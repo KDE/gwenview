@@ -264,6 +264,7 @@ struct GVScrollPixmapView::Private {
 
 	QRect widgetToImageBounding( const QRect& r, int extra ) const {
 		QRect ret = widgetToImage( r );
+		if( extra <= 0 ) extra = 1; // always at least add one to make sure the rect is larger
 		ret.addCoords( -extra, -extra, extra, extra );
 		return ret;
 	}
