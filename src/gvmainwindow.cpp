@@ -268,7 +268,7 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url) {
-	LOG(url.prettyURL());
+	LOG(url.prettyURL(0,KURL::StripFileProtocol));
 	KURL dirURL( url );
 	dirURL.setFileName( QString::null );
 	LOG(dirURL.path());
@@ -294,7 +294,7 @@ void GVMainWindow::setURL(const KURL& url) {
 	int i = 0;
 	KURL urlUp = dirURL.upURL();
 	while(urlUp.hasPath()) {
-		upPopup->insertItem(urlUp.url()), urlUp.prettyURL();
+		upPopup->insertItem(urlUp.url()), urlUp.prettyURL(0,KURL::StripFileProtocol);
 		if(urlUp.path() == "/" || ++i > 10)
 			break;
 		urlUp = urlUp.upURL();
@@ -307,8 +307,8 @@ void GVMainWindow::setURL(const KURL& url) {
 		kapp->restoreOverrideCursor();
 	mLoadingCursor = false;
 
-	mURLEdit->setEditText(url.prettyURL());
-	mURLEdit->addToHistory(url.prettyURL());
+	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
+	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
 }
 
 void GVMainWindow::goUp() {
@@ -620,7 +620,7 @@ void GVMainWindow::escapePressed() {
 
 
 void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
-	LOG(oldURL.prettyURL() << " to " << newURL.prettyURL());
+	LOG(oldURL.prettyURL(0,KURL::StripFileProtocol) << " to " << newURL.prettyURL(0,KURL::StripFileProtocol));
 
 	KURL url(mDocument->url());
 	if (!oldURL.isParentOf(url) ) return;
@@ -677,7 +677,7 @@ void GVMainWindow::slotToggleCentralStack() {
 void GVMainWindow::updateStatusInfo() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
-	QString url=mDocument->dirURL().prettyURL();
+	QString url=mDocument->dirURL().prettyURL(0,KURL::StripFileProtocol);
 	if (count==0) {
 		txt=i18n("%1 - No Images").arg(url);
 	} else {
