@@ -1048,7 +1048,8 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 
 	case QEvent::MouseButtonDblClick:
-		if (d->mActionCollection->action("fullscreen")->isEnabled()) {
+		if (d->mActionCollection->action("fullscreen") // may be NULL in KParts
+		    && d->mActionCollection->action("fullscreen")->isEnabled()) {
 			d->mActionCollection->action("fullscreen")->activate();
 		}
 		return true;
@@ -1254,8 +1255,10 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	bool validImage=!d->mDocument->isNull();
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
-	// if necessary
-	d->mActionCollection->action("fullscreen")->plug(&menu);
+	// if necessary. But KParts may not have the action itself.
+	if( d->mActionCollection->action("fullscreen")) {
+		d->mActionCollection->action("fullscreen")->plug(&menu);
+	}
 
 	if (validImage) {
 		menu.insertSeparator();
@@ -1269,19 +1272,35 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 	menu.insertSeparator();
 
-	d->mActionCollection->action("first")->plug(&menu);
-	d->mActionCollection->action("previous")->plug(&menu);
-	d->mActionCollection->action("next")->plug(&menu);
-	d->mActionCollection->action("last")->plug(&menu);
+	if( d->mActionCollection->action("first")) {
+		d->mActionCollection->action("previous")->plug(&menu);
+	}
+	if( d->mActionCollection->action("next")) {
+		d->mActionCollection->action("last")->plug(&menu);
+	}
+	if( d->mActionCollection->action("first")) {
+		d->mActionCollection->action("previous")->plug(&menu);
+	}
+	if( d->mActionCollection->action("next")) {
+		d->mActionCollection->action("last")->plug(&menu);
+	}
 
 	if (validImage) {
 		menu.insertSeparator();
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
-		d->mActionCollection->action("rotate_left")->plug(editMenu);
-		d->mActionCollection->action("rotate_right")->plug(editMenu);
-		d->mActionCollection->action("mirror")->plug(editMenu);
-		d->mActionCollection->action("flip")->plug(editMenu);
+		if( d->mActionCollection->action("rotate_left")) {
+			d->mActionCollection->action("rotate_right")->plug(editMenu);
+		}
+		if( d->mActionCollection->action("mirror")) {
+			d->mActionCollection->action("flip")->plug(editMenu);
+		}
+		if( d->mActionCollection->action("rotate_left")) {
+			d->mActionCollection->action("rotate_right")->plug(editMenu);
+		}
+		if( d->mActionCollection->action("mirror")) {
+			d->mActionCollection->action("flip")->plug(editMenu);
+		}
 		menu.insertItem( i18n("Edit"), editMenu );
 
 		GVExternalToolContext* externalToolContext=
