@@ -128,6 +128,7 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 
 
 void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
+	if( fileItem == mShownFileItem ) return;
 	GVFileThumbnailViewItem* oldShownItem=viewItem(mShownFileItem);
 	GVFileThumbnailViewItem* newShownItem=viewItem(fileItem);
 

@@ -455,6 +455,7 @@ void GVFileDetailView::startDrag()
 
 void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 {
+	if( fileItem == mShownFileItem ) return;
 	GVFileDetailViewItem* oldShownItem=viewItem(mShownFileItem);
 	GVFileDetailViewItem* newShownItem=viewItem(fileItem);
 	
