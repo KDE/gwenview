@@ -1,8 +1,20 @@
 [Desktop Entry]
 Type=Service
 Name=Image View
+Name[bg]=Преглед на изображения
+Name[br]=Gwell ar skeudennoù
+Name[de]=Bildbetrachter
+Name[es]=Visor de imágenes
+Name[et]=Piltide vaataja
 Name[is]=Myndskoðun
+Name[it]=Vista immagini
+Name[nl]=Afbeeldingweergave
+Name[pt]=Visualizador de Imagens
+Name[pt_BR]=Visualizador de Imagens
+Name[ru]=Просмотр изображений
 Name[sv]=Bildvisare
+Name[uk]=Перегляд зображень
+Name[xx]=xxImage Viewxx
 MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvdirpart
