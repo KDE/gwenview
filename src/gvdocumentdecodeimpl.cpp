@@ -540,6 +540,11 @@ void GVDocumentDecodeImpl::frameDone(const QPoint& offset, const QRect& rect) {
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
 	if( !d->mWasFrameData ) return;
 	d->mWasFrameData = false;
+	if( !d->mLoadChangedRect.isNull() && d->mFrames.count() == 0 ) {
+		emit rectUpdated(d->mLoadChangedRect);
+		d->mLoadChangedRect = QRect();
+		d->mTimeSinceLastUpdate.start();
+	}
 	QImage image = d->mDecoder.image();
 	image.detach();
 	if( offset != QPoint( 0, 0 ) || rect != QRect( 0, 0, image.width(), image.height())) {
