@@ -5,11 +5,17 @@ Actions=gwenview
 
 [Desktop Action gwenview]
 Name=Browse with Gwenview
+Name[da]=Gennemse med Gwenview
 Name[de]=Dateien mit Gwenview durchsehen
-Name[el]=Εξερεύνηση με το Gwenview
 Name[es]=Navegación con Gwenview
 Name[fr]=Naviguer avec Gwenview
 Name[it]=Sfoglia con Gwenview
+Name[pt]=Navegar com o Gwenview
+Name[pt_BR]=Navegar com Gwenview
+Name[sk]=Prehliadať s Gwenview
 Name[sv]=Bläddra med Gwenview
+Name[xh]=Khangela nge Gwenview
+Name[zh_TW]=以 Gwenview 瀏覽
+Name[zu]=Cinga nge-Gwenview
 Icon=gwenview
 Exec=gwenview %f
