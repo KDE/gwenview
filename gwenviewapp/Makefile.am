@@ -22,4 +22,4 @@ rc_DATA = gwenviewui.rc
 dummy.cpp:
 	echo > dummy.cpp
 
-CLEANFILES = dummy.cpp
+CLEANFILES = dummy.cpp gwenview_dummy.cpp gwenview.la.cpp
