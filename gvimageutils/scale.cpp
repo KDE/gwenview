@@ -121,13 +121,10 @@ inline double fasttodouble( fastfloat v ) { return v.toDouble(); }
 inline long fasttolong( fastfloat v ) { return v.toLong(); }
 
 #if 1  // change to 0 to turn fastfloat usage off
-static const fastfloat fasthalf( 0.5 );
-#define half fasthalf
 #else
 #define fastfloat double
 #define fasttodouble( v ) double( v )
 #define fasttolong( v ) long( v )
-#define half 0.5
 #endif
 
 //fastfloat end
@@ -227,9 +224,9 @@ static fastfloat BlackmanSinc(const fastfloat x,const fastfloat)
 
 static fastfloat Box(const fastfloat x,const fastfloat)
 {
-  if (x < -half)
+  if (x < -0.5)
     return(0.0);
-  if (x < half)
+  if (x < 0.5)
     return(1.0);
   return(0.0);
 }
@@ -379,26 +376,26 @@ static void HorizontalFilter(const QImage& source,QImage& destination,
   */
   scale=blur*Max(1.0/x_factor,1.0);
   support=scale* filtersupport;
-  if (support <= half)
+  if (support <= 0.5)
     {
       /*
         Reduce to point sampling.
       */
-      support=half+MagickEpsilon;
+      support=0.5+MagickEpsilon;
       scale=1.0;
     }
   scale=1.0/scale;
   for (x=0; x < (long) destination.width(); x++)
   {
-    center=(fastfloat) (x+half)/x_factor;
-    start= fasttolong(Max(center-support+half,0));
-    stop= fasttolong(Min(center+support+half,source.width()));
+    center=(fastfloat) (x+0.5)/x_factor;
+    start= fasttolong(Max(center-support+0.5,0));
+    stop= fasttolong(Min(center+support+0.5,source.width()));
     density=0.0;
     for (n=0; n < (stop-start); n++)
     {
       contribution[n].pixel=start+n;
       contribution[n].weight=
-        filter (scale*(start+n-center+half), filtersupport );
+        filter (scale*(start+n-center+0.5), filtersupport );
       density+=contribution[n].weight;
     }
     if ((density != 0.0) && (density != 1.0))
@@ -430,10 +427,10 @@ static void HorizontalFilter(const QImage& source,QImage& destination,
         alpha+=contribution[i].weight*qAlpha(p);
       }
       QRgb pix = qRgba(
-          fasttolong( red < 0 ? 0 : red > 255 ? 255 : red + half ),
-          fasttolong( green < 0 ? 0 : green > 255 ? 255 : green + half ),
-          fasttolong( blue < 0 ? 0 : blue > 255 ? 255 : blue + half ),
-          fasttolong( alpha < 0 ? 0 : alpha > 255 ? 255 : alpha + half ));
+          fasttolong( red < 0 ? 0 : red > 255 ? 255 : red + 0.5 ),
+          fasttolong( green < 0 ? 0 : green > 255 ? 255 : green + 0.5 ),
+          fasttolong( blue < 0 ? 0 : blue > 255 ? 255 : blue + 0.5 ),
+          fasttolong( alpha < 0 ? 0 : alpha > 255 ? 255 : alpha + 0.5 ));
       reinterpret_cast< QRgb* >( destination.jumpTable()[ y ])[ x ] = pix;
     }
   }
@@ -464,26 +461,26 @@ static void VerticalFilter(const QImage& source,QImage& destination,
   */
   scale=blur*Max(1.0/y_factor,1.0);
   support=scale* filtersupport;
-  if (support <= half)
+  if (support <= 0.5)
     {
       /*
         Reduce to point sampling.
       */
-      support=half+MagickEpsilon;
+      support=0.5+MagickEpsilon;
       scale=1.0;
     }
   scale=1.0/scale;
   for (y=0; y < (long) destination.height(); y++)
   {
-    center=(fastfloat) (y+half)/y_factor;
-    start= fasttolong(Max(center-support+half,0));
-    stop= fasttolong(Min(center+support+half,source.height()));
+    center=(fastfloat) (y+0.5)/y_factor;
+    start= fasttolong(Max(center-support+0.5,0));
+    stop= fasttolong(Min(center+support+0.5,source.height()));
     density=0.0;
     for (n=0; n < (stop-start); n++)
     {
       contribution[n].pixel=start+n;
       contribution[n].weight=
-        filter (scale*(start+n-center+half), filtersupport);
+        filter (scale*(start+n-center+0.5), filtersupport);
       density+=contribution[n].weight;
     }
     if ((density != 0.0) && (density != 1.0))
@@ -515,10 +512,10 @@ static void VerticalFilter(const QImage& source,QImage& destination,
         alpha+=contribution[i].weight*qAlpha(p);
       }
       QRgb pix = qRgba(
-          fasttolong( red < 0 ? 0 : red > 255 ? 255 : red + half ),
-          fasttolong( green < 0 ? 0 : green > 255 ? 255 : green + half ),
-          fasttolong( blue < 0 ? 0 : blue > 255 ? 255 : blue + half ),
-          fasttolong( alpha < 0 ? 0 : alpha > 255 ? 255 : alpha + half ));
+          fasttolong( red < 0 ? 0 : red > 255 ? 255 : red + 0.5 ),
+          fasttolong( green < 0 ? 0 : green > 255 ? 255 : green + 0.5 ),
+          fasttolong( blue < 0 ? 0 : blue > 255 ? 255 : blue + 0.5 ),
+          fasttolong( alpha < 0 ? 0 : alpha > 255 ? 255 : alpha + 0.5 ));
       reinterpret_cast< QRgb* >( destination.jumpTable()[ y ])[ x ] = pix;
     }
   }
@@ -561,7 +558,7 @@ static QImage ResizeImage(const QImage& image,const int columns,
   support=Max(x_support,y_support);
   if (support < filtersupport)
     support=filtersupport;
-  contribution=new ContributionInfo[ fasttolong( 2.0*Max(support,half)+3 ) ];
+  contribution=new ContributionInfo[ fasttolong( 2.0*Max(support,0.5)+3 ) ];
   Q_CHECK_PTR( contribution );
   /*
     Resize image.
