@@ -76,13 +76,13 @@ public:
 	 * Don't forget to call arrangeItemsInGrid to apply the changes
 	 */
 	void setThumbnailSize(ThumbnailSize value);
-	ThumbnailSize thumbnailSize() const { return mThumbnailSize; }
+	ThumbnailSize thumbnailSize() const;
 
 	/**
 	 * Don't forget to call arrangeItemsInGrid to apply the changes
 	 */
 	void setMarginSize(int value);
-	int marginSize() const { return mMarginSize; }
+	int marginSize() const;
 
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
@@ -114,18 +114,10 @@ protected:
 	void startDrag();
 
 private:
-	ThumbnailSize mThumbnailSize;
-	int mMarginSize;
-	bool mUpdateThumbnailsOnNextShow;
-	QPixmap mWaitPixmap;
-
-	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
+	class Private;
+	Private* d;
 
 	void updateGrid();
-	GVFileThumbnailViewItem* viewItem(const KFileItem* fileItem) const {
-		if (!fileItem) return 0L;
-		return static_cast<GVFileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
-	}
 	void doStartThumbnailUpdate(const KFileItemList*);
 	void setSortingKey(QIconViewItem*, const KFileItem*);
 
