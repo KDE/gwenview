@@ -906,7 +906,7 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
     MImageScaleInfo *scaleinfo =
         mimageCalcScaleInfo(img, w, h, dw, dh, true);
     if(!scaleinfo)
-        return(QImage());
+        return QImage();
 
     QImage buffer(dw, dh, 32);
     buffer.setAlphaBuffer(img.hasAlphaBuffer());
