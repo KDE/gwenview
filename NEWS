@@ -3,6 +3,7 @@
  - The layout of the "external tools" dialog has been reworked.
  - The image was not correctly displayed after a manual rotation.
  - When saving a file, its permissions are now kept.
+ - Fix history and back/forward/up buttons in the directory KPart.
  
 2005.02.27 - v1.2.0pre3
 - Fixes:
