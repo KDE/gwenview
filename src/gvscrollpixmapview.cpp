@@ -166,98 +166,6 @@ const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 const int FULLSCREEN_LABEL_RADIUS = 6;
 
 
-static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
-	painter.fillRect(
-		rect.left() + radius,
-		rect.top(),
-		rect.width() - radius*2,
-		rect.bottom(),
-		painter.brush());
-
-	painter.fillRect(
-		rect.left(),
-		rect.top() + radius,
-		rect.right(),
-		rect.height() - radius*2,
-		painter.brush());
-
-	painter.drawPie(
-		rect.left(),
-		rect.top(),
-		radius*2, radius*2,
-		16*90, 16*90);
-
-	painter.drawPie(
-		rect.right() - radius *2,
-		rect.top(),
-		radius*2, radius*2,
-		0, 16*90);
-
-	painter.drawPie(
-		rect.left(),
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		16*180, 16*90);
-
-	painter.drawPie(
-		rect.right() - radius *2,
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		0, -16*90);
-}
-
-
-static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
-	painter.drawLine(
-		rect.left() + radius,
-		rect.top(),
-		rect.right() - radius,
-		rect.top());
-
-	painter.drawLine(
-		rect.right() - 1,
-		rect.top() + radius,
-		rect.right() - 1,
-		rect.bottom() - radius);
-
-	painter.drawLine(
-		rect.right() - radius,
-		rect.bottom() - 1,
-		rect.left() + radius,
-		rect.bottom() - 1);
-
-	painter.drawLine(
-		rect.left(),
-		rect.bottom() - radius,
-		rect.left(),
-		rect.top() + radius);
-
-	painter.drawArc(
-		rect.left(),
-		rect.top(),
-		radius*2, radius*2,
-		16*90, 16*90);
-
-	painter.drawArc(
-		rect.right() - radius *2,
-		rect.top(),
-		radius*2, radius*2,
-		0, 16*90);
-
-	painter.drawArc(
-		rect.left(),
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		16*180, 16*90);
-
-	painter.drawArc(
-		rect.right() - radius *2,
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		0, -16*90);
-}
-
-
 class FullScreenWidget : public QLabel {
 public:
 	FullScreenWidget(QWidget* parent)
@@ -274,25 +182,68 @@ public:
 
 	void resizeEvent(QResizeEvent* event) {
 		QSize size=event->size();
+		QRect rect=QRect(QPoint(0, 0), size);
+
 		QPainter painter;
 		// Create a mask for the text
 		QBitmap mask(size,true);
 		painter.begin(&mask);
 		painter.setBrush(Qt::white);
-		fillRoundRect(painter, rect(), FULLSCREEN_LABEL_RADIUS);
+		fillMask(painter, rect);
 		painter.end();
 
 		// Draw the background on a pixmap
 		QPixmap pixmap(size);
 		painter.begin(&pixmap, this);
-		QRect rect=pixmap.rect();
 		painter.eraseRect(rect);
-		drawRoundRect(painter, rect, FULLSCREEN_LABEL_RADIUS);
+		drawBorder(painter, rect);
 		painter.end();
 
 		// Update the label
 		setPixmap(pixmap);
 		setMask(mask);
+	}
+
+	void fillMask(QPainter& painter, const QRect& rect) {
+		painter.fillRect(
+			rect.left(),
+			rect.top(),
+			rect.width() - FULLSCREEN_LABEL_RADIUS,
+			rect.bottom(),
+			painter.brush());
+
+		painter.fillRect(
+			rect.right() - FULLSCREEN_LABEL_RADIUS,
+			rect.top(),
+			FULLSCREEN_LABEL_RADIUS,
+			rect.height() - FULLSCREEN_LABEL_RADIUS,
+			painter.brush());
+
+		painter.drawPie(
+			rect.right() - 2*FULLSCREEN_LABEL_RADIUS,
+			rect.bottom() - 2*FULLSCREEN_LABEL_RADIUS,
+			FULLSCREEN_LABEL_RADIUS*2, FULLSCREEN_LABEL_RADIUS*2,
+			0, -16*90);
+	}
+
+	void drawBorder(QPainter& painter, const QRect& rect) {
+		painter.drawLine(
+			rect.right() - 1,
+			rect.top(),
+			rect.right() - 1,
+			rect.bottom() - FULLSCREEN_LABEL_RADIUS);
+
+		painter.drawLine(
+			rect.right() - FULLSCREEN_LABEL_RADIUS,
+			rect.bottom() - 1,
+			rect.left(),
+			rect.bottom() - 1);
+
+		painter.drawArc(
+			rect.right() - 2*FULLSCREEN_LABEL_RADIUS,
+			rect.bottom() - 2*FULLSCREEN_LABEL_RADIUS,
+			FULLSCREEN_LABEL_RADIUS*2, FULLSCREEN_LABEL_RADIUS*2,
+			0, -16*90);
 	}
 };
 
@@ -421,9 +372,10 @@ struct GVScrollPixmapView::Private {
 		Q_ASSERT(!mFullScreenWidget);
 		mFullScreenWidget=new FullScreenWidget(parent);
 		
-		QHBoxLayout* layout=new QHBoxLayout(mFullScreenWidget);
-		layout->setResizeMode(QLayout::Fixed);
-		layout->setMargin(FULLSCREEN_LABEL_RADIUS);
+		QVBoxLayout* vLayout=new QVBoxLayout(mFullScreenWidget);
+		QHBoxLayout* layout=new QHBoxLayout(vLayout);
+		vLayout->addSpacing(FULLSCREEN_LABEL_RADIUS);
+		vLayout->setResizeMode(QLayout::Fixed);
 	
 		// Buttons
 		QPtrListIterator<KAction> it(mFullScreenActions);
@@ -439,7 +391,7 @@ struct GVScrollPixmapView::Private {
 		font.setWeight(QFont::Bold);
 		mFullScreenLabel->setFont(font);
 
-		mFullScreenWidget->move(2, 2);
+		layout->addSpacing(FULLSCREEN_LABEL_RADIUS);
 	}
 };
 
