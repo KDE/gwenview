@@ -1,4 +1,4 @@
-2004.xx.xx - v1.1.2
+2004.05.09 - v1.1.2
 - New features:
  - Optional support for KIPI, KDE Image Plugin Interface.
  - Incremental downloading of images.
@@ -9,7 +9,7 @@
  - Make sure small and medium size thumbnails do not look jagged.
  - Work-around a Qt bug which caused the window title to not come back after
    leaving fullscreen mode and reduces flickering (By Lubos Lunak).
- - File saving is back.
+ - Fixed several bugs in file saving.
  - Make sure the loading cursor disappear when the image has finished to load
    (By Lubos Lunak).
  - Remember last used folder in "copy to" and "move to" dialogs (By Lubos
@@ -20,7 +20,7 @@
  - When viewing an image from within a frame based web site in Konqueror, don't
    crash when opening popup menu.
  - Give higher priority to the loading of the image than to the generation of
-   thumbnails.
+   thumbnails (By Lubos Lunak).
 
 2004.03.20 - v1.1.1
 - New features:
