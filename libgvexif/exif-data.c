@@ -31,6 +31,7 @@
 #undef MAX
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
 
+/*#define DEBUG*/
 
 static const unsigned char ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
 
@@ -180,6 +181,13 @@ exif_data_load_data_content (ExifData *data, ExifContent *ifd,
 	unsigned int i;
 	ExifTag tag;
 
+	if (offset>ds) {
+#ifdef DEBUG
+		printf("Offset is over data size (%d>%d)\n", offset, ds);
+#endif
+		return;
+	}
+	
 	/* Read the number of entries */
 	n = exif_get_short (d + offset, data->priv->order);
 #ifdef DEBUG

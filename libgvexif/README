@@ -28,3 +28,8 @@ avoid including the system libexif include files, I renamed the dir from
 Just updated to libexif 0.5.10. this version fixes the bug which caused
 Gwenview to stop displaying image when browsing a dir containing more than a
 thousand JPEG files.
+
+
+- 2003.12.14
+
+Updated to libexif 0.5.12 and fixed a bug when reading broken EXIF info.

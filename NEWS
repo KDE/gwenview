@@ -1,6 +1,7 @@
 200x.xx.xx - v1.1.0
 - Fixes:
  - Gave contributors the credit they deserve in the about box.
+ - Updated to libexif 0.5.12 and fixed handling of broken exif info.
 
 2003.12.07 - v1.0.0
 - New features:
