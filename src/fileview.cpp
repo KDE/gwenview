@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
+static const char* CONFIG_SHOW_DIRS="show dirs";
 
 FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList), mPopupMenu(0L)
@@ -66,12 +67,6 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 
 // Dir lister
 	mDirLister=new KDirLister;
-	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
-	mimeTypes.append("image/x-xcf-gimp");
-	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
-	mimeTypes.append("inode/directory");
-	mDirLister->setMimeFilter(mimeTypes);
-
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 	
@@ -132,7 +127,6 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 		this,SIGNAL(updateEnded()) );
 	connect(mFileThumbnailView,SIGNAL(updatedOneThumbnail()),
 		this,SIGNAL(updatedOneThumbnail()) );
-
 }
 
 
@@ -385,6 +379,16 @@ void FileView::setMode(FileView::Mode mode) {
 }
 
 
+bool FileView::showDirs() const {
+	return mShowDirs;
+}
+
+
+void FileView::setShowDirs(bool value) {
+	mShowDirs=value;
+	initDirListerFilter();
+}
+
 //-Dir lister slots------------------------------------------------------
 void FileView::dirListerDeleteItem(KFileItem* item) {
 	mFileThumbnailView->removeItem(item);
@@ -457,6 +461,16 @@ void FileView::dirListerCanceled() {
 
 
 //-Private---------------------------------------------------------------
+void FileView::initDirListerFilter() {
+	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
+	mimeTypes.append("image/x-xcf-gimp");
+	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
+	if (mShowDirs) mimeTypes.append("inode/directory");
+	mDirLister->setMimeFilter(mimeTypes);
+	mDirLister->emitChanges();
+}
+
+
 void FileView::updateActions() {
 	if (currentFileView()->count()==0) {
 		mSelectFirst->setEnabled(false);
@@ -558,6 +572,9 @@ void FileView::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
 
 	config->setGroup(group);
+	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,false);
+	initDirListerFilter();
+	
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
 	setMode(startWithThumbnails?Thumbnail:FileList);
 
@@ -588,6 +605,7 @@ void FileView::writeConfig(KConfig* config,const QString& group) const {
 
 	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
 	config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
+	config->writeEntry(CONFIG_SHOW_DIRS, mShowDirs);
 }
 
 void FileView::setAutoLoadImage(bool autoLoadImage) {

@@ -70,6 +70,8 @@ public:
 	QString filename() const;
 	KURL url() const;
 	uint fileCount() const;
+	bool showDirs() const;
+	void setShowDirs(bool);
 	
 	FileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
@@ -168,7 +170,9 @@ private:
 
 	bool mConfirmDelete;
 
-  bool mAutoLoadImage;
+	bool mAutoLoadImage;
+
+	bool mShowDirs;
 
 // Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
@@ -178,6 +182,7 @@ private:
 	KFileView* currentFileView() const;
 	void emitURLChanged();
 	void updateActions();
+	void initDirListerFilter();
 };
 
 

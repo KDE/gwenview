@@ -100,7 +100,8 @@ mMainWindow(mainWindow)
 // Misc tab
 	mZoomStep->setValue(int(mMainWindow->pixmapView()->scrollPixmapView()->zoomStep()*100));
 	mExternalEditor->setText(FileOperation::editor());
-  mAutoLoadImage->setChecked(fileView->autoLoadImage());
+	mAutoLoadImage->setChecked(fileView->autoLoadImage());
+	mShowDirs->setChecked(fileView->showDirs());
 }
 
 
@@ -140,7 +141,8 @@ void ConfigDialog::slotApply() {
 // Misc tab
 	FileOperation::setEditor(mExternalEditor->text());
 	mMainWindow->pixmapView()->scrollPixmapView()->setZoomStep(mZoomStep->value()/100.0);
-  fileView->setAutoLoadImage(mAutoLoadImage->isChecked());
+	fileView->setAutoLoadImage(mAutoLoadImage->isChecked());
+	fileView->setShowDirs(mShowDirs->isChecked());
 }
 
 
