@@ -707,6 +707,7 @@ void GVMainWindow::createMainToolBar() {
 
 void GVMainWindow::createLocationToolBar() {
 	mLocationToolBar=toolBar("locationToolBar");
+	mLocationToolBar->setNewLine(true);
 	if (!mShowLocationToolBar) mLocationToolBar->hide();
 	mLocationToolBar->setLabel(i18n("Location Tool Bar"));
 
