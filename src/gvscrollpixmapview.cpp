@@ -1370,74 +1370,53 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		menu.connectItem(
 			menu.insertItem( i18n("Properties") ),
-			this,SLOT(showFileProperties()) );
-	}
+   this,SLOT(showFileProperties()) );
+ }
 
-	menu.exec(pos);
+ menu.exec(pos);
 }
 
 
 void GVScrollPixmapView::updateScrollBarMode() {
-	if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
-		setVScrollBarMode(AlwaysOff);
-		setHScrollBarMode(AlwaysOff);
-	} else {
-		setVScrollBarMode(Auto);
-		setHScrollBarMode(Auto);
-	}
+ if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
+  setVScrollBarMode(AlwaysOff);
+  setHScrollBarMode(AlwaysOff);
+ } else {
+  setVScrollBarMode(Auto);
+  setHScrollBarMode(Auto);
+ }
 }
 
 
 void GVScrollPixmapView::updateContentSize() {
-	resizeContents(
-		int(d->mDocument->width()*d->mZoom),
-		int(d->mDocument->height()*d->mZoom)	);
+ resizeContents(
+  int(d->mDocument->width()*d->mZoom),
+  int(d->mDocument->height()*d->mZoom) );
 }
 
-// QSize.scale() does not exist in Qt 3.0.x
-#if QT_VERSION<0x030100
-static void sizeScaleMin(QSize* size, int w, int h) {
-	int w0 = size->width();
-	int h0 = size->height();
-	int rw = h * w0 / h0;
-
-	if ( rw <= w ) {
-		size->setWidth( rw );
-		size->setHeight( h );
-	} else {
-		size->setWidth( w );
-		size->setHeight( w * h0 / w0 );
-	}
-}
-#endif
 
 double GVScrollPixmapView::computeAutoZoom() const {
-	if (d->mDocument->isNull()) {
-		return 1.0;
-	}
-	QSize size=d->mDocument->image().size();
+ if (d->mDocument->isNull()) {
+  return 1.0;
+ }
+ QSize size=d->mDocument->image().size();
+ size.scale(width(),height(),QSize::ScaleMin);
 
-#if QT_VERSION>=0x030100
-	size.scale(width(),height(),QSize::ScaleMin);
-#else
-	sizeScaleMin(&size,width(),height());
-#endif
-
-	double zoom=double(size.width())/d->mDocument->width();
-	if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
-	return zoom;
+ double zoom=double(size.width())/d->mDocument->width();
+ if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
+ return zoom;
 }
 
 
 double GVScrollPixmapView::computeZoom(bool in) const {
-	if (in) {
-		if (d->mZoom>=1.0) {
-			return floor(d->mZoom)+1.0;
-		} else {
-			return 1/( ceil(1/d->mZoom)-1.0 );
-		}
-	} else {
-		if (d->mZoom>1.0) {
+ if (in) {
+  if (d->mZoom>=1.0) {
+   return floor(d->mZoom)+1.0;
+  } else {
+   return 1/( ceil(1/d->mZoom)-1.0 );
+  }
+ } else {
+  if (d->mZoom>1.0) {
 			return ceil(d->mZoom)-1.0;
 		} else {
 			return 1/( floor(1/d->mZoom)+1.0 );

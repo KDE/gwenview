@@ -785,20 +785,20 @@ bool XCFImageFormat::loadImageProperties ( SafeDataStream& xcf_io,
 
     case PROP_PARASITES:
       while ( !property.atEnd() ) {
-	char* tag;
-	Q_UINT32 size;
+ char* tag;
+ Q_UINT32 size;
 
-	property.readBytes( tag, size );
+ property.readBytes( tag, size );
 
-	Q_UINT32 flags;
-	char* data;
-	property >> flags >> data;
+ Q_UINT32 flags;
+ char* data;
+ property >> flags >> data;
 
-	if ( strcmp( tag, "gimp-comment" ) == 0 )
-	  xcf_image.image.setText( "Comment", 0, data );
+ if ( strcmp( tag, "gimp-comment" ) == 0 )
+   xcf_image.image.setText( "Comment", 0, data );
 
-	delete[] tag;
-	delete[] data;
+ delete[] tag;
+ delete[] data;
       }
       break;
 
@@ -2373,13 +2373,13 @@ void XCFImageFormat::dissolveAlphaPixels ( QImage& image, int x, int y )
       uchar alpha = image.pixelIndex( k, l );
 
       if ( rand_val > alpha ) {
-	image.setPixel( k, l, 0 );
+ image.setPixel( k, l, 0 );
       }
     }
   }
 }
 
-#if KDE_VERSION >= 0x30400
+#if KDE_IS_VERSION(3, 3, 89)
 KDE_Q_EXPORT_PLUGIN( XCFImageFormat )
 #else
 Q_EXPORT_PLUGIN( XCFImageFormat )

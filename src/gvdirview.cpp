@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 #include <kurldrag.h>
 
-#if KDE_VERSION >= 0x30200
+#if KDE_IS_VERSION(3, 2, 0)
 #include <kinputdialog.h>
 #else
 #include <klineeditdlg.h>
@@ -520,32 +520,32 @@ void GVDirView::renameDir() {
 
 	KURL newURL=currentURL().upURL();
 
-	newURL.addPath(newDir);
-	job=KIO::rename(currentURL(),newURL,false);
+ newURL.addPath(newDir);
+ job=KIO::rename(currentURL(),newURL,false);
 
-	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(slotDirRenamed(KIO::Job*)));
+ connect(job,SIGNAL(result(KIO::Job*)),
+  this,SLOT(slotDirRenamed(KIO::Job*)));
 }
 
 
 void GVDirView::slotDirRenamed(KIO::Job* job) {
-	if (job->error()) {
-		job->showErrorDialog(this);
-		return;
-	}
+ if (job->error()) {
+  job->showErrorDialog(this);
+  return;
+ }
 }
 
 
 void GVDirView::removeDir() {
-	KIO::Job* job;
-	if (!currentItem()) return;
+ KIO::Job* job;
+ if (!currentItem()) return;
 
-	QString dir=QStyleSheet::escape(currentURL().path());
-	int response=KMessageBox::warningContinueCancel(this,
-		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
-		i18n("Delete Folder"),
-#if KDE_VERSION >= 0x30300
-		KStdGuiItem::del()
+ QString dir=QStyleSheet::escape(currentURL().path());
+ int response=KMessageBox::warningContinueCancel(this,
+  "<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
+  i18n("Delete Folder"),
+#if KDE_IS_VERSION(3, 3, 0)
+  KStdGuiItem::del()
 #else
 		KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif

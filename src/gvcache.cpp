@@ -28,7 +28,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kdebug.h>
 
 #include <kdeversion.h>
-#if KDE_VERSION < 0x30200
+#if ! KDE_IS_VERSION(3, 2, 0)
 #include <libgvcompat/kurlcompat.h>
 #endif
 // Local
@@ -41,19 +41,19 @@ GVCache::GVCache()
 }
 
 GVCache* GVCache::instance() {
-	static GVCache manager;
-	return &manager;
+ static GVCache manager;
+ return &manager;
 }
 
 void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp ) {
-	updateAge();
-	bool insert = true;
-	if( mImages.contains( url )) {
-		ImageData& data = mImages[ url ];
-		if( data.timestamp == timestamp ) {
-			data.addFile( file );
-			insert = false;
-		}
+ updateAge();
+ bool insert = true;
+ if( mImages.contains( url )) {
+  ImageData& data = mImages[ url ];
+  if( data.timestamp == timestamp ) {
+   data.addFile( file );
+   insert = false;
+  }
 	}
 	if( insert ) mImages[ url ] = ImageData( url, file, timestamp );
 	checkMaxSize();

@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/job.h>
 #include <kio/file.h>
 
-#if KDE_VERSION >= 0x30200
+#if KDE_IS_VERSION(3, 2, 0)
 #include <kinputdialog.h>
 #else
 #include <klineeditdlg.h>

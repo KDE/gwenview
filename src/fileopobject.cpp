@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstandarddirs.h>
 #include <kurlcombobox.h>
 
-#if KDE_VERSION >= 0x30200
+#if KDE_IS_VERSION(3, 2, 0)
 #include <kinputdialog.h>
 #else
 #include <klineeditdlg.h>
@@ -196,46 +196,46 @@ void FileOpTrashObject::operator()() {
 		if (response==KMessageBox::Cancel) return;
 	}
 
-	// Go do it
+ // Go do it
     if (mURLList.count()==1) {
         // If there's only one file, KIO::move will think we want to overwrite
         // the trash dir with the file to trash, so we add the file name
         trashURL.addPath(mURLList.first().fileName());
     }
-	KIO::Job* job=KIO::move(mURLList,trashURL);
-	connect( job, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+ KIO::Job* job=KIO::move(mURLList,trashURL);
+ connect( job, SIGNAL( result(KIO::Job*) ),
+  this, SLOT( slotResult(KIO::Job*) ) );
 }
 
 //-FileOpRealDeleteObject----------------------------------------------------------
 void FileOpRealDeleteObject::operator()() {
-	// Confirm operation
-	if (FileOperation::confirmDelete()) {
-		int response;
-		if (mURLList.count()>1) {
-			QStringList fileList;
-			KURL::List::ConstIterator it=mURLList.begin();
-			for (; it!=mURLList.end(); ++it) {
-				fileList.append((*it).filename());
-			}
-			response=KMessageBox::warningYesNoList(mParent,
-				i18n("Do you really want to delete these files?"),fileList,
-				i18n("Delete Files"),
-#if KDE_VERSION > 0x30300
-				KStdGuiItem::del()
+ // Confirm operation
+ if (FileOperation::confirmDelete()) {
+  int response;
+  if (mURLList.count()>1) {
+   QStringList fileList;
+   KURL::List::ConstIterator it=mURLList.begin();
+   for (; it!=mURLList.end(); ++it) {
+    fileList.append((*it).filename());
+   }
+   response=KMessageBox::warningYesNoList(mParent,
+    i18n("Do you really want to delete these files?"),fileList,
+    i18n("Delete Files"),
+#if KDE_IS_VERSION(3, 3, 0)
+    KStdGuiItem::del()
 #else
-				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
+    KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
-				);
-		} else {
-			QString filename=QStyleSheet::escape(mURLList.first().filename());
-			response=KMessageBox::warningYesNo(mParent,
-				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
-				i18n("Delete File"),
-#if KDE_VERSION > 0x30300
-				KStdGuiItem::del()
+    );
+  } else {
+   QString filename=QStyleSheet::escape(mURLList.first().filename());
+   response=KMessageBox::warningYesNo(mParent,
+    i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
+    i18n("Delete File"),
+#if KDE_IS_VERSION(3, 3, 0)
+    KStdGuiItem::del()
 #else
-				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
+    KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
 				);
 		}

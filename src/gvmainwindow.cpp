@@ -92,11 +92,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvkipiinterface.h"
 #endif
 
-#if KDE_VERSION < 0x30100
-#include "libgvcompat/kwidgetaction.h"
-#else
 #include <kcursor.h>
-#endif
 
 #include "gvmainwindow.moc"
 
@@ -220,33 +216,33 @@ bool GVMainWindow::queryClose() {
 	// If we are in fullscreen mode, we need to make the needed GUI elements
 	// visible before saving the window settings.
 	if (mToggleFullScreen->isChecked()) {
-		statusBar()->show();
+  statusBar()->show();
 
-		if (toolBar()->area()) {
-			toolBar()->area()->show();
-		} else {
-			toolBar()->show();
-		}
-		leftDock()->show();
-		rightDock()->show();
-		topDock()->show();
-		bottomDock()->show();
+  if (toolBar()->area()) {
+   toolBar()->area()->show();
+  } else {
+   toolBar()->show();
+  }
+  leftDock()->show();
+  rightDock()->show();
+  topDock()->show();
+  bottomDock()->show();
 
-		menuBar()->show();
-	}
-	
-	if (mAutoDeleteThumbnailCache) {
-		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
+  menuBar()->show();
+ }
+ 
+ if (mAutoDeleteThumbnailCache) {
+  QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
-		if (QFile::exists(dir)) {
-			KURL url;
-			url.setPath(dir);
-#if KDE_VERSION >= 0x30200
-			KIO::NetAccess::del(url, 0);
+  if (QFile::exists(dir)) {
+   KURL url;
+   url.setPath(dir);
+#if KDE_IS_VERSION(3, 2, 0)
+   KIO::NetAccess::del(url, 0);
 #else
-			KIO::NetAccess::del(url);
+   KIO::NetAccess::del(url);
 #endif
-		}
+  }
 	}
 	
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
@@ -423,16 +419,16 @@ void GVMainWindow::printFile() {
 
 	printer.setDocName(mDocument->filename());
 	const KAboutData* pAbout = KApplication::kApplication()->aboutData();
-	QString nm = pAbout->appName();
-	nm += "-";
-	nm += pAbout->version();
-	printer.setCreator( nm );
+ QString nm = pAbout->appName();
+ nm += "-";
+ nm += pAbout->version();
+ printer.setCreator( nm );
 
-	KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, this, "GV page"));
+ KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, this, "GV page"));
 
-	if (printer.setup(this, QString::null, true)) {
-		mDocument->print(&printer);
-	}
+ if (printer.setup(this, QString::null, true)) {
+  mDocument->print(&printer);
+ }
 }
 
 
@@ -442,16 +438,12 @@ void GVMainWindow::printFile() {
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::pixmapLoading() {
-	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
-		if( !mLoadingCursor ) {
-#if KDE_VERSION >= 0x30100
-			kapp->setOverrideCursor(KCursor::workingCursor());
-#else
-			kapp->setOverrideCursor(QCursor(WaitCursor));
-#endif
-		}
-		mLoadingCursor = true;
-	}
+ if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+  if( !mLoadingCursor ) {
+   kapp->setOverrideCursor(KCursor::workingCursor());
+  }
+  mLoadingCursor = true;
+ }
 }
 
 
@@ -790,33 +782,33 @@ void GVMainWindow::createActions() {
 	mSaveFile=KStdAction::save(mDocument,SLOT(save()),actionCollection() );
 	mSaveFileAs=KStdAction::saveAs(mDocument,SLOT(saveAs()),actionCollection() );
 	mFilePrint = KStdAction::print(this, SLOT(printFile()), actionCollection());
-	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
-	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F7,this,SLOT(copyFiles()),actionCollection(),"file_copy");
-	mMoveFiles=new KAction(i18n("&Move To..."),Key_F8,this,SLOT(moveFiles()),actionCollection(),"file_move");
-	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
-	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
-	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
+ mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
+ mCopyFiles=new KAction(i18n("&Copy To..."),Key_F7,this,SLOT(copyFiles()),actionCollection(),"file_copy");
+ mMoveFiles=new KAction(i18n("&Move To..."),Key_F8,this,SLOT(moveFiles()),actionCollection(),"file_move");
+ mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
+ mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
+ KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
 
-	// Edit
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
-	mMirror=new KAction(i18n("&Mirror"),"mirror",0, this, SLOT(mirror()),actionCollection(),"mirror");
-	mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
+ // Edit
+ mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
+ mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
+ mMirror=new KAction(i18n("&Mirror"),"mirror",0, this, SLOT(mirror()),actionCollection(),"mirror");
+ mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
 
-	// View
-	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mDocument, SLOT(reload()), actionCollection(), "reload");
-	mReload->setEnabled(false);
-//(0x3015A == 3.1.90)
-#if KDE_VERSION>=0x3015A
-	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
+ // View
+ mReload=new KAction(i18n("Reload"), "reload", Key_F5, mDocument, SLOT(reload()), actionCollection(), "reload");
+ mReload->setEnabled(false);
+
+#if KDE_IS_VERSION(3, 1, 90)
+ mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 #else
-	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
+ mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
 #endif
-	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
+ mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
 
-	// Go
- 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
-	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
+ // Go
+  mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
+ mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
 
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );
