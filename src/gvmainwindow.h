@@ -151,6 +151,7 @@ private slots:
 	void pixmapLoading();
 	void toggleSlideShow();
 	void toggleDirAndFileViews();
+	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 
 	/**
 	 * Update status bar and caption

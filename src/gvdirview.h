@@ -36,6 +36,7 @@ public slots:
 	
 signals:
 	void dirURLChanged(const KURL&);
+	void dirRenamed(const KURL& oldURL, const KURL& newURL);
 
 protected:
 	void showEvent(QShowEvent*);
@@ -50,6 +51,7 @@ protected slots:
 	
 private slots:
 	void slotExecuted();
+	void slotItemsRefreshed(const KFileItemList& items);
 
 	// Do not name this slot "slotPopulateFinished", it will clash with
 	// "KFileTreeView::slotPopulateFinished".
@@ -79,6 +81,7 @@ private:
 
 	// FIXME: Doc
 	void setURLInternal(const KURL&);
+	void refreshBranch(KFileItem* item, KFileTreeBranch* branch);
 };
 
 

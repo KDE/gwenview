@@ -519,6 +519,22 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 }
 
 
+void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
+	kdDebug() << "GVMainWindow::slotDirRenamed: "
+		<< oldURL.prettyURL() << " to " << newURL.prettyURL() << endl;
+	
+	KURL url(mGVPixmap->url());
+	if (!oldURL.isParentOf(url) ) return;
+	
+	QString oldPath=oldURL.path();
+	kdDebug() << " current path: " << url.path() << endl;
+	QString path=newURL.path() + url.path().mid(oldPath.length());
+	kdDebug() << " new path: " << path << endl;
+	url.setPath(path);
+	mGVPixmap->setURL(url);
+}
+
+
 void GVMainWindow::slotGo() {
 	mGVPixmap->setURL(mURLEdit->currentText());
 }
@@ -725,6 +741,9 @@ void GVMainWindow::createConnections() {
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
+	connect(mDirView, SIGNAL(dirRenamed(const KURL&, const KURL&)),
+		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
+	
 	// Pixmap view connections
 	connect(mPixmapView,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );

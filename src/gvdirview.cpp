@@ -74,6 +74,11 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
 		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+	
+	connect(mHomeBranch,SIGNAL( refreshItems(const KFileItemList&)),
+		this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
+	connect(mRootBranch,SIGNAL( refreshItems(const KFileItemList&)),
+		this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
 
 	// Popup
 	mPopupMenu=new QPopupMenu(this);
@@ -101,6 +106,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	connect(mAutoOpenTimer, SIGNAL(timeout()),
 		this,SLOT(autoOpenDropTarget()));
 }
+
 
 
 /**
@@ -430,5 +436,31 @@ void GVDirView::slotDirRemoved(KIO::Job* job) {
 
 void GVDirView::showPropertiesDialog() {
 	(void)new KPropertiesDialog(currentURL());
+}
+
+
+//- This code should go in KFileTreeBranch -------------------------------
+void GVDirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
+	KFileTreeViewItem* tvItem=
+		static_cast<KFileTreeViewItem*>( item->extraData(branch) );
+	if (!tvItem) return;
+	
+	QString oldText=tvItem->text(0);
+	QString newText=item->text();
+	if (oldText!=newText) {
+		tvItem->setText(0, newText);
+		KURL oldURL(item->url());
+		oldURL.setFileName(oldText);
+		emit dirRenamed(oldURL, item->url());
+	}
+}
+
+void GVDirView::slotItemsRefreshed(const KFileItemList& items) {
+	KFileItemListIterator it(items);
+	for (;it.current(); ++it) {
+		KFileItem* item=it.current();
+		refreshBranch(item, mHomeBranch);
+		refreshBranch(item, mRootBranch);
+	}
 }
 

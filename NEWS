@@ -3,6 +3,7 @@
  - Added a "Go" button to the location toolbar.
 - Fixes:
  - Really fixed saving of external tools.
+ - Make sure the folder view is updated when a folder is renamed.
 
 2003.10.11 - v1.0.0pre2
 - New features:
