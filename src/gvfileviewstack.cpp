@@ -317,6 +317,9 @@ void GVFileViewStack::browseToFileNameToSelect() {
 	// Nothing to select, but an item is already shown
 	if (currentFileView()->shownFileItem()) return;
 
+	// Now we have to make some default choice
+	slotSelectFirst();
+
 	// If no item is selected, make sure the first one is
 	if (currentFileView()->selectedItems()->count()==0) {
 		KFileItem* item=currentFileView()->firstFileItem();
