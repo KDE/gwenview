@@ -1,20 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Gwenview
+Name[xx]=xxGwenviewxx
 Comment=A simple image viewer
 Comment[da]=En simpel billedfremviser
 Comment[de]=Einfacher Bildbetrachter
 Comment[el]=Ένας απλός προβολέας εικόνων
 Comment[es]=Visor de mensajes sencillo
-Comment[fr]=Un afficheur d'images simple
+Comment[fr]=Un afficheur basique d'images
 Comment[he]=מציג תמונות פשוט
 Comment[it]=Semplice visualizzatore di immagini
+Comment[nl]=Een eenvoudig afbeeldingenweergaveprogramma
 Comment[pt]=Um visualizador de imagens simples
 Comment[pt_BR]=Um visualizador de imagens simples
 Comment[sk]=Jednoduchý prehliadač obrázkov
 Comment[sv]=En enkel bildvisare
 Comment[uk]=Простий переглядач зображень
 Comment[xh]=Umboniseli olula womfanekiso
+Comment[xx]=xxA simple image viewerxx
 Comment[zh_CN]=一个简单的图像查看器
 Comment[zh_TW]=一個簡易的影像檢視器
 Comment[zu]=Umbukisi wesithombe esilula
