@@ -4,7 +4,9 @@
    sub-folders.
  - Lossless manipulations of JPEG files won't remove the EXIF information
    anymore.
- - Handling of EXIF orientation tag should now work on KDE 3.0.
+ - Handling of the EXIF orientation tag should now work on KDE 3.0.
+ - When "auto-zoom" was on, pressing the "reset zoom" button would not
+   disactivate it.
 
 2003.05.04 - v0.17.0
 - New features:

@@ -492,6 +492,10 @@ void GVScrollPixmapView::slotZoomOut() {
 
 
 void GVScrollPixmapView::slotResetZoom() {
+	if (mAutoZoom->isChecked()) {
+		mAutoZoom->setChecked(false);
+		updateScrollBarMode();
+	}
 	setZoom(1.0);
 }
 
