@@ -33,18 +33,22 @@ Q_OBJECT
 public:
 	GVMetaEdit(QWidget *parent, GVPixmap*, const char *name="");
 	~GVMetaEdit();
-
+protected:
+	bool eventFilter(QObject *o, QEvent *e);
 private slots:
 	void updateContent();
+	void setModified(bool);
 
 private:
 	bool mWritable;
+	bool mEmpty;
 	GVPixmap* mGVPixmap;
 	KFileMetaInfo* mMetaInfo;
 	KFileMetaInfoItem mCommentItem;
 	QTextEdit* mCommentEdit;
 
 	void clearData();
+	void setEmptyText();
 };
 
 

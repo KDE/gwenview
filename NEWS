@@ -1,3 +1,9 @@
+2003.xx.xx - v1.0.0pre2
+- Fixes:
+ - The image comment editor shows more explicit messages when the comment is
+   empty and when the image can't be commented.
+
+
 2003.09.27 - v1.0.0pre1
 - New features:
  - Toolbars are now configurable and toolbar settings are remembered.

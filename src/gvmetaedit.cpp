@@ -42,6 +42,9 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
 , mMetaInfo(0L)
 {
 	mCommentEdit=new QTextEdit(this);
+	mCommentEdit->installEventFilter(this);
+	connect(mCommentEdit, SIGNAL(modificationChanged(bool)),
+		this, SLOT(setModified(bool)));
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(updateContent()) );
 	updateContent();
@@ -53,12 +56,35 @@ GVMetaEdit::~GVMetaEdit() {
 }
 
 
+bool GVMetaEdit::eventFilter(QObject *o, QEvent *e) {
+	if (o == mCommentEdit && mEmpty && mWritable) {
+		if (e->type() == QEvent::FocusIn) {
+			mCommentEdit->setTextFormat(QTextEdit::PlainText);
+			mCommentEdit->setText("");
+		} else if (e->type() == QEvent::FocusOut) {
+			setEmptyText();
+		}
+	}
+	return false;
+}
+
+
+void GVMetaEdit::setModified(bool m) {
+	if (m && mEmpty) {
+		mEmpty = false;
+	}
+}
+
+
 void GVMetaEdit::updateContent() {
 	clearData();
 
 	if (mGVPixmap->isNull()) {
-		mCommentEdit->setText(i18n("No image selected"));
-		mCommentEdit->setEnabled(false);
+		mCommentEdit->setTextFormat(QTextEdit::RichText);
+		mCommentEdit->setText(i18n("<i>No image selected.</i>"));
+		//mCommentEdit->setEnabled(false);
+		mEmpty = true;
+		mWritable = false;
 		return;
 	}
 
@@ -106,14 +132,20 @@ void GVMetaEdit::updateContent() {
 	
 	// set comment in QTextEdit
 	if (mCommentItem.isValid()) {
-		mCommentEdit->setText(QString::fromUtf8( mCommentItem.string().ascii() ));
-		mCommentEdit->setEnabled(true);
-		mCommentEdit->setReadOnly(!mWritable);
+		QString comment = QString::fromUtf8( mCommentItem.string().ascii());
+		mEmpty = comment.isEmpty();
+		if (mEmpty) {
+			setEmptyText();
+		} else {
+			mCommentEdit->setTextFormat(QTextEdit::PlainText);
+			mCommentEdit->setText(comment);
+		}
 	} else {
-		mCommentEdit->setText(i18n("No comment available"));
-		mCommentEdit->setEnabled(false);
-		mCommentEdit->setReadOnly(true);
+		mCommentEdit->setTextFormat(QTextEdit::RichText);
+		mCommentEdit->setText("<i>This image can't be commented.</i>");
 	}
+	mCommentEdit->setReadOnly(!mWritable);
+	mCommentEdit->setEnabled(mWritable);
 }
 
 
@@ -128,4 +160,16 @@ void GVMetaEdit::clearData() {
 	}
 	delete mMetaInfo;
 	mMetaInfo = 0L;
+}
+
+
+void GVMetaEdit::setEmptyText() {
+	QString comment;
+	mCommentEdit->setTextFormat(QTextEdit::RichText);
+	if (mWritable) {
+		comment=i18n("<i>Type here to add a comment to this image.</i>");
+	} else {
+		comment=i18n("<i>No comment available.</i>");
+	}
+	mCommentEdit->setText(comment);
 }
