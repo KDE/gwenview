@@ -55,7 +55,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvslideshow.h"
 #include "statusbarprogress.h"
 
-#include "mainwindow.moc"
+#include "gvmainwindow.moc"
 
 
 enum { SB_FOLDER, SB_FILE};
@@ -71,7 +71,7 @@ const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
 const char* CONFIG_STATUSBAR_IN_FS="status bar in full screen";
 
-MainWindow::MainWindow()
+GVMainWindow::GVMainWindow()
 : KDockMainWindow(), mProgress(0L)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
@@ -168,7 +168,7 @@ MainWindow::MainWindow()
 }
 
 
-MainWindow::~MainWindow() {
+GVMainWindow::~GVMainWindow() {
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
 	mPixmapViewStack->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
@@ -181,8 +181,8 @@ MainWindow::~MainWindow() {
 
 
 //-Public slots----------------------------------------------------------
-void MainWindow::setURL(const KURL& url,const QString&) {
-	//kdDebug() << "MainWindow::setURL " << url.path() << " - " << filename << endl;
+void GVMainWindow::setURL(const KURL& url,const QString&) {
+	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
 
     bool filenameIsValid=!mGVPixmap->isNull();
 
@@ -208,13 +208,13 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 // File operations
 //
 //-----------------------------------------------------------------------
-void MainWindow::openParentDir() {
+void GVMainWindow::openParentDir() {
 	KURL url=mGVPixmap->dirURL().upURL();
 	mGVPixmap->setURL(url);	
 }
 
 
-void MainWindow::renameFile() {
+void GVMainWindow::renameFile() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->renameFile();
 	} else {
@@ -223,7 +223,7 @@ void MainWindow::renameFile() {
 }
 
 
-void MainWindow::copyFiles() {
+void GVMainWindow::copyFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->copyFiles();
 	} else {
@@ -232,7 +232,7 @@ void MainWindow::copyFiles() {
 }
 
 
-void MainWindow::moveFiles() {
+void GVMainWindow::moveFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->moveFiles();
 	} else {
@@ -241,7 +241,7 @@ void MainWindow::moveFiles() {
 }
 
 
-void MainWindow::deleteFiles() {
+void GVMainWindow::deleteFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->deleteFiles();
 	} else {
@@ -250,7 +250,7 @@ void MainWindow::deleteFiles() {
 }
 
 
-void MainWindow::showFileProperties() {
+void GVMainWindow::showFileProperties() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->showFileProperties();
 	} else {
@@ -259,7 +259,7 @@ void MainWindow::showFileProperties() {
 }
 
 
-void MainWindow::openWithEditor() {
+void GVMainWindow::openWithEditor() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->openWithEditor();
 	} else {
@@ -268,7 +268,7 @@ void MainWindow::openWithEditor() {
 }
 
 
-void MainWindow::openFile() {
+void GVMainWindow::openFile() {
 	QString path=KFileDialog::getOpenFileName();
 	if (path.isNull()) return;
 
@@ -283,12 +283,12 @@ void MainWindow::openFile() {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void MainWindow::pixmapLoading() {
+void GVMainWindow::pixmapLoading() {
 	kapp->setOverrideCursor(QCursor(WaitCursor));
 }
 
 
-void MainWindow::toggleFullScreen() {
+void GVMainWindow::toggleFullScreen() {
 	KConfig* config=KGlobal::config();
 
 	if (mToggleFullScreen->isChecked()) {
@@ -342,7 +342,7 @@ void MainWindow::toggleFullScreen() {
 }
 
 
-void MainWindow::toggleSlideShow() {
+void GVMainWindow::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
 		if (!mToggleFullScreen->isChecked()) {
 			mToggleFullScreen->activate();
@@ -357,18 +357,18 @@ void MainWindow::toggleSlideShow() {
 }
 
 
-void MainWindow::showConfigDialog() {
+void GVMainWindow::showConfigDialog() {
 	ConfigDialog dialog(this,this);
 	dialog.exec();
 }
 
 
-void MainWindow::showKeyDialog() {
+void GVMainWindow::showKeyDialog() {
 	KKeyDialog::configureKeys(mAccel);
 }
 
 
-void MainWindow::escapePressed() {
+void GVMainWindow::escapePressed() {
 	if (mToggleSlideShow->isChecked()) {
 		mToggleSlideShow->activate();
 		return;
@@ -379,7 +379,7 @@ void MainWindow::escapePressed() {
 }
 
 
-void MainWindow::thumbnailUpdateStarted(int count) {
+void GVMainWindow::thumbnailUpdateStarted(int count) {
 	mProgress=new StatusBarProgress(statusBar(),i18n("Generating thumbnails..."),count);
 	mProgress->progress()->setFormat("%v/%m");
 	mProgress->show();
@@ -387,7 +387,7 @@ void MainWindow::thumbnailUpdateStarted(int count) {
 }
 
 
-void MainWindow::thumbnailUpdateEnded() {
+void GVMainWindow::thumbnailUpdateEnded() {
 	mStop->setEnabled(false);
 	if (mProgress) {
 		mProgress->hide();
@@ -397,12 +397,12 @@ void MainWindow::thumbnailUpdateEnded() {
 }
 
 
-void MainWindow::thumbnailUpdateProcessedOne() {
+void GVMainWindow::thumbnailUpdateProcessedOne() {
 	mProgress->progress()->advance(1);
 }
 
 
-void MainWindow::slotURLEditChanged(const QString &str) {
+void GVMainWindow::slotURLEditChanged(const QString &str) {
 	mGVPixmap->setURL(str);
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
@@ -417,7 +417,7 @@ void MainWindow::slotURLEditChanged(const QString &str) {
 // GUI
 //
 //-----------------------------------------------------------------------
-void MainWindow::updateStatusBar() {
+void GVMainWindow::updateStatusBar() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
 	if (count>1) {
@@ -432,7 +432,7 @@ void MainWindow::updateStatusBar() {
 }
 
 
-void MainWindow::updateFileStatusBar() {
+void GVMainWindow::updateFileStatusBar() {
 	QString txt;
 	QString filename=mGVPixmap->filename();
 	if (!filename.isEmpty()) {
@@ -446,7 +446,7 @@ void MainWindow::updateFileStatusBar() {
 }
 
 
-void MainWindow::createWidgets() {
+void GVMainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
 // Status bar
@@ -485,7 +485,7 @@ void MainWindow::createWidgets() {
 }
 
 
-void MainWindow::createActions() {
+void GVMainWindow::createActions() {
 	mOpenFile=KStdAction::open(this, SLOT(openFile()),actionCollection() );
 	
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
@@ -515,7 +515,7 @@ void MainWindow::createActions() {
 }
 
 
-void MainWindow::createAccels() {
+void GVMainWindow::createAccels() {
 // Associate actions with accelerator
 	mAccel=new KAccel(this);
 	int count=actionCollection()->count();
@@ -537,7 +537,7 @@ void MainWindow::createAccels() {
 }
 
 
-void MainWindow::createMenu() {
+void GVMainWindow::createMenu() {
 	QPopupMenu* fileMenu = new QPopupMenu;
 
 	mOpenFile->plug(fileMenu);
@@ -595,7 +595,7 @@ void MainWindow::createMenu() {
 }
 
 
-void MainWindow::createMainToolBar() {
+void GVMainWindow::createMainToolBar() {
 	KToolBar* mainBar=new KToolBar(this,topDock(),true);
 	mainBar->setLabel(i18n("Main tool bar"));
 	mOpenParentDir->plug(toolBar());
@@ -626,7 +626,7 @@ void MainWindow::createMainToolBar() {
 }
 
 
-void MainWindow::createAddressToolBar() {
+void GVMainWindow::createAddressToolBar() {
 	KToolBar* addressBar=new KToolBar(this,topDock(),true);
 	addressBar->setLabel(i18n("Address tool bar"));
 
@@ -650,7 +650,7 @@ void MainWindow::createAddressToolBar() {
 
 	
 //-Properties-----------------------------------------------	
-void MainWindow::setShowMenuBarInFullScreen(bool value) {
+void GVMainWindow::setShowMenuBarInFullScreen(bool value) {
 	mShowMenuBarInFullScreen=value;
 	if (!mToggleFullScreen->isChecked()) return;
 	if (value) {
@@ -660,7 +660,7 @@ void MainWindow::setShowMenuBarInFullScreen(bool value) {
 	}
 }
 
-void MainWindow::setShowToolBarInFullScreen(bool value) {
+void GVMainWindow::setShowToolBarInFullScreen(bool value) {
 	mShowToolBarInFullScreen=value;
 	if (!mToggleFullScreen->isChecked()) return;
 	if (value) {
@@ -670,7 +670,7 @@ void MainWindow::setShowToolBarInFullScreen(bool value) {
 	}
 }
 
-void MainWindow::setShowStatusBarInFullScreen(bool value) {
+void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 	mShowStatusBarInFullScreen=value;
 	if (!mToggleFullScreen->isChecked()) return;
 	if (value) {
@@ -682,7 +682,7 @@ void MainWindow::setShowStatusBarInFullScreen(bool value) {
 
 
 //-Configuration--------------------------------------------	
-void MainWindow::readConfig(KConfig* config,const QString& group) {
+void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS,false);
 	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS,true);
@@ -690,7 +690,7 @@ void MainWindow::readConfig(KConfig* config,const QString& group) {
 }
 
 
-void MainWindow::writeConfig(KConfig* config,const QString& group) const {
+void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_MENUBAR_IN_FS,mShowMenuBarInFullScreen);
 	config->writeEntry(CONFIG_TOOLBAR_IN_FS,mShowToolBarInFullScreen);

@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kimageio.h>
 #include <klocale.h>
 
-#include "mainwindow.h"
+#include "gvmainwindow.h"
 #include "qxcfi.h"
 
 static KCmdLineOptions options[] = {
@@ -49,9 +49,9 @@ int main (int argc, char *argv[]) {
 	XCFImageFormat::registerFormat();
 
 	if (kapplication.isRestored()) {
-		RESTORE(MainWindow)
+		RESTORE(GVMainWindow)
 	} else {
-		MainWindow *mainWindow = new MainWindow;
+		GVMainWindow *mainWindow = new GVMainWindow;
 		mainWindow->show();
 	}
 

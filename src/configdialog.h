@@ -23,12 +23,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "configdialogbase.h"
 
-class MainWindow;
+class GVMainWindow;
 
 class ConfigDialog : ConfigDialogBase {
 Q_OBJECT
 public:
-	ConfigDialog(QWidget* parent,MainWindow*);
+	ConfigDialog(QWidget* parent,GVMainWindow*);
 	int exec() { return ConfigDialogBase::exec(); }
 
 public slots:
@@ -36,7 +36,7 @@ public slots:
 	void slotApply();
 
 private:
-	MainWindow* mMainWindow;
+	GVMainWindow* mGVMainWindow;
 
 private slots:
 	void calculateCacheSize();

@@ -39,19 +39,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfileviewstack.h"
 #include "gvpixmapviewstack.h"
 #include "gvslideshow.h"
-#include "mainwindow.h"
+#include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
 
 #include "configdialog.moc"
 
 
-ConfigDialog::ConfigDialog(QWidget* parent,MainWindow* mainWindow)
+ConfigDialog::ConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 : ConfigDialogBase(parent,0L,true),
-mMainWindow(mainWindow)
+mGVMainWindow(mainWindow)
 {
-	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
-	GVSlideShow* slideShow=mMainWindow->slideShow();
+	GVFileViewStack* fileViewStack=mGVMainWindow->fileViewStack();
+	GVPixmapViewStack* pixmapViewStack=mGVMainWindow->pixmapViewStack();
+	GVSlideShow* slideShow=mGVMainWindow->slideShow();
 
 // Thumbnails tab
 	mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -72,10 +72,10 @@ mMainWindow(mainWindow)
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
 
 // Full screen tab
-	mShowPathInFullScreen->setChecked(mMainWindow->pixmapViewStack()->showPathInFullScreen());
-	mShowMenuBarInFullScreen->setChecked(mMainWindow->showMenuBarInFullScreen());
-	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
-	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
+	mShowPathInFullScreen->setChecked(mGVMainWindow->pixmapViewStack()->showPathInFullScreen());
+	mShowMenuBarInFullScreen->setChecked(mGVMainWindow->showMenuBarInFullScreen());
+	mShowToolBarInFullScreen->setChecked(mGVMainWindow->showToolBarInFullScreen());
+	mShowStatusBarInFullScreen->setChecked(mGVMainWindow->showStatusBarInFullScreen());
 
 // Mouse wheel behaviour tab
 	typedef QMap<GVPixmapViewStack::WheelBehaviour,QString> WheelBehaviours;
@@ -117,9 +117,9 @@ void ConfigDialog::slotOk() {
 
 
 void ConfigDialog::slotApply() {
-	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
-	GVSlideShow* slideShow=mMainWindow->slideShow();
+	GVFileViewStack* fileViewStack=mGVMainWindow->fileViewStack();
+	GVPixmapViewStack* pixmapViewStack=mGVMainWindow->pixmapViewStack();
+	GVSlideShow* slideShow=mGVMainWindow->slideShow();
 
 // Thumbnails tab
 	fileViewStack->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
@@ -133,10 +133,10 @@ void ConfigDialog::slotApply() {
 	FileOperation::setDestDir(mDefaultDestDir->url());
 
 // Full screen tab
-	mMainWindow->pixmapViewStack()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
-	mMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
-	mMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
-	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
+	mGVMainWindow->pixmapViewStack()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
+	mGVMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
+	mGVMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
+	mGVMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
 
 // Mouse wheel behaviour tab		
 	pixmapViewStack->wheelBehaviours()[NoButton]=     GVPixmapViewStack::WheelBehaviour(mWheelOnly->currentItem());

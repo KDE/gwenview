@@ -38,11 +38,11 @@ class GVPixmapViewStack;
 class StatusBarProgress;
 
 
-class MainWindow : public KDockMainWindow {
+class GVMainWindow : public KDockMainWindow {
 Q_OBJECT
 public:
-	MainWindow();
-	~MainWindow();
+	GVMainWindow();
+	~GVMainWindow();
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
 	GVPixmapViewStack* pixmapViewStack() const { return mPixmapViewStack; }
