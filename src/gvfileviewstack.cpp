@@ -52,18 +52,22 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 : QWidgetStack(parent), mMode(FileList)
 {
 // Actions
-	mSelectFirst=new KAction(i18n("&First"),"gvfirst",Key_Home,
+	mSelectFirst=new KAction(i18n("&First"),
+		QApplication::reverseLayout() ? "gvlast":"gvfirst", Key_Home,
 		this,SLOT(slotSelectFirst()), actionCollection, "first");
 
-	mSelectLast=new KAction(i18n("&Last"),"gvlast",Key_End,
+	mSelectLast=new KAction(i18n("&Last"),
+		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
 	mSelectPrevious=KStdAction::back(this, SLOT(slotSelectPrevious()),actionCollection, "previous" );
-	mSelectPrevious->setIcon("gvprevious");
+	mSelectPrevious->setIcon(QApplication::reverseLayout() ?
+						"gvnext" : "gvprevious");
 	mSelectPrevious->setAccel(Key_Backspace);
 
 	mSelectNext=KStdAction::forward(this, SLOT(slotSelectNext()),actionCollection, "next" );
-	mSelectNext->setIcon("gvnext");
+	mSelectNext->setIcon(QApplication::reverseLayout() ?
+						"gvprevious" : "gvnext");
 	mSelectNext->setAccel(Key_Space);
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"view_detailed");
