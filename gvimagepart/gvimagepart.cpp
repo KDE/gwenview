@@ -40,26 +40,24 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	setInstance( GVImageFactory::instance() );
 
-	m_browserExtension = new GVImagePartBrowserExtension(this);
+	mBrowserExtension = new GVImagePartBrowserExtension(this);
 
 	// Create the widgets
-	m_gvPixmap = new GVPixmap(this);
-	m_pixmapView = new GVScrollPixmapView(parentWidget, m_gvPixmap, actionCollection());
-	m_pixmapView->kpartConfig();
-	setWidget(m_pixmapView);
+	mGVPixmap = new GVPixmap(this);
+	mPixmapView = new GVScrollPixmapView(parentWidget, mGVPixmap, actionCollection());
+	mPixmapView->kpartConfig();
+	setWidget(mPixmapView);
 
-	connect(m_pixmapView, SIGNAL(contextMenu()),
-		m_browserExtension, SLOT(contextMenu()) );
+	connect(mPixmapView, SIGNAL(contextMenu()),
+		mBrowserExtension, SLOT(contextMenu()) );
 
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
 }
 
 GVImagePart::~GVImagePart() {
-	kdDebug() << k_funcinfo << endl;
 }
 
 KAboutData* GVImagePart::createAboutData() {
-	kdDebug() << k_funcinfo << endl;
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
 						"0.1", I18N_NOOP("Image Viewer"),
 						KAboutData::License_GPL,
@@ -68,8 +66,6 @@ KAboutData* GVImagePart::createAboutData() {
 }
 
 bool GVImagePart::openFile() {
-	kdDebug() << k_funcinfo << m_file << endl;
-
 	//m_file is inherited from super-class
 	//it is a QString with the path of the file
 	//remote files are first downloaded and saved in /tmp/kde-user/
@@ -82,7 +78,7 @@ bool GVImagePart::openFile() {
 		return false;
 	}
 
-	m_gvPixmap->setURL(url);
+	mGVPixmap->setURL(url);
 	emit setWindowCaption( url.prettyURL() );
 
 	return true;
@@ -96,24 +92,23 @@ QString GVImagePart::filePath() {
 
 GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {
-	m_gvImagePart = viewPart;
+	mGVImagePart = viewPart;
 }
 
 GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
 }
 
 void GVImagePartBrowserExtension::contextMenu() {
-	kdDebug() << k_funcinfo << endl;
 	/*FIXME Why is this KFileMetaInfo invalid?
-	KFileMetaInfo metaInfo = KFileMetaInfo(m_gvImagePart->filePath());
-	kdDebug() << k_funcinfo << "m_gvImagePart->filePath(): " << m_gvImagePart->filePath() << endl;
+	KFileMetaInfo metaInfo = KFileMetaInfo(mGVImagePart->filePath());
+	kdDebug() << k_funcinfo << "mGVImagePart->filePath(): " << mGVImagePart->filePath() << endl;
 	kdDebug() << k_funcinfo << "metaInfo.isValid(): " << metaInfo.isValid() << endl;
 	kdDebug() << k_funcinfo << "above" << endl;
 	QString mimeType = metaInfo.mimeType();
 	kdDebug() << k_funcinfo << "below" << endl;
-	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
+	emit popupMenu(QCursor::pos(), mGVImagePart->url(), mimeType);
 	*/
-	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), 0);
+	emit popupMenu(QCursor::pos(), mGVImagePart->url(), 0);
 }
 
 #include "gvimagepart.moc"

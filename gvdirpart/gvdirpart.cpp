@@ -43,51 +43,47 @@ K_EXPORT_COMPONENT_FACTORY( libgvdirpart /*library name*/, GVDirFactory );
 
 GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent, const char* name,
 		     const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
-	kdDebug() << k_funcinfo << endl;
-
 	setInstance( GVDirFactory::instance() );
 
-	m_browserExtension = new GVDirPartBrowserExtension(this);
-	m_browserExtension->updateActions();
+	mBrowserExtension = new GVDirPartBrowserExtension(this);
+	mBrowserExtension->updateActions();
 
-	m_splitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
+	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
 
 	// Create the widgets
-	m_gvPixmap = new GVPixmap(this);
-	m_filesView = new GVFileViewStack(m_splitter, actionCollection());
-	m_pixmapView = new GVScrollPixmapView(m_splitter, m_gvPixmap, actionCollection());
+	mGVPixmap = new GVPixmap(this);
+	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
+	mPixmapView = new GVScrollPixmapView(mSplitter, mGVPixmap, actionCollection());
 
-	mSlideShow = new GVSlideShow(m_filesView->selectFirst(), m_filesView->selectNext());
+	mSlideShow = new GVSlideShow(mFilesView->selectFirst(), mFilesView->selectNext());
 
 	FileOperation::kpartConfig();
-	m_filesView->kpartConfig();
-	m_pixmapView->kpartConfig();
+	mFilesView->kpartConfig();
+	mPixmapView->kpartConfig();
 
-	setWidget(m_splitter);
+	setWidget(mSplitter);
 
-	connect(m_pixmapView, SIGNAL(contextMenu()),
-		m_browserExtension, SLOT(contextMenu()) );
-	connect(m_filesView, SIGNAL(urlChanged(const KURL&)),
-		m_gvPixmap, SLOT(setURL(const KURL&)) );
-	connect(m_filesView, SIGNAL(directoryChanged(const KURL&)),
-		m_browserExtension, SLOT(directoryChanged(const KURL&)) );
+	connect(mPixmapView, SIGNAL(contextMenu()),
+		mBrowserExtension, SLOT(contextMenu()) );
+	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
+		mGVPixmap, SLOT(setURL(const KURL&)) );
+	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
+		mBrowserExtension, SLOT(directoryChanged(const KURL&)) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
-	m_splitter->setSizes(splitterSizes);
+	mSplitter->setSizes(splitterSizes);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
-
 
 	setXMLFile( "gvdirpart/gvdirpart.rc" );
 }
 
 GVDirPart::~GVDirPart() {
-	kdDebug() << k_funcinfo << endl;
+	delete mSlideShow;
 }
 
 KAboutData* GVDirPart::createAboutData() {
-	kdDebug() << k_funcinfo << endl;
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
 						"0.1", I18N_NOOP("Image Viewer"),
 						KAboutData::License_GPL,
@@ -97,41 +93,36 @@ KAboutData* GVDirPart::createAboutData() {
 
 bool GVDirPart::openFile() {
         //unused because openURL implemented
-        kdDebug() << k_funcinfo << endl;
 
-        //m_gvPixmap->setFilename(m_file);
+        //mGVPixmap->setFilename(mFile);
         return true;
 }
 
 bool GVDirPart::openURL(const KURL& url) {
-	kdDebug() << k_funcinfo << url.prettyURL() << "<--end" << endl;
-
 	if (!url.isValid())  {
 		return false;
 	}
 
 	m_url = url;
 
-	m_gvPixmap->setDirURL(url);
-	m_filesView->setURL(url, 0);
+	mGVPixmap->setDirURL(url);
+	mFilesView->setURL(url, 0);
 	emit setWindowCaption( url.prettyURL() );
 
 	return true;
 }
 
 void GVDirPart::setKonquerorWindowCaption(const QString& url) {
-	kdDebug() << k_funcinfo << url << endl;
 	emit setWindowCaption(url);
-	kdDebug() << k_funcinfo << "done" << endl;
 }
 
 KURL GVDirPart::pixmapURL() {
-	return m_pixmapView->pixmapURL();
+	return mPixmapView->pixmapURL();
 }
 
 void GVDirPart::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
-		GVSlideShowDialog dialog(m_splitter, mSlideShow);
+		GVSlideShowDialog dialog(mSplitter, mSlideShow);
 		if (!dialog.exec()) {
 			mToggleSlideShow->setChecked(false);
 			return;
@@ -148,14 +139,13 @@ void GVDirPart::toggleSlideShow() {
 
 GVDirPartBrowserExtension::GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {
-	m_gvDirPart = viewPart;
+	mGVDirPart = viewPart;
 }
 
 GVDirPartBrowserExtension::~GVDirPartBrowserExtension() {
 }
 
 void GVDirPartBrowserExtension::updateActions() {
-	kdDebug() << k_funcinfo << endl;
 	/*
 	emit enableAction( "copy", true );
 	emit enableAction( "cut", true );
@@ -189,12 +179,10 @@ void GVDirPartBrowserExtension::cut() {
 }
 
 void GVDirPartBrowserExtension::directoryChanged(const KURL& dirURL) {
-	kdDebug() << k_funcinfo << endl;
 	emit openURLRequest(dirURL);
 }
 
 void GVDirPartBrowserExtension::contextMenu() {
-	kdDebug() << k_funcinfo << endl;
 	/*FIXME Why is this KFileMetaInfo invalid?
 	KFileMetaInfo metaInfo = KFileMetaInfo(m_gvImagePart->filePath());
 	kdDebug() << k_funcinfo << "m_gvImagePart->filePath(): " << m_gvImagePart->filePath() << endl;
@@ -204,9 +192,7 @@ void GVDirPartBrowserExtension::contextMenu() {
 	kdDebug() << k_funcinfo << "below" << endl;
 	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
 	*/
-	kdDebug() << k_funcinfo << "url: " << m_gvDirPart->url() << endl;
-	kdDebug() << k_funcinfo << "filename: " << m_gvDirPart->pixmapURL() << endl;
-	emit popupMenu(QCursor::pos(), m_gvDirPart->pixmapURL(), 0);
+	emit popupMenu(QCursor::pos(), mGVDirPart->pixmapURL(), 0);
 }
 
 #include "gvdirpart.moc"

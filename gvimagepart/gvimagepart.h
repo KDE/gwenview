@@ -43,7 +43,7 @@ class GVImagePartBrowserExtension: public KParts::BrowserExtension {
  public slots:
 	void contextMenu();
  private:
-	GVImagePart* m_gvImagePart;
+	GVImagePart* mGVImagePart;
 };
 
 /**
@@ -76,21 +76,18 @@ class GVImagePart : public KParts::ReadOnlyPart {
         /**
 	 * The component's widget
 	 */
-	GVScrollPixmapView* m_pixmapView;
+	GVScrollPixmapView* mPixmapView;
 
 	/**
 	 * Holds the image
 	 */
-	GVPixmap* m_gvPixmap;
-
-	// An action to which we need to keep a pointer
-	KAction* m_exampleAction;
+	GVPixmap* mGVPixmap;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies
 	 * some extra functionality to Konqueror.
 	 */
-	GVImagePartBrowserExtension* m_browserExtension;
+	GVImagePartBrowserExtension* mBrowserExtension;
 };
 
 #endif

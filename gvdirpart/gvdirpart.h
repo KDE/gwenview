@@ -44,10 +44,7 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name=0L);
 	~GVDirPartBrowserExtension();
 
-//protected slots:
  public slots:
-//  void selected(TreeMapItem*);
-//  void contextMenu(TreeMapItem*,const QPoint&);
 	void contextMenu();
 
 	void updateActions();
@@ -61,7 +58,7 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 
 	void directoryChanged(const KURL& dirURL);
  private:
-	GVDirPart* m_gvDirPart;
+	GVDirPart* mGVDirPart;
 };
 
 /**
@@ -103,6 +100,9 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	virtual bool openURL(const KURL& url);
 
  protected slots:
+	/**
+	 * Turns the slide show on or off
+	 */
 	void toggleSlideShow();
 
  protected:
@@ -110,29 +110,29 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * The component's widget, contains the files view on the left
 	 * and scroll view on the right.
 	 */
-	QSplitter* m_splitter;
+	QSplitter* mSplitter;
 
         /**
 	 * Scroll widget
 	 */
-	GVScrollPixmapView* m_pixmapView;
+	GVScrollPixmapView* mPixmapView;
 
 	/**
 	 * Holds the image
 	 */
-	GVPixmap* m_gvPixmap;
+	GVPixmap* mGVPixmap;
 
 	/**
 	 * Shows the directory's files and folders
 	 */
 
-	GVFileViewStack* m_filesView;
+	GVFileViewStack* mFilesView;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies
 	 * some extra functionality to Konqueror.
 	 */
-	GVDirPartBrowserExtension* m_browserExtension;
+	GVDirPartBrowserExtension* mBrowserExtension;
 
 	/**
 	 * Action turns on slide show
