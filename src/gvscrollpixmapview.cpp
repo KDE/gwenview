@@ -943,13 +943,6 @@ void GVScrollPixmapView::restartAutoHideTimer() {
 
 
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
-	//KPart
-	if (QString(parent()->name()) == QString("KonqFrame") ||
-		QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
-		emit contextMenu();
-		return;
-	}
-
 	QPopupMenu menu(this);
 	bool noImage=mDocument->filename().isEmpty();
 	bool validImage=!mDocument->isNull();

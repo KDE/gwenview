@@ -16,6 +16,8 @@
  - Horizontal mouse wheels should work correctly now.
  - Entering "~username" in location combo box works now.
  - Selecting an URL in the location combo box opens it.
+ - When viewing an image from within a frame based web site in Konqueror, don't
+   crash when opening popup menu.
 
 2004.03.20 - v1.1.1
 - New features:

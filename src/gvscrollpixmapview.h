@@ -115,12 +115,10 @@ signals:
 	void selectPrevious();
 	void selectNext();
 	void zoomChanged(double);
-	/**
-	 * Used by KParts to signal that the right mouse button menu
-	 * should be shown
-	 */
-	void contextMenu();
 
+protected:
+	virtual void openContextMenu(const QPoint&);
+	
 private:
 	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
@@ -187,7 +185,6 @@ private:
 	void updateImageOffset();
 	void updateScrollBarMode();
 	void updateContentSize();
-	void openContextMenu(const QPoint&);
 	void updatePathLabel();
 	void updateZoomActions();
 	void selectTool(ButtonState, bool force);

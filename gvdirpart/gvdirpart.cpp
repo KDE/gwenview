@@ -40,6 +40,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvslideshowdialog.h>
 #include <src/fileoperation.h>
 
+
+class GVDirPartView : public GVScrollPixmapView {
+public:
+	GVDirPartView(QWidget* parent, GVDocument* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
+	: GVScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	{}
+
+protected:
+	void openContextMenu(const QPoint&) {
+		mBrowserExtension->contextMenu();
+	}
+
+private:
+	GVDirPartBrowserExtension* mBrowserExtension;
+};
+
+
 //Factory Code
 typedef KParts::GenericFactory<GVDirPart> GVDirFactory;
 K_EXPORT_COMPONENT_FACTORY( libgvdirpart /*library name*/, GVDirFactory )
@@ -56,7 +73,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	// Create the widgets
 	mDocument = new GVDocument(this);
 	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
-	mPixmapView = new GVScrollPixmapView(mSplitter, mDocument, actionCollection());
+	mPixmapView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
 	mSlideShow = new GVSlideShow(mFilesView->selectFirst(), mFilesView->selectNext());
 

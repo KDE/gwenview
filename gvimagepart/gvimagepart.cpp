@@ -32,6 +32,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
 
+
+
+class GVImagePartView : public GVScrollPixmapView {
+public:
+	GVImagePartView(QWidget* parent, GVDocument* document, KActionCollection* actionCollection, GVImagePartBrowserExtension* browserExtension)
+	: GVScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	{}
+
+protected:
+	void openContextMenu(const QPoint&) {
+		mBrowserExtension->contextMenu();
+	}
+
+private:
+	GVImagePartBrowserExtension* mBrowserExtension;
+};
+
+
 //Factory Code
 typedef KParts::GenericFactory<GVImagePart> GVImageFactory;
 K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
@@ -44,7 +62,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	// Create the widgets
 	mDocument = new GVDocument(this);
-	mPixmapView = new GVScrollPixmapView(parentWidget, mDocument, actionCollection());
+	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	mPixmapView->kpartConfig();
 	setWidget(mPixmapView);
 
