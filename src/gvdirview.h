@@ -78,6 +78,9 @@ private:
 	KFileTreeViewItem* mDropTarget;
 	KFileTreeBranch* mHomeBranch;
 	KFileTreeBranch* mRootBranch;
+
+	// FIXME: Doc
+	void setURLInternal(const KURL&);
 };
 
 

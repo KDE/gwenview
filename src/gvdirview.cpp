@@ -41,21 +41,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "gvdirview.moc"
 
+#if KDE_VERSION < 306
+#define SAME_URL(u1,u2,slash) u1.cmp(u2,slash)
+#else
+#define SAME_URL(u1,u2,slash) u1.equals(u2,slash)
+#endif
 
+		
 const int AUTO_OPEN_DELAY=1000;
 const int DND_ICON_COUNT=8;
 const char* DND_PREFIX="dnd";
 
 
 GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
-
-// Look tweaking
+	// Look tweaking
 	addColumn(QString::null);
 	header()->hide();
 	setAllColumnsShowFocus(true);
 	setRootIsDecorated(true);
 
-// Create branches
+	// Create branches
 	mHomeBranch=addBranch(KURL(QDir::homeDirPath()),i18n("Home Directory"),SmallIcon("folder_home"));
 	mRootBranch=addBranch(KURL("/"),i18n("Root Directory"),SmallIcon("folder_red"));
 	setDirOnlyMode(mHomeBranch,true);
@@ -68,7 +73,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
 		this, SLOT( slotGVDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
-// Popup
+	// Popup
 	mPopupMenu=new QPopupMenu(this);
 	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder"),this,SLOT(makeDir()));
 	mPopupMenu->insertSeparator();
@@ -80,11 +85,11 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
 		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
 
-// Dir selection
+	// Dir selection
 	connect(this,SIGNAL(executed(QListViewItem*)),
 		this,SLOT(slotExecuted(QListViewItem*)) );
 
-// Drag'n'drop
+	// Drag'n'drop
 	setDragEnabled(true);
 	setDropVisualizer(false);
 	setDropHighlighter(true);
@@ -102,40 +107,43 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
  * hidden
  */
 void GVDirView::showEvent(QShowEvent* event) {
-#if KDE_VERSION < 306
-	if (!currentURL().cmp(m_nextUrlToSelect,true)) {
-#else
-	if (!currentURL().equals(m_nextUrlToSelect,true)) {
-#endif
-		setURL(m_nextUrlToSelect,QString::null);
+	if (!SAME_URL(currentURL(),m_nextUrlToSelect,true)) {
+		setURLInternal(m_nextUrlToSelect);
 	}	
 	QWidget::showEvent(event);
 }
 
 
-void GVDirView::setURL(const KURL& url,const QString&) {
-	//kdDebug() << "GVDirView::setURL " << url.path() << endl;
+void GVDirView::setURL(const KURL& url,const QString& filename) {
+	kdDebug() << "GVDirView::setURL " << url.prettyURL() << ' ' << filename << endl;
 
 	// Do nothing if we're browsing remote files
 	if (!url.isLocalFile()) return;
-	
-#if KDE_VERSION < 306
-	if (currentURL().cmp(url,true)) {
-#else
-	if (currentURL().equals(url,true)) {
-#endif
-		//kdDebug() << "GVDirView::setURL : same as current\n";
+
+	if (SAME_URL(currentURL(),url,true)) {
+		kdDebug() << "GVDirView::setURL same as current\n";
 		return;
 	}
 
-// Do not update the view if it's hidden, just store the url to
-// open next time the view is shown
+	if (SAME_URL(m_nextUrlToSelect,url,true)) {
+		kdDebug() << "GVDirView::setURL same as m_nextUrlToSelect\n";
+		return;
+	}
+
+	// Do not update the view if it's hidden, just store the url to
+	// open next time the view is shown
 	if (!isVisible()) {
-		//kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
+		kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
 		slotSetNextUrlToSelect(url);
 		return;
 	}
+
+	setURLInternal(url);
+}
+
 	
+void GVDirView::setURLInternal(const KURL& url) {
+	kdDebug() << "GVDirView::setURLInternal " << url.prettyURL() << endl;
 	QStringList folderParts;
 	QStringList::Iterator folderIter,endFolderIter;
 	QString folder="/";
@@ -152,33 +160,28 @@ void GVDirView::setURL(const KURL& url,const QString&) {
 	}
 	folderParts=QStringList::split('/',path);
 
-// Finds the deepest existing view item
+	// Finds the deepest existing view item
 	folderIter=folderParts.begin();
 	endFolderIter=folderParts.end();
 	for(;folderIter!=endFolderIter;++folderIter) {
 
 		nextViewItem=findViewItem(viewItem,*folderIter);
 		if (nextViewItem) {
-			folder+=*folderIter + "/";
+			folder+=*folderIter + '/';
 			viewItem=nextViewItem;
 		} else {
 			break;
 		}
 	}
+	viewItem->setOpen(true);
 
-// If this is the wanted item, select it, 
-// otherwise set the url as the next to select
-#if KDE_VERSION < 306
-	if (viewItem->url().cmp(url,true)) {
-#else
-	if (viewItem->url().equals(url,true)) {
-#endif
+	// If this is the wanted item, select it, 
+	// otherwise set the url as the next to select
+	if (SAME_URL(viewItem->url(),url,true)) {
 		setCurrentItem(viewItem);
 		ensureItemVisible(viewItem);
-		viewItem->setOpen(true);
 	} else {
 		slotSetNextUrlToSelect(url);
-		viewItem->setOpen(true);
 	}
 }
 
@@ -198,16 +201,13 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 	for(;it.current(); ++it ) {
 		KURL url = (*it)->url();
 
-	// This is an URL to select
-	// (We block signals to avoid simulating a click on the dir item)
-#if KDE_VERSION < 306
-		if( m_nextUrlToSelect.cmp(url, true )) {
-#else
-		if( m_nextUrlToSelect.equals(url, true )) {
-#endif
+		// This is an URL to select
+		// (We block signals to avoid simulating a click on the dir item)
+		if (SAME_URL(m_nextUrlToSelect,url,true)) {
 			blockSignals(true);
 			setCurrentItem(*it);
 			blockSignals(false);
+
 			ensureItemVisible(*it);
 			(*it)->setOpen(true);
 			m_nextUrlToSelect = KURL();
@@ -235,17 +235,13 @@ void GVDirView::slotGVDirViewPopulateFinished(KFileTreeViewItem* item) {
 		startAnimation(mDropTarget,DND_PREFIX,DND_ICON_COUNT);
 	}
 
-// We reached the URL to select, get out
-#if KDE_VERSION < 306
-	if (url.cmp(m_nextUrlToSelect,true)) return;
-#else
-	if (url.equals(m_nextUrlToSelect,true)) return;
-#endif
+	// We reached the URL to select, get out
+	if (SAME_URL(url,m_nextUrlToSelect,true)) return;
 
-// This URL is not a parent of a wanted URL, get out
+	// This URL is not a parent of a wanted URL, get out
 	if (!url.isParentOf(m_nextUrlToSelect)) return;
 
-// Find the next child item and open it
+	// Find the next child item and open it
 	for (child=item->firstChild(); child; child=child->nextSibling()) {
 		url=static_cast<KFileTreeViewItem*>(child)->url();
 		if (url.isParentOf(m_nextUrlToSelect)) {
@@ -277,7 +273,7 @@ void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 		return;
 	}
 
-// Get a pointer to the new drop item
+	// Get a pointer to the new drop item
 	QPoint point(0,event->pos().y());
 	KFileTreeViewItem* newDropTarget=static_cast<KFileTreeViewItem*>( itemAt(contentsToViewport(point)) );
 	if (!newDropTarget) {
@@ -292,7 +288,7 @@ void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 		stopAnimation(mDropTarget);
 	}
 
-// Restart auto open timer if we are over a new item 
+	// Restart auto open timer if we are over a new item 
 	mAutoOpenTimer->stop();
 	mDropTarget=newDropTarget;
 	startAnimation(newDropTarget,DND_PREFIX,DND_ICON_COUNT);
@@ -312,16 +308,16 @@ void GVDirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 void GVDirView::contentsDropEvent(QDropEvent* event) {
 	mAutoOpenTimer->stop();
 
-// Quit if no valid target
+	// Quit if no valid target
 	if (!mDropTarget) return;
 
-// Get data from drop (do it before showing menu to avoid mDropTarget changes)
+	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
 	KURL dest=mDropTarget->url();
 
 	KURL::List urls;
 	KURLDrag::decode(event,urls);
 
-// Show popup
+	// Show popup
 	QPopupMenu menu(this);
 	int copyItemID = menu.insertItem( i18n("&Copy Here") );
 	int moveItemID = menu.insertItem( i18n("&Move Here") );
@@ -329,15 +325,15 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 	menu.setMouseTracking(true);
 	int id = menu.exec(QCursor::pos());
 
-// Handle menu choice
+	// Handle menu choice
 	if (id!=-1) {
 		if (id==copyItemID) {
 			KIO::copy(urls, dest, true);
 		} else if (id==moveItemID) {
 			KIO::move(urls, dest, true);
 			
-		// If the current url was in the list, set the drop target as the new
-		// current item
+			// If the current url was in the list, set the drop target as the new
+			// current item
 			KURL current=currentURL();
 			KURL::List::ConstIterator it=urls.begin();
 			for (; it!=urls.end(); ++it) {
@@ -349,7 +345,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 		}
 	}
 
-// Reset drop target
+	// Reset drop target
 	if (mDropTarget) {
 		stopAnimation(mDropTarget);
 		mDropTarget=0L;
