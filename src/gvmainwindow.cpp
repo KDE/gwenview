@@ -753,6 +753,7 @@ void GVMainWindow::createWidgets() {
 	(void)new KToolBar(vbox, "fileViewToolBar", true);
 	mFileViewStack=new GVFileViewStack(vbox, actionCollection());
 	mFileDock->setWidget(vbox);
+	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
 
 	// Meta info edit widget
