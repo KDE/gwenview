@@ -70,8 +70,8 @@ private:
 	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
 	KToolBar* mLocationToolBar;
-    QLabel* mSBDirLabel;
-    QLabel* mSBDetailLabel;
+	QLabel* mSBDirLabel;
+	QLabel* mSBDetailLabel;
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
