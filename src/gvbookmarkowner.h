@@ -25,15 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kbookmarkmanager.h>
 #include <kurl.h>
 
-class KActionCollection;
-class KPopupMenu;
-
 
 class GVBookmarkOwner : public QObject, public KBookmarkOwner {
 Q_OBJECT
 public:
-	GVBookmarkOwner(QWidget* parent,KActionCollection*);
-	KPopupMenu* menu() const { return mMenu; }
+	GVBookmarkOwner(QWidget* parent);
 
 	// KBookmarkOwner interface
 	void openBookmarkURL(const QString&);
@@ -46,7 +42,6 @@ signals:
 	void openURL(const KURL&);
 
 private:
-	KPopupMenu* mMenu;
 	KURL mURL;
 };
 

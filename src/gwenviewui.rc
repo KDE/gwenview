@@ -44,6 +44,7 @@
   	<Action name="next"/>
   	<Action name="last"/>
   </Menu>
+  <Action name="bookmarks"/>
 </MenuBar>
 
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>

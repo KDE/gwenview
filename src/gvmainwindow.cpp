@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaccel.h>
 #include <kaction.h>
 #include <kapplication.h>
+#include <kbookmarkmanager.h>
+#include <kbookmarkmenu.h>
 #include <kcmdlineargs.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -43,6 +45,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kpopupmenu.h>
 #include <kprogress.h>
 #include <ksqueezedtextlabel.h>
+#include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -534,6 +537,27 @@ void GVMainWindow::createActions() {
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()), actionCollection() );
 	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
 	
+	// Bookmarks
+	QString file = locate( "data", "kfile/bookmarks.xml" );
+	if (file.isEmpty()) {
+		file = locateLocal( "data", "kfile/bookmarks.xml" );
+	}
+
+	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
+	manager->setUpdate(true);
+	manager->setShowNSBookmarks(false);
+
+	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this);
+	
+	KActionMenu* bookmark=new KActionMenu(i18n( "&Bookmarks" ), "bookmark", actionCollection(), "bookmarks" );
+	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), this->actionCollection(), true);
+	
+	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
+		mGVPixmap,SLOT(setDirURL(const KURL&)) );
+	
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		bookmarkOwner,SLOT(setURL(const KURL&)) );
+	
 	// Settings
 	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
 	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
@@ -663,12 +687,7 @@ void GVMainWindow::createMenu() {
 	
 	menuBar()->insertItem(i18n("&Go"), goMenu);
 
-	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this,this->actionCollection());
-	menuBar()->insertItem(i18n("&Bookmarks"),bookmarkOwner->menu());
-	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
-		mGVPixmap,SLOT(setDirURL(const KURL&)) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		bookmarkOwner,SLOT(setURL(const KURL&)) );
+	
 	
 	QPopupMenu* settingsMenu = new QPopupMenu;
 	mShowConfigDialog->plug(settingsMenu);

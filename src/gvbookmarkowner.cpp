@@ -18,31 +18,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// KDE includes
+// KDE 
 #include <kbookmarkmenu.h>
-#include <kpopupmenu.h>
-#include <kstandarddirs.h>
 
-// Our includes
+// Local 
 #include "gvbookmarkowner.moc"
 
 
-GVBookmarkOwner::GVBookmarkOwner(QWidget* parent,KActionCollection* actionCollection)
+GVBookmarkOwner::GVBookmarkOwner(QWidget* parent)
 : QObject(parent)
-{
-	mMenu=new KPopupMenu(parent);
-
-	QString file = locate( "data", "kfile/bookmarks.xml" );
-	if (file.isEmpty()) {
-		file = locateLocal( "data", "kfile/bookmarks.xml" );
-	}
-
-	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
-	manager->setUpdate(true);
-	manager->setShowNSBookmarks(false);
-
-	new KBookmarkMenu(manager, this, mMenu, actionCollection, true);
-}
+{}
 
 
 void GVBookmarkOwner::openBookmarkURL(const QString& strURL)
