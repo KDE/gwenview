@@ -51,7 +51,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addCredit("GeniusR13", I18N_NOOP("Fixed compilation on KDE 3.0 (v0.16.1)"), "geniusr13@gmx.net");
 	aboutData.addCredit("Ian Koenig", I18N_NOOP("First RPM spec file"), "iguy@ionsphere.org");
 	aboutData.addCredit("Meni Livne", I18N_NOOP("Toolbar layout patch for RTL languages (v0.16.0)"), "livne@kde.org");
-	aboutData.addCredit("Lubos Lunak", I18N_NOOP("Patch to generate thumbnails for the visible images first (v1.1.0)"), "l.lunak@suse.cz");
+	aboutData.addCredit("Luboš Luňák", I18N_NOOP("Patch to generate thumbnails for the visible images first (v1.1.0)"), "l.lunak@suse.cz");
 	aboutData.addCredit("Angelo Naselli", I18N_NOOP("Printing support (v1.0.0)"), "random_lx@yahoo.com");
 	aboutData.addCredit("Jos van den Oever", I18N_NOOP("File info view (v1.0.0)\nPatch to toggle auto-zoom on click (v1.0.0)"), "jos@vandenoever.info");
 	aboutData.addCredit("Jeroen Peters", I18N_NOOP("Configurable mouse wheel behavior (v1.1.1)"), "jpeters@coldmail.nl");
