@@ -234,9 +234,9 @@ inline void composite(uint* rgba,uint value) {
 	if (alpha<255) {
 		uint alphaValue=(255-alpha)*value;
 		
-		uint c1=( ( (*rgba & 0xFF0000) >> 16 ) * alpha + alphaValue ) / 255;
-		uint c2=( ( (*rgba & 0x00FF00) >>  8 ) * alpha + alphaValue ) / 255;
-		uint c3=( ( (*rgba & 0x0000FF) >>  0 ) * alpha + alphaValue ) / 255;
+		uint c1=( ( (*rgba & 0xFF0000) >> 16 ) * alpha + alphaValue ) >> 8;
+		uint c2=( ( (*rgba & 0x00FF00) >>  8 ) * alpha + alphaValue ) >> 8;
+		uint c3=( ( (*rgba & 0x0000FF) >>  0 ) * alpha + alphaValue ) >> 8;
 		*rgba=0xFF000000 + (c1<<16) + (c2<<8) + c3;
 	}
 }
