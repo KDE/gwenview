@@ -34,110 +34,53 @@ class QKeyEvent;
 // Our includes
 #include "gvfileview.h"
 
-/**
- * An item for the listiew, that has a reference to its corresponding
- * @ref KFileItem.
- */
-class GVFileListViewItem : public KListViewItem
-{
-public:
-	GVFileListViewItem( QListView *parent, const QString &text,
-					   const QPixmap &icon, KFileItem *fi )
-		: KListViewItem( parent, text ), inf( fi ) {
-		setPixmap( 0, icon );
-		setText( 0, text );
-	}
-
-	/**
-	 * @since 3.1
-	 */
-	GVFileListViewItem( QListView *parent, KFileItem *fi )
-		: KListViewItem( parent ), inf( fi ) {
-		init();
-	}
-
-	GVFileListViewItem( QListView *parent, const QString &text,
-					   const QPixmap &icon, KFileItem *fi,
-					   QListViewItem *after)
-		: KListViewItem( parent, after ), inf( fi ) {
-		setPixmap( 0, icon );
-		setText( 0, text );
-	}
-	~GVFileListViewItem() {
-		inf->removeExtraData( listView() );
-	}
-
-	/**
-	 * @returns the corresponding KFileItem
-	 */
-	KFileItem *fileInfo() const { return inf; }
-
-	virtual QString key( int /*column*/, bool /*ascending*/ ) const { return m_key; }
-
-	void setKey( const QString& key ) { m_key = key; }
-
-	QRect rect() const
-	{
-		QRect r = listView()->itemRect(this);
-		return QRect( listView()->viewportToContents( r.topLeft() ),
-					  QSize( r.width(), r.height() ) );
-	}
-
-	/**
-	 * @since 3.1
-	 */
-	void init();
-
-private:
-	KFileItem *inf;
-	QString m_key;
-};
-
+class GVFileDetailViewItem;
 
 class GVFileDetailView : public KListView, public GVFileView
 {
 	Q_OBJECT
 
 public:
-	GVFileDetailView(QWidget *parent, const char *name);
+	GVFileDetailView(QWidget* parent, const char* name);
 	virtual ~GVFileDetailView();
 
-	virtual QWidget *widget() { return this; }
+	virtual QWidget* widget() { return this; }
 	virtual void clearView();
 
 	virtual void updateView( bool );
 	virtual void updateView(const KFileItem*);
-	virtual void removeItem( const KFileItem *);
+	virtual void removeItem( const KFileItem* );
 	virtual void listingCompleted();
 
-	virtual void setSelected(const KFileItem *, bool);
-	virtual bool isSelected(const KFileItem *i) const;
+	virtual void setSelected(const KFileItem* , bool);
+	virtual bool isSelected(const KFileItem* i) const;
 	virtual void clearSelection();
 	virtual void selectAll();
 	virtual void invertSelection();
 
-	virtual void setCurrentItem( const KFileItem * );
-	virtual KFileItem * currentFileItem() const;
-	virtual KFileItem * firstFileItem() const;
-	virtual KFileItem * nextItem( const KFileItem * ) const;
-	virtual KFileItem * prevItem( const KFileItem * ) const;
+	virtual void setCurrentItem( const KFileItem* );
+	virtual KFileItem* currentFileItem() const;
+	virtual KFileItem* firstFileItem() const;
+	virtual KFileItem* nextItem( const KFileItem* ) const;
+	virtual KFileItem* prevItem( const KFileItem* ) const;
 
-	virtual void insertItem( KFileItem *i );
+	virtual void insertItem( KFileItem* i );
 
 	// implemented to get noticed about sorting changes (for sortingIndicator)
 	virtual void setSorting( QDir::SortSpec );
 
-	void ensureItemVisible( const KFileItem * );
+	void ensureItemVisible( const KFileItem*  );
 
 	// for KMimeTypeResolver
 	void mimeTypeDeterminationFinished();
-	void determineIcon( GVFileListViewItem *item );
-	QScrollView *scrollWidget() const { return (QScrollView*) this; }
-
+	void determineIcon( GVFileDetailViewItem* item );
+	QScrollView* scrollWidget() { return this; }
+	
+	GVFileDetailViewItem* viewedItem() const { return mViewedItem; }
 	void setViewedFileItem(const KFileItem* fileItem);
 
 protected:
-	virtual void keyPressEvent( QKeyEvent * );
+	virtual void keyPressEvent( QKeyEvent*  );
 
 	int mSortingCol;
 
@@ -146,28 +89,29 @@ protected slots:
 
 private slots:
 	void slotSortingChanged( int );
-	void selected( QListViewItem *item );
-	void slotActivate( QListViewItem *item );
-	void highlighted( QListViewItem *item );
-	void slotActivateMenu ( QListViewItem *item, const QPoint& pos );
+	void selected( QListViewItem* item );
+	void slotActivate( QListViewItem* item );
+	void highlighted( QListViewItem* item );
+	void slotActivateMenu ( QListViewItem* item, const QPoint& pos );
 
 private:
 	bool mBlockSortingSignal;
-	KMimeTypeResolver<GVFileListViewItem,GVFileDetailView> *mResolver;
+	KMimeTypeResolver<GVFileDetailViewItem,GVFileDetailView>* mResolver;
 
-	virtual void insertItem(QListViewItem *i) { KListView::insertItem(i); }
+	virtual void insertItem(QListViewItem* i) { KListView::insertItem(i); }
 	virtual void setSorting(int i, bool b) { KListView::setSorting(i, b); }
-	virtual void setSelected(QListViewItem *i, bool b) { KListView::setSelected(i, b); }
+	virtual void setSelected(QListViewItem* i, bool b) { KListView::setSelected(i, b); }
 
-	inline GVFileListViewItem * viewItem( const KFileItem *item ) const {
-		if ( item )
-			return (GVFileListViewItem *) item->extraData( this );
+	GVFileDetailViewItem* viewItem( const KFileItem* item ) const {
+		if (item) return (GVFileDetailViewItem*)item->extraData(this);
 		return 0L;
 	}
 
-	void setSortingKey( GVFileListViewItem *item, const KFileItem *i );
+	void setSortingKey(GVFileDetailViewItem* item, const KFileItem* i);
 	
 	void startDrag();
+
+	GVFileDetailViewItem* mViewedItem;
 };
 
 

@@ -149,6 +149,7 @@ void FileThumbnailView::setViewedFileItem(const KFileItem* fileItem) {
 //-KFileView methods--------------------------------------------------------
 void FileThumbnailView::clearView() {
     stopThumbnailUpdate();
+	mViewedItem=0L;
 	QIconView::clear();
 }
 
@@ -237,6 +238,7 @@ void FileThumbnailView::removeItem(const KFileItem* fileItem) {
 
 // Remove it from our view
 	const FileThumbnailViewItem* iconItem=static_cast<const FileThumbnailViewItem*>( fileItem->extraData(this) );
+	if (iconItem==mViewedItem) mViewedItem=0L;
 	delete iconItem;
 	KFileView::removeItem(fileItem);
 	arrangeItemsInGrid();

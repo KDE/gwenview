@@ -5,7 +5,7 @@ gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
 	main.cpp gvpixmap.cpp fitpixmapview.cpp dirview.cpp gvfileviewstack.cpp \
 	filethumbnailview.cpp fileoperation.cpp configdialog.cpp fileopobject.cpp \
 	filethumbnailviewitem.cpp qxcfi.cpp gvarchive.cpp gvslideshow.cpp \
-	gvfiledetailview.cpp
+	gvfiledetailview.cpp gvfiledetailviewitem.cpp
 
 gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBJPEG)
 
@@ -21,7 +21,8 @@ noinst_HEADERS = configdialogbase.h configdialog.h dirview.h fileoperation.h \
 				 gvpixmap.h mainwindow.h pixmapview.h pixmapviewinterface.h \
 				 scrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
 				 thumbnailsize.h filethumbnailviewitem.h qxcfi.h gimp.h \
-				 gvarchive.h gvslideshow.h gvfiledetailview.h gvfileview.h
+				 gvarchive.h gvslideshow.h gvfiledetailview.h gvfileview.h \
+				 gvfiledetailviewitem.h
 
 
 EXTRA_DIST = configdialogbase.ui
