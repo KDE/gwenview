@@ -22,11 +22,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kprocess.h>
 
 // Our includes
 #include "gvjpegtran.moc"
+
+
+const char* CONFIG_PROGRAM_PATH="path";
+
+static QString sProgramPath;
+
+
 
 GVJPEGTran::GVJPEGTran()
 : mDone(false)
@@ -46,7 +54,7 @@ void GVJPEGTran::slotProcessExited() {
 QByteArray GVJPEGTran::apply(const QByteArray& src,Operation operation) {
 	GVJPEGTran obj;
 	KProcess process;
-	process << "jpegtran";
+	process << sProgramPath;
 	
 	switch (operation) {
 	case RotateLeft:
@@ -82,5 +90,32 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,Operation operation) {
 	}
 
 	return obj.mResult;
+}
+
+
+//---------------------------------------------------------------------------
+//
+// Config
+//
+//---------------------------------------------------------------------------
+void GVJPEGTran::readConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	sProgramPath=config->readEntry(CONFIG_PROGRAM_PATH,"jpegtran");
+}
+
+
+void GVJPEGTran::writeConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	config->writeEntry(CONFIG_PROGRAM_PATH,sProgramPath);
+}
+
+
+void GVJPEGTran::setProgramPath(const QString& path) {
+	sProgramPath=path;
+}
+
+
+QString GVJPEGTran::programPath() {
+	return sProgramPath;
 }
 

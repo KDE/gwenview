@@ -25,7 +25,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qcstring.h>
 #include <qobject.h>
 
+class QString;
 
+class KConfig;
 class KProcess;
 
 
@@ -34,6 +36,12 @@ Q_OBJECT
 public:
 	enum Operation { RotateLeft,RotateRight,Mirror,Flip };
 	static QByteArray apply(const QByteArray&,Operation);
+
+	static void readConfig(KConfig*,const QString& group);
+	static void writeConfig(KConfig*,const QString& group);
+
+	static QString programPath();
+	static void setProgramPath(const QString&);
 
 private slots:
 	void slotProcessExited();

@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
+#include "gvjpegtran.h"
 #include "gvscrollpixmapview.h"
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
@@ -97,7 +98,8 @@ mMainWindow(mainWindow)
 	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
 	
 	// Misc tab
-	mExternalEditor->setText(FileOperation::editor());
+	mExternalEditor->setURL(FileOperation::editor());
+	mJPEGTran->setURL(GVJPEGTran::programPath());
 	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	mShowDirs->setChecked(fileViewStack->showDirs());
 	mShowAddressBar->setChecked(mainWindow->showAddressBar());
@@ -139,7 +141,8 @@ void ConfigDialog::slotApply() {
 	pixmapView->wheelBehaviours()[AltButton]=    GVScrollPixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
 
 	// Misc tab
-	FileOperation::setEditor(mExternalEditor->text());
+	FileOperation::setEditor(mExternalEditor->url());
+	GVJPEGTran::setProgramPath(mJPEGTran->url());
 	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(mShowDirs->isChecked());
 	mMainWindow->setShowAddressBar(mShowAddressBar->isChecked());

@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvbookmarkowner.h"
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
+#include "gvjpegtran.h"
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
@@ -67,6 +68,7 @@ enum { SB_FOLDER, SB_FILE};
 const char* CONFIG_DOCK_GROUP="dock";
 const char* CONFIG_MAINWINDOW_GROUP="main window";
 const char* CONFIG_FILEWIDGET_GROUP="file widget";
+const char* CONFIG_JPEGTRAN_GROUP="jpegtran";
 const char* CONFIG_PIXMAPWIDGET_GROUP="pixmap widget";
 const char* CONFIG_FILEOPERATION_GROUP="file operations";
 const char* CONFIG_SLIDESHOW_GROUP="slide show";
@@ -123,6 +125,7 @@ GVMainWindow::~GVMainWindow() {
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
+	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
 }
 
 
@@ -450,6 +453,7 @@ void GVMainWindow::createWidgets() {
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
+	GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
 }
 
 

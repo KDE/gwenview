@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>624</width>
-            <height>303</height>
+            <width>614</width>
+            <height>299</height>
         </rect>
     </property>
     <property name="caption">
@@ -42,12 +42,6 @@
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
                     </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
@@ -144,38 +138,48 @@
                         <property name="toolTip" stdset="0">
                         </property>
                     </widget>
-                    <widget class="QGroupBox">
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>GroupBoxCache</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Cache</string>
+                            <cstring>layout9</cstring>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QPushButton">
+                            <widget class="QGroupBox">
                                 <property name="name">
-                                    <cstring>mCalculateCacheSize</cstring>
+                                    <cstring>GroupBoxCache</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Calculate Cache Size</string>
+                                <property name="title">
+                                    <string>Cache</string>
                                 </property>
-                            </widget>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>mEmptyCache</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Empty Cache</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>11</number>
+                                    </property>
+                                    <property name="spacing">
+                                        <number>6</number>
+                                    </property>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>mCalculateCacheSize</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Calculate Cache Size</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>mEmptyCache</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Empty Cache</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
                             <spacer>
                                 <property name="name">
@@ -189,8 +193,8 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>20</width>
-                                        <height>0</height>
+                                        <width>321</width>
+                                        <height>16</height>
                                     </size>
                                 </property>
                             </spacer>
@@ -208,8 +212,8 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>0</width>
-                                <height>20</height>
+                                <width>16</width>
+                                <height>79</height>
                             </size>
                         </property>
                     </spacer>
@@ -562,25 +566,13 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>Layout5</cstring>
+                            <cstring>layout8</cstring>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
                             </property>
                             <widget class="QLabel">
                                 <property name="name">
@@ -590,9 +582,32 @@
                                     <string>External editor:</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="KURLRequester">
                                 <property name="name">
                                     <cstring>mExternalEditor</cstring>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Path to jpegtran:</string>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester">
+                                <property name="name">
+                                    <cstring>mJPEGTran</cstring>
                                 </property>
                             </widget>
                         </hbox>
@@ -692,8 +707,8 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>0</width>
-                                <height>40</height>
+                                <width>20</width>
+                                <height>30</height>
                             </size>
                         </property>
                     </spacer>
@@ -808,7 +823,6 @@
     <tabstop>mShowMenuBarInFullScreen</tabstop>
     <tabstop>mShowToolBarInFullScreen</tabstop>
     <tabstop>mShowStatusBarInFullScreen</tabstop>
-    <tabstop>mExternalEditor</tabstop>
     <tabstop>mOK</tabstop>
     <tabstop>mApply</tabstop>
     <tabstop>mCancel</tabstop>
@@ -819,6 +833,12 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
