@@ -26,12 +26,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qmap.h>
 #include <qscrollview.h>
 
+class QEvent;
 class QLabel;
 class QMouseEvent;
 class QPainter;
 class QTimer;
 class QWheelEvent;
-class QPopupMenu;
 class KAction;
 class KActionCollection;
 class KConfig;
@@ -42,8 +42,10 @@ class GVPixmap;
 class GVScrollPixmapView : public QScrollView {
 Q_OBJECT
 public:
-	enum WheelBehaviour { None, Browse, Scroll, Zoom };
-	typedef QMap<ButtonState,WheelBehaviour> WheelBehaviours;
+	enum Tool { None, Browse, Scroll, Zoom };
+	typedef Tool WheelBehaviour; // FIXME: For compatibility
+	typedef QMap<ButtonState,Tool> WheelBehaviours;
+	typedef QMap<Tool,QCursor> ToolCursors;
 
 	GVScrollPixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
 	void readConfig(KConfig* config, const QString& group);
@@ -93,7 +95,10 @@ private:
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	WheelBehaviours mWheelBehaviours;
-	QCursor mDrag,mDragging;
+	ToolCursors mToolCursors;
+	QCursor mDraggingCursor;
+
+	Tool mTool;
 
 	// Offset to center images
 	int mXOffset,mYOffset;
@@ -130,9 +135,10 @@ private:
 	void updateScrollBarMode();
 	void updateImageOffset();
 	void updateContentSize();
-	void makeContextMenu();
+	void openContextMenu(const QPoint&);
 	void updatePathLabel();
 	void updateZoomActions();
+	void selectTool(ButtonState);
 
 private slots:
 	void slotURLChanged();
@@ -146,9 +152,11 @@ private slots:
 	
 protected:
 	// Overloaded methods
+	bool eventFilter(QObject*, QEvent*);
 	void viewportMousePressEvent(QMouseEvent*);
 	void viewportMouseMoveEvent(QMouseEvent*);
 	void viewportMouseReleaseEvent(QMouseEvent*);
+	bool viewportKeyEvent(QKeyEvent*); // This one is not inherited, it's called from the eventFilter
 	void wheelEvent(QWheelEvent* event);
 	void resizeEvent(QResizeEvent* event);
 	void drawContents(QPainter* p,int clipx,int clipy,int clipw,int cliph);

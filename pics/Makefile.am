@@ -1,1 +1,1 @@
-SUBDIRS=action app
+SUBDIRS=action app cursor
