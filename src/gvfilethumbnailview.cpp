@@ -302,6 +302,9 @@ void GVFileThumbnailView::slotUpdateEnded() {
 
 
 void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
+	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
+		return;
+	}
 
 	ThumbnailLoadJob::deleteImageThumbnail(fileItem->url());
 	if (d->mThumbnailLoadJob.isNull()) {

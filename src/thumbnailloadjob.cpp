@@ -54,7 +54,6 @@ extern "C" {
 }
 
 // Local
-#include "gvarchive.h"
 #include "gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
@@ -374,9 +373,7 @@ void ThumbnailLoadJob::resume() {
 
 //-Internal--------------------------------------------------------------
 void ThumbnailLoadJob::appendItem(const KFileItem* item) {
-	if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
-		mItems.append(item);
-	}
+	mItems.append(item);
 }
 
 
