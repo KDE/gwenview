@@ -1,12 +1,4 @@
 2003.xx.xx - v1.0.0
-- Fixes:
- - Added an "Edit" submenu to the popup menu of the image view, containing the
-   same items as the main window "Edit" menu.
- - Moved the "Open with editor" in the "Edit" menu.
- - Moved the image file name from status bar to the window title.
- - Fixed the bug which caused the window to grow up when entering folders with
-   long names.
- - Rotating big JPEG images with JPEGTran won't hung anymore.
 
 2003.xx.xx - v0.17.1
 - Fixes:
@@ -17,6 +9,14 @@
  - Handling of the EXIF orientation tag should now work on KDE 3.0.
  - When "auto-zoom" was on, pressing the "reset zoom" button would not
    disactivate it.
+ - Added an "Edit" submenu to the popup menu of the image view, similar to the
+   main window "Edit" menu.
+ - Moved "Open with editor" in the "Edit" menu.
+ - Display the image file name in the window title.
+ - Fixed the bug which caused the window to grow up when entering folders with
+   long names.
+ - Rotating big JPEG images with JPEGTran won't hang anymore.
+
 
 2003.05.04 - v0.17.0
 - New features:
