@@ -2,6 +2,7 @@
 - Features:
  - Added a new option to hide the busy pointer when loading an image in
    fullscreen.
+ - Added a popup menu to select the sorting mode. Usefull in thumbnail view.
 - Fixes:
  - Use a KDE dialog for the configuration dialog.
  - Removed the image view mouse behavior configuration options. The behavior is

@@ -214,11 +214,10 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 	}
 
 	// Create icon item
-	QDir::SortSpec spec = KFileView::sorting();
 	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
 	iconItem->setDropEnabled(isDirOrArchive);
-	iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
 
+	setSortingKey(iconItem, item);
 	item->setExtraData(this,iconItem);
 }
 
@@ -318,6 +317,21 @@ KFileItem* GVFileThumbnailView::nextItem(const KFileItem* fileItem) const {
 
 	return iconItem->fileItem();
 }
+	
+
+void GVFileThumbnailView::setSorting(QDir::SortSpec spec) {
+	KFileView::setSorting(spec);
+	
+	KFileItem *item;
+	KFileItemListIterator it( *items() );
+
+	for ( ; (item = it.current() ); ++it ) {
+		QIconViewItem* iconItem=viewItem(item);
+		if (iconItem) setSortingKey(iconItem, item);
+	}
+
+	KIconView::sort();
+}
 
 //--------------------------------------------------------------------------
 //
@@ -343,13 +357,38 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 }
 
 
-//-Private -----------------------------------------------------------------
+//--------------------------------------------------------------------------
+//
+// Private
+// 
+//--------------------------------------------------------------------------
 void GVFileThumbnailView::updateGrid() {
 	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
 }
 
 
-//-Private slots------------------------------------------------------------
+void GVFileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem *item)
+{
+	// see also setSorting()
+	QDir::SortSpec spec = KFileView::sorting();
+	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
+
+	if ( spec & QDir::Time )
+		iconItem->setKey( sortingKey( item->time( KIO::UDS_MODIFICATION_TIME ),
+								  isDirOrArchive, spec ));
+	else if ( spec & QDir::Size )
+		iconItem->setKey( sortingKey( item->size(), isDirOrArchive, spec ));
+
+	else // Name or Unsorted
+		iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
+}
+
+
+//--------------------------------------------------------------------------
+//
+// Private slots
+//
+//--------------------------------------------------------------------------
 void GVFileThumbnailView::slotDoubleClicked(QIconViewItem* iconItem) {
 	if (!iconItem) return;
 	if (KGlobalSettings::singleClick()) return;
@@ -378,7 +417,11 @@ void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 }
 
 
-//-Protected----------------------------------------------------------------
+//--------------------------------------------------------------------------
+//
+// Protected
+//
+//--------------------------------------------------------------------------
 void GVFileThumbnailView::startDrag() {
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
@@ -405,7 +448,11 @@ void GVFileThumbnailView::startDrag() {
 }
 
 
-//-Configuration------------------------------------------------------------
+//--------------------------------------------------------------------------
+//
+// Configuration
+//
+//--------------------------------------------------------------------------
 void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 

@@ -64,6 +64,7 @@ public:
 	bool isSelected(const KFileItem* item) const;
 	void removeItem(const KFileItem* item);
 	void updateView(const KFileItem* item);
+	void setSorting(QDir::SortSpec);
 
 	KFileItem* firstFileItem() const;
 	KFileItem* prevItem( const KFileItem*) const;
@@ -118,6 +119,7 @@ private:
 		return static_cast<GVFileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
 	}
 	void doStartThumbnailUpdate(const KFileItemList*);
+	void setSortingKey(QIconViewItem*, const KFileItem*);
 
 private slots:
 	void slotClicked(QIconViewItem*);

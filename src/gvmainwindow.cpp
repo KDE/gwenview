@@ -190,9 +190,9 @@ bool GVMainWindow::queryClose() {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setURL(const KURL& url,const QString&) {
+void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
 	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
-
+	
 	bool filenameIsValid=!mGVPixmap->isNull();
 
 	mRenameFile->setEnabled(filenameIsValid);

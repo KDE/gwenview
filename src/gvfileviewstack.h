@@ -22,8 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GVFILEVIEWSTACK_H
 
 // Qt 
-#include <qobject.h>
+#include <qdir.h>
 #include <qmutex.h>
+#include <qobject.h>
 #include <qwidgetstack.h>
 
 // KDE
@@ -45,6 +46,8 @@ class GVFileViewBase;
 class GVFileDetailView;
 class GVFileThumbnailView;
 
+
+class GVFileViewStackPrivate;
 
 class GVFileViewStack : public QWidgetStack {
 Q_OBJECT
@@ -145,6 +148,8 @@ private slots:
 	void updateThumbnailSize();
 
 	void toggleShowDotFiles();
+	void setSorting();
+	void updateSortMenu(QDir::SortSpec);
 
 	// Dir lister slots
 	void dirListerDeleteItem(KFileItem* item);
@@ -158,6 +163,7 @@ private slots:
 	void openDropURLMenu(QDropEvent*, KFileItem*);
 	
 private:
+	GVFileViewStackPrivate* d;
 	Mode mMode;
 	GVFileDetailView* mFileDetailView;
 	GVFileThumbnailView* mFileThumbnailView;

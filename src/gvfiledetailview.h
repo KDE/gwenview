@@ -28,6 +28,9 @@ class KFileItem;
 class QWidget;
 class QKeyEvent;
 
+// Qt includes
+#include <qdir.h>
+
 // KDE includes
 #include <klistview.h>
 #include <kmimetyperesolver.h>
@@ -83,6 +86,7 @@ public:
 
 signals:
 	void dropped(QDropEvent* event, KFileItem* item);
+	void sortingChanged(QDir::SortSpec);
 	
 protected:
 	virtual bool acceptDrag(QDropEvent*) const;

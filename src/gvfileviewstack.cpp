@@ -54,9 +54,27 @@ inline bool isDirOrArchive(const KFileItem* item) {
 }
 
 
+//-----------------------------------------------------------------------
+//
+// GVFileViewStackPrivate
+// 
+//-----------------------------------------------------------------------
+class GVFileViewStackPrivate {
+public:
+	KSelectAction* mSortAction; 
+};
+
+
+//-----------------------------------------------------------------------
+//
+// GVFileViewStack
+//
+//-----------------------------------------------------------------------
 GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList)
 {
+	d=new GVFileViewStackPrivate;
+
 	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
 		QApplication::reverseLayout() ? "gvlast":"gvfirst", Key_Home,
@@ -85,6 +103,12 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
+	d->mSortAction=new KSelectAction(i18n("Sort by"), 0, this, SLOT(setSorting()), actionCollection, "view_sort");
+	QStringList sortItems;
+	sortItems << i18n("Name") << i18n("Date") << i18n("Size");
+	d->mSortAction->setItems(sortItems);
+	d->mSortAction->setCurrentItem(0);
+	
 	// Dir lister
 	mDirLister=new KDirLister;
 	connect(mDirLister,SIGNAL(clear()),
@@ -128,6 +152,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 	connect(mFileDetailView,SIGNAL(dropped(QDropEvent*,KFileItem*)),
 		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
+	connect(mFileDetailView, SIGNAL(sortingChanged(QDir::SortSpec)),
+		this, SLOT(updateSortMenu(QDir::SortSpec)) );
 
 	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
@@ -155,6 +181,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 
 GVFileViewStack::~GVFileViewStack() {
+	delete d;
 	delete mDirLister;
 }
 
@@ -327,6 +354,47 @@ void GVFileViewStack::toggleShowDotFiles() {
 }
 
 
+void GVFileViewStack::updateSortMenu(QDir::SortSpec _spec) {
+	int	spec=_spec & (QDir::Name | QDir::Time | QDir::Size);
+	int item;
+	switch (spec) {
+	case QDir::Name:
+		item=0;
+		break;
+	case QDir::Time:
+		item=1;
+		break;
+	case QDir::Size:
+		item=2;
+		break;
+	default:
+		item=-1;
+		break;
+	}
+	d->mSortAction->setCurrentItem(item);
+}
+
+
+void GVFileViewStack::setSorting() {
+	QDir::SortSpec spec;
+	
+	switch (d->mSortAction->currentItem()) {
+	case 0: // Name
+		spec=QDir::Name;
+		break;
+	case 1: // Date
+		spec=QDir::Time;
+		break;
+	case 2: // Size
+		spec=QDir::Size;
+		break;
+	default:
+		return;
+	}
+	currentFileView()->setSorting(QDir::SortSpec(spec | QDir::DirsFirst));
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Context menu
@@ -344,6 +412,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	menu.insertItem(
 		i18n("External Tools"), externalToolContext->popupMenu());
 
+	d->mSortAction->plug(&menu);
 
 	menu.connectItem(
 		menu.insertItem( i18n("Parent Dir") ),
@@ -548,6 +617,9 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 		it.current()->removeExtraData(oldView);
 	}
 
+	// Update sorting
+	newView->setSorting(oldView->sorting());
+	
 	// Clear the old view
 	oldView->GVFileViewBase::clear();
 }

@@ -79,6 +79,10 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 	connect( this, SIGNAL( selectionChanged() ),
 			 SLOT( slotSelectionChanged() ));
 
+	// GVFileViewStack need to be aware of sort changes, to update the sort menu
+	connect( sig, SIGNAL(sortingChanged(QDir::SortSpec)),
+		this, SIGNAL(sortingChanged(QDir::SortSpec)) );
+	
 	setSorting( sorting() );
 
 
