@@ -567,6 +567,8 @@ void GVScrollPixmapView::checkPendingOperations() {
 }
 
 void GVScrollPixmapView::checkPendingOperationsInternal() {
+	if( !mPendingPaintTimer.isActive()) // suspended
+		return;
 	while( !mPendingPaints.isEmpty()) {
 		PendingPaint paint = *mPendingPaints.begin();
 		mPendingPaints.remove( mPendingPaints.begin());
@@ -625,7 +627,9 @@ void GVScrollPixmapView::slotBusyLevelChanged( GVBusyLevel level ) {
 	}
 	if( resume ) {
 		mPendingPaintTimer.start( 0 );
-	}
+	} else {
+		mPendingPaintTimer.stop();
+        }
 }
 
 // How to do painting:

@@ -139,6 +139,10 @@ void GVDocument::setURL(const KURL& paramURL) {
 		return;
 	}
 
+	// Set high busy level, so that operations like smoothing are suspended.
+	// Otherwise the stat() below done using KIO can take quite long.
+	GVBusyLevelHelper busyhelper( BUSY_CHECKING_NEW_IMAGE );
+
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(localURL.protocol())) {
 		QFileInfo info(localURL.path());
@@ -171,6 +175,8 @@ void GVDocument::setURL(const KURL& paramURL) {
 		reset();
 		return;
 	}
+
+	busyhelper.reset();
 
 	load();
 }

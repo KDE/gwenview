@@ -36,7 +36,8 @@ enum GVBusyLevel {
 	BUSY_THUMBNAILS,
 	BUSY_LOADING,
 	BUSY_SMOOTHING,
-	BUSY_PAINTING
+	BUSY_PAINTING,
+	BUSY_CHECKING_NEW_IMAGE
 };
 
 
@@ -72,5 +73,37 @@ private:
 	GVBusyLevel mCurrentBusyLevel;
 	QTimer mDelayedBusyLevelTimer;
 };
+
+
+/**
+  Helper class. Constructor sets its busy level to the given level,
+  destructor resets the busy level to none.
+ */
+class GVBusyLevelHelper : public QObject {
+Q_OBJECT
+public:
+	GVBusyLevelHelper( GVBusyLevel level );
+	~GVBusyLevelHelper();
+	void reset();
+};
+
+inline
+GVBusyLevelHelper::GVBusyLevelHelper( GVBusyLevel level )
+{
+	GVBusyLevelManager::instance()->setBusyLevel( this, level );
+}
+
+inline
+void GVBusyLevelHelper::reset()
+{
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+}
+
+inline
+GVBusyLevelHelper::~GVBusyLevelHelper()
+{
+	reset();
+}
+
 
 #endif
