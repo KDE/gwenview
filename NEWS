@@ -1,4 +1,4 @@
-2003.xx.xx - v0.16.0
+2003.01.30 - v0.16.0
 - New features:
  - Support for zip IO slave.
  - Added an "erase url" button.
@@ -7,6 +7,7 @@
  - Do not give focus to the address bar on start.
  - Do not exit when trying to thumbnailing a broken JPEG (Thanks to Marco
    Gazzetta).
+ - The previous/next shortcuts were wrong in 0.16.0pre1.
 
 2003.01.12 - v0.16.0pre1
 - New features:

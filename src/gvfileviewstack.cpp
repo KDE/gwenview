@@ -60,15 +60,13 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
-	mSelectPrevious=KStdAction::back(this, SLOT(slotSelectPrevious()),actionCollection, "previous" );
-	mSelectPrevious->setIcon(QApplication::reverseLayout() ?
-						"gvnext" : "gvprevious");
-	mSelectPrevious->setAccel(Key_Backspace);
-
-	mSelectNext=KStdAction::forward(this, SLOT(slotSelectNext()),actionCollection, "next" );
-	mSelectNext->setIcon(QApplication::reverseLayout() ?
-						"gvprevious" : "gvnext");
-	mSelectNext->setAccel(Key_Space);
+	mSelectPrevious=new KAction(i18n("go back", "&Back"),
+		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
+		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
+	
+	mSelectNext=new KAction(i18n("go forward", "&Forward"),
+		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
+		this,SLOT(slotSelectNext()), actionCollection, "next");
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"view_detailed");
 	mNoThumbnails->setExclusiveGroup("thumbnails");
