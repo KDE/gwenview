@@ -1,60 +1,86 @@
-Summary:Simple image viewer for KDE
+%define	desktop_vendor	rockers
+
 Name: gwenview
-Version: 0.12.0
-Release: 1_RedHat
-Copyright: GPL
-Group: Application/Multimedia 
-Source0: %{name}-%{version}.tar.bz2
-URL: http://gwenview.sourceforge.net 
-
-Packager: Ian Koenig <iguy@ionsphere.org> 
-
-BuildRoot: /tmp/build/%{name}-%{version}
+Summary: Gwenview is an image viewer for KDE.
+Version: 0.16.2
+Release: 0
+License: GPL
+Group: Amusements/Graphics
+Source: http://prdownloads.sourceforge.net/gwenview/%{name}-%{version}.tar.bz2
+BuildRoot: %{_tmppath}/%{name}-root
+Url: http://gwenview.sourceforge.net/home/
+Requires: libpng, kdebase >= 3.0
+BuildRequires: libpng-devel, kdelibs-devel, arts-devel, libjpeg-devel
+BuildRequires:  XFree86-devel, zlib-devel, qt-devel >= 3.0.2
 
 %description
-Gwenview is an image viewer for KDE 2.x. 
+Gwenview is an image viewer for KDE.
 
-It features a folder tree window and a file list window to provide easy 
-navigation in your file hierarchy.  Image loading is done by the Qt library, 
-so it supports all image formats your Qt installation supports. 
+It features a folder tree window and a file list window to 
+provide easy navigation among your thousand images.
+
+Image loading is done by the Qt library, giving you access 
+to all image formats your Qt installation supports, but 
+Gwenview can also browse GIMP files (*.xcf) thanks to the 
+included QXCFI component developed by Lignum Computing.
+
+Gwenview correctly displays images with alpha channel, 
+using the traditionnal checker board as a background to
+reveal transparency.
 
 %prep
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-%setup
+%setup -q
 
 %build
-./configure --prefix=$RPM_BUILD_ROOT/usr/ --enable-final 
-make
+%configure --with-xinerama
+make %{_smp_mflags}
 
 %install
-make install 
+%makeinstall
 
-%files
-%defattr(-,root,root,0755)
-/usr/bin/gwenview
-/usr/share/apps/gwenview
-/usr/share/apps/gwenview/icons/hicolor/22x22/actions/actualsize.png
-/usr/share/apps/gwenview/icons/hicolor/22x22/actions/smallthumbnails.png
-/usr/share/apps/gwenview/icons/hicolor/22x22/actions/medthumbnails.png
-/usr/share/apps/gwenview/icons/hicolor/22x22/actions/largethumbnails.png
-/usr/share/apps/gwenview/icons/hicolor/32x32/actions/actualsize.png
-/usr/share/apps/gwenview/icons/hicolor/32x32/actions/smallthumbnails.png
-/usr/share/apps/gwenview/icons/hicolor/32x32/actions/medthumbnails.png
-/usr/share/apps/gwenview/icons/hicolor/32x32/actions/largethumbnails.png
-/usr/share/apps/gwenview/icons/locolor/16x16/actions/actualsize.png
-/usr/share/apps/gwenview/icons/locolor/16x16/actions/smallthumbnails.png
-/usr/share/apps/gwenview/icons/locolor/16x16/actions/medthumbnails.png
-/usr/share/apps/gwenview/icons/locolor/16x16/actions/largethumbnails.png
-/usr/share/icons/hicolor/16x16/apps/gwenview.png
-/usr/share/icons/hicolor/32x32/apps/gwenview.png
-/usr/share/icons/locolor/16x16/apps/gwenview.png
-/usr/share/icons/locolor/32x32/apps/gwenview.png
-/usr/share/applnk/Graphics/gwenview.desktop
-/usr/share/apps/konqueror/servicemenus/konqgwenview.desktop
-/usr/share/locale/*/LC_MESSAGES/gwenview.mo
-/usr/man/man1/gwenview.1.gz
-%doc NEWS README TODO ChangeLog COPYING CREDITS
+desktop-file-install --vendor %{desktop_vendor} --delete-original \
+  --dir %{buildroot}%{_datadir}/applications                      \
+  --add-category X-Red-Hat-Extra                                  \
+  --add-category Application                                      \
+  --add-category Graphics					  \
+  %{buildroot}%{_datadir}/applnk/Graphics/%{name}.desktop
+
+rm -rf %{buildroot}%{_datadir}/applnk
+
+mv %{buildroot}%{_datadir}/hicolor/16x16/actions/	\
+%{buildroot}%{_datadir}/icons/hicolor/16x16
+
+mkdir %{buildroot}%{_datadir}/icons/hicolor/22x22
+mv %{buildroot}%{_datadir}/hicolor/22x22/actions/	\
+%{buildroot}%{_datadir}/icons/hicolor/22x22
+
+mv %{buildroot}%{_datadir}/hicolor/32x32/actions/	\
+%{buildroot}%{_datadir}/icons/hicolor/32x32
+
+rm -rf %{buildroot}%{_datadir}/hicolor
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
+
+%post
+
+%postun
+
+%files
+%defattr(-,root,root,-)
+%doc AUTHORS COPYING README INSTALL CREDITS TODO NEWS
+%{_bindir}/%{name}*
+%{_mandir}/man1/%{name}*
+%{_datadir}/apps/konqueror/servicemenus/konqgwenview.desktop
+%{_datadir}/applications/%{desktop_vendor}-%{name}.desktop
+%{_datadir}/icons/*/*/*/*
+%{_datadir}/locale/*/LC_MESSAGES/%{name}*
+
+%changelog
+* Fri Feb 14 2003 Robert Rockers <brockers at dps.state.ok.us> 0.16.2
+- Recompiled for version 0.16.2
+
+* Fri Feb 7 2003 Robert Rockers <brockers at dps.state.ok.us> 0.16.1
+- Initial RedHat RPM release.

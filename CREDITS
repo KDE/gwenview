@@ -1,3 +1,5 @@
+- Miscellaneous contributions -----------------------------------------------
+
 - Ian Koenig <iguy@ionsphere.org>
 First RPM spec file.
 
@@ -28,7 +30,7 @@ Patch to make Gwenview use the same thumbnail folder as Konqueror 3 (v0.15.0).
 Added an address bar (v0.16.0).
 
 - Meni Livne <livne@kde.org>
-Patched toolbar layour for RTL languages (v0.16.0).
+Patched toolbar layout for RTL languages (v0.16.0).
 
 - Marco Gazzetta <mililani@pobox.com>
 Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
@@ -36,3 +38,58 @@ Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
 
 - GeniusR13 <geniusr13@gmx.net>
 Patch to fix compilation with KDE 3.0 (v0.16.1).
+
+
+- Past packagers ------------------------------------------------------------
+
+These fine people contributed binary packages:
+
+SuSE 7.2:
+  Dario Abatianni <eisfuchs@tigress.com>
+
+Red Hat:
+  Ian Koenig <iguy@ionsphere.org>
+
+
+- Translators ---------------------------------------------------------------
+
+Back in the days when Gwenview was not in KDE Extra Gear, the following nice
+people contributed translations.
+
+Dutch:
+  Rindert Vonk <rindertvonk@gmx.net>
+
+German:
+  Robert Gogolok <robertgogolok@gmx.de>
+
+Hungarian:
+  Arpad Biro <biro_arpad@yahoo.com>
+
+Italian:
+  Marco De Simone <marco@studenti.unina.it>
+
+Japanese:
+  Ryota Simamoto <liangtai@nns.ne.jp>
+
+Korean:
+  Park Yu-Chan <super@linuxone.co.kr>
+
+Norwegian:
+  Rune Nordvik <rune@linuxnorge.com>
+
+Polish:
+  Szymon Janc <szymon@janc.int.pl>
+
+Spanish:
+  Daniel R. Ome <keziah@uole.com>
+
+Swedish:
+  Karolina Lindqvist <pgd-karolinali@algonet.se>
+
+
+Now translations are done by the KDE translation teams, so I don't really know
+how are the translators. I guess some of the people I quoted here are still
+working on translating Gwenview.
+
+
+Thanks to all of you.
