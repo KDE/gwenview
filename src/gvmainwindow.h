@@ -126,6 +126,7 @@ private:
 	KAction* mSaveFile;
 	KAction* mSaveFileAs;
 	KAction* mFilePrint;
+	KAction* mResetDockWidgets;
 	bool     mLoadingCursor;
 	bool	 mAutoDeleteThumbnailCache;
 	KToggleAction* mToggleBrowse;
@@ -180,6 +181,7 @@ private slots:
 	void rotateRight();
 	void mirror();
 	void flip();
+	void resetDockWidgets();
 
 	void slotToggleCentralStack();
 	/**

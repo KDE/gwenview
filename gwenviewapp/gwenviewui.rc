@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="14">
+<kpartgui name="Gwenview" version="15">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -86,6 +86,8 @@
   <Menu name="window">
     <text>&amp;Window</text>
     <ActionList name="winlist"/>
+	<Separator/>
+    <Action name="reset_dock_widgets"/>
   </Menu>
 </MenuBar>
 

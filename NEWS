@@ -1,6 +1,8 @@
 xxxx.xx.x - v1.1.8
 - New features:
  - Zoom actions added to both KPart's.
+ - Added an item in the "Windows" menu to reset the window layout to the default
+   configuration.
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
  - Fixed "Clear location"/"Location" shortcuts.

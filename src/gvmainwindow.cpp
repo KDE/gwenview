@@ -664,6 +664,17 @@ void GVMainWindow::slotToggleCentralStack() {
 }
 
 
+void GVMainWindow::resetDockWidgets() {
+	mFolderDock->undock();
+	mPixmapDock->undock();
+	mMetaDock->undock();
+
+	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
+	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
+	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+}
+
+
 //-----------------------------------------------------------------------
 //
 // GUI
@@ -833,6 +844,9 @@ void GVMainWindow::createActions() {
 
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
+
+	// Window
+	mResetDockWidgets = new KAction(i18n("Reset"), 0, this, SLOT(resetDockWidgets()), actionCollection(), "reset_dock_widgets");
 
 	// Settings
 	mShowConfigDialog=
