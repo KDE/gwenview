@@ -64,8 +64,8 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	QRect itemIconRect = QRect(0,0,0,0);
 	QRect itemTextRect = QRect(0,0,0,0);
 	QRect itemRect = rect();
-	int availableTextWidth=view->thumbnailSize().pixelSize()
-		- (view->itemTextPos()==QIconView::Bottom ? 0 : pixmapRect().width() );
+	int availableTextWidth=rect().width()
+		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize().pixelSize() );
 
 // Init itemIconRect 
 #ifndef QT_NO_PICTURE
@@ -198,7 +198,11 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		p->setPen( QPen( cg.highlight() ) );
 		QRect outerRect=pRect | tRect;
 		p->drawRect(outerRect);
-		p->fillRect( outerRect.x(),tRect.y(),outerRect.width(),tRect.height(), cg.highlight() );
+		if (view->itemTextPos()==QIconView::Bottom) {
+			p->fillRect( outerRect.x(),tRect.y(),outerRect.width(),tRect.height(), cg.highlight() );
+		} else {
+			p->fillRect( tRect.x(),outerRect.y(),tRect.width(),outerRect.height(), cg.highlight() );
+		}
 
 		p->setPen( QPen( cg.highlightedText() ) );
 	} else {
