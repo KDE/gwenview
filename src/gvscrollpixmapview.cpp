@@ -136,7 +136,6 @@ public:
 		if (mView->fullScreen()) {
 			mView->startAutoHideTimer();
 		}
-		return;
 	}
 
 	void wheelEvent(QWheelEvent* event) {
@@ -154,14 +153,17 @@ public:
 
 
 class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
-	QCursor mCursor;
+	QCursor mZoomCursor;
+	QCursor mAutoZoomCursor;
 public:
 	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
-		mCursor=loadCursor("zoom");
+		mZoomCursor=loadCursor("zoom");
+		mAutoZoomCursor=loadCursor("autozoom");
 	}
 
 	void mouseReleaseEvent(QMouseEvent*) {
 		mView->autoZoom()->activate();
+		updateCursor();
 	}
 
 	void wheelEvent(QWheelEvent* event) {
@@ -174,7 +176,13 @@ public:
 	}
 
 	void updateCursor() {
-		mView->viewport()->setCursor(mCursor);
+		// This is inverted, since we show the cursor for the tool which will
+		// be activated *after* the click
+		if (mView->autoZoom()->isChecked()) {
+			mView->viewport()->setCursor(mZoomCursor);
+		} else {
+			mView->viewport()->setCursor(mAutoZoomCursor);
+		}
 	}
 };
 
@@ -534,7 +542,6 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			return;
 		}
 		mToolControllers[mTool]->mouseReleaseEvent(event);
-		mToolControllers[mTool]->updateCursor();
 		break;
 			
 	case Qt::RightButton:
