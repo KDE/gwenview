@@ -227,7 +227,7 @@
 - Korean translation.
 - New folder view : more responsive, get automatically updated on
   changes, features a popup menu.
-- Scrollbars are now resetted on image change.
+- Scrollbars are now reset on image change.
 - Should now installs itself in <appdir>/Graphics rather than in
   <appdir>/Multimedia/Graphics.
 - New buttons in config dialog to get the cache size and to empty it.

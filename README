@@ -54,7 +54,7 @@ edge. To make A and B use tabs, drag the grip of A on the center of B.
 -> Keyboard navigation
 
 When you move in the file list using the arrow keys, the selected image
-isn't displayed immediatly : you must press the Enter key to display it.
+isn't displayed immediately : you must press the Enter key to display it.
 This allows you to move directly from an image to another without loading
 all images between them.
 To browse images without having to press Enter, use the 'previous' and 'next'
@@ -87,7 +87,7 @@ The available actions are :
 
 -> About thumbnail cache
 
-Thumbnails aren't loaded everytime you browse a folder. Images are loaded once
+Thumbnails aren't loaded every time you browse a folder. Images are loaded once
 and the thumbnail is then stored on disk. Next time you browse the folder,
 Gwenview will use the saved thumbnail instead of reloading the image.
 Until version 0.10.0, thumbnails were stored in .pics folders created in the 
