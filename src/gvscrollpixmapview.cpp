@@ -929,6 +929,9 @@ void GVScrollPixmapView::deleteFile() {
 	FileOperation::del(list,this);
 }
 
+KURL GVScrollPixmapView::pixmapURL() {
+	return mGVPixmap->url();
+}
 
 //------------------------------------------------------------------------
 //

@@ -63,8 +63,9 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	GVDirPart* m_gvDirPart;
 };
 
-
-
+/**
+ * A Read Only KPart to browse directories and their images using Gwenview
+ */
 class GVDirPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
  public:
@@ -76,13 +77,28 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 	static KAboutData* createAboutData();
 
+	/**
+	 * Sets Konqueror's caption with setWindowCaption()
+	 */
 	void setKonquerorWindowCaption(const QString& url);
 
+	/**
+	 * Returns the name of the current file in the pixmap
+	 */
+	KURL pixmapURL();
  protected:
-	/** Open the file whose path is stored in the member variable
-	 * m_file and return true on success, false on failure.
+
+	/**
+	 * Unused because openURL() is implemented but required to be
+	 * implemented.
 	 */
 	virtual bool openFile();
+	
+	/**
+	 * Tell the widgets the URL to browse.  Sets the window
+	 * caption and saves URL to m_url (important for history and
+	 * others).
+	 */
 	virtual bool openURL(const KURL& url);
 
  protected slots:

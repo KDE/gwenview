@@ -89,6 +89,14 @@ KAboutData* GVDirPart::createAboutData() {
 	return aboutData;
 }
 
+bool GVDirPart::openFile() {
+        //unused because openURL implemented
+        kdDebug() << k_funcinfo << endl;
+
+        //m_gvPixmap->setFilename(m_file);
+        return true;
+}
+
 bool GVDirPart::openURL(const KURL& url) {
 	kdDebug() << k_funcinfo << url.prettyURL() << "<--end" << endl;
 
@@ -105,14 +113,6 @@ bool GVDirPart::openURL(const KURL& url) {
 	return true;
 }
 
-bool GVDirPart::openFile() {
-	//unused because openURL implemented
-	kdDebug() << k_funcinfo << endl;
-	m_gvPixmap->setFilename(m_file);
-
-	return true;
-}
-
 void GVDirPart::slotExample() {
 	//Example KAction
 	kdDebug() << k_funcinfo << endl;
@@ -122,6 +122,10 @@ void GVDirPart::setKonquerorWindowCaption(const QString& url) {
 	kdDebug() << k_funcinfo << url << endl;
 	emit setWindowCaption(url);
 	kdDebug() << k_funcinfo << "done" << endl;
+}
+
+KURL GVDirPart::pixmapURL() {
+	return m_pixmapView->pixmapURL();
 }
 
 /***** GVDirPartBrowserExtension *****/
@@ -185,7 +189,8 @@ void GVDirPartBrowserExtension::contextMenu() {
 	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
 	*/
 	kdDebug() << k_funcinfo << "url: " << m_gvDirPart->url() << endl;
-	emit popupMenu(QCursor::pos(), m_gvDirPart->url(), 0);
+	kdDebug() << k_funcinfo << "filename: " << m_gvDirPart->pixmapURL() << endl;
+	emit popupMenu(QCursor::pos(), m_gvDirPart->pixmapURL(), 0);
 }
 
 #include "gvdirpart.moc"
