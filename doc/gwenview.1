@@ -1,19 +1,21 @@
-.TH "gwenview" "1" "0.11.0" "Michael Spanier" "An Image Viewer for KDE"
+.TH "gwenview" "1" "0.15.0" "Michael Spanier" "An Image Viewer for KDE"
 .SH "NAME"
 .LP 
 gwenview \- an imageviewer for KDE 
 .SH "SYNTAX"
 .LP 
-gwenview 
+gwenview [file or folder]
 .br 
 .SH "DESCRIPTION"
 .LP 
-gwenview is an imageviewer for KDE.
+gwenview is an image viewer for KDE.
 It features a folder tree window and a file list window to provide easy navigation in your file hierarchy.
 .
-Image loading is done by the Qt library, so it supports all image formats your Qt installation supports. Gwenview correctly displays images with alpha channels. 
+Image loading is done by the Qt library, so it supports all image formats your Qt installation supports. Also support for the XCF file format has been added. Gwenview correctly displays images with alpha channels. 
 
 It uses docked windows, so you can alter the layout in any way you want. You can also browse your images in full screen. 
+
+Gwenview can be start with a file or a folder as a optionally argument. If a file is given gwenview will show this file, if a folder is given gwenview will show the content of the folder as perview.
 .SH "OPTIONS"
 .LP 
 .TP 
