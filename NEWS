@@ -1,4 +1,7 @@
 2004.xx.xx - v1.1.7
+- New features:
+ - Double clicking the image view toggles the full screen mode (By Daniel
+   Thaler)
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.
