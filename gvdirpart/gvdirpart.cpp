@@ -66,10 +66,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	setWidget(mSplitter);
 
-	KIconLoader iconLoader = KIconLoader("gwenview");
-	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
-	new KAction(i18n("Rotate &Right"), "rotate_right", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
+	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
@@ -85,7 +83,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mSplitter->setSizes(splitterSizes);
 
 	// KIconLoader is weird.  If I preload them here it remembers about them for the following KAction.
-//FIXMEnow	KIconLoader iconLoader = KIconLoader("gwenview");
+	KIconLoader iconLoader = KIconLoader("gwenview");
 	iconLoader.loadIconSet("slideshow", KIcon::Toolbar);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");

@@ -51,7 +51,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	KIconLoader iconLoader = KIconLoader("gwenview");
 	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
-	new KAction(i18n("Rotate &Right"), "rotate_right", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
+	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
