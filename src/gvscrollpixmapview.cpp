@@ -1371,6 +1371,7 @@ double GVScrollPixmapView::computeAutoZoom() const {
 
 double GVScrollPixmapView::computeZoom(bool in) const {
 	const double F = 0.5; // change in 0.5 steps
+	double autozoom = computeAutoZoom();
 	if (in) {
 		double newzoom;
 		if (d->mZoom>=1.0) {
@@ -1378,7 +1379,6 @@ double GVScrollPixmapView::computeZoom(bool in) const {
 		} else {
 			newzoom = 1/(( ceil(1/d->mZoom/F)-1.0 )*F);
 		}
-		double autozoom = computeAutoZoom();
 		if( d->mZoom < autozoom && autozoom < newzoom ) newzoom = autozoom;
 		return newzoom;
 	} else {
@@ -1388,7 +1388,6 @@ double GVScrollPixmapView::computeZoom(bool in) const {
 		} else {
 			newzoom = 1/(( floor(1/d->mZoom/F)+1.0 )*F);
 		}
-		double autozoom = computeAutoZoom();
 		if( d->mZoom > autozoom && autozoom > newzoom ) newzoom = autozoom;
 		return newzoom;
 	}
