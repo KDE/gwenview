@@ -21,6 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <config.h>
 #ifdef HAVE_KIPI
 
+// Qt
+#include <qdir.h>
+
 // KDE
 #include <kdebug.h>
 #include <kfileitem.h>
@@ -45,6 +48,12 @@ public:
 	QString comment() { return QString::null; }
 	
 	KURL::List images() { return mImages; }
+	// FIXME: Return current URL instead
+	KURL uploadPath() {
+		KURL url;
+		url.setPath(QDir::homeDirPath());
+		return url;
+	}
 
 private:
 	QString mName;
@@ -129,6 +138,14 @@ KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 
 int GVKIPIInterface::features() const {
 	return KIPI::AlbumEQDir | KIPI::AcceptNewImages; 
+}
+
+/**
+ * We don't need to do anything here, the KDirLister will pick up the image if
+ * necessary
+ */
+bool GVKIPIInterface::addImage(const KURL&, QString&) {
+	return true;
 }
 
 #endif /* HAVE_KIPI */

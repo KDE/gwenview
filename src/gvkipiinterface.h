@@ -42,6 +42,7 @@ public:
 	QValueList<KIPI::ImageCollection> allAlbums();
 	KIPI::ImageInfo info( const KURL& );
 	int features() const;
+	bool addImage(const KURL&, QString& err);
 
 private:
 	GVKIPIInterfacePrivate* d;
