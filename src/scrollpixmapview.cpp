@@ -119,9 +119,9 @@ bool ScrollPixmapView::isZoomSetToMin() {
 
 //-Overloaded methods----------------------------------
 void ScrollPixmapView::resizeEvent(QResizeEvent* event) {
+	QScrollView::resizeEvent(event);
 	updateContentSize();
 	updateImageOffset(mZoom);
-	QScrollView::resizeEvent(event);
 }
 
 
@@ -231,40 +231,31 @@ void ScrollPixmapView::setLockZoom(bool value) {
 //-Private---------------------------------------------
 void ScrollPixmapView::updateContentSize() {
 	resizeContents(
-		QMAX( int(mGVPixmap->pixmap().width()*mZoom) , visibleWidth() ),
-		QMAX( int(mGVPixmap->pixmap().height()*mZoom) , visibleHeight() )
-	);
+		int(mGVPixmap->pixmap().width()*mZoom), 
+		int(mGVPixmap->pixmap().height()*mZoom)	);
 }
 
 
 void ScrollPixmapView::updateImageOffset(double oldZoom) {
-// FIXME : Comments !
-	int centerX=int( ((visibleWidth()/2+contentsX()-mXOffset)/oldZoom)*mZoom );
-	int centerY=int( ((visibleHeight()/2+contentsY()-mYOffset)/oldZoom)*mZoom );
-	center(centerX,centerY);
-	
-	int zpixWidth=int(mGVPixmap->width() * mZoom);
 	int viewWidth=visibleWidth();
-	if (zpixWidth<viewWidth) {
-		mXOffset=(viewWidth-zpixWidth)/2;
-	} else {
-		mXOffset=0;
-	}
+	int viewHeight=visibleHeight();
+	
+	
+	// Find the coordinate of the center of the image
+	// and center the view on it
+	int centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
+	int centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+	center(centerX,centerY);
+
+	// Compute mXOffset and mYOffset in case the image does not fit
+	// the view width or height
+	int zpixWidth=int(mGVPixmap->width() * mZoom);
+	mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
+
 
 	int zpixHeight=int(mGVPixmap->height() * mZoom);
-	int viewHeight=visibleHeight();
-	if (zpixHeight<viewHeight) {
-		mYOffset=(viewHeight-zpixHeight)/2;
-	} else {
-		mYOffset=0;
-	}
+	mYOffset=QMAX(0,(viewHeight-zpixHeight)/2);
 
-
-/*	int pixWidth=int( mGVPixmap->pixmap().width() * mZoom);
-	int pixHeight=int( mGVPixmap->pixmap().height() * mZoom);
-
-	mXOffset=QMAX( (width()-pixWidth)/2, 0);
-	mYOffset=QMAX( (height()-pixHeight)/2, 0);*/
 }
 
 

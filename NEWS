@@ -1,11 +1,15 @@
 2002.xx.xx - v0.16.0
 - New features :
- - Added an item to popup menu to show the file properties.
+- Fixes :
+
+2002.10.26 - v0.15.1
+- New features :
+ - Added an item to the popup menus to show the file properties.
 - Fixes :
  - The selected thumbnail does not look strange anymore when changing the
    thumbnail size.
  - Always zoom on the center of the image.
- - Do not reload the image every time when you open the context menu.
+ - Do not reload the image every time when opening the context menu.
 
 2002.10.04 - v0.15.0
 - File count was also counting folders.

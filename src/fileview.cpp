@@ -588,7 +588,7 @@ void FileView::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
 
 	config->setGroup(group);
-	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,false);
+	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
 	initDirListerFilter();
 	
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
