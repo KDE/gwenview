@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filethumbnailview.h"
 #include "fileview.h"
 #include "fitpixmapview.h"
+#include "gvslideshow.h"
 #include "mainwindow.h"
 #include "pixmapview.h"
 #include "scrollpixmapview.h"
@@ -51,6 +52,7 @@ mMainWindow(mainWindow)
 {
 	FileView* fileView=mMainWindow->fileView();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
+	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 // Thumbnails tab
 	mThumbnailMargin->setValue(fileView->fileThumbnailView()->marginSize());
@@ -97,6 +99,10 @@ mMainWindow(mainWindow)
 	mShiftPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ShiftButton]));
 	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
 
+// Slide show tab
+	mLoopInSlideShow->setChecked(slideShow->loop());
+	mDelayInSlideShow->setValue(slideShow->delay());
+	
 // Misc tab
 	mExternalEditor->setText(FileOperation::editor());
 	mAutoLoadImage->setChecked(fileView->autoLoadImage());
@@ -113,6 +119,7 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	FileView* fileView=mMainWindow->fileView();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
+	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 // Thumbnails tab
 	fileView->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
@@ -136,6 +143,10 @@ void ConfigDialog::slotApply() {
 	pixmapView->wheelBehaviours()[ControlButton]=PixmapView::WheelBehaviour(mControlPlusWheel->currentItem());
 	pixmapView->wheelBehaviours()[ShiftButton]=  PixmapView::WheelBehaviour(mShiftPlusWheel->currentItem());
 	pixmapView->wheelBehaviours()[AltButton]=    PixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
+
+// Slide show tab
+	slideShow->setDelay(mDelayInSlideShow->value());
+	slideShow->setLoop(mLoopInSlideShow->isChecked());
 
 // Misc tab
 	FileOperation::setEditor(mExternalEditor->text());
@@ -171,10 +182,6 @@ void ConfigDialog::emptyCache() {
 	if (KIO::NetAccess::del(url)) {
 		KMessageBox::information( this,i18n("Cache emptied.") );
 	}
-	/*
-	KIO::DeleteJob* job=KIO::del(url);
-	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(onCacheEmptied(KIO::Job*)));*/
 }
 
 

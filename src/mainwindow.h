@@ -32,6 +32,7 @@ class KToggleAction;
 class DirView;
 class FileView;
 class GVPixmap;
+class GVSlideShow;
 class PixmapView;
 class StatusBarProgress;
 
@@ -44,6 +45,7 @@ public:
 
 	FileView* fileView() const { return mFileView; }
 	PixmapView* pixmapView() const { return mPixmapView; }
+	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
@@ -66,6 +68,7 @@ private:
 	PixmapView* mPixmapView;
 
 	GVPixmap* mGVPixmap;
+	GVSlideShow* mSlideShow;
 
 	KAction* mOpenFile;
 	KAction* mOpenLocation;
@@ -80,6 +83,7 @@ private:
 	KAction* mStop;
 	KAction* mOpenParentDir;
 	KAction* mShowFileProperties;
+	KToggleAction* mToggleSlideShow;
 	
 	KAccel* mAccel;
 
@@ -106,6 +110,7 @@ private slots:
 	void openWithEditor();
 	void openParentDir();
 	void showFileProperties();
+	void toggleSlideShow();
 
 	/**
 	 * Update both folder and file status bar

@@ -3,6 +3,7 @@
  - Support for IO slaves: you can browse Windows share, FTP files, into
    tarballs...
  - Added a "home folder" tree branch to folder view.
+ - Added a simple slideshow feature.
 - Fixes :
  - Do not start dragging folders in the folder view when not necessary.
 

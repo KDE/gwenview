@@ -50,6 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileview.h"
 #include "fileoperation.h"
 #include "gvpixmap.h"
+#include "gvslideshow.h"
 #include "pixmapview.h"
 #include "statusbarprogress.h"
 
@@ -63,6 +64,7 @@ const char* CONFIG_MAINWINDOW_GROUP="main window";
 const char* CONFIG_FILEWIDGET_GROUP="file widget";
 const char* CONFIG_PIXMAPWIDGET_GROUP="pixmap widget";
 const char* CONFIG_FILEOPERATION_GROUP="file operations";
+const char* CONFIG_SLIDESHOW_GROUP="slide show";
 
 const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
@@ -86,6 +88,10 @@ MainWindow::MainWindow()
 	createPixmapViewPopupMenu();
 	createToolBar();
 
+// Slide show
+	mSlideShow=new GVSlideShow(mFileView->selectFirst(),mFileView->selectNext());
+	mSlideShow->readConfig(KGlobal::config(),CONFIG_SLIDESHOW_GROUP);
+	
 // Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
@@ -126,6 +132,10 @@ MainWindow::MainWindow()
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileView,SLOT(setURL(const KURL&,const QString&)) );
 
+// Slide show
+	connect(mSlideShow,SIGNAL(finished()),
+		mToggleSlideShow,SLOT(activate()) );
+	
 // Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -152,6 +162,7 @@ MainWindow::~MainWindow() {
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mFileView->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
+	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 	mAccel->writeSettings();
@@ -244,6 +255,21 @@ void MainWindow::toggleFullScreen() {
 }
 
 
+void MainWindow::toggleSlideShow() {
+	if (mToggleSlideShow->isChecked()) {
+		if (!mToggleFullScreen->isChecked()) {
+			mToggleFullScreen->activate();
+		}
+		mSlideShow->start();
+	} else {
+		mSlideShow->stop();
+		if (mToggleFullScreen->isChecked()) {
+			mToggleFullScreen->activate();
+		}
+	}
+}
+
+
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this,this);
 	dialog.exec();
@@ -259,6 +285,10 @@ void MainWindow::showFileProperties() {
 }
 	
 void MainWindow::escapePressed() {
+	if (mToggleSlideShow->isChecked()) {
+		mToggleSlideShow->activate();
+		return;
+	}
 	if (mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
@@ -307,7 +337,6 @@ void MainWindow::thumbnailUpdateEnded() {
 void MainWindow::thumbnailUpdateProcessedOne() {
 	mProgress->progress()->advance(1);
 }
-
 
 
 //-GUI-------------------------------------------------------------------
@@ -406,6 +435,8 @@ void MainWindow::createActions() {
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
 
 	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"show_file_properties");
+
+	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
 }
 
 
@@ -465,6 +496,8 @@ void MainWindow::createMenu() {
 	mPixmapView->zoomIn()->plug(viewMenu);
 	mPixmapView->zoomOut()->plug(viewMenu);
 	mPixmapView->resetZoom()->plug(viewMenu);
+	viewMenu->insertSeparator();
+	mToggleSlideShow->plug(viewMenu);
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
@@ -548,9 +581,10 @@ void MainWindow::createToolBar() {
 	mFileView->selectPrevious()->plug(toolBar());
 	mFileView->selectNext()->plug(toolBar());
 	mFileView->selectLast()->plug(toolBar());
-	toolBar()->insertLineSeparator();
 
+	toolBar()->insertLineSeparator();
 	mStop->plug(toolBar());
+
 	toolBar()->insertLineSeparator();
 	mFileView->noThumbnails()->plug(toolBar());
 	mFileView->smallThumbnails()->plug(toolBar());
@@ -566,6 +600,9 @@ void MainWindow::createToolBar() {
 	mPixmapView->zoomIn()->plug(toolBar());
 	mPixmapView->zoomOut()->plug(toolBar());
 	mPixmapView->resetZoom()->plug(toolBar());
+
+	toolBar()->insertLineSeparator();
+	mToggleSlideShow->plug(toolBar());
 	toolBar()->show();
 }
 
