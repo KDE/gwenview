@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // Qt includes
 #include <qcursor.h>
+#include <qdir.h>
 #include <qdockarea.h>
 #include <qtooltip.h>
 
@@ -170,6 +171,13 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 //-----------------------------------------------------------------------
 void GVMainWindow::openParentDir() {
 	KURL url=mGVPixmap->dirURL().upURL();
+	mGVPixmap->setURL(url);	
+}
+
+
+void GVMainWindow::openHomeDir() {
+	KURL url;
+	url.setPath( QDir::homeDirPath() );
 	mGVPixmap->setURL(url);	
 }
 
@@ -485,6 +493,8 @@ void GVMainWindow::createActions() {
 
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
 
+	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()),actionCollection() );
+
 	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
 
 	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
@@ -608,10 +618,13 @@ void GVMainWindow::createMenu() {
 
 	QPopupMenu* goMenu = new QPopupMenu;
 	mOpenParentDir->plug(goMenu);
+	mOpenHomeDir->plug(goMenu);
+	goMenu->insertSeparator();
 	mFileViewStack->selectFirst()->plug(goMenu);
 	mFileViewStack->selectPrevious()->plug(goMenu);
 	mFileViewStack->selectNext()->plug(goMenu);
 	mFileViewStack->selectLast()->plug(goMenu);
+	
 	menuBar()->insertItem(i18n("&Go"), goMenu);
 
 	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this,this->actionCollection());

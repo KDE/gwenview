@@ -84,6 +84,7 @@ private:
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
 	KAction* mStop;
+	KAction* mOpenHomeDir;
 	KAction* mOpenParentDir;
 	KAction* mShowFileProperties;
 	KToggleAction* mToggleSlideShow;
@@ -115,6 +116,7 @@ private:
 	
 private slots:
 	void openParentDir();
+	void openHomeDir();
 	void renameFile();
 	void copyFiles();
 	void moveFiles();
