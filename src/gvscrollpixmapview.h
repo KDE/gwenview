@@ -49,9 +49,9 @@ public:
 	class ZoomToolController;
 
 	friend class ToolController;
-	friend class BrowseController;
-	friend class ScrollController;
-	friend class ZoomController;
+	friend class BrowseToolController;
+	friend class ScrollToolController;
+	friend class ZoomToolController;
 
 	enum Tool { None, Browse, Scroll, Zoom };
 	typedef Tool WheelBehaviour; // FIXME: For compatibility
