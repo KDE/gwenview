@@ -40,7 +40,6 @@ public:
 	void setImage(QImage);
 	void setImageFormat(const char*);
 	
-	virtual const char* imageFormat() const;
 	virtual QString comment() const;
 	virtual GVDocument::CommentState commentState() const;
 	virtual void setComment(const QString&);
