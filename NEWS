@@ -3,6 +3,7 @@
   folder (Thanks to Andreas Pfaller for the patch).
 - Fixed the horizontal one pixel line which appeared in fullscreen mode when
   the toolbar was hidden.
+- New command line option (-f) to start in fullscreen mode.
 
 2002.07.28 - v0.14.4
 - Updated thumbnail generation to store thumbnails in the same folder 

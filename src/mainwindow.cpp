@@ -135,6 +135,12 @@ MainWindow::MainWindow()
 		url.setPath(info.absFilePath());
 	}
 
+// Check if we should start in fullscreen mode
+	if (args->isSet("f")) {
+		mFileView->noThumbnails()->activate(); // No thumbnails needed
+		mToggleFullScreen->activate();
+	}
+
 // Go to requested file
 	mGVPixmap->setURL(url);
 }
