@@ -435,6 +435,7 @@ void GVMainWindow::toggleFullScreen() {
 	mToggleDirAndFileViews->setEnabled(!mToggleFullScreen->isChecked());
 
 	if (mToggleFullScreen->isChecked()) {
+		showFullScreen();
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
 
 	/* Hide toolbar
@@ -460,9 +461,12 @@ void GVMainWindow::toggleFullScreen() {
 		makeDockInvisible(mFolderDock);
 		makeDockInvisible(mMetaDock);
 		mPixmapView->setFullScreen(true);
-		showFullScreen();
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
+		// workaround Qt bug - it unsets the fullscreen state on setGeometry(),
+		// which will be triggered by readDockConfig(), but KWin will ignore
+		// the geometry change and won't reset the state
+		setWState(WState_FullScreen);
 		statusBar()->show();
 
 		showToolBars();
@@ -473,7 +477,11 @@ void GVMainWindow::toggleFullScreen() {
 
 		menuBar()->show();
 		mPixmapView->setFullScreen(false);
+#if QT_VERSION >= 0x030200
+		setWindowState( windowState() & ~WindowFullScreen );
+#else
 		showNormal();
+#endif
 	}
 	mPixmapView->setFocus();
 }

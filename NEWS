@@ -2,6 +2,8 @@
 - Fixes:
  - Don't crash when loading 8 bit PNG files with transparency.
  - Make sure small and medium size thumbnails do not look jagged.
+ - Work-around a Qt bug which caused the window title to not come back after
+   leaving fullscreen mode and reduces flickering (By Lubos Lunak).
 
 2004.03.20 - v1.1.1
 - New features:
