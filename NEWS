@@ -14,6 +14,8 @@
  - Fixed a few bugs in image saving.
  - Made the save error messages more explicit.
  - Removed the "show toolbar/menubar/statusbar in fullscreen" options.
+ - When selecting multiple images with Ctrl or Shift, block the "double click
+   an image goes to fullscreen" feature.
 
 2004.10.24 - v1.1.6
 - New features:

@@ -172,6 +172,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	// File detail widget
 	mFileDetailView=new GVFileDetailView(this,"filedetailview");
 	addWidget(mFileDetailView,0);
+	mFileDetailView->viewport()->installEventFilter(this);
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
 		this,SLOT(slotViewExecuted()) );
@@ -195,6 +196,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
+	mFileThumbnailView->viewport()->installEventFilter(this);
 
 	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
 		this,SLOT(slotViewExecuted()) );
@@ -230,6 +232,20 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 	mFileNameToSelect=fileName;
 }
 
+
+/**
+ * Do not let double click events propagate if Ctrl or Shift is down, to avoid
+ * toggling fullscreen
+ */
+bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
+	if (event->type()!=QEvent::MouseButtonDblClick) return false;
+
+	QMouseEvent* mouseEvent=static_cast<QMouseEvent*>(event);
+	if (mouseEvent->state() & Qt::ControlButton || mouseEvent->state() & Qt::ShiftButton) {
+		return true;
+	}
+	return false;
+}
 
 
 //-----------------------------------------------------------------------

@@ -224,6 +224,8 @@ private:
 	KFileItem* findPreviousImage() const;
 	KFileItem* findNextImage() const;
 	KFileItem* findItemByFileName(const QString& fileName) const;
+
+	bool eventFilter(QObject*, QEvent*);
 };
 
 
