@@ -54,6 +54,7 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	setResizeMode(Adjust);
 	setShowToolTips(true);
 	setSpacing(0);
+	viewport()->setAcceptDrops(false);
 
 // If we use KIconView::Execute mode, the current item is unselected after
 // being clicked, so we use KIconView::Select mode and emit ourself the
