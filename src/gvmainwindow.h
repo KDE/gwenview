@@ -71,6 +71,9 @@ public:
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	GVDocument* document() const { return mDocument; }
+#ifdef HAVE_KIPI
+	KIPI::PluginLoader* pluginLoader() const { return mPluginLoader; }
+#endif
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
@@ -140,7 +143,7 @@ private:
 	bool mShowBusyPtrInFullScreen;
 
 #ifdef HAVE_KIPI
-	KIPI::PluginLoader::PluginList mPluginList;
+	KIPI::PluginLoader* mPluginLoader;
 #endif
 
 	void hideToolBars();
@@ -211,6 +214,10 @@ private slots:
 
 	// Helper function for updateWindowActions()
 	void createHideShowAction(KDockWidget* dock);
+
+#ifdef HAVE_KIPI
+	void slotReplug();
+#endif
 };
 
 

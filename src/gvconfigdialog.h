@@ -30,7 +30,7 @@ class GVConfigDialogPrivate;
 class GVConfigDialog : public KDialogBase {
 Q_OBJECT
 public:
-	GVConfigDialog(QWidget* parent,GVMainWindow*);
+	GVConfigDialog(GVMainWindow*);
 	~GVConfigDialog();
 
 protected slots:

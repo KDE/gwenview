@@ -2,6 +2,7 @@
 - New features:
  - Double clicking the image view toggles the full screen mode (By Daniel
    Thaler)
+ - It's now possible to select which KIPI plugins should be loaded.
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="12">
+<kpartgui name="Gwenview" version="13">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -47,24 +47,31 @@
     <text>&amp;Plugins</text>
     <Menu name="kipi_images">
       <text>Images</text>
+      <ActionList name="image_actions"/>
     </Menu>
     <Menu name="kipi_effects">
       <text>Effects</text>
+      <ActionList name="effect_actions"/>
     </Menu>
     <Menu name="kipi_tools">
       <text>Tools</text>
+      <ActionList name="tool_actions"/>
     </Menu>
     <Menu name="kipi_batch">
       <text>Batch Processing</text>
+      <ActionList name="batch_actions"/>
     </Menu>
     <Menu name="kipi_import">
       <text>Import</text>
+      <ActionList name="import_actions"/>
     </Menu>
     <Menu name="kipi_export">
       <text>Export</text>
+      <ActionList name="export_actions"/>
     </Menu>
     <Menu name="kipi_collections">
       <text>Collections</text>
+      <ActionList name="collection_actions"/>
     </Menu>
   </Menu>
   <Menu name="window">

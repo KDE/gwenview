@@ -562,7 +562,7 @@ void GVMainWindow::toggleSlideShow() {
 
 
 void GVMainWindow::showConfigDialog() {
-	GVConfigDialog dialog(this,this);
+	GVConfigDialog dialog(this);
 	dialog.exec();
 }
 
@@ -577,8 +577,9 @@ void GVMainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
 #ifdef HAVE_KIPI
-	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
-	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
+	KIPI::PluginLoader::PluginList pluginList=mPluginLoader->pluginList();
+	KIPI::PluginLoader::PluginList::ConstIterator it(pluginList.begin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(pluginList.end());
 	for( ; it!=itEnd; ++it ) {
 		KIPI::Plugin* plugin=(*it)->plugin();
 		if (plugin) {
@@ -983,25 +984,40 @@ void GVMainWindow::createLocationToolBar() {
 
 #ifdef HAVE_KIPI
 void GVMainWindow::loadPlugins() {
-	QMap<KIPI::Category, QCString> categoryMap;
-	categoryMap[KIPI::IMAGESPLUGIN]="kipi_images";
-	categoryMap[KIPI::EFFECTSPLUGIN]="kipi_effects";
-	categoryMap[KIPI::TOOLSPLUGIN]="kipi_tools";
-	categoryMap[KIPI::IMPORTPLUGIN]="kipi_import";
-	categoryMap[KIPI::EXPORTPLUGIN]="kipi_export";
-	categoryMap[KIPI::BATCHPLUGIN]="kipi_batch";
-	categoryMap[KIPI::COLLECTIONSPLUGIN]="kipi_collections";
-	
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
-	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
-	loader->loadPlugins();
+	mPluginLoader = new KIPI::PluginLoader(QStringList(), interface );
+    connect( mPluginLoader, SIGNAL( replug() ), this, SLOT( slotReplug() ) );
+	mPluginLoader->loadPlugins();
+}
 
-	// Fill the plugin menu
-	mPluginList=loader->pluginList();
-	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
-	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
+
+// Helper class for slotReplug(), gcc does not want to instantiate templates
+// with local classes, so this is declared outside of slotReplug()
+struct MenuInfo {
+	QString mName;
+	QPtrList<KAction> mActions;
+	MenuInfo() {}
+	MenuInfo(const QString& name) : mName(name) {}
+};
+
+void GVMainWindow::slotReplug() {
+	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
+	CategoryMap categoryMap;
+	categoryMap[KIPI::IMAGESPLUGIN]=MenuInfo("image_actions");
+	categoryMap[KIPI::EFFECTSPLUGIN]=MenuInfo("effect_actions");
+	categoryMap[KIPI::TOOLSPLUGIN]=MenuInfo("tool_actions");
+	categoryMap[KIPI::IMPORTPLUGIN]=MenuInfo("import_actions");
+	categoryMap[KIPI::EXPORTPLUGIN]=MenuInfo("export_actions");
+	categoryMap[KIPI::BATCHPLUGIN]=MenuInfo("batch_actions");
+	categoryMap[KIPI::COLLECTIONSPLUGIN]=MenuInfo("collection_actions");
+	
+	// Fill the mActions
+	KIPI::PluginLoader::PluginList pluginList=mPluginLoader->pluginList();
+	KIPI::PluginLoader::PluginList::ConstIterator it(pluginList.begin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(pluginList.end());
 	for( ; it!=itEnd; ++it ) {
+		if (!(*it)->shouldLoad()) continue;
 		KIPI::Plugin* plugin = (*it)->plugin();
 		Q_ASSERT(plugin);
 		if (!plugin) continue;
@@ -1016,14 +1032,29 @@ void GVMainWindow::loadPlugins() {
 				kdWarning() << "Unknown category '" << category << "'\n";
 				continue;
 			}
-			QPopupMenu *popup = static_cast<QPopupMenu*>(
-				factory()->container( categoryMap[category], this));
-			Q_ASSERT( popup );
-			if (!popup) continue;
 
-			(*actionIt)->plug( popup );
+			categoryMap[category].mActions.append(*actionIt);
 		}
 		plugin->actionCollection()->readShortcutSettings();
+	}
+
+	// Create a dummy "no plugin" action list
+	KAction* noPlugin=new KAction(i18n("No plugin"), 0, 0, 0, actionCollection(), "no_plugin");
+	noPlugin->setShortcutConfigurable(false);
+	noPlugin->setEnabled(false);
+	QPtrList<KAction> noPluginList;
+	noPluginList.append(noPlugin);
+	
+	// Fill the menu
+	CategoryMap::ConstIterator catIt=categoryMap.begin(), catItEnd=categoryMap.end();
+	for (; catIt!=catItEnd; ++catIt) {
+		const MenuInfo& info=catIt.data();
+		unplugActionList(info.mName);
+		if (info.mActions.count()>0) {
+			plugActionList(info.mName, info.mActions);
+		} else {
+			plugActionList(info.mName, noPluginList);
+		}
 	}
 }
 #else
@@ -1031,6 +1062,10 @@ void GVMainWindow::loadPlugins() {
 	QPopupMenu *popup = static_cast<QPopupMenu*>(
 		factory()->container( "plugins", this));
 	delete popup;
+}
+
+
+void GVMainWindow::slotReplug() {
 }
 #endif
 

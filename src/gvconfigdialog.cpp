@@ -39,6 +39,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
+#include <config.h>
+// KIPI
+#ifdef HAVE_KIPI
+#include <libkipi/pluginloader.h>
+#endif
+
 // Local 
 #include "fileoperation.h"
 #include "gvconfigfileoperationspage.h"
@@ -63,27 +69,37 @@ public:
 	GVConfigFileOperationsPage* mFileOperationsPage;
 	GVConfigMiscPage* mMiscPage;
 	GVMainWindow* mMainWindow;
+#ifdef HAVE_KIPI
+	KIPI::ConfigWidget* mKIPIConfigWidget;
+#endif
 };
 
+
+// Two helper functions to create the config pages
 template<class T>
-T* addConfigPage(KDialogBase* dialog, const QString& name, const char* iconName) {
+T* addConfigPage(KDialogBase* dialog, const QString& header, const QString& name, const char* iconName) {
 	T* content=new T;
-	QFrame* page=dialog->addPage(name, content->caption(), BarIcon(iconName, 32));
+	addConfigPage(dialog, content, header, name, iconName);
+	return content;
+}
+
+template<class T>
+void addConfigPage(KDialogBase* dialog, T* content, const QString& header, const QString& name, const char* iconName) {
+	QFrame* page=dialog->addPage(name, header, BarIcon(iconName, 32));
 	content->reparent(page, QPoint(0,0));
 	QVBoxLayout* layout=new QVBoxLayout(page, 0, KDialog::spacingHint());
 	layout->addWidget(content);
 	layout->addStretch();
-	return content;
-	
 }
 
-GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
+
+GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 : KDialogBase(
 	KDialogBase::IconList,
 	i18n("Configure"),
 	KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
 	KDialogBase::Ok,
-	parent,
+	mainWindow,
 	"GVConfigDialog",
 	true,
 	true)
@@ -91,11 +107,27 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d=new GVConfigDialogPrivate;
 	d->mMainWindow=mainWindow;
 
-	d->mImageListPage      = addConfigPage<GVConfigImageListPage>(this, i18n("Image List"), "view_icon");
-	d->mImageViewPage      = addConfigPage<GVConfigImageViewPage>(this, i18n("Image View"), "looknfeel");
-	d->mFullScreenPage     = addConfigPage<GVConfigFullScreenPage>(this, i18n("Full Screen"), "window_fullscreen");
-	d->mFileOperationsPage = addConfigPage<GVConfigFileOperationsPage>(this, i18n("File Operations"), "folder");
-	d->mMiscPage           = addConfigPage<GVConfigMiscPage>(this, i18n("Misc"), "gear");
+	// Create dialog pages
+	d->mImageListPage = addConfigPage<GVConfigImageListPage>(
+		this, i18n("Configure Image List"), i18n("Image List"), "view_icon");
+	
+	d->mImageViewPage = addConfigPage<GVConfigImageViewPage>(
+		this, i18n("Configure Image View"), i18n("Image View"), "looknfeel");
+	
+	d->mFullScreenPage = addConfigPage<GVConfigFullScreenPage>(
+		this, i18n("Configure Full Screen Mode"), i18n("Full Screen"), "window_fullscreen");
+
+	d->mFileOperationsPage = addConfigPage<GVConfigFileOperationsPage>(
+		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
+
+#ifdef HAVE_KIPI
+	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
+	addConfigPage(
+		this, d->mKIPIConfigWidget, i18n("Configure KIPI Plugins"), i18n("KIPI Plugins"), "kipi");
+#endif
+
+	d->mMiscPage = addConfigPage<GVConfigMiscPage>(
+		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
 
 	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
@@ -217,6 +249,11 @@ void GVConfigDialog::slotApply() {
 	FileOperation::setDestDir(d->mFileOperationsPage->mDefaultDestDir->url());
 	FileOperation::setConfirmDelete(d->mFileOperationsPage->mConfirmBeforeDelete->isChecked());
 	FileOperation::setDeleteToTrash(d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
+
+	// KIPI tab
+#ifdef HAVE_KIPI
+	d->mKIPIConfigWidget->apply();
+#endif
 
 	// Misc tab
 #if QT_VERSION>=0x030200
