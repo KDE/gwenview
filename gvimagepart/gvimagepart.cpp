@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpoint.h>
 
 #include <kaction.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kiconloader.h>
@@ -28,12 +29,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 
 #include "gvimagepart.h"
+#include <src/gvcache.h>
 #include <src/gvdocument.h>
+#include <src/gvjpegtran.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
 
+#include "config.h"
 
-const char* CONFIG_VIEW_GROUP="GwenviewPart View";
+// For now let's duplicate
+const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
+const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
+const char CONFIG_CACHE_GROUP[]="cache";
 
 
 class GVImagePartView : public GVScrollPixmapView {
@@ -84,11 +91,19 @@ GVImagePart::~GVImagePart() {
 
 
 void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
+#ifdef GV_HACK_SUFFIX
+	KConfig* config=new KConfig("gwenview_hackrc");
+#else
+	KConfig* config=new KConfig("gwenviewrc");
+#endif
 	if (event->activated()) {
-		mPixmapView->readConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+		GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
+		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
+		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
 	} else {
-		mPixmapView->writeConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
 	}
+	delete config;
 	KParts::ReadOnlyPart::partActivateEvent( event );
 }
 

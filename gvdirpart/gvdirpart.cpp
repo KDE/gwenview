@@ -32,16 +32,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/job.h>
 
 #include "gvdirpart.h"
-#include <src/gvscrollpixmapview.h>
-#include <src/gvfileviewstack.h>
-#include <src/gvdocument.h>
-#include <src/gvprintdialog.h>
-#include <src/gvslideshow.h>
-#include <src/gvslideshowdialog.h>
 #include <src/fileoperation.h>
+#include <src/gvcache.h>
+#include <src/gvdocument.h>
+#include <src/gvfileviewstack.h>
+#include <src/gvjpegtran.h>
+#include <src/gvprintdialog.h>
+#include <src/gvscrollpixmapview.h>
+#include <src/gvslideshowdialog.h>
+#include <src/gvslideshow.h>
+#include <src/thumbnailloadjob.h>
 
+#include "config.h"
 
-const char* CONFIG_VIEW_GROUP="GwenviewPart View";
+// For now let's duplicate
+const char CONFIG_CACHE_GROUP[]="cache";
+const char CONFIG_FILEOPERATION_GROUP[]="file operations";
+const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
+const char CONFIG_SLIDESHOW_GROUP[]="slide show";
+const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
+const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
 
 class GVDirPartView : public GVScrollPixmapView {
@@ -114,11 +124,22 @@ GVDirPart::~GVDirPart() {
 
 
 void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
+#ifdef GV_HACK_SUFFIX
+	KConfig* config=new KConfig("gwenview_hackrc");
+#else
+	KConfig* config=new KConfig("gwenviewrc");
+#endif
 	if (event->activated()) {
-		mPixmapView->readConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
+		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);
+		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
+		GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
+		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
+		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 	} else {
-		mPixmapView->writeConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
 	}
+	delete config;
 }
 
 
