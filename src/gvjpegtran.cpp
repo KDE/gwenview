@@ -88,7 +88,7 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	GVJPEGTran obj;
 	KProcess process;
 	process << sProgramPath << "-copy" << "all";
-	
+
 	switch (orientation) {
 	case GVImageUtils::HFLIP:
 		process << "-flip" << "horizontal";
@@ -114,16 +114,16 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	default:
 		return src;
 	}
-	
+
 	connect(&process,SIGNAL(wroteStdin(KProcess*)),
 		&obj,SLOT(writeChunk(KProcess*)) );
-	
+
 	connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
 		&obj,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-	
+
 	connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
 		&obj,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-	
+
 	// Return an empty QByteArray on failure. GVDocument will thus consider the
 	// buffer as invalid and will fall back to lossy manipulations.
 	if ( !process.start(KProcess::NotifyOnExit, KProcess::All) ) {
@@ -134,17 +134,20 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 					),QString::null,"jpegtran failed");
 		return QByteArray();
 	}
-	
+
 	obj.mSrc=src;
 	obj.mSent=0;
 	obj.writeChunk(&process);
-	
+
 	kapp->setOverrideCursor(QCursor(WaitCursor));
 	while (process.isRunning()) {
+                usleep( 50 ); // FIXME: gives jpegtrans some time to avoid
+		// a busy loop, but this should either be a separate thread
+		// or at least create a single shot timer
 		kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	kapp->restoreOverrideCursor();
-	
+
 	return obj.mDst;
 }
 
