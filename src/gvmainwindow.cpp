@@ -314,7 +314,8 @@ void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
 void GVMainWindow::updateLocationURL() {
 	LOG("");
 	KURL url = mFileViewStack->dirURL();
-	// Show the picture URL in the location bar only when not browsing.
+	// Show the picture URL in the location bar only when not browsing and only
+	// if we are really on a picture (== !mDocument->isNull())
 	//
 	// We do not use mFileViewStack->url() or mDocument->url() because this is
 	// the "real" url, not the "fake" one the user believes he is navigating
@@ -323,7 +324,7 @@ void GVMainWindow::updateLocationURL() {
 	// For example with digikamtags, "digikamtags:/1/2/myimage.jpg" is the
 	// "fake" url, it's a KFileItem whose "real" url will be
 	// "/path/to/my/photo/library/myimage.jpg"
-	if (!mToggleBrowse->isChecked()) {
+	if (!mToggleBrowse->isChecked() && !mDocument->isNull()) {
 		url.adjustPath(1);
 		url.setFileName(mFileViewStack->fileName());
 	}
