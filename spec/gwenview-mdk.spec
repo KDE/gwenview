@@ -1,14 +1,14 @@
 %define name gwenview
 %define version 1.0.0
-%define release 0.pre2.1mdk
+%define release 0.pre3.2mdk
 
-Summary:Simple image viewer for KDE
+Summary: Simple image viewer for KDE.
 Name: %name
 Version: %version
 Release: %release
 License: GPL
 Group: Graphics
-Source0: %{name}-%{version}pre2.tar.bz2
+Source0: %{name}-%{version}pre3.tar.bz2
 URL: http://gwenview.sourceforge.net 
 BuildRoot: %_tmppath/%{name}-%{version}
 
@@ -20,9 +20,7 @@ navigation in your file hierarchy.  Image loading is done by the Qt library,
 so it supports all image formats your Qt installation supports. 
 
 %prep
-rm -rf $RPM_BUILD_ROOT
-
-%setup -n %{name}-%{version}pre2
+%setup -q -n %{name}-%{version}pre3
 
 %build
 ./configure --disable-rpath \
@@ -35,6 +33,7 @@ rm -rf $RPM_BUILD_ROOT
 %make
 
 %install
+rm -rf $RPM_BUILD_ROOT
 %makeinstall 
 
 install -d %buildroot/%_menudir/
@@ -68,6 +67,26 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Wed Nov 05 2003 Marcel Pol <mpol@gmx.net> 1.0.0-0.pre3.2mdk
+- redo changelog
+- rm -rf $RPM_BUILD_ROOT in %%install instead of %%prep
+
+* Tue Nov 04 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre3.1mdk
+- built mdk version
+      - New features from Aurélien Gâteau:
+       - Added a "don't ask me again" check box to the save prompt dialog.
+       - Added a reload button.
+       - Added a "Go" button to the location toolbar.
+      - Fixes:
+        - Really fixed saving of external tools.
+	- Make sure the folder view is updated when a folder is renamed.
+	- The mouse-wheel behaviors are not messed anymore by dialogs or by 
+	  showing the popup menu.
+
+* Mon Nov 03 2003 Marcel Pol <mpol@gmx.net> 1.0.0-0.pre2.2mdk
+- buildrequires
+- quiet setup
+
 * Wed Oct 22 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre2.1mdk
 - added some changes on spec file imported from 
   Lenny Cartier <lenny@mandrakesoft.com> 1.0.0-0.pre1.1mdk
