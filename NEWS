@@ -1,3 +1,7 @@
+200x.xx.xx - v1.1.0
+- Fixes:
+ - Gave contributors the credit they deserve in the about box.
+
 2003.12.07 - v1.0.0
 - New features:
  - Show a wait icon for not-generated-yet thumbnails (inspired from Nautilus

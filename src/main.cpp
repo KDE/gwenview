@@ -33,14 +33,27 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char* version="1.0.0";
+static const char* version="CVS>=20031214";
 
 
 int main (int argc, char *argv[]) {
 	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
 		"Copyright 2000-2003 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
-
+	aboutData.addCredit("Frank Becker", I18N_NOOP("Fast JPEG thumbnail generation (v0.13.0)"), "ff@telus.net");
+	aboutData.addCredit("Tudor Calin", I18N_NOOP("Address bar (v0.16.0)\nHistory support (v1.0.0)"), "tudor_calin@mymail.ro");
+	aboutData.addCredit("Avinash Chopde", I18N_NOOP("File operation patch (v0.9.2)"), "avinash@acm.org");
+	aboutData.addCredit("Marco Gazzetta", I18N_NOOP("Fixed crash when trying to generate a thumbnail for a broken JPEG file (v0.16.0)"), "mililani@pobox.com");
+	aboutData.addCredit("GeniusR13", I18N_NOOP("Fixed compilation on KDE 3.0 (v0.16.1)"), "geniusr13@gmx.net");
+	aboutData.addCredit("Ian Koenig", I18N_NOOP("First RPM spec file"), "iguy@ionsphere.org");
+	aboutData.addCredit("Meni Livne", I18N_NOOP("Toolbar layout patch for RTL languages (v0.16.0)"), "livne@kde.org");
+	aboutData.addCredit("Angelo Naselli", I18N_NOOP("Printing support (v1.0.0)"), "random_lx@yahoo.com");
+	aboutData.addCredit("Jos van den Oever", I18N_NOOP("File info view (v1.0.0)\nPatch to toggle auto-zoom on click (v1.0.0)"), "jos@vandenoever.info");
+	aboutData.addCredit("Andreas Pfaller", I18N_NOOP("Option to prevent Gwenview from automatically loading the first image of a folder (v0.15.0)"), "apfaller@yahoo.com.au");
+	aboutData.addCredit("Renchi Raju", I18N_NOOP("Fixed thumbnail generation to share the thumbnail folder of Konqueror v3 (v0.15.0)"), "renchi@green.tam.uiuc.edu");
+	aboutData.addCredit("Michael Spanier", I18N_NOOP("Patch for mouse navigation (v0.7.0)"), "mail@michael-spanier.de");
+	aboutData.addCredit("Christian A Strømmen", I18N_NOOP("Integration in Konqueror folder context menu"), "number1@realityx.net");
+	
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options );
 
