@@ -6,6 +6,7 @@
    going fullscreen.
  - File name won't be cut anymore in the thumbnail view.
  - Prompt to save a modified image before quitting.
+ - Fixed an inconsistency with JPEG lossless rotation.
 
 2003.04.21 - v0.17.0pre1
 - New features:

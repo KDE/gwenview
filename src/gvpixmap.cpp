@@ -135,7 +135,7 @@ KURL GVPixmap::url() const {
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot90);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot270);
 	}
 	QWMatrix matrix;
 	matrix.rotate(-90);
@@ -147,7 +147,7 @@ void GVPixmap::rotateLeft() {
 
 void GVPixmap::rotateRight() {
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot270);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot90);
 	}
 	QWMatrix matrix;
 	matrix.rotate(90);
