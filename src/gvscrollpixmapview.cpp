@@ -67,6 +67,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mGVPixmap(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
+, mXOffset(0),mYOffset(0)
 , mZoom(1)
 , mActionCollection(actionCollection)
 , mFullScreen(false)
