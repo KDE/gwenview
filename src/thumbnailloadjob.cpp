@@ -266,17 +266,20 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	QImage img;
 	bool loaded=false;
 	
-	// Try to load smaller jpeg file
-	// if it fails, load file using Qt
-	if (isJPEG(pixPath)) loaded=loadJPEG(pixPath, img);
+	// If it's a JPEG, try to load a small image directly from the file
+	if (isJPEG(pixPath)) {
+		loaded=loadJPEG(pixPath, img);
+		if (loaded) {
+			// Rotate if necessary
+			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(pixPath);
+			img=GVImageUtils::rotate(img,orientation);
+		}
+	}
 
+	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
 	if (!loaded) {
 		if (!loadThumbnail(pixPath, img)) return;
 	}
-
-	// Rotate if necessary
-	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(pixPath);
-	img=GVImageUtils::rotate(img,orientation);
 	
 	img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
 	emitThumbnailLoaded(QPixmap(img));
