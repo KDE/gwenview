@@ -126,7 +126,7 @@ const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit
 
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mLocationToolBar(0L), mLoadingCursor(false)
+: KDockMainWindow(), mLoadingCursor(false)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);

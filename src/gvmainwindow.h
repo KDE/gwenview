@@ -41,7 +41,6 @@ class QLabel;
 class KAction;
 class KHistoryCombo;
 class KToggleAction;
-class KToolBar;
 class KToolBarPopupAction;
 class KFileItem;
 class KURLCompletion;
@@ -86,8 +85,6 @@ private:
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	KDockWidget* mMetaDock;
-	KToolBar* mMainToolBar;
-	KToolBar* mLocationToolBar;
 	QLabel* mSBDirLabel;
 	QLabel* mSBDetailLabel;
 
