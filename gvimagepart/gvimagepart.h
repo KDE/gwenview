@@ -69,7 +69,7 @@ public:
 	/**
 	 * Print the image being viewed
 	 */
-	void GVImagePart::print();
+	void print();
 
 protected:
 	/** Open the file whose path is stored in the member variable
