@@ -671,6 +671,13 @@ void GVMainWindow::slotToggleCentralStack() {
 		mCentralStack->raiseWidget(StackIDView);
 		mFileViewStack->setSilentMode( true );
 	}
+
+	// Make sure the window list actions are disabled if we are in view mode,
+	// otherwise weird things happens when we go back to browse mode
+	QPtrListIterator<KAction> it(mWindowListActions);
+	for (;it.current(); ++it) {
+		it.current()->setEnabled(mToggleBrowse->isChecked());
+	}
 	updateLocationURL();
 }
 
