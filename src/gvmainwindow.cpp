@@ -593,7 +593,8 @@ void GVMainWindow::thumbnailUpdateProcessedOne() {
 
 
 void GVMainWindow::slotURLEditChanged(const QString &str) {
-	mDocument->setURL(KURL(str));
+	KURL url(mURLEditCompletion->replacedPath(str));
+	mDocument->setURL(url);
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
 	} else if (mPixmapView->isVisible()) {
@@ -619,7 +620,8 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 
 
 void GVMainWindow::slotGo() {
-	mDocument->setURL(KURL(mURLEdit->currentText()));
+	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
+	mDocument->setURL(url);
 }
 
 //-----------------------------------------------------------------------
@@ -883,6 +885,8 @@ void GVMainWindow::createConnections() {
 		mToggleSlideShow,SLOT(activate()) );
 
 	// Location bar
+	connect(mURLEdit,SIGNAL(activated(const QString &)),
+		this,SLOT(slotURLEditChanged(const QString &)));
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
 
@@ -908,8 +912,10 @@ void GVMainWindow::createLocationToolBar() {
 	mURLEdit->setCompletionObject(mURLEditCompletion);
 	mURLEdit->setAutoDeleteCompletionObject(true);
 
-	mURLEdit->setEditText(QDir::current().absPath());
-	mURLEdit->addToHistory(QDir::current().absPath());
+	KURL url;
+	url.setPath(QDir::current().absPath());
+	mURLEdit->setEditText(url.prettyURL());
+	mURLEdit->addToHistory(url.prettyURL());
 	mURLEdit->setDuplicatesEnabled(false);
 
 	KWidgetAction* comboAction=new KWidgetAction( mURLEdit, i18n("Location Bar"), 0,
