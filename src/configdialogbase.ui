@@ -1008,6 +1008,14 @@
 </connections>
 <tabstops>
     <tabstop>mTabs</tabstop>
+    <tabstop>mShowCopyDialog</tabstop>
+    <tabstop>mShowMoveDialog</tabstop>
+    <tabstop>mDefaultDestDir</tabstop>
+    <tabstop>mConfirmBeforeDelete</tabstop>
+    <tabstop>mDeleteToTrash</tabstop>
+    <tabstop>mReallyDelete</tabstop>
+    <tabstop>mJPEGTran</tabstop>
+    <tabstop>mModifyAsk</tabstop>
     <tabstop>mAutoLoadImage</tabstop>
     <tabstop>mShowDirs</tabstop>
     <tabstop>mShownColor</tabstop>
@@ -1026,11 +1034,6 @@
     <tabstop>mShowMenuBarInFullScreen</tabstop>
     <tabstop>mShowToolBarInFullScreen</tabstop>
     <tabstop>mShowStatusBarInFullScreen</tabstop>
-    <tabstop>mConfirmBeforeDelete</tabstop>
-    <tabstop>mShowCopyDialog</tabstop>
-    <tabstop>mShowMoveDialog</tabstop>
-    <tabstop>mDefaultDestDir</tabstop>
-    <tabstop>mJPEGTran</tabstop>
     <tabstop>mOK</tabstop>
     <tabstop>mApply</tabstop>
     <tabstop>mCancel</tabstop>

@@ -54,9 +54,6 @@ public:
 
 	void setModifiedBehavior(ModifiedBehavior);
 	ModifiedBehavior modifiedBehavior() const;
-	
-	void readConfig(KConfig*, const QString& group);
-	void writeConfig(KConfig*, const QString& group);
 
 public slots:
 	void setURL(const KURL&);
@@ -113,7 +110,6 @@ private:
 	QString mFilename;
 	QString mImageFormat;
 	bool mModified;
-	ModifiedBehavior mModifiedBehavior;
 
 	// Store compressed data. Usefull for lossless manipulations.
 	QByteArray mCompressedData;

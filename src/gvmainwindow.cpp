@@ -148,7 +148,6 @@ bool GVMainWindow::queryClose() {
 	if (!mGVPixmap->saveIfModified()) return false;
 	
 	KConfig* config=KGlobal::config();
-	mGVPixmap->writeConfig(config, CONFIG_GVPIXMAP_GROUP);
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
@@ -620,7 +619,6 @@ void GVMainWindow::createWidgets() {
 
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
-	mGVPixmap->readConfig(config, CONFIG_GVPIXMAP_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
