@@ -1299,6 +1299,9 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	QString path=mDocument->url().path();	
 	QString pathFile=mDocument->dirURL().path();
 	QString comment=mDocument->comment();
+    if (comment.isNull()) {
+        comment=i18n("(No comment)");
+    }
 	QString fileName=mDocument->filename();
 	QString resolution = QString( "%1x%2" ).arg( mDocument->width()).arg( mDocument->height());
 
