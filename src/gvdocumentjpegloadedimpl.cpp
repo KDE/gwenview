@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
+#include <qcstring.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
@@ -128,7 +129,7 @@ bool GVDocumentJPEGLoadedImpl::save(const KURL& url, const char* format) const {
 		path=tmp.name();
 	}
 
-	if (!d->mRawData.isNull()) {
+	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
 		kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);

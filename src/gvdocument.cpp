@@ -403,12 +403,10 @@ void GVDocument::saveAs() {
 	KURL saveURL;
 	if (url().isLocalFile()) saveURL=url();
 
-	// FIXME: Make GVImageSaveDialog uses const char* for image format
-	QString tmp(d->mImageFormat);
-	GVImageSaveDialog dialog(saveURL,tmp,0);
+	GVImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
 	if (!dialog.exec()) return;
 
-	if (!saveInternal(saveURL,d->mImageFormat)) {
+	if (!saveInternal(saveURL, dialog.imageFormat() )) {
 		KMessageBox::sorry(0,i18n(
 			"Could not save file. Check that you have the appropriate rights and that there's enough room left on the device."));
 	}

@@ -63,7 +63,7 @@ static QString typeForMime(const QString& mimeType) {
 }
 #endif
 
-GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& imageFormat,QWidget* parent)
+GVImageSaveDialog::GVImageSaveDialog(KURL& url, const char* imageFormat, QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"gvimagesavedialog",true)
 , mURL(url)
 , mImageFormat(imageFormat)
