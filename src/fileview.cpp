@@ -189,7 +189,7 @@ void FileView::selectFilename(QString filename) {
 
 
 void FileView::slotSelectFirst() {
-	// FIXME : This is a work around to a bug which cause
+	// FIXME : This is a work around to a bug which causes
 	// FileThumbnailView::firstFileItem to return a wrong item.
 	// This work around is not in the method because firstFileItem is 
 	// const and sort is a non const method
@@ -219,7 +219,12 @@ void FileView::slotSelectLast() {
 
 
 void FileView::slotSelectPrevious() {
-	KFileItem* item=currentFileView()->prevItem(currentFileView()->currentFileItem());
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (item) {
+		item=currentFileView()->prevItem(item);
+	} else {
+		item=currentFileView()->firstFileItem();
+	}
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
@@ -230,7 +235,12 @@ void FileView::slotSelectPrevious() {
 
 
 void FileView::slotSelectNext() {
-	KFileItem* item=currentFileView()->nextItem(currentFileView()->currentFileItem());
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (item) {
+		item=currentFileView()->nextItem(item);
+	} else {
+		item=currentFileView()->firstFileItem();
+	}
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
@@ -385,7 +395,11 @@ void FileView::dirListerStarted() {
 
 void FileView::dirListerCompleted() {
 	if (mFilenameToSelect.isEmpty()) {
-		if (mAutoLoadImage) slotSelectFirst();
+		if (mAutoLoadImage) {
+			slotSelectFirst();
+		} else {
+			updateActions();
+		}
 	} else {
 		selectFilename(mFilenameToSelect);
 	}
@@ -418,6 +432,14 @@ void FileView::updateActions() {
 		return;
 	}
 
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (!item) {
+		mSelectFirst->setEnabled(true);
+		mSelectPrevious->setEnabled(true);
+		mSelectNext->setEnabled(true);
+		mSelectLast->setEnabled(true);	
+		return;
+	}
 	bool isFirst=currentIsFirst();
 	bool isLast=currentIsLast();
 	

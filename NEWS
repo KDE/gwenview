@@ -1,8 +1,6 @@
 2002.xx.xx - v0.15.0
 - New option to prevent Gwenview from loading the first image when it enters a
   folder (Thanks to Andreas Pfaller for the patch).
-- Updated thumbnail generation to store thumbnails in the same folder 
-  Konqueror 3 uses (Thanks to Renchi Raju for the patch).
 
 2002.07.15 - v0.14.3
 - Really fixed the bug which caused Gwenview to not display image file given as
