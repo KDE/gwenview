@@ -890,7 +890,7 @@ namespace MImageScale{
                           int dyy, int dx, int dy, int dw, int dh, int dow, int
                           sow);
     QImage smoothScale(const QImage& img, int dw, int dh);
-};
+}
 
 #ifdef HAVE_X86_MMX
 extern "C" {
