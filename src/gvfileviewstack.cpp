@@ -657,7 +657,6 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 
 	// Clear the old view
 	oldView->GVFileViewBase::clear();
-
 }
 
 
@@ -917,6 +916,21 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	mAutoLoadImage=config->readBoolEntry(CONFIG_AUTO_LOAD_IMAGE, true);
 }
 
+void GVFileViewStack::kpartConfig() {
+	mFileThumbnailView->kpartConfig();
+	mShowDirs=true;
+	mShowDotFiles->setChecked(false);
+	initDirListerFilter();
+
+	bool startWithThumbnails=true;
+	setMode(Thumbnail);
+
+	mFileThumbnailView->startThumbnailUpdate();
+
+	setShownColor(Qt::red);
+
+	mAutoLoadImage=true;
+}
 
 void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	mFileThumbnailView->writeConfig(config,group);

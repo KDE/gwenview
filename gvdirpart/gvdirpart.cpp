@@ -48,7 +48,10 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	m_gvPixmap = new GVPixmap(this);
 	m_filesView = new GVFileViewStack(m_splitter, actionCollection());
 	m_pixmapView = new GVScrollPixmapView(m_splitter, m_gvPixmap, actionCollection());
+
+	m_filesView->kpartConfig();
 	m_pixmapView->kpartConfig();
+
 	setWidget(m_splitter);
 
 	connect(m_filesView, SIGNAL(urlChanged(const KURL&)),
@@ -78,7 +81,7 @@ KAboutData* GVDirPart::createAboutData() {
 }
 
 bool GVDirPart::openURL(const KURL& url) {
-	kdDebug() << k_funcinfo << endl;
+	kdDebug() << k_funcinfo << "start" <<  endl;
 
 	if (!url.isValid())  {
 		return false;

@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpushbutton.h>
 #include <qtimer.h>
 
-// KDE 
+// KDE
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurldrag.h>
 #include <kwordwrap.h>
 
-// Local 
+// Local
 #include "gvfilethumbnailviewitem.h"
 #include "gvarchive.h"
 #include "thumbnailloadjob.h"
@@ -61,7 +61,7 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setShowToolTips(true);
 	setSpacing(0);
 	setAcceptDrops(true);
-		
+
 	mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 
 	// We can't use KIconView::Execute mode because in this mode the current
@@ -77,7 +77,7 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 		this, SLOT(slotDropped(QDropEvent*)) );
 	connect(this, SIGNAL( contentsMoving( int, int )),
 		this, SLOT( slotContentsMoving( int, int )));
-	
+
 	QIconView::setSelectionMode(Extended);
 }
 
@@ -330,11 +330,11 @@ KFileItem* GVFileThumbnailView::nextItem(const KFileItem* fileItem) const {
 
 	return iconItem->fileItem();
 }
-	
+
 
 void GVFileThumbnailView::setSorting(QDir::SortSpec spec) {
 	KFileView::setSorting(spec);
-	
+
 	KFileItem *item;
 	KFileItemListIterator it( *items() );
 
@@ -362,7 +362,7 @@ void GVFileThumbnailView::slotDropped(QDropEvent* event) {
 
 
 void GVFileThumbnailView::showEvent(QShowEvent* event) {
-	KIconView::showEvent(event);	
+	KIconView::showEvent(event);
 	if (!mUpdateThumbnailsOnNextShow) return;
 
 	mUpdateThumbnailsOnNextShow=false;
@@ -373,7 +373,7 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 //--------------------------------------------------------------------------
 //
 // Private
-// 
+//
 //--------------------------------------------------------------------------
 void GVFileThumbnailView::updateGrid() {
 	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
@@ -492,6 +492,15 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 
 	updateGrid();
 	setWordWrapIconText(config->readBoolEntry(CONFIG_WORD_WRAP_FILENAME,false));
+	arrangeItemsInGrid();
+}
+
+void GVFileThumbnailView::kpartConfig() {
+	mThumbnailSize=ThumbnailSize::Med;
+	mMarginSize=5;
+
+	updateGrid();
+	setWordWrapIconText(false);
 	arrangeItemsInGrid();
 }
 
