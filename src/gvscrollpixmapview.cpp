@@ -513,6 +513,14 @@ void GVScrollPixmapView::addPendingPaint( PaintType type, QRect rect ) {
 	if( !mPendingPaintTimer.isActive()) mPendingPaintTimer.start( 0 );
 }
 
+bool GVScrollPixmapView::pendingResume() {
+	for( QValueList< PendingPaint >::ConstIterator it = mPendingPaints.begin();
+	     it != mPendingPaints.end();
+	     ++it )
+		if( (*it).type == RESUME_LOADING )
+		return true;
+	return false;
+}
 
 void GVScrollPixmapView::paintPending() {
 	if( mPendingPaints.isEmpty()) {
@@ -531,6 +539,8 @@ void GVScrollPixmapView::paintPending() {
 			}
 			return;
 		case RESUME_LOADING:
+			if( pendingResume()) // was suspended again?
+				continue;
 			mDocument->resumeLoading();
 			return;
 		case PAINT_NORMAL:
@@ -1166,7 +1176,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
-		mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
+	mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));

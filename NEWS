@@ -3,6 +3,7 @@
  - Added KPart support, this installs in Konqueror a new file view mode and let
    you view images in an embedded Gwenview (By Jonathan Riddell).
  - Asynchronous JPEG loading, based on Khtml loader.
+ - Really asynchronous PNG loading (By Lubos Lunak).
  - Mouse wheel will now scroll the image by default. Holding Ctrl will scroll
    horizontally. An option has been added to the setting dialog to toggle
    between scroll and browse (By Jeroen Peters).

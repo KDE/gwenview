@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 #include <src/gvjpegformattype.h>
+#include <src/gvpngformattype.h>
 #include <src/gvmainwindow.h>
 #include <src/qxcfi.h>
 
@@ -51,7 +52,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addCredit("Lubos Lunak", I18N_NOOP("Patch to generate thumbnails for the visible images first (v1.1.0)"), "l.lunak@suse.cz");
 	aboutData.addCredit("Angelo Naselli", I18N_NOOP("Printing support (v1.0.0)"), "random_lx@yahoo.com");
 	aboutData.addCredit("Jos van den Oever", I18N_NOOP("File info view (v1.0.0)\nPatch to toggle auto-zoom on click (v1.0.0)"), "jos@vandenoever.info");
-    aboutData.addCredit("Jeroen Peters", I18N_NOOP("Configurable mouse wheel behavior (v1.1.1)"), "jpeters@coldmail.nl");
+	aboutData.addCredit("Jeroen Peters", I18N_NOOP("Configurable mouse wheel behavior (v1.1.1)"), "jpeters@coldmail.nl");
 	aboutData.addCredit("Andreas Pfaller", I18N_NOOP("Option to prevent Gwenview from automatically loading the first image of a folder (v0.15.0)"), "apfaller@yahoo.com.au");
 	aboutData.addCredit("Renchi Raju", I18N_NOOP("Fixed thumbnail generation to share the thumbnail folder of Konqueror v3 (v0.15.0)"), "renchi@green.tam.uiuc.edu");
 	aboutData.addCredit("Michael Spanier", I18N_NOOP("Patch for mouse navigation (v0.7.0)"), "mail@michael-spanier.de");
@@ -65,6 +66,7 @@ int main (int argc, char *argv[]) {
 	KImageIO::registerFormats();
 	XCFImageFormat::registerFormat();
 	GVJPEGFormatType jpegFormatType;
+	GVPNGFormatType pngFormatType;
 
 	if (kapplication.isRestored()) {
 		RESTORE(GVMainWindow)

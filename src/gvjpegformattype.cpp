@@ -52,7 +52,6 @@ extern "C" {
 
 
 static const int MAX_BUFFER = 32768;
-static const int MAX_CONSUMING_TIME = 100;
 
 //-----------------------------------------------------------------------------
 //
@@ -364,8 +363,9 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 	}
 
 	if(mState == DECOMPRESS_STARTED) {
-		mState =  (!mSourceManager.final_pass && mSourceManager.decoder_time_stamp.elapsed() < MAX_CONSUMING_TIME)
-			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
+//		mState =  (!mSourceManager.final_pass && decoder_time_stamp.elapsed() < MAX_CONSUMING_TIME)
+//			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
+		mState = PREPARE_OUTPUT_SCAN;
 	}
 
 	if(mState == CONSUME_INPUT) {
@@ -375,8 +375,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			retval = jpeg_consume_input(&mDecompress);
 		} while (retval != JPEG_SUSPENDED && retval != JPEG_REACHED_EOI);
 
-		if(mSourceManager.decoder_time_stamp.elapsed() > MAX_CONSUMING_TIME
-			|| mSourceManager.final_pass
+		if( mSourceManager.final_pass
 			|| retval == JPEG_REACHED_EOI
 			|| retval == JPEG_REACHED_SOS) {
 			mState = PREPARE_OUTPUT_SCAN;
@@ -429,11 +428,9 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 #endif
 			mSourceManager.change_rect |= r;
 
-			if ( mSourceManager.decoder_time_stamp.elapsed() >= MAX_CONSUMING_TIME ) {
-				consumer->changed(mSourceManager.change_rect);
-				mSourceManager.change_rect = QRect();
-				mSourceManager.decoder_time_stamp.restart();
-			}
+			consumer->changed(mSourceManager.change_rect);
+			mSourceManager.change_rect = QRect();
+			mSourceManager.decoder_time_stamp.restart();
 		}
 
 		if(mDecompress.output_scanline >= mDecompress.output_height) {

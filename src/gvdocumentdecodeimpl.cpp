@@ -56,6 +56,8 @@ public:
 	int mReadSize;
 	QImageDecoder mDecoder;
 	QTimer mDecoderTimer;
+	QRect mLoadChangedRect;
+	QTime mLoadCompressChangesTime;
 };
 
 
@@ -104,6 +106,8 @@ void GVDocumentDecodeImpl::startLoading() {
 	d->mReadSize=0;
 
 	d->mDecoderTimer.start(0, false);
+	d->mLoadChangedRect = QRect();
+	d->mLoadCompressChangesTime.start();
 }
 
 
@@ -182,16 +186,26 @@ void GVDocumentDecodeImpl::resumeLoading() {
 //
 //---------------------------------------------------------------------
 void GVDocumentDecodeImpl::end() {
+	if( !d->mLoadChangedRect.isNull()) {
+		emit rectUpdated(d->mLoadChangedRect);
+	}
 	kdDebug() << k_funcinfo << endl;
 }
 
 void GVDocumentDecodeImpl::changed(const QRect& rect) {
-	kdDebug() << k_funcinfo << " " << rect.left() << "-" << rect.top() << " " << rect.width() << "x" << rect.height() << endl;
+//	kdDebug() << k_funcinfo << " " << rect.left() << "-" << rect.top() << " " << rect.width() << "x" << rect.height() << endl;
 	if (!d->mUpdatedDuringLoad) {
 		setImage(d->mDecoder.image());
 		d->mUpdatedDuringLoad=true;
 	}
-	emit rectUpdated(rect);
+	d->mLoadChangedRect |= rect;
+	if( d->mLoadCompressChangesTime.elapsed() > 100 ) {
+		kdDebug() << "GVPixmap::changed2:" << d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
+			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() << "\n";
+		emit rectUpdated(d->mLoadChangedRect);
+		d->mLoadChangedRect = QRect();
+		d->mLoadCompressChangesTime.start();
+	}
 }
 
 void GVDocumentDecodeImpl::frameDone() {

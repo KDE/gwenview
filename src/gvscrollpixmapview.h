@@ -178,6 +178,7 @@ private:
 	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
 	void fullRepaint();
 	void cancelPendingPaints();
+	bool pendingResume();
 
 	double computeZoom(bool in) const;
 	double computeAutoZoom() const;
