@@ -85,7 +85,7 @@ public:
 	QTimer mDecoderTimer;
 
 
-	GVPixmapPrivate(GVPixmap* pixmap)
+	GVPixmapPrivate()
 	: mDecoder(0) {}
 
 	~GVPixmapPrivate() {
@@ -182,7 +182,7 @@ public:
 //-------------------------------------------------------------------
 GVPixmap::GVPixmap(QObject* parent)
 		: QObject(parent) {
-	d=new GVPixmapPrivate(this);
+	d=new GVPixmapPrivate();
 	d->mModified=false;
 	d->mCommentState=None;
 	/*
@@ -475,58 +475,25 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 	}
 }
 
-void GVPixmap::rotateLeft() {
+
+void GVPixmap::modify(GVImageUtils::Orientation orientation) {
 	// Apply the rotation to the compressed data too if available
 	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
-		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::Rot270);
+		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData, orientation);
 	}
-	QWMatrix matrix;
-	matrix.rotate(-90);
-	d->mImage=d->mImage.xForm(matrix);
+
+	d->mImage=GVImageUtils::modify(d->mImage, orientation);
 	d->mModified=true;
 	emit modified();
 }
 
 
-void GVPixmap::rotateRight() {
-	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
-		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::Rot90);
-	}
-	QWMatrix matrix;
-	matrix.rotate(90);
-	d->mImage=d->mImage.xForm(matrix);
-	d->mModified=true;
-	emit modified();
-}
-
-
-void GVPixmap::mirror() {
-	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
-		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::HFlip);
-	}
-	QWMatrix matrix;
-	matrix.scale(-1,1);
-	d->mImage=d->mImage.xForm(matrix);
-	d->mModified=true;
-	emit modified();
-}
-
-
-void GVPixmap::flip() {
-	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
-		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::VFlip);
-	}
-	QWMatrix matrix;
-	matrix.scale(1,-1);
-	d->mImage=d->mImage.xForm(matrix);
-	d->mModified=true;
-	emit modified();
-}
-
-
-bool GVPixmap::save() {
+bool GVPixmap::save(bool silent) {
 	if (!saveInternal(url(),d->mImageFormat)) {
-		KMessageBox::sorry(0,i18n("Could not save file."));
+		if (!silent) {
+			//FIXME: Better message (no space, access rights...)
+			KMessageBox::sorry(0,i18n("Could not save file."));
+		}
 		return false;
 	}
 	return true;
@@ -636,7 +603,7 @@ void GVPixmap::load() {
 	d->mCompressedData.resize(file.size());
 	stream.readRawBytes(d->mCompressedData.data(),d->mCompressedData.size());
 	d->mReadSize=0;
-
+	
 	d->mDecoder=new QImageDecoder(this);
 	d->mDecoderTimer.start(0, false);
 }
@@ -685,7 +652,7 @@ void GVPixmap::loadChunk() {
 			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(d->mCompressedData);
 
 			if (orientation!=GVImageUtils::NotAvailable && orientation!=GVImageUtils::Normal) {
-				d->mImage=GVImageUtils::rotate(d->mImage, orientation);
+				d->mImage=GVImageUtils::modify(d->mImage, orientation);
 				d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,orientation);
 				d->mCompressedData=GVImageUtils::setOrientation(d->mCompressedData,GVImageUtils::Normal);
 			}
@@ -714,7 +681,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	}
 
 	if (format=="JPEG" && !d->mCompressedData.isNull()) {
-		//kdDebug() << "Lossless save\n";
+		kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
@@ -782,3 +749,4 @@ void GVPixmap::setFramePeriod(int /*milliseconds*/) {
 void GVPixmap::setSize(int width, int height) {
 	kdDebug() << "GVPixmap::setSize " << width << "x" << height << "\n";
 }
+

@@ -13,7 +13,8 @@ gwenview_SOURCES = gvconfigdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp 
 				   gvmetaedit.cpp gvexternaltoolmanager.cpp \
 				   gvexternaltoolcontext.cpp gvexternaltoolaction.cpp \
 				   gvexternaltooldialogbase.ui gvexternaltooldialog.cpp \
-				   gvhistory.cpp gvprintdialogpagebase.ui
+				   gvhistory.cpp gvprintdialogpagebase.ui \
+				   gvbatchmanipulator.cpp
 
 gwenview_LDADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
@@ -37,7 +38,7 @@ noinst_HEADERS = gvconfigdialogbase.h gvconfigdialog.h gvdirview.h fileoperation
 				 gvimageutils.h gvmetaedit.h gvexternaltoolmanager.h \
 				 gvexternaltoolcontext.h gvexternaltoolaction.h \
 				 gvexternaltooldialog.h gvexternaltooldialogbase.h gvhistory.h \
-				 gvprintdialogpagebase.h
+				 gvprintdialogpagebase.h gvbatchmanipulator.h
 
 
 EXTRA_DIST = gvconfigdialogbase.ui gvslideshowdialogbase.ui \

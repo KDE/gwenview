@@ -31,6 +31,8 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kurl.h>
 #include <kprinter.h>
 
+// Local includes
+#include "gvimageutils.h"
 class GVPixmapPrivate;
 
 /**
@@ -61,7 +63,7 @@ public:
 	CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
-
+	
 public slots:
 	void setURL(const KURL&);
 	void setDirURL(const KURL&);
@@ -72,7 +74,7 @@ public slots:
 	 * Save to the current file.
 	 * Returns false if failed.
 	 */
-	bool save();
+	bool save(bool silent=false);
 	void saveAs();
 	
 	/** print the selected file */
@@ -85,10 +87,7 @@ public slots:
 	bool saveIfModified();
 
 	// "Image manipulation"
-	void rotateLeft();
-	void rotateRight();
-	void mirror();
-	void flip();
+	void modify(GVImageUtils::Orientation);
 
 signals:
 	/**

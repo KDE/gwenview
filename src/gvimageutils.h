@@ -21,6 +21,9 @@ Copyright 2000-2004 Aurélien Gâteau
 #ifndef GVIMAGEUTILS_H
 #define GVIMAGEUTILS_H
 
+// KDE includes
+#include <kurl.h>
+
 template <class>class QMemArray;
 typedef QMemArray<char> QByteArray;
 class QImage;
@@ -32,7 +35,7 @@ namespace GVImageUtils {
 	Orientation getOrientation(const QByteArray& jpegContent);
 	Orientation getOrientation(const QString& pixPath);
 
-	QImage rotate(const QImage& img, Orientation orientation);
+	QImage modify(const QImage& img, Orientation orientation);
 }
 
 #endif

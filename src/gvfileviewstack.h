@@ -96,9 +96,8 @@ public:
 	void setFocus();
 
 	void setFileNameToSelect(const QString&);
-	/* FIXME
-	void highlightItem(KFileItem*);
-	*/
+	
+	KURL::List selectedURLs() const;
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -209,7 +208,6 @@ private:
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();
-	KURL::List selectedURLs() const;
 	
 	KFileItem* findFirstImage() const;
 	KFileItem* findLastImage() const;

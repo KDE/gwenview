@@ -325,7 +325,7 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 		if (loaded) {
 			// Rotate if necessary
 			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(pixPath);
-			img=GVImageUtils::rotate(img,orientation);
+			img=GVImageUtils::modify(img,orientation);
 		}
 	}
 

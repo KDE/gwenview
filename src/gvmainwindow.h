@@ -28,6 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdockwidget.h>
 #include <kurl.h>
 
+// Local
+#include "gvimageutils.h"
+
 class QLabel;
 
 class KAction;
@@ -156,7 +159,12 @@ private slots:
 	void toggleSlideShow();
 	void toggleDirAndFileViews();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
-
+	void modifyImage(GVImageUtils::Orientation);
+	void rotateLeft();
+	void rotateRight();
+	void mirror();
+	void flip();
+	
 	/**
 	 * Update status bar and caption
 	 */

@@ -60,9 +60,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdeprint/kprintdialog.h>
 
 // Local
-#include "gvconfigdialog.h"
 #include "fileoperation.h"
+#include "gvbatchmanipulator.h"
 #include "gvbookmarkowner.h"
+#include "gvconfigdialog.h"
 #include "gvdirview.h"
 #include "gvexternaltooldialog.h"
 #include "gvfileviewstack.h"
@@ -72,9 +73,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
 #include "gvslideshowdialog.h"
-#include "statusbarprogress.h"
 #include "gvmetaedit.h"
-#include <gvprintdialog.h>
+#include "gvprintdialog.h"
+#include "statusbarprogress.h"
 
 
 #if KDE_VERSION < 0x30100
@@ -310,6 +311,37 @@ void GVMainWindow::showFileProperties() {
 	}
 }
 
+
+void GVMainWindow::rotateLeft() {
+	modifyImage(GVImageUtils::Rot270);
+}
+
+void GVMainWindow::rotateRight() {
+	modifyImage(GVImageUtils::Rot90);
+}
+
+void GVMainWindow::mirror() {
+	modifyImage(GVImageUtils::HFlip);
+}
+
+void GVMainWindow::flip() {
+	modifyImage(GVImageUtils::VFlip);
+}
+
+void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {
+	const KURL::List& urls=mFileViewStack->selectedURLs();
+	if (mFileViewStack->isVisible() && urls.size()>1) {
+		GVBatchManipulator manipulator(this, urls, orientation);
+		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
+			mFileViewStack, SLOT(updateThumbnail(const KURL&)) );
+		manipulator.apply();
+		if (urls.find(mGVPixmap->url())!=urls.end()) {
+			mGVPixmap->reload();
+		}
+	} else {
+		mGVPixmap->modify(orientation);
+	}
+}
 
 void GVMainWindow::openFile() {
 	KURL url=KFileDialog::getOpenURL();
@@ -665,10 +697,10 @@ void GVMainWindow::createActions() {
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
 
 	// Edit
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"rotate_left");
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"rotate_right");
-	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"mirror");
-	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"flip");
+	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
+	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
+	mMirror=new KAction(i18n("&Mirror"),"mirror",0, this, SLOT(mirror()),actionCollection(),"mirror");
+	mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
 
 	// View
 	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mGVPixmap, SLOT(reload()), actionCollection(), "reload");

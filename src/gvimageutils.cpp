@@ -117,7 +117,7 @@ QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation
 }
 
 
-QImage rotate(const QImage& img, Orientation orientation) {
+QImage modify(const QImage& img, Orientation orientation) {
 	QWMatrix matrix;
 	switch (orientation) {
 	case NotAvailable:
