@@ -18,7 +18,11 @@ Copyright (c) 2000-2003 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+// Qt
+#include <qdir.h>
+
 // KDE
+#include <kdebug.h>
 #include <krun.h>
 #include <kservice.h>
 
@@ -41,5 +45,9 @@ GVExternalToolAction::GVExternalToolAction(
 
 
 void GVExternalToolAction::openExternalTool() {
-	KRun::run(*mService, mURLs);
+	QString dir=mURLs.first().directory();
+	QDir::setCurrent(dir);
+	
+	QStringList args=KRun::processDesktopExec(*mService, mURLs, true);
+	KRun::runCommand(args.join(" "), mService->name(), mService->icon());
 }

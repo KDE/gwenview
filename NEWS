@@ -4,6 +4,7 @@
  - Fixed crash when loading XCF images if Gwenview was compiled with gcc 3.3.1.
  - Use standard KDE icons for zoom actions.
  - New icons for image operations.
+ - Change working directory to current folder before running an external tool.
 
 2003.11.16 - v1.0.0pre4
 - New features:
