@@ -65,6 +65,10 @@ struct GVExternalToolDialogPrivate {
 	: mSelectedItem(0L) {}
 	
 	void fillMimeTypeListView() {
+		// Dir item
+		(void)new QCheckListItem(mContent->mMimeTypeListView, "inode/directory", QCheckListItem::CheckBox);
+		
+		// Image type items
 		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 		QStringList::const_iterator it=mimeTypes.begin();
 		for(; it!=mimeTypes.end(); ++it) {
@@ -140,7 +144,7 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 	d->mContent=new GVExternalToolDialogBase(this);
 	setMainWidget(d->mContent);
 	setCaption(d->mContent->caption());
-
+	
 	d->mContent->mToolListView->header()->hide();
 	d->mContent->mMimeTypeListView->header()->hide();
 
@@ -153,6 +157,10 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 		this, SLOT(addTool()) );
 	connect( d->mContent->mDeleteButton, SIGNAL(clicked()),
 		this, SLOT(deleteTool()) );
+	
+	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	// FIXME: Ugly!
+	d->mContent->setMinimumSize(d->mContent->sizeHint() + QSize(50,50));
 }
 
 
@@ -168,6 +176,10 @@ void GVExternalToolDialog::slotOk() {
 
 
 void GVExternalToolDialog::slotApply() {
+	QPtrListIterator<KDesktopFile> it(d->mDeletedTools);
+	for(; it.current(); ++it) {
+		GVExternalToolManager::instance()->hideDesktopFile(it.current());
+	}
 	d->saveChanges();
 	GVExternalToolManager::instance()->updateServices();
 }
@@ -202,4 +214,6 @@ void GVExternalToolDialog::deleteTool() {
 	KDesktopFile* desktopFile=item->desktopFile();
 	delete item;
 	d->mDeletedTools.append(desktopFile);
+	d->mSelectedItem=0L;
+	d->updateDetails();
 }

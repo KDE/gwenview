@@ -183,6 +183,22 @@ QDict<KDesktopFile>& GVExternalToolManager::desktopFiles() const {
 }
 
 
+void GVExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
+	QFileInfo fi(desktopFile->fileName());
+	QString name=QString("%1.desktop").arg( fi.baseName(true) );
+	d->mDesktopFiles.take(name);
+	
+	if (desktopFile->isReadOnly()) {
+		delete desktopFile;
+		desktopFile=new KDesktopFile(
+			QString("%1/%1").arg(d->mUserToolDir).arg(name), false);
+	}
+	desktopFile->writeEntry("Hidden", true);
+	desktopFile->sync();
+	delete desktopFile;
+}
+
+
 KDesktopFile* GVExternalToolManager::createUserDesktopFile(const KDesktopFile* desktopFile) {
 	Q_ASSERT(desktopFile);
 	QFileInfo fi(desktopFile->fileName());
