@@ -53,7 +53,6 @@ class GVHistory;
 class GVScrollPixmapView;
 class GVSlideShow;
 class GVMetaEdit;
-class StatusBarProgress;
 
 
 class GVMainWindow : public KDockMainWindow {
@@ -87,7 +86,6 @@ private:
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	KDockWidget* mMetaDock;
-	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
 	KToolBar* mLocationToolBar;
 	QLabel* mSBDirLabel;
@@ -110,7 +108,6 @@ private:
 	KAction* mShowConfigDialog;
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
-	KAction* mStop;
 	KAction* mReload;
 	KAction* mOpenHomeDir;
 	KToolBarPopupAction* mGoUp;
@@ -189,10 +186,6 @@ private slots:
 	 * when folder info is not available yet
 	 */
 	void updateFileInfo();
-
-	void thumbnailUpdateStarted(int);
-	void thumbnailUpdateEnded();
-	void thumbnailUpdateProcessedOne();
 
 	void slotShownFileItemRefreshed(const KFileItem* item);
 

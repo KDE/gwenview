@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
+#include <qhbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -35,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kprogress.h>
 #include <kstandarddirs.h>
 #include <kurldrag.h>
 #include <kwordwrap.h>
@@ -45,6 +47,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "thumbnailloadjob.h"
 #include "gvbusylevelmanager.h"
 
+#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 #include "gvfilethumbnailview.moc"
 
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
@@ -52,11 +61,55 @@ static const char* CONFIG_MARGIN_SIZE="margin size";
 static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
+class ProgressWidget : public QHBox {
+	KProgress* mProgressBar;
+	QPushButton* mStop;
+public:
+	ProgressWidget(GVFileThumbnailView* view, int count)
+	: QHBox(view)
+	{
+		setSpacing(2);
+		setPaletteBackgroundColor(view->paletteBackgroundColor());
+		
+		mProgressBar=new KProgress(count, this);
+		mProgressBar->setFormat("%v/%m");
+		mStop=new QPushButton(i18n("Stop"), this);
+		view->clipper()->installEventFilter(this);
+	}
+	
+	void polish() {
+		setMinimumWidth(layout()->minimumSize().width());
+		setFixedHeight( int(mProgressBar->height()*0.8) );
+	}
+
+	void showEvent(QShowEvent*) {
+		updatePosition();
+	}
+
+	bool eventFilter(QObject*, QEvent* event) {
+		if (event->type()==QEvent::Resize) {
+			updatePosition();
+		}
+		return false;
+	}
+
+	void updatePosition() {
+		GVFileThumbnailView* view=static_cast<GVFileThumbnailView*>(parent());
+		QSize tmp=view->clipper()->size() - size();
+		move(tmp.width(), tmp.height());
+	}
+
+	KProgress* progressBar() const { return mProgressBar; }
+	QPushButton* stopButton() const { return mStop; }
+};
+
+
 struct GVFileThumbnailView::Private {
 	ThumbnailSize mThumbnailSize;
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
 	QPixmap mWaitPixmap;
+	ProgressWidget* mProgressWidget;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 };
@@ -74,6 +127,8 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	d=new Private;
 	d->mUpdateThumbnailsOnNextShow=false;
 	d->mThumbnailLoadJob=0L;
+	d->mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
+	d->mProgressWidget=0L;
 
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -82,8 +137,6 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setShowToolTips(true);
 	setSpacing(0);
 	setAcceptDrops(true);
-
-	d->mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 
 	// We can't use KIconView::Execute mode because in this mode the current
 	// item is unselected after being clicked, so we use KIconView::Select mode
@@ -158,8 +211,9 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QP
 	
 	iconItem->repaint();
 
-	// Notify others that one thumbnail has been updated
-	emit updatedOneThumbnail();
+	// Notify progress
+	Q_ASSERT(d->mProgressWidget);
+	d->mProgressWidget->progressBar()->advance(1);
 }
 
 
@@ -200,11 +254,13 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*, const QPixmap&, const QSize&)),
 		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&, const QSize&)) );
 	connect(d->mThumbnailLoadJob, SIGNAL(result(KIO::Job*)),
-		this, SIGNAL(updateEnded()) );
-	connect(this, SIGNAL(updateEnded()),
 		this, SLOT(slotUpdateEnded()) );
 
-	emit updateStarted(list->count());
+	Q_ASSERT(!d->mProgressWidget);
+	d->mProgressWidget=new ProgressWidget(this, list->count() );
+	connect(d->mProgressWidget->stopButton(), SIGNAL(clicked()),
+		this, SLOT(stopThumbnailUpdate()) );
+	d->mProgressWidget->show();
 	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 	// start updating at visible position
 	slotContentsMoving( contentsX(), contentsY());
@@ -214,15 +270,18 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 
 void GVFileThumbnailView::stopThumbnailUpdate() {
 	if (!d->mThumbnailLoadJob.isNull()) {
-		emit updateEnded();
-		d->mThumbnailLoadJob->kill();
+		d->mThumbnailLoadJob->kill(false);
 	}
 }
 
 
 void GVFileThumbnailView::slotUpdateEnded() {
+	Q_ASSERT(d->mProgressWidget);
+	delete d->mProgressWidget;
+	d->mProgressWidget=0L;
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
+
 
 void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
 

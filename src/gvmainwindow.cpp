@@ -47,7 +47,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kpopupmenu.h>
-#include <kprogress.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
@@ -82,7 +81,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvslideshowdialog.h"
 #include "gvmetaedit.h"
 #include "gvprintdialog.h"
-#include "statusbarprogress.h"
 #include "gvcache.h"
 #include "thumbnailloadjob.h"
 
@@ -128,7 +126,7 @@ const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit
 
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mProgress(0L), mLocationToolBar(0L), mLoadingCursor(false)
+: KDockMainWindow(), mLocationToolBar(0L), mLoadingCursor(false)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
@@ -618,29 +616,6 @@ void GVMainWindow::escapePressed() {
 }
 
 
-void GVMainWindow::thumbnailUpdateStarted(int count) {
-	mProgress=new StatusBarProgress(statusBar(),i18n("Generating thumbnails..."),count);
-	mProgress->progress()->setFormat("%v/%m");
-	statusBar()->addWidget(mProgress);
-	mProgress->show();
-	mStop->setEnabled(true);
-}
-
-
-void GVMainWindow::thumbnailUpdateEnded() {
-	mStop->setEnabled(false);
-	if (mProgress) {
-		delete mProgress;
-		mProgress=0L;
-	}
-}
-
-
-void GVMainWindow::thumbnailUpdateProcessedOne() {
-	mProgress->progress()->advance(1);
-}
-
-
 void GVMainWindow::slotURLEditChanged(const QString &str) {
 	KURL url(mURLEditCompletion->replacedPath(str));
 	mDocument->setURL(url);
@@ -802,8 +777,6 @@ void GVMainWindow::createActions() {
 	// View
 	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mDocument, SLOT(reload()), actionCollection(), "reload");
 	mReload->setEnabled(false);
-	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(), "stop");
-	mStop->setEnabled(false);
 //(0x3015A == 3.1.90)
 #if KDE_VERSION>=0x3015A
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
@@ -905,14 +878,6 @@ void GVMainWindow::createConnections() {
 		mFileViewStack,SLOT(slotSelectNext()) );
 	connect(mPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateFileInfo()) );
-
-	// Thumbnail view connections
-	connect(mFileViewStack,SIGNAL(updateStarted(int)),
-		this,SLOT(thumbnailUpdateStarted(int)) );
-	connect(mFileViewStack,SIGNAL(updateEnded()),
-		this,SLOT(thumbnailUpdateEnded()) );
-	connect(mFileViewStack,SIGNAL(updatedOneThumbnail()),
-		this,SLOT(thumbnailUpdateProcessedOne()) );
 
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),

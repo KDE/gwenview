@@ -208,14 +208,6 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
 	connect(mFileThumbnailView, SIGNAL(doubleClicked(QIconViewItem*)),
 		this, SLOT(slotViewDoubleClicked()) );
-
-	// Propagate signals
-	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),
-		this,SIGNAL(updateStarted(int)) );
-	connect(mFileThumbnailView,SIGNAL(updateEnded()),
-		this,SIGNAL(updateEnded()) );
-	connect(mFileThumbnailView,SIGNAL(updatedOneThumbnail()),
-		this,SIGNAL(updatedOneThumbnail()) );
 }
 
 
@@ -253,17 +245,6 @@ void GVFileViewStack::setURL(const KURL& url) {
 		updateActions();
 	} else {
 		browseTo(findItemByFileName(url.filename()));
-	}
-}
-
-
-void GVFileViewStack::cancel() {
-	if (!mDirLister->isFinished()) {
-		mDirLister->stop();
-		return;
-	}
-	if (mMode==THUMBNAIL) {
-		mFileThumbnailView->stopThumbnailUpdate();
 	}
 }
 

@@ -115,9 +115,6 @@ public slots:
 	void slotSelectPrevious();
 	void slotSelectNext();
 
-	// Stop thumbnail generation
-	void cancel();
-
 	void updateThumbnail(const KURL&);
 
 	void openParentDir();
@@ -139,11 +136,6 @@ signals:
 	void completedURLListing(const KURL&);
 	void imageDoubleClicked();
 	void shownFileItemRefreshed(const KFileItem*);
-
-	// Thumbnail view signals
-	void updateStarted(int);
-	void updateEnded();
-	void updatedOneThumbnail();
 
 
 private slots:

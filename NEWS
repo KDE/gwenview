@@ -1,3 +1,7 @@
+2004.xx.xx - v1.1.5
+- New features:
+ - The thumbnail progress bar and stop buttons are now embedded in the
+   thumbnail view.
 2004.07.31 - v1.1.4
 - New features:
  - In the thumbnail view, It's now possible to sort images in reverse order.

@@ -20,7 +20,6 @@ libgwenviewcore_la_SOURCES = \
 	gvbranchpropertiesdialogbase.ui \
 	thumbnailsize.cpp \
 	thumbnailloadjob.cpp \
-	statusbarprogress.cpp \
 	gvscrollpixmapview.cpp \
 	gvprintdialog.cpp \
 	gvbatchmanipulator.cpp \
