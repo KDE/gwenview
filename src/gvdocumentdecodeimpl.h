@@ -65,6 +65,7 @@ public:
 private:
 	GVDocumentDecodeImplPrivate* d;
 	void finish();
+	void startThread();
 	
 	// QImageConsumer methods
 	void end();

@@ -336,9 +336,9 @@ void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
 	
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
-		LOG("starting decoder thread");
-		d->mDecoderThread.setRawData(d->mRawData);
-		d->mDecoderThread.start();
+		startThread();
+	} else { // Finish decoding if needed
+		if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
 	}
 }
 
@@ -366,28 +366,28 @@ void GVDocumentDecodeImpl::decodeChunk() {
 
 	int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mDecodedSize);
 	LOG("chunkSize: " << chunkSize);
-	Q_ASSERT(chunkSize>0);
-	if (chunkSize<=0) return;
-		
-	int decodedSize = d->mDecoder.decode(
-		(const uchar*)(d->mRawData.data()+d->mDecodedSize),
-		chunkSize);
-	LOG("decodedSize: " << decodedSize);
-	
-	if (decodedSize<0) {
-		// We can't use async decoding, switch to decoder thread 
-		d->mDecoderTimer.stop();
-		d->mUseThread=true;
-		return;
+	int decodedSize = 0;
+	if (chunkSize>0) {
+		decodedSize = d->mDecoder.decode(
+			(const uchar*)(d->mRawData.data()+d->mDecodedSize),
+			chunkSize);
+		LOG("decodedSize: " << decodedSize);
+
+		if (decodedSize<0) {
+			// We can't use async decoding, switch to decoder thread 
+			d->mDecoderTimer.stop();
+			d->mUseThread=true;
+			if( d->mGetComplete ) startThread();	
+			return;
+		}
+
+		// We just decoded some data
+		d->mDecodedSize+=decodedSize;
 	}
 
-	if (decodedSize==0) return;
-
-	// We just decoded some data
-	d->mDecodedSize+=decodedSize;
-	if (d->mDecodedSize==d->mRawData.size()) {
-		// We decoded the whole buffer, wait to receive more data before coming
-		// again in decodeChunk
+	if (decodedSize == 0) {
+		// We decoded as much as possible from the buffer, wait to receive
+		// more data before coming again in decodeChunk
 		d->mDecoderTimer.stop();
 		if (d->mGetComplete && !d->mAsyncImageComplete) {
 			// No more data is available, the image must be truncated,
@@ -397,6 +397,12 @@ void GVDocumentDecodeImpl::decodeChunk() {
 	}
 }
 
+
+void GVDocumentDecodeImpl::startThread() {
+	LOG("starting decoder thread");
+	d->mDecoderThread.setRawData(d->mRawData);
+	d->mDecoderThread.start();
+}
 
 
 void GVDocumentDecodeImpl::slotDecoderThreadFailed() {
@@ -487,9 +493,7 @@ void GVDocumentDecodeImpl::suspendLoading() {
 
 void GVDocumentDecodeImpl::resumeLoading() {
 	d->mSuspended = false;
-	if(d->mDecodedSize < d->mRawData.size()) {
-		d->mDecoderTimer.start(0, false);
-	}
+	d->mDecoderTimer.start(0, false);
 }
 
 
