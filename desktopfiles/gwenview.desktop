@@ -20,4 +20,4 @@ Terminal=false
 Icon=gwenview.png
 Type=Application
 Commend[ko]=간단한 이미지 보기 프로그램
-Categories=QT;KDE;Graphics
+Categories=Qt;KDE;Graphics
