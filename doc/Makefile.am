@@ -1,1 +1,1 @@
-man_MANS = gwenview.1
+man_MANS = gwenview_hack.1
