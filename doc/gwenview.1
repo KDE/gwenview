@@ -1,4 +1,4 @@
-.TH GWENVIEW 1 "September 2004" "K Desktop Environment" "Image viewer for KDE"
+.TH GWENVIEW 1 "October 2004" "K Desktop Environment" "Image viewer for KDE"
 .SH NAME
 Gwenview \- An image viewer for KDE
 .SH SYNOPSIS
@@ -9,16 +9,16 @@ Gwenview is an image viewer for KDE. It features a folder tree window and a file
 .PP
 Image loading is handled by the Qt library, so Gwenview supports all image formats your Qt installation supports. Gwenview correctly displays images with an alpha channel.
 .PP
-Gwenview supports the displaying and editing of EXIF comments, if the necessary JPEG kfile\-plugin is installed. This comes as part of the kdegraphics package. Lossless JPEG transforms are also supported with the jpegtran program, though for best performance most i386 users will want to use MMX optimised versions of this program.
+Gwenview supports the displaying and editing of EXIF comments, if the necessary JPEG kfile\-plugin is installed. This comes as part of the kdegraphics package. Lossless JPEG transforms are also supported.
 .SH OPTIONS
 .SS Arguments:
 .TP
 .B file or folder
-A starting image file, or a folder containing images.
+An initial image file, or a folder containing images.
 .SS Gwenview options:
 .TP
 .B  \-f
-Start in fullscreen mode.
+Start in Full Screen mode.
 .SS Generic options:
 .TP
 .B  \-\-help
@@ -138,6 +138,20 @@ Sets the application GUI style.
 .B  \-\-geometry \fIgeometry\fR
 Sets the client geometry of the main widget.
 .SH INTERFACE
+.SS Browse and View modes
+By default, Gwenview opens in Browse mode, with the docked windows (showing
+directory structure and contents) displayed. Starting Gwenview with a directory
+as an argument also begins in Browse mode. Starting with an image as an argument,
+however, opens Gwenview in View mode, with these docked windows hidden to give
+full space to the image itself.
+.PP
+Once Gwenview is started, the user can toggle between Browse and View modes by
+clicking the Browse button on the Main Toolbar. The same option can be found
+in the View menu. Ctrl-Return will toggle these modes as well.
+.PP
+Whereas normally, in Browse mode, single-clicking on an image thumbnail or
+listing is sufficient for Gwenview to display it, users also have the option of
+double-clicking, which displays the image and switches Gwenview to View mode.
 .SS Docked windows
 The Gwenview interface is composed of a number of smaller docked windows.
 Manipulating these windows can be difficult at first. To focus a particular
@@ -184,7 +198,7 @@ in the current directory instead.
 The mouse wheel, used while holding down the Shift key, will zoom the image
 in and out.
 .PP
-The mouse wheel, used while holding down the Control key, will scroll the image horizontally.
+The mouse wheel, used while holding down the Control or Alt keys, will scroll the image horizontally.
 .SS Keybindings
 Gwenview comes with a range of keyboard shortcuts, all of which can be viewed and remapped by
 selecting "Configure Shortcuts" in the Settings menu. Note that in the Files and Folders windows,
@@ -192,8 +206,8 @@ all the normal KDE shortcuts are functional, unless otherwise remapped.
 .PP
 A few of the most useful default bindings are:
 .PP
-  Ctrl-Shift-F    Toggles fullscreen mode.
-  Escape          Stop, exit from fullscreen mode.
+  Ctrl-Shift-F    Toggles Full Screen mode.
+  Escape          Stop, exit from Full Screen mode.
 
   Home            Displays the first image in the directory.
   End             Displays the last image in the directory.
