@@ -553,7 +553,7 @@
                             <cstring>mShowToolBarInFullScreen</cstring>
                         </property>
                         <property name="text">
-                            <string>Show toolbar</string>
+                            <string>Show toolbars</string>
                         </property>
                     </widget>
                     <widget class="QCheckBox">
@@ -759,14 +759,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mShowLocationToolBar</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Show location toolbar</string>
-                        </property>
-                    </widget>
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout15</cstring>
@@ -938,7 +930,6 @@
     <tabstop>mShowCopyDialog</tabstop>
     <tabstop>mShowMoveDialog</tabstop>
     <tabstop>mDefaultDestDir</tabstop>
-    <tabstop>mShowLocationToolBar</tabstop>
     <tabstop>mExternalEditor</tabstop>
     <tabstop>mJPEGTran</tabstop>
     <tabstop>mOK</tabstop>

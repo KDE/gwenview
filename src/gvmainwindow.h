@@ -54,12 +54,10 @@ public:
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
-	bool showLocationToolBar() const { return mShowLocationToolBar; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
 	void setShowStatusBarInFullScreen(bool);
-	void setShowLocationToolBar(bool);
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -112,12 +110,12 @@ private:
 	KURLCompletion* mURLEditCompletion;
 	QPtrList<KAction> mWindowListActions;
 
-	bool mShowLocationToolBar;
-	
 	bool mShowMenuBarInFullScreen;
 	bool mShowToolBarInFullScreen;
 	bool mShowStatusBarInFullScreen;
-	
+
+	void hideToolBars();
+	void showToolBars();
 	void createWidgets();
 	void createActions();
 	void createLocationToolBar();
@@ -140,7 +138,7 @@ private slots:
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showKeyDialog();
-	void showToolbarDialog();
+	void showToolBarDialog();
 	void applyMainWindowSettings();
 	void pixmapLoading();
 	void toggleSlideShow();

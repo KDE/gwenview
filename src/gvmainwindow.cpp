@@ -306,6 +306,38 @@ void GVMainWindow::toggleDirAndFileViews() {
 }
 
 
+
+void GVMainWindow::hideToolBars() {
+	QPtrListIterator<KToolBar> it=toolBarIterator();
+	KToolBar* bar;
+	
+	for(;it.current()!=0L; ++it) {	
+		bar=it.current();
+		if (bar->area()) {
+			bar->area()->hide();
+		} else {
+			bar->hide();
+		}
+	}
+}
+
+
+void GVMainWindow::showToolBars() {
+	QPtrListIterator<KToolBar> it=toolBarIterator();
+	
+	KToolBar* bar;
+	
+	for(;it.current()!=0L; ++it) {	
+		bar=it.current();
+		if (bar->area()) {
+			bar->area()->show();
+		} else {
+			bar->show();
+		}
+	}
+}
+
+
 void GVMainWindow::toggleFullScreen() {
 	KConfig* config=KGlobal::config();
 	
@@ -323,12 +355,9 @@ void GVMainWindow::toggleFullScreen() {
 	 * the left or right dock area.
 	 */
 		if (!mShowToolBarInFullScreen) {
-			if (toolBar()->area()) {
-				toolBar()->area()->hide();
-			} else {
-				toolBar()->hide();
-			}
+			hideToolBars();
 		}
+		
 		if (leftDock()->isEmpty())	 leftDock()->hide();
 		if (rightDock()->isEmpty())  rightDock()->hide();
 		if (topDock()->isEmpty())	 topDock()->hide();
@@ -345,11 +374,7 @@ void GVMainWindow::toggleFullScreen() {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 		statusBar()->show();
 		
-		if (toolBar()->area()) {
-			toolBar()->area()->show();
-		} else {
-			toolBar()->show();
-		}
+		showToolBars();
 		leftDock()->show();
 		rightDock()->show();
 		topDock()->show();
@@ -394,7 +419,7 @@ void GVMainWindow::showKeyDialog() {
 }
 
 
-void GVMainWindow::showToolbarDialog() {
+void GVMainWindow::showToolBarDialog() {
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	KEditToolbar dlg(actionCollection());
 	connect(&dlg,SIGNAL(newToolbarConfig()),this,SLOT(applyMainWindowSettings()));
@@ -600,7 +625,7 @@ void GVMainWindow::createActions() {
 	// Settings
 	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
 	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-	(void)KStdAction::configureToolbars(this, SLOT(showToolbarDialog()), actionCollection() );
+	(void)KStdAction::configureToolbars(this, SLOT(showToolBarDialog()), actionCollection() );
 	
 	actionCollection()->readShortcutSettings();
 }
@@ -760,9 +785,9 @@ void GVMainWindow::setShowToolBarInFullScreen(bool value) {
 	mShowToolBarInFullScreen=value;
 	if (!mToggleFullScreen->isChecked()) return;
 	if (value) {
-		toolBar()->show();
+		showToolBars();
 	} else {
-		toolBar()->hide();
+		hideToolBars();
 	}
 }
 
@@ -773,16 +798,6 @@ void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 		statusBar()->show();
 	} else {
 		statusBar()->hide();
-	}
-}
-
-void GVMainWindow::setShowLocationToolBar(bool value) {
-	mShowLocationToolBar=value;
-	if (!mLocationToolBar) return;
-	if (value) {
-		mLocationToolBar->show();
-	} else {
-		mLocationToolBar->hide();
 	}
 }
 
@@ -797,7 +812,6 @@ void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS,false);
 	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS,true);
 	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS,false);
-	setShowLocationToolBar(config->readBoolEntry(CONFIG_SHOW_LOCATION_TOOLBAR,true));
 }
 
 
@@ -806,5 +820,4 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_MENUBAR_IN_FS,mShowMenuBarInFullScreen);
 	config->writeEntry(CONFIG_TOOLBAR_IN_FS,mShowToolBarInFullScreen);
 	config->writeEntry(CONFIG_STATUSBAR_IN_FS,mShowStatusBarInFullScreen);
-	config->writeEntry(CONFIG_SHOW_LOCATION_TOOLBAR,mShowLocationToolBar);
 }

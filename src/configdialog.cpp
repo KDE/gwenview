@@ -111,7 +111,6 @@ mMainWindow(mainWindow)
 	mJPEGTran->setURL(GVJPEGTran::programPath());
 	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	mShowDirs->setChecked(fileViewStack->showDirs());
-	mShowLocationToolBar->setChecked(mainWindow->showLocationToolBar());
 	mShownColor->setColor(fileViewStack->shownColor());
 }
 
@@ -160,7 +159,6 @@ void ConfigDialog::slotApply() {
 	GVJPEGTran::setProgramPath(mJPEGTran->url());
 	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(mShowDirs->isChecked());
-	mMainWindow->setShowLocationToolBar(mShowLocationToolBar->isChecked());
 	fileViewStack->setShownColor(mShownColor->color());
 }
 
