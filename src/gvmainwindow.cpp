@@ -688,12 +688,9 @@ void GVMainWindow::slotGo() {
 	mFileViewStack->setFocus();
 }
 
-void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
+void GVMainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 	LOG("");
-	if (int(item->size())!=mDocument->fileSize()) {
-		LOG("need reload " << int(item->size()) << "!=" << mDocument->fileSize());
-		mDocument->reload();
-	}
+	mDocument->reload();
 }
 	
 
