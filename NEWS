@@ -6,6 +6,7 @@
  - The fullscreen display now contains "Previous", "Next" and "Exit fullscreen"
    buttons.
  - Adjust brightness, contrast and gamma.
+ - Going to next/previous image in the image KPart.
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.
@@ -19,6 +20,7 @@
    an image goes to fullscreen" feature.
  - Removed the "Auto load image" option, it's useless since Gwenview does not
    block anymore when loading images.
+ - Fix reloading in the image KPart.
 
 2004.10.24 - v1.1.6
 - New features:
