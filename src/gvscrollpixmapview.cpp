@@ -614,8 +614,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		return;
 	}
 
-	QImage image(updateRect.size()/mZoom,32);
-	image=mDocument->image().copy(
+	QImage image=mDocument->image().copy(
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
@@ -629,6 +628,10 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	}
 
 	if (image.hasAlphaBuffer()) {
+		if (image.depth()!=32) {
+			image=image.convertDepth(32);
+		}
+		
 		bool light;
 
 		int imageXOffset=int(updateRect.x())-int(mXOffset);
