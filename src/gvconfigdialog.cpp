@@ -127,6 +127,16 @@ void GVConfigDialog::slotOk() {
 }
 
 
+#if QT_VERSION<0x030200
+// This function emulates int QButtonGroup::selectedId() which does not exist
+// in Qt 3.1
+inline int buttonGroupSelectedId(const QButtonGroup* group) {
+	QButton* button=group->selected();
+	if (!button) return -1;
+	return group->id(button);
+}
+#endif
+
 void GVConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
@@ -141,7 +151,13 @@ void GVConfigDialog::slotApply() {
 	fileViewStack->setShownColor(d->mContent->mShownColor->color());
 	
 	// Image View tab
-	pixmapView->setSmoothAlgorithm( static_cast<GVImageUtils::SmoothAlgorithm>(d->mContent->mSmoothGroup->selectedId()));
+#if QT_VERSION>=0x030200
+	int algo=d->mContent->mSmoothGroup->selectedId();
+#else
+	int algo=buttonGroupSelectedId(d->mContent->mSmoothGroup);
+#endif
+	
+	pixmapView->setSmoothAlgorithm( static_cast<GVImageUtils::SmoothAlgorithm>(algo));
 	pixmapView->setDelayedSmoothing(d->mContent->mDelayedSmoothing->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mContent->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
@@ -163,9 +179,12 @@ void GVConfigDialog::slotApply() {
 
 	// Misc tab
 	GVJPEGTran::setProgramPath(d->mContent->mJPEGTran->url());
-	QButton* button=d->mContent->mModifiedBehaviorGroup->selected();
-	Q_ASSERT(button);
-	document->setModifiedBehavior( GVDocument::ModifiedBehavior(d->mContent->mModifiedBehaviorGroup->id(button)) );
+#if QT_VERSION>=0x030200
+	int behavior=d->mContent->mModifiedBehaviorGroup->selectedId();
+#else
+	int behavior=buttonGroupSelectedId(d->mContent->mModifiedBehaviorGroup);
+#endif
+	document->setModifiedBehavior( static_cast<GVDocument::ModifiedBehavior>(behavior) );
 }
 
 
