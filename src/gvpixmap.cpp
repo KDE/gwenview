@@ -57,7 +57,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 	// Check whether this is a dir or a file
 	KIO::UDSEntry entry;
-	bool isDir;
+	bool isDir=false;
 	if (!KIO::NetAccess::stat(URL,entry)) return;
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {

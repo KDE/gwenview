@@ -159,7 +159,6 @@ void GVFileViewStack::plugActionsToAccel(KAccel* accel) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-//FIXME: Handle passing a filename as a parameter
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
 	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + filename << endl;
 	if (mDirURL.cmp(dirURL,true)) return;
@@ -520,12 +519,6 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 
 // Clear the old view
 	oldView->GVFileView::clear();
-/*
-// Update the new view
-	
-	KURL url=mDirLister->url();
-	if (url.isValid()) mDirLister->openURL(url);
-	*/
 }
 
 

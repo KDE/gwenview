@@ -64,19 +64,17 @@ void FileOpObject::slotResult(KIO::Job* job) {
 void FileOpCopyToObject::operator()() {
 	QString destDir;
 	KURL destURL;
-	KURL srcURL=mURLList.first(); // FIXME : Correct this for multi file operations
 
 	if (FileOperation::confirmCopy()) {
 		destDir=KFileDialog::getExistingDirectory(FileOperation::destDir(), mParent);
 	} else {
 		destDir=FileOperation::destDir();
+	    destURL.setPath(destDir);
 	}
-	if (destDir.isEmpty()) return;
+	if (destURL.isEmpty()) return;
 
 // Copy the file
-	destURL.setPath(destDir);
-
-	KIO::Job* copyJob=KIO::copy(srcURL,destURL,true);
+	KIO::Job* copyJob=KIO::copy(mURLList,destURL,true);
 	connect( copyJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 
@@ -87,7 +85,6 @@ void FileOpCopyToObject::operator()() {
 void FileOpMoveToObject::operator()() {
 	QString destDir;
 	KURL destURL;
-	KURL srcURL=mURLList.first(); // FIXME : Correct this for multi file operations
 
 	if (FileOperation::confirmMove()) {
 		destDir=KFileDialog::getExistingDirectory(FileOperation::destDir(), mParent);
@@ -99,7 +96,7 @@ void FileOpMoveToObject::operator()() {
 // Copy the file
 	destURL.setPath(destDir);
 
-	KIO::Job* moveJob=KIO::move(srcURL,destURL,true);
+	KIO::Job* moveJob=KIO::move(mURLList,destURL,true);
 	connect( moveJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 
@@ -108,8 +105,6 @@ void FileOpMoveToObject::operator()() {
 
 //-FileOpDelObject-----------------------------------------------------------------
 void FileOpDelObject::operator()() {
-	KURL url=mURLList.first(); // FIXME : Correct this for multi file operations
-
 	// Get the trash path (and make sure it exists)
 	QString trashPath=KGlobalSettings::trashPath();
 	if ( !QFile::exists(trashPath) ) {
@@ -129,14 +124,25 @@ void FileOpDelObject::operator()() {
 
 	// Confirm operation
 	if (FileOperation::confirmDelete()) {
-		QString filename=QStyleSheet::escape(url.filename());
-		int response=KMessageBox::questionYesNo(mParent,
-			"<qt>"+i18n("Are you sure you want to delete file <b>%1</b>?").arg(filename)+"</qt>");
+		int response;
+		if (mURLList.count()>1) {
+			QStringList fileList;
+			KURL::List::ConstIterator it=mURLList.begin();
+			for (; it!=mURLList.end(); ++it) {
+				fileList.append((*it).filename());
+			}
+			response=KMessageBox::questionYesNoList(mParent,
+				i18n("Are you sure you want to trash these files?"),fileList);
+		} else {
+			QString filename=QStyleSheet::escape(mURLList.first().filename());
+			response=KMessageBox::questionYesNo(mParent,
+				i18n("<qt>Are you sure you want to thrash file <b>%1</b>?</qt>").arg(filename));
+		}
 		if (response==KMessageBox::No) return;
 	}
 
 	// Go do it
-	KIO::Job* job=KIO::move(url,trashURL);
+	KIO::Job* job=KIO::move(mURLList,trashURL);
 	connect( job, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }
@@ -145,7 +151,7 @@ void FileOpDelObject::operator()() {
 //-FileOpRenameObject--------------------------------------------------------------
 void FileOpRenameObject::operator()() {
 	bool ok;
-	KURL srcURL=mURLList.first(); // FIXME : Correct this for multi file operations
+	KURL srcURL=mURLList.first();
 
 // Prompt for the new filename
 	QString filename=QStyleSheet::escape(srcURL.filename());
