@@ -440,7 +440,7 @@ void GVFileDetailView::startDrag()
 		return;
 	}
 
-	QDragObject* drag=KURLDrag::newDrag(urls, this);
+	QDragObject* drag=new KURLDrag(urls, this, 0);
 	QPixmap dragPixmap;
 	if (urls.count()>1) {
 		dragPixmap=SmallIcon("kmultiple");

@@ -931,7 +931,6 @@ void GVFileViewStack::kpartConfig() {
 	mShowDotFiles->setChecked(false);
 	initDirListerFilter();
 
-	bool startWithThumbnails=true;
 	setMode(THUMBNAIL);
 
 	mFileThumbnailView->startThumbnailUpdate();
