@@ -44,7 +44,7 @@ public:
 	~GVPixmap();
 	void reset();
 
-// Properties 
+	// Properties 
 	const QImage& image() const { return mImage; }
 	KURL url() const;
 	const KURL& dirURL() const { return mDirURL; }
@@ -57,18 +57,29 @@ public slots:
 	void setURL(const KURL&);
 	void setDirURL(const KURL&);
 	void setFilename(const QString&);
+
+	// "Image manipulation"
+	void rotateLeft();
+	void rotateRight();
+	void mirror();
+	void flip();
 	
 signals:
-/**
- * Emitted when the class starts to load the image.
- */
+	/**
+	 * Emitted when the class starts to load the image.
+	 */
 	void loading();
 
-/**
- * Emitted when the class has finished loading the image.
- * Also emitted if the image could not be loaded.
- */
+	/**
+	 * Emitted when the class has finished loading the image.
+	 * Also emitted if the image could not be loaded.
+	 */
 	void urlChanged(const KURL&,const QString&);
+
+	/**
+	 * Emitted when the image is modified.
+	 */
+	void modified();
 };
 
 

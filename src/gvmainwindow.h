@@ -88,6 +88,10 @@ private:
 	KAction* mOpenParentDir;
 	KAction* mShowFileProperties;
 	KToggleAction* mToggleSlideShow;
+	KAction* mRotateLeft;
+	KAction* mRotateRight;
+	KAction* mMirror;
+	KAction* mFlip;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;

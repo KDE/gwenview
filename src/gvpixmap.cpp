@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qfileinfo.h>
 #include <qpainter.h>
+#include <qwmatrix.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -122,6 +123,38 @@ KURL GVPixmap::url() const {
 }
 
 
+void GVPixmap::rotateLeft() {
+	QWMatrix matrix;
+	matrix.rotate(-90);
+	mImage=mImage.xForm(matrix);
+	emit modified();
+}
+
+
+void GVPixmap::rotateRight() {
+	QWMatrix matrix;
+	matrix.rotate(90);
+	mImage=mImage.xForm(matrix);
+	emit modified();
+}
+
+
+void GVPixmap::mirror() {
+	QWMatrix matrix;
+	matrix.scale(-1,1);
+	mImage=mImage.xForm(matrix);
+	emit modified();
+}
+
+
+void GVPixmap::flip() {
+	QWMatrix matrix;
+	matrix.scale(1,-1);
+	mImage=mImage.xForm(matrix);
+	emit modified();
+}
+
+
 //---------------------------------------------------------------------
 //
 // Private stuff
@@ -147,48 +180,3 @@ bool GVPixmap::load() {
 
 	return result;
 }
-#if 0
-bool GVPixmap::load() {
-	KURL pixURL=url();
-	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
-	int posX,posY;
-	int pixWidth;
-	int pixHeight;
-	QPainter painter;
-	QColor dark(128,128,128);
-	QColor light(192,192,192);
-	QPixmap pix;
-
-	// Load pixmap
-	// FIXME : Async
-	QString path;
-	if (pixURL.isLocalFile()) {
-		path=pixURL.path();
-	} else {
-		if (!KIO::NetAccess::download(pixURL,path)) return false;
-	}
-	if (!pix.load(path)) return false;
-	if (!pixURL.isLocalFile()) {
-		KIO::NetAccess::removeTempFile(path);
-	}
-	
-	pixWidth=pix.width();
-	pixHeight=pix.height();
-
-	// Create checker board
-	mPixmap.resize(pixWidth,pixHeight);
-	mPixmap.fill(dark);
-	painter.begin(&mPixmap);
-	for(posY=0;posY<pixHeight;posY+=16) {
-		for(posX=0;posX<pixWidth;posX+=16) {
-			painter.fillRect(posX,posY,8,8,light);
-			painter.fillRect(posX+8,posY+8,8,8,light);
-		}
-	}
-
-	// Paint pixmap on checker board 
-	painter.drawPixmap(0,0,pix);
-	painter.end();
-	return true;
-}
-#endif

@@ -100,6 +100,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	// Connect to some interesting signals
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(updateView()) );
+	connect(mGVPixmap,SIGNAL(modified()),
+		this,SLOT(updateView()) );
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 }

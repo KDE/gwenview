@@ -467,6 +467,14 @@ void GVMainWindow::createActions() {
 	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"show_file_properties");
 
 	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
+
+	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_ccw",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"image_rotate_left");
+	
+	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_cw",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"image_rotate_right");
+	
+	mMirror=new KAction(i18n("&Mirror"),0,mGVPixmap,SLOT(mirror()),actionCollection(),"image_mirror");
+	
+	mFlip=new KAction(i18n("&Flip"),0,mGVPixmap,SLOT(flip()),actionCollection(),"image_flip");
 	
 	actionCollection()->readShortcutSettings();
 }
@@ -541,6 +549,13 @@ void GVMainWindow::createMenu() {
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() )->plug(fileMenu);
 	menuBar()->insertItem(i18n("&File"), fileMenu);
 
+	QPopupMenu* editMenu = new QPopupMenu;
+	mRotateLeft->plug(editMenu);
+	mRotateRight->plug(editMenu);
+	mMirror->plug(editMenu);
+	mFlip->plug(editMenu);
+	menuBar()->insertItem(i18n("&Edit"), editMenu);
+	
 	QPopupMenu* viewMenu = new QPopupMenu;
 	mStop->plug(viewMenu);
 	
