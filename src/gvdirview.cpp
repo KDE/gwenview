@@ -218,7 +218,7 @@ void GVDirView::setURLInternal(const KURL& url) {
 	KFileTreeViewItem* viewItem;
 	KFileTreeViewItem* nextViewItem;
 
-	QString path=url.path();
+	QString path=dirSyntax(url.path());
 	KFileTreeBranch *branch,
 			*bestMatch=NULL;
 	for (branch=mBranches.first(); branch; branch=mBranches.next()) {
