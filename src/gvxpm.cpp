@@ -1,5 +1,5 @@
-/* This file is based on qt-3.3.2/src/qimage.cpp . Original
- * copyright follows.
+/* This file is based on qt-3.3.2/src/qimage.cpp , plus it includes
+ * a fix from qt-bugs@ issue #49934. Original copyright follows.
  */
 /****************************************************************************
 ** 
@@ -171,6 +171,8 @@ static void read_xpm_image_or_array( QImageIO * iio, const char * const * source
 	    i = buf.find( " g4 " );
 	if ( i < 0 )
 	    i = buf.find( " m " );
+	if ( i < 0 )
+	    i = buf.find( " s " );
 	if ( i < 0 ) {
 #if defined(QT_CHECK_RANGE)
 	    qWarning( "QImage: XPM color specification is missing: %s", buf.data());
@@ -191,6 +193,9 @@ static void read_xpm_image_or_array( QImageIO * iio, const char * const * source
 	if( endtmp > 0 && endtmp < end )
 	    end = endtmp;
 	endtmp = buf.find(" m ");
+	if( endtmp > 0 && endtmp < end )
+	    end = endtmp;
+	endtmp = buf.find(" s ");
 	if( endtmp > 0 && endtmp < end )
 	    end = endtmp;
 	buf.truncate(end);
