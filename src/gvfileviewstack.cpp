@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+M// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -525,6 +525,7 @@ KURL::List GVFileViewStack::selectedURLs() const {
 void GVFileViewStack::openParentDir() {
 	KURL url(mDirURL.upURL());
 	emit urlChanged(url);
+	emit directoryChanged(url);
 }
 
 
