@@ -10,6 +10,8 @@
  - Don't crash when switching to fullscreen while generating thumbnails and
    coming back (By Lubos Lunak)
  - Faster thumbnail generation (By Lubos Lunak)
+ - Faster image painting by dynamically determining suitable paint
+   size (By Lubos Lunak)
  - Use "Standard Background" colour as the background for thumbnails and folders.
  - Make sure the current image is reloaded if it's modified outside Gwenview. 
 

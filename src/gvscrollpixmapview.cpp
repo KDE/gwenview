@@ -69,6 +69,7 @@ const int AUTO_HIDE_TIMEOUT=2000;
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
+const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 
 //------------------------------------------------------------------------
 //
@@ -253,6 +254,9 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 , mPendingOperations( 0 )
 , mSmoothingSuspended( false )
 , mEmptyImage( false )
+, mMaxRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
+, mMaxScaleRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
+, mMaxSmoothRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -368,6 +372,9 @@ void GVScrollPixmapView::loadingStarted() {
 void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value) {
 	if( mSmoothAlgorithm == value ) return;
 	mSmoothAlgorithm = value;
+	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
+	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
+	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
 	if( mDelayedSmoothing ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
@@ -379,6 +386,9 @@ void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value)
 void GVScrollPixmapView::setDelayedSmoothing(bool value) {
 	if (mDelayedSmoothing==value) return;
 	mDelayedSmoothing=value;
+	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
+	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
+	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
 	if( mDelayedSmoothing ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
@@ -522,39 +532,31 @@ void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 	// at least try to remove the part that's already scheduled
 	rect = ( QRegion( rect ) - region ).boundingRect();
 	region += rect;
-	// split to several repaints limited by pixels to be painted
-	const int MAX_REPAINT_SIZE = 10000;
-	int step = 0;
-	if (rect.width() > 0) {
-		step=(( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
-	}
-	step = QMAX( step, 5 ); // at least 5 lines together
-	for( int line = 0;
-		 line < rect.height();
-		 line += step ) {
-		step = QMIN( step, rect.height() - line );
-		QRect area( rect.x(), rect.y() + line, rect.width(), step );
-		const long long MAX_DIM = 1000000; // if monitors get larger than this, we're in trouble :)
-		// QMap will ensure ordering (non-smooth first, top-to-bottom, left-to-right)
-		long long key = ( smooth ? MAX_DIM * MAX_DIM : 0 ) + ( area.y() + line ) * MAX_DIM + area.x();
-		// handle the case of two different paints at the same position (just in case)
-		key *= 100;
-		bool insert = true;
-		while( mPendingPaints.contains( key )) {
-			if( mPendingPaints[ key ].rect.contains( area )) {
-				insert = false;
-				break;
-			}
-			if( area.contains( mPendingPaints[ key ].rect )) {
-				break;
-			}
-			++key;
-		}
-		if( insert ) {
-			mPendingPaints[ key ] = PendingPaint( smooth, area );
-		}
-	}
+	if( rect.isEmpty())
+		return;
+	addPendingPaintInternal( smooth, rect );
+}
 
+void GVScrollPixmapView::addPendingPaintInternal( bool smooth, QRect rect ) {
+	const long long MAX_DIM = 1000000; // if monitors get larger than this, we're in trouble :)
+	// QMap will ensure ordering (non-smooth first, top-to-bottom, left-to-right)
+	long long key = ( smooth ? MAX_DIM * MAX_DIM : 0 ) + rect.y() * MAX_DIM + rect.x();
+	// handle the case of two different paints at the same position (just in case)
+	key *= 100;
+	bool insert = true;
+	while( mPendingPaints.contains( key )) {
+		if( mPendingPaints[ key ].rect.contains( rect )) {
+			insert = false;
+			break;
+		}
+		if( rect.contains( mPendingPaints[ key ].rect )) {
+			break;
+		}
+		++key;
+	}
+	if( insert ) {
+		mPendingPaints[ key ] = PendingPaint( smooth, rect );
+	}
 	scheduleOperation( CHECK_OPERATIONS );
 }
 
@@ -566,12 +568,38 @@ void GVScrollPixmapView::checkPendingOperations() {
 	updateBusyLevels();
 }
 
+void GVScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
+	// The only thing that makes time spent in performPaint() vary
+	// is whether there will be scaling and whether there will be smoothing.
+	// So there are three max sizes for each mode.
+	int maxSize = mMaxRepaintSize;
+	if( mZoom != 1.0 ) {
+		if( paint.smooth || !mDelayedSmoothing ) {
+			maxSize = mMaxSmoothRepaintSize;
+		} else {
+			maxSize = mMaxScaleRepaintSize;
+		}
+	}
+	// don't paint more than max_size pixels at a time
+	int maxHeight = ( maxSize + paint.rect.width() - 1 ) / paint.rect.width(); // round up
+	maxHeight = QMAX( maxHeight, 5 ); // at least 5 lines together
+	// can't repaint whole paint at once, adjust height and schedule the rest
+	if( maxHeight < paint.rect.height()) {
+		QRect remaining = paint.rect;
+		remaining.setTop( remaining.top() + maxHeight );
+		addPendingPaintInternal( paint.smooth, remaining );
+		paint.rect.setHeight( maxHeight );
+	}
+}
+
+
 void GVScrollPixmapView::checkPendingOperationsInternal() {
 	if( !mPendingPaintTimer.isActive()) // suspended
 		return;
 	while( !mPendingPaints.isEmpty()) {
 		PendingPaint paint = *mPendingPaints.begin();
 		mPendingPaints.remove( mPendingPaints.begin());
+		limitPaintSize( paint ); // modifies paint.rect if necessary
 		QRegion& region = paint.smooth ? mPendingSmoothRegion : mPendingNormalRegion;
 		region -= paint.rect;
 		QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
@@ -659,6 +687,9 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	static int numColor=0;
 	#endif
 
+	QTime t;
+	t.start();
+
 	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
 	if (mDocument->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
@@ -695,19 +726,24 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		return;
 	}
 
+	int* maxRepaintSize = &mMaxRepaintSize;
 	if (smooth) {
 		if( mZoom != 1.0 ) {
 			image=image.convertDepth(32);
 			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), mSmoothAlgorithm );
+			maxRepaintSize = &mMaxSmoothRepaintSize;
 		}
 	} else {
-		GVImageUtils::SmoothAlgorithm algo=mDelayedSmoothing
-			?GVImageUtils::SMOOTH_NONE
-			:mSmoothAlgorithm;
-		image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algo );
-		
-		if( mDelayedSmoothing && mZoom != 1.0 ) {
-			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
+		if( mZoom != 1.0 ) {
+			GVImageUtils::SmoothAlgorithm algo=mDelayedSmoothing
+				?GVImageUtils::SMOOTH_NONE
+				:mSmoothAlgorithm;
+			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algo );
+			maxRepaintSize = mDelayedSmoothing ? &mMaxScaleRepaintSize : &mMaxSmoothRepaintSize;
+			
+			if( mDelayedSmoothing && mZoom != 1.0 ) {
+				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
+			}
 		}
 	}
 
@@ -742,6 +778,12 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	}
 	painter->drawPixmap(clipx,clipy,buffer);
 
+	if( updateRect.width() * updateRect.height() >= 10000 ) { // ignore small repaints
+		// try to do one step in 0.1sec
+		int size = updateRect.width() * updateRect.height() * 100 / QMAX( t.elapsed(), 1 );
+		*maxRepaintSize = QMIN( 1000000, QMAX( 10000,
+				( size + *maxRepaintSize ) / 2 ));
+	}
 
 	#ifdef DEBUG_RECTS
 	painter->setPen(colors[numColor]);

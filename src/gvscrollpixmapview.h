@@ -168,8 +168,13 @@ private:
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
 	bool mEmptyImage;
+	int mMaxRepaintSize;
+	int mMaxScaleRepaintSize;
+	int mMaxSmoothRepaintSize;
 	void addPendingPaint( bool smooth, QRect rect = QRect());
+	void addPendingPaintInternal( bool smooth, QRect rect = QRect());
 	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
+	void limitPaintSize( PendingPaint& paint );
 	void fullRepaint();
 	void cancelPending();
 	void scheduleOperation( Operation operation );
