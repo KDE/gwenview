@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=Gwenview Directory Image Browser
+MimeType=inode/directory
+ServiceTypes=KParts/ReadOnlyPart
+X-KDE-Library=libgvdirpart
+InitialPreference=5

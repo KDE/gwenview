@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="GVImagePart">
+<MenuBar>
+ <Menu name="view"><Text>&amp;View</Text>
+    <Action name="openCloseAll"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

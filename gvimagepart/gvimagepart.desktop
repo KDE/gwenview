@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=Gwenview Image Viewer
+MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbm;image/x-xpm
+ServiceTypes=KParts/ReadOnlyPart
+X-KDE-Library=libgvimagepart
+InitialPreference=5

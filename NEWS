@@ -1,4 +1,7 @@
 2004.xx.xx - v1.1.1
+ - Add KParts, src/ becomes libgwenview.so  gwenviewapp/ creates executable and 
+   gvimagepart/ & gvdirpart/ contain the read only KParts so you use Gwenview 
+   in Konqueror
 - Fixes:
  - The rotate and mirror functions can now work on multiple selection.
 
