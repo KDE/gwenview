@@ -43,6 +43,8 @@ public:
 	operator const QString&() const;
 	operator Size() const { return mValue; }
 
+	static ThumbnailSize biggest() { return ThumbnailSize(Large); }
+
 private:
 	Size mValue;
 };

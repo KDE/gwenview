@@ -93,7 +93,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* itemList,ThumbnailSize s
 		QString::fromLatin1( hash.data()+8 ) + "/";
 
 // Create the thumbnail cache dir
-	mCacheDir = locateLocal( "thumbnails", thumbPath + QString(mThumbnailSize) + "/" );
+	mCacheDir = locateLocal( "thumbnails", thumbPath + QString(ThumbnailSize::biggest()) + "/" );
 	LOG("mCacheDir=" << mCacheDir);
 }
 
@@ -225,8 +225,9 @@ bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
 	if (!pix.load(mThumbURL.path())) {
 		return false;
 	}
-
-	emit thumbnailLoaded(mCurrentItem,pix);
+	
+// All done
+	emitThumbnailLoaded(pix);
 	determineNextIcon();
 	return true;
 }
@@ -239,7 +240,7 @@ void ThumbnailLoadJob::createThumbnail(QString pixPath) {
 		QPixmap pix;
 		if( loadJPEG( pixPath, pix)) {
 			pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-			emit thumbnailLoaded(mCurrentItem,pix);
+			emitThumbnailLoaded(pix);
 			determineNextIcon();
 			return;
 		}
@@ -248,7 +249,7 @@ void ThumbnailLoadJob::createThumbnail(QString pixPath) {
 	QPixmap pix;
 	if( loadThumbnail(pixPath, pix)) {
 		pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-		emit thumbnailLoaded(mCurrentItem,pix);
+		emitThumbnailLoaded(pix);
 	}
 	determineNextIcon();
 }
@@ -258,7 +259,7 @@ bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QPixmap &pix) {
 	LOG("");
 	QImage bigImg,img;
 	int biWidth,biHeight;
-	int thumbSize=mThumbnailSize.pixelSize();
+	int thumbSize=ThumbnailSize::biggest().pixelSize();
 	if (!bigImg.load(pixPath)) return false;
 	
 	biWidth=bigImg.width();
@@ -297,7 +298,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	jpeg_read_header(&cinfo, TRUE);
 
 // Compute scale value
-	int size=mThumbnailSize.pixelSize();
+	int size=ThumbnailSize::biggest().pixelSize();
 	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
 	int scale=1;
@@ -356,3 +357,32 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	return true;
 }
 
+
+void ThumbnailLoadJob::emitThumbnailLoaded(const QPixmap& pix) {
+	ThumbnailSize biggest=ThumbnailSize::biggest();
+
+	if (mThumbnailSize==biggest) {
+		emit thumbnailLoaded(mCurrentItem,pix);
+		return;
+	}
+	
+// Do we need to scale down the thumbnail ?
+	int biggestDimension=max(pix.width(),pix.height());
+	int thumbPixelSize=mThumbnailSize.pixelSize();
+	if (biggestDimension<thumbPixelSize) {
+		emit thumbnailLoaded(mCurrentItem,pix);
+		return;
+	}
+
+// Scale thumbnail
+	double scale=double(thumbPixelSize)/double(biggestDimension);
+	QPixmap pix2(thumbPixelSize,thumbPixelSize);
+	QPainter painter;
+	painter.begin(&pix2);
+	painter.eraseRect(0,0,thumbPixelSize,thumbPixelSize);
+	painter.scale(scale,scale);
+	painter.drawPixmap((biggestDimension-pix.width())/2, (biggestDimension-pix.height())/2, pix);
+	painter.end();
+
+	emit thumbnailLoaded(mCurrentItem,pix2);
+}

@@ -3,6 +3,11 @@
   folder (Thanks to Andreas Pfaller for the patch).
 - You can now show the folders in the file view. By enabling this and hiding
   the folder view, Gwenview won't have to open all parent folders on startup.
+- XCF file format support, thanks to the QXCFI library by Lignum Computing
+  (http://lignumcomputing.com).
+- Thumbnail generator now saves always save the thumbnail at the biggest size :
+  for smaller sizes the big thumbnail is loaded and scaled. This uses less disk
+  space and make thumbnail size switching faster.
 
 2002.08.11 - v0.14.5
 - Fixed the horizontal one pixel lines which appeared in fullscreen mode when
