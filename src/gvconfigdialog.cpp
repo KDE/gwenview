@@ -166,14 +166,14 @@ void GVConfigDialog::slotApply() {
 
 void GVConfigDialog::calculateCacheSize() {
 	KURL url;
-	url.setPath(ThumbnailLoadJob::thumbnailDir());
+	url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
 	unsigned long size=KDirSize::dirSize(url);
 	KMessageBox::information( this,i18n("Cache size is %1").arg(KIO::convertSize(size)) );
 }
 
 
 void GVConfigDialog::emptyCache() {
-	QString dir=ThumbnailLoadJob::thumbnailDir();
+	QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
 	if (!QFile::exists(dir)) {
 		KMessageBox::information( this,i18n("Cache is already empty.") );

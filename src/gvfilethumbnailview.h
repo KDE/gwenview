@@ -88,7 +88,7 @@ public:
 
 	void setShownFileItem(KFileItem*);
 
-	void updateThumbnail(KFileItem*);
+	void updateThumbnail(const KFileItem*);
 
 public slots:
 	void setThumbnailPixmap(const KFileItem*,const QPixmap&);

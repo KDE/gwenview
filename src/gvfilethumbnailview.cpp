@@ -169,8 +169,9 @@ void GVFileThumbnailView::stopThumbnailUpdate() {
 }
 
 
-void GVFileThumbnailView::updateThumbnail(KFileItem* fileItem) {
+void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
 
+	ThumbnailLoadJob::deleteImageThumbnail(fileItem->url());
 	if (mThumbnailLoadJob.isNull()) {
 		KFileItemList list;
 		list.append(fileItem);
@@ -233,7 +234,10 @@ void GVFileThumbnailView::updateView(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
 	GVFileThumbnailViewItem* iconItem=viewItem(fileItem);
-	if (iconItem) iconItem->setText(fileItem->text());
+	if (iconItem) {
+		iconItem->setText(fileItem->text());
+		updateThumbnail(fileItem);
+	}
 	sort();
 }
 

@@ -67,10 +67,19 @@ public:
 
 	
 	/**
-	 * Returns the thumbnail dir
+	 * Returns the thumbnail base dir
 	 */
-	static const QString& thumbnailDir();
+	static QString thumbnailBaseDir();
 
+
+	static QString thumbnailDirForURL(const KURL& url);
+
+	
+	/**
+	 * Delete the thumbnail for the @p url
+	 */
+	static void deleteImageThumbnail(const KURL& url);
+	
 signals:
 	/**
 	 * Emitted when the thumbnail for the @p item has been loaded

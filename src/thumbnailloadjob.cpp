@@ -58,7 +58,12 @@ extern "C" {
 
 
 
-const QString& ThumbnailLoadJob::thumbnailDir() {
+//------------------------------------------------------------------------
+//
+// ThumbnailLoadJob static methods
+//
+//------------------------------------------------------------------------
+QString ThumbnailLoadJob::thumbnailBaseDir() {
 	static QString dir;
 	if (!dir.isEmpty()) return dir;
 
@@ -68,24 +73,14 @@ const QString& ThumbnailLoadJob::thumbnailDir() {
 }
 
 
-ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* itemList,ThumbnailSize size)
-: KIO::Job(false), mThumbnailSize(size)
-{
-	LOG("");
-
-	// Look for images and store the items in our todo list
-	mItems=*itemList;
-
-	if (mItems.isEmpty()) return;
-
-	QString originalDir=QDir::cleanDirPath( mItems.first()->url().directory() );
+QString ThumbnailLoadJob::thumbnailDirForURL(const KURL& url) {
+	QString originalDir=QDir::cleanDirPath( url.directory() );
 
 	// Check if we're already in a cache dir
 	// In that case the cache dir will be the original dir
-	QString cacheBaseDir = thumbnailDir();
-	if ( originalDir.startsWith(cacheBaseDir) ) {
-		mCacheDir=originalDir;
-		return;
+	QString cacheBaseDir = thumbnailBaseDir();
+	if (originalDir.startsWith(cacheBaseDir) ) {
+		return originalDir;
 	}
 
 	// Generate the thumbnail dir name
@@ -97,7 +92,33 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* itemList,ThumbnailSize s
 		QString::fromLatin1( hash.data()+8 ) + "/";
 
 	// Create the thumbnail cache dir
-	mCacheDir = locateLocal( "thumbnails", thumbPath + QString(ThumbnailSize::biggest()) + "/" );
+	return locateLocal( "thumbnails", thumbPath + QString(ThumbnailSize::biggest()) + "/" );
+}
+
+
+void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
+	QDir dir( thumbnailDirForURL(url) );
+	dir.remove(url.fileName());
+}
+
+
+//------------------------------------------------------------------------
+//
+// ThumbnailLoadJob implementation
+//
+//------------------------------------------------------------------------
+ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize size)
+: KIO::Job(false), mThumbnailSize(size)
+{
+	LOG("");
+
+	// Look for images and store the items in our todo list
+	mItems=*items;
+
+	if (mItems.isEmpty()) return;
+
+	// We assume that all items are in the same dir
+	mCacheDir=thumbnailDirForURL(mItems.first()->url());
 	LOG("mCacheDir=" << mCacheDir);
 }
 
@@ -250,6 +271,7 @@ bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
 
 	// Quit if thumbnail is older than file
 	if (thumbnailTime<mOriginalTime) return false;
+	LOG("Thumbnail is up to date");
 
 	// Load thumbnail
 	QPixmap pix;

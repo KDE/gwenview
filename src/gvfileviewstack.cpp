@@ -674,12 +674,14 @@ void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
 
 
 void GVFileViewStack::dirListerNewItems(const KFileItemList& items) {
+	//kdDebug() << "GVFileViewStack::dirListerNewItems\n";
 	mThumbnailsNeedUpdate=true;
 	currentFileView()->addItemList(items);
 }
 
 
 void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
+	//kdDebug() << "GVFileViewStack::dirListerRefreshItems\n";
 	KFileItemListIterator it(list);
 	for (; *it!=0L; ++it) {
 		currentFileView()->updateView(*it);
@@ -693,11 +695,13 @@ void GVFileViewStack::dirListerClear() {
 
 
 void GVFileViewStack::dirListerStarted() {
+	//kdDebug() << "GVFileViewStack::dirListerStarted\n";
 	mThumbnailsNeedUpdate=false;
 }
 
 
 void GVFileViewStack::dirListerCompleted() {
+	//kdDebug() << "GVFileViewStack::dirListerCompleted\n";
 	// Delay the code to be executed when the dir lister has completed its job
 	// to avoid crash in KDirLister (see bug #57991)
 	QTimer::singleShot(0,this,SLOT(delayedDirListerCompleted()));
