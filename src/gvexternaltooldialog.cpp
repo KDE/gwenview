@@ -21,8 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qbuttongroup.h>
 #include <qheader.h>
+#include <qwhatsthis.h>
 
 // KDE
+#include <kactivelabel.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kicondialog.h>
@@ -274,10 +276,17 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 		this, SLOT(addTool()) );
 	connect( d->mContent->mDeleteButton, SIGNAL(clicked()),
 		this, SLOT(deleteTool()) );
+	d->mContent->mHelp->disconnect();
+	connect( d->mContent->mHelp, SIGNAL(linkClicked(const QString&)),
+		this, SLOT(showCommandHelp()) );
 	
-	setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-	// FIXME: Ugly!
-	d->mContent->setMinimumSize(d->mContent->sizeHint() + QSize(50,50));
+	// FIXME: This is necessary because we are in string freeze. Set this in
+	// the .ui file next
+	QString txt=QWhatsThis::textFor(d->mContent->mCommand);
+	txt=QString("<qt>%1</qt>").arg(txt);
+	QWhatsThis::add(d->mContent->mCommand, txt);
+
+	d->mContent->mHelp->setText("<a href='#'>?</a>");
 }
 
 
@@ -326,4 +335,11 @@ void GVExternalToolDialog::deleteTool() {
 	d->mDeletedTools.append(desktopFile);
 	d->mSelectedItem=0L;
 	d->updateDetails();
+}
+
+
+void GVExternalToolDialog::showCommandHelp() {
+	KURLRequester* lbl=d->mContent->mCommand;
+	QWhatsThis::display(QWhatsThis::textFor(lbl),
+		lbl->mapToGlobal( lbl->rect().bottomRight() ) );
 }

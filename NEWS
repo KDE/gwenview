@@ -1,3 +1,7 @@
+2005.xx.xx - v1.2.0
+- Fixes:
+ - The layout of the "external tools" dialog has been reworked.
+ 
 2005.02.27 - v1.2.0pre3
 - Fixes:
  - Support for smb:/ and digikamtags:/ ioslaves has been fixed.

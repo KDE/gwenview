@@ -41,6 +41,7 @@ private slots:
 	void slotSelectionChanged(QListViewItem*);
 	void addTool();
 	void deleteTool();
+	void showCommandHelp();
 	
 private:
 	GVExternalToolDialogPrivate* d;
