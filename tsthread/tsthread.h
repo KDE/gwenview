@@ -97,10 +97,13 @@ class TSThread
         bool testCancel() const;
         /**
          * Returns pointer to the current thread, i.e. thread from which
-         * this function is called. Returns NULL for main thread.
+         * this function is called.
          */
-        // TODO don't return NULL for main thread
         static TSThread* currentThread();
+        /**
+         * Returns a pointer to the main thread. Mostly useful for currentThread().
+         */
+        static TSThread* mainThread();
     protected:
         /**
          * The code to be executed in the started thread.
@@ -202,6 +205,7 @@ class TSThread
 #else
         static TSCurrentThread* current_thread;
 #endif
+        static TSThread* main_thread;
     private:
         TSThread( const TSThread& );
         TSThread& operator=( const TSThread& );
@@ -273,6 +277,12 @@ TSThread* TSThread::currentThread()
 #else
     return current_thread->localData();
 #endif
+    }
+
+inline
+TSThread* TSThread::mainThread()
+    {
+    return main_thread;
     }
 
 inline

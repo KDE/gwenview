@@ -36,6 +36,14 @@ QThreadStorage< TSThread** >* TSThread::current_thread;
 #else
 TSCurrentThread* TSThread::current_thread;
 #endif
+TSThread* TSThread::main_thread = NULL;
+
+class TSMainThread
+    : public TSThread
+    {
+    protected:
+        virtual void run() { assert( false ); }
+    };
 
 TSThread::Helper::Helper( TSThread* parent )
     : thread( parent )
@@ -107,8 +115,9 @@ void TSThread::initCurrentThread()
     current_thread->setLocalData( new TSThreadPtr( NULL )); // TODO NULL ?
 #else
     current_thread = new TSCurrentThread();
+    main_thread = new TSMainThread;
     // set pointer for main thread (this must be main thread)
-    current_thread->setLocalData( NULL ); // TODO NULL ?
+    current_thread->setLocalData( main_thread );
 #endif
     }
 
