@@ -76,12 +76,7 @@ Orientation getOrientation(const QString& pixPath) {
 
 
 Orientation getOrientation(const QByteArray& jpegContent) {
-	JPEGDataPtr jpegData( jpeg_data_new_from_data((unsigned char*)jpegContent.data(),jpegContent.size()) );
-	if (!jpegData) {
-		return NOT_AVAILABLE;
-	}
-	
-	ExifDataPtr exifData( jpeg_data_get_exif_data(jpegData) );
+	ExifDataPtr exifData( exif_data_new_from_data( (unsigned char*)jpegContent.data(),jpegContent.size() ));
 	return getOrientation(exifData);
 }
 
