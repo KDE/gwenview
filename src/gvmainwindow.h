@@ -20,6 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// Qt
+#include <qptrlist.h>
+
+// KDE
 #include <kdockwidget.h>
 #include <kurl.h>
 
@@ -107,6 +111,7 @@ private:
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
+	QPtrList<KAction> mWindowListActions;
 
 	bool mShowLocationToolBar;
 	
@@ -116,7 +121,6 @@ private:
 	
 	void createWidgets();
 	void createActions();
-	void createMenu();
 	void createMainToolBar();
 	void createLocationToolBar();
 	void createConnections();
@@ -166,6 +170,11 @@ private slots:
 	 * Address bar related
 	 */
 	void slotURLEditChanged(const QString &str);
+	
+	void updateWindowListActions();
+
+	// Helper function for updateWindowListActions()
+	void createHideShowAction(KDockWidget* dock);
 };
 
 

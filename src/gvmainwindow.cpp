@@ -96,12 +96,14 @@ GVMainWindow::GVMainWindow()
 	createWidgets();
 	createActions();
 	/*
-	createMenu();
 	createMainToolBar();
 	createLocationToolBar();
 	*/
-	createGUI("gwenviewui.rc");
+	createGUI("gwenviewui.rc", false);
 	createConnections();
+	mWindowListActions.setAutoDelete(true);
+	updateWindowListActions();
+	
 	mFileViewStack->setFocus();
 
 	// Command line
@@ -154,7 +156,7 @@ bool GVMainWindow::queryClose() {
 void GVMainWindow::setURL(const KURL& url,const QString&) {
 	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
 
-    bool filenameIsValid=!mGVPixmap->isNull();
+	bool filenameIsValid=!mGVPixmap->isNull();
 
 	mRenameFile->setEnabled(filenameIsValid);
 	mCopyFiles->setEnabled(filenameIsValid);
@@ -309,9 +311,9 @@ void GVMainWindow::toggleFullScreen() {
 				toolBar()->hide();
 			}
 		}
-		if (leftDock()->isEmpty())   leftDock()->hide();
+		if (leftDock()->isEmpty())	 leftDock()->hide();
 		if (rightDock()->isEmpty())  rightDock()->hide();
-		if (topDock()->isEmpty())    topDock()->hide();
+		if (topDock()->isEmpty())	 topDock()->hide();
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
 		if (!mShowStatusBarInFullScreen) statusBar()->hide();
@@ -432,24 +434,24 @@ void GVMainWindow::updateStatusInfo() {
 	} else {
 		txt=i18n("%1 - One Image","%1 - %n images",count).arg(url);
 	}
-    mSBDirLabel->setText(txt);
+	mSBDirLabel->setText(txt);
 
-    updateFileInfo();
+	updateFileInfo();
 }
 
 
 void GVMainWindow::updateFileInfo() {
-    QString filename=mGVPixmap->filename();
+	QString filename=mGVPixmap->filename();
 	if (!filename.isEmpty()) {
 		QString info=QString("%1 %2x%3 @ %4%")
 			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
 			.arg(int(mPixmapView->zoom()*100) );
-        mSBDetailLabel->show();
-        mSBDetailLabel->setText(info);
+		mSBDetailLabel->show();
+		mSBDetailLabel->setText(info);
 	} else {
-        mSBDetailLabel->hide();
-    }
-    setCaption(filename);
+		mSBDetailLabel->hide();
+	}
+	setCaption(filename);
 }
 
 
@@ -460,10 +462,10 @@ void GVMainWindow::createWidgets() {
 	manager()->setSplitterOpaqueResize(true);
 	
 	// Status bar
-    mSBDirLabel=new KSqueezedTextLabel("", statusBar());
-    statusBar()->addWidget(mSBDirLabel,1);
-    mSBDetailLabel=new QLabel("", statusBar());
-    statusBar()->addWidget(mSBDetailLabel);
+	mSBDirLabel=new KSqueezedTextLabel("", statusBar());
+	statusBar()->addWidget(mSBDirLabel,1);
+	mSBDetailLabel=new QLabel("", statusBar());
+	statusBar()->addWidget(mSBDetailLabel);
 	
 	// Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
@@ -566,6 +568,33 @@ void GVMainWindow::createActions() {
 }
 
 
+void GVMainWindow::createHideShowAction(KDockWidget* dock) {
+	QString caption;
+	if (dock->mayBeHide()) {
+		caption=i18n("Hide %1").arg(dock->caption());
+	} else {
+		caption=i18n("Show %1").arg(dock->caption());
+	}
+
+	KAction* action=new KAction(caption, 0, dock, SLOT(changeHideShowState()), (QObject*)0 );
+	if (dock->icon()) {
+		action->setIconSet( QIconSet(*dock->icon()) );
+	}
+	mWindowListActions.append(action);
+}
+
+
+void GVMainWindow::updateWindowListActions() {
+	unplugActionList("winlist");
+	mWindowListActions.clear();
+	createHideShowAction(mFolderDock);
+	createHideShowAction(mFileDock);
+	createHideShowAction(mPixmapDock);
+	createHideShowAction(mMetaDock);
+	plugActionList("winlist", mWindowListActions);
+}
+
+
 void GVMainWindow::createConnections() {
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
@@ -623,82 +652,10 @@ void GVMainWindow::createConnections() {
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
 	accel->connectItem(accel->insertItem(Key_Escape),this,SLOT(escapePressed()));
-}
 
-
-void GVMainWindow::createMenu() {
-	QPopupMenu* fileMenu = new QPopupMenu;
-
-	mOpenFile->plug(fileMenu);
-	mSaveFile->plug(fileMenu);
-	mSaveFileAs->plug(fileMenu);
-	fileMenu->insertSeparator();
-	mRenameFile->plug(fileMenu);
-	mCopyFiles->plug(fileMenu);
-	mMoveFiles->plug(fileMenu);
-	mDeleteFiles->plug(fileMenu);
-	fileMenu->insertSeparator();
-	mShowFileProperties->plug(fileMenu);
-	fileMenu->insertSeparator();
-	menuBar()->insertItem(i18n("&File"), fileMenu);
-
-	QPopupMenu* editMenu = new QPopupMenu;
-	mRotateLeft->plug(editMenu);
-	mRotateRight->plug(editMenu);
-	mMirror->plug(editMenu);
-	mFlip->plug(editMenu);
-	mOpenWithEditor->plug(editMenu);
-	menuBar()->insertItem(i18n("&Edit"), editMenu);
-	
-	QPopupMenu* viewMenu = new QPopupMenu;
-	mStop->plug(viewMenu);
-	
-	viewMenu->insertSeparator();
-	mFileViewStack->noThumbnails()->plug(viewMenu);
-	mFileViewStack->smallThumbnails()->plug(viewMenu);
-	mFileViewStack->medThumbnails()->plug(viewMenu);
-	mFileViewStack->largeThumbnails()->plug(viewMenu);
-	
-	viewMenu->insertSeparator();
-	mToggleDirAndFileViews->plug(viewMenu);
-	mToggleFullScreen->plug(viewMenu);
-	mToggleSlideShow->plug(viewMenu);
-
-	viewMenu->insertSeparator();
-	mPixmapView->autoZoom()->plug(viewMenu);
-	mPixmapView->zoomIn()->plug(viewMenu);
-	mPixmapView->zoomOut()->plug(viewMenu);
-	mPixmapView->resetZoom()->plug(viewMenu);
-	mPixmapView->lockZoom()->plug(viewMenu);
-
-    viewMenu->insertSeparator();
-    mFileViewStack->showDotFiles()->plug(viewMenu);
-    
-	menuBar()->insertItem(i18n("&View"), viewMenu);
-
-	QPopupMenu* goMenu = new QPopupMenu;
-	mOpenParentDir->plug(goMenu);
-	mOpenHomeDir->plug(goMenu);
-	goMenu->insertSeparator();
-	mFileViewStack->selectFirst()->plug(goMenu);
-	mFileViewStack->selectPrevious()->plug(goMenu);
-	mFileViewStack->selectNext()->plug(goMenu);
-	mFileViewStack->selectLast()->plug(goMenu);
-	
-	menuBar()->insertItem(i18n("&Go"), goMenu);
-
-	
-	
-	QPopupMenu* settingsMenu = new QPopupMenu;
-	mShowConfigDialog->plug(settingsMenu);
-	mShowKeyDialog->plug(settingsMenu);
-	menuBar()->insertItem(i18n("&Settings"),settingsMenu);
-
-	menuBar()->insertItem(i18n("&Windows"), dockHideShowMenu());
-
-	menuBar()->insertItem(i18n("&Help"), helpMenu());
-
-	menuBar()->show();
+	// Dock related
+	connect(manager(), SIGNAL(change()),
+		this, SLOT(updateWindowListActions()) );
 }
 
 

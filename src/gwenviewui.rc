@@ -1,6 +1,6 @@
-<!DOCTYPE kpartgui>
+<?xml version="1.0"?>
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <kpartgui name="Gwenview" version="1">
-
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -17,7 +17,7 @@
     <Action name="flip"/>
     <Action name="open_with_editor"/>
   </Menu>
-  <Menu noMerge="1" name="view">
+  <Menu name="view">
   	<text>&amp;View</text>
   	<Action name="stop"/>
     <Separator/>
@@ -26,8 +26,8 @@
 	<Action name="med_thumbnails"/>
 	<Action name="large_thumbnails"/>
     <Separator/>
-	<Action name="hide_dir_and_file_views"/>
   	<Action name="fullscreen"/>
+	<Action name="hide_dir_and_file_views"/>
   	<Action name="slideshow"/>
     <Separator/>
     <Action name="view_zoom_auto"/>
@@ -45,10 +45,16 @@
   	<Action name="last"/>
   </Menu>
   <Action name="bookmarks"/>
+  <Menu name="settings">
+    <ActionList name="winlist"/>
+  </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
-  <Action name="options_configure"/>
+  <Action name="first"/>
+  <Action name="previous"/>
+  <Action name="next"/>
+  <Action name="last"/>
 </ToolBar>
 
 <StatusBar/>
