@@ -143,7 +143,7 @@ KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 }
 
 int GVKIPIInterface::features() const {
-	return KIPI::AlbumEQDir | KIPI::AcceptNewImages; 
+	return KIPI::AcceptNewImages; 
 }
 
 /**
