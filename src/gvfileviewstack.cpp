@@ -337,7 +337,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	if (selectionSize==1) {
 		if (!isDirOrArchive(currentFileView()->selectedItems()->getFirst())) {
 			menu.connectItem(
-				menu.insertItem( i18n("Open With &Editor") ),
+				menu.insertItem( i18n("Open with &Editor") ),
 				this,SLOT(openWithEditor()) );
 			menu.insertSeparator();
 		}

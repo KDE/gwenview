@@ -545,7 +545,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	mActionCollection->action("edit_mirror")->plug(editMenu);
 	mActionCollection->action("edit_flip")->plug(editMenu);
 	editMenu->connectItem(
-		editMenu->insertItem( i18n("Open With &Editor") ),
+		editMenu->insertItem( i18n("Open with &Editor") ),
 		this,SLOT(openWithEditor()) );
 		
 	menu.insertItem( i18n("Edit"), editMenu );
