@@ -40,5 +40,5 @@ GVExternalToolAction::GVExternalToolAction(
 
 
 void GVExternalToolAction::openExternalTool() {
-	KRun::run(*mService, mURLs, false);
+	KRun::run(*mService, mURLs);
 }

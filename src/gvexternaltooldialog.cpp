@@ -274,7 +274,7 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 	connect( d->mContent->mDeleteButton, SIGNAL(clicked()),
 		this, SLOT(deleteTool()) );
 	
-	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 	// FIXME: Ugly!
 	d->mContent->setMinimumSize(d->mContent->sizeHint() + QSize(50,50));
 }

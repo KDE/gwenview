@@ -107,7 +107,9 @@ GVMainWindow::GVMainWindow()
 	mMetaEdit->installEventFilter(mPixmapView);
 	mURLEdit->installEventFilter(mPixmapView);
 
-	setStandardToolBarMenuEnabled(true);
+    #if KDE_VERSION >= 0x30100
+    setStandardToolBarMenuEnabled(true);
+    #endif
 	createGUI("gwenviewui.rc", false);
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
@@ -592,7 +594,7 @@ void GVMainWindow::createActions() {
 	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
-#if KDE_IS_VERSION(3,1,90)
+#if defined KDE_IS_VERSION && KDE_IS_VERSION(3,1,90)
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection());
 #else
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
