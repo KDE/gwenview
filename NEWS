@@ -1,3 +1,9 @@
+xxxx.xx.x - v1.1.8
+- New features:
+ - Zoom actions added to both KPart's.
+- Fixes:
+ - "Lock zoom"/"Auto zoom" options fixed
+
 2004.12.19 - v1.1.7
 - New features:
  - Double clicking the image view toggles the full screen mode (By Daniel
