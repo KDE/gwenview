@@ -16,3 +16,6 @@ Multiple nice suggestions.
 
 - Frank Becker <ff@telus.net>
 Patch for fast JPEG thumbnails (v0.13.0).
+
+- Renchi Raju <renchi@green.tam.uiuc.edu>
+Patch to make Gwenview use the same thumbnail folder as Konqueror 3 (v0.15.0).
