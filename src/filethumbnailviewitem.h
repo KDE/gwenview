@@ -23,8 +23,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt includes
 #include <qiconview.h>
+#include <qstring.h>
 
 
+class QFontMetrics;
 class QPixmap;
 class KFileItem;
 class KWordWrap;
@@ -44,10 +46,12 @@ public:
 protected:
 	void paintItem(QPainter* painter, const QColorGroup& colorGroup);
 	void calcRect( const QString& text_=QString::null );
+	void truncateText(const QFontMetrics&);
 	void paintFocus(QPainter*, const QColorGroup&) {}
 	
 	KFileItem* mFileItem;
 	KWordWrap* mWordWrap;
+	QString mTruncatedText;
 };
 
 #endif

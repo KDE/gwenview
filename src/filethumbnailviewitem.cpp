@@ -41,7 +41,7 @@ FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text
 
 
 FileThumbnailViewItem::~FileThumbnailViewItem() {
-	delete mWordWrap;
+	if (mWordWrap) delete mWordWrap;
 }
 
 
@@ -52,8 +52,6 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 
 	QFontMetrics fm = view->fontMetrics();
 
-	delete mWordWrap;
-	mWordWrap = 0L;
 
 	QRect itemIconRect = pixmapRect();
 	QRect itemTextRect = textRect();
@@ -83,16 +81,18 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 
 	int tw = 0;
 	int th = 0;
-	QRect outerRect( 0, 0, view->maxItemWidth() -
-					( view->itemTextPos() == QIconView::Bottom ? 0 :
-					pixmapRect().width() ), 0xFFFFFFFF );
+	QRect outerRect( 0, 0,
+		view->maxItemWidth()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width() ),
+		0xFFFFFFFF );
 
 // Calculate the word-wrap
-	mWordWrap=KWordWrap::formatText( fm, outerRect, AlignHCenter | WordBreak /*| BreakAnywhere*/, t );
 	QRect r;
 	if (iconView()->wordWrapIconText()) {
+		if (mWordWrap) delete mWordWrap;
+		mWordWrap=KWordWrap::formatText( fm, outerRect, AlignHCenter | WordBreak, t );
 		r=mWordWrap->boundingRect();
 	} else {
+		truncateText(fm);
 		r=QRect(0,0,outerRect.width(),fm.height());
 	}
 	r.setWidth( r.width() + 4 );
@@ -159,17 +159,39 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 }
 
 
+void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
+	QIconView* view = iconView();
+	Q_ASSERT( view );
+	if ( !view ) return;
+	
+	static QString dots("...");
+	int width=view->maxItemWidth()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
+	if (fm.boundingRect(text()).width()<=width) {
+		mTruncatedText=QString::null;
+		return;
+	}
+
+	mTruncatedText=text();
+	width-=fm.width(dots);
+	int len=mTruncatedText.length();
+	for(;len>0 && fm.width(mTruncatedText,len)>width;--len);
+
+	mTruncatedText.truncate(len);
+	mTruncatedText+=dots;
+}
+
 
 void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	QIconView* view = iconView();
 	Q_ASSERT( view );
 	if ( !view ) return;
 
-	if ( !mWordWrap ) {
-		kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;
-		return;
-	}
+// Get the rects. We adjust pRect because pixmapRect seems to return the outer
+// rect of the pixmap
 	QRect pRect=pixmapRect(false);
+	pRect.moveBy(1,1);
+	pRect.setWidth(pRect.width()-2);
+	pRect.setHeight(pRect.height()-2);
 	QRect tRect=textRect(false);
 
 	p->save();
@@ -194,10 +216,27 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 // Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
 	if (view->wordWrapIconText()) {
+		if (!mWordWrap) {
+			kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;
+			return;
+		}
 		mWordWrap->drawText( p, tRect.x(), tRect.y(), align );
 	} else {
-		p->drawText(tRect,align,mWordWrap->truncatedString());
+		QString str;
+		if (mTruncatedText.isNull()) {
+			str=text();
+		} else {
+			str=mTruncatedText;
+			align=AlignLeft;
+		}
+		/*
+		QString truncated=text();
+		if ( cutText(view,truncated,tRect.width()) ) align=AlignLeft;
+		kdDebug() << "paintItem : truncated=" << truncated << endl;
+		*/
+		p->drawText(tRect,align,str);
 	}
 
 	p->restore();
 }
+

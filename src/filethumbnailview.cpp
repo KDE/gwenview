@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapp.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kurldrag.h>
 #include <kwordwrap.h>
@@ -53,6 +54,14 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	setResizeMode(Adjust);
 	setShowToolTips(true);
 	setSpacing(0);
+
+// If we use KIconView::Execute mode, the current item is unselected after
+// being clicked, so we use KIconView::Select mode and emit ourself the
+// execute() signal with slotClicked()
+	setMode(KIconView::Select);
+	connect(this,SIGNAL(clicked(QIconViewItem*,const QPoint&)),
+		this,SLOT(slotClicked(QIconViewItem*,const QPoint&)) );
+	
 	//QIconView::setSelectionMode(Extended); // FIXME : Find a way to change which item is current on multi-select before enabling this
 }
 
@@ -65,14 +74,14 @@ FileThumbnailView::~FileThumbnailView() {
 void FileThumbnailView::setThumbnailSize(ThumbnailSize value) {
 	if (value==mThumbnailSize) return;
 	mThumbnailSize=value;
-	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
+	setGridX(mThumbnailSize.pixelSize()+4 + mMarginSize);
 }
 
 
 void FileThumbnailView::setMarginSize(int value) {
 	if (value==mMarginSize) return;
 	mMarginSize=value;
-	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
+	setGridX(mThumbnailSize.pixelSize()+4 + mMarginSize);
 }
 
 
@@ -127,7 +136,7 @@ void FileThumbnailView::clearView() {
 void FileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
 	
-	int pixelSize=mThumbnailSize.pixelSize();
+	int pixelSize=mThumbnailSize.pixelSize()/*+4*/;
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
 	painter.eraseRect(0,0,pixelSize,pixelSize);
@@ -139,6 +148,7 @@ void FileThumbnailView::insertItem(KFileItem* item) {
 			(pixelSize-itemPix.height())/2,
 			itemPix);
 	} else {
+		painter.setPen(colorGroup().button());
 		painter.drawRect(0,0,pixelSize,pixelSize);
 	}
 
@@ -246,6 +256,37 @@ KFileItem* FileThumbnailView::nextItem(const KFileItem* fileItem) const {
 }
 
 
+//-Private slots------------------------------------------------------------
+void FileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos) {
+	if (!iconItem) return;
+	if (!KGlobalSettings::singleClick()) return;
+	FileThumbnailViewItem* thumbItem=static_cast<FileThumbnailViewItem*>(iconItem);
+
+	KFileItem* fileItem=thumbItem->fileItem();
+	if (!fileItem) return;
+
+	if (fileItem->isDir()) {
+		emit executed(iconItem);
+		emit executed(iconItem,pos);
+	}
+}
+
+
+//-Protected----------------------------------------------------------------
+void FileThumbnailView::startDrag() {
+	KFileItem* item=selectedItems()->getFirst();
+	if (!item) {
+		kdWarning() << "No item to drag\n";
+		return;
+	}
+	KURL::List urls;
+	urls.append(item->url());
+	QUriDrag* drag = KURLDrag::newDrag( urls, this );
+	drag->setPixmap( item->pixmap(0) );
+	drag->dragCopy();
+}
+
+
 //-Configuration------------------------------------------------------------
 void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
@@ -264,20 +305,5 @@ void FileThumbnailView::writeConfig(KConfig* config,const QString& group) const 
 	config->writeEntry(CONFIG_THUMBNAIL_SIZE,QString(mThumbnailSize));
 	config->writeEntry(CONFIG_MARGIN_SIZE,mMarginSize);
 	config->writeEntry(CONFIG_WORD_WRAP_FILENAME,wordWrapIconText());
-}
-
-
-//-Protected----------------------------------------------------------------
-void FileThumbnailView::startDrag() {
-	KFileItem* item=selectedItems()->getFirst();
-	if (!item) {
-		kdWarning() << "No item to drag\n";
-		return;
-	}
-	KURL::List urls;
-	urls.append(item->url());
-	QUriDrag* drag = KURLDrag::newDrag( urls, this );
-	drag->setPixmap( item->pixmap(0) );
-	drag->dragCopy();
 }
 

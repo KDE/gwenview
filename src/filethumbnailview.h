@@ -98,6 +98,9 @@ private:
 	QPopupMenu* mPopupMenu;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
+
+private slots:
+	void slotClicked(QIconViewItem*,const QPoint& pos);
 };
 
 
