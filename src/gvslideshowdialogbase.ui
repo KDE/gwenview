@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>GVSlideShowDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -21,6 +21,9 @@
         </property>
         <property name="margin">
             <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
         </property>
         <widget class="QSpinBox" row="0" column="1">
             <property name="name">

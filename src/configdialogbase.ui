@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ConfigDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -42,6 +42,12 @@
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
                     </property>
                     <widget class="QCheckBox">
                         <property name="name">
@@ -287,6 +293,12 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
                             <widget class="QPushButton">
                                 <property name="name">
                                     <cstring>mCalculateCacheSize</cstring>
@@ -334,6 +346,12 @@
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
                     </property>
                     <widget class="QCheckBox">
                         <property name="name">
@@ -391,6 +409,12 @@
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
                             </property>
                             <widget class="QComboBox" row="3" column="1">
                                 <property name="name">
@@ -507,6 +531,12 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
                     <widget class="QCheckBox">
                         <property name="name">
                             <cstring>mShowPathInFullScreen</cstring>
@@ -593,6 +623,12 @@
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
                     </property>
                     <widget class="QLabel">
                         <property name="name">
@@ -705,6 +741,9 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>mDeleteToTrash</cstring>
@@ -759,6 +798,12 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout15</cstring>
@@ -766,6 +811,12 @@
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
                             </property>
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
@@ -927,13 +978,4 @@
     <slot>slotOk()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcolorbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
 </UI>
