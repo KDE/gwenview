@@ -189,13 +189,6 @@ void FileView::selectFilename(QString filename) {
 
 
 void FileView::slotSelectFirst() {
-	// FIXME : This is a work around to a bug which causes
-	// FileThumbnailView::firstFileItem to return a wrong item.
-	// This work around is not in the method because firstFileItem is 
-	// const and sort is a non const method
-	if (mMode==Thumbnail) {
-		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
-	}
 
 	KFileItem* item=currentFileView()->firstFileItem();
 	if (!item) return;
@@ -394,6 +387,14 @@ void FileView::dirListerStarted() {
 
 
 void FileView::dirListerCompleted() {
+	// FIXME : This is a work around to a bug which causes
+	// FileThumbnailView::firstFileItem to return a wrong item.
+	// This work around is not in the method because firstFileItem is 
+	// const and sort is a non const method
+	if (mMode==Thumbnail) {
+		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
+	}
+
 	if (mFilenameToSelect.isEmpty()) {
 		if (mAutoLoadImage) {
 			slotSelectFirst();
