@@ -30,6 +30,7 @@
 // KDE includes
 #include <kdebug.h>
 #include <kwordwrap.h>
+#include <kurldrag.h>
 
 // Our includes
 #include "gvfilethumbnailview.h"
@@ -232,7 +233,7 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 
 bool GVFileThumbnailViewItem::acceptDrop(const QMimeSource* source) const {
-	return QUriDrag::canDecode(source);
+	return KURLDrag::canDecode(source);
 }
 
 

@@ -465,7 +465,7 @@ void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 //
 //----------------------------------------------------------------------
 bool GVFileDetailView::acceptDrag(QDropEvent* event) const {
-	return QUriDrag::canDecode(event);
+	return KURLDrag::canDecode(event);
 }
 
 void GVFileDetailView::contentsDropEvent(QDropEvent *event) {

@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt 
-#include <qdragobject.h>
 #include <qdir.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
@@ -263,7 +262,7 @@ KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QStri
 
 //-Drag'n drop------------------------------------------------------
 void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
-	if (!QUriDrag::canDecode(event)) {
+	if (!KURLDrag::canDecode(event)) {
 		event->ignore();
 		return;
 	}

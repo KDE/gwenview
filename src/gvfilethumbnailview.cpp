@@ -319,7 +319,7 @@ KFileItem* GVFileThumbnailView::nextItem(const KFileItem* fileItem) const {
 //
 //--------------------------------------------------------------------------
 void GVFileThumbnailView::contentsDragEnterEvent(QDragEnterEvent* event) {
-	return event->accept( QUriDrag::canDecode(event) );
+	return event->accept( KURLDrag::canDecode(event) );
 }
 
 
