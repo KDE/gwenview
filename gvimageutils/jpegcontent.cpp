@@ -166,21 +166,21 @@ void JPEGContent::transform(Orientation orientation) {
 	jvirt_barray_ptr * src_coef_arrays;
 	jvirt_barray_ptr * dst_coef_arrays;
 
-    // Initialize the JPEG decompression object with default error handling
-    srcinfo.err = jpeg_std_error(&jsrcerr);
-    jpeg_create_decompress(&srcinfo);
+	// Initialize the JPEG decompression object with default error handling
+	srcinfo.err = jpeg_std_error(&jsrcerr);
+	jpeg_create_decompress(&srcinfo);
 
-    // Initialize the JPEG compression object with default error handling
-    dstinfo.err = jpeg_std_error(&jdsterr);
-    jpeg_create_compress(&dstinfo);
+	// Initialize the JPEG compression object with default error handling
+	dstinfo.err = jpeg_std_error(&jdsterr);
+	jpeg_create_compress(&dstinfo);
 
 	// Open files
-    FILE *input_file=fopen(QFile::encodeName(srcTemp.name()), "r");
+	FILE *input_file=fopen(QFile::encodeName(srcTemp.name()), "r");
 	if (!input_file) {
 		kdError() << "Could not open temp file for reading\n";
 		return;
 	}
-    FILE *output_file=fopen(QFile::encodeName(dstTemp.name()), "w");
+	FILE *output_file=fopen(QFile::encodeName(dstTemp.name()), "w");
 	if (!output_file) {
 		fclose(input_file);
 		kdError() << "Could not open temp file for writing\n";
@@ -197,10 +197,10 @@ void JPEGContent::transform(Orientation orientation) {
 	(void) jpeg_read_header(&srcinfo, TRUE);
 
 	// Init transformation
-    jpeg_transform_info transformoption;
+	jpeg_transform_info transformoption;
 	transformoption.transform = orientation2jxform[orientation];
-    transformoption.force_grayscale = false;
-    transformoption.trim = false;
+	transformoption.force_grayscale = false;
+	transformoption.trim = false;
 	jtransform_request_workspace(&srcinfo, &transformoption);
 
 	/* Read source file as DCT coefficients */
@@ -213,8 +213,8 @@ void JPEGContent::transform(Orientation orientation) {
 	* also find out which set of coefficient arrays will hold the output.
 	*/
 	dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
-						 src_coef_arrays,
-						 &transformoption);
+		src_coef_arrays,
+		&transformoption);
 
 	/* Specify data destination for compression */
 	jpeg_stdio_dest(&dstinfo, output_file);
@@ -227,8 +227,8 @@ void JPEGContent::transform(Orientation orientation) {
 
 	/* Execute image transformation, if any */
 	jtransform_execute_transformation(&srcinfo, &dstinfo,
-					src_coef_arrays,
-					&transformoption);
+		src_coef_arrays,
+		&transformoption);
 
 	/* Finish compression and release memory */
 	jpeg_finish_compress(&dstinfo);
