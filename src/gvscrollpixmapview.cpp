@@ -523,8 +523,10 @@ void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 		long long key = ( smooth ? MAX_DIM * MAX_DIM : 0 ) + ( area.y() + line ) * MAX_DIM + area.x();
 		// handle the case of two different paints at the same position (just in case)
 		key *= 100;
+		bool insert = true;
 		while( mPendingPaints.contains( key )) {
 			if( mPendingPaints[ key ].rect.contains( area )) {
+				insert = false;
 				break;
 			}
 			if( area.contains( mPendingPaints[ key ].rect )) {
@@ -532,7 +534,9 @@ void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 			}
 			++key;
 		}
-		mPendingPaints[ key ] = PendingPaint( smooth, area );
+		if( insert ) {
+			mPendingPaints[ key ] = PendingPaint( smooth, area );
+		}
 	}
 
 	if( !mPendingPaintTimer.isActive()) mPendingPaintTimer.start( 0 );
