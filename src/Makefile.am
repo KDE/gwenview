@@ -8,7 +8,7 @@ libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
 	$(LIBJPEG) $(LIBPNG) $(LIB_KIPI) \
 	../libgvexif/libgvexif.la ../gvimageutils/libgvimageutils.la \
-	../libgvcompat/libgvcompat.la ../tsthread/libtsthread.la
+	../tsthread/libtsthread.la
 
 libgwenviewcore_la_METASOURCES = AUTO
 

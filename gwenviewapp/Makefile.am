@@ -8,7 +8,7 @@ gwenview_hack_SOURCES = main.cpp
 
 gwenview_hack_LDADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) ../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la \
+	$(LIBJPEG) ../libgvexif/libgvexif.la \
 	../src/libgwenviewcore.la
  
 # the library search path.
@@ -18,7 +18,7 @@ gwenview_SOURCES = main.cpp
 
 gwenview_LDADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) ../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la \
+	$(LIBJPEG) ../libgvexif/libgvexif.la \
 	../src/libgwenviewcore.la
 
 # the library search path.
