@@ -125,6 +125,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 			src->jpeg_buffer[0] = (JOCTET) 0xFF;
 			src->jpeg_buffer[1] = (JOCTET) JPEG_EOI;
 			src->bytes_in_buffer = 2;
+                        src->next_input_byte = (JOCTET *) src->jpeg_buffer;
 #ifdef BUFFER_DEBUG
 			qDebug("...returning true!");
 #endif
