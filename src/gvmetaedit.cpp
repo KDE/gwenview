@@ -92,7 +92,7 @@ void GVMetaEdit::updateContent() {
 		}
 	} else {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
-		mCommentEdit->setText(i18n("<i>This image can't be commented.</i>"));
+		mCommentEdit->setText(i18n("<i>This image cannot be commented.</i>"));
 	}
 	bool writable=mDocument->commentState()==GVDocument::WRITABLE;
 	mCommentEdit->setReadOnly(!writable);
