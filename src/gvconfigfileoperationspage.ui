@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Configure the file operations</string>
+        <string>Configure File Operations</string>
     </property>
     <vbox>
         <property name="name">

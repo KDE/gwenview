@@ -2,7 +2,7 @@
 ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2 
 Icon=background
-Name=Set as tiled wallpaper
+Name=Set as Tiled Wallpaper
 Name[cs]=Nastavit jako dlaždice na plochu
 Name[da]=Sæt som fliselagt tapet
 Name[de]=Als Hintergrundbild verwenden (gekachelt)
@@ -24,5 +24,6 @@ Name[sr]=Постави као поплочан постер
 Name[sr@Latn]=Постави као поплочан постер
 Name[sv]=Ange som skrivbordsunderlägg sida vid sida
 Name[ta]=டைல்டு வால்பேப்பராக அமை
+Name[tg]=Сафолро дар мизи корӣ тартиб диҳед
 Name[xx]=xxSet as tiled wallpaperxx
 Name[zh_CN]=设为平铺墙纸

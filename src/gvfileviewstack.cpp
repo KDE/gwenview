@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -981,7 +981,7 @@ void GVFileViewStack::makeDir() {
 
 	bool ok;
 	QString newDir=KInputDialog::getText(
-			i18n("Creating a folder"),
+			i18n("Creating Folder"),
 			i18n("Enter the name of the new folder:"),
 			QString::null, &ok, this);
 	if (!ok) return;

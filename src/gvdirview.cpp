@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,14 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt 
+// Qt
 #include <qdir.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
 #include <qstylesheet.h>
 #include <qtimer.h>
 
-// KDE 
+// KDE
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #else
 #define LOG(x) ;
 #endif
-		
+
 const int AUTO_OPEN_DELAY=1000;
 const int DND_ICON_COUNT=8;
 const char* DND_PREFIX="dnd";
@@ -100,7 +100,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mPopupMenu->insertItem(i18n("Rename..."),this,SLOT(renameDir()));
 	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete"),this,SLOT(removeDir()));
 	mPopupMenu->insertSeparator();
-	mPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showPropertiesDialog()));
+	mPopupMenu->insertItem(i18n("Properties"),this,SLOT(showPropertiesDialog()));
 
 	mBranchPopupMenu=new QPopupMenu(this);
 	mBranchNewFolderItem=mBranchPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder..."),this,
@@ -108,7 +108,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mBranchPopupMenu->insertSeparator();
 	mBranchPopupMenu->insertItem(i18n("New Branch..."),this,SLOT(makeBranch()));
 	mBranchPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete Branch"),this,SLOT(removeBranch()));
-	mBranchPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showBranchPropertiesDialog()));
+	mBranchPopupMenu->insertItem(i18n("Properties"),this,SLOT(showBranchPropertiesDialog()));
 
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
 		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
@@ -207,7 +207,7 @@ void GVDirView::writeConfig(KConfig* config, const QString& group) {
 void GVDirView::showEvent(QShowEvent* event) {
 	if (!currentURL().equals(m_nextUrlToSelect,true)) {
 		setURLInternal(m_nextUrlToSelect);
-	}	
+	}
 	QWidget::showEvent(event);
 }
 
@@ -232,7 +232,7 @@ void GVDirView::setURL(const KURL& url) {
 	setURLInternal(url);
 }
 
-	
+
 void GVDirView::setURLInternal(const KURL& url) {
 	LOG(url.prettyURL() );
 	QStringList folderParts;
@@ -275,7 +275,7 @@ void GVDirView::setURLInternal(const KURL& url) {
 		}
 		viewItem->setOpen(true);
 
-		// If this is the wanted item, select it, 
+		// If this is the wanted item, select it,
 		// otherwise set the url as the next to select
 		if (viewItem->url().equals(url,true)) {
 			setCurrentItem(viewItem);
@@ -296,7 +296,7 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 	if( ! branch ) return;
 	LOG("");
 	if(m_nextUrlToSelect.isEmpty()) return;
-	
+
 	KFileTreeViewItemListIterator it( itemList );
 
 	for(;it.current(); ++it ) {
@@ -312,7 +312,7 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 			ensureItemVisible(*it);
 			(*it)->setOpen(true);
 			m_nextUrlToSelect = KURL();
-			return;	
+			return;
 		}
 	}
 }
@@ -409,7 +409,7 @@ void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 		stopAnimation(mDropTarget);
 	}
 
-	// Restart auto open timer if we are over a new item 
+	// Restart auto open timer if we are over a new item
 	mAutoOpenTimer->stop();
 	mDropTarget=newDropTarget;
 	startAnimation(newDropTarget,DND_PREFIX,DND_ICON_COUNT);
@@ -432,7 +432,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
 	if (!mDropTarget) return;
 	KURL dest=mDropTarget->url();
-	
+
 	KURL::List urls;
 	if (!KURLDrag::decode(event,urls)) return;
 
@@ -452,7 +452,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 			}
 		}
 	}
-	
+
 	// Reset drop target
 	if (mDropTarget) {
 		stopAnimation(mDropTarget);
@@ -485,15 +485,15 @@ void GVDirView::makeDir() {
 
 	bool ok;
 	QString newDir=KInputDialog::getText(
-			i18n("Creating a folder"),
+			i18n("Creating Folder"),
 			i18n("Enter the name of the new folder:"),
 			QString::null, &ok, this);
 	if (!ok) return;
-	
+
 	KURL newURL(currentURL());
 	newURL.addPath(newDir);
 	job=KIO::mkdir(newURL);
-	
+
 	connect(job,SIGNAL(result(KIO::Job*)),
 		this,SLOT(slotDirMade(KIO::Job*)));
 }
@@ -512,16 +512,16 @@ void GVDirView::slotDirMade(KIO::Job* job) {
 void GVDirView::renameDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
-	
+
 	bool ok;
 	QString newDir=KInputDialog::getText(
-		i18n("Renaming a folder"),
+		i18n("Renaming Folder"),
 		i18n("Rename this folder to:"),
 		currentURL().filename(), &ok, this);
 	if (!ok) return;
 
 	KURL newURL=currentURL().upURL();
-	
+
 	newURL.addPath(newDir);
 	job=KIO::rename(currentURL(),newURL,false);
 
@@ -650,7 +650,7 @@ void GVDirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
 	KFileTreeViewItem* tvItem=
 		static_cast<KFileTreeViewItem*>( item->extraData(branch) );
 	if (!tvItem) return;
-	
+
 	QString oldText=tvItem->text(0);
 	QString newText=item->text();
 	if (oldText!=newText) {

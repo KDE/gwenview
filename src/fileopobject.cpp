@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -103,10 +103,10 @@ void FileOpCopyToObject::operator()() {
         }
 		if (mURLList.size()==1) {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
-					QString::null, mParent, i18n("Copy file"));
+					QString::null, mParent, i18n("Copy File"));
 		} else {
 			GVDirSelectDialog dialog(destDir, mParent);
-			dialog.setCaption(i18n("Select the folder where the files will be copied"));
+			dialog.setCaption(i18n("Select Folder Where the Files Will be Copied"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
 		}
@@ -134,10 +134,10 @@ void FileOpMoveToObject::operator()() {
         }
 		if (mURLList.size()==1) {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
-					QString::null, mParent, i18n("Move file"));
+					QString::null, mParent, i18n("Move File"));
 		} else {
 			GVDirSelectDialog dialog(destDir, mParent);
-			dialog.setCaption(i18n("Select the folder where the files will be moved"));
+			dialog.setCaption(i18n("Select Folder Where the Files Will be Moved"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
 		}
@@ -238,7 +238,7 @@ void FileOpRenameObject::operator()() {
 
 // Prompt for the new filename
 	QString filename=QStyleSheet::escape(srcURL.filename());
-	mNewFilename=KInputDialog::getText(i18n("Renaming a file"),
+	mNewFilename=KInputDialog::getText(i18n("Renaming File"),
 		i18n("<p>Rename file <b>%1</b> to:</p>").arg(filename),
 		srcURL.filename(),
 		&ok,mParent);
