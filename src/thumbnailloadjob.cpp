@@ -367,7 +367,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QPixmap& pix) {
 	}
 	
 // Do we need to scale down the thumbnail ?
-	int biggestDimension=max(pix.width(),pix.height());
+	int biggestDimension=QMAX(pix.width(),pix.height());
 	int thumbPixelSize=mThumbnailSize.pixelSize();
 	if (biggestDimension<thumbPixelSize) {
 		emit thumbnailLoaded(mCurrentItem,pix);
