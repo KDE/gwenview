@@ -1,5 +1,8 @@
 if GV_HACK_SUFFIX
 bin_PROGRAMS = gwenview_hack
+else
+bin_PROGRAMS = gwenview
+endif
 
 gwenview_hack_SOURCES = main.cpp
 
@@ -11,9 +14,6 @@ gwenview_hack_LDADD   = \
 # the library search path.
 gwenview_hack_LDFLAGS = $(all_libraries)
 
-else
-bin_PROGRAMS = gwenview
-
 gwenview_SOURCES = main.cpp
 
 gwenview_LDADD   = \
@@ -23,8 +23,6 @@ gwenview_LDADD   = \
 
 # the library search path.
 gwenview_LDFLAGS = $(all_libraries)
-endif
-
 
 
 # set the include path for X, qt and KDE
