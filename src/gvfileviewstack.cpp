@@ -327,6 +327,8 @@ void GVFileViewStack::viewClicked() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
 
+	// Don't change the current image if the user is creating a multi-selection
+	if (currentFileView()->selectedItems()->count()>1) return;
 	emitURLChanged();
 }
 
