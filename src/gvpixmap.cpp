@@ -61,6 +61,11 @@ void GVPixmap::setURL(const KURL& paramURL) {
 		return;
 	}
 
+	if (URL.isEmpty()) {
+		reset();
+		return;
+	}
+
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(URL.protocol())) {
 		QFileInfo info(URL.path());

@@ -1,6 +1,7 @@
 2003.xx.xx - v0.17.0
 - Fixes:
  - Fixed compilation failure on KDE 3.0.
+ - Clear the image view when the last image of the current folder is removed.
 
 2003.04.27 - v0.17.0pre3
 - Fixes:

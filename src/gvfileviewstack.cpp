@@ -574,6 +574,8 @@ void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
 		currentFileView()->setShownFileItem(newShownItem);
 		if (newShownItem) {
 			emit urlChanged(newShownItem->url());
+		} else {
+			emit urlChanged(KURL());
 		}
 	}
 }
