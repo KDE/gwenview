@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 static const char* CONFIG_SHOW_DIRS="show dirs";
+static const char* CONFIG_SHOW_DOT_FILES="show dot files";
 static const char* CONFIG_SHOWN_COLOR="shown color";
 
 inline bool isDirOrArchive(const KFileItem* item) {
@@ -660,6 +661,7 @@ void GVFileViewStack::initDirListerFilter() {
 		mimeTypes.append("inode/directory");
 		mimeTypes+=GVArchive::mimeTypes();
 	}
+    mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->setMimeFilter(mimeTypes);
 	mDirLister->emitChanges();
 }
@@ -753,6 +755,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 
 	config->setGroup(group);
 	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
+	mShowDotFiles->setChecked(config->readBoolEntry(CONFIG_SHOW_DOT_FILES,false));
 	initDirListerFilter();
 	
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
@@ -789,6 +792,7 @@ void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
 	config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
 	config->writeEntry(CONFIG_SHOW_DIRS, mShowDirs);
+	config->writeEntry(CONFIG_SHOW_DOT_FILES, mShowDotFiles->isChecked());
 	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);
 }
 
