@@ -83,7 +83,7 @@ public:
 //
 //-----------------------------------------------------------------------
 GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent), mMode(FILE_LIST)
+: QWidgetStack(parent), mMode(FILE_LIST), mBrowsing(false)
 {
 	d=new GVFileViewStackPrivate;
 
@@ -270,7 +270,8 @@ void GVFileViewStack::slotSelectNext() {
 
 
 void GVFileViewStack::browseTo(KFileItem* item) {
-	if (!mBrowsing.tryLock()) return;
+	if (mBrowsing) return;
+	mBrowsing = true;
 	if (item) {
 		currentFileView()->setCurrentItem(item);
 		currentFileView()->clearSelection();
@@ -281,7 +282,7 @@ void GVFileViewStack::browseTo(KFileItem* item) {
 		}
 	}
 	updateActions();
-	mBrowsing.unlock();
+	mBrowsing = false;
 }
 
 

@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt 
 #include <qdir.h>
-#include <qmutex.h>
 #include <qobject.h>
 #include <qwidgetstack.h>
 
@@ -213,7 +212,7 @@ private:
 	bool mThumbnailsNeedUpdate;
 	QString mFileNameToSelect;
 
-	QMutex mBrowsing;
+	bool mBrowsing;
 	
 	/**
 	 * Browse to the given item. Prevents multiple calls using mBrowsing.
