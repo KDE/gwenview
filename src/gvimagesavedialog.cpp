@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfilefiltercombo.h>
 #include <kimageio.h>
 #include <klocale.h>
+#include <kurlcombobox.h>
 
 // Our includes
 #include "gvimagesavedialog.moc"
@@ -107,6 +108,14 @@ void GVImageSaveDialog::accept() {
 void GVImageSaveDialog::updateImageFormat(const QString& text) {
 	QStringList list=QStringList::split(" ",text);
 	mImageFormat=list[0];
-	kdDebug() << "slotFilterChanged:" << text << " -> " << mImageFormat << endl;
+	
+	QString name=locationEdit->currentText();
+	QString suffix=KImageIO::suffix(mImageFormat);
+	int dotPos=name.findRev('.');
+	if (dotPos>-1) {
+		name=name.left(dotPos);
+	} 
+	name.append('.').append(suffix);
+	locationEdit->setCurrentText(name);
 }
 
