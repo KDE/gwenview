@@ -4,6 +4,7 @@ Exec=gimp-remote -n %F
 Icon=gimp
 Name=The GIMP
 Name[da]=GIMP
+Name[de]=GIMP
 Name[et]=GIMP
 Name[it]=GIMP
 Name[pt]=O GIMP
