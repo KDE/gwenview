@@ -2,7 +2,6 @@
 /* -*- c++ -*-
  * gimp.h: Header for a Qt 3 plug-in for reading GIMP XCF image files
  * Copyright (C) 2001 lignum Computing, Inc. <allen@lignumcomputing.com>
- * $Id$
  *
  * This plug-in is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
