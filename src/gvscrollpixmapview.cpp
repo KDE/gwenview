@@ -1016,7 +1016,12 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 
 	// Right rect
 	painter.eraseRect( imageRect.right(), imageRect.top(),
-		viewport()->width()-imageRect.right(), imageRect.height());
+	viewport()->width()-imageRect.right(), imageRect.height());
+                
+	// Image area
+	painter.setPen(painter.backgroundColor().light(200));
+	imageRect.addCoords(0,0,-1,-1);
+	painter.drawRect(imageRect);
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
