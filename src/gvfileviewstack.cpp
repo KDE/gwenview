@@ -632,7 +632,7 @@ void GVFileViewStack::dirListerStarted() {
 
 
 void GVFileViewStack::dirListerCompleted() {
-	// Delay the work to accomplish when the dir lister has completed its job
+	// Delay the code to be executed when the dir lister has completed its job
 	// to avoid crash in KDirLister (see bug #57991)
 	QTimer::singleShot(0,this,SLOT(delayedDirListerCompleted()));
 }

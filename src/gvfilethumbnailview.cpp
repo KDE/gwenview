@@ -59,9 +59,9 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setSpacing(0);
 	setAcceptDrops(true);
 
-	// If we use KIconView::Execute mode, the current item is unselected after
-	// being clicked, so we use KIconView::Select mode and emit ourself the
-	// execute() signal with slotClicked()
+	// We can't use KIconView::Execute mode because in this mode the current
+	// item is unselected after being clicked, so we use KIconView::Select mode
+	// and emit the execute() signal with slotClicked() ourself.
 	setMode(KIconView::Select);
 	connect(this, SIGNAL(clicked(QIconViewItem*)),
 		this, SLOT(slotClicked(QIconViewItem*)) );
