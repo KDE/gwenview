@@ -2,8 +2,9 @@
 - New features :
  - Support for IO slaves: you can browse Windows share, FTP files, into
    tarballs...
+ - Added a "home folder" tree branch to folder view.
 - Fixes :
- - Do not start dragging dirs in the dir view when not necessary.
+ - Do not start dragging folders in the folder view when not necessary.
 
 2002.10.26 - v0.15.1
 - New features :

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qcursor.h>
 #include <qdragobject.h>
+#include <qdir.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
 #include <qstylesheet.h>
@@ -52,12 +53,19 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	addColumn(QString::null);
 	header()->hide();
 	setAllColumnsShowFocus(true);
+	setRootIsDecorated(true);
 
-// Create branch
-	KFileTreeBranch* rootBranch=addBranch(KURL("/"),"/");
-	setDirOnlyMode(rootBranch,true);
+// Create branches
+	mHomeBranch=addBranch(KURL(QDir::homeDirPath()),i18n("Home Directory"));
+	mRootBranch=addBranch(KURL("/"),i18n("Root Directory"));
+	setDirOnlyMode(mHomeBranch,true);
+	setDirOnlyMode(mRootBranch,true);
+	mHomeBranch->root()->setExpandable(true);
+	mRootBranch->root()->setExpandable(true);
 
-	connect(rootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
+	connect(mHomeBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
+		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
 		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
 // Popup
@@ -134,12 +142,19 @@ void DirView::setURL(const KURL& url,const QString&) {
 	KFileTreeViewItem* viewItem;
 	KFileTreeViewItem* nextViewItem;
 
-	folderParts=QStringList::split('/',url.path());
-	folderIter=folderParts.begin();
-	endFolderIter=folderParts.end();
-	viewItem=static_cast<KFileTreeViewItem*>(branch("/")->root());
+	QString path=url.path();
+	QString homePath=QDir::homeDirPath();
+	if (path.startsWith(homePath)) {
+		viewItem=static_cast<KFileTreeViewItem*>(mHomeBranch->root());
+		path.remove(0,homePath.length());
+	} else {
+		viewItem=static_cast<KFileTreeViewItem*>(mRootBranch->root());
+	}
+	folderParts=QStringList::split('/',path);
 
 // Finds the deepest existing view item
+	folderIter=folderParts.begin();
+	endFolderIter=folderParts.end();
 	for(;folderIter!=endFolderIter;++folderIter) {
 
 		nextViewItem=findViewItem(viewItem,*folderIter);

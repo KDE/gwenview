@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QPopupMenu;
 class QShowEvent;
 
+class KFileTreeBranch;
 
 class DirView : public KFileTreeView {
 Q_OBJECT
@@ -75,6 +76,8 @@ private:
 	QPopupMenu* mPopupMenu;
 	QTimer* mAutoOpenTimer;
 	KFileTreeViewItem* mDropTarget;
+	KFileTreeBranch* mHomeBranch;
+	KFileTreeBranch* mRootBranch;
 };
 
 
