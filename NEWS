@@ -1,7 +1,6 @@
-2003.xx.xx - v1.0.0pre3
+2003.11.01 - v1.0.0pre3
 - New features:
- - Gwenview can now silently save or discard changes when leaving a modified
-   image.
+ - Added a "don't ask me again" check box to the save prompt dialog.
  - Added a reload button.
  - Added a "Go" button to the location toolbar.
 - Fixes:

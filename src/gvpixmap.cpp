@@ -135,8 +135,7 @@ void GVPixmap::setFilename(const QString& filename) {
 
 void GVPixmap::reload() {
 	load();
-	// FIXME: Ugly, use another signal or rename this one
-	emit saved(url());
+	emit reloaded(url());
 }
 
 

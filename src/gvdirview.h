@@ -79,7 +79,10 @@ private:
 	KFileTreeBranch* mHomeBranch;
 	KFileTreeBranch* mRootBranch;
 
-	// FIXME: Doc
+	/**
+	 * Really defines the url, does not check if the wanted url is already the
+	 * current one
+	 */
 	void setURLInternal(const KURL&);
 	void refreshBranch(KFileItem* item, KFileTreeBranch* branch);
 };

@@ -105,6 +105,11 @@ signals:
 	 */
 	void saved(const KURL& url);
 
+	/**
+	 * Emitted when the image has been reloaded.
+	 */ 
+	void reloaded(const KURL& url);
+
 private:
 	QImage mImage;
 	KURL mDirURL;

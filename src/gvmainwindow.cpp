@@ -783,6 +783,8 @@ void GVMainWindow::createConnections() {
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
+	connect(mGVPixmap,SIGNAL(reloaded(const KURL&)),
+		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 
 	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),
