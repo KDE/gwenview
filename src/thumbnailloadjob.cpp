@@ -72,7 +72,7 @@ const char CONFIG_STORE_THUMBNAILS_IN_CACHE[]="path";
 
 static bool sStoreThumbnailsInCache;
 
-QString generateOriginalURI(KURL url) {
+static QString generateOriginalURI(KURL url) {
 	// Don't include the password if any
 	url.setPass(QString::null);
 	
@@ -86,7 +86,7 @@ QString generateOriginalURI(KURL url) {
 }
 
 
-QString generateThumbnailPath(const QString& uri) {
+static QString generateThumbnailPath(const QString& uri) {
 	KMD5 md5( QFile::encodeName(uri) );
 	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir();
 	return baseDir + QString(QFile::encodeName( md5.hexDigest())) + ".png";
