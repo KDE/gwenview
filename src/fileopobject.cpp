@@ -19,12 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt 
+// Qt
 #include <qfile.h>
 #include <qstylesheet.h>
 #include <qwidget.h>
 
-// KDE 
+// KDE
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
@@ -182,14 +182,14 @@ void FileOpTrashObject::operator()() {
 			for (; it!=mURLList.end(); ++it) {
 				fileList.append((*it).filename());
 			}
-			response=KMessageBox::questionYesNoList(mParent,
-				i18n("Do you really want to trash these files?"),fileList);
+			response=KMessageBox::warningContinueCancelList(mParent,
+				i18n("Do you really want to trash these files?"),fileList,i18n("Trash Files"),KGuiItem(i18n("&Trash"),"edittrash"));
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
-			response=KMessageBox::questionYesNo(mParent,
-				i18n("<p>Do you really want to move <b>%1</b> to the trash?</p>").arg(filename));
+			response=KMessageBox::warningContinueCancel(mParent,
+				i18n("<p>Do you really want to move <b>%1</b> to the trash?</p>").arg(filename),i18n("Trash File"),KGuiItem(i18n("&Trash"),"edittrash"));
 		}
-		if (response==KMessageBox::No) return;
+		if (response==KMessageBox::Cancel) return;
 	}
 
 	// Go do it
@@ -214,14 +214,16 @@ void FileOpRealDeleteObject::operator()() {
 			for (; it!=mURLList.end(); ++it) {
 				fileList.append((*it).filename());
 			}
-			response=KMessageBox::questionYesNoList(mParent,
-				i18n("Do you really want to delete these files?"),fileList);
+			response=KMessageBox::warningYesNoList(mParent,
+				i18n("Do you really want to delete these files?"),fileList,
+				i18n("Delete Files"),KStdGuiItem::del());
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
-			response=KMessageBox::questionYesNo(mParent,
-				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename));
+			response=KMessageBox::warningYesNo(mParent,
+				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
+				i18n("Delete File"),KStdGuiItem::del());
 		}
-		if (response==KMessageBox::No) return;
+		if (response==KMessageBox::Cancel) return;
 	}
 
 	// Delete the file

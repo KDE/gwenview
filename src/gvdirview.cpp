@@ -541,9 +541,10 @@ void GVDirView::removeDir() {
 	if (!currentItem()) return;
 
 	QString dir=QStyleSheet::escape(currentURL().path());
-	int response=KMessageBox::questionYesNo(this,
-		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>");
-	if (response==KMessageBox::No) return;
+	int response=KMessageBox::warningContinueCancel(this,
+		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
+		i18n("Delete Folder"),KStdGuiItem::del());
+	if (response==KMessageBox::Cancel) return;
 
 	job=KIO::del(currentURL());
 	connect(job,SIGNAL(result(KIO::Job*)),
@@ -575,7 +576,7 @@ void GVDirView::removeBranch() {
 	QListViewItem* li=selectedItem();
 	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
 
-	if (br && KMessageBox::Yes==KMessageBox::warningYesNo(this,
+	if (br && KMessageBox::Continue==KMessageBox::warningContinueCancel(this,
                                 "<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
                                 + "</qt>")) {
 		mBranches.remove(static_cast<GVFileTreeBranch*>(br));
