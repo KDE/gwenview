@@ -539,9 +539,16 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	
 	menu.insertSeparator();
 	
-	menu.connectItem(
-		menu.insertItem( i18n("Open With &Editor") ),
+	QPopupMenu* editMenu=new QPopupMenu(&menu);
+	mActionCollection->action("edit_rotate_left")->plug(editMenu);
+	mActionCollection->action("edit_rotate_right")->plug(editMenu);
+	mActionCollection->action("edit_mirror")->plug(editMenu);
+	mActionCollection->action("edit_flip")->plug(editMenu);
+	editMenu->connectItem(
+		editMenu->insertItem( i18n("Open With &Editor") ),
 		this,SLOT(openWithEditor()) );
+		
+	menu.insertItem( i18n("Edit"), editMenu );
 	
 	menu.insertSeparator();
 	

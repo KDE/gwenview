@@ -1,4 +1,8 @@
 2003.xx.xx - v1.0.0
+- Fixes:
+ - Added an "Edit" submenu to the popup menu of the image view, containing the
+   same items as the main window "Edit" menu.
+ - Moved the "Open with editor" in the "Edit" menu.
 
 2003.xx.xx - v0.17.1
 - Fixes:

@@ -504,8 +504,6 @@ void GVMainWindow::createActions() {
 
 	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
 
-	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
-
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
 
 	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"settings_config_dialog");
@@ -530,6 +528,8 @@ void GVMainWindow::createActions() {
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
 
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
+
+	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"edit_open_with_editor");
 
 	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder & File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
 	
@@ -602,7 +602,6 @@ void GVMainWindow::createMenu() {
 	mSaveFile->plug(fileMenu);
 	mSaveFileAs->plug(fileMenu);
 	fileMenu->insertSeparator();
-	mOpenWithEditor->plug(fileMenu);
 	mRenameFile->plug(fileMenu);
 	mCopyFiles->plug(fileMenu);
 	mMoveFiles->plug(fileMenu);
@@ -618,6 +617,7 @@ void GVMainWindow::createMenu() {
 	mRotateRight->plug(editMenu);
 	mMirror->plug(editMenu);
 	mFlip->plug(editMenu);
+	mOpenWithEditor->plug(editMenu);
 	menuBar()->insertItem(i18n("&Edit"), editMenu);
 	
 	QPopupMenu* viewMenu = new QPopupMenu;
