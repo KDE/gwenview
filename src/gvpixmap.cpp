@@ -2,21 +2,21 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
- 
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
 */
 
 #include <sys/stat.h> // For S_ISDIR
@@ -71,7 +71,7 @@ public:
 	GVPixmap::CommentState mCommentState;
 	QString mComment;
 	QImageDecoder* mDecoder;
-	
+
 	QImage mImage;
 	KURL mDirURL;
 	QString mFilename;
@@ -186,7 +186,7 @@ GVPixmap::GVPixmap(QObject* parent)
 	d->mModified=false;
 	d->mCommentState=NONE;
 	/*
-	kdDebug() << "GVPixmap::GVPixmap supported decoder formats: " 
+	kdDebug() << "GVPixmap::GVPixmap supported decoder formats: "
 		<< QStringList::fromStrList(QImageDecoder::inputFormats()).join(",")
 		<< endl;
 	*/
@@ -412,7 +412,7 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 
 	// Apply scaling
 	bool scaling = printer->option( "app-gwenview-scale" ) != f;
-	if (scaling) {		 
+	if (scaling) {
 		int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
 					GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
 		float inches = 1;
@@ -427,7 +427,7 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 					  1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
 		wImg = wImg * printer->resolution();
 		hImg = hImg * printer->resolution();
-	
+
 		image = image.smoothScale( int(wImg), int(hImg), QImage::ScaleMin );
 	}
 
@@ -603,7 +603,7 @@ void GVPixmap::load() {
 	d->mCompressedData.resize(file.size());
 	stream.readRawBytes(d->mCompressedData.data(),d->mCompressedData.size());
 	d->mReadSize=0;
-	
+
 	d->mDecoder=new QImageDecoder(this);
 	d->mDecoderTimer.start(0, false);
 }
@@ -621,7 +621,7 @@ void GVPixmap::loadChunk() {
 		d->mReadSize+=decodedSize;
 		return;
 	}
-	
+
 	// Loading finished
 	bool ok=decodedSize==0;
 	// If async loading failed, try synchronous loading
@@ -639,7 +639,7 @@ void GVPixmap::loadChunk() {
 		emit loaded(d->mDirURL,d->mFilename);
 	} else {
 		//kdDebug() << "GVPixmap::loadChunk loading succeded\n";
-		
+
 		// Convert depth if necessary
 		// (32 bit depth is necessary for alpha-blending)
 		if (d->mImage.depth()<32 && d->mImage.hasAlphaBuffer()) {
@@ -716,7 +716,7 @@ void GVPixmap::reset() {
 }
 
 
-	
+
 //---------------------------------------------------------------------
 //
 // QImageConsumer

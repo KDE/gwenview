@@ -50,6 +50,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
+	connect(mGVPixmap, SIGNAL(loaded(const KURL&, const QString&)),
+		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
 
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
 }
@@ -79,13 +81,16 @@ bool GVImagePart::openFile() {
 	}
 
 	mGVPixmap->setURL(url);
-	emit setWindowCaption( url.prettyURL() );
-
 	return true;
 }
 
 QString GVImagePart::filePath() {
 	return m_file;
+}
+
+void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
+	QString caption = QString(filename + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
+	emit setWindowCaption(caption);
 }
 
 /***** GVImagePartBrowserExtension *****/

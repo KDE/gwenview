@@ -69,6 +69,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		mGVPixmap, SLOT(setURL(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
 		mBrowserExtension, SLOT(directoryChanged(const KURL&)) );
+	connect(mGVPixmap, SIGNAL(loaded(const KURL&, const QString&)),
+		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
@@ -107,13 +109,14 @@ bool GVDirPart::openURL(const KURL& url) {
 
 	mGVPixmap->setDirURL(url);
 	mFilesView->setURL(url, 0);
-	emit setWindowCaption( url.prettyURL() );
+	emit setWindowCaption( url.prettyURL() + " [" );
 
 	return true;
 }
 
-void GVDirPart::setKonquerorWindowCaption(const QString& url) {
-	emit setWindowCaption(url);
+void GVDirPart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
+	QString caption = QString(filename + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
+	emit setWindowCaption(caption);
 }
 
 KURL GVDirPart::pixmapURL() {

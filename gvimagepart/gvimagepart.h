@@ -71,6 +71,11 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	virtual bool openFile();
 
  protected slots:
+	/**
+	 * Sets Konqueror's caption with setWindowCaption()
+	 * called by loaded() signal in GVPixmap
+	 */
+	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
 
  protected:
         /**

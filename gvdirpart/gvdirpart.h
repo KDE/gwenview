@@ -76,11 +76,6 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	static KAboutData* createAboutData();
 
 	/**
-	 * Sets Konqueror's caption with setWindowCaption()
-	 */
-	void setKonquerorWindowCaption(const QString& url);
-
-	/**
 	 * Returns the name of the current file in the pixmap
 	 */
 	KURL pixmapURL();
@@ -104,6 +99,12 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * Turns the slide show on or off
 	 */
 	void toggleSlideShow();
+
+	/**
+	 * Sets Konqueror's caption with setWindowCaption()
+	 * called by loaded() signal in GVPixmap
+	 */
+	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
 
  protected:
         /**
