@@ -405,7 +405,7 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 			int resp = KMessageBox::warningYesNoCancel(0, 
 				i18n("The image will not fit on the page, what do you want to do?"),
 				QString::null,KStdGuiItem::cont(), 
-				QString(i18n("Shrink")) );
+				i18n("Shrink") );
 
 			if (resp==KMessageBox::Cancel) {
 				printer->abort();
