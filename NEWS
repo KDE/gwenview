@@ -2,6 +2,7 @@
 - New features :
  - Support for IO slaves: you can browse FTP files, Windows shares, go into
    tarballs...
+ - Multi-selection support (at last!).
  - Added a "home folder" tree branch to the folder view.
  - Added a simple slideshow feature.
  - Now uses the trash to delete images.
