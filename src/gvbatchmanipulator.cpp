@@ -30,6 +30,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.h"
 #include "gvbatchmanipulator.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 class GVBatchManipulatorPrivate {
 public:
 	KURL::List mURLs;
@@ -54,26 +61,32 @@ GVBatchManipulator::~GVBatchManipulator() {
 }
 
 void GVBatchManipulator::apply() {
+	LOG("");
 	KURL::List::ConstIterator it=d->mURLs.begin();
 	GVDocument doc(0);
 	connect(&doc, SIGNAL(loaded(const KURL&)),
 		this, SLOT(slotImageLoaded()) );
 	d->mProgressDialog->show();
 	for (;it!=d->mURLs.end(); ++it) {
+		LOG("Loading " << (*it).prettyURL());
+		d->mLoaded=false;
 		doc.setURL(*it);
 
 		d->mProgressDialog->setProgress(d->mProgressDialog->progress()+1);
 		
 		// Wait for the image to load
-		d->mLoaded=false;
 		do {
 			if (d->mProgressDialog->wasCancelled()) break;
 			kapp->processEvents();
 		} while (!d->mLoaded);
 		if (d->mProgressDialog->wasCancelled()) break;
 		
+		LOG("Transforming " << (*it).prettyURL());
 		doc.transform(d->mOrientation);
+		
+		LOG("Saving " << (*it).prettyURL());
 		doc.save();
+
 		emit imageModified(*it);
 	}
 	d->mProgressDialog->close();
