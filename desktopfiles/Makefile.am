@@ -5,4 +5,4 @@ xdg_apps_DATA = gwenview.desktop
 konqservicedir = $(kde_datadir)/konqueror/servicemenus
 konqservice_DATA = konqgwenview.desktop
 
-EXTRA_DIST = $(kdelnk_DATA) $(konqservice_DATA)
+EXTRA_DIST = $(xdg_apps_DATA) $(konqservice_DATA)
