@@ -202,7 +202,6 @@ const QImage& GVDocument::image() const {
 }
 
 void GVDocument::setImage(QImage img) {
-	kdDebug() << k_funcinfo << endl;
 	d->mImage=img;
 }
 
