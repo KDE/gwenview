@@ -973,13 +973,10 @@ void GVFileViewStack::makeDir() {
 			QString::null, &ok, this);
 	if (!ok) return;
 
-	kdDebug() << k_funcinfo << "url()" << url() << endl;
-	kdDebug() << k_funcinfo << "url().directory()" << url().directory() << endl;
 	KURL newURL(url().directory());
 	newURL.addPath(newDir);
 	job=KIO::mkdir(newURL);
 
-	kdDebug() << k_funcinfo << "newURL:" << newURL << endl;
 	connect( job, SIGNAL(result(KIO::Job*)), this, SLOT(slotDirMade(KIO::Job*)) );
 }
 
