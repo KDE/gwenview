@@ -165,6 +165,8 @@ private slots:
 	void slotResetZoom();
 	void setAutoZoom(bool);
 	void hideCursor();
+	void slotImageSizeUpdated();
+	void slotImageRectUpdated(const QRect&);
 
 	
 protected:

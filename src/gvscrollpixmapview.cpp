@@ -256,6 +256,12 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	connect(mGVPixmap,SIGNAL(modified()),
 		this,SLOT(slotModified()) );
 
+	connect(mGVPixmap, SIGNAL(sizeUpdated(int, int)),
+		this, SLOT(slotImageSizeUpdated()) );
+	
+	connect(mGVPixmap, SIGNAL(rectUpdated(const QRect&)),
+		this, SLOT(slotImageRectUpdated(const QRect&)) );
+	
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 
@@ -273,30 +279,14 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 
 void GVScrollPixmapView::slotURLChanged() {
-	mXOffset=0;
-	mYOffset=0;
-
+	/* FIXME: Not sure this is necessary
 	if (mGVPixmap->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
 		updateZoomActions();
 		return;
 	}
-
-	if (mAutoZoom->isChecked()) {
-		setZoom(computeAutoZoom());
-	} else {
-		if (mLockZoom->isChecked()) {
-			updateContentSize();
-			updateImageOffset();
-			updateZoomActions();
-			viewport()->repaint(false);
-		} else {
-			setZoom(1.0);
-		}
-		horizontalScrollBar()->setValue(0);
-		verticalScrollBar()->setValue(0);
-	}
+	*/
 
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
 }
@@ -663,6 +653,33 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 // Private
 //
 //------------------------------------------------------------------------
+void GVScrollPixmapView::slotImageSizeUpdated() {
+	mXOffset=0;
+	mYOffset=0;
+
+	if (mAutoZoom->isChecked()) {
+		mXCenterBeforeAuto=0;
+		mYCenterBeforeAuto=0;
+		setZoom(computeAutoZoom());
+	} else {
+		horizontalScrollBar()->setValue(0);
+		verticalScrollBar()->setValue(0);
+	}
+	updateImageOffset();
+}
+
+void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
+	QRect widgetRect;
+	// We add a one pixel border to avoid missing parts of the image
+	widgetRect.setLeft( int(imageRect.left()*mZoom) + mXOffset-1);
+	widgetRect.setTop( int(imageRect.top()*mZoom) + mYOffset-1);
+	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
+	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
+	kdDebug() << "updateImageRect: " << widgetRect << endl;
+	viewport()->repaint(widgetRect, false);
+}
+
+
 void GVScrollPixmapView::restartAutoHideTimer() {
 	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
@@ -767,7 +784,6 @@ static void sizeScaleMin(QSize* size, int w, int h) {
 #endif
 
 double GVScrollPixmapView::computeAutoZoom() const {
-
 	if (mGVPixmap->isNull()) {
 		return 1.0;
 	}

@@ -83,7 +83,7 @@ public:
 	QByteArray mCompressedData;
 	int mReadSize;
 	QTimer mDecoderTimer;
-
+	bool mUpdatedDuringLoad;
 
 	GVPixmapPrivate()
 			: mDecoder(0) {}
@@ -591,6 +591,7 @@ void GVPixmap::load() {
 
 	// Start the new download
 	emit loading();
+	d->mUpdatedDuringLoad=false;
 	if (!KIO::NetAccess::download(pixURL, d->mTempFilePath)) {
 		d->mImage.reset();
 		emit loaded(d->mDirURL,"");
@@ -665,6 +666,13 @@ void GVPixmap::loadChunk() {
 
 		d->loadComment(d->mTempFilePath);
 		emit loaded(d->mDirURL,d->mFilename);
+
+		// The loader used did not emit sizeUpdated or rectUpdated, let's do it
+		// now
+		if (!d->mUpdatedDuringLoad) {
+			emit sizeUpdated(d->mImage.width(), d->mImage.height());
+			emit rectUpdated( QRect(QPoint(0,0), d->mImage.size()) );
+		}
 	}
 	d->finishLoading();
 }
@@ -732,8 +740,8 @@ void GVPixmap::end() {
 void GVPixmap::changed(const QRect& rect) {
 	kdDebug() << "GVPixmap::changed" << rect << "\n";
 	d->mImage=d->mDecoder->image();
-	// FIXME: Use an updated(cons QRect& signal)
-	emit modified();
+	d->mUpdatedDuringLoad=true;
+	emit rectUpdated(rect);
 }
 
 void GVPixmap::frameDone() {
@@ -753,7 +761,8 @@ void GVPixmap::setFramePeriod(int /*milliseconds*/) {
 }
 
 void GVPixmap::setSize(int width, int height) {
-	kdDebug() << "GVPixmap::setSize " << width << "x" << height << "\n";
-	d->mImage=d->mDecoder->image();
+	kdDebug() << "GVPixmap::setSize " << width << "x" << height << endl;
+	d->mImage=QImage(width, height, 32);
+	emit sizeUpdated(width, height);
 }
 

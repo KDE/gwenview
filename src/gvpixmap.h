@@ -116,6 +116,16 @@ signals:
 	 */ 
 	void reloaded(const KURL& url);
 
+	/**
+	 * Emitted during loading to show a part of the image must be refreshed
+	 */
+	void rectUpdated(const QRect& rect);
+
+	/**
+	 * Emitted during loading, when the size is known
+	 */
+	void sizeUpdated(int width, int height);
+	
 private:
 	GVPixmapPrivate* d;
 
