@@ -51,7 +51,7 @@
 	<ActionList name="winlist"/>
 	<Separator/>
 	<Action name="toggle_dir_and_file_views"/>
-  </Menu>	
+  </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" noMerge="1">
@@ -77,6 +77,13 @@
   <Action name="view_zoom_out"/>
   <Action name="view_actual_size"/>
   <Action name="view_zoom_lock"/>
+</ToolBar>
+
+<ToolBar fullWidth="true" name="locationToolBar" newline="true">
+  <text>Location Toolbar</text>
+  <Action name="clear_location" />
+  <Action name="location_label" />
+  <Action name="location_url" />
 </ToolBar>
 
 <StatusBar/>

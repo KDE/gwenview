@@ -121,7 +121,6 @@ private:
 	
 	void createWidgets();
 	void createActions();
-	void createMainToolBar();
 	void createLocationToolBar();
 	void createConnections();
 

@@ -96,15 +96,13 @@ GVMainWindow::GVMainWindow()
 	// GUI
 	createWidgets();
 	createActions();
-	/*
-	createMainToolBar();
 	createLocationToolBar();
-	*/
+
 	createGUI("gwenviewui.rc", false);
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
-	
+
 	mFileViewStack->setFocus();
 
 	// Command line
@@ -532,7 +530,7 @@ void GVMainWindow::createActions() {
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"mirror");
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"flip");
 	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"open_with_editor");
-	
+
 	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
@@ -543,11 +541,11 @@ void GVMainWindow::createActions() {
 #endif
 	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
 	mToggleDirAndFileViews=new KAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"toggle_dir_and_file_views");
-	
+
 	// Go
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()), actionCollection() );
 	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
-	
+
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );
 	if (file.isEmpty()) {
@@ -559,20 +557,20 @@ void GVMainWindow::createActions() {
 	manager->setShowNSBookmarks(false);
 
 	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this);
-	
+
 	KActionMenu* bookmark=new KActionMenu(i18n( "&Bookmarks" ), "bookmark", actionCollection(), "bookmarks" );
 	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), this->actionCollection(), true);
-	
+
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
-	
+
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
-	
+
 	// Settings
 	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
 	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-	
+
 	actionCollection()->readShortcutSettings();
 }
 
@@ -661,10 +659,8 @@ void GVMainWindow::createConnections() {
 		mToggleSlideShow,SLOT(activate()) );
 	
 	// Address bar
-	/*
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
-	*/
 
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
@@ -676,66 +672,41 @@ void GVMainWindow::createConnections() {
 }
 
 
-void GVMainWindow::createMainToolBar() {
-	mMainToolBar=toolBar();
-	mMainToolBar->setLabel(i18n("Main Tool Bar"));
-	mOpenParentDir->plug(mMainToolBar);
-	mFileViewStack->selectFirst()->plug(mMainToolBar);
-	mFileViewStack->selectPrevious()->plug(mMainToolBar);
-	mFileViewStack->selectNext()->plug(mMainToolBar);
-	mFileViewStack->selectLast()->plug(mMainToolBar);
-
-	mMainToolBar->insertLineSeparator();
-	mStop->plug(mMainToolBar);
-
-	mMainToolBar->insertLineSeparator();
-	mFileViewStack->noThumbnails()->plug(mMainToolBar);
-	mFileViewStack->smallThumbnails()->plug(mMainToolBar);
-	mFileViewStack->medThumbnails()->plug(mMainToolBar);
-	mFileViewStack->largeThumbnails()->plug(mMainToolBar);
-
-	mMainToolBar->insertLineSeparator();
-	mToggleFullScreen->plug(mMainToolBar);
-	mToggleSlideShow->plug(mMainToolBar);
-	
-	mMainToolBar->insertLineSeparator();
-	mPixmapView->autoZoom()->plug(mMainToolBar);
-	mPixmapView->zoomIn()->plug(mMainToolBar);
-	mPixmapView->zoomOut()->plug(mMainToolBar);
-	mPixmapView->resetZoom()->plug(mMainToolBar);
-	mPixmapView->lockZoom()->plug(mMainToolBar);
-}
-
-
 void GVMainWindow::createLocationToolBar() {
-	mLocationToolBar=toolBar("locationToolBar");
-	mLocationToolBar->setNewLine(true);
-	if (!mShowLocationToolBar) mLocationToolBar->hide();
-	mLocationToolBar->setLabel(i18n("Location Tool Bar"));
+	// Clear button
+	(void)new KAction( i18n("Clear location bar"),
+		QApplication::reverseLayout()?"clear_left" : "locationbar_erase",
+		0, mURLEdit, SLOT(clearEdit()), actionCollection(), "clear_location");
 
-	mLocationToolBar->insertButton("locationbar_erase",1,true);
-	QToolTip::add(mLocationToolBar->getButton(1),i18n("Clear location bar"));
-	
-	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
-	 * styles like Keramik). See konq_misc.cc.
-	 */
-	QLabel* urlLabel=new QLabel(i18n("L&ocation:"),mLocationToolBar,"kde toolbar widget");
-	mURLEdit=new KHistoryCombo(mLocationToolBar);
-	urlLabel->setBuddy(mURLEdit);
-	mLocationToolBar->addConnection(1,SIGNAL(clicked(int)),mURLEdit,SLOT(clearEdit()));
-	
+	// URL Combo
+	mURLEdit=new KHistoryCombo(this);
+
 	mURLEdit->setDuplicatesEnabled(false);
-	
+
 	mURLEditCompletion=new KURLCompletion(KURLCompletion::DirCompletion);
 	mURLEditCompletion->setDir("/");
-	
+
 	mURLEdit->setCompletionObject(mURLEditCompletion);
 	mURLEdit->setAutoDeleteCompletionObject(true);
 
 	mURLEdit->setEditText(QDir::current().absPath());
 	mURLEdit->addToHistory(QDir::current().absPath());
 	mURLEdit->setDuplicatesEnabled(false);
-	mLocationToolBar->setStretchableWidget(mURLEdit);
+
+	KWidgetAction* comboAction=new KWidgetAction( mURLEdit, i18n("Location Bar"), 0,
+		0, 0, actionCollection(), "location_url");
+	comboAction->setShortcutConfigurable(false);
+	comboAction->setAutoSized(true);
+
+	// URL Label
+	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
+	 * styles like Keramik). See konq_misc.cc.
+	 */
+	QLabel* urlLabel=new QLabel(i18n("L&ocation:"), this, "kde toolbar widget");
+	(void)new KWidgetAction( urlLabel, i18n("L&ocation: "), 0, 0, 0, actionCollection(), "location_label");
+	urlLabel->setBuddy(mURLEdit);
+
+
 }
 
 	
