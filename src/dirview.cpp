@@ -89,8 +89,11 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 void DirView::setURL(const KURL& url,const QString&) {
 	//kdDebug() << "DirView::setURL " << url.path() << endl; 
-
+#if KDE_VERSION < 306
 	if (currentURL().cmp(url,true)) {
+#else
+	if (currentURL().equals(url,true)) {
+#endif
 		//kdDebug() << "DirView::setURL : same as current\n";
 		return;
 	}
@@ -120,7 +123,11 @@ void DirView::setURL(const KURL& url,const QString&) {
 
 // If this is the wanted item, select it, 
 // otherwise set the url as the next to select
+#if KDE_VERSION < 306
 	if (viewItem->url().cmp(url,true)) {
+#else
+	if (viewItem->url().equals(url,true)) {
+#endif
 		setCurrentItem(viewItem);
 		ensureItemVisible(viewItem);
 		viewItem->setOpen(true);
@@ -148,7 +155,11 @@ void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeView
 
 	// This is an URL to select
 	// (We block signals to avoid simulating a click on the dir item)
+#if KDE_VERSION < 306
 		if( m_nextUrlToSelect.cmp(url, true )) {
+#else
+		if( m_nextUrlToSelect.equals(url, true )) {
+#endif
 			blockSignals(true);
 			setCurrentItem(*it);
 			blockSignals(false);
@@ -179,7 +190,11 @@ void DirView::onPopulateFinished(KFileTreeViewItem* item) {
 	}
 
 // We reached the URL to select, get out
+#if KDE_VERSION < 306
 	if (url.cmp(m_nextUrlToSelect,true)) return;
+#else
+	if (url.equals(m_nextUrlToSelect,true)) return;
+#endif
 
 // This URL is not a parent of a wanted URL, get out
 	if (!url.isParentOf(m_nextUrlToSelect)) return;
