@@ -8,7 +8,7 @@ gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp st
 	filethumbnailview.cpp fileoperation.cpp filednddetailview.cpp configdialog.cpp fileopobject.cpp \
 	filethumbnailviewitem.cpp qxcfi.cpp
 
-gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBJPEG)
 
 # the library search path.
 gwenview_LDFLAGS = $(all_libraries)
