@@ -134,12 +134,16 @@ const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
 const char* CONFIG_BACKGROUND_COLOR="background color";
+const char* CONFIG_MAX_REPAINT_SIZE = "max repaint size";
+const char* CONFIG_MAX_SCALE_REPAINT_SIZE = "max scale repaint size";
+const char* CONFIG_MAX_SMOOTH_REPAINT_SIZE = "max smooth repaint size";
 
 const int AUTO_HIDE_TIMEOUT=2000;
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
+const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
 const int FULLSCREEN_LABEL_RADIUS = 10;
 
@@ -835,7 +839,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	if( paintRect.width() * paintRect.height() >= 10000 ) { // ignore small repaints
 		// try to do one step in 0.1sec
 		int size = paintRect.width() * paintRect.height() * 100 / QMAX( t.elapsed(), 1 );
-		*maxRepaintSize = QMIN( 1000000, QMAX( 10000,
+		*maxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 				( size + *maxRepaintSize ) / 2 ));
 	}
 
@@ -1524,6 +1528,13 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 
 	mTool=mButtonStateToolMap[NoButton];
 	mToolControllers[mTool]->updateCursor();
+
+	mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+		config->readNumEntry(CONFIG_MAX_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
+	mMaxScaleRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+		config->readNumEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
+	mMaxSmoothRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+		config->readNumEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
 }
 
 
@@ -1539,5 +1550,8 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_AUTO_ZOOM, mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM, mLockZoom->isChecked());
 	config->writeEntry(CONFIG_BACKGROUND_COLOR, mBackgroundColor);
+	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, mMaxRepaintSize);
+	config->writeEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, mMaxScaleRepaintSize);
+	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, mMaxSmoothRepaintSize);
 }
 
