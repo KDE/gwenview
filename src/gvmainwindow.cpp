@@ -51,7 +51,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
 #include "gvpixmap.h"
-#include "gvpixmapviewstack.h"
+#include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
 #include "statusbarprogress.h"
 
@@ -114,7 +114,7 @@ GVMainWindow::GVMainWindow()
 GVMainWindow::~GVMainWindow() {
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
-	mPixmapViewStack->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
@@ -164,7 +164,7 @@ void GVMainWindow::renameFile() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->renameFile();
 	} else {
-		mPixmapViewStack->renameFile();
+		mPixmapView->renameFile();
 	}
 }
 
@@ -173,7 +173,7 @@ void GVMainWindow::copyFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->copyFiles();
 	} else {
-		mPixmapViewStack->copyFile();
+		mPixmapView->copyFile();
 	}
 }
 
@@ -182,7 +182,7 @@ void GVMainWindow::moveFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->moveFiles();
 	} else {
-		mPixmapViewStack->moveFile();
+		mPixmapView->moveFile();
 	}
 }
 
@@ -191,7 +191,7 @@ void GVMainWindow::deleteFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->deleteFiles();
 	} else {
-		mPixmapViewStack->deleteFile();
+		mPixmapView->deleteFile();
 	}
 }
 
@@ -200,7 +200,7 @@ void GVMainWindow::showFileProperties() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->showFileProperties();
 	} else {
-		mPixmapViewStack->showFileProperties();
+		mPixmapView->showFileProperties();
 	}
 }
 
@@ -209,7 +209,7 @@ void GVMainWindow::openWithEditor() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->openWithEditor();
 	} else {
-		mPixmapViewStack->openWithEditor();
+		mPixmapView->openWithEditor();
 	}
 }
 
@@ -264,9 +264,9 @@ void GVMainWindow::toggleFullScreen() {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
-		mPixmapViewStack->setFullScreen(true);
+		mPixmapView->setFullScreen(true);
 		showFullScreen();
-		mPixmapViewStack->setFocus();
+		mPixmapView->setFocus();
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 		statusBar()->show();
@@ -282,7 +282,7 @@ void GVMainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		menuBar()->show();
-		mPixmapViewStack->setFullScreen(false);
+		mPixmapView->setFullScreen(false);
 		showNormal();
 	}
 }
@@ -352,8 +352,8 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 	mGVPixmap->setURL(str);
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
-	} else if (mPixmapViewStack->isVisible()) {
-		mPixmapViewStack->setFocus();
+	} else if (mPixmapView->isVisible()) {
+		mPixmapView->setFocus();
 	}
 }
 
@@ -384,7 +384,7 @@ void GVMainWindow::updateFileStatusBar() {
 	if (!filename.isEmpty()) {
 		txt=QString("%1 %2x%3 @ %4%")
 			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
-			.arg(int(mPixmapViewStack->zoom()*100) );
+			.arg(int(mPixmapView->zoom()*100) );
 	} else {
 		txt="";
 	}
@@ -408,8 +408,8 @@ void GVMainWindow::createWidgets() {
 	// Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
-	mPixmapViewStack=new GVPixmapViewStack(mPixmapDock,mGVPixmap,actionCollection());
-	mPixmapDock->setWidget(mPixmapViewStack);
+	mPixmapView=new GVScrollPixmapView(mPixmapDock,mGVPixmap,actionCollection());
+	mPixmapDock->setWidget(mPixmapView);
 	setView(mPixmapDock);
 	setMainDockWidget(mPixmapDock);
 
@@ -434,7 +434,7 @@ void GVMainWindow::createWidgets() {
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
-	mPixmapViewStack->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 }
 
@@ -477,13 +477,11 @@ void GVMainWindow::createConnections() {
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
 	// Pixmap view connections
-	connect(mPixmapViewStack,SIGNAL(selectPrevious()),
+	connect(mPixmapView,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );
-	connect(mPixmapViewStack,SIGNAL(selectNext()),
+	connect(mPixmapView,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
-
-	// Scroll pixmap view connections
-	connect(mPixmapViewStack,SIGNAL(zoomChanged(double)),
+	connect(mPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateFileStatusBar()) );
 
 	// Thumbnail view connections
@@ -556,11 +554,11 @@ void GVMainWindow::createMenu() {
 	mToggleSlideShow->plug(viewMenu);
 
 	viewMenu->insertSeparator();
-	mPixmapViewStack->autoZoom()->plug(viewMenu);
-	mPixmapViewStack->zoomIn()->plug(viewMenu);
-	mPixmapViewStack->zoomOut()->plug(viewMenu);
-	mPixmapViewStack->resetZoom()->plug(viewMenu);
-	mPixmapViewStack->lockZoom()->plug(viewMenu);
+	mPixmapView->autoZoom()->plug(viewMenu);
+	mPixmapView->zoomIn()->plug(viewMenu);
+	mPixmapView->zoomOut()->plug(viewMenu);
+	mPixmapView->resetZoom()->plug(viewMenu);
+	mPixmapView->lockZoom()->plug(viewMenu);
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
@@ -607,11 +605,11 @@ void GVMainWindow::createMainToolBar() {
 	mToggleSlideShow->plug(mMainToolBar);
 	
 	mMainToolBar->insertLineSeparator();
-	mPixmapViewStack->autoZoom()->plug(mMainToolBar);
-	mPixmapViewStack->zoomIn()->plug(mMainToolBar);
-	mPixmapViewStack->zoomOut()->plug(mMainToolBar);
-	mPixmapViewStack->resetZoom()->plug(mMainToolBar);
-	mPixmapViewStack->lockZoom()->plug(mMainToolBar);
+	mPixmapView->autoZoom()->plug(mMainToolBar);
+	mPixmapView->zoomIn()->plug(mMainToolBar);
+	mPixmapView->zoomOut()->plug(mMainToolBar);
+	mPixmapView->resetZoom()->plug(mMainToolBar);
+	mPixmapView->lockZoom()->plug(mMainToolBar);
 }
 
 

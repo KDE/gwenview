@@ -23,72 +23,112 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GVSCROLLPIXMAPVIEW_H
 
 // Qt includes
-#include <qpixmap.h>
+#include <qmap.h>
 #include <qscrollview.h>
 
-// Our includes
-#include "gvpixmapviewbase.h"
-
-class QPainter;
-class QPopupMenu;
+class QLabel;
 class QMouseEvent;
+class QPainter;
+class QTimer;
 class QWheelEvent;
 
-class KAccel;
 class KAction;
+class KActionCollection;
 class KConfig;
 class KToggleAction;
 
 class GVPixmap;
 
-class GVScrollPixmapView : public QScrollView, public GVPixmapViewBase {
+class GVScrollPixmapView : public QScrollView {
 Q_OBJECT
 public:
-	GVScrollPixmapView(QWidget* parent,GVPixmap*,bool);
-	void enableView(bool);
+	enum WheelBehaviour { None, Browse, Scroll, Zoom };
+	typedef QMap<ButtonState,WheelBehaviour> WheelBehaviours;
+
+	GVScrollPixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
 
-// Properties
+	// Properties
+	KToggleAction* autoZoom() const { return mAutoZoom; }
+	KAction* zoomIn() const { return mZoomIn; }
+	KAction* zoomOut() const { return mZoomOut; }
+	KAction* resetZoom() const { return mResetZoom; }
+	KToggleAction* lockZoom() const { return mLockZoom; }
 	double zoom() const { return mZoom; }
 	void setZoom(double zoom);
-	bool isZoomSetToMax();
-	bool isZoomSetToMin();
 	void setFullScreen(bool);
+	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
+	void setShowPathInFullScreen(bool);
+	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
+
 
 public slots:
-	void updateView();
-	void slotZoomIn();
-	void slotZoomOut();
-	void slotResetZoom();
-	void setLockZoom(bool);
+	// File operations
+	void showFileProperties();
+	void openWithEditor();
+	void renameFile();
+	void copyFile();
+	void moveFile();
+	void deleteFile();
 
 signals:
+	void selectPrevious();
+	void selectNext();
 	void zoomChanged(double);
 
 private:
 	GVPixmap* mGVPixmap;
-	QPopupMenu* mPopupMenu;
+	QTimer* mAutoHideTimer;
+	QLabel* mPathLabel;
+	
+	bool mShowPathInFullScreen;
+	WheelBehaviours mWheelBehaviours;
 
-// Offset to center images
+	// Offset to center images
 	int mXOffset,mYOffset;
 
-// Zoom info
+	// Zoom info
 	double mZoom;
-	bool mLockZoom;
 
-// Drag info
+	// Our actions
+	KToggleAction* mAutoZoom;
+	KAction* mZoomIn;
+	KAction* mZoomOut;
+	KAction* mResetZoom;
+	KToggleAction* mLockZoom;
+	KActionCollection* mActionCollection;
+
+	// Object state info
+	bool mFullScreen;
 	bool mDragStarted; // Indicates that the user is scrolling the image by dragging it
 	int mScrollStartX,mScrollStartY;
+	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
+	double mLastZoomBeforeAuto;
 
-	void updateImageOffset(double oldZoom);
+	double computeAutoZoom();
+	void updateScrollBarMode();
+	void updateImageOffset();
 	void updateContentSize();
+	void openContextMenu(const QPoint& pos);
+	void updatePathLabel();
+	void updateZoomActions();
 
+private slots:
+	void updateView();
+	void slotZoomIn();
+	void slotZoomOut();
+	void slotResetZoom();
+	void setAutoZoom(bool);
+	void hideCursor();
+
+	
 protected:
-// Overloaded methods
+	// Overloaded methods
 	void viewportMousePressEvent(QMouseEvent*);
 	void viewportMouseMoveEvent(QMouseEvent*);
 	void viewportMouseReleaseEvent(QMouseEvent*);
+	void wheelEvent(QWheelEvent* event);
 	void resizeEvent(QResizeEvent* event);
 	void drawContents(QPainter* p,int clipx,int clipy,int clipw,int cliph);
 };

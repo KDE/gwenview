@@ -110,7 +110,7 @@ void GVPixmap::setFilename(const QString& filename) {
 
 
 void GVPixmap::reset() {
-	mPixmap.resize(0,0);
+	mImage.reset();
 	emit urlChanged(mDirURL,mFilename);
 }
 
@@ -127,6 +127,27 @@ KURL GVPixmap::url() const {
 // Private stuff
 // 
 //---------------------------------------------------------------------
+bool GVPixmap::load() {
+	KURL pixURL=url();
+	bool result;
+	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
+		
+	// FIXME : Async
+	QString path;
+	if (pixURL.isLocalFile()) {
+		path=pixURL.path();
+	} else {
+		if (!KIO::NetAccess::download(pixURL,path)) return false;
+	}
+	result=mImage.load(path);
+	
+	if (!pixURL.isLocalFile()) {
+		KIO::NetAccess::removeTempFile(path);
+	}
+
+	return result;
+}
+#if 0
 bool GVPixmap::load() {
 	KURL pixURL=url();
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
@@ -170,3 +191,4 @@ bool GVPixmap::load() {
 	painter.end();
 	return true;
 }
+#endif

@@ -33,7 +33,7 @@ class KURLCompletion;
 class GVDirView;
 class GVFileViewStack;
 class GVPixmap;
-class GVPixmapViewStack;
+class GVScrollPixmapView;
 class GVSlideShow;
 class StatusBarProgress;
 
@@ -45,7 +45,7 @@ public:
 	~GVMainWindow();
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
-	GVPixmapViewStack* pixmapViewStack() const { return mPixmapViewStack; }
+	GVScrollPixmapView* pixmapView() const { return mPixmapView; }
 	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
@@ -70,7 +70,7 @@ private:
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
-	GVPixmapViewStack* mPixmapViewStack;
+	GVScrollPixmapView* mPixmapView;
 
 	GVPixmap* mGVPixmap;
 	GVSlideShow* mSlideShow;

@@ -21,145 +21,272 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <math.h>
 
 // Qt includes
+#include <qbitmap.h>
+#include <qcolor.h>
 #include <qcursor.h>
+#include <qdatetime.h>
 #include <qevent.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qpopupmenu.h>
 #include <qstyle.h>
+#include <qtimer.h>
 
 // KDE includes
+#include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kpropsdlg.h>
+#include <kstdaction.h>
 
 // Our includes
+#include "fileoperation.h"
 #include "gvpixmap.h"
 
 #include "gvscrollpixmapview.moc"
 
+const char* CONFIG_SHOW_PATH="show path";
+const char* CONFIG_LOCK_ZOOM="lock zoom";
+const char* CONFIG_AUTO_ZOOM="auto zoom";
+const char* CONFIG_WHEEL_BEHAVIOUR_NONE=   "wheel behaviour none";
+const char* CONFIG_WHEEL_BEHAVIOUR_SHIFT=  "wheel behaviour shift";
+const char* CONFIG_WHEEL_BEHAVIOUR_CONTROL="wheel behaviour control";
+const char* CONFIG_WHEEL_BEHAVIOUR_ALT=    "wheel behaviour alt";
+
+const int AUTO_HIDE_TIMEOUT=1000;
+
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
-GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled)
+GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase)
 , mGVPixmap(pixmap)
-, mPopupMenu(0L)
+, mAutoHideTimer(new QTimer(this))
+, mPathLabel(new QLabel(parent))
 , mZoom(1)
-, mLockZoom(false)
+, mActionCollection(actionCollection)
+, mFullScreen(false)
 , mDragStarted(false)
+, mOperaLikePrevious(false)
+, mLastZoomBeforeAuto(1)
 {
-	unsetCursor();
 	setFocusPolicy(StrongFocus);
-	setFullScreen(false);
-	enableView(enabled);
-}
+	setFrameStyle(NoFrame);
+	
+	// Init path label
+	mPathLabel->setBackgroundColor(white);
+	QFont font=mPathLabel->font();
+	font.setWeight(QFont::Bold);
+	mPathLabel->setFont(font);
+	mPathLabel->hide();
 
+	// Create actions
+	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"autozoom",0,mActionCollection,"autozoom");
+	connect(mAutoZoom,SIGNAL(toggled(bool)),
+		this,SLOT(setAutoZoom(bool)) );
 
-void GVScrollPixmapView::enableView(bool enabled) {
-	disconnect(mGVPixmap,0,this,0);
+	mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),mActionCollection);
+	mZoomIn->setIcon("zoomin");
+	
+	mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),mActionCollection);
+	mZoomOut->setIcon("zoomout");
+	
+	mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),mActionCollection);
+    mResetZoom->setIcon("actualsize");
 
-	if (enabled) {
-		connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-			this,SLOT(updateView()) );
-	}
+	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"lockzoom");
+
+	// Connect to some interesting signals
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		this,SLOT(updateView()) );
+	connect(mAutoHideTimer,SIGNAL(timeout()),
+		this,SLOT(hideCursor()) );
 }
 
 
 void GVScrollPixmapView::updateView() {
 	mXOffset=0;
 	mYOffset=0;
+
 	if (mGVPixmap->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
+		updateZoomActions();
 		return;
 	}
 
-	if (!mLockZoom) {
-		setZoom(1.0);
+	if (mAutoZoom->isChecked()) {
+		setZoom(computeAutoZoom());
 	} else {
-		updateContentSize();
-		updateImageOffset(mZoom);
-		viewport()->repaint(false);
+		if (mLockZoom->isChecked()) {
+			updateContentSize();
+			updateImageOffset();
+			updateZoomActions();
+			viewport()->repaint(false);
+		} else {
+			setZoom(1.0);
+		}
+		horizontalScrollBar()->setValue(0);
+		verticalScrollBar()->setValue(0);
 	}
-	horizontalScrollBar()->setValue(0);
-	verticalScrollBar()->setValue(0);
+	
+	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
+}
+
+
+//------------------------------------------------------------------------
+//
+// Properties
+// 
+//------------------------------------------------------------------------
+void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
+	mShowPathInFullScreen=value;
 }
 
 
 void GVScrollPixmapView::setZoom(double zoom) {
+	int viewWidth=width();
+	int viewHeight=height();
 	double oldZoom=mZoom;
 	mZoom=zoom;
+
 	updateContentSize();
-	updateImageOffset(oldZoom);
+
+	// Find the coordinate of the center of the image
+	// and center the view on it
+	int centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
+	int centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+	center(centerX,centerY);
+	
+	updateImageOffset();
+	updateZoomActions();
 	viewport()->repaint(false);
 	emit zoomChanged(mZoom);
 }
 
 
 void GVScrollPixmapView::setFullScreen(bool fullScreen) {
-	if (fullScreen) {
+	mFullScreen=fullScreen;
+	viewport()->setMouseTracking(mFullScreen);
+	if (mFullScreen) {
 		viewport()->setBackgroundColor(black);
-		setFrameStyle(NoFrame);
+		viewport()->setCursor(blankCursor);
 	} else {
 		viewport()->setBackgroundMode(PaletteDark);
-		setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-		setLineWidth( style().defaultFrameWidth() );
+		mAutoHideTimer->stop();
+		viewport()->unsetCursor();
+	}
+	
+	if (mFullScreen && mShowPathInFullScreen) {
+		updatePathLabel();
+		mPathLabel->show();
+	} else {
+		mPathLabel->hide();
 	}
 }
 
 
-bool GVScrollPixmapView::isZoomSetToMax() {
-	return mZoom>=MAX_ZOOM;
-}
-
-
-bool GVScrollPixmapView::isZoomSetToMin() {
-	return mZoom<=1/MAX_ZOOM;
-}
-
-
-//-Overloaded methods----------------------------------
+//------------------------------------------------------------------------
+//
+// Overloaded methods
+//
+//------------------------------------------------------------------------
 void GVScrollPixmapView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
-	updateContentSize();
-	updateImageOffset(mZoom);
+	if (mAutoZoom->isChecked()) {
+		setZoom(computeAutoZoom());
+	} else {
+		updateContentSize();
+		updateImageOffset();
+	}
 }
 
 
+//#define DEBUG_RECTS
+inline int roundDown(int value,double factor) {
+	return int(int(value/factor)*factor);
+}
+inline int roundUp(int value,double factor) {
+	return int(ceil(value/factor)*factor);
+}
+
+
+inline void composite(uint* rgba,uint value) {
+	uint alpha=(*rgba) >> 24;
+	if (alpha<255) {
+		uint alphaValue=(255-alpha)*value;
+		
+		uint c1=( ( (*rgba & 0xFF0000) >> 16 ) * alpha + alphaValue ) / 255;
+		uint c2=( ( (*rgba & 0x00FF00) >>  8 ) * alpha + alphaValue ) / 255;
+		uint c3=( ( (*rgba & 0x0000FF) >>  0 ) * alpha + alphaValue ) / 255;
+		*rgba=0xFF000000 + (c1<<16) + (c2<<8) + c3;
+	}
+}
 
 void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
-/*
+	#ifdef DEBUG_RECTS
 	static QColor colors[4]={QColor(255,0,0),QColor(0,255,0),QColor(0,0,255),QColor(255,255,0) };
-	static int numColor=0;*/ // DEBUG rects
+	static int numColor=0;
+	#endif
 
+	
 	if (mGVPixmap->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
-	int roundedClipx=int( int (  clipx        /mZoom)*mZoom );
-	int roundedClipy=int( int (  clipy        /mZoom)*mZoom );
-	int roundedClipw=int( ceil( (clipx+clipw) /mZoom)*mZoom ) - roundedClipx;
-	int roundedCliph=int( ceil( (clipy+cliph) /mZoom)*mZoom ) - roundedClipy;
+	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
+	QRect updateRect=QRect(clipx,clipy,clipw,cliph).intersect(zoomedImageRect);
 
-	if (roundedClipw<=0 || roundedCliph<=0) return;
+	if (mZoom>1.0) {
+		updateRect.setLeft  ( roundDown(updateRect.x(),mZoom) );
+		updateRect.setTop   ( roundDown(updateRect.y(),mZoom) );
+		updateRect.setWidth ( roundUp(updateRect.width(),mZoom) );
+		updateRect.setHeight( roundUp(updateRect.height(),mZoom) );
+	}
+	
+	if (updateRect.isEmpty()) return;
 
-	QPixmap buffer(roundedClipw,roundedCliph);
+	QImage image(updateRect.size()/mZoom,32);
+	image=mGVPixmap->image().copy(
+		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
+		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
+
+	
+	if (image.hasAlphaBuffer()) {
+		bool light;
+	
+		int imageXOffset=int(updateRect.x()/mZoom)-int(mXOffset/mZoom);
+		int imageYOffset=int(updateRect.y()/mZoom)-int(mYOffset/mZoom);
+		for (int y=0;y<image.height();++y) {
+			uint* rgba=(uint*)(image.scanLine(y));
+			for(int x=0;x<image.width();x++) {
+				light= ((x+imageXOffset) & 16) ^ ((y+imageYOffset) & 16);
+				composite(rgba,light?192:128);
+				rgba++;
+			}
+		}
+		image.setAlphaBuffer(false);
+	}
+	
+	
+	image=image.scale(updateRect.size());
+	QPixmap buffer(clipw,cliph);
 	{
 		QPainter bufferPainter(&buffer);
 		bufferPainter.setBackgroundColor(painter->backgroundColor());
-		bufferPainter.eraseRect(0,0,roundedClipw,roundedCliph);
-		bufferPainter.scale(mZoom,mZoom);
-		bufferPainter.drawPixmap(0,0,
-			mGVPixmap->pixmap(),
-			int(roundedClipx/mZoom) - int(mXOffset/mZoom), int(roundedClipy/mZoom) - int(mYOffset/mZoom),
-			int(roundedClipw/mZoom), int(roundedCliph/mZoom) );
+		bufferPainter.eraseRect(0,0,clipw,cliph);
+		bufferPainter.drawImage(updateRect.x()-clipx,updateRect.y()-clipy,image);
 	}
+	painter->drawPixmap(clipx,clipy,buffer);
 
-	painter->drawPixmap(clipx,clipy,buffer,clipx-roundedClipx,clipy-roundedClipy,clipw,cliph);
 
-/*	painter->setPen(colors[numColor]);
+	#ifdef DEBUG_RECTS
+	painter->setPen(colors[numColor]);
 	numColor=(numColor+1)%4;
-	painter->drawRect(clipx,clipy,clipw,cliph);*/ // DEBUG Rects
+	painter->drawRect(clipx,clipy,clipw,cliph);
+	#endif
 }
 
 
@@ -169,11 +296,16 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	mScrollStartX=event->x();
 	mScrollStartY=event->y();
 	mDragStarted=true;
-	setCursor(QCursor(SizeAllCursor));
+	viewport()->setCursor(QCursor(SizeAllCursor));
 }
 
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
+	if (mFullScreen && !mDragStarted) {
+		viewport()->unsetCursor();
+		mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
+	}
+	
 	if (!mDragStarted) return;
 
 	int deltaX,deltaY;
@@ -187,21 +319,108 @@ void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
+void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
+	// If the mouse was released because of the end of a drag, end here
 	if (mDragStarted) {
-		unsetCursor();
 		mDragStarted=false;
+		if (mFullScreen) {
+			viewport()->unsetCursor();
+			mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
+		} else {
+			viewport()->unsetCursor();
+		}
+		return;
+	}
+	
+	switch (event->button()) {
+	case Qt::LeftButton:
+		if (event->stateAfter() & Qt::RightButton) {
+			mOperaLikePrevious=true;
+			emit selectPrevious();
+			return;
+		}
+		break;
+			
+	case Qt::RightButton:
+		if (event->stateAfter() & Qt::LeftButton) {
+			emit selectNext();
+			return;
+		}
+
+		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
+			mOperaLikePrevious=false;
+		} else {
+			if ( !mGVPixmap->isNull()) {
+				openContextMenu(event->globalPos());
+				return;
+			}
+		}
+		break;
+	
+	default: // Avoid compiler complain
+		break;
 	}
 }
 
 
-//-Slots----------------------------------------------
+void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
+	// If auto zoom is on, we always browse
+	if (mAutoZoom->isChecked()) {
+		if (event->delta()<0) {
+			emit selectNext();
+		} else {
+			emit selectPrevious();
+		}
+		event->accept();
+		return;
+	}
+
+	// No auto zoom, use  mWheelBehaviours
+	ButtonState modifier=ButtonState( event->state() & (ShiftButton | ControlButton | AltButton) );
+	switch (mWheelBehaviours[modifier]) {
+	case Browse:
+		if (event->delta()<0) {
+			emit selectNext();
+		} else {
+			emit selectPrevious();
+		}
+		event->accept();
+		break;
+
+	case Scroll:
+		QScrollView::wheelEvent(event);
+		break;
+
+	case Zoom:
+		if (event->delta()<0) {
+			if (mZoomIn->isEnabled()) mZoomIn->activate();
+		} else {
+			if (mZoomOut->isEnabled()) mZoomOut->activate();
+		}
+		event->accept();
+		break;
+
+	case None:
+		event->accept();
+		break;
+	}
+}
+
+//------------------------------------------------------------------------
+//
+// Slots
+//
+//------------------------------------------------------------------------
 void GVScrollPixmapView::slotZoomIn() {
 	double newZoom;
 	if (mZoom>=1.0) {
 		newZoom=floor(mZoom)+1.0;
 	} else {
 		newZoom=1/( ceil(1/mZoom)-1.0 );
+	}
+	if (mAutoZoom->isChecked()) {
+		mAutoZoom->setChecked(false);
+		updateScrollBarMode();
 	}
 	setZoom(newZoom);
 }
@@ -214,6 +433,10 @@ void GVScrollPixmapView::slotZoomOut() {
 	} else {
 		newZoom=1/( floor(1/mZoom)+1.0 );
 	}
+	if (mAutoZoom->isChecked()) {
+		mAutoZoom->setChecked(false);
+		updateScrollBarMode();
+	}
 	setZoom(newZoom);
 }
 
@@ -223,47 +446,266 @@ void GVScrollPixmapView::slotResetZoom() {
 }
 
 
-void GVScrollPixmapView::setLockZoom(bool value) {
-	mLockZoom=value;
+void GVScrollPixmapView::setAutoZoom(bool value) {
+	updateScrollBarMode();
+	if (value) {
+		mLastZoomBeforeAuto=mZoom;
+		setZoom(computeAutoZoom());
+	} else {
+		setZoom(mLastZoomBeforeAuto);
+	}
 }
 
 
-//-Private---------------------------------------------
+//------------------------------------------------------------------------
+//
+// Private
+//
+//------------------------------------------------------------------------
+void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
+	if (mGVPixmap->isNull()) return;
+
+	QPopupMenu menu(this);
+
+	mActionCollection->action("view_fullscreen")->plug(&menu);
+	menu.insertSeparator();
+	
+	mAutoZoom->plug(&menu);
+	mZoomIn->plug(&menu);
+	mZoomOut->plug(&menu);
+	mResetZoom->plug(&menu);
+	mLockZoom->plug(&menu);
+
+	menu.insertSeparator();
+	
+	mActionCollection->action("first")->plug(&menu);
+	mActionCollection->action("previous")->plug(&menu);
+	mActionCollection->action("next")->plug(&menu);
+	mActionCollection->action("last")->plug(&menu);
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("Open With &Editor") ),
+		this,SLOT(openWithEditor()) );
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("&Rename...") ),
+		this,SLOT(renameFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Copy To...") ),
+		this,SLOT(copyFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Move To...") ),
+		this,SLOT(moveFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Delete...") ),
+		this,SLOT(deleteFile()) );
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("Properties") ),
+		this,SLOT(showFileProperties()) );
+	
+	menu.exec(pos);
+}
+
+
+void GVScrollPixmapView::updateScrollBarMode() {
+	if (mAutoZoom->isChecked()) {
+		setVScrollBarMode(AlwaysOff);
+		setHScrollBarMode(AlwaysOff);
+	} else {
+		setVScrollBarMode(Auto);
+		setHScrollBarMode(Auto);
+	}
+}
+
+
 void GVScrollPixmapView::updateContentSize() {
 	resizeContents(
-		int(mGVPixmap->pixmap().width()*mZoom), 
-		int(mGVPixmap->pixmap().height()*mZoom)	);
+		int(mGVPixmap->width()*mZoom), 
+		int(mGVPixmap->height()*mZoom)	);
 }
 
 
-void GVScrollPixmapView::updateImageOffset(double oldZoom) {
-	int viewWidth=visibleWidth();
-	int viewHeight=visibleHeight();
-	
-	
-	// Find the coordinate of the center of the image
-	// and center the view on it
-	int centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
-	int centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
-	center(centerX,centerY);
+double GVScrollPixmapView::computeAutoZoom() {
 
+	if (mGVPixmap->isNull()) {
+		return 1.0;
+	}
+	QSize size=mGVPixmap->image().size();
+	
+	size.scale(width(),height(),QSize::ScaleMin);
+	
+	return double(size.width())/mGVPixmap->width();
+}
+
+
+void GVScrollPixmapView::updateImageOffset() {
+	int viewWidth=width();
+	int viewHeight=height();
+	
 	// Compute mXOffset and mYOffset in case the image does not fit
 	// the view width or height
 	int zpixWidth=int(mGVPixmap->width() * mZoom);
-	mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
-
-
 	int zpixHeight=int(mGVPixmap->height() * mZoom);
+
+	if (zpixWidth>viewWidth) {
+		viewHeight-=horizontalScrollBar()->height();
+	}
+	if (zpixHeight>viewHeight) {
+		viewWidth-=verticalScrollBar()->width();
+	}
+	
+	mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
 	mYOffset=QMAX(0,(viewHeight-zpixHeight)/2);
-
 }
 
 
-//-Config----------------------------------------------
-void GVScrollPixmapView::readConfig(KConfig*, const QString&) {
+void GVScrollPixmapView::hideCursor() {
+	viewport()->setCursor(blankCursor);
 }
 
 
-void GVScrollPixmapView::writeConfig(KConfig*, const QString&) const {
+void GVScrollPixmapView::updatePathLabel() {
+	QString path=mGVPixmap->url().path();
+	
+	QPainter painter;
+	
+	QSize pathSize=mPathLabel->fontMetrics().size(0,path);
+	pathSize.setWidth( pathSize.width() + 4);
+	pathSize.setHeight( pathSize.height() + 15);
+	int left=2;
+	int top=mPathLabel->fontMetrics().height();
+
+	// Create a mask for the text
+	QBitmap mask(pathSize,true);
+	painter.begin(&mask);
+	painter.setFont(mPathLabel->font());
+	painter.drawText(left-1,top-1,path);
+	painter.drawText(left,top-1,path);
+	painter.drawText(left+1,top-1,path);
+
+	painter.drawText(left-1,top,path);
+	painter.drawText(left+1,top,path);
+
+	painter.drawText(left-1,top+1,path);
+	painter.drawText(left,top+1,path);
+	painter.drawText(left+1,top+1,path);
+	painter.end();
+
+	// Draw the text on a pixmap
+	QPixmap pixmap(pathSize);
+	painter.begin(&pixmap);
+	painter.setFont(mPathLabel->font());
+
+	painter.eraseRect(pixmap.rect());
+	painter.setPen(black);
+	painter.drawText(left,top,path);
+	painter.end();
+
+	// Update the path label
+	mPathLabel->setPixmap(pixmap);
+	mPathLabel->setMask(mask);
+	mPathLabel->adjustSize();
+}
+
+
+void GVScrollPixmapView::updateZoomActions() {
+	// Disable most actions if there's no image
+	if (mGVPixmap->isNull()) {
+		mZoomIn->setEnabled(false);
+		mZoomOut->setEnabled(false);
+		mResetZoom->setEnabled(false);
+		return;
+	}
+
+	mAutoZoom->setEnabled(true);
+	mResetZoom->setEnabled(true);
+
+	if (mAutoZoom->isChecked()) {
+		mZoomIn->setEnabled(true);
+		mZoomOut->setEnabled(true);
+	} else {
+		mZoomIn->setEnabled(mZoom<MAX_ZOOM);
+		mZoomOut->setEnabled(mZoom>1/MAX_ZOOM);
+	}
+}
+
+
+//------------------------------------------------------------------------
+//
+// File operations
+//
+//------------------------------------------------------------------------
+void GVScrollPixmapView::showFileProperties() {
+	(void)new KPropertiesDialog(mGVPixmap->url());
+}
+
+
+void GVScrollPixmapView::openWithEditor() {
+	FileOperation::openWithEditor(mGVPixmap->url());
+}
+
+
+void GVScrollPixmapView::renameFile() {
+	FileOperation::rename(mGVPixmap->url(),this);
+}
+
+
+void GVScrollPixmapView::copyFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::copyTo(list,this);
+}
+
+
+void GVScrollPixmapView::moveFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::moveTo(list,this);
+}
+
+
+void GVScrollPixmapView::deleteFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::del(list,this);
+}
+
+
+//------------------------------------------------------------------------
+//
+// Config
+//
+//------------------------------------------------------------------------
+void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
+	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
+	updateScrollBarMode();
+	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
+
+	mWheelBehaviours[NoButton]=     WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_NONE,Scroll) );
+	mWheelBehaviours[ControlButton]=WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL,Zoom) );
+	mWheelBehaviours[ShiftButton]=  WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT,Browse) );
+	mWheelBehaviours[AltButton]=    WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_ALT,None) );
+}
+
+
+void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
+	config->setGroup(group);
+	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
+	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
+	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
+	
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_NONE   , int(mWheelBehaviours[NoButton]) );
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL, int(mWheelBehaviours[ControlButton]) );
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT  , int(mWheelBehaviours[ShiftButton]) );
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_ALT    , int(mWheelBehaviours[AltButton]) );
 }
 

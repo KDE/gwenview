@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
-#include "gvpixmapviewstack.h"
+#include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
@@ -50,7 +50,7 @@ ConfigDialog::ConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 mMainWindow(mainWindow)
 {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
+	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 	// Thumbnails tab
@@ -72,18 +72,18 @@ mMainWindow(mainWindow)
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
 
 	// Full screen tab
-	mShowPathInFullScreen->setChecked(mMainWindow->pixmapViewStack()->showPathInFullScreen());
+	mShowPathInFullScreen->setChecked(mMainWindow->pixmapView()->showPathInFullScreen());
 	mShowMenuBarInFullScreen->setChecked(mMainWindow->showMenuBarInFullScreen());
 	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
 	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
 
 	// Mouse wheel behaviour tab
-	typedef QMap<GVPixmapViewStack::WheelBehaviour,QString> WheelBehaviours;
+	typedef QMap<GVScrollPixmapView::WheelBehaviour,QString> WheelBehaviours;
 	WheelBehaviours behaviours;
-	behaviours[GVPixmapViewStack::None]=i18n("None");
-	behaviours[GVPixmapViewStack::Scroll]=i18n("Scroll");
-	behaviours[GVPixmapViewStack::Browse]=i18n("Browse");
-	behaviours[GVPixmapViewStack::Zoom]=i18n("Zoom");
+	behaviours[GVScrollPixmapView::None]=i18n("None");
+	behaviours[GVScrollPixmapView::Scroll]=i18n("Scroll");
+	behaviours[GVScrollPixmapView::Browse]=i18n("Browse");
+	behaviours[GVScrollPixmapView::Zoom]=i18n("Zoom");
 
 	WheelBehaviours::Iterator it;
 	for( it = behaviours.begin(); it!=behaviours.end(); ++it ) {
@@ -93,10 +93,10 @@ mMainWindow(mainWindow)
 		mShiftPlusWheel->insertItem(*it,index);
 		mAltPlusWheel->insertItem(*it,index);
 	}
-	mWheelOnly->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[NoButton]));
-	mControlPlusWheel->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[ControlButton]));
-	mShiftPlusWheel->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[ShiftButton]));
-	mAltPlusWheel->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[AltButton]));
+	mWheelOnly->setCurrentItem(int(pixmapView->wheelBehaviours()[NoButton]));
+	mControlPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ControlButton]));
+	mShiftPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ShiftButton]));
+	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
 
 	// Slide show tab
 	mLoopInSlideShow->setChecked(slideShow->loop());
@@ -119,7 +119,7 @@ void ConfigDialog::slotOk() {
 
 void ConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
+	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 	// Thumbnails tab
@@ -134,16 +134,16 @@ void ConfigDialog::slotApply() {
 	FileOperation::setDestDir(mDefaultDestDir->url());
 
 	// Full screen tab
-	mMainWindow->pixmapViewStack()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
+	mMainWindow->pixmapView()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
 	mMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
 	mMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
 	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
 
 	// Mouse wheel behaviour tab		
-	pixmapViewStack->wheelBehaviours()[NoButton]=     GVPixmapViewStack::WheelBehaviour(mWheelOnly->currentItem());
-	pixmapViewStack->wheelBehaviours()[ControlButton]=GVPixmapViewStack::WheelBehaviour(mControlPlusWheel->currentItem());
-	pixmapViewStack->wheelBehaviours()[ShiftButton]=  GVPixmapViewStack::WheelBehaviour(mShiftPlusWheel->currentItem());
-	pixmapViewStack->wheelBehaviours()[AltButton]=    GVPixmapViewStack::WheelBehaviour(mAltPlusWheel->currentItem());
+	pixmapView->wheelBehaviours()[NoButton]=     GVScrollPixmapView::WheelBehaviour(mWheelOnly->currentItem());
+	pixmapView->wheelBehaviours()[ControlButton]=GVScrollPixmapView::WheelBehaviour(mControlPlusWheel->currentItem());
+	pixmapView->wheelBehaviours()[ShiftButton]=  GVScrollPixmapView::WheelBehaviour(mShiftPlusWheel->currentItem());
+	pixmapView->wheelBehaviours()[AltButton]=    GVScrollPixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
 
 	// Slide show tab
 	slideShow->setDelay(mDelayInSlideShow->value());

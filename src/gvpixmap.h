@@ -22,7 +22,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 
 // Qt includes
 #include <qobject.h>
-#include <qpixmap.h>
+#include <qimage.h>
 
 // KDE includes
 #include <kurl.h>
@@ -34,7 +34,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
  */
 class GVPixmap : public QObject {
 Q_OBJECT
-	QPixmap mPixmap;
+	QImage mImage;
 	KURL mDirURL;
 	QString mFilename;
 	bool load();
@@ -45,13 +45,13 @@ public:
 	void reset();
 
 // Properties 
-	const QPixmap& pixmap() const { return mPixmap; }
+	const QImage& image() const { return mImage; }
 	KURL url() const;
 	const KURL& dirURL() const { return mDirURL; }
 	const QString& filename() const { return mFilename; }
-	int width() const { return mPixmap.width(); }
-	int height() const { return mPixmap.height(); }
-	bool isNull() const { return mPixmap.isNull(); }
+	int width() const { return mImage.width(); }
+	int height() const { return mImage.height(); }
+	bool isNull() const { return mImage.isNull(); }
 
 public slots:
 	void setURL(const KURL&);
