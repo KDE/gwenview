@@ -121,7 +121,7 @@ void ThumbnailThread::run() {
 		}
 		loadThumbnail();
 		mPixPath = QString(); // done, ready for next
-		emitCancellableSignal( SIGNAL( done( const QImage& )), mImage );
+		emitCancellableSignal( this, SIGNAL( done( const QImage& )), mImage );
 	}
 }
 

@@ -132,29 +132,32 @@ void TSThread::executeThread()
     current_thread->setLocalData( this );
 #endif
     run();
-    postSignal( NULL ); // = terminated()
+    postSignal( this, NULL ); // = terminated()
     }
 
-void TSThread::postSignal( const char* signal )
+void TSThread::postSignal( QObject* obj, const char* signal )
     {
-    qApp->postEvent( this, new SignalEvent( signal, NULL ));
+    assert( currentThread() == this );
+    qApp->postEvent( this, new SignalEvent( signal, obj, NULL ));
     }
 
-void TSThread::emitSignalInternal( const char* signal, QUObject* o )
+void TSThread::emitSignalInternal( QObject* obj, const char* signal, QUObject* o )
     {
+    assert( currentThread() == this );
     QMutexLocker locker( &signal_mutex );
     emit_pending = true;
-    qApp->postEvent( this, new SignalEvent( signal, o ));
+    qApp->postEvent( this, new SignalEvent( signal, obj, o ));
     while( emit_pending )
         signal_cond.wait( &signal_mutex );
     }
 
-void TSThread::emitCancellableSignalInternal( const char* signal, QUObject* o )
+void TSThread::emitCancellableSignalInternal( QObject* obj, const char* signal, QUObject* o )
     {
+    assert( currentThread() == this );
     // can't use this->mutex, because its locking will be triggered by TSWaitCondition
     QMutexLocker locker( &signal_mutex );
     emit_pending = true;
-    qApp->postEvent( this, new SignalEvent( signal, o ));
+    qApp->postEvent( this, new SignalEvent( signal, obj, o ));
     while( emit_pending && !testCancel())
         signal_cond.cancellableWait( &signal_mutex );
     emit_pending = false; // in case of cancel
@@ -172,9 +175,9 @@ void TSThread::customEvent( QCustomEvent* ev )
         }
     bool deleted = false;
     deleted_flag = &deleted; // this is like QGuardedPtr for self, but faster
-    int signal_id = metaObject()->findSignal( normalizeSignalSlot( e->signal ).data() + 1, true );
+    int signal_id = e->object->metaObject()->findSignal( normalizeSignalSlot( e->signal ).data() + 1, true );
     if( signal_id >= 0 )
-        qt_emit( signal_id, e->args );
+        e->object->qt_emit( signal_id, e->args );
     else
         kdWarning() << "Cannot emit signal \"" << e->signal << "\"." << endl;
     if( *deleted_flag ) // some slot deleted 'this'

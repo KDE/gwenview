@@ -129,7 +129,7 @@ void GVDecoderThread::run() {
 			
 		if (!ok) {
 			kdDebug() << k_funcinfo << "failed" << endl;
-			postSignal( SIGNAL(failed()) );
+			postSignal( this, SIGNAL(failed()) );
 			return;
 		}
 		
@@ -138,7 +138,7 @@ void GVDecoderThread::run() {
 	}
 	
 	kdDebug() << k_funcinfo << "succeeded, emitting signal" << endl;
-	postSignal( SIGNAL(succeeded()) );
+	postSignal( this, SIGNAL(succeeded()) );
 }
 
 
