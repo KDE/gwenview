@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.moc"
 
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -185,7 +185,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 
 	bool isDir=false;
 	KIO::UDSEntry entry = d->mStatJob->statResult();
-	KURL localURL=d->mStatJob->url();
+	d->mURL=d->mStatJob->url();
 	
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
@@ -196,13 +196,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 	}
 
 	if (isDir) {
-		d->mURL=localURL;
 		d->mURL.adjustPath( +1 ); // add trailing /
-	} else {
-		d->mURL=localURL;
-	}
-
-	if (d->mURL.filename().isEmpty()) {
 		reset();
 		return;
 	}
@@ -247,7 +241,11 @@ KURL GVDocument::dirURL() const {
 }
 
 QString GVDocument::filename() const {
-	return d->mURL.filename();
+	if (d->mURL.path().endsWith("/")) {
+		return QString::null;
+	} else {
+		return d->mURL.filename();
+	}
 }
 
 const QCString& GVDocument::imageFormat() const {

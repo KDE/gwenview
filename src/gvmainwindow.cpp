@@ -117,7 +117,7 @@ const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
 
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -234,10 +234,11 @@ bool GVMainWindow::queryClose() {
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url2) {
+	LOG(url2.prettyURL());
 	KURL url( url2 );
 	url.setFileName( QString::null );
-	LOG(url.path() << " - " << url2.filename());
-
+	LOG(url.path());
+	
 	bool filenameIsValid=!mDocument->isNull();
 
 	mRenameFile->setEnabled(filenameIsValid);
