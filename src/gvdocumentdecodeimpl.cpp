@@ -229,6 +229,8 @@ public:
 	bool mWasFrameData;
 
 	GVImageFrames mFrames;
+
+	QCString mCachedFormat;
 };
 
 
@@ -269,6 +271,7 @@ void GVDocumentDecodeImpl::start() {
 	d->mFrames.clear();
 	d->mWasFrameData = false;
 	d->mNextFrameDelay = 0;
+	d->mCachedFormat = QCString();
 	KIO::Job* job=KIO::stat( mDocument->url(), false);
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
@@ -294,10 +297,17 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 		d->mRawData = GVCache::instance()->file( mDocument->url() );
 		GVImageFrames frames = GVCache::instance()->frames( mDocument->url(), format );
 		if( !frames.isEmpty()) {
-			setImageFormat(format);
-			d->mFrames = frames;
-			finish();
-			return;
+			if( !d->mRawData.isNull()) {
+				setImageFormat(format);
+				d->mFrames = frames;
+				finish();
+				return;
+			} else {
+				// the raw data is needed e.g. for JPEG, so it needs to be loaded
+				// if it's not in the cache
+				d->mCachedFormat = format;
+				d->mFrames = frames;
+			}
 		} else {
 			// Image in cache is broken, let's try the file
 			if( !d->mRawData.isNull()) {
@@ -333,6 +343,15 @@ void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
 	}
 
 	d->mGetComplete = true;
+
+	if( !d->mCachedFormat.isNull()) {
+		// Store raw data in cache
+		GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
+		setImageFormat(d->mCachedFormat);
+		//d->mFrames = frames;
+		finish();
+		return;
+	}
 	
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
@@ -360,6 +379,11 @@ void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) 
 
 void GVDocumentDecodeImpl::decodeChunk() {
 	if( d->mSuspended ) {
+		d->mDecoderTimer.stop();
+		return;
+	}
+
+	if( !d->mCachedFormat.isNull()) {
 		d->mDecoderTimer.stop();
 		return;
 	}
