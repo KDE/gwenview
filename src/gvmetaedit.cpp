@@ -34,10 +34,10 @@ const char* JPEG_EXIF_COMMENT="Comment";
 
 
 GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
-: QVBox(parent, name) {
-	mGVPixmap = gvp;
-	mCommentEdit = new QTextEdit(this);
-	mMeta = NULL;
+: QVBox(parent, name)
+, mGVPixmap(gvp)
+, mMetaInfo(0L)
+, mCommentEdit(new QTextEdit(this)) {
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(slotURLChanged()) );
 	slotURLChanged();
@@ -57,7 +57,7 @@ GVMetaEdit::slotURLChanged() {
 	if (url.isValid()) {
 		// make KFileMetaInfo object and check if file is writable
 		#if KDE_VERSION_MAJOR >= 3 && KDE_VERSION_MINOR >= 2
-		mMeta = new KFileMetaInfo(url);
+		mMetaInfo = new KFileMetaInfo(url);
 		if (url.isLocalFile()) {
 			mWritable = QFileInfo(url.path()).isWritable();
 		} else {
@@ -65,21 +65,21 @@ GVMetaEdit::slotURLChanged() {
 		}
 		#else
 		// KDE <= 3.1 can only get meta info from local files
-		mMeta = new KFileMetaInfo(url.path());
+		mMetaInfo = new KFileMetaInfo(url.path());
 		mWritable = QFileInfo(url.path()).isWritable();
 		#endif
 
 		// retrieve comment item
 		QString mimetype = "";
-		if (!mMeta->isEmpty()) {
-			mimetype = mMeta->mimeType();
+		if (!mMetaInfo->isEmpty()) {
+			mimetype = mMetaInfo->mimeType();
 		}
 		if (mimetype == "image/jpeg") {
-			mCommentItem = (*mMeta)[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
+			mCommentItem = (*mMetaInfo)[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
 		} else if (mimetype == "image/png") {
 			// we take the first comment
-			QString name = (*mMeta)[JPEG_EXIF_COMMENT].keys()[0];
-			mCommentItem = (*mMeta)[JPEG_EXIF_COMMENT][name];
+			QString name = (*mMetaInfo)[JPEG_EXIF_COMMENT].keys()[0];
+			mCommentItem = (*mMetaInfo)[JPEG_EXIF_COMMENT][name];
 			mWritable = false; // not implemented in KDE
 		} else {
 			mCommentItem = KFileMetaInfoItem();
@@ -88,9 +88,9 @@ GVMetaEdit::slotURLChanged() {
 		
 		/* Some code to debug
 		QStringList k,l;
-		k = mMeta->groups();
+		k = mMetaInfo->groups();
 		for (uint i=0; i<k.size(); ++i) {
-			l = (*mMeta)[k[i]].keys();
+			l = (*mMetaInfo)[k[i]].keys();
 			for (uint j=0; j<l.size(); ++j) {
 				kdDebug() << k[i] << '\t' << l[j] <<endl;
 			}
@@ -110,14 +110,13 @@ GVMetaEdit::slotURLChanged() {
 }
 void
 GVMetaEdit::clearData() {
-	if (mMeta) {
-		// save changed data
-		if (mWritable && mCommentEdit->isModified()) {
-			mCommentItem.setValue(mCommentEdit->text());
-			mMeta->applyChanges();
-			mCommentEdit->setModified(false);
-		}
-		delete mMeta;
-		mMeta = NULL;
+	if (!mMetaInfo) return;
+	// save changed data
+	if (mWritable && mCommentEdit->isModified()) {
+		mCommentItem.setValue(mCommentEdit->text());
+		mMetaInfo->applyChanges();
+		mCommentEdit->setModified(false);
 	}
+	delete mMetaInfo;
+	mMetaInfo = 0L;
 }

@@ -35,10 +35,10 @@ private slots:
 
 private:
 	bool mWritable;
-	QTextEdit *mCommentEdit;
-	KFileMetaInfo *mMeta;
 	GVPixmap* mGVPixmap;
+	KFileMetaInfo* mMetaInfo;
 	KFileMetaInfoItem mCommentItem;
+	QTextEdit* mCommentEdit;
 
 	void clearData();
 };
