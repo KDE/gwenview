@@ -329,25 +329,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-
-
-/*
-
- This class tries to first generate the most important thumbnails, i.e.
- first the currently selected one, then the ones that are visible, and then
- the rest, the closer the the currently selected one the sooner
-
- mAllItems contains all thumbnails
- mItems contains pending thumbnails, in the priority order
- mCurrentItem is currently processed thumbnail, already removed from mItems
- mProcessedState needs to match mAllItems, and contains information about every
-   thumbnail whether it has been already processed
-
- thumbnailIndex() returns index of a thumbnail in mAllItems, or -1
- updateItemsOrder() builds mItems from mAllItems
-*/
-
-ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, ThumbnailSize size)
+ThumbnailLoadJob::ThumbnailLoadJob(const QValueList<const KFileItem*>* items, ThumbnailSize size)
 : KIO::Job(false), mState( STATE_NEXTTHUMB ), mThumbnailSize(size), mSuspended( false )
 {
 	LOG("");
@@ -357,12 +339,12 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items->empty());
-	mAllItems=*items;
-	mProcessedState.resize( mAllItems.count());
-	qFill( mProcessedState.begin(), mProcessedState.end(), false );
-	mCurrentItem = NULL;
+	mItems=*items;
 
 	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
+	
+	// Move to the first item
+	mNextItemIterator = mItems.begin();
 }
 
 
@@ -397,14 +379,7 @@ void ThumbnailLoadJob::resume() {
 
 //-Internal--------------------------------------------------------------
 void ThumbnailLoadJob::appendItem(const KFileItem* item) {
-	int index = thumbnailIndex( item );
-	if( index >= 0 ) {
-		mProcessedState[ index ] = false;
-		return;
-	}
-	mAllItems.append(item);
-	mProcessedState.append( false );
-	updateItemsOrder();
+	mItems.append(item);
 }
 
 
@@ -413,16 +388,15 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 	// If we are removing the next item, update to be the item after or the
 	// first if we removed the last item
-	mItems.remove( item );
-	int index = thumbnailIndex( item );
-	if( index >= 0 ) {
-		mAllItems.erase( mAllItems.begin() + index );
-		mProcessedState.erase( mProcessedState.begin() + index );
+	if (item == *mNextItemIterator) {
+		mNextItemIterator=mItems.remove(mNextItemIterator);
+		if (mNextItemIterator==mItems.end()) {
+			mNextItemIterator=mItems.begin();
+		}
 	}
 
 	if (item == mCurrentItem) {
 		// Abort
-		mCurrentItem = NULL;
 		subjobs.first()->kill();
 		subjobs.removeFirst();
 		determineNextIcon();
@@ -430,58 +404,17 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 }
 
 
-void ThumbnailLoadJob::setPriorityItems(const KFileItem* current, const KFileItem* first, const KFileItem* last) {
-	if( mAllItems.isEmpty()) {
-		mCurrentVisibleIndex = mFirstVisibleIndex = mLastVisibleIndex = 0;
-		return;
+bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
+	// Move mNextItem to the next item to be processed
+	mNextItemIterator=mItems.find(item);
+	if (mNextItemIterator!=mItems.end()) {
+		return true;
 	}
-	mFirstVisibleIndex = -1;
-	mLastVisibleIndex = - 1;
-	mCurrentVisibleIndex = -1;
-	if( first != NULL ) mFirstVisibleIndex = thumbnailIndex( first );
-	if( last != NULL ) mLastVisibleIndex = thumbnailIndex( last );
-	if( current != NULL ) mCurrentVisibleIndex = thumbnailIndex( current );
-	if( mFirstVisibleIndex == -1 ) mFirstVisibleIndex = 0;
-	if( mLastVisibleIndex == -1 ) mLastVisibleIndex = mAllItems.count() - 1;
-	if( mCurrentVisibleIndex == -1 ) mCurrentVisibleIndex = mFirstVisibleIndex;
-	updateItemsOrder();
+
+	mNextItemIterator = mItems.begin();
+	return false;
 }
 
-void ThumbnailLoadJob::updateItemsOrder() {
-	mItems.clear();
-	int forward = mCurrentVisibleIndex + 1;
-	int backward = mCurrentVisibleIndex;
-	int first = mFirstVisibleIndex;
-	int last = mLastVisibleIndex;
-	updateItemsOrderHelper( forward, backward, first, last );
-	if( first != 0 || last != int( mAllItems.count()) - 1 ) {
-		// add non-visible items
-		updateItemsOrderHelper( last + 1, first - 1, 0, mAllItems.count() - 1);
-	}
-}
-
-void ThumbnailLoadJob::updateItemsOrderHelper( int forward, int backward, int first, int last ) {
-	// start from the current item, add one following it, and one preceding it, for all visible items
-	while( forward <= last || backward >= first ) {
-		// start with backward - that's the curent item for the first time
-		while( backward >= first ) {
-			if( !mProcessedState[ backward ] ) {
-				mItems.append( mAllItems[ backward ] );
-				--backward;
-				break;
-			}
-			--backward;
-		}
-		while( forward <= last ) {
-			if( !mProcessedState[ forward ] ) {
-				mItems.append( mAllItems[ forward ] );
-				++forward;
-				break;
-			}
-			++forward;
-		}
-	}
-}
 
 void ThumbnailLoadJob::determineNextIcon() {
 	mState = STATE_NEXTTHUMB;
@@ -498,11 +431,13 @@ void ThumbnailLoadJob::determineNextIcon() {
 		return;
 	}
 
-	mCurrentItem=mItems.first();
-	mItems.pop_front();
-	Q_ASSERT( !mProcessedState[ thumbnailIndex( mCurrentItem )] );
-	mProcessedState[ thumbnailIndex( mCurrentItem )] = true;
-
+	// Make sure mNextItemIterator references a valid item
+	if (mItems.find(*mNextItemIterator)==mItems.end()) {
+		mNextItemIterator=mItems.begin();
+	}
+	mCurrentItem=*mNextItemIterator;
+	Q_ASSERT(mItems.find(mCurrentItem)!=mItems.end());
+		
 	// First, stat the orig file
 	mState = STATE_STATORIG;
 	mOriginalTime = 0;
@@ -523,6 +458,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		LOG( "KIO::stat orig " << mCurrentURL.url() );
 		addSubjob(job);
 	}
+	mNextItemIterator=mItems.remove(mNextItemIterator);
 }
 
 

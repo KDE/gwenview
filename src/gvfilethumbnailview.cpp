@@ -28,7 +28,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpixmapcache.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
-#include <qvaluevector.h>
 
 // KDE
 #include <kapplication.h>
@@ -159,8 +158,6 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 		this, SLOT(slotDropped(QDropEvent*)) );
 	connect(this, SIGNAL( contentsMoving( int, int )),
 		this, SLOT( slotContentsMoving( int, int )));
-	connect(this, SIGNAL(currentChanged(QIconViewItem*)),
-		this, SLOT(slotCurrentChanged(QIconViewItem*)) );
 
 	QIconView::setSelectionMode(Extended);
 
@@ -260,13 +257,12 @@ void GVFileThumbnailView::startThumbnailUpdate() {
 void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
 
-	QValueVector<const KFileItem*> imageList;
-	imageList.reserve( list->count());
+	QValueList<const KFileItem*> imageList;
 	QPtrListIterator<KFileItem> it(*list);
 	for (;it.current(); ++it) {
 		KFileItem* item=it.current();
 		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
-			imageList.append( item );
+			imageList << item;
 		}
 	}
 	if (imageList.empty()) return;
@@ -581,47 +577,22 @@ void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 	}
 }
 
-void GVFileThumbnailView::slotContentsMoving( int x, int y ) {
-	updateVisibilityInfo( x, y ); // use x,y, the signal is emitted before moving
-}
-
-void GVFileThumbnailView::slotCurrentChanged(QIconViewItem*) {
-	// trigger generating thumbnails from the current one
-	updateVisibilityInfo( contentsX(), contentsY());
-}
-
 /**
- * when generating thumbnails, make the current thumbnail
- * to be the next one processed by the thumbnail job, if visible,
- * otherwise use the first visible thumbnail
+ * when generating thumbnails, make the first visible (not loaded yet)
+ * thumbnail be the next one processed by the thumbnail job
  */
-void GVFileThumbnailView::updateVisibilityInfo( int x, int y ) {
+void GVFileThumbnailView::slotContentsMoving( int x, int y ) {
 	if (d->mThumbnailLoadJob.isNull()) return;
 	QRect r( x, y, visibleWidth(), visibleHeight());
-	GVFileThumbnailViewItem* first = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( r ));
+	GVFileThumbnailViewItem* pos = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( r ));
 	GVFileThumbnailViewItem* last = static_cast< GVFileThumbnailViewItem* >( findLastVisibleItem( r ));
-	for( GVFileThumbnailViewItem* pos = first;
-	     pos != last;
-	     pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem())) {
-		if( pos == currentItem()) {
-			KFileItem* fileItem = pos->fileItem();
-			if( fileItem ) {
-				d->mThumbnailLoadJob->setPriorityItems(fileItem,
-					first->fileItem(), last->fileItem());
-				return;
-			}
-			break;
-		}
-	}
-	for( GVFileThumbnailViewItem* pos = first;
-	     pos != last;
-	     pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem())) {
+	while( pos != NULL ) {
 		KFileItem* fileItem = pos->fileItem();
 		if( fileItem ) {
-			d->mThumbnailLoadJob->setPriorityItems(fileItem,
-				first->fileItem(), last->fileItem());
-			return;
+			if( d->mThumbnailLoadJob->setNextItem(fileItem)) return;
 		}
+		if( pos == last ) break;
+		pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem());
 	}
 }
 

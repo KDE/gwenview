@@ -28,7 +28,6 @@
 // Qt includes
 #include <qpixmap.h>
 #include <qvaluelist.h>
-#include <qvaluevector.h>
 
 // KDE includes
 #include <kio/job.h>
@@ -84,7 +83,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob(const QValueVector<const KFileItem*>* itemList,ThumbnailSize size);
+	ThumbnailLoadJob(const QValueList<const KFileItem*>* itemList,ThumbnailSize size);
 	virtual ~ThumbnailLoadJob();
 
 	/**
@@ -105,9 +104,10 @@ public:
 
 	
 	/**
-	 * Sets items in range first..last to be generated first, starting with current.
+	 * Set item to be the next processed job. Returns false
+	 * if there's no such item in mItems
 	 */	
-	void setPriorityItems(const KFileItem* current, const KFileItem* first, const KFileItem* last);
+	bool setNextItem(const KFileItem* item);
 
 	/**
 	 * Temporarily suspends loading. Used if there's a more
@@ -151,15 +151,14 @@ private slots:
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_CREATETHUMB, STATE_NEXTTHUMB } mState;
 
+	// Our todo list :)
 	QValueList<const KFileItem*> mItems;
-	QValueVector<const KFileItem* > mAllItems;
-	QValueVector< bool > mProcessedState;
-	const KFileItem *mCurrentItem;
-	int thumbnailIndex( const KFileItem* item ) const;
-	void updateItemsOrder();
 
-	// indexes of the current, fist and last visible thumbnails
-	int mCurrentVisibleIndex, mFirstVisibleIndex, mLastVisibleIndex;
+	// The current item
+	const KFileItem *mCurrentItem;
+
+	// The next item to be processed
+	QValueListIterator<const KFileItem*> mNextItemIterator;
 
 	// The URL of the current item (always equivalent to m_items.first()->item()->url())
 	KURL mCurrentURL;
@@ -190,15 +189,6 @@ private:
 	
 	void emitThumbnailLoaded(const QImage& img);
 	void emitThumbnailLoadingFailed();
-
-	void updateItemsOrderHelper( int forward, int backward, int first, int last );
 };
-
-inline
-int ThumbnailLoadJob::thumbnailIndex( const KFileItem* item ) const {
-	QValueVector<const KFileItem* >::ConstIterator pos = qFind( mAllItems.begin(), mAllItems.end(), item );
-	if( pos != mAllItems.end()) return pos - mAllItems.begin();
-	return -1;
-}
 
 #endif

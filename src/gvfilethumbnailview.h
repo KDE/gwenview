@@ -117,14 +117,12 @@ private:
 	void updateGrid();
 	void doStartThumbnailUpdate(const KFileItemList*);
 	void setSortingKey(QIconViewItem*, const KFileItem*);
-	void updateVisibilityInfo( int x, int y );
 
 private slots:
 	void slotClicked(QIconViewItem*);
 	void slotDoubleClicked(QIconViewItem*);
 	void slotDropped(QDropEvent*);
 	void slotContentsMoving( int, int );
-	void slotCurrentChanged(QIconViewItem*);
 	void slotBusyLevelChanged( GVBusyLevel );
 	void slotUpdateEnded();
 };
