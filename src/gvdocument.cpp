@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.moc"
 
 
-#define ENABLE_LOG
+//#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -440,7 +440,7 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 	painter->drawImage( x, y, image );
 
 	if ( printFilename ) {
-		QString fname = minimizeString( d->mURL.filename(), fMetrics, pdWidth );
+		QString fname = minimizeString( filename(), fMetrics, pdWidth );
 		if ( !fname.isEmpty() ) {
 			int fw = fMetrics.width( fname );
 			int x = (pdWidth - fw)/2;
