@@ -1,5 +1,5 @@
-#ifndef GVTHREAD_H
-#define GVTHREAD_H
+#ifndef TSTHREAD_H
+#define TSTHREAD_H
 
 #include <qobject.h>
 #include <qthread.h>
@@ -10,7 +10,7 @@
 
 // how difficult ...
 template< typename T >
-T GVDeepCopy( const T& t )
+T TSDeepCopy( const T& t )
 {
     return QDeepCopy< T >( t );
 }
@@ -115,7 +115,7 @@ class TSThread
         static void initCurrentThread();
         void setCancelCond( QWaitCondition* c );
         friend class Helper;
-        friend class GVCancellable;
+        friend class TSCancellable;
         Helper thread;
         bool cancelling;
         mutable QMutex mutex;
@@ -134,7 +134,7 @@ class TSThread
  *         {
  *         while( !dataReady )
  *             {
- *             GVCancellable c( &condition );
+ *             TSCancellable c( &condition );
  *             condition.wait( &mutex );
  *             if( testCancel())
  *                 return;
@@ -144,11 +144,11 @@ class TSThread
  *     }
  * \endcode
  */
-class GVCancellable
+class TSCancellable
     {
     public:
-        GVCancellable( QWaitCondition* c );
-        ~GVCancellable();
+        TSCancellable( QWaitCondition* c );
+        ~TSCancellable();
     private:
         QWaitCondition* cond;
     };
@@ -176,7 +176,7 @@ TSThread* TSThread::currentThread()
     }
 
 inline
-GVCancellable::GVCancellable( QWaitCondition* c )
+TSCancellable::TSCancellable( QWaitCondition* c )
     : cond( c )
     {
     TSThread::currentThread()->setCancelCond( c );
@@ -184,7 +184,7 @@ GVCancellable::GVCancellable( QWaitCondition* c )
 
 
 inline
-GVCancellable::~GVCancellable()
+TSCancellable::~TSCancellable()
     {
     TSThread::currentThread()->setCancelCond( NULL );
     }

@@ -397,8 +397,8 @@ void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 void ThumbnailThread::load( const QString& path, const QString& name ) {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
-	mPixPath = GVDeepCopy( path );
-	mName = GVDeepCopy( name );
+	mPixPath = TSDeepCopy( path );
+	mName = TSDeepCopy( name );
 	if( !running()) start();
 	mCond.wakeOne();
 }
@@ -408,7 +408,7 @@ void ThumbnailThread::run() {
 	while( !testCancel()) {
 		// empty mPixPath means nothing to do
 		while( mPixPath.isNull()) {
-			GVCancellable c( &mCond );
+			TSCancellable c( &mCond );
 			mCond.wait( &mMutex );
 			if( testCancel()) return;
 		}
@@ -569,7 +569,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image) {
 
 void ThumbnailThread::setCacheDir( const QString& dir ) {
 	QMutexLocker lock( &mMutex );
-	mCacheDir = GVDeepCopy( dir );
+	mCacheDir = TSDeepCopy( dir );
 }
 
 QImage ThumbnailThread::loadedThumbnail() {
