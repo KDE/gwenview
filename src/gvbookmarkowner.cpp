@@ -32,9 +32,9 @@ GVBookmarkOwner::GVBookmarkOwner(QWidget* parent,KActionCollection* actionCollec
 {
 	mMenu=new KPopupMenu(parent);
 
-	QString file = locate( "data", "gwenview/bookmarks.xml" );
+	QString file = locate( "data", "kfile/bookmarks.xml" );
 	if (file.isEmpty()) {
-		file = locateLocal( "data", "gwenview/bookmarks.xml" );
+		file = locateLocal( "data", "kfile/bookmarks.xml" );
 	}
 
 	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
