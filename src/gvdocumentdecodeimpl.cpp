@@ -224,7 +224,7 @@ void GVDocumentDecodeImpl::loadChunk() {
 		// We want a local copy of the file for the comment editor
 		QString tempFilePath;
 		if (!mDocument->url().isLocalFile()) {
-			KTempFile tempFile(QString("gvremotefile"));
+			KTempFile tempFile;
 			tempFile.dataStream()->writeRawBytes(d->mRawData.data(), d->mRawData.size());
 			tempFile.close();
 			tempFilePath=tempFile.name();
