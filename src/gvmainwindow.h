@@ -59,6 +59,9 @@ public:
 public slots:
 	void setURL(const KURL&,const QString&);
 
+protected:
+	bool queryClose();
+
 private:
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;

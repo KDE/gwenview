@@ -5,6 +5,7 @@
  - Don't alter the layout of the docks when toggling dir and file views or
    going fullscreen.
  - File name won't be cut anymore in the thumbnail view.
+ - Prompt to save a modified image before quitting.
 
 2003.04.21 - v0.17.0pre1
 - New features:

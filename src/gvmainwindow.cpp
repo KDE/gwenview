@@ -134,6 +134,11 @@ GVMainWindow::~GVMainWindow() {
 }
 
 
+bool GVMainWindow::queryClose() {
+	return mGVPixmap->saveIfModified();
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Public slots
