@@ -217,6 +217,7 @@ void GVDocument::setDirURL(const KURL& paramURL) {
 		return;
 	}
 	d->mURL=paramURL;
+	d->mURL.adjustPath( +1 ); // add trailing /
 	reset();
 }
 
