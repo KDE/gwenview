@@ -1,22 +1,25 @@
+bin_PROGRAMS=
+lib_LTLIBRARIES=
+
 if GV_HACK_SUFFIX
-bin_PROGRAMS = gwenview_hack
+kdeinit_LTLIBRARIES = gwenview_hack.la
 else
-bin_PROGRAMS = gwenview
+kdeinit_LTLIBRARIES = gwenview.la
 endif
 
-gwenview_hack_SOURCES = main.cpp
+gwenview_hack_la_SOURCES = dummy.cpp
 
-gwenview_hack_LDADD   = ../src/libgwenviewcore.la
- 
-# the library search path.
-gwenview_hack_LDFLAGS = $(all_libraries)
-
-gwenview_SOURCES = main.cpp
-
-gwenview_LDADD   = ../src/libgwenviewcore.la
+gwenview_hack_la_LIBADD   = ../src/libgwenviewcore.la
 
 # the library search path.
-gwenview_LDFLAGS = $(all_libraries)
+gwenview_hack_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+
+gwenview_la_SOURCES = dummy.cpp
+
+gwenview_la_LIBADD   = ../src/libgwenviewcore.la
+
+# the library search path.
+gwenview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
 
 # set the include path for X, qt and KDE
@@ -30,3 +33,8 @@ else
 rcdir = $(kde_datadir)/gwenview
 endif
 rc_DATA = gwenviewui.rc
+
+dummy.cpp:
+	echo > dummy.cpp
+
+CLEANFILES = dummy.cpp

@@ -36,7 +36,8 @@ static KCmdLineOptions options[] = {
 static const char* version="1.1.8";
 
 
-int main (int argc, char *argv[]) {
+extern "C"
+KDE_EXPORT int kdemain (int argc, char *argv[]) {
 #ifdef GV_HACK_SUFFIX
 	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview hack" ),
 #else
