@@ -186,6 +186,8 @@ GVMainWindow::GVMainWindow()
 			} else {
 				if( !urlIsDirectory(this, url)) {
 					mToggleBrowse->activate();
+				} else {
+					url.adjustPath( +1 ); // add trailing /
 				}
 			}
 		}
