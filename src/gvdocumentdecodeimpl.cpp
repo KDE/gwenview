@@ -162,28 +162,28 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job*job) {
 			break;
 		}
 	}
-	QImage image;
-	QCString format;
 	if( urlTimestamp <= d->mTimestamp ) {
-		image = GVCache::instance()->image( mDocument->url(), format );
-	}
-	if( !image.isNull()) {
-		setImageFormat(format);
-		finish(image);
-	} else {
-		QByteArray data = GVCache::instance()->file( mDocument->url() );
-		if( !data.isNull()) {
-			d->mJob = NULL;
-			d->mRawData = data;
-			d->mReadSize=0;
-			d->mUseThread = false;
-			d->mTimeSinceLastUpdate.start();
-			d->mDecoderTimer.start(0, false);
+		QCString format;
+		QImage image = GVCache::instance()->image( mDocument->url(), format );
+		if( !image.isNull()) {
+			setImageFormat(format);
+			finish(image);
+			return;
 		} else {
-			d->mTimestamp = urlTimestamp;
-			startLoading();
+			QByteArray data = GVCache::instance()->file( mDocument->url() );
+			if( !data.isNull()) {
+				d->mJob = NULL;
+				d->mRawData = data;
+				d->mReadSize=0;
+				d->mUseThread = false;
+				d->mTimeSinceLastUpdate.start();
+				d->mDecoderTimer.start(0, false);
+				return;
+			}
 		}
 	}
+	d->mTimestamp = urlTimestamp;
+	startLoading();
 }
 
 void GVDocumentDecodeImpl::startLoading() {
