@@ -158,9 +158,6 @@ GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 	// Full Screen tab
 	d->mFullScreenPage->mOSDModeGroup->setButton(pixmapView->osdMode());
 	d->mFullScreenPage->mFreeOutputFormat->setText(pixmapView->freeOutputFormat());
-	d->mFullScreenPage->mShowMenuBarInFullScreen->setChecked(d->mMainWindow->showMenuBarInFullScreen());
-	d->mFullScreenPage->mShowToolBarInFullScreen->setChecked(d->mMainWindow->showToolBarInFullScreen());
-	d->mFullScreenPage->mShowStatusBarInFullScreen->setChecked(d->mMainWindow->showStatusBarInFullScreen());
 	d->mFullScreenPage->mShowBusyPtrInFullScreen->setChecked(d->mMainWindow->showBusyPtrInFullScreen());
 
 	// File Operations tab
@@ -238,9 +235,6 @@ void GVConfigDialog::slotApply() {
 #endif
 	pixmapView->setOSDMode( static_cast<GVScrollPixmapView::OSDMode>(osdMode) );
 	pixmapView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
-	d->mMainWindow->setShowMenuBarInFullScreen( d->mFullScreenPage->mShowMenuBarInFullScreen->isChecked() );
-	d->mMainWindow->setShowToolBarInFullScreen( d->mFullScreenPage->mShowToolBarInFullScreen->isChecked() );
-	d->mMainWindow->setShowStatusBarInFullScreen( d->mFullScreenPage->mShowStatusBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
 
 	// File Operations tab

@@ -110,9 +110,6 @@ const char CONFIG_SLIDESHOW_GROUP[]="slide show";
 const char CONFIG_CACHE_GROUP[]="cache";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 
-const char CONFIG_MENUBAR_IN_FS[]="menu bar in full screen";
-const char CONFIG_TOOLBAR_IN_FS[]="tool bar in full screen";
-const char CONFIG_STATUSBAR_IN_FS[]="status bar in full screen";
 const char CONFIG_BUSYPTR_IN_FS[]="busy ptr in full screen";
 const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
@@ -492,8 +489,8 @@ void GVMainWindow::showToolBars() {
 void GVMainWindow::toggleFullScreen() {
 	if (mToggleFullScreen->isChecked()) {
 		showFullScreen();
-		if (!mShowMenuBarInFullScreen) menuBar()->hide();
-		if (!mShowStatusBarInFullScreen) statusBar()->hide();
+		menuBar()->hide();
+		statusBar()->hide();
 		
 		/* Hide toolbar
 		 * If the toolbar is docked we hide the DockArea to avoid
@@ -503,7 +500,7 @@ void GVMainWindow::toggleFullScreen() {
 		 * NOTE: This does not work really well if the toolbar is in
 		 * the left or right dock area.
 		 */
-		if (!mShowToolBarInFullScreen) hideToolBars();
+		hideToolBars();
 		if (leftDock()->isEmpty())	 leftDock()->hide();
 		if (rightDock()->isEmpty())  rightDock()->hide();
 		if (topDock()->isEmpty())	 topDock()->hide();
@@ -513,6 +510,11 @@ void GVMainWindow::toggleFullScreen() {
 			mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
+		QPtrList<KAction> actions;
+		actions.append(mFileViewStack->selectPrevious());
+		actions.append(mFileViewStack->selectNext());
+		actions.append(mToggleFullScreen);
+		mPixmapView->setFullScreenActions(actions);
 		mPixmapView->setFullScreen(true);
 		mPixmapView->setFocus();
 	} else {
@@ -1075,37 +1077,6 @@ void GVMainWindow::slotReplug() {
 // Properties
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setShowMenuBarInFullScreen(bool value) {
-	mShowMenuBarInFullScreen=value;
-	if (!mToggleFullScreen->isChecked()) return;
-	if (value) {
-		menuBar()->show();
-	} else {
-		menuBar()->hide();
-	}
-}
-
-void GVMainWindow::setShowToolBarInFullScreen(bool value) {
-	mShowToolBarInFullScreen=value;
-	if (!mToggleFullScreen->isChecked()) return;
-	if (value) {
-		showToolBars();
-	} else {
-		hideToolBars();
-	}
-}
-
-void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
-	mShowStatusBarInFullScreen=value;
-	if (!mToggleFullScreen->isChecked()) return;
-	if (value) {
-		statusBar()->show();
-	} else {
-		statusBar()->hide();
-	}
-}
-
-
 void GVMainWindow::setShowBusyPtrInFullScreen(bool value) {
 	mShowBusyPtrInFullScreen=value;
 }
@@ -1122,9 +1093,6 @@ void GVMainWindow::setAutoDeleteThumbnailCache(bool value){
 //-----------------------------------------------------------------------
 void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
-	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS, false);
-	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS, true);
-	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS, false);
 	mShowBusyPtrInFullScreen=config->readBoolEntry(CONFIG_BUSYPTR_IN_FS, true);
 	mAutoDeleteThumbnailCache=config->readBoolEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, false);	
 }
@@ -1132,11 +1100,6 @@ void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 
 void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_MENUBAR_IN_FS, mShowMenuBarInFullScreen);
-	config->writeEntry(CONFIG_TOOLBAR_IN_FS, mShowToolBarInFullScreen);
-	config->writeEntry(CONFIG_STATUSBAR_IN_FS, mShowStatusBarInFullScreen);
 	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
 }
-
-

@@ -65,9 +65,6 @@ public:
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
 	GVScrollPixmapView* pixmapView() const { return mPixmapView; }
-	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
-	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
-	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	GVDocument* document() const { return mDocument; }
@@ -137,9 +134,6 @@ private:
 	KURLCompletion* mURLEditCompletion;
 	QPtrList<KAction> mWindowListActions;
 
-	bool mShowMenuBarInFullScreen;
-	bool mShowToolBarInFullScreen;
-	bool mShowStatusBarInFullScreen;
 	bool mShowBusyPtrInFullScreen;
 
 #ifdef HAVE_KIPI

@@ -3,6 +3,8 @@
  - Double clicking the image view toggles the full screen mode (By Daniel
    Thaler)
  - It's now possible to select which KIPI plugins should be loaded.
+ - The fullscreen display now contains "Previous", "Next" and "Exit fullscreen"
+   buttons.
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.
@@ -11,6 +13,7 @@
  - KIPI Batch image processing tools now work again.
  - Fixed a few bugs in image saving.
  - Made the save error messages more explicit.
+ - Removed the "show toolbar/menubar/statusbar in fullscreen" options.
 
 2004.10.24 - v1.1.6
 - New features:

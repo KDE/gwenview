@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>GVConfigFullScreenPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>476</width>
-            <height>394</height>
+            <height>309</height>
         </rect>
     </property>
     <property name="caption">
@@ -140,7 +140,7 @@
                 <enum>Vertical</enum>
             </property>
             <property name="sizeType">
-                <enum>Fixed</enum>
+                <enum>Expanding</enum>
             </property>
             <property name="sizeHint">
                 <size>
@@ -149,38 +149,6 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel3</cstring>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Interface&lt;/b&gt;</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>mShowMenuBarInFullScreen</cstring>
-            </property>
-            <property name="text">
-                <string>Show menu</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>mShowToolBarInFullScreen</cstring>
-            </property>
-            <property name="text">
-                <string>Show toolbars</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>mShowStatusBarInFullScreen</cstring>
-            </property>
-            <property name="text">
-                <string>Show status bar</string>
-            </property>
-        </widget>
     </vbox>
 </widget>
 <connections>

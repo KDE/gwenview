@@ -28,21 +28,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qdatetime.h>
 #include <qevent.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
+#include <qregexp.h>
 #include <qstyle.h>
 #include <qtimer.h>
-#include <qregexp.h>
+#include <qtoolbutton.h>
 
 // KDE 
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kicontheme.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
+#include <ktoolbarbutton.h>
 #include <kurldrag.h>
 #include <kapplication.h>
 
@@ -145,13 +149,158 @@ const double MAX_ZOOM=16.0; // Same value as GIMP
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
-const int FULLSCREEN_LABEL_RADIUS = 10;
+const int FULLSCREEN_LABEL_RADIUS = 6;
+
+
+static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
+	painter.fillRect(
+		rect.left() + radius,
+		rect.top(),
+		rect.width() - radius*2,
+		rect.bottom(),
+		painter.brush());
+
+	painter.fillRect(
+		rect.left(),
+		rect.top() + radius,
+		rect.right(),
+		rect.height() - radius*2,
+		painter.brush());
+
+	painter.drawPie(
+		rect.left(),
+		rect.top(),
+		radius*2, radius*2,
+		16*90, 16*90);
+
+	painter.drawPie(
+		rect.right() - radius *2,
+		rect.top(),
+		radius*2, radius*2,
+		0, 16*90);
+
+	painter.drawPie(
+		rect.left(),
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		16*180, 16*90);
+
+	painter.drawPie(
+		rect.right() - radius *2,
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		0, -16*90);
+}
+
+
+static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
+    painter.drawLine(
+        rect.left() + radius,
+        rect.top(),
+        rect.right() - radius,
+        rect.top());
+
+    painter.drawLine(
+        rect.right() - 1,
+        rect.top() + radius,
+        rect.right() - 1,
+        rect.bottom() - radius);
+
+    painter.drawLine(
+        rect.right() - radius,
+        rect.bottom() - 1,
+        rect.left() + radius,
+        rect.bottom() - 1);
+
+    painter.drawLine(
+        rect.left(),
+        rect.bottom() - radius,
+        rect.left(),
+        rect.top() + radius);
+
+	painter.drawArc(
+		rect.left(),
+		rect.top(),
+		radius*2, radius*2,
+		16*90, 16*90);
+
+	painter.drawArc(
+		rect.right() - radius *2,
+		rect.top(),
+		radius*2, radius*2,
+		0, 16*90);
+
+	painter.drawArc(
+		rect.left(),
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		16*180, 16*90);
+
+	painter.drawArc(
+		rect.right() - radius *2,
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		0, -16*90);
+}
+
+
+class FullScreenWidget : public QLabel {
+public:
+	FullScreenWidget(QWidget* parent)
+	: QLabel(parent) {
+		QColor bg=colorGroup().highlight();
+		QColor fg=colorGroup().highlightedText();
+		QPalette pal(palette());
+		pal.setColor(QColorGroup::Background, bg);
+		pal.setColor(QColorGroup::Foreground, fg);
+		pal.setColor(QColorGroup::Button, bg);
+		pal.setColor(QColorGroup::ButtonText, fg);
+		setPalette(pal);
+	}
+
+	void resizeEvent(QResizeEvent* event) {
+		QSize size=event->size();
+		QPainter painter;
+		// Create a mask for the text
+		QBitmap mask(size,true);
+		painter.begin(&mask);
+		painter.setBrush(Qt::white);
+		fillRoundRect(painter, rect(), FULLSCREEN_LABEL_RADIUS);
+		painter.end();
+
+		// Draw the background on a pixmap
+		QPixmap pixmap(size);
+		painter.begin(&pixmap, this);
+		QRect rect=pixmap.rect();
+		painter.eraseRect(rect);
+		drawRoundRect(painter, rect, FULLSCREEN_LABEL_RADIUS);
+		painter.end();
+
+		// Update the label
+		setPixmap(pixmap);
+		setMask(mask);
+	}
+};
+
+
+class ActionButton : public KToolBarButton {
+public:
+	ActionButton(QWidget* parent, KAction* action)
+	: KToolBarButton(
+		action->icon(),
+		0, parent, "action_button", action->plainText()
+		)
+	{
+		setEnabled(action->isEnabled());
+		connect(this, SIGNAL(clicked(int)), action, SLOT(activate()) );
+		connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)) );
+	}
+};
 
 
 struct GVScrollPixmapView::Private {
 	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
-	QLabel* mFullScreenLabel;
 	
 	QColor mBackgroundColor;
 	OSDMode mOSDMode;
@@ -179,8 +328,13 @@ struct GVScrollPixmapView::Private {
 	KToggleAction* mLockZoom;
 	KActionCollection* mActionCollection;
 
-	// Object state info
+	// Fullscreen stuff
 	bool mFullScreen;
+	QLabel* mFullScreenLabel;
+	FullScreenWidget* mFullScreenWidget;
+	QPtrList<KAction> mFullScreenActions;
+	
+	// Object state info
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
@@ -239,6 +393,30 @@ struct GVScrollPixmapView::Private {
 		return ret;
 	}
 
+	void createFullScreenWidget(QWidget* parent) {
+		Q_ASSERT(!mFullScreenWidget);
+		mFullScreenWidget=new FullScreenWidget(parent);
+		
+		QHBoxLayout* layout=new QHBoxLayout(mFullScreenWidget);
+		layout->setResizeMode(QLayout::Fixed);
+		layout->setMargin(FULLSCREEN_LABEL_RADIUS);
+	
+		// Buttons
+		QPtrListIterator<KAction> it(mFullScreenActions);
+		for (; it.current(); ++it) {
+			ActionButton* btn=new ActionButton(mFullScreenWidget, it.current());
+			layout->addWidget(btn);
+		}
+
+		// Label
+		mFullScreenLabel=new QLabel(mFullScreenWidget);
+		layout->addWidget(mFullScreenLabel);
+		QFont font=mFullScreenLabel->font();
+		font.setWeight(QFont::Bold);
+		mFullScreenLabel->setFont(font);
+
+		mFullScreenWidget->move(2, 2);
+	}
 };
 
 
@@ -269,13 +447,14 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d=new Private;
 	d->mDocument=document;
 	d->mAutoHideTimer=new QTimer(this);
-	d->mFullScreenLabel=new QLabel(this);
 	d->mToolID=SCROLL;
 	d->mXOffset=0;
 	d->mYOffset=0;
 	d->mZoom=1;
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
+	d->mFullScreenWidget=0;
+	d->mFullScreenLabel=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
 	d->mPendingOperations= 0 ;
@@ -294,14 +473,6 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mTools[ZOOM]=new ZoomTool(this);
 	d->mTools[d->mToolID]->updateCursor();
 
-	// Init full screen label
-	d->mFullScreenLabel->setBackgroundColor(white);
-	QFont font=d->mFullScreenLabel->font();
-	font.setWeight(QFont::Bold);
-	d->mFullScreenLabel->setFont(font);
-    d->mFullScreenLabel->move(2, 2);
-	d->mFullScreenLabel->hide();
-	
 	// Create actions
 	d->mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,d->mActionCollection,"view_zoom_auto");
 	connect(d->mAutoZoom,SIGNAL(toggled(bool)),
@@ -572,22 +743,33 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 }
 
 
+void GVScrollPixmapView::setFullScreenActions(QPtrList<KAction> actions) {
+	d->mFullScreenActions=actions;
+}
+
+
 void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	d->mFullScreen=fullScreen;
 	viewport()->setMouseTracking(d->mFullScreen);
+
 	if (d->mFullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
+		
+		d->createFullScreenWidget(this);
+		updateFullScreenLabel();
+		d->mFullScreenWidget->show();
+		
 	} else {
 		viewport()->setBackgroundColor(d->mBackgroundColor);
 		d->mAutoHideTimer->stop();
 		d->mTools[d->mToolID]->updateCursor();
-	}
-	if (d->mFullScreen && d->mOSDMode!=NONE) {
-		updateFullScreenLabel();
-		d->mFullScreenLabel->show();
-	} else {
-		d->mFullScreenLabel->hide();
+		
+		Q_ASSERT(d->mFullScreenWidget);
+		if (d->mFullScreenWidget) {
+			delete d->mFullScreenWidget;
+			d->mFullScreenWidget=0;
+		}
 	}
 }
 
@@ -1288,99 +1470,12 @@ void GVScrollPixmapView::hideCursor() {
 }
 
 
-
-static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
-	painter.fillRect(
-		rect.left() + radius,
-		rect.top(),
-		rect.width() - radius*2,
-		rect.bottom(),
-		painter.brush());
-
-	painter.fillRect(
-		rect.left(),
-		rect.top() + radius,
-		rect.right(),
-		rect.height() - radius*2,
-		painter.brush());
-
-	painter.drawPie(
-		rect.left(),
-		rect.top(),
-		radius*2, radius*2,
-		16*90, 16*90);
-
-	painter.drawPie(
-		rect.right() - radius *2,
-		rect.top(),
-		radius*2, radius*2,
-		0, 16*90);
-
-	painter.drawPie(
-		rect.left(),
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		16*180, 16*90);
-
-	painter.drawPie(
-		rect.right() - radius *2,
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		0, -16*90);
-}
-
-static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
-    painter.drawLine(
-        rect.left() + radius,
-        rect.top(),
-        rect.right() - radius,
-        rect.top());
-
-    painter.drawLine(
-        rect.right() - 1,
-        rect.top() + radius,
-        rect.right() - 1,
-        rect.bottom() - radius);
-
-    painter.drawLine(
-        rect.right() - radius,
-        rect.bottom() - 1,
-        rect.left() + radius,
-        rect.bottom() - 1);
-
-    painter.drawLine(
-        rect.left(),
-        rect.bottom() - radius,
-        rect.left(),
-        rect.top() + radius);
-
-	painter.drawArc(
-		rect.left(),
-		rect.top(),
-		radius*2, radius*2,
-		16*90, 16*90);
-
-	painter.drawArc(
-		rect.right() - radius *2,
-		rect.top(),
-		radius*2, radius*2,
-		0, 16*90);
-
-	painter.drawArc(
-		rect.left(),
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		16*180, 16*90);
-
-	painter.drawArc(
-		rect.right() - radius *2,
-		rect.bottom() - radius *2,
-		radius*2, radius*2,
-		0, -16*90);
-}
-
-
 void GVScrollPixmapView::updateFullScreenLabel() {
+	Q_ASSERT(d->mFullScreenWidget);
+	if (!d->mFullScreenWidget) {
+		kdWarning() << "mFullScreenWidget does not exist\n";
+		return;
+	}
 	QString path=d->mDocument->url().path();	
 	QString pathFile=d->mDocument->dirURL().path();
 	QString comment=d->mDocument->comment();
@@ -1428,46 +1523,9 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	case NONE:
 		break;
 	}
-	
-	QPainter painter;
-
-	QSize size=d->mFullScreenLabel->fontMetrics().size(0,text);
-	size.setWidth( size.width() + FULLSCREEN_LABEL_RADIUS * 2);
-	size.setHeight( size.height() + FULLSCREEN_LABEL_RADIUS);
-	d->mFullScreenLabel->resize(size);
-
-	// Create a mask for the text
-	QBitmap mask(size,true);
-	painter.begin(&mask);
-	painter.setBrush(Qt::white);
-	fillRoundRect(painter, d->mFullScreenLabel->rect(), FULLSCREEN_LABEL_RADIUS);
-	painter.end();
-
-	// Draw the text on a pixmap
-	QPixmap pixmap(size);
-	painter.begin(&pixmap);
-	painter.setPen(colorGroup().highlightedText());
-	QRect rect=pixmap.rect();
-	painter.fillRect(rect, colorGroup().highlight());
-	drawRoundRect(painter, rect, FULLSCREEN_LABEL_RADIUS);
-	
-	rect.addCoords(
-        FULLSCREEN_LABEL_RADIUS, FULLSCREEN_LABEL_RADIUS/2,
-		-FULLSCREEN_LABEL_RADIUS, -FULLSCREEN_LABEL_RADIUS/2);
-	painter.setFont(d->mFullScreenLabel->font());
-	
-    painter.setPen(black);
-	painter.drawText(rect, Qt::DontClip, text);
-	
-	painter.setPen(colorGroup().highlightedText());
-	rect.moveBy(-1, -1);
-	painter.drawText(rect, Qt::DontClip, text);
-	painter.end();
-
-	// Update the label
-	d->mFullScreenLabel->setPixmap(pixmap);
-	d->mFullScreenLabel->setMask(mask);
+	d->mFullScreenLabel->setText(text);
 }
+
 
 void GVScrollPixmapView::updateZoomActions() {
 	// Disable most actions if there's no image

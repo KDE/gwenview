@@ -82,6 +82,7 @@ public:
 	double zoom() const; 
 	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const; 
+	void setFullScreenActions(QPtrList<KAction>);
 	void setFullScreen(bool);
 
 	// we use "normal"BackgroundColor because backgroundColor() already exists
