@@ -2,7 +2,7 @@
 - New features:
  - KPart support: src/ contains libgwenview.so, gwenviewapp/ contains the
    executable, gvimagepart/ and gvdirpart/ contain the read only KParts so you
-   can use Gwenview in Konqueror (By Jonathan Riddel).
+   can use Gwenview in Konqueror (By Jonathan Riddell).
  - Asynchronous JPEG loading, based on Khtml loader.
 - Fixes:
  - The rotate and mirror functions can now work on multiple selection.
