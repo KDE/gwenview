@@ -176,11 +176,9 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	updateStatusInfo();
 	kapp->restoreOverrideCursor();
 
-	/*
 	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
 	mURLEdit->addToHistory(url.prettyURL());
-	*/
 }
 
 //-----------------------------------------------------------------------
