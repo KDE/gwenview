@@ -3,5 +3,7 @@ ServiceTypes=image/*
 Exec=gimp-remote -n %F 
 Icon=gimp
 Name=The GIMP
+Name[da]=GIMP
 Name[pt]=O GIMP
 Name[pt_BR]=O GIMP
+Name[sv]=GIMP
