@@ -149,7 +149,7 @@ private slots:
 	void thumbnailReady( const QImage& im );
 
 private:
-	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_CREATETHUMB, STATE_NEXTTHUMB } mState;
+	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_NEXTTHUMB } mState;
 
 	QValueList<const KFileItem*> mItems;
 	QValueVector<const KFileItem* > mAllItems;
@@ -173,8 +173,8 @@ private:
 	// The thumbnail path
 	QString mThumbnailPath;
 
-	// The URL of the temporary file for remote urls
-	KURL mTempURL;
+	// The temporary path for remote urls
+	QString mTempPath;
 
 	// Thumbnail size
 	ThumbnailSize mThumbnailSize;

@@ -566,20 +566,13 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	case STATE_DOWNLOADORIG: 
 		if (job->error()) {
 			emitThumbnailLoadingFailed();
-			mState=STATE_DELETETEMP;
-			LOG("Delete temp file " << mTempURL.prettyURL());
-			addSubjob(KIO::file_delete(mTempURL,false));
-			mTempURL = KURL();
+			LOG("Delete temp file " << mTempPath);
+			QFile::remove(mTempPath);
+			mTempPath = QString::null;
+			determineNextIcon();
 		} else {
-			startCreatingThumbnail(mTempURL.path());
+			startCreatingThumbnail(mTempPath);
 		}
-		return;
-
-	case STATE_CREATETHUMB:
-		assert( false ); // thumbnailReady() must handle this
-
-	case STATE_DELETETEMP:
-		determineNextIcon();
 		return;
 	}
 }
@@ -592,14 +585,12 @@ void ThumbnailLoadJob::thumbnailReady( const QImage& im ) {
 	} else {
 		emitThumbnailLoadingFailed();
 	}
-	if( !mTempURL.isEmpty()) {
-		mState=STATE_DELETETEMP;
-		LOG("Delete temp file " << mTempURL.prettyURL());
-		addSubjob(KIO::file_delete(mTempURL,false));
-		mTempURL = KURL();
-	} else {
-		determineNextIcon();
+	if( !mTempPath.isEmpty()) {
+		LOG("Delete temp file " << mTempPath);
+		QFile::remove(mTempPath);
+		mTempPath = QString::null;
 	}
+	determineNextIcon();
 }
 
 void ThumbnailLoadJob::checkThumbnail() {
@@ -636,8 +627,10 @@ void ThumbnailLoadJob::checkThumbnail() {
 	} else {
 		mState=STATE_DOWNLOADORIG;
 		KTempFile tmpFile;
-		mTempURL.setPath(tmpFile.name());
-		KIO::Job* job=KIO::file_copy(mCurrentURL,mTempURL,-1,true,false,false);
+		mTempPath=tmpFile.name();
+		KURL url;
+		url.setPath(mTempPath);
+		KIO::Job* job=KIO::file_copy(mCurrentURL, url,-1,true,false,false);
 		LOG("Download remote file " << mCurrentURL.prettyURL());
 		addSubjob(job);
 	}
@@ -648,7 +641,6 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
 		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
 		sStoreThumbnailsInCache);
-	mState = STATE_CREATETHUMB;
 }
 
 
