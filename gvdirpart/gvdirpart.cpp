@@ -151,10 +151,10 @@ KAboutData* GVDirPart::createAboutData() {
 }
 
 bool GVDirPart::openFile() {
-        //unused because openURL implemented
+	//unused because openURL implemented
 
-        //mDocument->setFilename(mFile);
-        return true;
+	//mDocument->setFilename(mFile);
+	return true;
 }
 
 bool GVDirPart::openURL(const KURL& url) {

@@ -41,19 +41,19 @@ GVCache::GVCache()
 }
 
 GVCache* GVCache::instance() {
- static GVCache manager;
- return &manager;
+	static GVCache manager;
+	return &manager;
 }
 
 void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp ) {
- updateAge();
- bool insert = true;
- if( mImages.contains( url )) {
-  ImageData& data = mImages[ url ];
-  if( data.timestamp == timestamp ) {
-   data.addFile( file );
-   insert = false;
-  }
+	updateAge();
+	bool insert = true;
+	if( mImages.contains( url )) {
+		ImageData& data = mImages[ url ];
+		if( data.timestamp == timestamp ) {
+			data.addFile( file );
+			insert = false;
+		}
 	}
 	if( insert ) mImages[ url ] = ImageData( url, file, timestamp );
 	checkMaxSize();
@@ -101,8 +101,8 @@ QImage GVCache::image( const KURL& url, QCString& format ) const {
 
 void GVCache::updateAge() {
 	for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
-	     it != mImages.end();
-	     ++it ) {
+		it != mImages.end();
+		++it ) {
 		(*it).age++;
 	}
 }
@@ -113,10 +113,10 @@ void GVCache::checkMaxSize() {
 		QMap< KURL, ImageData >::Iterator max;
 		long long max_cost = -1;
 		for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
-		     it != mImages.end();
-		     ++it ) {
+			it != mImages.end();
+			++it ) {
 			size += (*it).size();
-                        long long cost = (*it).cost();
+			long long cost = (*it).cost();
 			if( cost > max_cost ) {
 				max_cost = cost;
 				max = it;

@@ -75,7 +75,7 @@ public slots:
 	virtual bool openURL(const KURL& url);
 
 protected slots:
-    virtual bool openFile() { return false; }
+	virtual bool openFile() { return false; }
 	/**
 	 * Sets Konqueror's caption with setWindowCaption()
 	 * called by loaded() signal in GVDocument

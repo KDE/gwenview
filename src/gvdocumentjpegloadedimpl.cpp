@@ -109,11 +109,11 @@ GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteAr
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mJPEGContent.loadFromData(rawData);
-    if (mDocument->url().isLocalFile()) {
-        d->mLocalFilePath=document->url().path();
-    } else {
-        d->mLocalFilePath=tempFilePath;
-    }
+	if (mDocument->url().isLocalFile()) {
+		d->mLocalFilePath=document->url().path();
+	} else {
+		d->mLocalFilePath=tempFilePath;
+	}
 }
 
 
@@ -133,9 +133,9 @@ void GVDocumentJPEGLoadedImpl::init() {
 	}
 
 	d->loadComment();
-    if (!mDocument->url().isLocalFile()) {
-        QFile::remove(d->mLocalFilePath);
-    }
+	if (!mDocument->url().isLocalFile()) {
+		QFile::remove(d->mLocalFilePath);
+	}
 
 	GVDocumentLoadedImpl::init();
 }

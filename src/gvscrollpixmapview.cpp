@@ -195,29 +195,29 @@ static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
 
 
 static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
-    painter.drawLine(
-        rect.left() + radius,
-        rect.top(),
-        rect.right() - radius,
-        rect.top());
+	painter.drawLine(
+		rect.left() + radius,
+		rect.top(),
+		rect.right() - radius,
+		rect.top());
 
-    painter.drawLine(
-        rect.right() - 1,
-        rect.top() + radius,
-        rect.right() - 1,
-        rect.bottom() - radius);
+	painter.drawLine(
+		rect.right() - 1,
+		rect.top() + radius,
+		rect.right() - 1,
+		rect.bottom() - radius);
 
-    painter.drawLine(
-        rect.right() - radius,
-        rect.bottom() - 1,
-        rect.left() + radius,
-        rect.bottom() - 1);
+	painter.drawLine(
+		rect.right() - radius,
+		rect.bottom() - 1,
+		rect.left() + radius,
+		rect.bottom() - 1);
 
-    painter.drawLine(
-        rect.left(),
-        rect.bottom() - radius,
-        rect.left(),
-        rect.top() + radius);
+	painter.drawLine(
+		rect.left(),
+		rect.bottom() - radius,
+		rect.left(),
+		rect.top() + radius);
 
 	painter.drawArc(
 		rect.left(),
@@ -1370,53 +1370,53 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		menu.connectItem(
 			menu.insertItem( i18n("Properties") ),
-   this,SLOT(showFileProperties()) );
- }
+			this,SLOT(showFileProperties()) );
+	}
 
- menu.exec(pos);
+	menu.exec(pos);
 }
 
 
 void GVScrollPixmapView::updateScrollBarMode() {
- if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
-  setVScrollBarMode(AlwaysOff);
-  setHScrollBarMode(AlwaysOff);
- } else {
-  setVScrollBarMode(Auto);
-  setHScrollBarMode(Auto);
- }
+	if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
+		setVScrollBarMode(AlwaysOff);
+		setHScrollBarMode(AlwaysOff);
+	} else {
+		setVScrollBarMode(Auto);
+		setHScrollBarMode(Auto);
+	}
 }
 
 
 void GVScrollPixmapView::updateContentSize() {
- resizeContents(
-  int(d->mDocument->width()*d->mZoom),
-  int(d->mDocument->height()*d->mZoom) );
+	resizeContents(
+		int(d->mDocument->width()*d->mZoom),
+		int(d->mDocument->height()*d->mZoom) );
 }
 
 
 double GVScrollPixmapView::computeAutoZoom() const {
- if (d->mDocument->isNull()) {
-  return 1.0;
- }
- QSize size=d->mDocument->image().size();
- size.scale(width(),height(),QSize::ScaleMin);
+	if (d->mDocument->isNull()) {
+		return 1.0;
+	}
+	QSize size=d->mDocument->image().size();
+	size.scale(width(),height(),QSize::ScaleMin);
 
- double zoom=double(size.width())/d->mDocument->width();
- if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
- return zoom;
+	double zoom=double(size.width())/d->mDocument->width();
+	if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
+	return zoom;
 }
 
 
 double GVScrollPixmapView::computeZoom(bool in) const {
- if (in) {
-  if (d->mZoom>=1.0) {
-   return floor(d->mZoom)+1.0;
-  } else {
-   return 1/( ceil(1/d->mZoom)-1.0 );
-  }
- } else {
-  if (d->mZoom>1.0) {
+	if (in) {
+		if (d->mZoom>=1.0) {
+			return floor(d->mZoom)+1.0;
+		} else {
+			return 1/( ceil(1/d->mZoom)-1.0 );
+		}
+	} else {
+	if (d->mZoom>1.0) {
 			return ceil(d->mZoom)-1.0;
 		} else {
 			return 1/( floor(1/d->mZoom)+1.0 );
@@ -1460,9 +1460,9 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	QString path=d->mDocument->url().path();	
 	QString pathFile=d->mDocument->dirURL().path();
 	QString comment=d->mDocument->comment();
-    if (comment.isNull()) {
-        comment=i18n("(No comment)");
-    }
+	if (comment.isNull()) {
+		comment=i18n("(No comment)");
+	}
 	QString fileName=d->mDocument->filename();
 	QString resolution = QString( "%1x%2" ).arg( d->mDocument->width()).arg( d->mDocument->height());
 

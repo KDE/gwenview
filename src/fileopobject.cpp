@@ -59,8 +59,8 @@ public:
 		filterWidget->setEnabled(false);
 		setMode(KFile::Directory | KFile::ExistingOnly);
 
-        // Cast to avoid gcc being confused
-        setPreviewWidget(static_cast<KPreviewWidgetBase*>(0));
+		// Cast to avoid gcc being confused
+		setPreviewWidget(static_cast<KPreviewWidgetBase*>(0));
 	}
 };
 
@@ -100,7 +100,7 @@ void FileOpCopyToObject::operator()() {
 		QString destDir = FileOperation::destDir();
 		if( !destDir.isEmpty()) {
 			destDir += "/";
-        }
+		}
 		if (mURLList.size()==1) {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Copy File"));
@@ -131,7 +131,7 @@ void FileOpMoveToObject::operator()() {
 		QString destDir = FileOperation::destDir();
 		if( !destDir.isEmpty()) {
 			destDir += "/";
-        }
+		}
 		if (mURLList.size()==1) {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Move File"));
@@ -196,46 +196,46 @@ void FileOpTrashObject::operator()() {
 		if (response==KMessageBox::Cancel) return;
 	}
 
- // Go do it
-    if (mURLList.count()==1) {
-        // If there's only one file, KIO::move will think we want to overwrite
-        // the trash dir with the file to trash, so we add the file name
-        trashURL.addPath(mURLList.first().fileName());
-    }
- KIO::Job* job=KIO::move(mURLList,trashURL);
- connect( job, SIGNAL( result(KIO::Job*) ),
-  this, SLOT( slotResult(KIO::Job*) ) );
+	// Go do it
+	if (mURLList.count()==1) {
+		// If there's only one file, KIO::move will think we want to overwrite
+		// the trash dir with the file to trash, so we add the file name
+		trashURL.addPath(mURLList.first().fileName());
+	}
+	KIO::Job* job=KIO::move(mURLList,trashURL);
+	connect( job, SIGNAL( result(KIO::Job*) ),
+		this, SLOT( slotResult(KIO::Job*) ) );
 }
 
 //-FileOpRealDeleteObject----------------------------------------------------------
 void FileOpRealDeleteObject::operator()() {
- // Confirm operation
- if (FileOperation::confirmDelete()) {
-  int response;
-  if (mURLList.count()>1) {
-   QStringList fileList;
-   KURL::List::ConstIterator it=mURLList.begin();
-   for (; it!=mURLList.end(); ++it) {
-    fileList.append((*it).filename());
-   }
-   response=KMessageBox::warningYesNoList(mParent,
-    i18n("Do you really want to delete these files?"),fileList,
-    i18n("Delete Files"),
+	// Confirm operation
+	if (FileOperation::confirmDelete()) {
+		int response;
+		if (mURLList.count()>1) {
+			QStringList fileList;
+			KURL::List::ConstIterator it=mURLList.begin();
+			for (; it!=mURLList.end(); ++it) {
+				fileList.append((*it).filename());
+			}
+			response=KMessageBox::warningYesNoList(mParent,
+				i18n("Do you really want to delete these files?"),fileList,
+				i18n("Delete Files"),
 #if KDE_IS_VERSION(3, 3, 0)
-    KStdGuiItem::del()
+				KStdGuiItem::del()
 #else
-    KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
+				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
-    );
-  } else {
-   QString filename=QStyleSheet::escape(mURLList.first().filename());
-   response=KMessageBox::warningYesNo(mParent,
-    i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
-    i18n("Delete File"),
+				);
+		} else {
+			QString filename=QStyleSheet::escape(mURLList.first().filename());
+			response=KMessageBox::warningYesNo(mParent,
+				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
+				i18n("Delete File"),
 #if KDE_IS_VERSION(3, 3, 0)
-    KStdGuiItem::del()
+				KStdGuiItem::del()
 #else
-    KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
+				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
 				);
 		}

@@ -38,14 +38,14 @@ public:
 };
 
 GVBranchPropertiesDialog::GVBranchPropertiesDialog(QWidget* parent)
-                    : KDialogBase(parent,"gvfolderconfig",true,QString::null,Ok|Cancel)
+: KDialogBase(parent,"gvfolderconfig",true,QString::null,Ok|Cancel)
 {
 	d=new GVBranchPropertiesDialogPrivate;
-        d->mContent=new GVBranchPropertiesDialogBase(this);
-        setMainWidget(d->mContent);
-        setCaption(d->mContent->caption());
+	d->mContent=new GVBranchPropertiesDialogBase(this);
+	setMainWidget(d->mContent);
+	setCaption(d->mContent->caption());
 	d->mContent->mUrl->setMode(KFile::Directory);
-        d->mContent->mIcon->setIcon("folder");
+	d->mContent->mIcon->setIcon("folder");
 	enableButton(Ok, false);
 }
 
@@ -57,7 +57,7 @@ void GVBranchPropertiesDialog::setContents(const QString& icon, const QString& t
 	d->mContent->mTitle->setText(title);
 	d->mContent->mUrl->setURL(url);
 	d->mContent->mIcon->setIcon(icon);
-        setCaption(i18n("Edit Branch"));
+	setCaption(i18n("Edit Branch"));
 }
 
 int GVBranchPropertiesDialog::exec() {

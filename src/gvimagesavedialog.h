@@ -33,8 +33,8 @@ class GVImageSaveDialog : public KFileDialog {
 Q_OBJECT
 public:
 	GVImageSaveDialog(KURL& url,const QCString& imageFormat,QWidget* parent);
-    QCString imageFormat() const { return mImageFormat; }
-    
+	QCString imageFormat() const { return mImageFormat; }
+
 protected slots:
 	void accept();
 

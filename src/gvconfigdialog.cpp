@@ -260,41 +260,41 @@ void GVConfigDialog::slotApply() {
 
 
 void GVConfigDialog::calculateCacheSize() {
- KURL url;
- url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
- unsigned long size=KDirSize::dirSize(url);
- KMessageBox::information( this,i18n("Cache size is %1").arg(KIO::convertSize(size)) );
+	KURL url;
+	url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
+	unsigned long size=KDirSize::dirSize(url);
+	KMessageBox::information( this,i18n("Cache size is %1").arg(KIO::convertSize(size)) );
 }
 
 
 void GVConfigDialog::emptyCache() {
- QString dir=ThumbnailLoadJob::thumbnailBaseDir();
+	QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
- if (!QFile::exists(dir)) {
-  KMessageBox::information( this,i18n("Cache is already empty.") );
-  return;
- }
+	if (!QFile::exists(dir)) {
+		KMessageBox::information( this,i18n("Cache is already empty.") );
+		return;
+	}
 
- int response=KMessageBox::questionYesNo(this,
-  "<qt>" + i18n("Are you sure you want to empty the thumbnail cache?"
-  " This will remove the folder <b>%1</b>.").arg(QStyleSheet::escape(dir)) + "</qt>");
+	int response=KMessageBox::questionYesNo(this,
+		"<qt>" + i18n("Are you sure you want to empty the thumbnail cache?"
+		" This will remove the folder <b>%1</b>.").arg(QStyleSheet::escape(dir)) + "</qt>");
 
- if (response==KMessageBox::No) return;
+	if (response==KMessageBox::No) return;
 
- KURL url;
- url.setPath(dir);
+	KURL url;
+	url.setPath(dir);
 #if KDE_IS_VERSION(3, 2, 0)
- if (KIO::NetAccess::del(url, 0)) {
+	if (KIO::NetAccess::del(url, 0)) {
 #else
- if (KIO::NetAccess::del(url)) {
+	if (KIO::NetAccess::del(url)) {
 #endif
-  KMessageBox::information( this,i18n("Cache emptied.") );
- }
+		KMessageBox::information( this,i18n("Cache emptied.") );
+	}
 }
 
 
 void GVConfigDialog::onCacheEmptied(KIO::Job* job) {
- if ( job->error() ) {
+	if ( job->error() ) {
 		job->showErrorDialog(this);
 		return;
 	}

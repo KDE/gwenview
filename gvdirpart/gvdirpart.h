@@ -40,11 +40,11 @@ class GVDirPart;
 class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	Q_OBJECT
 
- public:
+public:
 	GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name=0L);
 	~GVDirPartBrowserExtension();
 
- public slots:
+public slots:
 	void contextMenu();
 
 	void updateActions();
@@ -59,7 +59,7 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	void print();
 
 	void directoryChanged(const KURL& dirURL);
- private:
+private:
 	GVDirPart* mGVDirPart;
 };
 
@@ -68,7 +68,7 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
  */
 class GVDirPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
- public:
+public:
 	GVDirPart(QWidget*, const char*, QObject*, const char*, const QStringList &);
 	virtual ~GVDirPart();
 
@@ -86,7 +86,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * Print the image being viewed if there is one
 	 */
 	void print();
- protected:
+protected:
 	void partActivateEvent(KParts::PartActivateEvent* event);
 
 	/**
@@ -102,7 +102,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 	virtual bool openURL(const KURL& url);
 
- protected slots:
+protected slots:
 	/**
 	 * Turns the slide show on or off
 	 */
@@ -119,14 +119,14 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 	void rotateRight();
 
- protected:
-        /**
+protected:
+	/**
 	 * The component's widget, contains the files view on the left
 	 * and scroll view on the right.
 	 */
 	QSplitter* mSplitter;
 
-        /**
+	/**
 	 * Scroll widget
 	 */
 	GVScrollPixmapView* mPixmapView;

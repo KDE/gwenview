@@ -81,8 +81,8 @@ static QString dirSyntax(const QString &d) {
 }
 
 GVFileTreeBranch::GVFileTreeBranch(KFileTreeView *tv, const KURL& url, const QString& title, const QString& icon)
-                : KFileTreeBranch(tv, url, title, SmallIcon(icon)),
-                  mIcon(icon)
+: KFileTreeBranch(tv, url, title, SmallIcon(icon)),
+mIcon(icon)
 {
 }
 
@@ -367,16 +367,16 @@ KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QStri
 
 void GVDirView::addBranch(const QString& url, const QString& title, const QString& icon) {
 	GVFileTreeBranch *branch= new GVFileTreeBranch(this, KURL(dirSyntax(url)), title, icon);
-        KFileTreeView::addBranch(branch);
-        setDirOnlyMode(branch,true);
-        branch->root()->setExpandable(true);
-        branch->setChildRecurse(false);
+	KFileTreeView::addBranch(branch);
+	setDirOnlyMode(branch,true);
+	branch->root()->setExpandable(true);
+	branch->setChildRecurse(false);
 
-        connect(branch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-                this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+	connect(branch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
+		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
-        connect(branch,SIGNAL( refreshItems(const KFileItemList&)),
-                this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
+	connect(branch,SIGNAL( refreshItems(const KFileItemList&)),
+		this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
 	mBranches.append(branch);
 }
 
@@ -520,32 +520,32 @@ void GVDirView::renameDir() {
 
 	KURL newURL=currentURL().upURL();
 
- newURL.addPath(newDir);
- job=KIO::rename(currentURL(),newURL,false);
+	newURL.addPath(newDir);
+	job=KIO::rename(currentURL(),newURL,false);
 
- connect(job,SIGNAL(result(KIO::Job*)),
-  this,SLOT(slotDirRenamed(KIO::Job*)));
+	connect(job,SIGNAL(result(KIO::Job*)),
+		this,SLOT(slotDirRenamed(KIO::Job*)));
 }
 
 
 void GVDirView::slotDirRenamed(KIO::Job* job) {
- if (job->error()) {
-  job->showErrorDialog(this);
-  return;
- }
+	if (job->error()) {
+		job->showErrorDialog(this);
+		return;
+	}
 }
 
 
 void GVDirView::removeDir() {
- KIO::Job* job;
- if (!currentItem()) return;
+	KIO::Job* job;
+	if (!currentItem()) return;
 
- QString dir=QStyleSheet::escape(currentURL().path());
- int response=KMessageBox::warningContinueCancel(this,
-  "<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
-  i18n("Delete Folder"),
+	QString dir=QStyleSheet::escape(currentURL().path());
+	int response=KMessageBox::warningContinueCancel(this,
+		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
+		i18n("Delete Folder"),
 #if KDE_IS_VERSION(3, 3, 0)
-  KStdGuiItem::del()
+		KStdGuiItem::del()
 #else
 		KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
@@ -583,8 +583,8 @@ void GVDirView::removeBranch() {
 	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
 
 	if (br && KMessageBox::Continue==KMessageBox::warningContinueCancel(this,
-                                "<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
-                                + "</qt>")) {
+			"<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
+			+ "</qt>")) {
 		mBranches.remove(static_cast<GVFileTreeBranch*>(br));
 		KFileTreeView::removeBranch(br);
 		if (0==childCount()) {
@@ -607,13 +607,13 @@ void GVDirView::showBranchPropertiesDialog() {
 
 void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
 {
-        GVBranchPropertiesDialog dialog(this);
+	GVBranchPropertiesDialog dialog(this);
 
-        if(editItem) {
-                dialog.setContents(editItem->icon(), editItem->name(), editItem->rootUrl().prettyURL());
-        }
+	if(editItem) {
+		dialog.setContents(editItem->icon(), editItem->name(), editItem->rootUrl().prettyURL());
+	}
 
-        if(QDialog::Accepted==dialog.exec()) {
+	if(QDialog::Accepted==dialog.exec()) {
 		KURL newUrl(dirSyntax(dialog.url()));
 
 		if (editItem) {

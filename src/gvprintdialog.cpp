@@ -63,8 +63,7 @@ GVPrintDialogPage::GVPrintDialogPage( GVDocument* document, QWidget *parent, con
 
 GVPrintDialogPage::~GVPrintDialogPage() {}
 
-void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
-                                    bool /*incldef*/ ) {
+void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ ) {
 	opts["app-gwenview-position"] = QString::number(getPosition(mContent->mPosition->currentText()));
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
