@@ -769,6 +769,10 @@ bool XCFImageFormat::loadImageProperties ( QDataStream& xcf_io,
       property >> xcf_image.compression;
       break;
 
+    case PROP_GUIDES:
+      // This property is ignored.
+      break;
+	  
     case PROP_RESOLUTION:
       property >> xcf_image.x_resolution >> xcf_image.y_resolution;
       break;
@@ -1408,7 +1412,9 @@ void XCFImageFormat::assignMaskBytes ( Layer& layer, uint i, uint j )
 bool XCFImageFormat::loadProperty ( QDataStream& xcf_io, PropType& type,
 				    QByteArray& bytes )
 {
-  xcf_io >> (Q_UINT32)type;
+  Q_UINT32 tmp;
+  xcf_io >> tmp;
+  type=static_cast<PropType>(tmp);
 
   if ( xcf_io.device()->status() != IO_Ok ) {
     qDebug( "XCF: read failure on property type" );
