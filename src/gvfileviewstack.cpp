@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kaction.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kicontheme.h>
