@@ -564,19 +564,17 @@ void GVMainWindow::showExternalToolDialog() {
 void GVMainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
-/* Disable it for now: the keys appear in the dialog, but are not applied
 #ifdef HAVE_KIPI
 	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
 	for( ; it!=itEnd; ++it ) {
 		KIPI::Plugin* plugin=(*it)->plugin;
 		if (plugin) {
-			dialog.insert(plugin->actionCollection(this), (*it)->name);
+			dialog.insert(plugin->actionCollection(), (*it)->name);
 		}
 	}
 #endif
-*/
-	dialog.exec();
+	dialog.configure(true);
 }
 
 
@@ -992,6 +990,7 @@ void GVMainWindow::loadPlugins() {
 
 			(*actionIt)->plug( popup );
 		}
+		plugin->actionCollection()->readShortcutSettings();
 	}
 }
 #else
