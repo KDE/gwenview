@@ -131,6 +131,8 @@ signals:
 	 * Used by GVDirPart to tell Konqueror to change directory
 	 */
 	void directoryChanged(const KURL&);
+
+	void selectionChanged();
 	void completed();
 	void canceled();
 	void completedURLListing(const KURL&);

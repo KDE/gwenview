@@ -189,6 +189,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this, SLOT(updateSortMenu(QDir::SortSpec)) );
 	connect(mFileDetailView, SIGNAL(doubleClicked(QListViewItem*)),
 		this, SLOT(slotViewDoubleClicked()) );
+	connect(mFileDetailView, SIGNAL(selectionChanged()),
+		this, SIGNAL(selectionChanged()) );
 
 	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
@@ -208,6 +210,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
 	connect(mFileThumbnailView, SIGNAL(doubleClicked(QIconViewItem*)),
 		this, SLOT(slotViewDoubleClicked()) );
+	connect(mFileThumbnailView, SIGNAL(selectionChanged()),
+		this, SIGNAL(selectionChanged()) );
 }
 
 

@@ -7,6 +7,7 @@
    not in view mode.
  - On Screen Display is back, it was broken in 1.1.6.
  - Updated man page.
+ - KIPI Batch image processing tools now work again.
 
 2004.10.24 - v1.1.6
 - New features:

@@ -103,6 +103,12 @@ GVKIPIInterface::GVKIPIInterface( QWidget* parent, GVFileViewStack* fileView)
 :KIPI::Interface(parent, "Gwenview kipi interface") {
 	d=new GVKIPIInterfacePrivate;
 	d->mFileView=fileView;
+
+	connect(d->mFileView, SIGNAL(selectionChanged()),
+		this, SLOT(slotSelectionChanged()) );
+	
+	connect(d->mFileView, SIGNAL(completedURLListing(const KURL&)),
+		this, SLOT(slotDirectoryChanged()) );
 }
 
 
@@ -153,5 +159,16 @@ int GVKIPIInterface::features() const {
 bool GVKIPIInterface::addImage(const KURL&, QString&) {
 	return true;
 }
+
+
+void GVKIPIInterface::slotSelectionChanged() {
+	emit selectionChanged(d->mFileView->selectionSize() > 0);
+}
+
+
+void GVKIPIInterface::slotDirectoryChanged() {
+	emit currentAlbumChanged(d->mFileView->fileCount() > 0);
+}
+
 
 #endif /* HAVE_KIPI */

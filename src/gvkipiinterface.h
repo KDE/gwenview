@@ -46,6 +46,10 @@ public:
 
 private:
 	GVKIPIInterfacePrivate* d;
+
+private slots:
+	void slotSelectionChanged();
+	void slotDirectoryChanged();
 };
 
 #endif /* HAVE_KIPI */
