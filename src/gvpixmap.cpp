@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
+#include <ktempfile.h>
 
 // Our includes
 #include <gvarchive.h>
@@ -162,15 +163,18 @@ bool GVPixmap::save() const {
 
 
 bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
-	QString path;
-	if (!url.isLocalFile()) {
-		kdWarning() << "Remote file saving not implemented yet\n";
-		return false;
-	} else {
-		path=url.path();
+	if (url.isLocalFile()) {
+		return mImage.save(url.path(),format.ascii());
 	}
 
-	return mImage.save(path,format.ascii());
+	KTempFile tmp;
+	tmp.setAutoDelete(true);
+	bool result;
+	
+	result=mImage.save(tmp.name(),format.ascii());
+	if (!result) return false;
+
+	return KIO::NetAccess::upload(tmp.name(),url);
 }
 
 
