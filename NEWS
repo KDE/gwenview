@@ -9,6 +9,8 @@ xxxx.xx.x - v1.1.8
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
  - Fixed "Clear location"/"Location" shortcuts.
+ - Make it impossible to undock the file view. It should be easier for new
+   users to use it this way.
 
 2004.12.19 - v1.1.7
 - New features:

@@ -49,6 +49,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klargefile.h>
 #include <klocale.h>
 #include <kmenubar.h>
+#include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
@@ -109,8 +110,13 @@ const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_BUSYPTR_IN_FS[]="busy ptr in full screen";
 const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
+const char CONFIG_GWENVIEW_DOCK_VERSION[]="Gwenview version";
 
 const char CONFIG_SESSION_URL[] = "url";
+
+// This version is here to avoid configuration migration troubles when changes
+// are made to the dock behavior
+const int GWENVIEW_DOCK_VERSION=2;
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -216,6 +222,8 @@ bool GVMainWindow::queryClose() {
 	// saving layout when in "fullscreen" or "image only" mode.
 	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
+		config->setGroup(CONFIG_DOCK_GROUP);
+		config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
 	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 
@@ -775,8 +783,23 @@ void GVMainWindow::createWidgets() {
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
 
+	// Load dock config if up-to-date
+	bool loadDockConfig=true;
+	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
+		config->setGroup(CONFIG_DOCK_GROUP);
+		loadDockConfig=config->readNumEntry(CONFIG_GWENVIEW_DOCK_VERSION, 1)==GWENVIEW_DOCK_VERSION;
+	}
+	if (loadDockConfig) {
+		mDockArea->readDockConfig(config,CONFIG_DOCK_GROUP);
+	} else {
+		KMessageBox::sorry(this, i18n(
+			"<qt><b>Configuration update</b><br>"
+			"Due to some changes in the dock behavior, your old dock configuration has been discarded. "
+			"Please adjust your docks again.</qt>")
+			);
+	}
+	
 	// Load config
-	mDockArea->readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
@@ -883,7 +906,6 @@ void GVMainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
-	createHideShowAction(mFileDock);
 	createHideShowAction(mPixmapDock);
 	createHideShowAction(mMetaDock);
 	plugActionList("winlist", mWindowListActions);
