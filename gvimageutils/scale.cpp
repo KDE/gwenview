@@ -944,10 +944,17 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
 
 // FIXME: replace with mRed, etc... These work on pointers to pixels, not
 // pixel values
+#if Q_BYTE_ORDER == Q_BIG_ENDIAN
+#define A_VAL(p) ((unsigned char *)(p))[0]
+#define R_VAL(p) ((unsigned char *)(p))[1]
+#define G_VAL(p) ((unsigned char *)(p))[2]
+#define B_VAL(p) ((unsigned char *)(p))[3]
+#elif Q_BYTE_ORDER == Q_LITTLE_ENDIAN
 #define A_VAL(p) ((unsigned char *)(p))[3]
 #define R_VAL(p) ((unsigned char *)(p))[2]
 #define G_VAL(p) ((unsigned char *)(p))[1]
 #define B_VAL(p) ((unsigned char *)(p))[0]
+#endif
 
 #define INV_XAP                   (256 - xapoints[x])
 #define XAP                       (xapoints[x])
