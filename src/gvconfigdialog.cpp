@@ -85,7 +85,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	d->mContent->mSmoothScale->setChecked(pixmapView->smoothScale());
+	d->mContent->mSmoothScale->setCurrentItem(pixmapView->smoothScale());
 	d->mContent->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mContent->mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	d->mContent->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
@@ -140,7 +140,7 @@ void GVConfigDialog::slotApply() {
 	fileViewStack->setShownColor(d->mContent->mShownColor->color());
 	
 	// Image View tab		
-	pixmapView->setSmoothScale(d->mContent->mSmoothScale->isChecked());
+	pixmapView->setSmoothScale(d->mContent->mSmoothScale->currentItem());
 	pixmapView->setEnlargeSmallImages(d->mContent->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
 	pixmapView->setMouseWheelScroll(d->mContent->mMouseWheelGroup->selected()==d->mContent->mMouseWheelScroll);

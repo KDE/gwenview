@@ -21,15 +21,20 @@ Copyright 2000-2004 Aurélien Gâteau
 #ifndef GVIMAGEUTILS_H
 #define GVIMAGEUTILS_H
 
-// KDE includes
-#include <kurl.h>
+// Qt
+#include <qmemarray.h>
+#include <qimage.h>
 
-template <class>class QMemArray;
-typedef QMemArray<char> QByteArray;
-class QImage;
+// KDE
+#include <kurl.h>
 
 namespace GVImageUtils {
 	enum Orientation { NOT_AVAILABLE=0,NORMAL=1,HFLIP=2,ROT_180=3,VFlip=4,ROT_90_HFLIP=5,ROT_90=6,ROT_90_VFLIP=7,ROT_270=8};
+
+	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };
+
+	QImage scale(const QImage& image,int width, int height,
+		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
 
 	QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation);
 	Orientation getOrientation(const QByteArray& jpegContent);

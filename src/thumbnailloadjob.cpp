@@ -356,7 +356,7 @@ bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QImage& img) {
 	if (biWidth<=thumbSize && biHeight<=thumbSize) {
 		img=bigImg;
 	} else {
-		img=bigImg.smoothScale(thumbSize,thumbSize,QImage::ScaleMin);
+		img= GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 	}
 	return true;
 }
@@ -462,7 +462,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 	int newx = size*cinfo.output_width / newMax;
 	int newy = size*cinfo.output_height / newMax;
 
-	image=image.smoothScale( newx, newy);
+	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_FAST);
 
 	jpeg_destroy_decompress(&cinfo);
 	fclose(inputFile);
@@ -488,7 +488,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 	}
 
 	// Scale thumbnail
-	QImage img2=img.smoothScale(thumbPixelSize, thumbPixelSize, QImage::ScaleMin);
+	QImage img2=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 	emit thumbnailLoaded(mCurrentItem, QPixmap(img2));
 }
 

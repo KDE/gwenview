@@ -42,6 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentdecodeimpl.h"
 #include "gvdocumentimpl.h"
 #include "gvimagesavedialog.h"
+#include "gvimageutils.h"
 #include "gvjpegformattype.h"
 #include "gvjpegtran.h"
 #include "gvpngformattype.h"
@@ -340,13 +341,13 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 		wImg = wImg * printer->resolution();
 		hImg = hImg * printer->resolution();
 
-		image = image.smoothScale( int(wImg), int(hImg), QImage::ScaleMin );
+		image = GVImageUtils::scale( image, int(wImg), int(hImg), GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
 	}
 
 	// Shring image if necessary
 	bool shrinkToFit = printer->option( "app-gwenview-shrinkToFit" ) != f;
 	if ( shrinkToFit && image.width() > pdWidth || image.height() > pdHeight ) {
-		image = image.smoothScale( pdWidth, pdHeight, QImage::ScaleMin );
+		image = GVImageUtils::scale( image, pdWidth, pdHeight, GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
 	}
 
 	// Compute x and y

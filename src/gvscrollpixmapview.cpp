@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <math.h>
 
-// Qt includes
+// Qt 
 #include <qbitmap.h>
 #include <qcolor.h>
 #include <qcursor.h>
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstyle.h>
 #include <qtimer.h>
 
-// KDE includes
+// KDE 
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -44,11 +44,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaction.h>
 #include <kapplication.h>
 
-// Our includes
+// Local
 #include "fileoperation.h"
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltoolcontext.h"
 #include "gvdocument.h"
+#include "gvimageutils.h"
 
 #include "gvscrollpixmapview.moc"
 
@@ -329,7 +330,7 @@ void GVScrollPixmapView::slotLoaded() {
 	updateContentSize();
 	updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
-	if (mSmoothScale) addPendingPaint( SMOOTH_PASS );
+	if (mSmoothScale >= SMOOTH2) scheduleOperation( SMOOTH_PASS );
 }
 
 
@@ -346,7 +347,7 @@ void GVScrollPixmapView::slotModified() {
 
 
 void GVScrollPixmapView::loadingStarted() {
-	cancelPendingPaints();
+	cancelPending();
 	mSmoothingSuspended = true;
 	mEmptyImage = true;
 	// every loading() signal from GVDocument must be followed by a signal that turns this off
@@ -359,11 +360,11 @@ void GVScrollPixmapView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
-void GVScrollPixmapView::setSmoothScale(bool value) {
+void GVScrollPixmapView::setSmoothScale(int value) {
 	if( mSmoothScale == value ) return;
-	mSmoothScale=value;
-	if( mSmoothScale ) {
-		addPendingPaint( SMOOTH_PASS );
+	mSmoothScale= static_cast< SmoothScale >( value );
+	if( mSmoothScale >= SMOOTH2 ) {
+		scheduleOperation( SMOOTH_PASS );
 	} else {
 		fullRepaint();
 	}
@@ -484,81 +485,103 @@ inline void composite(uint* rgba,uint value) {
 
 void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
 	if( !mEmptyImage ) {
-		addPendingPaint( PAINT_NORMAL, QRect( clipx, clipy, clipw, cliph ));
+		addPendingPaint( false, QRect( clipx, clipy, clipw, cliph ));
 	} else {
 		// image is empty, simply clear
 		painter->eraseRect( clipx, clipy, clipw, cliph );
 	}
 }
 
-void GVScrollPixmapView::addPendingPaint( PaintType type, QRect rect ) {
-	if( mSmoothingSuspended && type == PAINT_SMOOTH ) return;
+// How this pending stuff works:
+// There's a queue of areas to paint (each with bool saying whether it's smooth pass).
+// Also, there's a bitfield of pending operations, operations are handled only after
+// there's nothing more to paint (so that loading is resumed or smooth pass is started).
+void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
+	if( mSmoothingSuspended && smooth ) return;
 
-	if( type == SMOOTH_PASS || type == RESUME_LOADING ) {
-		mPendingPaints.append( PendingPaint( type, rect ));
-	} else { // split to several repaints limited by pixels to be painted
-		const int MAX_REPAINT_SIZE = 10000;
-		int step = 0;
-		if (rect.width() > 0) {
-			step=(( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
+	// try to avoid scheduling already scheduled areas
+	QRegion& region = smooth ? mPendingSmoothRegion : mPendingNormalRegion;
+	if( region.intersect( rect ) == QRegion( rect ))
+		return; // whole rect has already pending paints
+	// at least try to remove the part that's already scheduled
+	rect = ( QRegion( rect ) - region ).boundingRect();
+	region += rect;
+	// split to several repaints limited by pixels to be painted
+	const int MAX_REPAINT_SIZE = 10000;
+	int step = 0;
+	if (rect.width() > 0) {
+		step=(( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
+	}
+	step = QMAX( step, 5 ); // at least 5 lines together
+	for( int line = 0;
+		 line < rect.height();
+		 line += step ) {
+		step = QMIN( step, rect.height() - line );
+		QRect area( rect.x(), rect.y() + line, rect.width(), step );
+		const long long MAX_DIM = 1000000; // if monitors get larger than this, we're in trouble :)
+		// QMap will ensure ordering (non-smooth first, top-to-bottom, left-to-right)
+		long long key = ( smooth ? MAX_DIM * MAX_DIM : 0 ) + ( area.y() + line ) * MAX_DIM + area.x();
+		// handle the case of two different paints at the same position (just in case)
+		key *= 100;
+		while( mPendingPaints.contains( key )) {
+			if( mPendingPaints[ key ].rect.contains( area )) {
+				break;
+			}
+			if( area.contains( mPendingPaints[ key ].rect )) {
+				break;
+			}
+			++key;
 		}
-		step = QMAX( step, 5 ); // at least 5 lines together
-		for( int line = 0;
-			 line < rect.height();
-			 line += step ) {
-			step = QMIN( step, rect.height() - line );
-			mPendingPaints.append( PendingPaint( type, QRect( rect.x(), rect.y() + line,
-				rect.width(), step )));
-		}
+		mPendingPaints[ key ] = PendingPaint( smooth, area );
 	}
 
 	if( !mPendingPaintTimer.isActive()) mPendingPaintTimer.start( 0 );
 }
 
-bool GVScrollPixmapView::pendingResume() {
-	for( QValueList< PendingPaint >::ConstIterator it = mPendingPaints.begin();
-	     it != mPendingPaints.end();
-	     ++it )
-		if( (*it).type == RESUME_LOADING )
-		return true;
-	return false;
-}
-
 void GVScrollPixmapView::paintPending() {
-	if( mPendingPaints.isEmpty()) {
-		mPendingPaintTimer.stop();
-		return;
-	}
 	while( !mPendingPaints.isEmpty()) {
-		PendingPaint paint = mPendingPaints.first();
-		mPendingPaints.pop_front();
+		PendingPaint paint = *mPendingPaints.begin();
+		mPendingPaints.remove( mPendingPaints.begin());
+		QRegion& region = paint.smooth ? mPendingSmoothRegion : mPendingNormalRegion;
+		region -= paint.rect;
 		QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
-		switch( paint.type ) {
-		case SMOOTH_PASS:
-			mSmoothingSuspended = false;
-			if( mSmoothScale ) {
-				addPendingPaint( PAINT_SMOOTH, visibleRect );
-			}
+		QRect paintRect = paint.rect.intersect( visibleRect );
+		if( !paintRect.isEmpty()) {
+			QPainter painter( viewport());
+			painter.translate( -contentsX(), -contentsY());
+			performPaint( &painter, paintRect.x(), paintRect.y(),
+				paintRect.width(), paintRect.height(), paint.smooth );
 			return;
-		case RESUME_LOADING:
-			if( pendingResume()) // was suspended again?
-				continue;
-			mDocument->resumeLoading();
-			return;
-		case PAINT_NORMAL:
-		case PAINT_SMOOTH: {
-			QRect paintRect = paint.rect.intersect( visibleRect );
-			if( !paintRect.isEmpty()) {
-				QPainter painter( viewport());
-				painter.translate( -contentsX(), -contentsY());
-				performPaint( &painter, paintRect.x(), paintRect.y(),
-					paintRect.width(), paintRect.height(), paint.type == PAINT_SMOOTH );
-				return;
-			}
-		}
 		}
 	}
 	mPendingPaintTimer.stop();
+	checkPendingOperations();
+}
+
+void GVScrollPixmapView::scheduleOperation( Operation operation )
+{
+	mPendingOperations |= operation;
+	if( mPendingPaints.isEmpty()) {
+		checkPendingOperations();
+	}
+}
+
+void GVScrollPixmapView::checkPendingOperations()
+{
+	if( mPendingOperations & RESUME_LOADING ) {
+		mDocument->resumeLoading();
+		mPendingOperations &= ~RESUME_LOADING;
+		return;
+	}
+	if( mPendingOperations & SMOOTH_PASS ) {
+		mSmoothingSuspended = false;
+		if( mSmoothScale >= SMOOTH2 ) {
+			QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
+			addPendingPaint( true, visibleRect );
+		}
+		mPendingOperations &= ~SMOOTH_PASS;
+		return;
+	}
 }
 
 // How to do painting:
@@ -568,21 +591,16 @@ void GVScrollPixmapView::paintPending() {
 // All other paints will be changed to progressive painting.
 void GVScrollPixmapView::fullRepaint() {
 	if( !viewport()->isUpdatesEnabled()) return;
-	cancelPendingPaints();
+	cancelPending();
 	viewport()->repaint(false);
 }
 
-void GVScrollPixmapView::cancelPendingPaints() {
-	while( !mPendingPaints.isEmpty()) {
-		// check items that are not just paints and that cannot be just discarded
-		if( mPendingPaints.front().type == SMOOTH_PASS ) {
-			mSmoothingSuspended = false;
-		}	else if( mPendingPaints.front().type == RESUME_LOADING ) {
-			mDocument->resumeLoading();
-		}
-		mPendingPaints.pop_front();
-	}
+void GVScrollPixmapView::cancelPending() {
+	mPendingPaints.clear();
+	mPendingNormalRegion = QRegion();
+	mPendingSmoothRegion = QRegion();
 	mPendingPaintTimer.stop();
+	mPendingOperations = 0;
 }
 
 // do the actual painting
@@ -620,15 +638,39 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
+	// There's a small problem somewhere here above. If updateRect.height() is 1 and mZoom > 1,
+	// the resulting image height will be 0, yet there's one pixel row to paint. For now, at least
+	// avoid using a null image.
+	if (image.isNull()) {
+		painter->eraseRect(clipx,clipy,clipw,cliph);
+		return;
+	}
+
 	if (smooth) {
 		if( mZoom != 1.0 ) {
 			image=image.convertDepth(32);
-			image=image.smoothScale(updateRect.size());
+			static GVImageUtils::SmoothAlgorithm algs[] = {
+				GVImageUtils::SMOOTH_NONE,
+				GVImageUtils::SMOOTH_FAST,
+				GVImageUtils::SMOOTH_NORMAL,
+				GVImageUtils::SMOOTH_BEST,
+				GVImageUtils::SMOOTH_FAST,
+				GVImageUtils::SMOOTH_NORMAL,
+				GVImageUtils::SMOOTH_BEST };
+			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algs[ mSmoothScale ] );
 		}
 	} else {
-		image=image.scale(updateRect.size());
-		if( mSmoothScale && mZoom != 1.0 ) {
-			addPendingPaint( PAINT_SMOOTH, QRect( clipx, clipy, clipw, cliph ));
+		static GVImageUtils::SmoothAlgorithm algs[] = {
+			GVImageUtils::SMOOTH_NONE,
+			GVImageUtils::SMOOTH_FAST,
+			GVImageUtils::SMOOTH_NORMAL,
+			GVImageUtils::SMOOTH_BEST,
+			GVImageUtils::SMOOTH_NONE,
+			GVImageUtils::SMOOTH_NONE,
+			GVImageUtils::SMOOTH_NONE }; // none for 2-pass ones
+		image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algs[ mSmoothScale ] );
+		if( mSmoothScale >= SMOOTH2 && mZoom != 1.0 ) {
+			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 		}
 	}
 
@@ -886,7 +928,7 @@ void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
 	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
 	viewport()->repaint(widgetRect,false);
 	mDocument->suspendLoading();
-	addPendingPaint( RESUME_LOADING );
+	scheduleOperation( RESUME_LOADING );
 }
 
 
@@ -1181,7 +1223,16 @@ KURL GVScrollPixmapView::pixmapURL() {
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
-	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
+	int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE,SMOOTH_NORMAL2);
+	if( smooth >= SMOOTH_NONE && smooth <= SMOOTH_BEST2 ) {
+		mSmoothScale = static_cast< SmoothScale >( smooth );
+	} else {
+		mSmoothScale = SMOOTH_NORMAL2;
+	}
+	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {// backwards comp.
+		mSmoothScale = SMOOTH_NORMAL2;
+	}
+
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
 	mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
@@ -1198,7 +1249,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 
 void GVScrollPixmapView::kpartConfig() {
 	mShowPathInFullScreen=true;
-	mSmoothScale=false;
+	mSmoothScale=SMOOTH_NORMAL2;
 	mEnlargeSmallImages=false;
 	mShowScrollBars=true;
 	mMouseWheelScroll=true;

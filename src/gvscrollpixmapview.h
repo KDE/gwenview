@@ -91,8 +91,8 @@ public:
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
 	void setShowPathInFullScreen(bool);
-	bool smoothScale() const { return mSmoothScale; }
-	void setSmoothScale(bool);
+	int smoothScale() const { return mSmoothScale; }
+	void setSmoothScale(int);
 	bool enlargeSmallImages() const { return mEnlargeSmallImages; }
 	void setEnlargeSmallImages(bool);
 	bool showScrollBars() const { return mShowScrollBars; }
@@ -127,7 +127,9 @@ private:
 	QLabel* mPathLabel;
 	
 	bool mShowPathInFullScreen;
-	bool mSmoothScale;
+	enum SmoothScale { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST,
+		SMOOTH2, SMOOTH_FAST2 = SMOOTH2, SMOOTH_NORMAL2, SMOOTH_BEST2 };
+	SmoothScale mSmoothScale;
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	bool mMouseWheelScroll;
@@ -158,27 +160,26 @@ private:
 	
 	GVScrollPixmapViewFilter mFilter;
 
-	enum PaintType {
-		PAINT_NORMAL, // repaint given area (schedule smooth repaint if smoothing is enabled)
-		PAINT_SMOOTH, // repaint given area (smooth while scaling)
-		SMOOTH_PASS,  // start smooth pass
-		RESUME_LOADING // resume loading
-	};
 	struct PendingPaint {
-		PendingPaint( PaintType t, const QRect& r ) : type( t ), rect( r ) {};
-		PendingPaint() {}; // stupid QValueList
-		PaintType type;
+		PendingPaint( bool s, const QRect& r ) : rect( r ), smooth( s ) {};
+		PendingPaint() {}; // stupid Qt containers
 		QRect rect;
+		bool smooth;
 	};
-	QValueList< PendingPaint > mPendingPaints;
+	QMap< long long, PendingPaint > mPendingPaints;
+	QRegion mPendingNormalRegion;
+	QRegion mPendingSmoothRegion;
+	enum Operation { SMOOTH_PASS = 1 << 0, RESUME_LOADING = 1 << 1 };
+	int mPendingOperations;
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
 	bool mEmptyImage;
-	void addPendingPaint( PaintType type, QRect rect = QRect());
+	void addPendingPaint( bool smooth, QRect rect = QRect());
 	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
 	void fullRepaint();
-	void cancelPendingPaints();
-	bool pendingResume();
+	void cancelPending();
+	void scheduleOperation( Operation operation );
+	void checkPendingOperations();
 
 	double computeZoom(bool in) const;
 	double computeAutoZoom() const;

@@ -52,4 +52,5 @@ libgwenviewcore_la_SOURCES = \
 	gvdocumentdecodeimpl.cpp \
 	gvdocumentloadedimpl.cpp \
 	gvdocumentjpegloadedimpl.cpp \
-	gvkipiinterface.cpp
+	gvkipiinterface.cpp \
+	gvimagescale.cpp
