@@ -144,6 +144,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
 		// Not saved, notify others that we stay on the image
+		emit newURLSet(d->mURL);
 		emit loaded(d->mURL);
 		return;
 	}
@@ -152,6 +153,8 @@ void GVDocument::setURL(const KURL& paramURL) {
 		reset();
 		return;
 	}
+
+	emit newURLSet(localURL);
 
 	// Set high busy level, so that operations like smoothing are suspended.
 	// Otherwise the stat() below done using KIO can take quite long.
@@ -207,6 +210,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 
 void GVDocument::setDirURL(const KURL& paramURL) {
 	if (!saveBeforeClosing()) {
+		emit newURLSet(d->mURL);
 		emit loaded(d->mURL);
 		return;
 	}
@@ -614,5 +618,6 @@ QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
 
 void GVDocument::reset() {
 	switchToImpl(new GVDocumentEmptyImpl(this));
+	emit newURLSet(d->mURL);
 	emit loaded(d->mURL);
 }

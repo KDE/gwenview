@@ -904,7 +904,7 @@ void GVMainWindow::createConnections() {
 		this,SLOT(pixmapLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(setURL(const KURL&)) );
-	connect(mDocument,SIGNAL(loaded(const KURL&)),
+	connect(mDocument,SIGNAL(newURLSet(const KURL&)),
 		mFileViewStack,SLOT(setURL(const KURL&)) );
 	connect(mDocument,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
