@@ -111,8 +111,8 @@ private:
 	void createThumbnail(const QString& path);
 	
 	bool isJPEG(const QString& name);
-	bool loadJPEG( const QString &pixPath, QPixmap &pix);
-	bool loadThumbnail(const QString& pixPath, QPixmap &pix);
+	bool loadJPEG( const QString &pixPath, QImage&);
+	bool loadThumbnail(const QString& pixPath, QImage&);
 	void emitThumbnailLoaded(const QPixmap &pix);
 };
 

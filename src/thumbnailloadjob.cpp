@@ -22,14 +22,14 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// Qt includes
+// Qt
 #include <qdir.h>
 #include <qfile.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 
-// KDE includes
+// KDE 
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kmdcodec.h>
@@ -37,14 +37,15 @@
 #include <ktempfile.h>
 #include <kio/netaccess.h>
 
-// Other includes
+// libjpeg 
 #include <setjmp.h>
 #define XMD_H
 extern "C" {
 #include <jpeglib.h>
 }
 
-// Our includes
+// Local
+#include "gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
 //#define ENABLE_LOG
@@ -262,27 +263,31 @@ bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
 
 void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
-	QPixmap pix;
+	QImage img;
+	bool loaded=false;
 	
-	// Create thumbnail
-	if( isJPEG(pixPath)) {
-		if( loadJPEG( pixPath, pix)) {
-			pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-			emitThumbnailLoaded(pix);
+	// Try to load smaller jpeg file
+	// if it fails, load file using Qt
+	if (isJPEG(pixPath)) loaded=loadJPEG(pixPath, img);
+
+	if (!loaded) {
+		if (!loadThumbnail(pixPath, img)) {
 			return;
 		}
-		//load failed try via Qt
 	}
-	if( loadThumbnail(pixPath, pix)) {
-		pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-		emitThumbnailLoaded(pix);
-	}
+
+	// Rotate if necessary
+	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(pixPath);
+	img=GVImageUtils::rotate(img,orientation);
+	
+	img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
+	emitThumbnailLoaded(QPixmap(img));
 }
 
 
-bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QPixmap &pix) {
+bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QImage& img) {
 	LOG("");
-	QImage bigImg,img;
+	QImage bigImg;
 	int biWidth,biHeight;
 	int thumbSize=ThumbnailSize::biggest().pixelSize();
 	if (!bigImg.load(pixPath)) return false;
@@ -290,14 +295,9 @@ bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QPixmap &pix) {
 	biWidth=bigImg.width();
 	biHeight=bigImg.height();
 
-	if (biWidth<=thumbSize && biHeight<=thumbSize) {
-		pix.convertFromImage(bigImg);
-		return true;
-	}
+	if (biWidth<=thumbSize && biHeight<=thumbSize) return true;
 	
 	img=bigImg.smoothScale(thumbSize,thumbSize,QImage::ScaleMin);
-	pix.convertFromImage(img);
-
 	return true;
 }
 
@@ -319,8 +319,7 @@ struct GVJPEGFatalError : public jpeg_error_mgr {
 	}
 };
 
-bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
-	QImage image;
+bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 	struct jpeg_decompress_struct cinfo;
 
 	// Open file
@@ -348,7 +347,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 
 	if (imgSize<=size) {
 		fclose(inputFile);
-		return pix.load(pixPath);
+		return image.load(pixPath);
 	}	
 
 	// Compute scale value
@@ -402,7 +401,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	int newx = size*cinfo.output_width / newMax;
 	int newy = size*cinfo.output_height / newMax;
 
-	pix=image.smoothScale( newx, newy);
+	image=image.smoothScale( newx, newy);
 
 	jpeg_destroy_decompress(&cinfo);
 	fclose(inputFile);
