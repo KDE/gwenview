@@ -2,6 +2,7 @@
 - Fixes:
  - If auto-zoom is on, make sure the zoom is updated after rotating an image.
  - Fixed crash when loading XCF images if Gwenview was compiled with gcc 3.3.1.
+ - Use standard KDE icons for zoom actions.
 
 2003.11.16 - v1.0.0pre4
 - New features:

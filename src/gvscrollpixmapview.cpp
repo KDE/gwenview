@@ -222,20 +222,18 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	mPathLabel->hide();
 
 	// Create actions
-	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"autozoom",0,mActionCollection,"view_zoom_auto");
+	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,mActionCollection,"view_zoom_auto");
 	connect(mAutoZoom,SIGNAL(toggled(bool)),
 		this,SLOT(setAutoZoom(bool)) );
 
 	mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),mActionCollection);
-	mZoomIn->setIcon("zoomin");
 	
 	mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),mActionCollection);
-	mZoomOut->setIcon("zoomout");
 	
 	mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),mActionCollection);
-	mResetZoom->setIcon("actualsize");
+	mResetZoom->setIcon("viewmag1");
 
-	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"view_zoom_lock");
+	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,mActionCollection,"view_zoom_lock");
 
 	// Connect to some interesting signals
 	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
