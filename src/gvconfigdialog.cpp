@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlrequester.h>
 
 // Local 
-#include "configdialogbase.h"
+#include "gvconfigdialogbase.h"
 #include "fileoperation.h"
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
@@ -47,21 +47,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
 
-#include "configdialog.moc"
+#include "gvconfigdialog.moc"
 
 
-class ConfigDialogPrivate {
+class GVConfigDialogPrivate {
 public:
-	ConfigDialogBase* mContent;
+	GVConfigDialogBase* mContent;
 	GVMainWindow* mMainWindow;
 };
 
 
-ConfigDialog::ConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
+GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 : KDialogBase(parent)
 {
-	d=new ConfigDialogPrivate;
-	d->mContent=new ConfigDialogBase(this);
+	d=new GVConfigDialogPrivate;
+	d->mContent=new GVConfigDialogBase(this);
 	d->mMainWindow=mainWindow;
 
 	setMainWidget(d->mContent);
@@ -132,18 +132,18 @@ ConfigDialog::ConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 
 
 
-ConfigDialog::~ConfigDialog() {
+GVConfigDialog::~GVConfigDialog() {
 	delete d;
 }
 
 
-void ConfigDialog::slotOk() {
+void GVConfigDialog::slotOk() {
 	slotApply();
 	accept();
 }
 
 
-void ConfigDialog::slotApply() {
+void GVConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
 	GVPixmap* gvPixmap=d->mMainWindow->gvPixmap();
@@ -188,7 +188,7 @@ void ConfigDialog::slotApply() {
 }
 
 
-void ConfigDialog::calculateCacheSize() {
+void GVConfigDialog::calculateCacheSize() {
 	KURL url;
 	url.setPath(ThumbnailLoadJob::thumbnailDir());
 	unsigned long size=KDirSize::dirSize(url);
@@ -196,7 +196,7 @@ void ConfigDialog::calculateCacheSize() {
 }
 
 
-void ConfigDialog::emptyCache() {
+void GVConfigDialog::emptyCache() {
 	QString dir=ThumbnailLoadJob::thumbnailDir();
 
 	if (!QFile::exists(dir)) {
@@ -218,7 +218,7 @@ void ConfigDialog::emptyCache() {
 }
 
 
-void ConfigDialog::onCacheEmptied(KIO::Job* job) {
+void GVConfigDialog::onCacheEmptied(KIO::Job* job) {
 	if ( job->error() ) {
 		job->showErrorDialog(this);
 		return;

@@ -413,7 +413,7 @@ void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
 
 void GVScrollPixmapView::updateDefaultCursor() {
 	// We assume no modifier is pressed when this is called
-	// FIXME: To be removed after ConfigDialog rewrite
+	// FIXME: To be removed after GVConfigDialog rewrite
 	selectTool(NoButton);
 }
 

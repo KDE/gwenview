@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprinter.h>
 
 // Local
-#include "configdialog.h"
+#include "gvconfigdialog.h"
 #include "fileoperation.h"
 #include "gvbookmarkowner.h"
 #include "gvdirview.h"
@@ -443,7 +443,7 @@ void GVMainWindow::toggleSlideShow() {
 
 
 void GVMainWindow::showConfigDialog() {
-	ConfigDialog dialog(this,this);
+	GVConfigDialog dialog(this,this);
 	dialog.exec();
 }
 

@@ -1,10 +1,10 @@
 bin_PROGRAMS = gwenview
 
-gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
+gwenview_SOURCES = gvconfigdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
 				   statusbarprogress.cpp gvscrollpixmapview.cpp \
 				   gvmainwindow.cpp main.cpp gvpixmap.cpp gvdirview.cpp \
 				   gvfileviewstack.cpp gvfilethumbnailview.cpp \
-				   fileoperation.cpp configdialog.cpp fileopobject.cpp \
+				   fileoperation.cpp gvconfigdialog.cpp fileopobject.cpp \
 				   gvfilethumbnailviewitem.cpp qxcfi.cpp gvarchive.cpp \
 				   gvslideshow.cpp gvfiledetailview.cpp \
 				   gvfiledetailviewitem.cpp gvbookmarkowner.cpp \
@@ -26,7 +26,7 @@ gwenview_LDFLAGS = $(all_libraries)
 # set the include path for X, qt and KDE
 INCLUDES = $(all_includes) -I$(top_srcdir)/gwenview
 
-noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
+noinst_HEADERS = gvconfigdialogbase.h gvconfigdialog.h gvdirview.h fileoperation.h \
 				 fileopobject.h gvfilethumbnailview.h gvfileviewstack.h \
 				 gvpixmap.h gvmainwindow.h gvfileviewstack.h \
 				 gvscrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
@@ -39,7 +39,7 @@ noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 gvexternaltooldialog.h gvexternaltooldialogbase.h gvhistory.h
 
 
-EXTRA_DIST = configdialogbase.ui gvslideshowdialogbase.ui \
+EXTRA_DIST = gvconfigdialogbase.ui gvslideshowdialogbase.ui \
 	gvexternaltooldialogbase.ui
 
 METASOURCES = AUTO

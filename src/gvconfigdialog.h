@@ -18,20 +18,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef CONFIGDIALOG_H
-#define CONFIGDIALOG_H
+#ifndef GVCONFIGDIALOG_H
+#define GVCONFIGDIALOG_H
 
 // KDE includes
 #include <kdialogbase.h>
 
 class GVMainWindow;
-class ConfigDialogPrivate;
+class GVConfigDialogPrivate;
 
-class ConfigDialog : public KDialogBase {
+class GVConfigDialog : public KDialogBase {
 Q_OBJECT
 public:
-	ConfigDialog(QWidget* parent,GVMainWindow*);
-	~ConfigDialog();
+	GVConfigDialog(QWidget* parent,GVMainWindow*);
+	~GVConfigDialog();
 
 protected slots:
 	void slotOk();
@@ -43,7 +43,7 @@ private slots:
 	void onCacheEmptied(KIO::Job*);
 
 private:
-	ConfigDialogPrivate* d;
+	GVConfigDialogPrivate* d;
 };
 
 

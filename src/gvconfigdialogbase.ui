@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>ConfigDialogBase</class>
+<class>GVConfigDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>ConfigDialogBase</cstring>
+        <cstring>GVConfigDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>
