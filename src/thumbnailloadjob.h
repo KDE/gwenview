@@ -33,6 +33,7 @@
 
 // Our includes
 #include "tsthread/tsthread.h"
+#include "tsthread/tswaitcondition.h"
 #include "thumbnailsize.h"
 
 class KFileItem;
@@ -66,7 +67,7 @@ private:
 	int mOriginalSize;
 	QString mOriginalMimeType;
 	QMutex mMutex;
-	QWaitCondition mCond;
+	TSWaitCondition mCond;
 };
 
 /**

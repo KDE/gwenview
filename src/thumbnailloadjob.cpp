@@ -116,8 +116,7 @@ void ThumbnailThread::run() {
 	while( !testCancel()) {
 		// empty mPixPath means nothing to do
 		while( mPixPath.isNull()) {
-			TSCancellable c( &mCond );
-			mCond.wait( &mMutex );
+			mCond.cancellableWait( &mMutex );
 			if( testCancel()) return;
 		}
 		loadThumbnail();
