@@ -27,38 +27,40 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace GVArchive {
 
+typedef QMap<QString,QString> MimeTypeProtocols;
+
+static const MimeTypeProtocols& mimeTypeProtocols() {
+	static MimeTypeProtocols map;
+	if (map.isEmpty()) {
+		map["application/x-tar"]="tar";
+		map["application/x-tgz"]="tar";
+		map["application/x-tbz"]="tar";
+		map["application/x-zip"]="zip";
+	}
+	return map;
+}
+
+	
 bool fileItemIsArchive(const KFileItem* item) {
-	return mimeTypes().findIndex(item->mimetype())!=-1;
+	return mimeTypeProtocols().contains(item->mimetype());
 }
 
 bool protocolIsArchive(const QString& protocol) {
-	return protocols().findIndex(protocol)!=-1;
+	const MimeTypeProtocols& map=mimeTypeProtocols();
+	MimeTypeProtocols::ConstIterator it;
+	for (it=map.begin();it!=map.end();++it) {
+		if (it.data()==protocol) return true;
+	}
+	return false;
 }
 
-const QStringList& mimeTypes() {
-	static QStringList sMimeTypes;
-	if (sMimeTypes.empty()) {
-		sMimeTypes.append("application/x-tar");
-		sMimeTypes.append("application/x-tgz");
-		sMimeTypes.append("application/x-tbz");
-	}
-	return sMimeTypes;
+QStringList mimeTypes() {
+	return mimeTypeProtocols().keys();
 }
 
-const QStringList& protocols() {
-	static QStringList sProtocols;
-	if (sProtocols.empty()) {
-		sProtocols.append("tar");
-	}
-	return sProtocols;
-}
 
 QString protocolForMimeType(const QString& mimeType) {
-	if (mimeTypes().findIndex(mimeType)) {
-		return "tar";
-	} else {
-		return QString::null;
-	}
+	return mimeTypeProtocols()[mimeType];
 }
 
 }

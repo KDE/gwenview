@@ -33,8 +33,7 @@ namespace GVArchive {
 	
 bool fileItemIsArchive(const KFileItem*);
 bool protocolIsArchive(const QString&);
-const QStringList& mimeTypes();
-const QStringList& protocols();
+QStringList mimeTypes();
 QString protocolForMimeType(const QString&);
 
 };

@@ -1,11 +1,12 @@
 2003.xx.xx - v0.16.0
-- Fixes :
+- New features:
+ - Support for zip IO slave.
+- Fixes:
  - Corrected toolbar layout for RTL languages (Thanks to Meni Livne).
  - Do not give focus to the address bar on start.
- 
 
 2003.01.12 - v0.16.0pre1
-- New features :
+- New features:
  - Support for IO slaves: you can browse FTP files, Windows shares, go into
    tarballs...
  - Multi-selection support (at last!).
@@ -15,22 +16,22 @@
  - Added an address bar.
  - Displays the filename of the current image in a different (configurable)
    color.
-- Fixes :
+- Fixes:
  - Do not start dragging folders in the folder view when not necessary.
  - When dropping urls and selecting "Move", the drop item will become the
    current one only if the item which was the current one was part of the
    drop.
 
 2002.11.05 - v0.15.2
-- Fixes :
+- Fixes:
  - Small jpeg images were getting a stretched thumbnail.
  - Fixed the centering of image in scrollable view.
  - Enabled the "show folders in file view" by default.
 
 2002.10.26 - v0.15.1
-- New features :
+- New features:
  - Added an item to the popup menus to show the file properties.
-- Fixes :
+- Fixes:
  - The selected thumbnail does not look strange anymore when changing the
    thumbnail size.
  - Always zoom on the center of the image.
