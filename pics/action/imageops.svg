@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
-"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
-[
- <!ATTLIST svg
-  xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
-]>
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
 <svg
    id="svg548"
-   sodipodi:version="0.32"
+   sodipodi:version="0.33"
+   width="900pt"
+   height="700pt"
+   sodipodi:docbase="/home/bk/kde/kdeextragear-1/gwenview/pics/action/"
+   sodipodi:docname="/home/bk/kde/kdeextragear-1/gwenview/pics/action/imageops.svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   width="210mm"
-   height="297mm"
-   sodipodi:docbase="/home/bk/kde/kdeextragear-1/gwenview/pics/action"
-   sodipodi:docname="/home/bk/kde/kdeextragear-1/gwenview/pics/action/imageops.svg">
+   xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs
      id="defs550">
     <linearGradient
