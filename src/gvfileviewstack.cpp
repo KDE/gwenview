@@ -163,6 +163,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(slotViewExecuted()) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
 		this,SLOT(slotViewExecuted()) );
+	connect(mFileDetailView,SIGNAL(selectionChanged()),
+		this,SLOT(slotViewClicked()) );
 	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
 		this,SLOT(slotViewClicked()) );
 	connect(mFileDetailView,SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
@@ -182,6 +184,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(slotViewExecuted()) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
 		this,SLOT(slotViewExecuted()) );
+	connect(mFileThumbnailView,SIGNAL(selectionChanged()),
+		this,SLOT(slotViewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
 		this,SLOT(slotViewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
