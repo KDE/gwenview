@@ -112,8 +112,11 @@ void loadDesktopFiles(QDict<KDesktopFile>& dict, const QString& dirString) {
 
 GVExternalToolManager::GVExternalToolManager() {
 	d=new GVExternalToolManagerPrivate;
+    
+    // Make sure the dir exists.
+    KGlobal::dirs()->saveLocation("appdata", "tools");
 	
-	// Load system and user desktop files.
+    // Load system and user desktop files.
 	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
 	QString userBaseDir=KGlobal::dirs()->localkdedir();
 	
