@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentimpl.h"
 
 class GVDocument;
+class QFile;
 
 class GVDocumentLoadedImpl : public GVDocumentImpl {
 Q_OBJECT
@@ -37,10 +38,10 @@ public:
 	~GVDocumentLoadedImpl();
 	
 	void transform(GVImageUtils::Orientation);
-	bool save(const KURL&, const QCString& format) const;
+	QString save(const KURL&, const QCString& format) const;
 
 protected:
-	virtual bool localSave(const QString& file, const QCString& format) const;
+	virtual QString localSave(QFile* file, const QCString& format) const;
 };
 
 #endif /* GVDOCUMENTLOADEDIMPL_H */

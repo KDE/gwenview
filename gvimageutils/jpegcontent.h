@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class QImage;
 class QString;
+class QFile;
 
 namespace GVImageUtils {
 
@@ -50,6 +51,7 @@ public:
 	bool load(const QString& file);
 	bool loadFromData(const QByteArray& rawData);
 	bool save(const QString& file) const;
+	bool save(QFile*) const;
 
 private:
 	struct Private;

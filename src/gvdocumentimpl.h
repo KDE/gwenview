@@ -54,7 +54,7 @@ public:
 	virtual void resumeLoading();
 
 	virtual void transform(GVImageUtils::Orientation);
-	virtual bool save(const KURL&, const QCString& format) const;
+	virtual QString save(const KURL&, const QCString& format) const;
 
 signals:
 	void finished(bool success);

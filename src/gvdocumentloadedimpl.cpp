@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kdebug.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 #include <ktempfile.h>
 
 // Local
@@ -64,8 +65,8 @@ void GVDocumentLoadedImpl::transform(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) const {
-	bool result;
+QString GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) const {
+	QString msg;
 
 	KTempFile tmp;
 	tmp.setAutoDelete(true);
@@ -76,19 +77,35 @@ bool GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) const {
 		path=tmp.name();
 	}
 
-	result=localSave(path, format);
-	if (!result) return false;
+	QFile file(path);
+	if (!file.open(IO_WriteOnly)) {
+		return
+			i18n("<qt><b>Could not save the image to %1.</b><br/>You are not allowed to save a file here.</qt>")
+			.arg(path);
+	}
+
+	msg=localSave(&file, format);
+	if (!msg.isNull()) return msg;
 	setFileSize(QFileInfo(path).size());
 
 	if (!url.isLocalFile()) {
-		result=KIO::NetAccess::upload(tmp.name(),url);
+		if (!KIO::NetAccess::upload(tmp.name(),url)) {
+			return i18n("Could not upload the file to %1").arg(path);
+		}
 	}
 
-	return result;
+	return QString::null;
 }
 
 
-bool GVDocumentLoadedImpl::localSave(const QString& path, const QCString& format) const {
-	return mDocument->image().save(path, format);
+QString GVDocumentLoadedImpl::localSave(QFile* file, const QCString& format) const {
+	QImageIO iio(file, format);
+	iio.setImage(mDocument->image());
+	if (!iio.write()) {
+		return
+			i18n("<qt><b>Could not save the image to %1.</b><br/>An error happened while saving.</qt>")
+			.arg(file->name());
+	}
+	return QString::null;
 }
 

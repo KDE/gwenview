@@ -78,9 +78,8 @@ public slots:
 
 	/**
 	 * Save to the current file.
-	 * Returns false if failed.
 	 */
-	bool save();
+	void save();
 	void saveAs();
 	
 	/** print the selected file */
@@ -132,6 +131,11 @@ signals:
 	 */
 	void sizeUpdated(int width, int height);
 
+	/**
+	 * Emitted when something goes wrong, like when save fails
+	 */
+	void errorHappened(const QString& message);
+
 private slots:
 	void slotStatResult(KIO::Job*); 
 	void slotFinished(bool success);
@@ -141,6 +145,7 @@ private slots:
 	
 private:
 	friend class GVDocumentImpl;
+	friend class GVDocumentPrivate;
 
 	GVDocumentPrivate* d;
 
@@ -152,8 +157,13 @@ private:
 	
 	void reset();
 	void load();
-	bool saveInternal(const KURL&,const QCString& format);
-	void doPaint(KPrinter *pPrinter, QPainter *p); 
+	void doPaint(KPrinter *pPrinter, QPainter *p);
+
+	/**
+	 * The returned string is null if the image was successfully saved,
+	 * otherwise it's the translated error message.
+	 */
+	QString saveInternal(const KURL& url, const QCString& format);
 };
 
 

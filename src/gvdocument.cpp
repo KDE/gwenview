@@ -466,8 +466,11 @@ void GVDocument::transform(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVDocument::save() {
-	return saveInternal(url(), d->mImageFormat);
+void GVDocument::save() {
+	QString msg=saveInternal(url(), d->mImageFormat);
+	if (!msg.isNull()) {
+		KMessageBox::error(0, msg);
+	}
 }
 
 
@@ -478,14 +481,15 @@ void GVDocument::saveAs() {
 	GVImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
 	if (!dialog.exec()) return;
 
-	if (!saveInternal(saveURL, dialog.imageFormat() )) {
-		KMessageBox::sorry(0,i18n(
-			"Could not save file. Check that you have the appropriate rights and that there is enough space left on the device."));
+	QString msg=saveInternal(saveURL, dialog.imageFormat() );
+	if (!msg.isNull()) {
+		KMessageBox::error(0, msg);
 	}
 }
 
 bool GVDocument::saveBeforeClosing() {
 	if (!d->mModified) return true;
+
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 		.arg(url().prettyURL());
 
@@ -494,11 +498,11 @@ bool GVDocument::saveBeforeClosing() {
 
 	switch (result) {
 	case KMessageBox::Yes:
-		if (save()) return true;
-		result= KMessageBox::warningContinueCancel(0, i18n(
-			"Could not save file. Check that you have the appropriate rights and that there is enough space left on the device.\n"),
-			QString::null,
-			i18n("Discard"));
+		msg=saveInternal(url(), d->mImageFormat);
+		if (msg.isNull()) {
+			return true;
+		}
+		result= KMessageBox::warningContinueCancel(0, msg, QString::null, i18n("Discard"));
 		if (result==KMessageBox::Continue) {
 			d->mModified=false;
 			return true;
@@ -595,15 +599,15 @@ void GVDocument::slotFinished(bool success) {
 }
 
 
-bool GVDocument::saveInternal(const KURL& url, const QCString& format) {
-	bool result=d->mImpl->save(url, format);
+QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
+	QString msg=d->mImpl->save(url, format);
 	
-	if (result) {
+	if (msg.isNull()) {
 		emit saved(url);
 		d->mModified=false;
 	}
 
-	return result;
+	return msg;
 }
 
 

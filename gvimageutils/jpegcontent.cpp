@@ -297,20 +297,25 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 
 
 bool JPEGContent::save(const QString& path) const {
-	if (d->mRawData.size()==0) {
-		kdError() << "No data to store in '" << path << "'\n";
-		return false;
-	}
-
 	QFile file(path);
 	if (!file.open(IO_WriteOnly)) {
 		kdError() << "Could not open '" << path << "' for writing\n";
 		return false;
 	}
 
+	return save(&file);
+}
+
+
+bool JPEGContent::save(QFile* file) const {
+	if (d->mRawData.size()==0) {
+		kdError() << "No data to store in '" << file->name() << "'\n";
+		return false;
+	}
+
 	if (!d->mExifData) {
 		// There's no Exif info, let's just save the byte array
-		QDataStream stream(&file);
+		QDataStream stream(file);
 		stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
 		return true;
 	}
@@ -327,7 +332,7 @@ bool JPEGContent::save(const QString& path) const {
 	jpeg_data_save_data(jpegData, &dest, &destSize);
 	jpeg_data_unref(jpegData);
 	
-	QDataStream stream(&file);
+	QDataStream stream(file);
 	stream.writeRawBytes((char*)dest, destSize);
 	free(dest);
 	return true;

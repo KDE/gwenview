@@ -18,7 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-
+// KDE
+#include <klocale.h>
 
 // Local
 #include "gvdocument.h"
@@ -67,6 +68,6 @@ void GVDocumentImpl::resumeLoading() {
 void GVDocumentImpl::transform(GVImageUtils::Orientation) {
 }
 
-bool GVDocumentImpl::save(const KURL&, const QCString&) const {
-	return false;
+QString GVDocumentImpl::save(const KURL&, const QCString&) const {
+	return i18n("No document to save");
 }

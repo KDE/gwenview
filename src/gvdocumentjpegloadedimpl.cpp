@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 #include <ktempfile.h>
 
 // Local
@@ -151,9 +152,7 @@ void GVDocumentJPEGLoadedImpl::transform(GVImageUtils::Orientation orientation) 
 }
 
 
-bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& format) const {
-	bool result;
-
+QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format) const {
 	if (qstrcmp(format, "JPEG")==0) {
 		LOG("JPEG Reset orientation");
 		d->mJPEGContent.resetOrientation();
@@ -163,15 +162,17 @@ bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& fo
 		}
 		
 		LOG("JPEG Lossless save");
-		if (!d->mJPEGContent.save(path)) return false;
+		if (!d->mJPEGContent.save(file)) {
+			return i18n("Could not save this JPEG file.");
+		}
 	} else {
-		result=mDocument->image().save(path, format);
-		if (!result) return false;
+		QString msg=GVDocumentLoadedImpl::localSave(file, format);
+		if (!msg.isNull()) return msg;
 	}
 
-	d->saveComment(path);
+	d->saveComment(file->name());
 	
-	return result;
+	return QString::null;
 }
 
 
