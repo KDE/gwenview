@@ -58,6 +58,7 @@ libgwenviewcore_la_SOURCES = \
 	gvdocumentdecodeimpl.cpp \
 	gvdocumentloadedimpl.cpp \
 	gvdocumentjpegloadedimpl.cpp \
+	gvdocumentanimatedloadedimpl.cpp \
 	gvkipiinterface.cpp \
 	gvbusylevelmanager.cpp \
 	gvcache.cpp \

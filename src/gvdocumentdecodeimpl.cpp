@@ -40,8 +40,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvdocumentloadedimpl.h"
 #include "gvdocumentjpegloadedimpl.h"
+#include "gvdocumentanimatedloadedimpl.h"
 #include "gvdocumentdecodeimpl.moc"
 #include "gvcache.h"
+#include "gvimageframe.h"
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
@@ -178,6 +180,8 @@ public:
 	, mSuspended(false)
 	, mGetComplete(false)
 	, mAsyncImageComplete(false)
+	, mNextFrameDelay(0)
+	, mWasFrameData(false)
 	{}
 
 	// The file timestamp
@@ -219,6 +223,12 @@ public:
 	// Set to true when all the image has been decoded
 	bool mAsyncImageComplete;
 
+	// Delay used for next frame after it's finished decoding.
+	int mNextFrameDelay;
+
+	bool mWasFrameData;
+
+	GVImageFrames mFrames;
 };
 
 
@@ -256,6 +266,9 @@ GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 void GVDocumentDecodeImpl::start() {
 	d->mLoadChangedRect=QRect();
 	d->mTimestamp = GVCache::instance()->timestamp( mDocument->url() );
+	d->mFrames.clear();
+	d->mWasFrameData = false;
+	d->mNextFrameDelay = 0;
 	KIO::Job* job=KIO::stat( mDocument->url(), false);
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
@@ -279,10 +292,11 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 		// We have the image in cache
 		QCString format;
 		d->mRawData = GVCache::instance()->file( mDocument->url() );
-		QImage image = GVCache::instance()->image( mDocument->url(), format );
-		if( !image.isNull()) {
+		GVImageFrames frames = GVCache::instance()->frames( mDocument->url(), format );
+		if( !frames.isEmpty()) {
 			setImageFormat(format);
-			finish(image);
+			d->mFrames = frames;
+			finish();
 			return;
 		} else {
 			// Image in cache is broken, let's try the file
@@ -397,11 +411,11 @@ void GVDocumentDecodeImpl::slotImageDecoded() {
 	LOG("");
 
 	// Get image
-	QImage image;
 	if (d->mUseThread) {
-		image=d->mDecoderThread.popLoadedImage();
-	} else {
-		image=d->mDecoder.image();
+		d->mFrames.clear();
+		d->mFrames.append( GVImageFrame( d->mDecoderThread.popLoadedImage(), 0 ));
+	} else if( d->mFrames.count() == 0 ) {
+		d->mFrames.append( GVImageFrame( d->mDecoder.image(), 0 ));
 	}
 	
 	// Set image format
@@ -421,7 +435,7 @@ void GVDocumentDecodeImpl::slotImageDecoded() {
 	// Store raw data in cache
 	GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
 	
-	finish(image);
+	finish();
 }
 
 
@@ -429,16 +443,12 @@ void GVDocumentDecodeImpl::slotImageDecoded() {
  * Make the final adjustments to the image before switching to a loaded
  * implementation
  */
-void GVDocumentDecodeImpl::finish(QImage& image) {
+void GVDocumentDecodeImpl::finish() {
 	LOG("");
-	// Convert depth if necessary
-	// (32 bit depth is necessary for alpha-blending)
-	if (image.depth()<32 && image.hasAlphaBuffer()) {
-		image=image.convertDepth(32);
-		d->mUpdatedDuringLoad=false;
-	}
 
-	GVCache::instance()->addImage( mDocument->url(), image, mDocument->imageFormat(), d->mTimestamp );
+	QImage image = d->mFrames.first().image;
+
+	GVCache::instance()->addImage( mDocument->url(), d->mFrames, mDocument->imageFormat(), d->mTimestamp );
 
 	// The decoder did not cause the sizeUpdated or rectUpdated signals to be
 	// emitted, let's do it now
@@ -452,7 +462,9 @@ void GVDocumentDecodeImpl::finish(QImage& image) {
 	setFileSize(d->mRawData.size());
 	
 	// Now we switch to a loaded implementation
-	if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {
+	if ( d->mFrames.count() > 1 ) {
+		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mFrames));
+	} else if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {
 		// We want a local copy of the file for the comment editor
 		QString tempFilePath;
 		if (!mDocument->url().isLocalFile()) {
@@ -488,10 +500,10 @@ void GVDocumentDecodeImpl::resumeLoading() {
 //---------------------------------------------------------------------
 void GVDocumentDecodeImpl::end() {
 	LOG("");
-	if( !d->mLoadChangedRect.isNull()) {
+	if( !d->mLoadChangedRect.isNull() && d->mFrames.count() == 0 ) {
 		emit rectUpdated(d->mLoadChangedRect);
 	}
-	
+
 	d->mDecoderTimer.stop();
 	d->mAsyncImageComplete=true;
 	
@@ -503,6 +515,8 @@ void GVDocumentDecodeImpl::end() {
 }
 
 void GVDocumentDecodeImpl::changed(const QRect& rect) {
+	d->mWasFrameData = true;
+	if( d->mFrames.count() > 0 ) return;
 	if (!d->mUpdatedDuringLoad) {
 		setImage(d->mDecoder.image());
 		d->mUpdatedDuringLoad=true;
@@ -518,15 +532,39 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 }
 
 void GVDocumentDecodeImpl::frameDone() {
+	frameDone( QPoint( 0, 0 ), QRect( 0, 0, d->mDecoder.image().width(), d->mDecoder.image().height()));
 }
 
-void GVDocumentDecodeImpl::frameDone(const QPoint& /*offset*/, const QRect& /*rect*/) {
+void GVDocumentDecodeImpl::frameDone(const QPoint& offset, const QRect& rect) {
+	// Another case where the image loading in Qt's is a bit borken.
+	// It's possible to get several notes about a frame being done for one frame (with MNG).
+	if( !d->mWasFrameData ) return;
+	d->mWasFrameData = false;
+	QImage image = d->mDecoder.image();
+	image.detach();
+	if( offset != QPoint( 0, 0 ) || rect != QRect( 0, 0, image.width(), image.height())) {
+                if( !d->mFrames.isEmpty()) { // not first image - what to do here?
+			QImage im( d->mFrames.last().image);
+			im.detach();
+			bitBlt( &im, offset.x(), offset.y(), &image, rect.x(), rect.y(), rect.width(), rect.height());
+			image = im;
+		}
+	}
+	if( d->mFrames.count() == 0 ) {
+		setImage( image ); // explicit sharing - don't modify the image in document anymore
+	}
+	d->mFrames.append( GVImageFrame( image, d->mNextFrameDelay ));
+	d->mNextFrameDelay = 0;
 }
 
 void GVDocumentDecodeImpl::setLooping(int) {
 }
 
-void GVDocumentDecodeImpl::setFramePeriod(int /*milliseconds*/) {
+void GVDocumentDecodeImpl::setFramePeriod(int milliseconds) {
+	if( milliseconds < 0 ) milliseconds = 0; // -1 means showing immediately
+	if( d->mNextFrameDelay == 0 || milliseconds != 0 ) {
+		d->mNextFrameDelay = milliseconds;
+	}
 }
 
 void GVDocumentDecodeImpl::setSize(int width, int height) {

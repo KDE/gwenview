@@ -30,6 +30,9 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kurl.h>
 
+// Local
+#include "gvimageframe.h"
+
 class KConfig;
 
 class GVCache {
@@ -37,9 +40,11 @@ public:
 	static GVCache* instance();
 	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 	void addImage( const KURL& url, const QImage& im, const QCString& format, const QDateTime& timestamp );
+	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
 	QImage image( const KURL& url, QCString& format ) const;
+	GVImageFrames frames( const KURL& url, QCString& format ) const;
 	void readConfig(KConfig*,const QString& group);
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
@@ -49,12 +54,14 @@ private:
 	struct ImageData {
 		ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 		ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
+		ImageData( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 		void addFile( const QByteArray& file );
 		void addImage( const QImage& image, const QCString& format );
+		void addImage( const GVImageFrames& frames, const QCString& format );
 		long long cost() const;
 		int size() const;
 		QByteArray file;
-		QImage image;
+		GVImageFrames frames;
 		QCString format;
 		QDateTime timestamp;
 		mutable int age;

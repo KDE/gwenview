@@ -5,6 +5,7 @@ xxxx.xx.x - v1.1.8
    configuration.
  - Fast image scaling function from Imlib2/Mosfet (select 'fast' smoothing
    in the configuration dialog).
+ - Support for animated pictures.
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
  - Fixed "Clear location"/"Location" shortcuts.

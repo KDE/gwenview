@@ -60,16 +60,22 @@ void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime&
 }
 
 void GVCache::addImage( const KURL& url, const QImage& im, const QCString& format, const QDateTime& timestamp ) {
+	GVImageFrames frames;
+	frames.append( GVImageFrame( im, 0 ));
+	return addImage( url, frames, format, timestamp );
+}
+
+void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp ) {
 	updateAge();
 	bool insert = true;
 	if( mImages.contains( url )) {
 		ImageData& data = mImages[ url ];
 		if( data.timestamp == timestamp ) {
-			data.addImage( im, format );
+			data.addImage( frames, format );
 			insert = false;
 		}
 	}
-	if( insert ) mImages[ url ] = ImageData( url, im, format, timestamp );
+	if( insert ) mImages[ url ] = ImageData( url, frames, format, timestamp );
 	checkMaxSize();
 }
 
@@ -91,12 +97,23 @@ QByteArray GVCache::file( const KURL& url ) const {
 QImage GVCache::image( const KURL& url, QCString& format ) const {
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
-		if( data.image.isNull()) return QImage();
+		if( data.frames.isEmpty()) return QImage();
 		format = data.format;
 		data.age = 0;
-		return data.image;
+		return data.frames.first().image;
 	}
 	return QImage();
+}
+
+GVImageFrames GVCache::frames( const KURL& url, QCString& format ) const {
+	if( mImages.contains( url )) {
+		const ImageData& data = mImages[ url ];
+		if( data.frames.isEmpty()) return GVImageFrames();
+		format = data.format;
+		data.age = 0;
+		return data.frames;
+	}
+	return GVImageFrames();
 }
 
 void GVCache::updateAge() {
@@ -145,7 +162,16 @@ GVCache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDate
 }
 
 GVCache::ImageData::ImageData( const KURL& url, const QImage& im, const QCString& f, const QDateTime& t )
-: image( im )
+: format( f )
+, timestamp( t )
+, age( 0 )
+, local_url( url.isLocalFile())
+{
+	frames.append( GVImageFrame( im, 0 ));
+}
+
+GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const QCString& f, const QDateTime& t )
+: frames( frms )
 , format( f )
 , timestamp( t )
 , age( 0 )
@@ -160,7 +186,14 @@ void GVCache::ImageData::addFile( const QByteArray& f ) {
 }
 
 void GVCache::ImageData::addImage( const QImage& i, const QCString& f ) {
-	image = i;
+	frames.clear();
+	frames.append( GVImageFrame( i, 0 ));
+	format = f;
+	age = 0;
+}
+
+void GVCache::ImageData::addImage( const GVImageFrames& fs, const QCString& f ) {
+	frames = fs;
 	format = f;
 	age = 0;
 }
@@ -168,17 +201,19 @@ void GVCache::ImageData::addImage( const QImage& i, const QCString& f ) {
 int GVCache::ImageData::size() const {
 	int ret = 0;
 	if( !file.isNull()) ret += file.size();
-	if( !image.isNull()) ret += image.height() * image.width() * image.depth() / 8;
+	for( GVImageFrames::ConstIterator it = frames.begin(); it != frames.end(); ++it ) {
+		ret += (*it).image.height() * (*it).image.width() * (*it).image.depth() / 8;
+	}
 	return ret;
 }
 
 bool GVCache::ImageData::reduceSize() {
-	if( !file.isNull() && local_url && !image.isNull()) {
+	if( !file.isNull() && local_url && !frames.isEmpty()) {
 		file = QByteArray();
 		return true;
 	}
-	if( !file.isNull() && !image.isNull()) {
-		image = QImage();
+	if( !file.isNull() && !frames.isEmpty()) {
+		frames.clear();
 		return true;
 	}
 	return false; // reducing here would mean clearing everything
