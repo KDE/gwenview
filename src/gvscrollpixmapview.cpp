@@ -497,7 +497,10 @@ void GVScrollPixmapView::addPendingPaint( PaintType type, QRect rect ) {
 		mPendingPaints.append( PendingPaint( type, rect ));
 	} else { // split to several repaints limited by pixels to be painted
 		const int MAX_REPAINT_SIZE = 10000;
-		int step = (( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
+		int step = 0;
+		if (rect.width() > 0) {
+			step=(( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
+		}
 		step = QMAX( step, 5 ); // at least 5 lines together
 		for( int line = 0;
 			 line < rect.height();

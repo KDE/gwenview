@@ -76,7 +76,7 @@ public:
 //
 //-------------------------------------------------------------------
 GVDocument::GVDocument(QObject* parent)
-		: QObject(parent) {
+: QObject(parent) {
 	d=new GVDocumentPrivate;
 	d->mModified=false;
 	d->mImpl=new GVDocumentEmptyImpl(this);
