@@ -338,6 +338,7 @@ void GVDocumentDecodeImpl::decodeChunk() {
 		// Unknown format, no need to go further
 		emit finished(false);
 		switchToImpl(new GVDocumentImpl(mDocument));
+		return;
 	}
 	setImageFormat( format );
 
