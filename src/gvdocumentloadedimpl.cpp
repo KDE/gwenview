@@ -29,11 +29,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvdocumentloadedimpl.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 
 GVDocumentLoadedImpl::GVDocumentLoadedImpl(GVDocument* document)
 : GVDocumentImpl(document) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	
 	// Do not emit the signal directly from the constructor because
 	// switchToImpl has not updated the connections yet

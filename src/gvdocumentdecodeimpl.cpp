@@ -45,6 +45,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 //---------------------------------------------------------------------
 //
@@ -60,7 +66,7 @@ public:
 
 	bool atEnd() const {
 		if (mThread->testCancel()) {
-			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			LOG("cancel detected");
 			return true;
 		}
 		return QBuffer::atEnd();
@@ -68,7 +74,7 @@ public:
 	
 	Q_LONG readBlock(char * data, Q_ULONG maxlen) {
 		if (mThread->testCancel()) {
-			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			LOG("cancel detected");
 			return 0;
 		}
 		return QBuffer::readBlock(data, maxlen);
@@ -76,7 +82,7 @@ public:
 
 	Q_LONG readLine(char * data, Q_ULONG maxlen) {
 		if (mThread->testCancel()) {
-			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			LOG("cancel detected");
 			return 0;
 		}
 		return QBuffer::readLine(data, maxlen);
@@ -84,7 +90,7 @@ public:
 
 	QByteArray readAll() {
 		if (mThread->testCancel()) {
-			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			LOG("cancel detected");
 			return QByteArray();
 		}
 		return QBuffer::readAll();
@@ -92,7 +98,7 @@ public:
 
 	int getch() {
 		if (mThread->testCancel()) {
-			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			LOG("cancel detected");
 			setStatus(IO_ReadError);
 			return -1;
 		}
@@ -111,7 +117,7 @@ private:
 //---------------------------------------------------------------------
 void GVDecoderThread::run() {
 	QMutexLocker locker(&mMutex);
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	
 	// This block makes sure imageIO won't access the image after the signal
 	// has been posted
@@ -123,21 +129,21 @@ void GVDecoderThread::run() {
 		imageIO.setIODevice(&buffer);
 		bool ok=imageIO.read();
 		if (testCancel()) {
-			kdDebug() << k_funcinfo << "cancelled" << endl;
+			LOG("cancelled");
 			return;
 		}
 			
 		if (!ok) {
-			kdDebug() << k_funcinfo << "failed" << endl;
+			LOG("failed");
 			postSignal( this, SIGNAL(failed()) );
 			return;
 		}
 		
-		kdDebug() << k_funcinfo << "succeeded" << endl;
+		LOG("succeeded");
 		mImage=imageIO.image();
 	}
 	
-	kdDebug() << k_funcinfo << "succeeded, emitting signal" << endl;
+	LOG("succeeded, emitting signal");
 	postSignal( this, SIGNAL(succeeded()) );
 }
 
@@ -223,7 +229,7 @@ public:
 //---------------------------------------------------------------------
 GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document) 
 : GVDocumentImpl(document) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	d=new GVDocumentDecodeImplPrivate(this);
 
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
@@ -238,7 +244,7 @@ GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document)
 
 
 GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	if (d->mDecoderThread.running()) {
 		d->mDecoderThread.cancel();
 		d->mDecoderThread.wait();
@@ -256,7 +262,7 @@ void GVDocumentDecodeImpl::start() {
 }
 
 void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
-	kdDebug() << k_funcinfo << "error code: " << job->error() << endl;
+	LOG("error code: " << job->error());
 
 	// Get modification time of the original file
 	KIO::UDSEntry entry = static_cast<KIO::StatJob*>(job)->statResult();
@@ -305,7 +311,7 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 	
 
 void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
-	kdDebug() << k_funcinfo << "error code: " << job->error() << endl;
+	LOG("error code: " << job->error());
 	if( job->error() != 0 ) {
 		// failed
 		emit finished(false);
@@ -317,7 +323,7 @@ void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
 	
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
-		kdDebug() << k_funcinfo << "starting decoder thread\n";
+		LOG("starting decoder thread");
 		d->mDecoderThread.setRawData(d->mRawData);
 		d->mDecoderThread.start();
 	}
@@ -325,7 +331,7 @@ void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
 
 
 void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
-	kdDebug() << k_funcinfo << "size: " << chunk.size() << endl;
+	LOG("size: " << chunk.size());
 	if (chunk.size()<=0) return;
 
 	int oldSize=d->mRawData.size();
@@ -346,14 +352,14 @@ void GVDocumentDecodeImpl::decodeChunk() {
 	}
 
 	int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mDecodedSize);
-	kdDebug() << k_funcinfo << "chunkSize: " << chunkSize << endl;
+	LOG("chunkSize: " << chunkSize);
 	Q_ASSERT(chunkSize>0);
 	if (chunkSize<=0) return;
 		
 	int decodedSize = d->mDecoder.decode(
 		(const uchar*)(d->mRawData.data()+d->mDecodedSize),
 		chunkSize);
-	kdDebug() << k_funcinfo << "decodedSize: " << decodedSize << endl;
+	LOG("decodedSize: " << decodedSize);
 	
 	if (decodedSize<0) {
 		// We can't use async decoding, switch to decoder thread 
@@ -381,7 +387,7 @@ void GVDocumentDecodeImpl::decodeChunk() {
 
 
 void GVDocumentDecodeImpl::slotDecoderThreadFailed() {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	// Image can't be loaded, let's switch to an empty implementation
 	emit finished(false);
 	switchToImpl(new GVDocumentImpl(mDocument));
@@ -389,7 +395,7 @@ void GVDocumentDecodeImpl::slotDecoderThreadFailed() {
 
 
 void GVDocumentDecodeImpl::slotImageDecoded() {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 
 	// Get image
 	QImage image;
@@ -425,7 +431,7 @@ void GVDocumentDecodeImpl::slotImageDecoded() {
  * implementation
  */
 void GVDocumentDecodeImpl::finish(QImage& image) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	// Convert depth if necessary
 	// (32 bit depth is necessary for alpha-blending)
 	if (image.depth()<32 && image.hasAlphaBuffer()) {
@@ -479,7 +485,7 @@ void GVDocumentDecodeImpl::resumeLoading() {
 //
 //---------------------------------------------------------------------
 void GVDocumentDecodeImpl::end() {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	if( !d->mLoadChangedRect.isNull()) {
 		emit rectUpdated(d->mLoadChangedRect);
 	}
@@ -495,15 +501,14 @@ void GVDocumentDecodeImpl::end() {
 }
 
 void GVDocumentDecodeImpl::changed(const QRect& rect) {
-//	kdDebug() << k_funcinfo << " " << rect.left() << "-" << rect.top() << " " << rect.width() << "x" << rect.height() << endl;
 	if (!d->mUpdatedDuringLoad) {
 		setImage(d->mDecoder.image());
 		d->mUpdatedDuringLoad=true;
 	}
 	d->mLoadChangedRect |= rect;
 	if( d->mTimeSinceLastUpdate.elapsed() > 100 ) {
-		kdDebug() << k_funcinfo << " " << d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
-			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() << "\n";
+		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
+			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
 		emit rectUpdated(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
 		d->mTimeSinceLastUpdate.start();
@@ -523,7 +528,7 @@ void GVDocumentDecodeImpl::setFramePeriod(int /*milliseconds*/) {
 }
 
 void GVDocumentDecodeImpl::setSize(int width, int height) {
-	kdDebug() << k_funcinfo << " " << width << "x" << height << endl;
+	LOG(width << "x" << height);
 	// FIXME: There must be a better way than creating an empty image
 	setImage(QImage(width, height, 32));
 	emit sizeUpdated(width, height);

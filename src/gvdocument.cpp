@@ -54,6 +54,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.moc"
 
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
 const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
@@ -129,7 +135,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	if (paramURL==url()) return;
 	// Make a copy, we might have to fix the protocol
 	KURL localURL(paramURL);
-	kdDebug() << k_funcinfo << " url: " << paramURL.prettyURL() << endl;
+	LOG("url: " << paramURL.prettyURL());
 
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
@@ -166,7 +172,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 
 
 void GVDocument::slotStatResult(KIO::Job* job) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	Q_ASSERT(d->mStatJob==job);
 	if (d->mStatJob!=job) {
 		kdWarning() << k_funcinfo << "We did not get the right job!\n";
@@ -550,7 +556,7 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 void GVDocument::load() {
 	KURL pixURL=url();
 	Q_ASSERT(!pixURL.isEmpty());
-	kdDebug() << k_funcinfo << " url: " << pixURL.prettyURL() << endl;
+	LOG("url: " << pixURL.prettyURL());
 
 	switchToImpl(new GVDocumentDecodeImpl(this));
 	emit loading();
@@ -558,7 +564,7 @@ void GVDocument::load() {
 	
 
 void GVDocument::slotFinished(bool success) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	if (success) {
 		emit loaded(d->mDirURL, d->mFilename);
 	} else {
