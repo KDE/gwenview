@@ -20,11 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt includes
+#include <qfile.h>
 #include <qstylesheet.h>
 #include <qwidget.h>
 
 // KDE includes
-#include <kfiledialog.h>
+#include <kdirselectdialog.h>
 #include <kglobalsettings.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
@@ -63,16 +64,14 @@ void FileOpObject::slotResult(KIO::Job* job) {
 
 //-FileOpCopyToObject--------------------------------------------------------------
 void FileOpCopyToObject::operator()() {
-	QString destDir;
 	KURL destURL;
 
 	if (FileOperation::confirmCopy()) {
-		destDir=KFileDialog::getExistingDirectory(FileOperation::destDir(), mParent);
+		destURL=KDirSelectDialog::selectDirectory(FileOperation::destDir(), false, mParent, i18n("Copy files"));
 	} else {
-		destDir=FileOperation::destDir();
+		destURL.setPath(FileOperation::destDir());
 	}
-	if (destDir.isEmpty()) return;
-	destURL.setPath(destDir);
+	if (destURL.isEmpty()) return;
 
 // Copy the file
 	KIO::Job* copyJob=KIO::copy(mURLList,destURL,true);
@@ -84,19 +83,16 @@ void FileOpCopyToObject::operator()() {
 
 //-FileOpMoveToObject--------------------------------------------------------------
 void FileOpMoveToObject::operator()() {
-	QString destDir;
 	KURL destURL;
 
 	if (FileOperation::confirmMove()) {
-		destDir=KFileDialog::getExistingDirectory(FileOperation::destDir(), mParent);
+		destURL=KDirSelectDialog::selectDirectory(FileOperation::destDir(), false, mParent, i18n("Move files"));
 	} else {
-		destDir=FileOperation::destDir();
+		destURL.setPath(FileOperation::destDir());
 	}
-	if (destDir.isEmpty()) return;
+	if (destURL.isEmpty()) return;
 
-// Copy the file
-	destURL.setPath(destDir);
-
+// Move the file
 	KIO::Job* moveJob=KIO::move(mURLList,destURL,true);
 	connect( moveJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
