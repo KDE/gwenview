@@ -54,9 +54,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	// Example action creation code
 	KAction* m_openCloseAll = new KAction( i18n("Open All"), 0, this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
 
-	//FIXME why won't this work?
-	KAction* m_exampleAction = KStdAction::zoomIn(this, SLOT(slotExample()), actionCollection(), "zoomin");
-
 	//FIXME why does this not work without path relative
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
 }

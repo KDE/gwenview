@@ -2,7 +2,10 @@
 <kpartgui name="GVImagePart">
 <MenuBar>
  <Menu name="view"><Text>&amp;View</Text>
-    <Action name="openCloseAll"/>
+  <Action name="openCloseAll"/>
  </Menu>
 </MenuBar>
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+ <Action name="view_zoom_auto"/>
+</ToolBar>
 </kpartgui>

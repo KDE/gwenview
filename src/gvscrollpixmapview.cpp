@@ -960,7 +960,7 @@ void GVScrollPixmapView::kpartConfig() {
 	mSmoothScale=false;
 	mEnlargeSmallImages=false;
 	mShowScrollBars=true;
-	mAutoZoom->setChecked(false);
+	mAutoZoom->setChecked(true);
 	updateScrollBarMode();
 	mLockZoom->setChecked(false);
 
