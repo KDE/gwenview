@@ -64,6 +64,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	// Create the widgets
 	mDocument = new GVDocument(this);
+	connect( mDocument, SIGNAL( loaded(const KURL&,const QString&)), SIGNAL( completed()));
 	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	setWidget(mPixmapView);
 
@@ -88,6 +89,7 @@ void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 	} else {
 		mPixmapView->writeConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
 	}
+	KParts::ReadOnlyPart::partActivateEvent( event );
 }
 
 
@@ -104,7 +106,7 @@ bool GVImagePart::openURL(const KURL& url) {
 		return false;
 	}
 	m_url = url;
-
+	emit started( 0 );
 	mDocument->setURL(url);
 	emit setWindowCaption(url.prettyURL());
 	return true;
