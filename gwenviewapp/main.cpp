@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
 		"Copyright 2000-2004, The Gwenview developers",0,"http://gwenview.sourceforge.net");
 	aboutData.addAuthor("Aurélien Gâteau", I18N_NOOP("Main developer"), "aurelien.gateau@free.fr");
-	aboutData.addAuthor("Luboš Lunák", I18N_NOOP("Developer"), "l.lunak@suse.cz");
+	aboutData.addAuthor("Luboš Luňák", I18N_NOOP("Developer"), "l.lunak@suse.cz");
 
 	aboutData.addCredit("Frank Becker", I18N_NOOP("Fast JPEG thumbnail generation (v0.13.0)"), "ff@telus.net");
 	aboutData.addCredit("Tudor Calin", I18N_NOOP("Address bar (v0.16.0)\nHistory support (v1.0.0)"), "tudor_calin@mymail.ro");
