@@ -5,6 +5,9 @@
 
 - Packagers ----------------------------------------------
 
+ASP Linux:
+  Andrew "nording" Chernyak <nording@yandex.ru>
+
 Debian:
   Michael Spanier <mail@michael-spanier.de>
 
@@ -12,9 +15,10 @@ Mandrake:
   Aurélien Gâteau <aurelien.gateau@mail.dotcom.fr>
 
 Red Hat:
-  Bobby Brockers <brockers@dps.state.ok.us>
+  Bobby Rockers <brockers@dps.state.ok.us>
 
 SuSE:
   Marc'O Puszina <marco@hackerwelt.de>
 
-
+Slackware:
+  Luca Cavalli <luca.cav@tiscali.it>
