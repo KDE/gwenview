@@ -1,8 +1,10 @@
 2003.xx.xx - v1.0.0pre4
-- Features:
- - Added a new option: "Always browse when auto zoom is enabled"
 - Fixes:
  - Use a KDE dialog for the configuration dialog.
+ - Removed the image view mouse behavior configuration options. The behavior is
+   much simpler now: left button to drag image, middle button to toggle
+   auto-zoom and mouse-wheel to browse images. If you want to zoom hold Shift
+   and use either the mouse-wheel or the left button.
 
 2003.11.01 - v1.0.0pre3
 - New features:

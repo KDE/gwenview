@@ -88,9 +88,13 @@ public:
 	ToolController(GVScrollPixmapView* view)
 	: mView(view) {}
 	virtual ~ToolController() {}
-	virtual void mousePressEvent(QMouseEvent*) {}
+	virtual void leftButtonPressEvent(QMouseEvent*) {}
 	virtual void mouseMoveEvent(QMouseEvent*) {}
-	virtual void mouseReleaseEvent(QMouseEvent*) {}
+	virtual void leftButtonReleaseEvent(QMouseEvent*) {}
+	virtual void midButtonReleaseEvent(QMouseEvent*) {
+		mView->autoZoom()->activate();
+	}
+
 	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
 	virtual void updateCursor() {
 		mView->viewport()->setCursor(ArrowCursor);
@@ -98,9 +102,37 @@ public:
 };
 
 
+class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
+	QCursor mZoomCursor;
+public:
+	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
+		mZoomCursor=loadCursor("zoom");
+	}
+
+	void leftButtonReleaseEvent(QMouseEvent*) {
+		mView->zoomIn()->activate();
+	}
+	
+	void wheelEvent(QWheelEvent* event) {
+		if (event->delta()<0) {
+			if (mView->zoomIn()->isEnabled()) mView->zoomIn()->activate();
+		} else {
+			if (mView->zoomOut()->isEnabled()) mView->zoomOut()->activate();
+		}
+		event->accept();
+	}
+
+	void updateCursor() {
+		mView->viewport()->setCursor(mZoomCursor);
+	}
+};
+
+
 class GVScrollPixmapView::ScrollToolController : public GVScrollPixmapView::ToolController {
 	int mScrollStartX,mScrollStartY;
 	bool mDragStarted;
+
+protected:
 	QCursor mDragCursor,mDraggingCursor;
 
 public:
@@ -112,7 +144,7 @@ public:
 		mDraggingCursor=loadCursor("dragging");
 	}
 
-	void mousePressEvent(QMouseEvent* event) {
+	void leftButtonPressEvent(QMouseEvent* event) {
 		mScrollStartX=event->x();
 		mScrollStartY=event->y();
 		mView->viewport()->setCursor(mDraggingCursor);
@@ -132,73 +164,13 @@ public:
 		mView->scrollBy(deltaX,deltaY);
 	}
 
-	void mouseReleaseEvent(QMouseEvent*) {
+	void leftButtonReleaseEvent(QMouseEvent*) {
 		if (!mDragStarted) return;
 
 		mDragStarted=false;
 		mView->viewport()->setCursor(mDragCursor);
 	}
 
-	void wheelEvent(QWheelEvent* event) {
-		mView->QScrollView::wheelEvent(event);
-	}
-
-	void updateCursor() {
-		if (mDragStarted) {
-			mView->viewport()->setCursor(mDraggingCursor);
-		} else {
-			mView->viewport()->setCursor(mDragCursor);
-		}
-	}
-};
-
-
-class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
-	QCursor mZoomCursor;
-	QCursor mAutoZoomCursor;
-public:
-	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
-		mZoomCursor=loadCursor("zoom");
-		mAutoZoomCursor=loadCursor("autozoom");
-	}
-
-	void mouseReleaseEvent(QMouseEvent*) {
-		mView->autoZoom()->activate();
-		updateCursor();
-	}
-
-	void wheelEvent(QWheelEvent* event) {
-		if (event->delta()<0) {
-			if (mView->zoomIn()->isEnabled()) mView->zoomIn()->activate();
-		} else {
-			if (mView->zoomOut()->isEnabled()) mView->zoomOut()->activate();
-		}
-		event->accept();
-	}
-
-	void updateCursor() {
-		// This is inverted, since we show the cursor for the tool which will
-		// be activated *after* the click
-		if (mView->autoZoom()->isChecked()) {
-			mView->viewport()->setCursor(mZoomCursor);
-		} else {
-			mView->viewport()->setCursor(mAutoZoomCursor);
-		}
-	}
-};
-
-
-class GVScrollPixmapView::BrowseToolController : public GVScrollPixmapView::ToolController {
-	QCursor mCursor;
-public:
-	BrowseToolController(GVScrollPixmapView* view) : ToolController(view) {
-		mCursor=loadCursor("browse");
-	}
-
-	void mouseReleaseEvent(QMouseEvent*) {
-		mView->emitSelectNext();
-	}
-	
 	void wheelEvent(QWheelEvent* event) {
 		if (event->delta()<0) {
 			mView->emitSelectNext();
@@ -207,9 +179,13 @@ public:
 		}
 		event->accept();
 	}
-	
+
 	void updateCursor() {
-		mView->viewport()->setCursor(mCursor);
+		if (mDragStarted) {
+			mView->viewport()->setCursor(mDraggingCursor);
+		} else {
+			mView->viewport()->setCursor(mDragCursor);
+		}
 	}
 };
 
@@ -235,8 +211,6 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
 
-	mToolControllers[None]=new ToolController(this);
-	mToolControllers[Browse]=new BrowseToolController(this);
 	mToolControllers[Scroll]=new ScrollToolController(this);
 	mToolControllers[Zoom]=new ZoomToolController(this);
 	
@@ -418,12 +392,6 @@ void GVScrollPixmapView::setAutoZoomBrowse(bool value) {
 }
 
 
-void GVScrollPixmapView::updateDefaultCursor() {
-	// We assume no modifier is pressed when this is called
-	// FIXME: To be removed after GVConfigDialog rewrite
-	selectTool(NoButton);
-}
-
 //------------------------------------------------------------------------
 //
 // Overloaded methods
@@ -538,8 +506,9 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 
 void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
-	if (event->button()==RightButton) return;
-	mToolControllers[mTool]->mousePressEvent(event);
+	if (event->button()==LeftButton) { 
+		mToolControllers[mTool]->leftButtonPressEvent(event);
+	}
 }
 
 
@@ -560,9 +529,13 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			emit selectPrevious();
 			return;
 		}
-		mToolControllers[mTool]->mouseReleaseEvent(event);
+		mToolControllers[mTool]->leftButtonReleaseEvent(event);
 		break;
-			
+
+	case Qt::MidButton:
+		mToolControllers[mTool]->midButtonReleaseEvent(event);
+		break;
+		
 	case Qt::RightButton:
 		if (event->stateAfter() & Qt::LeftButton) {
 			emit selectNext();
@@ -611,12 +584,10 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 
 
 void GVScrollPixmapView::selectTool(ButtonState state) {
-	ButtonState modifier=ButtonState(state & (ShiftButton | ControlButton | AltButton) );
-	
-	if (mAutoZoomBrowse && mAutoZoom->isChecked() && modifier==0) {
-		mTool=Browse;
+	if (state & ShiftButton) {
+		mTool=Zoom;
 	} else {
-		mTool=mButtonStateToolMap[modifier];
+		mTool=Scroll;
 	}
 	
 	mToolControllers[mTool]->updateCursor();
@@ -951,10 +922,14 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
+	/* FIXME
 	mButtonStateToolMap[NoButton]=	   Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_NONE,Scroll) );
 	mButtonStateToolMap[ControlButton]=Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL,Browse) );
 	mButtonStateToolMap[ShiftButton]=  Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT,Zoom) );
 	mButtonStateToolMap[AltButton]=    Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_ALT,None) );
+	*/
+	mButtonStateToolMap[NoButton]=Scroll;
+	mButtonStateToolMap[ShiftButton]=Zoom;
 
 	mTool=mButtonStateToolMap[NoButton];
 	mToolControllers[mTool]->updateCursor();
@@ -971,9 +946,11 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_AUTO_ZOOM_BROWSE, mAutoZoomBrowse);
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
+	/* FIXME
 	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_NONE	 , int(mButtonStateToolMap[NoButton]) );
 	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL, int(mButtonStateToolMap[ControlButton]) );
 	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT  , int(mButtonStateToolMap[ShiftButton]) );
 	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_ALT	 , int(mButtonStateToolMap[AltButton]) );
+	*/
 }
 

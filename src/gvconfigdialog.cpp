@@ -84,31 +84,9 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	typedef QMap<GVScrollPixmapView::Tool,QString> MouseBehaviours;
-	MouseBehaviours behaviours;
-	behaviours[GVScrollPixmapView::None]=i18n("None");
-	behaviours[GVScrollPixmapView::Scroll]=i18n("Scroll");
-	behaviours[GVScrollPixmapView::Browse]=i18n("Browse");
-	behaviours[GVScrollPixmapView::Zoom]=i18n("Zoom");
-
-	MouseBehaviours::Iterator it;
-	for( it = behaviours.begin(); it!=behaviours.end(); ++it ) {
-		int index=int(it.key());
-		d->mContent->mWheelOnly->insertItem(*it,index);
-		d->mContent->mControlPlusWheel->insertItem(*it,index);
-		d->mContent->mShiftPlusWheel->insertItem(*it,index);
-		d->mContent->mAltPlusWheel->insertItem(*it,index);
-	}
-	d->mContent->mWheelOnly->setCurrentItem(int(pixmapView->buttonStateTool(NoButton) ));
-	d->mContent->mControlPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(ControlButton) ));
-	d->mContent->mShiftPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(ShiftButton) ));
-	d->mContent->mAltPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(AltButton) ));
-
 	d->mContent->mSmoothScale->setChecked(pixmapView->smoothScale());
 	d->mContent->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mContent->mShowScrollBars->setChecked(pixmapView->showScrollBars());
-
-	d->mContent->mAutoZoomBrowse->setChecked(pixmapView->autoZoomBrowse());
 	
 	// Full Screen tab
 	d->mContent->mShowPathInFullScreen->setChecked(d->mMainWindow->pixmapView()->showPathInFullScreen());
@@ -159,17 +137,9 @@ void GVConfigDialog::slotApply() {
 	fileViewStack->setShownColor(d->mContent->mShownColor->color());
 	
 	// Image View tab		
-	pixmapView->setButtonStateTool(NoButton,      GVScrollPixmapView::Tool(d->mContent->mWheelOnly->currentItem()) );
-	pixmapView->setButtonStateTool(ControlButton, GVScrollPixmapView::Tool(d->mContent->mControlPlusWheel->currentItem()) );
-	pixmapView->setButtonStateTool(ShiftButton,   GVScrollPixmapView::Tool(d->mContent->mShiftPlusWheel->currentItem()) );
-	pixmapView->setButtonStateTool(AltButton,     GVScrollPixmapView::Tool(d->mContent->mAltPlusWheel->currentItem()) );
-	pixmapView->updateDefaultCursor();
-
 	pixmapView->setSmoothScale(d->mContent->mSmoothScale->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mContent->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
-
-	pixmapView->setAutoZoomBrowse(d->mContent->mAutoZoomBrowse->isChecked());
 	
 	// Full Screen tab
 	d->mMainWindow->pixmapView()->setShowPathInFullScreen( d->mContent->mShowPathInFullScreen->isChecked() );

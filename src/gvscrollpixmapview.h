@@ -45,12 +45,10 @@ Q_OBJECT
 
 public:
 	class ToolController;
-	class BrowseToolController;
 	class ScrollToolController;
 	class ZoomToolController;
 
 	friend class ToolController;
-	friend class BrowseToolController;
 	friend class ScrollToolController;
 	friend class ZoomToolController;
 
@@ -84,10 +82,8 @@ public:
 	bool autoZoomBrowse() const { return mAutoZoomBrowse; }
 	void setAutoZoomBrowse(bool);
 
-
 	Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
 	void setButtonStateTool(ButtonState,Tool);
-	void updateDefaultCursor();
 
 	void restartAutoHideTimer();
 
