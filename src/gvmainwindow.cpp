@@ -707,7 +707,7 @@ void GVMainWindow::createLocationToolBar() {
 	mLocationToolBar->setLabel(i18n("Location Tool Bar"));
 
 	mLocationToolBar->insertButton("locationbar_erase",1,true);
-	QToolTip::add(mLocationToolBar->getButton(1),"Clear location bar");
+	QToolTip::add(mLocationToolBar->getButton(1),i18n("Clear location bar"));
 	
 	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
 	 * styles like Keramik). See konq_misc.cc.
