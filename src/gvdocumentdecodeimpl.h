@@ -55,6 +55,7 @@ private:
 private slots:
 	void startLoading();
     void slotDataReceived(KIO::Job*, const QByteArray& chunk);
+    void slotCanceled();
 	void loadChunk();
 };
 

@@ -49,11 +49,11 @@ public:
 	QByteArray mRawData;
 	QString mComment;
 	GVDocument::CommentState mCommentState;
-	QString mTempFilePath;
+	QString mLocalFilePath;
 
 
 	void loadComment() {
-		KFileMetaInfo metaInfo=KFileMetaInfo(mTempFilePath);
+		KFileMetaInfo metaInfo=KFileMetaInfo(mLocalFilePath);
 		KFileMetaInfoItem commentItem;
 
 		mCommentState=GVDocument::NONE;
@@ -61,7 +61,7 @@ public:
 		if (metaInfo.isEmpty()) return;
 
 		commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-		mCommentState=QFileInfo(mTempFilePath).isWritable()?GVDocument::WRITABLE:GVDocument::READ_ONLY;
+		mCommentState=QFileInfo(mLocalFilePath).isWritable()?GVDocument::WRITABLE:GVDocument::READ_ONLY;
 		mComment=QString::fromUtf8( commentItem.string().ascii() );
 
 #ifdef DEBUG_COMMENT 
@@ -93,12 +93,20 @@ public:
 };
 
 
+/**
+ * tempFilePath is set to QString::null if the document is a local file,
+ * otherwise it is the name of a local copy of the file and must be deleted
+ */
 GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath)
 : GVDocumentImpl(document) {
 	kdDebug() << k_funcinfo << endl;
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mRawData=rawData;
-	d->mTempFilePath=tempFilePath;
+    if (mDocument->url().isLocalFile()) {
+        d->mLocalFilePath=document->url().path();
+    } else {
+        d->mLocalFilePath=tempFilePath;
+    }
 
 	QTimer::singleShot(0, this, SLOT(finishLoading()) );
 }
@@ -179,7 +187,9 @@ void GVDocumentJPEGLoadedImpl::finishLoading() {
 	}
 
 	d->loadComment();
-	KIO::NetAccess::removeTempFile(d->mTempFilePath);
+    if (!mDocument->url().isLocalFile()) {
+        QFile::remove(d->mLocalFilePath);
+    }
 
 	emit finished(true);
 }

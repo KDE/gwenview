@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
+#include <qbuffer.h>
 #include <qfile.h>
 #include <qguardedptr.h>
 #include <qimage.h>
@@ -31,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
+#include <ktempfile.h>
 #include <kurl.h>
 
 // Local
@@ -53,7 +55,6 @@ public:
 	: mDecoder(impl) {}
 
 	bool mUpdatedDuringLoad;
-	QString mTempFilePath;
 	QByteArray mRawData;
 	unsigned int mReadSize;
 	QImageDecoder mDecoder;
@@ -98,6 +99,13 @@ void GVDocumentDecodeImpl::startLoading() {
     d->mReadSize=0;
     d->mLoadChangedRect=QRect();
 	d->mLoadCompressChangesTime.start();
+}
+    
+
+void GVDocumentDecodeImpl::slotCanceled() {
+    kdDebug() << k_funcinfo << " loading canceled\n";
+    emit finished(false);
+    switchToImpl(new GVDocumentImpl(mDocument));
 }
 
 
@@ -149,7 +157,6 @@ void GVDocumentDecodeImpl::loadChunk() {
 	// Image can't be loaded, let's switch to an empty implementation
 	if (!ok) {
 		kdDebug() << k_funcinfo << " loading failed\n";
-		KIO::NetAccess::removeTempFile(d->mTempFilePath);
 		emit finished(false);
 		switchToImpl(new GVDocumentImpl(mDocument));
 		return;
@@ -157,6 +164,14 @@ void GVDocumentDecodeImpl::loadChunk() {
 
 	kdDebug() << k_funcinfo << " loading succeded\n";
 
+    // Set the image format. QImageIO::imageFormat should not fail since at
+    // this point the image has been decoded successfully.
+    QBuffer buffer(d->mRawData);
+    buffer.open(IO_ReadOnly);
+    setImageFormat( QImageIO::imageFormat(&buffer) );
+    Q_ASSERT(mDocument->imageFormat()!=0);
+    buffer.close();
+    
 	// Convert depth if necessary
 	// (32 bit depth is necessary for alpha-blending)
 	if (image.depth()<32 && image.hasAlphaBuffer()) {
@@ -173,12 +188,17 @@ void GVDocumentDecodeImpl::loadChunk() {
 	}
 	
 	// Now we switch to a loaded implementation
-	QCString format(mDocument->imageFormat());
-    //FIXME: What to do with mTempFilePath?
-	if (format=="JPEG") {
-		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mRawData, d->mTempFilePath));
+	if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {
+        // We want a local copy of the file for the comment editor
+        QString tempFilePath;
+        if (!mDocument->url().isLocalFile()) {
+            KTempFile tempFile(QString("gvremotefile"));
+            tempFile.dataStream()->writeRawBytes(d->mRawData.data(), d->mRawData.size());
+            tempFile.close();
+            tempFilePath=tempFile.name();
+        }
+		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mRawData, tempFilePath));
 	} else {
-		KIO::NetAccess::removeTempFile(d->mTempFilePath);
 		switchToImpl(new GVDocumentLoadedImpl(mDocument));
 	}
 }
