@@ -252,13 +252,13 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 		this,SLOT(setAutoZoom(bool)) );
 
 	mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),mActionCollection);
-	mZoomIn->setIcon("view_zoom_in");
+	mZoomIn->setIcon("zoomin");
 	
 	mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),mActionCollection);
-	mZoomOut->setIcon("view_zoom_out");
+	mZoomOut->setIcon("zoomout");
 	
 	mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),mActionCollection);
-	mResetZoom->setIcon("view_zoom_actual_size");
+	mResetZoom->setIcon("actualsize");
 
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"view_zoom_lock");
 
