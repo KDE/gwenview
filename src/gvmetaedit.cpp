@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kdeversion.h>
-#include <kfilemetainfo.h>
 #include <klocale.h>
 
 // Local
@@ -32,15 +31,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvmetaedit.moc"
 
 
-const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
-const char* JPEG_EXIF_COMMENT="Comment";
-const char* PNG_COMMENT="Comment";
-
-
 GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
 : QVBox(parent, name)
 , mGVPixmap(gvp)
-, mMetaInfo(0L)
 {
 	mCommentEdit=new QTextEdit(this);
 	mCommentEdit->installEventFilter(this);
@@ -48,17 +41,18 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
 		this, SLOT(setModified(bool)));
 	connect(mGVPixmap,SIGNAL(loaded(const KURL&, const QString&)),
 		this,SLOT(updateContent()) );
+	connect(mCommentEdit, SIGNAL(textChanged()),
+		this, SLOT(updateDoc()) );
 	updateContent();
 }
 
 
 GVMetaEdit::~GVMetaEdit() {
-	clearData();
 }
 
 
 bool GVMetaEdit::eventFilter(QObject *o, QEvent *e) {
-	if (o == mCommentEdit && mEmpty && mWritable) {
+	if (o == mCommentEdit && mEmpty && (mGVPixmap->commentState()==GVPixmap::Writable)) {
 		if (e->type() == QEvent::FocusIn) {
 			mCommentEdit->setTextFormat(QTextEdit::PlainText);
 			mCommentEdit->setText("");
@@ -78,62 +72,16 @@ void GVMetaEdit::setModified(bool m) {
 
 
 void GVMetaEdit::updateContent() {
-	clearData();
-
 	if (mGVPixmap->isNull()) {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
 		mCommentEdit->setText(i18n("<i>No image selected.</i>"));
-		//mCommentEdit->setEnabled(false);
 		mEmpty = true;
-		mWritable = false;
 		return;
 	}
 
-	KURL url = mGVPixmap->url();
-	// make KFileMetaInfo object and check if file is writable
-	#if KDE_VERSION_MAJOR >= 3 && KDE_VERSION_MINOR >= 2
-	mMetaInfo = new KFileMetaInfo(url);
-	if (url.isLocalFile()) {
-		mWritable = QFileInfo(url.path()).isWritable();
-	} else {
-		mWritable = false;
-	}
-	#else
-	// KDE <= 3.1 can only get meta info from local files
-	mMetaInfo = new KFileMetaInfo(url.path());
-	mWritable = QFileInfo(url.path()).isWritable();
-	#endif
-
-	// retrieve comment item
-	QString mimetype = "";
-	if (!mMetaInfo->isEmpty()) {
-		mimetype = mMetaInfo->mimeType();
-	}
-	if (mimetype == "image/jpeg") {
-		mCommentItem = (*mMetaInfo)[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-	} else if (mimetype == "image/png") {
-		// we take the first comment
-		QString name = (*mMetaInfo)[PNG_COMMENT].keys()[0];
-		mCommentItem = (*mMetaInfo)[PNG_COMMENT][name];
-		mWritable = false; // not implemented in KDE
-	} else {
-		mCommentItem = KFileMetaInfoItem();
-		mWritable = false;
-	}
+	QString comment=mGVPixmap->comment();
 	
-	/* Some code to debug
-	QStringList k,l;
-	k = mMetaInfo->groups();
-	for (uint i=0; i<k.size(); ++i) {
-		l = (*mMetaInfo)[k[i]].keys();
-		for (uint j=0; j<l.size(); ++j) {
-			kdDebug() << k[i] << '\t' << l[j] <<endl;
-		}
-	}*/
-	
-	// set comment in QTextEdit
-	if (mCommentItem.isValid()) {
-		QString comment = QString::fromUtf8( mCommentItem.string().ascii());
+	if (mGVPixmap->commentState() & GVPixmap::Valid) {
 		mEmpty = comment.isEmpty();
 		if (mEmpty) {
 			setEmptyText();
@@ -145,29 +93,24 @@ void GVMetaEdit::updateContent() {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
 		mCommentEdit->setText("<i>This image can't be commented.</i>");
 	}
-	mCommentEdit->setReadOnly(!mWritable);
-	mCommentEdit->setEnabled(mWritable);
+	bool writable=mGVPixmap->commentState()==GVPixmap::Writable;
+	mCommentEdit->setReadOnly(!writable);
+	mCommentEdit->setEnabled(writable);
 }
 
 
-void GVMetaEdit::clearData() {
-	if (!mMetaInfo) return;
-
-	// save changed data
-	if (mWritable && mCommentEdit->isModified()) {
-		mCommentItem.setValue(mCommentEdit->text());
-		mMetaInfo->applyChanges();
+void GVMetaEdit::updateDoc() {
+	if ((mGVPixmap->commentState()==GVPixmap::Writable) && mCommentEdit->isModified()) {
+		mGVPixmap->setComment(mCommentEdit->text());
 		mCommentEdit->setModified(false);
 	}
-	delete mMetaInfo;
-	mMetaInfo = 0L;
 }
 
 
 void GVMetaEdit::setEmptyText() {
 	QString comment;
 	mCommentEdit->setTextFormat(QTextEdit::RichText);
-	if (mWritable) {
+	if (mGVPixmap->commentState()==GVPixmap::Writable) {
 		comment=i18n("<i>Type here to add a comment to this image.</i>");
 	} else {
 		comment=i18n("<i>No comment available.</i>");

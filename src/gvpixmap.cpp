@@ -28,12 +28,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kdebug.h>
+#include <kfilemetainfo.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <ktempfile.h>
 #include <kprinter.h>
+#include <ktempfile.h>
 
 // Our includes
 #include <gvarchive.h>
@@ -46,13 +47,123 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
 const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 
+const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
+const char* JPEG_EXIF_COMMENT="Comment";
+const char* PNG_COMMENT="Comment";
+
+
+
+//-------------------------------------------------------------------
+//
+// GVPixmapPrivate
+//
+//-------------------------------------------------------------------
+class GVPixmapPrivate {
+public:
+	GVPixmap::CommentState mCommentState;
+	QString mComment;
+
+
+	void loadComment(const QString& path) {
+		KFileMetaInfo metaInfo=KFileMetaInfo(path);
+		KFileMetaInfoItem commentItem;
+		
+		mCommentState=GVPixmap::None;
+
+		if (metaInfo.isEmpty()) return;
+
+		// Get the comment
+		QString mimeType=metaInfo.mimeType();
+		if (mimeType=="image/jpeg") {
+			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
+			mCommentState=
+				QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
+			mComment=QString::fromUtf8( commentItem.string().ascii() );
+			
+		} else if (mimeType=="image/png") {
+			
+			// we take all comments
+			QStringList keys=metaInfo[PNG_COMMENT].keys();
+			if (keys.size()==0) return;
+
+			QStringList tmp;
+			QStringList::ConstIterator it;
+			for(it=keys.begin(); it!=keys.end(); ++it) {
+				KFileMetaInfoItem metaInfoItem=metaInfo[PNG_COMMENT][*it];
+				QString line=QString("%1: %2")
+					.arg(metaInfoItem.translatedKey())
+					.arg(metaInfoItem.string());
+				tmp.append(line);
+			}
+			mComment=tmp.join("\n");
+			mCommentState=GVPixmap::ReadOnly;
+		} else {
+			return;
+		}
+		
+		#if 0
+		// Some code to debug
+		QStringList groups, keys;
+		groups = metaInfo.groups();
+		for (uint i=0; i<groups.size(); ++i) {
+			keys = metaInfo[groups[i]].keys();
+			kdDebug() << groups[i] << endl;
+			for (uint j=0; j<keys.size(); ++j) {
+				kdDebug() << "- " << keys[j] << endl;
+			}
+		}
+		#endif
+	}
+
+
+	void saveComment(const QString& path) {
+		KFileMetaInfo metaInfo=KFileMetaInfo(path);
+		KFileMetaInfoItem commentItem;
+		if (metaInfo.isEmpty()) return;
+		
+		QString mimeType=metaInfo.mimeType();
+		if (mimeType=="image/jpeg") {
+			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
+		} else {
+			return;
+		}
+		
+		if (commentItem.isEditable()) {
+			commentItem.setValue(mComment);
+		}
+		metaInfo.applyChanges();
+	}
+};
+
+
+//-------------------------------------------------------------------
+//
+// GVPixmap
+//
+//-------------------------------------------------------------------
 GVPixmap::GVPixmap(QObject* parent)
 : QObject(parent)
 , mModified(false)
-{}
+{
+	d=new GVPixmapPrivate;
+	d->mCommentState=None;
+}
 
 
 GVPixmap::~GVPixmap() {
+	delete d;
+}
+
+
+//---------------------------------------------------------------------
+//
+// Properties
+//
+//---------------------------------------------------------------------
+KURL GVPixmap::url() const {
+	KURL url=mDirURL;
+	url.addPath(mFilename);
+	return url;
 }
 
 
@@ -133,6 +244,35 @@ void GVPixmap::setFilename(const QString& filename) {
 }
 
 
+GVPixmap::CommentState GVPixmap::commentState() const {
+	return d->mCommentState;
+}
+
+
+QString GVPixmap::comment() const {
+	return d->mComment;
+#if 0
+	if (d->mCommentItem.isValid()) {
+		return QString::fromUtf8( d->mCommentItem.string().ascii());
+	} else {
+		return QString::null;
+	}
+#endif
+}
+
+
+void GVPixmap::setComment(const QString& comment) {
+	Q_ASSERT(d->mCommentState==Writable);
+	d->mComment=comment;
+	mModified=true;
+}
+
+
+//---------------------------------------------------------------------
+//
+// Operations 
+//
+//---------------------------------------------------------------------
 void GVPixmap::reload() {
 	load();
 	emit reloaded(url());
@@ -153,12 +293,6 @@ void GVPixmap::print(KPrinter *pPrinter) {
   
   printpainter.end();
 
-}
-
-KURL GVPixmap::url() const {
-	KURL url=mDirURL;
-	url.addPath(mFilename);
-	return url;
 }
 
 
@@ -341,6 +475,8 @@ void GVPixmap::load() {
 		mImage.reset();
 	}
 
+	d->loadComment(path);
+	
 	KIO::NetAccess::removeTempFile(path);
 	emit loaded(mDirURL,mFilename);
 }
@@ -365,11 +501,15 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 		if (!result) return false;
 		QDataStream stream(&file);
 		stream.writeRawBytes(mCompressedData.data(),mCompressedData.size());
+		file.close();
 	} else {
 		result=mImage.save(path,format.ascii());
 		if (!result) return false;
 	}
 
+	// Save comment
+	d->saveComment(path);
+		
 	if (!url.isLocalFile()) {
 		result=KIO::NetAccess::upload(tmp.name(),url);
 	}

@@ -30,14 +30,16 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #include <kurl.h>
 #include <kprinter.h>
 
+class GVPixmapPrivate;
+
 /**
- * A pixmap class with zooming capacities
- * Emits a signal when it changes
+ * The application document. Should be renamed GVDoc.
  */
 class GVPixmap : public QObject {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { Ask=0, SaveSilently=1, DiscardChanges=2 };
+	enum CommentState { None=0, ReadOnly=1, Valid=ReadOnly, Writable=3 };
 	
 	GVPixmap(QObject*);
 	~GVPixmap();
@@ -54,6 +56,10 @@ public:
 
 	void setModifiedBehavior(ModifiedBehavior);
 	ModifiedBehavior modifiedBehavior() const;
+
+	CommentState commentState() const;
+	QString comment() const;
+	void setComment(const QString&);
 
 public slots:
 	void setURL(const KURL&);
@@ -119,6 +125,8 @@ private:
 
 	// Store compressed data. Usefull for lossless manipulations.
 	QByteArray mCompressedData;
+
+	GVPixmapPrivate* d;
 
 	void reset();
 	void load();
