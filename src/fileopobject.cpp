@@ -52,6 +52,9 @@ public:
 		locationEdit->setEnabled(false);
 		filterWidget->setEnabled(false);
 		setMode(KFile::Directory | KFile::ExistingOnly);
+
+        // Cast to avoid gcc being confused
+        setPreviewWidget(static_cast<KPreviewWidgetBase*>(0));
 	}
 };
 
