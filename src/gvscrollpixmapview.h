@@ -67,7 +67,7 @@ public:
 	friend class ZoomToolController;
 	friend class GVScrollPixmapViewFilter;
 
-	enum Tool { NONE, BROWSE, SCROLL, ZOOM };
+	enum Tool { SCROLL, ZOOM };
 	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
 	typedef QMap<Tool,ToolController*> ToolControllers;
 

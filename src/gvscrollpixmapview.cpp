@@ -243,7 +243,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 , mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
-, mTool(NONE)
+, mTool(SCROLL)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
 , mActionCollection(actionCollection)
@@ -320,8 +320,6 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 
 
 GVScrollPixmapView::~GVScrollPixmapView() {
-	delete mToolControllers[NONE];
-	delete mToolControllers[BROWSE];
 	delete mToolControllers[SCROLL];
 	delete mToolControllers[ZOOM];
 }
