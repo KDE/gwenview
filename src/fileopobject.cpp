@@ -193,6 +193,11 @@ void FileOpTrashObject::operator()() {
 	}
 
 	// Go do it
+    if (mURLList.count()==1) {
+        // If there's only one file, KIO::move will think we want to overwrite
+        // the trash dir with the file to trash, so we add the file name
+        trashURL.addPath(mURLList.first().fileName());
+    }
 	KIO::Job* job=KIO::move(mURLList,trashURL);
 	connect( job, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
