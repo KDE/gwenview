@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpixmap.h>
 
 // Our includes
-#include <pixmapviewinterface.h>
+#include "gvpixmapviewbase.h"
 
 class QPainter;
 class QResizeEvent;
@@ -37,7 +37,7 @@ class KConfig;
 class GVPixmap;
 
 
-class FitPixmapView : public QFrame, public PixmapViewInterface {
+class FitPixmapView : public QFrame, public GVPixmapViewBase {
 Q_OBJECT
 public:
 	FitPixmapView(QWidget* parent,GVPixmap* image,bool);

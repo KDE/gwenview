@@ -18,7 +18,7 @@ INCLUDES = $(all_includes)
 
 noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 fileopobject.h gvfilethumbnailview.h gvfileviewstack.h fitpixmapview.h \
-				 gvpixmap.h mainwindow.h pixmapview.h pixmapviewinterface.h \
+				 gvpixmap.h mainwindow.h pixmapview.h gvpixmapviewbase.h \
 				 scrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
 				 thumbnailsize.h gvfilethumbnailviewitem.h qxcfi.h gimp.h \
 				 gvarchive.h gvslideshow.h gvfiledetailview.h gvfileviewbase.h \

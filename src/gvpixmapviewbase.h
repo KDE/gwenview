@@ -21,9 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PIXMAPVIEWINTERFACE_H
 
 
-class PixmapViewInterface {
+class GVPixmapViewBase {
 public:
-	virtual ~PixmapViewInterface() {}
+	virtual ~GVPixmapViewBase() {}
 
 	virtual void setFullScreen(bool)=0;
 	virtual double zoom() const=0;

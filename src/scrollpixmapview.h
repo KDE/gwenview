@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qscrollview.h>
 
 // Our includes
-#include <pixmapviewinterface.h>
+#include "gvpixmapviewbase.h"
 
 class QPainter;
 class QPopupMenu;
@@ -41,7 +41,7 @@ class KToggleAction;
 
 class GVPixmap;
 
-class ScrollPixmapView : public QScrollView, public PixmapViewInterface {
+class ScrollPixmapView : public QScrollView, public GVPixmapViewBase {
 Q_OBJECT
 public:
 	ScrollPixmapView(QWidget* parent,GVPixmap*,bool);

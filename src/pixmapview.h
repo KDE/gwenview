@@ -38,7 +38,7 @@ class KToggleAction;
 
 class FitPixmapView;
 class GVPixmap;
-class PixmapViewInterface;
+class GVPixmapViewBase;
 class ScrollPixmapView;
 
 
@@ -110,7 +110,7 @@ private:
 	KActionCollection* mActionCollection;
 
 	void updatePathLabel();
-	PixmapViewInterface* currentView() const;
+	GVPixmapViewBase* currentView() const;
 	bool mouseMoveEventFilter(QObject*,QMouseEvent*);
 	bool mouseReleaseEventFilter(QObject*,QMouseEvent*);
 	bool wheelEventFilter(QObject*,QWheelEvent*);

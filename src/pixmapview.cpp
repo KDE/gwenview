@@ -461,7 +461,7 @@ void PixmapView::updateZoomActions() {
 }
 
 
-PixmapViewInterface* PixmapView::currentView() const {
+GVPixmapViewBase* PixmapView::currentView() const {
 	if (mAutoZoom->isChecked()) {
 		return mFitPixmapView;
 	} else {
