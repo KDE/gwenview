@@ -1,0 +1,178 @@
+/* This file is based on kfiledetailview.h from the KDE libs. Original
+   copyright follows.
+*/
+/* This file is part of the KDE libraries
+	Copyright (C) 1997 Stephan Kulow <coolo@kde.org>
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Library General Public
+	License as published by the Free Software Foundation; either
+	version 2 of the License, or (at your option) any later version.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Library General Public License for more details.
+
+	You should have received a copy of the GNU Library General Public License
+	along with this library; see the file COPYING.LIB.	If not, write to
+	the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+	Boston, MA 02111-1307, USA.
+*/
+
+#ifndef GVFILEDETAILVIEW_H
+#define GVFILEDETAILVIEW_H
+
+class KFileItem;
+class QWidget;
+class QKeyEvent;
+
+#include <klistview.h>
+#include <kmimetyperesolver.h>
+
+#include "kfileview.h"
+
+/**
+ * An item for the listiew, that has a reference to its corresponding
+ * @ref KFileItem.
+ */
+class GVFileListViewItem : public KListViewItem
+{
+public:
+	GVFileListViewItem( QListView *parent, const QString &text,
+					   const QPixmap &icon, KFileItem *fi )
+		: KListViewItem( parent, text ), inf( fi ) {
+		setPixmap( 0, icon );
+		setText( 0, text );
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	GVFileListViewItem( QListView *parent, KFileItem *fi )
+		: KListViewItem( parent ), inf( fi ) {
+		init();
+	}
+
+	GVFileListViewItem( QListView *parent, const QString &text,
+					   const QPixmap &icon, KFileItem *fi,
+					   QListViewItem *after)
+		: KListViewItem( parent, after ), inf( fi ) {
+		setPixmap( 0, icon );
+		setText( 0, text );
+	}
+	~GVFileListViewItem() {
+		inf->removeExtraData( listView() );
+	}
+
+	/**
+	 * @returns the corresponding KFileItem
+	 */
+	KFileItem *fileInfo() const { return inf; }
+
+	virtual QString key( int /*column*/, bool /*ascending*/ ) const { return m_key; }
+
+	void setKey( const QString& key ) { m_key = key; }
+
+	QRect rect() const
+	{
+		QRect r = listView()->itemRect(this);
+		return QRect( listView()->viewportToContents( r.topLeft() ),
+					  QSize( r.width(), r.height() ) );
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	void init();
+
+private:
+	KFileItem *inf;
+	QString m_key;
+};
+
+/**
+ * A list-view capable of showing @ref KFileItem'. Used in the filedialog
+ * for example. Most of the documentation is in @ref KFileView class.
+ *
+ * @see KDirOperator
+ * @see KCombiView
+ * @see KFileIconView
+ */
+class GVFileDetailView : public KListView, public KFileView
+{
+	Q_OBJECT
+
+public:
+	GVFileDetailView(QWidget *parent, const char *name);
+	virtual ~GVFileDetailView();
+
+	virtual QWidget *widget() { return this; }
+	virtual void clearView();
+
+	virtual void updateView( bool );
+	virtual void updateView(const KFileItem*);
+	virtual void removeItem( const KFileItem *);
+	virtual void listingCompleted();
+
+	virtual void setSelected(const KFileItem *, bool);
+	virtual bool isSelected(const KFileItem *i) const;
+	virtual void clearSelection();
+	virtual void selectAll();
+	virtual void invertSelection();
+
+	virtual void setCurrentItem( const KFileItem * );
+	virtual KFileItem * currentFileItem() const;
+	virtual KFileItem * firstFileItem() const;
+	virtual KFileItem * nextItem( const KFileItem * ) const;
+	virtual KFileItem * prevItem( const KFileItem * ) const;
+
+	virtual void insertItem( KFileItem *i );
+
+	// implemented to get noticed about sorting changes (for sortingIndicator)
+	virtual void setSorting( QDir::SortSpec );
+
+	void ensureItemVisible( const KFileItem * );
+
+	// for KMimeTypeResolver
+	void mimeTypeDeterminationFinished();
+	void determineIcon( GVFileListViewItem *item );
+	QScrollView *scrollWidget() const { return (QScrollView*) this; }
+
+
+protected:
+	virtual void keyPressEvent( QKeyEvent * );
+
+	int mSortingCol;
+
+protected slots:
+	void slotSelectionChanged();
+
+private slots:
+	void slotSortingChanged( int );
+	void selected( QListViewItem *item );
+	void slotActivate( QListViewItem *item );
+	void highlighted( QListViewItem *item );
+	void slotActivateMenu ( QListViewItem *item, const QPoint& pos );
+
+private:
+	bool mBlockSortingSignal;
+	KMimeTypeResolver<GVFileListViewItem,GVFileDetailView> *mResolver;
+
+	virtual void insertItem(QListViewItem *i) { KListView::insertItem(i); }
+	virtual void setSorting(int i, bool b) { KListView::setSorting(i, b); }
+	virtual void setSelected(QListViewItem *i, bool b) { KListView::setSelected(i, b); }
+
+	inline GVFileListViewItem * viewItem( const KFileItem *item ) const {
+		if ( item )
+			return (GVFileListViewItem *) item->extraData( this );
+		return 0L;
+	}
+
+	void setSortingKey( GVFileListViewItem *item, const KFileItem *i );
+	
+	void startDrag();
+};
+
+
+#endif

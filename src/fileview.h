@@ -39,7 +39,7 @@ class KDirLister;
 class KFileView;
 class KRadioAction;
 
-class FileDnDDetailView;
+class GVFileDetailView;
 class FileThumbnailView;
 
 
@@ -58,8 +58,8 @@ public:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
-  void setAutoLoadImage(bool);
-  bool autoLoadImage() const { return mAutoLoadImage; }
+	void setAutoLoadImage(bool);
+	bool autoLoadImage() const { return mAutoLoadImage; }
 
 // Properties
 	void setMode(Mode);
@@ -151,7 +151,7 @@ private slots:
 
 private:
 	Mode mMode;
-	FileDnDDetailView* mFileDetailView;
+	GVFileDetailView* mFileDetailView;
 	FileThumbnailView* mFileThumbnailView;
 	KDirLister* mDirLister;
 	KURL mDirURL;

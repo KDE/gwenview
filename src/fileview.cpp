@@ -31,10 +31,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaction.h>
 
 // Our includes
-#include "filednddetailview.h"
 #include "fileoperation.h"
 #include "filethumbnailview.h"
 #include "gvarchive.h"
+#include "gvfiledetailview.h"
 
 #include "fileview.moc"
 
@@ -102,7 +102,7 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 		this,SIGNAL(canceled()) );
 
 // File detail widget
-	mFileDetailView=new FileDnDDetailView(this,"filedetailview");
+	mFileDetailView=new GVFileDetailView(this,"filedetailview");
 	addWidget(mFileDetailView,0);
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
