@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kurldrag.h>
 #include <kwordwrap.h>
@@ -299,15 +300,27 @@ void FileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos) {
 
 //-Protected----------------------------------------------------------------
 void FileThumbnailView::startDrag() {
-	KFileItem* item=selectedItems()->getFirst();
-	if (!item) {
+	KURL::List urls;
+	KFileItemListIterator it(*KFileView::selectedItems());
+
+	for ( ; it.current(); ++it ) {
+		urls.append(it.current()->url());
+	}
+
+	if (urls.isEmpty()) {
 		kdWarning() << "No item to drag\n";
 		return;
 	}
-	KURL::List urls;
-	urls.append(item->url());
-	QUriDrag* drag = KURLDrag::newDrag( urls, this );
-	drag->setPixmap( item->pixmap(0) );
+
+	QDragObject* drag=KURLDrag::newDrag(urls, this);
+	QPixmap dragPixmap;
+	if (urls.count()>1) {
+		dragPixmap=SmallIcon("kmultiple");
+	} else {
+		dragPixmap=KFileView::selectedItems()->getFirst()->pixmap(16);
+	}
+	drag->setPixmap( dragPixmap, QPoint(dragPixmap.width()/2, dragPixmap.height()/2) );
+
 	drag->dragCopy();
 }
 

@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kglobalsettings.h>
-#include <kicontheme.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kurldrag.h>
 
@@ -419,18 +419,26 @@ void GVFileDetailView::listingCompleted()
 
 void GVFileDetailView::startDrag()
 {
-	// FIXME: Implement multi-selection
-	KFileItem* item=KFileView::selectedItems()->getFirst();
-	if (!item) {
+	KURL::List urls;
+	KFileItemListIterator it(*KFileView::selectedItems());
+
+	for ( ; it.current(); ++it ) {
+		urls.append(it.current()->url());
+	}
+
+	if (urls.isEmpty()) {
 		kdWarning() << "No item to drag\n";
 		return;
 	}
 
-	KURL::List urls;
-	urls.append(item->url());
-
-	QDragObject* drag = KURLDrag::newDrag( urls, this );
-	drag->setPixmap( item->pixmap(0) );
+	QDragObject* drag=KURLDrag::newDrag(urls, this);
+	QPixmap dragPixmap;
+	if (urls.count()>1) {
+		dragPixmap=SmallIcon("kmultiple");
+	} else {
+		dragPixmap=KFileView::selectedItems()->getFirst()->pixmap(16);
+	}
+	drag->setPixmap( dragPixmap, QPoint(dragPixmap.width()/2, dragPixmap.height()/2) );
 
 	drag->dragCopy();
 }
