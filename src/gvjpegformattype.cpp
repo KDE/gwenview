@@ -189,18 +189,18 @@ public:
 	virtual ~GVJPEGFormat();
 
 	virtual int decode(QImage& img, QImageConsumer* consumer,
-	                   const uchar* buffer, int length);
+		const uchar* buffer, int length);
 private:
 
 	enum {
-	    INIT,
-	    START_DECOMPRESS,
-	    DECOMPRESS_STARTED,
-	    CONSUME_INPUT,
-	    PREPARE_OUTPUT_SCAN,
-	    DO_OUTPUT_SCAN,
-	    READ_DONE,
-	    INVALID
+		INIT,
+		START_DECOMPRESS,
+		DECOMPRESS_STARTED,
+		CONSUME_INPUT,
+		PREPARE_OUTPUT_SCAN,
+		DO_OUTPUT_SCAN,
+		READ_DONE,
+		INVALID
 	} mState;
 
 	// structs for the jpeglib
@@ -302,11 +302,11 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			// as long as we use that stupid Qt stuff
 			/*int s = mDecompress.image_width * mDecompress.image_height;
 			if ( s > 16384 * 12388 )
-			    mDecompress.scale_denom = 8;
+				mDecompress.scale_denom = 8;
 			else if ( s > 8192 * 6144 )
-			    mDecompress.scale_denom = 4;
+				mDecompress.scale_denom = 4;
 			else if ( s > 4096 * 3072 )
-			    mDecompress.scale_denom = 2;
+				mDecompress.scale_denom = 2;
 			*/
 
 			if (consumer) {
@@ -365,7 +365,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 
 	if(mState == DECOMPRESS_STARTED) {
 		mState =  (!mSourceManager.final_pass && mSourceManager.decoder_time_stamp.elapsed() < MAX_CONSUMING_TIME)
-		         ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
+			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
 	}
 
 	if(mState == CONSUME_INPUT) {
@@ -376,9 +376,9 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 		} while (retval != JPEG_SUSPENDED && retval != JPEG_REACHED_EOI);
 
 		if(mSourceManager.decoder_time_stamp.elapsed() > MAX_CONSUMING_TIME
-		   || mSourceManager.final_pass
-		   || retval == JPEG_REACHED_EOI
-		   || retval == JPEG_REACHED_SOS) {
+			|| mSourceManager.final_pass
+			|| retval == JPEG_REACHED_EOI
+			|| retval == JPEG_REACHED_SOS) {
 			mState = PREPARE_OUTPUT_SCAN;
 		}
 	}
@@ -401,7 +401,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 		int oldoutput_scanline = mDecompress.output_scanline;
 
 		while(mDecompress.output_scanline < mDecompress.output_height &&
-		      jpeg_read_scanlines(&mDecompress, lines+mDecompress.output_scanline, mDecompress.output_height))
+			jpeg_read_scanlines(&mDecompress, lines+mDecompress.output_scanline, mDecompress.output_height))
 			; // here happens all the magic of decoding
 
 		int completed_scanlines = mDecompress.output_scanline - oldoutput_scanline;
@@ -449,12 +449,12 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			}
 #ifdef JPEG_DEBUG
 			qDebug("one pass is completed, final_pass = %d, dec_done: %d, complete: %d",
-			       mSourceManager.final_pass, mSourceManager.decoding_done, jpeg_input_complete(&mDecompress));
+				mSourceManager.final_pass, mSourceManager.decoding_done, jpeg_input_complete(&mDecompress));
 #endif
 			if(!mSourceManager.decoding_done) {
 #ifdef JPEG_DEBUG
 				qDebug("starting another one, input_scan_number is %d/%d", mDecompress.input_scan_number,
-				       mDecompress.output_scan_number);
+					mDecompress.output_scan_number);
 #endif
 				// don't return until necessary!
 				mSourceManager.decoder_time_stamp.restart();
