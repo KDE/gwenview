@@ -188,6 +188,9 @@ static void read_xpm_image_or_array( QImageIO * iio, const char * const * source
     if (image.isNull())
 	return;
 
+   if (image.isNull())
+       return;
+
     QMap<QString, int> colorMap;
     int currentColor;
 
