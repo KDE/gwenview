@@ -64,7 +64,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mSelectPrevious=new KAction(i18n("go back", "&Back"),
 		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
-	
+
 	mSelectNext=new KAction(i18n("go forward", "&Forward"),
 		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
@@ -84,22 +84,22 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mDirLister=new KDirLister;
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
-	
+
 	connect(mDirLister,SIGNAL(newItems(const KFileItemList&)),
 		this,SLOT(dirListerNewItems(const KFileItemList&)) );
-	
+
 	connect(mDirLister,SIGNAL(deleteItem(KFileItem*)),
 		this,SLOT(dirListerDeleteItem(KFileItem*)) );
 
 	connect(mDirLister,SIGNAL(refreshItems(const KFileItemList&)),
 		this,SLOT(dirListerRefreshItems(const KFileItemList&)) );
-	
+
 	connect(mDirLister,SIGNAL(started(const KURL&)),
 		this,SLOT(dirListerStarted()) );
-	
+
 	connect(mDirLister,SIGNAL(completed()),
 		this,SLOT(dirListerCompleted()) );
-	
+
 	connect(mDirLister,SIGNAL(canceled()),
 		this,SLOT(dirListerCanceled()) );
 
@@ -163,11 +163,11 @@ void GVFileViewStack::setFocus() {
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
 	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + filename << endl;
 	if (mDirURL.cmp(dirURL,true)) return;
-	
+
 	mDirURL=dirURL;
 	currentFileView()->setShownFileItem(0L);
 	mFilenameToSelect=filename;
-	
+
 	mDirLister->openURL(mDirURL);
 	updateActions();
 }
@@ -258,6 +258,15 @@ void GVFileViewStack::slotSelectNext() {
 }
 
 
+void GVFileViewStack::updateThumbnail(const KURL& url) {
+	if (mMode==FileList) return;
+
+	KFileItem* item=mDirLister->findByURL(url);
+	if (!item) return;
+	mFileThumbnailView->updateThumbnail(item);
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Private slots
@@ -271,7 +280,7 @@ void GVFileViewStack::viewExecuted() {
 	bool isArchive=GVArchive::fileItemIsArchive(item);
 	if (isDir || isArchive) {
 		KURL tmp=url();
-		
+
 		if (isArchive) {
 			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
 			tmp.adjustPath(1);

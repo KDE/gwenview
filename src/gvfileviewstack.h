@@ -103,6 +103,8 @@ public slots:
 	// Stop thumbnail generation
 	void cancel();
 
+	void updateThumbnail(const KURL&);
+
 	void openWithEditor();
 	void openParentDir();
 	void showFileProperties();

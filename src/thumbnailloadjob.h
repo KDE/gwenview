@@ -60,6 +60,12 @@ public:
 
 
 	/**
+	 * Add an item to a running job
+	 */
+	void appendItem(const KFileItem* item);
+
+	
+	/**
 	 * Returns the thumbnail dir
 	 */
 	static const QString& thumbnailDir();

@@ -73,12 +73,17 @@ signals:
 	 * Emitted when the class has finished loading the image.
 	 * Also emitted if the image could not be loaded.
 	 */
-	void urlChanged(const KURL&,const QString&);
+	void urlChanged(const KURL& dirURL,const QString& filename);
 
 	/**
 	 * Emitted when the image is modified.
 	 */
 	void modified();
+
+	/**
+	 * Emitted when the image has been saved on disk.
+	 */
+	void saved(const KURL& url);
 
 private:
 	QImage mImage;

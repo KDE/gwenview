@@ -532,9 +532,11 @@ void GVMainWindow::createConnections() {
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mDirView,SLOT(setURL(const KURL&,const QString&)) );
+		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
+	connect(mGVPixmap,SIGNAL(saved(const KURL&)),
+		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 
 	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),

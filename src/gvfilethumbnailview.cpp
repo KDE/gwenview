@@ -93,6 +93,8 @@ void GVFileThumbnailView::setMarginSize(int value) {
 
 void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPixmap& thumbnail) {
 	GVFileThumbnailViewItem* iconItem=viewItem(fileItem);
+	if (!iconItem) return;
+
 	int pixelSize=mThumbnailSize.pixelSize();
 
 	// Draw the thumbnail to the center of the icon
@@ -109,16 +111,39 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 }
 
 
+
+
+void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
+	GVFileThumbnailViewItem* oldShownItem=viewItem(mShownFileItem);
+	GVFileThumbnailViewItem* newShownItem=viewItem(fileItem);
+
+	GVFileViewBase::setShownFileItem(fileItem);
+	if (oldShownItem) repaintItem(oldShownItem);
+	if (newShownItem) repaintItem(newShownItem);
+}
+
+
+//-----------------------------------------------------------------------------
+//
+// Thumbnail code
+//
+//-----------------------------------------------------------------------------
 void GVFileThumbnailView::startThumbnailUpdate()
 {
 	stopThumbnailUpdate(); // just in case
+	doStartThumbnailUpdate(items());
+}
 
-	mThumbnailLoadJob = new ThumbnailLoadJob(this->items(),mThumbnailSize);
+
+void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
+	mThumbnailLoadJob = new ThumbnailLoadJob(list, mThumbnailSize);
+
 	connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*,const QPixmap&)),
 		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&)) );
 	connect(mThumbnailLoadJob, SIGNAL(result(KIO::Job*)),
 		this, SIGNAL(updateEnded()) );
-	emit updateStarted(QIconView::count());
+
+	emit updateStarted(list->count());
 	mThumbnailLoadJob->start();
 }
 
@@ -132,17 +157,23 @@ void GVFileThumbnailView::stopThumbnailUpdate()
 }
 
 
-void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
-	GVFileThumbnailViewItem* oldShownItem=viewItem(mShownFileItem);
-	GVFileThumbnailViewItem* newShownItem=viewItem(fileItem);
-	
-	GVFileViewBase::setShownFileItem(fileItem);
-	if (oldShownItem) repaintItem(oldShownItem);
-	if (newShownItem) repaintItem(newShownItem);
+void GVFileThumbnailView::updateThumbnail(KFileItem* fileItem) {
+
+	if (mThumbnailLoadJob.isNull()) {
+		KFileItemList list;
+		list.append(fileItem);
+		doStartThumbnailUpdate(&list);
+	} else {
+		mThumbnailLoadJob->appendItem(fileItem);
+	}
 }
 
 
-//-KFileView methods--------------------------------------------------------
+//-----------------------------------------------------------------------------
+//
+// KFileView methods
+//
+//-----------------------------------------------------------------------------
 void GVFileThumbnailView::clearView() {
     stopThumbnailUpdate();
 	mShownFileItem=0L;
@@ -154,7 +185,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
 
 	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
-	
+
 	int pixelSize=mThumbnailSize.pixelSize();
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
@@ -175,7 +206,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 
 	// Create icon item
 	QDir::SortSpec spec = KFileView::sorting();
-	GVFileThumbnailViewItem* iconItem=new	GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
+	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
 	iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
 
 	item->setExtraData(this,iconItem);

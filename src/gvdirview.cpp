@@ -114,7 +114,7 @@ void GVDirView::showEvent(QShowEvent* event) {
 }
 
 
-void GVDirView::setURL(const KURL& url,const QString& /*filename*/) {
+void GVDirView::setURL(const KURL& url) {
 	//kdDebug() << "GVDirView::setURL " << url.prettyURL() << ' ' << filename << endl;
 
 	// Do nothing if we're browsing remote files

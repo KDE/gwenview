@@ -118,6 +118,11 @@ void ThumbnailLoadJob::start() {
 
 
 //-Internal--------------------------------------------------------------
+void ThumbnailLoadJob::appendItem(const KFileItem* item) {
+	mItems.append(item);
+}
+
+
 void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 	mItems.removeRef(item);
 

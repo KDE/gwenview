@@ -31,7 +31,7 @@ public:
 	GVDirView(QWidget* parent);
 
 public slots:
-	void setURL(const KURL&,const QString&);
+	void setURL(const KURL&);
 	
 signals:
 	void dirURLChanged(const KURL&);

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt includes
 #include <qguardedptr.h>
+#include <qptrlist.h>
 
 // KDE includes
 #include <kiconview.h>
@@ -35,6 +36,7 @@ class QPopupMenu;
 
 class KConfig;
 class KFileItem;
+typedef QPtrList<KFileItem> KFileItemList;
 
 class GVFileThumbnailViewItem;
 
@@ -52,7 +54,7 @@ public:
 	void startThumbnailUpdate();
 	void stopThumbnailUpdate();
 
-// KFileView methods
+	// KFileView methods
 	void clearView();
 	void clearSelection() { QIconView::clearSelection(); }
 	void insertItem(KFileItem* item);
@@ -85,6 +87,8 @@ public:
 
 	void setShownFileItem(KFileItem*);
 
+	void updateThumbnail(KFileItem*);
+
 public slots:
 	void setThumbnailPixmap(const KFileItem*,const QPixmap&);
 
@@ -107,6 +111,7 @@ private:
 		if (!fileItem) return 0L;
 		return static_cast<GVFileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
 	}
+	void doStartThumbnailUpdate(const KFileItemList*);
 
 private slots:
 	void slotClicked(QIconViewItem*);

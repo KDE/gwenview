@@ -197,7 +197,10 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 
 		result=KIO::NetAccess::upload(tmp.name(),url);
 	}
-	if (result) mModified=false;
+	if (result) {
+		emit saved(url);
+		mModified=false;
+	}
 
 	return result;
 }
