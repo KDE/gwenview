@@ -224,7 +224,8 @@ void GVPixmap::load() {
 		if (mImageFormat!="JPEG") mCompressedData.resize(0);
 
 		// Convert depth if necessary
-		if (mImage.depth()<32) {
+		// (32 bit depth is necessary for alpha-blending)
+		if (mImage.depth()<32 && mImage.hasAlphaBuffer()) {
 			mImage=mImage.convertDepth(32);
 		}
 	} else {
