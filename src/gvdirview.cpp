@@ -87,7 +87,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 	// Dir selection
 	connect(this,SIGNAL(executed(QListViewItem*)),
-		this,SLOT(slotExecuted(QListViewItem*)) );
+		this,SLOT(slotExecuted()) );
 
 	// Drag'n'drop
 	setDragEnabled(true);
@@ -211,10 +211,10 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 
 
 //-Private slots-----------------------------------------------------------
-void GVDirView::slotExecuted(QListViewItem* item)
-{
-	if (!item) return;
+void GVDirView::slotExecuted() {
 	KFileTreeViewItem* treeItem=currentKFileTreeViewItem();
+	if (!treeItem) return;
+	if (!treeItem->fileItem()) return;
 	if (!treeItem->fileItem()->isReadable()) return;
 	emit dirURLChanged(treeItem->url());
 }

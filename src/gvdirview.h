@@ -48,7 +48,7 @@ protected slots:
 	void slotNewTreeViewItems(KFileTreeBranch*,const KFileTreeViewItemList&); 
 	
 private slots:
-	void slotExecuted(QListViewItem*);
+	void slotExecuted();
 
 	// Do not name this slot "slotPopulateFinished", it will clash with
 	// "KFileTreeView::slotPopulateFinished".
