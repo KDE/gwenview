@@ -158,7 +158,8 @@ bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& fo
 		LOG("JPEG Reset orientation");
 		d->mJPEGContent.resetOrientation();
 		if (!d->mJPEGContent.thumbnail().isNull()) {
-			d->mJPEGContent.setThumbnail(mDocument->image().scale(128, 128, QImage::ScaleMin));
+			d->mJPEGContent.setThumbnail( GVImageUtils::scale(
+				mDocument->image(), 128, 128, GVImageUtils::SMOOTH_NONE, QImage::ScaleMin));
 		}
 		
 		LOG("JPEG Lossless save");
