@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
-#include <qhbox.h>
+#include <qframe.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -61,25 +61,31 @@ static const char* CONFIG_MARGIN_SIZE="margin size";
 static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
-class ProgressWidget : public QHBox {
+class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
 	QPushButton* mStop;
 public:
 	ProgressWidget(GVFileThumbnailView* view, int count)
-	: QHBox(view)
+	: QFrame(view)
 	{
-		setSpacing(2);
-		setPaletteBackgroundColor(view->paletteBackgroundColor());
+		QHBoxLayout* layout=new QHBoxLayout(this, 3, 3);
+		layout->setAutoAdd(true);
+		setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 		
+		mStop=new QPushButton(this);
+		mStop->setPixmap(SmallIcon("stop"));
+		mStop->setFlat(true);
+
 		mProgressBar=new KProgress(count, this);
 		mProgressBar->setFormat("%v/%m");
-		mStop=new QPushButton(i18n("Stop"), this);
+
 		view->clipper()->installEventFilter(this);
 	}
 	
 	void polish() {
 		setMinimumWidth(layout()->minimumSize().width());
-		setFixedHeight( int(mProgressBar->height()*0.8) );
+		//setFixedHeight( mProgressBar->height() );
+		setFixedHeight( mStop->height() );
 	}
 
 	void showEvent(QShowEvent*) {
@@ -96,7 +102,7 @@ public:
 	void updatePosition() {
 		GVFileThumbnailView* view=static_cast<GVFileThumbnailView*>(parent());
 		QSize tmp=view->clipper()->size() - size();
-		move(tmp.width(), tmp.height());
+		move(tmp.width() - 2, tmp.height() - 2);
 	}
 
 	KProgress* progressBar() const { return mProgressBar; }
