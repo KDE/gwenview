@@ -156,7 +156,7 @@ void FileOpMoveToObject::operator()() {
 
 //-FileOpTrashObject---------------------------------------------------------------
 void FileOpTrashObject::operator()() {
-#if KDE_VERSION >= 0x30400
+#if KDE_IS_VERSION( 3, 3, 89 )
 	KURL trashURL("trash:/");
 #else
 	KURL trashURL;
