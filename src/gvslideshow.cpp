@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE includes
 #include <kaction.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 // Our includes
 #include "gvslideshow.moc"
@@ -93,7 +94,7 @@ void GVSlideShow::slotTimeout()
 }
 
 
-//-Configuration--------------------------------------------	
+//-Configuration--------------------------------------------
 void GVSlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mDelay=config->readNumEntry(CONFIG_DELAY,10);

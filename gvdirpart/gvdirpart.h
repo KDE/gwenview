@@ -29,6 +29,7 @@ class KAction;
 class GVScrollPixmapView;
 class GVFileViewStack;
 class GVPixmap;
+class GVSlideShow;
 
 class GVDirPart;
 
@@ -103,6 +104,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 
  protected slots:
 	void slotExample();
+	void toggleSlideShow();
 
  protected:
         /**
@@ -135,6 +137,12 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * some extra functionality to Konqueror.
 	 */
 	GVDirPartBrowserExtension* m_browserExtension;
+
+	/**
+	 * Action turns on slide show
+	 */
+	KToggleAction* mToggleSlideShow;
+	GVSlideShow* mSlideShow;
 };
 
 #endif

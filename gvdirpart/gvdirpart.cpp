@@ -33,6 +33,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvscrollpixmapview.h>
 #include <src/gvfileviewstack.h>
 #include <src/gvpixmap.h>
+#include <src/gvslideshow.h>
+#include <src/gvslideshowdialog.h>
 
 //Factory Code
 typedef KParts::GenericFactory<GVDirPart> GVDirFactory;
@@ -54,6 +56,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	m_filesView = new GVFileViewStack(m_splitter, actionCollection());
 	m_pixmapView = new GVScrollPixmapView(m_splitter, m_gvPixmap, actionCollection());
 
+	mSlideShow = new GVSlideShow(m_filesView->selectFirst(), m_filesView->selectNext());
+
 	m_filesView->kpartConfig();
 	m_pixmapView->kpartConfig();
 
@@ -71,7 +75,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	m_splitter->setSizes(splitterSizes);
 
 	// Example action creation code
-	m_exampleAction = new KAction( i18n("Example"), 0, this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
+	m_exampleAction = new KAction( i18n("Example"), "viewmagfit", this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
+	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
+
 
 	setXMLFile( "gvdirpart/gvdirpart.rc" );
 }
@@ -126,6 +132,21 @@ void GVDirPart::setKonquerorWindowCaption(const QString& url) {
 
 KURL GVDirPart::pixmapURL() {
 	return m_pixmapView->pixmapURL();
+}
+
+void GVDirPart::toggleSlideShow() {
+	if (mToggleSlideShow->isChecked()) {
+		GVSlideShowDialog dialog(m_splitter, mSlideShow);
+		if (!dialog.exec()) {
+			mToggleSlideShow->setChecked(false);
+			return;
+		}
+		//FIXME turn on full screen here (anyone know how?)
+		mSlideShow->start();
+	} else {
+		//FIXME turn off full screen here
+		mSlideShow->stop();
+	}
 }
 
 /***** GVDirPartBrowserExtension *****/

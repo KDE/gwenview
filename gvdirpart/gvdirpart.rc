@@ -4,9 +4,11 @@
  <Menu name="view"><Text>&amp;View</Text>
   <Action name="openCloseAll"/>
   <Action name="view_zoom_auto"/>
+  <Action name="slideshow"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
  <Action name="view_zoom_auto"/>
+ <Action name="slideshow"/>
 </ToolBar>
 </kpartgui>
