@@ -999,9 +999,9 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		verticalScrollBar()->setValue(0);
 	}
 	updateImageOffset();
-	QRect imageRect(mXOffset, mYOffset, mDocument->width(), mDocument->height());
+	QRect imageRect(mXOffset, mYOffset, int(mDocument->width()*mZoom), int(mDocument->height()*mZoom));
 
-		QPainter painter( viewport());
+	QPainter painter( viewport());
 	// Top rect
 	painter.eraseRect( 0, 0,
 		viewport()->width(), imageRect.top());
