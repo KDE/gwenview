@@ -42,13 +42,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 GVPixmap::GVPixmap(QObject* parent)
 : QObject(parent)
 , mModified(false)
-, mCompressedData(0L)
-, mCompressedLength(0L)
 {}
 
 
 GVPixmap::~GVPixmap() {
-	freeData();
 }
 
 
@@ -127,7 +124,7 @@ KURL GVPixmap::url() const {
 
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
-	if (mImageFormat=="JPEG" && mCompressedData) {
+	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
 		kdDebug() << "Lossless left rotation\n";
 	}
 	QWMatrix matrix;
@@ -208,20 +205,17 @@ void GVPixmap::load() {
 
 	// Load file. We load it ourself so that we can keep a copy of the
 	// compressed data. This is used by jpeg loss-less manipulations.
-	freeData();
 	QFile file(path);
 	file.open(IO_ReadOnly);
 	QDataStream stream(&file);
-	mCompressedLength=file.size();
-	mCompressedData=new uchar[mCompressedLength];
-	stream.readRawBytes((char*)mCompressedData,mCompressedLength);
-	//kdDebug() << "Loading data:" << long(mCompressedData) << " " << mCompressedLength << endl;
+	mCompressedData.resize(file.size());
+	stream.readRawBytes(mCompressedData.data(),mCompressedData.size());
 
 	// Decode image
 	mImageFormat=QString(QImage::imageFormat(path));
-	if (mImage.loadFromData(mCompressedData,mCompressedLength,mImageFormat.ascii())) {
+	if (mImage.loadFromData(mCompressedData,mImageFormat.ascii())) {
 		// Throw data away if it's not a JPEG, since we wont use it
-		if (mImageFormat!="JPEG") freeData();
+		if (mImageFormat!="JPEG") mCompressedData.resize(0);
 	} else {
 		mImage.reset();
 	}
@@ -244,13 +238,13 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 		path=tmp.name();
 	}
 	
-	if (format=="JPEG" && mCompressedData) {
+	if (format=="JPEG" && !mCompressedData.isNull()) {
 		kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
 		QDataStream stream(&file);
-		stream.writeRawBytes((char*)mCompressedData,mCompressedLength);
+		stream.writeRawBytes(mCompressedData.data(),mCompressedData.size());
 	} else {
 		result=mImage.save(path,format.ascii());
 		if (!result) return false;
@@ -271,7 +265,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 
 void GVPixmap::reset() {
 	mImage.reset();
-	freeData();
+	mCompressedData.resize(0);
 	emit urlChanged(mDirURL,mFilename);
 }
 
@@ -285,9 +279,3 @@ void GVPixmap::saveIfModified() {
 	}
 }
 
-
-void GVPixmap::freeData() {
-	//kdDebug() << "Releasing data:" << long(mCompressedData) << endl;
-	delete []mCompressedData;
-	mCompressedData=0;
-}

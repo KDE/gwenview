@@ -21,6 +21,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #define GVPIXMAP_H
 
 // Qt includes
+#include <qcstring.h>
 #include <qobject.h>
 #include <qimage.h>
 
@@ -92,10 +93,9 @@ private:
 	QString mImageFormat;
 	bool mModified;
 
-	uchar* mCompressedData;
-	uint mCompressedLength;
+	// Store compressed data. Usefull for lossless manipulations.
+	QByteArray mCompressedData;
 
-	void freeData();
 	void saveIfModified();
 	void reset();
 	void load();
