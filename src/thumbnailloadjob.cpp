@@ -279,9 +279,7 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	img=GVImageUtils::rotate(img,orientation);
 	
 	img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-	QPixmap pix;
-	pix.convertFromImage(img);
-	emitThumbnailLoaded(pix);
+	emitThumbnailLoaded(QPixmap(img));
 }
 
 
@@ -295,9 +293,11 @@ bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QImage& img) {
 	biWidth=bigImg.width();
 	biHeight=bigImg.height();
 
-	if (biWidth<=thumbSize && biHeight<=thumbSize) return true;
-	
-	img=bigImg.smoothScale(thumbSize,thumbSize,QImage::ScaleMin);
+	if (biWidth<=thumbSize && biHeight<=thumbSize) {
+		img=bigImg;
+	} else {
+		img=bigImg.smoothScale(thumbSize,thumbSize,QImage::ScaleMin);
+	}
 	return true;
 }
 
