@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
+#include <kpropsdlg.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -168,6 +169,8 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 	mCopyFile->setEnabled(filenameIsValid);
 	mMoveFile->setEnabled(filenameIsValid);
 	mDeleteFile->setEnabled(filenameIsValid);
+	mShowFileProperties->setEnabled(filenameIsValid);
+	mOpenWithEditor->setEnabled(filenameIsValid);
 	mOpenParentDir->setEnabled(url.path()!="/");
 
 	updateStatusBar();
@@ -250,7 +253,10 @@ void MainWindow::showKeyDialog() {
 	KKeyDialog::configureKeys(mAccel);
 }
 
-
+void MainWindow::showFileProperties() {
+	(void)new KPropertiesDialog(mGVPixmap->url());
+}
+	
 void MainWindow::escapePressed() {
 	if (mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
@@ -384,11 +390,13 @@ void MainWindow::createActions() {
 	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"show_config_dialog");
 
 	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"show_key_dialog");
-
+	
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileView,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
 
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
+
+	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"show_file_properties");
 }
 
 
@@ -424,6 +432,8 @@ void MainWindow::createMenu() {
 	mCopyFile->plug(fileMenu);
 	mMoveFile->plug(fileMenu);
 	mDeleteFile->plug(fileMenu);
+	fileMenu->insertSeparator();
+	mShowFileProperties->plug(fileMenu);
 	fileMenu->insertSeparator();
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() )->plug(fileMenu);
 	menuBar()->insertItem(i18n("&File"), fileMenu);
@@ -472,10 +482,15 @@ void MainWindow::createFileViewPopupMenu() {
 	QPopupMenu* menu=new QPopupMenu(this);
 
 	mOpenWithEditor->plug(menu);
+	
+	menu->insertSeparator();
 	mRenameFile->plug(menu);
 	mCopyFile->plug(menu);
 	mMoveFile->plug(menu);
 	mDeleteFile->plug(menu);
+	
+	menu->insertSeparator();
+	mShowFileProperties->plug(menu);
 
 	mFileView->installRBPopup(menu);
 }
@@ -501,10 +516,16 @@ void MainWindow::createPixmapViewPopupMenu() {
 
 	menu->insertSeparator();
 	mOpenWithEditor->plug(menu);
+	
+	menu->insertSeparator();
 	mRenameFile->plug(menu);
 	mCopyFile->plug(menu);
 	mMoveFile->plug(menu);
 	mDeleteFile->plug(menu);
+	
+	menu->insertSeparator();
+	mShowFileProperties->plug(menu);
+
 
 	mPixmapView->installRBPopup(menu);
 }

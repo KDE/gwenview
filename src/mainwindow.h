@@ -78,6 +78,7 @@ private:
 	KToggleAction* mToggleFullScreen;
 	KAction* mStop;
 	KAction* mOpenParentDir;
+	KAction* mShowFileProperties;
 	
 	KAccel* mAccel;
 
@@ -102,6 +103,7 @@ private slots:
 	void pixmapLoading();
 	void openWithEditor();
 	void openParentDir();
+	void showFileProperties();
 
 // Status bar update
 	/**

@@ -1,4 +1,6 @@
 2002.xx.xx - v0.16.0
+- New features :
+ - Added an item to popup menu to show the file properties.
 - Fixes :
  - The selected thumbnail does not look strange anymore when changing the
    thumbnail size.
