@@ -64,6 +64,26 @@
 
 
 // Qt code start ---------------------------
+static QString fbname( const QString &fileName ) // get file basename (sort of)
+{
+    QString s = fileName;
+    if ( !s.isEmpty() ) {
+	int i;
+	if ( (i = s.findRev('/')) >= 0 )
+	    s = s.mid( i );
+	if ( (i = s.findRev('\\')) >= 0 )
+	    s = s.mid( i );
+	QRegExp r( QString::fromLatin1("[a-zA-Z][a-zA-Z0-9_]*") );
+	int p = r.search( s );
+	if ( p == -1 )
+	    s.truncate( 0 );
+	else
+	    s = s.mid( p, r.matchedLength() );
+    }
+    if ( s.isEmpty() )
+	s = QString::fromLatin1( "dummy" );
+    return s;
+}
 
 /*****************************************************************************
   XPM image read/write functions
@@ -107,6 +127,21 @@ static bool read_xpm_string( QCString &buf, QIODevice *d,
     return TRUE;
 }
 
+
+
+static int nextColorSpec(const QCString & buf)
+{
+    int i = buf.find(" c ");
+    if (i < 0)
+        i = buf.find(" g ");
+    if (i < 0)
+        i = buf.find(" g4 ");
+    if (i < 0)
+        i = buf.find(" m ");
+    if (i < 0)
+        i = buf.find(" s ");
+    return i;
+}
 
 //
 // INTERNAL
@@ -167,41 +202,18 @@ static void read_xpm_image_or_array( QImageIO * iio, const char * const * source
 	index = buf.left( cpp );
 	buf = buf.mid( cpp ).simplifyWhiteSpace().lower();
 	buf.prepend( " " );
-	i = buf.find( " c " );
-	if ( i < 0 )
-	    i = buf.find( " g " );
-	if ( i < 0 )
-	    i = buf.find( " g4 " );
-	if ( i < 0 )
-	    i = buf.find( " m " );
-	if ( i < 0 )
-	    i = buf.find( " s " );
+	i = nextColorSpec(buf);
 	if ( i < 0 ) {
 #if defined(QT_CHECK_RANGE)
 	    qWarning( "QImage: XPM color specification is missing: %s", buf.data());
 #endif
-	    return;	// no c/g/g4/m specification at all
+	    return;	// no c/g/g4/m/s specification at all
 	}
 	buf = buf.mid( i+3 );
 	// Strip any other colorspec
-	int endtmp;
-	int end = buf.length();
-	endtmp = buf.find(" c ");
-	if( endtmp > 0 && endtmp < end )
-	    end = endtmp;
-	endtmp = buf.find(" g ");
-	if( endtmp > 0 && endtmp < end )
-	    end = endtmp;
-	endtmp = buf.find(" g4 ");
-	if( endtmp > 0 && endtmp < end )
-	    end = endtmp;
-	endtmp = buf.find(" m ");
-	if( endtmp > 0 && endtmp < end )
-	    end = endtmp;
-	endtmp = buf.find(" s ");
-	if( endtmp > 0 && endtmp < end )
-	    end = endtmp;
-	buf.truncate(end);
+	int end = nextColorSpec(buf);
+	if (end != -1)
+	    buf.truncate(end);
 	buf = buf.stripWhiteSpace();
 	if ( buf == "none" ) {
 	    image.setAlphaBuffer( TRUE );
@@ -290,11 +302,135 @@ static void read_xpm_image( QImageIO * iio )
     return;
 }
 
+
+static const char* xpm_color_name( int cpp, int index )
+{
+    static char returnable[5];
+    static const char code[] = ".#abcdefghijklmnopqrstuvwxyzABCD"
+			       "EFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    // cpp is limited to 4 and index is limited to 64^cpp
+    if ( cpp > 1 ) {
+	if ( cpp > 2 ) {
+	    if ( cpp > 3 ) {
+		returnable[3] = code[index % 64];
+		index /= 64;
+	    } else
+		returnable[3] = '\0';
+	    returnable[2] = code[index % 64];
+	    index /= 64;
+	} else
+	    returnable[2] = '\0';
+	// the following 4 lines are a joke!
+	if ( index == 0 )
+	    index = 64*44+21;
+	else if ( index == 64*44+21 )
+	    index = 0;
+	returnable[1] = code[index % 64];
+	index /= 64;
+    } else
+	returnable[1] = '\0';
+    returnable[0] = code[index];
+
+    return returnable;
+}
+
+
+// write XPM image data
+static void write_xpm_image( QImageIO * iio )
+{
+    if ( iio )
+	iio->setStatus( 1 );
+    else
+	return;
+
+    // ### 8-bit case could be made faster
+    QImage image;
+    if ( iio->image().depth() != 32 )
+	image = iio->image().convertDepth( 32 );
+    else
+	image = iio->image();
+
+    QMap<QRgb, int> colorMap;
+
+    int w = image.width(), h = image.height(), ncolors = 0;
+    int x, y;
+
+    // build color table
+    for( y=0; y<h; y++ ) {
+	QRgb * yp = (QRgb *)image.scanLine( y );
+	for( x=0; x<w; x++ ) {
+	    QRgb color = *(yp + x);
+	    if ( !colorMap.contains(color) )
+		colorMap.insert( color, ncolors++ );
+	}
+    }
+
+    // number of 64-bit characters per pixel needed to encode all colors
+    int cpp = 1;
+    for ( int k = 64; ncolors > k; k *= 64 ) {
+	++cpp;
+	// limit to 4 characters per pixel
+	// 64^4 colors is enough for a 4096x4096 image
+	 if ( cpp > 4)
+	    break;
+    }
+
+    QString line;
+
+    // write header
+    QTextStream s( iio->ioDevice() );
+    s << "/* XPM */" << endl
+      << "static char *" << fbname(iio->fileName()) << "[]={" << endl
+      << "\"" << w << " " << h << " " << ncolors << " " << cpp << "\"";
+
+    // write palette
+    QMap<QRgb, int>::Iterator c = colorMap.begin();
+    while ( c != colorMap.end() ) {
+	QRgb color = c.key();
+	if ( image.hasAlphaBuffer() && color == (color & RGB_MASK) )
+	    line.sprintf( "\"%s c None\"",
+			  xpm_color_name(cpp, *c) );
+	else
+	    line.sprintf( "\"%s c #%02x%02x%02x\"",
+			  xpm_color_name(cpp, *c),
+			  qRed(color),
+			  qGreen(color),
+			  qBlue(color) );
+	++c;
+	s << "," << endl << line;
+    }
+
+    // write pixels, limit to 4 characters per pixel
+    line.truncate( cpp*w );
+    for( y=0; y<h; y++ ) {
+	QRgb * yp = (QRgb *) image.scanLine( y );
+	int cc = 0;
+	for( x=0; x<w; x++ ) {
+	    int color = (int)(*(yp + x));
+	    QCString chars = xpm_color_name( cpp, colorMap[color] );
+	    line[cc++] = chars[0];
+	    if ( cpp > 1 ) {
+		line[cc++] = chars[1];
+		if ( cpp > 2 ) {
+		    line[cc++] = chars[2];
+		    if ( cpp > 3 ) {
+			line[cc++] = chars[3];
+		    }
+		}
+	    }
+	}
+	s << "," << endl << "\"" << line << "\"";
+    }
+    s << "};" << endl;
+
+    iio->setStatus( 0 );
+}
+
 // Qt code end ---------------------------
 
 GVXPM::GVXPM()
 {
         QImageIO::inputFormats(); // trigger registration of Qt's handlers
 	QImageIO::defineIOHandler( "XPM", "/\\*.XPM.\\*/", "T",
-				   read_xpm_image, NULL );
+				   read_xpm_image, write_xpm_image );
 }
