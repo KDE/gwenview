@@ -25,7 +25,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class GVFileView : public KFileView {
 public:
-	virtual void setViewedFileItem(const KFileItem* fileItem)=0;
+	GVFileView() : mShownFileItem(0L) {}
+	
+	KFileItem* shownFileItem() const { return mShownFileItem; }
+	virtual void setShownFileItem(KFileItem* fileItem) { mShownFileItem=fileItem; }
+
+protected:
+	KFileItem* mShownFileItem;
 };
 
 #endif

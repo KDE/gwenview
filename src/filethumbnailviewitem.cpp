@@ -208,8 +208,8 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 // Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
-	if (view->viewedItem()==this) {
-		p->setPen(QColor(255,0,0));
+	if (view->viewItem(view->shownFileItem())==this) {
+		p->setPen(Qt::red);
 	}
 	if (view->wordWrapIconText()) {
 		if (!mWordWrap) {

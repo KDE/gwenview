@@ -44,20 +44,20 @@ static QString sDestDir,sEditor;
 
 
 //-FileOperations--------------------------------------------------
-void FileOperation::copyTo(const KURL& srcURL,QWidget* parent) {
+void FileOperation::copyTo(const KURL::List& srcURL,QWidget* parent) {
 	FileOpCopyToObject* op=new FileOpCopyToObject(srcURL,parent);
 	(*op)();
 }
 
 
-void FileOperation::moveTo(const KURL& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
+void FileOperation::moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpMoveToObject* op=new FileOpMoveToObject(srcURL,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
-void FileOperation::del(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
+void FileOperation::del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpDelObject* op=new FileOpDelObject(url,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();

@@ -40,6 +40,8 @@ class GVFileDetailView : public KListView, public GVFileView
 {
 	Q_OBJECT
 
+	friend class GVFileDetailViewItem;
+
 public:
 	GVFileDetailView(QWidget* parent, const char* name);
 	virtual ~GVFileDetailView();
@@ -76,8 +78,7 @@ public:
 	void determineIcon( GVFileDetailViewItem* item );
 	QScrollView* scrollWidget() { return this; }
 	
-	GVFileDetailViewItem* viewedItem() const { return mViewedItem; }
-	void setViewedFileItem(const KFileItem* fileItem);
+	void setShownFileItem(KFileItem* fileItem);
 
 protected:
 	virtual void keyPressEvent( QKeyEvent*  );
@@ -110,8 +111,6 @@ private:
 	void setSortingKey(GVFileDetailViewItem* item, const KFileItem* i);
 	
 	void startDrag();
-
-	GVFileDetailViewItem* mViewedItem;
 };
 
 

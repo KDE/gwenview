@@ -94,10 +94,10 @@ public slots:
 // Stop thumbnail generation
 	void cancel();
 
-	void deleteFile();
+	void deleteFiles();
 	void renameFile();
-	void copyFile();
-	void moveFile();
+	void copyFiles();
+	void moveFiles();
 
 
 signals:
@@ -115,10 +115,6 @@ private slots:
 // Context menu slots 
 	void editSelectedFile();
 	void openParentDir();
-	void renameSelectedFile();
-	void copySelectedFiles();
-	void moveSelectedFiles();
-	void deleteSelectedFiles();
 	void showFileProperties();
 	
 	
@@ -132,10 +128,6 @@ private slots:
 	void openContextMenu(const QPoint& pos);
 	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
 	void openContextMenu(QIconViewItem*,const QPoint&);
-
-// Used for file operations which changes the content of the current dir (move/del/rename) 
-	void slotSelectNewFilename();
-	void slotRenamed(const QString&);
 
 // Get called by the thumbnail size radio actions
 	void updateThumbnailSize();
@@ -168,27 +160,17 @@ private:
 	KRadioAction* mLargeThumbnails;
 
 // configurable settings
-	bool mConfirmMove;
-	QString mMoveToFolder;
-
-	bool mConfirmCopy;
-	QString mCopyToFolder;
-
-	bool mConfirmDelete;
-
 	bool mAutoLoadImage;
-
 	bool mShowDirs;
 
 // Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
-	QString mFilenameToSelect; // The file which will be selected at the end of the dir lister work
-	QString mNewFilenameToSelect; // The file which will be selected after a file operation like move, delete or rename
 
 	GVFileView* currentFileView() const;
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();
+	KURL::List selectedURLs() const;
 	
 	KFileItem* findFirstImage() const;
 	KFileItem* findLastImage() const;

@@ -49,7 +49,7 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
 FileThumbnailView::FileThumbnailView(QWidget* parent)
-: KIconView(parent), GVFileView(), mViewedItem(0L), mThumbnailLoadJob(0L)
+: KIconView(parent), GVFileView(), mThumbnailLoadJob(0L)
 {
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -130,20 +130,20 @@ void FileThumbnailView::stopThumbnailUpdate()
 }
 
 
-void FileThumbnailView::setViewedFileItem(const KFileItem* fileItem) {
-	FileThumbnailViewItem* oldViewed=mViewedItem;
-	FileThumbnailViewItem* item=viewItem(fileItem);
+void FileThumbnailView::setShownFileItem(KFileItem* fileItem) {
+	FileThumbnailViewItem* oldShownItem=viewItem(mShownFileItem);
+	FileThumbnailViewItem* newShownItem=viewItem(fileItem);
 	
-	mViewedItem=item;
-	if (oldViewed) repaintItem(oldViewed);
-	if (mViewedItem) repaintItem(mViewedItem);
+	GVFileView::setShownFileItem(fileItem);
+	if (oldShownItem) repaintItem(oldShownItem);
+	if (newShownItem) repaintItem(newShownItem);
 }
 
 
 //-KFileView methods--------------------------------------------------------
 void FileThumbnailView::clearView() {
     stopThumbnailUpdate();
-	mViewedItem=0L;
+	mShownFileItem=0L;
 	QIconView::clear();
 }
 
@@ -230,9 +230,10 @@ void FileThumbnailView::removeItem(const KFileItem* fileItem) {
 	if (!mThumbnailLoadJob.isNull())
 		mThumbnailLoadJob->itemRemoved(fileItem);
 
+	if (fileItem==mShownFileItem) mShownFileItem=0L;
+
 // Remove it from our view
 	FileThumbnailViewItem* iconItem=viewItem(fileItem);
-	if (iconItem==mViewedItem) mViewedItem=0L;
 	if (iconItem) delete iconItem;
 	KFileView::removeItem(fileItem);
 	arrangeItemsInGrid();

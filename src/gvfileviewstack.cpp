@@ -154,13 +154,19 @@ void GVFileViewStack::plugActionsToAccel(KAccel* accel) {
 }
 
 
-//-Public slots----------------------------------------------------------
+//-----------------------------------------------------------------------
+//
+// Public slots
+//
+//-----------------------------------------------------------------------
+//FIXME: Handle passing a filename as a parameter
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
 	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + filename << endl;
 	if (mDirURL.cmp(dirURL,true)) return;
 	
 	mDirURL=dirURL;
-	mFilenameToSelect=filename;
+	currentFileView()->setShownFileItem(0L);
+	
 	mDirLister->openURL(mDirURL);
 	updateActions();
 }
@@ -251,7 +257,11 @@ void GVFileViewStack::slotSelectNext() {
 }
 
 
-//-Private slots---------------------------------------------------------
+//-----------------------------------------------------------------------
+//
+// Private slots
+//
+//-----------------------------------------------------------------------
 void GVFileViewStack::viewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
@@ -292,7 +302,17 @@ void GVFileViewStack::updateThumbnailSize() {
 		} else {
 			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Large);
 		}
-		setMode(GVFileViewStack::Thumbnail);
+		if (mMode==GVFileViewStack::FileList) {
+			setMode(GVFileViewStack::Thumbnail);
+		} else {
+			KFileItemList items=*mFileThumbnailView->items();
+			KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
+
+			mFileThumbnailView->GVFileView::clear();
+			mFileThumbnailView->addItemList(items);
+			mFileThumbnailView->setShownFileItem(shownFileItem);
+		}
+		mFileThumbnailView->startThumbnailUpdate();
 	}
 }
 
@@ -325,19 +345,19 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	if (selectionSize==1) {
 		menu.connectItem(
 			menu.insertItem( i18n("Rename...") ),
-			this,SLOT(renameSelectedFile()) );
+			this,SLOT(renameFile()) );
 	}
 
 	if (selectionSize>=1) {
 		menu.connectItem(
 			menu.insertItem( i18n("Copy To...") ),
-			this,SLOT(copySelectedFiles()) );
+			this,SLOT(copyFiles()) );
 		menu.connectItem(
 			menu.insertItem( i18n("Move To...") ),
-			this,SLOT(moveSelectedFiles()) );
+			this,SLOT(moveFiles()) );
 		menu.connectItem(
 			menu.insertItem( i18n("Delete...") ),
-			this,SLOT(deleteSelectedFiles()) );
+			this,SLOT(deleteFiles()) );
 		menu.insertSeparator();
 	}
 	
@@ -372,30 +392,41 @@ void GVFileViewStack::openParentDir() {
 }
 
 
-void GVFileViewStack::renameSelectedFile() {
-	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
-	if (!fileItem) return;
+//-----------------------------------------------------------------------
+//
+// File operations
+//
+//-----------------------------------------------------------------------
+KURL::List GVFileViewStack::selectedURLs() const {
+	KURL::List list;
 
-// If we are renaming the current item, use the renameCurrent method
-	if (fileItem->name()==filename()) {
-		renameFile();
-		return;
+	KFileItemListIterator it( *currentFileView()->selectedItems() );
+	for ( ; it.current(); ++it ) {
+		list.append(it.current()->url());
 	}
-
-	mFilenameToSelect=filename();
-	FileOperation::rename(fileItem->url(),this);
+	if (list.isEmpty()) {
+		const KFileItem* item=currentFileView()->shownFileItem();
+		if (item) list.append(item->url());
+	}
+	return list;
 }
 
 
-void GVFileViewStack::copySelectedFiles() {
+void GVFileViewStack::copyFiles() {
+	KURL::List list=selectedURLs();
+	FileOperation::copyTo(list,this);
 }
 
 
-void GVFileViewStack::moveSelectedFiles() {
+void GVFileViewStack::moveFiles() {
+	KURL::List list=selectedURLs();
+	FileOperation::moveTo(list,this);
 }
 
 
-void GVFileViewStack::deleteSelectedFiles() {
+void GVFileViewStack::deleteFiles() {
+	KURL::List list=selectedURLs();
+	FileOperation::del(list,this);
 }
 
 
@@ -409,60 +440,15 @@ void GVFileViewStack::showFileProperties() {
 }
 
 
-//-----------------------------------------------------------------------
-//
-// Current item file operations
-//
-//-----------------------------------------------------------------------
-void GVFileViewStack::copyFile() {
-	FileOperation::copyTo(url(),this);
-}
-
-
-void GVFileViewStack::moveFile() {
-// Get the next item text or the previous one if there's no next item
-	KFileItem* newItem=findNextImage();
-	if (!newItem) newItem=findPreviousImage();
-
-	if (newItem) {
-		mNewFilenameToSelect=newItem->name();
-	} else {
-		mNewFilenameToSelect="";
-	}
-	
-// move the file, slotSelectNewFilename will be called on success
-	FileOperation::moveTo(url(),this,this,SLOT(slotSelectNewFilename()) );
-}
-
-
-void GVFileViewStack::deleteFile() {
-// Get the next item text or the previous one if there's no next item
-	KFileItem* newItem=findNextImage();
-	if (!newItem) newItem=findPreviousImage();
-	
-	if (newItem) {
-		mNewFilenameToSelect=newItem->name();
-	} else {
-		mNewFilenameToSelect="";
-	}
-	
-// Delete the file, slotSelectNewFilename will be called on success
-	FileOperation::del(url(),this,this,SLOT(slotSelectNewFilename()) );
-}
-
-
-void GVFileViewStack::slotSelectNewFilename() {
-	mFilenameToSelect=mNewFilenameToSelect;
-}
-
-
 void GVFileViewStack::renameFile() {
-	FileOperation::rename(url(),this,this,SLOT(slotRenamed(const QString&)) );
-}
-
-
-void GVFileViewStack::slotRenamed(const QString& newFilename) {
-	mFilenameToSelect=newFilename;
+	const KFileItemList* selectedItems=currentFileView()->selectedItems();
+	const KFileItem* item;
+	if (selectedItems->count()>0) {
+		item=selectedItems->getFirst();
+	} else {
+		item=currentFileView()->shownFileItem();
+	}
+	if (item) FileOperation::rename(item->url(),this );
 }
 
 
@@ -503,12 +489,6 @@ KURL GVFileViewStack::url() const {
 
 
 void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (item && !isDirOrArchive(item)) {
-		mFilenameToSelect=filename();
-	} else {
-		mFilenameToSelect=QString::null;
-	}
 	mMode=mode;
 	GVFileView* oldView;
 	GVFileView* newView;
@@ -525,6 +505,11 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 // Show the new active view
 	raiseWidget(newView->widget());
 
+// Fill the new view
+	newView->clear();
+	newView->addItemList(*oldView->items());
+	newView->setShownFileItem(oldView->shownFileItem());
+ 
 // Remove references to the old view from KFileItems
 	const KFileItemList* items=oldView->items();
 	for(KFileItemListIterator it(*items);it.current()!=0L;++it) {
@@ -533,10 +518,12 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 
 // Clear the old view
 	oldView->GVFileView::clear();
-
+/*
 // Update the new view
+	
 	KURL url=mDirLister->url();
 	if (url.isValid()) mDirLister->openURL(url);
+	*/
 }
 
 
@@ -562,7 +549,21 @@ void GVFileViewStack::setAutoLoadImage(bool autoLoadImage) {
 //
 //-----------------------------------------------------------------------
 void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
+	KFileItem* newShownItem=0L;
+	const KFileItem* shownItem=currentFileView()->shownFileItem();
+	if (shownItem==item) {
+		newShownItem=findNextImage();
+		if (!newShownItem) newShownItem=findPreviousImage();
+	}
+
 	currentFileView()->removeItem(item);
+
+	if (shownItem==item) {
+		currentFileView()->setShownFileItem(newShownItem);
+		if (newShownItem) {
+			emit urlChanged(newShownItem->url());
+		}
+	}
 }
 
 
@@ -591,7 +592,7 @@ void GVFileViewStack::dirListerStarted() {
 
 
 void GVFileViewStack::dirListerCompleted() {
-	// FIXME : This is a work around to a bug which causes
+	// FIXME: This is a work around to a bug which causes
 	// FileThumbnailView::firstFileItem to return a wrong item.
 	// This work around is not in the method because firstFileItem is 
 	// const and sort is a non const method
@@ -599,10 +600,10 @@ void GVFileViewStack::dirListerCompleted() {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
-	if (mFilenameToSelect.isEmpty() && mAutoLoadImage) {
+	// FIXME: Add code to handle the case when Gwenview is started with a image
+	// as an argument
+	if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
 		slotSelectFirst();
-	} else {
-		selectFilename(mFilenameToSelect);
 	}
 	
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
@@ -615,10 +616,8 @@ void GVFileViewStack::dirListerCanceled() {
 	if (mMode==Thumbnail) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
-	if (mFilenameToSelect.isEmpty() && mAutoLoadImage) {
+	if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
 		slotSelectFirst();
-	} else {
-		selectFilename(mFilenameToSelect);
 	}
 }
 
@@ -676,7 +675,7 @@ void GVFileViewStack::updateActions() {
 
 void GVFileViewStack::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
-	currentFileView()->setViewedFileItem(item);
+	currentFileView()->setShownFileItem(item);
 		
 // We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
@@ -700,9 +699,8 @@ KFileItem* GVFileViewStack::findLastImage() const {
 	return item;
 }
 
-// FIXME: Use viewed item instead of current
 KFileItem* GVFileViewStack::findPreviousImage() const {
-	KFileItem* item=currentFileView()->currentFileItem();
+	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->prevItem(item);
@@ -711,7 +709,7 @@ KFileItem* GVFileViewStack::findPreviousImage() const {
 }
 
 KFileItem* GVFileViewStack::findNextImage() const {
-	KFileItem* item=currentFileView()->currentFileItem();
+	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->nextItem(item);
@@ -747,6 +745,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 			mLargeThumbnails->setChecked(true);
 			break;
 		}
+		mFileThumbnailView->startThumbnailUpdate();
 	} else {
 		mNoThumbnails->setChecked(true);
 	}

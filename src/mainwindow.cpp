@@ -436,11 +436,11 @@ void MainWindow::createActions() {
 	
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileViewStack,SLOT(renameFile()),actionCollection(),"file_rename");
 
-	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileViewStack,SLOT(copyFile()),actionCollection(),"file_copy");
+	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileViewStack,SLOT(copyFiles()),actionCollection(),"file_copy");
 
-	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileViewStack,SLOT(moveFile()),actionCollection(),"file_move");
+	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileViewStack,SLOT(moveFiles()),actionCollection(),"file_move");
 
-	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileViewStack,SLOT(deleteFile()),actionCollection(),"file_delete");
+	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileViewStack,SLOT(deleteFiles()),actionCollection(),"file_delete");
 
 	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 

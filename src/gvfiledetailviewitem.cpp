@@ -46,7 +46,8 @@ void GVFileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int colu
 {
 	QColorGroup myCG=cg;
 	GVFileDetailView* view=static_cast<GVFileDetailView*>(listView());
-	if (view->viewedItem()==this) {
+	GVFileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
+	if (viewedItem==this) {
 		myCG.setColor(QColorGroup::Text, Qt::red);
 		myCG.setColor(QColorGroup::HighlightedText, Qt::red);
 	}

@@ -35,9 +35,9 @@ class KURL;
  */
 class FileOperation {
 public:
-	static void copyTo(const KURL&,QWidget* parent=0L);
-	static void moveTo(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-	static void del(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+	static void copyTo(const KURL::List&,QWidget* parent=0L);
+	static void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void openWithEditor(const KURL&);
 

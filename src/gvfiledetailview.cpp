@@ -44,7 +44,7 @@
 
 
 GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
-	: KListView(parent, name), GVFileView(), mViewedItem(0L)
+	: KListView(parent, name), GVFileView()
 {
 	mSortingCol = COL_NAME;
 	mBlockSortingSignal = false;
@@ -144,7 +144,7 @@ void GVFileDetailView::slotActivateMenu (QListViewItem *item,const QPoint& pos )
 void GVFileDetailView::clearView()
 {
 	mResolver->m_lstPendingMimeIconItems.clear();
-	mViewedItem=0L;
+	mShownFileItem=0L;
 	KListView::clear();
 }
 
@@ -246,7 +246,7 @@ void GVFileDetailView::removeItem( const KFileItem *i )
 
 	GVFileDetailViewItem *item = viewItem(i);
 	mResolver->m_lstPendingMimeIconItems.remove( item );
-	if(mViewedItem==item) mViewedItem=0L;
+	if(mShownFileItem==i) mShownFileItem=0L;
 	delete item;
 
 	KFileView::removeItem( i );
@@ -444,10 +444,12 @@ void GVFileDetailView::startDrag()
 }
 
 
-void GVFileDetailView::setViewedFileItem(const KFileItem* fileItem)
+void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 {
-	GVFileDetailViewItem* oldViewed=mViewedItem;
-	mViewedItem=viewItem(fileItem);
-	if (oldViewed) oldViewed->repaint();
-	if (mViewedItem) mViewedItem->repaint();
+	GVFileDetailViewItem* oldShownItem=viewItem(mShownFileItem);
+	GVFileDetailViewItem* newShownItem=viewItem(fileItem);
+	
+	GVFileView::setShownFileItem(fileItem);
+	if (oldShownItem) oldShownItem->repaint();
+	if (newShownItem) newShownItem->repaint();
 }
