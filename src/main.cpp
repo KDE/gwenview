@@ -49,7 +49,7 @@ int main (int argc, char *argv[]) {
 	XCFImageFormat::registerFormat();
 
 	if (kapplication.isRestored()) {
-		RESTORE(MainWindow());
+		RESTORE(MainWindow)
 	} else {
 		MainWindow *mainWindow = new MainWindow;
 		mainWindow->show();
