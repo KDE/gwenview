@@ -23,9 +23,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qevent.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qtimer.h>
 #include <qtoolbutton.h>
 
 // KDE
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
 
@@ -34,6 +36,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 const int FULLSCREEN_LABEL_RADIUS = 6;
+// Intervals are in milliseconds
+const int SLIDE_IN_INTERVAL = 4;
+const int SLIDE_OUT_INTERVAL = 8;
+// Step is in pixels
+const int SLIDE_STEP = 4;
 
 
 class ActionButton : public QToolButton {
@@ -96,8 +103,21 @@ static void drawBorder(QPainter& painter, const QRect& rect) {
 }
 
 
+enum BarState { OUT, SLIDING_OUT, SLIDING_IN, IN };
+
+
+struct GVFullScreenBar::Private {
+	QLabel* mLabel;
+	QTimer mTimer;
+	BarState mState;
+};
+
+
 GVFullScreenBar::GVFullScreenBar(QWidget* parent, const KActionPtrList& actions)
 : QLabel(parent) {
+	d=new Private;
+	d->mState=IN;
+
 	QColor bg=colorGroup().highlight();
 	QColor fg=colorGroup().highlightedText();
 	QPalette pal(palette());
@@ -122,15 +142,23 @@ GVFullScreenBar::GVFullScreenBar(QWidget* parent, const KActionPtrList& actions)
 	}
 
 	// Label
-	mLabel=new QLabel(this);
-	layout->addWidget(mLabel);
-	QFont font=mLabel->font();
+	d->mLabel=new QLabel(this);
+	layout->addWidget(d->mLabel);
+	QFont font=d->mLabel->font();
 	font.setWeight(QFont::Bold);
-	mLabel->setFont(font);
+	d->mLabel->setFont(font);
 
 	layout->addSpacing(FULLSCREEN_LABEL_RADIUS);
-}
 	
+	// Timer
+	connect(&d->mTimer, SIGNAL(timeout()), this, SLOT(slotUpdateSlide()) );
+}
+
+
+GVFullScreenBar::~GVFullScreenBar() {
+	delete d;
+}
+
 
 void GVFullScreenBar::resizeEvent(QResizeEvent* event) {
 	QSize size=event->size();
@@ -158,6 +186,54 @@ void GVFullScreenBar::resizeEvent(QResizeEvent* event) {
 
 
 void GVFullScreenBar::setText(const QString& text) {
-	mLabel->setText(text);
+	d->mLabel->setText(text);
 }
 
+
+void GVFullScreenBar::slideIn() {
+	if (d->mState!=IN) {
+		d->mState=SLIDING_IN;
+		d->mTimer.start(SLIDE_IN_INTERVAL);
+	}
+}
+
+
+void GVFullScreenBar::slideOut() {
+	if (d->mState!=OUT) {
+		d->mState=SLIDING_OUT;
+		d->mTimer.start(SLIDE_OUT_INTERVAL);
+	}
+}
+
+
+void GVFullScreenBar::slotUpdateSlide() {
+	int pos=x();
+	int minPos;
+	// If the label is empty, we totally hide the bar
+	if (d->mLabel->text().isEmpty()) {
+		minPos=-width();
+	} else {
+		minPos=-d->mLabel->x();
+	}
+
+	switch (d->mState) {
+	case SLIDING_OUT:
+		pos-=SLIDE_STEP;
+		if (pos<=minPos) {
+			d->mState=OUT;
+			d->mTimer.stop();
+		}
+		break;
+	case SLIDING_IN:
+		pos+=SLIDE_STEP;
+		if (pos>=0) {
+			pos=0;
+			d->mState=IN;
+			d->mTimer.stop();
+		}
+		break;
+	default:
+		kdWarning() << k_funcinfo << "We should not get there\n";
+	}
+	move(pos, 0);
+}

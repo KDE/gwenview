@@ -35,11 +35,19 @@ class GVFullScreenBar : public QLabel {
 Q_OBJECT
 public:
 	GVFullScreenBar(QWidget* parent, const KActionPtrList& actions);
+	~GVFullScreenBar();
 	void resizeEvent(QResizeEvent* event);
 	void setText(const QString& text);
 
+	void slideIn();
+	void slideOut();
+
+private slots:
+	void slotUpdateSlide();
+
 private:
-	QLabel* mLabel;
+	class Private;
+	Private* d;
 };
 
 #endif /* GVFULLSCREENBAR_H */

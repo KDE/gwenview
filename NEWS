@@ -4,7 +4,8 @@
    Thaler)
  - It's now possible to select which KIPI plugins should be loaded.
  - The fullscreen display now contains "Previous", "Next" and "Exit fullscreen"
-   buttons.
+   buttons. These buttons automatically hide when the cursor hides
+   itself.
  - Adjust brightness, contrast and gamma.
  - Going to next/previous image in the image KPart.
 - Fixes:

@@ -181,7 +181,7 @@ private slots:
 	void decreaseBrightness();
 	void increaseContrast();
 	void decreaseContrast();
-	void hideCursor();
+	void slotAutoHide();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
 	void checkPendingOperations();

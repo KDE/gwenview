@@ -363,7 +363,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 		this, SLOT(slotImageRectUpdated(const QRect&)) );
 
 	connect(d->mAutoHideTimer,SIGNAL(timeout()),
-		this,SLOT(hideCursor()) );
+		this,SLOT(slotAutoHide()) );
 
 	connect(&d->mPendingPaintTimer,SIGNAL(timeout()),
 		this,SLOT(checkPendingOperations()) );
@@ -980,7 +980,14 @@ void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state(), true);
 	d->mTools[d->mToolID]->mouseMoveEvent(event);
 	if (d->mFullScreen) {
-		restartAutoHideTimer();
+		if (d->mFullScreenBar && d->mFullScreenBar->rect().contains(event->pos())) {
+			d->mAutoHideTimer->stop();
+		} else {
+			restartAutoHideTimer();
+		}
+		if (d->mFullScreenBar) {
+			d->mFullScreenBar->slideIn();
+		}
 	}
 }
 
@@ -1357,8 +1364,11 @@ void GVScrollPixmapView::updateImageOffset() {
 }
 
 
-void GVScrollPixmapView::hideCursor() {
+void GVScrollPixmapView::slotAutoHide() {
 	viewport()->setCursor(blankCursor);
+	if (d->mFullScreenBar) {
+		d->mFullScreenBar->slideOut();
+	}
 }
 
 
