@@ -1014,6 +1014,8 @@ void GVMainWindow::loadPlugins() {
 		QPopupMenu *popup = static_cast<QPopupMenu*>(
 			factory()->container( categoryMap[plugin->category()], this));
 		Q_ASSERT( popup );
+        if (!popup) continue;
+
 		plugin->setup(this);
 		KActionPtrList actions = plugin->actions();
 		KActionPtrList::ConstIterator actionIt=actions.begin(), end=actions.end();
