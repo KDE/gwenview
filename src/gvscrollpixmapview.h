@@ -70,7 +70,7 @@ public:
 	KAction* resetZoom() const { return mResetZoom; }
 	KToggleAction* lockZoom() const { return mLockZoom; }
 	double zoom() const { return mZoom; }
-	void setZoom(double zoom);
+	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const { return mFullScreen; }
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
@@ -85,6 +85,7 @@ public:
 
 	void startAutoHideTimer();
 
+	// Used by the browse tool controller
 	void emitSelectPrevious() { emit selectPrevious(); }
 	void emitSelectNext() { emit selectNext(); }
 
@@ -133,7 +134,8 @@ private:
 	// Object state info
 	bool mFullScreen;
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
-	double mLastZoomBeforeAuto;
+	double mZoomBeforeAuto;
+	int mXCenterBeforeAuto, mYCenterBeforeAuto;
 
 	double computeAutoZoom();
 	void updateScrollBarMode();

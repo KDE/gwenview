@@ -2,7 +2,9 @@
 - New features:
  - Toolbars are now configurable, and toolbar settings are remembered.
  - New dock window to display Meta Info (thanks to Jos van den Oever).
- - Click on the image to toggle auto-zoom (thanks to Jos van den Oever).
+ - Cursor over image view changes to reflect the current behavior.
+ - When toggling autozoom off, restore the previous zoom and position (Based
+   on a patch by Jos van den Oever).
 - Fixes:
  - Exiting with Ctrl+Q from the fullscreen won't close the file view for
    the next startup.

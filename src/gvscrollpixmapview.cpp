@@ -79,7 +79,7 @@ protected:
 		path=locate("appdata", QString("cursor/%1.png").arg(name));
 		return QCursor(QPixmap(path));
 	}
-	
+
 public:
 	ToolController(GVScrollPixmapView* view)
 	: mView(view) {}
@@ -98,7 +98,7 @@ class GVScrollPixmapView::ScrollToolController : public GVScrollPixmapView::Tool
 	int mScrollStartX,mScrollStartY;
 	bool mDragStarted;
 	QCursor mDragCursor,mDraggingCursor;
-	
+
 public:
 	ScrollToolController(GVScrollPixmapView* view)
 	: ToolController(view)
@@ -107,7 +107,7 @@ public:
 		mDragCursor=loadCursor("drag");
 		mDraggingCursor=loadCursor("dragging");
 	}
-	
+
 	void mousePressEvent(QMouseEvent* event) {
 		mScrollStartX=event->x();
 		mScrollStartY=event->y();
@@ -163,7 +163,7 @@ public:
 	void mouseReleaseEvent(QMouseEvent*) {
 		mView->autoZoom()->activate();
 	}
-	
+
 	void wheelEvent(QWheelEvent* event) {
 		if (event->delta()<0) {
 			if (mView->zoomIn()->isEnabled()) mView->zoomIn()->activate();
@@ -172,7 +172,7 @@ public:
 		}
 		event->accept();
 	}
-	
+
 	void updateCursor() {
 		mView->viewport()->setCursor(mCursor);
 	}
@@ -221,7 +221,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mActionCollection(actionCollection)
 , mFullScreen(false)
 , mOperaLikePrevious(false)
-, mLastZoomBeforeAuto(1)
+, mZoomBeforeAuto(1)
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -302,7 +302,7 @@ void GVScrollPixmapView::slotURLChanged() {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
-	
+
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
 }
 
@@ -349,28 +349,32 @@ void GVScrollPixmapView::setShowScrollBars(bool value) {
 }
 
 
-void GVScrollPixmapView::setZoom(double zoom) {
+void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	int viewWidth=width();
 	int viewHeight=height();
 	double oldZoom=mZoom;
 	mZoom=zoom;
 
 	viewport()->setUpdatesEnabled(false);
-	
+
 	updateContentSize();
 
 	// Find the coordinate of the center of the image
 	// and center the view on it
-	int centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
-	int centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+	if (centerX==-1) {
+		centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
+	}
+	if (centerY==-1) {
+		centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+	}
 	center(centerX,centerY);
-	
+
 	updateImageOffset();
 	updateZoomActions();
-	
+
 	viewport()->setUpdatesEnabled(true);
 	viewport()->repaint(false);
-	
+
 	emit zoomChanged(mZoom);
 }
 
@@ -551,7 +555,7 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			}
 		}
 		break;
-	
+
 	default: // Avoid compiler complain
 		break;
 	}
@@ -650,10 +654,12 @@ void GVScrollPixmapView::slotResetZoom() {
 void GVScrollPixmapView::setAutoZoom(bool value) {
 	updateScrollBarMode();
 	if (value) {
-		mLastZoomBeforeAuto=mZoom;
+		mZoomBeforeAuto=mZoom;
+		mXCenterBeforeAuto=width()/2  + contentsX() + mXOffset;
+		mYCenterBeforeAuto=height()/2 + contentsY() + mYOffset;
 		setZoom(computeAutoZoom());
 	} else {
-		setZoom(mLastZoomBeforeAuto);
+		setZoom(mZoomBeforeAuto, mXCenterBeforeAuto, mYCenterBeforeAuto);
 	}
 }
 
@@ -669,10 +675,10 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary
 	mActionCollection->action("fullscreen")->plug(&menu);
-	
+
 	if (!mGVPixmap->isNull()) {
 		menu.insertSeparator();
-		
+
 		mAutoZoom->plug(&menu);
 		mZoomIn->plug(&menu);
 		mZoomOut->plug(&menu);
@@ -738,7 +744,7 @@ void GVScrollPixmapView::updateScrollBarMode() {
 
 void GVScrollPixmapView::updateContentSize() {
 	resizeContents(
-		int(mGVPixmap->width()*mZoom), 
+		int(mGVPixmap->width()*mZoom),
 		int(mGVPixmap->height()*mZoom)	);
 }
 
