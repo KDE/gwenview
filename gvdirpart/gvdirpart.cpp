@@ -157,7 +157,7 @@ void GVDirPart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& fi
 }
 
 KURL GVDirPart::pixmapURL() {
-	return mPixmapView->pixmapURL();
+	return mDocument->url();
 }
 
 void GVDirPart::toggleSlideShow() {

@@ -1235,10 +1235,6 @@ void GVScrollPixmapView::deleteFile() {
 	FileOperation::del(list,this);
 }
 
-KURL GVScrollPixmapView::pixmapURL() {
-	return mDocument->url();
-}
-
 //------------------------------------------------------------------------
 //
 // Config

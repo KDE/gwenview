@@ -105,7 +105,6 @@ public slots:
 	void copyFile();
 	void moveFile();
 	void deleteFile();
-	KURL pixmapURL(); //Used by directory KPart
 
 signals:
 	void selectPrevious();
