@@ -54,6 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvbookmarkowner.h"
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
+#include "gvimagesavedialog.h"
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
@@ -234,26 +235,21 @@ void GVMainWindow::openFile() {
 	
 
 void GVMainWindow::saveFile() {
-	bool result=mGVPixmap->save();
-	if (!result) {
+	if (!mGVPixmap->save()) {
 		KMessageBox::sorry(this,i18n("Could not save file."));
 	}
 }
 
 
 void GVMainWindow::saveFileAs() {
-	KURL dirURL=mGVPixmap->dirURL();
-	QString path;
-	if (dirURL.isLocalFile()) {
-		path=dirURL.path();
-	} else {
-		path=QString::null;
-	}
-	KURL url=KFileDialog::getSaveURL(path,KImageIO::pattern(KImageIO::Writing));
-	if (!url.isValid()) return;
+	QString format=mGVPixmap->imageFormat();
+	KURL url;
+	if (mGVPixmap->url().isLocalFile()) url=mGVPixmap->url();
 
-	bool result=mGVPixmap->saveAs(url,KImageIO::type(url.path()));	
-	if (!result) {
+	GVImageSaveDialog dialog(url,format,this);
+	if (!dialog.exec()) return;
+	
+	if (!mGVPixmap->saveAs(url,format)) {
 		KMessageBox::sorry(this,i18n("Could not save file."));
 	}
 }

@@ -158,7 +158,7 @@ void GVPixmap::flip() {
 
 
 bool GVPixmap::save() const {
-	return saveAs(url(),mFileFormat);
+	return saveAs(url(),mImageFormat);
 }
 
 
@@ -196,8 +196,8 @@ bool GVPixmap::load() {
 	} else {
 		if (!KIO::NetAccess::download(pixURL,path)) return false;
 	}
-	mFileFormat=QString(QImage::imageFormat(path));
-	result=mImage.load(path,mFileFormat.ascii());
+	mImageFormat=QString(QImage::imageFormat(path));
+	result=mImage.load(path,mImageFormat.ascii());
 	
 	if (!pixURL.isLocalFile()) {
 		KIO::NetAccess::removeTempFile(path);
