@@ -64,8 +64,6 @@ public:
 
 // Properties
 	void setMode(Mode);
-	bool currentIsFirst() const;
-	bool currentIsLast() const;
 	
 	QString filename() const;
 	KURL url() const;
@@ -183,6 +181,11 @@ private:
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();
+	
+	KFileItem* findFirstImage() const;
+	KFileItem* findLastImage() const;
+	KFileItem* findPreviousImage() const;
+	KFileItem* findNextImage() const;
 };
 
 

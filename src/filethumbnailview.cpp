@@ -162,7 +162,7 @@ void FileThumbnailView::insertItem(KFileItem* item) {
 	// Create icon item
 	QDir::SortSpec spec = KFileView::sorting();
 	FileThumbnailViewItem* iconItem=new	FileThumbnailViewItem(this,item->text(),thumbnail,item);
-	iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
+	iconItem->setKey( sortingKey( item->text(), item->isDir(), spec ));
 
 	item->setExtraData(this,iconItem);
 }

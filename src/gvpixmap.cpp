@@ -125,7 +125,7 @@ KURL GVPixmap::url() const {
 //-Private-------------------------------------------------------------
 bool GVPixmap::load() {
 	KURL pixURL=url();
-	kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
+	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 	int posX,posY;
 	int pixWidth;
 	int pixHeight;

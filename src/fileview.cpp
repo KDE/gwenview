@@ -41,6 +41,10 @@ static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 static const char* CONFIG_SHOW_DIRS="show dirs";
 
+inline bool isDirOrArchive(const KFileItem* item) {
+	return item && (item->isDir() || GVArchive::fileItemIsArchive(item));
+}
+
 
 FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList), mPopupMenu(0L)
@@ -190,12 +194,8 @@ void FileView::selectFilename(QString filename) {
 
 
 void FileView::slotSelectFirst() {
-	KFileItem* item=currentFileView()->firstFileItem();
+	KFileItem* item=findFirstImage();
 	if (!item) return;
-	while (item->isDir() || GVArchive::fileItemIsArchive(item)) {
-		item=currentFileView()->nextItem(item);
-		if (!item) return;
-	}
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -205,9 +205,8 @@ void FileView::slotSelectFirst() {
 
 
 void FileView::slotSelectLast() {
-	KFileItem* item=currentFileView()->items()->getLast();
+	KFileItem* item=findLastImage();
 	if (!item) return;
-	if (item->isDir() || GVArchive::fileItemIsArchive(item)) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -217,18 +216,8 @@ void FileView::slotSelectLast() {
 
 
 void FileView::slotSelectPrevious() {
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (item) {
-		item=currentFileView()->prevItem(item);
-		if (!item) return;
-		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
-			slotSelectFirst();
-			return;
-		}
-	} else {
-		slotSelectFirst();
-		return;
-	}
+	KFileItem* item=findPreviousImage();
+	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -238,14 +227,8 @@ void FileView::slotSelectPrevious() {
 
 
 void FileView::slotSelectNext() {
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (item && !(item->isDir() || GVArchive::fileItemIsArchive(item))) {
-		item=currentFileView()->nextItem(item);
-		if (!item) return;
-	} else {
-		slotSelectFirst();
-		return;
-	}
+	KFileItem* item=findNextImage();
+	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -277,7 +260,7 @@ void FileView::viewExecuted() {
 void FileView::viewChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
+	if (isDirOrArchive(item)) {
 		updateActions();
 		return;
 	}
@@ -288,7 +271,7 @@ void FileView::viewChanged() {
 void FileView::viewRightButtonClicked(const QPoint& pos) {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
+	if (isDirOrArchive(item)) {
 		updateActions();
 		return;
 	}
@@ -354,25 +337,6 @@ KURL FileView::url() const {
 	KURL url(mDirURL);
 	url.addPath(filename());
 	return url;
-}
-
-
-bool FileView::currentIsFirst() const {
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item) return false;
-
-	KFileItem* prevItem=currentFileView()->prevItem(item);
-	if (!prevItem) return true;
-
-	return prevItem->isDir() || GVArchive::fileItemIsArchive(prevItem);
-}
-
-
-bool FileView::currentIsLast() const {
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item) return false;
-
-	return currentFileView()->nextItem(item)==0L;
 }
 
 
@@ -504,17 +468,10 @@ void FileView::initDirListerFilter() {
 
 
 void FileView::updateActions() {
-    bool atLeastOneImage=false;
-	KFileItem* item=currentFileView()->firstFileItem();
-	if (item) {
-    	while (item->isDir() || GVArchive::fileItemIsArchive(item)) {
-	    	item=currentFileView()->nextItem(item);
-		    if (!item) break;
-    	}
-        if (item) atLeastOneImage=true;
-    }
+	KFileItem* firstImage=findFirstImage();
     
-	if (!atLeastOneImage) {
+	// There isn't any image, no need to continue
+	if (!firstImage) {
 		mSelectFirst->setEnabled(false);
 		mSelectPrevious->setEnabled(false);
 		mSelectNext->setEnabled(false);
@@ -522,22 +479,22 @@ void FileView::updateActions() {
 		return;
 	}
 
-    
-	item=currentFileView()->currentFileItem();
-	if (!item || item->isDir() || GVArchive::fileItemIsArchive(item)) {
+	// We did not select any image, let's activate everything
+	KFileItem* currentItem=currentFileView()->currentFileItem();
+	if (!currentItem || isDirOrArchive(currentItem)) {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
 		mSelectNext->setEnabled(true);
 		mSelectLast->setEnabled(true);	
 		return;
 	}
-    
-
-	bool isFirst=currentIsFirst();
-	bool isLast=currentIsLast();
+	
+	// There is at least one image, and an image is selected, let's be precise
+	bool isFirst=currentItem==firstImage;
+	bool isLast=currentItem==findLastImage();
 	
 	mSelectFirst->setEnabled(!isFirst);
-	mSelectPrevious->setEnabled(!isFirst);	
+	mSelectPrevious->setEnabled(!isFirst);
 	mSelectNext->setEnabled(!isLast);
 	mSelectLast->setEnabled(!isLast);	
 }
@@ -551,6 +508,39 @@ void FileView::emitURLChanged() {
 	updateActions();
 }
 
+KFileItem* FileView::findFirstImage() const {
+	KFileItem* item=currentFileView()->firstFileItem();
+	while (item && isDirOrArchive(item)) { 
+		item=currentFileView()->nextItem(item);
+	}
+	return item;
+}
+
+KFileItem* FileView::findLastImage() const {
+	KFileItem* item=currentFileView()->items()->getLast();
+	while (item && isDirOrArchive(item)) { 
+		item=currentFileView()->prevItem(item);
+	}
+	return item;
+}
+
+KFileItem* FileView::findPreviousImage() const {
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (!item) return 0L;
+	do {
+		item=currentFileView()->prevItem(item);
+	} while (item && isDirOrArchive(item)); 
+	return item;
+}
+
+KFileItem* FileView::findNextImage() const {
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (!item) return 0L;
+	do {
+		item=currentFileView()->nextItem(item);
+	} while (item && isDirOrArchive(item)); 
+	return item;
+}
 
 //-File operations-------------------------------------------------------
 void FileView::copyFile() {
