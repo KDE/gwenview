@@ -59,6 +59,12 @@ void GVSlideShow::setDelay(int delay) {
 
 void GVSlideShow::start(const KURL::List& urls) {
 	mURLs=urls;
+	mStartIt=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	if (mStartIt==mURLs.end()) {
+		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
+		return;
+	}
+	
 	mTimer->start(mDelay*1000, true);
 	mStarted=true;
 }
@@ -73,6 +79,7 @@ void GVSlideShow::stop() {
 void GVSlideShow::slotTimeout() {
 	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
+		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
 		stop();
 		emit finished();
 		return;
@@ -80,10 +87,10 @@ void GVSlideShow::slotTimeout() {
 
 	++it;
 	if (it==mURLs.end()) {
-		if (mLoop) {
-			mDocument->setURL(*mURLs.begin());
-			return;
-		}
+		it=mURLs.begin();
+	}
+
+	if (it==mStartIt && !mLoop) {
 		stop();
 		emit finished();
 		return;
