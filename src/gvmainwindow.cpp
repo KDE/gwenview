@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "configdialog.h"
 #include "fileoperation.h"
+#include "gvbookmarkowner.h"
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
 #include "gvpixmap.h"
@@ -569,6 +570,13 @@ void GVMainWindow::createMenu() {
 	mFileViewStack->selectLast()->plug(goMenu);
 	menuBar()->insertItem(i18n("&Go"), goMenu);
 
+	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this,this->actionCollection());
+	menuBar()->insertItem(i18n("&Bookmarks"),bookmarkOwner->menu());
+	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
+		mGVPixmap,SLOT(setDirURL(const KURL&)) );
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		bookmarkOwner,SLOT(setURL(const KURL&)) );
+	
 	QPopupMenu* settingsMenu = new QPopupMenu;
 	mShowConfigDialog->plug(settingsMenu);
 	mShowKeyDialog->plug(settingsMenu);
