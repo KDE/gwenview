@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltoolcontext.h"
-#include "gvpixmap.h"
+#include "gvdocument.h"
 
 #include "gvscrollpixmapview.moc"
 
@@ -234,9 +234,9 @@ public:
 // GVScrollPixmapView implementation
 //
 //------------------------------------------------------------------------
-GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
+GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
-, mGVPixmap(pixmap)
+, mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
 , mTool(NONE)
@@ -278,19 +278,19 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,mActionCollection,"view_zoom_lock");
 
 	// Connect to some interesting signals
-	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
 		this,SLOT(slotURLChanged()) );
 
-	connect(mGVPixmap,SIGNAL(loading()),
+	connect(mDocument,SIGNAL(loading()),
 		this,SLOT( loadingStarted()) );
 
-	connect(mGVPixmap,SIGNAL(modified()),
+	connect(mDocument,SIGNAL(modified()),
 		this,SLOT(slotModified()) );
 
-	connect(mGVPixmap, SIGNAL(sizeUpdated(int, int)),
+	connect(mDocument, SIGNAL(sizeUpdated(int, int)),
 		this, SLOT(slotImageSizeUpdated()) );
 	
-	connect(mGVPixmap, SIGNAL(rectUpdated(const QRect&)),
+	connect(mDocument, SIGNAL(rectUpdated(const QRect&)),
 		this, SLOT(slotImageRectUpdated(const QRect&)) );
 	
 	connect(mAutoHideTimer,SIGNAL(timeout()),
@@ -318,7 +318,7 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 void GVScrollPixmapView::slotURLChanged() {
 	/* FIXME: Not sure this is necessary
-	if (mGVPixmap->isNull()) {
+	if (mDocument->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
 		updateZoomActions();
@@ -348,7 +348,7 @@ void GVScrollPixmapView::loadingStarted() {
 	cancelPendingPaints();
 	mSmoothingSuspended = true;
 	mEmptyImage = true;
-	// every loading() signal from GVPixmap must be followed by a signal that turns this off
+	// every loading() signal from GVDocument must be followed by a signal that turns this off
 	QPainter painter( viewport());
 	painter.eraseRect( viewport()->rect());
 }
@@ -529,7 +529,7 @@ void GVScrollPixmapView::paintPending() {
 			}
 			return;
 		case RESUME_LOADING:
-			mGVPixmap->resumeLoading();
+			mDocument->resumeLoading();
 			return;
 		case PAINT_NORMAL:
 		case PAINT_SMOOTH: {
@@ -564,7 +564,7 @@ void GVScrollPixmapView::cancelPendingPaints() {
 		if( mPendingPaints.front().type == SMOOTH_PASS ) {
 			mSmoothingSuspended = false;
 		}	else if( mPendingPaints.front().type == RESUME_LOADING ) {
-			mGVPixmap->resumeLoading();
+			mDocument->resumeLoading();
 		}
 		mPendingPaints.pop_front();
 	}
@@ -579,7 +579,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	#endif
 
 	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
-	if (mGVPixmap->isNull()) {
+	if (mDocument->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
@@ -594,7 +594,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		updateRect.setBottom( roundUp(	updateRect.bottom(),mZoom)+int(mZoom)-1 );
 	}
 
-	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
+	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mDocument->width()*mZoom), int(mDocument->height()*mZoom));
 	updateRect=updateRect.intersect(zoomedImageRect);
 
 	if (updateRect.isEmpty()) {
@@ -603,7 +603,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	}
 
 	QImage image(updateRect.size()/mZoom,32);
-	image=mGVPixmap->image().copy(
+	image=mDocument->image().copy(
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
@@ -836,7 +836,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		verticalScrollBar()->setValue(0);
 	}
 	updateImageOffset();
-	QRect imageRect(mXOffset, mYOffset, mGVPixmap->width(), mGVPixmap->height());
+	QRect imageRect(mXOffset, mYOffset, mDocument->width(), mDocument->height());
 
         QPainter painter( viewport());
 	// Top rect
@@ -865,7 +865,7 @@ void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
 	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
 	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
 	viewport()->repaint(widgetRect,false);
-	mGVPixmap->suspendLoading();
+	mDocument->suspendLoading();
 	addPendingPaint( RESUME_LOADING );
 }
 
@@ -884,8 +884,8 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
     }
 	
     QPopupMenu menu(this);
-    bool noImage=mGVPixmap->filename().isEmpty();
-    bool validImage=!mGVPixmap->isNull();
+    bool noImage=mDocument->filename().isEmpty();
+    bool validImage=!mDocument->isNull();
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary
@@ -920,7 +920,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		GVExternalToolContext* externalToolContext=
 			GVExternalToolManager::instance()->createContext(
-			this, mGVPixmap->url());
+			this, mDocument->url());
 
 		menu.insertItem(
 			i18n("External Tools"), externalToolContext->popupMenu());
@@ -966,8 +966,8 @@ void GVScrollPixmapView::updateScrollBarMode() {
 
 void GVScrollPixmapView::updateContentSize() {
 	resizeContents(
-		int(mGVPixmap->width()*mZoom),
-		int(mGVPixmap->height()*mZoom)	);
+		int(mDocument->width()*mZoom),
+		int(mDocument->height()*mZoom)	);
 }
 
 // QSize.scale() does not exist in Qt 3.0.x
@@ -988,10 +988,10 @@ static void sizeScaleMin(QSize* size, int w, int h) {
 #endif
 
 double GVScrollPixmapView::computeAutoZoom() const {
-	if (mGVPixmap->isNull()) {
+	if (mDocument->isNull()) {
 		return 1.0;
 	}
-	QSize size=mGVPixmap->image().size();
+	QSize size=mDocument->image().size();
 
 #if QT_VERSION>=0x030100
 	size.scale(width(),height(),QSize::ScaleMin);
@@ -999,7 +999,7 @@ double GVScrollPixmapView::computeAutoZoom() const {
 	sizeScaleMin(&size,width(),height());
 #endif
 
-	double zoom=double(size.width())/mGVPixmap->width();
+	double zoom=double(size.width())/mDocument->width();
 	if (zoom>1.0 && !mEnlargeSmallImages) return 1.0;
 	return zoom;
 }
@@ -1028,8 +1028,8 @@ void GVScrollPixmapView::updateImageOffset() {
 
 	// Compute mXOffset and mYOffset in case the image does not fit
 	// the view width or height
-	int zpixWidth=int(mGVPixmap->width() * mZoom);
-	int zpixHeight=int(mGVPixmap->height() * mZoom);
+	int zpixWidth=int(mDocument->width() * mZoom);
+	int zpixHeight=int(mDocument->height() * mZoom);
 
 	if (zpixWidth>viewWidth && hScrollBarMode()!=AlwaysOff) {
 		viewHeight-=horizontalScrollBar()->height();
@@ -1049,7 +1049,7 @@ void GVScrollPixmapView::hideCursor() {
 
 
 void GVScrollPixmapView::updatePathLabel() {
-	QString path=mGVPixmap->url().path();
+	QString path=mDocument->url().path();
 
 	QPainter painter;
 
@@ -1094,7 +1094,7 @@ void GVScrollPixmapView::updatePathLabel() {
 
 void GVScrollPixmapView::updateZoomActions() {
 	// Disable most actions if there's no image
-	if (mGVPixmap->isNull()) {
+	if (mDocument->isNull()) {
 		mZoomIn->setEnabled(false);
 		mZoomOut->setEnabled(false);
 		mResetZoom->setEnabled(false);
@@ -1120,37 +1120,37 @@ void GVScrollPixmapView::updateZoomActions() {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::showFileProperties() {
-	(void)new KPropertiesDialog(mGVPixmap->url());
+	(void)new KPropertiesDialog(mDocument->url());
 }
 
 
 void GVScrollPixmapView::renameFile() {
-	FileOperation::rename(mGVPixmap->url(),this);
+	FileOperation::rename(mDocument->url(),this);
 }
 
 
 void GVScrollPixmapView::copyFile() {
 	KURL::List list;
-	list << mGVPixmap->url();
+	list << mDocument->url();
 	FileOperation::copyTo(list,this);
 }
 
 
 void GVScrollPixmapView::moveFile() {
 	KURL::List list;
-	list << mGVPixmap->url();
+	list << mDocument->url();
 	FileOperation::moveTo(list,this);
 }
 
 
 void GVScrollPixmapView::deleteFile() {
 	KURL::List list;
-	list << mGVPixmap->url();
+	list << mDocument->url();
 	FileOperation::del(list,this);
 }
 
 KURL GVScrollPixmapView::pixmapURL() {
-	return mGVPixmap->url();
+	return mDocument->url();
 }
 
 //------------------------------------------------------------------------

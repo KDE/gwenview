@@ -27,12 +27,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfilemetainfo.h>
 
 class QTextEdit;
-class GVPixmap;
+class GVDocument;
 
 class GVMetaEdit : public QVBox {
 Q_OBJECT
 public:
-	GVMetaEdit(QWidget *parent, GVPixmap*, const char *name="");
+	GVMetaEdit(QWidget *parent, GVDocument*, const char *name="");
 	~GVMetaEdit();
 protected:
 	bool eventFilter(QObject *o, QEvent *e);
@@ -43,7 +43,7 @@ private slots:
 
 private:
 	bool mEmpty;
-	GVPixmap* mGVPixmap;
+	GVDocument* mDocument;
 	QTextEdit* mCommentEdit;
 
 	void setEmptyText();

@@ -34,10 +34,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprinter.h>
 
 // Local
-#include <gvmainwindow.h>
-#include <gvpixmap.h>
-#include <gvprintdialogpagebase.h>
-#include <gvprintdialog.moc>
+#include "gvmainwindow.h"
+#include "gvdocument.h"
+#include "gvprintdialogpagebase.h"
+#include "gvprintdialog.moc"
 
 
 const char* STR_TRUE="true";
@@ -46,7 +46,7 @@ const char* STR_FALSE="false";
 
 GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 		: KPrintDialogPage( parent, name ) {
-	mGVPixmap = ((GVMainWindow*)parent)->gvPixmap();
+	mDocument = ((GVMainWindow*)parent)->document();
 	mContent = new GVPrintDialogPageBase(this);
 	setTitle( mContent->caption() );
 
@@ -206,7 +206,7 @@ void GVPrintDialogPage::setHValue (int value) {
 	mContent->mHeight->blockSignals(true);
 
 	if (mContent->mKeepRatio->isChecked()) {
-		int w = (mGVPixmap->width() * value) / mGVPixmap->height();
+		int w = (mDocument->width() * value) / mDocument->height();
 		mContent->mWidth->setValue( w ? w : 1);
 	}
 	mContent->mHeight->setValue(value);
@@ -220,7 +220,7 @@ void GVPrintDialogPage::setWValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 	if (mContent->mKeepRatio->isChecked()) {
-		int h = (mGVPixmap->height() * value) / mGVPixmap->width();
+		int h = (mDocument->height() * value) / mDocument->width();
 		mContent->mHeight->setValue( h ? h : 1);
 	}
 	mContent->mWidth->setValue(value);
@@ -235,12 +235,12 @@ void GVPrintDialogPage::toggleRatio(bool enable) {
 		else if (getUnit(mContent->mUnits->currentText()) == GV_INCHES) cm = 1/(2.54);
 		// 15x10 cm
 		float hValue, wValue;
-		if (mGVPixmap->height() > mGVPixmap->width()) {
+		if (mDocument->height() > mDocument->width()) {
 			hValue = cm*15;
-			wValue = (mGVPixmap->width() * (hValue))/ mGVPixmap->height();
+			wValue = (mDocument->width() * (hValue))/ mDocument->height();
 		} else {
 			wValue = cm*15;
-			hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();
+			hValue = (mDocument->height() * wValue)/ mDocument->width();
 		}
 		mContent->mWidth->setValue((int)wValue);
 		mContent->mHeight->setValue((int)hValue);

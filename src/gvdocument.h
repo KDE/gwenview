@@ -18,51 +18,57 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVPIXMAP_H
-#define GVPIXMAP_H
+#ifndef GVDOCUMENT_H
+#define GVDOCUMENT_H
 
-// Qt includes
-#include <qasyncimageio.h>
+// Qt 
 #include <qcstring.h>
 #include <qobject.h>
 #include <qimage.h>
 
-// KDE includes
+// KDE 
 #include <kurl.h>
 #include <kprinter.h>
 
-// Local includes
+// Local 
 #include "gvimageutils.h"
-class GVPixmapPrivate;
+
+class GVDocumentPrivate;
+class GVDocumentImpl;
 
 /**
- * The application document. Should be renamed GVDoc.
+ * The application document.
+ * It knows what the current url is.
  */
-class GVPixmap : public QObject, public QImageConsumer {
+class GVDocument : public QObject {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
 	enum CommentState { NONE=0, READ_ONLY=1, VALID=READ_ONLY, WRITABLE=3 };
 	
-	GVPixmap(QObject*);
-	~GVPixmap();
+	GVDocument(QObject*);
+	~GVDocument();
 
 	// Properties
 	const QImage& image() const;
 	KURL url() const;
 	const KURL& dirURL() const;
 	const QString& filename() const;
+	const char* imageFormat() const;
+
+	// Convenience methods
+	bool isNull() const { return image().isNull(); }
 	int width() const { return image().width(); }
 	int height() const { return image().height(); }
-	bool isNull() const { return image().isNull(); }
-	const QString& imageFormat() const;
 
 	void setModifiedBehavior(ModifiedBehavior);
 	ModifiedBehavior modifiedBehavior() const;
 
-	CommentState commentState() const;
+	GVDocument::CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
+	void suspendLoading();
+	void resumeLoading();
 	
 public slots:
 	void setURL(const KURL&);
@@ -88,11 +94,6 @@ public slots:
 
 	// "Image manipulation"
 	void modify(GVImageUtils::Orientation);
-	
-	// GVScrollPixmapView suspends and resumes loading as it progressively paints
-	// the image in order to keep up with loading
-	void suspendLoading();
-	void resumeLoading();
 
 signals:
 	/**
@@ -130,28 +131,24 @@ signals:
 	 * Emitted during loading, when the size is known
 	 */
 	void sizeUpdated(int width, int height);
-	
-private:
-	GVPixmapPrivate* d;
-
-	void reset();
-	void load();
-	bool saveInternal(const KURL&,const QString& format);
-	void doPaint(KPrinter *pPrinter, QPainter *p); 
-	QString minimizeString(const QString& text, const QFontMetrics&
-							metrics, int maxWidth );
-
-	// QImageConsumer methods
-	void end();
-	void changed(const QRect&);
-	void frameDone();
-	void frameDone(const QPoint& offset, const QRect& rect);
-	void setLooping(int);
-	void setFramePeriod(int milliseconds);
-	void setSize(int, int);
 
 private slots:
-	void loadChunk();
+	void slotFinished(bool success);
+	
+private:
+	friend class GVDocumentImpl;
+
+	GVDocumentPrivate* d;
+
+	// These methods are used by GVDocumentImpl and derived
+	void switchToImpl(GVDocumentImpl*);
+	void setImage(QImage);
+	void setImageFormat(const char*);
+	
+	void reset();
+	void load();
+	bool saveInternal(const KURL&,const char* format);
+	void doPaint(KPrinter *pPrinter, QPainter *p); 
 };
 
 

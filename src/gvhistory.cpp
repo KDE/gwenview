@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdeversion.h>
 
 // Local
-#include "gvpixmap.h"
+#include "gvdocument.h"
 #include "gvhistory.moc"
 
 #if KDE_VERSION < 306
@@ -38,8 +38,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const unsigned int MAX_HISTORY_SIZE=12;
 
-GVHistory::GVHistory(GVPixmap* gvPixmap, KActionCollection* actionCollection) {
-	mGVPixmap=gvPixmap;
+GVHistory::GVHistory(GVDocument* document, KActionCollection* actionCollection) {
+	mDocument=document;
 	mPosition=mHistoryList.end();
 	mMovingInHistory=false;
 	
@@ -60,7 +60,7 @@ GVHistory::GVHistory(GVPixmap* gvPixmap, KActionCollection* actionCollection) {
 	connect(mGoForward->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoForwardMenu()) );
 	
-	connect(mGVPixmap, SIGNAL(loaded(const KURL&,const QString&) ),
+	connect(mDocument, SIGNAL(loaded(const KURL&,const QString&) ),
 		this, SLOT(updateHistoryList(const KURL&)) );
 }
 
@@ -124,7 +124,7 @@ void GVHistory::goForward() {
 void GVHistory::goBackTo(int id) {
 	for (;id>0; --id) --mPosition;
 	mMovingInHistory=true;
-	mGVPixmap->setDirURL(*mPosition);
+	mDocument->setDirURL(*mPosition);
 	mMovingInHistory=false;
 }
 
@@ -132,6 +132,6 @@ void GVHistory::goBackTo(int id) {
 void GVHistory::goForwardTo(int id) {
 	for (;id>0; --id) ++mPosition;
 	mMovingInHistory=true;
-	mGVPixmap->setDirURL(*mPosition);
+	mDocument->setDirURL(*mPosition);
 	mMovingInHistory=false;
 }

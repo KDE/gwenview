@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdockwidget.h>
 #include <kdeprint/kprintdialogpage.h>
 
-class GVPixmap;
+class GVDocument;
 class GVPrintDialogPageBase;
 
 enum GVUnits {
@@ -64,7 +64,7 @@ private:
 	int getUnit(const QString& unit);
 	QString setUnit(int unit);
 
-	GVPixmap *mGVPixmap;
+	GVDocument *mDocument;
 	GVPrintDialogPageBase* mContent;
 };
 

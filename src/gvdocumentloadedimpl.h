@@ -2,65 +2,44 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
-Copyright 2003 Tudor Calin
-
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
+ 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
+ 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+ 
 */
-#ifndef GVHISTORY_H
-#define GVHISTORY_H
+#ifndef GVDOCUMENTLOADEDIMPL_H
+#define GVDOCUMENTLOADEDIMPL_H
 
 // Qt
-#include <qobject.h>
-#include <qvaluelist.h>
+#include <qimage.h>
 
-// KDE
-#include <kurl.h>
-
-class KToolBarPopupAction;
-class KActionCollection;
+// Local
+#include "gvdocumentimpl.h"
 
 class GVDocument;
 
-typedef QValueList<KURL> HistoryList;
-
-class GVHistory : public QObject {
+class GVDocumentLoadedImpl : public GVDocumentImpl {
 Q_OBJECT
-	
 public:
-	GVHistory(GVDocument*, KActionCollection*);
-	~GVHistory();
-
-private:
-	KToolBarPopupAction* mGoBack;
-	KToolBarPopupAction* mGoForward;
-	HistoryList mHistoryList;
-	GVDocument* mDocument;
-	HistoryList::Iterator mPosition;
-	bool mMovingInHistory;
+	GVDocumentLoadedImpl(GVDocument* document);
+	~GVDocumentLoadedImpl();
+	
+	void modify(GVImageUtils::Orientation);
+	bool save(const KURL&, const char* format) const;
 	
 private slots:
-	void updateHistoryList(const KURL&);
-	void fillGoBackMenu();
-	void fillGoForwardMenu();
-	void goBack();
-	void goForward();
-	void goBackTo(int);
-	void goForwardTo(int);
+	void emitFinished();
 };
 
-#endif
-
-
+#endif /* GVDOCUMENTLOADEDIMPL_H */

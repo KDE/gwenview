@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
 #include "gvjpegtran.h"
-#include "gvpixmap.h"
+#include "gvdocument.h"
 #include "gvscrollpixmapview.h"
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
@@ -69,7 +69,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	
 	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
-	GVPixmap* gvPixmap=d->mMainWindow->gvPixmap();
+	GVDocument* document=d->mMainWindow->document();
 
 	// Image List tab
 	d->mContent->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -109,7 +109,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	
 	// Misc tab
 	d->mContent->mJPEGTran->setURL(GVJPEGTran::programPath());
-	d->mContent->mModifiedBehaviorGroup->setButton( int(gvPixmap->modifiedBehavior()) );
+	d->mContent->mModifiedBehaviorGroup->setButton( int(document->modifiedBehavior()) );
 }
 
 
@@ -128,7 +128,7 @@ void GVConfigDialog::slotOk() {
 void GVConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
-	GVPixmap* gvPixmap=d->mMainWindow->gvPixmap();
+	GVDocument* document=d->mMainWindow->document();
 
 	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(d->mContent->mThumbnailMargin->value());
@@ -162,7 +162,7 @@ void GVConfigDialog::slotApply() {
 	GVJPEGTran::setProgramPath(d->mContent->mJPEGTran->url());
 	QButton* button=d->mContent->mModifiedBehaviorGroup->selected();
 	Q_ASSERT(button);
-	gvPixmap->setModifiedBehavior( GVPixmap::ModifiedBehavior(d->mContent->mModifiedBehaviorGroup->id(button)) );
+	document->setModifiedBehavior( GVDocument::ModifiedBehavior(d->mContent->mModifiedBehaviorGroup->id(button)) );
 }
 
 

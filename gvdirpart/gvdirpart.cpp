@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdirpart.h"
 #include <src/gvscrollpixmapview.h>
 #include <src/gvfileviewstack.h>
-#include <src/gvpixmap.h>
+#include <src/gvdocument.h>
 #include <src/gvprintdialog.h>
 #include <src/gvslideshow.h>
 #include <src/gvslideshowdialog.h>
@@ -54,9 +54,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
 
 	// Create the widgets
-	mGVPixmap = new GVPixmap(this);
+	mDocument = new GVDocument(this);
 	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
-	mPixmapView = new GVScrollPixmapView(mSplitter, mGVPixmap, actionCollection());
+	mPixmapView = new GVScrollPixmapView(mSplitter, mDocument, actionCollection());
 
 	mSlideShow = new GVSlideShow(mFilesView->selectFirst(), mFilesView->selectNext());
 
@@ -69,10 +69,10 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
-		mGVPixmap, SLOT(setURL(const KURL&)) );
+		mDocument, SLOT(setURL(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
 		mBrowserExtension, SLOT(directoryChanged(const KURL&)) );
-	connect(mGVPixmap, SIGNAL(loaded(const KURL&, const QString&)),
+	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
 		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
 
 	QValueList<int> splitterSizes;
@@ -103,7 +103,7 @@ KAboutData* GVDirPart::createAboutData() {
 bool GVDirPart::openFile() {
         //unused because openURL implemented
 
-        //mGVPixmap->setFilename(mFile);
+        //mDocument->setFilename(mFile);
         return true;
 }
 
@@ -114,7 +114,7 @@ bool GVDirPart::openURL(const KURL& url) {
 
 	m_url = url;
 
-	mGVPixmap->setDirURL(url);
+	mDocument->setDirURL(url);
 	mFilesView->setURL(url, 0);
 	emit setWindowCaption( url.prettyURL() );
 
@@ -122,7 +122,7 @@ bool GVDirPart::openURL(const KURL& url) {
 }
 
 void GVDirPart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
-	QString caption = QString(filename + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
+	QString caption = QString(filename + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 }
 
@@ -147,12 +147,12 @@ void GVDirPart::toggleSlideShow() {
 
 void GVDirPart::print() {
 	KPrinter printer;
-	if ( !mGVPixmap->filename().isEmpty() ) {
+	if ( !mDocument->filename().isEmpty() ) {
 		printer.setDocName( m_url.filename() );
 		KPrinter::addDialogPage( new GVPrintDialogPage( mPixmapView, "GV page"));
 
 		if (printer.setup(mPixmapView, QString::null, true)) {
-			mGVPixmap->print(&printer);
+			mDocument->print(&printer);
 		}
 	}
 }

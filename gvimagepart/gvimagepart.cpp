@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 
 #include "gvimagepart.h"
-#include <src/gvpixmap.h>
+#include <src/gvdocument.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
 
@@ -42,14 +42,14 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
 
 	// Create the widgets
-	mGVPixmap = new GVPixmap(this);
-	mPixmapView = new GVScrollPixmapView(parentWidget, mGVPixmap, actionCollection());
+	mDocument = new GVDocument(this);
+	mPixmapView = new GVScrollPixmapView(parentWidget, mDocument, actionCollection());
 	mPixmapView->kpartConfig();
 	setWidget(mPixmapView);
 
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
-	connect(mGVPixmap, SIGNAL(loaded(const KURL&, const QString&)),
+	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
 		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
 
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
@@ -79,7 +79,7 @@ bool GVImagePart::openFile() {
 		return false;
 	}
 
-	mGVPixmap->setURL(url);
+	mDocument->setURL(url);
 	return true;
 }
 
@@ -88,7 +88,7 @@ QString GVImagePart::filePath() {
 }
 
 void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& /*filename*/) {
-	QString caption = QString(m_url.filename() + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
+	QString caption = QString(m_url.filename() + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 }
 
@@ -99,7 +99,7 @@ void GVImagePart::print() {
 	KPrinter::addDialogPage( new GVPrintDialogPage( mPixmapView, "GV page"));
 
 	if (printer.setup(mPixmapView, QString::null, true)) {
-		mGVPixmap->print(&printer);
+		mDocument->print(&printer);
 	}
 }
 

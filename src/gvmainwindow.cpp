@@ -68,7 +68,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfileviewstack.h"
 #include "gvhistory.h"
 #include "gvjpegtran.h"
-#include "gvpixmap.h"
+#include "gvdocument.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
 #include "gvslideshowdialog.h"
@@ -86,7 +86,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvmainwindow.moc"
 
 const char* CONFIG_DOCK_GROUP="dock";
-const char* CONFIG_GVPIXMAP_GROUP="misc";
 const char* CONFIG_MAINWINDOW_GROUP="main window";
 const char* CONFIG_FILEWIDGET_GROUP="file widget";
 const char* CONFIG_JPEGTRAN_GROUP="jpegtran";
@@ -107,8 +106,8 @@ GVMainWindow::GVMainWindow()
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
 
 	// Backend
-	mGVPixmap=new GVPixmap(this);
-	mGVHistory=new GVHistory(mGVPixmap, actionCollection());
+	mDocument=new GVDocument(this);
+	mGVHistory=new GVHistory(mDocument, actionCollection());
 	// GUI
 	createWidgets();
 	createActions();
@@ -141,12 +140,12 @@ GVMainWindow::GVMainWindow()
 	}
 
 	// Go to requested file
-	mGVPixmap->setURL(url);
+	mDocument->setURL(url);
 }
 
 
 bool GVMainWindow::queryClose() {
-	if (!mGVPixmap->saveBeforeClosing()) return false;
+	if (!mDocument->saveBeforeClosing()) return false;
 
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
@@ -193,7 +192,7 @@ bool GVMainWindow::queryClose() {
 void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
 	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
 
-	bool filenameIsValid=!mGVPixmap->isNull();
+	bool filenameIsValid=!mDocument->isNull();
 
 	mRenameFile->setEnabled(filenameIsValid);
 	mCopyFiles->setEnabled(filenameIsValid);
@@ -244,10 +243,10 @@ void GVMainWindow::goUpTo(int id) {
 	if (index>0) {
 		childURL=KURL(menu->text(menu->idAt(index-1)));
 	} else {
-		childURL=mGVPixmap->dirURL();
+		childURL=mDocument->dirURL();
 	}
 
-	mGVPixmap->setDirURL(url);
+	mDocument->setDirURL(url);
 	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
 
@@ -260,7 +259,7 @@ void GVMainWindow::goUpTo(int id) {
 void GVMainWindow::openHomeDir() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
-	mGVPixmap->setURL(url);
+	mDocument->setURL(url);
 }
 
 
@@ -332,11 +331,11 @@ void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {
 		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
 			mFileViewStack, SLOT(updateThumbnail(const KURL&)) );
 		manipulator.apply();
-		if (urls.find(mGVPixmap->url())!=urls.end()) {
-			mGVPixmap->reload();
+		if (urls.find(mDocument->url())!=urls.end()) {
+			mDocument->reload();
 		}
 	} else {
-		mGVPixmap->modify(orientation);
+		mDocument->modify(orientation);
 	}
 }
 
@@ -344,14 +343,14 @@ void GVMainWindow::openFile() {
 	KURL url=KFileDialog::getOpenURL();
 	if (!url.isValid()) return;
 
-	mGVPixmap->setURL(url);
+	mDocument->setURL(url);
 }
 
 
 void GVMainWindow::printFile() {
 	KPrinter printer;
 
-	printer.setDocName(mGVPixmap->filename());
+	printer.setDocName(mDocument->filename());
 	const KAboutData* pAbout = KApplication::kApplication()->aboutData();
 	QString nm = pAbout->appName();
 	nm += "-";
@@ -361,7 +360,7 @@ void GVMainWindow::printFile() {
 	KPrinter::addDialogPage( new GVPrintDialogPage( this, "GV page"));
 
 	if (printer.setup(this, QString::null, true)) {
-		mGVPixmap->print(&printer);
+		mDocument->print(&printer);
 	}
 }
 
@@ -566,7 +565,7 @@ void GVMainWindow::thumbnailUpdateProcessedOne() {
 
 
 void GVMainWindow::slotURLEditChanged(const QString &str) {
-	mGVPixmap->setURL(str);
+	mDocument->setURL(str);
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
 	} else if (mPixmapView->isVisible()) {
@@ -579,7 +578,7 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	kdDebug() << "GVMainWindow::slotDirRenamed: "
 		<< oldURL.prettyURL() << " to " << newURL.prettyURL() << endl;
 
-	KURL url(mGVPixmap->url());
+	KURL url(mDocument->url());
 	if (!oldURL.isParentOf(url) ) return;
 
 	QString oldPath=oldURL.path();
@@ -587,12 +586,12 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	QString path=newURL.path() + url.path().mid(oldPath.length());
 	kdDebug() << " new path: " << path << endl;
 	url.setPath(path);
-	mGVPixmap->setURL(url);
+	mDocument->setURL(url);
 }
 
 
 void GVMainWindow::slotGo() {
-	mGVPixmap->setURL(mURLEdit->currentText());
+	mDocument->setURL(mURLEdit->currentText());
 }
 
 //-----------------------------------------------------------------------
@@ -603,7 +602,7 @@ void GVMainWindow::slotGo() {
 void GVMainWindow::updateStatusInfo() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
-	QString url=mGVPixmap->dirURL().prettyURL();
+	QString url=mDocument->dirURL().prettyURL();
 	if (count==0) {
 		txt=i18n("%1 - No Images").arg(url);
 	} else {
@@ -616,10 +615,10 @@ void GVMainWindow::updateStatusInfo() {
 
 
 void GVMainWindow::updateFileInfo() {
-	QString filename=mGVPixmap->filename();
+	QString filename=mDocument->filename();
 	if (!filename.isEmpty()) {
 		QString info=QString("%1 %2x%3 @ %4%")
-			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
+			.arg(filename).arg(mDocument->width()).arg(mDocument->height())
 			.arg(int(mPixmapView->zoom()*100) );
 		mSBDetailLabel->show();
 		mSBDetailLabel->setText(info);
@@ -645,7 +644,7 @@ void GVMainWindow::createWidgets() {
 	// Pixmap widget
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
-	mPixmapView=new GVScrollPixmapView(mPixmapDock,mGVPixmap,actionCollection());
+	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
 	setView(mPixmapDock);
 	setMainDockWidget(mPixmapDock);
@@ -663,7 +662,7 @@ void GVMainWindow::createWidgets() {
 	// Meta info edit widget
 	mMetaDock = createDockWidget("File Attributes", SmallIcon("doc"),NULL,
 		i18n("File Info"));
-	mMetaEdit = new GVMetaEdit(mMetaDock, mGVPixmap);
+	mMetaEdit = new GVMetaEdit(mMetaDock, mDocument);
 	mMetaDock->setWidget(mMetaEdit);
 
 	// Slide show controller (not really a widget)
@@ -689,8 +688,8 @@ void GVMainWindow::createWidgets() {
 void GVMainWindow::createActions() {
 	// File
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
-	mSaveFile=KStdAction::save(mGVPixmap,SLOT(save()),actionCollection() );
-	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
+	mSaveFile=KStdAction::save(mDocument,SLOT(save()),actionCollection() );
+	mSaveFileAs=KStdAction::saveAs(mDocument,SLOT(saveAs()),actionCollection() );
 	mFilePrint = KStdAction::print(this, SLOT(printFile()), actionCollection());
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F7,this,SLOT(copyFiles()),actionCollection(),"file_copy");
@@ -706,7 +705,7 @@ void GVMainWindow::createActions() {
 	mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
 
 	// View
-	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mGVPixmap, SLOT(reload()), actionCollection(), "reload");
+	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mDocument, SLOT(reload()), actionCollection(), "reload");
 	mReload->setEnabled(false);
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(), "stop");
 	mStop->setEnabled(false);
@@ -739,9 +738,9 @@ void GVMainWindow::createActions() {
 	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), this->actionCollection(), true);
 
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
-		mGVPixmap,SLOT(setDirURL(const KURL&)) );
+		mDocument,SLOT(setDirURL(const KURL&)) );
 
-	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 
 	// Settings
@@ -799,7 +798,7 @@ void GVMainWindow::createConnections() {
 
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
-		mGVPixmap,SLOT(setDirURL(const KURL&)) );
+		mDocument,SLOT(setDirURL(const KURL&)) );
 
 	connect(mDirView, SIGNAL(dirRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
@@ -822,29 +821,29 @@ void GVMainWindow::createConnections() {
 
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
-		mGVPixmap,SLOT(setURL(const KURL&)) );
+		mDocument,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(imageDoubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
-	// Don't connect mGVPixmap::loaded to mDirView. mDirView will be
+	// Don't connect mDocument::loaded to mDirView. mDirView will be
 	// updated _after_ the file view is done, since it's less important to the
 	// user
 	connect(mFileViewStack,SIGNAL(completedURLListing(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
 
-	// GVPixmap connections
-	connect(mGVPixmap,SIGNAL(loading()),
+	// GVDocument connections
+	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
-	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(saved(const KURL&)),
+	connect(mDocument,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
-	connect(mGVPixmap,SIGNAL(reloaded(const KURL&)),
+	connect(mDocument,SIGNAL(reloaded(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 
 	// Slide show

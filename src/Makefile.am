@@ -19,7 +19,7 @@ libgwenviewcore_la_SOURCES = \
 	gvprintdialog.cpp \
 	gvbatchmanipulator.cpp \
 	gvmainwindow.cpp \
-	gvpixmap.cpp \
+	gvdocument.cpp \
 	gvdirview.cpp \
 	gvfileviewstack.cpp \
 	gvfilethumbnailview.cpp \
@@ -45,6 +45,10 @@ libgwenviewcore_la_SOURCES = \
 	gvexternaltooldialog.cpp \
 	gvhistory.cpp \
 	gvprintdialogpagebase.ui \
-	gvjpegformattype.cpp
+	gvjpegformattype.cpp \
+	gvdocumentimpl.cpp \
+	gvdocumentdecodeimpl.cpp \
+	gvdocumentloadedimpl.cpp \
+	gvdocumentjpegloadedimpl.cpp
 
 

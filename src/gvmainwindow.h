@@ -42,7 +42,7 @@ class KURLCompletion;
 
 class GVDirView;
 class GVFileViewStack;
-class GVPixmap;
+class GVDocument;
 class GVHistory;
 class GVScrollPixmapView;
 class GVSlideShow;
@@ -61,7 +61,7 @@ public:
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
-	GVPixmap* gvPixmap() const { return mGVPixmap; }
+	GVDocument* document() const { return mDocument; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
@@ -90,7 +90,7 @@ private:
 	GVScrollPixmapView* mPixmapView;
 	GVMetaEdit *mMetaEdit;
 
-	GVPixmap* mGVPixmap;
+	GVDocument* mDocument;
 	GVHistory* mGVHistory;
 	GVSlideShow* mSlideShow;
 

@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class KAboutData;
 class KAction;
 class GVScrollPixmapView;
-class GVPixmap;
+class GVDocument;
 class GVImagePart;
 
 /**
@@ -35,15 +35,15 @@ class GVImagePart;
 class GVImagePartBrowserExtension: public KParts::BrowserExtension {
 	Q_OBJECT
 
- public:
+public:
 	GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name=0L);
 	~GVImagePartBrowserExtension();
 
 //protected slots:
- public slots:
+public slots:
 	void contextMenu();
 	void print();
- private:
+private:
 	GVImagePart* mGVImagePart;
 };
 
@@ -52,7 +52,7 @@ class GVImagePartBrowserExtension: public KParts::BrowserExtension {
  */
 class GVImagePart : public KParts::ReadOnlyPart {
 	Q_OBJECT
- public:
+public:
 	GVImagePart(QWidget*, const char*, QObject*, const char*, const QStringList &);
 	virtual ~GVImagePart();
 
@@ -71,21 +71,21 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	 */
 	void GVImagePart::print();
 
- protected:
+protected:
 	/** Open the file whose path is stored in the member variable
 	 * m_file and return true on success, false on failure.
 	 */
 	virtual bool openFile();
 
- protected slots:
+protected slots:
 	/**
 	 * Sets Konqueror's caption with setWindowCaption()
-	 * called by loaded() signal in GVPixmap
+	 * called by loaded() signal in GVDocument
 	 */
 	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
 
- protected:
-        /**
+protected:
+	/**
 	 * The component's widget
 	 */
 	GVScrollPixmapView* mPixmapView;
@@ -93,7 +93,7 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	/**
 	 * Holds the image
 	 */
-	GVPixmap* mGVPixmap;
+	GVDocument* mDocument;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies

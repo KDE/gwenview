@@ -130,7 +130,7 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	connect(&process,SIGNAL(processExited(KProcess*)),
 		&obj,SLOT(slotProcessExited()) );
 	
-	// Return an empty QByteArray on failure. GVPixmap will thus consider the
+	// Return an empty QByteArray on failure. GVDocument will thus consider the
 	// buffer as invalid and will fall back to lossy manipulations.
 	if ( !process.start(KProcess::NotifyOnExit, KProcess::All) ) {
 		KMessageBox::information(0L,

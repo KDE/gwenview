@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 // Local
-#include "gvpixmap.h"
+#include "gvdocument.h"
 #include "gvbatchmanipulator.moc"
 
 class GVBatchManipulatorPrivate {
@@ -55,7 +55,7 @@ GVBatchManipulator::~GVBatchManipulator() {
 
 void GVBatchManipulator::apply() {
 	KURL::List::ConstIterator it=d->mURLs.begin();
-	GVPixmap doc(0);
+	GVDocument doc(0);
 	connect(&doc, SIGNAL(loaded(const KURL&,const QString&)),
 		this, SLOT(slotImageLoaded()) );
 	d->mProgressDialog->show();

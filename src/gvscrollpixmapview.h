@@ -39,7 +39,7 @@ class KActionCollection;
 class KConfig;
 class KToggleAction;
 
-class GVPixmap;
+class GVDocument;
 
 class GVScrollPixmapView;
 
@@ -68,7 +68,7 @@ public:
 	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
 	typedef QMap<Tool,ToolController*> ToolControllers;
 
-	GVScrollPixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
+	GVScrollPixmapView(QWidget* parent,GVDocument*,KActionCollection*);
 	~GVScrollPixmapView();
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
@@ -122,7 +122,7 @@ signals:
 	void contextMenu();
 
 private:
-	GVPixmap* mGVPixmap;
+	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
 	QLabel* mPathLabel;
 	

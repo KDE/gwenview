@@ -28,7 +28,7 @@ class KAboutData;
 class KAction;
 class GVScrollPixmapView;
 class GVFileViewStack;
-class GVPixmap;
+class GVDocument;
 class GVSlideShow;
 
 class GVDirPart;
@@ -109,7 +109,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 
 	/**
 	 * Sets Konqueror's caption with setWindowCaption()
-	 * called by loaded() signal in GVPixmap
+	 * called by loaded() signal in GVDocument
 	 */
 	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
 
@@ -128,7 +128,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	/**
 	 * Holds the image
 	 */
-	GVPixmap* mGVPixmap;
+	GVDocument* mDocument;
 
 	/**
 	 * Shows the directory's files and folders
