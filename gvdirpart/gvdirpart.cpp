@@ -36,7 +36,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvcache.h>
 #include <src/gvdocument.h>
 #include <src/gvfileviewstack.h>
-#include <src/gvjpegtran.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
 #include <src/gvslideshowdialog.h>
@@ -134,7 +133,6 @@ void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
 		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
 		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);
 		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
-		GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
 		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 	} else {
@@ -210,7 +208,7 @@ void GVDirPart::print() {
 }
 
 void GVDirPart::rotateRight() {
-	mDocument->modify(GVImageUtils::ROT_90);
+	mDocument->transform(GVImageUtils::ROT_90);
 }
 
 /***** GVDirPartBrowserExtension *****/

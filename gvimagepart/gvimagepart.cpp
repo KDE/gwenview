@@ -31,7 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvimagepart.h"
 #include <src/gvcache.h>
 #include <src/gvdocument.h>
-#include <src/gvjpegtran.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
 
@@ -98,7 +97,6 @@ void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 	KConfig* config=new KConfig("gwenviewrc");
 #endif
 	if (event->activated()) {
-		GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
 		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
 	} else {
@@ -149,7 +147,7 @@ void GVImagePart::print() {
 }
 
 void GVImagePart::rotateRight() {
-	mDocument->modify(GVImageUtils::ROT_90);
+	mDocument->transform(GVImageUtils::ROT_90);
 }
 
 /***** GVImagePartBrowserExtension *****/
