@@ -1,0 +1,75 @@
+/*
+Gwenview - A simple image viewer for KDE
+Copyright (C) 2000-2002 Aurélien Gâteau
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+  
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+   
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    
+*/
+#ifndef GVPIXMAP_H
+#define GVPIXMAP_H
+
+// Qt includes
+#include <qobject.h>
+#include <qpixmap.h>
+
+// KDE includes
+#include <kurl.h>
+
+
+/**
+ * A pixmap class with zooming capacities
+ * Emits a signal when it changes
+ */
+class GVPixmap : public QObject {
+Q_OBJECT
+	QPixmap mPixmap;
+	KURL mDirURL;
+	QString mFilename;
+	bool load();
+
+public:
+	GVPixmap(QObject*);
+	~GVPixmap();
+	void reset();
+
+// Properties 
+	const QPixmap& pixmap() const { return mPixmap; }
+	KURL url() const;
+	const KURL& dirURL() const { return mDirURL; }
+	const QString& filename() const { return mFilename; }
+	int width() const { return mPixmap.width(); }
+	int height() const { return mPixmap.height(); }
+	bool isNull() const { return mPixmap.isNull(); }
+
+public slots:
+	void setURL(const KURL&);
+	void setDirURL(const KURL&);
+	void setFilename(const QString&);
+	
+signals:
+/**
+ * Emitted when the class starts to load the image.
+ */
+	void loading();
+
+/**
+ * Emitted when the class has finished loading the image.
+ * Also emitted if the image could not be loaded.
+ */
+	void urlChanged(const KURL&,const QString&);
+};
+
+
+#endif

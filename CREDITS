@@ -1,0 +1,18 @@
+- Ian Koenig <iguy@ionsphere.org>
+First RPM spec file.
+
+- Christian A Strømmen <number1@realityx.net>
+File for integration in Konqueror folder context menu.
+
+- Michael Spanier <mail@michael-spanier.de>
+Patch for mouse navigation (v0.7.0).
+
+- Jean Philippe Martin <jeanphilippemartin@club-internet.fr> 
+Multiple bug reports and suggestions.
+
+- Avinash Chopde <avinash@acm.org>
+Bug reports and file operation patch (v0.9.2).
+Multiple nice suggestions.
+
+- Frank Becker <ff@telus.net>
+Patch for fast JPEG thumbnails (v0.13.0).

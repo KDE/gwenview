@@ -1,0 +1,111 @@
+Gwenview - http://gwenview.sourceforge.net
+
+
+
+-> What is it ?
+
+Gwenview is a simple image viewer for KDE. It features a folder tree window
+and a file list window to provide easy navigation in your file hierarchy.
+Image loading is done by Qt library, so it supports all image formats your
+Qt installation supports.
+
+
+-> Requirements
+
+KDE 3.0 or more.
+As of version 0.14, Gwenview requires KDE 3.0.
+
+
+-> Installation
+
+ ./configure
+ make
+ make install
+
+If configure fails to find your Qt or KDE libs, you will have to type
+  'export KDEDIR=/path/to/kde'
+and 
+  'export QTDIR=/path/to/Qt/lib'
+
+
+-> Uninstallation
+
+ make uninstall
+
+
+-> Tips concerning docked windows
+
+Docked windows are great, but they take a little time to get
+accustomed to. Here comes a few tips that you might find handy.
+
+- While dragging a window, press Esc to cancel the drag.
+
+- After undocking a window, if you want to dock it back, don't drag it
+with the title bar, it won't dock. Drag the little horizontal grip
+below the title bar instead. You may also click on the small arrow in
+the top right corner, this will get it back to its previous docked place.
+
+- If you closed a window you can get it back using the "Window" menu.
+
+- To dock window A on an edge of window B, drag the grip of A to the wanted
+edge. To make A and B use tabs, drag the grip of A on the center of B.
+
+
+-> Keyboard navigation
+
+When you move in the file list using the arrow keys, the selected image
+isn't displayed immediatly : you must press the Enter key to display it.
+This allows you to move directly from an image to another without loading
+all images between them.
+To browse images without having to press Enter, use the 'previous' and 'next'
+shortcut keys, which are BackSpace and Space by default (You can change them
+to whatever you want using the shortcut configuration dialog)
+
+
+-> Mouse operations
+
+You can browse through your image using the Opera-like previous-next mouse
+navigation : Keep the left mouse button down and click on the right button to
+go to the next image. Keep the right mouse button down and click on the left
+button to go to the previous one.
+Thanks to Michael Spanier for sending me a patch which started this new feature.
+
+You can also scroll your image by holding the left mouse button down and
+moving the mouse around.
+
+
+-> Mouse wheel
+
+Version 0.13 bring customizable mouse wheel behaviours : you can assign
+different actions to the mouse wheel depending on whether it's used with
+Control, Shift, Alt or no keys.
+The available actions are :
+- Scroll
+- Browse
+- Zoom
+
+
+-> About thumbnail cache
+
+Thumbnails aren't loaded everytime you browse a folder. Images are loaded once
+and the thumbnail is then stored on disk. Next time you browse the folder,
+Gwenview will use the saved thumbnail instead of reloading the image.
+Until version 0.10.0, thumbnails were stored in .pics folders created in the 
+image folder. Beginning with version 0.10.1, thumbnails are now stored in a
+common folder : ~/.kde/share/thumbnails, like Konqueror 2.2 does.
+
+If you want to get rid of all the .pics folders created by previous versions of
+Gwenview, you can run this command from the folder to clear :
+
+ find -name .pics -exec rm -rf {} \;
+
+
+-> Contact
+
+mailto:aurelien.gateau@mail.dotcom.fr
+http://gwenview.sourceforge.net
+
+You can also join the mailing list :
+http://lists.sourceforge.net/lists/listinfo/gwenview-general
+
+

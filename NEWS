@@ -1,0 +1,195 @@
+2002.07.15 - v0.14.3
+- Really fixed the bug which caused Gwenview to not display image file given as
+  an argument.
+- Fixed ugly look of file names in thumbnail view when word wrap was enabled. 
+- Fixed flickering and drawing artefacts remaining after zooming in and out.
+- Lock zoom state was not properly remembered.
+- Updated polish translation.
+- Updated german translation.
+
+2002.07.10 - v0.14.2
+- Fixed a crash if a directory contained URL-like encoded characters (Thanks to
+  Dario Abatianni for the bug report)
+- Do not reload all thumbnails if an image is removed.
+- When starting Gwenview with an image file as an argument, the image does
+  not hide anymore.
+- Gwenview won't crash anymore if started with a file that doesn't exist as an
+  argument.
+
+2002.06.17 - v0.14.1
+- Fixed a bug in recognition of progressive jpeg images.
+- Updated swedish translation by Anders Lindén.
+- Added a japanese translation by Ryota Simamoto.
+
+2002.06.15 - v0.14.0
+- Ported to KDE3
+- Gwenview uses KImageIO for file formats, bringing a few other file formats
+  such as ico, eps or g3.
+- Replaced my own dir widget with the new KDirView widget provided by KDE3.
+
+2002.05.04 - v0.13.0
+- Thumbnail selection buttons are always activated.
+- You can now choose between 'auto-zoom' or 'scroll-and-zoom' in fullscreen
+  mode.
+- You can now lock the zoom to keep the same zoom value during browsing.
+- Integrated a patch from Frank Becker to speed up JPEG thumbnail generation.
+- Swedish translation.
+- More personalizable wheel behaviour.
+- Gwenview now remembers the 'auto-zoom' state.
+- You can now define what interface elements you want to hide in fullscreen
+  mode.
+- Fixed a bug in cache cleaning if the cache was already empty.
+
+
+2002.03.04 - v0.12.0
+- Navigation buttons are now enabled or disabled according to the
+  position of the file in the folder.
+- New zoom option : fit to window.
+- Zoom actions are disabled when there's no image.
+- No more ugly thumbnails when selected.
+- Images are now centered in main view.
+- Added popup menus to the file and image views.
+- Thumbnails aren't reloaded anymore when deleting a file.
+- Added support for external editor.
+
+
+2001.12.30 - v0.11.1
+- Added TIFF support.
+- Added drag'n drop support to folder view.
+- Bug fix when renaming folder containing folders.
+
+
+2001.12.15 - v0.11.0
+- Korean translation.
+- New folder view : more responsive, get automatically updated on
+  changes, features a popup menu.
+- Scrollbars are now resetted on image change.
+- Should now installs itself in <appdir>/Graphics rather than in
+  <appdir>/Multimedia/Graphics.
+- New buttons in config dialog to get the cache size and to empty it.
+- Added a man page by Michael Spanier.
+
+
+2001.10.11 - v0.10.1
+- Dutch translation.
+- Hungarian translation.
+- Now uses Konqueror central thumbnail cache folder.
+
+
+2001.09.29 - v0.10.0
+- Italian translation.
+- Polish translation.
+- Redesigned the configuration dialog with Qt-Designer, now features
+  GUI for Avinash Chopde's patch.
+- Added a file/open menu item.
+- Added an option to hide file names in fullscreen mode.
+- Gwenview now displays an error message when it can't load an image.
+
+
+2001.09.01 - v0.9.2
+- German translation.
+- Fixed a bug which caused the fullscreen view to be updated even after
+  coming back to normal.
+- Merged a patch from Avinash Chopde to provide default folders for file
+  copy/move and bypass file operation confirmations (No GUI yet).
+
+
+2001.08.29 - v0.9.1
+- Spanish translation.
+- Fixed bad encoding in French translation (no more '?' instead of accent).
+- Dock icons were too big. Fixed.
+
+
+2001.08.20 - v0.9.0
+- Added support for alpha channel.
+- Gwenview now displays the image size in status bar.
+- Fixed wrong icon size for folders on some distributions (my mistake).
+
+
+2001.07.30 - v0.8.0
+- Replaced thumbnail generation with Konqueror code : don't freeze the
+  interface anymore and cache generated thumbnails on disk.
+- You can now select the size of the thumbnails from the menu/toolbar.
+
+
+2001.07.11 - v0.7.0
+- Added zoom in and out feature.
+- Thumbnail generation is now non-blocking.
+- Uses KIO for file operations.
+- Added "move" to file operations.
+- Selecting a folder which does not contain images will now empty the image
+  widget.
+- Added a status bar displaying folder and file information.
+- Opera-like previous-next mouse navigation.
+- Scroll the image by dragging it.
+- Fixed a bug which could prevent the toolbar from showing on the first launch.
+
+
+2001.05.23 - v0.6.1
+- Fixed a bug in file view that might not display files.
+- Added a Norwegian translation, thanks to Rune Nordvik.
+
+
+2001.05.16 - v0.6.0
+- Full screen support with keyboard, mouse button and mouse wheel navigation.
+- Added a toolbar.
+- Folder view uses standard folder icons.
+- Integration with Konqueror : right click on any folder and select "Browse
+  with Gwenview".
+
+
+2001.04.10 - v0.5.1
+- Fixed drag'n'drop for file detail view.
+
+
+2001.03.31 - v0.5.0
+- File view items can now be dragged to any KDE application (for example Konqueror).
+- French translation.
+- File copy dialog opens in current folder.
+- Fixed a bug on file copy cancel.
+- Fixed a crash on file deletion.
+- Shortcut keys are now configurable.
+- When using thumbnail view, files are all shown before thumbnail generation begins.
+- Added a configuration dialog.
+
+
+2001.03.09 - v0.4.1
+- Fixed crash on file manipulation using thumbnail view.
+- Added a progress gauge for thumbnail generation.
+
+
+2001.02.26 - v0.4.0
+- File list use a standard KDE detail view.
+- Added a configurable memory cache to speed up image loading.
+
+
+2001.01.28 - v0.3.0
+- Nicer window menu.
+- Removed FilePath module : use QT instead.
+- Some code cleaning.
+- New shortcut for first/previous/next/last image.
+- Icon for folders.
+- Removed folder column header.
+- Thumbnail view.
+
+
+2001.01.16 - v0.2.2
+- Added a window menu to toggle visibility of windows.
+- Changed the default button in delete dialog to "Yes".
+
+
+2001.01.15 - v0.2.1
+- Updated mail address and web site.
+
+
+2001.01.08 - v0.2.0
+- Uses docked windows.
+- Remember window sizes and configurations.
+- Added Help menu with about dialog.
+- Uses the KDE way to handle command line parameters.
+- Added ability to copy a file.
+
+
+2000.12.10 - v0.1.0
+- Initial release.
+

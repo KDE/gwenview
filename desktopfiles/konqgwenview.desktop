@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+ServiceTypes=inode/directory
+Actions=gwenview
+
+[Desktop Action gwenview]
+Name=Browse with Gwenview
+Name[de]=Mit Gwenview betrachten
+Name[nl]=Bladeren met Gwenview
+Name[fr]=Parcourir avec Gwenview
+Name[ko]=Gwenview로 탐색
+Name[it]=Sfoglia con Gwenview
+Name[pl]=Przeglądaj z Gwenview
+Name[hu]=Böngészés a Gwenview képmegjelenítővel
+Name[sv]=Bl�ddra med Gwenview
+Icon=gwenview
+Exec=gwenview %f

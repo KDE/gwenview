@@ -1,0 +1,22 @@
+Pixmap view
+- Replace zoom step with zoom factor
+- Add a color picker
+- Scroll with keyboard
+
+File operations
+- Save
+
+File view
+- Refresh thumbnails
+- Multi selection
+
+Dir view
+- Show/Hide hidden dirs
+- Bookmarks
+- Add an option to disable dir exploration (for the [+] before the dir name)
+
+Misc
+- Add a switch to start in fullscreen mode
+- Allow the user to manually define what file should be considered as an image
+- Make use of XML GUI (Should hopefully allow to save the state of toolbar
+  icons)
