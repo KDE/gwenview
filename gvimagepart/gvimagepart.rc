@@ -1,8 +1,10 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="GVImagePart">
 <MenuBar>
+ <Menu name="file"><Text>&amp;File</Text>
+  <Action name="saveAs"/>
+ </Menu>
  <Menu name="view"><Text>&amp;View</Text>
-  <Action name="openCloseAll"/>
   <Action name="view_zoom_auto"/>
  </Menu>
 </MenuBar>

@@ -1,6 +1,9 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="GVDirPart">
 <MenuBar>
+ <Menu name="file"><Text>&amp;File</Text>
+  <Action name="saveAs"/>
+ </Menu>
  <Menu name="view"><Text>&amp;View</Text>
   <Action name="previous"/>
   <Action name="next"/>

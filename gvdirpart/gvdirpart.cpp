@@ -66,6 +66,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	setWidget(mSplitter);
 
+	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),

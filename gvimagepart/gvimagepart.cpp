@@ -47,6 +47,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mPixmapView->kpartConfig();
 	setWidget(mPixmapView);
 
+	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
