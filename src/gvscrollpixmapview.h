@@ -64,6 +64,8 @@ public:
 	void setSmoothScale(bool);
 	bool enlargeSmallImages() const { return mEnlargeSmallImages; }
 	void setEnlargeSmallImages(bool);
+	void setShowScrollBars(bool);
+	bool showScrollBars() const { return mShowScrollBars; }
 	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
 
 
@@ -89,6 +91,7 @@ private:
 	bool mShowPathInFullScreen;
 	bool mSmoothScale;
 	bool mEnlargeSmallImages;
+	bool mShowScrollBars;
 	WheelBehaviours mWheelBehaviours;
 
 	// Offset to center images

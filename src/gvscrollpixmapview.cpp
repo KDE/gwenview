@@ -50,6 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const char* CONFIG_SHOW_PATH="show path";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
 const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
+const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_WHEEL_BEHAVIOUR_NONE=   "wheel behaviour none";
@@ -170,6 +171,12 @@ void GVScrollPixmapView::setEnlargeSmallImages(bool value) {
 
 void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
 	mShowPathInFullScreen=value;
+}
+
+
+void GVScrollPixmapView::setShowScrollBars(bool value) {
+	mShowScrollBars=value;
+	updateScrollBarMode();
 }
 
 
@@ -557,7 +564,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 
 void GVScrollPixmapView::updateScrollBarMode() {
-	if (mAutoZoom->isChecked()) {
+	if (mAutoZoom->isChecked() || !mShowScrollBars) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -732,6 +739,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
+	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -748,6 +756,7 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
 	config->writeEntry(CONFIG_SMOOTH_SCALE,mSmoothScale);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
+	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
