@@ -74,6 +74,7 @@ public:
 	QColor shownColor() const { return mShownColor; }
 	void setShownColor(const QColor&);
 	
+	GVFileViewBase* currentFileView() const;
 	GVFileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
 	KAction* selectFirst() const { return mSelectFirst; }
@@ -85,6 +86,8 @@ public:
 	KRadioAction* medThumbnails() const { return mMedThumbnails; }
 	KRadioAction* largeThumbnails() const { return mLargeThumbnails; }
 
+	void setFocus();
+	
 public slots:
 	void setURL(const KURL&,const QString&);
 
@@ -170,7 +173,6 @@ private:
 	bool mThumbnailsNeedUpdate;
 	QString mFilenameToSelect;
 
-	GVFileViewBase* currentFileView() const;
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();

@@ -149,6 +149,11 @@ GVFileViewStack::~GVFileViewStack() {
 }
 
 
+void GVFileViewStack::setFocus() {
+	currentFileView()->widget()->setFocus();
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Public slots

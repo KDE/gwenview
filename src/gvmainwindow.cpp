@@ -88,6 +88,7 @@ GVMainWindow::GVMainWindow()
 	createMainToolBar();
 	createAddressToolBar();
 	createConnections();
+	mFileViewStack->setFocus();
 	
 	// Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

@@ -1,6 +1,7 @@
 2003.xx.xx - v0.16.0
 - Fixes :
- - Corrected toolbar layout for RTL languages (Thanks to Meni Livne)
+ - Corrected toolbar layout for RTL languages (Thanks to Meni Livne).
+ - Do not give focus to the address bar on start.
  
 
 2003.01.12 - v0.16.0pre1
