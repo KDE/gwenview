@@ -88,7 +88,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
 	mPixmapView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
-	mSlideShow = new GVSlideShow(mFilesView->selectFirst(), mFilesView->selectNext());
+	mSlideShow = new GVSlideShow(mDocument); // mFilesView->selectFirst(), mFilesView->selectNext());
 
 	FileOperation::kpartConfig();
 	mFilesView->kpartConfig();
@@ -184,7 +184,8 @@ void GVDirPart::toggleSlideShow() {
 			return;
 		}
 		//FIXME turn on full screen here (anyone know how?)
-		mSlideShow->start();
+		KURL::List l;
+		mSlideShow->start(l);
 	} else {
 		//FIXME turn off full screen here
 		mSlideShow->stop();
