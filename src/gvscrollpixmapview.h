@@ -121,8 +121,7 @@ protected:
 private:
 	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
-	QLabel* mPathLabel;
-	QLabel* mCommentLabel;
+	QLabel* mFullScreenLabel;
 	
 	bool mShowPathInFullScreen;
 	bool mShowCommentInFullScreen;
@@ -191,8 +190,7 @@ private:
 	void updateImageOffset();
 	void updateScrollBarMode();
 	void updateContentSize();
-	void updatePathLabel();
-	void updateCommentLabel();
+	void updateFullScreenLabel();
 	void updateZoomActions();
 	void selectTool(ButtonState, bool force);
 	void restartAutoHideTimer();

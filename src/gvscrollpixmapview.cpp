@@ -245,8 +245,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 , mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
-, mPathLabel(new QLabel(parent))
-, mCommentLabel(new QLabel(parent))
+, mFullScreenLabel(new QLabel(parent))
 , mTool(SCROLL)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
@@ -268,21 +267,12 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	mToolControllers[SCROLL]=new ScrollToolController(this);
 	mToolControllers[ZOOM]=new ZoomToolController(this);
 
-	// Init path label
-	mPathLabel->setBackgroundColor(white);
-	QFont font=mPathLabel->font();
+	// Init full screen label
+	mFullScreenLabel->setBackgroundColor(white);
+	QFont font=mFullScreenLabel->font();
 	font.setWeight(QFont::Bold);
-	mPathLabel->setFont(font);
-	this->addChild(mPathLabel);
-	mPathLabel->hide();
-	
-	// Init comment label
-	mCommentLabel->setBackgroundColor(white);
-	QFont commentFont=mCommentLabel->font();
-	commentFont.setWeight(QFont::Bold);
-	mCommentLabel->setFont(commentFont);
-	this->addChild(mCommentLabel,1,viewport()->height());
-	mCommentLabel->hide();
+	mFullScreenLabel->setFont(font);
+	mFullScreenLabel->hide();
 	
 	// Create actions
 	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,mActionCollection,"view_zoom_auto");
@@ -349,8 +339,7 @@ void GVScrollPixmapView::slotLoaded() {
 
 	updateContentSize();
 	updateImageOffset();
-	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
-	if (mFullScreen && mShowCommentInFullScreen) updateCommentLabel();
+	if (mFullScreen && (mShowPathInFullScreen || mShowCommentInFullScreen)) updateFullScreenLabel();
 	if (mDelayedSmoothing) scheduleOperation( SMOOTH_PASS );
 }
 
@@ -479,19 +468,11 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		mAutoHideTimer->stop();
 		mToolControllers[mTool]->updateCursor();
 	}
-
-	if (mFullScreen && mShowPathInFullScreen) {
-		updatePathLabel();
-		mPathLabel->show();
+	if (mFullScreen && (mShowPathInFullScreen || mShowCommentInFullScreen)) {
+		updateFullScreenLabel();
+		mFullScreenLabel->show();
 	} else {
-		mPathLabel->hide();
-	}
-	
-	if (mFullScreen && mShowCommentInFullScreen) {
-		updateCommentLabel();
-		mCommentLabel->show();
-	} else {
-		mCommentLabel->hide();
+		mFullScreenLabel->hide();
 	}
 }
 
@@ -1215,94 +1196,55 @@ void GVScrollPixmapView::hideCursor() {
 	viewport()->setCursor(blankCursor);
 }
 
-
-void GVScrollPixmapView::updatePathLabel() {
+void GVScrollPixmapView::updateFullScreenLabel() {
 	QString path=mDocument->url().path();
-
-	QPainter painter;
-
-	QSize pathSize=mPathLabel->fontMetrics().size(0,path);
-	pathSize.setWidth( pathSize.width() + 4);
-	pathSize.setHeight( pathSize.height() + 15);
-	int left=2;
-	int top=mPathLabel->fontMetrics().height();
-
-	// Create a mask for the text
-	QBitmap mask(pathSize,true);
-	painter.begin(&mask);
-	painter.setFont(mPathLabel->font());
-	painter.drawText(left-1,top-1,path);
-	painter.drawText(left,top-1,path);
-	painter.drawText(left+1,top-1,path);
-
-	painter.drawText(left-1,top,path);
-	painter.drawText(left+1,top,path);
-
-	painter.drawText(left-1,top+1,path);
-	painter.drawText(left,top+1,path);
-	painter.drawText(left+1,top+1,path);
-	painter.end();
-
-	// Draw the text on a pixmap
-	QPixmap pixmap(pathSize);
-	painter.begin(&pixmap);
-	painter.setFont(mPathLabel->font());
-
-	painter.eraseRect(pixmap.rect());
-	painter.setPen(black);
-	painter.drawText(left,top,path);
-	painter.end();
-
-	// Update the path label
-	mPathLabel->setPixmap(pixmap);
-	mPathLabel->setMask(mask);
-	mPathLabel->adjustSize();
-}
-
-
-void GVScrollPixmapView::updateCommentLabel() {
 	QString comment=mDocument->comment();
-
+	QString text;
+	if (mShowPathInFullScreen) {
+		text = path + "\n";
+	}
+	if (mShowCommentInFullScreen) {
+		text += comment;
+	}
+	
 	QPainter painter;
 
-	QSize commentSize=mCommentLabel->fontMetrics().size(0,comment);
-	commentSize.setWidth( commentSize.width() + 4);
-	commentSize.setHeight( commentSize.height() + 15);
-	int left=2;
-	int top=mCommentLabel->fontMetrics().height();
+	QSize textSize=mFullScreenLabel->fontMetrics().size(0,text);
+	textSize.setWidth( textSize.width() + 2);
+	textSize.setHeight( textSize.height() + 2);
+	int left=1;
+	int top=1;
 
 	// Create a mask for the text
-	QBitmap mask(commentSize,true);
+	QBitmap mask(textSize,true);
 	painter.begin(&mask);
-	painter.setFont(mCommentLabel->font());
-	painter.drawText(left-1,top-1,comment);
-	painter.drawText(left,top-1,comment);
-	painter.drawText(left+1,top-1,comment);
+	painter.setFont(mFullScreenLabel->font());
+	painter.drawText(left-1,top-1,width(), height(), Qt::DontClip,text);
+	painter.drawText(left,top-1,width(), height(), Qt::DontClip,text);
+	painter.drawText(left+1,top-1,width(), height(), Qt::DontClip,text);
 
-	painter.drawText(left-1,top,comment);
-	painter.drawText(left+1,top,comment);
+	painter.drawText(left-1,top,width(), height(), Qt::DontClip,text);
+	painter.drawText(left+1,top,width(), height(), Qt::DontClip,text);
 
-	painter.drawText(left-1,top+1,comment);
-	painter.drawText(left,top+1,comment);
-	painter.drawText(left+1,top+1,comment);
+	painter.drawText(left-1,top+1,width(), height(), Qt::DontClip,text);
+	painter.drawText(left,top+1,width(), height(), Qt::DontClip,text);
+	painter.drawText(left+1,top+1,width(), height(), Qt::DontClip,text);
 	painter.end();
 
 	// Draw the text on a pixmap
-	QPixmap pixmap(commentSize);
+	QPixmap pixmap(textSize);
 	painter.begin(&pixmap);
-	painter.setFont(mCommentLabel->font());
+	painter.setFont(mFullScreenLabel->font());
 
 	painter.eraseRect(pixmap.rect());
 	painter.setPen(black);
-	painter.drawText(left,top,comment);
+	painter.drawText(left, top, width(), height(), Qt::DontClip, text);
 	painter.end();
 
 	// Update the path label
-	mCommentLabel->setPixmap(pixmap);
-	mCommentLabel->setMask(mask);
-	mCommentLabel->adjustSize();
-	int hComm = int(mDocument->height()*mZoom) - top;
-	this->moveChild(mCommentLabel,1,hComm); //TODO better h coord
+	mFullScreenLabel->setPixmap(pixmap);
+	mFullScreenLabel->setMask(mask);
+	mFullScreenLabel->adjustSize();	
 }
 
 void GVScrollPixmapView::updateZoomActions() {
