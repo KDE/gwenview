@@ -316,7 +316,15 @@ void GVMainWindow::goUp() {
 void GVMainWindow::goUpTo(int id) {
 	KPopupMenu* menu=mGoUp->popupMenu();
 	KURL url(menu->text(id));
+	KURL childURL;
+	int index=menu->indexOf(id);
+	if (index>0) {
+		childURL=KURL(menu->text(menu->idAt(index-1)));
+	} else {
+		childURL=mDocument->dirURL();
+	}
 	mDocument->setDirURL(url);
+	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
 
 
