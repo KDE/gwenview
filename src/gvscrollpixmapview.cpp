@@ -92,11 +92,11 @@ public:
 	virtual void midButtonReleaseEvent(QMouseEvent*) {
 		mView->autoZoom()->activate();
 	}
-	
+
 	virtual void rightButtonReleaseEvent(QMouseEvent* event) {
 		mView->openContextMenu(event->globalPos());
 	}
-	
+
 	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
 	virtual void updateCursor() {
 		mView->viewport()->setCursor(ArrowCursor);
@@ -107,7 +107,7 @@ public:
 class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
 private:
 	QCursor mZoomCursor;
-	
+
 	void zoomTo(const QPoint& pos, bool in) {
 		KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
 		if (!zoomAction->isEnabled()) return;
@@ -146,7 +146,7 @@ public:
 	void rightButtonReleaseEvent(QMouseEvent* event) {
 		zoomTo(event->pos(), false);
 	}
-	
+
 	void updateCursor() {
 		mView->viewport()->setCursor(mZoomCursor);
 	}
@@ -288,10 +288,10 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 
 	connect(mDocument, SIGNAL(sizeUpdated(int, int)),
 		this, SLOT(slotImageSizeUpdated()) );
-	
+
 	connect(mDocument, SIGNAL(rectUpdated(const QRect&)),
 		this, SLOT(slotImageRectUpdated(const QRect&)) );
-	
+
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 
@@ -304,6 +304,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	// installs an event filter on its viewport, and doesn't filter out the paint
 	// events -> it'd get it twice, first from app filter, second from viewport filter.
 	kapp->installEventFilter( &mFilter );
+
+	viewport()->setBackgroundMode(PaletteMid);
 }
 
 
@@ -429,7 +431,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
 	} else {
-		viewport()->setBackgroundMode(PaletteDark);
+		viewport()->setBackgroundMode(PaletteMid);
 		mAutoHideTimer->stop();
 		mToolControllers[mTool]->updateCursor();
 	}
@@ -631,7 +633,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		if (image.depth()!=32) {
 			image=image.convertDepth(32);
 		}
-		
+
 		bool light;
 
 		int imageXOffset=int(updateRect.x())-int(mXOffset);
@@ -897,7 +899,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 		emit contextMenu();
 		return;
 	}
-	
+
 	QPopupMenu menu(this);
 	bool noImage=mDocument->filename().isEmpty();
 	bool validImage=!mDocument->isNull();
@@ -943,7 +945,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 	if (!noImage) {
 		menu.insertSeparator();
-		
+
 		menu.connectItem(
 			menu.insertItem( i18n("&Rename...") ),
 			this,SLOT(renameFile()) );
