@@ -998,15 +998,15 @@ void GVMainWindow::loadPlugins() {
 	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
 
 	// Fill the plugin menu
-    KIPI::PluginLoader::List::ConstIterator it(loader->pluginList().constBegin());
-    KIPI::PluginLoader::List::ConstIterator itEnd(loader->pluginList().constEnd());
+	KIPI::PluginLoader::PluginList::ConstIterator it(loader->pluginList().constBegin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(loader->pluginList().constEnd());
 	for( ; it!=itEnd; ++it ) {
-		KIPI::Plugin* plugin = (*it).plugin;
+		KIPI::Plugin* plugin = (*it)->plugin;
 
 		QPopupMenu *popup = static_cast<QPopupMenu*>(
 			factory()->container( categoryMap[plugin->category()], this));
 		Q_ASSERT( popup );
-        plugin->setup(this);
+		plugin->setup(this);
 		KActionPtrList actions = plugin->actions();
 		KActionPtrList::ConstIterator actionIt=actions.begin(), end=actions.end();
 		for (; actionIt!=end; ++actionIt) {
