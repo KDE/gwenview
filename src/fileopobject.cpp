@@ -183,11 +183,11 @@ void FileOpTrashObject::operator()() {
 				fileList.append((*it).filename());
 			}
 			response=KMessageBox::warningContinueCancelList(mParent,
-				i18n("Do you really want to trash these files?"),fileList,i18n("Trash Files"),KGuiItem(i18n("&Trash"),"edittrash"));
+				i18n("Do you really want to trash these files?"),fileList,i18n("Trash used as a verb", "Trash Files"),KGuiItem(i18n("Trash used as a verb", "&Trash"),"edittrash"));
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
 			response=KMessageBox::warningContinueCancel(mParent,
-				i18n("<p>Do you really want to move <b>%1</b> to the trash?</p>").arg(filename),i18n("Trash File"),KGuiItem(i18n("&Trash"),"edittrash"));
+				i18n("<p>Do you really want to move <b>%1</b> to the trash?</p>").arg(filename),i18n("Trash used as a verb", "Trash File"),KGuiItem(i18n("Trash used as a verb", "&Trash"),"edittrash"));
 		}
 		if (response==KMessageBox::Cancel) return;
 	}
