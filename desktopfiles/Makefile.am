@@ -1,6 +1,5 @@
 # this is where the kdelnk file will go
-kdelnkdir   = $(kde_appsdir)/Graphics
-kdelnk_DATA = gwenview.desktop
+xdg_apps_DATA = gwenview.desktop
 
 # file for konqueror integration
 konqservicedir = $(kde_datadir)/konqueror/servicemenus
