@@ -53,7 +53,6 @@ public:
 	~FileView();
 
 	void plugActionsToAccel(KAccel*);
-	void installRBPopup(QPopupMenu*);
 
 // Config
 	void readConfig(KConfig*,const QString&);
@@ -113,16 +112,26 @@ signals:
 
 
 private slots:
+// Context menu slots 
+	void editSelectedFile();
+	void openParentDir();
+	void renameSelectedFile();
+	void copySelectedFiles();
+	void moveSelectedFiles();
+	void deleteSelectedFiles();
+	void showFileProperties();
+	
+	
 // Used to enter directories
 	void viewExecuted();
 
 // Used to change the current image
 	void viewChanged();
 
-// Right button
-	void viewRightButtonClicked(const QPoint& pos);
-	void detailViewRightButtonClicked(QListViewItem*,const QPoint&,int);
-	void thumbnailViewRightButtonClicked(QIconViewItem*,const QPoint&);
+// Context menu
+	void openContextMenu(const QPoint& pos);
+	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
+	void openContextMenu(QIconViewItem*,const QPoint&);
 
 // Used for file operations which changes the content of the current dir (move/del/rename) 
 	void slotSelectNewFilename();
@@ -146,7 +155,6 @@ private:
 	FileThumbnailView* mFileThumbnailView;
 	KDirLister* mDirLister;
 	KURL mDirURL;
-	QPopupMenu* mPopupMenu;
 
 // Our actions
 	KAction* mSelectFirst;

@@ -38,7 +38,6 @@ class KFileItem;
 
 class ThumbnailLoadJob;
 
-
 class FileThumbnailView : public KIconView, public KFileView {
 Q_OBJECT
 public:
@@ -80,6 +79,8 @@ public:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
+	const QIconViewItem* viewedItem() const;
+	void setViewedFileItem(const KFileItem*);
 
 public slots:
 	void setThumbnailPixmap(const KFileItem*,const QPixmap&);
@@ -95,7 +96,7 @@ protected:
 private:
 	ThumbnailSize mThumbnailSize;
 	int mMarginSize;
-	QPopupMenu* mPopupMenu;
+	QIconViewItem* mViewedItem;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 

@@ -84,7 +84,6 @@ MainWindow::MainWindow()
 	createActions();
 	createAccels();
 	createMenu();
-	createFileViewPopupMenu();
 	createPixmapViewPopupMenu();
 	createToolBar();
 
@@ -518,24 +517,6 @@ void MainWindow::createMenu() {
 	menuBar()->insertItem(i18n("&Help"), helpMenu());
 
 	menuBar()->show();
-}
-
-
-void MainWindow::createFileViewPopupMenu() {
-	QPopupMenu* menu=new QPopupMenu(this);
-
-	mOpenWithEditor->plug(menu);
-	
-	menu->insertSeparator();
-	mRenameFile->plug(menu);
-	mCopyFile->plug(menu);
-	mMoveFile->plug(menu);
-	mDeleteFile->plug(menu);
-	
-	menu->insertSeparator();
-	mShowFileProperties->plug(menu);
-
-	mFileView->installRBPopup(menu);
 }
 
 

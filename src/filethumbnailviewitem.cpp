@@ -22,6 +22,7 @@
 */
 // Qt includes
 #include <qapplication.h>
+#include <qcolor.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpixmap.h>
@@ -53,7 +54,7 @@ FileThumbnailViewItem::~FileThumbnailViewItem() {
 
 
 void FileThumbnailViewItem::calcRect(const QString& text_) {
-	FileThumbnailView *view =static_cast<FileThumbnailView*>(iconView());
+	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 
@@ -75,8 +76,8 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 	{
 		// Qt uses unknown_icon if no pixmap. Let's see if we need that - I doubt it
 		if (!pixmap()) return;
-		itemIconRect.setWidth( pixmap()->width() );
-		itemIconRect.setHeight( pixmap()->height() );
+		itemIconRect.setWidth( pixmap()->width()+2 );
+		itemIconRect.setHeight( pixmap()->height()+2 );
 	}
 
 // Init itemTextRect 
@@ -177,7 +178,7 @@ void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 
 
 void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
-	QIconView* view=iconView();
+	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 
@@ -207,6 +208,9 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 // Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
+	if (view->viewedItem()==this) {
+		p->setPen(QColor(255,0,0));
+	}
 	if (view->wordWrapIconText()) {
 		if (!mWordWrap) {
 			kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;

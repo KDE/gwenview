@@ -94,7 +94,6 @@ private:
 	void createAccels();
 	void createMenu();
 	void createToolBar();
-	void createFileViewPopupMenu();
 	void createPixmapViewPopupMenu();
 
 	void readConfig(KConfig*,const QString&);

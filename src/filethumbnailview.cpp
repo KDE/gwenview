@@ -48,7 +48,7 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
 FileThumbnailView::FileThumbnailView(QWidget* parent)
-: KIconView(parent), KFileView(), mThumbnailLoadJob(0L)
+: KIconView(parent), KFileView(), mViewedItem(0L), mThumbnailLoadJob(0L)
 {
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -66,7 +66,6 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 		this,SLOT(slotClicked(QIconViewItem*,const QPoint&)) );
 	
 	QIconView::setSelectionMode(Extended);
-	// FIXME : Find a way to change which item is current on multi-select before enabling this
 }
 
 
@@ -127,6 +126,23 @@ void FileThumbnailView::stopThumbnailUpdate()
 		emit updateEnded();
 		mThumbnailLoadJob->kill();
 	}
+}
+
+
+const QIconViewItem* FileThumbnailView::viewedItem() const {
+	return mViewedItem;
+}
+
+
+void FileThumbnailView::setViewedFileItem(const KFileItem* fileItem) {
+	QIconViewItem* oldViewed=mViewedItem;
+	QIconViewItem* item=0L;
+	if (fileItem) {
+		item=static_cast<QIconViewItem*>( const_cast<void*>( fileItem->extraData(this) ) );
+	}
+	mViewedItem=item;
+	if (oldViewed) repaintItem(oldViewed);
+	if (mViewedItem) repaintItem(mViewedItem);
 }
 
 
@@ -205,10 +221,10 @@ void FileThumbnailView::setSelected(const KFileItem* fileItem,bool enable) {
 bool FileThumbnailView::isSelected(const KFileItem* fileItem) const {
 	if (!fileItem) return false;
 
-	const FileThumbnailViewItem* currentViewItem=static_cast<const FileThumbnailViewItem*>( currentItem() );
-	if (!currentViewItem) return false;
-	
-	return currentViewItem->fileItem()==fileItem;
+	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
+	if (!iconItem) return false;
+
+	return iconItem->isSelected();
 }
 
 
