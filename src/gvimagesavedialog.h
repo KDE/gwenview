@@ -31,14 +31,18 @@ class KURL;
 class GVImageSaveDialog : public KFileDialog {
 Q_OBJECT
 public:
-	GVImageSaveDialog(KURL& url,QString& mimeType,QWidget* parent);
+	GVImageSaveDialog(KURL& url,QString& imageFormat,QWidget* parent);
 
 protected slots:
 	void accept();
 
+private slots:
+	void updateImageFormat(const QString&);
+
 private:
 	KURL& mURL;
-	QString& mMimeType;
+	QString& mImageFormat;
+	QMap<QString,QString> mImageFormats;
 };
 
 #endif

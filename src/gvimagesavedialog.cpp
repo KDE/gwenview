@@ -17,9 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+// Qt includes
+#include <qtimer.h>
 
 // KDE includes
 #include <kdebug.h>
+#include <kfilefiltercombo.h>
 #include <kimageio.h>
 #include <klocale.h>
 
@@ -27,38 +30,83 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvimagesavedialog.moc"
 
 
-GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& mimeType,QWidget* parent)
+static int findFormatInFilterList(const QStringList& filters, const QString& format) {
+	int pos=0;
+	for(QStringList::const_iterator it=filters.begin(); it!=filters.end(); ++it,++pos) {
+		QStringList list=QStringList::split("|",*it);
+		if ( list[1].startsWith(format) ) return pos;
+	}
+	return -1;
+}
+
+
+GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& imageFormat,QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"gvimagesavedialog",true)
 , mURL(url)
-, mMimeType(mimeType)
+, mImageFormat(imageFormat)
 {
 	setOperationMode(KFileDialog::Saving);
 
-	// Create our KMimeTypeList
-	QStringList strTypes=KImageIO::mimeTypes();
+	// FIXME: Ugly code to define the filter combo label.
 	KMimeType::List types;
-	for(QStringList::const_iterator it=strTypes.begin(); it!=strTypes.end(); ++it) {
-		types.append( KMimeType::mimeType(*it) );
-	}
+	setFilterMimeType(i18n("Format:"),types,KMimeType::mimeType(""));
+	
+	QStringList filters;
 
-	// Get default format
-	KMimeType::Ptr defaultType;
-	if (KImageIO::isSupported(mimeType)) {
-		defaultType=KMimeType::mimeType(mMimeType);
-	} else {
-		defaultType=KMimeType::mimeType("image/png");
+	// Create our filter list
+	QStringList mimeTypes=KImageIO::mimeTypes();
+	for(QStringList::const_iterator it=mimeTypes.begin(); it!=mimeTypes.end(); ++it) {
+		QString format=KImageIO::typeForMime(*it);
+		
+		// Create the pattern part of the filter string
+		KMimeType::Ptr mt=KMimeType::mimeType(*it);
+		QStringList patterns;
+		for (QStringList::const_iterator patIt=mt->patterns().begin();patIt!=mt->patterns().end();++patIt) {
+			QString pattern=(*patIt).lower();
+			if (!patterns.contains(pattern)) patterns.append(pattern);
+		}
+		if (patterns.isEmpty()) {
+			patterns.append( QString("*.%1").arg(format.lower()) );
+		}
+		QString patternString=patterns.join(" ");
+
+		// Create the filter string
+		QString filter=QString("%1|%2 - %3 (%4)").arg(patternString).arg(format).arg(mt->comment()).arg(patternString);
+		
+		// Add it to our list
+		filters.append(filter);
 	}
 	
-	// Init "filter" line
-	setFilterMimeType(i18n("Format:"),types,defaultType);
+	qHeapSort(filters);
+	setFilter(filters.join("\n"));
+	
+	// Select the default image format
+	int pos=findFormatInFilterList(filters,mImageFormat);
+	if (pos==-1) pos=findFormatInFilterList(filters,"PNG");
+	
+	filterWidget->setCurrentItem(pos);
 
+	// Tweak the filter widget
+	filterWidget->setEditable(false);
+	
+	connect(filterWidget,SIGNAL(activated(const QString&)),
+		this,SLOT(updateImageFormat(const QString&)) );
+	
+	// Call slotFilterChanged() to get the list filtered by the filter we
+	// selected. If we don't use a single shot, it leads to a crash :-/
+	QTimer::singleShot(0,this,SLOT(slotFilterChanged()));
 }
 
 
 void GVImageSaveDialog::accept() {
 	KFileDialog::accept();
 	mURL=selectedURL();
-	mMimeType=currentMimeFilter();
 }
 
+
+void GVImageSaveDialog::updateImageFormat(const QString& text) {
+	QStringList list=QStringList::split(" ",text);
+	mImageFormat=list[0];
+	kdDebug() << "slotFilterChanged:" << text << " -> " << mImageFormat << endl;
+}
 
