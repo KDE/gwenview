@@ -31,7 +31,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kprinter.h>
 
 // Local 
-#include "gvimageutils.h"
+#include "gvimageutils/orientation.h"
 #include "gvbusylevelmanager.h"
 
 class GVDocumentPrivate;
@@ -93,7 +93,7 @@ public slots:
 	bool saveBeforeClosing();
 
 	// "Image manipulation"
-	void modify(GVImageUtils::Orientation);
+	void transform(GVImageUtils::Orientation);
 
 signals:
 	/**

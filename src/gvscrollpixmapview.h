@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtimer.h>
 
 #include "gvbusylevelmanager.h"
-#include "gvimageutils.h"
+#include "gvimageutils/gvimageutils.h"
 
 class QEvent;
 class QLabel;

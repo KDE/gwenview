@@ -1,3 +1,10 @@
+2004.xx.xx - v1.1.6
+- New features:
+ - JPEGTran code has been integrated into Gwenview, there's no need to install
+   it separately anymore.
+- Fixes:
+ - Update the EXIF thumbnail when rotating a JPEG file.
+
 2004.09.19 - v1.1.5
 - New features:
  - The thumbnail progress bar and stop buttons are now embedded in the

@@ -18,39 +18,49 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTJPEGLOADEDIMPL_H
-#define GVDOCUMENTJPEGLOADEDIMPL_H
+#ifndef JPEGCONTENT_H
+#define JPEGCONTENT_H
 
 // Qt
-#include <qimage.h>
+#include <qcstring.h>
 
 // Local
-#include "gvdocumentloadedimpl.h"
+#include <gvimageutils/orientation.h>
 
-class GVDocument;
 
-class GVDocumentJPEGLoadedImplPrivate;
+class QImage;
+class QString;
 
-class GVDocumentJPEGLoadedImpl : public GVDocumentLoadedImpl {
-Q_OBJECT
+namespace GVImageUtils {
+
+
+class JPEGContent {
 public:
-	GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath);
-	~GVDocumentJPEGLoadedImpl();
-	
-	QString comment() const;
-	void setComment(const QString&);
-	GVDocument::CommentState commentState() const;
-	
-	void transform(GVImageUtils::Orientation);
+	JPEGContent();
+	~JPEGContent();
 
-protected:
-	bool localSave(const QString&, const QCString& format) const;
-	
+	Orientation orientation() const;
+	void resetOrientation();
+
+	void transform(Orientation);
+
+	QImage thumbnail() const;
+	void setThumbnail(const QImage&);
+
+	bool load(const QString& file);
+	bool loadFromData(const QByteArray& rawData);
+	bool save(const QString& file) const;
+
 private:
-	GVDocumentJPEGLoadedImplPrivate* d;
+	struct Private;
+	Private *d;
 
-private slots:
-	void finishLoading();
+	JPEGContent(const JPEGContent&);
+	void operator=(const JPEGContent&);
 };
 
-#endif /* GVDOCUMENTJPEGLOADEDIMPL_H */
+
+} // namespace
+
+
+#endif /* JPEGCONTENT_H */

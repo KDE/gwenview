@@ -49,7 +49,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.h"
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
-#include "gvjpegtran.h"
 #include "gvmainwindow.h"
 #include "gvscrollpixmapview.h"
 #include "thumbnailloadjob.h"
@@ -144,7 +143,6 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
 	
 	// Misc tab
-	d->mMiscPage->mJPEGTran->setURL(GVJPEGTran::programPath());
 	d->mMiscPage->mModifiedBehaviorGroup->setButton( int(document->modifiedBehavior()) );
 }
 
@@ -221,7 +219,6 @@ void GVConfigDialog::slotApply() {
 	FileOperation::setDeleteToTrash(d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
 
 	// Misc tab
-	GVJPEGTran::setProgramPath(d->mMiscPage->mJPEGTran->url());
 #if QT_VERSION>=0x030200
 	int behavior=d->mMiscPage->mModifiedBehaviorGroup->selectedId();
 #else

@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "gvdocument.h"
-#include "gvimageutils.h"
+#include "gvimageutils/orientation.h"
 
 
 class GVDocumentImpl : public QObject {
@@ -48,7 +48,7 @@ public:
 	virtual void suspendLoading();
 	virtual void resumeLoading();
 
-	virtual void modify(GVImageUtils::Orientation);
+	virtual void transform(GVImageUtils::Orientation);
 	virtual bool save(const KURL&, const QCString& format) const;
 
 signals:

@@ -52,7 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltoolcontext.h"
 #include "gvdocument.h"
-#include "gvimageutils.h"
+#include "gvimageutils/gvimageutils.h"
 #include "gvbusylevelmanager.h"
 
 #include "gvscrollpixmapview.moc"

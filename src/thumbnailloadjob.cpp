@@ -54,7 +54,8 @@ extern "C" {
 }
 
 // Local
-#include "gvimageutils.h"
+#include "gvimageutils/jpegcontent.h"
+#include "gvimageutils/gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
 //#define ENABLE_LOG
@@ -138,8 +139,13 @@ void ThumbnailThread::loadThumbnail() {
 	
 	// If it's a JPEG, try to load a small image directly from the file
 	if (isJPEG(mPixPath)) {
-		GVImageUtils::Orientation orientation = GVImageUtils::NOT_AVAILABLE;
-		GVImageUtils::getOrientationAndThumbnail(mPixPath,orientation, mImage);
+		//GVImageUtils::Orientation orientation = GVImageUtils::NOT_AVAILABLE;
+		//GVImageUtils::getOrientationAndThumbnail(mPixPath,orientation, mImage);
+		GVImageUtils::JPEGContent content;
+		content.load(mPixPath);
+		GVImageUtils::Orientation orientation = content.orientation();
+		mImage = content.thumbnail();
+	
 		if( !mImage.isNull()
 			&& ( mImage.width() >= mThumbnailSize.pixelSize() // don't use small thumbnails
 			|| mImage.height() >= mThumbnailSize.pixelSize() )) {
@@ -150,7 +156,7 @@ void ThumbnailThread::loadThumbnail() {
 		}
 		if (loaded) {
 			// Rotate if necessary
-			mImage=GVImageUtils::modify(mImage,orientation);
+			mImage=GVImageUtils::transform(mImage,orientation);
 		}
 	}
 	// File is not a JPEG, or JPEG optimized load failed, load file using Qt

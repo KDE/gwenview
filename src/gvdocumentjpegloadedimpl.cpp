@@ -32,8 +32,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ktempfile.h>
 
 // Local
-#include "gvjpegtran.h"
-#include "gvimageutils.h"
+#include "gvimageutils/jpegcontent.h"
+#include "gvimageutils/gvimageutils.h"
 #include "gvdocumentjpegloadedimpl.moc"
 
 
@@ -52,7 +52,7 @@ const char* JPEG_EXIF_COMMENT="Comment";
 
 class GVDocumentJPEGLoadedImplPrivate {
 public:
-	QByteArray mRawData;
+	GVImageUtils::JPEGContent mJPEGContent;
 	QString mComment;
 	GVDocument::CommentState mCommentState;
 	QString mLocalFilePath;
@@ -107,7 +107,7 @@ GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteAr
 : GVDocumentLoadedImpl(document) {
 	LOG("");
 	d=new GVDocumentJPEGLoadedImplPrivate;
-	d->mRawData=rawData;
+	d->mJPEGContent.loadFromData(rawData);
     if (mDocument->url().isLocalFile()) {
         d->mLocalFilePath=document->url().path();
     } else {
@@ -120,28 +120,24 @@ GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
 }
 
 
-void GVDocumentJPEGLoadedImpl::modify(GVImageUtils::Orientation orientation) {
-	if (!d->mRawData.isNull()) {
-		d->mRawData=GVJPEGTran::apply(d->mRawData, orientation);
-	}
-
-	setImage(GVImageUtils::modify(mDocument->image(), orientation));
+void GVDocumentJPEGLoadedImpl::transform(GVImageUtils::Orientation orientation) {
+	d->mJPEGContent.transform(orientation);
+	setImage(GVImageUtils::transform(mDocument->image(), orientation));
 }
 
 
 bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& format) const {
 	bool result;
 
-	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
+	if (qstrcmp(format, "JPEG")==0) {
 		LOG("JPEG Reset orientation");
-		d->mRawData=GVImageUtils::resetOrientation(d->mRawData, mDocument->image());
+		d->mJPEGContent.resetOrientation();
+		if (!d->mJPEGContent.thumbnail().isNull()) {
+			d->mJPEGContent.setThumbnail(mDocument->image().scale(128, 128, QImage::ScaleMin));
+		}
+		
 		LOG("JPEG Lossless save");
-		QFile file(path);
-		result=file.open(IO_WriteOnly);
-		if (!result) return false;
-		QDataStream stream(&file);
-		stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
-		file.close();
+		if (!d->mJPEGContent.save(path)) return false;
 	} else {
 		result=mDocument->image().save(path, format);
 		if (!result) return false;
@@ -167,12 +163,12 @@ GVDocument::CommentState GVDocumentJPEGLoadedImpl::commentState() const {
 
 void GVDocumentJPEGLoadedImpl::finishLoading() {
 	LOG("");
-	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(d->mRawData);
+	GVImageUtils::Orientation orientation=d->mJPEGContent.orientation();
 
 	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
 		LOG("jpeg rotating");
-		setImage(GVImageUtils::modify(mDocument->image(), orientation));
-		d->mRawData=GVJPEGTran::apply(d->mRawData, orientation);
+		setImage(GVImageUtils::transform(mDocument->image(), orientation));
+		d->mJPEGContent.transform(orientation);
 
 		emit sizeUpdated(mDocument->image().width(), mDocument->image().height());
 		emit rectUpdated(QRect(QPoint(0,0), mDocument->image().size()) );

@@ -22,27 +22,18 @@ Copyright 2000-2004 Aurélien Gâteau
 #define GVIMAGEUTILS_H
 
 // Qt
-#include <qmemarray.h>
 #include <qimage.h>
 
-// KDE
-#include <kurl.h>
+// Local
+#include "gvimageutils/orientation.h"
 
 namespace GVImageUtils {
-	enum Orientation { NOT_AVAILABLE=0,NORMAL=1,HFLIP=2,ROT_180=3,VFLIP=4,ROT_90_HFLIP=5,ROT_90=6,ROT_90_VFLIP=7,ROT_270=8};
-
 	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };
 
-	QImage scale(const QImage& image,int width, int height,
+	QImage scale(const QImage& image, int width, int height,
 		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
 
-	QByteArray resetOrientation(const QByteArray& jpegContent, const QImage& image);
-	Orientation getOrientation(const QByteArray& jpegContent);
-	Orientation getOrientation(const QString& pixPath);
-
-	QImage modify(const QImage& img, Orientation orientation);
-
-	void getOrientationAndThumbnail(const QString& pixPath, Orientation& orientation, QImage& image);
+	QImage transform(const QImage& img, Orientation orientation);
 }
 
 #endif

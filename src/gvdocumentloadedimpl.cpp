@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ktempfile.h>
 
 // Local
+#include "gvimageutils/gvimageutils.h"
 #include "gvdocumentloadedimpl.moc"
 
 //#define ENABLE_LOG
@@ -57,8 +58,8 @@ GVDocumentLoadedImpl::~GVDocumentLoadedImpl() {
 }
 
 
-void GVDocumentLoadedImpl::modify(GVImageUtils::Orientation orientation) {
-	setImage(GVImageUtils::modify(mDocument->image(), orientation));
+void GVDocumentLoadedImpl::transform(GVImageUtils::Orientation orientation) {
+	setImage(GVImageUtils::transform(mDocument->image(), orientation));
 }
 
 

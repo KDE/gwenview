@@ -43,9 +43,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentdecodeimpl.h"
 #include "gvdocumentimpl.h"
 #include "gvimagesavedialog.h"
-#include "gvimageutils.h"
+#include "gvimageutils/gvimageutils.h"
 #include "gvjpegformattype.h"
-#include "gvjpegtran.h"
 #include "gvpngformattype.h"
 #include "gvprintdialog.h"
 #include "qxcfi.h"
@@ -460,8 +459,8 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 }
 
 
-void GVDocument::modify(GVImageUtils::Orientation orientation) {
-	d->mImpl->modify(orientation);
+void GVDocument::transform(GVImageUtils::Orientation orientation) {
+	d->mImpl->transform(orientation);
 	d->mModified=true;
 	emit modified();
 }

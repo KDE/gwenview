@@ -1,0 +1,2 @@
+This directory contains image utilities. It contains code from the JPEGLib to
+perform lossless transformations and from the ImageMagick library.

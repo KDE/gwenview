@@ -2,61 +2,75 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
-
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
+ 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
+ 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+ 
 */
+// Qt
+#include <qimage.h>
+#include <qwmatrix.h>
 
-#ifndef GVJPEGTRAN_H
-#define GVJPEGTRAN_H
-
-// Qt 
-#include <qcstring.h>
-#include <qobject.h>
+// KDE
+#include <kdebug.h>
 
 // Local
-#include "gvimageutils.h"
+#include "gvimageutils/orientation.h"
 
-class QString;
+namespace GVImageUtils {
 
-class KConfig;
-class KProcess;
+QImage transform(const QImage& img, Orientation orientation) {
+	QWMatrix matrix;
+	switch (orientation) {
+	case NOT_AVAILABLE:
+	case NORMAL:
+		return img;
+
+	case HFLIP:
+		matrix.scale(-1,1);
+		break;
+
+	case ROT_180:
+		matrix.rotate(180);
+		break;
+
+	case VFLIP:
+		matrix.scale(1,-1);
+		break;
+	
+	case ROT_90_HFLIP:
+		matrix.scale(-1,1);
+		matrix.rotate(90);
+		break;
+		
+	case ROT_90:		
+		matrix.rotate(90);
+		break;
+	
+	case ROT_90_VFLIP:
+		matrix.scale(1,-1);
+		matrix.rotate(90);
+		break;
+		
+	case ROT_270:		
+		matrix.rotate(270);
+		break;
+	}
+
+	return img.xForm(matrix);
+}
 
 
-class GVJPEGTran : public QObject {
-Q_OBJECT
-public:
-	static QByteArray apply(const QByteArray&,GVImageUtils::Orientation);
+} // Namespace
 
-	static void readConfig(KConfig*,const QString& group);
-	static void writeConfig(KConfig*,const QString& group);
-
-	static QString programPath();
-	static void setProgramPath(const QString&);
-
-private slots:
-	void writeChunk(KProcess*);
-	void slotReceivedStdout(KProcess*,char*,int);
-	void slotReceivedStderr(KProcess*,char*,int);
-
-private:
-	GVJPEGTran();
-	QByteArray mSrc;
-	unsigned int mSent;
-	QByteArray mDst;
-};
-
-
-#endif

@@ -62,7 +62,7 @@ void GVDocumentImpl::suspendLoading() {
 void GVDocumentImpl::resumeLoading() {
 }
 
-void GVDocumentImpl::modify(GVImageUtils::Orientation) {
+void GVDocumentImpl::transform(GVImageUtils::Orientation) {
 }
 
 bool GVDocumentImpl::save(const KURL&, const QCString&) const {

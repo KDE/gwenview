@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 
 // Local includes
-#include "gvimageutils.h"
+#include "gvimageutils/orientation.h"
 
 class GVBatchManipulatorPrivate;
 

@@ -35,7 +35,7 @@ public:
 	GVDocumentLoadedImpl(GVDocument* document);
 	~GVDocumentLoadedImpl();
 	
-	void modify(GVImageUtils::Orientation);
+	void transform(GVImageUtils::Orientation);
 	bool save(const KURL&, const QCString& format) const;
 
 protected:

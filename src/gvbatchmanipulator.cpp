@@ -72,7 +72,7 @@ void GVBatchManipulator::apply() {
 		} while (!d->mLoaded);
 		if (d->mProgressDialog->wasCancelled()) break;
 		
-		doc.modify(d->mOrientation);
+		doc.transform(d->mOrientation);
 		doc.save();
 		emit imageModified(*it);
 	}
