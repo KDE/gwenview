@@ -32,6 +32,6 @@ namespace GVImageUtils {
 	Orientation getOrientation(const QString& pixPath);
 
 	QImage rotate(const QImage& img, Orientation orientation);
-};
+}
 
 #endif

@@ -36,6 +36,6 @@ bool protocolIsArchive(const QString&);
 QStringList mimeTypes();
 QString protocolForMimeType(const QString&);
 
-};
+}
 
 #endif
