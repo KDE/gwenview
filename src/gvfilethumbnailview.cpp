@@ -59,12 +59,14 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setSpacing(0);
 	viewport()->setAcceptDrops(false);
 
-// If we use KIconView::Execute mode, the current item is unselected after
-// being clicked, so we use KIconView::Select mode and emit ourself the
-// execute() signal with slotClicked()
+	// If we use KIconView::Execute mode, the current item is unselected after
+	// being clicked, so we use KIconView::Select mode and emit ourself the
+	// execute() signal with slotClicked()
 	setMode(KIconView::Select);
-	connect(this,SIGNAL(clicked(QIconViewItem*,const QPoint&)),
-		this,SLOT(slotClicked(QIconViewItem*,const QPoint&)) );
+	connect(this,SIGNAL(clicked(QIconViewItem*)),
+		this,SLOT(slotClicked(QIconViewItem*)) );
+	connect(this,SIGNAL(doubleClicked(QIconViewItem*)),
+		this,SLOT(slotDoubleClicked(QIconViewItem*)) );
 	
 	QIconView::setSelectionMode(Extended);
 }
@@ -93,7 +95,7 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 	GVFileThumbnailViewItem* iconItem=viewItem(fileItem);
 	int pixelSize=mThumbnailSize.pixelSize();
 
-// Draw the thumbnail to the center of the icon
+	// Draw the thumbnail to the center of the icon
 	QPainter painter(iconItem->pixmap());
 	painter.eraseRect(0,0,pixelSize,pixelSize);
 	painter.drawPixmap(
@@ -102,7 +104,7 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 		thumbnail);
 	iconItem->repaint();
 
-// Notify others that one thumbnail has been updated
+	// Notify others that one thumbnail has been updated
 	emit updatedOneThumbnail();
 }
 
@@ -226,13 +228,13 @@ bool GVFileThumbnailView::isSelected(const KFileItem* fileItem) const {
 void GVFileThumbnailView::removeItem(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-// Remove it from the image preview job
+	// Remove it from the image preview job
 	if (!mThumbnailLoadJob.isNull())
 		mThumbnailLoadJob->itemRemoved(fileItem);
 
 	if (fileItem==mShownFileItem) mShownFileItem=0L;
 
-// Remove it from our view
+	// Remove it from our view
 	GVFileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (iconItem) delete iconItem;
 	KFileView::removeItem(fileItem);
@@ -284,7 +286,21 @@ void GVFileThumbnailView::updateGrid() {
 
 
 //-Private slots------------------------------------------------------------
-void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos) {
+void GVFileThumbnailView::slotDoubleClicked(QIconViewItem* iconItem) {
+	if (!iconItem) return;
+	if (KGlobalSettings::singleClick()) return;
+	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
+
+	KFileItem* fileItem=thumbItem->fileItem();
+	if (!fileItem) return;
+
+	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
+		emit executed(iconItem);
+	}
+}
+
+
+void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 	if (!iconItem) return;
 	if (!KGlobalSettings::singleClick()) return;
 	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
@@ -294,7 +310,6 @@ void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos)
 
 	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
-		emit executed(iconItem,pos);
 	}
 }
 

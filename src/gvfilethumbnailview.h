@@ -109,7 +109,8 @@ private:
 	}
 
 private slots:
-	void slotClicked(QIconViewItem*,const QPoint& pos);
+	void slotClicked(QIconViewItem*);
+	void slotDoubleClicked(QIconViewItem*);
 };
 
 
