@@ -204,9 +204,6 @@ void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeView
 
 //-Private slots-----------------------------------------------------------
 void DirView::onSelectionChanged() {
-/*	if (currentURL().isParentOf(m_nextUrlToSelect)) {
-		return;
-	}*/
 	emit dirURLChanged(currentURL());
 }
 
