@@ -5,6 +5,8 @@
 - Fixes:
  - Corrected toolbar layout for RTL languages (Thanks to Meni Livne).
  - Do not give focus to the address bar on start.
+ - Do not exit when trying to thumbnailing a broken JPEG (Thanks to Marco
+   Gazzetta).
 
 2003.01.12 - v0.16.0pre1
 - New features:

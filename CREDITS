@@ -30,3 +30,6 @@ Added an address bar (v0.16.0).
 - Meni Livne <livne@kde.org>
 Patched toolbar layour for RTL languages (v0.16.0).
 
+- Marco Gazzetta <mililani@pobox.com>
+Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
+(v0.16.0).

@@ -38,6 +38,7 @@
 #include <kio/netaccess.h>
 
 // Other includes
+#include <setjmp.h>
 #define XMD_H
 extern "C" {
 #include <jpeglib.h>
@@ -302,16 +303,36 @@ bool ThumbnailLoadJob::isJPEG(const QString& name) {
 }
 
 
+
+struct GVJPEGFatalError : public jpeg_error_mgr {
+	jmp_buf mJmpBuffer;
+
+	static void handler(j_common_ptr cinfo) {
+		GVJPEGFatalError* error=static_cast<GVJPEGFatalError*>(cinfo->err);
+		(error->output_message)(cinfo);
+		longjmp(error->mJmpBuffer,1);
+	}
+};
+
 bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	QImage image;
+	struct jpeg_decompress_struct cinfo;
 
 	// Open file
 	FILE* inputFile=fopen(pixPath.data(), "rb");
 	if(!inputFile) return false;
-
-	struct jpeg_decompress_struct cinfo;
-	struct jpeg_error_mgr jerr;
+	
+	// Error handling
+	struct GVJPEGFatalError jerr;
 	cinfo.err = jpeg_std_error(&jerr);
+	cinfo.err->error_exit = GVJPEGFatalError::handler;
+	if (setjmp(jerr.mJmpBuffer)) {
+		jpeg_destroy_decompress(&cinfo);
+		fclose(inputFile);
+		return false;
+	}
+
+	// Init decompression
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, inputFile);
 	jpeg_read_header(&cinfo, TRUE);
