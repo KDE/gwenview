@@ -1245,23 +1245,6 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mToolControllers[mTool]->updateCursor();
 }
 
-void GVScrollPixmapView::kpartConfig() {
-	mShowPathInFullScreen=true;
-	mSmoothScale=SMOOTH_NORMAL2;
-	mEnlargeSmallImages=false;
-	mShowScrollBars=true;
-	mMouseWheelScroll=true;
-	mAutoZoom->setChecked(true);
-	updateScrollBarMode();
-	mLockZoom->setChecked(false);
-
-	mButtonStateToolMap[NoButton]=SCROLL;
-	mButtonStateToolMap[ShiftButton]=ZOOM;
-
-	mTool=mButtonStateToolMap[NoButton];
-	mToolControllers[mTool]->updateCursor();
-}
-
 
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);

@@ -3,6 +3,7 @@
  - Optional support for KIPI, KDE Image Plugin Interface.
  - Incremental downloading of images.
  - Image smoothing is much more configurable (By Lubos Lunak).
+ - KParts will now remember their settings.
 - Fixes:
  - Don't crash when loading 8 bit PNG files with transparency.
  - Make sure small and medium size thumbnails do not look jagged.

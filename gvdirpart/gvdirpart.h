@@ -87,6 +87,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 	void print();
  protected:
+	void partActivateEvent(KParts::PartActivateEvent* event);
 
 	/**
 	 * Unused because openURL() is implemented but required to be

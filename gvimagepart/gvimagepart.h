@@ -88,6 +88,8 @@ protected slots:
 	void rotateRight();
 
 protected:
+	void partActivateEvent(KParts::PartActivateEvent* event);
+
 	/**
 	 * The component's widget
 	 */

@@ -33,6 +33,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvscrollpixmapview.h>
 
 
+const char* CONFIG_VIEW_GROUP="GwenviewPart View";
+
 
 class GVImagePartView : public GVScrollPixmapView {
 public:
@@ -63,7 +65,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	// Create the widgets
 	mDocument = new GVDocument(this);
 	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
-	mPixmapView->kpartConfig();
 	setWidget(mPixmapView);
 
 	KIconLoader iconLoader = KIconLoader("gwenview");
@@ -71,8 +72,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
-	connect(mPixmapView, SIGNAL(contextMenu()),
-		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
 		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
 
@@ -81,6 +80,16 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 GVImagePart::~GVImagePart() {
 }
+
+
+void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
+	if (event->activated()) {
+		mPixmapView->readConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+	} else {
+		mPixmapView->writeConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+	}
+}
+
 
 KAboutData* GVImagePart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),

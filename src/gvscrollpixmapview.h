@@ -72,12 +72,6 @@ public:
 	~GVScrollPixmapView();
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
-	/**
-	 * Used by the KParts, equivalent of readConfig(), this sets
-	 * some values but just uses the defaults rather than using
-	 * KConfig
-	 */
-	void kpartConfig();
 
 	// Properties
 	KToggleAction* autoZoom() const { return mAutoZoom; }

@@ -41,6 +41,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/fileoperation.h>
 
 
+const char* CONFIG_VIEW_GROUP="GwenviewPart View";
+
+
 class GVDirPartView : public GVScrollPixmapView {
 public:
 	GVDirPartView(QWidget* parent, GVDocument* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
@@ -79,15 +82,12 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	FileOperation::kpartConfig();
 	mFilesView->kpartConfig();
-	mPixmapView->kpartConfig();
 
 	setWidget(mSplitter);
 
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
-	connect(mPixmapView, SIGNAL(contextMenu()),
-		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
 		mDocument, SLOT(setURL(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
@@ -111,6 +111,16 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 GVDirPart::~GVDirPart() {
 	delete mSlideShow;
 }
+
+
+void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
+	if (event->activated()) {
+		mPixmapView->readConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+	} else {
+		mPixmapView->writeConfig(KGlobal::config(), CONFIG_VIEW_GROUP);
+	}
+}
+
 
 KAboutData* GVDirPart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
