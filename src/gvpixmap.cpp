@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qfileinfo.h>
 #include <qpainter.h>
+#include <qmovie.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -34,18 +35,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 GVPixmap::GVPixmap(QObject* parent) 
-: QObject(parent) 
+: QObject(parent), mMovie(0L) 
 {}
 
 
 GVPixmap::~GVPixmap()
-{}
+{
+    if (mMovie) delete mMovie;
+}
 
 
 void GVPixmap::setURL(const KURL& paramURL) {
 	//kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
 	KURL URL(paramURL);
 	if (URL.cmp(url())) return;
+
+    if (mMovie) {
+        delete mMovie;
+        mMovie=0L;
+    }
 
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(URL.protocol())) {
@@ -57,7 +65,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 	// Check whether this is a dir or a file
 	KIO::UDSEntry entry;
-	bool isDir;
+	bool isDir=false;
 	if (!KIO::NetAccess::stat(URL,entry)) return;
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
@@ -81,11 +89,14 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	}
 
 	emit loading();
+    load();
+    /*
+	emit loading();
 	if (!load()) {
 		reset();
 		return;
 	}
-	emit urlChanged(mDirURL,mFilename);
+	emit urlChanged(mDirURL,mFilename);*/
 }
 
 
@@ -98,14 +109,20 @@ void GVPixmap::setDirURL(const KURL& paramURL) {
 
 void GVPixmap::setFilename(const QString& filename) {
 	if (mFilename==filename) return;
-	
+
+    if (mMovie) {
+        delete mMovie;
+        mMovie=0L;
+    }
 	mFilename=filename;
 	emit loading();
+    load();
+    /*
 	if (!load()) {
 		reset();
 		return;
 	}
-	emit urlChanged(mDirURL,mFilename);
+	emit urlChanged(mDirURL,mFilename);*/
 }
 
 
@@ -123,30 +140,51 @@ KURL GVPixmap::url() const {
 
 
 //-Private-------------------------------------------------------------
-bool GVPixmap::load() {
+void GVPixmap::load()
+{
 	KURL pixURL=url();
 	kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
+
+	// FIXME : Async
+	QString path;
+	if (pixURL.isLocalFile()) {
+		path=pixURL.path();
+	} else {
+		if (!KIO::NetAccess::download(pixURL,path)) return;
+	}
+
+    if (mMovie) delete mMovie;
+    mMovie=new QMovie(path);
+    mMovie->connectStatus(this,SLOT(slotMovieStatusChanged(int)));
+    /* FIXME: remove temp files
+	if (!pixURL.isLocalFile()) {
+		KIO::NetAccess::removeTempFile(path);
+	}
+    */
+}
+
+
+void GVPixmap::slotMovieStatusChanged(int status)
+{
+    switch (status) {
+    case QMovie::SourceEmpty:
+    case QMovie::UnrecognizedFormat:
+        reset();
+        return;
+    case QMovie::EndOfMovie:
+        break;
+    default:
+        return;
+    }
+    
 	int posX,posY;
 	int pixWidth;
 	int pixHeight;
 	QPainter painter;
 	QColor dark(128,128,128);
 	QColor light(192,192,192);
-	QPixmap pix;
 
-	// Load pixmap
-	// FIXME : Async
-	QString path;
-	if (pixURL.isLocalFile()) {
-		path=pixURL.path();
-	} else {
-		if (!KIO::NetAccess::download(pixURL,path)) return false;
-	}
-	if (!pix.load(path)) return false;
-	if (!pixURL.isLocalFile()) {
-		KIO::NetAccess::removeTempFile(path);
-	}
-	
+	const QPixmap& pix=mMovie->framePixmap();
 	pixWidth=pix.width();
 	pixHeight=pix.height();
 
@@ -164,5 +202,9 @@ bool GVPixmap::load() {
 	// Paint pixmap on checker board 
 	painter.drawPixmap(0,0,pix);
 	painter.end();
-	return true;
+
+    delete mMovie;
+    mMovie=0L;
+	
+    emit urlChanged(mDirURL,mFilename);
 }
