@@ -140,7 +140,7 @@ QImage modify(const QImage& img, Orientation orientation) {
 		matrix.rotate(180);
 		break;
 
-	case VFlip:
+	case VFLIP:
 		matrix.scale(1,-1);
 		break;
 	

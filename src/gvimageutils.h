@@ -29,7 +29,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kurl.h>
 
 namespace GVImageUtils {
-	enum Orientation { NOT_AVAILABLE=0,NORMAL=1,HFLIP=2,ROT_180=3,VFlip=4,ROT_90_HFLIP=5,ROT_90=6,ROT_90_VFLIP=7,ROT_270=8};
+	enum Orientation { NOT_AVAILABLE=0,NORMAL=1,HFLIP=2,ROT_180=3,VFLIP=4,ROT_90_HFLIP=5,ROT_90=6,ROT_90_VFLIP=7,ROT_270=8};
 
 	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };
 

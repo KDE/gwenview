@@ -358,7 +358,7 @@ void GVMainWindow::mirror() {
 }
 
 void GVMainWindow::flip() {
-	modifyImage(GVImageUtils::VFlip);
+	modifyImage(GVImageUtils::VFLIP);
 }
 
 void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {

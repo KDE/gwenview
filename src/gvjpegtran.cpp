@@ -96,7 +96,7 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	case GVImageUtils::ROT_180:
 		process << "-rotate" << "180";
 		break;
-	case GVImageUtils::VFlip:
+	case GVImageUtils::VFLIP:
 		process << "-flip" << "vertical";
 		break;
 	case GVImageUtils::ROT_90_HFLIP:
