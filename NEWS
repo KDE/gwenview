@@ -1,23 +1,24 @@
-2004.xx.xx - v1.1.0
+2004.02.01 - v1.1.0
 - New features:
- - Double-clicking an image in the file view will open it in fullscreen.
  - New settings in print dialog to specify how the image must be print.
  - Big thumbnails are really BIG now :-).
  - First implementation of asynchronous image loading. Only for PNG right now.
+ - Double-clicking an image in the file view will open it in fullscreen [*].
 - Fixes:
- - Gave contributors the credit they deserve in the about box.
- - Updated to libexif 0.5.12 and applied patches from libexif CVS.
- - When going to the parent folder, make sure the folder we were in before is
-   selected.
- - If there's no image in the current folder, select the first visible file.
- - When holding down Shift to zoom, keep the same area of the image under the
-   cursor.
- - Nicer drag cursor.
- - Hopefully fixed every cases where the image was not centered in the view.
  - The move and copy dialog now use a tree view.
  - In the thumbnail view, create thumbnails for the visible images first
    (Thanks to Lubos Lunak).
  - Gwenview now uses its own thumbnail cache dir.
+ - Gave contributors the credit they deserve in the about box [*].
+ - Updated to libexif 0.5.12 and applied patches from libexif CVS [*].
+ - When going to the parent folder, make sure the folder we were in before is
+   selected [*].
+ - If there's no image in the current folder, select the first visible file [*].
+ - When holding down Shift to zoom, keep the same area of the image under the
+   cursor [*].
+ - Nicer drag cursor [*].
+ - Hopefully fixed every cases where the image was not centered in the view [*].
+*: Backported to 1.0.1.
 
 2003.12.07 - v1.0.0
 - New features:
