@@ -342,17 +342,17 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
 
-	d->mIncreaseGamma=new KAction(i18n("Increase gamma"),0,CTRL+Key_G,
+	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
 		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
-	d->mDecreaseGamma=new KAction(i18n("Decrease gamma"),0,SHIFT+CTRL+Key_G,
+	d->mDecreaseGamma=new KAction(i18n("Decrease Gamma"),0,SHIFT+CTRL+Key_G,
 		this,SLOT(decreaseGamma()),d->mActionCollection,"decrease_gamma");
-	d->mIncreaseBrightness=new KAction(i18n("Increase brightness" ),0,CTRL+Key_B,
+	d->mIncreaseBrightness=new KAction(i18n("Increase Brightness" ),0,CTRL+Key_B,
 		this,SLOT(increaseBrightness()),d->mActionCollection,"increase_brightness");
-	d->mDecreaseBrightness=new KAction(i18n("Decrease brightness" ),0,SHIFT+CTRL+Key_B,
+	d->mDecreaseBrightness=new KAction(i18n("Decrease Brightness" ),0,SHIFT+CTRL+Key_B,
 		this,SLOT(decreaseBrightness()),d->mActionCollection,"decrease_brightness");
-	d->mIncreaseContrast=new KAction(i18n("Increase contrast" ),0,CTRL+Key_C,
+	d->mIncreaseContrast=new KAction(i18n("Increase Contrast" ),0,CTRL+Key_C,
 		this,SLOT(increaseContrast()),d->mActionCollection,"increase_contrast");
-	d->mDecreaseContrast=new KAction(i18n("Decrease contrast" ),0,SHIFT+CTRL+Key_C,
+	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
 		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
 
 	// Connect to some interesting signals

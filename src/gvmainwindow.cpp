@@ -1086,7 +1086,7 @@ void GVMainWindow::slotReplug() {
 	}
 
 	// Create a dummy "no plugin" action list
-	KAction* noPlugin=new KAction(i18n("No plugin"), 0, 0, 0, actionCollection(), "no_plugin");
+	KAction* noPlugin=new KAction(i18n("No Plugin"), 0, 0, 0, actionCollection(), "no_plugin");
 	noPlugin->setShortcutConfigurable(false);
 	noPlugin->setEnabled(false);
 	QPtrList<KAction> noPluginList;
