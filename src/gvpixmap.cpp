@@ -290,28 +290,29 @@ void GVPixmap::print(KPrinter *pPrinter) {
 	printPainter.end();
 }
 
-QString GVPixmap::minimizeString( QString text, const QFontMetrics&
+QString GVPixmap::minimizeString( const QString& text, const QFontMetrics&
                                   metrics, int maxWidth ) {
 	if ( text.length() <= 5 )
-		return QString::null; // no sense to cut that tiny little string
+		return text; // no sense to cut that tiny little string
 
+    QString txt = text;
 	bool changed = false;
-	while ( metrics.width( text ) > maxWidth ) {
-		int mid = text.length() / 2;
-		text.remove( mid, 2 ); // remove 2 characters in the middle
+	while ( metrics.width( txt ) > maxWidth ) {
+		int mid = txt.length() / 2;
+		txt.remove( mid, 2 ); // remove 2 characters in the middle
 		changed = true;
 	}
 
 	if ( changed ) // add "..." in the middle
 	{
-		int mid = text.length() / 2;
+		int mid = txt.length() / 2;
 		if ( mid <= 5 ) // sanity check
-			return QString::null;
+			return txt;
 
-		text.replace( mid - 1, 3, "..." );
+		txt.replace( mid - 1, 3, "..." );
 	}
 
-	return text;
+	return txt;
 }
 
 void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
@@ -348,53 +349,62 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 	}
 
 	int alignment;
-	QString align = pPrinter->option("position");
-	if (align == "left") {
+	QString align = pPrinter->option("app-gwenview-position");
+	if (align == "Central-Left") {
 		alignment = Qt::AlignLeft | Qt::AlignVCenter;
-	} else if (align == "right") {
+	} else if (align == "Central-Right") {
 		alignment = Qt::AlignRight | Qt::AlignVCenter;
-	} else if (align == "top-left") {
+	} else if (align == "Top-Left") {
 		alignment = Qt::AlignTop | Qt::AlignLeft;
-	} else if (align == "top-right") {
+	} else if (align == "Top-Right") {
 		alignment = Qt::AlignTop | Qt::AlignRight;
-	} else if (align == "bottom-left") {
+	} else if (align == "Bottom-Left") {
 		alignment = Qt::AlignBottom | Qt::AlignLeft;
-	} else if (align == "bottom-right") {
+	} else if (align == "Bottom-Right") {
 		alignment = Qt::AlignBottom | Qt::AlignRight;
-	} else // default
+	} else if (align == "Top-Central") {
+		alignment = Qt::AlignTop | Qt::AlignHCenter;
+	} else if (align == "Bottom-Central") {
+		alignment = Qt::AlignBottom | Qt::AlignHCenter;
+	} else // Central
 	{
 		alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
 	}
 
-	int imgScaling = (pPrinter->option("natural-scaling").isEmpty() ?
-	                  0 : pPrinter->option("natural-scaling").toInt());
-	if (imgScaling) {
-		int w_img = image.width();
-		int h_img = image.height();
-
-		w_img = (w_img * imgScaling) / 100;
-		if (w_img == 0) w_img = 1;
-		h_img = (h_img * imgScaling) / 100;
-		if (h_img == 0) h_img = 1;
-		image = image.smoothScale( w_img, h_img, QImage::ScaleMin );
-	}
-
-	int pageScaling = (pPrinter->option("scaling").isEmpty() ?
-	                   0 : pPrinter->option("scaling").toInt());
-	if (pageScaling) {
-		w = (w * pageScaling) / 100;
-		if (w == 0) w = 1;
-		h = (h * pageScaling) / 100;
-		if (h == 0) h = 1;
-		image = image.smoothScale( w, h, QImage::ScaleMin );
-	}
-
 	int filenameOffset = 0;
+    const int MARGIN = metrics.logicalDpiX() / 2; // half-inch margin
 	bool printFilename = pPrinter->option( "app-gwenview-printFilename" ) != f;
 	if ( printFilename ) {
 		filenameOffset = fm.lineSpacing() + 14;
 		h -= filenameOffset; // filename goes into one line!
 	}
+    
+    int commentOffset = 0;
+	bool printComment = pPrinter->option( "app-gwenview-printComment" ) != f;
+	if ( commentOffset ) {
+		commentOffset = fm.lineSpacing() + 14;// #### TODO check if it's correct
+		h -= commentOffset; // #### TODO check if it's correct
+	}
+    if (commentOffset || printFilename)
+        h -= MARGIN;
+
+    bool scaling = pPrinter->option( "app-gwenview-scale" ) != f;
+    if (scaling) {       
+        QString unit = pPrinter->option("app-gwenview-scaleUnit");
+        float inches = 1;
+        if (unit == "Millimeters")
+            inches = 1/(25.5);
+        else if (unit == "Centimeters") 
+            inches = 1/(2.54);
+        float w_img = (pPrinter->option("app-gwenview-scaleWidth").isEmpty() ?
+	                  1 : pPrinter->option("app-gwenview-scaleWidth").toInt()) * inches;
+        float h_img = (pPrinter->option("app-gwenview-scaleHeight").isEmpty() ?
+	                  1 : pPrinter->option("app-gwenview-scaleHeight").toInt()) * inches;
+        w_img = w_img * pPrinter->resolution();
+        h_img = h_img * pPrinter->resolution();
+        
+        image = image.smoothScale( (int)w_img, (int)h_img, QImage::ScaleMin );
+    }
 
 	bool shrinkToFit = (pPrinter->option( "app-gwenview-shrinkToFit" ) != f);
 	if ( shrinkToFit && image.width() > w || image.height() > h ) {
@@ -428,8 +438,17 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 		if ( !fname.isEmpty() ) {
 			int fw = fm.width( fname );
 			int x = (w - fw)/2;
-			int y = metrics.height() - filenameOffset/2;
+			int y = metrics.height() - filenameOffset/2 -commentOffset/2;
 			p->drawText( x, y, fname );
+		}
+	}
+    if ( printComment ) {
+		QString comm = comment(); //minimizeString( mFilename, fm, w );
+		if ( !comm.isEmpty() ) {
+			int fw = fm.width( comm );
+			int x = (w - fw)/2;
+			int y = metrics.height() - commentOffset/2;
+			p->drawText( x, y, comm );
 		}
 	}
 }

@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
-Gwenview - A simple image viewer for KDE
-Copyright (c) 2000-2003 Aurélien Gâteau
+Gwenview - printing support
+Copyright (c) 2003 Angelo Naselli
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -29,11 +29,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdockwidget.h>
 #include <kdeprint/kprintdialogpage.h>
 
-class QCheckBox;
-class QRadioButton;
-class KComboBox;
-class KPrinter;
-class KIntNumInput;
+class GVPixmap;
+class GVPrintDialogPageBase;
 
 class GVPrintDialogPage : public KPrintDialogPage
 {
@@ -46,11 +43,21 @@ public:
     virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
     virtual void setOptions(const QMap<QString,QString>& opts);
 
-private:
-    QCheckBox *mAddFileName;
-    QCheckBox *mShrinkToFit;
-    QCheckBox *mBlackWhite;
-
+private slots:
+    void toggleRatio( bool enable );
+    void setNewUnit(const QString& string);
+    void setHValue (int value);
+    void setWValue (int value);
+    
+private:    
+    int scaleWidth() const;
+    int scaleHeight() const;
+    void setScaleWidth( int pixels );
+    void setScaleHeight( int pixels );
+    
+    bool mChanged;
+    GVPixmap *mGVPixmap;
+	GVPrintDialogPageBase* mContent;
 };
 
 #endif

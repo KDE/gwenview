@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
-Gwenview - A simple image viewer for KDE
-Copyright 2000-2003 Aurélien Gâteau
+Gwenview - printing support
+Copyright (c) 2003 Angelo Naselli
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -34,6 +34,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprinter.h>
 
 // Our
+#include <gvmainwindow.h>
+#include <gvpixmap.h>
+#include <gvprintdialogpagebase.h>
 #include <gvprintdialog.moc>
 
 
@@ -43,40 +46,135 @@ const char* STR_FALSE="false";
 
 GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 : KPrintDialogPage( parent, name ) {
-	setTitle( i18n("Image Settings") );
+    mGVPixmap = ((GVMainWindow*)parent)->gvPixmap();
+	mContent = new GVPrintDialogPageBase(this);
+	setTitle( mContent->caption() );
 
 	QVBoxLayout *layout = new QVBoxLayout( this );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setSpacing( KDialog::spacingHint() );
+	layout->addWidget( mContent );
 
-	mAddFileName = new QCheckBox( i18n("Print fi&lename below image"), this);
-	mAddFileName->setChecked( true );
-	layout->addWidget( mAddFileName );
+    mChanged = false;
+    connect(mContent->mWidth, SIGNAL( valueChanged( int )), SLOT( setWValue( int )));
+    connect(mContent->mHeight, SIGNAL( valueChanged( int )), SLOT( setHValue( int )));
+    connect(mContent->mKeepRatio, SIGNAL( toggled( bool )), SLOT( toggleRatio( bool )));
+    connect(mContent->mUnits, SIGNAL(activated(const QString &)), SLOT(setNewUnit(const QString& )));
 
-	mBlackWhite = new QCheckBox ( i18n("Print image in &black and white"), this);
-	mBlackWhite->setChecked( false );
-	layout->addWidget (mBlackWhite );
-
-	mShrinkToFit = new QCheckBox( i18n("Shrink image to &fit, if necessary"), this);
-	mShrinkToFit->setChecked( true );
-	layout->addWidget( mShrinkToFit );
-
+    toggleRatio(mContent->mScale->isChecked() );
 }
 
 GVPrintDialogPage::~GVPrintDialogPage() {}
 
 void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
                                     bool /*incldef*/ ) {
-	opts["app-gwenview-printFilename"] = mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
-	opts["app-gwenview-blackWhite"] = mBlackWhite->isChecked() ? STR_TRUE : STR_FALSE;
-	opts["app-gwenview-shrinkToFit"] = mShrinkToFit->isChecked() ? STR_TRUE : STR_FALSE;
+    opts["app-gwenview-position"] = mContent->mPosition->currentText();
+	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
+    opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-blackWhite"] = mContent->mBlackWhite->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-shrinkToFit"] = mContent->mShrinkToFit->isChecked() ? STR_TRUE : STR_FALSE;
+
+    opts["app-gwenview-scale"] = mContent->mScale->isChecked() ? STR_TRUE : STR_FALSE;
+    opts["app-gwenview-scaleKeepRatio"] = mContent->mKeepRatio->isChecked() ? STR_TRUE : STR_FALSE;
+    opts["app-gwenview-scaleUnit"] = mContent->mUnits->currentText();
+    opts["app-gwenview-scaleWidth"] = QString::number( scaleWidth() );
+    opts["app-gwenview-scaleHeight"] = QString::number( scaleHeight() );
 
 }
 
 void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
-	mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
-	mBlackWhite->setChecked( opts["app-gwenview-blackWhite"] == STR_TRUE );
-	mShrinkToFit->setChecked( opts["app-gwenview-shrinkToFit"] == STR_TRUE );
+    mContent->mPosition->setCurrentItem( opts["app-gwenview-position"] );
+	mContent->mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
+	mContent->mAddComment->setChecked( opts["app-gwenview-printComment"] == STR_TRUE );
+	mContent->mBlackWhite->setChecked( opts["app-gwenview-blackWhite"] == STR_TRUE );
+	mContent->mShrinkToFit->setChecked( opts["app-gwenview-shrinkToFit"] == STR_TRUE );
+    
+    mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
+    mContent->mUnits->setCurrentItem( opts["app-gwenview-scaleUnit"] ); 
+	mContent->mKeepRatio->setChecked( opts["app-gwenview-scaleKeepRatio"] == STR_TRUE );
+    
+    bool ok;
+    int val = opts["app-gwenview-scaleWidth"].toInt( &ok );
+    if ( ok )
+        setScaleWidth( val );
+    val = opts["app-gwenview-scaleHeight"].toInt( &ok );
+    if ( ok )
+        setScaleHeight( val );
 
+//    if ( mScale->isChecked() == mShrinkToFit->isChecked() )
+//        mShrinkToFit->setChecked( !mScale->isChecked() );
+
+    //toggleRatio(mContent->mKeepRatio->isChecked() );
+    toggleRatio(mContent->mScale->isChecked() );
 }
+
+int GVPrintDialogPage::scaleWidth() const
+{
+    return mContent->mWidth->value();
+}
+
+int GVPrintDialogPage::scaleHeight() const
+{
+    return mContent->mHeight->value();
+}
+
+void GVPrintDialogPage::setScaleWidth( int value )
+{
+    mContent->mWidth->setValue(value);
+}
+
+void GVPrintDialogPage::setScaleHeight( int value )
+{
+    mContent->mHeight->setValue(value);
+}
+
+// SLOTS
+void GVPrintDialogPage::setHValue (int value){
+    if (mContent->mKeepRatio->isChecked()) {
+        if (!mChanged) {
+            int w = (mGVPixmap->width() * value) / mGVPixmap->height()  ;
+            mContent->mWidth->setValue( w ? w : 1);                            
+        }
+        mChanged = (!mChanged);
+    }
+    mContent->mHeight->setValue(value);     
+}
+
+void GVPrintDialogPage::setWValue (int value){    
+    if (mContent->mKeepRatio->isChecked()) {
+        if (!mChanged) {
+            int h = (mGVPixmap->height() * value) / mGVPixmap->width();            
+            mContent->mHeight->setValue( h ? h : 1);
+        }
+        mChanged = (!mChanged);
+    }
+    mContent->mWidth->setValue(value);    
+}
+    
+void GVPrintDialogPage::toggleRatio(bool enable) {
+    if (enable) {
+        float cm = 1;
+        if (mContent->mUnits->currentText() == "Millimeters")
+            cm = 10;
+        else if (mContent->mUnits->currentText() == "Inches")
+            cm = 1/(2.54);
+        // 15x10 cm 
+        float hValue, wValue;
+        if (mGVPixmap->height() > mGVPixmap->width()) {
+            hValue = cm*15;
+            wValue = (mGVPixmap->width() * (hValue))/ mGVPixmap->height();
+        } else {
+            wValue = cm*15;
+            hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();            
+        }        
+        mContent->mWidth->setValue((int)wValue);
+        mContent->mHeight->setValue((int)hValue);
+    }
+}
+
+
+void GVPrintDialogPage::setNewUnit(const QString& string) {
+    mContent->mUnits->setCurrentItem(string);
+    toggleRatio(true); // to do better
+}
+
+
 
