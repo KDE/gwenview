@@ -471,11 +471,10 @@ void GVPixmap::load() {
 			mCompressedData.resize(0);
 		}
 
+        d->loadComment(path);
 	} else {
 		mImage.reset();
 	}
-
-	d->loadComment(path);
 	
 	KIO::NetAccess::removeTempFile(path);
 	emit loaded(mDirURL,mFilename);
