@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir) -I$(srcdir)/..
+INCLUDES = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES = libgvcompat.la
 
