@@ -93,22 +93,22 @@ private:
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	WheelBehaviours mWheelBehaviours;
+	QCursor mDrag,mDragging;
 
 	// Offset to center images
 	int mXOffset,mYOffset;
-	QTime lastWheelZoomTime;
+	QTime mLastWheelZoomTime;
 
 	// Zoom info
 	double mZoom;
 
 	// point in image that should be centered as % of width and height
-//	double mXCenter, mYCenter;
-	bool mouseZoomAction;
+	bool mMouseZoomAction;
 	double mPictX, mPictY;
 	int mViewX, mViewY;
 
 	// context menu
-	QPopupMenu *menu;
+	QPopupMenu* mMenu;
 
 	// Our actions
 	KToggleAction* mAutoZoom;

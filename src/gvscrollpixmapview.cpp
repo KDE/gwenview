@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
+#include <kstandarddirs.h>
 #include <kstdaction.h>
 
 // Our includes
@@ -69,8 +70,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mPathLabel(new QLabel(parent))
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
-, mouseZoomAction(false)
-, menu(NULL)
+, mMouseZoomAction(false)
+, mMenu(NULL)
 , mActionCollection(actionCollection)
 , mFullScreen(false)
 , mMouseToggleZoom(false)
@@ -80,6 +81,14 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
+
+	// Load cursors
+	QString path;
+	path=locate("appdata", "cursor/drag.png");
+	mDrag=QCursor(QPixmap(path));
+	path=locate("appdata", "cursor/dragging.png");
+	mDragging=QCursor(QPixmap(path));
+	setCursor(mDrag);
 	
 	// Init path label
 	mPathLabel->setBackgroundColor(white);
@@ -194,7 +203,7 @@ void GVScrollPixmapView::setZoom(double zoom) {
 	if (!mAutoZoom->isChecked()) {
 		// Find the coordinate of the center of the image
 		// and center the view on it
-		if (!mouseZoomAction) {
+		if (!mMouseZoomAction) {
 			mPictX = mGVPixmap->width()/2;
 			mPictY = mGVPixmap->height()/2;
 			mViewX = visibleWidth()/2;
@@ -224,7 +233,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	} else {
 		viewport()->setBackgroundMode(PaletteDark);
 		mAutoHideTimer->stop();
-		viewport()->unsetCursor();
+		viewport()->setCursor(mDrag);
 	}
 	
 	if (mFullScreen && mShowPathInFullScreen) {
@@ -354,6 +363,7 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	mScrollStartX=event->x();
 	mScrollStartY=event->y();
 	mMouseToggleZoom=true;
+	viewport()->setCursor(mDragging);
 }
 
 
@@ -362,11 +372,10 @@ void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 		mMouseToggleZoom=false;
 		if (!mAutoZoom->isChecked()) {
 			mDragStarted=true;
-			viewport()->setCursor(QCursor(SizeAllCursor));
 		}
 	}
 	if (mFullScreen && !mDragStarted) {
-		viewport()->unsetCursor();
+		viewport()->setCursor(mDrag);
 		mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 	}
 	
@@ -383,13 +392,15 @@ void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	mScrollStartY=event->y();
 	scrollBy(deltaX,deltaY);
 }
+
+
 void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 	// If the mouse was released for toggling the zoom, end here
 	if (mMouseToggleZoom && event->button() == Qt::LeftButton
 		// do not interfere with opera gestures
 		&& !(event->stateAfter() & Qt::RightButton)
 		// do not zoom when 
-		&& (!menu || !menu->isVisible())) {
+		&& (!mMenu || !mMenu->isVisible())) {
 		mMouseToggleZoom=false;
 		// switch zoom
 		if (mAutoZoom->isChecked()) {
@@ -397,10 +408,10 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			mPictY = (event->y()-mYOffset)/mZoom;
 			mViewX = visibleWidth()/2;
 			mViewY = visibleHeight()/2;
-			mouseZoomAction = true;
+			mMouseZoomAction = true;
 			mAutoZoom->setChecked(false);
 			setAutoZoom(false);
-			mouseZoomAction = false;
+			mMouseZoomAction = false;
 		} else {
 			mAutoZoom->setChecked(true);
 			setAutoZoom(true);
@@ -411,11 +422,9 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 	// If the mouse was released because of the end of a drag, end here
 	if (mDragStarted) {
 		mDragStarted=false;
+		viewport()->setCursor(mDrag);
 		if (mFullScreen) {
-			viewport()->unsetCursor();
 			mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
-		} else {
-			viewport()->unsetCursor();
 		}
 		return;
 	}
@@ -440,7 +449,7 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		} else {
 			if (!(mGVPixmap->isNull() && !mFullScreen)) {
 				makeContextMenu();
-				menu->exec(event->globalPos());
+				mMenu->exec(event->globalPos());
 				return;
 			}
 		}
@@ -464,7 +473,7 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 		return;
 	}
 
-	// No auto zoom, use  mWheelBehaviours
+	// No auto zoom, use mWheelBehaviours
 	ButtonState modifier=ButtonState( event->state() & (ShiftButton | ControlButton | AltButton) );
 	switch (mWheelBehaviours[modifier]) {
 	case Browse:
@@ -483,21 +492,21 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 	case Zoom:
 		// only record the view and pict variables once per action,
 		// so that they are reversible
-		if (lastWheelZoomTime.isNull()
-				|| lastWheelZoomTime.elapsed() > 1000) {
+		if (mLastWheelZoomTime.isNull()
+				|| mLastWheelZoomTime.elapsed() > 1000) {
 			mViewX = event->x();
 			mViewY = event->y();
 			mPictX = double(mViewX-mXOffset)/mZoom;
 			mPictY = double(mViewY-mYOffset)/mZoom;
 		}
-		lastWheelZoomTime.start();
-		mouseZoomAction = true;
+		mLastWheelZoomTime.start();
+		mMouseZoomAction = true;
 		if (event->delta()<0) {
 			if (mZoomIn->isEnabled()) mZoomIn->activate();
 		} else {
 			if (mZoomOut->isEnabled()) mZoomOut->activate();
 		}
-		mouseZoomAction = true;
+		mMouseZoomAction = true;
 		event->accept();
 		break;
 
@@ -568,31 +577,31 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::makeContextMenu() {
-	if (menu) return;
+	if (mMenu) return;
 
-	menu = new QPopupMenu(this);
+	mMenu = new QPopupMenu(this);
 
-	mActionCollection->action("fullscreen")->plug(menu);
+	mActionCollection->action("fullscreen")->plug(mMenu);
 	
 	if (!mGVPixmap->isNull()) {
-		menu->insertSeparator();
+		mMenu->insertSeparator();
 		
-		mAutoZoom->plug(menu);
-		mZoomIn->plug(menu);
-		mZoomOut->plug(menu);
-		mResetZoom->plug(menu);
-		mLockZoom->plug(menu);
+		mAutoZoom->plug(mMenu);
+		mZoomIn->plug(mMenu);
+		mZoomOut->plug(mMenu);
+		mResetZoom->plug(mMenu);
+		mLockZoom->plug(mMenu);
 
-		menu->insertSeparator();
+		mMenu->insertSeparator();
 		
-		mActionCollection->action("first")->plug(menu);
-		mActionCollection->action("previous")->plug(menu);
-		mActionCollection->action("next")->plug(menu);
-		mActionCollection->action("last")->plug(menu);
+		mActionCollection->action("first")->plug(mMenu);
+		mActionCollection->action("previous")->plug(mMenu);
+		mActionCollection->action("next")->plug(mMenu);
+		mActionCollection->action("last")->plug(mMenu);
 		
-		menu->insertSeparator();
+		mMenu->insertSeparator();
 		
-		QPopupMenu* editMenu=new QPopupMenu(menu);
+		QPopupMenu* editMenu=new QPopupMenu(mMenu);
 		mActionCollection->action("rotate_left")->plug(editMenu);
 		mActionCollection->action("rotate_right")->plug(editMenu);
 		mActionCollection->action("mirror")->plug(editMenu);
@@ -601,27 +610,27 @@ void GVScrollPixmapView::makeContextMenu() {
 			editMenu->insertItem( i18n("Open with &Editor") ),
 			this,SLOT(openWithEditor()) );
 			
-		menu->insertItem( i18n("Edit"), editMenu );
+		mMenu->insertItem( i18n("Edit"), editMenu );
 		
-		menu->insertSeparator();
+		mMenu->insertSeparator();
 		
-		menu->connectItem(
-			menu->insertItem( i18n("&Rename...") ),
+		mMenu->connectItem(
+			mMenu->insertItem( i18n("&Rename...") ),
 			this,SLOT(renameFile()) );
-		menu->connectItem(
-			menu->insertItem( i18n("&Copy To...") ),
+		mMenu->connectItem(
+			mMenu->insertItem( i18n("&Copy To...") ),
 			this,SLOT(copyFile()) );
-		menu->connectItem(
-			menu->insertItem( i18n("&Move To...") ),
+		mMenu->connectItem(
+			mMenu->insertItem( i18n("&Move To...") ),
 			this,SLOT(moveFile()) );
-		menu->connectItem(
-			menu->insertItem( i18n("&Delete") ),
+		mMenu->connectItem(
+			mMenu->insertItem( i18n("&Delete") ),
 			this,SLOT(deleteFile()) );
 		
-		menu->insertSeparator();
+		mMenu->insertSeparator();
 		
-		menu->connectItem(
-			menu->insertItem( i18n("Properties") ),
+		mMenu->connectItem(
+			mMenu->insertItem( i18n("Properties") ),
 			this,SLOT(showFileProperties()) );
 	}
 }
