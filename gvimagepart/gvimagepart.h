@@ -42,6 +42,7 @@ class GVImagePartBrowserExtension: public KParts::BrowserExtension {
 //protected slots:
  public slots:
 	void contextMenu();
+	void print();
  private:
 	GVImagePart* mGVImagePart;
 };
@@ -64,6 +65,12 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	 * Returns m_file
 	 */
 	QString filePath();
+
+	/**
+	 * Print the image being viewed
+	 */
+	void GVImagePart::print();
+
  protected:
 	/** Open the file whose path is stored in the member variable
 	 * m_file and return true on success, false on failure.

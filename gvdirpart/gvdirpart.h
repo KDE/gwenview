@@ -56,6 +56,8 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	void del();
 	void editMimeType();
 
+	void print();
+
 	void directoryChanged(const KURL& dirURL);
  private:
 	GVDirPart* mGVDirPart;
@@ -79,6 +81,11 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * Returns the name of the current file in the pixmap
 	 */
 	KURL pixmapURL();
+
+	/**
+	 * Print the image being viewed if there is one
+	 */
+	void print();
  protected:
 
 	/**

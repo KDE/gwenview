@@ -27,8 +27,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 
 #include "gvimagepart.h"
-#include <src/gvscrollpixmapview.h>
 #include <src/gvpixmap.h>
+#include <src/gvprintdialog.h>
+#include <src/gvscrollpixmapview.h>
 
 //Factory Code
 typedef KParts::GenericFactory<GVImagePart> GVImageFactory;
@@ -36,8 +37,6 @@ K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory );
 
 GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent,
 			 const char* name, const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
-	kdDebug() << k_funcinfo << endl;
-
 	setInstance( GVImageFactory::instance() );
 
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
@@ -93,11 +92,23 @@ void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& 
 	emit setWindowCaption(caption);
 }
 
+void GVImagePart::print() {
+	KPrinter printer;
+
+	printer.setDocName( m_url.filename() );
+	KPrinter::addDialogPage( new GVPrintDialogPage( mPixmapView, "GV page"));
+
+	if (printer.setup(mPixmapView, QString::null, true)) {
+		mGVPixmap->print(&printer);
+	}
+}
+
 /***** GVImagePartBrowserExtension *****/
 
 GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {
 	mGVImagePart = viewPart;
+	emit enableAction("print", true );
 }
 
 GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
@@ -114,6 +125,10 @@ void GVImagePartBrowserExtension::contextMenu() {
 	emit popupMenu(QCursor::pos(), mGVImagePart->url(), mimeType);
 	*/
 	emit popupMenu(QCursor::pos(), mGVImagePart->url(), 0);
+}
+
+void GVImagePartBrowserExtension::print() {
+	mGVImagePart->print();
 }
 
 #include "gvimagepart.moc"

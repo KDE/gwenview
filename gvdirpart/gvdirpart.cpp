@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvscrollpixmapview.h>
 #include <src/gvfileviewstack.h>
 #include <src/gvpixmap.h>
+#include <src/gvprintdialog.h>
 #include <src/gvslideshow.h>
 #include <src/gvslideshowdialog.h>
 #include <src/fileoperation.h>
@@ -144,11 +145,24 @@ void GVDirPart::toggleSlideShow() {
 	}
 }
 
+void GVDirPart::print() {
+	KPrinter printer;
+	if ( !mGVPixmap->filename().isEmpty() ) {
+		printer.setDocName( m_url.filename() );
+		KPrinter::addDialogPage( new GVPrintDialogPage( mPixmapView, "GV page"));
+
+		if (printer.setup(mPixmapView, QString::null, true)) {
+			mGVPixmap->print(&printer);
+		}
+	}
+}
+
 /***** GVDirPartBrowserExtension *****/
 
 GVDirPartBrowserExtension::GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {
 	mGVDirPart = viewPart;
+	emit enableAction("print", true );
 }
 
 GVDirPartBrowserExtension::~GVDirPartBrowserExtension() {
@@ -202,6 +216,10 @@ void GVDirPartBrowserExtension::contextMenu() {
 	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
 	*/
 	emit popupMenu(QCursor::pos(), mGVDirPart->pixmapURL(), 0);
+}
+
+void GVDirPartBrowserExtension::print() {
+	mGVDirPart->print();
 }
 
 #include "gvdirpart.moc"
