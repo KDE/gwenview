@@ -57,8 +57,6 @@ public slots:
 	void editMimeType();
 
 	void print();
-
-	void directoryChanged(const KURL& dirURL);
 private:
 	GVDirPart* mGVDirPart;
 };
@@ -109,15 +107,17 @@ protected slots:
 	void toggleSlideShow();
 
 	/**
-	 * Sets Konqueror's caption with setWindowCaption()
-	 * called by loaded() signal in GVDocument
+	 * Sets Konqueror's caption, statusbar and emits completed().
+	 * Called by loaded() signal in GVDocument
 	 */
-	void setKonquerorWindowCaption(const KURL& url);
+	void loaded(const KURL& url);
 
 	/**
 	 * Rotates the current image 90 degrees clockwise
 	 */
 	void rotateRight();
+
+	void directoryChanged(const KURL& dirURL);
 
 protected:
 	/**

@@ -103,9 +103,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
 		mDocument, SLOT(setURL(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
-		mBrowserExtension, SLOT(directoryChanged(const KURL&)) );
+		this, SLOT(directoryChanged(const KURL&)) );
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
-		this, SLOT(setKonquerorWindowCaption(const KURL&)) );
+		this, SLOT(loaded(const KURL&)) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
@@ -160,6 +160,7 @@ bool GVDirPart::openURL(const KURL& url) {
 		return false;
 	}
 
+	emit started( 0 );
 	m_url = url;
 	m_url.adjustPath(1);
 
@@ -169,11 +170,12 @@ bool GVDirPart::openURL(const KURL& url) {
 	return true;
 }
 
-void GVDirPart::setKonquerorWindowCaption(const KURL& url) {
+void GVDirPart::loaded(const KURL& url) {
 	QString caption = url.filename();
 	if( !mDocument->image().isNull())
 		caption += QString(" %1 x %2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
+	emit completed();
 }
 
 KURL GVDirPart::pixmapURL() {
@@ -223,6 +225,11 @@ void GVDirPart::rotateRight() {
 	mDocument->transform(GVImageUtils::ROT_90);
 }
 
+void GVDirPart::directoryChanged(const KURL& dirURL) {
+	if( dirURL == m_url ) return;
+	emit mBrowserExtension->openURLRequest(dirURL);
+}
+
 /***** GVDirPartBrowserExtension *****/
 
 GVDirPartBrowserExtension::GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name)
@@ -265,10 +272,6 @@ void GVDirPartBrowserExtension::copy() {
 }
 void GVDirPartBrowserExtension::cut() {
 	kdDebug() << k_funcinfo << endl;
-}
-
-void GVDirPartBrowserExtension::directoryChanged(const KURL& dirURL) {
-	emit openURLRequest(dirURL);
 }
 
 void GVDirPartBrowserExtension::contextMenu() {
