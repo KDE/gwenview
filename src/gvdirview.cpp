@@ -55,6 +55,7 @@ const char* DND_PREFIX="dnd";
 const char* CONFIG_BRANCH_URL="url";
 const char* CONFIG_BRANCH_ICON="icon";
 const char* CONFIG_BRANCH_TITLE="title";
+const char* CONFIG_NUM_BRANCHES="num branches";
 
 static QString dirSyntax(const QString &d) {
 	if(!d.isEmpty()) {
@@ -127,11 +128,20 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 // Config
 //
 //------------------------------------------------------------------------
-void GVDirView::readConfig(KConfig* config, const QString& group) {
-	for(int num=1; num<100; num++) {
-		QString grp;
 
-		grp.sprintf("%s - branch:%d", group.latin1(), num);
+static QString branchGroupKey(const QString &group, unsigned int num) {
+	QString grp;
+	grp.sprintf("%s - branch:%d", group.latin1(), num+1);
+	return grp;
+}
+
+void GVDirView::readConfig(KConfig* config, const QString& group) {
+	// Note: Previously the number of branches was not saved -> use a default of 20
+	// so that any old branches are still used.
+	unsigned int numBranches=config->readNumEntry(CONFIG_NUM_BRANCHES, 20);
+	for(unsigned int num=0; num<numBranches; num++) {
+		QString grp(branchGroupKey(group, num));
+
 		if(config->hasGroup(grp)) {
 			config->setGroup(grp);
 			QString url;
@@ -158,13 +168,12 @@ void GVDirView::readConfig(KConfig* config, const QString& group) {
 
 void GVDirView::writeConfig(KConfig* config, const QString& group) {
 	GVFileTreeBranch *branch;
-	int num=1;
+	unsigned int num=0;
+	unsigned int oldBranches=config->readNumEntry(CONFIG_NUM_BRANCHES);
 
+	config->writeEntry(CONFIG_NUM_BRANCHES, mBranches.count());
 	for (branch=mBranches.first(); branch; branch=mBranches.next(), num++) {
-		QString grp;
-		grp.sprintf("%s - branch:%d", group.latin1(), num);
-
-		config->setGroup(grp);
+		config->setGroup(branchGroupKey(group, num));
 		if (branch->rootUrl().isLocalFile()) {
 			config->writePathEntry(CONFIG_BRANCH_URL, branch->rootUrl().path());
 		} else {
@@ -172,6 +181,12 @@ void GVDirView::writeConfig(KConfig* config, const QString& group) {
 		}
 		config->writeEntry(CONFIG_BRANCH_ICON, branch->icon());
 		config->writeEntry(CONFIG_BRANCH_TITLE, branch->name());
+	}
+
+	if(oldBranches>mBranches.count()) {
+		for(num=mBranches.count(); num<oldBranches; ++num) {
+			config->deleteGroup(branchGroupKey(group, num));
+		}
 	}
 }
 
@@ -557,6 +572,7 @@ void GVDirView::removeBranch() {
 	if (br && KMessageBox::Yes==KMessageBox::warningYesNo(this,
                                 "<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
                                 + "</qt>")) {
+		mBranches.remove(static_cast<GVFileTreeBranch*>(br));
 		KFileTreeView::removeBranch(br);
 		if (0==childCount()) {
 			KMessageBox::information(this,
