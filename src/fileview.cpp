@@ -239,7 +239,7 @@ void FileView::slotSelectPrevious() {
 
 void FileView::slotSelectNext() {
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (item && !item->isDir() || GVArchive::fileItemIsArchive(item)) {
+	if (item && !(item->isDir() || GVArchive::fileItemIsArchive(item))) {
 		item=currentFileView()->nextItem(item);
 		if (!item) return;
 	} else {
@@ -364,7 +364,7 @@ bool FileView::currentIsFirst() const {
 	KFileItem* prevItem=currentFileView()->prevItem(item);
 	if (!prevItem) return true;
 
-	return prevItem->isDir();
+	return prevItem->isDir() || GVArchive::fileItemIsArchive(prevItem);
 }
 
 
@@ -504,7 +504,17 @@ void FileView::initDirListerFilter() {
 
 
 void FileView::updateActions() {
-	if (currentFileView()->count()==0) {
+    bool atLeastOneImage=false;
+	KFileItem* item=currentFileView()->firstFileItem();
+	if (item) {
+    	while (item->isDir() || GVArchive::fileItemIsArchive(item)) {
+	    	item=currentFileView()->nextItem(item);
+		    if (!item) break;
+    	}
+        if (item) atLeastOneImage=true;
+    }
+    
+	if (!atLeastOneImage) {
 		mSelectFirst->setEnabled(false);
 		mSelectPrevious->setEnabled(false);
 		mSelectNext->setEnabled(false);
@@ -512,7 +522,8 @@ void FileView::updateActions() {
 		return;
 	}
 
-	KFileItem* item=currentFileView()->currentFileItem();
+    
+	item=currentFileView()->currentFileItem();
 	if (!item || item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
@@ -520,6 +531,7 @@ void FileView::updateActions() {
 		mSelectLast->setEnabled(true);	
 		return;
 	}
+    
 
 	bool isFirst=currentIsFirst();
 	bool isLast=currentIsLast();
