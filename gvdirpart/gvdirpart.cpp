@@ -48,6 +48,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	m_gvPixmap = new GVPixmap(this);
 	m_filesView = new GVFileViewStack(m_splitter, actionCollection());
 	m_pixmapView = new GVScrollPixmapView(m_splitter, m_gvPixmap, actionCollection());
+	m_pixmapView->kpartConfig();
 	setWidget(m_splitter);
 
 	connect(m_filesView, SIGNAL(urlChanged(const KURL&)),

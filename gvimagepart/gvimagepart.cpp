@@ -39,6 +39,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	// Create the widgets
 	m_gvPixmap = new GVPixmap(this);
 	m_pixmapView = new GVScrollPixmapView(parentWidget, m_gvPixmap, actionCollection());
+	m_pixmapView->kpartConfig();
 	setWidget(m_pixmapView);
 
 	// Example action creation code
