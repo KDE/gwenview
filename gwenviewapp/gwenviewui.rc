@@ -111,7 +111,7 @@
   <Action name="small_thumbnails" />
   <Action name="med_thumbnails" />
   <Action name="large_thumbnails" />
-</Toolbar>
+</ToolBar>
 
 <StatusBar/>
 
