@@ -55,8 +55,18 @@ public slots:
 	void setDirURL(const KURL&);
 	void setFilename(const QString&);
 
-	void save();
+	/**
+	 * Save to the current file.
+	 * Returns false if failed.
+	 */
+	bool save();
 	void saveAs();
+	
+	/**
+	 * If the image has been modified, prompt the user to save the changes.
+	 * Returns true if it's safe to switch to another image.
+	 */
+	bool saveIfModified();
 
 	// "Image manipulation"
 	void rotateLeft();
@@ -96,7 +106,6 @@ private:
 	// Store compressed data. Usefull for lossless manipulations.
 	QByteArray mCompressedData;
 
-	void saveIfModified();
 	void reset();
 	void load();
 	bool saveInternal(const KURL&,const QString& format);

@@ -54,6 +54,12 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	//kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
 	KURL URL(paramURL);
 	if (URL.cmp(url())) return;
+	
+	// Ask to save if necessary.
+	if (!saveIfModified()) {
+		emit urlChanged(mDirURL,mFilename);
+		return;
+	}
 
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(URL.protocol())) {
@@ -75,10 +81,6 @@ void GVPixmap::setURL(const KURL& paramURL) {
 		}
 	}
 
-	// Ask to save if necessary. Do this now because mDirURL and mFilename
-	// have not been modified yet.
-	saveIfModified();
-
 	if (isDir) {
 		mDirURL=URL;
 		mFilename="";
@@ -99,7 +101,10 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 
 void GVPixmap::setDirURL(const KURL& paramURL) {
-	saveIfModified();
+	if (!saveIfModified()) {
+		emit urlChanged(mDirURL,mFilename);
+		return;
+	}
 	mDirURL=paramURL;
 	mFilename="";
 	reset();
@@ -109,7 +114,10 @@ void GVPixmap::setDirURL(const KURL& paramURL) {
 void GVPixmap::setFilename(const QString& filename) {
 	if (mFilename==filename) return;
 
-	saveIfModified();
+	if (!saveIfModified()) {
+		emit urlChanged(mDirURL,mFilename);
+		return;
+	}
 	mFilename=filename;
 	emit loading();
 	load();
@@ -173,10 +181,12 @@ void GVPixmap::flip() {
 }
 
 
-void GVPixmap::save() {
+bool GVPixmap::save() {
 	if (!saveInternal(url(),mImageFormat)) {
 		KMessageBox::sorry(0,i18n("Could not save file."));
+		return false;
 	}
+	return true;
 }
 
 
@@ -190,6 +200,22 @@ void GVPixmap::saveAs() {
 
 	if (!saveInternal(saveURL,format)) {
 		KMessageBox::sorry(0,i18n("Could not save file."));
+	}
+}
+
+bool GVPixmap::saveIfModified() {
+	if (!mModified) return true;
+	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
+				.arg(url().prettyURL());
+	int result=KMessageBox::questionYesNoCancel(0,msg,QString::null,i18n("Save"),i18n("Discard"));
+	switch (result) {
+	case KMessageBox::Yes:
+		return save();
+	case KMessageBox::No:
+		mModified=false;
+		return true;
+	default:
+		return false;
 	}
 }
 
@@ -285,13 +311,4 @@ void GVPixmap::reset() {
 	emit urlChanged(mDirURL,mFilename);
 }
 
-
-void GVPixmap::saveIfModified() {
-	if (!mModified) return;
-	mModified=false;
-	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
-				.arg(url().prettyURL());
-	int result=KMessageBox::questionYesNo(0,msg,QString::null,i18n("Save as..."),i18n("Discard"));
-	if (result==KMessageBox::Yes) saveAs();
-}
 

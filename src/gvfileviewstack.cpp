@@ -162,14 +162,15 @@ void GVFileViewStack::setFocus() {
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
 	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + filename << endl;
-	if (mDirURL.cmp(dirURL,true)) return;
-
-	mDirURL=dirURL;
-	currentFileView()->setShownFileItem(0L);
-	mFilenameToSelect=filename;
-
-	mDirLister->openURL(mDirURL);
-	updateActions();
+	if ( !mDirURL.cmp(dirURL,true) ) {
+		mDirURL=dirURL;
+		currentFileView()->setShownFileItem(0L);
+		mFilenameToSelect=filename;
+		mDirLister->openURL(mDirURL);
+		updateActions();
+	} else {
+		selectFilename(filename);
+	}
 }
 
 
@@ -197,6 +198,7 @@ void GVFileViewStack::selectFilename(QString filename) {
 
 		if (item->name()==filename) {
 			currentFileView()->setCurrentItem(item);
+			currentFileView()->setSelected(item,true);
 			currentFileView()->ensureItemVisible(item);
 			emitURLChanged();
 			break;
