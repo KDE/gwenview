@@ -19,8 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVMETAEDIT_H
 #define GVMETAEDIT_H
 
+// Qt
 #include <qvbox.h>
+
+// KDE
 #include <kfilemetainfo.h>
+
 class QTextEdit;
 class GVPixmap;
 
@@ -31,7 +35,7 @@ public:
 	~GVMetaEdit();
 
 private slots:
-	void slotURLChanged();
+	void updateContent();
 
 private:
 	bool mWritable;

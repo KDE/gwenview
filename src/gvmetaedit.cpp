@@ -17,12 +17,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 // Qt
+#include <qlabel.h>
 #include <qtextedit.h>
 #include <qfileinfo.h>
 
 // KDE
-#include <kfilemetainfo.h>
 #include <kdeversion.h>
+#include <kfilemetainfo.h>
+#include <klocale.h>
 
 // Local
 #include "gvpixmap.h"
@@ -31,16 +33,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
 const char* JPEG_EXIF_COMMENT="Comment";
+const char* PNG_COMMENT="Comment";
 
 
 GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
 : QVBox(parent, name)
 , mGVPixmap(gvp)
 , mMetaInfo(0L)
-, mCommentEdit(new QTextEdit(this)) {
+{
+	mCommentEdit=new QTextEdit(this);
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		this,SLOT(slotURLChanged()) );
-	slotURLChanged();
+		this,SLOT(updateContent()) );
+	updateContent();
 }
 
 
@@ -49,68 +53,73 @@ GVMetaEdit::~GVMetaEdit() {
 }
 
 
-void
-GVMetaEdit::slotURLChanged() {
+void GVMetaEdit::updateContent() {
 	clearData();
 
-	KURL url = mGVPixmap->url();
-	if (url.isValid()) {
-		// make KFileMetaInfo object and check if file is writable
-		#if KDE_VERSION_MAJOR >= 3 && KDE_VERSION_MINOR >= 2
-		mMetaInfo = new KFileMetaInfo(url);
-		if (url.isLocalFile()) {
-			mWritable = QFileInfo(url.path()).isWritable();
-		} else {
-			mWritable = false;
-		}
-		#else
-		// KDE <= 3.1 can only get meta info from local files
-		mMetaInfo = new KFileMetaInfo(url.path());
-		mWritable = QFileInfo(url.path()).isWritable();
-		#endif
+	if (mGVPixmap->isNull()) {
+		mCommentEdit->setText(i18n("No image selected"));
+		mCommentEdit->setEnabled(false);
+		return;
+	}
 
-		// retrieve comment item
-		QString mimetype = "";
-		if (!mMetaInfo->isEmpty()) {
-			mimetype = mMetaInfo->mimeType();
-		}
-		if (mimetype == "image/jpeg") {
-			mCommentItem = (*mMetaInfo)[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-		} else if (mimetype == "image/png") {
-			// we take the first comment
-			QString name = (*mMetaInfo)[JPEG_EXIF_COMMENT].keys()[0];
-			mCommentItem = (*mMetaInfo)[JPEG_EXIF_COMMENT][name];
-			mWritable = false; // not implemented in KDE
-		} else {
-			mCommentItem = KFileMetaInfoItem();
-			mWritable = false;
-		}
-		
-		/* Some code to debug
-		QStringList k,l;
-		k = mMetaInfo->groups();
-		for (uint i=0; i<k.size(); ++i) {
-			l = (*mMetaInfo)[k[i]].keys();
-			for (uint j=0; j<l.size(); ++j) {
-				kdDebug() << k[i] << '\t' << l[j] <<endl;
-			}
-		}*/
-		
-		// set comment in QTextEdit
-		if (mCommentItem.isValid()) {
-			mCommentEdit->setText(mCommentItem.string());
-			mCommentEdit->setReadOnly(!mWritable);
-			mCommentEdit->show();
-		} else {
-			mCommentEdit->hide();
-		}
+	KURL url = mGVPixmap->url();
+	// make KFileMetaInfo object and check if file is writable
+	#if KDE_VERSION_MAJOR >= 3 && KDE_VERSION_MINOR >= 2
+	mMetaInfo = new KFileMetaInfo(url);
+	if (url.isLocalFile()) {
+		mWritable = QFileInfo(url.path()).isWritable();
 	} else {
-		mCommentEdit->hide();
+		mWritable = false;
+	}
+	#else
+	// KDE <= 3.1 can only get meta info from local files
+	mMetaInfo = new KFileMetaInfo(url.path());
+	mWritable = QFileInfo(url.path()).isWritable();
+	#endif
+
+	// retrieve comment item
+	QString mimetype = "";
+	if (!mMetaInfo->isEmpty()) {
+		mimetype = mMetaInfo->mimeType();
+	}
+	if (mimetype == "image/jpeg") {
+		mCommentItem = (*mMetaInfo)[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
+	} else if (mimetype == "image/png") {
+		// we take the first comment
+		QString name = (*mMetaInfo)[PNG_COMMENT].keys()[0];
+		mCommentItem = (*mMetaInfo)[PNG_COMMENT][name];
+		mWritable = false; // not implemented in KDE
+	} else {
+		mCommentItem = KFileMetaInfoItem();
+		mWritable = false;
+	}
+	
+	/* Some code to debug
+	QStringList k,l;
+	k = mMetaInfo->groups();
+	for (uint i=0; i<k.size(); ++i) {
+		l = (*mMetaInfo)[k[i]].keys();
+		for (uint j=0; j<l.size(); ++j) {
+			kdDebug() << k[i] << '\t' << l[j] <<endl;
+		}
+	}*/
+	
+	// set comment in QTextEdit
+	if (mCommentItem.isValid()) {
+		mCommentEdit->setText(QString::fromUtf8( mCommentItem.string().ascii() ));
+		mCommentEdit->setEnabled(true);
+		mCommentEdit->setReadOnly(!mWritable);
+	} else {
+		mCommentEdit->setText(i18n("No comment available"));
+		mCommentEdit->setEnabled(false);
+		mCommentEdit->setReadOnly(true);
 	}
 }
-void
-GVMetaEdit::clearData() {
+
+
+void GVMetaEdit::clearData() {
 	if (!mMetaInfo) return;
+
 	// save changed data
 	if (mWritable && mCommentEdit->isModified()) {
 		mCommentItem.setValue(mCommentEdit->text());
