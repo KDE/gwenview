@@ -348,7 +348,9 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 */
 
 ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, ThumbnailSize size)
-: KIO::Job(false), mState( STATE_NEXTTHUMB ), mThumbnailSize(size), mSuspended( false )
+: KIO::Job(false), mState( STATE_NEXTTHUMB ),
+  mCurrentVisibleIndex( -1 ), mFirstVisibleIndex( -1 ), mLastVisibleIndex( -1 ),
+  mThumbnailSize(size), mSuspended( false )
 {
 	LOG("");
 	
@@ -374,6 +376,10 @@ ThumbnailLoadJob::~ThumbnailLoadJob() {
 
 
 void ThumbnailLoadJob::start() {
+	// build mItems from mAllItems if not done yet
+	if (mLastVisibleIndex == -1 ) {
+		setPriorityItems( NULL, NULL, NULL );
+	}
 	if (mItems.isEmpty()) {
 		LOG("Nothing to do");
 		emit result(this);

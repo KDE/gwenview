@@ -258,8 +258,6 @@ void GVFileThumbnailView::startThumbnailUpdate() {
 
 
 void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
-
 	QValueVector<const KFileItem*> imageList;
 	imageList.reserve( list->count());
 	QPtrListIterator<KFileItem> it(*list);
@@ -271,6 +269,7 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	}
 	if (imageList.empty()) return;
 
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
 	
 	d->mThumbnailLoadJob = new ThumbnailLoadJob(&imageList, d->mThumbnailSize);
 
@@ -623,6 +622,7 @@ void GVFileThumbnailView::updateVisibilityInfo( int x, int y ) {
 			return;
 		}
 	}
+	d->mThumbnailLoadJob->setPriorityItems(NULL,NULL,NULL);
 }
 
 //--------------------------------------------------------------------------
