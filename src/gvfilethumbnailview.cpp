@@ -167,6 +167,8 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 
 	emit updateStarted(list->count());
 	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
+	// start updating at visible position
+	slotContentsMoving( contentsX(), contentsY());
 	mThumbnailLoadJob->start();
 }
 

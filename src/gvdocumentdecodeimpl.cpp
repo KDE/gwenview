@@ -63,6 +63,7 @@ public:
 	QTime mLoadCompressChangesTime;
 	QGuardedPtr<KIO::Job> mJob;
 	bool mSuspended;
+	bool mSyncDecode;
 };
 
 
@@ -88,78 +89,94 @@ GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 }
 
 void GVDocumentDecodeImpl::startLoading() {
-    d->mJob=KIO::get(mDocument->url(), false, false);
+	d->mJob=KIO::get(mDocument->url(), false, false);
 
-    connect(d->mJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-        this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
-    
-    connect(d->mJob, SIGNAL(canceled(KIO::Job*)),
-        this, SLOT(slotCanceled()) );
+	connect(d->mJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+		this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
+	
+	connect(d->mJob, SIGNAL(result(KIO::Job*)),
+		this, SLOT(slotResult(KIO::Job*)) );
 
-    d->mRawData.resize(0);
-    d->mReadSize=0;
-    d->mLoadChangedRect=QRect();
+	d->mRawData.resize(0);
+	d->mReadSize=0;
+	d->mLoadChangedRect=QRect();
+	d->mSyncDecode = false;
 	d->mLoadCompressChangesTime.start();
 }
     
 
-void GVDocumentDecodeImpl::slotCanceled() {
-    kdDebug() << k_funcinfo << " loading canceled\n";
-    emit finished(false);
-    switchToImpl(new GVDocumentImpl(mDocument));
+void GVDocumentDecodeImpl::slotResult(KIO::Job* job) {
+	kdDebug() << k_funcinfo << " loading finished:" << job->error() << endl;
+	if( job->error() == 0 ) {
+		d->mDecoderTimer.start(0, false);
+		return;
+	}
+	// failed
+	emit finished(false);
+	switchToImpl(new GVDocumentImpl(mDocument));
 }
 
 
 void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
-    if (chunk.size()>0) {
-        int oldSize=d->mRawData.size();
-        d->mRawData.resize(oldSize + chunk.size());
-        memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
-        loadChunk();
-    } else {
-        if (d->mReadSize < d->mRawData.size()) {
-            // No more data, but the image has not been fully decoded yet. We
-            // will load the rest with a timer
-            d->mDecoderTimer.start(0, false);
-        }
-    }
+	if (chunk.size()>0) {
+		int oldSize=d->mRawData.size();
+		d->mRawData.resize(oldSize + chunk.size());
+		memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
+	}
+	// Decode the the image with a timer
+	if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0, false);
 }
 
 
-void GVDocumentDecodeImpl::loadChunk() {
-	if( d->mSuspended ) {
-		d->mDecoderTimer.stop();
-		return;
+QImage GVDocumentDecodeImpl::asyncDecode(bool& ok) {
+	ok = true;
+	int decodedSize=0;
+	int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize);
+	if( chunkSize > 0 ) {
+		decodedSize = d->mDecoder.decode(
+			(const uchar*)(d->mRawData.data()+d->mReadSize),
+			chunkSize);
 	}
-
-	int decodedSize=d->mDecoder.decode(
-		(const uchar*)(d->mRawData.data()+d->mReadSize),
-		QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize));
-
 	// There's more to load
 	if (decodedSize>0) {
 		d->mReadSize+=decodedSize;
-		return;
+		return QImage();
 	}
 
 	// We decoded all the available data, but the job is still running
 	if (decodedSize==0 && !d->mJob.isNull()) {
-		d->mDecoderTimer.stop();
-		return;
+		return QImage();
 	}
-
-	// Loading finished or failed
-	bool ok=decodedSize==0;
-
 	// If async loading failed, try synchronous loading
-	QImage image;
-	if (!ok) {
+	if( decodedSize < 0 ) {
 		kdDebug() << k_funcinfo << " async loading failed, trying sync loading\n";
-		ok=image.loadFromData(d->mRawData);
-		d->mUpdatedDuringLoad=false;
-	} else {
-		image=d->mDecoder.image();
+		d->mSyncDecode = true;
+		return syncDecode( ok );
 	}
+	return d->mDecoder.image();
+}
+
+QImage GVDocumentDecodeImpl::syncDecode(bool& ok) {
+	ok = true;
+	if( !d->mJob.isNull()) return QImage(); // wait for whole image
+	d->mUpdatedDuringLoad=false;
+	QImage image;
+	d->mReadSize = d->mRawData.size();
+	if( !image.loadFromData(d->mRawData)) {
+		ok = false;
+		return QImage();
+	}
+	return image;
+}
+
+void GVDocumentDecodeImpl::loadChunk() {
+	if( d->mSuspended ) {
+		d->mDecoderTimer.stop();
+	        return;
+	}
+
+	bool ok;
+	QImage image = d->mSyncDecode ? syncDecode(ok) : asyncDecode(ok);
 	
 	// Image can't be loaded, let's switch to an empty implementation
 	if (!ok) {
@@ -167,6 +184,12 @@ void GVDocumentDecodeImpl::loadChunk() {
 		d->mDecoderTimer.stop();
 		emit finished(false);
 		switchToImpl(new GVDocumentImpl(mDocument));
+		return;
+	}
+	if( image.isNull()) { // not completely loaded yet
+		if(d->mReadSize == d->mRawData.size() && !d->mJob.isNull()) {
+			d->mDecoderTimer.stop(); // wait for more data
+		}
 		return;
 	}
 
@@ -198,14 +221,14 @@ void GVDocumentDecodeImpl::loadChunk() {
 	
 	// Now we switch to a loaded implementation
 	if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {
-        // We want a local copy of the file for the comment editor
-        QString tempFilePath;
-        if (!mDocument->url().isLocalFile()) {
-            KTempFile tempFile(QString("gvremotefile"));
-            tempFile.dataStream()->writeRawBytes(d->mRawData.data(), d->mRawData.size());
-            tempFile.close();
-            tempFilePath=tempFile.name();
-        }
+		// We want a local copy of the file for the comment editor
+		QString tempFilePath;
+		if (!mDocument->url().isLocalFile()) {
+			KTempFile tempFile(QString("gvremotefile"));
+			tempFile.dataStream()->writeRawBytes(d->mRawData.data(), d->mRawData.size());
+			tempFile.close();
+			tempFilePath=tempFile.name();
+		}
 		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mRawData, tempFilePath));
 	} else {
 		switchToImpl(new GVDocumentLoadedImpl(mDocument));
@@ -220,7 +243,7 @@ void GVDocumentDecodeImpl::suspendLoading() {
 
 void GVDocumentDecodeImpl::resumeLoading() {
 	d->mSuspended = false;
-	if(d->mReadSize < d->mRawData.size()) {
+	if(d->mReadSize < d->mRawData.size() || d->mJob.isNull()) {
 		d->mDecoderTimer.start(0, false);
 	}
 }

@@ -42,6 +42,8 @@ public:
 
 private:
 	GVDocumentDecodeImplPrivate* d;
+	QImage asyncDecode(bool&);
+	QImage syncDecode(bool&);
 	
 	// QImageConsumer methods
 	void end();
@@ -54,8 +56,8 @@ private:
 
 private slots:
 	void startLoading();
-    void slotDataReceived(KIO::Job*, const QByteArray& chunk);
-    void slotCanceled();
+	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
+	void slotResult(KIO::Job*);
 	void loadChunk();
 };
 

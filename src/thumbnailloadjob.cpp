@@ -179,6 +179,7 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
 	// Move mItems' internal iterator to the next item to be processed
+	mItems.first();
 	do {
 		if (item==mItems.current()) return true;
 	} while (mItems.next());
@@ -352,12 +353,12 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 		loaded=loadThumbnail(pixPath, img);
 	}
 	
-    if (loaded) {
-        img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-        emitThumbnailLoaded(img);
-    } else {
-        emitThumbnailLoadingFailed();
-    }
+	if (loaded) {
+		img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
+		emitThumbnailLoaded(img);
+	} else {
+		emitThumbnailLoadingFailed();
+	}
 }
 
 
