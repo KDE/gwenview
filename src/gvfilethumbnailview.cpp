@@ -83,6 +83,7 @@ public:
 	}
 	
 	void polish() {
+		QFrame::polish();
 		setMinimumWidth(layout()->minimumSize().width());
 		//setFixedHeight( mProgressBar->height() );
 		setFixedHeight( mStop->height() );
