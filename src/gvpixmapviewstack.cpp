@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qbitmap.h>
 #include <qcursor.h>
+#include <qiconset.h>
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
@@ -30,6 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kiconeffect.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
 #include <kstdaction.h>
@@ -85,7 +88,17 @@ mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollectio
 	
 	mResetZoom=KStdAction::actualSize(mGVScrollPixmapView,SLOT(slotResetZoom()),mActionCollection);
     mResetZoom->setIcon("viewmag1");
-	
+
+	/* Experimental code to generate the lock zoom icon on the fly
+	 * Unfortunately this does not work when resizing the toolbar buttons
+	QImage icon=MainBarIcon("viewmag").convertToImage();
+	KIconTheme* theme=KGlobal::instance()->iconLoader()->theme();
+	QImage overlay=MainBarIcon(theme->lockOverlay()).convertToImage();
+	KIconEffect::overlay(icon,overlay);
+	QPixmap result=QPixmap(icon);
+	QIconSet iconSet(result);
+	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),iconSet,0,mActionCollection,"lockzoom");
+	*/
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"lockzoom");
 	connect(mLockZoom,SIGNAL(toggled(bool)),
 		mGVScrollPixmapView,SLOT(setLockZoom(bool)) );
