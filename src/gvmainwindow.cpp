@@ -140,6 +140,11 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mDeleteFiles->setEnabled(filenameIsValid);
 	mShowFileProperties->setEnabled(filenameIsValid);
 	mOpenWithEditor->setEnabled(filenameIsValid);
+	mRotateLeft->setEnabled(filenameIsValid);
+	mRotateRight->setEnabled(filenameIsValid);
+	mMirror->setEnabled(filenameIsValid);
+	mFlip->setEnabled(filenameIsValid);
+	
 	mOpenParentDir->setEnabled(url.path()!="/");
 
 	updateStatusBar();
@@ -475,7 +480,7 @@ void GVMainWindow::createActions() {
 	mMirror=new KAction(i18n("&Mirror"),0,mGVPixmap,SLOT(mirror()),actionCollection(),"image_mirror");
 	
 	mFlip=new KAction(i18n("&Flip"),0,mGVPixmap,SLOT(flip()),actionCollection(),"image_flip");
-	
+
 	actionCollection()->readShortcutSettings();
 }
 
