@@ -960,16 +960,17 @@ void GVMainWindow::loadPlugins() {
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
 	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
-	loader->loadPlugins();
 
 	// Fill the plugin menu
-	KIPI::PluginLoader::List list = loader->pluginList();
-	for( QPtrListIterator<KIPI::Plugin> it( list ); *it; ++it ) {
-		KIPI::Plugin* plugin = *it;
+    KIPI::PluginLoader::List::ConstIterator it(loader->pluginList().constBegin());
+    KIPI::PluginLoader::List::ConstIterator itEnd(loader->pluginList().constEnd());
+	for( ; it!=itEnd; ++it ) {
+		KIPI::Plugin* plugin = (*it).plugin;
 
 		QPopupMenu *popup = static_cast<QPopupMenu*>(
 			factory()->container( categoryMap[plugin->category()], this));
 		Q_ASSERT( popup );
+        plugin->setup(this);
 		KActionPtrList actions = plugin->actions();
 		KActionPtrList::ConstIterator actionIt=actions.begin(), end=actions.end();
 		for (; actionIt!=end; ++actionIt) {
