@@ -18,7 +18,7 @@ gwenview_LDFLAGS = $(all_libraries)
 
 
 # set the include path for X, qt and KDE
-INCLUDES = $(all_includes) -I../
+INCLUDES = $(all_includes) -I$(top_srcdir)/gwenview
 
 noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 fileopobject.h gvfilethumbnailview.h gvfileviewstack.h \
