@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="2">
+<kpartgui name="Gwenview" version="3">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -45,6 +45,7 @@
   <Action name="bookmarks"/>
   <Menu name="settings">
   	<Action name="fullscreen" append="show_merge"/>
+	<Action name="configure_tools"/>
   </Menu>
   <Menu name="window">
   	<text>&amp;Window</text>

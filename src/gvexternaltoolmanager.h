@@ -37,14 +37,14 @@ public:
 	GVExternalToolContext* createContext(QObject* parent, const KURL&);
 
 	static GVExternalToolManager* instance();
+	QDict<KDesktopFile>& desktopFiles() { return mDesktopFiles; }
 
 private:
 	GVExternalToolManager();
 	void loadDesktopFiles(QDict<KDesktopFile>&, const QString&);
 	GVExternalToolContext* createContextInternal(QObject* parent, const KURL::List&, const QStringList& mimeTypes);
 
-	QDict<KDesktopFile> mSystemDesktopFiles;
-	QDict<KDesktopFile> mUserDesktopFiles;
+	QDict<KDesktopFile> mDesktopFiles;
 	QPtrList<KService> mServices;
 };
 

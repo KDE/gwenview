@@ -135,6 +135,7 @@ private slots:
 	
 	void toggleFullScreen();
 	void showConfigDialog();
+	void showExternalToolDialog();
 	void showKeyDialog();
 	void showToolBarDialog();
 	void applyMainWindowSettings();

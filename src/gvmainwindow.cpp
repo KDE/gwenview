@@ -60,6 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "gvbookmarkowner.h"
 #include "gvdirview.h"
+#include "gvexternaltooldialog.h"
 #include "gvfileviewstack.h"
 #include "gvjpegtran.h"
 #include "gvpixmap.h"
@@ -411,6 +412,12 @@ void GVMainWindow::showConfigDialog() {
 }
 
 
+void GVMainWindow::showExternalToolDialog() {
+	GVExternalToolDialog dialog(this);
+	dialog.exec();
+}
+
+
 void GVMainWindow::showKeyDialog() {
 	KKeyDialog::configure(actionCollection());
 }
@@ -619,9 +626,14 @@ void GVMainWindow::createActions() {
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 
 	// Settings
-	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
-	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-	(void)KStdAction::configureToolbars(this, SLOT(showToolBarDialog()), actionCollection() );
+	mShowConfigDialog=
+		KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
+	mShowKeyDialog=
+		KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
+	(void)new KAction(i18n("Configure External Tools..."), "configure",
+		this, SLOT(showExternalToolDialog()), actionCollection(), "configure_tools");
+	(void)KStdAction::configureToolbars(
+		this, SLOT(showToolBarDialog()), actionCollection() );
 	
 	actionCollection()->readShortcutSettings();
 }

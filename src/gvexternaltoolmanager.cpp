@@ -33,51 +33,46 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #include "gvexternaltoolmanager.h"
 
 
-const char* HIDDEN_ENTRY="Hidden";
-
-
-inline bool kDesktopFileIsHidden(KDesktopFile* df) {
-	df->setDesktopGroup();
-	return df->readBoolEntry(HIDDEN_ENTRY);
-}
 
 
 GVExternalToolManager::GVExternalToolManager() {
-	mSystemDesktopFiles.setAutoDelete(true);
-	mUserDesktopFiles.setAutoDelete(true);
-	
 	// Load system and user desktop files.
 	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
 	QString userBaseDir=KGlobal::dirs()->localkdedir();
 	
 	QStringList::ConstIterator it;
+	QDict<KDesktopFile> systemDesktopFiles;
+	QDict<KDesktopFile> userDesktopFiles;
 	for (it=dirs.begin(); it!=dirs.end(); ++it) {
 		QString dir=*it;
 		if (dir.startsWith(userBaseDir)) {
-			loadDesktopFiles(mUserDesktopFiles, *it);
+			loadDesktopFiles(userDesktopFiles, *it);
 		} else {
-			loadDesktopFiles(mSystemDesktopFiles, *it);
+			loadDesktopFiles(systemDesktopFiles, *it);
 		}
 	}
 
-	// Merge system and user desktop files into a temporary dictionary
-	QDict<KDesktopFile> tmpDict=mSystemDesktopFiles;
-	QDictIterator<KDesktopFile> itDict(mUserDesktopFiles);
+	// Merge system and user desktop files into our KDesktopFile dictionary
+	mDesktopFiles=systemDesktopFiles;
+	mDesktopFiles.setAutoDelete(true);
+	QDictIterator<KDesktopFile> itDict(userDesktopFiles);
 	
 	for (; itDict.current(); ++itDict) {
 		QString name=itDict.currentKey();
 		KDesktopFile* df=itDict.current();
-		if (tmpDict.find(name)) {
-			tmpDict.remove(name);
+		if (mDesktopFiles.find(name)) {
+			mDesktopFiles.remove(name);
 		}
-		if (!kDesktopFileIsHidden(df)) {
-			tmpDict.insert(name, df);
+		if (df->readBoolEntry("Hidden")) {
+			delete df;
+		} else {
+			mDesktopFiles.insert(name, df);
 		}
 	}
 
-	// Update mServices from the temporary dictionary
+	// Update mServices from our dictionary
 	mServices.setAutoDelete(true);
-	itDict=QDictIterator<KDesktopFile>(tmpDict);
+	itDict=QDictIterator<KDesktopFile>(mDesktopFiles);
 	for (; itDict.current(); ++itDict) {
 		KService* service=new KService(itDict.current());
 		mServices.append(service);
