@@ -63,7 +63,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
-static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 static const char* CONFIG_SHOW_DIRS="show dirs";
 static const char* CONFIG_SHOW_DOT_FILES="show dot files";
 static const char* CONFIG_SHOWN_COLOR="shown color";
@@ -317,9 +316,6 @@ void GVFileViewStack::browseToFileNameToSelect() {
 
 	// Nothing to select, but an item is already shown
 	if (currentFileView()->shownFileItem()) return;
-
-	// Now we have to make some default choice
-	if (mAutoLoadImage) slotSelectFirst();
 
 	// If no item is selected, make sure the first one is
 	if (currentFileView()->selectedItems()->count()==0) {
@@ -720,11 +716,6 @@ void GVFileViewStack::setShowDirs(bool value) {
 }
 
 
-void GVFileViewStack::setAutoLoadImage(bool autoLoadImage) {
-	mAutoLoadImage=autoLoadImage;
-}
-
-
 void GVFileViewStack::setShownColor(const QColor& value) {
 	mShownColor=value;
 	mFileDetailView->setShownFileItemColor(mShownColor);
@@ -965,8 +956,6 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	}
 
 	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR,&Qt::red));
-
-	mAutoLoadImage=config->readBoolEntry(CONFIG_AUTO_LOAD_IMAGE, true);
 }
 
 void GVFileViewStack::kpartConfig() {
@@ -980,8 +969,6 @@ void GVFileViewStack::kpartConfig() {
 	mFileThumbnailView->startThumbnailUpdate();
 
 	setShownColor(Qt::red);
-
-	mAutoLoadImage=true;
 }
 
 void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
@@ -990,7 +977,6 @@ void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 
 	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
-	config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
 	config->writeEntry(CONFIG_SHOW_DIRS, mShowDirs);
 	config->writeEntry(CONFIG_SHOW_DOT_FILES, mShowDotFiles->isChecked());
 	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>524</width>
-            <height>351</height>
+            <width>531</width>
+            <height>330</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,17 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>mAutoLoadImage</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="text">
-                <string>Automatically load first image in folder</string>
-            </property>
-        </widget>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>mShowDirs</cstring>

@@ -70,9 +70,6 @@ public:
 	 */
 	void kpartConfig();
 
-	void setAutoLoadImage(bool);
-	bool autoLoadImage() const { return mAutoLoadImage; }
-
 	// Properties
 	void setMode(Mode);
 	
@@ -199,7 +196,6 @@ private:
 	KToggleAction* mShowDotFiles;
 
 	// configurable settings
-	bool mAutoLoadImage;
 	bool mShowDirs;
 	QColor mShownColor;
 

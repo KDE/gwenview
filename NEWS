@@ -17,6 +17,8 @@
  - Removed the "show toolbar/menubar/statusbar in fullscreen" options.
  - When selecting multiple images with Ctrl or Shift, block the "double click
    an image goes to fullscreen" feature.
+ - Removed the "Auto load image" option, it's useless since Gwenview does not
+   block anymore when loading images.
 
 2004.10.24 - v1.1.6
 - New features:
