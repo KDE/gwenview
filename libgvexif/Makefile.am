@@ -9,6 +9,7 @@ libgvexif_la_SOURCES = \
 	exif-entry.c \
 	exif-format.c \
 	exif-ifd.c \
+	exif-loader.c \
 	exif-tag.c \
 	exif-utils.c \
 	jpeg-data.c \
@@ -23,6 +24,7 @@ noinst_HEADERS = \
 	exif-entry.h \
 	exif-format.h \
 	exif-ifd.h \
+	exif-loader.h \
 	exif-result.h \
 	exif-tag.h \
 	exif-utils.h \

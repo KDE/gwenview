@@ -1,3 +1,5 @@
+- 2003.05.11
+
 This dir contains a copy of libexif 0.5.9, available from
 http://libexif.sourceforge.net.
 
@@ -19,3 +21,10 @@ duplicating some code, I thought it would be better to completely duplicate the
 library (it's quite small) to avoid adding another dependency to Gwenview. To
 avoid including the system libexif include files, I renamed the dir from
 'libexif' to 'libgvexif'.
+
+
+- 2003.07.29
+
+Just updated to libexif 0.5.10. this version fixes the bug which caused
+Gwenview to stop displaying image when browsing a dir containing more than a
+thousand JPEG files.

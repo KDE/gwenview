@@ -44,7 +44,10 @@ exif_format_get_name (ExifFormat format)
 {
 	unsigned int i;
 
-	/*bindtextdomain (GETTEXT_PACKAGE, LIBEXIF_LOCALEDIR);*/
+	/*
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	bindtextdomain (GETTEXT_PACKAGE, LIBEXIF_LOCALEDIR);
+	*/
 
 	for (i = 0; ExifFormatTable[i].name; i++)
 		if (ExifFormatTable[i].format == format)

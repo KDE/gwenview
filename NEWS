@@ -10,6 +10,8 @@
    the next startup.
  - Do not switch the file view to detailed mode when leaving the fullscreen
    mode.
+ - Do not stop displaying images when browsing folders containing lots of JPEG
+   files (more than a thousand).
 
 2003.06.09 - v0.17.1a
 - Fixes:
