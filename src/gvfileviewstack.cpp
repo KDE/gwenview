@@ -204,6 +204,7 @@ void GVFileViewStack::slotSelectFirst() {
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
+	currentFileView()->clearSelection();
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
@@ -216,6 +217,7 @@ void GVFileViewStack::slotSelectLast() {
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
+	currentFileView()->clearSelection();
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
@@ -228,6 +230,7 @@ void GVFileViewStack::slotSelectPrevious() {
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
+	currentFileView()->clearSelection();
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
@@ -240,6 +243,7 @@ void GVFileViewStack::slotSelectNext() {
 	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
+	currentFileView()->clearSelection();
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
@@ -696,6 +700,7 @@ KFileItem* GVFileViewStack::findLastImage() const {
 	return item;
 }
 
+// FIXME: Use viewed item instead of current
 KFileItem* GVFileViewStack::findPreviousImage() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return 0L;
@@ -713,7 +718,6 @@ KFileItem* GVFileViewStack::findNextImage() const {
 	} while (item && isDirOrArchive(item)); 
 	return item;
 }
-
 
 
 //-----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-/* This file is based on kfiledetailview.h from the KDE libs. Original
+/* This file is based on kfiledetailview.h v1.30 from the KDE libs. Original
    copyright follows.
 */
 /* This file is part of the KDE libraries
