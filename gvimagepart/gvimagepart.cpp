@@ -100,9 +100,14 @@ KAboutData* GVImagePart::createAboutData() {
 }
 
 bool GVImagePart::openURL(const KURL& url) {
+	if (!url.isValid())  {
+		return false;
+	}
+	m_url = url;
+
 	mDocument->setURL(url);
-    emit setWindowCaption(url.prettyURL());
-    return true;
+	emit setWindowCaption(url.prettyURL());
+	return true;
 }
 
 QString GVImagePart::filePath() {
