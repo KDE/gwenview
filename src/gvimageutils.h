@@ -36,7 +36,7 @@ namespace GVImageUtils {
 	QImage scale(const QImage& image,int width, int height,
 		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
 
-	QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation);
+	QByteArray resetOrientation(const QByteArray& jpegContent, const QImage& image);
 	Orientation getOrientation(const QByteArray& jpegContent);
 	Orientation getOrientation(const QString& pixPath);
 

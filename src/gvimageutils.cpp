@@ -1,5 +1,10 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
+// System
+#include <stdlib.h>
+#include <string.h>
+
 // Qt
+#include <qbuffer.h>
 #include <qcstring.h>
 #include <qfile.h>
 #include <qimage.h>
@@ -84,13 +89,13 @@ Orientation getOrientation(const QByteArray& jpegContent) {
 void getOrientationAndThumbnail(const QString& pixPath, Orientation& orientation, QImage& image) {
 	ExifDataPtr exifData( exif_data_new_from_file(QFile::encodeName(pixPath)) );
 	orientation = getOrientation(exifData);
-        if( exifData != NULL && exifData->data != NULL ) {
+	if( exifData != NULL && exifData->data != NULL ) {
 		image.loadFromData( exifData->data, exifData->size, "JPEG" );
 	}
 }
 
 
-QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation) {
+QByteArray resetOrientation(const QByteArray& jpegContent, const QImage& image) {
 	JPEGDataPtr jpegData( jpeg_data_new_from_data((unsigned char*)jpegContent.data(),jpegContent.size()) );
 	if (!jpegData) {
 		return jpegContent;
@@ -102,13 +107,41 @@ QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation
 	}
 	ExifByteOrder byteOrder=exif_data_get_byte_order(exifData);
 	
+	// Set Orientation tag to NORMAL
 	ExifEntry* entry( exif_content_get_entry(
 			exifData->ifd[EXIF_IFD_0], EXIF_TAG_ORIENTATION) );
 	if (!entry) {
 		return jpegContent;
 	}
-	exif_set_short(entry->data, byteOrder, short(orientation));
+	exif_set_short(entry->data, byteOrder, short(GVImageUtils::NORMAL));
 
+	// Update EXIF thumbnail, if any
+	if( exifData->data != NULL ) {
+		free(exifData->data);
+		exifData->data=NULL;
+		exifData->size=0;
+
+		QImage thumb=image.scale(128, 128, QImage::ScaleMin);
+		
+		QByteArray array;
+		QBuffer buffer(array);
+		buffer.open(IO_WriteOnly);
+		QImageIO iio(&buffer, "JPEG");
+		iio.setImage(thumb);
+		if (iio.write()) {
+			exifData->size=array.size();
+			exifData->data=(unsigned char*)malloc(exifData->size);
+			if (exifData->data) {
+				memcpy(exifData->data, array.data(), array.size());
+			} else {
+				kdWarning() << "Could not allocate memory for thumbnail\n";
+			}
+		} else {
+			kdWarning() << "Could not write thumbnail\n";
+		}
+	}
+	
+	// Store EXIF data into JPEG
 	jpeg_data_set_exif_data(jpegData, exifData);
 	unsigned char* dest=0L;
 	unsigned int destSize=0;

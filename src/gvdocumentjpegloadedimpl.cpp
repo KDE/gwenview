@@ -133,7 +133,9 @@ bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& fo
 	bool result;
 
 	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
-		LOG("Lossless save");
+		LOG("JPEG Reset orientation");
+		d->mRawData=GVImageUtils::resetOrientation(d->mRawData, mDocument->image());
+		LOG("JPEG Lossless save");
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
@@ -171,7 +173,6 @@ void GVDocumentJPEGLoadedImpl::finishLoading() {
 		LOG("jpeg rotating");
 		setImage(GVImageUtils::modify(mDocument->image(), orientation));
 		d->mRawData=GVJPEGTran::apply(d->mRawData, orientation);
-		d->mRawData=GVImageUtils::setOrientation(d->mRawData,GVImageUtils::NORMAL);
 
 		emit sizeUpdated(mDocument->image().width(), mDocument->image().height());
 		emit rectUpdated(QRect(QPoint(0,0), mDocument->image().size()) );
