@@ -67,6 +67,8 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	setDirOnlyMode(mRootBranch,true);
 	mHomeBranch->root()->setExpandable(true);
 	mRootBranch->root()->setExpandable(true);
+	mHomeBranch->setChildRecurse(false);
+	mRootBranch->setChildRecurse(false);
 
 	connect(mHomeBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
 		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );

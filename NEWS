@@ -1,3 +1,8 @@
+2003.xx.xx - v1.0.0
+- Fixes:
+ - In the folder view, show the "+" sign in front of folders if they have
+   sub-folders.
+
 2003.05.04 - v0.17.0
 - New features:
  - Added a cancel button to popup menus, like Konqueror does.
