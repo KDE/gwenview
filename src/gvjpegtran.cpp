@@ -20,7 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <string.h> // For memcpy
 
-// KDE includes
+// Qt
+#include <qeventloop.h>
+
+// KDE
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -28,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kprocess.h>
 
-// Our includes
+// Local
 #include "gvjpegtran.moc"
 
 
@@ -38,18 +41,32 @@ static QString sProgramPath;
 
 
 GVJPEGTran::GVJPEGTran()
-: mDone(false)
-{
+{}
+
+void GVJPEGTran::slotWroteStdin(KProcess* process) {
+	kdDebug() << "slotWroteStdin\n";
+	process->closeStdin();
 }
 
 void GVJPEGTran::slotReceivedStdout(KProcess*,char* data,int length) {
+	kdDebug() << "slotReceivedStdout size:" << length << endl;
 	uint oldSize=mResult.size();
 	mResult.resize(oldSize+length);
 	memcpy(mResult.data()+oldSize,data,length);
 }
 
+
+void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
+	kdDebug() << "slotReceivedStderr size:" << length << endl;
+	kdWarning() << "Error: " << QCString(data,length) << endl;
+	mResult.resize(0);
+	process->kill();
+}
+
+
 void GVJPEGTran::slotProcessExited() {
-	mDone=true;
+	kdDebug() << "slotProcessExited" << endl;
+	kapp->eventLoop()->exitLoop();
 }
 
 QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation orientation) {
@@ -83,15 +100,21 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 		return src;
 	}
 	
-	connect(&process,SIGNAL(processExited(KProcess*)),
-		&obj,SLOT(slotProcessExited()) );
+	connect(&process,SIGNAL(wroteStdin(KProcess*)),
+		&obj,SLOT(slotWroteStdin(KProcess*)) );
 	
 	connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
 		&obj,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
+	
+	connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+		&obj,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+	
+	connect(&process,SIGNAL(processExited(KProcess*)),
+		&obj,SLOT(slotProcessExited()) );
+	
 	// Return an empty QByteArray on failure. GVPixmap will thus consider the
 	// buffer as invalid and will fall back to lossy manipulations.
-	if ( !process.start(KProcess::NotifyOnExit,KProcess::All) ) {
+	if ( !process.start(KProcess::NotifyOnExit, KProcess::All) ) {
 		KMessageBox::information(0L,
 				i18n("Gwenview couldn't perform lossless image manipulation.\n"
 					"Make sure that the jpegtran program is installed and that "
@@ -99,13 +122,9 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 					),QString::null,"jpegtran failed");
 		return QByteArray();
 	}
-	process.writeStdin( src.data(),src.size() );
-	process.closeStdin();
-
-	while (!obj.mDone) {
-		kapp->processEvents();
-	}
-
+	process.writeStdin( src.data(), src.size() );
+	kapp->eventLoop()->enterLoop();
+	
 	return obj.mResult;
 }
 
