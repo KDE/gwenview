@@ -52,21 +52,21 @@ void FileOperation::copyTo(const KURL& srcURL,QWidget* parent) {
 
 void FileOperation::moveTo(const KURL& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpMoveToObject* op=new FileOpMoveToObject(srcURL,parent);
-	QObject::connect(op,SIGNAL(success()),receiver,slot);
+	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
 void FileOperation::del(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpDelObject* op=new FileOpDelObject(url,parent);
-	QObject::connect(op,SIGNAL(success()),receiver,slot);
+	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
 void FileOperation::rename(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpRenameObject* op=new FileOpRenameObject(url,parent);
-	QObject::connect(op,SIGNAL(renamed(const QString&)),receiver,slot);
+	if (receiver && slot) QObject::connect(op,SIGNAL(renamed(const QString&)),receiver,slot);
 	(*op)();
 }
 
