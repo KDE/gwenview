@@ -4,9 +4,14 @@
 #include <qobject.h>
 #include <qthread.h>
 #include <qwaitcondition.h>
-#include <qthreadstorage.h>
 #include <qdeepcopy.h>
 #include <qmutex.h>
+
+#ifdef TS_QTHREADSTORAGE
+#include <qthreadstorage.h>
+#else
+#include <pthread.h>
+#endif
 
 // how difficult ...
 template< typename T >
@@ -14,6 +19,8 @@ T TSDeepCopy( const T& t )
 {
     return QDeepCopy< T >( t );
 }
+
+class TSCurrentThread;
 
 /**
  Thread class, internally based on QThread, which intentionally doesn't have
@@ -120,7 +127,11 @@ class TSThread
         bool cancelling;
         mutable QMutex mutex;
         QWaitCondition* cancel_cond;
+#ifdef TS_QTHREADSTORAGE
         static QThreadStorage< TSThread** >* current_thread;
+#else
+        static TSCurrentThread* current_thread;
+#endif
     };
 
 /**
@@ -153,6 +164,44 @@ class TSCancellable
         QWaitCondition* cond;
     };
 
+
+#ifndef TS_QTHREADSTORAGE
+/**
+ * @internal
+ */
+class TSCurrentThread
+    {
+    public:
+        TSCurrentThread();
+        ~TSCurrentThread();
+        TSThread* localData() const;
+        void setLocalData( TSThread* t );
+    private:
+        pthread_key_t key;
+    };
+
+
+inline TSCurrentThread::TSCurrentThread()
+    {
+    pthread_key_create( &key, NULL );
+    }
+
+inline TSCurrentThread::~TSCurrentThread()
+    {
+    pthread_key_delete( key );
+    }
+
+inline void TSCurrentThread::setLocalData( TSThread* t )
+    {
+    pthread_setspecific( key, t );
+    }
+
+inline TSThread* TSCurrentThread::localData() const
+    {
+    return static_cast< TSThread* >( pthread_getspecific( key ));
+    }
+#endif
+
 inline
 bool TSThread::testCancel() const
     {
@@ -172,7 +221,11 @@ TSThread* TSThread::currentThread()
     {
     if( current_thread == NULL )
         initCurrentThread();
+#ifdef TS_QTHREADSTORAGE
     return *current_thread->localData();
+#else
+    return current_thread->localData();
+#endif
     }
 
 inline

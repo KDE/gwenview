@@ -5,7 +5,11 @@
 
 #include <assert.h>
 
+#ifdef TS_QTHREADSTORAGE
 QThreadStorage< TSThread** >* TSThread::current_thread;
+#else
+TSCurrentThread* TSThread::current_thread;
+#endif
 
 TSThread::Helper::Helper( TSThread* parent )
     : thread( parent )
@@ -56,18 +60,28 @@ bool TSThread::running() const
 
 void TSThread::initCurrentThread()
     {
+#ifdef TS_QTHREADSTORAGE
     current_thread = new QThreadStorage< TSThread** >();
     typedef TSThread* TSThreadPtr;
     // set pointer for main thread (this must be main thread)
     current_thread->setLocalData( new TSThreadPtr( NULL )); // TODO NULL ?
+#else
+    current_thread = new TSCurrentThread();
+    // set pointer for main thread (this must be main thread)
+    current_thread->setLocalData( NULL ); // TODO NULL ?
+#endif
     }
 
 void TSThread::executeThread()
     {
+#ifdef TS_QTHREADSTORAGE
     // store dynamically allocated pointer, so that
     // QThreadStorage deletes the pointer and not TSThread
     typedef TSThread* TSThreadPtr;
     current_thread->setLocalData( new TSThreadPtr( this ));
+#else
+    current_thread->setLocalData( this );
+#endif
     run();
     postSignal( NULL ); // = terminated()
     }
