@@ -34,7 +34,7 @@ class GVDirView;
 class GVFileViewStack;
 class GVPixmap;
 class GVSlideShow;
-class PixmapView;
+class GVPixmapViewStack;
 class StatusBarProgress;
 
 
@@ -45,7 +45,7 @@ public:
 	~MainWindow();
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
-	PixmapView* pixmapView() const { return mPixmapView; }
+	GVPixmapViewStack* pixmapViewStack() const { return mPixmapViewStack; }
 	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
@@ -66,7 +66,7 @@ private:
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mGVDirView;
-	PixmapView* mPixmapView;
+	GVPixmapViewStack* mPixmapViewStack;
 
 	GVPixmap* mGVPixmap;
 	GVSlideShow* mSlideShow;

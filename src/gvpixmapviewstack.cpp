@@ -36,11 +36,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "fileoperation.h"
-#include "fitpixmapview.h"
+#include "gvfitpixmapview.h"
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 
-#include "pixmapview.moc"
+#include "gvpixmapviewstack.moc"
 
 
 const char* CONFIG_SHOW_PATH="show path";
@@ -53,7 +53,7 @@ const char* CONFIG_WHEEL_BEHAVIOUR_ALT=    "wheel behaviour alt";
 
 const int AUTO_HIDE_TIMEOUT=1000;
 
-PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
+GVPixmapViewStack::GVPixmapViewStack(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
 : QWidgetStack(parent), mGVPixmap(pixmap), mShowPathInFullScreen(false),
 mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollection)
 {
@@ -73,8 +73,8 @@ mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollectio
 	// Create child widgets
 	mGVScrollPixmapView=new GVScrollPixmapView(this,pixmap,true);
 	mGVScrollPixmapView->viewport()->installEventFilter(this);
-	mFitPixmapView=new FitPixmapView(this,pixmap,false);
-	mFitPixmapView->installEventFilter(this);
+	mGVFitPixmapView=new GVFitPixmapView(this,pixmap,false);
+	mGVFitPixmapView->installEventFilter(this);
 
 	// Create actions
 	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),mActionCollection,"autozoom");
@@ -95,27 +95,27 @@ mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollectio
 		this,SLOT(slotUpdateView()) );
 	connect(mGVScrollPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateZoomActions()) );
-	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mGVFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateZoomActions()) );
 
 	// Propagate child view signals
 	connect(mGVScrollPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
-	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mGVFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
 
 	// Add children to stack
 	addWidget(mGVScrollPixmapView,0);
-	addWidget(mFitPixmapView,1);
+	addWidget(mGVFitPixmapView,1);
 
 }
 
 
-PixmapView::~PixmapView() {
+GVPixmapViewStack::~GVPixmapViewStack() {
 }
 
 
-void PixmapView::plugActionsToAccel(KAccel* accel) {
+void GVPixmapViewStack::plugActionsToAccel(KAccel* accel) {
 	mAutoZoom->plugAccel(accel);
 	mZoomIn->plugAccel(accel);
 	mZoomOut->plugAccel(accel);
@@ -128,9 +128,9 @@ void PixmapView::plugActionsToAccel(KAccel* accel) {
 // Config
 //
 //------------------------------------------------------------------------
-void PixmapView::readConfig(KConfig* config, const QString& group) {
+void GVPixmapViewStack::readConfig(KConfig* config, const QString& group) {
 	mGVScrollPixmapView->readConfig(config,group);
-	mFitPixmapView->readConfig(config,group);
+	mGVFitPixmapView->readConfig(config,group);
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
@@ -145,9 +145,9 @@ void PixmapView::readConfig(KConfig* config, const QString& group) {
 }
 
 
-void PixmapView::writeConfig(KConfig* config, const QString& group) const {
+void GVPixmapViewStack::writeConfig(KConfig* config, const QString& group) const {
 	mGVScrollPixmapView->writeConfig(config,group);
-	mFitPixmapView->writeConfig(config,group);
+	mGVFitPixmapView->writeConfig(config,group);
 	config->setGroup(group);
 	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
@@ -165,17 +165,17 @@ void PixmapView::writeConfig(KConfig* config, const QString& group) const {
 // Properties
 // 
 //------------------------------------------------------------------------
-void PixmapView::setFullScreen(bool fullScreen) {
+void GVPixmapViewStack::setFullScreen(bool fullScreen) {
 	mFullScreen=fullScreen;
 
 	if (mFullScreen) {
 		mGVScrollPixmapView->viewport()->setMouseTracking(true);
-		mFitPixmapView->setMouseTracking(true);
+		mGVFitPixmapView->setMouseTracking(true);
 		setCursor(blankCursor);
 	} else {
 		mAutoHideTimer->stop();
 		mGVScrollPixmapView->viewport()->setMouseTracking(false);
-		mFitPixmapView->setMouseTracking(false);
+		mGVFitPixmapView->setMouseTracking(false);
 		setCursor(arrowCursor);
 	}
 
@@ -189,12 +189,12 @@ void PixmapView::setFullScreen(bool fullScreen) {
 }
 
 
-double PixmapView::zoom() const {
+double GVPixmapViewStack::zoom() const {
 	return currentView()->zoom();
 }
 
 
-void PixmapView::setShowPathInFullScreen(bool value) {
+void GVPixmapViewStack::setShowPathInFullScreen(bool value) {
 	mShowPathInFullScreen=value;
 }
 
@@ -204,7 +204,7 @@ void PixmapView::setShowPathInFullScreen(bool value) {
 // Overloaded methods
 //
 //------------------------------------------------------------------------
-bool PixmapView::eventFilter(QObject* object,QEvent* event) {
+bool GVPixmapViewStack::eventFilter(QObject* object,QEvent* event) {
 	switch (event->type()) {
 	case QEvent::MouseMove:
 		return mouseMoveEventFilter(object,static_cast<QMouseEvent*>(event));
@@ -218,7 +218,7 @@ bool PixmapView::eventFilter(QObject* object,QEvent* event) {
 }
 
 
-bool PixmapView::mouseMoveEventFilter(QObject* object,QMouseEvent* event) {
+bool GVPixmapViewStack::mouseMoveEventFilter(QObject* object,QMouseEvent* event) {
 	if (mFullScreen) {
 		setCursor(arrowCursor);
 		mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
@@ -227,7 +227,7 @@ bool PixmapView::mouseMoveEventFilter(QObject* object,QMouseEvent* event) {
 }
 
 
-bool PixmapView::mouseReleaseEventFilter(QObject* object,QMouseEvent* event) {
+bool GVPixmapViewStack::mouseReleaseEventFilter(QObject* object,QMouseEvent* event) {
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
@@ -260,7 +260,7 @@ bool PixmapView::mouseReleaseEventFilter(QObject* object,QMouseEvent* event) {
 }
 
 
-bool PixmapView::wheelEventFilter(QObject* object,QWheelEvent* event) {
+bool GVPixmapViewStack::wheelEventFilter(QObject* object,QWheelEvent* event) {
 
 	if (mAutoZoom->isChecked()) {
 		if (event->delta()<0) {
@@ -310,7 +310,7 @@ bool PixmapView::wheelEventFilter(QObject* object,QWheelEvent* event) {
 // Private slots
 // 
 //------------------------------------------------------------------------
-void PixmapView::openContextMenu(const QPoint& pos) {
+void GVPixmapViewStack::openContextMenu(const QPoint& pos) {
 	if (mGVPixmap->isNull()) return;
 
 	QPopupMenu menu(this);
@@ -362,14 +362,14 @@ void PixmapView::openContextMenu(const QPoint& pos) {
 }
 
 
-void PixmapView::slotAutoZoom() {
+void GVPixmapViewStack::slotAutoZoom() {
 	if (mAutoZoom->isChecked()) {
 		mGVScrollPixmapView->enableView(false);
-		raiseWidget(mFitPixmapView);
-		mFitPixmapView->enableView(true);
-		mFitPixmapView->updateView();
+		raiseWidget(mGVFitPixmapView);
+		mGVFitPixmapView->enableView(true);
+		mGVFitPixmapView->updateView();
 	} else {
-		mFitPixmapView->enableView(false);
+		mGVFitPixmapView->enableView(false);
 		raiseWidget(mGVScrollPixmapView);
 		mGVScrollPixmapView->enableView(true);
 		mGVScrollPixmapView->updateView();
@@ -382,13 +382,13 @@ void PixmapView::slotAutoZoom() {
 /**
  * Update the path label when necessary in fullscreen mode
  */
-void PixmapView::slotUpdateView() {
+void GVPixmapViewStack::slotUpdateView() {
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
 	updateZoomActions();
 }
 
 
-void PixmapView::hideCursor() {
+void GVPixmapViewStack::hideCursor() {
 	setCursor(blankCursor);
 }
 
@@ -398,36 +398,36 @@ void PixmapView::hideCursor() {
 // File operations
 //
 //------------------------------------------------------------------------
-void PixmapView::showFileProperties() {
+void GVPixmapViewStack::showFileProperties() {
 	(void)new KPropertiesDialog(mGVPixmap->url());
 }
 
 
-void PixmapView::openWithEditor() {
+void GVPixmapViewStack::openWithEditor() {
 	FileOperation::openWithEditor(mGVPixmap->url());
 }
 
 
-void PixmapView::renameFile() {
+void GVPixmapViewStack::renameFile() {
 	FileOperation::rename(mGVPixmap->url(),this);
 }
 
 
-void PixmapView::copyFile() {
+void GVPixmapViewStack::copyFile() {
 	KURL::List list;
 	list << mGVPixmap->url();
 	FileOperation::copyTo(list,this);
 }
 
 
-void PixmapView::moveFile() {
+void GVPixmapViewStack::moveFile() {
 	KURL::List list;
 	list << mGVPixmap->url();
 	FileOperation::moveTo(list,this);
 }
 
 
-void PixmapView::deleteFile() {
+void GVPixmapViewStack::deleteFile() {
 	KURL::List list;
 	list << mGVPixmap->url();
 	FileOperation::del(list,this);
@@ -439,7 +439,7 @@ void PixmapView::deleteFile() {
 // Private
 //
 //------------------------------------------------------------------------
-void PixmapView::updateZoomActions() {
+void GVPixmapViewStack::updateZoomActions() {
 	// Disable most actions if there's no image
 	if (mGVPixmap->isNull()) {
 		mZoomIn->setEnabled(false);
@@ -461,16 +461,16 @@ void PixmapView::updateZoomActions() {
 }
 
 
-GVPixmapViewBase* PixmapView::currentView() const {
+GVPixmapViewBase* GVPixmapViewStack::currentView() const {
 	if (mAutoZoom->isChecked()) {
-		return mFitPixmapView;
+		return mGVFitPixmapView;
 	} else {
 		return mGVScrollPixmapView;
 	}
 }
 
 
-void PixmapView::updatePathLabel() {
+void GVPixmapViewStack::updatePathLabel() {
 	QString path=mGVPixmap->url().path();
 	
 	QPainter painter;

@@ -36,20 +36,20 @@ class KActionCollection;
 class KConfig;
 class KToggleAction;
 
-class FitPixmapView;
+class GVFitPixmapView;
 class GVPixmap;
 class GVPixmapViewBase;
 class GVScrollPixmapView;
 
 
-class PixmapView : public QWidgetStack {
+class GVPixmapViewStack : public QWidgetStack {
 Q_OBJECT
 public:
 	enum WheelBehaviour { None, Browse, Scroll, Zoom };
 	typedef QMap<ButtonState,WheelBehaviour> WheelBehaviours;
 	
-	PixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
-	~PixmapView();
+	GVPixmapViewStack(QWidget* parent,GVPixmap*,KActionCollection*);
+	~GVPixmapViewStack();
 
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
@@ -57,7 +57,7 @@ public:
 	void plugActionsToAccel(KAccel*);
 
 	// Properties
-	FitPixmapView* fitPixmapView() const { return mFitPixmapView; }
+	GVFitPixmapView* fitPixmapView() const { return mGVFitPixmapView; }
 	GVScrollPixmapView* scrollPixmapView() const { return mGVScrollPixmapView; }
 	KToggleAction* autoZoom() const { return mAutoZoom; }
 	KAction* zoomIn() const { return mZoomIn; }
@@ -91,7 +91,7 @@ protected:
 
 private:
 	GVScrollPixmapView* mGVScrollPixmapView;
-	FitPixmapView* mFitPixmapView;
+	GVFitPixmapView* mGVFitPixmapView;
 	GVPixmap* mGVPixmap;
 	QLabel* mPathLabel;
 	QTimer* mAutoHideTimer;

@@ -29,10 +29,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "gvpixmap.h"
 
-#include "fitpixmapview.moc"
+#include "gvfitpixmapview.moc"
 
 
-FitPixmapView::FitPixmapView(QWidget* parent, GVPixmap* pixmap,bool enabled)
+GVFitPixmapView::GVFitPixmapView(QWidget* parent, GVPixmap* pixmap,bool enabled)
 : QFrame(parent,0L,WPaintClever | WResizeNoErase | WRepaintNoErase), mGVPixmap(pixmap)
 {
 	setFocusPolicy(StrongFocus);
@@ -41,7 +41,7 @@ FitPixmapView::FitPixmapView(QWidget* parent, GVPixmap* pixmap,bool enabled)
 }
 
 
-void FitPixmapView::enableView(bool enabled) {
+void GVFitPixmapView::enableView(bool enabled) {
 	disconnect(mGVPixmap,0,this,0);
 
 	if (enabled) {
@@ -52,13 +52,13 @@ void FitPixmapView::enableView(bool enabled) {
 }
 
 
-void FitPixmapView::updateView() {
+void GVFitPixmapView::updateView() {
 	updateZoomedPixmap();
 	repaint();
 }
 
 
-void FitPixmapView::setFullScreen(bool fullScreen) {
+void GVFitPixmapView::setFullScreen(bool fullScreen) {
 	if (fullScreen) {
 		setBackgroundColor(black);
 		setFrameStyle(NoFrame);
@@ -71,7 +71,7 @@ void FitPixmapView::setFullScreen(bool fullScreen) {
 
 
 //-Overloaded functions-------------------
-void FitPixmapView::drawContents(QPainter* painter) {
+void GVFitPixmapView::drawContents(QPainter* painter) {
 	if (!mGVPixmap->isNull()) {
 		paintPixmap(painter);
 	} else {
@@ -81,14 +81,14 @@ void FitPixmapView::drawContents(QPainter* painter) {
 }
 
 
-void FitPixmapView::resizeEvent(QResizeEvent*) {
+void GVFitPixmapView::resizeEvent(QResizeEvent*) {
 	updateZoomedPixmap();
 	repaint();
 }
 
 
 //-Private--------------------------------
-void FitPixmapView::paintPixmap(QPainter* painter) {
+void GVFitPixmapView::paintPixmap(QPainter* painter) {
 	QRect clip=painter->clipRegion().boundingRect();
 	int pixmapWidth,pixmapHeight,contentsWidth,contentsHeight;
 	int xOffset,yOffset;
@@ -110,7 +110,7 @@ void FitPixmapView::paintPixmap(QPainter* painter) {
 }
 
 
-void FitPixmapView::updateZoomedPixmap() {
+void GVFitPixmapView::updateZoomedPixmap() {
 	int srcWidth,srcHeight,dstWidth,dstHeight;
 	srcWidth=mGVPixmap->width();
 	srcHeight=mGVPixmap->height();
@@ -139,9 +139,9 @@ void FitPixmapView::updateZoomedPixmap() {
 
 
 //-Configuration--------------------------
-void FitPixmapView::readConfig(KConfig*,const QString&) {
+void GVFitPixmapView::readConfig(KConfig*,const QString&) {
 }
 
 
-void FitPixmapView::writeConfig(KConfig*,const QString&) const {
+void GVFitPixmapView::writeConfig(KConfig*,const QString&) const {
 }

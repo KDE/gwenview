@@ -51,8 +51,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
 #include "gvpixmap.h"
+#include "gvpixmapviewstack.h"
 #include "gvslideshow.h"
-#include "pixmapview.h"
 #include "statusbarprogress.h"
 
 #include "mainwindow.moc"
@@ -97,13 +97,13 @@ MainWindow::MainWindow()
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
 // Pixmap view connections
-	connect(mPixmapView,SIGNAL(selectPrevious()),
+	connect(mPixmapViewStack,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );
-	connect(mPixmapView,SIGNAL(selectNext()),
+	connect(mPixmapViewStack,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
 
 // Scroll pixmap view connections
-	connect(mPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mPixmapViewStack,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateFileStatusBar()) );
 
 // Thumbnail view connections
@@ -162,8 +162,8 @@ MainWindow::MainWindow()
 // Set focus
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
-	} else if (mPixmapView->isVisible()) {
-		mPixmapView->setFocus();
+	} else if (mPixmapViewStack->isVisible()) {
+		mPixmapViewStack->setFocus();
 	}
 }
 
@@ -171,7 +171,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow() {
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
-	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mPixmapViewStack->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
@@ -218,7 +218,7 @@ void MainWindow::renameFile() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->renameFile();
 	} else {
-		mPixmapView->renameFile();
+		mPixmapViewStack->renameFile();
 	}
 }
 
@@ -227,7 +227,7 @@ void MainWindow::copyFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->copyFiles();
 	} else {
-		mPixmapView->copyFile();
+		mPixmapViewStack->copyFile();
 	}
 }
 
@@ -236,7 +236,7 @@ void MainWindow::moveFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->moveFiles();
 	} else {
-		mPixmapView->moveFile();
+		mPixmapViewStack->moveFile();
 	}
 }
 
@@ -245,7 +245,7 @@ void MainWindow::deleteFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->deleteFiles();
 	} else {
-		mPixmapView->deleteFile();
+		mPixmapViewStack->deleteFile();
 	}
 }
 
@@ -254,7 +254,7 @@ void MainWindow::showFileProperties() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->showFileProperties();
 	} else {
-		mPixmapView->showFileProperties();
+		mPixmapViewStack->showFileProperties();
 	}
 }
 
@@ -263,7 +263,7 @@ void MainWindow::openWithEditor() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->openWithEditor();
 	} else {
-		mPixmapView->openWithEditor();
+		mPixmapViewStack->openWithEditor();
 	}
 }
 
@@ -318,9 +318,9 @@ void MainWindow::toggleFullScreen() {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
-		mPixmapView->setFullScreen(true);
+		mPixmapViewStack->setFullScreen(true);
 		showFullScreen();
-		mPixmapView->setFocus();
+		mPixmapViewStack->setFocus();
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 		statusBar()->show();
@@ -336,7 +336,7 @@ void MainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		menuBar()->show();
-		mPixmapView->setFullScreen(false);
+		mPixmapViewStack->setFullScreen(false);
 		showNormal();
 	}
 }
@@ -406,8 +406,8 @@ void MainWindow::slotURLEditChanged(const QString &str) {
 	mGVPixmap->setURL(str);
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
-	} else if (mPixmapView->isVisible()) {
-		mPixmapView->setFocus();
+	} else if (mPixmapViewStack->isVisible()) {
+		mPixmapViewStack->setFocus();
 	}
 }
 
@@ -438,7 +438,7 @@ void MainWindow::updateFileStatusBar() {
 	if (!filename.isEmpty()) {
 		txt=QString("%1 %2x%3 @ %4%")
 			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
-			.arg(int(mPixmapView->zoom()*100) );
+			.arg(int(mPixmapViewStack->zoom()*100) );
 	} else {
 		txt="";
 	}
@@ -458,8 +458,8 @@ void MainWindow::createWidgets() {
 // Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
-	mPixmapView=new PixmapView(mPixmapDock,mGVPixmap,actionCollection());
-	mPixmapDock->setWidget(mPixmapView);
+	mPixmapViewStack=new GVPixmapViewStack(mPixmapDock,mGVPixmap,actionCollection());
+	mPixmapDock->setWidget(mPixmapViewStack);
 	setView(mPixmapDock);
 	setMainDockWidget(mPixmapDock);
 
@@ -481,7 +481,7 @@ void MainWindow::createWidgets() {
 // Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
-	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mPixmapViewStack->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 }
 
 
@@ -527,7 +527,7 @@ void MainWindow::createAccels() {
 		}
 	}
 	mFileViewStack->plugActionsToAccel(mAccel);
-	mPixmapView->plugActionsToAccel(mAccel);
+	mPixmapViewStack->plugActionsToAccel(mAccel);
 
 // Read user accelerator
 	mAccel->readSettings();
@@ -567,11 +567,11 @@ void MainWindow::createMenu() {
 	mToggleSlideShow->plug(viewMenu);
 
 	viewMenu->insertSeparator();
-	mPixmapView->autoZoom()->plug(viewMenu);
-	mPixmapView->zoomIn()->plug(viewMenu);
-	mPixmapView->zoomOut()->plug(viewMenu);
-	mPixmapView->resetZoom()->plug(viewMenu);
-	mPixmapView->lockZoom()->plug(viewMenu);
+	mPixmapViewStack->autoZoom()->plug(viewMenu);
+	mPixmapViewStack->zoomIn()->plug(viewMenu);
+	mPixmapViewStack->zoomOut()->plug(viewMenu);
+	mPixmapViewStack->resetZoom()->plug(viewMenu);
+	mPixmapViewStack->lockZoom()->plug(viewMenu);
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
@@ -618,11 +618,11 @@ void MainWindow::createMainToolBar() {
 	mToggleSlideShow->plug(toolBar());
 	
 	toolBar()->insertLineSeparator();
-	mPixmapView->autoZoom()->plug(toolBar());
-	mPixmapView->zoomIn()->plug(toolBar());
-	mPixmapView->zoomOut()->plug(toolBar());
-	mPixmapView->resetZoom()->plug(toolBar());
-	mPixmapView->lockZoom()->plug(toolBar());
+	mPixmapViewStack->autoZoom()->plug(toolBar());
+	mPixmapViewStack->zoomIn()->plug(toolBar());
+	mPixmapViewStack->zoomOut()->plug(toolBar());
+	mPixmapViewStack->resetZoom()->plug(toolBar());
+	mPixmapViewStack->lockZoom()->plug(toolBar());
 }
 
 

@@ -37,10 +37,10 @@ class KConfig;
 class GVPixmap;
 
 
-class FitPixmapView : public QFrame, public GVPixmapViewBase {
+class GVFitPixmapView : public QFrame, public GVPixmapViewBase {
 Q_OBJECT
 public:
-	FitPixmapView(QWidget* parent,GVPixmap* image,bool);
+	GVFitPixmapView(QWidget* parent,GVPixmap* image,bool);
 	void enableView(bool);
 
 	void readConfig(KConfig*,const QString&);
