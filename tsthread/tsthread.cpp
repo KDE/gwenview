@@ -180,7 +180,7 @@ void TSThread::customEvent( QCustomEvent* ev )
         e->object->qt_emit( signal_id, e->args );
     else
         kdWarning() << "Cannot emit signal \"" << e->signal << "\"." << endl;
-    if( *deleted_flag ) // some slot deleted 'this'
+    if( deleted ) // some slot deleted 'this'
         return;
     deleted_flag = NULL;
     QMutexLocker locker( &signal_mutex );
