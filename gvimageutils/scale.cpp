@@ -1813,7 +1813,7 @@ void MImageScale::mimageScaleAARGB(MImageScaleInfo *isi, unsigned int *dest,
 // could sometimes make the edges between incremental steps visible.
 int extraScalePixels( SmoothAlgorithm alg, double zoom, double blur )
 {
-	double filtersupport;
+	double filtersupport = 0;
 	Filter filter = NULL;
 	switch( alg ) {
 	case SMOOTH_NONE:
