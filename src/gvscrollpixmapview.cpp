@@ -200,7 +200,7 @@ public:
 		if (mView->mMouseWheelScroll) {
 			int deltaX, deltaY;
 
-			if (event->state() & ControlButton) {
+			if (event->state() & ControlButton || event->orientation()==Horizontal) {
 				deltaX = event->delta();
 				deltaY = 0;
 			} else {
