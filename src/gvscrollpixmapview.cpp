@@ -57,6 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const char* CONFIG_SHOW_PATH="show path";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
+const char* CONFIG_DELAYED_SMOOTHING="delayed smoothing";
 const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
 const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
 const char* CONFIG_MOUSE_WHEEL_SCROLL="mouse wheel scrolls image";
@@ -334,7 +335,7 @@ void GVScrollPixmapView::slotLoaded() {
 	updateContentSize();
 	updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
-	if (mSmoothScale >= SMOOTH2) scheduleOperation( SMOOTH_PASS );
+	if (mDelayedSmoothing) scheduleOperation( SMOOTH_PASS );
 }
 
 
@@ -364,10 +365,21 @@ void GVScrollPixmapView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
-void GVScrollPixmapView::setSmoothScale(int value) {
-	if( mSmoothScale == value ) return;
-	mSmoothScale= static_cast< SmoothScale >( value );
-	if( mSmoothScale >= SMOOTH2 ) {
+void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value) {
+	if( mSmoothAlgorithm == value ) return;
+	mSmoothAlgorithm = value;
+	if( mDelayedSmoothing ) {
+		scheduleOperation( SMOOTH_PASS );
+	} else {
+		fullRepaint();
+	}
+}
+
+
+void GVScrollPixmapView::setDelayedSmoothing(bool value) {
+	if (mDelayedSmoothing==value) return;
+	mDelayedSmoothing=value;
+	if( mDelayedSmoothing ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
 		fullRepaint();
@@ -572,7 +584,7 @@ void GVScrollPixmapView::checkPendingOperationsInternal() {
 	}
 	if( mPendingOperations & SMOOTH_PASS ) {
 		mSmoothingSuspended = false;
-		if( mSmoothScale >= SMOOTH2 ) {
+		if( mDelayedSmoothing ) {
 			QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
 			addPendingPaint( true, visibleRect );
 		}
@@ -682,27 +694,15 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	if (smooth) {
 		if( mZoom != 1.0 ) {
 			image=image.convertDepth(32);
-			static GVImageUtils::SmoothAlgorithm algs[] = {
-				GVImageUtils::SMOOTH_NONE,
-				GVImageUtils::SMOOTH_FAST,
-				GVImageUtils::SMOOTH_NORMAL,
-				GVImageUtils::SMOOTH_BEST,
-				GVImageUtils::SMOOTH_FAST,
-				GVImageUtils::SMOOTH_NORMAL,
-				GVImageUtils::SMOOTH_BEST };
-			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algs[ mSmoothScale ] );
+			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), mSmoothAlgorithm );
 		}
 	} else {
-		static GVImageUtils::SmoothAlgorithm algs[] = {
-			GVImageUtils::SMOOTH_NONE,
-			GVImageUtils::SMOOTH_FAST,
-			GVImageUtils::SMOOTH_NORMAL,
-			GVImageUtils::SMOOTH_BEST,
-			GVImageUtils::SMOOTH_NONE,
-			GVImageUtils::SMOOTH_NONE,
-			GVImageUtils::SMOOTH_NONE }; // none for 2-pass ones
-		image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algs[ mSmoothScale ] );
-		if( mSmoothScale >= SMOOTH2 && mZoom != 1.0 ) {
+		GVImageUtils::SmoothAlgorithm algo=mDelayedSmoothing
+			?GVImageUtils::SMOOTH_NONE
+			:mSmoothAlgorithm;
+		image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algo );
+		
+		if( mDelayedSmoothing && mZoom != 1.0 ) {
 			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 		}
 	}
@@ -1243,22 +1243,23 @@ void GVScrollPixmapView::deleteFile() {
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
-	int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE,SMOOTH_NORMAL2);
-	if( smooth >= SMOOTH_NONE && smooth <= SMOOTH_BEST2 ) {
-		mSmoothScale = static_cast< SmoothScale >( smooth );
+	
+	// backwards comp.
+	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
+		mSmoothAlgorithm = GVImageUtils::SMOOTH_NORMAL;
+		mDelayedSmoothing = false;
 	} else {
-		mSmoothScale = SMOOTH_NORMAL2;
-	}
-	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {// backwards comp.
-		mSmoothScale = SMOOTH_NORMAL2;
+		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, GVImageUtils::SMOOTH_NORMAL);
+		mSmoothAlgorithm = static_cast<GVImageUtils::SmoothAlgorithm>(smooth);
+		mDelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, false);
 	}
 
-	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
-	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
+	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
+	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
 	mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
-	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
+	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, false));
 	updateScrollBarMode();
-	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
+	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
 
 	mButtonStateToolMap[NoButton]=SCROLL;
 	mButtonStateToolMap[ShiftButton]=ZOOM;
@@ -1270,12 +1271,13 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
-	config->writeEntry(CONFIG_SMOOTH_SCALE,mSmoothScale);
-	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
-	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
-	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL,mMouseWheelScroll);
-	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
-	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
+	config->writeEntry(CONFIG_SHOW_PATH, mShowPathInFullScreen);
+	config->writeEntry(CONFIG_SMOOTH_SCALE, mSmoothAlgorithm);
+	config->writeEntry(CONFIG_DELAYED_SMOOTHING, mDelayedSmoothing);
+	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, mEnlargeSmallImages);
+	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, mShowScrollBars);
+	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, mMouseWheelScroll);
+	config->writeEntry(CONFIG_AUTO_ZOOM, mAutoZoom->isChecked());
+	config->writeEntry(CONFIG_LOCK_ZOOM, mLockZoom->isChecked());
 }
 

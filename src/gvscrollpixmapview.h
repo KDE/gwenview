@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtimer.h>
 
 #include "gvbusylevelmanager.h"
+#include "gvimageutils.h"
 
 class QEvent;
 class QLabel;
@@ -87,8 +88,10 @@ public:
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
 	void setShowPathInFullScreen(bool);
-	int smoothScale() const { return mSmoothScale; }
-	void setSmoothScale(int);
+	GVImageUtils::SmoothAlgorithm smoothAlgorithm() const { return mSmoothAlgorithm; }
+	void setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm);
+	bool delayedSmoothing() const { return mDelayedSmoothing; }
+	void setDelayedSmoothing(bool);
 	bool enlargeSmallImages() const { return mEnlargeSmallImages; }
 	void setEnlargeSmallImages(bool);
 	bool showScrollBars() const { return mShowScrollBars; }
@@ -119,9 +122,8 @@ private:
 	QLabel* mPathLabel;
 	
 	bool mShowPathInFullScreen;
-	enum SmoothScale { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST,
-		SMOOTH2, SMOOTH_FAST2 = SMOOTH2, SMOOTH_NORMAL2, SMOOTH_BEST2 };
-	SmoothScale mSmoothScale;
+	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
+	bool mDelayedSmoothing;
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	bool mMouseWheelScroll;

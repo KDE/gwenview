@@ -85,7 +85,8 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	d->mContent->mSmoothScale->setCurrentItem(pixmapView->smoothScale());
+	d->mContent->mSmoothGroup->setButton(pixmapView->smoothAlgorithm());
+	d->mContent->mDelayedSmoothing->setChecked(pixmapView->delayedSmoothing());
 	d->mContent->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mContent->mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	d->mContent->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
@@ -139,8 +140,9 @@ void GVConfigDialog::slotApply() {
 	fileViewStack->setShowDirs(d->mContent->mShowDirs->isChecked());
 	fileViewStack->setShownColor(d->mContent->mShownColor->color());
 	
-	// Image View tab		
-	pixmapView->setSmoothScale(d->mContent->mSmoothScale->currentItem());
+	// Image View tab
+	pixmapView->setSmoothAlgorithm( static_cast<GVImageUtils::SmoothAlgorithm>(d->mContent->mSmoothGroup->selectedId()));
+	pixmapView->setDelayedSmoothing(d->mContent->mDelayedSmoothing->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mContent->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
 	pixmapView->setMouseWheelScroll(d->mContent->mMouseWheelGroup->selected()==d->mContent->mMouseWheelScroll);
