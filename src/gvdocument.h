@@ -177,6 +177,9 @@ private:
 	 * otherwise it's the translated error message.
 	 */
 	QString saveInternal(const KURL& url, const QCString& format);
+
+	GVDocument(const GVDocument&);
+	GVDocument &operator=(const GVDocument&);
 };
 
 
