@@ -7,6 +7,7 @@
    in addition to the file path.
  - The fullscreen on screen display is more readable now.
  - The background color of the image view can be configured.
+ - It's now possible to enlarge images so that they fill the page when printed.
 - Fixes:
  - In the folder view, pressing Enter now opens the selected folder.
  - Use icon list for the configuration dialog.

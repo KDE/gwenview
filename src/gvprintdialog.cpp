@@ -68,7 +68,8 @@ void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
 	opts["app-gwenview-position"] = QString::number(getPosition(mContent->mPosition->currentText()));
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
-	opts["app-gwenview-shrinkToFit"] = mContent->mShrinkToFit->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-fitToPage"] = mContent->mFitToPage->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-enlargeToFit"] = mContent->mEnlargeToFit->isChecked() ? STR_TRUE : STR_FALSE;
 
 	opts["app-gwenview-scale"] = mContent->mScale->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-scaleKeepRatio"] = mContent->mKeepRatio->isChecked() ? STR_TRUE : STR_FALSE;
@@ -91,7 +92,8 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 
 	mContent->mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
 	mContent->mAddComment->setChecked( opts["app-gwenview-printComment"] == STR_TRUE );
-	mContent->mShrinkToFit->setChecked( opts["app-gwenview-shrinkToFit"] == STR_TRUE );
+	mContent->mFitToPage->setChecked( opts["app-gwenview-fitToPage"] == STR_TRUE );
+	mContent->mEnlargeToFit->setChecked( opts["app-gwenview-enlargeToFit"] == STR_TRUE );
 
 	mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
 	val = opts["app-gwenview-scaleUnit"].toInt( &ok );

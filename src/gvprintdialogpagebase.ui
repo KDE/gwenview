@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>GVPrintDialogPageBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,21 +8,21 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>451</width>
-            <height>208</height>
+            <width>452</width>
+            <height>232</height>
         </rect>
     </property>
     <property name="caption">
         <string>Image Settings</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout2</cstring>
             </property>
@@ -107,7 +107,7 @@
                 </spacer>
             </hbox>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="1" column="0">
             <property name="name">
                 <cstring>mAddFileName</cstring>
             </property>
@@ -118,7 +118,7 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="2" column="0">
             <property name="name">
                 <cstring>mAddComment</cstring>
             </property>
@@ -129,29 +129,18 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QButtonGroup" row="3" column="0">
             <property name="name">
-                <cstring>groupBox1</cstring>
+                <cstring>buttonGroup2</cstring>
             </property>
             <property name="title">
                 <string>Scaling</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>mShrinkToFit</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Shrink image to &amp;fit, if necessary</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
+                <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
                         <cstring>mScale</cstring>
                     </property>
@@ -159,37 +148,53 @@
                         <string>&amp;Scale to:</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLayoutWidget" row="1" column="0">
                     <property name="name">
-                        <cstring>layout3</cstring>
+                        <cstring>layout15</cstring>
                     </property>
-                    <hbox>
+                    <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="KIntSpinBox">
+                        <spacer row="0" column="1">
                             <property name="name">
-                                <cstring>mWidth</cstring>
+                                <cstring>spacer6</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>290</width>
+                                    <height>21</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>mEnlargeToFit</cstring>
                             </property>
                             <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="maxValue">
-                                <number>999999999</number>
-                            </property>
-                            <property name="minValue">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
+                                <bool>true</bool>
                             </property>
                             <property name="text">
-                                <string>x</string>
+                                <string>Enlarge smaller images</string>
                             </property>
                         </widget>
-                        <widget class="KIntSpinBox">
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="3" column="0">
+                    <property name="name">
+                        <cstring>layout13</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KIntSpinBox" row="0" column="2">
                             <property name="name">
                                 <cstring>mHeight</cstring>
                             </property>
@@ -203,7 +208,26 @@
                                 <number>1</number>
                             </property>
                         </widget>
-                        <widget class="KComboBox">
+                        <widget class="QCheckBox" row="0" column="4">
+                            <property name="name">
+                                <cstring>mKeepRatio</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="text">
+                                <string>Keep ratio</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="1">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>x</string>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox" row="0" column="3">
                             <item>
                                 <property name="text">
                                     <string>Millimeters</string>
@@ -226,18 +250,7 @@
                                 <bool>false</bool>
                             </property>
                         </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>mKeepRatio</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>Keep ratio</string>
-                            </property>
-                        </widget>
-                        <spacer>
+                        <spacer row="0" column="5">
                             <property name="name">
                                 <cstring>spacer2</cstring>
                             </property>
@@ -249,24 +262,43 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>51</width>
+                                    <width>99</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                    </hbox>
+                        <widget class="KIntSpinBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>mWidth</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="maxValue">
+                                <number>999999999</number>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
-            </vbox>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>mFitToPage</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Fit image to page</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <connections>
-    <connection>
-        <sender>mScale</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>mWidth</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
     <connection>
         <sender>mScale</sender>
         <signal>toggled(bool)</signal>
@@ -285,12 +317,24 @@
         <receiver>mKeepRatio</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>mScale</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>mWidth</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>mFitToPage</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>mEnlargeToFit</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

@@ -404,8 +404,36 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 	}
 
 	// Shring image if necessary
-	bool shrinkToFit = printer->option( "app-gwenview-shrinkToFit" ) != f;
-	if ( shrinkToFit && image.width() > pdWidth || image.height() > pdHeight ) {
+	bool shrinkToFit = printer->option( "app-gwenview-fitToPage" ) != f;
+	bool enlargeToFit = printer->option( "app-gwenview-enlargeToFit" ) != f;
+
+	bool fitImage = false;
+	if ( image.width() > pdWidth || image.height() > pdHeight ) {
+		if (shrinkToFit)
+			fitImage = true;
+		else {
+			int resp = KMessageBox::warningYesNoCancel(0, 
+					i18n("The image won't fit into the page, what do you want to do?"),
+					QString::null,KStdGuiItem::cont(), 
+					QString(i18n("Shrink")) );
+
+			switch (resp) {
+			case KMessageBox::No: //Shrink
+				fitImage =true;
+				break;
+			case KMessageBox::Cancel:
+				printer->abort();
+				return;
+			case KMessageBox::Yes: //Continue
+			default:
+				break;
+			}
+		}
+	}
+	if (enlargeToFit && shrinkToFit) {
+		fitImage = true;
+	}
+	if (fitImage) {
 		image = GVImageUtils::scale( image, pdWidth, pdHeight, GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
 	}
 
