@@ -39,7 +39,7 @@ static const char* version="1.1.0";
 
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
+	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview" ),
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
 		"Copyright 2000-2004 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 	aboutData.addCredit("Frank Becker", I18N_NOOP("Fast JPEG thumbnail generation (v0.13.0)"), "ff@telus.net");

@@ -642,7 +642,7 @@ void GVMainWindow::createWidgets() {
 	statusBar()->addWidget(mSBDetailLabel);
 
 	// Pixmap widget
-	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
+	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview_hack"),NULL,i18n("Image"));
 
 	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
