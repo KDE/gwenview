@@ -24,10 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qguardedptr.h>
 
 // KDE includes
-#include <kfileview.h>
 #include <kiconview.h>
 
 // Our includes
+#include "gvfileview.h"
 #include "thumbnailsize.h"
 
 class QIconViewItem;
@@ -38,7 +38,7 @@ class KFileItem;
 
 class ThumbnailLoadJob;
 
-class FileThumbnailView : public KIconView, public KFileView {
+class FileThumbnailView : public KIconView, public GVFileView {
 Q_OBJECT
 public:
 	FileThumbnailView(QWidget* parent);

@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvarchive.h"
 #include "gvfiledetailview.h"
 
-#include "fileview.moc"
+#include "gvfileviewstack.moc"
 
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
@@ -47,7 +47,7 @@ inline bool isDirOrArchive(const KFileItem* item) {
 }
 
 
-FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
+GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList)
 {
 // Actions
@@ -137,12 +137,12 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 }
 
 
-FileView::~FileView() {
+GVFileViewStack::~GVFileViewStack() {
 	delete mDirLister;
 }
 
 
-void FileView::plugActionsToAccel(KAccel* accel) {
+void GVFileViewStack::plugActionsToAccel(KAccel* accel) {
 	mSelectFirst->plugAccel(accel);
 	mSelectLast->plugAccel(accel);
 	mSelectPrevious->plugAccel(accel);
@@ -153,16 +153,10 @@ void FileView::plugActionsToAccel(KAccel* accel) {
 	mLargeThumbnails->plugAccel(accel);
 }
 
-/*
-void FileView::installRBPopup(QPopupMenu* menu) {
-	mPopupMenu=menu;
-}
-//FIXME
-*/
 
 //-Public slots----------------------------------------------------------
-void FileView::setURL(const KURL& dirURL,const QString& filename) {
-	//kdDebug() << "FileView::setURL " << dirURL.path() + " - " + filename << endl;
+void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
+	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + filename << endl;
 	if (mDirURL.cmp(dirURL,true)) return;
 	
 	mDirURL=dirURL;
@@ -172,7 +166,7 @@ void FileView::setURL(const KURL& dirURL,const QString& filename) {
 }
 
 
-void FileView::cancel() {
+void GVFileViewStack::cancel() {
 	if (!mDirLister->isFinished()) {
 		mDirLister->stop();
 		return;
@@ -183,7 +177,7 @@ void FileView::cancel() {
 }
 
 
-void FileView::selectFilename(QString filename) {
+void GVFileViewStack::selectFilename(QString filename) {
 	if (filename.isEmpty()) {
 		updateActions();
 		return;
@@ -205,7 +199,7 @@ void FileView::selectFilename(QString filename) {
 }
 
 
-void FileView::slotSelectFirst() {
+void GVFileViewStack::slotSelectFirst() {
 	KFileItem* item=findFirstImage();
 	if (!item) return;
 	
@@ -217,7 +211,7 @@ void FileView::slotSelectFirst() {
 }
 
 
-void FileView::slotSelectLast() {
+void GVFileViewStack::slotSelectLast() {
 	KFileItem* item=findLastImage();
 	if (!item) return;
 	
@@ -229,7 +223,7 @@ void FileView::slotSelectLast() {
 }
 
 
-void FileView::slotSelectPrevious() {
+void GVFileViewStack::slotSelectPrevious() {
 	KFileItem* item=findPreviousImage();
 	if (!item) return;
 	
@@ -241,7 +235,7 @@ void FileView::slotSelectPrevious() {
 }
 
 
-void FileView::slotSelectNext() {
+void GVFileViewStack::slotSelectNext() {
 	KFileItem* item=findNextImage();
 	if (!item) return;
 	
@@ -254,7 +248,7 @@ void FileView::slotSelectNext() {
 
 
 //-Private slots---------------------------------------------------------
-void FileView::viewExecuted() {
+void GVFileViewStack::viewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
 
@@ -273,7 +267,7 @@ void FileView::viewExecuted() {
 }
 
 
-void FileView::viewChanged() {
+void GVFileViewStack::viewChanged() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
@@ -282,9 +276,9 @@ void FileView::viewChanged() {
 }
 
 
-void FileView::updateThumbnailSize() {
+void GVFileViewStack::updateThumbnailSize() {
 	if (mNoThumbnails->isChecked()) {
-		setMode(FileView::FileList);
+		setMode(GVFileViewStack::FileList);
 		return;
 	} else {
 		if (mSmallThumbnails->isChecked()) {
@@ -294,7 +288,7 @@ void FileView::updateThumbnailSize() {
 		} else {
 			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Large);
 		}
-		setMode(FileView::Thumbnail);
+		setMode(GVFileViewStack::Thumbnail);
 	}
 }
 
@@ -304,18 +298,7 @@ void FileView::updateThumbnailSize() {
 // Context menu
 //
 //-----------------------------------------------------------------------
-void FileView::openContextMenu(const QPoint& pos) {
-	/*
-	updateActions();
-
-	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item || isDirOrArchive(item)) return;
-	
-	emitURLChanged();
-	if (mPopupMenu) mPopupMenu->popup(pos);
-	// FIXME
-	*/
-
+void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	int selectionSize=currentFileView()->selectedItems()->count();
 	
 	QPopupMenu menu(this);
@@ -361,17 +344,17 @@ void FileView::openContextMenu(const QPoint& pos) {
 }
 
 
-void FileView::openContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
+void GVFileViewStack::openContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
 	openContextMenu(pos);
 }
 
 
-void FileView::openContextMenu(QIconViewItem*,const QPoint& pos) {
+void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 	openContextMenu(pos);
 }
 
 
-void FileView::editSelectedFile() {
+void GVFileViewStack::editSelectedFile() {
 	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
 	if (!fileItem) return;
 	
@@ -379,13 +362,13 @@ void FileView::editSelectedFile() {
 }
 
 
-void FileView::openParentDir() {
+void GVFileViewStack::openParentDir() {
 	KURL url(mDirURL.upURL());
 	emit urlChanged(url);
 }
 
 
-void FileView::renameSelectedFile() {
+void GVFileViewStack::renameSelectedFile() {
 	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
 	if (!fileItem) return;
 
@@ -400,19 +383,19 @@ void FileView::renameSelectedFile() {
 }
 
 
-void FileView::copySelectedFiles() {
+void GVFileViewStack::copySelectedFiles() {
 }
 
 
-void FileView::moveSelectedFiles() {
+void GVFileViewStack::moveSelectedFiles() {
 }
 
 
-void FileView::deleteSelectedFiles() {
+void GVFileViewStack::deleteSelectedFiles() {
 }
 
 
-void FileView::showFileProperties() {
+void GVFileViewStack::showFileProperties() {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	if (selectedItems->count()>0) {
 		(void)new KPropertiesDialog(*selectedItems);
@@ -427,12 +410,12 @@ void FileView::showFileProperties() {
 // Current item file operations
 //
 //-----------------------------------------------------------------------
-void FileView::copyFile() {
+void GVFileViewStack::copyFile() {
 	FileOperation::copyTo(url(),this);
 }
 
 
-void FileView::moveFile() {
+void GVFileViewStack::moveFile() {
 // Get the next item text or the previous one if there's no next item
 	KFileItem* newItem=findNextImage();
 	if (!newItem) newItem=findPreviousImage();
@@ -448,7 +431,7 @@ void FileView::moveFile() {
 }
 
 
-void FileView::deleteFile() {
+void GVFileViewStack::deleteFile() {
 // Get the next item text or the previous one if there's no next item
 	KFileItem* newItem=findNextImage();
 	if (!newItem) newItem=findPreviousImage();
@@ -464,17 +447,17 @@ void FileView::deleteFile() {
 }
 
 
-void FileView::slotSelectNewFilename() {
+void GVFileViewStack::slotSelectNewFilename() {
 	mFilenameToSelect=mNewFilenameToSelect;
 }
 
 
-void FileView::renameFile() {
+void GVFileViewStack::renameFile() {
 	FileOperation::rename(url(),this,this,SLOT(slotRenamed(const QString&)) );
 }
 
 
-void FileView::slotRenamed(const QString& newFilename) {
+void GVFileViewStack::slotRenamed(const QString& newFilename) {
 	mFilenameToSelect=newFilename;
 }
 
@@ -484,14 +467,14 @@ void FileView::slotRenamed(const QString& newFilename) {
 // Properties
 //
 //-----------------------------------------------------------------------
-QString FileView::filename() const {
+QString GVFileViewStack::filename() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return "";
 	return item->text();
 }
 
 
-KFileView* FileView::currentFileView() const {
+GVFileView* GVFileViewStack::currentFileView() const {
 	if (mMode==FileList) {
 		return mFileDetailView;
 	} else {
@@ -503,19 +486,19 @@ KFileView* FileView::currentFileView() const {
 /**
  * This method avoids the need to include kfileview.h for class users
  */
-uint FileView::fileCount() const {
+uint GVFileViewStack::fileCount() const {
 	return currentFileView()->numFiles();
 }
 
 
-KURL FileView::url() const {
+KURL GVFileViewStack::url() const {
 	KURL url(mDirURL);
 	url.addPath(filename());
 	return url;
 }
 
 
-void FileView::setMode(FileView::Mode mode) {
+void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (item && !isDirOrArchive(item)) {
 		mFilenameToSelect=filename();
@@ -523,8 +506,8 @@ void FileView::setMode(FileView::Mode mode) {
 		mFilenameToSelect=QString::null;
 	}
 	mMode=mode;
-	KFileView* oldView;
-	KFileView* newView;
+	GVFileView* oldView;
+	GVFileView* newView;
 
 	if (mMode==FileList) {
 		mFileThumbnailView->stopThumbnailUpdate();
@@ -545,7 +528,7 @@ void FileView::setMode(FileView::Mode mode) {
 	}
 
 // Clear the old view
-	oldView->KFileView::clear();
+	oldView->GVFileView::clear();
 
 // Update the new view
 	KURL url=mDirLister->url();
@@ -553,18 +536,18 @@ void FileView::setMode(FileView::Mode mode) {
 }
 
 
-bool FileView::showDirs() const {
+bool GVFileViewStack::showDirs() const {
 	return mShowDirs;
 }
 
 
-void FileView::setShowDirs(bool value) {
+void GVFileViewStack::setShowDirs(bool value) {
 	mShowDirs=value;
 	initDirListerFilter();
 }
 
 
-void FileView::setAutoLoadImage(bool autoLoadImage) {
+void GVFileViewStack::setAutoLoadImage(bool autoLoadImage) {
 	mAutoLoadImage=autoLoadImage;
 }
 
@@ -574,18 +557,18 @@ void FileView::setAutoLoadImage(bool autoLoadImage) {
 // Dir lister slots
 //
 //-----------------------------------------------------------------------
-void FileView::dirListerDeleteItem(KFileItem* item) {
+void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
 	currentFileView()->removeItem(item);
 }
 
 
-void FileView::dirListerNewItems(const KFileItemList& items) {
+void GVFileViewStack::dirListerNewItems(const KFileItemList& items) {
 	mThumbnailsNeedUpdate=true;
 	currentFileView()->addItemList(items);
 }
 
 
-void FileView::dirListerRefreshItems(const KFileItemList& list) {
+void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 	KFileItemListIterator it(list);
 	for (; *it!=0L; ++it) {
 		currentFileView()->updateView(*it);
@@ -593,17 +576,17 @@ void FileView::dirListerRefreshItems(const KFileItemList& list) {
 }
 
 
-void FileView::dirListerClear() {
+void GVFileViewStack::dirListerClear() {
 	currentFileView()->clear();
 }
 
 
-void FileView::dirListerStarted() {
+void GVFileViewStack::dirListerStarted() {
 	mThumbnailsNeedUpdate=false;
 }
 
 
-void FileView::dirListerCompleted() {
+void GVFileViewStack::dirListerCompleted() {
 	// FIXME : This is a work around to a bug which causes
 	// FileThumbnailView::firstFileItem to return a wrong item.
 	// This work around is not in the method because firstFileItem is 
@@ -624,7 +607,7 @@ void FileView::dirListerCompleted() {
 }
 
 
-void FileView::dirListerCanceled() {
+void GVFileViewStack::dirListerCanceled() {
 	if (mMode==Thumbnail) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
@@ -641,7 +624,7 @@ void FileView::dirListerCanceled() {
 // Private
 //
 //-----------------------------------------------------------------------
-void FileView::initDirListerFilter() {
+void GVFileViewStack::initDirListerFilter() {
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
@@ -654,7 +637,7 @@ void FileView::initDirListerFilter() {
 }
 
 
-void FileView::updateActions() {
+void GVFileViewStack::updateActions() {
 	KFileItem* firstImage=findFirstImage();
 	
 	// There isn't any image, no need to continue
@@ -687,18 +670,17 @@ void FileView::updateActions() {
 }
 
 
-void FileView::emitURLChanged() {
+void GVFileViewStack::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (mMode==Thumbnail) {
-		mFileThumbnailView->setViewedFileItem(item);
-	}
+	currentFileView()->setViewedFileItem(item);
+		
 // We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
 	//kdDebug() << "urlChanged : " << tmp.prettyURL() << endl;
 	emit urlChanged(tmp);
 }
 
-KFileItem* FileView::findFirstImage() const {
+KFileItem* GVFileViewStack::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
 	while (item && isDirOrArchive(item)) { 
 		item=currentFileView()->nextItem(item);
@@ -706,7 +688,7 @@ KFileItem* FileView::findFirstImage() const {
 	return item;
 }
 
-KFileItem* FileView::findLastImage() const {
+KFileItem* GVFileViewStack::findLastImage() const {
 	KFileItem* item=currentFileView()->items()->getLast();
 	while (item && isDirOrArchive(item)) { 
 		item=currentFileView()->prevItem(item);
@@ -714,7 +696,7 @@ KFileItem* FileView::findLastImage() const {
 	return item;
 }
 
-KFileItem* FileView::findPreviousImage() const {
+KFileItem* GVFileViewStack::findPreviousImage() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return 0L;
 	do {
@@ -723,7 +705,7 @@ KFileItem* FileView::findPreviousImage() const {
 	return item;
 }
 
-KFileItem* FileView::findNextImage() const {
+KFileItem* GVFileViewStack::findNextImage() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return 0L;
 	do {
@@ -739,7 +721,7 @@ KFileItem* FileView::findNextImage() const {
 // Configuration
 //
 //-----------------------------------------------------------------------
-void FileView::readConfig(KConfig* config,const QString& group) {
+void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
 
 	config->setGroup(group);
@@ -769,7 +751,7 @@ void FileView::readConfig(KConfig* config,const QString& group) {
 }
 
 
-void FileView::writeConfig(KConfig* config,const QString& group) const {
+void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	mFileThumbnailView->writeConfig(config,group);
 
 	config->setGroup(group);

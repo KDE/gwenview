@@ -27,10 +27,12 @@ class KFileItem;
 class QWidget;
 class QKeyEvent;
 
+// KDE includes
 #include <klistview.h>
 #include <kmimetyperesolver.h>
 
-#include "kfileview.h"
+// Our includes
+#include "gvfileview.h"
 
 /**
  * An item for the listiew, that has a reference to its corresponding
@@ -91,15 +93,8 @@ private:
 	QString m_key;
 };
 
-/**
- * A list-view capable of showing @ref KFileItem'. Used in the filedialog
- * for example. Most of the documentation is in @ref KFileView class.
- *
- * @see KDirOperator
- * @see KCombiView
- * @see KFileIconView
- */
-class GVFileDetailView : public KListView, public KFileView
+
+class GVFileDetailView : public KListView, public GVFileView
 {
 	Q_OBJECT
 
@@ -139,6 +134,7 @@ public:
 	void determineIcon( GVFileListViewItem *item );
 	QScrollView *scrollWidget() const { return (QScrollView*) this; }
 
+	void setViewedFileItem(const KFileItem* fileItem);
 
 protected:
 	virtual void keyPressEvent( QKeyEvent * );

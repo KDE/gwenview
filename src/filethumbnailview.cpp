@@ -48,7 +48,7 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
 FileThumbnailView::FileThumbnailView(QWidget* parent)
-: KIconView(parent), KFileView(), mViewedItem(0L), mThumbnailLoadJob(0L)
+: KIconView(parent), GVFileView(), mViewedItem(0L), mThumbnailLoadJob(0L)
 {
 	setAutoArrange(true);
 	QIconView::setSorting(true);

@@ -30,7 +30,7 @@ class KAccel;
 class KToggleAction;
 
 class DirView;
-class FileView;
+class GVFileViewStack;
 class GVPixmap;
 class GVSlideShow;
 class PixmapView;
@@ -43,7 +43,8 @@ public:
 	MainWindow();
 	~MainWindow();
 
-	FileView* fileView() const { return mFileView; }
+	// FIXME: Rename this method?
+	GVFileViewStack* fileView() const { return mFileView; }
 	PixmapView* pixmapView() const { return mPixmapView; }
 	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
@@ -63,7 +64,8 @@ private:
 	KDockWidget* mPixmapDock;
 	StatusBarProgress* mProgress;
 
-	FileView* mFileView;
+	// FIXME: Rename this member
+	GVFileViewStack* mFileView;
 	DirView* mDirView;
 	PixmapView* mPixmapView;
 

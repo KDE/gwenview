@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef FILEVIEW_H
-#define FILEVIEW_H
+#ifndef GVFILEVIEWCONTAINER_H
+#define GVFILEVIEWCONTAINER_H
 
 //Qt includes
 #include <qobject.h>
@@ -36,21 +36,21 @@ class KAction;
 class KActionCollection;
 class KConfig;
 class KDirLister;
-class KFileView;
 class KRadioAction;
 
+class GVFileView;
 class GVFileDetailView;
 class FileThumbnailView;
 
 
-class FileView : public QWidgetStack {
+class GVFileViewStack : public QWidgetStack {
 Q_OBJECT
 
 public:
 	enum Mode { FileList, Thumbnail};
 
-	FileView(QWidget* parent,KActionCollection*);
-	~FileView();
+	GVFileViewStack(QWidget* parent,KActionCollection*);
+	~GVFileViewStack();
 
 	void plugActionsToAccel(KAccel*);
 
@@ -185,7 +185,7 @@ private:
 	QString mFilenameToSelect; // The file which will be selected at the end of the dir lister work
 	QString mNewFilenameToSelect; // The file which will be selected after a file operation like move, delete or rename
 
-	KFileView* currentFileView() const;
+	GVFileView* currentFileView() const;
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();

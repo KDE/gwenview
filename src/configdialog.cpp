@@ -35,8 +35,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "fileoperation.h"
 #include "filethumbnailview.h"
-#include "fileview.h"
 #include "fitpixmapview.h"
+#include "gvfileviewstack.h"
 #include "gvslideshow.h"
 #include "mainwindow.h"
 #include "pixmapview.h"
@@ -50,7 +50,7 @@ ConfigDialog::ConfigDialog(QWidget* parent,MainWindow* mainWindow)
 : ConfigDialogBase(parent,0L,true),
 mMainWindow(mainWindow)
 {
-	FileView* fileView=mMainWindow->fileView();
+	GVFileViewStack* fileView=mMainWindow->fileView();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 
@@ -117,7 +117,7 @@ void ConfigDialog::slotOk() {
 
 
 void ConfigDialog::slotApply() {
-	FileView* fileView=mMainWindow->fileView();
+	GVFileViewStack* fileView=mMainWindow->fileView();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 

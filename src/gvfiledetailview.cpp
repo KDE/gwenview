@@ -46,7 +46,7 @@
 #define COL_GROUP 5
 
 GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
-	: KListView(parent, name), KFileView()
+	: KListView(parent, name), GVFileView()
 {
 	mSortingCol = COL_NAME;
 	mBlockSortingSignal = false;
@@ -450,6 +450,11 @@ void GVFileDetailView::startDrag()
 	drag->setPixmap( item->pixmap(0) );
 
 	drag->dragCopy();
+}
+
+
+void GVFileDetailView::setViewedFileItem(const KFileItem*)
+{
 }
 
 

@@ -47,8 +47,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "configdialog.h"
 #include "dirview.h"
-#include "fileview.h"
 #include "fileoperation.h"
+#include "gvfileviewstack.h"
 #include "gvpixmap.h"
 #include "gvslideshow.h"
 #include "pixmapview.h"
@@ -392,7 +392,7 @@ void MainWindow::createWidgets() {
 
 // File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
-	mFileView=new FileView(this,actionCollection());
+	mFileView=new GVFileViewStack(this,actionCollection());
 	mFileDock->setWidget(mFileView);
 
 // Default dock config
