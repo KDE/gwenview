@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kprocess.h>
 
 // Our includes
@@ -80,6 +82,11 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,Operation operation) {
 	// Return an empty QByteArray on failure. GVPixmap will thus consider the
 	// buffer as invalid and will fall back to lossy manipulations.
 	if ( !process.start(KProcess::NotifyOnExit,KProcess::All) ) {
+		KMessageBox::information(0L,
+				i18n("Gwenview couldn't perform lossless image manipulation.\n"
+					"Make sure that the jpegtran program is installed and that "
+					"its path in the configuration dialog is correct"
+					),QString::null,"jpegtran failed");
 		return QByteArray();
 	}
 	process.writeStdin( src.data(),src.size() );

@@ -99,6 +99,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 
 void GVPixmap::setDirURL(const KURL& paramURL) {
+	saveIfModified();
 	mDirURL=paramURL;
 	mFilename="";
 	reset();
@@ -126,7 +127,6 @@ KURL GVPixmap::url() const {
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		kdDebug() << "Lossless left rotation\n";
 		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::RotateLeft);
 	}
 	QWMatrix matrix;
@@ -210,7 +210,7 @@ void GVPixmap::load() {
 	}
 
 	// Load file. We load it ourself so that we can keep a copy of the
-	// compressed data. This is used by jpeg loss-less manipulations.
+	// compressed data. This is used by jpeg lossless manipulations.
 	QFile file(path);
 	file.open(IO_ReadOnly);
 	QDataStream stream(&file);
@@ -248,7 +248,6 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	}
 	
 	if (format=="JPEG" && !mCompressedData.isNull()) {
-		kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
@@ -282,9 +281,9 @@ void GVPixmap::reset() {
 void GVPixmap::saveIfModified() {
 	if (!mModified) return;
 	mModified=false;
-	QString msg=i18n("The current image has been modified, do you want to save the changes?");
-	if (KMessageBox::questionYesNo(0,msg)==KMessageBox::Yes) {
-		saveAs();
-	}
+	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
+				.arg(url().prettyURL());
+	int result=KMessageBox::questionYesNo(0,msg,QString::null,i18n("Save as..."),i18n("Discard"));
+	if (result==KMessageBox::Yes) saveAs();
 }
 
