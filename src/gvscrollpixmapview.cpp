@@ -1273,15 +1273,15 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	menu.insertSeparator();
 
 	if( d->mActionCollection->action("first")) {
+		d->mActionCollection->action("first")->plug(&menu);
+	}
+	if( d->mActionCollection->action("previous")) {
 		d->mActionCollection->action("previous")->plug(&menu);
 	}
 	if( d->mActionCollection->action("next")) {
-		d->mActionCollection->action("last")->plug(&menu);
+		d->mActionCollection->action("next")->plug(&menu);
 	}
-	if( d->mActionCollection->action("first")) {
-		d->mActionCollection->action("previous")->plug(&menu);
-	}
-	if( d->mActionCollection->action("next")) {
+	if( d->mActionCollection->action("last")) {
 		d->mActionCollection->action("last")->plug(&menu);
 	}
 
@@ -1290,15 +1290,15 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
 		if( d->mActionCollection->action("rotate_left")) {
+			d->mActionCollection->action("rotate_left")->plug(editMenu);
+		}
+		if( d->mActionCollection->action("rotate_right")) {
 			d->mActionCollection->action("rotate_right")->plug(editMenu);
 		}
 		if( d->mActionCollection->action("mirror")) {
-			d->mActionCollection->action("flip")->plug(editMenu);
+			d->mActionCollection->action("mirror")->plug(editMenu);
 		}
-		if( d->mActionCollection->action("rotate_left")) {
-			d->mActionCollection->action("rotate_right")->plug(editMenu);
-		}
-		if( d->mActionCollection->action("mirror")) {
+		if( d->mActionCollection->action("flip")) {
 			d->mActionCollection->action("flip")->plug(editMenu);
 		}
 		menu.insertItem( i18n("Edit"), editMenu );
