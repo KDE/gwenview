@@ -313,11 +313,6 @@ void GVScrollPixmapView::slotModified() {
 	}
 }
 
-void GVScrollPixmapView::restartAutoHideTimer() {
-	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
-}
-
-
 //------------------------------------------------------------------------
 //
 // Properties
@@ -396,10 +391,6 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	} else {
 		mPathLabel->hide();
 	}
-}
-
-void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
-	mButtonStateToolMap[state]=tool;
 }
 
 
@@ -667,6 +658,11 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 // Private
 //
 //------------------------------------------------------------------------
+void GVScrollPixmapView::restartAutoHideTimer() {
+	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
+}
+
+
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	QPopupMenu menu(this);
 

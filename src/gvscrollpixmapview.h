@@ -81,14 +81,6 @@ public:
 	void setShowScrollBars(bool);
 	void setAutoZoomBrowse(bool);
 
-	Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
-	void setButtonStateTool(ButtonState,Tool);
-
-	void restartAutoHideTimer();
-
-	// Used by the browse tool controller
-	void emitSelectPrevious() { emit selectPrevious(); }
-	void emitSelectNext() { emit selectNext(); }
 
 public slots:
 	// File operations
@@ -147,6 +139,11 @@ private:
 	void updatePathLabel();
 	void updateZoomActions();
 	void selectTool(ButtonState, bool force);
+	void restartAutoHideTimer();
+
+	// Used by the browse tool controller
+	void emitSelectPrevious() { emit selectPrevious(); }
+	void emitSelectNext() { emit selectNext(); }
 
 private slots:
 	void slotURLChanged();
