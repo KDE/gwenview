@@ -1,2 +1,2 @@
-datadir = $(kde_datadir)/gwenview/icons
-data_ICON = AUTO
+icondir = $(kde_datadir)/gwenview/icons
+icon_ICON = AUTO
