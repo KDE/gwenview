@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileview.moc"
 
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
-
+static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 
 FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList), mPopupMenu(0L)
@@ -384,7 +384,7 @@ void FileView::dirListerStarted() {
 
 void FileView::dirListerCompleted() {
 	if (mFilenameToSelect.isEmpty()) {
-		slotSelectFirst();
+		if (mAutoLoadImage) slotSelectFirst();
 	} else {
 		selectFilename(mFilenameToSelect);
 	}
@@ -518,6 +518,8 @@ void FileView::readConfig(KConfig* config,const QString& group) {
 	} else {
 		mNoThumbnails->setChecked(true);
 	}
+
+  mAutoLoadImage=config->readBoolEntry(CONFIG_AUTO_LOAD_IMAGE, true);
 }
 
 
@@ -527,4 +529,10 @@ void FileView::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 
 	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
+  config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
 }
+
+void FileView::setAutoLoadImage(bool autoLoadImage) {
+  mAutoLoadImage=autoLoadImage;
+}
+

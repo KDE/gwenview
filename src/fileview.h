@@ -59,6 +59,9 @@ public:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
+  void setAutoLoadImage(bool);
+  bool autoLoadImage() const { return mAutoLoadImage; }
+
 // Properties
 	void setMode(Mode);
 	bool currentIsFirst() const;
@@ -161,6 +164,8 @@ private:
 	QString mCopyToFolder;
 
 	bool mConfirmDelete;
+
+  bool mAutoLoadImage;
 
 // Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;

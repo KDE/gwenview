@@ -82,12 +82,13 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* itemList,ThumbnailSize s
 	}
 
 // Generate the thumbnail dir name
-	QCString hash;
-	KMD5 md5( QFile::encodeName(originalDir) );
-	md5.hexDigest( hash );
-	QString thumbPath = QString::fromLatin1( hash, 4 ) + "/" +
-		QString::fromLatin1( &hash[4], 4 ) + "/" +
-		QString::fromLatin1( &hash[8] ) + "/";
+//	kdDebug() << mItems.first()->url().upURL().url(-1) << endl;
+	
+	KMD5 md5(QFile::encodeName(originalDir));
+	QCString hash=md5.hexDigest();
+	QString thumbPath = QString::fromLatin1( hash.data(), 4 ) + "/" +
+		QString::fromLatin1( hash.data()+4, 4 ) + "/" +
+		QString::fromLatin1( hash.data()+8 ) + "/";
 
 // Create the thumbnail cache dir
 	mCacheDir = locateLocal( "thumbnails", thumbPath + "/" + QString(mThumbnailSize) + "/" );
