@@ -80,7 +80,12 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 	QString msg;
 	KURL url(_url);
 	
-	int mode=-1;
+	// Use the umask to determine default mode (will be used if the dest file
+	// does not exist)
+	int _umask=umask(0);
+	umask(_umask);
+	mode_t mode=0666 & ~_umask;
+
 	if (url.isLocalFile()) {
 		// If the file is a link, dereference it but take care of circular
 		// links
@@ -102,16 +107,23 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 			url.setPath(info.filePath());
 		}
 
-		// Get mode
-		KDE_struct_stat st; 
-		KDE_stat(QFile::encodeName(info.filePath()), &st);
-		mode=st.st_mode & 07777;
 		
 		// Make some quick tests on the file if it is local
 		if (info.exists() && ! info.isWritable()) {
 			return i18n("This file is read-only.");
 		}
-		if (!info.exists()) {
+		
+		if (info.exists()) {
+			// Get current file mode
+			KDE_struct_stat st; 
+			if (KDE_stat(QFile::encodeName(info.filePath()), &st)==0) {
+				mode=st.st_mode & 07777;
+			} else {
+				// This should not happen
+				kdWarning() << "Could not stat " << info.filePath() << endl;
+			}
+			
+		} else {
 			QFileInfo parent=QFileInfo(info.dirPath());
 			if (!parent.isWritable()) {
 				return
@@ -124,12 +136,12 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 	// Save the file to a tmp file
 	QString prefix;
 	if (url.isLocalFile()) {
-		// We set the prefix to url.path() so that the temp file is one the
+		// We set the prefix to url.path() so that the temp file is on the
 		// same partition as the destination file. If we don't do this, rename
 		// will fail
 		prefix=url.path();
 	}
-	KTempFile tmp(prefix);
+	KTempFile tmp(prefix, "gwenview", mode);
 	tmp.setAutoDelete(true);
 
 	msg=localSave(tmp.file(), format);
@@ -138,10 +150,6 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 
 	// Move the tmp file to the final dest
 	if (url.isLocalFile()) {
-		// Set the mode if available
-		if (mode!=-1) {
-			chmod( QFile::encodeName(tmp.name()), mode);
-		}
 		if( ::rename( QFile::encodeName( tmp.name() ), QFile::encodeName( url.path())) < 0 ) {
 			return i18n("Could not write to %1.").arg(url.path());
 		}
