@@ -61,12 +61,12 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 // Popup
 	mPopupMenu=new QPopupMenu(this);
-	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New folder"),this,SLOT(makeDir()));
+	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder"),this,SLOT(makeDir()));
 	mPopupMenu->insertSeparator();
 	mPopupMenu->insertItem(i18n("Rename..."),this,SLOT(renameDir()));
-	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete"),this,SLOT(removeDir()));
+	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete..."),this,SLOT(removeDir()));
 	mPopupMenu->insertSeparator();
-	mPopupMenu->insertItem(i18n("Properties"),this,SLOT(showPropertiesDialog()));
+	mPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showPropertiesDialog()));
 
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
 		this,SLOT(onContextMenu(KListView*,QListViewItem*,const QPoint&)));
@@ -262,8 +262,8 @@ void DirView::contentsDropEvent(QDropEvent* event) {
 
 // Show popup
 	QPopupMenu menu(this);
-	int copyItemID = menu.insertItem( i18n("&Copy here") );
-	int moveItemID = menu.insertItem( i18n("&Move here") );
+	int copyItemID = menu.insertItem( i18n("&Copy Here") );
+	int moveItemID = menu.insertItem( i18n("&Move Here") );
 
 	menu.setMouseTracking(true);
 	int id = menu.exec(QCursor::pos());
@@ -304,7 +304,7 @@ void DirView::makeDir() {
 	if (!currentItem()) return;
 
 	bool ok;
-	QString newDir=KLineEditDlg::getText(i18n("Enter the name of the new folder :"),"",&ok,this);
+	QString newDir=KLineEditDlg::getText(i18n("Enter the name of the new folder:"),"",&ok,this);
 	if (!ok) return;
 	
 	KURL newURL(currentURL());
@@ -331,7 +331,7 @@ void DirView::renameDir() {
 	if (!currentItem()) return;
 	
 	bool ok;
-	QString newDir=KLineEditDlg::getText(i18n("Rename this folder to :"),currentURL().filename(),&ok,this);
+	QString newDir=KLineEditDlg::getText(i18n("Rename this folder to:"),currentURL().filename(),&ok,this);
 	if (!ok) return;
 
 	KURL newURL=currentURL().upURL();
@@ -358,7 +358,7 @@ void DirView::removeDir() {
 
 	QString dir=QStyleSheet::escape(currentURL().path());
 	int response=KMessageBox::questionYesNo(this,
-		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b> ?").arg(dir) + "</qt>");
+		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>");
 	if (response==KMessageBox::No) return;
 
 	job=KIO::del(currentURL());

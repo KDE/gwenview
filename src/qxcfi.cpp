@@ -20,7 +20,7 @@
  */
 
 #include <qiodevice.h>
-
+#include <stdlib.h>
 #include "qxcfi.h"
 
 const float INCHESPERMETER = (100. / 2.54);

@@ -154,12 +154,12 @@ void ConfigDialog::emptyCache() {
 	QString dir=ThumbnailLoadJob::thumbnailDir();
 
 	if (!QFile::exists(dir)) {
-		KMessageBox::information( this,i18n("Cache emptied") ); // FIXME : Add a more explicit message
+		KMessageBox::information( this,i18n("Cache emptied.") ); // FIXME : Add a more explicit message
 		return;
 	}
 
 	int response=KMessageBox::questionYesNo(this,
-		"<qt>" + i18n("Are you sure you want to empty the thumbnail cache ?"
+		"<qt>" + i18n("Are you sure you want to empty the thumbnail cache?"
 		" This will remove the folder <b>%1</b>.").arg(QStyleSheet::escape(dir)) + "</qt>");
 
 	if (response==KMessageBox::No) return;
@@ -177,5 +177,5 @@ void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 		job->showErrorDialog(this);
 		return;
 	}
-	KMessageBox::information( this,i18n("Cache emptied") );
+	KMessageBox::information( this,i18n("Cache emptied.") );
 }

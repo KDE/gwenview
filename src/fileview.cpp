@@ -57,11 +57,11 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"view_detailed");
 	mNoThumbnails->setExclusiveGroup("thumbnails");
-	mSmallThumbnails=new KRadioAction(i18n("Small thumbnails"),"smallthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"smallthumbnails");
+	mSmallThumbnails=new KRadioAction(i18n("Small Thumbnails"),"smallthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"smallthumbnails");
 	mSmallThumbnails->setExclusiveGroup("thumbnails");
-	mMedThumbnails=new KRadioAction(i18n("Medium thumbnails"),"medthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"medthumbnails");
+	mMedThumbnails=new KRadioAction(i18n("Medium Thumbnails"),"medthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"medthumbnails");
 	mMedThumbnails->setExclusiveGroup("thumbnails");
-	mLargeThumbnails=new KRadioAction(i18n("Large thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"largethumbnails");
+	mLargeThumbnails=new KRadioAction(i18n("Large Thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"largethumbnails");
 	mLargeThumbnails->setExclusiveGroup("thumbnails");
 
 // Dir lister

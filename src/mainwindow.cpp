@@ -328,17 +328,17 @@ void MainWindow::createActions() {
 
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileView,SLOT(renameFile()),actionCollection(),"file_new");
 
-	mCopyFile=new KAction(i18n("&Copy to..."),Key_F5,mFileView,SLOT(copyFile()),actionCollection(),"file_copy");
+	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileView,SLOT(copyFile()),actionCollection(),"file_copy");
 
-	mMoveFile=new KAction(i18n("&Move to..."),Key_F6,mFileView,SLOT(moveFile()),actionCollection(),"file_move");
+	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileView,SLOT(moveFile()),actionCollection(),"file_move");
 
-	mDeleteFile=new KAction(i18n("&Delete"),"editdelete",Key_Delete,mFileView,SLOT(deleteFile()),actionCollection(),"file_delete");
+	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileView,SLOT(deleteFile()),actionCollection(),"file_delete");
 
-	mOpenWithEditor=new KAction(i18n("&Open with editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
+	mOpenWithEditor=new KAction(i18n("&Open with Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 
-	mToggleFullScreen=new KToggleAction(i18n("Full screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
+	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
 
-	mShowConfigDialog=new KAction(i18n("Configure Gwenview"),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"show_config_dialog");
+	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"show_config_dialog");
 
 	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"show_key_dialog");
 

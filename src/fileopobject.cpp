@@ -111,7 +111,7 @@ void FileOpDelObject::operator()() {
 	if (FileOperation::confirmDelete()) {
 		QString filename=QStyleSheet::escape(url.filename());
 		int response=KMessageBox::questionYesNo(mParent,
-			"<qt>"+i18n("Are you sure you want to delete file <b>%1</b> ?").arg(filename)+"</qt>");
+			"<qt>"+i18n("Are you sure you want to delete file <b>%1</b>?").arg(filename)+"</qt>");
 		if (response==KMessageBox::No) return;
 	}
 
@@ -129,7 +129,7 @@ void FileOpRenameObject::operator()() {
 // Prompt for the new filename
 	QString filename=QStyleSheet::escape(srcURL.filename());
 	mNewFilename=KLineEditDlg::getText(
-		"<qt>" + i18n("Rename file <b>%1</b> to :").arg(filename) + "</qt>",
+		"<qt>" + i18n("Rename file <b>%1</b> to:").arg(filename) + "</qt>",
 		srcURL.filename(),
 		&ok,mParent);
 
