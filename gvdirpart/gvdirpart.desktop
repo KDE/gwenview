@@ -1,24 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=Gwenview Image Browser View
-Name[da]=Gwenview billedsøgervisning
-Name[de]=Gwenview Bildbetrachter-Ansicht
-Name[el]=Προβολή του περιηγητή εικόνων Gwenview
-Name[es]=Vista del navegador de imágenes Gwenview
-Name[et]=Gwenview piltide lehitseja
-Name[fr]=Vue du navigateur de galeries d'images Gwenview
-Name[it]=Vista navigatore immagine di Gwenview
-Name[ms]=Lihat Pelungsur Imej Gwenview
-Name[nl]=Gwenview Afbeeldingenbrowser
-Name[pt]=Navegador de Imagens Gwenview
-Name[pt_BR]=Navegador de Imagens Gwenview
-Name[ru]=Обзор изображений Gwenview
-Name[sr]=Gwenview разлистани приказ слика
-Name[sr@Latn]=Gwenview разлистани приказ слика
-Name[sv]=Gwenview bildbläddrare
-Name[ta]=Gwenview பிம்பம் உலாவி தோற்றம்
-Name[xx]=xxGwenview Image Browser Viewxx
-Name[zh_CN]=Gwenview 图像浏览器视图
 MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvdirpart
