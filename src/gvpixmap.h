@@ -49,7 +49,7 @@ public:
 	int width() const { return mImage.width(); }
 	int height() const { return mImage.height(); }
 	bool isNull() const { return mImage.isNull(); }
-	const QString& imageFormat() const { return mImageFormat; }
+	const QString& mimeType() const { return mMimeType; }
 	
 
 public slots:
@@ -84,7 +84,7 @@ private:
 	QImage mImage;
 	KURL mDirURL;
 	QString mFilename;
-	QString mImageFormat;
+	QString mMimeType;
 
 	bool load();
 };

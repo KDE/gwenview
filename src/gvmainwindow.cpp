@@ -242,14 +242,14 @@ void GVMainWindow::saveFile() {
 
 
 void GVMainWindow::saveFileAs() {
-	QString format=mGVPixmap->imageFormat();
+	QString mimeType=mGVPixmap->mimeType();
 	KURL url;
 	if (mGVPixmap->url().isLocalFile()) url=mGVPixmap->url();
 
-	GVImageSaveDialog dialog(url,format,this);
+	GVImageSaveDialog dialog(url,mimeType,this);
 	if (!dialog.exec()) return;
 	
-	if (!mGVPixmap->saveAs(url,format)) {
+	if (!mGVPixmap->saveAs(url,mimeType)) {
 		KMessageBox::sorry(this,i18n("Could not save file."));
 	}
 }

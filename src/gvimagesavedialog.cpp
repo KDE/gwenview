@@ -27,12 +27,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvimagesavedialog.moc"
 
 
-GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& format,QWidget* parent)
+GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& mimeType,QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"gvimagesavedialog",true)
 , mURL(url)
-, mFormat(format)
+, mMimeType(mimeType)
 {
 	setOperationMode(KFileDialog::Saving);
+
 	// Create our KMimeTypeList
 	QStringList strTypes=KImageIO::mimeTypes();
 	KMimeType::List types;
@@ -40,10 +41,15 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& format,QWidget* parent)
 		types.append( KMimeType::mimeType(*it) );
 	}
 
-	QString strDefaultType=KImageIO::mimeType(url.path());
-	KMimeType::Ptr defaultType=KMimeType::mimeType(strDefaultType);
+	// Get default format
+	KMimeType::Ptr defaultType;
+	if (KImageIO::isSupported(mimeType)) {
+		defaultType=KMimeType::mimeType(mMimeType);
+	} else {
+		defaultType=KMimeType::mimeType("image/png");
+	}
 	
-	// Get file name  and format
+	// Init "filter" line
 	setFilterMimeType(i18n("Format:"),types,defaultType);
 
 }
@@ -52,7 +58,7 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url,QString& format,QWidget* parent)
 void GVImageSaveDialog::accept() {
 	KFileDialog::accept();
 	mURL=selectedURL();
-	mFormat=KImageIO::typeForMime( currentMimeFilter() );
+	mMimeType=currentMimeFilter();
 }
 
 

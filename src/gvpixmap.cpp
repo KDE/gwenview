@@ -158,11 +158,13 @@ void GVPixmap::flip() {
 
 
 bool GVPixmap::save() const {
-	return saveAs(url(),mImageFormat);
+	return saveAs(url(),mMimeType);
 }
 
 
-bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
+bool GVPixmap::saveAs(const KURL& url, const QString& mMimeType) const {
+	QString format=KImageIO::typeForMime(mMimeType);
+	
 	if (url.isLocalFile()) {
 		return mImage.save(url.path(),format.ascii());
 	}
@@ -196,8 +198,8 @@ bool GVPixmap::load() {
 	} else {
 		if (!KIO::NetAccess::download(pixURL,path)) return false;
 	}
-	mImageFormat=QString(QImage::imageFormat(path));
-	result=mImage.load(path,mImageFormat.ascii());
+	mMimeType=KImageIO::mimeType(path);
+	result=mImage.load(path);
 	
 	if (!pixURL.isLocalFile()) {
 		KIO::NetAccess::removeTempFile(path);
