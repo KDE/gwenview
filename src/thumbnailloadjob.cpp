@@ -393,15 +393,19 @@ void ThumbnailLoadJob::determineNextIcon() {
 	if( mSuspended ) {
 		return;
 	}
-	if( mNextItem != mItems.current()) mItems.findRef( mNextItem );
-	assert( mNextItem == mItems.current());
+	// Position mItems' current item
+	if( mNextItem != mItems.current()) {
+		if (mItems.findRef( mNextItem )==-1) {
+			mItems.first();
+		}
+	}
+
 	// Skip non images 
 	while (true) {
 		KFileItem* item=mItems.current();
 		if (!item) break;
 		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 			mItems.remove();
-			mNextItem = mItems.current();
 		} else {
 			break;
 		}
@@ -417,11 +421,11 @@ void ThumbnailLoadJob::determineNextIcon() {
 		// First, stat the orig file
 		mState = STATE_STATORIG;
 		mOriginalTime = 0;
-		assert( mNextItem == mItems.current());
-		mCurrentItem = mNextItem;
+		mCurrentItem = mItems.current();
 		assert(mCurrentItem);
 		mCurrentURL = mCurrentItem->url();
 		mCurrentURL.cleanPath();
+
 		// Do direct stat instead of using KIO if the file is local (faster)
 		if( mCurrentURL.isLocalFile()
 			&& !KIO::probably_slow_mounted( mCurrentURL.path())) {
