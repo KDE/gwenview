@@ -1,6 +1,6 @@
 %define name gwenview
 %define version 1.0.0
-%define release 0.pre2.2mdk
+%define release 0.pre2.1mdk
 
 Summary:Simple image viewer for KDE
 Name: %name
@@ -61,7 +61,6 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 %_datadir/icons/hicolor/16x16/apps/*
 %_datadir/icons/hicolor/32x32/apps/*
 %_datadir/icons/hicolor/48x48/apps/*
-%_datadir/locale/*/LC_MESSAGES/%{name}.mo
 %_datadir/applications/kde/%{name}.desktop
 %_mandir/man1/gwenview.1.bz2
 
@@ -69,9 +68,13 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
-* Wed Oct 22 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre1.2mdk
+* Wed Oct 22 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre2.1mdk
 - added some changes on spec file imported from 
   Lenny Cartier <lenny@mandrakesoft.com> 1.0.0-0.pre1.1mdk
+
+* Mon Oct 20 2003 Lenny Cartier <lenny@mandrakesoft.com> 1.0.0-0.pre1.1mdk
+- from Angelo Naselli <random_lx@yahoo.com> :
+       - built mdk version
 
 * Mon Oct 12 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0pre2-1mdk
 - fixed some bugs on spec file
