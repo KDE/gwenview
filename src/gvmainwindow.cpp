@@ -222,8 +222,6 @@ bool GVMainWindow::queryClose() {
 	// saving layout when in "fullscreen" or "image only" mode.
 	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
-		config->setGroup(CONFIG_DOCK_GROUP);
-		config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
 	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 
@@ -783,21 +781,23 @@ void GVMainWindow::createWidgets() {
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
 
-	// Load dock config if up-to-date
-	bool loadDockConfig=true;
+	// Load dock config if up to date
 	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
 		config->setGroup(CONFIG_DOCK_GROUP);
-		loadDockConfig=config->readNumEntry(CONFIG_GWENVIEW_DOCK_VERSION, 1)==GWENVIEW_DOCK_VERSION;
+		if (config->readNumEntry(CONFIG_GWENVIEW_DOCK_VERSION, 1)==GWENVIEW_DOCK_VERSION) {
+			mDockArea->readDockConfig(config,CONFIG_DOCK_GROUP);
+		} else {
+			KMessageBox::sorry(this, i18n(
+				"<qt><b>Configuration update</b><br>"
+				"Due to some changes in the dock behavior, your old dock configuration has been discarded. "
+				"Please adjust your docks again.</qt>")
+				);
+		}
 	}
-	if (loadDockConfig) {
-		mDockArea->readDockConfig(config,CONFIG_DOCK_GROUP);
-	} else {
-		KMessageBox::sorry(this, i18n(
-			"<qt><b>Configuration update</b><br>"
-			"Due to some changes in the dock behavior, your old dock configuration has been discarded. "
-			"Please adjust your docks again.</qt>")
-			);
-	}
+	
+	// Make sure the Gwenview dock version is up to date
+	config->setGroup(CONFIG_DOCK_GROUP);
+	config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
 	
 	// Load config
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
