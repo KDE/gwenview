@@ -1,0 +1,100 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>GVSlideShowDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GVSlideShowDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>309</width>
+            <height>69</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Slide Show</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QSpinBox" row="0" column="1">
+            <property name="name">
+                <cstring>mDelay</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="buttonSymbols">
+                <enum>UpDownArrows</enum>
+            </property>
+            <property name="maxValue">
+                <number>3600</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="lineStep">
+                <number>1</number>
+            </property>
+            <property name="value">
+                <number>10</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1_4</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Delay between images (in seconds):</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring></cstring>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>mLoop</cstring>
+            </property>
+            <property name="text">
+                <string>Loop</string>
+            </property>
+        </widget>
+        <spacer row="0" column="2">
+            <property name="name">
+                <cstring>Spacer7_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>80</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

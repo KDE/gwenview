@@ -38,7 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
 #include "gvscrollpixmapview.h"
-#include "gvslideshow.h"
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
 
@@ -51,7 +50,6 @@ mMainWindow(mainWindow)
 {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
-	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 	// Thumbnails tab
 	mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -97,10 +95,6 @@ mMainWindow(mainWindow)
 	mControlPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ControlButton]));
 	mShiftPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ShiftButton]));
 	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
-
-	// Slide show tab
-	mLoopInSlideShow->setChecked(slideShow->loop());
-	mDelayInSlideShow->setValue(slideShow->delay());
 	
 	// Misc tab
 	mExternalEditor->setText(FileOperation::editor());
@@ -120,7 +114,6 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
-	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 	// Thumbnails tab
 	fileViewStack->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
@@ -144,10 +137,6 @@ void ConfigDialog::slotApply() {
 	pixmapView->wheelBehaviours()[ControlButton]=GVScrollPixmapView::WheelBehaviour(mControlPlusWheel->currentItem());
 	pixmapView->wheelBehaviours()[ShiftButton]=  GVScrollPixmapView::WheelBehaviour(mShiftPlusWheel->currentItem());
 	pixmapView->wheelBehaviours()[AltButton]=    GVScrollPixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
-
-	// Slide show tab
-	slideShow->setDelay(mDelayInSlideShow->value());
-	slideShow->setLoop(mLoopInSlideShow->isChecked());
 
 	// Misc tab
 	FileOperation::setEditor(mExternalEditor->text());

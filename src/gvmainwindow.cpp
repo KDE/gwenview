@@ -58,6 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
+#include "gvslideshowdialog.h"
 #include "statusbarprogress.h"
 
 #include "gvmainwindow.moc"
@@ -321,6 +322,11 @@ void GVMainWindow::toggleFullScreen() {
 
 void GVMainWindow::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
+		GVSlideShowDialog dialog(this,mSlideShow);
+		if (!dialog.exec()) {
+			mToggleSlideShow->setChecked(false);
+			return;
+		}
 		if (!mToggleFullScreen->isChecked()) {
 			mToggleFullScreen->activate();
 		}

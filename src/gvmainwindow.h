@@ -46,7 +46,6 @@ public:
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
 	GVScrollPixmapView* pixmapView() const { return mPixmapView; }
-	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }

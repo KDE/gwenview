@@ -8,7 +8,8 @@ gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
 				   gvfilethumbnailviewitem.cpp qxcfi.cpp gvarchive.cpp \
 				   gvslideshow.cpp gvfiledetailview.cpp \
 				   gvfiledetailviewitem.cpp gvbookmarkowner.cpp \
-				   gvimagesavedialog.cpp
+				   gvimagesavedialog.cpp gvslideshowdialog.cpp \
+				   gvslideshowdialogbase.ui
 
 gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBJPEG)
 
@@ -25,10 +26,11 @@ noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 gvscrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
 				 thumbnailsize.h gvfilethumbnailviewitem.h qxcfi.h gimp.h \
 				 gvarchive.h gvslideshow.h gvfiledetailview.h gvfileviewbase.h \
-				 gvfiledetailviewitem.h gvbookmarkowner.h gvimagesavedialog.h
+				 gvfiledetailviewitem.h gvbookmarkowner.h gvimagesavedialog.h \
+				 gvslideshowdialog.h gvslideshowdialogbase.h
 
 
-EXTRA_DIST = configdialogbase.ui
+EXTRA_DIST = configdialogbase.ui gvslideshowdialogbase.ui
 
 METASOURCES = AUTO
 

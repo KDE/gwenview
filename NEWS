@@ -6,6 +6,8 @@
   - Rotate left and right.
   - Mirror and flip.
  - Image saving.
+- Fixes:
+ - Moved the slide show settings to a separate dialog shown before starting it.
 
 2003.02.13 - v0.16.2
 - Fixes:
