@@ -1,0 +1,18 @@
+Source: gwenview
+Section: x11
+Priority: optional 
+Maintainer: Michael Spanier <mail@michael-spanier.de>
+Build-Depends: debhelper (>> 3.0.0)
+Standards-Version: 3.5.2
+
+Package: gwenview
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: imageviewer for KDE 2.X
+  gwenview features a folder tree window and a file list window to provide easy
+  navigation in your file hierarchy.
+  Image loading is done by the Qt library, so it supports all image formats
+  your Qt installation supports. Gwenview correctly displays images with
+  alpha channel. 
+  It uses docked windows, so you can alter the layout in any way you want.
+  You can also browse your images in full screen.
