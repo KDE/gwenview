@@ -50,17 +50,6 @@ the top right corner, this will get it back to its previous docked place.
 edge. To make A and B use tabs, drag the grip of A on the center of B.
 
 
--> Keyboard navigation
-
-When you move in the file list using the arrow keys, the selected image
-isn't displayed immediately: you must press the Enter key to display it.
-This allows you to move directly from an image to another without loading
-all images between them.
-To browse images without having to press Enter, use the 'previous' and 'next'
-shortcut keys, which are BackSpace and Space by default (You can change them
-to whatever you want using the shortcut configuration dialog)
-
-
 -> Mouse operations
 
 You can browse through your image using the Opera-like previous-next mouse
