@@ -100,6 +100,11 @@ signals:
 	void selectPrevious();
 	void selectNext();
 	void zoomChanged(double);
+	/**
+	 * Used by KParts to signal that the right mouse button menu
+	 * should be shown
+	 */
+	void contextMenu();
 
 private:
 	GVPixmap* mGVPixmap;

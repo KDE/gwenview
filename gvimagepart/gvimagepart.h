@@ -26,6 +26,21 @@ class KAboutData;
 class KAction;
 class GVScrollPixmapView;
 class GVPixmap;
+class GVImagePart;
+
+class GVImagePartBrowserExtension: public KParts::BrowserExtension {
+	Q_OBJECT
+
+ public:
+	GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name=0L);
+	~GVImagePartBrowserExtension();
+
+//protected slots:
+ public slots:
+	void contextMenu();
+ private:
+	GVImagePart* m_gvImagePart;
+};
 
 /**
  * A Read Only KPart to view images using Gwenview
@@ -41,6 +56,10 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	 */
 	static KAboutData* createAboutData();
 
+	/**
+	 * Returns m_file
+	 */
+	QString filePath();
  protected:
 	/** Open the file whose path is stored in the member variable
 	 * m_file and return true on success, false on failure.
@@ -63,6 +82,12 @@ class GVImagePart : public KParts::ReadOnlyPart {
 
 	// An action to which we need to keep a pointer
 	KAction* m_exampleAction;
+
+	/**
+	 * This inherits from KParts::BrowserExtention and supplies
+	 * some extra functionality to Konqueror.
+	 */
+	GVImagePartBrowserExtension* m_browserExtension;
 };
 
 #endif

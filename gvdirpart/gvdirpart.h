@@ -33,29 +33,29 @@ class GVPixmap;
 class GVDirPart;
 
 class GVDirPartBrowserExtension: public KParts::BrowserExtension {
-  Q_OBJECT
+	Q_OBJECT
 
-public:
-  GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name=0L);
-  ~GVDirPartBrowserExtension();
+ public:
+	GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name=0L);
+	~GVDirPartBrowserExtension();
 
 //protected slots:
-public slots:
+ public slots:
 //  void selected(TreeMapItem*);
 //  void contextMenu(TreeMapItem*,const QPoint&);
 
-  void updateActions();
-  void refresh();
+	void updateActions();
+	void refresh();
 
-  void copy();
-  void cut();
-  void trash();
-  void del();
-  void editMimeType();
+	void copy();
+	void cut();
+	void trash();
+	void del();
+	void editMimeType();
 
-  void directoryChanged(const KURL& dirURL);
-private:
-  GVDirPart* m_gvDirPart;
+	void directoryChanged(const KURL& dirURL);
+ private:
+	GVDirPart* m_gvDirPart;
 };
 
 

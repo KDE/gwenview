@@ -547,9 +547,13 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			// Don't show the menu if there's no image, except if we are in
-			// fullscreen mode, so that we always have a way to leave it.
-			if (!mGVPixmap->isNull() || mFullScreen) {
+			if (QString(parent()->name()) == QString("KonqFrame"))  {
+				//KPart
+				emit contextMenu();
+				return;
+			} else if (!mGVPixmap->isNull() || mFullScreen) {
+				// Don't show the menu if there's no image, except if we are in
+				// fullscreen mode, so that we always have a way to leave it.
 				openContextMenu(event->globalPos());
 				return;
 			}

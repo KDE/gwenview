@@ -16,8 +16,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include <kdebug.h>
+#include <qcursor.h>
+#include <qpoint.h>
+
 #include <kaction.h>
+#include <kdebug.h>
+#include <kfilemetainfo.h>
 #include <klocale.h>
 #include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
@@ -36,11 +40,16 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	setInstance( GVImageFactory::instance() );
 
+	m_browserExtension = new GVImagePartBrowserExtension(this);
+
 	// Create the widgets
 	m_gvPixmap = new GVPixmap(this);
 	m_pixmapView = new GVScrollPixmapView(parentWidget, m_gvPixmap, actionCollection());
 	m_pixmapView->kpartConfig();
 	setWidget(m_pixmapView);
+
+	connect(m_pixmapView, SIGNAL(contextMenu()),
+		m_browserExtension, SLOT(contextMenu()) );
 
 	// Example action creation code
 	KAction* m_openCloseAll = new KAction( i18n("Open All"), 0, this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
@@ -86,9 +95,37 @@ bool GVImagePart::openFile() {
 	return true;
 }
 
+QString GVImagePart::filePath() {
+	return m_file;
+}
+
 void GVImagePart::slotExample() {
 	kdDebug() << k_funcinfo << endl;
 	//Example KAction
+}
+
+// GVImagePartBrowserExtension
+
+GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name)
+	:KParts::BrowserExtension(viewPart, name) {
+	m_gvImagePart = viewPart;
+}
+
+GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
+}
+
+void GVImagePartBrowserExtension::contextMenu() {
+	kdDebug() << k_funcinfo << endl;
+	/*FIXME Why is this KFileMetaInfo invalid?
+	KFileMetaInfo metaInfo = KFileMetaInfo(m_gvImagePart->filePath());
+	kdDebug() << k_funcinfo << "m_gvImagePart->filePath(): " << m_gvImagePart->filePath() << endl;
+	kdDebug() << k_funcinfo << "metaInfo.isValid(): " << metaInfo.isValid() << endl;
+	kdDebug() << k_funcinfo << "above" << endl;
+	QString mimeType = metaInfo.mimeType();
+	kdDebug() << k_funcinfo << "below" << endl;
+	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
+	*/
+	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), 0);
 }
 
 #include "gvimagepart.moc"
