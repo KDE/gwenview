@@ -319,6 +319,7 @@ void GVDocumentDecodeImpl::decodeChunk() {
 				return;
 			}
 		}
+		if (!d->mJob.isNull()) return;
 	} else {
 		// We are in threaded decoding mode, et's wait until the get job has finished
 		if (!d->mJob.isNull()) return;
