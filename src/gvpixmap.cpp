@@ -39,8 +39,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <gvpixmap.moc>
 
 
-GVPixmap::GVPixmap(QObject* parent) 
-: QObject(parent) 
+GVPixmap::GVPixmap(QObject* parent)
+: QObject(parent)
+, mModified(false)
 {}
 
 
@@ -73,6 +74,10 @@ void GVPixmap::setURL(const KURL& paramURL) {
 		}
 	}
 
+	// Ask to save if necessary. Do this now because mDirURL and mFilename
+	// have not been modified yet.
+	saveIfModified();
+
 	if (isDir) {
 		mDirURL=URL;
 		mFilename="";
@@ -80,17 +85,14 @@ void GVPixmap::setURL(const KURL& paramURL) {
 		mDirURL=URL.upURL();
 		mFilename=URL.filename();
 	}
-	
+
 	if (mFilename.isEmpty()) {
 		reset();
 		return;
 	}
 
 	emit loading();
-	if (!load()) {
-		reset();
-		return;
-	}
+	load();
 	emit urlChanged(mDirURL,mFilename);
 }
 
@@ -104,19 +106,11 @@ void GVPixmap::setDirURL(const KURL& paramURL) {
 
 void GVPixmap::setFilename(const QString& filename) {
 	if (mFilename==filename) return;
-	
+
+	saveIfModified();
 	mFilename=filename;
 	emit loading();
-	if (!load()) {
-		reset();
-		return;
-	}
-	emit urlChanged(mDirURL,mFilename);
-}
-
-
-void GVPixmap::reset() {
-	mImage.reset();
+	load();
 	emit urlChanged(mDirURL,mFilename);
 }
 
@@ -132,6 +126,7 @@ void GVPixmap::rotateLeft() {
 	QWMatrix matrix;
 	matrix.rotate(-90);
 	mImage=mImage.xForm(matrix);
+	mModified=true;
 	emit modified();
 }
 
@@ -140,6 +135,7 @@ void GVPixmap::rotateRight() {
 	QWMatrix matrix;
 	matrix.rotate(90);
 	mImage=mImage.xForm(matrix);
+	mModified=true;
 	emit modified();
 }
 
@@ -148,6 +144,7 @@ void GVPixmap::mirror() {
 	QWMatrix matrix;
 	matrix.scale(-1,1);
 	mImage=mImage.xForm(matrix);
+	mModified=true;
 	emit modified();
 }
 
@@ -156,6 +153,7 @@ void GVPixmap::flip() {
 	QWMatrix matrix;
 	matrix.scale(1,-1);
 	mImage=mImage.xForm(matrix);
+	mModified=true;
 	emit modified();
 }
 
@@ -187,24 +185,26 @@ void GVPixmap::saveAs() {
 //
 //---------------------------------------------------------------------
 bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
-	if (url.isLocalFile()) {
-		return mImage.save(url.path(),format.ascii());
-	}
-
-	KTempFile tmp;
-	tmp.setAutoDelete(true);
 	bool result;
+	if (url.isLocalFile()) {
+		result=mImage.save(url.path(),format.ascii());
+	} else {
+		KTempFile tmp;
+		tmp.setAutoDelete(true);
 
-	result=mImage.save(tmp.name(),format.ascii());
-	if (!result) return false;
+		result=mImage.save(tmp.name(),format.ascii());
+		if (!result) return false;
 
-	return KIO::NetAccess::upload(tmp.name(),url);
+		result=KIO::NetAccess::upload(tmp.name(),url);
+	}
+	if (result) mModified=false;
+
+	return result;
 }
 
 
-bool GVPixmap::load() {
+void GVPixmap::load() {
 	KURL pixURL=url();
-	bool result;
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 
 	// FIXME : Async
@@ -212,14 +212,34 @@ bool GVPixmap::load() {
 	if (pixURL.isLocalFile()) {
 		path=pixURL.path();
 	} else {
-		if (!KIO::NetAccess::download(pixURL,path)) return false;
+		if (!KIO::NetAccess::download(pixURL,path)) {
+			mImage.reset();
+			return;
+		}
 	}
 	mImageFormat=QString(QImage::imageFormat(path));
-	result=mImage.load(path,mImageFormat.ascii());
+	if (!mImage.load(path,mImageFormat.ascii())) {
+		mImage.reset();
+	}
 
 	if (!pixURL.isLocalFile()) {
 		KIO::NetAccess::removeTempFile(path);
 	}
+}
 
-	return result;
+
+void GVPixmap::reset() {
+	mImage.reset();
+	emit urlChanged(mDirURL,mFilename);
+}
+
+
+void GVPixmap::saveIfModified() {
+	if (!mModified) return;
+	mModified=false;
+	QString msg=i18n("The current image has been modified, do you want to save the changes?");
+	if (KMessageBox::questionYesNo(0,msg)==KMessageBox::Yes) {
+		saveAs();
+	}
+
 }

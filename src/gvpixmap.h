@@ -37,7 +37,6 @@ Q_OBJECT
 public:
 	GVPixmap(QObject*);
 	~GVPixmap();
-	void reset();
 
 	// Properties
 	const QImage& image() const { return mImage; }
@@ -63,7 +62,7 @@ public slots:
 	void rotateRight();
 	void mirror();
 	void flip();
-	
+
 signals:
 	/**
 	 * Emitted when the class starts to load the image.
@@ -86,8 +85,11 @@ private:
 	KURL mDirURL;
 	QString mFilename;
 	QString mImageFormat;
+	bool mModified;
 
-	bool load();
+	void saveIfModified();
+	void reset();
+	void load();
 	bool saveInternal(const KURL&,const QString& format);
 };
 
