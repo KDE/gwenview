@@ -2,21 +2,21 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
- 
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
 */
 
 #include <sys/stat.h> // For S_ISDIR
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpainter.h>
 #include <qwmatrix.h>
 
-// KDE 
+// KDE
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kimageio.h>
@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprinter.h>
 #include <kglobalsettings.h>
 
-// Local 
+// Local
 #include "gvarchive.h"
 #include "gvdocumentdecodeimpl.h"
 #include "gvdocumentimpl.h"
@@ -99,7 +99,7 @@ GVDocument::GVDocument(QObject* parent)
 	d->mImpl=new GVDocumentEmptyImpl(this);
 	d->mStatJob=0L;
 	d->mFileSize=-1;
-	
+
 	// Register formats here to make sure they are always enabled
 	KImageIO::registerFormats();
 	XCFImageFormat::registerFormat();
@@ -134,7 +134,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	// Make a copy, we might have to fix the protocol
 	KURL localURL(paramURL);
 	LOG("url: " << paramURL.prettyURL());
-	
+
 	// Be sure we are not waiting for another stat result
 	if (!d->mStatJob.isNull()) {
 		d->mStatJob->kill();
@@ -156,7 +156,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	// Set high busy level, so that operations like smoothing are suspended.
 	// Otherwise the stat() below done using KIO can take quite long.
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_CHECKING_NEW_IMAGE );
-	
+
 
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(localURL.protocol())) {
@@ -185,7 +185,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 	bool isDir=false;
 	KIO::UDSEntry entry = d->mStatJob->statResult();
 	d->mURL=d->mStatJob->url();
-	
+
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
 		if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
@@ -202,7 +202,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 
 	load();
 }
-	
+
 
 void GVDocument::setDirURL(const KURL& paramURL) {
 	if (!saveBeforeClosing()) {
@@ -398,28 +398,28 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 			/* No scaling */
 			size = image.size();
 		}
-			
-		
+
+
 		if (size.width() > pdWidth || size.height() > pdHeight) {
-			int resp = KMessageBox::warningYesNoCancel(0, 
+			int resp = KMessageBox::warningYesNoCancel(0,
 				i18n("The image will not fit on the page, what do you want to do?"),
-				QString::null,KStdGuiItem::cont(), 
+				QString::null,KStdGuiItem::cont(),
 				i18n("Shrink") );
 
 			if (resp==KMessageBox::Cancel) {
 				printer->abort();
 				return;
-			} else if (resp == KMessageBox::No) { // Shrink 
+			} else if (resp == KMessageBox::No) { // Shrink
 				size.scale(pdWidth, pdHeight, QSize::ScaleMin);
 			}
 		}
-		
+
 		if (size!=image.size()) {
 			image = GVImageUtils::scale( image, size.width(), size.height(),
 				GVImageUtils::SMOOTH_NORMAL, QImage::ScaleFree );
 		}
 	}
-	
+
 	// Compute x and y
 	if ( alignment & Qt::AlignHCenter )
 		x = (pdWidth - image.width())/2;
@@ -494,7 +494,7 @@ bool GVDocument::saveBeforeClosing() {
 		.arg(url().prettyURL());
 
 	int result=KMessageBox::questionYesNoCancel(0, msg, QString::null,
-		i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
+		KStdGuiItem::save(), KStdGuiItem::discard(), CONFIG_SAVE_AUTOMATICALLY);
 
 	switch (result) {
 	case KMessageBox::Yes:
@@ -502,14 +502,14 @@ bool GVDocument::saveBeforeClosing() {
 		if (msg.isNull()) {
 			return true;
 		}
-		result= KMessageBox::warningContinueCancel(0, msg, QString::null, i18n("Discard"));
+		result= KMessageBox::warningContinueCancel(0, msg, QString::null, KStdGuiItem::discard());
 		if (result==KMessageBox::Continue) {
 			d->mModified=false;
 			return true;
 		} else {
 			return false;
 		}
-		
+
 	case KMessageBox::No:
 		d->mModified=false;
 		return true;
@@ -566,7 +566,7 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 	Q_ASSERT(impl);
 	delete d->mImpl;
 	d->mImpl=impl;
-	
+
 	connect(d->mImpl, SIGNAL(finished(bool)),
 		this, SLOT(slotFinished(bool)) );
 	connect(d->mImpl, SIGNAL(sizeUpdated(int, int)),
@@ -586,7 +586,7 @@ void GVDocument::load() {
 	switchToImpl(new GVDocumentDecodeImpl(this));
 	emit loading();
 }
-	
+
 
 void GVDocument::slotFinished(bool success) {
 	LOG("");
@@ -601,7 +601,7 @@ void GVDocument::slotFinished(bool success) {
 
 QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
 	QString msg=d->mImpl->save(url, format);
-	
+
 	if (msg.isNull()) {
 		emit saved(url);
 		d->mModified=false;
