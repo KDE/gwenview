@@ -20,14 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
 #include <kdockwidget.h>
 #include <kurl.h>
 
 
-class KAction;
 class KAccel;
+class KAction;
+class KHistoryCombo;
 class KToggleAction;
+class KURLCompletion;
 
 class DirView;
 class GVFileViewStack;
@@ -71,7 +72,6 @@ private:
 	GVSlideShow* mSlideShow;
 
 	KAction* mOpenFile;
-	KAction* mOpenLocation;
 	KAction* mRenameFile;
 	KAction* mCopyFile;
 	KAction* mMoveFile;
@@ -86,6 +86,8 @@ private:
 	KToggleAction* mToggleSlideShow;
 	
 	KAccel* mAccel;
+	KHistoryCombo* mURLEdit;
+	KURLCompletion* mURLEditCompletion;
 
 	bool mShowMenuBarInFullScreen,mShowToolBarInFullScreen,mShowStatusBarInFullScreen;
 	
@@ -101,7 +103,6 @@ private:
 	
 private slots:
 	void openFile();
-	void openLocation();
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showKeyDialog();
@@ -130,6 +131,11 @@ private slots:
 	 * Allow quitting full screen mode by pressing Escape key.
 	 */
 	void escapePressed();
+
+	/**
+	 * Address bar related
+	 */
+	void slotURLEditChanged(const QString &str);
 };
 
 

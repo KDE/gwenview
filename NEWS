@@ -1,14 +1,21 @@
 2002.xx.xx - v0.16.0
 - New features :
- - Support for IO slaves: you can browse Windows share, FTP files, into
+ - Support for IO slaves: you can browse FTP files, Windows shares, go into
    tarballs...
- - Added a "home folder" tree branch to folder view.
+ - Added a "home folder" tree branch to the folder view.
  - Added a simple slideshow feature.
  - Now uses the trash to delete images.
+ - Added an address bar.
 - Fixes :
  - Do not start dragging folders in the folder view when not necessary.
  - When dropping urls and selecting "Move", the drop item will become the
    current one only if the current one was part of the drop.
+
+2002.11.05 - v0.15.2
+- Fixes :
+ - Small jpeg images were getting a stretched thumbnail.
+ - Fixed the centering of image in scrollable view.
+ - Enabled the "show folders in file view" by default.
 
 2002.10.26 - v0.15.1
 - New features :

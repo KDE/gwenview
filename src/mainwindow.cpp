@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -42,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
 
 // Our includes
@@ -135,6 +137,10 @@ MainWindow::MainWindow()
 	connect(mSlideShow,SIGNAL(finished()),
 		mToggleSlideShow,SLOT(activate()) );
 	
+// Address bar
+	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
+		this,SLOT(slotURLEditChanged(const QString &)));
+
 // Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -185,6 +191,10 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 
 	updateStatusBar();
 	kapp->restoreOverrideCursor();
+
+	mURLEditCompletion->addItem(url.prettyURL());
+	mURLEdit->setEditText(url.prettyURL());
+	mURLEdit->addToHistory(url.prettyURL());
 }
 
 
@@ -211,7 +221,7 @@ void MainWindow::toggleFullScreen() {
 	 * having a one pixel band remaining
 	 * For the same reason, we hide all the empty DockAreas
 	 *
-	 * FIXME : This does not work really well if the toolbar is in
+	 * NOTE: This does not work really well if the toolbar is in
 	 * the left or right dock area.
 	 */
 		if (!mShowToolBarInFullScreen) {
@@ -279,10 +289,12 @@ void MainWindow::showKeyDialog() {
 	KKeyDialog::configureKeys(mAccel);
 }
 
+
 void MainWindow::showFileProperties() {
 	(void)new KPropertiesDialog(mGVPixmap->url());
 }
-	
+
+
 void MainWindow::escapePressed() {
 	if (mToggleSlideShow->isChecked()) {
 		mToggleSlideShow->activate();
@@ -300,12 +312,6 @@ void MainWindow::openFile() {
 
 	KURL url;
 	url.setPath(path);
-	mGVPixmap->setURL(url);
-}
-
-
-void MainWindow::openLocation() {
-	KURL url=KURLRequesterDlg::getURL(QString::null,this);
 	mGVPixmap->setURL(url);
 }
 
@@ -335,6 +341,11 @@ void MainWindow::thumbnailUpdateEnded() {
 
 void MainWindow::thumbnailUpdateProcessedOne() {
 	mProgress->progress()->advance(1);
+}
+
+
+void MainWindow::slotURLEditChanged(const QString &str) {
+	mGVPixmap->setURL(str);
 }
 
 
@@ -410,8 +421,6 @@ void MainWindow::createWidgets() {
 void MainWindow::createActions() {
 	mOpenFile=KStdAction::open(this, SLOT(openFile()),actionCollection() );
 	
-	mOpenLocation=new KAction(i18n("Open &Location..."),0,this,SLOT(openLocation()),actionCollection(),"file_open_location");
-
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileViewStack,SLOT(renameFile()),actionCollection(),"file_rename");
 
 	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileViewStack,SLOT(copyFile()),actionCollection(),"file_copy");
@@ -465,7 +474,6 @@ void MainWindow::createMenu() {
 	QPopupMenu* fileMenu = new QPopupMenu;
 
 	mOpenFile->plug(fileMenu);
-	mOpenLocation->plug(fileMenu);
 	fileMenu->insertSeparator();
 	mOpenWithEditor->plug(fileMenu);
 	mRenameFile->plug(fileMenu);
@@ -489,14 +497,14 @@ void MainWindow::createMenu() {
 	
 	viewMenu->insertSeparator();
 	mToggleFullScreen->plug(viewMenu);
-	mPixmapView->autoZoom()->plug(viewMenu);
-	mPixmapView->lockZoom()->plug(viewMenu);
+	mToggleSlideShow->plug(viewMenu);
+
 	viewMenu->insertSeparator();
+	mPixmapView->autoZoom()->plug(viewMenu);
 	mPixmapView->zoomIn()->plug(viewMenu);
 	mPixmapView->zoomOut()->plug(viewMenu);
 	mPixmapView->resetZoom()->plug(viewMenu);
-	viewMenu->insertSeparator();
-	mToggleSlideShow->plug(viewMenu);
+	mPixmapView->lockZoom()->plug(viewMenu);
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
@@ -574,17 +582,30 @@ void MainWindow::createToolBar() {
 
 	toolBar()->insertLineSeparator();
 	mToggleFullScreen->plug(toolBar());
-	mPixmapView->autoZoom()->plug(toolBar());
-	mPixmapView->lockZoom()->plug(toolBar());
-
+	mToggleSlideShow->plug(toolBar());
+	
 	toolBar()->insertLineSeparator();
+	mPixmapView->autoZoom()->plug(toolBar());
 	mPixmapView->zoomIn()->plug(toolBar());
 	mPixmapView->zoomOut()->plug(toolBar());
 	mPixmapView->resetZoom()->plug(toolBar());
-
+	mPixmapView->lockZoom()->plug(toolBar());
+	
 	toolBar()->insertLineSeparator();
-	mToggleSlideShow->plug(toolBar());
-	toolBar()->show();
+	
+	mURLEdit=new KHistoryCombo(toolBar());
+	mURLEdit->setDuplicatesEnabled(false);
+	
+	mURLEditCompletion=new KURLCompletion(KURLCompletion::DirCompletion);
+	mURLEditCompletion->setDir("/");
+	
+	mURLEdit->setCompletionObject(mURLEditCompletion);
+	mURLEdit->setAutoDeleteCompletionObject(true);
+
+	mURLEdit->setEditText(QDir::current().absPath());
+	mURLEdit->addToHistory(QDir::current().absPath());
+	mURLEdit->setDuplicatesEnabled(false);
+	toolBar()->setStretchableWidget(mURLEdit);
 }
 
 	
