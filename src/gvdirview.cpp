@@ -18,8 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
-#include <qcursor.h>
+// Qt 
 #include <qdragobject.h>
 #include <qdir.h>
 #include <qheader.h>
@@ -27,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstylesheet.h>
 #include <qtimer.h>
 
-// KDE includes
+// KDE 
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -38,7 +37,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 #include <kurldrag.h>
 
-// Our includes
+// Local
+#include "fileoperation.h"
 #include "gvdirview.moc"
 
 #if KDE_VERSION < 306
@@ -307,10 +307,28 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
 	KURL dest=mDropTarget->url();
 
+	// Show popup
 	KURL::List urls;
 	KURLDrag::decode(event,urls);
+	bool wasMoved;
+	FileOperation::openDropURLMenu(this, urls, dest, &wasMoved);
 
-	// Show popup
+	if (wasMoved) {
+		// If the current url was in the list, set the drop target as the new
+		// current item
+		KURL current=currentURL();
+		KURL::List::ConstIterator it=urls.begin();
+		for (; it!=urls.end(); ++it) {
+			if (current.cmp(*it,true)) {
+				setCurrentItem(mDropTarget);
+				break;
+			}
+		}
+	}
+	
+	/*
+	KURL::List urls;
+	KURLDrag::decode(event,urls);
 	QPopupMenu menu(this);
 	int copyItemID = menu.insertItem( i18n("&Copy Here") );
 	int moveItemID = menu.insertItem( i18n("&Move Here") );
@@ -336,7 +354,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 				}
 			}
 		}
-	}
+	}*/
 
 	// Reset drop target
 	if (mDropTarget) {

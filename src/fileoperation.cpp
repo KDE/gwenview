@@ -18,14 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt 
+#include <qcursor.h>
+#include <qpopupmenu.h>
 #include <qobject.h>
 
-// KDE includes
+// KDE 
 #include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <krun.h>
 
-// Our includes
+// Local 
 #include "fileopobject.h"
 #include "fileoperation.h"
 
@@ -83,6 +87,28 @@ void FileOperation::openWithEditor(const KURL& url) {
 	QString cmdLine=sEditor;
 	cmdLine.append(' ').append(path);
 	KRun::runCommand(cmdLine);
+}
+
+
+void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, const KURL& target, bool* wasMoved) {
+	QPopupMenu menu(parent);
+	if (wasMoved) *wasMoved=false;
+
+	int copyItemID = menu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here") );
+	int moveItemID = menu.insertItem( i18n("&Move Here") );
+	menu.insertSeparator();
+	menu.insertItem( SmallIcon("cancel"), i18n("Cancel") );
+
+	menu.setMouseTracking(true);
+	int id = menu.exec(QCursor::pos());
+
+	// Handle menu choice
+	if (id==copyItemID) {
+		KIO::copy(urls, target, true);
+	} else if (id==moveItemID) {
+		KIO::move(urls, target, true);
+		if (wasMoved) *wasMoved=true;
+	}
 }
 
 

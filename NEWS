@@ -1,4 +1,6 @@
 2003.xx.xx - v0.17.0
+- New features:
+ - Added a cancel button to popup menus, like Konqueror does.
 - Fixes:
  - Fixed compilation failure on KDE 3.0.
  - Clear the image view when the last image of the current folder is removed.

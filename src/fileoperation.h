@@ -40,8 +40,9 @@ public:
 	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void openWithEditor(const KURL&);
+	static void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
 
-// Config
+	// Config
 	static void readConfig(KConfig*,const QString&);
 	static void writeConfig(KConfig*,const QString&);
 
