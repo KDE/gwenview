@@ -207,6 +207,7 @@ struct GVScrollPixmapView::Private {
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
+	bool mManualZoom; // overrides mAutoZoom when user manually does zoom in/out
 	
 	QMap< long long, PendingPaint > mPendingPaints;
 	QRegion mPendingNormalRegion;
@@ -300,6 +301,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mFullScreenBar=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
+	d->mManualZoom=false;
 	d->mPendingOperations= 0 ;
 	d->mSmoothingSuspended= false ;
 	d->mEmptyImage= false ;
@@ -411,7 +413,7 @@ void GVScrollPixmapView::slotLoaded() {
 
 
 void GVScrollPixmapView::slotModified() {
-	if (d->mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -559,7 +561,7 @@ void GVScrollPixmapView::setDelayedSmoothing(bool value) {
 
 void GVScrollPixmapView::setEnlargeSmallImages(bool value) {
 	d->mEnlargeSmallImages=value;
-	if (d->mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
 	}
 }
@@ -656,7 +658,7 @@ void GVScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
-	if (d->mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -1103,7 +1105,7 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::slotZoomIn() {
 	if (d->mAutoZoom->isChecked()) {
-		d->mAutoZoom->setChecked(false);
+		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
 	setZoom(computeZoom(true));
@@ -1112,7 +1114,7 @@ void GVScrollPixmapView::slotZoomIn() {
 
 void GVScrollPixmapView::slotZoomOut() {
 	if (d->mAutoZoom->isChecked()) {
-		d->mAutoZoom->setChecked(false);
+		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
 	setZoom(computeZoom(false));
@@ -1121,7 +1123,7 @@ void GVScrollPixmapView::slotZoomOut() {
 
 void GVScrollPixmapView::slotResetZoom() {
 	if (d->mAutoZoom->isChecked()) {
-		d->mAutoZoom->setChecked(false);
+		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
 	setZoom(1.0);
@@ -1130,6 +1132,7 @@ void GVScrollPixmapView::slotResetZoom() {
 
 void GVScrollPixmapView::setAutoZoom(bool value) {
 	updateScrollBarMode();
+	d->mManualZoom = false;
 	if (value) {
 		d->mZoomBeforeAuto=d->mZoom;
 		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
@@ -1180,6 +1183,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	d->mXOffset=0;
 	d->mYOffset=0;
 
+	d->mManualZoom = false;
 	if (d->mAutoZoom->isChecked() && !d->mLockZoom->isChecked()) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
@@ -1188,6 +1192,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		verticalScrollBar()->setValue(0);
 	}
 	if( !d->mLockZoom->isChecked()) {
+		d->mManualZoom = false;
 		if( d->mAutoZoom->isChecked()) {
 			setZoom(computeAutoZoom());
 		} else {
@@ -1303,7 +1308,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 
 void GVScrollPixmapView::updateScrollBarMode() {
-	if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
+	if ((d->mAutoZoom->isChecked() && !d->mManualZoom) || !d->mShowScrollBars) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1448,7 +1453,7 @@ void GVScrollPixmapView::updateZoomActions() {
 	d->mAutoZoom->setEnabled(true);
 	d->mResetZoom->setEnabled(true);
 
-	if (d->mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		d->mZoomIn->setEnabled(true);
 		d->mZoomOut->setEnabled(true);
 	} else {
