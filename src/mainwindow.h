@@ -43,8 +43,7 @@ public:
 	MainWindow();
 	~MainWindow();
 
-	// FIXME: Rename this method?
-	GVFileViewStack* fileView() const { return mFileView; }
+	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
 	PixmapView* pixmapView() const { return mPixmapView; }
 	GVSlideShow* slideShow() const { return mSlideShow; }
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
@@ -64,8 +63,7 @@ private:
 	KDockWidget* mPixmapDock;
 	StatusBarProgress* mProgress;
 
-	// FIXME: Rename this member
-	GVFileViewStack* mFileView;
+	GVFileViewStack* mFileViewStack;
 	DirView* mDirView;
 	PixmapView* mPixmapView;
 

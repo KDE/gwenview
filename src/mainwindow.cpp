@@ -88,7 +88,7 @@ MainWindow::MainWindow()
 	createToolBar();
 
 // Slide show
-	mSlideShow=new GVSlideShow(mFileView->selectFirst(),mFileView->selectNext());
+	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
 	mSlideShow->readConfig(KGlobal::config(),CONFIG_SLIDESHOW_GROUP);
 	
 // Dir view connections
@@ -97,28 +97,28 @@ MainWindow::MainWindow()
 
 // Pixmap view connections
 	connect(mPixmapView,SIGNAL(selectPrevious()),
-		mFileView,SLOT(slotSelectPrevious()) );
+		mFileViewStack,SLOT(slotSelectPrevious()) );
 	connect(mPixmapView,SIGNAL(selectNext()),
-		mFileView,SLOT(slotSelectNext()) );
+		mFileViewStack,SLOT(slotSelectNext()) );
 
 // Scroll pixmap view connections
 	connect(mPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateFileStatusBar()) );
 
 // Thumbnail view connections
-	connect(mFileView,SIGNAL(updateStarted(int)),
+	connect(mFileViewStack,SIGNAL(updateStarted(int)),
 		this,SLOT(thumbnailUpdateStarted(int)) );
-	connect(mFileView,SIGNAL(updateEnded()),
+	connect(mFileViewStack,SIGNAL(updateEnded()),
 		this,SLOT(thumbnailUpdateEnded()) );
-	connect(mFileView,SIGNAL(updatedOneThumbnail()),
+	connect(mFileViewStack,SIGNAL(updatedOneThumbnail()),
 		this,SLOT(thumbnailUpdateProcessedOne()) );
 
 // File view connections
-	connect(mFileView,SIGNAL(urlChanged(const KURL&)),
+	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mGVPixmap,SLOT(setURL(const KURL&)) );
-	connect(mFileView,SIGNAL(completed()),
+	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusBar()) );
-	connect(mFileView,SIGNAL(canceled()),
+	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusBar()) );
 		
 // GVPixmap connections
@@ -129,7 +129,7 @@ MainWindow::MainWindow()
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mDirView,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mFileView,SLOT(setURL(const KURL&,const QString&)) );
+		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 
 // Slide show
 	connect(mSlideShow,SIGNAL(finished()),
@@ -147,7 +147,7 @@ MainWindow::MainWindow()
 
 // Check if we should start in fullscreen mode
 	if (args->isSet("f")) {
-		mFileView->noThumbnails()->activate(); // No thumbnails needed
+		mFileViewStack->noThumbnails()->activate(); // No thumbnails needed
 		mToggleFullScreen->activate();
 	}
 
@@ -160,7 +160,7 @@ MainWindow::~MainWindow() {
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
-	mFileView->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
+	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
@@ -341,7 +341,7 @@ void MainWindow::thumbnailUpdateProcessedOne() {
 //-GUI-------------------------------------------------------------------
 void MainWindow::updateStatusBar() {
 	QString txt;
-	uint count=mFileView->fileCount();
+	uint count=mFileViewStack->fileCount();
 	if (count>1) {
 		txt=i18n("%1 - %2 images");
 	} else {
@@ -392,8 +392,8 @@ void MainWindow::createWidgets() {
 
 // File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
-	mFileView=new GVFileViewStack(this,actionCollection());
-	mFileDock->setWidget(mFileView);
+	mFileViewStack=new GVFileViewStack(this,actionCollection());
+	mFileDock->setWidget(mFileViewStack);
 
 // Default dock config
 	setGeometry(20,20,600,400);
@@ -402,7 +402,7 @@ void MainWindow::createWidgets() {
 
 // Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
-	mFileView->readConfig(config,CONFIG_FILEWIDGET_GROUP);
+	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 }
 
@@ -412,13 +412,13 @@ void MainWindow::createActions() {
 	
 	mOpenLocation=new KAction(i18n("Open &Location..."),0,this,SLOT(openLocation()),actionCollection(),"file_open_location");
 
-	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileView,SLOT(renameFile()),actionCollection(),"file_rename");
+	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileViewStack,SLOT(renameFile()),actionCollection(),"file_rename");
 
-	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileView,SLOT(copyFile()),actionCollection(),"file_copy");
+	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileViewStack,SLOT(copyFile()),actionCollection(),"file_copy");
 
-	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileView,SLOT(moveFile()),actionCollection(),"file_move");
+	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileViewStack,SLOT(moveFile()),actionCollection(),"file_move");
 
-	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileView,SLOT(deleteFile()),actionCollection(),"file_delete");
+	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileViewStack,SLOT(deleteFile()),actionCollection(),"file_delete");
 
 	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 
@@ -428,7 +428,7 @@ void MainWindow::createActions() {
 
 	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"show_key_dialog");
 	
-	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileView,SLOT(cancel()),actionCollection(),"stop");
+	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
 
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
@@ -450,7 +450,7 @@ void MainWindow::createAccels() {
 			action->plugAccel(mAccel);
 		}
 	}
-	mFileView->plugActionsToAccel(mAccel);
+	mFileViewStack->plugActionsToAccel(mAccel);
 	mPixmapView->plugActionsToAccel(mAccel);
 
 // Read user accelerator
@@ -482,10 +482,10 @@ void MainWindow::createMenu() {
 	mStop->plug(viewMenu);
 	
 	viewMenu->insertSeparator();
-	mFileView->noThumbnails()->plug(viewMenu);
-	mFileView->smallThumbnails()->plug(viewMenu);
-	mFileView->medThumbnails()->plug(viewMenu);
-	mFileView->largeThumbnails()->plug(viewMenu);
+	mFileViewStack->noThumbnails()->plug(viewMenu);
+	mFileViewStack->smallThumbnails()->plug(viewMenu);
+	mFileViewStack->medThumbnails()->plug(viewMenu);
+	mFileViewStack->largeThumbnails()->plug(viewMenu);
 	
 	viewMenu->insertSeparator();
 	mToggleFullScreen->plug(viewMenu);
@@ -501,10 +501,10 @@ void MainWindow::createMenu() {
 
 	QPopupMenu* goMenu = new QPopupMenu;
 	mOpenParentDir->plug(goMenu);
-	mFileView->selectFirst()->plug(goMenu);
-	mFileView->selectPrevious()->plug(goMenu);
-	mFileView->selectNext()->plug(goMenu);
-	mFileView->selectLast()->plug(goMenu);
+	mFileViewStack->selectFirst()->plug(goMenu);
+	mFileViewStack->selectPrevious()->plug(goMenu);
+	mFileViewStack->selectNext()->plug(goMenu);
+	mFileViewStack->selectLast()->plug(goMenu);
 	menuBar()->insertItem(i18n("&Go"), goMenu);
 
 	QPopupMenu* settingsMenu = new QPopupMenu;
@@ -533,10 +533,10 @@ void MainWindow::createPixmapViewPopupMenu() {
 	mPixmapView->resetZoom()->plug(menu);
 
 	menu->insertSeparator();
-	mFileView->selectFirst()->plug(menu);
-	mFileView->selectPrevious()->plug(menu);
-	mFileView->selectNext()->plug(menu);
-	mFileView->selectLast()->plug(menu);
+	mFileViewStack->selectFirst()->plug(menu);
+	mFileViewStack->selectPrevious()->plug(menu);
+	mFileViewStack->selectNext()->plug(menu);
+	mFileViewStack->selectLast()->plug(menu);
 
 	menu->insertSeparator();
 	mOpenWithEditor->plug(menu);
@@ -558,19 +558,19 @@ void MainWindow::createPixmapViewPopupMenu() {
 
 void MainWindow::createToolBar() {
 	mOpenParentDir->plug(toolBar());
-	mFileView->selectFirst()->plug(toolBar());
-	mFileView->selectPrevious()->plug(toolBar());
-	mFileView->selectNext()->plug(toolBar());
-	mFileView->selectLast()->plug(toolBar());
+	mFileViewStack->selectFirst()->plug(toolBar());
+	mFileViewStack->selectPrevious()->plug(toolBar());
+	mFileViewStack->selectNext()->plug(toolBar());
+	mFileViewStack->selectLast()->plug(toolBar());
 
 	toolBar()->insertLineSeparator();
 	mStop->plug(toolBar());
 
 	toolBar()->insertLineSeparator();
-	mFileView->noThumbnails()->plug(toolBar());
-	mFileView->smallThumbnails()->plug(toolBar());
-	mFileView->medThumbnails()->plug(toolBar());
-	mFileView->largeThumbnails()->plug(toolBar());
+	mFileViewStack->noThumbnails()->plug(toolBar());
+	mFileViewStack->smallThumbnails()->plug(toolBar());
+	mFileViewStack->medThumbnails()->plug(toolBar());
+	mFileViewStack->largeThumbnails()->plug(toolBar());
 
 	toolBar()->insertLineSeparator();
 	mToggleFullScreen->plug(toolBar());

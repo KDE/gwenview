@@ -50,13 +50,13 @@ ConfigDialog::ConfigDialog(QWidget* parent,MainWindow* mainWindow)
 : ConfigDialogBase(parent,0L,true),
 mMainWindow(mainWindow)
 {
-	GVFileViewStack* fileView=mMainWindow->fileView();
+	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 // Thumbnails tab
-	mThumbnailMargin->setValue(fileView->fileThumbnailView()->marginSize());
-	mWordWrapFilename->setChecked(fileView->fileThumbnailView()->wordWrapIconText());
+	mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
+	mWordWrapFilename->setChecked(fileViewStack->fileThumbnailView()->wordWrapIconText());
 
 	connect(mCalculateCacheSize,SIGNAL(clicked()),
 		this,SLOT(calculateCacheSize()));
@@ -105,8 +105,8 @@ mMainWindow(mainWindow)
 	
 // Misc tab
 	mExternalEditor->setText(FileOperation::editor());
-	mAutoLoadImage->setChecked(fileView->autoLoadImage());
-	mShowDirs->setChecked(fileView->showDirs());
+	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
+	mShowDirs->setChecked(fileViewStack->showDirs());
 }
 
 
@@ -117,14 +117,14 @@ void ConfigDialog::slotOk() {
 
 
 void ConfigDialog::slotApply() {
-	GVFileViewStack* fileView=mMainWindow->fileView();
+	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	PixmapView* pixmapView=mMainWindow->pixmapView();
 	GVSlideShow* slideShow=mMainWindow->slideShow();
 
 // Thumbnails tab
-	fileView->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
-	fileView->fileThumbnailView()->setWordWrapIconText(mWordWrapFilename->isChecked());
-	fileView->fileThumbnailView()->arrangeItemsInGrid();
+	fileViewStack->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
+	fileViewStack->fileThumbnailView()->setWordWrapIconText(mWordWrapFilename->isChecked());
+	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
 
 // File operations tab
 	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
@@ -150,8 +150,8 @@ void ConfigDialog::slotApply() {
 
 // Misc tab
 	FileOperation::setEditor(mExternalEditor->text());
-	fileView->setAutoLoadImage(mAutoLoadImage->isChecked());
-	fileView->setShowDirs(mShowDirs->isChecked());
+	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
+	fileViewStack->setShowDirs(mShowDirs->isChecked());
 }
 
 
