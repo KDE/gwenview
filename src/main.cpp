@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
 	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
-	{ 0, 0, 0 }
+	KCmdLineLastOption
 };
 
 static const char* version="CVS>=20030504";
