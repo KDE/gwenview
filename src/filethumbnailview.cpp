@@ -89,17 +89,17 @@ void FileThumbnailView::setMarginSize(int value) {
 
 
 void FileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPixmap& thumbnail) {
-	QIconViewItem* item=static_cast<QIconViewItem*>( const_cast<void*>( fileItem->extraData(this) ) );
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
 	int pixelSize=mThumbnailSize.pixelSize();
 
 // Draw the thumbnail to the center of the icon
-	QPainter painter(item->pixmap());
+	QPainter painter(iconItem->pixmap());
 	painter.eraseRect(0,0,pixelSize,pixelSize);
 	painter.drawPixmap(
 		(pixelSize-thumbnail.width())/2,
 		(pixelSize-thumbnail.height())/2,
 		thumbnail);
-	item->repaint();
+	iconItem->repaint();
 
 // Notify others that one thumbnail has been updated
 	emit updatedOneThumbnail();
@@ -129,17 +129,10 @@ void FileThumbnailView::stopThumbnailUpdate()
 }
 
 
-const QIconViewItem* FileThumbnailView::viewedItem() const {
-	return mViewedItem;
-}
-
-
 void FileThumbnailView::setViewedFileItem(const KFileItem* fileItem) {
-	QIconViewItem* oldViewed=mViewedItem;
-	QIconViewItem* item=0L;
-	if (fileItem) {
-		item=static_cast<QIconViewItem*>( const_cast<void*>( fileItem->extraData(this) ) );
-	}
+	FileThumbnailViewItem* oldViewed=mViewedItem;
+	FileThumbnailViewItem* item=viewItem(fileItem);
+	
 	mViewedItem=item;
 	if (oldViewed) repaintItem(oldViewed);
 	if (mViewedItem) repaintItem(mViewedItem);
@@ -189,8 +182,8 @@ void FileThumbnailView::insertItem(KFileItem* item) {
 void FileThumbnailView::updateView(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>(const_cast<void*>( fileItem->extraData(this) ) );
-	iconItem->setText(fileItem->text());
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
+	if (iconItem) iconItem->setText(fileItem->text());
 	sort();
 }
 
@@ -198,31 +191,31 @@ void FileThumbnailView::updateView(const KFileItem* fileItem) {
 void FileThumbnailView::ensureItemVisible(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>(const_cast<void*>( fileItem->extraData(this) ) );
-	QIconView::ensureItemVisible(iconItem);
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
+	if (iconItem) QIconView::ensureItemVisible(iconItem);
 }
 
 
 void FileThumbnailView::setCurrentItem(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
-	QIconView::setCurrentItem(iconItem);
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
+	if (iconItem) QIconView::setCurrentItem(iconItem);
 }
 
 
 void FileThumbnailView::setSelected(const KFileItem* fileItem,bool enable) {
 	if (!fileItem) return;
 
-	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
-	QIconView::setSelected(iconItem,enable);
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
+	if (iconItem) QIconView::setSelected(iconItem,enable);
 }
 
 
 bool FileThumbnailView::isSelected(const KFileItem* fileItem) const {
 	if (!fileItem) return false;
 
-	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (!iconItem) return false;
 
 	return iconItem->isSelected();
@@ -237,9 +230,9 @@ void FileThumbnailView::removeItem(const KFileItem* fileItem) {
 		mThumbnailLoadJob->itemRemoved(fileItem);
 
 // Remove it from our view
-	const FileThumbnailViewItem* iconItem=static_cast<const FileThumbnailViewItem*>( fileItem->extraData(this) );
+	FileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (iconItem==mViewedItem) mViewedItem=0L;
-	delete iconItem;
+	if (iconItem) delete iconItem;
 	KFileView::removeItem(fileItem);
 	arrangeItemsInGrid();
 }
@@ -253,7 +246,7 @@ KFileItem* FileThumbnailView::firstFileItem() const {
 
 
 KFileItem* FileThumbnailView::prevItem(const KFileItem* fileItem) const {
-	const FileThumbnailViewItem* iconItem=static_cast<const FileThumbnailViewItem*>( fileItem->extraData(this) );
+	const FileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (!iconItem) return 0L;
 
 	iconItem=static_cast<const FileThumbnailViewItem*>(iconItem->prevItem());
@@ -272,7 +265,7 @@ KFileItem* FileThumbnailView::currentFileItem() const {
 
 
 KFileItem* FileThumbnailView::nextItem(const KFileItem* fileItem) const {
-	const FileThumbnailViewItem* iconItem=static_cast<const FileThumbnailViewItem*>( fileItem->extraData(this) );
+	const FileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (!iconItem) return 0L;
 
 	iconItem=static_cast<const FileThumbnailViewItem*>(iconItem->nextItem());

@@ -36,6 +36,8 @@ class QPopupMenu;
 class KConfig;
 class KFileItem;
 
+class FileThumbnailViewItem;
+
 class ThumbnailLoadJob;
 
 class FileThumbnailView : public KIconView, public GVFileView {
@@ -79,7 +81,7 @@ public:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
-	const QIconViewItem* viewedItem() const;
+	const FileThumbnailViewItem* viewedItem() const { return mViewedItem; }
 	void setViewedFileItem(const KFileItem*);
 
 public slots:
@@ -96,11 +98,15 @@ protected:
 private:
 	ThumbnailSize mThumbnailSize;
 	int mMarginSize;
-	QIconViewItem* mViewedItem;
+	FileThumbnailViewItem* mViewedItem;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 
 	void updateGrid();
+	FileThumbnailViewItem* viewItem(const KFileItem* fileItem) const {
+		if (!fileItem) return 0L;
+		return static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
+	}
 
 private slots:
 	void slotClicked(QIconViewItem*,const QPoint& pos);

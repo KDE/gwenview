@@ -97,19 +97,16 @@ GVFileDetailView::~GVFileDetailView()
 
 void GVFileDetailView::setSelected( const KFileItem *info, bool enable )
 {
-	if ( !info ) return;
-
-	// we can only hope that this casts works
-	GVFileDetailViewItem *item = (GVFileDetailViewItem*)info->extraData( this );
-
-	if ( item ) KListView::setSelected( item, enable );
+	if (!info) return;
+	GVFileDetailViewItem *item = viewItem(info);
+	if (item) KListView::setSelected(item, enable);
 }
 
 void GVFileDetailView::setCurrentItem( const KFileItem *item )
 {
-	if ( !item ) return;
-	GVFileDetailViewItem *it = (GVFileDetailViewItem*) item->extraData( this );
-	if ( it ) KListView::setCurrentItem( it );
+	if (!item) return;
+	GVFileDetailViewItem *listItem = viewItem(item);
+	if (listItem) KListView::setCurrentItem(listItem);
 }
 
 KFileItem * GVFileDetailView::currentFileItem() const
@@ -194,12 +191,12 @@ void GVFileDetailView::highlighted( QListViewItem *item )
 }
 
 
-bool GVFileDetailView::isSelected( const KFileItem *i ) const
+bool GVFileDetailView::isSelected(const KFileItem* fileItem) const
 {
-	if ( !i ) return false;
+	if (!fileItem) return false;
 
-	GVFileDetailViewItem *item = (GVFileDetailViewItem*) i->extraData( this );
-	return (item && item->isSelected());
+	GVFileDetailViewItem *item = viewItem(fileItem);
+	return item && item->isSelected();
 }
 
 
@@ -218,7 +215,7 @@ void GVFileDetailView::updateView( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = (GVFileDetailViewItem*) i->extraData( this );
+	GVFileDetailViewItem *item = viewItem(i);
 	if ( !item ) return;
 
 	item->init();
@@ -248,7 +245,7 @@ void GVFileDetailView::removeItem( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = (GVFileDetailViewItem*) i->extraData( this );
+	GVFileDetailViewItem *item = viewItem(i);
 	mResolver->m_lstPendingMimeIconItems.remove( item );
 	if(mViewedItem==item) mViewedItem=0L;
 	delete item;
@@ -323,7 +320,7 @@ void GVFileDetailView::slotSortingChanged( int col )
 	KListView::setSorting( mSortingCol, !reversed );
 	KListView::sort();
 
-	if ( !mBlockSortingSignal ) sig->changeSorting( static_cast<QDir::SortSpec>( sortSpec ) );
+	if (!mBlockSortingSignal) sig->changeSorting( static_cast<QDir::SortSpec>( sortSpec ) );
 }
 
 
@@ -359,7 +356,7 @@ void GVFileDetailView::ensureItemVisible( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = (GVFileDetailViewItem*) i->extraData( this );
+	GVFileDetailViewItem *item = viewItem(i);
 		
 	if ( item ) KListView::ensureItemVisible( item );
 }
