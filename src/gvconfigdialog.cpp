@@ -190,7 +190,7 @@ void GVConfigDialog::emptyCache() {
 
 	KURL url;
 	url.setPath(dir);
-	if (KIO::NetAccess::del(url)) {
+	if (KIO::NetAccess::del(url, 0)) {
 		KMessageBox::information( this,i18n("Cache emptied.") );
 	}
 }
