@@ -143,32 +143,36 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	addWidget(mFileDetailView,0);
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
-		this,SLOT(viewExecuted()) );
+		this,SLOT(slotViewExecuted()) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
-		this,SLOT(viewExecuted()) );
+		this,SLOT(slotViewExecuted()) );
 	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
-		this,SLOT(viewClicked()) );
+		this,SLOT(slotViewClicked()) );
 	connect(mFileDetailView,SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 	connect(mFileDetailView,SIGNAL(dropped(QDropEvent*,KFileItem*)),
 		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
 	connect(mFileDetailView, SIGNAL(sortingChanged(QDir::SortSpec)),
 		this, SLOT(updateSortMenu(QDir::SortSpec)) );
+	connect(mFileDetailView, SIGNAL(doubleClicked(QListViewItem*)),
+		this, SLOT(slotViewDoubleClicked()) );
 
 	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
 
 	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
-		this,SLOT(viewExecuted()) );
+		this,SLOT(slotViewExecuted()) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
-		this,SLOT(viewExecuted()) );
+		this,SLOT(slotViewExecuted()) );
 	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
-		this,SLOT(viewClicked()) );
+		this,SLOT(slotViewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
 		this,SLOT(openContextMenu(QIconViewItem*,const QPoint&)) );
 	connect(mFileThumbnailView,SIGNAL(dropped(QDropEvent*,KFileItem*)),
 		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
+	connect(mFileThumbnailView, SIGNAL(doubleClicked(QIconViewItem*)),
+		this, SLOT(slotViewDoubleClicked()) );
 
 	// Propagate signals
 	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),
@@ -300,7 +304,7 @@ void GVFileViewStack::updateThumbnail(const KURL& url) {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::viewExecuted() {
+void GVFileViewStack::slotViewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
 
@@ -322,7 +326,7 @@ void GVFileViewStack::viewExecuted() {
 }
 
 
-void GVFileViewStack::viewClicked() {
+void GVFileViewStack::slotViewClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
@@ -330,6 +334,13 @@ void GVFileViewStack::viewClicked() {
 	// Don't change the current image if the user is creating a multi-selection
 	if (currentFileView()->selectedItems()->count()>1) return;
 	emitURLChanged();
+}
+
+
+void GVFileViewStack::slotViewDoubleClicked() {
+	updateActions();
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (item && !isDirOrArchive(item)) emit imageDoubleClicked();
 }
 
 

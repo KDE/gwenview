@@ -780,6 +780,8 @@ void GVMainWindow::createConnections() {
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusInfo()) );
+	connect(mFileViewStack,SIGNAL(imageDoubleClicked()),
+		mToggleFullScreen,SLOT(activate()) );
 	// Don't connect mGVPixmap::loaded to mDirView. mDirView will be
 	// updated _after_ the file view is done, since it's less important to the
 	// user

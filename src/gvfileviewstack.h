@@ -126,6 +126,7 @@ signals:
 	void completed();
 	void canceled();
 	void completedURLListing(const KURL&);
+	void imageDoubleClicked();
 
 	// Thumbnail view signals
 	void updateStarted(int);
@@ -137,11 +138,13 @@ private slots:
 	void delayedDirListerCompleted();
 	
 	// Used to enter directories
-	void viewExecuted();
+	void slotViewExecuted();
 
 	// Used to change the current image
-	void viewClicked();
+	void slotViewClicked();
 
+	void slotViewDoubleClicked();
+	
 	// Context menu
 	void openContextMenu(const QPoint& pos);
 	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
