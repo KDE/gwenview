@@ -40,7 +40,7 @@ class KRadioAction;
 
 class GVFileViewBase;
 class GVFileDetailView;
-class FileThumbnailView;
+class GVFileThumbnailView;
 
 
 class GVFileViewStack : public QWidgetStack {
@@ -71,7 +71,7 @@ public:
 	void setShowDirs(bool);
 	uint selectionSize() const;
 	
-	FileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
+	GVFileThumbnailView* fileThumbnailView() const { return mGVFileThumbnailView; }
 	
 	KAction* selectFirst() const { return mSelectFirst; }
 	KAction* selectLast() const { return mSelectLast; }
@@ -143,7 +143,7 @@ private slots:
 private:
 	Mode mMode;
 	GVFileDetailView* mFileDetailView;
-	FileThumbnailView* mFileThumbnailView;
+	GVFileThumbnailView* mGVFileThumbnailView;
 	KDirLister* mDirLister;
 	KURL mDirURL;
 

@@ -32,8 +32,8 @@
 #include <kwordwrap.h>
 
 // Our includes
-#include "filethumbnailview.h"
-#include "filethumbnailviewitem.h"
+#include "gvfilethumbnailview.h"
+#include "gvfilethumbnailviewitem.h"
 
 /*
 static void printRect(const QString& txt,const QRect& rect) {
@@ -42,19 +42,19 @@ static void printRect(const QString& txt,const QRect& rect) {
 */
 
 
-FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
+GVFileThumbnailViewItem::GVFileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
 : QIconViewItem(view,text,icon), mFileItem(fileItem), mWordWrap(0L) {
 	calcRect();
 }
 
 
-FileThumbnailViewItem::~FileThumbnailViewItem() {
+GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
 	if (mWordWrap) delete mWordWrap;
 }
 
 
-void FileThumbnailViewItem::calcRect(const QString& text_) {
-	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
+void GVFileThumbnailViewItem::calcRect(const QString& text_) {
+	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 
@@ -152,7 +152,7 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 }
 
 
-void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
+void GVFileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 	static QString dots("...");
 	QIconView* view = iconView();
 	Q_ASSERT( view );
@@ -177,8 +177,8 @@ void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 }
 
 
-void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
-	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
+void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
+	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 

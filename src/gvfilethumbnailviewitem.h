@@ -18,8 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef FILETHUMBNAILVIEWITEM_H
-#define FILETHUMBNAILVIEWITEM_H
+#ifndef GVFILETHUMBNAILVIEWITEM_H
+#define GVFILETHUMBNAILVIEWITEM_H
 
 // Qt includes
 #include <qiconview.h>
@@ -36,10 +36,10 @@ class KWordWrap;
  * We override the QIconViewItem to control the look of selected items
  * and get a pointer to our KFileItem
  */
-class FileThumbnailViewItem : public QIconViewItem {
+class GVFileThumbnailViewItem : public QIconViewItem {
 public:
-	FileThumbnailViewItem(QIconView* parent,const QString& text,const QPixmap& icon, KFileItem* fileItem);
-	~FileThumbnailViewItem();
+	GVFileThumbnailViewItem(QIconView* parent,const QString& text,const QPixmap& icon, KFileItem* fileItem);
+	~GVFileThumbnailViewItem();
 
 	KFileItem* fileItem() const { return mFileItem; }
 

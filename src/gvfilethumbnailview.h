@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef FILETHUMBNAILVIEW_H
-#define FILETHUMBNAILVIEW_H
+#ifndef GVFILETHUMBNAILVIEW_H
+#define GVFILETHUMBNAILVIEW_H
 
 // Qt includes
 #include <qguardedptr.h>
@@ -36,17 +36,17 @@ class QPopupMenu;
 class KConfig;
 class KFileItem;
 
-class FileThumbnailViewItem;
+class GVFileThumbnailViewItem;
 
 class ThumbnailLoadJob;
 
-class FileThumbnailView : public KIconView, public GVFileViewBase {
+class GVFileThumbnailView : public KIconView, public GVFileViewBase {
 Q_OBJECT
-	friend class FileThumbnailViewItem;
+	friend class GVFileThumbnailViewItem;
 	
 public:
-	FileThumbnailView(QWidget* parent);
-	~FileThumbnailView();
+	GVFileThumbnailView(QWidget* parent);
+	~GVFileThumbnailView();
 
 	QWidget* widget() { return this; }
 	void startThumbnailUpdate();
@@ -103,9 +103,9 @@ private:
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 
 	void updateGrid();
-	FileThumbnailViewItem* viewItem(const KFileItem* fileItem) const {
+	GVFileThumbnailViewItem* viewItem(const KFileItem* fileItem) const {
 		if (!fileItem) return 0L;
-		return static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
+		return static_cast<GVFileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(this) ) );
 	}
 
 private slots:

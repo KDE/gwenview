@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "fileoperation.h"
-#include "filethumbnailview.h"
+#include "gvfilethumbnailview.h"
 #include "gvarchive.h"
 #include "gvfiledetailview.h"
 
@@ -117,24 +117,24 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
 // Thumbnail widget
-	mFileThumbnailView=new FileThumbnailView(this);
-	addWidget(mFileThumbnailView,1);
+	mGVFileThumbnailView=new GVFileThumbnailView(this);
+	addWidget(mGVFileThumbnailView,1);
 
-	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
+	connect(mGVFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
 		this,SLOT(viewExecuted()) );
-	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
+	connect(mGVFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
 		this,SLOT(viewExecuted()) );
-	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
+	connect(mGVFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
 		this,SLOT(viewClicked()) );
-	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
+	connect(mGVFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
 		this,SLOT(openContextMenu(QIconViewItem*,const QPoint&)) );
 
 // Propagate signals
-	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),
+	connect(mGVFileThumbnailView,SIGNAL(updateStarted(int)),
 		this,SIGNAL(updateStarted(int)) );
-	connect(mFileThumbnailView,SIGNAL(updateEnded()),
+	connect(mGVFileThumbnailView,SIGNAL(updateEnded()),
 		this,SIGNAL(updateEnded()) );
-	connect(mFileThumbnailView,SIGNAL(updatedOneThumbnail()),
+	connect(mGVFileThumbnailView,SIGNAL(updatedOneThumbnail()),
 		this,SIGNAL(updatedOneThumbnail()) );
 }
 
@@ -180,7 +180,7 @@ void GVFileViewStack::cancel() {
 		return;
 	}
 	if (mMode==Thumbnail) {
-		mFileThumbnailView->stopThumbnailUpdate();
+		mGVFileThumbnailView->stopThumbnailUpdate();
 	}
 }
 
@@ -301,23 +301,23 @@ void GVFileViewStack::updateThumbnailSize() {
 		return;
 	} else {
 		if (mSmallThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Small);
+			mGVFileThumbnailView->setThumbnailSize(ThumbnailSize::Small);
 		} else if (mMedThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Med);
+			mGVFileThumbnailView->setThumbnailSize(ThumbnailSize::Med);
 		} else {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Large);
+			mGVFileThumbnailView->setThumbnailSize(ThumbnailSize::Large);
 		}
 		if (mMode==GVFileViewStack::FileList) {
 			setMode(GVFileViewStack::Thumbnail);
 		} else {
-			KFileItemList items=*mFileThumbnailView->items();
-			KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
+			KFileItemList items=*mGVFileThumbnailView->items();
+			KFileItem* shownFileItem=mGVFileThumbnailView->shownFileItem();
 
-			mFileThumbnailView->GVFileViewBase::clear();
-			mFileThumbnailView->addItemList(items);
-			mFileThumbnailView->setShownFileItem(shownFileItem);
+			mGVFileThumbnailView->GVFileViewBase::clear();
+			mGVFileThumbnailView->addItemList(items);
+			mGVFileThumbnailView->setShownFileItem(shownFileItem);
 		}
-		mFileThumbnailView->startThumbnailUpdate();
+		mGVFileThumbnailView->startThumbnailUpdate();
 	}
 }
 
@@ -474,7 +474,7 @@ GVFileViewBase* GVFileViewStack::currentFileView() const {
 	if (mMode==FileList) {
 		return mFileDetailView;
 	} else {
-		return mFileThumbnailView;
+		return mGVFileThumbnailView;
 	}
 }
 
@@ -506,12 +506,12 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	GVFileViewBase* newView;
 
 	if (mMode==FileList) {
-		mFileThumbnailView->stopThumbnailUpdate();
-		oldView=mFileThumbnailView;
+		mGVFileThumbnailView->stopThumbnailUpdate();
+		oldView=mGVFileThumbnailView;
 		newView=mFileDetailView;
 	} else {
 		oldView=mFileDetailView;
-		newView=mFileThumbnailView;
+		newView=mGVFileThumbnailView;
 	}
 
 // Show the new active view
@@ -599,11 +599,11 @@ void GVFileViewStack::dirListerStarted() {
 
 void GVFileViewStack::dirListerCompleted() {
 	// FIXME: This is a work around to a bug which causes
-	// FileThumbnailView::firstFileItem to return a wrong item.
+	// GVFileThumbnailView::firstFileItem to return a wrong item.
 	// This work around is not in the method because firstFileItem is 
 	// const and sort is a non const method
 	if (mMode==Thumbnail) {
-		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
+		mGVFileThumbnailView->sort(mGVFileThumbnailView->sortDirection());
 	}
 
 	if (!mFilenameToSelect.isEmpty()) {
@@ -616,14 +616,14 @@ void GVFileViewStack::dirListerCompleted() {
 	}
 
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
-		mFileThumbnailView->startThumbnailUpdate();
+		mGVFileThumbnailView->startThumbnailUpdate();
 	}
 }
 
 
 void GVFileViewStack::dirListerCanceled() {
 	if (mMode==Thumbnail) {
-		mFileThumbnailView->stopThumbnailUpdate();
+		mGVFileThumbnailView->stopThumbnailUpdate();
 	}
 
 	if (!mFilenameToSelect.isEmpty()) {
@@ -739,7 +739,7 @@ KFileItem* GVFileViewStack::findNextImage() const {
 //
 //-----------------------------------------------------------------------
 void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
-	mFileThumbnailView->readConfig(config,group);
+	mGVFileThumbnailView->readConfig(config,group);
 
 	config->setGroup(group);
 	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
@@ -749,7 +749,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	setMode(startWithThumbnails?Thumbnail:FileList);
 
 	if (startWithThumbnails) {
-		switch (mFileThumbnailView->thumbnailSize()) {
+		switch (mGVFileThumbnailView->thumbnailSize()) {
 		case ThumbnailSize::Small:
 			mSmallThumbnails->setChecked(true);
 			break;
@@ -760,7 +760,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 			mLargeThumbnails->setChecked(true);
 			break;
 		}
-		mFileThumbnailView->startThumbnailUpdate();
+		mGVFileThumbnailView->startThumbnailUpdate();
 	} else {
 		mNoThumbnails->setChecked(true);
 	}
@@ -770,7 +770,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 
 
 void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
-	mFileThumbnailView->writeConfig(config,group);
+	mGVFileThumbnailView->writeConfig(config,group);
 
 	config->setGroup(group);
 

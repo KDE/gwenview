@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "fileoperation.h"
-#include "filethumbnailview.h"
+#include "gvfilethumbnailview.h"
 #include "fitpixmapview.h"
 #include "gvfileviewstack.h"
 #include "gvslideshow.h"
