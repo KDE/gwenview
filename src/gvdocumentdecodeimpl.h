@@ -59,14 +59,12 @@ public:
 	GVDocumentDecodeImpl(GVDocument* document);
 	~GVDocumentDecodeImpl();
 	
-public slots:
 	void suspendLoading();
 	void resumeLoading();
 
 private:
 	GVDocumentDecodeImplPrivate* d;
 	void finish(QImage&);
-	void emitRectUpdated();
 	
 	// QImageConsumer methods
 	void end();
