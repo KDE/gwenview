@@ -543,7 +543,13 @@ void GVDirView::removeDir() {
 	QString dir=QStyleSheet::escape(currentURL().path());
 	int response=KMessageBox::warningContinueCancel(this,
 		"<qt>" + i18n("Are you sure you want to delete the folder <b>%1</b>?").arg(dir) + "</qt>",
-		i18n("Delete Folder"),KStdGuiItem::del());
+		i18n("Delete Folder"),
+#if KDE_VERSION >= 0x30300
+		KStdGuiItem::del()
+#else
+		i18n("Delete")
+#endif
+		);
 	if (response==KMessageBox::Cancel) return;
 
 	job=KIO::del(currentURL());

@@ -216,12 +216,24 @@ void FileOpRealDeleteObject::operator()() {
 			}
 			response=KMessageBox::warningYesNoList(mParent,
 				i18n("Do you really want to delete these files?"),fileList,
-				i18n("Delete Files"),KStdGuiItem::del());
+				i18n("Delete Files"),
+#if KDE_VERSION > 0x30300
+				KStdGuiItem::del()
+#else
+				i18n("Delete")
+#endif
+				);
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
 			response=KMessageBox::warningYesNo(mParent,
 				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
-				i18n("Delete File"),KStdGuiItem::del());
+				i18n("Delete File"),
+#if KDE_VERSION > 0x30300
+				KStdGuiItem::del()
+#else
+				i18n("Delete")
+#endif
+				);
 		}
 		if (response==KMessageBox::Cancel) return;
 	}
