@@ -51,16 +51,18 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 : QWidgetStack(parent), mMode(FileList)
 {
 // Actions
-	mSelectFirst=new KAction(i18n("&First"),"start",Key_Home,
+	mSelectFirst=new KAction(i18n("&First"),"first",Key_Home,
 		this,SLOT(slotSelectFirst()), actionCollection, "first");
 
-	mSelectLast=new KAction(i18n("&Last"),"finish",Key_End,
+	mSelectLast=new KAction(i18n("&Last"),"last",Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
 	mSelectPrevious=KStdAction::back(this, SLOT(slotSelectPrevious()),actionCollection );
+	mSelectPrevious->setIcon("previous");
 	mSelectPrevious->setAccel(Key_Backspace);
 
 	mSelectNext=KStdAction::forward(this, SLOT(slotSelectNext()),actionCollection );
+	mSelectNext->setIcon("next");
 	mSelectNext->setAccel(Key_Space);
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"view_detailed");
