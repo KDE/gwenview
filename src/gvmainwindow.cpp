@@ -473,6 +473,7 @@ void GVMainWindow::pixmapLoading() {
 		}
 		mLoadingCursor = true;
 	}
+	updateLocationURL();
 }
 
 
