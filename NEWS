@@ -1,7 +1,9 @@
 2002.xx.xx - v0.15.0
 - New option to prevent Gwenview from loading the first image when it enters a
   folder (Thanks to Andreas Pfaller for the patch).
-- Fixed the horizontal one pixel line which appeared in fullscreen mode when
+
+2002.08.11 - v0.14.5
+- Fixed the horizontal one pixel lines which appeared in fullscreen mode when
   the toolbar was hidden.
 - New command line option (-f) to start in fullscreen mode.
 
