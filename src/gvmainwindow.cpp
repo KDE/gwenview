@@ -938,12 +938,12 @@ void GVMainWindow::createLocationToolBar() {
 
 #ifdef HAVE_KIPI
 void GVMainWindow::loadPlugins() {
-	QMap<KIPI::Plugin::Category, QCString> categoryMap;
-	categoryMap[KIPI::Plugin::IMAGESPLUGIN]="kipi_images";
-	categoryMap[KIPI::Plugin::EFFECTSPLUGIN]="kipi_effects";
-	categoryMap[KIPI::Plugin::TOOLSPLUGIN]="kipi_tools";
-	categoryMap[KIPI::Plugin::IMPORTPLUGIN]="kipi_import";
-	categoryMap[KIPI::Plugin::EXPORTPLUGIN]="kipi_export";
+	QMap<KIPI::Category, QCString> categoryMap;
+	categoryMap[KIPI::IMAGESPLUGIN]="kipi_images";
+	categoryMap[KIPI::EFFECTSPLUGIN]="kipi_effects";
+	categoryMap[KIPI::TOOLSPLUGIN]="kipi_tools";
+	categoryMap[KIPI::IMPORTPLUGIN]="kipi_import";
+	categoryMap[KIPI::EXPORTPLUGIN]="kipi_export";
 	
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);

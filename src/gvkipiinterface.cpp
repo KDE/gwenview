@@ -27,24 +27,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kurl.h>
 
+// KIPI
+#include <libkipi/imagecollectionshared.h>
+#include <libkipi/imageinfoshared.h>
+
 // Local
 #include "gvfileviewbase.h"
 #include "gvfileviewstack.h"
 #include "gvkipiinterface.moc"
 
-class GVImageCollection : public KIPI::ImageCollection {
+class GVImageCollection : public KIPI::ImageCollectionShared {
 public:
-	GVImageCollection(const QString& name, const QValueList<KURL>& images)
-	: mName(name), mImages(images) {}
+	GVImageCollection(const QString& name, const KURL::List& images)
+	: KIPI::ImageCollectionShared(), mName(name), mImages(images) {}
 	
-	QString name() const { return mName; }
-	QValueList<KURL> images() const { return mImages; }
-	bool valid() const { return true; }
+	QString name() { return mName; }
+	KURL::List images() { return mImages; }
+	QString comment() { return QString::null; }
 
 private:
 	QString mName;
-	QValueList<KURL> mImages;
+	KURL::List mImages;
 };
+
+
+
+class GVImageInfo : public KIPI::ImageInfoShared {
+public:
+	GVImageInfo( const KURL& url ) : KIPI::ImageInfoShared(url) {}
+	QString name() {
+		return _url.fileName();
+	}
+	
+	QString description() {
+		return QString( "description for %1" ).arg( name() );
+	}
+	
+	QMap<QString,QVariant> attributes() {
+		return QMap<QString,QVariant>();
+	}
+};
+
 
 
 struct GVKIPIInterfacePrivate {
@@ -64,27 +87,35 @@ GVKIPIInterface::~GVKIPIInterface() {
 }
 
 
-KIPI::ImageCollection* GVKIPIInterface::currentAlbum() {
+KIPI::ImageCollection GVKIPIInterface::currentAlbum() {
 	kdDebug() << "GVKIPIInterface::currentAlbum\n";
-	QValueList<KURL> list;
+	KURL::List list;
 	KFileItemListIterator it( *d->mFileView->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return new GVImageCollection(i18n("Folder content"), list); 
+	return KIPI::ImageCollection(new GVImageCollection(i18n("Folder content"), list)); 
 }
 
 
-KIPI::ImageCollection* GVKIPIInterface::currentSelection() {
+KIPI::ImageCollection GVKIPIInterface::currentSelection() {
 	kdDebug() << "GVKIPIInterface::currentSelection\n";
 	KURL::List list=d->mFileView->selectedURLs();
-	return new GVImageCollection(i18n("Selected images"), list); 
+	return KIPI::ImageCollection(new GVImageCollection(i18n("Selected images"), list)); 
 }
 
 
-KIPI::ImageInfo GVKIPIInterface::info( const KURL& ) {
+QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
+	kdDebug() << "GVKIPIInterface::allAlbums\n";
+	QValueList<KIPI::ImageCollection> list;
+	list << currentAlbum() << currentSelection();
+	return list;
+}
+
+
+KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 	kdDebug() << "GVKIPIInterface::info\n";
-	return KIPI::ImageInfo();
+	return KIPI::ImageInfo( new GVImageInfo(url) );
 }
 
 #endif /* HAVE_KIPI */

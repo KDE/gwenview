@@ -37,8 +37,9 @@ public:
     GVKIPIInterface( QWidget* parent, GVFileViewStack*);
 	virtual ~GVKIPIInterface();
 
-    KIPI::ImageCollection* currentAlbum();
-    KIPI::ImageCollection* currentSelection();
+    KIPI::ImageCollection currentAlbum();
+    KIPI::ImageCollection currentSelection();
+	QValueList<KIPI::ImageCollection> allAlbums();
     KIPI::ImageInfo info( const KURL& );
 
 private:
