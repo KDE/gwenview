@@ -47,13 +47,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ConfigDialog::ConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 : ConfigDialogBase(parent,0L,true),
-mGVMainWindow(mainWindow)
+mMainWindow(mainWindow)
 {
-	GVFileViewStack* fileViewStack=mGVMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mGVMainWindow->pixmapViewStack();
-	GVSlideShow* slideShow=mGVMainWindow->slideShow();
+	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
+	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
+	GVSlideShow* slideShow=mMainWindow->slideShow();
 
-// Thumbnails tab
+	// Thumbnails tab
 	mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
 	mWordWrapFilename->setChecked(fileViewStack->fileThumbnailView()->wordWrapIconText());
 
@@ -62,7 +62,7 @@ mGVMainWindow(mainWindow)
 	connect(mEmptyCache,SIGNAL(clicked()),
 		this,SLOT(emptyCache()));
 
-// File operations tab
+	// File operations tab
 	mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
 	mShowCopyDialog->setChecked(FileOperation::confirmCopy());
 	mShowMoveDialog->setChecked(FileOperation::confirmMove());
@@ -71,13 +71,13 @@ mGVMainWindow(mainWindow)
 	mDefaultDestDir->fileDialog()->setMode(
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
 
-// Full screen tab
-	mShowPathInFullScreen->setChecked(mGVMainWindow->pixmapViewStack()->showPathInFullScreen());
-	mShowMenuBarInFullScreen->setChecked(mGVMainWindow->showMenuBarInFullScreen());
-	mShowToolBarInFullScreen->setChecked(mGVMainWindow->showToolBarInFullScreen());
-	mShowStatusBarInFullScreen->setChecked(mGVMainWindow->showStatusBarInFullScreen());
+	// Full screen tab
+	mShowPathInFullScreen->setChecked(mMainWindow->pixmapViewStack()->showPathInFullScreen());
+	mShowMenuBarInFullScreen->setChecked(mMainWindow->showMenuBarInFullScreen());
+	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
+	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
 
-// Mouse wheel behaviour tab
+	// Mouse wheel behaviour tab
 	typedef QMap<GVPixmapViewStack::WheelBehaviour,QString> WheelBehaviours;
 	WheelBehaviours behaviours;
 	behaviours[GVPixmapViewStack::None]=i18n("None");
@@ -98,14 +98,15 @@ mGVMainWindow(mainWindow)
 	mShiftPlusWheel->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[ShiftButton]));
 	mAltPlusWheel->setCurrentItem(int(pixmapViewStack->wheelBehaviours()[AltButton]));
 
-// Slide show tab
+	// Slide show tab
 	mLoopInSlideShow->setChecked(slideShow->loop());
 	mDelayInSlideShow->setValue(slideShow->delay());
 	
-// Misc tab
+	// Misc tab
 	mExternalEditor->setText(FileOperation::editor());
 	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	mShowDirs->setChecked(fileViewStack->showDirs());
+	mShowAddressBar->setChecked(mainWindow->showAddressBar());
 	mShownColor->setColor(fileViewStack->shownColor());
 }
 
@@ -117,41 +118,42 @@ void ConfigDialog::slotOk() {
 
 
 void ConfigDialog::slotApply() {
-	GVFileViewStack* fileViewStack=mGVMainWindow->fileViewStack();
-	GVPixmapViewStack* pixmapViewStack=mGVMainWindow->pixmapViewStack();
-	GVSlideShow* slideShow=mGVMainWindow->slideShow();
+	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
+	GVPixmapViewStack* pixmapViewStack=mMainWindow->pixmapViewStack();
+	GVSlideShow* slideShow=mMainWindow->slideShow();
 
-// Thumbnails tab
+	// Thumbnails tab
 	fileViewStack->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
 	fileViewStack->fileThumbnailView()->setWordWrapIconText(mWordWrapFilename->isChecked());
 	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
 
-// File operations tab
+	// File operations tab
 	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
 	FileOperation::setConfirmCopy(mShowCopyDialog->isChecked());
 	FileOperation::setConfirmMove(mShowMoveDialog->isChecked());
 	FileOperation::setDestDir(mDefaultDestDir->url());
 
-// Full screen tab
-	mGVMainWindow->pixmapViewStack()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
-	mGVMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
-	mGVMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
-	mGVMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
+	// Full screen tab
+	mMainWindow->pixmapViewStack()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
+	mMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
+	mMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
+	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
 
-// Mouse wheel behaviour tab		
+	// Mouse wheel behaviour tab		
 	pixmapViewStack->wheelBehaviours()[NoButton]=     GVPixmapViewStack::WheelBehaviour(mWheelOnly->currentItem());
 	pixmapViewStack->wheelBehaviours()[ControlButton]=GVPixmapViewStack::WheelBehaviour(mControlPlusWheel->currentItem());
 	pixmapViewStack->wheelBehaviours()[ShiftButton]=  GVPixmapViewStack::WheelBehaviour(mShiftPlusWheel->currentItem());
 	pixmapViewStack->wheelBehaviours()[AltButton]=    GVPixmapViewStack::WheelBehaviour(mAltPlusWheel->currentItem());
 
-// Slide show tab
+	// Slide show tab
 	slideShow->setDelay(mDelayInSlideShow->value());
 	slideShow->setLoop(mLoopInSlideShow->isChecked());
 
-// Misc tab
+	// Misc tab
 	FileOperation::setEditor(mExternalEditor->text());
 	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(mShowDirs->isChecked());
+	mMainWindow->setShowAddressBar(mShowAddressBar->isChecked());
 	fileViewStack->setShownColor(mShownColor->color());
 }
 

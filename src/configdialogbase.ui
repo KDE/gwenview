@@ -740,6 +740,14 @@
                             <string>Show folders in file view</string>
                         </property>
                     </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mShowAddressBar</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show address bar</string>
+                        </property>
+                    </widget>
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>Layout7</cstring>
@@ -809,7 +817,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>0</width>
-                                <height>80</height>
+                                <height>40</height>
                             </size>
                         </property>
                     </spacer>

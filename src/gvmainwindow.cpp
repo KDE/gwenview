@@ -70,17 +70,18 @@ const char* CONFIG_SLIDESHOW_GROUP="slide show";
 const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
 const char* CONFIG_STATUSBAR_IN_FS="status bar in full screen";
+const char* CONFIG_SHOW_ADDRESSBAR="show address bar";
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mProgress(0L)
+: KDockMainWindow(), mProgress(0L), mAddressToolBar(0L)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
 
-// Backend
+	// Backend
 	mGVPixmap=new GVPixmap(this);
 
-// GUI
+	// GUI
 	createWidgets();
 	createActions();
 	createAccels();
@@ -88,25 +89,25 @@ GVMainWindow::GVMainWindow()
 	createMainToolBar();
 	createAddressToolBar();
 
-// Slide show
+	// Slide show
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
 	mSlideShow->readConfig(KGlobal::config(),CONFIG_SLIDESHOW_GROUP);
 	
-// Dir view connections
+	// Dir view connections
 	connect(mGVDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
-// Pixmap view connections
+	// Pixmap view connections
 	connect(mPixmapViewStack,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );
 	connect(mPixmapViewStack,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
 
-// Scroll pixmap view connections
+	// Scroll pixmap view connections
 	connect(mPixmapViewStack,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateFileStatusBar()) );
 
-// Thumbnail view connections
+	// Thumbnail view connections
 	connect(mFileViewStack,SIGNAL(updateStarted(int)),
 		this,SLOT(thumbnailUpdateStarted(int)) );
 	connect(mFileViewStack,SIGNAL(updateEnded()),
@@ -114,7 +115,7 @@ GVMainWindow::GVMainWindow()
 	connect(mFileViewStack,SIGNAL(updatedOneThumbnail()),
 		this,SLOT(thumbnailUpdateProcessedOne()) );
 
-// File view connections
+	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mGVPixmap,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(completed()),
@@ -122,7 +123,7 @@ GVMainWindow::GVMainWindow()
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusBar()) );
 		
-// GVPixmap connections
+	// GVPixmap connections
 	connect(mGVPixmap,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
@@ -132,15 +133,15 @@ GVMainWindow::GVMainWindow()
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 
-// Slide show
+	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),
 		mToggleSlideShow,SLOT(activate()) );
 	
-// Address bar
+	// Address bar
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
 
-// Command line
+	// Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
 	KURL url;
@@ -150,16 +151,16 @@ GVMainWindow::GVMainWindow()
 		url=args->url(0);
 	}
 
-// Check if we should start in fullscreen mode
+	// Check if we should start in fullscreen mode
 	if (args->isSet("f")) {
 		mFileViewStack->noThumbnails()->activate(); // No thumbnails needed
 		mToggleFullScreen->activate();
 	}
 
-// Go to requested file
+	// Go to requested file
 	mGVPixmap->setURL(url);
 	
-// Set focus
+	// Set focus
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
 	} else if (mPixmapViewStack->isVisible()) {
@@ -180,7 +181,11 @@ GVMainWindow::~GVMainWindow() {
 }
 
 
-//-Public slots----------------------------------------------------------
+//-----------------------------------------------------------------------
+//
+// Public slots
+//
+//-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url,const QString&) {
 	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
 
@@ -449,13 +454,13 @@ void GVMainWindow::updateFileStatusBar() {
 void GVMainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
-// Status bar
+	// Status bar
 	statusBar()->insertItem("",SB_FOLDER);
 	statusBar()->setItemAlignment(SB_FOLDER, AlignLeft|AlignVCenter);
 	statusBar()->insertItem("",SB_FILE,1);
 	statusBar()->setItemAlignment(SB_FILE, AlignLeft|AlignVCenter);
 
-// Pixmap widgets
+	// Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
 	mPixmapViewStack=new GVPixmapViewStack(mPixmapDock,mGVPixmap,actionCollection());
@@ -463,22 +468,22 @@ void GVMainWindow::createWidgets() {
 	setView(mPixmapDock);
 	setMainDockWidget(mPixmapDock);
 
-// Folder widget
+	// Folder widget
 	mFolderDock = createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
 	mGVDirView=new GVDirView(mFolderDock);
 	mFolderDock->setWidget(mGVDirView);
 
-// File widget
+	// File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	mFileViewStack=new GVFileViewStack(this,actionCollection());
 	mFileDock->setWidget(mFileViewStack);
 
-// Default dock config
+	// Default dock config
 	setGeometry(20,20,600,400);
 	mFolderDock->manualDock( mPixmapDock,KDockWidget::DockLeft,30);
 	mFileDock->manualDock( mPixmapDock,KDockWidget::DockTop,30);
 
-// Load config
+	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapViewStack->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
@@ -516,7 +521,7 @@ void GVMainWindow::createActions() {
 
 
 void GVMainWindow::createAccels() {
-// Associate actions with accelerator
+	// Associate actions with accelerator
 	mAccel=new KAccel(this);
 	int count=actionCollection()->count();
 
@@ -529,7 +534,7 @@ void GVMainWindow::createAccels() {
 	mFileViewStack->plugActionsToAccel(mAccel);
 	mPixmapViewStack->plugActionsToAccel(mAccel);
 
-// Read user accelerator
+	// Read user accelerator
 	mAccel->readSettings();
 
 	QAccel* accel=new QAccel(this);
@@ -596,42 +601,43 @@ void GVMainWindow::createMenu() {
 
 
 void GVMainWindow::createMainToolBar() {
-	KToolBar* mainBar=new KToolBar(this,topDock(),true);
-	mainBar->setLabel(i18n("Main tool bar"));
-	mOpenParentDir->plug(toolBar());
-	mFileViewStack->selectFirst()->plug(toolBar());
-	mFileViewStack->selectPrevious()->plug(toolBar());
-	mFileViewStack->selectNext()->plug(toolBar());
-	mFileViewStack->selectLast()->plug(toolBar());
+	mMainToolBar=new KToolBar(this,topDock(),true);
+	mMainToolBar->setLabel(i18n("Main tool bar"));
+	mOpenParentDir->plug(mMainToolBar);
+	mFileViewStack->selectFirst()->plug(mMainToolBar);
+	mFileViewStack->selectPrevious()->plug(mMainToolBar);
+	mFileViewStack->selectNext()->plug(mMainToolBar);
+	mFileViewStack->selectLast()->plug(mMainToolBar);
 
-	toolBar()->insertLineSeparator();
-	mStop->plug(toolBar());
+	mMainToolBar->insertLineSeparator();
+	mStop->plug(mMainToolBar);
 
-	toolBar()->insertLineSeparator();
-	mFileViewStack->noThumbnails()->plug(toolBar());
-	mFileViewStack->smallThumbnails()->plug(toolBar());
-	mFileViewStack->medThumbnails()->plug(toolBar());
-	mFileViewStack->largeThumbnails()->plug(toolBar());
+	mMainToolBar->insertLineSeparator();
+	mFileViewStack->noThumbnails()->plug(mMainToolBar);
+	mFileViewStack->smallThumbnails()->plug(mMainToolBar);
+	mFileViewStack->medThumbnails()->plug(mMainToolBar);
+	mFileViewStack->largeThumbnails()->plug(mMainToolBar);
 
-	toolBar()->insertLineSeparator();
-	mToggleFullScreen->plug(toolBar());
-	mToggleSlideShow->plug(toolBar());
+	mMainToolBar->insertLineSeparator();
+	mToggleFullScreen->plug(mMainToolBar);
+	mToggleSlideShow->plug(mMainToolBar);
 	
-	toolBar()->insertLineSeparator();
-	mPixmapViewStack->autoZoom()->plug(toolBar());
-	mPixmapViewStack->zoomIn()->plug(toolBar());
-	mPixmapViewStack->zoomOut()->plug(toolBar());
-	mPixmapViewStack->resetZoom()->plug(toolBar());
-	mPixmapViewStack->lockZoom()->plug(toolBar());
+	mMainToolBar->insertLineSeparator();
+	mPixmapViewStack->autoZoom()->plug(mMainToolBar);
+	mPixmapViewStack->zoomIn()->plug(mMainToolBar);
+	mPixmapViewStack->zoomOut()->plug(mMainToolBar);
+	mPixmapViewStack->resetZoom()->plug(mMainToolBar);
+	mPixmapViewStack->lockZoom()->plug(mMainToolBar);
 }
 
 
 void GVMainWindow::createAddressToolBar() {
-	KToolBar* addressBar=new KToolBar(this,topDock(),true);
-	addressBar->setLabel(i18n("Address tool bar"));
+	mAddressToolBar=new KToolBar(this,topDock(),true);
+	if (!mShowAddressBar) mAddressToolBar->hide();
+	mAddressToolBar->setLabel(i18n("Address tool bar"));
 
-	QLabel* urlLabel=new QLabel(i18n("&URL:"),addressBar);
-	mURLEdit=new KHistoryCombo(addressBar);
+	QLabel* urlLabel=new QLabel(i18n("&URL:"),mAddressToolBar);
+	mURLEdit=new KHistoryCombo(mAddressToolBar);
 	urlLabel->setBuddy(mURLEdit);
 	
 	mURLEdit->setDuplicatesEnabled(false);
@@ -645,11 +651,15 @@ void GVMainWindow::createAddressToolBar() {
 	mURLEdit->setEditText(QDir::current().absPath());
 	mURLEdit->addToHistory(QDir::current().absPath());
 	mURLEdit->setDuplicatesEnabled(false);
-	addressBar->setStretchableWidget(mURLEdit);
+	mAddressToolBar->setStretchableWidget(mURLEdit);
 }
 
 	
-//-Properties-----------------------------------------------	
+//-----------------------------------------------------------------------
+//
+// Properties
+//
+//-----------------------------------------------------------------------
 void GVMainWindow::setShowMenuBarInFullScreen(bool value) {
 	mShowMenuBarInFullScreen=value;
 	if (!mToggleFullScreen->isChecked()) return;
@@ -680,13 +690,28 @@ void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 	}
 }
 
+void GVMainWindow::setShowAddressBar(bool value) {
+	mShowAddressBar=value;
+	if (!mAddressToolBar) return;
+	if (value) {
+		mAddressToolBar->show();
+	} else {
+		mAddressToolBar->hide();
+	}
+}
 
-//-Configuration--------------------------------------------	
+
+//-----------------------------------------------------------------------
+//
+// Configuration
+//
+//-----------------------------------------------------------------------
 void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS,false);
 	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS,true);
 	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS,false);
+	setShowAddressBar(config->readBoolEntry(CONFIG_SHOW_ADDRESSBAR,true));
 }
 
 
@@ -695,4 +720,5 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_MENUBAR_IN_FS,mShowMenuBarInFullScreen);
 	config->writeEntry(CONFIG_TOOLBAR_IN_FS,mShowToolBarInFullScreen);
 	config->writeEntry(CONFIG_STATUSBAR_IN_FS,mShowStatusBarInFullScreen);
+	config->writeEntry(CONFIG_SHOW_ADDRESSBAR,mShowAddressBar);
 }

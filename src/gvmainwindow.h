@@ -28,13 +28,14 @@ class KAccel;
 class KAction;
 class KHistoryCombo;
 class KToggleAction;
+class KToolBar;
 class KURLCompletion;
 
 class GVDirView;
 class GVFileViewStack;
 class GVPixmap;
-class GVSlideShow;
 class GVPixmapViewStack;
+class GVSlideShow;
 class StatusBarProgress;
 
 
@@ -50,10 +51,12 @@ public:
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
+	bool showAddressBar() const { return mShowAddressBar; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
 	void setShowStatusBarInFullScreen(bool);
+	void setShowAddressBar(bool);
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -63,6 +66,8 @@ private:
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	StatusBarProgress* mProgress;
+	KToolBar* mMainToolBar;
+	KToolBar* mAddressToolBar;
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mGVDirView;
@@ -89,7 +94,11 @@ private:
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
 
-	bool mShowMenuBarInFullScreen,mShowToolBarInFullScreen,mShowStatusBarInFullScreen;
+	bool mShowAddressBar;
+	
+	bool mShowMenuBarInFullScreen;
+	bool mShowToolBarInFullScreen;
+	bool mShowStatusBarInFullScreen;
 	
 	void createWidgets();
 	void createActions();

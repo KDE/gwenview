@@ -36,7 +36,7 @@ public slots:
 	void slotApply();
 
 private:
-	GVMainWindow* mGVMainWindow;
+	GVMainWindow* mMainWindow;
 
 private slots:
 	void calculateCacheSize();
