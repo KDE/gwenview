@@ -49,7 +49,7 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
 FileThumbnailView::FileThumbnailView(QWidget* parent)
-: KIconView(parent), GVFileView(), mThumbnailLoadJob(0L)
+: KIconView(parent), GVFileViewBase(), mThumbnailLoadJob(0L)
 {
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -134,7 +134,7 @@ void FileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 	FileThumbnailViewItem* oldShownItem=viewItem(mShownFileItem);
 	FileThumbnailViewItem* newShownItem=viewItem(fileItem);
 	
-	GVFileView::setShownFileItem(fileItem);
+	GVFileViewBase::setShownFileItem(fileItem);
 	if (oldShownItem) repaintItem(oldShownItem);
 	if (newShownItem) repaintItem(newShownItem);
 }

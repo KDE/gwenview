@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconview.h>
 
 // Our includes
-#include "gvfileview.h"
+#include "gvfileviewbase.h"
 #include "thumbnailsize.h"
 
 class QIconViewItem;
@@ -40,7 +40,7 @@ class FileThumbnailViewItem;
 
 class ThumbnailLoadJob;
 
-class FileThumbnailView : public KIconView, public GVFileView {
+class FileThumbnailView : public KIconView, public GVFileViewBase {
 Q_OBJECT
 	friend class FileThumbnailViewItem;
 	

@@ -313,7 +313,7 @@ void GVFileViewStack::updateThumbnailSize() {
 			KFileItemList items=*mFileThumbnailView->items();
 			KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
 
-			mFileThumbnailView->GVFileView::clear();
+			mFileThumbnailView->GVFileViewBase::clear();
 			mFileThumbnailView->addItemList(items);
 			mFileThumbnailView->setShownFileItem(shownFileItem);
 		}
@@ -470,7 +470,7 @@ QString GVFileViewStack::filename() const {
 }
 
 
-GVFileView* GVFileViewStack::currentFileView() const {
+GVFileViewBase* GVFileViewStack::currentFileView() const {
 	if (mMode==FileList) {
 		return mFileDetailView;
 	} else {
@@ -502,8 +502,8 @@ uint GVFileViewStack::selectionSize() const {
 
 void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	mMode=mode;
-	GVFileView* oldView;
-	GVFileView* newView;
+	GVFileViewBase* oldView;
+	GVFileViewBase* newView;
 
 	if (mMode==FileList) {
 		mFileThumbnailView->stopThumbnailUpdate();
@@ -529,7 +529,7 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	}
 
 // Clear the old view
-	oldView->GVFileView::clear();
+	oldView->GVFileViewBase::clear();
 }
 
 

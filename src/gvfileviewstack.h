@@ -38,7 +38,7 @@ class KConfig;
 class KDirLister;
 class KRadioAction;
 
-class GVFileView;
+class GVFileViewBase;
 class GVFileDetailView;
 class FileThumbnailView;
 
@@ -166,7 +166,7 @@ private:
 	bool mThumbnailsNeedUpdate;
 	QString mFilenameToSelect;
 
-	GVFileView* currentFileView() const;
+	GVFileViewBase* currentFileView() const;
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();

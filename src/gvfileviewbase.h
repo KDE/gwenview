@@ -18,14 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef GVFILEVIEW_H
-#define GVFILEVIEW_H
+#ifndef GVFILEVIEWBASE_H
+#define GVFILEVIEWBASE_H
 
 #include <kfileview.h>
 
-class GVFileView : public KFileView {
+class GVFileViewBase : public KFileView {
 public:
-	GVFileView() : mShownFileItem(0L) {}
+	GVFileViewBase() : mShownFileItem(0L) {}
 	
 	KFileItem* shownFileItem() const { return mShownFileItem; }
 	virtual void setShownFileItem(KFileItem* fileItem) { mShownFileItem=fileItem; }

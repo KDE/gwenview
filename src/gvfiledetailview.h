@@ -32,11 +32,11 @@ class QKeyEvent;
 #include <kmimetyperesolver.h>
 
 // Our includes
-#include "gvfileview.h"
+#include "gvfileviewbase.h"
 
 class GVFileDetailViewItem;
 
-class GVFileDetailView : public KListView, public GVFileView
+class GVFileDetailView : public KListView, public GVFileViewBase
 {
 	Q_OBJECT
 

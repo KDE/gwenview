@@ -44,7 +44,7 @@
 
 
 GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
-	: KListView(parent, name), GVFileView()
+	: KListView(parent, name), GVFileViewBase()
 {
 	mSortingCol = COL_NAME;
 	mBlockSortingSignal = false;
@@ -449,7 +449,7 @@ void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 	GVFileDetailViewItem* oldShownItem=viewItem(mShownFileItem);
 	GVFileDetailViewItem* newShownItem=viewItem(fileItem);
 	
-	GVFileView::setShownFileItem(fileItem);
+	GVFileViewBase::setShownFileItem(fileItem);
 	if (oldShownItem) oldShownItem->repaint();
 	if (newShownItem) newShownItem->repaint();
 }
