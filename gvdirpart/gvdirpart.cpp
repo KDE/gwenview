@@ -77,6 +77,7 @@ K_EXPORT_COMPONENT_FACTORY( libgvdirpart /*library name*/, GVDirFactory )
 GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent, const char* name,
 		     const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
 	setInstance( GVDirFactory::instance() );
+	KGlobal::locale()->insertCatalogue( "gwenview" );
 
 	mBrowserExtension = new GVDirPartBrowserExtension(this);
 	mBrowserExtension->updateActions();

@@ -66,6 +66,7 @@ K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
 GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent,
 			 const char* name, const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
 	setInstance( GVImageFactory::instance() );
+	KGlobal::locale()->insertCatalogue( "gwenview" );
 
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
 
@@ -109,7 +110,7 @@ void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 
 
 KAboutData* GVImagePart::createAboutData() {
-	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
+	KAboutData* aboutData = new KAboutData( "gvimagepart", I18N_NOOP("GVImagePart"),
 						"0.1", I18N_NOOP("Image Viewer"),
 						KAboutData::License_GPL,
 						"(c) 2004, Jonathan Riddell <jr@jriddell.org>");

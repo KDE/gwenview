@@ -36,5 +36,3 @@ else
 rcdir = $(kde_datadir)/gwenview
 endif
 rc_DATA = gwenviewui.rc
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/gwenview.pot
