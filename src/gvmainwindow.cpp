@@ -289,32 +289,13 @@ void GVMainWindow::setURL(const KURL& url) {
 }
 
 
-void GVMainWindow::slotURLChanged(const KURL& url) {
-	LOG(url.prettyURL(0,KURL::StripFileProtocol));
-	KURL dirURL( url );
-	dirURL.setFileName( QString::null );
+void GVMainWindow::slotURLChanged() {
+	LOG(mFileViewStack->dirURL().prettyURL(0,KURL::StripFileProtocol));
 	
-	bool filenameIsValid=!mDocument->isNull();
-
-	mStartSlideShow->setEnabled(filenameIsValid);
-	mRenameFile->setEnabled(filenameIsValid);
-	mCopyFiles->setEnabled(filenameIsValid);
-	mMoveFiles->setEnabled(filenameIsValid);
-	mDeleteFiles->setEnabled(filenameIsValid);
-	mShowFileProperties->setEnabled(filenameIsValid);
-	mRotateLeft->setEnabled(filenameIsValid);
-	mRotateRight->setEnabled(filenameIsValid);
-	mMirror->setEnabled(filenameIsValid);
-	mFlip->setEnabled(filenameIsValid);
-	mSaveFile->setEnabled(filenameIsValid);
-	mSaveFileAs->setEnabled(filenameIsValid);
-	mFilePrint->setEnabled(filenameIsValid);
-	mReload->setEnabled(filenameIsValid);
-
 	QPopupMenu *upPopup = mGoUp->popupMenu();
 	upPopup->clear();
 	int i = 0;
-	KURL urlUp = dirURL.upURL();
+	KURL urlUp = mFileViewStack->dirURL().upURL();
 	while(urlUp.hasPath()) {
 		upPopup->insertItem(urlUp.url()), urlUp.prettyURL(0,KURL::StripFileProtocol);
 		if(urlUp.path() == "/" || ++i > 10)
@@ -322,21 +303,30 @@ void GVMainWindow::slotURLChanged(const KURL& url) {
 		urlUp = urlUp.upURL();
 	}
 
-	mGoUp->setEnabled(dirURL.path() != "/");
+	mGoUp->setEnabled(mFileViewStack->dirURL().path() != "/");
 	updateStatusInfo();
-
-	if( mLoadingCursor )
-		kapp->restoreOverrideCursor();
-	mLoadingCursor = false;
+	updateImageActions();
 	updateLocationURL();
 }
 
 void GVMainWindow::updateLocationURL() {
 	LOG("");
-	// show the picture URL in the location bar only when not browsing
-	KURL locationURL = mToggleBrowse->isChecked() ? mFileViewStack->dirURL() : mDocument->url();
-	mURLEdit->setEditText(locationURL.prettyURL(0,KURL::StripFileProtocol));
-	mURLEdit->addToHistory(locationURL.prettyURL(0,KURL::StripFileProtocol));
+	KURL url = mFileViewStack->dirURL();
+	// Show the picture URL in the location bar only when not browsing.
+	//
+	// We do not use mFileViewStack->url() or mDocument->url() because this is
+	// the "real" url, not the "fake" one the user believes he is navigating
+	// into.
+	// 
+	// For example with digikamtags, "digikamtags:/1/2/myimage.jpg" is the
+	// "fake" url, it's a KFileItem whose "real" url will be
+	// "/path/to/my/photo/library/myimage.jpg"
+	if (!mToggleBrowse->isChecked()) {
+		url.adjustPath(1);
+		url.setFileName(mFileViewStack->fileName());
+	}
+	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
+	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
 }
 
 void GVMainWindow::goUp() {
@@ -484,6 +474,16 @@ void GVMainWindow::slotImageLoading() {
 		}
 		mLoadingCursor = true;
 	}
+}
+
+
+void GVMainWindow::slotImageLoaded() {
+	if( mLoadingCursor )
+		kapp->restoreOverrideCursor();
+	mLoadingCursor = false;
+	updateStatusInfo();
+	updateImageActions();
+	updateLocationURL();
 }
 
 
@@ -756,6 +756,27 @@ void GVMainWindow::updateFileInfo() {
 }
 
 
+void GVMainWindow::updateImageActions() {
+	bool filenameIsValid=!mDocument->isNull();
+
+	mStartSlideShow->setEnabled(filenameIsValid);
+	mRenameFile->setEnabled(filenameIsValid);
+	mCopyFiles->setEnabled(filenameIsValid);
+	mMoveFiles->setEnabled(filenameIsValid);
+	mDeleteFiles->setEnabled(filenameIsValid);
+	mShowFileProperties->setEnabled(filenameIsValid);
+	mRotateLeft->setEnabled(filenameIsValid);
+	mRotateRight->setEnabled(filenameIsValid);
+	mMirror->setEnabled(filenameIsValid);
+	mFlip->setEnabled(filenameIsValid);
+	mSaveFile->setEnabled(filenameIsValid);
+	mSaveFileAs->setEnabled(filenameIsValid);
+	mFilePrint->setEnabled(filenameIsValid);
+	mReload->setEnabled(filenameIsValid);
+
+}
+
+
 void GVMainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
@@ -975,8 +996,8 @@ void GVMainWindow::createConnections() {
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mDocument,SLOT(setURL(const KURL&)) );
-	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
-		this,SLOT(slotURLChanged(const KURL&)) );
+	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+		this,SLOT(slotURLChanged()) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
@@ -999,7 +1020,7 @@ void GVMainWindow::createConnections() {
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(slotImageLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
-		this,SLOT(slotURLChanged(const KURL&)) );
+		this,SLOT(slotImageLoaded()) );
 	// FIXME: Is this still necessary?
 	/*connect(mDocument,SIGNAL(newURLSet(const KURL&)),
 		mFileViewStack,SLOT(setURL(const KURL&)) );*/

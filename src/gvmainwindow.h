@@ -173,9 +173,10 @@ private slots:
 	void showToolBarDialog();
 	void applyMainWindowSettings();
 	void slotImageLoading();
+	void slotImageLoaded();
 	void startSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
-	void slotURLChanged(const KURL&);
+	void slotURLChanged();
 	void modifyImage(GVImageUtils::Orientation);
 	void rotateLeft();
 	void rotateRight();
@@ -188,6 +189,11 @@ private slots:
 	 * Update status bar and caption
 	 */
 	void updateStatusInfo();
+
+	/**
+	 * Enable or disable image actions
+	 */
+	void updateImageActions();
 
 	/**
 	 * Update only caption, allows setting file info
