@@ -234,7 +234,7 @@ void FileOpRenameObject::operator()() {
 
 // Prompt for the new filename
 	QString filename=QStyleSheet::escape(srcURL.filename());
-	mNewFilename=KInputDialog::getText(
+	mNewFilename=KInputDialog::getText(i18n("Renaming a file"),
 		i18n("<p>Rename file <b>%1</b> to:</p>").arg(filename),
 		srcURL.filename(),
 		&ok,mParent);
