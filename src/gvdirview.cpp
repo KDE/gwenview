@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aur�ien G�eau
@@ -278,6 +278,7 @@ void GVDirView::setURLInternal(const KURL& url) {
 		if (viewItem->url().equals(url,true)) {
 			setCurrentItem(viewItem);
 			ensureItemVisible(viewItem);
+			slotSetNextUrlToSelect(KURL());
 		} else {
 			slotSetNextUrlToSelect(url);
 		}
