@@ -953,7 +953,7 @@ void GVMainWindow::loadPlugins() {
 	
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
-	KIPI::PluginLoader* loader = new KIPI::PluginLoader( interface );
+	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
 	loader->loadPlugins();
 
 	// Fill the plugin menu

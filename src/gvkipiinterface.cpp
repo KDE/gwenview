@@ -40,10 +40,13 @@ class GVImageCollection : public KIPI::ImageCollectionShared {
 public:
 	GVImageCollection(const QString& name, const KURL::List& images)
 	: KIPI::ImageCollectionShared(), mName(name), mImages(images) {}
-	
+
 	QString name() { return mName; }
+	
 	KURL::List images() { return mImages; }
+	
 	QString comment() { return QString::null; }
+	void setComment(const QString&) {}
 
 private:
 	QString mName;
@@ -59,13 +62,21 @@ public:
 		return _url.fileName();
 	}
 	
+	void setName(const QString&) {}
+	
 	QString description() {
-		return QString( "description for %1" ).arg( name() );
+		return QString::null;
 	}
+
+	void setDescription(const QString&) {}
 	
 	QMap<QString,QVariant> attributes() {
 		return QMap<QString,QVariant>();
 	}
+
+	void clearAttributes() {}
+
+	void addAttributes(const QMap<QString, QVariant>&) {}
 };
 
 
