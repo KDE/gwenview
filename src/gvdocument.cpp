@@ -383,60 +383,56 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 	}
 
 	// Apply scaling
-	bool scaling = printer->option( "app-gwenview-scale" ) != f;
-	if (scaling) {
-		int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
-			GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
-		float inches = 1;
-		if (unit == GV_MILLIMETERS) {
-			inches = 1/25.5;
-		} else if (unit == GV_CENTIMETERS) {
-			inches = 1/2.54;
+	int scaling = printer->option( "app-gwenview-scale" ).toInt();
+
+	if (scaling==1 /* Fit to page */) {
+		bool enlargeToFit = printer->option( "app-gwenview-enlargeToFit" ) != f;
+		if ((image.width() > pdWidth || image.height() > pdHeight) || enlargeToFit) {
+			image = GVImageUtils::scale( image, pdWidth, pdHeight, GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
 		}
-		float wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
-			1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
-		float hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
-			1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
-		wImg = wImg * printer->resolution();
-		hImg = hImg * printer->resolution();
-
-		image = GVImageUtils::scale( image, int(wImg), int(hImg), GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
-	}
-
-	// Shring image if necessary
-	bool shrinkToFit = printer->option( "app-gwenview-fitToPage" ) != f;
-	bool enlargeToFit = printer->option( "app-gwenview-enlargeToFit" ) != f;
-
-	bool fitImage = false;
-	if ( image.width() > pdWidth || image.height() > pdHeight ) {
-		if (shrinkToFit)
-			fitImage = true;
-		else {
+	} else {
+		QSize size;
+		if (scaling==2 /* Scale To */) {
+			int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
+				GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
+			float inches = 1;
+			if (unit == GV_MILLIMETERS) {
+				inches = 1/25.5;
+			} else if (unit == GV_CENTIMETERS) {
+				inches = 1/2.54;
+			}
+			float wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
+				1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
+			float hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
+				1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
+			size.setWidth( int(wImg * printer->resolution()) );
+			size.setHeight( int(hImg * printer->resolution()) );
+		} else {
+			/* No scaling */
+			size = image.size();
+		}
+			
+		
+		if (size.width() > pdWidth || size.height() > pdHeight) {
 			int resp = KMessageBox::warningYesNoCancel(0, 
-					i18n("The image won't fit into the page, what do you want to do?"),
-					QString::null,KStdGuiItem::cont(), 
-					QString(i18n("Shrink")) );
+				i18n("The image won't fit into the page, what do you want to do?"),
+				QString::null,KStdGuiItem::cont(), 
+				QString(i18n("Shrink")) );
 
-			switch (resp) {
-			case KMessageBox::No: //Shrink
-				fitImage =true;
-				break;
-			case KMessageBox::Cancel:
+			if (resp==KMessageBox::Cancel) {
 				printer->abort();
 				return;
-			case KMessageBox::Yes: //Continue
-			default:
-				break;
+			} else if (resp = KMessageBox::No) { // Shrink 
+				size.scale(pdWidth, pdHeight, QSize::ScaleMin);
 			}
 		}
+		
+		if (size!=image.size()) {
+			image = GVImageUtils::scale( image, size.width(), size.height(),
+				GVImageUtils::SMOOTH_NORMAL, QImage::ScaleFree );
+		}
 	}
-	if (enlargeToFit && shrinkToFit) {
-		fitImage = true;
-	}
-	if (fitImage) {
-		image = GVImageUtils::scale( image, pdWidth, pdHeight, GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
-	}
-
+	
 	// Compute x and y
 	if ( alignment & Qt::AlignHCenter )
 		x = (pdWidth - image.width())/2;
