@@ -506,13 +506,13 @@ void GVMainWindow::createActions() {
 
 	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
 
-	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_ccw",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
+	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
 	
-	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_cw",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
+	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
 	
-	mMirror=new KAction(i18n("&Mirror"),0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
+	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
 	
-	mFlip=new KAction(i18n("&Flip"),0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
+	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
 	actionCollection()->readShortcutSettings();
 }
