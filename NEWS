@@ -1,12 +1,14 @@
 2004.xx.xx - v1.1.1
 - New features:
- - KPart support: src/ contains libgwenview.so, gwenviewapp/ contains the
-   executable, gvimagepart/ and gvdirpart/ contain the read only KParts so you
-   can use Gwenview in Konqueror (By Jonathan Riddell).
+ - Added KPart support, this installs in Konqueror a new file view mode and let
+   you view images in an embedded Gwenview (By Jonathan Riddell).
  - Asynchronous JPEG loading, based on Khtml loader.
  - Mouse wheel will now scroll the image by default. Holding Ctrl will scroll
    horizontally. An option has been added to the setting dialog to toggle
    between scroll and browse (By Jeroen Peters).
+ - When holding shift over the image, right click will zoom out (By Jeroen
+   Peters).
+ - Image painting is now progressive (By Lubos Lunak).
 - Fixes:
  - The rotate and mirror functions can now work on multiple selection.
  - Make it possible to load another image or quit even if you can't save your
