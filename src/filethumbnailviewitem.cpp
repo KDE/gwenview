@@ -177,18 +177,15 @@ void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 
 
 void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
-	QIconView* view = iconView();
-	Q_ASSERT( view );
-	if ( !view ) return;
-
-// Get the rects. We adjust pRect so that we get the outer rect of the pixmap
-	QRect pRect=pixmapRect(false);
-	pRect.moveBy(-1,-1);
-	pRect.setWidth(pRect.width()+2);
-	pRect.setHeight(pRect.height()+2);
-	QRect tRect=textRect(false);
+	QIconView* view=iconView();
+	Q_ASSERT(view);
+	if (!view) return;
 
 	p->save();
+
+// Get the rects
+	QRect pRect=pixmapRect(false);
+	QRect tRect=textRect(false);
 
 // Draw pixmap
 	p->drawPixmap( pRect.x()+1, pRect.y()+1, *pixmap() );
