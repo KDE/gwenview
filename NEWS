@@ -1,6 +1,14 @@
 2002.xx.xx - v0.15.0
 - New option to prevent Gwenview from loading the first image when it enters a
   folder (Thanks to Andreas Pfaller for the patch).
+- Fixed the horizontal one pixel line which appeared in fullscreen mode when
+  the toolbar was hidden.
+
+2002.07.28 - v0.14.4
+- Updated thumbnail generation to store thumbnails in the same folder 
+  Konqueror 3 uses (Thanks to Andreas Pfaller and Renchi Raju for the patches).
+- Fixed a crash on exit under certain circumstances.
+- Should not crash anymore when loading big images.
 
 2002.07.15 - v0.14.3
 - Really fixed the bug which caused Gwenview to not display image file given as

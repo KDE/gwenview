@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // Qt includes
 #include <qcursor.h>
+#include <qdockarea.h>
 
 // KDE includes
 #include <kaccel.h>
@@ -178,7 +179,27 @@ void MainWindow::toggleFullScreen() {
 
 	if (mToggleFullScreen->isChecked()) {
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
-		if (!mShowToolBarInFullScreen) toolBar()->hide();
+
+	/* Hide toolbar
+	 * If the toolbar is docked we hide the DockArea to avoid
+	 * having a one pixel band remaining
+	 * For the same reason, we hide all the empty DockAreas
+	 *
+	 * FIXME : This does not work really well if the toolbar is in
+	 * the left or right dock area.
+	 */
+		if (!mShowToolBarInFullScreen) {
+			if (toolBar()->area()) {
+				toolBar()->area()->hide();
+			} else {
+				toolBar()->hide();
+			}
+		}
+		if (leftDock()->isEmpty())   leftDock()->hide();
+		if (rightDock()->isEmpty())  rightDock()->hide();
+		if (topDock()->isEmpty())    topDock()->hide();
+		if (bottomDock()->isEmpty()) bottomDock()->hide();
+		
 		if (!mShowStatusBarInFullScreen) statusBar()->hide();
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
@@ -189,7 +210,17 @@ void MainWindow::toggleFullScreen() {
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 		statusBar()->show();
-		toolBar()->show();
+		
+		if (toolBar()->area()) {
+			toolBar()->area()->show();
+		} else {
+			toolBar()->show();
+		}
+		leftDock()->show();
+		rightDock()->show();
+		topDock()->show();
+		bottomDock()->show();
+		
 		menuBar()->show();
 		mPixmapView->setFullScreen(false);
 		showNormal();
