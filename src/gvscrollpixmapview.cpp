@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <kicontheme.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
@@ -283,16 +284,17 @@ public:
 };
 
 
-class ActionButton : public KToolBarButton {
+class ActionButton : public QToolButton {
 public:
 	ActionButton(QWidget* parent, KAction* action)
-	: KToolBarButton(
-		action->icon(),
-		0, parent, "action_button", action->plainText()
-		)
+	: QToolButton(parent)
 	{
+		setAutoRaise(true);
+		setIconSet(MainBarIconSet(action->icon()));
+		setTextLabel(action->plainText(), true);
 		setEnabled(action->isEnabled());
-		connect(this, SIGNAL(clicked(int)), action, SLOT(activate()) );
+
+		connect(this, SIGNAL(clicked()), action, SLOT(activate()) );
 		connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)) );
 	}
 };
