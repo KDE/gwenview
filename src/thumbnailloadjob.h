@@ -50,11 +50,10 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath);
-	QImage popThumbnail();
 protected:
 	virtual void run();
 signals:
-	void done();
+	void done( const QImage& );
 private:
 	bool isJPEG(const QString& name);
 	bool loadJPEG(const QString &pixPath, QImage&, int& width, int& height);
@@ -136,7 +135,7 @@ signals:
 private slots:
 	void slotResult( KIO::Job *job );
 	void checkThumbnail();
-	void thumbnailReady();
+	void thumbnailReady( const QImage& im );
 
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_CREATETHUMB, STATE_NEXTTHUMB } mState;

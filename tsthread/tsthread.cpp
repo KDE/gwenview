@@ -27,6 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #include <qapplication.h>
 #include <qmetaobject.h>
 #include <kdebug.h>
+#include <qguardedptr.h>
 
 #include <assert.h>
 
@@ -49,8 +50,19 @@ void TSThread::Helper::run()
 
 
 TSThread::TSThread()
-    : thread( this ), cancelling( false ), cancel_mutex( NULL ), cancel_cond( NULL )
+    : thread( this )
+    , cancelling( false )
+    , emit_pending( false )
+    , cancel_mutex( NULL )
+    , cancel_cond( NULL )
+    , deleted_flag( NULL )
     {
+    }
+
+TSThread::~TSThread()
+    {
+    if( deleted_flag != NULL )
+        *deleted_flag = true;
     }
 
 void TSThread::start()
@@ -116,24 +128,55 @@ void TSThread::executeThread()
 
 void TSThread::postSignal( const char* signal )
     {
-    qApp->postEvent( this, new SignalEvent( signal ));
+    qApp->postEvent( this, new SignalEvent( signal, NULL ));
     }
 
-void TSThread::customEvent( QCustomEvent* e )
+void TSThread::emitSignalInternal( const char* signal, QUObject* o )
     {
-    QCString signal = static_cast< SignalEvent* >( e )->signal;
-    if( signal.isEmpty()) // = terminated()
+    QMutexLocker locker( &signal_mutex );
+    emit_pending = true;
+    qApp->postEvent( this, new SignalEvent( signal, o ));
+    while( emit_pending )
+        signal_cond.wait( &signal_mutex );
+    }
+
+void TSThread::emitCancellableSignalInternal( const char* signal, QUObject* o )
+    {
+    // can't use this->mutex, because its locking will be triggered by TSWaitCondition
+    QMutexLocker locker( &signal_mutex );
+    emit_pending = true;
+    qApp->postEvent( this, new SignalEvent( signal, o ));
+    while( emit_pending && !testCancel())
+        signal_cond.cancellableWait( &signal_mutex );
+    emit_pending = false; // in case of cancel
+    }
+
+void TSThread::customEvent( QCustomEvent* ev )
+    {
+    SignalEvent* e = static_cast< SignalEvent* >( ev );
+    if( e->signal.isEmpty()) // = terminated()
         { // threadExecute() finishes before the actual thread terminates
         if( !finished())
             wait();
         emit terminated();
         return;
         }
-    int signal_id = metaObject()->findSignal( normalizeSignalSlot( signal ).data() + 1, true );
+    bool deleted = false;
+    deleted_flag = &deleted; // this is like QGuardedPtr for self, but faster
+    int signal_id = metaObject()->findSignal( normalizeSignalSlot( e->signal ).data() + 1, true );
     if( signal_id >= 0 )
-        qt_emit( signal_id, NULL );
+        qt_emit( signal_id, e->args );
     else
-        kdWarning() << "Cannot emit signal \"" << signal << "\"." << endl;
+        kdWarning() << "Cannot emit signal \"" << e->signal << "\"." << endl;
+    if( *deleted_flag ) // some slot deleted 'this'
+        return;
+    deleted_flag = NULL;
+    QMutexLocker locker( &signal_mutex );
+    if( emit_pending )
+        {
+        emit_pending = false;
+        signal_cond.wakeOne();
+        }
     }
 
 #include "tsthread.moc"

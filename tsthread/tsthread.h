@@ -30,12 +30,15 @@ DEALINGS IN THE SOFTWARE.
 #include <qwaitcondition.h>
 #include <qdeepcopy.h>
 #include <qmutex.h>
+#include <private/qucomextra_p.h>
 
 #ifdef TS_QTHREADSTORAGE
 #include <qthreadstorage.h>
 #else
 #include <pthread.h>
 #endif
+
+#include "tswaitcondition.h"
 
 // how difficult ...
 template< typename T >
@@ -58,6 +61,7 @@ class TSThread
     Q_OBJECT
     public:
         TSThread();
+        virtual ~TSThread();
         /**
          * Starts the thread.
          * @see QThread::start()
@@ -104,11 +108,41 @@ class TSThread
          */
         virtual void run() = 0;
         /**
+         * Emits the specified signal in the main thread. This function returns
+         * only after all slots connected to the signal have been executed (i.e.
+         * it works like normal signal). The signal can have one pointer argument,
+         * which can be used for communication in either direction. QObject::sender()
+         * in slots is valid.
+         * Example:
+         * \code
+         *   emitSignal( SIGNAL( result( int* )), &result_data );
+         * \endcode
+         * @see postSignal
+         * @see emitCancellableSignal
+         */
+        void emitSignal( const char* signal );
+        template< typename T1 >
+        void emitSignal( const char* signal, T1 p1 );
+        template< typename T1, typename T2 >
+        void emitSignal( const char* signal, T1 p1, T2 p2 );
+        /**
+         * This function works like emitSignal(), but additionally acts as a cancellation
+         * point, i.e. calling cancel() on the thread causes premature return.
+         * @see emitSignal
+         * @see postSignal
+         */        
+        void emitCancellableSignal( const char* signal );
+        template< typename T1 >
+        void emitCancellableSignal( const char* signal, T1 p1 );
+        template< typename T1, typename T2 >
+        void emitCancellableSignal( const char* signal, T1 p1, T2 p2 );
+        /**
          * Posts (i.e. it is not executed immediatelly like normal signals)
          * a signal to be emitted in the main thread. The signal cannot
          * have any parameters, use your TSThread derived class instance
-         * data members instead. QObject::sender() is valid, unless the thread
-         * instance is destroyed before the signal is processed.
+         * data members instead. QObject::sender() in slots is valid, unless
+         * the thread instance is destroyed before the signal is processed.
+         * @see emitSignal
          */
         void postSignal( const char* signal ); // is emitted _always_ in main thread
     signals:
@@ -126,11 +160,12 @@ class TSThread
             : public QCustomEvent
             {
             public:
-                SignalEvent( const char* sig )
-                    : QCustomEvent( QEvent::User ), signal( sig )
+                SignalEvent( const char* sig, QUObject* o )
+                    : QCustomEvent( QEvent::User ), signal( sig ), args( o )
                     {
                     }
                 const QCString signal;
+                QUObject* args;
             };
         class Helper
             : public QThread
@@ -145,13 +180,23 @@ class TSThread
         void executeThread();
         static void initCurrentThread();
         bool setCancelData( QMutex*m, QWaitCondition* c );
+        void setSignalData( QUObject* o, int i );
+        void setSignalData( QUObject* o, const QImage& i );
+        void setSignalData( QUObject* o, const QString& s );
+        void setSignalData( QUObject* o, bool b );
+        void emitSignalInternal( const char* signal, QUObject* o );
+        void emitCancellableSignalInternal( const char* signal, QUObject* o );
         friend class Helper;
         friend class TSWaitCondition;
         Helper thread;
         bool cancelling;
+        bool emit_pending;
         mutable QMutex mutex;
+        QMutex signal_mutex;
+        TSWaitCondition signal_cond;
         QMutex* cancel_mutex;
         QWaitCondition* cancel_cond;
+        bool* deleted_flag;
 #ifdef TS_QTHREADSTORAGE
         static QThreadStorage< TSThread** >* current_thread;
 #else
@@ -206,6 +251,7 @@ bool TSThread::testCancel() const
     return cancelling;
     }
 
+#include <kdebug.h>
 inline
 bool TSThread::setCancelData( QMutex* m, QWaitCondition* c )
     {
@@ -214,7 +260,7 @@ bool TSThread::setCancelData( QMutex* m, QWaitCondition* c )
         return false;
     cancel_mutex = m;
     cancel_cond = c;
-    return !cancelling;
+    return true;
     }
 
 inline
@@ -228,5 +274,82 @@ TSThread* TSThread::currentThread()
     return current_thread->localData();
 #endif
     }
+
+inline
+void TSThread::setSignalData( QUObject* o, int i )
+    {
+    static_QUType_int.set( o, i );
+    }
+
+inline
+void TSThread::setSignalData( QUObject* o, const QImage& i )
+    {
+    static_QUType_varptr.set( o, &i );
+    }
+
+inline
+void TSThread::setSignalData( QUObject* o, const QString& s )
+    {
+    static_QUType_QString.set( o, s );
+    }
+
+inline
+void TSThread::setSignalData( QUObject* o, bool b )
+    {
+    static_QUType_bool.set( o, b );
+    }
+
+inline
+void TSThread::emitSignal( const char* signal )
+    {
+    QUObject o[ 1 ];
+    emitSignalInternal( signal, o );
+    }
+
+template< typename T1 >
+inline
+void TSThread::emitSignal( const char* signal, T1 p1 )
+    {
+    QUObject o[ 2 ];
+    setSignalData( o + 1, p1 );
+    emitSignalInternal( signal, o );
+    }
+
+template< typename T1, typename T2 >
+inline
+void TSThread::emitSignal( const char* signal, T1 p1, T2 p2 )
+    {
+    QUObject o[ 3 ];
+    setSignalData( o + 1, p1 );
+    setSignalData( o + 2, p2 );
+    emitSignalInternal( signal, o );
+    }
+
+inline
+void TSThread::emitCancellableSignal( const char* signal )
+    {
+    QUObject o[ 1 ];
+    emitCancellableSignalInternal( signal, o );
+    }
+
+template< typename T1 >
+inline
+void TSThread::emitCancellableSignal( const char* signal, T1 p1 )
+    {
+    QUObject o[ 2 ];
+    setSignalData( o + 1, p1 );
+    emitCancellableSignalInternal( signal, o );
+    }
+
+template< typename T1, typename T2 >
+inline
+void TSThread::emitCancellableSignal( const char* signal, T1 p1, T2 p2 )
+    {
+    QUObject o[ 3 ];
+    setSignalData( o + 1, p1 );
+    setSignalData( o + 2, p2 );
+    emitCancellableSignalInternal( signal, o );
+    }
+
 
 #endif

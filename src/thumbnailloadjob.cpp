@@ -121,7 +121,7 @@ void ThumbnailThread::run() {
 		}
 		loadThumbnail();
 		mPixPath = QString(); // done, ready for next
-		postSignal( SIGNAL( done()));
+		emitCancellableSignal( SIGNAL( done( const QImage& )), mImage );
 	}
 }
 
@@ -285,15 +285,6 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 }
 
 
-QImage ThumbnailThread::popThumbnail() {
-	QMutexLocker lock( &mMutex );
-	QImage ret = mImage; // no deep copy
-	mImage = QImage(); // thread no longer accesses the image
-	mPixPath = QString(); // waiting for next job
-	return ret;
-}
-
-
 //------------------------------------------------------------------------
 //
 // ThumbnailLoadJob static methods
@@ -331,7 +322,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 
 	if (mItems.isEmpty()) return;
 
-	connect( &mThumbnailThread, SIGNAL( done()), SLOT( thumbnailReady()));
+	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
 	
 	// Move to the first item
 	mNextItem = mItems.first();
@@ -503,8 +494,8 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 }
 
 
-void ThumbnailLoadJob::thumbnailReady() {
-	QImage img = mThumbnailThread.popThumbnail();
+void ThumbnailLoadJob::thumbnailReady( const QImage& im ) {
+	QImage img = TSDeepCopy( im );
 	if ( !img.isNull()) {
 		emitThumbnailLoaded(img);
 	} else {
