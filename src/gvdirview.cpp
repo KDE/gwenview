@@ -605,6 +605,7 @@ void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
 
 		if (editItem) {
 			if (dialog.icon()!=editItem->icon() || newUrl!=editItem->rootUrl()) {
+				mBranches.remove(editItem);
 				KFileTreeView::removeBranch(editItem);
 				addBranch(dialog.url(), dialog.title(), dialog.icon());
 			} else {
