@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <iostream>
 
 // Qt
+#include <qdir.h>
+#include <qfile.h>
 #include <qimage.h>
 #include <qstring.h>
 
@@ -34,13 +36,46 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 using namespace std;
 
 const char* ORIENT6_FILE="orient6.jpg";
+const char* CUT_FILE="cut.jpg";
 const char* ORIENT6_COMMENT="a comment";
 const char* ORIENT1_FILE="test_orient1.jpg";
 const char* ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
 const char* ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 
+
+class TestEnvironment {
+public:
+	TestEnvironment() {
+		bool result;
+		QFile in(ORIENT6_FILE);
+		result=in.open(IO_ReadOnly);
+		Q_ASSERT(result);
+		
+		QFileInfo info(in);
+		int size=info.size()/2;
+		
+		char* data=new char[size];
+		int readSize=in.readBlock(data, size);
+		Q_ASSERT(size==readSize);
+		
+		QFile out(CUT_FILE);
+		result=out.open(IO_WriteOnly);
+		Q_ASSERT(result);
+		
+		int wroteSize=out.writeBlock(data, size);
+		Q_ASSERT(size==wroteSize);
+		delete []data;
+	}
+
+	~TestEnvironment() {
+		QDir::current().remove(CUT_FILE);
+	}
+};
+
+
 int main() {
+	TestEnvironment testEnv;
 	bool result;
 
 	GVImageUtils::JPEGContent content;
@@ -65,4 +100,11 @@ int main() {
 	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
 	result=content.save(ORIENT1_VFLIP_FILE);
 	Q_ASSERT(result);
+
+	// Test that loading and manipulating a truncated file does not crash
+	result=content.load(CUT_FILE);
+	Q_ASSERT(result);
+	Q_ASSERT(content.orientation() == 6);
+	Q_ASSERT(content.comment() == ORIENT6_COMMENT);
+	content.transform(GVImageUtils::VFLIP);
 }

@@ -61,8 +61,16 @@ void inmem_init_source(j_decompress_ptr cinfo) {
 	src->bytes_in_buffer=src->mInput->size();
 }
 
-int inmem_fill_input_buffer(j_decompress_ptr /*cinfo*/) {
-	return false;
+/**
+ * If this function is called, it means the JPEG file is broken. We feed the
+ * decoder with fake EOI has specified in the libjpeg documentation.
+ */
+int inmem_fill_input_buffer(j_decompress_ptr cinfo) {
+	static JOCTET fakeEOI[2]={ JOCTET(0xFF), JOCTET(JPEG_EOI)};
+	kdWarning() << k_funcinfo << " Image is incomplete" << endl;
+	cinfo->src->next_input_byte=fakeEOI;
+	cinfo->src->bytes_in_buffer=2;
+	return true;
 }
 
 void inmem_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
