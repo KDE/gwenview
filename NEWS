@@ -1,4 +1,4 @@
-2004.xx.xx - v1.1.6
+2004.10.24 - v1.1.6
 - New features:
  - The application now has two modes: browse and view. Browse mode shows all
    views: folder, file and image. View mode only shows the image. Gwenview
@@ -9,7 +9,7 @@
    it separately anymore.
 - Fixes:
  - Update the EXIF thumbnail when rotating a JPEG file.
- - In the dir view, folders now open with a single click (By Daniel Thaler).
+ - In the folder view, folders now open with a single click (By Daniel Thaler).
  - Reworked image->widget coordinate conversions in order to avoid subtle
    paint errors.
  - Remember computed optimal repaint sizes in the config file, so they are
