@@ -80,17 +80,19 @@ mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollectio
 	mGVFitPixmapView->installEventFilter(this);
 
 	// Create actions
-	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),mActionCollection,"autozoom");
+	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"autozoom",0,this,SLOT(slotAutoZoom()),mActionCollection,"autozoom");
 
 	mZoomIn=KStdAction::zoomIn(mGVScrollPixmapView,SLOT(slotZoomIn()),mActionCollection);
+	mZoomIn->setIcon("zoomin");
 	
 	mZoomOut=KStdAction::zoomOut(mGVScrollPixmapView,SLOT(slotZoomOut()),mActionCollection);
+	mZoomOut->setIcon("zoomout");
 	
 	mResetZoom=KStdAction::actualSize(mGVScrollPixmapView,SLOT(slotResetZoom()),mActionCollection);
-    mResetZoom->setIcon("viewmag1");
+    mResetZoom->setIcon("actualsize");
 
-	/* Experimental code to generate the lock zoom icon on the fly
-	 * Unfortunately this does not work when resizing the toolbar buttons
+	/* Experimental code to generate the lock zoom icon on the fly.
+	 * Unfortunately this does not work when resizing the toolbar buttons.
 	QImage icon=MainBarIcon("viewmag").convertToImage();
 	KIconTheme* theme=KGlobal::instance()->iconLoader()->theme();
 	QImage overlay=MainBarIcon(theme->lockOverlay()).convertToImage();
