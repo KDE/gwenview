@@ -71,7 +71,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	// Create the widgets
 	mDocument = new GVDocument(this);
-	connect( mDocument, SIGNAL( loaded(const KURL&)), SIGNAL( completed()));
+	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( loaded(const KURL&)));
 	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	setWidget(mPixmapView);
 
@@ -79,9 +79,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
-
-	connect(mDocument, SIGNAL(loaded(const KURL&)),
-		this, SLOT(setKonquerorWindowCaption(const KURL&)) );
 
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
 }
@@ -121,7 +118,11 @@ bool GVImagePart::openURL(const KURL& url) {
 	}
 	m_url = url;
 	emit started( 0 );
-	mDocument->setURL(url);
+	if( mDocument->url() == url ) { // reload button in Konqy - setURL would return immediately
+		mDocument->reload();
+	} else {
+		mDocument->setURL(url);
+	}
 	emit setWindowCaption(url.prettyURL());
 	return true;
 }
@@ -130,9 +131,11 @@ QString GVImagePart::filePath() {
 	return m_file;
 }
 
-void GVImagePart::setKonquerorWindowCaption(const KURL& url) {
+void GVImagePart::loaded(const KURL& url) {
 	QString caption = QString("%1 - %2x%3").arg(url.filename()).arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
+	emit completed();
+	emit setStatusBarText(i18n("Done."));
 }
 
 void GVImagePart::print() {

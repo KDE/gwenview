@@ -77,10 +77,10 @@ public slots:
 protected slots:
 	virtual bool openFile() { return false; }
 	/**
-	 * Sets Konqueror's caption with setWindowCaption()
-	 * called by loaded() signal in GVDocument
+	 * Sets Konqueror's caption, statusbar and emits completed().
+	 * Called by loaded() signal in GVDocument
 	 */
-	void setKonquerorWindowCaption(const KURL& url);
+	void loaded(const KURL& url);
 
 	/**
 	 * Rotates the current image 90 degrees clockwise
