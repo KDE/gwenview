@@ -69,7 +69,7 @@ private:
 	KToolBar* mAddressToolBar;
 
 	GVFileViewStack* mFileViewStack;
-	GVDirView* mGVDirView;
+	GVDirView* mDirView;
 	GVPixmapViewStack* mPixmapViewStack;
 
 	GVPixmap* mGVPixmap;

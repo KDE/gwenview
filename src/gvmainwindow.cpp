@@ -395,6 +395,10 @@ void GVMainWindow::updateFileStatusBar() {
 void GVMainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
+	manager()->setSplitterHighResolution(true);
+	manager()->setSplitterOpaqueResize(true);
+	manager()->setSplitterKeepSize(true);
+	
 	// Status bar
 	statusBar()->insertItem("",SB_FOLDER);
 	statusBar()->setItemAlignment(SB_FOLDER, AlignLeft|AlignVCenter);
@@ -411,8 +415,8 @@ void GVMainWindow::createWidgets() {
 
 	// Folder widget
 	mFolderDock = createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mGVDirView=new GVDirView(mFolderDock);
-	mFolderDock->setWidget(mGVDirView);
+	mDirView=new GVDirView(mFolderDock);
+	mFolderDock->setWidget(mDirView);
 
 	// File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -469,7 +473,7 @@ void GVMainWindow::createActions() {
 
 void GVMainWindow::createConnections() {
 	// Dir view connections
-	connect(mGVDirView,SIGNAL(dirURLChanged(const KURL&)),
+	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
 	// Pixmap view connections
@@ -504,7 +508,7 @@ void GVMainWindow::createConnections() {
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mGVDirView,SLOT(setURL(const KURL&,const QString&)) );
+		mDirView,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 
