@@ -28,11 +28,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 #include <math.h>
 
-// Qt includes
+// Qt
 #include <qmap.h>
 #include <qscrollview.h>
 #include <qtimer.h>
 
+// KDE
+#include <kactioncollection.h>
+
+// Local
 #include "gvbusylevelmanager.h"
 #include "gvimageutils/gvimageutils.h"
 
@@ -82,7 +86,7 @@ public:
 	double zoom() const; 
 	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const; 
-	void setFullScreenActions(QPtrList<KAction>);
+	void setFullScreenActions(KActionPtrList);
 	void setFullScreen(bool);
 
 	// we use "normal"BackgroundColor because backgroundColor() already exists

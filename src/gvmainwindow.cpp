@@ -504,7 +504,7 @@ void GVMainWindow::toggleFullScreen() {
 			mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
-		QPtrList<KAction> actions;
+		KActionPtrList actions;
 		actions.append(mFileViewStack->selectPrevious());
 		actions.append(mFileViewStack->selectNext());
 		actions.append(mToggleFullScreen);

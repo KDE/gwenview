@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim:set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aur�ien G�eau
@@ -22,33 +22,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <assert.h>
 
 // Qt 
-#include <qbitmap.h>
 #include <qcolor.h>
 #include <qcursor.h>
 #include <qdatetime.h>
 #include <qevent.h>
-#include <qlabel.h>
-#include <qlayout.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qregexp.h>
-#include <qstyle.h>
 #include <qtimer.h>
-#include <qtoolbutton.h>
 
 // KDE 
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <kiconloader.h>
-#include <kicontheme.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
-#include <ktoolbarbutton.h>
 #include <kurldrag.h>
 #include <kapplication.h>
 
@@ -57,6 +49,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltoolcontext.h"
 #include "gvdocument.h"
+#include "gvfullscreenbar.h"
 #include "gvimageutils/gvimageutils.h"
 #include "gvbusylevelmanager.h"
 #include "gvscrollpixmapviewtools.h"
@@ -163,106 +156,6 @@ const double MAX_ZOOM=16.0; // Same value as GIMP
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
-const int FULLSCREEN_LABEL_RADIUS = 6;
-
-
-class FullScreenWidget : public QLabel {
-public:
-	FullScreenWidget(QWidget* parent)
-	: QLabel(parent) {
-		QColor bg=colorGroup().highlight();
-		QColor fg=colorGroup().highlightedText();
-		QPalette pal(palette());
-		pal.setColor(QColorGroup::Background, bg);
-		pal.setColor(QColorGroup::Foreground, fg);
-		pal.setColor(QColorGroup::Button, bg);
-		pal.setColor(QColorGroup::ButtonText, fg);
-		setPalette(pal);
-	}
-
-	void resizeEvent(QResizeEvent* event) {
-		QSize size=event->size();
-		QRect rect=QRect(QPoint(0, 0), size);
-
-		QPainter painter;
-		// Create a mask for the text
-		QBitmap mask(size,true);
-		painter.begin(&mask);
-		painter.setBrush(Qt::white);
-		fillMask(painter, rect);
-		painter.end();
-
-		// Draw the background on a pixmap
-		QPixmap pixmap(size);
-		painter.begin(&pixmap, this);
-		painter.eraseRect(rect);
-		drawBorder(painter, rect);
-		painter.end();
-
-		// Update the label
-		setPixmap(pixmap);
-		setMask(mask);
-	}
-
-	void fillMask(QPainter& painter, const QRect& rect) {
-		painter.fillRect(
-			rect.left(),
-			rect.top(),
-			rect.width() - FULLSCREEN_LABEL_RADIUS,
-			rect.bottom(),
-			painter.brush());
-
-		painter.fillRect(
-			rect.right() - FULLSCREEN_LABEL_RADIUS,
-			rect.top(),
-			FULLSCREEN_LABEL_RADIUS,
-			rect.height() - FULLSCREEN_LABEL_RADIUS,
-			painter.brush());
-
-		painter.drawPie(
-			rect.right() - 2*FULLSCREEN_LABEL_RADIUS,
-			rect.bottom() - 2*FULLSCREEN_LABEL_RADIUS,
-			FULLSCREEN_LABEL_RADIUS*2, FULLSCREEN_LABEL_RADIUS*2,
-			0, -16*90);
-	}
-
-	void drawBorder(QPainter& painter, const QRect& rect) {
-		painter.drawLine(
-			rect.right() - 1,
-			rect.top(),
-			rect.right() - 1,
-			rect.bottom() - FULLSCREEN_LABEL_RADIUS);
-
-		painter.drawLine(
-			rect.right() - FULLSCREEN_LABEL_RADIUS,
-			rect.bottom() - 1,
-			rect.left(),
-			rect.bottom() - 1);
-
-		painter.drawArc(
-			rect.right() - 2*FULLSCREEN_LABEL_RADIUS,
-			rect.bottom() - 2*FULLSCREEN_LABEL_RADIUS,
-			FULLSCREEN_LABEL_RADIUS*2, FULLSCREEN_LABEL_RADIUS*2,
-			0, -16*90);
-	}
-};
-
-
-class ActionButton : public QToolButton {
-public:
-	ActionButton(QWidget* parent, KAction* action)
-	: QToolButton(parent)
-	{
-		setAutoRaise(true);
-		setIconSet(MainBarIconSet(action->icon()));
-		setTextLabel(action->plainText(), true);
-		setEnabled(action->isEnabled());
-
-		connect(this, SIGNAL(clicked()), action, SLOT(activate()) );
-		connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)) );
-	}
-};
-
 
 struct GVScrollPixmapView::Private {
 	GVDocument* mDocument;
@@ -287,7 +180,7 @@ struct GVScrollPixmapView::Private {
 	double mZoom;
 
 	// Gamma, brightness, contrast - multiplied by 100
-        int mGamma, mBrightness, mContrast;
+	int mGamma, mBrightness, mContrast;
 
 	// Our actions
 	KToggleAction* mAutoZoom;
@@ -305,9 +198,8 @@ struct GVScrollPixmapView::Private {
 
 	// Fullscreen stuff
 	bool mFullScreen;
-	QLabel* mFullScreenLabel;
-	FullScreenWidget* mFullScreenWidget;
-	QPtrList<KAction> mFullScreenActions;
+	GVFullScreenBar* mFullScreenBar;
+	KActionPtrList mFullScreenActions;
 	
 	// Object state info
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
@@ -367,32 +259,6 @@ struct GVScrollPixmapView::Private {
 		ret.addCoords( -extra, -extra, extra, extra );
 		return ret;
 	}
-
-	void createFullScreenWidget(QWidget* parent) {
-		Q_ASSERT(!mFullScreenWidget);
-		mFullScreenWidget=new FullScreenWidget(parent);
-		
-		QVBoxLayout* vLayout=new QVBoxLayout(mFullScreenWidget);
-		QHBoxLayout* layout=new QHBoxLayout(vLayout);
-		vLayout->addSpacing(FULLSCREEN_LABEL_RADIUS);
-		vLayout->setResizeMode(QLayout::Fixed);
-	
-		// Buttons
-		QPtrListIterator<KAction> it(mFullScreenActions);
-		for (; it.current(); ++it) {
-			ActionButton* btn=new ActionButton(mFullScreenWidget, it.current());
-			layout->addWidget(btn);
-		}
-
-		// Label
-		mFullScreenLabel=new QLabel(mFullScreenWidget);
-		layout->addWidget(mFullScreenLabel);
-		QFont font=mFullScreenLabel->font();
-		font.setWeight(QFont::Bold);
-		mFullScreenLabel->setFont(font);
-
-		layout->addSpacing(FULLSCREEN_LABEL_RADIUS);
-	}
 };
 
 
@@ -429,8 +295,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mZoom=1;
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
-	d->mFullScreenWidget=0;
-	d->mFullScreenLabel=0;
+	d->mFullScreenBar=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
 	d->mPendingOperations= 0 ;
@@ -744,7 +609,7 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 }
 
 
-void GVScrollPixmapView::setFullScreenActions(QPtrList<KAction> actions) {
+void GVScrollPixmapView::setFullScreenActions(KActionPtrList actions) {
 	d->mFullScreenActions=actions;
 }
 
@@ -757,19 +622,20 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
 		
-		d->createFullScreenWidget(this);
+		Q_ASSERT(!d->mFullScreenBar);
+		d->mFullScreenBar=new GVFullScreenBar(this, d->mFullScreenActions);
 		updateFullScreenLabel();
-		d->mFullScreenWidget->show();
+		d->mFullScreenBar->show();
 		
 	} else {
 		viewport()->setBackgroundColor(d->mBackgroundColor);
 		d->mAutoHideTimer->stop();
 		d->mTools[d->mToolID]->updateCursor();
 		
-		Q_ASSERT(d->mFullScreenWidget);
-		if (d->mFullScreenWidget) {
-			delete d->mFullScreenWidget;
-			d->mFullScreenWidget=0;
+		Q_ASSERT(d->mFullScreenBar);
+		if (d->mFullScreenBar) {
+			delete d->mFullScreenBar;
+			d->mFullScreenBar=0;
 		}
 	}
 }
@@ -1495,9 +1361,9 @@ void GVScrollPixmapView::hideCursor() {
 
 
 void GVScrollPixmapView::updateFullScreenLabel() {
-	Q_ASSERT(d->mFullScreenWidget);
-	if (!d->mFullScreenWidget) {
-		kdWarning() << "mFullScreenWidget does not exist\n";
+	Q_ASSERT(d->mFullScreenBar);
+	if (!d->mFullScreenBar) {
+		kdWarning() << "mFullScreenBar does not exist\n";
 		return;
 	}
 	QString path=d->mDocument->url().path();	
@@ -1547,7 +1413,7 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	case NONE:
 		break;
 	}
-	d->mFullScreenLabel->setText(text);
+	d->mFullScreenBar->setText(text);
 }
 
 
