@@ -234,9 +234,12 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 //
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& url) {
-	LOG(url);
+	LOG(url.prettyURL());
 	KURL dirURL = url;
-	dirURL.setFileName( QString::null );
+	if (!dirURL.fileName(false).isEmpty()) {
+		dirURL.setFileName( QString::null );
+	}
+	
 	LOG(dirURL.path() + " - " + url.filename(false));
 	if ( !mDirURL.equals(dirURL,true) ) {
 		mDirURL=dirURL;
@@ -335,8 +338,8 @@ void GVFileViewStack::slotViewExecuted() {
 
 		if (isArchive) {
 			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
-			tmp.adjustPath(1);
 		}
+		tmp.adjustPath(1);
 
 		emit urlChanged(tmp);
 		emit directoryChanged(tmp);
