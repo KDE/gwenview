@@ -216,18 +216,6 @@ void GVDocument::setDirURL(const KURL& paramURL) {
 }
 
 
-void GVDocument::setFilename(const QString& filename) {
-	if (d->mURL.filename()==filename) return;
-
-	if (!saveBeforeClosing()) {
-		emit loaded(d->mURL);
-		return;
-	}
-	d->mURL.setFileName(filename);
-	load();
-}
-
-
 const QImage& GVDocument::image() const {
 	return d->mImage;
 }

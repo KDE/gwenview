@@ -74,7 +74,6 @@ public:
 public slots:
 	void setURL(const KURL&);
 	void setDirURL(const KURL&);
-	void setFilename(const QString&);
 	void reload();
 
 	/**
