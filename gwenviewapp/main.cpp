@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <src/gvmainwindow.h>
 
+#include "config.h"
+
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
 	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
@@ -35,7 +37,11 @@ static const char* version="1.1.1";
 
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview" ),
+#if GV_HACK_SUFFIX==1
+	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview_hack" ),
+#else
+	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
+#endif			
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
 		"Copyright 2000-2004 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 	aboutData.addCredit("Frank Becker", I18N_NOOP("Fast JPEG thumbnail generation (v0.13.0)"), "ff@telus.net");

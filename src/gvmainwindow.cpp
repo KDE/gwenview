@@ -76,6 +76,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvprintdialog.h"
 #include "statusbarprogress.h"
 
+#include "config.h"
 
 #if KDE_VERSION < 0x30100
 #include "libgvcompat/kwidgetaction.h"
@@ -642,7 +643,11 @@ void GVMainWindow::createWidgets() {
 	statusBar()->addWidget(mSBDetailLabel);
 
 	// Pixmap widget
+#if GV_HACK_SUFFIX==1
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview_hack"),NULL,i18n("Image"));
+#else
+	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
+#endif	
 
 	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
