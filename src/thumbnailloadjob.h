@@ -50,7 +50,8 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath,
-		ThumbnailSize size);
+		ThumbnailSize size,
+		bool storeThumbnail);
 protected:
 	virtual void run();
 signals:
@@ -69,6 +70,7 @@ private:
 	QMutex mMutex;
 	TSWaitCondition mCond;
 	ThumbnailSize mThumbnailSize;
+	bool mStoreThumbnailsInCache;
 };
 
 /**
@@ -127,7 +129,13 @@ public:
 	 * Delete the thumbnail for the @p url
 	 */
 	static void deleteImageThumbnail(const KURL& url);
-	
+
+	static void readConfig(KConfig*,const QString& group);
+	static void writeConfig(KConfig*,const QString& group);
+
+	static bool storeThumbnailsInCache();
+	static void setStoreThumbnailsInCache(bool);
+
 signals:
 	/**
 	 * Emitted when the thumbnail for the @p item has been loaded

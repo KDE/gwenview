@@ -78,6 +78,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d->mContent->mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	d->mContent->mShowDirs->setChecked(fileViewStack->showDirs());
 	d->mContent->mShownColor->setColor(fileViewStack->shownColor());
+	d->mContent->mStoreThumbnailsInCache->setChecked(ThumbnailLoadJob::storeThumbnailsInCache());
 	d->mContent->mAutoDeleteThumbnailCache->setChecked(d->mMainWindow->showAutoDeleteThumbnailCache());
 
 	connect(d->mContent->mCalculateCacheSize,SIGNAL(clicked()),
@@ -150,6 +151,7 @@ void GVConfigDialog::slotApply() {
 	fileViewStack->setAutoLoadImage(d->mContent->mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(d->mContent->mShowDirs->isChecked());
 	fileViewStack->setShownColor(d->mContent->mShownColor->color());
+	ThumbnailLoadJob::setStoreThumbnailsInCache(d->mContent->mStoreThumbnailsInCache->isChecked());
 	d->mMainWindow->setAutoDeleteThumbnailCache(d->mContent->mAutoDeleteThumbnailCache->isChecked());
 	
 	// Image View tab

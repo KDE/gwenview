@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>485</width>
-            <height>364</height>
+            <height>394</height>
         </rect>
     </property>
     <property name="caption">
@@ -33,43 +33,30 @@
                 <attribute name="title">
                     <string>Image List</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget" row="10" column="0">
+                    <widget class="QCheckBox">
                         <property name="name">
-                            <cstring>layout7</cstring>
+                            <cstring>mAutoLoadImage</cstring>
                         </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>mCalculateCacheSize</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Calculate Cache Size</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>mEmptyCache</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Empty Cache</string>
-                                </property>
-                            </widget>
-                        </hbox>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="text">
+                            <string>Automatically load first image in folder</string>
+                        </property>
                     </widget>
-                    <widget class="QLayoutWidget" row="2" column="0">
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mShowDirs</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show folders and archives</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>Layout7</cstring>
                         </property>
@@ -125,24 +112,7 @@
                             </spacer>
                         </hbox>
                     </widget>
-                    <spacer row="7" column="0">
-                        <property name="name">
-                            <cstring>spacer10</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Preferred</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>21</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="3" column="0">
+                    <spacer>
                         <property name="name">
                             <cstring>spacer10_2</cstring>
                         </property>
@@ -159,32 +129,23 @@
                             </size>
                         </property>
                     </spacer>
-                    <spacer row="11" column="0">
+                    <widget class="QLabel">
                         <property name="name">
-                            <cstring>Spacer1</cstring>
+                            <cstring>textLabel1_2_2</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QCheckBox" row="1" column="0">
-                        <property name="name">
-                            <cstring>mShowDirs</cstring>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="text">
-                            <string>Show folders and archives</string>
+                            <string>&lt;b&gt;Thumbnail View&lt;/b&gt;</string>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="5" column="0">
+                    <widget class="QCheckBox">
                         <property name="name">
                             <cstring>mWordWrapFilename</cstring>
                         </property>
@@ -202,31 +163,7 @@
                         <property name="toolTip" stdset="0">
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="9" column="0">
-                        <property name="name">
-                            <cstring>mAutoDeleteThumbnailCache</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Automatically empty thumbnail cache on exit</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="8" column="0">
-                        <property name="name">
-                            <cstring>textLabel1_2</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="text">
-                            <string>&lt;b&gt;Thumbnail Cache&lt;/b&gt;</string>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="6" column="0">
+                    <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>Layout6</cstring>
                         </property>
@@ -303,9 +240,26 @@
                             </spacer>
                         </hbox>
                     </widget>
-                    <widget class="QLabel" row="4" column="0">
+                    <spacer>
                         <property name="name">
-                            <cstring>textLabel1_2_2</cstring>
+                            <cstring>spacer10</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>
@@ -316,21 +270,75 @@
                             </sizepolicy>
                         </property>
                         <property name="text">
-                            <string>&lt;b&gt;Thumbnail View&lt;/b&gt;</string>
+                            <string>&lt;b&gt;Thumbnail Cache&lt;/b&gt;</string>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="0" column="0">
+                    <widget class="QCheckBox">
                         <property name="name">
-                            <cstring>mAutoLoadImage</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
+                            <cstring>mStoreThumbnailsInCache</cstring>
                         </property>
                         <property name="text">
-                            <string>Automatically load first image in folder</string>
+                            <string>Store thumbnails in cache</string>
                         </property>
                     </widget>
-                </grid>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mAutoDeleteThumbnailCache</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Automatically empty thumbnail cache on exit</string>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>mCalculateCacheSize</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Calculate Cache Size</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>mEmptyCache</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Empty Cache</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">

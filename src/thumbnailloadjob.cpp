@@ -68,6 +68,10 @@ extern "C" {
 
 
 
+const char CONFIG_STORE_THUMBNAILS_IN_CACHE[]="path";
+
+static bool sStoreThumbnailsInCache;
+
 QString generateOriginalURI(KURL url) {
 	// Don't include the password if any
 	url.setPass(QString::null);
@@ -97,7 +101,7 @@ void ThumbnailThread::load(
 	const QString& originalURI, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
 	const QString& thumbnailPath,
-	ThumbnailSize size)
+	ThumbnailSize size, bool storeThumbnail)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -109,6 +113,7 @@ void ThumbnailThread::load(
 	mPixPath = TSDeepCopy(pixPath);
 	mThumbnailPath = TSDeepCopy(thumbnailPath);
 	mThumbnailSize = size;
+	mStoreThumbnailsInCache = storeThumbnail;
 	if(!running()) start();
 	mCond.wakeOne();
 }
@@ -170,7 +175,7 @@ void ThumbnailThread::loadThumbnail() {
 
 	if( testCancel()) return;
 
-	if( loaded && width != -1 ) {
+	if( mStoreThumbnailsInCache && loaded && width != -1 ) {
 		mImage.setText("Thumb::URI", 0, mOriginalURI);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
@@ -570,7 +575,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
 	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
-		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize);
+		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
+		sStoreThumbnailsInCache);
 	mState = STATE_CREATETHUMB;
 }
 
@@ -605,4 +611,29 @@ void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 }
 
 
+//---------------------------------------------------------------------------
+//
+// Config
+//
+//---------------------------------------------------------------------------
+void ThumbnailLoadJob::readConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	sStoreThumbnailsInCache=config->readBoolEntry(CONFIG_STORE_THUMBNAILS_IN_CACHE,true);
+}
+
+
+void ThumbnailLoadJob::writeConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	config->writeEntry(CONFIG_STORE_THUMBNAILS_IN_CACHE,sStoreThumbnailsInCache);
+}
+
+
+void ThumbnailLoadJob::setStoreThumbnailsInCache(bool store) {
+	sStoreThumbnailsInCache=store;
+}
+
+
+bool ThumbnailLoadJob::storeThumbnailsInCache() {
+	return sStoreThumbnailsInCache;
+}
 
