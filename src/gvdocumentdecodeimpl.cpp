@@ -47,6 +47,64 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 
 //---------------------------------------------------------------------
 //
+// GVCancellableBuffer
+// This class acts like QBuffer, but will simulates a truncated file if the
+// TSThread which was passed to its constructor has been asked for cancellation
+//
+//---------------------------------------------------------------------
+class GVCancellableBuffer : public QBuffer {
+public:
+	GVCancellableBuffer(QByteArray buffer, TSThread* thread)
+	: QBuffer(buffer), mThread(thread) {}
+
+	bool atEnd() const {
+		if (mThread->testCancel()) {
+			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			return true;
+		}
+		return QBuffer::atEnd();
+	}
+	
+	Q_LONG readBlock(char * data, Q_ULONG maxlen) {
+		if (mThread->testCancel()) {
+			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			return 0;
+		}
+		return QBuffer::readBlock(data, maxlen);
+	}
+
+	Q_LONG readLine(char * data, Q_ULONG maxlen) {
+		if (mThread->testCancel()) {
+			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			return 0;
+		}
+		return QBuffer::readLine(data, maxlen);
+	}
+
+	QByteArray readAll() {
+		if (mThread->testCancel()) {
+			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			return QByteArray();
+		}
+		return QBuffer::readAll();
+	}
+
+	int getch() {
+		if (mThread->testCancel()) {
+			kdDebug() << k_funcinfo << "cancel detected" << endl;
+			setStatus(IO_ReadError);
+			return -1;
+		}
+		return QBuffer::getch();
+	}
+
+private:
+	TSThread* mThread;
+};
+
+
+//---------------------------------------------------------------------
+//
 // GVDecoderThread
 //
 //---------------------------------------------------------------------
@@ -59,10 +117,14 @@ void GVDecoderThread::run() {
 	{
 		QImageIO imageIO;
 		
-		QBuffer buffer(mRawData);
+		GVCancellableBuffer buffer(mRawData, this);
 		buffer.open(IO_ReadOnly);
 		imageIO.setIODevice(&buffer);
 		bool ok=imageIO.read();
+		if (testCancel()) {
+			kdDebug() << k_funcinfo << "cancelled" << endl;
+			return;
+		}
 			
 		if (!ok) {
 			kdDebug() << k_funcinfo << " failed" << endl;
@@ -143,6 +205,7 @@ GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document)
 
 GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 	if (d->mDecoderThread.running()) {
+		d->mDecoderThread.cancel();
 		d->mDecoderThread.wait();
 	}
 	delete d;
@@ -218,7 +281,7 @@ void GVDocumentDecodeImpl::slotResult(KIO::Job* job) {
 
 
 void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
-	kdDebug() << k_funcinfo << " size:" << chunk.size() << endl;
+	//kdDebug() << k_funcinfo << " size:" << chunk.size() << endl;
 	if (chunk.size()<=0) return;
 
 	int oldSize=d->mRawData.size();
