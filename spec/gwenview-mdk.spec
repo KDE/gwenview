@@ -1,6 +1,6 @@
 %define name gwenview
 %define version 1.0.0
-%define release 0.pre4.1mdk
+%define release 0.1mdk
 
 Summary: Simple image viewer for KDE.
 Name: %name
@@ -8,7 +8,7 @@ Version: %version
 Release: %release
 License: GPL
 Group: Graphics
-Source0: %{name}-%{version}pre4.tar.bz2
+Source0: %{name}-%{version}.tar.bz2
 URL: http://gwenview.sourceforge.net 
 BuildRoot: %_tmppath/%{name}-%{version}
 BuildRequires: kdelibs-devel
@@ -21,7 +21,7 @@ navigation in your file hierarchy.  Image loading is done by the Qt library,
 so it supports all image formats your Qt installation supports. 
 
 %prep
-%setup -q -n %{name}-%{version}pre4
+%setup -q -n %{name}-%{version}
 
 %build
 ./configure --disable-rpath \
@@ -50,7 +50,7 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 
 %files -f %name.lang
 %defattr(-,root,root,0755)
-%doc NEWS README TODO ChangeLog COPYING CREDITS
+%doc NEWS AUTHORS README TODO ChangeLog COPYING CREDITS INSTALL
 %_bindir/%{name}
 %_menudir/*
 %_datadir/apps/konqueror/servicemenus/*
@@ -59,8 +59,10 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 %_datadir/icons/locolor/16x16/apps/*
 %_datadir/icons/locolor/32x32/apps/*
 %_datadir/icons/hicolor/16x16/apps/*
+%_datadir/icons/hicolor/22x22/apps/*
 %_datadir/icons/hicolor/32x32/apps/*
 %_datadir/icons/hicolor/48x48/apps/*
+%_datadir/icons/hicolor/64x64/apps/*
 %_datadir/applications/kde/%{name}.desktop
 %_mandir/man1/gwenview.1.bz2
 
@@ -68,6 +70,22 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Mon Dec 08 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.1mdk
+- built mdk version of Gwenview 1.0.0 release
+    from Aurélien Gâteau:
+    - New features:
+          - Show a wait icon for not-generated-yet thumbnails (inspired from Nautilus 
+            thumbnail view).
+          - Show a broken icon for broken images.
+    - Fixes:
+          - If auto-zoom is on, make sure the zoom is updated after rotating an image.
+          - Fixed crash when loading XCF images if Gwenview was compiled with gcc 3.3.1.
+          - Before running an external tool, change working directory to current folder.
+          - When switching images in fullscreen, don't show the cursor.
+          - Use standard KDE icons for zoom actions.
+          - New icons for slideshow and image operations.
+          - New magnifier cursor.
+
 * Sun Nov 16 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre4.1mdk
 - built mdk version
     from Aurélien Gâteau:
