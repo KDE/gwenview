@@ -237,15 +237,17 @@ void GVDocument::setImage(QImage img) {
 }
 
 KURL GVDocument::dirURL() const {
-	return d->mURL.upURL();
+	if (filename().isEmpty()) {
+		return d->mURL;
+	} else {
+		KURL url=d->mURL.upURL();
+		url.adjustPath(1);
+		return url;
+	}
 }
 
 QString GVDocument::filename() const {
-	if (d->mURL.path().endsWith("/")) {
-		return QString::null;
-	} else {
-		return d->mURL.filename();
-	}
+	return d->mURL.filename(false);
 }
 
 const QCString& GVDocument::imageFormat() const {

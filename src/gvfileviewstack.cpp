@@ -234,17 +234,18 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 //
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& url) {
+	LOG(url);
 	KURL dirURL = url;
 	dirURL.setFileName( QString::null );
-	LOG(dirURL.path() + " - " + url.filename());
+	LOG(dirURL.path() + " - " + url.filename(false));
 	if ( !mDirURL.equals(dirURL,true) ) {
 		mDirURL=dirURL;
 		currentFileView()->setShownFileItem(0L);
-		mFileNameToSelect=url.filename();
+		mFileNameToSelect=url.filename(false);
 		mDirLister->openURL(mDirURL);
 		updateActions();
 	} else {
-		browseTo(findItemByFileName(url.filename()));
+		browseTo(findItemByFileName(url.filename(false)));
 	}
 }
 
