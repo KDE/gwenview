@@ -21,13 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <kimageio.h>
 #include <klocale.h>
 
-#include <src/gvjpegformattype.h>
-#include <src/gvpngformattype.h>
 #include <src/gvmainwindow.h>
-#include <src/qxcfi.h>
 
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
@@ -62,11 +58,6 @@ int main (int argc, char *argv[]) {
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	KApplication kapplication;
-
-	KImageIO::registerFormats();
-	XCFImageFormat::registerFormat();
-	GVJPEGFormatType jpegFormatType;
-	GVPNGFormatType pngFormatType;
 
 	if (kapplication.isRestored()) {
 		RESTORE(GVMainWindow)

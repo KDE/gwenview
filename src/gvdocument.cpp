@@ -39,11 +39,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local 
 #include "gvarchive.h"
-#include "gvdocumentimpl.h"
 #include "gvdocumentdecodeimpl.h"
+#include "gvdocumentimpl.h"
 #include "gvimagesavedialog.h"
+#include "gvjpegformattype.h"
 #include "gvjpegtran.h"
+#include "gvpngformattype.h"
 #include "gvprintdialog.h"
+#include "qxcfi.h"
 
 #include "gvdocument.moc"
 
@@ -52,7 +55,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
 const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 
-
+// These static format type vars are here to make sure the async loaders are
+// always enabled (in viewer and in parts)
+static GVJPEGFormatType sJPEGFormatType;
+static GVPNGFormatType sPNGFormatType;
 
 //-------------------------------------------------------------------
 //
@@ -80,6 +86,10 @@ GVDocument::GVDocument(QObject* parent)
 	d=new GVDocumentPrivate;
 	d->mModified=false;
 	d->mImpl=new GVDocumentEmptyImpl(this);
+	
+	// Register formats here to make sure they are always enabled
+	KImageIO::registerFormats();
+	XCFImageFormat::registerFormat();
 }
 
 
