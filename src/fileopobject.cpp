@@ -97,11 +97,15 @@ void FileOpCopyToObject::operator()() {
 	KURL destURL;
 
 	if (FileOperation::confirmCopy()) {
+		QString destDir = FileOperation::destDir();
+		if( !destDir.isEmpty()) {
+			destDir += "/";
+        }
 		if (mURLList.size()==1) {
-			destURL=KFileDialog::getSaveURL(FileOperation::destDir() + "/" + mURLList.first().fileName(),
+			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Copy file"));
 		} else {
-			GVDirSelectDialog dialog(FileOperation::destDir(), mParent);
+			GVDirSelectDialog dialog(destDir, mParent);
 			dialog.setCaption(i18n("Select the folder where the files will be copied"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
@@ -124,11 +128,15 @@ void FileOpMoveToObject::operator()() {
 	KURL destURL;
 
 	if (FileOperation::confirmMove()) {
+		QString destDir = FileOperation::destDir();
+		if( !destDir.isEmpty()) {
+			destDir += "/";
+        }
 		if (mURLList.size()==1) {
-			destURL=KFileDialog::getSaveURL(FileOperation::destDir() + "/" + mURLList.first().fileName(),
+			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Move file"));
 		} else {
-			GVDirSelectDialog dialog(FileOperation::destDir(), mParent);
+			GVDirSelectDialog dialog(destDir, mParent);
 			dialog.setCaption(i18n("Select the folder where the files will be moved"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
