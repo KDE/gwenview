@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kurlrequester.h>
 
 // Local
@@ -121,14 +122,30 @@ struct GVExternalToolDialogPrivate {
 	}
 	
 
-	void saveChanges() {
-		if (!mSelectedItem) return;
+	bool saveChanges() {
+		if (!mSelectedItem) return true;
 
+		// Check name
+		QString name=mContent->mName->text().stripWhiteSpace();
+		if (name.isEmpty()) {
+			KMessageBox::sorry(mContent, i18n("The tool name can't be empty"));
+			return false;
+		}
+
+		QListViewItem* item=mContent->mToolListView->firstChild();
+		for (; item; item=item->nextSibling()) {
+			if (item==mSelectedItem) continue;
+			if (name==item->text(0)) {
+				KMessageBox::sorry(mContent, i18n("There is already a tool named \"%1\"").arg(name));
+				return false;
+			}
+		}
+		
+		// Save data
 		KDesktopFile* desktopFile=mSelectedItem->desktopFile();
-		QString name=mContent->mName->text();
 		if (desktopFile) {
 			if (desktopFile->isReadOnly()) {
-				desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(desktopFile);
+				desktopFile=GVExternalToolManager::instance()->editSystemDesktopFile(desktopFile);
 				mSelectedItem->setDesktopFile(desktopFile);
 			}
 		} else {		
@@ -142,6 +159,8 @@ struct GVExternalToolDialogPrivate {
 
 		mSelectedItem->setPixmap(0, SmallIcon(mContent->mIconButton->icon()) );
 		mSelectedItem->setText(0, name);
+
+		return true;
 	}
 
 
@@ -195,6 +214,33 @@ struct GVExternalToolDialogPrivate {
 		mContent->mIconButton->setIcon(QString::null);
 		mContent->mFileAssociationGroup->setButton(ID_ALL_IMAGES);
 	}
+	
+	bool apply() {
+		if (!saveChanges()) return false;
+		QPtrListIterator<KDesktopFile> it(mDeletedTools);
+		for(; it.current(); ++it) {
+			GVExternalToolManager::instance()->hideDesktopFile(it.current());
+		}
+		GVExternalToolManager::instance()->updateServices();
+		return true;
+	}
+};
+
+
+/**
+ * This event filter object is here to prevent the user from selecting a
+ * different tool in the tool list view if the current tool could not be saved.
+ */
+class ToolListViewFilterObject : public QObject {
+	GVExternalToolDialogPrivate* d;
+public:
+	ToolListViewFilterObject(QObject* parent, GVExternalToolDialogPrivate* _d)
+	: QObject(parent), d(_d) {}
+
+	bool eventFilter(QObject*, QEvent* event) {
+		if (event->type()!=QEvent::MouseButtonPress) return false;
+		return !d->saveChanges();
+	}
 };
 
 
@@ -215,6 +261,8 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 
 	d->fillMimeTypeListView();
 	d->fillToolListView();
+	d->mContent->mToolListView->viewport()->installEventFilter(
+		new ToolListViewFilterObject(this, d));
 
 	connect( d->mContent->mToolListView, SIGNAL(selectionChanged(QListViewItem*)),
 		this, SLOT(slotSelectionChanged(QListViewItem*)) );
@@ -235,18 +283,13 @@ GVExternalToolDialog::~GVExternalToolDialog() {
 
 
 void GVExternalToolDialog::slotOk() {
-	slotApply();
+	if (!d->apply()) return;
 	accept();
 }
 
 
 void GVExternalToolDialog::slotApply() {
-	QPtrListIterator<KDesktopFile> it(d->mDeletedTools);
-	for(; it.current(); ++it) {
-		GVExternalToolManager::instance()->hideDesktopFile(it.current());
-	}
-	d->saveChanges();
-	GVExternalToolManager::instance()->updateServices();
+	d->apply();
 }
 
 
@@ -256,7 +299,6 @@ void GVExternalToolDialog::slotCancel() {
 
 
 void GVExternalToolDialog::slotSelectionChanged(QListViewItem* item) {
-	d->saveChanges();
 	d->mSelectedItem=static_cast<ToolListViewItem*>(item);
 	d->updateDetails();
 }
@@ -267,7 +309,6 @@ void GVExternalToolDialog::addTool() {
 	QString name=i18n("<Unnamed tool>");
 	ToolListViewItem* item=new ToolListViewItem(view, name);
 	view->setSelected(item, true);
-	d->mContent->mName->setText(name);
 }
 
 

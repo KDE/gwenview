@@ -6,6 +6,8 @@
  - Cursor over image view changes to reflect the current behavior.
  - When toggling autozoom off, restore the previous zoom and position (Based
    on a patch by Jos van den Oever).
+ - It's now possible to define external tools associated with images or
+   directories.
 - Fixes:
  - Exiting with Ctrl+Q from the fullscreen won't close the file view for
    the next startup.

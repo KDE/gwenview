@@ -49,7 +49,7 @@ public:
 	KDesktopFile* createUserDesktopFile(const QString& name);
 
 	// Create a desktop file based on a existing (system) desktop file
-	KDesktopFile* createUserDesktopFile(const KDesktopFile* desktopFile);
+	KDesktopFile* editSystemDesktopFile(const KDesktopFile* desktopFile);
 	void updateServices();
 
 private:

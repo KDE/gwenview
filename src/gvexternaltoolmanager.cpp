@@ -199,7 +199,7 @@ void GVExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
 }
 
 
-KDesktopFile* GVExternalToolManager::createUserDesktopFile(const KDesktopFile* desktopFile) {
+KDesktopFile* GVExternalToolManager::editSystemDesktopFile(const KDesktopFile* desktopFile) {
 	Q_ASSERT(desktopFile);
 	QFileInfo fi(desktopFile->fileName());
 
