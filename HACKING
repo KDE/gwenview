@@ -1,0 +1,85 @@
+This file describes the coding conventions used in Gwenview.
+
+
+Naming
+------
+
+Classes should be named like this: GVMyClass (Some classes actually are not yet
+prefixed by GV, this should be changed). The class GVMyClass should be defined
+in the gvmyclass.h file and implemented in gvmyclass.cpp.
+
+Variables and functions should be named like this: myVariable. Static and
+member variables are identified by a prefix (s or m), without underscore.
+
+int sStaticVariable.
+
+class GVMyClass {
+	int mMemberVariable;
+
+	void doSomething() {
+		int localVariable;
+	}
+};
+
+
+Enum items and consts are spelled like this:
+
+const int MY_CONST_VALUE=120;
+enum AnEnum { ENUM_ITEM1, ENUM_ITEM2, ENUM_ITEM3 };
+
+
+Code layout
+-----------
+
+Use tabs, not spaces.
+
+The opening brace follows the function/class/for/while. Insert a space after
+commas and after for/while keywords.
+
+void myFunction() {
+	int v1;
+	int v2=12;
+	for (v1=0; v1<10; ++v1) {
+		doSomething(v1, v2);
+	}
+}
+
+class GVMyClass {
+};
+
+
+If the if content is only one line long, you can place it on the same line and
+omit the curly braces, but DO NOT omit them if you place the content after the
+if.
+
+// Ok 
+if (!data) {
+	return;
+}
+
+// Ok too
+if (!data) return;
+
+// Bad
+if (!data)
+	return;
+	
+
+Include files
+-------------
+
+Group include files in the Qt, KDE or local groups and sort them
+alphabetically. When writing the implementation file of a class which is a
+Q_OBJECT, make sure you include the .moc file, not the .h.
+
+// Qt
+#include <qobject.h>
+#include <qwidget.h>
+
+// KDE
+#include <kiconview.h>
+#include <klistview.h>
+
+// Local
+#include "gvaclass.h"
+#include "gvmyclass.moc"
