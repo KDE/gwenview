@@ -288,7 +288,7 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 		}
 	}
 
-	if( urlTimestamp <= d->mTimestamp ) {
+	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
 		d->mRawData = GVCache::instance()->file( mDocument->url() );
