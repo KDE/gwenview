@@ -153,6 +153,8 @@ private:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 	
+	bool urlIsDirectory( const KURL& url );
+
 private slots:
 	void goUp();
 	void goUpTo(int);

@@ -46,6 +46,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kimageio.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
+#include <klargefile.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kpopupmenu.h>
@@ -164,7 +165,9 @@ GVMainWindow::GVMainWindow()
 			if (args->isSet("f")) {
 				mToggleFullScreen->activate();
 			} else {
-				mToggleBrowse->activate();
+				if( !urlIsDirectory( url )) {
+					mToggleBrowse->activate();
+				}
 			}
 		}
 		// Go to requested file
@@ -1066,3 +1069,27 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
 }
 
+
+// This function is used in the ctor to find out whether to start in viewing
+// or browsing mode if URL is passed on the command line.
+bool GVMainWindow::urlIsDirectory( const KURL& url ) {
+	if( url.filename( false ).isEmpty()) return true; // file:/somewhere/<nothing here>
+	// Do direct stat instead of using KIO if the file is local (faster)
+	if( url.isLocalFile()
+		&& !KIO::probably_slow_mounted( url.path())) {
+		KDE_struct_stat buff;
+		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
+			return S_ISDIR( buff.st_mode );
+		}
+	}
+	KIO::UDSEntry entry;
+	if( KIO::NetAccess::stat( url, entry, this )) {
+		KIO::UDSEntry::ConstIterator it;
+		for(it=entry.begin();it!=entry.end();++it) {
+			if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
+				return S_ISDIR( (*it).m_long );
+			}
+		}
+	}
+	return false;
+}
