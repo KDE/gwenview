@@ -107,9 +107,10 @@ signals:
 
 private slots:
 	void slotResult( KIO::Job *job );
+	void checkThumbnail();
 
 private:
-	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_NEXTTHUMB } mState;
+	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_NEXTTHUMB } mState;
 
 	// Our todo list :)
 	KFileItemList mItems;
@@ -122,9 +123,6 @@ private:
 
 	// The modification time of that URL
 	time_t mOriginalTime;
-
-	// The URL where we find (or create) the thumbnail for the current URL
-	KURL mThumbURL;
 
 	// The URL of the temporary file for remote urls
 	KURL mTempURL;
@@ -140,7 +138,6 @@ private:
 	bool mSuspended;
 
 	void determineNextIcon();
-	bool statResultThumbnail( KIO::StatJob * );
 	void createThumbnail(const QString& path);
 	
 	bool isJPEG(const QString& name);

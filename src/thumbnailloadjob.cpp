@@ -23,21 +23,27 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 // Qt
 #include <qdir.h>
 #include <qfile.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qtimer.h>
 
 // KDE 
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
+#include <kio/netaccess.h>
+#include <klargefile.h>
 #include <kmdcodec.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <kio/netaccess.h>
 
 // libjpeg 
 #include <setjmp.h>
@@ -215,11 +221,23 @@ void ThumbnailLoadJob::determineNextIcon() {
 	} else {
 		// First, stat the orig file
 		mState = STATE_STATORIG;
+		mOriginalTime = 0;
 		mCurrentItem = mItems.current();
 		mCurrentURL = mCurrentItem->url();
-		KIO::Job* job = KIO::stat(mCurrentURL,false);
-		LOG( "KIO::stat orig " << mCurrentURL.url() );
-		addSubjob(job);
+		// Do direct stat instead of using KIO if the file is local (faster)
+		if( mCurrentURL.isLocalFile()
+			&& !KIO::probably_slow_mounted( mCurrentURL.path())) {
+			KDE_struct_stat buff;
+			if ( KDE_stat( QFile::encodeName(mCurrentURL.path()), &buff ) == 0 )  {
+				mOriginalTime = buff.st_mtime;
+				QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
+			}
+		}
+		if( mOriginalTime == 0 ) { // KIO must be used
+			KIO::Job* job = KIO::stat(mCurrentURL,false);
+			LOG( "KIO::stat orig " << mCurrentURL.url() );
+			addSubjob(job);
+		}
 		mItems.remove();
 	}
 }
@@ -252,37 +270,9 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 				break;
 			}
 		}
-
-		// Now stat the thumbnail
-		mThumbURL.setPath(mCacheDir + "/" + mCurrentURL.fileName());
-		mState = STATE_STATTHUMB;
-		KIO::Job * job = KIO::stat(mThumbURL, false);
-		LOG("Stat thumb " << mThumbURL.url());
-		addSubjob(job);
-
+		checkThumbnail();
 		return;
 	}
-
-	case STATE_STATTHUMB:
-		// Try to load this thumbnail - takes care of determineNextIcon
-		if (statResultThumbnail(static_cast < KIO::StatJob * >(job)))
-			return;
-
-		// Thumbnail not found or not valid
-		// If the original is a local file, create the thumbnail
-		// and proceed to next icon, otherwise download the original
-		if (mCurrentURL.isLocalFile()) {
-			createThumbnail(mCurrentURL.path());
-			determineNextIcon();
-		} else {
-			mState=STATE_DOWNLOADORIG;
-			KTempFile tmpFile;
-			mTempURL.setPath(tmpFile.name());
-			KIO::Job* job=KIO::file_copy(mCurrentURL,mTempURL,-1,true,false,false);
-			LOG("Download remote file " << mCurrentURL.prettyURL());
-			addSubjob(job);
-		}
-		return;
 
 	case STATE_DOWNLOADORIG: 
 		if (job->error()) {
@@ -303,35 +293,41 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 }
 
 
-bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
-	// Quit if thumbnail not found
-	if (job->error()) return false;
-
-	// Get thumbnail modification time
-	KIO::UDSEntry entry = job->statResult();
-	KIO::UDSEntry::ConstIterator it = entry.begin();
-	time_t thumbnailTime = 0;
-	for (; it != entry.end(); it++) {
-		if ((*it).m_uds == KIO::UDS_MODIFICATION_TIME) {
-			thumbnailTime = (time_t) ((*it).m_long);
-			break;
+void ThumbnailLoadJob::checkThumbnail() {
+	// Now stat the thumbnail, it's a local file, so there's
+	// no need to use KIO (direct stat is faster)
+	QString mThumbFilename = mCacheDir + "/" + mCurrentURL.fileName();
+	LOG("Stat thumb " << mThumbFilename);
+	KDE_struct_stat buff;
+	if ( KDE_stat( QFile::encodeName(mThumbFilename), &buff ) == 0 )  {
+		// Only if thumbnail is older than file
+		if (buff.st_mtime>=mOriginalTime) {
+			LOG("Thumbnail is up to date");
+			// Load thumbnail
+			QImage img;
+			if (img.load(mThumbFilename)) {
+				// All done
+				emitThumbnailLoaded(img);
+				determineNextIcon();
+				return;
+			}
 		}
 	}
-
-	// Quit if thumbnail is older than file
-	if (thumbnailTime<mOriginalTime) return false;
-	LOG("Thumbnail is up to date");
-
-	// Load thumbnail
-	QImage img;
-	if (!img.load(mThumbURL.path())) return false;
-	
-	// All done
-	emitThumbnailLoaded(img);
-	determineNextIcon();
-	return true;
+	// Thumbnail not found or not valid
+	// If the original is a local file, create the thumbnail
+	// and proceed to next icon, otherwise download the original
+	if (mCurrentURL.isLocalFile()) {
+		createThumbnail(mCurrentURL.path());
+		determineNextIcon();
+	} else {
+		mState=STATE_DOWNLOADORIG;
+		KTempFile tmpFile;
+		mTempURL.setPath(tmpFile.name());
+		KIO::Job* job=KIO::file_copy(mCurrentURL,mTempURL,-1,true,false,false);
+		LOG("Download remote file " << mCurrentURL.prettyURL());
+		addSubjob(job);
+	}
 }
-
 
 void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
