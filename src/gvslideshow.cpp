@@ -19,38 +19,37 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt
 #include <qtimer.h>
 
-// KDE includes
-#include <kaction.h>
+// KDE
 #include <kconfig.h>
 #include <kdebug.h>
 
-// Our includes
+// Local
 #include "gvslideshow.moc"
+#include "gvdocument.h"
 
 
 static const char* CONFIG_DELAY="delay";
 static const char* CONFIG_LOOP="loop";
 
 
-GVSlideShow::GVSlideShow(KAction* first,KAction* next)
-: mFirst(first),mNext(next),mDelay(10),mLoop(false)
-{
+GVSlideShow::GVSlideShow(GVDocument* document)
+: mDelay(10), mLoop(false), mDocument(document), mStarted(false) {
 	mTimer=new QTimer(this);
-	connect(mTimer,SIGNAL(timeout()),
-			this,SLOT(slotTimeout()) );
+	connect(mTimer, SIGNAL(timeout()),
+			this, SLOT(slotTimeout()) );
+	connect(mDocument, SIGNAL(loaded(const KURL&)),
+			this, SLOT(slotLoaded()) );
 }
 
 
-void GVSlideShow::setLoop(bool value)
-{
+void GVSlideShow::setLoop(bool value) {
 	mLoop=value;
 }
 
-void GVSlideShow::setDelay(int delay)
-{
+void GVSlideShow::setDelay(int delay) {
 	mDelay=delay;
 	if (mTimer->isActive()) {
 		mTimer->changeInterval(delay*1000);
@@ -58,39 +57,46 @@ void GVSlideShow::setDelay(int delay)
 }
 
 
-void GVSlideShow::start()
-{
-	if (!mFirst->isEnabled()
-		&& !mNext->isEnabled()) {
+void GVSlideShow::start(const KURL::List& urls) {
+	mURLs=urls;
+	mTimer->start(mDelay*1000, true);
+	mStarted=true;
+}
+
+
+void GVSlideShow::stop() {
+	mTimer->stop();
+	mStarted=false;
+}
+
+
+void GVSlideShow::slotTimeout() {
+	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	if (it==mURLs.end()) {
+		stop();
 		emit finished();
 		return;
 	}
-	if (mFirst->isEnabled()) {
-		mFirst->activate();
-	}
-	mTimer->start(mDelay*1000);
-}
 
-
-void GVSlideShow::stop()
-{
-	mTimer->stop();
-}
-
-
-void GVSlideShow::slotTimeout()
-{
-	if (!mNext->isEnabled()) {
+	++it;
+	if (it==mURLs.end()) {
 		if (mLoop) {
-			mFirst->activate();
+			mDocument->setURL(*mURLs.begin());
 			return;
 		}
-		mTimer->stop();
+		stop();
 		emit finished();
 		return;
 	}
 
-	mNext->activate();
+	mDocument->setURL(*it);
+}
+
+
+void GVSlideShow::slotLoaded() {
+	if (mStarted) {
+		mTimer->start(mDelay*1000, true);
+	}
 }
 
 

@@ -71,12 +71,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "fileoperation.h"
+#include "gvarchive.h"
 #include "gvbatchmanipulator.h"
 #include "gvbookmarkowner.h"
 #include "gvconfigdialog.h"
 #include "gvdirview.h"
 #include "gvdocument.h"
 #include "gvexternaltooldialog.h"
+#include "gvfileviewbase.h"
 #include "gvfileviewstack.h"
 #include "gvhistory.h"
 #include "gvscrollpixmapview.h"
@@ -563,13 +565,25 @@ void GVMainWindow::toggleFullScreen() {
 
 
 void GVMainWindow::startSlideShow() {
+	KURL::List list;
+	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
+	for ( ; it.current(); ++it ) {
+		KFileItem* item=it.current();
+		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+			list.append(item->url());
+		}
+	}
+	if (list.count()==0) {
+		return;
+	}
+
 	GVSlideShowDialog dialog(this,mSlideShow);
 	if (!dialog.exec()) return;
 	
 	if (!mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
-	mSlideShow->start();
+	mSlideShow->start(list);
 }
 
 
@@ -776,7 +790,7 @@ void GVMainWindow::createWidgets() {
 	mMetaDock->setWidget(mMetaEdit);
 
 	// Slide show controller (not really a widget)
-	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
+	mSlideShow=new GVSlideShow(mDocument);
 
 	// Default position on desktop
 	setGeometry(20,20,720,520);

@@ -22,18 +22,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVSLIDESHOW_H
 #define GVSLIDESHOW_H
 
+// Qt
 #include <qobject.h>
+
+// KDE
+#include <kurl.h>
 
 class QTimer;
 
-class KAction;
+class GVDocument;
 class KConfig;
 
 class GVSlideShow : public QObject
 {
 Q_OBJECT
 public:
-	GVSlideShow(KAction* first,KAction* next);
+	GVSlideShow(GVDocument* document);
 	
 	void setLoop(bool);
 	bool loop() const { return mLoop; }
@@ -41,7 +45,7 @@ public:
 	void setDelay(int);
 	int delay() const { return mDelay; }
 	
-	void start();
+	void start(const KURL::List& urls);
 	void stop();
 
 	void readConfig(KConfig* config,const QString& group);
@@ -52,13 +56,15 @@ signals:
 
 private slots:
 	void slotTimeout();
+	void slotLoaded();
 
 private:
 	QTimer* mTimer;
-	KAction* mFirst;
-	KAction* mNext;
 	int mDelay;
 	bool mLoop;
+	GVDocument* mDocument;
+	bool mStarted;
+	KURL::List mURLs;
 };
 
 #endif // GVSLIDESHOW_H

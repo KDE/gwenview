@@ -5,6 +5,8 @@
  - Moved all navigation buttons (back, forward, up and home) to the location
    toolbar.
  - Items in the "Windows" menu are now disabled when Gwenview is in View mode.
+ - The slideshow has been reworked: it now starts from the current picture and
+   correctly handles manual image browsing.
 
 2005.01.23 - v1.2.0pre1
 - Fixes:
