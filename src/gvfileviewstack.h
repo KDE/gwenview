@@ -117,12 +117,11 @@ private slots:
 	void openParentDir();
 	void showFileProperties();
 	
-	
 // Used to enter directories
 	void viewExecuted();
 
 // Used to change the current image
-	void viewChanged();
+	void viewClicked();
 
 // Context menu
 	void openContextMenu(const QPoint& pos);

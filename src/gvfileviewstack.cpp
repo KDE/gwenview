@@ -109,10 +109,10 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
 		this,SLOT(viewExecuted()) );
-	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
-		this,SLOT(viewChanged()) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
-		this,SLOT(viewChanged()) );
+		this,SLOT(viewExecuted()) );
+	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
+		this,SLOT(viewClicked()) );
 	connect(mFileDetailView,SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
@@ -122,10 +122,10 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
 		this,SLOT(viewExecuted()) );
-	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
-		this,SLOT(viewChanged()) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
-		this,SLOT(viewChanged()) );
+		this,SLOT(viewExecuted()) );
+	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
+		this,SLOT(viewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
 		this,SLOT(openContextMenu(QIconViewItem*,const QPoint&)) );
 
@@ -270,20 +270,23 @@ void GVFileViewStack::viewExecuted() {
 
 	bool isDir=item->isDir();
 	bool isArchive=GVArchive::fileItemIsArchive(item);
-	if (!isDir && !isArchive) return;
-	KURL tmp=url();
-	
-	if (isArchive) {
-		tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
-		tmp.adjustPath(1);
+	if (isDir || isArchive) {
+		KURL tmp=url();
+		
+		if (isArchive) {
+			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
+			tmp.adjustPath(1);
+		}
+		
+		emit urlChanged(tmp);
+		updateActions();
+	} else {
+		emitURLChanged();
 	}
-	
-	emit urlChanged(tmp);
-	updateActions();
 }
 
 
-void GVFileViewStack::viewChanged() {
+void GVFileViewStack::viewClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
@@ -605,7 +608,7 @@ void GVFileViewStack::dirListerCompleted() {
 			slotSelectFirst();
 		}
 	}
-	
+
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
 	}
