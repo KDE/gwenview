@@ -39,6 +39,7 @@ class KAction;
 class KActionCollection;
 class KConfig;
 class KDirLister;
+class KListView;
 class KRadioAction;
 class KToggleAction;
 

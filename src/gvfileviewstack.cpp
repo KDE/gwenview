@@ -19,10 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt 
+// Qt
 #include <qpopupmenu.h>
 
-// KDE 
+// KDE
 #include <kaction.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -32,8 +32,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kpropertiesdialog.h>
 #include <kstdaction.h>
 #include <kurldrag.h>
+#include <klistview.h>
 
-// Local 
+// Local
 #include "fileoperation.h"
 #include "gvarchive.h"
 #include "gvexternaltoolcontext.h"
@@ -57,11 +58,11 @@ inline bool isDirOrArchive(const KFileItem* item) {
 //-----------------------------------------------------------------------
 //
 // GVFileViewStackPrivate
-// 
+//
 //-----------------------------------------------------------------------
 class GVFileViewStackPrivate {
 public:
-	KSelectAction* mSortAction; 
+	KSelectAction* mSortAction;
 };
 
 
@@ -108,7 +109,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	sortItems << i18n("By Name") << i18n("By Date") << i18n("By Size");
 	d->mSortAction->setItems(sortItems);
 	d->mSortAction->setCurrentItem(0);
-	
+
 	// Dir lister
 	mDirLister=new KDirLister;
 	connect(mDirLister,SIGNAL(clear()),
@@ -277,7 +278,7 @@ void GVFileViewStack::browseToFileNameToSelect() {
 
 	// Now we have to make some default choice
 	if (mAutoLoadImage) slotSelectFirst();
-	
+
 	// If no item is selected, make sure the first one is
 	if (currentFileView()->selectedItems()->count()==0) {
 		KFileItem* item=currentFileView()->firstFileItem();
@@ -317,7 +318,7 @@ void GVFileViewStack::slotViewExecuted() {
 			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
 			tmp.adjustPath(1);
 		}
-		
+
 		emit urlChanged(tmp);
 		updateActions();
 	} else {
@@ -400,7 +401,7 @@ void GVFileViewStack::updateSortMenu(QDir::SortSpec _spec) {
 
 void GVFileViewStack::setSorting() {
 	QDir::SortSpec spec;
-	
+
 	switch (d->mSortAction->currentItem()) {
 	case 0: // Name
 		spec=QDir::Name;
@@ -425,13 +426,13 @@ void GVFileViewStack::setSorting() {
 //-----------------------------------------------------------------------
 void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	int selectionSize=currentFileView()->selectedItems()->count();
-	
+
 	QPopupMenu menu(this);
 
 	GVExternalToolContext* externalToolContext=
 		GVExternalToolManager::instance()->createContext(
 		this, currentFileView()->selectedItems());
-	
+
 	menu.insertItem(
 		i18n("External Tools"), externalToolContext->popupMenu());
 
@@ -442,7 +443,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 		this,SLOT(openParentDir()) );
 
 	menu.insertSeparator();
-	
+
 	if (selectionSize==1) {
 		menu.connectItem(
 			menu.insertItem( i18n("&Rename...") ),
@@ -461,7 +462,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 			this,SLOT(deleteFiles()) );
 		menu.insertSeparator();
 	}
-	
+
 	menu.connectItem(
 		menu.insertItem( i18n("Properties") ),
 		this,SLOT(showFileProperties()) );
@@ -486,16 +487,16 @@ void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 //-----------------------------------------------------------------------
 void GVFileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 	KURL dest;
-	
+
 	if (item) {
 		dest=item->url();
 	} else {
 		dest=mDirURL;
 	}
-	
+
 	KURL::List urls;
 	if (!KURLDrag::decode(event,urls)) return;
-	
+
 	FileOperation::openDropURLMenu(this, urls, dest);
 }
 
@@ -589,13 +590,13 @@ GVFileViewBase* GVFileViewStack::currentFileView() const {
 
 uint GVFileViewStack::fileCount() const {
 	uint count=currentFileView()->count();
-	
+
 	KFileItem* item=currentFileView()->firstFileItem();
-	while (item && isDirOrArchive(item)) { 
+	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
 		count--;
 	}
-	return count; 
+	return count;
 }
 
 
@@ -616,7 +617,7 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	const KFileItemList* items;
 	GVFileViewBase* oldView;
 	GVFileViewBase* newView;
-	
+
 	mMode=mode;
 
 	if (mMode==FileList) {
@@ -644,7 +645,7 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	}
 	newView->setShownFileItem(oldView->shownFileItem());
 	newView->setCurrentItem(oldView->currentFileItem());
-	
+
 	// Remove references to the old view from KFileItems
 	items=oldView->items();
 	for(KFileItemListIterator it(*items);it.current()!=0L;++it) {
@@ -653,10 +654,10 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 
 	// Update sorting
 	newView->setSorting(oldView->sorting());
-	
+
 	// Clear the old view
 	oldView->GVFileViewBase::clear();
-	
+
 }
 
 
@@ -754,7 +755,7 @@ void GVFileViewStack::delayedDirListerCompleted() {
 
 	browseToFileNameToSelect();
 	emit completedURLListing(mDirURL);
-	
+
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
 	}
@@ -791,13 +792,13 @@ void GVFileViewStack::initDirListerFilter() {
 
 void GVFileViewStack::updateActions() {
 	KFileItem* firstImage=findFirstImage();
-	
+
 	// There isn't any image, no need to continue
 	if (!firstImage) {
 		mSelectFirst->setEnabled(false);
 		mSelectPrevious->setEnabled(false);
 		mSelectNext->setEnabled(false);
-		mSelectLast->setEnabled(false);	
+		mSelectLast->setEnabled(false);
 		return;
 	}
 
@@ -807,25 +808,25 @@ void GVFileViewStack::updateActions() {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
 		mSelectNext->setEnabled(true);
-		mSelectLast->setEnabled(true);	
+		mSelectLast->setEnabled(true);
 		return;
 	}
-	
+
 	// There is at least one image, and an image is selected, let's be precise
 	bool isFirst=currentItem==firstImage;
 	bool isLast=currentItem==findLastImage();
-	
+
 	mSelectFirst->setEnabled(!isFirst);
 	mSelectPrevious->setEnabled(!isFirst);
 	mSelectNext->setEnabled(!isLast);
-	mSelectLast->setEnabled(!isLast);	
+	mSelectLast->setEnabled(!isLast);
 }
 
 
 void GVFileViewStack::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	currentFileView()->setShownFileItem(item);
-		
+
 	// We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
 	//kdDebug() << "urlChanged : " << tmp.prettyURL() << endl;
@@ -834,7 +835,7 @@ void GVFileViewStack::emitURLChanged() {
 
 KFileItem* GVFileViewStack::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
-	while (item && isDirOrArchive(item)) { 
+	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
 	}
 	return item;
@@ -842,7 +843,7 @@ KFileItem* GVFileViewStack::findFirstImage() const {
 
 KFileItem* GVFileViewStack::findLastImage() const {
 	KFileItem* item=currentFileView()->items()->getLast();
-	while (item && isDirOrArchive(item)) { 
+	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->prevItem(item);
 	}
 	return item;
@@ -853,7 +854,7 @@ KFileItem* GVFileViewStack::findPreviousImage() const {
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->prevItem(item);
-	} while (item && isDirOrArchive(item)); 
+	} while (item && isDirOrArchive(item));
 	return item;
 }
 
@@ -862,7 +863,7 @@ KFileItem* GVFileViewStack::findNextImage() const {
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->nextItem(item);
-	} while (item && isDirOrArchive(item)); 
+	} while (item && isDirOrArchive(item));
 	return item;
 }
 
@@ -890,7 +891,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
 	mShowDotFiles->setChecked(config->readBoolEntry(CONFIG_SHOW_DOT_FILES,false));
 	initDirListerFilter();
-	
+
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
 	setMode(startWithThumbnails?Thumbnail:FileList);
 

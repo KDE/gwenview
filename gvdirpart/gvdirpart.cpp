@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 
 #include "gvdirpart.h"
-#include <libgwenview/gvscrollpixmapview.h>
-#include <libgwenview/gvfileviewstack.h>
-#include <libgwenview/gvpixmap.h>
+#include <src/gvscrollpixmapview.h>
+#include <src/gvfileviewstack.h>
+#include <src/gvpixmap.h>
 
 //Factory Code
 typedef KParts::GenericFactory<GVDirPart> GVDirFactory;
