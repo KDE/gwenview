@@ -108,13 +108,6 @@ GVMainWindow::GVMainWindow()
 
 	// Go to requested file
 	mGVPixmap->setURL(url);
-	
-	// Set focus
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->setFocus();
-	} else if (mPixmapViewStack->isVisible()) {
-		mPixmapViewStack->setFocus();
-	}
 }
 
 
