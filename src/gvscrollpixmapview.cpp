@@ -358,8 +358,8 @@ void GVScrollPixmapView::setShowScrollBars(bool value) {
 
 
 void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
-	int viewWidth=width();
-	int viewHeight=height();
+	int viewWidth=visibleWidth();
+	int viewHeight=visibleHeight();
 	double oldZoom=mZoom;
 	mZoom=zoom;
 
