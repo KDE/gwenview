@@ -79,6 +79,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #if KDE_VERSION < 0x30100
 #include "libgvcompat/kwidgetaction.h"
+#else
+#include <kcursor.h>
 #endif
 
 #include "gvmainwindow.moc"
@@ -111,10 +113,6 @@ GVMainWindow::GVMainWindow()
 	createWidgets();
 	createActions();
 	createLocationToolBar();
-
-	// This event filter is here to make sure the pixmap view is aware of the changes
-	// in the keyboard modifiers, even if it isn't focused
-	kapp->installEventFilter(mPixmapView);
 
 	#if KDE_VERSION >= 0x30100
 	setStandardToolBarMenuEnabled(true);
@@ -375,7 +373,11 @@ void GVMainWindow::printFile() {
 //-----------------------------------------------------------------------
 void GVMainWindow::pixmapLoading() {
 	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+#if KDE_VERSION >= 0x30100
+		kapp->setOverrideCursor(KCursor::workingCursor());
+#else
 		kapp->setOverrideCursor(QCursor(WaitCursor));
+#endif
 	}
 }
 

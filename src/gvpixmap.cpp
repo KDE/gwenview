@@ -83,10 +83,11 @@ public:
 	QByteArray mCompressedData;
 	int mReadSize;
 	QTimer mDecoderTimer;
+        bool mLoading;
 	bool mUpdatedDuringLoad;
 
 	GVPixmapPrivate()
-			: mDecoder(0) {}
+			: mDecoder(0), mLoading( false ) {}
 
 	~GVPixmapPrivate() {
 		if (mDecoder) delete mDecoder;
@@ -163,11 +164,12 @@ public:
 	}
 
 	void finishLoading() {
-		Q_ASSERT(mDecoderTimer.isActive());
+		Q_ASSERT(mLoading);
 		Q_ASSERT(mDecoder);
 		mDecoderTimer.stop();
 		delete mDecoder;
 		mDecoder=0;
+                mLoading = false;
 		KIO::NetAccess::removeTempFile(mTempFilePath);
 	}
 
@@ -582,7 +584,7 @@ void GVPixmap::load() {
 	//kdDebug() << "GVPixmap::load " << pixURL.prettyURL() << endl;
 
 	// Abort any active download
-	if (d->mDecoderTimer.isActive()) {
+	if (d->mLoading) {
 		kdDebug() << "GVPixmap::load found an already active loading\n";
 		d->finishLoading();
 		// FIXME: Emit a cancelled signal instead
@@ -610,6 +612,7 @@ void GVPixmap::load() {
 
 	d->mDecoder=new QImageDecoder(this);
 	d->mDecoderTimer.start(0, false);
+        d->mLoading = true;
 }
 
 
@@ -678,6 +681,13 @@ void GVPixmap::loadChunk() {
 }
 
 
+void GVPixmap::suspendLoading() {
+	if( d->mLoading ) d->mDecoderTimer.stop();
+}
+
+void GVPixmap::resumeLoading() {
+	if( d->mLoading ) d->mDecoderTimer.start(0,false);
+}
 
 bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	bool result;

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qmap.h>
 #include <qscrollview.h>
+#include <qtimer.h>
 
 class QEvent;
 class QLabel;
@@ -40,6 +41,16 @@ class KToggleAction;
 
 class GVPixmap;
 
+class GVScrollPixmapView;
+
+// see GVScrollPixmapView ctor
+class GVScrollPixmapViewFilter : public QObject {
+Q_OBJECT
+public:
+	GVScrollPixmapViewFilter( GVScrollPixmapView* parent );
+	virtual bool eventFilter( QObject*, QEvent* );
+};
+
 class GVScrollPixmapView : public QScrollView {
 Q_OBJECT
 
@@ -51,6 +62,7 @@ public:
 	friend class ToolController;
 	friend class ScrollToolController;
 	friend class ZoomToolController;
+	friend class GVScrollPixmapViewFilter;
 
 	enum Tool { NONE, BROWSE, SCROLL, ZOOM };
 	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
@@ -143,6 +155,29 @@ private:
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
+	
+	GVScrollPixmapViewFilter mFilter;
+
+	enum PaintType {
+		PAINT_NORMAL, // repaint given area (schedule smooth repaint if smoothing is enabled)
+		PAINT_SMOOTH, // repaint given area (smooth while scaling)
+		SMOOTH_PASS,  // start smooth pass
+		RESUME_LOADING // resume loading
+	};
+	struct PendingPaint {
+		PendingPaint( PaintType t, const QRect& r ) : type( t ), rect( r ) {};
+		PendingPaint() {}; // stupid QValueList
+		PaintType type;
+		QRect rect;
+	};
+	QValueList< PendingPaint > mPendingPaints;
+	QTimer mPendingPaintTimer;
+	bool mSmoothingSuspended;
+	bool mEmptyImage;
+	void addPendingPaint( PaintType type, QRect rect = QRect());
+	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
+	void fullRepaint();
+	void cancelPendingPaints();
 
 	double computeZoom(bool in) const;
 	double computeAutoZoom() const;
@@ -170,7 +205,8 @@ private slots:
 	void hideCursor();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
-
+	void paintPending();
+	void loadingStarted();
 	
 protected:
 	// Overloaded methods

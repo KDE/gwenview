@@ -88,6 +88,11 @@ public slots:
 
 	// "Image manipulation"
 	void modify(GVImageUtils::Orientation);
+	
+	// GVScrollPixmapView suspends and resumes loading as it progressively paints
+	// the image in order to keep up with loading
+	void suspendLoading();
+	void resumeLoading();
 
 signals:
 	/**

@@ -42,6 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
+#include <kapplication.h>
 
 // Our includes
 #include "fileoperation.h"
@@ -226,7 +227,7 @@ public:
 //
 //------------------------------------------------------------------------
 GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
-: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase)
+: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 , mGVPixmap(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
@@ -237,6 +238,9 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mFullScreen(false)
 , mOperaLikePrevious(false)
 , mZoomBeforeAuto(1)
+, mFilter( this )
+, mSmoothingSuspended( false )
+, mEmptyImage( false )
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -269,6 +273,9 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
 		this,SLOT(slotURLChanged()) );
 
+	connect(mGVPixmap,SIGNAL(loading()),
+		this,SLOT( loadingStarted()) );
+
 	connect(mGVPixmap,SIGNAL(modified()),
 		this,SLOT(slotModified()) );
 
@@ -281,8 +288,15 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 
-	// To monitor key presses
-	viewport()->installEventFilter(this);
+	connect(&mPendingPaintTimer,SIGNAL(timeout()),
+		this,SLOT(paintPending()) );
+
+	// This event filter is here to make sure the pixmap view is aware of the changes
+	// in the keyboard modifiers, even if it isn't focused. However, making this widget
+	// itself the filter would lead to doubled paint events, because QScrollView
+	// installs an event filter on its viewport, and doesn't filter out the paint
+	// events -> it'd get it twice, first from app filter, second from viewport filter.
+	kapp->installEventFilter( &mFilter );
 }
 
 
@@ -303,9 +317,10 @@ void GVScrollPixmapView::slotURLChanged() {
 		return;
 	}
 	*/
-    updateContentSize();
-    updateImageOffset();
+updateContentSize();
+updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
+	if( mSmoothScale ) addPendingPaint( SMOOTH_PASS );
 }
 
 
@@ -316,8 +331,18 @@ void GVScrollPixmapView::slotModified() {
 		updateContentSize();
 		updateImageOffset();
 		updateZoomActions();
-		viewport()->repaint(false);
+		fullRepaint();
 	}
+}
+
+
+void GVScrollPixmapView::loadingStarted() {
+	cancelPendingPaints();
+	mSmoothingSuspended = true;
+	mEmptyImage = true;
+	// every loading() signal from GVPixmap must be followed by a signal that turns this off
+	QPainter painter( viewport());
+	painter.eraseRect( viewport()->rect());
 }
 
 //------------------------------------------------------------------------
@@ -326,8 +351,13 @@ void GVScrollPixmapView::slotModified() {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::setSmoothScale(bool value) {
+	if( mSmoothScale == value ) return;
 	mSmoothScale=value;
-	viewport()->update();
+	if( mSmoothScale ) {
+		addPendingPaint( SMOOTH_PASS );
+	} else {
+		fullRepaint();
+	}
 }
 
 
@@ -379,7 +409,7 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	updateZoomActions();
 
 	viewport()->setUpdatesEnabled(true);
-	viewport()->repaint(false);
+        fullRepaint();
 
 	emit zoomChanged(mZoom);
 }
@@ -444,18 +474,108 @@ inline void composite(uint* rgba,uint value) {
 }
 
 void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
+	if( !mEmptyImage ) {
+		addPendingPaint( PAINT_NORMAL, QRect( clipx, clipy, clipw, cliph ));
+	} else {
+		// image is empty, simply clear
+		painter->eraseRect( clipx, clipy, clipw, cliph );
+	}
+}
+
+void GVScrollPixmapView::addPendingPaint( PaintType type, QRect rect ) {
+	if( mSmoothingSuspended && type == PAINT_SMOOTH ) return;
+
+	if( type == SMOOTH_PASS || type == RESUME_LOADING ) {
+		mPendingPaints.append( PendingPaint( type, rect ));
+	} else { // split to several repaints limited by pixels to be painted
+		const int MAX_REPAINT_SIZE = 10000;
+		int step = (( MAX_REPAINT_SIZE + rect.width() - 1 ) / rect.width()); // round up
+		step = QMAX( step, 5 ); // at least 5 lines together
+		for( int line = 0;
+			 line < rect.height();
+			 line += step ) {
+			step = QMIN( step, rect.height() - line );
+			mPendingPaints.append( PendingPaint( type, QRect( rect.x(), rect.y() + line,
+				rect.width(), step )));
+		}
+	}
+
+	if( !mPendingPaintTimer.isActive()) mPendingPaintTimer.start( 0 );
+}
+
+
+void GVScrollPixmapView::paintPending() {
+	if( mPendingPaints.isEmpty()) {
+		mPendingPaintTimer.stop();
+		return;
+	}
+	while( !mPendingPaints.isEmpty()) {
+		PendingPaint paint = mPendingPaints.first();
+		mPendingPaints.pop_front();
+		QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
+		switch( paint.type ) {
+		case SMOOTH_PASS:
+			mSmoothingSuspended = false;
+			if( mSmoothScale ) {
+				addPendingPaint( PAINT_SMOOTH, visibleRect );
+			}
+			return;
+		case RESUME_LOADING:
+			mGVPixmap->resumeLoading();
+			return;
+		case PAINT_NORMAL:
+		case PAINT_SMOOTH: {
+			QRect paintRect = paint.rect.intersect( visibleRect );
+			if( !paintRect.isEmpty()) {
+				QPainter painter( viewport());
+				painter.translate( -contentsX(), -contentsY());
+				performPaint( &painter, paintRect.x(), paintRect.y(),
+					paintRect.width(), paintRect.height(), paint.type == PAINT_SMOOTH );
+				return;
+			}
+		}
+		}
+	}
+	mPendingPaintTimer.stop();
+}
+
+// How to do painting:
+// When something needs to be erased: QPainter on viewport and eraseRect()
+// When whole picture needs to be repainted: fullRepaint()
+// When a part of the picture needs to be updated: viewport()->repaint(area,false)
+// All other paints will be changed to progressive painting.
+void GVScrollPixmapView::fullRepaint() {
+	if( !viewport()->isUpdatesEnabled()) return;
+	cancelPendingPaints();
+	viewport()->repaint(false);
+}
+
+void GVScrollPixmapView::cancelPendingPaints() {
+	while( !mPendingPaints.isEmpty()) {
+		// check items that are not just paints and that cannot be just discarded
+		if( mPendingPaints.front().type == SMOOTH_PASS ) {
+			mSmoothingSuspended = false;
+		}	else if( mPendingPaints.front().type == RESUME_LOADING ) {
+			mGVPixmap->resumeLoading();
+		}
+		mPendingPaints.pop_front();
+	}
+	mPendingPaintTimer.stop();
+}
+
+// do the actual painting
+void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth ) {
 	#ifdef DEBUG_RECTS
 	static QColor colors[4]={QColor(255,0,0),QColor(0,255,0),QColor(0,0,255),QColor(255,255,0) };
 	static int numColor=0;
 	#endif
 
-
+	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
 	if (mGVPixmap->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
-	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
 	// If we are enlarging the image, we grow the update rect so that it
 	// contains full zoomed image pixels. We also take one more image pixel to
 	// avoid gaps in images.
@@ -469,17 +589,23 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
 	updateRect=updateRect.intersect(zoomedImageRect);
 
-	if (updateRect.isEmpty()) return;
+	if (updateRect.isEmpty()) {
+		painter->eraseRect(clipx,clipy,clipw,cliph);
+		return;
+	}
 
 	QImage image(updateRect.size()/mZoom,32);
 	image=mGVPixmap->image().copy(
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
-	if (mSmoothScale) {
+	if (smooth) {
 		image=image.smoothScale(updateRect.size());
 	} else {
 		image=image.scale(updateRect.size());
+		if( mSmoothScale && mZoom != 1.0 ) {
+			addPendingPaint( PAINT_SMOOTH, QRect( clipx, clipy, clipw, cliph ));
+		}
 	}
 
 	if (image.hasAlphaBuffer()) {
@@ -586,12 +712,36 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 	case QEvent::AccelOverride:
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 
+	// Getting/loosing focus causes repaints, but repainting here is expensive,
+	// and there's no need to repaint on focus changes, as the focus is not
+	// indicated.
+	case QEvent::FocusIn:
+	case QEvent::FocusOut:
+		return true;
+
 	default:
 		break;
 	}
 	return QScrollView::eventFilter(obj,event);
 }
 
+GVScrollPixmapViewFilter::GVScrollPixmapViewFilter( GVScrollPixmapView* parent )
+: QObject( parent )
+{
+}
+
+bool GVScrollPixmapViewFilter::eventFilter(QObject*, QEvent* event) {
+	switch (event->type()) {
+	case QEvent::KeyPress:
+	case QEvent::KeyRelease:
+	case QEvent::AccelOverride:
+		return static_cast< GVScrollPixmapView* >( parent())
+                    ->viewportKeyEvent(static_cast<QKeyEvent*>(event));
+	default:
+		break;
+	}
+	return false;
+}
 
 bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter(), false);
@@ -690,39 +840,35 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	updateImageOffset();
 	QRect imageRect(mXOffset, mYOffset, mGVPixmap->width(), mGVPixmap->height());
 
+        QPainter painter( viewport());
 	// Top rect
-	viewport()->repaint(
-		0, 0,
-		viewport()->width(), imageRect.top(),
-		true);
+	painter.eraseRect( 0, 0,
+		viewport()->width(), imageRect.top());
 
 	// Bottom rect
-	viewport()->repaint(
-		0, imageRect.bottom(),
-		viewport()->width(), viewport()->height()-imageRect.bottom(),
-		true);
+        painter.eraseRect( 0, imageRect.bottom(),
+		viewport()->width(), viewport()->height()-imageRect.bottom());
 
 	// Left rect
-	viewport()->repaint(
-		0, imageRect.top(),
-		imageRect.left(), imageRect.height(),
-		true);
+	painter.eraseRect( 0, imageRect.top(),
+		imageRect.left(), imageRect.height());
 
 	// Right rect
-	viewport()->repaint(
-		imageRect.right(), imageRect.top(),
-		viewport()->width()-imageRect.right(), imageRect.height(),
-		true);
+	painter.eraseRect( imageRect.right(), imageRect.top(),
+		viewport()->width()-imageRect.right(), imageRect.height());
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
+        mEmptyImage = false;
 	QRect widgetRect;
 	// We add a one pixel border to avoid missing parts of the image
 	widgetRect.setLeft( int(imageRect.left()*mZoom) + mXOffset-1);
 	widgetRect.setTop( int(imageRect.top()*mZoom) + mYOffset-1);
 	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
 	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
-	viewport()->repaint(widgetRect, false);
+	viewport()->repaint(widgetRect,false);
+	mGVPixmap->suspendLoading();
+	addPendingPaint( RESUME_LOADING );
 }
 
 
