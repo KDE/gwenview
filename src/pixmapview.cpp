@@ -31,9 +31,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpropsdlg.h>
 #include <kstdaction.h>
 
 // Our includes
+#include "fileoperation.h"
 #include "fitpixmapview.h"
 #include "gvpixmap.h"
 #include "scrollpixmapview.h"
@@ -52,13 +54,14 @@ const char* CONFIG_WHEEL_BEHAVIOUR_ALT=    "wheel behaviour alt";
 const int AUTO_HIDE_TIMEOUT=1000;
 
 PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
-: QWidgetStack(parent), mPopupMenu(0L), mGVPixmap(pixmap), mShowPathInFullScreen(false), mFullScreen(false), mOperaLikePrevious(false)
+: QWidgetStack(parent), mGVPixmap(pixmap), mShowPathInFullScreen(false),
+mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollection)
 {
 	mAutoHideTimer=new QTimer(this);
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 
-// Create path label
+	// Create path label
 	mPathLabel=new QLabel(parent);
 	mPathLabel->setBackgroundColor(white);
 	QFont font=mPathLabel->font();
@@ -67,27 +70,27 @@ PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actio
 	mPathLabel->hide();
 	mPathLabel->installEventFilter(this);
 
-// Create child widgets
+	// Create child widgets
 	mScrollPixmapView=new ScrollPixmapView(this,pixmap,true);
 	mScrollPixmapView->viewport()->installEventFilter(this);
 	mFitPixmapView=new FitPixmapView(this,pixmap,false);
 	mFitPixmapView->installEventFilter(this);
 
-// Create actions
-	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),actionCollection,"autozoom");
+	// Create actions
+	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),mActionCollection,"autozoom");
 
-	mZoomIn=KStdAction::zoomIn(mScrollPixmapView,SLOT(slotZoomIn()),actionCollection);
+	mZoomIn=KStdAction::zoomIn(mScrollPixmapView,SLOT(slotZoomIn()),mActionCollection);
 	
-	mZoomOut=KStdAction::zoomOut(mScrollPixmapView,SLOT(slotZoomOut()),actionCollection);
+	mZoomOut=KStdAction::zoomOut(mScrollPixmapView,SLOT(slotZoomOut()),mActionCollection);
 	
-	mResetZoom=KStdAction::actualSize(mScrollPixmapView,SLOT(slotResetZoom()),actionCollection);
+	mResetZoom=KStdAction::actualSize(mScrollPixmapView,SLOT(slotResetZoom()),mActionCollection);
     mResetZoom->setIcon("viewmag1");
 	
-	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,actionCollection,"lockzoom");
+	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"lockzoom");
 	connect(mLockZoom,SIGNAL(toggled(bool)),
 		mScrollPixmapView,SLOT(setLockZoom(bool)) );
 
-// Connect to some interesting signals
+	// Connect to some interesting signals
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(slotUpdateView()) );
 	connect(mScrollPixmapView,SIGNAL(zoomChanged(double)),
@@ -95,13 +98,13 @@ PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actio
 	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateZoomActions()) );
 
-// Propagate child view signals
+	// Propagate child view signals
 	connect(mScrollPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
 	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
 
-// Add children to stack
+	// Add children to stack
 	addWidget(mScrollPixmapView,0);
 	addWidget(mFitPixmapView,1);
 
@@ -120,12 +123,11 @@ void PixmapView::plugActionsToAccel(KAccel* accel) {
 }
 
 
-void PixmapView::installRBPopup(QPopupMenu* menu) {
-	mPopupMenu=menu;
-}
-
-
-//- Config -------------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//
+// Config
+//
+//------------------------------------------------------------------------
 void PixmapView::readConfig(KConfig* config, const QString& group) {
 	mScrollPixmapView->readConfig(config,group);
 	mFitPixmapView->readConfig(config,group);
@@ -158,7 +160,11 @@ void PixmapView::writeConfig(KConfig* config, const QString& group) const {
 }
 
 
-//- Properties ---------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//
+// Properties
+// 
+//------------------------------------------------------------------------
 void PixmapView::setFullScreen(bool fullScreen) {
 	mFullScreen=fullScreen;
 
@@ -193,7 +199,11 @@ void PixmapView::setShowPathInFullScreen(bool value) {
 }
 
 
-//- Overloaded methods -------------------------------------------------------------------
+//------------------------------------------------------------------------
+//
+// Overloaded methods
+//
+//------------------------------------------------------------------------
 bool PixmapView::eventFilter(QObject* object,QEvent* event) {
 	switch (event->type()) {
 	case QEvent::MouseMove:
@@ -236,8 +246,8 @@ bool PixmapView::mouseReleaseEventFilter(QObject* object,QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			if ( !mGVPixmap->isNull() && mPopupMenu) {
-				mPopupMenu->popup(event->globalPos());
+			if ( !mGVPixmap->isNull()) {
+				openContextMenu(event->globalPos());
 				return true;
 			}
 		}
@@ -295,7 +305,63 @@ bool PixmapView::wheelEventFilter(QObject* object,QWheelEvent* event) {
 }
 
 
-//- Private slots ------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//
+// Private slots
+// 
+//------------------------------------------------------------------------
+void PixmapView::openContextMenu(const QPoint& pos) {
+	if (mGVPixmap->isNull()) return;
+
+	QPopupMenu menu(this);
+
+	mActionCollection->action("view_fullscreen")->plug(&menu);
+	menu.insertSeparator();
+	
+	mAutoZoom->plug(&menu);
+	mZoomIn->plug(&menu);
+	mZoomOut->plug(&menu);
+	mResetZoom->plug(&menu);
+	mLockZoom->plug(&menu);
+
+	menu.insertSeparator();
+	
+	mActionCollection->action("first")->plug(&menu);
+	mActionCollection->action("previous")->plug(&menu);
+	mActionCollection->action("next")->plug(&menu);
+	mActionCollection->action("last")->plug(&menu);
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("Open With &Editor") ),
+		this,SLOT(openWithEditor()) );
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("&Rename...") ),
+		this,SLOT(renameFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Copy To...") ),
+		this,SLOT(copyFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Move To...") ),
+		this,SLOT(moveFile()) );
+	menu.connectItem(
+		menu.insertItem( i18n("&Delete...") ),
+		this,SLOT(deleteFile()) );
+	
+	menu.insertSeparator();
+	
+	menu.connectItem(
+		menu.insertItem( i18n("Properties") ),
+		this,SLOT(showFileProperties()) );
+	
+	menu.exec(pos);
+}
+
+
 void PixmapView::slotAutoZoom() {
 	if (mAutoZoom->isChecked()) {
 		mScrollPixmapView->enableView(false);
@@ -327,9 +393,54 @@ void PixmapView::hideCursor() {
 }
 
 
-//- Private ------------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//
+// File operations
+//
+//------------------------------------------------------------------------
+void PixmapView::showFileProperties() {
+	(void)new KPropertiesDialog(mGVPixmap->url());
+}
+
+
+void PixmapView::openWithEditor() {
+	FileOperation::openWithEditor(mGVPixmap->url());
+}
+
+
+void PixmapView::renameFile() {
+	FileOperation::rename(mGVPixmap->url(),this);
+}
+
+
+void PixmapView::copyFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::copyTo(list,this);
+}
+
+
+void PixmapView::moveFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::moveTo(list,this);
+}
+
+
+void PixmapView::deleteFile() {
+	KURL::List list;
+	list << mGVPixmap->url();
+	FileOperation::del(list,this);
+}
+
+
+//------------------------------------------------------------------------
+//
+// Private
+//
+//------------------------------------------------------------------------
 void PixmapView::updateZoomActions() {
-// Disable most actions if there's no image
+	// Disable most actions if there's no image
 	if (mGVPixmap->isNull()) {
 		mZoomIn->setEnabled(false);
 		mZoomOut->setEnabled(false);
@@ -370,7 +481,7 @@ void PixmapView::updatePathLabel() {
 	int left=2;
 	int top=mPathLabel->fontMetrics().height();
 
-// Create a mask for the text
+	// Create a mask for the text
 	QBitmap mask(pathSize,true);
 	painter.begin(&mask);
 	painter.setFont(mPathLabel->font());
@@ -386,7 +497,7 @@ void PixmapView::updatePathLabel() {
 	painter.drawText(left+1,top+1,path);
 	painter.end();
 
-// Draw the text on a pixmap
+	// Draw the text on a pixmap
 	QPixmap pixmap(pathSize);
 	painter.begin(&pixmap);
 	painter.setFont(mPathLabel->font());
@@ -396,7 +507,7 @@ void PixmapView::updatePathLabel() {
 	painter.drawText(left,top,path);
 	painter.end();
 
-// Update the path label
+	// Update the path label
 	mPathLabel->setPixmap(pixmap);
 	mPathLabel->setMask(mask);
 	mPathLabel->adjustSize();

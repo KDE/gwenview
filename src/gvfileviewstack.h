@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVFILEVIEWCONTAINER_H
 #define GVFILEVIEWCONTAINER_H
 
-//Qt includes
+// Qt includes
 #include <qobject.h>
 #include <qwidgetstack.h>
 
@@ -54,14 +54,14 @@ public:
 
 	void plugActionsToAccel(KAccel*);
 
-// Config
+	// Config
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
 	void setAutoLoadImage(bool);
 	bool autoLoadImage() const { return mAutoLoadImage; }
 
-// Properties
+	// Properties
 	void setMode(Mode);
 	
 	QString filename() const;
@@ -69,6 +69,7 @@ public:
 	uint fileCount() const;
 	bool showDirs() const;
 	void setShowDirs(bool);
+	uint selectionSize() const;
 	
 	FileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
@@ -91,9 +92,12 @@ public slots:
 	void slotSelectPrevious();
 	void slotSelectNext();
 
-// Stop thumbnail generation
+	// Stop thumbnail generation
 	void cancel();
 
+	void openWithEditor();
+	void openParentDir();
+	void showFileProperties();
 	void deleteFiles();
 	void renameFile();
 	void copyFiles();
@@ -105,33 +109,29 @@ signals:
 	void completed();
 	void canceled();
 
-// Thumbnail view signals
+	// Thumbnail view signals
 	void updateStarted(int);
 	void updateEnded();
 	void updatedOneThumbnail();
 
 
 private slots:
-// Context menu slots 
-	void editSelectedFile();
-	void openParentDir();
-	void showFileProperties();
 	
-// Used to enter directories
+	// Used to enter directories
 	void viewExecuted();
 
-// Used to change the current image
+	// Used to change the current image
 	void viewClicked();
 
-// Context menu
+	// Context menu
 	void openContextMenu(const QPoint& pos);
 	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
 	void openContextMenu(QIconViewItem*,const QPoint&);
 
-// Get called by the thumbnail size radio actions
+	// Get called by the thumbnail size radio actions
 	void updateThumbnailSize();
 
-// Dir lister slots
+	// Dir lister slots
 	void dirListerDeleteItem(KFileItem* item);
 	void dirListerNewItems(const KFileItemList& items);
 	void dirListerRefreshItems(const KFileItemList&);
@@ -147,7 +147,7 @@ private:
 	KDirLister* mDirLister;
 	KURL mDirURL;
 
-// Our actions
+	// Our actions
 	KAction* mSelectFirst;
 	KAction* mSelectLast;
 	KAction* mSelectPrevious;
@@ -158,11 +158,11 @@ private:
 	KRadioAction* mMedThumbnails;
 	KRadioAction* mLargeThumbnails;
 
-// configurable settings
+	// configurable settings
 	bool mAutoLoadImage;
 	bool mShowDirs;
 
-// Temp data used by the dir lister
+	// Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
 	QString mFilenameToSelect;
 

@@ -24,9 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qmap.h>
 #include <qwidgetstack.h>
 
-class QPopupMenu;
 class QLabel;
 class QMouseEvent;
+class QPoint;
+class QPopupMenu;
 class QTimer;
 class QWheelEvent;
 
@@ -55,7 +56,7 @@ public:
 	void installRBPopup(QPopupMenu*);
 	void plugActionsToAccel(KAccel*);
 
-// Properties
+	// Properties
 	FitPixmapView* fitPixmapView() const { return mFitPixmapView; }
 	ScrollPixmapView* scrollPixmapView() const { return mScrollPixmapView; }
 	KToggleAction* autoZoom() const { return mAutoZoom; }
@@ -67,8 +68,17 @@ public:
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
 	void setShowPathInFullScreen(bool);
 	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
+
 	
 public slots:
+	// File operations
+	void showFileProperties();
+	void openWithEditor();
+	void renameFile();
+	void copyFile();
+	void moveFile();
+	void deleteFile();
+
 	void setFullScreen(bool);
 
 signals:
@@ -82,7 +92,6 @@ protected:
 private:
 	ScrollPixmapView* mScrollPixmapView;
 	FitPixmapView* mFitPixmapView;
-	QPopupMenu* mPopupMenu;
 	GVPixmap* mGVPixmap;
 	QLabel* mPathLabel;
 	QTimer* mAutoHideTimer;
@@ -91,12 +100,14 @@ private:
 	bool mFullScreen;
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 
-// Our actions
+	// Our actions
 	KToggleAction* mAutoZoom;
 	KAction* mZoomIn;
 	KAction* mZoomOut;
 	KAction* mResetZoom;
 	KToggleAction* mLockZoom;
+
+	KActionCollection* mActionCollection;
 
 	void updatePathLabel();
 	PixmapViewInterface* currentView() const;
@@ -109,6 +120,7 @@ private slots:
 	void slotAutoZoom();
 	void slotUpdateView();
 	void hideCursor();
+	void openContextMenu(const QPoint&);
 };
 
 

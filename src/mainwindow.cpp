@@ -39,7 +39,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
-#include <kpropsdlg.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -86,7 +85,6 @@ MainWindow::MainWindow()
 	createActions();
 	createAccels();
 	createMenu();
-	createPixmapViewPopupMenu();
 	createMainToolBar();
 	createAddressToolBar();
 
@@ -190,9 +188,9 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 
 	mToggleFullScreen->setEnabled(filenameIsValid);
 	mRenameFile->setEnabled(filenameIsValid);
-	mCopyFile->setEnabled(filenameIsValid);
-	mMoveFile->setEnabled(filenameIsValid);
-	mDeleteFile->setEnabled(filenameIsValid);
+	mCopyFiles->setEnabled(filenameIsValid);
+	mMoveFiles->setEnabled(filenameIsValid);
+	mDeleteFiles->setEnabled(filenameIsValid);
 	mShowFileProperties->setEnabled(filenameIsValid);
 	mOpenWithEditor->setEnabled(filenameIsValid);
 	mOpenParentDir->setEnabled(url.path()!="/");
@@ -205,14 +203,86 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 	mURLEdit->addToHistory(url.prettyURL());
 }
 
-
-//-Private slots---------------------------------------------------------
+//-----------------------------------------------------------------------
+//
+// File operations
+//
+//-----------------------------------------------------------------------
 void MainWindow::openParentDir() {
 	KURL url=mGVPixmap->dirURL().upURL();
 	mGVPixmap->setURL(url);	
 }
 
 
+void MainWindow::renameFile() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->renameFile();
+	} else {
+		mPixmapView->renameFile();
+	}
+}
+
+
+void MainWindow::copyFiles() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->copyFiles();
+	} else {
+		mPixmapView->copyFile();
+	}
+}
+
+
+void MainWindow::moveFiles() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->moveFiles();
+	} else {
+		mPixmapView->moveFile();
+	}
+}
+
+
+void MainWindow::deleteFiles() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->deleteFiles();
+	} else {
+		mPixmapView->deleteFile();
+	}
+}
+
+
+void MainWindow::showFileProperties() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->showFileProperties();
+	} else {
+		mPixmapView->showFileProperties();
+	}
+}
+
+
+void MainWindow::openWithEditor() {
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->openWithEditor();
+	} else {
+		mPixmapView->openWithEditor();
+	}
+}
+
+
+void MainWindow::openFile() {
+	QString path=KFileDialog::getOpenFileName();
+	if (path.isNull()) return;
+
+	KURL url;
+	url.setPath(path);
+	mGVPixmap->setURL(url);
+}
+
+
+//-----------------------------------------------------------------------
+//
+// Private slots
+//
+//-----------------------------------------------------------------------
 void MainWindow::pixmapLoading() {
 	kapp->setOverrideCursor(QCursor(WaitCursor));
 }
@@ -298,11 +368,6 @@ void MainWindow::showKeyDialog() {
 }
 
 
-void MainWindow::showFileProperties() {
-	(void)new KPropertiesDialog(mGVPixmap->url());
-}
-
-
 void MainWindow::escapePressed() {
 	if (mToggleSlideShow->isChecked()) {
 		mToggleSlideShow->activate();
@@ -311,21 +376,6 @@ void MainWindow::escapePressed() {
 	if (mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
-}
-
-
-void MainWindow::openFile() {
-	QString path=KFileDialog::getOpenFileName();
-	if (path.isNull()) return;
-
-	KURL url;
-	url.setPath(path);
-	mGVPixmap->setURL(url);
-}
-
-
-void MainWindow::openWithEditor() {
-	FileOperation::openWithEditor(mGVPixmap->url());
 }
 
 
@@ -362,7 +412,11 @@ void MainWindow::slotURLEditChanged(const QString &str) {
 }
 
 
-//-GUI-------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//
+// GUI
+//
+//-----------------------------------------------------------------------
 void MainWindow::updateStatusBar() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
@@ -434,13 +488,13 @@ void MainWindow::createWidgets() {
 void MainWindow::createActions() {
 	mOpenFile=KStdAction::open(this, SLOT(openFile()),actionCollection() );
 	
-	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileViewStack,SLOT(renameFile()),actionCollection(),"file_rename");
+	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 
-	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileViewStack,SLOT(copyFiles()),actionCollection(),"file_copy");
+	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
 
-	mMoveFile=new KAction(i18n("&Move To..."),Key_F6,mFileViewStack,SLOT(moveFiles()),actionCollection(),"file_move");
+	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
 
-	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileViewStack,SLOT(deleteFiles()),actionCollection(),"file_delete");
+	mDeleteFiles=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
 
 	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 
@@ -490,9 +544,9 @@ void MainWindow::createMenu() {
 	fileMenu->insertSeparator();
 	mOpenWithEditor->plug(fileMenu);
 	mRenameFile->plug(fileMenu);
-	mCopyFile->plug(fileMenu);
-	mMoveFile->plug(fileMenu);
-	mDeleteFile->plug(fileMenu);
+	mCopyFiles->plug(fileMenu);
+	mMoveFiles->plug(fileMenu);
+	mDeleteFiles->plug(fileMenu);
 	fileMenu->insertSeparator();
 	mShowFileProperties->plug(fileMenu);
 	fileMenu->insertSeparator();
@@ -539,42 +593,6 @@ void MainWindow::createMenu() {
 
 	menuBar()->show();
 }
-
-
-void MainWindow::createPixmapViewPopupMenu() {
-	QPopupMenu* menu=new QPopupMenu(this);
-
-	mToggleFullScreen->plug(menu);
-	mPixmapView->autoZoom()->plug(menu);
-	mPixmapView->lockZoom()->plug(menu);
-	
-	menu->insertSeparator();
-	mPixmapView->zoomIn()->plug(menu);
-	mPixmapView->zoomOut()->plug(menu);
-	mPixmapView->resetZoom()->plug(menu);
-
-	menu->insertSeparator();
-	mFileViewStack->selectFirst()->plug(menu);
-	mFileViewStack->selectPrevious()->plug(menu);
-	mFileViewStack->selectNext()->plug(menu);
-	mFileViewStack->selectLast()->plug(menu);
-
-	menu->insertSeparator();
-	mOpenWithEditor->plug(menu);
-	
-	menu->insertSeparator();
-	mRenameFile->plug(menu);
-	mCopyFile->plug(menu);
-	mMoveFile->plug(menu);
-	mDeleteFile->plug(menu);
-	
-	menu->insertSeparator();
-	mShowFileProperties->plug(menu);
-
-
-	mPixmapView->installRBPopup(menu);
-}
-
 
 
 void MainWindow::createMainToolBar() {

@@ -57,11 +57,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mSelectLast=new KAction(i18n("&Last"),"gvlast",Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
-	mSelectPrevious=KStdAction::back(this, SLOT(slotSelectPrevious()),actionCollection );
+	mSelectPrevious=KStdAction::back(this, SLOT(slotSelectPrevious()),actionCollection, "previous" );
 	mSelectPrevious->setIcon("gvprevious");
 	mSelectPrevious->setAccel(Key_Backspace);
 
-	mSelectNext=KStdAction::forward(this, SLOT(slotSelectNext()),actionCollection );
+	mSelectNext=KStdAction::forward(this, SLOT(slotSelectNext()),actionCollection, "next" );
 	mSelectNext->setIcon("gvnext");
 	mSelectNext->setAccel(Key_Space);
 
@@ -335,8 +335,8 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	if (selectionSize==1) {
 		if (!isDirOrArchive(currentFileView()->selectedItems()->getFirst())) {
 			menu.connectItem(
-				menu.insertItem( i18n("Open With Editor...") ),
-				this,SLOT(editSelectedFile()) );
+				menu.insertItem( i18n("Open With &Editor") ),
+				this,SLOT(openWithEditor()) );
 			menu.insertSeparator();
 		}
 	}
@@ -349,19 +349,19 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 
 	if (selectionSize==1) {
 		menu.connectItem(
-			menu.insertItem( i18n("Rename...") ),
+			menu.insertItem( i18n("&Rename...") ),
 			this,SLOT(renameFile()) );
 	}
 
 	if (selectionSize>=1) {
 		menu.connectItem(
-			menu.insertItem( i18n("Copy To...") ),
+			menu.insertItem( i18n("&Copy To...") ),
 			this,SLOT(copyFiles()) );
 		menu.connectItem(
-			menu.insertItem( i18n("Move To...") ),
+			menu.insertItem( i18n("&Move To...") ),
 			this,SLOT(moveFiles()) );
 		menu.connectItem(
-			menu.insertItem( i18n("Delete...") ),
+			menu.insertItem( i18n("&Delete...") ),
 			this,SLOT(deleteFiles()) );
 		menu.insertSeparator();
 	}
@@ -404,11 +404,11 @@ KURL::List GVFileViewStack::selectedURLs() const {
 }
 
 
-void GVFileViewStack::editSelectedFile() {
-	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
-	if (!fileItem) return;
+void GVFileViewStack::openWithEditor() {
+	KURL::List list=selectedURLs();
+	if (list.isEmpty()) return;
 	
-	FileOperation::openWithEditor(fileItem->url());
+	FileOperation::openWithEditor(list.first());
 }
 
 
@@ -491,6 +491,12 @@ KURL GVFileViewStack::url() const {
 	KURL url(mDirURL);
 	url.addPath(filename());
 	return url;
+}
+
+
+uint GVFileViewStack::selectionSize() const {
+	const KFileItemList* selectedItems=currentFileView()->selectedItems();
+	return selectedItems->count();
 }
 
 

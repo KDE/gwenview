@@ -73,9 +73,9 @@ private:
 
 	KAction* mOpenFile;
 	KAction* mRenameFile;
-	KAction* mCopyFile;
-	KAction* mMoveFile;
-	KAction* mDeleteFile;
+	KAction* mCopyFiles;
+	KAction* mMoveFiles;
+	KAction* mDeleteFiles;
 	KAction* mOpenWithEditor;
 	KAction* mShowConfigDialog;
 	KAction* mShowKeyDialog;
@@ -97,20 +97,24 @@ private:
 	void createMenu();
 	void createMainToolBar();
 	void createAddressToolBar();
-	void createPixmapViewPopupMenu();
 
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 	
 private slots:
+	void openParentDir();
+	void renameFile();
+	void copyFiles();
+	void moveFiles();
+	void deleteFiles();
+	void showFileProperties();
 	void openFile();
+	void openWithEditor();
+	
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showKeyDialog();
 	void pixmapLoading();
-	void openWithEditor();
-	void openParentDir();
-	void showFileProperties();
 	void toggleSlideShow();
 
 	/**
