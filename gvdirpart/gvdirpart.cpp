@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <kdebug.h>
 #include <kaction.h>
+#include <kicontheme.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kparts/browserextension.h>
@@ -75,6 +77,10 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
 	mSplitter->setSizes(splitterSizes);
+
+	// KIconLoader is weird.  If I preload them here it remembers about them for the following KAction.
+	KIconLoader iconLoader = KIconLoader("gwenview");
+	iconLoader.loadIconSet("slideshow", KIcon::Toolbar);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
 

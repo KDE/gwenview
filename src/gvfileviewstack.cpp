@@ -27,6 +27,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapp.h>
 #include <kdebug.h>
 #include <kdirlister.h>
+#include <kicontheme.h>
+#include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
@@ -85,12 +87,17 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
+	// KIconLoader is weird.  If I preload them here it remembers about them later on even for the KPart.
+	KIconLoader iconLoader = KIconLoader("gwenview");
+	iconLoader.loadIconSet("gvnext", KIcon::Toolbar);
+	iconLoader.loadIconSet("gvprevious", KIcon::Toolbar);
+
 	mSelectPrevious=new KAction(i18n("&Previous"),
-		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
+		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
 
 	mSelectNext=new KAction(i18n("&Next"),
-		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
+		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"detailed");
