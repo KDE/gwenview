@@ -4,6 +4,8 @@
 - Fixes:
  - Really fixed saving of external tools.
  - Make sure the folder view is updated when a folder is renamed.
+ - The mouse-wheel behaviors are not messed anymore by dialogs or by showing
+   the popup menu. 
 
 2003.10.11 - v1.0.0pre2
 - New features:

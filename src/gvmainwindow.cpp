@@ -108,12 +108,9 @@ GVMainWindow::GVMainWindow()
 	createActions();
 	createLocationToolBar();
 	
-	// This is an ugly hack to be sure the pixmap view is aware of the changes
-	// in the keyboard modifiers even if it isn't focused
-	mDirView->installEventFilter(mPixmapView);
-	mFileViewStack->installEventFilter(mPixmapView);
-	mMetaEdit->installEventFilter(mPixmapView);
-	mURLEdit->installEventFilter(mPixmapView);
+	// This event filter is here to make sure the pixmap view is aware of the changes
+	// in the keyboard modifiers, even if it isn't focused
+	kapp->installEventFilter(mPixmapView);
 
 	#if KDE_VERSION >= 0x30100
 	setStandardToolBarMenuEnabled(true);
