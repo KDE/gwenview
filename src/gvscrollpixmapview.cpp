@@ -326,10 +326,10 @@ void GVScrollPixmapView::slotURLChanged() {
 		return;
 	}
 	*/
-updateContentSize();
-updateImageOffset();
+	updateContentSize();
+	updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
-	if( mSmoothScale ) addPendingPaint( SMOOTH_PASS );
+	if (mSmoothScale) addPendingPaint( SMOOTH_PASS );
 }
 
 
