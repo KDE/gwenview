@@ -721,8 +721,11 @@ QImage SampleImage(const QImage& image,const int columns,
           Read a scan line.
         */
         j= fasttolong( y_offset[y]+half ); // half added
-        p= image.scanLine( j );
-        (void) memcpy(pixels,p,image.width()*d);
+        if (j < image.height())
+        {
+          p= image.scanLine( j );
+          (void) memcpy(pixels,p,image.width()*d);
+        }
       }
     /*
       Sample each column.
