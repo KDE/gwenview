@@ -163,7 +163,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 
 void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	subjobs.remove(job);
-	ASSERT(subjobs.isEmpty());	// We should have only one job at a time ...
+	Q_ASSERT(subjobs.isEmpty());	// We should have only one job at a time ...
 
 	switch (mState) {
 	case STATE_STATORIG: {
@@ -323,7 +323,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 	struct jpeg_decompress_struct cinfo;
 
 	// Open file
-	FILE* inputFile=fopen(pixPath.data(), "rb");
+	FILE* inputFile=fopen(QFile::encodeName( pixPath ).data(), "rb");
 	if(!inputFile) return false;
 	
 	// Error handling

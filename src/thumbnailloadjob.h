@@ -33,7 +33,7 @@
 class KFileItem;
 class QPixmap;
 
-typedef QList<KFileItem> KFileItemList;
+typedef QPtrList<KFileItem> KFileItemList;
 
 
 /**
