@@ -163,6 +163,8 @@ void GVScrollPixmapView::setZoom(double zoom) {
 	double oldZoom=mZoom;
 	mZoom=zoom;
 
+	viewport()->setUpdatesEnabled(false);
+	
 	updateContentSize();
 
 	// Find the coordinate of the center of the image
@@ -173,7 +175,10 @@ void GVScrollPixmapView::setZoom(double zoom) {
 	
 	updateImageOffset();
 	updateZoomActions();
+	
+	viewport()->setUpdatesEnabled(true);
 	viewport()->repaint(false);
+	
 	emit zoomChanged(mZoom);
 }
 
@@ -265,15 +270,17 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
-	
+
 	if (image.hasAlphaBuffer()) {
 		bool light;
 	
 		int imageXOffset=int(updateRect.x()/mZoom)-int(mXOffset/mZoom);
 		int imageYOffset=int(updateRect.y()/mZoom)-int(mYOffset/mZoom);
-		for (int y=0;y<image.height();++y) {
+		int imageWidth=image.width();
+		int imageHeight=image.height();
+		for (int y=0;y<imageHeight;++y) {
 			uint* rgba=(uint*)(image.scanLine(y));
-			for(int x=0;x<image.width();x++) {
+			for(int x=0;x<imageWidth;x++) {
 				light= ((x+imageXOffset) & 16) ^ ((y+imageYOffset) & 16);
 				composite(rgba,light?192:128);
 				rgba++;
@@ -281,7 +288,6 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 		}
 		image.setAlphaBuffer(false);
 	}
-	
 	
 	image=image.scale(updateRect.size());
 	QPixmap buffer(clipw,cliph);
