@@ -61,7 +61,7 @@ const char* CONFIG_MOUSE_BEHAVIOUR_SHIFT=  "mouse behaviour shift";
 const char* CONFIG_MOUSE_BEHAVIOUR_CONTROL="mouse behaviour control";
 const char* CONFIG_MOUSE_BEHAVIOUR_ALT=    "mouse behaviour alt";
 
-const int AUTO_HIDE_TIMEOUT=1000;
+const int AUTO_HIDE_TIMEOUT=2000;
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
@@ -407,13 +407,13 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 }
 
 void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
-    mButtonStateToolMap[state]=tool;
+	mButtonStateToolMap[state]=tool;
 }
 
 void GVScrollPixmapView::updateDefaultCursor() {
-    // We assume no modifier is pressed when this is called
-    // FIXME: To be removed after ConfigDialog rewrite
-    selectTool(NoButton);
+	// We assume no modifier is pressed when this is called
+	// FIXME: To be removed after ConfigDialog rewrite
+	selectTool(NoButton);
 }
 
 //------------------------------------------------------------------------
@@ -532,23 +532,19 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
 	if (event->button()==RightButton) return;
 	mToolControllers[mTool]->mousePressEvent(event);
-    mAutoHideTimer->stop();
 }
 
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state());
 	mToolControllers[mTool]->mouseMoveEvent(event);
-    if (mFullScreen && event->stateAfter()==Qt::NoButton) {
-        restartAutoHideTimer();
-    }
+	if (mFullScreen) {
+		restartAutoHideTimer();
+	}
 }
 
 
 void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
-    if (mFullScreen) {
-        restartAutoHideTimer();
-    }
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
@@ -599,6 +595,9 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 
 bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter());
+	if (mFullScreen) {
+		restartAutoHideTimer();
+	}
 	return false;
 }
 
@@ -611,17 +610,6 @@ void GVScrollPixmapView::selectTool(ButtonState state) {
 
 
 void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
-	// If auto zoom is on, we always browse
-	/*if (mAutoZoom->isChecked()) {
-		if (event->delta()<0) {
-			emit selectNext();
-		} else {
-			emit selectPrevious();
-		}
-		event->accept();
-		return;
-	}*/ //FIXME: Remove it or not?
-
 	mToolControllers[mTool]->wheelEvent(event);
 }
 
@@ -948,7 +936,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
-	mButtonStateToolMap[NoButton]=     Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_NONE,Scroll) );
+	mButtonStateToolMap[NoButton]=	   Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_NONE,Scroll) );
 	mButtonStateToolMap[ControlButton]=Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL,Browse) );
 	mButtonStateToolMap[ShiftButton]=  Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT,Zoom) );
 	mButtonStateToolMap[AltButton]=    Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_ALT,None) );

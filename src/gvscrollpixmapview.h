@@ -81,9 +81,9 @@ public:
 	void setShowScrollBars(bool);
 	bool showScrollBars() const { return mShowScrollBars; }
 
-    Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
-    void setButtonStateTool(ButtonState,Tool);
-    void updateDefaultCursor();
+	Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
+	void setButtonStateTool(ButtonState,Tool);
+	void updateDefaultCursor();
 
 	void restartAutoHideTimer();
 
