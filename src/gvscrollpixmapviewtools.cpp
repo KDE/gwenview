@@ -89,7 +89,7 @@ void GVScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 	}
 	QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;
 	// Compute image position
-	QPoint imgPos=mView->viewportToContents(pos) - QPoint(mView->mXOffset, mView->mYOffset);
+	QPoint imgPos=mView->viewportToContents(pos) - mView->offset();
 	double newZoom=mView->computeZoom(in);
 
 	imgPos*=newZoom/mView->zoom();
@@ -168,7 +168,7 @@ void GVScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 
 
 void GVScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
-	if (mView->mMouseWheelScroll) {
+	if (mView->mouseWheelScroll()) {
 		int deltaX, deltaY;
 
 		if (event->state() & ControlButton || event->orientation()==Horizontal) {

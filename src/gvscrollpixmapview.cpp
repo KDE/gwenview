@@ -148,78 +148,194 @@ const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 const int FULLSCREEN_LABEL_RADIUS = 10;
 
 
+struct GVScrollPixmapView::Private {
+	GVDocument* mDocument;
+	QTimer* mAutoHideTimer;
+	QLabel* mFullScreenLabel;
+	
+	QColor mBackgroundColor;
+	OSDMode mOSDMode;
+	QString mFreeOutputFormat;
+	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
+	bool mDelayedSmoothing;
+	bool mEnlargeSmallImages;
+	bool mShowScrollBars;
+	bool mMouseWheelScroll;
+	Tools mTools;
 
-GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActionCollection* actionCollection)
+	ToolID mToolID;
+
+	// Offset to center images
+	int mXOffset, mYOffset;
+
+	// Zoom info
+	double mZoom;
+
+	// Our actions
+	KToggleAction* mAutoZoom;
+	KAction* mZoomIn;
+	KAction* mZoomOut;
+	KAction* mResetZoom;
+	KToggleAction* mLockZoom;
+	KActionCollection* mActionCollection;
+
+	// Object state info
+	bool mFullScreen;
+	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
+	double mZoomBeforeAuto;
+	int mXCenterBeforeAuto, mYCenterBeforeAuto;
+	
+	QMap< long long, PendingPaint > mPendingPaints;
+	QRegion mPendingNormalRegion;
+	QRegion mPendingSmoothRegion;
+	int mPendingOperations;
+	QTimer mPendingPaintTimer;
+	bool mSmoothingSuspended;
+	bool mEmptyImage;
+	int mMaxRepaintSize;
+	int mMaxScaleRepaintSize;
+	int mMaxSmoothRepaintSize;
+
+	int imageToWidgetX( int x ) const {
+		if( mZoom == 1.0 ) return x + mXOffset;
+		return int( round( x * mZoom )) + mXOffset;
+	}
+
+	int imageToWidgetY( int y ) const {
+		if( mZoom == 1.0 ) return y + mYOffset;
+		return int( round( y * mZoom )) + mYOffset;
+	}
+
+	QPoint imageToWidget( const QPoint& p ) const {
+		return QPoint( imageToWidgetX( p.x()), imageToWidgetY( p.y()));
+	}
+
+	QRect imageToWidget( const QRect& r ) const {
+		return QRect( imageToWidget( r.topLeft()), imageToWidget( r.bottomRight()));
+	}
+
+	int widgetToImageX( int x ) const {
+		if( mZoom == 1.0 ) return x - mXOffset;
+		return int( round( ( x - mXOffset ) / mZoom ));
+	}
+
+	int widgetToImageY( int y ) const {
+		if( mZoom == 1.0 ) return y - mYOffset;
+		return int( round( ( y - mYOffset ) / mZoom ));
+	}
+
+	QPoint widgetToImage( const QPoint& p ) const {
+		return QPoint( widgetToImageX( p.x()), widgetToImageY( p.y()));
+	}
+
+	QRect widgetToImage( const QRect& r ) const {
+		return QRect( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+	}
+
+	QRect widgetToImageBounding( const QRect& r ) const {
+		int extra = mZoom == 1.0 ? 0 : int( ceil( 1 / mZoom ));
+		QRect ret( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+		ret.addCoords( -extra, -extra, extra, extra );
+		return ret;
+	}
+
+};
+
+
+class GVScrollPixmapView::EventFilter : public QObject {
+public:
+	EventFilter(GVScrollPixmapView* parent)
+	: QObject(parent) {}
+		
+	bool eventFilter(QObject*, QEvent* event) {
+		switch (event->type()) {
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease:
+		case QEvent::AccelOverride:
+			return static_cast< GVScrollPixmapView* >( parent())
+						->viewportKeyEvent(static_cast<QKeyEvent*>(event));
+		default:
+			break;
+		}
+		return false;
+	}
+};
+
+
+
+GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
-, mDocument(pixmap)
-, mAutoHideTimer(new QTimer(this))
-, mFullScreenLabel(new QLabel(this))
-, mToolID(SCROLL)
-, mXOffset(0),mYOffset(0)
-, mZoom(1)
-, mActionCollection(actionCollection)
-, mFullScreen(false)
-, mOperaLikePrevious(false)
-, mZoomBeforeAuto(1)
-, mFilter( this )
-, mPendingOperations( 0 )
-, mSmoothingSuspended( false )
-, mEmptyImage( false )
-, mMaxRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
-, mMaxScaleRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
-, mMaxSmoothRepaintSize( DEFAULT_MAX_REPAINT_SIZE )
 {
+	d=new Private;
+	d->mDocument=document;
+	d->mAutoHideTimer=new QTimer(this);
+	d->mFullScreenLabel=new QLabel(this);
+	d->mToolID=SCROLL;
+	d->mXOffset=0;
+	d->mYOffset=0;
+	d->mZoom=1;
+	d->mActionCollection=actionCollection;
+	d->mFullScreen=false;
+	d->mOperaLikePrevious=false;
+	d->mZoomBeforeAuto=1;
+	d->mPendingOperations= 0 ;
+	d->mSmoothingSuspended= false ;
+	d->mEmptyImage= false ;
+	d->mMaxRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
+	d->mMaxScaleRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
+	d->mMaxSmoothRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
+
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
 	setAcceptDrops( true );
 	viewport()->setAcceptDrops( true );
 
-	mTools[SCROLL]=new ScrollTool(this);
-	mTools[ZOOM]=new ZoomTool(this);
-	mTools[mToolID]->updateCursor();
+	d->mTools[SCROLL]=new ScrollTool(this);
+	d->mTools[ZOOM]=new ZoomTool(this);
+	d->mTools[d->mToolID]->updateCursor();
 
 	// Init full screen label
-	mFullScreenLabel->setBackgroundColor(white);
-	QFont font=mFullScreenLabel->font();
+	d->mFullScreenLabel->setBackgroundColor(white);
+	QFont font=d->mFullScreenLabel->font();
 	font.setWeight(QFont::Bold);
-	mFullScreenLabel->setFont(font);
-    mFullScreenLabel->move(2, 2);
-	mFullScreenLabel->hide();
+	d->mFullScreenLabel->setFont(font);
+    d->mFullScreenLabel->move(2, 2);
+	d->mFullScreenLabel->hide();
 	
 	// Create actions
-	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,mActionCollection,"view_zoom_auto");
-	connect(mAutoZoom,SIGNAL(toggled(bool)),
+	d->mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,d->mActionCollection,"view_zoom_auto");
+	connect(d->mAutoZoom,SIGNAL(toggled(bool)),
 		this,SLOT(setAutoZoom(bool)) );
 
-	mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),mActionCollection);
+	d->mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),d->mActionCollection);
 
-	mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),mActionCollection);
+	d->mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),d->mActionCollection);
 
-	mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),mActionCollection);
-	mResetZoom->setIcon("viewmag1");
+	d->mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),d->mActionCollection);
+	d->mResetZoom->setIcon("viewmag1");
 
-	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,mActionCollection,"view_zoom_lock");
+	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
 
 	// Connect to some interesting signals
-	connect(mDocument,SIGNAL(loaded(const KURL&)),
+	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
 
-	connect(mDocument,SIGNAL(loading()),
+	connect(d->mDocument,SIGNAL(loading()),
 		this,SLOT( loadingStarted()) );
 
-	connect(mDocument,SIGNAL(modified()),
+	connect(d->mDocument,SIGNAL(modified()),
 		this,SLOT(slotModified()) );
 
-	connect(mDocument, SIGNAL(sizeUpdated(int, int)),
+	connect(d->mDocument, SIGNAL(sizeUpdated(int, int)),
 		this, SLOT(slotImageSizeUpdated()) );
 
-	connect(mDocument, SIGNAL(rectUpdated(const QRect&)),
+	connect(d->mDocument, SIGNAL(rectUpdated(const QRect&)),
 		this, SLOT(slotImageRectUpdated(const QRect&)) );
 
-	connect(mAutoHideTimer,SIGNAL(timeout()),
+	connect(d->mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 
-	connect(&mPendingPaintTimer,SIGNAL(timeout()),
+	connect(&d->mPendingPaintTimer,SIGNAL(timeout()),
 		this,SLOT(checkPendingOperations()) );
 
 	connect(GVBusyLevelManager::instance(),SIGNAL(busyLevelChanged(GVBusyLevel)),
@@ -230,20 +346,22 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	// itself the filter would lead to doubled paint events, because QScrollView
 	// installs an event filter on its viewport, and doesn't filter out the paint
 	// events -> it'd get it twice, first from app filter, second from viewport filter.
-	kapp->installEventFilter( &mFilter );
+	EventFilter* filter=new EventFilter(this);
+	kapp->installEventFilter(filter);
 }
 
 
 GVScrollPixmapView::~GVScrollPixmapView() {
-	delete mTools[SCROLL];
-	delete mTools[ZOOM];
+	delete d->mTools[SCROLL];
+	delete d->mTools[ZOOM];
+	delete d;
 }
 
 
 void GVScrollPixmapView::slotLoaded() {
 	updateZoomActions();
 
-	if (mDocument->isNull()) {
+	if (d->mDocument->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
 		return;
@@ -251,13 +369,13 @@ void GVScrollPixmapView::slotLoaded() {
 
 	updateContentSize();
 	updateImageOffset();
-	if (mFullScreen && mOSDMode!=NONE) updateFullScreenLabel();
+	if (d->mFullScreen && d->mOSDMode!=NONE) updateFullScreenLabel();
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
 
 
 void GVScrollPixmapView::slotModified() {
-	if (mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked()) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -270,8 +388,8 @@ void GVScrollPixmapView::slotModified() {
 
 void GVScrollPixmapView::loadingStarted() {
 	cancelPending();
-	mSmoothingSuspended = true;
-	mEmptyImage = true;
+	d->mSmoothingSuspended = true;
+	d->mEmptyImage = true;
 	// every loading() signal from GVDocument must be followed by a signal that turns this off
 	QPainter painter( viewport());
 	painter.eraseRect( viewport()->rect());
@@ -282,12 +400,102 @@ void GVScrollPixmapView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
+KToggleAction* GVScrollPixmapView::autoZoom() const {
+	return d->mAutoZoom;
+}
+
+
+KAction* GVScrollPixmapView::zoomIn() const {
+	return d->mZoomIn;
+}
+
+
+KAction* GVScrollPixmapView::zoomOut() const {
+	return d->mZoomOut;
+}
+
+
+KAction* GVScrollPixmapView::resetZoom() const {
+	return d->mResetZoom;
+}
+
+
+KToggleAction* GVScrollPixmapView::lockZoom() const {
+	return d->mLockZoom;
+}
+
+
+double GVScrollPixmapView::zoom() const {
+	return d->mZoom;
+}
+
+
+bool GVScrollPixmapView::fullScreen() const {
+	return d->mFullScreen;
+}
+
+
+QColor GVScrollPixmapView::normalBackgroundColor() const {
+	return d->mBackgroundColor;
+}
+
+
+GVScrollPixmapView::OSDMode GVScrollPixmapView::osdMode() const {
+	return d->mOSDMode;
+}
+
+
+QString GVScrollPixmapView::freeOutputFormat() const {
+	return d->mFreeOutputFormat;
+}
+
+
+void GVScrollPixmapView::setFreeOutputFormat(const QString& format) {
+	d->mFreeOutputFormat=format;
+}
+
+
+GVImageUtils::SmoothAlgorithm GVScrollPixmapView::smoothAlgorithm() const {
+	return d->mSmoothAlgorithm;
+}
+
+
+bool GVScrollPixmapView::delayedSmoothing() const {
+	return d->mDelayedSmoothing;
+}
+
+
+bool GVScrollPixmapView::doDelayedSmoothing() const {
+	return d->mDelayedSmoothing && d->mSmoothAlgorithm;
+}
+
+
+bool GVScrollPixmapView::enlargeSmallImages() const {
+	return d->mEnlargeSmallImages;
+}
+
+
+bool GVScrollPixmapView::showScrollBars() const {
+	return d->mShowScrollBars;
+}
+
+
+bool GVScrollPixmapView::mouseWheelScroll() const {
+	return d->mMouseWheelScroll;
+}
+
+
+QPoint GVScrollPixmapView::offset() const {
+	return QPoint(d->mXOffset, d->mYOffset);
+}
+
+
 void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value) {
-	if( mSmoothAlgorithm == value ) return;
-	mSmoothAlgorithm = value;
-	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
-	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
-	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
+	if( d->mSmoothAlgorithm == value ) return;
+	d->mSmoothAlgorithm = value;
+	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
+	d->mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
+	d->mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
 	if( doDelayedSmoothing() ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
@@ -297,11 +505,11 @@ void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value)
 
 
 void GVScrollPixmapView::setDelayedSmoothing(bool value) {
-	if (m_DelayedSmoothing==value) return;
-	m_DelayedSmoothing=value;
-	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
-	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
-	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
+	if (d->mDelayedSmoothing==value) return;
+	d->mDelayedSmoothing=value;
+	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
+	d->mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
+	d->mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
 	if( doDelayedSmoothing() ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
@@ -311,34 +519,34 @@ void GVScrollPixmapView::setDelayedSmoothing(bool value) {
 
 
 void GVScrollPixmapView::setEnlargeSmallImages(bool value) {
-	mEnlargeSmallImages=value;
-	if (mAutoZoom->isChecked()) {
+	d->mEnlargeSmallImages=value;
+	if (d->mAutoZoom->isChecked()) {
 		setZoom(computeAutoZoom());
 	}
 }
 
 
 void GVScrollPixmapView::setOSDMode(GVScrollPixmapView::OSDMode value) {
-	mOSDMode=value;
+	d->mOSDMode=value;
 }
 
 
 void GVScrollPixmapView::setShowScrollBars(bool value) {
-	mShowScrollBars=value;
+	d->mShowScrollBars=value;
 	updateScrollBarMode();
 }
 
 
 void GVScrollPixmapView::setMouseWheelScroll(bool value) {
-	mMouseWheelScroll=value;
+	d->mMouseWheelScroll=value;
 }
 
 
 void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	int viewWidth=visibleWidth();
 	int viewHeight=visibleHeight();
-	double oldZoom=mZoom;
-	mZoom=zoom;
+	double oldZoom=d->mZoom;
+	d->mZoom=zoom;
 
 	viewport()->setUpdatesEnabled(false);
 
@@ -347,10 +555,10 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	// Find the coordinate of the center of the image
 	// and center the view on it
 	if (centerX==-1) {
-		centerX=int( ((viewWidth/2+contentsX()-mXOffset)/oldZoom)*mZoom );
+		centerX=int( ((viewWidth/2+contentsX()-d->mXOffset)/oldZoom)*d->mZoom );
 	}
 	if (centerY==-1) {
-		centerY=int( ((viewHeight/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+		centerY=int( ((viewHeight/2+contentsY()-d->mYOffset)/oldZoom)*d->mZoom );
 	}
 	center(centerX,centerY);
 
@@ -360,33 +568,33 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	viewport()->setUpdatesEnabled(true);
 	fullRepaint();
 
-	emit zoomChanged(mZoom);
+	emit zoomChanged(d->mZoom);
 }
 
 
 void GVScrollPixmapView::setFullScreen(bool fullScreen) {
-	mFullScreen=fullScreen;
-	viewport()->setMouseTracking(mFullScreen);
-	if (mFullScreen) {
+	d->mFullScreen=fullScreen;
+	viewport()->setMouseTracking(d->mFullScreen);
+	if (d->mFullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
 	} else {
-		viewport()->setBackgroundColor(mBackgroundColor);
-		mAutoHideTimer->stop();
-		mTools[mToolID]->updateCursor();
+		viewport()->setBackgroundColor(d->mBackgroundColor);
+		d->mAutoHideTimer->stop();
+		d->mTools[d->mToolID]->updateCursor();
 	}
-	if (mFullScreen && mOSDMode!=NONE) {
+	if (d->mFullScreen && d->mOSDMode!=NONE) {
 		updateFullScreenLabel();
-		mFullScreenLabel->show();
+		d->mFullScreenLabel->show();
 	} else {
-		mFullScreenLabel->hide();
+		d->mFullScreenLabel->hide();
 	}
 }
 
 
 void GVScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
-	mBackgroundColor=color;
-	viewport()->setBackgroundColor(mBackgroundColor);
+	d->mBackgroundColor=color;
+	viewport()->setBackgroundColor(d->mBackgroundColor);
 }
 
 
@@ -397,7 +605,7 @@ void GVScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
-	if (mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked()) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -419,7 +627,7 @@ inline void composite(uint* rgba,uint value) {
 }
 
 void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
-	if( !mEmptyImage ) {
+	if( !d->mEmptyImage ) {
 		addPendingPaint( false, QRect( clipx, clipy, clipw, cliph ));
 	} else {
 		// image is empty, simply clear
@@ -432,10 +640,10 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 // Also, there's a bitfield of pending operations, operations are handled only after
 // there's nothing more to paint (so that smooth pass is started).
 void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
-	if( mSmoothingSuspended && smooth ) return;
+	if( d->mSmoothingSuspended && smooth ) return;
 
 	// try to avoid scheduling already scheduled areas
-	QRegion& region = smooth ? mPendingSmoothRegion : mPendingNormalRegion;
+	QRegion& region = smooth ? d->mPendingSmoothRegion : d->mPendingNormalRegion;
 	if( region.intersect( rect ) == QRegion( rect ))
 		return; // whole rect has already pending paints
 	// at least try to remove the part that's already scheduled
@@ -453,26 +661,26 @@ void GVScrollPixmapView::addPendingPaintInternal( bool smooth, QRect rect ) {
 	// handle the case of two different paints at the same position (just in case)
 	key *= 100;
 	bool insert = true;
-	while( mPendingPaints.contains( key )) {
-		if( mPendingPaints[ key ].rect.contains( rect )) {
+	while( d->mPendingPaints.contains( key )) {
+		if( d->mPendingPaints[ key ].rect.contains( rect )) {
 			insert = false;
 			break;
 		}
-		if( rect.contains( mPendingPaints[ key ].rect )) {
+		if( rect.contains( d->mPendingPaints[ key ].rect )) {
 			break;
 		}
 		++key;
 	}
 	if( insert ) {
-		mPendingPaints[ key ] = PendingPaint( smooth, rect );
+		d->mPendingPaints[ key ] = PendingPaint( smooth, rect );
 	}
 	scheduleOperation( CHECK_OPERATIONS );
 }
 
 void GVScrollPixmapView::checkPendingOperations() {
 	checkPendingOperationsInternal();
-	if( mPendingPaints.isEmpty() && mPendingOperations == 0 ) {
-		mPendingPaintTimer.stop();
+	if( d->mPendingPaints.isEmpty() && d->mPendingOperations == 0 ) {
+		d->mPendingPaintTimer.stop();
 	}
 	updateBusyLevels();
 }
@@ -481,12 +689,12 @@ void GVScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
 	// The only thing that makes time spent in performPaint() vary
 	// is whether there will be scaling and whether there will be smoothing.
 	// So there are three max sizes for each mode.
-	int maxSize = mMaxRepaintSize;
-	if( mZoom != 1.0 ) {
+	int maxSize = d->mMaxRepaintSize;
+	if( d->mZoom != 1.0 ) {
 		if( paint.smooth || !doDelayedSmoothing() ) {
-			maxSize = mMaxSmoothRepaintSize;
+			maxSize = d->mMaxSmoothRepaintSize;
 		} else {
-			maxSize = mMaxScaleRepaintSize;
+			maxSize = d->mMaxScaleRepaintSize;
 		}
 	}
 	// don't paint more than max_size pixels at a time
@@ -503,13 +711,13 @@ void GVScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
 
 
 void GVScrollPixmapView::checkPendingOperationsInternal() {
-	if( !mPendingPaintTimer.isActive()) // suspended
+	if( !d->mPendingPaintTimer.isActive()) // suspended
 		return;
-	while( !mPendingPaints.isEmpty()) {
-		PendingPaint paint = *mPendingPaints.begin();
-		mPendingPaints.remove( mPendingPaints.begin());
+	while( !d->mPendingPaints.isEmpty()) {
+		PendingPaint paint = *d->mPendingPaints.begin();
+		d->mPendingPaints.remove( d->mPendingPaints.begin());
 		limitPaintSize( paint ); // modifies paint.rect if necessary
-		QRegion& region = paint.smooth ? mPendingSmoothRegion : mPendingNormalRegion;
+		QRegion& region = paint.smooth ? d->mPendingSmoothRegion : d->mPendingNormalRegion;
 		region -= paint.rect;
 		QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
 		QRect paintRect = paint.rect.intersect( visibleRect );
@@ -521,31 +729,31 @@ void GVScrollPixmapView::checkPendingOperationsInternal() {
 			return;
 		}
 	}
-	if( mPendingOperations & SMOOTH_PASS ) {
-		mSmoothingSuspended = false;
+	if( d->mPendingOperations & SMOOTH_PASS ) {
+		d->mSmoothingSuspended = false;
 		if( doDelayedSmoothing() ) {
 			QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
 			addPendingPaint( true, visibleRect );
 		}
-		mPendingOperations &= ~SMOOTH_PASS;
+		d->mPendingOperations &= ~SMOOTH_PASS;
 		return;
 	}
 }
 
 void GVScrollPixmapView::scheduleOperation( Operation operation )
 {
-	mPendingOperations |= operation;
+	d->mPendingOperations |= operation;
 	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 	updateBusyLevels();
 }
 
 void GVScrollPixmapView::updateBusyLevels() {
-	if( !mPendingPaintTimer.isActive()) {
+	if( !d->mPendingPaintTimer.isActive()) {
 		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
-	} else if( !mPendingPaints.isEmpty() && !(*mPendingPaints.begin()).smooth ) {
+	} else if( !d->mPendingPaints.isEmpty() && !(*d->mPendingPaints.begin()).smooth ) {
 		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_PAINTING );
-	} else if(( mPendingOperations & SMOOTH_PASS )
-		|| ( !mPendingPaints.isEmpty() && (*mPendingPaints.begin()).smooth )) {
+	} else if(( d->mPendingOperations & SMOOTH_PASS )
+		|| ( !d->mPendingPaints.isEmpty() && (*d->mPendingPaints.begin()).smooth )) {
 		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_SMOOTHING );
 	} else {
 		assert( false );
@@ -555,17 +763,17 @@ void GVScrollPixmapView::updateBusyLevels() {
 void GVScrollPixmapView::slotBusyLevelChanged( GVBusyLevel level ) {
 	bool resume = false;
 	if( level <= BUSY_PAINTING
-		&& !mPendingPaints.isEmpty() && !(*mPendingPaints.begin()).smooth ) {
+		&& !d->mPendingPaints.isEmpty() && !(*d->mPendingPaints.begin()).smooth ) {
 		resume = true;
 	} else if( level <= BUSY_SMOOTHING
-			&& (( mPendingOperations & SMOOTH_PASS )
-			|| ( !mPendingPaints.isEmpty() && (*mPendingPaints.begin()).smooth ))) {
+			&& (( d->mPendingOperations & SMOOTH_PASS )
+			|| ( !d->mPendingPaints.isEmpty() && (*d->mPendingPaints.begin()).smooth ))) {
 		resume = true;
 	}
 	if( resume ) {
-		mPendingPaintTimer.start( 0 );
+		d->mPendingPaintTimer.start( 0 );
 	} else {
-		mPendingPaintTimer.stop();
+		d->mPendingPaintTimer.stop();
 	}
 }
 
@@ -581,11 +789,11 @@ void GVScrollPixmapView::fullRepaint() {
 }
 
 void GVScrollPixmapView::cancelPending() {
-	mPendingPaints.clear();
-	mPendingNormalRegion = QRegion();
-	mPendingSmoothRegion = QRegion();
-	mPendingPaintTimer.stop();
-	mPendingOperations = 0;
+	d->mPendingPaints.clear();
+	d->mPendingNormalRegion = QRegion();
+	d->mPendingSmoothRegion = QRegion();
+	d->mPendingPaintTimer.stop();
+	d->mPendingOperations = 0;
 	updateBusyLevels();
 }
 
@@ -601,39 +809,39 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	QTime t;
 	t.start();
 
-	if (mDocument->isNull()) {
+	if (d->mDocument->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
-	QRect imageRect = widgetToImageBounding( QRect(clipx,clipy,clipw,cliph));
-	imageRect = imageRect.intersect( QRect( 0, 0, mDocument->width(), mDocument->height()));
+	QRect imageRect = d->widgetToImageBounding( QRect(clipx,clipy,clipw,cliph));
+	imageRect = imageRect.intersect( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
 	if (imageRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
-	QImage image = mDocument->image().copy( imageRect );
-	QRect widgetRect = imageToWidget( imageRect );
+	QImage image = d->mDocument->image().copy( imageRect );
+	QRect widgetRect = d->imageToWidget( imageRect );
 
 	if (image.isNull() || widgetRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
-	int* maxRepaintSize = &mMaxRepaintSize;
+	int* maxRepaintSize = &d->mMaxRepaintSize;
 	if (smooth) {
 		if( zoom() != 1.0 ) {
 			image=image.convertDepth(32);
-			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), mSmoothAlgorithm );
-			maxRepaintSize = &mMaxSmoothRepaintSize;
+			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), d->mSmoothAlgorithm );
+			maxRepaintSize = &d->mMaxSmoothRepaintSize;
 		}
 	} else {
 		if( zoom() != 1.0 ) {
 			GVImageUtils::SmoothAlgorithm algo=doDelayedSmoothing()
 				?GVImageUtils::SMOOTH_NONE
-				:mSmoothAlgorithm;
+				:d->mSmoothAlgorithm;
 			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), algo );
-			maxRepaintSize = doDelayedSmoothing() ? &mMaxScaleRepaintSize : &mMaxSmoothRepaintSize;
+			maxRepaintSize = doDelayedSmoothing() ? &d->mMaxScaleRepaintSize : &d->mMaxSmoothRepaintSize;
 			
 			if( doDelayedSmoothing() && zoom() != 1.0 ) {
 				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
@@ -648,8 +856,8 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 
 		bool light;
 
-		int imageXOffset=widgetRect.x()-mXOffset;
-		int imageYOffset=widgetRect.y()-mYOffset;
+		int imageXOffset=widgetRect.x()-d->mXOffset;
+		int imageYOffset=widgetRect.y()-d->mYOffset;
 		int imageWidth=image.width();
 		int imageHeight=image.height();
 		for (int y=0;y<imageHeight;++y) {
@@ -694,10 +902,10 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
 	switch (event->button()) {
 	case Qt::LeftButton:
-		mTools[mToolID]->leftButtonPressEvent(event);
+		d->mTools[d->mToolID]->leftButtonPressEvent(event);
 		break;
 	case Qt::RightButton:
-		mTools[mToolID]->rightButtonPressEvent(event);
+		d->mTools[d->mToolID]->rightButtonPressEvent(event);
 		break;
 	default: // Avoid compiler complain
 		break;
@@ -707,8 +915,8 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state(), true);
-	mTools[mToolID]->mouseMoveEvent(event);
-	if (mFullScreen) {
+	d->mTools[d->mToolID]->mouseMoveEvent(event);
+	if (d->mFullScreen) {
 		restartAutoHideTimer();
 	}
 }
@@ -718,15 +926,15 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
-			mOperaLikePrevious=true;
+			d->mOperaLikePrevious=true;
 			emit selectPrevious();
 			return;
 		}
-		mTools[mToolID]->leftButtonReleaseEvent(event);
+		d->mTools[d->mToolID]->leftButtonReleaseEvent(event);
 		break;
 
 	case Qt::MidButton:
-		mTools[mToolID]->midButtonReleaseEvent(event);
+		d->mTools[d->mToolID]->midButtonReleaseEvent(event);
 		break;
 
 	case Qt::RightButton:
@@ -735,10 +943,10 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			return;
 		}
 
-		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
-			mOperaLikePrevious=false;
+		if (d->mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
+			d->mOperaLikePrevious=false;
 		} else {
-			mTools[mToolID]->rightButtonReleaseEvent(event);
+			d->mTools[d->mToolID]->rightButtonReleaseEvent(event);
 		}
 		break;
 
@@ -756,7 +964,7 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 
 	case QEvent::MouseButtonDblClick:
-		mActionCollection->action("fullscreen")->activate();
+		d->mActionCollection->action("fullscreen")->activate();
 		return true;
 
 	// Getting/loosing focus causes repaints, but repainting here is expensive,
@@ -772,27 +980,10 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 	return QScrollView::eventFilter(obj,event);
 }
 
-GVScrollPixmapViewFilter::GVScrollPixmapViewFilter( GVScrollPixmapView* parent )
-: QObject( parent )
-{
-}
-
-bool GVScrollPixmapViewFilter::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::KeyPress:
-	case QEvent::KeyRelease:
-	case QEvent::AccelOverride:
-		return static_cast< GVScrollPixmapView* >( parent())
-					->viewportKeyEvent(static_cast<QKeyEvent*>(event));
-	default:
-		break;
-	}
-	return false;
-}
 
 bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter(), false);
-	if (mFullScreen) {
+	if (d->mFullScreen) {
 		restartAutoHideTimer();
 	}
 	return false;
@@ -806,7 +997,7 @@ void GVScrollPixmapView::contentsDragEnterEvent(QDragEnterEvent* event) {
 void GVScrollPixmapView::contentsDropEvent(QDropEvent* event) {
 	KURL::List list;
 	if( KURLDrag::decode( event, list )) {
-		mDocument->setURL( list.first());
+		d->mDocument->setURL( list.first());
 	}
 }
 
@@ -815,21 +1006,21 @@ void GVScrollPixmapView::contentsDropEvent(QDropEvent* event) {
  * different from the current one.
  */
 void GVScrollPixmapView::selectTool(ButtonState state, bool force) {
-	ToolID oldToolID=mToolID;
+	ToolID oldToolID=d->mToolID;
 	if (state & ShiftButton) {
-		mToolID=ZOOM;
+		d->mToolID=ZOOM;
 	} else {
-		mToolID=SCROLL;
+		d->mToolID=SCROLL;
 	}
 
-	if (mToolID!=oldToolID || force) {
-		mTools[mToolID]->updateCursor();
+	if (d->mToolID!=oldToolID || force) {
+		d->mTools[d->mToolID]->updateCursor();
 	}
 }
 
 
 void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
-	mTools[mToolID]->wheelEvent(event);
+	d->mTools[d->mToolID]->wheelEvent(event);
 }
 
 
@@ -839,8 +1030,8 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::slotZoomIn() {
-	if (mAutoZoom->isChecked()) {
-		mAutoZoom->setChecked(false);
+	if (d->mAutoZoom->isChecked()) {
+		d->mAutoZoom->setChecked(false);
 		updateScrollBarMode();
 	}
 	setZoom(computeZoom(true));
@@ -848,8 +1039,8 @@ void GVScrollPixmapView::slotZoomIn() {
 
 
 void GVScrollPixmapView::slotZoomOut() {
-	if (mAutoZoom->isChecked()) {
-		mAutoZoom->setChecked(false);
+	if (d->mAutoZoom->isChecked()) {
+		d->mAutoZoom->setChecked(false);
 		updateScrollBarMode();
 	}
 	setZoom(computeZoom(false));
@@ -857,8 +1048,8 @@ void GVScrollPixmapView::slotZoomOut() {
 
 
 void GVScrollPixmapView::slotResetZoom() {
-	if (mAutoZoom->isChecked()) {
-		mAutoZoom->setChecked(false);
+	if (d->mAutoZoom->isChecked()) {
+		d->mAutoZoom->setChecked(false);
 		updateScrollBarMode();
 	}
 	setZoom(1.0);
@@ -868,12 +1059,12 @@ void GVScrollPixmapView::slotResetZoom() {
 void GVScrollPixmapView::setAutoZoom(bool value) {
 	updateScrollBarMode();
 	if (value) {
-		mZoomBeforeAuto=mZoom;
-		mXCenterBeforeAuto=width()/2  + contentsX() + mXOffset;
-		mYCenterBeforeAuto=height()/2 + contentsY() + mYOffset;
+		d->mZoomBeforeAuto=d->mZoom;
+		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
+		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
 		setZoom(computeAutoZoom());
 	} else {
-		setZoom(mZoomBeforeAuto, mXCenterBeforeAuto, mYCenterBeforeAuto);
+		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
 	}
 }
 
@@ -884,19 +1075,19 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::slotImageSizeUpdated() {
-	mXOffset=0;
-	mYOffset=0;
+	d->mXOffset=0;
+	d->mYOffset=0;
 
-	if (mAutoZoom->isChecked()) {
-		mXCenterBeforeAuto=0;
-		mYCenterBeforeAuto=0;
+	if (d->mAutoZoom->isChecked()) {
+		d->mXCenterBeforeAuto=0;
+		d->mYCenterBeforeAuto=0;
 		setZoom(computeAutoZoom());
 	} else {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
 	updateImageOffset();
-	QRect imageRect = imageToWidget( QRect( 0, 0, mDocument->width(), mDocument->height()));
+	QRect imageRect = d->imageToWidget( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
 
 	QPainter painter( viewport());
 	// Top rect
@@ -921,55 +1112,55 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
-	mEmptyImage = false;
-	viewport()->repaint( imageToWidget( imageRect ), false );
+	d->mEmptyImage = false;
+	viewport()->repaint( d->imageToWidget( imageRect ), false );
 }
 
 
 void GVScrollPixmapView::restartAutoHideTimer() {
-	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
+	d->mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
 
 
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 	QPopupMenu menu(this);
-	bool noImage=mDocument->filename().isEmpty();
-	bool validImage=!mDocument->isNull();
+	bool noImage=d->mDocument->filename().isEmpty();
+	bool validImage=!d->mDocument->isNull();
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary
-	mActionCollection->action("fullscreen")->plug(&menu);
+	d->mActionCollection->action("fullscreen")->plug(&menu);
 
 	if (validImage) {
 		menu.insertSeparator();
 
-		mAutoZoom->plug(&menu);
-		mZoomIn->plug(&menu);
-		mZoomOut->plug(&menu);
-		mResetZoom->plug(&menu);
-		mLockZoom->plug(&menu);
+		d->mAutoZoom->plug(&menu);
+		d->mZoomIn->plug(&menu);
+		d->mZoomOut->plug(&menu);
+		d->mResetZoom->plug(&menu);
+		d->mLockZoom->plug(&menu);
 	}
 
 	menu.insertSeparator();
 
-	mActionCollection->action("first")->plug(&menu);
-	mActionCollection->action("previous")->plug(&menu);
-	mActionCollection->action("next")->plug(&menu);
-	mActionCollection->action("last")->plug(&menu);
+	d->mActionCollection->action("first")->plug(&menu);
+	d->mActionCollection->action("previous")->plug(&menu);
+	d->mActionCollection->action("next")->plug(&menu);
+	d->mActionCollection->action("last")->plug(&menu);
 
 	if (validImage) {
 		menu.insertSeparator();
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
-		mActionCollection->action("rotate_left")->plug(editMenu);
-		mActionCollection->action("rotate_right")->plug(editMenu);
-		mActionCollection->action("mirror")->plug(editMenu);
-		mActionCollection->action("flip")->plug(editMenu);
+		d->mActionCollection->action("rotate_left")->plug(editMenu);
+		d->mActionCollection->action("rotate_right")->plug(editMenu);
+		d->mActionCollection->action("mirror")->plug(editMenu);
+		d->mActionCollection->action("flip")->plug(editMenu);
 		menu.insertItem( i18n("Edit"), editMenu );
 
 		GVExternalToolContext* externalToolContext=
 			GVExternalToolManager::instance()->createContext(
-			this, mDocument->url());
+			this, d->mDocument->url());
 
 		menu.insertItem(
 			i18n("External Tools"), externalToolContext->popupMenu());
@@ -1003,7 +1194,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 
 void GVScrollPixmapView::updateScrollBarMode() {
-	if (mAutoZoom->isChecked() || !mShowScrollBars) {
+	if (d->mAutoZoom->isChecked() || !d->mShowScrollBars) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1015,8 +1206,8 @@ void GVScrollPixmapView::updateScrollBarMode() {
 
 void GVScrollPixmapView::updateContentSize() {
 	resizeContents(
-		int(mDocument->width()*mZoom),
-		int(mDocument->height()*mZoom)	);
+		int(d->mDocument->width()*d->mZoom),
+		int(d->mDocument->height()*d->mZoom)	);
 }
 
 // QSize.scale() does not exist in Qt 3.0.x
@@ -1037,10 +1228,10 @@ static void sizeScaleMin(QSize* size, int w, int h) {
 #endif
 
 double GVScrollPixmapView::computeAutoZoom() const {
-	if (mDocument->isNull()) {
+	if (d->mDocument->isNull()) {
 		return 1.0;
 	}
-	QSize size=mDocument->image().size();
+	QSize size=d->mDocument->image().size();
 
 #if QT_VERSION>=0x030100
 	size.scale(width(),height(),QSize::ScaleMin);
@@ -1048,24 +1239,24 @@ double GVScrollPixmapView::computeAutoZoom() const {
 	sizeScaleMin(&size,width(),height());
 #endif
 
-	double zoom=double(size.width())/mDocument->width();
-	if (zoom>1.0 && !mEnlargeSmallImages) return 1.0;
+	double zoom=double(size.width())/d->mDocument->width();
+	if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
 	return zoom;
 }
 
 
 double GVScrollPixmapView::computeZoom(bool in) const {
 	if (in) {
-		if (mZoom>=1.0) {
-			return floor(mZoom)+1.0;
+		if (d->mZoom>=1.0) {
+			return floor(d->mZoom)+1.0;
 		} else {
-			return 1/( ceil(1/mZoom)-1.0 );
+			return 1/( ceil(1/d->mZoom)-1.0 );
 		}
 	} else {
-		if (mZoom>1.0) {
-			return ceil(mZoom)-1.0;
+		if (d->mZoom>1.0) {
+			return ceil(d->mZoom)-1.0;
 		} else {
-			return 1/( floor(1/mZoom)+1.0 );
+			return 1/( floor(1/d->mZoom)+1.0 );
 		}
 	}
 }
@@ -1075,10 +1266,10 @@ void GVScrollPixmapView::updateImageOffset() {
 	int viewWidth=width();
 	int viewHeight=height();
 
-	// Compute mXOffset and mYOffset in case the image does not fit
+	// Compute d->mXOffset and d->mYOffset in case the image does not fit
 	// the view width or height
-	int zpixWidth=int(mDocument->width() * mZoom);
-	int zpixHeight=int(mDocument->height() * mZoom);
+	int zpixWidth=int(d->mDocument->width() * d->mZoom);
+	int zpixHeight=int(d->mDocument->height() * d->mZoom);
 
 	if (zpixWidth>viewWidth && hScrollBarMode()!=AlwaysOff) {
 		viewHeight-=horizontalScrollBar()->height();
@@ -1087,8 +1278,8 @@ void GVScrollPixmapView::updateImageOffset() {
 		viewWidth-=verticalScrollBar()->width();
 	}
 
-	mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
-	mYOffset=QMAX(0,(viewHeight-zpixHeight)/2);
+	d->mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
+	d->mYOffset=QMAX(0,(viewHeight-zpixHeight)/2);
 }
 
 
@@ -1190,20 +1381,20 @@ static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
 
 
 void GVScrollPixmapView::updateFullScreenLabel() {
-	QString path=mDocument->url().path();	
-	QString pathFile=mDocument->dirURL().path();
-	QString comment=mDocument->comment();
+	QString path=d->mDocument->url().path();	
+	QString pathFile=d->mDocument->dirURL().path();
+	QString comment=d->mDocument->comment();
     if (comment.isNull()) {
         comment=i18n("(No comment)");
     }
-	QString fileName=mDocument->filename();
-	QString resolution = QString( "%1x%2" ).arg( mDocument->width()).arg( mDocument->height());
+	QString fileName=d->mDocument->filename();
+	QString resolution = QString( "%1x%2" ).arg( d->mDocument->width()).arg( d->mDocument->height());
 
 	QString text;
 	
-	switch (mOSDMode) {
+	switch (d->mOSDMode) {
 	case FREE_OUTPUT: {		
-		QString str = mFreeOutputFormat;
+		QString str = d->mFreeOutputFormat;
 		str.replace("\\n", "\n");
 		QStringList strList = QStringList::split(QRegExp("\%"),str,TRUE);
 		for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it ) {
@@ -1240,16 +1431,16 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	
 	QPainter painter;
 
-	QSize size=mFullScreenLabel->fontMetrics().size(0,text);
+	QSize size=d->mFullScreenLabel->fontMetrics().size(0,text);
 	size.setWidth( size.width() + FULLSCREEN_LABEL_RADIUS * 2);
 	size.setHeight( size.height() + FULLSCREEN_LABEL_RADIUS);
-	mFullScreenLabel->resize(size);
+	d->mFullScreenLabel->resize(size);
 
 	// Create a mask for the text
 	QBitmap mask(size,true);
 	painter.begin(&mask);
 	painter.setBrush(Qt::white);
-	fillRoundRect(painter, mFullScreenLabel->rect(), FULLSCREEN_LABEL_RADIUS);
+	fillRoundRect(painter, d->mFullScreenLabel->rect(), FULLSCREEN_LABEL_RADIUS);
 	painter.end();
 
 	// Draw the text on a pixmap
@@ -1263,7 +1454,7 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	rect.addCoords(
         FULLSCREEN_LABEL_RADIUS, FULLSCREEN_LABEL_RADIUS/2,
 		-FULLSCREEN_LABEL_RADIUS, -FULLSCREEN_LABEL_RADIUS/2);
-	painter.setFont(mFullScreenLabel->font());
+	painter.setFont(d->mFullScreenLabel->font());
 	
     painter.setPen(black);
 	painter.drawText(rect, Qt::DontClip, text);
@@ -1274,28 +1465,28 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	painter.end();
 
 	// Update the label
-	mFullScreenLabel->setPixmap(pixmap);
-	mFullScreenLabel->setMask(mask);
+	d->mFullScreenLabel->setPixmap(pixmap);
+	d->mFullScreenLabel->setMask(mask);
 }
 
 void GVScrollPixmapView::updateZoomActions() {
 	// Disable most actions if there's no image
-	if (mDocument->isNull()) {
-		mZoomIn->setEnabled(false);
-		mZoomOut->setEnabled(false);
-		mResetZoom->setEnabled(false);
+	if (d->mDocument->isNull()) {
+		d->mZoomIn->setEnabled(false);
+		d->mZoomOut->setEnabled(false);
+		d->mResetZoom->setEnabled(false);
 		return;
 	}
 
-	mAutoZoom->setEnabled(true);
-	mResetZoom->setEnabled(true);
+	d->mAutoZoom->setEnabled(true);
+	d->mResetZoom->setEnabled(true);
 
-	if (mAutoZoom->isChecked()) {
-		mZoomIn->setEnabled(true);
-		mZoomOut->setEnabled(true);
+	if (d->mAutoZoom->isChecked()) {
+		d->mZoomIn->setEnabled(true);
+		d->mZoomOut->setEnabled(true);
 	} else {
-		mZoomIn->setEnabled(mZoom<MAX_ZOOM);
-		mZoomOut->setEnabled(mZoom>1/MAX_ZOOM);
+		d->mZoomIn->setEnabled(d->mZoom<MAX_ZOOM);
+		d->mZoomOut->setEnabled(d->mZoom>1/MAX_ZOOM);
 	}
 }
 
@@ -1306,32 +1497,32 @@ void GVScrollPixmapView::updateZoomActions() {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::showFileProperties() {
-	(void)new KPropertiesDialog(mDocument->url());
+	(void)new KPropertiesDialog(d->mDocument->url());
 }
 
 
 void GVScrollPixmapView::renameFile() {
-	FileOperation::rename(mDocument->url(),this);
+	FileOperation::rename(d->mDocument->url(),this);
 }
 
 
 void GVScrollPixmapView::copyFile() {
 	KURL::List list;
-	list << mDocument->url();
+	list << d->mDocument->url();
 	FileOperation::copyTo(list,this);
 }
 
 
 void GVScrollPixmapView::moveFile() {
 	KURL::List list;
-	list << mDocument->url();
+	list << d->mDocument->url();
 	FileOperation::moveTo(list,this);
 }
 
 
 void GVScrollPixmapView::deleteFile() {
 	KURL::List list;
-	list << mDocument->url();
+	list << d->mDocument->url();
 	FileOperation::del(list,this);
 }
 
@@ -1342,53 +1533,53 @@ void GVScrollPixmapView::deleteFile() {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
-	mOSDMode=static_cast<OSDMode>(config->readNumEntry(CONFIG_OSD_MODE, static_cast<int>(PATH_AND_COMMENT)) );
-	mFreeOutputFormat=config->readEntry(CONFIG_FREE_OUTPUT_FORMAT,"%f - %r - %c");
+	d->mOSDMode=static_cast<OSDMode>(config->readNumEntry(CONFIG_OSD_MODE, static_cast<int>(PATH_AND_COMMENT)) );
+	d->mFreeOutputFormat=config->readEntry(CONFIG_FREE_OUTPUT_FORMAT,"%f - %r - %c");
 	
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
-		mSmoothAlgorithm = GVImageUtils::SMOOTH_NORMAL;
-		m_DelayedSmoothing = true;
+		d->mSmoothAlgorithm = GVImageUtils::SMOOTH_NORMAL;
+		d->mDelayedSmoothing = true;
 	} else {
 		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, GVImageUtils::SMOOTH_NORMAL);
-		mSmoothAlgorithm = static_cast<GVImageUtils::SmoothAlgorithm>(smooth);
-		m_DelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
+		d->mSmoothAlgorithm = static_cast<GVImageUtils::SmoothAlgorithm>(smooth);
+		d->mDelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
 	}
 
-	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
-	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
-	mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
-	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, true));
+	d->mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
+	d->mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
+	d->mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
+	d->mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, true));
 	updateScrollBarMode();
-	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
-	mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
-	if (!mFullScreen) {
-		viewport()->setBackgroundColor(mBackgroundColor);
+	d->mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
+	d->mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
+	if (!d->mFullScreen) {
+		viewport()->setBackgroundColor(d->mBackgroundColor);
 	}
 
-	mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+	d->mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 		config->readNumEntry(CONFIG_MAX_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
-	mMaxScaleRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+	d->mMaxScaleRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 		config->readNumEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
-	mMaxSmoothRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
+	d->mMaxSmoothRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 		config->readNumEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
 }
 
 
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(mOSDMode));
-	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, mFreeOutputFormat);	
-	config->writeEntry(CONFIG_SMOOTH_SCALE, mSmoothAlgorithm);
-	config->writeEntry(CONFIG_DELAYED_SMOOTHING, m_DelayedSmoothing);
-	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, mEnlargeSmallImages);
-	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, mShowScrollBars);
-	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, mMouseWheelScroll);
-	config->writeEntry(CONFIG_AUTO_ZOOM, mAutoZoom->isChecked());
-	config->writeEntry(CONFIG_LOCK_ZOOM, mLockZoom->isChecked());
-	config->writeEntry(CONFIG_BACKGROUND_COLOR, mBackgroundColor);
-	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, mMaxRepaintSize);
-	config->writeEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, mMaxScaleRepaintSize);
-	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, mMaxSmoothRepaintSize);
+	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(d->mOSDMode));
+	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, d->mFreeOutputFormat);	
+	config->writeEntry(CONFIG_SMOOTH_SCALE, d->mSmoothAlgorithm);
+	config->writeEntry(CONFIG_DELAYED_SMOOTHING, d->mDelayedSmoothing);
+	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, d->mEnlargeSmallImages);
+	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, d->mShowScrollBars);
+	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, d->mMouseWheelScroll);
+	config->writeEntry(CONFIG_AUTO_ZOOM, d->mAutoZoom->isChecked());
+	config->writeEntry(CONFIG_LOCK_ZOOM, d->mLockZoom->isChecked());
+	config->writeEntry(CONFIG_BACKGROUND_COLOR, d->mBackgroundColor);
+	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, d->mMaxRepaintSize);
+	config->writeEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, d->mMaxScaleRepaintSize);
+	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, d->mMaxSmoothRepaintSize);
 }
 
