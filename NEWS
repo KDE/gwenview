@@ -1,3 +1,8 @@
+- New features:
+  - Use EXIF-stored thumbnail if available.
+  - Option to disable saving of generated thumbnails to cache.
+- Fixes:
+
 2004.06.11 - v1.1.3 - "Hurry up, I'm getting married tomorrow"
 - New features:
  - You can now define custom branches in the dir view (By Craig Drummond)
