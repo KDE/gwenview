@@ -32,9 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qmap.h>
 #include <qscrollview.h>
 #include <qtimer.h>
-
-// KDE
-#include <kactioncollection.h>
+#include <qvaluelist.h>
 
 // Local
 #include "gvbusylevelmanager.h"
@@ -50,6 +48,7 @@ class KAction;
 class KActionCollection;
 class KConfig;
 class KToggleAction;
+typedef QValueList<KAction *> KActionPtrList;
 
 class GVDocument;
 

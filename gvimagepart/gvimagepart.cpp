@@ -185,7 +185,8 @@ void GVImagePart::dirListerClear() {
 }
 
 void GVImagePart::dirListerNewItems( const KFileItemList& list ) {
-	for( KFileItemList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+	QPtrListIterator<KFileItem> it(list);
+	for( ; it.current(); ++it ) {
 		mImagesInDirectory.append( (*it)->name());
 	}
 	qHeapSort( mImagesInDirectory );

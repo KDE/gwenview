@@ -135,7 +135,11 @@ static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 		}
 	}
 	KIO::UDSEntry entry;
+#if KDE_IS_VERSION(3, 2, 0)
 	if( KIO::NetAccess::stat( url, entry, parent)) {
+#else
+	if( KIO::NetAccess::stat( url, entry)) {
+#endif
 		KIO::UDSEntry::ConstIterator it;
 		for(it=entry.begin();it!=entry.end();++it) {
 			if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
