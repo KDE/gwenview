@@ -3,6 +3,8 @@ xxxx.xx.x - v1.1.8
  - Zoom actions added to both KPart's.
  - Added an item in the "Windows" menu to reset the window layout to the default
    configuration.
+ - Fast image scaling function from Imlib2/Mosfet (select 'fast' smoothing
+   in the configuration dialog).
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
  - Fixed "Clear location"/"Location" shortcuts.

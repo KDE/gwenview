@@ -1,4 +1,30 @@
-- Past packagers ------------------------------------------------------------
+CURRENT PACKAGERS
+-----------------
+
+ASP Linux:
+  Andrew "nording" Chernyak <nording@yandex.ru>
+
+Debian:
+  Christopher Martin <chrsmrtn@freeshell.org>
+
+Fedora Core:
+  Domenico Cotroneo <ricewind73@yahoo.it>
+
+Mandrake:
+  Angelo Naselli <random_lx@yahoo.com>
+
+Red Hat:
+  Bobby Rockers <brockers@dps.state.ok.us>
+
+SuSE:
+  Sarah "cokie" Jaromij <cokie@shitt-happens.de>
+
+Slackware:
+  Mark Tucker <mark@tucker.net>
+
+
+PAST PACKAGERS
+--------------
 
 These fine people contributed binary packages:
 
@@ -18,7 +44,8 @@ Slackware:
   Luca Cavalli <luca.cav@tiscali.it>
 
 
-- Translators ---------------------------------------------------------------
+TRANSLATORS 
+-----------
 
 Back in the days when Gwenview was not in KDE Extra Gear, the following nice
 people contributed translations.
@@ -57,6 +84,5 @@ Swedish:
 Now translations are done by the KDE translation teams, so I don't really know
 how are the translators. I guess some of the people I quoted here are still
 working on translating Gwenview.
-
 
 Thanks to all of you.
