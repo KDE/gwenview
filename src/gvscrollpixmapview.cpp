@@ -129,14 +129,11 @@ private:
 			mView->updateScrollBarMode();
 		}
 		QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;
-
 		// Compute image position
 		QPoint imgPos=mView->viewportToContents(pos) - QPoint(mView->mXOffset, mView->mYOffset);
-		imgPos/=mView->zoom();
-
 		double newZoom=mView->computeZoom(in);
 
-		imgPos*=newZoom;
+		imgPos*=newZoom/mView->zoom();
 		imgPos=imgPos-pos+centerPos;
 		mView->setZoom(newZoom, imgPos.x(), imgPos.y());
 	}
