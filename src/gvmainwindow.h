@@ -94,7 +94,7 @@ private:
 	KAction* mFlip;
 	KAction* mSaveFile;
 	KAction* mSaveFileAs;
-	KToggleAction* mShowImageViewOnly;
+	KToggleAction* mToggleDirAndFileViews;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
@@ -131,7 +131,7 @@ private slots:
 	void showKeyDialog();
 	void pixmapLoading();
 	void toggleSlideShow();
-	void showImageViewOnly();
+	void toggleDirAndFileViews();
 
 	/**
 	 * Update both folder and file status bar

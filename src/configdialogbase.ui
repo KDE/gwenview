@@ -59,7 +59,7 @@
                             <cstring>mShowDirs</cstring>
                         </property>
                         <property name="text">
-                            <string>Show folders</string>
+                            <string>Show folders and archives</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">

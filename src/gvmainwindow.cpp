@@ -17,13 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-// Qt includes
+// Qt 
 #include <qcursor.h>
 #include <qdir.h>
 #include <qdockarea.h>
 #include <qtooltip.h>
 
-// KDE includes
+// KDE
 #include <kaccel.h>
 #include <kaction.h>
 #include <kapplication.h>
@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
 
-// Our includes
+// Local
 #include "configdialog.h"
 #include "fileoperation.h"
 #include "gvbookmarkowner.h"
@@ -126,7 +126,7 @@ GVMainWindow::~GVMainWindow() {
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 
 	// Don't store settings if the image view is the only visible view...
-	if (!mShowImageViewOnly->isChecked()) {
+	if (!mToggleDirAndFileViews->isChecked()) {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
@@ -258,10 +258,10 @@ void GVMainWindow::pixmapLoading() {
 }
 
 
-void GVMainWindow::showImageViewOnly() {
+void GVMainWindow::toggleDirAndFileViews() {
 	KConfig* config=KGlobal::config();
 	
-	if (mShowImageViewOnly->isChecked()) {
+	if (mToggleDirAndFileViews->isChecked()) {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
@@ -275,7 +275,7 @@ void GVMainWindow::showImageViewOnly() {
 void GVMainWindow::toggleFullScreen() {
 	KConfig* config=KGlobal::config();
 
-	mShowImageViewOnly->setEnabled(!mToggleFullScreen->isChecked());
+	mToggleDirAndFileViews->setEnabled(!mToggleFullScreen->isChecked());
 	
 	if (mToggleFullScreen->isChecked()) {
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
@@ -527,7 +527,7 @@ void GVMainWindow::createActions() {
 	
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
-	mShowImageViewOnly=new KToggleAction(i18n("&Show Image Only"),CTRL + Key_Return,this,SLOT(showImageViewOnly()),actionCollection(),"show_image_view_only");
+	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Dir And File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
 	
 	actionCollection()->readShortcutSettings();
 }
@@ -623,7 +623,7 @@ void GVMainWindow::createMenu() {
 	mFileViewStack->largeThumbnails()->plug(viewMenu);
 	
 	viewMenu->insertSeparator();
-	mShowImageViewOnly->plug(viewMenu);
+	mToggleDirAndFileViews->plug(viewMenu);
 	mToggleFullScreen->plug(viewMenu);
 	mToggleSlideShow->plug(viewMenu);
 
@@ -671,7 +671,7 @@ void GVMainWindow::createMenu() {
 
 
 void GVMainWindow::createMainToolBar() {
-	mMainToolBar=new KToolBar(this,topDock(),true);
+	mMainToolBar=toolBar();
 	mMainToolBar->setLabel(i18n("Main Tool Bar"));
 	mOpenParentDir->plug(mMainToolBar);
 	mFileViewStack->selectFirst()->plug(mMainToolBar);
@@ -702,7 +702,7 @@ void GVMainWindow::createMainToolBar() {
 
 
 void GVMainWindow::createLocationToolBar() {
-	mLocationToolBar=new KToolBar(this,topDock(),true);
+	mLocationToolBar=toolBar("locationToolBar");
 	if (!mShowLocationToolBar) mLocationToolBar->hide();
 	mLocationToolBar->setLabel(i18n("Location Tool Bar"));
 
