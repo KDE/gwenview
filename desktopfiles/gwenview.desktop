@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Gwenview
 Name[xx]=xxGwenviewxx
+GenericName=Image Viewer
 Comment=A simple image viewer
 Comment[ca]=Un simple visor de la imatge
 Comment[da]=En simpel billedfremviser
