@@ -38,10 +38,6 @@ typedef QList<KFileItem> KFileItemList;
 
 /**
  * A job that determines the thumbnails for the images in the current directory
- *
- * Supports png pics and xvpics, and generates png pics when none found.
- * Features network transparency, asynchronous processing, and safety
- * against deleted items.
  */
 class ThumbnailLoadJob : public KIO::Job {
 Q_OBJECT
@@ -76,7 +72,6 @@ signals:
 
 private slots:
 	void slotResult( KIO::Job *job );
-	void slotThumbData(KIO::Job *, const QByteArray &);
 
 private:
 	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_CREATETHUMB } mState;
@@ -108,9 +103,7 @@ private:
 	
 	bool isJPEG(const QString& name);
 	bool loadJPEG( const QString &pixPath, QPixmap &pix);
-	
-	bool isXCF(const QString& name);
-	bool loadXCF( const QString &pixPath, QPixmap &pix);
+	bool loadThumbnail(const QString& pixPath, QPixmap &pix);
 };
 
 #endif

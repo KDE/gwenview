@@ -126,16 +126,27 @@ void FileThumbnailView::clearView() {
 
 void FileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
+	
 	int pixelSize=mThumbnailSize.pixelSize();
-
-// Create an empty thumbnail
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
 	painter.eraseRect(0,0,pixelSize,pixelSize);
-	painter.drawRect(0,0,pixelSize,pixelSize);
+// Create an empty thumbnail
+	if (item->isDir()) {
+		QPixmap itemPix=item->pixmap(pixelSize);
+		painter.drawPixmap(
+			(pixelSize-itemPix.width())/2,
+			(pixelSize-itemPix.height())/2,
+			itemPix);
+	} else {
+		painter.drawRect(0,0,pixelSize,pixelSize);
+	}
 
-// Create item
+// Create icon item
+	QDir::SortSpec spec = KFileView::sorting();
 	FileThumbnailViewItem* iconItem=new	FileThumbnailViewItem(this,item->text(),thumbnail,item);
+	iconItem->setKey( sortingKey( item->text(), item->isDir(), spec ));
+
 	item->setExtraData(this,iconItem);
 }
 

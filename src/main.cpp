@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kimageio.h>
 #include <klocale.h>
 
-#include "config.h"
 #include "mainwindow.h"
 #include "qxcfi.h"
 
@@ -31,11 +30,13 @@ static KCmdLineOptions options[] = {
      { "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
      { 0, 0, 0 }
 };
- 
+
+static const char* version="0.15.0";
+
 
 int main (int argc, char *argv[]) {
-    KAboutData aboutData("gwenview", I18N_NOOP("Gwenview"),
-                        VERSION, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
+    KAboutData aboutData("gwenview", "Gwenview",
+                        version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
                         "(c) 2000-2002 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );

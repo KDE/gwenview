@@ -69,6 +69,7 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
+	mimeTypes.append("inode/directory");
 	mDirLister->setMimeFilter(mimeTypes);
 
 	connect(mDirLister,SIGNAL(clear()),
@@ -189,9 +190,12 @@ void FileView::selectFilename(QString filename) {
 
 
 void FileView::slotSelectFirst() {
-
 	KFileItem* item=currentFileView()->firstFileItem();
 	if (!item) return;
+	while (!item->isFile()) {
+		item=currentFileView()->nextItem(item);
+		if (!item) return;
+	}
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
