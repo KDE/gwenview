@@ -425,10 +425,12 @@ void ThumbnailLoadJob::determineNextIcon() {
 		return;
 	}
 
-	if (mNextItemIterator==mItems.end()) {
+	// Make sure mNextItemIterator references a valid item
+	if (mItems.find(*mNextItemIterator)==mItems.end()) {
 		mNextItemIterator=mItems.begin();
 	}
 	mCurrentItem=*mNextItemIterator;
+	Q_ASSERT(mItems.find(mCurrentItem)!=mItems.end());
 		
 	// First, stat the orig file
 	mState = STATE_STATORIG;
