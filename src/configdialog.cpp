@@ -99,6 +99,7 @@ mMainWindow(mainWindow)
 
 	// Image View tab
 	mSmoothScale->setChecked(pixmapView->smoothScale());
+	mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	
 	// Misc tab
 	mExternalEditor->setURL(FileOperation::editor());
@@ -145,6 +146,7 @@ void ConfigDialog::slotApply() {
 
 	// Image View tab
 	pixmapView->setSmoothScale(mSmoothScale->isChecked());
+	pixmapView->setEnlargeSmallImages(mAutoZoomEnlarge->isChecked());
 	
 	// Misc tab
 	FileOperation::setEditor(mExternalEditor->url());

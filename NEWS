@@ -7,6 +7,7 @@
  - Image saving.
  - The checkerboard used to show transparency is not zoomed anymore.
  - You can now smooth scale images.
+ - New option to enlarge smaller images when using auto zoom.
 - Fixes:
  - Moved the slide show settings to a separate dialog shown before starting it.
  - Image count in the status bar doesn't include archives anymore.

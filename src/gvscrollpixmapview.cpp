@@ -49,6 +49,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const char* CONFIG_SHOW_PATH="show path";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
+const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_WHEEL_BEHAVIOUR_NONE=   "wheel behaviour none";
@@ -156,6 +157,14 @@ void GVScrollPixmapView::slotModified() {
 void GVScrollPixmapView::setSmoothScale(bool value) {
 	mSmoothScale=value;
 	viewport()->update();
+}
+
+
+void GVScrollPixmapView::setEnlargeSmallImages(bool value) {
+	mEnlargeSmallImages=value;
+	if (mAutoZoom->isChecked()) {
+		setZoom(computeAutoZoom());
+	}
 }
 
 
@@ -570,7 +579,9 @@ double GVScrollPixmapView::computeAutoZoom() {
 	
 	size.scale(width(),height(),QSize::ScaleMin);
 	
-	return double(size.width())/mGVPixmap->width();
+	double zoom=double(size.width())/mGVPixmap->width();
+	if (zoom>1.0 && !mEnlargeSmallImages) return 1.0;
+	return zoom;
 }
 
 
@@ -716,6 +727,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
+	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -731,6 +743,7 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->setGroup(group);
 	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
 	config->writeEntry(CONFIG_SMOOTH_SCALE,mSmoothScale);
+	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
