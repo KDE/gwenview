@@ -1,16 +1,17 @@
-xxxx.xx.x - v1.1.8
+2005.01.08 - v1.1.8
 - New features:
  - Zoom actions added to both KPart's.
- - Added an item in the "Windows" menu to reset the window layout to the default
-   configuration.
+ - Support for animated pictures.
  - Fast image scaling function from Imlib2/Mosfet (select 'fast' smoothing
    in the configuration dialog).
- - Support for animated pictures.
+ - Added an item in the "Windows" menu to reset the window layout to the default
+   configuration.
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
  - Fixed "Clear location"/"Location" shortcuts.
  - Make it impossible to undock the file view. It should be easier for new
    users to use it this way.
+ - Fixed crash which could occur when copying multiple files.
 
 2004.12.19 - v1.1.7
 - New features:
