@@ -45,9 +45,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#define LOG(x) kdDebug() << QTime::currentTime().msec() << k_funcinfo << x << endl
 #else
 #define LOG(x) ;
 #endif
@@ -219,6 +219,11 @@ public:
 	// Set to true when all the image has been decoded
 	bool mAsyncImageComplete;
 
+	// If it's an animated image, the current frame period
+	int mFramePeriod;
+
+	// The time since we received the setFramePeriod call
+	QTime mFrameTime;
 };
 
 
@@ -231,6 +236,7 @@ GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document)
 : GVDocumentImpl(document) {
 	LOG("");
 	d=new GVDocumentDecodeImplPrivate(this);
+	d->mFramePeriod=-1;
 
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
 
@@ -470,15 +476,27 @@ void GVDocumentDecodeImpl::finish(QImage& image) {
 
 
 void GVDocumentDecodeImpl::suspendLoading() {
+	LOG("");
 	d->mDecoderTimer.stop();
 	d->mSuspended = true;
 }
 
 void GVDocumentDecodeImpl::resumeLoading() {
+	LOG("");
 	d->mSuspended = false;
 	if(d->mDecodedSize < d->mRawData.size()) {
 		d->mDecoderTimer.start(0, false);
 	}
+	emitRectUpdated();
+}
+
+
+void GVDocumentDecodeImpl::emitRectUpdated() {
+	LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
+		<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
+	emit rectUpdated(d->mLoadChangedRect);
+	d->mLoadChangedRect = QRect();
+	d->mTimeSinceLastUpdate.start();
 }
 
 
@@ -509,25 +527,36 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 		d->mUpdatedDuringLoad=true;
 	}
 	d->mLoadChangedRect |= rect;
-	if( d->mTimeSinceLastUpdate.elapsed() > 200 ) {
-		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
-			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
-		emit rectUpdated(d->mLoadChangedRect);
-		d->mLoadChangedRect = QRect();
-		d->mTimeSinceLastUpdate.start();
+	if( d->mTimeSinceLastUpdate.elapsed() > 200 && d->mFramePeriod==-1) {
+		emitRectUpdated();
 	}
 }
 
 void GVDocumentDecodeImpl::frameDone() {
+	LOG("");
+	int remainingMsecs=d->mFramePeriod - d->mFrameTime.elapsed() + 1;
+	LOG("remainingMsecs: " << remainingMsecs);
+	if (remainingMsecs>0) {
+		suspendLoading();
+		QTimer::singleShot(remainingMsecs, this, SLOT(resumeLoading()) );
+	} else {
+		emitRectUpdated();
+	}
 }
 
 void GVDocumentDecodeImpl::frameDone(const QPoint& /*offset*/, const QRect& /*rect*/) {
+	LOG("offset,rect");
+	frameDone();
 }
 
 void GVDocumentDecodeImpl::setLooping(int) {
 }
 
-void GVDocumentDecodeImpl::setFramePeriod(int /*milliseconds*/) {
+void GVDocumentDecodeImpl::setFramePeriod(int msecs) {
+	d->mFramePeriod=msecs;
+	if (msecs>0) {
+		d->mFrameTime.start();
+	}
 }
 
 void GVDocumentDecodeImpl::setSize(int width, int height) {
