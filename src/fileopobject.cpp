@@ -23,11 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qfile.h>
 #include <qstylesheet.h>
 #include <qwidget.h>
-#include <qpopupmenu.h>
 
 // KDE 
 #include <kdeversion.h>
-#include <kdirselectdialog.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kglobalsettings.h>
