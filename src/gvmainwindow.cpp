@@ -284,7 +284,8 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 //-----------------------------------------------------------------------
 void GVMainWindow::openURL(const KURL& url) {
 	mDocument->setURL(url);
-	mFileViewStack->setDirURL(url.upURL(), url.filename());
+	mFileViewStack->setDirURL(url.upURL());
+	mFileViewStack->setFileNameToSelect(url.filename());
 }
 
 
@@ -340,7 +341,8 @@ void GVMainWindow::goUpTo(int id) {
 	} else {
 		childURL=mDocument->dirURL();
 	}
-	mFileViewStack->setDirURL(url, childURL.fileName());
+	mFileViewStack->setDirURL(url);
+	mFileViewStack->setFileNameToSelect(childURL.fileName());
 }
 
 
@@ -548,6 +550,11 @@ void GVMainWindow::toggleFullScreen() {
 	} else {
 		// Stop the slideshow if it's running, harmless if it does not
 		mSlideShow->stop();
+
+		// Make sure the file view points to the right URL, it might not be the
+		// case if we are getting out of a slideshow
+		mFileViewStack->setDirURL(mDocument->url().upURL());
+		mFileViewStack->setFileNameToSelect(mDocument->url().fileName());
 
 		showNormal();
 		menuBar()->show();

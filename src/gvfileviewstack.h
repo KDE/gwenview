@@ -132,7 +132,8 @@ public:
 	void retryURL();
 	
 public slots:
-	void setDirURL(const KURL&, const QString& fileNameToSelect=QString::null);
+	void setDirURL(const KURL&);
+	void setFileNameToSelect(const QString&);
 
 	void slotSelectFirst();
 	void slotSelectLast();

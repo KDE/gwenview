@@ -252,25 +252,37 @@ bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::setDirURL(const KURL& url, const QString& fileNameToSelect) {
-	LOG(url.prettyURL() << " - " << fileNameToSelect);
+void GVFileViewStack::setDirURL(const KURL& url) {
+	LOG(url.prettyURL());
 	if ( mDirURL.equals(url,true) ) {
 		LOG("Same URL");
 		return;
 	}
-	if (!KProtocolInfo::supportsListing(url)) {
+	mDirURL=url;
+	if (!KProtocolInfo::supportsListing(mDirURL)) {
 		LOG("Protocol does not support listing");
 		return;
 	}
 	
 	mDirLister->clearError();
-	mDirURL=url;
 	currentFileView()->setShownFileItem(0L);
-	mFileNameToSelect=fileNameToSelect;
+	mFileNameToSelect=QString::null;
 	mDirLister->openURL(mDirURL);
 	emit urlChanged(mDirURL);
 	emit directoryChanged(mDirURL);
 	updateActions();
+}
+
+
+/**
+ * Sets the file to select once the dir lister is done. If it's not running,
+ * immediatly selects the file.
+ */
+void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
+	mFileNameToSelect=fileName;
+	if (mDirLister->isFinished()) {
+		browseToFileNameToSelect();
+	}
 }
 
 
