@@ -35,7 +35,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "gvmainwindow.h"
-#include "gvscrollpixmapview.h"
 #include "gvdocument.h"
 #include "gvprintdialogpagebase.h"
 #include "gvprintdialog.moc"
@@ -47,13 +46,7 @@ const char* STR_FALSE="false";
 
 GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 		: KPrintDialogPage( parent, name ) {
-	if (parent->inherits("GVMainWindow"))
-		mDocument = ((GVMainWindow*)parent)->document();
-	else if (parent->inherits("GVScrollPixmapView"))
-		mDocument = ((GVScrollPixmapView*)parent)->document();
-	else
-		mDocument = 0; // Uh oh
-
+	mDocument = ((GVMainWindow*)parent)->document();
 	mContent = new GVPrintDialogPageBase(this);
 	setTitle( mContent->caption() );
 
@@ -222,7 +215,7 @@ void GVPrintDialogPage::setHValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 
-	if (mDocument && mContent->mKeepRatio->isChecked()) {
+	if (mContent->mKeepRatio->isChecked()) {
 		int w = (mDocument->width() * value) / mDocument->height();
 		mContent->mWidth->setValue( w ? w : 1);
 	}
@@ -236,7 +229,7 @@ void GVPrintDialogPage::setHValue (int value) {
 void GVPrintDialogPage::setWValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
-	if (mDocument && mContent->mKeepRatio->isChecked()) {
+	if (mContent->mKeepRatio->isChecked()) {
 		int h = (mDocument->height() * value) / mDocument->width();
 		mContent->mHeight->setValue( h ? h : 1);
 	}
@@ -246,8 +239,6 @@ void GVPrintDialogPage::setWValue (int value) {
 }
 
 void GVPrintDialogPage::toggleRatio(bool enable) {
-	if (!mDocument)
-		return;
 	if (enable) {
 		float cm = 1;
 		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS) cm = 10;

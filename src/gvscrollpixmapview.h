@@ -106,7 +106,7 @@ public:
 	void setShowScrollBars(bool);
 	bool mouseWheelScroll() const { return mMouseWheelScroll; }
 	void setMouseWheelScroll(bool);
-	GVDocument* document() { return mDocument; }
+
 
 public slots:
 	// File operations
