@@ -89,10 +89,11 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d->mContent->mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	
 	// Full Screen tab
-	d->mContent->mShowPathInFullScreen->setChecked(d->mMainWindow->pixmapView()->showPathInFullScreen());
+	d->mContent->mShowPathInFullScreen->setChecked(pixmapView->showPathInFullScreen());
 	d->mContent->mShowMenuBarInFullScreen->setChecked(d->mMainWindow->showMenuBarInFullScreen());
 	d->mContent->mShowToolBarInFullScreen->setChecked(d->mMainWindow->showToolBarInFullScreen());
 	d->mContent->mShowStatusBarInFullScreen->setChecked(d->mMainWindow->showStatusBarInFullScreen());
+	d->mContent->mShowBusyPtrInFullScreen->setChecked(d->mMainWindow->showBusyPtrInFullScreen());
 
 	// File Operations tab
 	d->mContent->mShowCopyDialog->setChecked(FileOperation::confirmCopy());
@@ -142,10 +143,11 @@ void GVConfigDialog::slotApply() {
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
 	
 	// Full Screen tab
-	d->mMainWindow->pixmapView()->setShowPathInFullScreen( d->mContent->mShowPathInFullScreen->isChecked() );
+	pixmapView->setShowPathInFullScreen( d->mContent->mShowPathInFullScreen->isChecked() );
 	d->mMainWindow->setShowMenuBarInFullScreen( d->mContent->mShowMenuBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowToolBarInFullScreen( d->mContent->mShowToolBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowStatusBarInFullScreen( d->mContent->mShowStatusBarInFullScreen->isChecked() );
+	d->mMainWindow->setShowBusyPtrInFullScreen(d->mContent->mShowBusyPtrInFullScreen->isChecked() );
 
 	// File Operations tab
 	FileOperation::setConfirmCopy(d->mContent->mShowCopyDialog->isChecked());

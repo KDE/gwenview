@@ -57,11 +57,13 @@ public:
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
+	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	GVPixmap* gvPixmap() const { return mGVPixmap; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
 	void setShowStatusBarInFullScreen(bool);
+	void setShowBusyPtrInFullScreen(bool);
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -119,6 +121,7 @@ private:
 	bool mShowMenuBarInFullScreen;
 	bool mShowToolBarInFullScreen;
 	bool mShowStatusBarInFullScreen;
+	bool mShowBusyPtrInFullScreen;
 
 	void hideToolBars();
 	void showToolBars();

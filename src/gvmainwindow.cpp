@@ -93,6 +93,7 @@ const char* CONFIG_SLIDESHOW_GROUP="slide show";
 const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
 const char* CONFIG_STATUSBAR_IN_FS="status bar in full screen";
+const char* CONFIG_BUSYPTR_IN_FS="busy ptr in full screen";
 const char* CONFIG_SHOW_LOCATION_TOOLBAR="show address bar";
 
 GVMainWindow::GVMainWindow()
@@ -221,7 +222,9 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 
 	mGoUp->setEnabled(url.path() != "/");
 	updateStatusInfo();
-	kapp->restoreOverrideCursor();
+	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+		kapp->restoreOverrideCursor();
+	}
 
 	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
@@ -321,7 +324,9 @@ void GVMainWindow::printFile()
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::pixmapLoading() {
-	kapp->setOverrideCursor(QCursor(WaitCursor));
+	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+		kapp->setOverrideCursor(QCursor(WaitCursor));
+	}
 }
 
 
@@ -880,6 +885,11 @@ void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 }
 
 
+void GVMainWindow::setShowBusyPtrInFullScreen(bool value) {
+	mShowBusyPtrInFullScreen=value;
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Configuration
@@ -887,15 +897,17 @@ void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 //-----------------------------------------------------------------------
 void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
-	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS,false);
-	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS,true);
-	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS,false);
+	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS, false);
+	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS, true);
+	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS, false);
+	mShowBusyPtrInFullScreen=config->readBoolEntry(CONFIG_BUSYPTR_IN_FS, true);
 }
 
 
 void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_MENUBAR_IN_FS,mShowMenuBarInFullScreen);
-	config->writeEntry(CONFIG_TOOLBAR_IN_FS,mShowToolBarInFullScreen);
-	config->writeEntry(CONFIG_STATUSBAR_IN_FS,mShowStatusBarInFullScreen);
+	config->writeEntry(CONFIG_MENUBAR_IN_FS, mShowMenuBarInFullScreen);
+	config->writeEntry(CONFIG_TOOLBAR_IN_FS, mShowToolBarInFullScreen);
+	config->writeEntry(CONFIG_STATUSBAR_IN_FS, mShowStatusBarInFullScreen);
+	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 }
