@@ -284,13 +284,12 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 //-----------------------------------------------------------------------
 void GVMainWindow::openURL(const KURL& url) {
 	mDocument->setURL(url);
-	mFileViewStack->setDirURL(url.directory());
-	mFileViewStack->setFileNameToSelect(url.filename());
+	mFileViewStack->setDirURL(url.upURL(), url.filename());
 }
 
 
 void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
-	LOG(url.prettyURL(0,KURL::StripFileProtocol));
+	LOG(dirURL.prettyURL(0,KURL::StripFileProtocol));
 	
 	if (dirURL.path()!="/") {
 		mGoUp->setEnabled(true);
@@ -313,21 +312,16 @@ void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
 
 void GVMainWindow::updateLocationURL() {
 	LOG("");
-	KURL url = mFileViewStack->dirURL();
-	// Show the picture URL in the location bar only when not browsing and only
-	// if we are really on a picture (== !mDocument->isNull())
-	//
-	// We do not use mFileViewStack->url() or mDocument->url() because this is
-	// the "real" url, not the "fake" one the user believes he is navigating
-	// into.
-	// 
-	// For example with digikamtags, "digikamtags:/1/2/myimage.jpg" is the
-	// "fake" url, it's a KFileItem whose "real" url will be
-	// "/path/to/my/photo/library/myimage.jpg"
-	if (!mToggleBrowse->isChecked() && !mDocument->isNull()) {
-		url.adjustPath(1);
-		url.setFileName(mFileViewStack->fileName());
+	KURL url;
+	if (mToggleBrowse->isChecked()) {
+		url=mFileViewStack->dirURL();
+		if (!url.isValid()) {
+			url=mDocument->url();
+		}
+	} else {
+		url=mDocument->url();
 	}
+	LOG(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
 	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
 }
@@ -346,8 +340,7 @@ void GVMainWindow::goUpTo(int id) {
 	} else {
 		childURL=mDocument->dirURL();
 	}
-	mFileViewStack->setDirURL(url);
-	mFileViewStack->setFileNameToSelect(childURL.filename());
+	mFileViewStack->setDirURL(url, childURL.fileName());
 }
 
 
@@ -672,9 +665,12 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 
 void GVMainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
+	LOG(url.prettyURL());
 	if( urlIsDirectory(this, url)) {
+		LOG(" '-> is a directory");
 		mFileViewStack->setDirURL(url);
 	} else {
+		LOG(" '-> is not a directory");
 		openURL(url);
 	}
 	mFileViewStack->setFocus();

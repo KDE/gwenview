@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kimageio.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
+#include <kprotocolinfo.h>
 #include <kstdaction.h>
 #include <kurldrag.h>
 #include <klistview.h>
@@ -231,14 +232,6 @@ void GVFileViewStack::setFocus() {
 }
 
 
-void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
-	mFileNameToSelect=fileName;
-	if (mDirLister->isFinished()) {
-		browseToFileNameToSelect();
-	}
-}
-
-
 /**
  * Do not let double click events propagate if Ctrl or Shift is down, to avoid
  * toggling fullscreen
@@ -259,16 +252,21 @@ bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::setDirURL(const KURL& url) {
-	LOG(url.prettyURL());
+void GVFileViewStack::setDirURL(const KURL& url, const QString& fileNameToSelect) {
+	LOG(url.prettyURL() << " - " << fileNameToSelect);
 	if ( mDirURL.equals(url,true) ) {
 		LOG("Same URL");
 		return;
 	}
+	if (!KProtocolInfo::supportsListing(url)) {
+		LOG("Protocol does not support listing");
+		return;
+	}
+	
 	mDirLister->clearError();
 	mDirURL=url;
 	currentFileView()->setShownFileItem(0L);
-	mFileNameToSelect=QString::null;
+	mFileNameToSelect=fileNameToSelect;
 	mDirLister->openURL(mDirURL);
 	emit urlChanged(mDirURL);
 	emit directoryChanged(mDirURL);

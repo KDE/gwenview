@@ -116,8 +116,6 @@ public:
 
 	void setFocus();
 
-	void setFileNameToSelect(const QString&);
-	
 	KURL::List selectedURLs() const;
 	/**
 	 * If set to true, no error messages will be displayed.
@@ -134,7 +132,7 @@ public:
 	void retryURL();
 	
 public slots:
-	void setDirURL(const KURL&);
+	void setDirURL(const KURL&, const QString& fileNameToSelect=QString::null);
 
 	void slotSelectFirst();
 	void slotSelectLast();
