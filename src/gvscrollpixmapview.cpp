@@ -398,22 +398,12 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 
 void GVScrollPixmapView::slotLoaded() {
-	updateZoomActions();
-	d->mIncreaseGamma->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseGamma->setEnabled(!d->mDocument->isNull());
-	d->mIncreaseBrightness->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseBrightness->setEnabled(!d->mDocument->isNull());
-	d->mIncreaseContrast->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseContrast->setEnabled(!d->mDocument->isNull());
-
 	if (d->mDocument->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
 		return;
 	}
 
-	updateContentSize();
-	updateImageOffset();
 	if (d->mFullScreen && d->mOSDMode!=NONE) updateFullScreenLabel();
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
@@ -1224,7 +1214,17 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		}
 	}
 
+	updateZoomActions();
+	d->mIncreaseGamma->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseGamma->setEnabled(!d->mDocument->isNull());
+	d->mIncreaseBrightness->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseBrightness->setEnabled(!d->mDocument->isNull());
+	d->mIncreaseContrast->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseContrast->setEnabled(!d->mDocument->isNull());
+
+	updateContentSize();
 	updateImageOffset();
+	updateScrollBarMode();
 	fullRepaint();
 }
 
