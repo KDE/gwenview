@@ -410,7 +410,7 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 			if (resp==KMessageBox::Cancel) {
 				printer->abort();
 				return;
-			} else if (resp = KMessageBox::No) { // Shrink 
+			} else if (resp == KMessageBox::No) { // Shrink 
 				size.scale(pdWidth, pdHeight, QSize::ScaleMin);
 			}
 		}
