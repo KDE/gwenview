@@ -33,12 +33,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filednddetailview.h"
 #include "fileoperation.h"
 #include "filethumbnailview.h"
+#include "gvarchive.h"
 
 #include "fileview.moc"
 
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 static const char* CONFIG_SHOW_DIRS="show dirs";
+
 
 FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList), mPopupMenu(0L)
@@ -190,7 +192,7 @@ void FileView::selectFilename(QString filename) {
 void FileView::slotSelectFirst() {
 	KFileItem* item=currentFileView()->firstFileItem();
 	if (!item) return;
-	while (item->isDir()) {
+	while (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		item=currentFileView()->nextItem(item);
 		if (!item) return;
 	}
@@ -205,7 +207,7 @@ void FileView::slotSelectFirst() {
 void FileView::slotSelectLast() {
 	KFileItem* item=currentFileView()->items()->getLast();
 	if (!item) return;
-	if (item->isDir()) return;
+	if (item->isDir() || GVArchive::fileItemIsArchive(item)) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -219,7 +221,7 @@ void FileView::slotSelectPrevious() {
 	if (item) {
 		item=currentFileView()->prevItem(item);
 		if (!item) return;
-		if (item->isDir()) {
+		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 			slotSelectFirst();
 			return;
 		}
@@ -237,7 +239,7 @@ void FileView::slotSelectPrevious() {
 
 void FileView::slotSelectNext() {
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (item && !item->isDir()) {
+	if (item && !item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		item=currentFileView()->nextItem(item);
 		if (!item) return;
 	} else {
@@ -256,15 +258,26 @@ void FileView::slotSelectNext() {
 void FileView::viewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (!item->isDir()) return;
-	emitURLChanged();
+
+	bool isDir=item->isDir();
+	bool isArchive=GVArchive::fileItemIsArchive(item);
+	if (!isDir && !isArchive) return;
+	KURL tmp=url();
+	
+	if (isArchive) {
+		tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
+		tmp.adjustPath(1);
+	}
+	
+	emit urlChanged(tmp);
+	updateActions();
 }
 
 
 void FileView::viewChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (item->isDir()) {
+	if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		updateActions();
 		return;
 	}
@@ -275,7 +288,7 @@ void FileView::viewChanged() {
 void FileView::viewRightButtonClicked(const QPoint& pos) {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (item->isDir()) {
+	if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		updateActions();
 		return;
 	}
@@ -481,7 +494,10 @@ void FileView::initDirListerFilter() {
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
-	if (mShowDirs) mimeTypes.append("inode/directory");
+	if (mShowDirs) {
+		mimeTypes.append("inode/directory");
+		mimeTypes+=GVArchive::mimeTypes();
+	}
 	mDirLister->setMimeFilter(mimeTypes);
 	mDirLister->emitChanges();
 }
@@ -497,7 +513,7 @@ void FileView::updateActions() {
 	}
 
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item || item->isDir()) {
+	if (!item || item->isDir() || GVArchive::fileItemIsArchive(item)) {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
 		mSelectNext->setEnabled(true);

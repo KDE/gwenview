@@ -1,5 +1,7 @@
 2002.xx.xx - v0.16.0
 - New features :
+ - Support for IO slaves: you can browse Windows share, FTP files, into
+   tarballs...
 - Fixes :
 
 2002.10.26 - v0.15.1

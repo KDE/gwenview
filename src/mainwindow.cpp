@@ -180,7 +180,8 @@ void MainWindow::setURL(const KURL& url,const QString&) {
 
 //-Private slots---------------------------------------------------------
 void MainWindow::openParentDir() {
-	mGVPixmap->setURL( mGVPixmap->dirURL().upURL() );
+	KURL url=mGVPixmap->dirURL().upURL();
+	mGVPixmap->setURL(url);	
 }
 
 
@@ -318,7 +319,7 @@ void MainWindow::updateStatusBar() {
 	} else {
 		txt=i18n("%1 - %2 image");
 	}
-	txt=txt.arg(mGVPixmap->dirURL().path()).arg(count);
+	txt=txt.arg(mGVPixmap->dirURL().prettyURL()).arg(count);
 
 	statusBar()->changeItem( txt, SB_FOLDER );
 	updateFileStatusBar();

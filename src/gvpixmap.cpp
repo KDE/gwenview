@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <sys/stat.h> // For S_ISDIR
 
 // Qt includes
+#include <qfileinfo.h>
 #include <qpainter.h>
 
 // KDE includes
@@ -28,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/netaccess.h>
 
 // Our includes
+#include <gvarchive.h>
 #include <gvpixmap.moc>
 
 
@@ -41,11 +43,18 @@ GVPixmap::~GVPixmap()
 
 
 void GVPixmap::setURL(const KURL& paramURL) {
-	kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
+	//kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
 	KURL URL(paramURL);
-
 	if (URL.cmp(url())) return;
-	
+
+	// Fix wrong protocol
+	if (GVArchive::protocolIsArchive(URL.protocol())) {
+		QFileInfo info(URL.path());
+		if (info.exists()) {
+			URL.setProtocol("file");
+		}
+	}
+
 	// Check whether this is a dir or a file
 	KIO::UDSEntry entry;
 	bool isDir;

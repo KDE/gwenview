@@ -36,8 +36,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kwordwrap.h>
 
 // Our includes
-#include "thumbnailloadjob.h"
 #include "filethumbnailviewitem.h"
+#include "gvarchive.h"
+#include "thumbnailloadjob.h"
+
 #include "filethumbnailview.moc"
 
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
@@ -136,27 +138,31 @@ void FileThumbnailView::clearView() {
 
 void FileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
+
+	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 	
-	int pixelSize=mThumbnailSize.pixelSize()/*+4*/;
+	int pixelSize=mThumbnailSize.pixelSize();
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
 	painter.eraseRect(0,0,pixelSize,pixelSize);
-// Create an empty thumbnail
-	if (item->isDir()) {
+
+	if (isDirOrArchive) {
+		// Load the icon
 		QPixmap itemPix=item->pixmap(pixelSize);
 		painter.drawPixmap(
 			(pixelSize-itemPix.width())/2,
 			(pixelSize-itemPix.height())/2,
 			itemPix);
 	} else {
+		// Create an empty thumbnail
 		painter.setPen(colorGroup().button());
 		painter.drawRect(0,0,pixelSize,pixelSize);
 	}
 
-// Create icon item
+	// Create icon item
 	QDir::SortSpec spec = KFileView::sorting();
 	FileThumbnailViewItem* iconItem=new	FileThumbnailViewItem(this,item->text(),thumbnail,item);
-	iconItem->setKey( sortingKey( item->text(), item->isDir(), spec ));
+	iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
 
 	item->setExtraData(this,iconItem);
 }
@@ -272,7 +278,7 @@ void FileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos) {
 	KFileItem* fileItem=thumbItem->fileItem();
 	if (!fileItem) return;
 
-	if (fileItem->isDir()) {
+	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
 		emit executed(iconItem,pos);
 	}
