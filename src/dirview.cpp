@@ -87,8 +87,26 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 }
 
 
+/**
+ * We override showEvent to make sure the view shows the correct
+ * dir when it's shown. Since the view doesn't update if it's
+ * hidden
+ */
+void DirView::showEvent(QShowEvent* event) {
+#if KDE_VERSION < 306
+	if (!currentURL().cmp(m_nextUrlToSelect,true)) {
+#else
+	if (!currentURL().equals(m_nextUrlToSelect,true)) {
+#endif
+		setURL(m_nextUrlToSelect,QString::null);
+	}	
+	QWidget::showEvent(event);
+}
+
+
 void DirView::setURL(const KURL& url,const QString&) {
-	//kdDebug() << "DirView::setURL " << url.path() << endl; 
+	//kdDebug() << "DirView::setURL " << url.path() << endl;
+
 #if KDE_VERSION < 306
 	if (currentURL().cmp(url,true)) {
 #else
@@ -98,6 +116,14 @@ void DirView::setURL(const KURL& url,const QString&) {
 		return;
 	}
 
+// Do not update the view if it's hidden, just store the url to
+// open next time the view is shown
+	if (!isVisible()) {
+		//kdDebug() << "DirView::setURL we are hidden, just store the url" << endl;
+		slotSetNextUrlToSelect(url);
+		return;
+	}
+	
 	QStringList folderParts;
 	QStringList::Iterator folderIter,endFolderIter;
 	QString folder="/";

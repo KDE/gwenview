@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfiletreebranch.h>
 
 class QPopupMenu;
+class QShowEvent;
 
 
 class DirView : public KFileTreeView {
@@ -38,11 +39,12 @@ signals:
 	void dirURLChanged(const KURL&);
 
 protected:
+	void showEvent(QShowEvent*);
+	
 // Drag'n'drop
 	void contentsDragMoveEvent(QDragMoveEvent* event);
 	void contentsDragLeaveEvent(QDragLeaveEvent* event);
 	void contentsDropEvent(QDropEvent*);
-/*	void startDrag();*/
 
 protected slots:
 	void slotNewTreeViewItems(KFileTreeBranch*,const KFileTreeViewItemList&); 
