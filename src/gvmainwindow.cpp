@@ -718,18 +718,10 @@ void GVMainWindow::updateWindowActions() {
 void GVMainWindow::createConnections() {
     connect(mGoUp->popupMenu(), SIGNAL(activated(int)), 
 	    this,SLOT(goUpTo(int)));
-	/*
-    connect(mGoUp,SIGNAL(activated()), 
-	    mGVHistory,SLOT(slotManageHistoryList()) );
-    connect(mGoUp->popupMenu(),SIGNAL(activated(int)), 
-	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
-	/*
-    connect(mDirView,SIGNAL(executed(QListViewItem*)), 
-	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 
 	// Pixmap view connections
 	connect(mPixmapView,SIGNAL(selectPrevious()),
@@ -750,8 +742,6 @@ void GVMainWindow::createConnections() {
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mGVPixmap,SLOT(setURL(const KURL&)) );
-    /*connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
-	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
@@ -779,8 +769,6 @@ void GVMainWindow::createConnections() {
 	// Location bar
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
-    /*connect(mURLEdit,SIGNAL(returnPressed(const QString &)), 
-	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
