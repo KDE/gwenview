@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ const char* CONFIG_SHOW_PATH="show path";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
 const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
 const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
+const char* CONFIG_MOUSE_WHEEL_SCROLL="mouse wheel scrolls image";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
@@ -186,10 +187,25 @@ public:
 	}
 
 	void wheelEvent(QWheelEvent* event) {
-		if (event->delta()<0) {
-			mView->emitSelectNext();
-		} else {
-			mView->emitSelectPrevious();
+		if (mView->mMouseWheelScroll) {
+			int deltaX, deltaY;
+
+			if (event->state() & ControlButton) {
+				deltaX = 0;
+				deltaY = event->delta();
+			}
+			else {
+				deltaX = event->delta();
+				deltaY = 0;
+			}
+			mView->scrollBy(-deltaY, -deltaX);
+		}
+		else {
+			if (event->delta()<0) {
+				mView->emitSelectNext();
+			} else {
+				mView->emitSelectPrevious();
+			}
 		}
 		event->accept();
 	}
@@ -287,7 +303,8 @@ void GVScrollPixmapView::slotURLChanged() {
 		return;
 	}
 	*/
-
+    updateContentSize();
+    updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
 }
 
@@ -330,6 +347,11 @@ void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
 void GVScrollPixmapView::setShowScrollBars(bool value) {
 	mShowScrollBars=value;
 	updateScrollBarMode();
+}
+
+
+void GVScrollPixmapView::setMouseWheelScroll(bool value) {
+	mMouseWheelScroll=value;
 }
 
 
@@ -984,6 +1006,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
+        mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -1000,6 +1023,7 @@ void GVScrollPixmapView::kpartConfig() {
 	mSmoothScale=false;
 	mEnlargeSmallImages=false;
 	mShowScrollBars=true;
+	mMouseWheelScroll=true;
 	mAutoZoom->setChecked(true);
 	updateScrollBarMode();
 	mLockZoom->setChecked(false);
@@ -1018,6 +1042,7 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_SMOOTH_SCALE,mSmoothScale);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
+	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL,mMouseWheelScroll);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 }

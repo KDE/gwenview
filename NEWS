@@ -4,6 +4,9 @@
    executable, gvimagepart/ and gvdirpart/ contain the read only KParts so you
    can use Gwenview in Konqueror (By Jonathan Riddell).
  - Asynchronous JPEG loading, based on Khtml loader.
+ - Mouse wheel will now scroll the image by default. Holding Ctrl will scroll
+   horizontally. An option has been added to the setting dialog to toggle
+   between scroll and browse (By Jeroen Peters).
 - Fixes:
  - The rotate and mirror functions can now work on multiple selection.
  - Make it possible to load another image or quit even if you can't save your

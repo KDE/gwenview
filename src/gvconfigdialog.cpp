@@ -87,6 +87,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d->mContent->mSmoothScale->setChecked(pixmapView->smoothScale());
 	d->mContent->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mContent->mShowScrollBars->setChecked(pixmapView->showScrollBars());
+	d->mContent->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
 	
 	// Full Screen tab
 	d->mContent->mShowPathInFullScreen->setChecked(pixmapView->showPathInFullScreen());
@@ -141,6 +142,7 @@ void GVConfigDialog::slotApply() {
 	pixmapView->setSmoothScale(d->mContent->mSmoothScale->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mContent->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mContent->mShowScrollBars->isChecked());
+	pixmapView->setMouseWheelScroll(d->mContent->mMouseWheelGroup->selected()==d->mContent->mMouseWheelScroll);
 	
 	// Full Screen tab
 	pixmapView->setShowPathInFullScreen( d->mContent->mShowPathInFullScreen->isChecked() );
