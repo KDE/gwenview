@@ -2,7 +2,8 @@
 <kpartgui name="GVDirPart">
 <MenuBar>
  <Menu name="view"><Text>&amp;View</Text>
-    <Action name="openCloseAll"/>
+  <Action name="openCloseAll"/>
+  <Action name="view_zoom_auto"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
