@@ -276,6 +276,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	QFont font=mFullScreenLabel->font();
 	font.setWeight(QFont::Bold);
 	mFullScreenLabel->setFont(font);
+    mFullScreenLabel->move(2, 2);
 	mFullScreenLabel->hide();
 	
 	// Create actions
@@ -1243,6 +1244,55 @@ static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
 		0, -16*90);
 }
 
+static void drawRoundRect(QPainter& painter, const QRect& rect, int radius) {
+    painter.drawLine(
+        rect.left() + radius,
+        rect.top(),
+        rect.right() - radius,
+        rect.top());
+
+    painter.drawLine(
+        rect.right() - 1,
+        rect.top() + radius,
+        rect.right() - 1,
+        rect.bottom() - radius);
+
+    painter.drawLine(
+        rect.right() - radius,
+        rect.bottom() - 1,
+        rect.left() + radius,
+        rect.bottom() - 1);
+
+    painter.drawLine(
+        rect.left(),
+        rect.bottom() - radius,
+        rect.left(),
+        rect.top() + radius);
+
+	painter.drawArc(
+		rect.left(),
+		rect.top(),
+		radius*2, radius*2,
+		16*90, 16*90);
+
+	painter.drawArc(
+		rect.right() - radius *2,
+		rect.top(),
+		radius*2, radius*2,
+		0, 16*90);
+
+	painter.drawArc(
+		rect.left(),
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		16*180, 16*90);
+
+	painter.drawArc(
+		rect.right() - radius *2,
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		0, -16*90);
+}
 
 
 void GVScrollPixmapView::updateFullScreenLabel() {
@@ -1293,28 +1343,32 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	
 	QPainter painter;
 
-	QSize textSize=mFullScreenLabel->fontMetrics().size(0,text);
-	textSize.setWidth( textSize.width() + FULLSCREEN_LABEL_RADIUS);
-	textSize.setHeight( textSize.height() + FULLSCREEN_LABEL_RADIUS);
-	mFullScreenLabel->resize(textSize);
+	QSize size=mFullScreenLabel->fontMetrics().size(0,text);
+	size.setWidth( size.width() + FULLSCREEN_LABEL_RADIUS * 2);
+	size.setHeight( size.height() + FULLSCREEN_LABEL_RADIUS);
+	mFullScreenLabel->resize(size);
 
 	// Create a mask for the text
-	QBitmap mask(textSize,true);
+	QBitmap mask(size,true);
 	painter.begin(&mask);
 	painter.setBrush(Qt::white);
 	fillRoundRect(painter, mFullScreenLabel->rect(), FULLSCREEN_LABEL_RADIUS);
 	painter.end();
 
 	// Draw the text on a pixmap
-	QPixmap pixmap(textSize);
+	QPixmap pixmap(size);
 	painter.begin(&pixmap);
+	painter.setPen(colorGroup().highlightedText());
 	QRect rect=pixmap.rect();
 	painter.fillRect(rect, colorGroup().highlight());
+	drawRoundRect(painter, rect, FULLSCREEN_LABEL_RADIUS);
 	
-	rect.addCoords(FULLSCREEN_LABEL_RADIUS/2, FULLSCREEN_LABEL_RADIUS/2,
-		-FULLSCREEN_LABEL_RADIUS/2, -FULLSCREEN_LABEL_RADIUS/2);
+	rect.addCoords(
+        FULLSCREEN_LABEL_RADIUS, FULLSCREEN_LABEL_RADIUS/2,
+		-FULLSCREEN_LABEL_RADIUS, -FULLSCREEN_LABEL_RADIUS/2);
 	painter.setFont(mFullScreenLabel->font());
-	painter.setPen(black);
+	
+    painter.setPen(black);
 	painter.drawText(rect, Qt::DontClip, text);
 	
 	painter.setPen(colorGroup().highlightedText());
