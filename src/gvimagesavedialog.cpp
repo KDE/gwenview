@@ -43,26 +43,6 @@ static int findFormatInFilterList(const QStringList& filters, const QString& for
 }
 
 
-#if KDE_VERSION < 0x30100
-// Dumb replacement function for KImageIO::typeForMime() which does not exist
-// in KDE 3.0
-static QString typeForMime(const QString& mimeType) {
-	QMap<QString,QString> map;
-	map["image/gif"]="GIF";
-	map["image/jpeg"]="JPEG";
-	map["image/png"]="PNG";
-	map["image/x-bmp"]="BMP";
-	map["image/x-eps"]="EPS";
-	map["image/x-ico"]="ICO";
-	map["image/x-krl"]="KRL";
-	map["image/x-portable-bitmap"]="PBM";
-	map["image/x-portable-pixmap"]="PNM";
-	map["image/x-xbm"]="XBM";
-	map["image/x-xpm"]="XPM";
-	return map[mimeType];
-}
-#endif
-
 GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"gvimagesavedialog",true)
 , mURL(url)
@@ -79,11 +59,7 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWi
 	// Create our filter list
 	QStringList mimeTypes=KImageIO::mimeTypes();
 	for(QStringList::const_iterator it=mimeTypes.begin(); it!=mimeTypes.end(); ++it) {
-		#if KDE_VERSION < 0x30100
-		QString format=typeForMime(*it);
-		#else
 		QString format=KImageIO::typeForMime(*it);
-		#endif
 		
 		// Create the pattern part of the filter string
 		KMimeType::Ptr mt=KMimeType::mimeType(*it);
@@ -109,7 +85,10 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWi
 	
 	// Select the default image format
 	int pos=findFormatInFilterList(filters,mImageFormat);
-	if (pos==-1) pos=findFormatInFilterList(filters,"PNG");
+	if (pos==-1) {
+		pos=findFormatInFilterList(filters,"PNG");
+		mImageFormat="PNG";
+	}
 	
 	filterWidget->setCurrentItem(pos);
 
