@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
@@ -147,7 +148,7 @@ void ConfigDialog::slotApply() {
 	pixmapView->setButtonStateTool(ControlButton, GVScrollPixmapView::Tool(mControlPlusWheel->currentItem()) );
 	pixmapView->setButtonStateTool(ShiftButton,   GVScrollPixmapView::Tool(mShiftPlusWheel->currentItem()) );
 	pixmapView->setButtonStateTool(AltButton,     GVScrollPixmapView::Tool(mAltPlusWheel->currentItem()) );
-    pixmapView->updateDefaultCursor();
+	pixmapView->updateDefaultCursor();
 
 	// Image View tab
 	pixmapView->setSmoothScale(mSmoothScale->isChecked());

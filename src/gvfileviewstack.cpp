@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
@@ -82,7 +83,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mLargeThumbnails=new KRadioAction(i18n("Large Thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"large_thumbnails");
 	mLargeThumbnails->setExclusiveGroup("thumbnails");
 
-    mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
+	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
 	// Dir lister
 	mDirLister=new KDirLister;
@@ -321,7 +322,7 @@ void GVFileViewStack::updateThumbnailSize() {
 
 
 void GVFileViewStack::toggleShowDotFiles() {
-    mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
+	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->openURL(mDirURL);
 }
 
@@ -686,7 +687,7 @@ void GVFileViewStack::initDirListerFilter() {
 		mimeTypes.append("inode/directory");
 		mimeTypes+=GVArchive::mimeTypes();
 	}
-    mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
+	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->setMimeFilter(mimeTypes);
 	mDirLister->emitChanges();
 }

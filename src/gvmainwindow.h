@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright (c) 2000-2003 Aurélien Gâteau
@@ -140,7 +141,7 @@ private slots:
 	void showFileProperties();
 	void openFile();
 	void slotFilePrint();  /** print the actual file */
-    	
+
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showExternalToolDialog();

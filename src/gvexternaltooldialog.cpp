@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
@@ -72,12 +73,12 @@ struct GVExternalToolDialogPrivate {
 	
 	void fillMimeTypeListView() {
 		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
-        //FIXME: Factorize the additional mime types
-        mimeTypes.append("image/x-xcf-gimp");
-        mimeTypes.append("image/pjpeg");
+		//FIXME: Factorize the additional mime types
+		mimeTypes.append("image/x-xcf-gimp");
+		mimeTypes.append("image/pjpeg");
 		mimeTypes.append("inode/directory");
 		mimeTypes+=GVArchive::mimeTypes();
-        
+
 		QStringList::const_iterator it=mimeTypes.begin();
 		for(; it!=mimeTypes.end(); ++it) {
 			(void)new QCheckListItem(mContent->mMimeTypeListView, *it, QCheckListItem::CheckBox);

@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Copyright (c) 2003 Jos van den Oever
 

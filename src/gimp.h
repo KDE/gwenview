@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /* -*- c++ -*-
  * gimp.h: Header for a Qt 3 plug-in for reading GIMP XCF image files
  * Copyright (C) 2001 lignum Computing, Inc. <allen@lignumcomputing.com>

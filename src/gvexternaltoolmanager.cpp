@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright (c) 2000-2003 Aurélien Gâteau
@@ -112,11 +113,11 @@ void loadDesktopFiles(QDict<KDesktopFile>& dict, const QString& dirString) {
 
 GVExternalToolManager::GVExternalToolManager() {
 	d=new GVExternalToolManagerPrivate;
-    
-    // Make sure the dir exists.
-    KGlobal::dirs()->saveLocation("appdata", "tools");
+
+	// Make sure the dir exists.
+	KGlobal::dirs()->saveLocation("appdata", "tools");
 	
-    // Load system and user desktop files.
+	// Load system and user desktop files.
 	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
 	QString userBaseDir=KGlobal::dirs()->localkdedir();
 	

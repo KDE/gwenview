@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aur�ien G�eau
@@ -36,9 +37,9 @@ static const char* version="1.0.0pre2";
 
 
 int main (int argc, char *argv[]) {
-    KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
-                        version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
-                        "Copyright 2000-2003 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
+	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
+		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
+		"Copyright 2000-2003 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options );

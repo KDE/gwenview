@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright (c) 2000-2003 Aurélien Gâteau
@@ -87,7 +88,7 @@ public:
 	KRadioAction* smallThumbnails() const { return mSmallThumbnails; }
 	KRadioAction* medThumbnails() const { return mMedThumbnails; }
 	KRadioAction* largeThumbnails() const { return mLargeThumbnails; }
-    KToggleAction* showDotFiles() const { return mShowDotFiles; }
+	KToggleAction* showDotFiles() const { return mShowDotFiles; }
 
 	void setFocus();
 	
@@ -143,7 +144,7 @@ private slots:
 	// Get called by the thumbnail size radio actions
 	void updateThumbnailSize();
 
-    void toggleShowDotFiles();
+	void toggleShowDotFiles();
 
 	// Dir lister slots
 	void dirListerDeleteItem(KFileItem* item);
@@ -174,7 +175,7 @@ private:
 	KRadioAction* mMedThumbnails;
 	KRadioAction* mLargeThumbnails;
 
-    KToggleAction* mShowDotFiles;
+	KToggleAction* mShowDotFiles;
 
 	// configurable settings
 	bool mAutoLoadImage;

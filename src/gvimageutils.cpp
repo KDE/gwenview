@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 // Qt
 #include <qcstring.h>
 #include <qimage.h>

@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
@@ -101,7 +102,7 @@ GVMainWindow::GVMainWindow()
 
 	// Backend
 	mGVPixmap=new GVPixmap(this);
-    mGVHistory=new GVHistory(mGVPixmap, actionCollection());
+	mGVHistory=new GVHistory(mGVPixmap, actionCollection());
 	// GUI
 	createWidgets();
 	createActions();
@@ -114,9 +115,9 @@ GVMainWindow::GVMainWindow()
 	mMetaEdit->installEventFilter(mPixmapView);
 	mURLEdit->installEventFilter(mPixmapView);
 
-    #if KDE_VERSION >= 0x30100
-    setStandardToolBarMenuEnabled(true);
-    #endif
+	#if KDE_VERSION >= 0x30100
+	setStandardToolBarMenuEnabled(true);
+	#endif
 	createGUI("gwenviewui.rc", false);
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
@@ -142,7 +143,6 @@ GVMainWindow::GVMainWindow()
 
 	// Go to requested file
 	mGVPixmap->setURL(url);
-    /*mGVHistory->slotManageHistoryList();*/
 }
 
 
@@ -309,12 +309,10 @@ void GVMainWindow::openFile() {
 
 void GVMainWindow::slotFilePrint()
 {
-  KPrinter printer;
-  if (printer.setup(this))
-  {
-    
-    mGVPixmap->print(&printer);
-  }
+	KPrinter printer;
+	if (printer.setup(this)) {
+		mGVPixmap->print(&printer);
+	}
 }
 
 
@@ -716,8 +714,8 @@ void GVMainWindow::updateWindowActions() {
 
 
 void GVMainWindow::createConnections() {
-    connect(mGoUp->popupMenu(), SIGNAL(activated(int)), 
-	    this,SLOT(goUpTo(int)));
+	connect(mGoUp->popupMenu(), SIGNAL(activated(int)), 
+		this,SLOT(goUpTo(int)));
 
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),

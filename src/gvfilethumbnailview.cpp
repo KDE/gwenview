@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
@@ -77,7 +78,7 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 
 
 GVFileThumbnailView::~GVFileThumbnailView() {
-    stopThumbnailUpdate();
+	stopThumbnailUpdate();
 }
 
 
@@ -183,7 +184,7 @@ void GVFileThumbnailView::updateThumbnail(KFileItem* fileItem) {
 //
 //-----------------------------------------------------------------------------
 void GVFileThumbnailView::clearView() {
-    stopThumbnailUpdate();
+	stopThumbnailUpdate();
 	mShownFileItem=0L;
 	QIconView::clear();
 }

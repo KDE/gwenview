@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /* This file is based on kfiledetailview.h from the KDE libs. Original
    copyright follows.
 */
