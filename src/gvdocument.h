@@ -37,6 +37,7 @@ Copyright 2000-2004 Aurélien Gâteau
 class GVDocumentPrivate;
 class GVDocumentImpl;
 
+namespace KIO { class Job; }
 /**
  * The application document.
  * It knows what the current url is.
@@ -132,6 +133,7 @@ signals:
 	void sizeUpdated(int width, int height);
 
 private slots:
+	void slotStatResult(KIO::Job*); 
 	void slotFinished(bool success);
 	void slotLoading();
 	void slotLoaded();

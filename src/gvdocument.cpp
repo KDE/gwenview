@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kimageio.h>
-#include <kio/netaccess.h>
+#include <kio/job.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprinter.h>
@@ -62,6 +62,7 @@ const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 static GVJPEGFormatType sJPEGFormatType;
 static GVPNGFormatType sPNGFormatType;
 static GVXPM sXPM;
+
 
 //-------------------------------------------------------------------
 //
@@ -141,7 +142,8 @@ void GVDocument::setURL(const KURL& paramURL) {
 
 	// Set high busy level, so that operations like smoothing are suspended.
 	// Otherwise the stat() below done using KIO can take quite long.
-	GVBusyLevelHelper busyhelper( BUSY_CHECKING_NEW_IMAGE );
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_CHECKING_NEW_IMAGE );
+	
 
 	// Fix wrong protocol
 	if (GVArchive::protocolIsArchive(localURL.protocol())) {
@@ -151,10 +153,23 @@ void GVDocument::setURL(const KURL& paramURL) {
 		}
 	}
 
-	// Check whether this is a dir or a file
-	KIO::UDSEntry entry;
+	
+	KIO::StatJob* job = KIO::stat( localURL, !localURL.isLocalFile() );
+	connect( job, SIGNAL( result (KIO::Job *) ),
+	   this, SLOT( slotStatResult (KIO::Job *) ) );
+}
+
+
+void GVDocument::slotStatResult(KIO::Job* _job) {
+	kdDebug() << k_funcinfo << endl;
+	if (_job->error()) return;
+
 	bool isDir=false;
-	if (!KIO::NetAccess::stat(localURL,entry)) return;
+	KIO::StatJob* job= static_cast<KIO::StatJob *>(_job);
+	KIO::UDSEntry entry = job->statResult();
+	KURL localURL=job->url();
+	kdDebug() << k_funcinfo << localURL.path() << endl;
+	
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
 		if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
@@ -162,6 +177,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 			break;
 		}
 	}
+	kdDebug() << k_funcinfo << localURL.path() << " " << isDir << endl;
 
 	if (isDir) {
 		d->mDirURL=localURL;
@@ -176,11 +192,9 @@ void GVDocument::setURL(const KURL& paramURL) {
 		return;
 	}
 
-	busyhelper.reset();
-
 	load();
 }
-
+	
 
 void GVDocument::setDirURL(const KURL& paramURL) {
 	if (!saveBeforeClosing()) {
