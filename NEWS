@@ -1,3 +1,7 @@
+2003.xx.xx - v1.0.0pre4
+- Fixes:
+ - Use a KDE dialog for the configuration dialog.
+
 2003.11.01 - v1.0.0pre3
 - New features:
  - Added a "don't ask me again" check box to the save prompt dialog.

@@ -1,6 +1,6 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ConfigDialogBase</class>
-<widget class="QDialog">
+<widget class="QWidget">
     <property name="name">
         <cstring>ConfigDialogBase</cstring>
     </property>
@@ -8,25 +8,19 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>557</width>
-            <height>388</height>
+            <width>513</width>
+            <height>340</height>
         </rect>
     </property>
     <property name="caption">
         <string>Configure Gwenview</string>
-    </property>
-    <property name="sizeGripEnabled">
-        <bool>false</bool>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
+            <number>0</number>
         </property>
         <widget class="QTabWidget">
             <property name="name">
@@ -915,133 +909,8 @@
                 </vbox>
             </widget>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout4</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>mOK</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>mApply</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Apply</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>mCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property name="flat">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
     </vbox>
 </widget>
-<connections>
-    <connection>
-        <sender>mOK</sender>
-        <signal>clicked()</signal>
-        <receiver>ConfigDialogBase</receiver>
-        <slot>slotOk()</slot>
-    </connection>
-    <connection>
-        <sender>mApply</sender>
-        <signal>clicked()</signal>
-        <receiver>ConfigDialogBase</receiver>
-        <slot>slotApply()</slot>
-    </connection>
-    <connection>
-        <sender>mCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>ConfigDialogBase</receiver>
-        <slot>reject()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>mTabs</tabstop>
-    <tabstop>mShowCopyDialog</tabstop>
-    <tabstop>mShowMoveDialog</tabstop>
-    <tabstop>mDefaultDestDir</tabstop>
-    <tabstop>mConfirmBeforeDelete</tabstop>
-    <tabstop>mDeleteToTrash</tabstop>
-    <tabstop>mReallyDelete</tabstop>
-    <tabstop>mJPEGTran</tabstop>
-    <tabstop>mModifyAsk</tabstop>
-    <tabstop>mAutoLoadImage</tabstop>
-    <tabstop>mShowDirs</tabstop>
-    <tabstop>mShownColor</tabstop>
-    <tabstop>mWordWrapFilename</tabstop>
-    <tabstop>mThumbnailMargin</tabstop>
-    <tabstop>mCalculateCacheSize</tabstop>
-    <tabstop>mEmptyCache</tabstop>
-    <tabstop>mSmoothScale</tabstop>
-    <tabstop>mAutoZoomEnlarge</tabstop>
-    <tabstop>mShowScrollBars</tabstop>
-    <tabstop>mWheelOnly</tabstop>
-    <tabstop>mControlPlusWheel</tabstop>
-    <tabstop>mShiftPlusWheel</tabstop>
-    <tabstop>mAltPlusWheel</tabstop>
-    <tabstop>mShowPathInFullScreen</tabstop>
-    <tabstop>mShowMenuBarInFullScreen</tabstop>
-    <tabstop>mShowToolBarInFullScreen</tabstop>
-    <tabstop>mShowStatusBarInFullScreen</tabstop>
-    <tabstop>mOK</tabstop>
-    <tabstop>mApply</tabstop>
-    <tabstop>mCancel</tabstop>
-</tabstops>
-<slots>
-    <slot>slotApply()</slot>
-    <slot>slotOk()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>

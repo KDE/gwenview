@@ -21,28 +21,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
-
-#include "configdialogbase.h"
+// KDE includes
+#include <kdialogbase.h>
 
 class GVMainWindow;
+class ConfigDialogPrivate;
 
-class ConfigDialog : ConfigDialogBase {
+class ConfigDialog : public KDialogBase {
 Q_OBJECT
 public:
 	ConfigDialog(QWidget* parent,GVMainWindow*);
-	int exec() { return ConfigDialogBase::exec(); }
+	~ConfigDialog();
 
-public slots:
+protected slots:
 	void slotOk();
 	void slotApply();
-
-private:
-	GVMainWindow* mMainWindow;
 
 private slots:
 	void calculateCacheSize();
 	void emptyCache();
 	void onCacheEmptied(KIO::Job*);
+
+private:
+	ConfigDialogPrivate* d;
 };
 
 
