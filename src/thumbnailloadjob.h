@@ -42,21 +42,29 @@ typedef QPtrList<KFileItem> KFileItemList;
 class ThumbnailThread : public TSThread {
 Q_OBJECT
 public:
-	void load( const QString& pixPath, const QString& name );
-	QImage loadedThumbnail();
-	void setCacheDir( const QString& dir );
+	void load(
+		const QString& originalURI,
+		time_t originalTime,
+		int originalSize,
+		const QString& originalMimeType,
+		const QString& pixPath,
+		const QString& thumbnailPath);
+	QImage popThumbnail();
 protected:
 	virtual void run();
 signals:
 	void done();
 private:
 	bool isJPEG(const QString& name);
-	bool loadJPEG( const QString &pixPath, QImage&);
+	bool loadJPEG(const QString &pixPath, QImage&, int& width, int& height);
 	void loadThumbnail();
 	QImage mImage;
-	QString mCacheDir;
 	QString mPixPath;
-	QString mName;
+	QString mThumbnailPath;
+	QString mOriginalURI;
+	time_t mOriginalTime;
+	int mOriginalSize;
+	QString mOriginalMimeType;
 	QMutex mMutex;
 	QWaitCondition mCond;
 };
@@ -90,11 +98,11 @@ public:
 	void appendItem(const KFileItem* item);
 
 	
-        /**
-         * Set item to be the next processed job. Returns false
-         * if there's no such item in mItems
-         */	
-        bool setNextItem(const KFileItem* item);
+	/**
+	 * Set item to be the next processed job. Returns false
+	 * if there's no such item in mItems
+	 */	
+	bool setNextItem(const KFileItem* item);
 
 	/**
 	 * Temporarily suspends loading. Used if there's a more
@@ -113,9 +121,6 @@ public:
 	static QString thumbnailBaseDir();
 
 
-	static QString thumbnailDirForURL(const KURL& url);
-
-	
 	/**
 	 * Delete the thumbnail for the @p url
 	 */
@@ -147,14 +152,17 @@ private:
 	// The URL of the current item (always equivalent to m_items.first()->item()->url())
 	KURL mCurrentURL;
 
-	// The modification time of that URL
+	// The URI of the original image (might be different from mCurrentURL.url())
+	QString mOriginalURI;
+	
+	// The modification time of the original image
 	time_t mOriginalTime;
+
+	// The thumbnail path
+	QString mThumbnailPath;
 
 	// The URL of the temporary file for remote urls
 	KURL mTempURL;
-
-	// Thumbnail cache dir
-	QString mCacheDir;
 
 	// Thumbnail size
 	ThumbnailSize mThumbnailSize;

@@ -2,6 +2,7 @@
 - New features:
  - You can now define custom branches in the dir view (By Craig Drummond)
  - An image cache has been added to speedup image loading.
+ - Now uses freedesktop thumbnail spec to store thumbnails.
 - Fixes:
  - Don't crash when switching to fullscreen while generating thumbnails and
    coming back (By Lubos Lunak)

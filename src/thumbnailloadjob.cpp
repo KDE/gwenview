@@ -58,13 +58,241 @@ extern "C" {
 #include "gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
 #define LOG(x) ;
 #endif
 
+
+
+
+QString generateOriginalURI(KURL url) {
+	// Don't include the password if any
+	url.setPass(QString::null);
+	
+	// The TMS defines local files as file:///path/to/file instead of KDE's
+	// way (file:/path/to/file)
+	if (url.protocol() == "file") {
+		return "file://" + url.path();
+	} else {
+		return url.url();
+	}
+}
+
+
+QString generateThumbnailPath(const QString& uri) {
+	KMD5 md5( QFile::encodeName(uri) );
+	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir();
+	return baseDir + QString(QFile::encodeName( md5.hexDigest())) + ".png";
+}
+
+//------------------------------------------------------------------------
+//
+// ThumbnailThread
+//
+//------------------------------------------------------------------------
+void ThumbnailThread::load(
+	const QString& originalURI, time_t originalTime, int originalSize, const QString& originalMimeType,
+	const QString& pixPath,
+	const QString& thumbnailPath)
+{
+	QMutexLocker lock( &mMutex );
+	assert( mPixPath.isNull());
+
+	mOriginalURI = TSDeepCopy(originalURI);
+	mOriginalTime = originalTime;
+	mOriginalSize = originalSize;
+	mOriginalMimeType = TSDeepCopy(originalMimeType);
+	mPixPath = TSDeepCopy(pixPath);
+	mThumbnailPath = TSDeepCopy(thumbnailPath);
+	if(!running()) start();
+	mCond.wakeOne();
+}
+
+void ThumbnailThread::run() {
+	QMutexLocker lock( &mMutex );
+	while( !testCancel()) {
+		// empty mPixPath means nothing to do
+		while( mPixPath.isNull()) {
+			TSCancellable c( &mCond );
+			mCond.wait( &mMutex );
+			if( testCancel()) return;
+		}
+		loadThumbnail();
+		mPixPath = QString(); // done, ready for next
+		postSignal( SIGNAL( done()));
+	}
+}
+
+void ThumbnailThread::loadThumbnail() {
+	mImage = QImage();
+	bool loaded=false;
+	int width, height;
+	
+	// If it's a JPEG, try to load a small image directly from the file
+	if (isJPEG(mPixPath)) {
+		loaded=loadJPEG(mPixPath, mImage, width, height);
+		if (loaded) {
+			// Rotate if necessary
+			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mPixPath);
+			mImage=GVImageUtils::modify(mImage,orientation);
+		}
+	}
+	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
+	if (!loaded) {
+		QImage bigImg;
+		if (bigImg.load(mPixPath)) {
+			width=bigImg.width();
+			height=bigImg.height();
+			int thumbSize=ThumbnailSize::biggest().pixelSize();
+
+			if( testCancel()) return;
+
+			if (width<=thumbSize && height<=thumbSize) {
+				mImage=bigImg;
+			} else {
+				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_NONE,QImage::ScaleMin);
+			}
+			loaded = true;
+		}
+	}
+
+	if( testCancel()) return;
+
+	if( loaded ) {
+		mImage.setText("Thumb::URI", 0, mOriginalURI);
+		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
+		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
+		mImage.setText("Thumb::Mimetype", 0, mOriginalMimeType);
+		mImage.setText("Thumb::Image::Width", 0, QString::number(width));
+		mImage.setText("Thumb::Image::Height", 0, QString::number(height));
+		mImage.setText("Software", 0, "Gwenview");
+		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(), 0700);
+		mImage.save(mThumbnailPath, "PNG");
+	}
+}
+
+
+bool ThumbnailThread::isJPEG(const QString& name) {
+	QString format=QImageIO::imageFormat(name);
+	return format=="JPEG";
+}
+
+
+
+struct GVJPEGFatalError : public jpeg_error_mgr {
+	jmp_buf mJmpBuffer;
+
+	static void handler(j_common_ptr cinfo) {
+		GVJPEGFatalError* error=static_cast<GVJPEGFatalError*>(cinfo->err);
+		(error->output_message)(cinfo);
+		longjmp(error->mJmpBuffer,1);
+	}
+};
+
+bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& width, int& height) {
+	struct jpeg_decompress_struct cinfo;
+
+	// Open file
+	FILE* inputFile=fopen(QFile::encodeName( pixPath ).data(), "rb");
+	if(!inputFile) return false;
+	
+	// Error handling
+	struct GVJPEGFatalError jerr;
+	cinfo.err = jpeg_std_error(&jerr);
+	cinfo.err->error_exit = GVJPEGFatalError::handler;
+	if (setjmp(jerr.mJmpBuffer)) {
+		jpeg_destroy_decompress(&cinfo);
+		fclose(inputFile);
+		return false;
+	}
+
+	// Init decompression
+	jpeg_create_decompress(&cinfo);
+	jpeg_stdio_src(&cinfo, inputFile);
+	jpeg_read_header(&cinfo, TRUE);
+	width=cinfo.image_width;
+	height=cinfo.image_height;
+
+	// Get image size and check if we need a thumbnail
+	int size=ThumbnailSize::biggest().pixelSize();
+	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
+
+	if (imgSize<=size) {
+		fclose(inputFile);
+		return image.load(pixPath);
+	}	
+
+	// Compute scale value
+	int scale=1;
+	while(size*scale*2<=imgSize) {
+		scale*=2;
+	}
+	if(scale>8) scale=8;
+
+	cinfo.scale_num=1;
+	cinfo.scale_denom=scale;
+
+	// Create QImage
+	jpeg_start_decompress(&cinfo);
+
+	switch(cinfo.output_components) {
+	case 3:
+	case 4:
+		image.create( cinfo.output_width, cinfo.output_height, 32 );
+		break;
+	case 1: // B&W image
+		image.create( cinfo.output_width, cinfo.output_height, 8, 256 );
+		for (int i=0; i<256; i++)
+			image.setColor(i, qRgb(i,i,i));
+		break;
+	default:
+		jpeg_destroy_decompress(&cinfo);
+		fclose(inputFile);
+		return false;
+	}
+
+	uchar** lines = image.jumpTable();
+	while (cinfo.output_scanline < cinfo.output_height) {
+		jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
+	}
+	jpeg_finish_decompress(&cinfo);
+
+// Expand 24->32 bpp
+	if ( cinfo.output_components == 3 ) {
+		for (uint j=0; j<cinfo.output_height; j++) {
+			uchar *in = image.scanLine(j) + cinfo.output_width*3;
+			QRgb *out = (QRgb*)( image.scanLine(j) );
+
+			for (uint i=cinfo.output_width; i--; ) {
+				in-=3;
+				out[i] = qRgb(in[0], in[1], in[2]);
+			}
+		}
+	}
+
+	int newMax = QMAX(cinfo.output_width, cinfo.output_height);
+	int newx = size*cinfo.output_width / newMax;
+	int newy = size*cinfo.output_height / newMax;
+
+	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_NONE);
+
+	jpeg_destroy_decompress(&cinfo);
+	fclose(inputFile);
+
+	return true;
+}
+
+
+QImage ThumbnailThread::popThumbnail() {
+	QMutexLocker lock( &mMutex );
+	QImage ret = mImage; // no deep copy
+	mImage = QImage(); // thread no longer accesses the image
+	mPixPath = QString(); // waiting for next job
+	return ret;
+}
 
 
 //------------------------------------------------------------------------
@@ -75,40 +303,14 @@ extern "C" {
 QString ThumbnailLoadJob::thumbnailBaseDir() {
 	static QString dir;
 	if (!dir.isEmpty()) return dir;
-
-	dir=QDir::cleanDirPath( KGlobal::dirs()->saveLocation("cache", "gwenview") );
+    dir = QDir::homeDirPath() + "/.thumbnails/normal/";
 	return dir;
 }
 
 
-QString ThumbnailLoadJob::thumbnailDirForURL(const KURL& url) {
-	QString originalDir=QDir::cleanDirPath( url.directory() );
-
-	// Check if we're already in a cache dir
-	// In that case the cache dir will be the original dir
-	QString cacheBaseDir = thumbnailBaseDir();
-	if (originalDir.startsWith(cacheBaseDir) ) {
-		return originalDir;
-	}
-
-	// Generate the thumbnail dir name
-	//	kdDebug() << mItems.getFirst()->url().upURL().url(-1) << endl;
-	KMD5 md5(QFile::encodeName(KURL(originalDir).url()) );
-	QCString hash=md5.hexDigest();
-	QString thumbnailDir = thumbnailBaseDir() + "/" +
-		QString::fromLatin1( hash.data(), 4 ) + "/" +
-		QString::fromLatin1( hash.data()+4, 4 ) + "/" +
-		QString::fromLatin1( hash.data()+8 ) + "/";
-
-	// Create the thumbnail cache dir
-	KStandardDirs::makeDir(thumbnailDir);
-	return thumbnailDir;
-}
-
-
 void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
-	QDir dir( thumbnailDirForURL(url) );
-	dir.remove(url.fileName());
+	QString uri=generateOriginalURI(url);
+	QFile::remove(generateThumbnailPath(uri));
 }
 
 
@@ -130,10 +332,6 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 
 	if (mItems.isEmpty()) return;
 
-	// We assume that all items are in the same dir
-	mCacheDir=thumbnailDirForURL(mItems.getFirst()->url());
-	LOG("mCacheDir=" << mCacheDir);
-	mThumbnailThread.setCacheDir( mCacheDir );
 	connect( &mThumbnailThread, SIGNAL( done()), SLOT( thumbnailReady()));
 	
 	// Move to the first item
@@ -232,6 +430,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		assert( mNextItem == mItems.current());
 		mCurrentItem = mNextItem;
 		mCurrentURL = mCurrentItem->url();
+		mCurrentURL.cleanPath();
 		// Do direct stat instead of using KIO if the file is local (faster)
 		if( mCurrentURL.isLocalFile()
 			&& !KIO::probably_slow_mounted( mCurrentURL.path())) {
@@ -306,7 +505,7 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 
 
 void ThumbnailLoadJob::thumbnailReady() {
-	QImage img = mThumbnailThread.loadedThumbnail();
+	QImage img = mThumbnailThread.popThumbnail();
 	if ( !img.isNull()) {
 		emitThumbnailLoaded(img);
 	} else {
@@ -323,25 +522,31 @@ void ThumbnailLoadJob::thumbnailReady() {
 }
 
 void ThumbnailLoadJob::checkThumbnail() {
-	// Now stat the thumbnail, it's a local file, so there's
-	// no need to use KIO (direct stat is faster)
-	QString mThumbFilename = mCacheDir + "/" + mCurrentURL.fileName();
-	LOG("Stat thumb " << mThumbFilename);
-	KDE_struct_stat buff;
-	if ( KDE_stat( QFile::encodeName(mThumbFilename), &buff ) == 0 )  {
-		// Only if thumbnail is older than file
-		if (buff.st_mtime>=mOriginalTime) {
-			LOG("Thumbnail is up to date");
-			// Load thumbnail
-			QImage img;
-			if (img.load(mThumbFilename)) {
-				// All done
-				emitThumbnailLoaded(img);
-				determineNextIcon();
-				return;
-			}
+	// If we are in the thumbnail dir, just load the file
+	if (mCurrentURL.isLocalFile()
+		&& mCurrentURL.directory(false)==ThumbnailLoadJob::thumbnailBaseDir())
+	{
+		emitThumbnailLoaded(QImage(mCurrentURL.path()));
+		determineNextIcon();
+		return;
+	}
+	
+	mOriginalURI=generateOriginalURI(mCurrentURL);
+	mThumbnailPath=generateThumbnailPath(mOriginalURI);
+
+	LOG("Stat thumb " << mThumbnailPath);
+	
+	QImage thumb;
+	if ( thumb.load(mThumbnailPath) ) { 
+		if (thumb.text("Thumb::URI", 0) == mOriginalURI &&
+			thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime )
+		{
+			emitThumbnailLoaded(thumb);
+			determineNextIcon();
+			return;
 		}
 	}
+
 	// Thumbnail not found or not valid
 	// If the original is a local file, create the thumbnail
 	// and proceed to next icon, otherwise download the original
@@ -359,7 +564,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
-	mThumbnailThread.load( pixPath, mCurrentURL.fileName());
+	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(), mCurrentItem->mimetype(), pixPath, mThumbnailPath);
 	mState = STATE_CREATETHUMB;
 }
 
@@ -392,190 +597,3 @@ void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 
 
 
-// Thumbnail thread
-
-void ThumbnailThread::load( const QString& path, const QString& name ) {
-	QMutexLocker lock( &mMutex );
-	assert( mPixPath.isNull());
-	mPixPath = TSDeepCopy( path );
-	mName = TSDeepCopy( name );
-	if( !running()) start();
-	mCond.wakeOne();
-}
-
-void ThumbnailThread::run() {
-	QMutexLocker lock( &mMutex );
-	while( !testCancel()) {
-		// empty mPixPath means nothing to do
-		while( mPixPath.isNull()) {
-			TSCancellable c( &mCond );
-			mCond.wait( &mMutex );
-			if( testCancel()) return;
-		}
-		loadThumbnail();
-		mPixPath = QString(); // done, ready for next
-		postSignal( SIGNAL( done()));
-	}
-}
-
-void ThumbnailThread::loadThumbnail() {
-	mImage = QImage();
-	bool loaded=false;
-	
-	// If it's a JPEG, try to load a small image directly from the file
-	if (isJPEG(mPixPath)) {
-		loaded=loadJPEG(mPixPath, mImage);
-		if (loaded) {
-			// Rotate if necessary
-			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mPixPath);
-			mImage=GVImageUtils::modify(mImage,orientation);
-		}
-	}
-	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
-	if (!loaded) {
-		QImage bigImg;
-		if (bigImg.load(mPixPath)) {
-			int biWidth=bigImg.width();
-			int biHeight=bigImg.height();
-			int thumbSize=ThumbnailSize::biggest().pixelSize();
-
-			if( testCancel()) return;
-
-			if (biWidth<=thumbSize && biHeight<=thumbSize) {
-				mImage=bigImg;
-			} else {
-				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_NONE,QImage::ScaleMin);
-			}
-			loaded = true;
-		}
-	}
-
-	if( testCancel()) return;
-
-	if( loaded ) {
-		mImage.save(mCacheDir + "/" + mName,"PNG");
-	}
-}
-
-
-bool ThumbnailThread::isJPEG(const QString& name) {
-	QString format=QImageIO::imageFormat(name);
-	return format=="JPEG";
-}
-
-
-
-struct GVJPEGFatalError : public jpeg_error_mgr {
-	jmp_buf mJmpBuffer;
-
-	static void handler(j_common_ptr cinfo) {
-		GVJPEGFatalError* error=static_cast<GVJPEGFatalError*>(cinfo->err);
-		(error->output_message)(cinfo);
-		longjmp(error->mJmpBuffer,1);
-	}
-};
-
-bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image) {
-	struct jpeg_decompress_struct cinfo;
-
-	// Open file
-	FILE* inputFile=fopen(QFile::encodeName( pixPath ).data(), "rb");
-	if(!inputFile) return false;
-	
-	// Error handling
-	struct GVJPEGFatalError jerr;
-	cinfo.err = jpeg_std_error(&jerr);
-	cinfo.err->error_exit = GVJPEGFatalError::handler;
-	if (setjmp(jerr.mJmpBuffer)) {
-		jpeg_destroy_decompress(&cinfo);
-		fclose(inputFile);
-		return false;
-	}
-
-	// Init decompression
-	jpeg_create_decompress(&cinfo);
-	jpeg_stdio_src(&cinfo, inputFile);
-	jpeg_read_header(&cinfo, TRUE);
-
-	// Get image size and check if we need a thumbnail
-	int size=ThumbnailSize::biggest().pixelSize();
-	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
-
-	if (imgSize<=size) {
-		fclose(inputFile);
-		return image.load(pixPath);
-	}	
-
-	// Compute scale value
-	int scale=1;
-	while(size*scale*2<=imgSize) {
-		scale*=2;
-	}
-	if(scale>8) scale=8;
-
-	cinfo.scale_num=1;
-	cinfo.scale_denom=scale;
-
-	// Create QImage
-	jpeg_start_decompress(&cinfo);
-
-	switch(cinfo.output_components) {
-	case 3:
-	case 4:
-		image.create( cinfo.output_width, cinfo.output_height, 32 );
-		break;
-	case 1: // B&W image
-		image.create( cinfo.output_width, cinfo.output_height, 8, 256 );
-		for (int i=0; i<256; i++)
-			image.setColor(i, qRgb(i,i,i));
-		break;
-	default:
-		jpeg_destroy_decompress(&cinfo);
-		fclose(inputFile);
-		return false;
-	}
-
-	uchar** lines = image.jumpTable();
-	while (cinfo.output_scanline < cinfo.output_height) {
-		jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
-	}
-	jpeg_finish_decompress(&cinfo);
-
-// Expand 24->32 bpp
-	if ( cinfo.output_components == 3 ) {
-		for (uint j=0; j<cinfo.output_height; j++) {
-			uchar *in = image.scanLine(j) + cinfo.output_width*3;
-			QRgb *out = (QRgb*)( image.scanLine(j) );
-
-			for (uint i=cinfo.output_width; i--; ) {
-				in-=3;
-				out[i] = qRgb(in[0], in[1], in[2]);
-			}
-		}
-	}
-
-	int newMax = QMAX(cinfo.output_width, cinfo.output_height);
-	int newx = size*cinfo.output_width / newMax;
-	int newy = size*cinfo.output_height / newMax;
-
-	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_NONE);
-
-	jpeg_destroy_decompress(&cinfo);
-	fclose(inputFile);
-
-	return true;
-}
-
-
-void ThumbnailThread::setCacheDir( const QString& dir ) {
-	QMutexLocker lock( &mMutex );
-	mCacheDir = TSDeepCopy( dir );
-}
-
-QImage ThumbnailThread::loadedThumbnail() {
-	QMutexLocker lock( &mMutex );
-	QImage ret = mImage; // no deep copy
-	mImage = QImage(); // thread no longer accesses the image
-	mPixPath = QString(); // waiting for next job
-	return ret;
-}
