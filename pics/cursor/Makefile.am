@@ -1,2 +1,2 @@
 cursorsdir=$(kde_datadir)/gwenview/cursors
-cursors_DATA=drag.png dragging.png zoom.png autozoom.png 
+cursors_DATA=drag.png dragging.png zoom.png 

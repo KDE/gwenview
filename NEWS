@@ -8,6 +8,7 @@
    thumbnail view).
  - Show a broken icon for broken images.
  - Change working directory to current folder before running an external tool.
+ - New magnifier cursor.
 
 2003.11.16 - v1.0.0pre4
 - New features:
