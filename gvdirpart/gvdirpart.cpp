@@ -58,7 +58,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		m_gvPixmap, SLOT(setURL(const KURL&)) );
 
 	QValueList<int> splitterSizes;
-	splitterSizes.append(10);
+	splitterSizes.append(20);
 	m_splitter->setSizes(splitterSizes);
 
 	// Example action creation code

@@ -42,10 +42,10 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	static KAboutData* createAboutData();
 
  protected:
-	// Open the file whose path is stored in the member variable m_file
-	// and return true on success, false on failure.
+	/** Open the file whose path is stored in the member variable
+	 * m_file and return true on success, false on failure.
+	 */
 	virtual bool openFile();
-	virtual bool openURL(const KURL& url);
 
  protected slots:
 	void slotExample();

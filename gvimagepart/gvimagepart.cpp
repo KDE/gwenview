@@ -65,8 +65,13 @@ KAboutData* GVImagePart::createAboutData() {
 	return aboutData;
 }
 
-bool GVImagePart::openURL(const KURL& url) {
-	kdDebug() << k_funcinfo << endl;
+bool GVImagePart::openFile() {
+	kdDebug() << k_funcinfo << m_file << endl;
+
+	//m_file is inherited from super-class
+	//it is a QString with the path of the file
+	//remote files are first downloaded and saved in /tmp/kde-user/
+	KURL url(m_file);
 
 	if (!url.isValid())  {
 		return false;
@@ -78,13 +83,6 @@ bool GVImagePart::openURL(const KURL& url) {
 	m_gvPixmap->setURL(url);
 	emit setWindowCaption( url.prettyURL() );
 
-	return true;
-}
-
-bool GVImagePart::openFile() {
-	//unused because openURL implemented
-	kdDebug() << k_funcinfo << endl;
-	m_gvPixmap->setFilename(m_file);
 	return true;
 }
 
