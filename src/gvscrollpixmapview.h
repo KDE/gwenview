@@ -137,9 +137,11 @@ private:
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
 
-	double computeAutoZoom();
-	void updateScrollBarMode();
+	double computeZoom(bool in) const;
+	double computeAutoZoom() const;
+	
 	void updateImageOffset();
+	void updateScrollBarMode();
 	void updateContentSize();
 	void openContextMenu(const QPoint&);
 	void updatePathLabel();

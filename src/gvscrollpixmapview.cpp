@@ -100,21 +100,39 @@ public:
 
 class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
 	QCursor mZoomCursor;
+private:
+	void zoomTo(const QPoint& pos, bool in) {
+		KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
+		if (!zoomAction->isEnabled()) return;
+		
+		if (mView->autoZoom()->isChecked()) {
+			mView->autoZoom()->setChecked(false);
+			mView->updateScrollBarMode();
+		}
+		QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;
+
+		// Compute image position
+		QPoint imgPos=mView->viewportToContents(pos) - QPoint(mView->mXOffset, mView->mYOffset);
+		imgPos/=mView->zoom();
+		
+		double newZoom=mView->computeZoom(in);
+
+		imgPos*=newZoom;
+		imgPos=imgPos-pos+centerPos;
+		mView->setZoom(newZoom, imgPos.x(), imgPos.y());
+	}
+
 public:
 	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
 		mZoomCursor=loadCursor("zoom");
 	}
 
-	void leftButtonReleaseEvent(QMouseEvent*) {
-		mView->zoomIn()->activate();
+	void leftButtonReleaseEvent(QMouseEvent* event) {
+		zoomTo(event->pos(), true);
 	}
 	
 	void wheelEvent(QWheelEvent* event) {
-		if (event->delta()<0) {
-			if (mView->zoomIn()->isEnabled()) mView->zoomIn()->activate();
-		} else {
-			if (mView->zoomOut()->isEnabled()) mView->zoomOut()->activate();
-		}
+		zoomTo(event->pos(), event->delta()<0);
 		event->accept();
 	}
 
@@ -383,7 +401,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
 	mButtonStateToolMap[state]=tool;
 }
-	
+
 
 //------------------------------------------------------------------------
 //
@@ -605,32 +623,20 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::slotZoomIn() {
-	double newZoom;
-	if (mZoom>=1.0) {
-		newZoom=floor(mZoom)+1.0;
-	} else {
-		newZoom=1/( ceil(1/mZoom)-1.0 );
-	}
 	if (mAutoZoom->isChecked()) {
 		mAutoZoom->setChecked(false);
 		updateScrollBarMode();
 	}
-	setZoom(newZoom);
+	setZoom(computeZoom(true));
 }
 
 
 void GVScrollPixmapView::slotZoomOut() {
-	double newZoom;
-	if (mZoom>1.0) {
-		newZoom=ceil(mZoom)-1.0;
-	} else {
-		newZoom=1/( floor(1/mZoom)+1.0 );
-	}
 	if (mAutoZoom->isChecked()) {
 		mAutoZoom->setChecked(false);
 		updateScrollBarMode();
 	}
-	setZoom(newZoom);
+	setZoom(computeZoom(false));
 }
 
 
@@ -759,7 +765,7 @@ static void sizeScaleMin(QSize* size, int w, int h) {
 }
 #endif
 
-double GVScrollPixmapView::computeAutoZoom() {
+double GVScrollPixmapView::computeAutoZoom() const {
 
 	if (mGVPixmap->isNull()) {
 		return 1.0;
@@ -775,6 +781,23 @@ double GVScrollPixmapView::computeAutoZoom() {
 	double zoom=double(size.width())/mGVPixmap->width();
 	if (zoom>1.0 && !mEnlargeSmallImages) return 1.0;
 	return zoom;
+}
+
+
+double GVScrollPixmapView::computeZoom(bool in) const {
+	if (in) {
+		if (mZoom>=1.0) {
+			return floor(mZoom)+1.0;
+		} else {
+			return 1/( ceil(1/mZoom)-1.0 );
+		}
+	} else {	
+		if (mZoom>1.0) {
+			return ceil(mZoom)-1.0;
+		} else {
+			return 1/( floor(1/mZoom)+1.0 );
+		}
+	}
 }
 
 
