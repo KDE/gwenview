@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qwidgetstack.h>
 
 // KDE includes
-#include <kfileview.h>
 #include <kurl.h>
 
 class QIconViewItem;
@@ -37,6 +36,7 @@ class KAction;
 class KActionCollection;
 class KConfig;
 class KDirLister;
+class KFileView;
 class KRadioAction;
 
 class FileDnDDetailView;

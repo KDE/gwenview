@@ -182,14 +182,24 @@ void FileView::cancel() {
 
 
 void FileView::selectFilename(QString filename) {
-	KFileItem* item;
-	currentFileView()->setCurrentItem(filename);
-	item=currentFileView()->currentFileItem();
-	if (item) {
-		currentFileView()->ensureItemVisible(item);
+	if (filename.isEmpty()) {
+		updateActions();
+		return;
+	}
+	
+	KFileItem *item;
+	for (item=currentFileView()->firstFileItem();
+		item;
+		item=currentFileView()->nextItem(item) ) {
+
+		if (item->name()==filename) {
+			currentFileView()->setCurrentItem(item);
+			currentFileView()->ensureItemVisible(item);
+			emitURLChanged();
+			break;
+		}
 	}
 	updateActions();
-	emitURLChanged();
 }
 
 
@@ -201,6 +211,7 @@ void FileView::slotSelectFirst() {
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
+	updateActions();
 }
 
 
@@ -212,6 +223,7 @@ void FileView::slotSelectLast() {
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
+	updateActions();
 }
 
 
@@ -223,6 +235,7 @@ void FileView::slotSelectPrevious() {
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
+	updateActions();
 }
 
 
@@ -234,6 +247,7 @@ void FileView::slotSelectNext() {
 	currentFileView()->setSelected(item,true);
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
+	updateActions();
 }
 
 
@@ -258,26 +272,22 @@ void FileView::viewExecuted() {
 
 
 void FileView::viewChanged() {
+	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item) return;
-	if (isDirOrArchive(item)) {
-		updateActions();
-		return;
-	}
+	if (!item || isDirOrArchive(item)) return;
+
 	emitURLChanged();
 }
 
 
 void FileView::viewRightButtonClicked(const QPoint& pos) {
+	updateActions();
+
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item) return;
-	if (isDirOrArchive(item)) {
-		updateActions();
-		return;
-	}
+	if (!item || isDirOrArchive(item)) return;
+	
 	emitURLChanged();
-	if (mPopupMenu)
-		mPopupMenu->popup(pos);
+	if (mPopupMenu) mPopupMenu->popup(pos);
 }
 
 
@@ -410,9 +420,10 @@ void FileView::dirListerClear() {
 
 void FileView::dirListerStarted() {
 	mThumbnailsNeedUpdate=false;
-	if (mFilenameToSelect.isEmpty()) {
+	// FIXME: Remove if really not necessary
+	/*if (mFilenameToSelect.isEmpty()) {
 		mFilenameToSelect=filename();
-	}
+	}*/
 }
 
 
@@ -425,12 +436,8 @@ void FileView::dirListerCompleted() {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
-	if (mFilenameToSelect.isEmpty()) {
-		if (mAutoLoadImage) {
-			slotSelectFirst();
-		} else {
-			updateActions();
-		}
+	if (mFilenameToSelect.isEmpty() && mAutoLoadImage) {
+		slotSelectFirst();
 	} else {
 		selectFilename(mFilenameToSelect);
 	}
@@ -445,7 +452,7 @@ void FileView::dirListerCanceled() {
 	if (mMode==Thumbnail) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
-	if (mFilenameToSelect.isEmpty()) {
+	if (mFilenameToSelect.isEmpty() && mAutoLoadImage) {
 		slotSelectFirst();
 	} else {
 		selectFilename(mFilenameToSelect);
@@ -469,7 +476,7 @@ void FileView::initDirListerFilter() {
 
 void FileView::updateActions() {
 	KFileItem* firstImage=findFirstImage();
-    
+	
 	// There isn't any image, no need to continue
 	if (!firstImage) {
 		mSelectFirst->setEnabled(false);
@@ -503,9 +510,8 @@ void FileView::updateActions() {
 void FileView::emitURLChanged() {
 // We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
-	//kdDebug() << "urlChanged : " << tmp.path() << endl;
+	//kdDebug() << "urlChanged : " << tmp.prettyURL() << endl;
 	emit urlChanged(tmp);
-	updateActions();
 }
 
 KFileItem* FileView::findFirstImage() const {
@@ -550,17 +556,14 @@ void FileView::copyFile() {
 
 void FileView::moveFile() {
 // Get the next item text or the previous one if there's no next item
-	KFileItem* currentItem=currentFileView()->currentFileItem();
-	KFileItem* newItem=currentFileView()->nextItem(currentItem);
-	if (!newItem) {
-		newItem=currentFileView()->prevItem(currentItem);
-	}
+	KFileItem* newItem=findNextImage();
+	if (!newItem) newItem=findPreviousImage();
+
 	if (newItem) {
 		mNewFilenameToSelect=newItem->name();
 	} else {
 		mNewFilenameToSelect="";
 	}
-	//kdDebug() << "file to select after move : " << mNewFilenameToSelect << endl;
 	
 // move the file, slotSelectNewFilename will be called on success
 	FileOperation::moveTo(url(),this,this,SLOT(slotSelectNewFilename()) );
@@ -569,11 +572,9 @@ void FileView::moveFile() {
 
 void FileView::deleteFile() {
 // Get the next item text or the previous one if there's no next item
-	KFileItem* currentItem=currentFileView()->currentFileItem();
-	KFileItem* newItem=currentFileView()->nextItem(currentItem);
-	if (!newItem) {
-		newItem=currentFileView()->prevItem(currentItem);
-	}
+	KFileItem* newItem=findNextImage();
+	if (!newItem) newItem=findPreviousImage();
+	
 	if (newItem) {
 		mNewFilenameToSelect=newItem->name();
 	} else {
@@ -596,8 +597,7 @@ void FileView::renameFile() {
 
 
 void FileView::slotRenamed(const QString& newFilename) {
-	mNewFilenameToSelect=newFilename;
-	slotSelectNewFilename();
+	mFilenameToSelect=newFilename;
 }
 
 
