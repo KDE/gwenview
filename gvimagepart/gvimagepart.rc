@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="GVImagePart">
+<kpartgui name="GVImagePart" version="2">
 <MenuBar>
  <Menu name="file"><Text>&amp;File</Text>
   <Action name="saveAs"/>
@@ -8,6 +8,16 @@
   <Action name="rotate_right"/>
  </Menu>
  <Menu name="view"><Text>&amp;View</Text>
+  <Separator/>
+    <Menu name="colors">
+        <text>&amp;Colors</text>
+        <Action name="increase_gamma"/>
+        <Action name="decrease_gamma"/>
+        <Action name="increase_brightness"/>
+        <Action name="decrease_brightness"/>
+        <Action name="increase_contrast"/>
+        <Action name="decrease_contrast"/>
+    </Menu>
   <Action name="view_zoom_auto"/>
  </Menu>
 </MenuBar>

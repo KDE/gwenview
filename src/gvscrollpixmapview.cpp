@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kiconloader.h>
 #include <kicontheme.h>
 #include <klocale.h>
@@ -61,6 +62,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvscrollpixmapviewtools.h"
 
 #include "gvscrollpixmapview.moc"
+
+#if !KDE_IS_VERSION( 3, 3, 0 )
+// from kglobal.h
+#define KCLAMP(x,low,high) kClamp(x,low,high)
+template<class T>
+inline const T& kClamp( const T& x, const T& low, const T& high )
+{
+    if ( x < low )       return low;
+    else if ( high < x ) return high;
+    else                 return x;
+}
+#endif
 
 /*
 
@@ -322,12 +335,21 @@ struct GVScrollPixmapView::Private {
 	// Zoom info
 	double mZoom;
 
+	// Gamma, brightness, contrast - multiplied by 100
+        int mGamma, mBrightness, mContrast;
+
 	// Our actions
 	KToggleAction* mAutoZoom;
 	KAction* mZoomIn;
 	KAction* mZoomOut;
 	KAction* mResetZoom;
 	KToggleAction* mLockZoom;
+	KAction* mIncreaseGamma;
+	KAction* mDecreaseGamma;
+	KAction* mIncreaseBrightness;
+	KAction* mDecreaseBrightness;
+	KAction* mIncreaseContrast;
+	KAction* mDecreaseContrast;
 	KActionCollection* mActionCollection;
 
 	// Fullscreen stuff
@@ -465,6 +487,9 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mMaxRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
 	d->mMaxScaleRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
 	d->mMaxSmoothRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
+	d->mGamma = 100;
+	d->mBrightness = 0;
+	d->mContrast = 100;
 
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -488,6 +513,19 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mResetZoom->setIcon("viewmag1");
 
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
+
+	d->mIncreaseGamma=new KAction(i18n("Increase gamma"),0,CTRL+Key_G,
+		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
+	d->mDecreaseGamma=new KAction(i18n("Decrease gamma"),0,SHIFT+CTRL+Key_G,
+		this,SLOT(decreaseGamma()),d->mActionCollection,"decrease_gamma");
+	d->mIncreaseBrightness=new KAction(i18n("Increase brightness" ),0,CTRL+Key_B,
+		this,SLOT(increaseBrightness()),d->mActionCollection,"increase_brightness");
+	d->mDecreaseBrightness=new KAction(i18n("Decrease brightness" ),0,SHIFT+CTRL+Key_B,
+		this,SLOT(decreaseBrightness()),d->mActionCollection,"decrease_brightness");
+	d->mIncreaseContrast=new KAction(i18n("Increase contrast" ),0,CTRL+Key_C,
+		this,SLOT(increaseContrast()),d->mActionCollection,"increase_contrast");
+	d->mDecreaseContrast=new KAction(i18n("Decrease contrast" ),0,SHIFT+CTRL+Key_C,
+		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
 
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
@@ -533,6 +571,12 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 void GVScrollPixmapView::slotLoaded() {
 	updateZoomActions();
+	d->mIncreaseGamma->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseGamma->setEnabled(!d->mDocument->isNull());
+	d->mIncreaseBrightness->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseBrightness->setEnabled(!d->mDocument->isNull());
+	d->mIncreaseContrast->setEnabled(!d->mDocument->isNull());
+	d->mDecreaseContrast->setEnabled(!d->mDocument->isNull());
 
 	if (d->mDocument->isNull()) {
 		resizeContents(0,0);
@@ -563,6 +607,9 @@ void GVScrollPixmapView::loadingStarted() {
 	cancelPending();
 	d->mSmoothingSuspended = true;
 	d->mEmptyImage = true;
+	d->mGamma = 100;
+	d->mBrightness = 0;
+	d->mContrast = 100;
 	// every loading() signal from GVDocument must be followed by a signal that turns this off
 	QPainter painter( viewport());
 	painter.eraseRect( viewport()->rect());
@@ -1012,6 +1059,18 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		return;
 	}
 
+	if( d->mGamma != 100 ) { // != 1.0
+		image = GVImageUtils::changeGamma( image, d->mGamma );
+	}
+
+	if( d->mBrightness != 0 ) {
+		image = GVImageUtils::changeBrightness( image, d->mBrightness );
+	}
+
+	if( d->mContrast != 100 ) { // != 1.0
+		image = GVImageUtils::changeContrast( image, d->mContrast );
+	}
+
 	int* maxRepaintSize = &d->mMaxRepaintSize;
 	if (smooth) {
 		if( zoom() != 1.0 ) {
@@ -1250,6 +1309,36 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 	} else {
 		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
 	}
+}
+
+void GVScrollPixmapView::increaseGamma() {
+	d->mGamma = KCLAMP( d->mGamma + 10, 10, 500 );
+	fullRepaint();
+}
+
+void GVScrollPixmapView::decreaseGamma() {
+	d->mGamma = KCLAMP( d->mGamma - 10, 10, 500 );
+	fullRepaint();
+}
+
+void GVScrollPixmapView::increaseBrightness() {
+	d->mBrightness = KCLAMP( d->mBrightness + 5, -100, 100 );
+	fullRepaint();
+}
+
+void GVScrollPixmapView::decreaseBrightness() {
+	d->mBrightness = KCLAMP( d->mBrightness - 5, -100, 100 );
+	fullRepaint();
+}
+
+void GVScrollPixmapView::increaseContrast() {
+	d->mContrast = KCLAMP( d->mContrast + 10, 0, 500 );
+	fullRepaint();
+}
+
+void GVScrollPixmapView::decreaseContrast() {
+	d->mContrast = KCLAMP( d->mContrast - 10, 0, 500 );
+	fullRepaint();
 }
 
 

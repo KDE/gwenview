@@ -34,6 +34,12 @@ namespace GVImageUtils {
 		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
 
 	QImage transform(const QImage& img, Orientation orientation);
+
+	QImage changeBrightness( const QImage& image, int brightness );
+
+	QImage changeContrast( const QImage& image, int contrast );
+
+	QImage changeGamma( const QImage& image, int gamma );
 }
 
 #endif

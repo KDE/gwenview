@@ -5,6 +5,7 @@
  - It's now possible to select which KIPI plugins should be loaded.
  - The fullscreen display now contains "Previous", "Next" and "Exit fullscreen"
    buttons.
+ - Adjust brightness, contrast and gamma.
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="13">
+<kpartgui name="Gwenview" version="14">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -25,6 +25,15 @@
     <Action name="fullscreen"/> 
     <Action name="slideshow"/>
     <Separator/>
+    <Menu name="colors">
+        <text>&amp;Colors</text>
+        <Action name="increase_gamma"/>
+        <Action name="decrease_gamma"/>
+        <Action name="increase_brightness"/>
+        <Action name="decrease_brightness"/>
+        <Action name="increase_contrast"/>
+        <Action name="decrease_contrast"/>
+    </Menu>
     <Action name="view_zoom_auto"/>
     <Action name="view_zoom_in"/>
     <Action name="view_zoom_out"/>

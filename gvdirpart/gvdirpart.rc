@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="GVDirPart">
+<kpartgui name="GVDirPart" version="2">
 <MenuBar>
  <Menu name="file"><Text>&amp;File</Text>
   <Action name="saveAs"/>
@@ -10,6 +10,16 @@
  <Menu name="view"><Text>&amp;View</Text>
   <Action name="previous"/>
   <Action name="next"/>
+  <Separator/>
+    <Menu name="colors">
+        <text>&amp;Colors</text>
+        <Action name="increase_gamma"/>
+        <Action name="decrease_gamma"/>
+        <Action name="increase_brightness"/>
+        <Action name="decrease_brightness"/>
+        <Action name="increase_contrast"/>
+        <Action name="decrease_contrast"/>
+    </Menu>
   <Action name="view_zoom_auto"/>
   <Action name="slideshow"/>
  </Menu>

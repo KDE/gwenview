@@ -171,6 +171,12 @@ private slots:
 	void slotZoomOut();
 	void slotResetZoom();
 	void setAutoZoom(bool);
+	void increaseGamma();
+	void decreaseGamma();
+	void increaseBrightness();
+	void decreaseBrightness();
+	void increaseContrast();
+	void decreaseContrast();
 	void hideCursor();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
