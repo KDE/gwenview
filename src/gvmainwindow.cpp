@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
@@ -98,10 +99,12 @@ GVMainWindow::GVMainWindow()
 	createActions();
 	createLocationToolBar();
 
+	setStandardToolBarMenuEnabled(true);
 	createGUI("gwenviewui.rc", false);
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
+	applyMainWindowSettings();
 
 	mFileViewStack->setFocus();
 
@@ -136,6 +139,7 @@ GVMainWindow::~GVMainWindow() {
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
+	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
 
@@ -379,6 +383,21 @@ void GVMainWindow::showKeyDialog() {
 }
 
 
+void GVMainWindow::showToolbarDialog() {
+	saveMainWindowSettings(KGlobal::config(), "MainWindow");
+	KEditToolbar dlg(actionCollection());
+	connect(&dlg,SIGNAL(newToolbarConfig()),this,SLOT(applyMainWindowSettings()));
+	if (dlg.exec()) {
+		createGUI();
+	}
+}
+
+void GVMainWindow::applyMainWindowSettings() {
+	KMainWindow::applyMainWindowSettings(KGlobal::config(), "MainWindow");
+}
+
+	
+
 void GVMainWindow::escapePressed() {
 	if (mToggleSlideShow->isChecked()) {
 		mToggleSlideShow->activate();
@@ -570,7 +589,8 @@ void GVMainWindow::createActions() {
 	// Settings
 	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
 	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-
+	(void)KStdAction::configureToolbars(this, SLOT(showToolbarDialog()), actionCollection() );
+	
 	actionCollection()->readShortcutSettings();
 }
 
@@ -658,7 +678,7 @@ void GVMainWindow::createConnections() {
 	connect(mSlideShow,SIGNAL(finished()),
 		mToggleSlideShow,SLOT(activate()) );
 	
-	// Address bar
+	// Location bar
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
 
@@ -673,11 +693,6 @@ void GVMainWindow::createConnections() {
 
 
 void GVMainWindow::createLocationToolBar() {
-	// Clear button
-	(void)new KAction( i18n("Clear location bar"),
-		QApplication::reverseLayout()?"clear_left" : "locationbar_erase",
-		0, mURLEdit, SLOT(clearEdit()), actionCollection(), "clear_location");
-
 	// URL Combo
 	mURLEdit=new KHistoryCombo(this);
 
@@ -697,6 +712,11 @@ void GVMainWindow::createLocationToolBar() {
 		0, 0, actionCollection(), "location_url");
 	comboAction->setShortcutConfigurable(false);
 	comboAction->setAutoSized(true);
+
+	// Clear button
+	(void)new KAction( i18n("Clear location bar"),
+		QApplication::reverseLayout()?"clear_left" : "locationbar_erase",
+		0, mURLEdit, SLOT(clearEdit()), actionCollection(), "clear_location");
 
 	// URL Label
 	/* we use "kde toolbar widget" to avoid the flat background (looks bad with

@@ -141,6 +141,8 @@ private slots:
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showKeyDialog();
+	void showToolbarDialog();
+	void applyMainWindowSettings();
 	void pixmapLoading();
 	void toggleSlideShow();
 	void toggleDirAndFileViews();

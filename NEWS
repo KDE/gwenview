@@ -1,10 +1,12 @@
 2003.xx.xx - v1.0.0
 - New features:
- - Use XML GUI.
+ - Toolbars are now configurable, and toolbar settings are remembered.
  - New dock window to display Meta Info (thanks to Jos van den Oever).
  - Click on the image to toggle auto-zoom (thanks to Jos van den Oever).
+
+2003.06.09 - v0.17.1a
 - Fixes:
- - Fixed compilation failure on Qt 3.0.
+ - Fixed compilation failure on KDE 3.0.
 
 2003.03.29 - v0.17.1
 - Fixes:
