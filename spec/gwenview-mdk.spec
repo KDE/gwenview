@@ -1,12 +1,12 @@
 Summary:Simple image viewer for KDE
 Name: gwenview
-Version: 0.16.2
+Version: 1.0.0pre1
 Release: 1mdk
 Copyright: GPL
 Group: Application/Multimedia 
 Source0: %{name}-%{version}.tar.bz2
 URL: http://gwenview.sourceforge.net 
-Packager: Aurélien Gâteau <aurelien.gateau@mail.dotcom.fr> 
+Packager: Angelo Naselli <random_lx@yahoo.com> 
 BuildRoot: /tmp/%{name}-%{version}
 
 %description
@@ -22,21 +22,54 @@ rm -rf $RPM_BUILD_ROOT
 %setup
 
 %build
-./configure --prefix=$RPM_BUILD_ROOT/usr --enable-final 
+./configure --disable-rpath \
+            --prefix=$RPM_BUILD_ROOT/%_prefix \
+	    --libdir=$RPM_BUILD_ROOT%_libdir \
+	    --mandir=$RPM_BUILD_ROOT%_mandir \
+	    --datadir=$RPM_BUILD_ROOT%_datadir \
+	    --enable-final
+#./configure --prefix=$RPM_BUILD_ROOT/usr --enable-final 
+
 make
 
 %install
 make install 
 
+install -d %buildroot/%_menudir/
+kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applications/kde/%{name}.desktop %buildroot/%_menudir/%{name}
+
 %files
 %defattr(-,root,root,0755)
-/usr/bin/gwenview
-/usr/share/apps/gwenview/icons/*/*/actions/*.png
-/usr/share/icons/*/*/apps/gwenview.png
-/usr/share/applnk/Graphics/gwenview.desktop
-/usr/share/apps/konqueror/servicemenus/konqgwenview.desktop
-/usr/share/locale/*/LC_MESSAGES/gwenview.mo
+%_bindir/%{name}
+%_menudir/*
+%_datadir/apps/konqueror/servicemenus/*
+%dir %_datadir/apps/%{name}/
+%_datadir/apps/%{name}/*
+%_datadir/icons/locolor/16x16/apps/*
+%_datadir/icons/locolor/32x32/apps/*
+%_datadir/icons/hicolor/16x16/apps/*
+%_datadir/icons/hicolor/32x32/apps/*
+%_datadir/icons/hicolor/48x48/apps/*
+%_datadir/locale/*/LC_MESSAGES/%{name}.mo
+%_datadir/applications/kde/%{name}.desktop
+%_mandir/man1/gwenview.1.bz2
+
+#%_prefix/bin/gwenview
+#%_prefix/share/apps/gwenview/icons/*/*/actions/*.png
+#%_prefix/share/icons/*/*/apps/gwenview.png
+#%_prefix/share/applnk/Graphics/gwenview.desktop
+#%_prefix/share/apps/konqueror/servicemenus/konqgwenview.desktop
+#%_prefix/share/locale/*/LC_MESSAGES/gwenview.mo
+#%_mandir/man1/gwenview.1.bz2
 %doc NEWS README TODO ChangeLog COPYING CREDITS
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%changelog
+* Mon Sep 29 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0pre1mdk
+- built mdk version
+
+* Fri Aug 08 2003 Angelo N. <random_lx@yahoo.com>  0.17.1a-1mdk
+- built mdk version
+
