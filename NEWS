@@ -10,6 +10,7 @@
  - If there's no image in the current folder, select the first visible file.
  - When holding down Shift to zoom, keep the same area of the image under the
    cursor.
+ - Nicer drag cursor.
 
 2003.12.07 - v1.0.0
 - New features:
