@@ -202,7 +202,7 @@ void GVConfigDialog::slotApply() {
 #if QT_VERSION>=0x030200
 	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
 #else
-	int osdMode=buttonGroupSelectedId(d->mImageViewPage->mOSDModeGroup);
+	int osdMode=buttonGroupSelectedId(d->mFullScreenPage->mOSDModeGroup);
 #endif
 	pixmapView->setOSDMode( static_cast<GVScrollPixmapView::OSDMode>(osdMode) );
 	pixmapView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
