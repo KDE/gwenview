@@ -130,14 +130,6 @@ GVPixmapViewStack::~GVPixmapViewStack() {
 }
 
 
-void GVPixmapViewStack::plugActionsToAccel(KAccel* accel) {
-	mAutoZoom->plugAccel(accel);
-	mZoomIn->plugAccel(accel);
-	mZoomOut->plugAccel(accel);
-	mResetZoom->plugAccel(accel);
-}
-
-
 //------------------------------------------------------------------------
 //
 // Config

@@ -52,8 +52,6 @@ public:
 	GVFileViewStack(QWidget* parent,KActionCollection*);
 	~GVFileViewStack();
 
-	void plugActionsToAccel(KAccel*);
-
 	// Config
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;

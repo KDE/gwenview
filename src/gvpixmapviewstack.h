@@ -54,7 +54,6 @@ public:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 	void installRBPopup(QPopupMenu*);
-	void plugActionsToAccel(KAccel*);
 
 	// Properties
 	GVFitPixmapView* fitPixmapView() const { return mGVFitPixmapView; }

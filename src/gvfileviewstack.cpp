@@ -149,18 +149,6 @@ GVFileViewStack::~GVFileViewStack() {
 }
 
 
-void GVFileViewStack::plugActionsToAccel(KAccel* accel) {
-	mSelectFirst->plugAccel(accel);
-	mSelectLast->plugAccel(accel);
-	mSelectPrevious->plugAccel(accel);
-	mSelectNext->plugAccel(accel);
-	mNoThumbnails->plugAccel(accel);
-	mSmallThumbnails->plugAccel(accel);
-	mMedThumbnails->plugAccel(accel);
-	mLargeThumbnails->plugAccel(accel);
-}
-
-
 //-----------------------------------------------------------------------
 //
 // Public slots
