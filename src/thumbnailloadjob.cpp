@@ -96,7 +96,8 @@ QString generateThumbnailPath(const QString& uri) {
 void ThumbnailThread::load(
 	const QString& originalURI, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
-	const QString& thumbnailPath)
+	const QString& thumbnailPath,
+	ThumbnailSize size)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -107,6 +108,7 @@ void ThumbnailThread::load(
 	mOriginalMimeType = TSDeepCopy(originalMimeType);
 	mPixPath = TSDeepCopy(pixPath);
 	mThumbnailPath = TSDeepCopy(thumbnailPath);
+	mThumbnailSize = size;
 	if(!running()) start();
 	mCond.wakeOne();
 }
@@ -128,14 +130,22 @@ void ThumbnailThread::run() {
 void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
 	bool loaded=false;
-	int width, height;
+	int width = -1, height;
 	
 	// If it's a JPEG, try to load a small image directly from the file
 	if (isJPEG(mPixPath)) {
-		loaded=loadJPEG(mPixPath, mImage, width, height);
+		GVImageUtils::Orientation orientation = GVImageUtils::NOT_AVAILABLE;
+		GVImageUtils::getOrientationAndThumbnail(mPixPath,orientation, mImage);
+		if( !mImage.isNull()
+		    && ( mImage.width() >= mThumbnailSize.pixelSize() // don't use small thumbnails
+		        || mImage.height() >= mThumbnailSize.pixelSize() )) {
+			loaded = true; // don't set width/height, so that no thumbnail is saved
+		}
+		if(!loaded) {
+			loaded=loadJPEG(mPixPath, mImage, width, height);
+		}
 		if (loaded) {
 			// Rotate if necessary
-			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mPixPath);
 			mImage=GVImageUtils::modify(mImage,orientation);
 		}
 	}
@@ -160,7 +170,7 @@ void ThumbnailThread::loadThumbnail() {
 
 	if( testCancel()) return;
 
-	if( loaded ) {
+	if( loaded && width != -1 ) {
 		mImage.setText("Thumb::URI", 0, mOriginalURI);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
@@ -559,7 +569,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
-	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(), mCurrentItem->mimetype(), pixPath, mThumbnailPath);
+	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
+		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize);
 	mState = STATE_CREATETHUMB;
 }
 

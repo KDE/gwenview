@@ -85,6 +85,13 @@ Orientation getOrientation(const QByteArray& jpegContent) {
 }
 
 
+void getOrientationAndThumbnail(const QString& pixPath, Orientation& orientation, QImage& image) {
+	ExifDataPtr exifData( exif_data_new_from_file(pixPath.ascii()) );
+	orientation = getOrientation(exifData);
+        if( exifData != NULL && exifData->data != NULL ) {
+		image.loadFromData( exifData->data, exifData->size, "JPEG" );
+	}
+}
 
 
 QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation) {

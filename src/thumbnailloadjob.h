@@ -49,7 +49,8 @@ public:
 		int originalSize,
 		const QString& originalMimeType,
 		const QString& pixPath,
-		const QString& thumbnailPath);
+		const QString& thumbnailPath,
+		ThumbnailSize size);
 protected:
 	virtual void run();
 signals:
@@ -67,6 +68,7 @@ private:
 	QString mOriginalMimeType;
 	QMutex mMutex;
 	TSWaitCondition mCond;
+	ThumbnailSize mThumbnailSize;
 };
 
 /**

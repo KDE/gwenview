@@ -41,6 +41,8 @@ namespace GVImageUtils {
 	Orientation getOrientation(const QString& pixPath);
 
 	QImage modify(const QImage& img, Orientation orientation);
+
+	void getOrientationAndThumbnail(const QString& pixPath, Orientation& orientation, QImage& image);
 }
 
 #endif
