@@ -82,6 +82,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvmetaedit.h"
 #include "gvprintdialog.h"
 #include "statusbarprogress.h"
+#include "gvcache.h"
 
 #include "config.h"
 
@@ -105,6 +106,7 @@ const char* CONFIG_JPEGTRAN_GROUP="jpegtran";
 const char* CONFIG_PIXMAPWIDGET_GROUP="pixmap widget";
 const char* CONFIG_FILEOPERATION_GROUP="file operations";
 const char* CONFIG_SLIDESHOW_GROUP="slide show";
+const char* CONFIG_CACHE_GROUP="cache";
 
 const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
@@ -719,6 +721,7 @@ void GVMainWindow::createWidgets() {
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
+	GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
 
 

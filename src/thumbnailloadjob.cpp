@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <assert.h>
 
 // Qt
 #include <qdir.h>
@@ -121,8 +122,8 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 {
 	LOG("");
     
-    mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
-        KIcon::NoGroup, ThumbnailSize(ThumbnailSize::SMALL).pixelSize());
+	mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
+		KIcon::NoGroup, ThumbnailSize(ThumbnailSize::SMALL).pixelSize());
 
 	// Look for images and store the items in our todo list
 	mItems=*items;
@@ -132,14 +133,18 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 	// We assume that all items are in the same dir
 	mCacheDir=thumbnailDirForURL(mItems.getFirst()->url());
 	LOG("mCacheDir=" << mCacheDir);
+	mThumbnailThread.setCacheDir( mCacheDir );
+	connect( &mThumbnailThread, SIGNAL( done()), SLOT( thumbnailReady()));
 	
 	// Move to the first item
-	mItems.first();
+	mNextItem = mItems.first();
 }
 
 
 ThumbnailLoadJob::~ThumbnailLoadJob() {
 	LOG("");
+	mThumbnailThread.cancel();
+	mThumbnailThread.wait();
 }
 
 
@@ -173,6 +178,7 @@ void ThumbnailLoadJob::appendItem(const KFileItem* item) {
 
 void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 	mItems.removeRef(item);
+	if( item == mNextItem ) mNextItem = mItems.current();
 
 	if (item == mCurrentItem) {
 		// Abort
@@ -184,14 +190,12 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 
 bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
-	// Move mItems' internal iterator to the next item to be processed
-	mItems.first();
-	do {
-		if (item==mItems.current()) return true;
-	} while (mItems.next());
-	
-	// not found, move to first item
-	mItems.first(); 
+	// Move mNextItem to the next item to be processed
+	if( mItems.containsRef( item )) {
+		mNextItem = item;
+		return true;
+	}
+	mNextItem = mItems.first();
 	return false;
 }
 
@@ -201,12 +205,15 @@ void ThumbnailLoadJob::determineNextIcon() {
 	if( mSuspended ) {
 		return;
 	}
+	if( mNextItem != mItems.current()) mItems.findRef( mNextItem );
+	assert( mNextItem == mItems.current());
 	// Skip non images 
 	while (true) {
 		KFileItem* item=mItems.current();
 		if (!item) break;
 		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
 			mItems.remove();
+			mNextItem = mItems.current();
 		} else {
 			break;
 		}
@@ -222,7 +229,8 @@ void ThumbnailLoadJob::determineNextIcon() {
 		// First, stat the orig file
 		mState = STATE_STATORIG;
 		mOriginalTime = 0;
-		mCurrentItem = mItems.current();
+		assert( mNextItem == mItems.current());
+		mCurrentItem = mNextItem;
 		mCurrentURL = mCurrentItem->url();
 		// Do direct stat instead of using KIO if the file is local (faster)
 		if( mCurrentURL.isLocalFile()
@@ -239,6 +247,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 			addSubjob(job);
 		}
 		mItems.remove();
+		mNextItem = mItems.current();
 	}
 }
 
@@ -255,7 +264,7 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	case STATE_STATORIG: {
 		// Could not stat original, drop this one and move on to the next one
 		if (job->error()) {
-            emitThumbnailLoadingFailed();
+			emitThumbnailLoadingFailed();
 			determineNextIcon();
 			return;
 		}
@@ -276,15 +285,18 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 
 	case STATE_DOWNLOADORIG: 
 		if (job->error()) {
-            emitThumbnailLoadingFailed();
-        } else {
-			createThumbnail(mTempURL.path());
+			emitThumbnailLoadingFailed();
+			mState=STATE_DELETETEMP;
+			LOG("Delete temp file " << mTempURL.prettyURL());
+			addSubjob(KIO::file_delete(mTempURL,false));
+			mTempURL = KURL();
+		} else {
+			startCreatingThumbnail(mTempURL.path());
 		}
-		
-		mState=STATE_DELETETEMP;
-		LOG("Delete temp file " << mTempURL.prettyURL());
-		addSubjob(KIO::file_delete(mTempURL,false));
 		return;
+
+	case STATE_CREATETHUMB:
+		assert( false ); // thumbnailReady() must handle this
 
 	case STATE_DELETETEMP:
 		determineNextIcon();
@@ -292,6 +304,23 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	}
 }
 
+
+void ThumbnailLoadJob::thumbnailReady() {
+	QImage img = mThumbnailThread.loadedThumbnail();
+	if ( !img.isNull()) {
+		emitThumbnailLoaded(img);
+	} else {
+		emitThumbnailLoadingFailed();
+	}
+	if( !mTempURL.isEmpty()) {
+		mState=STATE_DELETETEMP;
+		LOG("Delete temp file " << mTempURL.prettyURL());
+		addSubjob(KIO::file_delete(mTempURL,false));
+		mTempURL = KURL();
+	} else {
+		determineNextIcon();
+	}
+}
 
 void ThumbnailLoadJob::checkThumbnail() {
 	// Now stat the thumbnail, it's a local file, so there's
@@ -317,8 +346,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	// If the original is a local file, create the thumbnail
 	// and proceed to next icon, otherwise download the original
 	if (mCurrentURL.isLocalFile()) {
-		createThumbnail(mCurrentURL.path());
-		determineNextIcon();
+		startCreatingThumbnail(mCurrentURL.path());
 	} else {
 		mState=STATE_DOWNLOADORIG;
 		KTempFile tmpFile;
@@ -329,55 +357,108 @@ void ThumbnailLoadJob::checkThumbnail() {
 	}
 }
 
-void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
+void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
-	QImage img;
+	mThumbnailThread.load( pixPath, mCurrentURL.fileName());
+	mState = STATE_CREATETHUMB;
+}
+
+
+void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
+	ThumbnailSize biggest=ThumbnailSize::biggest();
+
+	if (mThumbnailSize==biggest) {
+		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
+		return;
+	}
+	
+	// Do we need to scale down the thumbnail ?
+	int biggestDimension=QMAX(img.width(), img.height());
+	int thumbPixelSize=mThumbnailSize.pixelSize();
+	if (biggestDimension<=thumbPixelSize) {
+		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
+		return;
+	}
+
+	// Scale thumbnail
+	QImage img2=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+	emit thumbnailLoaded(mCurrentItem, QPixmap(img2));
+}
+
+
+void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
+	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap);
+}
+
+
+
+// Thumbnail thread
+
+void ThumbnailThread::load( const QString& path, const QString& name ) {
+	QMutexLocker lock( &mMutex );
+	assert( mPixPath.isNull());
+	mPixPath = GVDeepCopy( path );
+	mName = GVDeepCopy( name );
+	if( !running()) start();
+	mCond.wakeOne();
+}
+
+void ThumbnailThread::run() {
+	QMutexLocker lock( &mMutex );
+	while( !testCancel()) {
+		// empty mPixPath means nothing to do
+		while( mPixPath.isNull()) {
+			GVCancellable c( &mCond );
+			mCond.wait( &mMutex );
+			if( testCancel()) return;
+		}
+		loadThumbnail();
+		mPixPath = QString(); // done, ready for next
+		postSignal( SIGNAL( done()));
+	}
+}
+
+void ThumbnailThread::loadThumbnail() {
+	mImage = QImage();
 	bool loaded=false;
 	
 	// If it's a JPEG, try to load a small image directly from the file
-	if (isJPEG(pixPath)) {
-		loaded=loadJPEG(pixPath, img);
+	if (isJPEG(mPixPath)) {
+		loaded=loadJPEG(mPixPath, mImage);
 		if (loaded) {
 			// Rotate if necessary
-			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(pixPath);
-			img=GVImageUtils::modify(img,orientation);
+			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mPixPath);
+			mImage=GVImageUtils::modify(mImage,orientation);
+		}
+	}
+	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
+	if (!loaded) {
+		QImage bigImg;
+		if (bigImg.load(mPixPath)) {
+			int biWidth=bigImg.width();
+			int biHeight=bigImg.height();
+			int thumbSize=ThumbnailSize::biggest().pixelSize();
+
+			if( testCancel()) return;
+
+			if (biWidth<=thumbSize && biHeight<=thumbSize) {
+				mImage=bigImg;
+			} else {
+				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_NONE,QImage::ScaleMin);
+			}
+			loaded = true;
 		}
 	}
 
-	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
-	if (!loaded) {
-		loaded=loadThumbnail(pixPath, img);
-	}
-	
-	if (loaded) {
-		img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-		emitThumbnailLoaded(img);
-	} else {
-		emitThumbnailLoadingFailed();
+	if( testCancel()) return;
+
+	if( loaded ) {
+		mImage.save(mCacheDir + "/" + mName,"PNG");
 	}
 }
 
 
-bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QImage& img) {
-	LOG("");
-	QImage bigImg;
-	int biWidth,biHeight;
-	int thumbSize=ThumbnailSize::biggest().pixelSize();
-	if (!bigImg.load(pixPath)) return false;
-	
-	biWidth=bigImg.width();
-	biHeight=bigImg.height();
-
-	if (biWidth<=thumbSize && biHeight<=thumbSize) {
-		img=bigImg;
-	} else {
-		img= GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_NONE,QImage::ScaleMin);
-	}
-	return true;
-}
-
-
-bool ThumbnailLoadJob::isJPEG(const QString& name) {
+bool ThumbnailThread::isJPEG(const QString& name) {
 	QString format=QImageIO::imageFormat(name);
 	return format=="JPEG";
 }
@@ -394,7 +475,7 @@ struct GVJPEGFatalError : public jpeg_error_mgr {
 	}
 };
 
-bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
+bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image) {
 	struct jpeg_decompress_struct cinfo;
 
 	// Open file
@@ -486,28 +567,15 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 }
 
 
-void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
-	ThumbnailSize biggest=ThumbnailSize::biggest();
-
-	if (mThumbnailSize==biggest) {
-		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
-		return;
-	}
-	
-	// Do we need to scale down the thumbnail ?
-	int biggestDimension=QMAX(img.width(), img.height());
-	int thumbPixelSize=mThumbnailSize.pixelSize();
-	if (biggestDimension<=thumbPixelSize) {
-		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
-		return;
-	}
-
-	// Scale thumbnail
-	QImage img2=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
-	emit thumbnailLoaded(mCurrentItem, QPixmap(img2));
+void ThumbnailThread::setCacheDir( const QString& dir ) {
+	QMutexLocker lock( &mMutex );
+	mCacheDir = GVDeepCopy( dir );
 }
 
-
-void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
-	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap);
+QImage ThumbnailThread::loadedThumbnail() {
+	QMutexLocker lock( &mMutex );
+	QImage ret = mImage; // no deep copy
+	mImage = QImage(); // thread no longer accesses the image
+	mPixPath = QString(); // waiting for next job
+	return ret;
 }

@@ -32,12 +32,34 @@
 #include <kio/job.h>
 
 // Our includes
+#include "tsthread/tsthread.h"
 #include "thumbnailsize.h"
 
 class KFileItem;
 
 typedef QPtrList<KFileItem> KFileItemList;
 
+class ThumbnailThread : public TSThread {
+Q_OBJECT
+public:
+	void load( const QString& pixPath, const QString& name );
+	QImage loadedThumbnail();
+	void setCacheDir( const QString& dir );
+protected:
+	virtual void run();
+signals:
+	void done();
+private:
+	bool isJPEG(const QString& name);
+	bool loadJPEG( const QString &pixPath, QImage&);
+	void loadThumbnail();
+	QImage mImage;
+	QString mCacheDir;
+	QString mPixPath;
+	QString mName;
+	QMutex mMutex;
+	QWaitCondition mCond;
+};
 
 /**
  * A job that determines the thumbnails for the images in the current directory
@@ -108,15 +130,19 @@ signals:
 private slots:
 	void slotResult( KIO::Job *job );
 	void checkThumbnail();
+	void thumbnailReady();
 
 private:
-	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_NEXTTHUMB } mState;
+	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_CREATETHUMB, STATE_NEXTTHUMB } mState;
 
 	// Our todo list :)
 	KFileItemList mItems;
 
 	// The current item
-	KFileItem *mCurrentItem;
+	const KFileItem *mCurrentItem;
+
+	// The next item to be processed
+	const KFileItem *mNextItem;
 
 	// The URL of the current item (always equivalent to m_items.first()->item()->url())
 	KURL mCurrentURL;
@@ -136,15 +162,14 @@ private:
 	QPixmap mBrokenPixmap;
 
 	bool mSuspended;
+        
+	ThumbnailThread mThumbnailThread;
 
 	void determineNextIcon();
-	void createThumbnail(const QString& path);
+	void startCreatingThumbnail(const QString& path);
 	
-	bool isJPEG(const QString& name);
-	bool loadJPEG( const QString &pixPath, QImage&);
-	bool loadThumbnail(const QString& pixPath, QImage&);
 	void emitThumbnailLoaded(const QImage& img);
-    void emitThumbnailLoadingFailed();
+	void emitThumbnailLoadingFailed();
 };
 
 #endif

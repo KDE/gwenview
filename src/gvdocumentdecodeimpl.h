@@ -44,6 +44,7 @@ private:
 	GVDocumentDecodeImplPrivate* d;
 	QImage asyncDecode(bool&);
 	QImage syncDecode(bool&);
+	void finish( QImage& im, const QCString& format );
 	
 	// QImageConsumer methods
 	void end();
@@ -55,10 +56,12 @@ private:
 	void setSize(int, int);
 
 private slots:
+	void start();
 	void startLoading();
 	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
 	void slotResult(KIO::Job*);
-	void loadChunk();
+	void slotStatResult(KIO::Job*);
+	void decodeChunk();
 };
 
 #endif /* GVDOCUMENTDECODEIMPL_H */

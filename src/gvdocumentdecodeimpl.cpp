@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qmemarray.h>
 #include <qstring.h>
 #include <qtimer.h>
+#include <qdatetime.h>
 
 // KDE
 #include <kdebug.h>
@@ -39,7 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentloadedimpl.h"
 #include "gvdocumentjpegloadedimpl.h"
 #include "gvdocumentdecodeimpl.moc"
-
+#include "gvcache.h"
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
@@ -60,10 +61,11 @@ public:
 	QImageDecoder mDecoder;
 	QTimer mDecoderTimer;
 	QRect mLoadChangedRect;
-	QTime mLoadCompressChangesTime;
+	QTime mTimeSinceLastUpdate;
 	QGuardedPtr<KIO::Job> mJob;
 	bool mSuspended;
 	bool mSyncDecode;
+	QDateTime mTimestamp;
 };
 
 
@@ -78,9 +80,9 @@ GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document)
 	d=new GVDocumentDecodeImplPrivate(this);
 	d->mUpdatedDuringLoad=false;
 
-	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(loadChunk()) );
+	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
 	
-	QTimer::singleShot(0, this, SLOT(startLoading()) );
+	QTimer::singleShot(0, this, SLOT(start()) );
 }
 
 
@@ -88,8 +90,50 @@ GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 	delete d;
 }
 
+void GVDocumentDecodeImpl::start() {
+	d->mLoadChangedRect=QRect();
+	d->mTimestamp = GVCache::instance()->timestamp( mDocument->url() );
+	d->mJob=KIO::stat( mDocument->url(), false);
+	connect(d->mJob, SIGNAL(result(KIO::Job*)),
+		this, SLOT(slotStatResult(KIO::Job*)) );
+}
+
+void GVDocumentDecodeImpl::slotStatResult(KIO::Job*job) {
+	// Get modification time of the original file
+	KIO::UDSEntry entry = static_cast<KIO::StatJob*>(job)->statResult();
+	KIO::UDSEntry::ConstIterator it= entry.begin();
+	QDateTime urlTimestamp;
+	for (; it!=entry.end(); it++) {
+		if ((*it).m_uds == KIO::UDS_MODIFICATION_TIME) {
+			urlTimestamp.setTime_t( (*it).m_long );
+			break;
+		}
+	}
+	QImage image;
+	QCString format;
+	if( urlTimestamp <= d->mTimestamp ) {
+		image = GVCache::instance()->image( mDocument->url(), format );
+	}
+	if( !image.isNull()) {
+		finish( image, format );
+	} else {
+		QByteArray data = GVCache::instance()->file( mDocument->url() );
+		if( !data.isNull()) {
+			d->mJob = NULL;
+			d->mRawData = data;
+			d->mReadSize=0;
+			d->mSyncDecode = false;
+			d->mTimeSinceLastUpdate.start();
+			d->mDecoderTimer.start(0, false);
+		} else {
+			d->mTimestamp = urlTimestamp;
+			startLoading();
+		}
+	}
+}
+
 void GVDocumentDecodeImpl::startLoading() {
-	d->mJob=KIO::get(mDocument->url(), false, false);
+	d->mJob=KIO::get( mDocument->url(), false, false);
 
 	connect(d->mJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
 		this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
@@ -99,16 +143,15 @@ void GVDocumentDecodeImpl::startLoading() {
 
 	d->mRawData.resize(0);
 	d->mReadSize=0;
-	d->mLoadChangedRect=QRect();
 	d->mSyncDecode = false;
-	d->mLoadCompressChangesTime.start();
+	d->mTimeSinceLastUpdate.start();
 }
     
 
 void GVDocumentDecodeImpl::slotResult(KIO::Job* job) {
 	kdDebug() << k_funcinfo << " loading finished:" << job->error() << endl;
 	if( job->error() == 0 ) {
-		d->mDecoderTimer.start(0, false);
+		if (!d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
 		return;
 	}
 	// failed
@@ -124,7 +167,7 @@ void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) 
 		memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
 	}
 	// Decode the the image with a timer
-	if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0, false);
+	if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
 }
 
 
@@ -169,10 +212,10 @@ QImage GVDocumentDecodeImpl::syncDecode(bool& ok) {
 	return image;
 }
 
-void GVDocumentDecodeImpl::loadChunk() {
+void GVDocumentDecodeImpl::decodeChunk() {
 	if( d->mSuspended ) {
 		d->mDecoderTimer.stop();
-	        return;
+		return;
 	}
 
 	bool ok;
@@ -196,20 +239,31 @@ void GVDocumentDecodeImpl::loadChunk() {
 	kdDebug() << k_funcinfo << " loading succeded\n";
 	d->mDecoderTimer.stop();
 
-	// Set the image format. QImageIO::imageFormat should not fail since at
-	// this point the image has been decoded successfully.
 	QBuffer buffer(d->mRawData);
 	buffer.open(IO_ReadOnly);
-	setImageFormat( QImageIO::imageFormat(&buffer) );
-	Q_ASSERT(mDocument->imageFormat()!=0);
+	QCString format = QImageIO::imageFormat(&buffer);
 	buffer.close();
 
+	GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
+
+	finish( image, format );
+}
+
+
+void GVDocumentDecodeImpl::finish( QImage& image, const QCString& format ) {
+	// Set the image format. QImageIO::imageFormat should not fail since at
+	// this point the image has been decoded successfully.
+	setImageFormat( format );
+	Q_ASSERT(mDocument->imageFormat()!=0);
+	
 	// Convert depth if necessary
 	// (32 bit depth is necessary for alpha-blending)
 	if (image.depth()<32 && image.hasAlphaBuffer()) {
 		image=image.convertDepth(32);
 		d->mUpdatedDuringLoad=false;
 	}
+
+	GVCache::instance()->addImage( mDocument->url(), image, format, d->mTimestamp );
 
 	// The decoder did not cause the sizeUpdated or rectUpdated signals to be
 	// emitted, let's do it now
@@ -268,12 +322,12 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 		d->mUpdatedDuringLoad=true;
 	}
 	d->mLoadChangedRect |= rect;
-	if( d->mLoadCompressChangesTime.elapsed() > 100 ) {
+	if( d->mTimeSinceLastUpdate.elapsed() > 100 ) {
 		kdDebug() << k_funcinfo << " " << d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() << "\n";
 		emit rectUpdated(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
-		d->mLoadCompressChangesTime.start();
+		d->mTimeSinceLastUpdate.start();
 	}
 }
 
