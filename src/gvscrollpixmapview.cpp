@@ -94,9 +94,9 @@ public:
 	}
 	
 	virtual void rightButtonReleaseEvent(QMouseEvent* event) {
-        mView->openContextMenu(event->globalPos());
-    }
-    
+		mView->openContextMenu(event->globalPos());
+	}
+	
 	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
 	virtual void updateCursor() {
 		mView->viewport()->setCursor(ArrowCursor);
@@ -105,8 +105,9 @@ public:
 
 
 class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
-	QCursor mZoomCursor;
 private:
+	QCursor mZoomCursor;
+	
 	void zoomTo(const QPoint& pos, bool in) {
 		KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
 		if (!zoomAction->isEnabled()) return;
@@ -143,7 +144,7 @@ public:
 	}
 
 	void rightButtonReleaseEvent(QMouseEvent* event) {
-        zoomTo(event->pos(), false);
+		zoomTo(event->pos(), false);
 	}
 	
 	void updateCursor() {
@@ -200,16 +201,14 @@ public:
 			int deltaX, deltaY;
 
 			if (event->state() & ControlButton) {
+				deltaX = event->delta();
+				deltaY = 0;
+			} else {
 				deltaX = 0;
 				deltaY = event->delta();
 			}
-			else {
-				deltaX = event->delta();
-				deltaY = 0;
-			}
-			mView->scrollBy(-deltaY, -deltaX);
-		}
-		else {
+			mView->scrollBy(-deltaX, -deltaY);
+		} else {
 			if (event->delta()<0) {
 				mView->emitSelectNext();
 			} else {
@@ -417,7 +416,7 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	updateZoomActions();
 
 	viewport()->setUpdatesEnabled(true);
-        fullRepaint();
+		fullRepaint();
 
 	emit zoomChanged(mZoom);
 }
@@ -696,8 +695,8 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-            mToolControllers[mTool]->rightButtonReleaseEvent(event);
-        }
+			mToolControllers[mTool]->rightButtonReleaseEvent(event);
+		}
 		break;
 
 	default: // Avoid compiler complain
@@ -737,7 +736,7 @@ bool GVScrollPixmapViewFilter::eventFilter(QObject*, QEvent* event) {
 	case QEvent::KeyRelease:
 	case QEvent::AccelOverride:
 		return static_cast< GVScrollPixmapView* >( parent())
-                    ->viewportKeyEvent(static_cast<QKeyEvent*>(event));
+					->viewportKeyEvent(static_cast<QKeyEvent*>(event));
 	default:
 		break;
 	}
@@ -841,13 +840,13 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	updateImageOffset();
 	QRect imageRect(mXOffset, mYOffset, mDocument->width(), mDocument->height());
 
-        QPainter painter( viewport());
+		QPainter painter( viewport());
 	// Top rect
 	painter.eraseRect( 0, 0,
 		viewport()->width(), imageRect.top());
 
 	// Bottom rect
-        painter.eraseRect( 0, imageRect.bottom(),
+		painter.eraseRect( 0, imageRect.bottom(),
 		viewport()->width(), viewport()->height()-imageRect.bottom());
 
 	// Left rect
@@ -860,7 +859,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
-        mEmptyImage = false;
+		mEmptyImage = false;
 	QRect widgetRect;
 	// We add a one pixel border to avoid missing parts of the image
 	widgetRect.setLeft( int(imageRect.left()*mZoom) + mXOffset-1);
@@ -879,16 +878,16 @@ void GVScrollPixmapView::restartAutoHideTimer() {
 
 
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
-    //KPart
-    if (QString(parent()->name()) == QString("KonqFrame") ||
-        QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
-        emit contextMenu();
-        return;
-    }
+	//KPart
+	if (QString(parent()->name()) == QString("KonqFrame") ||
+		QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
+		emit contextMenu();
+		return;
+	}
 	
-    QPopupMenu menu(this);
-    bool noImage=mDocument->filename().isEmpty();
-    bool validImage=!mDocument->isNull();
+	QPopupMenu menu(this);
+	bool noImage=mDocument->filename().isEmpty();
+	bool validImage=!mDocument->isNull();
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary
@@ -902,16 +901,16 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 		mZoomOut->plug(&menu);
 		mResetZoom->plug(&menu);
 		mLockZoom->plug(&menu);
-    }
+	}
 
-    menu.insertSeparator();
+	menu.insertSeparator();
 
-    mActionCollection->action("first")->plug(&menu);
-    mActionCollection->action("previous")->plug(&menu);
-    mActionCollection->action("next")->plug(&menu);
-    mActionCollection->action("last")->plug(&menu);
+	mActionCollection->action("first")->plug(&menu);
+	mActionCollection->action("previous")->plug(&menu);
+	mActionCollection->action("next")->plug(&menu);
+	mActionCollection->action("last")->plug(&menu);
 
-    if (validImage) {
+	if (validImage) {
 		menu.insertSeparator();
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
@@ -927,30 +926,30 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		menu.insertItem(
 			i18n("External Tools"), externalToolContext->popupMenu());
-    }
+	}
 
-    if (!noImage) {
+	if (!noImage) {
 		menu.insertSeparator();
-        
-        menu.connectItem(
-            menu.insertItem( i18n("&Rename...") ),
-            this,SLOT(renameFile()) );
-        menu.connectItem(
-            menu.insertItem( i18n("&Copy To...") ),
-            this,SLOT(copyFile()) );
-        menu.connectItem(
-            menu.insertItem( i18n("&Move To...") ),
-            this,SLOT(moveFile()) );
-        menu.connectItem(
-            menu.insertItem( i18n("&Delete") ),
-            this,SLOT(deleteFile()) );
+		
+		menu.connectItem(
+			menu.insertItem( i18n("&Rename...") ),
+			this,SLOT(renameFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Copy To...") ),
+			this,SLOT(copyFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Move To...") ),
+			this,SLOT(moveFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Delete") ),
+			this,SLOT(deleteFile()) );
 
-        menu.insertSeparator();
+		menu.insertSeparator();
 
-        menu.connectItem(
-            menu.insertItem( i18n("Properties") ),
-            this,SLOT(showFileProperties()) );
-    }
+		menu.connectItem(
+			menu.insertItem( i18n("Properties") ),
+			this,SLOT(showFileProperties()) );
+	}
 
 	menu.exec(pos);
 }
@@ -1167,7 +1166,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
-        mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
+		mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
