@@ -80,11 +80,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
-		QApplication::reverseLayout() ? "gvlast":"gvfirst", Key_Home,
+		QApplication::reverseLayout() ? "2rightarrow":"2leftarrow", Key_Home,
 		this,SLOT(slotSelectFirst()), actionCollection, "first");
 
 	mSelectLast=new KAction(i18n("&Last"),
-		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
+		QApplication::reverseLayout() ? "2leftarrow":"2rightarrow", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
 	// KIconLoader is weird.  If I preload them here it remembers about them later on even for the KPart.
@@ -93,11 +93,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	iconLoader.loadIconSet("gvprevious", KIcon::Toolbar);
 
 	mSelectPrevious=new KAction(i18n("&Previous"),
-		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
+		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
 
 	mSelectNext=new KAction(i18n("&Next"),
-		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
+		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"detailed");
