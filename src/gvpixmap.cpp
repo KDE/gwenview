@@ -222,6 +222,11 @@ void GVPixmap::load() {
 	if (mImage.loadFromData(mCompressedData,mImageFormat.ascii())) {
 		// Throw data away if it's not a JPEG, since we wont use it
 		if (mImageFormat!="JPEG") mCompressedData.resize(0);
+
+		// Convert depth if necessary
+		if (mImage.depth()<32) {
+			mImage=mImage.convertDepth(32);
+		}
 	} else {
 		mImage.reset();
 	}
