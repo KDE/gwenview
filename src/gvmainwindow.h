@@ -57,6 +57,7 @@ public:
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
+	GVPixmap* gvPixmap() const { return mGVPixmap; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);

@@ -37,6 +37,8 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 class GVPixmap : public QObject {
 Q_OBJECT
 public:
+	enum ModifiedBehavior { Ask=0, SaveSilently=1, DiscardChanges=2 };
+	
 	GVPixmap(QObject*);
 	~GVPixmap();
 
@@ -50,6 +52,11 @@ public:
 	bool isNull() const { return mImage.isNull(); }
 	const QString& imageFormat() const { return mImageFormat; }
 
+	void setModifiedBehavior(ModifiedBehavior);
+	ModifiedBehavior modifiedBehavior() const;
+	
+	void readConfig(KConfig*, const QString& group);
+	void writeConfig(KConfig*, const QString& group);
 
 public slots:
 	void setURL(const KURL&);
@@ -106,6 +113,7 @@ private:
 	QString mFilename;
 	QString mImageFormat;
 	bool mModified;
+	ModifiedBehavior mModifiedBehavior;
 
 	// Store compressed data. Usefull for lossless manipulations.
 	QByteArray mCompressedData;

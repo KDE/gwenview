@@ -42,6 +42,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <gvpixmap.moc>
 
+
+const char* CONFIG_MODIFIED_BEHAVIOR="modified behavior";
+
+
 GVPixmap::GVPixmap(QObject* parent)
 : QObject(parent)
 , mModified(false)
@@ -228,6 +232,16 @@ void GVPixmap::saveAs() {
 
 bool GVPixmap::saveIfModified() {
 	if (!mModified) return true;
+	if (mModifiedBehavior==SaveSilently) {
+		save();
+		mModified=false;
+		return true;
+	}
+	if (mModifiedBehavior==DiscardChanges) {
+		mModified=false;
+		return true;
+	}
+
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 				.arg(url().prettyURL());
 	int result=KMessageBox::questionYesNoCancel(0,msg,QString::null,i18n("Save"),i18n("Discard"));
@@ -240,6 +254,33 @@ bool GVPixmap::saveIfModified() {
 	default:
 		return false;
 	}
+}
+
+//---------------------------------------------------------------------
+//
+// Config
+//
+//---------------------------------------------------------------------
+void GVPixmap::setModifiedBehavior(ModifiedBehavior value) {
+	mModifiedBehavior=value;
+}
+
+
+GVPixmap::ModifiedBehavior GVPixmap::modifiedBehavior() const {
+	return mModifiedBehavior;
+}
+
+
+void GVPixmap::readConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	mModifiedBehavior=ModifiedBehavior(
+		config->readNumEntry(CONFIG_MODIFIED_BEHAVIOR) );
+}
+
+
+void GVPixmap::writeConfig(KConfig* config, const QString& group) {
+	config->setGroup(group);
+	config->writeEntry(CONFIG_MODIFIED_BEHAVIOR, int(mModifiedBehavior));
 }
 
 

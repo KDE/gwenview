@@ -82,6 +82,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 const char* CONFIG_DOCK_GROUP="dock";
+const char* CONFIG_GVPIXMAP_GROUP="misc";
 const char* CONFIG_MAINWINDOW_GROUP="main window";
 const char* CONFIG_FILEWIDGET_GROUP="file widget";
 const char* CONFIG_JPEGTRAN_GROUP="jpegtran";
@@ -147,11 +148,12 @@ bool GVMainWindow::queryClose() {
 	if (!mGVPixmap->saveIfModified()) return false;
 	
 	KConfig* config=KGlobal::config();
-	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
-	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
-	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
-	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
-	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
+	mGVPixmap->writeConfig(config, CONFIG_GVPIXMAP_GROUP);
+	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
+	mPixmapView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
+	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
+	mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
+	GVJPEGTran::writeConfig(config, CONFIG_JPEGTRAN_GROUP);
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
@@ -618,6 +620,7 @@ void GVMainWindow::createWidgets() {
 
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
+	mGVPixmap->readConfig(config, CONFIG_GVPIXMAP_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);

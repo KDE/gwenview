@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
 #include "gvjpegtran.h"
+#include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 #include "gvmainwindow.h"
 #include "thumbnailloadjob.h"
@@ -54,34 +55,21 @@ mMainWindow(mainWindow)
 {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
+	GVPixmap* gvPixmap=mMainWindow->gvPixmap();
 
-	// Thumbnails tab
+	// Image List tab
 	mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
 	mWordWrapFilename->setChecked(fileViewStack->fileThumbnailView()->wordWrapIconText());
+	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
+	mShowDirs->setChecked(fileViewStack->showDirs());
+	mShownColor->setColor(fileViewStack->shownColor());
 
 	connect(mCalculateCacheSize,SIGNAL(clicked()),
 		this,SLOT(calculateCacheSize()));
 	connect(mEmptyCache,SIGNAL(clicked()),
 		this,SLOT(emptyCache()));
 
-	// File operations tab
-	mShowCopyDialog->setChecked(FileOperation::confirmCopy());
-	mShowMoveDialog->setChecked(FileOperation::confirmMove());
-
-	mDefaultDestDir->setURL(FileOperation::destDir());
-	mDefaultDestDir->fileDialog()->setMode(
-		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
-	
-	mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
-	mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
-
-	// Full screen tab
-	mShowPathInFullScreen->setChecked(mMainWindow->pixmapView()->showPathInFullScreen());
-	mShowMenuBarInFullScreen->setChecked(mMainWindow->showMenuBarInFullScreen());
-	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
-	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
-
-	// Mouse behaviour tab
+	// Image View tab
 	typedef QMap<GVScrollPixmapView::Tool,QString> MouseBehaviours;
 	MouseBehaviours behaviours;
 	behaviours[GVScrollPixmapView::None]=i18n("None");
@@ -102,16 +90,30 @@ mMainWindow(mainWindow)
 	mShiftPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(ShiftButton) ));
 	mAltPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(AltButton) ));
 
-	// Image View tab
 	mSmoothScale->setChecked(pixmapView->smoothScale());
 	mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	
+	// Full Screen tab
+	mShowPathInFullScreen->setChecked(mMainWindow->pixmapView()->showPathInFullScreen());
+	mShowMenuBarInFullScreen->setChecked(mMainWindow->showMenuBarInFullScreen());
+	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
+	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
+
+	// File Operations tab
+	mShowCopyDialog->setChecked(FileOperation::confirmCopy());
+	mShowMoveDialog->setChecked(FileOperation::confirmMove());
+
+	mDefaultDestDir->setURL(FileOperation::destDir());
+	mDefaultDestDir->fileDialog()->setMode(
+		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
+	
+	mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
+	mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
+	
 	// Misc tab
 	mJPEGTran->setURL(GVJPEGTran::programPath());
-	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
-	mShowDirs->setChecked(fileViewStack->showDirs());
-	mShownColor->setColor(fileViewStack->shownColor());
+	mModifiedBehaviorGroup->setButton( int(gvPixmap->modifiedBehavior()) );
 }
 
 
@@ -124,42 +126,45 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	GVFileViewStack* fileViewStack=mMainWindow->fileViewStack();
 	GVScrollPixmapView* pixmapView=mMainWindow->pixmapView();
+	GVPixmap* gvPixmap=mMainWindow->gvPixmap();
 
-	// Thumbnails tab
+	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(mThumbnailMargin->value());
 	fileViewStack->fileThumbnailView()->setWordWrapIconText(mWordWrapFilename->isChecked());
 	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
-
-	// File operations tab
-	FileOperation::setConfirmCopy(mShowCopyDialog->isChecked());
-	FileOperation::setConfirmMove(mShowMoveDialog->isChecked());
-	FileOperation::setDestDir(mDefaultDestDir->url());
-	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
-	FileOperation::setDeleteToTrash(mDeleteGroup->selected()==mDeleteToTrash);
-
-	// Full screen tab
-	mMainWindow->pixmapView()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
-	mMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
-	mMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
-	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
-
-	// Mouse wheel behaviour tab		
+	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
+	fileViewStack->setShowDirs(mShowDirs->isChecked());
+	fileViewStack->setShownColor(mShownColor->color());
+	
+	// Image View tab		
 	pixmapView->setButtonStateTool(NoButton,      GVScrollPixmapView::Tool(mWheelOnly->currentItem()) );
 	pixmapView->setButtonStateTool(ControlButton, GVScrollPixmapView::Tool(mControlPlusWheel->currentItem()) );
 	pixmapView->setButtonStateTool(ShiftButton,   GVScrollPixmapView::Tool(mShiftPlusWheel->currentItem()) );
 	pixmapView->setButtonStateTool(AltButton,     GVScrollPixmapView::Tool(mAltPlusWheel->currentItem()) );
 	pixmapView->updateDefaultCursor();
 
-	// Image View tab
 	pixmapView->setSmoothScale(mSmoothScale->isChecked());
 	pixmapView->setEnlargeSmallImages(mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(mShowScrollBars->isChecked());
 	
+	// Full Screen tab
+	mMainWindow->pixmapView()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );
+	mMainWindow->setShowMenuBarInFullScreen( mShowMenuBarInFullScreen->isChecked() );
+	mMainWindow->setShowToolBarInFullScreen( mShowToolBarInFullScreen->isChecked() );
+	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
+
+	// File Operations tab
+	FileOperation::setConfirmCopy(mShowCopyDialog->isChecked());
+	FileOperation::setConfirmMove(mShowMoveDialog->isChecked());
+	FileOperation::setDestDir(mDefaultDestDir->url());
+	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
+	FileOperation::setDeleteToTrash(mDeleteGroup->selected()==mDeleteToTrash);
+
 	// Misc tab
 	GVJPEGTran::setProgramPath(mJPEGTran->url());
-	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
-	fileViewStack->setShowDirs(mShowDirs->isChecked());
-	fileViewStack->setShownColor(mShownColor->color());
+	QButton* button=mModifiedBehaviorGroup->selected();
+	Q_ASSERT(button);
+	gvPixmap->setModifiedBehavior( GVPixmap::ModifiedBehavior(mModifiedBehaviorGroup->id(button)) );
 }
 
 

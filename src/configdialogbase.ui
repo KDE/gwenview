@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ConfigDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -798,12 +798,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout15</cstring>
@@ -833,6 +827,74 @@
                             </widget>
                         </grid>
                     </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2_2_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>&lt;b&gt;What to do when leaving a modified image&lt;/b&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>mModifiedBehaviorGroup</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>mModifyAsk</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ask</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>mModifySave</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Save silently</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>mModifyDiscard</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Discard changes</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>2</number>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
                     <spacer>
                         <property name="name">
                             <cstring>Spacer3</cstring>
@@ -846,7 +908,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>120</height>
+                                <height>60</height>
                             </size>
                         </property>
                     </spacer>
@@ -978,4 +1040,13 @@
     <slot>slotOk()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

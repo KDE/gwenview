@@ -1,6 +1,8 @@
 2003.xx.xx - v1.0.0pre3
 - New features:
  - Added a "Go" button to the location toolbar.
+ - Gwenview can now silently save or discard changes when leaving a modified
+   image.
 - Fixes:
  - Really fixed saving of external tools.
  - Make sure the folder view is updated when a folder is renamed.
