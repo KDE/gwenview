@@ -1,3 +1,7 @@
+2003.xx.xx - v0.17.0
+- Fixes:
+ - Fixed compilation failure on KDE 3.0.
+
 2003.04.27 - v0.17.0pre3
 - Fixes:
  - Really fixed the bug which caused the dock layout to be messed after going
