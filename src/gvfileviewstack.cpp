@@ -103,9 +103,9 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
-	d->mSortAction=new KSelectAction(i18n("Sort by"), 0, this, SLOT(setSorting()), actionCollection, "view_sort");
+	d->mSortAction=new KSelectAction(i18n("Sort"), 0, this, SLOT(setSorting()), actionCollection, "view_sort");
 	QStringList sortItems;
-	sortItems << i18n("Name") << i18n("Date") << i18n("Size");
+	sortItems << i18n("By Name") << i18n("By Date") << i18n("By Size");
 	d->mSortAction->setItems(sortItems);
 	d->mSortAction->setCurrentItem(0);
 	
