@@ -193,7 +193,7 @@ void FileOpTrashObject::operator()() {
 			response=KMessageBox::warningContinueCancel(mParent,
 				i18n("<p>Do you really want to move <b>%1</b> to the trash?</p>").arg(filename),i18n("Trash used as a verb", "Trash File"),KGuiItem(i18n("Trash used as a verb", "&Trash"),"edittrash"));
 		}
-		if (response==KMessageBox::Cancel) return;
+		if (response!=KMessageBox::Continue) return;
 	}
 
 	// Go do it
@@ -218,7 +218,7 @@ void FileOpRealDeleteObject::operator()() {
 			for (; it!=mURLList.end(); ++it) {
 				fileList.append((*it).filename());
 			}
-			response=KMessageBox::warningYesNoList(mParent,
+			response=KMessageBox::warningContinueCancelList(mParent,
 				i18n("Do you really want to delete these files?"),fileList,
 				i18n("Delete Files"),
 #if KDE_IS_VERSION(3, 3, 0)
@@ -229,7 +229,7 @@ void FileOpRealDeleteObject::operator()() {
 				);
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
-			response=KMessageBox::warningYesNo(mParent,
+			response=KMessageBox::warningContinueCancel(mParent,
 				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
 				i18n("Delete File"),
 #if KDE_IS_VERSION(3, 3, 0)
@@ -239,7 +239,7 @@ void FileOpRealDeleteObject::operator()() {
 #endif
 				);
 		}
-		if (response==KMessageBox::Cancel) return;
+		if (response!=KMessageBox::Continue) return;
 	}
 
 	// Delete the file
