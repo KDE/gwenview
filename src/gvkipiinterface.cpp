@@ -64,12 +64,11 @@ private:
 
 class GVImageInfo : public KIPI::ImageInfoShared {
 public:
-	GVImageInfo( const KURL& url ) : KIPI::ImageInfoShared(url) {}
-	QString name() {
+	GVImageInfo(KIPI::Interface* interface, const KURL& url) : KIPI::ImageInfoShared(interface, url) {}
+    
+	QString title() {
 		return _url.fileName();
 	}
-	
-	void setName(const QString&) {}
 	
 	QString description() {
 		return QString::null;
@@ -133,7 +132,7 @@ QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
 
 KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 	kdDebug() << "GVKIPIInterface::info\n";
-	return KIPI::ImageInfo( new GVImageInfo(url) );
+	return KIPI::ImageInfo( new GVImageInfo(this, url) );
 }
 
 int GVKIPIInterface::features() const {
