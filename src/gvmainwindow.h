@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 
 
-class KAccel;
 class KAction;
 class KHistoryCombo;
 class KToggleAction;
@@ -90,7 +89,6 @@ private:
 	KAction* mShowFileProperties;
 	KToggleAction* mToggleSlideShow;
 	
-	KAccel* mAccel;
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
 
@@ -102,10 +100,10 @@ private:
 	
 	void createWidgets();
 	void createActions();
-	void createAccels();
 	void createMenu();
 	void createMainToolBar();
 	void createAddressToolBar();
+	void createConnections();
 
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;

@@ -84,63 +84,11 @@ GVMainWindow::GVMainWindow()
 	// GUI
 	createWidgets();
 	createActions();
-	createAccels();
 	createMenu();
 	createMainToolBar();
 	createAddressToolBar();
-
-	// Slide show
-	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
-	mSlideShow->readConfig(KGlobal::config(),CONFIG_SLIDESHOW_GROUP);
+	createConnections();
 	
-	// Dir view connections
-	connect(mGVDirView,SIGNAL(dirURLChanged(const KURL&)),
-		mGVPixmap,SLOT(setDirURL(const KURL&)) );
-
-	// Pixmap view connections
-	connect(mPixmapViewStack,SIGNAL(selectPrevious()),
-		mFileViewStack,SLOT(slotSelectPrevious()) );
-	connect(mPixmapViewStack,SIGNAL(selectNext()),
-		mFileViewStack,SLOT(slotSelectNext()) );
-
-	// Scroll pixmap view connections
-	connect(mPixmapViewStack,SIGNAL(zoomChanged(double)),
-		this,SLOT(updateFileStatusBar()) );
-
-	// Thumbnail view connections
-	connect(mFileViewStack,SIGNAL(updateStarted(int)),
-		this,SLOT(thumbnailUpdateStarted(int)) );
-	connect(mFileViewStack,SIGNAL(updateEnded()),
-		this,SLOT(thumbnailUpdateEnded()) );
-	connect(mFileViewStack,SIGNAL(updatedOneThumbnail()),
-		this,SLOT(thumbnailUpdateProcessedOne()) );
-
-	// File view connections
-	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
-		mGVPixmap,SLOT(setURL(const KURL&)) );
-	connect(mFileViewStack,SIGNAL(completed()),
-		this,SLOT(updateStatusBar()) );
-	connect(mFileViewStack,SIGNAL(canceled()),
-		this,SLOT(updateStatusBar()) );
-		
-	// GVPixmap connections
-	connect(mGVPixmap,SIGNAL(loading()),
-		this,SLOT(pixmapLoading()) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		this,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mGVDirView,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
-
-	// Slide show
-	connect(mSlideShow,SIGNAL(finished()),
-		mToggleSlideShow,SLOT(activate()) );
-	
-	// Address bar
-	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
-		this,SLOT(slotURLEditChanged(const QString &)));
-
 	// Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -177,7 +125,6 @@ GVMainWindow::~GVMainWindow() {
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
-	mAccel->writeSettings();
 }
 
 
@@ -369,7 +316,7 @@ void GVMainWindow::showConfigDialog() {
 
 
 void GVMainWindow::showKeyDialog() {
-	KKeyDialog::configureKeys(mAccel);
+	KKeyDialog::configure(actionCollection());
 }
 
 
@@ -478,6 +425,9 @@ void GVMainWindow::createWidgets() {
 	mFileViewStack=new GVFileViewStack(this,actionCollection());
 	mFileDock->setWidget(mFileViewStack);
 
+	// Slide show controller (not really a widget)
+	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
+	
 	// Default dock config
 	setGeometry(20,20,600,400);
 	mFolderDock->manualDock( mPixmapDock,KDockWidget::DockLeft,30);
@@ -487,6 +437,7 @@ void GVMainWindow::createWidgets() {
 	readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mPixmapViewStack->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 }
 
 
@@ -517,26 +468,61 @@ void GVMainWindow::createActions() {
 	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"show_file_properties");
 
 	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
+	
+	actionCollection()->readShortcutSettings();
 }
 
 
-void GVMainWindow::createAccels() {
-	// Associate actions with accelerator
-	mAccel=new KAccel(this);
-	int count=actionCollection()->count();
+void GVMainWindow::createConnections() {
+	// Dir view connections
+	connect(mGVDirView,SIGNAL(dirURLChanged(const KURL&)),
+		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
-	for (int pos=0;pos<count;++pos) {
-		KAction *action = actionCollection()->action(pos);
-		if ( action->accel() ) {
-			action->plugAccel(mAccel);
-		}
-	}
-	mFileViewStack->plugActionsToAccel(mAccel);
-	mPixmapViewStack->plugActionsToAccel(mAccel);
+	// Pixmap view connections
+	connect(mPixmapViewStack,SIGNAL(selectPrevious()),
+		mFileViewStack,SLOT(slotSelectPrevious()) );
+	connect(mPixmapViewStack,SIGNAL(selectNext()),
+		mFileViewStack,SLOT(slotSelectNext()) );
 
-	// Read user accelerator
-	mAccel->readSettings();
+	// Scroll pixmap view connections
+	connect(mPixmapViewStack,SIGNAL(zoomChanged(double)),
+		this,SLOT(updateFileStatusBar()) );
 
+	// Thumbnail view connections
+	connect(mFileViewStack,SIGNAL(updateStarted(int)),
+		this,SLOT(thumbnailUpdateStarted(int)) );
+	connect(mFileViewStack,SIGNAL(updateEnded()),
+		this,SLOT(thumbnailUpdateEnded()) );
+	connect(mFileViewStack,SIGNAL(updatedOneThumbnail()),
+		this,SLOT(thumbnailUpdateProcessedOne()) );
+
+	// File view connections
+	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
+		mGVPixmap,SLOT(setURL(const KURL&)) );
+	connect(mFileViewStack,SIGNAL(completed()),
+		this,SLOT(updateStatusBar()) );
+	connect(mFileViewStack,SIGNAL(canceled()),
+		this,SLOT(updateStatusBar()) );
+		
+	// GVPixmap connections
+	connect(mGVPixmap,SIGNAL(loading()),
+		this,SLOT(pixmapLoading()) );
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		this,SLOT(setURL(const KURL&,const QString&)) );
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		mGVDirView,SLOT(setURL(const KURL&,const QString&)) );
+	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
+
+	// Slide show
+	connect(mSlideShow,SIGNAL(finished()),
+		mToggleSlideShow,SLOT(activate()) );
+	
+	// Address bar
+	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
+		this,SLOT(slotURLEditChanged(const QString &)));
+
+	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
 	accel->connectItem(accel->insertItem(Key_Escape),this,SLOT(escapePressed()));
 }

@@ -1,3 +1,8 @@
+2003.xx.xx - v0.16.0
+- Fixes :
+ - Corrected toolbar layout for RTL languages (Thanks to Meni Livne)
+ 
+
 2003.01.12 - v0.16.0pre1
 - New features :
  - Support for IO slaves: you can browse FTP files, Windows shares, go into

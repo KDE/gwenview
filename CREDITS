@@ -26,3 +26,7 @@ Patch to make Gwenview use the same thumbnail folder as Konqueror 3 (v0.15.0).
 
 - Tudor Calin <tudor_calin@mymail.ro>
 Added an address bar (v0.16.0).
+
+- Meni Livne <livne@kde.org>
+Patched toolbar layour for RTL languages (v0.16.0).
+
