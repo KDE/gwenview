@@ -217,7 +217,7 @@ struct GVScrollPixmapView::Private {
 	int mPendingOperations;
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
-	bool mEmptyImage;
+	QRegion mValidImageArea;
 	int mMaxRepaintSize;
 	int mMaxScaleRepaintSize;
 	int mMaxSmoothRepaintSize;
@@ -311,7 +311,6 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* document, KAc
 	d->mManualZoom=false;
 	d->mPendingOperations= 0 ;
 	d->mSmoothingSuspended= false ;
-	d->mEmptyImage= false ;
 	d->mMaxRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
 	d->mMaxScaleRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
 	d->mMaxSmoothRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
@@ -434,7 +433,7 @@ void GVScrollPixmapView::slotModified() {
 void GVScrollPixmapView::loadingStarted() {
 	cancelPending();
 	d->mSmoothingSuspended = true;
-	d->mEmptyImage = true;
+	d->mValidImageArea = QRegion();
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
@@ -687,7 +686,7 @@ inline void composite(uint* rgba,uint value) {
 }
 
 void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
-	if( !d->mEmptyImage ) {
+	if( !d->mValidImageArea.isEmpty()) {
 		addPendingPaint( false, QRect( clipx, clipy, clipw, cliph ));
 	} else {
 		// image is empty, simply clear
@@ -897,6 +896,11 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	int extraPixels = GVImageUtils::extraScalePixels( smooth_algo, zoom());
 	QRect imageRect = d->widgetToImageBounding( QRect(clipx,clipy,clipw,cliph), extraPixels );
 	imageRect = imageRect.intersect( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
+	QMemArray< QRect > rects = d->mValidImageArea.intersect( imageRect ).rects();
+	for( unsigned int i = 1; i < rects.count(); ++i ) {
+		addPendingPaint( smooth, d->imageToWidget( rects[ i ] ));
+	}
+	imageRect = rects.count() > 0 ? rects[ 0 ] : QRect();
 	if (imageRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
@@ -1197,6 +1201,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	d->mYOffset=0;
 
 	d->mManualZoom = false;
+	d->mValidImageArea = QRegion();
 	if (d->mAutoZoom->isChecked() && !d->mLockZoom->isChecked()) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
@@ -1239,7 +1244,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
-	d->mEmptyImage = false;
+	d->mValidImageArea += imageRect;
 	viewport()->repaint( d->imageToWidget( imageRect ), false );
 }
 
