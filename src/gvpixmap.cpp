@@ -57,7 +57,6 @@ const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
 const char* JPEG_EXIF_COMMENT="Comment";
 const char* PNG_COMMENT="Comment";
 
-const int CHUNK_SIZE=4096;
 
 
 //-------------------------------------------------------------------
@@ -67,6 +66,8 @@ const int CHUNK_SIZE=4096;
 //-------------------------------------------------------------------
 class GVPixmapPrivate {
 public:
+	// Declare it here to avoid breaking --enable-final builds
+	static const int CHUNK_SIZE=4096;
 	GVPixmap::CommentState mCommentState;
 	QString mComment;
 	QImageDecoder* mDecoder;
@@ -646,7 +647,7 @@ void GVPixmap::loadChunk() {
 	Q_ASSERT(d->mDecoder);
 	int decodedSize=d->mDecoder->decode(
 		(const uchar*)(d->mCompressedData.data()+d->mReadSize),
-		QMIN(CHUNK_SIZE, int(d->mCompressedData.size())-d->mReadSize));
+		QMIN(GVPixmapPrivate::CHUNK_SIZE, int(d->mCompressedData.size())-d->mReadSize));
 
 	// Continue loading
 	if (decodedSize>0) {
