@@ -634,7 +634,7 @@ void GVMainWindow::createActions() {
 	mStop->setEnabled(false);
 //(0x3015A == 3.1.90)
 #if KDE_VERSION>=0x3015A
-	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection());
+	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 #else
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
 #endif
