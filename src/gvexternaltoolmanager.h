@@ -40,6 +40,7 @@ public:
 private:
 	GVExternalToolManager();
 	void loadDesktopFiles(const QString&);
+	GVExternalToolContext* createContextInternal(QObject* parent, const KURL::List&, const QStringList& mimeTypes);
 
 	QPtrList<KService> mServices;
 };

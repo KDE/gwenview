@@ -39,7 +39,6 @@ public:
 	static void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-	static void openWithEditor(const KURL&);
 	static void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
 
 	// Config
@@ -60,9 +59,6 @@ public:
 
 	static QString destDir();
 	static void setDestDir(const QString&);
-
-	static QString editor();
-	static void setEditor(const QString&);
 };
 
 #endif

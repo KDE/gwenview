@@ -775,19 +775,6 @@
                                     <string>Path to jpegtran:</string>
                                 </property>
                             </widget>
-                            <widget class="KURLRequester" row="0" column="1">
-                                <property name="name">
-                                    <cstring>mExternalEditor</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel1_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>External editor:</string>
-                                </property>
-                            </widget>
                             <widget class="KURLRequester" row="1" column="1">
                                 <property name="name">
                                     <cstring>mJPEGTran</cstring>
@@ -930,7 +917,6 @@
     <tabstop>mShowCopyDialog</tabstop>
     <tabstop>mShowMoveDialog</tabstop>
     <tabstop>mDefaultDestDir</tabstop>
-    <tabstop>mExternalEditor</tabstop>
     <tabstop>mJPEGTran</tabstop>
     <tabstop>mOK</tabstop>
     <tabstop>mApply</tabstop>
@@ -943,9 +929,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcolorbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

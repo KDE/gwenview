@@ -94,7 +94,6 @@ public:
 public slots:
 	// File operations
 	void showFileProperties();
-	void openWithEditor();
 	void renameFile();
 	void copyFile();
 	void moveFile();

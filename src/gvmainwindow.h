@@ -89,7 +89,6 @@ private:
 	KAction* mCopyFiles;
 	KAction* mMoveFiles;
 	KAction* mDeleteFiles;
-	KAction* mOpenWithEditor;
 	KAction* mShowConfigDialog;
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
@@ -133,7 +132,6 @@ private slots:
 	void deleteFiles();
 	void showFileProperties();
 	void openFile();
-	void openWithEditor();
 	
 	void toggleFullScreen();
 	void showConfigDialog();

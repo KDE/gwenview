@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <krun.h>
 
 // Local 
 #include "fileopobject.h"
@@ -40,7 +39,6 @@ static const char CONFIG_CONFIRM_DELETE[]  = "confirm file delete";
 static const char CONFIG_CONFIRM_MOVE[]    = "confirm file move";
 static const char CONFIG_CONFIRM_COPY[]    = "confirm file copy";
 static const char CONFIG_DEST_DIR[]        = "destination dir";
-static const char CONFIG_EDITOR[]          = "editor";
 
 
 //-Static configuration data---------------------------------------
@@ -81,15 +79,6 @@ void FileOperation::rename(const KURL& url,QWidget* parent,QObject* receiver,con
 }
 
 
-void FileOperation::openWithEditor(const KURL& url) {
-	QString path=url.path();
-	KRun::shellQuote(path);
-	QString cmdLine=sEditor;
-	cmdLine.append(' ').append(path);
-	KRun::runCommand(cmdLine);
-}
-
-
 void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, const KURL& target, bool* wasMoved) {
 	QPopupMenu menu(parent);
 	if (wasMoved) *wasMoved=false;
@@ -122,7 +111,6 @@ void FileOperation::readConfig(KConfig* config,const QString& group) {
 	sConfirmCopy=config->readBoolEntry(CONFIG_CONFIRM_COPY,true);
 
 	sDestDir=config->readPathEntry(CONFIG_DEST_DIR);
-	sEditor=config->readPathEntry(CONFIG_EDITOR,"gimp-remote -n");
 }
 
 
@@ -135,7 +123,6 @@ void FileOperation::writeConfig(KConfig* config,const QString& group) {
 	config->writeEntry(CONFIG_CONFIRM_COPY,sConfirmCopy);
 
 	config->writePathEntry(CONFIG_DEST_DIR,sDestDir);
-	config->writePathEntry(CONFIG_EDITOR,sEditor);
 }
 
 
@@ -183,15 +170,5 @@ QString FileOperation::destDir() {
 void FileOperation::setDestDir(const QString& value) {
 	sDestDir=value;
 }
-
-
-QString FileOperation::editor() {
-	return sEditor;
-}
-
-void FileOperation::setEditor(const QString& value) {
-	sEditor=value;
-}
-
 
 

@@ -100,11 +100,11 @@ GVExternalToolContext* GVExternalToolManager::createContext(
 	QObject* parent, const KFileItemList* items)
 {
 	KURL::List urls;
-	QPtrListIterator<KFileItem> it(*items);
 	QStringList mimeTypes;
 
 	// Create our URL list and a list of the different mime types present in
 	// the selection
+	QPtrListIterator<KFileItem> it(*items);
 	for (; it.current(); ++it) {
 		urls.append(it.current()->url());
 		QString mimeType=it.current()->mimetype();
@@ -112,14 +112,36 @@ GVExternalToolContext* GVExternalToolManager::createContext(
 			mimeTypes.append(mimeType);
 		}
 	}
+
+	return createContextInternal(parent, urls, mimeTypes);
+}
+
+
+GVExternalToolContext* GVExternalToolManager::createContext(
+	QObject* parent, const KURL& url)
+{
+	KURL::List urls;
+	QStringList mimeTypes;
+	
+	urls.append(url);
+	QString mimeType=KMimeType::findByURL(url, 0, url.isLocalFile(), true)->name();
+	mimeTypes.append(mimeType);
+	
+	return createContextInternal(parent, urls, mimeTypes);
+}
+
+	
+GVExternalToolContext* GVExternalToolManager::createContextInternal(
+	QObject* parent, const KURL::List& urls, const QStringList& mimeTypes)
+{
 	bool onlyOneURL=urls.size()==1;
 	
 	// Only add to selectionServices the services which can handle all the
 	// different mime types present in the selection
 	QPtrList<KService> selectionServices;
-	QPtrListIterator<KService> itService(mServices);
-	for (; itService.current(); ++itService) {
-		KService* service=itService.current();
+	QPtrListIterator<KService> it(mServices);
+	for (; it.current(); ++it) {
+		KService* service=it.current();
 		if (!onlyOneURL && !service->allowMultipleFiles()) {
 			continue;
 		}

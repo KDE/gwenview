@@ -107,7 +107,6 @@ mMainWindow(mainWindow)
 	mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	
 	// Misc tab
-	mExternalEditor->setURL(FileOperation::editor());
 	mJPEGTran->setURL(GVJPEGTran::programPath());
 	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	mShowDirs->setChecked(fileViewStack->showDirs());
@@ -156,7 +155,6 @@ void ConfigDialog::slotApply() {
 	pixmapView->setShowScrollBars(mShowScrollBars->isChecked());
 	
 	// Misc tab
-	FileOperation::setEditor(mExternalEditor->url());
 	GVJPEGTran::setProgramPath(mJPEGTran->url());
 	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(mShowDirs->isChecked());

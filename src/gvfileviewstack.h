@@ -106,7 +106,6 @@ public slots:
 
 	void updateThumbnail(const KURL&);
 
-	void openWithEditor();
 	void openParentDir();
 	void showFileProperties();
 	void deleteFiles();

@@ -336,15 +336,6 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	
 	QPopupMenu menu(this);
 
-	if (selectionSize==1) {
-		if (!isDirOrArchive(currentFileView()->selectedItems()->getFirst())) {
-			menu.connectItem(
-				menu.insertItem( i18n("Open with &Editor") ),
-				this,SLOT(openWithEditor()) );
-			menu.insertSeparator();
-		}
-	}
-	
 	GVExternalToolContext* externalToolContext=
 		GVExternalToolManager::instance()->createContext(
 		this, currentFileView()->selectedItems());
@@ -433,14 +424,6 @@ KURL::List GVFileViewStack::selectedURLs() const {
 		if (item) list.append(item->url());
 	}
 	return list;
-}
-
-
-void GVFileViewStack::openWithEditor() {
-	KURL::List list=selectedURLs();
-	if (list.isEmpty()) return;
-	
-	FileOperation::openWithEditor(list.first());
 }
 
 

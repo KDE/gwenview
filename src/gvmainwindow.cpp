@@ -190,7 +190,6 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mMoveFiles->setEnabled(filenameIsValid);
 	mDeleteFiles->setEnabled(filenameIsValid);
 	mShowFileProperties->setEnabled(filenameIsValid);
-	mOpenWithEditor->setEnabled(filenameIsValid);
 	mRotateLeft->setEnabled(filenameIsValid);
 	mRotateRight->setEnabled(filenameIsValid);
 	mMirror->setEnabled(filenameIsValid);
@@ -267,15 +266,6 @@ void GVMainWindow::showFileProperties() {
 		mFileViewStack->showFileProperties();
 	} else {
 		mPixmapView->showFileProperties();
-	}
-}
-
-
-void GVMainWindow::openWithEditor() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->openWithEditor();
-	} else {
-		mPixmapView->openWithEditor();
 	}
 }
 
@@ -591,7 +581,6 @@ void GVMainWindow::createActions() {
 	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"rotate_right");
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"mirror");
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"flip");
-	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"open_with_editor");
 
 	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");

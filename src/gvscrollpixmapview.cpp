@@ -44,6 +44,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "fileoperation.h"
+#include "gvexternaltoolmanager.h"
+#include "gvexternaltoolcontext.h"
 #include "gvpixmap.h"
 
 #include "gvscrollpixmapview.moc"
@@ -715,12 +717,14 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 		mActionCollection->action("rotate_right")->plug(editMenu);
 		mActionCollection->action("mirror")->plug(editMenu);
 		mActionCollection->action("flip")->plug(editMenu);
-		editMenu->connectItem(
-			editMenu->insertItem( i18n("Open with &Editor") ),
-			this,SLOT(openWithEditor()) );
-			
 		menu.insertItem( i18n("Edit"), editMenu );
 		
+		GVExternalToolContext* externalToolContext=
+			GVExternalToolManager::instance()->createContext(
+			this, mGVPixmap->url());
+		
+		menu.insertItem(
+			i18n("External Tools"), externalToolContext->popupMenu());
 		menu.insertSeparator();
 		
 		menu.connectItem(
@@ -899,11 +903,6 @@ void GVScrollPixmapView::updateZoomActions() {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::showFileProperties() {
 	(void)new KPropertiesDialog(mGVPixmap->url());
-}
-
-
-void GVScrollPixmapView::openWithEditor() {
-	FileOperation::openWithEditor(mGVPixmap->url());
 }
 
 
