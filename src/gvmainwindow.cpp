@@ -544,6 +544,10 @@ void GVMainWindow::toggleSlideShow() {
 			mToggleSlideShow->setChecked(false);
 			return;
 		}
+		if (mToggleBrowse->isChecked()) {
+			mToggleBrowse->activate();
+		}
+		
 		if (!mToggleFullScreen->isChecked()) {
 			mToggleFullScreen->activate();
 		}
@@ -650,6 +654,11 @@ void GVMainWindow::slotToggleCentralStack() {
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mPixmapView);
 		mCentralStack->raiseWidget(StackIDBrowse);
+		
+		if (mToggleSlideShow->isChecked()) {
+			mToggleSlideShow->activate();
+		}
+		
 	} else {
 		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
