@@ -527,7 +527,7 @@ void GVMainWindow::createActions() {
 	
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
-	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Dir And File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
+	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder And File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
 	
 	actionCollection()->readShortcutSettings();
 }
