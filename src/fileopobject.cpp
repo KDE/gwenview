@@ -24,9 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kfiledialog.h>
+#include <kglobalsettings.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 
 // Our includes
 #include "fileoperation.h"
@@ -108,6 +110,24 @@ void FileOpMoveToObject::operator()() {
 void FileOpDelObject::operator()() {
 	KURL url=mURLList.first(); // FIXME : Correct this for multi file operations
 
+	// Get the trash path (and make sure it exists)
+	QString trashPath=KGlobalSettings::trashPath();
+	if ( !QFile::exists(trashPath) ) {
+		KStandardDirs::makeDir( QFile::encodeName(trashPath) );
+	}
+	KURL trashURL;
+	trashURL.setPath(trashPath);
+
+	// Check we don't want to trash the trash
+	KURL::List::ConstIterator it=mURLList.begin();
+	for (; it!=mURLList.end(); ++it) {
+		if ( (*it).isLocalFile() && (*it).path(1)==trashPath ) {
+			KMessageBox::sorry(0, i18n("You can't trash the trash bin."));
+			return;
+		}
+	}
+
+	// Confirm operation
 	if (FileOperation::confirmDelete()) {
 		QString filename=QStyleSheet::escape(url.filename());
 		int response=KMessageBox::questionYesNo(mParent,
@@ -115,8 +135,9 @@ void FileOpDelObject::operator()() {
 		if (response==KMessageBox::No) return;
 	}
 
-	KIO::Job* removeJob=KIO::del(url,false,true);
-	connect( removeJob, SIGNAL( result(KIO::Job*) ),
+	// Go do it
+	KIO::Job* job=KIO::move(url,trashURL);
+	connect( job, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }
 

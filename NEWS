@@ -4,6 +4,7 @@
    tarballs...
  - Added a "home folder" tree branch to folder view.
  - Added a simple slideshow feature.
+ - Now uses the trash to delete images.
 - Fixes :
  - Do not start dragging folders in the folder view when not necessary.
 
