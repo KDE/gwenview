@@ -41,13 +41,25 @@ class GVPixmap;
 
 class GVScrollPixmapView : public QScrollView {
 Q_OBJECT
+
 public:
+	class ToolController;
+	class BrowseToolController;
+	class ScrollToolController;
+	class ZoomToolController;
+
+	friend class ToolController;
+	friend class BrowseController;
+	friend class ScrollController;
+	friend class ZoomController;
+
 	enum Tool { None, Browse, Scroll, Zoom };
 	typedef Tool WheelBehaviour; // FIXME: For compatibility
 	typedef QMap<ButtonState,Tool> WheelBehaviours;
-	typedef QMap<Tool,QCursor> ToolCursors;
+	typedef QMap<Tool,ToolController*> ToolControllers;
 
 	GVScrollPixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
+	~GVScrollPixmapView();
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
 
@@ -59,6 +71,7 @@ public:
 	KToggleAction* lockZoom() const { return mLockZoom; }
 	double zoom() const { return mZoom; }
 	void setZoom(double zoom);
+	bool fullScreen() const { return mFullScreen; }
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
 	void setShowPathInFullScreen(bool);
@@ -70,6 +83,10 @@ public:
 	bool showScrollBars() const { return mShowScrollBars; }
 	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
 
+	void startAutoHideTimer();
+
+	void emitSelectPrevious() { emit selectPrevious(); }
+	void emitSelectNext() { emit selectNext(); }
 
 public slots:
 	// File operations
@@ -95,25 +112,15 @@ private:
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	WheelBehaviours mWheelBehaviours;
-	ToolCursors mToolCursors;
-	QCursor mDraggingCursor;
+	ToolControllers mToolControllers;
 
 	Tool mTool;
 
 	// Offset to center images
 	int mXOffset,mYOffset;
-	QTime mLastWheelZoomTime;
 
 	// Zoom info
 	double mZoom;
-
-	// point in image that should be centered as % of width and height
-	bool mMouseZoomAction;
-	double mPictX, mPictY;
-	int mViewX, mViewY;
-
-	// context menu
-	QPopupMenu* mMenu;
 
 	// Our actions
 	KToggleAction* mAutoZoom;
@@ -125,9 +132,6 @@ private:
 
 	// Object state info
 	bool mFullScreen;
-	bool mMouseToggleZoom; // Indicates that the user wants to toggle the zoom
-	bool mDragStarted; // Indicates that the user is scrolling the image by dragging it
-	int mScrollStartX,mScrollStartY;
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mLastZoomBeforeAuto;
 

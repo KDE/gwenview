@@ -64,13 +64,152 @@ const int AUTO_HIDE_TIMEOUT=1000;
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
 
-inline QCursor loadCursor(const QString& name) {
-	QString path;
-	path=locate("appdata", QString("cursor/%1.png").arg(name));
-	return QCursor(QPixmap(path));
-}
+//------------------------------------------------------------------------
+//
+// GVScrollPixmapView ToolControllers
+//
+//------------------------------------------------------------------------
+class GVScrollPixmapView::ToolController {
+protected:
+	GVScrollPixmapView* mView;
+	
+	// Helper function
+	QCursor loadCursor(const QString& name) {
+		QString path;
+		path=locate("appdata", QString("cursor/%1.png").arg(name));
+		return QCursor(QPixmap(path));
+	}
+	
+public:
+	ToolController(GVScrollPixmapView* view)
+	: mView(view) {}
+	virtual ~ToolController() {}
+	virtual void mousePressEvent(QMouseEvent*) {}
+	virtual void mouseMoveEvent(QMouseEvent*) {}
+	virtual void mouseReleaseEvent(QMouseEvent*) {}
+	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
+	virtual void updateCursor() {
+		mView->viewport()->setCursor(ArrowCursor);
+	}
+};
 
 
+class GVScrollPixmapView::ScrollToolController : public GVScrollPixmapView::ToolController {
+	int mScrollStartX,mScrollStartY;
+	bool mDragStarted;
+	QCursor mDragCursor,mDraggingCursor;
+	
+public:
+	ScrollToolController(GVScrollPixmapView* view)
+	: ToolController(view)
+	, mScrollStartX(0), mScrollStartY(0)
+	, mDragStarted(false) {
+		mDragCursor=loadCursor("drag");
+		mDraggingCursor=loadCursor("dragging");
+	}
+	
+	void mousePressEvent(QMouseEvent* event) {
+		mScrollStartX=event->x();
+		mScrollStartY=event->y();
+		mView->viewport()->setCursor(mDraggingCursor);
+		mDragStarted=true;
+	}
+
+	void mouseMoveEvent(QMouseEvent* event) {
+		if (!mDragStarted) return;
+
+		int deltaX,deltaY;
+
+		deltaX=mScrollStartX - event->x();
+		deltaY=mScrollStartY - event->y();
+
+		mScrollStartX=event->x();
+		mScrollStartY=event->y();
+		mView->scrollBy(deltaX,deltaY);
+	}
+
+	void mouseReleaseEvent(QMouseEvent*) {
+		if (!mDragStarted) return;
+
+		mDragStarted=false;
+		mView->viewport()->setCursor(mDragCursor);
+		if (mView->fullScreen()) {
+			mView->startAutoHideTimer();
+		}
+		return;
+	}
+
+	void wheelEvent(QWheelEvent* event) {
+		mView->QScrollView::wheelEvent(event);
+	}
+
+	void updateCursor() {
+		if (mDragStarted) {
+			mView->viewport()->setCursor(mDraggingCursor);
+		} else {
+			mView->viewport()->setCursor(mDragCursor);
+		}
+	}
+};
+
+
+class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
+	QCursor mCursor;
+public:
+	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
+		mCursor=loadCursor("zoom");
+	}
+
+	void mouseReleaseEvent(QMouseEvent*) {
+		mView->autoZoom()->activate();
+	}
+	
+	void wheelEvent(QWheelEvent* event) {
+		if (event->delta()<0) {
+			if (mView->zoomIn()->isEnabled()) mView->zoomIn()->activate();
+		} else {
+			if (mView->zoomOut()->isEnabled()) mView->zoomOut()->activate();
+		}
+		event->accept();
+	}
+	
+	void updateCursor() {
+		mView->viewport()->setCursor(mCursor);
+	}
+};
+
+
+class GVScrollPixmapView::BrowseToolController : public GVScrollPixmapView::ToolController {
+	QCursor mCursor;
+public:
+	BrowseToolController(GVScrollPixmapView* view) : ToolController(view) {
+		mCursor=loadCursor("browse");
+	}
+
+	void mouseReleaseEvent(QMouseEvent*) {
+		mView->emitSelectNext();
+	}
+	
+	void wheelEvent(QWheelEvent* event) {
+		if (event->delta()<0) {
+			mView->emitSelectNext();
+		} else {
+			mView->emitSelectPrevious();
+		}
+		event->accept();
+	}
+	
+	void updateCursor() {
+		mView->viewport()->setCursor(mCursor);
+	}
+};
+
+
+//------------------------------------------------------------------------
+//
+// GVScrollPixmapView implementation
+//
+//------------------------------------------------------------------------
 GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase)
 , mGVPixmap(pixmap)
@@ -79,24 +218,18 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mTool(None)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
-, mMouseZoomAction(false)
-, mMenu(NULL)
 , mActionCollection(actionCollection)
 , mFullScreen(false)
-, mMouseToggleZoom(false)
-, mDragStarted(false)
 , mOperaLikePrevious(false)
 , mLastZoomBeforeAuto(1)
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
 
-	// Load cursors
-	mToolCursors[None]=ArrowCursor;
-	mToolCursors[Browse]=loadCursor("browse");
-	mToolCursors[Scroll]=loadCursor("drag");
-	mToolCursors[Zoom]=loadCursor("zoom");
-	mDraggingCursor=loadCursor("dragging");
+	mToolControllers[None]=new ToolController(this);
+	mToolControllers[Browse]=new BrowseToolController(this);
+	mToolControllers[Scroll]=new ScrollToolController(this);
+	mToolControllers[Zoom]=new ZoomToolController(this);
 	
 	// Init path label
 	mPathLabel->setBackgroundColor(white);
@@ -136,6 +269,14 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 }
 
 
+GVScrollPixmapView::~GVScrollPixmapView() {
+	delete mToolControllers[None];
+	delete mToolControllers[Browse];
+	delete mToolControllers[Scroll];
+	delete mToolControllers[Zoom];
+}
+
+
 void GVScrollPixmapView::slotURLChanged() {
 	mXOffset=0;
 	mYOffset=0;
@@ -171,6 +312,10 @@ void GVScrollPixmapView::slotModified() {
 	updateImageOffset();
 	updateZoomActions();
 	viewport()->repaint(false);
+}
+
+void GVScrollPixmapView::startAutoHideTimer() {
+	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
 
 
@@ -235,11 +380,11 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	viewport()->setMouseTracking(mFullScreen);
 	if (mFullScreen) {
 		viewport()->setBackgroundColor(black);
-		viewport()->setCursor(blankCursor);
+		startAutoHideTimer();
 	} else {
 		viewport()->setBackgroundMode(PaletteDark);
 		mAutoHideTimer->stop();
-		//viewport()->setCursor(mDrag); // FIXME
+		mToolControllers[mTool]->updateCursor();
 	}
 	
 	if (mFullScreen && mShowPathInFullScreen) {
@@ -365,43 +510,18 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 
 void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
-	if (event->button()==RightButton || mTool!=Scroll) return;
-
-	// We are about to start a drag
-	mScrollStartX=event->x();
-	mScrollStartY=event->y();
-	viewport()->setCursor(mDraggingCursor);
-	mDragStarted=true;
+	if (event->button()==RightButton) return;
+	mToolControllers[mTool]->mousePressEvent(event);
 }
 
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state());
-	
-	if (!mDragStarted) return;
-
-	int deltaX,deltaY;
-
-	deltaX=mScrollStartX - event->x();
-	deltaY=mScrollStartY - event->y();
-
-	mScrollStartX=event->x();
-	mScrollStartY=event->y();
-	scrollBy(deltaX,deltaY);
+	mToolControllers[mTool]->mouseMoveEvent(event);
 }
 
 
 void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
-	// If the mouse was released because of the end of a drag, end here
-	if (mDragStarted) {
-		mDragStarted=false;
-		viewport()->setCursor(mToolCursors[Scroll]);
-		if (mFullScreen) {
-			mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
-		}
-		return;
-	}
-	
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
@@ -409,6 +529,8 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			emit selectPrevious();
 			return;
 		}
+		mToolControllers[mTool]->mouseReleaseEvent(event);
+		mToolControllers[mTool]->updateCursor();
 		break;
 			
 	case Qt::RightButton:
@@ -461,11 +583,7 @@ void GVScrollPixmapView::selectTool(ButtonState state) {
 	if (mTool==mWheelBehaviours[modifier]) return;
 
 	mTool=mWheelBehaviours[modifier];
-	if (mTool==Scroll && mDragStarted) {
-		viewport()->setCursor(mDraggingCursor);
-	} else {
-		viewport()->setCursor(mToolCursors[mTool]);
-	}
+	mToolControllers[mTool]->updateCursor();
 }
 
 
@@ -479,38 +597,11 @@ void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
 		}
 		event->accept();
 		return;
-	}*/ //FIXME
+	}*/ //FIXME: Remove it or not?
 
-	// No auto zoom, use mWheelBehaviours
-	ButtonState modifier=ButtonState( event->state() & (ShiftButton | ControlButton | AltButton) );
-	switch (mWheelBehaviours[modifier]) {
-	case Browse:
-		if (event->delta()<0) {
-			emit selectNext();
-		} else {
-			emit selectPrevious();
-		}
-		event->accept();
-		break;
-
-	case Scroll:
-		QScrollView::wheelEvent(event);
-		break;
-
-	case Zoom:
-		if (event->delta()<0) {
-			if (mZoomIn->isEnabled()) mZoomIn->activate();
-		} else {
-			if (mZoomOut->isEnabled()) mZoomOut->activate();
-		}
-		event->accept();
-		break;
-
-	case None:
-		event->accept();
-		break;
-	}
+	mToolControllers[mTool]->wheelEvent(event);
 }
+
 
 //------------------------------------------------------------------------
 //
@@ -841,7 +932,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mWheelBehaviours[AltButton]=	WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_ALT,None) );
 
 	mTool=mWheelBehaviours[NoButton];
-	viewport()->setCursor(mToolCursors[mTool]);
+	mToolControllers[mTool]->updateCursor();
 }
 
 
