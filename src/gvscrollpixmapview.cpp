@@ -551,7 +551,7 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 		menu.insertItem( i18n("&Move To...") ),
 		this,SLOT(moveFile()) );
 	menu.connectItem(
-		menu.insertItem( i18n("&Delete") ),
+		menu.insertItem( i18n("&Delete...") ),
 		this,SLOT(deleteFile()) );
 	
 	menu.insertSeparator();

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>557</width>
-            <height>388</height>
+            <height>342</height>
         </rect>
     </property>
     <property name="caption">
@@ -381,7 +381,7 @@
                             <cstring>textLabel2</cstring>
                         </property>
                         <property name="text">
-                            <string>&lt;b&gt;Mouse Wheel Behavior&lt;/b&gt;</string>
+                            <string>&lt;b&gt;Mouse Wheel Behaviour&lt;/b&gt;</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">
@@ -599,7 +599,7 @@
                             <cstring>textLabel2_2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>&lt;b&gt;Moving &amp; Copying Files&lt;/b&gt;</string>
+                            <string>&lt;b&gt;Moving and copying files&lt;/b&gt;</string>
                         </property>
                     </widget>
                     <widget class="QCheckBox">
@@ -677,7 +677,7 @@
                             <cstring>textLabel2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>&lt;b&gt;Deleting Files&lt;/b&gt;</string>
+                            <string>&lt;b&gt;Deleting files&lt;/b&gt;</string>
                         </property>
                     </widget>
                     <widget class="QCheckBox">

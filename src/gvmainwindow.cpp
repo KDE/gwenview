@@ -502,7 +502,7 @@ void GVMainWindow::createActions() {
 
 	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
 
-	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
+	mDeleteFiles=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
 
 	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 
@@ -519,19 +519,19 @@ void GVMainWindow::createActions() {
 
 	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()),actionCollection() );
 
-	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
+	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
 
-	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
+	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
 
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
-
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
-
+	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
+	
+	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
+	
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
-
+	
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
-	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder & File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
+	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder And File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
 	
 	actionCollection()->readShortcutSettings();
 }

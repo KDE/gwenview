@@ -75,12 +75,12 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 	// Popup
 	mPopupMenu=new QPopupMenu(this);
-	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder..."),this,SLOT(makeDir()));
+	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder"),this,SLOT(makeDir()));
 	mPopupMenu->insertSeparator();
 	mPopupMenu->insertItem(i18n("Rename..."),this,SLOT(renameDir()));
-	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete"),this,SLOT(removeDir()));
+	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete..."),this,SLOT(removeDir()));
 	mPopupMenu->insertSeparator();
-	mPopupMenu->insertItem(i18n("Properties"),this,SLOT(showPropertiesDialog()));
+	mPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showPropertiesDialog()));
 
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
 		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
