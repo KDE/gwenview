@@ -65,7 +65,7 @@ private:
 		QCString format;
 		QDateTime timestamp;
 		mutable int age;
-		bool local_url;
+		bool fast_url;
 		void setSize();
 		bool reduceSize();
 		ImageData() {}; // stupid QMap

@@ -26,6 +26,7 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kio/global.h>
 
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION(3, 2, 0)
@@ -157,7 +158,7 @@ GVCache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDate
 : file( f )
 , timestamp( t )
 , age( 0 )
-, local_url( url.isLocalFile())
+, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
 {
 	file.detach(); // explicit sharing
 }
@@ -166,7 +167,7 @@ GVCache::ImageData::ImageData( const KURL& url, const QImage& im, const QCString
 : format( f )
 , timestamp( t )
 , age( 0 )
-, local_url( url.isLocalFile())
+, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
 {
 	frames.append( GVImageFrame( im, 0 ));
 }
@@ -176,7 +177,7 @@ GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const
 , format( f )
 , timestamp( t )
 , age( 0 )
-, local_url( url.isLocalFile())
+, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
 {
 }
 
@@ -209,7 +210,7 @@ int GVCache::ImageData::size() const {
 }
 
 bool GVCache::ImageData::reduceSize() {
-	if( !file.isNull() && local_url && !frames.isEmpty()) {
+	if( !file.isNull() && fast_url && !frames.isEmpty()) {
 		file = QByteArray();
 		return true;
 	}
@@ -222,7 +223,7 @@ bool GVCache::ImageData::reduceSize() {
 
 long long GVCache::ImageData::cost() const {
 	long long s = size();
-//	if( local_url && !file.isNull()) {
+//	if( fast_url && !file.isNull()) {
 //		s *= 100; // heavy penalty for storing local files
 //	}
 	static const int mod[] = { 50, 30, 20, 16, 12, 10 };
