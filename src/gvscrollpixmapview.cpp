@@ -92,7 +92,11 @@ public:
 	virtual void midButtonReleaseEvent(QMouseEvent*) {
 		mView->autoZoom()->activate();
 	}
-
+	
+	virtual void rightButtonReleaseEvent(QMouseEvent* event) {
+        mView->openContextMenu(event->globalPos());
+    }
+    
 	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
 	virtual void updateCursor() {
 		mView->viewport()->setCursor(ArrowCursor);
@@ -138,6 +142,10 @@ public:
 		event->accept();
 	}
 
+	void rightButtonReleaseEvent(QMouseEvent* event) {
+        zoomTo(event->pos(), false);
+	}
+	
 	void updateCursor() {
 		mView->viewport()->setCursor(mZoomCursor);
 	}
@@ -685,18 +693,8 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			if (QString(parent()->name()) == QString("KonqFrame") ||
-			    QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
-				//KPart
-				emit contextMenu();
-				return;
-			} else if (!mGVPixmap->isNull() || mFullScreen) {
-				// Don't show the menu if there's no image, except if we are in
-				// fullscreen mode, so that we always have a way to leave it.
-				openContextMenu(event->globalPos());
-				return;
-			}
-		}
+            mToolControllers[mTool]->rightButtonReleaseEvent(event);
+        }
 		break;
 
 	default: // Avoid compiler complain
@@ -878,13 +876,22 @@ void GVScrollPixmapView::restartAutoHideTimer() {
 
 
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
-	QPopupMenu menu(this);
+    //KPart
+    if (QString(parent()->name()) == QString("KonqFrame") ||
+        QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
+        emit contextMenu();
+        return;
+    }
+	
+    QPopupMenu menu(this);
+    bool noImage=mGVPixmap->filename().isEmpty();
+    bool validImage=!mGVPixmap->isNull();
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary
 	mActionCollection->action("fullscreen")->plug(&menu);
 
-	if (!mGVPixmap->isNull()) {
+	if (validImage) {
 		menu.insertSeparator();
 
 		mAutoZoom->plug(&menu);
@@ -892,14 +899,16 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 		mZoomOut->plug(&menu);
 		mResetZoom->plug(&menu);
 		mLockZoom->plug(&menu);
+    }
 
-		menu.insertSeparator();
+    menu.insertSeparator();
 
-		mActionCollection->action("first")->plug(&menu);
-		mActionCollection->action("previous")->plug(&menu);
-		mActionCollection->action("next")->plug(&menu);
-		mActionCollection->action("last")->plug(&menu);
+    mActionCollection->action("first")->plug(&menu);
+    mActionCollection->action("previous")->plug(&menu);
+    mActionCollection->action("next")->plug(&menu);
+    mActionCollection->action("last")->plug(&menu);
 
+    if (validImage) {
 		menu.insertSeparator();
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
@@ -915,27 +924,30 @@ void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
 
 		menu.insertItem(
 			i18n("External Tools"), externalToolContext->popupMenu());
+    }
+
+    if (!noImage) {
 		menu.insertSeparator();
+        
+        menu.connectItem(
+            menu.insertItem( i18n("&Rename...") ),
+            this,SLOT(renameFile()) );
+        menu.connectItem(
+            menu.insertItem( i18n("&Copy To...") ),
+            this,SLOT(copyFile()) );
+        menu.connectItem(
+            menu.insertItem( i18n("&Move To...") ),
+            this,SLOT(moveFile()) );
+        menu.connectItem(
+            menu.insertItem( i18n("&Delete") ),
+            this,SLOT(deleteFile()) );
 
-		menu.connectItem(
-			menu.insertItem( i18n("&Rename...") ),
-			this,SLOT(renameFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Copy To...") ),
-			this,SLOT(copyFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Move To...") ),
-			this,SLOT(moveFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Delete") ),
-			this,SLOT(deleteFile()) );
+        menu.insertSeparator();
 
-		menu.insertSeparator();
-
-		menu.connectItem(
-			menu.insertItem( i18n("Properties") ),
-			this,SLOT(showFileProperties()) );
-	}
+        menu.connectItem(
+            menu.insertItem( i18n("Properties") ),
+            this,SLOT(showFileProperties()) );
+    }
 
 	menu.exec(pos);
 }
