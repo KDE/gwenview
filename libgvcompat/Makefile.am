@@ -6,6 +6,6 @@ libgvcompat_la_SOURCES = \
 	kwidgetaction.cpp
 
 noinst_HEADERS = \
-	kwidgetaction.h
+	kwidgetaction.h kurlcompat.h
 
 METASOURCES = AUTO
