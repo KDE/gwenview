@@ -87,7 +87,8 @@ MainWindow::MainWindow()
 	createAccels();
 	createMenu();
 	createPixmapViewPopupMenu();
-	createToolBar();
+	createMainToolBar();
+	createAddressToolBar();
 
 // Slide show
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
@@ -564,7 +565,9 @@ void MainWindow::createPixmapViewPopupMenu() {
 
 
 
-void MainWindow::createToolBar() {
+void MainWindow::createMainToolBar() {
+	KToolBar* mainBar=new KToolBar(this,topDock(),true);
+	mainBar->setLabel(i18n("Main tool bar"));
 	mOpenParentDir->plug(toolBar());
 	mFileViewStack->selectFirst()->plug(toolBar());
 	mFileViewStack->selectPrevious()->plug(toolBar());
@@ -590,10 +593,13 @@ void MainWindow::createToolBar() {
 	mPixmapView->zoomOut()->plug(toolBar());
 	mPixmapView->resetZoom()->plug(toolBar());
 	mPixmapView->lockZoom()->plug(toolBar());
-	
-	toolBar()->insertLineSeparator();
-	
-	mURLEdit=new KHistoryCombo(toolBar());
+}
+
+
+void MainWindow::createAddressToolBar() {
+	KToolBar* addressBar=new KToolBar(this,topDock(),true);
+	addressBar->setLabel(i18n("Address tool bar"));
+	mURLEdit=new KHistoryCombo(addressBar);
 	mURLEdit->setDuplicatesEnabled(false);
 	
 	mURLEditCompletion=new KURLCompletion(KURLCompletion::DirCompletion);
@@ -605,7 +611,7 @@ void MainWindow::createToolBar() {
 	mURLEdit->setEditText(QDir::current().absPath());
 	mURLEdit->addToHistory(QDir::current().absPath());
 	mURLEdit->setDuplicatesEnabled(false);
-	toolBar()->setStretchableWidget(mURLEdit);
+	addressBar->setStretchableWidget(mURLEdit);
 }
 
 	
