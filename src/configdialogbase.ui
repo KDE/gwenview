@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>614</width>
+            <width>632</width>
             <height>299</height>
         </rect>
     </property>
@@ -550,6 +550,52 @@
                             <size>
                                 <width>0</width>
                                 <height>57</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Image View</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mSmoothScale</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use smooth scaling (slower)</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mAutoZoomEnlarge</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Enlarge small images when auto zoom is activated</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer11</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>61</height>
                             </size>
                         </property>
                     </spacer>

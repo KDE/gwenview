@@ -2,10 +2,11 @@
 - New features:
  - Added bookmarks.
  - Show hidden files.
- - Basic image manipulations:
-  - Rotate left and right.
-  - Mirror and flip.
+ - Image rotation and mirroring (using jpegtran when working on JPEG files to
+   perform lossless manipulations).
  - Image saving.
+ - The checkerboard used to show transparency is not zoomed anymore.
+ - You can now smooth scale images.
 - Fixes:
  - Moved the slide show settings to a separate dialog shown before starting it.
  - Image count in the status bar doesn't include archives anymore.

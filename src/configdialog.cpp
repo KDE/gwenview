@@ -96,6 +96,9 @@ mMainWindow(mainWindow)
 	mControlPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ControlButton]));
 	mShiftPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ShiftButton]));
 	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
+
+	// Image View tab
+	mSmoothScale->setChecked(pixmapView->smoothScale());
 	
 	// Misc tab
 	mExternalEditor->setURL(FileOperation::editor());
@@ -140,6 +143,9 @@ void ConfigDialog::slotApply() {
 	pixmapView->wheelBehaviours()[ShiftButton]=  GVScrollPixmapView::WheelBehaviour(mShiftPlusWheel->currentItem());
 	pixmapView->wheelBehaviours()[AltButton]=    GVScrollPixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
 
+	// Image View tab
+	pixmapView->setSmoothScale(mSmoothScale->isChecked());
+	
 	// Misc tab
 	FileOperation::setEditor(mExternalEditor->url());
 	GVJPEGTran::setProgramPath(mJPEGTran->url());

@@ -60,6 +60,8 @@ public:
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
 	void setShowPathInFullScreen(bool);
+	bool smoothScale() const { return mSmoothScale; }
+	void setSmoothScale(bool);
 	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
 
 
@@ -83,6 +85,7 @@ private:
 	QLabel* mPathLabel;
 	
 	bool mShowPathInFullScreen;
+	bool mSmoothScale;
 	WheelBehaviours mWheelBehaviours;
 
 	// Offset to center images

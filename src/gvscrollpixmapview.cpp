@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvscrollpixmapview.moc"
 
 const char* CONFIG_SHOW_PATH="show path";
+const char* CONFIG_SMOOTH_SCALE="smooth scale";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_WHEEL_BEHAVIOUR_NONE=   "wheel behaviour none";
@@ -152,6 +153,12 @@ void GVScrollPixmapView::slotModified() {
 // Properties
 // 
 //------------------------------------------------------------------------
+void GVScrollPixmapView::setSmoothScale(bool value) {
+	mSmoothScale=value;
+	viewport()->update();
+}
+
+
 void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
 	mShowPathInFullScreen=value;
 }
@@ -270,12 +277,17 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
+	if (mSmoothScale) {
+		image=image.smoothScale(updateRect.size());
+	} else {
+		image=image.scale(updateRect.size());
+	}
 
 	if (image.hasAlphaBuffer()) {
 		bool light;
 	
-		int imageXOffset=int(updateRect.x()/mZoom)-int(mXOffset/mZoom);
-		int imageYOffset=int(updateRect.y()/mZoom)-int(mYOffset/mZoom);
+		int imageXOffset=int(updateRect.x())-int(mXOffset);
+		int imageYOffset=int(updateRect.y())-int(mYOffset);
 		int imageWidth=image.width();
 		int imageHeight=image.height();
 		for (int y=0;y<imageHeight;++y) {
@@ -289,7 +301,6 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 		image.setAlphaBuffer(false);
 	}
 	
-	image=image.scale(updateRect.size());
 	QPixmap buffer(clipw,cliph);
 	{
 		QPainter bufferPainter(&buffer);
@@ -704,6 +715,7 @@ void GVScrollPixmapView::deleteFile() {
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
+	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -718,6 +730,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
+	config->writeEntry(CONFIG_SMOOTH_SCALE,mSmoothScale);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
