@@ -33,26 +33,66 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #include "gvexternaltoolmanager.h"
 
 
-GVExternalToolManager::GVExternalToolManager() {
-	mServices.setAutoDelete(true);
-	
-	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
-	QStringList::Iterator it;
-	for (it=dirs.begin(); it!=dirs.end(); ++it) {
-		loadDesktopFiles(*it);
-	}
+const char* DESKTOP_GROUP="Desktop Entry";
+const char* HIDDEN_ENTRY="Hidden";
+
+
+inline bool kServiceIsHidden(KService* service) {
+	QString path=service->desktopEntryPath();
+	KSimpleConfig config(path);
+	if (!config.hasGroup(DESKTOP_GROUP)) return false;
+	config.setGroup(DESKTOP_GROUP);
+	return config.readBoolEntry(HIDDEN_ENTRY);
 }
 
 
-void GVExternalToolManager::loadDesktopFiles(const QString& dirString) {
-	//TODO: Let the user hide some desktop files
+GVExternalToolManager::GVExternalToolManager() {
+
+	// Load system and user desktop files.
+	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
+	QString userBaseDir=KGlobal::dirs()->localkdedir();
+	
+	QStringList::ConstIterator it;
+	for (it=dirs.begin(); it!=dirs.end(); ++it) {
+		QString dir=*it;
+		if (dir.startsWith(userBaseDir)) {
+			loadDesktopFiles(mUserServices, *it);
+		} else {
+			loadDesktopFiles(mSystemServices, *it);
+		}
+	}
+
+	// Merge system and user desktop files into a temporary dictionary
+	QDict<KService> tmpDict=mSystemServices;
+	QDictIterator<KService> itDict(mUserServices);
+	for (; itDict.current(); ++itDict) {
+		QString name=itDict.currentKey();
+		KService* service=itDict.current();
+		if (tmpDict.find(name)) {
+			tmpDict.remove(name);
+		}
+		if (!kServiceIsHidden(service)) {
+			tmpDict.insert(name, service);
+		}
+	}
+
+	// Update mServices from the temporary dictionary
+	mServices.setAutoDelete(false);
+	itDict=QDictIterator<KService>(tmpDict);
+	for (; itDict.current(); ++itDict) {
+		mServices.append(itDict.current());
+	}	
+}
+
+
+void GVExternalToolManager::loadDesktopFiles(QDict<KService>& dict, const QString& dirString) {
 	QDir dir(dirString);
 	QStringList list=dir.entryList("*.desktop");
-	QStringList::Iterator it=list.begin();
+	QStringList::ConstIterator it=list.begin();
 	for (; it!=list.end(); ++it) {
 		KDesktopFile df( dir.filePath(*it) );
 		KService* service=new KService(&df);
-		mServices.append(service);
+		dict.insert(*it, service);
 	}
 }
 

@@ -21,6 +21,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #define GVEXTERNALTOOLMANAGER_H
 
 // Qt
+#include <qdict.h>
 #include <qptrlist.h>
 
 // KDE
@@ -39,9 +40,11 @@ public:
 
 private:
 	GVExternalToolManager();
-	void loadDesktopFiles(const QString&);
+	void loadDesktopFiles(QDict<KService>&, const QString&);
 	GVExternalToolContext* createContextInternal(QObject* parent, const KURL::List&, const QStringList& mimeTypes);
 
+	QDict<KService> mSystemServices;
+	QDict<KService> mUserServices;
 	QPtrList<KService> mServices;
 };
 
