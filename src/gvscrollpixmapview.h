@@ -115,7 +115,8 @@ private:
 	void updateZoomActions();
 
 private slots:
-	void updateView();
+	void slotURLChanged();
+	void slotModified();
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotResetZoom();

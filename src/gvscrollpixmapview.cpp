@@ -99,15 +99,17 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 
 	// Connect to some interesting signals
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		this,SLOT(updateView()) );
+		this,SLOT(slotURLChanged()) );
+
 	connect(mGVPixmap,SIGNAL(modified()),
-		this,SLOT(updateView()) );
+		this,SLOT(slotModified()) );
+	
 	connect(mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(hideCursor()) );
 }
 
 
-void GVScrollPixmapView::updateView() {
+void GVScrollPixmapView::slotURLChanged() {
 	mXOffset=0;
 	mYOffset=0;
 
@@ -134,6 +136,14 @@ void GVScrollPixmapView::updateView() {
 	}
 	
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
+}
+
+
+void GVScrollPixmapView::slotModified() {
+	updateContentSize();
+	updateImageOffset();
+	updateZoomActions();
+	viewport()->repaint(false);
 }
 
 
