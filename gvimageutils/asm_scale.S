@@ -1,5 +1,3 @@
-#include <asm_config.h>
-
 #ifdef HAVE_X86_MMX
 
 #ifdef __EMX__

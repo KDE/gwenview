@@ -1,5 +1,5 @@
 AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
-AM_CCASFLAGS = -I$(srcdir)
+AM_CCASFLAGS = -I$(srcdir) $(GV_ASM_DEFS)
 
 noinst_LTLIBRARIES = libgvimageutils.la
 

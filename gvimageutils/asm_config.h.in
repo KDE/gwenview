@@ -1,4 +1,0 @@
-#undef HAVE_X86_3DNOW
-#undef HAVE_X86_MMX
-#undef HAVE_X86_SSE
-#undef HAVE_X86_SSE2
