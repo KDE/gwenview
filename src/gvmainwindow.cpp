@@ -129,22 +129,43 @@ GVMainWindow::GVMainWindow()
 }
 
 
-GVMainWindow::~GVMainWindow() {
+bool GVMainWindow::queryClose() {
+	if (!mGVPixmap->saveIfModified()) return false;
+	
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config,CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
-
-	writeDockConfig(config,CONFIG_DOCK_GROUP);
-	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
+
+	// Don't store dock layout if only the image dock is visible. This avoid
+	// saving layout when in "fullscreen" or "image only" mode.
+	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
+		writeDockConfig(config,CONFIG_DOCK_GROUP);
+	}
+	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
+
+	// If we are in fullscreen mode, we need to make the needed GUI elements
+	// visible before saving the window settings.
+	if (mToggleFullScreen->isChecked()) {
+		statusBar()->show();
+		
+		if (toolBar()->area()) {
+			toolBar()->area()->show();
+		} else {
+			toolBar()->show();
+		}
+		leftDock()->show();
+		rightDock()->show();
+		topDock()->show();
+		bottomDock()->show();
+		
+		menuBar()->show();
+	}
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
-}
 
-
-bool GVMainWindow::queryClose() {
-	return mGVPixmap->saveIfModified();
+	return true;
 }
 
 
@@ -274,13 +295,6 @@ void GVMainWindow::pixmapLoading() {
 void GVMainWindow::toggleDirAndFileViews() {
 	KConfig* config=KGlobal::config();
 	
-	/*if (mToggleDirAndFileViews->isChecked()) {
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
-		makeDockInvisible(mFileDock);
-		makeDockInvisible(mFolderDock);
-	} else {
-		readDockConfig(config,CONFIG_DOCK_GROUP);
-	}*/
 	if (mFileDock->isVisible() || mFolderDock->isVisible()) {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);

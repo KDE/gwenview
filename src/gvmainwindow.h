@@ -48,7 +48,6 @@ class GVMainWindow : public KDockMainWindow {
 Q_OBJECT
 public:
 	GVMainWindow();
-	~GVMainWindow();
 
 	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
 	GVScrollPixmapView* pixmapView() const { return mPixmapView; }
