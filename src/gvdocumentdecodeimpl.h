@@ -77,10 +77,9 @@ private:
 
 private slots:
 	void start();
-	void startLoading();
-	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
-	void slotResult(KIO::Job*);
 	void slotStatResult(KIO::Job*);
+	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
+	void slotGetResult(KIO::Job*);
 	void decodeChunk();
 	void slotImageDecoded();
 	void slotDecoderThreadFailed();
