@@ -142,7 +142,8 @@ void GVCache::checkMaxSize() {
 		if( size <= mMaxSize ) {
 			break;
 		}
-		if( !(*max).reduceSize()) mImages.remove( max );
+//		if( !(*max).reduceSize()) mImages.remove( max );
+		mImages.remove( max );
 	}
 }
 
@@ -221,9 +222,9 @@ bool GVCache::ImageData::reduceSize() {
 
 long long GVCache::ImageData::cost() const {
 	long long s = size();
-	if( local_url && !file.isNull()) {
-		s *= 100; // heavy penalty for storing local files
-	}
+//	if( local_url && !file.isNull()) {
+//		s *= 100; // heavy penalty for storing local files
+//	}
 	static const int mod[] = { 50, 30, 20, 16, 12, 10 };
 	if( age <= 5 ) {
 		return s * 10 / mod[ age ];
