@@ -21,12 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GVDIRVIEW_H
 
 #include <kfiletreeview.h>
-#include <kfiletreebranch.h>
 
 class QPopupMenu;
 class QShowEvent;
-
-class KFileTreeBranch;
 
 class GVDirView : public KFileTreeView {
 Q_OBJECT
@@ -53,9 +50,9 @@ protected slots:
 private slots:
 	void slotExecuted(QListViewItem*);
 
-	// Do not call this one slotPopulateFinished, it will clash with
-	// KFileTreeView::slotPopulateFinished.
-	void slotGVDirViewPopulateFinished(KFileTreeViewItem*);
+	// Do not name this slot "slotPopulateFinished", it will clash with
+	// "KFileTreeView::slotPopulateFinished".
+	void slotDirViewPopulateFinished(KFileTreeViewItem*);
 
 // Drag'n'Drop
 	void autoOpenDropTarget();

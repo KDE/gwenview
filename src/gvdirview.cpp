@@ -69,9 +69,9 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mRootBranch->root()->setExpandable(true);
 
 	connect(mHomeBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotGVDirViewPopulateFinished(KFileTreeViewItem*) ) );
+		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotGVDirViewPopulateFinished(KFileTreeViewItem*) ) );
+		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
 	// Popup
 	mPopupMenu=new QPopupMenu(this);
@@ -227,7 +227,7 @@ void GVDirView::slotExecuted(QListViewItem* item)
 }
 
 
-void GVDirView::slotGVDirViewPopulateFinished(KFileTreeViewItem* item) {
+void GVDirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 	QListViewItem* child;
 	KURL url=item->url();
 
