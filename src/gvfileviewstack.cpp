@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aur�ien G�eau
@@ -233,6 +233,9 @@ void GVFileViewStack::setFocus() {
 
 void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 	mFileNameToSelect=fileName;
+	if (mDirLister->isFinished()) {
+		browseToFileNameToSelect();
+	}
 }
 
 
@@ -256,26 +259,20 @@ bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::setURL(const KURL& url) {
+void GVFileViewStack::setDirURL(const KURL& url) {
 	LOG(url.prettyURL());
+	if ( mDirURL.equals(url,true) ) {
+		LOG("Same URL");
+		return;
+	}
 	mDirLister->clearError();
-	KURL dirURL = url;
-	if (!dirURL.fileName(false).isEmpty()) {
-		dirURL.setFileName( QString::null );
-	}
-	
-	LOG(dirURL.path() + " - " + url.filename(false));
-	if ( !mDirURL.equals(dirURL,true) ) {
-		mDirURL=dirURL;
-		currentFileView()->setShownFileItem(0L);
-		mFileNameToSelect=url.filename(false);
-		mDirLister->openURL(mDirURL);
-		updateActions();
-	} else {
-		if( !mSelecting ) {
-			browseTo(findItemByFileName(url.filename(false)));
-		}
-	}
+	mDirURL=url;
+	currentFileView()->setShownFileItem(0L);
+	mFileNameToSelect=QString::null;
+	mDirLister->openURL(mDirURL);
+	emit urlChanged(mDirURL);
+	emit directoryChanged(mDirURL);
+	updateActions();
 }
 
 
@@ -366,10 +363,7 @@ void GVFileViewStack::slotViewExecuted() {
 			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
 		}
 		tmp.adjustPath(1);
-
-		emit urlChanged(tmp);
-		emit directoryChanged(tmp);
-		updateActions();
+		setDirURL(tmp);
 	} else {
 		emitURLChanged();
 	}
@@ -661,6 +655,10 @@ KURL GVFileViewStack::url() const {
 	return item->url();
 }
 
+KURL GVFileViewStack::dirURL() const {
+	return mDirURL;
+}
+
 
 uint GVFileViewStack::selectionSize() const {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
@@ -914,6 +912,11 @@ KFileItem* GVFileViewStack::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
 	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
+	}
+	if (item) {
+		LOG("item->url(): " << item->url().prettyURL());
+	} else {
+		LOG("No item found");
 	}
 	return item;
 }

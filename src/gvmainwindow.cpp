@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aur�ien G�eau
@@ -167,7 +167,7 @@ GVMainWindow::GVMainWindow()
 
 	// Backend
 	mDocument=new GVDocument(this);
-	mGVHistory=new GVHistory(mDocument, actionCollection());
+	mGVHistory=new GVHistory(actionCollection());
 	// GUI
 	createWidgets();
 	createActions();
@@ -188,23 +188,28 @@ GVMainWindow::GVMainWindow()
 		// Command line
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-		KURL url;
 		if (args->count()==0) {
+			KURL url;
 			url.setPath( QDir::currentDirPath() );
+			mFileViewStack->setDirURL(url);
 		} else {
-			url=args->url(0);
-			if (args->isSet("f")) {
-				mToggleFullScreen->activate();
+			bool fullscreen=args->isSet("f");
+			if (fullscreen) mToggleFullScreen->activate();
+			KURL url=args->url(0);
+
+			if( !urlIsDirectory(this, url)) {
+				if (!fullscreen) mToggleBrowse->activate();
+
+				mDocument->setURL(url);
+				KURL dirURL(url);
+				dirURL.setFileName(QString::null);
+				mFileViewStack->setDirURL(dirURL);
+				mFileViewStack->setFileNameToSelect(url.fileName());
 			} else {
-				if( !urlIsDirectory(this, url)) {
-					mToggleBrowse->activate();
-				} else {
-					url.adjustPath( +1 ); // add trailing /
-				}
+				mFileViewStack->setDirURL(url);
 			}
+			updateLocationURL();
 		}
-		// Go to requested file
-		mDocument->setURL(url);
 	}
 }
 
@@ -265,11 +270,20 @@ bool GVMainWindow::queryClose() {
 }
 
 void GVMainWindow::saveProperties( KConfig* cfg ) {
-	cfg->writeEntry( CONFIG_SESSION_URL, mDocument->url().url());
+	cfg->writeEntry( CONFIG_SESSION_URL, mFileViewStack->url().url());
 }
 
 void GVMainWindow::readProperties( KConfig* cfg ) {
-	mDocument->setURL( KURL( cfg->readEntry( CONFIG_SESSION_URL )));
+	KURL url(cfg->readEntry(CONFIG_SESSION_URL));
+	if( urlIsDirectory(this, url)) {
+		mFileViewStack->setDirURL(url);
+	} else {
+		mDocument->setURL(url);
+		KURL dirURL(url);
+		dirURL.setFileName(QString::null);
+		mFileViewStack->setDirURL(dirURL);
+		mFileViewStack->setFileNameToSelect(url.fileName());
+	}
 }
 
 //-----------------------------------------------------------------------
@@ -323,7 +337,7 @@ void GVMainWindow::setURL(const KURL& url) {
 
 void GVMainWindow::updateLocationURL() {
 	// show the picture URL in the location bar only when not browsing
-	KURL locationURL = mToggleBrowse->isChecked() ? mDocument->dirURL() : mDocument->url();
+	KURL locationURL = mToggleBrowse->isChecked() ? mFileViewStack->dirURL() : mDocument->url();
 	mURLEdit->setEditText(locationURL.prettyURL(0,KURL::StripFileProtocol));
 	mURLEdit->addToHistory(locationURL.prettyURL(0,KURL::StripFileProtocol));
 }
@@ -342,7 +356,7 @@ void GVMainWindow::goUpTo(int id) {
 	} else {
 		childURL=mDocument->dirURL();
 	}
-	mDocument->setDirURL(url);
+	mFileViewStack->setDirURL(url);
 	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
 
@@ -355,7 +369,7 @@ void GVMainWindow::goUpTo(int id) {
 void GVMainWindow::openHomeDir() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
-	mDocument->setURL(url);
+	mFileViewStack->setDirURL(url);
 }
 
 
@@ -440,6 +454,8 @@ void GVMainWindow::openFile() {
 	if (!url.isValid()) return;
 
 	mDocument->setURL(url);
+	mFileViewStack->setDirURL(url.directory());
+	mFileViewStack->setFileNameToSelect(url.filename());
 }
 
 
@@ -642,26 +658,33 @@ void GVMainWindow::escapePressed() {
 void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	LOG(oldURL.prettyURL(0,KURL::StripFileProtocol) << " to " << newURL.prettyURL(0,KURL::StripFileProtocol));
 
-	KURL url(mDocument->url());
-	if (!oldURL.isParentOf(url) ) return;
+	KURL url(mFileViewStack->dirURL());
+	if (!oldURL.isParentOf(url) ) {
+		LOG(oldURL.prettyURL() << " is not a parent of " << url.prettyURL());
+		return;
+	}
 
 	QString oldPath=oldURL.path();
 	LOG("current path: " << url.path() );
 	QString path=newURL.path() + url.path().mid(oldPath.length());
 	LOG("new path: " << path);
 	url.setPath(path);
-	mDocument->setURL(url);
+	mFileViewStack->setDirURL(url);
 }
 
 
 void GVMainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
-	mDocument->setURL(url);
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->setFocus();
-	} else if (mPixmapView->isVisible()) {
-		mPixmapView->setFocus();
+	if( urlIsDirectory(this, url)) {
+		mFileViewStack->setDirURL(url);
+	} else {
+		mDocument->setURL(url);
+		KURL dirURL(url);
+		dirURL.setFileName(QString::null);
+		mFileViewStack->setDirURL(dirURL);
+		mFileViewStack->setFileNameToSelect(url.fileName());
 	}
+	mFileViewStack->setFocus();
 }
 
 void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
@@ -891,9 +914,9 @@ void GVMainWindow::createActions() {
 	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), 0, true);
 
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
-		mDocument,SLOT(setDirURL(const KURL&)) );
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
 
-	connect(mDocument,SIGNAL(loaded(const KURL&)),
+	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 
 	// Window
@@ -945,7 +968,7 @@ void GVMainWindow::createConnections() {
 
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
-		mDocument,SLOT(setDirURL(const KURL&)) );
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
 
 	connect(mDirView, SIGNAL(dirRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
@@ -961,6 +984,13 @@ void GVMainWindow::createConnections() {
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mDocument,SLOT(setURL(const KURL&)) );
+	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
+		this,SLOT(setURL(const KURL&)) );
+	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+		mDirView,SLOT(setURL(const KURL&)) );
+	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+		mGVHistory,SLOT(addURLToHistory(const KURL&)) );
+
 	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
@@ -969,19 +999,19 @@ void GVMainWindow::createConnections() {
 		mToggleBrowse,SLOT(activate()) );
 	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
 		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
-	// Don't connect mDocument::loaded to mDirView. mDirView will be
-	// updated _after_ the file view is done, since it's less important to the
-	// user
-	connect(mFileViewStack,SIGNAL(completedURLListing(const KURL&)),
-		mDirView,SLOT(setURL(const KURL&)) );
 
+	// GVHistory connections
+	connect(mGVHistory, SIGNAL(urlChanged(const KURL&)),
+		mFileViewStack, SLOT(setDirURL(const KURL&)) );
+	
 	// GVDocument connections
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(setURL(const KURL&)) );
-	connect(mDocument,SIGNAL(newURLSet(const KURL&)),
-		mFileViewStack,SLOT(setURL(const KURL&)) );
+	// FIXME: Is this still necessary?
+	/*connect(mDocument,SIGNAL(newURLSet(const KURL&)),
+		mFileViewStack,SLOT(setURL(const KURL&)) );*/
 	connect(mDocument,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),

@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -32,27 +32,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class KToolBarPopupAction;
 class KActionCollection;
 
-class GVDocument;
-
 typedef QValueList<KURL> HistoryList;
 
 class GVHistory : public QObject {
 Q_OBJECT
 	
 public:
-	GVHistory(GVDocument*, KActionCollection*);
+	GVHistory(KActionCollection*);
 	~GVHistory();
+
+signals:
+	void urlChanged(const KURL&);
+
+public slots:
+	void addURLToHistory(const KURL&);
 
 private:
 	KToolBarPopupAction* mGoBack;
 	KToolBarPopupAction* mGoForward;
 	HistoryList mHistoryList;
-	GVDocument* mDocument;
 	HistoryList::Iterator mPosition;
 	bool mMovingInHistory;
 	
 private slots:
-	void updateHistoryList(const KURL&);
 	void fillGoBackMenu();
 	void fillGoForwardMenu();
 	void goBack();

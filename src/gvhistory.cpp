@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -29,14 +29,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdguiitem.h>
 
 // Local
-#include "gvdocument.h"
 #include "gvhistory.moc"
 
 
 const unsigned int MAX_HISTORY_SIZE=12;
 
-GVHistory::GVHistory(GVDocument* document, KActionCollection* actionCollection) {
-	mDocument=document;
+GVHistory::GVHistory(KActionCollection* actionCollection) {
 	mPosition=mHistoryList.end();
 	mMovingInHistory=false;
 
@@ -59,9 +57,6 @@ GVHistory::GVHistory(GVDocument* document, KActionCollection* actionCollection) 
 		this, SLOT(fillGoBackMenu()) );
 	connect(mGoForward->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoForwardMenu()) );
-
-	connect(mDocument, SIGNAL(loaded(const KURL&) ),
-		this, SLOT(updateHistoryList(const KURL&)) );
 }
 
 
@@ -69,7 +64,7 @@ GVHistory::~GVHistory() {
 }
 
 
-void GVHistory::updateHistoryList(const KURL& url2) {
+void GVHistory::addURLToHistory(const KURL& url2) {
 	KURL url( url2 );
 	url.setFileName( QString::null );
 	if (!mMovingInHistory) {
@@ -126,7 +121,7 @@ void GVHistory::goForward() {
 void GVHistory::goBackTo(int id) {
 	for (;id>0; --id) --mPosition;
 	mMovingInHistory=true;
-	mDocument->setDirURL(*mPosition);
+	emit urlChanged(*mPosition);
 	mMovingInHistory=false;
 }
 
@@ -134,6 +129,6 @@ void GVHistory::goBackTo(int id) {
 void GVHistory::goForwardTo(int id) {
 	for (;id>0; --id) ++mPosition;
 	mMovingInHistory=true;
-	mDocument->setDirURL(*mPosition);
+	emit urlChanged(*mPosition);
 	mMovingInHistory=false;
 }
