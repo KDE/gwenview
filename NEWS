@@ -5,7 +5,7 @@
  - Image smoothing is much more configurable (By Lubos Lunak).
  - KParts will now remember their settings.
 - Fixes:
- - Don't crash when loading 8 bit PNG files with transparency.
+ - Fixed several image loading bugs.
  - Make sure small and medium size thumbnails do not look jagged.
  - Work-around a Qt bug which caused the window title to not come back after
    leaving fullscreen mode and reduces flickering (By Lubos Lunak).
