@@ -568,9 +568,9 @@ void GVMainWindow::showKeyDialog() {
 	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
 	for( ; it!=itEnd; ++it ) {
-		KIPI::Plugin* plugin=(*it)->plugin;
+		KIPI::Plugin* plugin=(*it)->plugin();
 		if (plugin) {
-			dialog.insert(plugin->actionCollection(), (*it)->name);
+			dialog.insert(plugin->actionCollection(), (*it)->name());
 		}
 	}
 #endif
@@ -969,7 +969,7 @@ void GVMainWindow::loadPlugins() {
 	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
 	for( ; it!=itEnd; ++it ) {
-		KIPI::Plugin* plugin = (*it)->plugin;
+		KIPI::Plugin* plugin = (*it)->plugin();
 		Q_ASSERT(plugin);
 		if (!plugin) continue;
 
