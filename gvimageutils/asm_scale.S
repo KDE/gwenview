@@ -1,3 +1,7 @@
+#include <asm_config.h>
+
+#ifdef HAVE_X86_MMX
+
 #ifdef __EMX__
 /* Due to strange behaviour of as.exe we use this macros */
 /* For all OS/2 coders - please use PGCC to compile this code */
@@ -802,3 +806,5 @@ PR_(mimageScale_mmx_AARGBA):
 	ret
 
 SIZE(mimageScale_mmx_AARGBA)
+
+#endif

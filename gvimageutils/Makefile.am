@@ -1,4 +1,5 @@
-INCLUDES = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
+AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
+AM_CCASFLAGS = -I$(srcdir)
 
 noinst_LTLIBRARIES = libgvimageutils.la
 
@@ -6,11 +7,8 @@ libgvimageutils_la_SOURCES = \
 	gvimageutils.cpp \
 	jpegcontent.cpp \
 	scale.cpp \
-	transupp.c
-
-if GV_USE_MMX
-libgvimageutils_la_SOURCES += asm_scale.S
-endif
+	transupp.c \
+	asm_scale.S
 
 noinst_HEADERS = \
 	orientation.h \
