@@ -27,7 +27,6 @@ Copyright (C) 2000-2002 Aurélien Gâteau
 // KDE includes
 #include <kurl.h>
 
-class QMovie;
 
 /**
  * A pixmap class with zooming capacities
@@ -35,6 +34,11 @@ class QMovie;
  */
 class GVPixmap : public QObject {
 Q_OBJECT
+	QPixmap mPixmap;
+	KURL mDirURL;
+	QString mFilename;
+	bool load();
+
 public:
 	GVPixmap(QObject*);
 	~GVPixmap();
@@ -65,17 +69,6 @@ signals:
  * Also emitted if the image could not be loaded.
  */
 	void urlChanged(const KURL&,const QString&);
-
-private slots:
-    void slotMovieStatusChanged(int status);
-
-private:
-	QPixmap mPixmap;
-	KURL mDirURL;
-	QString mFilename;
-    QMovie* mMovie;
-
-	void load();
 };
 
 
