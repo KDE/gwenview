@@ -114,9 +114,6 @@
             <property name="text">
                 <string>Print fi&amp;lename below image</string>
             </property>
-            <property name="accel">
-                <string>Alt+L</string>
-            </property>
             <property name="checked">
                 <bool>true</bool>
             </property>
@@ -150,9 +147,6 @@
                     <property name="text">
                         <string>Shrink image to &amp;fit, if necessary</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+F</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -163,9 +157,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Scale to:</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
