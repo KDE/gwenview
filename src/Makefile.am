@@ -15,7 +15,9 @@ gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
 				   gvexternaltooldialogbase.ui gvexternaltooldialog.cpp \
 				   gvhistory.cpp
 
-gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) $(LIBJPEG) ../libgvexif/libgvexif.la
+gwenview_LDADD   = \
+	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
+	$(LIBJPEG) ../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la
 
 # the library search path.
 gwenview_LDFLAGS = $(all_libraries)

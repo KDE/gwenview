@@ -72,6 +72,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "statusbarprogress.h"
 #include "gvmetaedit.h"
 
+
+#if KDE_VERSION < 0x30100
+#include "libgvcompat/kwidgetaction.h"
+#endif
+
 #include "gvmainwindow.moc"
 
 
@@ -627,7 +632,8 @@ void GVMainWindow::createActions() {
 	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
-#if defined KDE_IS_VERSION && KDE_IS_VERSION(3,1,90)
+//(0x3015A == 3.1.90)
+#if KDE_VERSION>=0x3015A
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection());
 #else
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
