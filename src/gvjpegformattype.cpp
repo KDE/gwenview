@@ -39,6 +39,7 @@ extern "C" {
 #include <qdatetime.h>
 
 // KDE
+#include <kdebug.h>
 #include <kglobal.h>
 
 // Local
@@ -63,15 +64,11 @@ static const int MAX_BUFFER = 32768;
 struct GVJPEGErrorManager : public jpeg_error_mgr {
 	jmp_buf jmp_buffer;
 
-	GVJPEGErrorManager() {
-		error_exit=errorExitCallBack;
-	}
-
 	static void errorExitCallBack (j_common_ptr cinfo) {
 		GVJPEGErrorManager* myerr = (GVJPEGErrorManager*) cinfo->err;
 		char buffer[JMSG_LENGTH_MAX];
 		(*cinfo->err->format_message)(cinfo, buffer);
-		qWarning("%s", buffer);
+		kdWarning() << buffer << endl;
 		longjmp(myerr->jmp_buffer, 1);
 	}
 };
@@ -96,16 +93,20 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 	bool do_progressive;
 
 	GVJPEGSourceManager() {
-		jpeg_source_mgr::init_source = gvJPEGDummyDecompress;
-		jpeg_source_mgr::fill_input_buffer = gvFillInputBuffer;
-		jpeg_source_mgr::skip_input_data = gvSkipInputData;
-		jpeg_source_mgr::resync_to_restart = jpeg_resync_to_restart;
-		jpeg_source_mgr::term_source = gvJPEGDummyDecompress;
+		// jpeg_source_mgr fields
+		init_source = gvJPEGDummyDecompress;
+		fill_input_buffer = gvFillInputBuffer;
+		skip_input_data = gvSkipInputData;
+		resync_to_restart = jpeg_resync_to_restart;
+		term_source = gvJPEGDummyDecompress;
+		
 		bytes_in_buffer = 0;
+		next_input_byte = jpeg_buffer;
+		
+		// GVJPEGSourceManager fields
 		valid_buffer_length = 0;
 		skip_input_bytes = 0;
 		at_eof = 0;
-		next_input_byte = jpeg_buffer;
 		final_pass = false;
 		decoding_done = false;
 	}
@@ -125,7 +126,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 			src->jpeg_buffer[0] = (JOCTET) 0xFF;
 			src->jpeg_buffer[1] = (JOCTET) JPEG_EOI;
 			src->bytes_in_buffer = 2;
-                        src->next_input_byte = (JOCTET *) src->jpeg_buffer;
+			src->next_input_byte = (JOCTET *) src->jpeg_buffer;
 #ifdef BUFFER_DEBUG
 			qDebug("...returning true!");
 #endif
@@ -212,8 +213,8 @@ private:
 GVJPEGFormat::GVJPEGFormat() {
 	memset(&mDecompress, 0, sizeof(mDecompress));
 	mDecompress.err = jpeg_std_error(&mErrorManager);
+	mErrorManager.error_exit=GVJPEGErrorManager::errorExitCallBack;
 	jpeg_create_decompress(&mDecompress);
-	mDecompress.err = jpeg_std_error(&mErrorManager);
 	mDecompress.src = &mSourceManager;
 	mState = INIT;
 }
@@ -241,7 +242,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 #endif
 		return length;
 	}
-
 
 	if(setjmp(mErrorManager.jmp_buffer)) {
 #ifdef JPEG_DEBUG
