@@ -806,10 +806,10 @@ void GVScrollPixmapView::updateImageOffset() {
 	int zpixWidth=int(mGVPixmap->width() * mZoom);
 	int zpixHeight=int(mGVPixmap->height() * mZoom);
 
-	if (zpixWidth>viewWidth) {
+	if (zpixWidth>viewWidth && hScrollBarMode()!=AlwaysOff) {
 		viewHeight-=horizontalScrollBar()->height();
 	}
-	if (zpixHeight>viewHeight) {
+	if (zpixHeight>viewHeight && vScrollBarMode()!=AlwaysOff) {
 		viewWidth-=verticalScrollBar()->width();
 	}
 	

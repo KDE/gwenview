@@ -1,4 +1,4 @@
-200x.xx.xx - v1.1.0
+2004.xx.xx - v1.1.0
 - New features:
  - Double-clicking an image in the file view will open it in fullscreen.
  - Better print dialog.
@@ -11,6 +11,7 @@
  - When holding down Shift to zoom, keep the same area of the image under the
    cursor.
  - Nicer drag cursor.
+ - Hopefully fixed every cases where the image was not centered in the view.
 
 2003.12.07 - v1.0.0
 - New features:
