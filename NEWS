@@ -1,4 +1,6 @@
 2005.xx.xx - v1.2.0pre2
+- New features:
+ - A documentation has been written.
 - Fixes:
  - Mouse wheel zooming is now consistent with other KDE applications.
  - Show rotation and mirroring buttons on main toolbar.
