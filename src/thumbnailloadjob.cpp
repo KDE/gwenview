@@ -324,7 +324,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize size)
+ThumbnailLoadJob::ThumbnailLoadJob(const QValueList<const KFileItem*>* items, ThumbnailSize size)
 : KIO::Job(false), mState( STATE_NEXTTHUMB ), mThumbnailSize(size), mSuspended( false )
 {
 	LOG("");
@@ -333,14 +333,8 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 		KIcon::NoGroup, ThumbnailSize(ThumbnailSize::SMALL).pixelSize());
 
 	// Look for images and store the items in our todo list
-	QPtrListIterator<KFileItem> it(*items);
-	for (;it.current(); ++it) {
-		KFileItem* item=it.current();
-		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
-			mItems << item;
-		}
-	}
-	if (mItems.empty()) return;
+	Q_ASSERT(!items->empty());
+	mItems=*items;
 
 	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
 	

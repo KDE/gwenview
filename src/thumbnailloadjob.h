@@ -83,7 +83,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob( const KFileItemList* itemList,ThumbnailSize size);
+	ThumbnailLoadJob(const QValueList<const KFileItem*>* itemList,ThumbnailSize size);
 	virtual ~ThumbnailLoadJob();
 
 	/**

@@ -255,7 +255,19 @@ void GVFileThumbnailView::startThumbnailUpdate() {
 
 void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
-	d->mThumbnailLoadJob = new ThumbnailLoadJob(list, d->mThumbnailSize);
+
+	QValueList<const KFileItem*> imageList;
+	QPtrListIterator<KFileItem> it(*list);
+	for (;it.current(); ++it) {
+		KFileItem* item=it.current();
+		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+			imageList << item;
+		}
+	}
+	if (imageList.empty()) return;
+
+	
+	d->mThumbnailLoadJob = new ThumbnailLoadJob(&imageList, d->mThumbnailSize);
 
 	connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*, const QPixmap&, const QSize&)),
 		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&, const QSize&)) );
@@ -263,7 +275,7 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 		this, SLOT(slotUpdateEnded()) );
 
 	Q_ASSERT(!d->mProgressWidget);
-	d->mProgressWidget=new ProgressWidget(this, list->count() );
+	d->mProgressWidget=new ProgressWidget(this, imageList.count() );
 	connect(d->mProgressWidget->stopButton(), SIGNAL(clicked()),
 		this, SLOT(stopThumbnailUpdate()) );
 	d->mProgressWidget->show();
