@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qfileinfo.h>
+#include <qguardedptr.h>
 #include <qpaintdevicemetrics.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -77,6 +78,7 @@ public:
 	QImage mImage;
 	const char* mImageFormat;
 	GVDocumentImpl* mImpl;
+	QGuardedPtr<KIO::StatJob> mStatJob;
 };
 
 
@@ -90,6 +92,7 @@ GVDocument::GVDocument(QObject* parent)
 	d=new GVDocumentPrivate;
 	d->mModified=false;
 	d->mImpl=new GVDocumentEmptyImpl(this);
+	d->mStatJob=0L;
 	
 	// Register formats here to make sure they are always enabled
 	KImageIO::registerFormats();
@@ -153,22 +156,28 @@ void GVDocument::setURL(const KURL& paramURL) {
 		}
 	}
 
-	
-	KIO::StatJob* job = KIO::stat( localURL, !localURL.isLocalFile() );
-	connect( job, SIGNAL( result (KIO::Job *) ),
+	if (!d->mStatJob.isNull()) {
+		d->mStatJob->kill();
+	}
+	d->mStatJob = KIO::stat( localURL, !localURL.isLocalFile() );
+	connect( d->mStatJob, SIGNAL( result (KIO::Job *) ),
 	   this, SLOT( slotStatResult (KIO::Job *) ) );
 }
 
 
-void GVDocument::slotStatResult(KIO::Job* _job) {
+void GVDocument::slotStatResult(KIO::Job* job) {
 	kdDebug() << k_funcinfo << endl;
-	if (_job->error()) return;
+	Q_ASSERT(d->mStatJob==job);
+	if (d->mStatJob!=job) {
+		kdWarning() << k_funcinfo << "We did not get the right job!\n";
+		return;
+	}
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+	if (d->mStatJob->error()) return;
 
 	bool isDir=false;
-	KIO::StatJob* job= static_cast<KIO::StatJob *>(_job);
-	KIO::UDSEntry entry = job->statResult();
-	KURL localURL=job->url();
-	kdDebug() << k_funcinfo << localURL.path() << endl;
+	KIO::UDSEntry entry = d->mStatJob->statResult();
+	KURL localURL=d->mStatJob->url();
 	
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
@@ -177,7 +186,6 @@ void GVDocument::slotStatResult(KIO::Job* _job) {
 			break;
 		}
 	}
-	kdDebug() << k_funcinfo << localURL.path() << " " << isDir << endl;
 
 	if (isDir) {
 		d->mDirURL=localURL;
