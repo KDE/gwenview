@@ -220,7 +220,7 @@ void FileOpRealDeleteObject::operator()() {
 #if KDE_VERSION > 0x30300
 				KStdGuiItem::del()
 #else
-				i18n("Delete")
+				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
 				);
 		} else {
@@ -231,7 +231,7 @@ void FileOpRealDeleteObject::operator()() {
 #if KDE_VERSION > 0x30300
 				KStdGuiItem::del()
 #else
-				i18n("Delete")
+				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
 				);
 		}

@@ -547,7 +547,7 @@ void GVDirView::removeDir() {
 #if KDE_VERSION >= 0x30300
 		KStdGuiItem::del()
 #else
-		i18n("Delete")
+		KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
 #endif
 		);
 	if (response==KMessageBox::Cancel) return;
