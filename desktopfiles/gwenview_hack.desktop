@@ -2,9 +2,12 @@
 Encoding=UTF-8
 Name=Gwenview - hack
 Name[da]=Gwenview - hak
+Name[et]=Gwenview - häkk
 Name[sv]=Gwenview
 GenericName=Image Viewer - hack
 GenericName[da]=Billedfremviser - hak
+GenericName[de]=Bildbetrachter - hack
+GenericName[et]=Piltide vaataja - häkk
 GenericName[pt]=Visualizador de Imagens - hack
 GenericName[pt_BR]=Visualizador de Imagens - hack
 GenericName[sv]=Bildvisare
@@ -15,3 +18,4 @@ Icon=gwenview_hack
 Type=Application
 Commend[ko]=간단한 이미지 보기 프로그램
 Categories=Qt;KDE;Graphics
+MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbm;image/x-xpm
