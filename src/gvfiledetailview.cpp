@@ -38,6 +38,7 @@
 #include <kurldrag.h>
 
 // Our includes
+#include "gvarchive.h"
 #include "gvfiledetailviewitem.h"
 #include "gvfiledetailview.moc"
 
@@ -73,8 +74,6 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 												const QPoint &, int )),
 			 this, SLOT( slotActivateMenu( QListViewItem *, const QPoint& )));
 
-	// FIXME: Do not start a multi selection when going to previous or next
-	// image
 	QListView::setSelectionMode( QListView::Extended );
 	connect( this, SIGNAL( selectionChanged() ),
 			 SLOT( slotSelectionChanged() ));
@@ -220,24 +219,24 @@ void GVFileDetailView::updateView( const KFileItem *i )
 
 	item->init();
 	setSortingKey( item, i );
-
-	//item->repaint(); // only repaints if visible
 }
+
 
 void GVFileDetailView::setSortingKey( GVFileDetailViewItem *item,
 									 const KFileItem *i )
 {
 	// see also setSorting()
 	QDir::SortSpec spec = KFileView::sorting();
+	bool isDirOrArchive=i->isDir() || GVArchive::fileItemIsArchive(i);
 
 	if ( spec & QDir::Time )
 		item->setKey( sortingKey( i->time( KIO::UDS_MODIFICATION_TIME ),
-								  i->isDir(), spec ));
+								  isDirOrArchive, spec ));
 	else if ( spec & QDir::Size )
-		item->setKey( sortingKey( i->size(), i->isDir(), spec ));
+		item->setKey( sortingKey( i->size(), isDirOrArchive, spec ));
 
 	else // Name or Unsorted
-		item->setKey( sortingKey( i->text(), i->isDir(), spec ));
+		item->setKey( sortingKey( i->text(), isDirOrArchive, spec ));
 }
 
 
@@ -299,22 +298,9 @@ void GVFileDetailView::slotSortingChanged( int col )
 	KFileItem *item;
 	KFileItemListIterator it( *items() );
 
-	if ( sortSpec & QDir::Time ) {
-		for ( ; (item = it.current()); ++it )
-			viewItem(item)->setKey( sortingKey( item->time( KIO::UDS_MODIFICATION_TIME ), item->isDir(), sortSpec ));
-	}
-
-	else if ( sortSpec & QDir::Size ) {
-		for ( ; (item = it.current()); ++it )
-			viewItem(item)->setKey( sortingKey( item->size(), item->isDir(),
-												sortSpec ));
-	}
-	else { // Name or Unsorted -> use column text
-		for ( ; (item = it.current()); ++it ) {
-			GVFileDetailViewItem *i = viewItem( item );
-			i->setKey( sortingKey( i->text(mSortingCol), item->isDir(),
-								   sortSpec ));
-		}
+	for ( ; (item = it.current() ); ++it ) {
+		GVFileDetailViewItem* thumbItem=viewItem( item );
+		if (thumbItem) setSortingKey(thumbItem,item);
 	}
 
 	KListView::setSorting( mSortingCol, !reversed );
