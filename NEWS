@@ -1,13 +1,14 @@
 2003.xx.xx - v1.0.0
-- Fixes:
- - If auto-zoom is on, make sure the zoom is updated after rotating an image.
- - Fixed crash when loading XCF images if Gwenview was compiled with gcc 3.3.1.
- - Use standard KDE icons for zoom actions.
- - New icons for image operations.
+- New features:
  - Show a wait icon for not-generated-yet thumbnails (inspired from Nautilus
    thumbnail view).
  - Show a broken icon for broken images.
- - Change working directory to current folder before running an external tool.
+- Fixes:
+ - If auto-zoom is on, make sure the zoom is updated after rotating an image.
+ - Fixed crash when loading XCF images if Gwenview was compiled with gcc 3.3.1.
+ - Before running an external tool, change working directory to current folder.
+ - Use standard KDE icons for zoom actions.
+ - New icons for image operations.
  - New magnifier cursor.
 
 2003.11.16 - v1.0.0pre4
