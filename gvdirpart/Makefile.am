@@ -18,3 +18,4 @@ gv_DATA = gvdirpart.rc
 # Install the .desktop file into the kde_services directory
 kde_services_DATA = gvdirpart.desktop
 
+KDE_ICON = imagegallery
