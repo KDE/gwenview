@@ -621,7 +621,10 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
 
 	if (smooth) {
-		image=image.smoothScale(updateRect.size());
+		if( mZoom != 1.0 ) {
+			image=image.convertDepth(32);
+			image=image.smoothScale(updateRect.size());
+		}
 	} else {
 		image=image.scale(updateRect.size());
 		if( mSmoothScale && mZoom != 1.0 ) {
