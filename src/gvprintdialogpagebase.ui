@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>350</width>
-            <height>218</height>
+            <width>451</width>
+            <height>208</height>
         </rect>
     </property>
     <property name="caption">
@@ -130,17 +130,6 @@
             </property>
             <property name="accel">
                 <string></string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>mBlackWhite</cstring>
-            </property>
-            <property name="text">
-                <string>Print image in &amp;black &amp;&amp; white</string>
-            </property>
-            <property name="accel">
-                <string>Alt+B</string>
             </property>
         </widget>
         <widget class="QGroupBox">
@@ -280,8 +269,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>mScale</sender>

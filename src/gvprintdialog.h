@@ -55,7 +55,6 @@ private:
     void setScaleWidth( int pixels );
     void setScaleHeight( int pixels );
     
-    bool mChanged;
     GVPixmap *mGVPixmap;
 	GVPrintDialogPageBase* mContent;
 };

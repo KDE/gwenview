@@ -53,7 +53,6 @@ GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->addWidget( mContent );
 
-    mChanged = false;
     connect(mContent->mWidth, SIGNAL( valueChanged( int )), SLOT( setWValue( int )));
     connect(mContent->mHeight, SIGNAL( valueChanged( int )), SLOT( setHValue( int )));
     connect(mContent->mKeepRatio, SIGNAL( toggled( bool )), SLOT( toggleRatio( bool )));
@@ -69,7 +68,6 @@ void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
     opts["app-gwenview-position"] = mContent->mPosition->currentText();
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
     opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
-	opts["app-gwenview-blackWhite"] = mContent->mBlackWhite->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-shrinkToFit"] = mContent->mShrinkToFit->isChecked() ? STR_TRUE : STR_FALSE;
 
     opts["app-gwenview-scale"] = mContent->mScale->isChecked() ? STR_TRUE : STR_FALSE;
@@ -84,7 +82,6 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
     mContent->mPosition->setCurrentItem( opts["app-gwenview-position"] );
 	mContent->mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
 	mContent->mAddComment->setChecked( opts["app-gwenview-printComment"] == STR_TRUE );
-	mContent->mBlackWhite->setChecked( opts["app-gwenview-blackWhite"] == STR_TRUE );
 	mContent->mShrinkToFit->setChecked( opts["app-gwenview-shrinkToFit"] == STR_TRUE );
     
     mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
@@ -99,54 +96,51 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
     if ( ok )
         setScaleHeight( val );
 
-//    if ( mScale->isChecked() == mShrinkToFit->isChecked() )
-//        mShrinkToFit->setChecked( !mScale->isChecked() );
-
-    //toggleRatio(mContent->mKeepRatio->isChecked() );
     toggleRatio(mContent->mScale->isChecked() );
 }
 
-int GVPrintDialogPage::scaleWidth() const
-{
+int GVPrintDialogPage::scaleWidth() const {
     return mContent->mWidth->value();
 }
 
-int GVPrintDialogPage::scaleHeight() const
-{
+int GVPrintDialogPage::scaleHeight() const {
     return mContent->mHeight->value();
 }
 
-void GVPrintDialogPage::setScaleWidth( int value )
-{
+void GVPrintDialogPage::setScaleWidth( int value ) {
     mContent->mWidth->setValue(value);
 }
 
-void GVPrintDialogPage::setScaleHeight( int value )
-{
+void GVPrintDialogPage::setScaleHeight( int value ) {
     mContent->mHeight->setValue(value);
 }
 
 // SLOTS
 void GVPrintDialogPage::setHValue (int value){
+    mContent->mWidth->blockSignals(true);
+    mContent->mHeight->blockSignals(true);
+
     if (mContent->mKeepRatio->isChecked()) {
-        if (!mChanged) {
             int w = (mGVPixmap->width() * value) / mGVPixmap->height()  ;
             mContent->mWidth->setValue( w ? w : 1);                            
-        }
-        mChanged = (!mChanged);
     }
     mContent->mHeight->setValue(value);     
+
+    mContent->mWidth->blockSignals(false);
+    mContent->mHeight->blockSignals(false);
+    
 }
 
 void GVPrintDialogPage::setWValue (int value){    
+    mContent->mWidth->blockSignals(true);
+    mContent->mHeight->blockSignals(true);
     if (mContent->mKeepRatio->isChecked()) {
-        if (!mChanged) {
             int h = (mGVPixmap->height() * value) / mGVPixmap->width();            
             mContent->mHeight->setValue( h ? h : 1);
-        }
-        mChanged = (!mChanged);
     }
     mContent->mWidth->setValue(value);    
+    mContent->mWidth->blockSignals(false);
+    mContent->mHeight->blockSignals(false);
 }
     
 void GVPrintDialogPage::toggleRatio(bool enable) {

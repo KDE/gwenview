@@ -331,23 +331,6 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 	QString t = "true";
 	QString f = "false";
 
-	// Black & white print?
-	if ( pPrinter->option( "app-gwenview-blackWhite" ) != f) {
-		image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-	} else {
-		QString col = pPrinter->option("OutputType");
-		if (col == "Grayscale") {
-			//image = image.convertDepth( 8, Qt::MonoOnly | Qt::OrderedDither );
-			kdWarning() << "GrayScale not yet supported! \n";
-			//BTW it seems to be managed directly from kprinter
-		} else if (col == "BlackAndWhite")
-			image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-
-		//KPrinter::ColorMode col = pPrinter->colorMode();
-		//ColorMode GrayScale = QPrinter::GrayScale, Color = QPrinter::Color
-		//image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
-	}
-
 	int alignment;
 	QString align = pPrinter->option("app-gwenview-position");
 	if (align == "Central-Left") {
@@ -372,7 +355,7 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 	}
 
 	int filenameOffset = 0;
-    const int MARGIN = metrics.logicalDpiX() / 2; // half-inch margin
+    const int MARGIN = metrics.logicalDpiY() / 2; // half-inch margin
 	bool printFilename = pPrinter->option( "app-gwenview-printFilename" ) != f;
 	if ( printFilename ) {
 		filenameOffset = fm.lineSpacing() + 14;
@@ -438,7 +421,7 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 		if ( !fname.isEmpty() ) {
 			int fw = fm.width( fname );
 			int x = (w - fw)/2;
-			int y = metrics.height() - filenameOffset/2 -commentOffset/2;
+			int y = metrics.height() - filenameOffset/2 -commentOffset/2 - MARGIN;
 			p->drawText( x, y, fname );
 		}
 	}
@@ -447,7 +430,7 @@ void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
 		if ( !comm.isEmpty() ) {
 			int fw = fm.width( comm );
 			int x = (w - fw)/2;
-			int y = metrics.height() - commentOffset/2;
+			int y = metrics.height() - commentOffset/2 - MARGIN;
 			p->drawText( x, y, comm );
 		}
 	}
