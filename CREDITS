@@ -1,62 +1,15 @@
-- Miscellaneous contributions -----------------------------------------------
-
-- Ian Koenig <iguy@ionsphere.org>
-First RPM spec file.
-
-- Christian A Strømmen <number1@realityx.net>
-File for integration in Konqueror folder context menu.
-
-- Michael Spanier <mail@michael-spanier.de>
-Patch for mouse navigation (v0.7.0).
-
-- Jean Philippe Martin <jeanphilippemartin@club-internet.fr> 
-Multiple bug reports and suggestions.
-
-- Avinash Chopde <avinash@acm.org>
-Bug reports and file operation patch (v0.9.2).
-Multiple nice suggestions.
-
-- Frank Becker <ff@telus.net>
-Patch for fast JPEG thumbnails (v0.13.0).
-
-- Andreas Pfaller <apfaller@yahoo.com.au>
-Patch adding an option to prevent Gwenview from loading the first image when
-entering a folder (v0.15.0).
-
-- Renchi Raju <renchi@green.tam.uiuc.edu>
-Patch to make Gwenview use the same thumbnail folder as Konqueror 3 (v0.15.0).
-
-- Tudor Calin <tudor_calin@mymail.ro>
-Added an address bar (v0.16.0).
-History support (v1.0.0).
-
-- Meni Livne <livne@kde.org>
-Patched toolbar layout for RTL languages (v0.16.0).
-
-- Marco Gazzetta <mililani@pobox.com>
-Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
-(v0.16.0).
-
-- GeniusR13 <geniusr13@gmx.net>
-Patch to fix compilation with KDE 3.0 (v0.16.1).
-
-- Jos van den Oever <jos@vandenoever.info>
-Implemented the meta-data dock window (v1.0.0).
-Patch to toggle auto-zoom when clicking on the image (v1.0.0).
-
-- Angelo Naselli <random_lx@yahoo.com>
-Printing support (v1.0.0).
-
-
 - Past packagers ------------------------------------------------------------
 
 These fine people contributed binary packages:
 
+Red Hat:
+  Ian Koenig <iguy@ionsphere.org>
+
 SuSE 7.2:
   Dario Abatianni <eisfuchs@tigress.com>
 
-Red Hat:
-  Ian Koenig <iguy@ionsphere.org>
+SuSE 9.0:
+  Marco Puszina <marco@hackerwelt.de>
 
 
 - Translators ---------------------------------------------------------------
