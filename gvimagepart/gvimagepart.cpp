@@ -72,29 +72,18 @@ KAboutData* GVImagePart::createAboutData() {
 	return aboutData;
 }
 
-bool GVImagePart::openFile() {
-	//m_file is inherited from super-class
-	//it is a QString with the path of the file
-	//remote files are first downloaded and saved in /tmp/kde-user/
-	KURL url(m_file);
-
-	if (!url.isValid())  {
-		return false;
-	}
-	if (!url.isLocalFile())  {
-		return false;
-	}
-
+bool GVImagePart::openURL(const KURL& url) {
 	mDocument->setURL(url);
-	return true;
+    emit setWindowCaption(url.prettyURL());
+    return true;
 }
 
 QString GVImagePart::filePath() {
 	return m_file;
 }
 
-void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& /*filename*/) {
-	QString caption = QString(m_url.filename() + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
+void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
+	QString caption = QString("%1 - %2x%3").arg(filename).arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 }
 

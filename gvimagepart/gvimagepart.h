@@ -71,13 +71,11 @@ public:
 	 */
 	void print();
 
-protected:
-	/** Open the file whose path is stored in the member variable
-	 * m_file and return true on success, false on failure.
-	 */
-	virtual bool openFile();
+public slots:
+	virtual bool openURL(const KURL& url);
 
 protected slots:
+    virtual bool openFile() { return false; }
 	/**
 	 * Sets Konqueror's caption with setWindowCaption()
 	 * called by loaded() signal in GVDocument

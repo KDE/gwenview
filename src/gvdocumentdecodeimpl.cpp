@@ -21,13 +21,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qfile.h>
-#include <qmemarray.h>
+#include <qguardedptr.h>
 #include <qimage.h>
+#include <qmemarray.h>
 #include <qstring.h>
 #include <qtimer.h>
 
 // KDE
 #include <kdebug.h>
+#include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
 
@@ -37,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentdecodeimpl.moc"
 
 
-const int DECODE_CHUNK_SIZE=4096;
+const unsigned int DECODE_CHUNK_SIZE=4096;
 
 
 //---------------------------------------------------------------------
@@ -53,11 +55,12 @@ public:
 	bool mUpdatedDuringLoad;
 	QString mTempFilePath;
 	QByteArray mRawData;
-	int mReadSize;
+	unsigned int mReadSize;
 	QImageDecoder mDecoder;
 	QTimer mDecoderTimer;
 	QRect mLoadChangedRect;
 	QTime mLoadCompressChangesTime;
+    QGuardedPtr<KIO::Job> mJob;
 };
 
 
@@ -83,31 +86,34 @@ GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 }
 
 void GVDocumentDecodeImpl::startLoading() {
-	// FIXME: Incremental download
-	if (!KIO::NetAccess::download(mDocument->url(), d->mTempFilePath)) {
-		emit finished(false);
-		return;
-	}
-	
-	const char* format=QImage::imageFormat(d->mTempFilePath);
-	setImageFormat(format);
-	if (!format) {
-		emit finished(false);
-		KIO::NetAccess::removeTempFile(d->mTempFilePath);
-		return;
-	}
-	
-	// FIXME: Read file in chunks too
-	QFile file(d->mTempFilePath);
-	file.open(IO_ReadOnly);
-	QDataStream stream(&file);
-	d->mRawData.resize(file.size());
-	stream.readRawBytes(d->mRawData.data(),d->mRawData.size());
-	d->mReadSize=0;
+    d->mJob=KIO::get(mDocument->url(), false, false);
 
-	d->mDecoderTimer.start(0, false);
-	d->mLoadChangedRect = QRect();
+    connect(d->mJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+        this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
+    
+    connect(d->mJob, SIGNAL(canceled(KIO::Job*)),
+        this, SLOT(slotCanceled()) );
+
+    d->mRawData.resize(0);
+    d->mReadSize=0;
+    d->mLoadChangedRect=QRect();
 	d->mLoadCompressChangesTime.start();
+}
+
+
+void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+    if (chunk.size()>0) {
+        int oldSize=d->mRawData.size();
+        d->mRawData.resize(oldSize + chunk.size());
+        memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
+        loadChunk();
+    } else {
+        if (d->mReadSize < d->mRawData.size()) {
+            // No more data, but the image has not been fully decoded yet. We
+            // will load the rest with a timer
+            d->mDecoderTimer.start(0, false);
+        }
+    }
 }
 
 
@@ -116,14 +122,20 @@ void GVDocumentDecodeImpl::loadChunk() {
 		(const uchar*)(d->mRawData.data()+d->mReadSize),
 		QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize));
 
-	// Continue loading
+	// There's more to load
 	if (decodedSize>0) {
 		d->mReadSize+=decodedSize;
 		return;
 	}
 
-	// Loading finished
+    // We decoded all the available data, but the job is still running
+    if (decodedSize==0 && !d->mJob.isNull()) {
+        return;
+    }
+
+	// Loading finished or failed
 	bool ok=decodedSize==0;
+
 	// If async loading failed, try synchronous loading
 	QImage image;
 	if (!ok) {
@@ -162,6 +174,7 @@ void GVDocumentDecodeImpl::loadChunk() {
 	
 	// Now we switch to a loaded implementation
 	QCString format(mDocument->imageFormat());
+    //FIXME: What to do with mTempFilePath?
 	if (format=="JPEG") {
 		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mRawData, d->mTempFilePath));
 	} else {
