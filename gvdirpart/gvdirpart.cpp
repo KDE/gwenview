@@ -77,6 +77,7 @@ K_EXPORT_COMPONENT_FACTORY( libgvdirpart /*library name*/, GVDirFactory )
 
 GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent, const char* name,
 		     const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
+	GVDirFactory::instance()->iconLoader()->addAppDir( "gwenview");
 	setInstance( GVDirFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
 
@@ -111,10 +112,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
 	mSplitter->setSizes(splitterSizes);
-
-	// KIconLoader is weird.  If I preload them here it remembers about them for the following KAction.
-	KIconLoader iconLoader = KIconLoader("gwenview");
-	iconLoader.loadIconSet("slideshow", KIcon::Toolbar);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
 	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));

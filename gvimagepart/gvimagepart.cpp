@@ -67,6 +67,7 @@ K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
 
 GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent,
 			 const char* name, const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
+	GVImageFactory::instance()->iconLoader()->addAppDir( "gwenview");
 	setInstance( GVImageFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
 
@@ -99,8 +100,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 		this,SLOT(slotSelectNext()), actionCollection(), "next");
 	updateNextPrevious();
 
-	KIconLoader iconLoader = KIconLoader("gwenview");
-	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 

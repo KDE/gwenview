@@ -104,11 +104,6 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "2leftarrow":"2rightarrow", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
-	// KIconLoader is weird.  If I preload them here it remembers about them later on even for the KPart.
-	KIconLoader iconLoader = KIconLoader("gwenview");
-	iconLoader.loadIconSet("gvnext", KIcon::Toolbar);
-	iconLoader.loadIconSet("gvprevious", KIcon::Toolbar);
-
 	mSelectPrevious=new KAction(i18n("&Previous"),
 		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
