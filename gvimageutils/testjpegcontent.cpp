@@ -34,8 +34,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 using namespace std;
 
 const char* ORIENT6_FILE="orient6.jpg";
+const char* ORIENT6_COMMENT="a comment";
 const char* ORIENT1_FILE="test_orient1.jpg";
 const char* ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
+const char* ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 
 int main() {
@@ -45,6 +47,7 @@ int main() {
 	result=content.load(ORIENT6_FILE);
 	Q_ASSERT(result);
 	Q_ASSERT(content.orientation() == 6);
+	Q_ASSERT(content.comment() == ORIENT6_COMMENT);
 	
 	QImage thumbnail=content.thumbnail();
 	result=thumbnail.save(THUMBNAIL_FILE, "JPEG");
@@ -58,7 +61,8 @@ int main() {
 	Q_ASSERT(result);
 	Q_ASSERT(content.orientation() == GVImageUtils::NORMAL);
 
-	content.transform(GVImageUtils::VFLIP);
+	content.transform(GVImageUtils::VFLIP, true, ORIENT1_VFLIP_COMMENT);
+	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
 	result=content.save(ORIENT1_VFLIP_FILE);
 	Q_ASSERT(result);
 }

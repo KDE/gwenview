@@ -18,7 +18,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-
 // Qt
 #include <qcstring.h>
 #include <qfile.h>
@@ -27,18 +26,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kdebug.h>
-#include <kfilemetainfo.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
-#include <ktempfile.h>
 
 // Local
 #include "gvimageutils/jpegcontent.h"
 #include "gvimageutils/gvimageutils.h"
 #include "gvdocumentjpegloadedimpl.moc"
 
-
-//#define DEBUG_COMMENT
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -47,56 +42,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define LOG(x) ;
 #endif
 
-const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
-const char* JPEG_EXIF_COMMENT="Comment";
-
 
 class GVDocumentJPEGLoadedImplPrivate {
 public:
 	GVImageUtils::JPEGContent mJPEGContent;
+	bool mCommentModified;
 	QString mComment;
 	GVDocument::CommentState mCommentState;
 	QString mLocalFilePath;
 
-
-	void loadComment() {
-		KFileMetaInfo metaInfo=KFileMetaInfo(mLocalFilePath);
-		KFileMetaInfoItem commentItem;
-
-		mCommentState=GVDocument::NONE;
-
-		if (metaInfo.isEmpty()) return;
-
-		commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-		mCommentState=QFileInfo(mLocalFilePath).isWritable()?GVDocument::WRITABLE:GVDocument::READ_ONLY;
-		mComment=QString::fromUtf8( commentItem.string().ascii() );
-
-#ifdef DEBUG_COMMENT 
-		// Some code to debug
-		QStringList groups, keys;
-		groups = metaInfo.groups();
-		for (uint i=0; i<groups.size(); ++i) {
-			keys = metaInfo[groups[i]].keys();
-			kdDebug() << groups[i] << endl;
-			for (uint j=0; j<keys.size(); ++j) {
-				kdDebug() << "- " << keys[j] << endl;
-			}
-		}
-#endif
-	}
-
-	void saveComment(const QString& path) {
-		KFileMetaInfo metaInfo=KFileMetaInfo(path);
-		KFileMetaInfoItem commentItem;
-		if (metaInfo.isEmpty()) return;
-
-		commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-
-		if (commentItem.isEditable()) {
-			commentItem.setValue(mComment);
-		}
-		metaInfo.applyChanges();
-	}
 };
 
 
@@ -108,6 +62,7 @@ GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteAr
 : GVDocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new GVDocumentJPEGLoadedImplPrivate;
+	d->mCommentModified=false;
 	d->mJPEGContent.loadFromData(rawData);
 	if (mDocument->url().isLocalFile()) {
 		d->mLocalFilePath=document->url().path();
@@ -127,7 +82,8 @@ void GVDocumentJPEGLoadedImpl::init() {
 		d->mJPEGContent.transform(orientation);
 	}
 
-	d->loadComment();
+	d->mCommentState=QFileInfo(d->mLocalFilePath).isWritable()?GVDocument::WRITABLE:GVDocument::READ_ONLY;
+	d->mComment=d->mJPEGContent.comment();
 	if (!mDocument->url().isLocalFile()) {
 		QFile::remove(d->mLocalFilePath);
 	}
@@ -142,7 +98,9 @@ GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
 
 
 void GVDocumentJPEGLoadedImpl::transform(GVImageUtils::Orientation orientation) {
-	d->mJPEGContent.transform(orientation);
+	// Little optimization, update the comment if necessary
+	d->mJPEGContent.transform(orientation, d->mCommentModified, d->mComment);
+	d->mCommentModified=false;
 	setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
 }
 
@@ -155,6 +113,12 @@ QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format)
 			d->mJPEGContent.setThumbnail( GVImageUtils::scale(
 				mDocument->image(), 128, 128, GVImageUtils::SMOOTH_FAST, QImage::ScaleMin));
 		}
+
+		if (d->mCommentModified) {
+			LOG("Comment must be saved");
+			d->mJPEGContent.transform(GVImageUtils::NORMAL, true, d->mComment);
+			d->mCommentModified=false;
+		}
 		
 		LOG("JPEG Lossless save");
 		if (!d->mJPEGContent.save(file)) {
@@ -164,8 +128,6 @@ QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format)
 		QString msg=GVDocumentLoadedImpl::localSave(file, format);
 		if (!msg.isNull()) return msg;
 	}
-
-	d->saveComment(file->name());
 	
 	return QString::null;
 }
@@ -176,6 +138,7 @@ QString GVDocumentJPEGLoadedImpl::comment() const {
 }
 
 void GVDocumentJPEGLoadedImpl::setComment(const QString& comment) {
+	d->mCommentModified=true;
 	d->mComment=comment;
 }
 

@@ -39,11 +39,13 @@ class JPEGContent {
 public:
 	JPEGContent();
 	~JPEGContent();
-
+	
 	Orientation orientation() const;
 	void resetOrientation();
 
-	void transform(Orientation);
+	QString comment() const;
+	
+	void transform(Orientation, bool setComment=false, const QString& comment=QString::null);
 
 	QImage thumbnail() const;
 	void setThumbnail(const QImage&);

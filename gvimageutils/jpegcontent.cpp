@@ -35,7 +35,6 @@ extern "C" {
 
 // KDE
 #include <kdebug.h>
-#include <ktempfile.h>
 
 // Exif
 #include "libgvexif/exif-data.h"
@@ -49,7 +48,74 @@ extern "C" {
 
 namespace GVImageUtils {
 
+const int INMEM_DST_DELTA=4096;
 	
+// In-memory data source manager for libjpeg
+struct inmem_src_mgr : public jpeg_source_mgr {
+	QByteArray* mInput;
+};
+
+void inmem_init_source(j_decompress_ptr cinfo) {
+	inmem_src_mgr* src=(inmem_src_mgr*)(cinfo->src);
+	src->next_input_byte=(const JOCTET*)( src->mInput->data() );
+	src->bytes_in_buffer=src->mInput->size();
+}
+
+int inmem_fill_input_buffer(j_decompress_ptr /*cinfo*/) {
+	return false;
+}
+
+void inmem_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
+	if (num_bytes<=0) return;
+	Q_ASSERT(num_bytes>=long(cinfo->src->bytes_in_buffer));
+	cinfo->src->next_input_byte+=num_bytes;
+	cinfo->src->bytes_in_buffer-=num_bytes;
+}
+
+void inmem_term_source(j_decompress_ptr /*cinfo*/) {
+}
+
+// In-memory data destination manager for libjpeg
+struct inmem_dest_mgr : public jpeg_destination_mgr {
+	QByteArray* mOutput;
+
+	void dump() {
+		kdDebug() << "dest_mgr:\n";
+		kdDebug() << "- next_output_byte: " << next_output_byte << endl;
+		kdDebug() << "- free_in_buffer: " << free_in_buffer << endl;
+		kdDebug() << "- output size: " << mOutput->size() << endl;
+	}
+};
+
+void inmem_init_destination(j_compress_ptr cinfo) {
+	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
+	if (dest->mOutput->size()==0) {
+		bool result=dest->mOutput->resize(INMEM_DST_DELTA);
+		Q_ASSERT(result);
+	}
+	dest->free_in_buffer=dest->mOutput->size();
+	dest->next_output_byte=(JOCTET*)(dest->mOutput->data() );
+}
+
+int inmem_empty_output_buffer(j_compress_ptr cinfo) {
+	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
+	bool result=dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
+	Q_ASSERT(result);
+	dest->next_output_byte=(JOCTET*)( dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA );
+	dest->free_in_buffer=INMEM_DST_DELTA;
+
+	return true;
+}
+
+void inmem_term_destination(j_compress_ptr cinfo) {
+	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
+	int finalSize=dest->next_output_byte - (JOCTET*)(dest->mOutput->data());
+	Q_ASSERT(finalSize>=0);
+	dest->mOutput->resize(finalSize);
+}
+
+
+
 struct JPEGContent::Private {
 	QByteArray mRawData;
 	ExifData* mExifData;
@@ -59,6 +125,37 @@ struct JPEGContent::Private {
 	Private() {
 		mExifData=0;
 		mOrientationEntry=0;
+	}
+
+	void setupInmemSource(j_decompress_ptr cinfo) {
+		Q_ASSERT(!cinfo->src);
+		inmem_src_mgr* src = (inmem_src_mgr*)
+			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+										sizeof(inmem_src_mgr));
+		cinfo->src=(struct jpeg_source_mgr*)(src);
+
+		src->init_source=inmem_init_source;
+		src->fill_input_buffer=inmem_fill_input_buffer;
+		src->skip_input_data=inmem_skip_input_data;
+		src->resync_to_restart=jpeg_resync_to_restart;
+		src->term_source=inmem_term_source;
+
+		src->mInput=&mRawData;
+	}
+
+	
+	void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData) {
+		Q_ASSERT(!cinfo->dest);
+		inmem_dest_mgr* dest = (inmem_dest_mgr*)
+			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+										sizeof(inmem_dest_mgr));
+		cinfo->dest=(struct jpeg_destination_mgr*)(dest);
+
+		dest->init_destination=inmem_init_destination;
+		dest->empty_output_buffer=inmem_empty_output_buffer;
+		dest->term_destination=inmem_term_destination;
+
+		dest->mOutput=outputData;
 	}
 };
 
@@ -132,8 +229,73 @@ void JPEGContent::resetOrientation() {
 }
 
 
-// FIXME: This should use in-memory jpeg readers and writers
-void JPEGContent::transform(Orientation orientation) {
+QString JPEGContent::comment() const {
+	QString theComment;
+	struct jpeg_decompress_struct srcinfo;
+	jpeg_saved_marker_ptr mark;
+	
+	// Init JPEG structs 
+	struct jpeg_error_mgr jsrcerr;
+
+	// Initialize the JPEG decompression object with default error handling
+	srcinfo.err = jpeg_std_error(&jsrcerr);
+	jpeg_create_decompress(&srcinfo);
+
+	// Specify data source for decompression
+	d->setupInmemSource(&srcinfo);
+
+	// Find the marker
+	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
+	int result=jpeg_read_header(&srcinfo, true);
+	if (result!=JPEG_HEADER_OK) {
+		kdError() << "Could not read jpeg header\n";
+		return QString::null;
+	}
+	for (mark = srcinfo.marker_list; mark; mark = mark->next) {
+		if (mark->marker == JPEG_COM) break;
+	}
+
+	if (mark) {
+		theComment=QString::fromUtf8((const char*)(mark->data), mark->data_length);
+	}
+	
+	jpeg_destroy_decompress(&srcinfo);
+	return theComment;
+}
+
+
+// This code is inspired by jpegtools.c from fbida
+static void doSetComment(struct jpeg_decompress_struct *src, const QString& comment) {
+	jpeg_saved_marker_ptr mark;
+	int size;
+
+	/* find or create comment marker */
+	for (mark = src->marker_list;; mark = mark->next) {
+		if (mark->marker == JPEG_COM)
+			break;
+		if (NULL == mark->next) {
+			mark->next = (jpeg_marker_struct*)
+				src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,
+							   sizeof(*mark));
+			mark = mark->next;
+			memset(mark,0,sizeof(*mark));
+			mark->marker = JPEG_COM;
+			break;
+		}
+	}
+
+	/* update comment marker */
+	QCString utf8=comment.utf8();
+	size = utf8.length() +1;
+	mark->data = (JOCTET*)
+		src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,size);
+	mark->original_length = size;
+	mark->data_length = size;
+	memcpy(mark->data, utf8, size);
+}
+
+
+void JPEGContent::transform(Orientation orientation, bool setComment, const QString& comment) {
 	QMap<Orientation,JXFORM_CODE> orientation2jxform;
 	orientation2jxform[NOT_AVAILABLE]= JXFORM_NONE;
 	orientation2jxform[NORMAL]=        JXFORM_NONE;
@@ -145,29 +307,11 @@ void JPEGContent::transform(Orientation orientation) {
 	orientation2jxform[ROT_90_VFLIP]=  JXFORM_TRANSVERSE;
 	orientation2jxform[ROT_270]=       JXFORM_ROT_270;
 
-	// NOTE: We do not use the default values here, because this would cause
-	// KTempFile to use the appname. Since it's not set by the test program,
-	// it crashes (as of KDE 3.3.0)
-	KTempFile srcTemp("src", ".jpg");
-	srcTemp.setAutoDelete(true);
-	KTempFile dstTemp("dst", ".jpg");
-	dstTemp.setAutoDelete(true);
-
 	if (d->mRawData.size()==0) {
 		kdError() << "No data loaded\n";
 		return;
 	}
 
-	// Copy array to srcTemp
-	QFile file(srcTemp.name());
-	if (!file.open(IO_WriteOnly)) {
-		kdError() << "Could not open '" << srcTemp.name() << "' for writing\n";
-		return;
-	}
-	QDataStream stream(&file);
-	stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
-	file.close();
-	
 	// The following code is inspired by jpegtran.c from the libjpeg
 
 	// Init JPEG structs 
@@ -185,27 +329,19 @@ void JPEGContent::transform(Orientation orientation) {
 	dstinfo.err = jpeg_std_error(&jdsterr);
 	jpeg_create_compress(&dstinfo);
 
-	// Open files
-	FILE *input_file=fopen(QFile::encodeName(srcTemp.name()), "r");
-	if (!input_file) {
-		kdError() << "Could not open temp file for reading\n";
-		return;
-	}
-	FILE *output_file=fopen(QFile::encodeName(dstTemp.name()), "w");
-	if (!output_file) {
-		fclose(input_file);
-		kdError() << "Could not open temp file for writing\n";
-		return;
-	}
-
 	// Specify data source for decompression
-	jpeg_stdio_src(&srcinfo, input_file);
+	d->setupInmemSource(&srcinfo);
 
 	// Enable saving of extra markers that we want to copy
 	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
 
 	// Read file header
 	(void) jpeg_read_header(&srcinfo, TRUE);
+
+	// Set comment
+	if (setComment) {
+		doSetComment(&srcinfo, comment);
+	}
 
 	// Init transformation
 	jpeg_transform_info transformoption;
@@ -228,7 +364,9 @@ void JPEGContent::transform(Orientation orientation) {
 		&transformoption);
 
 	/* Specify data destination for compression */
-	jpeg_stdio_dest(&dstinfo, output_file);
+	QByteArray output;
+	output.resize(d->mRawData.size());
+	d->setupInmemDestination(&dstinfo, &output);
 
 	/* Start compressor (note no image data is actually written here) */
 	jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
@@ -247,12 +385,8 @@ void JPEGContent::transform(Orientation orientation) {
 	(void) jpeg_finish_decompress(&srcinfo);
 	jpeg_destroy_decompress(&srcinfo);
 
-	/* Close files, if we opened them */
-	fclose(input_file);
-	fclose(output_file);
-	
 	// Reload the new JPEG
-	load(dstTemp.name());
+	loadFromData(output);
 }
 
 
