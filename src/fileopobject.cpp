@@ -69,9 +69,9 @@ void FileOpCopyToObject::operator()() {
 		destDir=KFileDialog::getExistingDirectory(FileOperation::destDir(), mParent);
 	} else {
 		destDir=FileOperation::destDir();
-	    destURL.setPath(destDir);
 	}
-	if (destURL.isEmpty()) return;
+	if (destDir.isEmpty()) return;
+	destURL.setPath(destDir);
 
 // Copy the file
 	KIO::Job* copyJob=KIO::copy(mURLList,destURL,true);
