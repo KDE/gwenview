@@ -576,7 +576,7 @@ void GVMainWindow::showExternalToolDialog() {
 void GVMainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
-
+/* Disable it for now: the keys appear in the dialog, but are not applied
 #ifdef HAVE_KIPI
 	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
@@ -587,6 +587,7 @@ void GVMainWindow::showKeyDialog() {
 		}
 	}
 #endif
+*/
 	dialog.exec();
 }
 
