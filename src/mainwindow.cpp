@@ -47,8 +47,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "configdialog.h"
-#include "dirview.h"
 #include "fileoperation.h"
+#include "gvdirview.h"
 #include "gvfileviewstack.h"
 #include "gvpixmap.h"
 #include "gvslideshow.h"
@@ -93,7 +93,7 @@ MainWindow::MainWindow()
 	mSlideShow->readConfig(KGlobal::config(),CONFIG_SLIDESHOW_GROUP);
 	
 // Dir view connections
-	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
+	connect(mGVDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
 // Pixmap view connections
@@ -128,7 +128,7 @@ MainWindow::MainWindow()
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mDirView,SLOT(setURL(const KURL&,const QString&)) );
+		mGVDirView,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 
@@ -465,8 +465,8 @@ void MainWindow::createWidgets() {
 
 // Folder widget
 	mFolderDock = createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mDirView=new DirView(mFolderDock);
-	mFolderDock->setWidget(mDirView);
+	mGVDirView=new GVDirView(mFolderDock);
+	mFolderDock->setWidget(mGVDirView);
 
 // File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));

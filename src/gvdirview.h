@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef DIRVIEW_H
-#define DIRVIEW_H
+#ifndef GVDIRVIEW_H
+#define GVDIRVIEW_H
 
 #include <kfiletreeview.h>
 #include <kfiletreebranch.h>
@@ -28,10 +28,10 @@ class QShowEvent;
 
 class KFileTreeBranch;
 
-class DirView : public KFileTreeView {
+class GVDirView : public KFileTreeView {
 Q_OBJECT
 public:
-	DirView(QWidget* parent);
+	GVDirView(QWidget* parent);
 
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -55,7 +55,7 @@ private slots:
 
 	// Do not call this one slotPopulateFinished, it will clash with
 	// KFileTreeView::slotPopulateFinished.
-	void slotDirViewPopulateFinished(KFileTreeViewItem*);
+	void slotGVDirViewPopulateFinished(KFileTreeViewItem*);
 
 // Drag'n'Drop
 	void autoOpenDropTarget();

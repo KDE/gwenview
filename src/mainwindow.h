@@ -30,7 +30,7 @@ class KHistoryCombo;
 class KToggleAction;
 class KURLCompletion;
 
-class DirView;
+class GVDirView;
 class GVFileViewStack;
 class GVPixmap;
 class GVSlideShow;
@@ -65,7 +65,7 @@ private:
 	StatusBarProgress* mProgress;
 
 	GVFileViewStack* mFileViewStack;
-	DirView* mDirView;
+	GVDirView* mGVDirView;
 	PixmapView* mPixmapView;
 
 	GVPixmap* mGVPixmap;

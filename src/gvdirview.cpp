@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurldrag.h>
 
 // Our includes
-#include <dirview.moc>
+#include "gvdirview.moc"
 
 
 const int AUTO_OPEN_DELAY=1000;
@@ -47,7 +47,7 @@ const int DND_ICON_COUNT=8;
 const char* DND_PREFIX="dnd";
 
 
-DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
+GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 // Look tweaking
 	addColumn(QString::null);
@@ -64,9 +64,9 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mRootBranch->root()->setExpandable(true);
 
 	connect(mHomeBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+		this, SLOT( slotGVDirViewPopulateFinished(KFileTreeViewItem*) ) );
 	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+		this, SLOT( slotGVDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
 // Popup
 	mPopupMenu=new QPopupMenu(this);
@@ -101,7 +101,7 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
  * dir when it's shown. Since the view doesn't update if it's
  * hidden
  */
-void DirView::showEvent(QShowEvent* event) {
+void GVDirView::showEvent(QShowEvent* event) {
 #if KDE_VERSION < 306
 	if (!currentURL().cmp(m_nextUrlToSelect,true)) {
 #else
@@ -113,8 +113,8 @@ void DirView::showEvent(QShowEvent* event) {
 }
 
 
-void DirView::setURL(const KURL& url,const QString&) {
-	//kdDebug() << "DirView::setURL " << url.path() << endl;
+void GVDirView::setURL(const KURL& url,const QString&) {
+	//kdDebug() << "GVDirView::setURL " << url.path() << endl;
 
 	// Do nothing if we're browsing remote files
 	if (!url.isLocalFile()) return;
@@ -124,14 +124,14 @@ void DirView::setURL(const KURL& url,const QString&) {
 #else
 	if (currentURL().equals(url,true)) {
 #endif
-		//kdDebug() << "DirView::setURL : same as current\n";
+		//kdDebug() << "GVDirView::setURL : same as current\n";
 		return;
 	}
 
 // Do not update the view if it's hidden, just store the url to
 // open next time the view is shown
 	if (!isVisible()) {
-		//kdDebug() << "DirView::setURL we are hidden, just store the url" << endl;
+		//kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
 		slotSetNextUrlToSelect(url);
 		return;
 	}
@@ -188,7 +188,7 @@ void DirView::setURL(const KURL& url,const QString&) {
  * Override this method to make sure that the item is selected, opened and
  * visible
  */
-void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeViewItemList& itemList ) {
+void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeViewItemList& itemList ) {
 	if( ! branch ) return;
 	kdDebug(250) << "hitting slotNewTreeViewItems" << endl;
 	if(m_nextUrlToSelect.isEmpty()) return;
@@ -218,7 +218,7 @@ void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeView
 
 
 //-Private slots-----------------------------------------------------------
-void DirView::slotExecuted(QListViewItem* item)
+void GVDirView::slotExecuted(QListViewItem* item)
 {
 	if (!item) return;
 	KFileTreeViewItem* treeItem=currentKFileTreeViewItem();
@@ -227,7 +227,7 @@ void DirView::slotExecuted(QListViewItem* item)
 }
 
 
-void DirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
+void GVDirView::slotGVDirViewPopulateFinished(KFileTreeViewItem* item) {
 	QListViewItem* child;
 	KURL url=item->url();
 
@@ -258,7 +258,7 @@ void DirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 
 
 //-Private-----------------------------------------------------------
-KFileTreeViewItem* DirView::findViewItem(KFileTreeViewItem* parent,const QString& text) {
+KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QString& text) {
 	QListViewItem* item;
 
 	for (item=parent->firstChild();item;item=item->nextSibling()) {
@@ -271,7 +271,7 @@ KFileTreeViewItem* DirView::findViewItem(KFileTreeViewItem* parent,const QString
 
 
 //-Drag'n drop------------------------------------------------------
-void DirView::contentsDragMoveEvent(QDragMoveEvent* event) {
+void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 	if (!QUriDrag::canDecode(event)) {
 		event->ignore();
 		return;
@@ -300,7 +300,7 @@ void DirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 }
 
 
-void DirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
+void GVDirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 	mAutoOpenTimer->stop();
 	if (mDropTarget) {
 		stopAnimation(mDropTarget);
@@ -309,7 +309,7 @@ void DirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 }
 
 
-void DirView::contentsDropEvent(QDropEvent* event) {
+void GVDirView::contentsDropEvent(QDropEvent* event) {
 	mAutoOpenTimer->stop();
 
 // Quit if no valid target
@@ -357,7 +357,7 @@ void DirView::contentsDropEvent(QDropEvent* event) {
 }
 
 
-void DirView::autoOpenDropTarget() {
+void GVDirView::autoOpenDropTarget() {
 	if (mDropTarget) {
 		mDropTarget->setOpen(true);
 	}
@@ -365,12 +365,12 @@ void DirView::autoOpenDropTarget() {
 
 
 //- Popup ----------------------------------------------------------
-void DirView::slotContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
+void GVDirView::slotContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
 	mPopupMenu->popup(pos);
 }
 
 
-void DirView::makeDir() {
+void GVDirView::makeDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 
@@ -387,7 +387,7 @@ void DirView::makeDir() {
 }
 
 
-void DirView::slotDirMade(KIO::Job* job) {
+void GVDirView::slotDirMade(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -397,7 +397,7 @@ void DirView::slotDirMade(KIO::Job* job) {
 }
 
 
-void DirView::renameDir() {
+void GVDirView::renameDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 	
@@ -415,7 +415,7 @@ void DirView::renameDir() {
 }
 
 
-void DirView::slotDirRenamed(KIO::Job* job) {
+void GVDirView::slotDirRenamed(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -423,7 +423,7 @@ void DirView::slotDirRenamed(KIO::Job* job) {
 }
 
 
-void DirView::removeDir() {
+void GVDirView::removeDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 
@@ -443,14 +443,14 @@ void DirView::removeDir() {
 }
 
 
-void DirView::slotDirRemoved(KIO::Job* job) {
+void GVDirView::slotDirRemoved(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 	}
 }
 
 
-void DirView::showPropertiesDialog() {
+void GVDirView::showPropertiesDialog() {
 	(void)new KPropertiesDialog(currentURL());
 }
 
