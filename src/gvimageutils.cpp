@@ -52,7 +52,7 @@ typedef DataPtr<ExifData,exif_data_unref> ExifDataPtr;
 
 static Orientation getOrientation(ExifData* data) {
 	if (!data) {
-		return NotAvailable;
+		return NOT_AVAILABLE;
 	}
 	ExifByteOrder byteOrder=exif_data_get_byte_order(data);
 	
@@ -60,10 +60,10 @@ static Orientation getOrientation(ExifData* data) {
 		exif_content_get_entry(data->ifd[EXIF_IFD_0],
 			EXIF_TAG_ORIENTATION) );
 	if (!entry) {
-		return NotAvailable;
+		return NOT_AVAILABLE;
 	}
 	short value=exif_get_short(entry->data, byteOrder);
-	if (value<Normal || value>Rot270) return NotAvailable;
+	if (value<NORMAL || value>ROT_270) return NOT_AVAILABLE;
 	return Orientation(value);
 }
 
@@ -77,7 +77,7 @@ Orientation getOrientation(const QString& pixPath) {
 Orientation getOrientation(const QByteArray& jpegContent) {
 	JPEGDataPtr jpegData( jpeg_data_new_from_data((unsigned char*)jpegContent.data(),jpegContent.size()) );
 	if (!jpegData) {
-		return NotAvailable;
+		return NOT_AVAILABLE;
 	}
 	
 	ExifDataPtr exifData( jpeg_data_get_exif_data(jpegData) );
@@ -120,15 +120,15 @@ QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation
 QImage modify(const QImage& img, Orientation orientation) {
 	QWMatrix matrix;
 	switch (orientation) {
-	case NotAvailable:
-	case Normal:
+	case NOT_AVAILABLE:
+	case NORMAL:
 		return img;
 
-	case HFlip:
+	case HFLIP:
 		matrix.scale(-1,1);
 		break;
 
-	case Rot180:
+	case ROT_180:
 		matrix.rotate(180);
 		break;
 
@@ -136,21 +136,21 @@ QImage modify(const QImage& img, Orientation orientation) {
 		matrix.scale(1,-1);
 		break;
 	
-	case Rot90HFlip:
+	case ROT_90_HFLIP:
 		matrix.scale(-1,1);
 		matrix.rotate(90);
 		break;
 		
-	case Rot90:		
+	case ROT_90:		
 		matrix.rotate(90);
 		break;
 	
-	case Rot90VFlip:
+	case ROT_90_VFLIP:
 		matrix.scale(1,-1);
 		matrix.rotate(90);
 		break;
 		
-	case Rot270:		
+	case ROT_270:		
 		matrix.rotate(270);
 		break;
 	}

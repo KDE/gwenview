@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 class ThumbnailSize {
 public:
-	enum Size { Small, Med, Large };
-	ThumbnailSize(Size value=Med);
+	enum Size { SMALL, MED, LARGE };
+	ThumbnailSize(Size value=MED);
 
 	/**
 	 * Init a ThumbnailSize from a string, set to medium if the string
@@ -44,7 +44,7 @@ public:
 	operator const QString&() const;
 	operator Size() const { return mValue; }
 
-	static ThumbnailSize biggest() { return ThumbnailSize(Large); }
+	static ThumbnailSize biggest() { return ThumbnailSize(LARGE); }
 
 private:
 	Size mValue;

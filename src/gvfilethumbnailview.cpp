@@ -496,7 +496,7 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 }
 
 void GVFileThumbnailView::kpartConfig() {
-	mThumbnailSize=ThumbnailSize::Med;
+	mThumbnailSize=ThumbnailSize::MED;
 	mMarginSize=5;
 
 	updateGrid();

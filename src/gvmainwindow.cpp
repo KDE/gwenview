@@ -313,15 +313,15 @@ void GVMainWindow::showFileProperties() {
 
 
 void GVMainWindow::rotateLeft() {
-	modifyImage(GVImageUtils::Rot270);
+	modifyImage(GVImageUtils::ROT_270);
 }
 
 void GVMainWindow::rotateRight() {
-	modifyImage(GVImageUtils::Rot90);
+	modifyImage(GVImageUtils::ROT_90);
 }
 
 void GVMainWindow::mirror() {
-	modifyImage(GVImageUtils::HFlip);
+	modifyImage(GVImageUtils::HFLIP);
 }
 
 void GVMainWindow::flip() {

@@ -52,7 +52,7 @@ GVMetaEdit::~GVMetaEdit() {
 
 
 bool GVMetaEdit::eventFilter(QObject *o, QEvent *e) {
-	if (o == mCommentEdit && mEmpty && (mGVPixmap->commentState()==GVPixmap::Writable)) {
+	if (o == mCommentEdit && mEmpty && (mGVPixmap->commentState()==GVPixmap::WRITABLE)) {
 		if (e->type() == QEvent::FocusIn) {
 			mCommentEdit->setTextFormat(QTextEdit::PlainText);
 			mCommentEdit->setText("");
@@ -81,7 +81,7 @@ void GVMetaEdit::updateContent() {
 
 	QString comment=mGVPixmap->comment();
 	
-	if (mGVPixmap->commentState() & GVPixmap::Valid) {
+	if (mGVPixmap->commentState() & GVPixmap::VALID) {
 		mEmpty = comment.isEmpty();
 		if (mEmpty) {
 			setEmptyText();
@@ -93,14 +93,14 @@ void GVMetaEdit::updateContent() {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
 		mCommentEdit->setText("<i>This image can't be commented.</i>");
 	}
-	bool writable=mGVPixmap->commentState()==GVPixmap::Writable;
+	bool writable=mGVPixmap->commentState()==GVPixmap::WRITABLE;
 	mCommentEdit->setReadOnly(!writable);
 	mCommentEdit->setEnabled(writable);
 }
 
 
 void GVMetaEdit::updateDoc() {
-	if ((mGVPixmap->commentState()==GVPixmap::Writable) && mCommentEdit->isModified()) {
+	if ((mGVPixmap->commentState()==GVPixmap::WRITABLE) && mCommentEdit->isModified()) {
 		mGVPixmap->setComment(mCommentEdit->text());
 		mCommentEdit->setModified(false);
 	}
@@ -110,7 +110,7 @@ void GVMetaEdit::updateDoc() {
 void GVMetaEdit::setEmptyText() {
 	QString comment;
 	mCommentEdit->setTextFormat(QTextEdit::RichText);
-	if (mGVPixmap->commentState()==GVPixmap::Writable) {
+	if (mGVPixmap->commentState()==GVPixmap::WRITABLE) {
 		comment=i18n("<i>Type here to add a comment to this image.</i>");
 	} else {
 		comment=i18n("<i>No comment available.</i>");

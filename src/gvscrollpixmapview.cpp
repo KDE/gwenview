@@ -214,7 +214,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 , mGVPixmap(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
-, mTool(None)
+, mTool(NONE)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
 , mActionCollection(actionCollection)
@@ -225,8 +225,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
 
-	mToolControllers[Scroll]=new ScrollToolController(this);
-	mToolControllers[Zoom]=new ZoomToolController(this);
+	mToolControllers[SCROLL]=new ScrollToolController(this);
+	mToolControllers[ZOOM]=new ZoomToolController(this);
 
 	// Init path label
 	mPathLabel->setBackgroundColor(white);
@@ -265,10 +265,10 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 
 
 GVScrollPixmapView::~GVScrollPixmapView() {
-	delete mToolControllers[None];
-	delete mToolControllers[Browse];
-	delete mToolControllers[Scroll];
-	delete mToolControllers[Zoom];
+	delete mToolControllers[NONE];
+	delete mToolControllers[BROWSE];
+	delete mToolControllers[SCROLL];
+	delete mToolControllers[ZOOM];
 }
 
 
@@ -592,9 +592,9 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 void GVScrollPixmapView::selectTool(ButtonState state, bool force) {
 	Tool oldTool=mTool;
 	if (state & ShiftButton) {
-		mTool=Zoom;
+		mTool=ZOOM;
 	} else {
-		mTool=Scroll;
+		mTool=SCROLL;
 	}
 
 	if (mTool!=oldTool || force) {
@@ -940,8 +940,8 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
-	mButtonStateToolMap[NoButton]=Scroll;
-	mButtonStateToolMap[ShiftButton]=Zoom;
+	mButtonStateToolMap[NoButton]=SCROLL;
+	mButtonStateToolMap[ShiftButton]=ZOOM;
 
 	mTool=mButtonStateToolMap[NoButton];
 	mToolControllers[mTool]->updateCursor();
@@ -956,8 +956,8 @@ void GVScrollPixmapView::kpartConfig() {
 	updateScrollBarMode();
 	mLockZoom->setChecked(false);
 
-	mButtonStateToolMap[NoButton]=Scroll;
-	mButtonStateToolMap[ShiftButton]=Zoom;
+	mButtonStateToolMap[NoButton]=SCROLL;
+	mButtonStateToolMap[ShiftButton]=ZOOM;
 
 	mTool=mButtonStateToolMap[NoButton];
 	mToolControllers[mTool]->updateCursor();

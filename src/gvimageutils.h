@@ -29,7 +29,7 @@ typedef QMemArray<char> QByteArray;
 class QImage;
 
 namespace GVImageUtils {
-	enum Orientation { NotAvailable=0,Normal=1,HFlip=2,Rot180=3,VFlip=4,Rot90HFlip=5,Rot90=6,Rot90VFlip=7,Rot270=8};
+	enum Orientation { NOT_AVAILABLE=0,NORMAL=1,HFLIP=2,ROT_180=3,VFlip=4,ROT_90_HFLIP=5,ROT_90=6,ROT_90_VFLIP=7,ROT_270=8};
 
 	QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation);
 	Orientation getOrientation(const QByteArray& jpegContent);

@@ -41,8 +41,8 @@ class GVPixmapPrivate;
 class GVPixmap : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
-	enum ModifiedBehavior { Ask=0, SaveSilently=1, DiscardChanges=2 };
-	enum CommentState { None=0, ReadOnly=1, Valid=ReadOnly, Writable=3 };
+	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
+	enum CommentState { NONE=0, READ_ONLY=1, VALID=READ_ONLY, WRITABLE=3 };
 	
 	GVPixmap(QObject*);
 	~GVPixmap();

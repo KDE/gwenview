@@ -93,25 +93,25 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	process << sProgramPath << "-copy" << "all";
 	
 	switch (orientation) {
-	case GVImageUtils::HFlip:
+	case GVImageUtils::HFLIP:
 		process << "-flip" << "horizontal";
 		break;
-	case GVImageUtils::Rot180:
+	case GVImageUtils::ROT_180:
 		process << "-rotate" << "180";
 		break;
 	case GVImageUtils::VFlip:
 		process << "-flip" << "vertical";
 		break;
-	case GVImageUtils::Rot90HFlip:
+	case GVImageUtils::ROT_90_HFLIP:
 		process << "-transpose";
 		break;
-	case GVImageUtils::Rot90:
+	case GVImageUtils::ROT_90:
 		process << "-rotate" << "90";
 		break;
-	case GVImageUtils::Rot90VFlip:
+	case GVImageUtils::ROT_90_VFLIP:
 		process << "-transverse";
 		break;
-	case GVImageUtils::Rot270:
+	case GVImageUtils::ROT_270:
 		process << "-rotate" << "270";
 		break;
 	default:

@@ -96,7 +96,7 @@ public:
 		KFileMetaInfo metaInfo=KFileMetaInfo(path);
 		KFileMetaInfoItem commentItem;
 
-		mCommentState=GVPixmap::None;
+		mCommentState=GVPixmap::NONE;
 
 		if (metaInfo.isEmpty()) return;
 
@@ -105,7 +105,7 @@ public:
 		if (mimeType=="image/jpeg") {
 			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
 			mCommentState=
-				QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
+				QFileInfo(path).isWritable()?GVPixmap::WRITABLE:GVPixmap::READ_ONLY;
 			mComment=QString::fromUtf8( commentItem.string().ascii() );
 
 		} else if (mimeType=="image/png") {
@@ -124,7 +124,7 @@ public:
 				tmp.append(line);
 			}
 			mComment=tmp.join("\n");
-			mCommentState=GVPixmap::ReadOnly;
+			mCommentState=GVPixmap::READ_ONLY;
 		} else {
 			return;
 		}
@@ -184,7 +184,7 @@ GVPixmap::GVPixmap(QObject* parent)
 		: QObject(parent) {
 	d=new GVPixmapPrivate();
 	d->mModified=false;
-	d->mCommentState=None;
+	d->mCommentState=NONE;
 	/*
 	kdDebug() << "GVPixmap::GVPixmap supported decoder formats: " 
 		<< QStringList::fromStrList(QImageDecoder::inputFormats()).join(",")
@@ -306,7 +306,7 @@ QString GVPixmap::comment() const {
 
 
 void GVPixmap::setComment(const QString& comment) {
-	Q_ASSERT(d->mCommentState==Writable);
+	Q_ASSERT(d->mCommentState==WRITABLE);
 	d->mComment=comment;
 	d->mModified=true;
 }
@@ -539,14 +539,14 @@ bool GVPixmap::saveIfModified() {
 //
 //---------------------------------------------------------------------
 static GVPixmap::ModifiedBehavior stringToModifiedBehavior(const QString& str) {
-	if (str=="yes") return GVPixmap::SaveSilently;
-	if (str=="no") return GVPixmap::DiscardChanges;
-	return GVPixmap::Ask;
+	if (str=="yes") return GVPixmap::SAVE_SILENTLY;
+	if (str=="no") return GVPixmap::DISCARD_CHANGES;
+	return GVPixmap::ASK;
 }
 
 static QString modifiedBehaviorToString(GVPixmap::ModifiedBehavior behaviour) {
-	if (behaviour==GVPixmap::SaveSilently) return "yes";
-	if (behaviour==GVPixmap::DiscardChanges) return "no";
+	if (behaviour==GVPixmap::SAVE_SILENTLY) return "yes";
+	if (behaviour==GVPixmap::DISCARD_CHANGES) return "no";
 	return "";
 }
 
@@ -651,10 +651,10 @@ void GVPixmap::loadChunk() {
 		if (d->mImageFormat=="JPEG") {
 			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(d->mCompressedData);
 
-			if (orientation!=GVImageUtils::NotAvailable && orientation!=GVImageUtils::Normal) {
+			if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
 				d->mImage=GVImageUtils::modify(d->mImage, orientation);
 				d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,orientation);
-				d->mCompressedData=GVImageUtils::setOrientation(d->mCompressedData,GVImageUtils::Normal);
+				d->mCompressedData=GVImageUtils::setOrientation(d->mCompressedData,GVImageUtils::NORMAL);
 			}
 		} else {
 			d->mCompressedData.resize(0);

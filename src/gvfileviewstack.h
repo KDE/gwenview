@@ -54,7 +54,7 @@ class GVFileViewStack : public QWidgetStack {
 Q_OBJECT
 
 public:
-	enum Mode { FileList, Thumbnail};
+	enum Mode { FILE_LIST, THUMBNAIL};
 
 	GVFileViewStack(QWidget* parent,KActionCollection*);
 	~GVFileViewStack();

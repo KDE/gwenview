@@ -52,7 +52,7 @@ public:
 	friend class ScrollToolController;
 	friend class ZoomToolController;
 
-	enum Tool { None, Browse, Scroll, Zoom };
+	enum Tool { NONE, BROWSE, SCROLL, ZOOM };
 	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
 	typedef QMap<Tool,ToolController*> ToolControllers;
 

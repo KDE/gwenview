@@ -28,20 +28,20 @@ ThumbnailSize::ThumbnailSize(Size value) : mValue(value) {}
 ThumbnailSize::ThumbnailSize(const QString& str) {
 	QString low=str.lower();
 	if (low=="small") {
-		mValue=Small;
+		mValue=SMALL;
 	} else if (low=="large") {
-		mValue=Large;
+		mValue=LARGE;
 	} else {
-		mValue=Med;
+		mValue=MED;
 	}
 }
 
 
 int ThumbnailSize::pixelSize() const {
 	switch (mValue) {
-	case Small:
+	case SMALL:
 		return 48;
-	case Med:
+	case MED:
 		return 96;
 	default: /* Always Large, but keeps the compiler from complaining */
 		return 192;

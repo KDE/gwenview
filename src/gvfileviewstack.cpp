@@ -72,7 +72,7 @@ public:
 //
 //-----------------------------------------------------------------------
 GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent), mMode(FileList)
+: QWidgetStack(parent), mMode(FILE_LIST)
 {
 	d=new GVFileViewStackPrivate;
 
@@ -226,7 +226,7 @@ void GVFileViewStack::cancel() {
 		mDirLister->stop();
 		return;
 	}
-	if (mMode==Thumbnail) {
+	if (mMode==THUMBNAIL) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
 }
@@ -292,7 +292,7 @@ void GVFileViewStack::browseToFileNameToSelect() {
 
 
 void GVFileViewStack::updateThumbnail(const KURL& url) {
-	if (mMode==FileList) return;
+	if (mMode==FILE_LIST) return;
 
 	KFileItem* item=mDirLister->findByURL(url);
 	if (!item) return;
@@ -347,18 +347,18 @@ void GVFileViewStack::slotViewDoubleClicked() {
 
 void GVFileViewStack::updateThumbnailSize() {
 	if (mNoThumbnails->isChecked()) {
-		setMode(GVFileViewStack::FileList);
+		setMode(GVFileViewStack::FILE_LIST);
 		return;
 	} else {
 		if (mSmallThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Small);
+			mFileThumbnailView->setThumbnailSize(ThumbnailSize::SMALL);
 		} else if (mMedThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Med);
+			mFileThumbnailView->setThumbnailSize(ThumbnailSize::MED);
 		} else {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::Large);
+			mFileThumbnailView->setThumbnailSize(ThumbnailSize::LARGE);
 		}
-		if (mMode==GVFileViewStack::FileList) {
-			setMode(GVFileViewStack::Thumbnail);
+		if (mMode==GVFileViewStack::FILE_LIST) {
+			setMode(GVFileViewStack::THUMBNAIL);
 		} else {
 			KFileItemList items=*mFileThumbnailView->items();
 			KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
@@ -580,7 +580,7 @@ QString GVFileViewStack::fileName() const {
 
 
 GVFileViewBase* GVFileViewStack::currentFileView() const {
-	if (mMode==FileList) {
+	if (mMode==FILE_LIST) {
 		return mFileDetailView;
 	} else {
 		return mFileThumbnailView;
@@ -620,7 +620,7 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 
 	mMode=mode;
 
-	if (mMode==FileList) {
+	if (mMode==FILE_LIST) {
 		mFileThumbnailView->stopThumbnailUpdate();
 		oldView=mFileThumbnailView;
 		newView=mFileDetailView;
@@ -748,21 +748,21 @@ void GVFileViewStack::delayedDirListerCompleted() {
 	// GVFileThumbnailView::firstFileItem() to return a wrong item.  This work
 	// around is not in firstFileItem() because it's const and sort() is a non
 	// const method
-	if (mMode==Thumbnail) {
+	if (mMode==THUMBNAIL) {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
 	browseToFileNameToSelect();
 	emit completedURLListing(mDirURL);
 
-	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
+	if (mMode==THUMBNAIL && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
 	}
 }
 
 
 void GVFileViewStack::dirListerCanceled() {
-	if (mMode==Thumbnail) {
+	if (mMode==THUMBNAIL) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
 
@@ -892,17 +892,17 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	initDirListerFilter();
 
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
-	setMode(startWithThumbnails?Thumbnail:FileList);
+	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
 
 	if (startWithThumbnails) {
 		switch (mFileThumbnailView->thumbnailSize()) {
-		case ThumbnailSize::Small:
+		case ThumbnailSize::SMALL:
 			mSmallThumbnails->setChecked(true);
 			break;
-		case ThumbnailSize::Med:
+		case ThumbnailSize::MED:
 			mMedThumbnails->setChecked(true);
 			break;
-		case ThumbnailSize::Large:
+		case ThumbnailSize::LARGE:
 			mLargeThumbnails->setChecked(true);
 			break;
 		}
@@ -923,7 +923,7 @@ void GVFileViewStack::kpartConfig() {
 	initDirListerFilter();
 
 	bool startWithThumbnails=true;
-	setMode(Thumbnail);
+	setMode(THUMBNAIL);
 
 	mFileThumbnailView->startThumbnailUpdate();
 
