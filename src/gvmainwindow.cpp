@@ -117,7 +117,7 @@ const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
 
 
-#define ENABLE_LOG
+//#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -285,17 +285,7 @@ void GVMainWindow::goUp() {
 void GVMainWindow::goUpTo(int id) {
 	KPopupMenu* menu=mGoUp->popupMenu();
 	KURL url(menu->text(id));
-
-	KURL childURL;
-	int index=menu->indexOf(id);
-	if (index>0) {
-		childURL=KURL(menu->text(menu->idAt(index-1)));
-	} else {
-		childURL=mDocument->dirURL();
-	}
-
 	mDocument->setDirURL(url);
-	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
 
 
