@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -78,9 +78,6 @@ public:
 	void setShowBusyPtrInFullScreen(bool);
 	void setAutoDeleteThumbnailCache(bool);
 
-public slots:
-	void setURL(const KURL&);
-
 protected:
 	bool queryClose();
 	virtual void saveProperties( KConfig* );
@@ -127,7 +124,7 @@ private:
 	KAction* mSaveFileAs;
 	KAction* mFilePrint;
 	KAction* mResetDockWidgets;
-	bool     mLoadingCursor;
+	bool	 mLoadingCursor;
 	bool	 mAutoDeleteThumbnailCache;
 	KToggleAction* mToggleBrowse;
 
@@ -152,6 +149,8 @@ private:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
+	void setURL(const KURL&);
+
 private slots:
 	void goUp();
 	void goUpTo(int);
@@ -173,9 +172,10 @@ private slots:
 	void showKeyDialog();
 	void showToolBarDialog();
 	void applyMainWindowSettings();
-	void pixmapLoading();
+	void slotImageLoading();
 	void startSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
+	void slotURLChanged(const KURL&);
 	void modifyImage(GVImageUtils::Orientation);
 	void rotateLeft();
 	void rotateRight();

@@ -197,16 +197,11 @@ GVMainWindow::GVMainWindow()
 			if (fullscreen) mToggleFullScreen->activate();
 			KURL url=args->url(0);
 
-			if( !urlIsDirectory(this, url)) {
-				if (!fullscreen) mToggleBrowse->activate();
-
-				mDocument->setURL(url);
-				KURL dirURL(url);
-				dirURL.setFileName(QString::null);
-				mFileViewStack->setDirURL(dirURL);
-				mFileViewStack->setFileNameToSelect(url.fileName());
-			} else {
+			if( urlIsDirectory(this, url)) {
 				mFileViewStack->setDirURL(url);
+			} else {
+				if (!fullscreen) mToggleBrowse->activate();
+				setURL(url);
 			}
 			updateLocationURL();
 		}
@@ -278,11 +273,7 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 	if( urlIsDirectory(this, url)) {
 		mFileViewStack->setDirURL(url);
 	} else {
-		mDocument->setURL(url);
-		KURL dirURL(url);
-		dirURL.setFileName(QString::null);
-		mFileViewStack->setDirURL(dirURL);
-		mFileViewStack->setFileNameToSelect(url.fileName());
+		setURL(url);
 	}
 }
 
@@ -292,14 +283,19 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url) {
+	mDocument->setURL(url);
+	mFileViewStack->setDirURL(url.directory());
+	mFileViewStack->setFileNameToSelect(url.filename());
+}
+
+
+void GVMainWindow::slotURLChanged(const KURL& url) {
 	LOG(url.prettyURL(0,KURL::StripFileProtocol));
 	KURL dirURL( url );
 	dirURL.setFileName( QString::null );
-	LOG(dirURL.path());
 	
 	bool filenameIsValid=!mDocument->isNull();
 
-	mToggleFullScreen->setEnabled(filenameIsValid);
 	mStartSlideShow->setEnabled(filenameIsValid);
 	mRenameFile->setEnabled(filenameIsValid);
 	mCopyFiles->setEnabled(filenameIsValid);
@@ -336,6 +332,7 @@ void GVMainWindow::setURL(const KURL& url) {
 }
 
 void GVMainWindow::updateLocationURL() {
+	LOG("");
 	// show the picture URL in the location bar only when not browsing
 	KURL locationURL = mToggleBrowse->isChecked() ? mFileViewStack->dirURL() : mDocument->url();
 	mURLEdit->setEditText(locationURL.prettyURL(0,KURL::StripFileProtocol));
@@ -453,9 +450,7 @@ void GVMainWindow::openFile() {
 	KURL url=KFileDialog::getOpenURL();
 	if (!url.isValid()) return;
 
-	mDocument->setURL(url);
-	mFileViewStack->setDirURL(url.directory());
-	mFileViewStack->setFileNameToSelect(url.filename());
+	setURL(url);
 }
 
 
@@ -482,14 +477,13 @@ void GVMainWindow::printFile() {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::pixmapLoading() {
+void GVMainWindow::slotImageLoading() {
 	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
 		if( !mLoadingCursor ) {
 			kapp->setOverrideCursor(KCursor::workingCursor());
 		}
 		mLoadingCursor = true;
 	}
-	updateLocationURL();
 }
 
 
@@ -678,11 +672,7 @@ void GVMainWindow::slotGo() {
 	if( urlIsDirectory(this, url)) {
 		mFileViewStack->setDirURL(url);
 	} else {
-		mDocument->setURL(url);
-		KURL dirURL(url);
-		dirURL.setFileName(QString::null);
-		mFileViewStack->setDirURL(dirURL);
-		mFileViewStack->setFileNameToSelect(url.fileName());
+		setURL(url);
 	}
 	mFileViewStack->setFocus();
 }
@@ -697,6 +687,7 @@ void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
 	
 
 void GVMainWindow::slotToggleCentralStack() {
+	LOG("");
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mPixmapView);
 		mCentralStack->raiseWidget(StackIDBrowse);
@@ -985,7 +976,7 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mDocument,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
-		this,SLOT(setURL(const KURL&)) );
+		this,SLOT(slotURLChanged(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
@@ -1006,9 +997,9 @@ void GVMainWindow::createConnections() {
 	
 	// GVDocument connections
 	connect(mDocument,SIGNAL(loading()),
-		this,SLOT(pixmapLoading()) );
+		this,SLOT(slotImageLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
-		this,SLOT(setURL(const KURL&)) );
+		this,SLOT(slotURLChanged(const KURL&)) );
 	// FIXME: Is this still necessary?
 	/*connect(mDocument,SIGNAL(newURLSet(const KURL&)),
 		mFileViewStack,SLOT(setURL(const KURL&)) );*/
