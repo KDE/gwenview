@@ -1,5 +1,9 @@
+2003.xx.xx - v1.0.0
+- Fixes:
+ - If auto-zoom is on, make sure the zoom is updated after rotating an image.
+
 2003.11.16 - v1.0.0pre4
-- Features:
+- New features:
  - Added a new option to hide the busy pointer when loading an image in
    fullscreen.
  - Added a popup menu to select the sorting mode. Usefull in thumbnail view.

@@ -291,10 +291,14 @@ void GVScrollPixmapView::slotURLChanged() {
 
 
 void GVScrollPixmapView::slotModified() {
-	updateContentSize();
-	updateImageOffset();
-	updateZoomActions();
-	viewport()->repaint(false);
+	if (mAutoZoom->isChecked()) {
+		setZoom(computeAutoZoom());
+	} else {
+		updateContentSize();
+		updateImageOffset();
+		updateZoomActions();
+		viewport()->repaint(false);
+	}
 }
 
 void GVScrollPixmapView::restartAutoHideTimer() {
