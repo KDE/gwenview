@@ -1,11 +1,11 @@
-2002.xx.xx - v0.15.0
+2002.09.14 - v0.15.0pre1
 - New option to prevent Gwenview from loading the first image when it enters a
   folder (Thanks to Andreas Pfaller for the patch).
 - You can now show the folders in the file view. By enabling this and hiding
   the folder view, Gwenview won't have to open all parent folders on startup.
 - XCF file format support, thanks to the QXCFI library by Lignum Computing
   (http://lignumcomputing.com).
-- Thumbnail generator now saves always save the thumbnail at the biggest size :
+- Thumbnail generator now always saves the thumbnail at the biggest size :
   for smaller sizes the big thumbnail is loaded and scaled. This uses less disk
   space and make thumbnail size switching faster.
 - Reworked the zoom behaviour so that it works like the zoom tool in the GIMP.
