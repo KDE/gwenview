@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="1">
+<kpartgui name="Gwenview" version="2">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -26,7 +26,6 @@
 	<Action name="med_thumbnails"/>
 	<Action name="large_thumbnails"/>
     <Separator/>
-  	<Action name="fullscreen"/>
   	<Action name="slideshow"/>
     <Separator/>
     <Action name="view_zoom_auto"/>
@@ -45,6 +44,7 @@
   </Menu>
   <Action name="bookmarks"/>
   <Menu name="settings">
+  	<Action name="fullscreen"/>
   </Menu>
   <Menu name="window">
   	<text>&amp;Window</text>

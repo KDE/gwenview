@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
@@ -535,7 +536,11 @@ void GVMainWindow::createActions() {
 	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
+#if KDE_IS_VERSION(3,1,90)
+	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection());
+#else
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
+#endif
 	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
 	mToggleDirAndFileViews=new KAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"toggle_dir_and_file_views");
 	

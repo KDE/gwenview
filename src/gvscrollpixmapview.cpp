@@ -572,7 +572,7 @@ void GVScrollPixmapView::makeContextMenu() {
 
 	menu = new QPopupMenu(this);
 
-	mActionCollection->action("view_fullscreen")->plug(menu);
+	mActionCollection->action("fullscreen")->plug(menu);
 	
 	if (!mGVPixmap->isNull()) {
 		menu->insertSeparator();
@@ -593,10 +593,10 @@ void GVScrollPixmapView::makeContextMenu() {
 		menu->insertSeparator();
 		
 		QPopupMenu* editMenu=new QPopupMenu(menu);
-		mActionCollection->action("edit_rotate_left")->plug(editMenu);
-		mActionCollection->action("edit_rotate_right")->plug(editMenu);
-		mActionCollection->action("edit_mirror")->plug(editMenu);
-		mActionCollection->action("edit_flip")->plug(editMenu);
+		mActionCollection->action("rotate_left")->plug(editMenu);
+		mActionCollection->action("rotate_right")->plug(editMenu);
+		mActionCollection->action("mirror")->plug(editMenu);
+		mActionCollection->action("flip")->plug(editMenu);
 		editMenu->connectItem(
 			editMenu->insertItem( i18n("Open with &Editor") ),
 			this,SLOT(openWithEditor()) );
