@@ -20,11 +20,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// KDE 
+// KDE
 #include <kaction.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kdeversion.h>
+#include <kstdaccel.h>
+#include <kstdguiitem.h>
 
 // Local
 #include "gvdocument.h"
@@ -37,24 +39,27 @@ GVHistory::GVHistory(GVDocument* document, KActionCollection* actionCollection) 
 	mDocument=document;
 	mPosition=mHistoryList.end();
 	mMovingInHistory=false;
-	
+
 	// Actions
-	mGoBack=new KToolBarPopupAction(i18n("Back"), "back", ALT + Key_Left,
-		this, SLOT(goBack()), actionCollection, "go_back");
-	mGoForward=new KToolBarPopupAction(i18n("Forward"), "forward", ALT + Key_Right, 
-		this, SLOT(goForward()), actionCollection, "go_forward");
-	
+	QPair<KGuiItem, KGuiItem> backForward = KStdGuiItem::backAndForward();
+	mGoBack=new KToolBarPopupAction(backForward.first,
+					KStdAccel::shortcut(KStdAccel::Back),
+					this, SLOT(goBack()), actionCollection, "go_back");
+	mGoForward=new KToolBarPopupAction(backForward.second,
+					   KStdAccel::shortcut(KStdAccel::Forward),
+					   this, SLOT(goForward()), actionCollection, "go_forward");
+
 	// Connections
-	connect(mGoBack->popupMenu(),SIGNAL(activated(int)), 
+	connect(mGoBack->popupMenu(),SIGNAL(activated(int)),
 		this,SLOT(goBackTo(int)) );
-	connect(mGoForward->popupMenu(),SIGNAL(activated(int)), 
+	connect(mGoForward->popupMenu(),SIGNAL(activated(int)),
 		this,SLOT(goForwardTo(int)) );
 
 	connect(mGoBack->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoBackMenu()) );
 	connect(mGoForward->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoForwardMenu()) );
-	
+
 	connect(mDocument, SIGNAL(loaded(const KURL&,const QString&) ),
 		this, SLOT(updateHistoryList(const KURL&)) );
 }
@@ -67,17 +72,17 @@ GVHistory::~GVHistory() {
 void GVHistory::updateHistoryList(const KURL& url) {
 	if (!mMovingInHistory) {
 		if (mPosition!=mHistoryList.end() && url.equals(*mPosition, true)) return;
-		
+
 		// Drop everything after current
 		HistoryList::iterator it=mPosition;
 		++it;
 		mHistoryList.erase(it, mHistoryList.end());
-		
+
 		mHistoryList.append(url);
 		if(mHistoryList.count()==MAX_HISTORY_SIZE) mHistoryList.pop_front();
 		mPosition=mHistoryList.fromLast();
 	}
-		
+
 	mGoBack->setEnabled(mPosition!=mHistoryList.begin());
 	mGoForward->setEnabled(mPosition!=mHistoryList.fromLast());
 }
