@@ -1,5 +1,7 @@
 [Desktop Entry]
+ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 6
 Icon=background
-Type=Application
 Name=Set as wallpaper
+Name[pt]=Colocar como fundo de ecrã
+Name[pt_BR]=Colocar como fundo de ecrã

@@ -1,6 +1,7 @@
 [Desktop Entry]
+ServiceTypes=image/*
 Exec=gimp-remote -n %F 
 Icon=gimp
-Type=Application
 Name=The GIMP
-Name[fr]=Le GIMP
+Name[pt]=O GIMP
+Name[pt_BR]=O GIMP

@@ -63,17 +63,68 @@ GVExternalToolManager* GVExternalToolManager::instance() {
 }
 
 
+inline bool mimeTypeMatches(const QString& candidate, const QString& reference) {
+	if (reference=="*") return true;
+
+	if (reference.right(1)=="*") {
+		return candidate.startsWith(reference.left(reference.length()-1));
+	} else {
+		return candidate==reference;
+	}
+}
+
+inline bool isSubSetOf(const QStringList& subSet, const QStringList& set) {
+	// Simple implementation, might need some optimization
+	QStringList::ConstIterator itSubSet=subSet.begin();
+	QStringList::ConstIterator itSetBegin=set.begin();
+	QStringList::ConstIterator itSetEnd=set.end();
+
+	for (; itSubSet!=subSet.end(); ++itSubSet) {
+		bool matchFound=false;
+		QStringList::ConstIterator itSet=itSetBegin;
+		for (; itSet!=itSetEnd; ++itSet) {
+			if (mimeTypeMatches(*itSubSet, *itSet)) {
+				matchFound=true;
+				break;
+			}
+		}
+		if (!matchFound) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
 GVExternalToolContext* GVExternalToolManager::createContext(
 	QObject* parent, const KFileItemList* items)
 {
 	KURL::List urls;
 	QPtrListIterator<KFileItem> it(*items);
+	QStringList mimeTypes;
+
+	// Create our URL list and make a list of the different mime types
+	// present in the selection
 	for (; it.current(); ++it) {
 		urls.append(it.current()->url());
+		QString mimeType=it.current()->mimetype();
+		if (!mimeTypes.contains(mimeType)) {
+			mimeTypes.append(mimeType);
+		}
 	}
-
-	//TODO: Add code to filter services
-	QPtrList<KService> services(mServices);
-	return new GVExternalToolContext(parent, services, urls);
+	
+	// Add to selectionServices all services which can handle all the different
+	// mime types present in the selection
+	QPtrList<KService> selectionServices;
+	QPtrListIterator<KService> itService(mServices);
+	for (; itService.current(); ++itService) {
+		KService* service=itService.current();
+		QStringList serviceTypes=service->serviceTypes();
+		if (isSubSetOf(mimeTypes, serviceTypes)) {
+			selectionServices.append(service);
+		}
+	}
+	
+	return new GVExternalToolContext(parent, selectionServices, urls);
 }
 

@@ -1,5 +1,7 @@
 [Desktop Entry]
+ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2 
 Icon=background
-Type=Application
 Name=Set as tiled wallpaper
+Name[pt]=Colocar como fundo de ecrã em mosaíco
+Name[pt_BR]=Colocar como fundo de ecrã em mosaíco

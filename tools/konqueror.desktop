@@ -1,0 +1,5 @@
+[Desktop Entry]
+ServiceTypes=*
+Exec=konqueror %u 
+Icon=konqueror
+Name=Konqueror
