@@ -945,7 +945,7 @@ void GVMainWindow::createActions() {
 		KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
 	mShowKeyDialog=
 		KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-	(void)new KAction(i18n("Configure External Tools..."), "configure",
+	(void)new KAction(i18n("Configure External Tools..."), "configure", 0,
 		this, SLOT(showExternalToolDialog()), actionCollection(), "configure_tools");
 	(void)KStdAction::configureToolbars(
 		this, SLOT(showToolBarDialog()), actionCollection() );
