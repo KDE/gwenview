@@ -49,7 +49,7 @@ void TSThread::Helper::run()
 
 
 TSThread::TSThread()
-    : thread( this ), cancelling( false ), cancel_cond( NULL )
+    : thread( this ), cancelling( false ), cancel_mutex( NULL ), cancel_cond( NULL )
     {
     }
 
@@ -64,8 +64,11 @@ void TSThread::cancel()
     {
     QMutexLocker lock( &mutex );
     cancelling = true;
-    if( cancel_cond != NULL )
+    if( cancel_mutex != NULL )
+        {
+        QMutexLocker lock( cancel_mutex );
         cancel_cond->wakeAll();
+        }
     }
 
 void TSThread::wait( unsigned long time )

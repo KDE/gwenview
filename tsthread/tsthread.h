@@ -144,12 +144,13 @@ class TSThread
             };
         void executeThread();
         static void initCurrentThread();
-        void setCancelCond( QWaitCondition* c );
+        bool setCancelData( QMutex*m, QWaitCondition* c );
         friend class Helper;
         friend class TSWaitCondition;
         Helper thread;
         bool cancelling;
         mutable QMutex mutex;
+        QMutex* cancel_mutex;
         QWaitCondition* cancel_cond;
 #ifdef TS_QTHREADSTORAGE
         static QThreadStorage< TSThread** >* current_thread;
@@ -206,10 +207,14 @@ bool TSThread::testCancel() const
     }
 
 inline
-void TSThread::setCancelCond( QWaitCondition* c )
+bool TSThread::setCancelData( QMutex* m, QWaitCondition* c )
     {
     QMutexLocker lock( &mutex );
+    if( cancelling && m != NULL )
+        return false;
+    cancel_mutex = m;
     cancel_cond = c;
+    return !cancelling;
     }
 
 inline

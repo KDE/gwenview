@@ -33,13 +33,15 @@ bool TSWaitCondition::wait( QMutex* m, unsigned long time )
 
 bool TSWaitCondition::cancellableWait( QMutex* m, unsigned long time )
     {
-    if( TSThread::currentThread()->testCancel())
-        return false;
     mutex.lock();
+    if( !TSThread::currentThread()->setCancelData( &mutex, &cond ))
+        {
+        mutex.unlock();
+        return false;
+        }
     m->unlock();
-    TSThread::currentThread()->setCancelCond( &cond );
     bool ret = cond.wait( &mutex, time );
-    TSThread::currentThread()->setCancelCond( NULL );
+    TSThread::currentThread()->setCancelData( NULL, NULL );
     mutex.unlock();
     m->lock();
     return ret;
