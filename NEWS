@@ -4,6 +4,7 @@
    it separately anymore.
 - Fixes:
  - Update the EXIF thumbnail when rotating a JPEG file.
+ - In the dir view, folders now opens with a single click (Daniel Thaler).
 
 2004.09.19 - v1.1.5
 - New features:
