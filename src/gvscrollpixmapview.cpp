@@ -1207,7 +1207,9 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 
 	case QEvent::MouseButtonDblClick:
-		d->mActionCollection->action("fullscreen")->activate();
+		if (d->mActionCollection->action("fullscreen")->isEnabled()) {
+			d->mActionCollection->action("fullscreen")->activate();
+		}
 		return true;
 
 	// Getting/loosing focus causes repaints, but repainting here is expensive,
