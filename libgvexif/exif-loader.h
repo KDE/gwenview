@@ -21,7 +21,7 @@
 #ifndef __EXIF_LOADER_H__
 #define __EXIF_LOADER_H__
 
-#include <libexif/exif-data.h>
+#include <libgvexif/exif-data.h>
 
 #ifdef __cplusplus
 extern "C" {
