@@ -1370,17 +1370,18 @@ double GVScrollPixmapView::computeAutoZoom() const {
 
 
 double GVScrollPixmapView::computeZoom(bool in) const {
+	const double F = 0.5; // change in 0.5 steps
 	if (in) {
 		if (d->mZoom>=1.0) {
-			return floor(d->mZoom)+1.0;
+			return (floor(d->mZoom/F)+1.0)*F;
 		} else {
-			return 1/( ceil(1/d->mZoom)-1.0 );
+			return 1/(( ceil(1/d->mZoom/F)-1.0 )*F);
 		}
 	} else {
-	if (d->mZoom>1.0) {
-			return ceil(d->mZoom)-1.0;
+		if (d->mZoom>1.0) {
+			return (ceil(d->mZoom/F)-1.0)*F;
 		} else {
-			return 1/( floor(1/d->mZoom)+1.0 );
+			return 1/(( floor(1/d->mZoom/F)+1.0 )*F);
 		}
 	}
 }
