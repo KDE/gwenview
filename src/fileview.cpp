@@ -333,7 +333,7 @@ KFileView* FileView::currentFileView() const {
  * This methods avoid the need to include kfileview.h for class users
  */
 uint FileView::fileCount() const {
-	return currentFileView()->count();
+	return currentFileView()->numFiles();
 }
 
 
