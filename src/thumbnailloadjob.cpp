@@ -1,26 +1,26 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
-/*  Gwenview - A simple image viewer for KDE
-    Copyright 2000-2004 Aurélien Gâteau
-    This class is based on the ImagePreviewJob class from Konqueror.
-    Original copyright follows.
+/*	Gwenview - A simple image viewer for KDE
+	Copyright 2000-2004 Aurélien Gâteau
+	This class is based on the ImagePreviewJob class from Konqueror.
+	Original copyright follows.
 */
-/*  This file is part of the KDE project
-    Copyright (C) 2000 David Faure <faure@kde.org>
-                  2000 Carsten Pfeiffer <pfeiffer@kde.org>
+/*	This file is part of the KDE project
+	Copyright (C) 2000 David Faure <faure@kde.org>
+				  2000 Carsten Pfeiffer <pfeiffer@kde.org>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <sys/types.h>
@@ -58,7 +58,7 @@ extern "C" {
 #include "gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -142,8 +142,8 @@ void ThumbnailThread::loadThumbnail() {
 		GVImageUtils::Orientation orientation = GVImageUtils::NOT_AVAILABLE;
 		GVImageUtils::getOrientationAndThumbnail(mPixPath,orientation, mImage);
 		if( !mImage.isNull()
-		    && ( mImage.width() >= mThumbnailSize.pixelSize() // don't use small thumbnails
-		        || mImage.height() >= mThumbnailSize.pixelSize() )) {
+			&& ( mImage.width() >= mThumbnailSize.pixelSize() // don't use small thumbnails
+			|| mImage.height() >= mThumbnailSize.pixelSize() )) {
 			loaded = true; // don't set width/height, so that no thumbnail is saved
 		}
 		if(!loaded) {
@@ -308,7 +308,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 QString ThumbnailLoadJob::thumbnailBaseDir() {
 	static QString dir;
 	if (!dir.isEmpty()) return dir;
-    dir = QDir::homeDirPath() + "/.thumbnails/normal/";
+	dir = QDir::homeDirPath() + "/.thumbnails/normal/";
 	return dir;
 }
 
@@ -328,19 +328,24 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 : KIO::Job(false), mState( STATE_NEXTTHUMB ), mThumbnailSize(size), mSuspended( false )
 {
 	LOG("");
-    
+	
 	mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
 		KIcon::NoGroup, ThumbnailSize(ThumbnailSize::SMALL).pixelSize());
 
 	// Look for images and store the items in our todo list
-	mItems=*items;
-
-	if (mItems.isEmpty()) return;
+	QPtrListIterator<KFileItem> it(*items);
+	for (;it.current(); ++it) {
+		KFileItem* item=it.current();
+		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+			mItems << item;
+		}
+	}
+	if (mItems.empty()) return;
 
 	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
 	
 	// Move to the first item
-	mNextItem = mItems.first();
+	mNextItemIterator = mItems.begin();
 }
 
 
@@ -375,13 +380,23 @@ void ThumbnailLoadJob::resume() {
 
 //-Internal--------------------------------------------------------------
 void ThumbnailLoadJob::appendItem(const KFileItem* item) {
-	mItems.append(item);
+	if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+		mItems.append(item);
+	}
 }
 
 
 void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
-	mItems.removeRef(item);
-	if( item == mNextItem ) mNextItem = mItems.current();
+	Q_ASSERT(item);
+
+	// If we are removing the next item, update to be the item after or the
+	// first if we removed the last item
+	if (item == *mNextItemIterator) {
+		mNextItemIterator=mItems.remove(mNextItemIterator);
+		if (mNextItemIterator==mItems.end()) {
+			mNextItemIterator=mItems.begin();
+		}
+	}
 
 	if (item == mCurrentItem) {
 		// Abort
@@ -394,11 +409,12 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
 	// Move mNextItem to the next item to be processed
-	if( mItems.containsRef( item )) {
-		mNextItem = item;
+	mNextItemIterator=mItems.find(item);
+	if (mNextItemIterator!=mItems.end()) {
 		return true;
 	}
-	mNextItem = mItems.first();
+
+	mNextItemIterator = mItems.begin();
 	return false;
 }
 
@@ -408,56 +424,42 @@ void ThumbnailLoadJob::determineNextIcon() {
 	if( mSuspended ) {
 		return;
 	}
-	// Position mItems' current item
-	if( mNextItem != mItems.current()) {
-		if (mItems.findRef( mNextItem )==-1) {
-			mItems.first();
-		}
-	}
 
-	// Skip non images 
-	while (true) {
-		KFileItem* item=mItems.current();
-		if (!item) break;
-		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
-			mItems.remove();
-		} else {
-			break;
-		}
-	}
-	
 	// No more items ?
 	if (mItems.isEmpty()) {
 		// Done
 		LOG("emitting result");
 		emit result(this);
 		delete this;
-	} else {
-		// First, stat the orig file
-		mState = STATE_STATORIG;
-		mOriginalTime = 0;
-		mCurrentItem = mItems.current();
-		assert(mCurrentItem);
-		mCurrentURL = mCurrentItem->url();
-		mCurrentURL.cleanPath();
-
-		// Do direct stat instead of using KIO if the file is local (faster)
-		if( mCurrentURL.isLocalFile()
-			&& !KIO::probably_slow_mounted( mCurrentURL.path())) {
-			KDE_struct_stat buff;
-			if ( KDE_stat( QFile::encodeName(mCurrentURL.path()), &buff ) == 0 )  {
-				mOriginalTime = buff.st_mtime;
-				QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
-			}
-		}
-		if( mOriginalTime == 0 ) { // KIO must be used
-			KIO::Job* job = KIO::stat(mCurrentURL,false);
-			LOG( "KIO::stat orig " << mCurrentURL.url() );
-			addSubjob(job);
-		}
-		mItems.remove();
-		mNextItem = mItems.current();
+		return;
 	}
+
+	if (mNextItemIterator==mItems.end()) {
+		mNextItemIterator=mItems.begin();
+	}
+	mCurrentItem=*mNextItemIterator;
+		
+	// First, stat the orig file
+	mState = STATE_STATORIG;
+	mOriginalTime = 0;
+	mCurrentURL = mCurrentItem->url();
+	mCurrentURL.cleanPath();
+
+	// Do direct stat instead of using KIO if the file is local (faster)
+	if( mCurrentURL.isLocalFile()
+		&& !KIO::probably_slow_mounted( mCurrentURL.path())) {
+		KDE_struct_stat buff;
+		if ( KDE_stat( QFile::encodeName(mCurrentURL.path()), &buff ) == 0 )  {
+			mOriginalTime = buff.st_mtime;
+			QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
+		}
+	}
+	if( mOriginalTime == 0 ) { // KIO must be used
+		KIO::Job* job = KIO::stat(mCurrentURL,false);
+		LOG( "KIO::stat orig " << mCurrentURL.url() );
+		addSubjob(job);
+	}
+	mNextItemIterator=mItems.remove(mNextItemIterator);
 }
 
 
@@ -482,7 +484,7 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 		KIO::UDSEntry entry = static_cast<KIO::StatJob*>(job)->statResult();
 		KIO::UDSEntry::ConstIterator it= entry.begin();
 		mOriginalTime = 0;
-		for (; it!=entry.end(); it++) {
+		for (; it!=entry.end(); ++it) {
 			if ((*it).m_uds == KIO::UDS_MODIFICATION_TIME) {
 				mOriginalTime = (time_t)((*it).m_long);
 				break;
@@ -582,8 +584,6 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 
 
 void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
-	ThumbnailSize biggest=ThumbnailSize::biggest();
-
 	int biggestDimension=QMAX(img.width(), img.height());
 	bool ok;
 	QSize size;
