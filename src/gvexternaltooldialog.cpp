@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlrequester.h>
 
 // Local
+#include "gvarchive.h"
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltooldialogbase.h"
 #include "gvexternaltooldialog.moc"
@@ -70,11 +71,13 @@ struct GVExternalToolDialogPrivate {
 	: mSelectedItem(0L) {}
 	
 	void fillMimeTypeListView() {
-		// Dir item
-		(void)new QCheckListItem(mContent->mMimeTypeListView, "inode/directory", QCheckListItem::CheckBox);
-		
-		// Image type items
 		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
+        //FIXME: Factorize the additional mime types
+        mimeTypes.append("image/x-xcf-gimp");
+        mimeTypes.append("image/pjpeg");
+		mimeTypes.append("inode/directory");
+		mimeTypes+=GVArchive::mimeTypes();
+        
 		QStringList::const_iterator it=mimeTypes.begin();
 		for(; it!=mimeTypes.end(); ++it) {
 			(void)new QCheckListItem(mContent->mMimeTypeListView, *it, QCheckListItem::CheckBox);
