@@ -140,7 +140,7 @@ private slots:
 	void deleteFiles();
 	void showFileProperties();
 	void openFile();
-	void slotFilePrint();  /** print the actual file */
+	void printFile();  /** print the actual file */
 
 	void toggleFullScreen();
 	void showConfigDialog();
@@ -176,6 +176,7 @@ private slots:
 	 * Address bar related
 	 */
 	void slotURLEditChanged(const QString &str);
+	void slotGo();
 	
 	void updateWindowActions();
 

@@ -1,4 +1,8 @@
-2003.xx.xx - v1.0.0pre2
+2003.xx.xx - v1.0.0pre3
+- New features:
+ - Added a "Go" button to the location toolbar.
+
+2003.10.11 - v1.0.0pre2
 - New features:
  - Added Back/Forward history buttons (based on work from Tudor Calin).
  - The parent button can now display a popup menu (by Tudor Calin).

@@ -307,7 +307,7 @@ void GVMainWindow::openFile() {
 	mGVPixmap->setURL(url);
 }
 
-void GVMainWindow::slotFilePrint()
+void GVMainWindow::printFile()
 {
 	KPrinter printer;
 	if (printer.setup(this)) {
@@ -519,6 +519,10 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 }
 
 
+void GVMainWindow::slotGo() {
+	mGVPixmap->setURL(mURLEdit->currentText());
+}
+
 //-----------------------------------------------------------------------
 //
 // GUI
@@ -613,7 +617,7 @@ void GVMainWindow::createActions() {
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
 	mSaveFile=KStdAction::save(mGVPixmap,SLOT(save()),actionCollection() );
 	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
-	mFilePrint = KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
+	mFilePrint = KStdAction::print(this, SLOT(printFile()), actionCollection());
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
 	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
@@ -812,6 +816,8 @@ void GVMainWindow::createLocationToolBar() {
 	(void)new KWidgetAction( urlLabel, i18n("L&ocation: "), 0, 0, 0, actionCollection(), "location_label");
 	urlLabel->setBuddy(mURLEdit);
 
+	// Go button
+	(void)new KAction(i18n("Go"), "key_enter", 0, this, SLOT(slotGo()), actionCollection(), "location_go");
 
 }
 
