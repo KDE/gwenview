@@ -117,7 +117,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 
 	// Image View tab
 	d->mImageViewPage->mSmoothGroup->setButton(pixmapView->smoothAlgorithm());
-	d->mImageViewPage->mDelayedSmoothing->setChecked(pixmapView->delayedSmoothing());
+	d->mImageViewPage->mDelayedSmoothing->setChecked(pixmapView->configuredDelayedSmoothing());
 	d->mImageViewPage->mBackgroundColor->setColor(pixmapView->normalBackgroundColor());
 	d->mImageViewPage->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mImageViewPage->mShowScrollBars->setChecked(pixmapView->showScrollBars());

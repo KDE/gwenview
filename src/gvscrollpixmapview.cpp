@@ -411,7 +411,7 @@ void GVScrollPixmapView::slotLoaded() {
 	updateContentSize();
 	updateImageOffset();
 	if (mFullScreen && mOSDMode!=NONE) updateFullScreenLabel();
-	if (mDelayedSmoothing) scheduleOperation( SMOOTH_PASS );
+	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
 
 
@@ -447,7 +447,7 @@ void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value)
 	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
 	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
 	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
-	if( mDelayedSmoothing ) {
+	if( doDelayedSmoothing() ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
 		fullRepaint();
@@ -456,12 +456,12 @@ void GVScrollPixmapView::setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm value)
 
 
 void GVScrollPixmapView::setDelayedSmoothing(bool value) {
-	if (mDelayedSmoothing==value) return;
-	mDelayedSmoothing=value;
+	if (m_DelayedSmoothing==value) return;
+	m_DelayedSmoothing=value;
 	mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
 	mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
 	mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
-	if( mDelayedSmoothing ) {
+	if( doDelayedSmoothing() ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
 		fullRepaint();
@@ -642,7 +642,7 @@ void GVScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
 	// So there are three max sizes for each mode.
 	int maxSize = mMaxRepaintSize;
 	if( mZoom != 1.0 ) {
-		if( paint.smooth || !mDelayedSmoothing ) {
+		if( paint.smooth || !doDelayedSmoothing() ) {
 			maxSize = mMaxSmoothRepaintSize;
 		} else {
 			maxSize = mMaxScaleRepaintSize;
@@ -682,7 +682,7 @@ void GVScrollPixmapView::checkPendingOperationsInternal() {
 	}
 	if( mPendingOperations & SMOOTH_PASS ) {
 		mSmoothingSuspended = false;
-		if( mDelayedSmoothing ) {
+		if( doDelayedSmoothing() ) {
 			QRect visibleRect( contentsX(), contentsY(), visibleWidth(), visibleHeight());
 			addPendingPaint( true, visibleRect );
 		}
@@ -788,13 +788,13 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		}
 	} else {
 		if( zoom() != 1.0 ) {
-			GVImageUtils::SmoothAlgorithm algo=mDelayedSmoothing
+			GVImageUtils::SmoothAlgorithm algo=doDelayedSmoothing()
 				?GVImageUtils::SMOOTH_NONE
 				:mSmoothAlgorithm;
 			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), algo );
-			maxRepaintSize = mDelayedSmoothing ? &mMaxScaleRepaintSize : &mMaxSmoothRepaintSize;
+			maxRepaintSize = doDelayedSmoothing() ? &mMaxScaleRepaintSize : &mMaxSmoothRepaintSize;
 			
-			if( mDelayedSmoothing && zoom() != 1.0 ) {
+			if( doDelayedSmoothing() && zoom() != 1.0 ) {
 				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 			}
 		}
@@ -1501,11 +1501,11 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
 		mSmoothAlgorithm = GVImageUtils::SMOOTH_NORMAL;
-		mDelayedSmoothing = true;
+		m_DelayedSmoothing = true;
 	} else {
 		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, GVImageUtils::SMOOTH_NORMAL);
 		mSmoothAlgorithm = static_cast<GVImageUtils::SmoothAlgorithm>(smooth);
-		mDelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
+		m_DelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
 	}
 
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
@@ -1532,7 +1532,7 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(mOSDMode));
 	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, mFreeOutputFormat);	
 	config->writeEntry(CONFIG_SMOOTH_SCALE, mSmoothAlgorithm);
-	config->writeEntry(CONFIG_DELAYED_SMOOTHING, mDelayedSmoothing);
+	config->writeEntry(CONFIG_DELAYED_SMOOTHING, m_DelayedSmoothing);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, mEnlargeSmallImages);
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, mShowScrollBars);
 	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, mMouseWheelScroll);

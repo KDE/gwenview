@@ -94,7 +94,8 @@ public:
 	void setFreeOutputFormat(const QString& outFormat) { mFreeOutputFormat = outFormat; }
 	GVImageUtils::SmoothAlgorithm smoothAlgorithm() const { return mSmoothAlgorithm; }
 	void setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm);
-	bool delayedSmoothing() const { return mDelayedSmoothing; }
+	bool doDelayedSmoothing() const { return m_DelayedSmoothing && mSmoothAlgorithm != GVImageUtils::SMOOTH_NONE; }
+	bool configuredDelayedSmoothing() const { return m_DelayedSmoothing; }
 	void setDelayedSmoothing(bool);
 	bool enlargeSmallImages() const { return mEnlargeSmallImages; }
 	void setEnlargeSmallImages(bool);
@@ -195,7 +196,7 @@ private:
 	OSDMode mOSDMode;
 	QString mFreeOutputFormat;
 	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
-	bool mDelayedSmoothing;
+	bool m_DelayedSmoothing;
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	bool mMouseWheelScroll;
