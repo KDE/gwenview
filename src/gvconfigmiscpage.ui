@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>GVConfigMiscPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>306</width>
-            <height>173</height>
+            <height>185</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,43 +19,14 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout15</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Path to jpegtran:</string>
-                    </property>
-                </widget>
-                <widget class="KURLRequester" row="1" column="1">
-                    <property name="name">
-                        <cstring>mJPEGTran</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1_2_2_2</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>1</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
@@ -118,12 +89,5 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
 </UI>
