@@ -84,15 +84,6 @@ void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
 }
 
 
-void GVJPEGTran::slotProcessExited() {
-	LOG("");
-#if QT_VERSION<0x030100
-	kapp->exit_loop();
-#else
-	kapp->eventLoop()->exitLoop();
-#endif
-}
-
 QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation orientation) {
 	GVJPEGTran obj;
 	KProcess process;
@@ -133,9 +124,6 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
 		&obj,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 	
-	connect(&process,SIGNAL(processExited(KProcess*)),
-		&obj,SLOT(slotProcessExited()) );
-	
 	// Return an empty QByteArray on failure. GVDocument will thus consider the
 	// buffer as invalid and will fall back to lossy manipulations.
 	if ( !process.start(KProcess::NotifyOnExit, KProcess::All) ) {
@@ -152,11 +140,9 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	obj.writeChunk(&process);
 	
 	kapp->setOverrideCursor(QCursor(WaitCursor));
-#if QT_VERSION<0x030100
-	kapp->enter_loop();
-#else
-	kapp->eventLoop()->enterLoop();
-#endif
+	while (process.isRunning()) {
+		kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
 	kapp->restoreOverrideCursor();
 	
 	return obj.mDst;

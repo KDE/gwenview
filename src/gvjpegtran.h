@@ -50,7 +50,6 @@ private slots:
 	void writeChunk(KProcess*);
 	void slotReceivedStdout(KProcess*,char*,int);
 	void slotReceivedStderr(KProcess*,char*,int);
-	void slotProcessExited();
 
 private:
 	GVJPEGTran();
