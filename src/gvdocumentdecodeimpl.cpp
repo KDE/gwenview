@@ -233,7 +233,7 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 	}
 	d->mLoadChangedRect |= rect;
 	if( d->mLoadCompressChangesTime.elapsed() > 100 ) {
-		kdDebug() << "GVPixmap::changed2:" << d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
+		kdDebug() << k_funcinfo << " " << d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() << "\n";
 		emit rectUpdated(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
