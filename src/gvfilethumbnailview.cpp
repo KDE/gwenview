@@ -376,7 +376,7 @@ void GVFileThumbnailView::setSorting(QDir::SortSpec spec) {
 		if (iconItem) setSortingKey(iconItem, item);
 	}
 
-	KIconView::sort();
+	KIconView::sort(! (spec & QDir::Reversed) );
 }
 
 //--------------------------------------------------------------------------
@@ -419,14 +419,17 @@ void GVFileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem
 	QDir::SortSpec spec = KFileView::sorting();
 	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 
+	QString key;
 	if ( spec & QDir::Time )
-		iconItem->setKey( sortingKey( item->time( KIO::UDS_MODIFICATION_TIME ),
-								  isDirOrArchive, spec ));
+		key=sortingKey( item->time( KIO::UDS_MODIFICATION_TIME ),
+								  isDirOrArchive, spec );
 	else if ( spec & QDir::Size )
-		iconItem->setKey( sortingKey( item->size(), isDirOrArchive, spec ));
+		key=sortingKey( item->size(), isDirOrArchive, spec );
 
 	else // Name or Unsorted
-		iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
+		key=sortingKey( item->text(), isDirOrArchive, spec );
+
+	iconItem->setKey(key);
 }
 
 

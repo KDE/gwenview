@@ -1,7 +1,10 @@
+2004.xx.xx - v1.1.4
 - New features:
-  - Use EXIF-stored thumbnail if available.
-  - Option to disable saving of generated thumbnails to cache.
+ - In the thumbnail view, It's now possible to sort images in reverse order.
+ - Use EXIF-stored thumbnail if available.
+ - Option to disable saving of generated thumbnails to cache.
 - Fixes:
+ - In the folder view, pressing Enter now opens the selected folder.
 
 2004.06.11 - v1.1.3 - "Hurry up, I'm getting married tomorrow"
 - New features:

@@ -238,14 +238,17 @@ void GVFileDetailView::setSortingKey( GVFileDetailViewItem *item,
 	QDir::SortSpec spec = KFileView::sorting();
 	bool isDirOrArchive=i->isDir() || GVArchive::fileItemIsArchive(i);
 
+	QString key;
 	if ( spec & QDir::Time )
-		item->setKey( sortingKey( i->time( KIO::UDS_MODIFICATION_TIME ),
-								  isDirOrArchive, spec ));
+		key=sortingKey( i->time( KIO::UDS_MODIFICATION_TIME ),
+								  isDirOrArchive, spec );
 	else if ( spec & QDir::Size )
-		item->setKey( sortingKey( i->size(), isDirOrArchive, spec ));
+		key=sortingKey( i->size(), isDirOrArchive, spec );
 
 	else // Name or Unsorted
-		item->setKey( sortingKey( i->text(), isDirOrArchive, spec ));
+		key=sortingKey( i->text(), isDirOrArchive, spec );
+
+	item->setKey(key);
 }
 
 

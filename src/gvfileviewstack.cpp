@@ -81,6 +81,7 @@ inline bool isDirOrArchive(const KFileItem* item) {
 class GVFileViewStackPrivate {
 public:
 	KSelectAction* mSortAction;
+	KToggleAction* mRevertSortAction;
 };
 
 
@@ -132,6 +133,12 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	sortItems << i18n("By Name") << i18n("By Date") << i18n("By Size");
 	d->mSortAction->setItems(sortItems);
 	d->mSortAction->setCurrentItem(0);
+
+	d->mRevertSortAction=new KToggleAction(i18n("Descending"),0, this, SLOT(setSorting()), actionCollection, "descending");
+	QPopupMenu* sortMenu=d->mSortAction->popupMenu();
+	Q_ASSERT(sortMenu);
+	sortMenu->insertSeparator();
+	d->mRevertSortAction->plug(sortMenu);
 
 	// Dir lister
 	mDirLister=new KDirLister;
@@ -443,6 +450,9 @@ void GVFileViewStack::setSorting() {
 		break;
 	default:
 		return;
+	}
+	if (d->mRevertSortAction->isChecked()) {
+		spec=QDir::SortSpec(spec | QDir::Reversed);
 	}
 	currentFileView()->setSorting(QDir::SortSpec(spec | QDir::DirsFirst));
 }
