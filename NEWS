@@ -8,6 +8,7 @@
  - Image saving.
 - Fixes:
  - Moved the slide show settings to a separate dialog shown before starting it.
+ - Image count in the status bar doesn't include archives anymore.
 
 2003.02.13 - v0.16.2
 - Fixes:

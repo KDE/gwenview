@@ -493,11 +493,15 @@ GVFileViewBase* GVFileViewStack::currentFileView() const {
 }
 
 
-/**
- * This method avoids the need to include kfileview.h for class users
- */
 uint GVFileViewStack::fileCount() const {
-	return currentFileView()->numFiles();
+	uint count=currentFileView()->count();
+	
+	KFileItem* item=currentFileView()->firstFileItem();
+	while (item && isDirOrArchive(item)) { 
+		item=currentFileView()->nextItem(item);
+		count--;
+	}
+	return count; 
 }
 
 

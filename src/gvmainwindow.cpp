@@ -380,13 +380,13 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 void GVMainWindow::updateStatusBar() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
-	if (count>1) {
-		txt=i18n("%1 - %2 images");
+	QString url=mGVPixmap->dirURL().prettyURL();
+	if (count==0) {
+		txt=i18n("%1 - No Images").arg(url);
 	} else {
-		txt=i18n("%1 - %2 image");
+		txt=i18n("%1 - One Image","%1 - %n images",count).arg(url);
 	}
-	txt=txt.arg(mGVPixmap->dirURL().prettyURL()).arg(count);
-
+			
 	statusBar()->changeItem( txt, SB_FOLDER );
 	updateFileStatusBar();
 }
