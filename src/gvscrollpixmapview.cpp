@@ -319,6 +319,7 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 
 void GVScrollPixmapView::slotLoaded() {
+	mPendingOperations &= ~RESUME_LOADING;
 	updateZoomActions();
 
 	if (mDocument->isNull()) {

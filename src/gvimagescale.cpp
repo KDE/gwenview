@@ -65,7 +65,8 @@ namespace GVImageUtils {
 #define Max QMAX
 #define Min QMIN
 
-#define MagickEpsilon 0.00001
+// mustn't be less than used precision (i.e. 1/fastfloat::RATIO)
+#define MagickEpsilon 0.0002
 
 // fastfloat begin
 // this class stores floating point numbers as integers, with BITS shift,
@@ -378,7 +379,7 @@ static void HorizontalFilter(const QImage& source,QImage& destination,
   */
   scale=blur*Max(1.0/x_factor,1.0);
   support=scale* filtersupport;
-  if (support <= half && false)
+  if (support <= half)
     {
       /*
         Reduce to point sampling.
@@ -463,7 +464,7 @@ static void VerticalFilter(const QImage& source,QImage& destination,
   */
   scale=blur*Max(1.0/y_factor,1.0);
   support=scale* filtersupport;
-  if (support <= half && false)
+  if (support <= half)
     {
       /*
         Reduce to point sampling.
@@ -540,7 +541,7 @@ QImage ResizeImage(const QImage& image,const int columns,
     Initialize resize image attributes.
   */
   if ((columns == image.width()) && (rows == image.height()) && (blur == 1.0))
-    return image;
+    return image.copy();
   QImage resize_image( columns, rows, 32 );
   resize_image.setAlphaBuffer( image.hasAlphaBuffer());
   resize_image.fill( Qt::red.rgb() );
@@ -643,7 +644,7 @@ QImage scale(const QImage& image, int width, int height,
 	
 	switch( alg ) {
 	case SMOOTH_NONE:
-		filter = Box;
+		filter = NULL;
 		filtersupport = 0.0;
 		break;
 	case SMOOTH_FAST:
