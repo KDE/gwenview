@@ -48,7 +48,7 @@ const char* DND_PREFIX="dnd";
 DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 
 // Look tweaking
-	addColumn(i18n("Folders"));
+	addColumn(QString::null);
 	header()->hide();
 	setAllColumnsShowFocus(true);
 
