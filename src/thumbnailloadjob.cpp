@@ -1,5 +1,5 @@
 /*  Gwenview - A simple image viewer for KDE
-    Copyright (C) 2000-2002 Aurélien Gâteau
+    Copyright 2000-2003 Aurélien Gâteau
     This class is based on the ImagePreviewJob class from Konqueror.
     Original copyright follows.
 */

@@ -1,6 +1,6 @@
 /*
 Gwenview - A simple image viewer for KDE
-Copyright (C) 2000-2002 Aurélien Gâteau
+Copyright 2000-2003 Aurélien Gâteau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ static const char* version="CVS";
 int main (int argc, char *argv[]) {
     KAboutData aboutData("gwenview", "Gwenview",
                         version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
-                        "(c) 2000-2002 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
+                        "Copyright 2000-2003 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options );

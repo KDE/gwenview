@@ -1,6 +1,6 @@
 /*
 Gwenview - A simple image viewer for KDE
-Copyright (C) 2000-2002 Aurélien Gâteau
+Copyright 2000-2003 Aurélien Gâteau
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
