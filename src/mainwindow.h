@@ -68,6 +68,7 @@ private:
 	GVPixmap* mGVPixmap;
 
 	KAction* mOpenFile;
+	KAction* mOpenLocation;
 	KAction* mRenameFile;
 	KAction* mCopyFile;
 	KAction* mMoveFile;
@@ -97,6 +98,7 @@ private:
 	
 private slots:
 	void openFile();
+	void openLocation();
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showKeyDialog();
@@ -105,7 +107,6 @@ private slots:
 	void openParentDir();
 	void showFileProperties();
 
-// Status bar update
 	/**
 	 * Update both folder and file status bar
 	 */

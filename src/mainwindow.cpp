@@ -42,6 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <kurlrequesterdlg.h>
 
 // Our includes
 #include "configdialog.h"
@@ -273,6 +274,12 @@ void MainWindow::openFile() {
 }
 
 
+void MainWindow::openLocation() {
+	KURL url=KURLRequesterDlg::getURL(QString::null,this);
+	mGVPixmap->setURL(url);
+}
+
+
 void MainWindow::openWithEditor() {
 	FileOperation::openWithEditor(mGVPixmap->url());
 }
@@ -373,8 +380,10 @@ void MainWindow::createWidgets() {
 
 void MainWindow::createActions() {
 	mOpenFile=KStdAction::open(this, SLOT(openFile()),actionCollection() );
+	
+	mOpenLocation=new KAction(i18n("Open &Location..."),0,this,SLOT(openLocation()),actionCollection(),"file_open_location");
 
-	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileView,SLOT(renameFile()),actionCollection(),"file_new");
+	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,mFileView,SLOT(renameFile()),actionCollection(),"file_rename");
 
 	mCopyFile=new KAction(i18n("&Copy To..."),Key_F5,mFileView,SLOT(copyFile()),actionCollection(),"file_copy");
 
@@ -382,7 +391,7 @@ void MainWindow::createActions() {
 
 	mDeleteFile=new KAction(i18n("&Delete..."),"editdelete",Key_Delete,mFileView,SLOT(deleteFile()),actionCollection(),"file_delete");
 
-	mOpenWithEditor=new KAction(i18n("&Open with Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
+	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"file_edit");
 
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
 
@@ -425,6 +434,7 @@ void MainWindow::createMenu() {
 	QPopupMenu* fileMenu = new QPopupMenu;
 
 	mOpenFile->plug(fileMenu);
+	mOpenLocation->plug(fileMenu);
 	fileMenu->insertSeparator();
 	mOpenWithEditor->plug(fileMenu);
 	mRenameFile->plug(fileMenu);
