@@ -59,26 +59,24 @@ public:
 	virtual bool eventFilter( QObject*, QEvent* );
 };
 
+
 class GVScrollPixmapView : public QScrollView {
 Q_OBJECT
 
 public:
-	class ToolController;
-	class ScrollToolController;
-	class ZoomToolController;
-
+	class ToolBase;
+	class ZoomTool;
+	class ScrollTool;
 #if __GNUC__ < 3
-	friend class ToolController;
-	friend class ScrollToolController;
-	friend class ZoomToolController;
+	friend class ToolBase;
+	friend class ZoomTool;
+	friend class ScrollTool;
 #endif
-
 	friend class GVScrollPixmapViewFilter;
 
-	enum Tool { SCROLL, ZOOM };
+	enum ToolID { SCROLL, ZOOM };
 	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
-	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
-	typedef QMap<Tool,ToolController*> ToolControllers;
+	typedef QMap<ToolID,ToolBase*> Tools;
 
 	GVScrollPixmapView(QWidget* parent,GVDocument*,KActionCollection*);
 	~GVScrollPixmapView();
@@ -212,10 +210,9 @@ private:
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
 	bool mMouseWheelScroll;
-	ButtonStateToolMap mButtonStateToolMap;
-	ToolControllers mToolControllers;
+	Tools mTools;
 
-	Tool mTool;
+	ToolID mToolID;
 
 	// Offset to center images
 	int mXOffset,mYOffset;

@@ -61,4 +61,5 @@ libgwenviewcore_la_SOURCES = \
 	gvkipiinterface.cpp \
 	gvbusylevelmanager.cpp \
 	gvcache.cpp \
-	gvthreadgate.cpp
+	gvthreadgate.cpp \
+	gvscrollpixmapviewtools.cpp

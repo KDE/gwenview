@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.h"
 #include "gvimageutils/gvimageutils.h"
 #include "gvbusylevelmanager.h"
+#include "gvscrollpixmapviewtools.h"
 
 #include "gvscrollpixmapview.moc"
 
@@ -146,178 +147,14 @@ const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
 const int FULLSCREEN_LABEL_RADIUS = 10;
 
-//------------------------------------------------------------------------
-//
-// GVScrollPixmapView ToolControllers
-//
-//------------------------------------------------------------------------
-class GVScrollPixmapView::ToolController {
-protected:
-	GVScrollPixmapView* mView;
-
-	// Helper function
-	QCursor loadCursor(const QString& name) {
-		QString path;
-		path=locate("data", QString("gwenview/cursors/%1.png").arg(name));
-		return QCursor(QPixmap(path));
-	}
-
-public:
-	ToolController(GVScrollPixmapView* view)
-	: mView(view) {}
-	virtual ~ToolController() {}
-	virtual void leftButtonPressEvent(QMouseEvent*) {}
-	virtual void rightButtonPressEvent(QMouseEvent* event) {
-		mView->openContextMenu(event->globalPos());
-	}
-	virtual void mouseMoveEvent(QMouseEvent*) {}
-	virtual void leftButtonReleaseEvent(QMouseEvent*) {}
-	virtual void midButtonReleaseEvent(QMouseEvent*) {
-		mView->autoZoom()->activate();
-	}
-
-	virtual void rightButtonReleaseEvent(QMouseEvent*) {}
-
-	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
-	virtual void updateCursor() {
-		mView->viewport()->setCursor(ArrowCursor);
-	}
-};
 
 
-class GVScrollPixmapView::ZoomToolController : public GVScrollPixmapView::ToolController {
-private:
-	QCursor mZoomCursor;
-
-	void zoomTo(const QPoint& pos, bool in) {
-		KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
-		if (!zoomAction->isEnabled()) return;
-
-		if (mView->autoZoom()->isChecked()) {
-			mView->autoZoom()->setChecked(false);
-			mView->updateScrollBarMode();
-		}
-		QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;
-		// Compute image position
-		QPoint imgPos=mView->viewportToContents(pos) - QPoint(mView->mXOffset, mView->mYOffset);
-		double newZoom=mView->computeZoom(in);
-
-		imgPos*=newZoom/mView->zoom();
-		imgPos=imgPos-pos+centerPos;
-		mView->setZoom(newZoom, imgPos.x(), imgPos.y());
-	}
-
-public:
-	ZoomToolController(GVScrollPixmapView* view) : ToolController(view) {
-		mZoomCursor=loadCursor("zoom");
-	}
-
-	void leftButtonReleaseEvent(QMouseEvent* event) {
-		zoomTo(event->pos(), true);
-	}
-
-	void wheelEvent(QWheelEvent* event) {
-		zoomTo(event->pos(), event->delta()<0);
-		event->accept();
-	}
-
-	virtual void rightButtonPressEvent(QMouseEvent*) {}
-	void rightButtonReleaseEvent(QMouseEvent* event) {
-		zoomTo(event->pos(), false);
-	}
-
-	void updateCursor() {
-		mView->viewport()->setCursor(mZoomCursor);
-	}
-};
-
-
-class GVScrollPixmapView::ScrollToolController : public GVScrollPixmapView::ToolController {
-	int mScrollStartX,mScrollStartY;
-	bool mDragStarted;
-
-protected:
-	QCursor mDragCursor,mDraggingCursor;
-
-public:
-	ScrollToolController(GVScrollPixmapView* view)
-	: ToolController(view)
-	, mScrollStartX(0), mScrollStartY(0)
-	, mDragStarted(false) {
-		mDragCursor=loadCursor("drag");
-		mDraggingCursor=loadCursor("dragging");
-	}
-
-	void leftButtonPressEvent(QMouseEvent* event) {
-		mScrollStartX=event->x();
-		mScrollStartY=event->y();
-		mView->viewport()->setCursor(mDraggingCursor);
-		mDragStarted=true;
-	}
-
-	void mouseMoveEvent(QMouseEvent* event) {
-		if (!mDragStarted) return;
-
-		int deltaX,deltaY;
-
-		deltaX=mScrollStartX - event->x();
-		deltaY=mScrollStartY - event->y();
-
-		mScrollStartX=event->x();
-		mScrollStartY=event->y();
-		mView->scrollBy(deltaX,deltaY);
-	}
-
-	void leftButtonReleaseEvent(QMouseEvent*) {
-		if (!mDragStarted) return;
-
-		mDragStarted=false;
-		mView->viewport()->setCursor(mDragCursor);
-	}
-
-	void wheelEvent(QWheelEvent* event) {
-		if (mView->mMouseWheelScroll) {
-			int deltaX, deltaY;
-
-			if (event->state() & ControlButton || event->orientation()==Horizontal) {
-				deltaX = event->delta();
-				deltaY = 0;
-			} else {
-				deltaX = 0;
-				deltaY = event->delta();
-			}
-			mView->scrollBy(-deltaX, -deltaY);
-		} else {
-			if (event->delta()<0) {
-				mView->emitSelectNext();
-			} else {
-				mView->emitSelectPrevious();
-			}
-		}
-		event->accept();
-	}
-
-	void updateCursor() {
-		if (mDragStarted) {
-			mView->viewport()->setCursor(mDraggingCursor);
-		} else {
-			mView->viewport()->setCursor(mDragCursor);
-		}
-	}
-};
-
-
-//------------------------------------------------------------------------
-//
-// GVScrollPixmapView implementation
-//
-//------------------------------------------------------------------------
 GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 , mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mFullScreenLabel(new QLabel(this))
-, mTool(SCROLL)
+, mToolID(SCROLL)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
 , mActionCollection(actionCollection)
@@ -337,8 +174,9 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	setAcceptDrops( true );
 	viewport()->setAcceptDrops( true );
 
-	mToolControllers[SCROLL]=new ScrollToolController(this);
-	mToolControllers[ZOOM]=new ZoomToolController(this);
+	mTools[SCROLL]=new ScrollTool(this);
+	mTools[ZOOM]=new ZoomTool(this);
+	mTools[mToolID]->updateCursor();
 
 	// Init full screen label
 	mFullScreenLabel->setBackgroundColor(white);
@@ -397,8 +235,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 
 
 GVScrollPixmapView::~GVScrollPixmapView() {
-	delete mToolControllers[SCROLL];
-	delete mToolControllers[ZOOM];
+	delete mTools[SCROLL];
+	delete mTools[ZOOM];
 }
 
 
@@ -535,7 +373,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	} else {
 		viewport()->setBackgroundColor(mBackgroundColor);
 		mAutoHideTimer->stop();
-		mToolControllers[mTool]->updateCursor();
+		mTools[mToolID]->updateCursor();
 	}
 	if (mFullScreen && mOSDMode!=NONE) {
 		updateFullScreenLabel();
@@ -856,10 +694,10 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
 	switch (event->button()) {
 	case Qt::LeftButton:
-		mToolControllers[mTool]->leftButtonPressEvent(event);
+		mTools[mToolID]->leftButtonPressEvent(event);
 		break;
 	case Qt::RightButton:
-		mToolControllers[mTool]->rightButtonPressEvent(event);
+		mTools[mToolID]->rightButtonPressEvent(event);
 		break;
 	default: // Avoid compiler complain
 		break;
@@ -869,7 +707,7 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state(), true);
-	mToolControllers[mTool]->mouseMoveEvent(event);
+	mTools[mToolID]->mouseMoveEvent(event);
 	if (mFullScreen) {
 		restartAutoHideTimer();
 	}
@@ -884,11 +722,11 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			emit selectPrevious();
 			return;
 		}
-		mToolControllers[mTool]->leftButtonReleaseEvent(event);
+		mTools[mToolID]->leftButtonReleaseEvent(event);
 		break;
 
 	case Qt::MidButton:
-		mToolControllers[mTool]->midButtonReleaseEvent(event);
+		mTools[mToolID]->midButtonReleaseEvent(event);
 		break;
 
 	case Qt::RightButton:
@@ -900,7 +738,7 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			mToolControllers[mTool]->rightButtonReleaseEvent(event);
+			mTools[mToolID]->rightButtonReleaseEvent(event);
 		}
 		break;
 
@@ -977,21 +815,21 @@ void GVScrollPixmapView::contentsDropEvent(QDropEvent* event) {
  * different from the current one.
  */
 void GVScrollPixmapView::selectTool(ButtonState state, bool force) {
-	Tool oldTool=mTool;
+	ToolID oldToolID=mToolID;
 	if (state & ShiftButton) {
-		mTool=ZOOM;
+		mToolID=ZOOM;
 	} else {
-		mTool=SCROLL;
+		mToolID=SCROLL;
 	}
 
-	if (mTool!=oldTool || force) {
-		mToolControllers[mTool]->updateCursor();
+	if (mToolID!=oldToolID || force) {
+		mTools[mToolID]->updateCursor();
 	}
 }
 
 
 void GVScrollPixmapView::wheelEvent(QWheelEvent* event) {
-	mToolControllers[mTool]->wheelEvent(event);
+	mTools[mToolID]->wheelEvent(event);
 }
 
 
@@ -1527,12 +1365,6 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	if (!mFullScreen) {
 		viewport()->setBackgroundColor(mBackgroundColor);
 	}
-
-	mButtonStateToolMap[NoButton]=SCROLL;
-	mButtonStateToolMap[ShiftButton]=ZOOM;
-
-	mTool=mButtonStateToolMap[NoButton];
-	mToolControllers[mTool]->updateCursor();
 
 	mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 		config->readNumEntry(CONFIG_MAX_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
