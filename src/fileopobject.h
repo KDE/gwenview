@@ -77,11 +77,20 @@ public:
 };
 
 
-class FileOpDelObject : public FileOpObject {
+class FileOpTrashObject : public FileOpObject {
 Q_OBJECT
 public:
-	FileOpDelObject(const KURL& url,QWidget* parent=0L) : FileOpObject(url,parent) {}
-	FileOpDelObject(const KURL::List& urlList,QWidget* parent=0L) : FileOpObject(urlList,parent) {}
+	FileOpTrashObject(const KURL& url,QWidget* parent=0L) : FileOpObject(url,parent) {}
+	FileOpTrashObject(const KURL::List& urlList,QWidget* parent=0L) : FileOpObject(urlList,parent) {}
+	void operator()();
+};
+
+
+class FileOpRealDeleteObject : public FileOpObject {
+Q_OBJECT
+public:
+	FileOpRealDeleteObject(const KURL& url,QWidget* parent=0L) : FileOpObject(url,parent) {}
+	FileOpRealDeleteObject(const KURL::List& urlList,QWidget* parent=0L) : FileOpObject(urlList,parent) {}
 	void operator()();
 };
 

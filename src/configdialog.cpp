@@ -17,14 +17,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-// Qt includes
+// Qt 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qmap.h>
+#include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qstylesheet.h>
 
-// KDE includes
+// KDE
 #include <kcolorbutton.h>
 #include <kdirsize.h>
 #include <kfiledialog.h>
@@ -33,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
-// Our includes
+// Local 
 #include "fileoperation.h"
 #include "gvfilethumbnailview.h"
 #include "gvfileviewstack.h"
@@ -62,13 +64,15 @@ mMainWindow(mainWindow)
 		this,SLOT(emptyCache()));
 
 	// File operations tab
-	mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
 	mShowCopyDialog->setChecked(FileOperation::confirmCopy());
 	mShowMoveDialog->setChecked(FileOperation::confirmMove());
 
 	mDefaultDestDir->setURL(FileOperation::destDir());
 	mDefaultDestDir->fileDialog()->setMode(
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
+	
+	mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
+	mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
 
 	// Full screen tab
 	mShowPathInFullScreen->setChecked(mMainWindow->pixmapView()->showPathInFullScreen());
@@ -128,10 +132,11 @@ void ConfigDialog::slotApply() {
 	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
 
 	// File operations tab
-	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
 	FileOperation::setConfirmCopy(mShowCopyDialog->isChecked());
 	FileOperation::setConfirmMove(mShowMoveDialog->isChecked());
 	FileOperation::setDestDir(mDefaultDestDir->url());
+	FileOperation::setConfirmDelete(mConfirmBeforeDelete->isChecked());
+	FileOperation::setDeleteToTrash(mDeleteGroup->selected()==mDeleteToTrash);
 
 	// Full screen tab
 	mMainWindow->pixmapView()->setShowPathInFullScreen( mShowPathInFullScreen->isChecked() );

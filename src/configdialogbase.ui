@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>557</width>
-            <height>388</height>
+            <height>342</height>
         </rect>
     </property>
     <property name="caption">
@@ -594,37 +594,14 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QCheckBox">
+                    <widget class="QLabel">
                         <property name="name">
-                            <cstring>mConfirmBeforeDelete</cstring>
+                            <cstring>textLabel2_2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Ask for confirmation before deleting files</string>
+                            <string>&lt;b&gt;Moving and copying files&lt;/b&gt;</string>
                         </property>
                     </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer9</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Preferred</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>15</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QCheckBox">
                         <property name="name">
                             <cstring>mShowCopyDialog</cstring>
@@ -680,6 +657,80 @@
                     </widget>
                     <spacer>
                         <property name="name">
+                            <cstring>spacer10_2_2_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Preferred</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>15</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel2_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&lt;b&gt;Deleting files&lt;/b&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mConfirmBeforeDelete</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Ask for confirmation</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>mDeleteGroup</cstring>
+                        </property>
+                        <property name="lineWidth">
+                            <number>0</number>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>mDeleteToTrash</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move deleted files in the trash</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>mReallyDelete</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Really delete files (dangerous)</string>
+                                </property>
+                                <property name="buttonGroupId">
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
                             <cstring>Spacer2</cstring>
                         </property>
                         <property name="orientation">
@@ -690,7 +741,7 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>0</width>
+                                <width>20</width>
                                 <height>20</height>
                             </size>
                         </property>

@@ -103,8 +103,8 @@ void FileOpMoveToObject::operator()() {
 }
 
 
-//-FileOpDelObject-----------------------------------------------------------------
-void FileOpDelObject::operator()() {
+//-FileOpTrashObject---------------------------------------------------------------
+void FileOpTrashObject::operator()() {
 	// Get the trash path (and make sure it exists)
 	QString trashPath=KGlobalSettings::trashPath();
 	if ( !QFile::exists(trashPath) ) {
@@ -144,6 +144,33 @@ void FileOpDelObject::operator()() {
 	// Go do it
 	KIO::Job* job=KIO::move(mURLList,trashURL);
 	connect( job, SIGNAL( result(KIO::Job*) ),
+		this, SLOT( slotResult(KIO::Job*) ) );
+}
+
+//-FileOpRealDeleteObject----------------------------------------------------------
+void FileOpRealDeleteObject::operator()() {
+	// Confirm operation
+	if (FileOperation::confirmDelete()) {
+		int response;
+		if (mURLList.count()>1) {
+			QStringList fileList;
+			KURL::List::ConstIterator it=mURLList.begin();
+			for (; it!=mURLList.end(); ++it) {
+				fileList.append((*it).filename());
+			}
+			response=KMessageBox::questionYesNoList(mParent,
+				i18n("Do you really want to delete these files?"),fileList);
+		} else {
+			QString filename=QStyleSheet::escape(mURLList.first().filename());
+			response=KMessageBox::questionYesNo(mParent,
+				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename));
+		}
+		if (response==KMessageBox::No) return;
+	}
+	
+	// Delete the file
+	KIO::Job* removeJob=KIO::del(mURLList,false,true);
+	connect( removeJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }
 

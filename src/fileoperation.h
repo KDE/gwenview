@@ -45,6 +45,9 @@ public:
 	static void readConfig(KConfig*,const QString&);
 	static void writeConfig(KConfig*,const QString&);
 
+	static bool deleteToTrash();
+	static void setDeleteToTrash(bool);
+	
 	static bool confirmDelete();
 	static void setConfirmDelete(bool);
 

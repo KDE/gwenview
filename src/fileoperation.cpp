@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 //-Configuration keys----------------------------------------------
+static const char* CONFIG_DELETE_TO_TRASH="delete to trash";
 static const char* CONFIG_CONFIRM_DELETE="confirm file delete";
 static const char* CONFIG_CONFIRM_MOVE="confirm file move";
 static const char* CONFIG_CONFIRM_COPY="confirm file copy";
@@ -39,33 +40,38 @@ static const char* CONFIG_EDITOR="editor";
 
 
 //-Static configuration data---------------------------------------
-static bool sConfirmCopy,sConfirmMove,sConfirmDelete;
+static bool sDeleteToTrash,sConfirmCopy,sConfirmMove,sConfirmDelete;
 static QString sDestDir,sEditor;
 
 
 //-FileOperations--------------------------------------------------
 void FileOperation::copyTo(const KURL::List& srcURL,QWidget* parent) {
-	FileOpCopyToObject* op=new FileOpCopyToObject(srcURL,parent);
+	FileOpObject* op=new FileOpCopyToObject(srcURL,parent);
 	(*op)();
 }
 
 
 void FileOperation::moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
-	FileOpMoveToObject* op=new FileOpMoveToObject(srcURL,parent);
+	FileOpObject* op=new FileOpMoveToObject(srcURL,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
 void FileOperation::del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
-	FileOpDelObject* op=new FileOpDelObject(url,parent);
+	FileOpObject* op;
+	if (sDeleteToTrash) {
+		op=new FileOpTrashObject(url,parent);
+	} else {
+		op=new FileOpRealDeleteObject(url,parent);
+	}
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
 void FileOperation::rename(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
-	FileOpRenameObject* op=new FileOpRenameObject(url,parent);
+	FileOpObject* op=new FileOpRenameObject(url,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(renamed(const QString&)),receiver,slot);
 	(*op)();
 }
@@ -84,6 +90,7 @@ void FileOperation::openWithEditor(const KURL& url) {
 void FileOperation::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 
+	sDeleteToTrash=config->readBoolEntry(CONFIG_DELETE_TO_TRASH,true);
 	sConfirmDelete=config->readBoolEntry(CONFIG_CONFIRM_DELETE,true);
 	sConfirmMove=config->readBoolEntry(CONFIG_CONFIRM_MOVE,true);
 	sConfirmCopy=config->readBoolEntry(CONFIG_CONFIRM_COPY,true);
@@ -96,12 +103,23 @@ void FileOperation::readConfig(KConfig* config,const QString& group) {
 void FileOperation::writeConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 
+	config->writeEntry(CONFIG_DELETE_TO_TRASH,sDeleteToTrash);
 	config->writeEntry(CONFIG_CONFIRM_DELETE,sConfirmDelete);
 	config->writeEntry(CONFIG_CONFIRM_MOVE,sConfirmMove);
 	config->writeEntry(CONFIG_CONFIRM_COPY,sConfirmCopy);
 
 	config->writeEntry(CONFIG_DEST_DIR,sDestDir);
 	config->writeEntry(CONFIG_EDITOR,sEditor);
+}
+
+
+
+bool FileOperation::deleteToTrash() {
+	return sDeleteToTrash;
+}
+
+void FileOperation::setDeleteToTrash(bool value) {
+	sDeleteToTrash=value;
 }
 
 
