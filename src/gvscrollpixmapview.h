@@ -87,7 +87,9 @@ public:
 	bool fullScreen() const { return mFullScreen; }
 	void setFullScreen(bool);
 	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
+	bool showCommentInFullScreen() const { return mShowCommentInFullScreen; }	
 	void setShowPathInFullScreen(bool);
+	void setShowCommentInFullScreen(bool);
 	GVImageUtils::SmoothAlgorithm smoothAlgorithm() const { return mSmoothAlgorithm; }
 	void setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm);
 	bool delayedSmoothing() const { return mDelayedSmoothing; }
@@ -120,8 +122,10 @@ private:
 	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
 	QLabel* mPathLabel;
+	QLabel* mCommentLabel;
 	
 	bool mShowPathInFullScreen;
+	bool mShowCommentInFullScreen;
 	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
 	bool mDelayedSmoothing;
 	bool mEnlargeSmallImages;
@@ -188,6 +192,7 @@ private:
 	void updateScrollBarMode();
 	void updateContentSize();
 	void updatePathLabel();
+	void updateCommentLabel();
 	void updateZoomActions();
 	void selectTool(ButtonState, bool force);
 	void restartAutoHideTimer();

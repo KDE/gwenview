@@ -95,6 +95,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	
 	// Full Screen tab
 	d->mContent->mShowPathInFullScreen->setChecked(pixmapView->showPathInFullScreen());
+	d->mContent->mShowCommentInFullScreen->setChecked(pixmapView->showCommentInFullScreen());
 	d->mContent->mShowMenuBarInFullScreen->setChecked(d->mMainWindow->showMenuBarInFullScreen());
 	d->mContent->mShowToolBarInFullScreen->setChecked(d->mMainWindow->showToolBarInFullScreen());
 	d->mContent->mShowStatusBarInFullScreen->setChecked(d->mMainWindow->showStatusBarInFullScreen());
@@ -169,6 +170,7 @@ void GVConfigDialog::slotApply() {
 	
 	// Full Screen tab
 	pixmapView->setShowPathInFullScreen( d->mContent->mShowPathInFullScreen->isChecked() );
+	pixmapView->setShowCommentInFullScreen( d->mContent->mShowCommentInFullScreen->isChecked() );
 	d->mMainWindow->setShowMenuBarInFullScreen( d->mContent->mShowMenuBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowToolBarInFullScreen( d->mContent->mShowToolBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowStatusBarInFullScreen( d->mContent->mShowStatusBarInFullScreen->isChecked() );

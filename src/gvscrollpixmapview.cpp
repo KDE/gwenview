@@ -56,6 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvscrollpixmapview.moc"
 
 const char* CONFIG_SHOW_PATH="show path";
+const char* CONFIG_SHOW_COMMENT="show comment";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
 const char* CONFIG_DELAYED_SMOOTHING="delayed smoothing";
 const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
@@ -243,6 +244,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 , mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
 , mPathLabel(new QLabel(parent))
+, mCommentLabel(new QLabel(parent))
 , mTool(SCROLL)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
@@ -269,8 +271,17 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	QFont font=mPathLabel->font();
 	font.setWeight(QFont::Bold);
 	mPathLabel->setFont(font);
+	this->addChild(mPathLabel);
 	mPathLabel->hide();
-
+	
+	// Init comment label
+	mCommentLabel->setBackgroundColor(white);
+	QFont commentFont=mCommentLabel->font();
+	commentFont.setWeight(QFont::Bold);
+	mCommentLabel->setFont(commentFont);
+	this->addChild(mCommentLabel,1,viewport()->height());
+	mCommentLabel->hide();
+	
 	// Create actions
 	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,mActionCollection,"view_zoom_auto");
 	connect(mAutoZoom,SIGNAL(toggled(bool)),
@@ -337,6 +348,7 @@ void GVScrollPixmapView::slotLoaded() {
 	updateContentSize();
 	updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();
+	if (mFullScreen && mShowCommentInFullScreen) updateCommentLabel();
 	if (mDelayedSmoothing) scheduleOperation( SMOOTH_PASS );
 }
 
@@ -408,6 +420,11 @@ void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
 }
 
 
+void GVScrollPixmapView::setShowCommentInFullScreen(bool value) {
+	mShowCommentInFullScreen=value;
+}
+
+
 void GVScrollPixmapView::setShowScrollBars(bool value) {
 	mShowScrollBars=value;
 	updateScrollBarMode();
@@ -466,6 +483,13 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		mPathLabel->show();
 	} else {
 		mPathLabel->hide();
+	}
+	
+	if (mFullScreen && mShowCommentInFullScreen) {
+		updateCommentLabel();
+		mCommentLabel->show();
+	} else {
+		mCommentLabel->hide();
 	}
 }
 
@@ -1222,6 +1246,51 @@ void GVScrollPixmapView::updatePathLabel() {
 }
 
 
+void GVScrollPixmapView::updateCommentLabel() {
+	QString comment=mDocument->comment();
+
+	QPainter painter;
+
+	QSize commentSize=mCommentLabel->fontMetrics().size(0,comment);
+	commentSize.setWidth( commentSize.width() + 4);
+	commentSize.setHeight( commentSize.height() + 15);
+	int left=2;
+	int top=mCommentLabel->fontMetrics().height();
+
+	// Create a mask for the text
+	QBitmap mask(commentSize,true);
+	painter.begin(&mask);
+	painter.setFont(mCommentLabel->font());
+	painter.drawText(left-1,top-1,comment);
+	painter.drawText(left,top-1,comment);
+	painter.drawText(left+1,top-1,comment);
+
+	painter.drawText(left-1,top,comment);
+	painter.drawText(left+1,top,comment);
+
+	painter.drawText(left-1,top+1,comment);
+	painter.drawText(left,top+1,comment);
+	painter.drawText(left+1,top+1,comment);
+	painter.end();
+
+	// Draw the text on a pixmap
+	QPixmap pixmap(commentSize);
+	painter.begin(&pixmap);
+	painter.setFont(mCommentLabel->font());
+
+	painter.eraseRect(pixmap.rect());
+	painter.setPen(black);
+	painter.drawText(left,top,comment);
+	painter.end();
+
+	// Update the path label
+	mCommentLabel->setPixmap(pixmap);
+	mCommentLabel->setMask(mask);
+	mCommentLabel->adjustSize();
+	int hComm = int(mDocument->height()*mZoom) - top;
+	this->moveChild(mCommentLabel,1,hComm); //TODO better h coord
+}
+
 void GVScrollPixmapView::updateZoomActions() {
 	// Disable most actions if there's no image
 	if (mDocument->isNull()) {
@@ -1287,6 +1356,7 @@ void GVScrollPixmapView::deleteFile() {
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
+	mShowCommentInFullScreen=config->readBoolEntry(CONFIG_SHOW_COMMENT,false);
 	
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
@@ -1316,6 +1386,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_SHOW_PATH, mShowPathInFullScreen);
+	config->writeEntry(CONFIG_SHOW_COMMENT, mShowCommentInFullScreen);
 	config->writeEntry(CONFIG_SMOOTH_SCALE, mSmoothAlgorithm);
 	config->writeEntry(CONFIG_DELAYED_SMOOTHING, mDelayedSmoothing);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, mEnlargeSmallImages);
