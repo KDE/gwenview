@@ -1180,14 +1180,21 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	d->mXOffset=0;
 	d->mYOffset=0;
 
-	if (d->mAutoZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked() && !d->mLockZoom->isChecked()) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
-		setZoom(computeAutoZoom());
 	} else {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
+	if( !d->mLockZoom->isChecked()) {
+		if( d->mAutoZoom->isChecked()) {
+			setZoom(computeAutoZoom());
+		} else {
+			setZoom( 1.0 );
+		}
+	}
+
 	updateImageOffset();
 	QRect imageRect = d->imageToWidget( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
 
