@@ -170,7 +170,9 @@ bool GVDirPart::openURL(const KURL& url) {
 }
 
 void GVDirPart::setKonquerorWindowCaption(const KURL& url) {
-	QString caption = QString(url.filename() + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
+	QString caption = url.filename();
+	if( !mDocument->image().isNull())
+		caption += QString(" %1 x %2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 }
 
