@@ -119,6 +119,7 @@ signals:
 	void urlChanged(const KURL&);
 	void completed();
 	void canceled();
+	void completedURLListing(const KURL&);
 
 	// Thumbnail view signals
 	void updateStarted(int);
@@ -127,6 +128,7 @@ signals:
 
 
 private slots:
+	void delayedDirListerCompleted();
 	
 	// Used to enter directories
 	void viewExecuted();

@@ -18,11 +18,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt 
 #include <qpopupmenu.h>
 
-// KDE includes
+// KDE 
 #include <kaction.h>
+#include <kapp.h>
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kimageio.h>
@@ -30,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kpropertiesdialog.h>
 #include <kstdaction.h>
 
-// Our includes
+// Local 
 #include "fileoperation.h"
 #include "gvfilethumbnailview.h"
 #include "gvarchive.h"
@@ -606,14 +607,21 @@ void GVFileViewStack::dirListerStarted() {
 
 
 void GVFileViewStack::dirListerCompleted() {
-	// FIXME: This is a work around to a bug which causes
-	// GVFileThumbnailView::firstFileItem to return a wrong item.
-	// This work around is not in the method because firstFileItem is 
-	// const and sort is a non const method
+	// Delay the work to accomplish when the dir lister has completed its job
+	// to avoid crash in KDirLister (see bug #57991)
+	QTimer::singleShot(0,this,SLOT(delayedDirListerCompleted()));
+}
+
+
+void GVFileViewStack::delayedDirListerCompleted() {
+	// The call to sort() is a work around to a bug which causes
+	// GVFileThumbnailView::firstFileItem() to return a wrong item.  This work
+	// around is not in firstFileItem() because it's const and sort() is a non
+	// const method
 	if (mMode==Thumbnail) {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
-
+	
 	if (!mFilenameToSelect.isEmpty()) {
 		selectFilename(mFilenameToSelect);
 		mFilenameToSelect=QString::null;
@@ -623,6 +631,8 @@ void GVFileViewStack::dirListerCompleted() {
 		}
 	}
 
+	emit completedURLListing(mDirURL);
+	
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
 	}

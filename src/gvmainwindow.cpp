@@ -565,14 +565,17 @@ void GVMainWindow::createConnections() {
 		this,SLOT(updateStatusBar()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusBar()) );
+	// Don't connect mGVPixmap::urlChanged to mDirView. mDirView will be
+	// updated _after_ the file view is done, since it's less important to the
+	// user
+	connect(mFileViewStack,SIGNAL(completedURLListing(const KURL&)),
+		mDirView,SLOT(setURL(const KURL&)) );
 		
 	// GVPixmap connections
 	connect(mGVPixmap,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
-		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(saved(const KURL&)),
