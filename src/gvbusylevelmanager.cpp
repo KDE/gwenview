@@ -81,7 +81,7 @@ void GVBusyLevelManager::delayedBusyLevelChanged() {
 	}
 
 	if( newLevel != mCurrentBusyLevel ) {
-		LOG("CHANGED BUSY:" << new_level);
+		LOG("CHANGED BUSY:" << newLevel);
 		mCurrentBusyLevel = newLevel;
 		emit busyLevelChanged( newLevel );
 	}
