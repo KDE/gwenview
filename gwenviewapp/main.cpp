@@ -24,8 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kimageio.h>
 #include <klocale.h>
 
-#include "gvmainwindow.h"
-#include "qxcfi.h"
+#include "../src/gvmainwindow.h"
+#include "../src/qxcfi.h"
 
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
@@ -54,7 +54,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addCredit("Renchi Raju", I18N_NOOP("Fixed thumbnail generation to share the thumbnail folder of Konqueror v3 (v0.15.0)"), "renchi@green.tam.uiuc.edu");
 	aboutData.addCredit("Michael Spanier", I18N_NOOP("Patch for mouse navigation (v0.7.0)"), "mail@michael-spanier.de");
 	aboutData.addCredit("Christian A Strømmen", I18N_NOOP("Integration in Konqueror folder context menu"), "number1@realityx.net");
-	
+
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options );
 
