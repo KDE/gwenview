@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="6">
+<kpartgui name="Gwenview" version="7">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -19,6 +19,7 @@
   </Menu>
   <Menu name="view" noMerge="1">
   	<text>&amp;View</text>
+  	<Action name="reload"/>
   	<Action name="stop"/>
     <Separator/>
 	<Action name="detailed"/>
@@ -66,6 +67,7 @@
   <Action name="next"/>
   <Action name="last"/>
   <Separator/>
+  <Action name="reload"/>
   <Action name="stop"/>
   <Separator/>
   <Action name="detailed"/>

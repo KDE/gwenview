@@ -59,6 +59,7 @@ public slots:
 	void setURL(const KURL&);
 	void setDirURL(const KURL&);
 	void setFilename(const QString&);
+	void reload();
 
 	/**
 	 * Save to the current file.
@@ -92,10 +93,10 @@ signals:
 	 * Emitted when the class has finished loading the image.
 	 * Also emitted if the image could not be loaded.
 	 */
-	void urlChanged(const KURL& dirURL,const QString& filename);
+	void loaded(const KURL& dirURL,const QString& filename);
 
 	/**
-	 * Emitted when the image is modified.
+	 * Emitted when the image has been modified.
 	 */
 	void modified();
 

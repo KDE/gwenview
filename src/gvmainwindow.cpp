@@ -206,6 +206,7 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mSaveFile->setEnabled(filenameIsValid);
 	mSaveFileAs->setEnabled(filenameIsValid);
 	mFilePrint->setEnabled(filenameIsValid);
+	mReload->setEnabled(filenameIsValid);
 	
 	QPopupMenu *upPopup = mGoUp->popupMenu();
 	upPopup->clear();
@@ -633,8 +634,8 @@ void GVMainWindow::createActions() {
 	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
 	mFilePrint = KStdAction::print(this, SLOT(printFile()), actionCollection());
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
-	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
-	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
+	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F7,this,SLOT(copyFiles()),actionCollection(),"file_copy");
+	mMoveFiles=new KAction(i18n("&Move To..."),Key_F8,this,SLOT(moveFiles()),actionCollection(),"file_move");
 	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
 	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
@@ -646,7 +647,9 @@ void GVMainWindow::createActions() {
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"flip");
 
 	// View
-	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
+	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mGVPixmap, SLOT(reload()), actionCollection(), "reload");
+	mReload->setEnabled(false);
+	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(), "stop");
 	mStop->setEnabled(false);
 //(0x3015A == 3.1.90)
 #if KDE_VERSION>=0x3015A
@@ -679,7 +682,7 @@ void GVMainWindow::createActions() {
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
 
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 
 	// Settings
@@ -765,7 +768,7 @@ void GVMainWindow::createConnections() {
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusInfo()) );
-	// Don't connect mGVPixmap::urlChanged to mDirView. mDirView will be
+	// Don't connect mGVPixmap::loaded to mDirView. mDirView will be
 	// updated _after_ the file view is done, since it's less important to the
 	// user
 	connect(mFileViewStack,SIGNAL(completedURLListing(const KURL&)),
@@ -774,9 +777,9 @@ void GVMainWindow::createConnections() {
 	// GVPixmap connections
 	connect(mGVPixmap,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
 		this,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
 		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
 	connect(mGVPixmap,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );

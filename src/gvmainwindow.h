@@ -98,6 +98,7 @@ private:
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
 	KAction* mStop;
+	KAction* mReload;
 	KAction* mOpenHomeDir;
 	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;

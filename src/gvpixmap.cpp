@@ -63,7 +63,8 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	
 	// Ask to save if necessary.
 	if (!saveIfModified()) {
-		emit urlChanged(mDirURL,mFilename);
+		// Not saved, notify others that we stay on the image
+		emit loaded(mDirURL,mFilename);
 		return;
 	}
 
@@ -105,15 +106,13 @@ void GVPixmap::setURL(const KURL& paramURL) {
 		return;
 	}
 
-	emit loading();
 	load();
-	emit urlChanged(mDirURL,mFilename);
 }
 
 
 void GVPixmap::setDirURL(const KURL& paramURL) {
 	if (!saveIfModified()) {
-		emit urlChanged(mDirURL,mFilename);
+		emit loaded(mDirURL,mFilename);
 		return;
 	}
 	mDirURL=paramURL;
@@ -126,17 +125,22 @@ void GVPixmap::setFilename(const QString& filename) {
 	if (mFilename==filename) return;
 
 	if (!saveIfModified()) {
-		emit urlChanged(mDirURL,mFilename);
+		emit loaded(mDirURL,mFilename);
 		return;
 	}
 	mFilename=filename;
-	emit loading();
 	load();
-	emit urlChanged(mDirURL,mFilename);
 }
 
-void GVPixmap::print(KPrinter *pPrinter)
-{
+
+void GVPixmap::reload() {
+	load();
+	// FIXME: Ugly, use another signal or rename this one
+	emit saved(url());
+}
+
+
+void GVPixmap::print(KPrinter *pPrinter) {
   QPainter printpainter;
 
   // Is this needed?
@@ -291,12 +295,15 @@ GVPixmap::ModifiedBehavior GVPixmap::modifiedBehavior() const {
 //
 //---------------------------------------------------------------------
 void GVPixmap::load() {
+	emit loading();
 	KURL pixURL=url();
+	Q_ASSERT(!pixURL.isEmpty());
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 
 	QString path;
 	if (!KIO::NetAccess::download(pixURL,path)) {
 		mImage.reset();
+		emit loaded(mDirURL,"");
 		return;
 	}
 
@@ -335,8 +342,8 @@ void GVPixmap::load() {
 		mImage.reset();
 	}
 
-
 	KIO::NetAccess::removeTempFile(path);
+	emit loaded(mDirURL,mFilename);
 }
 
 
@@ -380,7 +387,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 void GVPixmap::reset() {
 	mImage.reset();
 	mCompressedData.resize(0);
-	emit urlChanged(mDirURL,mFilename);
+	emit loaded(mDirURL,mFilename);
 }
 
 

@@ -263,7 +263,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"view_zoom_lock");
 
 	// Connect to some interesting signals
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+	connect(mGVPixmap,SIGNAL(loaded(const KURL&,const QString&)),
 		this,SLOT(slotURLChanged()) );
 
 	connect(mGVPixmap,SIGNAL(modified()),

@@ -46,7 +46,7 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVPixmap *gvp, const char *name)
 	mCommentEdit->installEventFilter(this);
 	connect(mCommentEdit, SIGNAL(modificationChanged(bool)),
 		this, SLOT(setModified(bool)));
-	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
+	connect(mGVPixmap,SIGNAL(loaded(const KURL&, const QString&)),
 		this,SLOT(updateContent()) );
 	updateContent();
 }

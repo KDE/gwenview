@@ -60,7 +60,7 @@ GVHistory::GVHistory(GVPixmap* gvPixmap, KActionCollection* actionCollection) {
 	connect(mGoForward->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoForwardMenu()) );
 	
-	connect(mGVPixmap, SIGNAL(urlChanged(const KURL&,const QString&) ),
+	connect(mGVPixmap, SIGNAL(loaded(const KURL&,const QString&) ),
 		this, SLOT(updateHistoryList(const KURL&)) );
 }
 
