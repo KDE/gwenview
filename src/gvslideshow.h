@@ -65,6 +65,7 @@ private:
 	GVDocument* mDocument;
 	bool mStarted;
 	KURL::List mURLs;
+	KURL::List::ConstIterator mStartIt;
 };
 
 #endif // GVSLIDESHOW_H
