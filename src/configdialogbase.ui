@@ -679,10 +679,10 @@
                     </widget>
                     <widget class="QCheckBox">
                         <property name="name">
-                            <cstring>mShowAddressBar</cstring>
+                            <cstring>mShowLocationToolBar</cstring>
                         </property>
                         <property name="text">
-                            <string>Show address bar</string>
+                            <string>Show location toolbar</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">

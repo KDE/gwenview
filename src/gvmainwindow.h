@@ -49,12 +49,12 @@ public:
 	bool showMenuBarInFullScreen() const { return mShowMenuBarInFullScreen; }
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
-	bool showAddressBar() const { return mShowAddressBar; }
+	bool showLocationToolBar() const { return mShowLocationToolBar; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
 	void setShowStatusBarInFullScreen(bool);
-	void setShowAddressBar(bool);
+	void setShowLocationToolBar(bool);
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -65,7 +65,7 @@ private:
 	KDockWidget* mPixmapDock;
 	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
-	KToolBar* mAddressToolBar;
+	KToolBar* mLocationToolBar;
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
@@ -98,7 +98,7 @@ private:
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
 
-	bool mShowAddressBar;
+	bool mShowLocationToolBar;
 	
 	bool mShowMenuBarInFullScreen;
 	bool mShowToolBarInFullScreen;
@@ -108,7 +108,7 @@ private:
 	void createActions();
 	void createMenu();
 	void createMainToolBar();
-	void createAddressToolBar();
+	void createLocationToolBar();
 	void createConnections();
 
 	void readConfig(KConfig*,const QString&);

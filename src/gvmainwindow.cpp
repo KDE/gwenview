@@ -77,10 +77,10 @@ const char* CONFIG_SLIDESHOW_GROUP="slide show";
 const char* CONFIG_MENUBAR_IN_FS="menu bar in full screen";
 const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
 const char* CONFIG_STATUSBAR_IN_FS="status bar in full screen";
-const char* CONFIG_SHOW_ADDRESSBAR="show address bar";
+const char* CONFIG_SHOW_LOCATION_TOOLBAR="show address bar";
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mProgress(0L), mAddressToolBar(0L)
+: KDockMainWindow(), mProgress(0L), mLocationToolBar(0L)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
@@ -93,7 +93,7 @@ GVMainWindow::GVMainWindow()
 	createActions();
 	createMenu();
 	createMainToolBar();
-	createAddressToolBar();
+	createLocationToolBar();
 	createConnections();
 	mFileViewStack->setFocus();
 
@@ -678,21 +678,21 @@ void GVMainWindow::createMainToolBar() {
 }
 
 
-void GVMainWindow::createAddressToolBar() {
-	mAddressToolBar=new KToolBar(this,topDock(),true);
-	if (!mShowAddressBar) mAddressToolBar->hide();
-	mAddressToolBar->setLabel(i18n("Location Tool Bar"));
+void GVMainWindow::createLocationToolBar() {
+	mLocationToolBar=new KToolBar(this,topDock(),true);
+	if (!mShowLocationToolBar) mLocationToolBar->hide();
+	mLocationToolBar->setLabel(i18n("Location Tool Bar"));
 
-	mAddressToolBar->insertButton("locationbar_erase",1,true);
-	QToolTip::add(mAddressToolBar->getButton(1),"Clear location bar");
+	mLocationToolBar->insertButton("locationbar_erase",1,true);
+	QToolTip::add(mLocationToolBar->getButton(1),"Clear location bar");
 	
 	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
 	 * styles like Keramik). See konq_misc.cc.
 	 */
-	QLabel* urlLabel=new QLabel(i18n("L&ocation:"),mAddressToolBar,"kde toolbar widget");
-	mURLEdit=new KHistoryCombo(mAddressToolBar);
+	QLabel* urlLabel=new QLabel(i18n("L&ocation:"),mLocationToolBar,"kde toolbar widget");
+	mURLEdit=new KHistoryCombo(mLocationToolBar);
 	urlLabel->setBuddy(mURLEdit);
-	mAddressToolBar->addConnection(1,SIGNAL(clicked(int)),mURLEdit,SLOT(clearEdit()));
+	mLocationToolBar->addConnection(1,SIGNAL(clicked(int)),mURLEdit,SLOT(clearEdit()));
 	
 	mURLEdit->setDuplicatesEnabled(false);
 	
@@ -705,7 +705,7 @@ void GVMainWindow::createAddressToolBar() {
 	mURLEdit->setEditText(QDir::current().absPath());
 	mURLEdit->addToHistory(QDir::current().absPath());
 	mURLEdit->setDuplicatesEnabled(false);
-	mAddressToolBar->setStretchableWidget(mURLEdit);
+	mLocationToolBar->setStretchableWidget(mURLEdit);
 }
 
 	
@@ -744,13 +744,13 @@ void GVMainWindow::setShowStatusBarInFullScreen(bool value) {
 	}
 }
 
-void GVMainWindow::setShowAddressBar(bool value) {
-	mShowAddressBar=value;
-	if (!mAddressToolBar) return;
+void GVMainWindow::setShowLocationToolBar(bool value) {
+	mShowLocationToolBar=value;
+	if (!mLocationToolBar) return;
 	if (value) {
-		mAddressToolBar->show();
+		mLocationToolBar->show();
 	} else {
-		mAddressToolBar->hide();
+		mLocationToolBar->hide();
 	}
 }
 
@@ -765,7 +765,7 @@ void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	mShowMenuBarInFullScreen=config->readBoolEntry(CONFIG_MENUBAR_IN_FS,false);
 	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS,true);
 	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS,false);
-	setShowAddressBar(config->readBoolEntry(CONFIG_SHOW_ADDRESSBAR,true));
+	setShowLocationToolBar(config->readBoolEntry(CONFIG_SHOW_LOCATION_TOOLBAR,true));
 }
 
 
@@ -774,5 +774,5 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_MENUBAR_IN_FS,mShowMenuBarInFullScreen);
 	config->writeEntry(CONFIG_TOOLBAR_IN_FS,mShowToolBarInFullScreen);
 	config->writeEntry(CONFIG_STATUSBAR_IN_FS,mShowStatusBarInFullScreen);
-	config->writeEntry(CONFIG_SHOW_ADDRESSBAR,mShowAddressBar);
+	config->writeEntry(CONFIG_SHOW_LOCATION_TOOLBAR,mShowLocationToolBar);
 }
