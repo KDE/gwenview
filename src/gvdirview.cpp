@@ -328,6 +328,7 @@ void GVDirView::slotExecuted() {
 
 void GVDirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 	QListViewItem* child;
+	if (!item) return;
 	KURL url=item->url();
 
 	if (mDropTarget) {
