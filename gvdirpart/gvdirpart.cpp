@@ -84,6 +84,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mBrowserExtension->updateActions();
 
 	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
+	mSplitter->setFocusPolicy(QWidget::ClickFocus);
 
 	// Create the widgets
 	mDocument = new GVDocument(this);
