@@ -2,21 +2,21 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2003 Aurélien Gâteau
-
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
+ 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
+ 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+ 
 */
 
 #include <sys/stat.h> // For S_ISDIR
@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qpaintdevicemetrics.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -35,13 +36,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kprinter.h>
 #include <ktempfile.h>
+#include <kglobalsettings.h>
 
 // Our includes
 #include <gvarchive.h>
 #include <gvimagesavedialog.h>
 #include <gvjpegtran.h>
+#include <gvprintdialog.h>
 
 #include <gvpixmap.moc>
+
 
 
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
@@ -67,7 +71,7 @@ public:
 	void loadComment(const QString& path) {
 		KFileMetaInfo metaInfo=KFileMetaInfo(path);
 		KFileMetaInfoItem commentItem;
-		
+
 		mCommentState=GVPixmap::None;
 
 		if (metaInfo.isEmpty()) return;
@@ -77,11 +81,11 @@ public:
 		if (mimeType=="image/jpeg") {
 			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
 			mCommentState=
-				QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
+			    QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
 			mComment=QString::fromUtf8( commentItem.string().ascii() );
-			
+
 		} else if (mimeType=="image/png") {
-			
+
 			// we take all comments
 			QStringList keys=metaInfo[PNG_COMMENT].keys();
 			if (keys.size()==0) return;
@@ -91,8 +95,8 @@ public:
 			for(it=keys.begin(); it!=keys.end(); ++it) {
 				KFileMetaInfoItem metaInfoItem=metaInfo[PNG_COMMENT][*it];
 				QString line=QString("%1: %2")
-					.arg(metaInfoItem.translatedKey())
-					.arg(metaInfoItem.string());
+				             .arg(metaInfoItem.translatedKey())
+				             .arg(metaInfoItem.string());
 				tmp.append(line);
 			}
 			mComment=tmp.join("\n");
@@ -100,8 +104,8 @@ public:
 		} else {
 			return;
 		}
-		
-		#if 0
+
+#if 0
 		// Some code to debug
 		QStringList groups, keys;
 		groups = metaInfo.groups();
@@ -112,7 +116,8 @@ public:
 				kdDebug() << "- " << keys[j] << endl;
 			}
 		}
-		#endif
+#endif
+
 	}
 
 
@@ -120,14 +125,14 @@ public:
 		KFileMetaInfo metaInfo=KFileMetaInfo(path);
 		KFileMetaInfoItem commentItem;
 		if (metaInfo.isEmpty()) return;
-		
+
 		QString mimeType=metaInfo.mimeType();
 		if (mimeType=="image/jpeg") {
 			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
 		} else {
 			return;
 		}
-		
+
 		if (commentItem.isEditable()) {
 			commentItem.setValue(mComment);
 		}
@@ -142,9 +147,8 @@ public:
 //
 //-------------------------------------------------------------------
 GVPixmap::GVPixmap(QObject* parent)
-: QObject(parent)
-, mModified(false)
-{
+		: QObject(parent)
+, mModified(false) {
 	d=new GVPixmapPrivate;
 	d->mCommentState=None;
 }
@@ -171,7 +175,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	//kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
 	KURL URL(paramURL);
 	if (URL.cmp(url())) return;
-	
+
 	// Ask to save if necessary.
 	if (!saveIfModified()) {
 		// Not saved, notify others that we stay on the image
@@ -270,7 +274,7 @@ void GVPixmap::setComment(const QString& comment) {
 
 //---------------------------------------------------------------------
 //
-// Operations 
+// Operations
 //
 //---------------------------------------------------------------------
 void GVPixmap::reload() {
@@ -280,21 +284,155 @@ void GVPixmap::reload() {
 
 
 void GVPixmap::print(KPrinter *pPrinter) {
-  QPainter printpainter;
-
-  // Is this needed?
-  KURL url = this->url();
-  QString path=url.path();
-  pPrinter->setDocName(mFilename);
-
-  printpainter.begin(pPrinter);
-  
-  printpainter.drawImage(0,0,mImage);
-  
-  printpainter.end();
-
+	QPainter printPainter;
+	printPainter.begin(pPrinter);
+	doPaint(pPrinter, &printPainter);
+	printPainter.end();
 }
 
+QString GVPixmap::minimizeString( QString text, const QFontMetrics&
+                                  metrics, int maxWidth ) {
+	if ( text.length() <= 5 )
+		return QString::null; // no sense to cut that tiny little string
+
+	bool changed = false;
+	while ( metrics.width( text ) > maxWidth ) {
+		int mid = text.length() / 2;
+		text.remove( mid, 2 ); // remove 2 characters in the middle
+		changed = true;
+	}
+
+	if ( changed ) // add "..." in the middle
+	{
+		int mid = text.length() / 2;
+		if ( mid <= 5 ) // sanity check
+			return QString::null;
+
+		text.replace( mid - 1, 3, "..." );
+	}
+
+	return text;
+}
+
+void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
+	QImage image = mImage;   // will contain the final image to print
+
+	// We use a QPaintDeviceMetrics to know the actual page size in pixel,
+	// this gives the real painting area
+	QPaintDeviceMetrics metrics(p->device());
+
+	p->setFont( KGlobalSettings::generalFont() );
+	QFontMetrics fm = p->fontMetrics();
+
+	int w = metrics.width();
+	int h = metrics.height();
+
+	QString t = "true";
+	QString f = "false";
+
+	// Black & white print?
+	if ( pPrinter->option( "app-gwenview-blackWhite" ) != f) {
+		image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
+	} else {
+		QString col = pPrinter->option("OutputType");
+		if (col == "Grayscale") {
+			//image = image.convertDepth( 8, Qt::MonoOnly | Qt::OrderedDither );
+			kdWarning() << "GrayScale not yet supported! \n";
+			//BTW it seems to be managed directly from kprinter
+		} else if (col == "BlackAndWhite")
+			image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
+
+		//KPrinter::ColorMode col = pPrinter->colorMode();
+		//ColorMode GrayScale = QPrinter::GrayScale, Color = QPrinter::Color
+		//image = image.convertDepth( 1, Qt::MonoOnly | Qt::ThresholdDither | Qt::AvoidDither );
+	}
+
+	int alignment;
+	QString align = pPrinter->option("position");
+	if (align == "left") {
+		alignment = Qt::AlignLeft | Qt::AlignVCenter;
+	} else if (align == "right") {
+		alignment = Qt::AlignRight | Qt::AlignVCenter;
+	} else if (align == "top-left") {
+		alignment = Qt::AlignTop | Qt::AlignLeft;
+	} else if (align == "top-right") {
+		alignment = Qt::AlignTop | Qt::AlignRight;
+	} else if (align == "bottom-left") {
+		alignment = Qt::AlignBottom | Qt::AlignLeft;
+	} else if (align == "bottom-right") {
+		alignment = Qt::AlignBottom | Qt::AlignRight;
+	} else // default
+	{
+		alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
+	}
+
+	int imgScaling = (pPrinter->option("natural-scaling").isEmpty() ?
+	                  0 : pPrinter->option("natural-scaling").toInt());
+	if (imgScaling) {
+		int w_img = image.width();
+		int h_img = image.height();
+
+		w_img = (w_img * imgScaling) / 100;
+		if (w_img == 0) w_img = 1;
+		h_img = (h_img * imgScaling) / 100;
+		if (h_img == 0) h_img = 1;
+		image = image.smoothScale( w_img, h_img, QImage::ScaleMin );
+	}
+
+	int pageScaling = (pPrinter->option("scaling").isEmpty() ?
+	                   0 : pPrinter->option("scaling").toInt());
+	if (pageScaling) {
+		w = (w * pageScaling) / 100;
+		if (w == 0) w = 1;
+		h = (h * pageScaling) / 100;
+		if (h == 0) h = 1;
+		image = image.smoothScale( w, h, QImage::ScaleMin );
+	}
+
+	int filenameOffset = 0;
+	bool printFilename = pPrinter->option( "app-gwenview-printFilename" ) != f;
+	if ( printFilename ) {
+		filenameOffset = fm.lineSpacing() + 14;
+		h -= filenameOffset; // filename goes into one line!
+	}
+
+	bool shrinkToFit = (pPrinter->option( "app-gwenview-shrinkToFit" ) != f);
+	if ( shrinkToFit && image.width() > w || image.height() > h ) {
+		image = image.smoothScale( w, h, QImage::ScaleMin );
+	}
+
+	int x = 0;
+	int y = 0;
+
+	// x - alignment
+	if ( alignment & Qt::AlignHCenter )
+		x = (w - image.width())/2;
+	else if ( alignment & Qt::AlignLeft )
+		x = 0;
+	else if ( alignment & Qt::AlignRight )
+		x = w - image.width();
+
+	// y - alignment
+	if ( alignment & Qt::AlignVCenter )
+		y = (h - image.height())/2;
+	else if ( alignment & Qt::AlignTop )
+		y = 0;
+	else if ( alignment & Qt::AlignBottom )
+		y = h - image.height();
+
+	// at last we draw the image!
+	p->drawImage( x, y, image );
+
+	if ( printFilename ) {
+		QString fname = minimizeString( mFilename, fm, w );
+		if ( !fname.isEmpty() ) {
+			int fw = fm.width( fname );
+			int x = (w - fw)/2;
+			int y = metrics.height() - filenameOffset/2;
+			p->drawText( x, y, fname );
+		}
+	}
+}
 
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
@@ -370,10 +508,10 @@ void GVPixmap::saveAs() {
 bool GVPixmap::saveIfModified() {
 	if (!mModified) return true;
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
-				.arg(url().prettyURL());
+	            .arg(url().prettyURL());
 
 	int result=KMessageBox::questionYesNoCancel(0, msg, QString::null,
-		i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
+	           i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
 
 	switch (result) {
 	case KMessageBox::Yes:
@@ -410,7 +548,7 @@ void GVPixmap::setModifiedBehavior(ModifiedBehavior value) {
 	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->setGroup(CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->writeEntry(CONFIG_SAVE_AUTOMATICALLY,
-		modifiedBehaviorToString(value));
+	                   modifiedBehaviorToString(value));
 }
 
 
@@ -461,7 +599,7 @@ void GVPixmap::load() {
 		// data if necessary, otherwise throw the compressed data away
 		if (mImageFormat=="JPEG") {
 			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mCompressedData);
-			
+
 			if (orientation!=GVImageUtils::NotAvailable && orientation!=GVImageUtils::Normal) {
 				mImage=GVImageUtils::rotate(mImage, orientation);
 				mCompressedData=GVJPEGTran::apply(mCompressedData,orientation);
@@ -471,11 +609,11 @@ void GVPixmap::load() {
 			mCompressedData.resize(0);
 		}
 
-        d->loadComment(path);
+		d->loadComment(path);
 	} else {
 		mImage.reset();
 	}
-	
+
 	KIO::NetAccess::removeTempFile(path);
 	emit loaded(mDirURL,mFilename);
 }
@@ -492,7 +630,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	} else {
 		path=tmp.name();
 	}
-	
+
 	if (format=="JPEG" && !mCompressedData.isNull()) {
 		//kdDebug() << "Lossless save\n";
 		QFile file(path);
@@ -508,11 +646,11 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 
 	// Save comment
 	d->saveComment(path);
-		
+
 	if (!url.isLocalFile()) {
 		result=KIO::NetAccess::upload(tmp.name(),url);
 	}
-	
+
 	if (result) {
 		emit saved(url);
 		mModified=false;

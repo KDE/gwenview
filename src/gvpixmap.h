@@ -131,6 +131,9 @@ private:
 	void reset();
 	void load();
 	bool saveInternal(const KURL&,const QString& format);
+	void doPaint(KPrinter *pPrinter, QPainter *p); 
+    QString minimizeString( QString text, const QFontMetrics&
+                             metrics, int maxWidth );
 };
 
 

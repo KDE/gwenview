@@ -1,6 +1,7 @@
 200x.xx.xx - v1.1.0
 - New features:
  - Double-clicking an image in the file view will open it in fullscreen.
+ - Better print dialog.
 - Fixes:
  - Gave contributors the credit they deserve in the about box.
  - Updated to libexif 0.5.12 and applied from libexif CVS.

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtooltip.h>
 
 // KDE
+#include <kaboutdata.h>
 #include <kaccel.h>
 #include <kaction.h>
 #include <kapplication.h>
@@ -56,6 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
 #include <kprinter.h>
+#include <kdeprint/kprintdialog.h>
 
 // Local
 #include "gvconfigdialog.h"
@@ -72,6 +74,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvslideshowdialog.h"
 #include "statusbarprogress.h"
 #include "gvmetaedit.h"
+#include <gvprintdialog.h>
 
 
 #if KDE_VERSION < 0x30100
@@ -79,7 +82,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #include "gvmainwindow.moc"
-
 
 const char* CONFIG_DOCK_GROUP="dock";
 const char* CONFIG_GVPIXMAP_GROUP="misc";
@@ -316,10 +318,20 @@ void GVMainWindow::openFile() {
 	mGVPixmap->setURL(url);
 }
 
-void GVMainWindow::printFile()
-{
+
+void GVMainWindow::printFile() {
 	KPrinter printer;
-	if (printer.setup(this)) {
+
+	printer.setDocName(mGVPixmap->filename());
+	const KAboutData* pAbout = KApplication::kApplication()->aboutData();
+	QString nm = pAbout->appName();
+	nm += "-";
+	nm += pAbout->version();
+	printer.setCreator( nm );
+
+	KPrinter::addDialogPage( new GVPrintDialogPage( this, "GV page"));
+
+	if (printer.setup(this, QString::null, true)) {
 		mGVPixmap->print(&printer);
 	}
 }
@@ -920,3 +932,4 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_STATUSBAR_IN_FS, mShowStatusBarInFullScreen);
 	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 }
+
