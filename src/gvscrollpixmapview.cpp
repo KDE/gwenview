@@ -93,15 +93,16 @@ public:
 	: mView(view) {}
 	virtual ~ToolController() {}
 	virtual void leftButtonPressEvent(QMouseEvent*) {}
+	virtual void rightButtonPressEvent(QMouseEvent* event) {
+		mView->openContextMenu(event->globalPos());
+	}
 	virtual void mouseMoveEvent(QMouseEvent*) {}
 	virtual void leftButtonReleaseEvent(QMouseEvent*) {}
 	virtual void midButtonReleaseEvent(QMouseEvent*) {
 		mView->autoZoom()->activate();
 	}
 
-	virtual void rightButtonReleaseEvent(QMouseEvent* event) {
-		mView->openContextMenu(event->globalPos());
-	}
+	virtual void rightButtonReleaseEvent(QMouseEvent*) {}
 
 	virtual void wheelEvent(QWheelEvent* event) { event->accept(); }
 	virtual void updateCursor() {
@@ -149,6 +150,7 @@ public:
 		event->accept();
 	}
 
+	virtual void rightButtonPressEvent(QMouseEvent*) {}
 	void rightButtonReleaseEvent(QMouseEvent* event) {
 		zoomTo(event->pos(), false);
 	}
@@ -817,8 +819,15 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 
 void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
-	if (event->button()==LeftButton) {
+	switch (event->button()) {
+	case Qt::LeftButton:
 		mToolControllers[mTool]->leftButtonPressEvent(event);
+		break;
+	case Qt::RightButton:
+		mToolControllers[mTool]->rightButtonPressEvent(event);
+		break;
+	default: // Avoid compiler complain
+		break;
 	}
 }
 
