@@ -247,7 +247,11 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
 	align|=AlignBottom;
 	QFont font=p->font();
-	font.setPointSize(font.pointSize()-2);
+	if (font.pixelSize()!=-1) {
+		font.setPixelSize(font.pixelSize()-2);
+	} else {
+		font.setPointSize(font.pointSize()-2);
+	}
 	p->setFont(font);
 	p->drawText(tRect, align, mInfoText);
 
