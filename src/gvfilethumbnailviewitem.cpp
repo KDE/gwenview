@@ -154,12 +154,12 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 
 void GVFileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 	static QString dots("...");
-	QIconView* view = iconView();
+	GVFileThumbnailView* view = static_cast<GVFileThumbnailView*>( iconView() );
 	Q_ASSERT( view );
 	if ( !view ) return;
 
 // If the text fit in the width, don't truncate it
-	int width=view->gridX()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
+	int width=view->thumbnailSize().pixelSize()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
 	if (fm.boundingRect(text()).width()<=width) {
 		mTruncatedText=QString::null;
 		return;
@@ -223,7 +223,6 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 			str=text();
 		} else {
 			str=mTruncatedText;
-			align=AlignLeft;
 		}
 		p->drawText(tRect,align,str);
 	}
