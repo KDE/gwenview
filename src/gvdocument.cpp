@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.moc"
 
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -82,7 +82,7 @@ public:
 	QString mFilename;
 	bool mModified;
 	QImage mImage;
-	const char* mImageFormat;
+	QCString mImageFormat;
 	GVDocumentImpl* mImpl;
 	QGuardedPtr<KIO::StatJob> mStatJob;
 	int mFileSize;
@@ -254,11 +254,11 @@ const QString& GVDocument::filename() const {
 	return d->mFilename;
 }
 
-const char* GVDocument::imageFormat() const {
+const QCString& GVDocument::imageFormat() const {
 	return d->mImageFormat;
 }
 
-void GVDocument::setImageFormat(const char* format) {
+void GVDocument::setImageFormat(const QCString& format) {
 	d->mImageFormat=format;
 }
 
@@ -587,7 +587,7 @@ void GVDocument::slotFinished(bool success) {
 }
 
 
-bool GVDocument::saveInternal(const KURL& url, const char* format) {
+bool GVDocument::saveInternal(const KURL& url, const QCString& format) {
 	bool result=d->mImpl->save(url, format);
 	
 	if (result) {

@@ -38,7 +38,7 @@ public:
 	
 	void switchToImpl(GVDocumentImpl*);
 	void setImage(QImage);
-	void setImageFormat(const char*);
+	void setImageFormat(const QCString&);
 	void setFileSize(int) const;
 	
 	virtual QString comment() const;
@@ -49,7 +49,7 @@ public:
 	virtual void resumeLoading();
 
 	virtual void modify(GVImageUtils::Orientation);
-	virtual bool save(const KURL&, const char* format) const;
+	virtual bool save(const KURL&, const QCString& format) const;
 
 signals:
 	void finished(bool success);

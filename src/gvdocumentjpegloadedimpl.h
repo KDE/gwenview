@@ -44,7 +44,7 @@ public:
 	void modify(GVImageUtils::Orientation);
 
 protected:
-	bool localSave(const QString&, const char* format) const;
+	bool localSave(const QString&, const QCString& format) const;
 	
 private:
 	GVDocumentJPEGLoadedImplPrivate* d;

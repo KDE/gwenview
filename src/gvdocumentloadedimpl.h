@@ -36,10 +36,10 @@ public:
 	~GVDocumentLoadedImpl();
 	
 	void modify(GVImageUtils::Orientation);
-	bool save(const KURL&, const char* format) const;
+	bool save(const KURL&, const QCString& format) const;
 
 protected:
-	virtual bool localSave(const QString& file, const char* format) const;
+	virtual bool localSave(const QString& file, const QCString& format) const;
 	
 protected slots:
 	virtual void finishLoading();

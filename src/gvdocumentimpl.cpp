@@ -37,7 +37,7 @@ void GVDocumentImpl::setImage(QImage img) {
 	mDocument->setImage(img);
 }
 
-void GVDocumentImpl::setImageFormat(const char* format) {
+void GVDocumentImpl::setImageFormat(const QCString& format) {
 	mDocument->setImageFormat(format);
 }
 
@@ -65,6 +65,6 @@ void GVDocumentImpl::resumeLoading() {
 void GVDocumentImpl::modify(GVImageUtils::Orientation) {
 }
 
-bool GVDocumentImpl::save(const KURL&, const char*) const {
+bool GVDocumentImpl::save(const KURL&, const QCString&) const {
 	return false;
 }

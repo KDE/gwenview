@@ -56,7 +56,7 @@ public:
 	KURL url() const;
 	const KURL& dirURL() const;
 	const QString& filename() const;
-	const char* imageFormat() const;
+	const QCString& imageFormat() const;
 	int fileSize() const;
 
 	// Convenience methods
@@ -148,12 +148,12 @@ private:
 	// These methods are used by GVDocumentImpl and derived
 	void switchToImpl(GVDocumentImpl*);
 	void setImage(QImage);
-	void setImageFormat(const char*);
+	void setImageFormat(const QCString&);
 	void setFileSize(int); 
 	
 	void reset();
 	void load();
-	bool saveInternal(const KURL&,const char* format);
+	bool saveInternal(const KURL&,const QCString& format);
 	void doPaint(KPrinter *pPrinter, QPainter *p); 
 };
 

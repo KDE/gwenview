@@ -62,7 +62,7 @@ void GVDocumentLoadedImpl::modify(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVDocumentLoadedImpl::save(const KURL& url, const char* format) const {
+bool GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) const {
 	bool result;
 
 	KTempFile tmp;
@@ -86,7 +86,7 @@ bool GVDocumentLoadedImpl::save(const KURL& url, const char* format) const {
 }
 
 
-bool GVDocumentLoadedImpl::localSave(const QString& path, const char* format) const {
+bool GVDocumentLoadedImpl::localSave(const QString& path, const QCString& format) const {
 	return mDocument->image().save(path, format);
 }
 

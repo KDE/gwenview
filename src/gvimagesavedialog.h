@@ -32,8 +32,8 @@ class KURL;
 class GVImageSaveDialog : public KFileDialog {
 Q_OBJECT
 public:
-	GVImageSaveDialog(KURL& url,const char* imageFormat,QWidget* parent);
-    const char* imageFormat() const { return mImageFormat.ascii(); }
+	GVImageSaveDialog(KURL& url,const QCString& imageFormat,QWidget* parent);
+    QCString imageFormat() const { return mImageFormat; }
     
 protected slots:
 	void accept();
@@ -43,7 +43,7 @@ private slots:
 
 private:
 	KURL& mURL;
-	QString mImageFormat;
+	QCString mImageFormat;
 	QMap<QString,QString> mImageFormats;
 };
 

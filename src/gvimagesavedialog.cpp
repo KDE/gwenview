@@ -63,7 +63,7 @@ static QString typeForMime(const QString& mimeType) {
 }
 #endif
 
-GVImageSaveDialog::GVImageSaveDialog(KURL& url, const char* imageFormat, QWidget* parent)
+GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"gvimagesavedialog",true)
 , mURL(url)
 , mImageFormat(imageFormat)
@@ -133,7 +133,7 @@ void GVImageSaveDialog::accept() {
 
 void GVImageSaveDialog::updateImageFormat(const QString& text) {
 	QStringList list=QStringList::split(" ",text);
-	mImageFormat=list[0];
+	mImageFormat=list[0].local8Bit();
 	
 	QString name=locationEdit->currentText();
 	QString suffix=KImageIO::suffix(mImageFormat);

@@ -129,7 +129,7 @@ void GVDocumentJPEGLoadedImpl::modify(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const char* format) const {
+bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const QCString& format) const {
 	bool result;
 
 	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
