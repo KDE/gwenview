@@ -164,7 +164,7 @@ bool GVDirPart::openURL(const KURL& url) {
 	m_url.adjustPath(1);
 
 	emit setWindowCaption( m_url.prettyURL() );
-	mFilesView->setURL(m_url);
+	mFilesView->setDirURL(m_url);
 
 	return true;
 }
