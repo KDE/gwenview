@@ -103,6 +103,8 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 	mFileDetailView=new FileDnDDetailView(this,"filedetailview");
 	addWidget(mFileDetailView,0);
 
+	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
+		this,SLOT(executed()) );
 	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
 		this,SLOT(detailChanged(QListViewItem*)) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
@@ -114,6 +116,8 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 	mFileThumbnailView=new FileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
 
+	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
+		this,SLOT(executed()) );
 	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
 		this,SLOT(thumbnailChanged(QIconViewItem*)) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
@@ -248,20 +252,31 @@ void FileView::slotSelectNext() {
 
 
 //-Private slots---------------------------------------------------------
+void FileView::executed() {
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (!item) return;
+	if (!item->isDir()) return;
+	emitURLChanged();
+}
+
+
 void FileView::detailChanged(QListViewItem* item) {
 	if (!item) return;
+	if (currentFileView()->currentFileItem()->isDir()) return;
 	emitURLChanged();
 }
 
 
 void FileView::thumbnailChanged(QIconViewItem* item) {
 	if (!item) return;
+	if (currentFileView()->currentFileItem()->isDir()) return;
 	emitURLChanged();
 }
 
 
 void FileView::detailRightButtonClicked(QListViewItem* item,const QPoint& pos,int) {
 	if (!item) return;
+	if (currentFileView()->currentFileItem()->isDir()) return;
 	emitURLChanged();
 	if (mPopupMenu)
 		mPopupMenu->popup(pos);
@@ -270,6 +285,7 @@ void FileView::detailRightButtonClicked(QListViewItem* item,const QPoint& pos,in
 
 void FileView::thumbnailRightButtonClicked(QIconViewItem* item,const QPoint& pos) {
 	if (!item) return;
+	if (currentFileView()->currentFileItem()->isDir()) return;
 	emitURLChanged();
 	mPopupMenu->popup(pos);
 }

@@ -113,6 +113,9 @@ signals:
 
 
 private slots:
+// Common slot to both views, used for directories
+	void executed();
+
 // Detail view signals
 	void detailChanged(QListViewItem* item);
 	void detailRightButtonClicked(QListViewItem*,const QPoint&,int);
