@@ -998,8 +998,8 @@ void GVMainWindow::loadPlugins() {
 	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
 
 	// Fill the plugin menu
-	KIPI::PluginLoader::PluginList::ConstIterator it(loader->pluginList().constBegin());
-	KIPI::PluginLoader::PluginList::ConstIterator itEnd(loader->pluginList().constEnd());
+	KIPI::PluginLoader::PluginList::ConstIterator it(loader->pluginList().begin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(loader->pluginList().end());
 	for( ; it!=itEnd; ++it ) {
 		KIPI::Plugin* plugin = (*it)->plugin;
 
