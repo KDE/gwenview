@@ -1,15 +1,17 @@
-2004.xx.xx - v1.1.5
+2004.09.19 - v1.1.5
 - New features:
  - The thumbnail progress bar and stop buttons are now embedded in the
    thumbnail view.
  - The location bar now shows the file names instead of the folders.
- - Moved the thumbnails toolbar buttons to a specialized file view toolbar.
+ - The thumbnails toolbar buttons have been moved to a specialized file view
+   toolbar.
  - It's now possible to assign key shortcuts to KIPI plugins.
+ - New manpage by Christopher Martin.
 - Fixes:
  - Do not display the folder name as an image in the status bar.
  - Make sure the folder KPart starts in the right folder.
  - Unbreak the saving of key shortcuts.
- - Correctly bookmark remote urls.
+ - Remote urls are correctly bookmarked.
  - Do not try to overwrite the trash when trashing only one file.
 
 2004.07.31 - v1.1.4
