@@ -3,15 +3,16 @@
  - Added an "Edit" submenu to the popup menu of the image view, containing the
    same items as the main window "Edit" menu.
  - Moved the "Open with editor" in the "Edit" menu.
- - Moved the image information from status bar to the window title.
+ - Moved the image file name from status bar to the window title.
  - Fixed the bug which caused the window to grow up when entering folders with
    long names.
+ - Rotating big JPEG images with JPEGTran won't hung anymore.
 
 2003.xx.xx - v0.17.1
 - Fixes:
  - In the folder view, show the "+" sign in front of folders if they have
    sub-folders.
- - Lossless manipulations of JPEG files won't remove the EXIF information
+ - Lossless manipulations of JPEG images won't remove the EXIF information
    anymore.
  - Handling of the EXIF orientation tag should now work on KDE 3.0.
  - When "auto-zoom" was on, pressing the "reset zoom" button would not

@@ -46,14 +46,16 @@ public:
 	static void setProgramPath(const QString&);
 
 private slots:
-	void slotWroteStdin(KProcess*);
+	void writeChunk(KProcess*);
 	void slotReceivedStdout(KProcess*,char*,int);
 	void slotReceivedStderr(KProcess*,char*,int);
 	void slotProcessExited();
 
 private:
 	GVJPEGTran();
-	QByteArray mResult;
+	QByteArray mSrc;
+	unsigned int mSent;
+	QByteArray mDst;
 };
 
 

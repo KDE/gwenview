@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h> // For memcpy
 
 // Qt
+#include <qcursor.h>
 #include <qeventloop.h>
 
 // KDE
@@ -36,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 const char* CONFIG_PROGRAM_PATH="path";
+const unsigned int CHUNK_SIZE=1024;
 
 static QString sProgramPath;
 
@@ -43,29 +45,38 @@ static QString sProgramPath;
 GVJPEGTran::GVJPEGTran()
 {}
 
-void GVJPEGTran::slotWroteStdin(KProcess* process) {
-	kdDebug() << "slotWroteStdin\n";
-	process->closeStdin();
+void GVJPEGTran::writeChunk(KProcess* process) {
+	//kdDebug() << "writeChunk\n";
+
+	if (mSent>=mSrc.size()) {
+		//kdDebug() << " all done\n";
+		process->closeStdin();
+		return;
+	}
+	unsigned int size=QMIN(mSrc.size()-mSent, CHUNK_SIZE);
+	//kdDebug() << " sending " << size << " bytes\n";
+	process->writeStdin( mSrc.data() + mSent, size );
+	mSent+=size;
 }
 
 void GVJPEGTran::slotReceivedStdout(KProcess*,char* data,int length) {
-	kdDebug() << "slotReceivedStdout size:" << length << endl;
-	uint oldSize=mResult.size();
-	mResult.resize(oldSize+length);
-	memcpy(mResult.data()+oldSize,data,length);
+	//kdDebug() << "slotReceivedStdout size:" << length << endl;
+	uint oldSize=mDst.size();
+	mDst.resize(oldSize+length);
+	memcpy(mDst.data()+oldSize,data,length);
 }
 
 
 void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
-	kdDebug() << "slotReceivedStderr size:" << length << endl;
+	//kdDebug() << "slotReceivedStderr size:" << length << endl;
 	kdWarning() << "Error: " << QCString(data,length) << endl;
-	mResult.resize(0);
+	mDst.resize(0);
 	process->kill();
 }
 
 
 void GVJPEGTran::slotProcessExited() {
-	kdDebug() << "slotProcessExited" << endl;
+	//kdDebug() << "slotProcessExited" << endl;
 	kapp->eventLoop()->exitLoop();
 }
 
@@ -101,7 +112,7 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	}
 	
 	connect(&process,SIGNAL(wroteStdin(KProcess*)),
-		&obj,SLOT(slotWroteStdin(KProcess*)) );
+		&obj,SLOT(writeChunk(KProcess*)) );
 	
 	connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
 		&obj,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
@@ -122,10 +133,16 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 					),QString::null,"jpegtran failed");
 		return QByteArray();
 	}
-	process.writeStdin( src.data(), src.size() );
-	kapp->eventLoop()->enterLoop();
 	
-	return obj.mResult;
+	obj.mSrc=src;
+	obj.mSent=0;
+	obj.writeChunk(&process);
+	
+	kapp->setOverrideCursor(QCursor(WaitCursor));
+	kapp->eventLoop()->enterLoop();
+	kapp->restoreOverrideCursor();
+	
+	return obj.mDst;
 }
 
 
