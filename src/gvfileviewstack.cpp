@@ -742,9 +742,13 @@ void GVFileViewStack::dirListerNewItems(const KFileItemList& items) {
 
 void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 	//kdDebug() << "GVFileViewStack::dirListerRefreshItems\n";
+	const KFileItem* item=currentFileView()->shownFileItem();
 	KFileItemListIterator it(list);
 	for (; *it!=0L; ++it) {
 		currentFileView()->updateView(*it);
+		if (*it==item) {
+			emit shownFileItemRefreshed(item);
+		}
 	}
 }
 

@@ -646,6 +646,14 @@ void GVMainWindow::slotGo() {
 	mDocument->setURL(url);
 }
 
+void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
+	kdDebug() << k_funcinfo << endl;
+	if (int(item->size())!=mDocument->fileSize()) {
+		kdDebug() << k_funcinfo << "need reload " << int(item->size()) << "!=" << mDocument->fileSize() << endl;
+		mDocument->reload();
+	}
+}
+
 //-----------------------------------------------------------------------
 //
 // GUI
@@ -886,6 +894,8 @@ void GVMainWindow::createConnections() {
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(imageDoubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
+	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
+		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
 	// Don't connect mDocument::loaded to mDirView. mDirView will be
 	// updated _after_ the file view is done, since it's less important to the
 	// user

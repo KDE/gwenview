@@ -37,9 +37,12 @@ public:
 	
 	void modify(GVImageUtils::Orientation);
 	bool save(const KURL&, const char* format) const;
+
+protected:
+	virtual bool localSave(const QString& file, const char* format) const;
 	
-private slots:
-	void emitFinished();
+protected slots:
+	virtual void finishLoading();
 };
 
 #endif /* GVDOCUMENTLOADEDIMPL_H */

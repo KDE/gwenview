@@ -41,6 +41,10 @@ void GVDocumentImpl::setImageFormat(const char* format) {
 	mDocument->setImageFormat(format);
 }
 
+void GVDocumentImpl::setFileSize(int size) const {
+	mDocument->setFileSize(size);
+}
+
 QString GVDocumentImpl::comment() const {
 	return QString::null;
 }

@@ -38,6 +38,7 @@ class KHistoryCombo;
 class KToggleAction;
 class KToolBar;
 class KToolBarPopupAction;
+class KFileItem;
 class KURLCompletion;
 
 class GVDirView;
@@ -183,6 +184,8 @@ private slots:
 	void thumbnailUpdateStarted(int);
 	void thumbnailUpdateEnded();
 	void thumbnailUpdateProcessedOne();
+
+	void slotShownFileItemRefreshed(const KFileItem* item);
 
 	/**
 	 * Allow quitting full screen mode by pressing Escape key.

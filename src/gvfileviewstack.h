@@ -138,6 +138,7 @@ signals:
 	void canceled();
 	void completedURLListing(const KURL&);
 	void imageDoubleClicked();
+	void shownFileItemRefreshed(const KFileItem*);
 
 	// Thumbnail view signals
 	void updateStarted(int);

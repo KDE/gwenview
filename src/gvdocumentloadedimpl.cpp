@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
 // Qt
+#include <qfileinfo.h>
 #include <qtimer.h>
 
 // KDE
@@ -37,13 +38,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 
+class GVDocumentLoadedImplPrivate {
+	int mSize;
+	QDateTime mModified;
+};
+
 GVDocumentLoadedImpl::GVDocumentLoadedImpl(GVDocument* document)
 : GVDocumentImpl(document) {
 	LOG("");
 	
 	// Do not emit the signal directly from the constructor because
 	// switchToImpl has not updated the connections yet
-	QTimer::singleShot(0, this, SLOT(emitFinished()) );
+	QTimer::singleShot(0, this, SLOT(finishLoading()) );
 }
 
 
@@ -68,8 +74,9 @@ bool GVDocumentLoadedImpl::save(const KURL& url, const char* format) const {
 		path=tmp.name();
 	}
 
-	result=mDocument->image().save(path, format);
+	result=localSave(path, format);
 	if (!result) return false;
+	setFileSize(QFileInfo(path).size());
 
 	if (!url.isLocalFile()) {
 		result=KIO::NetAccess::upload(tmp.name(),url);
@@ -77,8 +84,12 @@ bool GVDocumentLoadedImpl::save(const KURL& url, const char* format) const {
 
 	return result;
 }
-	
 
-void GVDocumentLoadedImpl::emitFinished() {
+
+bool GVDocumentLoadedImpl::localSave(const QString& path, const char* format) const {
+	return mDocument->image().save(path, format);
+}
+
+void GVDocumentLoadedImpl::finishLoading() {
 	emit finished(true);
 }

@@ -39,6 +39,7 @@ public:
 	void switchToImpl(GVDocumentImpl*);
 	void setImage(QImage);
 	void setImageFormat(const char*);
+	void setFileSize(int) const;
 	
 	virtual QString comment() const;
 	virtual GVDocument::CommentState commentState() const;

@@ -448,6 +448,9 @@ void GVDocumentDecodeImpl::finish(QImage& image) {
 		emit sizeUpdated(image.width(), image.height());
 		emit rectUpdated( QRect(QPoint(0,0), image.size()) );
 	}
+
+	// Update file info
+	setFileSize(d->mRawData.size());
 	
 	// Now we switch to a loaded implementation
 	if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {

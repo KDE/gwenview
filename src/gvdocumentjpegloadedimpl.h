@@ -25,13 +25,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qimage.h>
 
 // Local
-#include "gvdocumentimpl.h"
+#include "gvdocumentloadedimpl.h"
 
 class GVDocument;
 
 class GVDocumentJPEGLoadedImplPrivate;
 
-class GVDocumentJPEGLoadedImpl : public GVDocumentImpl {
+class GVDocumentJPEGLoadedImpl : public GVDocumentLoadedImpl {
 Q_OBJECT
 public:
 	GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath);
@@ -42,7 +42,9 @@ public:
 	GVDocument::CommentState commentState() const;
 	
 	void modify(GVImageUtils::Orientation);
-	bool save(const KURL&, const char* format) const;
+
+protected:
+	bool localSave(const QString&, const char* format) const;
 	
 private:
 	GVDocumentJPEGLoadedImplPrivate* d;

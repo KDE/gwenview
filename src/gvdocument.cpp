@@ -85,6 +85,7 @@ public:
 	const char* mImageFormat;
 	GVDocumentImpl* mImpl;
 	QGuardedPtr<KIO::StatJob> mStatJob;
+	int mFileSize;
 };
 
 
@@ -99,6 +100,7 @@ GVDocument::GVDocument(QObject* parent)
 	d->mModified=false;
 	d->mImpl=new GVDocumentEmptyImpl(this);
 	d->mStatJob=0L;
+	d->mFileSize=-1;
 	
 	// Register formats here to make sure they are always enabled
 	KImageIO::registerFormats();
@@ -257,6 +259,10 @@ void GVDocument::setImageFormat(const char* format) {
 	d->mImageFormat=format;
 }
 
+void GVDocument::setFileSize(int size) {
+	d->mFileSize=size;
+}
+
 QString GVDocument::comment() const {
 	return d->mImpl->comment();
 }
@@ -269,6 +275,10 @@ void GVDocument::setComment(const QString& comment) {
 
 GVDocument::CommentState GVDocument::commentState() const {
 	return d->mImpl->commentState();
+}
+
+int GVDocument::fileSize() const {
+	return d->mFileSize;
 }
 
 void GVDocument::slotLoading() {

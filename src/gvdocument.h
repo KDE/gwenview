@@ -57,6 +57,7 @@ public:
 	const KURL& dirURL() const;
 	const QString& filename() const;
 	const char* imageFormat() const;
+	int fileSize() const;
 
 	// Convenience methods
 	bool isNull() const { return image().isNull(); }
@@ -148,6 +149,7 @@ private:
 	void switchToImpl(GVDocumentImpl*);
 	void setImage(QImage);
 	void setImageFormat(const char*);
+	void setFileSize(int); 
 	
 	void reset();
 	void load();

@@ -98,7 +98,7 @@ public:
  * otherwise it is the name of a local copy of the file and must be deleted
  */
 GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath)
-: GVDocumentImpl(document) {
+: GVDocumentLoadedImpl(document) {
 	kdDebug() << k_funcinfo << endl;
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mRawData=rawData;
@@ -107,8 +107,6 @@ GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteAr
     } else {
         d->mLocalFilePath=tempFilePath;
     }
-
-	QTimer::singleShot(0, this, SLOT(finishLoading()) );
 }
 
 GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
@@ -125,17 +123,8 @@ void GVDocumentJPEGLoadedImpl::modify(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVDocumentJPEGLoadedImpl::save(const KURL& url, const char* format) const {
+bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const char* format) const {
 	bool result;
-
-	KTempFile tmp;
-	tmp.setAutoDelete(true);
-	QString path;
-	if (url.isLocalFile()) {
-		path=url.path();
-	} else {
-		path=tmp.name();
-	}
 
 	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
 		kdDebug() << "Lossless save\n";
@@ -151,11 +140,7 @@ bool GVDocumentJPEGLoadedImpl::save(const KURL& url, const char* format) const {
 	}
 
 	d->saveComment(path);
-
-	if (!url.isLocalFile()) {
-		result=KIO::NetAccess::upload(tmp.name(), url);
-	}
-
+	
 	return result;
 }
 
@@ -191,5 +176,5 @@ void GVDocumentJPEGLoadedImpl::finishLoading() {
         QFile::remove(d->mLocalFilePath);
     }
 
-	emit finished(true);
+	GVDocumentLoadedImpl::finishLoading();
 }
