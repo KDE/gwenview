@@ -1,8 +1,8 @@
-2005.xx.xx - v1.x.x
-- New features:
+2005.01.23 - v1.2.0pre1
 - Fixes:
  - Zoom step halved (100%->150%->200%).
  - No image quality loss when printing large images.
+ - More explicit messages when an error occurs while saving.
 
 2005.01.08 - v1.1.8
 - New features:

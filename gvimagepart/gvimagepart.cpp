@@ -113,11 +113,7 @@ GVImagePart::~GVImagePart() {
 
 
 void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
-#ifdef GV_HACK_SUFFIX
-	KConfig* config=new KConfig("gwenview_hackrc");
-#else
 	KConfig* config=new KConfig("gwenviewrc");
-#endif
 	if (event->activated()) {
 		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);

@@ -124,11 +124,7 @@ GVDirPart::~GVDirPart() {
 
 
 void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
-#ifdef GV_HACK_SUFFIX
-	KConfig* config=new KConfig("gwenview_hackrc");
-#else
 	KConfig* config=new KConfig("gwenviewrc");
-#endif
 	if (event->activated()) {
 		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
 		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);

@@ -25,24 +25,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <src/gvmainwindow.h>
 
-#include "config.h"
-
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
 	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
 	KCmdLineLastOption
 };
 
-static const char* version="1.1.8";
+static const char* version="1.2.0pre1";
 
+// This is for KDE 3.1
+#ifndef KDE_EXPORT
+#define KDE_EXPORT
+#endif
 
 extern "C"
 KDE_EXPORT int kdemain (int argc, char *argv[]) {
-#ifdef GV_HACK_SUFFIX
-	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview hack" ),
-#else
-	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
-#endif
+	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview"),
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
 		"Copyright 2000-2004, The Gwenview developers",0,"http://gwenview.sourceforge.net");
 	aboutData.addAuthor("Aurélien Gâteau", I18N_NOOP("Main developer"), "aurelien.gateau@free.fr");

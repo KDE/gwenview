@@ -1,20 +1,4 @@
 #MIN_CONFIG(3.1)
-#
-# _hack suffix
-#
-AC_MSG_CHECKING(if we should add the "_hack" suffix to Gwenview)
-
-AC_ARG_ENABLE(gwenview-hack,
-[  --enable-gwenview-hack  Add the "_hack" suffix to Gwenview files],
-[if test "$enableval" = yes; then
-  AC_MSG_RESULT(yes)
-  AC_DEFINE(GV_HACK_SUFFIX,1,[Define if you want to add the "_hack" suffix to Gwenview])
-else
-  AC_MSG_RESULT(no)
-fi], [AC_MSG_RESULT(no)])
-
-AM_CONDITIONAL(GV_HACK_SUFFIX, test "$enable_gwenview_hack" = yes)
-
 
 #
 # KIPI
