@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="10">
+<kpartgui name="Gwenview" version="11">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -20,11 +20,6 @@
   <Menu name="view" noMerge="1">
     <text>&amp;View</text>
     <Action name="reload"/>
-    <Separator/>
-    <Action name="detailed"/>
-    <Action name="small_thumbnails"/>
-    <Action name="med_thumbnails"/>
-    <Action name="large_thumbnails"/>
     <Separator/>
     <Action name="fullscreen"/> 
     <Action name="slideshow"/>
@@ -81,9 +76,8 @@
 
 <ToolBar name="mainToolBar" noMerge="1">
   <text>Main Toolbar</text>
-  <Action name="go_up"/>
-  <Action name="go_back"/>
-  <Action name="go_forward"/>
+  <Action name="go_back" />
+  <Action name="go_forward" />
   <Separator/>
   <Action name="first"/>
   <Action name="previous"/>
@@ -91,11 +85,6 @@
   <Action name="last"/>
   <Separator/>
   <Action name="reload"/>
-  <Separator/>
-  <Action name="detailed"/>
-  <Action name="small_thumbnails"/>
-  <Action name="med_thumbnails"/>
-  <Action name="large_thumbnails"/>
   <Separator/>
   <Action name="fullscreen"/>
   <Action name="slideshow"/>
@@ -113,6 +102,16 @@
   <Action name="location_url" />
   <Action name="location_go" />
 </ToolBar>
+
+<ToolBar name="fileViewToolBar">
+  <text>File View Toolbar</text>
+  <Action name="go_up" />
+  <Separator />
+  <Action name="detailed" />
+  <Action name="small_thumbnails" />
+  <Action name="med_thumbnails" />
+  <Action name="large_thumbnails" />
+</Toolbar>
 
 <StatusBar/>
 

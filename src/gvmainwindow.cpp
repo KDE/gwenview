@@ -140,10 +140,9 @@ GVMainWindow::GVMainWindow()
 	createActions();
 	createLocationToolBar();
 
-	#if KDE_VERSION >= 0x30100
 	setStandardToolBarMenuEnabled(true);
-	#endif
 	createGUI("gwenviewui.rc", false);
+
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
@@ -704,8 +703,10 @@ void GVMainWindow::createWidgets() {
 
 	// File widget
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
-	mFileViewStack=new GVFileViewStack(this,actionCollection());
-	mFileDock->setWidget(mFileViewStack);
+	QVBox* vbox=new QVBox(this);
+	(void)new KToolBar(vbox, "fileViewToolBar", true);
+	mFileViewStack=new GVFileViewStack(vbox, actionCollection());
+	mFileDock->setWidget(vbox);
 	setView(mFileDock);
 	setMainDockWidget(mFileDock);
 
@@ -788,7 +789,7 @@ void GVMainWindow::createActions() {
 	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this);
 
 	KActionMenu* bookmark=new KActionMenu(i18n( "&Bookmarks" ), "bookmark", actionCollection(), "bookmarks" );
-	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), this->actionCollection(), true);
+	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), 0, true);
 
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
 		mDocument,SLOT(setDirURL(const KURL&)) );
