@@ -81,6 +81,7 @@ PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actio
 	mZoomOut=KStdAction::zoomOut(mScrollPixmapView,SLOT(slotZoomOut()),actionCollection);
 	
 	mResetZoom=KStdAction::actualSize(mScrollPixmapView,SLOT(slotResetZoom()),actionCollection);
+    mResetZoom->setIcon("viewmag1");
 	
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,actionCollection,"lockzoom");
 	connect(mLockZoom,SIGNAL(toggled(bool)),
