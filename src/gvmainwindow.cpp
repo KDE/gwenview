@@ -664,9 +664,13 @@ void GVMainWindow::slotToggleCentralStack() {
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mPixmapView);
 		mCentralStack->raiseWidget(StackIDBrowse);
+		mFileViewStack->setSilentMode( false );
+		// force re-reading the directory to show the error
+		if( mFileViewStack->lastURLError()) mFileViewStack->retryURL();
 	} else {
 		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
+		mFileViewStack->setSilentMode( true );
 	}
 	updateLocationURL();
 }

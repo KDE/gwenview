@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qwidgetstack.h>
 
 // KDE
+#include <kdirlister.h>
 #include <kfileitem.h>
 #include <kio/job.h>
 #include <kurl.h>
@@ -39,7 +40,6 @@ class KAccel;
 class KAction;
 class KActionCollection;
 class KConfig;
-class KDirLister;
 class KListView;
 class KRadioAction;
 class KToggleAction;
@@ -50,6 +50,21 @@ class GVFileThumbnailView;
 
 
 class GVFileViewStackPrivate;
+
+// internal class which allows dynamically turning off visual error reporting
+class GVDirLister : public KDirLister {
+Q_OBJECT
+public:
+	GVDirLister() : KDirLister(), mError( false ), mCheck( false ) {}
+	virtual bool validURL( const KURL& ) const;
+	virtual void handleError( KIO::Job * );
+	bool error() const { return mError; }
+	void clearError() { mError = false; }
+	void setCheck( bool c ) { mCheck = c; }
+private:
+	mutable bool mError;
+	bool mCheck;
+};
 
 class GVFileViewStack : public QWidgetStack {
 Q_OBJECT
@@ -103,6 +118,19 @@ public:
 	void setFileNameToSelect(const QString&);
 	
 	KURL::List selectedURLs() const;
+	/**
+	 * If set to true, no error messages will be displayed.
+	 */
+	void setSilentMode( bool silent );
+	/**
+	 * Returns true if there was an error since last URL had been opened.
+	 */
+	bool lastURLError() const { return mDirLister->error(); }
+	/**
+	 * Tries to open again the active URL. Useful for showing error messages
+	 * initially supressed by silent mode.
+	 */
+	void retryURL();
 	
 public slots:
 	void setURL(const KURL&);
@@ -179,7 +207,7 @@ private:
 	Mode mMode;
 	GVFileDetailView* mFileDetailView;
 	GVFileThumbnailView* mFileThumbnailView;
-	KDirLister* mDirLister;
+	GVDirLister* mDirLister;
 	KURL mDirURL;
 
 	// Our actions

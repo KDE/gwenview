@@ -140,7 +140,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	d->mRevertSortAction->plug(sortMenu);
 
 	// Dir lister
-	mDirLister=new KDirLister;
+	mDirLister=new GVDirLister;
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 
@@ -258,6 +258,7 @@ bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& url) {
 	LOG(url.prettyURL());
+	mDirLister->clearError();
 	KURL dirURL = url;
 	if (!dirURL.fileName(false).isEmpty()) {
 		dirURL.setFileName( QString::null );
@@ -730,6 +731,30 @@ void GVFileViewStack::setShownColor(const QColor& value) {
 	mFileDetailView->setShownFileItemColor(mShownColor);
 	mFileThumbnailView->setShownFileItemColor(mShownColor);
 }
+
+
+void GVFileViewStack::setSilentMode( bool silent ) {
+	mDirLister->setCheck( !silent );
+}
+
+
+void GVFileViewStack::retryURL() {
+	mDirLister->clearError();
+	mDirLister->openURL( url());
+}
+
+bool GVDirLister::validURL( const KURL& url ) const {
+	if( !url.isValid()) mError = true;
+	if( mCheck ) return KDirLister::validURL( url );
+	return url.isValid();
+}
+
+
+void GVDirLister::handleError( KIO::Job* job ) {
+	mError = true;
+	if( mCheck ) KDirLister::handleError( job );
+}
+
 
 //-----------------------------------------------------------------------
 //
