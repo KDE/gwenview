@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QDragEnterEvent;
 class QIconViewItem;
 class QPopupMenu;
+class QShowEvent;
 
 class KConfig;
 class KFileItem;
@@ -51,8 +52,6 @@ public:
 	~GVFileThumbnailView();
 
 	QWidget* widget() { return this; }
-	void startThumbnailUpdate();
-	void stopThumbnailUpdate();
 
 	// KFileView methods
 	void clearView();
@@ -91,6 +90,8 @@ public:
 
 public slots:
 	void setThumbnailPixmap(const KFileItem*,const QPixmap&);
+	void startThumbnailUpdate();
+	void stopThumbnailUpdate();
 
 signals:
 	void updateStarted(int);
@@ -99,12 +100,14 @@ signals:
 	void dropped(QDropEvent*, KFileItem* target);
 
 protected:
+	void showEvent(QShowEvent*);
 	void contentsDragEnterEvent(QDragEnterEvent*);
 	void startDrag();
 
 private:
 	ThumbnailSize mThumbnailSize;
 	int mMarginSize;
+	bool mUpdateThumbnailsOnNextShow;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 

@@ -6,6 +6,8 @@
 - Fixes:
  - Exiting with Ctrl+Q from the fullscreen won't close the file view for
    the next startup.
+ - Do not switch the file view to detailed mode when leaving the fullscreen
+   mode.
 
 2003.06.09 - v0.17.1a
 - Fixes:

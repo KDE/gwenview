@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpixmap.h>
 #include <qpixmapcache.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 
 // KDE 
 #include <kapplication.h>
@@ -49,7 +50,7 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 
 GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
-: KIconView(parent), GVFileViewBase(), mThumbnailLoadJob(0L)
+: KIconView(parent), GVFileViewBase(), mUpdateThumbnailsOnNextShow(false), mThumbnailLoadJob(0L)
 {
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -131,8 +132,13 @@ void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 // Thumbnail code
 //
 //-----------------------------------------------------------------------------
-void GVFileThumbnailView::startThumbnailUpdate()
-{
+void GVFileThumbnailView::startThumbnailUpdate() {
+	// Delay thumbnail update if the widget is not visible
+	if (!isVisible()) {
+		mUpdateThumbnailsOnNextShow=true;
+		return;
+	}
+	mUpdateThumbnailsOnNextShow=false;
 	stopThumbnailUpdate(); // just in case
 	doStartThumbnailUpdate(items());
 }
@@ -151,8 +157,7 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 }
 
 
-void GVFileThumbnailView::stopThumbnailUpdate()
-{
+void GVFileThumbnailView::stopThumbnailUpdate() {
 	if (!mThumbnailLoadJob.isNull()) {
 		emit updateEnded();
 		mThumbnailLoadJob->kill();
@@ -325,6 +330,15 @@ void GVFileThumbnailView::contentsDragEnterEvent(QDragEnterEvent* event) {
 
 void GVFileThumbnailView::slotDropped(QDropEvent* event) {
 	emit dropped(event,0L);
+}
+
+
+void GVFileThumbnailView::showEvent(QShowEvent* event) {
+	KIconView::showEvent(event);	
+	if (!mUpdateThumbnailsOnNextShow) return;
+
+	mUpdateThumbnailsOnNextShow=false;
+	QTimer::singleShot(0, this, SLOT(startThumbnailUpdate()));
 }
 
 

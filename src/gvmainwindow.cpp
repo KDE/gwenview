@@ -120,7 +120,6 @@ GVMainWindow::GVMainWindow()
 
 	// Check if we should start in fullscreen mode
 	if (args->isSet("f")) {
-		mFileViewStack->noThumbnails()->activate(); // No thumbnails needed
 		mToggleFullScreen->activate();
 	}
 
