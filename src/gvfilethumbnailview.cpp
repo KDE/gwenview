@@ -113,7 +113,7 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 
 	// Draw the thumbnail to the center of the icon
 	QPainter painter(iconItem->pixmap());
-	painter.eraseRect(0,0,pixelSize,pixelSize);
+	painter.fillRect(0,0,pixelSize,pixelSize,paletteBackgroundColor());
 	painter.drawPixmap(
 		(pixelSize-thumbnail.width())/2,
 		(pixelSize-thumbnail.height())/2,
@@ -230,7 +230,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 	int pixelSize=mThumbnailSize.pixelSize();
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
-	painter.eraseRect(0,0,pixelSize,pixelSize);
+	painter.fillRect(0,0,pixelSize,pixelSize,paletteBackgroundColor());
 
 	if (isDirOrArchive) {
 		// Load the icon
