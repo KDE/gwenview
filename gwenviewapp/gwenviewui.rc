@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="15">
+<kpartgui name="Gwenview" version="16">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -15,7 +15,6 @@
     <Action name="rotate_right"/>
     <Action name="mirror"/>
     <Action name="flip"/>
-    <Action name="open_with_editor"/>
   </Menu>
   <Menu name="view" noMerge="1">
     <text>&amp;View</text>
@@ -91,19 +90,14 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" noMerge="1">
+<ToolBar name="mainToolBar" noMerge="1" newline="true">
   <text>Main Toolbar</text>
-  <Action name="toggle_browse" />
+  <Action name="toggle_browse"/>
   <Action name="fullscreen"/>
   <Action name="slideshow"/>
   <Separator/>
-  <Action name="go_back" />
-  <Action name="go_forward" />
-  <Separator/>
-  <Action name="first"/>
   <Action name="previous"/>
   <Action name="next"/>
-  <Action name="last"/>
   <Separator/>
   <Action name="reload"/>
   <Separator/>
@@ -111,10 +105,19 @@
   <Action name="view_zoom_in"/>
   <Action name="view_zoom_out"/>
   <Action name="view_actual_size"/>
+  <Separator/>
+  <Action name="rotate_left"/>
+  <Action name="rotate_right"/>
+  <Action name="mirror"/>
+  <Action name="flip"/>
 </ToolBar>
 
 <ToolBar fullWidth="true" name="locationToolBar" newline="true">
   <text>Location Toolbar</text>
+  <Action name="go_up" />
+  <Action name="go_back" />
+  <Action name="go_forward" />
+  <Action name="go_home" />
   <Action name="clear_location" />
   <Action name="location_label" />
   <Action name="location_url" />
@@ -123,8 +126,6 @@
 
 <ToolBar name="fileViewToolBar">
   <text>File View Toolbar</text>
-  <Action name="go_up" />
-  <Separator />
   <Action name="detailed" />
   <Action name="small_thumbnails" />
   <Action name="med_thumbnails" />
