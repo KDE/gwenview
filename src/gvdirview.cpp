@@ -114,26 +114,19 @@ void GVDirView::showEvent(QShowEvent* event) {
 }
 
 
-void GVDirView::setURL(const KURL& url,const QString& filename) {
-	kdDebug() << "GVDirView::setURL " << url.prettyURL() << ' ' << filename << endl;
+void GVDirView::setURL(const KURL& url,const QString& /*filename*/) {
+	//kdDebug() << "GVDirView::setURL " << url.prettyURL() << ' ' << filename << endl;
 
 	// Do nothing if we're browsing remote files
 	if (!url.isLocalFile()) return;
 
-	if (SAME_URL(currentURL(),url,true)) {
-		kdDebug() << "GVDirView::setURL same as current\n";
-		return;
-	}
-
-	if (SAME_URL(m_nextUrlToSelect,url,true)) {
-		kdDebug() << "GVDirView::setURL same as m_nextUrlToSelect\n";
-		return;
-	}
+	if (SAME_URL(currentURL(),url,true)) return;
+	if (SAME_URL(m_nextUrlToSelect,url,true)) return;
 
 	// Do not update the view if it's hidden, just store the url to
 	// open next time the view is shown
 	if (!isVisible()) {
-		kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
+		//kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
 		slotSetNextUrlToSelect(url);
 		return;
 	}
@@ -143,7 +136,7 @@ void GVDirView::setURL(const KURL& url,const QString& filename) {
 
 	
 void GVDirView::setURLInternal(const KURL& url) {
-	kdDebug() << "GVDirView::setURLInternal " << url.prettyURL() << endl;
+	//kdDebug() << "GVDirView::setURLInternal " << url.prettyURL() << endl;
 	QStringList folderParts;
 	QStringList::Iterator folderIter,endFolderIter;
 	QString folder="/";
