@@ -571,27 +571,30 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 	ThumbnailSize biggest=ThumbnailSize::biggest();
 
-	if (mThumbnailSize==biggest) {
-		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
-		return;
-	}
-	
-	// Do we need to scale down the thumbnail ?
 	int biggestDimension=QMAX(img.width(), img.height());
-	int thumbPixelSize=mThumbnailSize.pixelSize();
-	if (biggestDimension<=thumbPixelSize) {
-		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
-		return;
+	bool ok;
+	QSize size;
+	size.rwidth()=img.text("Thumb::Image::Width", 0).toInt(&ok);
+	if (ok) size.rheight()=img.text("Thumb::Image::Height", 0).toInt(&ok);
+	if (!ok) {
+		size=QSize();
 	}
 
-	// Scale thumbnail
-	QImage img2=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
-	emit thumbnailLoaded(mCurrentItem, QPixmap(img2));
+	int thumbPixelSize=mThumbnailSize.pixelSize();
+	QImage thumbImg;
+	if (biggestDimension>thumbPixelSize) {
+		// Scale down thumbnail if necessary
+		thumbImg=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+	} else {
+		thumbImg=img;
+	}
+	emit thumbnailLoaded(mCurrentItem, QPixmap(thumbImg), size);
 }
 
 
 void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
-	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap);
+	QSize size;
+	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap, size);
 }
 
 

@@ -98,7 +98,7 @@ public:
 	void updateThumbnail(const KFileItem*);
 
 public slots:
-	void setThumbnailPixmap(const KFileItem*,const QPixmap&);
+	void setThumbnailPixmap(const KFileItem*,const QPixmap&, const QSize&);
 	void startThumbnailUpdate();
 	void stopThumbnailUpdate();
 

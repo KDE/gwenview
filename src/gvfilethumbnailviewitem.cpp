@@ -97,6 +97,9 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 		r=QRect(0,0,availableTextWidth,fm.height());
 	}
 	
+	// Add the info line height
+	r.rBottom()+=fm.height();
+	
 	if ( r.width() > availableTextWidth ) {
 		r.setWidth(availableTextWidth);
 	}
@@ -189,6 +192,10 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 // Get the rects
 	QRect pRect=pixmapRect(false);
 	QRect tRect=textRect(false);
+	// Do not draw the focus rect behind the info line if it's empty
+	if (mInfoText.isNull()) {
+		tRect.rBottom()-=view->fontMetrics().height();
+	}
 
 // Draw pixmap
 	p->drawPixmap( pRect.x()+1, pRect.y()+1, *pixmap() );
@@ -197,6 +204,8 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	if ( isSelected() ) {
 		p->setPen( QPen( cg.highlight() ) );
 		QRect outerRect=pRect | tRect;
+		
+
 		p->drawRect(outerRect);
 		if (view->itemTextPos()==QIconView::Bottom) {
 			p->fillRect( outerRect.x(),tRect.y(),outerRect.width(),tRect.height(), cg.highlight() );
@@ -214,6 +223,7 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 // Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
+	align|=AlignTop;
 	if (view->viewItem(view->shownFileItem())==this) {
 		p->setPen(view->shownFileItemColor());
 	}
@@ -230,8 +240,16 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		} else {
 			str=mTruncatedText;
 		}
-		p->drawText(tRect,align,str);
+		p->drawText(tRect, align, str);
 	}
+
+	// Draw info line
+	align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
+	align|=AlignBottom;
+	QFont font=p->font();
+	font.setPointSize(font.pointSize()-2);
+	p->setFont(font);
+	p->drawText(tRect, align, mInfoText);
 
 	p->restore();
 }
@@ -245,4 +263,8 @@ bool GVFileThumbnailViewItem::acceptDrop(const QMimeSource* source) const {
 void GVFileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconDragItem>&) {
 	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
 	emit view->dropped(event,mFileItem);
+}
+
+void GVFileThumbnailViewItem::setInfoText(const QString& text) {
+	mInfoText=text;
 }

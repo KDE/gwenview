@@ -5,6 +5,7 @@
  - Now uses freedesktop thumbnail spec to store thumbnails.
  - New option to automatically empty thumbnail cache on exit (By Angelo
    Naselli).
+ - Image size is now displayed below file names in thumbnail view.
 - Fixes:
  - Don't crash when switching to fullscreen while generating thumbnails and
    coming back (By Lubos Lunak)

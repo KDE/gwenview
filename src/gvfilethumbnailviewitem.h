@@ -44,6 +44,8 @@ public:
 
 	KFileItem* fileItem() const { return mFileItem; }
 
+	void setInfoText(const QString&);
+
 protected:
 	void paintItem(QPainter* painter, const QColorGroup& colorGroup);
 	void calcRect( const QString& text_=QString::null );
@@ -55,6 +57,7 @@ protected:
 	KFileItem* mFileItem;
 	KWordWrap* mWordWrap;
 	QString mTruncatedText;
+	QString mInfoText;
 };
 
 #endif

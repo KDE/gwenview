@@ -105,7 +105,7 @@ void GVFileThumbnailView::setMarginSize(int value) {
 }
 
 
-void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPixmap& thumbnail) {
+void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QPixmap& thumbnail, const QSize& size) {
 	GVFileThumbnailViewItem* iconItem=viewItem(fileItem);
 	if (!iconItem) return;
 
@@ -118,6 +118,13 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem,const QPi
 		(pixelSize-thumbnail.width())/2,
 		(pixelSize-thumbnail.height())/2,
 		thumbnail);
+
+	// Update item info
+	if (size.isValid()) {
+		QString info=QString::number(size.width())+"x"+QString::number(size.height());
+		iconItem->setInfoText(info);
+	}
+	
 	iconItem->repaint();
 
 	// Notify others that one thumbnail has been updated
@@ -159,8 +166,8 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
 	mThumbnailLoadJob = new ThumbnailLoadJob(list, mThumbnailSize);
 
-	connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*,const QPixmap&)),
-		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&)) );
+	connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*, const QPixmap&, const QSize&)),
+		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&, const QSize&)) );
 	connect(mThumbnailLoadJob, SIGNAL(result(KIO::Job*)),
 		this, SIGNAL(updateEnded()) );
 	connect(this, SIGNAL(updateEnded()),

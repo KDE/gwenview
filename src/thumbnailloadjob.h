@@ -131,7 +131,7 @@ signals:
 	/**
 	 * Emitted when the thumbnail for the @p item has been loaded
 	 */
-	void thumbnailLoaded(const KFileItem* item,const QPixmap&);
+	void thumbnailLoaded(const KFileItem* item, const QPixmap&, const QSize&);
 
 private slots:
 	void slotResult( KIO::Job *job );
