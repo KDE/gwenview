@@ -1,5 +1,9 @@
 #MIN_CONFIG(3.1)
 
+KDE_CHECK_LIB(m, round, [
+  AC_DEFINE(HAVE_FUNC_ROUND, 1, [Define if you have round])
+])
+
 #
 # KIPI
 #

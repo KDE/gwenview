@@ -225,12 +225,12 @@ struct GVScrollPixmapView::Private {
 
 	int imageToWidgetX( int x ) const {
 		if( mZoom == 1.0 ) return x + mXOffset;
-		return int( round( x * mZoom )) + mXOffset;
+		return int( ROUND( x * mZoom )) + mXOffset;
 	}
 
 	int imageToWidgetY( int y ) const {
 		if( mZoom == 1.0 ) return y + mYOffset;
-		return int( round( y * mZoom )) + mYOffset;
+		return int( ROUND( y * mZoom )) + mYOffset;
 	}
 
 	QPoint imageToWidget( const QPoint& p ) const {
@@ -245,12 +245,12 @@ struct GVScrollPixmapView::Private {
 
 	int widgetToImageX( int x ) const {
 		if( mZoom == 1.0 ) return x - mXOffset;
-		return int( round( ( x - mXOffset ) / mZoom ));
+		return int( ROUND( ( x - mXOffset ) / mZoom ));
 	}
 
 	int widgetToImageY( int y ) const {
 		if( mZoom == 1.0 ) return y - mYOffset;
-		return int( round( ( y - mYOffset ) / mZoom ));
+		return int( ROUND( ( y - mYOffset ) / mZoom ));
 	}
 
 	QPoint widgetToImage( const QPoint& p ) const {
