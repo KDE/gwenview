@@ -1,6 +1,6 @@
 Summary:Simple image viewer for KDE
 Name: gwenview
-Version: 0.16.1
+Version: 0.16.2
 Release: 1mdk
 Copyright: GPL
 Group: Application/Multimedia 

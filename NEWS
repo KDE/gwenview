@@ -1,4 +1,4 @@
-2003.xx.xx - v0.16.2
+2003.02.13 - v0.16.2
 - Fixes:
  - Uses opaque resize for docked views.
  - Resizing the window resizes the image view only.
