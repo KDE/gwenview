@@ -651,7 +651,7 @@ void GVMainWindow::createWidgets() {
 	statusBar()->addWidget(mSBDetailLabel);
 
 	// Pixmap widget
-#if GV_HACK_SUFFIX==1
+#ifdef GV_HACK_SUFFIX
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview_hack"),NULL,i18n("Image"));
 #else
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
