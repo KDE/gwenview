@@ -47,7 +47,7 @@ public:
 
 GVDocumentAnimatedLoadedImpl::GVDocumentAnimatedLoadedImpl(GVDocument* document, const GVImageFrames& frames)
 : GVDocumentLoadedImpl(document) {
-	LOG("" << mDocument->url().prettyURL() << ", frames: " << delays.count() );
+	LOG("" << mDocument->url().prettyURL() << ", frames: " << frames.count() );
 	d=new GVDocumentAnimatedLoadedImplPrivate;
 	d->mFrames = frames;
 	d->mCurrentFrame = -1;
