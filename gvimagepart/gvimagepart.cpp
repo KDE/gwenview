@@ -104,7 +104,7 @@ void GVImagePart::slotExample() {
 	//Example KAction
 }
 
-// GVImagePartBrowserExtension
+/***** GVImagePartBrowserExtension *****/
 
 GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {

@@ -16,6 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <qcursor.h>
 #include <qfile.h>
 #include <qsplitter.h>
 #include <qvaluelist.h>
@@ -46,7 +47,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	m_browserExtension = new GVDirPartBrowserExtension(this);
 	m_browserExtension->updateActions();
 
-	m_splitter = new QSplitter(Qt::Horizontal, parentWidget, "splitter");
+	m_splitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
 
 	// Create the widgets
 	m_gvPixmap = new GVPixmap(this);
@@ -58,13 +59,12 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	setWidget(m_splitter);
 
+	connect(m_pixmapView, SIGNAL(contextMenu()),
+		m_browserExtension, SLOT(contextMenu()) );
 	connect(m_filesView, SIGNAL(urlChanged(const KURL&)),
 		m_gvPixmap, SLOT(setURL(const KURL&)) );
 	connect(m_filesView, SIGNAL(directoryChanged(const KURL&)),
 		m_browserExtension, SLOT(directoryChanged(const KURL&)) );
-	//I had hoped this would enable the "up" button, but it doesn't
-	connect(m_gvPixmap, SIGNAL(loaded(const KURL&,const QString&)),
-		this, SLOT(slotCompleted()) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
@@ -96,6 +96,8 @@ bool GVDirPart::openURL(const KURL& url) {
 		return false;
 	}
 
+	m_url = url;
+
 	m_gvPixmap->setDirURL(url);
 	m_filesView->setURL(url, 0);
 	emit setWindowCaption( url.prettyURL() );
@@ -116,18 +118,13 @@ void GVDirPart::slotExample() {
 	kdDebug() << k_funcinfo << endl;
 }
 
-void GVDirPart::slotCompleted() {
-	kdDebug() << k_funcinfo << endl;
-	emit completed();
-}
-
 void GVDirPart::setKonquerorWindowCaption(const QString& url) {
 	kdDebug() << k_funcinfo << url << endl;
 	emit setWindowCaption(url);
 	kdDebug() << k_funcinfo << "done" << endl;
 }
 
-// GVDirPartBrowserExtension
+/***** GVDirPartBrowserExtension *****/
 
 GVDirPartBrowserExtension::GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name)
 	:KParts::BrowserExtension(viewPart, name) {
@@ -174,6 +171,21 @@ void GVDirPartBrowserExtension::cut() {
 void GVDirPartBrowserExtension::directoryChanged(const KURL& dirURL) {
 	kdDebug() << k_funcinfo << endl;
 	emit openURLRequest(dirURL);
+}
+
+void GVDirPartBrowserExtension::contextMenu() {
+	kdDebug() << k_funcinfo << endl;
+	/*FIXME Why is this KFileMetaInfo invalid?
+	KFileMetaInfo metaInfo = KFileMetaInfo(m_gvImagePart->filePath());
+	kdDebug() << k_funcinfo << "m_gvImagePart->filePath(): " << m_gvImagePart->filePath() << endl;
+	kdDebug() << k_funcinfo << "metaInfo.isValid(): " << metaInfo.isValid() << endl;
+	kdDebug() << k_funcinfo << "above" << endl;
+	QString mimeType = metaInfo.mimeType();
+	kdDebug() << k_funcinfo << "below" << endl;
+	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
+	*/
+	kdDebug() << k_funcinfo << "url: " << m_gvDirPart->url() << endl;
+	emit popupMenu(QCursor::pos(), m_gvDirPart->url(), 0);
 }
 
 #include "gvdirpart.moc"

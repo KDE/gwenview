@@ -547,7 +547,8 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			if (QString(parent()->name()) == QString("KonqFrame"))  {
+			if (QString(parent()->name()) == QString("KonqFrame") ||
+			    QString(parent()->name()) == QString("gwenview-kpart-splitter")) {
 				//KPart
 				emit contextMenu();
 				return;

@@ -32,6 +32,10 @@ class GVPixmap;
 
 class GVDirPart;
 
+/**
+ * The browser extension is an attribute of GVImagePart and provides
+ * some services to Konqueror.  All Konqueror KParts have one.
+ */
 class GVDirPartBrowserExtension: public KParts::BrowserExtension {
 	Q_OBJECT
 
@@ -43,6 +47,7 @@ class GVDirPartBrowserExtension: public KParts::BrowserExtension {
  public slots:
 //  void selected(TreeMapItem*);
 //  void contextMenu(TreeMapItem*,const QPoint&);
+	void contextMenu();
 
 	void updateActions();
 	void refresh();
@@ -82,7 +87,6 @@ class GVDirPart : public KParts::ReadOnlyPart {
 
  protected slots:
 	void slotExample();
-	void slotCompleted();
 
  protected:
         /**

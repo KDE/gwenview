@@ -28,6 +28,10 @@ class GVScrollPixmapView;
 class GVPixmap;
 class GVImagePart;
 
+/**
+ * The browser extension is an attribute of GVImagePart and provides
+ * some services to Konqueror.  All Konqueror KParts have one.
+ */
 class GVImagePartBrowserExtension: public KParts::BrowserExtension {
 	Q_OBJECT
 
