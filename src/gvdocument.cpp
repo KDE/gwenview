@@ -112,9 +112,10 @@ KURL GVDocument::url() const {
 
 
 void GVDocument::setURL(const KURL& paramURL) {
-	kdDebug() << k_funcinfo << " url: " << paramURL.prettyURL() << endl;
+	if (paramURL==url()) return;
+	// Make a copy, we might have to fix the protocol
 	KURL localURL(paramURL);
-	if (localURL==url()) return;
+	kdDebug() << k_funcinfo << " url: " << paramURL.prettyURL() << endl;
 
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
