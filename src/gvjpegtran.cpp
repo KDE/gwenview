@@ -22,7 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qcursor.h>
+#if QT_VERSION>=0x030100
 #include <qeventloop.h>
+#endif
 
 // KDE
 #include <kapplication.h>
