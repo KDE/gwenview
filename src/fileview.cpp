@@ -366,14 +366,31 @@ bool FileView::currentIsLast() const {
 void FileView::setMode(FileView::Mode mode) {
 	mFilenameToSelect=filename();
 	mMode=mode;
+	KFileView* oldView;
+	KFileView* newView;
 
 	if (mMode==FileList) {
 		mFileThumbnailView->stopThumbnailUpdate();
-		raiseWidget(mFileDetailView);
+		oldView=mFileThumbnailView;
+		newView=mFileDetailView;
 	} else {
-		raiseWidget(mFileThumbnailView);
+		oldView=mFileDetailView;
+		newView=mFileThumbnailView;
 	}
 
+// Show the new active view
+	raiseWidget(newView->widget());
+
+// Remove references to the old view from KFileItems
+	const KFileItemList* items=oldView->items();
+	for(KFileItemListIterator it(*items);it.current()!=0L;++it) {
+		it.current()->removeExtraData(oldView);
+	}
+
+// Clear the old view
+	oldView->KFileView::clear();
+
+// Update the new view
 	KURL url=mDirLister->url();
 	if (url.isValid()) mDirLister->openURL(url);
 }
@@ -391,8 +408,7 @@ void FileView::setShowDirs(bool value) {
 
 //-Dir lister slots------------------------------------------------------
 void FileView::dirListerDeleteItem(KFileItem* item) {
-	mFileThumbnailView->removeItem(item);
-	mFileDetailView->removeItem(item);
+	currentFileView()->removeItem(item);
 }
 
 
