@@ -574,7 +574,20 @@ void GVMainWindow::showExternalToolDialog() {
 
 
 void GVMainWindow::showKeyDialog() {
-	KKeyDialog::configure(actionCollection());
+	KKeyDialog dialog(true, this);
+	dialog.insert(actionCollection());
+
+#ifdef HAVE_KIPI
+	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
+	for( ; it!=itEnd; ++it ) {
+		KIPI::Plugin* plugin=(*it)->plugin;
+		if (plugin) {
+			dialog.insert(plugin->actionCollection(this), (*it)->name);
+		}
+	}
+#endif
+	dialog.exec();
 }
 
 
@@ -997,9 +1010,10 @@ void GVMainWindow::loadPlugins() {
 	categoryMap[KIPI::IMAGESPLUGIN]="kipi_images";
 	categoryMap[KIPI::EFFECTSPLUGIN]="kipi_effects";
 	categoryMap[KIPI::TOOLSPLUGIN]="kipi_tools";
-	categoryMap[KIPI::BATCHPLUGIN]="kipi_batch";
 	categoryMap[KIPI::IMPORTPLUGIN]="kipi_import";
 	categoryMap[KIPI::EXPORTPLUGIN]="kipi_export";
+	categoryMap[KIPI::BATCHPLUGIN]="kipi_batch";
+	categoryMap[KIPI::COLLECTIONSPLUGIN]="kipi_collections";
 	
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
@@ -1007,8 +1021,9 @@ void GVMainWindow::loadPlugins() {
 	loader->loadPlugins();
 
 	// Fill the plugin menu
-	KIPI::PluginLoader::PluginList::ConstIterator it(loader->pluginList().begin());
-	KIPI::PluginLoader::PluginList::ConstIterator itEnd(loader->pluginList().end());
+	mPluginList=loader->pluginList();
+	KIPI::PluginLoader::PluginList::ConstIterator it(mPluginList.begin());
+	KIPI::PluginLoader::PluginList::ConstIterator itEnd(mPluginList.end());
 	for( ; it!=itEnd; ++it ) {
 		KIPI::Plugin* plugin = (*it)->plugin;
 		Q_ASSERT(plugin);

@@ -31,6 +31,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvimageutils.h"
 
+#include "config.h"
+#ifdef HAVE_KIPI
+#include <libkipi/pluginloader.h>
+#endif
+
 class QLabel;
 
 class KAction;
@@ -130,6 +135,10 @@ private:
 	bool mShowToolBarInFullScreen;
 	bool mShowStatusBarInFullScreen;
 	bool mShowBusyPtrInFullScreen;
+
+#ifdef HAVE_KIPI
+	KIPI::PluginLoader::PluginList mPluginList;
+#endif
 
 	void hideToolBars();
 	void showToolBars();

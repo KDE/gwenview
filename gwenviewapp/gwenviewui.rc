@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="9">
+<kpartgui name="Gwenview" version="10">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -49,7 +49,7 @@
     <Action name="configure_tools" append="configure_merge"/>
   </Menu>
   <Menu name="plugins">
-    <text>Plugins</text>
+    <text>&amp;Plugins</text>
     <Menu name="kipi_images">
       <text>Images</text>
     </Menu>
@@ -67,6 +67,9 @@
     </Menu>
     <Menu name="kipi_export">
       <text>Export</text>
+    </Menu>
+    <Menu name="kipi_collections">
+      <text>Collections</text>
     </Menu>
   </Menu>
   <Menu name="window">
