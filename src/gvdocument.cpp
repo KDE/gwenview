@@ -166,6 +166,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 		}
 	}
 
+	d->mURL = localURL; // this may be fixed after stat() is complete, but set at least something
 	d->mStatJob = KIO::stat( localURL, !localURL.isLocalFile() );
 	connect( d->mStatJob, SIGNAL( result (KIO::Job *) ),
 	   this, SLOT( slotStatResult (KIO::Job *) ) );
