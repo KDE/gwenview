@@ -311,8 +311,6 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	// installs an event filter on its viewport, and doesn't filter out the paint
 	// events -> it'd get it twice, first from app filter, second from viewport filter.
 	kapp->installEventFilter( &mFilter );
-
-	viewport()->setBackgroundMode(PaletteMid);
 }
 
 
@@ -438,7 +436,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
 	} else {
-		viewport()->setBackgroundMode(PaletteMid);
+		viewport()->setBackgroundMode(PaletteDark);
 		mAutoHideTimer->stop();
 		mToolControllers[mTool]->updateCursor();
 	}
