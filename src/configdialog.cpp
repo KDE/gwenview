@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstylesheet.h>
 
 // KDE includes
+#include <kcolorbutton.h>
 #include <kdirsize.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -105,6 +106,7 @@ mMainWindow(mainWindow)
 	mExternalEditor->setText(FileOperation::editor());
 	mAutoLoadImage->setChecked(fileViewStack->autoLoadImage());
 	mShowDirs->setChecked(fileViewStack->showDirs());
+	mShownColor->setColor(fileViewStack->shownColor());
 }
 
 
@@ -150,6 +152,7 @@ void ConfigDialog::slotApply() {
 	FileOperation::setEditor(mExternalEditor->text());
 	fileViewStack->setAutoLoadImage(mAutoLoadImage->isChecked());
 	fileViewStack->setShowDirs(mShowDirs->isChecked());
+	fileViewStack->setShownColor(mShownColor->color());
 }
 
 

@@ -67,11 +67,16 @@ public:
 	QString filename() const;
 	KURL url() const;
 	uint fileCount() const;
+	
 	bool showDirs() const;
 	void setShowDirs(bool);
-	uint selectionSize() const;
 	
-	GVFileThumbnailView* fileThumbnailView() const { return mGVFileThumbnailView; }
+	uint selectionSize() const;
+
+	QColor shownColor() const { return mShownColor; }
+	void setShownColor(const QColor&);
+	
+	GVFileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
 	KAction* selectFirst() const { return mSelectFirst; }
 	KAction* selectLast() const { return mSelectLast; }
@@ -143,7 +148,7 @@ private slots:
 private:
 	Mode mMode;
 	GVFileDetailView* mFileDetailView;
-	GVFileThumbnailView* mGVFileThumbnailView;
+	GVFileThumbnailView* mFileThumbnailView;
 	KDirLister* mDirLister;
 	KURL mDirURL;
 
@@ -161,6 +166,7 @@ private:
 	// configurable settings
 	bool mAutoLoadImage;
 	bool mShowDirs;
+	QColor mShownColor;
 
 	// Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;

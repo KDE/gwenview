@@ -209,7 +209,7 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 // Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
 	if (view->viewItem(view->shownFileItem())==this) {
-		p->setPen(Qt::red);
+		p->setPen(view->shownFileItemColor());
 	}
 	if (view->wordWrapIconText()) {
 		if (!mWordWrap) {

@@ -21,17 +21,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVFILEVIEWBASE_H
 #define GVFILEVIEWBASE_H
 
+// Qt includes
+#include <qcolor.h>
+
+// KDE includes
 #include <kfileview.h>
 
 class GVFileViewBase : public KFileView {
 public:
-	GVFileViewBase() : mShownFileItem(0L) {}
+	GVFileViewBase() : mShownFileItem(0L), mShownFileItemColor(Qt::red) {}
 	
 	KFileItem* shownFileItem() const { return mShownFileItem; }
 	virtual void setShownFileItem(KFileItem* fileItem) { mShownFileItem=fileItem; }
 
+	QColor shownFileItemColor() const { return mShownFileItemColor; }
+	void setShownFileItemColor(const QColor& value) { mShownFileItemColor=value; }
+
 protected:
 	KFileItem* mShownFileItem;
+	QColor mShownFileItemColor;
 };
 
 #endif

@@ -1,4 +1,4 @@
-2002.xx.xx - v0.16.0
+2003.xx.xx - v0.16.0
 - New features :
  - Support for IO slaves: you can browse FTP files, Windows shares, go into
    tarballs...
@@ -6,6 +6,8 @@
  - Added a simple slideshow feature.
  - Now uses the trash to delete images.
  - Added an address bar.
+ - Displays the filename of the current image in a different (configurable)
+   color.
 - Fixes :
  - Do not start dragging folders in the folder view when not necessary.
  - When dropping urls and selecting "Move", the drop item will become the
