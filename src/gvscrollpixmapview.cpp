@@ -35,7 +35,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kaction.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -438,23 +437,12 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 
 
 bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
-	if (obj!=viewport()) {
-		return QScrollView::eventFilter(obj,event);
-	}
-	
 	switch (event->type()) {
 	case QEvent::KeyPress:
 	case QEvent::KeyRelease:
+	case QEvent::AccelOverride:
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 	
-	case QEvent::Enter:
-		kdDebug() << "Enter\n";
-		viewport()->grabKeyboard();
-		break;
-	case QEvent::Leave:
-		kdDebug() << "Leave\n";
-		viewport()->releaseKeyboard();
-		break;
 	default:
 		break;
 	}
@@ -464,17 +452,14 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 
 bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter());
-	QWidget* focusWidget=kapp->focusWidget();
-	if (focusWidget!=0L && focusWidget!=viewport()) {
-		QApplication::sendEvent(focusWidget,event);
-	}
-	return true;
+	return false;
 }
 
 
 void GVScrollPixmapView::selectTool(ButtonState state) {
 	ButtonState modifier=ButtonState(state & (ShiftButton | ControlButton | AltButton) );
 	if (mTool==mWheelBehaviours[modifier]) return;
+
 	mTool=mWheelBehaviours[modifier];
 	if (mTool==Scroll && mDragStarted) {
 		viewport()->setCursor(mDraggingCursor);

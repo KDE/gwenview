@@ -98,6 +98,13 @@ GVMainWindow::GVMainWindow()
 	createWidgets();
 	createActions();
 	createLocationToolBar();
+	
+	// This is an ugly hack to be sure the pixmap view is aware of the changes
+	// in the keyboard modifiers even if it isn't focused
+	mDirView->installEventFilter(mPixmapView);
+	mFileViewStack->installEventFilter(mPixmapView);
+	mMetaEdit->installEventFilter(mPixmapView);
+	mURLEdit->installEventFilter(mPixmapView);
 
 	setStandardToolBarMenuEnabled(true);
 	createGUI("gwenviewui.rc", false);
@@ -525,7 +532,7 @@ void GVMainWindow::createWidgets() {
 	mSBDetailLabel=new QLabel("", statusBar());
 	statusBar()->addWidget(mSBDetailLabel);
 	
-	// Pixmap widgets
+	// Pixmap widget
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
 	mPixmapView=new GVScrollPixmapView(mPixmapDock,mGVPixmap,actionCollection());
