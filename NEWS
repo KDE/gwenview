@@ -12,6 +12,7 @@
  - Use icon list for the configuration dialog.
  - Avoid data loss if the JPEG images are saved while being rotated by
    JPEGTran.
+ - The back button in Konqueror now works correctly with gvimagepart.
 
 2004.06.11 - v1.1.3 - "Hurry up, I'm getting married tomorrow"
 - New features:
