@@ -429,8 +429,10 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 	if (item == mCurrentItem) {
 		// Abort
 		mCurrentItem = NULL;
-		subjobs.first()->kill();
-		subjobs.removeFirst();
+		if (subjobs.first()) {
+			subjobs.first()->kill();
+			subjobs.removeFirst();
+		}
 		determineNextIcon();
 	}
 }
