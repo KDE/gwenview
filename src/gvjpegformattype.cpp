@@ -296,17 +296,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 
 	if(mState == INIT) {
 		if(jpeg_read_header(&mDecompress, true) != JPEG_SUSPENDED) {
-			// do some simple memory requirements limitations
-			// as long as we use that stupid Qt stuff
-			/*int s = mDecompress.image_width * mDecompress.image_height;
-			if ( s > 16384 * 12388 )
-				mDecompress.scale_denom = 8;
-			else if ( s > 8192 * 6144 )
-				mDecompress.scale_denom = 4;
-			else if ( s > 4096 * 3072 )
-				mDecompress.scale_denom = 2;
-			*/
-
 			if (consumer) {
 				consumer->setSize(
 					mDecompress.image_width/mDecompress.scale_denom,
