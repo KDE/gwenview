@@ -165,6 +165,7 @@ private:
 
 // Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
+	QString mFilenameToSelect;
 
 	GVFileView* currentFileView() const;
 	void emitURLChanged();

@@ -166,6 +166,7 @@ void GVFileViewStack::setURL(const KURL& dirURL,const QString& filename) {
 	
 	mDirURL=dirURL;
 	currentFileView()->setShownFileItem(0L);
+	mFilenameToSelect=filename;
 	
 	mDirLister->openURL(mDirURL);
 	updateActions();
@@ -378,19 +379,6 @@ void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 }
 
 
-void GVFileViewStack::editSelectedFile() {
-	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
-	if (!fileItem) return;
-	
-	FileOperation::openWithEditor(fileItem->url());
-}
-
-
-void GVFileViewStack::openParentDir() {
-	KURL url(mDirURL.upURL());
-	emit urlChanged(url);
-}
-
 
 //-----------------------------------------------------------------------
 //
@@ -409,6 +397,20 @@ KURL::List GVFileViewStack::selectedURLs() const {
 		if (item) list.append(item->url());
 	}
 	return list;
+}
+
+
+void GVFileViewStack::editSelectedFile() {
+	KFileItem* fileItem=currentFileView()->selectedItems()->getFirst();
+	if (!fileItem) return;
+	
+	FileOperation::openWithEditor(fileItem->url());
+}
+
+
+void GVFileViewStack::openParentDir() {
+	KURL url(mDirURL.upURL());
+	emit urlChanged(url);
 }
 
 
@@ -600,10 +602,13 @@ void GVFileViewStack::dirListerCompleted() {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
-	// FIXME: Add code to handle the case when Gwenview is started with a image
-	// as an argument
-	if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
-		slotSelectFirst();
+	if (!mFilenameToSelect.isEmpty()) {
+		selectFilename(mFilenameToSelect);
+		mFilenameToSelect=QString::null;
+	} else {
+		if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
+			slotSelectFirst();
+		}
 	}
 	
 	if (mMode==Thumbnail && mThumbnailsNeedUpdate) {
@@ -616,8 +621,14 @@ void GVFileViewStack::dirListerCanceled() {
 	if (mMode==Thumbnail) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
-	if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
-		slotSelectFirst();
+
+	if (!mFilenameToSelect.isEmpty()) {
+		selectFilename(mFilenameToSelect);
+		mFilenameToSelect=QString::null;
+	} else {
+		if (!currentFileView()->shownFileItem() && mAutoLoadImage) {
+			slotSelectFirst();
+		}
 	}
 }
 
