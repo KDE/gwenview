@@ -19,12 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt 
 #include <qfile.h>
 #include <qstylesheet.h>
 #include <qwidget.h>
 
-// KDE includes
+// KDE 
+#include <kdeversion.h>
 #include <kdirselectdialog.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
@@ -41,7 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define KInputDialog KLineEditDlg
 #endif
 
-// Our includes
+// Local
 #include "fileoperation.h"
 #include "fileopobject.moc"
 

@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kcolorbutton.h>
+#include <kdeversion.h>
 #include <kdirsize.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -190,7 +191,11 @@ void GVConfigDialog::emptyCache() {
 
 	KURL url;
 	url.setPath(dir);
+#if KDE_VERSION >= 0x30200
 	if (KIO::NetAccess::del(url, 0)) {
+#else
+	if (KIO::NetAccess::del(url)) {
+#endif
 		KMessageBox::information( this,i18n("Cache emptied.") );
 	}
 }
