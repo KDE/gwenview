@@ -120,8 +120,8 @@ The widgetToImage() functions round the values (in order to have the conversion
 as approximate as possible). However when converting from widget to image and back
 this can result in the final rectangle being smaller than the original.
 The widgetToImageBounding() function converts from widget to image coordinates
-(by adding ceil(1/mZoom) in all directions) in a way which makes sure the reverse
-conversion will be at least as large as the original geometry.
+in a way which makes sure the reverse conversion will be at least as large
+as the original geometry.
 
 There are no conversion functions for only width/height, as their conversion
 depends on the position (because of the rounding etc.). For similar reasons
@@ -262,8 +262,7 @@ struct GVScrollPixmapView::Private {
 			widgetToImage( r.bottomRight() + QPoint( 1, 1 )) - QPoint( 1, 1 ));
 	}
 
-	QRect widgetToImageBounding( const QRect& r ) const {
-		int extra = mZoom == 1.0 ? 0 : int( ceil( 1 / mZoom ));
+	QRect widgetToImageBounding( const QRect& r, int extra ) const {
 		QRect ret = widgetToImage( r );
 		ret.addCoords( -extra, -extra, extra, extra );
 		return ret;
@@ -873,7 +872,28 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		return;
 	}
 
-	QRect imageRect = d->widgetToImageBounding( QRect(clipx,clipy,clipw,cliph));
+	int* maxRepaintSize = &d->mMaxRepaintSize;
+	GVImageUtils::SmoothAlgorithm smooth_algo = GVImageUtils::SMOOTH_NONE;
+	if (smooth) {
+		if( zoom() != 1.0 ) {
+			maxRepaintSize = &d->mMaxSmoothRepaintSize;
+			smooth_algo = d->mSmoothAlgorithm;
+		}
+	} else {
+		if( zoom() != 1.0 ) {
+			smooth_algo=doDelayedSmoothing()
+				?GVImageUtils::SMOOTH_NONE
+				:d->mSmoothAlgorithm;
+			maxRepaintSize = doDelayedSmoothing() ? &d->mMaxScaleRepaintSize : &d->mMaxSmoothRepaintSize;
+			
+			if( doDelayedSmoothing() && zoom() != 1.0 ) {
+				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
+			}
+		}
+	}
+
+	int extraPixels = GVImageUtils::extraScalePixels( smooth_algo, zoom());
+	QRect imageRect = d->widgetToImageBounding( QRect(clipx,clipy,clipw,cliph), extraPixels );
 	imageRect = imageRect.intersect( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
 	if (imageRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
@@ -899,25 +919,9 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		image = GVImageUtils::changeGamma( image, d->mGamma );
 	}
 
-	int* maxRepaintSize = &d->mMaxRepaintSize;
-	if (smooth) {
-		if( zoom() != 1.0 ) {
-			image=image.convertDepth(32);
-			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), d->mSmoothAlgorithm );
-			maxRepaintSize = &d->mMaxSmoothRepaintSize;
-		}
-	} else {
-		if( zoom() != 1.0 ) {
-			GVImageUtils::SmoothAlgorithm algo=doDelayedSmoothing()
-				?GVImageUtils::SMOOTH_NONE
-				:d->mSmoothAlgorithm;
-			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), algo );
-			maxRepaintSize = doDelayedSmoothing() ? &d->mMaxScaleRepaintSize : &d->mMaxSmoothRepaintSize;
-			
-			if( doDelayedSmoothing() && zoom() != 1.0 ) {
-				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
-			}
-		}
+	if( zoom() != 1.0 ) {
+		image=image.convertDepth(32);
+		image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smooth_algo );
 	}
 
 	if (image.hasAlphaBuffer()) {

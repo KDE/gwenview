@@ -763,7 +763,42 @@ QImage SampleImage(const QImage& image,const int columns,
 
 
 
-// the only public function here
+// public functions :
+// ------------------
+
+// This function returns how many pixels around the zoomed area should be
+// included in the image. This is used when doing incremental painting, because
+// some smoothing algorithms use surrounding pixels and not including them
+// could sometimes make the edges between incremental steps visible.
+int extraScalePixels( SmoothAlgorithm alg, double zoom, double blur )
+{
+	double filtersupport;
+	switch( alg ) {
+	case SMOOTH_NONE:
+//		filter = NULL;
+		filtersupport = 0.0;
+		break;
+	case SMOOTH_FAST:
+//		filter = Box;
+		filtersupport = 0.5;
+		break;
+	case SMOOTH_NORMAL:
+//		filter = Triangle;
+		filtersupport = 1.0;
+		break;
+	case SMOOTH_BEST:
+//		filter = Mitchell;
+		filtersupport = 2.0;
+		break;
+	}
+	if( zoom == 1.0 || filtersupport == 0.0 ) return 0;
+// This is support size for ImageMagick's scaling.
+	double scale=blur*QMAX(1.0/zoom,1.0);
+	double support=scale* filtersupport;
+	if (support <= 0.5) support=0.5+0.000001;
+	return int( support + 1 );
+}
+
 QImage scale(const QImage& image, int width, int height,
 	SmoothAlgorithm alg, QImage::ScaleMode mode, double blur )
 {

@@ -33,6 +33,8 @@ namespace GVImageUtils {
 	QImage scale(const QImage& image, int width, int height,
 		SmoothAlgorithm alg, QImage::ScaleMode mode = QImage::ScaleFree, double blur = 1.0);
 
+	int extraScalePixels( SmoothAlgorithm alg, double zoom, double blur = 1.0 );
+
 	QImage transform(const QImage& img, Orientation orientation);
 
 	QImage changeBrightness( const QImage& image, int brightness );
