@@ -32,4 +32,4 @@ thousand JPEG files.
 
 - 2003.12.14
 
-Updated to libexif 0.5.12 and fixed a bug when reading broken EXIF info.
+Updated to libexif 0.5.12 and applied some fixes from libexif CVS.

@@ -7,10 +7,10 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details. 
+ * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
@@ -22,10 +22,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <string.h>
 
-/*#define DEBUG*/
+/* #define DEBUG */
 
 struct _JPEGDataPrivate
 {
@@ -80,7 +79,7 @@ jpeg_data_save_file (JPEGData *data, const char *path)
 	if (!d)
 		return;
 
-	unlink (path);
+	remove (path);
 	f = fopen (path, "wb");
 	if (!f) {
 		free (d);
@@ -124,19 +123,21 @@ jpeg_data_save_data (JPEGData *data, unsigned char **d, unsigned int *ds)
 			break;
 		case JPEG_MARKER_APP1:
 			exif_data_save_data (s.content.app1, &ed, &eds);
+			if (!ed) break;
 			*d = realloc (*d, sizeof (char) * (*ds + 2));
 			(*d)[*ds + 0] = (eds + 2) >> 8;
-			(*d)[*ds + 1] = (eds + 2) | 0;
+			(*d)[*ds + 1] = (eds + 2) >> 0;
 			*ds += 2;
 			*d = realloc (*d, sizeof (char) * (*ds + eds));
 			memcpy (*d + *ds, ed, eds);
 			*ds += eds;
+			free (ed);
 			break;
 		default:
 			*d = realloc (*d, sizeof (char) *
 					(*ds + s.content.generic.size + 2));
 			(*d)[*ds + 0] = (s.content.generic.size + 2) >> 8;
-			(*d)[*ds + 1] = (s.content.generic.size + 2) | 0;
+			(*d)[*ds + 1] = (s.content.generic.size + 2) >> 0;
 			*ds += 2;
 			memcpy (*d + *ds, s.content.generic.data,
 				s.content.generic.size);
@@ -203,6 +204,7 @@ jpeg_data_load_data (JPEGData *data, const unsigned char *d,
 		jpeg_data_append_section (data);
 		s = &data->sections[data->count - 1];
 		s->marker = marker;
+		s->content.generic.data = NULL;
 		o += i + 1;
 
 		switch (s->marker) {
@@ -213,7 +215,9 @@ jpeg_data_load_data (JPEGData *data, const unsigned char *d,
 
 			/* Read the length of the section */
 			len = ((d[o] << 8) | d[o + 1]) - 2;
+			if (len > size) { o = size; break; }
 			o += 2;
+			if (o + len > size) { o = size; break; }
 
 			switch (s->marker) {
 			case JPEG_MARKER_APP1:
