@@ -668,11 +668,13 @@ void GVMainWindow::createWidgets() {
 	// Slide show controller (not really a widget)
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
 
-	// Default dock config
+	// Default position on desktop
 	setGeometry(20,20,600,400);
-	mFolderDock->manualDock( mPixmapDock,KDockWidget::DockLeft,30);
-	mFileDock->manualDock( mPixmapDock,KDockWidget::DockTop,30);
-	mMetaDock->manualDock( mPixmapDock,KDockWidget::DockTop,30);
+
+	// Default dock config
+	mFolderDock->manualDock(mPixmapDock,KDockWidget::DockLeft,30);
+	mFileDock->manualDock(mFolderDock,KDockWidget::DockBottom,50);
+	mMetaDock->manualDock(mPixmapDock,KDockWidget::DockTop,10);
 
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);

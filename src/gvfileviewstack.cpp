@@ -893,7 +893,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	mShowDotFiles->setChecked(config->readBoolEntry(CONFIG_SHOW_DOT_FILES,false));
 	initDirListerFilter();
 
-	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,false);
+	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,true);
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
 
 	if (startWithThumbnails) {
