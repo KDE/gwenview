@@ -63,7 +63,7 @@ KAboutData* GVImagePart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
 						"0.1", I18N_NOOP("Image Viewer"),
 						KAboutData::License_GPL,
-						"(c) 2001, Jonathan Riddell <jr@jriddell.org>");
+						"(c) 2004, Jonathan Riddell <jr@jriddell.org>");
 	return aboutData;
 }
 
@@ -88,8 +88,8 @@ QString GVImagePart::filePath() {
 	return m_file;
 }
 
-void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
-	QString caption = QString(filename + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
+void GVImagePart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& /*filename*/) {
+	QString caption = QString(m_url.filename() + " %1 x %2").arg(mGVPixmap->width()).arg(mGVPixmap->height());
 	emit setWindowCaption(caption);
 }
 

@@ -93,9 +93,9 @@ GVDirPart::~GVDirPart() {
 
 KAboutData* GVDirPart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvdirpart", I18N_NOOP("GVDirPart"),
-						"0.1", I18N_NOOP("Image Viewer"),
+						"0.1", I18N_NOOP("Image Browser"),
 						KAboutData::License_GPL,
-						"(c) 2001, Jonathan Riddell <jr@jriddell.org>");
+						"(c) 2004, Jonathan Riddell <jr@jriddell.org>");
 	return aboutData;
 }
 
@@ -115,7 +115,7 @@ bool GVDirPart::openURL(const KURL& url) {
 
 	mGVPixmap->setDirURL(url);
 	mFilesView->setURL(url, 0);
-	emit setWindowCaption( url.prettyURL() + " [" );
+	emit setWindowCaption( url.prettyURL() );
 
 	return true;
 }
