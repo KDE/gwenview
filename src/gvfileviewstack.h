@@ -204,6 +204,7 @@ private:
 	QString mFileNameToSelect;
 
 	bool mBrowsing;
+	bool mSelecting;
 	
 	/**
 	 * Browse to the given item. Prevents multiple calls using mBrowsing.

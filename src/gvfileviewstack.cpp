@@ -90,7 +90,7 @@ public:
 //
 //-----------------------------------------------------------------------
 GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent), mMode(FILE_LIST), mBrowsing(false)
+: QWidgetStack(parent), mMode(FILE_LIST), mBrowsing(false), mSelecting(false)
 {
 	d=new GVFileViewStackPrivate;
 
@@ -177,6 +177,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(slotViewExecuted()) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
 		this,SLOT(slotViewExecuted()) );
+	connect(mFileDetailView,SIGNAL(currentChanged(QListViewItem*)),
+		this,SLOT(slotViewClicked()) );
 	connect(mFileDetailView,SIGNAL(selectionChanged()),
 		this,SLOT(slotViewClicked()) );
 	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
@@ -201,6 +203,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(slotViewExecuted()) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
 		this,SLOT(slotViewExecuted()) );
+	connect(mFileThumbnailView,SIGNAL(currentChanged(QIconViewItem*)),
+		this,SLOT(slotViewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(selectionChanged()),
 		this,SLOT(slotViewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
@@ -267,7 +271,9 @@ void GVFileViewStack::setURL(const KURL& url) {
 		mDirLister->openURL(mDirURL);
 		updateActions();
 	} else {
-		browseTo(findItemByFileName(url.filename(false)));
+		if( !mSelecting ) {
+			browseTo(findItemByFileName(url.filename(false)));
+		}
 	}
 }
 
@@ -374,9 +380,9 @@ void GVFileViewStack::slotViewClicked() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
 
-	// Don't change the current image if the user is creating a multi-selection
-	if (currentFileView()->selectedItems()->count()>1) return;
+	mSelecting = true;
 	emitURLChanged();
+	mSelecting = false;
 }
 
 
