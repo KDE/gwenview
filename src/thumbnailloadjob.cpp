@@ -69,8 +69,7 @@ QString ThumbnailLoadJob::thumbnailBaseDir() {
 	static QString dir;
 	if (!dir.isEmpty()) return dir;
 
-	KGlobal::dirs()->addResourceType("thumbnails","share/thumbnails/");
-	dir = QDir::cleanDirPath( KGlobal::dirs()->resourceDirs("thumbnails")[0] );
+	dir=QDir::cleanDirPath( KGlobal::dirs()->saveLocation("cache", "gwenview") );
 	return dir;
 }
 
@@ -89,12 +88,14 @@ QString ThumbnailLoadJob::thumbnailDirForURL(const KURL& url) {
 	//	kdDebug() << mItems.getFirst()->url().upURL().url(-1) << endl;
 	KMD5 md5(QFile::encodeName(KURL(originalDir).url()) );
 	QCString hash=md5.hexDigest();
-	QString thumbPath = QString::fromLatin1( hash.data(), 4 ) + "/" +
+	QString thumbnailDir = thumbnailBaseDir() + "/" +
+		QString::fromLatin1( hash.data(), 4 ) + "/" +
 		QString::fromLatin1( hash.data()+4, 4 ) + "/" +
 		QString::fromLatin1( hash.data()+8 ) + "/";
 
 	// Create the thumbnail cache dir
-	return locateLocal( "thumbnails", thumbPath + QString(ThumbnailSize::biggest()) + "/" );
+	KStandardDirs::makeDir(thumbnailDir);
+	return thumbnailDir;
 }
 
 
