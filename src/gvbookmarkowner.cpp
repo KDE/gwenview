@@ -40,7 +40,7 @@ void GVBookmarkOwner::openBookmarkURL(const QString& strURL)
 
 QString GVBookmarkOwner::currentURL() const
 {
-	return mURL.path();
+	return mURL.prettyURL();
 }
 
 
