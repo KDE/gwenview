@@ -799,12 +799,18 @@ void GVMainWindow::createWidgets() {
 				"Due to some changes in the dock behavior, your old dock configuration has been discarded. "
 				"Please adjust your docks again.</qt>")
 				);
+			// Store the default dock config and create the
+			// GWENVIEW_DOCK_VERSION entry
+			mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
+			config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
+			config->sync();
 		}
+	} else {
+		// There was no dock config, lets create the GWENVIEW_DOCK_VERSION entry
+		config->setGroup(CONFIG_DOCK_GROUP);
+		config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
+		config->sync();
 	}
-	
-	// Make sure the Gwenview dock version is up to date
-	config->setGroup(CONFIG_DOCK_GROUP);
-	config->writeEntry(CONFIG_GWENVIEW_DOCK_VERSION, GWENVIEW_DOCK_VERSION);
 	
 	// Load config
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
