@@ -1,9 +1,9 @@
-2004.xx.xx - v1.1.7
+2004.12.19 - v1.1.7
 - New features:
  - Double clicking the image view toggles the full screen mode (By Daniel
    Thaler)
  - It's now possible to select which KIPI plugins should be loaded.
- - The fullscreen display now contains "Previous", "Next" and "Exit fullscreen"
+ - The On Screen Display now contains "Previous", "Next" and "Exit fullscreen"
    buttons. These buttons automatically hide when the cursor hides
    itself.
  - Adjust brightness, contrast and gamma.
