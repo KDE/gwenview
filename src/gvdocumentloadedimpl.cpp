@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 // Qt
 #include <qdir.h>
@@ -30,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kdebug.h>
 #include <kio/netaccess.h>
+#include <klargefile.h>
 #include <klocale.h>
 #include <ktempfile.h>
 
@@ -78,6 +80,7 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 	QString msg;
 	KURL url(_url);
 	
+	int mode=-1;
 	if (url.isLocalFile()) {
 		// If the file is a link, dereference it but take care of circular
 		// links
@@ -98,6 +101,11 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 			}
 			url.setPath(info.filePath());
 		}
+
+		// Get mode
+		KDE_struct_stat st; 
+		KDE_stat(QFile::encodeName(info.filePath()), &st);
+		mode=st.st_mode & 07777;
 		
 		// Make some quick tests on the file if it is local
 		if (info.exists() && ! info.isWritable()) {
@@ -130,6 +138,10 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 
 	// Move the tmp file to the final dest
 	if (url.isLocalFile()) {
+		// Set the mode if available
+		if (mode!=-1) {
+			chmod( QFile::encodeName(tmp.name()), mode);
+		}
 		if( ::rename( QFile::encodeName( tmp.name() ), QFile::encodeName( url.path())) < 0 ) {
 			return i18n("Could not write to %1.").arg(url.path());
 		}
