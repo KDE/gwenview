@@ -8,9 +8,7 @@
 - Thumbnail generator now saves always save the thumbnail at the biggest size :
   for smaller sizes the big thumbnail is loaded and scaled. This uses less disk
   space and make thumbnail size switching faster.
-- Removed zoom step, replaced it by a fixed zoom factora, now when you zoom in,
-  the image is two times bigger, and tow times smaller when you zoom out. Min
-  zoom is 1/16, max zoom is 16 (Same values as the GIMP).
+- Reworked the zoom behaviour so that it works like the zoom tool in the GIMP.
 
 2002.08.11 - v0.14.5
 - Fixed the horizontal one pixel lines which appeared in fullscreen mode when

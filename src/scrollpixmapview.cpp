@@ -190,14 +190,22 @@ void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
 //-Slots----------------------------------------------
 void ScrollPixmapView::slotZoomIn() {
 	double newZoom;
-	for(newZoom=1/MAX_ZOOM;newZoom<=mZoom;newZoom*=2);
+	if (mZoom>=1.0) {
+		newZoom=floor(mZoom)+1.0;
+	} else {
+		newZoom=1/( ceil(1/mZoom)-1.0 );
+	}
 	setZoom(newZoom);
 }
 
 
 void ScrollPixmapView::slotZoomOut() {
 	double newZoom;
-	for(newZoom=MAX_ZOOM;newZoom>=mZoom;newZoom/=2);
+	if (mZoom>1.0) {
+		newZoom=ceil(mZoom)-1.0;
+	} else {
+		newZoom=1/( floor(1/mZoom)+1.0 );
+	}
 	setZoom(newZoom);
 }
 
