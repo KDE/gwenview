@@ -1,4 +1,4 @@
-2003.xx.xx - v0.17.0
+2003.xx.xx - v0.17.0pre1
 - New features:
  - Added bookmarks.
  - Show hidden files.
@@ -6,6 +6,7 @@
    perform lossless manipulations).
  - Image saving.
  - You can now smooth scale images.
+ - New entry in the "View" menu to show the image view only. 
  - New option to enlarge smaller images when using auto zoom.
  - New option to toggle scroll bars on image view.
  - New option to select whether deleting files should send them to the trash or

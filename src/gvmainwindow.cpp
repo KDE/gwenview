@@ -124,7 +124,11 @@ GVMainWindow::~GVMainWindow() {
 	mPixmapView->writeConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
-	writeDockConfig(config,CONFIG_DOCK_GROUP);
+
+	// Don't store settings if the image view is the only visible view...
+	if (!mShowImageViewOnly->isChecked()) {
+		writeDockConfig(config,CONFIG_DOCK_GROUP);
+	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
 }
@@ -254,9 +258,25 @@ void GVMainWindow::pixmapLoading() {
 }
 
 
+void GVMainWindow::showImageViewOnly() {
+	KConfig* config=KGlobal::config();
+	
+	if (mShowImageViewOnly->isChecked()) {
+		writeDockConfig(config,CONFIG_DOCK_GROUP);
+		makeDockInvisible(mFileDock);
+		makeDockInvisible(mFolderDock);
+	} else {
+		readDockConfig(config,CONFIG_DOCK_GROUP);
+	}
+	mPixmapView->setFocus();
+}
+
+
 void GVMainWindow::toggleFullScreen() {
 	KConfig* config=KGlobal::config();
 
+	mShowImageViewOnly->setEnabled(!mToggleFullScreen->isChecked());
+	
 	if (mToggleFullScreen->isChecked()) {
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
 
@@ -507,6 +527,8 @@ void GVMainWindow::createActions() {
 	
 	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
+	mShowImageViewOnly=new KToggleAction(i18n("&Show Image Only"),CTRL + Key_Return,this,SLOT(showImageViewOnly()),actionCollection(),"show_image_view_only");
+	
 	actionCollection()->readShortcutSettings();
 }
 
@@ -601,6 +623,7 @@ void GVMainWindow::createMenu() {
 	mFileViewStack->largeThumbnails()->plug(viewMenu);
 	
 	viewMenu->insertSeparator();
+	mShowImageViewOnly->plug(viewMenu);
 	mToggleFullScreen->plug(viewMenu);
 	mToggleSlideShow->plug(viewMenu);
 
