@@ -419,6 +419,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		mOriginalTime = 0;
 		assert( mNextItem == mItems.current());
 		mCurrentItem = mNextItem;
+		assert(mCurrentItem);
 		mCurrentURL = mCurrentItem->url();
 		mCurrentURL.cleanPath();
 		// Do direct stat instead of using KIO if the file is local (faster)
