@@ -2,6 +2,10 @@
 - New features:
  - Added bookmarks.
  - Show hidden files.
+ - Basic image manipulations:
+  - Rotate left and right.
+  - Mirror and flip.
+ - Image saving.
 
 2003.02.13 - v0.16.2
 - Fixes:

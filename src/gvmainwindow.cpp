@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
+#include <kimageio.h>
 #include <kkeydialog.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -146,6 +147,8 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mRotateRight->setEnabled(filenameIsValid);
 	mMirror->setEnabled(filenameIsValid);
 	mFlip->setEnabled(filenameIsValid);
+	mSaveFile->setEnabled(filenameIsValid);
+	mSaveFileAs->setEnabled(filenameIsValid);
 	
 	mOpenParentDir->setEnabled(url.path()!="/");
 
@@ -223,12 +226,36 @@ void GVMainWindow::openWithEditor() {
 
 
 void GVMainWindow::openFile() {
-	QString path=KFileDialog::getOpenFileName();
-	if (path.isNull()) return;
+	KURL url=KFileDialog::getOpenURL();
+	if (!url.isValid()) return;
 
-	KURL url;
-	url.setPath(path);
 	mGVPixmap->setURL(url);
+}
+	
+
+void GVMainWindow::saveFile() {
+	bool result=mGVPixmap->save();
+	if (!result) {
+		KMessageBox::sorry(this,i18n("Could not save file."));
+	}
+}
+
+
+void GVMainWindow::saveFileAs() {
+	KURL dirURL=mGVPixmap->dirURL();
+	QString path;
+	if (dirURL.isLocalFile()) {
+		path=dirURL.path();
+	} else {
+		path=QString::null;
+	}
+	KURL url=KFileDialog::getSaveURL(path,KImageIO::pattern(KImageIO::Writing));
+	if (!url.isValid()) return;
+
+	bool result=mGVPixmap->saveAs(url,KImageIO::type(url.path()));	
+	if (!result) {
+		KMessageBox::sorry(this,i18n("Could not save file."));
+	}
 }
 
 
@@ -448,7 +475,11 @@ void GVMainWindow::createWidgets() {
 
 
 void GVMainWindow::createActions() {
-	mOpenFile=KStdAction::open(this, SLOT(openFile()),actionCollection() );
+	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
+	
+	mSaveFile=KStdAction::save(this,SLOT(saveFile()),actionCollection() );
+	
+	mSaveFileAs=KStdAction::saveAs(this,SLOT(saveFileAs()),actionCollection() );
 	
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 
@@ -462,26 +493,26 @@ void GVMainWindow::createActions() {
 
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
 
-	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"show_config_dialog");
+	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"settings_config_dialog");
 
-	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"show_key_dialog");
+	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"settings_key_dialog");
 	
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
 
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
 
-	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"show_file_properties");
+	mShowFileProperties=new KAction(i18n("Properties..."),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
 
 	mToggleSlideShow=new KToggleAction(i18n("Slide show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
 
-	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_ccw",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"image_rotate_left");
+	mRotateLeft=new KAction(i18n("Rotate &left"),"rotate_ccw",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
 	
-	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_cw",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"image_rotate_right");
+	mRotateRight=new KAction(i18n("Rotate &right"),"rotate_cw",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
 	
-	mMirror=new KAction(i18n("&Mirror"),0,mGVPixmap,SLOT(mirror()),actionCollection(),"image_mirror");
+	mMirror=new KAction(i18n("&Mirror"),0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
 	
-	mFlip=new KAction(i18n("&Flip"),0,mGVPixmap,SLOT(flip()),actionCollection(),"image_flip");
+	mFlip=new KAction(i18n("&Flip"),0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
 
 	actionCollection()->readShortcutSettings();
 }
@@ -544,6 +575,8 @@ void GVMainWindow::createMenu() {
 	QPopupMenu* fileMenu = new QPopupMenu;
 
 	mOpenFile->plug(fileMenu);
+	mSaveFile->plug(fileMenu);
+	mSaveFileAs->plug(fileMenu);
 	fileMenu->insertSeparator();
 	mOpenWithEditor->plug(fileMenu);
 	mRenameFile->plug(fileMenu);

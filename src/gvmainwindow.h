@@ -92,6 +92,8 @@ private:
 	KAction* mRotateRight;
 	KAction* mMirror;
 	KAction* mFlip;
+	KAction* mSaveFile;
+	KAction* mSaveFileAs;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
@@ -120,6 +122,8 @@ private slots:
 	void deleteFiles();
 	void showFileProperties();
 	void openFile();
+	void saveFile();
+	void saveFileAs();
 	void openWithEditor();
 	
 	void toggleFullScreen();

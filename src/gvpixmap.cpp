@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kdebug.h>
+#include <kimageio.h>
 #include <kio/netaccess.h>
 
 // Our includes
@@ -155,6 +156,25 @@ void GVPixmap::flip() {
 }
 
 
+bool GVPixmap::save() const {
+	return saveAs(url(),mFileFormat);
+}
+
+
+bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
+	QString path;
+	if (!url.isLocalFile()) {
+		kdWarning() << "Remote file saving not implemented yet\n";
+		return false;
+	} else {
+		path=url.path();
+	}
+
+	return mImage.save(path,format.ascii());
+}
+
+
+
 //---------------------------------------------------------------------
 //
 // Private stuff
@@ -172,7 +192,8 @@ bool GVPixmap::load() {
 	} else {
 		if (!KIO::NetAccess::download(pixURL,path)) return false;
 	}
-	result=mImage.load(path);
+	mFileFormat=QString(QImage::imageFormat(path));
+	result=mImage.load(path,mFileFormat.ascii());
 	
 	if (!pixURL.isLocalFile()) {
 		KIO::NetAccess::removeTempFile(path);

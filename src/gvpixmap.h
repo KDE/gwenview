@@ -34,15 +34,12 @@ Copyright (c) 2000-2003 Aurélien Gâteau
  */
 class GVPixmap : public QObject {
 Q_OBJECT
-	QImage mImage;
-	KURL mDirURL;
-	QString mFilename;
-	bool load();
-
 public:
 	GVPixmap(QObject*);
 	~GVPixmap();
 	void reset();
+	bool save() const;
+	bool saveAs(const KURL&,const QString& format) const;
 
 	// Properties 
 	const QImage& image() const { return mImage; }
@@ -52,6 +49,7 @@ public:
 	int width() const { return mImage.width(); }
 	int height() const { return mImage.height(); }
 	bool isNull() const { return mImage.isNull(); }
+	
 
 public slots:
 	void setURL(const KURL&);
@@ -80,6 +78,14 @@ signals:
 	 * Emitted when the image is modified.
 	 */
 	void modified();
+	
+private:
+	QImage mImage;
+	KURL mDirURL;
+	QString mFilename;
+	QString mFileFormat;
+
+	bool load();
 };
 
 
