@@ -63,11 +63,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
-	mSelectPrevious=new KAction(i18n("go back", "&Back"),
+	mSelectPrevious=new KAction(i18n("Go back", "&Back"),
 		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
 
-	mSelectNext=new KAction(i18n("go forward", "&Forward"),
+	mSelectNext=new KAction(i18n("Go forward", "&Forward"),
 		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 
@@ -363,7 +363,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 			menu.insertItem( i18n("&Move To...") ),
 			this,SLOT(moveFiles()) );
 		menu.connectItem(
-			menu.insertItem( i18n("&Delete...") ),
+			menu.insertItem( i18n("&Delete") ),
 			this,SLOT(deleteFiles()) );
 		menu.insertSeparator();
 	}
