@@ -1,7 +1,4 @@
-
 bin_PROGRAMS = gwenview
-
-SUBDIRS = pics
 
 gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp statusbarprogress.cpp scrollpixmapview.cpp \
 	pixmapview.cpp mainwindow.cpp main.cpp gvpixmap.cpp fitpixmapview.cpp dirview.cpp fileview.cpp \

@@ -1,2 +1,0 @@
-?package(gwenview):needs=X11|text|vc|wm section=Apps/Viewers\
-  title="gwenview" command="/usr/bin/gwenview"

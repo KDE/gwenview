@@ -1,6 +1,9 @@
-2002.xx.xx - v0.15.0
+2002.10.04 - v0.15.0
 - File count was also counting folders.
 - Integrated the updated man page by Michael Spanier.
+- Selected thumbnail looks nicer now.
+- Fixed automatic deselection of the selected thumbnail when using single-click
+  mode.
 
 2002.09.14 - v0.15.0pre1
 - New option to prevent Gwenview from loading the first image when it enters a

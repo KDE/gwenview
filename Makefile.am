@@ -1,4 +1,4 @@
-SUBDIRS = src desktopfiles doc
+SUBDIRS = src pics desktopfiles doc
 
 EXTRA_DIST = AUTHORS ChangeLog COPYING INSTALL NEWS README TODO CREDITS
 
