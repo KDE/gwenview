@@ -177,6 +177,9 @@ private slots:
 	void dirListerCompleted();
 
 	void openDropURLMenu(QDropEvent*, KFileItem*);
+
+	void makeDir();
+	void slotDirMade(KIO::Job* job);
 	
 private:
 	GVFileViewStackPrivate* d;
