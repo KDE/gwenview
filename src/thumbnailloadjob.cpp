@@ -86,7 +86,7 @@ QString ThumbnailLoadJob::thumbnailDirForURL(const KURL& url) {
 	}
 
 	// Generate the thumbnail dir name
-	//	kdDebug() << mItems.first()->url().upURL().url(-1) << endl;
+	//	kdDebug() << mItems.getFirst()->url().upURL().url(-1) << endl;
 	KMD5 md5(QFile::encodeName(KURL(originalDir).url()) );
 	QCString hash=md5.hexDigest();
 	QString thumbPath = QString::fromLatin1( hash.data(), 4 ) + "/" +
@@ -123,8 +123,11 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 	if (mItems.isEmpty()) return;
 
 	// We assume that all items are in the same dir
-	mCacheDir=thumbnailDirForURL(mItems.first()->url());
+	mCacheDir=thumbnailDirForURL(mItems.getFirst()->url());
 	LOG("mCacheDir=" << mCacheDir);
+	
+	// Move to the first item
+	mItems.first();
 }
 
 
@@ -163,17 +166,29 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 }
 
 
+bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
+	// Move mItems' internal iterator to the next item to be processed
+	do {
+		if (item==mItems.current()) return true;
+	} while (mItems.next());
+	
+	// not found, move to first item
+	mItems.first(); 
+	return false;
+}
+
+
 void ThumbnailLoadJob::determineNextIcon() {
 	// Skip non images 
-    while (true) {
-	    KFileItem* item=mItems.first();
-        if (!item) break;
-        if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
-            mItems.removeFirst();
-	    } else {
-            break;
-        }
-    }
+	while (true) {
+		KFileItem* item=mItems.current();
+		if (!item) break;
+		if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
+			mItems.remove();
+		} else {
+			break;
+		}
+	}
 	
 	// No more items ?
 	if (mItems.isEmpty()) {
@@ -184,12 +199,12 @@ void ThumbnailLoadJob::determineNextIcon() {
 	} else {
 		// First, stat the orig file
 		mState = STATE_STATORIG;
-		mCurrentItem = mItems.first();
+		mCurrentItem = mItems.current();
 		mCurrentURL = mCurrentItem->url();
 		KIO::Job* job = KIO::stat(mCurrentURL,false);
 		LOG( "KIO::stat orig " << mCurrentURL.url() );
 		addSubjob(job);
-		mItems.removeFirst();
+		mItems.remove();
 	}
 }
 

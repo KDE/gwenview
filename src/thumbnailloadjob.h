@@ -68,6 +68,12 @@ public:
 	void appendItem(const KFileItem* item);
 
 	
+        /**
+         * Set item to be the next processed job. Returns false
+         * if there's no such item in mItems
+         */	
+        bool setNextItem(const KFileItem* item);
+
 	/**
 	 * Returns the thumbnail base dir
 	 */

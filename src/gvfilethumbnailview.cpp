@@ -75,6 +75,8 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 
 	connect(this, SIGNAL(dropped(QDropEvent*,const QValueList<QIconDragItem>&)),
 		this, SLOT(slotDropped(QDropEvent*)) );
+	connect(this, SIGNAL( contentsMoving( int, int )),
+		this, SLOT( slotContentsMoving( int, int )));
 	
 	QIconView::setSelectionMode(Extended);
 }
@@ -427,6 +429,24 @@ void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 	}
 }
 
+/**
+ * when generating thumbnails, make the first visible (not loaded yet)
+ * thumbnail be the next one processed by the thumbnail job
+ */
+void GVFileThumbnailView::slotContentsMoving( int x, int y ) {
+	if (mThumbnailLoadJob.isNull()) return;
+	QRect r( x, y, visibleWidth(), visibleHeight());
+	GVFileThumbnailViewItem* pos = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( r ));
+	GVFileThumbnailViewItem* last = static_cast< GVFileThumbnailViewItem* >( findLastVisibleItem( r ));
+	while( pos != NULL ) {
+		KFileItem* fileItem = pos->fileItem();
+		if( fileItem ) {
+			if( mThumbnailLoadJob->setNextItem(fileItem)) return;
+		}
+		if( pos == last ) break;
+		pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem());
+	}
+}
 
 //--------------------------------------------------------------------------
 //

@@ -126,6 +126,7 @@ private slots:
 	void slotClicked(QIconViewItem*);
 	void slotDoubleClicked(QIconViewItem*);
 	void slotDropped(QDropEvent*);
+	void slotContentsMoving( int, int );
 };
 
 
