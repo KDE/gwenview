@@ -123,6 +123,8 @@ signals:
 
 protected:
 	virtual void openContextMenu(const QPoint&);
+	virtual void contentsDragEnterEvent(QDragEnterEvent*);
+	virtual void contentsDropEvent(QDropEvent*);
 	
 private:
 	GVDocument* mDocument;

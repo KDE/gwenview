@@ -44,6 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
+#include <kurldrag.h>
 #include <kapplication.h>
 
 // Local
@@ -267,6 +268,8 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 {
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
+	setAcceptDrops( true );
+	viewport()->setAcceptDrops( true );
 
 	mToolControllers[SCROLL]=new ScrollToolController(this);
 	mToolControllers[ZOOM]=new ZoomToolController(this);
@@ -908,6 +911,17 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 	return false;
 }
 
+
+void GVScrollPixmapView::contentsDragEnterEvent(QDragEnterEvent* event) {
+	event->accept( QUriDrag::canDecode( event ));
+}
+
+void GVScrollPixmapView::contentsDropEvent(QDropEvent* event) {
+	KURL::List list;
+	if( KURLDrag::decode( event, list )) {
+		mDocument->setURL( list.first());
+	}
+}
 
 /**
  * If force is set, the cursor will be updated even if the tool is not
