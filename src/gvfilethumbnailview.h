@@ -116,7 +116,7 @@ private:
 	ThumbnailSize mThumbnailSize;
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
-    QPixmap mWaitPixmap;
+	QPixmap mWaitPixmap;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 

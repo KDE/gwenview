@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstandarddirs.h>
 #include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
+#include <kio/job.h>
 
 #include "gvdirpart.h"
 #include <src/gvscrollpixmapview.h>
@@ -42,6 +43,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	setInstance( GVDirFactory::instance() );
 
+	m_browserExtension = new GVDirPartBrowserExtension(this);
+	m_browserExtension->updateActions();
+
 	m_splitter = new QSplitter(Qt::Horizontal, parentWidget, "splitter");
 
 	// Create the widgets
@@ -56,6 +60,11 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	connect(m_filesView, SIGNAL(urlChanged(const KURL&)),
 		m_gvPixmap, SLOT(setURL(const KURL&)) );
+	connect(m_filesView, SIGNAL(directoryChanged(const KURL&)),
+		m_browserExtension, SLOT(directoryChanged(const KURL&)) );
+	//I had hoped this would enable the "up" button, but it doesn't
+	connect(m_gvPixmap, SIGNAL(loaded(const KURL&,const QString&)),
+		this, SLOT(slotCompleted()) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
@@ -81,7 +90,7 @@ KAboutData* GVDirPart::createAboutData() {
 }
 
 bool GVDirPart::openURL(const KURL& url) {
-	kdDebug() << k_funcinfo << url.prettyURL() <<  endl;
+	kdDebug() << k_funcinfo << url.prettyURL() << "<--end" << endl;
 
 	if (!url.isValid())  {
 		return false;
@@ -94,7 +103,6 @@ bool GVDirPart::openURL(const KURL& url) {
 	return true;
 }
 
-
 bool GVDirPart::openFile() {
 	//unused because openURL implemented
 	kdDebug() << k_funcinfo << endl;
@@ -105,7 +113,67 @@ bool GVDirPart::openFile() {
 
 void GVDirPart::slotExample() {
 	//Example KAction
-	m_filesView->setMode(GVFileViewStack::Thumbnail);
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPart::slotCompleted() {
+	kdDebug() << k_funcinfo << endl;
+	emit completed();
+}
+
+void GVDirPart::setKonquerorWindowCaption(const QString& url) {
+	kdDebug() << k_funcinfo << url << endl;
+	emit setWindowCaption(url);
+	kdDebug() << k_funcinfo << "done" << endl;
+}
+
+// GVDirPartBrowserExtension
+
+GVDirPartBrowserExtension::GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name)
+	:KParts::BrowserExtension(viewPart, name) {
+	m_gvDirPart = viewPart;
+}
+
+GVDirPartBrowserExtension::~GVDirPartBrowserExtension() {
+}
+
+void GVDirPartBrowserExtension::updateActions() {
+	kdDebug() << k_funcinfo << endl;
+	/*
+	emit enableAction( "copy", true );
+	emit enableAction( "cut", true );
+	emit enableAction( "trash", true);
+	emit enableAction( "del", true );
+	emit enableAction( "editMimeType", true );
+	*/
+}
+
+void GVDirPartBrowserExtension::del() {
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPartBrowserExtension::trash() {
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPartBrowserExtension::editMimeType() {
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPartBrowserExtension::refresh() {
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPartBrowserExtension::copy() {
+	kdDebug() << k_funcinfo << endl;
+}
+void GVDirPartBrowserExtension::cut() {
+	kdDebug() << k_funcinfo << endl;
+}
+
+void GVDirPartBrowserExtension::directoryChanged(const KURL& dirURL) {
+	kdDebug() << k_funcinfo << endl;
+	emit openURLRequest(dirURL);
 }
 
 #include "gvdirpart.moc"

@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define __gvdirpart_h__
 
 #include <kparts/part.h>
+#include <kparts/browserextension.h>
 
 // Forward declarations
 class QSplitter;
@@ -28,6 +29,36 @@ class KAction;
 class GVScrollPixmapView;
 class GVFileViewStack;
 class GVPixmap;
+
+class GVDirPart;
+
+class GVDirPartBrowserExtension: public KParts::BrowserExtension {
+  Q_OBJECT
+
+public:
+  GVDirPartBrowserExtension(GVDirPart* viewPart, const char* name=0L);
+  ~GVDirPartBrowserExtension();
+
+//protected slots:
+public slots:
+//  void selected(TreeMapItem*);
+//  void contextMenu(TreeMapItem*,const QPoint&);
+
+  void updateActions();
+  void refresh();
+
+  void copy();
+  void cut();
+  void trash();
+  void del();
+  void editMimeType();
+
+  void directoryChanged(const KURL& dirURL);
+private:
+  GVDirPart* m_gvDirPart;
+};
+
+
 
 class GVDirPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
@@ -40,6 +71,8 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 	static KAboutData* createAboutData();
 
+	void setKonquerorWindowCaption(const QString& url);
+
  protected:
 	/** Open the file whose path is stored in the member variable
 	 * m_file and return true on success, false on failure.
@@ -49,6 +82,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 
  protected slots:
 	void slotExample();
+	void slotCompleted();
 
  protected:
         /**
@@ -61,7 +95,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * Scroll widget
 	 */
 	GVScrollPixmapView* m_pixmapView;
-	
+
 	/**
 	 * Holds the image
 	 */
@@ -75,6 +109,12 @@ class GVDirPart : public KParts::ReadOnlyPart {
 
 	// An example action to which we need to keep a pointer
 	KAction* m_exampleAction;
+
+	/**
+	 * This inherits from KParts::BrowserExtention and supplies
+	 * some extra functionality to Konqueror.
+	 */
+	GVDirPartBrowserExtension* m_browserExtension;
 };
 
 #endif

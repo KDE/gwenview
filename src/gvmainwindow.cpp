@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-// Qt 
+// Qt
 #include <qcursor.h>
 #include <qdir.h>
 #include <qdockarea.h>
@@ -112,7 +112,7 @@ GVMainWindow::GVMainWindow()
 	createWidgets();
 	createActions();
 	createLocationToolBar();
-	
+
 	// This event filter is here to make sure the pixmap view is aware of the changes
 	// in the keyboard modifiers, even if it isn't focused
 	kapp->installEventFilter(mPixmapView);
@@ -150,7 +150,7 @@ GVMainWindow::GVMainWindow()
 
 bool GVMainWindow::queryClose() {
 	if (!mGVPixmap->saveIfModified()) return false;
-	
+
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
@@ -169,7 +169,7 @@ bool GVMainWindow::queryClose() {
 	// visible before saving the window settings.
 	if (mToggleFullScreen->isChecked()) {
 		statusBar()->show();
-		
+
 		if (toolBar()->area()) {
 			toolBar()->area()->show();
 		} else {
@@ -179,7 +179,7 @@ bool GVMainWindow::queryClose() {
 		rightDock()->show();
 		topDock()->show();
 		bottomDock()->show();
-		
+
 		menuBar()->show();
 	}
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
@@ -195,7 +195,7 @@ bool GVMainWindow::queryClose() {
 //-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
 	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
-	
+
 	bool filenameIsValid=!mGVPixmap->isNull();
 
 	mRenameFile->setEnabled(filenameIsValid);
@@ -211,7 +211,7 @@ void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
 	mSaveFileAs->setEnabled(filenameIsValid);
 	mFilePrint->setEnabled(filenameIsValid);
 	mReload->setEnabled(filenameIsValid);
-	
+
 	QPopupMenu *upPopup = mGoUp->popupMenu();
 	upPopup->clear();
 	int i = 0;
@@ -241,7 +241,7 @@ void GVMainWindow::goUp() {
 void GVMainWindow::goUpTo(int id) {
 	KPopupMenu* menu=mGoUp->popupMenu();
 	KURL url(menu->text(id));
-	
+
 	KURL childURL;
 	int index=menu->indexOf(id);
 	if (index>0) {
@@ -249,7 +249,7 @@ void GVMainWindow::goUpTo(int id) {
 	} else {
 		childURL=mGVPixmap->dirURL();
 	}
-	
+
 	mGVPixmap->setDirURL(url);
 	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
@@ -263,7 +263,7 @@ void GVMainWindow::goUpTo(int id) {
 void GVMainWindow::openHomeDir() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
-	mGVPixmap->setURL(url);	
+	mGVPixmap->setURL(url);
 }
 
 
@@ -383,7 +383,7 @@ void GVMainWindow::pixmapLoading() {
 
 void GVMainWindow::toggleDirAndFileViews() {
 	KConfig* config=KGlobal::config();
-	
+
 	if (mFileDock->isVisible() || mFolderDock->isVisible()) {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
@@ -400,8 +400,8 @@ void GVMainWindow::toggleDirAndFileViews() {
 void GVMainWindow::hideToolBars() {
 	QPtrListIterator<KToolBar> it=toolBarIterator();
 	KToolBar* bar;
-	
-	for(;it.current()!=0L; ++it) {	
+
+	for(;it.current()!=0L; ++it) {
 		bar=it.current();
 		if (bar->area()) {
 			bar->area()->hide();
@@ -414,10 +414,10 @@ void GVMainWindow::hideToolBars() {
 
 void GVMainWindow::showToolBars() {
 	QPtrListIterator<KToolBar> it=toolBarIterator();
-	
+
 	KToolBar* bar;
-	
-	for(;it.current()!=0L; ++it) {	
+
+	for(;it.current()!=0L; ++it) {
 		bar=it.current();
 		if (bar->area()) {
 			bar->area()->show();
@@ -430,9 +430,9 @@ void GVMainWindow::showToolBars() {
 
 void GVMainWindow::toggleFullScreen() {
 	KConfig* config=KGlobal::config();
-	
+
 	mToggleDirAndFileViews->setEnabled(!mToggleFullScreen->isChecked());
-	
+
 	if (mToggleFullScreen->isChecked()) {
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
 
@@ -447,12 +447,12 @@ void GVMainWindow::toggleFullScreen() {
 		if (!mShowToolBarInFullScreen) {
 			hideToolBars();
 		}
-		
+
 		if (leftDock()->isEmpty())	 leftDock()->hide();
 		if (rightDock()->isEmpty())  rightDock()->hide();
 		if (topDock()->isEmpty())	 topDock()->hide();
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
-		
+
 		if (!mShowStatusBarInFullScreen) statusBar()->hide();
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
@@ -463,13 +463,13 @@ void GVMainWindow::toggleFullScreen() {
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 		statusBar()->show();
-		
+
 		showToolBars();
 		leftDock()->show();
 		rightDock()->show();
 		topDock()->show();
 		bottomDock()->show();
-		
+
 		menuBar()->show();
 		mPixmapView->setFullScreen(false);
 		showNormal();
@@ -528,7 +528,7 @@ void GVMainWindow::applyMainWindowSettings() {
 	KMainWindow::applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
-	
+
 
 void GVMainWindow::escapePressed() {
 	if (mToggleSlideShow->isChecked()) {
@@ -577,10 +577,10 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	kdDebug() << "GVMainWindow::slotDirRenamed: "
 		<< oldURL.prettyURL() << " to " << newURL.prettyURL() << endl;
-	
+
 	KURL url(mGVPixmap->url());
 	if (!oldURL.isParentOf(url) ) return;
-	
+
 	QString oldPath=oldURL.path();
 	kdDebug() << " current path: " << url.path() << endl;
 	QString path=newURL.path() + url.path().mid(oldPath.length());
@@ -634,13 +634,13 @@ void GVMainWindow::createWidgets() {
 
 	manager()->setSplitterHighResolution(true);
 	manager()->setSplitterOpaqueResize(true);
-	
+
 	// Status bar
 	mSBDirLabel=new KSqueezedTextLabel("", statusBar());
 	statusBar()->addWidget(mSBDirLabel,1);
 	mSBDetailLabel=new QLabel("", statusBar());
 	statusBar()->addWidget(mSBDetailLabel);
-	
+
 	// Pixmap widget
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
@@ -667,7 +667,7 @@ void GVMainWindow::createWidgets() {
 
 	// Slide show controller (not really a widget)
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
-	
+
 	// Default dock config
 	setGeometry(20,20,600,400);
 	mFolderDock->manualDock( mPixmapDock,KDockWidget::DockLeft,30);
@@ -750,7 +750,7 @@ void GVMainWindow::createActions() {
 		this, SLOT(showExternalToolDialog()), actionCollection(), "configure_tools");
 	(void)KStdAction::configureToolbars(
 		this, SLOT(showToolBarDialog()), actionCollection() );
-	
+
 	actionCollection()->readShortcutSettings();
 }
 
@@ -791,7 +791,7 @@ void GVMainWindow::updateWindowActions() {
 
 
 void GVMainWindow::createConnections() {
-	connect(mGoUp->popupMenu(), SIGNAL(activated(int)), 
+	connect(mGoUp->popupMenu(), SIGNAL(activated(int)),
 		this,SLOT(goUpTo(int)));
 
 	// Dir view connections
@@ -800,7 +800,7 @@ void GVMainWindow::createConnections() {
 
 	connect(mDirView, SIGNAL(dirRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
-	
+
 	// Pixmap view connections
 	connect(mPixmapView,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );
@@ -831,7 +831,7 @@ void GVMainWindow::createConnections() {
 	// user
 	connect(mFileViewStack,SIGNAL(completedURLListing(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
-		
+
 	// GVPixmap connections
 	connect(mGVPixmap,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
@@ -847,7 +847,7 @@ void GVMainWindow::createConnections() {
 	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),
 		mToggleSlideShow,SLOT(activate()) );
-	
+
 	// Location bar
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
@@ -901,7 +901,7 @@ void GVMainWindow::createLocationToolBar() {
 
 }
 
-	
+
 //-----------------------------------------------------------------------
 //
 // Properties

@@ -129,6 +129,10 @@ public slots:
 
 signals:
 	void urlChanged(const KURL&);
+	/**
+	 * Used by GVDirPart to tell Konqueror to change directory
+	 */
+	void directoryChanged(const KURL&);
 	void completed();
 	void canceled();
 	void completedURLListing(const KURL&);
