@@ -55,7 +55,7 @@ void GVJPEGTran::slotProcessExited() {
 QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation orientation) {
 	GVJPEGTran obj;
 	KProcess process;
-	process << sProgramPath;
+	process << sProgramPath << "-copy" << "all";
 	
 	switch (orientation) {
 	case GVImageUtils::HFlip:

@@ -2,6 +2,9 @@
 - Fixes:
  - In the folder view, show the "+" sign in front of folders if they have
    sub-folders.
+ - Lossless manipulations of JPEG files won't remove the EXIF information
+   anymore.
+ - Handling of EXIF orientation tag should now work on KDE 3.0.
 
 2003.05.04 - v0.17.0
 - New features:

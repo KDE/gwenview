@@ -11,14 +11,14 @@ gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
 				   gvimagesavedialog.cpp gvslideshowdialog.cpp \
 				   gvslideshowdialogbase.ui gvjpegtran.cpp gvimageutils.cpp
 
-gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBJPEG)
+gwenview_LDADD   = $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBJPEG) ../libgvexif/libgvexif.la
 
 # the library search path.
 gwenview_LDFLAGS = $(all_libraries)
 
 
 # set the include path for X, qt and KDE
-INCLUDES = $(all_includes)
+INCLUDES = $(all_includes) -I../
 
 noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 fileopobject.h gvfilethumbnailview.h gvfileviewstack.h \

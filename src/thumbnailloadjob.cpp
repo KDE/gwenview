@@ -380,8 +380,9 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 	}
 
 	uchar** lines = image.jumpTable();
-	while (cinfo.output_scanline < cinfo.output_height)
+	while (cinfo.output_scanline < cinfo.output_height) {
 		jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
+	}
 	jpeg_finish_decompress(&cinfo);
 
 // Expand 24->32 bpp

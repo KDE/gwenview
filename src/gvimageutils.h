@@ -20,13 +20,17 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #ifndef GVIMAGEUTILS_H
 #define GVIMAGEUTILS_H
 
+template <class>class QMemArray;
+typedef QMemArray<char> QByteArray;
 class QImage;
-class QString;
 
 namespace GVImageUtils {
 	enum Orientation { NotAvailable=0,Normal=1,HFlip=2,Rot180=3,VFlip=4,Rot90HFlip=5,Rot90=6,Rot90VFlip=7,Rot270=8};
 
+	QByteArray setOrientation(const QByteArray& jpegContent, Orientation orientation);
+	Orientation getOrientation(const QByteArray& jpegContent);
 	Orientation getOrientation(const QString& pixPath);
+
 	QImage rotate(const QImage& img, Orientation orientation);
 };
 

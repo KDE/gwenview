@@ -241,7 +241,7 @@ void GVPixmap::load() {
 	}
 
 	// Load file. We load it ourself so that we can keep a copy of the
-	// compressed data. This is used by jpeg lossless manipulations.
+	// compressed data. This is used by JPEG lossless manipulations.
 	QFile file(path);
 	file.open(IO_ReadOnly);
 	QDataStream stream(&file);
@@ -251,23 +251,30 @@ void GVPixmap::load() {
 	// Decode image
 	mImageFormat=QString(QImage::imageFormat(path));
 	if (mImage.loadFromData(mCompressedData,mImageFormat.ascii())) {
-		// Throw data away if it's not a JPEG, since we won't use it
-		if (mImageFormat!="JPEG") mCompressedData.resize(0);
-
 		// Convert depth if necessary
 		// (32 bit depth is necessary for alpha-blending)
 		if (mImage.depth()<32 && mImage.hasAlphaBuffer()) {
 			mImage=mImage.convertDepth(32);
 		}
+
+		// If the image is a JPEG, rotate the decode image and the compressed
+		// data if necessary, otherwise throw the compressed data away
+		if (mImageFormat=="JPEG") {
+			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mCompressedData);
+			
+			if (orientation!=GVImageUtils::NotAvailable && orientation!=GVImageUtils::Normal) {
+				mImage=GVImageUtils::rotate(mImage, orientation);
+				mCompressedData=GVJPEGTran::apply(mCompressedData,orientation);
+				mCompressedData=GVImageUtils::setOrientation(mCompressedData,GVImageUtils::Normal);
+			}
+		} else {
+			mCompressedData.resize(0);
+		}
+
 	} else {
 		mImage.reset();
 	}
 
-	// Rotate image if necessary
-	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(path);
-	mImage=GVImageUtils::rotate(mImage, orientation);
-	if (mImageFormat=="JPEG") 
-		mCompressedData=GVJPEGTran::apply(mCompressedData,orientation);
 
 	KIO::NetAccess::removeTempFile(path);
 }
