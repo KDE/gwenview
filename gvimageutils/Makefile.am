@@ -8,6 +8,10 @@ libgvimageutils_la_SOURCES = \
 	scale.cpp \
 	transupp.c
 
+if GV_USE_MMX
+libgvimageutils_la_SOURCES += asm_scale.S
+endif
+
 noinst_HEADERS = \
 	orientation.h \
 	gvimageutils.h \
