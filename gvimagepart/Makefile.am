@@ -5,7 +5,7 @@ INCLUDES = $(all_includes) -I$(top_srcdir)/gwenview
 kde_module_LTLIBRARIES = libgvimagepart.la
 
 libgvimagepart_la_SOURCES = gvimagepart.cpp
-libgvimagepart_la_LIBADD = $(LIB_KPARTS) ../src/libgwenview.la
+libgvimagepart_la_LIBADD = $(LIB_KPARTS) ../src/libgwenviewcore.la
 libgvimagepart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 
 # Automatically generate moc files

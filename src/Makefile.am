@@ -1,16 +1,16 @@
 AM_CPPFLAGS = $(all_includes) -I$(top_srcdir)/gwenview
 
-lib_LTLIBRARIES = libgwenview.la
+lib_LTLIBRARIES = libgwenviewcore.la
 
-libgwenview_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
-libgwenview_la_LIBADD   = \
+libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
 	$(LIBJPEG) ../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la
 
-libgwenview_la_METASOURCES = AUTO
+libgwenviewcore_la_METASOURCES = AUTO
 
-libgwenview_la_SOURCES = \
+libgwenviewcore_la_SOURCES = \
 	gvconfigdialogbase.ui \
 	thumbnailsize.cpp \
 	thumbnailloadjob.cpp \
