@@ -616,9 +616,17 @@ void GVMainWindow::createAddressToolBar() {
 	if (!mShowAddressBar) mAddressToolBar->hide();
 	mAddressToolBar->setLabel(i18n("Address tool bar"));
 
-	QLabel* urlLabel=new QLabel(i18n("&URL:"),mAddressToolBar);
+	/* FIXME: Add a tooltip to the erase button and change "URL:" to
+	 * "Location:"
+	 */
+	mAddressToolBar->insertButton("locationbar_erase",1,true);
+	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
+	 * styles like Keramik). See konq_misc.cc.
+	 */
+	QLabel* urlLabel=new QLabel(i18n("&URL:"),mAddressToolBar,"kde toolbar widget");
 	mURLEdit=new KHistoryCombo(mAddressToolBar);
 	urlLabel->setBuddy(mURLEdit);
+	mAddressToolBar->addConnection(1,SIGNAL(clicked(int)),mURLEdit,SLOT(clearEdit()));
 	
 	mURLEdit->setDuplicatesEnabled(false);
 	

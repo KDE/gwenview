@@ -1,6 +1,7 @@
 2003.xx.xx - v0.16.0
 - New features:
  - Support for zip IO slave.
+ - Added an "erase url" button.
 - Fixes:
  - Corrected toolbar layout for RTL languages (Thanks to Meni Livne).
  - Do not give focus to the address bar on start.
