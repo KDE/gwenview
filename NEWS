@@ -1,3 +1,9 @@
+2005.xx.xx - v1.x.x
+- New features:
+- Fixes:
+ - Zoom step halved (100%->150%->200%).
+ - No image quality loss when printing large images.
+
 2005.01.08 - v1.1.8
 - New features:
  - Zoom actions added to both KPart's.
