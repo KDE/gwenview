@@ -21,7 +21,7 @@
    Boston, MA 02111-1307, USA.
 */
 // Qt includes
-#include <qapp.h>
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpixmap.h>

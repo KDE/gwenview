@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kmdcodec.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kio/netaccess.h>
 
