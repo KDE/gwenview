@@ -33,12 +33,12 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char* version="CVS>=20040427";
+static const char* version="1.1.2";
 
 
 int main (int argc, char *argv[]) {
 #ifdef GV_HACK_SUFFIX
-	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview_hack" ),
+	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview hack" ),
 #else
 	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
 #endif			
