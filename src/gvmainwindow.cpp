@@ -972,6 +972,9 @@ void GVMainWindow::loadPlugins() {
 }
 #else
 void GVMainWindow::loadPlugins() {
+	QPopupMenu *popup = static_cast<QPopupMenu*>(
+		factory()->container( "plugins", this));
+	delete popup;
 }
 #endif
 
