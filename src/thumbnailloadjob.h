@@ -74,32 +74,35 @@ private slots:
 	void slotResult( KIO::Job *job );
 
 private:
-	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_CREATETHUMB } mState;
+	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_DOWNLOADORIG, STATE_DELETETEMP } mState;
 
-// Our todo list :)
+	// Our todo list :)
 	KFileItemList mItems;
 
-// The current item
+	// The current item
 	KFileItem *mCurrentItem;
 
-// The URL of the current item (always equivalent to m_items.first()->item()->url())
+	// The URL of the current item (always equivalent to m_items.first()->item()->url())
 	KURL mCurrentURL;
 
-// The modification time of that URL
+	// The modification time of that URL
 	time_t mOriginalTime;
 
-// The URL where we find (or create) the thumbnail for the current URL
+	// The URL where we find (or create) the thumbnail for the current URL
 	KURL mThumbURL;
 
-// Thumbnail cache dir
+	// The URL of the temporary file for remote urls
+	KURL mTempURL;
+
+	// Thumbnail cache dir
 	QString mCacheDir;
 
-// Thumbnail size
+	// Thumbnail size
 	ThumbnailSize mThumbnailSize;
 
 	void determineNextIcon();
 	bool statResultThumbnail( KIO::StatJob * );
-	void createThumbnail( QString );
+	void createThumbnail(const QString& path);
 	
 	bool isJPEG(const QString& name);
 	bool loadJPEG( const QString &pixPath, QPixmap &pix);

@@ -34,6 +34,8 @@
 #include <kfileitem.h>
 #include <kmdcodec.h>
 #include <kstddirs.h>
+#include <ktempfile.h>
+#include <kio/netaccess.h>
 
 // Other includes
 #define XMD_H
@@ -68,31 +70,30 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* itemList,ThumbnailSize s
 {
 	LOG("");
 
-// Look for images and store the items in our todo list
+	// Look for images and store the items in our todo list
 	mItems=*itemList;
 
 	if (mItems.isEmpty()) return;
 
 	QString originalDir=QDir::cleanDirPath( mItems.first()->url().directory() );
 
-// Check if we're already in a cache dir
-// In that case the cache dir will be the original dir
+	// Check if we're already in a cache dir
+	// In that case the cache dir will be the original dir
 	QString cacheBaseDir = thumbnailDir();
 	if ( originalDir.startsWith(cacheBaseDir) ) {
 		mCacheDir=originalDir;
 		return;
 	}
 
-// Generate the thumbnail dir name
-//	kdDebug() << mItems.first()->url().upURL().url(-1) << endl;
-	
+	// Generate the thumbnail dir name
+	//	kdDebug() << mItems.first()->url().upURL().url(-1) << endl;
 	KMD5 md5(QFile::encodeName(KURL(originalDir).url()) );
 	QCString hash=md5.hexDigest();
 	QString thumbPath = QString::fromLatin1( hash.data(), 4 ) + "/" +
 		QString::fromLatin1( hash.data()+4, 4 ) + "/" +
 		QString::fromLatin1( hash.data()+8 ) + "/";
 
-// Create the thumbnail cache dir
+	// Create the thumbnail cache dir
 	mCacheDir = locateLocal( "thumbnails", thumbPath + QString(ThumbnailSize::biggest()) + "/" );
 	LOG("mCacheDir=" << mCacheDir);
 }
@@ -129,14 +130,19 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 
 void ThumbnailLoadJob::determineNextIcon() {
+	// Skip dirs
+	while (!mItems.isEmpty() && mItems.first()->isDir()) {
+		mItems.removeFirst();
+	}
+	
 	// No more items ?
 	if (mItems.isEmpty()) {
-	// Done
+		// Done
 		LOG("emitting result");
 		emit result(this);
 		delete this;
 	} else {
-	// First, stat the orig file
+		// First, stat the orig file
 		mState = STATE_STATORIG;
 		mCurrentItem = mItems.first();
 		mCurrentURL = mCurrentItem->url();
@@ -154,13 +160,13 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 
 	switch (mState) {
 	case STATE_STATORIG: {
-	// Could not stat original, drop this one and move on to the next one
+		// Could not stat original, drop this one and move on to the next one
 		if (job->error()) {
 			determineNextIcon();
 			return;
 		}
 
-	// Get modification time of the original file
+		// Get modification time of the original file
 		KIO::UDSEntry entry = static_cast<KIO::StatJob*>(job)->statResult();
 		KIO::UDSEntry::ConstIterator it= entry.begin();
 		mOriginalTime = 0;
@@ -171,7 +177,7 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 			}
 		}
 
-	// Now stat the thumbnail
+		// Now stat the thumbnail
 		mThumbURL.setPath(mCacheDir + "/" + mCurrentURL.fileName());
 		mState = STATE_STATTHUMB;
 		KIO::Job * job = KIO::stat(mThumbURL, false);
@@ -181,19 +187,38 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 		return;
 	}
 
-
 	case STATE_STATTHUMB:
-	// Try to load this thumbnail - takes care of determineNextIcon
+		// Try to load this thumbnail - takes care of determineNextIcon
 		if (statResultThumbnail(static_cast < KIO::StatJob * >(job)))
 			return;
 
-	// Not found or not valid, let's create a thumbnail
-		createThumbnail(mCurrentURL.path());
+		// Thumbnail not found or not valid
+		// If the original is a local file, create the thumbnail
+		// and proceed to next icon, otherwise download the original
+		if (mCurrentURL.isLocalFile()) {
+			createThumbnail(mCurrentURL.path());
+			determineNextIcon();
+		} else {
+			mState=STATE_DOWNLOADORIG;
+			KTempFile tmpFile;
+			mTempURL.setPath(tmpFile.name());
+			KIO::Job* job=KIO::file_copy(mCurrentURL,mTempURL,-1,true,false,false);
+			LOG("Download remote file " << mCurrentURL.prettyURL());
+			addSubjob(job);
+		}
 		return;
 
+	case STATE_DOWNLOADORIG: 
+		if (!job->error()) {
+			createThumbnail(mTempURL.path());
+		}
+		
+		mState=STATE_DELETETEMP;
+		LOG("Delete temp file " << mTempURL.prettyURL());
+		addSubjob(KIO::file_delete(mTempURL,false));
+		return;
 
-	case STATE_CREATETHUMB:
-	// Thumbnail saved, go on
+	case STATE_DELETETEMP:
 		determineNextIcon();
 		return;
 	}
@@ -201,10 +226,10 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 
 
 bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
-// Quit if thumbnail not found
+	// Quit if thumbnail not found
 	if (job->error()) return false;
 
-// Get thumbnail modification time
+	// Get thumbnail modification time
 	KIO::UDSEntry entry = job->statResult();
 	KIO::UDSEntry::ConstIterator it = entry.begin();
 	time_t thumbnailTime = 0;
@@ -215,43 +240,37 @@ bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
 		}
 	}
 
-// Quit if thumbnail is older than file
-	if (thumbnailTime<mOriginalTime) {
-		return false;
-	}
+	// Quit if thumbnail is older than file
+	if (thumbnailTime<mOriginalTime) return false;
 
-// Load thumbnail
+	// Load thumbnail
 	QPixmap pix;
-	if (!pix.load(mThumbURL.path())) {
-		return false;
-	}
+	if (!pix.load(mThumbURL.path())) return false;
 	
-// All done
+	// All done
 	emitThumbnailLoaded(pix);
 	determineNextIcon();
 	return true;
 }
 
 
-void ThumbnailLoadJob::createThumbnail(QString pixPath) {
-	mState = STATE_CREATETHUMB;
+void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
+	LOG("Creating thumbnail from " << pixPath);
+	QPixmap pix;
 	
-	if( isJPEG( pixPath)) {
-		QPixmap pix;
+	// Create thumbnail
+	if( isJPEG(pixPath)) {
 		if( loadJPEG( pixPath, pix)) {
 			pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
 			emitThumbnailLoaded(pix);
-			determineNextIcon();
 			return;
 		}
 		//load failed try via Qt
 	}
-	QPixmap pix;
 	if( loadThumbnail(pixPath, pix)) {
 		pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
 		emitThumbnailLoaded(pix);
 	}
-	determineNextIcon();
 }
 
 
@@ -268,7 +287,7 @@ bool ThumbnailLoadJob::loadThumbnail(const QString& pixPath, QPixmap &pix) {
 	if (biWidth<=thumbSize && biHeight<=thumbSize) {
 		pix.convertFromImage(bigImg);
 		return true;
-	};
+	}
 	
 	img=bigImg.smoothScale(thumbSize,thumbSize,QImage::ScaleMin);
 	pix.convertFromImage(img);

@@ -108,6 +108,9 @@ void DirView::showEvent(QShowEvent* event) {
 void DirView::setURL(const KURL& url,const QString&) {
 	//kdDebug() << "DirView::setURL " << url.path() << endl;
 
+	// Do nothing if we're browsing remote files
+	if (!url.isLocalFile()) return;
+	
 #if KDE_VERSION < 306
 	if (currentURL().cmp(url,true)) {
 #else

@@ -132,8 +132,7 @@ MainWindow::MainWindow()
 	if (args->count()==0) {
 		url.setPath( QDir::currentDirPath() );
 	} else {
-		QFileInfo info(QFile::decodeName(args->arg(0)));
-		url.setPath(info.absFilePath());
+		url=args->url(0);
 	}
 
 // Check if we should start in fullscreen mode

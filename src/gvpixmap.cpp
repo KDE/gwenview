@@ -18,12 +18,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     
 */
 
+#include <sys/stat.h> // For S_ISDIR
+
 // Qt includes
 #include <qfileinfo.h>
 #include <qpainter.h>
 
 // KDE includes
 #include <kdebug.h>
+#include <kio/netaccess.h>
 
 // Our includes
 #include <gvpixmap.moc>
@@ -39,12 +42,12 @@ GVPixmap::~GVPixmap()
 
 
 void GVPixmap::setURL(const KURL& paramURL) {
-	//kdDebug() << "GVPixmap::setURL " << paramURL.path() << endl;
+	kdDebug() << "GVPixmap::setURL " << paramURL.path() << endl;
 	KURL URL(paramURL);
 
 	if (URL.cmp(url())) return;
 	
-	QFileInfo pathInfo(URL.path());
+	/*QFileInfo pathInfo(URL.path());
 	if (!pathInfo.exists()) {
 		URL=KURL("/");
 		pathInfo.setFile("/");
@@ -56,8 +59,30 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	} else {
 		mDirURL.setPath(URL.directory());
 		mFilename=URL.filename();
+	}*/
+
+	// Check whether this is a dir or a file
+	KIO::UDSEntry entry;
+	bool isDir;
+	if (!KIO::NetAccess::stat(URL,entry)) return;
+	KIO::UDSEntry::ConstIterator it;
+	for(it=entry.begin();it!=entry.end();++it) {
+		if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
+			isDir=S_ISDIR( (*it).m_long );
+			break;
+		}
 	}
 
+	if (isDir) {
+		kdDebug() << "GVPixmap::setURL url is a dir\n";
+		mDirURL=URL;
+		mFilename="";
+	} else {
+		kdDebug() << "GVPixmap::setURL url is not a dir\n";
+		mDirURL=URL.upURL();
+		mFilename=URL.filename();
+	}
+	
 	if (mFilename.isEmpty()) {
 		reset();
 		return;
@@ -108,7 +133,7 @@ KURL GVPixmap::url() const {
 //-Private-------------------------------------------------------------
 bool GVPixmap::load() {
 	KURL pixURL=url();
-	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
+	kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 	int posX,posY;
 	int pixWidth;
 	int pixHeight;
@@ -118,7 +143,18 @@ bool GVPixmap::load() {
 	QPixmap pix;
 
 // Load pixmap
-	if (!pix.load(pixURL.path())) return false;
+	/*if (!pix.load(pixURL.path())) return false; */ // FIXME
+	QString path;
+	if (pixURL.isLocalFile()) {
+		path=pixURL.path();
+	} else {
+		if (!KIO::NetAccess::download(pixURL,path)) return false;
+	}
+	if (!pix.load(path)) return false;
+	if (!pixURL.isLocalFile()) {
+		KIO::NetAccess::removeTempFile(path);
+	}
+	
 	pixWidth=pix.width();
 	pixHeight=pix.height();
 
