@@ -111,29 +111,37 @@ void loadDesktopFiles(QDict<KDesktopFile>& dict, const QString& dirString) {
 	}
 }
 
+inline QString addSlash(const QString& _str) {
+	QString str(_str);
+	if (str.right(1)!="/") str.append('/');
+	return str;
+}
+
 GVExternalToolManager::GVExternalToolManager() {
 	d=new GVExternalToolManagerPrivate;
 
-	// Make sure the dir exists.
-	KGlobal::dirs()->saveLocation("appdata", "tools");
-	
-	// Load system and user desktop files.
-	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
-	QString userBaseDir=KGlobal::dirs()->localkdedir();
-	
-	QStringList::ConstIterator it;
-	QDict<KDesktopFile> systemDesktopFiles;
-	QDict<KDesktopFile> userDesktopFiles;
-	for (it=dirs.begin(); it!=dirs.end(); ++it) {
-		QString dir=*it;
-		if (dir.startsWith(userBaseDir)) {
-			d->mUserToolDir=dir;
-			loadDesktopFiles(userDesktopFiles, *it);
-		} else {
-			loadDesktopFiles(systemDesktopFiles, *it);
-		}
-	}
+	// Getting dirs
+	d->mUserToolDir=KGlobal::dirs()->saveLocation("appdata", "tools");
+	d->mUserToolDir=addSlash(d->mUserToolDir);
 	Q_ASSERT(!d->mUserToolDir.isEmpty());
+	//kdDebug() << "GVExternalToolManager: d->mUserToolDir:" << d->mUserToolDir << endl;
+	
+	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
+	//kdDebug() << "GVExternalToolManager: dirs:" << dirs.join(",") << endl;
+
+	// Loading desktop files
+	QDict<KDesktopFile> systemDesktopFiles;
+	QStringList::ConstIterator it;
+	for (it=dirs.begin(); it!=dirs.end(); ++it) {
+		if (addSlash(*it)==d->mUserToolDir) {
+			//kdDebug() << "GVExternalToolManager: skipping " << *it << endl;
+			continue;
+		}
+		//kdDebug() << "GVExternalToolManager: loading system desktop files from " << *it << endl;
+		loadDesktopFiles(systemDesktopFiles, *it);
+	}
+	QDict<KDesktopFile> userDesktopFiles;
+	loadDesktopFiles(userDesktopFiles, d->mUserToolDir);
 
 	// Merge system and user desktop files into our KDesktopFile dictionary
 	d->mDesktopFiles=systemDesktopFiles;
