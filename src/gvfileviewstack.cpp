@@ -656,9 +656,9 @@ uint GVFileViewStack::fileCount() const {
 
 
 KURL GVFileViewStack::url() const {
-	KURL url(mDirURL);
-	url.addPath(fileName());
-	return url;
+	KFileItem* item=currentFileView()->currentFileItem();
+	if (!item) return mDirURL;
+	return item->url();
 }
 
 
