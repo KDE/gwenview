@@ -73,6 +73,8 @@ const double MAX_ZOOM=16.0; // Same value as GIMP
 
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 
+const int FULLSCREEN_LABEL_RADIUS = 10;
+
 //------------------------------------------------------------------------
 //
 // GVScrollPixmapView ToolControllers
@@ -1192,6 +1194,50 @@ void GVScrollPixmapView::hideCursor() {
 	viewport()->setCursor(blankCursor);
 }
 
+
+
+static void fillRoundRect(QPainter& painter, const QRect& rect, int radius) {
+	painter.fillRect(
+		rect.left() + radius,
+		rect.top(),
+		rect.width() - radius*2,
+		rect.bottom(),
+		painter.brush());
+
+	painter.fillRect(
+		rect.left(),
+		rect.top() + radius,
+		rect.right(),
+		rect.height() - radius*2,
+		painter.brush());
+
+	painter.drawPie(
+		rect.left(),
+		rect.top(),
+		radius*2, radius*2,
+		16*90, 16*90);
+
+	painter.drawPie(
+		rect.right() - radius *2,
+		rect.top(),
+		radius*2, radius*2,
+		0, 16*90);
+
+	painter.drawPie(
+		rect.left(),
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		16*180, 16*90);
+
+	painter.drawPie(
+		rect.right() - radius *2,
+		rect.bottom() - radius *2,
+		radius*2, radius*2,
+		0, -16*90);
+}
+
+
+
 void GVScrollPixmapView::updateFullScreenLabel() {
 	QString path=mDocument->url().path();	
 	QString pathFile=mDocument->dirURL().path();
@@ -1241,41 +1287,37 @@ void GVScrollPixmapView::updateFullScreenLabel() {
 	QPainter painter;
 
 	QSize textSize=mFullScreenLabel->fontMetrics().size(0,text);
-	textSize.setWidth( textSize.width() + 2);
-	textSize.setHeight( textSize.height() + 2);
-	int left=1;
-	int top=1;
+	textSize.setWidth( textSize.width() + FULLSCREEN_LABEL_RADIUS);
+	textSize.setHeight( textSize.height() + FULLSCREEN_LABEL_RADIUS);
+	mFullScreenLabel->resize(textSize);
 
 	// Create a mask for the text
 	QBitmap mask(textSize,true);
 	painter.begin(&mask);
-	painter.setFont(mFullScreenLabel->font());
-	painter.drawText(left-1,top-1,width(), height(), Qt::DontClip,text);
-	painter.drawText(left,top-1,width(), height(), Qt::DontClip,text);
-	painter.drawText(left+1,top-1,width(), height(), Qt::DontClip,text);
-
-	painter.drawText(left-1,top,width(), height(), Qt::DontClip,text);
-	painter.drawText(left+1,top,width(), height(), Qt::DontClip,text);
-
-	painter.drawText(left-1,top+1,width(), height(), Qt::DontClip,text);
-	painter.drawText(left,top+1,width(), height(), Qt::DontClip,text);
-	painter.drawText(left+1,top+1,width(), height(), Qt::DontClip,text);
+	painter.setBrush(Qt::white);
+	fillRoundRect(painter, mFullScreenLabel->rect(), FULLSCREEN_LABEL_RADIUS);
 	painter.end();
 
 	// Draw the text on a pixmap
 	QPixmap pixmap(textSize);
 	painter.begin(&pixmap);
+	QRect rect=pixmap.rect();
+	painter.fillRect(rect, colorGroup().highlight());
+	
+	rect.addCoords(FULLSCREEN_LABEL_RADIUS/2, FULLSCREEN_LABEL_RADIUS/2,
+		-FULLSCREEN_LABEL_RADIUS/2, -FULLSCREEN_LABEL_RADIUS/2);
 	painter.setFont(mFullScreenLabel->font());
-
-	painter.eraseRect(pixmap.rect());
 	painter.setPen(black);
-	painter.drawText(left, top, width(), height(), Qt::DontClip, text);
+	painter.drawText(rect, Qt::DontClip, text);
+	
+	painter.setPen(colorGroup().highlightedText());
+	rect.moveBy(-1, -1);
+	painter.drawText(rect, Qt::DontClip, text);
 	painter.end();
 
-	// Update the path label
+	// Update the label
 	mFullScreenLabel->setPixmap(pixmap);
 	mFullScreenLabel->setMask(mask);
-	mFullScreenLabel->adjustSize();	
 }
 
 void GVScrollPixmapView::updateZoomActions() {
