@@ -18,6 +18,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
+
+#include <stdio.h>
+#include <unistd.h>
+
 // Qt
 #include <qfileinfo.h>
 #include <qtimer.h>
@@ -72,7 +76,7 @@ QString GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) cons
 	tmp.setAutoDelete(true);
 	QString path;
 	if (url.isLocalFile()) {
-		path=url.path();
+		path=url.path() + ".gwenviewtmp";
 	} else {
 		path=tmp.name();
 	}
@@ -88,7 +92,12 @@ QString GVDocumentLoadedImpl::save(const KURL& url, const QCString& format) cons
 	if (!msg.isNull()) return msg;
 	setFileSize(QFileInfo(path).size());
 
-	if (!url.isLocalFile()) {
+	if (url.isLocalFile()) {
+		if( ::rename( QFile::encodeName( path ), QFile::encodeName( url.path())) < 0 ) {
+			::unlink( QFile::encodeName( path ));
+			return i18n("Could not save the image to %1").arg(url.path());
+		}
+	} else {
 		if (!KIO::NetAccess::upload(tmp.name(),url)) {
 			return i18n("Could not upload the file to %1").arg(path);
 		}
