@@ -36,8 +36,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include <gvarchive.h>
 #include <gvimagesavedialog.h>
-#include <gvpixmap.moc>
+#include <gvjpegtran.h>
 
+#include <gvpixmap.moc>
 
 GVPixmap::GVPixmap(QObject* parent)
 : QObject(parent)
@@ -126,6 +127,7 @@ void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
 		kdDebug() << "Lossless left rotation\n";
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::RotateLeft);
 	}
 	QWMatrix matrix;
 	matrix.rotate(-90);
@@ -136,6 +138,9 @@ void GVPixmap::rotateLeft() {
 
 
 void GVPixmap::rotateRight() {
+	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::RotateRight);
+	}
 	QWMatrix matrix;
 	matrix.rotate(90);
 	mImage=mImage.xForm(matrix);
@@ -145,6 +150,9 @@ void GVPixmap::rotateRight() {
 
 
 void GVPixmap::mirror() {
+	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::Mirror);
+	}
 	QWMatrix matrix;
 	matrix.scale(-1,1);
 	mImage=mImage.xForm(matrix);
@@ -154,6 +162,9 @@ void GVPixmap::mirror() {
 
 
 void GVPixmap::flip() {
+	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::Flip);
+	}
 	QWMatrix matrix;
 	matrix.scale(1,-1);
 	mImage=mImage.xForm(matrix);
