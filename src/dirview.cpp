@@ -56,8 +56,8 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	setRootIsDecorated(true);
 
 // Create branches
-	mHomeBranch=addBranch(KURL(QDir::homeDirPath()),i18n("Home Directory"));
-	mRootBranch=addBranch(KURL("/"),i18n("Root Directory"));
+	mHomeBranch=addBranch(KURL(QDir::homeDirPath()),i18n("Home Directory"),SmallIcon("folder_home"));
+	mRootBranch=addBranch(KURL("/"),i18n("Root Directory"),SmallIcon("folder_red"));
 	setDirOnlyMode(mHomeBranch,true);
 	setDirOnlyMode(mRootBranch,true);
 	mHomeBranch->root()->setExpandable(true);
