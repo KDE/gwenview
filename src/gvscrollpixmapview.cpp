@@ -269,15 +269,19 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 		return;
 	}
 
-	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
-	QRect updateRect=QRect(clipx,clipy,clipw,cliph).intersect(zoomedImageRect);
-
+	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
+	// If we are enlarging the image, we grow the update rect so that it
+	// contains full zoomed image pixels. We also take one more image pixel to
+	// avoid gaps in images.
 	if (mZoom>1.0) {
-		updateRect.setLeft  ( roundDown(updateRect.x(),mZoom) );
-		updateRect.setTop   ( roundDown(updateRect.y(),mZoom) );
-		updateRect.setWidth ( roundUp(updateRect.width(),mZoom) );
-		updateRect.setHeight( roundUp(updateRect.height(),mZoom) );
+		updateRect.setLeft  ( roundDown(updateRect.left(),  mZoom)-int(mZoom) );
+		updateRect.setTop   ( roundDown(updateRect.top(),   mZoom)-int(mZoom) );
+		updateRect.setRight ( roundUp(  updateRect.right(), mZoom)+int(mZoom)-1 );
+		updateRect.setBottom( roundUp(  updateRect.bottom(),mZoom)+int(mZoom)-1 );
 	}
+	
+	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
+	updateRect=updateRect.intersect(zoomedImageRect);
 	
 	if (updateRect.isEmpty()) return;
 
