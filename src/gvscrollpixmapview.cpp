@@ -124,7 +124,9 @@ The widgetToImageBounding() function converts from widget to image coordinates
 conversion will be at least as large as the original geometry.
 
 There are no conversion functions for only width/height, as their conversion
-depends on the position (because of the rounding etc.).
+depends on the position (because of the rounding etc.). For similar reasons
+conversions should not be done with the bottomright corner of a rectangle,
+but with the point next to it.
 
 
 
@@ -235,7 +237,9 @@ struct GVScrollPixmapView::Private {
 	}
 
 	QRect imageToWidget( const QRect& r ) const {
-		return QRect( imageToWidget( r.topLeft()), imageToWidget( r.bottomRight()));
+		return QRect( imageToWidget( r.topLeft()),
+			// don't use bottomright corner for conversion, but the one next to it
+			imageToWidget( r.bottomRight() + QPoint( 1, 1 )) - QPoint( 1, 1 ));
 	}
 
 	int widgetToImageX( int x ) const {
@@ -253,12 +257,14 @@ struct GVScrollPixmapView::Private {
 	}
 
 	QRect widgetToImage( const QRect& r ) const {
-		return QRect( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+		return QRect( widgetToImage( r.topLeft()),
+			// don't use bottomright corner for conversion, but the one next to it
+			widgetToImage( r.bottomRight() + QPoint( 1, 1 )) - QPoint( 1, 1 ));
 	}
 
 	QRect widgetToImageBounding( const QRect& r ) const {
 		int extra = mZoom == 1.0 ? 0 : int( ceil( 1 / mZoom ));
-		QRect ret( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+		QRect ret = widgetToImage( r );
 		ret.addCoords( -extra, -extra, extra, extra );
 		return ret;
 	}
