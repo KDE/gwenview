@@ -108,7 +108,7 @@ public:
 	KURL::List selectedURLs() const;
 	
 public slots:
-	void setURL(const KURL&,const QString&);
+	void setURL(const KURL&);
 
 	void slotSelectFirst();
 	void slotSelectLast();

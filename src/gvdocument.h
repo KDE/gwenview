@@ -54,8 +54,8 @@ public:
 	// Properties
 	const QImage& image() const;
 	KURL url() const;
-	const KURL& dirURL() const;
-	const QString& filename() const;
+	KURL dirURL() const;
+	QString filename() const;
 	const QCString& imageFormat() const;
 	int fileSize() const;
 
@@ -106,7 +106,7 @@ signals:
 	 * Emitted when the class has finished loading the image.
 	 * Also emitted if the image could not be loaded.
 	 */
-	void loaded(const KURL& dirURL,const QString& filename);
+	void loaded(const KURL& url);
 
 	/**
 	 * Emitted when the image has been modified.

@@ -72,7 +72,7 @@ public:
 	void setAutoDeleteThumbnailCache(bool);
 	
 public slots:
-	void setURL(const KURL&,const QString&);
+	void setURL(const KURL&);
 
 protected:
 	bool queryClose();

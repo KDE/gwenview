@@ -60,7 +60,7 @@ GVHistory::GVHistory(GVDocument* document, KActionCollection* actionCollection) 
 	connect(mGoForward->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(fillGoForwardMenu()) );
 
-	connect(mDocument, SIGNAL(loaded(const KURL&,const QString&) ),
+	connect(mDocument, SIGNAL(loaded(const KURL&) ),
 		this, SLOT(updateHistoryList(const KURL&)) );
 }
 
@@ -69,7 +69,9 @@ GVHistory::~GVHistory() {
 }
 
 
-void GVHistory::updateHistoryList(const KURL& url) {
+void GVHistory::updateHistoryList(const KURL& url2) {
+	KURL url( url2 );
+	url.setFileName( QString::null );
 	if (!mMovingInHistory) {
 		if (mPosition!=mHistoryList.end() && url.equals(*mPosition, true)) return;
 

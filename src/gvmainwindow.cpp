@@ -235,8 +235,10 @@ bool GVMainWindow::queryClose() {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
-	LOG(url.path() << " - " << filename);
+void GVMainWindow::setURL(const KURL& url2) {
+	KURL url( url2 );
+	url.setFileName( QString::null );
+	LOG(url.path() << " - " << url2.filename());
 
 	bool filenameIsValid=!mDocument->isNull();
 
@@ -819,7 +821,7 @@ void GVMainWindow::createActions() {
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
 		mDocument,SLOT(setDirURL(const KURL&)) );
 
-	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 
 	// Settings
@@ -918,10 +920,10 @@ void GVMainWindow::createConnections() {
 	// GVDocument connections
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(pixmapLoading()) );
-	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
-		this,SLOT(setURL(const KURL&,const QString&)) );
-	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
-		mFileViewStack,SLOT(setURL(const KURL&,const QString&)) );
+	connect(mDocument,SIGNAL(loaded(const KURL&)),
+		this,SLOT(setURL(const KURL&)) );
+	connect(mDocument,SIGNAL(loaded(const KURL&)),
+		mFileViewStack,SLOT(setURL(const KURL&)) );
 	connect(mDocument,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),

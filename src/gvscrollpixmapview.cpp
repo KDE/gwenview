@@ -294,7 +294,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,mActionCollection,"view_zoom_lock");
 
 	// Connect to some interesting signals
-	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
 
 	connect(mDocument,SIGNAL(loading()),

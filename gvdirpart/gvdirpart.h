@@ -112,7 +112,7 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 * Sets Konqueror's caption with setWindowCaption()
 	 * called by loaded() signal in GVDocument
 	 */
-	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
+	void setKonquerorWindowCaption(const KURL& url);
 
 	/**
 	 * Rotates the current image 90 degrees clockwise

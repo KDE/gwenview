@@ -102,8 +102,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		mDocument, SLOT(setURL(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
 		mBrowserExtension, SLOT(directoryChanged(const KURL&)) );
-	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
-		this, SLOT(setKonquerorWindowCaption(const KURL&, const QString&)) );
+	connect(mDocument, SIGNAL(loaded(const KURL&)),
+		this, SLOT(setKonquerorWindowCaption(const KURL&)) );
 
 	QValueList<int> splitterSizes;
 	splitterSizes.append(20);
@@ -166,14 +166,14 @@ bool GVDirPart::openURL(const KURL& url) {
 	m_url = url;
 
 	mDocument->setDirURL(url);
-	mFilesView->setURL(url, 0);
+	mFilesView->setURL(url);
 	emit setWindowCaption( url.prettyURL() );
 
 	return true;
 }
 
-void GVDirPart::setKonquerorWindowCaption(const KURL& /*url*/, const QString& filename) {
-	QString caption = QString(filename + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
+void GVDirPart::setKonquerorWindowCaption(const KURL& url) {
+	QString caption = QString(url.filename() + " %1 x %2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 }
 

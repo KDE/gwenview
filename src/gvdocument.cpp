@@ -78,8 +78,7 @@ static GVXPM sXPM;
 //-------------------------------------------------------------------
 class GVDocumentPrivate {
 public:
-	KURL mDirURL;
-	QString mFilename;
+	KURL mURL;
 	bool mModified;
 	QImage mImage;
 	QCString mImageFormat;
@@ -108,7 +107,7 @@ GVDocument::GVDocument(QObject* parent)
 
 	connect( this, SIGNAL( loading()),
 		this, SLOT( slotLoading()));
-	connect( this, SIGNAL( loaded(const KURL&,const QString& )),
+	connect( this, SIGNAL( loaded(const KURL&)),
 		this, SLOT( slotLoaded()));
 	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
 		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
@@ -127,9 +126,7 @@ GVDocument::~GVDocument() {
 //
 //---------------------------------------------------------------------
 KURL GVDocument::url() const {
-	KURL url=d->mDirURL;
-	url.addPath(d->mFilename);
-	return url;
+	return d->mURL;
 }
 
 
@@ -148,7 +145,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
 		// Not saved, notify others that we stay on the image
-		emit loaded(d->mDirURL,d->mFilename);
+		emit loaded(d->mURL);
 		return;
 	}
 
@@ -199,14 +196,13 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 	}
 
 	if (isDir) {
-		d->mDirURL=localURL;
-		d->mFilename="";
+		d->mURL=localURL;
+		d->mURL.adjustPath( +1 ); // add trailing /
 	} else {
-		d->mDirURL=localURL.upURL();
-		d->mFilename=localURL.filename();
+		d->mURL=localURL;
 	}
 
-	if (d->mFilename.isEmpty()) {
+	if (d->mURL.filename().isEmpty()) {
 		reset();
 		return;
 	}
@@ -217,23 +213,22 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 
 void GVDocument::setDirURL(const KURL& paramURL) {
 	if (!saveBeforeClosing()) {
-		emit loaded(d->mDirURL,d->mFilename);
+		emit loaded(d->mURL);
 		return;
 	}
-	d->mDirURL=paramURL;
-	d->mFilename="";
+	d->mURL=paramURL;
 	reset();
 }
 
 
 void GVDocument::setFilename(const QString& filename) {
-	if (d->mFilename==filename) return;
+	if (d->mURL.filename()==filename) return;
 
 	if (!saveBeforeClosing()) {
-		emit loaded(d->mDirURL,d->mFilename);
+		emit loaded(d->mURL);
 		return;
 	}
-	d->mFilename=filename;
+	d->mURL.setFileName(filename);
 	load();
 }
 
@@ -246,12 +241,12 @@ void GVDocument::setImage(QImage img) {
 	d->mImage=img;
 }
 
-const KURL& GVDocument::dirURL() const {
-	return d->mDirURL;
+KURL GVDocument::dirURL() const {
+	return d->mURL.upURL();
 }
 
-const QString& GVDocument::filename() const {
-	return d->mFilename;
+QString GVDocument::filename() const {
+	return d->mURL.filename();
 }
 
 const QCString& GVDocument::imageFormat() const {
@@ -432,7 +427,7 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 	painter->drawImage( x, y, image );
 
 	if ( printFilename ) {
-		QString fname = minimizeString( d->mFilename, fMetrics, pdWidth );
+		QString fname = minimizeString( d->mURL.filename(), fMetrics, pdWidth );
 		if ( !fname.isEmpty() ) {
 			int fw = fMetrics.width( fname );
 			int x = (pdWidth - fw)/2;
@@ -579,10 +574,10 @@ void GVDocument::load() {
 void GVDocument::slotFinished(bool success) {
 	LOG("");
 	if (success) {
-		emit loaded(d->mDirURL, d->mFilename);
+		emit loaded(d->mURL);
 	} else {
 		// FIXME: Emit a failed signal instead
-		emit loaded(d->mDirURL, d->mFilename);
+		emit loaded(d->mURL);
 	}
 }
 
@@ -601,5 +596,5 @@ bool GVDocument::saveInternal(const KURL& url, const QCString& format) {
 
 void GVDocument::reset() {
 	switchToImpl(new GVDocumentEmptyImpl(this));
-	emit loaded(d->mDirURL,d->mFilename);
+	emit loaded(d->mURL);
 }

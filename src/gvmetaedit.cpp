@@ -39,7 +39,7 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVDocument *gvp, const char *name)
 	mCommentEdit->installEventFilter(this);
 	connect(mCommentEdit, SIGNAL(modificationChanged(bool)),
 		this, SLOT(setModified(bool)));
-	connect(mDocument,SIGNAL(loaded(const KURL&, const QString&)),
+	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(updateContent()) );
 	connect(mCommentEdit, SIGNAL(textChanged()),
 		this, SLOT(updateDoc()) );

@@ -56,7 +56,7 @@ GVBatchManipulator::~GVBatchManipulator() {
 void GVBatchManipulator::apply() {
 	KURL::List::ConstIterator it=d->mURLs.begin();
 	GVDocument doc(0);
-	connect(&doc, SIGNAL(loaded(const KURL&,const QString&)),
+	connect(&doc, SIGNAL(loaded(const KURL&)),
 		this, SLOT(slotImageLoaded()) );
 	d->mProgressDialog->show();
 	for (;it!=d->mURLs.end(); ++it) {
