@@ -74,16 +74,13 @@ PixmapView::PixmapView(QWidget* parent,GVPixmap* pixmap,KActionCollection* actio
 	mFitPixmapView->installEventFilter(this);
 
 // Create actions
-	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"autozoom",0,this,SLOT(slotAutoZoom()),actionCollection,"autozoom");
+	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),actionCollection,"autozoom");
 
 	mZoomIn=KStdAction::zoomIn(mScrollPixmapView,SLOT(slotZoomIn()),actionCollection);
-	mZoomIn->setIcon("zoomin");
 	
 	mZoomOut=KStdAction::zoomOut(mScrollPixmapView,SLOT(slotZoomOut()),actionCollection);
-	mZoomOut->setIcon("zoomout");
 	
 	mResetZoom=KStdAction::actualSize(mScrollPixmapView,SLOT(slotResetZoom()),actionCollection);
-	mResetZoom->setIcon("actualsize");
 	
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,actionCollection,"lockzoom");
 	connect(mLockZoom,SIGNAL(toggled(bool)),
