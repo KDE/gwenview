@@ -37,6 +37,7 @@ class KActionCollection;
 class KConfig;
 class KDirLister;
 class KRadioAction;
+class KToggleAction;
 
 class GVFileViewBase;
 class GVFileDetailView;
@@ -85,6 +86,7 @@ public:
 	KRadioAction* smallThumbnails() const { return mSmallThumbnails; }
 	KRadioAction* medThumbnails() const { return mMedThumbnails; }
 	KRadioAction* largeThumbnails() const { return mLargeThumbnails; }
+    KToggleAction* showDotFiles() const { return mShowDotFiles; }
 
 	void setFocus();
 	
@@ -137,6 +139,8 @@ private slots:
 	// Get called by the thumbnail size radio actions
 	void updateThumbnailSize();
 
+    void toggleShowDotFiles();
+
 	// Dir lister slots
 	void dirListerDeleteItem(KFileItem* item);
 	void dirListerNewItems(const KFileItemList& items);
@@ -163,6 +167,8 @@ private:
 	KRadioAction* mSmallThumbnails;
 	KRadioAction* mMedThumbnails;
 	KRadioAction* mLargeThumbnails;
+
+    KToggleAction* mShowDotFiles;
 
 	// configurable settings
 	bool mAutoLoadImage;

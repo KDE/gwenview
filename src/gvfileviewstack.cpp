@@ -77,6 +77,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mLargeThumbnails=new KRadioAction(i18n("Large Thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"largethumbnails");
 	mLargeThumbnails->setExclusiveGroup("thumbnails");
 
+    mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"showdotfiles");
+
 	// Dir lister
 	mDirLister=new KDirLister;
 	connect(mDirLister,SIGNAL(clear()),
@@ -315,6 +317,12 @@ void GVFileViewStack::updateThumbnailSize() {
 		}
 		mFileThumbnailView->startThumbnailUpdate();
 	}
+}
+
+
+void GVFileViewStack::toggleShowDotFiles() {
+    mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
+	mDirLister->openURL(mDirURL);
 }
 
 

@@ -560,6 +560,10 @@ void GVMainWindow::createMenu() {
 	mPixmapView->zoomOut()->plug(viewMenu);
 	mPixmapView->resetZoom()->plug(viewMenu);
 	mPixmapView->lockZoom()->plug(viewMenu);
+
+    viewMenu->insertSeparator();
+    mFileViewStack->showDotFiles()->plug(viewMenu);
+    
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
