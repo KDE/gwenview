@@ -461,7 +461,7 @@
                                     <cstring>TextLabel2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Co&amp;ntrol + wheel:</string>
+                                    <string>C&amp;trl + wheel:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>mControlPlusWheel</cstring>
