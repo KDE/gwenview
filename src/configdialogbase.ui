@@ -69,7 +69,7 @@
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>7</hsizetype>
+                                        <hsizetype>1</hsizetype>
                                         <vsizetype>1</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
@@ -435,7 +435,7 @@
                     </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>Layout6</cstring>
+                            <cstring>Layout8</cstring>
                         </property>
                         <grid>
                             <property name="name">
@@ -447,43 +447,33 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QComboBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>mWheelOnly</cstring>
-                                </property>
-                                <property name="currentItem">
-                                    <number>0</number>
-                                </property>
-                            </widget>
                             <widget class="QComboBox" row="2" column="1">
                                 <property name="name">
                                     <cstring>mShiftPlusWheel</cstring>
                                 </property>
                             </widget>
-                            <widget class="QComboBox" row="3" column="1">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>mAltPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_2_2</cstring>
+                                    <cstring>TextLabel1_3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Shift + wheel:</string>
+                                    <string>&amp;Wheel only:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
-                                    <cstring>mShiftPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>mControlPlusWheel</cstring>
+                                    <cstring>mWheelOnly</cstring>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="3" column="0">
                                 <property name="name">
                                     <cstring>TextLabel2_2_3</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
                                 </property>
                                 <property name="text">
                                     <string>A&amp;lt + wheel:</string>
@@ -503,15 +493,41 @@
                                     <cstring>mControlPlusWheel</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="0" column="0">
+                            <widget class="QLabel" row="2" column="0">
                                 <property name="name">
-                                    <cstring>TextLabel1_3</cstring>
+                                    <cstring>TextLabel2_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Wheel only:</string>
+                                    <string>&amp;Shift + wheel:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
+                                    <cstring>mShiftPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="0" column="1">
+                                <property name="name">
                                     <cstring>mWheelOnly</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="currentItem">
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>mControlPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="3" column="1">
+                                <property name="name">
+                                    <cstring>mAltPlusWheel</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -529,7 +545,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>0</width>
-                                <height>20</height>
+                                <height>57</height>
                             </size>
                         </property>
                     </spacer>
