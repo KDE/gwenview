@@ -54,8 +54,7 @@ public:
 	friend class ZoomToolController;
 
 	enum Tool { None, Browse, Scroll, Zoom };
-	typedef Tool WheelBehaviour; // FIXME: For compatibility
-	typedef QMap<ButtonState,Tool> WheelBehaviours;
+	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
 	typedef QMap<Tool,ToolController*> ToolControllers;
 
 	GVScrollPixmapView(QWidget* parent,GVPixmap*,KActionCollection*);
@@ -81,7 +80,10 @@ public:
 	void setEnlargeSmallImages(bool);
 	void setShowScrollBars(bool);
 	bool showScrollBars() const { return mShowScrollBars; }
-	WheelBehaviours& wheelBehaviours() { return mWheelBehaviours; }
+
+    Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
+    void setButtonStateTool(ButtonState,Tool);
+    void updateDefaultCursor();
 
 	void startAutoHideTimer();
 
@@ -112,7 +114,7 @@ private:
 	bool mSmoothScale;
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
-	WheelBehaviours mWheelBehaviours;
+	ButtonStateToolMap mButtonStateToolMap;
 	ToolControllers mToolControllers;
 
 	Tool mTool;

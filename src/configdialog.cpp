@@ -80,15 +80,15 @@ mMainWindow(mainWindow)
 	mShowToolBarInFullScreen->setChecked(mMainWindow->showToolBarInFullScreen());
 	mShowStatusBarInFullScreen->setChecked(mMainWindow->showStatusBarInFullScreen());
 
-	// Mouse wheel behaviour tab
-	typedef QMap<GVScrollPixmapView::WheelBehaviour,QString> WheelBehaviours;
-	WheelBehaviours behaviours;
+	// Mouse behaviour tab
+	typedef QMap<GVScrollPixmapView::Tool,QString> MouseBehaviours;
+	MouseBehaviours behaviours;
 	behaviours[GVScrollPixmapView::None]=i18n("None");
 	behaviours[GVScrollPixmapView::Scroll]=i18n("Scroll");
 	behaviours[GVScrollPixmapView::Browse]=i18n("Browse");
 	behaviours[GVScrollPixmapView::Zoom]=i18n("Zoom");
 
-	WheelBehaviours::Iterator it;
+	MouseBehaviours::Iterator it;
 	for( it = behaviours.begin(); it!=behaviours.end(); ++it ) {
 		int index=int(it.key());
 		mWheelOnly->insertItem(*it,index);
@@ -96,10 +96,10 @@ mMainWindow(mainWindow)
 		mShiftPlusWheel->insertItem(*it,index);
 		mAltPlusWheel->insertItem(*it,index);
 	}
-	mWheelOnly->setCurrentItem(int(pixmapView->wheelBehaviours()[NoButton]));
-	mControlPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ControlButton]));
-	mShiftPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[ShiftButton]));
-	mAltPlusWheel->setCurrentItem(int(pixmapView->wheelBehaviours()[AltButton]));
+	mWheelOnly->setCurrentItem(int(pixmapView->buttonStateTool(NoButton) ));
+	mControlPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(ControlButton) ));
+	mShiftPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(ShiftButton) ));
+	mAltPlusWheel->setCurrentItem(int(pixmapView->buttonStateTool(AltButton) ));
 
 	// Image View tab
 	mSmoothScale->setChecked(pixmapView->smoothScale());
@@ -144,10 +144,11 @@ void ConfigDialog::slotApply() {
 	mMainWindow->setShowStatusBarInFullScreen( mShowStatusBarInFullScreen->isChecked() );
 
 	// Mouse wheel behaviour tab		
-	pixmapView->wheelBehaviours()[NoButton]=     GVScrollPixmapView::WheelBehaviour(mWheelOnly->currentItem());
-	pixmapView->wheelBehaviours()[ControlButton]=GVScrollPixmapView::WheelBehaviour(mControlPlusWheel->currentItem());
-	pixmapView->wheelBehaviours()[ShiftButton]=  GVScrollPixmapView::WheelBehaviour(mShiftPlusWheel->currentItem());
-	pixmapView->wheelBehaviours()[AltButton]=    GVScrollPixmapView::WheelBehaviour(mAltPlusWheel->currentItem());
+	pixmapView->setButtonStateTool(NoButton,      GVScrollPixmapView::Tool(mWheelOnly->currentItem()) );
+	pixmapView->setButtonStateTool(ControlButton, GVScrollPixmapView::Tool(mControlPlusWheel->currentItem()) );
+	pixmapView->setButtonStateTool(ShiftButton,   GVScrollPixmapView::Tool(mShiftPlusWheel->currentItem()) );
+	pixmapView->setButtonStateTool(AltButton,     GVScrollPixmapView::Tool(mAltPlusWheel->currentItem()) );
+    pixmapView->updateDefaultCursor();
 
 	// Image View tab
 	pixmapView->setSmoothScale(mSmoothScale->isChecked());

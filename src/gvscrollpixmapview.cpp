@@ -54,10 +54,10 @@ const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
 const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
-const char* CONFIG_WHEEL_BEHAVIOUR_NONE=   "wheel behaviour none";
-const char* CONFIG_WHEEL_BEHAVIOUR_SHIFT=  "wheel behaviour shift";
-const char* CONFIG_WHEEL_BEHAVIOUR_CONTROL="wheel behaviour control";
-const char* CONFIG_WHEEL_BEHAVIOUR_ALT=    "wheel behaviour alt";
+const char* CONFIG_MOUSE_BEHAVIOUR_NONE=   "mouse behaviour none";
+const char* CONFIG_MOUSE_BEHAVIOUR_SHIFT=  "mouse behaviour shift";
+const char* CONFIG_MOUSE_BEHAVIOUR_CONTROL="mouse behaviour control";
+const char* CONFIG_MOUSE_BEHAVIOUR_ALT=    "mouse behaviour alt";
 
 const int AUTO_HIDE_TIMEOUT=1000;
 
@@ -407,6 +407,15 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	}
 }
 
+void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
+    mButtonStateToolMap[state]=tool;
+}
+
+void GVScrollPixmapView::updateDefaultCursor() {
+    // We assume no modifier is pressed when this is called
+    // FIXME: To be removed after ConfigDialog rewrite
+    selectTool(NoButton);
+}
 
 //------------------------------------------------------------------------
 //
@@ -591,9 +600,9 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 
 void GVScrollPixmapView::selectTool(ButtonState state) {
 	ButtonState modifier=ButtonState(state & (ShiftButton | ControlButton | AltButton) );
-	if (mTool==mWheelBehaviours[modifier]) return;
+	if (mTool==mButtonStateToolMap[modifier]) return;
 
-	mTool=mWheelBehaviours[modifier];
+	mTool=mButtonStateToolMap[modifier];
 	mToolControllers[mTool]->updateCursor();
 }
 
@@ -939,12 +948,12 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
-	mWheelBehaviours[NoButton]=		WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_NONE,Scroll) );
-	mWheelBehaviours[ControlButton]=WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL,Browse) );
-	mWheelBehaviours[ShiftButton]=	WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT,Zoom) );
-	mWheelBehaviours[AltButton]=	WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_ALT,None) );
+	mButtonStateToolMap[NoButton]=     Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_NONE,Scroll) );
+	mButtonStateToolMap[ControlButton]=Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL,Browse) );
+	mButtonStateToolMap[ShiftButton]=  Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT,Zoom) );
+	mButtonStateToolMap[AltButton]=    Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_ALT,None) );
 
-	mTool=mWheelBehaviours[NoButton];
+	mTool=mButtonStateToolMap[NoButton];
 	mToolControllers[mTool]->updateCursor();
 }
 
@@ -958,9 +967,9 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_NONE	 , int(mWheelBehaviours[NoButton]) );
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL, int(mWheelBehaviours[ControlButton]) );
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT  , int(mWheelBehaviours[ShiftButton]) );
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_ALT	 , int(mWheelBehaviours[AltButton]) );
+	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_NONE	 , int(mButtonStateToolMap[NoButton]) );
+	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL, int(mButtonStateToolMap[ControlButton]) );
+	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT  , int(mButtonStateToolMap[ShiftButton]) );
+	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_ALT	 , int(mButtonStateToolMap[AltButton]) );
 }
 
