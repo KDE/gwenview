@@ -658,7 +658,7 @@ static QImage ResizeImage(const QImage& image,const int columns,
 QImage SampleImage(const QImage& image,const int columns,
   const int rows)
 {
-  fastfloat
+  int
     *x_offset,
     *y_offset;
 
@@ -693,18 +693,22 @@ QImage SampleImage(const QImage& image,const int columns,
     Allocate scan line buffer and column offset buffers.
   */
   pixels= new uchar[ image.width() * d ];
-  x_offset= new fastfloat[ sample_image.width() ];
-  y_offset= new fastfloat[ sample_image.height() ];
+  x_offset= new int[ sample_image.width() ];
+  y_offset= new int[ sample_image.height() ];
   /*
     Initialize pixel offsets.
   */
+// In the following several code 0.5 needs to be added, otherwise the image
+// would be moved by half a pixel to bottom-right, just like
+// with Qt's QImage::scale()
   for (x=0; x < (long) sample_image.width(); x++)
-    // this may overflow fastfloat's range, so reorder the operations
-    //x_offset[x]=(fastfloat) x*image.width()/(fastfloat) sample_image.width();
-    x_offset[x]=(fastfloat) image.width()/(fastfloat) sample_image.width() * x;
+  {
+    x_offset[x]=int((x+0.5)*image.width()/sample_image.width());
+  }
   for (y=0; y < (long) sample_image.height(); y++)
-    //y_offset[y]=(fastfloat) y*image.height()/(fastfloat) sample_image.height();
-    y_offset[y]=(fastfloat) image.height()/(fastfloat) sample_image.height() * y;
+  {
+    y_offset[y]=int((y+0.5)*image.height()/sample_image.height());
+  }
   /*
     Sample each row.
   */
@@ -712,20 +716,14 @@ QImage SampleImage(const QImage& image,const int columns,
   for (y=0; y < (long) sample_image.height(); y++)
   {
     q= sample_image.scanLine( y );
-    // in the following several places 0.5 (=half) needs to be added, otherwise the image
-    // would be moved by half a pixel to bottom-right, just like
-    // with Qt's QImage::scale()
-    if (j != fasttolong( y_offset[y]+half )) // half added
+    if (j != y_offset[y] )
       {
         /*
           Read a scan line.
         */
-        j= fasttolong( y_offset[y]+half ); // half added
-        if (j < image.height())
-        {
-          p= image.scanLine( j );
-          (void) memcpy(pixels,p,image.width()*d);
-        }
+        j= y_offset[y];
+        p= image.scanLine( j );
+        (void) memcpy(pixels,p,image.width()*d);
       }
     /*
       Sample each column.
@@ -735,20 +733,20 @@ QImage SampleImage(const QImage& image,const int columns,
     case 1: // 8bit
       for (x=0; x < (long) sample_image.width(); x++)
       {
-        *q++=pixels[ fasttolong( x_offset[x]+half ) ]; // half added
+        *q++=pixels[ x_offset[x] ];
       }
       break;
     case 4: // 32bit
       for (x=0; x < (long) sample_image.width(); x++)
       {
-        *(QRgb*)q=((QRgb*)pixels)[ fasttolong( x_offset[x]+half ) ]; // half added
+        *(QRgb*)q=((QRgb*)pixels)[ x_offset[x] ];
         q += d;
       }
       break;
     default:
       for (x=0; x < (long) sample_image.width(); x++)
       {
-        memcpy( q, pixels + fasttolong( x_offset[x]+half ) * d, d ); // half added
+        memcpy( q, pixels + x_offset[x] * d, d );
         q += d;
       }
       break;
