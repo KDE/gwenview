@@ -351,7 +351,8 @@ void FileView::setMode(FileView::Mode mode) {
 
 //-Dir lister slots------------------------------------------------------
 void FileView::dirListerDeleteItem(KFileItem* item) {
-	currentFileView()->removeItem(item);
+	mFileThumbnailView->removeItem(item);
+	mFileDetailView->removeItem(item);
 }
 
 
@@ -519,7 +520,7 @@ void FileView::readConfig(KConfig* config,const QString& group) {
 		mNoThumbnails->setChecked(true);
 	}
 
-  mAutoLoadImage=config->readBoolEntry(CONFIG_AUTO_LOAD_IMAGE, true);
+	mAutoLoadImage=config->readBoolEntry(CONFIG_AUTO_LOAD_IMAGE, true);
 }
 
 
@@ -529,10 +530,10 @@ void FileView::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 
 	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
-  config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
+	config->writeEntry(CONFIG_AUTO_LOAD_IMAGE, mAutoLoadImage);
 }
 
 void FileView::setAutoLoadImage(bool autoLoadImage) {
-  mAutoLoadImage=autoLoadImage;
+	mAutoLoadImage=autoLoadImage;
 }
 

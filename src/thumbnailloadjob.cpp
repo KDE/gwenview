@@ -26,6 +26,8 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qimage.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -242,6 +244,14 @@ void ThumbnailLoadJob::createThumbnail(QString pixPath) {
 			return;
 		}
 		//load failed try via KIO...
+	} else if (isXCF(pixPath)) {
+		QPixmap pix;
+		if( loadXCF(pixPath, pix)) {
+			pix.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
+			emit thumbnailLoaded(mCurrentItem,pix);
+			determineNextIcon();
+			return;
+		}
 	}
 	
 	KURL thumbURL;
@@ -274,6 +284,42 @@ void ThumbnailLoadJob::slotThumbData(KIO::Job *, const QByteArray& imgData) {
 
 	file.writeBlock(imgData.data(), imgData.size());
 	file.close();
+}
+
+
+bool ThumbnailLoadJob::isXCF(const QString& name) {
+	// FIXME : Do not rely on extension
+	return name.endsWith(".xcf");
+}
+
+
+bool ThumbnailLoadJob::loadXCF(const QString& pixPath, QPixmap &pix) {
+	QPixmap bigPix;
+	int bpWidth,bpHeight;
+	int thumbSize=mThumbnailSize.pixelSize();
+	int xOffset,yOffset;
+	double scale;
+	if (!bigPix.load(pixPath)) return false;
+
+	bpWidth=bigPix.width();
+	bpHeight=bigPix.height();
+
+	pix.resize(thumbSize,thumbSize);
+	QPainter painter(&pix);
+	painter.eraseRect(pix.rect());
+	
+	if (bpWidth>bpHeight) {
+		scale=double(thumbSize)/bpWidth;
+		xOffset=0;
+		yOffset=/*(thumbSize- int(bpHeight*scale) )/2*/(bpWidth-bpHeight)/2;
+	} else {
+		scale=double(thumbSize)/bpHeight;
+		xOffset=/*(thumbSize- int(bpWidth*scale) )/2*/(bpHeight-bpWidth)/2;
+		yOffset=0;
+	}
+	painter.scale(scale,scale);
+	painter.drawPixmap(xOffset,yOffset,bigPix);
+	return true;
 }
 
 

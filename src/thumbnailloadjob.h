@@ -105,8 +105,12 @@ private:
 	void determineNextIcon();
 	bool statResultThumbnail( KIO::StatJob * );
 	void createThumbnail( QString );
-	bool loadJPEG( const QString &pixPath, QPixmap &pix);
+	
 	bool isJPEG(const QString& name);
+	bool loadJPEG( const QString &pixPath, QPixmap &pix);
+	
+	bool isXCF(const QString& name);
+	bool loadXCF( const QString &pixPath, QPixmap &pix);
 };
 
 #endif
