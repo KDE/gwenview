@@ -19,8 +19,6 @@ Copyright 2000-2004 Aurélien Gâteau
 
 */
 
-#include "gvbusylevelmanager.h"
-
 // Qt
 #include <qtimer.h>
 
@@ -28,14 +26,13 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kdebug.h>
 
 // Local
-
 #include "gvbusylevelmanager.moc"
 
 GVBusyLevelManager::GVBusyLevelManager()
 : mCurrentBusyLevel( BUSY_NONE )
 {
 	connect( &mDelayedBusyLevelTimer, SIGNAL( timeout()),
-        	 this, SLOT( delayedBusyLevelChanged()));
+		this, SLOT( delayedBusyLevelChanged()));
 }
 
 GVBusyLevelManager* GVBusyLevelManager::instance() {
@@ -60,8 +57,7 @@ GVBusyLevelManager* GVBusyLevelManager::instance() {
 void GVBusyLevelManager::setBusyLevel( QObject* obj, GVBusyLevel level ) {
 //	kdDebug() << "BUSY:" << level << ":" << obj << ":" << obj->className() << endl;
 	if( level > BUSY_NONE ) {
-		if( mBusyLevels[ obj ] == level )
-			return;
+		if( mBusyLevels[ obj ] == level )	return;
 		mBusyLevels[ obj ] = level;
 	} else {
 		mBusyLevels.remove( obj );
@@ -70,15 +66,17 @@ void GVBusyLevelManager::setBusyLevel( QObject* obj, GVBusyLevel level ) {
 }
 
 void GVBusyLevelManager::delayedBusyLevelChanged() {
-	GVBusyLevel new_level = BUSY_NONE;
+	GVBusyLevel newLevel = BUSY_NONE;
 	for( QMap< QObject*, GVBusyLevel >::ConstIterator it = mBusyLevels.begin();
-	     it != mBusyLevels.end();
-	     ++it )
-		new_level = QMAX( new_level, *it );
-	if( new_level != mCurrentBusyLevel ) {
+		it != mBusyLevels.end();
+		++it ) {
+		newLevel = QMAX( newLevel, *it );
+	}
+
+	if( newLevel != mCurrentBusyLevel ) {
 //		kdDebug() << "CHANGED BUSY:" << new_level << endl;
-		mCurrentBusyLevel = new_level;
-		emit busyLevelChanged( new_level );
+		mCurrentBusyLevel = newLevel;
+		emit busyLevelChanged( newLevel );
 	}
 }
 
