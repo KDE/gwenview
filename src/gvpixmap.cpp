@@ -127,7 +127,7 @@ KURL GVPixmap::url() const {
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::RotateLeft);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot90);
 	}
 	QWMatrix matrix;
 	matrix.rotate(-90);
@@ -139,7 +139,7 @@ void GVPixmap::rotateLeft() {
 
 void GVPixmap::rotateRight() {
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::RotateRight);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot270);
 	}
 	QWMatrix matrix;
 	matrix.rotate(90);
@@ -151,7 +151,7 @@ void GVPixmap::rotateRight() {
 
 void GVPixmap::mirror() {
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::Mirror);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::HFlip);
 	}
 	QWMatrix matrix;
 	matrix.scale(-1,1);
@@ -163,7 +163,7 @@ void GVPixmap::mirror() {
 
 void GVPixmap::flip() {
 	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVJPEGTran::Flip);
+		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::VFlip);
 	}
 	QWMatrix matrix;
 	matrix.scale(1,-1);
@@ -220,7 +220,7 @@ void GVPixmap::load() {
 	// Decode image
 	mImageFormat=QString(QImage::imageFormat(path));
 	if (mImage.loadFromData(mCompressedData,mImageFormat.ascii())) {
-		// Throw data away if it's not a JPEG, since we wont use it
+		// Throw data away if it's not a JPEG, since we won't use it
 		if (mImageFormat!="JPEG") mCompressedData.resize(0);
 
 		// Convert depth if necessary
@@ -231,6 +231,12 @@ void GVPixmap::load() {
 	} else {
 		mImage.reset();
 	}
+
+	// Rotate image if necessary
+	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(path);
+	mImage=GVImageUtils::rotate(mImage, orientation);
+	if (mImageFormat=="JPEG") 
+		mCompressedData=GVJPEGTran::apply(mCompressedData,orientation);
 
 	KIO::NetAccess::removeTempFile(path);
 }
@@ -249,6 +255,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	}
 	
 	if (format=="JPEG" && !mCompressedData.isNull()) {
+		//kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;

@@ -37,7 +37,6 @@ const char* CONFIG_PROGRAM_PATH="path";
 static QString sProgramPath;
 
 
-
 GVJPEGTran::GVJPEGTran()
 : mDone(false)
 {
@@ -53,24 +52,35 @@ void GVJPEGTran::slotProcessExited() {
 	mDone=true;
 }
 
-QByteArray GVJPEGTran::apply(const QByteArray& src,Operation operation) {
+QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation orientation) {
 	GVJPEGTran obj;
 	KProcess process;
 	process << sProgramPath;
 	
-	switch (operation) {
-	case RotateLeft:
-		process << "-rotate" << "270";
-		break;
-	case RotateRight:
-		process << "-rotate" << "90";
-		break;
-	case Mirror:
+	switch (orientation) {
+	case GVImageUtils::HFlip:
 		process << "-flip" << "horizontal";
 		break;
-	case Flip:
+	case GVImageUtils::Rot180:
+		process << "-rotate" << "180";
+		break;
+	case GVImageUtils::VFlip:
 		process << "-flip" << "vertical";
 		break;
+	case GVImageUtils::Rot90HFlip:
+		process << "-flip" << "horizontal" << "-rotate" << "90";
+		break;
+	case GVImageUtils::Rot90:
+		process << "-rotate" << "90";
+		break;
+	case GVImageUtils::Rot90VFlip:
+		process << "-flip" << "vertical" << "-rotate" << "90";
+		break;
+	case GVImageUtils::Rot270:
+		process << "-rotate" << "270";
+		break;
+	default:
+		return src;
 	}
 	
 	connect(&process,SIGNAL(processExited(KProcess*)),

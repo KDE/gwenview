@@ -16,7 +16,6 @@ namespace GVImageUtils {
 // Inspired from Kuickshow imlibwidget.cpp::autoRotate
 Orientation getOrientation(const QString& pixPath) {
 	KFileMetaInfo metaInfo(pixPath);
-	kdDebug() << "getOrientation: " << pixPath << endl;
 	if (!metaInfo.isValid()) return NotAvailable;
 
 	KFileMetaInfoItem item = metaInfo.item("Orientation");
@@ -30,14 +29,12 @@ Orientation getOrientation(const QString& pixPath) {
 
 	// Sanity check
 	if (value<int(Normal) && value>int(Rot270)) return NotAvailable;
-	kdDebug() << "getOrientation: " << value << endl;
 	return Orientation(value);
 }
 
 
 QImage rotate(const QImage& img, Orientation orientation) {
 	QWMatrix matrix;
-	kdDebug() << "rotate: " << int(orientation) << endl;
 	switch (orientation) {
 	case NotAvailable:
 	case Normal:

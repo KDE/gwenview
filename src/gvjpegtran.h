@@ -21,9 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVJPEGTRAN_H
 #define GVJPEGTRAN_H
 
-// Qt includes
+// Qt 
 #include <qcstring.h>
 #include <qobject.h>
+
+// Local
+#include "gvimageutils.h"
 
 class QString;
 
@@ -34,8 +37,7 @@ class KProcess;
 class GVJPEGTran : public QObject {
 Q_OBJECT
 public:
-	enum Operation { RotateLeft,RotateRight,Mirror,Flip };
-	static QByteArray apply(const QByteArray&,Operation);
+	static QByteArray apply(const QByteArray&,GVImageUtils::Orientation);
 
 	static void readConfig(KConfig*,const QString& group);
 	static void writeConfig(KConfig*,const QString& group);

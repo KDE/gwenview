@@ -1,4 +1,6 @@
-2003.xx.xx - v0.17.0
+2003.xx.xx - v0.17.0pre2
+- New features:
+ - Support for EXIF orientation information.
 - Fixes:
  - Don't alter the layout of the docks when toggling dir and file views or
    going fullscreen.
