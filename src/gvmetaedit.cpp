@@ -112,10 +112,10 @@ void
 GVMetaEdit::clearData() {
 	if (mMeta) {
 		// save changed data
-		if (mWritable
-			&& mCommentItem.string() != mCommentEdit->text()) {
+		if (mWritable && mCommentEdit->isModified()) {
 			mCommentItem.setValue(mCommentEdit->text());
 			mMeta->applyChanges();
+			mCommentEdit->setModified(false);
 		}
 		delete mMeta;
 		mMeta = NULL;
