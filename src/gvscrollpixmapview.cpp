@@ -506,7 +506,7 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
-	selectTool(event->state());
+	selectTool(event->state(), true);
 	mToolControllers[mTool]->mouseMoveEvent(event);
 	if (mFullScreen) {
 		restartAutoHideTimer();
@@ -568,7 +568,7 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 
 
 bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
-	selectTool(event->stateAfter());
+	selectTool(event->stateAfter(), false);
 	if (mFullScreen) {
 		restartAutoHideTimer();
 	}
@@ -576,14 +576,21 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 }
 
 
-void GVScrollPixmapView::selectTool(ButtonState state) {
+/**
+ * If force is set, the cursor will be updated even if the tool is not
+ * different from the current one.
+ */
+void GVScrollPixmapView::selectTool(ButtonState state, bool force) {
+	Tool oldTool=mTool;
 	if (state & ShiftButton) {
 		mTool=Zoom;
 	} else {
 		mTool=Scroll;
 	}
 	
-	mToolControllers[mTool]->updateCursor();
+	if (mTool!=oldTool || force) {
+		mToolControllers[mTool]->updateCursor();
+	}
 }
 
 

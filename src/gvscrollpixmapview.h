@@ -144,7 +144,7 @@ private:
 	void openContextMenu(const QPoint&);
 	void updatePathLabel();
 	void updateZoomActions();
-	void selectTool(ButtonState);
+	void selectTool(ButtonState, bool force);
 
 private slots:
 	void slotURLChanged();

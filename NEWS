@@ -10,6 +10,7 @@
  - Use standard KDE icons for zoom actions.
  - New icons for image operations.
  - New magnifier cursor.
+ - When switching images in fullscreen, don't show the cursor.
 
 2003.11.16 - v1.0.0pre4
 - New features:
