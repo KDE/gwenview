@@ -33,8 +33,9 @@ static KCmdLineOptions options[] = {
 
 static const char* version="1.2.0pre1";
 
-// This is for KDE 3.1
-#ifndef KDE_EXPORT
+#if !KDE_IS_VERSION(3,3,2)
+// broken KDE_EXPORT, don't use it
+#undef KDE_EXPORT
 #define KDE_EXPORT
 #endif
 
