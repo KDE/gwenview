@@ -323,8 +323,13 @@ void GVMainWindow::updateLocationURL() {
 		url=mDocument->url();
 	}
 	LOG(url.prettyURL());
+#if KDE_IS_VERSION( 3, 4, 0 )
+	mURLEdit->setEditText(url.pathOrURL());
+	mURLEdit->addToHistory(url.pathOrURL());
+#else
 	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
 	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
+#endif
 }
 
 void GVMainWindow::goUp() {
@@ -735,7 +740,11 @@ void GVMainWindow::resetDockWidgets() {
 void GVMainWindow::updateStatusInfo() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
+#if KDE_IS_VERSION( 3, 4, 0 )
+	QString url=mDocument->dirURL().pathOrURL();
+#else
 	QString url=mDocument->dirURL().prettyURL(0,KURL::StripFileProtocol);
+#endif
 	if (count==0) {
 		txt=i18n("%1 - No Images").arg(url);
 	} else {
