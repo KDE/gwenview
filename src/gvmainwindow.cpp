@@ -466,7 +466,11 @@ void GVMainWindow::toggleFullScreen() {
 		// workaround Qt bug - it unsets the fullscreen state on setGeometry(),
 		// which will be triggered by readDockConfig(), but KWin will ignore
 		// the geometry change and won't reset the state
+#if QT_VERSION >= 0x030300
 		setWState(WState_FullScreen);
+#else
+	// FIXME
+#endif
 		statusBar()->show();
 
 		showToolBars();
@@ -477,7 +481,7 @@ void GVMainWindow::toggleFullScreen() {
 
 		menuBar()->show();
 		mPixmapView->setFullScreen(false);
-#if QT_VERSION >= 0x030200
+#if QT_VERSION >= 0x030300
 		setWindowState( windowState() & ~WindowFullScreen );
 #else
 		showNormal();
