@@ -2,6 +2,7 @@
 
 #include <qapplication.h>
 #include <qmetaobject.h>
+#include <kdebug.h>
 
 #include <assert.h>
 
@@ -104,6 +105,8 @@ void TSThread::customEvent( QCustomEvent* e )
     int signal_id = metaObject()->findSignal( normalizeSignalSlot( signal ).data() + 1, true );
     if( signal_id >= 0 )
         qt_emit( signal_id, NULL );
+    else
+        kdWarning() << "Cannot emit signal \"" << signal << "\"." << endl;
     }
 
 #include "tsthread.moc"
