@@ -25,11 +25,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qasyncimageio.h>
 
 // Local 
+#include "tsthread/tsthread.h"
 #include "gvdocumentimpl.h"
 
 class GVDocument;
 
 class GVDocumentDecodeImplPrivate;
+
+
+class GVDecoderThread : public TSThread {
+Q_OBJECT
+public:
+	void setRawData(const QByteArray&);
+	QImage popLoadedImage();
+	
+signals:
+	void failed();
+	void succeeded();
+	
+protected:
+	void run();
+
+private:
+	QMutex mMutex;
+	QByteArray mRawData;
+	QImage mImage;
+};
+
 
 class GVDocumentDecodeImpl : public GVDocumentImpl, public QImageConsumer {
 Q_OBJECT
@@ -42,9 +64,7 @@ public:
 
 private:
 	GVDocumentDecodeImplPrivate* d;
-	QImage asyncDecode(bool&);
-	QImage syncDecode(bool&);
-	void finish( QImage& im, const QCString& format );
+	void finish(QImage&);
 	
 	// QImageConsumer methods
 	void end();
@@ -62,6 +82,8 @@ private slots:
 	void slotResult(KIO::Job*);
 	void slotStatResult(KIO::Job*);
 	void decodeChunk();
+	void slotDecoderThreadFailed();
+	void slotDecoderThreadSucceeded();
 };
 
 #endif /* GVDOCUMENTDECODEIMPL_H */

@@ -47,6 +47,50 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 
 //---------------------------------------------------------------------
 //
+// GVDecoderThread
+//
+//---------------------------------------------------------------------
+void GVDecoderThread::run() {
+	QMutexLocker locker(&mMutex);
+	kdDebug() << k_funcinfo << endl;
+	QImageIO imageIO;
+	
+	QBuffer buffer(mRawData);
+	buffer.open(IO_ReadOnly);
+	imageIO.setIODevice(&buffer);
+	bool ok=imageIO.read();
+		
+	if (!ok) {
+		kdDebug() << k_funcinfo << " failed" << endl;
+		postSignal( SIGNAL(failed()) );
+		return;
+	}
+	
+	kdDebug() << k_funcinfo << " succeeded" << endl;
+	mImage=imageIO.image();
+	
+	kdDebug() << k_funcinfo << " succeeded, emitting signal" << endl;
+	postSignal( SIGNAL(succeeded()) );
+}
+
+
+void GVDecoderThread::setRawData(const QByteArray& data) {
+	QMutexLocker locker(&mMutex);
+	mRawData=data.copy();
+}
+
+
+QImage GVDecoderThread::popLoadedImage() {
+	QMutexLocker locker(&mMutex);
+	QImage img=mImage;
+	mImage=QImage();
+	return img;
+}
+	
+
+
+//---------------------------------------------------------------------
+//
 // GVDocumentDecodeImplPrivate
 //
 //---------------------------------------------------------------------
@@ -64,8 +108,9 @@ public:
 	QTime mTimeSinceLastUpdate;
 	QGuardedPtr<KIO::Job> mJob;
 	bool mSuspended;
-	bool mSyncDecode;
+	bool mUseThread;
 	QDateTime mTimestamp;
+	GVDecoderThread mDecoderThread;
 };
 
 
@@ -81,12 +126,20 @@ GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document)
 	d->mUpdatedDuringLoad=false;
 
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
+
+	connect(&d->mDecoderThread, SIGNAL(succeeded()),
+		this, SLOT(slotDecoderThreadSucceeded()) );
+	connect(&d->mDecoderThread, SIGNAL(failed()),
+		this, SLOT(slotDecoderThreadFailed()) );
 	
 	QTimer::singleShot(0, this, SLOT(start()) );
 }
 
 
 GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
+	if (d->mDecoderThread.running()) {
+		d->mDecoderThread.wait();
+	}
 	delete d;
 }
 
@@ -115,14 +168,15 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job*job) {
 		image = GVCache::instance()->image( mDocument->url(), format );
 	}
 	if( !image.isNull()) {
-		finish( image, format );
+		setImageFormat(format);
+		finish(image);
 	} else {
 		QByteArray data = GVCache::instance()->file( mDocument->url() );
 		if( !data.isNull()) {
 			d->mJob = NULL;
 			d->mRawData = data;
 			d->mReadSize=0;
-			d->mSyncDecode = false;
+			d->mUseThread = false;
 			d->mTimeSinceLastUpdate.start();
 			d->mDecoderTimer.start(0, false);
 		} else {
@@ -143,74 +197,33 @@ void GVDocumentDecodeImpl::startLoading() {
 
 	d->mRawData.resize(0);
 	d->mReadSize=0;
-	d->mSyncDecode = false;
+	d->mUseThread = false;
 	d->mTimeSinceLastUpdate.start();
 }
     
 
 void GVDocumentDecodeImpl::slotResult(KIO::Job* job) {
 	kdDebug() << k_funcinfo << " loading finished:" << job->error() << endl;
-	if( job->error() == 0 ) {
-		if (!d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
-		return;
+	if( job->error() != 0 ) {
+		// failed
+		emit finished(false);
+		switchToImpl(new GVDocumentImpl(mDocument));
 	}
-	// failed
-	emit finished(false);
-	switchToImpl(new GVDocumentImpl(mDocument));
 }
 
 
 void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
-	if (chunk.size()>0) {
-		int oldSize=d->mRawData.size();
-		d->mRawData.resize(oldSize + chunk.size());
-		memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
-	}
-	// Decode the the image with a timer
+	kdDebug() << k_funcinfo << " size:" << chunk.size() << endl;
+	if (chunk.size()<=0) return;
+
+	int oldSize=d->mRawData.size();
+	d->mRawData.resize(oldSize + chunk.size());
+	memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
+
+	// Decode the received data
 	if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
 }
 
-
-QImage GVDocumentDecodeImpl::asyncDecode(bool& ok) {
-	ok = true;
-	int decodedSize=0;
-	int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize);
-	if( chunkSize > 0 ) {
-		decodedSize = d->mDecoder.decode(
-			(const uchar*)(d->mRawData.data()+d->mReadSize),
-			chunkSize);
-	}
-	// There's more to load
-	if (decodedSize>0) {
-		d->mReadSize+=decodedSize;
-		return QImage();
-	}
-
-	// We decoded all the available data, but the job is still running
-	if (decodedSize==0 && !d->mJob.isNull()) {
-		return QImage();
-	}
-	// If async loading failed, try synchronous loading
-	if( decodedSize < 0 ) {
-		kdDebug() << k_funcinfo << " async loading failed, trying sync loading\n";
-		d->mSyncDecode = true;
-		return syncDecode( ok );
-	}
-	return d->mDecoder.image();
-}
-
-QImage GVDocumentDecodeImpl::syncDecode(bool& ok) {
-	ok = true;
-	if( !d->mJob.isNull()) return QImage(); // wait for whole image
-	d->mUpdatedDuringLoad=false;
-	QImage image;
-	d->mReadSize = d->mRawData.size();
-	if( !image.loadFromData(d->mRawData)) {
-		ok = false;
-		return QImage();
-	}
-	return image;
-}
 
 void GVDocumentDecodeImpl::decodeChunk() {
 	if( d->mSuspended ) {
@@ -218,43 +231,87 @@ void GVDocumentDecodeImpl::decodeChunk() {
 		return;
 	}
 
-	bool ok;
-	QImage image = d->mSyncDecode ? syncDecode(ok) : asyncDecode(ok);
-	
-	// Image can't be loaded, let's switch to an empty implementation
-	if (!ok) {
-		kdDebug() << k_funcinfo << " loading failed\n";
-		d->mDecoderTimer.stop();
-		emit finished(false);
-		switchToImpl(new GVDocumentImpl(mDocument));
-		return;
-	}
-	if( image.isNull()) { // not completely loaded yet
-		if(d->mReadSize == d->mRawData.size() && !d->mJob.isNull()) {
-			d->mDecoderTimer.stop(); // wait for more data
+	if (!d->mUseThread) {
+		int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize);
+		if (chunkSize> 0) {
+			int decodedSize = d->mDecoder.decode(
+				(const uchar*)(d->mRawData.data()+d->mReadSize),
+				chunkSize);
+			kdDebug() << k_funcinfo << "decodedSize:" << decodedSize << endl;
+
+			if (decodedSize>0) {
+				// There's more to come
+				d->mReadSize+=decodedSize;
+				return;
+			}
+
+			if (decodedSize<0) {
+				// We can't use async decoding, switch to decoder thread 
+				d->mUseThread=true;
+				return;
+			}
 		}
-		return;
+	} else {
+		// We are in threaded decoding mode, et's wait until the get job has finished
+		if (!d->mJob.isNull()) return;
 	}
 
-	kdDebug() << k_funcinfo << " loading succeded\n";
+	// If we reach this part, we have the full image in d->mRawData and it has
+	// either been fully decoded, or async decoding failed
 	d->mDecoderTimer.stop();
-
+	
+	// Set image format
 	QBuffer buffer(d->mRawData);
 	buffer.open(IO_ReadOnly);
-	QCString format = QImageIO::imageFormat(&buffer);
+	const char* format = QImageIO::imageFormat(&buffer);
 	buffer.close();
+
+	if (!format) {
+		// Unknown format, no need to go further
+		emit finished(false);
+		switchToImpl(new GVDocumentImpl(mDocument));
+	}
+	setImageFormat( format );
+
+	// If async decoding failed, start threaded decoding
+	if( d->mUseThread ) {
+		kdDebug() << k_funcinfo << "starting threaded decoding\n";
+		d->mDecoderThread.setRawData(d->mRawData);
+		d->mDecoderThread.start();
+		return;
+	}
+	
+	// If we reach this part, async decoding has succeeded
+	kdDebug() << k_funcinfo << "async decoding succeeded\n";
 
 	GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
 
-	finish( image, format );
+	QImage image=d->mDecoder.image();
+	finish(image);
 }
 
 
-void GVDocumentDecodeImpl::finish( QImage& image, const QCString& format ) {
-	// Set the image format. QImageIO::imageFormat should not fail since at
-	// this point the image has been decoded successfully.
-	setImageFormat( format );
-	Q_ASSERT(mDocument->imageFormat()!=0);
+
+void GVDocumentDecodeImpl::slotDecoderThreadFailed() {
+	kdDebug() << k_funcinfo << endl;
+	// Image can't be loaded, let's switch to an empty implementation
+	emit finished(false);
+	switchToImpl(new GVDocumentImpl(mDocument));
+}
+
+
+void GVDocumentDecodeImpl::slotDecoderThreadSucceeded() {
+	kdDebug() << k_funcinfo << endl;
+	GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
+
+	QImage image=d->mDecoderThread.popLoadedImage();
+	finish( image);
+}
+
+
+
+void GVDocumentDecodeImpl::finish( QImage& image) {
+	kdDebug() << k_funcinfo << endl;
 	
 	// Convert depth if necessary
 	// (32 bit depth is necessary for alpha-blending)
@@ -263,7 +320,7 @@ void GVDocumentDecodeImpl::finish( QImage& image, const QCString& format ) {
 		d->mUpdatedDuringLoad=false;
 	}
 
-	GVCache::instance()->addImage( mDocument->url(), image, format, d->mTimestamp );
+	GVCache::instance()->addImage( mDocument->url(), image, mDocument->imageFormat(), d->mTimestamp );
 
 	// The decoder did not cause the sizeUpdated or rectUpdated signals to be
 	// emitted, let's do it now
@@ -297,7 +354,7 @@ void GVDocumentDecodeImpl::suspendLoading() {
 
 void GVDocumentDecodeImpl::resumeLoading() {
 	d->mSuspended = false;
-	if(d->mReadSize < d->mRawData.size() || d->mJob.isNull()) {
+	if(d->mReadSize < d->mRawData.size()) {
 		d->mDecoderTimer.start(0, false);
 	}
 }
