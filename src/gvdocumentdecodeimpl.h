@@ -82,8 +82,8 @@ private slots:
 	void slotResult(KIO::Job*);
 	void slotStatResult(KIO::Job*);
 	void decodeChunk();
+	void slotImageDecoded();
 	void slotDecoderThreadFailed();
-	void slotDecoderThreadSucceeded();
 };
 
 #endif /* GVDOCUMENTDECODEIMPL_H */
