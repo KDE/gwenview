@@ -95,7 +95,6 @@ public:
 	void setShowScrollBars(bool);
 	bool mouseWheelScroll() const { return mMouseWheelScroll; }
 	void setMouseWheelScroll(bool);
-	void setAutoZoomBrowse(bool);
 
 
 public slots:
