@@ -1066,6 +1066,11 @@ bool GVScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 	case QEvent::FocusOut:
 		return true;
 
+#if KDE_IS_VERSION( 3, 4, 0 )
+	case QEvent::Enter:
+		selectTool( kapp->keyboardMouseState(), true );
+#endif
+
 	default:
 		break;
 	}
