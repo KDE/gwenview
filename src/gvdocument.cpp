@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -489,30 +489,18 @@ bool GVDocument::saveBeforeClosing() {
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 		.arg(url().prettyURL());
 
-	int result=KMessageBox::questionYesNoCancel(0, msg, QString::null,
-		KStdGuiItem::save(), KStdGuiItem::discard(), CONFIG_SAVE_AUTOMATICALLY);
+	// FIXME: If we definitly switch from questionYesNoCancel to questionYesNo,
+	// change this method to not return anything and change the calling code.
+	int result=KMessageBox::questionYesNo(0, msg, QString::null,
+		KStdGuiItem::save(), KStdGuiItem::discard(), CONFIG_SAVE_AUTOMATICALLY);		
 
-	switch (result) {
-	case KMessageBox::Yes:
-		msg=saveInternal(url(), d->mImageFormat);
-		if (msg.isNull()) {
-			return true;
-		}
-		result= KMessageBox::warningContinueCancel(0, msg, QString::null, KStdGuiItem::discard());
-		if (result==KMessageBox::Continue) {
-			d->mModified=false;
-			return true;
-		} else {
-			return false;
-		}
-
-	case KMessageBox::No:
+	if (result == KMessageBox::Yes) {
+		msg=saveInternal(url(), d->mImageFormat);	
+	} else {
 		d->mModified=false;
-		return true;
-
-	default:
-		return false;
 	}
+
+	return true;
 }
 
 
