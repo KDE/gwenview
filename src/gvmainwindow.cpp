@@ -592,7 +592,7 @@ void GVMainWindow::thumbnailUpdateProcessedOne() {
 
 
 void GVMainWindow::slotURLEditChanged(const QString &str) {
-	mDocument->setURL(str);
+	mDocument->setURL(KURL(str));
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->setFocus();
 	} else if (mPixmapView->isVisible()) {
@@ -618,7 +618,7 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 
 
 void GVMainWindow::slotGo() {
-	mDocument->setURL(mURLEdit->currentText());
+	mDocument->setURL(KURL(mURLEdit->currentText()));
 }
 
 //-----------------------------------------------------------------------
