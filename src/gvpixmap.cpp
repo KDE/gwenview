@@ -203,15 +203,10 @@ void GVPixmap::load() {
 	KURL pixURL=url();
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 
-	// FIXME : Async
 	QString path;
-	if (pixURL.isLocalFile()) {
-		path=pixURL.path();
-	} else {
-		if (!KIO::NetAccess::download(pixURL,path)) {
-			mImage.reset();
-			return;
-		}
+	if (!KIO::NetAccess::download(pixURL,path)) {
+		mImage.reset();
+		return;
 	}
 
 	// Load file. We load it ourself so that we can keep a copy of the
@@ -231,9 +226,7 @@ void GVPixmap::load() {
 		mImage.reset();
 	}
 
-	if (!pixURL.isLocalFile()) {
-		KIO::NetAccess::removeTempFile(path);
-	}
+	KIO::NetAccess::removeTempFile(path);
 }
 
 
