@@ -114,9 +114,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
 
 	// Dir selection
-	connect(this, SIGNAL(clicked(QListViewItem*)),
-		this, SLOT(slotExecuted()) );
-	connect(this, SIGNAL(returnPressed(QListViewItem*)),
+	connect(this, SIGNAL(selectionChanged(QListViewItem*)),
 		this, SLOT(slotExecuted()) );
 
 	// Drag'n'drop
