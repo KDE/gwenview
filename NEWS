@@ -1,4 +1,4 @@
-2003.xx.xx - v0.16.0
+2003.01.12 - v0.16.0pre1
 - New features :
  - Support for IO slaves: you can browse FTP files, Windows shares, go into
    tarballs...
@@ -12,7 +12,8 @@
 - Fixes :
  - Do not start dragging folders in the folder view when not necessary.
  - When dropping urls and selecting "Move", the drop item will become the
-   current one only if the current one was part of the drop.
+   current one only if the item which was the current one was part of the
+   drop.
 
 2002.11.05 - v0.15.2
 - Fixes :
