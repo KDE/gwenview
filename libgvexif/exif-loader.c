@@ -36,7 +36,7 @@ struct _ExifLoader {
 unsigned char
 exif_loader_write (ExifLoader *eld, unsigned char *buf, unsigned int len)
 {
-	int i;
+	unsigned int i;
 	int len_remain;
 
 	if (!eld) return 0;
