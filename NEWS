@@ -2,6 +2,8 @@
 - Fixes :
  - The selected thumbnail does not look strange anymore when changing the
    thumbnail size.
+ - Always zoom on the center of the image.
+ - Do not reload the image every time when you open the context menu.
 
 2002.10.04 - v0.15.0
 - File count was also counting folders.

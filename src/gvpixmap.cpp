@@ -42,6 +42,8 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	//kdDebug() << "GVPixmap::setURL " << paramURL.path() << endl;
 	KURL URL(paramURL);
 
+	if (URL.cmp(url())) return;
+	
 	QFileInfo pathInfo(URL.path());
 	if (!pathInfo.exists()) {
 		URL=KURL("/");
@@ -78,6 +80,8 @@ void GVPixmap::setDirURL(const KURL& paramURL) {
 
 
 void GVPixmap::setFilename(const QString& filename) {
+	if (mFilename==filename) return;
+	
 	mFilename=filename;
 	emit loading();
 	if (!load()) {
@@ -103,6 +107,8 @@ KURL GVPixmap::url() const {
 
 //-Private-------------------------------------------------------------
 bool GVPixmap::load() {
+	KURL pixURL=url();
+	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
 	int posX,posY;
 	int pixWidth;
 	int pixHeight;
@@ -112,7 +118,7 @@ bool GVPixmap::load() {
 	QPixmap pix;
 
 // Load pixmap
-	if (!pix.load(url().path())) return false;
+	if (!pix.load(pixURL.path())) return false;
 	pixWidth=pix.width();
 	pixHeight=pix.height();
 

@@ -81,7 +81,7 @@ private:
 	bool mDragStarted; // Indicates that the user is scrolling the image by dragging it
 	int mScrollStartX,mScrollStartY;
 
-	void updateImageOffset();
+	void updateImageOffset(double oldZoom);
 	void updateContentSize();
 
 protected:

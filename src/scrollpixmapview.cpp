@@ -40,7 +40,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
 ScrollPixmapView::ScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled)
-: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase), mGVPixmap(pixmap), mPopupMenu(0L), mZoom(1), mLockZoom(false), mDragStarted(false)
+: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase)
+, mGVPixmap(pixmap)
+, mPopupMenu(0L)
+, mZoom(1)
+, mLockZoom(false)
+, mDragStarted(false)
 {
 	unsetCursor();
 	setFocusPolicy(StrongFocus);
@@ -60,6 +65,8 @@ void ScrollPixmapView::enableView(bool enabled) {
 
 
 void ScrollPixmapView::updateView() {
+	mXOffset=0;
+	mYOffset=0;
 	if (mGVPixmap->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
@@ -70,7 +77,7 @@ void ScrollPixmapView::updateView() {
 		setZoom(1.0);
 	} else {
 		updateContentSize();
-		updateImageOffset();
+		updateImageOffset(mZoom);
 		viewport()->repaint(false);
 	}
 	horizontalScrollBar()->setValue(0);
@@ -79,9 +86,10 @@ void ScrollPixmapView::updateView() {
 
 
 void ScrollPixmapView::setZoom(double zoom) {
+	double oldZoom=mZoom;
 	mZoom=zoom;
 	updateContentSize();
-	updateImageOffset();
+	updateImageOffset(oldZoom);
 	viewport()->repaint(false);
 	emit zoomChanged(mZoom);
 }
@@ -112,7 +120,7 @@ bool ScrollPixmapView::isZoomSetToMin() {
 //-Overloaded methods----------------------------------
 void ScrollPixmapView::resizeEvent(QResizeEvent* event) {
 	updateContentSize();
-	updateImageOffset();
+	updateImageOffset(mZoom);
 	QScrollView::resizeEvent(event);
 }
 
@@ -222,16 +230,41 @@ void ScrollPixmapView::setLockZoom(bool value) {
 
 //-Private---------------------------------------------
 void ScrollPixmapView::updateContentSize() {
-	resizeContents(int(mGVPixmap->pixmap().width()*mZoom),int(mGVPixmap->pixmap().height()*mZoom));
+	resizeContents(
+		QMAX( int(mGVPixmap->pixmap().width()*mZoom) , visibleWidth() ),
+		QMAX( int(mGVPixmap->pixmap().height()*mZoom) , visibleHeight() )
+	);
 }
 
 
-void ScrollPixmapView::updateImageOffset() {
-	int pixWidth=int( mGVPixmap->pixmap().width() * mZoom);
+void ScrollPixmapView::updateImageOffset(double oldZoom) {
+// FIXME : Comments !
+	int centerX=int( ((visibleWidth()/2+contentsX()-mXOffset)/oldZoom)*mZoom );
+	int centerY=int( ((visibleHeight()/2+contentsY()-mYOffset)/oldZoom)*mZoom );
+	center(centerX,centerY);
+	
+	int zpixWidth=int(mGVPixmap->width() * mZoom);
+	int viewWidth=visibleWidth();
+	if (zpixWidth<viewWidth) {
+		mXOffset=(viewWidth-zpixWidth)/2;
+	} else {
+		mXOffset=0;
+	}
+
+	int zpixHeight=int(mGVPixmap->height() * mZoom);
+	int viewHeight=visibleHeight();
+	if (zpixHeight<viewHeight) {
+		mYOffset=(viewHeight-zpixHeight)/2;
+	} else {
+		mYOffset=0;
+	}
+
+
+/*	int pixWidth=int( mGVPixmap->pixmap().width() * mZoom);
 	int pixHeight=int( mGVPixmap->pixmap().height() * mZoom);
 
 	mXOffset=QMAX( (width()-pixWidth)/2, 0);
-	mYOffset=QMAX( (height()-pixHeight)/2, 0);
+	mYOffset=QMAX( (height()-pixHeight)/2, 0);*/
 }
 
 
