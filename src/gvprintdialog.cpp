@@ -231,9 +231,9 @@ void GVPrintDialogPage::setWValue (int value){
 void GVPrintDialogPage::toggleRatio(bool enable) {
 	if (enable) {
 		float cm = 1;
-		if (mContent->mUnits->currentText() == "Millimeters")
+		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS)
 			cm = 10;
-		else if (mContent->mUnits->currentText() == "Inches")
+		else if (getUnit(mContent->mUnits->currentText()) == GV_INCHES)
 			cm = 1/(2.54);
 		// 15x10 cm 
 		float hValue, wValue;
