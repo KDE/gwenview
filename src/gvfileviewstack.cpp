@@ -320,6 +320,7 @@ void GVFileViewStack::slotViewExecuted() {
 		}
 
 		emit urlChanged(tmp);
+		emit directoryChanged(tmp);
 		updateActions();
 	} else {
 		emitURLChanged();
