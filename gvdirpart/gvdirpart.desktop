@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=Gwenview Image Browser View
+Name[da]=Gwenview billedsøgervisning
+Name[es]=Vista del navegador de imágenes Gwenview
+Name[et]=Gwenview piltide lehitseja
+Name[nl]=Gwenview Afbeeldingenbrowser
+Name[pt]=Navegador de Imagens Gwenview
+Name[pt_BR]=Navegador de Imagens Gwenview
+Name[sv]=Gwenview bildbläddrare
 MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvdirpart

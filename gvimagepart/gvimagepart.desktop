@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=Gwenview Image Viewer
+Name[da]=Gwenview billedfremviser
+Name[es]=Visor de imágenes Gwenview
+Name[et]=Gwenview piltide vaataja
+Name[nl]=Gwenview Afbeeldingenweergave
+Name[pt]=Visualizador de Imagens Gwenview
+Name[pt_BR]=Visualizador de Imagens Gwenview
+Name[sv]=Gwenview bildvisare
 MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbm;image/x-xpm
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvimagepart
