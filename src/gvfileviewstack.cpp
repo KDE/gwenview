@@ -34,8 +34,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local 
 #include "fileoperation.h"
-#include "gvfilethumbnailview.h"
 #include "gvarchive.h"
+#include "gvexternaltoolcontext.h"
+#include "gvexternaltoolmanager.h"
+#include "gvfilethumbnailview.h"
 #include "gvfiledetailview.h"
 
 #include "gvfileviewstack.moc"
@@ -343,12 +345,20 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 		}
 	}
 	
+	GVExternalToolContext* externalToolContext=
+		GVExternalToolManager::instance()->createContext(
+		this, currentFileView()->selectedItems());
+	
+	menu.insertItem(
+		i18n("External Tools"), externalToolContext->popupMenu());
+
+
 	menu.connectItem(
 		menu.insertItem( i18n("Parent Dir") ),
 		this,SLOT(openParentDir()) );
 
 	menu.insertSeparator();
-
+	
 	if (selectionSize==1) {
 		menu.connectItem(
 			menu.insertItem( i18n("&Rename...") ),

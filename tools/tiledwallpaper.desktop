@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2 
+Icon=background
+Type=Application
+Name=Set as tiled wallpaper

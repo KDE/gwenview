@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=gimp-remote -n %F 
+Icon=gimp
+Type=Application
+Name=The GIMP
+Name[fr]=Le GIMP

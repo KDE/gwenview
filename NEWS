@@ -1,6 +1,7 @@
 2003.xx.xx - v1.0.0
 - New features:
  - Toolbars are now configurable, and toolbar settings are remembered.
+ - Added support for user customizable external tools.
  - New dock window to display Meta Info (thanks to Jos van den Oever).
  - Cursor over image view changes to reflect the current behavior.
  - When toggling autozoom off, restore the previous zoom and position (Based

@@ -76,7 +76,7 @@ protected:
 	// Helper function
 	QCursor loadCursor(const QString& name) {
 		QString path;
-		path=locate("appdata", QString("cursor/%1.png").arg(name));
+		path=locate("appdata", QString("cursors/%1.png").arg(name));
 		return QCursor(QPixmap(path));
 	}
 
