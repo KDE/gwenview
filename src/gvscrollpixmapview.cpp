@@ -135,9 +135,6 @@ public:
 
 		mDragStarted=false;
 		mView->viewport()->setCursor(mDragCursor);
-		if (mView->fullScreen()) {
-			mView->startAutoHideTimer();
-		}
 	}
 
 	void wheelEvent(QWheelEvent* event) {
@@ -324,7 +321,7 @@ void GVScrollPixmapView::slotModified() {
 	viewport()->repaint(false);
 }
 
-void GVScrollPixmapView::startAutoHideTimer() {
+void GVScrollPixmapView::restartAutoHideTimer() {
 	mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
 
@@ -394,7 +391,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	viewport()->setMouseTracking(mFullScreen);
 	if (mFullScreen) {
 		viewport()->setBackgroundColor(black);
-		startAutoHideTimer();
+		restartAutoHideTimer();
 	} else {
 		viewport()->setBackgroundMode(PaletteDark);
 		mAutoHideTimer->stop();
@@ -535,16 +532,23 @@ void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
 	if (event->button()==RightButton) return;
 	mToolControllers[mTool]->mousePressEvent(event);
+    mAutoHideTimer->stop();
 }
 
 
 void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state());
 	mToolControllers[mTool]->mouseMoveEvent(event);
+    if (mFullScreen && event->stateAfter()==Qt::NoButton) {
+        restartAutoHideTimer();
+    }
 }
 
 
 void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
+    if (mFullScreen) {
+        restartAutoHideTimer();
+    }
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
@@ -565,8 +569,7 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 			mOperaLikePrevious=false;
 		} else {
 			// Don't show the menu if there's no image, except if we are in
-			// fullscreen mode, so that we always have a way to leave
-			// fullscreen mode.
+			// fullscreen mode, so that we always have a way to leave it.
 			if (!mGVPixmap->isNull() || mFullScreen) {
 				openContextMenu(event->globalPos());
 				return;
@@ -602,8 +605,6 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 
 void GVScrollPixmapView::selectTool(ButtonState state) {
 	ButtonState modifier=ButtonState(state & (ShiftButton | ControlButton | AltButton) );
-	if (mTool==mButtonStateToolMap[modifier]) return;
-
 	mTool=mButtonStateToolMap[modifier];
 	mToolControllers[mTool]->updateCursor();
 }

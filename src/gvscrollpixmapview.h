@@ -85,7 +85,7 @@ public:
     void setButtonStateTool(ButtonState,Tool);
     void updateDefaultCursor();
 
-	void startAutoHideTimer();
+	void restartAutoHideTimer();
 
 	// Used by the browse tool controller
 	void emitSelectPrevious() { emit selectPrevious(); }
