@@ -138,6 +138,12 @@ void GVDocument::setURL(const KURL& paramURL) {
 	// Make a copy, we might have to fix the protocol
 	KURL localURL(paramURL);
 	LOG("url: " << paramURL.prettyURL());
+	
+	// Be sure we are not waiting for another stat result
+	if (!d->mStatJob.isNull()) {
+		d->mStatJob->kill();
+	}
+	GVBusyLevelManager::instance()->setBusyLevel(this, BUSY_NONE);
 
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
@@ -164,9 +170,6 @@ void GVDocument::setURL(const KURL& paramURL) {
 		}
 	}
 
-	if (!d->mStatJob.isNull()) {
-		d->mStatJob->kill();
-	}
 	d->mStatJob = KIO::stat( localURL, !localURL.isLocalFile() );
 	connect( d->mStatJob, SIGNAL( result (KIO::Job *) ),
 	   this, SLOT( slotStatResult (KIO::Job *) ) );
