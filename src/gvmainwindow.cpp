@@ -101,7 +101,7 @@ const char* CONFIG_BUSYPTR_IN_FS="busy ptr in full screen";
 const char* CONFIG_SHOW_LOCATION_TOOLBAR="show address bar";
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mProgress(0L), mLocationToolBar(0L)
+: KDockMainWindow(), mProgress(0L), mLocationToolBar(0L), mLoadingCursor(false)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
@@ -222,9 +222,10 @@ void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
 
 	mGoUp->setEnabled(url.path() != "/");
 	updateStatusInfo();
-	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+
+	if( mLoadingCursor )
 		kapp->restoreOverrideCursor();
-	}
+	mLoadingCursor = false;
 
 	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
@@ -373,14 +374,16 @@ void GVMainWindow::printFile() {
 //-----------------------------------------------------------------------
 void GVMainWindow::pixmapLoading() {
 	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+		if( !mLoadingCursor ) {
 #if KDE_VERSION >= 0x30100
-		kapp->setOverrideCursor(KCursor::workingCursor());
+			kapp->setOverrideCursor(KCursor::workingCursor());
 #else
-		kapp->setOverrideCursor(QCursor(WaitCursor));
+			kapp->setOverrideCursor(QCursor(WaitCursor));
 #endif
+		}
+		mLoadingCursor = true;
 	}
 }
-
 
 void GVMainWindow::toggleDirAndFileViews() {
 	KConfig* config=KGlobal::config();

@@ -116,6 +116,7 @@ private:
 	KAction* mSaveFileAs;
 	KAction* mFilePrint;
 	KAction* mToggleDirAndFileViews;
+	bool     mLoadingCursor;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
