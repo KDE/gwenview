@@ -36,7 +36,7 @@ static const char* version="CVS>=20030728";
 
 
 int main (int argc, char *argv[]) {
-    KAboutData aboutData("gwenview", "Gwenview",
+    KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),
                         version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
                         "Copyright 2000-2003 Aurélien Gâteau",0,"http://gwenview.sourceforge.net");
 
