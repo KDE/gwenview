@@ -805,6 +805,23 @@ void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 }
 
 
+void GVFileViewStack::refreshItems(const KURL::List& urls) {
+	LOG("");
+	KFileItemList list;
+	for( KURL::List::ConstIterator it = urls.begin();
+	     it != urls.end();
+	     ++it ) {
+		KURL dir = *it;
+		dir.setFileName( QString::null );
+		if( dir != mDirURL ) continue;
+		// TODO this could be quite slow for many images?
+		KFileItem* item = findItemByFileName( (*it).filename());
+		if( item ) list.append( item );
+	}
+	dirListerRefreshItems( list );
+}
+
+
 void GVFileViewStack::dirListerClear() {
 	currentFileView()->clear();
 }

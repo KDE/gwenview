@@ -160,6 +160,12 @@ bool GVKIPIInterface::addImage(const KURL&, QString&) {
 	return true;
 }
 
+// TODO currently KDirWatch doesn't have watching of files in a directory
+// implemented, so KDirLister will not inform when a file changes
+void GVKIPIInterface::refreshImages( const KURL::List& urls ) {
+	d->mFileView->refreshItems( urls );
+}
+
 
 void GVKIPIInterface::slotSelectionChanged() {
 	emit selectionChanged(d->mFileView->selectionSize() > 0);

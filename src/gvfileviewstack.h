@@ -130,6 +130,8 @@ public:
 	 * initially supressed by silent mode.
 	 */
 	void retryURL();
+
+	void refreshItems( const KURL::List& urls ); // used by a workaround in GVKIPIInterface
 	
 public slots:
 	void setDirURL(const KURL&);

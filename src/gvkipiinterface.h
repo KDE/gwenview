@@ -43,6 +43,7 @@ public:
 	KIPI::ImageInfo info( const KURL& );
 	int features() const;
 	bool addImage(const KURL&, QString& err);
+	virtual void refreshImages( const KURL::List& urls );
 
 private:
 	GVKIPIInterfacePrivate* d;
