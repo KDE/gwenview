@@ -139,7 +139,7 @@ void GVImagePart::print() {
 	KPrinter printer;
 
 	printer.setDocName( m_url.filename() );
-	KPrinter::addDialogPage( new GVPrintDialogPage( mPixmapView, "GV page"));
+	KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, mPixmapView, "GV page"));
 
 	if (printer.setup(mPixmapView, QString::null, true)) {
 		mDocument->print(&printer);

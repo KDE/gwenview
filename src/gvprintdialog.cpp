@@ -44,9 +44,9 @@ const char* STR_TRUE="true";
 const char* STR_FALSE="false";
 
 
-GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
+GVPrintDialogPage::GVPrintDialogPage( GVDocument* document, QWidget *parent, const char *name )
 		: KPrintDialogPage( parent, name ) {
-	mDocument = ((GVMainWindow*)parent)->document();
+	mDocument = document;
 	mContent = new GVPrintDialogPageBase(this);
 	setTitle( mContent->caption() );
 

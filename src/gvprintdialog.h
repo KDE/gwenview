@@ -42,7 +42,7 @@ class GVPrintDialogPage : public KPrintDialogPage {
 	Q_OBJECT
 
 public:
-	GVPrintDialogPage( QWidget *parent = 0L, const char *name = 0 );
+	GVPrintDialogPage( GVDocument* document, QWidget *parent = 0L, const char *name = 0 );
 	~GVPrintDialogPage();
 
 	virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);

@@ -391,7 +391,7 @@ void GVMainWindow::printFile() {
 	nm += pAbout->version();
 	printer.setCreator( nm );
 
-	KPrinter::addDialogPage( new GVPrintDialogPage( this, "GV page"));
+	KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, this, "GV page"));
 
 	if (printer.setup(this, QString::null, true)) {
 		mDocument->print(&printer);
