@@ -271,9 +271,7 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	if (isJPEG(pixPath)) loaded=loadJPEG(pixPath, img);
 
 	if (!loaded) {
-		if (!loadThumbnail(pixPath, img)) {
-			return;
-		}
+		if (!loadThumbnail(pixPath, img)) return;
 	}
 
 	// Rotate if necessary
@@ -281,7 +279,9 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	img=GVImageUtils::rotate(img,orientation);
 	
 	img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-	emitThumbnailLoaded(QPixmap(img));
+	QPixmap pix;
+	pix.convertFromImage(img);
+	emitThumbnailLoaded(pix);
 }
 
 
