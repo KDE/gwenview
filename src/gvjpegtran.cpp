@@ -77,7 +77,11 @@ void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
 
 void GVJPEGTran::slotProcessExited() {
 	//kdDebug() << "slotProcessExited" << endl;
+#if QT_VERSION<0x030100
+	kapp->exit_loop();
+#else
 	kapp->eventLoop()->exitLoop();
+#endif
 }
 
 QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation orientation) {
@@ -139,7 +143,11 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	obj.writeChunk(&process);
 	
 	kapp->setOverrideCursor(QCursor(WaitCursor));
+#if QT_VERSION<0x030100
+	kapp->enter_loop();
+#else
 	kapp->eventLoop()->enterLoop();
+#endif
 	kapp->restoreOverrideCursor();
 	
 	return obj.mDst;

@@ -1,9 +1,8 @@
 2003.xx.xx - v1.0.0
 - Fixes:
- - Keep the fullscreen button activated to be able to go back to normal mode
-   when moving to a dir without images in fullscreen mode. 
+ - Fixed compilation failure on Qt 3.0.
 
-2003.xx.xx - v0.17.1
+2003.03.29 - v0.17.1
 - Fixes:
  - In the folder view, show the "+" sign in front of folders if they have
    sub-folders.
@@ -19,7 +18,8 @@
  - Fixed the bug which caused the window to grow up when entering folders with
    long names (Thanks to Stefan Heinze for the tip).
  - Rotating big JPEG images with JPEGTran won't hang anymore.
-
+ - Keep the fullscreen button activated to be able to go back to normal mode
+   when moving to a dir without images in fullscreen mode. 
 
 2003.05.04 - v0.17.0
 - New features:
