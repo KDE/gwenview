@@ -35,6 +35,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaction.h>
 #include <kurldrag.h>
 #include <klistview.h>
+#include <kio/job.h>
+#include <kio/file.h>
+
+#if KDE_VERSION >= 0x30200
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#define KInputDialog KLineEditDlg
+#endif
 
 // Local
 #include "fileoperation.h"
@@ -449,6 +458,8 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	menu.connectItem(
 		menu.insertItem( i18n("Parent Folder") ),
 		this,SLOT(openParentDir()) );
+
+	menu.insertItem(SmallIcon("folder_new"), i18n("New Folder..."), this, SLOT(makeDir()));
 
 	menu.insertSeparator();
 
@@ -952,3 +963,29 @@ void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);
 }
 
+void GVFileViewStack::makeDir() {
+	KIO::Job* job;
+
+	bool ok;
+	QString newDir=KInputDialog::getText(
+			i18n("Creating a folder"),
+			i18n("Enter the name of the new folder:"),
+			QString::null, &ok, this);
+	if (!ok) return;
+
+	kdDebug() << k_funcinfo << "url()" << url() << endl;
+	kdDebug() << k_funcinfo << "url().directory()" << url().directory() << endl;
+	KURL newURL(url().directory());
+	newURL.addPath(newDir);
+	job=KIO::mkdir(newURL);
+
+	kdDebug() << k_funcinfo << "newURL:" << newURL << endl;
+	connect( job, SIGNAL(result(KIO::Job*)), this, SLOT(slotDirMade(KIO::Job*)) );
+}
+
+void GVFileViewStack::slotDirMade(KIO::Job* job) {
+	if (job->error()) {
+		job->showErrorDialog(this);
+		return;
+	}
+}
