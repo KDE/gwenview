@@ -40,7 +40,15 @@ class GVDocumentImpl;
 namespace KIO { class Job; }
 /**
  * The application document.
- * It knows what the current url is.
+ * It knows what the current url is and will emit signals when
+ * loading/loaded/modified...
+ * 
+ * The ordering of loading() and loaded() signals is:
+ * - setURL() is called
+ * - URL is stated
+ * - loading() is emitted (may be skipped if no loading is needed, e.g. wrong URL)
+ * - image is being loaded
+ * - loaded() is emitted
  */
 class GVDocument : public QObject {
 Q_OBJECT
@@ -105,19 +113,6 @@ signals:
 	 * Also emitted if the image could not be loaded.
 	 */
 	void loaded(const KURL& url);
-
-	/**
-	 * Emitted by setURL(), even before checking of the new URL begins.
-	 * Should be used e.g. by the thumbnail view to select the matching item.
-	 * The ordering of newURLSet(), loading() and loaded() signals is:
-	 * - setURL() is called
-	 * - newURLSet() is emitted
-	 * - URL is stated
-	 * - loading() is emitted (may be skipped if no loading is needed, e.g. wrong URL)
-	 * - image is being loaded
-	 * - loaded() is emitted
-	 */
-	void newURLSet(const KURL& url);
 
 	/**
 	 * Emitted when the image has been modified.

@@ -103,7 +103,6 @@ private:
 	GVHistory* mGVHistory;
 	GVSlideShow* mSlideShow;
 
-	KAction* mOpenFile;
 	KAction* mRenameFile;
 	KAction* mCopyFiles;
 	KAction* mMoveFiles;
@@ -149,7 +148,7 @@ private:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
-	void setURL(const KURL&);
+	void openURL(const KURL&);
 
 private slots:
 	void goUp();
@@ -161,7 +160,7 @@ private slots:
 	void moveFiles();
 	void deleteFiles();
 	void showFileProperties();
-	void openFile();
+	void showFileDialog();
 	void printFile();  /** print the actual file */
 	void clearLocationLabel();
 	void activateLocationLabel();
@@ -176,7 +175,7 @@ private slots:
 	void slotImageLoaded();
 	void startSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
-	void slotURLChanged();
+	void slotDirURLChanged(const KURL&);
 	void modifyImage(GVImageUtils::Orientation);
 	void rotateLeft();
 	void rotateRight();

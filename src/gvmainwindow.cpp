@@ -201,7 +201,7 @@ GVMainWindow::GVMainWindow()
 				mFileViewStack->setDirURL(url);
 			} else {
 				if (!fullscreen) mToggleBrowse->activate();
-				setURL(url);
+				openURL(url);
 			}
 			updateLocationURL();
 		}
@@ -273,7 +273,7 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 	if( urlIsDirectory(this, url)) {
 		mFileViewStack->setDirURL(url);
 	} else {
-		setURL(url);
+		openURL(url);
 	}
 }
 
@@ -282,28 +282,30 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setURL(const KURL& url) {
+void GVMainWindow::openURL(const KURL& url) {
 	mDocument->setURL(url);
 	mFileViewStack->setDirURL(url.directory());
 	mFileViewStack->setFileNameToSelect(url.filename());
 }
 
 
-void GVMainWindow::slotURLChanged() {
-	LOG(mFileViewStack->dirURL().prettyURL(0,KURL::StripFileProtocol));
+void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
+	LOG(url.prettyURL(0,KURL::StripFileProtocol));
 	
-	QPopupMenu *upPopup = mGoUp->popupMenu();
-	upPopup->clear();
-	int i = 0;
-	KURL urlUp = mFileViewStack->dirURL().upURL();
-	while(urlUp.hasPath()) {
-		upPopup->insertItem(urlUp.url()), urlUp.prettyURL(0,KURL::StripFileProtocol);
-		if(urlUp.path() == "/" || ++i > 10)
-			break;
-		urlUp = urlUp.upURL();
+	if (dirURL.path()!="/") {
+		mGoUp->setEnabled(true);
+		QPopupMenu *upPopup = mGoUp->popupMenu();
+		upPopup->clear();
+		int pos = 0;
+		KURL url = dirURL.upURL();
+		for (; url.hasPath() && pos<10; url=url.upURL(), ++pos) {
+			upPopup->insertItem(url.url());
+			if (url.path()=="/") break;
+		}
+	} else {
+		mGoUp->setEnabled(false);
 	}
 
-	mGoUp->setEnabled(mFileViewStack->dirURL().path() != "/");
 	updateStatusInfo();
 	updateImageActions();
 	updateLocationURL();
@@ -436,11 +438,11 @@ void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {
 	}
 }
 
-void GVMainWindow::openFile() {
+void GVMainWindow::showFileDialog() {
 	KURL url=KFileDialog::getOpenURL();
 	if (!url.isValid()) return;
 
-	setURL(url);
+	openURL(url);
 }
 
 
@@ -672,7 +674,7 @@ void GVMainWindow::slotGo() {
 	if( urlIsDirectory(this, url)) {
 		mFileViewStack->setDirURL(url);
 	} else {
-		setURL(url);
+		openURL(url);
 	}
 	mFileViewStack->setFocus();
 }
@@ -878,7 +880,7 @@ void GVMainWindow::createActions() {
 	mToggleBrowse->setShortcut(CTRL + Key_Return);
 	
 	// File
-	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
+	KStdAction::open(this,SLOT(showFileDialog()),actionCollection() );
 	mSaveFile=KStdAction::save(mDocument,SLOT(save()),actionCollection() );
 	mSaveFileAs=KStdAction::saveAs(mDocument,SLOT(saveAs()),actionCollection() );
 	mFilePrint = KStdAction::print(this, SLOT(printFile()), actionCollection());
@@ -997,7 +999,7 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mDocument,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
-		this,SLOT(slotURLChanged()) );
+		this,SLOT(slotDirURLChanged(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
@@ -1021,9 +1023,6 @@ void GVMainWindow::createConnections() {
 		this,SLOT(slotImageLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotImageLoaded()) );
-	// FIXME: Is this still necessary?
-	/*connect(mDocument,SIGNAL(newURLSet(const KURL&)),
-		mFileViewStack,SLOT(setURL(const KURL&)) );*/
 	connect(mDocument,SIGNAL(saved(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),
