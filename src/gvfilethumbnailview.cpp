@@ -559,7 +559,6 @@ void GVFileThumbnailView::slotDoubleClicked(QIconViewItem* iconItem) {
 	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
 
 	KFileItem* fileItem=thumbItem->fileItem();
-	if (!fileItem) return;
 
 	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
@@ -573,7 +572,6 @@ void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
 
 	KFileItem* fileItem=thumbItem->fileItem();
-	if (!fileItem) return;
 
 	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
@@ -596,33 +594,28 @@ void GVFileThumbnailView::slotCurrentChanged(QIconViewItem*) {
  */
 void GVFileThumbnailView::updateVisibilityInfo( int x, int y ) {
 	if (d->mThumbnailLoadJob.isNull()) return;
-	QRect r( x, y, visibleWidth(), visibleHeight());
-	GVFileThumbnailViewItem* first = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( r ));
-	GVFileThumbnailViewItem* last = static_cast< GVFileThumbnailViewItem* >( findLastVisibleItem( r ));
-	for( GVFileThumbnailViewItem* pos = first;
-	     pos != last;
-	     pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem())) {
-		if( pos == currentItem()) {
-			KFileItem* fileItem = pos->fileItem();
-			if( fileItem ) {
-				d->mThumbnailLoadJob->setPriorityItems(fileItem,
-					first->fileItem(), last->fileItem());
-				return;
-			}
-			break;
-		}
+	
+	QRect rect( x, y, visibleWidth(), visibleHeight());
+	GVFileThumbnailViewItem* first = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( rect ));
+	if (!first) {
+		d->mThumbnailLoadJob->setPriorityItems(NULL,NULL,NULL);
+		return;
 	}
-	for( GVFileThumbnailViewItem* pos = first;
-	     pos != last;
-	     pos = static_cast< GVFileThumbnailViewItem* >( pos->nextItem())) {
-		KFileItem* fileItem = pos->fileItem();
-		if( fileItem ) {
-			d->mThumbnailLoadJob->setPriorityItems(fileItem,
-				first->fileItem(), last->fileItem());
-			return;
-		}
+	
+	GVFileThumbnailViewItem* last = static_cast< GVFileThumbnailViewItem* >( findLastVisibleItem( rect ));
+	Q_ASSERT(last); // If we get a first item, then there must be a last
+	
+	if (currentItem() && currentItem()->intersects(rect)) {
+		KFileItem* fileItem = currentFileItem();
+		d->mThumbnailLoadJob->setPriorityItems(fileItem,
+			first->fileItem(), last->fileItem());
+		return;
 	}
-	d->mThumbnailLoadJob->setPriorityItems(NULL,NULL,NULL);
+	
+	d->mThumbnailLoadJob->setPriorityItems(
+		first->fileItem(),
+		first->fileItem(),
+		last->fileItem());
 }
 
 //--------------------------------------------------------------------------
