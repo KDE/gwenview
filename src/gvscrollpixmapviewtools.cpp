@@ -104,7 +104,7 @@ void GVScrollPixmapView::ZoomTool::leftButtonReleaseEvent(QMouseEvent* event) {
 
 
 void GVScrollPixmapView::ZoomTool::wheelEvent(QWheelEvent* event) {
-	zoomTo(event->pos(), event->delta()<0);
+	zoomTo(event->pos(), event->delta()>0);
 	event->accept();
 }
 
@@ -171,7 +171,7 @@ void GVScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
 	if (mView->mouseWheelScroll()) {
 		int deltaX, deltaY;
 
-		if (event->state() & ControlButton || event->orientation()==Horizontal) {
+		if (event->state() & AltButton || event->orientation()==Horizontal) {
 			deltaX = event->delta();
 			deltaY = 0;
 		} else {

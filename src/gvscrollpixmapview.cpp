@@ -1098,7 +1098,7 @@ void GVScrollPixmapView::contentsDropEvent(QDropEvent* event) {
  */
 void GVScrollPixmapView::selectTool(ButtonState state, bool force) {
 	ToolID oldToolID=d->mToolID;
-	if (state & ShiftButton) {
+	if (state & ControlButton) {
 		d->mToolID=ZOOM;
 	} else {
 		d->mToolID=SCROLL;

@@ -1,3 +1,7 @@
+2005.xx.xx - v1.2.0pre2
+- Fixes:
+ - Mouse wheel zooming is now consistent with other KDE applications.
+
 2005.01.23 - v1.2.0pre1
 - Fixes:
  - Zoom step halved (100%->150%->200%).
