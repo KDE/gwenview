@@ -53,21 +53,26 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 void GVDecoderThread::run() {
 	QMutexLocker locker(&mMutex);
 	kdDebug() << k_funcinfo << endl;
-	QImageIO imageIO;
 	
-	QBuffer buffer(mRawData);
-	buffer.open(IO_ReadOnly);
-	imageIO.setIODevice(&buffer);
-	bool ok=imageIO.read();
+	// This block makes sure imageIO won't access the image after the signal
+	// has been posted
+	{
+		QImageIO imageIO;
 		
-	if (!ok) {
-		kdDebug() << k_funcinfo << " failed" << endl;
-		postSignal( SIGNAL(failed()) );
-		return;
+		QBuffer buffer(mRawData);
+		buffer.open(IO_ReadOnly);
+		imageIO.setIODevice(&buffer);
+		bool ok=imageIO.read();
+			
+		if (!ok) {
+			kdDebug() << k_funcinfo << " failed" << endl;
+			postSignal( SIGNAL(failed()) );
+			return;
+		}
+		
+		kdDebug() << k_funcinfo << " succeeded" << endl;
+		mImage=imageIO.image();
 	}
-	
-	kdDebug() << k_funcinfo << " succeeded" << endl;
-	mImage=imageIO.image();
 	
 	kdDebug() << k_funcinfo << " succeeded, emitting signal" << endl;
 	postSignal( SIGNAL(succeeded()) );
