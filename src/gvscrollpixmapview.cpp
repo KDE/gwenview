@@ -675,7 +675,6 @@ void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
 	widgetRect.setTop( int(imageRect.top()*mZoom) + mYOffset-1);
 	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
 	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
-	kdDebug() << "updateImageRect: " << widgetRect << endl;
 	viewport()->repaint(widgetRect, false);
 }
 

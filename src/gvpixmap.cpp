@@ -738,7 +738,7 @@ void GVPixmap::end() {
 }
 
 void GVPixmap::changed(const QRect& rect) {
-	kdDebug() << "GVPixmap::changed" << rect << "\n";
+	kdDebug() << "GVPixmap::changed" << rect.left() << "-" << rect.top() << " " << rect.width() << "x" << rect.height() << "\n";
 	d->mImage=d->mDecoder->image();
 	d->mUpdatedDuringLoad=true;
 	emit rectUpdated(rect);
