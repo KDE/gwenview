@@ -163,13 +163,13 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 //---------------------------------------------------------------------------
 void GVJPEGTran::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
-	sProgramPath=config->readEntry(CONFIG_PROGRAM_PATH,"jpegtran");
+	sProgramPath=config->readPathEntry(CONFIG_PROGRAM_PATH,"jpegtran");
 }
 
 
 void GVJPEGTran::writeConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_PROGRAM_PATH,sProgramPath);
+	config->writePathEntry(CONFIG_PROGRAM_PATH,sProgramPath);
 }
 
 

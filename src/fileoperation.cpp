@@ -35,12 +35,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 //-Configuration keys----------------------------------------------
-static const char* CONFIG_DELETE_TO_TRASH="delete to trash";
-static const char* CONFIG_CONFIRM_DELETE="confirm file delete";
-static const char* CONFIG_CONFIRM_MOVE="confirm file move";
-static const char* CONFIG_CONFIRM_COPY="confirm file copy";
-static const char* CONFIG_DEST_DIR="destination dir";
-static const char* CONFIG_EDITOR="editor";
+static const char CONFIG_DELETE_TO_TRASH[] = "delete to trash";
+static const char CONFIG_CONFIRM_DELETE[]  = "confirm file delete";
+static const char CONFIG_CONFIRM_MOVE[]    = "confirm file move";
+static const char CONFIG_CONFIRM_COPY[]    = "confirm file copy";
+static const char CONFIG_DEST_DIR[]        = "destination dir";
+static const char CONFIG_EDITOR[]          = "editor";
 
 
 //-Static configuration data---------------------------------------
@@ -121,8 +121,8 @@ void FileOperation::readConfig(KConfig* config,const QString& group) {
 	sConfirmMove=config->readBoolEntry(CONFIG_CONFIRM_MOVE,true);
 	sConfirmCopy=config->readBoolEntry(CONFIG_CONFIRM_COPY,true);
 
-	sDestDir=config->readEntry(CONFIG_DEST_DIR);
-	sEditor=config->readEntry(CONFIG_EDITOR,"gimp-remote -n");
+	sDestDir=config->readPathEntry(CONFIG_DEST_DIR);
+	sEditor=config->readPathEntry(CONFIG_EDITOR,"gimp-remote -n");
 }
 
 
@@ -134,8 +134,8 @@ void FileOperation::writeConfig(KConfig* config,const QString& group) {
 	config->writeEntry(CONFIG_CONFIRM_MOVE,sConfirmMove);
 	config->writeEntry(CONFIG_CONFIRM_COPY,sConfirmCopy);
 
-	config->writeEntry(CONFIG_DEST_DIR,sDestDir);
-	config->writeEntry(CONFIG_EDITOR,sEditor);
+	config->writePathEntry(CONFIG_DEST_DIR,sDestDir);
+	config->writePathEntry(CONFIG_EDITOR,sEditor);
 }
 
 
