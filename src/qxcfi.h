@@ -8,6 +8,93 @@
 
 #include "gimp.h"
 
+// Safe readBlock helper functions
+class SafeDataStream {
+public:
+  SafeDataStream(QIODevice* device)
+  : mDevice(device), mFailed(false) {}
+
+  bool failed() const { return mFailed; }
+  QIODevice* device() const { return mDevice; }
+
+  SafeDataStream& readRawBytes(char* data, uint length) {
+	if (mFailed) return *this;
+	int read_length=mDevice->readBlock(data, length);
+	if (read_length==-1) mFailed=true;
+	if ((uint)read_length!=length) mFailed=true;
+	return *this;
+  }
+
+  SafeDataStream& operator>>(Q_INT8& value) {
+	return readRawBytes((char*)&value, 1);
+  }
+
+  SafeDataStream& operator>>(Q_UINT32& value) {
+	if (mFailed) return *this;
+	uchar *p = (uchar *)(&value);
+	char b[4];
+	if (mDevice->readBlock( b, 4 )==4) {
+	  *p++ = b[3];
+	  *p++ = b[2];
+	  *p++ = b[1];
+	  *p   = b[0];
+	} else {
+	  mFailed=true;
+	}
+	return *this;
+  }
+
+  SafeDataStream& operator>>(Q_INT32& value) {
+	return *this >>((Q_UINT32&)value);
+  }
+
+  SafeDataStream& operator>>(float& value) {
+	return *this >>((Q_UINT32&)value);
+  }
+
+  SafeDataStream& operator>>(char*& value) {
+	if (mFailed) return *this;
+	
+	Q_UINT32 len;
+	*this >> len;
+	if (mFailed) return *this;
+	if ( len == 0 ) {
+	  value = 0;
+	  return *this;
+	}
+	if (mDevice->atEnd() ) {
+	  value = 0;
+	  mFailed=true;
+	  return *this;
+	}
+	value = new char[len];
+	Q_CHECK_PTR( value );
+	if ( !value ) {
+	  mFailed=true;
+	  return *this;
+	}
+	return readRawBytes(value, len);
+  }
+
+  SafeDataStream& readBytes(char*& data, uint& len) {
+	if (mFailed) return *this;
+
+	*this >> len;
+	if (mFailed) return *this;
+	data=new char[len];
+	Q_CHECK_PTR( data );
+	if ( !data ) {
+	  mFailed=true;
+	  return *this;
+	}
+	return readRawBytes(data, len);
+  }
+
+private:
+  QIODevice* mDevice;
+  bool mFailed;
+};
+
 //! Plug-in for loading a GIMP XCF image file directly.
 /*!
  * This class uses the Qt 3.0 Image format plug-in loader to provide
@@ -182,16 +269,16 @@ private:
 #endif
   static void initializeImage ( XCFImage& xcf_image );
   static void composeTiles ( XCFImage& xcf_image );
-  static bool loadImageProperties ( QIODevice* dev, XCFImage& image );
-  static bool loadLayer ( QIODevice* dev, XCFImage& xcf_image );
-  static bool loadLayerProperties ( QIODevice* dev, Layer& layer );
-  static bool loadChannelProperties ( QIODevice* dev, Layer& layer );
-  static bool loadHierarchy ( QIODevice* dev, Layer& layer );
-  static bool loadMask ( QIODevice* dev, Layer& layer );
-  static bool loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp );
-  static bool loadTileRLE ( QIODevice* dev, uchar* tile, int size,
+  static bool loadImageProperties ( SafeDataStream& xcf_io, XCFImage& image );
+  static bool loadLayer ( SafeDataStream& xcf_io, XCFImage& xcf_image );
+  static bool loadLayerProperties ( SafeDataStream& xcf_io, Layer& layer );
+  static bool loadChannelProperties ( SafeDataStream& xcf_io, Layer& layer );
+  static bool loadHierarchy ( SafeDataStream& xcf_io, Layer& layer );
+  static bool loadMask ( SafeDataStream& xcf_io, Layer& layer );
+  static bool loadLevel ( SafeDataStream& xcf_io, Layer& layer, Q_INT32 bpp );
+  static bool loadTileRLE ( SafeDataStream& xcf_io, uchar* tile, int size,
 			    int data_length, Q_INT32 bpp );
-  static bool loadProperty ( QIODevice* dev, PropType& type,
+  static bool loadProperty ( SafeDataStream& xcf_io, PropType& type,
 			     QByteArray& bytes );
   static void setGrayPalette ( QImage& image );
   static void setPalette ( XCFImage& xcf_image, QImage& image );

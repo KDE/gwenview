@@ -60,67 +60,6 @@ inline QRgb qRgba ( QRgb rgb, int a )
   return ( ( a & 0xff ) << 24 | ( rgb & RGB_MASK ) );
 }
 
-// Safe readBlock helper functions
-inline bool safeReadRawBytes(QIODevice* device, char* data, uint length) {
-  int read_length=device->readBlock(data, length);
-  if (read_length==-1) return false;
-  return (uint)read_length==length;
-}
-
-inline bool safeRead(QIODevice* device, Q_INT8& value) {
-  return device->readBlock((char*)&value, 1)==1;
-}
-
-inline bool safeRead(QIODevice* device, Q_UINT32& value) {
-  uchar *p = (uchar *)(&value);
-  char b[4];
-  if (device->readBlock( b, 4 )!=4) return false;
-  *p++ = b[3];
-  *p++ = b[2];
-  *p++ = b[1];
-  *p   = b[0];
-  return true;
-}
-
-inline bool safeRead(QIODevice* device, Q_INT32& value) {
-  return safeRead(device, (Q_UINT32&)value);
-}
-
-inline bool safeRead(QIODevice* device, float& value) {
-  return safeRead(device, (Q_UINT32&)value);
-}
-
-inline bool safeRead(QIODevice* device, char*& value) {
-  Q_UINT32 len;
-  if (!safeRead(device, len)) return false;
-  if ( len == 0 ) {
-    value = 0;
-    return true;
-  }
-  if (device->atEnd() ) {
-    value = 0;
-    return false;
-  }
-  value = new char[len];
-  Q_CHECK_PTR( value );
-  if ( !value ) {
-    return false;
-  }
-  return safeReadRawBytes(device, value, len);
-}
-
-inline bool safeReadBytes(QIODevice* device, char*& data, uint& len) {
-  if (!safeRead(device, len)) return false;
-  data=new char[len];
-  Q_CHECK_PTR( data );
-  if ( !data ) {
-    return false;
-  }
-  return safeReadRawBytes(device, data, len);
-}
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////
 // From GIMP "paint_funcs.c" v1.2
@@ -458,9 +397,9 @@ void XCFImageFormat::registerFormat() {
  * is positioned at its beginning).
  *
  * The XCF file is binary and is stored in big endian format. The
- * QDataStream class is used to read the file. Even though the XCF file
- * was not written with QDataStream, there is still a good match. At least
- * in version 001 of XCF and version 4 of QDataStream. Any other combination
+ * SafeDataStream class is used to read the file. Even though the XCF file
+ * was not written with SafeDataStream, there is still a good match. At least
+ * in version 001 of XCF and version 4 of SafeDataStream. Any other combination
  * is suspect.
  *
  * Any failures while reading the XCF image are reported by the
@@ -472,23 +411,27 @@ void XCFImageFormat::readXCF ( QImageIO* image_io )
 {
   XCFImage xcf_image;
 
-  // The XCF data is stored in big endian format
-  QIODevice* dev=image_io->ioDevice();
+  // The XCF data is stored in big endian format, which SafeDataStream handles
+  // very well.
+
+  SafeDataStream xcf_io( image_io->ioDevice() );
 
   char tag[14];
-  if (!safeReadRawBytes(dev, tag, sizeof tag)) {
+  xcf_io.readRawBytes( tag, sizeof(tag) );
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on header tag" );
     return;
   }
 
-  safeRead(dev, xcf_image.width);
-  safeRead(dev, xcf_image.height);
-  if (!safeRead(dev, xcf_image.type)) {
+  xcf_io >> xcf_image.width >> xcf_image.height >> xcf_image.type;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on image info" );
     return;
   }
 
-  if ( !loadImageProperties( dev, xcf_image ) ) return;
+  if ( !loadImageProperties( xcf_io, xcf_image ) ) return;
 
   // The layers appear to be stored in top-to-bottom order. This is
   // the reverse of how a merged image must be computed. So, the layer
@@ -501,7 +444,9 @@ void XCFImageFormat::readXCF ( QImageIO* image_io )
   while ( true ) {
     Q_INT32 layer_offset;
 
-    if (!safeRead(dev, layer_offset)) {
+    xcf_io >> layer_offset;
+
+    if ( xcf_io.failed() ) {
       qDebug( "XCF: read failure on layer offsets" );
       return;
     }
@@ -523,9 +468,9 @@ void XCFImageFormat::readXCF ( QImageIO* image_io )
   while ( !layer_offsets.isEmpty() ) {
     Q_INT32 layer_offset = layer_offsets.pop();
 
-    dev->at( layer_offset );
+    xcf_io.device()->at( layer_offset );
 
-    if ( !loadLayer( dev, xcf_image ) ) return;
+    if ( !loadLayer( xcf_io, xcf_image ) ) return;
   }
 
   if ( !xcf_image.initialized ) {
@@ -799,18 +744,18 @@ void XCFImageFormat::setPalette ( XCFImage& xcf_image, QImage& image )
 /*!
  * An XCF file can contain an arbitrary number of properties associated
  * with the image (and layer and mask).
- * \param dev the io device connected to the XCF image
+ * \param xcf_io the data stream connected to the XCF image
  * \param xcf_image XCF image data.
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadImageProperties ( QIODevice* dev,
+bool XCFImageFormat::loadImageProperties ( SafeDataStream& xcf_io,
 					   XCFImage& xcf_image )
 {
   while ( true ) {
     PropType type;
     QByteArray bytes;
 
-    if ( !loadProperty( dev, type, bytes ) ) {
+    if ( !loadProperty( xcf_io, type, bytes ) ) {
       qDebug( "XCF: error loading global image properties" );
       return false;
     }
@@ -889,26 +834,25 @@ bool XCFImageFormat::loadImageProperties ( QIODevice* dev,
 /*!
  * Load a layer from the XCF file. The data stream must be positioned at
  * the beginning of the layer data.
- * \param dev the image file io device.
+ * \param xcf_io the image file data stream.
  * \param xcf_image contains the layer and the color table
  * (if the image is indexed).
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadLayer ( QIODevice* dev, XCFImage& xcf_image )
+bool XCFImageFormat::loadLayer ( SafeDataStream& xcf_io, XCFImage& xcf_image )
 {
   Layer& layer( xcf_image.layer );
 
   if ( layer.name != 0 ) delete[] layer.name;
 
-  safeRead(dev, layer.width);
-  safeRead(dev, layer.height);
-  safeRead(dev, layer.type);
-  if (!safeRead(dev, layer.name)) {
+  xcf_io >> layer.width >> layer.height >> layer.type >> layer.name;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on layer" );
     return false;
   }
 
-  if ( !loadLayerProperties( dev, layer ) ) return false;
+  if ( !loadLayerProperties( xcf_io, layer ) ) return false;
 #if 0
   cout << "layer: \"" << layer.name << "\", size: " << layer.width << " x "
        << layer.height << ", type: " << layer.type << ", mode: " << layer.mode
@@ -923,8 +867,9 @@ bool XCFImageFormat::loadLayer ( QIODevice* dev, XCFImage& xcf_image )
 
   // If there are any more layers, merge them into the final QImage.
 
-  safeRead(dev, layer.hierarchy_offset);
-  if (!safeRead(dev, layer.mask_offset)) {
+  xcf_io >> layer.hierarchy_offset >> layer.mask_offset;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on layer image offsets" );
     return false;
   }
@@ -934,7 +879,7 @@ bool XCFImageFormat::loadLayer ( QIODevice* dev, XCFImage& xcf_image )
 
   composeTiles( xcf_image );
 
-  dev->at( layer.hierarchy_offset );
+  xcf_io.device()->at( layer.hierarchy_offset );
 
   // As tiles are loaded, they are copied into the layers tiles by
   // this routine. (loadMask(), below, uses a slightly different
@@ -942,12 +887,12 @@ bool XCFImageFormat::loadLayer ( QIODevice* dev, XCFImage& xcf_image )
 
   layer.assignBytes = assignImageBytes;
 
-  if ( !loadHierarchy( dev, layer ) ) return false;
+  if ( !loadHierarchy( xcf_io, layer ) ) return false;
 
   if ( layer.mask_offset != 0 ) {
-    dev->at( layer.mask_offset );
+    xcf_io.device()->at( layer.mask_offset );
 
-    if ( !loadMask( dev, layer ) ) return false;
+    if ( !loadMask( xcf_io, layer ) ) return false;
   }
 
   // Now we should have enough information to initialize the final
@@ -970,17 +915,17 @@ bool XCFImageFormat::loadLayer ( QIODevice* dev, XCFImage& xcf_image )
 /*!
  * An XCF file can contain an arbitrary number of properties associated
  * with a layer.
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param layer layer to collect the properties.
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadLayerProperties ( QIODevice* dev, Layer& layer )
+bool XCFImageFormat::loadLayerProperties ( SafeDataStream& xcf_io, Layer& layer )
 {
   while ( true ) {
     PropType type;
     QByteArray bytes;
 
-    if ( !loadProperty( dev, type, bytes ) ) {
+    if ( !loadProperty( xcf_io, type, bytes ) ) {
       qDebug( "XCF: error loading layer properties" );
       return false;
     }
@@ -1044,17 +989,17 @@ bool XCFImageFormat::loadLayerProperties ( QIODevice* dev, Layer& layer )
 /*!
  * An XCF file can contain an arbitrary number of properties associated
  * with a channel. Note that this routine only reads mask channel properties.
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param layer layer containing the mask channel to collect the properties.
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadChannelProperties ( QIODevice* dev, Layer& layer )
+bool XCFImageFormat::loadChannelProperties ( SafeDataStream& xcf_io, Layer& layer )
 {
   while ( true ) {
     PropType type;
     QByteArray bytes;
 
-    if ( !loadProperty( dev, type, bytes ) ) {
+    if ( !loadProperty( xcf_io, type, bytes ) ) {
       qDebug( "XCF: error loading channel properties" );
       return false;
     }
@@ -1096,21 +1041,20 @@ bool XCFImageFormat::loadChannelProperties ( QIODevice* dev, Layer& layer )
  * The GIMP stores images in a "mipmap"-like hierarchy. As far as the QImage
  * is concerned, however, only the top level (i.e., the full resolution image)
  * is used.
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param layer the layer to collect the image.
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadHierarchy ( QIODevice* dev, Layer& layer )
+bool XCFImageFormat::loadHierarchy ( SafeDataStream& xcf_io, Layer& layer )
 {
   Q_INT32 width;
   Q_INT32 height;
   Q_INT32 bpp;
   Q_UINT32 offset;
 
-  safeRead(dev, width);
-  safeRead(dev, height);
-  safeRead(dev, bpp);
-  if (!safeRead(dev, offset)) {
+  xcf_io >> width >> height >> bpp >> offset;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on layer %s image header", layer.name );
     return false;
   }
@@ -1121,40 +1065,42 @@ bool XCFImageFormat::loadHierarchy ( QIODevice* dev, Layer& layer )
 
   Q_UINT32 junk;
   do {
-    if (!safeRead(dev, junk)) {
+    xcf_io >> junk;
+
+    if ( xcf_io.failed() ) {
       qDebug( "XCF: read failure on layer %s level offsets", layer.name );
       return false;
     }
   } while ( junk != 0 );
 
-  QIODevice::Offset saved_pos = dev->at();
+  QIODevice::Offset saved_pos = xcf_io.device()->at();
 
-  dev->at( offset );
+  xcf_io.device()->at( offset );
 
-  if ( !loadLevel( dev, layer, bpp ) ) return false;
+  if ( !loadLevel( xcf_io, layer, bpp ) ) return false;
 
-  dev->at( saved_pos );
+  xcf_io.device()->at( saved_pos );
 
   return true;
 }
 
 /*!
  * Load one level of the image hierarchy (but only the top level is ever used).
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param layer the layer to collect the image.
  * \param bpp the number of bytes in a pixel.
  * \return true if there were no I/O errors.
  * \sa loadTileRLE().
  */
-bool XCFImageFormat::loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp )
+bool XCFImageFormat::loadLevel ( SafeDataStream& xcf_io, Layer& layer, Q_INT32 bpp )
 {
   Q_INT32 width;
   Q_INT32 height;
   Q_UINT32 offset;
 
-  safeRead(dev, width);
-  safeRead(dev, height);
-  if (!safeRead(dev, offset)) {
+  xcf_io >> width >> height >> offset;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on layer %s level info", layer.name );
     return false;
   }
@@ -1169,11 +1115,13 @@ bool XCFImageFormat::loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp )
 	return false;
       }
 
-      QIODevice::Offset saved_pos = dev->at();
+      QIODevice::Offset saved_pos = xcf_io.device()->at();
 
       Q_UINT32 offset2;
 
-      if (!safeRead(dev, offset2)) {
+      xcf_io >> offset2;
+
+      if ( xcf_io.failed() ) {
 	qDebug( "XCF: read failure on layer %s level offset look-ahead",
 		layer.name );
 	return false;
@@ -1184,11 +1132,11 @@ bool XCFImageFormat::loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp )
       if ( offset2 == 0 )
 	offset2 = offset + (uint)( TILE_WIDTH * TILE_HEIGHT * 4 * 1.5 );
 
-      dev->at( offset );
+      xcf_io.device()->at( offset );
 
       int size = layer.image_tiles[j][i].width() * layer.image_tiles[j][i].height();
 
-      if ( !loadTileRLE( dev, layer.tile, size, offset2 - offset, bpp ) )
+      if ( !loadTileRLE( xcf_io, layer.tile, size, offset2 - offset, bpp ) )
 	return false;
 
       // The bytes in the layer tile are juggled differently depending on
@@ -1197,9 +1145,11 @@ bool XCFImageFormat::loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp )
 
       layer.assignBytes( layer, i, j );
 
-      dev->at( saved_pos );
+      xcf_io.device()->at( saved_pos );
       
-      if (!safeRead(dev, offset)) {
+      xcf_io >> offset;
+
+      if ( xcf_io.failed() ) {
 	qDebug( "XCF: read failure on layer %s level offset", layer.name );
 	return false;
       }
@@ -1211,39 +1161,41 @@ bool XCFImageFormat::loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp )
 
 /*!
  * A layer can have a one channel image which is used as a mask.
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param layer the layer to collect the mask image.
  * \return true if there were no I/O errors.
  */
-bool XCFImageFormat::loadMask ( QIODevice* dev, Layer& layer )
+bool XCFImageFormat::loadMask ( SafeDataStream& xcf_io, Layer& layer )
 {
   Q_INT32 width;
   Q_INT32 height;
   char* name;
 
-  safeRead(dev, width);
-  safeRead(dev, height);
-  if (!safeRead(dev, name)) {
+  xcf_io >> width >> height >> name;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on mask info" );
     return false;
   }
 
   delete name;
 
-  if ( !loadChannelProperties( dev, layer ) ) return false;
+  if ( !loadChannelProperties( xcf_io, layer ) ) return false;
 
   Q_UINT32 hierarchy_offset;
 
-  if (!safeRead(dev, hierarchy_offset)) {
+  xcf_io >> hierarchy_offset;
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on mask image offset" );
     return false;
   }
 
-  dev->at( hierarchy_offset );
+  xcf_io.device()->at( hierarchy_offset );
 
   layer.assignBytes = assignMaskBytes;
 
-  if ( !loadHierarchy( dev, layer ) ) return false;
+  if ( !loadHierarchy( xcf_io, layer ) ) return false;
 
   return true;
 }
@@ -1263,7 +1215,7 @@ bool XCFImageFormat::loadMask ( QIODevice* dev, Layer& layer )
  * The data is compressed with "run length encoding". Some simple data
  * integrity checks are made.
  *
- * \param dev the io device connected to the XCF image.
+ * \param xcf_io the data stream connected to the XCF image.
  * \param tile the buffer to expand the RLE into.
  * \param image_size number of bytes expected to be in the image tile.
  * \param data_length number of bytes expected in the RLE.
@@ -1271,7 +1223,7 @@ bool XCFImageFormat::loadMask ( QIODevice* dev, Layer& layer )
  * \return true if there were no I/O errors and no obvious corruption of
  * the RLE data.
  */
-bool XCFImageFormat::loadTileRLE ( QIODevice* dev, uchar* tile, int image_size,
+bool XCFImageFormat::loadTileRLE ( SafeDataStream& xcf_io, uchar* tile, int image_size,
 				   int data_length, Q_INT32 bpp )
 {
   uchar* data;
@@ -1282,15 +1234,15 @@ bool XCFImageFormat::loadTileRLE ( QIODevice* dev, uchar* tile, int image_size,
 
   xcfdata = xcfodata = new uchar[data_length];
 
-  // We don't use safeReadRawBytes here because the read block can be smaller
-  // than asked
-  int read_size=dev->readBlock((char*)xcfdata, data_length);
-  if (read_size==-1) {
+  int read_length=xcf_io.device()->readBlock( (char*)xcfdata, data_length  );
+
+  if ( read_length<=0 ) {
     delete[] xcfodata;
     qDebug( "XCF: read failure on tile" );
     return false;
   }
-  xcfdatalimit = xcfodata + read_size - 1;
+
+  xcfdatalimit = &xcfodata[read_length-1];
 
   for ( int i = 0; i < bpp; ++i ) {
 
@@ -1454,19 +1406,21 @@ void XCFImageFormat::assignMaskBytes ( Layer& layer, uint i, uint j )
 /*!
  * Read a single property from the image file. The property type is returned
  * in type and the data is returned in bytes.
- * \param dev the image file io device.
+ * \param xcf the image file data stream.
  * \param type returns with the property type.
  * \param bytes returns with the property data.
  * \return true if there were no IO errors.  */
-bool XCFImageFormat::loadProperty ( QIODevice* dev, PropType& type,
+bool XCFImageFormat::loadProperty ( SafeDataStream& xcf_io, PropType& type,
 				    QByteArray& bytes )
 {
   Q_UINT32 tmp;
-  if (!safeRead(dev, tmp)) {
+  xcf_io >> tmp;
+  type=static_cast<PropType>(tmp);
+
+  if ( xcf_io.failed() ) {
     qDebug( "XCF: read failure on property type" );
     return false;
   }
-  type=static_cast<PropType>(tmp);
 
   char* data;
   Q_UINT32 size;
@@ -1476,7 +1430,9 @@ bool XCFImageFormat::loadProperty ( QIODevice* dev, PropType& type,
   // 4 + 3 * ncolors
 
   if ( type == PROP_COLORMAP ) {
-    if (!safeRead(dev, size)) {
+    xcf_io >> size;
+
+    if ( xcf_io.failed() ) {
       qDebug( "XCF: read failure on property %d size", type );
       return false;
     }
@@ -1484,11 +1440,7 @@ bool XCFImageFormat::loadProperty ( QIODevice* dev, PropType& type,
     size = 3 * ( size - 4 ) + 4;
     data = new char[size];
 
-    if (!safeReadRawBytes(dev, data, size )) {
-      delete[] data;
-      qDebug( "XCF: read failure on property %d data", type );
-      return false;
-    }
+    xcf_io.readRawBytes( data, size );
   }
 
   // The USER UNIT property size is not correct. I'm not sure why, though.
@@ -1498,15 +1450,17 @@ bool XCFImageFormat::loadProperty ( QIODevice* dev, PropType& type,
     Q_INT32 digits;
     char* unit_strings;
 
-    safeRead(dev, size);
-    safeRead(dev, factor);
-    if (!safeRead(dev, digits)) {
+    xcf_io >> size >> factor >> digits;
+
+    if ( xcf_io.failed() ) {
       qDebug( "XCF: read failure on property %d", type );
       return false;
     }
 
     for ( int i = 0; i < 5; i++ ) {
-      if (!safeRead(dev, unit_strings)) {
+      xcf_io >> unit_strings;
+
+      if ( xcf_io.failed() ) {
 	qDebug( "XCF: read failure on property %d", type );
 	return false;
       }
@@ -1517,11 +1471,12 @@ bool XCFImageFormat::loadProperty ( QIODevice* dev, PropType& type,
     size = 0;
   }
 
-  else {
-    if (!safeReadBytes(dev, data, size ) ) {
-      qDebug( "XCF: read failure on property %d data, size %d", type, size );
-      return false;
-    }
+  else
+    xcf_io.readBytes( data, size );
+
+  if ( xcf_io.failed() ) {
+    qDebug( "XCF: read failure on property %d data, size %d", type, size );
+    return false;
   }
 
   if ( size != 0 ) {
