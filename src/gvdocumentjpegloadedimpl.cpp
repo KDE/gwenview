@@ -39,6 +39,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //#define DEBUG_COMMENT
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
 const char* JPEG_EXIF_COMMENT="Comment";
@@ -99,7 +105,7 @@ public:
  */
 GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath)
 : GVDocumentLoadedImpl(document) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mRawData=rawData;
     if (mDocument->url().isLocalFile()) {
@@ -127,7 +133,7 @@ bool GVDocumentJPEGLoadedImpl::localSave(const QString& path, const char* format
 	bool result;
 
 	if (!d->mRawData.isNull() && qstrcmp(format, "JPEG")==0) {
-		kdDebug() << "Lossless save\n";
+		LOG("Lossless save");
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
@@ -158,11 +164,11 @@ GVDocument::CommentState GVDocumentJPEGLoadedImpl::commentState() const {
 }
 
 void GVDocumentJPEGLoadedImpl::finishLoading() {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(d->mRawData);
 
 	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
-		kdDebug() << k_funcinfo << " jpeg rotating" << endl;
+		LOG("jpeg rotating");
 		setImage(GVImageUtils::modify(mDocument->image(), orientation));
 		d->mRawData=GVJPEGTran::apply(d->mRawData, orientation);
 		d->mRawData=GVImageUtils::setOrientation(d->mRawData,GVImageUtils::NORMAL);

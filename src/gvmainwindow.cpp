@@ -117,6 +117,15 @@ const char* CONFIG_BUSYPTR_IN_FS="busy ptr in full screen";
 const char* CONFIG_SHOW_LOCATION_TOOLBAR="show address bar";
 const char* CONFIG_AUTO_DELETE_THUMBNAIL_CACHE="Delete Thumbnail Cache whe exit";
 
+
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
+
 GVMainWindow::GVMainWindow()
 : KDockMainWindow(), mProgress(0L), mLocationToolBar(0L), mLoadingCursor(false)
 {
@@ -225,7 +234,7 @@ bool GVMainWindow::queryClose() {
 //
 //-----------------------------------------------------------------------
 void GVMainWindow::setURL(const KURL& url,const QString& /*filename*/) {
-	//kdDebug() << "GVMainWindow::setURL " << url.path() << " - " << filename << endl;
+	LOG(url.path() << " - " << filename);
 
 	bool filenameIsValid=!mDocument->isNull();
 
@@ -626,16 +635,15 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 
 
 void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
-	kdDebug() << "GVMainWindow::slotDirRenamed: "
-		<< oldURL.prettyURL() << " to " << newURL.prettyURL() << endl;
+	LOG(oldURL.prettyURL() << " to " << newURL.prettyURL());
 
 	KURL url(mDocument->url());
 	if (!oldURL.isParentOf(url) ) return;
 
 	QString oldPath=oldURL.path();
-	kdDebug() << " current path: " << url.path() << endl;
+	LOG("current path: " << url.path() );
 	QString path=newURL.path() + url.path().mid(oldPath.length());
-	kdDebug() << " new path: " << path << endl;
+	LOG("new path: " << path);
 	url.setPath(path);
 	mDocument->setURL(url);
 }
@@ -647,9 +655,9 @@ void GVMainWindow::slotGo() {
 }
 
 void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
-	kdDebug() << k_funcinfo << endl;
+	LOG("");
 	if (int(item->size())!=mDocument->fileSize()) {
-		kdDebug() << k_funcinfo << "need reload " << int(item->size()) << "!=" << mDocument->fileSize() << endl;
+		LOG("need reload " << int(item->size()) << "!=" << mDocument->fileSize());
 		mDocument->reload();
 	}
 }

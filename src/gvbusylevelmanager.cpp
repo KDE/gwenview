@@ -28,6 +28,13 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local
 #include "gvbusylevelmanager.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 GVBusyLevelManager::GVBusyLevelManager()
 : mCurrentBusyLevel( BUSY_NONE )
 {
@@ -55,7 +62,7 @@ GVBusyLevelManager* GVBusyLevelManager::instance() {
 // it needs to use helper objects for setBusyLevel().
 
 void GVBusyLevelManager::setBusyLevel( QObject* obj, GVBusyLevel level ) {
-//	kdDebug() << "BUSY:" << level << ":" << obj << ":" << obj->className() << endl;
+	LOG("BUSY:" << level << ":" << obj << ":" << obj->className() );
 	if( level > BUSY_NONE ) {
 		if( mBusyLevels[ obj ] == level )	return;
 		mBusyLevels[ obj ] = level;
@@ -74,7 +81,7 @@ void GVBusyLevelManager::delayedBusyLevelChanged() {
 	}
 
 	if( newLevel != mCurrentBusyLevel ) {
-//		kdDebug() << "CHANGED BUSY:" << new_level << endl;
+		LOG("CHANGED BUSY:" << new_level);
 		mCurrentBusyLevel = newLevel;
 		emit busyLevelChanged( newLevel );
 	}

@@ -33,6 +33,13 @@ Copyright 2000-2004 Aurélien Gâteau
 #include "gvexternaltoolcontext.h"
 #include "gvexternaltoolmanager.h"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 // Helper functions for createContextInternal
 inline bool mimeTypeMatches(const QString& candidate, const QString& reference) {
 	if (reference=="*") return true;
@@ -124,20 +131,20 @@ GVExternalToolManager::GVExternalToolManager() {
 	d->mUserToolDir=KGlobal::dirs()->saveLocation("appdata", "tools");
 	d->mUserToolDir=addSlash(d->mUserToolDir);
 	Q_ASSERT(!d->mUserToolDir.isEmpty());
-	//kdDebug() << "GVExternalToolManager: d->mUserToolDir:" << d->mUserToolDir << endl;
+	LOG("d->mUserToolDir:" << d->mUserToolDir);
 	
 	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
-	//kdDebug() << "GVExternalToolManager: dirs:" << dirs.join(",") << endl;
+	LOG("dirs:" << dirs.join(","));
 
 	// Loading desktop files
 	QDict<KDesktopFile> systemDesktopFiles;
 	QStringList::ConstIterator it;
 	for (it=dirs.begin(); it!=dirs.end(); ++it) {
 		if (addSlash(*it)==d->mUserToolDir) {
-			//kdDebug() << "GVExternalToolManager: skipping " << *it << endl;
+			LOG("skipping " << *it);
 			continue;
 		}
-		//kdDebug() << "GVExternalToolManager: loading system desktop files from " << *it << endl;
+		LOG("loading system desktop files from " << *it);
 		loadDesktopFiles(systemDesktopFiles, *it);
 	}
 	QDict<KDesktopFile> userDesktopFiles;

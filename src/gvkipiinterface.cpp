@@ -39,6 +39,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfileviewstack.h"
 #include "gvkipiinterface.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 class GVImageCollection : public KIPI::ImageCollectionShared {
 public:
 	GVImageCollection(const QString& name, const KURL::List& images)
@@ -105,7 +112,7 @@ GVKIPIInterface::~GVKIPIInterface() {
 
 
 KIPI::ImageCollection GVKIPIInterface::currentAlbum() {
-	kdDebug() << "GVKIPIInterface::currentAlbum\n";
+	LOG("");
 	KURL::List list;
 	KFileItemListIterator it( *d->mFileView->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
@@ -116,14 +123,14 @@ KIPI::ImageCollection GVKIPIInterface::currentAlbum() {
 
 
 KIPI::ImageCollection GVKIPIInterface::currentSelection() {
-	kdDebug() << "GVKIPIInterface::currentSelection\n";
+	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
 	return KIPI::ImageCollection(new GVImageCollection(i18n("Selected images"), list)); 
 }
 
 
 QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
-	kdDebug() << "GVKIPIInterface::allAlbums\n";
+	LOG("");
 	QValueList<KIPI::ImageCollection> list;
 	list << currentAlbum() << currentSelection();
 	return list;
@@ -131,7 +138,7 @@ QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
 
 
 KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
-	kdDebug() << "GVKIPIInterface::info\n";
+	LOG("");
 	return KIPI::ImageInfo( new GVImageInfo(this, url) );
 }
 

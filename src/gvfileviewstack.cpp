@@ -55,6 +55,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvfileviewstack.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_AUTO_LOAD_IMAGE="automatically load first image";
 static const char* CONFIG_SHOW_DIRS="show dirs";
@@ -228,7 +235,7 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 //
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& fileName) {
-	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + fileName << endl;
+	LOG(dirURL.path() + " - " + fileName);
 	if ( !mDirURL.equals(dirURL,true) ) {
 		mDirURL=dirURL;
 		currentFileView()->setShownFileItem(0L);
@@ -734,14 +741,14 @@ void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
 
 
 void GVFileViewStack::dirListerNewItems(const KFileItemList& items) {
-	//kdDebug() << "GVFileViewStack::dirListerNewItems\n";
+	LOG("");
 	mThumbnailsNeedUpdate=true;
 	currentFileView()->addItemList(items);
 }
 
 
 void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
-	//kdDebug() << "GVFileViewStack::dirListerRefreshItems\n";
+	LOG("");
 	const KFileItem* item=currentFileView()->shownFileItem();
 	KFileItemListIterator it(list);
 	for (; *it!=0L; ++it) {
@@ -759,13 +766,13 @@ void GVFileViewStack::dirListerClear() {
 
 
 void GVFileViewStack::dirListerStarted() {
-	//kdDebug() << "GVFileViewStack::dirListerStarted\n";
+	LOG("");
 	mThumbnailsNeedUpdate=false;
 }
 
 
 void GVFileViewStack::dirListerCompleted() {
-	//kdDebug() << "GVFileViewStack::dirListerCompleted\n";
+	LOG("");
 	// Delay the code to be executed when the dir lister has completed its job
 	// to avoid crash in KDirLister (see bug #57991)
 	QTimer::singleShot(0,this,SLOT(delayedDirListerCompleted()));
@@ -857,7 +864,7 @@ void GVFileViewStack::emitURLChanged() {
 
 	// We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
-	//kdDebug() << "urlChanged : " << tmp.prettyURL() << endl;
+	LOG("urlChanged: " << tmp.prettyURL());
 	emit urlChanged(tmp);
 }
 

@@ -48,6 +48,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvbranchpropertiesdialog.h"
 #include "gvdirview.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 		
 const int AUTO_OPEN_DELAY=1000;
 const int DND_ICON_COUNT=8;
@@ -205,7 +211,7 @@ void GVDirView::showEvent(QShowEvent* event) {
 
 
 void GVDirView::setURL(const KURL& url) {
-	//kdDebug() << "GVDirView::setURL " << url.prettyURL() << ' ' << filename << endl;
+	LOG(url.prettyURL() << ' ' << filename);
 
 	// Do nothing if we're browsing remote files
 	if (!url.isLocalFile()) return;
@@ -216,7 +222,7 @@ void GVDirView::setURL(const KURL& url) {
 	// Do not update the view if it's hidden, just store the url to
 	// open next time the view is shown
 	if (!isVisible()) {
-		//kdDebug() << "GVDirView::setURL we are hidden, just store the url" << endl;
+		LOG("we are hidden, just store the url");
 		slotSetNextUrlToSelect(url);
 		return;
 	}
@@ -226,7 +232,7 @@ void GVDirView::setURL(const KURL& url) {
 
 	
 void GVDirView::setURLInternal(const KURL& url) {
-	//kdDebug() << "GVDirView::setURLInternal " << url.prettyURL() << endl;
+	LOG(url.prettyURL() );
 	QStringList folderParts;
 	QStringList::Iterator folderIter,endFolderIter;
 	QString folder="/";
@@ -286,7 +292,7 @@ void GVDirView::setURLInternal(const KURL& url) {
  */
 void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeViewItemList& itemList ) {
 	if( ! branch ) return;
-	kdDebug(250) << "hitting slotNewTreeViewItems" << endl;
+	LOG("");
 	if(m_nextUrlToSelect.isEmpty()) return;
 	
 	KFileTreeViewItemListIterator it( itemList );

@@ -38,6 +38,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvjpegtran.moc"
 
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 const char* CONFIG_PROGRAM_PATH="path";
 const unsigned int CHUNK_SIZE=1024;
@@ -49,21 +55,21 @@ GVJPEGTran::GVJPEGTran()
 {}
 
 void GVJPEGTran::writeChunk(KProcess* process) {
-	//kdDebug() << "writeChunk\n";
+	LOG("");
 
 	if (mSent>=mSrc.size()) {
-		//kdDebug() << " all done\n";
+		LOG("all done");
 		process->closeStdin();
 		return;
 	}
 	unsigned int size=QMIN(mSrc.size()-mSent, CHUNK_SIZE);
-	//kdDebug() << " sending " << size << " bytes\n";
+	LOG("sending " << size << " bytes");
 	process->writeStdin( mSrc.data() + mSent, size );
 	mSent+=size;
 }
 
 void GVJPEGTran::slotReceivedStdout(KProcess*,char* data,int length) {
-	//kdDebug() << "slotReceivedStdout size:" << length << endl;
+	LOG("size:" << length);
 	uint oldSize=mDst.size();
 	mDst.resize(oldSize+length);
 	memcpy(mDst.data()+oldSize,data,length);
@@ -71,7 +77,7 @@ void GVJPEGTran::slotReceivedStdout(KProcess*,char* data,int length) {
 
 
 void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
-	//kdDebug() << "slotReceivedStderr size:" << length << endl;
+	LOG("size:" << length);
 	kdWarning() << "Error: " << QCString(data,length) << endl;
 	mDst.resize(0);
 	process->kill();
@@ -79,7 +85,7 @@ void GVJPEGTran::slotReceivedStderr(KProcess* process,char* data, int length) {
 
 
 void GVJPEGTran::slotProcessExited() {
-	//kdDebug() << "slotProcessExited" << endl;
+	LOG("");
 #if QT_VERSION<0x030100
 	kapp->exit_loop();
 #else
