@@ -11,8 +11,8 @@ gv_icon_name = gwenview
 endif
 gv_icon_sizes = 16 22 32 48 64 128
 
-install-data-am: install-gv-icons
-uninstall-am: uninstall-gv-icons
+install-data-local: install-gv-icons
+uninstall-local: uninstall-gv-icons
 
 install-gv-icons:
 	for size in $(gv_icon_sizes) ; do \
