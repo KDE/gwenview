@@ -26,7 +26,7 @@ gwenview_LDFLAGS = $(all_libraries)
 
 
 # set the include path for X, qt and KDE
-INCLUDES = $(all_includes) -I$(top_srcdir)/gwenview
+INCLUDES = $(all_includes) -I$(srcdir)/..
 
 METASOURCES = AUTO
 

@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(top_srcdir)/gwenview
+INCLUDES = $(all_includes) -I$(srcdir)/..
 
 # These are not really libraries, but modules dynamically opened.
 # So they should be installed in kde_module_dir, which is usually $kde_prefix/lib/kde3

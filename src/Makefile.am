@@ -1,4 +1,4 @@
-AM_CPPFLAGS = $(all_includes) -I$(top_srcdir)/gwenview
+AM_CPPFLAGS = $(all_includes) -I$(srcdir)/..
 
 lib_LTLIBRARIES = libgwenviewcore.la
 
