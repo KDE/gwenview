@@ -83,6 +83,8 @@ public slots:
 
 protected:
 	bool queryClose();
+	virtual void saveProperties( KConfig* );
+	virtual void readProperties( KConfig* );
 
 private:
 	QWidgetStack* mCentralStack;

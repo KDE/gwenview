@@ -116,6 +116,7 @@ const char CONFIG_BUSYPTR_IN_FS[]="busy ptr in full screen";
 const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
 
+const char CONFIG_SESSION_URL[] = "url";
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -151,23 +152,24 @@ GVMainWindow::GVMainWindow()
 
 	mFileViewStack->setFocus();
 
-	// Command line
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if( !kapp->isSessionRestored()) {
+		// Command line
+		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-	KURL url;
-	if (args->count()==0) {
-		url.setPath( QDir::currentDirPath() );
-	} else {
-		url=args->url(0);
-		if (args->isSet("f")) {
-			mToggleFullScreen->activate();
+		KURL url;
+		if (args->count()==0) {
+			url.setPath( QDir::currentDirPath() );
 		} else {
-			mToggleBrowse->activate();
+			url=args->url(0);
+			if (args->isSet("f")) {
+				mToggleFullScreen->activate();
+			} else {
+				mToggleBrowse->activate();
+			}
 		}
+		// Go to requested file
+		mDocument->setURL(url);
 	}
-
-	// Go to requested file
-	mDocument->setURL(url);
 }
 
 
@@ -226,6 +228,13 @@ bool GVMainWindow::queryClose() {
 	return true;
 }
 
+void GVMainWindow::saveProperties( KConfig* cfg ) {
+	cfg->writeEntry( CONFIG_SESSION_URL, mDocument->url().url());
+}
+
+void GVMainWindow::readProperties( KConfig* cfg ) {
+	mDocument->setURL( KURL( cfg->readEntry( CONFIG_SESSION_URL )));
+}
 
 //-----------------------------------------------------------------------
 //
