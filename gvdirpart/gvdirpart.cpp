@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvpixmap.h>
 #include <src/gvslideshow.h>
 #include <src/gvslideshowdialog.h>
+#include <src/fileoperation.h>
 
 //Factory Code
 typedef KParts::GenericFactory<GVDirPart> GVDirFactory;
@@ -58,6 +59,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	mSlideShow = new GVSlideShow(m_filesView->selectFirst(), m_filesView->selectNext());
 
+	FileOperation::kpartConfig();
 	m_filesView->kpartConfig();
 	m_pixmapView->kpartConfig();
 

@@ -44,6 +44,7 @@ public:
 
 	// Config
 	static void readConfig(KConfig*,const QString&);
+	static void kpartConfig();
 	static void writeConfig(KConfig*,const QString&);
 
 	static bool deleteToTrash();

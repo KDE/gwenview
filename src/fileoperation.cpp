@@ -19,17 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt 
+// Qt
 #include <qcursor.h>
 #include <qpopupmenu.h>
 #include <qobject.h>
 
-// KDE 
+// KDE
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
-// Local 
+// Local
 #include "fileopobject.h"
 #include "fileoperation.h"
 
@@ -112,6 +112,14 @@ void FileOperation::readConfig(KConfig* config,const QString& group) {
 	sConfirmCopy=config->readBoolEntry(CONFIG_CONFIRM_COPY,true);
 
 	sDestDir=config->readPathEntry(CONFIG_DEST_DIR);
+}
+
+
+void FileOperation::kpartConfig() {
+	sDeleteToTrash=true;
+	sConfirmDelete=true;
+	sConfirmMove=true;
+	sConfirmCopy=true;
 }
 
 

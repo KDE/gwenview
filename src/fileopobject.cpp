@@ -164,7 +164,7 @@ void FileOpRealDeleteObject::operator()() {
 		}
 		if (response==KMessageBox::No) return;
 	}
-	
+
 	// Delete the file
 	KIO::Job* removeJob=KIO::del(mURLList,false,true);
 	connect( removeJob, SIGNAL( result(KIO::Job*) ),
