@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qptrlist.h>
 
 // KDE
-#include <kdockwidget.h>
+#include <kmainwindow.h>
 #include <kurl.h>
 
 // Local
@@ -37,9 +37,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 class QLabel;
+class QWidgetStack;
 
 class KAction;
+class KDockArea;
+class KDockWidget;
 class KHistoryCombo;
+class KRadioAction;
 class KToggleAction;
 class KToolBarPopupAction;
 class KFileItem;
@@ -54,7 +58,7 @@ class GVSlideShow;
 class GVMetaEdit;
 
 
-class GVMainWindow : public KDockMainWindow {
+class GVMainWindow : public KMainWindow {
 Q_OBJECT
 public:
 	GVMainWindow();
@@ -81,6 +85,9 @@ protected:
 	bool queryClose();
 
 private:
+	QWidgetStack* mCentralStack;
+	QWidget* mViewModeWidget;
+	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
@@ -117,9 +124,9 @@ private:
 	KAction* mSaveFile;
 	KAction* mSaveFileAs;
 	KAction* mFilePrint;
-	KAction* mToggleDirAndFileViews;
 	bool     mLoadingCursor;
 	bool	 mAutoDeleteThumbnailCache;
+	KToggleAction* mToggleBrowse;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
@@ -165,7 +172,6 @@ private slots:
 	void applyMainWindowSettings();
 	void pixmapLoading();
 	void toggleSlideShow();
-	void toggleDirAndFileViews();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void modifyImage(GVImageUtils::Orientation);
 	void rotateLeft();
@@ -173,6 +179,7 @@ private slots:
 	void mirror();
 	void flip();
 	
+	void slotToggleCentralStack();
 	/**
 	 * Update status bar and caption
 	 */

@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kdockwidget.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -123,9 +124,10 @@ const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit
 #define LOG(x) ;
 #endif
 
+enum { StackIDBrowse, StackIDView };
 
 GVMainWindow::GVMainWindow()
-: KDockMainWindow(), mLoadingCursor(false)
+: KMainWindow(), mLoadingCursor(false)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
@@ -157,11 +159,11 @@ GVMainWindow::GVMainWindow()
 		url.setPath( QDir::currentDirPath() );
 	} else {
 		url=args->url(0);
-	}
-
-	// Check if we should start in fullscreen mode
-	if (args->isSet("f")) {
-		mToggleFullScreen->activate();
+		if (args->isSet("f")) {
+			mToggleFullScreen->activate();
+		} else {
+			mToggleBrowse->activate();
+		}
 	}
 
 	// Go to requested file
@@ -183,7 +185,7 @@ bool GVMainWindow::queryClose() {
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
 	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
+		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 
@@ -417,21 +419,6 @@ void GVMainWindow::pixmapLoading() {
 	}
 }
 
-void GVMainWindow::toggleDirAndFileViews() {
-	KConfig* config=KGlobal::config();
-
-	if (mFileDock->isVisible() || mFolderDock->isVisible()) {
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
-		makeDockInvisible(mFileDock);
-		makeDockInvisible(mFolderDock);
-	} else {
-		readDockConfig(config,CONFIG_DOCK_GROUP);
-	}
-
-	mPixmapView->setFocus();
-}
-
-
 
 void GVMainWindow::hideToolBars() {
 	QPtrListIterator<KToolBar> it=toolBarIterator();
@@ -465,64 +452,50 @@ void GVMainWindow::showToolBars() {
 
 
 void GVMainWindow::toggleFullScreen() {
-	KConfig* config=KGlobal::config();
-
-	mToggleDirAndFileViews->setEnabled(!mToggleFullScreen->isChecked());
-
 	if (mToggleFullScreen->isChecked()) {
 		showFullScreen();
 		if (!mShowMenuBarInFullScreen) menuBar()->hide();
-
-	/* Hide toolbar
-	 * If the toolbar is docked we hide the DockArea to avoid
-	 * having a one pixel band remaining
-	 * For the same reason, we hide all the empty DockAreas
-	 *
-	 * NOTE: This does not work really well if the toolbar is in
-	 * the left or right dock area.
-	 */
-		if (!mShowToolBarInFullScreen) {
-			hideToolBars();
-		}
-
+		if (!mShowStatusBarInFullScreen) statusBar()->hide();
+		
+		/* Hide toolbar
+		 * If the toolbar is docked we hide the DockArea to avoid
+		 * having a one pixel band remaining
+		 * For the same reason, we hide all the empty DockAreas
+		 *
+		 * NOTE: This does not work really well if the toolbar is in
+		 * the left or right dock area.
+		 */
+		if (!mShowToolBarInFullScreen) hideToolBars();
 		if (leftDock()->isEmpty())	 leftDock()->hide();
 		if (rightDock()->isEmpty())  rightDock()->hide();
 		if (topDock()->isEmpty())	 topDock()->hide();
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
-
-		if (!mShowStatusBarInFullScreen) statusBar()->hide();
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
-		makeDockInvisible(mFileDock);
-		makeDockInvisible(mFolderDock);
-		makeDockInvisible(mMetaDock);
+		
+		if (mToggleBrowse->isChecked()) {
+			mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
+			mCentralStack->raiseWidget(StackIDView);
+		}
 		mPixmapView->setFullScreen(true);
+		mPixmapView->setFocus();
 	} else {
-		readDockConfig(config,CONFIG_DOCK_GROUP);
-		// workaround Qt bug - it unsets the fullscreen state on setGeometry(),
-		// which will be triggered by readDockConfig(), but KWin will ignore
-		// the geometry change and won't reset the state
-#if QT_VERSION >= 0x030300
-		setWState(WState_FullScreen);
-#else
-	// FIXME
-#endif
-		statusBar()->show();
-
+		showNormal();
+		menuBar()->show();
+		
 		showToolBars();
 		leftDock()->show();
 		rightDock()->show();
 		topDock()->show();
 		bottomDock()->show();
-
-		menuBar()->show();
+		
+		statusBar()->show();
 		mPixmapView->setFullScreen(false);
-#if QT_VERSION >= 0x030300
-		setWindowState( windowState() & ~WindowFullScreen );
-#else
-		showNormal();
-#endif
+		
+		if (mToggleBrowse->isChecked()) {
+			mPixmapDock->setWidget(mPixmapView);
+			mCentralStack->raiseWidget(StackIDBrowse);
+		}
+		mFileViewStack->setFocus();
 	}
-	mPixmapView->setFocus();
 }
 
 
@@ -633,6 +606,18 @@ void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
 		mDocument->reload();
 	}
 }
+	
+
+void GVMainWindow::slotToggleCentralStack() {
+	if (mToggleBrowse->isChecked()) {
+		mPixmapDock->setWidget(mPixmapView);
+		mCentralStack->raiseWidget(StackIDBrowse);
+	} else {
+		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
+		mCentralStack->raiseWidget(StackIDView);
+	}
+}
+
 
 //-----------------------------------------------------------------------
 //
@@ -672,8 +657,18 @@ void GVMainWindow::updateFileInfo() {
 void GVMainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
-	manager()->setSplitterHighResolution(true);
-	manager()->setSplitterOpaqueResize(true);
+	mCentralStack=new QWidgetStack(this);
+	setCentralWidget(mCentralStack);
+
+	mDockArea=new KDockArea(mCentralStack);
+	mCentralStack->addWidget(mDockArea, StackIDBrowse);
+	mDockArea->manager()->setSplitterHighResolution(true);
+	mDockArea->manager()->setSplitterOpaqueResize(true);
+	
+	mViewModeWidget=new QWidget(mCentralStack);
+	QVBoxLayout* layout=new QVBoxLayout(mViewModeWidget);
+	layout->setAutoAdd(true);
+	mCentralStack->addWidget(mViewModeWidget);
 
 	// Status bar
 	mSBDirLabel=new KSqueezedTextLabel("", statusBar());
@@ -683,30 +678,29 @@ void GVMainWindow::createWidgets() {
 
 	// Pixmap widget
 #ifdef GV_HACK_SUFFIX
-	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview_hack"),NULL,i18n("Image"));
+	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview_hack"),NULL,i18n("Image"));
 #else
-	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
+	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 #endif	
 
 	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
 
 	// Folder widget
-	mFolderDock = createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
+	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
 	mDirView=new GVDirView(mFolderDock);
 	mFolderDock->setWidget(mDirView);
 
 	// File widget
-	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
+	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
 	(void)new KToolBar(vbox, "fileViewToolBar", true);
 	mFileViewStack=new GVFileViewStack(vbox, actionCollection());
 	mFileDock->setWidget(vbox);
-	setView(mFileDock);
-	setMainDockWidget(mFileDock);
+	mDockArea->setMainDockWidget(mFileDock);
 
 	// Meta info edit widget
-	mMetaDock = createDockWidget("File Attributes", SmallIcon("doc"),NULL,
+	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("doc"),NULL,
 		i18n("File Info"));
 	mMetaEdit = new GVMetaEdit(mMetaDock, mDocument);
 	mMetaDock->setWidget(mMetaEdit);
@@ -725,7 +719,7 @@ void GVMainWindow::createWidgets() {
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
 
 	// Load config
-	readDockConfig(config,CONFIG_DOCK_GROUP);
+	mDockArea->readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
@@ -736,6 +730,11 @@ void GVMainWindow::createWidgets() {
 
 
 void GVMainWindow::createActions() {
+	// Stack
+	mToggleBrowse=new KToggleAction(i18n("Browse"), "folder", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "toggle_browse");
+	mToggleBrowse->setChecked(true);
+	mToggleBrowse->setShortcut(CTRL + Key_Return);
+	
 	// File
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
 	mSaveFile=KStdAction::save(mDocument,SLOT(save()),actionCollection() );
@@ -764,7 +763,6 @@ void GVMainWindow::createActions() {
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
 #endif
 	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
-	mToggleDirAndFileViews=new KAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"toggle_dir_and_file_views");
 
 	// Go
  	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
@@ -822,14 +820,6 @@ void GVMainWindow::createHideShowAction(KDockWidget* dock) {
 
 
 void GVMainWindow::updateWindowActions() {
-	QString caption;
-	if (mFolderDock->mayBeHide() || mFileDock->mayBeHide()) {
-		caption=i18n("Hide Folder && File Views");
-	} else {
-		caption=i18n("Show Folder && File Views");
-	}
-	mToggleDirAndFileViews->setText(caption);
-
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
@@ -867,7 +857,7 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(canceled()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(imageDoubleClicked()),
-		mToggleFullScreen,SLOT(activate()) );
+		mToggleBrowse,SLOT(activate()) );
 	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
 		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
 	// Don't connect mDocument::loaded to mDirView. mDirView will be
@@ -903,7 +893,7 @@ void GVMainWindow::createConnections() {
 	accel->connectItem(accel->insertItem(Key_Escape),this,SLOT(escapePressed()));
 
 	// Dock related
-	connect(manager(), SIGNAL(change()),
+	connect(mDockArea->manager(), SIGNAL(change()),
 		this, SLOT(updateWindowActions()) );
 }
 

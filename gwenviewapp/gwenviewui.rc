@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="11">
+<kpartgui name="Gwenview" version="12">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -21,6 +21,7 @@
     <text>&amp;View</text>
     <Action name="reload"/>
     <Separator/>
+	<Action name="toggle_browse" />
     <Action name="fullscreen"/> 
     <Action name="slideshow"/>
     <Separator/>
@@ -69,13 +70,15 @@
   <Menu name="window">
     <text>&amp;Window</text>
     <ActionList name="winlist"/>
-    <Separator/>
-    <Action name="toggle_dir_and_file_views"/>
   </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" noMerge="1">
   <text>Main Toolbar</text>
+  <Action name="toggle_browse" />
+  <Action name="fullscreen"/>
+  <Action name="slideshow"/>
+  <Separator/>
   <Action name="go_back" />
   <Action name="go_forward" />
   <Separator/>
@@ -85,9 +88,6 @@
   <Action name="last"/>
   <Separator/>
   <Action name="reload"/>
-  <Separator/>
-  <Action name="fullscreen"/>
-  <Action name="slideshow"/>
   <Separator/>
   <Action name="view_zoom_auto"/>
   <Action name="view_zoom_in"/>
