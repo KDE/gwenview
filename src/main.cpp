@@ -31,7 +31,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char version[] = "1.2.0pre4";
+static const char version[] = "1.2.0";
 
 #if !KDE_IS_VERSION(3,3,2)
 // broken KDE_EXPORT, don't use it

@@ -1,3 +1,7 @@
+2005.04.03 - v1.2.0
+- Fixes:
+ - A crash which could happen when pressing back has been fixed.
+
 2005.03.19 - v1.2.0pre4
 - New features:
  - An item to open the "external tools" dialog has been added at the end of the
