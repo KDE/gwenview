@@ -68,6 +68,7 @@ public:
 	friend class GVScrollPixmapViewFilter;
 
 	enum Tool { SCROLL, ZOOM };
+	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 	typedef QMap<ButtonState,Tool> ButtonStateToolMap;
 	typedef QMap<Tool,ToolController*> ToolControllers;
 
@@ -86,10 +87,11 @@ public:
 	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const { return mFullScreen; }
 	void setFullScreen(bool);
-	bool showPathInFullScreen() const { return mShowPathInFullScreen; }
-	bool showCommentInFullScreen() const { return mShowCommentInFullScreen; }	
-	void setShowPathInFullScreen(bool);
-	void setShowCommentInFullScreen(bool);
+
+	OSDMode osdMode() const { return mOSDMode; }
+	void setOSDMode(OSDMode);
+	QString freeOutputFormat() const { return mFreeOutputFormat; }
+	void setFreeOutputFormat(const QString& outFormat) { mFreeOutputFormat = outFormat; }
 	GVImageUtils::SmoothAlgorithm smoothAlgorithm() const { return mSmoothAlgorithm; }
 	void setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm);
 	bool delayedSmoothing() const { return mDelayedSmoothing; }
@@ -123,8 +125,8 @@ private:
 	QTimer* mAutoHideTimer;
 	QLabel* mFullScreenLabel;
 	
-	bool mShowPathInFullScreen;
-	bool mShowCommentInFullScreen;
+	OSDMode mOSDMode;
+	QString mFreeOutputFormat;
 	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
 	bool mDelayedSmoothing;
 	bool mEnlargeSmallImages;

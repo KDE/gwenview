@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpopupmenu.h>
 #include <qstyle.h>
 #include <qtimer.h>
+#include <qregexp.h>
 
 // KDE 
 #include <kaction.h>
@@ -55,8 +56,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvscrollpixmapview.moc"
 
-const char* CONFIG_SHOW_PATH="show path";
-const char* CONFIG_SHOW_COMMENT="show comment";
+const char* CONFIG_OSD_MODE="osd mode";
+const char* CONFIG_FREE_OUTPUT_FORMAT="free output format";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
 const char* CONFIG_DELAYED_SMOOTHING="delayed smoothing";
 const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
@@ -339,7 +340,7 @@ void GVScrollPixmapView::slotLoaded() {
 
 	updateContentSize();
 	updateImageOffset();
-	if (mFullScreen && (mShowPathInFullScreen || mShowCommentInFullScreen)) updateFullScreenLabel();
+	if (mFullScreen && mOSDMode!=NONE) updateFullScreenLabel();
 	if (mDelayedSmoothing) scheduleOperation( SMOOTH_PASS );
 }
 
@@ -406,13 +407,8 @@ void GVScrollPixmapView::setEnlargeSmallImages(bool value) {
 }
 
 
-void GVScrollPixmapView::setShowPathInFullScreen(bool value) {
-	mShowPathInFullScreen=value;
-}
-
-
-void GVScrollPixmapView::setShowCommentInFullScreen(bool value) {
-	mShowCommentInFullScreen=value;
+void GVScrollPixmapView::setOSDMode(GVScrollPixmapView::OSDMode value) {
+	mOSDMode=value;
 }
 
 
@@ -468,7 +464,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		mAutoHideTimer->stop();
 		mToolControllers[mTool]->updateCursor();
 	}
-	if (mFullScreen && (mShowPathInFullScreen || mShowCommentInFullScreen)) {
+	if (mFullScreen && mOSDMode!=NONE) {
 		updateFullScreenLabel();
 		mFullScreenLabel->show();
 	} else {
@@ -662,7 +658,7 @@ void GVScrollPixmapView::slotBusyLevelChanged( GVBusyLevel level ) {
 		mPendingPaintTimer.start( 0 );
 	} else {
 		mPendingPaintTimer.stop();
-        }
+	}
 }
 
 // How to do painting:
@@ -1007,7 +1003,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	// Right rect
 	painter.eraseRect( imageRect.right(), imageRect.top(),
 	viewport()->width()-imageRect.right(), imageRect.height());
-                
+
 	// Image area
 	painter.setPen(painter.backgroundColor().light(200));
 	imageRect.addCoords(0,0,-1,-1);
@@ -1197,14 +1193,49 @@ void GVScrollPixmapView::hideCursor() {
 }
 
 void GVScrollPixmapView::updateFullScreenLabel() {
-	QString path=mDocument->url().path();
+	QString path=mDocument->url().path();	
+	QString pathFile=mDocument->dirURL().path();
 	QString comment=mDocument->comment();
+	QString fileName=mDocument->filename();
+	QString resolution = QString( "%1x%2" ).arg( mDocument->width()).arg( mDocument->height());
+
 	QString text;
-	if (mShowPathInFullScreen) {
-		text = path + "\n";
+	
+	switch (mOSDMode) {
+	case FREE_OUTPUT: {		
+		QString str = mFreeOutputFormat;
+		str.replace("\\n", "\n");
+		QStringList strList = QStringList::split(QRegExp("\%"),str,TRUE);
+		for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it ) {
+			str = *it;
+			if ((*it).find('f',0,false) == 0) {
+				str = "%" + *it;
+				str.replace(QRegExp("\%[fF]"), fileName);
+			} else if ((*it).find('c',0,false) == 0) {
+				str = "%" + *it;
+				str.replace(QRegExp("\%[Cc]"), comment);
+			} else if ((*it).find('r',0,false) == 0) {
+				str = "%" + *it;
+				str.replace(QRegExp("\%[rR]"), resolution);
+			} else if ((*it).find('p',0,false) == 0) {
+				str = "%" + *it;
+				str.replace(QRegExp("\%[pP]"), pathFile);
+			}
+			text += str;
+		}
+		break;
 	}
-	if (mShowCommentInFullScreen) {
-		text += comment;
+	case PATH:
+		text = path;
+		break;
+	case COMMENT:
+		text = comment;
+		break;
+	case PATH_AND_COMMENT:
+		text = path + "\n" + comment;
+		break;
+	case NONE:
+		break;
 	}
 	
 	QPainter painter;
@@ -1311,8 +1342,8 @@ void GVScrollPixmapView::deleteFile() {
 //------------------------------------------------------------------------
 void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
-	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
-	mShowCommentInFullScreen=config->readBoolEntry(CONFIG_SHOW_COMMENT,false);
+	mOSDMode=static_cast<OSDMode>(config->readNumEntry(CONFIG_OSD_MODE, static_cast<int>(PATH_AND_COMMENT)) );
+	mFreeOutputFormat=config->readEntry(CONFIG_FREE_OUTPUT_FORMAT,"%f - %r - %c");
 	
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
@@ -1341,8 +1372,8 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 
 void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_SHOW_PATH, mShowPathInFullScreen);
-	config->writeEntry(CONFIG_SHOW_COMMENT, mShowCommentInFullScreen);
+	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(mOSDMode));
+	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, mFreeOutputFormat);	
 	config->writeEntry(CONFIG_SMOOTH_SCALE, mSmoothAlgorithm);
 	config->writeEntry(CONFIG_DELAYED_SMOOTHING, mDelayedSmoothing);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, mEnlargeSmallImages);

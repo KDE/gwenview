@@ -124,8 +124,8 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	d->mImageViewPage->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
 	
 	// Full Screen tab
-	d->mFullScreenPage->mShowPathInFullScreen->setChecked(pixmapView->showPathInFullScreen());
-	d->mFullScreenPage->mShowCommentInFullScreen->setChecked(pixmapView->showCommentInFullScreen());
+	d->mFullScreenPage->mOSDModeGroup->setButton(pixmapView->osdMode());
+	d->mFullScreenPage->mFreeOutputFormat->setText(pixmapView->freeOutputFormat());
 	d->mFullScreenPage->mShowMenuBarInFullScreen->setChecked(d->mMainWindow->showMenuBarInFullScreen());
 	d->mFullScreenPage->mShowToolBarInFullScreen->setChecked(d->mMainWindow->showToolBarInFullScreen());
 	d->mFullScreenPage->mShowStatusBarInFullScreen->setChecked(d->mMainWindow->showStatusBarInFullScreen());
@@ -199,8 +199,13 @@ void GVConfigDialog::slotApply() {
 	pixmapView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 	
 	// Full Screen tab
-	pixmapView->setShowPathInFullScreen( d->mFullScreenPage->mShowPathInFullScreen->isChecked() );
-	pixmapView->setShowCommentInFullScreen( d->mFullScreenPage->mShowCommentInFullScreen->isChecked() );
+#if QT_VERSION>=0x030200
+	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
+#else
+	int osdMode=buttonGroupSelectedId(d->mImageViewPage->mOSDModeGroup);
+#endif
+	pixmapView->setOSDMode( static_cast<GVScrollPixmapView::OSDMode>(osdMode) );
+	pixmapView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
 	d->mMainWindow->setShowMenuBarInFullScreen( d->mFullScreenPage->mShowMenuBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowToolBarInFullScreen( d->mFullScreenPage->mShowToolBarInFullScreen->isChecked() );
 	d->mMainWindow->setShowStatusBarInFullScreen( d->mFullScreenPage->mShowStatusBarInFullScreen->isChecked() );
@@ -265,3 +270,4 @@ void GVConfigDialog::onCacheEmptied(KIO::Job* job) {
 	}
 	KMessageBox::information( this,i18n("Cache emptied.") );
 }
+

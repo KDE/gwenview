@@ -3,6 +3,8 @@
  - In the thumbnail view, It's now possible to sort images in reverse order.
  - Use EXIF-stored thumbnail if available.
  - Option to disable saving of generated thumbnails to cache.
+ - In fullscreen mode, it's now possible to display the image comment or size
+   in addition to the file path.
 - Fixes:
  - In the folder view, pressing Enter now opens the selected folder.
  - Use icon list for the configuration dialog.
