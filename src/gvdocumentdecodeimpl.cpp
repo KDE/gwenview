@@ -509,7 +509,7 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 		d->mUpdatedDuringLoad=true;
 	}
 	d->mLoadChangedRect |= rect;
-	if( d->mTimeSinceLastUpdate.elapsed() > 100 ) {
+	if( d->mTimeSinceLastUpdate.elapsed() > 200 ) {
 		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
 		emit rectUpdated(d->mLoadChangedRect);
