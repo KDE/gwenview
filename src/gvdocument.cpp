@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvpngformattype.h"
 #include "gvprintdialog.h"
 #include "qxcfi.h"
+#include "gvxpm.h"
 
 #include "gvdocument.moc"
 
@@ -60,6 +61,7 @@ const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 // always enabled (in viewer and in parts)
 static GVJPEGFormatType sJPEGFormatType;
 static GVPNGFormatType sPNGFormatType;
+static GVXPM sXPM;
 
 //-------------------------------------------------------------------
 //

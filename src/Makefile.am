@@ -50,6 +50,7 @@ libgwenviewcore_la_SOURCES = \
 	gvprintdialogpagebase.ui \
 	gvjpegformattype.cpp \
 	gvpngformattype.cpp \
+	gvxpm.cpp \
 	gvdocumentimpl.cpp \
 	gvdocumentdecodeimpl.cpp \
 	gvdocumentloadedimpl.cpp \
@@ -57,4 +58,5 @@ libgwenviewcore_la_SOURCES = \
 	gvkipiinterface.cpp \
 	gvimagescale.cpp \
 	gvbusylevelmanager.cpp \
-	gvcache.cpp 
+	gvcache.cpp \
+	gvthreadgate.cpp
