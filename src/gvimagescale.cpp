@@ -542,6 +542,7 @@ QImage ResizeImage(const QImage& image,const int columns,
   if ((columns == image.width()) && (rows == image.height()) && (blur == 1.0))
     return image;
   QImage resize_image( columns, rows, 32 );
+  resize_image.setAlphaBuffer( image.hasAlphaBuffer());
   resize_image.fill( Qt::red.rgb() );
   /*
     Allocate filter contribution info.
@@ -569,6 +570,7 @@ QImage ResizeImage(const QImage& image,const int columns,
       ((fastfloat) rows*(image.width()+columns)))
     {
       QImage source_image( columns, image.height(), 32 );
+      source_image.setAlphaBuffer( image.hasAlphaBuffer());
       source_image.fill( Qt::yellow.rgb() );
       HorizontalFilter(image,source_image,x_factor,blur,
         contribution,filter,filtersupport);
@@ -578,6 +580,7 @@ QImage ResizeImage(const QImage& image,const int columns,
   else
     {
       QImage source_image( image.width(), rows, 32 );
+      source_image.setAlphaBuffer( image.hasAlphaBuffer());
       source_image.fill( Qt::yellow.rgb() );
       VerticalFilter(image,source_image,y_factor,blur,
         contribution,filter,filtersupport);
@@ -665,7 +668,6 @@ QImage scale(const QImage& image, int width, int height,
 	}
 
 	if ( image.depth() == 32 ) {
-		QImage img( newSize, 32 );
 		// 32-bpp to 32-bpp
 		return ResizeImage( image, width, height, filter, filtersupport, blur );
 	} else if ( image.depth() != 16 && image.allGray() && !image.hasAlphaBuffer() ) {
