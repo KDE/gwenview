@@ -39,6 +39,10 @@ Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
 - GeniusR13 <geniusr13@gmx.net>
 Patch to fix compilation with KDE 3.0 (v0.16.1).
 
+- Jos van den Oever <jos@vandenoever.info>
+Implemented the meta-data dock window (v1.0.0).
+Patch to toggle auto-zoom when clicking on the image (v1.0.0).
+
 
 - Past packagers ------------------------------------------------------------
 

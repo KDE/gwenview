@@ -62,6 +62,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvslideshow.h"
 #include "gvslideshowdialog.h"
 #include "statusbarprogress.h"
+#include "gvmetaedit.h"
 
 #include "gvmainwindow.moc"
 
@@ -91,9 +92,12 @@ GVMainWindow::GVMainWindow()
 	// GUI
 	createWidgets();
 	createActions();
+	/*
 	createMenu();
 	createMainToolBar();
 	createLocationToolBar();
+	*/
+	createGUI("gwenviewui.rc");
 	createConnections();
 	mFileViewStack->setFocus();
 
@@ -167,9 +171,11 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	updateStatusInfo();
 	kapp->restoreOverrideCursor();
 
+	/*
 	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
 	mURLEdit->addToHistory(url.prettyURL());
+	*/
 }
 
 //-----------------------------------------------------------------------
@@ -269,6 +275,7 @@ void GVMainWindow::toggleDirAndFileViews() {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
+		makeDockInvisible(mMetaDock);
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 	}
@@ -308,6 +315,7 @@ void GVMainWindow::toggleFullScreen() {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
+		makeDockInvisible(mMetaDock);
 		mPixmapView->setFullScreen(true);
 		showFullScreen();
 	} else {
@@ -472,6 +480,12 @@ void GVMainWindow::createWidgets() {
 	mFileViewStack=new GVFileViewStack(this,actionCollection());
 	mFileDock->setWidget(mFileViewStack);
 
+	// Meta info edit widget
+	mMetaDock = createDockWidget("File Attributes", SmallIcon("doc"),NULL,
+		i18n("File Info"));
+	mMetaEdit = new GVMetaEdit(mMetaDock, mGVPixmap);
+	mMetaDock->setWidget(mMetaEdit);
+
 	// Slide show controller (not really a widget)
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
 	
@@ -479,6 +493,7 @@ void GVMainWindow::createWidgets() {
 	setGeometry(20,20,600,400);
 	mFolderDock->manualDock( mPixmapDock,KDockWidget::DockLeft,30);
 	mFileDock->manualDock( mPixmapDock,KDockWidget::DockTop,30);
+	mMetaDock->manualDock( mPixmapDock,KDockWidget::DockTop,30);
 
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
@@ -490,48 +505,38 @@ void GVMainWindow::createWidgets() {
 
 
 void GVMainWindow::createActions() {
+	// File
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
-	
 	mSaveFile=KStdAction::save(mGVPixmap,SLOT(save()),actionCollection() );
-
 	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
-
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
-
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
-
 	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
-
 	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
+	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
+	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
 
-	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"view_fullscreen");
-
-	mShowConfigDialog=new KAction(i18n("Configure Gwenview..."),"configure",0,this,SLOT(showConfigDialog()),actionCollection(),"settings_config_dialog");
-
-	mShowKeyDialog=KStdAction::keyBindings(this,SLOT(showKeyDialog()),actionCollection(),"settings_key_dialog");
+	// Edit
+	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"rotate_left");
+	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"rotate_right");
+	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"mirror");
+	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"flip");
+	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"open_with_editor");
 	
+	// View
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileViewStack,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
-
-	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
-
-	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()),actionCollection() );
-
-	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
-
-	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"view_slideshow");
-
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L,mGVPixmap,SLOT(rotateLeft()),actionCollection(),"edit_rotate_left");
-
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R,mGVPixmap,SLOT(rotateRight()),actionCollection(),"edit_rotate_right");
-
-	mMirror=new KAction(i18n("&Mirror"),"mirror",0,mGVPixmap,SLOT(mirror()),actionCollection(),"edit_mirror");
-
-	mFlip=new KAction(i18n("&Flip"),"flip",0,mGVPixmap,SLOT(flip()),actionCollection(),"edit_flip");
-
-	mOpenWithEditor=new KAction(i18n("Open with &Editor"),"paintbrush",0,this,SLOT(openWithEditor()),actionCollection(),"edit_open_with_editor");
-
-	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder & File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
+	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
+	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
+	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
+	
+	// Go
+	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()), actionCollection() );
+	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
+	
+	// Settings
+	mShowConfigDialog=KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
+	mShowKeyDialog=KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
 	
 	actionCollection()->readShortcutSettings();
 }
@@ -586,8 +591,10 @@ void GVMainWindow::createConnections() {
 		mToggleSlideShow,SLOT(activate()) );
 	
 	// Address bar
+	/*
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
+	*/
 
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
@@ -609,7 +616,6 @@ void GVMainWindow::createMenu() {
 	fileMenu->insertSeparator();
 	mShowFileProperties->plug(fileMenu);
 	fileMenu->insertSeparator();
-	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() )->plug(fileMenu);
 	menuBar()->insertItem(i18n("&File"), fileMenu);
 
 	QPopupMenu* editMenu = new QPopupMenu;

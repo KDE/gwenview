@@ -31,7 +31,7 @@ class QMouseEvent;
 class QPainter;
 class QTimer;
 class QWheelEvent;
-
+class QPopupMenu;
 class KAction;
 class KActionCollection;
 class KConfig;
@@ -96,9 +96,19 @@ private:
 
 	// Offset to center images
 	int mXOffset,mYOffset;
+	QTime lastWheelZoomTime;
 
 	// Zoom info
 	double mZoom;
+
+	// point in image that should be centered as % of width and height
+//	double mXCenter, mYCenter;
+	bool mouseZoomAction;
+	double mPictX, mPictY;
+	int mViewX, mViewY;
+
+	// context menu
+	QPopupMenu *menu;
 
 	// Our actions
 	KToggleAction* mAutoZoom;
@@ -110,6 +120,7 @@ private:
 
 	// Object state info
 	bool mFullScreen;
+	bool mMouseToggleZoom; // Indicates that the user wants to toggle the zoom
 	bool mDragStarted; // Indicates that the user is scrolling the image by dragging it
 	int mScrollStartX,mScrollStartY;
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
@@ -119,7 +130,7 @@ private:
 	void updateScrollBarMode();
 	void updateImageOffset();
 	void updateContentSize();
-	void openContextMenu(const QPoint& pos);
+	void makeContextMenu();
 	void updatePathLabel();
 	void updateZoomActions();
 

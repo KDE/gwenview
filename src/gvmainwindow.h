@@ -36,6 +36,7 @@ class GVFileViewStack;
 class GVPixmap;
 class GVScrollPixmapView;
 class GVSlideShow;
+class GVMetaEdit;
 class StatusBarProgress;
 
 
@@ -67,6 +68,7 @@ private:
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
+	KDockWidget* mMetaDock;
 	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
 	KToolBar* mLocationToolBar;
@@ -76,6 +78,7 @@ private:
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
 	GVScrollPixmapView* mPixmapView;
+	GVMetaEdit *mMetaEdit;
 
 	GVPixmap* mGVPixmap;
 	GVSlideShow* mSlideShow;

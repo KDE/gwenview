@@ -1,0 +1,55 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="Gwenview" version="1">
+
+<MenuBar>
+  <Menu name="file">
+    <Action name="file_rename"/>
+    <Action name="file_copy"/>
+    <Action name="file_move"/>
+    <Action name="file_delete"/>
+    <Separator/>
+    <Action name="file_properties"/>
+  </Menu>
+  <Menu name="edit">
+    <Action name="rotate_left"/>
+    <Action name="rotate_right"/>
+    <Action name="mirror"/>
+    <Action name="flip"/>
+    <Action name="open_with_editor"/>
+  </Menu>
+  <Menu noMerge="1" name="view">
+  	<text>&amp;View</text>
+  	<Action name="stop"/>
+    <Separator/>
+	<Action name="detailed"/>
+	<Action name="small_thumbnails"/>
+	<Action name="med_thumbnails"/>
+	<Action name="large_thumbnails"/>
+    <Separator/>
+	<Action name="hide_dir_and_file_views"/>
+  	<Action name="fullscreen"/>
+  	<Action name="slideshow"/>
+    <Separator/>
+    <Action name="view_zoom_auto"/>
+    <Action name="view_zoom_in"/>
+    <Action name="view_zoom_out"/>
+    <Action name="view_zoom_actual_size"/>
+    <Action name="view_zoom_lock"/>
+	<Separator/>
+	<Action name="show_dot_files"/>
+  </Menu>
+  <Menu name="go_web">
+  	<Action name="first"/>
+  	<Action name="previous"/>
+  	<Action name="next"/>
+  	<Action name="last"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+  <Action name="options_configure"/>
+</ToolBar>
+
+<StatusBar/>
+
+</kpartgui>

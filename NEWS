@@ -1,4 +1,8 @@
 2003.xx.xx - v1.0.0
+- New features:
+ - Use XML GUI.
+ - New dock window to display Meta Info (thanks to Jos van den Oever).
+ - Click on the image to toggle auto-zoom (thanks to Jos van den Oever).
 - Fixes:
  - Fixed compilation failure on Qt 3.0.
 
