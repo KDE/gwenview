@@ -44,7 +44,7 @@
   </Menu>
   <Action name="bookmarks"/>
   <Menu name="settings">
-  	<Action name="fullscreen"/>
+  	<Action name="fullscreen" append="show_merge"/>
   </Menu>
   <Menu name="window">
   	<text>&amp;Window</text>

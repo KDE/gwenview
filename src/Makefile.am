@@ -36,7 +36,7 @@ EXTRA_DIST = configdialogbase.ui gvslideshowdialogbase.ui
 
 METASOURCES = AUTO
 
-rcdir = $(kde_appsdir)/gwenview
+rcdir = $(kde_datadir)/gwenview
 rc_DATA = gwenviewui.rc
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/gwenview.pot
