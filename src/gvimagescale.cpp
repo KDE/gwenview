@@ -634,6 +634,7 @@ QImage scale(const QImage& image, int width, int height,
 	
 	QSize newSize( image.size() );
 	newSize.scale( QSize( width, height ), (QSize::ScaleMode)mode ); // ### remove cast in Qt 4.0
+	newSize = newSize.expandedTo( QSize( 1, 1 )); // make sure it doesn't become null
 
 	if ( newSize == image.size() ) return image.copy();
 	
