@@ -1,7 +1,12 @@
 2003.xx.xx - v1.0.0pre2
+- New features:
+ - Added Back/Forward history buttons (based on a patch by Tudor Calin).
+ - The parent button can now display a popup menu (patch by Tudor Calin).
 - Fixes:
  - The image comment editor shows more explicit messages when the comment is
    empty and when the image can't be commented.
+ - A bug which caused the external tool dialog to fail on fresh installation
+   was fixed.
 
 
 2003.09.27 - v1.0.0pre1

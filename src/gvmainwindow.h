@@ -33,11 +33,13 @@ class KAction;
 class KHistoryCombo;
 class KToggleAction;
 class KToolBar;
+class KToolBarPopupAction;
 class KURLCompletion;
 
 class GVDirView;
 class GVFileViewStack;
 class GVPixmap;
+class GVHistory;
 class GVScrollPixmapView;
 class GVSlideShow;
 class GVMetaEdit;
@@ -82,6 +84,7 @@ private:
 	GVMetaEdit *mMetaEdit;
 
 	GVPixmap* mGVPixmap;
+	GVHistory* mGVHistory;
 	GVSlideShow* mSlideShow;
 
 	KAction* mOpenFile;
@@ -94,7 +97,7 @@ private:
 	KToggleAction* mToggleFullScreen;
 	KAction* mStop;
 	KAction* mOpenHomeDir;
-	KAction* mOpenParentDir;
+	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;
 	KToggleAction* mToggleSlideShow;
 	KAction* mRotateLeft;
@@ -124,6 +127,9 @@ private:
 	void writeConfig(KConfig*,const QString&) const;
 	
 private slots:
+	void goUp();
+	void goUpTo(int);
+	
 	void openParentDir();
 	void openHomeDir();
 	void renameFile();

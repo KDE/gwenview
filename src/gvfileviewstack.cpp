@@ -65,11 +65,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "gvfirst":"gvlast", Key_End,
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
-	mSelectPrevious=new KAction(i18n("Go back", "&Back"),
+	mSelectPrevious=new KAction(i18n("&Previous"),
 		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
 
-	mSelectNext=new KAction(i18n("Go forward", "&Forward"),
+	mSelectNext=new KAction(i18n("&Next"),
 		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 

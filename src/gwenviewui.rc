@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="4">
+<kpartgui name="Gwenview" version="5">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -58,6 +58,9 @@
 <ToolBar name="mainToolBar" noMerge="1">
   <text>Main Toolbar</text>
   <Action name="go_up"/>
+  <Action name="go_back"/>
+  <Action name="go_forward"/>
+  <Separator/>
   <Action name="first"/>
   <Action name="previous"/>
   <Action name="next"/>

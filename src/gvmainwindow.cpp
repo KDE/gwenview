@@ -62,6 +62,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdirview.h"
 #include "gvexternaltooldialog.h"
 #include "gvfileviewstack.h"
+#include "gvhistory.h"
 #include "gvjpegtran.h"
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
@@ -94,7 +95,7 @@ GVMainWindow::GVMainWindow()
 
 	// Backend
 	mGVPixmap=new GVPixmap(this);
-
+    mGVHistory=new GVHistory(mGVPixmap, actionCollection());
 	// GUI
 	createWidgets();
 	createActions();
@@ -135,6 +136,7 @@ GVMainWindow::GVMainWindow()
 
 	// Go to requested file
 	mGVPixmap->setURL(url);
+    /*mGVHistory->slotManageHistoryList();*/
 }
 
 
@@ -200,14 +202,32 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mSaveFile->setEnabled(filenameIsValid);
 	mSaveFileAs->setEnabled(filenameIsValid);
 	
-	mOpenParentDir->setEnabled(url.path()!="/");
+	QPopupMenu *upPopup = mGoUp->popupMenu();
+	upPopup->clear();
+	int i = 0;
+	KURL urlUp = url.upURL();
+	while(urlUp.hasPath()) {
+		upPopup->insertItem(urlUp.url()), urlUp.prettyURL();
+		if(urlUp.path() == "/" || ++i > 10)
+			break;
+		urlUp = urlUp.upURL();
+	}
 
+	mGoUp->setEnabled(url.path() != "/");
 	updateStatusInfo();
 	kapp->restoreOverrideCursor();
 
 	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
 	mURLEdit->addToHistory(url.prettyURL());
+}
+
+void GVMainWindow::goUp() {
+	goUpTo(mGoUp->popupMenu()->idAt(0));
+}
+
+void GVMainWindow::goUpTo(int id) {
+	mGVPixmap->setDirURL((KURL)mGoUp->popupMenu()->text(id));
 }
 
 //-----------------------------------------------------------------------
@@ -603,7 +623,7 @@ void GVMainWindow::createActions() {
 	mToggleDirAndFileViews=new KAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"toggle_dir_and_file_views");
 
 	// Go
-	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()), actionCollection() );
+ 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
 	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
 
 	// Bookmarks
@@ -677,9 +697,20 @@ void GVMainWindow::updateWindowActions() {
 
 
 void GVMainWindow::createConnections() {
+    connect(mGoUp->popupMenu(), SIGNAL(activated(int)), 
+	    this,SLOT(goUpTo(int)));
+	/*
+    connect(mGoUp,SIGNAL(activated()), 
+	    mGVHistory,SLOT(slotManageHistoryList()) );
+    connect(mGoUp->popupMenu(),SIGNAL(activated(int)), 
+	    mGVHistory,SLOT(slotManageHistoryList()) );*/
+
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
 		mGVPixmap,SLOT(setDirURL(const KURL&)) );
+	/*
+    connect(mDirView,SIGNAL(executed(QListViewItem*)), 
+	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 
 	// Pixmap view connections
 	connect(mPixmapView,SIGNAL(selectPrevious()),
@@ -700,6 +731,8 @@ void GVMainWindow::createConnections() {
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mGVPixmap,SLOT(setURL(const KURL&)) );
+    /*connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
+	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
@@ -727,6 +760,8 @@ void GVMainWindow::createConnections() {
 	// Location bar
 	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
 		this,SLOT(slotURLEditChanged(const QString &)));
+    /*connect(mURLEdit,SIGNAL(returnPressed(const QString &)), 
+	    mGVHistory,SLOT(slotManageHistoryList()) );*/
 
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
