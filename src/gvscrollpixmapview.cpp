@@ -1520,10 +1520,10 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
-		d->mSmoothAlgorithm = GVImageUtils::SMOOTH_NORMAL;
+		d->mSmoothAlgorithm = GVImageUtils::SMOOTH_FAST;
 		d->mDelayedSmoothing = true;
 	} else {
-		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, GVImageUtils::SMOOTH_NORMAL);
+		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, GVImageUtils::SMOOTH_FAST);
 		d->mSmoothAlgorithm = static_cast<GVImageUtils::SmoothAlgorithm>(smooth);
 		d->mDelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
 	}

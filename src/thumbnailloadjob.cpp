@@ -172,7 +172,7 @@ void ThumbnailThread::loadThumbnail() {
 			if (width<=thumbSize && height<=thumbSize) {
 				mImage=bigImg;
 			} else {
-				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_NONE,QImage::ScaleMin);
+				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 			}
 			loaded = true;
 		}
@@ -296,7 +296,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	int newx = size*cinfo.output_width / newMax;
 	int newy = size*cinfo.output_height / newMax;
 
-	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_NONE);
+	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_FAST);
 
 	jpeg_destroy_decompress(&cinfo);
 	fclose(inputFile);

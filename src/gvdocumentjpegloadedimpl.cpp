@@ -158,7 +158,7 @@ QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format)
 		d->mJPEGContent.resetOrientation();
 		if (!d->mJPEGContent.thumbnail().isNull()) {
 			d->mJPEGContent.setThumbnail( GVImageUtils::scale(
-				mDocument->image(), 128, 128, GVImageUtils::SMOOTH_NONE, QImage::ScaleMin));
+				mDocument->image(), 128, 128, GVImageUtils::SMOOTH_FAST, QImage::ScaleMin));
 		}
 		
 		LOG("JPEG Lossless save");
