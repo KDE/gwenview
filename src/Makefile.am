@@ -13,6 +13,7 @@ libgwenviewcore_la_METASOURCES = AUTO
 
 libgwenviewcore_la_SOURCES = \
 	gvconfigdialogbase.ui \
+	gvbranchpropertiesdialogbase.ui \
 	thumbnailsize.cpp \
 	thumbnailloadjob.cpp \
 	statusbarprogress.cpp \
@@ -26,6 +27,7 @@ libgwenviewcore_la_SOURCES = \
 	gvfilethumbnailview.cpp \
 	fileoperation.cpp \
 	gvconfigdialog.cpp \
+	gvbranchpropertiesdialog.cpp \
 	fileopobject.cpp \
 	gvfilethumbnailviewitem.cpp \
 	qxcfi.cpp \

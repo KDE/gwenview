@@ -47,16 +47,3 @@ StatusBarProgress::StatusBarProgress(QStatusBar* statusBar,QString text,int coun
 
 StatusBarProgress::~StatusBarProgress() {
 }
-
-
-void StatusBarProgress::show() {
-	mStatusBar->addWidget(this);
-	QWidget::show();
-}
-
-
-void StatusBarProgress::hide() {
-	QWidget::hide();
-	mStatusBar->removeWidget(this);
-}
-

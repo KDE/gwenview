@@ -45,13 +45,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "fileoperation.h"
+#include "gvbranchpropertiesdialog.h"
 #include "gvdirview.moc"
 
 		
 const int AUTO_OPEN_DELAY=1000;
 const int DND_ICON_COUNT=8;
 const char* DND_PREFIX="dnd";
+const char* CONFIG_BRANCH_URL="url";
+const char* CONFIG_BRANCH_ICON="icon";
+const char* CONFIG_BRANCH_TITLE="title";
 
+static QString dirSyntax(const QString &d) {
+	if(!d.isEmpty()) {
+		QString ds(d);
+
+		ds.replace("//", "/");
+
+		int slashPos=ds.findRev('/');
+
+		if(slashPos!=(((int)ds.length())-1))
+			ds.append('/');
+
+		return ds;
+	}
+
+	return d;
+}
+
+GVFileTreeBranch::GVFileTreeBranch(KFileTreeView *tv, const KURL& url, const QString& title, const QString& icon)
+                : KFileTreeBranch(tv, url, title, SmallIcon(icon)),
+                  mIcon(icon)
+{
+}
 
 GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	// Look tweaking
@@ -60,26 +86,6 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	setAllColumnsShowFocus(true);
 	setRootIsDecorated(true);
 
-	// Create branches
-	mHomeBranch=addBranch(KURL(QDir::homeDirPath()),i18n("Home Directory"),SmallIcon("folder_home"));
-	mRootBranch=addBranch(KURL("/"),i18n("Root Directory"),SmallIcon("folder_red"));
-	setDirOnlyMode(mHomeBranch,true);
-	setDirOnlyMode(mRootBranch,true);
-	mHomeBranch->root()->setExpandable(true);
-	mRootBranch->root()->setExpandable(true);
-	mHomeBranch->setChildRecurse(false);
-	mRootBranch->setChildRecurse(false);
-
-	connect(mHomeBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
-	connect(mRootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
-	
-	connect(mHomeBranch,SIGNAL( refreshItems(const KFileItemList&)),
-		this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
-	connect(mRootBranch,SIGNAL( refreshItems(const KFileItemList&)),
-		this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
-
 	// Popup
 	mPopupMenu=new QPopupMenu(this);
 	mPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder..."),this,SLOT(makeDir()));
@@ -87,7 +93,15 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mPopupMenu->insertItem(i18n("Rename..."),this,SLOT(renameDir()));
 	mPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete"),this,SLOT(removeDir()));
 	mPopupMenu->insertSeparator();
-	mPopupMenu->insertItem(i18n("Properties"),this,SLOT(showPropertiesDialog()));
+	mPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showPropertiesDialog()));
+
+	mBranchPopupMenu=new QPopupMenu(this);
+	mBranchNewFolderItem=mBranchPopupMenu->insertItem(SmallIcon("folder_new"),i18n("New Folder..."),this,
+				SLOT(makeDir()));
+	mBranchPopupMenu->insertSeparator();
+	mBranchPopupMenu->insertItem(i18n("New Branch..."),this,SLOT(makeBranch()));
+	mBranchPopupMenu->insertItem(SmallIcon("editdelete"),i18n("Delete Branch"),this,SLOT(removeBranch()));
+	mBranchPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showBranchPropertiesDialog()));
 
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
 		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
@@ -107,6 +121,59 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 		this,SLOT(autoOpenDropTarget()));
 }
 
+
+//------------------------------------------------------------------------
+//
+// Config
+//
+//------------------------------------------------------------------------
+void GVDirView::readConfig(KConfig* config, const QString& group) {
+	for(int num=1; num<100; num++) {
+		QString grp;
+
+		grp.sprintf("%s - branch:%d", group.latin1(), num);
+		if(config->hasGroup(grp)) {
+			config->setGroup(grp);
+			QString url;
+			QString icon;
+			QString title;
+
+			url=config->readPathEntry(CONFIG_BRANCH_URL);
+			icon=config->readEntry(CONFIG_BRANCH_ICON);
+			title=config->readEntry(CONFIG_BRANCH_TITLE);
+			if (url.isEmpty() || icon.isEmpty() || title.isEmpty()) {
+				break;
+			} else {
+				addBranch(url, title, icon);
+			}
+		} else {
+			break;
+		}
+	}
+	if (0==mBranches.count()) {
+		defaultBranches();
+	}
+}
+
+
+void GVDirView::writeConfig(KConfig* config, const QString& group) {
+	GVFileTreeBranch *branch;
+	int num=1;
+
+	for (branch=mBranches.first(); branch; branch=mBranches.next(), num++) {
+		QString grp;
+		grp.sprintf("%s - branch:%d", group.latin1(), num);
+
+		config->setGroup(grp);
+		if (branch->rootUrl().isLocalFile()) {
+			config->writePathEntry(CONFIG_BRANCH_URL, branch->rootUrl().path());
+		} else {
+			config->writeEntry(CONFIG_BRANCH_URL, branch->rootUrl().prettyURL());
+		}
+		config->writeEntry(CONFIG_BRANCH_ICON, branch->icon());
+		config->writeEntry(CONFIG_BRANCH_TITLE, branch->name());
+	}
+}
 
 
 /**
@@ -152,37 +219,47 @@ void GVDirView::setURLInternal(const KURL& url) {
 	KFileTreeViewItem* nextViewItem;
 
 	QString path=url.path();
-	QString homePath=QDir::homeDirPath();
-	if (path.startsWith(homePath)) {
-		viewItem=static_cast<KFileTreeViewItem*>(mHomeBranch->root());
-		path.remove(0,homePath.length());
-	} else {
-		viewItem=static_cast<KFileTreeViewItem*>(mRootBranch->root());
-	}
-	folderParts=QStringList::split('/',path);
-
-	// Finds the deepest existing view item
-	folderIter=folderParts.begin();
-	endFolderIter=folderParts.end();
-	for(;folderIter!=endFolderIter;++folderIter) {
-
-		nextViewItem=findViewItem(viewItem,*folderIter);
-		if (nextViewItem) {
-			folder+=*folderIter + '/';
-			viewItem=nextViewItem;
-		} else {
-			break;
+	KFileTreeBranch *branch,
+			*bestMatch=NULL;
+	for (branch=mBranches.first(); branch; branch=mBranches.next()) {
+		if(branch->rootUrl().protocol()==url.protocol() &&
+		   path.startsWith(branch->rootUrl().path()) &&
+		   (!bestMatch || branch->rootUrl().path().length() > bestMatch->rootUrl().path().length())) {
+			bestMatch=branch;
 		}
 	}
-	viewItem->setOpen(true);
 
-	// If this is the wanted item, select it, 
-	// otherwise set the url as the next to select
-	if (viewItem->url().equals(url,true)) {
-		setCurrentItem(viewItem);
-		ensureItemVisible(viewItem);
-	} else {
-		slotSetNextUrlToSelect(url);
+	if(bestMatch) {
+		viewItem=static_cast<KFileTreeViewItem*>(bestMatch->root());
+		if(bestMatch->rootUrl().path()!="/") {
+			path.remove(0,bestMatch->rootUrl().path().length());
+		}
+
+		folderParts=QStringList::split('/',path);
+
+		// Finds the deepest existing view item
+		folderIter=folderParts.begin();
+		endFolderIter=folderParts.end();
+		for(;folderIter!=endFolderIter;++folderIter) {
+
+			nextViewItem=findViewItem(viewItem,*folderIter);
+			if (nextViewItem) {
+				folder+=*folderIter + '/';
+				viewItem=nextViewItem;
+			} else {
+				break;
+			}
+		}
+		viewItem->setOpen(true);
+
+		// If this is the wanted item, select it, 
+		// otherwise set the url as the next to select
+		if (viewItem->url().equals(url,true)) {
+			setCurrentItem(viewItem);
+			ensureItemVisible(viewItem);
+		} else {
+			slotSetNextUrlToSelect(url);
+		}
 	}
 }
 
@@ -267,6 +344,26 @@ KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QStri
 }
 
 
+void GVDirView::addBranch(const QString& url, const QString& title, const QString& icon) {
+	GVFileTreeBranch *branch= new GVFileTreeBranch(this, KURL(dirSyntax(url)), title, icon);
+        KFileTreeView::addBranch(branch);
+        setDirOnlyMode(branch,true);
+        branch->root()->setExpandable(true);
+        branch->setChildRecurse(false);
+
+        connect(branch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
+                this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
+
+        connect(branch,SIGNAL( refreshItems(const KFileItemList&)),
+                this, SLOT( slotItemsRefreshed(const KFileItemList&) ) );
+	mBranches.append(branch);
+}
+
+void GVDirView::defaultBranches() {
+	addBranch(QDir::homeDirPath(),i18n("Home Folder"),"folder_home");
+	addBranch("/",i18n("Root Folder"),"folder_red");
+}
+
 //-Drag'n drop------------------------------------------------------
 void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 	if (!KURLDrag::canDecode(event)) {
@@ -349,8 +446,13 @@ void GVDirView::autoOpenDropTarget() {
 
 
 //- Popup ----------------------------------------------------------
-void GVDirView::slotContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
-	mPopupMenu->popup(pos);
+void GVDirView::slotContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
+	if(item && item->parent()) {
+		mPopupMenu->popup(pos);
+	} else {
+		mBranchPopupMenu->setItemEnabled(mBranchNewFolderItem, item);
+		mBranchPopupMenu->popup(pos);
+	}
 }
 
 
@@ -441,9 +543,82 @@ void GVDirView::slotDirRemoved(KIO::Job* job) {
 
 
 void GVDirView::showPropertiesDialog() {
-	(void)new KPropertiesDialog(currentURL());
+	(void)new KPropertiesDialog(currentURL(),this);
 }
 
+void GVDirView::makeBranch() {
+	showBranchPropertiesDialog(0L);
+}
+
+void GVDirView::removeBranch() {
+	QListViewItem* li=selectedItem();
+	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
+
+	if (br && KMessageBox::Yes==KMessageBox::warningYesNo(this,
+                                "<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
+                                + "</qt>")) {
+		KFileTreeView::removeBranch(br);
+		if (0==childCount()) {
+			KMessageBox::information(this,
+				"<qt>" + i18n("You have removed all folders. The list will now rollback to the default.")
+				+ "</qt>");
+			defaultBranches();
+		}
+	}
+}
+
+void GVDirView::showBranchPropertiesDialog() {
+	QListViewItem* li=selectedItem();
+	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
+
+	if (br) {
+		showBranchPropertiesDialog(static_cast<GVFileTreeBranch*>(br));
+	}
+}
+
+void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
+{
+        GVBranchPropertiesDialog dialog(this);
+
+        if(editItem) {
+                dialog.setContents(editItem->icon(), editItem->name(), editItem->rootUrl().prettyURL());
+        }
+
+        if(QDialog::Accepted==dialog.exec()) {
+		KURL newUrl(dirSyntax(dialog.url()));
+
+		if (editItem) {
+			if (dialog.icon()!=editItem->icon() || newUrl!=editItem->rootUrl()) {
+				KFileTreeView::removeBranch(editItem);
+				addBranch(dialog.url(), dialog.title(), dialog.icon());
+			} else {
+				if (dialog.title()!=editItem->name()) {
+					editItem->setName(dialog.title());
+				}
+			}
+		} else {
+			if (NULL!=branch(dialog.title())) {
+				KMessageBox::error(this,
+					"<qt>"+i18n("An entry already exists with the title \"%1\"!")
+					.arg(dialog.title())+"</qt>");
+			} else {
+				KFileTreeBranch *existingBr;
+				for (existingBr=mBranches.first(); existingBr; existingBr=mBranches.next()) {
+					if(existingBr->rootUrl()==newUrl) {
+						break;
+					}
+				}
+				if (existingBr) {
+					KMessageBox::error(this,
+						"<qt>"+i18n("An entry already exists with the URL \"%1\"!")
+						.arg(dialog.url())+"</qt>");
+				} else {
+					addBranch(dialog.url(), dialog.title(), dialog.icon());
+				}
+			}
+		}
+	}
+}
 
 //- This code should go in KFileTreeBranch -------------------------------
 void GVDirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
@@ -465,8 +640,10 @@ void GVDirView::slotItemsRefreshed(const KFileItemList& items) {
 	KFileItemListIterator it(items);
 	for (;it.current(); ++it) {
 		KFileItem* item=it.current();
-		refreshBranch(item, mHomeBranch);
-		refreshBranch(item, mRootBranch);
+		KFileTreeBranch *branch;
+		for (branch=mBranches.first(); branch; branch=mBranches.next()) {
+			refreshBranch(item, branch);
+		}
 	}
 }
 

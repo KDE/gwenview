@@ -1,0 +1,59 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>GVBranchPropertiesDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GVBranchPropertiesDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>327</width>
+            <height>84</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Add New Branch</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KLineEdit" row="0" column="2">
+            <property name="name">
+                <cstring>mTitle</cstring>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="1" column="2">
+            <property name="name">
+                <cstring>mUrl</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="1">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Title:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="1">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>URL:</string>
+            </property>
+        </widget>
+        <widget class="KIconButton" row="0" column="0" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>mIcon</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

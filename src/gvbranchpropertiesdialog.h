@@ -18,30 +18,33 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef STATUSBARPROGRESS_H
-#define STATUSBARPROGRESS_H
+#ifndef GVCONFIGFOLDERDIALOG_H
+#define GVCONFIGFOLDERDIALOG_H
 
-// Qt includes
-#include <qwidget.h>
+// KDE includes
+#include <kdialogbase.h>
 
-class QHBoxLayout;
-class QLabel;
-class QStatusBar;
+class GVBranchPropertiesDialogPrivate;
 
-class KProgress;
-
-class StatusBarProgress : public QWidget {
+class GVBranchPropertiesDialog : public KDialogBase {
 Q_OBJECT
-	KProgress* mProgress;
-	QLabel* mLabel;
-	QStatusBar* mStatusBar;
-	QHBoxLayout* mLayout;
 public:
-	StatusBarProgress(QStatusBar*,QString text,int count);
-	~StatusBarProgress();
+	GVBranchPropertiesDialog(QWidget* parent);
+	~GVBranchPropertiesDialog();
 
-	KProgress* progress() const { return mProgress; }
+	void setContents(const QString& icon, const QString& title, const QString& url);
+
+	QString icon();
+	QString title();
+	QString url();
+
+	int exec();
+
+protected slots:
+	void enableOk();
+
+private:
+	GVBranchPropertiesDialogPrivate* d;
 };
-
 
 #endif

@@ -100,6 +100,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const char* CONFIG_DOCK_GROUP="dock";
 const char* CONFIG_MAINWINDOW_GROUP="main window";
 const char* CONFIG_FILEWIDGET_GROUP="file widget";
+const char* CONFIG_DIRWIDGET_GROUP="dir widget";
 const char* CONFIG_JPEGTRAN_GROUP="jpegtran";
 const char* CONFIG_PIXMAPWIDGET_GROUP="pixmap widget";
 const char* CONFIG_FILEOPERATION_GROUP="file operations";
@@ -164,6 +165,7 @@ bool GVMainWindow::queryClose() {
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
 	mPixmapView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
+	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
 	mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
 	GVJPEGTran::writeConfig(config, CONFIG_JPEGTRAN_GROUP);
 
@@ -572,6 +574,7 @@ void GVMainWindow::escapePressed() {
 void GVMainWindow::thumbnailUpdateStarted(int count) {
 	mProgress=new StatusBarProgress(statusBar(),i18n("Generating thumbnails..."),count);
 	mProgress->progress()->setFormat("%v/%m");
+	statusBar()->addWidget(mProgress);
 	mProgress->show();
 	mStop->setEnabled(true);
 }
@@ -580,7 +583,6 @@ void GVMainWindow::thumbnailUpdateStarted(int count) {
 void GVMainWindow::thumbnailUpdateEnded() {
 	mStop->setEnabled(false);
 	if (mProgress) {
-		mProgress->hide();
 		delete mProgress;
 		mProgress=0L;
 	}
@@ -713,6 +715,7 @@ void GVMainWindow::createWidgets() {
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
+	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	GVJPEGTran::readConfig(config,CONFIG_JPEGTRAN_GROUP);
