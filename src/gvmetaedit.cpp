@@ -81,7 +81,7 @@ void GVMetaEdit::updateContent() {
 	}
 
 	QString comment=mDocument->comment();
-	
+
 	if (mDocument->commentState() & GVDocument::VALID) {
 		mEmpty = comment.isEmpty();
 		if (mEmpty) {
@@ -92,7 +92,7 @@ void GVMetaEdit::updateContent() {
 		}
 	} else {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
-		mCommentEdit->setText("<i>This image can't be commented.</i>");
+		mCommentEdit->setText(i18n("<i>This image can't be commented.</i>"));
 	}
 	bool writable=mDocument->commentState()==GVDocument::WRITABLE;
 	mCommentEdit->setReadOnly(!writable);
