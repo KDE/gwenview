@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>632</width>
-            <height>299</height>
+            <width>557</width>
+            <height>337</height>
         </rect>
     </property>
     <property name="caption">
@@ -37,15 +37,34 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Thumbnails</string>
+                    <string>File List</string>
                 </attribute>
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mAutoLoadImage</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="text">
+                            <string>Automatically load first image in folder</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mShowDirs</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show folders</string>
+                        </property>
+                    </widget>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>Layout6</cstring>
+                            <cstring>Layout7</cstring>
                         </property>
                         <hbox>
                             <property name="name">
@@ -59,51 +78,30 @@
                             </property>
                             <widget class="QLabel">
                                 <property name="name">
-                                    <cstring>TextLabel1</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>1</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                    <cstring>TextLabel1_5_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Margin between thumbnails:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring></cstring>
+                                    <string>Filename color of current image:</string>
                                 </property>
                             </widget>
-                            <widget class="QSpinBox">
+                            <widget class="KColorButton">
                                 <property name="name">
-                                    <cstring>mThumbnailMargin</cstring>
+                                    <cstring>mShownColor</cstring>
                                 </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                <property name="text">
+                                    <string></string>
                                 </property>
-                                <property name="buttonSymbols">
-                                    <enum>UpDownArrows</enum>
-                                </property>
-                                <property name="maxValue">
-                                    <number>50</number>
-                                </property>
-                                <property name="minValue">
-                                    <number>2</number>
-                                </property>
-                                <property name="lineStep">
-                                    <number>1</number>
+                                <property name="color">
+                                    <color>
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
                                 </property>
                             </widget>
                             <spacer>
                                 <property name="name">
-                                    <cstring>Spacer7</cstring>
+                                    <cstring>Spacer12_2</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -113,91 +111,154 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>20</width>
+                                        <width>251</width>
                                         <height>0</height>
                                     </size>
                                 </property>
                             </spacer>
                         </hbox>
                     </widget>
-                    <widget class="QCheckBox">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>mWordWrapFilename</cstring>
+                            <cstring>groupBox5</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
+                        <property name="title">
+                            <string>Thumbnail View</string>
                         </property>
-                        <property name="text">
-                            <string>Word wrap filename</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout9</cstring>
-                        </property>
-                        <hbox>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QGroupBox">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>GroupBoxCache</cstring>
+                                    <cstring>mWordWrapFilename</cstring>
                                 </property>
-                                <property name="title">
-                                    <string>Cache</string>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Word wrap filename</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>Layout6</cstring>
                                 </property>
                                 <hbox>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
                                     <property name="margin">
-                                        <number>11</number>
+                                        <number>0</number>
                                     </property>
                                     <property name="spacing">
                                         <number>6</number>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="QLabel">
                                         <property name="name">
-                                            <cstring>mCalculateCacheSize</cstring>
+                                            <cstring>TextLabel1</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>1</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>Calculate Cache Size</string>
+                                            <string>Margin between thumbnails:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring></cstring>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="QSpinBox">
                                         <property name="name">
-                                            <cstring>mEmptyCache</cstring>
+                                            <cstring>mThumbnailMargin</cstring>
                                         </property>
-                                        <property name="text">
-                                            <string>Empty Cache</string>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>0</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="buttonSymbols">
+                                            <enum>UpDownArrows</enum>
+                                        </property>
+                                        <property name="maxValue">
+                                            <number>50</number>
+                                        </property>
+                                        <property name="minValue">
+                                            <number>2</number>
+                                        </property>
+                                        <property name="lineStep">
+                                            <number>1</number>
                                         </property>
                                     </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer7</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
                                 </hbox>
                             </widget>
-                            <spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBoxCache</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Thumbnail Cache</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QPushButton">
                                 <property name="name">
-                                    <cstring>Spacer17</cstring>
+                                    <cstring>mCalculateCacheSize</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                <property name="text">
+                                    <string>Calculate Cache Size</string>
                                 </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>mEmptyCache</cstring>
                                 </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>321</width>
-                                        <height>16</height>
-                                    </size>
+                                <property name="text">
+                                    <string>Empty Cache</string>
                                 </property>
-                            </spacer>
+                            </widget>
                         </hbox>
                     </widget>
                     <spacer>
@@ -212,8 +273,239 @@
                         </property>
                         <property name="sizeHint">
                             <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Image View</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mSmoothScale</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use smooth scaling (slower)</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mAutoZoomEnlarge</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Enlarge small images when auto zoom is activated</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mShowScrollBars</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show scroll bars</string>
+                        </property>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBox4</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Mouse Wheel Behaviour</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_3_2</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>A&amp;lt + wheel:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>mAltPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>C&amp;trl + wheel:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>mControlPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1_3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Wheel only:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>mWheelOnly</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>mWheelOnly</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="currentItem">
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="2" column="1">
+                                <property name="name">
+                                    <cstring>mShiftPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>mControlPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Shift + wheel:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>mShiftPlusWheel</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="3" column="1">
+                                <property name="name">
+                                    <cstring>mAltPlusWheel</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer11</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>21</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Full Screen</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>mShowPathInFullScreen</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Display image path over image</string>
+                        </property>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBox2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Interface</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>mShowMenuBarInFullScreen</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show menu</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>mShowToolBarInFullScreen</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show toolbar</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>mShowStatusBarInFullScreen</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show status bar</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer9_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
                                 <width>16</width>
-                                <height>79</height>
+                                <height>100</height>
                             </size>
                         </property>
                     </spacer>
@@ -338,353 +630,12 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Image View</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mSmoothScale</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Use smooth scaling (slower)</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mAutoZoomEnlarge</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Enlarge small images when auto zoom is activated</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mShowScrollBars</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Show scroll bars</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer11</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>21</width>
-                                <height>100</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Full Screen</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mShowPathInFullScreen</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Display image path over image</string>
-                        </property>
-                    </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>GroupBox2</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Interface</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>mShowMenuBarInFullScreen</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show menu</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>mShowToolBarInFullScreen</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show toolbar</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>mShowStatusBarInFullScreen</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show status bar</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer9_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>0</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Mouse Wheel Behavior</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>Layout8</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QComboBox" row="2" column="1">
-                                <property name="name">
-                                    <cstring>mShiftPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel1_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Wheel only:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>mWheelOnly</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="3" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_2_3</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>A&amp;lt + wheel:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>mAltPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>C&amp;trl + wheel:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>mControlPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Shift + wheel:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>mShiftPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>mWheelOnly</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="currentItem">
-                                    <number>0</number>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>mControlPlusWheel</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="3" column="1">
-                                <property name="name">
-                                    <cstring>mAltPlusWheel</cstring>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer10</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>0</width>
-                                <height>57</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
                     <string>Misc</string>
                 </attribute>
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout8</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>TextLabel1_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>External editor:</string>
-                                </property>
-                            </widget>
-                            <widget class="KURLRequester">
-                                <property name="name">
-                                    <cstring>mExternalEditor</cstring>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout7</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Path to jpegtran:</string>
-                                </property>
-                            </widget>
-                            <widget class="KURLRequester">
-                                <property name="name">
-                                    <cstring>mJPEGTran</cstring>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mAutoLoadImage</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
-                        </property>
-                        <property name="text">
-                            <string>Automatically load first image in folder</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>mShowDirs</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Show folders in file view</string>
-                        </property>
-                    </widget>
                     <widget class="QCheckBox">
                         <property name="name">
                             <cstring>mShowLocationToolBar</cstring>
@@ -695,59 +646,39 @@
                     </widget>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>Layout7</cstring>
+                            <cstring>layout15</cstring>
                         </property>
-                        <hbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QLabel">
+                            <widget class="QLabel" row="1" column="0">
                                 <property name="name">
-                                    <cstring>TextLabel1_5</cstring>
+                                    <cstring>textLabel1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Filename color of current image:</string>
+                                    <string>Path to jpegtran:</string>
                                 </property>
                             </widget>
-                            <widget class="KColorButton">
+                            <widget class="KURLRequester" row="0" column="1">
                                 <property name="name">
-                                    <cstring>mShownColor</cstring>
+                                    <cstring>mExternalEditor</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string></string>
-                                </property>
-                                <property name="color">
-                                    <color>
-                                        <red>255</red>
-                                        <green>0</green>
-                                        <blue>0</blue>
-                                    </color>
+                                    <string>External editor:</string>
                                 </property>
                             </widget>
-                            <spacer>
+                            <widget class="KURLRequester" row="1" column="1">
                                 <property name="name">
-                                    <cstring>Spacer12</cstring>
+                                    <cstring>mJPEGTran</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>251</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </hbox>
+                            </widget>
+                        </grid>
                     </widget>
                     <spacer>
                         <property name="name">
@@ -762,7 +693,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>30</height>
+                                <height>120</height>
                             </size>
                         </property>
                     </spacer>
@@ -867,12 +798,6 @@
     <tabstop>mTabs</tabstop>
     <tabstop>mThumbnailMargin</tabstop>
     <tabstop>mWordWrapFilename</tabstop>
-    <tabstop>mCalculateCacheSize</tabstop>
-    <tabstop>mEmptyCache</tabstop>
-    <tabstop>mWheelOnly</tabstop>
-    <tabstop>mControlPlusWheel</tabstop>
-    <tabstop>mShiftPlusWheel</tabstop>
-    <tabstop>mAltPlusWheel</tabstop>
     <tabstop>mShowPathInFullScreen</tabstop>
     <tabstop>mShowMenuBarInFullScreen</tabstop>
     <tabstop>mShowToolBarInFullScreen</tabstop>
@@ -887,15 +812,15 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kcolorbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>
