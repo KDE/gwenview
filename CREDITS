@@ -33,3 +33,6 @@ Patched toolbar layour for RTL languages (v0.16.0).
 - Marco Gazzetta <mililani@pobox.com>
 Patch to prevent Gwenview from exiting when trying to thumbnail a broken JPEG
 (v0.16.0).
+
+- GeniusR13 <geniusr13@gmx.net>
+Patch to fix compilation with KDE 3.0 (v0.16.1).

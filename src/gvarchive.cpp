@@ -55,7 +55,14 @@ bool protocolIsArchive(const QString& protocol) {
 }
 
 QStringList mimeTypes() {
-	return mimeTypeProtocols().keys();
+	const MimeTypeProtocols& map=mimeTypeProtocols();
+	MimeTypeProtocols::ConstIterator it;
+	QStringList strlist;
+	for (it=map.begin();it!=map.end();++it) {
+		strlist+=it.key();
+	}
+	return strlist;
+	//return mimeTypeProtocols().keys(); // keys() does not exist in Qt 3.0
 }
 
 
