@@ -377,13 +377,13 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 	// Apply scaling
 	int scaling = printer->option( "app-gwenview-scale" ).toInt();
 
+	QSize size = image.size();
 	if (scaling==1 /* Fit to page */) {
 		bool enlargeToFit = printer->option( "app-gwenview-enlargeToFit" ) != f;
 		if ((image.width() > pdWidth || image.height() > pdHeight) || enlargeToFit) {
-			image = GVImageUtils::scale( image, pdWidth, pdHeight, GVImageUtils::SMOOTH_NORMAL, QImage::ScaleMin );
+			size.scale( pdWidth, pdHeight, QSize::ScaleMin );
 		}
 	} else {
-		QSize size;
 		if (scaling==2 /* Scale To */) {
 			int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
 				GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
@@ -418,30 +418,25 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 				size.scale(pdWidth, pdHeight, QSize::ScaleMin);
 			}
 		}
-
-		if (size!=image.size()) {
-			image = GVImageUtils::scale( image, size.width(), size.height(),
-				GVImageUtils::SMOOTH_NORMAL, QImage::ScaleFree );
-		}
 	}
 
 	// Compute x and y
 	if ( alignment & Qt::AlignHCenter )
-		x = (pdWidth - image.width())/2;
+		x = (pdWidth - size.width())/2;
 	else if ( alignment & Qt::AlignLeft )
 		x = 0;
 	else if ( alignment & Qt::AlignRight )
-		x = pdWidth - image.width();
+		x = pdWidth - size.width();
 
 	if ( alignment & Qt::AlignVCenter )
-		y = (pdHeight - image.height())/2;
+		y = (pdHeight - size.height())/2;
 	else if ( alignment & Qt::AlignTop )
 		y = 0;
 	else if ( alignment & Qt::AlignBottom )
-		y = pdHeight - image.height();
+		y = pdHeight - size.height();
 
-	// Draw
-	painter->drawImage( x, y, image );
+	// Draw, the image will be scaled to fit the given area if necessary
+	painter->drawImage( QRect( x, y, size.width(), size.height()), image );
 
 	if ( printFilename ) {
 		QString fname = minimizeString( filename(), fMetrics, pdWidth );
