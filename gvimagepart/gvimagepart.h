@@ -27,6 +27,8 @@ class KAction;
 class GVScrollPixmapView;
 class GVDocument;
 class GVImagePart;
+class KDirLister;
+class KFileItem;
 
 /**
  * The browser extension is an attribute of GVImagePart and provides
@@ -90,6 +92,21 @@ protected slots:
 protected:
 	void partActivateEvent(KParts::PartActivateEvent* event);
 
+private slots:
+
+	void dirListerClear();
+
+	void dirListerNewItems( const KFileItemList& );
+
+	void dirListerDeleteItem(KFileItem*);
+
+	void slotSelectNext();
+	void slotSelectPrevious();
+
+private:
+
+	void updateNextPrevious();
+
 	/**
 	 * The component's widget
 	 */
@@ -105,6 +122,14 @@ protected:
 	 * some extra functionality to Konqueror.
 	 */
 	GVImagePartBrowserExtension* mBrowserExtension;
+
+	// for the next/previous actions
+	KDirLister* mDirLister;
+
+	KAction* mNextImage;
+	KAction* mPreviousImage;
+	// alphabetically sorted filenames of images in the picture's directory
+	QStringList mImagesInDirectory;
 };
 
 #endif

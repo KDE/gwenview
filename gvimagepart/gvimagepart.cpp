@@ -16,14 +16,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <qapplication.h>
 #include <qcursor.h>
 #include <qpoint.h>
 
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdirlister.h>
 #include <kfilemetainfo.h>
 #include <kiconloader.h>
+#include <kimageio.h>
 #include <klocale.h>
 #include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
@@ -75,6 +78,27 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	setWidget(mPixmapView);
 
+	mDirLister = new KDirLister;
+	mDirLister->setAutoErrorHandlingEnabled( false, 0 );
+	mDirLister->setMainWindow( parentWidget->topLevelWidget());
+	connect( mDirLister, SIGNAL( clear()), SLOT( dirListerClear()));
+	connect( mDirLister, SIGNAL( newItems( const KFileItemList& )),
+		SLOT( dirListerNewItems( const KFileItemList& )));
+	connect(mDirLister,SIGNAL(deleteItem(KFileItem*)),
+		SLOT(dirListerDeleteItem(KFileItem*)) );
+	// partially duped from GVFileViewStack::initDirListerFilter()
+	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
+	mimeTypes.append("image/x-xcf-gimp");
+	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
+	mDirLister->setMimeFilter(mimeTypes);
+	mPreviousImage=new KAction(i18n("&Previous Image"),
+		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
+		this,SLOT(slotSelectPrevious()), actionCollection(), "previous");
+	mNextImage=new KAction(i18n("&Next Image"),
+		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
+		this,SLOT(slotSelectNext()), actionCollection(), "next");
+	updateNextPrevious();
+
 	KIconLoader iconLoader = KIconLoader("gwenview");
 	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
@@ -84,6 +108,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 }
 
 GVImagePart::~GVImagePart() {
+	delete mDirLister;
 }
 
 
@@ -123,6 +148,7 @@ bool GVImagePart::openURL(const KURL& url) {
 	} else {
 		mDocument->setURL(url);
 	}
+	mDirLister->openURL(mDocument->dirURL());
 	emit setWindowCaption(url.prettyURL());
 	return true;
 }
@@ -151,6 +177,65 @@ void GVImagePart::print() {
 
 void GVImagePart::rotateRight() {
 	mDocument->transform(GVImageUtils::ROT_90);
+}
+
+void GVImagePart::dirListerClear() {
+	mImagesInDirectory.clear();
+	updateNextPrevious();
+}
+
+void GVImagePart::dirListerNewItems( const KFileItemList& list ) {
+	for( KFileItemList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+		mImagesInDirectory.append( (*it)->name());
+	}
+	qHeapSort( mImagesInDirectory );
+	updateNextPrevious();
+}
+
+void GVImagePart::dirListerDeleteItem( KFileItem* item ) {
+	mImagesInDirectory.remove( item->name());
+	updateNextPrevious();
+}
+
+void GVImagePart::updateNextPrevious() {
+	QStringList::ConstIterator current = mImagesInDirectory.find( mDocument->filename());
+	if( current == mImagesInDirectory.end()) {
+		mNextImage->setEnabled( false );
+		mPreviousImage->setEnabled( false );
+		return;
+	}
+	mPreviousImage->setEnabled( current != mImagesInDirectory.begin());
+	++current;
+	mNextImage->setEnabled( current != mImagesInDirectory.end());
+}
+
+void GVImagePart::slotSelectNext() {
+	QStringList::ConstIterator current = mImagesInDirectory.find( mDocument->filename());
+	if( current == mImagesInDirectory.end()) {
+		return;
+	}
+	++current;
+	if( current == mImagesInDirectory.end()) {
+		return;
+	}
+	KURL newURL = mDocument->dirURL();
+	newURL.setFileName( *current );
+	KParts::URLArgs args;        // Prevent adding all images to history, it feels
+	args.setLockHistory( true ); // better that way when finally going back.
+	mBrowserExtension->openURLRequest( newURL, args );
+}
+
+void GVImagePart::slotSelectPrevious() {
+	QStringList::ConstIterator current = mImagesInDirectory.find( mDocument->filename());
+	if( current == mImagesInDirectory.end() || current == mImagesInDirectory.begin()) {
+		return;
+	}
+	--current;
+	KURL newURL = mDocument->dirURL();
+	newURL.setFileName( *current );
+	KParts::URLArgs args;
+	args.setLockHistory( true );
+	mBrowserExtension->openURLRequest( newURL, args );
 }
 
 /***** GVImagePartBrowserExtension *****/

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="GVImagePart" version="2">
+<kpartgui name="GVImagePart" version="3">
 <MenuBar>
  <Menu name="file"><Text>&amp;File</Text>
   <Action name="saveAs"/>
@@ -22,6 +22,8 @@
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
+ <Action name="previous"/>
+ <Action name="next"/>
  <Action name="view_zoom_auto"/>
  <Action name="rotate_right"/>
 </ToolBar>
