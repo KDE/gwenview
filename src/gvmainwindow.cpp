@@ -149,7 +149,6 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 
     bool filenameIsValid=!mGVPixmap->isNull();
 
-	mToggleFullScreen->setEnabled(filenameIsValid);
 	mRenameFile->setEnabled(filenameIsValid);
 	mCopyFiles->setEnabled(filenameIsValid);
 	mMoveFiles->setEnabled(filenameIsValid);

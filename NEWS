@@ -1,4 +1,7 @@
 2003.xx.xx - v1.0.0
+- Fixes:
+ - Keep the fullscreen button activated to be able to go back to normal mode
+   when moving to a dir without images in fullscreen mode. 
 
 2003.xx.xx - v0.17.1
 - Fixes:
@@ -14,7 +17,7 @@
  - Moved "Open with editor" in the "Edit" menu.
  - Display the image file name in the window title.
  - Fixed the bug which caused the window to grow up when entering folders with
-   long names.
+   long names (Thanks to Stefan Heinze for the tip).
  - Rotating big JPEG images with JPEGTran won't hang anymore.
 
 

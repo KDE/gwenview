@@ -400,10 +400,8 @@ void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 		if (mOperaLikePrevious) { // Avoid showing the popup menu after Opera like previous
 			mOperaLikePrevious=false;
 		} else {
-			if ( !mGVPixmap->isNull()) {
-				openContextMenu(event->globalPos());
-				return;
-			}
+			openContextMenu(event->globalPos());
+			return;
 		}
 		break;
 	
@@ -517,59 +515,61 @@ void GVScrollPixmapView::setAutoZoom(bool value) {
 //
 //------------------------------------------------------------------------
 void GVScrollPixmapView::openContextMenu(const QPoint& pos) {
-	if (mGVPixmap->isNull()) return;
-
+	if (mGVPixmap->isNull() && !mFullScreen) return;
 	QPopupMenu menu(this);
 
 	mActionCollection->action("view_fullscreen")->plug(&menu);
-	menu.insertSeparator();
 	
-	mAutoZoom->plug(&menu);
-	mZoomIn->plug(&menu);
-	mZoomOut->plug(&menu);
-	mResetZoom->plug(&menu);
-	mLockZoom->plug(&menu);
-
-	menu.insertSeparator();
-	
-	mActionCollection->action("first")->plug(&menu);
-	mActionCollection->action("previous")->plug(&menu);
-	mActionCollection->action("next")->plug(&menu);
-	mActionCollection->action("last")->plug(&menu);
-	
-	menu.insertSeparator();
-	
-	QPopupMenu* editMenu=new QPopupMenu(&menu);
-	mActionCollection->action("edit_rotate_left")->plug(editMenu);
-	mActionCollection->action("edit_rotate_right")->plug(editMenu);
-	mActionCollection->action("edit_mirror")->plug(editMenu);
-	mActionCollection->action("edit_flip")->plug(editMenu);
-	editMenu->connectItem(
-		editMenu->insertItem( i18n("Open with &Editor") ),
-		this,SLOT(openWithEditor()) );
+	if (!mGVPixmap->isNull()) {
+		menu.insertSeparator();
 		
-	menu.insertItem( i18n("Edit"), editMenu );
-	
-	menu.insertSeparator();
-	
-	menu.connectItem(
-		menu.insertItem( i18n("&Rename...") ),
-		this,SLOT(renameFile()) );
-	menu.connectItem(
-		menu.insertItem( i18n("&Copy To...") ),
-		this,SLOT(copyFile()) );
-	menu.connectItem(
-		menu.insertItem( i18n("&Move To...") ),
-		this,SLOT(moveFile()) );
-	menu.connectItem(
-		menu.insertItem( i18n("&Delete") ),
-		this,SLOT(deleteFile()) );
-	
-	menu.insertSeparator();
-	
-	menu.connectItem(
-		menu.insertItem( i18n("Properties") ),
-		this,SLOT(showFileProperties()) );
+		mAutoZoom->plug(&menu);
+		mZoomIn->plug(&menu);
+		mZoomOut->plug(&menu);
+		mResetZoom->plug(&menu);
+		mLockZoom->plug(&menu);
+
+		menu.insertSeparator();
+		
+		mActionCollection->action("first")->plug(&menu);
+		mActionCollection->action("previous")->plug(&menu);
+		mActionCollection->action("next")->plug(&menu);
+		mActionCollection->action("last")->plug(&menu);
+		
+		menu.insertSeparator();
+		
+		QPopupMenu* editMenu=new QPopupMenu(&menu);
+		mActionCollection->action("edit_rotate_left")->plug(editMenu);
+		mActionCollection->action("edit_rotate_right")->plug(editMenu);
+		mActionCollection->action("edit_mirror")->plug(editMenu);
+		mActionCollection->action("edit_flip")->plug(editMenu);
+		editMenu->connectItem(
+			editMenu->insertItem( i18n("Open with &Editor") ),
+			this,SLOT(openWithEditor()) );
+			
+		menu.insertItem( i18n("Edit"), editMenu );
+		
+		menu.insertSeparator();
+		
+		menu.connectItem(
+			menu.insertItem( i18n("&Rename...") ),
+			this,SLOT(renameFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Copy To...") ),
+			this,SLOT(copyFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Move To...") ),
+			this,SLOT(moveFile()) );
+		menu.connectItem(
+			menu.insertItem( i18n("&Delete") ),
+			this,SLOT(deleteFile()) );
+		
+		menu.insertSeparator();
+		
+		menu.connectItem(
+			menu.insertItem( i18n("Properties") ),
+			this,SLOT(showFileProperties()) );
+	}
 	
 	menu.exec(pos);
 }
