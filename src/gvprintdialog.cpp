@@ -46,128 +46,213 @@ const char* STR_FALSE="false";
 
 GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 : KPrintDialogPage( parent, name ) {
-    mGVPixmap = ((GVMainWindow*)parent)->gvPixmap();
+	mGVPixmap = ((GVMainWindow*)parent)->gvPixmap();
 	mContent = new GVPrintDialogPageBase(this);
 	setTitle( mContent->caption() );
 
 	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->addWidget( mContent );
 
-    connect(mContent->mWidth, SIGNAL( valueChanged( int )), SLOT( setWValue( int )));
-    connect(mContent->mHeight, SIGNAL( valueChanged( int )), SLOT( setHValue( int )));
-    connect(mContent->mKeepRatio, SIGNAL( toggled( bool )), SLOT( toggleRatio( bool )));
-    connect(mContent->mUnits, SIGNAL(activated(const QString &)), SLOT(setNewUnit(const QString& )));
+	connect(mContent->mWidth, SIGNAL( valueChanged( int )), SLOT( setWValue( int )));
+	connect(mContent->mHeight, SIGNAL( valueChanged( int )), SLOT( setHValue( int )));
+	connect(mContent->mKeepRatio, SIGNAL( toggled( bool )), SLOT( toggleRatio( bool )));
+	connect(mContent->mUnits, SIGNAL(activated(const QString &)), SLOT(setNewUnit(const QString& )));
 
-    toggleRatio(mContent->mScale->isChecked() );
+	toggleRatio(mContent->mScale->isChecked() );
 }
 
 GVPrintDialogPage::~GVPrintDialogPage() {}
 
 void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
-                                    bool /*incldef*/ ) {
-    opts["app-gwenview-position"] = mContent->mPosition->currentText();
+									bool /*incldef*/ ) {
+	opts["app-gwenview-position"] = QString::number(getPosition(mContent->mPosition->currentText()));
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
-    opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-shrinkToFit"] = mContent->mShrinkToFit->isChecked() ? STR_TRUE : STR_FALSE;
 
-    opts["app-gwenview-scale"] = mContent->mScale->isChecked() ? STR_TRUE : STR_FALSE;
-    opts["app-gwenview-scaleKeepRatio"] = mContent->mKeepRatio->isChecked() ? STR_TRUE : STR_FALSE;
-    opts["app-gwenview-scaleUnit"] = mContent->mUnits->currentText();
-    opts["app-gwenview-scaleWidth"] = QString::number( scaleWidth() );
-    opts["app-gwenview-scaleHeight"] = QString::number( scaleHeight() );
+	opts["app-gwenview-scale"] = mContent->mScale->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-scaleKeepRatio"] = mContent->mKeepRatio->isChecked() ? STR_TRUE : STR_FALSE;
+	opts["app-gwenview-scaleUnit"] = QString::number(getUnit(mContent->mUnits->currentText()));
+	opts["app-gwenview-scaleWidth"] = QString::number( scaleWidth() );
+	opts["app-gwenview-scaleHeight"] = QString::number( scaleHeight() );
 
 }
 
 void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
-    mContent->mPosition->setCurrentItem( opts["app-gwenview-position"] );
+	int val;
+	bool ok;
+	QString stVal;
+
+	val = opts["app-gwenview-position"].toInt( &ok );
+	if (ok) {
+		stVal = setPosition(val);	
+		mContent->mPosition->setCurrentItem(stVal);
+	}
+
 	mContent->mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
 	mContent->mAddComment->setChecked( opts["app-gwenview-printComment"] == STR_TRUE );
 	mContent->mShrinkToFit->setChecked( opts["app-gwenview-shrinkToFit"] == STR_TRUE );
-    
-    mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
-    mContent->mUnits->setCurrentItem( opts["app-gwenview-scaleUnit"] ); 
-	mContent->mKeepRatio->setChecked( opts["app-gwenview-scaleKeepRatio"] == STR_TRUE );
-    
-    bool ok;
-    int val = opts["app-gwenview-scaleWidth"].toInt( &ok );
-    if ( ok )
-        setScaleWidth( val );
-    val = opts["app-gwenview-scaleHeight"].toInt( &ok );
-    if ( ok )
-        setScaleHeight( val );
 
-    toggleRatio(mContent->mScale->isChecked() );
+	mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
+	val = opts["app-gwenview-scaleUnit"].toInt( &ok );
+	if (ok) {
+		stVal = setUnit(val);	
+		mContent->mUnits->setCurrentItem(stVal);
+	}
+
+	mContent->mKeepRatio->setChecked( opts["app-gwenview-scaleKeepRatio"] == STR_TRUE );
+
+	val = opts["app-gwenview-scaleWidth"].toInt( &ok );
+	if ( ok ) setScaleWidth( val );
+	val = opts["app-gwenview-scaleHeight"].toInt( &ok );
+	if ( ok ) setScaleHeight( val );
+
+	toggleRatio(mContent->mScale->isChecked() );
 }
 
 int GVPrintDialogPage::scaleWidth() const {
-    return mContent->mWidth->value();
+	return mContent->mWidth->value();
 }
 
 int GVPrintDialogPage::scaleHeight() const {
-    return mContent->mHeight->value();
+	return mContent->mHeight->value();
 }
 
 void GVPrintDialogPage::setScaleWidth( int value ) {
-    mContent->mWidth->setValue(value);
+	mContent->mWidth->setValue(value);
 }
 
 void GVPrintDialogPage::setScaleHeight( int value ) {
-    mContent->mHeight->setValue(value);
+	mContent->mHeight->setValue(value);
+}
+
+int GVPrintDialogPage::getPosition(const QString& align) {
+	int alignment;
+
+	if (align == i18n("Central-Left")) {
+		alignment = Qt::AlignLeft | Qt::AlignVCenter;
+	} else if (align == i18n("Central-Right")) {
+		alignment = Qt::AlignRight | Qt::AlignVCenter;
+	} else if (align == i18n("Top-Left")) {
+		alignment = Qt::AlignTop | Qt::AlignLeft;
+	} else if (align == i18n("Top-Right")) {
+		alignment = Qt::AlignTop | Qt::AlignRight;
+	} else if (align == i18n("Bottom-Left")) {
+		alignment = Qt::AlignBottom | Qt::AlignLeft;
+	} else if (align == i18n("Bottom-Right")) {
+		alignment = Qt::AlignBottom | Qt::AlignRight;
+	} else if (align == i18n("Top-Central")) {
+		alignment = Qt::AlignTop | Qt::AlignHCenter;
+	} else if (align == i18n("Bottom-Central")) {
+		alignment = Qt::AlignBottom | Qt::AlignHCenter;
+	} else	{
+		// Central
+		alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
+	}
+
+	return alignment;
+}
+
+QString GVPrintDialogPage::setPosition(int align) {
+	QString alignment;
+
+	if (align == (Qt::AlignLeft | Qt::AlignVCenter)) {
+		alignment = i18n("Central-Left");
+	} else if (align == (Qt::AlignRight | Qt::AlignVCenter)) {
+		alignment = i18n("Central-Right");
+	} else if (align == (Qt::AlignTop | Qt::AlignLeft)) {
+		alignment = i18n("Top-Left");
+	} else if (align == (Qt::AlignTop | Qt::AlignRight)) {
+		alignment = i18n("Top-Right");
+	} else if (align == (Qt::AlignBottom | Qt::AlignLeft)) {
+		alignment = i18n("Bottom-Left");
+	} else if (align == (Qt::AlignBottom | Qt::AlignRight)) {
+		alignment = i18n("Bottom-Right");
+	} else if (align == (Qt::AlignTop | Qt::AlignHCenter)) {
+		alignment = i18n("Top-Central");
+	} else if (align == (Qt::AlignBottom | Qt::AlignHCenter)) {
+		alignment = i18n("Bottom-Central");
+	} else	{
+		// Central: Qt::AlignCenter or (Qt::AlignHCenter || Qt::AlignVCenter)
+		alignment = i18n("Central");
+	}
+
+	return alignment;
+}
+
+int GVPrintDialogPage::getUnit(const QString& unit) {	 
+	if (unit == i18n("Millimeters")) {
+		return	GV_MILLIMETERS;
+	} else if (unit == i18n("Centimeters")) {
+		return GV_CENTIMETERS;
+	} else {//Inches
+		return GV_INCHES;
+	}
+}
+
+QString GVPrintDialogPage::setUnit(int unit) {
+	if (unit == GV_MILLIMETERS) {
+		return i18n("Millimeters");
+	} else if (unit == GV_CENTIMETERS) {
+		return i18n("Centimeters");
+	} else { //GV_INCHES
+		return i18n("Inches");
+	}
 }
 
 // SLOTS
 void GVPrintDialogPage::setHValue (int value){
-    mContent->mWidth->blockSignals(true);
-    mContent->mHeight->blockSignals(true);
+	mContent->mWidth->blockSignals(true);
+	mContent->mHeight->blockSignals(true);
 
-    if (mContent->mKeepRatio->isChecked()) {
-            int w = (mGVPixmap->width() * value) / mGVPixmap->height()  ;
-            mContent->mWidth->setValue( w ? w : 1);                            
-    }
-    mContent->mHeight->setValue(value);     
+	if (mContent->mKeepRatio->isChecked()) {
+		int w = (mGVPixmap->width() * value) / mGVPixmap->height();
+		mContent->mWidth->setValue( w ? w : 1);							   
+	}
+	mContent->mHeight->setValue(value);		
 
-    mContent->mWidth->blockSignals(false);
-    mContent->mHeight->blockSignals(false);
-    
+	mContent->mWidth->blockSignals(false);
+	mContent->mHeight->blockSignals(false);
+	
 }
 
-void GVPrintDialogPage::setWValue (int value){    
-    mContent->mWidth->blockSignals(true);
-    mContent->mHeight->blockSignals(true);
-    if (mContent->mKeepRatio->isChecked()) {
-            int h = (mGVPixmap->height() * value) / mGVPixmap->width();            
-            mContent->mHeight->setValue( h ? h : 1);
-    }
-    mContent->mWidth->setValue(value);    
-    mContent->mWidth->blockSignals(false);
-    mContent->mHeight->blockSignals(false);
+void GVPrintDialogPage::setWValue (int value){	  
+	mContent->mWidth->blockSignals(true);
+	mContent->mHeight->blockSignals(true);
+	if (mContent->mKeepRatio->isChecked()) {
+		int h = (mGVPixmap->height() * value) / mGVPixmap->width();			   
+		mContent->mHeight->setValue( h ? h : 1);
+	}
+	mContent->mWidth->setValue(value);	  
+	mContent->mWidth->blockSignals(false);
+	mContent->mHeight->blockSignals(false);
 }
-    
+	
 void GVPrintDialogPage::toggleRatio(bool enable) {
-    if (enable) {
-        float cm = 1;
-        if (mContent->mUnits->currentText() == "Millimeters")
-            cm = 10;
-        else if (mContent->mUnits->currentText() == "Inches")
-            cm = 1/(2.54);
-        // 15x10 cm 
-        float hValue, wValue;
-        if (mGVPixmap->height() > mGVPixmap->width()) {
-            hValue = cm*15;
-            wValue = (mGVPixmap->width() * (hValue))/ mGVPixmap->height();
-        } else {
-            wValue = cm*15;
-            hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();            
-        }        
-        mContent->mWidth->setValue((int)wValue);
-        mContent->mHeight->setValue((int)hValue);
-    }
+	if (enable) {
+		float cm = 1;
+		if (mContent->mUnits->currentText() == "Millimeters")
+			cm = 10;
+		else if (mContent->mUnits->currentText() == "Inches")
+			cm = 1/(2.54);
+		// 15x10 cm 
+		float hValue, wValue;
+		if (mGVPixmap->height() > mGVPixmap->width()) {
+			hValue = cm*15;
+			wValue = (mGVPixmap->width() * (hValue))/ mGVPixmap->height();
+		} else {
+			wValue = cm*15;
+			hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();			
+		}		 
+		mContent->mWidth->setValue((int)wValue);
+		mContent->mHeight->setValue((int)hValue);
+	}
 }
 
 
 void GVPrintDialogPage::setNewUnit(const QString& string) {
-    mContent->mUnits->setCurrentItem(string);
-    toggleRatio(true); // to do better
+	mContent->mUnits->setCurrentItem(string);
+	toggleRatio(true); // to do better
 }
 
 

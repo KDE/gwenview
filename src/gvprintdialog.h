@@ -32,30 +32,40 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class GVPixmap;
 class GVPrintDialogPageBase;
 
+enum GVUnits {
+	GV_MILLIMETERS = 1,
+	GV_CENTIMETERS,
+	GV_INCHES	 
+};
+
 class GVPrintDialogPage : public KPrintDialogPage
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    GVPrintDialogPage( QWidget *parent = 0L, const char *name = 0 );
-    ~GVPrintDialogPage();
+	GVPrintDialogPage( QWidget *parent = 0L, const char *name = 0 );
+	~GVPrintDialogPage();
 
-    virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
-    virtual void setOptions(const QMap<QString,QString>& opts);
+	virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
+	virtual void setOptions(const QMap<QString,QString>& opts);
 
 private slots:
-    void toggleRatio( bool enable );
-    void setNewUnit(const QString& string);
-    void setHValue (int value);
-    void setWValue (int value);
-    
-private:    
-    int scaleWidth() const;
-    int scaleHeight() const;
-    void setScaleWidth( int pixels );
-    void setScaleHeight( int pixels );
-    
-    GVPixmap *mGVPixmap;
+	void toggleRatio(bool enable);
+	void setNewUnit(const QString& string);
+	void setHValue (int value);
+	void setWValue (int value);
+	
+private:	
+	int scaleWidth() const;
+	int scaleHeight() const;
+	void setScaleWidth(int pixels);
+	void setScaleHeight(int pixels);
+	int getPosition(const QString& align);
+	QString setPosition(int align);
+	int getUnit(const QString& unit);
+	QString setUnit(int unit);
+
+	GVPixmap *mGVPixmap;
 	GVPrintDialogPageBase* mContent;
 };
 

@@ -81,7 +81,7 @@ public:
 		if (mimeType=="image/jpeg") {
 			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
 			mCommentState=
-			    QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
+				QFileInfo(path).isWritable()?GVPixmap::Writable:GVPixmap::ReadOnly;
 			mComment=QString::fromUtf8( commentItem.string().ascii() );
 
 		} else if (mimeType=="image/png") {
@@ -95,8 +95,8 @@ public:
 			for(it=keys.begin(); it!=keys.end(); ++it) {
 				KFileMetaInfoItem metaInfoItem=metaInfo[PNG_COMMENT][*it];
 				QString line=QString("%1: %2")
-				             .arg(metaInfoItem.translatedKey())
-				             .arg(metaInfoItem.string());
+							 .arg(metaInfoItem.translatedKey())
+							 .arg(metaInfoItem.string());
 				tmp.append(line);
 			}
 			mComment=tmp.join("\n");
@@ -291,11 +291,11 @@ void GVPixmap::print(KPrinter *pPrinter) {
 }
 
 QString GVPixmap::minimizeString( const QString& text, const QFontMetrics&
-                                  metrics, int maxWidth ) {
+								  metrics, int maxWidth ) {
 	if ( text.length() <= 5 )
 		return text; // no sense to cut that tiny little string
 
-    QString txt = text;
+	QString txt = text;
 	bool changed = false;
 	while ( metrics.width( txt ) > maxWidth ) {
 		int mid = txt.length() / 2;
@@ -315,123 +315,108 @@ QString GVPixmap::minimizeString( const QString& text, const QFontMetrics&
 	return txt;
 }
 
-void GVPixmap::doPaint(KPrinter *pPrinter, QPainter *p) {
-	QImage image = mImage;   // will contain the final image to print
+void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
+	QImage image = mImage;	 // will contain the final image to print
 
 	// We use a QPaintDeviceMetrics to know the actual page size in pixel,
 	// this gives the real painting area
-	QPaintDeviceMetrics metrics(p->device());
+	QPaintDeviceMetrics pdMetrics(painter->device());
+	const int margin = pdMetrics.logicalDpiY() / 2; // half-inch margin
 
-	p->setFont( KGlobalSettings::generalFont() );
-	QFontMetrics fm = p->fontMetrics();
+	painter->setFont( KGlobalSettings::generalFont() );
+	QFontMetrics fMetrics = painter->fontMetrics();
 
-	int w = metrics.width();
-	int h = metrics.height();
+	int x = 0;
+	int y = 0;
+	int pdWidth = pdMetrics.width();
+	int pdHeight = pdMetrics.height();
 
 	QString t = "true";
 	QString f = "false";
 
-	int alignment;
-	QString align = pPrinter->option("app-gwenview-position");
-	if (align == "Central-Left") {
-		alignment = Qt::AlignLeft | Qt::AlignVCenter;
-	} else if (align == "Central-Right") {
-		alignment = Qt::AlignRight | Qt::AlignVCenter;
-	} else if (align == "Top-Left") {
-		alignment = Qt::AlignTop | Qt::AlignLeft;
-	} else if (align == "Top-Right") {
-		alignment = Qt::AlignTop | Qt::AlignRight;
-	} else if (align == "Bottom-Left") {
-		alignment = Qt::AlignBottom | Qt::AlignLeft;
-	} else if (align == "Bottom-Right") {
-		alignment = Qt::AlignBottom | Qt::AlignRight;
-	} else if (align == "Top-Central") {
-		alignment = Qt::AlignTop | Qt::AlignHCenter;
-	} else if (align == "Bottom-Central") {
-		alignment = Qt::AlignBottom | Qt::AlignHCenter;
-	} else // Central
-	{
-		alignment = Qt::AlignCenter; // Qt::AlignHCenter || Qt::AlignVCenter
-	}
+	int alignment = (printer->option("app-gwenview-position").isEmpty() ?
+					 Qt::AlignCenter : printer->option("app-gwenview-position").toInt());
 
+	// Compute filename offset
 	int filenameOffset = 0;
-    const int MARGIN = metrics.logicalDpiY() / 2; // half-inch margin
-	bool printFilename = pPrinter->option( "app-gwenview-printFilename" ) != f;
+	bool printFilename = printer->option( "app-gwenview-printFilename" ) != f;
 	if ( printFilename ) {
-		filenameOffset = fm.lineSpacing() + 14;
-		h -= filenameOffset; // filename goes into one line!
+		filenameOffset = fMetrics.lineSpacing() + 14;
+		pdHeight -= filenameOffset; // filename goes into one line!
 	}
-    
-    int commentOffset = 0;
-	bool printComment = pPrinter->option( "app-gwenview-printComment" ) != f;
+
+	// Compute comment offset
+	int commentOffset = 0;
+	bool printComment = printer->option( "app-gwenview-printComment" ) != f;
 	if ( commentOffset ) {
-		commentOffset = fm.lineSpacing() + 14;// #### TODO check if it's correct
-		h -= commentOffset; // #### TODO check if it's correct
+		commentOffset = fMetrics.lineSpacing() + 14;// #### TODO check if it's correct
+		pdHeight -= commentOffset; // #### TODO check if it's correct
 	}
-    if (commentOffset || printFilename)
-        h -= MARGIN;
-
-    bool scaling = pPrinter->option( "app-gwenview-scale" ) != f;
-    if (scaling) {       
-        QString unit = pPrinter->option("app-gwenview-scaleUnit");
-        float inches = 1;
-        if (unit == "Millimeters")
-            inches = 1/(25.5);
-        else if (unit == "Centimeters") 
-            inches = 1/(2.54);
-        float w_img = (pPrinter->option("app-gwenview-scaleWidth").isEmpty() ?
-	                  1 : pPrinter->option("app-gwenview-scaleWidth").toInt()) * inches;
-        float h_img = (pPrinter->option("app-gwenview-scaleHeight").isEmpty() ?
-	                  1 : pPrinter->option("app-gwenview-scaleHeight").toInt()) * inches;
-        w_img = w_img * pPrinter->resolution();
-        h_img = h_img * pPrinter->resolution();
-        
-        image = image.smoothScale( (int)w_img, (int)h_img, QImage::ScaleMin );
-    }
-
-	bool shrinkToFit = (pPrinter->option( "app-gwenview-shrinkToFit" ) != f);
-	if ( shrinkToFit && image.width() > w || image.height() > h ) {
-		image = image.smoothScale( w, h, QImage::ScaleMin );
+	if (commentOffset || printFilename) {
+		pdHeight -= margin;
 	}
 
-	int x = 0;
-	int y = 0;
+	// Apply scaling
+	bool scaling = printer->option( "app-gwenview-scale" ) != f;
+	if (scaling) {		 
+		int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
+					GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
+		float inches = 1;
+		if (unit == GV_MILLIMETERS) {
+			inches = 1/25.5;
+		} else if (unit == GV_CENTIMETERS) {
+			inches = 1/2.54;
+		}
+		float wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
+					  1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
+		float hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
+					  1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
+		wImg = wImg * printer->resolution();
+		hImg = hImg * printer->resolution();
+	
+		image = image.smoothScale( int(wImg), int(hImg), QImage::ScaleMin );
+	}
 
-	// x - alignment
+	// Shring image if necessary
+	bool shrinkToFit = printer->option( "app-gwenview-shrinkToFit" ) != f;
+	if ( shrinkToFit && image.width() > pdWidth || image.height() > pdHeight ) {
+		image = image.smoothScale( pdWidth, pdHeight, QImage::ScaleMin );
+	}
+
+	// Compute x and y
 	if ( alignment & Qt::AlignHCenter )
-		x = (w - image.width())/2;
+		x = (pdWidth - image.width())/2;
 	else if ( alignment & Qt::AlignLeft )
 		x = 0;
 	else if ( alignment & Qt::AlignRight )
-		x = w - image.width();
+		x = pdWidth - image.width();
 
-	// y - alignment
 	if ( alignment & Qt::AlignVCenter )
-		y = (h - image.height())/2;
+		y = (pdHeight - image.height())/2;
 	else if ( alignment & Qt::AlignTop )
 		y = 0;
 	else if ( alignment & Qt::AlignBottom )
-		y = h - image.height();
+		y = pdHeight - image.height();
 
-	// at last we draw the image!
-	p->drawImage( x, y, image );
+	// Draw
+	painter->drawImage( x, y, image );
 
 	if ( printFilename ) {
-		QString fname = minimizeString( mFilename, fm, w );
+		QString fname = minimizeString( mFilename, fMetrics, pdWidth );
 		if ( !fname.isEmpty() ) {
-			int fw = fm.width( fname );
-			int x = (w - fw)/2;
-			int y = metrics.height() - filenameOffset/2 -commentOffset/2 - MARGIN;
-			p->drawText( x, y, fname );
+			int fw = fMetrics.width( fname );
+			int x = (pdWidth - fw)/2;
+			int y = pdMetrics.height() - filenameOffset/2 -commentOffset/2 - margin;
+			painter->drawText( x, y, fname );
 		}
 	}
-    if ( printComment ) {
-		QString comm = comment(); //minimizeString( mFilename, fm, w );
+	if ( printComment ) {
+		QString comm = comment(); //minimizeString( mFilename, fMetrics, pdWidth );
 		if ( !comm.isEmpty() ) {
-			int fw = fm.width( comm );
-			int x = (w - fw)/2;
-			int y = metrics.height() - commentOffset/2 - MARGIN;
-			p->drawText( x, y, comm );
+			int fw = fMetrics.width( comm );
+			int x = (pdWidth - fw)/2;
+			int y = pdMetrics.height() - commentOffset/2 - margin;
+			painter->drawText( x, y, comm );
 		}
 	}
 }
@@ -510,10 +495,10 @@ void GVPixmap::saveAs() {
 bool GVPixmap::saveIfModified() {
 	if (!mModified) return true;
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
-	            .arg(url().prettyURL());
+				.arg(url().prettyURL());
 
 	int result=KMessageBox::questionYesNoCancel(0, msg, QString::null,
-	           i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
+			   i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
 
 	switch (result) {
 	case KMessageBox::Yes:
@@ -550,7 +535,7 @@ void GVPixmap::setModifiedBehavior(ModifiedBehavior value) {
 	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->setGroup(CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->writeEntry(CONFIG_SAVE_AUTOMATICALLY,
-	                   modifiedBehaviorToString(value));
+					   modifiedBehaviorToString(value));
 }
 
 
