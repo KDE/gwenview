@@ -100,7 +100,10 @@
                         <cstring>radioButton2</cstring>
                     </property>
                     <property name="text">
-                        <string>All images</string>
+                        <string>All files</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
                     </property>
                 </widget>
                 <widget class="KListView" row="2" column="1" rowspan="2" colspan="1">
@@ -141,10 +144,13 @@
                         <cstring>radioButton1</cstring>
                     </property>
                     <property name="text">
-                        <string>All files</string>
+                        <string>All images</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="2" column="0">

@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 // Qt
+#include <qbuttongroup.h>
 #include <qheader.h>
 
 // KDE
@@ -35,6 +36,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvexternaltoolmanager.h"
 #include "gvexternaltooldialogbase.h"
 #include "gvexternaltooldialog.moc"
+
+
+enum { ID_ALL_IMAGES=0, ID_ALL_FILES, ID_CUSTOM };
 
 
 class ToolListViewItem : public KListViewItem {
@@ -89,6 +93,34 @@ struct GVExternalToolDialogPrivate {
 	}
 
 
+	void writeServiceTypes(KDesktopFile* desktopFile) {
+		QButton* button=mContent->mFileAssociationGroup->selected();
+		if (!button) {
+			desktopFile->writeEntry("ServiceTypes", "*");
+			return;
+		}
+
+		int id=mContent->mFileAssociationGroup->id(button);
+		if (id==ID_ALL_IMAGES) {
+			desktopFile->writeEntry("ServiceTypes", "image/*");
+			return;
+		}
+		if (id==ID_ALL_FILES) {
+			desktopFile->writeEntry("ServiceTypes", "*");
+			return;
+		}
+
+		QStringList mimeTypes;
+		QListViewItem* item=mContent->mMimeTypeListView->firstChild();
+		for (; item; item=item->nextSibling()) {
+			if (static_cast<QCheckListItem*>(item)->isOn()) {
+				mimeTypes.append(item->text(0));
+			}
+		}
+		desktopFile->writeEntry("ServiceTypes", mimeTypes);
+	}
+	
+
 	void saveChanges() {
 		if (!mSelectedItem) return;
 
@@ -96,7 +128,6 @@ struct GVExternalToolDialogPrivate {
 		QString name=mContent->mName->text();
 		if (desktopFile) {
 			if (desktopFile->isReadOnly()) {
-				kdDebug() << "desktopFile->isReadOnly\n";
 				desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(desktopFile);
 				mSelectedItem->setDesktopFile(desktopFile);
 			}
@@ -107,13 +138,44 @@ struct GVExternalToolDialogPrivate {
 		desktopFile->writeEntry("Name", name);
 		desktopFile->writeEntry("Icon", mContent->mIconButton->icon());
 		desktopFile->writeEntry("Exec", mContent->mCommand->url());
-		// FIXME: Implement real service type read/write
-		desktopFile->writeEntry("ServiceTypes", "*");
+		writeServiceTypes(desktopFile);
 
 		mSelectedItem->setPixmap(0, SmallIcon(mContent->mIconButton->icon()) );
 		mSelectedItem->setText(0, name);
 	}
 
+
+	void updateFileAssociationGroup(const QStringList& serviceTypes) {
+		QListViewItem* item=mContent->mMimeTypeListView->firstChild();
+		for (; item; item=item->nextSibling()) {
+			static_cast<QCheckListItem*>(item)->setOn(false);
+		}
+		
+		if (serviceTypes.size()==0) {
+			mContent->mFileAssociationGroup->setButton(ID_ALL_FILES);
+			return;
+		}
+		if (serviceTypes.size()==1) {
+			QString serviceType=serviceTypes[0];
+			if (serviceType=="image/*") {
+				mContent->mFileAssociationGroup->setButton(ID_ALL_IMAGES);
+				return;
+			}
+			if (serviceType=="*") {
+				mContent->mFileAssociationGroup->setButton(ID_ALL_FILES);
+				return;
+			}
+		}
+
+		mContent->mFileAssociationGroup->setButton(ID_CUSTOM);
+		QStringList::ConstIterator it=serviceTypes.begin();
+		for (;it!=serviceTypes.end(); ++it) {
+			QListViewItem* item=
+				mContent->mMimeTypeListView->findItem(*it, 0, Qt::ExactMatch);
+			if (item) static_cast<QCheckListItem*>(item)->setOn(true);
+		}
+	}
+	
 
 	void updateDetails() {
 		if (mSelectedItem) {
@@ -122,6 +184,8 @@ struct GVExternalToolDialogPrivate {
 				mContent->mName->setText(desktopFile->readName());
 				mContent->mCommand->setURL(desktopFile->readEntry("Exec"));
 				mContent->mIconButton->setIcon(desktopFile->readIcon());
+				QStringList serviceTypes=desktopFile->readListEntry("ServiceTypes");
+				updateFileAssociationGroup(serviceTypes);
 				return;
 			}
 		}
@@ -129,6 +193,7 @@ struct GVExternalToolDialogPrivate {
 		mContent->mName->setText(QString::null);
 		mContent->mCommand->setURL(QString::null);
 		mContent->mIconButton->setIcon(QString::null);
+		mContent->mFileAssociationGroup->setButton(ID_ALL_IMAGES);
 	}
 };
 
