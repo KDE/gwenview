@@ -199,13 +199,10 @@ bool GVMainWindow::queryClose() {
 		menuBar()->show();
 	}
 	
-    kdDebug() << k_funcinfo << "mAutoDeleteThumbnailCache:" << mAutoDeleteThumbnailCache << endl;
 	if (mAutoDeleteThumbnailCache) {
 		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
-        kdDebug() << k_funcinfo << "dir:" << dir << endl;
 
 		if (QFile::exists(dir)) {
-            kdDebug() << k_funcinfo << "deleting" << endl;
 			KURL url;
 			url.setPath(dir);
 #if KDE_VERSION >= 0x30200
@@ -213,7 +210,6 @@ bool GVMainWindow::queryClose() {
 #else
 			KIO::NetAccess::del(url);
 #endif
-            kdDebug() << k_funcinfo << "deleted" << endl;
 		}
 	}
 	
