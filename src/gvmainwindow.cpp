@@ -510,6 +510,9 @@ void GVMainWindow::toggleFullScreen() {
 		mPixmapView->setFullScreen(true);
 		mPixmapView->setFocus();
 	} else {
+		// Stop the slideshow if it's running, harmless if it does not
+		mSlideShow->stop();
+
 		showNormal();
 		menuBar()->show();
 		
@@ -531,27 +534,14 @@ void GVMainWindow::toggleFullScreen() {
 }
 
 
-void GVMainWindow::toggleSlideShow() {
-	if (mToggleSlideShow->isChecked()) {
-		GVSlideShowDialog dialog(this,mSlideShow);
-		if (!dialog.exec()) {
-			mToggleSlideShow->setChecked(false);
-			return;
-		}
-		if (mToggleBrowse->isChecked()) {
-			mToggleBrowse->activate();
-		}
-		
-		if (!mToggleFullScreen->isChecked()) {
-			mToggleFullScreen->activate();
-		}
-		mSlideShow->start();
-	} else {
-		mSlideShow->stop();
-		if (mToggleFullScreen->isChecked()) {
-			mToggleFullScreen->activate();
-		}
+void GVMainWindow::startSlideShow() {
+	GVSlideShowDialog dialog(this,mSlideShow);
+	if (!dialog.exec()) return;
+	
+	if (!mToggleFullScreen->isChecked()) {
+		mToggleFullScreen->activate();
 	}
+	mSlideShow->start();
 }
 
 
@@ -601,10 +591,6 @@ void GVMainWindow::applyMainWindowSettings() {
 
 
 void GVMainWindow::escapePressed() {
-	if (mToggleSlideShow->isChecked()) {
-		mToggleSlideShow->activate();
-		return;
-	}
 	if (mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
@@ -649,11 +635,6 @@ void GVMainWindow::slotToggleCentralStack() {
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mPixmapView);
 		mCentralStack->raiseWidget(StackIDBrowse);
-		
-		if (mToggleSlideShow->isChecked()) {
-			mToggleSlideShow->activate();
-		}
-		
 	} else {
 		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
@@ -804,7 +785,7 @@ void GVMainWindow::createActions() {
 #else
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
 #endif
-	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
+	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
 
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
@@ -922,7 +903,7 @@ void GVMainWindow::createConnections() {
 
 	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),
-		mToggleSlideShow,SLOT(activate()) );
+		mToggleFullScreen,SLOT(activate()) );
 
 	// Location bar
 	connect(mURLEdit, SIGNAL(activated(const QString &)),

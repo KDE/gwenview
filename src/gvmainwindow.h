@@ -118,7 +118,7 @@ private:
 	KAction* mOpenHomeDir;
 	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;
-	KToggleAction* mToggleSlideShow;
+	KAction* mStartSlideShow;
 	KAction* mRotateLeft;
 	KAction* mRotateRight;
 	KAction* mMirror;
@@ -170,7 +170,7 @@ private slots:
 	void showToolBarDialog();
 	void applyMainWindowSettings();
 	void pixmapLoading();
-	void toggleSlideShow();
+	void startSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void modifyImage(GVImageUtils::Orientation);
 	void rotateLeft();
