@@ -12,8 +12,7 @@ Qt installation supports.
 
 -> Requirements
 
-KDE 3.0 or more.
-As of version 0.14, Gwenview requires KDE 3.0.
+KDE 3.1 or more.
 
 
 -> Installation
@@ -73,37 +72,19 @@ Thanks to Michael Spanier for sending me a patch which started this new feature.
 You can also scroll your image by holding the left mouse button down and
 moving the mouse around.
 
+Middle mouse will toggle the auto zoom on and off.
 
--> Mouse wheel
+By default, the mouse wheel will either scroll the image vertically or go to
+previous/next image. This can be configured in the configure dialog.
 
-Version 0.13 bring customizable mouse wheel behaviours: you can assign
-different actions to the mouse wheel depending on whether it's used with
-Control, Shift, Alt or no keys.
-The available actions are:
-- Scroll
-- Browse
-- Zoom
+Use Shift + mouse wheel to zoom in and out.
 
-
--> About thumbnail cache
-
-Thumbnails aren't loaded every time you browse a folder. Images are loaded once
-and the thumbnail is then stored on disk. Next time you browse the folder,
-Gwenview will use the saved thumbnail instead of reloading the image.
-Until version 0.10.0, thumbnails were stored in .pics folders created in the 
-image folder. Beginning with version 0.10.1, thumbnails are now stored in a
-common folder: ~/.kde/share/thumbnails, like Konqueror 2.2 does.
-
-If you want to get rid of all the .pics folders created by previous versions of
-Gwenview, you can run this command from the folder to clear:
-
- find -name .pics -exec rm -rf {} \;
+Use Ctrl + mouse wheel to scroll the image horizontally.
 
 
 -> Contact
 
-mailto:aurelien.gateau@mail.dotcom.fr
-http://gwenview.sourceforge.net
+mailto:aurelien.gateau@free.fr http://gwenview.sourceforge.net
 
 You can also join the mailing list:
 http://lists.sourceforge.net/lists/listinfo/gwenview-general
