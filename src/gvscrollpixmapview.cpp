@@ -1478,7 +1478,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
 	mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
-	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, false));
+	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, true));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
 	mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
