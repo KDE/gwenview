@@ -1,6 +1,6 @@
 %define name gwenview
 %define version 1.0.0
-%define release 0.pre3.2mdk
+%define release 0.pre4.1mdk
 
 Summary: Simple image viewer for KDE.
 Name: %name
@@ -8,9 +8,10 @@ Version: %version
 Release: %release
 License: GPL
 Group: Graphics
-Source0: %{name}-%{version}pre3.tar.bz2
+Source0: %{name}-%{version}pre4.tar.bz2
 URL: http://gwenview.sourceforge.net 
 BuildRoot: %_tmppath/%{name}-%{version}
+BuildRequires: kdelibs-devel
 
 %description
 Gwenview is an image viewer for KDE. 
@@ -20,7 +21,7 @@ navigation in your file hierarchy.  Image loading is done by the Qt library,
 so it supports all image formats your Qt installation supports. 
 
 %prep
-%setup -q -n %{name}-%{version}pre3
+%setup -q -n %{name}-%{version}pre4
 
 %build
 ./configure --disable-rpath \
@@ -67,6 +68,23 @@ kdedesktop2mdkmenu.pl %{name} "Multimedia/Graphics" %buildroot/%_datadir/applica
 rm -rf $RPM_BUILD_ROOT
 
 %changelog
+* Sun Nov 16 2003 Angelo Naselli <random_lx@yahoo.com> 1.0.0-0.pre4.1mdk
+- built mdk version
+    from Aurélien Gâteau:
+   - New features 
+     - Added a new option to hide the busy pointer when loading an 
+       image in fullscreen.
+     - Added a popup menu to select the sorting mode.
+       Usefull in thumbnail view.
+   - Fixes:
+     - Use a KDE dialog for the configuration dialog.
+     - Removed the image view mouse behavior configuration 
+       options. The behavior is much simpler now: left button 
+       to drag image,
+     - middle button to toggle auto-zoom and mouse-wheel 
+       to browse images. Ifrom Aurélien Gâteauef you want to zoom hold Shift
+       and use either the mouse-wheel or the left button.
+
 * Wed Nov 05 2003 Marcel Pol <mpol@gmx.net> 1.0.0-0.pre3.2mdk
 - redo changelog
 - rm -rf $RPM_BUILD_ROOT in %%install instead of %%prep
