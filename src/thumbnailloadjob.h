@@ -25,6 +25,9 @@
 #ifndef THUMBNAILLOADJOB_H
 #define THUMBNAILLOADJOB_H
 
+// Qt includes
+#include <qpixmap.h>
+
 // KDE includes
 #include <kio/job.h>
 
@@ -32,7 +35,6 @@
 #include "thumbnailsize.h"
 
 class KFileItem;
-class QPixmap;
 
 typedef QPtrList<KFileItem> KFileItemList;
 
@@ -116,6 +118,8 @@ private:
 	// Thumbnail size
 	ThumbnailSize mThumbnailSize;
 
+    QPixmap mBrokenPixmap;
+
 	void determineNextIcon();
 	bool statResultThumbnail( KIO::StatJob * );
 	void createThumbnail(const QString& path);
@@ -124,6 +128,7 @@ private:
 	bool loadJPEG( const QString &pixPath, QImage&);
 	bool loadThumbnail(const QString& pixPath, QImage&);
 	void emitThumbnailLoaded(const QPixmap &pix);
+    void emitThumbnailLoadingFailed();
 };
 
 #endif

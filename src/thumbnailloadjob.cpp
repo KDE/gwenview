@@ -33,6 +33,7 @@
 // KDE 
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kiconloader.h>
 #include <kmdcodec.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -46,6 +47,7 @@ extern "C" {
 }
 
 // Local
+#include "gvarchive.h"
 #include "gvimageutils.h"
 #include "thumbnailloadjob.moc"
 
@@ -111,6 +113,9 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize siz
 : KIO::Job(false), mThumbnailSize(size)
 {
 	LOG("");
+    
+    mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
+        KIcon::NoGroup, ThumbnailSize(ThumbnailSize::Small).pixelSize());
 
 	// Look for images and store the items in our todo list
 	mItems=*items;
@@ -159,10 +164,16 @@ void ThumbnailLoadJob::itemRemoved(const KFileItem* item) {
 
 
 void ThumbnailLoadJob::determineNextIcon() {
-	// Skip dirs
-	while (!mItems.isEmpty() && mItems.first()->isDir()) {
-		mItems.removeFirst();
-	}
+	// Skip non images 
+    while (true) {
+	    KFileItem* item=mItems.first();
+        if (!item) break;
+        if (item->isDir() || GVArchive::fileItemIsArchive(item)) {
+            mItems.removeFirst();
+	    } else {
+            break;
+        }
+    }
 	
 	// No more items ?
 	if (mItems.isEmpty()) {
@@ -191,6 +202,7 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	case STATE_STATORIG: {
 		// Could not stat original, drop this one and move on to the next one
 		if (job->error()) {
+            emitThumbnailLoadingFailed();
 			determineNextIcon();
 			return;
 		}
@@ -238,7 +250,9 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 		return;
 
 	case STATE_DOWNLOADORIG: 
-		if (!job->error()) {
+		if (job->error()) {
+            emitThumbnailLoadingFailed();
+        } else {
 			createThumbnail(mTempURL.path());
 		}
 		
@@ -301,11 +315,15 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 
 	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
 	if (!loaded) {
-		if (!loadThumbnail(pixPath, img)) return;
+		loaded=loadThumbnail(pixPath, img);
 	}
 	
-	img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-	emitThumbnailLoaded(QPixmap(img));
+    if (loaded) {
+        img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
+        emitThumbnailLoaded(QPixmap(img));
+    } else {
+        emitThumbnailLoadingFailed();
+    }
 }
 
 
@@ -464,4 +482,9 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QPixmap& pix) {
 	painter.end();
 
 	emit thumbnailLoaded(mCurrentItem,pix2);
+}
+
+
+void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
+	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap);
 }
