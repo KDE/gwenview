@@ -1,7 +1,11 @@
-2005.xx.xx - v1.2.0
+2005.xx.xx - v1.2.0pre3
 - Fixes:
  - Support for smb:/ and digikamtags:/ ioslaves has been fixed.
  - The documentation now appears in KHelpCenter tree.
+ - When starting a slideshow from a picture in the middle of the list, Gwenview
+   now loops once to show all images before the start picture, even if the
+   "Loop" option is not activated.
+ - The On Screen Display totally hides itself after a while.
 
 2005.02.13 - v1.2.0pre2
 - New features:

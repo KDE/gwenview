@@ -207,19 +207,12 @@ void GVFullScreenBar::slideOut() {
 
 
 void GVFullScreenBar::slotUpdateSlide() {
-	int pos=x();
-	int minPos;
-	// If the label is empty, we totally hide the bar
-	if (d->mLabel->text().isEmpty()) {
-		minPos=-width();
-	} else {
-		minPos=-d->mLabel->x();
-	}
+	int pos=y();
 
 	switch (d->mState) {
 	case SLIDING_OUT:
 		pos-=SLIDE_STEP;
-		if (pos<=minPos) {
+		if (pos<=-height()) {
 			d->mState=OUT;
 			d->mTimer.stop();
 		}
@@ -235,5 +228,5 @@ void GVFullScreenBar::slotUpdateSlide() {
 	default:
 		kdWarning() << k_funcinfo << "We should not get there\n";
 	}
-	move(pos, 0);
+	move(0, pos);
 }
