@@ -42,9 +42,9 @@ int ThumbnailSize::pixelSize() const {
 	case SMALL:
 		return 48;
 	case MED:
-		return 96;
+		return 88;
 	default: /* Always Large, but keeps the compiler from complaining */
-		return 192;
+		return 128;
 	}
 }
 
