@@ -271,6 +271,8 @@ void GVMainWindow::setURL(const KURL& url) {
 	
 	bool filenameIsValid=!mDocument->isNull();
 
+	mToggleFullScreen->setEnabled(filenameIsValid);
+	mStartSlideShow->setEnabled(filenameIsValid);
 	mRenameFile->setEnabled(filenameIsValid);
 	mCopyFiles->setEnabled(filenameIsValid);
 	mMoveFiles->setEnabled(filenameIsValid);
