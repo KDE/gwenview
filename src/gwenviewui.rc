@@ -27,13 +27,12 @@
 	<Action name="large_thumbnails"/>
     <Separator/>
   	<Action name="fullscreen"/>
-	<Action name="hide_dir_and_file_views"/>
   	<Action name="slideshow"/>
     <Separator/>
     <Action name="view_zoom_auto"/>
     <Action name="view_zoom_in"/>
     <Action name="view_zoom_out"/>
-    <Action name="view_zoom_actual_size"/>
+    <Action name="view_actual_size"/>
     <Action name="view_zoom_lock"/>
 	<Separator/>
 	<Action name="show_dot_files"/>
@@ -46,15 +45,38 @@
   </Menu>
   <Action name="bookmarks"/>
   <Menu name="settings">
-    <ActionList name="winlist"/>
   </Menu>
+  <Menu name="window">
+  	<text>&amp;Window</text>
+	<ActionList name="winlist"/>
+	<Separator/>
+	<Action name="toggle_dir_and_file_views"/>
+  </Menu>	
 </MenuBar>
 
-<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+<ToolBar name="mainToolBar" noMerge="1">
+  <text>Main Toolbar</text>
+  <Action name="go_up"/>
   <Action name="first"/>
   <Action name="previous"/>
   <Action name="next"/>
   <Action name="last"/>
+  <Separator/>
+  <Action name="stop"/>
+  <Separator/>
+  <Action name="detailed"/>
+  <Action name="small_thumbnails"/>
+  <Action name="med_thumbnails"/>
+  <Action name="large_thumbnails"/>
+  <Separator/>
+  <Action name="fullscreen"/>
+  <Action name="slideshow"/>
+  <Separator/>
+  <Action name="view_zoom_auto"/>
+  <Action name="view_zoom_in"/>
+  <Action name="view_zoom_out"/>
+  <Action name="view_actual_size"/>
+  <Action name="view_zoom_lock"/>
 </ToolBar>
 
 <StatusBar/>

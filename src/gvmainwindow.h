@@ -107,7 +107,7 @@ private:
 	KAction* mFlip;
 	KAction* mSaveFile;
 	KAction* mSaveFileAs;
-	KToggleAction* mToggleDirAndFileViews;
+	KAction* mToggleDirAndFileViews;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
@@ -171,9 +171,9 @@ private slots:
 	 */
 	void slotURLEditChanged(const QString &str);
 	
-	void updateWindowListActions();
+	void updateWindowActions();
 
-	// Helper function for updateWindowListActions()
+	// Helper function for updateWindowActions()
 	void createHideShowAction(KDockWidget* dock);
 };
 

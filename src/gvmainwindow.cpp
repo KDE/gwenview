@@ -102,7 +102,7 @@ GVMainWindow::GVMainWindow()
 	createGUI("gwenviewui.rc", false);
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
-	updateWindowListActions();
+	updateWindowActions();
 	
 	mFileViewStack->setFocus();
 
@@ -134,10 +134,7 @@ GVMainWindow::~GVMainWindow() {
 	mFileViewStack->writeConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mSlideShow->writeConfig(config,CONFIG_SLIDESHOW_GROUP);
 
-	// Don't store settings if the image view is the only visible view...
-	if (!mToggleDirAndFileViews->isChecked()) {
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
-	}
+	writeDockConfig(config,CONFIG_DOCK_GROUP);
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 	GVJPEGTran::writeConfig(config,CONFIG_JPEGTRAN_GROUP);
 }
@@ -276,14 +273,21 @@ void GVMainWindow::pixmapLoading() {
 void GVMainWindow::toggleDirAndFileViews() {
 	KConfig* config=KGlobal::config();
 	
-	if (mToggleDirAndFileViews->isChecked()) {
+	/*if (mToggleDirAndFileViews->isChecked()) {
 		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
-		makeDockInvisible(mMetaDock);
+	} else {
+		readDockConfig(config,CONFIG_DOCK_GROUP);
+	}*/
+	if (mFileDock->isVisible() || mFolderDock->isVisible()) {
+		writeDockConfig(config,CONFIG_DOCK_GROUP);
+		makeDockInvisible(mFileDock);
+		makeDockInvisible(mFolderDock);
 	} else {
 		readDockConfig(config,CONFIG_DOCK_GROUP);
 	}
+
 	mPixmapView->setFocus();
 }
 
@@ -533,7 +537,7 @@ void GVMainWindow::createActions() {
 	mStop->setEnabled(false);
 	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
 	mToggleSlideShow=new KToggleAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
-	mToggleDirAndFileViews=new KToggleAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"hide_dir_and_file_views");
+	mToggleDirAndFileViews=new KAction(i18n("Hide Folder && File Views"),CTRL + Key_Return,this,SLOT(toggleDirAndFileViews()),actionCollection(),"toggle_dir_and_file_views");
 	
 	// Go
 	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()), actionCollection() );
@@ -584,7 +588,15 @@ void GVMainWindow::createHideShowAction(KDockWidget* dock) {
 }
 
 
-void GVMainWindow::updateWindowListActions() {
+void GVMainWindow::updateWindowActions() {
+	QString caption;
+	if (mFolderDock->mayBeHide() || mFileDock->mayBeHide()) {
+		caption=i18n("Hide Folder && File Views");
+	} else {
+		caption=i18n("Show Folder && File Views");
+	}
+	mToggleDirAndFileViews->setText(caption);
+
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
@@ -655,7 +667,7 @@ void GVMainWindow::createConnections() {
 
 	// Dock related
 	connect(manager(), SIGNAL(change()),
-		this, SLOT(updateWindowListActions()) );
+		this, SLOT(updateWindowActions()) );
 }
 
 
