@@ -17,14 +17,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVFILEVIEWCONTAINER_H
-#define GVFILEVIEWCONTAINER_H
+#ifndef GVFILEVIEWSTACK_H
+#define GVFILEVIEWSTACK_H
 
-// Qt includes
+// Qt 
 #include <qobject.h>
+#include <qmutex.h>
 #include <qwidgetstack.h>
 
-// KDE includes
+// KDE
 #include <kurl.h>
 
 class QIconViewItem;
@@ -181,6 +182,12 @@ private:
 	bool mThumbnailsNeedUpdate;
 	QString mFilenameToSelect;
 
+	QMutex mBrowsing;
+	
+	/**
+	 * Browse to the given item. Prevents multiple calls using mBrowsing.
+	 */
+	void browseTo(KFileItem* item);
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();

@@ -3,6 +3,8 @@
  - Really fixed the bug which caused the dock layout to be messed after going
    fullscreen.
  - Always display the location bar on a new line.
+ - Fixed the lock which could occur if you kept the go-to-previous or
+   go-to-next shortcut keys pressed for too long.
 
 2003.04.26 - v0.17.0pre2
 - New features:

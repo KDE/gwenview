@@ -209,47 +209,25 @@ void GVFileViewStack::selectFilename(QString filename) {
 
 
 void GVFileViewStack::slotSelectFirst() {
-	KFileItem* item=findFirstImage();
-	if (!item) return;
-	
-	currentFileView()->setCurrentItem(item);
-	currentFileView()->clearSelection();
-	currentFileView()->setSelected(item,true);
-	currentFileView()->ensureItemVisible(item);
-	emitURLChanged();
-	updateActions();
+	browseTo(findFirstImage());
 }
-
 
 void GVFileViewStack::slotSelectLast() {
-	KFileItem* item=findLastImage();
-	if (!item) return;
-	
-	currentFileView()->setCurrentItem(item);
-	currentFileView()->clearSelection();
-	currentFileView()->setSelected(item,true);
-	currentFileView()->ensureItemVisible(item);
-	emitURLChanged();
-	updateActions();
+	browseTo(findLastImage());
 }
-
 
 void GVFileViewStack::slotSelectPrevious() {
-	KFileItem* item=findPreviousImage();
-	if (!item) return;
-	
-	currentFileView()->setCurrentItem(item);
-	currentFileView()->clearSelection();
-	currentFileView()->setSelected(item,true);
-	currentFileView()->ensureItemVisible(item);
-	emitURLChanged();
-	updateActions();
+	browseTo(findPreviousImage());
+}
+
+void GVFileViewStack::slotSelectNext() {
+	browseTo(findNextImage());
 }
 
 
-void GVFileViewStack::slotSelectNext() {
-	KFileItem* item=findNextImage();
+void GVFileViewStack::browseTo(KFileItem* item) {
 	if (!item) return;
+	if (!mBrowsing.tryLock()) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->clearSelection();
@@ -257,6 +235,8 @@ void GVFileViewStack::slotSelectNext() {
 	currentFileView()->ensureItemVisible(item);
 	emitURLChanged();
 	updateActions();
+
+	mBrowsing.unlock();
 }
 
 
