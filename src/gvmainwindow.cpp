@@ -720,8 +720,6 @@ void GVMainWindow::createWidgets() {
 
 	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
-	setView(mPixmapDock);
-	setMainDockWidget(mPixmapDock);
 
 	// Folder widget
 	mFolderDock = createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
@@ -732,6 +730,8 @@ void GVMainWindow::createWidgets() {
 	mFileDock = createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	mFileViewStack=new GVFileViewStack(this,actionCollection());
 	mFileDock->setWidget(mFileViewStack);
+	setView(mFileDock);
+	setMainDockWidget(mFileDock);
 
 	// Meta info edit widget
 	mMetaDock = createDockWidget("File Attributes", SmallIcon("doc"),NULL,
@@ -743,12 +743,14 @@ void GVMainWindow::createWidgets() {
 	mSlideShow=new GVSlideShow(mFileViewStack->selectFirst(),mFileViewStack->selectNext());
 
 	// Default position on desktop
-	setGeometry(20,20,600,400);
+	setGeometry(20,20,720,520);
 
 	// Default dock config
-	mFolderDock->manualDock(mPixmapDock,KDockWidget::DockLeft,30);
-	mFileDock->manualDock(mFolderDock,KDockWidget::DockBottom,50);
-	mMetaDock->manualDock(mPixmapDock,KDockWidget::DockTop,10);
+	// (The "magic numbers" were found by adjusting the layout from within the
+	// app and looking at the result in the configuration file)
+	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
+	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
+	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
 
 	// Load config
 	readDockConfig(config,CONFIG_DOCK_GROUP);

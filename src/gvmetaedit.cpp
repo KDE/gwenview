@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.h"
 #include "gvmetaedit.moc"
 
-
+// FIXME: Why doesn't GVMetaEdit inherits from QTextEdit rather than QVBox?
 GVMetaEdit::GVMetaEdit(QWidget *parent, GVDocument *gvp, const char *name)
 : QVBox(parent, name)
 , mDocument(gvp)
@@ -44,6 +44,7 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVDocument *gvp, const char *name)
 	connect(mCommentEdit, SIGNAL(textChanged()),
 		this, SLOT(updateDoc()) );
 	updateContent();
+	mCommentEdit->setMinimumHeight(int (mCommentEdit->fontMetrics().height() * 1.5) );
 }
 
 
