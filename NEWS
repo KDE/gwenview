@@ -6,6 +6,8 @@
  - Asynchronous JPEG loading, based on Khtml loader.
 - Fixes:
  - The rotate and mirror functions can now work on multiple selection.
+ - Make it possible to load another image or quit even if you can't save your
+   changes.
 
 2004.02.01 - v1.1.0
 - New features:

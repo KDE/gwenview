@@ -214,7 +214,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	if (URL.cmp(url())) return;
 
 	// Ask to save if necessary.
-	if (!saveIfModified()) {
+	if (!saveBeforeClosing()) {
 		// Not saved, notify others that we stay on the image
 		emit loaded(d->mDirURL,d->mFilename);
 		return;
@@ -263,7 +263,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 
 void GVPixmap::setDirURL(const KURL& paramURL) {
-	if (!saveIfModified()) {
+	if (!saveBeforeClosing()) {
 		emit loaded(d->mDirURL,d->mFilename);
 		return;
 	}
@@ -276,7 +276,7 @@ void GVPixmap::setDirURL(const KURL& paramURL) {
 void GVPixmap::setFilename(const QString& filename) {
 	if (d->mFilename==filename) return;
 
-	if (!saveIfModified()) {
+	if (!saveBeforeClosing()) {
 		emit loaded(d->mDirURL,d->mFilename);
 		return;
 	}
@@ -485,15 +485,8 @@ void GVPixmap::modify(GVImageUtils::Orientation orientation) {
 }
 
 
-bool GVPixmap::save(bool silent) {
-	if (!saveInternal(url(),d->mImageFormat)) {
-		if (!silent) {
-			//FIXME: Better message (no space, access rights...)
-			KMessageBox::sorry(0,i18n("Could not save file."));
-		}
-		return false;
-	}
-	return true;
+bool GVPixmap::save() {
+	return saveInternal(url(), d->mImageFormat);
 }
 
 
@@ -506,11 +499,12 @@ void GVPixmap::saveAs() {
 	if (!dialog.exec()) return;
 
 	if (!saveInternal(saveURL,format)) {
-		KMessageBox::sorry(0,i18n("Could not save file."));
+		KMessageBox::sorry(0,i18n(
+			"Could not save file. Check that you have the appropriate rights and that there's enough room left on the device."));
 	}
 }
 
-bool GVPixmap::saveIfModified() {
+bool GVPixmap::saveBeforeClosing() {
 	if (!d->mModified) return true;
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 		.arg(url().prettyURL());
@@ -520,10 +514,22 @@ bool GVPixmap::saveIfModified() {
 
 	switch (result) {
 	case KMessageBox::Yes:
-		return save();
+		if (save()) return true;
+		result= KMessageBox::warningContinueCancel(0, i18n(
+			"Could not save file. Check that you have the appropriate rights and that there's enough room left on the device.\n"),
+			QString::null,
+			i18n("Discard"));
+		if (result==KMessageBox::Continue) {
+			d->mModified=false;
+			return true;
+		} else {
+			return false;
+		}
+		
 	case KMessageBox::No:
 		d->mModified=false;
 		return true;
+
 	default:
 		return false;
 	}

@@ -149,7 +149,7 @@ GVMainWindow::GVMainWindow()
 
 
 bool GVMainWindow::queryClose() {
-	if (!mGVPixmap->saveIfModified()) return false;
+	if (!mGVPixmap->saveBeforeClosing()) return false;
 
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);

@@ -74,7 +74,7 @@ public slots:
 	 * Save to the current file.
 	 * Returns false if failed.
 	 */
-	bool save(bool silent=false);
+	bool save();
 	void saveAs();
 	
 	/** print the selected file */
@@ -84,7 +84,7 @@ public slots:
 	 * If the image has been modified, prompt the user to save the changes.
 	 * Returns true if it's safe to switch to another image.
 	 */
-	bool saveIfModified();
+	bool saveBeforeClosing();
 
 	// "Image manipulation"
 	void modify(GVImageUtils::Orientation);
