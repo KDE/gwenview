@@ -1,4 +1,6 @@
 2003.xx.xx - v1.0.0
+
+2003.xx.xx - v0.17.1
 - Fixes:
  - In the folder view, show the "+" sign in front of folders if they have
    sub-folders.
