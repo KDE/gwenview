@@ -182,16 +182,16 @@ private:
 #endif
   static void initializeImage ( XCFImage& xcf_image );
   static void composeTiles ( XCFImage& xcf_image );
-  static bool loadImageProperties ( QDataStream& xcf_io, XCFImage& image );
-  static bool loadLayer ( QDataStream& xcf_io, XCFImage& xcf_image );
-  static bool loadLayerProperties ( QDataStream& xcf_io, Layer& layer );
-  static bool loadChannelProperties ( QDataStream& xcf_io, Layer& layer );
-  static bool loadHierarchy ( QDataStream& xcf_io, Layer& layer );
-  static bool loadMask ( QDataStream& xcf_io, Layer& layer );
-  static bool loadLevel ( QDataStream& xcf_io, Layer& layer, Q_INT32 bpp );
-  static bool loadTileRLE ( QDataStream& xcf_io, uchar* tile, int size,
+  static bool loadImageProperties ( QIODevice* dev, XCFImage& image );
+  static bool loadLayer ( QIODevice* dev, XCFImage& xcf_image );
+  static bool loadLayerProperties ( QIODevice* dev, Layer& layer );
+  static bool loadChannelProperties ( QIODevice* dev, Layer& layer );
+  static bool loadHierarchy ( QIODevice* dev, Layer& layer );
+  static bool loadMask ( QIODevice* dev, Layer& layer );
+  static bool loadLevel ( QIODevice* dev, Layer& layer, Q_INT32 bpp );
+  static bool loadTileRLE ( QIODevice* dev, uchar* tile, int size,
 			    int data_length, Q_INT32 bpp );
-  static bool loadProperty ( QDataStream& xcf_io, PropType& type,
+  static bool loadProperty ( QIODevice* dev, PropType& type,
 			     QByteArray& bytes );
   static void setGrayPalette ( QImage& image );
   static void setPalette ( XCFImage& xcf_image, QImage& image );
