@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 #include <kurldrag.h>
 #include <kwordwrap.h>
 
@@ -60,6 +61,8 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setShowToolTips(true);
 	setSpacing(0);
 	setAcceptDrops(true);
+		
+	mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 
 	// We can't use KIconView::Execute mode because in this mode the current
 	// item is unselected after being clicked, so we use KIconView::Select mode
@@ -211,6 +214,10 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 		// Create an empty thumbnail
 		painter.setPen(colorGroup().button());
 		painter.drawRect(0,0,pixelSize,pixelSize);
+		painter.drawPixmap(
+			(pixelSize-mWaitPixmap.width())/2,
+			(pixelSize-mWaitPixmap.height())/2,
+			mWaitPixmap);
 	}
 
 	// Create icon item
