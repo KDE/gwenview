@@ -3,6 +3,9 @@
  - Added an "Edit" submenu to the popup menu of the image view, containing the
    same items as the main window "Edit" menu.
  - Moved the "Open with editor" in the "Edit" menu.
+ - Moved the image information from status bar to the window title.
+ - Fixed the bug which caused the window to grow up when entering folders with
+   long names.
 
 2003.xx.xx - v0.17.1
 - Fixes:

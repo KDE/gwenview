@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qcursor.h>
 #include <qdir.h>
 #include <qdockarea.h>
+#include <qhbox.h>
 #include <qtooltip.h>
 
 // KDE
@@ -41,6 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmenubar.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
+#include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -63,8 +65,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvmainwindow.moc"
 
-
-enum { SB_FOLDER, SB_FILE};
 
 const char* CONFIG_DOCK_GROUP="dock";
 const char* CONFIG_MAINWINDOW_GROUP="main window";
@@ -165,7 +165,7 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	
 	mOpenParentDir->setEnabled(url.path()!="/");
 
-	updateStatusBar();
+	updateStatusInfo();
 	kapp->restoreOverrideCursor();
 
 	mURLEditCompletion->addItem(url.prettyURL());
@@ -413,7 +413,7 @@ void GVMainWindow::slotURLEditChanged(const QString &str) {
 // GUI
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::updateStatusBar() {
+void GVMainWindow::updateStatusInfo() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
 	QString url=mGVPixmap->dirURL().prettyURL();
@@ -422,23 +422,23 @@ void GVMainWindow::updateStatusBar() {
 	} else {
 		txt=i18n("%1 - One Image","%1 - %n images",count).arg(url);
 	}
-			
-	statusBar()->changeItem( txt, SB_FOLDER );
-	updateFileStatusBar();
+    mStatusBarLabel->setText(txt);
+
+    updateCaption();
 }
 
 
-void GVMainWindow::updateFileStatusBar() {
-	QString txt;
-	QString filename=mGVPixmap->filename();
+void GVMainWindow::updateCaption() {
+    QString filename=mGVPixmap->filename();
+    QString caption;
 	if (!filename.isEmpty()) {
-		txt=QString("%1 %2x%3 @ %4%")
+		caption=QString("%1 %2x%3 @ %4%")
 			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
 			.arg(int(mPixmapView->zoom()*100) );
 	} else {
-		txt="";
-	}
-	statusBar()->changeItem( txt, SB_FILE );
+        caption="";
+    }
+    setCaption(caption);
 }
 
 
@@ -449,11 +449,9 @@ void GVMainWindow::createWidgets() {
 	manager()->setSplitterOpaqueResize(true);
 	
 	// Status bar
-	statusBar()->insertItem("",SB_FOLDER);
-	statusBar()->setItemAlignment(SB_FOLDER, AlignLeft|AlignVCenter);
-	statusBar()->insertItem("",SB_FILE,1);
-	statusBar()->setItemAlignment(SB_FILE, AlignLeft|AlignVCenter);
-
+    mStatusBarLabel=new KSqueezedTextLabel("",statusBar());
+    statusBar()->addWidget(mStatusBarLabel,1);
+	
 	// Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 
@@ -548,7 +546,7 @@ void GVMainWindow::createConnections() {
 	connect(mPixmapView,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
 	connect(mPixmapView,SIGNAL(zoomChanged(double)),
-		this,SLOT(updateFileStatusBar()) );
+		this,SLOT(updateCaption()) );
 
 	// Thumbnail view connections
 	connect(mFileViewStack,SIGNAL(updateStarted(int)),
@@ -562,9 +560,9 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
 		mGVPixmap,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(completed()),
-		this,SLOT(updateStatusBar()) );
+		this,SLOT(updateStatusInfo()) );
 	connect(mFileViewStack,SIGNAL(canceled()),
-		this,SLOT(updateStatusBar()) );
+		this,SLOT(updateStatusInfo()) );
 	// Don't connect mGVPixmap::urlChanged to mDirView. mDirView will be
 	// updated _after_ the file view is done, since it's less important to the
 	// user

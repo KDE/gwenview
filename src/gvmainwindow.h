@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdockwidget.h>
 #include <kurl.h>
 
+class QLabel;
 
 class KAction;
 class KHistoryCombo;
@@ -69,6 +70,7 @@ private:
 	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
 	KToolBar* mLocationToolBar;
+    QLabel* mStatusBarLabel;
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
@@ -137,15 +139,15 @@ private slots:
 	void toggleDirAndFileViews();
 
 	/**
-	 * Update both folder and file status bar
+	 * Update status bar and caption
 	 */
-	void updateStatusBar();
+	void updateStatusInfo();
 
 	/**
-	 * Update only file status bar, allows setting file info
+	 * Update only caption, allows setting file info
 	 * when folder info is not available yet
 	 */
-	void updateFileStatusBar();
+	void updateCaption();
 
 	void thumbnailUpdateStarted(int);
 	void thumbnailUpdateEnded();
