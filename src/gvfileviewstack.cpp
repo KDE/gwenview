@@ -51,7 +51,7 @@ inline bool isDirOrArchive(const KFileItem* item) {
 GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FileList)
 {
-// Actions
+	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
 		QApplication::reverseLayout() ? "gvlast":"gvfirst", Key_Home,
 		this,SLOT(slotSelectFirst()), actionCollection, "first");
@@ -77,7 +77,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mLargeThumbnails=new KRadioAction(i18n("Large Thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"largethumbnails");
 	mLargeThumbnails->setExclusiveGroup("thumbnails");
 
-// Dir lister
+	// Dir lister
 	mDirLister=new KDirLister;
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
@@ -100,13 +100,13 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	connect(mDirLister,SIGNAL(canceled()),
 		this,SLOT(dirListerCanceled()) );
 
-// Propagate completed and canceled signals
+	// Propagate completed and canceled signals
 	connect(mDirLister,SIGNAL(completed()),
 		this,SIGNAL(completed()) );
 	connect(mDirLister,SIGNAL(canceled()),
 		this,SIGNAL(canceled()) );
 
-// File detail widget
+	// File detail widget
 	mFileDetailView=new GVFileDetailView(this,"filedetailview");
 	addWidget(mFileDetailView,0);
 
@@ -119,7 +119,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	connect(mFileDetailView,SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
-// Thumbnail widget
+	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
 
@@ -132,7 +132,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
 		this,SLOT(openContextMenu(QIconViewItem*,const QPoint&)) );
 
-// Propagate signals
+	// Propagate signals
 	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),
 		this,SIGNAL(updateStarted(int)) );
 	connect(mFileThumbnailView,SIGNAL(updateEnded()),
@@ -510,21 +510,21 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 		newView=mFileThumbnailView;
 	}
 
-// Show the new active view
+	// Show the new active view
 	raiseWidget(newView->widget());
 
-// Fill the new view
+	// Fill the new view
 	newView->clear();
 	newView->addItemList(*oldView->items());
 	newView->setShownFileItem(oldView->shownFileItem());
  
-// Remove references to the old view from KFileItems
+	// Remove references to the old view from KFileItems
 	const KFileItemList* items=oldView->items();
 	for(KFileItemListIterator it(*items);it.current()!=0L;++it) {
 		it.current()->removeExtraData(oldView);
 	}
 
-// Clear the old view
+	// Clear the old view
 	oldView->GVFileViewBase::clear();
 }
 
@@ -694,7 +694,7 @@ void GVFileViewStack::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	currentFileView()->setShownFileItem(item);
 		
-// We use a tmp value because the signal parameter is a reference
+	// We use a tmp value because the signal parameter is a reference
 	KURL tmp=url();
 	//kdDebug() << "urlChanged : " << tmp.prettyURL() << endl;
 	emit urlChanged(tmp);
