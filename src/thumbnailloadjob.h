@@ -133,7 +133,7 @@ private:
 	bool isJPEG(const QString& name);
 	bool loadJPEG( const QString &pixPath, QImage&);
 	bool loadThumbnail(const QString& pixPath, QImage&);
-	void emitThumbnailLoaded(const QPixmap &pix);
+	void emitThumbnailLoaded(const QImage& img);
     void emitThumbnailLoadingFailed();
 };
 

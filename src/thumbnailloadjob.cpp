@@ -304,11 +304,11 @@ bool ThumbnailLoadJob::statResultThumbnail(KIO::StatJob * job) {
 	LOG("Thumbnail is up to date");
 
 	// Load thumbnail
-	QPixmap pix;
-	if (!pix.load(mThumbURL.path())) return false;
+	QImage img;
+	if (!img.load(mThumbURL.path())) return false;
 	
 	// All done
-	emitThumbnailLoaded(pix);
+	emitThumbnailLoaded(img);
 	determineNextIcon();
 	return true;
 }
@@ -336,7 +336,7 @@ void ThumbnailLoadJob::createThumbnail(const QString& pixPath) {
 	
     if (loaded) {
         img.save(mCacheDir + "/" + mCurrentURL.fileName(),"PNG");
-        emitThumbnailLoaded(QPixmap(img));
+        emitThumbnailLoaded(img);
     } else {
         emitThumbnailLoadingFailed();
     }
@@ -471,33 +471,25 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QImage& image) {
 }
 
 
-void ThumbnailLoadJob::emitThumbnailLoaded(const QPixmap& pix) {
+void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 	ThumbnailSize biggest=ThumbnailSize::biggest();
 
 	if (mThumbnailSize==biggest) {
-		emit thumbnailLoaded(mCurrentItem,pix);
+		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
 		return;
 	}
 	
-// Do we need to scale down the thumbnail ?
-	int biggestDimension=QMAX(pix.width(),pix.height());
+	// Do we need to scale down the thumbnail ?
+	int biggestDimension=QMAX(img.width(), img.height());
 	int thumbPixelSize=mThumbnailSize.pixelSize();
 	if (biggestDimension<=thumbPixelSize) {
-		emit thumbnailLoaded(mCurrentItem,pix);
+		emit thumbnailLoaded(mCurrentItem, QPixmap(img));
 		return;
 	}
 
-// Scale thumbnail
-	double scale=double(thumbPixelSize)/double(biggestDimension);
-	QPixmap pix2(thumbPixelSize,thumbPixelSize);
-	QPainter painter;
-	painter.begin(&pix2);
-	painter.eraseRect(0,0,thumbPixelSize,thumbPixelSize);
-	painter.scale(scale,scale);
-	painter.drawPixmap((biggestDimension-pix.width())/2, (biggestDimension-pix.height())/2, pix);
-	painter.end();
-
-	emit thumbnailLoaded(mCurrentItem,pix2);
+	// Scale thumbnail
+	QImage img2=img.smoothScale(thumbPixelSize, thumbPixelSize, QImage::ScaleMin);
+	emit thumbnailLoaded(mCurrentItem, QPixmap(img2));
 }
 
 

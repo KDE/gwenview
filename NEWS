@@ -1,6 +1,7 @@
 2004.xx.xx - v1.1.2
 - Fixes:
  - Don't crash when loading 8 bit PNG files with transparency.
+ - Make sure small and medium size thumbnails do not look jagged.
 
 2004.03.20 - v1.1.1
 - New features:
