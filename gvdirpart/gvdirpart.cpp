@@ -33,8 +33,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvdirpart.h"
 #include <src/fileoperation.h>
+#include <src/gvarchive.h>
 #include <src/gvcache.h>
 #include <src/gvdocument.h>
+#include <src/gvfileviewbase.h>
 #include <src/gvfileviewstack.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
@@ -88,7 +90,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
 	mPixmapView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
-	mSlideShow = new GVSlideShow(mDocument); // mFilesView->selectFirst(), mFilesView->selectNext());
+	mSlideShow = new GVSlideShow(mDocument);
 
 	FileOperation::kpartConfig();
 	mFilesView->kpartConfig();
@@ -183,9 +185,20 @@ void GVDirPart::toggleSlideShow() {
 			mToggleSlideShow->setChecked(false);
 			return;
 		}
+        KURL::List list;
+        KFileItemListIterator it( *mFilesView->currentFileView()->items() );
+        for ( ; it.current(); ++it ) {
+            KFileItem* item=it.current();
+            if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+                list.append(item->url());
+            }
+        }
+        if (list.count()==0) {
+			mToggleSlideShow->setChecked(false);
+            return;
+        }
 		//FIXME turn on full screen here (anyone know how?)
-		KURL::List l;
-		mSlideShow->start(l);
+		mSlideShow->start(list);
 	} else {
 		//FIXME turn off full screen here
 		mSlideShow->stop();
