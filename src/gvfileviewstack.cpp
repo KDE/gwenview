@@ -440,7 +440,7 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 	d->mSortAction->plug(&menu);
 
 	menu.connectItem(
-		menu.insertItem( i18n("Parent Dir") ),
+		menu.insertItem( i18n("Parent Folder") ),
 		this,SLOT(openParentDir()) );
 
 	menu.insertSeparator();
