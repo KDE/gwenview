@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="8">
+<kpartgui name="Gwenview" version="9">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -18,41 +18,59 @@
     <Action name="open_with_editor"/>
   </Menu>
   <Menu name="view" noMerge="1">
-  	<text>&amp;View</text>
-  	<Action name="reload"/>
-  	<Action name="stop"/>
+    <text>&amp;View</text>
+    <Action name="reload"/>
+    <Action name="stop"/>
     <Separator/>
-	<Action name="detailed"/>
-	<Action name="small_thumbnails"/>
-	<Action name="med_thumbnails"/>
-	<Action name="large_thumbnails"/>
+    <Action name="detailed"/>
+    <Action name="small_thumbnails"/>
+    <Action name="med_thumbnails"/>
+    <Action name="large_thumbnails"/>
     <Separator/>
-  	<Action name="fullscreen"/> 
-  	<Action name="slideshow"/>
+    <Action name="fullscreen"/> 
+    <Action name="slideshow"/>
     <Separator/>
     <Action name="view_zoom_auto"/>
     <Action name="view_zoom_in"/>
     <Action name="view_zoom_out"/>
     <Action name="view_actual_size"/>
     <Action name="view_zoom_lock"/>
-	<Separator/>
-	<Action name="show_dot_files"/>
+    <Separator/>
+    <Action name="show_dot_files"/>
   </Menu>
   <Menu name="go_web">
-  	<Action name="first"/>
-  	<Action name="previous"/>
-  	<Action name="next"/>
-  	<Action name="last"/>
+    <Action name="first"/>
+    <Action name="previous"/>
+    <Action name="next"/>
+    <Action name="last"/>
   </Menu>
   <Action name="bookmarks"/>
   <Menu name="settings">
-	<Action name="configure_tools" append="configure_merge"/>
+    <Action name="configure_tools" append="configure_merge"/>
+  </Menu>
+  <Menu name="plugins">
+    <text>Plugins</text>
+    <Menu name="kipi_images">
+      <text>Images</text>
+    </Menu>
+    <Menu name="kipi_effects">
+      <text>Effects</text>
+    </Menu>
+    <Menu name="kipi_tools">
+      <text>Tools</text>
+    </Menu>
+    <Menu name="kipi_import">
+      <text>Import</text>
+    </Menu>
+    <Menu name="kipi_export">
+      <text>Export</text>
+    </Menu>
   </Menu>
   <Menu name="window">
-  	<text>&amp;Window</text>
-	<ActionList name="winlist"/>
-	<Separator/>
-	<Action name="toggle_dir_and_file_views"/>
+    <text>&amp;Window</text>
+    <ActionList name="winlist"/>
+    <Separator/>
+    <Action name="toggle_dir_and_file_views"/>
   </Menu>
 </MenuBar>
 

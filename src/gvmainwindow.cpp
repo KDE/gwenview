@@ -58,17 +58,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlrequesterdlg.h>
 #include <kprinter.h>
 
+// KIPI
+#include <libkipi/plugin.h>
+#include <libkipi/pluginloader.h>
+
 // Local
 #include "fileoperation.h"
 #include "gvbatchmanipulator.h"
 #include "gvbookmarkowner.h"
 #include "gvconfigdialog.h"
 #include "gvdirview.h"
+#include "gvdocument.h"
 #include "gvexternaltooldialog.h"
 #include "gvfileviewstack.h"
 #include "gvhistory.h"
 #include "gvjpegtran.h"
-#include "gvdocument.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
 #include "gvslideshowdialog.h"
@@ -77,6 +81,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "statusbarprogress.h"
 
 #include "config.h"
+
+#ifdef HAVE_KIPI
+#include "gvkipiinterface.h"
+#endif
 
 #if KDE_VERSION < 0x30100
 #include "libgvcompat/kwidgetaction.h"
@@ -121,6 +129,7 @@ GVMainWindow::GVMainWindow()
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
+	loadPlugins();
 	applyMainWindowSettings();
 
 	mFileViewStack->setFocus();
@@ -922,6 +931,40 @@ void GVMainWindow::createLocationToolBar() {
 	(void)new KAction(i18n("Go"), "key_enter", 0, this, SLOT(slotGo()), actionCollection(), "location_go");
 
 }
+
+
+#ifdef HAVE_KIPI
+void GVMainWindow::loadPlugins() {
+	QMap<KIPI::Plugin::Category, QCString> categoryMap;
+	categoryMap[KIPI::Plugin::IMAGESPLUGIN]="kipi_images";
+	categoryMap[KIPI::Plugin::EFFECTSPLUGIN]="kipi_effects";
+	categoryMap[KIPI::Plugin::TOOLSPLUGIN]="kipi_tools";
+	categoryMap[KIPI::Plugin::IMPORTPLUGIN]="kipi_import";
+	categoryMap[KIPI::Plugin::EXPORTPLUGIN]="kipi_export";
+	
+	// Sets up the plugin interface, and load the plugins
+	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
+	KIPI::PluginLoader* loader = new KIPI::PluginLoader( interface );
+	loader->loadPlugins();
+
+	// Fill the plugin menu
+	KIPI::PluginLoader::List list = loader->pluginList();
+	for( QPtrListIterator<KIPI::Plugin> it( list ); *it; ++it ) {
+		KIPI::Plugin* plugin = *it;
+
+		QPopupMenu *popup = static_cast<QPopupMenu*>(
+			factory()->container( categoryMap[plugin->category()], this));
+		Q_ASSERT( popup );
+		KActionCollection *actions = plugin->actionCollection();
+		for (unsigned int i=0; i < actions->count(); i++) {
+			actions->action(i)->plug( popup );
+		}
+	}
+}
+#else
+void GVMainWindow::loadPlugins() {
+}
+#endif
 
 
 //-----------------------------------------------------------------------

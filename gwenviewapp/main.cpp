@@ -37,7 +37,7 @@ static const char* version="1.1.1";
 
 
 int main (int argc, char *argv[]) {
-#if GV_HACK_SUFFIX==1
+#ifdef GV_HACK_SUFFIX
 	KAboutData aboutData("gwenview_hack", I18N_NOOP("Gwenview_hack" ),
 #else
 	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview" ),

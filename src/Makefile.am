@@ -6,7 +6,8 @@ libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) $(LIBPNG) ../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la
+	$(LIBJPEG) $(LIBPNG) $(LIB_KIPI) \
+	../libgvexif/libgvexif.la ../libgvcompat/libgvcompat.la
 
 libgwenviewcore_la_METASOURCES = AUTO
 
@@ -50,6 +51,5 @@ libgwenviewcore_la_SOURCES = \
 	gvdocumentimpl.cpp \
 	gvdocumentdecodeimpl.cpp \
 	gvdocumentloadedimpl.cpp \
-	gvdocumentjpegloadedimpl.cpp
-
-
+	gvdocumentjpegloadedimpl.cpp \
+	gvkipiinterface.cpp

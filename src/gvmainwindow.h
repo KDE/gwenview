@@ -193,6 +193,8 @@ private slots:
 	void slotGo();
 	
 	void updateWindowActions();
+	
+	void loadPlugins();
 
 	// Helper function for updateWindowActions()
 	void createHideShowAction(KDockWidget* dock);
