@@ -524,7 +524,7 @@ static void VerticalFilter(const QImage& source,QImage& destination,
   }
 }
 
-QImage ResizeImage(const QImage& image,const int columns,
+static QImage ResizeImage(const QImage& image,const int columns,
   const int rows, Filter filter, fastfloat filtersupport, double blur)
 {
   ContributionInfo
@@ -544,7 +544,6 @@ QImage ResizeImage(const QImage& image,const int columns,
     return image.copy();
   QImage resize_image( columns, rows, 32 );
   resize_image.setAlphaBuffer( image.hasAlphaBuffer());
-  resize_image.fill( Qt::red.rgb() );
   /*
     Allocate filter contribution info.
   */
@@ -572,7 +571,6 @@ QImage ResizeImage(const QImage& image,const int columns,
     {
       QImage source_image( columns, image.height(), 32 );
       source_image.setAlphaBuffer( image.hasAlphaBuffer());
-      source_image.fill( Qt::yellow.rgb() );
       HorizontalFilter(image,source_image,x_factor,blur,
         contribution,filter,filtersupport);
       VerticalFilter(source_image,resize_image,y_factor,
@@ -582,7 +580,6 @@ QImage ResizeImage(const QImage& image,const int columns,
     {
       QImage source_image( image.width(), rows, 32 );
       source_image.setAlphaBuffer( image.hasAlphaBuffer());
-      source_image.fill( Qt::yellow.rgb() );
       VerticalFilter(image,source_image,y_factor,blur,
         contribution,filter,filtersupport);
       HorizontalFilter(source_image,resize_image,x_factor,
@@ -665,20 +662,13 @@ QImage scale(const QImage& image, int width, int height,
 	if( filter == Box && width > image.width() && height > image.height() && blur == 1.0 ) {
 		filter = NULL; // Box doesn't really smooth when enlarging
 	}
+
 	if( filter == NULL ) {
 		return image.scale( width, height );
 	}
 
-	if ( image.depth() == 32 ) {
-		// 32-bpp to 32-bpp
-		return ResizeImage( image, width, height, filter, filtersupport, blur );
-	} else if ( image.depth() != 16 && image.allGray() && !image.hasAlphaBuffer() ) {
-		// Inefficient
-		return ResizeImage( image.convertDepth(32), width, height, filter, filtersupport, blur ).convertDepth(8);
-	} else {
-	// Inefficient
-		return ResizeImage( image.convertDepth(32), width, height, filter, filtersupport, blur );
-	}
+	return ResizeImage( image.convertDepth( 32 ), width, height, filter, filtersupport, blur );
+        // unlike Qt's smoothScale() this function introduces new colors to grayscale images ... oh well
 }
 
 
