@@ -59,8 +59,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprinter.h>
 
 // KIPI
+#ifdef HAVE_KIPI
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
+#endif
 
 // Local
 #include "fileoperation.h"
