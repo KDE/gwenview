@@ -1,6 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 // Qt
 #include <qcstring.h>
+#include <qfile.h>
 #include <qimage.h>
 #include <qstring.h>
 #include <qwmatrix.h>
@@ -69,7 +70,7 @@ static Orientation getOrientation(ExifData* data) {
 
 
 Orientation getOrientation(const QString& pixPath) {
-	ExifDataPtr exifData( exif_data_new_from_file(pixPath.ascii()) );
+	ExifDataPtr exifData( exif_data_new_from_file(QFile::encodeName(pixPath)) );
 	return getOrientation(exifData);
 }
 
@@ -86,7 +87,7 @@ Orientation getOrientation(const QByteArray& jpegContent) {
 
 
 void getOrientationAndThumbnail(const QString& pixPath, Orientation& orientation, QImage& image) {
-	ExifDataPtr exifData( exif_data_new_from_file(pixPath.ascii()) );
+	ExifDataPtr exifData( exif_data_new_from_file(QFile::encodeName(pixPath)) );
 	orientation = getOrientation(exifData);
         if( exifData != NULL && exifData->data != NULL ) {
 		image.loadFromData( exifData->data, exifData->size, "JPEG" );
