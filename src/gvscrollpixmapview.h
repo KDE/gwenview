@@ -123,6 +123,17 @@ protected:
 	virtual void contentsDropEvent(QDropEvent*);
 	
 private:
+	// contentsX/contentsY are not applied, use them manually
+	int imageToWidgetX( int x ) const;
+	int imageToWidgetY( int y ) const;
+	QPoint imageToWidget( const QPoint& p ) const;
+	QRect imageToWidget( const QRect& r ) const;
+	int widgetToImageX( int x ) const;
+	int widgetToImageY( int y ) const;
+	QPoint widgetToImage( const QPoint& p ) const;
+	QRect widgetToImage( const QRect& r ) const;
+	QRect widgetToImageBounding( const QRect& r ) const;
+
 	void addPendingPaint( bool smooth, QRect rect = QRect());
 	void addPendingPaintInternal( bool smooth, QRect rect = QRect());
 	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
@@ -233,5 +244,57 @@ private:
 	int mMaxSmoothRepaintSize;
 };
 
+// see coordinates description in the .cpp file
+inline
+int GVScrollPixmapView::imageToWidgetX( int x ) const {
+	if( mZoom == 1.0 ) return x + mXOffset;
+	return int( round( x * mZoom )) + mXOffset;
+}
+
+inline
+int GVScrollPixmapView::imageToWidgetY( int y ) const {
+	if( mZoom == 1.0 ) return y + mYOffset;
+	return int( round( y * mZoom )) + mYOffset;
+}
+
+inline
+QPoint GVScrollPixmapView::imageToWidget( const QPoint& p ) const {
+	return QPoint( imageToWidgetX( p.x()), imageToWidgetY( p.y()));
+}
+
+inline
+QRect GVScrollPixmapView::imageToWidget( const QRect& r ) const {
+	return QRect( imageToWidget( r.topLeft()), imageToWidget( r.bottomRight()));
+}
+
+inline
+int GVScrollPixmapView::widgetToImageX( int x ) const {
+	if( mZoom == 1.0 ) return x - mXOffset;
+	return int( round( ( x - mXOffset ) / mZoom ));
+}
+
+inline
+int GVScrollPixmapView::widgetToImageY( int y ) const {
+	if( mZoom == 1.0 ) return y - mYOffset;
+	return int( round( ( y - mYOffset ) / mZoom ));
+}
+
+inline
+QPoint GVScrollPixmapView::widgetToImage( const QPoint& p ) const {
+	return QPoint( widgetToImageX( p.x()), widgetToImageY( p.y()));
+}
+
+inline
+QRect GVScrollPixmapView::widgetToImage( const QRect& r ) const {
+	return QRect( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+}
+
+inline
+QRect GVScrollPixmapView::widgetToImageBounding( const QRect& r ) const {
+	int extra = mZoom == 1.0 ? 0 : int( ceil( 1 / mZoom ));
+	QRect ret( widgetToImage( r.topLeft()), widgetToImage( r.bottomRight()));
+	ret.addCoords( -extra, -extra, extra, extra );
+	return ret;
+}
 
 #endif

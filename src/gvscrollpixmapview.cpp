@@ -57,6 +57,72 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvscrollpixmapview.moc"
 
+/*
+
+Coordinates:
+
+The image can be zoomed, can have a position offset, and additionally there is
+QScrollView's viewport. This means there are several coordinate systems.
+
+
+
+Let's start from simple things. Viewport ignored, zoom ignored:
+
+ A-----------------------------------
+ |                                  |
+ |                                  |
+ |     B---------------------       |
+ |     |                    |       |
+ |     |                    |       |
+ |     |                    |       |
+ |     |                    |       |
+ |     |                    |       |
+ |     |                    |       |
+ |     ---------------------C       |
+ |                                  |
+ |                                  |
+ ------------------------------------
+
+
+The inner rectangle is the image, outer rectangle is the widget.
+A = [ 0, 0 ]
+B = [ mXOffset, mYOffset ]
+C = B + [ mDocument->width(), mDocument->height() ]
+
+
+
+The same, additionally the image is zoomed.
+
+A = [ 0, 0 ]
+B = [ mXOffset, mYOffset ]
+C = [ mZoom * mDocument->width(), mZoom * mDocument->height()) ]
+
+The groups of functions imageToWidget() and widgetToImage() do conversions
+between the image and widget coordinates, i.e. imageToWidget() accepts coordinates
+in the image (original,not zoomed,image's topleft corner is [0,0]) and returns
+coordinates in the picture above, widgetToImage() works the other way around.
+
+There's no bounds checking, so widgetToImage( A ) in the example above would
+return image coordinate with negative x,y.
+
+The widgetToImage() functions round the values (in order to have the conversion
+as approximate as possible). However when converting from widget to image and back
+this can result in the final rectangle being smaller than the original.
+The widgetToImageBounding() function converts from widget to image coordinates
+(by adding ceil(1/mZoom) in all directions) in a way which makes sure the reverse
+conversion will be at least as large as the original geometry.
+
+There are no conversion functions for only width/height, as their conversion
+depends on the position (because of the rounding etc.).
+
+
+
+For conversions from/to QScrollView's viewport, usually QScrollView methods should
+be used: contentsX(), contentsY(), contentsWidth(), contentsHeight(), visibleWidth(),
+visibleHeight(), contentsToViewport() and viewportToContents().
+
+*/
+
 const char* CONFIG_OSD_MODE="osd mode";
 const char* CONFIG_FREE_OUTPUT_FORMAT="free output format";
 const char* CONFIG_SMOOTH_SCALE="smooth scale";
@@ -451,7 +517,7 @@ void GVScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 	updateZoomActions();
 
 	viewport()->setUpdatesEnabled(true);
-		fullRepaint();
+	fullRepaint();
 
 	emit zoomChanged(mZoom);
 }
@@ -496,15 +562,6 @@ void GVScrollPixmapView::resizeEvent(QResizeEvent* event) {
 		updateContentSize();
 		updateImageOffset();
 	}
-}
-
-
-//#define DEBUG_RECTS
-inline int roundDown(int value,double factor) {
-	return int(int(value/factor)*factor);
-}
-inline int roundUp(int value,double factor) {
-	return int(ceil(value/factor)*factor);
 }
 
 
@@ -691,6 +748,8 @@ void GVScrollPixmapView::cancelPending() {
 	updateBusyLevels();
 }
 
+//#define DEBUG_RECTS
+
 // do the actual painting
 void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth ) {
 	#ifdef DEBUG_RECTS
@@ -701,58 +760,41 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	QTime t;
 	t.start();
 
-	QRect updateRect=QRect(clipx,clipy,clipw,cliph);
 	if (mDocument->isNull()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
-	// If we are enlarging the image, we grow the update rect so that it
-	// contains full zoomed image pixels. We also take one more image pixel to
-	// avoid gaps in images.
-	if (mZoom>1.0) {
-		updateRect.setLeft	( roundDown(updateRect.left(),	mZoom)-int(mZoom) );
-		updateRect.setTop	( roundDown(updateRect.top(),	mZoom)-int(mZoom) );
-		updateRect.setRight ( roundUp(	updateRect.right(), mZoom)+int(mZoom)-1 );
-		updateRect.setBottom( roundUp(	updateRect.bottom(),mZoom)+int(mZoom)-1 );
-	}
-
-	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mDocument->width()*mZoom), int(mDocument->height()*mZoom));
-	updateRect=updateRect.intersect(zoomedImageRect);
-
-	if (updateRect.isEmpty()) {
+	QRect imageRect = widgetToImageBounding( QRect(clipx,clipy,clipw,cliph));
+	imageRect = imageRect.intersect( QRect( 0, 0, mDocument->width(), mDocument->height()));
+	if (imageRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
+	QImage image = mDocument->image().copy( imageRect );
+	QRect widgetRect = imageToWidget( imageRect );
 
-	QImage image=mDocument->image().copy(
-		int(updateRect.x()/mZoom) - int(mXOffset/mZoom), int(updateRect.y()/mZoom) - int(mYOffset/mZoom),
-		int(updateRect.width()/mZoom), int(updateRect.height()/mZoom) );
-
-	// There's a small problem somewhere here above. If updateRect.height() is 1 and mZoom > 1,
-	// the resulting image height will be 0, yet there's one pixel row to paint. For now, at least
-	// avoid using a null image.
-	if (image.isNull()) {
+	if (image.isNull() || widgetRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
 	int* maxRepaintSize = &mMaxRepaintSize;
 	if (smooth) {
-		if( mZoom != 1.0 ) {
+		if( zoom() != 1.0 ) {
 			image=image.convertDepth(32);
-			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), mSmoothAlgorithm );
+			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), mSmoothAlgorithm );
 			maxRepaintSize = &mMaxSmoothRepaintSize;
 		}
 	} else {
-		if( mZoom != 1.0 ) {
+		if( zoom() != 1.0 ) {
 			GVImageUtils::SmoothAlgorithm algo=mDelayedSmoothing
 				?GVImageUtils::SMOOTH_NONE
 				:mSmoothAlgorithm;
-			image=GVImageUtils::scale(image,updateRect.width(),updateRect.height(), algo );
+			image=GVImageUtils::scale(image,widgetRect.width(),widgetRect.height(), algo );
 			maxRepaintSize = mDelayedSmoothing ? &mMaxScaleRepaintSize : &mMaxSmoothRepaintSize;
 			
-			if( mDelayedSmoothing && mZoom != 1.0 ) {
+			if( mDelayedSmoothing && zoom() != 1.0 ) {
 				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 			}
 		}
@@ -765,8 +807,8 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 
 		bool light;
 
-		int imageXOffset=int(updateRect.x())-int(mXOffset);
-		int imageYOffset=int(updateRect.y())-int(mYOffset);
+		int imageXOffset=widgetRect.x()-mXOffset;
+		int imageYOffset=widgetRect.y()-mYOffset;
 		int imageWidth=image.width();
 		int imageHeight=image.height();
 		for (int y=0;y<imageHeight;++y) {
@@ -780,18 +822,19 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		image.setAlphaBuffer(false);
 	}
 
-	QPixmap buffer(clipw,cliph);
+	QRect paintRect( clipx, clipy, clipw, cliph );
+	QPixmap buffer( paintRect.size());
 	{
 		QPainter bufferPainter(&buffer);
 		bufferPainter.setBackgroundColor(painter->backgroundColor());
-		bufferPainter.eraseRect(0,0,clipw,cliph);
-		bufferPainter.drawImage(updateRect.x()-clipx,updateRect.y()-clipy,image);
+		bufferPainter.eraseRect(0,0,paintRect.width(),paintRect.height());
+		bufferPainter.drawImage(widgetRect.topLeft()-paintRect.topLeft(),image);
 	}
-	painter->drawPixmap(clipx,clipy,buffer);
+	painter->drawPixmap(paintRect.topLeft(),buffer);
 
-	if( updateRect.width() * updateRect.height() >= 10000 ) { // ignore small repaints
+	if( paintRect.width() * paintRect.height() >= 10000 ) { // ignore small repaints
 		// try to do one step in 0.1sec
-		int size = updateRect.width() * updateRect.height() * 100 / QMAX( t.elapsed(), 1 );
+		int size = paintRect.width() * paintRect.height() * 100 / QMAX( t.elapsed(), 1 );
 		*maxRepaintSize = QMIN( 1000000, QMAX( 10000,
 				( size + *maxRepaintSize ) / 2 ));
 	}
@@ -799,7 +842,7 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	#ifdef DEBUG_RECTS
 	painter->setPen(colors[numColor]);
 	numColor=(numColor+1)%4;
-	painter->drawRect(clipx,clipy,clipw,cliph);
+	painter->drawRect(paintRect);
 	#endif
 }
 
@@ -1006,7 +1049,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		verticalScrollBar()->setValue(0);
 	}
 	updateImageOffset();
-	QRect imageRect(mXOffset, mYOffset, int(mDocument->width()*mZoom), int(mDocument->height()*mZoom));
+	QRect imageRect = imageToWidget( QRect( 0, 0, mDocument->width(), mDocument->height()));
 
 	QPainter painter( viewport());
 	// Top rect
@@ -1023,23 +1066,16 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 
 	// Right rect
 	painter.eraseRect( imageRect.right(), imageRect.top(),
-	viewport()->width()-imageRect.right(), imageRect.height());
+		viewport()->width()-imageRect.right(), imageRect.height());
 
 	// Image area
 	painter.setPen(painter.backgroundColor().light(200));
-	imageRect.addCoords(0,0,-1,-1);
 	painter.drawRect(imageRect);
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
 	mEmptyImage = false;
-	QRect widgetRect;
-	// We add a one pixel border to avoid missing parts of the image
-	widgetRect.setLeft( int(imageRect.left()*mZoom) + mXOffset-1);
-	widgetRect.setTop( int(imageRect.top()*mZoom) + mYOffset-1);
-	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
-	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
-	viewport()->repaint(widgetRect,false);
+	viewport()->repaint( imageToWidget( imageRect ), false );
 }
 
 
