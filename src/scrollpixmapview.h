@@ -52,8 +52,8 @@ public:
 // Properties
 	double zoom() const { return mZoom; }
 	void setZoom(double zoom);
-	double zoomStep() const { return mZoomStep; }
-	void setZoomStep(double zoom);
+	bool isZoomSetToMax();
+	bool isZoomSetToMin();
 	void setFullScreen(bool);
 
 public slots:
@@ -75,7 +75,6 @@ private:
 
 // Zoom info
 	double mZoom;
-	double mZoomStep;
 	bool mLockZoom;
 
 // Drag info

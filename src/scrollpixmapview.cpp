@@ -37,12 +37,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "scrollpixmapview.moc"
 
-
-const char* CONFIG_ZOOM_STEP="zoom step";
-
+const double MAX_ZOOM=16.0; // Same value as GIMP
 
 ScrollPixmapView::ScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled)
-: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase), mGVPixmap(pixmap), mPopupMenu(0L), mZoom(1), mZoomStep(0.5), mLockZoom(false), mDragStarted(false)
+: QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase), mGVPixmap(pixmap), mPopupMenu(0L), mZoom(1), mLockZoom(false), mDragStarted(false)
 {
 	unsetCursor();
 	setFocusPolicy(StrongFocus);
@@ -89,11 +87,6 @@ void ScrollPixmapView::setZoom(double zoom) {
 }
 
 
-void ScrollPixmapView::setZoomStep(double zoomStep) {
-	mZoomStep=zoomStep;
-}
-
-
 void ScrollPixmapView::setFullScreen(bool fullScreen) {
 	if (fullScreen) {
 		viewport()->setBackgroundColor(black);
@@ -103,6 +96,16 @@ void ScrollPixmapView::setFullScreen(bool fullScreen) {
 		setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 		setLineWidth( style().defaultFrameWidth() );
 	}
+}
+
+
+bool ScrollPixmapView::isZoomSetToMax() {
+	return mZoom>=MAX_ZOOM;
+}
+
+
+bool ScrollPixmapView::isZoomSetToMin() {
+	return mZoom<=1/MAX_ZOOM;
 }
 
 
@@ -186,12 +189,16 @@ void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
 
 //-Slots----------------------------------------------
 void ScrollPixmapView::slotZoomIn() {
-	setZoom(mZoom + mZoomStep);
+	double newZoom;
+	for(newZoom=1/MAX_ZOOM;newZoom<=mZoom;newZoom*=2);
+	setZoom(newZoom);
 }
 
 
 void ScrollPixmapView::slotZoomOut() {
-	setZoom(mZoom - mZoomStep);
+	double newZoom;
+	for(newZoom=MAX_ZOOM;newZoom>=mZoom;newZoom/=2);
+	setZoom(newZoom);
 }
 
 
@@ -221,14 +228,10 @@ void ScrollPixmapView::updateImageOffset() {
 
 
 //-Config----------------------------------------------
-void ScrollPixmapView::readConfig(KConfig* config, const QString& group) {
-	config->setGroup(group);
-	setZoomStep(config->readDoubleNumEntry(CONFIG_ZOOM_STEP,1.0));
+void ScrollPixmapView::readConfig(KConfig*, const QString&) {
 }
 
 
-void ScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
-	config->setGroup(group);
-	config->writeEntry(CONFIG_ZOOM_STEP,mZoomStep);
+void ScrollPixmapView::writeConfig(KConfig*, const QString&) const {
 }
 

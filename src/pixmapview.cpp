@@ -346,8 +346,8 @@ void PixmapView::updateZoomActions() {
 		mZoomIn->setEnabled(false);
 		mZoomOut->setEnabled(false);
 	} else {
-		mZoomIn->setEnabled(true);
-		mZoomOut->setEnabled(mScrollPixmapView->zoom()-mScrollPixmapView->zoomStep()>0);
+		mZoomIn->setEnabled(!mScrollPixmapView->isZoomSetToMax());
+		mZoomOut->setEnabled(!mScrollPixmapView->isZoomSetToMin());
 	}
 }
 
