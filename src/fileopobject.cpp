@@ -156,12 +156,15 @@ void FileOpMoveToObject::operator()() {
 
 //-FileOpTrashObject---------------------------------------------------------------
 void FileOpTrashObject::operator()() {
+#if KDE_VERSION >= 0x30400
+	KURL trashURL("trash:/");
+#else
+	KURL trashURL;
 	// Get the trash path (and make sure it exists)
 	QString trashPath=KGlobalSettings::trashPath();
 	if ( !QFile::exists(trashPath) ) {
 		KStandardDirs::makeDir( QFile::encodeName(trashPath) );
 	}
-	KURL trashURL;
 	trashURL.setPath(trashPath);
 
 	// Check we don't want to trash the trash
@@ -172,6 +175,7 @@ void FileOpTrashObject::operator()() {
 			return;
 		}
 	}
+#endif
 
 	// Confirm operation
 	if (FileOperation::confirmDelete()) {
