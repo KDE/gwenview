@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfileviewbase.h"
 #include "thumbnailsize.h"
 
+class QDragEnterEvent;
 class QIconViewItem;
 class QPopupMenu;
 
@@ -39,7 +40,6 @@ class KFileItem;
 typedef QPtrList<KFileItem> KFileItemList;
 
 class GVFileThumbnailViewItem;
-
 class ThumbnailLoadJob;
 
 class GVFileThumbnailView : public KIconView, public GVFileViewBase {
@@ -96,8 +96,10 @@ signals:
 	void updateStarted(int);
 	void updateEnded();
 	void updatedOneThumbnail();
+	void dropped(QDropEvent*, KFileItem* target);
 
 protected:
+	void contentsDragEnterEvent(QDragEnterEvent*);
 	void startDrag();
 
 private:
@@ -116,6 +118,7 @@ private:
 private slots:
 	void slotClicked(QIconViewItem*);
 	void slotDoubleClicked(QIconViewItem*);
+	void slotDropped(QDropEvent*);
 };
 
 

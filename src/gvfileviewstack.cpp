@@ -138,6 +138,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(viewClicked()) );
 	connect(mFileThumbnailView,SIGNAL(contextMenuRequested(QIconViewItem*,const QPoint&)),
 		this,SLOT(openContextMenu(QIconViewItem*,const QPoint&)) );
+	connect(mFileThumbnailView,SIGNAL(dropped(QDropEvent*,KFileItem*)),
+		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
 
 	// Propagate signals
 	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),

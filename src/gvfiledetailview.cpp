@@ -88,7 +88,7 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 	
 	setAcceptDrops(true);
 	setDropVisualizer(false);
-	setDropHighlighter(true);
+	setDropHighlighter(false);
 }
 
 
@@ -476,5 +476,4 @@ void GVFileDetailView::contentsDropEvent(QDropEvent *event) {
 		fileItem=static_cast<GVFileDetailViewItem*>(item)->fileInfo();
 	}
 	emit dropped(event,fileItem);
-	event->accept();
 }

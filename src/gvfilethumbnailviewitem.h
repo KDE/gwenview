@@ -48,6 +48,8 @@ protected:
 	void calcRect( const QString& text_=QString::null );
 	void truncateText(const QFontMetrics&);
 	void paintFocus(QPainter*, const QColorGroup&) {}
+	bool acceptDrop(const QMimeSource*) const;
+	void dropped(QDropEvent*, const QValueList<QIconDragItem>&);
 	
 	KFileItem* mFileItem;
 	KWordWrap* mWordWrap;

@@ -230,3 +230,13 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	p->restore();
 }
 
+
+bool GVFileThumbnailViewItem::acceptDrop(const QMimeSource* source) const {
+	return QUriDrag::canDecode(source);
+}
+
+
+void GVFileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconDragItem>&) {
+	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
+	emit view->dropped(event,mFileItem);
+}

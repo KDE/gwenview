@@ -1,9 +1,12 @@
 2003.xx.xx - v0.17.0
 - New features:
  - Added a cancel button to popup menus, like Konqueror does.
+ - Added support for dropping files to the file view.
 - Fixes:
  - Fixed compilation failure on KDE 3.0.
  - Clear the image view when the last image of the current folder is removed.
+ - Hopefully fixed the bug which caused Gwenview to sometimes crash when
+   invoked with a folder in the command line.
 
 2003.04.27 - v0.17.0pre3
 - Fixes:

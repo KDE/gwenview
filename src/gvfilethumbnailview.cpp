@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpixmapcache.h>
 #include <qpushbutton.h>
 
-// KDE includes
+// KDE 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurldrag.h>
 #include <kwordwrap.h>
 
-// Our includes
+// Local 
 #include "gvfilethumbnailviewitem.h"
 #include "gvarchive.h"
 #include "thumbnailloadjob.h"
@@ -57,16 +57,19 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	setResizeMode(Adjust);
 	setShowToolTips(true);
 	setSpacing(0);
-	viewport()->setAcceptDrops(false);
+	setAcceptDrops(true);
 
 	// If we use KIconView::Execute mode, the current item is unselected after
 	// being clicked, so we use KIconView::Select mode and emit ourself the
 	// execute() signal with slotClicked()
 	setMode(KIconView::Select);
-	connect(this,SIGNAL(clicked(QIconViewItem*)),
-		this,SLOT(slotClicked(QIconViewItem*)) );
-	connect(this,SIGNAL(doubleClicked(QIconViewItem*)),
-		this,SLOT(slotDoubleClicked(QIconViewItem*)) );
+	connect(this, SIGNAL(clicked(QIconViewItem*)),
+		this, SLOT(slotClicked(QIconViewItem*)) );
+	connect(this, SIGNAL(doubleClicked(QIconViewItem*)),
+		this, SLOT(slotDoubleClicked(QIconViewItem*)) );
+
+	connect(this, SIGNAL(dropped(QDropEvent*,const QValueList<QIconDragItem>&)),
+		this, SLOT(slotDropped(QDropEvent*)) );
 	
 	QIconView::setSelectionMode(Extended);
 }
@@ -207,6 +210,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 	// Create icon item
 	QDir::SortSpec spec = KFileView::sorting();
 	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
+	iconItem->setDropEnabled(isDirOrArchive);
 	iconItem->setKey( sortingKey( item->text(), isDirOrArchive, spec ));
 
 	item->setExtraData(this,iconItem);
@@ -307,6 +311,20 @@ KFileItem* GVFileThumbnailView::nextItem(const KFileItem* fileItem) const {
 	if (!iconItem) return 0L;
 
 	return iconItem->fileItem();
+}
+
+//--------------------------------------------------------------------------
+//
+// Drop support
+//
+//--------------------------------------------------------------------------
+void GVFileThumbnailView::contentsDragEnterEvent(QDragEnterEvent* event) {
+	return event->accept( QUriDrag::canDecode(event) );
+}
+
+
+void GVFileThumbnailView::slotDropped(QDropEvent* event) {
+	emit dropped(event,0L);
 }
 
 
