@@ -145,6 +145,7 @@ private:
 	void createWidgets();
 	void createActions();
 	void createLocationToolBar();
+	void updateLocationURL();
 	void createConnections();
 
 	void readConfig(KConfig*,const QString&);

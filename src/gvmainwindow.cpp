@@ -310,9 +310,14 @@ void GVMainWindow::setURL(const KURL& url) {
 	if( mLoadingCursor )
 		kapp->restoreOverrideCursor();
 	mLoadingCursor = false;
+	updateLocationURL();
+}
 
-	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
-	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
+void GVMainWindow::updateLocationURL() {
+	// show the picture URL in the location bar only when not browsing
+	KURL locationURL = mToggleBrowse->isChecked() ? mDocument->dirURL() : mDocument->url();
+	mURLEdit->setEditText(locationURL.prettyURL(0,KURL::StripFileProtocol));
+	mURLEdit->addToHistory(locationURL.prettyURL(0,KURL::StripFileProtocol));
 }
 
 void GVMainWindow::goUp() {
@@ -655,6 +660,7 @@ void GVMainWindow::slotToggleCentralStack() {
 		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
 	}
+	updateLocationURL();
 }
 
 
