@@ -89,9 +89,15 @@ bool JPEGContent::load(const QString& path) {
 bool JPEGContent::loadFromData(const QByteArray& data) {
 	if (d->mExifData) {
 		exif_data_unref(d->mExifData);
+		d->mExifData=0;
 	}
 
 	d->mRawData = data;
+	if (d->mRawData.size()==0) {
+		kdError() << "No data\n";
+		return false;
+	}
+
 	d->mExifData = exif_data_new_from_data((unsigned char*)data.data(), data.size());
 	if (!d->mExifData) {
 		kdError() << "Could not load exif data\n";
@@ -126,7 +132,7 @@ void JPEGContent::resetOrientation() {
 }
 
 
-// FIXME: This shoud use in-memory jpeg readers and writers
+// FIXME: This should use in-memory jpeg readers and writers
 void JPEGContent::transform(Orientation orientation) {
 	QMap<Orientation,JXFORM_CODE> orientation2jxform;
 	orientation2jxform[NOT_AVAILABLE]= JXFORM_NONE;
@@ -146,6 +152,11 @@ void JPEGContent::transform(Orientation orientation) {
 	srcTemp.setAutoDelete(true);
 	KTempFile dstTemp("dst", ".jpg");
 	dstTemp.setAutoDelete(true);
+
+	if (d->mRawData.size()==0) {
+		kdError() << "No data loaded\n";
+		return;
+	}
 
 	// Copy array to srcTemp
 	QFile file(srcTemp.name());
@@ -286,6 +297,11 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 
 
 bool JPEGContent::save(const QString& path) const {
+	if (d->mRawData.size()==0) {
+		kdError() << "No data to store in '" << path << "'\n";
+		return false;
+	}
+
 	QFile file(path);
 	if (!file.open(IO_WriteOnly)) {
 		kdError() << "Could not open '" << path << "' for writing\n";
