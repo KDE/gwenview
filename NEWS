@@ -1,8 +1,8 @@
 2004.xx.xx - v1.1.7
-- New features:
 - Fixes:
  - If the URL given as an argument is a directory, start in browse mode,
    not in view mode.
+ - On Screen Display is back, it was broken in 1.1.6.
 
 2004.10.24 - v1.1.6
 - New features:

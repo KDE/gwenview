@@ -316,7 +316,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 , mDocument(pixmap)
 , mAutoHideTimer(new QTimer(this))
-, mFullScreenLabel(new QLabel(parent))
+, mFullScreenLabel(new QLabel(this))
 , mTool(SCROLL)
 , mXOffset(0),mYOffset(0)
 , mZoom(1)
