@@ -65,7 +65,8 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	connect(this,SIGNAL(clicked(QIconViewItem*,const QPoint&)),
 		this,SLOT(slotClicked(QIconViewItem*,const QPoint&)) );
 	
-	//QIconView::setSelectionMode(Extended); // FIXME : Find a way to change which item is current on multi-select before enabling this
+	QIconView::setSelectionMode(Extended);
+	// FIXME : Find a way to change which item is current on multi-select before enabling this
 }
 
 

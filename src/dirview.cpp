@@ -335,7 +335,17 @@ void DirView::contentsDropEvent(QDropEvent* event) {
 			KIO::copy(urls, dest, true);
 		} else if (id==moveItemID) {
 			KIO::move(urls, dest, true);
-			setCurrentItem(mDropTarget);
+			
+		// If the current url was in the list, set the drop target as the new
+		// current item
+			KURL current=currentURL();
+			KURL::List::ConstIterator it=urls.begin();
+			for (; it!=urls.end(); ++it) {
+				if (current.cmp(*it,true)) {
+					setCurrentItem(mDropTarget);
+					break;
+				}
+			}
 		}
 	}
 
