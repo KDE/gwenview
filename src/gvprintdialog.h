@@ -2,21 +2,21 @@
 /*
 Gwenview - printing support
 Copyright (c) 2003 Angelo Naselli
-
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
+ 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
+ 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+ 
 */
 #ifndef GVPRINTDIALOG_H
 #define GVPRINTDIALOG_H
@@ -35,11 +35,10 @@ class GVPrintDialogPageBase;
 enum GVUnits {
 	GV_MILLIMETERS = 1,
 	GV_CENTIMETERS,
-	GV_INCHES	 
+	GV_INCHES
 };
 
-class GVPrintDialogPage : public KPrintDialogPage
-{
+class GVPrintDialogPage : public KPrintDialogPage {
 	Q_OBJECT
 
 public:
@@ -54,8 +53,8 @@ private slots:
 	void setNewUnit(const QString& string);
 	void setHValue (int value);
 	void setWValue (int value);
-	
-private:	
+
+private:
 	int scaleWidth() const;
 	int scaleHeight() const;
 	void setScaleWidth(int pixels);

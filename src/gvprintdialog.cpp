@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <knuminput.h>
 #include <kprinter.h>
 
-// Our
+// Local
 #include <gvmainwindow.h>
 #include <gvpixmap.h>
 #include <gvprintdialogpagebase.h>
@@ -45,7 +45,7 @@ const char* STR_FALSE="false";
 
 
 GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
-: KPrintDialogPage( parent, name ) {
+		: KPrintDialogPage( parent, name ) {
 	mGVPixmap = ((GVMainWindow*)parent)->gvPixmap();
 	mContent = new GVPrintDialogPageBase(this);
 	setTitle( mContent->caption() );
@@ -64,7 +64,7 @@ GVPrintDialogPage::GVPrintDialogPage( QWidget *parent, const char *name )
 GVPrintDialogPage::~GVPrintDialogPage() {}
 
 void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts,
-									bool /*incldef*/ ) {
+                                    bool /*incldef*/ ) {
 	opts["app-gwenview-position"] = QString::number(getPosition(mContent->mPosition->currentText()));
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
@@ -85,7 +85,7 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 
 	val = opts["app-gwenview-position"].toInt( &ok );
 	if (ok) {
-		stVal = setPosition(val);	
+		stVal = setPosition(val);
 		mContent->mPosition->setCurrentItem(stVal);
 	}
 
@@ -96,7 +96,7 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 	mContent->mScale->setChecked( opts["app-gwenview-scale"] == STR_TRUE );
 	val = opts["app-gwenview-scaleUnit"].toInt( &ok );
 	if (ok) {
-		stVal = setUnit(val);	
+		stVal = setUnit(val);
 		mContent->mUnits->setCurrentItem(stVal);
 	}
 
@@ -180,7 +180,7 @@ QString GVPrintDialogPage::setPosition(int align) {
 	return alignment;
 }
 
-int GVPrintDialogPage::getUnit(const QString& unit) {	 
+int GVPrintDialogPage::getUnit(const QString& unit) {
 	if (unit == i18n("Millimeters")) {
 		return	GV_MILLIMETERS;
 	} else if (unit == i18n("Centimeters")) {
@@ -201,49 +201,47 @@ QString GVPrintDialogPage::setUnit(int unit) {
 }
 
 // SLOTS
-void GVPrintDialogPage::setHValue (int value){
+void GVPrintDialogPage::setHValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 
 	if (mContent->mKeepRatio->isChecked()) {
 		int w = (mGVPixmap->width() * value) / mGVPixmap->height();
-		mContent->mWidth->setValue( w ? w : 1);							   
+		mContent->mWidth->setValue( w ? w : 1);
 	}
-	mContent->mHeight->setValue(value);		
+	mContent->mHeight->setValue(value);
 
 	mContent->mWidth->blockSignals(false);
 	mContent->mHeight->blockSignals(false);
-	
+
 }
 
-void GVPrintDialogPage::setWValue (int value){	  
+void GVPrintDialogPage::setWValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 	if (mContent->mKeepRatio->isChecked()) {
-		int h = (mGVPixmap->height() * value) / mGVPixmap->width();			   
+		int h = (mGVPixmap->height() * value) / mGVPixmap->width();
 		mContent->mHeight->setValue( h ? h : 1);
 	}
-	mContent->mWidth->setValue(value);	  
+	mContent->mWidth->setValue(value);
 	mContent->mWidth->blockSignals(false);
 	mContent->mHeight->blockSignals(false);
 }
-	
+
 void GVPrintDialogPage::toggleRatio(bool enable) {
 	if (enable) {
 		float cm = 1;
-		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS)
-			cm = 10;
-		else if (getUnit(mContent->mUnits->currentText()) == GV_INCHES)
-			cm = 1/(2.54);
-		// 15x10 cm 
+		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS) cm = 10;
+		else if (getUnit(mContent->mUnits->currentText()) == GV_INCHES) cm = 1/(2.54);
+		// 15x10 cm
 		float hValue, wValue;
 		if (mGVPixmap->height() > mGVPixmap->width()) {
 			hValue = cm*15;
 			wValue = (mGVPixmap->width() * (hValue))/ mGVPixmap->height();
 		} else {
 			wValue = cm*15;
-			hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();			
-		}		 
+			hValue = (mGVPixmap->height() * wValue)/ mGVPixmap->width();
+		}
 		mContent->mWidth->setValue((int)wValue);
 		mContent->mHeight->setValue((int)hValue);
 	}

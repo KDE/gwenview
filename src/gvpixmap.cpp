@@ -2,21 +2,21 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
-
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-
+ 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
+ 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+ 
 */
 
 #include <sys/stat.h> // For S_ISDIR
@@ -86,7 +86,7 @@ public:
 
 
 	GVPixmapPrivate()
-	: mDecoder(0) {}
+			: mDecoder(0) {}
 
 	~GVPixmapPrivate() {
 		if (mDecoder) delete mDecoder;
@@ -104,8 +104,7 @@ public:
 		QString mimeType=metaInfo.mimeType();
 		if (mimeType=="image/jpeg") {
 			commentItem=metaInfo[JPEG_EXIF_DATA][JPEG_EXIF_COMMENT];
-			mCommentState=
-				QFileInfo(path).isWritable()?GVPixmap::WRITABLE:GVPixmap::READ_ONLY;
+			mCommentState=QFileInfo(path).isWritable()?GVPixmap::WRITABLE:GVPixmap::READ_ONLY;
 			mComment=QString::fromUtf8( commentItem.string().ascii() );
 
 		} else if (mimeType=="image/png") {
@@ -119,8 +118,8 @@ public:
 			for(it=keys.begin(); it!=keys.end(); ++it) {
 				KFileMetaInfoItem metaInfoItem=metaInfo[PNG_COMMENT][*it];
 				QString line=QString("%1: %2")
-							 .arg(metaInfoItem.translatedKey())
-							 .arg(metaInfoItem.string());
+					.arg(metaInfoItem.translatedKey())
+					.arg(metaInfoItem.string());
 				tmp.append(line);
 			}
 			mComment=tmp.join("\n");
@@ -342,7 +341,7 @@ void GVPixmap::print(KPrinter *pPrinter) {
 }
 
 QString GVPixmap::minimizeString( const QString& text, const QFontMetrics&
-								  metrics, int maxWidth ) {
+                                  metrics, int maxWidth ) {
 	if ( text.length() <= 5 )
 		return text; // no sense to cut that tiny little string
 
@@ -387,7 +386,7 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 	QString f = "false";
 
 	int alignment = (printer->option("app-gwenview-position").isEmpty() ?
-					 Qt::AlignCenter : printer->option("app-gwenview-position").toInt());
+		Qt::AlignCenter : printer->option("app-gwenview-position").toInt());
 
 	// Compute filename offset
 	int filenameOffset = 0;
@@ -412,7 +411,7 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 	bool scaling = printer->option( "app-gwenview-scale" ) != f;
 	if (scaling) {
 		int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
-					GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
+			GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
 		float inches = 1;
 		if (unit == GV_MILLIMETERS) {
 			inches = 1/25.5;
@@ -420,9 +419,9 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 			inches = 1/2.54;
 		}
 		float wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
-					  1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
+			1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
 		float hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
-					  1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
+			1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
 		wImg = wImg * printer->resolution();
 		hImg = hImg * printer->resolution();
 
@@ -514,10 +513,10 @@ void GVPixmap::saveAs() {
 bool GVPixmap::saveIfModified() {
 	if (!d->mModified) return true;
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
-				.arg(url().prettyURL());
+		.arg(url().prettyURL());
 
 	int result=KMessageBox::questionYesNoCancel(0, msg, QString::null,
-			   i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
+		i18n("Save"), i18n("Discard"), CONFIG_SAVE_AUTOMATICALLY);
 
 	switch (result) {
 	case KMessageBox::Yes:
@@ -554,7 +553,7 @@ void GVPixmap::setModifiedBehavior(ModifiedBehavior value) {
 	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->setGroup(CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->writeEntry(CONFIG_SAVE_AUTOMATICALLY,
-					   modifiedBehaviorToString(value));
+		modifiedBehaviorToString(value));
 }
 
 
