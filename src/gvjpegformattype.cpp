@@ -91,7 +91,6 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 	size_t skip_input_bytes;
 	bool at_eof;
 	QRect change_rect;
-	QTime decoder_time_stamp;
 	bool final_pass;
 	bool decoding_done;
 	bool do_progressive;
@@ -357,7 +356,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			qDebug("ok, going to DECOMPRESS_STARTED");
 #endif
 
-			mSourceManager.decoder_time_stamp.start();
 			mState = mSourceManager.do_progressive ? DECOMPRESS_STARTED : DO_OUTPUT_SCAN;
 		}
 	}
@@ -383,7 +381,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 	}
 
 	if(mState == PREPARE_OUTPUT_SCAN) {
-		mSourceManager.decoder_time_stamp.restart();
 		if ( jpeg_start_output(&mDecompress, mDecompress.input_scan_number) ) {
 			mState = DO_OUTPUT_SCAN;
 		}
@@ -430,7 +427,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 
 			consumer->changed(mSourceManager.change_rect);
 			mSourceManager.change_rect = QRect();
-			mSourceManager.decoder_time_stamp.restart();
 		}
 
 		if(mDecompress.output_scanline >= mDecompress.output_height) {
@@ -454,7 +450,6 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 					mDecompress.output_scan_number);
 #endif
 				// don't return until necessary!
-				mSourceManager.decoder_time_stamp.restart();
 				mState = DECOMPRESS_STARTED;
 			}
 		}
