@@ -81,12 +81,9 @@ KAboutData* GVDirPart::createAboutData() {
 }
 
 bool GVDirPart::openURL(const KURL& url) {
-	kdDebug() << k_funcinfo << "start" <<  endl;
+	kdDebug() << k_funcinfo << url.prettyURL() <<  endl;
 
 	if (!url.isValid())  {
-		return false;
-	}
-	if (!url.isLocalFile())  {
 		return false;
 	}
 
