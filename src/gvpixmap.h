@@ -92,6 +92,10 @@ private:
 	QString mImageFormat;
 	bool mModified;
 
+	uchar* mCompressedData;
+	uint mCompressedLength;
+
+	void freeData();
 	void saveIfModified();
 	void reset();
 	void load();

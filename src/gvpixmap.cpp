@@ -42,11 +42,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 GVPixmap::GVPixmap(QObject* parent)
 : QObject(parent)
 , mModified(false)
+, mCompressedData(0L)
+, mCompressedLength(0L)
 {}
 
 
-GVPixmap::~GVPixmap()
-{}
+GVPixmap::~GVPixmap() {
+	freeData();
+}
 
 
 void GVPixmap::setURL(const KURL& paramURL) {
@@ -123,6 +126,10 @@ KURL GVPixmap::url() const {
 
 
 void GVPixmap::rotateLeft() {
+	// Apply the rotation to the compressed data too if available
+	if (mImageFormat=="JPEG" && mCompressedData) {
+		kdDebug() << "Lossless left rotation\n";
+	}
 	QWMatrix matrix;
 	matrix.rotate(-90);
 	mImage=mImage.xForm(matrix);
@@ -184,28 +191,6 @@ void GVPixmap::saveAs() {
 // Private stuff
 //
 //---------------------------------------------------------------------
-bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
-	bool result;
-	if (url.isLocalFile()) {
-		result=mImage.save(url.path(),format.ascii());
-	} else {
-		KTempFile tmp;
-		tmp.setAutoDelete(true);
-
-		result=mImage.save(tmp.name(),format.ascii());
-		if (!result) return false;
-
-		result=KIO::NetAccess::upload(tmp.name(),url);
-	}
-	if (result) {
-		emit saved(url);
-		mModified=false;
-	}
-
-	return result;
-}
-
-
 void GVPixmap::load() {
 	KURL pixURL=url();
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
@@ -220,8 +205,24 @@ void GVPixmap::load() {
 			return;
 		}
 	}
+
+	// Load file. We load it ourself so that we can keep a copy of the
+	// compressed data. This is used by jpeg loss-less manipulations.
+	freeData();
+	QFile file(path);
+	file.open(IO_ReadOnly);
+	QDataStream stream(&file);
+	mCompressedLength=file.size();
+	mCompressedData=new uchar[mCompressedLength];
+	stream.readRawBytes((char*)mCompressedData,mCompressedLength);
+	//kdDebug() << "Loading data:" << long(mCompressedData) << " " << mCompressedLength << endl;
+
+	// Decode image
 	mImageFormat=QString(QImage::imageFormat(path));
-	if (!mImage.load(path,mImageFormat.ascii())) {
+	if (mImage.loadFromData(mCompressedData,mCompressedLength,mImageFormat.ascii())) {
+		// Throw data away if it's not a JPEG, since we wont use it
+		if (mImageFormat!="JPEG") freeData();
+	} else {
 		mImage.reset();
 	}
 
@@ -231,8 +232,46 @@ void GVPixmap::load() {
 }
 
 
+bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
+	bool result;
+
+	KTempFile tmp;
+	tmp.setAutoDelete(true);
+	QString path;
+	if (url.isLocalFile()) {
+		path=url.path();
+	} else {
+		path=tmp.name();
+	}
+	
+	if (format=="JPEG" && mCompressedData) {
+		kdDebug() << "Lossless save\n";
+		QFile file(path);
+		result=file.open(IO_WriteOnly);
+		if (!result) return false;
+		QDataStream stream(&file);
+		stream.writeRawBytes((char*)mCompressedData,mCompressedLength);
+	} else {
+		result=mImage.save(path,format.ascii());
+		if (!result) return false;
+	}
+
+	if (!url.isLocalFile()) {
+		result=KIO::NetAccess::upload(tmp.name(),url);
+	}
+	
+	if (result) {
+		emit saved(url);
+		mModified=false;
+	}
+
+	return result;
+}
+
+
 void GVPixmap::reset() {
 	mImage.reset();
+	freeData();
 	emit urlChanged(mDirURL,mFilename);
 }
 
@@ -244,5 +283,11 @@ void GVPixmap::saveIfModified() {
 	if (KMessageBox::questionYesNo(0,msg)==KMessageBox::Yes) {
 		saveAs();
 	}
+}
 
+
+void GVPixmap::freeData() {
+	//kdDebug() << "Releasing data:" << long(mCompressedData) << endl;
+	delete []mCompressedData;
+	mCompressedData=0;
 }
