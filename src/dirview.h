@@ -50,22 +50,25 @@ protected slots:
 	void slotNewTreeViewItems(KFileTreeBranch*,const KFileTreeViewItemList&); 
 	
 private slots:
-	void onSelectionChanged();
-	void onPopulateFinished(KFileTreeViewItem*);
+	void slotExecuted(QListViewItem*);
+
+	// Do not call this one slotPopulateFinished, it will clash with
+	// KFileTreeView::slotPopulateFinished.
+	void slotDirViewPopulateFinished(KFileTreeViewItem*);
 
 // Drag'n'Drop
 	void autoOpenDropTarget();
 
 // Popup menu
-	void onContextMenu(KListView*,QListViewItem*,const QPoint&);
+	void slotContextMenu(KListView*,QListViewItem*,const QPoint&);
 	void makeDir();
 	void renameDir();
 	void removeDir();
 	void showPropertiesDialog();
 
-	void onDirMade(KIO::Job*);
-	void onDirRenamed(KIO::Job*);
-	void onDirRemoved(KIO::Job*);
+	void slotDirMade(KIO::Job*);
+	void slotDirRenamed(KIO::Job*);
+	void slotDirRemoved(KIO::Job*);
 
 private:
 	KFileTreeViewItem* findViewItem(KFileTreeViewItem*,const QString&);

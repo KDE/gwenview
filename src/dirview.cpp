@@ -58,7 +58,7 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	setDirOnlyMode(rootBranch,true);
 
 	connect(rootBranch,SIGNAL( populateFinished(KFileTreeViewItem*) ),
-		this, SLOT( onPopulateFinished(KFileTreeViewItem*) ) );
+		this, SLOT( slotDirViewPopulateFinished(KFileTreeViewItem*) ) );
 
 // Popup
 	mPopupMenu=new QPopupMenu(this);
@@ -70,11 +70,11 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	mPopupMenu->insertItem(i18n("Properties..."),this,SLOT(showPropertiesDialog()));
 
 	connect(this,SIGNAL(contextMenu(KListView*,QListViewItem*,const QPoint&)),
-		this,SLOT(onContextMenu(KListView*,QListViewItem*,const QPoint&)));
+		this,SLOT(slotContextMenu(KListView*,QListViewItem*,const QPoint&)));
 
 // Dir selection
-	connect(this,SIGNAL(selectionChanged()),
-		this,SLOT(onSelectionChanged()) );
+	connect(this,SIGNAL(executed(QListViewItem*)),
+		this,SLOT(slotExecuted(QListViewItem*)) );
 
 // Drag'n'drop
 	setDragEnabled(true);
@@ -203,12 +203,16 @@ void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeView
 
 
 //-Private slots-----------------------------------------------------------
-void DirView::onSelectionChanged() {
-	emit dirURLChanged(currentURL());
+void DirView::slotExecuted(QListViewItem* item)
+{
+	if (!item) return;
+	KFileTreeViewItem* treeItem=currentKFileTreeViewItem();
+	if (!treeItem->fileItem()->isReadable()) return;
+	emit dirURLChanged(treeItem->url());
 }
 
 
-void DirView::onPopulateFinished(KFileTreeViewItem* item) {
+void DirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 	QListViewItem* child;
 	KURL url=item->url();
 
@@ -336,7 +340,7 @@ void DirView::autoOpenDropTarget() {
 
 
 //- Popup ----------------------------------------------------------
-void DirView::onContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
+void DirView::slotContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
 	mPopupMenu->popup(pos);
 }
 
@@ -354,11 +358,11 @@ void DirView::makeDir() {
 	job=KIO::mkdir(newURL);
 	
 	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(onDirMade(KIO::Job*)));
+		this,SLOT(slotDirMade(KIO::Job*)));
 }
 
 
-void DirView::onDirMade(KIO::Job* job) {
+void DirView::slotDirMade(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -382,11 +386,11 @@ void DirView::renameDir() {
 	job=KIO::rename(currentURL(),newURL,false);
 
 	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(onDirRenamed(KIO::Job*)));
+		this,SLOT(slotDirRenamed(KIO::Job*)));
 }
 
 
-void DirView::onDirRenamed(KIO::Job* job) {
+void DirView::slotDirRenamed(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -405,7 +409,7 @@ void DirView::removeDir() {
 
 	job=KIO::del(currentURL());
 	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(onDirRemoved(KIO::Job*)));
+		this,SLOT(slotDirRemoved(KIO::Job*)));
 	QListViewItem* item=currentItem();
 	if (!item) return;
 	item=item->parent();
@@ -414,7 +418,7 @@ void DirView::removeDir() {
 }
 
 
-void DirView::onDirRemoved(KIO::Job* job) {
+void DirView::slotDirRemoved(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 	}
