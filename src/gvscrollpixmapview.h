@@ -61,10 +61,6 @@ public:
 	class ToolController;
 	class ScrollToolController;
 	class ZoomToolController;
-
-	friend class ToolController;
-	friend class ScrollToolController;
-	friend class ZoomToolController;
 	friend class GVScrollPixmapViewFilter;
 
 	enum Tool { SCROLL, ZOOM };
@@ -127,6 +123,59 @@ protected:
 	virtual void contentsDropEvent(QDropEvent*);
 	
 private:
+	void addPendingPaint( bool smooth, QRect rect = QRect());
+	void addPendingPaintInternal( bool smooth, QRect rect = QRect());
+	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
+	struct PendingPaint;
+	void limitPaintSize( PendingPaint& paint );
+	void fullRepaint();
+	void cancelPending();
+	enum Operation { CHECK_OPERATIONS = 0, SMOOTH_PASS = 1 << 0 };
+	void scheduleOperation( Operation operation );
+	void checkPendingOperationsInternal();
+	void updateBusyLevels();
+
+	double computeZoom(bool in) const;
+	double computeAutoZoom() const;
+	
+	void updateImageOffset();
+	void updateScrollBarMode();
+	void updateContentSize();
+	void updateFullScreenLabel();
+	void updateZoomActions();
+	void selectTool(ButtonState, bool force);
+	void restartAutoHideTimer();
+
+	// Used by the browse tool controller
+	void emitSelectPrevious() { emit selectPrevious(); }
+	void emitSelectNext() { emit selectNext(); }
+
+private slots:
+	void slotLoaded();
+	void slotModified();
+	void slotZoomIn();
+	void slotZoomOut();
+	void slotResetZoom();
+	void setAutoZoom(bool);
+	void hideCursor();
+	void slotImageSizeUpdated();
+	void slotImageRectUpdated(const QRect&);
+	void checkPendingOperations();
+	void loadingStarted();
+	void slotBusyLevelChanged(GVBusyLevel);
+	
+protected:
+	// Overloaded methods
+	bool eventFilter(QObject*, QEvent*);
+	void viewportMousePressEvent(QMouseEvent*);
+	void viewportMouseMoveEvent(QMouseEvent*);
+	void viewportMouseReleaseEvent(QMouseEvent*);
+	bool viewportKeyEvent(QKeyEvent*); // This one is not inherited, it's called from the eventFilter
+	void wheelEvent(QWheelEvent* event);
+	void resizeEvent(QResizeEvent* event);
+	void drawContents(QPainter* p,int clipx,int clipy,int clipw,int cliph);
+
+private:
 	GVDocument* mDocument;
 	QTimer* mAutoHideTimer;
 	QLabel* mFullScreenLabel;
@@ -175,7 +224,6 @@ private:
 	QMap< long long, PendingPaint > mPendingPaints;
 	QRegion mPendingNormalRegion;
 	QRegion mPendingSmoothRegion;
-	enum Operation { CHECK_OPERATIONS = 0, SMOOTH_PASS = 1 << 0 };
 	int mPendingOperations;
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
@@ -183,55 +231,6 @@ private:
 	int mMaxRepaintSize;
 	int mMaxScaleRepaintSize;
 	int mMaxSmoothRepaintSize;
-	void addPendingPaint( bool smooth, QRect rect = QRect());
-	void addPendingPaintInternal( bool smooth, QRect rect = QRect());
-	void performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth );
-	void limitPaintSize( PendingPaint& paint );
-	void fullRepaint();
-	void cancelPending();
-	void scheduleOperation( Operation operation );
-	void checkPendingOperationsInternal();
-	void updateBusyLevels();
-
-	double computeZoom(bool in) const;
-	double computeAutoZoom() const;
-	
-	void updateImageOffset();
-	void updateScrollBarMode();
-	void updateContentSize();
-	void updateFullScreenLabel();
-	void updateZoomActions();
-	void selectTool(ButtonState, bool force);
-	void restartAutoHideTimer();
-
-	// Used by the browse tool controller
-	void emitSelectPrevious() { emit selectPrevious(); }
-	void emitSelectNext() { emit selectNext(); }
-
-private slots:
-	void slotLoaded();
-	void slotModified();
-	void slotZoomIn();
-	void slotZoomOut();
-	void slotResetZoom();
-	void setAutoZoom(bool);
-	void hideCursor();
-	void slotImageSizeUpdated();
-	void slotImageRectUpdated(const QRect&);
-	void checkPendingOperations();
-	void loadingStarted();
-	void slotBusyLevelChanged(GVBusyLevel);
-	
-protected:
-	// Overloaded methods
-	bool eventFilter(QObject*, QEvent*);
-	void viewportMousePressEvent(QMouseEvent*);
-	void viewportMouseMoveEvent(QMouseEvent*);
-	void viewportMouseReleaseEvent(QMouseEvent*);
-	bool viewportKeyEvent(QKeyEvent*); // This one is not inherited, it's called from the eventFilter
-	void wheelEvent(QWheelEvent* event);
-	void resizeEvent(QResizeEvent* event);
-	void drawContents(QPainter* p,int clipx,int clipy,int clipw,int cliph);
 };
 
 
