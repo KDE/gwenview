@@ -57,6 +57,7 @@ const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
 const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
+const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
 const char* CONFIG_MOUSE_BEHAVIOUR_NONE=   "mouse behaviour none";
 const char* CONFIG_MOUSE_BEHAVIOUR_SHIFT=  "mouse behaviour shift";
 const char* CONFIG_MOUSE_BEHAVIOUR_CONTROL="mouse behaviour control";
@@ -410,6 +411,12 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
 	mButtonStateToolMap[state]=tool;
 }
+	
+
+void GVScrollPixmapView::setAutoZoomBrowse(bool value) {
+	mAutoZoomBrowse=value;
+}
+
 
 void GVScrollPixmapView::updateDefaultCursor() {
 	// We assume no modifier is pressed when this is called
@@ -605,7 +612,13 @@ bool GVScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 
 void GVScrollPixmapView::selectTool(ButtonState state) {
 	ButtonState modifier=ButtonState(state & (ShiftButton | ControlButton | AltButton) );
-	mTool=mButtonStateToolMap[modifier];
+	
+	if (mAutoZoomBrowse && mAutoZoom->isChecked() && modifier==0) {
+		mTool=Browse;
+	} else {
+		mTool=mButtonStateToolMap[modifier];
+	}
+	
 	mToolControllers[mTool]->updateCursor();
 }
 
@@ -933,6 +946,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
+	mAutoZoomBrowse=config->readBoolEntry(CONFIG_AUTO_ZOOM_BROWSE,true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -954,6 +968,7 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
+	config->writeEntry(CONFIG_AUTO_ZOOM_BROWSE, mAutoZoomBrowse);
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
 	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_NONE	 , int(mButtonStateToolMap[NoButton]) );

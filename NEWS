@@ -1,4 +1,6 @@
 2003.xx.xx - v1.0.0pre4
+- Features:
+ - Added a new option: "Always browse when auto zoom is enabled"
 - Fixes:
  - Use a KDE dialog for the configuration dialog.
 
