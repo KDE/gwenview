@@ -486,7 +486,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 // GVJPEGFormatType
 //
 //-----------------------------------------------------------------------------
-QImageFormat* GVJPEGFormatType::decoderFor(const unsigned char* buffer, int length) {
+QImageFormat* GVJPEGFormatType::decoderFor(const uchar* buffer, int length) {
 	if(length < 3) return 0;
 
 	if(buffer[0] == 0377 &&
