@@ -163,6 +163,8 @@ private slots:
 	void showFileProperties();
 	void openFile();
 	void printFile();  /** print the actual file */
+	void clearLocationLabel();
+	void activateLocationLabel();
 
 	void toggleFullScreen();
 	void showConfigDialog();

@@ -963,19 +963,32 @@ void GVMainWindow::createLocationToolBar() {
 	// Clear button
 	(void)new KAction( i18n("Clear Location Bar"),
 		QApplication::reverseLayout()?"clear_left" : "locationbar_erase",
-		0, mURLEdit, SLOT(clearEdit()), actionCollection(), "clear_location");
+		0, this, SLOT(clearLocationLabel()), actionCollection(), "clear_location");
 
 	// URL Label
 	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
 	 * styles like Keramik). See konq_misc.cc.
 	 */
 	QLabel* urlLabel=new QLabel(i18n("L&ocation:"), this, "kde toolbar widget");
-	(void)new KWidgetAction( urlLabel, i18n("L&ocation: "), 0, 0, 0, actionCollection(), "location_label");
+	(void)new KWidgetAction( urlLabel, i18n("L&ocation: "), Key_F6, this, SLOT( activateLocationLabel()),
+		actionCollection(), "location_label");
 	urlLabel->setBuddy(mURLEdit);
 
 	// Go button
 	(void)new KAction(i18n("Go"), "key_enter", 0, this, SLOT(slotGo()), actionCollection(), "location_go");
 
+}
+
+
+void GVMainWindow::clearLocationLabel() {
+	mURLEdit->clearEdit();
+	mURLEdit->setFocus();
+}
+
+
+void GVMainWindow::activateLocationLabel() {
+	mURLEdit->setFocus();
+	mURLEdit->lineEdit()->selectAll();
 }
 
 

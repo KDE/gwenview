@@ -3,6 +3,7 @@ xxxx.xx.x - v1.1.8
  - Zoom actions added to both KPart's.
 - Fixes:
  - "Lock zoom"/"Auto zoom" options fixed
+ - Fixed "Clear location"/"Location" shortcuts.
 
 2004.12.19 - v1.1.7
 - New features:
