@@ -43,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvfilethumbnailviewitem.h"
 #include "gvarchive.h"
 #include "thumbnailloadjob.h"
+#include "gvbusylevelmanager.h"
 
 #include "gvfilethumbnailview.moc"
 
@@ -79,6 +80,9 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 		this, SLOT( slotContentsMoving( int, int )));
 
 	QIconView::setSelectionMode(Extended);
+
+	connect(GVBusyLevelManager::instance(), SIGNAL(busyLevelChanged(GVBusyLevel)),
+		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
 }
 
 
@@ -151,14 +155,18 @@ void GVFileThumbnailView::startThumbnailUpdate() {
 
 
 void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
 	mThumbnailLoadJob = new ThumbnailLoadJob(list, mThumbnailSize);
 
 	connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem*,const QPixmap&)),
 		this, SLOT(setThumbnailPixmap(const KFileItem*,const QPixmap&)) );
 	connect(mThumbnailLoadJob, SIGNAL(result(KIO::Job*)),
 		this, SIGNAL(updateEnded()) );
+	connect(this, SIGNAL(updateEnded()),
+		this, SLOT(slotUpdateEnded()) );
 
 	emit updateStarted(list->count());
+	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 	mThumbnailLoadJob->start();
 }
 
@@ -170,6 +178,10 @@ void GVFileThumbnailView::stopThumbnailUpdate() {
 	}
 }
 
+
+void GVFileThumbnailView::slotUpdateEnded() {
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+}
 
 void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
 
@@ -183,6 +195,17 @@ void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
 	}
 }
 
+// temporarily stop loading thumbnails when busy loading the selected image,
+// otherwise thumbnail loading slows it down
+void GVFileThumbnailView::slotBusyLevelChanged(GVBusyLevel level) {
+	if( !mThumbnailLoadJob.isNull()) {
+		if( level > BUSY_THUMBNAILS ) {
+			mThumbnailLoadJob->suspend();
+		} else {
+			mThumbnailLoadJob->resume();
+		}
+	}
+}
 
 //-----------------------------------------------------------------------------
 //

@@ -75,6 +75,17 @@ public:
         bool setNextItem(const KFileItem* item);
 
 	/**
+	 * Temporarily suspends loading. Used if there's a more
+	 * important action going on (loading an image etc.).
+	 */
+	void suspend();
+
+	/**
+	 * Resumes loading if suspended.
+	 */
+	void resume();
+
+	/**
 	 * Returns the thumbnail base dir
 	 */
 	static QString thumbnailBaseDir();
@@ -98,7 +109,7 @@ private slots:
 	void slotResult( KIO::Job *job );
 
 private:
-	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_DOWNLOADORIG, STATE_DELETETEMP } mState;
+	enum { STATE_STATORIG, STATE_STATTHUMB, STATE_DOWNLOADORIG, STATE_DELETETEMP, STATE_NEXTTHUMB } mState;
 
 	// Our todo list :)
 	KFileItemList mItems;
@@ -124,7 +135,9 @@ private:
 	// Thumbnail size
 	ThumbnailSize mThumbnailSize;
 
-    QPixmap mBrokenPixmap;
+	QPixmap mBrokenPixmap;
+
+	bool mSuspended;
 
 	void determineNextIcon();
 	bool statResultThumbnail( KIO::StatJob * );

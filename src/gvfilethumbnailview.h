@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "gvfileviewbase.h"
 #include "thumbnailsize.h"
+#include "gvbusylevelmanager.h"
 
 class QDragEnterEvent;
 class QIconViewItem;
@@ -133,6 +134,8 @@ private slots:
 	void slotDoubleClicked(QIconViewItem*);
 	void slotDropped(QDropEvent*);
 	void slotContentsMoving( int, int );
+	void slotBusyLevelChanged( GVBusyLevel );
+	void slotUpdateEnded();
 };
 
 

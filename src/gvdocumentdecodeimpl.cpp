@@ -52,7 +52,7 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 class GVDocumentDecodeImplPrivate {
 public:
 	GVDocumentDecodeImplPrivate(GVDocumentDecodeImpl* impl)
-	: mDecoder(impl) {}
+	: mReadSize( 0 ), mDecoder(impl), mSuspended( false ) {}
 
 	bool mUpdatedDuringLoad;
 	QByteArray mRawData;
@@ -61,7 +61,8 @@ public:
 	QTimer mDecoderTimer;
 	QRect mLoadChangedRect;
 	QTime mLoadCompressChangesTime;
-    QGuardedPtr<KIO::Job> mJob;
+	QGuardedPtr<KIO::Job> mJob;
+	bool mSuspended;
 };
 
 
@@ -126,6 +127,11 @@ void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) 
 
 
 void GVDocumentDecodeImpl::loadChunk() {
+	if( d->mSuspended ) {
+		d->mDecoderTimer.stop();
+		return;
+	}
+
 	int decodedSize=d->mDecoder.decode(
 		(const uchar*)(d->mRawData.data()+d->mReadSize),
 		QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mReadSize));
@@ -136,10 +142,11 @@ void GVDocumentDecodeImpl::loadChunk() {
 		return;
 	}
 
-    // We decoded all the available data, but the job is still running
-    if (decodedSize==0 && !d->mJob.isNull()) {
-        return;
-    }
+	// We decoded all the available data, but the job is still running
+	if (decodedSize==0 && !d->mJob.isNull()) {
+		d->mDecoderTimer.stop();
+		return;
+	}
 
 	// Loading finished or failed
 	bool ok=decodedSize==0;
@@ -157,21 +164,23 @@ void GVDocumentDecodeImpl::loadChunk() {
 	// Image can't be loaded, let's switch to an empty implementation
 	if (!ok) {
 		kdDebug() << k_funcinfo << " loading failed\n";
+		d->mDecoderTimer.stop();
 		emit finished(false);
 		switchToImpl(new GVDocumentImpl(mDocument));
 		return;
 	}
 
 	kdDebug() << k_funcinfo << " loading succeded\n";
+	d->mDecoderTimer.stop();
 
-    // Set the image format. QImageIO::imageFormat should not fail since at
-    // this point the image has been decoded successfully.
-    QBuffer buffer(d->mRawData);
-    buffer.open(IO_ReadOnly);
-    setImageFormat( QImageIO::imageFormat(&buffer) );
-    Q_ASSERT(mDocument->imageFormat()!=0);
-    buffer.close();
-    
+	// Set the image format. QImageIO::imageFormat should not fail since at
+	// this point the image has been decoded successfully.
+	QBuffer buffer(d->mRawData);
+	buffer.open(IO_ReadOnly);
+	setImageFormat( QImageIO::imageFormat(&buffer) );
+	Q_ASSERT(mDocument->imageFormat()!=0);
+	buffer.close();
+
 	// Convert depth if necessary
 	// (32 bit depth is necessary for alpha-blending)
 	if (image.depth()<32 && image.hasAlphaBuffer()) {
@@ -206,10 +215,14 @@ void GVDocumentDecodeImpl::loadChunk() {
 
 void GVDocumentDecodeImpl::suspendLoading() {
 	d->mDecoderTimer.stop();
+	d->mSuspended = true;
 }
 
 void GVDocumentDecodeImpl::resumeLoading() {
-	d->mDecoderTimer.start(0, false);
+	d->mSuspended = false;
+	if(d->mReadSize < d->mRawData.size()) {
+		d->mDecoderTimer.start(0, false);
+	}
 }
 
 

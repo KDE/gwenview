@@ -91,6 +91,13 @@ GVDocument::GVDocument(QObject* parent)
 	// Register formats here to make sure they are always enabled
 	KImageIO::registerFormats();
 	XCFImageFormat::registerFormat();
+
+	connect( this, SIGNAL( loading()),
+		this, SLOT( slotLoading()));
+	connect( this, SIGNAL( loaded(const KURL&,const QString& )),
+		this, SLOT( slotLoaded()));
+	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
+		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
 }
 
 
@@ -215,14 +222,6 @@ void GVDocument::setImageFormat(const char* format) {
 	d->mImageFormat=format;
 }
 
-void GVDocument::suspendLoading() {
-	d->mImpl->suspendLoading();
-}
-
-void GVDocument::resumeLoading() {
-	d->mImpl->resumeLoading();
-}
-
 QString GVDocument::comment() const {
 	return d->mImpl->comment();
 }
@@ -235,6 +234,22 @@ void GVDocument::setComment(const QString& comment) {
 
 GVDocument::CommentState GVDocument::commentState() const {
 	return d->mImpl->commentState();
+}
+
+void GVDocument::slotLoading() {
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_LOADING );
+}
+
+void GVDocument::slotLoaded() {
+	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+}
+
+void GVDocument::slotBusyLevelChanged( GVBusyLevel level ) {
+	if( level > BUSY_LOADING ) {
+		d->mImpl->suspendLoading();
+	} else {
+		d->mImpl->resumeLoading();
+	}
 }
 
 //---------------------------------------------------------------------
@@ -499,6 +514,7 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 		this, SIGNAL(sizeUpdated(int, int)) );
 	connect(d->mImpl, SIGNAL(rectUpdated(const QRect&)),
 		this, SIGNAL(rectUpdated(const QRect&)) );
+	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 }
 
 

@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qscrollview.h>
 #include <qtimer.h>
 
+#include "gvbusylevelmanager.h"
+
 class QEvent;
 class QLabel;
 class QMouseEvent;
@@ -161,7 +163,7 @@ private:
 	QMap< long long, PendingPaint > mPendingPaints;
 	QRegion mPendingNormalRegion;
 	QRegion mPendingSmoothRegion;
-	enum Operation { SMOOTH_PASS = 1 << 0, RESUME_LOADING = 1 << 1 };
+	enum Operation { CHECK_OPERATIONS = 0, SMOOTH_PASS = 1 << 0 };
 	int mPendingOperations;
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
@@ -171,7 +173,8 @@ private:
 	void fullRepaint();
 	void cancelPending();
 	void scheduleOperation( Operation operation );
-	void checkPendingOperations();
+	void checkPendingOperationsInternal();
+	void updateBusyLevels();
 
 	double computeZoom(bool in) const;
 	double computeAutoZoom() const;
@@ -198,8 +201,9 @@ private slots:
 	void hideCursor();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
-	void paintPending();
+	void checkPendingOperations();
 	void loadingStarted();
+	void slotBusyLevelChanged(GVBusyLevel);
 	
 protected:
 	// Overloaded methods

@@ -111,7 +111,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 //
 //------------------------------------------------------------------------
 ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList* items, ThumbnailSize size)
-: KIO::Job(false), mThumbnailSize(size)
+: KIO::Job(false), mState( STATE_NEXTTHUMB ), mThumbnailSize(size), mSuspended( false )
 {
 	LOG("");
     
@@ -148,6 +148,16 @@ void ThumbnailLoadJob::start() {
 	determineNextIcon();
 }
 
+void ThumbnailLoadJob::suspend() {
+	mSuspended = true;
+}
+
+void ThumbnailLoadJob::resume() {
+	if( !mSuspended ) return;
+	mSuspended = false;
+	if( mState == STATE_NEXTTHUMB ) // don't load next while already loading
+		determineNextIcon();
+}
 
 //-Internal--------------------------------------------------------------
 void ThumbnailLoadJob::appendItem(const KFileItem* item) {
@@ -180,6 +190,10 @@ bool ThumbnailLoadJob::setNextItem(const KFileItem* item) {
 
 
 void ThumbnailLoadJob::determineNextIcon() {
+	mState = STATE_NEXTTHUMB;
+	if( mSuspended ) {
+		return;
+	}
 	// Skip non images 
 	while (true) {
 		KFileItem* item=mItems.current();
@@ -215,6 +229,10 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 	Q_ASSERT(subjobs.isEmpty());	// We should have only one job at a time ...
 
 	switch (mState) {
+	case STATE_NEXTTHUMB:
+		Q_ASSERT( false );
+		determineNextIcon();
+		return;
 	case STATE_STATORIG: {
 		// Could not stat original, drop this one and move on to the next one
 		if (job->error()) {

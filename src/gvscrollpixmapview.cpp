@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <math.h>
+#include <assert.h>
 
 // Qt 
 #include <qbitmap.h>
@@ -50,6 +51,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvexternaltoolcontext.h"
 #include "gvdocument.h"
 #include "gvimageutils.h"
+#include "gvbusylevelmanager.h"
 
 #include "gvscrollpixmapview.moc"
 
@@ -247,6 +249,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 , mOperaLikePrevious(false)
 , mZoomBeforeAuto(1)
 , mFilter( this )
+, mPendingOperations( 0 )
 , mSmoothingSuspended( false )
 , mEmptyImage( false )
 {
@@ -297,7 +300,10 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 		this,SLOT(hideCursor()) );
 
 	connect(&mPendingPaintTimer,SIGNAL(timeout()),
-		this,SLOT(paintPending()) );
+		this,SLOT(checkPendingOperations()) );
+
+	connect(GVBusyLevelManager::instance(),SIGNAL(busyLevelChanged(GVBusyLevel)),
+		this,SLOT(slotBusyLevelChanged(GVBusyLevel) ));
 
 	// This event filter is here to make sure the pixmap view is aware of the changes
 	// in the keyboard modifiers, even if it isn't focused. However, making this widget
@@ -319,7 +325,6 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 
 
 void GVScrollPixmapView::slotLoaded() {
-	mPendingOperations &= ~RESUME_LOADING;
 	updateZoomActions();
 
 	if (mDocument->isNull()) {
@@ -496,7 +501,7 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 // How this pending stuff works:
 // There's a queue of areas to paint (each with bool saying whether it's smooth pass).
 // Also, there's a bitfield of pending operations, operations are handled only after
-// there's nothing more to paint (so that loading is resumed or smooth pass is started).
+// there's nothing more to paint (so that smooth pass is started).
 void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 	if( mSmoothingSuspended && smooth ) return;
 
@@ -540,10 +545,18 @@ void GVScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 		}
 	}
 
-	if( !mPendingPaintTimer.isActive()) mPendingPaintTimer.start( 0 );
+	scheduleOperation( CHECK_OPERATIONS );
 }
 
-void GVScrollPixmapView::paintPending() {
+void GVScrollPixmapView::checkPendingOperations() {
+	checkPendingOperationsInternal();
+	if( mPendingPaints.isEmpty() && mPendingOperations == 0 ) {
+		mPendingPaintTimer.stop();
+	}
+	updateBusyLevels();
+}
+
+void GVScrollPixmapView::checkPendingOperationsInternal() {
 	while( !mPendingPaints.isEmpty()) {
 		PendingPaint paint = *mPendingPaints.begin();
 		mPendingPaints.remove( mPendingPaints.begin());
@@ -559,25 +572,6 @@ void GVScrollPixmapView::paintPending() {
 			return;
 		}
 	}
-	mPendingPaintTimer.stop();
-	checkPendingOperations();
-}
-
-void GVScrollPixmapView::scheduleOperation( Operation operation )
-{
-	mPendingOperations |= operation;
-	if( mPendingPaints.isEmpty()) {
-		checkPendingOperations();
-	}
-}
-
-void GVScrollPixmapView::checkPendingOperations()
-{
-	if( mPendingOperations & RESUME_LOADING ) {
-		mDocument->resumeLoading();
-		mPendingOperations &= ~RESUME_LOADING;
-		return;
-	}
 	if( mPendingOperations & SMOOTH_PASS ) {
 		mSmoothingSuspended = false;
 		if( mSmoothScale >= SMOOTH2 ) {
@@ -586,6 +580,41 @@ void GVScrollPixmapView::checkPendingOperations()
 		}
 		mPendingOperations &= ~SMOOTH_PASS;
 		return;
+	}
+}
+
+void GVScrollPixmapView::scheduleOperation( Operation operation )
+{
+	mPendingOperations |= operation;
+	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
+	updateBusyLevels();
+}
+
+void GVScrollPixmapView::updateBusyLevels() {
+	if( !mPendingPaintTimer.isActive()) {
+		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+	} else if( !mPendingPaints.isEmpty() && !(*mPendingPaints.begin()).smooth ) {
+		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_PAINTING );
+	} else if(( mPendingOperations & SMOOTH_PASS )
+		|| ( !mPendingPaints.isEmpty() && (*mPendingPaints.begin()).smooth )) {
+		GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_SMOOTHING );
+	} else {
+		assert( false );
+	}
+}
+
+void GVScrollPixmapView::slotBusyLevelChanged( GVBusyLevel level ) {
+	bool resume = false;
+	if( level <= BUSY_PAINTING
+		&& !mPendingPaints.isEmpty() && !(*mPendingPaints.begin()).smooth ) {
+		resume = true;
+	} else if( level <= BUSY_SMOOTHING
+			&& (( mPendingOperations & SMOOTH_PASS )
+			|| ( !mPendingPaints.isEmpty() && (*mPendingPaints.begin()).smooth ))) {
+		resume = true;
+	}
+	if( resume ) {
+		mPendingPaintTimer.start( 0 );
 	}
 }
 
@@ -606,6 +635,7 @@ void GVScrollPixmapView::cancelPending() {
 	mPendingSmoothRegion = QRegion();
 	mPendingPaintTimer.stop();
 	mPendingOperations = 0;
+	updateBusyLevels();
 }
 
 // do the actual painting
@@ -924,7 +954,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
-		mEmptyImage = false;
+	mEmptyImage = false;
 	QRect widgetRect;
 	// We add a one pixel border to avoid missing parts of the image
 	widgetRect.setLeft( int(imageRect.left()*mZoom) + mXOffset-1);
@@ -932,8 +962,6 @@ void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
 	widgetRect.setWidth( int(imageRect.width()*mZoom) +2);
 	widgetRect.setHeight( int(imageRect.height()*mZoom) +2);
 	viewport()->repaint(widgetRect,false);
-	mDocument->suspendLoading();
-	scheduleOperation( RESUME_LOADING );
 }
 
 

@@ -32,6 +32,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local 
 #include "gvimageutils.h"
+#include "gvbusylevelmanager.h"
 
 class GVDocumentPrivate;
 class GVDocumentImpl;
@@ -67,8 +68,6 @@ public:
 	GVDocument::CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
-	void suspendLoading();
-	void resumeLoading();
 	
 public slots:
 	void setURL(const KURL&);
@@ -134,6 +133,9 @@ signals:
 
 private slots:
 	void slotFinished(bool success);
+	void slotLoading();
+	void slotLoaded();
+	void slotBusyLevelChanged(GVBusyLevel level);
 	
 private:
 	friend class GVDocumentImpl;
