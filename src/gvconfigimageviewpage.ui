@@ -108,50 +108,20 @@
                     <property name="name">
                         <cstring>mSmoothGroup</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <property name="frameShape">
                         <enum>NoFrame</enum>
                     </property>
                     <property name="title">
                         <string></string>
                     </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>mSmoothFast</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>1</x>
-                                <y>26</y>
-                                <width>96</width>
-                                <height>19</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Fast</string>
-                        </property>
-                        <property name="buttonGroupId">
-                            <number>1</number>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>mSmoothBest</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>1</x>
-                                <y>76</y>
-                                <width>96</width>
-                                <height>19</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Best</string>
-                        </property>
-                        <property name="buttonGroupId">
-                            <number>3</number>
-                        </property>
-                    </widget>
                     <widget class="QRadioButton">
                         <property name="name">
                             <cstring>mSmoothNone</cstring>
@@ -184,6 +154,25 @@
                     </widget>
                     <widget class="QRadioButton">
                         <property name="name">
+                            <cstring>mSmoothFast</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>26</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Fast</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>1</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
                             <cstring>mSmoothNormal</cstring>
                         </property>
                         <property name="geometry">
@@ -199,6 +188,25 @@
                         </property>
                         <property name="buttonGroupId">
                             <number>2</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>mSmoothBest</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>76</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Best</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>3</number>
                         </property>
                     </widget>
                 </widget>
