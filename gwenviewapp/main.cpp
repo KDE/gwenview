@@ -33,7 +33,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char* version="1.1.3";
+static const char* version="1.1.4";
 
 
 int main (int argc, char *argv[]) {

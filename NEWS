@@ -1,22 +1,23 @@
-2004.xx.xx - v1.1.4
+2004.07.31 - v1.1.4
 - New features:
  - In the thumbnail view, It's now possible to sort images in reverse order.
  - Use EXIF-stored thumbnail if available.
  - Option to disable saving of generated thumbnails to cache.
  - In fullscreen mode, it's now possible to display the image comment or size
    in addition to the file path.
- - The fullscreen on screen display is more readable now.
+ - The fullscreen On-Screen-Display is more readable now.
  - The background color of the image view can be configured.
- - It's now possible to enlarge images so that they fill the page when printed.
+ - When printing, it's now possible to enlarge images so that they fill the
+   page.
 - Fixes:
  - In the folder view, pressing Enter now opens the selected folder.
  - Use icon list for the configuration dialog.
  - Avoid data loss if the JPEG images are saved while being rotated by
    JPEGTran.
  - The back button in Konqueror now works correctly with gvimagepart.
- - More user-friendly default layout.
- - Handle properly non-trivial URLs (e.g. http query URL).
- - Image view can accept DND drops.
+ - The default layout is more user-friendly.
+ - Non-trivial URLs (e.g. http query URL) are correctly handled.
+ - You can now drop images on the image view.
 
 2004.06.11 - v1.1.3 - "Hurry up, I'm getting married tomorrow"
 - New features:
