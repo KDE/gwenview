@@ -66,6 +66,7 @@ const char* CONFIG_MOUSE_WHEEL_SCROLL="mouse wheel scrolls image";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
+const char* CONFIG_BACKGROUND_COLOR="background color";
 
 const int AUTO_HIDE_TIMEOUT=2000;
 
@@ -462,7 +463,7 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 		viewport()->setBackgroundColor(black);
 		restartAutoHideTimer();
 	} else {
-		viewport()->setBackgroundMode(PaletteDark);
+		viewport()->setBackgroundColor(mBackgroundColor);
 		mAutoHideTimer->stop();
 		mToolControllers[mTool]->updateCursor();
 	}
@@ -472,6 +473,12 @@ void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	} else {
 		mFullScreenLabel->hide();
 	}
+}
+
+
+void GVScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
+	mBackgroundColor=color;
+	viewport()->setBackgroundColor(mBackgroundColor);
 }
 
 
@@ -1403,6 +1410,10 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
+	mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
+	if (!mFullScreen) {
+		viewport()->setBackgroundColor(mBackgroundColor);
+	}
 
 	mButtonStateToolMap[NoButton]=SCROLL;
 	mButtonStateToolMap[ShiftButton]=ZOOM;
@@ -1423,5 +1434,6 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, mMouseWheelScroll);
 	config->writeEntry(CONFIG_AUTO_ZOOM, mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM, mLockZoom->isChecked());
+	config->writeEntry(CONFIG_BACKGROUND_COLOR, mBackgroundColor);
 }
 

@@ -119,6 +119,7 @@ GVConfigDialog::GVConfigDialog(QWidget* parent,GVMainWindow* mainWindow)
 	// Image View tab
 	d->mImageViewPage->mSmoothGroup->setButton(pixmapView->smoothAlgorithm());
 	d->mImageViewPage->mDelayedSmoothing->setChecked(pixmapView->delayedSmoothing());
+	d->mImageViewPage->mBackgroundColor->setColor(pixmapView->normalBackgroundColor());
 	d->mImageViewPage->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
 	d->mImageViewPage->mShowScrollBars->setChecked(pixmapView->showScrollBars());
 	d->mImageViewPage->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
@@ -193,6 +194,7 @@ void GVConfigDialog::slotApply() {
 #endif
 	
 	pixmapView->setSmoothAlgorithm( static_cast<GVImageUtils::SmoothAlgorithm>(algo));
+	pixmapView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
 	pixmapView->setDelayedSmoothing(d->mImageViewPage->mDelayedSmoothing->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
 	pixmapView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());

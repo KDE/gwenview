@@ -5,6 +5,8 @@
  - Option to disable saving of generated thumbnails to cache.
  - In fullscreen mode, it's now possible to display the image comment or size
    in addition to the file path.
+ - The fullscreen on screen display is more readable now.
+ - The background color of the image view can be configured.
 - Fixes:
  - In the folder view, pressing Enter now opens the selected folder.
  - Use icon list for the configuration dialog.

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>GVConfigImageViewPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,17 +9,17 @@
             <x>0</x>
             <y>0</y>
             <width>379</width>
-            <height>292</height>
+            <height>323</height>
         </rect>
     </property>
     <property name="caption">
         <string>Configure the image view</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>mAutoZoomEnlarge</cstring>
             </property>
@@ -27,7 +27,7 @@
                 <string>Enlarge small images when auto zoom is activated</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>mShowScrollBars</cstring>
             </property>
@@ -35,15 +35,68 @@
                 <string>Show scroll bars</string>
             </property>
         </widget>
-        <widget class="QLabel">
+        <widget class="QButtonGroup" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>textLabel1_3_2</cstring>
+                <cstring>mMouseWheelGroup</cstring>
             </property>
-            <property name="text">
-                <string>&lt;b&gt;Smoothing&lt;/b&gt;</string>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
             </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>mMouseWheelScroll</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Scroll current image</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>mMouseWheelBrowse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse image list</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLayoutWidget">
+        <spacer row="5" column="2">
+            <property name="name">
+                <cstring>spacer10_2_3_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>layout9</cstring>
             </property>
@@ -204,24 +257,15 @@
                 </widget>
             </grid>
         </widget>
-        <spacer>
+        <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>spacer10_2_3_2</cstring>
+                <cstring>textLabel1_3_2</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="text">
+                <string>&lt;b&gt;Smoothing&lt;/b&gt;</string>
             </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLabel">
+        </widget>
+        <widget class="QLabel" row="6" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>textLabel1_3</cstring>
             </property>
@@ -229,52 +273,43 @@
                 <string>&lt;b&gt;Mouse wheel behavior over image&lt;/b&gt;</string>
             </property>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>mMouseWheelGroup</cstring>
+                <cstring>textLabel1</cstring>
             </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
+            <property name="text">
+                <string>Background color:</string>
             </property>
-            <property name="title">
+        </widget>
+        <widget class="KColorButton" row="2" column="1">
+            <property name="name">
+                <cstring>mBackgroundColor</cstring>
+            </property>
+            <property name="text">
                 <string></string>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>mMouseWheelScroll</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Scroll current image</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>mMouseWheelBrowse</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Browse image list</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>0</number>
-                    </property>
-                </widget>
-            </vbox>
         </widget>
-    </vbox>
+        <spacer row="2" column="2">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>181</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>mSmoothNone</sender>
@@ -290,4 +325,7 @@
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
 </UI>

@@ -88,6 +88,10 @@ public:
 	bool fullScreen() const { return mFullScreen; }
 	void setFullScreen(bool);
 
+	// we use "normal"BackgroundColor because backgroundColor() already exists
+	QColor normalBackgroundColor() const { return mBackgroundColor; }
+	void setNormalBackgroundColor(const QColor&);
+
 	OSDMode osdMode() const { return mOSDMode; }
 	void setOSDMode(OSDMode);
 	QString freeOutputFormat() const { return mFreeOutputFormat; }
@@ -125,6 +129,7 @@ private:
 	QTimer* mAutoHideTimer;
 	QLabel* mFullScreenLabel;
 	
+	QColor mBackgroundColor;
 	OSDMode mOSDMode;
 	QString mFreeOutputFormat;
 	GVImageUtils::SmoothAlgorithm mSmoothAlgorithm;
