@@ -22,7 +22,7 @@ rm -rf $RPM_BUILD_ROOT
 %setup
 
 %build
-./configure --prefix=$RPM_BUILD_ROOT/opt/kde3 --enable-final 
+./configure --prefix=$RPM_BUILD_ROOT/usr --enable-final 
 make
 
 %install
@@ -30,14 +30,13 @@ make install
 
 %files
 %defattr(-,root,root,0755)
-/opt/kde3/bin/gwenview
-/opt/kde3/share/apps/gwenview/icons/*/*/actions/*.png
-/opt/kde3/share/icons/*/*/apps/gwenview.png
-/opt/kde3/share/applnk/Graphics/gwenview.desktop
-/opt/kde3/share/apps/konqueror/servicemenus/konqgwenview.desktop
-/opt/kde3/share/locale/*/LC_MESSAGES/gwenview.mo
-# Disabled, the documentation needs to be converted to docbook
-#%doc NEWS README TODO ChangeLog COPYING CREDITS
+/usr/bin/gwenview
+/usr/share/apps/gwenview/icons/*/*/actions/*.png
+/usr/share/icons/*/*/apps/gwenview.png
+/usr/share/applnk/Graphics/gwenview.desktop
+/usr/share/apps/konqueror/servicemenus/konqgwenview.desktop
+/usr/share/locale/*/LC_MESSAGES/gwenview.mo
+%doc NEWS README TODO ChangeLog COPYING CREDITS
 
 %clean
 rm -rf $RPM_BUILD_ROOT

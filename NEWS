@@ -1,3 +1,8 @@
+2002.xx.xx - v0.16.0
+- Fixes :
+ - The selected thumbnail does not look strange anymore when changing the
+   thumbnail size.
+
 2002.10.04 - v0.15.0
 - File count was also counting folders.
 - Integrated the updated man page by Michael Spanier.

@@ -74,14 +74,14 @@ FileThumbnailView::~FileThumbnailView() {
 void FileThumbnailView::setThumbnailSize(ThumbnailSize value) {
 	if (value==mThumbnailSize) return;
 	mThumbnailSize=value;
-	setGridX(mThumbnailSize.pixelSize()+4 + mMarginSize);
+	updateGrid();
 }
 
 
 void FileThumbnailView::setMarginSize(int value) {
 	if (value==mMarginSize) return;
 	mMarginSize=value;
-	setGridX(mThumbnailSize.pixelSize()+4 + mMarginSize);
+	updateGrid();
 }
 
 
@@ -256,6 +256,12 @@ KFileItem* FileThumbnailView::nextItem(const KFileItem* fileItem) const {
 }
 
 
+//-Private -----------------------------------------------------------------
+void FileThumbnailView::updateGrid() {
+	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
+}
+
+
 //-Private slots------------------------------------------------------------
 void FileThumbnailView::slotClicked(QIconViewItem* iconItem,const QPoint& pos) {
 	if (!iconItem) return;
@@ -294,7 +300,7 @@ void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	mThumbnailSize=config->readEntry(CONFIG_THUMBNAIL_SIZE);
 	mMarginSize=config->readNumEntry(CONFIG_MARGIN_SIZE,5);
 
-	setGridX(mThumbnailSize.pixelSize() + mMarginSize);
+	updateGrid();
 	setWordWrapIconText(config->readBoolEntry(CONFIG_WORD_WRAP_FILENAME,false));
 	arrangeItemsInGrid();
 }

@@ -31,7 +31,14 @@
 #include <kwordwrap.h>
 
 // Our includes
+#include "filethumbnailview.h"
 #include "filethumbnailviewitem.h"
+
+/*
+static void printRect(const QString& txt,const QRect& rect) {
+	kdWarning() << txt << " : " << rect.x() << "x" << rect.y() << " " << rect.width() << "x" << rect.height() << endl;
+}
+*/
 
 
 FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
@@ -46,72 +53,53 @@ FileThumbnailViewItem::~FileThumbnailViewItem() {
 
 
 void FileThumbnailViewItem::calcRect(const QString& text_) {
-	QIconView *view = iconView();
+	FileThumbnailView *view =static_cast<FileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 
 	QFontMetrics fm = view->fontMetrics();
-
-
-	QRect itemIconRect = pixmapRect();
-	QRect itemTextRect = textRect();
+	QRect itemIconRect = QRect(0,0,0,0);
+	QRect itemTextRect = QRect(0,0,0,0);
 	QRect itemRect = rect();
+	int availableTextWidth=view->thumbnailSize().pixelSize()
+		- (view->itemTextPos()==QIconView::Bottom ? 0 : pixmapRect().width() );
 
-	int pw = 0;
-	int ph = 0;
-
+// Init itemIconRect 
 #ifndef QT_NO_PICTURE
 	if ( picture() ) {
 		QRect br = picture()->boundingRect();
-		pw = br.width() + 2;
-		ph = br.height() + 2;
+		itemIconRect.setWidth( br.width() );
+		itemIconRect.setHeight( br.height() );
 	} else
 #endif
 	{
 		// Qt uses unknown_icon if no pixmap. Let's see if we need that - I doubt it
 		if (!pixmap()) return;
-		pw = pixmap()->width() + 2;
-		ph = pixmap()->height() + 2;
+		itemIconRect.setWidth( pixmap()->width() );
+		itemIconRect.setHeight( pixmap()->height() );
 	}
-	itemIconRect.setWidth( pw );
-	itemIconRect.setHeight( ph );
 
-	// When is text_ set ? Doesn't look like it's ever set.
-	QString t = text_.isEmpty() ? text() : text_;
-
-	int tw = 0;
-	int th = 0;
-	QRect outerRect( 0, 0,
-		view->maxItemWidth()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width() ),
-		0xFFFFFFFF );
-
-// Calculate the word-wrap
+// Init itemTextRect 
 	QRect r;
 	if (iconView()->wordWrapIconText()) {
+	// When is text_ set ? Doesn't look like it's ever set.
+		QString txt = text_.isEmpty() ? text() : text_;
+		QRect outerRect( 0, 0, availableTextWidth,0xFFFFFFFF);
+
 		if (mWordWrap) delete mWordWrap;
-		mWordWrap=KWordWrap::formatText( fm, outerRect, AlignHCenter | WordBreak, t );
+		mWordWrap=KWordWrap::formatText( fm, outerRect, AlignHCenter | WordBreak, txt );
 		r=mWordWrap->boundingRect();
 	} else {
 		truncateText(fm);
-		r=QRect(0,0,outerRect.width(),fm.height());
+		r=QRect(0,0,availableTextWidth,fm.height());
 	}
-	r.setWidth( r.width() + 4 );
-	// [Non-word-wrap code removed]
+	
+	if ( r.width() > availableTextWidth ) {
+		r.setWidth(availableTextWidth);
+	}
 
-	if ( r.width() > view->maxItemWidth() -
-		( view->itemTextPos() == QIconView::Bottom ? 0 :
-		pixmapRect().width() ) )
-		r.setWidth( view->maxItemWidth() - ( view->itemTextPos() == QIconView::Bottom ? 0 :
-												pixmapRect().width() ) );
-
-	tw = r.width();
-	th = r.height();
-	int minw = fm.width( "X" );
-	if ( tw < minw )
-		tw = minw;
-
-	itemTextRect.setWidth( tw );
-	itemTextRect.setHeight( th );
+	itemTextRect.setWidth( QMAX(r.width(),fm.width("X")) );
+	itemTextRect.setHeight( r.height() );
 
 // All this code isn't related to the word-wrap algo...
 // Sucks that we have to duplicate it.
@@ -147,35 +135,42 @@ void FileThumbnailViewItem::calcRect(const QString& text_) {
 								itemIconRect.width(), itemIconRect.height() );
 	}
 
+// Apply margin on Y axis
+	int margin=view->marginSize();
+	itemIconRect.moveBy(0,margin/2);
+	itemTextRect.moveBy(0,margin/2);
+	itemRect.setHeight(itemRect.height()+margin);
+
+// Update rects
 	if ( itemIconRect != pixmapRect() )
 		setPixmapRect( itemIconRect );
 	if ( itemTextRect != textRect() )
 		setTextRect( itemTextRect );
 	if ( itemRect != rect() )
 		setItemRect( itemRect );
-
-// Done by setPixmapRect, setTextRect and setItemRect !  [and useless if no rect changed]
-//	view->updateItemContainer( this );
 }
 
 
 void FileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
+	static QString dots("...");
 	QIconView* view = iconView();
 	Q_ASSERT( view );
 	if ( !view ) return;
-	
-	static QString dots("...");
-	int width=view->maxItemWidth()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
+
+// If the text fit in the width, don't truncate it
+	int width=view->gridX()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
 	if (fm.boundingRect(text()).width()<=width) {
 		mTruncatedText=QString::null;
 		return;
 	}
 
+// Find the number of letters to keep
 	mTruncatedText=text();
 	width-=fm.width(dots);
 	int len=mTruncatedText.length();
 	for(;len>0 && fm.width(mTruncatedText,len)>width;--len);
 
+// Truncate the text
 	mTruncatedText.truncate(len);
 	mTruncatedText+=dots;
 }
@@ -186,24 +181,24 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	Q_ASSERT( view );
 	if ( !view ) return;
 
-// Get the rects. We adjust pRect because pixmapRect seems to return the outer
-// rect of the pixmap
+// Get the rects. We adjust pRect so that we get the outer rect of the pixmap
 	QRect pRect=pixmapRect(false);
-	pRect.moveBy(1,1);
-	pRect.setWidth(pRect.width()-2);
-	pRect.setHeight(pRect.height()-2);
+	pRect.moveBy(-1,-1);
+	pRect.setWidth(pRect.width()+2);
+	pRect.setHeight(pRect.height()+2);
 	QRect tRect=textRect(false);
 
 	p->save();
 
 // Draw pixmap
-	p->drawPixmap( pRect.x(), pRect.y(), *pixmap() );
+	p->drawPixmap( pRect.x()+1, pRect.y()+1, *pixmap() );
 
 // Draw focus
 	if ( isSelected() ) {
 		p->setPen( QPen( cg.highlight() ) );
-		p->drawRect(pRect | tRect);
-		p->fillRect( pRect.x(),tRect.y(),pRect.width(),tRect.height(), cg.highlight() );
+		QRect outerRect=pRect | tRect;
+		p->drawRect(outerRect);
+		p->fillRect( outerRect.x(),tRect.y(),outerRect.width(),tRect.height(), cg.highlight() );
 
 		p->setPen( QPen( cg.highlightedText() ) );
 	} else {
@@ -229,11 +224,6 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 			str=mTruncatedText;
 			align=AlignLeft;
 		}
-		/*
-		QString truncated=text();
-		if ( cutText(view,truncated,tRect.width()) ) align=AlignLeft;
-		kdDebug() << "paintItem : truncated=" << truncated << endl;
-		*/
 		p->drawText(tRect,align,str);
 	}
 

@@ -99,6 +99,8 @@ private:
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 
+	void updateGrid();
+
 private slots:
 	void slotClicked(QIconViewItem*,const QPoint& pos);
 };
