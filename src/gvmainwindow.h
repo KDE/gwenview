@@ -137,7 +137,6 @@ private slots:
 	void goUp();
 	void goUpTo(int);
 	
-	void openParentDir();
 	void openHomeDir();
 	void renameFile();
 	void copyFiles();

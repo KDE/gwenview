@@ -68,7 +68,7 @@ public:
 	// Properties
 	void setMode(Mode);
 	
-	QString filename() const;
+	QString fileName() const;
 	KURL url() const;
 	uint fileCount() const;
 	
@@ -94,11 +94,14 @@ public:
 	KToggleAction* showDotFiles() const { return mShowDotFiles; }
 
 	void setFocus();
+
+	void setFileNameToSelect(const QString&);
+	/* FIXME
+	void highlightItem(KFileItem*);
+	*/
 	
 public slots:
 	void setURL(const KURL&,const QString&);
-
-	void selectFilename(QString filename);
 
 	void slotSelectFirst();
 	void slotSelectLast();
@@ -190,7 +193,7 @@ private:
 
 	// Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
-	QString mFilenameToSelect;
+	QString mFileNameToSelect;
 
 	QMutex mBrowsing;
 	
@@ -198,6 +201,8 @@ private:
 	 * Browse to the given item. Prevents multiple calls using mBrowsing.
 	 */
 	void browseTo(KFileItem* item);
+
+	void browseToFileNameToSelect();
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();
@@ -207,6 +212,7 @@ private:
 	KFileItem* findLastImage() const;
 	KFileItem* findPreviousImage() const;
 	KFileItem* findNextImage() const;
+	KFileItem* findItemByFileName(const QString& fileName) const;
 };
 
 

@@ -236,20 +236,27 @@ void GVMainWindow::goUp() {
 }
 
 void GVMainWindow::goUpTo(int id) {
-	mGVPixmap->setDirURL((KURL)mGoUp->popupMenu()->text(id));
+	KPopupMenu* menu=mGoUp->popupMenu();
+	KURL url(menu->text(id));
+	
+	KURL childURL;
+	int index=menu->indexOf(id);
+	if (index>0) {
+		childURL=KURL(menu->text(menu->idAt(index-1)));
+	} else {
+		childURL=mGVPixmap->dirURL();
+	}
+	
+	mGVPixmap->setDirURL(url);
+	mFileViewStack->setFileNameToSelect(childURL.filename());
 }
+
 
 //-----------------------------------------------------------------------
 //
 // File operations
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::openParentDir() {
-	KURL url=mGVPixmap->dirURL().upURL();
-	mGVPixmap->setURL(url);	
-}
-
-
 void GVMainWindow::openHomeDir() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );

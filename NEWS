@@ -2,6 +2,9 @@
 - Fixes:
  - Gave contributors the credit they deserve in the about box.
  - Updated to libexif 0.5.12 and applied from libexif CVS.
+ - When going to the parent folder, make sure the folder we were in before is
+   selected.
+ - If there's no image in the current folder, select the first visible file.
 
 2003.12.07 - v1.0.0
 - New features:
