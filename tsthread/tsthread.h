@@ -119,9 +119,9 @@ class TSThread
          */
         void emitSignal( QObject* obj, const char* signal );
         template< typename T1 >
-        void emitSignal( QObject* obj, const char* signal, T1 p1 );
+        void emitSignal( QObject* obj, const char* signal, const T1& p1 );
         template< typename T1, typename T2 >
-        void emitSignal( QObject* obj, const char* signal, T1 p1, T2 p2 );
+        void emitSignal( QObject* obj, const char* signal, const T1& p1, const T2& p2 );
         /**
          * This function works like emitSignal(), but additionally acts as a cancellation
          * point, i.e. calling cancel() on the thread causes premature return.
@@ -130,9 +130,9 @@ class TSThread
          */        
         void emitCancellableSignal( QObject* obj, const char* signal );
         template< typename T1 >
-        void emitCancellableSignal( QObject* obj, const char* signal, T1 p1 );
+        void emitCancellableSignal( QObject* obj, const char* signal, const T1& p1 );
         template< typename T1, typename T2 >
-        void emitCancellableSignal( QObject* obj, const char* signal, T1 p1, T2 p2 );
+        void emitCancellableSignal( QObject* obj, const char* signal, const T1& p1, const T2& p2 );
         /**
          * Posts (i.e. it is not executed immediatelly like normal signals)
          * a signal to be emitted in the main thread. The signal cannot
@@ -319,7 +319,7 @@ void TSThread::emitSignal( QObject* obj, const char* signal )
 
 template< typename T1 >
 inline
-void TSThread::emitSignal( QObject* obj, const char* signal, T1 p1 )
+void TSThread::emitSignal( QObject* obj, const char* signal, const T1& p1 )
     {
     QUObject o[ 2 ];
     setSignalData( o + 1, p1 );
@@ -328,7 +328,7 @@ void TSThread::emitSignal( QObject* obj, const char* signal, T1 p1 )
 
 template< typename T1, typename T2 >
 inline
-void TSThread::emitSignal( QObject* obj, const char* signal, T1 p1, T2 p2 )
+void TSThread::emitSignal( QObject* obj, const char* signal, const T1& p1, const T2& p2 )
     {
     QUObject o[ 3 ];
     setSignalData( o + 1, p1 );
@@ -345,7 +345,7 @@ void TSThread::emitCancellableSignal( QObject* obj, const char* signal )
 
 template< typename T1 >
 inline
-void TSThread::emitCancellableSignal( QObject* obj, const char* signal, T1 p1 )
+void TSThread::emitCancellableSignal( QObject* obj, const char* signal, const T1& p1 )
     {
     QUObject o[ 2 ];
     setSignalData( o + 1, p1 );
@@ -354,7 +354,7 @@ void TSThread::emitCancellableSignal( QObject* obj, const char* signal, T1 p1 )
 
 template< typename T1, typename T2 >
 inline
-void TSThread::emitCancellableSignal( QObject* obj, const char* signal, T1 p1, T2 p2 )
+void TSThread::emitCancellableSignal( QObject* obj, const char* signal, const T1& p1, const T2& p2 )
     {
     QUObject o[ 3 ];
     setSignalData( o + 1, p1 );
