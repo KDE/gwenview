@@ -58,10 +58,6 @@ const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
 const char* CONFIG_LOCK_ZOOM="lock zoom";
 const char* CONFIG_AUTO_ZOOM="auto zoom";
 const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
-const char* CONFIG_MOUSE_BEHAVIOUR_NONE=   "mouse behaviour none";
-const char* CONFIG_MOUSE_BEHAVIOUR_SHIFT=  "mouse behaviour shift";
-const char* CONFIG_MOUSE_BEHAVIOUR_CONTROL="mouse behaviour control";
-const char* CONFIG_MOUSE_BEHAVIOUR_ALT=    "mouse behaviour alt";
 
 const int AUTO_HIDE_TIMEOUT=2000;
 
@@ -918,12 +914,6 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
-	/* FIXME
-	mButtonStateToolMap[NoButton]=	   Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_NONE,Scroll) );
-	mButtonStateToolMap[ControlButton]=Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL,Browse) );
-	mButtonStateToolMap[ShiftButton]=  Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT,Zoom) );
-	mButtonStateToolMap[AltButton]=    Tool( config->readNumEntry(CONFIG_MOUSE_BEHAVIOUR_ALT,None) );
-	*/
 	mButtonStateToolMap[NoButton]=Scroll;
 	mButtonStateToolMap[ShiftButton]=Zoom;
 
@@ -940,12 +930,5 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
-	
-	/* FIXME
-	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_NONE	 , int(mButtonStateToolMap[NoButton]) );
-	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_CONTROL, int(mButtonStateToolMap[ControlButton]) );
-	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_SHIFT  , int(mButtonStateToolMap[ShiftButton]) );
-	config->writeEntry(CONFIG_MOUSE_BEHAVIOUR_ALT	 , int(mButtonStateToolMap[AltButton]) );
-	*/
 }
 
