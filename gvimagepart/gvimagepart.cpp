@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //Factory Code
 typedef KParts::GenericFactory<GVImagePart> GVImageFactory;
-K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory );
+K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
 
 GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent,
 			 const char* name, const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
