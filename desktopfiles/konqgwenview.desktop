@@ -5,6 +5,8 @@ Actions=gwenview
 
 [Desktop Action gwenview]
 Name=Browse with Gwenview
+Name[ca]=Navega amb Gwenview
+Name[cs]=Procházet pomocí Gwenview
 Name[da]=Gennemse med Gwenview
 Name[de]=Dateien mit Gwenview durchsehen
 Name[el]=Εξερεύνηση με το Gwenview
@@ -12,6 +14,7 @@ Name[es]=Navegación con Gwenview
 Name[et]=Lehitse kasutades Gwenview'd
 Name[fr]=Naviguer avec Gwenview
 Name[he]=עיין בעזרת Gwenview
+Name[hi]=ग्वेनव्यू के साथ ब्राउज़ करें
 Name[hu]=Böngészés a Gwenview-val
 Name[it]=Sfoglia con Gwenview
 Name[nl]=Bladeren met Gwenview
@@ -19,7 +22,10 @@ Name[pt]=Navegar com o Gwenview
 Name[pt_BR]=Navegar com Gwenview
 Name[ru]=Просмотреть в Gwenview
 Name[sk]=Prehliadať s Gwenview
+Name[sl]=Brskaj z Gwenview
+Name[sr]=Прегледај помоћу Gwenview-а
 Name[sv]=Bläddra med Gwenview
+Name[ta]=GWEN பார்வையை வைத்து தேடு
 Name[uk]=Перегляд у Gwenview
 Name[xh]=Khangela nge Gwenview
 Name[xx]=xxBrowse with Gwenviewxx
