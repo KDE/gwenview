@@ -160,15 +160,15 @@ bool GVDirPart::openFile() {
 }
 
 bool GVDirPart::openURL(const KURL& url) {
-	if (!url.isValid())  {
+	if (!url.isValid()) {
 		return false;
 	}
 
 	m_url = url;
+	m_url.adjustPath(1);
 
-	mDocument->setDirURL(url);
-	mFilesView->setURL(url);
-	emit setWindowCaption( url.prettyURL() );
+	emit setWindowCaption( m_url.prettyURL() );
+	mFilesView->setURL(m_url);
 
 	return true;
 }

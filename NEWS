@@ -4,6 +4,7 @@
    thumbnail view.
 - Fixes:
  - Do not display the folder name as an image in the status bar.
+ - Make sure the folder KPart starts in the right folder.
 
 2004.07.31 - v1.1.4
 - New features:
