@@ -71,6 +71,10 @@ void GVDocumentLoadedImpl::transform(GVImageUtils::Orientation orientation) {
 
 
 QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) const {
+	if (!QImageIO::outputFormats().contains(format)) {
+		return i18n("Gwenview cannot write files in this format.");
+	}
+
 	QString msg;
 	KURL url(_url);
 	
@@ -88,8 +92,7 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 				}
 				path=QDir::cleanDirPath(path);
 				if (links.contains(path)) {
-					return i18n("<qt><b>Could not save the image to %1.</b><br/>This is a circular link.</qt>")
-					.arg(url.path());
+					return i18n("This is a circular link.");
 				}
 				info.setFile(path);
 			}
@@ -98,16 +101,13 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 		
 		// Make some quick tests on the file if it is local
 		if (info.exists() && ! info.isWritable()) {
-			return
-				i18n("<qt><b>Could not save the image to %1.</b><br/>This file is read-only.</qt>")
-				.arg(info.filePath());
+			return i18n("This file is read-only.");
 		}
 		if (!info.exists()) {
 			QFileInfo parent=QFileInfo(info.dirPath());
 			if (!parent.isWritable()) {
 				return
-					i18n("<qt><b>Could not save the image to %1.</b><br/>The %2 folder is read-only.</qt>")
-					.arg(info.filePath())
+					i18n("The %1 folder is read-only.")
 					.arg(parent.filePath());
 			}
 		}
@@ -131,11 +131,11 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 	// Move the tmp file to the final dest
 	if (url.isLocalFile()) {
 		if( ::rename( QFile::encodeName( tmp.name() ), QFile::encodeName( url.path())) < 0 ) {
-			return i18n("Could not save the image to %1").arg(url.path());
+			return i18n("Could not write to %1.").arg(url.path());
 		}
 	} else {
 		if (!KIO::NetAccess::upload(tmp.name(),url)) {
-			return i18n("Could not upload the file to %1").arg(url.prettyURL());
+			return i18n("Could not upload the file to %1.").arg(url.prettyURL());
 		}
 	}
 
@@ -148,8 +148,7 @@ QString GVDocumentLoadedImpl::localSave(QFile* file, const QCString& format) con
 	iio.setImage(mDocument->image());
 	if (!iio.write()) {
 		return
-			i18n("<qt><b>Could not save the image to %1.</b><br/>An error happened while saving.</qt>")
-			.arg(file->name());
+			i18n("An error happened while saving.");
 	}
 	return QString::null;
 }
