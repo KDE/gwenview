@@ -1,8 +1,12 @@
-2005.xx.xx - v1.2.0
+2005.xx.xx - v1.2.0pre4
+- New features:
+ - An item to open the "external tools" dialog has been added at the end of the
+   "external tools" menu.
 - Fixes:
  - The layout of the "external tools" dialog has been reworked.
  - The image was not correctly displayed after a manual rotation.
- - When saving a file, its permissions are now kept.
+ - When saving a file, its permissions are kept if it exists or set using umask
+   if not.
  - Fix history and back/forward/up buttons in the directory KPart.
  
 2005.02.27 - v1.2.0pre3

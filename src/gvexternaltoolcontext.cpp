@@ -20,11 +20,15 @@ Copyright 2000-2004 Aurélien Gâteau
 */
 // KDE
 #include <kaction.h>
+#include <kapplication.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kpopupmenu.h>
 #include <kservice.h>
 
 // Local
 #include "gvexternaltoolaction.h"
+#include "gvexternaltooldialog.h"
 
 #include "gvexternaltoolcontext.moc"
 
@@ -38,14 +42,26 @@ GVExternalToolContext::GVExternalToolContext(
 {}
 
 
+void GVExternalToolContext::showExternalToolDialog() {
+	GVExternalToolDialog* dialog=new GVExternalToolDialog(kapp->mainWidget());
+	dialog->show();
+}
+
+
 QPopupMenu* GVExternalToolContext::popupMenu() {
-	KActionMenu* actionMenu=new KActionMenu(this);
+	QPopupMenu* menu=new QPopupMenu();
 	QPtrListIterator<KService> it(mServices);
 	for (;it.current(); ++it) {
 		GVExternalToolAction* action=
 			new GVExternalToolAction(this, it.current(), mURLs);
-		actionMenu->insert(action);
+		action->plug(menu);
 	}
+
+	menu->insertSeparator();
+	menu->insertItem(
+		SmallIcon("configure"),
+		i18n("Configure External Tools..."), 
+		this, SLOT(showExternalToolDialog()) );
 	
-	return actionMenu->popupMenu();
+	return menu;
 }

@@ -39,6 +39,9 @@ public:
 		KURL::List urls);
 	QPopupMenu* popupMenu();
 
+private slots:
+	void showExternalToolDialog();
+
 private:
 	QPtrList<KService> mServices;
 	KURL::List mURLs;
