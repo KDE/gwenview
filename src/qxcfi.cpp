@@ -20,6 +20,7 @@
  */
 
 #include <qiodevice.h>
+#include <kdeversion.h>
 #include <stdlib.h>
 #include "qxcfi.h"
 
@@ -2378,4 +2379,8 @@ void XCFImageFormat::dissolveAlphaPixels ( QImage& image, int x, int y )
   }
 }
 
+#if KDE_VERSION >= 0x30400
 KDE_Q_EXPORT_PLUGIN( XCFImageFormat )
+#else
+Q_EXPORT_PLUGIN( XCFImageFormat )
+#endif
