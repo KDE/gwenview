@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt includes
 #include <qcursor.h>
 #include <qdockarea.h>
+#include <qtooltip.h>
 
 // KDE includes
 #include <kaccel.h>
@@ -42,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <ktoolbarbutton.h>
 #include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
 
@@ -616,7 +618,7 @@ void GVMainWindow::createMenu() {
 
 void GVMainWindow::createMainToolBar() {
 	mMainToolBar=new KToolBar(this,topDock(),true);
-	mMainToolBar->setLabel(i18n("Main tool bar"));
+	mMainToolBar->setLabel(i18n("Main Tool Bar"));
 	mOpenParentDir->plug(mMainToolBar);
 	mFileViewStack->selectFirst()->plug(mMainToolBar);
 	mFileViewStack->selectPrevious()->plug(mMainToolBar);
@@ -648,16 +650,15 @@ void GVMainWindow::createMainToolBar() {
 void GVMainWindow::createAddressToolBar() {
 	mAddressToolBar=new KToolBar(this,topDock(),true);
 	if (!mShowAddressBar) mAddressToolBar->hide();
-	mAddressToolBar->setLabel(i18n("Address tool bar"));
+	mAddressToolBar->setLabel(i18n("Location Tool Bar"));
 
-	/* FIXME: Add a tooltip to the erase button and change "URL:" to
-	 * "Location:"
-	 */
 	mAddressToolBar->insertButton("locationbar_erase",1,true);
+	QToolTip::add(mAddressToolBar->getButton(1),"Clear location bar");
+	
 	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
 	 * styles like Keramik). See konq_misc.cc.
 	 */
-	QLabel* urlLabel=new QLabel(i18n("&URL:"),mAddressToolBar,"kde toolbar widget");
+	QLabel* urlLabel=new QLabel(i18n("L&ocation:"),mAddressToolBar,"kde toolbar widget");
 	mURLEdit=new KHistoryCombo(mAddressToolBar);
 	urlLabel->setBuddy(mURLEdit);
 	mAddressToolBar->addConnection(1,SIGNAL(clicked(int)),mURLEdit,SLOT(clearEdit()));
