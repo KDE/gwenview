@@ -847,6 +847,8 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 	numColor=(numColor+1)%4;
 	painter->drawRect(paintRect);
 	#endif
+
+	QApplication::flushX();
 }
 
 
