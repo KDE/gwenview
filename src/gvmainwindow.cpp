@@ -259,22 +259,18 @@ void GVMainWindow::pixmapLoading() {
 
 
 void GVMainWindow::toggleDirAndFileViews() {
-	KConfig* config=KGlobal::config();
-	
 	if (mToggleDirAndFileViews->isChecked()) {
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
 	} else {
-		readDockConfig(config,CONFIG_DOCK_GROUP);
+		makeDockVisible(mFileDock);
+		makeDockVisible(mFolderDock);
 	}
 	mPixmapView->setFocus();
 }
 
 
 void GVMainWindow::toggleFullScreen() {
-	KConfig* config=KGlobal::config();
-
 	mToggleDirAndFileViews->setEnabled(!mToggleFullScreen->isChecked());
 	
 	if (mToggleFullScreen->isChecked()) {
@@ -301,14 +297,15 @@ void GVMainWindow::toggleFullScreen() {
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
 		if (!mShowStatusBarInFullScreen) statusBar()->hide();
-		writeDockConfig(config,CONFIG_DOCK_GROUP);
 		makeDockInvisible(mFileDock);
 		makeDockInvisible(mFolderDock);
 		mPixmapView->setFullScreen(true);
 		showFullScreen();
-		mPixmapView->setFocus();
 	} else {
-		readDockConfig(config,CONFIG_DOCK_GROUP);
+		showNormal();
+		mPixmapView->setFullScreen(false);
+		makeDockVisible(mFileDock);
+		makeDockVisible(mFolderDock);
 		statusBar()->show();
 		
 		if (toolBar()->area()) {
@@ -322,9 +319,8 @@ void GVMainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		menuBar()->show();
-		mPixmapView->setFullScreen(false);
-		showNormal();
 	}
+	mPixmapView->setFocus();
 }
 
 
