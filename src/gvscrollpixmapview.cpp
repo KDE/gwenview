@@ -134,20 +134,22 @@ visibleHeight(), contentsToViewport() and viewportToContents().
 
 */
 
-const char* CONFIG_OSD_MODE="osd mode";
-const char* CONFIG_FREE_OUTPUT_FORMAT="free output format";
-const char* CONFIG_SMOOTH_SCALE="smooth scale";
-const char* CONFIG_DELAYED_SMOOTHING="delayed smoothing";
-const char* CONFIG_ENLARGE_SMALL_IMAGES="enlarge small images";
-const char* CONFIG_SHOW_SCROLL_BARS="show scroll bars";
-const char* CONFIG_MOUSE_WHEEL_SCROLL="mouse wheel scrolls image";
-const char* CONFIG_LOCK_ZOOM="lock zoom";
-const char* CONFIG_AUTO_ZOOM="auto zoom";
-const char* CONFIG_AUTO_ZOOM_BROWSE="auto zoom browse";
-const char* CONFIG_BACKGROUND_COLOR="background color";
-const char* CONFIG_MAX_REPAINT_SIZE = "max repaint size";
-const char* CONFIG_MAX_SCALE_REPAINT_SIZE = "max scale repaint size";
-const char* CONFIG_MAX_SMOOTH_REPAINT_SIZE = "max smooth repaint size";
+const char CONFIG_OSD_MODE[]="osd mode";
+const char CONFIG_FREE_OUTPUT_FORMAT[]="free output format";
+const char CONFIG_SMOOTH_SCALE[]="smooth scale";
+const char CONFIG_DELAYED_SMOOTHING[]="delayed smoothing";
+const char CONFIG_ENLARGE_SMALL_IMAGES[]="enlarge small images";
+const char CONFIG_SHOW_SCROLL_BARS[]="show scroll bars";
+const char CONFIG_MOUSE_WHEEL_SCROLL[]="mouse wheel scrolls image";
+const char CONFIG_LOCK_ZOOM[]="lock zoom";
+const char CONFIG_AUTO_ZOOM[]="auto zoom";
+const char CONFIG_AUTO_ZOOM_BROWSE[]="auto zoom browse";
+const char CONFIG_BACKGROUND_COLOR[]="background color";
+const char CONFIG_MAX_REPAINT_SIZE[]= "max repaint size";
+const char CONFIG_MAX_SCALE_REPAINT_SIZE[]= "max scale repaint size";
+const char CONFIG_MAX_SMOOTH_REPAINT_SIZE[]= "max smooth repaint size";
+
+const char CONFIG_PIXMAPWIDGET_GLOBAL_GROUP[]="pixmap widget global";
 
 const int AUTO_HIDE_TIMEOUT=2000;
 
@@ -1505,6 +1507,7 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 		viewport()->setBackgroundColor(d->mBackgroundColor);
 	}
 
+	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
 	d->mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
 		config->readNumEntry(CONFIG_MAX_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
 	d->mMaxScaleRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
@@ -1526,6 +1529,8 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_AUTO_ZOOM, d->mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM, d->mLockZoom->isChecked());
 	config->writeEntry(CONFIG_BACKGROUND_COLOR, d->mBackgroundColor);
+	// following data are internal, and it makes sense to share them between the app and KPart's
+	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
 	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, d->mMaxRepaintSize);
 	config->writeEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, d->mMaxScaleRepaintSize);
 	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, d->mMaxSmoothRepaintSize);
