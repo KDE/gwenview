@@ -43,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageio.h>
+#include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <klocale.h>
 #include <kmenubar.h>
@@ -53,8 +54,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktoolbarbutton.h>
-#include <kio/netaccess.h>
 #include <kurlcompletion.h>
+#include <kurlpixmapprovider.h>
 #include <kurlrequesterdlg.h>
 #include <kprinter.h>
 
@@ -233,11 +234,11 @@ bool GVMainWindow::queryClose() {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setURL(const KURL& url2) {
-	LOG(url2.prettyURL());
-	KURL url( url2 );
-	url.setFileName( QString::null );
-	LOG(url.path());
+void GVMainWindow::setURL(const KURL& url) {
+	LOG(url.prettyURL());
+	KURL dirURL( url );
+	dirURL.setFileName( QString::null );
+	LOG(dirURL.path());
 	
 	bool filenameIsValid=!mDocument->isNull();
 
@@ -258,7 +259,7 @@ void GVMainWindow::setURL(const KURL& url2) {
 	QPopupMenu *upPopup = mGoUp->popupMenu();
 	upPopup->clear();
 	int i = 0;
-	KURL urlUp = url.upURL();
+	KURL urlUp = dirURL.upURL();
 	while(urlUp.hasPath()) {
 		upPopup->insertItem(urlUp.url()), urlUp.prettyURL();
 		if(urlUp.path() == "/" || ++i > 10)
@@ -266,14 +267,13 @@ void GVMainWindow::setURL(const KURL& url2) {
 		urlUp = urlUp.upURL();
 	}
 
-	mGoUp->setEnabled(url.path() != "/");
+	mGoUp->setEnabled(dirURL.path() != "/");
 	updateStatusInfo();
 
 	if( mLoadingCursor )
 		kapp->restoreOverrideCursor();
 	mLoadingCursor = false;
 
-	mURLEditCompletion->addItem(url.prettyURL());
 	mURLEdit->setEditText(url.prettyURL());
 	mURLEdit->addToHistory(url.prettyURL());
 }
@@ -607,17 +607,6 @@ void GVMainWindow::escapePressed() {
 }
 
 
-void GVMainWindow::slotURLEditChanged(const QString &str) {
-	KURL url(mURLEditCompletion->replacedPath(str));
-	mDocument->setURL(url);
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->setFocus();
-	} else if (mPixmapView->isVisible()) {
-		mPixmapView->setFocus();
-	}
-}
-
-
 void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	LOG(oldURL.prettyURL() << " to " << newURL.prettyURL());
 
@@ -636,6 +625,11 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 void GVMainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
 	mDocument->setURL(url);
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->setFocus();
+	} else if (mPixmapView->isVisible()) {
+		mPixmapView->setFocus();
+	}
 }
 
 void GVMainWindow::slotShownFileItemRefreshed(const KFileItem* item) {
@@ -904,10 +898,10 @@ void GVMainWindow::createConnections() {
 		mToggleSlideShow,SLOT(activate()) );
 
 	// Location bar
-	connect(mURLEdit,SIGNAL(activated(const QString &)),
-		this,SLOT(slotURLEditChanged(const QString &)));
-	connect(mURLEdit,SIGNAL(returnPressed(const QString &)),
-		this,SLOT(slotURLEditChanged(const QString &)));
+	connect(mURLEdit, SIGNAL(activated(const QString &)),
+		this,SLOT(slotGo()) );
+	connect(mURLEdit, SIGNAL(returnPressed()),
+		this,SLOT(slotGo()) );
 
 	// Non configurable stop-fullscreen accel
 	QAccel* accel=new QAccel(this);
@@ -922,20 +916,14 @@ void GVMainWindow::createConnections() {
 void GVMainWindow::createLocationToolBar() {
 	// URL Combo
 	mURLEdit=new KHistoryCombo(this);
-
 	mURLEdit->setDuplicatesEnabled(false);
+	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
 
-	mURLEditCompletion=new KURLCompletion(KURLCompletion::DirCompletion);
-	mURLEditCompletion->setDir("/");
+	mURLEditCompletion=new KURLCompletion();
+	//mURLEditCompletion->setDir("/");
 
 	mURLEdit->setCompletionObject(mURLEditCompletion);
 	mURLEdit->setAutoDeleteCompletionObject(true);
-
-	KURL url;
-	url.setPath(QDir::current().absPath());
-	mURLEdit->setEditText(url.prettyURL());
-	mURLEdit->addToHistory(url.prettyURL());
-	mURLEdit->setDuplicatesEnabled(false);
 
 	KWidgetAction* comboAction=new KWidgetAction( mURLEdit, i18n("Location Bar"), 0,
 		0, 0, actionCollection(), "location_url");

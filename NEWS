@@ -2,6 +2,7 @@
 - New features:
  - The thumbnail progress bar and stop buttons are now embedded in the
    thumbnail view.
+ - The location bar now shows the file names instead of the folders.
 - Fixes:
  - Do not display the folder name as an image in the status bar.
  - Make sure the folder KPart starts in the right folder.

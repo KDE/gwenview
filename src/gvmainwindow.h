@@ -194,7 +194,6 @@ private slots:
 	/**
 	 * Address bar related
 	 */
-	void slotURLEditChanged(const QString &str);
 	void slotGo();
 	
 	void updateWindowActions();
