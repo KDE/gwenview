@@ -10,6 +10,11 @@
 - Fixes:
  - Update the EXIF thumbnail when rotating a JPEG file.
  - In the dir view, folders now open with a single click (By Daniel Thaler).
+ - Reworked image->widget coordinate conversions in order to avoid subtle
+   paint errors.
+ - Remember computed optimal repaint sizes in the config file, so they are
+   available immediately after next start.
+ - Remember shown URL after session restore.
 
 2004.09.19 - v1.1.5
 - New features:
