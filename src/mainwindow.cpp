@@ -160,6 +160,13 @@ MainWindow::MainWindow()
 
 // Go to requested file
 	mGVPixmap->setURL(url);
+	
+// Set focus
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->setFocus();
+	} else if (mPixmapView->isVisible()) {
+		mPixmapView->setFocus();
+	}
 }
 
 
@@ -347,6 +354,11 @@ void MainWindow::thumbnailUpdateProcessedOne() {
 
 void MainWindow::slotURLEditChanged(const QString &str) {
 	mGVPixmap->setURL(str);
+	if (mFileViewStack->isVisible()) {
+		mFileViewStack->setFocus();
+	} else if (mPixmapView->isVisible()) {
+		mPixmapView->setFocus();
+	}
 }
 
 
@@ -599,7 +611,11 @@ void MainWindow::createMainToolBar() {
 void MainWindow::createAddressToolBar() {
 	KToolBar* addressBar=new KToolBar(this,topDock(),true);
 	addressBar->setLabel(i18n("Address tool bar"));
+
+	QLabel* urlLabel=new QLabel(i18n("&URL:"),addressBar);
 	mURLEdit=new KHistoryCombo(addressBar);
+	urlLabel->setBuddy(mURLEdit);
+	
 	mURLEdit->setDuplicatesEnabled(false);
 	
 	mURLEditCompletion=new KURLCompletion(KURLCompletion::DirCompletion);
