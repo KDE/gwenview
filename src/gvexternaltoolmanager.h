@@ -43,7 +43,11 @@ public:
 	static GVExternalToolManager* instance();
 	QDict<KDesktopFile>& desktopFiles() const;
 
+	// Create a new desktop file
 	KDesktopFile* createUserDesktopFile(const QString& name);
+
+	// Create a desktop file based on a existing (system) desktop file
+	KDesktopFile* createUserDesktopFile(const KDesktopFile* desktopFile);
 	void updateServices();
 
 private:

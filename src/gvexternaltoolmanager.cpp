@@ -167,11 +167,14 @@ GVExternalToolManager* GVExternalToolManager::instance() {
 
 void GVExternalToolManager::updateServices() {
 	d->mServices.clear();
-	QDictIterator<KDesktopFile> itDict(d->mDesktopFiles);
-	for (; itDict.current(); ++itDict) {
-		KService* service=new KService(itDict.current());
+	QDictIterator<KDesktopFile> it(d->mDesktopFiles);
+	for (; it.current(); ++it) {
+		KDesktopFile* desktopFile=it.current();
+		// If sync() is not called, KService does not read up to date content
+		desktopFile->sync();
+		KService* service=new KService(desktopFile);
 		d->mServices.append(service);
-	}	
+	}
 }
 
 
@@ -180,11 +183,22 @@ QDict<KDesktopFile>& GVExternalToolManager::desktopFiles() const {
 }
 
 
+KDesktopFile* GVExternalToolManager::createUserDesktopFile(const KDesktopFile* desktopFile) {
+	Q_ASSERT(desktopFile);
+	QFileInfo fi(desktopFile->fileName());
+
+	QString name=fi.baseName(true);
+	d->mDesktopFiles.remove(QString("%1.desktop").arg(name));
+	
+	return createUserDesktopFile(name);
+}
+
+
 KDesktopFile* GVExternalToolManager::createUserDesktopFile(const QString& name) {
 	Q_ASSERT(!name.isEmpty());
-	KDesktopFile* desktopFile=new KDesktopFile(QString("%1/%1.desktop").arg(d->mUserToolDir).arg(name), false);
+	KDesktopFile* desktopFile=new KDesktopFile(
+		QString("%1/%1.desktop").arg(d->mUserToolDir).arg(name), false);
 	d->mDesktopFiles.insert(QString("%1.desktop").arg(name), desktopFile);	
-	kdDebug() << "createUserDesktopFile: " << desktopFile->fileName() << endl;
 
 	return desktopFile;
 }

@@ -90,13 +90,21 @@ struct GVExternalToolDialogPrivate {
 
 		KDesktopFile* desktopFile=mSelectedItem->desktopFile();
 		QString name=mContent->mName->text();
-		if (!desktopFile) {
+		if (desktopFile) {
+			if (desktopFile->isReadOnly()) {
+				kdDebug() << "desktopFile->isReadOnly\n";
+				desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(desktopFile);
+				mSelectedItem->setDesktopFile(desktopFile);
+			}
+		} else {		
 			desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(name);
 			mSelectedItem->setDesktopFile(desktopFile);
 		}
 		desktopFile->writeEntry("Name", name);
 		desktopFile->writeEntry("Icon", mContent->mIconButton->icon());
 		desktopFile->writeEntry("Exec", mContent->mCommand->url());
+		// FIXME: Implement real service type read/write
+		desktopFile->writeEntry("ServiceTypes", "*");
 
 		mSelectedItem->setPixmap(0, SmallIcon(mContent->mIconButton->icon()) );
 		mSelectedItem->setText(0, name);
