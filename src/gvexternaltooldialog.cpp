@@ -21,12 +21,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qheader.h>
 
 // KDE
+#include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kicondialog.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klineedit.h>
 #include <klistview.h>
+#include <klocale.h>
 #include <kurlrequester.h>
 
 // Local
@@ -38,7 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class ToolListViewItem : public KListViewItem {
 public:
 	ToolListViewItem(KListView* parent, const QString& label)
-	: KListViewItem(parent, label) {}
+	: KListViewItem(parent, label), mDesktopFile(0L) {}
 	
 	void setDesktopFile(KDesktopFile* df) {
 		mDesktopFile=df;
@@ -55,8 +57,13 @@ private:
 
 struct GVExternalToolDialogPrivate {
 	GVExternalToolDialogBase* mContent;
-	
+	QPtrList<KDesktopFile> mDeletedTools;
+	ToolListViewItem* mSelectedItem;
 
+
+	GVExternalToolDialogPrivate()
+	: mSelectedItem(0L) {}
+	
 	void fillMimeTypeListView() {
 		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 		QStringList::const_iterator it=mimeTypes.begin();
@@ -76,14 +83,50 @@ struct GVExternalToolDialogPrivate {
 			item->setDesktopFile(it.current());
 		}
 	}
+
+
+	void saveChanges() {
+		if (!mSelectedItem) return;
+
+		KDesktopFile* desktopFile=mSelectedItem->desktopFile();
+		QString name=mContent->mName->text();
+		if (!desktopFile) {
+			desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(name);
+			mSelectedItem->setDesktopFile(desktopFile);
+		}
+		desktopFile->writeEntry("Name", name);
+		desktopFile->writeEntry("Icon", mContent->mIconButton->icon());
+		desktopFile->writeEntry("Exec", mContent->mCommand->url());
+
+		mSelectedItem->setPixmap(0, SmallIcon(mContent->mIconButton->icon()) );
+		mSelectedItem->setText(0, name);
+	}
+
+
+	void updateDetails() {
+		if (mSelectedItem) {
+			KDesktopFile* desktopFile=mSelectedItem->desktopFile();
+			if (desktopFile) {
+				mContent->mName->setText(desktopFile->readName());
+				mContent->mCommand->setURL(desktopFile->readEntry("Exec"));
+				mContent->mIconButton->setIcon(desktopFile->readIcon());
+				return;
+			}
+		}
+
+		mContent->mName->setText(QString::null);
+		mContent->mCommand->setURL(QString::null);
+		mContent->mIconButton->setIcon(QString::null);
+	}
 };
 
 
 GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 : KDialogBase(
-	parent,0,true,QString::null,KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
-	KDialogBase::Ok,true)
+	parent,0, false, QString::null, KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+	KDialogBase::Ok, true)
 {
+	setWFlags(getWFlags() | Qt::WDestructiveClose);
 	d=new GVExternalToolDialogPrivate;
 	
 	d->mContent=new GVExternalToolDialogBase(this);
@@ -96,8 +139,12 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 	d->fillMimeTypeListView();
 	d->fillToolListView();
 
-	connect( d->mContent->mToolListView, SIGNAL(selectionChanged()),
-		this, SLOT(updateDetails()) );
+	connect( d->mContent->mToolListView, SIGNAL(selectionChanged(QListViewItem*)),
+		this, SLOT(slotSelectionChanged(QListViewItem*)) );
+	connect( d->mContent->mAddButton, SIGNAL(clicked()),
+		this, SLOT(addTool()) );
+	connect( d->mContent->mDeleteButton, SIGNAL(clicked()),
+		this, SLOT(deleteTool()) );
 }
 
 
@@ -113,6 +160,8 @@ void GVExternalToolDialog::slotOk() {
 
 
 void GVExternalToolDialog::slotApply() {
+	d->saveChanges();
+	GVExternalToolManager::instance()->updateServices();
 }
 
 
@@ -121,16 +170,28 @@ void GVExternalToolDialog::slotCancel() {
 }
 
 
-void GVExternalToolDialog::updateDetails() {
-	ToolListViewItem* item=static_cast<ToolListViewItem*>(d->mContent->mToolListView->selectedItem());
-	if (item) {
-		KDesktopFile* desktopFile=item->desktopFile();
-		d->mContent->mName->setText(desktopFile->readName());
-		d->mContent->mCommand->setURL(desktopFile->readEntry("Exec"));
-		d->mContent->mIconButton->setIcon(desktopFile->readIcon());
-	} else {
-		d->mContent->mName->setText(QString::null);
-		d->mContent->mCommand->setURL(QString::null);
-		d->mContent->mIconButton->setIcon(QString::null);
-	}
+void GVExternalToolDialog::slotSelectionChanged(QListViewItem* item) {
+	d->saveChanges();
+	d->mSelectedItem=static_cast<ToolListViewItem*>(item);
+	d->updateDetails();
+}
+
+
+void GVExternalToolDialog::addTool() {
+	KListView* view=d->mContent->mToolListView;
+	QString name=i18n("<Unnamed tool>");
+	ToolListViewItem* item=new ToolListViewItem(view, name);
+	view->setSelected(item, true);
+	d->mContent->mName->setText(name);
+}
+
+
+void GVExternalToolDialog::deleteTool() {
+	KListView* view=d->mContent->mToolListView;
+	ToolListViewItem* item=static_cast<ToolListViewItem*>(view->selectedItem());
+	if (!item) return;
+
+	KDesktopFile* desktopFile=item->desktopFile();
+	delete item;
+	d->mDeletedTools.append(desktopFile);
 }

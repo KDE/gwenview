@@ -413,8 +413,8 @@ void GVMainWindow::showConfigDialog() {
 
 
 void GVMainWindow::showExternalToolDialog() {
-	GVExternalToolDialog dialog(this);
-	dialog.exec();
+	GVExternalToolDialog* dialog=new GVExternalToolDialog(this);
+	dialog->show();
 }
 
 

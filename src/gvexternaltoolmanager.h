@@ -31,21 +31,24 @@ class GVExternalToolContext;
 class KActionMenu;
 class KURL;
 
+class GVExternalToolManagerPrivate;
+
 class GVExternalToolManager {
 public:
+	~GVExternalToolManager();
+	
 	GVExternalToolContext* createContext(QObject* parent, const KFileItemList*);
 	GVExternalToolContext* createContext(QObject* parent, const KURL&);
 
 	static GVExternalToolManager* instance();
-	QDict<KDesktopFile>& desktopFiles() { return mDesktopFiles; }
+	QDict<KDesktopFile>& desktopFiles() const;
+
+	KDesktopFile* createUserDesktopFile(const QString& name);
+	void updateServices();
 
 private:
 	GVExternalToolManager();
-	void loadDesktopFiles(QDict<KDesktopFile>&, const QString&);
-	GVExternalToolContext* createContextInternal(QObject* parent, const KURL::List&, const QStringList& mimeTypes);
-
-	QDict<KDesktopFile> mDesktopFiles;
-	QPtrList<KService> mServices;
+	GVExternalToolManagerPrivate* d;
 };
 
 #endif

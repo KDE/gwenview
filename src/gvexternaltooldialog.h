@@ -37,7 +37,9 @@ protected slots:
 	void slotCancel();
 
 private slots:
-	void updateDetails();
+	void slotSelectionChanged(QListViewItem*);
+	void addTool();
+	void deleteTool();
 	
 private:
 	GVExternalToolDialogPrivate* d;

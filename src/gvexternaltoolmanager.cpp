@@ -32,71 +32,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #include "gvexternaltoolcontext.h"
 #include "gvexternaltoolmanager.h"
 
-
-
-
-GVExternalToolManager::GVExternalToolManager() {
-	// Load system and user desktop files.
-	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
-	QString userBaseDir=KGlobal::dirs()->localkdedir();
-	
-	QStringList::ConstIterator it;
-	QDict<KDesktopFile> systemDesktopFiles;
-	QDict<KDesktopFile> userDesktopFiles;
-	for (it=dirs.begin(); it!=dirs.end(); ++it) {
-		QString dir=*it;
-		if (dir.startsWith(userBaseDir)) {
-			loadDesktopFiles(userDesktopFiles, *it);
-		} else {
-			loadDesktopFiles(systemDesktopFiles, *it);
-		}
-	}
-
-	// Merge system and user desktop files into our KDesktopFile dictionary
-	mDesktopFiles=systemDesktopFiles;
-	mDesktopFiles.setAutoDelete(true);
-	QDictIterator<KDesktopFile> itDict(userDesktopFiles);
-	
-	for (; itDict.current(); ++itDict) {
-		QString name=itDict.currentKey();
-		KDesktopFile* df=itDict.current();
-		if (mDesktopFiles.find(name)) {
-			mDesktopFiles.remove(name);
-		}
-		if (df->readBoolEntry("Hidden")) {
-			delete df;
-		} else {
-			mDesktopFiles.insert(name, df);
-		}
-	}
-
-	// Update mServices from our dictionary
-	mServices.setAutoDelete(true);
-	itDict=QDictIterator<KDesktopFile>(mDesktopFiles);
-	for (; itDict.current(); ++itDict) {
-		KService* service=new KService(itDict.current());
-		mServices.append(service);
-	}	
-}
-
-
-void GVExternalToolManager::loadDesktopFiles(QDict<KDesktopFile>& dict, const QString& dirString) {
-	QDir dir(dirString);
-	QStringList list=dir.entryList("*.desktop");
-	QStringList::ConstIterator it=list.begin();
-	for (; it!=list.end(); ++it) {
-		KDesktopFile* df=new KDesktopFile( dir.filePath(*it) );
-		dict.insert(*it, df);
-	}
-}
-
-
-GVExternalToolManager* GVExternalToolManager::instance() {
-	static GVExternalToolManager manager;
-	return &manager;
-}
-
-
+// Helper functions for createContextInternal
 inline bool mimeTypeMatches(const QString& candidate, const QString& reference) {
 	if (reference=="*") return true;
 
@@ -130,6 +66,130 @@ inline bool isSubSetOf(const QStringList& subSet, const QStringList& set) {
 }
 
 
+struct GVExternalToolManagerPrivate {
+	QDict<KDesktopFile> mDesktopFiles;
+	QPtrList<KService> mServices;
+	QString mUserToolDir;
+
+	
+	GVExternalToolContext* createContextInternal(
+		QObject* parent, const KURL::List& urls, const QStringList& mimeTypes)
+	{
+		bool onlyOneURL=urls.size()==1;
+		
+		// Only add to selectionServices the services which can handle all the
+		// different mime types present in the selection
+		QPtrList<KService> selectionServices;
+		QPtrListIterator<KService> it(mServices);
+		for (; it.current(); ++it) {
+			KService* service=it.current();
+			if (!onlyOneURL && !service->allowMultipleFiles()) {
+				continue;
+			}
+			
+			QStringList serviceTypes=service->serviceTypes();
+			if (isSubSetOf(mimeTypes, serviceTypes)) {
+				selectionServices.append(service);
+			}
+		}
+		
+		return new GVExternalToolContext(parent, selectionServices, urls);
+	}
+
+};
+
+
+// Helper function for ctor
+void loadDesktopFiles(QDict<KDesktopFile>& dict, const QString& dirString) {
+	QDir dir(dirString);
+	QStringList list=dir.entryList("*.desktop");
+	QStringList::ConstIterator it=list.begin();
+	for (; it!=list.end(); ++it) {
+		KDesktopFile* df=new KDesktopFile( dir.filePath(*it) );
+		dict.insert(*it, df);
+	}
+}
+
+GVExternalToolManager::GVExternalToolManager() {
+	d=new GVExternalToolManagerPrivate;
+	
+	// Load system and user desktop files.
+	QStringList dirs=KGlobal::dirs()->findDirs("appdata", "tools");
+	QString userBaseDir=KGlobal::dirs()->localkdedir();
+	
+	QStringList::ConstIterator it;
+	QDict<KDesktopFile> systemDesktopFiles;
+	QDict<KDesktopFile> userDesktopFiles;
+	for (it=dirs.begin(); it!=dirs.end(); ++it) {
+		QString dir=*it;
+		if (dir.startsWith(userBaseDir)) {
+			d->mUserToolDir=dir;
+			loadDesktopFiles(userDesktopFiles, *it);
+		} else {
+			loadDesktopFiles(systemDesktopFiles, *it);
+		}
+	}
+	Q_ASSERT(!d->mUserToolDir.isEmpty());
+
+	// Merge system and user desktop files into our KDesktopFile dictionary
+	d->mDesktopFiles=systemDesktopFiles;
+	d->mDesktopFiles.setAutoDelete(true);
+	QDictIterator<KDesktopFile> itDict(userDesktopFiles);
+	
+	for (; itDict.current(); ++itDict) {
+		QString name=itDict.currentKey();
+		KDesktopFile* df=itDict.current();
+		if (d->mDesktopFiles.find(name)) {
+			d->mDesktopFiles.remove(name);
+		}
+		if (df->readBoolEntry("Hidden")) {
+			delete df;
+		} else {
+			d->mDesktopFiles.insert(name, df);
+		}
+	}
+
+	d->mServices.setAutoDelete(true);
+	updateServices();
+}
+
+
+GVExternalToolManager::~GVExternalToolManager() {
+	delete d;
+}
+
+	
+GVExternalToolManager* GVExternalToolManager::instance() {
+	static GVExternalToolManager manager;
+	return &manager;
+}
+
+
+void GVExternalToolManager::updateServices() {
+	d->mServices.clear();
+	QDictIterator<KDesktopFile> itDict(d->mDesktopFiles);
+	for (; itDict.current(); ++itDict) {
+		KService* service=new KService(itDict.current());
+		d->mServices.append(service);
+	}	
+}
+
+
+QDict<KDesktopFile>& GVExternalToolManager::desktopFiles() const {
+	return d->mDesktopFiles;
+}
+
+
+KDesktopFile* GVExternalToolManager::createUserDesktopFile(const QString& name) {
+	Q_ASSERT(!name.isEmpty());
+	KDesktopFile* desktopFile=new KDesktopFile(QString("%1/%1.desktop").arg(d->mUserToolDir).arg(name), false);
+	d->mDesktopFiles.insert(QString("%1.desktop").arg(name), desktopFile);	
+	kdDebug() << "createUserDesktopFile: " << desktopFile->fileName() << endl;
+
+	return desktopFile;
+}
+
+
 GVExternalToolContext* GVExternalToolManager::createContext(
 	QObject* parent, const KFileItemList* items)
 {
@@ -147,7 +207,7 @@ GVExternalToolContext* GVExternalToolManager::createContext(
 		}
 	}
 
-	return createContextInternal(parent, urls, mimeTypes);
+	return d->createContextInternal(parent, urls, mimeTypes);
 }
 
 
@@ -161,31 +221,6 @@ GVExternalToolContext* GVExternalToolManager::createContext(
 	QString mimeType=KMimeType::findByURL(url, 0, url.isLocalFile(), true)->name();
 	mimeTypes.append(mimeType);
 	
-	return createContextInternal(parent, urls, mimeTypes);
-}
-
-	
-GVExternalToolContext* GVExternalToolManager::createContextInternal(
-	QObject* parent, const KURL::List& urls, const QStringList& mimeTypes)
-{
-	bool onlyOneURL=urls.size()==1;
-	
-	// Only add to selectionServices the services which can handle all the
-	// different mime types present in the selection
-	QPtrList<KService> selectionServices;
-	QPtrListIterator<KService> it(mServices);
-	for (; it.current(); ++it) {
-		KService* service=it.current();
-		if (!onlyOneURL && !service->allowMultipleFiles()) {
-			continue;
-		}
-		
-		QStringList serviceTypes=service->serviceTypes();
-		if (isSubSetOf(mimeTypes, serviceTypes)) {
-			selectionServices.append(service);
-		}
-	}
-	
-	return new GVExternalToolContext(parent, selectionServices, urls);
+	return d->createContextInternal(parent, urls, mimeTypes);
 }
 
