@@ -2378,4 +2378,4 @@ void XCFImageFormat::dissolveAlphaPixels ( QImage& image, int x, int y )
   }
 }
 
-Q_EXPORT_PLUGIN( XCFImageFormat )
+KDE_Q_EXPORT_PLUGIN( XCFImageFormat )
