@@ -29,10 +29,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <ktempfile.h>
 
 // Our includes
 #include <gvarchive.h>
+#include <gvimagesavedialog.h>
 #include <gvpixmap.moc>
 
 
@@ -157,12 +160,33 @@ void GVPixmap::flip() {
 }
 
 
-bool GVPixmap::save() const {
-	return saveAs(url(),mImageFormat);
+void GVPixmap::save() {
+	if (!saveInternal(url(),mImageFormat)) {
+		KMessageBox::sorry(0,i18n("Could not save file."));
+	}
 }
 
 
-bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
+void GVPixmap::saveAs() {
+	QString format=mImageFormat;
+	KURL saveURL;
+	if (url().isLocalFile()) saveURL=url();
+
+	GVImageSaveDialog dialog(saveURL,format,0);
+	if (!dialog.exec()) return;
+
+	if (!saveInternal(saveURL,format)) {
+		KMessageBox::sorry(0,i18n("Could not save file."));
+	}
+}
+
+
+//---------------------------------------------------------------------
+//
+// Private stuff
+//
+//---------------------------------------------------------------------
+bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 	if (url.isLocalFile()) {
 		return mImage.save(url.path(),format.ascii());
 	}
@@ -170,7 +194,7 @@ bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
 	KTempFile tmp;
 	tmp.setAutoDelete(true);
 	bool result;
-	
+
 	result=mImage.save(tmp.name(),format.ascii());
 	if (!result) return false;
 
@@ -178,17 +202,11 @@ bool GVPixmap::saveAs(const KURL& url, const QString& format) const {
 }
 
 
-
-//---------------------------------------------------------------------
-//
-// Private stuff
-// 
-//---------------------------------------------------------------------
 bool GVPixmap::load() {
 	KURL pixURL=url();
 	bool result;
 	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
-		
+
 	// FIXME : Async
 	QString path;
 	if (pixURL.isLocalFile()) {
@@ -198,7 +216,7 @@ bool GVPixmap::load() {
 	}
 	mImageFormat=QString(QImage::imageFormat(path));
 	result=mImage.load(path,mImageFormat.ascii());
-	
+
 	if (!pixURL.isLocalFile()) {
 		KIO::NetAccess::removeTempFile(path);
 	}

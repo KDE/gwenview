@@ -6,16 +6,16 @@ Copyright (c) 2000-2003 Aurélien Gâteau
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
-  
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-   
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-    
+
 */
 #ifndef GVPIXMAP_H
 #define GVPIXMAP_H
@@ -38,10 +38,8 @@ public:
 	GVPixmap(QObject*);
 	~GVPixmap();
 	void reset();
-	bool save() const;
-	bool saveAs(const KURL&,const QString& format) const;
 
-	// Properties 
+	// Properties
 	const QImage& image() const { return mImage; }
 	KURL url() const;
 	const KURL& dirURL() const { return mDirURL; }
@@ -50,12 +48,15 @@ public:
 	int height() const { return mImage.height(); }
 	bool isNull() const { return mImage.isNull(); }
 	const QString& imageFormat() const { return mImageFormat; }
-	
+
 
 public slots:
 	void setURL(const KURL&);
 	void setDirURL(const KURL&);
 	void setFilename(const QString&);
+
+	void save();
+	void saveAs();
 
 	// "Image manipulation"
 	void rotateLeft();
@@ -79,7 +80,7 @@ signals:
 	 * Emitted when the image is modified.
 	 */
 	void modified();
-	
+
 private:
 	QImage mImage;
 	KURL mDirURL;
@@ -87,6 +88,7 @@ private:
 	QString mImageFormat;
 
 	bool load();
+	bool saveInternal(const KURL&,const QString& format);
 };
 
 

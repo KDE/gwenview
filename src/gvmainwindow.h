@@ -121,8 +121,6 @@ private slots:
 	void deleteFiles();
 	void showFileProperties();
 	void openFile();
-	void saveFile();
-	void saveFileAs();
 	void openWithEditor();
 	
 	void toggleFullScreen();

@@ -38,7 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kkeydialog.h>
 #include <klocale.h>
 #include <kmenubar.h>
-#include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kprogress.h>
 #include <kstatusbar.h>
@@ -54,7 +53,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvbookmarkowner.h"
 #include "gvdirview.h"
 #include "gvfileviewstack.h"
-#include "gvimagesavedialog.h"
 #include "gvpixmap.h"
 #include "gvscrollpixmapview.h"
 #include "gvslideshow.h"
@@ -95,7 +93,7 @@ GVMainWindow::GVMainWindow()
 	createAddressToolBar();
 	createConnections();
 	mFileViewStack->setFocus();
-	
+
 	// Command line
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -232,27 +230,6 @@ void GVMainWindow::openFile() {
 	if (!url.isValid()) return;
 
 	mGVPixmap->setURL(url);
-}
-	
-
-void GVMainWindow::saveFile() {
-	if (!mGVPixmap->save()) {
-		KMessageBox::sorry(this,i18n("Could not save file."));
-	}
-}
-
-
-void GVMainWindow::saveFileAs() {
-	QString imageFormat=mGVPixmap->imageFormat();
-	KURL url;
-	if (mGVPixmap->url().isLocalFile()) url=mGVPixmap->url();
-
-	GVImageSaveDialog dialog(url,imageFormat,this);
-	if (!dialog.exec()) return;
-	
-	if (!mGVPixmap->saveAs(url,imageFormat)) {
-		KMessageBox::sorry(this,i18n("Could not save file."));
-	}
 }
 
 
@@ -479,10 +456,10 @@ void GVMainWindow::createWidgets() {
 void GVMainWindow::createActions() {
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
 	
-	mSaveFile=KStdAction::save(this,SLOT(saveFile()),actionCollection() );
-	
-	mSaveFileAs=KStdAction::saveAs(this,SLOT(saveFileAs()),actionCollection() );
-	
+	mSaveFile=KStdAction::save(mGVPixmap,SLOT(save()),actionCollection() );
+
+	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
+
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
