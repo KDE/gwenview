@@ -666,6 +666,31 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 		verticalScrollBar()->setValue(0);
 	}
 	updateImageOffset();
+	QRect imageRect(mXOffset, mYOffset, mGVPixmap->width(), mGVPixmap->height());
+
+	// Top rect
+	viewport()->repaint(
+		0, 0,
+		viewport()->width(), imageRect.top(),
+		true);
+
+	// Bottom rect
+	viewport()->repaint(
+		0, imageRect.bottom(),
+		viewport()->width(), viewport()->height()-imageRect.bottom(),
+		true);
+
+	// Left rect
+	viewport()->repaint(
+		0, imageRect.top(),
+		imageRect.left(), imageRect.height(),
+		true);
+
+	// Right rect
+	viewport()->repaint(
+		imageRect.right(), imageRect.top(),
+		viewport()->width()-imageRect.right(), imageRect.height(),
+		true);
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
