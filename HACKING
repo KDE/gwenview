@@ -25,7 +25,7 @@ class GVMyClass {
 Enum items and consts are spelled like this:
 
 const int MY_CONST_VALUE=120;
-enum AnEnum { ENUM_ITEM1, ENUM_ITEM2, ENUM_ITEM3 };
+enum AnEnum { ITEM1, ITEM2, ITEM3 };
 
 
 Code layout
