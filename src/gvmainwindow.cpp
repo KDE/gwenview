@@ -54,6 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktoolbarbutton.h>
+#include <kio/netaccess.h>
 #include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
 #include <kprinter.h>
@@ -83,6 +84,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvprintdialog.h"
 #include "statusbarprogress.h"
 #include "gvcache.h"
+#include "thumbnailloadjob.h"
 
 #include "config.h"
 
@@ -113,6 +115,7 @@ const char* CONFIG_TOOLBAR_IN_FS="tool bar in full screen";
 const char* CONFIG_STATUSBAR_IN_FS="status bar in full screen";
 const char* CONFIG_BUSYPTR_IN_FS="busy ptr in full screen";
 const char* CONFIG_SHOW_LOCATION_TOOLBAR="show address bar";
+const char* CONFIG_AUTO_DELETE_THUMBNAIL_CACHE="Delete Thumbnail Cache whe exit";
 
 GVMainWindow::GVMainWindow()
 : KDockMainWindow(), mProgress(0L), mLocationToolBar(0L), mLoadingCursor(false)
@@ -195,6 +198,25 @@ bool GVMainWindow::queryClose() {
 
 		menuBar()->show();
 	}
+	
+    kdDebug() << k_funcinfo << "mAutoDeleteThumbnailCache:" << mAutoDeleteThumbnailCache << endl;
+	if (mAutoDeleteThumbnailCache) {
+		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
+        kdDebug() << k_funcinfo << "dir:" << dir << endl;
+
+		if (QFile::exists(dir)) {
+            kdDebug() << k_funcinfo << "deleting" << endl;
+			KURL url;
+			url.setPath(dir);
+#if KDE_VERSION >= 0x30200
+			KIO::NetAccess::del(url, 0);
+#else
+			KIO::NetAccess::del(url);
+#endif
+            kdDebug() << k_funcinfo << "deleted" << endl;
+		}
+	}
+	
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 
 	return true;
@@ -1027,6 +1049,10 @@ void GVMainWindow::setShowBusyPtrInFullScreen(bool value) {
 	mShowBusyPtrInFullScreen=value;
 }
 
+void GVMainWindow::setAutoDeleteThumbnailCache(bool value){
+	mAutoDeleteThumbnailCache=value;
+}
+
 
 //-----------------------------------------------------------------------
 //
@@ -1039,6 +1065,7 @@ void GVMainWindow::readConfig(KConfig* config,const QString& group) {
 	mShowToolBarInFullScreen=config->readBoolEntry(CONFIG_TOOLBAR_IN_FS, true);
 	mShowStatusBarInFullScreen=config->readBoolEntry(CONFIG_STATUSBAR_IN_FS, false);
 	mShowBusyPtrInFullScreen=config->readBoolEntry(CONFIG_BUSYPTR_IN_FS, true);
+	mAutoDeleteThumbnailCache=config->readBoolEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, false);	
 }
 
 
@@ -1048,5 +1075,6 @@ void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_TOOLBAR_IN_FS, mShowToolBarInFullScreen);
 	config->writeEntry(CONFIG_STATUSBAR_IN_FS, mShowStatusBarInFullScreen);
 	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
+	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
 }
 

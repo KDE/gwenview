@@ -61,12 +61,14 @@ public:
 	bool showToolBarInFullScreen() const { return mShowToolBarInFullScreen; }
 	bool showStatusBarInFullScreen() const { return mShowStatusBarInFullScreen; }
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
+	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	GVDocument* document() const { return mDocument; }
 
 	void setShowMenuBarInFullScreen(bool);
 	void setShowToolBarInFullScreen(bool);
 	void setShowStatusBarInFullScreen(bool);
 	void setShowBusyPtrInFullScreen(bool);
+	void setAutoDeleteThumbnailCache(bool);
 	
 public slots:
 	void setURL(const KURL&,const QString&);
@@ -117,6 +119,7 @@ private:
 	KAction* mFilePrint;
 	KAction* mToggleDirAndFileViews;
 	bool     mLoadingCursor;
+	bool	 mAutoDeleteThumbnailCache;
 	
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
