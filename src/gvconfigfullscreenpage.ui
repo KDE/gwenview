@@ -1,0 +1,101 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>GVConfigFullScreenPage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GVConfigFullScreenPage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>489</width>
+            <height>216</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Configure the full screen mode</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowPathInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Display image path over image</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowCommentInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Display image comment over image</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowBusyPtrInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Show busy mouse pointer when loading an image</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer10_2_3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Interface&lt;/b&gt;</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowMenuBarInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Show menu</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowToolBarInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Show toolbars</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowStatusBarInFullScreen</cstring>
+            </property>
+            <property name="text">
+                <string>Show status bar</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

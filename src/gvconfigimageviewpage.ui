@@ -1,0 +1,293 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>GVConfigImageViewPage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GVConfigImageViewPage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>379</width>
+            <height>292</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Configure the image view</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mAutoZoomEnlarge</cstring>
+            </property>
+            <property name="text">
+                <string>Enlarge small images when auto zoom is activated</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>mShowScrollBars</cstring>
+            </property>
+            <property name="text">
+                <string>Show scroll bars</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3_2</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Smoothing&lt;/b&gt;</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup" row="0" column="0" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>mSmoothGroup</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>mSmoothFast</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>26</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Fast</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>1</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>mSmoothBest</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>76</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Best</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>3</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>mSmoothNone</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>1</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>2</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="text">
+                            <string>None</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>0</number>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>mSmoothNormal</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>1</x>
+                                <y>51</y>
+                                <width>96</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Normal</string>
+                        </property>
+                        <property name="buttonGroupId">
+                            <number>2</number>
+                        </property>
+                    </widget>
+                </widget>
+                <widget class="Line" row="0" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>line1</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>VLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="2">
+                    <property name="name">
+                        <cstring>mDelayedSmoothing</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>7</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Delayed smoothing</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_4</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="margin">
+                        <number>3</number>
+                    </property>
+                    <property name="text">
+                        <string>Using this option, Gwenview will display the image as fast as possible, and smooth it after a short delay. Use this option if your computer is not very fast.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignTop</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>mDelayedSmoothing</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer10_2_3_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Mouse wheel behavior over image&lt;/b&gt;</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>mMouseWheelGroup</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>mMouseWheelScroll</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Scroll current image</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>mMouseWheelBrowse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse image list</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>mSmoothNone</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>mDelayedSmoothing</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>mSmoothNone</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel1_4</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

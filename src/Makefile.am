@@ -12,7 +12,11 @@ libgwenviewcore_la_LIBADD   = \
 libgwenviewcore_la_METASOURCES = AUTO
 
 libgwenviewcore_la_SOURCES = \
-	gvconfigdialogbase.ui \
+	gvconfigfileoperationspage.ui \
+	gvconfigfullscreenpage.ui \
+	gvconfigimagelistpage.ui \
+	gvconfigimageviewpage.ui \
+	gvconfigmiscpage.ui \
 	gvbranchpropertiesdialogbase.ui \
 	thumbnailsize.cpp \
 	thumbnailloadjob.cpp \
