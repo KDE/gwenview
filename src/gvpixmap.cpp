@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <sys/stat.h> // For S_ISDIR
 
 // Qt includes
-#include <qfileinfo.h>
 #include <qpainter.h>
 
 // KDE includes
@@ -42,25 +41,11 @@ GVPixmap::~GVPixmap()
 
 
 void GVPixmap::setURL(const KURL& paramURL) {
-	kdDebug() << "GVPixmap::setURL " << paramURL.path() << endl;
+	kdDebug() << "GVPixmap::setURL " << paramURL.prettyURL() << endl;
 	KURL URL(paramURL);
 
 	if (URL.cmp(url())) return;
 	
-	/*QFileInfo pathInfo(URL.path());
-	if (!pathInfo.exists()) {
-		URL=KURL("/");
-		pathInfo.setFile("/");
-	}
-	
-	if (pathInfo.isDir()) {
-		mDirURL.setPath(URL.path());
-		mFilename="";
-	} else {
-		mDirURL.setPath(URL.directory());
-		mFilename=URL.filename();
-	}*/
-
 	// Check whether this is a dir or a file
 	KIO::UDSEntry entry;
 	bool isDir;
@@ -74,11 +59,9 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	}
 
 	if (isDir) {
-		kdDebug() << "GVPixmap::setURL url is a dir\n";
 		mDirURL=URL;
 		mFilename="";
 	} else {
-		kdDebug() << "GVPixmap::setURL url is not a dir\n";
 		mDirURL=URL.upURL();
 		mFilename=URL.filename();
 	}
@@ -142,8 +125,8 @@ bool GVPixmap::load() {
 	QColor light(192,192,192);
 	QPixmap pix;
 
-// Load pixmap
-	/*if (!pix.load(pixURL.path())) return false; */ // FIXME
+	// Load pixmap
+	// FIXME : Async
 	QString path;
 	if (pixURL.isLocalFile()) {
 		path=pixURL.path();
@@ -158,7 +141,7 @@ bool GVPixmap::load() {
 	pixWidth=pix.width();
 	pixHeight=pix.height();
 
-// Create checker board
+	// Create checker board
 	mPixmap.resize(pixWidth,pixHeight);
 	mPixmap.fill(dark);
 	painter.begin(&mPixmap);
@@ -169,7 +152,7 @@ bool GVPixmap::load() {
 		}
 	}
 
-// Paint pixmap on checker board 
+	// Paint pixmap on checker board 
 	painter.drawPixmap(0,0,pix);
 	painter.end();
 	return true;

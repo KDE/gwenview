@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdirsize.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kio/global.h>
+#include <kio/netaccess.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 
@@ -156,7 +156,7 @@ void ConfigDialog::emptyCache() {
 	QString dir=ThumbnailLoadJob::thumbnailDir();
 
 	if (!QFile::exists(dir)) {
-		KMessageBox::information( this,i18n("Cache emptied.") ); // FIXME : Add a more explicit message
+		KMessageBox::information( this,i18n("Cache is already empty.") );
 		return;
 	}
 
@@ -168,9 +168,13 @@ void ConfigDialog::emptyCache() {
 
 	KURL url;
 	url.setPath(dir);
+	if (KIO::NetAccess::del(url)) {
+		KMessageBox::information( this,i18n("Cache emptied.") );
+	}
+	/*
 	KIO::DeleteJob* job=KIO::del(url);
 	connect(job,SIGNAL(result(KIO::Job*)),
-		this,SLOT(onCacheEmptied(KIO::Job*)));
+		this,SLOT(onCacheEmptied(KIO::Job*)));*/
 }
 
 
