@@ -158,7 +158,7 @@ MainWindow::~MainWindow() {
 
 
 //-Public slots----------------------------------------------------------
-void MainWindow::setURL(const KURL&, const QString&) {
+void MainWindow::setURL(const KURL& url,const QString&) {
 	//kdDebug() << "MainWindow::setURL " << url.path() << " - " << filename << endl;
 
     bool filenameIsValid=!mGVPixmap->isNull();
@@ -168,6 +168,7 @@ void MainWindow::setURL(const KURL&, const QString&) {
 	mCopyFile->setEnabled(filenameIsValid);
 	mMoveFile->setEnabled(filenameIsValid);
 	mDeleteFile->setEnabled(filenameIsValid);
+	mOpenParentDir->setEnabled(url.path()!="/");
 
 	updateStatusBar();
 	kapp->restoreOverrideCursor();
@@ -175,6 +176,11 @@ void MainWindow::setURL(const KURL&, const QString&) {
 
 
 //-Private slots---------------------------------------------------------
+void MainWindow::openParentDir() {
+	mGVPixmap->setURL( mGVPixmap->dirURL().upURL() );
+}
+
+
 void MainWindow::pixmapLoading() {
 	kapp->setOverrideCursor(QCursor(WaitCursor));
 }
@@ -381,6 +387,8 @@ void MainWindow::createActions() {
 
 	mStop=new KAction(i18n("Stop"),"stop",Key_Escape,mFileView,SLOT(cancel()),actionCollection(),"stop");
 	mStop->setEnabled(false);
+
+	mOpenParentDir=KStdAction::up(this, SLOT(openParentDir()),actionCollection() );
 }
 
 
@@ -440,6 +448,7 @@ void MainWindow::createMenu() {
 	menuBar()->insertItem(i18n("&View"), viewMenu);
 
 	QPopupMenu* goMenu = new QPopupMenu;
+	mOpenParentDir->plug(goMenu);
 	mFileView->selectFirst()->plug(goMenu);
 	mFileView->selectPrevious()->plug(goMenu);
 	mFileView->selectNext()->plug(goMenu);
@@ -503,6 +512,7 @@ void MainWindow::createPixmapViewPopupMenu() {
 
 
 void MainWindow::createToolBar() {
+	mOpenParentDir->plug(toolBar());
 	mFileView->selectFirst()->plug(toolBar());
 	mFileView->selectPrevious()->plug(toolBar());
 	mFileView->selectNext()->plug(toolBar());

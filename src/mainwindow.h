@@ -77,6 +77,8 @@ private:
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
 	KAction* mStop;
+	KAction* mOpenParentDir;
+	
 	KAccel* mAccel;
 
 	bool mShowMenuBarInFullScreen,mShowToolBarInFullScreen,mShowStatusBarInFullScreen;
@@ -99,6 +101,7 @@ private slots:
 	void showKeyDialog();
 	void pixmapLoading();
 	void openWithEditor();
+	void openParentDir();
 
 // Status bar update
 	/**
