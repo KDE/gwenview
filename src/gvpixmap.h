@@ -27,7 +27,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 
 // KDE includes
 #include <kurl.h>
-
+#include <kprinter.h>
 
 /**
  * A pixmap class with zooming capacities
@@ -61,6 +61,9 @@ public slots:
 	 */
 	bool save();
 	void saveAs();
+	
+	/** print the selected file */
+	void print(KPrinter *pPrinter);
 	
 	/**
 	 * If the image has been modified, prompt the user to save the changes.

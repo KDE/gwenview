@@ -106,6 +106,7 @@ private:
 	KAction* mFlip;
 	KAction* mSaveFile;
 	KAction* mSaveFileAs;
+	KAction* mFilePrint;
 	KAction* mToggleDirAndFileViews;
 	
 	KHistoryCombo* mURLEdit;
@@ -138,7 +139,8 @@ private slots:
 	void deleteFiles();
 	void showFileProperties();
 	void openFile();
-	
+	void slotFilePrint();  /** print the actual file */
+    	
 	void toggleFullScreen();
 	void showConfigDialog();
 	void showExternalToolDialog();

@@ -1,7 +1,8 @@
 2003.xx.xx - v1.0.0pre2
 - New features:
- - Added Back/Forward history buttons (based on a patch by Tudor Calin).
- - The parent button can now display a popup menu (patch by Tudor Calin).
+ - Added Back/Forward history buttons (based on work from Tudor Calin).
+ - The parent button can now display a popup menu (by Tudor Calin).
+ - Simple printing support (by Angelo Naselli).
 - Fixes:
  - The image comment editor shows more explicit messages when the comment is
    empty and when the image can't be commented.

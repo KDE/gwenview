@@ -28,6 +28,7 @@ Patch to make Gwenview use the same thumbnail folder as Konqueror 3 (v0.15.0).
 
 - Tudor Calin <tudor_calin@mymail.ro>
 Added an address bar (v0.16.0).
+History support (v1.0.0).
 
 - Meni Livne <livne@kde.org>
 Patched toolbar layout for RTL languages (v0.16.0).
@@ -42,6 +43,9 @@ Patch to fix compilation with KDE 3.0 (v0.16.1).
 - Jos van den Oever <jos@vandenoever.info>
 Implemented the meta-data dock window (v1.0.0).
 Patch to toggle auto-zoom when clicking on the image (v1.0.0).
+
+- Angelo Naselli <random_lx@yahoo.com>
+Printing support (v1.0.0).
 
 
 - Past packagers ------------------------------------------------------------

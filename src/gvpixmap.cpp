@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktempfile.h>
+#include <kprinter.h>
 
 // Our includes
 #include <gvarchive.h>
@@ -129,6 +130,22 @@ void GVPixmap::setFilename(const QString& filename) {
 	emit urlChanged(mDirURL,mFilename);
 }
 
+void GVPixmap::print(KPrinter *pPrinter)
+{
+  QPainter printpainter;
+
+  // Is this needed?
+  KURL url = this->url();
+  QString path=url.path();
+  pPrinter->setDocName(mFilename);
+
+  printpainter.begin(pPrinter);
+  
+  printpainter.drawImage(0,0,mImage);
+  
+  printpainter.end();
+
+}
 
 KURL GVPixmap::url() const {
 	KURL url=mDirURL;

@@ -54,6 +54,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ktoolbarbutton.h>
 #include <kurlcompletion.h>
 #include <kurlrequesterdlg.h>
+#include <kprinter.h>
 
 // Local
 #include "configdialog.h"
@@ -201,6 +202,7 @@ void GVMainWindow::setURL(const KURL& url,const QString&) {
 	mFlip->setEnabled(filenameIsValid);
 	mSaveFile->setEnabled(filenameIsValid);
 	mSaveFileAs->setEnabled(filenameIsValid);
+	mFilePrint->setEnabled(filenameIsValid);
 	
 	QPopupMenu *upPopup = mGoUp->popupMenu();
 	upPopup->clear();
@@ -298,6 +300,16 @@ void GVMainWindow::openFile() {
 	if (!url.isValid()) return;
 
 	mGVPixmap->setURL(url);
+}
+
+void GVMainWindow::slotFilePrint()
+{
+  KPrinter printer;
+  if (printer.setup(this))
+  {
+    
+    mGVPixmap->print(&printer);
+  }
 }
 
 
@@ -598,6 +610,7 @@ void GVMainWindow::createActions() {
 	mOpenFile=KStdAction::open(this,SLOT(openFile()),actionCollection() );
 	mSaveFile=KStdAction::save(mGVPixmap,SLOT(save()),actionCollection() );
 	mSaveFileAs=KStdAction::saveAs(mGVPixmap,SLOT(saveAs()),actionCollection() );
+	mFilePrint = KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F5,this,SLOT(copyFiles()),actionCollection(),"file_copy");
 	mMoveFiles=new KAction(i18n("&Move To..."),Key_F6,this,SLOT(moveFiles()),actionCollection(),"file_move");
