@@ -47,10 +47,11 @@ class GVDocumentLoadedImplPrivate {
 GVDocumentLoadedImpl::GVDocumentLoadedImpl(GVDocument* document)
 : GVDocumentImpl(document) {
 	LOG("");
-	
-	// Do not emit the signal directly from the constructor because
-	// switchToImpl has not updated the connections yet
-	QTimer::singleShot(0, this, SLOT(finishLoading()) );
+}
+
+
+void GVDocumentLoadedImpl::init() {
+	emit finished(true);
 }
 
 
@@ -91,6 +92,3 @@ bool GVDocumentLoadedImpl::localSave(const QString& path, const QCString& format
 	return mDocument->image().save(path, format);
 }
 
-void GVDocumentLoadedImpl::finishLoading() {
-	emit finished(true);
-}

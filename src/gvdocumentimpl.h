@@ -35,6 +35,11 @@ Q_OBJECT
 public:
 	GVDocumentImpl(GVDocument* document);
 	virtual ~GVDocumentImpl();
+	/**
+	 * This method is called by GVDocument::switchToImpl after it has connect
+	 * signals to the object
+	 */
+	virtual void init();
 	
 	void switchToImpl(GVDocumentImpl*);
 	void setImage(QImage);

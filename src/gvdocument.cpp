@@ -569,6 +569,7 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 		this, SIGNAL(sizeUpdated(int, int)) );
 	connect(d->mImpl, SIGNAL(rectUpdated(const QRect&)),
 		this, SIGNAL(rectUpdated(const QRect&)) );
+	d->mImpl->init();
 	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 }
 

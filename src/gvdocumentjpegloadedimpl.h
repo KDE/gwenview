@@ -36,6 +36,7 @@ Q_OBJECT
 public:
 	GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath);
 	~GVDocumentJPEGLoadedImpl();
+	void init();
 	
 	QString comment() const;
 	void setComment(const QString&);
@@ -48,9 +49,6 @@ protected:
 	
 private:
 	GVDocumentJPEGLoadedImplPrivate* d;
-
-private slots:
-	void finishLoading();
 };
 
 #endif /* GVDOCUMENTJPEGLOADEDIMPL_H */

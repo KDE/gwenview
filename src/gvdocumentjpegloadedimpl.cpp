@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //#define DEBUG_COMMENT
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -105,7 +105,7 @@ public:
  */
 GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath)
 : GVDocumentLoadedImpl(document) {
-	LOG("");
+	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mJPEGContent.loadFromData(rawData);
     if (mDocument->url().isLocalFile()) {
@@ -114,6 +114,31 @@ GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteAr
         d->mLocalFilePath=tempFilePath;
     }
 }
+
+
+void GVDocumentJPEGLoadedImpl::init() {
+	LOG("");
+	GVImageUtils::Orientation orientation=d->mJPEGContent.orientation();
+
+	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
+		LOG("jpeg rotating");
+		setImage(GVImageUtils::transform(mDocument->image(), orientation));
+		d->mJPEGContent.transform(orientation);
+
+		// Emit sizeUpdated and rectUpdated so that the view get updated to the
+		// new image orientation
+		emit sizeUpdated(mDocument->image().width(), mDocument->image().height());
+		emit rectUpdated(QRect(QPoint(0,0), mDocument->image().size()) );
+	}
+
+	d->loadComment();
+    if (!mDocument->url().isLocalFile()) {
+        QFile::remove(d->mLocalFilePath);
+    }
+
+	GVDocumentLoadedImpl::init();
+}
+
 
 GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
 	delete d;
@@ -161,23 +186,3 @@ GVDocument::CommentState GVDocumentJPEGLoadedImpl::commentState() const {
 	return d->mCommentState;
 }
 
-void GVDocumentJPEGLoadedImpl::finishLoading() {
-	LOG("");
-	GVImageUtils::Orientation orientation=d->mJPEGContent.orientation();
-
-	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
-		LOG("jpeg rotating");
-		setImage(GVImageUtils::transform(mDocument->image(), orientation));
-		d->mJPEGContent.transform(orientation);
-
-		emit sizeUpdated(mDocument->image().width(), mDocument->image().height());
-		emit rectUpdated(QRect(QPoint(0,0), mDocument->image().size()) );
-	}
-
-	d->loadComment();
-    if (!mDocument->url().isLocalFile()) {
-        QFile::remove(d->mLocalFilePath);
-    }
-
-	GVDocumentLoadedImpl::finishLoading();
-}

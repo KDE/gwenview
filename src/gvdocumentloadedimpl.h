@@ -33,6 +33,7 @@ class GVDocumentLoadedImpl : public GVDocumentImpl {
 Q_OBJECT
 public:
 	GVDocumentLoadedImpl(GVDocument* document);
+	void init();
 	~GVDocumentLoadedImpl();
 	
 	void transform(GVImageUtils::Orientation);
@@ -40,9 +41,6 @@ public:
 
 protected:
 	virtual bool localSave(const QString& file, const QCString& format) const;
-	
-protected slots:
-	virtual void finishLoading();
 };
 
 #endif /* GVDOCUMENTLOADEDIMPL_H */
