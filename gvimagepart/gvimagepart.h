@@ -84,6 +84,11 @@ protected slots:
 	 */
 	void setKonquerorWindowCaption(const KURL& url, const QString& filename);
 
+	/**
+	 * Rotates the current image 90 degrees clockwise
+	 */
+	void rotateRight();
+
 protected:
 	/**
 	 * The component's widget

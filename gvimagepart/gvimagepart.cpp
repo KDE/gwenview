@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kdebug.h>
 #include <kfilemetainfo.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
@@ -47,7 +48,11 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mPixmapView->kpartConfig();
 	setWidget(mPixmapView);
 
+	KIconLoader iconLoader = KIconLoader("gwenview");
+	iconLoader.loadIconSet("rotate_right", KIcon::Toolbar);
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
+	new KAction(i18n("Rotate &Right"), "rotate_right", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
+
 	connect(mPixmapView, SIGNAL(contextMenu()),
 		mBrowserExtension, SLOT(contextMenu()) );
 	connect(mDocument, SIGNAL(loaded(const KURL&, const QString&)),
@@ -102,6 +107,10 @@ void GVImagePart::print() {
 	if (printer.setup(mPixmapView, QString::null, true)) {
 		mDocument->print(&printer);
 	}
+}
+
+void GVImagePart::rotateRight() {
+	mDocument->modify(GVImageUtils::ROT_90);
 }
 
 /***** GVImagePartBrowserExtension *****/

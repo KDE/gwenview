@@ -4,6 +4,9 @@
  <Menu name="file"><Text>&amp;File</Text>
   <Action name="saveAs"/>
  </Menu>
+ <Menu name="edit">
+  <Action name="rotate_right"/>
+ </Menu>
  <Menu name="view"><Text>&amp;View</Text>
   <Action name="previous"/>
   <Action name="next"/>
@@ -16,6 +19,7 @@
  <Action name="previous"/>
  <Action name="next"/>
  <Action name="view_zoom_auto"/>
+ <Action name="rotate_right"/>
  <Action name="slideshow"/>
 </ToolBar>
 </kpartgui>
