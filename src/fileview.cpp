@@ -104,26 +104,26 @@ FileView::FileView(QWidget* parent,KActionCollection* actionCollection)
 	addWidget(mFileDetailView,0);
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
-		this,SLOT(executed()) );
+		this,SLOT(viewExecuted()) );
 	connect(mFileDetailView,SIGNAL(clicked(QListViewItem*)),
-		this,SLOT(detailChanged(QListViewItem*)) );
+		this,SLOT(viewChanged()) );
 	connect(mFileDetailView,SIGNAL(returnPressed(QListViewItem*)),
-		this,SLOT(detailChanged(QListViewItem*)) );
+		this,SLOT(viewChanged()) );
 	connect(mFileDetailView,SIGNAL(rightButtonClicked(QListViewItem*,const QPoint&,int)),
-		this,SLOT(detailRightButtonClicked(QListViewItem*,const QPoint&,int)) );
+		this,SLOT(detailViewRightButtonClicked(QListViewItem*,const QPoint&,int)) );
 
 // Thumbnail widget
 	mFileThumbnailView=new FileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
 
 	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
-		this,SLOT(executed()) );
+		this,SLOT(viewExecuted()) );
 	connect(mFileThumbnailView,SIGNAL(clicked(QIconViewItem*)),
-		this,SLOT(thumbnailChanged(QIconViewItem*)) );
+		this,SLOT(viewChanged()) );
 	connect(mFileThumbnailView,SIGNAL(returnPressed(QIconViewItem*)),
-		this,SLOT(thumbnailChanged(QIconViewItem*)) );
+		this,SLOT(viewChanged()) );
 	connect(mFileThumbnailView,SIGNAL(rightButtonClicked(QIconViewItem*,const QPoint&)),
-		this,SLOT(thumbnailRightButtonClicked(QIconViewItem*,const QPoint&)) );
+		this,SLOT(thumbnailViewRightButtonClicked(QIconViewItem*,const QPoint&)) );
 
 // Propagate signals
 	connect(mFileThumbnailView,SIGNAL(updateStarted(int)),
@@ -196,7 +196,7 @@ void FileView::selectFilename(QString filename) {
 void FileView::slotSelectFirst() {
 	KFileItem* item=currentFileView()->firstFileItem();
 	if (!item) return;
-	while (!item->isFile()) {
+	while (item->isDir()) {
 		item=currentFileView()->nextItem(item);
 		if (!item) return;
 	}
@@ -211,6 +211,7 @@ void FileView::slotSelectFirst() {
 void FileView::slotSelectLast() {
 	KFileItem* item=currentFileView()->items()->getLast();
 	if (!item) return;
+	if (item->isDir()) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -223,10 +224,15 @@ void FileView::slotSelectPrevious() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (item) {
 		item=currentFileView()->prevItem(item);
+		if (!item) return;
+		if (item->isDir()) {
+			slotSelectFirst();
+			return;
+		}
 	} else {
-		item=currentFileView()->firstFileItem();
+		slotSelectFirst();
+		return;
 	}
-	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -237,12 +243,13 @@ void FileView::slotSelectPrevious() {
 
 void FileView::slotSelectNext() {
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (item) {
+	if (item && !item->isDir()) {
 		item=currentFileView()->nextItem(item);
+		if (!item) return;
 	} else {
-		item=currentFileView()->firstFileItem();
+		slotSelectFirst();
+		return;
 	}
-	if (!item) return;
 	
 	currentFileView()->setCurrentItem(item);
 	currentFileView()->setSelected(item,true);
@@ -252,7 +259,7 @@ void FileView::slotSelectNext() {
 
 
 //-Private slots---------------------------------------------------------
-void FileView::executed() {
+void FileView::viewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
 	if (!item->isDir()) return;
@@ -260,34 +267,37 @@ void FileView::executed() {
 }
 
 
-void FileView::detailChanged(QListViewItem* item) {
+void FileView::viewChanged() {
+	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (currentFileView()->currentFileItem()->isDir()) return;
+	if (item->isDir()) {
+		updateActions();
+		return;
+	}
 	emitURLChanged();
 }
 
 
-void FileView::thumbnailChanged(QIconViewItem* item) {
+void FileView::viewRightButtonClicked(const QPoint& pos) {
+	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
-	if (currentFileView()->currentFileItem()->isDir()) return;
-	emitURLChanged();
-}
-
-
-void FileView::detailRightButtonClicked(QListViewItem* item,const QPoint& pos,int) {
-	if (!item) return;
-	if (currentFileView()->currentFileItem()->isDir()) return;
+	if (item->isDir()) {
+		updateActions();
+		return;
+	}
 	emitURLChanged();
 	if (mPopupMenu)
 		mPopupMenu->popup(pos);
 }
 
 
-void FileView::thumbnailRightButtonClicked(QIconViewItem* item,const QPoint& pos) {
-	if (!item) return;
-	if (currentFileView()->currentFileItem()->isDir()) return;
-	emitURLChanged();
-	mPopupMenu->popup(pos);
+void FileView::detailViewRightButtonClicked(QListViewItem*,const QPoint& pos,int) {
+	viewRightButtonClicked(pos);
+}
+
+
+void FileView::thumbnailViewRightButtonClicked(QIconViewItem*,const QPoint& pos) {
+	viewRightButtonClicked(pos);
 }
 
 
@@ -344,7 +354,10 @@ bool FileView::currentIsFirst() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return false;
 
-	return currentFileView()->prevItem(item)==0L;
+	KFileItem* prevItem=currentFileView()->prevItem(item);
+	if (!prevItem) return true;
+
+	return prevItem->isDir();
 }
 
 
@@ -454,13 +467,14 @@ void FileView::updateActions() {
 	}
 
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item) {
+	if (!item || item->isDir()) {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
 		mSelectNext->setEnabled(true);
 		mSelectLast->setEnabled(true);	
 		return;
 	}
+
 	bool isFirst=currentIsFirst();
 	bool isLast=currentIsLast();
 	

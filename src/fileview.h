@@ -113,16 +113,16 @@ signals:
 
 
 private slots:
-// Common slot to both views, used for directories
-	void executed();
+// Used to enter directories
+	void viewExecuted();
 
-// Detail view signals
-	void detailChanged(QListViewItem* item);
-	void detailRightButtonClicked(QListViewItem*,const QPoint&,int);
+// Used to change the current image
+	void viewChanged();
 
-// Thumbnail view signals
-	void thumbnailChanged(QIconViewItem* item);
-	void thumbnailRightButtonClicked(QIconViewItem*,const QPoint&);
+// Right button
+	void viewRightButtonClicked(const QPoint& pos);
+	void detailViewRightButtonClicked(QListViewItem*,const QPoint&,int);
+	void thumbnailViewRightButtonClicked(QIconViewItem*,const QPoint&);
 
 // Used for file operations which changes the content of the current dir (move/del/rename) 
 	void slotSelectNewFilename();
