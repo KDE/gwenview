@@ -422,23 +422,24 @@ void GVMainWindow::updateStatusInfo() {
 	} else {
 		txt=i18n("%1 - One Image","%1 - %n images",count).arg(url);
 	}
-    mStatusBarLabel->setText(txt);
+    mSBDirLabel->setText(txt);
 
-    updateCaption();
+    updateFileInfo();
 }
 
 
-void GVMainWindow::updateCaption() {
+void GVMainWindow::updateFileInfo() {
     QString filename=mGVPixmap->filename();
-    QString caption;
 	if (!filename.isEmpty()) {
-		caption=QString("%1 %2x%3 @ %4%")
+		QString info=QString("%1 %2x%3 @ %4%")
 			.arg(filename).arg(mGVPixmap->width()).arg(mGVPixmap->height())
 			.arg(int(mPixmapView->zoom()*100) );
+        mSBDetailLabel->show();
+        mSBDetailLabel->setText(info);
 	} else {
-        caption="";
+        mSBDetailLabel->hide();
     }
-    setCaption(caption);
+    setCaption(filename);
 }
 
 
@@ -449,8 +450,10 @@ void GVMainWindow::createWidgets() {
 	manager()->setSplitterOpaqueResize(true);
 	
 	// Status bar
-    mStatusBarLabel=new KSqueezedTextLabel("",statusBar());
-    statusBar()->addWidget(mStatusBarLabel,1);
+    mSBDirLabel=new KSqueezedTextLabel("", statusBar());
+    statusBar()->addWidget(mSBDirLabel,1);
+    mSBDetailLabel=new QLabel("", statusBar());
+    statusBar()->addWidget(mSBDetailLabel);
 	
 	// Pixmap widgets
 	mPixmapDock = createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
@@ -546,7 +549,7 @@ void GVMainWindow::createConnections() {
 	connect(mPixmapView,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
 	connect(mPixmapView,SIGNAL(zoomChanged(double)),
-		this,SLOT(updateCaption()) );
+		this,SLOT(updateFileInfo()) );
 
 	// Thumbnail view connections
 	connect(mFileViewStack,SIGNAL(updateStarted(int)),

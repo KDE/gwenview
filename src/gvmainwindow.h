@@ -70,7 +70,8 @@ private:
 	StatusBarProgress* mProgress;
 	KToolBar* mMainToolBar;
 	KToolBar* mLocationToolBar;
-    QLabel* mStatusBarLabel;
+    QLabel* mSBDirLabel;
+    QLabel* mSBDetailLabel;
 
 	GVFileViewStack* mFileViewStack;
 	GVDirView* mDirView;
@@ -147,7 +148,7 @@ private slots:
 	 * Update only caption, allows setting file info
 	 * when folder info is not available yet
 	 */
-	void updateCaption();
+	void updateFileInfo();
 
 	void thumbnailUpdateStarted(int);
 	void thumbnailUpdateEnded();
