@@ -30,11 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocument.h"
 #include "gvhistory.moc"
 
-#if KDE_VERSION < 306
-#define SAME_URL(u1,u2,slash) u1.cmp(u2,slash)
-#else
-#define SAME_URL(u1,u2,slash) u1.equals(u2,slash)
-#endif
 
 const unsigned int MAX_HISTORY_SIZE=12;
 
@@ -71,7 +66,7 @@ GVHistory::~GVHistory() {
 
 void GVHistory::updateHistoryList(const KURL& url) {
 	if (!mMovingInHistory) {
-		if (mPosition!=mHistoryList.end() && SAME_URL(url, *mPosition, true)) return;
+		if (mPosition!=mHistoryList.end() && url.equals(*mPosition, true)) return;
 		
 		// Drop everything after current
 		HistoryList::iterator it=mPosition;

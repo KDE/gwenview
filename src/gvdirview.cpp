@@ -30,22 +30,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpropsdlg.h>
 #include <kurl.h>
 #include <kurldrag.h>
 
+#if KDE_VERSION >= 0x30200
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#define KInputDialog KLineEditDlg
+#endif
+
 // Local
 #include "fileoperation.h"
 #include "gvdirview.moc"
-
-#if KDE_VERSION < 306
-#define SAME_URL(u1,u2,slash) u1.cmp(u2,slash)
-#else
-#define SAME_URL(u1,u2,slash) u1.equals(u2,slash)
-#endif
 
 		
 const int AUTO_OPEN_DELAY=1000;
@@ -115,7 +115,7 @@ GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
  * hidden
  */
 void GVDirView::showEvent(QShowEvent* event) {
-	if (!SAME_URL(currentURL(),m_nextUrlToSelect,true)) {
+	if (!currentURL().equals(m_nextUrlToSelect,true)) {
 		setURLInternal(m_nextUrlToSelect);
 	}	
 	QWidget::showEvent(event);
@@ -128,8 +128,8 @@ void GVDirView::setURL(const KURL& url) {
 	// Do nothing if we're browsing remote files
 	if (!url.isLocalFile()) return;
 
-	if (SAME_URL(currentURL(),url,true)) return;
-	if (SAME_URL(m_nextUrlToSelect,url,true)) return;
+	if (currentURL().equals(url,true)) return;
+	if (m_nextUrlToSelect.equals(url,true)) return;
 
 	// Do not update the view if it's hidden, just store the url to
 	// open next time the view is shown
@@ -178,7 +178,7 @@ void GVDirView::setURLInternal(const KURL& url) {
 
 	// If this is the wanted item, select it, 
 	// otherwise set the url as the next to select
-	if (SAME_URL(viewItem->url(),url,true)) {
+	if (viewItem->url().equals(url,true)) {
 		setCurrentItem(viewItem);
 		ensureItemVisible(viewItem);
 	} else {
@@ -204,7 +204,7 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 
 		// This is an URL to select
 		// (We block signals to avoid simulating a click on the dir item)
-		if (SAME_URL(m_nextUrlToSelect,url,true)) {
+		if (m_nextUrlToSelect.equals(url,true)) {
 			blockSignals(true);
 			setCurrentItem(*it);
 			blockSignals(false);
@@ -237,7 +237,7 @@ void GVDirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 	}
 
 	// We reached the URL to select, get out
-	if (SAME_URL(url,m_nextUrlToSelect,true)) return;
+	if (url.equals(m_nextUrlToSelect, true)) return;
 
 	// This URL is not a parent of a wanted URL, get out
 	if (!url.isParentOf(m_nextUrlToSelect)) return;
@@ -326,7 +326,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 		KURL current=currentURL();
 		KURL::List::ConstIterator it=urls.begin();
 		for (; it!=urls.end(); ++it) {
-			if (current.cmp(*it,true)) {
+			if (current.equals(*it,true)) {
 				setCurrentItem(mDropTarget);
 				break;
 			}
@@ -359,7 +359,10 @@ void GVDirView::makeDir() {
 	if (!currentItem()) return;
 
 	bool ok;
-	QString newDir=KLineEditDlg::getText(i18n("Enter the name of the new folder:"),"",&ok,this);
+	QString newDir=KInputDialog::getText(
+			i18n("Creating a folder"),
+			i18n("Enter the name of the new folder:"),
+			QString::null, &ok, this);
 	if (!ok) return;
 	
 	KURL newURL(currentURL());
@@ -386,7 +389,10 @@ void GVDirView::renameDir() {
 	if (!currentItem()) return;
 	
 	bool ok;
-	QString newDir=KLineEditDlg::getText(i18n("Rename this folder to:"),currentURL().filename(),&ok,this);
+	QString newDir=KInputDialog::getText(
+		i18n("Renaming a folder"),
+		i18n("Rename this folder to:"),
+		currentURL().filename(), &ok, this);
 	if (!ok) return;
 
 	KURL newURL=currentURL().upURL();

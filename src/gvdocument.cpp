@@ -103,8 +103,8 @@ KURL GVDocument::url() const {
 
 void GVDocument::setURL(const KURL& paramURL) {
 	kdDebug() << k_funcinfo << " url: " << paramURL.prettyURL() << endl;
-	KURL URL(paramURL);
-	if (URL.cmp(url())) return;
+	KURL localURL(paramURL);
+	if (localURL==url()) return;
 
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
@@ -113,23 +113,23 @@ void GVDocument::setURL(const KURL& paramURL) {
 		return;
 	}
 
-	if (URL.isEmpty()) {
+	if (localURL.isEmpty()) {
 		reset();
 		return;
 	}
 
 	// Fix wrong protocol
-	if (GVArchive::protocolIsArchive(URL.protocol())) {
-		QFileInfo info(URL.path());
+	if (GVArchive::protocolIsArchive(localURL.protocol())) {
+		QFileInfo info(localURL.path());
 		if (info.exists()) {
-			URL.setProtocol("file");
+			localURL.setProtocol("file");
 		}
 	}
 
 	// Check whether this is a dir or a file
 	KIO::UDSEntry entry;
 	bool isDir=false;
-	if (!KIO::NetAccess::stat(URL,entry)) return;
+	if (!KIO::NetAccess::stat(localURL,entry)) return;
 	KIO::UDSEntry::ConstIterator it;
 	for(it=entry.begin();it!=entry.end();++it) {
 		if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
@@ -139,11 +139,11 @@ void GVDocument::setURL(const KURL& paramURL) {
 	}
 
 	if (isDir) {
-		d->mDirURL=URL;
+		d->mDirURL=localURL;
 		d->mFilename="";
 	} else {
-		d->mDirURL=URL.upURL();
-		d->mFilename=URL.filename();
+		d->mDirURL=localURL.upURL();
+		d->mFilename=localURL.filename();
 	}
 
 	if (d->mFilename.isEmpty()) {

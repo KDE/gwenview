@@ -29,11 +29,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kglobalsettings.h>
-#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurlcombobox.h>
+
+#if KDE_VERSION >= 0x30200
+#include <kinputdialog.h>
+#else
+#include <klineeditdlg.h>
+#define KInputDialog KLineEditDlg
+#endif
 
 // Our includes
 #include "fileoperation.h"
@@ -219,7 +225,7 @@ void FileOpRenameObject::operator()() {
 
 // Prompt for the new filename
 	QString filename=QStyleSheet::escape(srcURL.filename());
-	mNewFilename=KLineEditDlg::getText(
+	mNewFilename=KInputDialog::getText(
 		i18n("<p>Rename file <b>%1</b> to:</p>").arg(filename),
 		srcURL.filename(),
 		&ok,mParent);

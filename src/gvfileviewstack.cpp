@@ -216,7 +216,7 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 //-----------------------------------------------------------------------
 void GVFileViewStack::setURL(const KURL& dirURL,const QString& fileName) {
 	//kdDebug() << "GVFileViewStack::setURL " << dirURL.path() + " - " + fileName << endl;
-	if ( !mDirURL.cmp(dirURL,true) ) {
+	if ( !mDirURL.equals(dirURL,true) ) {
 		mDirURL=dirURL;
 		currentFileView()->setShownFileItem(0L);
 		mFileNameToSelect=fileName;
