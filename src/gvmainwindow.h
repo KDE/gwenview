@@ -80,7 +80,7 @@ public:
 	void setShowStatusBarInFullScreen(bool);
 	void setShowBusyPtrInFullScreen(bool);
 	void setAutoDeleteThumbnailCache(bool);
-	
+
 public slots:
 	void setURL(const KURL&);
 
@@ -132,7 +132,7 @@ private:
 	bool     mLoadingCursor;
 	bool	 mAutoDeleteThumbnailCache;
 	KToggleAction* mToggleBrowse;
-	
+
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
 	QPtrList<KAction> mWindowListActions;
@@ -159,7 +159,7 @@ private:
 private slots:
 	void goUp();
 	void goUpTo(int);
-	
+
 	void openHomeDir();
 	void renameFile();
 	void copyFiles();
@@ -183,7 +183,7 @@ private slots:
 	void rotateRight();
 	void mirror();
 	void flip();
-	
+
 	void slotToggleCentralStack();
 	/**
 	 * Update status bar and caption
@@ -207,17 +207,15 @@ private slots:
 	 * Address bar related
 	 */
 	void slotGo();
-	
+
 	void updateWindowActions();
-	
+
 	void loadPlugins();
 
 	// Helper function for updateWindowActions()
 	void createHideShowAction(KDockWidget* dock);
 
-#ifdef HAVE_KIPI
 	void slotReplug();
-#endif
 };
 
 
