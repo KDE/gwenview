@@ -117,6 +117,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	iconLoader.loadIconSet("slideshow", KIcon::Toolbar);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
+	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));
 
 	setXMLFile( "gvdirpart/gvdirpart.rc" );
 }
