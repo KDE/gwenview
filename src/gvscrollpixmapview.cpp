@@ -387,11 +387,6 @@ void GVScrollPixmapView::setButtonStateTool(ButtonState state, Tool tool) {
 }
 	
 
-void GVScrollPixmapView::setAutoZoomBrowse(bool value) {
-	mAutoZoomBrowse=value;
-}
-
-
 //------------------------------------------------------------------------
 //
 // Overloaded methods
@@ -917,7 +912,6 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	mSmoothScale=config->readBoolEntry(CONFIG_SMOOTH_SCALE,false);
 	mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES,false);
 	mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS,true);
-	mAutoZoomBrowse=config->readBoolEntry(CONFIG_AUTO_ZOOM_BROWSE,true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
@@ -943,7 +937,6 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES,mEnlargeSmallImages);
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS,mShowScrollBars);
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
-	config->writeEntry(CONFIG_AUTO_ZOOM_BROWSE, mAutoZoomBrowse);
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
 	/* FIXME

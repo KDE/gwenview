@@ -79,7 +79,6 @@ public:
 	void setEnlargeSmallImages(bool);
 	bool showScrollBars() const { return mShowScrollBars; }
 	void setShowScrollBars(bool);
-	bool autoZoomBrowse() const { return mAutoZoomBrowse; }
 	void setAutoZoomBrowse(bool);
 
 	Tool buttonStateTool(ButtonState bs) const { return mButtonStateToolMap[bs]; }
@@ -113,7 +112,6 @@ private:
 	bool mSmoothScale;
 	bool mEnlargeSmallImages;
 	bool mShowScrollBars;
-	bool mAutoZoomBrowse;
 	ButtonStateToolMap mButtonStateToolMap;
 	ToolControllers mToolControllers;
 
