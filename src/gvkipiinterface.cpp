@@ -42,11 +42,9 @@ public:
 	: KIPI::ImageCollectionShared(), mName(name), mImages(images) {}
 
 	QString name() { return mName; }
+	QString comment() { return QString::null; }
 	
 	KURL::List images() { return mImages; }
-	
-	QString comment() { return QString::null; }
-	void setComment(const QString&) {}
 
 private:
 	QString mName;
@@ -127,6 +125,10 @@ QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
 KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 	kdDebug() << "GVKIPIInterface::info\n";
 	return KIPI::ImageInfo( new GVImageInfo(url) );
+}
+
+int GVKIPIInterface::features() const {
+	return KIPI::AlbumEQDir | KIPI::AcceptNewImages; 
 }
 
 #endif /* HAVE_KIPI */

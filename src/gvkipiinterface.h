@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #ifndef GVKIPIINTERFACE_H
-#define GVKIPIINTERFACE_H   
+#define GVKIPIINTERFACE_H	
 
 #include <config.h>
 #ifdef HAVE_KIPI
@@ -31,16 +31,17 @@ class GVKIPIInterfacePrivate;
 class GVFileViewStack;
 
 class GVKIPIInterface :public KIPI::Interface {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    GVKIPIInterface( QWidget* parent, GVFileViewStack*);
+	GVKIPIInterface( QWidget* parent, GVFileViewStack*);
 	virtual ~GVKIPIInterface();
 
-    KIPI::ImageCollection currentAlbum();
-    KIPI::ImageCollection currentSelection();
+	KIPI::ImageCollection currentAlbum();
+	KIPI::ImageCollection currentSelection();
 	QValueList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo info( const KURL& );
+	KIPI::ImageInfo info( const KURL& );
+	int features() const;
 
 private:
 	GVKIPIInterfacePrivate* d;
