@@ -278,6 +278,7 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 	if( urlTimestamp <= d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
+		d->mRawData = GVCache::instance()->file( mDocument->url() );
 		QImage image = GVCache::instance()->image( mDocument->url(), format );
 		if( !image.isNull()) {
 			setImageFormat(format);
@@ -285,9 +286,7 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 			return;
 		} else {
 			// Image in cache is broken, let's try the file
-			QByteArray data = GVCache::instance()->file( mDocument->url() );
-			if( !data.isNull()) {
-				d->mRawData = data;
+			if( !d->mRawData.isNull()) {
 				d->mTimeSinceLastUpdate.start();
 				d->mDecoderTimer.start(0, false);
 				return;
