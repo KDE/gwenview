@@ -51,10 +51,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	connect(m_pixmapView, SIGNAL(contextMenu()),
 		m_browserExtension, SLOT(contextMenu()) );
 
-	// Example action creation code
-	KAction* m_openCloseAll = new KAction( i18n("Open All"), 0, this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
-
-	//FIXME why does this not work without path relative
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
 }
 
@@ -94,11 +90,6 @@ bool GVImagePart::openFile() {
 
 QString GVImagePart::filePath() {
 	return m_file;
-}
-
-void GVImagePart::slotExample() {
-	kdDebug() << k_funcinfo << endl;
-	//Example KAction
 }
 
 /***** GVImagePartBrowserExtension *****/

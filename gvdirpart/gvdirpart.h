@@ -103,7 +103,6 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	virtual bool openURL(const KURL& url);
 
  protected slots:
-	void slotExample();
 	void toggleSlideShow();
 
  protected:
@@ -128,9 +127,6 @@ class GVDirPart : public KParts::ReadOnlyPart {
 	 */
 
 	GVFileViewStack* m_filesView;
-
-	// An example action to which we need to keep a pointer
-	KAction* m_exampleAction;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies

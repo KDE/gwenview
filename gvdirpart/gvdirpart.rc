@@ -2,12 +2,16 @@
 <kpartgui name="GVDirPart">
 <MenuBar>
  <Menu name="view"><Text>&amp;View</Text>
-  <Action name="openCloseAll"/>
+  <Action name="previous"/>
+  <Action name="next"/>
   <Action name="view_zoom_auto"/>
   <Action name="slideshow"/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
+ <Separator/>
+ <Action name="previous"/>
+ <Action name="next"/>
  <Action name="view_zoom_auto"/>
  <Action name="slideshow"/>
 </ToolBar>

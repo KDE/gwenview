@@ -74,8 +74,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	splitterSizes.append(20);
 	m_splitter->setSizes(splitterSizes);
 
-	// Example action creation code
-	m_exampleAction = new KAction( i18n("Example"), "viewmagfit", this, SLOT( slotExample() ), actionCollection(), "openCloseAll" );
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
 
 
@@ -117,11 +115,6 @@ bool GVDirPart::openURL(const KURL& url) {
 	emit setWindowCaption( url.prettyURL() );
 
 	return true;
-}
-
-void GVDirPart::slotExample() {
-	//Example KAction
-	kdDebug() << k_funcinfo << endl;
 }
 
 void GVDirPart::setKonquerorWindowCaption(const QString& url) {

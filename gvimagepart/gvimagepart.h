@@ -71,7 +71,6 @@ class GVImagePart : public KParts::ReadOnlyPart {
 	virtual bool openFile();
 
  protected slots:
-	void slotExample();
 
  protected:
         /**

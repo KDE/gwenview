@@ -86,11 +86,11 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(slotSelectLast()), actionCollection, "last");
 
 	mSelectPrevious=new KAction(i18n("&Previous"),
-		QApplication::reverseLayout() ? "gvnext":"gvprevious", Key_BackSpace,
+		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
 		this,SLOT(slotSelectPrevious()), actionCollection, "previous");
 
 	mSelectNext=new KAction(i18n("&Next"),
-		QApplication::reverseLayout() ? "gvprevious":"gvnext", Key_Space,
+		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 
 	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"detailed");
