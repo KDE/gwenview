@@ -52,7 +52,7 @@ extern "C" {
 
 
 static const int MAX_BUFFER = 32768;
-static const int MAX_CONSUMING_TIME = 200;
+static const int MAX_CONSUMING_TIME = 100;
 
 //-----------------------------------------------------------------------------
 //
