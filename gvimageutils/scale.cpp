@@ -623,6 +623,148 @@ static QImage ResizeImage(const QImage& image,const int columns,
 #endif
 
 
+/*
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%   S a m p l e I m a g e                                                     %
+%                                                                             %
+%                                                                             %
+%                                                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  SampleImage() scales an image to the desired dimensions with pixel
+%  sampling.  Unlike other scaling methods, this method does not introduce
+%  any additional color into the scaled image.
+%
+%  The format of the SampleImage method is:
+%
+%      Image *SampleImage(const Image *image,const unsigned long columns,
+%        const unsigned long rows,ExceptionInfo *exception)
+%
+%  A description of each parameter follows:
+%
+%    o image: The image.
+%
+%    o columns: The number of columns in the sampled image.
+%
+%    o rows: The number of rows in the sampled image.
+%
+%    o exception: Return any errors or warnings in this structure.
+%
+%
+*/
+QImage SampleImage(const QImage& image,const int columns,
+  const int rows)
+{
+  fastfloat
+    *x_offset,
+    *y_offset;
+
+  long
+    j,
+    y;
+
+  uchar
+    *pixels;
+
+  register const uchar
+    *p;
+
+  register long
+    x;
+
+  register uchar
+    *q;
+
+  /*
+    Initialize sampled image attributes.
+  */
+  if ((columns == image.width()) && (rows == image.height()))
+    return image;
+  // This function is modified to handle any image depth, not only
+  // 32bit like the ImageMagick original. This avoids the relatively
+  // expensive conversion.
+  const int d = image.depth() / 8;
+  QImage sample_image( columns, rows, image.depth());
+  sample_image.setAlphaBuffer( image.hasAlphaBuffer());
+  /*
+    Allocate scan line buffer and column offset buffers.
+  */
+  pixels= new uchar[ image.width() * d ];
+  x_offset= new fastfloat[ sample_image.width() ];
+  y_offset= new fastfloat[ sample_image.height() ];
+  /*
+    Initialize pixel offsets.
+  */
+  for (x=0; x < (long) sample_image.width(); x++)
+    // this may overflow fastfloat's range, so reorder the operations
+    //x_offset[x]=(fastfloat) x*image.width()/(fastfloat) sample_image.width();
+    x_offset[x]=(fastfloat) image.width()/(fastfloat) sample_image.width() * x;
+  for (y=0; y < (long) sample_image.height(); y++)
+    //y_offset[y]=(fastfloat) y*image.height()/(fastfloat) sample_image.height();
+    y_offset[y]=(fastfloat) image.height()/(fastfloat) sample_image.height() * y;
+  /*
+    Sample each row.
+  */
+  j=(-1);
+  for (y=0; y < (long) sample_image.height(); y++)
+  {
+    q= sample_image.scanLine( y );
+    // in the following several places 0.5 (=half) needs to be added, otherwise the image
+    // would be moved by half a pixel to bottom-right, just like
+    // with Qt's QImage::scale()
+    if (j != fasttolong( y_offset[y]+half )) // half added
+      {
+        /*
+          Read a scan line.
+        */
+        j= fasttolong( y_offset[y]+half ); // half added
+        p= image.scanLine( j );
+        (void) memcpy(pixels,p,image.width()*d);
+      }
+    /*
+      Sample each column.
+    */
+    switch( d )
+    {
+    case 1: // 8bit
+      for (x=0; x < (long) sample_image.width(); x++)
+      {
+        *q++=pixels[ fasttolong( x_offset[x]+half ) ]; // half added
+      }
+      break;
+    case 4: // 32bit
+      for (x=0; x < (long) sample_image.width(); x++)
+      {
+        *(QRgb*)q=((QRgb*)pixels)[ fasttolong( x_offset[x]+half ) ]; // half added
+        q += d;
+      }
+      break;
+    default:
+      for (x=0; x < (long) sample_image.width(); x++)
+      {
+        memcpy( q, pixels + fasttolong( x_offset[x]+half ) * d, d ); // half added
+        q += d;
+      }
+      break;
+    }
+  }
+  if( d != 4 ) // != 32bit
+  {
+    sample_image.setNumColors( image.numColors());
+    for( int i = 0; i < image.numColors(); ++i )
+      sample_image.setColor( i, image.color( i ));
+  }
+  delete[] y_offset;
+  delete[] x_offset;
+  delete[] pixels;
+  return sample_image;
+}
+
+
+
 // the only public function here
 QImage scale(const QImage& image, int width, int height,
 	SmoothAlgorithm alg, QImage::ScaleMode mode, double blur )
@@ -664,7 +806,7 @@ QImage scale(const QImage& image, int width, int height,
 	}
 
 	if( filter == NULL ) {
-		return image.scale( width, height );
+		return SampleImage( image, width, height ); // doesn't need 32bit
 	}
 
 	return ResizeImage( image.convertDepth( 32 ), width, height, filter, filtersupport, blur );
