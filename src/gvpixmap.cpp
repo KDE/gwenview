@@ -185,11 +185,9 @@ GVPixmap::GVPixmap(QObject* parent)
 	d=new GVPixmapPrivate();
 	d->mModified=false;
 	d->mCommentState=NONE;
-	/*
 	kdDebug() << "GVPixmap::GVPixmap supported decoder formats: "
 		<< QStringList::fromStrList(QImageDecoder::inputFormats()).join(",")
 		<< endl;
-	*/
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(loadChunk()) );
 }
 
@@ -629,7 +627,7 @@ void GVPixmap::loadChunk() {
 		//kdDebug() << "GVPixmap::loadChunk async loading failed\n";
 		ok=d->mImage.loadFromData(d->mCompressedData);
 	} else {
-		d->mImage=d->mDecoder->image().copy();
+		d->mImage=d->mDecoder->image();
 	}
 
 	if (!ok) {
@@ -726,8 +724,11 @@ void GVPixmap::end() {
 	kdDebug() << "GVPixmap::end\n";
 }
 
-void GVPixmap::changed(const QRect&) {
-	kdDebug() << "GVPixmap::changed\n";
+void GVPixmap::changed(const QRect& rect) {
+	kdDebug() << "GVPixmap::changed" << rect << "\n";
+	d->mImage=d->mDecoder->image();
+	// FIXME: Use an updated(cons QRect& signal)
+	emit modified();
 }
 
 void GVPixmap::frameDone() {
@@ -748,5 +749,6 @@ void GVPixmap::setFramePeriod(int /*milliseconds*/) {
 
 void GVPixmap::setSize(int width, int height) {
 	kdDebug() << "GVPixmap::setSize " << width << "x" << height << "\n";
+	d->mImage=d->mDecoder->image();
 }
 
