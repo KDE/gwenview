@@ -96,7 +96,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,KActionC
 	mZoomOut->setIcon("zoomout");
 	
 	mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),mActionCollection);
-    mResetZoom->setIcon("actualsize");
+	mResetZoom->setIcon("actualsize");
 
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"lockzoom");
 
@@ -281,10 +281,10 @@ void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int 
 	// contains full zoomed image pixels. We also take one more image pixel to
 	// avoid gaps in images.
 	if (mZoom>1.0) {
-		updateRect.setLeft  ( roundDown(updateRect.left(),  mZoom)-int(mZoom) );
-		updateRect.setTop   ( roundDown(updateRect.top(),   mZoom)-int(mZoom) );
-		updateRect.setRight ( roundUp(  updateRect.right(), mZoom)+int(mZoom)-1 );
-		updateRect.setBottom( roundUp(  updateRect.bottom(),mZoom)+int(mZoom)-1 );
+		updateRect.setLeft	( roundDown(updateRect.left(),	mZoom)-int(mZoom) );
+		updateRect.setTop	( roundDown(updateRect.top(),	mZoom)-int(mZoom) );
+		updateRect.setRight ( roundUp(	updateRect.right(), mZoom)+int(mZoom)-1 );
+		updateRect.setBottom( roundUp(	updateRect.bottom(),mZoom)+int(mZoom)-1 );
 	}
 	
 	QRect zoomedImageRect=QRect(mXOffset, mYOffset, int(mGVPixmap->width()*mZoom), int(mGVPixmap->height()*mZoom));
@@ -580,6 +580,22 @@ void GVScrollPixmapView::updateContentSize() {
 		int(mGVPixmap->height()*mZoom)	);
 }
 
+// QSize.scale() does not exist in Qt 3.0.x
+#if QT_VERSION<0x030100
+static void sizeScaleMin(QSize* size, int w, int h) {
+	int w0 = size->width();
+	int h0 = size->height();
+	int rw = h * w0 / h0;
+
+	if ( rw <= w ) {
+		size->setWidth( rw );
+		size->setHeight( h );
+	} else {
+		size->setWidth( w );
+		size->setHeight( w * h0 / w0 );
+	}
+}
+#endif
 
 double GVScrollPixmapView::computeAutoZoom() {
 
@@ -588,7 +604,11 @@ double GVScrollPixmapView::computeAutoZoom() {
 	}
 	QSize size=mGVPixmap->image().size();
 	
+#if QT_VERSION>=0x030100
 	size.scale(width(),height(),QSize::ScaleMin);
+#else
+	sizeScaleMin(&size,width(),height());
+#endif
 	
 	double zoom=double(size.width())/mGVPixmap->width();
 	if (zoom>1.0 && !mEnlargeSmallImages) return 1.0;
@@ -744,10 +764,10 @@ void GVScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 	updateScrollBarMode();
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
 
-	mWheelBehaviours[NoButton]=     WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_NONE,Scroll) );
+	mWheelBehaviours[NoButton]=		WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_NONE,Scroll) );
 	mWheelBehaviours[ControlButton]=WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL,Zoom) );
-	mWheelBehaviours[ShiftButton]=  WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT,Browse) );
-	mWheelBehaviours[AltButton]=    WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_ALT,None) );
+	mWheelBehaviours[ShiftButton]=	WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT,Browse) );
+	mWheelBehaviours[AltButton]=	WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_ALT,None) );
 }
 
 
@@ -760,9 +780,9 @@ void GVScrollPixmapView::writeConfig(KConfig* config, const QString& group) cons
 	config->writeEntry(CONFIG_AUTO_ZOOM,mAutoZoom->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM,mLockZoom->isChecked());
 	
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_NONE   , int(mWheelBehaviours[NoButton]) );
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_NONE	 , int(mWheelBehaviours[NoButton]) );
 	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL, int(mWheelBehaviours[ControlButton]) );
 	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_SHIFT  , int(mWheelBehaviours[ShiftButton]) );
-	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_ALT    , int(mWheelBehaviours[AltButton]) );
+	config->writeEntry(CONFIG_WHEEL_BEHAVIOUR_ALT	 , int(mWheelBehaviours[AltButton]) );
 }
 
