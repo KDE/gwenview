@@ -1,7 +1,7 @@
 bin_PROGRAMS = gwenview
 
 gwenview_SOURCES = configdialogbase.ui thumbnailsize.cpp thumbnailloadjob.cpp \
-	statusbarprogress.cpp scrollpixmapview.cpp pixmapview.cpp mainwindow.cpp \
+	statusbarprogress.cpp gvscrollpixmapview.cpp pixmapview.cpp mainwindow.cpp \
 	main.cpp gvpixmap.cpp fitpixmapview.cpp gvdirview.cpp gvfileviewstack.cpp \
 	gvfilethumbnailview.cpp fileoperation.cpp configdialog.cpp fileopobject.cpp \
 	gvfilethumbnailviewitem.cpp qxcfi.cpp gvarchive.cpp gvslideshow.cpp \
@@ -19,7 +19,7 @@ INCLUDES = $(all_includes)
 noinst_HEADERS = configdialogbase.h configdialog.h gvdirview.h fileoperation.h \
 				 fileopobject.h gvfilethumbnailview.h gvfileviewstack.h fitpixmapview.h \
 				 gvpixmap.h mainwindow.h pixmapview.h gvpixmapviewbase.h \
-				 scrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
+				 gvscrollpixmapview.h statusbarprogress.h thumbnailloadjob.h \
 				 thumbnailsize.h gvfilethumbnailviewitem.h qxcfi.h gimp.h \
 				 gvarchive.h gvslideshow.h gvfiledetailview.h gvfileviewbase.h \
 				 gvfiledetailviewitem.h

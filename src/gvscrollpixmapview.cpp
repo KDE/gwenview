@@ -35,11 +35,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "gvpixmap.h"
 
-#include "scrollpixmapview.moc"
+#include "gvscrollpixmapview.moc"
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
-ScrollPixmapView::ScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled)
+GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase)
 , mGVPixmap(pixmap)
 , mPopupMenu(0L)
@@ -54,7 +54,7 @@ ScrollPixmapView::ScrollPixmapView(QWidget* parent,GVPixmap* pixmap,bool enabled
 }
 
 
-void ScrollPixmapView::enableView(bool enabled) {
+void GVScrollPixmapView::enableView(bool enabled) {
 	disconnect(mGVPixmap,0,this,0);
 
 	if (enabled) {
@@ -64,7 +64,7 @@ void ScrollPixmapView::enableView(bool enabled) {
 }
 
 
-void ScrollPixmapView::updateView() {
+void GVScrollPixmapView::updateView() {
 	mXOffset=0;
 	mYOffset=0;
 	if (mGVPixmap->isNull()) {
@@ -85,7 +85,7 @@ void ScrollPixmapView::updateView() {
 }
 
 
-void ScrollPixmapView::setZoom(double zoom) {
+void GVScrollPixmapView::setZoom(double zoom) {
 	double oldZoom=mZoom;
 	mZoom=zoom;
 	updateContentSize();
@@ -95,7 +95,7 @@ void ScrollPixmapView::setZoom(double zoom) {
 }
 
 
-void ScrollPixmapView::setFullScreen(bool fullScreen) {
+void GVScrollPixmapView::setFullScreen(bool fullScreen) {
 	if (fullScreen) {
 		viewport()->setBackgroundColor(black);
 		setFrameStyle(NoFrame);
@@ -107,18 +107,18 @@ void ScrollPixmapView::setFullScreen(bool fullScreen) {
 }
 
 
-bool ScrollPixmapView::isZoomSetToMax() {
+bool GVScrollPixmapView::isZoomSetToMax() {
 	return mZoom>=MAX_ZOOM;
 }
 
 
-bool ScrollPixmapView::isZoomSetToMin() {
+bool GVScrollPixmapView::isZoomSetToMin() {
 	return mZoom<=1/MAX_ZOOM;
 }
 
 
 //-Overloaded methods----------------------------------
-void ScrollPixmapView::resizeEvent(QResizeEvent* event) {
+void GVScrollPixmapView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
 	updateContentSize();
 	updateImageOffset(mZoom);
@@ -126,7 +126,7 @@ void ScrollPixmapView::resizeEvent(QResizeEvent* event) {
 
 
 
-void ScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
+void GVScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
 /*
 	static QColor colors[4]={QColor(255,0,0),QColor(0,255,0),QColor(0,0,255),QColor(255,255,0) };
 	static int numColor=0;*/ // DEBUG rects
@@ -163,7 +163,7 @@ void ScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int cl
 }
 
 
-void ScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
+void GVScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 	if (event->button()==RightButton) return;
 	
 	mScrollStartX=event->x();
@@ -173,7 +173,7 @@ void ScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
+void GVScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 	if (!mDragStarted) return;
 
 	int deltaX,deltaY;
@@ -187,7 +187,7 @@ void ScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
+void GVScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
 	if (mDragStarted) {
 		unsetCursor();
 		mDragStarted=false;
@@ -196,7 +196,7 @@ void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent*) {
 
 
 //-Slots----------------------------------------------
-void ScrollPixmapView::slotZoomIn() {
+void GVScrollPixmapView::slotZoomIn() {
 	double newZoom;
 	if (mZoom>=1.0) {
 		newZoom=floor(mZoom)+1.0;
@@ -207,7 +207,7 @@ void ScrollPixmapView::slotZoomIn() {
 }
 
 
-void ScrollPixmapView::slotZoomOut() {
+void GVScrollPixmapView::slotZoomOut() {
 	double newZoom;
 	if (mZoom>1.0) {
 		newZoom=ceil(mZoom)-1.0;
@@ -218,25 +218,25 @@ void ScrollPixmapView::slotZoomOut() {
 }
 
 
-void ScrollPixmapView::slotResetZoom() {
+void GVScrollPixmapView::slotResetZoom() {
 	setZoom(1.0);
 }
 
 
-void ScrollPixmapView::setLockZoom(bool value) {
+void GVScrollPixmapView::setLockZoom(bool value) {
 	mLockZoom=value;
 }
 
 
 //-Private---------------------------------------------
-void ScrollPixmapView::updateContentSize() {
+void GVScrollPixmapView::updateContentSize() {
 	resizeContents(
 		int(mGVPixmap->pixmap().width()*mZoom), 
 		int(mGVPixmap->pixmap().height()*mZoom)	);
 }
 
 
-void ScrollPixmapView::updateImageOffset(double oldZoom) {
+void GVScrollPixmapView::updateImageOffset(double oldZoom) {
 	int viewWidth=visibleWidth();
 	int viewHeight=visibleHeight();
 	
@@ -260,10 +260,10 @@ void ScrollPixmapView::updateImageOffset(double oldZoom) {
 
 
 //-Config----------------------------------------------
-void ScrollPixmapView::readConfig(KConfig*, const QString&) {
+void GVScrollPixmapView::readConfig(KConfig*, const QString&) {
 }
 
 
-void ScrollPixmapView::writeConfig(KConfig*, const QString&) const {
+void GVScrollPixmapView::writeConfig(KConfig*, const QString&) const {
 }
 

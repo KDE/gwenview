@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#ifndef SCROLLPIXMAPVIEW_H
-#define SCROLLPIXMAPVIEW_H
+#ifndef GVSCROLLPIXMAPVIEW_H
+#define GVSCROLLPIXMAPVIEW_H
 
 // Qt includes
 #include <qpixmap.h>
@@ -41,10 +41,10 @@ class KToggleAction;
 
 class GVPixmap;
 
-class ScrollPixmapView : public QScrollView, public GVPixmapViewBase {
+class GVScrollPixmapView : public QScrollView, public GVPixmapViewBase {
 Q_OBJECT
 public:
-	ScrollPixmapView(QWidget* parent,GVPixmap*,bool);
+	GVScrollPixmapView(QWidget* parent,GVPixmap*,bool);
 	void enableView(bool);
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;

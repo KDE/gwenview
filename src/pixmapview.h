@@ -39,7 +39,7 @@ class KToggleAction;
 class FitPixmapView;
 class GVPixmap;
 class GVPixmapViewBase;
-class ScrollPixmapView;
+class GVScrollPixmapView;
 
 
 class PixmapView : public QWidgetStack {
@@ -58,7 +58,7 @@ public:
 
 	// Properties
 	FitPixmapView* fitPixmapView() const { return mFitPixmapView; }
-	ScrollPixmapView* scrollPixmapView() const { return mScrollPixmapView; }
+	GVScrollPixmapView* scrollPixmapView() const { return mGVScrollPixmapView; }
 	KToggleAction* autoZoom() const { return mAutoZoom; }
 	KAction* zoomIn() const { return mZoomIn; }
 	KAction* zoomOut() const { return mZoomOut; }
@@ -90,7 +90,7 @@ protected:
 	bool eventFilter(QObject*,QEvent*);
 
 private:
-	ScrollPixmapView* mScrollPixmapView;
+	GVScrollPixmapView* mGVScrollPixmapView;
 	FitPixmapView* mFitPixmapView;
 	GVPixmap* mGVPixmap;
 	QLabel* mPathLabel;

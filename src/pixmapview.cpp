@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "fitpixmapview.h"
 #include "gvpixmap.h"
-#include "scrollpixmapview.h"
+#include "gvscrollpixmapview.h"
 
 #include "pixmapview.moc"
 
@@ -71,41 +71,41 @@ mFullScreen(false), mOperaLikePrevious(false), mActionCollection(actionCollectio
 	mPathLabel->installEventFilter(this);
 
 	// Create child widgets
-	mScrollPixmapView=new ScrollPixmapView(this,pixmap,true);
-	mScrollPixmapView->viewport()->installEventFilter(this);
+	mGVScrollPixmapView=new GVScrollPixmapView(this,pixmap,true);
+	mGVScrollPixmapView->viewport()->installEventFilter(this);
 	mFitPixmapView=new FitPixmapView(this,pixmap,false);
 	mFitPixmapView->installEventFilter(this);
 
 	// Create actions
 	mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,this,SLOT(slotAutoZoom()),mActionCollection,"autozoom");
 
-	mZoomIn=KStdAction::zoomIn(mScrollPixmapView,SLOT(slotZoomIn()),mActionCollection);
+	mZoomIn=KStdAction::zoomIn(mGVScrollPixmapView,SLOT(slotZoomIn()),mActionCollection);
 	
-	mZoomOut=KStdAction::zoomOut(mScrollPixmapView,SLOT(slotZoomOut()),mActionCollection);
+	mZoomOut=KStdAction::zoomOut(mGVScrollPixmapView,SLOT(slotZoomOut()),mActionCollection);
 	
-	mResetZoom=KStdAction::actualSize(mScrollPixmapView,SLOT(slotResetZoom()),mActionCollection);
+	mResetZoom=KStdAction::actualSize(mGVScrollPixmapView,SLOT(slotResetZoom()),mActionCollection);
     mResetZoom->setIcon("viewmag1");
 	
 	mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lockzoom",0,mActionCollection,"lockzoom");
 	connect(mLockZoom,SIGNAL(toggled(bool)),
-		mScrollPixmapView,SLOT(setLockZoom(bool)) );
+		mGVScrollPixmapView,SLOT(setLockZoom(bool)) );
 
 	// Connect to some interesting signals
 	connect(mGVPixmap,SIGNAL(urlChanged(const KURL&,const QString&)),
 		this,SLOT(slotUpdateView()) );
-	connect(mScrollPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mGVScrollPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateZoomActions()) );
 	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateZoomActions()) );
 
 	// Propagate child view signals
-	connect(mScrollPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mGVScrollPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
 	connect(mFitPixmapView,SIGNAL(zoomChanged(double)),
 		this,SIGNAL(zoomChanged(double)) );
 
 	// Add children to stack
-	addWidget(mScrollPixmapView,0);
+	addWidget(mGVScrollPixmapView,0);
 	addWidget(mFitPixmapView,1);
 
 }
@@ -129,14 +129,14 @@ void PixmapView::plugActionsToAccel(KAccel* accel) {
 //
 //------------------------------------------------------------------------
 void PixmapView::readConfig(KConfig* config, const QString& group) {
-	mScrollPixmapView->readConfig(config,group);
+	mGVScrollPixmapView->readConfig(config,group);
 	mFitPixmapView->readConfig(config,group);
 	config->setGroup(group);
 	mShowPathInFullScreen=config->readBoolEntry(CONFIG_SHOW_PATH,true);
 	mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM,false));
 	slotAutoZoom(); // Call the auto zoom slot to initialise all settings
 	mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM,false));
-	mScrollPixmapView->setLockZoom(mLockZoom->isChecked());
+	mGVScrollPixmapView->setLockZoom(mLockZoom->isChecked());
 
 	mWheelBehaviours[NoButton]=     WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_NONE,Scroll) );
 	mWheelBehaviours[ControlButton]=WheelBehaviour( config->readNumEntry(CONFIG_WHEEL_BEHAVIOUR_CONTROL,Zoom) );
@@ -146,7 +146,7 @@ void PixmapView::readConfig(KConfig* config, const QString& group) {
 
 
 void PixmapView::writeConfig(KConfig* config, const QString& group) const {
-	mScrollPixmapView->writeConfig(config,group);
+	mGVScrollPixmapView->writeConfig(config,group);
 	mFitPixmapView->writeConfig(config,group);
 	config->setGroup(group);
 	config->writeEntry(CONFIG_SHOW_PATH,mShowPathInFullScreen);
@@ -169,12 +169,12 @@ void PixmapView::setFullScreen(bool fullScreen) {
 	mFullScreen=fullScreen;
 
 	if (mFullScreen) {
-		mScrollPixmapView->viewport()->setMouseTracking(true);
+		mGVScrollPixmapView->viewport()->setMouseTracking(true);
 		mFitPixmapView->setMouseTracking(true);
 		setCursor(blankCursor);
 	} else {
 		mAutoHideTimer->stop();
-		mScrollPixmapView->viewport()->setMouseTracking(false);
+		mGVScrollPixmapView->viewport()->setMouseTracking(false);
 		mFitPixmapView->setMouseTracking(false);
 		setCursor(arrowCursor);
 	}
@@ -364,15 +364,15 @@ void PixmapView::openContextMenu(const QPoint& pos) {
 
 void PixmapView::slotAutoZoom() {
 	if (mAutoZoom->isChecked()) {
-		mScrollPixmapView->enableView(false);
+		mGVScrollPixmapView->enableView(false);
 		raiseWidget(mFitPixmapView);
 		mFitPixmapView->enableView(true);
 		mFitPixmapView->updateView();
 	} else {
 		mFitPixmapView->enableView(false);
-		raiseWidget(mScrollPixmapView);
-		mScrollPixmapView->enableView(true);
-		mScrollPixmapView->updateView();
+		raiseWidget(mGVScrollPixmapView);
+		mGVScrollPixmapView->enableView(true);
+		mGVScrollPixmapView->updateView();
 	}
 	updateZoomActions();
 	setFullScreen(mFullScreen); // Apply fullscreen state to the new view
@@ -455,8 +455,8 @@ void PixmapView::updateZoomActions() {
 		mZoomIn->setEnabled(false);
 		mZoomOut->setEnabled(false);
 	} else {
-		mZoomIn->setEnabled(!mScrollPixmapView->isZoomSetToMax());
-		mZoomOut->setEnabled(!mScrollPixmapView->isZoomSetToMin());
+		mZoomIn->setEnabled(!mGVScrollPixmapView->isZoomSetToMax());
+		mZoomOut->setEnabled(!mGVScrollPixmapView->isZoomSetToMin());
 	}
 }
 
@@ -465,7 +465,7 @@ GVPixmapViewBase* PixmapView::currentView() const {
 	if (mAutoZoom->isChecked()) {
 		return mFitPixmapView;
 	} else {
-		return mScrollPixmapView;
+		return mGVScrollPixmapView;
 	}
 }
 
