@@ -22,6 +22,7 @@ Copyright (c) 2000-2003 Aurélien Gâteau
 #define GVPIXMAP_H
 
 // Qt includes
+#include <qasyncimageio.h>
 #include <qcstring.h>
 #include <qobject.h>
 #include <qimage.h>
@@ -35,7 +36,7 @@ class GVPixmapPrivate;
 /**
  * The application document. Should be renamed GVDoc.
  */
-class GVPixmap : public QObject {
+class GVPixmap : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { Ask=0, SaveSilently=1, DiscardChanges=2 };
@@ -45,14 +46,14 @@ public:
 	~GVPixmap();
 
 	// Properties
-	const QImage& image() const { return mImage; }
+	const QImage& image() const;
 	KURL url() const;
-	const KURL& dirURL() const { return mDirURL; }
-	const QString& filename() const { return mFilename; }
-	int width() const { return mImage.width(); }
-	int height() const { return mImage.height(); }
-	bool isNull() const { return mImage.isNull(); }
-	const QString& imageFormat() const { return mImageFormat; }
+	const KURL& dirURL() const;
+	const QString& filename() const;
+	int width() const { return image().width(); }
+	int height() const { return image().height(); }
+	bool isNull() const { return image().isNull(); }
+	const QString& imageFormat() const;
 
 	void setModifiedBehavior(ModifiedBehavior);
 	ModifiedBehavior modifiedBehavior() const;
@@ -117,15 +118,6 @@ signals:
 	void reloaded(const KURL& url);
 
 private:
-	QImage mImage;
-	KURL mDirURL;
-	QString mFilename;
-	QString mImageFormat;
-	bool mModified;
-
-	// Store compressed data. Usefull for lossless manipulations.
-	QByteArray mCompressedData;
-
 	GVPixmapPrivate* d;
 
 	void reset();
@@ -134,6 +126,18 @@ private:
 	void doPaint(KPrinter *pPrinter, QPainter *p); 
 	QString minimizeString(const QString& text, const QFontMetrics&
 							metrics, int maxWidth );
+
+	// QImageConsumer methods
+	void end();
+	void changed(const QRect&);
+	void frameDone();
+	void frameDone(const QPoint& offset, const QRect& rect);
+	void setLooping(int);
+	void setFramePeriod(int milliseconds);
+	void setSize(int, int);
+
+private slots:
+	void loadChunk();
 };
 
 

@@ -22,10 +22,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <sys/stat.h> // For S_ISDIR
 
 // Qt includes
+#include <qasyncimageio.h>
 #include <qfileinfo.h>
-#include <qpainter.h>
-#include <qwmatrix.h>
 #include <qpaintdevicemetrics.h>
+#include <qpainter.h>
+#include <qtimer.h>
+#include <qwmatrix.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -55,6 +57,7 @@ const char* JPEG_EXIF_DATA="Jpeg EXIF Data";
 const char* JPEG_EXIF_COMMENT="Comment";
 const char* PNG_COMMENT="Comment";
 
+const int CHUNK_SIZE=4096;
 
 
 //-------------------------------------------------------------------
@@ -66,7 +69,27 @@ class GVPixmapPrivate {
 public:
 	GVPixmap::CommentState mCommentState;
 	QString mComment;
+	QImageDecoder* mDecoder;
+	
+	QImage mImage;
+	KURL mDirURL;
+	QString mFilename;
+	QString mImageFormat;
+	bool mModified;
 
+	QString mTempFilePath;
+	// Store compressed data. Usefull for lossless manipulations.
+	QByteArray mCompressedData;
+	int mReadSize;
+	QTimer mDecoderTimer;
+
+
+	GVPixmapPrivate(GVPixmap* pixmap)
+	: mDecoder(0) {}
+
+	~GVPixmapPrivate() {
+		if (mDecoder) delete mDecoder;
+	}
 
 	void loadComment(const QString& path) {
 		KFileMetaInfo metaInfo=KFileMetaInfo(path);
@@ -138,6 +161,16 @@ public:
 		}
 		metaInfo.applyChanges();
 	}
+
+	void finishLoading() {
+		Q_ASSERT(mDecoderTimer.isActive());
+		Q_ASSERT(mDecoder);
+		mDecoderTimer.stop();
+		delete mDecoder;
+		mDecoder=0;
+		KIO::NetAccess::removeTempFile(mTempFilePath);
+	}
+
 };
 
 
@@ -147,10 +180,16 @@ public:
 //
 //-------------------------------------------------------------------
 GVPixmap::GVPixmap(QObject* parent)
-		: QObject(parent)
-, mModified(false) {
-	d=new GVPixmapPrivate;
+		: QObject(parent) {
+	d=new GVPixmapPrivate(this);
+	d->mModified=false;
 	d->mCommentState=None;
+	/*
+	kdDebug() << "GVPixmap::GVPixmap supported decoder formats: " 
+		<< QStringList::fromStrList(QImageDecoder::inputFormats()).join(",")
+		<< endl;
+	*/
+	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(loadChunk()) );
 }
 
 
@@ -165,8 +204,8 @@ GVPixmap::~GVPixmap() {
 //
 //---------------------------------------------------------------------
 KURL GVPixmap::url() const {
-	KURL url=mDirURL;
-	url.addPath(mFilename);
+	KURL url=d->mDirURL;
+	url.addPath(d->mFilename);
 	return url;
 }
 
@@ -179,7 +218,7 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	// Ask to save if necessary.
 	if (!saveIfModified()) {
 		// Not saved, notify others that we stay on the image
-		emit loaded(mDirURL,mFilename);
+		emit loaded(d->mDirURL,d->mFilename);
 		return;
 	}
 
@@ -209,14 +248,14 @@ void GVPixmap::setURL(const KURL& paramURL) {
 	}
 
 	if (isDir) {
-		mDirURL=URL;
-		mFilename="";
+		d->mDirURL=URL;
+		d->mFilename="";
 	} else {
-		mDirURL=URL.upURL();
-		mFilename=URL.filename();
+		d->mDirURL=URL.upURL();
+		d->mFilename=URL.filename();
 	}
 
-	if (mFilename.isEmpty()) {
+	if (d->mFilename.isEmpty()) {
 		reset();
 		return;
 	}
@@ -227,23 +266,23 @@ void GVPixmap::setURL(const KURL& paramURL) {
 
 void GVPixmap::setDirURL(const KURL& paramURL) {
 	if (!saveIfModified()) {
-		emit loaded(mDirURL,mFilename);
+		emit loaded(d->mDirURL,d->mFilename);
 		return;
 	}
-	mDirURL=paramURL;
-	mFilename="";
+	d->mDirURL=paramURL;
+	d->mFilename="";
 	reset();
 }
 
 
 void GVPixmap::setFilename(const QString& filename) {
-	if (mFilename==filename) return;
+	if (d->mFilename==filename) return;
 
 	if (!saveIfModified()) {
-		emit loaded(mDirURL,mFilename);
+		emit loaded(d->mDirURL,d->mFilename);
 		return;
 	}
-	mFilename=filename;
+	d->mFilename=filename;
 	load();
 }
 
@@ -268,9 +307,22 @@ QString GVPixmap::comment() const {
 void GVPixmap::setComment(const QString& comment) {
 	Q_ASSERT(d->mCommentState==Writable);
 	d->mComment=comment;
-	mModified=true;
+	d->mModified=true;
 }
 
+const QImage& GVPixmap::image() const {
+	return d->mImage;
+}
+
+const KURL& GVPixmap::dirURL() const {
+	return d->mDirURL;
+}
+const QString& GVPixmap::filename() const {
+	return d->mFilename;
+}
+const QString& GVPixmap::imageFormat() const {
+	return d->mImageFormat;
+}
 
 //---------------------------------------------------------------------
 //
@@ -316,7 +368,8 @@ QString GVPixmap::minimizeString( const QString& text, const QFontMetrics&
 }
 
 void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
-	QImage image = mImage;	 // will contain the final image to print
+	// will contain the final image to print
+	QImage image = d->mImage;
 
 	// We use a QPaintDeviceMetrics to know the actual page size in pixel,
 	// this gives the real painting area
@@ -402,7 +455,7 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 	painter->drawImage( x, y, image );
 
 	if ( printFilename ) {
-		QString fname = minimizeString( mFilename, fMetrics, pdWidth );
+		QString fname = minimizeString( d->mFilename, fMetrics, pdWidth );
 		if ( !fname.isEmpty() ) {
 			int fw = fMetrics.width( fname );
 			int x = (pdWidth - fw)/2;
@@ -423,55 +476,55 @@ void GVPixmap::doPaint(KPrinter *printer, QPainter *painter) {
 
 void GVPixmap::rotateLeft() {
 	// Apply the rotation to the compressed data too if available
-	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot270);
+	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
+		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::Rot270);
 	}
 	QWMatrix matrix;
 	matrix.rotate(-90);
-	mImage=mImage.xForm(matrix);
-	mModified=true;
+	d->mImage=d->mImage.xForm(matrix);
+	d->mModified=true;
 	emit modified();
 }
 
 
 void GVPixmap::rotateRight() {
-	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::Rot90);
+	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
+		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::Rot90);
 	}
 	QWMatrix matrix;
 	matrix.rotate(90);
-	mImage=mImage.xForm(matrix);
-	mModified=true;
+	d->mImage=d->mImage.xForm(matrix);
+	d->mModified=true;
 	emit modified();
 }
 
 
 void GVPixmap::mirror() {
-	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::HFlip);
+	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
+		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::HFlip);
 	}
 	QWMatrix matrix;
 	matrix.scale(-1,1);
-	mImage=mImage.xForm(matrix);
-	mModified=true;
+	d->mImage=d->mImage.xForm(matrix);
+	d->mModified=true;
 	emit modified();
 }
 
 
 void GVPixmap::flip() {
-	if (mImageFormat=="JPEG" && !mCompressedData.isNull()) {
-		mCompressedData=GVJPEGTran::apply(mCompressedData,GVImageUtils::VFlip);
+	if (d->mImageFormat=="JPEG" && !d->mCompressedData.isNull()) {
+		d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,GVImageUtils::VFlip);
 	}
 	QWMatrix matrix;
 	matrix.scale(1,-1);
-	mImage=mImage.xForm(matrix);
-	mModified=true;
+	d->mImage=d->mImage.xForm(matrix);
+	d->mModified=true;
 	emit modified();
 }
 
 
 bool GVPixmap::save() {
-	if (!saveInternal(url(),mImageFormat)) {
+	if (!saveInternal(url(),d->mImageFormat)) {
 		KMessageBox::sorry(0,i18n("Could not save file."));
 		return false;
 	}
@@ -480,7 +533,7 @@ bool GVPixmap::save() {
 
 
 void GVPixmap::saveAs() {
-	QString format=mImageFormat;
+	QString format=d->mImageFormat;
 	KURL saveURL;
 	if (url().isLocalFile()) saveURL=url();
 
@@ -493,7 +546,7 @@ void GVPixmap::saveAs() {
 }
 
 bool GVPixmap::saveIfModified() {
-	if (!mModified) return true;
+	if (!d->mModified) return true;
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 				.arg(url().prettyURL());
 
@@ -504,7 +557,7 @@ bool GVPixmap::saveIfModified() {
 	case KMessageBox::Yes:
 		return save();
 	case KMessageBox::No:
-		mModified=false;
+		d->mModified=false;
 		return true;
 	default:
 		return false;
@@ -553,57 +606,98 @@ GVPixmap::ModifiedBehavior GVPixmap::modifiedBehavior() const {
 //
 //---------------------------------------------------------------------
 void GVPixmap::load() {
-	emit loading();
 	KURL pixURL=url();
 	Q_ASSERT(!pixURL.isEmpty());
-	//kdDebug() << "GVPixmap::load() " << pixURL.prettyURL() << endl;
+	//kdDebug() << "GVPixmap::load " << pixURL.prettyURL() << endl;
 
-	QString path;
-	if (!KIO::NetAccess::download(pixURL,path)) {
-		mImage.reset();
-		emit loaded(mDirURL,"");
+	// Abort any active download
+	if (d->mDecoderTimer.isActive()) {
+		kdDebug() << "GVPixmap::load found an already active loading\n";
+		d->finishLoading();
+		// FIXME: Emit a cancelled signal instead
+		emit loaded(d->mDirURL,d->mFilename);
+	}
+
+	// Start the new download
+	emit loading();
+	if (!KIO::NetAccess::download(pixURL, d->mTempFilePath)) {
+		d->mImage.reset();
+		emit loaded(d->mDirURL,"");
 		return;
 	}
+	d->mImageFormat=QString(QImage::imageFormat(d->mTempFilePath));
 
 	// Load file. We load it ourself so that we can keep a copy of the
 	// compressed data. This is used by JPEG lossless manipulations.
-	QFile file(path);
+	QFile file(d->mTempFilePath);
 	file.open(IO_ReadOnly);
 	QDataStream stream(&file);
-	mCompressedData.resize(file.size());
-	stream.readRawBytes(mCompressedData.data(),mCompressedData.size());
+	d->mCompressedData.resize(file.size());
+	stream.readRawBytes(d->mCompressedData.data(),d->mCompressedData.size());
+	d->mReadSize=0;
 
-	// Decode image
-	mImageFormat=QString(QImage::imageFormat(path));
-	if (mImage.loadFromData(mCompressedData,mImageFormat.ascii())) {
+	d->mDecoder=new QImageDecoder(this);
+	d->mDecoderTimer.start(0, false);
+}
+
+
+void GVPixmap::loadChunk() {
+	//kdDebug() << "GVPixmap::loadChunk\n";
+	Q_ASSERT(d->mDecoder);
+	int decodedSize=d->mDecoder->decode(
+		(const uchar*)(d->mCompressedData.data()+d->mReadSize),
+		QMIN(CHUNK_SIZE, int(d->mCompressedData.size())-d->mReadSize));
+
+	// Continue loading
+	if (decodedSize>0) {
+		d->mReadSize+=decodedSize;
+		return;
+	}
+	
+	// Loading finished
+	bool ok=decodedSize==0;
+	// If async loading failed, try synchronous loading
+	if (!ok) {
+		//kdDebug() << "GVPixmap::loadChunk async loading failed\n";
+		ok=d->mImage.loadFromData(d->mCompressedData);
+	} else {
+		d->mImage=d->mDecoder->image().copy();
+	}
+
+	if (!ok) {
+		//kdDebug() << "GVPixmap::loadChunk loading failed\n";
+		// Oups, loading failed
+		// FIXME: Emit a failed signal instead
+		emit loaded(d->mDirURL,d->mFilename);
+	} else {
+		//kdDebug() << "GVPixmap::loadChunk loading succeded\n";
+		
 		// Convert depth if necessary
 		// (32 bit depth is necessary for alpha-blending)
-		if (mImage.depth()<32 && mImage.hasAlphaBuffer()) {
-			mImage=mImage.convertDepth(32);
+		if (d->mImage.depth()<32 && d->mImage.hasAlphaBuffer()) {
+			d->mImage=d->mImage.convertDepth(32);
 		}
 
 		// If the image is a JPEG, rotate the decode image and the compressed
 		// data if necessary, otherwise throw the compressed data away
-		if (mImageFormat=="JPEG") {
-			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(mCompressedData);
+		if (d->mImageFormat=="JPEG") {
+			GVImageUtils::Orientation orientation=GVImageUtils::getOrientation(d->mCompressedData);
 
 			if (orientation!=GVImageUtils::NotAvailable && orientation!=GVImageUtils::Normal) {
-				mImage=GVImageUtils::rotate(mImage, orientation);
-				mCompressedData=GVJPEGTran::apply(mCompressedData,orientation);
-				mCompressedData=GVImageUtils::setOrientation(mCompressedData,GVImageUtils::Normal);
+				d->mImage=GVImageUtils::rotate(d->mImage, orientation);
+				d->mCompressedData=GVJPEGTran::apply(d->mCompressedData,orientation);
+				d->mCompressedData=GVImageUtils::setOrientation(d->mCompressedData,GVImageUtils::Normal);
 			}
 		} else {
-			mCompressedData.resize(0);
+			d->mCompressedData.resize(0);
 		}
 
-		d->loadComment(path);
-	} else {
-		mImage.reset();
+		d->loadComment(d->mTempFilePath);
+		emit loaded(d->mDirURL,d->mFilename);
 	}
-
-	KIO::NetAccess::removeTempFile(path);
-	emit loaded(mDirURL,mFilename);
+	d->finishLoading();
 }
+
 
 
 bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
@@ -618,16 +712,16 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 		path=tmp.name();
 	}
 
-	if (format=="JPEG" && !mCompressedData.isNull()) {
+	if (format=="JPEG" && !d->mCompressedData.isNull()) {
 		//kdDebug() << "Lossless save\n";
 		QFile file(path);
 		result=file.open(IO_WriteOnly);
 		if (!result) return false;
 		QDataStream stream(&file);
-		stream.writeRawBytes(mCompressedData.data(),mCompressedData.size());
+		stream.writeRawBytes(d->mCompressedData.data(),d->mCompressedData.size());
 		file.close();
 	} else {
-		result=mImage.save(path,format.ascii());
+		result=d->mImage.save(path,format.ascii());
 		if (!result) return false;
 	}
 
@@ -640,7 +734,7 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 
 	if (result) {
 		emit saved(url);
-		mModified=false;
+		d->mModified=false;
 	}
 
 	return result;
@@ -648,9 +742,42 @@ bool GVPixmap::saveInternal(const KURL& url, const QString& format) {
 
 
 void GVPixmap::reset() {
-	mImage.reset();
-	mCompressedData.resize(0);
-	emit loaded(mDirURL,mFilename);
+	d->mImage.reset();
+	d->mCompressedData.resize(0);
+	emit loaded(d->mDirURL,d->mFilename);
 }
 
 
+	
+//---------------------------------------------------------------------
+//
+// QImageConsumer
+//
+//---------------------------------------------------------------------
+void GVPixmap::end() {
+	kdDebug() << "GVPixmap::end\n";
+}
+
+void GVPixmap::changed(const QRect&) {
+	kdDebug() << "GVPixmap::changed\n";
+}
+
+void GVPixmap::frameDone() {
+	kdDebug() << "GVPixmap::frameDone\n";
+}
+
+void GVPixmap::frameDone(const QPoint& /*offset*/, const QRect& /*rect*/) {
+	kdDebug() << "GVPixmap::frameDone\n";
+}
+
+void GVPixmap::setLooping(int) {
+	kdDebug() << "GVPixmap::setLooping\n";
+}
+
+void GVPixmap::setFramePeriod(int /*milliseconds*/) {
+	kdDebug() << "GVPixmap::setFramePeriod\n";
+}
+
+void GVPixmap::setSize(int width, int height) {
+	kdDebug() << "GVPixmap::setSize " << width << "x" << height << "\n";
+}
