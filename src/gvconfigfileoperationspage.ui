@@ -138,7 +138,7 @@
                         <cstring>mDeleteToTrash</cstring>
                     </property>
                     <property name="text">
-                        <string>Move deleted files in the trash</string>
+                        <string>Move deleted files to the trash</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>1</number>

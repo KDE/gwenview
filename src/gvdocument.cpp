@@ -415,7 +415,7 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 		
 		if (size.width() > pdWidth || size.height() > pdHeight) {
 			int resp = KMessageBox::warningYesNoCancel(0, 
-				i18n("The image won't fit into the page, what do you want to do?"),
+				i18n("The image will not fit on the page, what do you want to do?"),
 				QString::null,KStdGuiItem::cont(), 
 				QString(i18n("Shrink")) );
 
@@ -493,7 +493,7 @@ void GVDocument::saveAs() {
 
 	if (!saveInternal(saveURL, dialog.imageFormat() )) {
 		KMessageBox::sorry(0,i18n(
-			"Could not save file. Check that you have the appropriate rights and that there's enough room left on the device."));
+			"Could not save file. Check that you have the appropriate rights and that there is enough space left on the device."));
 	}
 }
 
@@ -509,7 +509,7 @@ bool GVDocument::saveBeforeClosing() {
 	case KMessageBox::Yes:
 		if (save()) return true;
 		result= KMessageBox::warningContinueCancel(0, i18n(
-			"Could not save file. Check that you have the appropriate rights and that there's enough room left on the device.\n"),
+			"Could not save file. Check that you have the appropriate rights and that there is enough space left on the device.\n"),
 			QString::null,
 			i18n("Discard"));
 		if (result==KMessageBox::Continue) {

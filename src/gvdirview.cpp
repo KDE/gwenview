@@ -624,7 +624,7 @@ void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
 		} else {
 			if (NULL!=branch(dialog.title())) {
 				KMessageBox::error(this,
-					"<qt>"+i18n("An entry already exists with the title \"%1\"!")
+					"<qt>"+i18n("An entry already exists with the title \"%1\".")
 					.arg(dialog.title())+"</qt>");
 			} else {
 				KFileTreeBranch *existingBr;
@@ -635,7 +635,7 @@ void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
 				}
 				if (existingBr) {
 					KMessageBox::error(this,
-						"<qt>"+i18n("An entry already exists with the URL \"%1\"!")
+						"<qt>"+i18n("An entry already exists with the URL \"%1\".")
 						.arg(dialog.url())+"</qt>");
 				} else {
 					addBranch(dialog.url(), dialog.title(), dialog.icon());

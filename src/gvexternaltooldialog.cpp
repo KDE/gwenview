@@ -132,7 +132,7 @@ struct GVExternalToolDialogPrivate {
 		// Check name
 		QString name=mContent->mName->text().stripWhiteSpace();
 		if (name.isEmpty()) {
-			KMessageBox::sorry(mContent, i18n("The tool name can't be empty"));
+			KMessageBox::sorry(mContent, i18n("The tool name cannot be empty"));
 			return false;
 		}
 

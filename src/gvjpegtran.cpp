@@ -128,9 +128,9 @@ QByteArray GVJPEGTran::apply(const QByteArray& src,GVImageUtils::Orientation ori
 	// buffer as invalid and will fall back to lossy manipulations.
 	if ( !process.start(KProcess::NotifyOnExit, KProcess::All) ) {
 		KMessageBox::information(0L,
-				i18n("Gwenview couldn't perform lossless image manipulation.\n"
+				i18n("Gwenview could not perform lossless image manipulation.\n"
 					"Make sure that the jpegtran program is installed and that "
-					"its path in the configuration dialog is correct"
+					"its path in the configuration dialog is correct."
 					),QString::null,"jpegtran failed");
 		return QByteArray();
 	}

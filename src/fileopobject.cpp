@@ -168,7 +168,7 @@ void FileOpTrashObject::operator()() {
 	KURL::List::ConstIterator it=mURLList.begin();
 	for (; it!=mURLList.end(); ++it) {
 		if ( (*it).isLocalFile() && (*it).path(1)==trashPath ) {
-			KMessageBox::sorry(0, i18n("You can't trash the trash bin."));
+			KMessageBox::sorry(0, i18n("You cannot trash the trash bin."));
 			return;
 		}
 	}
