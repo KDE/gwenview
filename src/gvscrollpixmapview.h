@@ -23,7 +23,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVSCROLLPIXMAPVIEW_H
 #define GVSCROLLPIXMAPVIEW_H
 
+#if __GNUC__ < 3
+#define __USE_ISOC99 1
+#endif
 #include <math.h>
+
 // Qt includes
 #include <qmap.h>
 #include <qscrollview.h>
@@ -62,6 +66,13 @@ public:
 	class ToolController;
 	class ScrollToolController;
 	class ZoomToolController;
+
+#if __GNUC__ < 3
+	friend class ToolController;
+	friend class ScrollToolController;
+	friend class ZoomToolController;
+#endif
+
 	friend class GVScrollPixmapViewFilter;
 
 	enum Tool { SCROLL, ZOOM };
