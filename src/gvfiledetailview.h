@@ -80,8 +80,13 @@ public:
 	
 	void setShownFileItem(KFileItem* fileItem);
 
+signals:
+	void dropped(QDropEvent* event, KFileItem* item);
+	
 protected:
-	virtual void keyPressEvent( QKeyEvent*  );
+	virtual bool acceptDrag(QDropEvent*) const;
+	virtual void contentsDropEvent(QDropEvent*);
+	virtual void keyPressEvent(QKeyEvent*);
 
 	int mSortingCol;
 

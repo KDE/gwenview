@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kpropertiesdialog.h>
 #include <kstdaction.h>
+#include <kurldrag.h>
 
 // Local 
 #include "fileoperation.h"
@@ -122,6 +123,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SLOT(viewClicked()) );
 	connect(mFileDetailView,SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this,SLOT(openContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+	connect(mFileDetailView,SIGNAL(dropped(QDropEvent*,KFileItem*)),
+		this,SLOT(openDropURLMenu(QDropEvent*, KFileItem*)) );
 
 	// Thumbnail widget
 	mFileThumbnailView=new GVFileThumbnailView(this);
@@ -379,6 +382,26 @@ void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 	openContextMenu(pos);
 }
 
+
+//-----------------------------------------------------------------------
+//
+// Drop URL menu
+//
+//-----------------------------------------------------------------------
+void GVFileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
+	KURL dest;
+	
+	if (item) {
+		dest=item->url();
+	} else {
+		dest=mDirURL;
+	}
+	
+	KURL::List urls;
+	if (!KURLDrag::decode(event,urls)) return;
+	
+	FileOperation::openDropURLMenu(this, urls, dest);
+}
 
 
 //-----------------------------------------------------------------------

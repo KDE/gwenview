@@ -155,6 +155,8 @@ private slots:
 	void dirListerCanceled();
 	void dirListerCompleted();
 
+	void openDropURLMenu(QDropEvent*, KFileItem*);
+	
 private:
 	Mode mMode;
 	GVFileDetailView* mFileDetailView;

@@ -301,15 +301,14 @@ void GVDirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 void GVDirView::contentsDropEvent(QDropEvent* event) {
 	mAutoOpenTimer->stop();
 
-	// Quit if no valid target
-	if (!mDropTarget) return;
-
 	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
+	if (!mDropTarget) return;
 	KURL dest=mDropTarget->url();
+	
+	KURL::List urls;
+	if (!KURLDrag::decode(event,urls)) return;
 
 	// Show popup
-	KURL::List urls;
-	KURLDrag::decode(event,urls);
 	bool wasMoved;
 	FileOperation::openDropURLMenu(this, urls, dest, &wasMoved);
 
@@ -326,36 +325,6 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 		}
 	}
 	
-	/*
-	KURL::List urls;
-	KURLDrag::decode(event,urls);
-	QPopupMenu menu(this);
-	int copyItemID = menu.insertItem( i18n("&Copy Here") );
-	int moveItemID = menu.insertItem( i18n("&Move Here") );
-
-	menu.setMouseTracking(true);
-	int id = menu.exec(QCursor::pos());
-
-	// Handle menu choice
-	if (id!=-1) {
-		if (id==copyItemID) {
-			KIO::copy(urls, dest, true);
-		} else if (id==moveItemID) {
-			KIO::move(urls, dest, true);
-			
-			// If the current url was in the list, set the drop target as the new
-			// current item
-			KURL current=currentURL();
-			KURL::List::ConstIterator it=urls.begin();
-			for (; it!=urls.end(); ++it) {
-				if (current.cmp(*it,true)) {
-					setCurrentItem(mDropTarget);
-					break;
-				}
-			}
-		}
-	}*/
-
 	// Reset drop target
 	if (mDropTarget) {
 		stopAnimation(mDropTarget);

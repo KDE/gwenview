@@ -21,14 +21,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-// Qt includes
+// Qt
 #include <qevent.h>
 #include <qheader.h>
 #include <qkeycode.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 
-// KDE includes
+// KDE 
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kfileitem.h>
@@ -37,7 +37,7 @@
 #include <klocale.h>
 #include <kurldrag.h>
 
-// Our includes
+// Local
 #include "gvarchive.h"
 #include "gvfiledetailviewitem.h"
 #include "gvfiledetailview.moc"
@@ -85,6 +85,10 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 		new KMimeTypeResolver<GVFileDetailViewItem,GVFileDetailView>( this );
 
 	setDragEnabled(true);
+	
+	setAcceptDrops(true);
+	setDropVisualizer(false);
+	setDropHighlighter(true);
 }
 
 
@@ -452,4 +456,25 @@ void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 	GVFileViewBase::setShownFileItem(fileItem);
 	if (oldShownItem) oldShownItem->repaint();
 	if (newShownItem) newShownItem->repaint();
+}
+
+
+//----------------------------------------------------------------------
+//
+// Drop support
+//
+//----------------------------------------------------------------------
+bool GVFileDetailView::acceptDrag(QDropEvent* event) const {
+	return QUriDrag::canDecode(event);
+}
+
+void GVFileDetailView::contentsDropEvent(QDropEvent *event) {
+	KFileItem* fileItem=0L;
+	QListViewItem *item=itemAt(contentsToViewport(event->pos() ) );
+	
+	if (item) {
+		fileItem=static_cast<GVFileDetailViewItem*>(item)->fileInfo();
+	}
+	emit dropped(event,fileItem);
+	event->accept();
 }
