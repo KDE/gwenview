@@ -363,7 +363,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 	if(mState == DECOMPRESS_STARTED) {
 //		mState =  (!mSourceManager.final_pass && decoder_time_stamp.elapsed() < MAX_CONSUMING_TIME)
 //			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
-		mState = PREPARE_OUTPUT_SCAN;
+		mState = CONSUME_INPUT;
 	}
 
 	if(mState == CONSUME_INPUT) {
@@ -373,11 +373,12 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			retval = jpeg_consume_input(&mDecompress);
 		} while (retval != JPEG_SUSPENDED && retval != JPEG_REACHED_EOI);
 
-		if( mSourceManager.final_pass
-			|| retval == JPEG_REACHED_EOI
-			|| retval == JPEG_REACHED_SOS) {
-			mState = PREPARE_OUTPUT_SCAN;
-		}
+//		if( mSourceManager.final_pass
+//			|| retval == JPEG_REACHED_EOI
+//			|| retval == JPEG_REACHED_SOS) {
+//			mState = PREPARE_OUTPUT_SCAN;
+//		}
+		mState = PREPARE_OUTPUT_SCAN;
 	}
 
 	if(mState == PREPARE_OUTPUT_SCAN) {
