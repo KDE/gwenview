@@ -36,8 +36,8 @@ void GVDocumentImpl::switchToImpl(GVDocumentImpl* impl) {
 	mDocument->switchToImpl(impl);
 }
 
-void GVDocumentImpl::setImage(QImage img) {
-	mDocument->setImage(img);
+void GVDocumentImpl::setImage(QImage img, bool update) {
+	mDocument->setImage(img, update);
 }
 
 void GVDocumentImpl::setImageFormat(const QCString& format) {

@@ -123,13 +123,8 @@ void GVDocumentJPEGLoadedImpl::init() {
 
 	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
 		LOG("jpeg rotating");
-		setImage(GVImageUtils::transform(mDocument->image(), orientation));
+		setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
 		d->mJPEGContent.transform(orientation);
-
-		// Emit sizeUpdated and rectUpdated so that the view get updated to the
-		// new image orientation
-		emit sizeUpdated(mDocument->image().width(), mDocument->image().height());
-		emit rectUpdated(QRect(QPoint(0,0), mDocument->image().size()) );
 	}
 
 	d->loadComment();
@@ -148,7 +143,7 @@ GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
 
 void GVDocumentJPEGLoadedImpl::transform(GVImageUtils::Orientation orientation) {
 	d->mJPEGContent.transform(orientation);
-	setImage(GVImageUtils::transform(mDocument->image(), orientation));
+	setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
 }
 
 

@@ -220,8 +220,13 @@ const QImage& GVDocument::image() const {
 	return d->mImage;
 }
 
-void GVDocument::setImage(QImage img) {
+void GVDocument::setImage(QImage img, bool update) {
+	bool sizechange = d->mImage.size() != img.size();
 	d->mImage=img;
+	if( update ) {
+		if( sizechange ) emit sizeUpdated( img.width(), img.height());
+		emit rectUpdated(QRect(QPoint(0,0), img.size()) );
+	}
 }
 
 KURL GVDocument::dirURL() const {

@@ -42,7 +42,7 @@ public:
 	virtual void init();
 	
 	void switchToImpl(GVDocumentImpl*);
-	void setImage(QImage);
+	void setImage(QImage, bool update);
 	void setImageFormat(const QCString&);
 	void setFileSize(int) const;
 	
@@ -69,7 +69,7 @@ class GVDocumentEmptyImpl : public GVDocumentImpl {
 public:
 	GVDocumentEmptyImpl(GVDocument* document)
 	: GVDocumentImpl(document) {
-		setImage(QImage());
+		setImage(QImage(), false);
 		setImageFormat(0);
 	}
 };

@@ -1,6 +1,7 @@
 2005.xx.xx - v1.2.0
 - Fixes:
  - The layout of the "external tools" dialog has been reworked.
+ - The image was not correctly displayed after a manual rotation.
  
 2005.02.27 - v1.2.0pre3
 - Fixes:

@@ -1220,28 +1220,7 @@ void GVScrollPixmapView::slotImageSizeUpdated() {
 	}
 
 	updateImageOffset();
-	QRect imageRect = d->imageToWidget( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
-
-	QPainter painter( viewport());
-	// Top rect
-	painter.eraseRect( 0, 0,
-		viewport()->width(), imageRect.top());
-
-	// Bottom rect
-		painter.eraseRect( 0, imageRect.bottom(),
-		viewport()->width(), viewport()->height()-imageRect.bottom());
-
-	// Left rect
-	painter.eraseRect( 0, imageRect.top(),
-		imageRect.left(), imageRect.height());
-
-	// Right rect
-	painter.eraseRect( imageRect.right(), imageRect.top(),
-		viewport()->width()-imageRect.right(), imageRect.height());
-
-	// Image area
-	painter.setPen(painter.backgroundColor().light(200));
-	painter.drawRect(imageRect);
+	fullRepaint();
 }
 
 void GVScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {

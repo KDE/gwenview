@@ -130,12 +130,12 @@ signals:
 	void reloaded(const KURL& url);
 
 	/**
-	 * Emitted during loading to show a part of the image must be refreshed
+	 * Emitted to show a part of the image must be refreshed
 	 */
 	void rectUpdated(const QRect& rect);
 
 	/**
-	 * Emitted during loading, when the size is known
+	 * Emitted when the size is known (or when it has changed)
 	 */
 	void sizeUpdated(int width, int height);
 
@@ -159,7 +159,8 @@ private:
 
 	// These methods are used by GVDocumentImpl and derived
 	void switchToImpl(GVDocumentImpl*);
-	void setImage(QImage);
+	// update == true triggers also sizeUpdated() and rectUpdated()
+	void setImage(QImage, bool update);
 	void setImageFormat(const QCString&);
 	void setFileSize(int); 
 	

@@ -64,9 +64,7 @@ void GVDocumentAnimatedLoadedImpl::nextFrame() {
 	if( d->mCurrentFrame == int( d->mFrames.count())) d->mCurrentFrame = 0;
 	d->mFrameTimer.start( QMAX( 10, d->mFrames[ d->mCurrentFrame ].delay ));
 	LOG("" << d->mCurrentFrame );
-	setImage( d->mFrames[ d->mCurrentFrame ].image );
-        // TODO this signal is usually used only while loading
-	emit rectUpdated( QRect(QPoint(0,0), d->mFrames[ d->mCurrentFrame ].image.size()) );
+	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
 }
 
 GVDocumentAnimatedLoadedImpl::~GVDocumentAnimatedLoadedImpl() {
@@ -78,7 +76,7 @@ void GVDocumentAnimatedLoadedImpl::transform(GVImageUtils::Orientation orientati
 	for( GVImageFrames::Iterator it = d->mFrames.begin(); it != d->mFrames.end(); ++it ) {
 	        (*it).image = GVImageUtils::transform( (*it).image, orientation );
 	}
-	setImage( d->mFrames[ d->mCurrentFrame ].image );
+	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
 }
 
 

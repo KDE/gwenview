@@ -66,7 +66,7 @@ GVDocumentLoadedImpl::~GVDocumentLoadedImpl() {
 
 
 void GVDocumentLoadedImpl::transform(GVImageUtils::Orientation orientation) {
-	setImage(GVImageUtils::transform(mDocument->image(), orientation));
+	setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
 }
 
 

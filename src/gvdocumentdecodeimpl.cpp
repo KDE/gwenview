@@ -459,7 +459,8 @@ void GVDocumentDecodeImpl::finish() {
 	// The decoder did not cause the sizeUpdated or rectUpdated signals to be
 	// emitted, let's do it now
 	if (!d->mUpdatedDuringLoad) {
-		setImage(image);
+		setImage(image, false);
+		// make sure sizeUpdated() is always emitted - setImage(image,true) could optimize it out
 		emit sizeUpdated(image.width(), image.height());
 		emit rectUpdated( QRect(QPoint(0,0), image.size()) );
 	}
@@ -522,7 +523,7 @@ void GVDocumentDecodeImpl::changed(const QRect& rect) {
 	d->mWasFrameData = true;
 	if( d->mFrames.count() > 0 ) return;
 	if (!d->mUpdatedDuringLoad) {
-		setImage(d->mDecoder.image());
+		setImage(d->mDecoder.image(), false);
 		d->mUpdatedDuringLoad=true;
 	}
 	d->mLoadChangedRect |= rect;
@@ -560,7 +561,7 @@ void GVDocumentDecodeImpl::frameDone(const QPoint& offset, const QRect& rect) {
 		}
 	}
 	if( d->mFrames.count() == 0 ) {
-		setImage( image ); // explicit sharing - don't modify the image in document anymore
+		setImage( image, false ); // explicit sharing - don't modify the image in document anymore
 	}
 	d->mFrames.append( GVImageFrame( image, d->mNextFrameDelay ));
 	d->mNextFrameDelay = 0;
@@ -579,7 +580,7 @@ void GVDocumentDecodeImpl::setFramePeriod(int milliseconds) {
 void GVDocumentDecodeImpl::setSize(int width, int height) {
 	LOG(width << "x" << height);
 	// FIXME: There must be a better way than creating an empty image
-	setImage(QImage(width, height, 32));
+	setImage(QImage(width, height, 32), false);
 	emit sizeUpdated(width, height);
 }
 
