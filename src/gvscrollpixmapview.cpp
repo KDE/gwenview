@@ -1389,10 +1389,11 @@ void GVScrollPixmapView::updateImageOffset() {
 	int zpixHeight=int(d->mDocument->height() * d->mZoom);
 
 	if (zpixWidth>viewWidth && hScrollBarMode()!=AlwaysOff) {
-		viewHeight-=horizontalScrollBar()->height();
+		// use sizeHint() - geometry is not valid before first show()
+		viewHeight-=horizontalScrollBar()->sizeHint().height();
 	}
 	if (zpixHeight>viewHeight && vScrollBarMode()!=AlwaysOff) {
-		viewWidth-=verticalScrollBar()->width();
+		viewWidth-=verticalScrollBar()->sizeHint().width();
 	}
 
 	d->mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
