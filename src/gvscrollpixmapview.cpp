@@ -278,7 +278,7 @@ GVScrollPixmapView::GVScrollPixmapView(QWidget* parent,GVDocument* pixmap,KActio
 
 	// Connect to some interesting signals
 	connect(mDocument,SIGNAL(loaded(const KURL&,const QString&)),
-		this,SLOT(slotURLChanged()) );
+		this,SLOT(slotLoaded()) );
 
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT( loadingStarted()) );
@@ -317,15 +317,15 @@ GVScrollPixmapView::~GVScrollPixmapView() {
 }
 
 
-void GVScrollPixmapView::slotURLChanged() {
-	/* FIXME: Not sure this is necessary
+void GVScrollPixmapView::slotLoaded() {
+	updateZoomActions();
+
 	if (mDocument->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
-		updateZoomActions();
 		return;
 	}
-	*/
+
 	updateContentSize();
 	updateImageOffset();
 	if (mFullScreen && mShowPathInFullScreen) updatePathLabel();

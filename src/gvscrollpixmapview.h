@@ -197,7 +197,7 @@ private:
 	void emitSelectNext() { emit selectNext(); }
 
 private slots:
-	void slotURLChanged();
+	void slotLoaded();
 	void slotModified();
 	void slotZoomIn();
 	void slotZoomOut();
