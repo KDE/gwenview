@@ -305,7 +305,7 @@ bool ThumbnailLoadJob::isJPEG(const QString& name) {
 bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	QImage image;
 
-// Open file
+	// Open file
 	FILE* inputFile=fopen(pixPath.data(), "rb");
 	if(!inputFile) return false;
 
@@ -316,10 +316,16 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	jpeg_stdio_src(&cinfo, inputFile);
 	jpeg_read_header(&cinfo, TRUE);
 
-// Compute scale value
+	// Get image size and check if we need a thumbnail
 	int size=ThumbnailSize::biggest().pixelSize();
 	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
+	if (imgSize<=size) {
+		fclose(inputFile);
+		return pix.load(pixPath);
+	}	
+
+	// Compute scale value
 	int scale=1;
 	while(size*scale*2<=imgSize) {
 		scale*=2;
@@ -329,7 +335,7 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 	cinfo.scale_num=1;
 	cinfo.scale_denom=scale;
 
-// Create QImage
+	// Create QImage
 	jpeg_start_decompress(&cinfo);
 
 	switch(cinfo.output_components) {
@@ -343,6 +349,8 @@ bool ThumbnailLoadJob::loadJPEG( const QString &pixPath, QPixmap &pix) {
 			image.setColor(i, qRgb(i,i,i));
 		break;
 	default:
+		jpeg_destroy_decompress(&cinfo);
+		fclose(inputFile);
 		return false;
 	}
 
@@ -388,7 +396,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QPixmap& pix) {
 // Do we need to scale down the thumbnail ?
 	int biggestDimension=QMAX(pix.width(),pix.height());
 	int thumbPixelSize=mThumbnailSize.pixelSize();
-	if (biggestDimension<thumbPixelSize) {
+	if (biggestDimension<=thumbPixelSize) {
 		emit thumbnailLoaded(mCurrentItem,pix);
 		return;
 	}
