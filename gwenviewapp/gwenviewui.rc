@@ -59,6 +59,9 @@
     <Menu name="kipi_tools">
       <text>Tools</text>
     </Menu>
+    <Menu name="kipi_batch">
+      <text>Batch processing</text>
+    </Menu>
     <Menu name="kipi_import">
       <text>Import</text>
     </Menu>

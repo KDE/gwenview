@@ -990,19 +990,27 @@ void GVMainWindow::loadPlugins() {
 	categoryMap[KIPI::IMAGESPLUGIN]="kipi_images";
 	categoryMap[KIPI::EFFECTSPLUGIN]="kipi_effects";
 	categoryMap[KIPI::TOOLSPLUGIN]="kipi_tools";
+	categoryMap[KIPI::BATCHPLUGIN]="kipi_batch";
 	categoryMap[KIPI::IMPORTPLUGIN]="kipi_import";
 	categoryMap[KIPI::EXPORTPLUGIN]="kipi_export";
 	
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
 	KIPI::PluginLoader* loader = new KIPI::PluginLoader(QStringList(), interface );
+	loader->loadPlugins();
 
 	// Fill the plugin menu
 	KIPI::PluginLoader::PluginList::ConstIterator it(loader->pluginList().begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(loader->pluginList().end());
 	for( ; it!=itEnd; ++it ) {
 		KIPI::Plugin* plugin = (*it)->plugin;
+		Q_ASSERT(plugin);
+		if (!plugin) continue;
 
+		if (!categoryMap.contains(plugin->category())) {
+			kdWarning() << "Unknown category '" << plugin->category() << "'\n";
+			continue;
+		}
 		QPopupMenu *popup = static_cast<QPopupMenu*>(
 			factory()->container( categoryMap[plugin->category()], this));
 		Q_ASSERT( popup );
