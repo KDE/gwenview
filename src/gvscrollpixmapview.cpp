@@ -1059,16 +1059,16 @@ void GVScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, 
 		return;
 	}
 
-	if( d->mGamma != 100 ) { // != 1.0
-		image = GVImageUtils::changeGamma( image, d->mGamma );
-	}
-
 	if( d->mBrightness != 0 ) {
 		image = GVImageUtils::changeBrightness( image, d->mBrightness );
 	}
 
 	if( d->mContrast != 100 ) { // != 1.0
 		image = GVImageUtils::changeContrast( image, d->mContrast );
+	}
+
+	if( d->mGamma != 100 ) { // != 1.0
+		image = GVImageUtils::changeGamma( image, d->mGamma );
 	}
 
 	int* maxRepaintSize = &d->mMaxRepaintSize;
