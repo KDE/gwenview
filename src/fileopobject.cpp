@@ -26,15 +26,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kdirselectdialog.h>
+#include <kfiledialog.h>
+#include <kfilefiltercombo.h>
 #include <kglobalsettings.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kurlcombobox.h>
 
 // Our includes
 #include "fileoperation.h"
 #include "fileopobject.moc"
+
+
+/**
+ * A tweaked KFileDialog used to select an existing directory. More efficient
+ * than KDirSelectDialog, since it provides access to bookmarks and let you
+ * create a dir.
+ */
+class GVDirSelectDialog : public KFileDialog {
+public:
+	GVDirSelectDialog(const QString& startDir, QWidget* parent)
+	: KFileDialog(startDir, QString::null, parent, "gvdirselectdialog", true) {
+		locationEdit->setEnabled(false);
+		filterWidget->setEnabled(false);
+		setMode(KFile::Directory | KFile::ExistingOnly);
+	}
+};
 
 
 //-FileOpObject--------------------------------------------------------------------
@@ -63,11 +82,21 @@ void FileOpObject::slotResult(KIO::Job* job) {
 
 
 //-FileOpCopyToObject--------------------------------------------------------------
+
+
 void FileOpCopyToObject::operator()() {
 	KURL destURL;
 
 	if (FileOperation::confirmCopy()) {
-		destURL=KDirSelectDialog::selectDirectory(FileOperation::destDir(), false, mParent, i18n("Copy files"));
+		if (mURLList.size()==1) {
+			destURL=KFileDialog::getSaveURL(FileOperation::destDir() + "/" + mURLList.first().fileName(),
+					QString::null, mParent, i18n("Copy file"));
+		} else {
+			GVDirSelectDialog dialog(FileOperation::destDir(), mParent);
+			dialog.setCaption(i18n("Select the folder where the files will be copied"));
+			dialog.exec();
+			destURL=dialog.selectedURL();
+		}
 	} else {
 		destURL.setPath(FileOperation::destDir());
 	}
@@ -86,7 +115,15 @@ void FileOpMoveToObject::operator()() {
 	KURL destURL;
 
 	if (FileOperation::confirmMove()) {
-		destURL=KDirSelectDialog::selectDirectory(FileOperation::destDir(), false, mParent, i18n("Move files"));
+		if (mURLList.size()==1) {
+			destURL=KFileDialog::getSaveURL(FileOperation::destDir() + "/" + mURLList.first().fileName(),
+					QString::null, mParent, i18n("Move file"));
+		} else {
+			GVDirSelectDialog dialog(FileOperation::destDir(), mParent);
+			dialog.setCaption(i18n("Select the folder where the files will be moved"));
+			dialog.exec();
+			destURL=dialog.selectedURL();
+		}
 	} else {
 		destURL.setPath(FileOperation::destDir());
 	}
