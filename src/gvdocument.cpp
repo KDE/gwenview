@@ -598,9 +598,9 @@ QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
 	}
 	
 	LOG("Save failed: " << msg);
-	return QString("<qt><b>%1</b><br/>%2</qt>")
+	return QString("<qt><b>%1</b><br/>")
 		.arg(i18n("Could not save the image to %1.").arg(url.prettyURL()))
-		.arg(msg);
+		+ msg + "</qt>";
 }
 
 

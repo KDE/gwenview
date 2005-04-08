@@ -74,7 +74,9 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWi
 		QString patternString=patterns.join(" ");
 
 		// Create the filter string
-		QString filter=QString("%1|%2 - %3 (%4)").arg(patternString).arg(format).arg(mt->comment()).arg(patternString);
+		QString filter=patternString + "|"
+			      + format + " - " + mt->comment()
+			      + " (" + patternString + ")";
 		
 		// Add it to our list
 		filters.append(filter);

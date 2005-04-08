@@ -153,7 +153,7 @@ QString GVImagePart::filePath() {
 }
 
 void GVImagePart::loaded(const KURL& url) {
-	QString caption = QString("%1 - %2x%3").arg(url.filename()).arg(mDocument->width()).arg(mDocument->height());
+	QString caption = url.filename() + QString(" - %1x%2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 	emit completed();
 	emit setStatusBarText(i18n("Done."));

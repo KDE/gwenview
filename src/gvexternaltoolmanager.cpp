@@ -209,8 +209,7 @@ void GVExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
 	
 	if (desktopFile->isReadOnly()) {
 		delete desktopFile;
-		desktopFile=new KDesktopFile(
-			QString("%1/%1").arg(d->mUserToolDir).arg(name), false);
+		desktopFile=new KDesktopFile(d->mUserToolDir + "/" + name, false);
 	}
 	desktopFile->writeEntry("Hidden", true);
 	desktopFile->sync();
@@ -232,7 +231,7 @@ KDesktopFile* GVExternalToolManager::editSystemDesktopFile(const KDesktopFile* d
 KDesktopFile* GVExternalToolManager::createUserDesktopFile(const QString& name) {
 	Q_ASSERT(!name.isEmpty());
 	KDesktopFile* desktopFile=new KDesktopFile(
-		QString("%1/%1.desktop").arg(d->mUserToolDir).arg(name), false);
+		d->mUserToolDir + "/" + name + ".desktop", false);
 	d->mDesktopFiles.insert(QString("%1.desktop").arg(name), desktopFile);	
 
 	return desktopFile;

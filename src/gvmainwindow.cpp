@@ -756,8 +756,8 @@ void GVMainWindow::updateStatusInfo() {
 void GVMainWindow::updateFileInfo() {
 	QString filename=mDocument->filename();
 	if (!filename.isEmpty()) {
-		QString info=QString("%1 %2x%3 @ %4%")
-			.arg(filename).arg(mDocument->width()).arg(mDocument->height())
+		QString info=filename + QString(" %1x%2 @ %3%")
+			.arg(mDocument->width()).arg(mDocument->height())
 			.arg(int(mPixmapView->zoom()*100) );
 		mSBDetailLabel->show();
 		mSBDetailLabel->setText(info);
