@@ -37,16 +37,39 @@
 #include "gvfilethumbnailview.h"
 #include "gvfilethumbnailviewitem.h"
 
-/*
+
+#if 0
 static void printRect(const QString& txt,const QRect& rect) {
 	kdWarning() << txt << " : " << rect.x() << "x" << rect.y() << " " << rect.width() << "x" << rect.height() << endl;
 }
-*/
+#endif
+
+
+static QString truncateText(const QFontMetrics& fm, const QString& fullText, int width) {
+	static QString dots("...");
+	QString text;
+
+	// If the text fit in the width, don't truncate it
+	if (fm.boundingRect(fullText).width()<=width) {
+		return fullText;
+	}
+
+	// Find the number of letters to keep
+	text=fullText;
+	width-=fm.width(dots);
+	int len=text.length();
+	for(;len>0 && fm.width(text,len)>width;--len);
+
+	// Truncate the text
+	text.truncate(len);
+	text+=dots;
+	return text;
+}
 
 
 GVFileThumbnailViewItem::GVFileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
 : QIconViewItem(view,text,icon), mFileItem(fileItem), mWordWrap(0L) {
-	calcRect();
+	updateInfoLines();
 }
 
 
@@ -55,60 +78,93 @@ GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
 }
 
 
+int GVFileThumbnailViewItem::availableTextWidth() const {
+	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
+	if (iconView()->itemTextPos()==QIconView::Right) {
+		// -2 because of the pixmap margin, see calcRect()
+		return view->gridX() - view->thumbnailSize() - view->marginSize() - 2;
+	} else {
+		return view->thumbnailSize();
+	}
+}
+
+
+void GVFileThumbnailViewItem::updateInfoLines() {
+	mInfoLines.clear();
+	if (!mFileItem) return;
+	if (iconView()->itemTextPos()==QIconView::Right) {
+		if (!mFileItem->isDir()) {
+			mInfoLines << KIO::convertSize(mFileItem->size());
+		}
+		mInfoLines << mFileItem->timeString();
+	}
+	if (mImageSize.isValid()) {
+		mInfoLines << QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+	}
+	calcRect();
+}
+
+
 void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
+	Q_ASSERT(pixmap());
+	if (!pixmap()) return;
 
 	QFontMetrics fm = view->fontMetrics();
 	QRect itemIconRect = QRect(0,0,0,0);
-	QRect itemTextRect = QRect(0,0,0,0);
 	QRect itemRect = rect();
-	int availableTextWidth=rect().width()
-		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize() );
 
-// Init itemIconRect 
-#ifndef QT_NO_PICTURE
-	if ( picture() ) {
-		QRect br = picture()->boundingRect();
-		itemIconRect.setWidth( br.width() );
-		itemIconRect.setHeight( br.height() );
-	} else
-#endif
-	{
-		// Qt uses unknown_icon if no pixmap. Let's see if we need that - I doubt it
-		if (!pixmap()) return;
-		itemIconRect.setWidth( pixmap()->width()+2 );
-		itemIconRect.setHeight( pixmap()->height()+2 );
+	itemIconRect.setWidth( pixmap()->width()+2 );
+	itemIconRect.setHeight( pixmap()->height()+2 );
+
+	int textWidth=availableTextWidth();
+	int textHeight=fm.height();
+	
+	if (iconView()->wordWrapIconText() && iconView()->itemTextPos()==QIconView::Bottom) {
+		// Word-wrap up to 3 lines if the text is on bottom
+		textHeight*=3;
 	}
-
-// Init itemTextRect 
-	QRect r;
-	if (iconView()->wordWrapIconText()) {
+	QRect itemTextRect = QRect(0, 0, textWidth, textHeight);
 	// When is text_ set ? Doesn't look like it's ever set.
-		QString txt = text_.isEmpty() ? text() : text_;
-		QRect outerRect( 0, 0, availableTextWidth,0xFFFFFFFF);
+	QString txt = text_.isEmpty() ? text() : text_;
 
-		if (mWordWrap) delete mWordWrap;
-		mWordWrap=KWordWrap::formatText( fm, outerRect, AlignHCenter | WordBreak, txt );
-		r=mWordWrap->boundingRect();
-	} else {
-		truncateText(fm);
-		r=QRect(0,0,availableTextWidth,fm.height());
-	}
+	if (mWordWrap) delete mWordWrap;
+	mWordWrap=KWordWrap::formatText(fm, itemTextRect,
+		(view->itemTextPos()==QIconView::Bottom ? AlignHCenter : AlignAuto)
+		| WordBreak, txt );
 	
-	// Add the info line height
-	r.rBottom()+=fm.height();
+	itemTextRect=mWordWrap->boundingRect();
+	Q_ASSERT( itemTextRect.width() <= textWidth );
 	
-	if ( r.width() > availableTextWidth ) {
-		r.setWidth(availableTextWidth);
+	// Take info lines width into account
+	// Find maximum width of info lines, truncate them if they are too long
+	QValueListIterator<QString> it=mInfoLines.begin();
+	QValueListIterator<QString> itEnd=mInfoLines.end();
+	for (;it!=itEnd; ++it) {
+		int lineWidth=fm.width(*it);
+		if (lineWidth>textWidth) {
+			*it=truncateText(fm, *it, textWidth);
+			// No need to go further, we are already at the max
+			itemTextRect.setWidth(textWidth);
+			break;
+		}
+		itemTextRect.setWidth( QMAX(itemTextRect.width(), lineWidth) );
 	}
 
-	itemTextRect.setWidth( QMAX(r.width(),fm.width("X")) );
-	itemTextRect.setHeight( r.height() );
+	// Append the info lines height
+	itemTextRect.rBottom()+=mInfoLines.count() * fm.height();
+	
+	if (view->itemTextPos() == QIconView::Right) {
+		// Make sure we don't get longer than the icon height
+		if (itemTextRect.height() > view->thumbnailSize()) {
+			itemTextRect.setHeight(view->thumbnailSize());
+		}
+	}
 
-// All this code isn't related to the word-wrap algo...
-// Sucks that we have to duplicate it.
+	// All this code isn't related to the word-wrap algo...
+	// Sucks that we have to duplicate it.
 	int w = 0;    int h = 0;
 	if ( view->itemTextPos() == QIconView::Bottom ) {
 		w = QMAX( itemTextRect.width(), itemIconRect.width() );
@@ -141,45 +197,20 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 								itemIconRect.width(), itemIconRect.height() );
 	}
 
-// Apply margin on Y axis
+	// Apply margin on Y axis
 	int margin=view->marginSize();
 	itemIconRect.moveBy(0,margin/2);
 	itemTextRect.moveBy(0,margin/2);
 	itemRect.setHeight(itemRect.height()+margin);
 
-// Update rects
+
+	// Update rects
 	if ( itemIconRect != pixmapRect() )
 		setPixmapRect( itemIconRect );
 	if ( itemTextRect != textRect() )
 		setTextRect( itemTextRect );
 	if ( itemRect != rect() )
 		setItemRect( itemRect );
-}
-
-
-void GVFileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
-	static QString dots("...");
-	GVFileThumbnailView* view = static_cast<GVFileThumbnailView*>( iconView() );
-	Q_ASSERT( view );
-	if ( !view ) return;
-
-// If the text fit in the width, don't truncate it
-	int width=rect().width()
-		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize() );
-	if (fm.boundingRect(text()).width()<=width) {
-		mTruncatedText=QString::null;
-		return;
-	}
-
-// Find the number of letters to keep
-	mTruncatedText=text();
-	width-=fm.width(dots);
-	int len=mTruncatedText.length();
-	for(;len>0 && fm.width(mTruncatedText,len)>width;--len);
-
-// Truncate the text
-	mTruncatedText.truncate(len);
-	mTruncatedText+=dots;
 }
 
 
@@ -190,18 +221,14 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 	p->save();
 
-// Get the rects
+	// Get the rects
 	QRect pRect=pixmapRect(false);
 	QRect tRect=textRect(false);
-	// Do not draw the focus rect behind the info line if it's empty
-	if (mInfoText.isNull()) {
-		tRect.rBottom()-=view->fontMetrics().height();
-	}
 
-// Draw pixmap
+	// Draw pixmap
 	p->drawPixmap( pRect.x()+1, pRect.y()+1, *pixmap() );
 
-// Draw focus
+	// Draw focus
 	if ( isSelected() ) {
 		p->setPen( QPen( cg.highlight() ) );
 		QRect outerRect=pRect | tRect;
@@ -215,47 +242,37 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		}
 
 		p->setPen( QPen( cg.highlightedText() ) );
+		p->setBackgroundColor(cg.highlight());
 	} else {
 		if ( view->itemTextBackground() != NoBrush ) {
 			p->fillRect( tRect, view->itemTextBackground() );
 		}
+		p->setBackgroundColor(cg.base());
 		p->setPen( cg.text() );
 	}
 
-// Draw text
+	// Draw text. We draw the info lines first, because mWordWrap might alter
+	// the painter settings
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
 	align|=AlignTop;
 	if (view->shownFileItem() && view->shownFileItem()->extraData(view)==this) {
 		p->setPen(view->shownFileItemColor());
 	}
-	if (view->wordWrapIconText()) {
-		if (!mWordWrap) {
-			kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;
-			return;
-		}
-		mWordWrap->drawText( p, tRect.x(), tRect.y(), align );
-	} else {
-		QString str;
-		if (mTruncatedText.isNull()) {
-			str=text();
-		} else {
-			str=mTruncatedText;
-		}
-		p->drawText(tRect, align, str);
+	if (!mWordWrap) {
+		kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;
+		return;
 	}
-
-	// Draw info line
-	align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
-	align|=AlignBottom;
-	QFont font=p->font();
-	if (font.pixelSize()!=-1) {
-		font.setPixelSize(font.pixelSize()-2);
-	} else {
-		font.setPointSize(font.pointSize()-2);
+	if (mInfoLines.count() > 0) {
+		int mainHeight=mWordWrap->boundingRect().height();
+		QRect rect(
+			tRect.x(),
+			tRect.y() + mainHeight,
+			view->itemTextPos() == QIconView::Bottom ? tRect.width() : availableTextWidth(),
+			tRect.height() - mainHeight);
+		p->drawText(rect, align, mInfoLines.join("\n"));
 	}
-	p->setFont(font);
-	p->drawText(tRect, align, mInfoText);
-
+	
+	mWordWrap->drawText( p, tRect.x(), tRect.y(), align | KWordWrap::FadeOut);
 	p->restore();
 }
 
@@ -270,6 +287,7 @@ void GVFileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconD
 	emit view->dropped(event,mFileItem);
 }
 
-void GVFileThumbnailViewItem::setInfoText(const QString& text) {
-	mInfoText=text;
+void GVFileThumbnailViewItem::setImageSize(const QSize& size) {
+	mImageSize=size;
+	updateInfoLines();
 }

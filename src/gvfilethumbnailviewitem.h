@@ -22,13 +22,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef GVFILETHUMBNAILVIEWITEM_H
 #define GVFILETHUMBNAILVIEWITEM_H
 
-// Qt includes
+// Qt 
 #include <qiconview.h>
+#include <qpixmap.h>
 #include <qstring.h>
 
 
 class QFontMetrics;
-class QPixmap;
 class KFileItem;
 class KWordWrap;
 
@@ -44,20 +44,22 @@ public:
 
 	KFileItem* fileItem() const { return mFileItem; }
 
-	void setInfoText(const QString&);
+	void setImageSize(const QSize&);
 
 protected:
 	void paintItem(QPainter* painter, const QColorGroup& colorGroup);
 	void calcRect( const QString& text_=QString::null );
-	void truncateText(const QFontMetrics&);
 	void paintFocus(QPainter*, const QColorGroup&) {}
 	bool acceptDrop(const QMimeSource*) const;
 	void dropped(QDropEvent*, const QValueList<QIconDragItem>&);
+	void updateInfoLines();
+
+	int availableTextWidth() const;
 	
 	KFileItem* mFileItem;
 	KWordWrap* mWordWrap;
-	QString mTruncatedText;
-	QString mInfoText;
+	QStringList mInfoLines;
+	QSize mImageSize;
 };
 
 #endif

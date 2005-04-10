@@ -227,10 +227,8 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QP
 
 	// Update item info
 	if (size.isValid()) {
-		QString info=QString::number(size.width())+"x"+QString::number(size.height());
-		iconItem->setInfoText(info);
+		iconItem->setImageSize(size);
 	}
-	
 	iconItem->repaint();
 
 	// Notify progress
@@ -313,6 +311,11 @@ void GVFileThumbnailView::slotUpdateEnded() {
 	Q_ASSERT(d->mProgressWidget);
 	delete d->mProgressWidget;
 	d->mProgressWidget=0L;
+	// This is necessary because the size info might have been added to the
+	// text
+	if (itemTextPos()==Bottom) {
+		arrangeItemsInGrid();
+	}
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 

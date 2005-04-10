@@ -1,7 +1,9 @@
 2005.xx.xx - v1.3.0
 - New features:
- - The file view now features three modes: details, thumbnail with info on the
-   right and thumbnail with info on bottom
+ - The file view now features three modes: details, thumbnail with text on the
+   right and thumbnail with text on bottom. When using the "info on the right
+   mode", the file size and date is displayed, in addition to the name and
+   resolution.
  - The thumbnail size can now be set with a slider.
 
 2005.04.03 - v1.2.0
