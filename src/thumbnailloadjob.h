@@ -36,7 +36,6 @@
 // Our includes
 #include "tsthread/tsthread.h"
 #include "tsthread/tswaitcondition.h"
-#include "thumbnailsize.h"
 
 class KFileItem;
 
@@ -52,7 +51,7 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath,
-		ThumbnailSize size,
+		int size,
 		bool storeThumbnail);
 protected:
 	virtual void run();
@@ -71,7 +70,7 @@ private:
 	QString mOriginalMimeType;
 	QMutex mMutex;
 	TSWaitCondition mCond;
-	ThumbnailSize mThumbnailSize;
+	int mThumbnailSize;
 	bool mStoreThumbnailsInCache;
 };
 
@@ -84,7 +83,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob(const QValueVector<const KFileItem*>* itemList,ThumbnailSize size);
+	ThumbnailLoadJob(const QValueVector<const KFileItem*>* itemList, int size);
 	virtual ~ThumbnailLoadJob();
 
 	/**
@@ -177,7 +176,7 @@ private:
 	QString mTempPath;
 
 	// Thumbnail size
-	ThumbnailSize mThumbnailSize;
+	int mThumbnailSize;
 
 	QPixmap mBrokenPixmap;
 

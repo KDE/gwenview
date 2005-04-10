@@ -1,6 +1,12 @@
+2005.xx.xx - v1.3.0
+- New features:
+ - The file view now features three modes: details, thumbnail with info on the
+   right and thumbnail with info on bottom
+ - The thumbnail size can now be set with a slider.
+
 2005.04.03 - v1.2.0
 - Fixes:
- - A crash which could happen when pressing back has been fixed.
+ - A crash which could happen when pressing the 'back' button has been fixed.
 
 2005.03.19 - v1.2.0pre4
 - New features:

@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvarchive.h"
 #include "thumbnailloadjob.h"
 #include "gvbusylevelmanager.h"
+#include "gvthumbnailsize.h"
 
 #define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -57,10 +58,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvfilethumbnailview.moc"
 
+static const char* CONFIG_ITEM_TEXT_POS="item text pos";
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
 static const char* CONFIG_MARGIN_SIZE="margin size";
 static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
+static const int THUMBNAIL_TEXT_SIZE=128;
 
 class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
@@ -113,7 +116,7 @@ public:
 
 
 struct GVFileThumbnailView::Private {
-	ThumbnailSize mThumbnailSize;
+	int mThumbnailSize;
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
 	QPixmap mWaitPixmap;
@@ -175,15 +178,24 @@ GVFileThumbnailView::~GVFileThumbnailView() {
 }
 
 
-void GVFileThumbnailView::setThumbnailSize(ThumbnailSize value) {
+void GVFileThumbnailView::setThumbnailSize(int value) {
 	if (value==d->mThumbnailSize) return;
 	d->mThumbnailSize=value;
 	updateGrid();
 }
 
 
-ThumbnailSize GVFileThumbnailView::thumbnailSize() const {
+int GVFileThumbnailView::thumbnailSize() const {
 	return d->mThumbnailSize;
+}
+
+
+/**
+ * Overriden to call updateGrid
+ */
+void GVFileThumbnailView::setItemTextPos(ItemTextPos pos) {
+	QIconView::setItemTextPos(pos);
+	updateGrid();
 }
 
 
@@ -203,7 +215,7 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QP
 	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return;
 
-	int pixelSize=d->mThumbnailSize.pixelSize();
+	int pixelSize=d->mThumbnailSize;
 
 	// Draw the thumbnail to the center of the icon
 	QPainter painter(iconItem->pixmap());
@@ -349,7 +361,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 
 	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 
-	int pixelSize=d->mThumbnailSize.pixelSize();
+	int pixelSize=d->mThumbnailSize;
 	QPixmap thumbnail(pixelSize,pixelSize);
 	QPainter painter(&thumbnail);
 	painter.fillRect(0,0,pixelSize,pixelSize,paletteBackgroundColor());
@@ -524,7 +536,11 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 //
 //--------------------------------------------------------------------------
 void GVFileThumbnailView::updateGrid() {
-	setGridX(d->mThumbnailSize.pixelSize() + d->mMarginSize);
+	if (itemTextPos()==Bottom) {
+		setGridX(d->mThumbnailSize + d->mMarginSize);
+	} else {
+		setGridX(d->mThumbnailSize + d->mMarginSize + THUMBNAIL_TEXT_SIZE);
+	}
 }
 
 
@@ -657,8 +673,10 @@ void GVFileThumbnailView::startDrag() {
 void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 
-	d->mThumbnailSize=config->readEntry(CONFIG_THUMBNAIL_SIZE);
+	d->mThumbnailSize=config->readNumEntry(CONFIG_THUMBNAIL_SIZE, 48);
 	d->mMarginSize=config->readNumEntry(CONFIG_MARGIN_SIZE,5);
+	int pos=config->readNumEntry(CONFIG_ITEM_TEXT_POS, QIconView::Right);
+	setItemTextPos(QIconView::ItemTextPos(pos));
 
 	updateGrid();
 	setWordWrapIconText(config->readBoolEntry(CONFIG_WORD_WRAP_FILENAME,false));
@@ -666,7 +684,7 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 }
 
 void GVFileThumbnailView::kpartConfig() {
-	d->mThumbnailSize=ThumbnailSize::MED;
+	d->mThumbnailSize=GVThumbnailSize::MAX;
 	d->mMarginSize=5;
 
 	updateGrid();
@@ -677,8 +695,9 @@ void GVFileThumbnailView::kpartConfig() {
 
 void GVFileThumbnailView::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_THUMBNAIL_SIZE,QString(d->mThumbnailSize));
+	config->writeEntry(CONFIG_THUMBNAIL_SIZE,d->mThumbnailSize);
 	config->writeEntry(CONFIG_MARGIN_SIZE,d->mMarginSize);
 	config->writeEntry(CONFIG_WORD_WRAP_FILENAME,wordWrapIconText());
+	config->writeEntry(CONFIG_ITEM_TEXT_POS, int(itemTextPos()));
 }
 

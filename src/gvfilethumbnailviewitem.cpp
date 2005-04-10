@@ -65,7 +65,7 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	QRect itemTextRect = QRect(0,0,0,0);
 	QRect itemRect = rect();
 	int availableTextWidth=rect().width()
-		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize().pixelSize() );
+		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize() );
 
 // Init itemIconRect 
 #ifndef QT_NO_PICTURE
@@ -164,7 +164,8 @@ void GVFileThumbnailViewItem::truncateText(const QFontMetrics& fm) {
 	if ( !view ) return;
 
 // If the text fit in the width, don't truncate it
-	int width=view->thumbnailSize().pixelSize()-( view->itemTextPos()==QIconView::Bottom ? 0:pixmapRect().width());
+	int width=rect().width()
+		- (view->itemTextPos()==QIconView::Bottom ? 0 : view->thumbnailSize() );
 	if (fm.boundingRect(text()).width()<=width) {
 		mTruncatedText=QString::null;
 		return;

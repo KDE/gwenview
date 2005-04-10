@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="16">
+<kpartgui name="Gwenview" version="17">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -126,10 +126,10 @@
 
 <ToolBar name="fileViewToolBar">
   <text>File View Toolbar</text>
-  <Action name="detailed" />
-  <Action name="small_thumbnails" />
-  <Action name="med_thumbnails" />
-  <Action name="large_thumbnails" />
+  <Action name="list_mode" />
+  <Action name="side_thumbnail_mode" />
+  <Action name="bottom_thumbnail_mode" />
+  <Action name="thumbnails_slider" />
 </ToolBar>
 
 <StatusBar/>

@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*	Gwenview - A simple image viewer for KDE
 	Copyright 2000-2004 Aurélien Gâteau
 	This class is based on the ImagePreviewJob class from Konqueror.
@@ -56,6 +56,7 @@ extern "C" {
 // Local
 #include "gvimageutils/jpegcontent.h"
 #include "gvimageutils/gvimageutils.h"
+#include "gvthumbnailsize.h"
 #include "thumbnailloadjob.moc"
 
 //#define ENABLE_LOG
@@ -101,7 +102,7 @@ void ThumbnailThread::load(
 	const QString& originalURI, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
 	const QString& thumbnailPath,
-	ThumbnailSize size, bool storeThumbnail)
+	int size, bool storeThumbnail)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -147,8 +148,8 @@ void ThumbnailThread::loadThumbnail() {
 		mImage = content.thumbnail();
 	
 		if( !mImage.isNull()
-			&& ( mImage.width() >= mThumbnailSize.pixelSize() // don't use small thumbnails
-			|| mImage.height() >= mThumbnailSize.pixelSize() )) {
+			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
+			|| mImage.height() >= mThumbnailSize )) {
 			loaded = true; // don't set width/height, so that no thumbnail is saved
 		}
 		if(!loaded) {
@@ -165,7 +166,7 @@ void ThumbnailThread::loadThumbnail() {
 		if (bigImg.load(mPixPath)) {
 			width=bigImg.width();
 			height=bigImg.height();
-			int thumbSize=ThumbnailSize::biggest().pixelSize();
+			int thumbSize=GVThumbnailSize::MAX;
 
 			if( testCancel()) return;
 
@@ -236,7 +237,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	height=cinfo.image_height;
 
 	// Get image size and check if we need a thumbnail
-	int size=ThumbnailSize::biggest().pixelSize();
+	int size=GVThumbnailSize::MAX;
 	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
 	if (imgSize<=size) {
@@ -347,7 +348,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
  updateItemsOrder() builds mItems from mAllItems
 */
 
-ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, ThumbnailSize size)
+ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, int size)
 : KIO::Job(false), mState( STATE_NEXTTHUMB ),
   mCurrentVisibleIndex( -1 ), mFirstVisibleIndex( -1 ), mLastVisibleIndex( -1 ),
   mThumbnailSize(size), mSuspended( false )
@@ -355,7 +356,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 	LOG("");
 	
 	mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
-		KIcon::NoGroup, ThumbnailSize(ThumbnailSize::SMALL).pixelSize());
+		KIcon::NoGroup, GVThumbnailSize::MIN);
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items->empty());
@@ -656,7 +657,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 		size=QSize();
 	}
 
-	int thumbPixelSize=mThumbnailSize.pixelSize();
+	int thumbPixelSize=mThumbnailSize;
 	QImage thumbImg;
 	if (biggestDimension>thumbPixelSize) {
 		// Scale down thumbnail if necessary

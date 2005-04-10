@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "gvfileviewbase.h"
-#include "thumbnailsize.h"
 #include "gvbusylevelmanager.h"
 
 class QDragEnterEvent;
@@ -75,8 +74,8 @@ public:
 	/**
 	 * Don't forget to call arrangeItemsInGrid to apply the changes
 	 */
-	void setThumbnailSize(ThumbnailSize value);
-	ThumbnailSize thumbnailSize() const;
+	void setThumbnailSize(int value);
+	int thumbnailSize() const;
 
 	/**
 	 * Don't forget to call arrangeItemsInGrid to apply the changes
@@ -84,6 +83,8 @@ public:
 	void setMarginSize(int value);
 	int marginSize() const;
 
+	void setItemTextPos(ItemTextPos);
+	
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 	/**

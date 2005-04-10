@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvexternaltoolmanager.h"
 #include "gvfilethumbnailview.h"
 #include "gvfiledetailview.h"
+#include "gvthumbnailsize.h"
 
 #include "gvfileviewstack.moc"
 
@@ -67,6 +68,8 @@ static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
 static const char* CONFIG_SHOW_DIRS="show dirs";
 static const char* CONFIG_SHOW_DOT_FILES="show dot files";
 static const char* CONFIG_SHOWN_COLOR="shown color";
+
+static const int SLIDER_RESOLUTION=4;
 
 inline bool isDirOrArchive(const KFileItem* item) {
 	return item && (item->isDir() || GVArchive::fileItemIsArchive(item));
@@ -112,15 +115,27 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
 
-	mNoThumbnails=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateThumbnailSize()),actionCollection,"detailed");
-	mNoThumbnails->setExclusiveGroup("thumbnails");
-	mSmallThumbnails=new KRadioAction(i18n("Small Thumbnails"),"smallthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"small_thumbnails");
-	mSmallThumbnails->setExclusiveGroup("thumbnails");
-	mMedThumbnails=new KRadioAction(i18n("Medium Thumbnails"),"medthumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"med_thumbnails");
-	mMedThumbnails->setExclusiveGroup("thumbnails");
-	mLargeThumbnails=new KRadioAction(i18n("Large Thumbnails"),"largethumbnails",0,this,SLOT(updateThumbnailSize()),actionCollection,"large_thumbnails");
-	mLargeThumbnails->setExclusiveGroup("thumbnails");
-
+	mListMode=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateViewMode()),actionCollection,"list_mode");
+	mListMode->setExclusiveGroup("thumbnails");
+	mSideThumbnailMode=new KRadioAction(i18n("Thumbnails with info on side"),"view_multicolumn",0,this,SLOT(updateViewMode()),actionCollection,"side_thumbnail_mode");
+	mSideThumbnailMode->setExclusiveGroup("thumbnails");
+	mBottomThumbnailMode=new KRadioAction(i18n("Thumbnails with info on bottom"),"view_icon",0,this,SLOT(updateViewMode()),actionCollection,"bottom_thumbnail_mode");
+	mBottomThumbnailMode->setExclusiveGroup("thumbnails");
+	
+	// Size slider
+	mSizeSlider=new QSlider(Horizontal, this);
+	mSizeSlider->setTickmarks(QSlider::Below);
+	mSizeSlider->setRange(
+		GVThumbnailSize::MIN/SLIDER_RESOLUTION,
+		GVThumbnailSize::MAX/SLIDER_RESOLUTION);
+	mSizeSlider->setSteps(1, 1);
+	mSizeSlider->setTickInterval(1);
+	
+	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
+	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
+	new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "thumbnails_slider");
+	// /Size slider
+	
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
 	d->mSortAction=new KSelectAction(i18n("Sort"), 0, this, SLOT(setSorting()), actionCollection, "view_sort");
@@ -393,30 +408,46 @@ void GVFileViewStack::slotViewDoubleClicked() {
 }
 
 
-void GVFileViewStack::updateThumbnailSize() {
-	if (mNoThumbnails->isChecked()) {
-		setMode(GVFileViewStack::FILE_LIST);
+void GVFileViewStack::updateViewMode() {
+	if (mListMode->isChecked()) {
+		setMode(FILE_LIST);
 		return;
-	} else {
-		if (mSmallThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::SMALL);
-		} else if (mMedThumbnails->isChecked()) {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::MED);
-		} else {
-			mFileThumbnailView->setThumbnailSize(ThumbnailSize::LARGE);
-		}
-		if (mMode==GVFileViewStack::FILE_LIST) {
-			setMode(GVFileViewStack::THUMBNAIL);
-		} else {
-			KFileItemList items=*mFileThumbnailView->items();
-			KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
-
-			mFileThumbnailView->GVFileViewBase::clear();
-			mFileThumbnailView->addItemList(items);
-			mFileThumbnailView->setShownFileItem(shownFileItem);
-		}
-		mFileThumbnailView->startThumbnailUpdate();
 	}
+	if (mSideThumbnailMode->isChecked()) {
+		mFileThumbnailView->setItemTextPos(QIconView::Right);
+	} else {
+		mFileThumbnailView->setItemTextPos(QIconView::Bottom);
+	}
+	
+	// Only switch the view if we are going from no thumbs to either side or
+	// bottom thumbs, not when switching between side and bottom thumbs
+	if (mMode==FILE_LIST) {
+		setMode(THUMBNAIL);
+	} else {
+		KFileItemList items=*mFileThumbnailView->items();
+		KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
+
+		mFileThumbnailView->GVFileViewBase::clear();
+		mFileThumbnailView->addItemList(items);
+		mFileThumbnailView->setShownFileItem(shownFileItem);
+	}
+	
+	mFileThumbnailView->startThumbnailUpdate();
+}
+
+
+void GVFileViewStack::updateThumbnailSize(int size) {
+	size*=SLIDER_RESOLUTION;
+	mFileThumbnailView->setThumbnailSize(size);
+	
+	KFileItemList items=*mFileThumbnailView->items();
+	KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
+
+	mFileThumbnailView->GVFileViewBase::clear();
+	mFileThumbnailView->addItemList(items);
+	mFileThumbnailView->setShownFileItem(shownFileItem);
+	
+	mFileThumbnailView->startThumbnailUpdate();
 }
 
 
@@ -846,21 +877,21 @@ void GVFileViewStack::delayedDirListerCompleted() {
 	// GVFileThumbnailView::firstFileItem() to return a wrong item.  This work
 	// around is not in firstFileItem() because it's const and sort() is a non
 	// const method
-	if (mMode==THUMBNAIL) {
+	if (mMode!=FILE_LIST) {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
 	browseToFileNameToSelect();
 	emit completedURLListing(mDirURL);
 
-	if (mMode==THUMBNAIL && mThumbnailsNeedUpdate) {
+	if (mMode!=FILE_LIST && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
 	}
 }
 
 
 void GVFileViewStack::dirListerCanceled() {
-	if (mMode==THUMBNAIL) {
+	if (mMode!=FILE_LIST) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
 
@@ -981,6 +1012,7 @@ KFileItem* GVFileViewStack::findItemByFileName(const QString& fileName) const {
 	return 0L;
 }
 
+
 //-----------------------------------------------------------------------
 //
 // Configuration
@@ -988,6 +1020,7 @@ KFileItem* GVFileViewStack::findItemByFileName(const QString& fileName) const {
 //-----------------------------------------------------------------------
 void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
+	mSizeSlider->setValue(mFileThumbnailView->thumbnailSize() / SLIDER_RESOLUTION);
 
 	config->setGroup(group);
 	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
@@ -996,22 +1029,17 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 
 	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,true);
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
+	mSizeSlider->setEnabled(startWithThumbnails);
 
 	if (startWithThumbnails) {
-		switch (mFileThumbnailView->thumbnailSize()) {
-		case ThumbnailSize::SMALL:
-			mSmallThumbnails->setChecked(true);
-			break;
-		case ThumbnailSize::MED:
-			mMedThumbnails->setChecked(true);
-			break;
-		case ThumbnailSize::LARGE:
-			mLargeThumbnails->setChecked(true);
-			break;
+		if (mFileThumbnailView->itemTextPos()==QIconView::Right) {
+			mSideThumbnailMode->setChecked(true);
+		} else {
+			mBottomThumbnailMode->setChecked(true);
 		}
 		mFileThumbnailView->startThumbnailUpdate();
 	} else {
-		mNoThumbnails->setChecked(true);
+		mListMode->setChecked(true);
 	}
 
 	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR,&Qt::red));
@@ -1035,7 +1063,7 @@ void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 
 	config->setGroup(group);
 
-	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mNoThumbnails->isChecked());
+	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mListMode->isChecked());
 	config->writeEntry(CONFIG_SHOW_DIRS, mShowDirs);
 	config->writeEntry(CONFIG_SHOW_DOT_FILES, mShowDotFiles->isChecked());
 	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);

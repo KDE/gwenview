@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt 
 #include <qdir.h>
 #include <qobject.h>
+#include <qslider.h>
 #include <qwidgetstack.h>
 
 // KDE
@@ -108,10 +109,9 @@ public:
 	KAction* selectLast() const { return mSelectLast; }
 	KAction* selectPrevious() const { return mSelectPrevious; }
 	KAction* selectNext() const { return mSelectNext; }
-	KRadioAction* noThumbnails() const { return mNoThumbnails; }
-	KRadioAction* smallThumbnails() const { return mSmallThumbnails; }
-	KRadioAction* medThumbnails() const { return mMedThumbnails; }
-	KRadioAction* largeThumbnails() const { return mLargeThumbnails; }
+	KRadioAction* listMode() const { return mListMode; }
+	KRadioAction* sideThumbnailMode() const { return mSideThumbnailMode; }
+	KRadioAction* bottomThumbnailMode() const { return mBottomThumbnailMode; }
 	KToggleAction* showDotFiles() const { return mShowDotFiles; }
 
 	void setFocus();
@@ -183,8 +183,11 @@ private slots:
 	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
 	void openContextMenu(QIconViewItem*,const QPoint&);
 
-	// Get called by the thumbnail size radio actions
-	void updateThumbnailSize();
+	// Get called by the thumbnail mode actions
+	void updateViewMode();
+	
+	// Get called by the thumbnail slider
+	void updateThumbnailSize(int);
 
 	void toggleShowDotFiles();
 	void setSorting();
@@ -218,10 +221,11 @@ private:
 	KAction* mSelectPrevious;
 	KAction* mSelectNext;
 	
-	KRadioAction* mNoThumbnails;
-	KRadioAction* mSmallThumbnails;
-	KRadioAction* mMedThumbnails;
-	KRadioAction* mLargeThumbnails;
+	KRadioAction* mListMode;
+	KRadioAction* mSideThumbnailMode;
+	KRadioAction* mBottomThumbnailMode;
+
+	QSlider* mSizeSlider;
 
 	KToggleAction* mShowDotFiles;
 
