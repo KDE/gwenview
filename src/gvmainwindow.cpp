@@ -143,11 +143,7 @@ static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 		}
 	}
 	KIO::UDSEntry entry;
-#if KDE_IS_VERSION(3, 2, 0)
 	if( KIO::NetAccess::stat( url, entry, parent)) {
-#else
-	if( KIO::NetAccess::stat( url, entry)) {
-#endif
 		KIO::UDSEntry::ConstIterator it;
 		for(it=entry.begin();it!=entry.end();++it) {
 			if ((*it).m_uds==KIO::UDS_FILE_TYPE) {
@@ -251,11 +247,7 @@ bool GVMainWindow::queryClose() {
 		if (QFile::exists(dir)) {
 			KURL url;
 			url.setPath(dir);
-#if KDE_IS_VERSION(3, 2, 0)
-			KIO::NetAccess::del(url, 0);
-#else
-			KIO::NetAccess::del(url);
-#endif
+			KIO::NetAccess::del(url, this);
 		}
 	}
 	
@@ -911,11 +903,7 @@ void GVMainWindow::createActions() {
 	mReload=new KAction(i18n("Reload"), "reload", Key_F5, mDocument, SLOT(reload()), actionCollection(), "reload");
 	mReload->setEnabled(false);
 
-#if KDE_IS_VERSION(3, 1, 90)
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
-#else
-	mToggleFullScreen=new KToggleAction(i18n("Full Screen"),"window_fullscreen",CTRL + Key_F,this,SLOT(toggleFullScreen()),actionCollection(),"fullscreen");
-#endif
 	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
 
 	// Go

@@ -26,12 +26,9 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kio/global.h>
 
-#include <kdeversion.h>
-#if ! KDE_IS_VERSION(3, 2, 0)
-#include <libgvcompat/kurlcompat.h>
-#endif
 // Local
 
 const char CONFIG_CACHE_MAXSIZE[]="maxSize";

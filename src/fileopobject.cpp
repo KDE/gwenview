@@ -29,17 +29,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kglobalsettings.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurlcombobox.h>
-
-#if KDE_IS_VERSION(3, 2, 0)
-#include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#define KInputDialog KLineEditDlg
-#endif
 
 // Local
 #include "fileoperation.h"

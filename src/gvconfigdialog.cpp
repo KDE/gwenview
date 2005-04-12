@@ -281,11 +281,7 @@ void GVConfigDialog::emptyCache() {
 
 	KURL url;
 	url.setPath(dir);
-#if KDE_IS_VERSION(3, 2, 0)
-	if (KIO::NetAccess::del(url, 0)) {
-#else
-	if (KIO::NetAccess::del(url)) {
-#endif
+	if (KIO::NetAccess::del(url, this)) {
 		KMessageBox::information( this,i18n("Cache emptied.") );
 	}
 }

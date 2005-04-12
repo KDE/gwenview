@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kicontheme.h>
 #include <kiconloader.h>
 #include <kimageio.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
 #include <kprotocolinfo.h>
@@ -38,13 +39,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klistview.h>
 #include <kio/job.h>
 #include <kio/file.h>
-
-#if KDE_IS_VERSION(3, 2, 0)
-#include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#define KInputDialog KLineEditDlg
-#endif
 
 // Local
 #include "fileoperation.h"

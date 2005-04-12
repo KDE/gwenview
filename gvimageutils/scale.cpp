@@ -64,11 +64,7 @@
 #include <qcolor.h>
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(3, 2, 0)
 #include <kcpuinfo.h>
-#else
-#include <libgvcompat/kcpuinfo.h>
-#endif
 
 #include <string.h>
 #include <stdlib.h>

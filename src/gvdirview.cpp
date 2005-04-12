@@ -30,18 +30,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpropsdlg.h>
 #include <kurl.h>
 #include <kurldrag.h>
-
-#if KDE_IS_VERSION(3, 2, 0)
-#include <kinputdialog.h>
-#else
-#include <klineeditdlg.h>
-#define KInputDialog KLineEditDlg
-#endif
 
 // Local
 #include "fileoperation.h"
