@@ -112,31 +112,27 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	Q_ASSERT(pixmap());
 	if (!pixmap()) return;
 
+	int thumbnailSize=view->thumbnailSize();
 	QFontMetrics fm = view->fontMetrics();
-	QRect itemIconRect = QRect(0,0,0,0);
-	QRect itemRect = rect();
 
-	itemIconRect.setWidth( pixmap()->width()+2 );
-	itemIconRect.setHeight( pixmap()->height()+2 );
-
-	int textWidth=availableTextWidth();
+	int maxTextWidth=availableTextWidth();
+	int textWidth=0;
 	int textHeight=fm.height();
 	
 	if (iconView()->wordWrapIconText() && iconView()->itemTextPos()==QIconView::Bottom) {
 		// Word-wrap up to 3 lines if the text is on bottom
 		textHeight*=3;
 	}
-	QRect itemTextRect = QRect(0, 0, textWidth, textHeight);
 	// When is text_ set ? Doesn't look like it's ever set.
 	QString txt = text_.isEmpty() ? text() : text_;
 
 	if (mWordWrap) delete mWordWrap;
-	mWordWrap=KWordWrap::formatText(fm, itemTextRect,
+	mWordWrap=KWordWrap::formatText(fm, QRect(0, 0, maxTextWidth, textHeight),
 		(view->itemTextPos()==QIconView::Bottom ? AlignHCenter : AlignAuto)
 		| WordBreak, txt );
 	
-	itemTextRect=mWordWrap->boundingRect();
-	Q_ASSERT( itemTextRect.width() <= textWidth );
+	textWidth=QMIN(mWordWrap->boundingRect().width(), maxTextWidth);
+	textHeight=mWordWrap->boundingRect().height();
 	
 	// Take info lines width into account
 	// Find maximum width of info lines, truncate them if they are too long
@@ -144,52 +140,57 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	QValueListIterator<QString> itEnd=mInfoLines.end();
 	for (;it!=itEnd; ++it) {
 		int lineWidth=fm.width(*it);
-		if (lineWidth>textWidth) {
-			*it=truncateText(fm, *it, textWidth);
-			// No need to go further, we are already at the max
-			itemTextRect.setWidth(textWidth);
+		if (lineWidth>maxTextWidth) {
+			*it=truncateText(fm, *it, maxTextWidth);
+			// No need to go further, we just reached the max
+			textWidth=maxTextWidth;
 			break;
 		}
-		itemTextRect.setWidth( QMAX(itemTextRect.width(), lineWidth) );
+		textWidth=QMAX(textWidth, lineWidth);
 	}
 
 	// Append the info lines height
-	itemTextRect.rBottom()+=mInfoLines.count() * fm.height();
+	textHeight+=mInfoLines.count() * fm.height();
 	
 	if (view->itemTextPos() == QIconView::Right) {
 		// Make sure we don't get longer than the icon height
-		if (itemTextRect.height() > view->thumbnailSize()) {
-			itemTextRect.setHeight(view->thumbnailSize());
+		if (textHeight > thumbnailSize) {
+			textHeight=thumbnailSize;
 		}
 	}
 
-	// All this code isn't related to the word-wrap algo...
-	// Sucks that we have to duplicate it.
-	int w = 0;    int h = 0;
+	// Center rects
+	QRect itemIconRect = QRect(0,0,thumbnailSize+2,thumbnailSize+2);
+	QRect itemRect = rect();
+	QRect itemTextRect;
+	
+	int w = 0;
+	int h = 0;
 	if ( view->itemTextPos() == QIconView::Bottom ) {
-		w = QMAX( itemTextRect.width(), itemIconRect.width() );
-		h = itemTextRect.height() + itemIconRect.height() + 1;
+		w = QMAX( textWidth, itemIconRect.width() );
+		h = textHeight + itemIconRect.height() + 1;
 
 		itemRect.setWidth( w );
 		itemRect.setHeight( h );
 		int width = QMAX( w, QApplication::globalStrut().width() ); // see QIconViewItem::width()
 		int height = QMAX( h, QApplication::globalStrut().height() ); // see QIconViewItem::height()
-		itemTextRect = QRect( ( width - itemTextRect.width() ) / 2, height - itemTextRect.height(),
-							itemTextRect.width(), itemTextRect.height() );
+		itemTextRect = QRect( ( width - textWidth ) / 2, height - textHeight,
+							textWidth, textHeight);
+
 		itemIconRect = QRect( ( width - itemIconRect.width() ) / 2, 0,
 							itemIconRect.width(), itemIconRect.height() );
 	} else {
-		h = QMAX( itemTextRect.height(), itemIconRect.height() );
-		w = itemTextRect.width() + itemIconRect.width() + 1;
+		h = QMAX( textHeight, itemIconRect.height() );
+		w = textWidth + itemIconRect.width() + 1;
 
 		itemRect.setWidth( w );
 		itemRect.setHeight( h );
 		int width = QMAX( w, QApplication::globalStrut().width() ); // see QIconViewItem::width()
 		int height = QMAX( h, QApplication::globalStrut().height() ); // see QIconViewItem::height()
 
-		itemTextRect = QRect( width - itemTextRect.width(), ( height - itemTextRect.height() ) / 2,
-							itemTextRect.width(), itemTextRect.height() );
-		if ( itemIconRect.height() > itemTextRect.height() ) // icon bigger than text -> center vertically
+		itemTextRect = QRect( width - textWidth, ( height - textHeight ) / 2,
+							textWidth, textHeight );
+		if ( itemIconRect.height() > textHeight ) // icon bigger than text -> center vertically
 			itemIconRect = QRect( 0, ( height - itemIconRect.height() ) / 2,
 								itemIconRect.width(), itemIconRect.height() );
 		else // icon smaller than text -> center with first line
