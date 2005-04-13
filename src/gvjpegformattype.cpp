@@ -53,6 +53,8 @@ extern "C" {
 
 
 static const int MAX_BUFFER = 32768;
+// how long it will consume data before starting outputing progressive scan
+static const int MAX_CONSUMING_TIME = 500;
 
 //-----------------------------------------------------------------------------
 //
@@ -88,6 +90,8 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 	size_t skip_input_bytes;
 	bool at_eof;
 	QRect change_rect;
+	QRect old_change_rect;
+	QTime decoder_timestamp;
 	bool final_pass;
 	bool decoding_done;
 	bool do_progressive;
@@ -346,14 +350,16 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 			qDebug("ok, going to DECOMPRESS_STARTED");
 #endif
 
+			mSourceManager.decoder_timestamp.start();
 			mState = mSourceManager.do_progressive ? DECOMPRESS_STARTED : DO_OUTPUT_SCAN;
 		}
 	}
 
+again:
+
 	if(mState == DECOMPRESS_STARTED) {
-//		mState =  (!mSourceManager.final_pass && decoder_time_stamp.elapsed() < MAX_CONSUMING_TIME)
-//			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
-		mState = CONSUME_INPUT;
+		mState =  (!mSourceManager.final_pass && mSourceManager.decoder_timestamp.elapsed() < MAX_CONSUMING_TIME)
+			 ? CONSUME_INPUT : PREPARE_OUTPUT_SCAN;
 	}
 
 	if(mState == CONSUME_INPUT) {
@@ -361,9 +367,11 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 
 		do {
 			retval = jpeg_consume_input(&mDecompress);
-		} while (retval != JPEG_SUSPENDED && retval != JPEG_REACHED_EOI);
+		} while (retval != JPEG_SUSPENDED && retval != JPEG_REACHED_EOI
+			&& (retval != JPEG_REACHED_SOS || mSourceManager.decoder_timestamp.elapsed() < MAX_CONSUMING_TIME));
 
 		if( mSourceManager.final_pass
+			|| mSourceManager.decoder_timestamp.elapsed() >= MAX_CONSUMING_TIME
 			|| retval == JPEG_REACHED_EOI
 			|| retval == JPEG_REACHED_SOS) {
 			mState = PREPARE_OUTPUT_SCAN;
@@ -415,8 +423,15 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 #endif
 			mSourceManager.change_rect |= r;
 
-			consumer->changed(mSourceManager.change_rect);
-			mSourceManager.change_rect = QRect();
+			if ( mSourceManager.decoder_timestamp.elapsed() >= MAX_CONSUMING_TIME ) {
+				if( !mSourceManager.old_change_rect.isEmpty()) {
+					consumer->changed(mSourceManager.old_change_rect);
+					mSourceManager.old_change_rect = QRect();
+				}
+				consumer->changed(mSourceManager.change_rect);
+				mSourceManager.change_rect = QRect();
+				mSourceManager.decoder_timestamp.restart();
+			}
 		}
 
 		if(mDecompress.output_scanline >= mDecompress.output_height) {
@@ -425,6 +440,7 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 				mSourceManager.final_pass = jpeg_input_complete(&mDecompress);
 				mSourceManager.decoding_done = mSourceManager.final_pass && mDecompress.input_scan_number == mDecompress.output_scan_number;
 				if ( !mSourceManager.decoding_done ) {
+					mSourceManager.old_change_rect |= mSourceManager.change_rect;
 					mSourceManager.change_rect =  QRect();
 				}
 			} else {
@@ -439,8 +455,10 @@ int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* b
 				qDebug("starting another one, input_scan_number is %d/%d", mDecompress.input_scan_number,
 					mDecompress.output_scan_number);
 #endif
-				// don't return until necessary!
+				mSourceManager.decoder_timestamp.restart();
 				mState = DECOMPRESS_STARTED;
+				// don't return until necessary!
+				goto again;
 			}
 		}
 
