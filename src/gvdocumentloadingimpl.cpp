@@ -72,7 +72,7 @@ GVDocumentLoadingImpl::GVDocumentLoadingImpl(GVDocument* document)
 
 GVDocumentLoadingImpl::~GVDocumentLoadingImpl() {
 	LOG("");
-	d->mLoader->release();
+	if( d->mLoader != NULL ) d->mLoader->release();
 	delete d;
 }
 
