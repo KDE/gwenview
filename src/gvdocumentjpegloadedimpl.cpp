@@ -58,7 +58,7 @@ public:
  * tempFilePath is set to QString::null if the document is a local file,
  * otherwise it is the name of a local copy of the file and must be deleted
  */
-GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, QByteArray& rawData, const QString& tempFilePath)
+GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData, const QString& tempFilePath)
 : GVDocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new GVDocumentJPEGLoadedImplPrivate;

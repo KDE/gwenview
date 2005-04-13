@@ -40,7 +40,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "gvarchive.h"
-#include "gvdocumentdecodeimpl.h"
+#include "gvbusylevelmanager.h"
+#include "gvdocumentloadingimpl.h"
 #include "gvdocumentimpl.h"
 #include "gvimagesavedialog.h"
 #include "gvimageutils/gvimageutils.h"
@@ -108,8 +109,6 @@ GVDocument::GVDocument(QObject* parent)
 		this, SLOT( slotLoading()));
 	connect( this, SIGNAL( loaded(const KURL&)),
 		this, SLOT( slotLoaded()));
-	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
-		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
 }
 
 
@@ -279,14 +278,6 @@ void GVDocument::slotLoading() {
 
 void GVDocument::slotLoaded() {
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
-}
-
-void GVDocument::slotBusyLevelChanged( GVBusyLevel level ) {
-	if( level > BUSY_LOADING ) {
-		d->mImpl->suspendLoading();
-	} else {
-		d->mImpl->resumeLoading();
-	}
 }
 
 //---------------------------------------------------------------------
@@ -563,7 +554,6 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 	connect(d->mImpl, SIGNAL(rectUpdated(const QRect&)),
 		this, SIGNAL(rectUpdated(const QRect&)) );
 	d->mImpl->init();
-	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
 }
 
 
@@ -572,7 +562,7 @@ void GVDocument::load() {
 	Q_ASSERT(!pixURL.isEmpty());
 	LOG("url: " << pixURL.prettyURL());
 
-	switchToImpl(new GVDocumentDecodeImpl(this));
+	switchToImpl(new GVDocumentLoadingImpl(this));
 	emit loading();
 }
 

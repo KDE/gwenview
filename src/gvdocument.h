@@ -32,7 +32,6 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local 
 #include "gvimageutils/orientation.h"
-#include "gvbusylevelmanager.h"
 
 class GVDocumentPrivate;
 class GVDocumentImpl;
@@ -149,7 +148,6 @@ private slots:
 	void slotFinished(bool success);
 	void slotLoading();
 	void slotLoaded();
-	void slotBusyLevelChanged(GVBusyLevel level);
 	
 private:
 	friend class GVDocumentImpl;

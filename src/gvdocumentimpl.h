@@ -50,9 +50,6 @@ public:
 	virtual GVDocument::CommentState commentState() const;
 	virtual void setComment(const QString&);
 	
-	virtual void suspendLoading();
-	virtual void resumeLoading();
-
 	virtual void transform(GVImageUtils::Orientation);
 	virtual QString save(const KURL&, const QCString& format) const;
 

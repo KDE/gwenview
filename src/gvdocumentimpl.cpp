@@ -59,12 +59,6 @@ GVDocument::CommentState GVDocumentImpl::commentState() const {
 void GVDocumentImpl::setComment(const QString&) {
 }
 
-void GVDocumentImpl::suspendLoading() {
-}
-
-void GVDocumentImpl::resumeLoading() {
-}
-
 void GVDocumentImpl::transform(GVImageUtils::Orientation) {
 }
 

@@ -18,20 +18,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTDECODEIMPL_H
-#define GVDOCUMENTDECODEIMPL_H
+#ifndef GVIMAGELOADER_H
+#define GVIMAGELOADER_H
 
 // Qt
 #include <qasyncimageio.h>
+#include <qbuffer.h>
+#include <qcstring.h>
+
+// KDE
+#include <kio/job.h>
 
 // Local 
 #include "tsthread/tsthread.h"
-#include "gvdocumentimpl.h"
-
-class GVDocument;
-
-class GVDocumentDecodeImplPrivate;
-
+#include "gvimageframe.h"
+#include "gvbusylevelmanager.h"
 
 class GVDecoderThread : public TSThread {
 Q_OBJECT
@@ -52,19 +53,32 @@ private:
 	QImage mImage;
 };
 
+class GVImageLoaderPrivate;
 
-class GVDocumentDecodeImpl : public GVDocumentImpl, public QImageConsumer {
+class GVImageLoader : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
-	GVDocumentDecodeImpl(GVDocument* document);
-	~GVDocumentDecodeImpl();
+	GVImageLoader();
+	~GVImageLoader();
 	
+	void startLoading( const KURL& url );
 	void suspendLoading();
 	void resumeLoading();
+	QImage processedImage() const;
+	GVImageFrames frames() const;
+	QCString imageFormat() const;
+	QByteArray rawData() const;
+	KURL url() const;
+
+signals:
+	void sizeLoaded(int, int);
+	void imageChanged(const QRect&); // use processedImage(), is not in frames() yet
+	void frameLoaded();
+	void imageLoaded( bool ok );
 
 private:
-	GVDocumentDecodeImplPrivate* d;
-	void finish();
+	GVImageLoaderPrivate* d;
+	void finish( bool ok );
 	void startThread();
 	
 	// QImageConsumer methods
@@ -77,13 +91,13 @@ private:
 	void setSize(int, int);
 
 private slots:
-	void start();
 	void slotStatResult(KIO::Job*);
 	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
 	void slotGetResult(KIO::Job*);
 	void decodeChunk();
 	void slotImageDecoded();
 	void slotDecoderThreadFailed();
+	void slotBusyLevelChanged( GVBusyLevel );
 };
 
-#endif /* GVDOCUMENTDECODEIMPL_H */
+#endif /* GVIMAGELOADER_H */

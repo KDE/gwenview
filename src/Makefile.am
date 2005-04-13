@@ -54,7 +54,7 @@ libgwenviewcore_la_SOURCES = \
 	gvpngformattype.cpp \
 	gvxpm.cpp \
 	gvdocumentimpl.cpp \
-	gvdocumentdecodeimpl.cpp \
+	gvdocumentloadingimpl.cpp \
 	gvdocumentloadedimpl.cpp \
 	gvdocumentjpegloadedimpl.cpp \
 	gvdocumentanimatedloadedimpl.cpp \
@@ -64,4 +64,5 @@ libgwenviewcore_la_SOURCES = \
 	gvthreadgate.cpp \
 	gvscrollpixmapviewtools.cpp \
 	gvfullscreenbar.cpp \
+	gvimageloader.cpp \
 	main.cpp

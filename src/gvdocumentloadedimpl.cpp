@@ -59,7 +59,6 @@ GVDocumentLoadedImpl::GVDocumentLoadedImpl(GVDocument* document)
 
 
 void GVDocumentLoadedImpl::init() {
-	emit finished(true);
 }
 
 

@@ -18,37 +18,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTJPEGLOADEDIMPL_H
-#define GVDOCUMENTJPEGLOADEDIMPL_H
+#ifndef GVDOCUMENTLOADINGIMPL_H
+#define GVDOCUMENTLOADINGIMPL_H
 
 // Qt
-#include <qimage.h>
+#include <qasyncimageio.h>
 
-// Local
-#include "gvdocumentloadedimpl.h"
+// Local 
+#include "gvdocumentimpl.h"
 
 class GVDocument;
 
-class GVDocumentJPEGLoadedImplPrivate;
+class GVDocumentLoadingImplPrivate;
 
-class GVDocumentJPEGLoadedImpl : public GVDocumentLoadedImpl {
+class GVDocumentLoadingImpl : public GVDocumentImpl {
 Q_OBJECT
 public:
-	GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData, const QString& tempFilePath);
-	~GVDocumentJPEGLoadedImpl();
-	void init();
-	
-	QString comment() const;
-	void setComment(const QString&);
-	GVDocument::CommentState commentState() const;
-	
-	void transform(GVImageUtils::Orientation);
-
-protected:
-	QString localSave(QFile*, const QCString& format) const;
+	GVDocumentLoadingImpl(GVDocument* document);
+	~GVDocumentLoadingImpl();
 	
 private:
-	GVDocumentJPEGLoadedImplPrivate* d;
+	GVDocumentLoadingImplPrivate* d;
+
+private slots:
+	void start();
+	void sizeLoaded(int, int);
+	void imageChanged(const QRect&);
+	void frameLoaded();
+	void imageLoaded( bool ok );
 };
 
-#endif /* GVDOCUMENTJPEGLOADEDIMPL_H */
+#endif /* GVDOCUMENTLOADINGIMPL_H */

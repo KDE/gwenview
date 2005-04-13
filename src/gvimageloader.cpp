@@ -19,31 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
 
+#include "gvimageloader.h"
+
 // Qt
-#include <qbuffer.h>
-#include <qfile.h>
-#include <qguardedptr.h>
-#include <qimage.h>
-#include <qmemarray.h>
-#include <qstring.h>
 #include <qtimer.h>
-#include <qdatetime.h>
 
 // KDE
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
-#include <ktempfile.h>
-#include <kurl.h>
 
 // Local
-#include "gvdocumentloadedimpl.h"
-#include "gvdocumentjpegloadedimpl.h"
-#include "gvdocumentanimatedloadedimpl.h"
-#include "gvdocumentdecodeimpl.moc"
 #include "gvcache.h"
-#include "gvimageframe.h"
+
+#include "gvimageloader.moc"
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
@@ -167,22 +153,25 @@ QImage GVDecoderThread::popLoadedImage() {
 
 //---------------------------------------------------------------------
 //
-// GVDocumentDecodeImplPrivate
+// GVImageLoaderPrivate
 //
 //---------------------------------------------------------------------
-class GVDocumentDecodeImplPrivate {
+class GVImageLoaderPrivate {
 public:
-	GVDocumentDecodeImplPrivate(GVDocumentDecodeImpl* impl)
+	GVImageLoaderPrivate(GVImageLoader* impl)
 	: mDecodedSize(0)
 	, mUseThread(false)
 	, mDecoder(impl)
 	, mUpdatedDuringLoad(false)
+	, mSizeKnown(false)
 	, mSuspended(false)
 	, mGetComplete(false)
 	, mAsyncImageComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
 	{}
+
+	KURL mURL;
 
 	// The file timestamp
 	QDateTime mTimestamp;
@@ -204,14 +193,16 @@ public:
 	// The decoder thread
 	GVDecoderThread mDecoderThread;
 	
-	// Set to true if at least one rectUpdated signals have been emitted
+	// Set to true if at least one changed() signals have been emitted
 	bool mUpdatedDuringLoad;
+	// Set to true if sizeLoaded() signal has been emitted
+	bool mSizeKnown;
 
 	// A rect of recently loaded pixels that the rest of the application has
-	// not been notified about with the rectUpdated signal
+	// not been notified about with the imageChanged() signal
 	QRect mLoadChangedRect; 
 	
-	// The time since we last emitted the rectUpdated signal
+	// The time since we last emitted the imageChanged() signal
 	QTime mTimeSinceLastUpdate;
 	
 	// Whether the loading should be suspended
@@ -228,34 +219,28 @@ public:
 
 	bool mWasFrameData;
 
+	QImage mProcessedImage; // image frame currently being decoded
+
 	GVImageFrames mFrames;
 
-	QCString mCachedFormat;
+	QCString mImageFormat;
 };
 
 
 //---------------------------------------------------------------------
 //
-// GVDocumentDecodeImpl
+// GVImageLoader
 //
 //---------------------------------------------------------------------
-GVDocumentDecodeImpl::GVDocumentDecodeImpl(GVDocument* document) 
-: GVDocumentImpl(document) {
+GVImageLoader::GVImageLoader()
+	: d(0) {
 	LOG("");
-	d=new GVDocumentDecodeImplPrivate(this);
-
-	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
-
-	connect(&d->mDecoderThread, SIGNAL(succeeded()),
-		this, SLOT(slotImageDecoded()) );
-	connect(&d->mDecoderThread, SIGNAL(failed()),
-		this, SLOT(slotDecoderThreadFailed()) );
-	
-	QTimer::singleShot(0, this, SLOT(start()) );
+	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
+		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
 }
 
 
-GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
+GVImageLoader::~GVImageLoader() {
 	LOG("");
 	if (d->mDecoderThread.running()) {
 		d->mDecoderThread.cancel();
@@ -265,19 +250,26 @@ GVDocumentDecodeImpl::~GVDocumentDecodeImpl() {
 }
 
 
-void GVDocumentDecodeImpl::start() {
-	d->mLoadChangedRect=QRect();
-	d->mTimestamp = GVCache::instance()->timestamp( mDocument->url() );
-	d->mFrames.clear();
-	d->mWasFrameData = false;
-	d->mNextFrameDelay = 0;
-	d->mCachedFormat = QCString();
-	KIO::Job* job=KIO::stat( mDocument->url(), false);
+void GVImageLoader::startLoading( const KURL& url ) {
+	delete d;
+	d = new GVImageLoaderPrivate(this);
+	d->mURL = url;
+	d->mTimestamp = GVCache::instance()->timestamp( d->mURL );
+	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
+
+	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
+
+	connect(&d->mDecoderThread, SIGNAL(succeeded()),
+		this, SLOT(slotImageDecoded()) );
+	connect(&d->mDecoderThread, SIGNAL(failed()),
+		this, SLOT(slotDecoderThreadFailed()) );
+
+	KIO::Job* job=KIO::stat( d->mURL, false );
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
 }
 
-void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
+void GVImageLoader::slotStatResult(KIO::Job* job) {
 	LOG("error code: " << job->error());
 
 	// Get modification time of the original file
@@ -291,23 +283,20 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 		}
 	}
 
-	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
+	if( urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
-		d->mRawData = GVCache::instance()->file( mDocument->url() );
-		GVImageFrames frames = GVCache::instance()->frames( mDocument->url(), format );
+		d->mRawData = GVCache::instance()->file( d->mURL );
+		GVImageFrames frames = GVCache::instance()->frames( d->mURL, format );
 		if( !frames.isEmpty()) {
+			d->mImageFormat = format;
+			d->mFrames = frames;
 			if( !d->mRawData.isNull()) {
-				setImageFormat(format);
-				d->mFrames = frames;
-				finish();
+				finish( true );
 				return;
-			} else {
-				// the raw data is needed e.g. for JPEG, so it needs to be loaded
-				// if it's not in the cache
-				d->mCachedFormat = format;
-				d->mFrames = frames;
 			}
+			// the raw data is needed e.g. for JPEG, so it needs to be loaded
+			// if it's not in the cache
 		} else {
 			// Image in cache is broken, let's try the file
 			if( !d->mRawData.isNull()) {
@@ -320,7 +309,7 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 	
 	// Start loading the image
 	d->mTimestamp = urlTimestamp;
-	KIO::Job* getJob=KIO::get( mDocument->url(), false, false);
+	KIO::Job* getJob=KIO::get( d->mURL, false, false);
 
 	connect(getJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
 		this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
@@ -333,26 +322,24 @@ void GVDocumentDecodeImpl::slotStatResult(KIO::Job* job) {
 }
 	
 
-void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
+void GVImageLoader::slotGetResult(KIO::Job* job) {
 	LOG("error code: " << job->error());
 	if( job->error() != 0 ) {
 		// failed
-		emit finished(false);
-		switchToImpl(new GVDocumentImpl(mDocument));
+		finish( false );
 		return;
 	}
 
 	d->mGetComplete = true;
+	
+	// Store raw data in cache
+	GVCache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
 
-	if( !d->mCachedFormat.isNull()) {
-		// Store raw data in cache
-		GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
-		setImageFormat(d->mCachedFormat);
-		//d->mFrames = frames;
-		finish();
+	if( !d->mImageFormat.isNull()) { // image was in cache, but not raw data
+		finish( true );
 		return;
 	}
-	
+
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
 		startThread();
@@ -362,7 +349,7 @@ void GVDocumentDecodeImpl::slotGetResult(KIO::Job* job) {
 }
 
 
-void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+void GVImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 	LOG("size: " << chunk.size());
 	if (chunk.size()<=0) return;
 
@@ -377,13 +364,12 @@ void GVDocumentDecodeImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) 
 }
 
 
-void GVDocumentDecodeImpl::decodeChunk() {
+void GVImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
 		d->mDecoderTimer.stop();
 		return;
 	}
-
-	if( !d->mCachedFormat.isNull()) {
+	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -422,22 +408,21 @@ void GVDocumentDecodeImpl::decodeChunk() {
 }
 
 
-void GVDocumentDecodeImpl::startThread() {
+void GVImageLoader::startThread() {
 	LOG("starting decoder thread");
 	d->mDecoderThread.setRawData(d->mRawData);
 	d->mDecoderThread.start();
 }
 
 
-void GVDocumentDecodeImpl::slotDecoderThreadFailed() {
+void GVImageLoader::slotDecoderThreadFailed() {
 	LOG("");
-	// Image can't be loaded, let's switch to an empty implementation
-	emit finished(false);
-	switchToImpl(new GVDocumentImpl(mDocument));
+	// Image can't be loaded
+	finish( false );
 }
 
 
-void GVDocumentDecodeImpl::slotImageDecoded() {
+void GVImageLoader::slotImageDecoded() {
 	LOG("");
 
 	// Get image
@@ -451,72 +436,64 @@ void GVDocumentDecodeImpl::slotImageDecoded() {
 	// Set image format
 	QBuffer buffer(d->mRawData);
 	buffer.open(IO_ReadOnly);
-	const char* format = QImageIO::imageFormat(&buffer);
+	d->mImageFormat = QImageIO::imageFormat(&buffer);
 	buffer.close();
 
-	if (!format) {
-		// Unknown format, no need to go further
-		emit finished(false);
-		switchToImpl(new GVDocumentImpl(mDocument));
-		return;
-	}
-	setImageFormat( format );
-	
-	// Store raw data in cache
-	GVCache::instance()->addFile( mDocument->url(), d->mRawData, d->mTimestamp );
-	
-	finish();
+	finish( true );
 }
 
 
 /**
- * Make the final adjustments to the image before switching to a loaded
- * implementation
+ * Make the final adjustments to the image.
  */
-void GVDocumentDecodeImpl::finish() {
+void GVImageLoader::finish( bool ok ) {
 	LOG("");
 
-	QImage image = d->mFrames.first().image;
-
-	GVCache::instance()->addImage( mDocument->url(), d->mFrames, mDocument->imageFormat(), d->mTimestamp );
-
-	// The decoder did not cause the sizeUpdated or rectUpdated signals to be
-	// emitted, let's do it now
-	if (!d->mUpdatedDuringLoad) {
-		setImage(image, false);
-		// make sure sizeUpdated() is always emitted - setImage(image,true) could optimize it out
-		emit sizeUpdated(image.width(), image.height());
-		emit rectUpdated( QRect(QPoint(0,0), image.size()) );
+	if( !ok || d->mFrames.count() == 0 ) {
+		d->mFrames.clear();
+		d->mRawData = QByteArray();
+		d->mImageFormat = QCString();
+		d->mProcessedImage = QImage();
+		emit imageLoaded( false );
+		return;
 	}
 
-	// Update file info
-	setFileSize(d->mRawData.size());
-	
-	// Now we switch to a loaded implementation
-	if ( d->mFrames.count() > 1 ) {
-		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mFrames));
-	} else if (qstrcmp(mDocument->imageFormat(), "JPEG")==0) {
-		// We want a local copy of the file for the comment editor
-		QString tempFilePath;
-		if (!mDocument->url().isLocalFile()) {
-			KTempFile tempFile;
-			tempFile.dataStream()->writeRawBytes(d->mRawData.data(), d->mRawData.size());
-			tempFile.close();
-			tempFilePath=tempFile.name();
-		}
-		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mRawData, tempFilePath));
-	} else {
-		switchToImpl(new GVDocumentLoadedImpl(mDocument));
+	GVCache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
+
+	GVImageFrame lastframe = d->mFrames.last();
+	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
+	d->mProcessedImage = lastframe.image;
+	// The decoder did not cause some signals to be emitted, let's do it now
+	if (!d->mSizeKnown) {
+		emit sizeLoaded( lastframe.image.width(), lastframe.image.height());
 	}
+	if (!d->mLoadChangedRect.isNull()) {
+		emit imageChanged( d->mLoadChangedRect );
+        } else if (!d->mUpdatedDuringLoad) {
+		emit imageChanged( QRect(QPoint(0,0), lastframe.image.size()) );
+	}
+	d->mFrames.push_back( lastframe );
+
+	emit imageLoaded( true );
 }
 
 
-void GVDocumentDecodeImpl::suspendLoading() {
+void GVImageLoader::slotBusyLevelChanged( GVBusyLevel level ) {
+	if( level > BUSY_LOADING ) {
+		suspendLoading();
+	} else {
+		resumeLoading();
+	}
+}
+
+void GVImageLoader::suspendLoading() {
+	if( d == NULL ) return;
 	d->mDecoderTimer.stop();
 	d->mSuspended = true;
 }
 
-void GVDocumentDecodeImpl::resumeLoading() {
+void GVImageLoader::resumeLoading() {
+	if( d == NULL ) return;
 	d->mSuspended = false;
 	d->mDecoderTimer.start(0, false);
 }
@@ -527,11 +504,8 @@ void GVDocumentDecodeImpl::resumeLoading() {
 // QImageConsumer
 //
 //---------------------------------------------------------------------
-void GVDocumentDecodeImpl::end() {
+void GVImageLoader::end() {
 	LOG("");
-	if( !d->mLoadChangedRect.isNull() && d->mFrames.count() == 0 ) {
-		emit rectUpdated(d->mLoadChangedRect);
-	}
 
 	d->mDecoderTimer.stop();
 	d->mAsyncImageComplete=true;
@@ -543,34 +517,31 @@ void GVDocumentDecodeImpl::end() {
 	QTimer::singleShot(0, this, SLOT(slotImageDecoded()) );
 }
 
-void GVDocumentDecodeImpl::changed(const QRect& rect) {
+void GVImageLoader::changed(const QRect& rect) {
+	d->mProcessedImage = d->mDecoder.image();
 	d->mWasFrameData = true;
-	if( d->mFrames.count() > 0 ) return;
-	if (!d->mUpdatedDuringLoad) {
-		setImage(d->mDecoder.image(), false);
-		d->mUpdatedDuringLoad=true;
-	}
+	d->mUpdatedDuringLoad=true;
 	d->mLoadChangedRect |= rect;
 	if( d->mTimeSinceLastUpdate.elapsed() > 200 ) {
 		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
-		emit rectUpdated(d->mLoadChangedRect);
+		emit imageChanged(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
 		d->mTimeSinceLastUpdate.start();
 	}
 }
 
-void GVDocumentDecodeImpl::frameDone() {
+void GVImageLoader::frameDone() {
 	frameDone( QPoint( 0, 0 ), QRect( 0, 0, d->mDecoder.image().width(), d->mDecoder.image().height()));
 }
 
-void GVDocumentDecodeImpl::frameDone(const QPoint& offset, const QRect& rect) {
+void GVImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	// Another case where the image loading in Qt's is a bit borken.
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
 	if( !d->mWasFrameData ) return;
 	d->mWasFrameData = false;
-	if( !d->mLoadChangedRect.isNull() && d->mFrames.count() == 0 ) {
-		emit rectUpdated(d->mLoadChangedRect);
+	if( !d->mLoadChangedRect.isNull()) {
+		emit imageChanged(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
 		d->mTimeSinceLastUpdate.start();
 	}
@@ -584,27 +555,49 @@ void GVDocumentDecodeImpl::frameDone(const QPoint& offset, const QRect& rect) {
 			image = im;
 		}
 	}
-	if( d->mFrames.count() == 0 ) {
-		setImage( image, false ); // explicit sharing - don't modify the image in document anymore
-	}
 	d->mFrames.append( GVImageFrame( image, d->mNextFrameDelay ));
 	d->mNextFrameDelay = 0;
+	emit frameLoaded();
 }
 
-void GVDocumentDecodeImpl::setLooping(int) {
+void GVImageLoader::setLooping(int) {
 }
 
-void GVDocumentDecodeImpl::setFramePeriod(int milliseconds) {
+void GVImageLoader::setFramePeriod(int milliseconds) {
 	if( milliseconds < 0 ) milliseconds = 0; // -1 means showing immediately
 	if( d->mNextFrameDelay == 0 || milliseconds != 0 ) {
 		d->mNextFrameDelay = milliseconds;
 	}
 }
 
-void GVDocumentDecodeImpl::setSize(int width, int height) {
+void GVImageLoader::setSize(int width, int height) {
 	LOG(width << "x" << height);
-	// FIXME: There must be a better way than creating an empty image
-	setImage(QImage(width, height, 32), false);
-	emit sizeUpdated(width, height);
+	d->mSizeKnown = true;
+	emit sizeLoaded(width, height);
+	d->mProcessedImage = QImage();
 }
 
+
+QImage GVImageLoader::processedImage() const {
+	return d->mProcessedImage;
+}
+
+
+GVImageFrames GVImageLoader::frames() const {
+	return d->mFrames;
+}
+
+
+QCString GVImageLoader::imageFormat() const {
+	return d->mImageFormat;
+}
+
+
+QByteArray GVImageLoader::rawData() const {
+	return d->mRawData;
+}
+
+
+KURL GVImageLoader::url() const {
+	return d->mURL;
+}
