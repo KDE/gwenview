@@ -64,13 +64,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
 const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 
-// These static format type vars are here to make sure the async loaders are
-// always enabled (in viewer and in parts)
-static GVJPEGFormatType sJPEGFormatType;
-static GVPNGFormatType sPNGFormatType;
-static GVXPM sXPM;
-
-
 //-------------------------------------------------------------------
 //
 // GVDocumentPrivate
@@ -104,6 +97,15 @@ GVDocument::GVDocument(QObject* parent)
 	// Register formats here to make sure they are always enabled
 	KImageIO::registerFormats();
 	XCFImageFormat::registerFormat();
+
+	// First load Qt's plugins, so that Gwenview's decoders that
+	// override some of them are installed later and thus come first.
+	QImageIO::inputFormats();
+	{
+		static GVJPEGFormatType sJPEGFormatType;
+		static GVPNGFormatType sPNGFormatType;
+		static GVXPM sXPM;
+	}
 
 	connect( this, SIGNAL( loading()),
 		this, SLOT( slotLoading()));
