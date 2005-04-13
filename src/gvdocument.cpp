@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvimageutils/gvimageutils.h"
 #include "gvjpegformattype.h"
 #include "gvpngformattype.h"
+#include "gvmngformattype.h"
 #include "gvprintdialog.h"
 #include "qxcfi.h"
 #include "gvxpm.h"
@@ -105,6 +106,7 @@ GVDocument::GVDocument(QObject* parent)
 		static GVJPEGFormatType sJPEGFormatType;
 		static GVPNGFormatType sPNGFormatType;
 		static GVXPM sXPM;
+		static GVMNG sMNG;
 	}
 
 	connect( this, SIGNAL( loading()),

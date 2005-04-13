@@ -94,3 +94,15 @@ esac
 
 GV_ASM_DEFS="$gv_asm_defs"
 AC_SUBST(GV_ASM_DEFS)
+
+# libmng check (for gvmngformattype.*)
+LIBMNG=
+KDE_CHECK_HEADER(libmng.h,
+    [
+    KDE_CHECK_LIB(mng, mng_initialize,
+        [
+        AC_DEFINE_UNQUOTED(HAVE_LIBMNG, 1, [Define if you have libmng])
+        LIBMNG="-lmng $LIBZ -lm"
+        ], [], $LIBZ -lm)
+    ])
+AC_SUBST(LIBMNG)
