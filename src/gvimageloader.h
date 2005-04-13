@@ -58,17 +58,17 @@ class GVImageLoaderPrivate;
 class GVImageLoader : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
-	GVImageLoader();
-	~GVImageLoader();
-	
-	void startLoading( const KURL& url );
-	void suspendLoading();
-	void resumeLoading();
+	static GVImageLoader* loader( const KURL& url ); // use this instead of ctor
+	void release(); // use this instead of dtor (disconnect from signals before)
+
 	QImage processedImage() const;
 	GVImageFrames frames() const;
 	QCString imageFormat() const;
 	QByteArray rawData() const;
 	KURL url() const;
+	QSize knownSize() const;
+	QRegion loadedRegion() const; // valid parts of processedImage()
+	bool completed() const;
 
 signals:
 	void sizeLoaded(int, int);
@@ -76,8 +76,23 @@ signals:
 	void frameLoaded();
 	void imageLoaded( bool ok );
 
+private slots:
+	void slotStatResult(KIO::Job*);
+	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
+	void slotGetResult(KIO::Job*);
+	void decodeChunk();
+	void slotImageDecoded();
+	void slotDecoderThreadFailed();
+	void slotBusyLevelChanged( GVBusyLevel );
+
 private:
-	GVImageLoaderPrivate* d;
+	GVImageLoader();
+	~GVImageLoader();
+	void ref();
+	void deref();
+	void startLoading( const KURL& url );
+	void suspendLoading();
+	void resumeLoading();
 	void finish( bool ok );
 	void startThread();
 	
@@ -90,14 +105,7 @@ private:
 	void setFramePeriod(int milliseconds);
 	void setSize(int, int);
 
-private slots:
-	void slotStatResult(KIO::Job*);
-	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
-	void slotGetResult(KIO::Job*);
-	void decodeChunk();
-	void slotImageDecoded();
-	void slotDecoderThreadFailed();
-	void slotBusyLevelChanged( GVBusyLevel );
+	GVImageLoaderPrivate* d;
 };
 
 #endif /* GVIMAGELOADER_H */

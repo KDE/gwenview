@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvslideshow.moc"
 #include "gvdocument.h"
+#include "gvimageloader.h"
 
 
 static const char* CONFIG_DELAY="delay";
@@ -36,7 +37,7 @@ static const char* CONFIG_LOOP="loop";
 
 
 GVSlideShow::GVSlideShow(GVDocument* document)
-: mDelay(10), mLoop(false), mDocument(document), mStarted(false) {
+: mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ), mPrefetchAdvance( 1 ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -44,6 +45,9 @@ GVSlideShow::GVSlideShow(GVDocument* document)
 			this, SLOT(slotLoaded()) );
 }
 
+GVSlideShow::~GVSlideShow() {
+	prefetchDone( false );
+}
 
 void GVSlideShow::setLoop(bool value) {
 	mLoop=value;
@@ -67,6 +71,8 @@ void GVSlideShow::start(const KURL::List& urls) {
 	
 	mTimer->start(mDelay*1000, true);
 	mStarted=true;
+	mPrefetchAdvance = 1;
+	prefetch();
 }
 
 
@@ -97,15 +103,53 @@ void GVSlideShow::slotTimeout() {
 	}
 
 	mDocument->setURL(*it);
+	if( mPrefetchAdvance > 1 ) --mPrefetchAdvance;
 }
 
 
 void GVSlideShow::slotLoaded() {
 	if (mStarted) {
 		mTimer->start(mDelay*1000, true);
+		prefetch();
 	}
 }
 
+
+void GVSlideShow::prefetch() {
+	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	if (it==mURLs.end()) {
+		return;
+	}
+
+	for( int i = 0;
+	     i < mPrefetchAdvance;
+	     ++i ) {
+		++it;
+		if (it==mURLs.end()) {
+			it=mURLs.begin();
+		}
+		if (it==mStartIt && !mLoop) {
+			return;
+		}
+	}
+
+	prefetchDone( false );
+	mPrefetch = GVImageLoader::loader( *it );
+	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
+}
+
+void GVSlideShow::prefetchDone( bool ok ) {
+	if( mPrefetch != NULL ) { 
+		mPrefetch->disconnect( this );
+		mPrefetch->release();
+	}
+	mPrefetch = NULL;
+	if( !ok ) return;
+// TODO this doesn't work for two reasons:
+// - more distant images could put more needed images from the cache (needs cache priority?)
+// - when doing manual image changes during slideshow, mPrefetchAdvance can get out of sync
+//	if( ++mPrefetchAdvance <= 3 ) prefetch();
+}
 
 //-Configuration--------------------------------------------
 void GVSlideShow::readConfig(KConfig* config,const QString& group) {

@@ -32,13 +32,15 @@ class QTimer;
 
 class GVDocument;
 class KConfig;
+class GVImageLoader;
 
 class GVSlideShow : public QObject
 {
 Q_OBJECT
 public:
 	GVSlideShow(GVDocument* document);
-	
+	virtual ~GVSlideShow();
+
 	void setLoop(bool);
 	bool loop() const { return mLoop; }
 	
@@ -57,8 +59,10 @@ signals:
 private slots:
 	void slotTimeout();
 	void slotLoaded();
+	void prefetchDone( bool ok );
 
 private:
+	void prefetch();
 	QTimer* mTimer;
 	int mDelay;
 	bool mLoop;
@@ -66,7 +70,8 @@ private:
 	bool mStarted;
 	KURL::List mURLs;
 	KURL::List::ConstIterator mStartIt;
+	GVImageLoader* mPrefetch;
+	int mPrefetchAdvance;
 };
 
 #endif // GVSLIDESHOW_H
-

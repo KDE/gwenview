@@ -40,6 +40,8 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 #define LOG(x) ;
 #endif
 
+static QMap< KURL, GVImageLoader* > loaders;
+
 //---------------------------------------------------------------------
 //
 // GVCancellableBuffer
@@ -163,12 +165,13 @@ public:
 	, mUseThread(false)
 	, mDecoder(impl)
 	, mUpdatedDuringLoad(false)
-	, mSizeKnown(false)
 	, mSuspended(false)
 	, mGetComplete(false)
 	, mAsyncImageComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
+	, mRefcount( 0 )
+	, mDecodeComplete( false )
 	{}
 
 	KURL mURL;
@@ -195,8 +198,8 @@ public:
 	
 	// Set to true if at least one changed() signals have been emitted
 	bool mUpdatedDuringLoad;
-	// Set to true if sizeLoaded() signal has been emitted
-	bool mSizeKnown;
+	// Set to image size if sizeLoaded() signal has been emitted
+	QSize mKnownSize;
 
 	// A rect of recently loaded pixels that the rest of the application has
 	// not been notified about with the imageChanged() signal
@@ -221,9 +224,15 @@ public:
 
 	QImage mProcessedImage; // image frame currently being decoded
 
+	QRegion mLoadedRegion; // loaded parts of mProcessedImage
+
 	GVImageFrames mFrames;
 
 	QCString mImageFormat;
+
+	int mRefcount; // loaders may be shared
+
+	bool mDecodeComplete; // is decoding fully completed?
 };
 
 
@@ -232,9 +241,9 @@ public:
 // GVImageLoader
 //
 //---------------------------------------------------------------------
-GVImageLoader::GVImageLoader()
-	: d(0) {
+GVImageLoader::GVImageLoader() {
 	LOG("");
+	d = new GVImageLoaderPrivate(this);
 	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
 		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
 }
@@ -251,8 +260,7 @@ GVImageLoader::~GVImageLoader() {
 
 
 void GVImageLoader::startLoading( const KURL& url ) {
-	delete d;
-	d = new GVImageLoaderPrivate(this);
+	if( !d->mURL.isEmpty()) return; // already loading
 	d->mURL = url;
 	d->mTimestamp = GVCache::instance()->timestamp( d->mURL );
 	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
@@ -449,6 +457,8 @@ void GVImageLoader::slotImageDecoded() {
 void GVImageLoader::finish( bool ok ) {
 	LOG("");
 
+	d->mDecodeComplete = true;
+
 	if( !ok || d->mFrames.count() == 0 ) {
 		d->mFrames.clear();
 		d->mRawData = QByteArray();
@@ -464,10 +474,10 @@ void GVImageLoader::finish( bool ok ) {
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
 	d->mProcessedImage = lastframe.image;
 	// The decoder did not cause some signals to be emitted, let's do it now
-	if (!d->mSizeKnown) {
+	if (d->mKnownSize.isEmpty()) {
 		emit sizeLoaded( lastframe.image.width(), lastframe.image.height());
 	}
-	if (!d->mLoadChangedRect.isNull()) {
+	if (!d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged( d->mLoadChangedRect );
         } else if (!d->mUpdatedDuringLoad) {
 		emit imageChanged( QRect(QPoint(0,0), lastframe.image.size()) );
@@ -487,13 +497,11 @@ void GVImageLoader::slotBusyLevelChanged( GVBusyLevel level ) {
 }
 
 void GVImageLoader::suspendLoading() {
-	if( d == NULL ) return;
 	d->mDecoderTimer.stop();
 	d->mSuspended = true;
 }
 
 void GVImageLoader::resumeLoading() {
-	if( d == NULL ) return;
 	d->mSuspended = false;
 	d->mDecoderTimer.start(0, false);
 }
@@ -522,6 +530,7 @@ void GVImageLoader::changed(const QRect& rect) {
 	d->mWasFrameData = true;
 	d->mUpdatedDuringLoad=true;
 	d->mLoadChangedRect |= rect;
+	d->mLoadedRegion |= rect;
 	if( d->mTimeSinceLastUpdate.elapsed() > 200 ) {
 		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
@@ -540,11 +549,12 @@ void GVImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
 	if( !d->mWasFrameData ) return;
 	d->mWasFrameData = false;
-	if( !d->mLoadChangedRect.isNull()) {
+	if( !d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
 		d->mTimeSinceLastUpdate.start();
 	}
+	d->mLoadedRegion = QRegion();
 	QImage image = d->mDecoder.image();
 	image.detach();
 	if( offset != QPoint( 0, 0 ) || rect != QRect( 0, 0, image.width(), image.height())) {
@@ -572,14 +582,20 @@ void GVImageLoader::setFramePeriod(int milliseconds) {
 
 void GVImageLoader::setSize(int width, int height) {
 	LOG(width << "x" << height);
-	d->mSizeKnown = true;
+	d->mKnownSize = QSize( width, height );
+	// FIXME: There must be a better way than creating an empty image
+	d->mProcessedImage = QImage( width, height, 32 );
 	emit sizeLoaded(width, height);
-	d->mProcessedImage = QImage();
 }
 
 
 QImage GVImageLoader::processedImage() const {
 	return d->mProcessedImage;
+}
+
+
+QSize GVImageLoader::knownSize() const {
+	return d->mKnownSize;
 }
 
 
@@ -600,4 +616,49 @@ QByteArray GVImageLoader::rawData() const {
 
 KURL GVImageLoader::url() const {
 	return d->mURL;
+}
+
+
+QRegion GVImageLoader::loadedRegion() const {
+	return d->mLoadedRegion;
+}
+
+
+bool GVImageLoader::completed() const {
+	return d->mDecodeComplete;
+}
+
+
+void GVImageLoader::ref() {
+	++d->mRefcount;
+}
+
+void GVImageLoader::deref() {
+	if( --d->mRefcount <= 0 ) {
+		loaders.remove( d->mURL );
+		delete this;
+	}
+}
+
+void GVImageLoader::release() {
+	deref();
+}
+
+//---------------------------------------------------------------------
+//
+// Managing loaders
+//
+//---------------------------------------------------------------------
+
+GVImageLoader* GVImageLoader::loader( const KURL& url ) {
+	if( loaders.contains( url )) {
+		GVImageLoader* l = loaders[ url ];
+                l->ref();
+		return l;
+        }
+	GVImageLoader* l = new GVImageLoader;
+	l->ref();
+	loaders[ url ] = l;
+	l->startLoading( url );
+	return l;
 }

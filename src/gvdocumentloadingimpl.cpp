@@ -50,9 +50,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class GVDocumentLoadingImplPrivate {
 public:
 	GVDocumentLoadingImplPrivate()
+	: mLoader( NULL )
 	{}
 
-	GVImageLoader mLoader;
+	GVImageLoader* mLoader;
 };
 
 //---------------------------------------------------------------------
@@ -66,27 +67,47 @@ GVDocumentLoadingImpl::GVDocumentLoadingImpl(GVDocument* document)
 	d=new GVDocumentLoadingImplPrivate;
 
 	QTimer::singleShot(0, this, SLOT(start()) );
-	connect( &d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
-	connect( &d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
-	connect( &d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
-	connect( &d->mLoader, SIGNAL( imageLoaded( bool )), SLOT( imageLoaded( bool )));
 }
 
 
 GVDocumentLoadingImpl::~GVDocumentLoadingImpl() {
 	LOG("");
+	d->mLoader->release();
 	delete d;
 }
 
 
 void GVDocumentLoadingImpl::start() {
-	d->mLoader.startLoading( mDocument->url());
+	d->mLoader = GVImageLoader::loader( mDocument->url());
+	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
+	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
+	connect( d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
+	connect( d->mLoader, SIGNAL( imageLoaded( bool )), SLOT( imageLoaded( bool )));
+
+	// it's possible the loader already has the whole or at least part of the image loaded
+	QSize s = d->mLoader->knownSize();
+	if( !s.isEmpty()) {
+		if( d->mLoader->frames().count() > 0 ) {
+			setImage( d->mLoader->frames().first().image, false );
+			emit sizeUpdated( s.width(), s.height());
+			emit rectUpdated( QRect( QPoint( 0, 0 ), s ));
+		} else {
+			setImage( d->mLoader->processedImage(), false );
+			emit sizeUpdated( s.width(), s.height());
+			QMemArray< QRect > rects = d->mLoader->loadedRegion().rects();
+			for( unsigned int i = 0; i < rects.count(); ++i ) {
+				emit rectUpdated( rects[ i ] );
+			}
+                }
+	}
+	if( d->mLoader->completed()) emit imageLoaded( d->mLoader->frames().count() != 0 );
+	// this may be deleted here
 }
 
 void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
 	LOG("");
 
-	QCString format = d->mLoader.imageFormat();
+	QCString format = d->mLoader->imageFormat();
 	if ( !ok || format.isEmpty()) {
 		// Unknown format, no need to go further
 		emit finished(false);
@@ -96,23 +117,23 @@ void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
 	setImageFormat( format );
 
 	// Update file info
-	setFileSize(d->mLoader.rawData().size());
+	setFileSize(d->mLoader->rawData().size());
 
 	emit finished(true);
 
 	// Now we switch to a loaded implementation
-	if ( d->mLoader.frames().count() > 1 ) {
-		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mLoader.frames()));
+	if ( d->mLoader->frames().count() > 1 ) {
+		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mLoader->frames()));
 	} else if ( format == "JPEG" ) {
 		// We want a local copy of the file for the comment editor
 		QString tempFilePath;
-		if (!d->mLoader.url().isLocalFile()) {
+		if (!d->mLoader->url().isLocalFile()) {
 			KTempFile tempFile;
-			tempFile.dataStream()->writeRawBytes(d->mLoader.rawData().data(), d->mLoader.rawData().size());
+			tempFile.dataStream()->writeRawBytes(d->mLoader->rawData().data(), d->mLoader->rawData().size());
 			tempFile.close();
 			tempFilePath=tempFile.name();
 		}
-		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mLoader.rawData(), tempFilePath));
+		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mLoader->rawData(), tempFilePath));
 	} else {
 		switchToImpl(new GVDocumentLoadedImpl(mDocument));
 	}
@@ -120,21 +141,20 @@ void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
 
 
 void GVDocumentLoadingImpl::imageChanged(const QRect& rect) {
-	if( d->mLoader.frames().count() > 0 ) return;
-	setImage(d->mLoader.processedImage(), false);
+	if( d->mLoader->frames().count() > 0 ) return;
+	setImage(d->mLoader->processedImage(), false);
 	emit rectUpdated( rect );
 }
 
 void GVDocumentLoadingImpl::frameLoaded() {
-	if( d->mLoader.frames().count() == 1 ) {
+	if( d->mLoader->frames().count() == 1 ) {
 		// explicit sharing - don't modify the image in document anymore
-		setImage( d->mLoader.frames().first().image.copy(), false ); 
+		setImage( d->mLoader->frames().first().image.copy(), false ); 
 	}
 }
 
 void GVDocumentLoadingImpl::sizeLoaded(int width, int height) {
 	LOG(width << "x" << height);
-	// FIXME: There must be a better way than creating an empty image
-	setImage(QImage(width, height, 32), false);
+	setImage( d->mLoader->processedImage(), false);
 	emit sizeUpdated(width, height);
 }
