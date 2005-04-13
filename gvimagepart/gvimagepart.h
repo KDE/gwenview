@@ -29,6 +29,7 @@ class GVDocument;
 class GVImagePart;
 class KDirLister;
 class KFileItem;
+class GVImageLoader;
 
 /**
  * The browser extension is an attribute of GVImagePart and provides
@@ -103,9 +104,13 @@ private slots:
 	void slotSelectNext();
 	void slotSelectPrevious();
 
+	void prefetchDone( bool ok );
+
 private:
 
 	void updateNextPrevious();
+	KURL nextURL() const;
+	KURL previousURL() const;
 
 	/**
 	 * The component's widget
@@ -130,6 +135,10 @@ private:
 	KAction* mPreviousImage;
 	// alphabetically sorted filenames of images in the picture's directory
 	QStringList mImagesInDirectory;
+
+	GVImageLoader* mPrefetch;
+	enum LastDirection { DirectionUnknown, DirectionNext, DirectionPrevious };
+	LastDirection mLastDirection; // used for prefetching
 };
 
 #endif

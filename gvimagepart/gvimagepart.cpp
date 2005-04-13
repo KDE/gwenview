@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/gvdocument.h>
 #include <src/gvprintdialog.h>
 #include <src/gvscrollpixmapview.h>
+#include <src/gvimageloader.h>
 
 #include "config.h"
 
@@ -66,7 +67,10 @@ typedef KParts::GenericFactory<GVImagePart> GVImageFactory;
 K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
 
 GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObject* parent,
-			 const char* name, const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
+			 const char* name, const QStringList &)
+	: KParts::ReadOnlyPart( parent, name )
+	, mPrefetch( NULL )
+	, mLastDirection( DirectionUnknown )  {
 	GVImageFactory::instance()->iconLoader()->addAppDir( "gwenview");
 	setInstance( GVImageFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
@@ -107,6 +111,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 }
 
 GVImagePart::~GVImagePart() {
+	prefetchDone( false );
 	delete mDirLister;
 }
 
@@ -136,6 +141,11 @@ bool GVImagePart::openURL(const KURL& url) {
 	if (!url.isValid())  {
 		return false;
 	}
+	KURL oldURLDir = m_url;
+	oldURLDir.setFileName( QString::null );
+	KURL newURLDir = url;
+	newURLDir.setFileName( QString::null );
+	bool sameDir = oldURLDir == newURLDir;
 	m_url = url;
 	emit started( 0 );
 	if( mDocument->url() == url ) { // reload button in Konqy - setURL would return immediately
@@ -143,7 +153,12 @@ bool GVImagePart::openURL(const KURL& url) {
 	} else {
 		mDocument->setURL(url);
 	}
-	mDirLister->openURL(mDocument->dirURL());
+	if( !sameDir ) {
+		mDirLister->openURL(mDocument->dirURL());
+		mLastDirection = DirectionUnknown;
+	} else {
+		updateNextPrevious();
+	}
 	emit setWindowCaption(url.prettyURL());
 	return true;
 }
@@ -157,6 +172,17 @@ void GVImagePart::loaded(const KURL& url) {
 	emit setWindowCaption(caption);
 	emit completed();
 	emit setStatusBarText(i18n("Done."));
+	prefetchDone( false );
+	mPrefetch = GVImageLoader::loader( mLastDirection == DirectionPrevious ? previousURL() : nextURL());
+	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
+}
+
+void GVImagePart::prefetchDone( bool ) {
+	if( mPrefetch != NULL ) { 
+		mPrefetch->disconnect( this );
+		mPrefetch->release();
+	}
+	mPrefetch = NULL;
 }
 
 void GVImagePart::print() {
@@ -205,30 +231,44 @@ void GVImagePart::updateNextPrevious() {
 	mNextImage->setEnabled( current != mImagesInDirectory.end());
 }
 
-void GVImagePart::slotSelectNext() {
+KURL GVImagePart::nextURL() const {
 	QStringList::ConstIterator current = mImagesInDirectory.find( mDocument->filename());
 	if( current == mImagesInDirectory.end()) {
-		return;
+		return KURL();
 	}
 	++current;
 	if( current == mImagesInDirectory.end()) {
-		return;
+		return KURL();
 	}
 	KURL newURL = mDocument->dirURL();
 	newURL.setFileName( *current );
+	return newURL;
+}
+
+void GVImagePart::slotSelectNext() {
+	KURL newURL = nextURL();
+	if( newURL.isEmpty()) return;
+	mLastDirection = DirectionNext;
 	KParts::URLArgs args;        // Prevent adding all images to history, it feels
 	args.setLockHistory( true ); // better that way when finally going back.
 	mBrowserExtension->openURLRequest( newURL, args );
 }
 
-void GVImagePart::slotSelectPrevious() {
+KURL GVImagePart::previousURL() const {
 	QStringList::ConstIterator current = mImagesInDirectory.find( mDocument->filename());
 	if( current == mImagesInDirectory.end() || current == mImagesInDirectory.begin()) {
-		return;
+		return KURL();
 	}
 	--current;
 	KURL newURL = mDocument->dirURL();
 	newURL.setFileName( *current );
+	return newURL;
+}
+
+void GVImagePart::slotSelectPrevious() {
+	KURL newURL = previousURL();
+	if( newURL.isEmpty()) return;
+	mLastDirection = DirectionPrevious;
 	KParts::URLArgs args;
 	args.setLockHistory( true );
 	mBrowserExtension->openURLRequest( newURL, args );
