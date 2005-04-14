@@ -823,7 +823,7 @@ void GVMainWindow::createWidgets() {
 	mDockArea->setMainDockWidget(mFileDock);
 
 	// Meta info edit widget
-	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("doc"),NULL,
+	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("info"),NULL,
 		i18n("File Info"));
 	mMetaEdit = new GVMetaEdit(mMetaDock, mDocument);
 	mMetaDock->setWidget(mMetaEdit);
