@@ -64,6 +64,9 @@ void GVDocumentAnimatedLoadedImpl::nextFrame() {
 	++d->mCurrentFrame;
 	if( d->mCurrentFrame == int( d->mFrames.count())) d->mCurrentFrame = 0;
 	d->mFrameTimer.start( QMAX( 10, d->mFrames[ d->mCurrentFrame ].delay ));
+// NOTE! If this ever gets changed to already animate the picture while it's still
+// loading, with MNG the frame delay gets announced only after the frame is ready.
+// See GVImageLoader::frameDone() .
 	LOG("" << d->mCurrentFrame );
 	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
 }

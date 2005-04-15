@@ -547,7 +547,20 @@ void GVImageLoader::frameDone() {
 void GVImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	// Another case where the image loading in Qt's is a bit borken.
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
-	if( !d->mWasFrameData ) return;
+	if( !d->mWasFrameData ) {
+		// To make it even more fun, with MNG the sequence is actually
+		// setFramePeriod( 0 )
+		// frameDone()
+		// setFramePeriod( delay )
+		// frameDone()
+		// Therefore ignore the second frameDone(), but fix the delay that should be
+		// after the frame.
+		if( d->mFrames.count() > 0 ) {
+			d->mFrames.last().delay = d->mNextFrameDelay;
+			d->mNextFrameDelay = 0;
+		}
+		return;
+	}
 	d->mWasFrameData = false;
 	if( !d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged(d->mLoadChangedRect);
