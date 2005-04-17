@@ -30,6 +30,12 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kio/global.h>
 
 // Local
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 
@@ -43,27 +49,19 @@ GVCache* GVCache::instance() {
 	return &manager;
 }
 
-void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp ) {
+void GVCache::addFile( const KURL& url, const QByteArray& file) {
+	LOG(url.prettyURL());
 	updateAge();
-	bool insert = true;
-	if( mImages.contains( url )) {
-		ImageData& data = mImages[ url ];
-		if( data.timestamp == timestamp ) {
-			data.addFile( file );
-			insert = false;
-		}
-	}
-	if( insert ) mImages[ url ] = ImageData( url, file, timestamp );
+	Q_ASSERT(mImages.contains(url));
+	if( !mImages.contains( url )) return;
+
+	ImageData& data = mImages[ url ];
+	data.addFile( file );
 	checkMaxSize();
 }
 
-void GVCache::addImage( const KURL& url, const QImage& im, const QCString& format, const QDateTime& timestamp ) {
-	GVImageFrames frames;
-	frames.append( GVImageFrame( im, 0 ));
-	return addImage( url, frames, format, timestamp );
-}
-
 void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp ) {
+	LOG(url.prettyURL());
 	updateAge();
 	bool insert = true;
 	if( mImages.contains( url )) {
@@ -78,11 +76,13 @@ void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCSt
 }
 
 QDateTime GVCache::timestamp( const KURL& url ) const {
+	LOG(url.prettyURL());
 	if( mImages.contains( url )) return mImages[ url ].timestamp;
 	return QDateTime();
 }
 
 QByteArray GVCache::file( const KURL& url ) const {
+	LOG(url.prettyURL());
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
 		if( data.file.isNull()) return QByteArray();
@@ -92,26 +92,17 @@ QByteArray GVCache::file( const KURL& url ) const {
 	return QByteArray();
 }
 
-QImage GVCache::image( const KURL& url, QCString& format ) const {
+void GVCache::getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const {
+	LOG(url.prettyURL());
+	frames=GVImageFrames();
+	format=QCString();
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
-		if( data.frames.isEmpty()) return QImage();
+		if( data.frames.isEmpty()) return;
+		frames = data.frames;
 		format = data.format;
 		data.age = 0;
-		return data.frames.first().image;
 	}
-	return QImage();
-}
-
-GVImageFrames GVCache::frames( const KURL& url, QCString& format ) const {
-	if( mImages.contains( url )) {
-		const ImageData& data = mImages[ url ];
-		if( data.frames.isEmpty()) return GVImageFrames();
-		format = data.format;
-		data.age = 0;
-		return data.frames;
-	}
-	return GVImageFrames();
 }
 
 void GVCache::updateAge() {
@@ -140,7 +131,6 @@ void GVCache::checkMaxSize() {
 		if( size <= mMaxSize ) {
 			break;
 		}
-//		if( !(*max).reduceSize()) mImages.remove( max );
 		mImages.remove( max );
 	}
 }
@@ -160,15 +150,6 @@ GVCache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDate
 	file.detach(); // explicit sharing
 }
 
-GVCache::ImageData::ImageData( const KURL& url, const QImage& im, const QCString& f, const QDateTime& t )
-: format( f )
-, timestamp( t )
-, age( 0 )
-, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
-{
-	frames.append( GVImageFrame( im, 0 ));
-}
-
 GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const QCString& f, const QDateTime& t )
 : frames( frms )
 , format( f )
@@ -181,13 +162,6 @@ GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const
 void GVCache::ImageData::addFile( const QByteArray& f ) {
 	file = f;
 	file.detach(); // explicit sharing
-	age = 0;
-}
-
-void GVCache::ImageData::addImage( const QImage& i, const QCString& f ) {
-	frames.clear();
-	frames.append( GVImageFrame( i, 0 ));
-	format = f;
 	age = 0;
 }
 
@@ -206,23 +180,8 @@ int GVCache::ImageData::size() const {
 	return ret;
 }
 
-bool GVCache::ImageData::reduceSize() {
-	if( !file.isNull() && fast_url && !frames.isEmpty()) {
-		file = QByteArray();
-		return true;
-	}
-	if( !file.isNull() && !frames.isEmpty()) {
-		frames.clear();
-		return true;
-	}
-	return false; // reducing here would mean clearing everything
-}
-
 long long GVCache::ImageData::cost() const {
 	long long s = size();
-//	if( fast_url && !file.isNull()) {
-//		s *= 100; // heavy penalty for storing local files
-//	}
 	static const int mod[] = { 50, 30, 20, 16, 12, 10 };
 	if( age <= 5 ) {
 		return s * 10 / mod[ age ];

@@ -294,24 +294,21 @@ void GVImageLoader::slotStatResult(KIO::Job* job) {
 	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
-		d->mRawData = GVCache::instance()->file( d->mURL );
-		GVImageFrames frames = GVCache::instance()->frames( d->mURL, format );
+		GVImageFrames frames;
+		GVCache::instance()->getFrames( d->mURL, frames, format );
+
+		// There should always be frames
+		Q_ASSERT(!frames.isEmpty());
 		if( !frames.isEmpty()) {
 			d->mImageFormat = format;
 			d->mFrames = frames;
-			if( !d->mRawData.isNull()) {
-				finish( true );
-				return;
+		
+			// Raw data is only needed for JPEG files
+			if (d->mImageFormat=="JPEG") {
+				d->mRawData = GVCache::instance()->file( d->mURL );
 			}
-			// the raw data is needed e.g. for JPEG, so it needs to be loaded
-			// if it's not in the cache
-		} else {
-			// Image in cache is broken, let's try the file
-			if( !d->mRawData.isNull()) {
-				d->mTimeSinceLastUpdate.start();
-				d->mDecoderTimer.start(0, false);
-				return;
-			}
+			finish( true );
+			return;
 		}
 	}
 	
@@ -340,14 +337,6 @@ void GVImageLoader::slotGetResult(KIO::Job* job) {
 
 	d->mGetComplete = true;
 	
-	// Store raw data in cache
-	GVCache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
-
-	if( !d->mImageFormat.isNull()) { // image was in cache, but not raw data
-		finish( true );
-		return;
-	}
-
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
 		startThread();
@@ -374,10 +363,6 @@ void GVImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 
 void GVImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
-		d->mDecoderTimer.stop();
-		return;
-	}
-	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -469,6 +454,9 @@ void GVImageLoader::finish( bool ok ) {
 	}
 
 	GVCache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
+	if (d->mImageFormat=="JPEG") {
+		GVCache::instance()->addFile(d->mURL, d->mRawData);
+	}
 
 	GVImageFrame lastframe = d->mFrames.last();
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
@@ -479,7 +467,7 @@ void GVImageLoader::finish( bool ok ) {
 	}
 	if (!d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged( d->mLoadChangedRect );
-        } else if (!d->mUpdatedDuringLoad) {
+	} else if (!d->mUpdatedDuringLoad) {
 		emit imageChanged( QRect(QPoint(0,0), lastframe.image.size()) );
 	}
 	d->mFrames.push_back( lastframe );
@@ -666,9 +654,9 @@ void GVImageLoader::release() {
 GVImageLoader* GVImageLoader::loader( const KURL& url ) {
 	if( loaders.contains( url )) {
 		GVImageLoader* l = loaders[ url ];
-                l->ref();
+		l->ref();
 		return l;
-        }
+	}
 	GVImageLoader* l = new GVImageLoader;
 	l->ref();
 	loaders[ url ] = l;

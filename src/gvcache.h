@@ -38,13 +38,11 @@ class KConfig;
 class GVCache {
 public:
 	static GVCache* instance();
-	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
-	void addImage( const KURL& url, const QImage& im, const QCString& format, const QDateTime& timestamp );
 	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
+	void addFile( const KURL& url, const QByteArray& file);
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
-	QImage image( const KURL& url, QCString& format ) const;
-	GVImageFrames frames( const KURL& url, QCString& format ) const;
+	void getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const;
 	void readConfig(KConfig*,const QString& group);
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
@@ -56,7 +54,6 @@ private:
 		ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
 		ImageData( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 		void addFile( const QByteArray& file );
-		void addImage( const QImage& image, const QCString& format );
 		void addImage( const GVImageFrames& frames, const QCString& format );
 		long long cost() const;
 		int size() const;
@@ -67,7 +64,6 @@ private:
 		mutable int age;
 		bool fast_url;
 		void setSize();
-		bool reduceSize();
 		ImageData() {}; // stupid QMap
 	};
 	QMap< KURL, ImageData > mImages;
