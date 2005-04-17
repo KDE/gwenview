@@ -34,7 +34,7 @@ class GVDocumentJPEGLoadedImplPrivate;
 class GVDocumentJPEGLoadedImpl : public GVDocumentLoadedImpl {
 Q_OBJECT
 public:
-	GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData, const QString& tempFilePath);
+	GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData);
 	~GVDocumentJPEGLoadedImpl();
 	void init();
 	

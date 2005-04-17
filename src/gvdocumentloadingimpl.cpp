@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 
 // KDE
-#include <ktempfile.h>
 
 // Local
 #include "gvimageloader.h"
@@ -125,15 +124,7 @@ void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
 	if ( d->mLoader->frames().count() > 1 ) {
 		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mLoader->frames()));
 	} else if ( format == "JPEG" ) {
-		// We want a local copy of the file for the comment editor
-		QString tempFilePath;
-		if (!d->mLoader->url().isLocalFile()) {
-			KTempFile tempFile;
-			tempFile.dataStream()->writeRawBytes(d->mLoader->rawData().data(), d->mLoader->rawData().size());
-			tempFile.close();
-			tempFilePath=tempFile.name();
-		}
-		switchToImpl(new GVDocumentJPEGLoadedImpl(mDocument, d->mLoader->rawData(), tempFilePath));
+		switchToImpl( new GVDocumentJPEGLoadedImpl(mDocument, d->mLoader->rawData()) );
 	} else {
 		switchToImpl(new GVDocumentLoadedImpl(mDocument));
 	}

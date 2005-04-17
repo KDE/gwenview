@@ -49,26 +49,16 @@ public:
 	bool mCommentModified;
 	QString mComment;
 	GVDocument::CommentState mCommentState;
-	QString mLocalFilePath;
 
 };
 
 
-/**
- * tempFilePath is set to QString::null if the document is a local file,
- * otherwise it is the name of a local copy of the file and must be deleted
- */
-GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData, const QString& tempFilePath)
+GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData)
 : GVDocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new GVDocumentJPEGLoadedImplPrivate;
 	d->mCommentModified=false;
 	d->mJPEGContent.loadFromData(rawData);
-	if (mDocument->url().isLocalFile()) {
-		d->mLocalFilePath=document->url().path();
-	} else {
-		d->mLocalFilePath=tempFilePath;
-	}
 }
 
 
@@ -82,12 +72,8 @@ void GVDocumentJPEGLoadedImpl::init() {
 		d->mJPEGContent.transform(orientation);
 	}
 
-	d->mCommentState=QFileInfo(d->mLocalFilePath).isWritable()?GVDocument::WRITABLE:GVDocument::READ_ONLY;
+	d->mCommentState=GVDocument::WRITABLE;
 	d->mComment=d->mJPEGContent.comment();
-	if (!mDocument->url().isLocalFile()) {
-		QFile::remove(d->mLocalFilePath);
-	}
-
 	GVDocumentLoadedImpl::init();
 }
 
