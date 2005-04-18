@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qvaluelist.h>
 
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kaction.h>
 #include <kicontheme.h>
 #include <kiconloader.h>
@@ -114,7 +115,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mSplitter->setSizes(splitterSizes);
 
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
+#if KDE_IS_VERSION(3, 3, 0)
 	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));
+#endif
 
 	setXMLFile( "gvdirpart/gvdirpart.rc" );
 }
