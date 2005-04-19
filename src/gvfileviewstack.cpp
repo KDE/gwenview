@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qpopupmenu.h>
+#include <qtooltip.h>
 
 // KDE
 #include <kaction.h>
@@ -432,16 +433,8 @@ void GVFileViewStack::updateViewMode() {
 
 void GVFileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
+	QToolTip::add(mSizeSlider, i18n("Thumbnail size: %1x%2").arg(size).arg(size));
 	mFileThumbnailView->setThumbnailSize(size);
-	
-	KFileItemList items=*mFileThumbnailView->items();
-	KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
-
-	mFileThumbnailView->GVFileViewBase::clear();
-	mFileThumbnailView->addItemList(items);
-	mFileThumbnailView->setShownFileItem(shownFileItem);
-	
-	mFileThumbnailView->startThumbnailUpdate();
 }
 
 

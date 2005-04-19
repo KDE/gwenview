@@ -71,15 +71,9 @@ public:
 	KFileItem* currentFileItem() const;
 	KFileItem* nextItem( const KFileItem*) const;
 
-	/**
-	 * Don't forget to call arrangeItemsInGrid to apply the changes
-	 */
 	void setThumbnailSize(int value);
 	int thumbnailSize() const;
 
-	/**
-	 * Don't forget to call arrangeItemsInGrid to apply the changes
-	 */
 	void setMarginSize(int value);
 	int marginSize() const;
 
@@ -116,6 +110,7 @@ private:
 	Private* d;
 
 	void updateGrid();
+	QPixmap createItemPixmap(const KFileItem*) const;
 	void doStartThumbnailUpdate(const KFileItemList*);
 	void setSortingKey(QIconViewItem*, const KFileItem*);
 	void updateVisibilityInfo( int x, int y );
