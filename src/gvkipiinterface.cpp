@@ -53,7 +53,7 @@ public:
 
 	QString name() { return mName; }
 	QString comment() { return QString::null; }
-	
+
 	KURL::List images() { return mImages; }
 	// FIXME: Return current URL instead
 	KURL uploadPath() {
@@ -72,17 +72,17 @@ private:
 class GVImageInfo : public KIPI::ImageInfoShared {
 public:
 	GVImageInfo(KIPI::Interface* interface, const KURL& url) : KIPI::ImageInfoShared(interface, url) {}
-    
+
 	QString title() {
 		return _url.fileName();
 	}
-	
+
 	QString description() {
 		return QString::null;
 	}
 
 	void setDescription(const QString&) {}
-	
+
 	QMap<QString,QVariant> attributes() {
 		return QMap<QString,QVariant>();
 	}
@@ -106,7 +106,7 @@ GVKIPIInterface::GVKIPIInterface( QWidget* parent, GVFileViewStack* fileView)
 
 	connect(d->mFileView, SIGNAL(selectionChanged()),
 		this, SLOT(slotSelectionChanged()) );
-	
+
 	connect(d->mFileView, SIGNAL(completedURLListing(const KURL&)),
 		this, SLOT(slotDirectoryChanged()) );
 }
@@ -124,14 +124,14 @@ KIPI::ImageCollection GVKIPIInterface::currentAlbum() {
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return KIPI::ImageCollection(new GVImageCollection(i18n("Folder content"), list)); 
+	return KIPI::ImageCollection(new GVImageCollection(i18n("Folder Content"), list));
 }
 
 
 KIPI::ImageCollection GVKIPIInterface::currentSelection() {
 	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
-	return KIPI::ImageCollection(new GVImageCollection(i18n("Selected images"), list)); 
+	return KIPI::ImageCollection(new GVImageCollection(i18n("Selected Images"), list));
 }
 
 
@@ -149,7 +149,7 @@ KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
 }
 
 int GVKIPIInterface::features() const {
-	return KIPI::AcceptNewImages; 
+	return KIPI::AcceptNewImages;
 }
 
 /**
