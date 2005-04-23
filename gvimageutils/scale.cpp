@@ -58,8 +58,16 @@
 %
 %
 */
+#include "config.h"
+
 // System
+#ifdef HAVE_ENDIAN_H
 #include <endian.h>
+#else
+#ifdef HAVE_SYS_ENDIAN_H
+#include <sys/endian.h>
+#endif
+#endif
 
 // Qt
 #include <qimage.h>
