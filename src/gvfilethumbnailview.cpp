@@ -65,6 +65,9 @@ static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 static const int THUMBNAIL_TEXT_SIZE=128;
 
+static const int THUMBNAIL_UPDATE_DELAY=500;
+
+
 class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
 	QPushButton* mStop;
@@ -124,6 +127,7 @@ struct GVFileThumbnailView::Private {
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 	
+	QTimer* mThumbnailUpdateTimer;
 };
 
 
@@ -141,6 +145,7 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 	d->mThumbnailLoadJob=0L;
 	d->mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 	d->mProgressWidget=0L;
+	d->mThumbnailUpdateTimer=new QTimer(this);
 
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -170,6 +175,9 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 
 	connect(GVBusyLevelManager::instance(), SIGNAL(busyLevelChanged(GVBusyLevel)),
 		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
+
+	connect(d->mThumbnailUpdateTimer, SIGNAL(timeout()),
+		this, SLOT( startThumbnailUpdate()) );
 }
 
 
@@ -182,6 +190,7 @@ GVFileThumbnailView::~GVFileThumbnailView() {
 void GVFileThumbnailView::setThumbnailSize(int value) {
 	if (value==d->mThumbnailSize) return;
 	d->mThumbnailSize=value;
+	updateGrid();
 	
 	KFileItemListIterator it( *items() );
 	for ( ; it.current(); ++it ) {
@@ -190,8 +199,8 @@ void GVFileThumbnailView::setThumbnailSize(int value) {
 		QIconViewItem* iconItem=viewItem(this, item);
 		if (iconItem) iconItem->setPixmap(pixmap);
 	}
-	updateGrid();
-	startThumbnailUpdate();
+	arrangeItemsInGrid();
+	d->mThumbnailUpdateTimer->start(THUMBNAIL_UPDATE_DELAY, true);
 }
 
 
