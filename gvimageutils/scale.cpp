@@ -904,7 +904,7 @@ extern "C" {
                                   unsigned int *dest, int dxx, int dyy,
                                   int dx, int dy, int dw, int dh,
                                   int dow, int sow);
-};
+}
 #endif
 
 using namespace MImageScale;
