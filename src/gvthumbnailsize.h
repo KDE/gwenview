@@ -32,6 +32,6 @@
 namespace GVThumbnailSize {
 	const int MIN=48;
 	const int MAX=128;
-};
+}
 
 #endif /* GVTHUMBNAILSIZE_H */
