@@ -358,11 +358,6 @@ void GVFileThumbnailView::slotUpdateEnded() {
 	Q_ASSERT(d->mProgressWidget);
 	delete d->mProgressWidget;
 	d->mProgressWidget=0L;
-	// This is necessary because the size info might have been added to the
-	// text
-	if (itemTextPos()==Bottom) {
-		arrangeItemsInGrid();
-	}
 	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 
