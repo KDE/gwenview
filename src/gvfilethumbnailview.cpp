@@ -62,8 +62,6 @@ static const char* CONFIG_ITEM_TEXT_POS="item text pos";
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
 static const char* CONFIG_MARGIN_SIZE="margin size";
 
-static const int THUMBNAIL_TEXT_SIZE=128;
-
 static const int THUMBNAIL_UPDATE_DELAY=500;
 
 
@@ -558,11 +556,9 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 //
 //--------------------------------------------------------------------------
 void GVFileThumbnailView::updateGrid() {
-	if (itemTextPos()==Bottom) {
-		setGridX(d->mThumbnailSize + d->mMarginSize);
-	} else {
-		setGridX(d->mThumbnailSize + d->mMarginSize + THUMBNAIL_TEXT_SIZE);
-	}
+	int grid=d->mThumbnailSize + GVFileThumbnailViewItem::PADDING*2 + d->mMarginSize;
+	if (itemTextPos()==Right) grid+=THUMBNAIL_TEXT_SIZE;
+	setGridX(grid);
 }
 
 

@@ -49,6 +49,7 @@ Q_OBJECT
 	friend class GVFileThumbnailViewItem;
 	
 public:
+	enum { THUMBNAIL_TEXT_SIZE=128 };
 	GVFileThumbnailView(QWidget* parent);
 	~GVFileThumbnailView();
 

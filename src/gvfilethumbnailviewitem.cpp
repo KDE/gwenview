@@ -57,9 +57,8 @@ GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
 
 int GVFileThumbnailViewItem::availableTextWidth() const {
 	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
-	if (iconView()->itemTextPos()==QIconView::Right) {
-		// -2 because of the pixmap margin, see calcRect()
-		return view->gridX() - view->thumbnailSize() - view->marginSize() - 2;
+	if (view->itemTextPos()==QIconView::Right) {
+		return GVFileThumbnailView::THUMBNAIL_TEXT_SIZE;
 	} else {
 		return view->thumbnailSize();
 	}
@@ -70,7 +69,10 @@ void GVFileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
 	mLines.append(mFileItem->name());
-	if (iconView()->itemTextPos()==QIconView::Right) {
+
+	bool isBottom=iconView()->itemTextPos()==QIconView::Bottom;
+	
+	if (!isBottom) {
 		if (!mFileItem->isDir()) {
 			mLines.append( KIO::convertSize(mFileItem->size()) );
 		}
@@ -80,8 +82,12 @@ void GVFileThumbnailViewItem::updateLines() {
 	if (mImageSize.isValid()) {
 		size=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
 	}
-	// Always append the size to make sure items are always the same height
-	mLines.append(size);
+	
+	// If isBottom is true, always append the size to make sure items are
+	// always the same height
+	if (!size.isNull() || isBottom) {
+		mLines.append(size);
+	}
 	
 	calcRect();
 }
@@ -146,12 +152,10 @@ void GVFileThumbnailViewItem::calcRect(const QString& /*text_*/) {
 								itemIconRect.width(), itemIconRect.height() );
 	}
 
-	// Apply margin on Y axis
-	int margin=view->marginSize();
-	itemIconRect.moveBy(0,margin/2);
-	itemTextRect.moveBy(0,margin/2);
-	itemRect.setHeight(itemRect.height()+margin);
-
+	// Apply padding and margin
+	itemIconRect.moveBy(PADDING, PADDING);
+	itemTextRect.moveBy(PADDING, PADDING);
+	itemRect.addCoords(0, 0, PADDING*2, PADDING*2 + view->marginSize());
 
 	// Update rects
 	if ( itemIconRect != pixmapRect() )
@@ -175,30 +179,45 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	QRect tRect=textRect(false);
 
 	// Draw pixmap
-	p->drawPixmap( pRect.x()+1, pRect.y()+1, *pixmap() );
+	p->drawPixmap( pRect.x(), pRect.y(), *pixmap() );
 
-	// Draw focus
+	// Define colors
+	QColor bg, fg;
 	if ( isSelected() ) {
-		p->setPen( QPen( cg.highlight() ) );
-		QRect outerRect=pRect | tRect;
-		
-
-		p->drawRect(outerRect);
-		if (view->itemTextPos()==QIconView::Bottom) {
-			p->fillRect( outerRect.x(),tRect.y(),outerRect.width(),tRect.height(), cg.highlight() );
-		} else {
-			p->fillRect( tRect.x(),outerRect.y(),tRect.width(),outerRect.height(), cg.highlight() );
-		}
-
-		p->setPen( QPen( cg.highlightedText() ) );
-		p->setBackgroundColor(cg.highlight());
+		bg=cg.highlight();
+		fg=cg.highlightedText();
 	} else {
-		if ( view->itemTextBackground() != NoBrush ) {
-			p->fillRect( tRect, view->itemTextBackground() );
-		}
-		p->setBackgroundColor(cg.base());
-		p->setPen( cg.text() );
+		bg=cg.base().dark(150);
+		fg=cg.text();
 	}
+	
+	// Draw frame
+	p->setPen( QPen(bg) );
+	QRect outerRect=rect();
+	outerRect.setHeight(outerRect.height() - view->marginSize());
+
+	p->drawRect(outerRect);
+	if (isSelected()) {
+		if (view->itemTextPos()==QIconView::Bottom) {
+			p->fillRect(
+				outerRect.x(),
+				tRect.y(),
+				outerRect.width(),
+				outerRect.bottom() - tRect.y() + 1,
+				bg);
+		} else {
+			p->fillRect(
+				tRect.x(),
+				outerRect.y(),
+				outerRect.right() - tRect.x() + 1,
+				outerRect.height(),
+				bg);
+		}
+	}
+
+	// Draw text
+	p->setPen(QPen(fg));
+	p->setBackgroundColor(bg);
 
 	// Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
@@ -217,10 +236,18 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		int length=view->fontMetrics().width(*it);
 		if (length>tRect.width()) {
 			p->save();
-			KWordWrap::drawFadeoutText(p, tRect.x(), tRect.y() + ypos + ascent, tRect.width(), *it);
+			KWordWrap::drawFadeoutText(p,
+				tRect.x(),
+				tRect.y() + ypos + ascent,
+				tRect.width(),
+				*it);
 			p->restore();
 		} else {
-			QRect rect(tRect.x(), tRect.y() + ypos, tRect.width(), lineHeight);
+			QRect rect(
+				tRect.x(),
+				tRect.y() + ypos,
+				tRect.width(),
+				lineHeight);
 			p->drawText(rect, align, *it);
 		}
 	}
