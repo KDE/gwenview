@@ -26,12 +26,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qiconview.h>
 #include <qpixmap.h>
 #include <qstring.h>
+#include <qvaluevector.h>
 
-
-class QFontMetrics;
 class KFileItem;
-class KWordWrap;
-
 
 /**
  * We override the QIconViewItem to control the look of selected items
@@ -52,13 +49,12 @@ protected:
 	void paintFocus(QPainter*, const QColorGroup&) {}
 	bool acceptDrop(const QMimeSource*) const;
 	void dropped(QDropEvent*, const QValueList<QIconDragItem>&);
-	void updateInfoLines();
+	void updateLines();
 
 	int availableTextWidth() const;
 	
 	KFileItem* mFileItem;
-	KWordWrap* mWordWrap;
-	QStringList mInfoLines;
+	QValueVector<QString> mLines;
 	QSize mImageSize;
 };
 

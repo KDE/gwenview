@@ -45,36 +45,13 @@ static void printRect(const QString& txt,const QRect& rect) {
 #endif
 
 
-static QString truncateText(const QFontMetrics& fm, const QString& fullText, int width) {
-	static QString dots("...");
-	QString text;
-
-	// If the text fit in the width, don't truncate it
-	if (fm.boundingRect(fullText).width()<=width) {
-		return fullText;
-	}
-
-	// Find the number of letters to keep
-	text=fullText;
-	width-=fm.width(dots);
-	int len=text.length();
-	for(;len>0 && fm.width(text,len)>width;--len);
-
-	// Truncate the text
-	text.truncate(len);
-	text+=dots;
-	return text;
-}
-
-
 GVFileThumbnailViewItem::GVFileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
-: QIconViewItem(view,text,icon), mFileItem(fileItem), mWordWrap(0L) {
-	updateInfoLines();
+: QIconViewItem(view,text,icon), mFileItem(fileItem) {
+	updateLines();
 }
 
 
 GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
-	if (mWordWrap) delete mWordWrap;
 }
 
 
@@ -89,23 +66,28 @@ int GVFileThumbnailViewItem::availableTextWidth() const {
 }
 
 
-void GVFileThumbnailViewItem::updateInfoLines() {
-	mInfoLines.clear();
+void GVFileThumbnailViewItem::updateLines() {
+	mLines.clear();
 	if (!mFileItem) return;
+	mLines.append(mFileItem->name());
 	if (iconView()->itemTextPos()==QIconView::Right) {
 		if (!mFileItem->isDir()) {
-			mInfoLines << KIO::convertSize(mFileItem->size());
+			mLines.append( KIO::convertSize(mFileItem->size()) );
 		}
-		mInfoLines << mFileItem->timeString();
+		mLines.append( mFileItem->timeString() );
 	}
+	QString size;
 	if (mImageSize.isValid()) {
-		mInfoLines << QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+		size=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
 	}
+	// Always append the size to make sure items are always the same height
+	mLines.append(size);
+	
 	calcRect();
 }
 
 
-void GVFileThumbnailViewItem::calcRect(const QString& text_) {
+void GVFileThumbnailViewItem::calcRect(const QString& /*text_*/) {
 	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
@@ -115,42 +97,8 @@ void GVFileThumbnailViewItem::calcRect(const QString& text_) {
 	int thumbnailSize=view->thumbnailSize();
 	QFontMetrics fm = view->fontMetrics();
 
-	int maxTextWidth=availableTextWidth();
-	int textWidth=0;
-	int textHeight=fm.height();
-	
-	if (iconView()->wordWrapIconText() && iconView()->itemTextPos()==QIconView::Bottom) {
-		// Word-wrap up to 3 lines if the text is on bottom
-		textHeight*=3;
-	}
-	// When is text_ set ? Doesn't look like it's ever set.
-	QString txt = text_.isEmpty() ? text() : text_;
-
-	if (mWordWrap) delete mWordWrap;
-	mWordWrap=KWordWrap::formatText(fm, QRect(0, 0, maxTextWidth, textHeight),
-		(view->itemTextPos()==QIconView::Bottom ? AlignHCenter : AlignAuto)
-		| WordBreak, txt );
-	
-	textWidth=QMIN(mWordWrap->boundingRect().width(), maxTextWidth);
-	textHeight=mWordWrap->boundingRect().height();
-	
-	// Take info lines width into account
-	// Find maximum width of info lines, truncate them if they are too long
-	QValueListIterator<QString> it=mInfoLines.begin();
-	QValueListIterator<QString> itEnd=mInfoLines.end();
-	for (;it!=itEnd; ++it) {
-		int lineWidth=fm.width(*it);
-		if (lineWidth>maxTextWidth) {
-			*it=truncateText(fm, *it, maxTextWidth);
-			// No need to go further, we just reached the max
-			textWidth=maxTextWidth;
-			break;
-		}
-		textWidth=QMAX(textWidth, lineWidth);
-	}
-
-	// Append the info lines height
-	textHeight+=mInfoLines.count() * fm.height();
+	int textWidth=availableTextWidth();
+	int textHeight=mLines.count() * fm.height();
 	
 	if (view->itemTextPos() == QIconView::Right) {
 		// Make sure we don't get longer than the icon height
@@ -252,28 +200,31 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		p->setPen( cg.text() );
 	}
 
-	// Draw text. We draw the info lines first, because mWordWrap might alter
-	// the painter settings
+	// Draw text
 	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
 	align|=AlignTop;
 	if (view->shownFileItem() && view->shownFileItem()->extraData(view)==this) {
 		p->setPen(view->shownFileItemColor());
 	}
-	if (!mWordWrap) {
-		kdWarning() << "KIconViewItem::paintItem called but wordwrap not ready - calcRect not called, or aborted!" << endl;
-		return;
-	}
-	if (mInfoLines.count() > 0) {
-		int mainHeight=mWordWrap->boundingRect().height();
-		QRect rect(
-			tRect.x(),
-			tRect.y() + mainHeight,
-			view->itemTextPos() == QIconView::Bottom ? tRect.width() : availableTextWidth(),
-			tRect.height() - mainHeight);
-		p->drawText(rect, align, mInfoLines.join("\n"));
+
+	int lineHeight=view->fontMetrics().height();
+	int ypos=0;
+	int ascent=view->fontMetrics().ascent();
+
+	QValueVector<QString>::ConstIterator it=mLines.begin();
+	QValueVector<QString>::ConstIterator itEnd=mLines.end();
+	for (;it!=itEnd && ypos + ascent<=tRect.height(); ++it, ypos+=lineHeight) {
+		int length=view->fontMetrics().width(*it);
+		if (length>tRect.width()) {
+			p->save();
+			KWordWrap::drawFadeoutText(p, tRect.x(), tRect.y() + ypos + ascent, tRect.width(), *it);
+			p->restore();
+		} else {
+			QRect rect(tRect.x(), tRect.y() + ypos, tRect.width(), lineHeight);
+			p->drawText(rect, align, *it);
+		}
 	}
 	
-	mWordWrap->drawText( p, tRect.x(), tRect.y(), align | KWordWrap::FadeOut);
 	p->restore();
 }
 
@@ -290,5 +241,5 @@ void GVFileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconD
 
 void GVFileThumbnailViewItem::setImageSize(const QSize& size) {
 	mImageSize=size;
-	updateInfoLines();
+	updateLines();
 }
