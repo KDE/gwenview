@@ -135,7 +135,6 @@ GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 
 	// Image List tab
 	d->mImageListPage->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
-	d->mImageListPage->mWordWrapFilename->setChecked(fileViewStack->fileThumbnailView()->wordWrapIconText());
 	d->mImageListPage->mShowDirs->setChecked(fileViewStack->showDirs());
 	d->mImageListPage->mShownColor->setColor(fileViewStack->shownColor());
 	d->mImageListPage->mStoreThumbnailsInCache->setChecked(ThumbnailLoadJob::storeThumbnailsInCache());
@@ -204,7 +203,6 @@ void GVConfigDialog::slotApply() {
 
 	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(d->mImageListPage->mThumbnailMargin->value());
-	fileViewStack->fileThumbnailView()->setWordWrapIconText(d->mImageListPage->mWordWrapFilename->isChecked());
 	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
 	fileViewStack->setShowDirs(d->mImageListPage->mShowDirs->isChecked());
 	fileViewStack->setShownColor(d->mImageListPage->mShownColor->color());

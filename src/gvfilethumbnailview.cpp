@@ -61,7 +61,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static const char* CONFIG_ITEM_TEXT_POS="item text pos";
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
 static const char* CONFIG_MARGIN_SIZE="margin size";
-static const char* CONFIG_WORD_WRAP_FILENAME="word wrap filename";
 
 static const int THUMBNAIL_TEXT_SIZE=128;
 
@@ -702,7 +701,6 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	setItemTextPos(QIconView::ItemTextPos(pos));
 
 	updateGrid();
-	setWordWrapIconText(config->readBoolEntry(CONFIG_WORD_WRAP_FILENAME,false));
 	arrangeItemsInGrid();
 }
 
@@ -720,7 +718,6 @@ void GVFileThumbnailView::writeConfig(KConfig* config,const QString& group) cons
 	config->setGroup(group);
 	config->writeEntry(CONFIG_THUMBNAIL_SIZE,d->mThumbnailSize);
 	config->writeEntry(CONFIG_MARGIN_SIZE,d->mMarginSize);
-	config->writeEntry(CONFIG_WORD_WRAP_FILENAME,wordWrapIconText());
 	config->writeEntry(CONFIG_ITEM_TEXT_POS, int(itemTextPos()));
 }
 
