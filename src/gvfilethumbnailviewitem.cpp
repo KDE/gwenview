@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*  Gwenview - A simple image viewer for KDE
     Copyright 2000-2004 Aurélien Gâteau
     This class is based on the KIconViewItem class from KDE libs.
@@ -155,7 +155,7 @@ void GVFileThumbnailViewItem::calcRect(const QString& /*text_*/) {
 	// Apply padding and margin
 	itemIconRect.moveBy(PADDING, PADDING);
 	itemTextRect.moveBy(PADDING, PADDING);
-	itemRect.addCoords(0, 0, PADDING*2, PADDING*2 + view->marginSize());
+	itemRect.addCoords(0, 0, PADDING*2 - 1, PADDING*2 + view->marginSize() - 1);
 
 	// Update rects
 	if ( itemIconRect != pixmapRect() )
@@ -187,13 +187,14 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		bg=cg.highlight();
 		fg=cg.highlightedText();
 	} else {
-		bg=cg.base().dark(150);
+		bg=cg.button();
 		fg=cg.text();
 	}
 	
 	// Draw frame
 	p->setPen( QPen(bg) );
 	QRect outerRect=rect();
+	outerRect.addCoords(0, 0, -1, -1);
 	outerRect.setHeight(outerRect.height() - view->marginSize());
 
 	p->drawRect(outerRect);
@@ -214,6 +215,12 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 				bg);
 		}
 	}
+	
+	// Draw shadow
+	p->setPen(QPen( cg.mid() ));
+	outerRect.moveBy(1, 1);
+	p->drawLine(outerRect.topRight(), outerRect.bottomRight() );
+	p->drawLine(outerRect.bottomLeft(), outerRect.bottomRight() );
 
 	// Draw text
 	p->setPen(QPen(fg));
