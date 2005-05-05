@@ -1029,7 +1029,8 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 		mListMode->setChecked(true);
 	}
 
-	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR,&Qt::red));
+	QColor defaultColor=colorGroup().highlight().light(150);
+	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR, &defaultColor));
 }
 
 void GVFileViewStack::kpartConfig() {
