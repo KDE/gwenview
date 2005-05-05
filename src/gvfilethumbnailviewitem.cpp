@@ -48,6 +48,7 @@ static void printRect(const QString& txt,const QRect& rect) {
 GVFileThumbnailViewItem::GVFileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
 : QIconViewItem(view,text,icon), mFileItem(fileItem) {
 	updateLines();
+	calcRect();
 }
 
 
@@ -83,83 +84,21 @@ void GVFileThumbnailViewItem::updateLines() {
 		size=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
 	}
 	
-	// If isBottom is true, always append the size to make sure items are
-	// always the same height
-	if (!size.isNull() || isBottom) {
+	if (!size.isNull()) {
 		mLines.append(size);
 	}
-	
-	calcRect();
 }
 
 
-void GVFileThumbnailViewItem::calcRect(const QString& /*text_*/) {
-	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
-	Q_ASSERT(view);
-	if (!view) return;
-	Q_ASSERT(pixmap());
-	if (!pixmap()) return;
+void GVFileThumbnailViewItem::calcRect(const QString&) {
+	QRect itemRect(x(), y(), iconView()->gridX(), iconView()->gridY());
 
-	int thumbnailSize=view->thumbnailSize();
-	QFontMetrics fm = view->fontMetrics();
-
-	int textWidth=availableTextWidth();
-	int textHeight=mLines.count() * fm.height();
+	QRect itemPixmapRect(0, 0, iconView()->gridX(), iconView()->gridY());
+	QRect itemTextRect(itemPixmapRect);
 	
-	if (view->itemTextPos() == QIconView::Right) {
-		// Make sure we don't get longer than the icon height
-		if (textHeight > thumbnailSize) {
-			textHeight=thumbnailSize;
-		}
-	}
-
-	// Center rects
-	QRect itemIconRect = QRect(0,0,thumbnailSize+2,thumbnailSize+2);
-	QRect itemRect = rect();
-	QRect itemTextRect;
-	
-	int w = 0;
-	int h = 0;
-	if ( view->itemTextPos() == QIconView::Bottom ) {
-		w = QMAX( textWidth, itemIconRect.width() );
-		h = textHeight + itemIconRect.height() + 1;
-
-		itemRect.setWidth( w );
-		itemRect.setHeight( h );
-		int width = QMAX( w, QApplication::globalStrut().width() ); // see QIconViewItem::width()
-		int height = QMAX( h, QApplication::globalStrut().height() ); // see QIconViewItem::height()
-		itemTextRect = QRect( ( width - textWidth ) / 2, height - textHeight,
-							textWidth, textHeight);
-
-		itemIconRect = QRect( ( width - itemIconRect.width() ) / 2, 0,
-							itemIconRect.width(), itemIconRect.height() );
-	} else {
-		h = QMAX( textHeight, itemIconRect.height() );
-		w = textWidth + itemIconRect.width() + 1;
-
-		itemRect.setWidth( w );
-		itemRect.setHeight( h );
-		int width = QMAX( w, QApplication::globalStrut().width() ); // see QIconViewItem::width()
-		int height = QMAX( h, QApplication::globalStrut().height() ); // see QIconViewItem::height()
-
-		itemTextRect = QRect( width - textWidth, ( height - textHeight ) / 2,
-							textWidth, textHeight );
-		if ( itemIconRect.height() > textHeight ) // icon bigger than text -> center vertically
-			itemIconRect = QRect( 0, ( height - itemIconRect.height() ) / 2,
-								itemIconRect.width(), itemIconRect.height() );
-		else // icon smaller than text -> center with first line
-			itemIconRect = QRect( 0, ( fm.height() - itemIconRect.height() ) / 2,
-								itemIconRect.width(), itemIconRect.height() );
-	}
-
-	// Apply padding and margin
-	itemIconRect.moveBy(PADDING, PADDING);
-	itemTextRect.moveBy(PADDING, PADDING);
-	itemRect.addCoords(0, 0, PADDING*2 - 1, PADDING*2 + view->marginSize() - 1);
-
 	// Update rects
-	if ( itemIconRect != pixmapRect() )
-		setPixmapRect( itemIconRect );
+	if ( itemPixmapRect != pixmapRect() )
+		setPixmapRect( itemPixmapRect );
 	if ( itemTextRect != textRect() )
 		setTextRect( itemTextRect );
 	if ( itemRect != rect() )
@@ -172,14 +111,27 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	Q_ASSERT(view);
 	if (!view) return;
 
-	p->save();
+	QRect rt=rect();
+	bool isRight=view->itemTextPos()==QIconView::Right;
+	bool isShownItem=view->shownFileItem() && view->shownFileItem()->extraData(view)==this;
+	int textX, textY, textW, textH;
 
-	// Get the rects
-	QRect pRect=pixmapRect(false);
-	QRect tRect=textRect(false);
+	if (isRight) {
+		textX= rt.x() + PADDING*2 + view->thumbnailSize();
+		textY= rt.y() + PADDING;
+		textW= rt.width() - PADDING*3 - view->thumbnailSize();
+		textH= rt.height() - PADDING*2;
+	} else {
+		textX= rt.x() + PADDING;
+		textY= rt.y() + PADDING*2 + view->thumbnailSize();
+		textW= rt.width() - PADDING*2;
+		textH= rt.height() - PADDING*3 - view->thumbnailSize();
+	}
+	textW-=SHADOW;
+	textY-=SHADOW;
 
 	// Draw pixmap
-	p->drawPixmap( pRect.x(), pRect.y(), *pixmap() );
+	p->drawPixmap( rt.x() + PADDING, rt.y() + PADDING, *pixmap() );
 
 	// Define colors
 	QColor bg, fg;
@@ -190,76 +142,83 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		bg=cg.button();
 		fg=cg.text();
 	}
+	if (isShownItem) {
+		bg=view->shownFileItemColor();
+	}
 	
 	// Draw frame
-	p->setPen( QPen(bg) );
-	QRect outerRect=rect();
-	outerRect.addCoords(0, 0, -1, -1);
-	outerRect.setHeight(outerRect.height() - view->marginSize());
-
-	p->drawRect(outerRect);
+	p->setPen(bg);
+	QRect frmRect(rt);
+	frmRect.addCoords(0, 0, -SHADOW, -SHADOW);
+	p->drawRect(frmRect);
 	if (isSelected()) {
-		if (view->itemTextPos()==QIconView::Bottom) {
+		if (isRight) {
 			p->fillRect(
-				outerRect.x(),
-				tRect.y(),
-				outerRect.width(),
-				outerRect.bottom() - tRect.y() + 1,
+				textX,
+				frmRect.y(),
+				textW + PADDING,
+				textH + PADDING*2,
 				bg);
 		} else {
 			p->fillRect(
-				tRect.x(),
-				outerRect.y(),
-				outerRect.right() - tRect.x() + 1,
-				outerRect.height(),
+				frmRect.x(),
+				textY,
+				textW + PADDING*2,
+				textH + PADDING,
 				bg);
 		}
 	}
 	
 	// Draw shadow
-	p->setPen(QPen( cg.mid() ));
-	outerRect.moveBy(1, 1);
-	p->drawLine(outerRect.topRight(), outerRect.bottomRight() );
-	p->drawLine(outerRect.bottomLeft(), outerRect.bottomRight() );
-
+	p->setPen(cg.mid());
+	frmRect.moveBy(SHADOW, SHADOW);
+	p->drawLine(frmRect.topRight(), frmRect.bottomRight() );
+	p->drawLine(frmRect.bottomLeft(), frmRect.bottomRight() );
+	
 	// Draw text
 	p->setPen(QPen(fg));
 	p->setBackgroundColor(bg);
 
-	// Draw text
-	int align = view->itemTextPos() == QIconView::Bottom ? AlignHCenter : AlignAuto;
-	align|=AlignTop;
-	if (view->shownFileItem() && view->shownFileItem()->extraData(view)==this) {
-		p->setPen(view->shownFileItemColor());
-	}
+	int align = (isRight ? AlignAuto : AlignHCenter) | AlignTop;
 
 	int lineHeight=view->fontMetrics().height();
-	int ypos=0;
 	int ascent=view->fontMetrics().ascent();
+	
+	int ypos=0;
+	if (isRight) {
+		ypos=(textH - int(mLines.count())*lineHeight) / 2;
+		if (ypos<0) ypos=0;
+	}
 
+	// Set up the background color for KWordWrap::drawFadeoutText()
+	if (isSelected()) {
+		p->setBackgroundColor(bg);
+	} else {
+		p->setBackgroundColor(cg.base());
+	}
+	
 	QValueVector<QString>::ConstIterator it=mLines.begin();
 	QValueVector<QString>::ConstIterator itEnd=mLines.end();
-	for (;it!=itEnd && ypos + ascent<=tRect.height(); ++it, ypos+=lineHeight) {
+	for (;it!=itEnd && ypos + ascent<=textH; ++it, ypos+=lineHeight) {
 		int length=view->fontMetrics().width(*it);
-		if (length>tRect.width()) {
+		if (length>textW) {
 			p->save();
 			KWordWrap::drawFadeoutText(p,
-				tRect.x(),
-				tRect.y() + ypos + ascent,
-				tRect.width(),
+				textX,
+				textY + ypos + ascent,
+				textW,
 				*it);
 			p->restore();
 		} else {
-			QRect rect(
-				tRect.x(),
-				tRect.y() + ypos,
-				tRect.width(),
-				lineHeight);
-			p->drawText(rect, align, *it);
+			p->drawText(
+				textX,
+				textY + ypos,
+				textW,
+				lineHeight,
+				align,
+				*it);
 		}
 	}
-	
-	p->restore();
 }
 
 

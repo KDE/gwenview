@@ -36,7 +36,7 @@ class KFileItem;
  */
 class GVFileThumbnailViewItem : public QIconViewItem {
 public:
-	enum { PADDING=4 };
+	enum { PADDING=4 , SHADOW=1 };
 
 	GVFileThumbnailViewItem(QIconView* parent,const QString& text,const QPixmap& icon, KFileItem* fileItem);
 	~GVFileThumbnailViewItem();

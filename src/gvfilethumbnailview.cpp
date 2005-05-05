@@ -556,9 +556,28 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 //
 //--------------------------------------------------------------------------
 void GVFileThumbnailView::updateGrid() {
-	int grid=d->mThumbnailSize + GVFileThumbnailViewItem::PADDING*2 + d->mMarginSize;
-	if (itemTextPos()==Right) grid+=THUMBNAIL_TEXT_SIZE;
-	setGridX(grid);
+	if (itemTextPos()==Right) {
+		setGridX(
+			d->mThumbnailSize
+			+ GVFileThumbnailViewItem::PADDING*3
+			+ GVFileThumbnailViewItem::SHADOW
+			+ THUMBNAIL_TEXT_SIZE);
+		setGridY(
+			d->mThumbnailSize
+			+ GVFileThumbnailViewItem::PADDING*2
+			+ GVFileThumbnailViewItem::SHADOW);
+	} else {
+		setGridX(
+			d->mThumbnailSize
+			+ GVFileThumbnailViewItem::PADDING*2
+			+ GVFileThumbnailViewItem::SHADOW);
+		setGridY(
+			d->mThumbnailSize
+			+ GVFileThumbnailViewItem::PADDING*3
+			+ GVFileThumbnailViewItem::SHADOW
+			+ fontMetrics().height()*2);
+	}
+	setSpacing(d->mMarginSize);
 }
 
 
