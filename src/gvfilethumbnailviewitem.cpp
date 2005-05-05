@@ -56,24 +56,15 @@ GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
 }
 
 
-int GVFileThumbnailViewItem::availableTextWidth() const {
-	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
-	if (view->itemTextPos()==QIconView::Right) {
-		return GVFileThumbnailView::THUMBNAIL_TEXT_SIZE;
-	} else {
-		return view->thumbnailSize();
-	}
-}
-
-
 void GVFileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
-	mLines.append(mFileItem->name());
-
-	bool isBottom=iconView()->itemTextPos()==QIconView::Bottom;
 	
-	if (!isBottom) {
+	bool isRight=iconView()->itemTextPos()==QIconView::Bottom;
+	
+	mLines.append(mFileItem->name());
+	
+	if (isRight) {
 		if (!mFileItem->isDir()) {
 			mLines.append( KIO::convertSize(mFileItem->size()) );
 		}
@@ -131,7 +122,14 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	textY-=SHADOW;
 
 	// Draw pixmap
-	p->drawPixmap( rt.x() + PADDING, rt.y() + PADDING, *pixmap() );
+	if (isRight) {
+		p->drawPixmap( rt.x() + PADDING, rt.y() + PADDING, *pixmap() );
+	} else {
+		p->drawPixmap(
+			rt.x() + (rt.width() - pixmap()->width())/2,
+			rt.y() + PADDING, 
+			*pixmap() );
+	}
 
 	// Define colors
 	QColor bg, fg;

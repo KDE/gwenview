@@ -63,6 +63,9 @@ static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
 static const char* CONFIG_MARGIN_SIZE="margin size";
 
 static const int THUMBNAIL_UPDATE_DELAY=500;
+	
+static const int RIGHT_TEXT_WIDTH=128;
+static const int BOTTOM_MIN_TEXT_WIDTH=96;
 
 
 class ProgressWidget : public QFrame {
@@ -561,14 +564,14 @@ void GVFileThumbnailView::updateGrid() {
 			d->mThumbnailSize
 			+ GVFileThumbnailViewItem::PADDING*3
 			+ GVFileThumbnailViewItem::SHADOW
-			+ THUMBNAIL_TEXT_SIZE);
+			+ RIGHT_TEXT_WIDTH);
 		setGridY(
 			d->mThumbnailSize
 			+ GVFileThumbnailViewItem::PADDING*2
 			+ GVFileThumbnailViewItem::SHADOW);
 	} else {
 		setGridX(
-			d->mThumbnailSize
+			QMAX(d->mThumbnailSize, BOTTOM_MIN_TEXT_WIDTH)
 			+ GVFileThumbnailViewItem::PADDING*2
 			+ GVFileThumbnailViewItem::SHADOW);
 		setGridY(

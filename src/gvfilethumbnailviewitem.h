@@ -53,8 +53,6 @@ protected:
 	void dropped(QDropEvent*, const QValueList<QIconDragItem>&);
 	void updateLines();
 
-	int availableTextWidth() const;
-	
 	KFileItem* mFileItem;
 	QValueVector<QString> mLines;
 	QSize mImageSize;
