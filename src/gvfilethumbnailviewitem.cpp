@@ -60,7 +60,7 @@ void GVFileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
 	
-	bool isRight=iconView()->itemTextPos()==QIconView::Bottom;
+	bool isRight=iconView()->itemTextPos()==QIconView::Right;
 	
 	mLines.append(mFileItem->name());
 	
