@@ -40,37 +40,46 @@ public:
 	static GVCache* instance();
 	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
+	void addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
 	void getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const;
+	QPixmap thumbnail( const KURL& url, QSize& imagesize ) const;
+	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
+	void updateAge();
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
 	GVCache();
 	void checkMaxSize();
-	void updateAge();
 	struct ImageData {
 		ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 		ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
 		ImageData( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
+		ImageData( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
 		void addFile( const QByteArray& file );
 		void addImage( const GVImageFrames& frames, const QCString& format );
+		void addThumbnail( const QPixmap& thumbnail, QSize imagesize );
 		long long cost() const;
 		int size() const;
 		QByteArray file;
 		GVImageFrames frames;
+		QPixmap thumbnail;
+		QSize imagesize;
 		QCString format;
 		QDateTime timestamp;
 		mutable int age;
 		bool fast_url;
-		void setSize();
 		int fileSize() const;
 		int imageSize() const;
+		int thumbnailSize() const;
 		bool reduceSize();
+		bool isEmpty() const;
 		ImageData() {}; // stupid QMap
 	};
 	QMap< KURL, ImageData > mImages;
 	int mMaxSize;
+	int mThumbnailSize;
 };
 
 #endif

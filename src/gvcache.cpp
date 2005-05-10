@@ -37,10 +37,13 @@ Copyright 2000-2004 Aurélien Gâteau
 #define LOG(x) ;
 #endif
 
+//#define DEBUG_CACHE
+
 const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 
 GVCache::GVCache()
 : mMaxSize( DEFAULT_MAXSIZE )
+, mThumbnailSize( 0 ) // don't remember size for every thumbnail, but have one global and dump all if needed
 {
 }
 
@@ -79,6 +82,22 @@ void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCSt
 	checkMaxSize();
 }
 
+void GVCache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp ) {
+// Thumbnails are many and often - things would age too quickly. Therefore
+// when adding thumbnails updateAge() is called from the outside only once for all of them.
+//	updateAge();
+	bool insert = true;
+	if( mImages.contains( url )) {
+		ImageData& data = mImages[ url ];
+		if( data.timestamp == timestamp ) {
+			data.addThumbnail( thumbnail, imagesize );
+			insert = false;
+		}
+	}
+	if( insert ) mImages[ url ] = ImageData( url, thumbnail, imagesize, timestamp );
+	checkMaxSize();
+}
+
 QDateTime GVCache::timestamp( const KURL& url ) const {
 	LOG(url.prettyURL());
 	if( mImages.contains( url )) return mImages[ url ].timestamp;
@@ -109,6 +128,17 @@ void GVCache::getFrames( const KURL& url, GVImageFrames& frames, QCString& forma
 	}
 }
 
+QPixmap GVCache::thumbnail( const KURL& url, QSize& imagesize ) const {
+	if( mImages.contains( url )) {
+		const ImageData& data = mImages[ url ];
+		if( data.thumbnail.isNull()) return QPixmap();
+		imagesize = data.imagesize;
+//		data.age = 0;
+		return data.thumbnail;
+	}
+	return QPixmap();
+}
+
 void GVCache::updateAge() {
 	for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
 		it != mImages.end();
@@ -117,15 +147,47 @@ void GVCache::updateAge() {
 	}
 }
 
+void GVCache::checkThumbnailSize( int size ) {
+	if( size != mThumbnailSize ) {
+		// simply remove all thumbnails, should happen rarely
+		for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
+			it != mImages.end();
+			) {
+			if( !(*it).thumbnail.isNull()) {
+				QMap< KURL, ImageData >::Iterator it2 = it;
+				++it;
+				mImages.remove( it2 );
+			} else {
+				++it;
+			}
+		}
+		mThumbnailSize = size;
+	}
+}
+
+#ifdef DEBUG_CACHE
+static KURL _cache_url; // hack only for debugging for item to show also its key
+#endif
+
 void GVCache::checkMaxSize() {
 	for(;;) {
 		int size = 0;
 		QMap< KURL, ImageData >::Iterator max;
 		long long max_cost = -1;
+#ifdef DEBUG_CACHE
+		int with_file = 0;
+		int with_thumb = 0;
+		int with_image = 0;
+#endif
 		for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
 			it != mImages.end();
 			++it ) {
 			size += (*it).size();
+#ifdef DEBUG_CACHE
+			if( !(*it).file.isNull()) ++with_file;
+			if( !(*it).thumbnail.isNull()) ++with_thumb;
+			if( !(*it).frames.isEmpty()) ++with_image;
+#endif
 			long long cost = (*it).cost();
 			if( cost > max_cost ) {
 				max_cost = cost;
@@ -133,9 +195,18 @@ void GVCache::checkMaxSize() {
 			}
 		}
 		if( size <= mMaxSize ) {
+#if 0
+#ifdef DEBUG_CACHE
+			kdDebug() << "GVCache: Statistics (" << mImages.size() << "/" << with_file << "/"
+				<< with_thumb << "/" << with_image << ")" << endl;
+#endif
+#endif
 			break;
 		}
-		if( !(*max).reduceSize()) mImages.remove( max );
+#ifdef DEBUG_CACHE
+		_cache_url = max.key();
+#endif
+		if( !(*max).reduceSize() || (*max).isEmpty()) mImages.remove( max );
 	}
 }
 
@@ -163,6 +234,15 @@ GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const
 {
 }
 
+GVCache::ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgsize, const QDateTime& t )
+: thumbnail( thumb )
+, imagesize( imgsize )
+, timestamp( t )
+, age( 0 )
+, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
+{
+}
+
 void GVCache::ImageData::addFile( const QByteArray& f ) {
 	file = f;
 	file.detach(); // explicit sharing
@@ -175,12 +255,22 @@ void GVCache::ImageData::addImage( const GVImageFrames& fs, const QCString& f ) 
 	age = 0;
 }
 
+void GVCache::ImageData::addThumbnail( const QPixmap& thumb, QSize imgsize ) {
+	thumbnail = thumb;
+	imagesize = imgsize;
+//	age = 0;
+}
+
 int GVCache::ImageData::size() const {
-	return fileSize() + imageSize();
+	return QMAX( fileSize() + imageSize() + thumbnailSize(), 100 ); // some minimal size per item
 }
 
 int GVCache::ImageData::fileSize() const {
 	return !file.isNull() ? file.size() : 0;
+}
+
+int GVCache::ImageData::thumbnailSize() const {
+	return !thumbnail.isNull() ? thumbnail.height() * thumbnail.width() * thumbnail.depth() / 8 : 0;
 }
 
 int GVCache::ImageData::imageSize() const {
@@ -194,6 +284,16 @@ int GVCache::ImageData::imageSize() const {
 bool GVCache::ImageData::reduceSize() {
 	if( !file.isNull() && fast_url && !frames.isEmpty()) {
 		file = QByteArray();
+#ifdef DEBUG_CACHE
+		kdDebug() << "GVCache: Dumping fast file: " << _cache_url.prettyURL() << ":" << cost() << endl;
+#endif
+		return true;
+	}
+	if( !thumbnail.isNull()) {
+#ifdef DEBUG_CACHE
+		kdDebug() << "GVCache: Dumping thumbnail: " << _cache_url.prettyURL() << ":" << cost() << endl;
+#endif
+		thumbnail = QPixmap();
 		return true;
 	}
 	if( !file.isNull() && !frames.isEmpty()) {
@@ -201,18 +301,33 @@ bool GVCache::ImageData::reduceSize() {
 	// is JPEG (which needs raw data anyway) or the raw data much larger than the image
 		if( format == "JPEG" || fileSize() < imageSize() / 10 ) {
 			frames.clear();
+#ifdef DEBUG_CACHE
+			kdDebug() << "GVCache: Dumping images: " << _cache_url.prettyURL() << ":" << cost() << endl;
+#endif
 		} else {
 			file = QByteArray();
+#ifdef DEBUG_CACHE
+			kdDebug() << "GVCache: Dumping file: " << _cache_url.prettyURL() << ":" << cost() << endl;
+#endif
 		}
 		return true;
 	}
+#ifdef DEBUG_CACHE
+	kdDebug() << "Cache: Dumping completely: " << _cache_url.prettyURL() << ":" << cost() << endl;
+#endif
 	return false; // reducing here would mean clearing everything
+}
+
+bool GVCache::ImageData::isEmpty() const {
+	return file.isNull() && frames.isEmpty() && thumbnail.isNull();
 }
 
 long long GVCache::ImageData::cost() const {
 	long long s = size();
 	if( fast_url && !file.isNull()) {
 		s *= ( format == "JPEG" ? 10 : 100 ); // heavy penalty for storing local files
+	} else if( !thumbnail.isNull()) {
+		s *= 10 * 10; // thumbnails are small, and try to get rid of them soon
 	}
 	static const int mod[] = { 50, 30, 20, 16, 12, 10 };
 	if( age <= 5 ) {

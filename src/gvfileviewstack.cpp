@@ -44,6 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "fileoperation.h"
 #include "gvarchive.h"
+#include "gvcache.h"
 #include "gvexternaltoolcontext.h"
 #include "gvexternaltoolmanager.h"
 #include "gvfilethumbnailview.h"
@@ -435,6 +436,7 @@ void GVFileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
 	QToolTip::add(mSizeSlider, i18n("Thumbnail size: %1x%2").arg(size).arg(size));
 	mFileThumbnailView->setThumbnailSize(size);
+	GVCache::instance()->checkThumbnailSize(size);
 }
 
 

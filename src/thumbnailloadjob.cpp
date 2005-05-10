@@ -54,6 +54,7 @@ extern "C" {
 }
 
 // Local
+#include "gvcache.h"
 #include "gvimageutils/jpegcontent.h"
 #include "gvimageutils/gvimageutils.h"
 #include "gvthumbnailsize.h"
@@ -366,6 +367,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 	mCurrentItem = NULL;
 
 	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
+	GVCache::instance()->updateAge(); // see addThumbnail in GVCache
 }
 
 
@@ -605,6 +607,13 @@ void ThumbnailLoadJob::checkThumbnail() {
 		determineNextIcon();
 		return;
 	}
+	QSize imagesize;
+	QPixmap cached = GVCache::instance()->thumbnail( mCurrentURL, imagesize );
+	if( !cached.isNull()) {
+		emit thumbnailLoaded(mCurrentItem, cached, imagesize);
+		determineNextIcon();
+		return;
+	}
 	
 	mOriginalURI=generateOriginalURI(mCurrentURL);
 	mThumbnailPath=generateThumbnailPath(mOriginalURI);
@@ -665,7 +674,11 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 	} else {
 		thumbImg=img;
 	}
-	emit thumbnailLoaded(mCurrentItem, QPixmap(thumbImg), size);
+	QDateTime tm;
+	tm.setTime_t( mOriginalTime );
+	QPixmap thumb( thumbImg ); // store as QPixmap in cache (faster to retrieve, no conversion needed)
+	GVCache::instance()->addThumbnail( mCurrentURL, thumb, size, tm );
+	emit thumbnailLoaded(mCurrentItem, thumb, size);
 }
 
 
