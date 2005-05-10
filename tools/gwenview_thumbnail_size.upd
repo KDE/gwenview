@@ -1,0 +1,5 @@
+Id=gwenview_thumbnail_size
+File=gwenviewrc
+Group=file widget
+Options=overwrite
+Script=gwenview_thumbnail_size.sh,sh
