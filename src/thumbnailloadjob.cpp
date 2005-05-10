@@ -608,11 +608,13 @@ void ThumbnailLoadJob::checkThumbnail() {
 		return;
 	}
 	QSize imagesize;
-	QPixmap cached = GVCache::instance()->thumbnail( mCurrentURL, imagesize );
-	if( !cached.isNull()) {
-		emit thumbnailLoaded(mCurrentItem, cached, imagesize);
-		determineNextIcon();
-		return;
+	if( mOriginalTime == time_t( GVCache::instance()->timestamp( mCurrentURL ).toTime_t())) {
+		QPixmap cached = GVCache::instance()->thumbnail( mCurrentURL, imagesize );
+		if( !cached.isNull()) {
+			emit thumbnailLoaded(mCurrentItem, cached, imagesize);
+			determineNextIcon();
+			return;
+		}
 	}
 	
 	mOriginalURI=generateOriginalURI(mCurrentURL);
