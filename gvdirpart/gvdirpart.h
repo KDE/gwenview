@@ -119,6 +119,8 @@ protected slots:
 
 	void directoryChanged(const KURL& dirURL);
 
+	void urlChanged( const KURL& );
+
 protected:
 	/**
 	 * The component's widget, contains the files view on the left

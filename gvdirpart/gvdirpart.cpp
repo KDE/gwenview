@@ -104,9 +104,11 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
 	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
-		mDocument, SLOT(setURL(const KURL&)) );
+		this, SLOT(urlChanged(const KURL&)) );
 	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
 		this, SLOT(directoryChanged(const KURL&)) );
+	connect(mSlideShow, SIGNAL(nextURL(const KURL&)),
+		this, SLOT(urlChanged(const KURL&)) );
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
 		this, SLOT(loaded(const KURL&)) );
 
@@ -231,6 +233,12 @@ void GVDirPart::directoryChanged(const KURL& dirURL) {
 	if( dirURL == m_url ) return;
 	emit mBrowserExtension->openURLRequest(dirURL);
 }
+
+void GVDirPart::urlChanged(const KURL& url) {
+	mDocument->setURL( url );
+	mFilesView->setFileNameToSelect( url.filename());
+}
+
 
 /***** GVDirPartBrowserExtension *****/
 

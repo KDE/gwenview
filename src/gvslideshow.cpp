@@ -102,7 +102,7 @@ void GVSlideShow::slotTimeout() {
 		return;
 	}
 
-	mDocument->setURL(*it);
+	emit nextURL(*it);
 	if( mPrefetchAdvance > 1 ) --mPrefetchAdvance;
 }
 

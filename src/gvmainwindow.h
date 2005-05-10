@@ -148,9 +148,8 @@ private:
 	void readConfig(KConfig*,const QString&);
 	void writeConfig(KConfig*,const QString&) const;
 
-	void openURL(const KURL&);
-
 private slots:
+	void openURL(const KURL&);
 	void goUp();
 	void goUpTo(int);
 

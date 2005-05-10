@@ -830,6 +830,7 @@ void GVMainWindow::createWidgets() {
 
 	// Slide show controller (not really a widget)
 	mSlideShow=new GVSlideShow(mDocument);
+	connect( mSlideShow, SIGNAL( nextURL( const KURL& )), SLOT( openURL( const KURL& )));
 
 	// Default position on desktop
 	setGeometry(20,20,720,520);

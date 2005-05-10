@@ -54,6 +54,7 @@ public:
 	void writeConfig(KConfig* config,const QString& group) const;
 
 signals:
+	void nextURL( const KURL& );
 	void finished();
 
 private slots:
