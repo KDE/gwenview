@@ -39,7 +39,7 @@ class LIBGWENVIEW_EXPORT GVCache {
 public:
 	static GVCache* instance();
 	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
-	void addFile( const KURL& url, const QByteArray& file);
+	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
 	void getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const;
@@ -64,6 +64,9 @@ private:
 		mutable int age;
 		bool fast_url;
 		void setSize();
+		int fileSize() const;
+		int imageSize() const;
+		bool reduceSize();
 		ImageData() {}; // stupid QMap
 	};
 	QMap< KURL, ImageData > mImages;

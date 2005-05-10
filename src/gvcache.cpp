@@ -49,14 +49,18 @@ GVCache* GVCache::instance() {
 	return &manager;
 }
 
-void GVCache::addFile( const KURL& url, const QByteArray& file) {
+void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp) {
 	LOG(url.prettyURL());
 	updateAge();
-	Q_ASSERT(mImages.contains(url));
-	if( !mImages.contains( url )) return;
-
-	ImageData& data = mImages[ url ];
-	data.addFile( file );
+	bool insert = true;
+	if( mImages.contains( url )) {
+		ImageData& data = mImages[ url ];
+		if( data.timestamp == timestamp ) {
+			data.addFile( file );
+			insert = false;
+		}
+	}
+	if( insert ) mImages[ url ] = ImageData( url, file, timestamp );
 	checkMaxSize();
 }
 
@@ -131,7 +135,7 @@ void GVCache::checkMaxSize() {
 		if( size <= mMaxSize ) {
 			break;
 		}
-		mImages.remove( max );
+		if( !(*max).reduceSize()) mImages.remove( max );
 	}
 }
 
@@ -172,16 +176,44 @@ void GVCache::ImageData::addImage( const GVImageFrames& fs, const QCString& f ) 
 }
 
 int GVCache::ImageData::size() const {
+	return fileSize() + imageSize();
+}
+
+int GVCache::ImageData::fileSize() const {
+	return !file.isNull() ? file.size() : 0;
+}
+
+int GVCache::ImageData::imageSize() const {
 	int ret = 0;
-	if( !file.isNull()) ret += file.size();
 	for( GVImageFrames::ConstIterator it = frames.begin(); it != frames.end(); ++it ) {
 		ret += (*it).image.height() * (*it).image.width() * (*it).image.depth() / 8;
 	}
 	return ret;
 }
 
+bool GVCache::ImageData::reduceSize() {
+	if( !file.isNull() && fast_url && !frames.isEmpty()) {
+		file = QByteArray();
+		return true;
+	}
+	if( !file.isNull() && !frames.isEmpty()) {
+	// possibly slow file to fetch - dump the image data unless the image
+	// is JPEG (which needs raw data anyway) or the raw data much larger than the image
+		if( format == "JPEG" || fileSize() < imageSize() / 10 ) {
+			frames.clear();
+		} else {
+			file = QByteArray();
+		}
+		return true;
+	}
+	return false; // reducing here would mean clearing everything
+}
+
 long long GVCache::ImageData::cost() const {
 	long long s = size();
+	if( fast_url && !file.isNull()) {
+		s *= ( format == "JPEG" ? 10 : 100 ); // heavy penalty for storing local files
+	}
 	static const int mod[] = { 50, 30, 20, 16, 12, 10 };
 	if( age <= 5 ) {
 		return s * 10 / mod[ age ];

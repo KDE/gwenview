@@ -294,21 +294,25 @@ void GVImageLoader::slotStatResult(KIO::Job* job) {
 	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
+		d->mRawData = GVCache::instance()->file( d->mURL );
 		GVImageFrames frames;
 		GVCache::instance()->getFrames( d->mURL, frames, format );
-
-		// There should always be frames
-		Q_ASSERT(!frames.isEmpty());
 		if( !frames.isEmpty()) {
 			d->mImageFormat = format;
 			d->mFrames = frames;
-		
-			// Raw data is only needed for JPEG files
-			if (d->mImageFormat=="JPEG") {
-				d->mRawData = GVCache::instance()->file( d->mURL );
+			if( !d->mRawData.isNull() || format != "JPEG" ) {
+				finish( true );
+				return;
 			}
-			finish( true );
-			return;
+			// the raw data is needed for JPEG, so it needs to be loaded
+			// if it's not in the cache
+		} else {
+			// Image in cache is broken, let's try the file
+			if( !d->mRawData.isNull()) {
+				d->mTimeSinceLastUpdate.start();
+				d->mDecoderTimer.start(0, false);
+				return;
+			}
 		}
 	}
 	
@@ -337,6 +341,15 @@ void GVImageLoader::slotGetResult(KIO::Job* job) {
 
 	d->mGetComplete = true;
 	
+	// Store raw data in cache
+	// Note: GVCache will give high cost to non-JPEG raw data.
+	GVCache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
+
+	if( !d->mImageFormat.isNull()) { // image was in cache, but not raw data
+		finish( true );
+		return;
+	}
+
 	// Start the decoder thread if needed
 	if( d->mUseThread ) {
 		startThread();
@@ -363,6 +376,10 @@ void GVImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 
 void GVImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
+		d->mDecoderTimer.stop();
+		return;
+	}
+	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -454,9 +471,6 @@ void GVImageLoader::finish( bool ok ) {
 	}
 
 	GVCache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
-	if (d->mImageFormat=="JPEG") {
-		GVCache::instance()->addFile(d->mURL, d->mRawData);
-	}
 
 	GVImageFrame lastframe = d->mFrames.last();
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
