@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdockwidget.h>
 #include <kdeprint/kprintdialogpage.h>
 
+#include "libgwenview_export.h"
 class GVDocument;
 class GVPrintDialogPageBase;
 
@@ -38,7 +39,7 @@ enum GVUnits {
 	GV_INCHES
 };
 
-class GVPrintDialogPage : public KPrintDialogPage {
+class LIBGWENVIEW_EXPORT GVPrintDialogPage : public KPrintDialogPage {
 	Q_OBJECT
 
 public:

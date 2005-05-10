@@ -32,10 +32,10 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local
 #include "gvimageframe.h"
-
+#include "libgwenview_export.h"
 class KConfig;
 
-class GVCache {
+class LIBGWENVIEW_EXPORT GVCache {
 public:
 	static GVCache* instance();
 	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );

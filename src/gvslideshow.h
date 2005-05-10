@@ -27,14 +27,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kurl.h>
-
+#include "libgwenview_export.h"
 class QTimer;
 
 class GVDocument;
 class KConfig;
 class GVImageLoader;
 
-class GVSlideShow : public QObject
+class LIBGWENVIEW_EXPORT GVSlideShow : public QObject
 {
 Q_OBJECT
 public:

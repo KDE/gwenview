@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/job.h>
 #include <kurl.h>
 
+#include "libgwenview_export.h"
 class QIconViewItem;
 class QListViewItem;
 class QPopupMenu;
@@ -67,7 +68,7 @@ private:
 	bool mCheck;
 };
 
-class GVFileViewStack : public QWidgetStack {
+class LIBGWENVIEW_EXPORT GVFileViewStack : public QWidgetStack {
 Q_OBJECT
 
 public:

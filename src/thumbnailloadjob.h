@@ -37,11 +37,13 @@
 #include "tsthread/tsthread.h"
 #include "tsthread/tswaitcondition.h"
 
+#include "libgwenview_export.h"
+
 class KFileItem;
 
 typedef QPtrList<KFileItem> KFileItemList;
 
-class ThumbnailThread : public TSThread {
+class LIBGWENVIEW_EXPORT ThumbnailThread : public TSThread {
 Q_OBJECT
 public:
 	void load(
@@ -77,7 +79,7 @@ private:
 /**
  * A job that determines the thumbnails for the images in the current directory
  */
-class ThumbnailLoadJob : public KIO::Job {
+class LIBGWENVIEW_EXPORT ThumbnailLoadJob : public KIO::Job {
 Q_OBJECT
 public:
 	/**

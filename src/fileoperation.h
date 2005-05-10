@@ -27,14 +27,14 @@ class QWidget;
 class KConfig;
 class KURL;
 
-
+#include "libgwenview_export.h"
 /**
  * This namespace-like class handles all steps of a file operation :
  * - asking the user what to do with a file
  * - performing the operation
  * - showing result dialogs
  */
-class FileOperation {
+class LIBGWENVIEW_EXPORT FileOperation {
 public:
 	static void copyTo(const KURL::List&,QWidget* parent=0L);
 	static void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);

@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt includes
 #include <qstringlist.h>
-
+#include "libgwenview_export.h"
 class KFileItem;
 
 /**
@@ -32,7 +32,7 @@ class KFileItem;
  */
 namespace GVArchive {
 	
-bool fileItemIsArchive(const KFileItem*);
+LIBGWENVIEW_EXPORT bool fileItemIsArchive(const KFileItem*);
 bool protocolIsArchive(const QString&);
 QStringList mimeTypes();
 QString protocolForMimeType(const QString&);

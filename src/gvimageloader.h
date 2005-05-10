@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "tsthread/tsthread.h"
 #include "gvimageframe.h"
 #include "gvbusylevelmanager.h"
-
+#include "libgwenview_export.h"
 class GVDecoderThread : public TSThread {
 Q_OBJECT
 public:
@@ -55,7 +55,7 @@ private:
 
 class GVImageLoaderPrivate;
 
-class GVImageLoader : public QObject, public QImageConsumer {
+class LIBGWENVIEW_EXPORT GVImageLoader : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
 	static GVImageLoader* loader( const KURL& url ); // use this instead of ctor

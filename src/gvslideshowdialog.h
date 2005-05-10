@@ -24,11 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kdialogbase.h>
-
+#include "libgwenview_export.h"
 class GVSlideShow;
 class GVSlideShowDialogBase;
 
-class GVSlideShowDialog: public KDialogBase {
+class LIBGWENVIEW_EXPORT GVSlideShowDialog: public KDialogBase {
 Q_OBJECT
 public:
 	GVSlideShowDialog(QWidget* parent,GVSlideShow*);

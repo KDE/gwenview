@@ -12,6 +12,8 @@ libgwenviewcore_la_LIBADD   = \
 
 libgwenviewcore_la_METASOURCES = AUTO
 
+include_HEADERS = libgwenview_export.h
+
 libgwenviewcore_la_SOURCES = \
 	gvconfigfileoperationspage.ui \
 	gvconfigfullscreenpage.ui \

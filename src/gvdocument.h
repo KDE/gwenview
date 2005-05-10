@@ -32,7 +32,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local 
 #include "gvimageutils/orientation.h"
-
+#include "libgwenview_export.h"
 class GVDocumentPrivate;
 class GVDocumentImpl;
 
@@ -49,7 +49,7 @@ namespace KIO { class Job; }
  * - image is being loaded
  * - loaded() is emitted
  */
-class GVDocument : public QObject {
+class LIBGWENVIEW_EXPORT GVDocument : public QObject {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
