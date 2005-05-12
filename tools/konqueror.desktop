@@ -3,6 +3,3 @@ ServiceTypes=*
 Exec=konqueror %u 
 Icon=konqueror
 Name=Konqueror
-Name[hi]=कॉन्क्वेरर
-Name[ta]=கான்குவரர்
-Name[xx]=xxKonquerorxx
