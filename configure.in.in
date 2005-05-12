@@ -25,9 +25,9 @@ if test "$want_kipi" = "yes"; then
     have_kipi=no)
 
   if test "$have_kipi" = "yes"; then
-	AC_DEFINE(HAVE_KIPI, 1, [If we have libkipi installed])
-	LIB_KIPI="-lkipi"
-	AC_SUBST(LIB_KIPI)
+	AC_DEFINE(GV_HAVE_KIPI, 1, [If we have libkipi installed])
+	GV_LIB_KIPI="-lkipi"
+	AC_SUBST(GV_LIB_KIPI)
   else
     AC_WARN([Can't find KIPI headers, Gwenview won't be compiled with KIPI support])
   fi

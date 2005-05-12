@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GVKIPIINTERFACE_H	
 
 #include <config.h>
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 
 #include <libkipi/interface.h>
 
@@ -53,5 +53,5 @@ private slots:
 	void slotDirectoryChanged();
 };
 
-#endif /* HAVE_KIPI */
+#endif /* GV_HAVE_KIPI */
 #endif /* GVKIPIINTERFACE_H */

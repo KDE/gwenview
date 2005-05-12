@@ -6,7 +6,7 @@ libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(LIB_KIPI) \
+	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_KIPI) \
 	../libgvexif/libgvexif.la ../gvimageutils/libgvimageutils.la \
 	../tsthread/libtsthread.la
 

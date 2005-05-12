@@ -64,7 +64,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <config.h>
 // KIPI
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
 #endif
@@ -91,7 +91,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "config.h"
 
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 #include "gvkipiinterface.h"
 #endif
 
@@ -612,7 +612,7 @@ void GVMainWindow::showExternalToolDialog() {
 void GVMainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader::PluginList pluginList=mPluginLoader->pluginList();
 	KIPI::PluginLoader::PluginList::ConstIterator it(pluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(pluginList.end());
@@ -1096,7 +1096,7 @@ void GVMainWindow::activateLocationLabel() {
 }
 
 
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 void GVMainWindow::loadPlugins() {
 	// Sets up the plugin interface, and load the plugins
 	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);

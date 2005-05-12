@@ -41,7 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <config.h>
 // KIPI
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 #include <libkipi/pluginloader.h>
 #endif
 
@@ -69,7 +69,7 @@ public:
 	GVConfigFileOperationsPage* mFileOperationsPage;
 	GVConfigMiscPage* mMiscPage;
 	GVMainWindow* mMainWindow;
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	KIPI::ConfigWidget* mKIPIConfigWidget;
 #endif
 };
@@ -120,7 +120,7 @@ GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 	d->mFileOperationsPage = addConfigPage<GVConfigFileOperationsPage>(
 		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
 
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
 	addConfigPage(
 		this, d->mKIPIConfigWidget, i18n("Configure KIPI Plugins"), i18n("KIPI Plugins"), "kipi");
@@ -241,7 +241,7 @@ void GVConfigDialog::slotApply() {
 	FileOperation::setDeleteToTrash(d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
 
 	// KIPI tab
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget->apply();
 #endif
 

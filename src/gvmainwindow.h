@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvimageutils/orientation.h"
 
 #include "config.h"
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 #include <libkipi/pluginloader.h>
 #endif
 
@@ -68,7 +68,7 @@ public:
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	GVDocument* document() const { return mDocument; }
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* pluginLoader() const { return mPluginLoader; }
 #endif
 
@@ -133,7 +133,7 @@ private:
 
 	bool mShowBusyPtrInFullScreen;
 
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* mPluginLoader;
 #endif
 

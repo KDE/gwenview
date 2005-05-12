@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include <config.h>
-#ifdef HAVE_KIPI
+#ifdef GV_HAVE_KIPI
 
 // Qt
 #include <qdir.h>
@@ -177,4 +177,4 @@ void GVKIPIInterface::slotDirectoryChanged() {
 }
 
 
-#endif /* HAVE_KIPI */
+#endif /* GV_HAVE_KIPI */
