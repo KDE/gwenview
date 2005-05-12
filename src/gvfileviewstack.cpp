@@ -123,7 +123,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mSizeSlider->setTickmarks(QSlider::Below);
 	mSizeSlider->setRange(
 		GVThumbnailSize::MIN/SLIDER_RESOLUTION,
-		GVThumbnailSize::MAX/SLIDER_RESOLUTION);
+		GVThumbnailSize::LARGE/SLIDER_RESOLUTION);
 	mSizeSlider->setSteps(1, 1);
 	mSizeSlider->setTickInterval(1);
 	

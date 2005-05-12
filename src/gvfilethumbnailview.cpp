@@ -283,7 +283,7 @@ QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
 
 	if (isDirOrArchive) {
 		// Load the icon
-		QPixmap itemPix=item->pixmap(d->mThumbnailSize);
+		QPixmap itemPix=item->pixmap(QMIN(d->mThumbnailSize, GVThumbnailSize::NORMAL));
 		painter.drawPixmap(
 			(d->mThumbnailSize-itemPix.width())/2,
 			(d->mThumbnailSize-itemPix.height())/2,
@@ -723,7 +723,7 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 }
 
 void GVFileThumbnailView::kpartConfig() {
-	d->mThumbnailSize=GVThumbnailSize::MAX;
+	d->mThumbnailSize=GVThumbnailSize::NORMAL;
 	d->mMarginSize=5;
 
 	updateGrid();

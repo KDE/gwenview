@@ -122,9 +122,14 @@ public:
 	void resume();
 
 	/**
-	 * Returns the thumbnail base dir
+	 * Returns the thumbnail base dir, independent of the thumbnail size
 	 */
 	static QString thumbnailBaseDir();
+	
+	/**
+	 * Returns the thumbnail base dir, for the @p size
+	 */
+	static QString thumbnailBaseDir(int size);
 
 
 	/**

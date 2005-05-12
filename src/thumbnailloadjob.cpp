@@ -88,9 +88,9 @@ static QString generateOriginalURI(KURL url) {
 }
 
 
-static QString generateThumbnailPath(const QString& uri) {
+static QString generateThumbnailPath(const QString& uri, int size) {
 	KMD5 md5( QFile::encodeName(uri) );
-	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir();
+	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir(size);
 	return baseDir + QString(QFile::encodeName( md5.hexDigest())) + ".png";
 }
 
@@ -167,7 +167,7 @@ void ThumbnailThread::loadThumbnail() {
 		if (bigImg.load(mPixPath)) {
 			width=bigImg.width();
 			height=bigImg.height();
-			int thumbSize=GVThumbnailSize::MAX;
+			int thumbSize=mThumbnailSize<=GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
 
 			if( testCancel()) return;
 
@@ -190,7 +190,7 @@ void ThumbnailThread::loadThumbnail() {
 		mImage.setText("Thumb::Image::Width", 0, QString::number(width));
 		mImage.setText("Thumb::Image::Height", 0, QString::number(height));
 		mImage.setText("Software", 0, "Gwenview");
-		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(), 0700);
+		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
 		mImage.save(mThumbnailPath, "PNG");
 	}
 }
@@ -238,7 +238,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	height=cinfo.image_height;
 
 	// Get image size and check if we need a thumbnail
-	int size=GVThumbnailSize::MAX;
+	int size= mThumbnailSize <= GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
 	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
 	if (imgSize<=size) {
@@ -315,14 +315,26 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 QString ThumbnailLoadJob::thumbnailBaseDir() {
 	static QString dir;
 	if (!dir.isEmpty()) return dir;
-	dir = QDir::homeDirPath() + "/.thumbnails/normal/";
+	dir=QDir::homeDirPath() + "/.thumbnails/";
+	return dir;
+}
+
+
+QString ThumbnailLoadJob::thumbnailBaseDir(int size) {
+	QString dir = thumbnailBaseDir();
+	if (size<=GVThumbnailSize::NORMAL) {
+		dir+="normal/";
+	} else {
+		dir+="large/";
+	}
 	return dir;
 }
 
 
 void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 	QString uri=generateOriginalURI(url);
-	QFile::remove(generateThumbnailPath(uri));
+	QFile::remove(generateThumbnailPath(uri, GVThumbnailSize::NORMAL));
+	QFile::remove(generateThumbnailPath(uri, GVThumbnailSize::LARGE));
 }
 
 
@@ -601,7 +613,7 @@ void ThumbnailLoadJob::thumbnailReady( const QImage& im ) {
 void ThumbnailLoadJob::checkThumbnail() {
 	// If we are in the thumbnail dir, just load the file
 	if (mCurrentURL.isLocalFile()
-		&& mCurrentURL.directory(false)==ThumbnailLoadJob::thumbnailBaseDir())
+		&& mCurrentURL.directory(false).startsWith(thumbnailBaseDir()) )
 	{
 		emitThumbnailLoaded(QImage(mCurrentURL.path()));
 		determineNextIcon();
@@ -618,7 +630,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	}
 	
 	mOriginalURI=generateOriginalURI(mCurrentURL);
-	mThumbnailPath=generateThumbnailPath(mOriginalURI);
+	mThumbnailPath=generateThumbnailPath(mOriginalURI, mThumbnailSize);
 
 	LOG("Stat thumb " << mThumbnailPath);
 	
@@ -668,11 +680,10 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
 		size=QSize();
 	}
 
-	int thumbPixelSize=mThumbnailSize;
 	QImage thumbImg;
-	if (biggestDimension>thumbPixelSize) {
+	if (biggestDimension>mThumbnailSize) {
 		// Scale down thumbnail if necessary
-		thumbImg=GVImageUtils::scale(img,thumbPixelSize, thumbPixelSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+		thumbImg=GVImageUtils::scale(img,mThumbnailSize, mThumbnailSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 	} else {
 		thumbImg=img;
 	}
