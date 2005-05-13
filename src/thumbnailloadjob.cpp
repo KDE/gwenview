@@ -137,12 +137,11 @@ void ThumbnailThread::run() {
 void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
 	bool loaded=false;
-	int width = -1, height;
+	bool needCaching=true;
+	int originalWidth, originalHeight;
 	
 	// If it's a JPEG, try to load a small image directly from the file
 	if (isJPEG(mPixPath)) {
-		//GVImageUtils::Orientation orientation = GVImageUtils::NOT_AVAILABLE;
-		//GVImageUtils::getOrientationAndThumbnail(mPixPath,orientation, mImage);
 		GVImageUtils::JPEGContent content;
 		content.load(mPixPath);
 		GVImageUtils::Orientation orientation = content.orientation();
@@ -151,10 +150,11 @@ void ThumbnailThread::loadThumbnail() {
 		if( !mImage.isNull()
 			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
 			|| mImage.height() >= mThumbnailSize )) {
-			loaded = true; // don't set width/height, so that no thumbnail is saved
+			loaded = true;
+			needCaching = false;
 		}
 		if(!loaded) {
-			loaded=loadJPEG(mPixPath, mImage, width, height);
+			loaded=loadJPEG(mPixPath, mImage, originalWidth, originalHeight);
 		}
 		if (loaded) {
 			// Rotate if necessary
@@ -163,18 +163,19 @@ void ThumbnailThread::loadThumbnail() {
 	}
 	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
 	if (!loaded) {
-		QImage bigImg;
-		if (bigImg.load(mPixPath)) {
-			width=bigImg.width();
-			height=bigImg.height();
+		QImage originalImage;
+		if (originalImage.load(mPixPath)) {
+			originalWidth=originalImage.width();
+			originalHeight=originalImage.height();
 			int thumbSize=mThumbnailSize<=GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
 
 			if( testCancel()) return;
 
-			if (width<=thumbSize && height<=thumbSize) {
-				mImage=bigImg;
+			if (QMAX(originalWidth, originalHeight)<=thumbSize ) {
+				mImage=originalImage;
+				needCaching = false;
 			} else {
-				mImage=GVImageUtils::scale(bigImg,thumbSize,thumbSize,GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+				mImage=GVImageUtils::scale(originalImage,thumbSize,thumbSize,GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 			}
 			loaded = true;
 		}
@@ -182,13 +183,13 @@ void ThumbnailThread::loadThumbnail() {
 
 	if( testCancel()) return;
 
-	if( mStoreThumbnailsInCache && loaded && width != -1 ) {
+	if( mStoreThumbnailsInCache && needCaching ) {
 		mImage.setText("Thumb::URI", 0, mOriginalURI);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
 		mImage.setText("Thumb::Mimetype", 0, mOriginalMimeType);
-		mImage.setText("Thumb::Image::Width", 0, QString::number(width));
-		mImage.setText("Thumb::Image::Height", 0, QString::number(height));
+		mImage.setText("Thumb::Image::Width", 0, QString::number(originalWidth));
+		mImage.setText("Thumb::Image::Height", 0, QString::number(originalHeight));
 		mImage.setText("Software", 0, "Gwenview");
 		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
 		mImage.save(mThumbnailPath, "PNG");
