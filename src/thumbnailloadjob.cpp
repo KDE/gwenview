@@ -138,10 +138,9 @@ void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
 	bool loaded=false;
 	bool needCaching=true;
-	int originalWidth, originalHeight;
 	
 	// If it's a JPEG, try to load a small image directly from the file
-	if (isJPEG(mPixPath)) {
+	if (isJPEG()) {
 		GVImageUtils::JPEGContent content;
 		content.load(mPixPath);
 		GVImageUtils::Orientation orientation = content.orientation();
@@ -150,11 +149,14 @@ void ThumbnailThread::loadThumbnail() {
 		if( !mImage.isNull()
 			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
 			|| mImage.height() >= mThumbnailSize )) {
+			kdWarning() << "FIXME: Get image size from JPEGContent\n";
+			mOriginalWidth = 24;
+			mOriginalHeight = 12;
 			loaded = true;
 			needCaching = false;
 		}
 		if(!loaded) {
-			loaded=loadJPEG(mPixPath, mImage, originalWidth, originalHeight);
+			loaded=loadJPEG();
 		}
 		if (loaded) {
 			// Rotate if necessary
@@ -165,13 +167,13 @@ void ThumbnailThread::loadThumbnail() {
 	if (!loaded) {
 		QImage originalImage;
 		if (originalImage.load(mPixPath)) {
-			originalWidth=originalImage.width();
-			originalHeight=originalImage.height();
+			mOriginalWidth=originalImage.width();
+			mOriginalHeight=originalImage.height();
 			int thumbSize=mThumbnailSize<=GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
 
 			if( testCancel()) return;
 
-			if (QMAX(originalWidth, originalHeight)<=thumbSize ) {
+			if (QMAX(mOriginalWidth, mOriginalHeight)<=thumbSize ) {
 				mImage=originalImage;
 				needCaching = false;
 			} else {
@@ -183,13 +185,18 @@ void ThumbnailThread::loadThumbnail() {
 
 	if( testCancel()) return;
 
+	// We always set the original width and height inside the thumb as we
+	// uses this to communicate the original size from the thread to the job
+	// FIXME: Ask Lubos to add support for a second parameter of type QSize to
+	// TSThread signals
+	mImage.setText("Thumb::Image::Width", 0, QString::number(mOriginalWidth));
+	mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
+
 	if( mStoreThumbnailsInCache && needCaching ) {
 		mImage.setText("Thumb::URI", 0, mOriginalURI);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
 		mImage.setText("Thumb::Mimetype", 0, mOriginalMimeType);
-		mImage.setText("Thumb::Image::Width", 0, QString::number(originalWidth));
-		mImage.setText("Thumb::Image::Height", 0, QString::number(originalHeight));
 		mImage.setText("Software", 0, "Gwenview");
 		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
 		mImage.save(mThumbnailPath, "PNG");
@@ -197,8 +204,8 @@ void ThumbnailThread::loadThumbnail() {
 }
 
 
-bool ThumbnailThread::isJPEG(const QString& name) {
-	QString format=QImageIO::imageFormat(name);
+bool ThumbnailThread::isJPEG() {
+	QString format=QImageIO::imageFormat(mPixPath);
 	return format=="JPEG";
 }
 
@@ -214,11 +221,11 @@ struct GVJPEGFatalError : public jpeg_error_mgr {
 	}
 };
 
-bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& width, int& height) {
+bool ThumbnailThread::loadJPEG() {
 	struct jpeg_decompress_struct cinfo;
 
 	// Open file
-	FILE* inputFile=fopen(QFile::encodeName( pixPath ).data(), "rb");
+	FILE* inputFile=fopen(QFile::encodeName( mPixPath ).data(), "rb");
 	if(!inputFile) return false;
 	
 	// Error handling
@@ -235,8 +242,8 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, inputFile);
 	jpeg_read_header(&cinfo, TRUE);
-	width=cinfo.image_width;
-	height=cinfo.image_height;
+	mOriginalWidth=cinfo.image_width;
+	mOriginalHeight=cinfo.image_height;
 
 	// Get image size and check if we need a thumbnail
 	int size= mThumbnailSize <= GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
@@ -244,7 +251,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 
 	if (imgSize<=size) {
 		fclose(inputFile);
-		return image.load(pixPath);
+		return mImage.load(mPixPath);
 	}	
 
 	// Compute scale value
@@ -263,12 +270,12 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	switch(cinfo.output_components) {
 	case 3:
 	case 4:
-		image.create( cinfo.output_width, cinfo.output_height, 32 );
+		mImage.create( cinfo.output_width, cinfo.output_height, 32 );
 		break;
 	case 1: // B&W image
-		image.create( cinfo.output_width, cinfo.output_height, 8, 256 );
+		mImage.create( cinfo.output_width, cinfo.output_height, 8, 256 );
 		for (int i=0; i<256; i++)
-			image.setColor(i, qRgb(i,i,i));
+			mImage.setColor(i, qRgb(i,i,i));
 		break;
 	default:
 		jpeg_destroy_decompress(&cinfo);
@@ -276,7 +283,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 		return false;
 	}
 
-	uchar** lines = image.jumpTable();
+	uchar** lines = mImage.jumpTable();
 	while (cinfo.output_scanline < cinfo.output_height) {
 		jpeg_read_scanlines(&cinfo, lines + cinfo.output_scanline, cinfo.output_height);
 	}
@@ -285,8 +292,8 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 // Expand 24->32 bpp
 	if ( cinfo.output_components == 3 ) {
 		for (uint j=0; j<cinfo.output_height; j++) {
-			uchar *in = image.scanLine(j) + cinfo.output_width*3;
-			QRgb *out = (QRgb*)( image.scanLine(j) );
+			uchar *in = mImage.scanLine(j) + cinfo.output_width*3;
+			QRgb *out = (QRgb*)( mImage.scanLine(j) );
 
 			for (uint i=cinfo.output_width; i--; ) {
 				in-=3;
@@ -299,7 +306,7 @@ bool ThumbnailThread::loadJPEG( const QString &pixPath, QImage& image, int& widt
 	int newx = size*cinfo.output_width / newMax;
 	int newy = size*cinfo.output_height / newMax;
 
-	image=GVImageUtils::scale(image,newx, newy,GVImageUtils::SMOOTH_FAST);
+	mImage=GVImageUtils::scale(mImage,newx, newy,GVImageUtils::SMOOTH_FAST);
 
 	jpeg_destroy_decompress(&cinfo);
 	fclose(inputFile);
@@ -599,7 +606,11 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 void ThumbnailLoadJob::thumbnailReady( const QImage& im ) {
 	QImage img = TSDeepCopy( im );
 	if ( !img.isNull()) {
-		emitThumbnailLoaded(img);
+		// FIXME: Hackish
+		QSize size;
+		size.setWidth(im.text("Thumb::Image::Width", 0).toInt() );
+		size.setHeight(im.text("Thumb::Image::Height", 0).toInt() );
+		emitThumbnailLoaded(img, size);
 	} else {
 		emitThumbnailLoadingFailed();
 	}
@@ -616,7 +627,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 	if (mCurrentURL.isLocalFile()
 		&& mCurrentURL.directory(false).startsWith(thumbnailBaseDir()) )
 	{
-		emitThumbnailLoaded(QImage(mCurrentURL.path()));
+		QImage image(mCurrentURL.path());
+		emitThumbnailLoaded(image, image.size());
 		determineNextIcon();
 		return;
 	}
@@ -640,7 +652,15 @@ void ThumbnailLoadJob::checkThumbnail() {
 		if (thumb.text("Thumb::URI", 0) == mOriginalURI &&
 			thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime )
 		{
-			emitThumbnailLoaded(thumb);
+			int width=0, height=0;
+			bool ok;
+
+			width=thumb.text("Thumb::Image::Width", 0).toInt(&ok);
+			if (ok) height=thumb.text("Thumb::Image::Height", 0).toInt(&ok);
+			if (!ok) {
+				kdWarning() << "Thumbnail for " << mOriginalURI << " does not contain correct image size information\n";
+			}
+			emitThumbnailLoaded(thumb, QSize(width, height));
 			determineNextIcon();
 			return;
 		}
@@ -671,15 +691,8 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 }
 
 
-void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img) {
+void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, QSize size) {
 	int biggestDimension=QMAX(img.width(), img.height());
-	bool ok;
-	QSize size;
-	size.rwidth()=img.text("Thumb::Image::Width", 0).toInt(&ok);
-	if (ok) size.rheight()=img.text("Thumb::Image::Height", 0).toInt(&ok);
-	if (!ok) {
-		size=QSize();
-	}
 
 	QImage thumbImg;
 	if (biggestDimension>mThumbnailSize) {

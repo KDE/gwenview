@@ -60,8 +60,8 @@ protected:
 signals:
 	void done( const QImage& );
 private:
-	bool isJPEG(const QString& name);
-	bool loadJPEG(const QString &pixPath, QImage&, int& width, int& height);
+	bool isJPEG();
+	bool loadJPEG();
 	void loadThumbnail();
 	QImage mImage;
 	QString mPixPath;
@@ -70,6 +70,8 @@ private:
 	time_t mOriginalTime;
 	int mOriginalSize;
 	QString mOriginalMimeType;
+	int mOriginalWidth;
+	int mOriginalHeight;
 	QMutex mMutex;
 	TSWaitCondition mCond;
 	int mThumbnailSize;
@@ -152,7 +154,7 @@ signals:
 private slots:
 	void slotResult( KIO::Job *job );
 	void checkThumbnail();
-	void thumbnailReady( const QImage& im );
+	void thumbnailReady(const QImage& im);
 
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_NEXTTHUMB } mState;
@@ -194,7 +196,7 @@ private:
 	void determineNextIcon();
 	void startCreatingThumbnail(const QString& path);
 	
-	void emitThumbnailLoaded(const QImage& img);
+	void emitThumbnailLoaded(const QImage& img, QSize size);
 	void emitThumbnailLoadingFailed();
 
 	void updateItemsOrderHelper( int forward, int backward, int first, int last );
