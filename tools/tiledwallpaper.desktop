@@ -1,6 +1,6 @@
 [Desktop Entry]
 ServiceTypes=image/*
-Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2 
+Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2
 Icon=background
 Name=Set as Tiled Wallpaper
 Name[cs]=Nastavit jako dlaždice na plochu
@@ -22,5 +22,6 @@ Name[sr]=Постави као поплочану позадину
 Name[sr@Latn]=Postavi kao popločanu pozadinu
 Name[sv]=Ange som skrivbordsunderlägg sida vid sida
 Name[ta]=முழுவதும் வால்பேப்பராக அமை
+Name[tr]=Döşenmiş Duvar Kağıdı Yap
 Name[uk]=Встановити як шпалери (плиткою)
 Name[zh_CN]=设为平铺墙纸

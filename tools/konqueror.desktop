@@ -1,6 +1,6 @@
 [Desktop Entry]
 ServiceTypes=*
-Exec=konqueror %u 
+Exec=konqueror %u
 Icon=konqueror
 Name=Konqueror
 Name[hi]=कॉन्क्वेरर

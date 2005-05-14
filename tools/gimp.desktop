@@ -1,6 +1,6 @@
 [Desktop Entry]
 ServiceTypes=image/*
-Exec=gimp-remote -n %F 
+Exec=gimp-remote -n %F
 Icon=gimp
 Name=The GIMP
 Name[br]=Ar GIMP
