@@ -6,6 +6,8 @@
    resolution.
  - The thumbnail size can now be set with a slider.
  - Thumbnail can now be as big as 256x256.
+ - In the "thumbnail with text on bottom" view, the file size is displayed
+   after the image size.
  - Non-blocking image preloading in advance.
 - Fixes:
  - Show progressive JPEG files really progressively.

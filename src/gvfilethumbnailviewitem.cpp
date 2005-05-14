@@ -60,23 +60,32 @@ void GVFileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
 	
+	QString imageSizeLine;
+	if (mImageSize.isValid()) {
+		imageSizeLine=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+	}
+	
+	bool isDir=mFileItem->isDir();
 	bool isRight=iconView()->itemTextPos()==QIconView::Right;
 	
-	mLines.append(mFileItem->name());
-	
 	if (isRight) {
-		if (!mFileItem->isDir()) {
-			mLines.append( KIO::convertSize(mFileItem->size()) );
-		}
+		mLines.append(mFileItem->name());
 		mLines.append( mFileItem->timeString() );
-	}
-	QString size;
-	if (mImageSize.isValid()) {
-		size=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
-	}
-	
-	if (!size.isNull()) {
-		mLines.append(size);
+		if (!imageSizeLine.isNull()) {
+			mLines.append(imageSizeLine);
+		}
+		if (!isDir) {
+			mLines.append(KIO::convertSize(mFileItem->size()));
+		}
+	} else {
+		mLines.append(mFileItem->name());
+		if (!isDir) {
+			QString line=KIO::convertSize(mFileItem->size());
+			if (!imageSizeLine.isNull()) {
+				line.prepend(imageSizeLine + " - ");
+			}
+			mLines.append(line);
+		}
 	}
 }
 
