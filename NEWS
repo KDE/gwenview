@@ -5,10 +5,13 @@
    mode", the file size and date is displayed, in addition to the name and
    resolution.
  - The thumbnail size can now be set with a slider.
+ - Thumbnail can now be as big as 256x256.
  - Non-blocking image preloading in advance.
 - Fixes:
  - Show progressive JPEG files really progressively.
  - Fix premature end when decoding MNG images.
+ - In the thumbnail view, make sure we report image sizes for JPEG with
+   embedded thumbnails.
 
 2005.04.03 - v1.2.0
 - Fixes:

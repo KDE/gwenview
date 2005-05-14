@@ -149,9 +149,8 @@ void ThumbnailThread::loadThumbnail() {
 		if( !mImage.isNull()
 			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
 			|| mImage.height() >= mThumbnailSize )) {
-			kdWarning() << "FIXME: Get image size from JPEGContent\n";
-			mOriginalWidth = 24;
-			mOriginalHeight = 12;
+			mOriginalWidth = content.size().width();
+			mOriginalHeight = content.size().height();
 			loaded = true;
 			needCaching = false;
 		}
