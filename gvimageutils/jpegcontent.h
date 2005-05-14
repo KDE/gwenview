@@ -43,6 +43,8 @@ public:
 	Orientation orientation() const;
 	void resetOrientation();
 
+	QSize size() const;
+
 	QString comment() const;
 	
 	void transform(Orientation, bool setComment=false, const QString& comment=QString::null);

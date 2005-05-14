@@ -126,6 +126,8 @@ void inmem_term_destination(j_compress_ptr cinfo) {
 
 struct JPEGContent::Private {
 	QByteArray mRawData;
+	QSize mSize;
+	QString mComment;
 	ExifData* mExifData;
 	ExifEntry* mOrientationEntry;
 	ExifByteOrder mByteOrder;
@@ -165,6 +167,43 @@ struct JPEGContent::Private {
 
 		dest->mOutput=outputData;
 	}
+	bool readJPEGInfo() {
+		struct jpeg_decompress_struct srcinfo;
+		jpeg_saved_marker_ptr mark;
+		
+		// Init JPEG structs 
+		struct jpeg_error_mgr jsrcerr;
+
+		// Initialize the JPEG decompression object with default error handling
+		srcinfo.err = jpeg_std_error(&jsrcerr);
+		jpeg_create_decompress(&srcinfo);
+
+		// Specify data source for decompression
+		setupInmemSource(&srcinfo);
+
+		// Read the header
+		jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
+		int result=jpeg_read_header(&srcinfo, true);
+		if (result!=JPEG_HEADER_OK) {
+			kdError() << "Could not read jpeg header\n";
+			jpeg_destroy_decompress(&srcinfo);
+			return false;
+		}
+		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
+		
+		// Read the comment, if any
+		for (mark = srcinfo.marker_list; mark; mark = mark->next) {
+			if (mark->marker == JPEG_COM) {
+				mComment=QString::fromUtf8((const char*)(mark->data), mark->data_length);
+				break;
+			}
+		}
+		
+		jpeg_destroy_decompress(&srcinfo);
+		return true;
+	}
+
+
 };
 
 
@@ -203,6 +242,8 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 		return false;
 	}
 
+	if (!d->readJPEGInfo()) return false;
+
 	d->mExifData = exif_data_new_from_data((unsigned char*)data.data(), data.size());
 	if (!d->mExifData) {
 		kdError() << "Could not load exif data\n";
@@ -213,6 +254,18 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 	d->mOrientationEntry =
 		exif_content_get_entry(d->mExifData->ifd[EXIF_IFD_0],
 			EXIF_TAG_ORIENTATION);
+
+	// Adjust the size according to the orientation
+	switch (orientation()) {
+	case ROT_90_HFLIP:
+	case ROT_90:
+	case ROT_90_VFLIP:
+	case ROT_270:
+		d->mSize.transpose();
+		break;
+	default:
+		break;
+	}
 
 	return true;
 }
@@ -237,38 +290,13 @@ void JPEGContent::resetOrientation() {
 }
 
 
+QSize JPEGContent::size() const {
+	return d->mSize;
+}
+
+
 QString JPEGContent::comment() const {
-	QString theComment;
-	struct jpeg_decompress_struct srcinfo;
-	jpeg_saved_marker_ptr mark;
-	
-	// Init JPEG structs 
-	struct jpeg_error_mgr jsrcerr;
-
-	// Initialize the JPEG decompression object with default error handling
-	srcinfo.err = jpeg_std_error(&jsrcerr);
-	jpeg_create_decompress(&srcinfo);
-
-	// Specify data source for decompression
-	d->setupInmemSource(&srcinfo);
-
-	// Find the marker
-	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
-	int result=jpeg_read_header(&srcinfo, true);
-	if (result!=JPEG_HEADER_OK) {
-		kdError() << "Could not read jpeg header\n";
-		return QString::null;
-	}
-	for (mark = srcinfo.marker_list; mark; mark = mark->next) {
-		if (mark->marker == JPEG_COM) break;
-	}
-
-	if (mark) {
-		theComment=QString::fromUtf8((const char*)(mark->data), mark->data_length);
-	}
-	
-	jpeg_destroy_decompress(&srcinfo);
-	return theComment;
+	return d->mComment;
 }
 
 
@@ -349,6 +377,7 @@ void JPEGContent::transform(Orientation orientation, bool setComment, const QStr
 	// Set comment
 	if (setComment) {
 		doSetComment(&srcinfo, comment);
+		d->mComment=comment;
 	}
 
 	// Init transformation
