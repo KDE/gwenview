@@ -1,4 +1,4 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
@@ -49,8 +49,13 @@ extern "C" {
 namespace GVImageUtils {
 
 const int INMEM_DST_DELTA=4096;
-	
+
+
+//------------------------------------------
+//
 // In-memory data source manager for libjpeg
+//
+//------------------------------------------
 struct inmem_src_mgr : public jpeg_source_mgr {
 	QByteArray* mInput;
 };
@@ -83,7 +88,12 @@ void inmem_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
 void inmem_term_source(j_decompress_ptr /*cinfo*/) {
 }
 
+
+//-----------------------------------------------
+//
 // In-memory data destination manager for libjpeg
+//
+//-----------------------------------------------
 struct inmem_dest_mgr : public jpeg_destination_mgr {
 	QByteArray* mOutput;
 
@@ -123,7 +133,11 @@ void inmem_term_destination(j_compress_ptr cinfo) {
 }
 
 
-
+//---------------------
+//
+// JPEGContent::Private
+//
+//---------------------
 struct JPEGContent::Private {
 	QByteArray mRawData;
 	QSize mSize;
@@ -202,11 +216,14 @@ struct JPEGContent::Private {
 		jpeg_destroy_decompress(&srcinfo);
 		return true;
 	}
-
-
 };
 
 
+//------------
+//
+// JPEGContent
+//
+//------------
 JPEGContent::JPEGContent() {
 	d=new JPEGContent::Private();
 }
