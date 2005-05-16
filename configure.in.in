@@ -108,3 +108,18 @@ KDE_CHECK_HEADER(libmng.h,
         ], [], $LIBZ -lm)
     ])
 AC_SUBST(LIBMNG)
+
+
+# Inspired by extragear/libs/libkexif/configure.in.in
+# libexif detection
+LIBEXIF_INTERNAL=no
+
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.12, ,
+        [AC_MSG_WARN([libexif >= 0.5.12 not found. Using internal copy.]) 
+		LIBEXIF_INTERNAL=yes
+		])
+
+AC_SUBST(LIBEXIF_LIBS)
+AC_SUBST(LIBEXIF_CFLAGS)
+
+AM_CONDITIONAL(libexif_internal, [test x$LIBEXIF_INTERNAL = xyes])

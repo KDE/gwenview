@@ -11,9 +11,7 @@ libgvexif_la_SOURCES = \
 	exif-ifd.c \
 	exif-loader.c \
 	exif-tag.c \
-	exif-utils.c \
-	jpeg-data.c \
-	jpeg-marker.c
+	exif-utils.c
 
 libgvexif_la_LIBADD = -lm
 
@@ -28,6 +26,5 @@ noinst_HEADERS = \
 	exif-result.h \
 	exif-tag.h \
 	exif-utils.h \
-	jpeg-data.h \
 	jpeg-marker.h \
 	i18n.h 

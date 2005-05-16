@@ -14,6 +14,9 @@
  - Fix premature end when decoding MNG images.
  - In the thumbnail view, make sure we report image sizes for JPEG with
    embedded thumbnails.
+ - Gwenview now dynamically links with installed version of libexif by default.
+   The included libexif copy is only used if libexif is not installed. Using it
+   is considered deprecated.
 
 2005.04.03 - v1.2.0
 - Fixes:

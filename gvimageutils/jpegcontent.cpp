@@ -37,14 +37,14 @@ extern "C" {
 #include <kdebug.h>
 
 // Exif
-#include "libgvexif/exif-data.h"
-#include "libgvexif/exif-ifd.h"
-#include "libgvexif/exif-utils.h"
-#include "libgvexif/jpeg-data.h"
+#include "exif-data.h"
+#include "exif-ifd.h"
+#include "exif-utils.h"
 
 // Local
 #include "gvimageutils/gvimageutils.h"
 #include "gvimageutils/jpegcontent.h"
+#include "gvimageutils/jpeg-data.h"
 
 namespace GVImageUtils {
 

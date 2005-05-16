@@ -33,3 +33,10 @@ thousand JPEG files.
 - 2003.12.14
 
 Updated to libexif 0.5.12 and applied some fixes from libexif CVS.
+
+
+- 2005.05.17
+
+This copy of libexif is now deprecated, but will still be used if ./configure
+doesn't find libexif installed. This will ease transition, but this directory
+will eventually be removed.
