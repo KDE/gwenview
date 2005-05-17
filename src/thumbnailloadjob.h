@@ -58,7 +58,7 @@ public:
 protected:
 	virtual void run();
 signals:
-	void done( const QImage& );
+	void done( const QImage&, const QSize&);
 private:
 	bool isJPEG();
 	bool loadJPEG();
@@ -154,7 +154,7 @@ signals:
 private slots:
 	void slotResult( KIO::Job *job );
 	void checkThumbnail();
-	void thumbnailReady(const QImage& im);
+	void thumbnailReady(const QImage& im, const QSize&);
 
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_NEXTTHUMB } mState;

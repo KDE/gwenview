@@ -190,7 +190,7 @@ class TSThread
         void setSignalData( QUObject* o, bool b );
         void setSignalData( QUObject* o, const QColor& c );
         void setSignalData( QUObject* o, const char* s );
-        void setSignalData( QUObject* o, QSize );
+        void setSignalData( QUObject* o, const QSize& );
         void emitSignalInternal( QObject* obj, const char* signal, QUObject* o );
         void emitCancellableSignalInternal( QObject* obj, const char* signal, QUObject* o );
         friend class Helper;
@@ -326,7 +326,7 @@ void TSThread::setSignalData( QUObject* o, const char* s )
     }
 
 inline
-void TSThread::setSignalData( QUObject* o, QSize s )
+void TSThread::setSignalData( QUObject* o, const QSize& s )
     {
     static_QUType_varptr.set( o, &s );
     }

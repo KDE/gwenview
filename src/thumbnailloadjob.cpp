@@ -130,7 +130,8 @@ void ThumbnailThread::run() {
 		}
 		loadThumbnail();
 		mPixPath = QString(); // done, ready for next
-		emitCancellableSignal( this, SIGNAL( done( const QImage& )), mImage );
+		QSize size(mOriginalWidth, mOriginalHeight);
+		emitCancellableSignal( this, SIGNAL( done( const QImage&, const QSize&)), mImage, size);
 	}
 }
 
@@ -184,18 +185,13 @@ void ThumbnailThread::loadThumbnail() {
 
 	if( testCancel()) return;
 
-	// We always set the original width and height inside the thumb as we
-	// uses this to communicate the original size from the thread to the job
-	// FIXME: Ask Lubos to add support for a second parameter of type QSize to
-	// TSThread signals
-	mImage.setText("Thumb::Image::Width", 0, QString::number(mOriginalWidth));
-	mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
-
 	if( mStoreThumbnailsInCache && needCaching ) {
 		mImage.setText("Thumb::URI", 0, mOriginalURI);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
 		mImage.setText("Thumb::Mimetype", 0, mOriginalMimeType);
+		mImage.setText("Thumb::Image::Width", 0, QString::number(mOriginalWidth));
+		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
 		mImage.setText("Software", 0, "Gwenview");
 		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
 		mImage.save(mThumbnailPath, "PNG");
@@ -385,7 +381,8 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 	qFill( mProcessedState.begin(), mProcessedState.end(), false );
 	mCurrentItem = NULL;
 
-	connect( &mThumbnailThread, SIGNAL( done( const QImage& )), SLOT( thumbnailReady( const QImage& )));
+	connect(&mThumbnailThread, SIGNAL(done(const QImage&, const QSize&)),
+		SLOT(thumbnailReady(const QImage&, const QSize&)) );
 	GVCache::instance()->updateAge(); // see addThumbnail in GVCache
 }
 
@@ -602,13 +599,10 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 }
 
 
-void ThumbnailLoadJob::thumbnailReady( const QImage& im ) {
+void ThumbnailLoadJob::thumbnailReady( const QImage& im, const QSize& _size) {
 	QImage img = TSDeepCopy( im );
+	QSize size = _size;
 	if ( !img.isNull()) {
-		// FIXME: Hackish
-		QSize size;
-		size.setWidth(im.text("Thumb::Image::Width", 0).toInt() );
-		size.setHeight(im.text("Thumb::Image::Height", 0).toInt() );
 		emitThumbnailLoaded(img, size);
 	} else {
 		emitThumbnailLoadingFailed();
