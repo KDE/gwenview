@@ -122,12 +122,28 @@ struct GVFileThumbnailView::Private {
 	int mThumbnailSize;
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
-	QPixmap mWaitPixmap;
+	QPixmap mWaitPixmap; // The wait pixmap (32 x 32)
+	QPixmap mWaitThumbnail; // The wait pixmap (mThumbnailSize x mThumbnailSize)
 	ProgressWidget* mProgressWidget;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
 	
 	QTimer* mThumbnailUpdateTimer;
+
+
+	void updateWaitThumbnail(GVFileThumbnailView* view) {
+		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
+		mWaitThumbnail.fill(view->paletteBackgroundColor());
+		QPainter painter(&mWaitThumbnail);
+		
+		painter.setPen(view->colorGroup().button());
+		painter.drawRect(0,0,mThumbnailSize,mThumbnailSize);
+		painter.drawPixmap(
+			(mThumbnailSize-mWaitPixmap.width())/2,
+			(mThumbnailSize-mWaitPixmap.height())/2,
+			mWaitPixmap);
+		painter.end();
+	}
 };
 
 
@@ -191,6 +207,9 @@ void GVFileThumbnailView::setThumbnailSize(int value) {
 	if (value==d->mThumbnailSize) return;
 	d->mThumbnailSize=value;
 	updateGrid();
+		
+	// Create the wait thumbnail
+	d->updateWaitThumbnail(this);
 	
 	KFileItemListIterator it( *items() );
 	for ( ; it.current(); ++it ) {
@@ -237,8 +256,8 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QP
 	int pixelSize=d->mThumbnailSize;
 
 	// Draw the thumbnail to the center of the icon
+	iconItem->pixmap()->fill(paletteBackgroundColor());
 	QPainter painter(iconItem->pixmap());
-	painter.fillRect(0,0,pixelSize,pixelSize,paletteBackgroundColor());
 	painter.drawPixmap(
 		(pixelSize-thumbnail.width())/2,
 		(pixelSize-thumbnail.height())/2,
@@ -275,28 +294,16 @@ void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 //
 //-----------------------------------------------------------------------------
 QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
-	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
-
 	QPixmap thumbnail(d->mThumbnailSize, d->mThumbnailSize);
+	thumbnail.fill(paletteBackgroundColor());
 	QPainter painter(&thumbnail);
-	painter.fillRect(0,0, d->mThumbnailSize, d->mThumbnailSize, paletteBackgroundColor());
 
-	if (isDirOrArchive) {
-		// Load the icon
-		QPixmap itemPix=item->pixmap(QMIN(d->mThumbnailSize, GVThumbnailSize::NORMAL));
-		painter.drawPixmap(
-			(d->mThumbnailSize-itemPix.width())/2,
-			(d->mThumbnailSize-itemPix.height())/2,
-			itemPix);
-	} else {
-		// Create an empty thumbnail
-		painter.setPen(colorGroup().button());
-		painter.drawRect(0,0,d->mThumbnailSize,d->mThumbnailSize);
-		painter.drawPixmap(
-			(d->mThumbnailSize-d->mWaitPixmap.width())/2,
-			(d->mThumbnailSize-d->mWaitPixmap.height())/2,
-			d->mWaitPixmap);
-	}
+	// Load the icon
+	QPixmap itemPix=item->pixmap(QMIN(d->mThumbnailSize, GVThumbnailSize::NORMAL));
+	painter.drawPixmap(
+		(d->mThumbnailSize-itemPix.width())/2,
+		(d->mThumbnailSize-itemPix.height())/2,
+		itemPix);
 
 	return thumbnail;
 }
@@ -403,11 +410,16 @@ void GVFileThumbnailView::clearView() {
 
 void GVFileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
+	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 
-	QPixmap thumbnail=createItemPixmap(item);
+	QPixmap thumbnail;
+	if (isDirOrArchive) {
+		thumbnail=createItemPixmap(item);
+	} else {
+		thumbnail=d->mWaitThumbnail;
+	}
 
 	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
-	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 	iconItem->setDropEnabled(isDirOrArchive);
 
 	setSortingKey(iconItem, item);
@@ -714,6 +726,7 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 
 	d->mThumbnailSize=config->readNumEntry(CONFIG_THUMBNAIL_SIZE, 48);
+	d->updateWaitThumbnail(this);
 	d->mMarginSize=config->readNumEntry(CONFIG_MARGIN_SIZE,5);
 	int pos=config->readNumEntry(CONFIG_ITEM_TEXT_POS, QIconView::Right);
 	setItemTextPos(QIconView::ItemTextPos(pos));
