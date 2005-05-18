@@ -144,14 +144,13 @@ void ThumbnailThread::loadThumbnail() {
 	if (isJPEG()) {
 		GVImageUtils::JPEGContent content;
 		content.load(mPixPath);
-		GVImageUtils::Orientation orientation = content.orientation();
+		mOriginalWidth = content.size().width();
+		mOriginalHeight = content.size().height();
 		mImage = content.thumbnail();
 	
 		if( !mImage.isNull()
 			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
 			|| mImage.height() >= mThumbnailSize )) {
-			mOriginalWidth = content.size().width();
-			mOriginalHeight = content.size().height();
 			loaded = true;
 			needCaching = false;
 		}
@@ -160,6 +159,7 @@ void ThumbnailThread::loadThumbnail() {
 		}
 		if (loaded) {
 			// Rotate if necessary
+			GVImageUtils::Orientation orientation = content.orientation();
 			mImage=GVImageUtils::transform(mImage,orientation);
 		}
 	}
@@ -237,8 +237,6 @@ bool ThumbnailThread::loadJPEG() {
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, inputFile);
 	jpeg_read_header(&cinfo, TRUE);
-	mOriginalWidth=cinfo.image_width;
-	mOriginalHeight=cinfo.image_height;
 
 	// Get image size and check if we need a thumbnail
 	int size= mThumbnailSize <= GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
