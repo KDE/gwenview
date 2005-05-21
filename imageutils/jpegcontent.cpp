@@ -42,9 +42,9 @@ extern "C" {
 #include "exif-utils.h"
 
 // Local
-#include "gvimageutils/gvimageutils.h"
-#include "gvimageutils/jpegcontent.h"
-#include "gvimageutils/jpeg-data.h"
+#include "imageutils/gvimageutils.h"
+#include "imageutils/jpegcontent.h"
+#include "imageutils/jpeg-data.h"
 
 namespace GVImageUtils {
 

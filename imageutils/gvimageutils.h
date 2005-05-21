@@ -25,7 +25,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <qimage.h>
 
 // Local
-#include "gvimageutils/orientation.h"
+#include "imageutils/orientation.h"
 
 namespace GVImageUtils {
 	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };

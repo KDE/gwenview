@@ -55,8 +55,8 @@ extern "C" {
 
 // Local
 #include "gvcache.h"
-#include "gvimageutils/jpegcontent.h"
-#include "gvimageutils/gvimageutils.h"
+#include "imageutils/jpegcontent.h"
+#include "imageutils/gvimageutils.h"
 #include "gvthumbnailsize.h"
 #include "thumbnailloadjob.moc"
 

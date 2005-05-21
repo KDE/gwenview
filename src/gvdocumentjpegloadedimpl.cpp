@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 // Local
-#include "gvimageutils/jpegcontent.h"
-#include "gvimageutils/gvimageutils.h"
+#include "imageutils/jpegcontent.h"
+#include "imageutils/gvimageutils.h"
 #include "gvdocumentjpegloadedimpl.moc"
 
 

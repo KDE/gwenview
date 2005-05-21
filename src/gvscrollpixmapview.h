@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "gvbusylevelmanager.h"
-#include "gvimageutils/gvimageutils.h"
+#include "imageutils/gvimageutils.h"
 #include "libgwenview_export.h"
 class QEvent;
 class QLabel;

@@ -31,7 +31,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kprinter.h>
 
 // Local 
-#include "gvimageutils/orientation.h"
+#include "imageutils/orientation.h"
 #include "libgwenview_export.h"
 class GVDocumentPrivate;
 class GVDocumentImpl;

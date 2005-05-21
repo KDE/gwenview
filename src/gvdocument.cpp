@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvdocumentloadingimpl.h"
 #include "gvdocumentimpl.h"
 #include "gvimagesavedialog.h"
-#include "gvimageutils/gvimageutils.h"
+#include "imageutils/gvimageutils.h"
 #include "gvjpegformattype.h"
 #include "gvpngformattype.h"
 #include "gvmngformattype.h"
