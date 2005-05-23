@@ -32,11 +32,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 
 #include "gvimagepart.h"
-#include <src/gvcache.h>
-#include <src/gvdocument.h>
-#include <src/gvprintdialog.h>
-#include <src/gvscrollpixmapview.h>
-#include <src/gvimageloader.h>
+#include <src/cache.h>
+#include <src/document.h>
+#include <src/printdialog.h>
+#include <src/scrollpixmapview.h>
+#include <src/imageloader.h>
 
 #include "config.h"
 

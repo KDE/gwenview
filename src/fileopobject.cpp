@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class GVDirSelectDialog : public KFileDialog {
 public:
 	GVDirSelectDialog(const QString& startDir, QWidget* parent)
-	: KFileDialog(startDir, QString::null, parent, "gvdirselectdialog", true) {
+	: KFileDialog(startDir, QString::null, parent, "dirselectdialog", true) {
 		locationEdit->setEnabled(false);
 		filterWidget->setEnabled(false);
 		setMode(KFile::Directory | KFile::ExistingOnly);

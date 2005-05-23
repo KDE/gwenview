@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-#include <src/gvmainwindow.h>
+#include "mainwindow.h"
 
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },

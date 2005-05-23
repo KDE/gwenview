@@ -34,15 +34,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "gvdirpart.h"
 #include <src/fileoperation.h>
-#include <src/gvarchive.h>
-#include <src/gvcache.h>
-#include <src/gvdocument.h>
-#include <src/gvfileviewbase.h>
-#include <src/gvfileviewstack.h>
-#include <src/gvprintdialog.h>
-#include <src/gvscrollpixmapview.h>
-#include <src/gvslideshowdialog.h>
-#include <src/gvslideshow.h>
+#include <src/archive.h>
+#include <src/cache.h>
+#include <src/document.h>
+#include <src/fileviewbase.h>
+#include <src/fileviewstack.h>
+#include <src/printdialog.h>
+#include <src/scrollpixmapview.h>
+#include <src/slideshowdialog.h>
+#include <src/slideshow.h>
 #include <src/thumbnailloadjob.h>
 
 #include "config.h"

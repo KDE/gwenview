@@ -54,10 +54,10 @@ extern "C" {
 }
 
 // Local
-#include "gvcache.h"
+#include "cache.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/gvimageutils.h"
-#include "gvthumbnailsize.h"
+#include "thumbnailsize.h"
 #include "thumbnailloadjob.moc"
 
 //#define ENABLE_LOG
