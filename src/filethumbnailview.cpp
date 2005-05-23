@@ -123,7 +123,7 @@ struct GVFileThumbnailView::Private {
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
 	QPixmap mWaitPixmap; // The wait pixmap (32 x 32)
-	QPixmap mWaitThumbnail; // The wait pixmap (mThumbnailSize x mThumbnailSize)
+	QPixmap mWaitThumbnail; // The wait thumbnail (mThumbnailSize x mThumbnailSize)
 	ProgressWidget* mProgressWidget;
 
 	QGuardedPtr<ThumbnailLoadJob> mThumbnailLoadJob;
@@ -131,7 +131,7 @@ struct GVFileThumbnailView::Private {
 	QTimer* mThumbnailUpdateTimer;
 
 
-	void updateWaitThumbnail(GVFileThumbnailView* view) {
+	void updateWaitThumbnail(const GVFileThumbnailView* view) {
 		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
 		mWaitThumbnail.fill(view->paletteBackgroundColor());
 		QPainter painter(&mWaitThumbnail);
@@ -208,9 +208,6 @@ void GVFileThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize=value;
 	updateGrid();
 		
-	// Create the wait thumbnail
-	d->updateWaitThumbnail(this);
-	
 	KFileItemListIterator it( *items() );
 	for ( ; it.current(); ++it ) {
 		KFileItem *item=it.current();
@@ -294,6 +291,14 @@ void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 //
 //-----------------------------------------------------------------------------
 QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
+	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
+	if (!isDirOrArchive) {
+		if (d->mWaitThumbnail.width()!=d->mThumbnailSize) {
+			d->updateWaitThumbnail(this);
+		}
+		return d->mWaitThumbnail;
+	}
+
 	QPixmap thumbnail(d->mThumbnailSize, d->mThumbnailSize);
 	thumbnail.fill(paletteBackgroundColor());
 	QPainter painter(&thumbnail);
@@ -412,13 +417,7 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
 	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
 
-	QPixmap thumbnail;
-	if (isDirOrArchive) {
-		thumbnail=createItemPixmap(item);
-	} else {
-		thumbnail=d->mWaitThumbnail;
-	}
-
+	QPixmap thumbnail=createItemPixmap(item);
 	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
 	iconItem->setDropEnabled(isDirOrArchive);
 
