@@ -74,13 +74,13 @@ inline bool isSubSetOf(const QStringList& subSet, const QStringList& set) {
 }
 
 
-struct GVExternalToolManagerPrivate {
+struct ExternalToolManagerPrivate {
 	QDict<KDesktopFile> mDesktopFiles;
 	QPtrList<KService> mServices;
 	QString mUserToolDir;
 
 	
-	GVExternalToolContext* createContextInternal(
+	ExternalToolContext* createContextInternal(
 		QObject* parent, const KURL::List& urls, const QStringList& mimeTypes)
 	{
 		bool onlyOneURL=urls.size()==1;
@@ -101,7 +101,7 @@ struct GVExternalToolManagerPrivate {
 			}
 		}
 		
-		return new GVExternalToolContext(parent, selectionServices, urls);
+		return new ExternalToolContext(parent, selectionServices, urls);
 	}
 
 };
@@ -124,8 +124,8 @@ inline QString addSlash(const QString& _str) {
 	return str;
 }
 
-GVExternalToolManager::GVExternalToolManager() {
-	d=new GVExternalToolManagerPrivate;
+ExternalToolManager::ExternalToolManager() {
+	d=new ExternalToolManagerPrivate;
 
 	// Getting dirs
 	d->mUserToolDir=KGlobal::dirs()->saveLocation("appdata", "tools");
@@ -173,18 +173,18 @@ GVExternalToolManager::GVExternalToolManager() {
 }
 
 
-GVExternalToolManager::~GVExternalToolManager() {
+ExternalToolManager::~ExternalToolManager() {
 	delete d;
 }
 
 	
-GVExternalToolManager* GVExternalToolManager::instance() {
-	static GVExternalToolManager manager;
+ExternalToolManager* ExternalToolManager::instance() {
+	static ExternalToolManager manager;
 	return &manager;
 }
 
 
-void GVExternalToolManager::updateServices() {
+void ExternalToolManager::updateServices() {
 	d->mServices.clear();
 	QDictIterator<KDesktopFile> it(d->mDesktopFiles);
 	for (; it.current(); ++it) {
@@ -197,12 +197,12 @@ void GVExternalToolManager::updateServices() {
 }
 
 
-QDict<KDesktopFile>& GVExternalToolManager::desktopFiles() const {
+QDict<KDesktopFile>& ExternalToolManager::desktopFiles() const {
 	return d->mDesktopFiles;
 }
 
 
-void GVExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
+void ExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
 	QFileInfo fi(desktopFile->fileName());
 	QString name=QString("%1.desktop").arg( fi.baseName(true) );
 	d->mDesktopFiles.take(name);
@@ -217,7 +217,7 @@ void GVExternalToolManager::hideDesktopFile(KDesktopFile* desktopFile) {
 }
 
 
-KDesktopFile* GVExternalToolManager::editSystemDesktopFile(const KDesktopFile* desktopFile) {
+KDesktopFile* ExternalToolManager::editSystemDesktopFile(const KDesktopFile* desktopFile) {
 	Q_ASSERT(desktopFile);
 	QFileInfo fi(desktopFile->fileName());
 
@@ -228,7 +228,7 @@ KDesktopFile* GVExternalToolManager::editSystemDesktopFile(const KDesktopFile* d
 }
 
 
-KDesktopFile* GVExternalToolManager::createUserDesktopFile(const QString& name) {
+KDesktopFile* ExternalToolManager::createUserDesktopFile(const QString& name) {
 	Q_ASSERT(!name.isEmpty());
 	KDesktopFile* desktopFile=new KDesktopFile(
 		d->mUserToolDir + "/" + name + ".desktop", false);
@@ -238,7 +238,7 @@ KDesktopFile* GVExternalToolManager::createUserDesktopFile(const QString& name) 
 }
 
 
-GVExternalToolContext* GVExternalToolManager::createContext(
+ExternalToolContext* ExternalToolManager::createContext(
 	QObject* parent, const KFileItemList* items)
 {
 	KURL::List urls;
@@ -259,7 +259,7 @@ GVExternalToolContext* GVExternalToolManager::createContext(
 }
 
 
-GVExternalToolContext* GVExternalToolManager::createContext(
+ExternalToolContext* ExternalToolManager::createContext(
 	QObject* parent, const KURL& url)
 {
 	KURL::List urls;

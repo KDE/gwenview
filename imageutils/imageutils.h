@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVIMAGEUTILS_H
-#define GVIMAGEUTILS_H
+#ifndef IMAGEUTILS_H
+#define IMAGEUTILS_H
 
 // Qt
 #include <qimage.h>
@@ -27,7 +27,7 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local
 #include "imageutils/orientation.h"
 
-namespace GVImageUtils {
+namespace ImageUtils {
 	enum SmoothAlgorithm { SMOOTH_NONE, SMOOTH_FAST, SMOOTH_NORMAL, SMOOTH_BEST };
 
 	QImage scale(const QImage& image, int width, int height,

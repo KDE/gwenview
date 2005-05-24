@@ -72,7 +72,7 @@ class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
 	QPushButton* mStop;
 public:
-	ProgressWidget(GVFileThumbnailView* view, int count)
+	ProgressWidget(FileThumbnailView* view, int count)
 	: QFrame(view)
 	{
 		QHBoxLayout* layout=new QHBoxLayout(this, 3, 3);
@@ -108,7 +108,7 @@ public:
 	}
 
 	void updatePosition() {
-		GVFileThumbnailView* view=static_cast<GVFileThumbnailView*>(parent());
+		FileThumbnailView* view=static_cast<FileThumbnailView*>(parent());
 		QSize tmp=view->clipper()->size() - size();
 		move(tmp.width() - 2, tmp.height() - 2);
 	}
@@ -118,7 +118,7 @@ public:
 };
 
 
-struct GVFileThumbnailView::Private {
+struct FileThumbnailView::Private {
 	int mThumbnailSize;
 	int mMarginSize;
 	bool mUpdateThumbnailsOnNextShow;
@@ -131,7 +131,7 @@ struct GVFileThumbnailView::Private {
 	QTimer* mThumbnailUpdateTimer;
 
 
-	void updateWaitThumbnail(const GVFileThumbnailView* view) {
+	void updateWaitThumbnail(const FileThumbnailView* view) {
 		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
 		mWaitThumbnail.fill(view->paletteBackgroundColor());
 		QPainter painter(&mWaitThumbnail);
@@ -147,14 +147,14 @@ struct GVFileThumbnailView::Private {
 };
 
 
-static GVFileThumbnailViewItem* viewItem(const GVFileThumbnailView* view, const KFileItem* fileItem) {
+static FileThumbnailViewItem* viewItem(const FileThumbnailView* view, const KFileItem* fileItem) {
 	if (!fileItem) return 0L;
-	return static_cast<GVFileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(view) ) );
+	return static_cast<FileThumbnailViewItem*>( const_cast<void*>(fileItem->extraData(view) ) );
 }
 
 
-GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
-: KIconView(parent), GVFileViewBase()
+FileThumbnailView::FileThumbnailView(QWidget* parent)
+: KIconView(parent), FileViewBase()
 {
 	d=new Private;
 	d->mUpdateThumbnailsOnNextShow=false;
@@ -189,21 +189,21 @@ GVFileThumbnailView::GVFileThumbnailView(QWidget* parent)
 
 	QIconView::setSelectionMode(Extended);
 
-	connect(GVBusyLevelManager::instance(), SIGNAL(busyLevelChanged(GVBusyLevel)),
-		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
+	connect(BusyLevelManager::instance(), SIGNAL(busyLevelChanged(BusyLevel)),
+		this, SLOT( slotBusyLevelChanged(BusyLevel)));
 
 	connect(d->mThumbnailUpdateTimer, SIGNAL(timeout()),
 		this, SLOT( startThumbnailUpdate()) );
 }
 
 
-GVFileThumbnailView::~GVFileThumbnailView() {
+FileThumbnailView::~FileThumbnailView() {
 	stopThumbnailUpdate();
 	delete d;
 }
 
 
-void GVFileThumbnailView::setThumbnailSize(int value) {
+void FileThumbnailView::setThumbnailSize(int value) {
 	if (value==d->mThumbnailSize) return;
 	d->mThumbnailSize=value;
 	updateGrid();
@@ -220,7 +220,7 @@ void GVFileThumbnailView::setThumbnailSize(int value) {
 }
 
 
-int GVFileThumbnailView::thumbnailSize() const {
+int FileThumbnailView::thumbnailSize() const {
 	return d->mThumbnailSize;
 }
 
@@ -228,26 +228,26 @@ int GVFileThumbnailView::thumbnailSize() const {
 /**
  * Overriden to call updateGrid
  */
-void GVFileThumbnailView::setItemTextPos(ItemTextPos pos) {
+void FileThumbnailView::setItemTextPos(ItemTextPos pos) {
 	QIconView::setItemTextPos(pos);
 	updateGrid();
 }
 
 
-void GVFileThumbnailView::setMarginSize(int value) {
+void FileThumbnailView::setMarginSize(int value) {
 	if (value==d->mMarginSize) return;
 	d->mMarginSize=value;
 	updateGrid();
 }
 
 
-int GVFileThumbnailView::marginSize() const {
+int FileThumbnailView::marginSize() const {
 	return d->mMarginSize;
 }
 
 
-void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QPixmap& thumbnail, const QSize& size) {
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+void FileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QPixmap& thumbnail, const QSize& size) {
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return;
 
 	int pixelSize=d->mThumbnailSize;
@@ -274,12 +274,12 @@ void GVFileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QP
 
 
 
-void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
+void FileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 	if( fileItem == mShownFileItem ) return;
-	GVFileThumbnailViewItem* oldShownItem=viewItem(this, mShownFileItem);
-	GVFileThumbnailViewItem* newShownItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* oldShownItem=viewItem(this, mShownFileItem);
+	FileThumbnailViewItem* newShownItem=viewItem(this, fileItem);
 
-	GVFileViewBase::setShownFileItem(fileItem);
+	FileViewBase::setShownFileItem(fileItem);
 	if (oldShownItem) repaintItem(oldShownItem);
 	if (newShownItem) repaintItem(newShownItem);
 }
@@ -290,8 +290,8 @@ void GVFileThumbnailView::setShownFileItem(KFileItem* fileItem) {
 // Thumbnail code
 //
 //-----------------------------------------------------------------------------
-QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
-	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
+QPixmap FileThumbnailView::createItemPixmap(const KFileItem* item) const {
+	bool isDirOrArchive=item->isDir() || Archive::fileItemIsArchive(item);
 	if (!isDirOrArchive) {
 		if (d->mWaitThumbnail.width()!=d->mThumbnailSize) {
 			d->updateWaitThumbnail(this);
@@ -304,7 +304,7 @@ QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
 	QPainter painter(&thumbnail);
 
 	// Load the icon
-	QPixmap itemPix=item->pixmap(QMIN(d->mThumbnailSize, GVThumbnailSize::NORMAL));
+	QPixmap itemPix=item->pixmap(QMIN(d->mThumbnailSize, ThumbnailSize::NORMAL));
 	painter.drawPixmap(
 		(d->mThumbnailSize-itemPix.width())/2,
 		(d->mThumbnailSize-itemPix.height())/2,
@@ -314,7 +314,7 @@ QPixmap GVFileThumbnailView::createItemPixmap(const KFileItem* item) const {
 }
 
 
-void GVFileThumbnailView::startThumbnailUpdate() {
+void FileThumbnailView::startThumbnailUpdate() {
 	// Delay thumbnail update if the widget is not visible
 	if (!isVisible()) {
 		d->mUpdateThumbnailsOnNextShow=true;
@@ -326,19 +326,19 @@ void GVFileThumbnailView::startThumbnailUpdate() {
 }
 
 
-void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
+void FileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	QValueVector<const KFileItem*> imageList;
 	imageList.reserve( list->count());
 	QPtrListIterator<KFileItem> it(*list);
 	for (;it.current(); ++it) {
 		KFileItem* item=it.current();
-		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
 			imageList.append( item );
 		}
 	}
 	if (imageList.empty()) return;
 
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
 	
 	d->mThumbnailLoadJob = new ThumbnailLoadJob(&imageList, d->mThumbnailSize);
 
@@ -352,30 +352,30 @@ void GVFileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	connect(d->mProgressWidget->stopButton(), SIGNAL(clicked()),
 		this, SLOT(stopThumbnailUpdate()) );
 	d->mProgressWidget->show();
-	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
+	slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 	// start updating at visible position
 	slotContentsMoving( contentsX(), contentsY());
 	d->mThumbnailLoadJob->start();
 }
 
 
-void GVFileThumbnailView::stopThumbnailUpdate() {
+void FileThumbnailView::stopThumbnailUpdate() {
 	if (!d->mThumbnailLoadJob.isNull()) {
 		d->mThumbnailLoadJob->kill(false);
 	}
 }
 
 
-void GVFileThumbnailView::slotUpdateEnded() {
+void FileThumbnailView::slotUpdateEnded() {
 	Q_ASSERT(d->mProgressWidget);
 	delete d->mProgressWidget;
 	d->mProgressWidget=0L;
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 
 
-void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
-	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
+void FileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
+	if (fileItem->isDir() || Archive::fileItemIsArchive(fileItem)) {
 		return;
 	}
 
@@ -391,7 +391,7 @@ void GVFileThumbnailView::updateThumbnail(const KFileItem* fileItem) {
 
 // temporarily stop loading thumbnails when busy loading the selected image,
 // otherwise thumbnail loading slows it down
-void GVFileThumbnailView::slotBusyLevelChanged(GVBusyLevel level) {
+void FileThumbnailView::slotBusyLevelChanged(BusyLevel level) {
 	if( !d->mThumbnailLoadJob.isNull()) {
 		if( level > BUSY_THUMBNAILS ) {
 			d->mThumbnailLoadJob->suspend();
@@ -406,19 +406,19 @@ void GVFileThumbnailView::slotBusyLevelChanged(GVBusyLevel level) {
 // KFileView methods
 //
 //-----------------------------------------------------------------------------
-void GVFileThumbnailView::clearView() {
+void FileThumbnailView::clearView() {
 	stopThumbnailUpdate();
 	mShownFileItem=0L;
 	QIconView::clear();
 }
 
 
-void GVFileThumbnailView::insertItem(KFileItem* item) {
+void FileThumbnailView::insertItem(KFileItem* item) {
 	if (!item) return;
-	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
+	bool isDirOrArchive=item->isDir() || Archive::fileItemIsArchive(item);
 
 	QPixmap thumbnail=createItemPixmap(item);
-	GVFileThumbnailViewItem* iconItem=new GVFileThumbnailViewItem(this,item->text(),thumbnail,item);
+	FileThumbnailViewItem* iconItem=new FileThumbnailViewItem(this,item->text(),thumbnail,item);
 	iconItem->setDropEnabled(isDirOrArchive);
 
 	setSortingKey(iconItem, item);
@@ -426,10 +426,10 @@ void GVFileThumbnailView::insertItem(KFileItem* item) {
 }
 
 
-void GVFileThumbnailView::updateView(const KFileItem* fileItem) {
+void FileThumbnailView::updateView(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (iconItem) {
 		iconItem->setText(fileItem->text());
 		updateThumbnail(fileItem);
@@ -438,41 +438,41 @@ void GVFileThumbnailView::updateView(const KFileItem* fileItem) {
 }
 
 
-void GVFileThumbnailView::ensureItemVisible(const KFileItem* fileItem) {
+void FileThumbnailView::ensureItemVisible(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (iconItem) QIconView::ensureItemVisible(iconItem);
 }
 
 
-void GVFileThumbnailView::setCurrentItem(const KFileItem* fileItem) {
+void FileThumbnailView::setCurrentItem(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (iconItem) QIconView::setCurrentItem(iconItem);
 }
 
 
-void GVFileThumbnailView::setSelected(const KFileItem* fileItem,bool enable) {
+void FileThumbnailView::setSelected(const KFileItem* fileItem,bool enable) {
 	if (!fileItem) return;
 
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (iconItem) QIconView::setSelected(iconItem,enable);
 }
 
 
-bool GVFileThumbnailView::isSelected(const KFileItem* fileItem) const {
+bool FileThumbnailView::isSelected(const KFileItem* fileItem) const {
 	if (!fileItem) return false;
 
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return false;
 
 	return iconItem->isSelected();
 }
 
 
-void GVFileThumbnailView::removeItem(const KFileItem* fileItem) {
+void FileThumbnailView::removeItem(const KFileItem* fileItem) {
 	if (!fileItem) return;
 
 	// Remove it from the image preview job
@@ -482,51 +482,51 @@ void GVFileThumbnailView::removeItem(const KFileItem* fileItem) {
 	if (fileItem==mShownFileItem) mShownFileItem=0L;
 
 	// Remove it from our view
-	GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (iconItem) delete iconItem;
 	KFileView::removeItem(fileItem);
 	arrangeItemsInGrid();
 }
 
 
-KFileItem* GVFileThumbnailView::firstFileItem() const {
-	GVFileThumbnailViewItem* iconItem=static_cast<GVFileThumbnailViewItem*>(firstItem());
+KFileItem* FileThumbnailView::firstFileItem() const {
+	FileThumbnailViewItem* iconItem=static_cast<FileThumbnailViewItem*>(firstItem());
 	if (!iconItem) return 0L;
 	return iconItem->fileItem();
 }
 
 
-KFileItem* GVFileThumbnailView::prevItem(const KFileItem* fileItem) const {
-	const GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+KFileItem* FileThumbnailView::prevItem(const KFileItem* fileItem) const {
+	const FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return 0L;
 
-	iconItem=static_cast<const GVFileThumbnailViewItem*>(iconItem->prevItem());
+	iconItem=static_cast<const FileThumbnailViewItem*>(iconItem->prevItem());
 	if (!iconItem) return 0L;
 
 	return iconItem->fileItem();
 }
 
 
-KFileItem* GVFileThumbnailView::currentFileItem() const {
+KFileItem* FileThumbnailView::currentFileItem() const {
 	const QIconViewItem* iconItem=currentItem();
 	if (!iconItem) return 0L;
 
-	return static_cast<const GVFileThumbnailViewItem*>(iconItem)->fileItem();
+	return static_cast<const FileThumbnailViewItem*>(iconItem)->fileItem();
 }
 
 
-KFileItem* GVFileThumbnailView::nextItem(const KFileItem* fileItem) const {
-	const GVFileThumbnailViewItem* iconItem=viewItem(this, fileItem);
+KFileItem* FileThumbnailView::nextItem(const KFileItem* fileItem) const {
+	const FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return 0L;
 
-	iconItem=static_cast<const GVFileThumbnailViewItem*>(iconItem->nextItem());
+	iconItem=static_cast<const FileThumbnailViewItem*>(iconItem->nextItem());
 	if (!iconItem) return 0L;
 
 	return iconItem->fileItem();
 }
 
 
-void GVFileThumbnailView::setSorting(QDir::SortSpec spec) {
+void FileThumbnailView::setSorting(QDir::SortSpec spec) {
 	KFileView::setSorting(spec);
 
 	KFileItem *item;
@@ -545,17 +545,17 @@ void GVFileThumbnailView::setSorting(QDir::SortSpec spec) {
 // Drop support
 //
 //--------------------------------------------------------------------------
-void GVFileThumbnailView::contentsDragEnterEvent(QDragEnterEvent* event) {
+void FileThumbnailView::contentsDragEnterEvent(QDragEnterEvent* event) {
 	return event->accept( KURLDrag::canDecode(event) );
 }
 
 
-void GVFileThumbnailView::slotDropped(QDropEvent* event) {
+void FileThumbnailView::slotDropped(QDropEvent* event) {
 	emit dropped(event,0L);
 }
 
 
-void GVFileThumbnailView::showEvent(QShowEvent* event) {
+void FileThumbnailView::showEvent(QShowEvent* event) {
 	KIconView::showEvent(event);
 	if (!d->mUpdateThumbnailsOnNextShow) return;
 
@@ -569,37 +569,37 @@ void GVFileThumbnailView::showEvent(QShowEvent* event) {
 // Private
 //
 //--------------------------------------------------------------------------
-void GVFileThumbnailView::updateGrid() {
+void FileThumbnailView::updateGrid() {
 	if (itemTextPos()==Right) {
 		setGridX(
 			d->mThumbnailSize
-			+ GVFileThumbnailViewItem::PADDING*3
-			+ GVFileThumbnailViewItem::SHADOW
+			+ FileThumbnailViewItem::PADDING*3
+			+ FileThumbnailViewItem::SHADOW
 			+ RIGHT_TEXT_WIDTH);
 		setGridY(
 			d->mThumbnailSize
-			+ GVFileThumbnailViewItem::PADDING*2
-			+ GVFileThumbnailViewItem::SHADOW);
+			+ FileThumbnailViewItem::PADDING*2
+			+ FileThumbnailViewItem::SHADOW);
 	} else {
 		setGridX(
 			QMAX(d->mThumbnailSize, BOTTOM_MIN_TEXT_WIDTH)
-			+ GVFileThumbnailViewItem::PADDING*2
-			+ GVFileThumbnailViewItem::SHADOW);
+			+ FileThumbnailViewItem::PADDING*2
+			+ FileThumbnailViewItem::SHADOW);
 		setGridY(
 			d->mThumbnailSize
-			+ GVFileThumbnailViewItem::PADDING*3
-			+ GVFileThumbnailViewItem::SHADOW
+			+ FileThumbnailViewItem::PADDING*3
+			+ FileThumbnailViewItem::SHADOW
 			+ fontMetrics().height()*2);
 	}
 	setSpacing(d->mMarginSize);
 }
 
 
-void GVFileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem *item)
+void FileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem *item)
 {
 	// see also setSorting()
 	QDir::SortSpec spec = KFileView::sorting();
-	bool isDirOrArchive=item->isDir() || GVArchive::fileItemIsArchive(item);
+	bool isDirOrArchive=item->isDir() || Archive::fileItemIsArchive(item);
 
 	QString key;
 	if ( spec & QDir::Time )
@@ -620,36 +620,36 @@ void GVFileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem
 // Private slots
 //
 //--------------------------------------------------------------------------
-void GVFileThumbnailView::slotDoubleClicked(QIconViewItem* iconItem) {
+void FileThumbnailView::slotDoubleClicked(QIconViewItem* iconItem) {
 	if (!iconItem) return;
 	if (KGlobalSettings::singleClick()) return;
-	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
+	FileThumbnailViewItem* thumbItem=static_cast<FileThumbnailViewItem*>(iconItem);
 
 	KFileItem* fileItem=thumbItem->fileItem();
 
-	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
+	if (fileItem->isDir() || Archive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
 	}
 }
 
 
-void GVFileThumbnailView::slotClicked(QIconViewItem* iconItem) {
+void FileThumbnailView::slotClicked(QIconViewItem* iconItem) {
 	if (!iconItem) return;
 	if (!KGlobalSettings::singleClick()) return;
-	GVFileThumbnailViewItem* thumbItem=static_cast<GVFileThumbnailViewItem*>(iconItem);
+	FileThumbnailViewItem* thumbItem=static_cast<FileThumbnailViewItem*>(iconItem);
 
 	KFileItem* fileItem=thumbItem->fileItem();
 
-	if (fileItem->isDir() || GVArchive::fileItemIsArchive(fileItem)) {
+	if (fileItem->isDir() || Archive::fileItemIsArchive(fileItem)) {
 		emit executed(iconItem);
 	}
 }
 
-void GVFileThumbnailView::slotContentsMoving( int x, int y ) {
+void FileThumbnailView::slotContentsMoving( int x, int y ) {
 	updateVisibilityInfo( x, y ); // use x,y, the signal is emitted before moving
 }
 
-void GVFileThumbnailView::slotCurrentChanged(QIconViewItem*) {
+void FileThumbnailView::slotCurrentChanged(QIconViewItem*) {
 	// trigger generating thumbnails from the current one
 	updateVisibilityInfo( contentsX(), contentsY());
 }
@@ -659,17 +659,17 @@ void GVFileThumbnailView::slotCurrentChanged(QIconViewItem*) {
  * to be the next one processed by the thumbnail job, if visible,
  * otherwise use the first visible thumbnail
  */
-void GVFileThumbnailView::updateVisibilityInfo( int x, int y ) {
+void FileThumbnailView::updateVisibilityInfo( int x, int y ) {
 	if (d->mThumbnailLoadJob.isNull()) return;
 	
 	QRect rect( x, y, visibleWidth(), visibleHeight());
-	GVFileThumbnailViewItem* first = static_cast< GVFileThumbnailViewItem* >( findFirstVisibleItem( rect ));
+	FileThumbnailViewItem* first = static_cast< FileThumbnailViewItem* >( findFirstVisibleItem( rect ));
 	if (!first) {
 		d->mThumbnailLoadJob->setPriorityItems(NULL,NULL,NULL);
 		return;
 	}
 	
-	GVFileThumbnailViewItem* last = static_cast< GVFileThumbnailViewItem* >( findLastVisibleItem( rect ));
+	FileThumbnailViewItem* last = static_cast< FileThumbnailViewItem* >( findLastVisibleItem( rect ));
 	Q_ASSERT(last); // If we get a first item, then there must be a last
 	
 	if (currentItem() && currentItem()->intersects(rect)) {
@@ -690,7 +690,7 @@ void GVFileThumbnailView::updateVisibilityInfo( int x, int y ) {
 // Protected
 //
 //--------------------------------------------------------------------------
-void GVFileThumbnailView::startDrag() {
+void FileThumbnailView::startDrag() {
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
 
@@ -721,7 +721,7 @@ void GVFileThumbnailView::startDrag() {
 // Configuration
 //
 //--------------------------------------------------------------------------
-void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
+void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 
 	d->mThumbnailSize=config->readNumEntry(CONFIG_THUMBNAIL_SIZE, 48);
@@ -734,8 +734,8 @@ void GVFileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	arrangeItemsInGrid();
 }
 
-void GVFileThumbnailView::kpartConfig() {
-	d->mThumbnailSize=GVThumbnailSize::NORMAL;
+void FileThumbnailView::kpartConfig() {
+	d->mThumbnailSize=ThumbnailSize::NORMAL;
 	d->mMarginSize=5;
 
 	updateGrid();
@@ -744,7 +744,7 @@ void GVFileThumbnailView::kpartConfig() {
 }
 
 
-void GVFileThumbnailView::writeConfig(KConfig* config,const QString& group) const {
+void FileThumbnailView::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_THUMBNAIL_SIZE,d->mThumbnailSize);
 	config->writeEntry(CONFIG_MARGIN_SIZE,d->mMarginSize);

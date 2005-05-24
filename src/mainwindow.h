@@ -49,25 +49,25 @@ class KToolBarPopupAction;
 class KFileItem;
 class KURLCompletion;
 
-class GVDirView;
-class GVFileViewStack;
-class GVDocument;
-class GVHistory;
-class GVScrollPixmapView;
-class GVSlideShow;
-class GVMetaEdit;
+class DirView;
+class FileViewStack;
+class Document;
+class History;
+class ScrollPixmapView;
+class SlideShow;
+class MetaEdit;
 
 
-class GVMainWindow : public KMainWindow {
+class MainWindow : public KMainWindow {
 Q_OBJECT
 public:
-	GVMainWindow();
+	MainWindow();
 
-	GVFileViewStack* fileViewStack() const { return mFileViewStack; }
-	GVScrollPixmapView* pixmapView() const { return mPixmapView; }
+	FileViewStack* fileViewStack() const { return mFileViewStack; }
+	ScrollPixmapView* pixmapView() const { return mPixmapView; }
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
-	GVDocument* document() const { return mDocument; }
+	Document* document() const { return mDocument; }
 #ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* pluginLoader() const { return mPluginLoader; }
 #endif
@@ -94,14 +94,14 @@ private:
 	QLabel* mSBDirLabel;
 	QLabel* mSBDetailLabel;
 
-	GVFileViewStack* mFileViewStack;
-	GVDirView* mDirView;
-	GVScrollPixmapView* mPixmapView;
-	GVMetaEdit *mMetaEdit;
+	FileViewStack* mFileViewStack;
+	DirView* mDirView;
+	ScrollPixmapView* mPixmapView;
+	MetaEdit *mMetaEdit;
 
-	GVDocument* mDocument;
-	GVHistory* mGVHistory;
-	GVSlideShow* mSlideShow;
+	Document* mDocument;
+	History* mHistory;
+	SlideShow* mSlideShow;
 
 	KAction* mRenameFile;
 	KAction* mCopyFiles;
@@ -175,7 +175,7 @@ private slots:
 	void startSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void slotDirURLChanged(const KURL&);
-	void modifyImage(GVImageUtils::Orientation);
+	void modifyImage(ImageUtils::Orientation);
 	void rotateLeft();
 	void rotateRight();
 	void mirror();

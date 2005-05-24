@@ -31,17 +31,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "branchpropertiesdialogbase.h"
 #include "branchpropertiesdialog.moc"
 
-class GVBranchPropertiesDialogPrivate {
+class BranchPropertiesDialogPrivate {
 public:
 
-	GVBranchPropertiesDialogBase* mContent;
+	BranchPropertiesDialogBase* mContent;
 };
 
-GVBranchPropertiesDialog::GVBranchPropertiesDialog(QWidget* parent)
+BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent)
 : KDialogBase(parent,"folderconfig",true,QString::null,Ok|Cancel)
 {
-	d=new GVBranchPropertiesDialogPrivate;
-	d->mContent=new GVBranchPropertiesDialogBase(this);
+	d=new BranchPropertiesDialogPrivate;
+	d->mContent=new BranchPropertiesDialogBase(this);
 	setMainWidget(d->mContent);
 	setCaption(d->mContent->caption());
 	d->mContent->mUrl->setMode(KFile::Directory);
@@ -49,18 +49,18 @@ GVBranchPropertiesDialog::GVBranchPropertiesDialog(QWidget* parent)
 	enableButton(Ok, false);
 }
 
-GVBranchPropertiesDialog::~GVBranchPropertiesDialog() {
+BranchPropertiesDialog::~BranchPropertiesDialog() {
 	delete d;
 }
 
-void GVBranchPropertiesDialog::setContents(const QString& icon, const QString& title, const QString& url) {
+void BranchPropertiesDialog::setContents(const QString& icon, const QString& title, const QString& url) {
 	d->mContent->mTitle->setText(title);
 	d->mContent->mUrl->setURL(url);
 	d->mContent->mIcon->setIcon(icon);
 	setCaption(i18n("Edit Branch"));
 }
 
-int GVBranchPropertiesDialog::exec() {
+int BranchPropertiesDialog::exec() {
 	connect(d->mContent->mTitle,SIGNAL(textChanged(const QString&)),
 		this,SLOT(enableOk()));
 	connect(d->mContent->mUrl,SIGNAL(textChanged(const QString&)),
@@ -70,18 +70,18 @@ int GVBranchPropertiesDialog::exec() {
 	return KDialog::exec();
 }
 
-void GVBranchPropertiesDialog::enableOk() {
+void BranchPropertiesDialog::enableOk() {
 	enableButton(Ok, true);
 }
 
-QString GVBranchPropertiesDialog::icon() {
+QString BranchPropertiesDialog::icon() {
 	return d->mContent->mIcon->icon();
 }
 
-QString GVBranchPropertiesDialog::title() {
+QString BranchPropertiesDialog::title() {
 	return d->mContent->mTitle->text();
 }
 
-QString GVBranchPropertiesDialog::url() {
+QString BranchPropertiesDialog::url() {
 	return d->mContent->mUrl->url();
 }

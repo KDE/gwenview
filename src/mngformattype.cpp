@@ -101,11 +101,12 @@
 
 
 #ifndef QT_NO_ASYNC_IMAGE_IO
+namespace Gwenview {
 
-class GVMNGFormat : public QImageFormat {
+class MNGFormat : public QImageFormat {
 public:
-    GVMNGFormat();
-    virtual ~GVMNGFormat();
+    MNGFormat();
+    virtual ~MNGFormat();
 
     int decode(QImage& img, QImageConsumer* consumer,
 	    const uchar* buffer, int length);
@@ -239,7 +240,7 @@ private:
     QImage* image;
 };
 
-class GVMNGFormatType : public QImageFormatType
+class MNGFormatType : public QImageFormatType
 {
     QImageFormat* decoderFor(const uchar* buffer, int length);
     const char* formatName() const;
@@ -292,7 +293,7 @@ TODO: decide on this point.  gIFg gives disposal types, so it can be done.
   so you should have no need for such objects.
 */
 
-QImageFormat* GVMNGFormatType::decoderFor( const uchar* buffer, int length )
+QImageFormat* MNGFormatType::decoderFor( const uchar* buffer, int length )
 {
     if (length < 8) return 0;
 
@@ -323,11 +324,11 @@ QImageFormat* GVMNGFormatType::decoderFor( const uchar* buffer, int length )
      && buffer[7]==10
 #endif
     )
-	return new GVMNGFormat;
+	return new MNGFormat;
     return 0;
 }
 
-const char* GVMNGFormatType::formatName() const
+const char* MNGFormatType::formatName() const
 {
     return "MNG";
 }
@@ -336,7 +337,7 @@ const char* GVMNGFormatType::formatName() const
 /*!
   Constructs a QMNGFormat.
 */
-GVMNGFormat::GVMNGFormat()
+MNGFormat::MNGFormat()
 {
     state = MovieStart;
     handle = 0;
@@ -349,7 +350,7 @@ GVMNGFormat::GVMNGFormat()
 /*
   Destroys a QMNGFormat.
 */
-GVMNGFormat::~GVMNGFormat()
+MNGFormat::~MNGFormat()
 {
     // We're setting the consumer to 0 since it may have been
     // deleted by read_async_image in qimage.cpp
@@ -362,15 +363,15 @@ GVMNGFormat::~GVMNGFormat()
 //
 static mng_bool openstream( mng_handle handle )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->openstream();
+    return ((MNGFormat*)mng_get_userdata(handle))->openstream();
 }
 static mng_bool closestream( mng_handle handle )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->closestream();
+    return ((MNGFormat*)mng_get_userdata(handle))->closestream();
 }
 static mng_bool readdata( mng_handle handle, mng_ptr pBuf, mng_uint32 iBuflen, mng_uint32p pRead )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->readdata(pBuf,iBuflen,pRead);
+    return ((MNGFormat*)mng_get_userdata(handle))->readdata(pBuf,iBuflen,pRead);
 }
 static mng_bool errorproc( mng_handle handle,
 		       mng_int32   iErrorcode,
@@ -381,17 +382,17 @@ static mng_bool errorproc( mng_handle handle,
 		       mng_int32   iExtra2,
 		       mng_pchar   zErrortext )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->errorproc(iErrorcode,
+    return ((MNGFormat*)mng_get_userdata(handle))->errorproc(iErrorcode,
 	iSeverity,iChunkname,iChunkseq,iExtra1,iExtra2,zErrortext);
 }
 static mng_bool processheader( mng_handle handle,
 			   mng_uint32 iWidth, mng_uint32 iHeight )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->processheader(iWidth,iHeight);
+    return ((MNGFormat*)mng_get_userdata(handle))->processheader(iWidth,iHeight);
 }
 static mng_ptr getcanvasline( mng_handle handle, mng_uint32 iLinenr )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->getcanvasline(iLinenr);
+    return ((MNGFormat*)mng_get_userdata(handle))->getcanvasline(iLinenr);
 }
 static mng_bool refresh( mng_handle handle,
 		      mng_uint32  iTop,
@@ -399,15 +400,15 @@ static mng_bool refresh( mng_handle handle,
 		      mng_uint32  iBottom,
 		      mng_uint32  iRight	)
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->refresh(iTop,iLeft,iBottom,iRight);
+    return ((MNGFormat*)mng_get_userdata(handle))->refresh(iTop,iLeft,iBottom,iRight);
 }
 static mng_uint32 gettickcount( mng_handle handle )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->gettickcount();
+    return ((MNGFormat*)mng_get_userdata(handle))->gettickcount();
 }
 static mng_bool settimer( mng_handle handle, mng_uint32  iMsecs )
 {
-    return ((GVMNGFormat*)mng_get_userdata(handle))->settimer(iMsecs);
+    return ((MNGFormat*)mng_get_userdata(handle))->settimer(iMsecs);
 }
 
 static mng_ptr memalloc( mng_size_t iLen )
@@ -424,7 +425,7 @@ static void memfree( mng_ptr iPtr, mng_size_t /*iLen*/ )
 
   Returns the number of bytes consumed.
 */
-int GVMNGFormat::decode( QImage& img, QImageConsumer* cons,
+int MNGFormat::decode( QImage& img, QImageConsumer* cons,
 			const uchar* buf, int length )
 {
     consumer = cons;
@@ -435,17 +436,17 @@ int GVMNGFormat::decode( QImage& img, QImageConsumer* cons,
     ubuffer = 0;
 
     if ( state == MovieStart ) {
-        handle = mng_initialize( (mng_ptr)this, ::memalloc, ::memfree, 0 );
+        handle = mng_initialize( (mng_ptr)this, Gwenview::memalloc, Gwenview::memfree, 0 );
 	mng_set_suspensionmode( handle, MNG_TRUE );
-	mng_setcb_openstream( handle, ::openstream );
-	mng_setcb_closestream( handle, ::closestream );
-	mng_setcb_readdata( handle, ::readdata );
-	mng_setcb_errorproc( handle, ::errorproc );
-	mng_setcb_processheader( handle, ::processheader );
-	mng_setcb_getcanvasline( handle, ::getcanvasline );
-	mng_setcb_refresh( handle, ::refresh );
-	mng_setcb_gettickcount( handle, ::gettickcount );
-	mng_setcb_settimer( handle, ::settimer );
+	mng_setcb_openstream( handle, Gwenview::openstream );
+	mng_setcb_closestream( handle, Gwenview::closestream );
+	mng_setcb_readdata( handle, Gwenview::readdata );
+	mng_setcb_errorproc( handle, Gwenview::errorproc );
+	mng_setcb_processheader( handle, Gwenview::processheader );
+	mng_setcb_getcanvasline( handle, Gwenview::getcanvasline );
+	mng_setcb_refresh( handle, Gwenview::refresh );
+	mng_setcb_gettickcount( handle, Gwenview::gettickcount );
+	mng_setcb_settimer( handle, Gwenview::settimer );
 	state = Data;
 	mng_readdisplay(handle);
 	losingtimer.start();
@@ -483,7 +484,7 @@ int GVMNGFormat::decode( QImage& img, QImageConsumer* cons,
     return length;
 }
 
-static GVMNGFormatType* globalMngFormatTypeObject = 0;
+static MNGFormatType* globalMngFormatTypeObject = 0;
 
 #endif // QT_NO_ASYNC_IMAGE_IO
 
@@ -503,7 +504,7 @@ void gvInitMngIO()
     if ( !done ) {
 	done = TRUE;
 #ifndef QT_NO_ASYNC_IMAGE_IO
-	globalMngFormatTypeObject = new GVMNGFormatType;
+	globalMngFormatTypeObject = new MNGFormatType;
 	qAddPostRoutine( gvCleanupMngIO );
 #endif
     }
@@ -513,4 +514,5 @@ void gvInitMngIO()
 void gvInitMngIO() {}
 #endif
 
-GVMNG::GVMNG() { gvInitMngIO(); }
+MNG::MNG() { gvInitMngIO(); }
+} // namespace

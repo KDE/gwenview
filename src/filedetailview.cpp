@@ -44,8 +44,8 @@
 #include "filedetailview.moc"
 
 
-GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
-	: KListView(parent, name), GVFileViewBase()
+FileDetailView::FileDetailView(QWidget *parent, const char *name)
+	: KListView(parent, name), FileViewBase()
 {
 	mSortingCol = COL_NAME;
 	mBlockSortingSignal = false;
@@ -79,7 +79,7 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 	connect( this, SIGNAL( selectionChanged() ),
 			 SLOT( slotSelectionChanged() ));
 
-	// GVFileViewStack need to be aware of sort changes, to update the sort menu
+	// FileViewStack need to be aware of sort changes, to update the sort menu
 	connect( sig, SIGNAL(sortingChanged(QDir::SortSpec)),
 		this, SIGNAL(sortingChanged(QDir::SortSpec)) );
 	
@@ -87,7 +87,7 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 
 
 	mResolver =
-		new KMimeTypeResolver<GVFileDetailViewItem,GVFileDetailView>( this );
+		new KMimeTypeResolver<FileDetailViewItem,FileDetailView>( this );
 
 	setDragEnabled(true);
 	
@@ -97,71 +97,71 @@ GVFileDetailView::GVFileDetailView(QWidget *parent, const char *name)
 }
 
 
-GVFileDetailView::~GVFileDetailView()
+FileDetailView::~FileDetailView()
 {
 	delete mResolver;
 }
 
 
-void GVFileDetailView::setSelected( const KFileItem *info, bool enable )
+void FileDetailView::setSelected( const KFileItem *info, bool enable )
 {
 	if (!info) return;
-	GVFileDetailViewItem *item = viewItem(info);
+	FileDetailViewItem *item = viewItem(info);
 	if (item) KListView::setSelected(item, enable);
 }
 
-void GVFileDetailView::setCurrentItem( const KFileItem *item )
+void FileDetailView::setCurrentItem( const KFileItem *item )
 {
 	if (!item) return;
-	GVFileDetailViewItem *listItem = viewItem(item);
+	FileDetailViewItem *listItem = viewItem(item);
 	if (listItem) KListView::setCurrentItem(listItem);
 }
 
-KFileItem * GVFileDetailView::currentFileItem() const
+KFileItem * FileDetailView::currentFileItem() const
 {
-	GVFileDetailViewItem *current = static_cast<GVFileDetailViewItem*>( currentItem() );
+	FileDetailViewItem *current = static_cast<FileDetailViewItem*>( currentItem() );
 	if ( current ) return current->fileInfo();
 
 	return 0L;
 }
 
-void GVFileDetailView::clearSelection()
+void FileDetailView::clearSelection()
 {
 	KListView::clearSelection();
 }
 
-void GVFileDetailView::selectAll()
+void FileDetailView::selectAll()
 {
 	KListView::selectAll( true );
 }
 
-void GVFileDetailView::invertSelection()
+void FileDetailView::invertSelection()
 {
 	KListView::invertSelection();
 }
 
-void GVFileDetailView::slotActivateMenu (QListViewItem *item,const QPoint& pos )
+void FileDetailView::slotActivateMenu (QListViewItem *item,const QPoint& pos )
 {
 	if ( !item ) {
 		sig->activateMenu( 0, pos );
 		return;
 	}
-	GVFileDetailViewItem *i = (GVFileDetailViewItem*) item;
+	FileDetailViewItem *i = (FileDetailViewItem*) item;
 	sig->activateMenu( i->fileInfo(), pos );
 }
 
-void GVFileDetailView::clearView()
+void FileDetailView::clearView()
 {
 	mResolver->m_lstPendingMimeIconItems.clear();
 	mShownFileItem=0L;
 	KListView::clear();
 }
 
-void GVFileDetailView::insertItem( KFileItem *i )
+void FileDetailView::insertItem( KFileItem *i )
 {
 	KFileView::insertItem( i );
 
-	GVFileDetailViewItem *item = new GVFileDetailViewItem( (QListView*) this, i );
+	FileDetailViewItem *item = new FileDetailViewItem( (QListView*) this, i );
 
 	setSortingKey( item, i );
 
@@ -171,59 +171,59 @@ void GVFileDetailView::insertItem( KFileItem *i )
 		mResolver->m_lstPendingMimeIconItems.append( item );
 }
 
-void GVFileDetailView::slotActivate( QListViewItem *item )
+void FileDetailView::slotActivate( QListViewItem *item )
 {
 	if ( !item ) return;
 
-	const KFileItem *fi = ( (GVFileDetailViewItem*)item )->fileInfo();
+	const KFileItem *fi = ( (FileDetailViewItem*)item )->fileInfo();
 	if ( fi ) sig->activate( fi );
 }
 
-void GVFileDetailView::selected( QListViewItem *item )
+void FileDetailView::selected( QListViewItem *item )
 {
 	if ( !item ) return;
 
 	if ( KGlobalSettings::singleClick() ) {
-		const KFileItem *fi = ( (GVFileDetailViewItem*)item )->fileInfo();
+		const KFileItem *fi = ( (FileDetailViewItem*)item )->fileInfo();
 		if ( fi && (fi->isDir() || !onlyDoubleClickSelectsFiles()) )
 			sig->activate( fi );
 	}
 }
 
-void GVFileDetailView::highlighted( QListViewItem *item )
+void FileDetailView::highlighted( QListViewItem *item )
 {
 	if ( !item ) return;
 
-	const KFileItem *fi = ( (GVFileDetailViewItem*)item )->fileInfo();
+	const KFileItem *fi = ( (FileDetailViewItem*)item )->fileInfo();
 	if ( fi ) sig->highlightFile( fi );
 }
 
 
-bool GVFileDetailView::isSelected(const KFileItem* fileItem) const
+bool FileDetailView::isSelected(const KFileItem* fileItem) const
 {
 	if (!fileItem) return false;
 
-	GVFileDetailViewItem *item = viewItem(fileItem);
+	FileDetailViewItem *item = viewItem(fileItem);
 	return item && item->isSelected();
 }
 
 
-void GVFileDetailView::updateView( bool b )
+void FileDetailView::updateView( bool b )
 {
 	if ( !b ) return;
 
 	QListViewItemIterator it( (QListView*)this );
 	for ( ; it.current(); ++it ) {
-		GVFileDetailViewItem *item=static_cast<GVFileDetailViewItem *>(it.current());
+		FileDetailViewItem *item=static_cast<FileDetailViewItem *>(it.current());
 		item->setPixmap( 0, item->fileInfo()->pixmap(KIcon::SizeSmall) );
 	}
 }
 
-void GVFileDetailView::updateView( const KFileItem *i )
+void FileDetailView::updateView( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = viewItem(i);
+	FileDetailViewItem *item = viewItem(i);
 	if ( !item ) return;
 
 	item->init();
@@ -231,12 +231,12 @@ void GVFileDetailView::updateView( const KFileItem *i )
 }
 
 
-void GVFileDetailView::setSortingKey( GVFileDetailViewItem *item,
+void FileDetailView::setSortingKey( FileDetailViewItem *item,
 									 const KFileItem *i )
 {
 	// see also setSorting()
 	QDir::SortSpec spec = KFileView::sorting();
-	bool isDirOrArchive=i->isDir() || GVArchive::fileItemIsArchive(i);
+	bool isDirOrArchive=i->isDir() || Archive::fileItemIsArchive(i);
 
 	QString key;
 	if ( spec & QDir::Time )
@@ -252,11 +252,11 @@ void GVFileDetailView::setSortingKey( GVFileDetailViewItem *item,
 }
 
 
-void GVFileDetailView::removeItem( const KFileItem *i )
+void FileDetailView::removeItem( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = viewItem(i);
+	FileDetailViewItem *item = viewItem(i);
 	mResolver->m_lstPendingMimeIconItems.remove( item );
 	if(mShownFileItem==i) mShownFileItem=0L;
 	delete item;
@@ -264,7 +264,7 @@ void GVFileDetailView::removeItem( const KFileItem *i )
 	KFileView::removeItem( i );
 }
 
-void GVFileDetailView::slotSortingChanged( int col )
+void FileDetailView::slotSortingChanged( int col )
 {
 	QDir::SortSpec sort = sorting();
 	int sortSpec = -1;
@@ -311,7 +311,7 @@ void GVFileDetailView::slotSortingChanged( int col )
 	KFileItemListIterator it( *items() );
 
 	for ( ; (item = it.current() ); ++it ) {
-		GVFileDetailViewItem* thumbItem=viewItem( item );
+		FileDetailViewItem* thumbItem=viewItem( item );
 		if (thumbItem) setSortingKey(thumbItem,item);
 	}
 
@@ -322,7 +322,7 @@ void GVFileDetailView::slotSortingChanged( int col )
 }
 
 
-void GVFileDetailView::setSorting( QDir::SortSpec spec )
+void FileDetailView::setSorting( QDir::SortSpec spec )
 {
 	int col = 0;
 	if ( spec & QDir::Time )
@@ -350,34 +350,34 @@ void GVFileDetailView::setSorting( QDir::SortSpec spec )
 	mBlockSortingSignal = false;
 }
 
-void GVFileDetailView::ensureItemVisible( const KFileItem *i )
+void FileDetailView::ensureItemVisible( const KFileItem *i )
 {
 	if ( !i ) return;
 
-	GVFileDetailViewItem *item = viewItem(i);
+	FileDetailViewItem *item = viewItem(i);
 		
 	if ( item ) KListView::ensureItemVisible( item );
 }
 
 // we're in multiselection mode
-void GVFileDetailView::slotSelectionChanged()
+void FileDetailView::slotSelectionChanged()
 {
 	sig->highlightFile( 0L );
 }
 
-KFileItem * GVFileDetailView::firstFileItem() const
+KFileItem * FileDetailView::firstFileItem() const
 {
-	GVFileDetailViewItem *item = static_cast<GVFileDetailViewItem*>( firstChild() );
+	FileDetailViewItem *item = static_cast<FileDetailViewItem*>( firstChild() );
 	if ( item ) return item->fileInfo();
 	return 0L;
 }
 
-KFileItem * GVFileDetailView::nextItem( const KFileItem *fileItem ) const
+KFileItem * FileDetailView::nextItem( const KFileItem *fileItem ) const
 {
 	if ( fileItem ) {
-		GVFileDetailViewItem *item = viewItem( fileItem );
+		FileDetailViewItem *item = viewItem( fileItem );
 		if ( item && item->itemBelow() )
-			return ((GVFileDetailViewItem*) item->itemBelow())->fileInfo();
+			return ((FileDetailViewItem*) item->itemBelow())->fileInfo();
 		else
 			return 0L;
 	}
@@ -385,12 +385,12 @@ KFileItem * GVFileDetailView::nextItem( const KFileItem *fileItem ) const
 		return firstFileItem();
 }
 
-KFileItem * GVFileDetailView::prevItem( const KFileItem *fileItem ) const
+KFileItem * FileDetailView::prevItem( const KFileItem *fileItem ) const
 {
 	if ( fileItem ) {
-		GVFileDetailViewItem *item = viewItem( fileItem );
+		FileDetailViewItem *item = viewItem( fileItem );
 		if ( item && item->itemAbove() )
-			return ((GVFileDetailViewItem*) item->itemAbove())->fileInfo();
+			return ((FileDetailViewItem*) item->itemAbove())->fileInfo();
 		else
 			return 0L;
 	}
@@ -398,7 +398,7 @@ KFileItem * GVFileDetailView::prevItem( const KFileItem *fileItem ) const
 		return firstFileItem();
 }
 
-void GVFileDetailView::keyPressEvent( QKeyEvent *e )
+void FileDetailView::keyPressEvent( QKeyEvent *e )
 {
 	KListView::keyPressEvent( e );
 
@@ -413,23 +413,23 @@ void GVFileDetailView::keyPressEvent( QKeyEvent *e )
 //
 // mimetype determination on demand
 //
-void GVFileDetailView::mimeTypeDeterminationFinished()
+void FileDetailView::mimeTypeDeterminationFinished()
 {
 	// anything to do?
 }
 
-void GVFileDetailView::determineIcon( GVFileDetailViewItem *item )
+void FileDetailView::determineIcon( FileDetailViewItem *item )
 {
 	(void) item->fileInfo()->determineMimeType();
 	updateView( item->fileInfo() );
 }
 
-void GVFileDetailView::listingCompleted()
+void FileDetailView::listingCompleted()
 {
 	mResolver->start();
 }
 
-void GVFileDetailView::startDrag()
+void FileDetailView::startDrag()
 {
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
@@ -456,13 +456,13 @@ void GVFileDetailView::startDrag()
 }
 
 
-void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
+void FileDetailView::setShownFileItem(KFileItem* fileItem)
 {
 	if( fileItem == mShownFileItem ) return;
-	GVFileDetailViewItem* oldShownItem=viewItem(mShownFileItem);
-	GVFileDetailViewItem* newShownItem=viewItem(fileItem);
+	FileDetailViewItem* oldShownItem=viewItem(mShownFileItem);
+	FileDetailViewItem* newShownItem=viewItem(fileItem);
 	
-	GVFileViewBase::setShownFileItem(fileItem);
+	FileViewBase::setShownFileItem(fileItem);
 	if (oldShownItem) oldShownItem->repaint();
 	if (newShownItem) newShownItem->repaint();
 }
@@ -473,16 +473,16 @@ void GVFileDetailView::setShownFileItem(KFileItem* fileItem)
 // Drop support
 //
 //----------------------------------------------------------------------
-bool GVFileDetailView::acceptDrag(QDropEvent* event) const {
+bool FileDetailView::acceptDrag(QDropEvent* event) const {
 	return KURLDrag::canDecode(event);
 }
 
-void GVFileDetailView::contentsDropEvent(QDropEvent *event) {
+void FileDetailView::contentsDropEvent(QDropEvent *event) {
 	KFileItem* fileItem=0L;
 	QListViewItem *item=itemAt(contentsToViewport(event->pos() ) );
 	
 	if (item) {
-		fileItem=static_cast<GVFileDetailViewItem*>(item)->fileInfo();
+		fileItem=static_cast<FileDetailViewItem*>(item)->fileInfo();
 	}
 	emit dropped(event,fileItem);
 }

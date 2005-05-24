@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTANIMATEDIMPL_H
-#define GVDOCUMENTANIMATEDIMPL_H
+#ifndef DOCUMENTANIMATEDIMPL_H
+#define DOCUMENTANIMATEDIMPL_H
 
 // Qt
 #include <qimage.h>
@@ -27,24 +27,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "documentloadedimpl.h"
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "imageframe.h"
 
 class QFile;
 class QCString;
 
-class GVDocument;
+class Document;
 
-class GVDocumentAnimatedLoadedImplPrivate;
+class DocumentAnimatedLoadedImplPrivate;
 
-class GVDocumentAnimatedLoadedImpl : public GVDocumentLoadedImpl {
+class DocumentAnimatedLoadedImpl : public DocumentLoadedImpl {
 Q_OBJECT
 public:
-	GVDocumentAnimatedLoadedImpl(GVDocument* document, const GVImageFrames& frames);
-	~GVDocumentAnimatedLoadedImpl();
+	DocumentAnimatedLoadedImpl(Document* document, const ImageFrames& frames);
+	~DocumentAnimatedLoadedImpl();
 	void init();
 	
-	void transform(GVImageUtils::Orientation);
+	void transform(ImageUtils::Orientation);
 
 protected:
 	QString localSave(QFile*, const QCString& format) const;
@@ -52,7 +52,7 @@ protected:
 private slots:
 	void nextFrame();
 private:
-	GVDocumentAnimatedLoadedImplPrivate* d;
+	DocumentAnimatedLoadedImplPrivate* d;
 };
 
-#endif /* GVDOCUMENTANIMATEDIMPL_H */
+#endif /* DOCUMENTANIMATEDIMPL_H */

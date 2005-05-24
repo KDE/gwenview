@@ -18,19 +18,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVCONFIGFOLDERDIALOG_H
-#define GVCONFIGFOLDERDIALOG_H
+#ifndef CONFIGFOLDERDIALOG_H
+#define CONFIGFOLDERDIALOG_H
 
 // KDE includes
 #include <kdialogbase.h>
 
-class GVBranchPropertiesDialogPrivate;
+class BranchPropertiesDialogPrivate;
 
-class GVBranchPropertiesDialog : public KDialogBase {
+class BranchPropertiesDialog : public KDialogBase {
 Q_OBJECT
 public:
-	GVBranchPropertiesDialog(QWidget* parent);
-	~GVBranchPropertiesDialog();
+	BranchPropertiesDialog(QWidget* parent);
+	~BranchPropertiesDialog();
 
 	void setContents(const QString& icon, const QString& title, const QString& url);
 
@@ -44,7 +44,7 @@ protected slots:
 	void enableOk();
 
 private:
-	GVBranchPropertiesDialogPrivate* d;
+	BranchPropertiesDialogPrivate* d;
 };
 
 #endif

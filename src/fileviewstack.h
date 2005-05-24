@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVFILEVIEWSTACK_H
-#define GVFILEVIEWSTACK_H
+#ifndef FILEVIEWSTACK_H
+#define FILEVIEWSTACK_H
 
 // Qt 
 #include <qdir.h>
@@ -46,18 +46,18 @@ class KListView;
 class KRadioAction;
 class KToggleAction;
 
-class GVFileViewBase;
-class GVFileDetailView;
-class GVFileThumbnailView;
+class FileViewBase;
+class FileDetailView;
+class FileThumbnailView;
 
 
-class GVFileViewStackPrivate;
+class FileViewStackPrivate;
 
 // internal class which allows dynamically turning off visual error reporting
-class GVDirLister : public KDirLister {
+class DirLister : public KDirLister {
 Q_OBJECT
 public:
-	GVDirLister() : KDirLister(), mError( false ), mCheck( false ) {}
+	DirLister() : KDirLister(), mError( false ), mCheck( false ) {}
 	virtual bool validURL( const KURL& ) const;
 	virtual void handleError( KIO::Job * );
 	bool error() const { return mError; }
@@ -68,14 +68,14 @@ private:
 	bool mCheck;
 };
 
-class LIBGWENVIEW_EXPORT GVFileViewStack : public QWidgetStack {
+class LIBGWENVIEW_EXPORT FileViewStack : public QWidgetStack {
 Q_OBJECT
 
 public:
 	enum Mode { FILE_LIST, THUMBNAIL};
 
-	GVFileViewStack(QWidget* parent,KActionCollection*);
-	~GVFileViewStack();
+	FileViewStack(QWidget* parent,KActionCollection*);
+	~FileViewStack();
 
 	// Config
 	void readConfig(KConfig*,const QString&);
@@ -103,8 +103,8 @@ public:
 	QColor shownColor() const { return mShownColor; }
 	void setShownColor(const QColor&);
 	
-	GVFileViewBase* currentFileView() const;
-	GVFileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
+	FileViewBase* currentFileView() const;
+	FileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
 	KAction* selectFirst() const { return mSelectFirst; }
 	KAction* selectLast() const { return mSelectLast; }
@@ -132,7 +132,7 @@ public:
 	 */
 	void retryURL();
 
-	void refreshItems( const KURL::List& urls ); // used by a workaround in GVKIPIInterface
+	void refreshItems( const KURL::List& urls ); // used by a workaround in KIPIInterface
 	
 public slots:
 	void setDirURL(const KURL&);
@@ -156,7 +156,7 @@ public slots:
 signals:
 	void urlChanged(const KURL&);
 	/**
-	 * Used by GVDirPart to tell Konqueror to change directory
+	 * Used by DirPart to tell Konqueror to change directory
 	 */
 	void directoryChanged(const KURL&);
 
@@ -209,11 +209,11 @@ private slots:
 	void slotDirMade(KIO::Job* job);
 	
 private:
-	GVFileViewStackPrivate* d;
+	FileViewStackPrivate* d;
 	Mode mMode;
-	GVFileDetailView* mFileDetailView;
-	GVFileThumbnailView* mFileThumbnailView;
-	GVDirLister* mDirLister;
+	FileDetailView* mFileDetailView;
+	FileThumbnailView* mFileThumbnailView;
+	DirLister* mDirLister;
 	KURL mDirURL;
 
 	// Our actions

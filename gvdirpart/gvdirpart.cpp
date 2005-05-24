@@ -56,10 +56,10 @@ const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
 
-class GVDirPartView : public GVScrollPixmapView {
+class GVDirPartView : public ScrollPixmapView {
 public:
-	GVDirPartView(QWidget* parent, GVDocument* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
-	: GVScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	GVDirPartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
+	: ScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
 	{}
 
 protected:
@@ -89,11 +89,11 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mSplitter->setFocusPolicy(QWidget::ClickFocus);
 
 	// Create the widgets
-	mDocument = new GVDocument(this);
-	mFilesView = new GVFileViewStack(mSplitter, actionCollection());
+	mDocument = new Document(this);
+	mFilesView = new FileViewStack(mSplitter, actionCollection());
 	mPixmapView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
-	mSlideShow = new GVSlideShow(mDocument);
+	mSlideShow = new SlideShow(mDocument);
 
 	FileOperation::kpartConfig();
 	mFilesView->kpartConfig();
@@ -136,7 +136,7 @@ void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
 		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);
 		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
 		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
-		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
+		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 	} else {
 		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
 	}
@@ -188,7 +188,7 @@ KURL GVDirPart::pixmapURL() {
 
 void GVDirPart::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
-		GVSlideShowDialog dialog(mSplitter, mSlideShow);
+		SlideShowDialog dialog(mSplitter, mSlideShow);
 		if (!dialog.exec()) {
 			mToggleSlideShow->setChecked(false);
 			return;
@@ -197,7 +197,7 @@ void GVDirPart::toggleSlideShow() {
         KFileItemListIterator it( *mFilesView->currentFileView()->items() );
         for ( ; it.current(); ++it ) {
             KFileItem* item=it.current();
-            if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+            if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
                 list.append(item->url());
             }
         }
@@ -217,7 +217,7 @@ void GVDirPart::print() {
 	KPrinter printer;
 	if ( !mDocument->filename().isEmpty() ) {
 		printer.setDocName( m_url.filename() );
-		KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, mPixmapView, "GV page"));
+		KPrinter::addDialogPage( new PrintDialogPage( mDocument, mPixmapView, "GV page"));
 
 		if (printer.setup(mPixmapView, QString::null, true)) {
 			mDocument->print(&printer);
@@ -226,7 +226,7 @@ void GVDirPart::print() {
 }
 
 void GVDirPart::rotateRight() {
-	mDocument->transform(GVImageUtils::ROT_90);
+	mDocument->transform(ImageUtils::ROT_90);
 }
 
 void GVDirPart::directoryChanged(const KURL& dirURL) {

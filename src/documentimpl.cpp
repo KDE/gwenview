@@ -25,43 +25,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "document.h"
 #include "documentimpl.moc"
 
-GVDocumentImpl::GVDocumentImpl(GVDocument* document)
+DocumentImpl::DocumentImpl(Document* document)
 : mDocument(document) {}
 
-void GVDocumentImpl::init() {}
+void DocumentImpl::init() {}
 
-GVDocumentImpl::~GVDocumentImpl() {}
+DocumentImpl::~DocumentImpl() {}
 
-void GVDocumentImpl::switchToImpl(GVDocumentImpl* impl) {
+void DocumentImpl::switchToImpl(DocumentImpl* impl) {
 	mDocument->switchToImpl(impl);
 }
 
-void GVDocumentImpl::setImage(QImage img, bool update) {
+void DocumentImpl::setImage(QImage img, bool update) {
 	mDocument->setImage(img, update);
 }
 
-void GVDocumentImpl::setImageFormat(const QCString& format) {
+void DocumentImpl::setImageFormat(const QCString& format) {
 	mDocument->setImageFormat(format);
 }
 
-void GVDocumentImpl::setFileSize(int size) const {
+void DocumentImpl::setFileSize(int size) const {
 	mDocument->setFileSize(size);
 }
 
-QString GVDocumentImpl::comment() const {
+QString DocumentImpl::comment() const {
 	return QString::null;
 }
 
-GVDocument::CommentState GVDocumentImpl::commentState() const {
-	return GVDocument::NONE;
+Document::CommentState DocumentImpl::commentState() const {
+	return Document::NONE;
 }
 
-void GVDocumentImpl::setComment(const QString&) {
+void DocumentImpl::setComment(const QString&) {
 }
 
-void GVDocumentImpl::transform(GVImageUtils::Orientation) {
+void DocumentImpl::transform(ImageUtils::Orientation) {
 }
 
-QString GVDocumentImpl::save(const KURL&, const QCString&) const {
+QString DocumentImpl::save(const KURL&, const QCString&) const {
 	return i18n("No document to save");
 }

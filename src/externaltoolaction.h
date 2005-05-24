@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVEXTERNALTOOLACTION_H
-#define GVEXTERNALTOOLACTION_H
+#ifndef EXTERNALTOOLACTION_H
+#define EXTERNALTOOLACTION_H
 
 // KDE
 #include <kaction.h>
@@ -31,10 +31,10 @@ class KService;
  * A specialized version of KAction, which is aware of the tool to run as well
  * as the urls to call it with.
  */
-class GVExternalToolAction : public KAction {
+class ExternalToolAction : public KAction {
 Q_OBJECT
 public:
-	GVExternalToolAction(QObject* parent, const KService*, const KURL::List&);
+	ExternalToolAction(QObject* parent, const KService*, const KURL::List&);
 	
 private slots:
 	void openExternalTool();

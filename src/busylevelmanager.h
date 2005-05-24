@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVBUSYLEVELMANAGER_H
-#define GVBUSYLEVELMANAGER_H
+#ifndef BUSYLEVELMANAGER_H
+#define BUSYLEVELMANAGER_H
 
 // Qt
 #include <qtimer.h>
@@ -31,7 +31,7 @@ Copyright 2000-2004 Aurélien Gâteau
  Busy level of the application.
  Sorted by increasing priority.
 */
-enum GVBusyLevel {
+enum BusyLevel {
 	BUSY_NONE,
 	BUSY_THUMBNAILS,
 	BUSY_LOADING,
@@ -41,20 +41,20 @@ enum GVBusyLevel {
 };
 
 
-class GVBusyLevelManager : public QObject {
+class BusyLevelManager : public QObject {
 Q_OBJECT
 public:
-	static GVBusyLevelManager* instance();
+	static BusyLevelManager* instance();
 
 	/**
 	 * Announces that the given object is busy.
 	 */
-	void setBusyLevel( QObject* obj, GVBusyLevel level );
+	void setBusyLevel( QObject* obj, BusyLevel level );
 
 	/**
 	 * Returns the busy level of the whole application (i.e. maximum).
 	 */
-	GVBusyLevel busyLevel() const;
+	BusyLevel busyLevel() const;
 
 signals:
 	/**
@@ -62,15 +62,15 @@ signals:
 	 * should be suspended until the level decreases to their level.
 	 * E.g. when loading a picture thumbnail generation should get suspended.
 	 */
-	void busyLevelChanged( GVBusyLevel level );
+	void busyLevelChanged( BusyLevel level );
 
 private slots:
 	void delayedBusyLevelChanged();
 
 private:
-	GVBusyLevelManager();
-	QMap< QObject*, GVBusyLevel > mBusyLevels;
-	GVBusyLevel mCurrentBusyLevel;
+	BusyLevelManager();
+	QMap< QObject*, BusyLevel > mBusyLevels;
+	BusyLevel mCurrentBusyLevel;
 	QTimer mDelayedBusyLevelTimer;
 };
 
@@ -79,28 +79,28 @@ private:
   Helper class. Constructor sets its busy level to the given level,
   destructor resets the busy level to none.
  */
-class GVBusyLevelHelper : public QObject {
+class BusyLevelHelper : public QObject {
 Q_OBJECT
 public:
-	GVBusyLevelHelper( GVBusyLevel level );
-	~GVBusyLevelHelper();
+	BusyLevelHelper( BusyLevel level );
+	~BusyLevelHelper();
 	void reset();
 };
 
 inline
-GVBusyLevelHelper::GVBusyLevelHelper( GVBusyLevel level )
+BusyLevelHelper::BusyLevelHelper( BusyLevel level )
 {
-	GVBusyLevelManager::instance()->setBusyLevel( this, level );
+	BusyLevelManager::instance()->setBusyLevel( this, level );
 }
 
 inline
-void GVBusyLevelHelper::reset()
+void BusyLevelHelper::reset()
 {
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 
 inline
-GVBusyLevelHelper::~GVBusyLevelHelper()
+BusyLevelHelper::~BusyLevelHelper()
 {
 	reset();
 }

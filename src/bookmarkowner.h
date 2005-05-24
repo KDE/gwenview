@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVBOOKMARKOWNER_H
-#define GVBOOKMARKOWNER_H
+#ifndef BOOKMARKOWNER_H
+#define BOOKMARKOWNER_H
 
 
 // KDE includes
@@ -27,10 +27,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 
 
-class GVBookmarkOwner : public QObject, public KBookmarkOwner {
+class BookmarkOwner : public QObject, public KBookmarkOwner {
 Q_OBJECT
 public:
-	GVBookmarkOwner(QWidget* parent);
+	BookmarkOwner(QWidget* parent);
 
 	// KBookmarkOwner interface
 	void openBookmarkURL(const QString&);

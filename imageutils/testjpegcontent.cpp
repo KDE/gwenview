@@ -81,7 +81,7 @@ int main() {
 	bool result;
 
 	// Reading info
-	GVImageUtils::JPEGContent content;
+	ImageUtils::JPEGContent content;
 	result=content.load(ORIENT6_FILE);
 	Q_ASSERT(result);
 	Q_ASSERT(content.orientation() == 6);
@@ -100,10 +100,10 @@ int main() {
 
 	result=content.load(ORIENT1_FILE);
 	Q_ASSERT(result);
-	Q_ASSERT(content.orientation() == GVImageUtils::NORMAL);
+	Q_ASSERT(content.orientation() == ImageUtils::NORMAL);
 
 	// transform()
-	content.transform(GVImageUtils::VFLIP, true, ORIENT1_VFLIP_COMMENT);
+	content.transform(ImageUtils::VFLIP, true, ORIENT1_VFLIP_COMMENT);
 	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
 	result=content.save(ORIENT1_VFLIP_FILE);
 	Q_ASSERT(result);
@@ -120,6 +120,6 @@ int main() {
 	Q_ASSERT(content.orientation() == 6);
 	Q_ASSERT(content.comment() == ORIENT6_COMMENT);
 	kdWarning() << "# Next function should output errors about incomplete image" << endl;
-	content.transform(GVImageUtils::VFLIP);
+	content.transform(ImageUtils::VFLIP);
 	kdWarning() << "#" << endl;
 }

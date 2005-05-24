@@ -46,10 +46,10 @@ const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
 const char CONFIG_CACHE_GROUP[]="cache";
 
 
-class GVImagePartView : public GVScrollPixmapView {
+class GVImagePartView : public ScrollPixmapView {
 public:
-	GVImagePartView(QWidget* parent, GVDocument* document, KActionCollection* actionCollection, GVImagePartBrowserExtension* browserExtension)
-	: GVScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	GVImagePartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVImagePartBrowserExtension* browserExtension)
+	: ScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
 	{}
 
 protected:
@@ -78,7 +78,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
 
 	// Create the widgets
-	mDocument = new GVDocument(this);
+	mDocument = new Document(this);
 	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( loaded(const KURL&)));
 	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	setWidget(mPixmapView);
@@ -91,7 +91,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 		SLOT( dirListerNewItems( const KFileItemList& )));
 	connect(mDirLister,SIGNAL(deleteItem(KFileItem*)),
 		SLOT(dirListerDeleteItem(KFileItem*)) );
-	// partially duped from GVFileViewStack::initDirListerFilter()
+	// partially duped from FileViewStack::initDirListerFilter()
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
@@ -119,7 +119,7 @@ GVImagePart::~GVImagePart() {
 void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
-		GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
+		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
 	} else {
 		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
@@ -173,7 +173,7 @@ void GVImagePart::loaded(const KURL& url) {
 	emit completed();
 	emit setStatusBarText(i18n("Done."));
 	prefetchDone( false );
-	mPrefetch = GVImageLoader::loader( mLastDirection == DirectionPrevious ? previousURL() : nextURL());
+	mPrefetch = ImageLoader::loader( mLastDirection == DirectionPrevious ? previousURL() : nextURL());
 	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
 }
 
@@ -189,7 +189,7 @@ void GVImagePart::print() {
 	KPrinter printer;
 
 	printer.setDocName( m_url.filename() );
-	KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, mPixmapView, "GV page"));
+	KPrinter::addDialogPage( new PrintDialogPage( mDocument, mPixmapView, "GV page"));
 
 	if (printer.setup(mPixmapView, QString::null, true)) {
 		mDocument->print(&printer);
@@ -197,7 +197,7 @@ void GVImagePart::print() {
 }
 
 void GVImagePart::rotateRight() {
-	mDocument->transform(GVImageUtils::ROT_90);
+	mDocument->transform(ImageUtils::ROT_90);
 }
 
 void GVImagePart::dirListerClear() {

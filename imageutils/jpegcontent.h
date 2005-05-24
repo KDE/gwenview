@@ -32,7 +32,7 @@ class QImage;
 class QString;
 class QFile;
 
-namespace GVImageUtils {
+namespace ImageUtils {
 
 
 class JPEGContent {

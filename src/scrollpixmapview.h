@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#ifndef GVSCROLLPIXMAPVIEW_H
-#define GVSCROLLPIXMAPVIEW_H
+#ifndef SCROLLPIXMAPVIEW_H
+#define SCROLLPIXMAPVIEW_H
 
 #include "config.h"
 
@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "busylevelmanager.h"
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "libgwenview_export.h"
 class QEvent;
 class QLabel;
@@ -58,9 +58,9 @@ class KConfig;
 class KToggleAction;
 typedef QValueList<KAction *> KActionPtrList;
 
-class GVDocument;
+class Document;
 
-class LIBGWENVIEW_EXPORT GVScrollPixmapView : public QScrollView {
+class LIBGWENVIEW_EXPORT ScrollPixmapView : public QScrollView {
 Q_OBJECT
 
 public:
@@ -79,8 +79,8 @@ public:
 	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 	typedef QMap<ToolID,ToolBase*> Tools;
 
-	GVScrollPixmapView(QWidget* parent,GVDocument*,KActionCollection*);
-	~GVScrollPixmapView();
+	ScrollPixmapView(QWidget* parent,Document*,KActionCollection*);
+	~ScrollPixmapView();
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
 
@@ -104,8 +104,8 @@ public:
 	void setOSDMode(OSDMode);
 	QString freeOutputFormat() const; 
 	void setFreeOutputFormat(const QString& outFormat); 
-	GVImageUtils::SmoothAlgorithm smoothAlgorithm() const; 
-	void setSmoothAlgorithm(GVImageUtils::SmoothAlgorithm);
+	ImageUtils::SmoothAlgorithm smoothAlgorithm() const; 
+	void setSmoothAlgorithm(ImageUtils::SmoothAlgorithm);
 	bool doDelayedSmoothing() const; 
 	bool delayedSmoothing() const; 
 	void setDelayedSmoothing(bool);
@@ -193,7 +193,7 @@ private slots:
 	void slotImageRectUpdated(const QRect&);
 	void checkPendingOperations();
 	void loadingStarted();
-	void slotBusyLevelChanged(GVBusyLevel);
+	void slotBusyLevelChanged(BusyLevel);
 	
 protected:
 	// Overloaded methods

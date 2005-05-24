@@ -155,15 +155,15 @@ static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 }
 
 
-GVMainWindow::GVMainWindow()
+MainWindow::MainWindow()
 : KMainWindow(), mLoadingCursor(false)
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
 
 	// Backend
-	mDocument=new GVDocument(this);
-	mGVHistory=new GVHistory(actionCollection());
+	mDocument=new Document(this);
+	mHistory=new History(actionCollection());
 	// GUI
 	createWidgets();
 	createActions();
@@ -205,7 +205,7 @@ GVMainWindow::GVMainWindow()
 }
 
 
-bool GVMainWindow::queryClose() {
+bool MainWindow::queryClose() {
 	if (!mDocument->saveBeforeClosing()) return false;
 
 	KConfig* config=KGlobal::config();
@@ -256,11 +256,11 @@ bool GVMainWindow::queryClose() {
 	return true;
 }
 
-void GVMainWindow::saveProperties( KConfig* cfg ) {
+void MainWindow::saveProperties( KConfig* cfg ) {
 	cfg->writeEntry( CONFIG_SESSION_URL, mFileViewStack->url().url());
 }
 
-void GVMainWindow::readProperties( KConfig* cfg ) {
+void MainWindow::readProperties( KConfig* cfg ) {
 	KURL url(cfg->readEntry(CONFIG_SESSION_URL));
 	if( urlIsDirectory(this, url)) {
 		mFileViewStack->setDirURL(url);
@@ -274,14 +274,14 @@ void GVMainWindow::readProperties( KConfig* cfg ) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::openURL(const KURL& url) {
+void MainWindow::openURL(const KURL& url) {
 	mDocument->setURL(url);
 	mFileViewStack->setDirURL(url.upURL());
 	mFileViewStack->setFileNameToSelect(url.filename());
 }
 
 
-void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
+void MainWindow::slotDirURLChanged(const KURL& dirURL) {
 	LOG(dirURL.prettyURL(0,KURL::StripFileProtocol));
 	
 	if (dirURL.path()!="/") {
@@ -303,7 +303,7 @@ void GVMainWindow::slotDirURLChanged(const KURL& dirURL) {
 	updateLocationURL();
 }
 
-void GVMainWindow::updateLocationURL() {
+void MainWindow::updateLocationURL() {
 	LOG("");
 	KURL url;
 	if (mToggleBrowse->isChecked()) {
@@ -324,11 +324,11 @@ void GVMainWindow::updateLocationURL() {
 #endif
 }
 
-void GVMainWindow::goUp() {
+void MainWindow::goUp() {
 	goUpTo(mGoUp->popupMenu()->idAt(0));
 }
 
-void GVMainWindow::goUpTo(int id) {
+void MainWindow::goUpTo(int id) {
 	KPopupMenu* menu=mGoUp->popupMenu();
 	KURL url(menu->text(id));
 	KURL childURL;
@@ -348,14 +348,14 @@ void GVMainWindow::goUpTo(int id) {
 // File operations
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::openHomeDir() {
+void MainWindow::openHomeDir() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
 	mFileViewStack->setDirURL(url);
 }
 
 
-void GVMainWindow::renameFile() {
+void MainWindow::renameFile() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->renameFile();
 	} else {
@@ -364,7 +364,7 @@ void GVMainWindow::renameFile() {
 }
 
 
-void GVMainWindow::copyFiles() {
+void MainWindow::copyFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->copyFiles();
 	} else {
@@ -373,7 +373,7 @@ void GVMainWindow::copyFiles() {
 }
 
 
-void GVMainWindow::moveFiles() {
+void MainWindow::moveFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->moveFiles();
 	} else {
@@ -382,7 +382,7 @@ void GVMainWindow::moveFiles() {
 }
 
 
-void GVMainWindow::deleteFiles() {
+void MainWindow::deleteFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->deleteFiles();
 	} else {
@@ -391,7 +391,7 @@ void GVMainWindow::deleteFiles() {
 }
 
 
-void GVMainWindow::showFileProperties() {
+void MainWindow::showFileProperties() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->showFileProperties();
 	} else {
@@ -400,26 +400,26 @@ void GVMainWindow::showFileProperties() {
 }
 
 
-void GVMainWindow::rotateLeft() {
-	modifyImage(GVImageUtils::ROT_270);
+void MainWindow::rotateLeft() {
+	modifyImage(ImageUtils::ROT_270);
 }
 
-void GVMainWindow::rotateRight() {
-	modifyImage(GVImageUtils::ROT_90);
+void MainWindow::rotateRight() {
+	modifyImage(ImageUtils::ROT_90);
 }
 
-void GVMainWindow::mirror() {
-	modifyImage(GVImageUtils::HFLIP);
+void MainWindow::mirror() {
+	modifyImage(ImageUtils::HFLIP);
 }
 
-void GVMainWindow::flip() {
-	modifyImage(GVImageUtils::VFLIP);
+void MainWindow::flip() {
+	modifyImage(ImageUtils::VFLIP);
 }
 
-void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {
+void MainWindow::modifyImage(ImageUtils::Orientation orientation) {
 	const KURL::List& urls=mFileViewStack->selectedURLs();
 	if (mFileViewStack->isVisible() && urls.size()>1) {
-		GVBatchManipulator manipulator(this, urls, orientation);
+		BatchManipulator manipulator(this, urls, orientation);
 		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
 			mFileViewStack, SLOT(updateThumbnail(const KURL&)) );
 		manipulator.apply();
@@ -431,7 +431,7 @@ void GVMainWindow::modifyImage(GVImageUtils::Orientation orientation) {
 	}
 }
 
-void GVMainWindow::showFileDialog() {
+void MainWindow::showFileDialog() {
 	KURL url=KFileDialog::getOpenURL();
 	if (!url.isValid()) return;
 
@@ -439,7 +439,7 @@ void GVMainWindow::showFileDialog() {
 }
 
 
-void GVMainWindow::printFile() {
+void MainWindow::printFile() {
 	KPrinter printer;
 
 	printer.setDocName(mDocument->filename());
@@ -449,7 +449,7 @@ void GVMainWindow::printFile() {
 	nm += pAbout->version();
 	printer.setCreator( nm );
 
-	KPrinter::addDialogPage( new GVPrintDialogPage( mDocument, this, "GV page"));
+	KPrinter::addDialogPage( new PrintDialogPage( mDocument, this, " page"));
 
 	if (printer.setup(this, QString::null, true)) {
 		mDocument->print(&printer);
@@ -462,7 +462,7 @@ void GVMainWindow::printFile() {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::slotImageLoading() {
+void MainWindow::slotImageLoading() {
 	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
 		if( !mLoadingCursor ) {
 			kapp->setOverrideCursor(KCursor::workingCursor());
@@ -472,7 +472,7 @@ void GVMainWindow::slotImageLoading() {
 }
 
 
-void GVMainWindow::slotImageLoaded() {
+void MainWindow::slotImageLoaded() {
 	if( mLoadingCursor )
 		kapp->restoreOverrideCursor();
 	mLoadingCursor = false;
@@ -482,7 +482,7 @@ void GVMainWindow::slotImageLoaded() {
 }
 
 
-void GVMainWindow::hideToolBars() {
+void MainWindow::hideToolBars() {
 	QPtrListIterator<KToolBar> it=toolBarIterator();
 	KToolBar* bar;
 
@@ -497,7 +497,7 @@ void GVMainWindow::hideToolBars() {
 }
 
 
-void GVMainWindow::showToolBars() {
+void MainWindow::showToolBars() {
 	QPtrListIterator<KToolBar> it=toolBarIterator();
 
 	KToolBar* bar;
@@ -513,7 +513,7 @@ void GVMainWindow::showToolBars() {
 }
 
 
-void GVMainWindow::toggleFullScreen() {
+void MainWindow::toggleFullScreen() {
 	if (mToggleFullScreen->isChecked()) {
 		showFullScreen();
 		menuBar()->hide();
@@ -574,12 +574,12 @@ void GVMainWindow::toggleFullScreen() {
 }
 
 
-void GVMainWindow::startSlideShow() {
+void MainWindow::startSlideShow() {
 	KURL::List list;
 	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
 		KFileItem* item=it.current();
-		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
 			list.append(item->url());
 		}
 	}
@@ -587,7 +587,7 @@ void GVMainWindow::startSlideShow() {
 		return;
 	}
 
-	GVSlideShowDialog dialog(this,mSlideShow);
+	SlideShowDialog dialog(this,mSlideShow);
 	if (!dialog.exec()) return;
 	
 	if (!mToggleFullScreen->isChecked()) {
@@ -597,19 +597,19 @@ void GVMainWindow::startSlideShow() {
 }
 
 
-void GVMainWindow::showConfigDialog() {
-	GVConfigDialog dialog(this);
+void MainWindow::showConfigDialog() {
+	ConfigDialog dialog(this);
 	dialog.exec();
 }
 
 
-void GVMainWindow::showExternalToolDialog() {
-	GVExternalToolDialog* dialog=new GVExternalToolDialog(this);
+void MainWindow::showExternalToolDialog() {
+	ExternalToolDialog* dialog=new ExternalToolDialog(this);
 	dialog->show();
 }
 
 
-void GVMainWindow::showKeyDialog() {
+void MainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
 #ifdef GV_HAVE_KIPI
@@ -627,7 +627,7 @@ void GVMainWindow::showKeyDialog() {
 }
 
 
-void GVMainWindow::showToolBarDialog() {
+void MainWindow::showToolBarDialog() {
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	KEditToolbar dlg(actionCollection());
 	connect(&dlg,SIGNAL(newToolbarConfig()),this,SLOT(applyMainWindowSettings()));
@@ -636,20 +636,20 @@ void GVMainWindow::showToolBarDialog() {
 	}
 }
 
-void GVMainWindow::applyMainWindowSettings() {
+void MainWindow::applyMainWindowSettings() {
 	KMainWindow::applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
 
 
-void GVMainWindow::escapePressed() {
+void MainWindow::escapePressed() {
 	if (mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
 }
 
 
-void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
+void MainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	LOG(oldURL.prettyURL(0,KURL::StripFileProtocol) << " to " << newURL.prettyURL(0,KURL::StripFileProtocol));
 
 	KURL url(mFileViewStack->dirURL());
@@ -667,7 +667,7 @@ void GVMainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 }
 
 
-void GVMainWindow::slotGo() {
+void MainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
 	LOG(url.prettyURL());
 	if( urlIsDirectory(this, url)) {
@@ -680,13 +680,13 @@ void GVMainWindow::slotGo() {
 	mFileViewStack->setFocus();
 }
 
-void GVMainWindow::slotShownFileItemRefreshed(const KFileItem*) {
+void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 	LOG("");
 	mDocument->reload();
 }
 	
 
-void GVMainWindow::slotToggleCentralStack() {
+void MainWindow::slotToggleCentralStack() {
 	LOG("");
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mPixmapView);
@@ -710,7 +710,7 @@ void GVMainWindow::slotToggleCentralStack() {
 }
 
 
-void GVMainWindow::resetDockWidgets() {
+void MainWindow::resetDockWidgets() {
 	mFolderDock->undock();
 	mPixmapDock->undock();
 	mMetaDock->undock();
@@ -726,7 +726,7 @@ void GVMainWindow::resetDockWidgets() {
 // GUI
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::updateStatusInfo() {
+void MainWindow::updateStatusInfo() {
 	QString txt;
 	uint count=mFileViewStack->fileCount();
 #if KDE_IS_VERSION( 3, 4, 0 )
@@ -745,7 +745,7 @@ void GVMainWindow::updateStatusInfo() {
 }
 
 
-void GVMainWindow::updateFileInfo() {
+void MainWindow::updateFileInfo() {
 	QString filename=mDocument->filename();
 	if (!filename.isEmpty()) {
 		QString info=filename + QString(" %1x%2 @ %3%")
@@ -760,7 +760,7 @@ void GVMainWindow::updateFileInfo() {
 }
 
 
-void GVMainWindow::updateImageActions() {
+void MainWindow::updateImageActions() {
 	bool filenameIsValid=!mDocument->isNull();
 
 	mStartSlideShow->setEnabled(filenameIsValid);
@@ -781,7 +781,7 @@ void GVMainWindow::updateImageActions() {
 }
 
 
-void GVMainWindow::createWidgets() {
+void MainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
 	mCentralStack=new QWidgetStack(this);
@@ -805,19 +805,19 @@ void GVMainWindow::createWidgets() {
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
-	mPixmapView=new GVScrollPixmapView(mPixmapDock,mDocument,actionCollection());
+	mPixmapView=new ScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mDirView=new GVDirView(mFolderDock);
+	mDirView=new DirView(mFolderDock);
 	mFolderDock->setWidget(mDirView);
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
 	(void)new KToolBar(vbox, "fileViewToolBar", true);
-	mFileViewStack=new GVFileViewStack(vbox, actionCollection());
+	mFileViewStack=new FileViewStack(vbox, actionCollection());
 	mFileDock->setWidget(vbox);
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
@@ -825,11 +825,11 @@ void GVMainWindow::createWidgets() {
 	// Meta info edit widget
 	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("info"),NULL,
 		i18n("File Info"));
-	mMetaEdit = new GVMetaEdit(mMetaDock, mDocument);
+	mMetaEdit = new MetaEdit(mMetaDock, mDocument);
 	mMetaDock->setWidget(mMetaEdit);
 
 	// Slide show controller (not really a widget)
-	mSlideShow=new GVSlideShow(mDocument);
+	mSlideShow=new SlideShow(mDocument);
 	connect( mSlideShow, SIGNAL( nextURL( const KURL& )), SLOT( openURL( const KURL& )));
 
 	// Default position on desktop
@@ -872,11 +872,11 @@ void GVMainWindow::createWidgets() {
 	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
-	GVCache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
+	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
 
 
-void GVMainWindow::createActions() {
+void MainWindow::createActions() {
 	// Stack
 	mToggleBrowse=new KToggleAction(i18n("Browse"), "folder", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "toggle_browse");
 	mToggleBrowse->setChecked(true);
@@ -921,7 +921,7 @@ void GVMainWindow::createActions() {
 	manager->setUpdate(true);
 	manager->setShowNSBookmarks(false);
 
-	GVBookmarkOwner* bookmarkOwner=new GVBookmarkOwner(this);
+	BookmarkOwner* bookmarkOwner=new BookmarkOwner(this);
 
 	KActionMenu* bookmark=new KActionMenu(i18n( "&Bookmarks" ), "bookmark", actionCollection(), "bookmarks" );
 	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), 0, true);
@@ -949,7 +949,7 @@ void GVMainWindow::createActions() {
 }
 
 
-void GVMainWindow::createHideShowAction(KDockWidget* dock) {
+void MainWindow::createHideShowAction(KDockWidget* dock) {
 	QString caption;
 	if (dock->mayBeHide()) {
 		caption=i18n("Hide %1").arg(dock->caption());
@@ -965,7 +965,7 @@ void GVMainWindow::createHideShowAction(KDockWidget* dock) {
 }
 
 
-void GVMainWindow::updateWindowActions() {
+void MainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
@@ -975,7 +975,7 @@ void GVMainWindow::updateWindowActions() {
 }
 
 
-void GVMainWindow::createConnections() {
+void MainWindow::createConnections() {
 	connect(mGoUp->popupMenu(), SIGNAL(activated(int)),
 		this,SLOT(goUpTo(int)));
 
@@ -1002,7 +1002,7 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		mDirView,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
-		mGVHistory,SLOT(addURLToHistory(const KURL&)) );
+		mHistory,SLOT(addURLToHistory(const KURL&)) );
 
 	connect(mFileViewStack,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
@@ -1013,11 +1013,11 @@ void GVMainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
 		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
 
-	// GVHistory connections
-	connect(mGVHistory, SIGNAL(urlChanged(const KURL&)),
+	// History connections
+	connect(mHistory, SIGNAL(urlChanged(const KURL&)),
 		mFileViewStack, SLOT(setDirURL(const KURL&)) );
 	
-	// GVDocument connections
+	// Document connections
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(slotImageLoading()) );
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
@@ -1047,7 +1047,7 @@ void GVMainWindow::createConnections() {
 }
 
 
-void GVMainWindow::createLocationToolBar() {
+void MainWindow::createLocationToolBar() {
 	// URL Combo
 	mURLEdit=new KHistoryCombo(this);
 	mURLEdit->setDuplicatesEnabled(false);
@@ -1084,22 +1084,22 @@ void GVMainWindow::createLocationToolBar() {
 }
 
 
-void GVMainWindow::clearLocationLabel() {
+void MainWindow::clearLocationLabel() {
 	mURLEdit->clearEdit();
 	mURLEdit->setFocus();
 }
 
 
-void GVMainWindow::activateLocationLabel() {
+void MainWindow::activateLocationLabel() {
 	mURLEdit->setFocus();
 	mURLEdit->lineEdit()->selectAll();
 }
 
 
 #ifdef GV_HAVE_KIPI
-void GVMainWindow::loadPlugins() {
+void MainWindow::loadPlugins() {
 	// Sets up the plugin interface, and load the plugins
-	GVKIPIInterface* interface = new GVKIPIInterface(this, mFileViewStack);
+	KIPIInterface* interface = new KIPIInterface(this, mFileViewStack);
 	mPluginLoader = new KIPI::PluginLoader(QStringList(), interface );
 	connect( mPluginLoader, SIGNAL( replug() ), this, SLOT( slotReplug() ) );
 	mPluginLoader->loadPlugins();
@@ -1115,7 +1115,7 @@ struct MenuInfo {
 	MenuInfo(const QString& name) : mName(name) {}
 };
 
-void GVMainWindow::slotReplug() {
+void MainWindow::slotReplug() {
 	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
 	CategoryMap categoryMap;
 	categoryMap[KIPI::IMAGESPLUGIN]=MenuInfo("image_actions");
@@ -1172,14 +1172,14 @@ void GVMainWindow::slotReplug() {
 	}
 }
 #else
-void GVMainWindow::loadPlugins() {
+void MainWindow::loadPlugins() {
 	QPopupMenu *popup = static_cast<QPopupMenu*>(
 		factory()->container( "plugins", this));
 	delete popup;
 }
 
 
-void GVMainWindow::slotReplug() {
+void MainWindow::slotReplug() {
 }
 #endif
 
@@ -1189,11 +1189,11 @@ void GVMainWindow::slotReplug() {
 // Properties
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::setShowBusyPtrInFullScreen(bool value) {
+void MainWindow::setShowBusyPtrInFullScreen(bool value) {
 	mShowBusyPtrInFullScreen=value;
 }
 
-void GVMainWindow::setAutoDeleteThumbnailCache(bool value){
+void MainWindow::setAutoDeleteThumbnailCache(bool value){
 	mAutoDeleteThumbnailCache=value;
 }
 
@@ -1203,14 +1203,14 @@ void GVMainWindow::setAutoDeleteThumbnailCache(bool value){
 // Configuration
 //
 //-----------------------------------------------------------------------
-void GVMainWindow::readConfig(KConfig* config,const QString& group) {
+void MainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mShowBusyPtrInFullScreen=config->readBoolEntry(CONFIG_BUSYPTR_IN_FS, true);
 	mAutoDeleteThumbnailCache=config->readBoolEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, false);	
 }
 
 
-void GVMainWindow::writeConfig(KConfig* config,const QString& group) const {
+void MainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);

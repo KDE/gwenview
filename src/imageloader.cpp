@@ -40,18 +40,18 @@ const unsigned int DECODE_CHUNK_SIZE=4096;
 #define LOG(x) ;
 #endif
 
-static QMap< KURL, GVImageLoader* > loaders;
+static QMap< KURL, ImageLoader* > loaders;
 
 //---------------------------------------------------------------------
 //
-// GVCancellableBuffer
+// CancellableBuffer
 // This class acts like QBuffer, but will simulates a truncated file if the
 // TSThread which was passed to its constructor has been asked for cancellation
 //
 //---------------------------------------------------------------------
-class GVCancellableBuffer : public QBuffer {
+class CancellableBuffer : public QBuffer {
 public:
-	GVCancellableBuffer(QByteArray buffer, TSThread* thread)
+	CancellableBuffer(QByteArray buffer, TSThread* thread)
 	: QBuffer(buffer), mThread(thread) {}
 
 	bool atEnd() const {
@@ -102,10 +102,10 @@ private:
 
 //---------------------------------------------------------------------
 //
-// GVDecoderThread
+// DecoderThread
 //
 //---------------------------------------------------------------------
-void GVDecoderThread::run() {
+void DecoderThread::run() {
 	QMutexLocker locker(&mMutex);
 	LOG("");
 	
@@ -114,7 +114,7 @@ void GVDecoderThread::run() {
 	{
 		QImageIO imageIO;
 		
-		GVCancellableBuffer buffer(mRawData, this);
+		CancellableBuffer buffer(mRawData, this);
 		buffer.open(IO_ReadOnly);
 		imageIO.setIODevice(&buffer);
 		bool ok=imageIO.read();
@@ -138,13 +138,13 @@ void GVDecoderThread::run() {
 }
 
 
-void GVDecoderThread::setRawData(const QByteArray& data) {
+void DecoderThread::setRawData(const QByteArray& data) {
 	QMutexLocker locker(&mMutex);
 	mRawData=data.copy();
 }
 
 
-QImage GVDecoderThread::popLoadedImage() {
+QImage DecoderThread::popLoadedImage() {
 	QMutexLocker locker(&mMutex);
 	QImage img=mImage;
 	mImage=QImage();
@@ -155,12 +155,12 @@ QImage GVDecoderThread::popLoadedImage() {
 
 //---------------------------------------------------------------------
 //
-// GVImageLoaderPrivate
+// ImageLoaderPrivate
 //
 //---------------------------------------------------------------------
-class GVImageLoaderPrivate {
+class ImageLoaderPrivate {
 public:
-	GVImageLoaderPrivate(GVImageLoader* impl)
+	ImageLoaderPrivate(ImageLoader* impl)
 	: mDecodedSize(0)
 	, mUseThread(false)
 	, mDecoder(impl)
@@ -194,7 +194,7 @@ public:
 	QTimer mDecoderTimer;
 
 	// The decoder thread
-	GVDecoderThread mDecoderThread;
+	DecoderThread mDecoderThread;
 	
 	// Set to true if at least one changed() signals have been emitted
 	bool mUpdatedDuringLoad;
@@ -226,7 +226,7 @@ public:
 
 	QRegion mLoadedRegion; // loaded parts of mProcessedImage
 
-	GVImageFrames mFrames;
+	ImageFrames mFrames;
 
 	QCString mImageFormat;
 
@@ -238,18 +238,18 @@ public:
 
 //---------------------------------------------------------------------
 //
-// GVImageLoader
+// ImageLoader
 //
 //---------------------------------------------------------------------
-GVImageLoader::GVImageLoader() {
+ImageLoader::ImageLoader() {
 	LOG("");
-	d = new GVImageLoaderPrivate(this);
-	connect( GVBusyLevelManager::instance(), SIGNAL( busyLevelChanged(GVBusyLevel)),
-		this, SLOT( slotBusyLevelChanged(GVBusyLevel)));
+	d = new ImageLoaderPrivate(this);
+	connect( BusyLevelManager::instance(), SIGNAL( busyLevelChanged(BusyLevel)),
+		this, SLOT( slotBusyLevelChanged(BusyLevel)));
 }
 
 
-GVImageLoader::~GVImageLoader() {
+ImageLoader::~ImageLoader() {
 	LOG("");
 	if (d->mDecoderThread.running()) {
 		d->mDecoderThread.cancel();
@@ -259,11 +259,11 @@ GVImageLoader::~GVImageLoader() {
 }
 
 
-void GVImageLoader::startLoading( const KURL& url ) {
+void ImageLoader::startLoading( const KURL& url ) {
 	if( !d->mURL.isEmpty()) return; // already loading
 	d->mURL = url;
-	d->mTimestamp = GVCache::instance()->timestamp( d->mURL );
-	slotBusyLevelChanged( GVBusyLevelManager::instance()->busyLevel());
+	d->mTimestamp = Cache::instance()->timestamp( d->mURL );
+	slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
 
@@ -277,7 +277,7 @@ void GVImageLoader::startLoading( const KURL& url ) {
 		this, SLOT(slotStatResult(KIO::Job*)) );
 }
 
-void GVImageLoader::slotStatResult(KIO::Job* job) {
+void ImageLoader::slotStatResult(KIO::Job* job) {
 	LOG("error code: " << job->error());
 
 	// Get modification time of the original file
@@ -294,9 +294,9 @@ void GVImageLoader::slotStatResult(KIO::Job* job) {
 	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		QCString format;
-		d->mRawData = GVCache::instance()->file( d->mURL );
-		GVImageFrames frames;
-		GVCache::instance()->getFrames( d->mURL, frames, format );
+		d->mRawData = Cache::instance()->file( d->mURL );
+		ImageFrames frames;
+		Cache::instance()->getFrames( d->mURL, frames, format );
 		if( !frames.isEmpty()) {
 			d->mImageFormat = format;
 			d->mFrames = frames;
@@ -331,7 +331,7 @@ void GVImageLoader::slotStatResult(KIO::Job* job) {
 }
 	
 
-void GVImageLoader::slotGetResult(KIO::Job* job) {
+void ImageLoader::slotGetResult(KIO::Job* job) {
 	LOG("error code: " << job->error());
 	if( job->error() != 0 ) {
 		// failed
@@ -342,8 +342,8 @@ void GVImageLoader::slotGetResult(KIO::Job* job) {
 	d->mGetComplete = true;
 	
 	// Store raw data in cache
-	// Note: GVCache will give high cost to non-JPEG raw data.
-	GVCache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
+	// Note: Cache will give high cost to non-JPEG raw data.
+	Cache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
 
 	if( !d->mImageFormat.isNull()) { // image was in cache, but not raw data
 		finish( true );
@@ -359,7 +359,7 @@ void GVImageLoader::slotGetResult(KIO::Job* job) {
 }
 
 
-void GVImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+void ImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 	LOG("size: " << chunk.size());
 	if (chunk.size()<=0) return;
 
@@ -374,7 +374,7 @@ void GVImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 }
 
 
-void GVImageLoader::decodeChunk() {
+void ImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
 		d->mDecoderTimer.stop();
 		return;
@@ -418,29 +418,29 @@ void GVImageLoader::decodeChunk() {
 }
 
 
-void GVImageLoader::startThread() {
+void ImageLoader::startThread() {
 	LOG("starting decoder thread");
 	d->mDecoderThread.setRawData(d->mRawData);
 	d->mDecoderThread.start();
 }
 
 
-void GVImageLoader::slotDecoderThreadFailed() {
+void ImageLoader::slotDecoderThreadFailed() {
 	LOG("");
 	// Image can't be loaded
 	finish( false );
 }
 
 
-void GVImageLoader::slotImageDecoded() {
+void ImageLoader::slotImageDecoded() {
 	LOG("");
 
 	// Get image
 	if (d->mUseThread) {
 		d->mFrames.clear();
-		d->mFrames.append( GVImageFrame( d->mDecoderThread.popLoadedImage(), 0 ));
+		d->mFrames.append( ImageFrame( d->mDecoderThread.popLoadedImage(), 0 ));
 	} else if( d->mFrames.count() == 0 ) {
-		d->mFrames.append( GVImageFrame( d->mDecoder.image(), 0 ));
+		d->mFrames.append( ImageFrame( d->mDecoder.image(), 0 ));
 	}
 	
 	// Set image format
@@ -456,7 +456,7 @@ void GVImageLoader::slotImageDecoded() {
 /**
  * Make the final adjustments to the image.
  */
-void GVImageLoader::finish( bool ok ) {
+void ImageLoader::finish( bool ok ) {
 	LOG("");
 
 	d->mDecodeComplete = true;
@@ -470,9 +470,9 @@ void GVImageLoader::finish( bool ok ) {
 		return;
 	}
 
-	GVCache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
+	Cache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
 
-	GVImageFrame lastframe = d->mFrames.last();
+	ImageFrame lastframe = d->mFrames.last();
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
 	d->mProcessedImage = lastframe.image;
 	// The decoder did not cause some signals to be emitted, let's do it now
@@ -490,7 +490,7 @@ void GVImageLoader::finish( bool ok ) {
 }
 
 
-void GVImageLoader::slotBusyLevelChanged( GVBusyLevel level ) {
+void ImageLoader::slotBusyLevelChanged( BusyLevel level ) {
 	if( level > BUSY_LOADING ) {
 		suspendLoading();
 	} else {
@@ -498,12 +498,12 @@ void GVImageLoader::slotBusyLevelChanged( GVBusyLevel level ) {
 	}
 }
 
-void GVImageLoader::suspendLoading() {
+void ImageLoader::suspendLoading() {
 	d->mDecoderTimer.stop();
 	d->mSuspended = true;
 }
 
-void GVImageLoader::resumeLoading() {
+void ImageLoader::resumeLoading() {
 	d->mSuspended = false;
 	d->mDecoderTimer.start(0, false);
 }
@@ -514,7 +514,7 @@ void GVImageLoader::resumeLoading() {
 // QImageConsumer
 //
 //---------------------------------------------------------------------
-void GVImageLoader::end() {
+void ImageLoader::end() {
 	LOG("");
 
 	d->mDecoderTimer.stop();
@@ -527,7 +527,7 @@ void GVImageLoader::end() {
 	QTimer::singleShot(0, this, SLOT(slotImageDecoded()) );
 }
 
-void GVImageLoader::changed(const QRect& rect) {
+void ImageLoader::changed(const QRect& rect) {
 	d->mProcessedImage = d->mDecoder.image();
 	d->mWasFrameData = true;
 	d->mUpdatedDuringLoad=true;
@@ -542,11 +542,11 @@ void GVImageLoader::changed(const QRect& rect) {
 	}
 }
 
-void GVImageLoader::frameDone() {
+void ImageLoader::frameDone() {
 	frameDone( QPoint( 0, 0 ), QRect( 0, 0, d->mDecoder.image().width(), d->mDecoder.image().height()));
 }
 
-void GVImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
+void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	// Another case where the image loading in Qt's is a bit borken.
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
 	if( !d->mWasFrameData ) {
@@ -580,22 +580,22 @@ void GVImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 			image = im;
 		}
 	}
-	d->mFrames.append( GVImageFrame( image, d->mNextFrameDelay ));
+	d->mFrames.append( ImageFrame( image, d->mNextFrameDelay ));
 	d->mNextFrameDelay = 0;
 	emit frameLoaded();
 }
 
-void GVImageLoader::setLooping(int) {
+void ImageLoader::setLooping(int) {
 }
 
-void GVImageLoader::setFramePeriod(int milliseconds) {
+void ImageLoader::setFramePeriod(int milliseconds) {
 	if( milliseconds < 0 ) milliseconds = 0; // -1 means showing immediately
 	if( d->mNextFrameDelay == 0 || milliseconds != 0 ) {
 		d->mNextFrameDelay = milliseconds;
 	}
 }
 
-void GVImageLoader::setSize(int width, int height) {
+void ImageLoader::setSize(int width, int height) {
 	LOG(width << "x" << height);
 	d->mKnownSize = QSize( width, height );
 	// FIXME: There must be a better way than creating an empty image
@@ -604,58 +604,58 @@ void GVImageLoader::setSize(int width, int height) {
 }
 
 
-QImage GVImageLoader::processedImage() const {
+QImage ImageLoader::processedImage() const {
 	return d->mProcessedImage;
 }
 
 
-QSize GVImageLoader::knownSize() const {
+QSize ImageLoader::knownSize() const {
 	return d->mKnownSize;
 }
 
 
-GVImageFrames GVImageLoader::frames() const {
+ImageFrames ImageLoader::frames() const {
 	return d->mFrames;
 }
 
 
-QCString GVImageLoader::imageFormat() const {
+QCString ImageLoader::imageFormat() const {
 	return d->mImageFormat;
 }
 
 
-QByteArray GVImageLoader::rawData() const {
+QByteArray ImageLoader::rawData() const {
 	return d->mRawData;
 }
 
 
-KURL GVImageLoader::url() const {
+KURL ImageLoader::url() const {
 	return d->mURL;
 }
 
 
-QRegion GVImageLoader::loadedRegion() const {
+QRegion ImageLoader::loadedRegion() const {
 	return d->mLoadedRegion;
 }
 
 
-bool GVImageLoader::completed() const {
+bool ImageLoader::completed() const {
 	return d->mDecodeComplete;
 }
 
 
-void GVImageLoader::ref() {
+void ImageLoader::ref() {
 	++d->mRefcount;
 }
 
-void GVImageLoader::deref() {
+void ImageLoader::deref() {
 	if( --d->mRefcount <= 0 ) {
 		loaders.remove( d->mURL );
 		delete this;
 	}
 }
 
-void GVImageLoader::release() {
+void ImageLoader::release() {
 	deref();
 }
 
@@ -665,13 +665,13 @@ void GVImageLoader::release() {
 //
 //---------------------------------------------------------------------
 
-GVImageLoader* GVImageLoader::loader( const KURL& url ) {
+ImageLoader* ImageLoader::loader( const KURL& url ) {
 	if( loaders.contains( url )) {
-		GVImageLoader* l = loaders[ url ];
+		ImageLoader* l = loaders[ url ];
 		l->ref();
 		return l;
 	}
-	GVImageLoader* l = new GVImageLoader;
+	ImageLoader* l = new ImageLoader;
 	l->ref();
 	loaders[ url ] = l;
 	l->startLoading( url );

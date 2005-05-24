@@ -24,12 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Forward declarations
 class KAboutData;
 class KAction;
-class GVScrollPixmapView;
-class GVDocument;
-class GVImagePart;
+
+class ScrollPixmapView;
+class Document;
 class KDirLister;
 class KFileItem;
-class GVImageLoader;
+class ImageLoader;
+
+class GVImagePart;
 
 /**
  * The browser extension is an attribute of GVImagePart and provides
@@ -81,7 +83,7 @@ protected slots:
 	virtual bool openFile() { return false; }
 	/**
 	 * Sets Konqueror's caption, statusbar and emits completed().
-	 * Called by loaded() signal in GVDocument
+	 * Called by loaded() signal in Document
 	 */
 	void loaded(const KURL& url);
 
@@ -115,12 +117,12 @@ private:
 	/**
 	 * The component's widget
 	 */
-	GVScrollPixmapView* mPixmapView;
+	ScrollPixmapView* mPixmapView;
 
 	/**
 	 * Holds the image
 	 */
-	GVDocument* mDocument;
+	Document* mDocument;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies
@@ -136,7 +138,7 @@ private:
 	// alphabetically sorted filenames of images in the picture's directory
 	QStringList mImagesInDirectory;
 
-	GVImageLoader* mPrefetch;
+	ImageLoader* mPrefetch;
 	enum LastDirection { DirectionUnknown, DirectionNext, DirectionPrevious };
 	LastDirection mLastDirection; // used for prefetching
 };

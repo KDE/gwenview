@@ -31,12 +31,14 @@
 
 #include <qasyncimageio.h>
 
+namespace Gwenview {
+
 /**
  * @internal
  *
  * An incremental loader factory for JPEG's.
  */
-class GVJPEGFormatType : public QImageFormatType {
+class JPEGFormatType : public QImageFormatType {
 public:
 	QImageFormat* decoderFor(const uchar* buffer, int length);
 	const char* formatName() const;
@@ -45,4 +47,5 @@ public:
 
 // -----------------------------------------------------------------------------
 
+} // namespace
 #endif // gvjpegformattype_h

@@ -37,49 +37,49 @@ static QCursor loadCursor(const QString& name) {
 
 //----------------------------------------------------------------------------
 //
-// GVScrollPixmapView::ToolBase
+// ScrollPixmapView::ToolBase
 //
 //----------------------------------------------------------------------------
-GVScrollPixmapView::ToolBase::ToolBase(GVScrollPixmapView* view)
+ScrollPixmapView::ToolBase::ToolBase(ScrollPixmapView* view)
 : mView(view) {}
 
 
-GVScrollPixmapView::ToolBase::~ToolBase() {}
+ScrollPixmapView::ToolBase::~ToolBase() {}
 
-void GVScrollPixmapView::ToolBase::mouseMoveEvent(QMouseEvent*) {}
-void GVScrollPixmapView::ToolBase::leftButtonPressEvent(QMouseEvent*) {}
-void GVScrollPixmapView::ToolBase::leftButtonReleaseEvent(QMouseEvent*) {}
+void ScrollPixmapView::ToolBase::mouseMoveEvent(QMouseEvent*) {}
+void ScrollPixmapView::ToolBase::leftButtonPressEvent(QMouseEvent*) {}
+void ScrollPixmapView::ToolBase::leftButtonReleaseEvent(QMouseEvent*) {}
 
-void GVScrollPixmapView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
+void ScrollPixmapView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
 	mView->autoZoom()->activate();
 }
 
-void GVScrollPixmapView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
-void GVScrollPixmapView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
+void ScrollPixmapView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
+void ScrollPixmapView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
 	mView->openContextMenu(event->globalPos());
 }
 
-void GVScrollPixmapView::ToolBase::wheelEvent(QWheelEvent* event) {
+void ScrollPixmapView::ToolBase::wheelEvent(QWheelEvent* event) {
 	event->accept();
 }
 
-void GVScrollPixmapView::ToolBase::updateCursor() {
+void ScrollPixmapView::ToolBase::updateCursor() {
 	mView->viewport()->setCursor(ArrowCursor);
 }
 
 
 //----------------------------------------------------------------------------
 //
-// GVScrollPixmapView::ZoomTool
+// ScrollPixmapView::ZoomTool
 //
 //----------------------------------------------------------------------------
-GVScrollPixmapView::ZoomTool::ZoomTool(GVScrollPixmapView* view)
-: GVScrollPixmapView::ToolBase(view) {
+ScrollPixmapView::ZoomTool::ZoomTool(ScrollPixmapView* view)
+: ScrollPixmapView::ToolBase(view) {
 	mZoomCursor=loadCursor("zoom");
 }
 
 
-void GVScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
+void ScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 	KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
 	if (!zoomAction->isEnabled()) return;
 
@@ -98,38 +98,38 @@ void GVScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 }
 
 
-void GVScrollPixmapView::ZoomTool::leftButtonReleaseEvent(QMouseEvent* event) {
+void ScrollPixmapView::ZoomTool::leftButtonReleaseEvent(QMouseEvent* event) {
 	zoomTo(event->pos(), true);
 }
 
 
-void GVScrollPixmapView::ZoomTool::wheelEvent(QWheelEvent* event) {
+void ScrollPixmapView::ZoomTool::wheelEvent(QWheelEvent* event) {
 	zoomTo(event->pos(), event->delta()>0);
 	event->accept();
 }
 
 
-void GVScrollPixmapView::ZoomTool::rightButtonPressEvent(QMouseEvent*) {
+void ScrollPixmapView::ZoomTool::rightButtonPressEvent(QMouseEvent*) {
 }
 
 
-void GVScrollPixmapView::ZoomTool::rightButtonReleaseEvent(QMouseEvent* event) {
+void ScrollPixmapView::ZoomTool::rightButtonReleaseEvent(QMouseEvent* event) {
 	zoomTo(event->pos(), false);
 }
 
 
-void GVScrollPixmapView::ZoomTool::updateCursor() {
+void ScrollPixmapView::ZoomTool::updateCursor() {
 	mView->viewport()->setCursor(mZoomCursor);
 }
 
 
 //----------------------------------------------------------------------------
 //
-// GVScrollPixmapView::ScrollTool
+// ScrollPixmapView::ScrollTool
 //
 //----------------------------------------------------------------------------
-GVScrollPixmapView::ScrollTool::ScrollTool(GVScrollPixmapView* view)
-: GVScrollPixmapView::ToolBase(view)
+ScrollPixmapView::ScrollTool::ScrollTool(ScrollPixmapView* view)
+: ScrollPixmapView::ToolBase(view)
 , mScrollStartX(0), mScrollStartY(0)
 , mDragStarted(false) {
 	mDragCursor=loadCursor("drag");
@@ -137,7 +137,7 @@ GVScrollPixmapView::ScrollTool::ScrollTool(GVScrollPixmapView* view)
 }
 
 
-void GVScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
+void ScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
 	mScrollStartX=event->x();
 	mScrollStartY=event->y();
 	mView->viewport()->setCursor(mDraggingCursor);
@@ -145,7 +145,7 @@ void GVScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
 }
 
 
-void GVScrollPixmapView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
+void ScrollPixmapView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 	if (!mDragStarted) return;
 
 	int deltaX,deltaY;
@@ -159,7 +159,7 @@ void GVScrollPixmapView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void GVScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
+void ScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 	if (!mDragStarted) return;
 
 	mDragStarted=false;
@@ -167,7 +167,7 @@ void GVScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 }
 
 
-void GVScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
+void ScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
 	if (mView->mouseWheelScroll()) {
 		int deltaX, deltaY;
 
@@ -190,7 +190,7 @@ void GVScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
 }
 
 
-void GVScrollPixmapView::ScrollTool::updateCursor() {
+void ScrollPixmapView::ScrollTool::updateCursor() {
 	if (mDragStarted) {
 		mView->viewport()->setCursor(mDraggingCursor);
 	} else {

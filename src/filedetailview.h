@@ -21,8 +21,8 @@
 	Boston, MA 02111-1307, USA.
 */
 
-#ifndef GVFILEDETAILVIEW_H
-#define GVFILEDETAILVIEW_H
+#ifndef FILEDETAILVIEW_H
+#define FILEDETAILVIEW_H
 
 class KFileItem;
 class QWidget;
@@ -38,17 +38,17 @@ class QKeyEvent;
 // Our includes
 #include "fileviewbase.h"
 
-class GVFileDetailViewItem;
+class FileDetailViewItem;
 
-class GVFileDetailView : public KListView, public GVFileViewBase
+class FileDetailView : public KListView, public FileViewBase
 {
 	Q_OBJECT
 
-	friend class GVFileDetailViewItem;
+	friend class FileDetailViewItem;
 
 public:
-	GVFileDetailView(QWidget* parent, const char* name);
-	virtual ~GVFileDetailView();
+	FileDetailView(QWidget* parent, const char* name);
+	virtual ~FileDetailView();
 
 	virtual QWidget* widget() { return this; }
 	virtual void clearView();
@@ -79,7 +79,7 @@ public:
 
 	// for KMimeTypeResolver
 	void mimeTypeDeterminationFinished();
-	void determineIcon( GVFileDetailViewItem* item );
+	void determineIcon( FileDetailViewItem* item );
 	QScrollView* scrollWidget() { return this; }
 	
 	void setShownFileItem(KFileItem* fileItem);
@@ -107,18 +107,18 @@ private slots:
 
 private:
 	bool mBlockSortingSignal;
-	KMimeTypeResolver<GVFileDetailViewItem,GVFileDetailView>* mResolver;
+	KMimeTypeResolver<FileDetailViewItem,FileDetailView>* mResolver;
 
 	virtual void insertItem(QListViewItem* i) { KListView::insertItem(i); }
 	virtual void setSorting(int i, bool b) { KListView::setSorting(i, b); }
 	virtual void setSelected(QListViewItem* i, bool b) { KListView::setSelected(i, b); }
 
-	GVFileDetailViewItem* viewItem( const KFileItem* item ) const {
-		if (item) return (GVFileDetailViewItem*)item->extraData(this);
+	FileDetailViewItem* viewItem( const KFileItem* item ) const {
+		if (item) return (FileDetailViewItem*)item->extraData(this);
 		return 0L;
 	}
 
-	void setSortingKey(GVFileDetailViewItem* item, const KFileItem* i);
+	void setSortingKey(FileDetailViewItem* item, const KFileItem* i);
 	
 	void startDrag();
 };

@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "imageutils/jpegcontent.h"
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "documentjpegloadedimpl.moc"
 
 
@@ -43,66 +43,66 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 
-class GVDocumentJPEGLoadedImplPrivate {
+class DocumentJPEGLoadedImplPrivate {
 public:
-	GVImageUtils::JPEGContent mJPEGContent;
+	ImageUtils::JPEGContent mJPEGContent;
 	bool mCommentModified;
 	QString mComment;
-	GVDocument::CommentState mCommentState;
+	Document::CommentState mCommentState;
 
 };
 
 
-GVDocumentJPEGLoadedImpl::GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData)
-: GVDocumentLoadedImpl(document) {
+DocumentJPEGLoadedImpl::DocumentJPEGLoadedImpl(Document* document, const QByteArray& rawData)
+: DocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
-	d=new GVDocumentJPEGLoadedImplPrivate;
+	d=new DocumentJPEGLoadedImplPrivate;
 	d->mCommentModified=false;
 	d->mJPEGContent.loadFromData(rawData);
 }
 
 
-void GVDocumentJPEGLoadedImpl::init() {
+void DocumentJPEGLoadedImpl::init() {
 	LOG("");
-	GVImageUtils::Orientation orientation=d->mJPEGContent.orientation();
+	ImageUtils::Orientation orientation=d->mJPEGContent.orientation();
 
-	if (orientation!=GVImageUtils::NOT_AVAILABLE && orientation!=GVImageUtils::NORMAL) {
+	if (orientation!=ImageUtils::NOT_AVAILABLE && orientation!=ImageUtils::NORMAL) {
 		LOG("jpeg rotating");
-		setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
+		setImage(ImageUtils::transform(mDocument->image(), orientation), true);
 		d->mJPEGContent.transform(orientation);
 	}
 
-	d->mCommentState=GVDocument::WRITABLE;
+	d->mCommentState=Document::WRITABLE;
 	d->mComment=d->mJPEGContent.comment();
-	GVDocumentLoadedImpl::init();
+	DocumentLoadedImpl::init();
 }
 
 
-GVDocumentJPEGLoadedImpl::~GVDocumentJPEGLoadedImpl() {
+DocumentJPEGLoadedImpl::~DocumentJPEGLoadedImpl() {
 	delete d;
 }
 
 
-void GVDocumentJPEGLoadedImpl::transform(GVImageUtils::Orientation orientation) {
+void DocumentJPEGLoadedImpl::transform(ImageUtils::Orientation orientation) {
 	// Little optimization, update the comment if necessary
 	d->mJPEGContent.transform(orientation, d->mCommentModified, d->mComment);
 	d->mCommentModified=false;
-	setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
+	setImage(ImageUtils::transform(mDocument->image(), orientation), true);
 }
 
 
-QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format) const {
+QString DocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format) const {
 	if (qstrcmp(format, "JPEG")==0) {
 		LOG("JPEG Reset orientation");
 		d->mJPEGContent.resetOrientation();
 		if (!d->mJPEGContent.thumbnail().isNull()) {
-			d->mJPEGContent.setThumbnail( GVImageUtils::scale(
-				mDocument->image(), 128, 128, GVImageUtils::SMOOTH_FAST, QImage::ScaleMin));
+			d->mJPEGContent.setThumbnail( ImageUtils::scale(
+				mDocument->image(), 128, 128, ImageUtils::SMOOTH_FAST, QImage::ScaleMin));
 		}
 
 		if (d->mCommentModified) {
 			LOG("Comment must be saved");
-			d->mJPEGContent.transform(GVImageUtils::NORMAL, true, d->mComment);
+			d->mJPEGContent.transform(ImageUtils::NORMAL, true, d->mComment);
 			d->mCommentModified=false;
 		}
 		
@@ -111,7 +111,7 @@ QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format)
 			return i18n("Could not save this JPEG file.");
 		}
 	} else {
-		QString msg=GVDocumentLoadedImpl::localSave(file, format);
+		QString msg=DocumentLoadedImpl::localSave(file, format);
 		if (!msg.isNull()) return msg;
 	}
 	
@@ -119,16 +119,16 @@ QString GVDocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format)
 }
 
 
-QString GVDocumentJPEGLoadedImpl::comment() const {
+QString DocumentJPEGLoadedImpl::comment() const {
 	return d->mComment;
 }
 
-void GVDocumentJPEGLoadedImpl::setComment(const QString& comment) {
+void DocumentJPEGLoadedImpl::setComment(const QString& comment) {
 	d->mCommentModified=true;
 	d->mComment=comment;
 }
 
-GVDocument::CommentState GVDocumentJPEGLoadedImpl::commentState() const {
+Document::CommentState DocumentJPEGLoadedImpl::commentState() const {
 	return d->mCommentState;
 }
 

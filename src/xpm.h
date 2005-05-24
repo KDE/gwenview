@@ -41,11 +41,14 @@
 #ifndef gvxpm_h
 #define gvxpm_h
 
-class GVXPM {
+namespace Gwenview {
+
+class XPM {
 public:
-    GVXPM();
+    XPM();
 };
 
 // -----------------------------------------------------------------------------
+} // namespace
 
 #endif // gvxpm_h

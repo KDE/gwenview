@@ -31,7 +31,7 @@
 #include "filedetailviewitem.h"
 
 
-void GVFileDetailViewItem::init()
+void FileDetailViewItem::init()
 {
 	setPixmap( COL_NAME, inf->pixmap(KIcon::SizeSmall));
 
@@ -43,11 +43,11 @@ void GVFileDetailViewItem::init()
 	setText( COL_GROUP, inf->group() );
 }
 
-void GVFileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column,int width,int align)
+void FileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column,int width,int align)
 {
 	QColorGroup myCG=cg;
-	GVFileDetailView* view=static_cast<GVFileDetailView*>(listView());
-	GVFileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
+	FileDetailView* view=static_cast<FileDetailView*>(listView());
+	FileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
 	if (viewedItem==this) {
 		myCG.setColor(QColorGroup::Text, view->shownFileItemColor());
 		myCG.setColor(QColorGroup::HighlightedText, view->shownFileItemColor());

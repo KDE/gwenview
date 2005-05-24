@@ -19,8 +19,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVHISTORY_H
-#define GVHISTORY_H
+#ifndef HISTORY_H
+#define HISTORY_H
 
 // Qt
 #include <qobject.h>
@@ -34,12 +34,12 @@ class KActionCollection;
 
 typedef QValueList<KURL> HistoryList;
 
-class GVHistory : public QObject {
+class History : public QObject {
 Q_OBJECT
 	
 public:
-	GVHistory(KActionCollection*);
-	~GVHistory();
+	History(KActionCollection*);
+	~History();
 
 signals:
 	void urlChanged(const KURL&);

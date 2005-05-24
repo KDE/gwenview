@@ -62,6 +62,7 @@
 
 #include "threadgate.h"
 
+namespace Gwenview {
 
 // Qt code start ---------------------------
 static QString fbname( const QString &fileName ) // get file basename (sort of)
@@ -231,7 +232,7 @@ static void read_xpm_image_or_array( QImageIO * iio, const char * const * source
 		buf.truncate (((buf.length()-1) / 4 * 3) + 1); // remove alpha channel left by imagemagick
 	    }
 #ifdef GV_XPM_CHANGES
-	    QColor c = GVThreadGate::instance()->color( buf.data());
+	    QColor c = ThreadGate::instance()->color( buf.data());
 #else
 	    QColor c( buf.data() );
 #endif
@@ -428,9 +429,11 @@ static void write_xpm_image( QImageIO * iio )
 
 // Qt code end ---------------------------
 
-GVXPM::GVXPM()
+XPM::XPM()
 {
         QImageIO::inputFormats(); // trigger registration of Qt's handlers
 	QImageIO::defineIOHandler( "XPM", "/\\*.XPM.\\*/", "T",
 				   read_xpm_image, write_xpm_image );
 }
+
+} // namespace

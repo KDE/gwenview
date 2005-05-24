@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVEXTERNALTOOLCONTEXT_H
-#define GVEXTERNALTOOLCONTEXT_H
+#ifndef EXTERNALTOOLCONTEXT_H
+#define EXTERNALTOOLCONTEXT_H
 
 // Qt
 #include <qobject.h>
@@ -31,10 +31,10 @@ Copyright 2000-2004 Aurélien Gâteau
 class QPopupMenu;
 class KService;
 
-class GVExternalToolContext : public QObject {
+class ExternalToolContext : public QObject {
 Q_OBJECT
 public:
-	GVExternalToolContext(QObject* parent,
+	ExternalToolContext(QObject* parent,
 		QPtrList<KService> services,
 		KURL::List urls);
 	QPopupMenu* popupMenu();

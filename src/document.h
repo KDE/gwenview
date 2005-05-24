@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVDOCUMENT_H
-#define GVDOCUMENT_H
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 
 // Qt 
 #include <qcstring.h>
@@ -33,8 +33,8 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local 
 #include "imageutils/orientation.h"
 #include "libgwenview_export.h"
-class GVDocumentPrivate;
-class GVDocumentImpl;
+class DocumentPrivate;
+class DocumentImpl;
 
 namespace KIO { class Job; }
 /**
@@ -49,14 +49,14 @@ namespace KIO { class Job; }
  * - image is being loaded
  * - loaded() is emitted
  */
-class LIBGWENVIEW_EXPORT GVDocument : public QObject {
+class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
 	enum CommentState { NONE=0, READ_ONLY=1, VALID=READ_ONLY, WRITABLE=3 };
 	
-	GVDocument(QObject*);
-	~GVDocument();
+	Document(QObject*);
+	~Document();
 
 	// Properties
 	const QImage& image() const;
@@ -74,7 +74,7 @@ public:
 	void setModifiedBehavior(ModifiedBehavior);
 	ModifiedBehavior modifiedBehavior() const;
 
-	GVDocument::CommentState commentState() const;
+	Document::CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
 	
@@ -99,7 +99,7 @@ public slots:
 	bool saveBeforeClosing();
 
 	// "Image manipulation"
-	void transform(GVImageUtils::Orientation);
+	void transform(ImageUtils::Orientation);
 
 signals:
 	/**
@@ -150,13 +150,13 @@ private slots:
 	void slotLoaded();
 	
 private:
-	friend class GVDocumentImpl;
-	friend class GVDocumentPrivate;
+	friend class DocumentImpl;
+	friend class DocumentPrivate;
 
-	GVDocumentPrivate* d;
+	DocumentPrivate* d;
 
-	// These methods are used by GVDocumentImpl and derived
-	void switchToImpl(GVDocumentImpl*);
+	// These methods are used by DocumentImpl and derived
+	void switchToImpl(DocumentImpl*);
 	// update == true triggers also sizeUpdated() and rectUpdated()
 	void setImage(QImage, bool update);
 	void setImageFormat(const QCString&);
@@ -172,8 +172,8 @@ private:
 	 */
 	QString saveInternal(const KURL& url, const QCString& format);
 
-	GVDocument(const GVDocument&);
-	GVDocument &operator=(const GVDocument&);
+	Document(const Document&);
+	Document &operator=(const Document&);
 };
 
 

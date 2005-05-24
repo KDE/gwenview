@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef GVFILEVIEWBASE_H
-#define GVFILEVIEWBASE_H
+#ifndef FILEVIEWBASE_H
+#define FILEVIEWBASE_H
 
 // Qt includes
 #include <qcolor.h>
@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE includes
 #include <kfileview.h>
 
-class GVFileViewBase : public KFileView {
+class FileViewBase : public KFileView {
 public:
-	GVFileViewBase() : mShownFileItem(0L), mShownFileItemColor(Qt::red) {}
+	FileViewBase() : mShownFileItem(0L), mShownFileItemColor(Qt::red) {}
 	
 	KFileItem* shownFileItem() const { return mShownFileItem; }
 	virtual void setShownFileItem(KFileItem* fileItem) { mShownFileItem=fileItem; }

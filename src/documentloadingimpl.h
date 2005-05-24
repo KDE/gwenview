@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTLOADINGIMPL_H
-#define GVDOCUMENTLOADINGIMPL_H
+#ifndef DOCUMENTLOADINGIMPL_H
+#define DOCUMENTLOADINGIMPL_H
 
 // Qt
 #include <qasyncimageio.h>
@@ -27,18 +27,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local 
 #include "documentimpl.h"
 
-class GVDocument;
+class Document;
 
-class GVDocumentLoadingImplPrivate;
+class DocumentLoadingImplPrivate;
 
-class GVDocumentLoadingImpl : public GVDocumentImpl {
+class DocumentLoadingImpl : public DocumentImpl {
 Q_OBJECT
 public:
-	GVDocumentLoadingImpl(GVDocument* document);
-	~GVDocumentLoadingImpl();
+	DocumentLoadingImpl(Document* document);
+	~DocumentLoadingImpl();
 	
 private:
-	GVDocumentLoadingImplPrivate* d;
+	DocumentLoadingImplPrivate* d;
 
 private slots:
 	void start();
@@ -48,4 +48,4 @@ private slots:
 	void imageLoaded( bool ok );
 };
 
-#endif /* GVDOCUMENTLOADINGIMPL_H */
+#endif /* DOCUMENTLOADINGIMPL_H */

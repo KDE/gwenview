@@ -19,26 +19,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef GVSLIDESHOWDIALOG_H
-#define GVSLIDESHOWDIALOG_H
+#ifndef SLIDESHOWDIALOG_H
+#define SLIDESHOWDIALOG_H
 
 // KDE includes
 #include <kdialogbase.h>
 #include "libgwenview_export.h"
-class GVSlideShow;
-class GVSlideShowDialogBase;
+class SlideShow;
+class SlideShowDialogBase;
 
-class LIBGWENVIEW_EXPORT GVSlideShowDialog: public KDialogBase {
+class LIBGWENVIEW_EXPORT SlideShowDialog: public KDialogBase {
 Q_OBJECT
 public:
-	GVSlideShowDialog(QWidget* parent,GVSlideShow*);
+	SlideShowDialog(QWidget* parent,SlideShow*);
 
 protected slots:
 	void slotOk();
 	
 private:
-	GVSlideShowDialogBase* mContent;
-	GVSlideShow* mSlideShow;
+	SlideShowDialogBase* mContent;
+	SlideShow* mSlideShow;
 };
 
 

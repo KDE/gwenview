@@ -42,10 +42,12 @@
 
 #include <png.h>
 
-class GVPNGFormat : public QImageFormat {
+namespace Gwenview {
+
+class PNGFormat : public QImageFormat {
 public:
-    GVPNGFormat();
-    virtual ~GVPNGFormat();
+    PNGFormat();
+    virtual ~PNGFormat();
 
     int decode(QImage& img, QImageConsumer* consumer,
 	    const uchar* buffer, int length);
@@ -125,7 +127,7 @@ private:
   such objects.
 */
 
-QImageFormat* GVPNGFormatType::decoderFor(
+QImageFormat* PNGFormatType::decoderFor(
     const uchar* buffer, int length)
 {
     if (length < 8) return 0;
@@ -137,11 +139,11 @@ QImageFormat* GVPNGFormatType::decoderFor(
      && buffer[5]==10
      && buffer[6]==26
      && buffer[7]==10)
-	return new GVPNGFormat;
+	return new PNGFormat;
     return 0;
 }
 
-const char* GVPNGFormatType::formatName() const
+const char* PNGFormatType::formatName() const
 {
     return "PNG";
 }
@@ -151,7 +153,7 @@ extern "C" {
 static void
 info_callback(png_structp png_ptr, png_infop info)
 {
-    GVPNGFormat* that = (GVPNGFormat*)png_get_progressive_ptr(png_ptr);
+    PNGFormat* that = (PNGFormat*)png_get_progressive_ptr(png_ptr);
     that->info(png_ptr,info);
 }
 
@@ -159,14 +161,14 @@ static void
 row_callback(png_structp png_ptr, png_bytep new_row,
    png_uint_32 row_num, int pass)
 {
-    GVPNGFormat* that = (GVPNGFormat*)png_get_progressive_ptr(png_ptr);
+    PNGFormat* that = (PNGFormat*)png_get_progressive_ptr(png_ptr);
     that->row(png_ptr,new_row,row_num,pass);
 }
 
 static void
 end_callback(png_structp png_ptr, png_infop info)
 {
-    GVPNGFormat* that = (GVPNGFormat*)png_get_progressive_ptr(png_ptr);
+    PNGFormat* that = (PNGFormat*)png_get_progressive_ptr(png_ptr);
     that->end(png_ptr,info);
 }
 
@@ -176,7 +178,7 @@ static int
 CALLBACK_CALL_TYPE user_chunk_callback(png_structp png_ptr,
          png_unknown_chunkp chunk)
 {
-    GVPNGFormat* that = (GVPNGFormat*)png_get_progressive_ptr(png_ptr);
+    PNGFormat* that = (PNGFormat*)png_get_progressive_ptr(png_ptr);
     return that->user_chunk(png_ptr,chunk->data,chunk->size);
 }
 #endif
@@ -327,7 +329,7 @@ void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr, float scr
 /*!
     Constructs a QPNGFormat object.
 */
-GVPNGFormat::GVPNGFormat()
+PNGFormat::PNGFormat()
 {
     state = MovieStart;
     first_frame = 1;
@@ -341,7 +343,7 @@ GVPNGFormat::GVPNGFormat()
 /*!
     Destroys a QPNGFormat object.
 */
-GVPNGFormat::~GVPNGFormat()
+PNGFormat::~PNGFormat()
 {
     if ( png_ptr )
         png_destroy_read_struct(&png_ptr, &info_ptr, 0);
@@ -353,7 +355,7 @@ GVPNGFormat::~GVPNGFormat()
 
     Returns the number of bytes consumed.
 */
-int GVPNGFormat::decode(QImage& img, QImageConsumer* cons,
+int PNGFormat::decode(QImage& img, QImageConsumer* cons,
 	const uchar* buffer, int length)
 {
     consumer = cons;
@@ -429,14 +431,14 @@ int GVPNGFormat::decode(QImage& img, QImageConsumer* cons,
     return l;
 }
 
-void GVPNGFormat::info(png_structp png, png_infop)
+void PNGFormat::info(png_structp png, png_infop)
 {
     png_set_interlace_handling(png);
     setup_qt(*image, png, info_ptr);
     consumer->setSize( image->width(), image->height());
 }
 
-void GVPNGFormat::row(png_structp png, png_bytep new_row,
+void PNGFormat::row(png_structp png, png_bytep new_row,
     png_uint_32 row_num, int)
 {
     uchar* old_row = image->scanLine(row_num);
@@ -445,7 +447,7 @@ void GVPNGFormat::row(png_structp png, png_bytep new_row,
 }
 
 
-void GVPNGFormat::end(png_structp png, png_infop info)
+void PNGFormat::end(png_structp png, png_infop info)
 {
     int offx = png_get_x_offset_pixels(png,info) - base_offx;
     int offy = png_get_y_offset_pixels(png,info) - base_offy;
@@ -492,7 +494,7 @@ static bool skip(png_uint_32& max, png_bytep& data)
 #endif
 */
 
-int GVPNGFormat::user_chunk(png_structp png,
+int PNGFormat::user_chunk(png_structp png,
 	    png_bytep data, png_uint_32 length)
 {
 #if 0 // NOT SUPPORTED: experimental PNG animation.
@@ -549,4 +551,5 @@ int GVPNGFormat::user_chunk(png_structp png,
 
     return 0;
 }
+} // namespace
 #endif

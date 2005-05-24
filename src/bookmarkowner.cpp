@@ -26,25 +26,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bookmarkowner.moc"
 
 
-GVBookmarkOwner::GVBookmarkOwner(QWidget* parent)
+BookmarkOwner::BookmarkOwner(QWidget* parent)
 : QObject(parent)
 {}
 
 
-void GVBookmarkOwner::openBookmarkURL(const QString& strURL)
+void BookmarkOwner::openBookmarkURL(const QString& strURL)
 {
 	KURL url(strURL);
 	emit openURL(url);
 }
 
 
-QString GVBookmarkOwner::currentURL() const
+QString BookmarkOwner::currentURL() const
 {
 	return mURL.prettyURL();
 }
 
 
-void GVBookmarkOwner::setURL(const KURL& url)
+void BookmarkOwner::setURL(const KURL& url)
 {
 	mURL=url;
 }

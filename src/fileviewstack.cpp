@@ -68,16 +68,16 @@ static const char* CONFIG_SHOWN_COLOR="shown color";
 static const int SLIDER_RESOLUTION=4;
 
 inline bool isDirOrArchive(const KFileItem* item) {
-	return item && (item->isDir() || GVArchive::fileItemIsArchive(item));
+	return item && (item->isDir() || Archive::fileItemIsArchive(item));
 }
 
 
 //-----------------------------------------------------------------------
 //
-// GVFileViewStackPrivate
+// FileViewStackPrivate
 //
 //-----------------------------------------------------------------------
-class GVFileViewStackPrivate {
+class FileViewStackPrivate {
 public:
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
@@ -86,13 +86,13 @@ public:
 
 //-----------------------------------------------------------------------
 //
-// GVFileViewStack
+// FileViewStack
 //
 //-----------------------------------------------------------------------
-GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollection)
+FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection)
 : QWidgetStack(parent), mMode(FILE_LIST), mBrowsing(false), mSelecting(false)
 {
-	d=new GVFileViewStackPrivate;
+	d=new FileViewStackPrivate;
 
 	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
@@ -122,8 +122,8 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	mSizeSlider=new QSlider(Horizontal, this);
 	mSizeSlider->setTickmarks(QSlider::Below);
 	mSizeSlider->setRange(
-		GVThumbnailSize::MIN/SLIDER_RESOLUTION,
-		GVThumbnailSize::LARGE/SLIDER_RESOLUTION);
+		ThumbnailSize::MIN/SLIDER_RESOLUTION,
+		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
 	mSizeSlider->setSteps(1, 1);
 	mSizeSlider->setTickInterval(1);
 	
@@ -147,7 +147,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 	d->mRevertSortAction->plug(sortMenu);
 
 	// Dir lister
-	mDirLister=new GVDirLister;
+	mDirLister=new DirLister;
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 
@@ -176,7 +176,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this,SIGNAL(canceled()) );
 
 	// File detail widget
-	mFileDetailView=new GVFileDetailView(this,"filedetailview");
+	mFileDetailView=new FileDetailView(this,"filedetailview");
 	addWidget(mFileDetailView,0);
 	mFileDetailView->viewport()->installEventFilter(this);
 
@@ -202,7 +202,7 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 		this, SIGNAL(selectionChanged()) );
 
 	// Thumbnail widget
-	mFileThumbnailView=new GVFileThumbnailView(this);
+	mFileThumbnailView=new FileThumbnailView(this);
 	addWidget(mFileThumbnailView,1);
 	mFileThumbnailView->viewport()->installEventFilter(this);
 
@@ -227,13 +227,13 @@ GVFileViewStack::GVFileViewStack(QWidget* parent,KActionCollection* actionCollec
 }
 
 
-GVFileViewStack::~GVFileViewStack() {
+FileViewStack::~FileViewStack() {
 	delete d;
 	delete mDirLister;
 }
 
 
-void GVFileViewStack::setFocus() {
+void FileViewStack::setFocus() {
 	currentFileView()->widget()->setFocus();
 }
 
@@ -242,7 +242,7 @@ void GVFileViewStack::setFocus() {
  * Do not let double click events propagate if Ctrl or Shift is down, to avoid
  * toggling fullscreen
  */
-bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
+bool FileViewStack::eventFilter(QObject*, QEvent* event) {
 	if (event->type()!=QEvent::MouseButtonDblClick) return false;
 
 	QMouseEvent* mouseEvent=static_cast<QMouseEvent*>(event);
@@ -258,7 +258,7 @@ bool GVFileViewStack::eventFilter(QObject*, QEvent* event) {
 // Public slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::setDirURL(const KURL& url) {
+void FileViewStack::setDirURL(const KURL& url) {
 	LOG(url.prettyURL());
 	if ( mDirURL.equals(url,true) ) {
 		LOG("Same URL");
@@ -284,7 +284,7 @@ void GVFileViewStack::setDirURL(const KURL& url) {
  * Sets the file to select once the dir lister is done. If it's not running,
  * immediatly selects the file.
  */
-void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
+void FileViewStack::setFileNameToSelect(const QString& fileName) {
 	mFileNameToSelect=fileName;
 	if (mDirLister->isFinished()) {
 		browseToFileNameToSelect();
@@ -292,24 +292,24 @@ void GVFileViewStack::setFileNameToSelect(const QString& fileName) {
 }
 
 
-void GVFileViewStack::slotSelectFirst() {
+void FileViewStack::slotSelectFirst() {
 	browseTo(findFirstImage());
 }
 
-void GVFileViewStack::slotSelectLast() {
+void FileViewStack::slotSelectLast() {
 	browseTo(findLastImage());
 }
 
-void GVFileViewStack::slotSelectPrevious() {
+void FileViewStack::slotSelectPrevious() {
 	browseTo(findPreviousImage());
 }
 
-void GVFileViewStack::slotSelectNext() {
+void FileViewStack::slotSelectNext() {
 	browseTo(findNextImage());
 }
 
 
-void GVFileViewStack::browseTo(KFileItem* item) {
+void FileViewStack::browseTo(KFileItem* item) {
 	if (mBrowsing) return;
 	mBrowsing = true;
 	if (item) {
@@ -317,7 +317,7 @@ void GVFileViewStack::browseTo(KFileItem* item) {
 		currentFileView()->clearSelection();
 		currentFileView()->setSelected(item,true);
 		currentFileView()->ensureItemVisible(item);
-		if (!item->isDir() && !GVArchive::fileItemIsArchive(item)) {
+		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
 			emitURLChanged();
 		}
 	}
@@ -326,7 +326,7 @@ void GVFileViewStack::browseTo(KFileItem* item) {
 }
 
 
-void GVFileViewStack::browseToFileNameToSelect() {
+void FileViewStack::browseToFileNameToSelect() {
 	// There's something to select
 	if (!mFileNameToSelect.isEmpty()) {
 		browseTo(findItemByFileName(mFileNameToSelect));
@@ -352,7 +352,7 @@ void GVFileViewStack::browseToFileNameToSelect() {
 }
 
 
-void GVFileViewStack::updateThumbnail(const KURL& url) {
+void FileViewStack::updateThumbnail(const KURL& url) {
 	if (mMode==FILE_LIST) return;
 
 	KFileItem* item=mDirLister->findByURL(url);
@@ -366,17 +366,17 @@ void GVFileViewStack::updateThumbnail(const KURL& url) {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::slotViewExecuted() {
+void FileViewStack::slotViewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
 
 	bool isDir=item->isDir();
-	bool isArchive=GVArchive::fileItemIsArchive(item);
+	bool isArchive=Archive::fileItemIsArchive(item);
 	if (isDir || isArchive) {
 		KURL tmp=url();
 
 		if (isArchive) {
-			tmp.setProtocol(GVArchive::protocolForMimeType(item->mimetype()));
+			tmp.setProtocol(Archive::protocolForMimeType(item->mimetype()));
 		}
 		tmp.adjustPath(1);
 		setDirURL(tmp);
@@ -386,7 +386,7 @@ void GVFileViewStack::slotViewExecuted() {
 }
 
 
-void GVFileViewStack::slotViewClicked() {
+void FileViewStack::slotViewClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || isDirOrArchive(item)) return;
@@ -397,14 +397,14 @@ void GVFileViewStack::slotViewClicked() {
 }
 
 
-void GVFileViewStack::slotViewDoubleClicked() {
+void FileViewStack::slotViewDoubleClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (item && !isDirOrArchive(item)) emit imageDoubleClicked();
 }
 
 
-void GVFileViewStack::updateViewMode() {
+void FileViewStack::updateViewMode() {
 	if (mListMode->isChecked()) {
 		setMode(FILE_LIST);
 		return;
@@ -423,7 +423,7 @@ void GVFileViewStack::updateViewMode() {
 		KFileItemList items=*mFileThumbnailView->items();
 		KFileItem* shownFileItem=mFileThumbnailView->shownFileItem();
 
-		mFileThumbnailView->GVFileViewBase::clear();
+		mFileThumbnailView->FileViewBase::clear();
 		mFileThumbnailView->addItemList(items);
 		mFileThumbnailView->setShownFileItem(shownFileItem);
 	}
@@ -432,21 +432,21 @@ void GVFileViewStack::updateViewMode() {
 }
 
 
-void GVFileViewStack::updateThumbnailSize(int size) {
+void FileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
 	QToolTip::add(mSizeSlider, i18n("Thumbnail size: %1x%2").arg(size).arg(size));
 	mFileThumbnailView->setThumbnailSize(size);
-	GVCache::instance()->checkThumbnailSize(size);
+	Cache::instance()->checkThumbnailSize(size);
 }
 
 
-void GVFileViewStack::toggleShowDotFiles() {
+void FileViewStack::toggleShowDotFiles() {
 	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->openURL(mDirURL);
 }
 
 
-void GVFileViewStack::updateSortMenu(QDir::SortSpec _spec) {
+void FileViewStack::updateSortMenu(QDir::SortSpec _spec) {
 	int	spec=_spec & (QDir::Name | QDir::Time | QDir::Size);
 	int item;
 	switch (spec) {
@@ -467,7 +467,7 @@ void GVFileViewStack::updateSortMenu(QDir::SortSpec _spec) {
 }
 
 
-void GVFileViewStack::setSorting() {
+void FileViewStack::setSorting() {
 	QDir::SortSpec spec;
 
 	switch (d->mSortAction->currentItem()) {
@@ -495,13 +495,13 @@ void GVFileViewStack::setSorting() {
 // Context menu
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::openContextMenu(const QPoint& pos) {
+void FileViewStack::openContextMenu(const QPoint& pos) {
 	int selectionSize=currentFileView()->selectedItems()->count();
 
 	QPopupMenu menu(this);
 
-	GVExternalToolContext* externalToolContext=
-		GVExternalToolManager::instance()->createContext(
+	ExternalToolContext* externalToolContext=
+		ExternalToolManager::instance()->createContext(
 		this, currentFileView()->selectedItems());
 
 	menu.insertItem(
@@ -543,12 +543,12 @@ void GVFileViewStack::openContextMenu(const QPoint& pos) {
 }
 
 
-void GVFileViewStack::openContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
+void FileViewStack::openContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
 	openContextMenu(pos);
 }
 
 
-void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
+void FileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 	openContextMenu(pos);
 }
 
@@ -558,7 +558,7 @@ void GVFileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
 // Drop URL menu
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
+void FileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 	KURL dest;
 
 	if (item) {
@@ -579,7 +579,7 @@ void GVFileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 // File operations
 //
 //-----------------------------------------------------------------------
-KURL::List GVFileViewStack::selectedURLs() const {
+KURL::List FileViewStack::selectedURLs() const {
 	KURL::List list;
 
 	KFileItemListIterator it( *currentFileView()->selectedItems() );
@@ -594,32 +594,32 @@ KURL::List GVFileViewStack::selectedURLs() const {
 }
 
 
-void GVFileViewStack::openParentDir() {
+void FileViewStack::openParentDir() {
 	KURL url(mDirURL.upURL());
 	emit urlChanged(url);
 	emit directoryChanged(url);
 }
 
 
-void GVFileViewStack::copyFiles() {
+void FileViewStack::copyFiles() {
 	KURL::List list=selectedURLs();
 	FileOperation::copyTo(list,this);
 }
 
 
-void GVFileViewStack::moveFiles() {
+void FileViewStack::moveFiles() {
 	KURL::List list=selectedURLs();
 	FileOperation::moveTo(list,this);
 }
 
 
-void GVFileViewStack::deleteFiles() {
+void FileViewStack::deleteFiles() {
 	KURL::List list=selectedURLs();
 	FileOperation::del(list,this);
 }
 
 
-void GVFileViewStack::showFileProperties() {
+void FileViewStack::showFileProperties() {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	if (selectedItems->count()>0) {
 		(void)new KPropertiesDialog(*selectedItems);
@@ -629,7 +629,7 @@ void GVFileViewStack::showFileProperties() {
 }
 
 
-void GVFileViewStack::renameFile() {
+void FileViewStack::renameFile() {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	const KFileItem* item;
 	if (selectedItems->count()>0) {
@@ -646,14 +646,14 @@ void GVFileViewStack::renameFile() {
 // Properties
 //
 //-----------------------------------------------------------------------
-QString GVFileViewStack::fileName() const {
+QString FileViewStack::fileName() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return "";
 	return item->text();
 }
 
 
-GVFileViewBase* GVFileViewStack::currentFileView() const {
+FileViewBase* FileViewStack::currentFileView() const {
 	if (mMode==FILE_LIST) {
 		return mFileDetailView;
 	} else {
@@ -662,7 +662,7 @@ GVFileViewBase* GVFileViewStack::currentFileView() const {
 }
 
 
-uint GVFileViewStack::fileCount() const {
+uint FileViewStack::fileCount() const {
 	uint count=currentFileView()->count();
 
 	KFileItem* item=currentFileView()->firstFileItem();
@@ -674,27 +674,27 @@ uint GVFileViewStack::fileCount() const {
 }
 
 
-KURL GVFileViewStack::url() const {
+KURL FileViewStack::url() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return mDirURL;
 	return item->url();
 }
 
-KURL GVFileViewStack::dirURL() const {
+KURL FileViewStack::dirURL() const {
 	return mDirURL;
 }
 
 
-uint GVFileViewStack::selectionSize() const {
+uint FileViewStack::selectionSize() const {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	return selectedItems->count();
 }
 
 
-void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
+void FileViewStack::setMode(FileViewStack::Mode mode) {
 	const KFileItemList* items;
-	GVFileViewBase* oldView;
-	GVFileViewBase* newView;
+	FileViewBase* oldView;
+	FileViewBase* newView;
 
 	mMode=mode;
 
@@ -734,46 +734,46 @@ void GVFileViewStack::setMode(GVFileViewStack::Mode mode) {
 	newView->setSorting(oldView->sorting());
 
 	// Clear the old view
-	oldView->GVFileViewBase::clear();
+	oldView->FileViewBase::clear();
 }
 
 
-bool GVFileViewStack::showDirs() const {
+bool FileViewStack::showDirs() const {
 	return mShowDirs;
 }
 
 
-void GVFileViewStack::setShowDirs(bool value) {
+void FileViewStack::setShowDirs(bool value) {
 	mShowDirs=value;
 	initDirListerFilter();
 }
 
 
-void GVFileViewStack::setShownColor(const QColor& value) {
+void FileViewStack::setShownColor(const QColor& value) {
 	mShownColor=value;
 	mFileDetailView->setShownFileItemColor(mShownColor);
 	mFileThumbnailView->setShownFileItemColor(mShownColor);
 }
 
 
-void GVFileViewStack::setSilentMode( bool silent ) {
+void FileViewStack::setSilentMode( bool silent ) {
 	mDirLister->setCheck( !silent );
 }
 
 
-void GVFileViewStack::retryURL() {
+void FileViewStack::retryURL() {
 	mDirLister->clearError();
 	mDirLister->openURL( url());
 }
 
-bool GVDirLister::validURL( const KURL& url ) const {
+bool DirLister::validURL( const KURL& url ) const {
 	if( !url.isValid()) mError = true;
 	if( mCheck ) return KDirLister::validURL( url );
 	return url.isValid();
 }
 
 
-void GVDirLister::handleError( KIO::Job* job ) {
+void DirLister::handleError( KIO::Job* job ) {
 	mError = true;
 	if( mCheck ) KDirLister::handleError( job );
 }
@@ -784,7 +784,7 @@ void GVDirLister::handleError( KIO::Job* job ) {
 // Dir lister slots
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
+void FileViewStack::dirListerDeleteItem(KFileItem* item) {
 	KFileItem* newShownItem=0L;
 	const KFileItem* shownItem=currentFileView()->shownFileItem();
 	if (shownItem==item) {
@@ -805,14 +805,14 @@ void GVFileViewStack::dirListerDeleteItem(KFileItem* item) {
 }
 
 
-void GVFileViewStack::dirListerNewItems(const KFileItemList& items) {
+void FileViewStack::dirListerNewItems(const KFileItemList& items) {
 	LOG("");
 	mThumbnailsNeedUpdate=true;
 	currentFileView()->addItemList(items);
 }
 
 
-void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
+void FileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 	LOG("");
 	const KFileItem* item=currentFileView()->shownFileItem();
 	KFileItemListIterator it(list);
@@ -825,7 +825,7 @@ void GVFileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 }
 
 
-void GVFileViewStack::refreshItems(const KURL::List& urls) {
+void FileViewStack::refreshItems(const KURL::List& urls) {
 	LOG("");
 	KFileItemList list;
 	for( KURL::List::ConstIterator it = urls.begin();
@@ -842,18 +842,18 @@ void GVFileViewStack::refreshItems(const KURL::List& urls) {
 }
 
 
-void GVFileViewStack::dirListerClear() {
+void FileViewStack::dirListerClear() {
 	currentFileView()->clear();
 }
 
 
-void GVFileViewStack::dirListerStarted() {
+void FileViewStack::dirListerStarted() {
 	LOG("");
 	mThumbnailsNeedUpdate=false;
 }
 
 
-void GVFileViewStack::dirListerCompleted() {
+void FileViewStack::dirListerCompleted() {
 	LOG("");
 	// Delay the code to be executed when the dir lister has completed its job
 	// to avoid crash in KDirLister (see bug #57991)
@@ -861,9 +861,9 @@ void GVFileViewStack::dirListerCompleted() {
 }
 
 
-void GVFileViewStack::delayedDirListerCompleted() {
+void FileViewStack::delayedDirListerCompleted() {
 	// The call to sort() is a work around to a bug which causes
-	// GVFileThumbnailView::firstFileItem() to return a wrong item.  This work
+	// FileThumbnailView::firstFileItem() to return a wrong item.  This work
 	// around is not in firstFileItem() because it's const and sort() is a non
 	// const method
 	if (mMode!=FILE_LIST) {
@@ -879,7 +879,7 @@ void GVFileViewStack::delayedDirListerCompleted() {
 }
 
 
-void GVFileViewStack::dirListerCanceled() {
+void FileViewStack::dirListerCanceled() {
 	if (mMode!=FILE_LIST) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
@@ -893,13 +893,13 @@ void GVFileViewStack::dirListerCanceled() {
 // Private
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::initDirListerFilter() {
+void FileViewStack::initDirListerFilter() {
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
 	if (mShowDirs) {
 		mimeTypes.append("inode/directory");
-		mimeTypes+=GVArchive::mimeTypes();
+		mimeTypes+=Archive::mimeTypes();
 	}
 	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->setMimeFilter(mimeTypes);
@@ -907,7 +907,7 @@ void GVFileViewStack::initDirListerFilter() {
 }
 
 
-void GVFileViewStack::updateActions() {
+void FileViewStack::updateActions() {
 	KFileItem* firstImage=findFirstImage();
 
 	// There isn't any image, no need to continue
@@ -940,7 +940,7 @@ void GVFileViewStack::updateActions() {
 }
 
 
-void GVFileViewStack::emitURLChanged() {
+void FileViewStack::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	currentFileView()->setShownFileItem(item);
 
@@ -950,7 +950,7 @@ void GVFileViewStack::emitURLChanged() {
 	emit urlChanged(tmp);
 }
 
-KFileItem* GVFileViewStack::findFirstImage() const {
+KFileItem* FileViewStack::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
 	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
@@ -963,7 +963,7 @@ KFileItem* GVFileViewStack::findFirstImage() const {
 	return item;
 }
 
-KFileItem* GVFileViewStack::findLastImage() const {
+KFileItem* FileViewStack::findLastImage() const {
 	KFileItem* item=currentFileView()->items()->getLast();
 	while (item && isDirOrArchive(item)) {
 		item=currentFileView()->prevItem(item);
@@ -971,7 +971,7 @@ KFileItem* GVFileViewStack::findLastImage() const {
 	return item;
 }
 
-KFileItem* GVFileViewStack::findPreviousImage() const {
+KFileItem* FileViewStack::findPreviousImage() const {
 	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
@@ -980,7 +980,7 @@ KFileItem* GVFileViewStack::findPreviousImage() const {
 	return item;
 }
 
-KFileItem* GVFileViewStack::findNextImage() const {
+KFileItem* FileViewStack::findNextImage() const {
 	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
@@ -989,7 +989,7 @@ KFileItem* GVFileViewStack::findNextImage() const {
 	return item;
 }
 
-KFileItem* GVFileViewStack::findItemByFileName(const QString& fileName) const {
+KFileItem* FileViewStack::findItemByFileName(const QString& fileName) const {
 	KFileItem *item;
 	if (fileName.isEmpty()) return 0L;
 	for (item=currentFileView()->firstFileItem();
@@ -1007,7 +1007,7 @@ KFileItem* GVFileViewStack::findItemByFileName(const QString& fileName) const {
 // Configuration
 //
 //-----------------------------------------------------------------------
-void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
+void FileViewStack::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
 	mSizeSlider->setValue(mFileThumbnailView->thumbnailSize() / SLIDER_RESOLUTION);
 
@@ -1035,7 +1035,7 @@ void GVFileViewStack::readConfig(KConfig* config,const QString& group) {
 	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR, &defaultColor));
 }
 
-void GVFileViewStack::kpartConfig() {
+void FileViewStack::kpartConfig() {
 	mFileThumbnailView->kpartConfig();
 	mShowDirs=true;
 	mShowDotFiles->setChecked(false);
@@ -1048,7 +1048,7 @@ void GVFileViewStack::kpartConfig() {
 	setShownColor(Qt::red);
 }
 
-void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
+void FileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	mFileThumbnailView->writeConfig(config,group);
 
 	config->setGroup(group);
@@ -1059,7 +1059,7 @@ void GVFileViewStack::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);
 }
 
-void GVFileViewStack::makeDir() {
+void FileViewStack::makeDir() {
 	KIO::Job* job;
 
 	bool ok;
@@ -1076,7 +1076,7 @@ void GVFileViewStack::makeDir() {
 	connect( job, SIGNAL(result(KIO::Job*)), this, SLOT(slotDirMade(KIO::Job*)) );
 }
 
-void GVFileViewStack::slotDirMade(KIO::Job* job) {
+void FileViewStack::slotDirMade(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;

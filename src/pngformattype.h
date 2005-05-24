@@ -43,17 +43,20 @@
 
 #include <qasyncimageio.h>
 
+namespace Gwenview {
+
 /**
  * @internal
  *
  * An incremental loader factory for PNG's.
  */
-class GVPNGFormatType : public QImageFormatType {
+class PNGFormatType : public QImageFormatType {
 public:
 	QImageFormat* decoderFor(const uchar* buffer, int length);
 	const char* formatName() const;
 };
 
+} // namespace
 
 // -----------------------------------------------------------------------------
 

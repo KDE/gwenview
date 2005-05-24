@@ -29,7 +29,7 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local
 #include "externaltoolaction.moc"
 
-GVExternalToolAction::GVExternalToolAction(
+ExternalToolAction::ExternalToolAction(
 	QObject* parent, const KService* service,
 	const KURL::List& urls)
 : KAction(parent)
@@ -44,7 +44,7 @@ GVExternalToolAction::GVExternalToolAction(
 }
 
 
-void GVExternalToolAction::openExternalTool() {
+void ExternalToolAction::openExternalTool() {
 	QString dir=mURLs.first().directory();
 	QDir::setCurrent(dir);
 	

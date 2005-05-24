@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef GVFULLSCREENBAR_H
-#define GVFULLSCREENBAR_H   
+#ifndef FULLSCREENBAR_H
+#define FULLSCREENBAR_H   
 
 // Qt
 #include <qlabel.h>
@@ -31,11 +31,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QResizeEvent;
 class QString;
 
-class GVFullScreenBar : public QLabel {
+class FullScreenBar : public QLabel {
 Q_OBJECT
 public:
-	GVFullScreenBar(QWidget* parent, const KActionPtrList& actions);
-	~GVFullScreenBar();
+	FullScreenBar(QWidget* parent, const KActionPtrList& actions);
+	~FullScreenBar();
 	void resizeEvent(QResizeEvent* event);
 	void setText(const QString& text);
 
@@ -50,4 +50,4 @@ private:
 	Private* d;
 };
 
-#endif /* GVFULLSCREENBAR_H */
+#endif /* FULLSCREENBAR_H */

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVPRINTDIALOG_H
-#define GVPRINTDIALOG_H
+#ifndef PRINTDIALOG_H
+#define PRINTDIALOG_H
 
 //Qt
 #include <qfontmetrics.h>
@@ -30,21 +30,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdeprint/kprintdialogpage.h>
 
 #include "libgwenview_export.h"
-class GVDocument;
-class GVPrintDialogPageBase;
+class Document;
+class PrintDialogPageBase;
 
-enum GVUnits {
+enum Units {
 	GV_MILLIMETERS = 1,
 	GV_CENTIMETERS,
 	GV_INCHES
 };
 
-class LIBGWENVIEW_EXPORT GVPrintDialogPage : public KPrintDialogPage {
+class LIBGWENVIEW_EXPORT PrintDialogPage : public KPrintDialogPage {
 	Q_OBJECT
 
 public:
-	GVPrintDialogPage( GVDocument* document, QWidget *parent = 0L, const char *name = 0 );
-	~GVPrintDialogPage();
+	PrintDialogPage( Document* document, QWidget *parent = 0L, const char *name = 0 );
+	~PrintDialogPage();
 
 	virtual void getOptions(QMap<QString,QString>& opts, bool incldef = false);
 	virtual void setOptions(const QMap<QString,QString>& opts);
@@ -65,8 +65,8 @@ private:
 	int getUnit(const QString& unit);
 	QString setUnit(int unit);
 
-	GVDocument *mDocument;
-	GVPrintDialogPageBase* mContent;
+	Document *mDocument;
+	PrintDialogPageBase* mContent;
 };
 
 #endif

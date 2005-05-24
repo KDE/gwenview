@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#ifndef GVARCHIVE_H
-#define GVARCHIVE_H
+#ifndef ARCHIVE_H
+#define ARCHIVE_H
 
 // Qt includes
 #include <qstringlist.h>
@@ -30,7 +30,7 @@ class KFileItem;
 /**
  * Helper functions to deal with archives
  */
-namespace GVArchive {
+namespace Archive {
 	
 LIBGWENVIEW_EXPORT bool fileItemIsArchive(const KFileItem*);
 bool protocolIsArchive(const QString&);

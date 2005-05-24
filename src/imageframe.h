@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVIMAGEFRAME_H
-#define GVIMAGEFRAME_H
+#ifndef IMAGEFRAME_H
+#define IMAGEFRAME_H
 
 // Qt
 #include <qimage.h>
@@ -27,13 +27,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 
-struct GVImageFrame {
-	GVImageFrame( const QImage& i, int d ) : image( i ), delay( d ) {};
-	GVImageFrame() : delay( 0 ) {} // stupid Qt containers
+struct ImageFrame {
+	ImageFrame( const QImage& i, int d ) : image( i ), delay( d ) {};
+	ImageFrame() : delay( 0 ) {} // stupid Qt containers
 	QImage image;
 	int delay; // how long this frame should be shown in the animation
 };
 
-typedef QValueVector< GVImageFrame > GVImageFrames;
+typedef QValueVector< ImageFrame > ImageFrames;
 
-#endif /* GVIMAGEFRAME_H */
+#endif /* IMAGEFRAME_H */

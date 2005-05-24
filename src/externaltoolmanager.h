@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVEXTERNALTOOLMANAGER_H
-#define GVEXTERNALTOOLMANAGER_H
+#ifndef EXTERNALTOOLMANAGER_H
+#define EXTERNALTOOLMANAGER_H
 
 // Qt
 #include <qdict.h>
@@ -28,20 +28,20 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kfileitem.h>
 
-class GVExternalToolContext;
+class ExternalToolContext;
 class KActionMenu;
 class KURL;
 
-class GVExternalToolManagerPrivate;
+class ExternalToolManagerPrivate;
 
-class GVExternalToolManager {
+class ExternalToolManager {
 public:
-	~GVExternalToolManager();
+	~ExternalToolManager();
 	
-	GVExternalToolContext* createContext(QObject* parent, const KFileItemList*);
-	GVExternalToolContext* createContext(QObject* parent, const KURL&);
+	ExternalToolContext* createContext(QObject* parent, const KFileItemList*);
+	ExternalToolContext* createContext(QObject* parent, const KURL&);
 
-	static GVExternalToolManager* instance();
+	static ExternalToolManager* instance();
 	QDict<KDesktopFile>& desktopFiles() const;
 
 	void hideDesktopFile(KDesktopFile*);
@@ -54,8 +54,8 @@ public:
 	void updateServices();
 
 private:
-	GVExternalToolManager();
-	GVExternalToolManagerPrivate* d;
+	ExternalToolManager();
+	ExternalToolManagerPrivate* d;
 };
 
 #endif

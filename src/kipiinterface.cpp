@@ -46,9 +46,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define LOG(x) ;
 #endif
 
-class GVImageCollection : public KIPI::ImageCollectionShared {
+class ImageCollection : public KIPI::ImageCollectionShared {
 public:
-	GVImageCollection(const QString& name, const KURL::List& images)
+	ImageCollection(const QString& name, const KURL::List& images)
 	: KIPI::ImageCollectionShared(), mName(name), mImages(images) {}
 
 	QString name() { return mName; }
@@ -69,9 +69,9 @@ private:
 
 
 
-class GVImageInfo : public KIPI::ImageInfoShared {
+class ImageInfo : public KIPI::ImageInfoShared {
 public:
-	GVImageInfo(KIPI::Interface* interface, const KURL& url) : KIPI::ImageInfoShared(interface, url) {}
+	ImageInfo(KIPI::Interface* interface, const KURL& url) : KIPI::ImageInfoShared(interface, url) {}
 
 	QString title() {
 		return _url.fileName();
@@ -94,14 +94,14 @@ public:
 
 
 
-struct GVKIPIInterfacePrivate {
-	GVFileViewStack* mFileView;
+struct KIPIInterfacePrivate {
+	FileViewStack* mFileView;
 };
 
 
-GVKIPIInterface::GVKIPIInterface( QWidget* parent, GVFileViewStack* fileView)
+KIPIInterface::KIPIInterface( QWidget* parent, FileViewStack* fileView)
 :KIPI::Interface(parent, "Gwenview kipi interface") {
-	d=new GVKIPIInterfacePrivate;
+	d=new KIPIInterfacePrivate;
 	d->mFileView=fileView;
 
 	connect(d->mFileView, SIGNAL(selectionChanged()),
@@ -112,30 +112,30 @@ GVKIPIInterface::GVKIPIInterface( QWidget* parent, GVFileViewStack* fileView)
 }
 
 
-GVKIPIInterface::~GVKIPIInterface() {
+KIPIInterface::~KIPIInterface() {
 	delete d;
 }
 
 
-KIPI::ImageCollection GVKIPIInterface::currentAlbum() {
+KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	LOG("");
 	KURL::List list;
 	KFileItemListIterator it( *d->mFileView->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return KIPI::ImageCollection(new GVImageCollection(i18n("Folder Content"), list));
+	return KIPI::ImageCollection(new ImageCollection(i18n("Folder Content"), list));
 }
 
 
-KIPI::ImageCollection GVKIPIInterface::currentSelection() {
+KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
-	return KIPI::ImageCollection(new GVImageCollection(i18n("Selected Images"), list));
+	return KIPI::ImageCollection(new ImageCollection(i18n("Selected Images"), list));
 }
 
 
-QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
+QValueList<KIPI::ImageCollection> KIPIInterface::allAlbums() {
 	LOG("");
 	QValueList<KIPI::ImageCollection> list;
 	list << currentAlbum() << currentSelection();
@@ -143,12 +143,12 @@ QValueList<KIPI::ImageCollection> GVKIPIInterface::allAlbums() {
 }
 
 
-KIPI::ImageInfo GVKIPIInterface::info(const KURL& url) {
+KIPI::ImageInfo KIPIInterface::info(const KURL& url) {
 	LOG("");
-	return KIPI::ImageInfo( new GVImageInfo(this, url) );
+	return KIPI::ImageInfo( new ImageInfo(this, url) );
 }
 
-int GVKIPIInterface::features() const {
+int KIPIInterface::features() const {
 	return KIPI::AcceptNewImages;
 }
 
@@ -156,23 +156,23 @@ int GVKIPIInterface::features() const {
  * We don't need to do anything here, the KDirLister will pick up the image if
  * necessary
  */
-bool GVKIPIInterface::addImage(const KURL&, QString&) {
+bool KIPIInterface::addImage(const KURL&, QString&) {
 	return true;
 }
 
 // TODO currently KDirWatch doesn't have watching of files in a directory
 // implemented, so KDirLister will not inform when a file changes
-void GVKIPIInterface::refreshImages( const KURL::List& urls ) {
+void KIPIInterface::refreshImages( const KURL::List& urls ) {
 	d->mFileView->refreshItems( urls );
 }
 
 
-void GVKIPIInterface::slotSelectionChanged() {
+void KIPIInterface::slotSelectionChanged() {
 	emit selectionChanged(d->mFileView->selectionSize() > 0);
 }
 
 
-void GVKIPIInterface::slotDirectoryChanged() {
+void KIPIInterface::slotDirectoryChanged() {
 	emit currentAlbumChanged(d->mFileView->fileCount() > 0);
 }
 

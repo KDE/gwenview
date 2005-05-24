@@ -18,19 +18,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVEXTERNALTOOLDIALOG_H 
-#define GVEXTERNALTOOLDIALOG_H
+#ifndef EXTERNALTOOLDIALOG_H 
+#define EXTERNALTOOLDIALOG_H
 
 // KDE
 #include <kdialogbase.h>
 
 
-class GVExternalToolDialogPrivate;
-class GVExternalToolDialog : public KDialogBase {
+class ExternalToolDialogPrivate;
+class ExternalToolDialog : public KDialogBase {
 Q_OBJECT
 public:
-	GVExternalToolDialog(QWidget* parent);
-	~GVExternalToolDialog();
+	ExternalToolDialog(QWidget* parent);
+	~ExternalToolDialog();
 	
 protected slots:
 	void slotOk();
@@ -44,7 +44,7 @@ private slots:
 	void showCommandHelp();
 	
 private:
-	GVExternalToolDialogPrivate* d;
+	ExternalToolDialogPrivate* d;
 };
 
 

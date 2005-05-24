@@ -42,42 +42,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //---------------------------------------------------------------------
 //
-// GVDocumentLoadingImplPrivate
+// DocumentLoadingImplPrivate
 //
 //---------------------------------------------------------------------
 
-class GVDocumentLoadingImplPrivate {
+class DocumentLoadingImplPrivate {
 public:
-	GVDocumentLoadingImplPrivate()
+	DocumentLoadingImplPrivate()
 	: mLoader( NULL )
 	{}
 
-	GVImageLoader* mLoader;
+	ImageLoader* mLoader;
 };
 
 //---------------------------------------------------------------------
 //
-// GVDocumentLoadingImpl
+// DocumentLoadingImpl
 //
 //---------------------------------------------------------------------
-GVDocumentLoadingImpl::GVDocumentLoadingImpl(GVDocument* document) 
-: GVDocumentImpl(document) {
+DocumentLoadingImpl::DocumentLoadingImpl(Document* document) 
+: DocumentImpl(document) {
 	LOG("");
-	d=new GVDocumentLoadingImplPrivate;
+	d=new DocumentLoadingImplPrivate;
 
 	QTimer::singleShot(0, this, SLOT(start()) );
 }
 
 
-GVDocumentLoadingImpl::~GVDocumentLoadingImpl() {
+DocumentLoadingImpl::~DocumentLoadingImpl() {
 	LOG("");
 	if( d->mLoader != NULL ) d->mLoader->release();
 	delete d;
 }
 
 
-void GVDocumentLoadingImpl::start() {
-	d->mLoader = GVImageLoader::loader( mDocument->url());
+void DocumentLoadingImpl::start() {
+	d->mLoader = ImageLoader::loader( mDocument->url());
 	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
 	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
 	connect( d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
@@ -103,14 +103,14 @@ void GVDocumentLoadingImpl::start() {
 	// this may be deleted here
 }
 
-void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
+void DocumentLoadingImpl::imageLoaded( bool ok ) {
 	LOG("");
 
 	QCString format = d->mLoader->imageFormat();
 	if ( !ok || format.isEmpty()) {
 		// Unknown format, no need to go further
 		emit finished(false);
-		switchToImpl(new GVDocumentImpl(mDocument));
+		switchToImpl(new DocumentImpl(mDocument));
 		return;
 	}
 	setImageFormat( format );
@@ -122,29 +122,29 @@ void GVDocumentLoadingImpl::imageLoaded( bool ok ) {
 
 	// Now we switch to a loaded implementation
 	if ( d->mLoader->frames().count() > 1 ) {
-		switchToImpl( new GVDocumentAnimatedLoadedImpl(mDocument, d->mLoader->frames()));
+		switchToImpl( new DocumentAnimatedLoadedImpl(mDocument, d->mLoader->frames()));
 	} else if ( format == "JPEG" ) {
-		switchToImpl( new GVDocumentJPEGLoadedImpl(mDocument, d->mLoader->rawData()) );
+		switchToImpl( new DocumentJPEGLoadedImpl(mDocument, d->mLoader->rawData()) );
 	} else {
-		switchToImpl(new GVDocumentLoadedImpl(mDocument));
+		switchToImpl(new DocumentLoadedImpl(mDocument));
 	}
 }
 
 
-void GVDocumentLoadingImpl::imageChanged(const QRect& rect) {
+void DocumentLoadingImpl::imageChanged(const QRect& rect) {
 	if( d->mLoader->frames().count() > 0 ) return;
 	setImage(d->mLoader->processedImage(), false);
 	emit rectUpdated( rect );
 }
 
-void GVDocumentLoadingImpl::frameLoaded() {
+void DocumentLoadingImpl::frameLoaded() {
 	if( d->mLoader->frames().count() == 1 ) {
 		// explicit sharing - don't modify the image in document anymore
 		setImage( d->mLoader->frames().first().image.copy(), false ); 
 	}
 }
 
-void GVDocumentLoadingImpl::sizeLoaded(int width, int height) {
+void DocumentLoadingImpl::sizeLoaded(int width, int height) {
 	LOG(width << "x" << height);
 	setImage( d->mLoader->processedImage(), false);
 	emit sizeUpdated(width, height);

@@ -26,10 +26,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QSplitter;
 class KAboutData;
 class KAction;
-class GVScrollPixmapView;
-class GVFileViewStack;
-class GVDocument;
-class GVSlideShow;
+class ScrollPixmapView;
+class FileViewStack;
+class Document;
+class SlideShow;
 
 class GVDirPart;
 
@@ -131,18 +131,18 @@ protected:
 	/**
 	 * Scroll widget
 	 */
-	GVScrollPixmapView* mPixmapView;
+	ScrollPixmapView* mPixmapView;
 
 	/**
 	 * Holds the image
 	 */
-	GVDocument* mDocument;
+	Document* mDocument;
 
 	/**
 	 * Shows the directory's files and folders
 	 */
 
-	GVFileViewStack* mFilesView;
+	FileViewStack* mFilesView;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies
@@ -154,7 +154,7 @@ protected:
 	 * Action turns on slide show
 	 */
 	KToggleAction* mToggleSlideShow;
-	GVSlideShow* mSlideShow;
+	SlideShow* mSlideShow;
 };
 
 #endif

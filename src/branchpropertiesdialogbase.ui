@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>GVBranchPropertiesDialogBase</class>
+<class>BranchPropertiesDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>GVBranchPropertiesDialogBase</cstring>
+        <cstring>BranchPropertiesDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>

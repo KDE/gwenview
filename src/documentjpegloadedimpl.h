@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTJPEGLOADEDIMPL_H
-#define GVDOCUMENTJPEGLOADEDIMPL_H
+#ifndef DOCUMENTJPEGLOADEDIMPL_H
+#define DOCUMENTJPEGLOADEDIMPL_H
 
 // Qt
 #include <qimage.h>
@@ -27,28 +27,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "documentloadedimpl.h"
 
-class GVDocument;
+class Document;
 
-class GVDocumentJPEGLoadedImplPrivate;
+class DocumentJPEGLoadedImplPrivate;
 
-class GVDocumentJPEGLoadedImpl : public GVDocumentLoadedImpl {
+class DocumentJPEGLoadedImpl : public DocumentLoadedImpl {
 Q_OBJECT
 public:
-	GVDocumentJPEGLoadedImpl(GVDocument* document, const QByteArray& rawData);
-	~GVDocumentJPEGLoadedImpl();
+	DocumentJPEGLoadedImpl(Document* document, const QByteArray& rawData);
+	~DocumentJPEGLoadedImpl();
 	void init();
 	
 	QString comment() const;
 	void setComment(const QString&);
-	GVDocument::CommentState commentState() const;
+	Document::CommentState commentState() const;
 	
-	void transform(GVImageUtils::Orientation);
+	void transform(ImageUtils::Orientation);
 
 protected:
 	QString localSave(QFile*, const QCString& format) const;
 	
 private:
-	GVDocumentJPEGLoadedImplPrivate* d;
+	DocumentJPEGLoadedImplPrivate* d;
 };
 
-#endif /* GVDOCUMENTJPEGLOADEDIMPL_H */
+#endif /* DOCUMENTJPEGLOADEDIMPL_H */

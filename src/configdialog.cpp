@@ -61,14 +61,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "configdialog.moc"
 
-class GVConfigDialogPrivate {
+class ConfigDialogPrivate {
 public:
-	GVConfigImageViewPage* mImageViewPage;
-	GVConfigImageListPage* mImageListPage;
-	GVConfigFullScreenPage* mFullScreenPage;
-	GVConfigFileOperationsPage* mFileOperationsPage;
-	GVConfigMiscPage* mMiscPage;
-	GVMainWindow* mMainWindow;
+	ConfigImageViewPage* mImageViewPage;
+	ConfigImageListPage* mImageListPage;
+	ConfigFullScreenPage* mFullScreenPage;
+	ConfigFileOperationsPage* mFileOperationsPage;
+	ConfigMiscPage* mMiscPage;
+	MainWindow* mMainWindow;
 #ifdef GV_HAVE_KIPI
 	KIPI::ConfigWidget* mKIPIConfigWidget;
 #endif
@@ -93,31 +93,31 @@ void addConfigPage(KDialogBase* dialog, T* content, const QString& header, const
 }
 
 
-GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
+ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 : KDialogBase(
 	KDialogBase::IconList,
 	i18n("Configure"),
 	KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
 	KDialogBase::Ok,
 	mainWindow,
-	"GVConfigDialog",
+	"ConfigDialog",
 	true,
 	true)
 {
-	d=new GVConfigDialogPrivate;
+	d=new ConfigDialogPrivate;
 	d->mMainWindow=mainWindow;
 
 	// Create dialog pages
-	d->mImageListPage = addConfigPage<GVConfigImageListPage>(
+	d->mImageListPage = addConfigPage<ConfigImageListPage>(
 		this, i18n("Configure Image List"), i18n("Image List"), "view_icon");
 	
-	d->mImageViewPage = addConfigPage<GVConfigImageViewPage>(
+	d->mImageViewPage = addConfigPage<ConfigImageViewPage>(
 		this, i18n("Configure Image View"), i18n("Image View"), "looknfeel");
 	
-	d->mFullScreenPage = addConfigPage<GVConfigFullScreenPage>(
+	d->mFullScreenPage = addConfigPage<ConfigFullScreenPage>(
 		this, i18n("Configure Full Screen Mode"), i18n("Full Screen"), "window_fullscreen");
 
-	d->mFileOperationsPage = addConfigPage<GVConfigFileOperationsPage>(
+	d->mFileOperationsPage = addConfigPage<ConfigFileOperationsPage>(
 		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
 
 #ifdef GV_HAVE_KIPI
@@ -126,12 +126,12 @@ GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 		this, d->mKIPIConfigWidget, i18n("Configure KIPI Plugins"), i18n("KIPI Plugins"), "kipi");
 #endif
 
-	d->mMiscPage = addConfigPage<GVConfigMiscPage>(
+	d->mMiscPage = addConfigPage<ConfigMiscPage>(
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
 
-	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
-	GVDocument* document=d->mMainWindow->document();
+	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
+	ScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
+	Document* document=d->mMainWindow->document();
 
 	// Image List tab
 	d->mImageListPage->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -175,12 +175,12 @@ GVConfigDialog::GVConfigDialog(GVMainWindow* mainWindow)
 
 
 
-GVConfigDialog::~GVConfigDialog() {
+ConfigDialog::~ConfigDialog() {
 	delete d;
 }
 
 
-void GVConfigDialog::slotOk() {
+void ConfigDialog::slotOk() {
 	slotApply();
 	accept();
 }
@@ -196,10 +196,10 @@ inline int buttonGroupSelectedId(const QButtonGroup* group) {
 }
 #endif
 
-void GVConfigDialog::slotApply() {
-	GVFileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	GVScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
-	GVDocument* document=d->mMainWindow->document();
+void ConfigDialog::slotApply() {
+	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
+	ScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
+	Document* document=d->mMainWindow->document();
 
 	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(d->mImageListPage->mThumbnailMargin->value());
@@ -216,7 +216,7 @@ void GVConfigDialog::slotApply() {
 	int algo=buttonGroupSelectedId(d->mImageViewPage->mSmoothGroup);
 #endif
 	
-	pixmapView->setSmoothAlgorithm( static_cast<GVImageUtils::SmoothAlgorithm>(algo));
+	pixmapView->setSmoothAlgorithm( static_cast<ImageUtils::SmoothAlgorithm>(algo));
 	pixmapView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
 	pixmapView->setDelayedSmoothing(d->mImageViewPage->mDelayedSmoothing->isChecked());
 	pixmapView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
@@ -229,7 +229,7 @@ void GVConfigDialog::slotApply() {
 #else
 	int osdMode=buttonGroupSelectedId(d->mFullScreenPage->mOSDModeGroup);
 #endif
-	pixmapView->setOSDMode( static_cast<GVScrollPixmapView::OSDMode>(osdMode) );
+	pixmapView->setOSDMode( static_cast<ScrollPixmapView::OSDMode>(osdMode) );
 	pixmapView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
 	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
 
@@ -251,11 +251,11 @@ void GVConfigDialog::slotApply() {
 #else
 	int behavior=buttonGroupSelectedId(d->mMiscPage->mModifiedBehaviorGroup);
 #endif
-	document->setModifiedBehavior( static_cast<GVDocument::ModifiedBehavior>(behavior) );
+	document->setModifiedBehavior( static_cast<Document::ModifiedBehavior>(behavior) );
 }
 
 
-void GVConfigDialog::calculateCacheSize() {
+void ConfigDialog::calculateCacheSize() {
 	KURL url;
 	url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
 	unsigned long size=KDirSize::dirSize(url);
@@ -263,7 +263,7 @@ void GVConfigDialog::calculateCacheSize() {
 }
 
 
-void GVConfigDialog::emptyCache() {
+void ConfigDialog::emptyCache() {
 	QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
 	if (!QFile::exists(dir)) {
@@ -285,7 +285,7 @@ void GVConfigDialog::emptyCache() {
 }
 
 
-void GVConfigDialog::onCacheEmptied(KIO::Job* job) {
+void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 	if ( job->error() ) {
 		job->showErrorDialog(this);
 		return;

@@ -106,14 +106,14 @@ static void drawBorder(QPainter& painter, const QRect& rect) {
 enum BarState { OUT, SLIDING_OUT, SLIDING_IN, IN };
 
 
-struct GVFullScreenBar::Private {
+struct FullScreenBar::Private {
 	QLabel* mLabel;
 	QTimer mTimer;
 	BarState mState;
 };
 
 
-GVFullScreenBar::GVFullScreenBar(QWidget* parent, const KActionPtrList& actions)
+FullScreenBar::FullScreenBar(QWidget* parent, const KActionPtrList& actions)
 : QLabel(parent) {
 	d=new Private;
 	d->mState=IN;
@@ -155,12 +155,12 @@ GVFullScreenBar::GVFullScreenBar(QWidget* parent, const KActionPtrList& actions)
 }
 
 
-GVFullScreenBar::~GVFullScreenBar() {
+FullScreenBar::~FullScreenBar() {
 	delete d;
 }
 
 
-void GVFullScreenBar::resizeEvent(QResizeEvent* event) {
+void FullScreenBar::resizeEvent(QResizeEvent* event) {
 	QSize size=event->size();
 	QRect rect=QRect(QPoint(0, 0), size);
 
@@ -185,12 +185,12 @@ void GVFullScreenBar::resizeEvent(QResizeEvent* event) {
 }
 
 
-void GVFullScreenBar::setText(const QString& text) {
+void FullScreenBar::setText(const QString& text) {
 	d->mLabel->setText(text);
 }
 
 
-void GVFullScreenBar::slideIn() {
+void FullScreenBar::slideIn() {
 	if (d->mState!=IN) {
 		d->mState=SLIDING_IN;
 		d->mTimer.start(SLIDE_IN_INTERVAL);
@@ -198,7 +198,7 @@ void GVFullScreenBar::slideIn() {
 }
 
 
-void GVFullScreenBar::slideOut() {
+void FullScreenBar::slideOut() {
 	if (d->mState!=OUT) {
 		d->mState=SLIDING_OUT;
 		d->mTimer.start(SLIDE_OUT_INTERVAL);
@@ -206,7 +206,7 @@ void GVFullScreenBar::slideOut() {
 }
 
 
-void GVFullScreenBar::slotUpdateSlide() {
+void FullScreenBar::slotUpdateSlide() {
 	int pos=y();
 
 	switch (d->mState) {

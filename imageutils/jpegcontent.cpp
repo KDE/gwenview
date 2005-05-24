@@ -42,11 +42,11 @@ extern "C" {
 #include "exif-utils.h"
 
 // Local
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/jpeg-data.h"
 
-namespace GVImageUtils {
+namespace ImageUtils {
 
 const int INMEM_DST_DELTA=4096;
 
@@ -303,7 +303,7 @@ void JPEGContent::resetOrientation() {
 		return;
 	}
 	exif_set_short(d->mOrientationEntry->data, d->mByteOrder,
-		short(GVImageUtils::NORMAL));
+		short(ImageUtils::NORMAL));
 }
 
 

@@ -44,10 +44,10 @@ const char* STR_TRUE="true";
 const char* STR_FALSE="false";
 
 
-GVPrintDialogPage::GVPrintDialogPage( GVDocument* document, QWidget *parent, const char *name )
+PrintDialogPage::PrintDialogPage( Document* document, QWidget *parent, const char *name )
 		: KPrintDialogPage( parent, name ) {
 	mDocument = document;
-	mContent = new GVPrintDialogPageBase(this);
+	mContent = new PrintDialogPageBase(this);
 	setTitle( mContent->caption() );
 
 	QVBoxLayout *layout = new QVBoxLayout( this );
@@ -61,9 +61,9 @@ GVPrintDialogPage::GVPrintDialogPage( GVDocument* document, QWidget *parent, con
 	toggleRatio(mContent->mScale->isChecked() );
 }
 
-GVPrintDialogPage::~GVPrintDialogPage() {}
+PrintDialogPage::~PrintDialogPage() {}
 
-void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ ) {
+void PrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ ) {
 	opts["app-gwenview-position"] = QString::number(getPosition(mContent->mPosition->currentText()));
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
@@ -81,7 +81,7 @@ void GVPrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*
 
 }
 
-void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
+void PrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 	int val;
 	bool ok;
 	QString stVal;
@@ -119,23 +119,23 @@ void GVPrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 	toggleRatio(mContent->mScale->isChecked() );
 }
 
-int GVPrintDialogPage::scaleWidth() const {
+int PrintDialogPage::scaleWidth() const {
 	return mContent->mWidth->value();
 }
 
-int GVPrintDialogPage::scaleHeight() const {
+int PrintDialogPage::scaleHeight() const {
 	return mContent->mHeight->value();
 }
 
-void GVPrintDialogPage::setScaleWidth( int value ) {
+void PrintDialogPage::setScaleWidth( int value ) {
 	mContent->mWidth->setValue(value);
 }
 
-void GVPrintDialogPage::setScaleHeight( int value ) {
+void PrintDialogPage::setScaleHeight( int value ) {
 	mContent->mHeight->setValue(value);
 }
 
-int GVPrintDialogPage::getPosition(const QString& align) {
+int PrintDialogPage::getPosition(const QString& align) {
 	int alignment;
 
 	if (align == i18n("Central-Left")) {
@@ -162,7 +162,7 @@ int GVPrintDialogPage::getPosition(const QString& align) {
 	return alignment;
 }
 
-QString GVPrintDialogPage::setPosition(int align) {
+QString PrintDialogPage::setPosition(int align) {
 	QString alignment;
 
 	if (align == (Qt::AlignLeft | Qt::AlignVCenter)) {
@@ -189,7 +189,7 @@ QString GVPrintDialogPage::setPosition(int align) {
 	return alignment;
 }
 
-int GVPrintDialogPage::getUnit(const QString& unit) {
+int PrintDialogPage::getUnit(const QString& unit) {
 	if (unit == i18n("Millimeters")) {
 		return	GV_MILLIMETERS;
 	} else if (unit == i18n("Centimeters")) {
@@ -199,7 +199,7 @@ int GVPrintDialogPage::getUnit(const QString& unit) {
 	}
 }
 
-QString GVPrintDialogPage::setUnit(int unit) {
+QString PrintDialogPage::setUnit(int unit) {
 	if (unit == GV_MILLIMETERS) {
 		return i18n("Millimeters");
 	} else if (unit == GV_CENTIMETERS) {
@@ -210,7 +210,7 @@ QString GVPrintDialogPage::setUnit(int unit) {
 }
 
 // SLOTS
-void GVPrintDialogPage::setHValue (int value) {
+void PrintDialogPage::setHValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 
@@ -225,7 +225,7 @@ void GVPrintDialogPage::setHValue (int value) {
 
 }
 
-void GVPrintDialogPage::setWValue (int value) {
+void PrintDialogPage::setWValue (int value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 	if (mContent->mKeepRatio->isChecked()) {
@@ -237,7 +237,7 @@ void GVPrintDialogPage::setWValue (int value) {
 	mContent->mHeight->blockSignals(false);
 }
 
-void GVPrintDialogPage::toggleRatio(bool enable) {
+void PrintDialogPage::toggleRatio(bool enable) {
 	if (enable) {
 		float cm = 1;
 		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS) cm = 10;
@@ -257,7 +257,7 @@ void GVPrintDialogPage::toggleRatio(bool enable) {
 }
 
 
-void GVPrintDialogPage::setNewUnit(const QString& string) {
+void PrintDialogPage::setNewUnit(const QString& string) {
 	mContent->mUnits->setCurrentItem(string);
 	toggleRatio(true); // to do better
 }

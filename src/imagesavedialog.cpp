@@ -43,7 +43,7 @@ static int findFormatInFilterList(const QStringList& filters, const QString& for
 }
 
 
-GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWidget* parent)
+ImageSaveDialog::ImageSaveDialog(KURL& url, const QCString& imageFormat, QWidget* parent)
 : KFileDialog(url.path(),QString::null,parent,"imagesavedialog",true)
 , mURL(url)
 , mImageFormat(imageFormat)
@@ -106,13 +106,13 @@ GVImageSaveDialog::GVImageSaveDialog(KURL& url, const QCString& imageFormat, QWi
 }
 
 
-void GVImageSaveDialog::accept() {
+void ImageSaveDialog::accept() {
 	KFileDialog::accept();
 	mURL=selectedURL();
 }
 
 
-void GVImageSaveDialog::updateImageFormat(const QString& text) {
+void ImageSaveDialog::updateImageFormat(const QString& text) {
 	QStringList list=QStringList::split(" ",text);
 	mImageFormat=list[0].local8Bit();
 	

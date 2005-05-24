@@ -18,24 +18,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVKIPIINTERFACE_H
-#define GVKIPIINTERFACE_H	
+#ifndef KIPIINTERFACE_H
+#define KIPIINTERFACE_H	
 
 #include <config.h>
 #ifdef GV_HAVE_KIPI
 
 #include <libkipi/interface.h>
 
-class GVKIPIInterfacePrivate;
+class KIPIInterfacePrivate;
 
-class GVFileViewStack;
+class FileViewStack;
 
-class GVKIPIInterface :public KIPI::Interface {
+class KIPIInterface :public KIPI::Interface {
 	Q_OBJECT
 
 public:
-	GVKIPIInterface( QWidget* parent, GVFileViewStack*);
-	virtual ~GVKIPIInterface();
+	KIPIInterface( QWidget* parent, FileViewStack*);
+	virtual ~KIPIInterface();
 
 	KIPI::ImageCollection currentAlbum();
 	KIPI::ImageCollection currentSelection();
@@ -46,7 +46,7 @@ public:
 	virtual void refreshImages( const KURL::List& urls );
 
 private:
-	GVKIPIInterfacePrivate* d;
+	KIPIInterfacePrivate* d;
 
 private slots:
 	void slotSelectionChanged();
@@ -54,4 +54,4 @@ private slots:
 };
 
 #endif /* GV_HAVE_KIPI */
-#endif /* GVKIPIINTERFACE_H */
+#endif /* KIPIINTERFACE_H */

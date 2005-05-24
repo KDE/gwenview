@@ -56,7 +56,7 @@ extern "C" {
 // Local
 #include "cache.h"
 #include "imageutils/jpegcontent.h"
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadjob.moc"
 
@@ -142,7 +142,7 @@ void ThumbnailThread::loadThumbnail() {
 	
 	// If it's a JPEG, try to load a small image directly from the file
 	if (isJPEG()) {
-		GVImageUtils::JPEGContent content;
+		ImageUtils::JPEGContent content;
 		content.load(mPixPath);
 		mOriginalWidth = content.size().width();
 		mOriginalHeight = content.size().height();
@@ -159,8 +159,8 @@ void ThumbnailThread::loadThumbnail() {
 		}
 		if (loaded) {
 			// Rotate if necessary
-			GVImageUtils::Orientation orientation = content.orientation();
-			mImage=GVImageUtils::transform(mImage,orientation);
+			ImageUtils::Orientation orientation = content.orientation();
+			mImage=ImageUtils::transform(mImage,orientation);
 		}
 	}
 	// File is not a JPEG, or JPEG optimized load failed, load file using Qt
@@ -169,7 +169,7 @@ void ThumbnailThread::loadThumbnail() {
 		if (originalImage.load(mPixPath)) {
 			mOriginalWidth=originalImage.width();
 			mOriginalHeight=originalImage.height();
-			int thumbSize=mThumbnailSize<=GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
+			int thumbSize=mThumbnailSize<=ThumbnailSize::NORMAL ? ThumbnailSize::NORMAL : ThumbnailSize::LARGE;
 
 			if( testCancel()) return;
 
@@ -177,7 +177,7 @@ void ThumbnailThread::loadThumbnail() {
 				mImage=originalImage;
 				needCaching = false;
 			} else {
-				mImage=GVImageUtils::scale(originalImage,thumbSize,thumbSize,GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+				mImage=ImageUtils::scale(originalImage,thumbSize,thumbSize,ImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 			}
 			loaded = true;
 		}
@@ -206,11 +206,11 @@ bool ThumbnailThread::isJPEG() {
 
 
 
-struct GVJPEGFatalError : public jpeg_error_mgr {
+struct JPEGFatalError : public jpeg_error_mgr {
 	jmp_buf mJmpBuffer;
 
 	static void handler(j_common_ptr cinfo) {
-		GVJPEGFatalError* error=static_cast<GVJPEGFatalError*>(cinfo->err);
+		JPEGFatalError* error=static_cast<JPEGFatalError*>(cinfo->err);
 		(error->output_message)(cinfo);
 		longjmp(error->mJmpBuffer,1);
 	}
@@ -224,9 +224,9 @@ bool ThumbnailThread::loadJPEG() {
 	if(!inputFile) return false;
 	
 	// Error handling
-	struct GVJPEGFatalError jerr;
+	struct JPEGFatalError jerr;
 	cinfo.err = jpeg_std_error(&jerr);
-	cinfo.err->error_exit = GVJPEGFatalError::handler;
+	cinfo.err->error_exit = JPEGFatalError::handler;
 	if (setjmp(jerr.mJmpBuffer)) {
 		jpeg_destroy_decompress(&cinfo);
 		fclose(inputFile);
@@ -239,7 +239,7 @@ bool ThumbnailThread::loadJPEG() {
 	jpeg_read_header(&cinfo, TRUE);
 
 	// Get image size and check if we need a thumbnail
-	int size= mThumbnailSize <= GVThumbnailSize::NORMAL ? GVThumbnailSize::NORMAL : GVThumbnailSize::LARGE;
+	int size= mThumbnailSize <= ThumbnailSize::NORMAL ? ThumbnailSize::NORMAL : ThumbnailSize::LARGE;
 	int imgSize = QMAX(cinfo.image_width, cinfo.image_height);
 
 	if (imgSize<=size) {
@@ -299,7 +299,7 @@ bool ThumbnailThread::loadJPEG() {
 	int newx = size*cinfo.output_width / newMax;
 	int newy = size*cinfo.output_height / newMax;
 
-	mImage=GVImageUtils::scale(mImage,newx, newy,GVImageUtils::SMOOTH_FAST);
+	mImage=ImageUtils::scale(mImage,newx, newy,ImageUtils::SMOOTH_FAST);
 
 	jpeg_destroy_decompress(&cinfo);
 	fclose(inputFile);
@@ -323,7 +323,7 @@ QString ThumbnailLoadJob::thumbnailBaseDir() {
 
 QString ThumbnailLoadJob::thumbnailBaseDir(int size) {
 	QString dir = thumbnailBaseDir();
-	if (size<=GVThumbnailSize::NORMAL) {
+	if (size<=ThumbnailSize::NORMAL) {
 		dir+="normal/";
 	} else {
 		dir+="large/";
@@ -334,8 +334,8 @@ QString ThumbnailLoadJob::thumbnailBaseDir(int size) {
 
 void ThumbnailLoadJob::deleteImageThumbnail(const KURL& url) {
 	QString uri=generateOriginalURI(url);
-	QFile::remove(generateThumbnailPath(uri, GVThumbnailSize::NORMAL));
-	QFile::remove(generateThumbnailPath(uri, GVThumbnailSize::LARGE));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::NORMAL));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::LARGE));
 }
 
 
@@ -370,7 +370,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 	LOG("");
 	
 	mBrokenPixmap=KGlobal::iconLoader()->loadIcon("file_broken", 
-		KIcon::NoGroup, GVThumbnailSize::MIN);
+		KIcon::NoGroup, ThumbnailSize::MIN);
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items->empty());
@@ -381,7 +381,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QValueVector<const KFileItem*>* items, 
 
 	connect(&mThumbnailThread, SIGNAL(done(const QImage&, const QSize&)),
 		SLOT(thumbnailReady(const QImage&, const QSize&)) );
-	GVCache::instance()->updateAge(); // see addThumbnail in GVCache
+	Cache::instance()->updateAge(); // see addThumbnail in Cache
 }
 
 
@@ -624,8 +624,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 		return;
 	}
 	QSize imagesize;
-	if( mOriginalTime == time_t( GVCache::instance()->timestamp( mCurrentURL ).toTime_t())) {
-		QPixmap cached = GVCache::instance()->thumbnail( mCurrentURL, imagesize );
+	if( mOriginalTime == time_t( Cache::instance()->timestamp( mCurrentURL ).toTime_t())) {
+		QPixmap cached = Cache::instance()->thumbnail( mCurrentURL, imagesize );
 		if( !cached.isNull()) {
 			emit thumbnailLoaded(mCurrentItem, cached, imagesize);
 			determineNextIcon();
@@ -688,14 +688,14 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, QSize size) {
 	QImage thumbImg;
 	if (biggestDimension>mThumbnailSize) {
 		// Scale down thumbnail if necessary
-		thumbImg=GVImageUtils::scale(img,mThumbnailSize, mThumbnailSize, GVImageUtils::SMOOTH_FAST,QImage::ScaleMin);
+		thumbImg=ImageUtils::scale(img,mThumbnailSize, mThumbnailSize, ImageUtils::SMOOTH_FAST,QImage::ScaleMin);
 	} else {
 		thumbImg=img;
 	}
 	QDateTime tm;
 	tm.setTime_t( mOriginalTime );
 	QPixmap thumb( thumbImg ); // store as QPixmap in cache (faster to retrieve, no conversion needed)
-	GVCache::instance()->addThumbnail( mCurrentURL, thumb, size, tm );
+	Cache::instance()->addThumbnail( mCurrentURL, thumb, size, tm );
 	emit thumbnailLoaded(mCurrentItem, thumb, size);
 }
 

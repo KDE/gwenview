@@ -32,7 +32,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 #include "externaltoolcontext.moc"
 
-GVExternalToolContext::GVExternalToolContext(
+ExternalToolContext::ExternalToolContext(
 	QObject* parent,
 	QPtrList<KService> services,
 	KURL::List urls)
@@ -42,18 +42,18 @@ GVExternalToolContext::GVExternalToolContext(
 {}
 
 
-void GVExternalToolContext::showExternalToolDialog() {
-	GVExternalToolDialog* dialog=new GVExternalToolDialog(kapp->mainWidget());
+void ExternalToolContext::showExternalToolDialog() {
+	ExternalToolDialog* dialog=new ExternalToolDialog(kapp->mainWidget());
 	dialog->show();
 }
 
 
-QPopupMenu* GVExternalToolContext::popupMenu() {
+QPopupMenu* ExternalToolContext::popupMenu() {
 	QPopupMenu* menu=new QPopupMenu();
 	QPtrListIterator<KService> it(mServices);
 	for (;it.current(); ++it) {
-		GVExternalToolAction* action=
-			new GVExternalToolAction(this, it.current(), mURLs);
+		ExternalToolAction* action=
+			new ExternalToolAction(this, it.current(), mURLs);
 		action->plug(menu);
 	}
 

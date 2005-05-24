@@ -45,9 +45,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * than KDirSelectDialog, since it provides access to bookmarks and let you
  * create a dir.
  */
-class GVDirSelectDialog : public KFileDialog {
+class DirSelectDialog : public KFileDialog {
 public:
-	GVDirSelectDialog(const QString& startDir, QWidget* parent)
+	DirSelectDialog(const QString& startDir, QWidget* parent)
 	: KFileDialog(startDir, QString::null, parent, "dirselectdialog", true) {
 		locationEdit->setEnabled(false);
 		filterWidget->setEnabled(false);
@@ -99,7 +99,7 @@ void FileOpCopyToObject::operator()() {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Copy File"));
 		} else {
-			GVDirSelectDialog dialog(destDir, mParent);
+			DirSelectDialog dialog(destDir, mParent);
 			dialog.setCaption(i18n("Select Folder Where the Files Will be Copied"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
@@ -130,7 +130,7 @@ void FileOpMoveToObject::operator()() {
 			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
 					QString::null, mParent, i18n("Move File"));
 		} else {
-			GVDirSelectDialog dialog(destDir, mParent);
+			DirSelectDialog dialog(destDir, mParent);
 			dialog.setCaption(i18n("Select Folder Where the Files Will be Moved"));
 			dialog.exec();
 			destURL=dialog.selectedURL();

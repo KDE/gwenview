@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 const unsigned int MAX_HISTORY_SIZE=12;
 
-GVHistory::GVHistory(KActionCollection* actionCollection) {
+History::History(KActionCollection* actionCollection) {
 	mPosition=mHistoryList.end();
 	mMovingInHistory=false;
 
@@ -60,11 +60,11 @@ GVHistory::GVHistory(KActionCollection* actionCollection) {
 }
 
 
-GVHistory::~GVHistory() {
+History::~History() {
 }
 
 
-void GVHistory::addURLToHistory(const KURL& url2) {
+void History::addURLToHistory(const KURL& url2) {
 	KURL url( url2 );
 	url.setFileName( QString::null );
 	if (!mMovingInHistory) {
@@ -85,7 +85,7 @@ void GVHistory::addURLToHistory(const KURL& url2) {
 }
 
 
-void GVHistory::fillGoBackMenu() {
+void History::fillGoBackMenu() {
 	QPopupMenu* menu=mGoBack->popupMenu();
 	menu->clear();
 	HistoryList::ConstIterator it;
@@ -96,7 +96,7 @@ void GVHistory::fillGoBackMenu() {
 	}
 }
 
-void GVHistory::fillGoForwardMenu() {
+void History::fillGoForwardMenu() {
 	QPopupMenu* menu=mGoForward->popupMenu();
 	menu->clear();
 	HistoryList::ConstIterator it=mPosition;
@@ -108,17 +108,17 @@ void GVHistory::fillGoForwardMenu() {
 	}
 }
 
-void GVHistory::goBack() {
+void History::goBack() {
 	goBackTo(1);
 }
 
 
-void GVHistory::goForward() {
+void History::goForward() {
 	goForwardTo(1);
 }
 
 
-void GVHistory::goBackTo(int id) {
+void History::goBackTo(int id) {
 	for (;id>0; --id) --mPosition;
 	mMovingInHistory=true;
 	emit urlChanged(*mPosition);
@@ -126,7 +126,7 @@ void GVHistory::goBackTo(int id) {
 }
 
 
-void GVHistory::goForwardTo(int id) {
+void History::goForwardTo(int id) {
 	for (;id>0; --id) ++mPosition;
 	mMovingInHistory=true;
 	emit urlChanged(*mPosition);

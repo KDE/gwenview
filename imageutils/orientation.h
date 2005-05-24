@@ -22,7 +22,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #define ORIENTATION_H
 
 
-namespace GVImageUtils {
+namespace ImageUtils {
 
 enum Orientation {
 	NOT_AVAILABLE=0,

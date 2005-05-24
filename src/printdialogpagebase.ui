@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>GVPrintDialogPageBase</class>
+<class>PrintDialogPageBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>GVPrintDialogPageBase</cstring>
+        <cstring>PrintDialogPageBase</cstring>
     </property>
     <property name="geometry">
         <rect>

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVFILETHUMBNAILVIEW_H
-#define GVFILETHUMBNAILVIEW_H
+#ifndef FILETHUMBNAILVIEW_H
+#define FILETHUMBNAILVIEW_H
 
 // Qt includes
 #include <qguardedptr.h>
@@ -41,16 +41,16 @@ class KConfig;
 class KFileItem;
 typedef QPtrList<KFileItem> KFileItemList;
 
-class GVFileThumbnailViewItem;
+class FileThumbnailViewItem;
 class ThumbnailLoadJob;
 
-class GVFileThumbnailView : public KIconView, public GVFileViewBase {
+class FileThumbnailView : public KIconView, public FileViewBase {
 Q_OBJECT
-	friend class GVFileThumbnailViewItem;
+	friend class FileThumbnailViewItem;
 	
 public:
-	GVFileThumbnailView(QWidget* parent);
-	~GVFileThumbnailView();
+	FileThumbnailView(QWidget* parent);
+	~FileThumbnailView();
 
 	QWidget* widget() { return this; }
 
@@ -121,7 +121,7 @@ private slots:
 	void slotDropped(QDropEvent*);
 	void slotContentsMoving( int, int );
 	void slotCurrentChanged(QIconViewItem*);
-	void slotBusyLevelChanged( GVBusyLevel );
+	void slotBusyLevelChanged( BusyLevel );
 	void slotUpdateEnded();
 };
 

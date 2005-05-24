@@ -29,13 +29,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "slideshowdialog.moc"
 
 
-GVSlideShowDialog::GVSlideShowDialog(QWidget* parent,GVSlideShow* slideShow)
+SlideShowDialog::SlideShowDialog(QWidget* parent,SlideShow* slideShow)
 : KDialogBase(
 	parent,0,true,QString::null,KDialogBase::Ok|KDialogBase::Cancel,
 	KDialogBase::Ok,true)
 , mSlideShow(slideShow)
 {
-	mContent=new GVSlideShowDialogBase(this);
+	mContent=new SlideShowDialogBase(this);
 	setMainWidget(mContent);
 	setCaption(mContent->caption());
 	
@@ -44,7 +44,7 @@ GVSlideShowDialog::GVSlideShowDialog(QWidget* parent,GVSlideShow* slideShow)
 }
 
 
-void GVSlideShowDialog::slotOk() {
+void SlideShowDialog::slotOk() {
 	mSlideShow->setDelay(mContent->mDelay->value());
 	mSlideShow->setLoop(mContent->mLoop->isChecked());
 	accept();

@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "documentloadingimpl.h"
 #include "documentimpl.h"
 #include "imagesavedialog.h"
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "jpegformattype.h"
 #include "pngformattype.h"
 #include "mngformattype.h"
@@ -67,16 +67,16 @@ const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 
 //-------------------------------------------------------------------
 //
-// GVDocumentPrivate
+// DocumentPrivate
 //
 //-------------------------------------------------------------------
-class GVDocumentPrivate {
+class DocumentPrivate {
 public:
 	KURL mURL;
 	bool mModified;
 	QImage mImage;
 	QCString mImageFormat;
-	GVDocumentImpl* mImpl;
+	DocumentImpl* mImpl;
 	QGuardedPtr<KIO::StatJob> mStatJob;
 	int mFileSize;
 };
@@ -84,14 +84,14 @@ public:
 
 //-------------------------------------------------------------------
 //
-// GVDocument
+// Document
 //
 //-------------------------------------------------------------------
-GVDocument::GVDocument(QObject* parent)
+Document::Document(QObject* parent)
 : QObject(parent) {
-	d=new GVDocumentPrivate;
+	d=new DocumentPrivate;
 	d->mModified=false;
-	d->mImpl=new GVDocumentEmptyImpl(this);
+	d->mImpl=new DocumentEmptyImpl(this);
 	d->mStatJob=0L;
 	d->mFileSize=-1;
 
@@ -103,10 +103,10 @@ GVDocument::GVDocument(QObject* parent)
 	// override some of them are installed later and thus come first.
 	QImageIO::inputFormats();
 	{
-		static GVJPEGFormatType sJPEGFormatType;
-		static GVPNGFormatType sPNGFormatType;
-		static GVXPM sXPM;
-		static GVMNG sMNG;
+		static Gwenview::JPEGFormatType sJPEGFormatType;
+		static Gwenview::PNGFormatType sPNGFormatType;
+		static Gwenview::XPM sXPM;
+		static Gwenview::MNG sMNG;
 	}
 
 	connect( this, SIGNAL( loading()),
@@ -116,7 +116,7 @@ GVDocument::GVDocument(QObject* parent)
 }
 
 
-GVDocument::~GVDocument() {
+Document::~Document() {
 	delete d->mImpl;
 	delete d;
 }
@@ -127,12 +127,12 @@ GVDocument::~GVDocument() {
 // Properties
 //
 //---------------------------------------------------------------------
-KURL GVDocument::url() const {
+KURL Document::url() const {
 	return d->mURL;
 }
 
 
-void GVDocument::setURL(const KURL& paramURL) {
+void Document::setURL(const KURL& paramURL) {
 	if (paramURL==url()) return;
 	// Make a copy, we might have to fix the protocol
 	KURL localURL(paramURL);
@@ -142,7 +142,7 @@ void GVDocument::setURL(const KURL& paramURL) {
 	if (!d->mStatJob.isNull()) {
 		d->mStatJob->kill();
 	}
-	GVBusyLevelManager::instance()->setBusyLevel(this, BUSY_NONE);
+	BusyLevelManager::instance()->setBusyLevel(this, BUSY_NONE);
 
 	// Ask to save if necessary.
 	if (!saveBeforeClosing()) {
@@ -158,11 +158,11 @@ void GVDocument::setURL(const KURL& paramURL) {
 
 	// Set high busy level, so that operations like smoothing are suspended.
 	// Otherwise the stat() below done using KIO can take quite long.
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_CHECKING_NEW_IMAGE );
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_CHECKING_NEW_IMAGE );
 
 
 	// Fix wrong protocol
-	if (GVArchive::protocolIsArchive(localURL.protocol())) {
+	if (Archive::protocolIsArchive(localURL.protocol())) {
 		QFileInfo info(localURL.path());
 		if (info.exists()) {
 			localURL.setProtocol("file");
@@ -176,14 +176,14 @@ void GVDocument::setURL(const KURL& paramURL) {
 }
 
 
-void GVDocument::slotStatResult(KIO::Job* job) {
+void Document::slotStatResult(KIO::Job* job) {
 	LOG("");
 	Q_ASSERT(d->mStatJob==job);
 	if (d->mStatJob!=job) {
 		kdWarning() << k_funcinfo << "We did not get the right job!\n";
 		return;
 	}
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 	if (d->mStatJob->error()) return;
 
 	bool isDir=false;
@@ -208,7 +208,7 @@ void GVDocument::slotStatResult(KIO::Job* job) {
 }
 
 
-void GVDocument::setDirURL(const KURL& paramURL) {
+void Document::setDirURL(const KURL& paramURL) {
 	if (!saveBeforeClosing()) {
 		emit loaded(d->mURL);
 		return;
@@ -219,11 +219,11 @@ void GVDocument::setDirURL(const KURL& paramURL) {
 }
 
 
-const QImage& GVDocument::image() const {
+const QImage& Document::image() const {
 	return d->mImage;
 }
 
-void GVDocument::setImage(QImage img, bool update) {
+void Document::setImage(QImage img, bool update) {
 	bool sizechange = d->mImage.size() != img.size();
 	d->mImage=img;
 	if( update ) {
@@ -232,7 +232,7 @@ void GVDocument::setImage(QImage img, bool update) {
 	}
 }
 
-KURL GVDocument::dirURL() const {
+KURL Document::dirURL() const {
 	if (filename().isEmpty()) {
 		return d->mURL;
 	} else {
@@ -242,46 +242,46 @@ KURL GVDocument::dirURL() const {
 	}
 }
 
-QString GVDocument::filename() const {
+QString Document::filename() const {
 	return d->mURL.filename(false);
 }
 
-const QCString& GVDocument::imageFormat() const {
+const QCString& Document::imageFormat() const {
 	return d->mImageFormat;
 }
 
-void GVDocument::setImageFormat(const QCString& format) {
+void Document::setImageFormat(const QCString& format) {
 	d->mImageFormat=format;
 }
 
-void GVDocument::setFileSize(int size) {
+void Document::setFileSize(int size) {
 	d->mFileSize=size;
 }
 
-QString GVDocument::comment() const {
+QString Document::comment() const {
 	return d->mImpl->comment();
 }
 
-void GVDocument::setComment(const QString& comment) {
+void Document::setComment(const QString& comment) {
 	d->mImpl->setComment(comment);
 	d->mModified=true;
 	emit modified();
 }
 
-GVDocument::CommentState GVDocument::commentState() const {
+Document::CommentState Document::commentState() const {
 	return d->mImpl->commentState();
 }
 
-int GVDocument::fileSize() const {
+int Document::fileSize() const {
 	return d->mFileSize;
 }
 
-void GVDocument::slotLoading() {
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_LOADING );
+void Document::slotLoading() {
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_LOADING );
 }
 
-void GVDocument::slotLoaded() {
-	GVBusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
+void Document::slotLoaded() {
+	BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 
 //---------------------------------------------------------------------
@@ -289,13 +289,13 @@ void GVDocument::slotLoaded() {
 // Operations
 //
 //---------------------------------------------------------------------
-void GVDocument::reload() {
+void Document::reload() {
 	load();
 	emit reloaded(url());
 }
 
 
-void GVDocument::print(KPrinter *pPrinter) {
+void Document::print(KPrinter *pPrinter) {
 	QPainter printPainter;
 	printPainter.begin(pPrinter);
 	doPaint(pPrinter, &printPainter);
@@ -327,7 +327,7 @@ static QString minimizeString( const QString& text, const QFontMetrics&
 	return txt;
 }
 
-void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
+void Document::doPaint(KPrinter *printer, QPainter *painter) {
 	// will contain the final image to print
 	QImage image = d->mImage;
 	image.detach();
@@ -455,14 +455,14 @@ void GVDocument::doPaint(KPrinter *printer, QPainter *painter) {
 }
 
 
-void GVDocument::transform(GVImageUtils::Orientation orientation) {
+void Document::transform(ImageUtils::Orientation orientation) {
 	d->mImpl->transform(orientation);
 	d->mModified=true;
 	emit modified();
 }
 
 
-void GVDocument::save() {
+void Document::save() {
 	QString msg=saveInternal(url(), d->mImageFormat);
 	if (!msg.isNull()) {
 		KMessageBox::error(0, msg);
@@ -470,11 +470,11 @@ void GVDocument::save() {
 }
 
 
-void GVDocument::saveAs() {
+void Document::saveAs() {
 	KURL saveURL;
 	if (url().isLocalFile()) saveURL=url();
 
-	GVImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
+	ImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
 	if (!dialog.exec()) return;
 
 	QString msg=saveInternal(saveURL, dialog.imageFormat() );
@@ -483,7 +483,7 @@ void GVDocument::saveAs() {
 	}
 }
 
-bool GVDocument::saveBeforeClosing() {
+bool Document::saveBeforeClosing() {
 	if (!d->mModified) return true;
 
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
@@ -509,20 +509,20 @@ bool GVDocument::saveBeforeClosing() {
 // Config
 //
 //---------------------------------------------------------------------
-static GVDocument::ModifiedBehavior stringToModifiedBehavior(const QString& str) {
-	if (str=="yes") return GVDocument::SAVE_SILENTLY;
-	if (str=="no") return GVDocument::DISCARD_CHANGES;
-	return GVDocument::ASK;
+static Document::ModifiedBehavior stringToModifiedBehavior(const QString& str) {
+	if (str=="yes") return Document::SAVE_SILENTLY;
+	if (str=="no") return Document::DISCARD_CHANGES;
+	return Document::ASK;
 }
 
-static QString modifiedBehaviorToString(GVDocument::ModifiedBehavior behaviour) {
-	if (behaviour==GVDocument::SAVE_SILENTLY) return "yes";
-	if (behaviour==GVDocument::DISCARD_CHANGES) return "no";
+static QString modifiedBehaviorToString(Document::ModifiedBehavior behaviour) {
+	if (behaviour==Document::SAVE_SILENTLY) return "yes";
+	if (behaviour==Document::DISCARD_CHANGES) return "no";
 	return "";
 }
 
 
-void GVDocument::setModifiedBehavior(ModifiedBehavior value) {
+void Document::setModifiedBehavior(ModifiedBehavior value) {
 	KConfig* config=KGlobal::config();
 	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	config->setGroup(CONFIG_NOTIFICATION_MESSAGES_GROUP);
@@ -531,7 +531,7 @@ void GVDocument::setModifiedBehavior(ModifiedBehavior value) {
 }
 
 
-GVDocument::ModifiedBehavior GVDocument::modifiedBehavior() const {
+Document::ModifiedBehavior Document::modifiedBehavior() const {
 	KConfig* config=KGlobal::config();
 	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
 	QString str=config->readEntry(CONFIG_SAVE_AUTOMATICALLY);
@@ -544,7 +544,7 @@ GVDocument::ModifiedBehavior GVDocument::modifiedBehavior() const {
 // Private stuff
 //
 //---------------------------------------------------------------------
-void GVDocument::switchToImpl(GVDocumentImpl* impl) {
+void Document::switchToImpl(DocumentImpl* impl) {
 	// There should always be an implementation defined
 	Q_ASSERT(d->mImpl);
 	Q_ASSERT(impl);
@@ -561,17 +561,17 @@ void GVDocument::switchToImpl(GVDocumentImpl* impl) {
 }
 
 
-void GVDocument::load() {
+void Document::load() {
 	KURL pixURL=url();
 	Q_ASSERT(!pixURL.isEmpty());
 	LOG("url: " << pixURL.prettyURL());
 
-	switchToImpl(new GVDocumentLoadingImpl(this));
+	switchToImpl(new DocumentLoadingImpl(this));
 	emit loading();
 }
 
 
-void GVDocument::slotFinished(bool success) {
+void Document::slotFinished(bool success) {
 	LOG("");
 	if (success) {
 		emit loaded(d->mURL);
@@ -582,7 +582,7 @@ void GVDocument::slotFinished(bool success) {
 }
 
 
-QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
+QString Document::saveInternal(const KURL& url, const QCString& format) {
 	QString msg=d->mImpl->save(url, format);
 
 	if (msg.isNull()) {
@@ -598,7 +598,7 @@ QString GVDocument::saveInternal(const KURL& url, const QCString& format) {
 }
 
 
-void GVDocument::reset() {
-	switchToImpl(new GVDocumentEmptyImpl(this));
+void Document::reset() {
+	switchToImpl(new DocumentEmptyImpl(this));
 	emit loaded(d->mURL);
 }

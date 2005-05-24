@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "document.h"
 #include "metaedit.moc"
 
-// FIXME: Why doesn't GVMetaEdit inherits from QTextEdit rather than QVBox?
-GVMetaEdit::GVMetaEdit(QWidget *parent, GVDocument *gvp, const char *name)
+// FIXME: Why doesn't MetaEdit inherits from QTextEdit rather than QVBox?
+MetaEdit::MetaEdit(QWidget *parent, Document *gvp, const char *name)
 : QVBox(parent, name)
 , mDocument(gvp)
 {
@@ -48,12 +48,12 @@ GVMetaEdit::GVMetaEdit(QWidget *parent, GVDocument *gvp, const char *name)
 }
 
 
-GVMetaEdit::~GVMetaEdit() {
+MetaEdit::~MetaEdit() {
 }
 
 
-bool GVMetaEdit::eventFilter(QObject *o, QEvent *e) {
-	if (o == mCommentEdit && mEmpty && (mDocument->commentState()==GVDocument::WRITABLE)) {
+bool MetaEdit::eventFilter(QObject *o, QEvent *e) {
+	if (o == mCommentEdit && mEmpty && (mDocument->commentState()==Document::WRITABLE)) {
 		if (e->type() == QEvent::FocusIn) {
 			mCommentEdit->setTextFormat(QTextEdit::PlainText);
 			mCommentEdit->setText("");
@@ -65,14 +65,14 @@ bool GVMetaEdit::eventFilter(QObject *o, QEvent *e) {
 }
 
 
-void GVMetaEdit::setModified(bool m) {
+void MetaEdit::setModified(bool m) {
 	if (m && mEmpty) {
 		mEmpty = false;
 	}
 }
 
 
-void GVMetaEdit::updateContent() {
+void MetaEdit::updateContent() {
 	if (mDocument->isNull()) {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
 		mCommentEdit->setText(i18n("<i>No image selected.</i>"));
@@ -82,7 +82,7 @@ void GVMetaEdit::updateContent() {
 
 	QString comment=mDocument->comment();
 
-	if (mDocument->commentState() & GVDocument::VALID) {
+	if (mDocument->commentState() & Document::VALID) {
 		mEmpty = comment.isEmpty();
 		if (mEmpty) {
 			setEmptyText();
@@ -94,24 +94,24 @@ void GVMetaEdit::updateContent() {
 		mCommentEdit->setTextFormat(QTextEdit::RichText);
 		mCommentEdit->setText(i18n("<i>This image cannot be commented.</i>"));
 	}
-	bool writable=mDocument->commentState()==GVDocument::WRITABLE;
+	bool writable=mDocument->commentState()==Document::WRITABLE;
 	mCommentEdit->setReadOnly(!writable);
 	mCommentEdit->setEnabled(writable);
 }
 
 
-void GVMetaEdit::updateDoc() {
-	if ((mDocument->commentState()==GVDocument::WRITABLE) && mCommentEdit->isModified()) {
+void MetaEdit::updateDoc() {
+	if ((mDocument->commentState()==Document::WRITABLE) && mCommentEdit->isModified()) {
 		mDocument->setComment(mCommentEdit->text());
 		mCommentEdit->setModified(false);
 	}
 }
 
 
-void GVMetaEdit::setEmptyText() {
+void MetaEdit::setEmptyText() {
 	QString comment;
 	mCommentEdit->setTextFormat(QTextEdit::RichText);
-	if (mDocument->commentState()==GVDocument::WRITABLE) {
+	if (mDocument->commentState()==Document::WRITABLE) {
 		comment=i18n("<i>Type here to add a comment to this image.</i>");
 	} else {
 		comment=i18n("<i>No comment available.</i>");

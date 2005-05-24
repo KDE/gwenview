@@ -21,8 +21,8 @@
 	Boston, MA 02111-1307, USA.
 */
 
-#ifndef GVFILEDETAILVIEWITEM_H
-#define GVFILEDETAILVIEWITEM_H
+#ifndef FILEDETAILVIEWITEM_H
+#define FILEDETAILVIEWITEM_H
 
 // KDE includes
 #include <klistview.h>
@@ -35,22 +35,22 @@
 #define COL_OWNER 4
 #define COL_GROUP 5
 
-class GVFileDetailViewItem : public KListViewItem
+class FileDetailViewItem : public KListViewItem
 {
 public:
-	GVFileDetailViewItem( QListView* parent, const QString &text,
+	FileDetailViewItem( QListView* parent, const QString &text,
 					   const QPixmap &icon, KFileItem* fi )
 		: KListViewItem( parent, text ), inf( fi ) {
 		setPixmap( 0, icon );
 		setText( 0, text );
 	}
 
-	GVFileDetailViewItem( QListView* parent, KFileItem* fi )
+	FileDetailViewItem( QListView* parent, KFileItem* fi )
 		: KListViewItem( parent ), inf( fi ) {
 		init();
 	}
 
-	GVFileDetailViewItem( QListView* parent, const QString &text,
+	FileDetailViewItem( QListView* parent, const QString &text,
 					   const QPixmap &icon, KFileItem* fi,
 					   QListViewItem* after)
 		: KListViewItem( parent, after ), inf( fi ) {
@@ -58,7 +58,7 @@ public:
 		setText( 0, text );
 	}
 	
-	~GVFileDetailViewItem() {
+	~FileDetailViewItem() {
 		inf->removeExtraData( listView() );
 	}
 

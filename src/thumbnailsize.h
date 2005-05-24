@@ -22,17 +22,17 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-#ifndef GVTHUMBNAILSIZE_H
-#define GVTHUMBNAILSIZE_H   
+#ifndef THUMBNAILSIZE_H
+#define THUMBNAILSIZE_H   
 
 /**
  * This namespace stores constants used by several files. It avoids multiple
  * includes.
  */
-namespace GVThumbnailSize {
+namespace ThumbnailSize {
 	const int MIN=48;
 	const int NORMAL=128;
 	const int LARGE=256;
 }
 
-#endif /* GVTHUMBNAILSIZE_H */
+#endif /* THUMBNAILSIZE_H */

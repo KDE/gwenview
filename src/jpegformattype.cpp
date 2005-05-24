@@ -45,6 +45,8 @@ extern "C" {
 // Local
 #include "jpegformattype.h"
 
+namespace Gwenview {
+
 #undef BUFFER_DEBUG
 //#define BUFFER_DEBUG
 
@@ -58,16 +60,16 @@ static const int MAX_CONSUMING_TIME = 500;
 
 //-----------------------------------------------------------------------------
 //
-// GVJPEGErrorManager
+// JPEGErrorManager
 // (Does not follow HACKING naming recommandation to be consistent with
 // jpeg_error_mgr naming)
 //
 //-----------------------------------------------------------------------------
-struct GVJPEGErrorManager : public jpeg_error_mgr {
+struct JPEGErrorManager : public jpeg_error_mgr {
 	jmp_buf jmp_buffer;
 
 	static void errorExitCallBack (j_common_ptr cinfo) {
-		GVJPEGErrorManager* myerr = (GVJPEGErrorManager*) cinfo->err;
+		JPEGErrorManager* myerr = (JPEGErrorManager*) cinfo->err;
 		char buffer[JMSG_LENGTH_MAX];
 		(*cinfo->err->format_message)(cinfo, buffer);
 		kdWarning() << buffer << endl;
@@ -78,12 +80,12 @@ struct GVJPEGErrorManager : public jpeg_error_mgr {
 
 //-----------------------------------------------------------------------------
 //
-// GVJPEGSourceManager
+// JPEGSourceManager
 // (Does not follow HACKING file recommandation to be consistent with
 // jpeg_source_mgr naming)
 //
 //-----------------------------------------------------------------------------
-struct GVJPEGSourceManager : public jpeg_source_mgr {
+struct JPEGSourceManager : public jpeg_source_mgr {
 	JOCTET jpeg_buffer[MAX_BUFFER];
 
 	int valid_buffer_length;
@@ -96,7 +98,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 	bool decoding_done;
 	bool do_progressive;
 
-	GVJPEGSourceManager() {
+	JPEGSourceManager() {
 		// jpeg_source_mgr fields
 		init_source = gvJPEGDummyDecompress;
 		fill_input_buffer = gvFillInputBuffer;
@@ -107,7 +109,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 		bytes_in_buffer = 0;
 		next_input_byte = jpeg_buffer;
 		
-		// GVJPEGSourceManager fields
+		// JPEGSourceManager fields
 		valid_buffer_length = 0;
 		skip_input_bytes = 0;
 		at_eof = 0;
@@ -123,7 +125,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 		qDebug("FillInputBuffer called!");
 #endif
 
-		GVJPEGSourceManager* src = (GVJPEGSourceManager*)cinfo->src;
+		JPEGSourceManager* src = (JPEGSourceManager*)cinfo->src;
 
 		if ( src->at_eof ) {
 			/* Insert a fake EOI marker - as per jpeglib recommendation */
@@ -147,7 +149,7 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 		qDebug("SkipInputData (%d) called!", num_bytes);
 #endif
 
-		GVJPEGSourceManager* src = (GVJPEGSourceManager*)cinfo->src;
+		JPEGSourceManager* src = (JPEGSourceManager*)cinfo->src;
 		src->skip_input_bytes += num_bytes;
 
 		unsigned int skipbytes = kMin(src->bytes_in_buffer, src->skip_input_bytes);
@@ -183,14 +185,14 @@ struct GVJPEGSourceManager : public jpeg_source_mgr {
 
 //-----------------------------------------------------------------------------
 //
-// GVJPEGFormat
+// JPEGFormat
 //
 //-----------------------------------------------------------------------------
-class GVJPEGFormat : public QImageFormat {
+class JPEGFormat : public QImageFormat {
 public:
-	GVJPEGFormat();
+	JPEGFormat();
 
-	virtual ~GVJPEGFormat();
+	virtual ~JPEGFormat();
 
 	virtual int decode(QImage& img, QImageConsumer* consumer,
 		const uchar* buffer, int length);
@@ -209,22 +211,22 @@ private:
 
 	// structs for the jpeglib
 	jpeg_decompress_struct mDecompress;
-	GVJPEGErrorManager mErrorManager;
-	GVJPEGSourceManager mSourceManager;
+	JPEGErrorManager mErrorManager;
+	JPEGSourceManager mSourceManager;
 };
 
 
-GVJPEGFormat::GVJPEGFormat() {
+JPEGFormat::JPEGFormat() {
 	memset(&mDecompress, 0, sizeof(mDecompress));
 	mDecompress.err = jpeg_std_error(&mErrorManager);
-	mErrorManager.error_exit=GVJPEGErrorManager::errorExitCallBack;
+	mErrorManager.error_exit=JPEGErrorManager::errorExitCallBack;
 	jpeg_create_decompress(&mDecompress);
 	mDecompress.src = &mSourceManager;
 	mState = INIT;
 }
 
 
-GVJPEGFormat::~GVJPEGFormat() {
+JPEGFormat::~JPEGFormat() {
 	(void) jpeg_destroy_decompress(&mDecompress);
 }
 
@@ -234,9 +236,9 @@ GVJPEGFormat::~GVJPEGFormat() {
  * return  < 0 means "fatal error in image decoding, don't call me ever again"
  */
 
-int GVJPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* buffer, int length) {
+int JPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* buffer, int length) {
 #ifdef JPEG_DEBUG
-	qDebug("GVJPEGFormat::decode(%08lx, %08lx, %08lx, %d)",
+	qDebug("JPEGFormat::decode(%08lx, %08lx, %08lx, %d)",
 	       &image, consumer, buffer, length);
 #endif
 
@@ -501,22 +503,23 @@ again:
 
 //-----------------------------------------------------------------------------
 //
-// GVJPEGFormatType
+// JPEGFormatType
 //
 //-----------------------------------------------------------------------------
-QImageFormat* GVJPEGFormatType::decoderFor(const uchar* buffer, int length) {
+QImageFormat* JPEGFormatType::decoderFor(const uchar* buffer, int length) {
 	if(length < 3) return 0;
 
 	if(buffer[0] == 0377 &&
 	   buffer[1] == 0330 &&
 	   buffer[2] == 0377) {
-		return new GVJPEGFormat;
+		return new JPEGFormat;
 	}
 
 	return 0;
 }
 
-const char* GVJPEGFormatType::formatName() const {
+const char* JPEGFormatType::formatName() const {
 	return "JPEG";
 }
 
+} // namespace

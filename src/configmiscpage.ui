@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>GVConfigMiscPage</class>
+<class>ConfigMiscPage</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>GVConfigMiscPage</cstring>
+        <cstring>ConfigMiscPage</cstring>
     </property>
     <property name="geometry">
         <rect>

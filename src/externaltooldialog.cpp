@@ -64,13 +64,13 @@ private:
 };
 
 
-struct GVExternalToolDialogPrivate {
-	GVExternalToolDialogBase* mContent;
+struct ExternalToolDialogPrivate {
+	ExternalToolDialogBase* mContent;
 	QPtrList<KDesktopFile> mDeletedTools;
 	ToolListViewItem* mSelectedItem;
 
 
-	GVExternalToolDialogPrivate()
+	ExternalToolDialogPrivate()
 	: mSelectedItem(0L) {}
 	
 	void fillMimeTypeListView() {
@@ -79,7 +79,7 @@ struct GVExternalToolDialogPrivate {
 		mimeTypes.append("image/x-xcf-gimp");
 		mimeTypes.append("image/pjpeg");
 		mimeTypes.append("inode/directory");
-		mimeTypes+=GVArchive::mimeTypes();
+		mimeTypes+=Archive::mimeTypes();
 
 		QStringList::const_iterator it=mimeTypes.begin();
 		for(; it!=mimeTypes.end(); ++it) {
@@ -89,7 +89,7 @@ struct GVExternalToolDialogPrivate {
 
 	
 	void fillToolListView() {
-		QDict<KDesktopFile> desktopFiles=GVExternalToolManager::instance()->desktopFiles();
+		QDict<KDesktopFile> desktopFiles=ExternalToolManager::instance()->desktopFiles();
 		
 		QDictIterator<KDesktopFile> it(desktopFiles);
 		for (; it.current(); ++it) {
@@ -151,11 +151,11 @@ struct GVExternalToolDialogPrivate {
 		KDesktopFile* desktopFile=mSelectedItem->desktopFile();
 		if (desktopFile) {
 			if (desktopFile->isReadOnly()) {
-				desktopFile=GVExternalToolManager::instance()->editSystemDesktopFile(desktopFile);
+				desktopFile=ExternalToolManager::instance()->editSystemDesktopFile(desktopFile);
 				mSelectedItem->setDesktopFile(desktopFile);
 			}
 		} else {		
-			desktopFile=GVExternalToolManager::instance()->createUserDesktopFile(name);
+			desktopFile=ExternalToolManager::instance()->createUserDesktopFile(name);
 			mSelectedItem->setDesktopFile(desktopFile);
 		}
 		desktopFile->writeEntry("Name", name);
@@ -225,9 +225,9 @@ struct GVExternalToolDialogPrivate {
 		if (!saveChanges()) return false;
 		QPtrListIterator<KDesktopFile> it(mDeletedTools);
 		for(; it.current(); ++it) {
-			GVExternalToolManager::instance()->hideDesktopFile(it.current());
+			ExternalToolManager::instance()->hideDesktopFile(it.current());
 		}
-		GVExternalToolManager::instance()->updateServices();
+		ExternalToolManager::instance()->updateServices();
 		return true;
 	}
 };
@@ -238,9 +238,9 @@ struct GVExternalToolDialogPrivate {
  * different tool in the tool list view if the current tool could not be saved.
  */
 class ToolListViewFilterObject : public QObject {
-	GVExternalToolDialogPrivate* d;
+	ExternalToolDialogPrivate* d;
 public:
-	ToolListViewFilterObject(QObject* parent, GVExternalToolDialogPrivate* _d)
+	ToolListViewFilterObject(QObject* parent, ExternalToolDialogPrivate* _d)
 	: QObject(parent), d(_d) {}
 
 	bool eventFilter(QObject*, QEvent* event) {
@@ -250,15 +250,15 @@ public:
 };
 
 
-GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
+ExternalToolDialog::ExternalToolDialog(QWidget* parent)
 : KDialogBase(
 	parent,0, false, QString::null, KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
 	KDialogBase::Ok, true)
 {
 	setWFlags(getWFlags() | Qt::WDestructiveClose);
-	d=new GVExternalToolDialogPrivate;
+	d=new ExternalToolDialogPrivate;
 	
-	d->mContent=new GVExternalToolDialogBase(this);
+	d->mContent=new ExternalToolDialogBase(this);
 	setMainWidget(d->mContent);
 	setCaption(d->mContent->caption());
 	
@@ -290,34 +290,34 @@ GVExternalToolDialog::GVExternalToolDialog(QWidget* parent)
 }
 
 
-GVExternalToolDialog::~GVExternalToolDialog() {
+ExternalToolDialog::~ExternalToolDialog() {
 	delete d;
 }
 
 
-void GVExternalToolDialog::slotOk() {
+void ExternalToolDialog::slotOk() {
 	if (!d->apply()) return;
 	accept();
 }
 
 
-void GVExternalToolDialog::slotApply() {
+void ExternalToolDialog::slotApply() {
 	d->apply();
 }
 
 
-void GVExternalToolDialog::slotCancel() {
+void ExternalToolDialog::slotCancel() {
 	KDialogBase::slotCancel();
 }
 
 
-void GVExternalToolDialog::slotSelectionChanged(QListViewItem* item) {
+void ExternalToolDialog::slotSelectionChanged(QListViewItem* item) {
 	d->mSelectedItem=static_cast<ToolListViewItem*>(item);
 	d->updateDetails();
 }
 
 
-void GVExternalToolDialog::addTool() {
+void ExternalToolDialog::addTool() {
 	KListView* view=d->mContent->mToolListView;
 	QString name=i18n("<Unnamed tool>");
 	ToolListViewItem* item=new ToolListViewItem(view, name);
@@ -325,7 +325,7 @@ void GVExternalToolDialog::addTool() {
 }
 
 
-void GVExternalToolDialog::deleteTool() {
+void ExternalToolDialog::deleteTool() {
 	KListView* view=d->mContent->mToolListView;
 	ToolListViewItem* item=static_cast<ToolListViewItem*>(view->selectedItem());
 	if (!item) return;
@@ -338,7 +338,7 @@ void GVExternalToolDialog::deleteTool() {
 }
 
 
-void GVExternalToolDialog::showCommandHelp() {
+void ExternalToolDialog::showCommandHelp() {
 	KURLRequester* lbl=d->mContent->mCommand;
 	QWhatsThis::display(QWhatsThis::textFor(lbl),
 		lbl->mapToGlobal( lbl->rect().bottomRight() ) );

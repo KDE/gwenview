@@ -68,9 +68,9 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 	KApplication kapplication;
 
 	if (kapplication.isRestored()) {
-		RESTORE(GVMainWindow)
+		RESTORE(MainWindow)
 	} else {
-		GVMainWindow *mainWindow = new GVMainWindow;
+		MainWindow *mainWindow = new MainWindow;
 		mainWindow->show();
 	}
 

@@ -44,7 +44,7 @@ inline const T& kClamp( const T& x, const T& low, const T& high )
 }
 #endif
 
-namespace GVImageUtils {
+namespace ImageUtils {
 
 QImage transform(const QImage& img, Orientation orientation) {
 	QWMatrix matrix;

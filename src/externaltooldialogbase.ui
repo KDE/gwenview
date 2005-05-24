@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>GVExternalToolDialogBase</class>
+<class>ExternalToolDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>GVExternalToolDialogBase</cstring>
+        <cstring>ExternalToolDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>

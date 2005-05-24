@@ -74,13 +74,13 @@ static QString dirSyntax(const QString &d) {
 	return d;
 }
 
-GVFileTreeBranch::GVFileTreeBranch(KFileTreeView *tv, const KURL& url, const QString& title, const QString& icon)
+FileTreeBranch::FileTreeBranch(KFileTreeView *tv, const KURL& url, const QString& title, const QString& icon)
 : KFileTreeBranch(tv, url, title, SmallIcon(icon)),
 mIcon(icon)
 {
 }
 
-GVDirView::GVDirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
+DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	// Look tweaking
 	addColumn(QString::null);
 	header()->hide();
@@ -135,7 +135,7 @@ static QString branchGroupKey(const QString &group, unsigned int num) {
 	return grp;
 }
 
-void GVDirView::readConfig(KConfig* config, const QString& group) {
+void DirView::readConfig(KConfig* config, const QString& group) {
 	// Note: Previously the number of branches was not saved -> use a default of 20
 	// so that any old branches are still used.
 	unsigned int numBranches=config->readNumEntry(CONFIG_NUM_BRANCHES, 20);
@@ -166,8 +166,8 @@ void GVDirView::readConfig(KConfig* config, const QString& group) {
 }
 
 
-void GVDirView::writeConfig(KConfig* config, const QString& group) {
-	GVFileTreeBranch *branch;
+void DirView::writeConfig(KConfig* config, const QString& group) {
+	FileTreeBranch *branch;
 	unsigned int num=0;
 	unsigned int oldBranches=config->readNumEntry(CONFIG_NUM_BRANCHES);
 
@@ -196,7 +196,7 @@ void GVDirView::writeConfig(KConfig* config, const QString& group) {
  * dir when it's shown. Since the view doesn't update if it's
  * hidden
  */
-void GVDirView::showEvent(QShowEvent* event) {
+void DirView::showEvent(QShowEvent* event) {
 	if (!currentURL().equals(m_nextUrlToSelect,true)) {
 		setURLInternal(m_nextUrlToSelect);
 	}
@@ -204,7 +204,7 @@ void GVDirView::showEvent(QShowEvent* event) {
 }
 
 
-void GVDirView::setURL(const KURL& url) {
+void DirView::setURL(const KURL& url) {
 	LOG(url.prettyURL() << ' ' << filename);
 
 	// Do nothing if we're browsing remote files
@@ -225,7 +225,7 @@ void GVDirView::setURL(const KURL& url) {
 }
 
 
-void GVDirView::setURLInternal(const KURL& url) {
+void DirView::setURLInternal(const KURL& url) {
 	LOG(url.prettyURL() );
 	QStringList folderParts;
 	QStringList::Iterator folderIter,endFolderIter;
@@ -285,7 +285,7 @@ void GVDirView::setURLInternal(const KURL& url) {
  * Override this method to make sure that the item is selected, opened and
  * visible
  */
-void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeViewItemList& itemList ) {
+void DirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeViewItemList& itemList ) {
 	if( ! branch ) return;
 	LOG("");
 	if(m_nextUrlToSelect.isEmpty()) return;
@@ -312,7 +312,7 @@ void GVDirView::slotNewTreeViewItems( KFileTreeBranch* branch, const KFileTreeVi
 
 
 //-Private slots-----------------------------------------------------------
-void GVDirView::slotExecuted() {
+void DirView::slotExecuted() {
 	KFileTreeViewItem* treeItem=currentKFileTreeViewItem();
 	if (!treeItem) return;
 	if (!treeItem->fileItem()) return;
@@ -321,7 +321,7 @@ void GVDirView::slotExecuted() {
 }
 
 
-void GVDirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
+void DirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 	QListViewItem* child;
 	if (!item) return;
 	KURL url=item->url();
@@ -349,7 +349,7 @@ void GVDirView::slotDirViewPopulateFinished(KFileTreeViewItem* item) {
 
 
 //-Private-----------------------------------------------------------
-KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QString& text) {
+KFileTreeViewItem* DirView::findViewItem(KFileTreeViewItem* parent,const QString& text) {
 	QListViewItem* item;
 
 	for (item=parent->firstChild();item;item=item->nextSibling()) {
@@ -361,8 +361,8 @@ KFileTreeViewItem* GVDirView::findViewItem(KFileTreeViewItem* parent,const QStri
 }
 
 
-void GVDirView::addBranch(const QString& url, const QString& title, const QString& icon) {
-	GVFileTreeBranch *branch= new GVFileTreeBranch(this, KURL(dirSyntax(url)), title, icon);
+void DirView::addBranch(const QString& url, const QString& title, const QString& icon) {
+	FileTreeBranch *branch= new FileTreeBranch(this, KURL(dirSyntax(url)), title, icon);
 	KFileTreeView::addBranch(branch);
 	setDirOnlyMode(branch,true);
 	branch->root()->setExpandable(true);
@@ -376,13 +376,13 @@ void GVDirView::addBranch(const QString& url, const QString& title, const QStrin
 	mBranches.append(branch);
 }
 
-void GVDirView::defaultBranches() {
+void DirView::defaultBranches() {
 	addBranch(QDir::homeDirPath(),i18n("Home Folder"),"folder_home");
 	addBranch("/",i18n("Root Folder"),"folder_red");
 }
 
 //-Drag'n drop------------------------------------------------------
-void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
+void DirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 	if (!KURLDrag::canDecode(event)) {
 		event->ignore();
 		return;
@@ -411,7 +411,7 @@ void GVDirView::contentsDragMoveEvent(QDragMoveEvent* event) {
 }
 
 
-void GVDirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
+void DirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 	mAutoOpenTimer->stop();
 	if (mDropTarget) {
 		stopAnimation(mDropTarget);
@@ -420,7 +420,7 @@ void GVDirView::contentsDragLeaveEvent(QDragLeaveEvent*) {
 }
 
 
-void GVDirView::contentsDropEvent(QDropEvent* event) {
+void DirView::contentsDropEvent(QDropEvent* event) {
 	mAutoOpenTimer->stop();
 
 	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
@@ -455,7 +455,7 @@ void GVDirView::contentsDropEvent(QDropEvent* event) {
 }
 
 
-void GVDirView::autoOpenDropTarget() {
+void DirView::autoOpenDropTarget() {
 	if (mDropTarget) {
 		mDropTarget->setOpen(true);
 	}
@@ -463,7 +463,7 @@ void GVDirView::autoOpenDropTarget() {
 
 
 //- Popup ----------------------------------------------------------
-void GVDirView::slotContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
+void DirView::slotContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
 	if(item && item->parent()) {
 		mPopupMenu->popup(pos);
 	} else {
@@ -473,7 +473,7 @@ void GVDirView::slotContextMenu(KListView*,QListViewItem* item,const QPoint& pos
 }
 
 
-void GVDirView::makeDir() {
+void DirView::makeDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 
@@ -493,7 +493,7 @@ void GVDirView::makeDir() {
 }
 
 
-void GVDirView::slotDirMade(KIO::Job* job) {
+void DirView::slotDirMade(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -503,7 +503,7 @@ void GVDirView::slotDirMade(KIO::Job* job) {
 }
 
 
-void GVDirView::renameDir() {
+void DirView::renameDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 
@@ -524,7 +524,7 @@ void GVDirView::renameDir() {
 }
 
 
-void GVDirView::slotDirRenamed(KIO::Job* job) {
+void DirView::slotDirRenamed(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 		return;
@@ -532,7 +532,7 @@ void GVDirView::slotDirRenamed(KIO::Job* job) {
 }
 
 
-void GVDirView::removeDir() {
+void DirView::removeDir() {
 	KIO::Job* job;
 	if (!currentItem()) return;
 
@@ -559,29 +559,29 @@ void GVDirView::removeDir() {
 }
 
 
-void GVDirView::slotDirRemoved(KIO::Job* job) {
+void DirView::slotDirRemoved(KIO::Job* job) {
 	if (job->error()) {
 		job->showErrorDialog(this);
 	}
 }
 
 
-void GVDirView::showPropertiesDialog() {
+void DirView::showPropertiesDialog() {
 	(void)new KPropertiesDialog(currentURL(),this);
 }
 
-void GVDirView::makeBranch() {
+void DirView::makeBranch() {
 	showBranchPropertiesDialog(0L);
 }
 
-void GVDirView::removeBranch() {
+void DirView::removeBranch() {
 	QListViewItem* li=selectedItem();
 	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
 
 	if (br && KMessageBox::Continue==KMessageBox::warningContinueCancel(this,
 			"<qt>" + i18n("Do you really want to remove\n <b>'%1'</b>?").arg(li->text(0))
 			+ "</qt>")) {
-		mBranches.remove(static_cast<GVFileTreeBranch*>(br));
+		mBranches.remove(static_cast<FileTreeBranch*>(br));
 		KFileTreeView::removeBranch(br);
 		if (0==childCount()) {
 			KMessageBox::information(this,
@@ -592,18 +592,18 @@ void GVDirView::removeBranch() {
 	}
 }
 
-void GVDirView::showBranchPropertiesDialog() {
+void DirView::showBranchPropertiesDialog() {
 	QListViewItem* li=selectedItem();
 	KFileTreeBranch *br=li ? branch(li->text(0)) : 0L;
 
 	if (br) {
-		showBranchPropertiesDialog(static_cast<GVFileTreeBranch*>(br));
+		showBranchPropertiesDialog(static_cast<FileTreeBranch*>(br));
 	}
 }
 
-void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
+void DirView::showBranchPropertiesDialog(FileTreeBranch* editItem)
 {
-	GVBranchPropertiesDialog dialog(this);
+	BranchPropertiesDialog dialog(this);
 
 	if(editItem) {
 		dialog.setContents(editItem->icon(), editItem->name(), editItem->rootUrl().prettyURL());
@@ -647,7 +647,7 @@ void GVDirView::showBranchPropertiesDialog(GVFileTreeBranch* editItem)
 }
 
 //- This code should go in KFileTreeBranch -------------------------------
-void GVDirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
+void DirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
 	KFileTreeViewItem* tvItem=
 		static_cast<KFileTreeViewItem*>( item->extraData(branch) );
 	if (!tvItem) return;
@@ -662,7 +662,7 @@ void GVDirView::refreshBranch(KFileItem* item, KFileTreeBranch* branch) {
 	}
 }
 
-void GVDirView::slotItemsRefreshed(const KFileItemList& items) {
+void DirView::slotItemsRefreshed(const KFileItemList& items) {
 	KFileItemListIterator it(items);
 	for (;it.current(); ++it) {
 		KFileItem* item=it.current();

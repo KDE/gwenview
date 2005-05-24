@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVSCROLLPIXMAPVIEWTOOLS_H
-#define GVSCROLLPIXMAPVIEWTOOLS_H   
+#ifndef SCROLLPIXMAPVIEWTOOLS_H
+#define SCROLLPIXMAPVIEWTOOLS_H   
 
 // Qt
 #include <qcursor.h>
@@ -28,12 +28,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "scrollpixmapview.h"
 
 
-class GVScrollPixmapView::ToolBase {
+class ScrollPixmapView::ToolBase {
 protected:
-	GVScrollPixmapView* mView;
+	ScrollPixmapView* mView;
 
 public:
-	ToolBase(GVScrollPixmapView* view);
+	ToolBase(ScrollPixmapView* view);
 	virtual ~ToolBase();
 	virtual void mouseMoveEvent(QMouseEvent*);
 	
@@ -51,14 +51,14 @@ public:
 };
 
 
-class GVScrollPixmapView::ZoomTool : public GVScrollPixmapView::ToolBase {
+class ScrollPixmapView::ZoomTool : public ScrollPixmapView::ToolBase {
 private:
 	QCursor mZoomCursor;
 
 	void zoomTo(const QPoint& pos, bool in); 
 
 public:
-	ZoomTool(GVScrollPixmapView* view);
+	ZoomTool(ScrollPixmapView* view);
 	void leftButtonReleaseEvent(QMouseEvent* event);
 
 	void wheelEvent(QWheelEvent* event);
@@ -69,7 +69,7 @@ public:
 };
 
 
-class GVScrollPixmapView::ScrollTool : public GVScrollPixmapView::ToolBase {
+class ScrollPixmapView::ScrollTool : public ScrollPixmapView::ToolBase {
 	int mScrollStartX,mScrollStartY;
 	bool mDragStarted;
 
@@ -77,7 +77,7 @@ protected:
 	QCursor mDragCursor,mDraggingCursor;
 
 public:
-	ScrollTool(GVScrollPixmapView* view);
+	ScrollTool(ScrollPixmapView* view);
 	void leftButtonPressEvent(QMouseEvent* event); 
 	void mouseMoveEvent(QMouseEvent* event);
 	void leftButtonReleaseEvent(QMouseEvent*);
@@ -87,4 +87,4 @@ public:
 };
 
 
-#endif /* GVSCROLLPIXMAPVIEWTOOLS_H */
+#endif /* SCROLLPIXMAPVIEWTOOLS_H */

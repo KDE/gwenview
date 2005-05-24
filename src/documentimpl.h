@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTIMPL_H
-#define GVDOCUMENTIMPL_H
+#ifndef DOCUMENTIMPL_H
+#define DOCUMENTIMPL_H
 
 // Qt
 #include <qobject.h>
@@ -30,27 +30,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageutils/orientation.h"
 
 
-class GVDocumentImpl : public QObject {
+class DocumentImpl : public QObject {
 Q_OBJECT
 public:
-	GVDocumentImpl(GVDocument* document);
-	virtual ~GVDocumentImpl();
+	DocumentImpl(Document* document);
+	virtual ~DocumentImpl();
 	/**
-	 * This method is called by GVDocument::switchToImpl after it has connect
+	 * This method is called by Document::switchToImpl after it has connect
 	 * signals to the object
 	 */
 	virtual void init();
 	
-	void switchToImpl(GVDocumentImpl*);
+	void switchToImpl(DocumentImpl*);
 	void setImage(QImage, bool update);
 	void setImageFormat(const QCString&);
 	void setFileSize(int) const;
 	
 	virtual QString comment() const;
-	virtual GVDocument::CommentState commentState() const;
+	virtual Document::CommentState commentState() const;
 	virtual void setComment(const QString&);
 	
-	virtual void transform(GVImageUtils::Orientation);
+	virtual void transform(ImageUtils::Orientation);
 	virtual QString save(const KURL&, const QCString& format) const;
 
 signals:
@@ -59,16 +59,16 @@ signals:
 	void rectUpdated(const QRect&);
 	
 protected:
-	GVDocument* mDocument;
+	Document* mDocument;
 };
 
-class GVDocumentEmptyImpl : public GVDocumentImpl {
+class DocumentEmptyImpl : public DocumentImpl {
 public:
-	GVDocumentEmptyImpl(GVDocument* document)
-	: GVDocumentImpl(document) {
+	DocumentEmptyImpl(Document* document)
+	: DocumentImpl(document) {
 		setImage(QImage(), false);
 		setImageFormat(0);
 	}
 };
 
-#endif /* GVDOCUMENTIMPL_H */
+#endif /* DOCUMENTIMPL_H */

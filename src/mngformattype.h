@@ -43,11 +43,13 @@
 
 #ifndef QT_H
 #endif // QT_H
+namespace Gwenview {
 
-class GVMNG
+class MNG
 {
 public:
-	GVMNG();
+	MNG();
 };
 
+} // namespace
 #endif // QMNGIO_H

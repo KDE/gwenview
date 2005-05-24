@@ -30,17 +30,17 @@ Copyright 2000-2004 Aurélien Gâteau
 // arguments. As the thread is blocked waiting on the signal to finish,
 // there's even no need to do any locking.
 
-GVThreadGate::GVThreadGate() {
+ThreadGate::ThreadGate() {
 	connect( this, SIGNAL( signalColor( QColor&, const char* )),
 		this, SLOT( slotColor( QColor&, const char* )));
 }
 
-GVThreadGate* GVThreadGate::instance() {
-	static GVThreadGate gate;
+ThreadGate* ThreadGate::instance() {
+	static ThreadGate gate;
 	return &gate;
 }
 
-QColor GVThreadGate::color( const char* name ) {
+QColor ThreadGate::color( const char* name ) {
 	if( name == NULL || name[ 0 ] == '\0' || name[ 0 ] == '#' )
 		return QColor( name );
 	// named color ... needs to be created in the main thread
@@ -51,7 +51,7 @@ QColor GVThreadGate::color( const char* name ) {
 	return col;
 }
 
-void GVThreadGate::slotColor( QColor& col, const char* name ) {
+void ThreadGate::slotColor( QColor& col, const char* name ) {
 	col = QColor( name );
 }
 

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVIMAGESAVEDIALOG_H
-#define GVIMAGESAVEDIALOG_H
+#ifndef IMAGESAVEDIALOG_H
+#define IMAGESAVEDIALOG_H
 
 // KDE includes
 #include <kfiledialog.h>
@@ -29,10 +29,10 @@ class QWidget;
 
 class KURL;
 
-class GVImageSaveDialog : public KFileDialog {
+class ImageSaveDialog : public KFileDialog {
 Q_OBJECT
 public:
-	GVImageSaveDialog(KURL& url,const QCString& imageFormat,QWidget* parent);
+	ImageSaveDialog(KURL& url,const QCString& imageFormat,QWidget* parent);
 	QCString imageFormat() const { return mImageFormat; }
 
 protected slots:

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVIMAGELOADER_H
-#define GVIMAGELOADER_H
+#ifndef IMAGELOADER_H
+#define IMAGELOADER_H
 
 // Qt
 #include <qasyncimageio.h>
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageframe.h"
 #include "busylevelmanager.h"
 #include "libgwenview_export.h"
-class GVDecoderThread : public TSThread {
+class DecoderThread : public TSThread {
 Q_OBJECT
 public:
 	void setRawData(const QByteArray&);
@@ -53,16 +53,16 @@ private:
 	QImage mImage;
 };
 
-class GVImageLoaderPrivate;
+class ImageLoaderPrivate;
 
-class LIBGWENVIEW_EXPORT GVImageLoader : public QObject, public QImageConsumer {
+class LIBGWENVIEW_EXPORT ImageLoader : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
-	static GVImageLoader* loader( const KURL& url ); // use this instead of ctor
+	static ImageLoader* loader( const KURL& url ); // use this instead of ctor
 	void release(); // use this instead of dtor (disconnect from signals before)
 
 	QImage processedImage() const;
-	GVImageFrames frames() const;
+	ImageFrames frames() const;
 	QCString imageFormat() const;
 	QByteArray rawData() const;
 	KURL url() const;
@@ -83,11 +83,11 @@ private slots:
 	void decodeChunk();
 	void slotImageDecoded();
 	void slotDecoderThreadFailed();
-	void slotBusyLevelChanged( GVBusyLevel );
+	void slotBusyLevelChanged( BusyLevel );
 
 private:
-	GVImageLoader();
-	~GVImageLoader();
+	ImageLoader();
+	~ImageLoader();
 	void ref();
 	void deref();
 	void startLoading( const KURL& url );
@@ -105,7 +105,7 @@ private:
 	void setFramePeriod(int milliseconds);
 	void setSize(int, int);
 
-	GVImageLoaderPrivate* d;
+	ImageLoaderPrivate* d;
 };
 
-#endif /* GVIMAGELOADER_H */
+#endif /* IMAGELOADER_H */

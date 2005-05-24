@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVDIRVIEW_H
-#define GVDIRVIEW_H
+#ifndef DIRVIEW_H
+#define DIRVIEW_H
 
 // Qt
 #include <qptrlist.h>
@@ -32,20 +32,20 @@ class QPopupMenu;
 class QShowEvent;
 class KURL;
 
-class GVFileTreeBranch : public KFileTreeBranch {
+class FileTreeBranch : public KFileTreeBranch {
 public:
-	GVFileTreeBranch(KFileTreeView* tv, const KURL& url, const QString& title, const QString& icon);
-	~GVFileTreeBranch() {}
+	FileTreeBranch(KFileTreeView* tv, const KURL& url, const QString& title, const QString& icon);
+	~FileTreeBranch() {}
 
 	const QString& icon() const { return mIcon; }
 private:
 	QString mIcon;
 };
 
-class GVDirView : public KFileTreeView {
+class DirView : public KFileTreeView {
 Q_OBJECT
 public:
-	GVDirView(QWidget* parent);
+	DirView(QWidget* parent);
 
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group);
@@ -97,13 +97,13 @@ private:
 	KFileTreeViewItem* findViewItem(KFileTreeViewItem*,const QString&);
 	void addBranch(const QString& url, const QString& title, const QString& icon);
 	void defaultBranches();
-	void showBranchPropertiesDialog(GVFileTreeBranch* editItem);
+	void showBranchPropertiesDialog(FileTreeBranch* editItem);
 	QPopupMenu* mPopupMenu;
 	QPopupMenu* mBranchPopupMenu;
 	int mBranchNewFolderItem;
 	QTimer* mAutoOpenTimer;
 	KFileTreeViewItem* mDropTarget;
-	QPtrList<GVFileTreeBranch> mBranches;
+	QPtrList<FileTreeBranch> mBranches;
 
 	/**
 	 * Really defines the url, does not check if the wanted url is already the

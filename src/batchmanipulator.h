@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#ifndef GVBATCHMANIPULATOR_H
-#define GVBATCHMANIPULATOR_H   
+#ifndef BATCHMANIPULATOR_H
+#define BATCHMANIPULATOR_H   
 
 // Qt includes
 #include <qwidget.h>
@@ -32,13 +32,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local includes
 #include "imageutils/orientation.h"
 
-class GVBatchManipulatorPrivate;
+class BatchManipulatorPrivate;
 
-class GVBatchManipulator : public QObject {
+class BatchManipulator : public QObject {
 Q_OBJECT
 public:
-	GVBatchManipulator(QWidget* parent, const KURL::List&, GVImageUtils::Orientation);
-	~GVBatchManipulator();
+	BatchManipulator(QWidget* parent, const KURL::List&, ImageUtils::Orientation);
+	~BatchManipulator();
 	void apply();
 
 public slots:
@@ -48,7 +48,7 @@ signals:
 	void imageModified(const KURL& url);
 
 private:
-	GVBatchManipulatorPrivate* d;
+	BatchManipulatorPrivate* d;
 };
 
-#endif /* GVBATCHMANIPULATOR_H */
+#endif /* BATCHMANIPULATOR_H */

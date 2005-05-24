@@ -80,10 +80,10 @@
 #include <stdlib.h>
 
 // Local
-#include "gvimageutils.h"
+#include "imageutils.h"
 
 // everything in namespace
-namespace GVImageUtils {
+namespace ImageUtils {
 
 
 #define Max QMAX

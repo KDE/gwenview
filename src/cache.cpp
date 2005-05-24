@@ -41,18 +41,18 @@ Copyright 2000-2004 Aurélien Gâteau
 
 const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 
-GVCache::GVCache()
+Cache::Cache()
 : mMaxSize( DEFAULT_MAXSIZE )
 , mThumbnailSize( 0 ) // don't remember size for every thumbnail, but have one global and dump all if needed
 {
 }
 
-GVCache* GVCache::instance() {
-	static GVCache manager;
+Cache* Cache::instance() {
+	static Cache manager;
 	return &manager;
 }
 
-void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp) {
+void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp) {
 	LOG(url.prettyURL());
 	updateAge();
 	bool insert = true;
@@ -67,7 +67,7 @@ void GVCache::addFile( const KURL& url, const QByteArray& file, const QDateTime&
 	checkMaxSize();
 }
 
-void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp ) {
+void Cache::addImage( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp ) {
 	LOG(url.prettyURL());
 	updateAge();
 	bool insert = true;
@@ -82,7 +82,7 @@ void GVCache::addImage( const KURL& url, const GVImageFrames& frames, const QCSt
 	checkMaxSize();
 }
 
-void GVCache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp ) {
+void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp ) {
 // Thumbnails are many and often - things would age too quickly. Therefore
 // when adding thumbnails updateAge() is called from the outside only once for all of them.
 //	updateAge();
@@ -98,13 +98,13 @@ void GVCache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize ima
 	checkMaxSize();
 }
 
-QDateTime GVCache::timestamp( const KURL& url ) const {
+QDateTime Cache::timestamp( const KURL& url ) const {
 	LOG(url.prettyURL());
 	if( mImages.contains( url )) return mImages[ url ].timestamp;
 	return QDateTime();
 }
 
-QByteArray GVCache::file( const KURL& url ) const {
+QByteArray Cache::file( const KURL& url ) const {
 	LOG(url.prettyURL());
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
@@ -115,9 +115,9 @@ QByteArray GVCache::file( const KURL& url ) const {
 	return QByteArray();
 }
 
-void GVCache::getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const {
+void Cache::getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const {
 	LOG(url.prettyURL());
-	frames=GVImageFrames();
+	frames=ImageFrames();
 	format=QCString();
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
@@ -128,7 +128,7 @@ void GVCache::getFrames( const KURL& url, GVImageFrames& frames, QCString& forma
 	}
 }
 
-QPixmap GVCache::thumbnail( const KURL& url, QSize& imagesize ) const {
+QPixmap Cache::thumbnail( const KURL& url, QSize& imagesize ) const {
 	if( mImages.contains( url )) {
 		const ImageData& data = mImages[ url ];
 		if( data.thumbnail.isNull()) return QPixmap();
@@ -139,7 +139,7 @@ QPixmap GVCache::thumbnail( const KURL& url, QSize& imagesize ) const {
 	return QPixmap();
 }
 
-void GVCache::updateAge() {
+void Cache::updateAge() {
 	for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
 		it != mImages.end();
 		++it ) {
@@ -147,7 +147,7 @@ void GVCache::updateAge() {
 	}
 }
 
-void GVCache::checkThumbnailSize( int size ) {
+void Cache::checkThumbnailSize( int size ) {
 	if( size != mThumbnailSize ) {
 		// simply remove all thumbnails, should happen rarely
 		for( QMap< KURL, ImageData >::Iterator it = mImages.begin();
@@ -169,7 +169,7 @@ void GVCache::checkThumbnailSize( int size ) {
 static KURL _cache_url; // hack only for debugging for item to show also its key
 #endif
 
-void GVCache::checkMaxSize() {
+void Cache::checkMaxSize() {
 	for(;;) {
 		int size = 0;
 		QMap< KURL, ImageData >::Iterator max;
@@ -197,7 +197,7 @@ void GVCache::checkMaxSize() {
 		if( size <= mMaxSize ) {
 #if 0
 #ifdef DEBUG_CACHE
-			kdDebug() << "GVCache: Statistics (" << mImages.size() << "/" << with_file << "/"
+			kdDebug() << "Cache: Statistics (" << mImages.size() << "/" << with_file << "/"
 				<< with_thumb << "/" << with_image << ")" << endl;
 #endif
 #endif
@@ -210,13 +210,13 @@ void GVCache::checkMaxSize() {
 	}
 }
 
-void GVCache::readConfig(KConfig* config,const QString& group) {
+void Cache::readConfig(KConfig* config,const QString& group) {
 	KConfigGroupSaver saver( config, group );
 	mMaxSize = config->readNumEntry( CONFIG_CACHE_MAXSIZE, mMaxSize );
 	checkMaxSize();
 }
 
-GVCache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDateTime& t )
+Cache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDateTime& t )
 : file( f )
 , timestamp( t )
 , age( 0 )
@@ -225,7 +225,7 @@ GVCache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDate
 	file.detach(); // explicit sharing
 }
 
-GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const QCString& f, const QDateTime& t )
+Cache::ImageData::ImageData( const KURL& url, const ImageFrames& frms, const QCString& f, const QDateTime& t )
 : frames( frms )
 , format( f )
 , timestamp( t )
@@ -234,7 +234,7 @@ GVCache::ImageData::ImageData( const KURL& url, const GVImageFrames& frms, const
 {
 }
 
-GVCache::ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgsize, const QDateTime& t )
+Cache::ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgsize, const QDateTime& t )
 : thumbnail( thumb )
 , imagesize( imgsize )
 , timestamp( t )
@@ -243,55 +243,55 @@ GVCache::ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgs
 {
 }
 
-void GVCache::ImageData::addFile( const QByteArray& f ) {
+void Cache::ImageData::addFile( const QByteArray& f ) {
 	file = f;
 	file.detach(); // explicit sharing
 	age = 0;
 }
 
-void GVCache::ImageData::addImage( const GVImageFrames& fs, const QCString& f ) {
+void Cache::ImageData::addImage( const ImageFrames& fs, const QCString& f ) {
 	frames = fs;
 	format = f;
 	age = 0;
 }
 
-void GVCache::ImageData::addThumbnail( const QPixmap& thumb, QSize imgsize ) {
+void Cache::ImageData::addThumbnail( const QPixmap& thumb, QSize imgsize ) {
 	thumbnail = thumb;
 	imagesize = imgsize;
 //	age = 0;
 }
 
-int GVCache::ImageData::size() const {
+int Cache::ImageData::size() const {
 	return QMAX( fileSize() + imageSize() + thumbnailSize(), 100 ); // some minimal size per item
 }
 
-int GVCache::ImageData::fileSize() const {
+int Cache::ImageData::fileSize() const {
 	return !file.isNull() ? file.size() : 0;
 }
 
-int GVCache::ImageData::thumbnailSize() const {
+int Cache::ImageData::thumbnailSize() const {
 	return !thumbnail.isNull() ? thumbnail.height() * thumbnail.width() * thumbnail.depth() / 8 : 0;
 }
 
-int GVCache::ImageData::imageSize() const {
+int Cache::ImageData::imageSize() const {
 	int ret = 0;
-	for( GVImageFrames::ConstIterator it = frames.begin(); it != frames.end(); ++it ) {
+	for( ImageFrames::ConstIterator it = frames.begin(); it != frames.end(); ++it ) {
 		ret += (*it).image.height() * (*it).image.width() * (*it).image.depth() / 8;
 	}
 	return ret;
 }
 
-bool GVCache::ImageData::reduceSize() {
+bool Cache::ImageData::reduceSize() {
 	if( !file.isNull() && fast_url && !frames.isEmpty()) {
 		file = QByteArray();
 #ifdef DEBUG_CACHE
-		kdDebug() << "GVCache: Dumping fast file: " << _cache_url.prettyURL() << ":" << cost() << endl;
+		kdDebug() << "Cache: Dumping fast file: " << _cache_url.prettyURL() << ":" << cost() << endl;
 #endif
 		return true;
 	}
 	if( !thumbnail.isNull()) {
 #ifdef DEBUG_CACHE
-		kdDebug() << "GVCache: Dumping thumbnail: " << _cache_url.prettyURL() << ":" << cost() << endl;
+		kdDebug() << "Cache: Dumping thumbnail: " << _cache_url.prettyURL() << ":" << cost() << endl;
 #endif
 		thumbnail = QPixmap();
 		return true;
@@ -302,12 +302,12 @@ bool GVCache::ImageData::reduceSize() {
 		if( format == "JPEG" || fileSize() < imageSize() / 10 ) {
 			frames.clear();
 #ifdef DEBUG_CACHE
-			kdDebug() << "GVCache: Dumping images: " << _cache_url.prettyURL() << ":" << cost() << endl;
+			kdDebug() << "Cache: Dumping images: " << _cache_url.prettyURL() << ":" << cost() << endl;
 #endif
 		} else {
 			file = QByteArray();
 #ifdef DEBUG_CACHE
-			kdDebug() << "GVCache: Dumping file: " << _cache_url.prettyURL() << ":" << cost() << endl;
+			kdDebug() << "Cache: Dumping file: " << _cache_url.prettyURL() << ":" << cost() << endl;
 #endif
 		}
 		return true;
@@ -318,11 +318,11 @@ bool GVCache::ImageData::reduceSize() {
 	return false; // reducing here would mean clearing everything
 }
 
-bool GVCache::ImageData::isEmpty() const {
+bool Cache::ImageData::isEmpty() const {
 	return file.isNull() && frames.isEmpty() && thumbnail.isNull();
 }
 
-long long GVCache::ImageData::cost() const {
+long long Cache::ImageData::cost() const {
 	long long s = size();
 	if( fast_url && !file.isNull()) {
 		s *= ( format == "JPEG" ? 10 : 100 ); // heavy penalty for storing local files

@@ -19,20 +19,20 @@ Copyright 2000-2004 Aurélien Gâteau
 
 */
 
-#ifndef GVTHREADGATE_H
-#define GVTHREADGATE_H
+#ifndef THREADGATE_H
+#define THREADGATE_H
 
 #include <qobject.h>
 #include <qcolor.h>
 
-class GVThreadGate : public QObject
+class ThreadGate : public QObject
 {
 Q_OBJECT
 public:
-	static GVThreadGate* instance();
+	static ThreadGate* instance();
 	QColor color( const char* name );
 private:
-	GVThreadGate();
+	ThreadGate();
 signals:
 	void signalColor( QColor&, const char* );
 private slots:

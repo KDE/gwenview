@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVMETAEDIT_H
-#define GVMETAEDIT_H
+#ifndef METAEDIT_H
+#define METAEDIT_H
 
 // Qt
 #include <qvbox.h>
@@ -27,13 +27,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfilemetainfo.h>
 
 class QTextEdit;
-class GVDocument;
+class Document;
 
-class GVMetaEdit : public QVBox {
+class MetaEdit : public QVBox {
 Q_OBJECT
 public:
-	GVMetaEdit(QWidget *parent, GVDocument*, const char *name="");
-	~GVMetaEdit();
+	MetaEdit(QWidget *parent, Document*, const char *name="");
+	~MetaEdit();
 protected:
 	bool eventFilter(QObject *o, QEvent *e);
 private slots:
@@ -43,7 +43,7 @@ private slots:
 
 private:
 	bool mEmpty;
-	GVDocument* mDocument;
+	Document* mDocument;
 	QTextEdit* mCommentEdit;
 
 	void setEmptyText();

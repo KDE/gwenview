@@ -45,18 +45,18 @@ static void printRect(const QString& txt,const QRect& rect) {
 #endif
 
 
-GVFileThumbnailViewItem::GVFileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
+FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
 : QIconViewItem(view,text,icon), mFileItem(fileItem) {
 	updateLines();
 	calcRect();
 }
 
 
-GVFileThumbnailViewItem::~GVFileThumbnailViewItem() {
+FileThumbnailViewItem::~FileThumbnailViewItem() {
 }
 
 
-void GVFileThumbnailViewItem::updateLines() {
+void FileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
 	
@@ -90,7 +90,7 @@ void GVFileThumbnailViewItem::updateLines() {
 }
 
 
-void GVFileThumbnailViewItem::calcRect(const QString&) {
+void FileThumbnailViewItem::calcRect(const QString&) {
 	QRect itemRect(x(), y(), iconView()->gridX(), iconView()->gridY());
 
 	QRect itemPixmapRect(0, 0, iconView()->gridX(), iconView()->gridY());
@@ -106,8 +106,8 @@ void GVFileThumbnailViewItem::calcRect(const QString&) {
 }
 
 
-void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
-	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
+void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
+	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
 	Q_ASSERT(view);
 	if (!view) return;
 
@@ -229,17 +229,17 @@ void GVFileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 }
 
 
-bool GVFileThumbnailViewItem::acceptDrop(const QMimeSource* source) const {
+bool FileThumbnailViewItem::acceptDrop(const QMimeSource* source) const {
 	return KURLDrag::canDecode(source);
 }
 
 
-void GVFileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconDragItem>&) {
-	GVFileThumbnailView *view=static_cast<GVFileThumbnailView*>(iconView());
+void FileThumbnailViewItem::dropped(QDropEvent* event, const QValueList<QIconDragItem>&) {
+	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
 	emit view->dropped(event,mFileItem);
 }
 
-void GVFileThumbnailViewItem::setImageSize(const QSize& size) {
+void FileThumbnailViewItem::setImageSize(const QSize& size) {
 	mImageSize=size;
 	updateLines();
 }

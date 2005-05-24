@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ktempfile.h>
 
 // Local
-#include "imageutils/gvimageutils.h"
+#include "imageutils/imageutils.h"
 #include "documentloadedimpl.moc"
 
 //#define ENABLE_LOG
@@ -47,31 +47,31 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 
-class GVDocumentLoadedImplPrivate {
+class DocumentLoadedImplPrivate {
 	int mSize;
 	QDateTime mModified;
 };
 
-GVDocumentLoadedImpl::GVDocumentLoadedImpl(GVDocument* document)
-: GVDocumentImpl(document) {
+DocumentLoadedImpl::DocumentLoadedImpl(Document* document)
+: DocumentImpl(document) {
 	LOG("");
 }
 
 
-void GVDocumentLoadedImpl::init() {
+void DocumentLoadedImpl::init() {
 }
 
 
-GVDocumentLoadedImpl::~GVDocumentLoadedImpl() {
+DocumentLoadedImpl::~DocumentLoadedImpl() {
 }
 
 
-void GVDocumentLoadedImpl::transform(GVImageUtils::Orientation orientation) {
-	setImage(GVImageUtils::transform(mDocument->image(), orientation), true);
+void DocumentLoadedImpl::transform(ImageUtils::Orientation orientation) {
+	setImage(ImageUtils::transform(mDocument->image(), orientation), true);
 }
 
 
-QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) const {
+QString DocumentLoadedImpl::save(const KURL& _url, const QCString& format) const {
 	if (!QImageIO::outputFormats().contains(format)) {
 		return i18n("Gwenview cannot write files in this format.");
 	}
@@ -162,7 +162,7 @@ QString GVDocumentLoadedImpl::save(const KURL& _url, const QCString& format) con
 }
 
 
-QString GVDocumentLoadedImpl::localSave(QFile* file, const QCString& format) const {
+QString DocumentLoadedImpl::localSave(QFile* file, const QCString& format) const {
 	QImageIO iio(file, format);
 	iio.setImage(mDocument->image());
 	if (!iio.write()) {

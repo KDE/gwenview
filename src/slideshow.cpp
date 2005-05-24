@@ -36,7 +36,7 @@ static const char* CONFIG_DELAY="delay";
 static const char* CONFIG_LOOP="loop";
 
 
-GVSlideShow::GVSlideShow(GVDocument* document)
+SlideShow::SlideShow(Document* document)
 : mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ), mPrefetchAdvance( 1 ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
@@ -45,15 +45,15 @@ GVSlideShow::GVSlideShow(GVDocument* document)
 			this, SLOT(slotLoaded()) );
 }
 
-GVSlideShow::~GVSlideShow() {
+SlideShow::~SlideShow() {
 	prefetchDone( false );
 }
 
-void GVSlideShow::setLoop(bool value) {
+void SlideShow::setLoop(bool value) {
 	mLoop=value;
 }
 
-void GVSlideShow::setDelay(int delay) {
+void SlideShow::setDelay(int delay) {
 	mDelay=delay;
 	if (mTimer->isActive()) {
 		mTimer->changeInterval(delay*1000);
@@ -61,7 +61,7 @@ void GVSlideShow::setDelay(int delay) {
 }
 
 
-void GVSlideShow::start(const KURL::List& urls) {
+void SlideShow::start(const KURL::List& urls) {
 	mURLs=urls;
 	mStartIt=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (mStartIt==mURLs.end()) {
@@ -76,13 +76,13 @@ void GVSlideShow::start(const KURL::List& urls) {
 }
 
 
-void GVSlideShow::stop() {
+void SlideShow::stop() {
 	mTimer->stop();
 	mStarted=false;
 }
 
 
-void GVSlideShow::slotTimeout() {
+void SlideShow::slotTimeout() {
 	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
@@ -107,7 +107,7 @@ void GVSlideShow::slotTimeout() {
 }
 
 
-void GVSlideShow::slotLoaded() {
+void SlideShow::slotLoaded() {
 	if (mStarted) {
 		mTimer->start(mDelay*1000, true);
 		prefetch();
@@ -115,7 +115,7 @@ void GVSlideShow::slotLoaded() {
 }
 
 
-void GVSlideShow::prefetch() {
+void SlideShow::prefetch() {
 	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		return;
@@ -134,11 +134,11 @@ void GVSlideShow::prefetch() {
 	}
 
 	prefetchDone( false );
-	mPrefetch = GVImageLoader::loader( *it );
+	mPrefetch = ImageLoader::loader( *it );
 	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
 }
 
-void GVSlideShow::prefetchDone( bool ok ) {
+void SlideShow::prefetchDone( bool ok ) {
 	if( mPrefetch != NULL ) { 
 		mPrefetch->disconnect( this );
 		mPrefetch->release();
@@ -152,14 +152,14 @@ void GVSlideShow::prefetchDone( bool ok ) {
 }
 
 //-Configuration--------------------------------------------
-void GVSlideShow::readConfig(KConfig* config,const QString& group) {
+void SlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mDelay=config->readNumEntry(CONFIG_DELAY,10);
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
 }
 
 
-void GVSlideShow::writeConfig(KConfig* config,const QString& group) const {
+void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
 	config->writeEntry(CONFIG_LOOP,mLoop);

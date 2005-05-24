@@ -35,15 +35,15 @@ Copyright 2000-2004 Aurélien Gâteau
 #define LOG(x) ;
 #endif
 
-GVBusyLevelManager::GVBusyLevelManager()
+BusyLevelManager::BusyLevelManager()
 : mCurrentBusyLevel( BUSY_NONE )
 {
 	connect( &mDelayedBusyLevelTimer, SIGNAL( timeout()),
 		this, SLOT( delayedBusyLevelChanged()));
 }
 
-GVBusyLevelManager* GVBusyLevelManager::instance() {
-	static GVBusyLevelManager manager;
+BusyLevelManager* BusyLevelManager::instance() {
+	static BusyLevelManager manager;
 	return &manager;
 }
 
@@ -61,7 +61,7 @@ GVBusyLevelManager* GVBusyLevelManager::instance() {
 // so if one object is responsible for more operations,
 // it needs to use helper objects for setBusyLevel().
 
-void GVBusyLevelManager::setBusyLevel( QObject* obj, GVBusyLevel level ) {
+void BusyLevelManager::setBusyLevel( QObject* obj, BusyLevel level ) {
 	LOG("BUSY:" << level << ":" << obj << ":" << obj->className() );
 	if( level > BUSY_NONE ) {
 		if( mBusyLevels[ obj ] == level )	return;
@@ -72,9 +72,9 @@ void GVBusyLevelManager::setBusyLevel( QObject* obj, GVBusyLevel level ) {
 	mDelayedBusyLevelTimer.start( 0, true );
 }
 
-void GVBusyLevelManager::delayedBusyLevelChanged() {
-	GVBusyLevel newLevel = BUSY_NONE;
-	for( QMap< QObject*, GVBusyLevel >::ConstIterator it = mBusyLevels.begin();
+void BusyLevelManager::delayedBusyLevelChanged() {
+	BusyLevel newLevel = BUSY_NONE;
+	for( QMap< QObject*, BusyLevel >::ConstIterator it = mBusyLevels.begin();
 		it != mBusyLevels.end();
 		++it ) {
 		newLevel = QMAX( newLevel, *it );
@@ -87,7 +87,7 @@ void GVBusyLevelManager::delayedBusyLevelChanged() {
 	}
 }
 
-GVBusyLevel GVBusyLevelManager::busyLevel() const {
+BusyLevel BusyLevelManager::busyLevel() const {
 	return mCurrentBusyLevel;
 }
 

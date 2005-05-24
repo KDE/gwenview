@@ -18,8 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef GVCACHE_H
-#define GVCACHE_H
+#ifndef CACHE_H
+#define CACHE_H
 
 // Qt
 #include <qcstring.h>
@@ -35,35 +35,35 @@ Copyright 2000-2004 Aurélien Gâteau
 #include "libgwenview_export.h"
 class KConfig;
 
-class LIBGWENVIEW_EXPORT GVCache {
+class LIBGWENVIEW_EXPORT Cache {
 public:
-	static GVCache* instance();
-	void addImage( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
+	static Cache* instance();
+	void addImage( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 	void addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
-	void getFrames( const KURL& url, GVImageFrames& frames, QCString& format ) const;
+	void getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const;
 	QPixmap thumbnail( const KURL& url, QSize& imagesize ) const;
 	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
 	void updateAge();
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
-	GVCache();
+	Cache();
 	void checkMaxSize();
 	struct ImageData {
 		ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 		ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
-		ImageData( const KURL& url, const GVImageFrames& frames, const QCString& format, const QDateTime& timestamp );
+		ImageData( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 		ImageData( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
 		void addFile( const QByteArray& file );
-		void addImage( const GVImageFrames& frames, const QCString& format );
+		void addImage( const ImageFrames& frames, const QCString& format );
 		void addThumbnail( const QPixmap& thumbnail, QSize imagesize );
 		long long cost() const;
 		int size() const;
 		QByteArray file;
-		GVImageFrames frames;
+		ImageFrames frames;
 		QPixmap thumbnail;
 		QSize imagesize;
 		QCString format;

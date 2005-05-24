@@ -38,52 +38,52 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define LOG(x) ;
 #endif
 
-class GVDocumentAnimatedLoadedImplPrivate {
+class DocumentAnimatedLoadedImplPrivate {
 public:
-	GVImageFrames mFrames;
+	ImageFrames mFrames;
 	int mCurrentFrame;
 	QTimer mFrameTimer;
 };
 
 
-GVDocumentAnimatedLoadedImpl::GVDocumentAnimatedLoadedImpl(GVDocument* document, const GVImageFrames& frames)
-: GVDocumentLoadedImpl(document) {
+DocumentAnimatedLoadedImpl::DocumentAnimatedLoadedImpl(Document* document, const ImageFrames& frames)
+: DocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", frames: " << frames.count() );
-	d=new GVDocumentAnimatedLoadedImplPrivate;
+	d=new DocumentAnimatedLoadedImplPrivate;
 	d->mFrames = frames;
 	d->mCurrentFrame = -1;
 	connect( &d->mFrameTimer, SIGNAL( timeout()), SLOT( nextFrame()));
 }
 
-void GVDocumentAnimatedLoadedImpl::init() {
-	GVDocumentLoadedImpl::init();
+void DocumentAnimatedLoadedImpl::init() {
+	DocumentLoadedImpl::init();
 	nextFrame();
 }
 
-void GVDocumentAnimatedLoadedImpl::nextFrame() {
+void DocumentAnimatedLoadedImpl::nextFrame() {
 	++d->mCurrentFrame;
 	if( d->mCurrentFrame == int( d->mFrames.count())) d->mCurrentFrame = 0;
 	d->mFrameTimer.start( QMAX( 10, d->mFrames[ d->mCurrentFrame ].delay ));
 // NOTE! If this ever gets changed to already animate the picture while it's still
 // loading, with MNG the frame delay gets announced only after the frame is ready.
-// See GVImageLoader::frameDone() .
+// See ImageLoader::frameDone() .
 	LOG("" << d->mCurrentFrame );
 	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
 }
 
-GVDocumentAnimatedLoadedImpl::~GVDocumentAnimatedLoadedImpl() {
+DocumentAnimatedLoadedImpl::~DocumentAnimatedLoadedImpl() {
 	delete d;
 }
 
 
-void GVDocumentAnimatedLoadedImpl::transform(GVImageUtils::Orientation orientation) {
-	for( GVImageFrames::Iterator it = d->mFrames.begin(); it != d->mFrames.end(); ++it ) {
-	        (*it).image = GVImageUtils::transform( (*it).image, orientation );
+void DocumentAnimatedLoadedImpl::transform(ImageUtils::Orientation orientation) {
+	for( ImageFrames::Iterator it = d->mFrames.begin(); it != d->mFrames.end(); ++it ) {
+	        (*it).image = ImageUtils::transform( (*it).image, orientation );
 	}
 	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
 }
 
 
-QString GVDocumentAnimatedLoadedImpl::localSave(QFile* /*file*/, const QCString& /*format*/) const {
+QString DocumentAnimatedLoadedImpl::localSave(QFile* /*file*/, const QCString& /*format*/) const {
 	return i18n("Sorry, cannot save animated images.");
 }

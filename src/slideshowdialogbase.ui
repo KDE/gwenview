@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>GVSlideShowDialogBase</class>
+<class>SlideShowDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>GVSlideShowDialogBase</cstring>
+        <cstring>SlideShowDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>

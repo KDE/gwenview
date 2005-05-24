@@ -37,33 +37,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define LOG(x) ;
 #endif
 
-class GVBatchManipulatorPrivate {
+class BatchManipulatorPrivate {
 public:
 	KURL::List mURLs;
-	GVImageUtils::Orientation mOrientation;
+	ImageUtils::Orientation mOrientation;
 	QProgressDialog* mProgressDialog;
 	bool mLoaded;
 };
 
 
-GVBatchManipulator::GVBatchManipulator(QWidget* parent, const KURL::List& urls, GVImageUtils::Orientation orientation)
+BatchManipulator::BatchManipulator(QWidget* parent, const KURL::List& urls, ImageUtils::Orientation orientation)
 : QObject(parent) {
-	d=new GVBatchManipulatorPrivate();
+	d=new BatchManipulatorPrivate();
 	d->mURLs=urls;
 	d->mOrientation=orientation;
 	d->mProgressDialog=new QProgressDialog(i18n("Manipulating images..."), i18n("Close"),
 		d->mURLs.size(), parent, 0, true);
 }
 
-GVBatchManipulator::~GVBatchManipulator() {
+BatchManipulator::~BatchManipulator() {
 	delete d->mProgressDialog;
 	delete d;
 }
 
-void GVBatchManipulator::apply() {
+void BatchManipulator::apply() {
 	LOG("");
 	KURL::List::ConstIterator it=d->mURLs.begin();
-	GVDocument doc(0);
+	Document doc(0);
 	connect(&doc, SIGNAL(loaded(const KURL&)),
 		this, SLOT(slotImageLoaded()) );
 	d->mProgressDialog->show();
@@ -92,6 +92,6 @@ void GVBatchManipulator::apply() {
 	d->mProgressDialog->close();
 }
 
-void GVBatchManipulator::slotImageLoaded() {
+void BatchManipulator::slotImageLoaded() {
 	d->mLoaded=true;
 }

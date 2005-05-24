@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef GVDOCUMENTLOADEDIMPL_H
-#define GVDOCUMENTLOADEDIMPL_H
+#ifndef DOCUMENTLOADEDIMPL_H
+#define DOCUMENTLOADEDIMPL_H
 
 // Qt
 #include <qimage.h>
@@ -27,21 +27,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "documentimpl.h"
 
-class GVDocument;
+class Document;
 class QFile;
 
-class GVDocumentLoadedImpl : public GVDocumentImpl {
+class DocumentLoadedImpl : public DocumentImpl {
 Q_OBJECT
 public:
-	GVDocumentLoadedImpl(GVDocument* document);
+	DocumentLoadedImpl(Document* document);
 	void init();
-	~GVDocumentLoadedImpl();
+	~DocumentLoadedImpl();
 	
-	void transform(GVImageUtils::Orientation);
+	void transform(ImageUtils::Orientation);
 	QString save(const KURL&, const QCString& format) const;
 
 protected:
 	virtual QString localSave(QFile* file, const QCString& format) const;
 };
 
-#endif /* GVDOCUMENTLOADEDIMPL_H */
+#endif /* DOCUMENTLOADEDIMPL_H */

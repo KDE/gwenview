@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
 
-#ifndef GVSLIDESHOW_H
-#define GVSLIDESHOW_H
+#ifndef SLIDESHOW_H
+#define SLIDESHOW_H
 
 // Qt
 #include <qobject.h>
@@ -30,16 +30,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "libgwenview_export.h"
 class QTimer;
 
-class GVDocument;
+class Document;
 class KConfig;
-class GVImageLoader;
+class ImageLoader;
 
-class LIBGWENVIEW_EXPORT GVSlideShow : public QObject
+class LIBGWENVIEW_EXPORT SlideShow : public QObject
 {
 Q_OBJECT
 public:
-	GVSlideShow(GVDocument* document);
-	virtual ~GVSlideShow();
+	SlideShow(Document* document);
+	virtual ~SlideShow();
 
 	void setLoop(bool);
 	bool loop() const { return mLoop; }
@@ -67,12 +67,12 @@ private:
 	QTimer* mTimer;
 	int mDelay;
 	bool mLoop;
-	GVDocument* mDocument;
+	Document* mDocument;
 	bool mStarted;
 	KURL::List mURLs;
 	KURL::List::ConstIterator mStartIt;
-	GVImageLoader* mPrefetch;
+	ImageLoader* mPrefetch;
 	int mPrefetchAdvance;
 };
 
-#endif // GVSLIDESHOW_H
+#endif // SLIDESHOW_H

@@ -14,7 +14,7 @@ AM_CCASFLAGS = -I$(srcdir) $(GV_ASM_DEFS)
 noinst_LTLIBRARIES = libgvimageutils.la
 
 libgvimageutils_la_SOURCES = \
-	gvimageutils.cpp \
+	imageutils.cpp \
 	jpegcontent.cpp \
 	scale.cpp \
 	transupp.c \
@@ -24,7 +24,7 @@ libgvimageutils_la_SOURCES = \
 
 noinst_HEADERS = \
 	orientation.h \
-	gvimageutils.h \
+	imageutils.h \
 	jpegcontent.h \
 	jinclude.h \
 	jpegint.h \
