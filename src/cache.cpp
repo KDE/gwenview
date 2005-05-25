@@ -28,6 +28,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kio/global.h>
+namespace Gwenview {
 
 // Local
 //#define ENABLE_LOG
@@ -336,3 +337,5 @@ long long Cache::ImageData::cost() const {
 		return s * ( age - 5 );
 	}
 }
+
+} // namespace

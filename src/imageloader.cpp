@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cache.h"
 
 #include "imageloader.moc"
+namespace Gwenview {
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
@@ -677,3 +678,5 @@ ImageLoader* ImageLoader::loader( const KURL& url ) {
 	l->startLoading( url );
 	return l;
 }
+
+} // namespace

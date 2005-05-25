@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
 
-#include "documentloadingimpl.h"
+#include "documentloadingimpl.moc"
 
 // Qt
 
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "documentloadedimpl.h"
 #include "documentjpegloadedimpl.h"
 
-#include "documentloadingimpl.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -149,3 +149,5 @@ void DocumentLoadingImpl::sizeLoaded(int width, int height) {
 	setImage( d->mLoader->processedImage(), false);
 	emit sizeUpdated(width, height);
 }
+
+} // namespace

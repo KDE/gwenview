@@ -29,6 +29,7 @@ class QWidget;
 
 class KURL;
 
+namespace Gwenview {
 class ImageSaveDialog : public KFileDialog {
 Q_OBJECT
 public:
@@ -47,4 +48,6 @@ private:
 	QMap<QString,QString> mImageFormats;
 };
 
+} // namespace
 #endif
+

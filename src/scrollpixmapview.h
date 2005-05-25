@@ -58,6 +58,7 @@ class KConfig;
 class KToggleAction;
 typedef QValueList<KAction *> KActionPtrList;
 
+namespace Gwenview {
 class Document;
 
 class LIBGWENVIEW_EXPORT ScrollPixmapView : public QScrollView {
@@ -207,4 +208,6 @@ protected:
 	void drawContents(QPainter* p,int clipx,int clipy,int clipw,int cliph);
 };
 
+} // namespace
 #endif
+

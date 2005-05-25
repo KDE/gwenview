@@ -25,8 +25,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE includes
 #include <kdialogbase.h>
 #include "libgwenview_export.h"
-class SlideShow;
 class SlideShowDialogBase;
+namespace Gwenview {
+class SlideShow;
 
 class LIBGWENVIEW_EXPORT SlideShowDialog: public KDialogBase {
 Q_OBJECT
@@ -42,4 +43,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

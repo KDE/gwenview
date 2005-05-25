@@ -30,8 +30,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "libgwenview_export.h"
 class QTimer;
 
-class Document;
 class KConfig;
+
+namespace Gwenview {
+class Document;
 class ImageLoader;
 
 class LIBGWENVIEW_EXPORT SlideShow : public QObject
@@ -75,4 +77,6 @@ private:
 	int mPrefetchAdvance;
 };
 
+} // namespace
 #endif // SLIDESHOW_H
+

@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "externaltoolmanager.h"
 #include "externaltooldialogbase.h"
 #include "externaltooldialog.moc"
+namespace Gwenview {
 
 
 enum { ID_ALL_IMAGES=0, ID_ALL_FILES, ID_CUSTOM };
@@ -343,3 +344,5 @@ void ExternalToolDialog::showCommandHelp() {
 	QWhatsThis::display(QWhatsThis::textFor(lbl),
 		lbl->mapToGlobal( lbl->rect().bottomRight() ) );
 }
+
+} // namespace

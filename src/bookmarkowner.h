@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE includes
 #include <kbookmarkmanager.h>
 #include <kurl.h>
+namespace Gwenview {
 
 
 class BookmarkOwner : public QObject, public KBookmarkOwner {
@@ -47,4 +48,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

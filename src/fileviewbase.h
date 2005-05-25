@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE includes
 #include <kfileview.h>
+namespace Gwenview {
 
 class FileViewBase : public KFileView {
 public:
@@ -43,4 +44,6 @@ protected:
 	QColor mShownFileItemColor;
 };
 
+} // namespace
 #endif
+

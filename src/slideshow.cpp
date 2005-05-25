@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "slideshow.moc"
 #include "document.h"
 #include "imageloader.h"
+namespace Gwenview {
 
 
 static const char* CONFIG_DELAY="delay";
@@ -164,3 +165,5 @@ void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_DELAY,mDelay);
 	config->writeEntry(CONFIG_LOOP,mLoop);
 }
+
+} // namespace

@@ -22,6 +22,7 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+#include "thumbnailloadjob.moc"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -37,6 +38,7 @@
 #include <qtimer.h>
 
 // KDE 
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
@@ -58,7 +60,7 @@ extern "C" {
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
 #include "thumbnailsize.h"
-#include "thumbnailloadjob.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -732,3 +734,5 @@ bool ThumbnailLoadJob::storeThumbnailsInCache() {
 	return sStoreThumbnailsInCache;
 }
 
+
+} // namespace

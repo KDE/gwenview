@@ -29,6 +29,7 @@
 // Our includes
 #include "filedetailview.h"
 #include "filedetailviewitem.h"
+namespace Gwenview {
 
 
 void FileDetailViewItem::init()
@@ -54,3 +55,5 @@ void FileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column
 	}
 	KListViewItem::paintCell(p,myCG,column,width,align);
 }
+
+} // namespace

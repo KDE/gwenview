@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifdef GV_HAVE_KIPI
 
 #include <libkipi/interface.h>
+namespace Gwenview {
 
 class KIPIInterfacePrivate;
 
@@ -54,4 +55,6 @@ private slots:
 };
 
 #endif /* GV_HAVE_KIPI */
+} // namespace
 #endif /* KIPIINTERFACE_H */
+

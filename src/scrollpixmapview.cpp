@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "scrollpixmapview.moc"
 
 #include <assert.h>
 #include <math.h>
@@ -55,8 +56,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "busylevelmanager.h"
 #include "scrollpixmapviewtools.h"
 
-#include "scrollpixmapview.moc"
-
 #if !KDE_IS_VERSION( 3, 3, 0 )
 // from kglobal.h
 #define KCLAMP(x,low,high) kClamp(x,low,high)
@@ -68,6 +67,8 @@ inline const T& kClamp( const T& x, const T& low, const T& high )
     else                 return x;
 }
 #endif
+
+namespace Gwenview {
 
 /*
 
@@ -1588,3 +1589,5 @@ void ScrollPixmapView::writeConfig(KConfig* config, const QString& group) const 
 	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, d->mMaxSmoothRepaintSize);
 }
 
+
+} // namespace

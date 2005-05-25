@@ -27,10 +27,10 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // KDE
 #include <kurl.h>
-
 class QPopupMenu;
 class KService;
 
+namespace Gwenview {
 class ExternalToolContext : public QObject {
 Q_OBJECT
 public:
@@ -47,4 +47,6 @@ private:
 	KURL::List mURLs;
 };
 
+} // namespace
 #endif
+

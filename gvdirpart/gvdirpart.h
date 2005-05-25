@@ -26,6 +26,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QSplitter;
 class KAboutData;
 class KAction;
+class KToggleAction;
+
+namespace Gwenview {
+
 class ScrollPixmapView;
 class FileViewStack;
 class Document;
@@ -157,4 +161,5 @@ protected:
 	SlideShow* mSlideShow;
 };
 
+} // namespace
 #endif

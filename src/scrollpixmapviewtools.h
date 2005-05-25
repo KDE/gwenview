@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "scrollpixmapview.h"
+namespace Gwenview {
 
 
 class ScrollPixmapView::ToolBase {
@@ -87,4 +88,6 @@ public:
 };
 
 
+} // namespace
 #endif /* SCROLLPIXMAPVIEWTOOLS_H */
+

@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "imagesavedialog.moc"
+namespace Gwenview {
 
 
 static int findFormatInFilterList(const QStringList& filters, const QString& format) {
@@ -126,3 +127,5 @@ void ImageSaveDialog::updateImageFormat(const QString& text) {
 	locationEdit->setCurrentText(name);
 }
 
+
+} // namespace

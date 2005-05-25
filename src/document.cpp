@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "xpm.h"
 
 #include "document.moc"
+namespace Gwenview {
 
 
 //#define ENABLE_LOG
@@ -602,3 +603,5 @@ void Document::reset() {
 	switchToImpl(new DocumentEmptyImpl(this));
 	emit loaded(d->mURL);
 }
+
+} // namespace

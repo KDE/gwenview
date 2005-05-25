@@ -41,6 +41,7 @@ class KConfig;
 class KFileItem;
 typedef QPtrList<KFileItem> KFileItemList;
 
+namespace Gwenview {
 class FileThumbnailViewItem;
 class ThumbnailLoadJob;
 
@@ -126,4 +127,6 @@ private slots:
 };
 
 
+} // namespace
 #endif
+

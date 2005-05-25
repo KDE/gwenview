@@ -18,6 +18,8 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "externaltoolcontext.moc"
+
 // KDE
 #include <kaction.h>
 #include <kapplication.h>
@@ -30,7 +32,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include "externaltoolaction.h"
 #include "externaltooldialog.h"
 
-#include "externaltoolcontext.moc"
+namespace Gwenview {
 
 ExternalToolContext::ExternalToolContext(
 	QObject* parent,
@@ -65,3 +67,5 @@ QPopupMenu* ExternalToolContext::popupMenu() {
 	
 	return menu;
 }
+
+} // namespace

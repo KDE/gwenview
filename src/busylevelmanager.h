@@ -23,6 +23,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Qt
 #include <qtimer.h>
+namespace Gwenview {
 
 // KDE
 
@@ -106,4 +107,6 @@ BusyLevelHelper::~BusyLevelHelper()
 }
 
 
+} // namespace
 #endif
+

@@ -57,6 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #include "filethumbnailview.moc"
+namespace Gwenview {
 
 static const char* CONFIG_ITEM_TEXT_POS="item text pos";
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
@@ -751,3 +752,5 @@ void FileThumbnailView::writeConfig(KConfig* config,const QString& group) const 
 	config->writeEntry(CONFIG_ITEM_TEXT_POS, int(itemTextPos()));
 }
 
+
+} // namespace

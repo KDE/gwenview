@@ -46,6 +46,7 @@ class KListView;
 class KRadioAction;
 class KToggleAction;
 
+namespace Gwenview {
 class FileViewBase;
 class FileDetailView;
 class FileThumbnailView;
@@ -261,4 +262,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

@@ -49,6 +49,7 @@ class KToolBarPopupAction;
 class KFileItem;
 class KURLCompletion;
 
+namespace Gwenview {
 class DirView;
 class FileViewStack;
 class Document;
@@ -222,4 +223,6 @@ private slots:
 };
 
 
+} // namespace
 #endif
+

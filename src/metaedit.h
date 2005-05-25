@@ -25,8 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kfilemetainfo.h>
-
 class QTextEdit;
+
+namespace Gwenview {
+
 class Document;
 
 class MetaEdit : public QVBox {
@@ -50,4 +52,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

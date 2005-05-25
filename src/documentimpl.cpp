@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "document.h"
 #include "documentimpl.moc"
+namespace Gwenview {
 
 DocumentImpl::DocumentImpl(Document* document)
 : mDocument(document) {}
@@ -65,3 +66,5 @@ void DocumentImpl::transform(ImageUtils::Orientation) {
 QString DocumentImpl::save(const KURL&, const QCString&) const {
 	return i18n("No document to save");
 }
+
+} // namespace

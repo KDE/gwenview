@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local 
 #include "bookmarkowner.moc"
+namespace Gwenview {
 
 
 BookmarkOwner::BookmarkOwner(QWidget* parent)
@@ -48,3 +49,5 @@ void BookmarkOwner::setURL(const KURL& url)
 {
 	mURL=url;
 }
+
+} // namespace

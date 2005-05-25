@@ -16,6 +16,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "gvimagepart.moc"
+
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qpoint.h>
@@ -28,10 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocale.h>
-#include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
 
-#include "gvimagepart.h"
 #include <src/cache.h>
 #include <src/document.h>
 #include <src/printdialog.h>
@@ -40,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "config.h"
 
+namespace Gwenview {
 // For now let's duplicate
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
@@ -302,4 +303,4 @@ void GVImagePartBrowserExtension::print() {
 	mGVImagePart->print();
 }
 
-#include "gvimagepart.moc"
+} // namespace

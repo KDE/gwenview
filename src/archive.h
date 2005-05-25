@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstringlist.h>
 #include "libgwenview_export.h"
 class KFileItem;
+namespace Gwenview {
 
 /**
  * Helper functions to deal with archives
@@ -39,4 +40,6 @@ QString protocolForMimeType(const QString&);
 
 }
 
+} // namespace
 #endif
+

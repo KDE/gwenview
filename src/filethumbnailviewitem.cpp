@@ -36,6 +36,7 @@
 // Our includes
 #include "filethumbnailview.h"
 #include "filethumbnailviewitem.h"
+namespace Gwenview {
 
 
 #if 0
@@ -243,3 +244,5 @@ void FileThumbnailViewItem::setImageSize(const QSize& size) {
 	mImageSize=size;
 	updateLines();
 }
+
+} // namespace

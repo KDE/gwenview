@@ -25,24 +25,26 @@
 #ifndef THUMBNAILLOADJOB_H
 #define THUMBNAILLOADJOB_H
 
-// Qt includes
+// Qt
+#include <qimage.h>
 #include <qpixmap.h>
 #include <qvaluelist.h>
 #include <qvaluevector.h>
 
-// KDE includes
+// KDE
 #include <kio/job.h>
 
-// Our includes
+// Local
 #include "tsthread/tsthread.h"
 #include "tsthread/tswaitcondition.h"
 
 #include "libgwenview_export.h"
-
+class KConfig;
 class KFileItem;
 
 typedef QPtrList<KFileItem> KFileItemList;
 
+namespace Gwenview {
 class LIBGWENVIEW_EXPORT ThumbnailThread : public TSThread {
 Q_OBJECT
 public:
@@ -209,4 +211,6 @@ int ThumbnailLoadJob::thumbnailIndex( const KFileItem* item ) const {
 	return -1;
 }
 
+} // namespace
 #endif
+

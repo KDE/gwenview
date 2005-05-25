@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "fullscreenbar.moc"
+namespace Gwenview {
 
 
 const int FULLSCREEN_LABEL_RADIUS = 6;
@@ -230,3 +231,5 @@ void FullScreenBar::slotUpdateSlide() {
 	}
 	move(0, pos);
 }
+
+} // namespace

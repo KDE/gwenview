@@ -32,6 +32,7 @@ class QPopupMenu;
 class QShowEvent;
 class KURL;
 
+namespace Gwenview {
 class FileTreeBranch : public KFileTreeBranch {
 public:
 	FileTreeBranch(KFileTreeView* tv, const KURL& url, const QString& title, const QString& icon);
@@ -114,4 +115,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

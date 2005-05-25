@@ -24,6 +24,16 @@
 #include <stdlib.h>
 #include "qxcfi.h"
 
+
+// Change a QRgb value's alpha only. (an optimization)
+inline QRgb qRgba ( QRgb rgb, int a )
+{
+  return ( ( a & 0xff ) << 24 | ( rgb & RGB_MASK ) );
+}
+
+
+namespace Gwenview {
+
 const float INCHESPERMETER = (100. / 2.54);
 
 // Static global values
@@ -53,14 +63,6 @@ XCFImageFormat::LayerModes XCFImageFormat::layer_modes[] = {
   { true },			// REPLACE_MODE
   { true },			// ANTI_ERASE_MODE
 };
-
-// Maybe ask TrollTech to include this function in qcolor.h
-//! Change a QRgb value's alpha only. (an optimization)
-inline QRgb qRgba ( QRgb rgb, int a )
-{
-  return ( ( a & 0xff ) << 24 | ( rgb & RGB_MASK ) );
-}
-
 
 //////////////////////////////////////////////////////////////////////////////////
 // From GIMP "paint_funcs.c" v1.2
@@ -2384,3 +2386,5 @@ KDE_Q_EXPORT_PLUGIN( XCFImageFormat )
 #else
 Q_EXPORT_PLUGIN( XCFImageFormat )
 #endif
+
+} // namespace

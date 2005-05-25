@@ -27,8 +27,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "documentimpl.h"
 
-class Document;
 class QFile;
+
+namespace Gwenview {
+class Document;
 
 class DocumentLoadedImpl : public DocumentImpl {
 Q_OBJECT
@@ -44,4 +46,6 @@ protected:
 	virtual QString localSave(QFile* file, const QCString& format) const;
 };
 
+} // namespace
 #endif /* DOCUMENTLOADEDIMPL_H */
+

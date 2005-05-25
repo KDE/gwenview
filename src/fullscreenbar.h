@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QResizeEvent;
 class QString;
 
+namespace Gwenview {
 class FullScreenBar : public QLabel {
 Q_OBJECT
 public:
@@ -50,4 +51,6 @@ private:
 	Private* d;
 };
 
+} // namespace
 #endif /* FULLSCREENBAR_H */
+

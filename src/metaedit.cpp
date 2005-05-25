@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "document.h"
 #include "metaedit.moc"
+namespace Gwenview {
 
 // FIXME: Why doesn't MetaEdit inherits from QTextEdit rather than QVBox?
 MetaEdit::MetaEdit(QWidget *parent, Document *gvp, const char *name)
@@ -118,3 +119,5 @@ void MetaEdit::setEmptyText() {
 	}
 	mCommentEdit->setText(comment);
 }
+
+} // namespace

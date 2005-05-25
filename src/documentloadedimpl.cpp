@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
+#include "documentloadedimpl.moc"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -37,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "imageutils/imageutils.h"
-#include "documentloadedimpl.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -172,3 +173,5 @@ QString DocumentLoadedImpl::localSave(QFile* file, const QCString& format) const
 	return QString::null;
 }
 
+
+} // namespace

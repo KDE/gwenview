@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QWidget;
 
 
+namespace Gwenview {
 /**
  * This class is a base class for wrappers to KIO slaves asynchronous
  * file operations. These classes handle all steps of a file operation :
@@ -113,4 +114,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

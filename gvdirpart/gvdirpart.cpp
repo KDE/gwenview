@@ -16,6 +16,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "gvdirpart.moc"
+
 #include <qcursor.h>
 #include <qfile.h>
 #include <qsplitter.h>
@@ -32,7 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 #include <kio/job.h>
 
-#include "gvdirpart.h"
 #include <src/fileoperation.h>
 #include <src/archive.h>
 #include <src/cache.h>
@@ -46,6 +47,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <src/thumbnailloadjob.h>
 
 #include "config.h"
+
+namespace Gwenview {
 
 // For now let's duplicate
 const char CONFIG_CACHE_GROUP[]="cache";
@@ -301,4 +304,4 @@ void GVDirPartBrowserExtension::print() {
 	mGVDirPart->print();
 }
 
-#include "gvdirpart.moc"
+} // namespace

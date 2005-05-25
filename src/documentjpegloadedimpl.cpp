@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
 #include "documentjpegloadedimpl.moc"
+namespace Gwenview {
 
 
 //#define ENABLE_LOG
@@ -132,3 +133,5 @@ Document::CommentState DocumentJPEGLoadedImpl::commentState() const {
 	return d->mCommentState;
 }
 
+
+} // namespace

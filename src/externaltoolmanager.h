@@ -28,10 +28,11 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kfileitem.h>
 
-class ExternalToolContext;
 class KActionMenu;
 class KURL;
 
+namespace Gwenview {
+class ExternalToolContext;
 class ExternalToolManagerPrivate;
 
 class ExternalToolManager {
@@ -58,4 +59,6 @@ private:
 	ExternalToolManagerPrivate* d;
 };
 
+} // namespace
 #endif
+

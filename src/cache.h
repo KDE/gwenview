@@ -35,6 +35,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include "libgwenview_export.h"
 class KConfig;
 
+namespace Gwenview {
 class LIBGWENVIEW_EXPORT Cache {
 public:
 	static Cache* instance();
@@ -82,4 +83,6 @@ private:
 	int mThumbnailSize;
 };
 
+} // namespace
 #endif
+

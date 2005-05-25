@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "document.h"
 #include "batchmanipulator.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -95,3 +96,5 @@ void BatchManipulator::apply() {
 void BatchManipulator::slotImageLoaded() {
 	d->mLoaded=true;
 }
+
+} // namespace

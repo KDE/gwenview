@@ -27,6 +27,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local
 #include "busylevelmanager.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -91,3 +92,5 @@ BusyLevel BusyLevelManager::busyLevel() const {
 	return mCurrentBusyLevel;
 }
 
+
+} // namespace

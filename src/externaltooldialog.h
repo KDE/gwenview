@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kdialogbase.h>
+namespace Gwenview {
 
 
 class ExternalToolDialogPrivate;
@@ -48,4 +49,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

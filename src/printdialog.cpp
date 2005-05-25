@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "document.h"
 #include "printdialogpagebase.h"
 #include "printdialog.moc"
+namespace Gwenview {
 
 
 const char* STR_TRUE="true";
@@ -264,3 +265,5 @@ void PrintDialogPage::setNewUnit(const QString& string) {
 
 
 
+
+} // namespace

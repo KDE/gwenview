@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+namespace Gwenview {
 
 
 // Helper function
@@ -198,3 +199,5 @@ void ScrollPixmapView::ScrollTool::updateCursor() {
 	}
 }
 
+
+} // namespace

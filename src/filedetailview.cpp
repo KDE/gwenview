@@ -42,6 +42,7 @@
 #include "archive.h"
 #include "filedetailviewitem.h"
 #include "filedetailview.moc"
+namespace Gwenview {
 
 
 FileDetailView::FileDetailView(QWidget *parent, const char *name)
@@ -486,3 +487,5 @@ void FileDetailView::contentsDropEvent(QDropEvent *event) {
 	}
 	emit dropped(event,fileItem);
 }
+
+} // namespace

@@ -28,6 +28,7 @@ class KConfig;
 class KURL;
 
 #include "libgwenview_export.h"
+namespace Gwenview {
 /**
  * This namespace-like class handles all steps of a file operation :
  * - asking the user what to do with a file
@@ -63,4 +64,6 @@ public:
 	static void setDestDir(const QString&);
 };
 
+} // namespace
 #endif
+

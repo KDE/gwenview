@@ -19,9 +19,11 @@ Copyright 2000-2004 Aurélien Gâteau
 
 */
 
-#include "threadgate.h"
+#include "threadgate.moc"
 
 #include "tsthread/tsthread.h"
+
+namespace Gwenview {
 
 // The trick is simple. This object connects its slot to its signal, then
 // emits the signal using emitSignal(), and the slot gets called in the main
@@ -55,4 +57,4 @@ void ThreadGate::slotColor( QColor& col, const char* name ) {
 	col = QColor( name );
 }
 
-#include "threadgate.moc"
+} // namespace

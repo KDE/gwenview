@@ -7,6 +7,7 @@
 #include <qvaluevector.h>
 
 #include "gimp.h"
+namespace Gwenview {
 
 // Safe readBlock helper functions
 class SafeDataStream {
@@ -323,4 +324,6 @@ private:
   static void dissolveAlphaPixels ( QImage& image, int x, int y );
 };
 
+} // namespace
 #endif
+

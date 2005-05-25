@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageframe.h"
 #include "busylevelmanager.h"
 #include "libgwenview_export.h"
+namespace Gwenview {
 class DecoderThread : public TSThread {
 Q_OBJECT
 public:
@@ -108,4 +109,6 @@ private:
 	ImageLoaderPrivate* d;
 };
 
+} // namespace
 #endif /* IMAGELOADER_H */
+

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "documentloadedimpl.h"
+namespace Gwenview {
 
 class Document;
 
@@ -51,4 +52,6 @@ private:
 	DocumentJPEGLoadedImplPrivate* d;
 };
 
+} // namespace
 #endif /* DOCUMENTJPEGLOADEDIMPL_H */
+

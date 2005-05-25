@@ -24,6 +24,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 #include <qobject.h>
 #include <qcolor.h>
+namespace Gwenview {
 
 class ThreadGate : public QObject
 {
@@ -39,4 +40,6 @@ private slots:
 	void slotColor( QColor&, const char* );
 };
 
+} // namespace
 #endif
+

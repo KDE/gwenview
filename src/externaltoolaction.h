@@ -27,6 +27,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 class KService;
 
+namespace Gwenview {
 /**
  * A specialized version of KAction, which is aware of the tool to run as well
  * as the urls to call it with.
@@ -44,4 +45,6 @@ private:
 	const KURL::List& mURLs;
 };
 
+} // namespace
 #endif
+

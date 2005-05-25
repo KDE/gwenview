@@ -20,15 +20,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define __gvimagepart_h__
 
 #include <kparts/part.h>
+#include <kparts/browserextension.h>
 
 // Forward declarations
 class KAboutData;
 class KAction;
-
-class ScrollPixmapView;
-class Document;
 class KDirLister;
 class KFileItem;
+
+namespace Gwenview {
+class ScrollPixmapView;
+class Document;
 class ImageLoader;
 
 class GVImagePart;
@@ -143,4 +145,5 @@ private:
 	LastDirection mLastDirection; // used for prefetching
 };
 
+} // namespace
 #endif

@@ -28,6 +28,7 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // Local
 #include "externaltoolaction.moc"
+namespace Gwenview {
 
 ExternalToolAction::ExternalToolAction(
 	QObject* parent, const KService* service,
@@ -51,3 +52,5 @@ void ExternalToolAction::openExternalTool() {
 	QStringList args=KRun::processDesktopExec(*mService, mURLs, true);
 	KRun::runCommand(args.join(" "), mService->name(), mService->icon());
 }
+
+} // namespace

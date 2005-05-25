@@ -26,11 +26,14 @@
 #if KDE_IS_VERSION(3,3,90)
 
 #include <kdemacros.h>
+namespace Gwenview {
 
 #define LIBGWENVIEW_EXPORT KDE_EXPORT
 
 #else
 #define LIBGWENVIEW_EXPORT
 #endif
+} // namespace
 #endif /* _LIBGWENVIEW_EXPORT_H */
+
 

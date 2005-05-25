@@ -60,6 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "thumbnailloadjob.h"
 
 #include "configdialog.moc"
+namespace Gwenview {
 
 class ConfigDialogPrivate {
 public:
@@ -293,3 +294,5 @@ void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 	KMessageBox::information( this,i18n("Cache emptied.") );
 }
 
+
+} // namespace

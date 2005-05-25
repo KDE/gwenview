@@ -32,6 +32,7 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local
 #include "externaltoolcontext.h"
 #include "externaltoolmanager.h"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -272,3 +273,5 @@ ExternalToolContext* ExternalToolManager::createContext(
 	return d->createContextInternal(parent, urls, mimeTypes);
 }
 
+
+} // namespace

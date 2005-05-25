@@ -33,10 +33,12 @@ Copyright 2000-2004 Aurélien Gâteau
 // Local 
 #include "imageutils/orientation.h"
 #include "libgwenview_export.h"
+namespace KIO { class Job; }
+
+namespace Gwenview {
 class DocumentPrivate;
 class DocumentImpl;
 
-namespace KIO { class Job; }
 /**
  * The application document.
  * It knows what the current url is and will emit signals when
@@ -177,4 +179,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

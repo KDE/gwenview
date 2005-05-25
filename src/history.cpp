@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "history.moc"
+namespace Gwenview {
 
 
 const unsigned int MAX_HISTORY_SIZE=12;
@@ -132,3 +133,5 @@ void History::goForwardTo(int id) {
 	emit urlChanged(*mPosition);
 	mMovingInHistory=false;
 }
+
+} // namespace

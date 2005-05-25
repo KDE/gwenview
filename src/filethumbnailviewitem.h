@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class KFileItem;
 
+namespace Gwenview {
 /**
  * We override the QIconViewItem to control the look of selected items
  * and get a pointer to our KFileItem
@@ -58,4 +59,6 @@ protected:
 	QSize mImageSize;
 };
 
+} // namespace
 #endif
+

@@ -27,6 +27,7 @@
 // KDE includes
 #include <klistview.h>
 #include <kfileitem.h>
+namespace Gwenview {
 
 #define COL_NAME 0
 #define COL_SIZE 1
@@ -83,4 +84,6 @@ private:
 	QString m_key;
 };
 
+} // namespace
 #endif
+

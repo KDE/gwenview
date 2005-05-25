@@ -98,6 +98,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kcursor.h>
 
 #include "mainwindow.moc"
+namespace Gwenview {
 
 const char CONFIG_DOCK_GROUP[]="dock";
 const char CONFIG_MAINWINDOW_GROUP[]="main window";
@@ -1215,3 +1216,5 @@ void MainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
 }
+
+} // namespace

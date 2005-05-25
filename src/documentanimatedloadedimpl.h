@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QFile;
 class QCString;
 
+namespace Gwenview {
 class Document;
 
 class DocumentAnimatedLoadedImplPrivate;
@@ -55,4 +56,6 @@ private:
 	DocumentAnimatedLoadedImplPrivate* d;
 };
 
+} // namespace
 #endif /* DOCUMENTANIMATEDIMPL_H */
+

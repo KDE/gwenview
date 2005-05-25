@@ -30,8 +30,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdeprint/kprintdialogpage.h>
 
 #include "libgwenview_export.h"
-class Document;
 class PrintDialogPageBase;
+namespace Gwenview {
+class Document;
 
 enum Units {
 	GV_MILLIMETERS = 1,
@@ -69,4 +70,6 @@ private:
 	PrintDialogPageBase* mContent;
 };
 
+} // namespace
 #endif
+

@@ -37,6 +37,7 @@ class QKeyEvent;
 
 // Our includes
 #include "fileviewbase.h"
+namespace Gwenview {
 
 class FileDetailViewItem;
 
@@ -124,4 +125,6 @@ private:
 };
 
 
+} // namespace
 #endif
+

@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "fileoperation.h"
 #include "fileopobject.moc"
+namespace Gwenview {
 
 
 /**
@@ -277,3 +278,5 @@ void FileOpRenameObject::slotResult(KIO::Job* job) {
 // Let's shoot ourself in the foot...
 	delete this;
 }
+
+} // namespace

@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kdebug.h>
 #include <klocale.h>
+namespace Gwenview {
 
 // Local
 
@@ -87,3 +88,5 @@ void DocumentAnimatedLoadedImpl::transform(ImageUtils::Orientation orientation) 
 QString DocumentAnimatedLoadedImpl::localSave(QFile* /*file*/, const QCString& /*format*/) const {
 	return i18n("Sorry, cannot save animated images.");
 }
+
+} // namespace

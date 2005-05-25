@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Our includes
 #include "archive.h"
+namespace Gwenview {
 
 
 namespace Archive {
@@ -72,3 +73,5 @@ QString protocolForMimeType(const QString& mimeType) {
 }
 
 }
+
+} // namespace

@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileviewbase.h"
 #include "fileviewstack.h"
 #include "kipiinterface.moc"
+namespace Gwenview {
 
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -178,3 +179,5 @@ void KIPIInterface::slotDirectoryChanged() {
 
 
 #endif /* GV_HAVE_KIPI */
+
+} // namespace

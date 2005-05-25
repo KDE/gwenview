@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qimage.h>
 #include <qvaluevector.h>
+namespace Gwenview {
 
 // Local
 
@@ -36,4 +37,6 @@ struct ImageFrame {
 
 typedef QValueVector< ImageFrame > ImageFrames;
 
+} // namespace
 #endif /* IMAGEFRAME_H */
+

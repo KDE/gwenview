@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "slideshow.h"
 #include "slideshowdialogbase.h"
 #include "slideshowdialog.moc"
+namespace Gwenview {
 
 
 SlideShowDialog::SlideShowDialog(QWidget* parent,SlideShow* slideShow)
@@ -49,3 +50,5 @@ void SlideShowDialog::slotOk() {
 	mSlideShow->setLoop(mContent->mLoop->isChecked());
 	accept();
 }
+
+} // namespace

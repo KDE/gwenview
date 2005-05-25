@@ -34,6 +34,7 @@ class KActionCollection;
 
 typedef QValueList<KURL> HistoryList;
 
+namespace Gwenview {
 class History : public QObject {
 Q_OBJECT
 	
@@ -63,6 +64,8 @@ private slots:
 	void goForwardTo(int);
 };
 
+} // namespace
 #endif
+
 
 

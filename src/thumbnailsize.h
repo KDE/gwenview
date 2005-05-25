@@ -1,4 +1,5 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
+namespace Gwenview {
 /*	Gwenview - A simple image viewer for KDE
 	Copyright 2000-2004 Aurélien Gâteau
 	This class is based on the ImagePreviewJob class from Konqueror.
@@ -35,4 +36,6 @@ namespace ThumbnailSize {
 	const int LARGE=256;
 }
 
+} // namespace
 #endif /* THUMBNAILSIZE_H */
+

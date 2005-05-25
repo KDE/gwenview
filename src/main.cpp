@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 #include "mainwindow.h"
+namespace Gwenview {
 
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
@@ -76,3 +77,5 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 
 	return kapplication.exec();
 }
+
+} // namespace

@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "document.h"
 #include "imageutils/orientation.h"
+namespace Gwenview {
 
 
 class DocumentImpl : public QObject {
@@ -71,4 +72,6 @@ public:
 	}
 };
 
+} // namespace
 #endif /* DOCUMENTIMPL_H */
+
