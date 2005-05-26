@@ -178,6 +178,6 @@ void KIPIInterface::slotDirectoryChanged() {
 }
 
 
-#endif /* GV_HAVE_KIPI */
-
 } // namespace
+
+#endif /* GV_HAVE_KIPI */
