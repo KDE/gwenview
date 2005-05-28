@@ -4,16 +4,15 @@ This file describes the coding conventions used in Gwenview.
 Naming
 ------
 
-Classes should be named like this: GVMyClass (Some classes actually are not yet
-prefixed by GV, this should be changed). The class GVMyClass should be defined
-in the gvmyclass.h file and implemented in gvmyclass.cpp.
+Classes should be named like this: MyClass. The class MyClass should be defined
+in the myclass.h file and implemented in myclass.cpp.
 
 Variables and functions should be named like this: myVariable. Static and
 member variables are identified by a prefix (s or m), without underscore.
 
 int sStaticVariable.
 
-class GVMyClass {
+class MyClass {
 	int mMemberVariable;
 
 	void doSomething() {
@@ -26,6 +25,17 @@ Enum items and consts are spelled like this:
 
 const int MY_CONST_VALUE=120;
 enum AnEnum { ITEM1, ITEM2, ITEM3 };
+
+
+Namespace
+---------
+
+All code should be enclosed in the "Gwenview" namespace. Make sure the closing
+curly bracket of the namespace looks like this :
+
+} // namespace
+
+This avoids wondering why the curly bracket is here.
 
 
 Code layout
@@ -44,7 +54,7 @@ void myFunction() {
 	}
 }
 
-class GVMyClass {
+class MyClass {
 };
 
 
@@ -81,5 +91,5 @@ Q_OBJECT, make sure you include the .moc file, not the .h.
 #include <klistview.h>
 
 // Local
-#include "gvaclass.h"
-#include "gvmyclass.moc"
+#include "aclass.h"
+#include "myclass.moc"
