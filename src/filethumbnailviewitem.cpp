@@ -68,20 +68,20 @@ public:
 	
 	virtual int height() const=0;
 	
-	void paint(QPainter* p, int ypos, int textX, int textY, int align) const {
+	void paint(QPainter* p, int textX, int textY, int align) const {
 		Q_ASSERT(mWidth!=-1);
 		int length=fontMetrics().width(mTxt);
 		if (length<=mWidth ) {
 			p->drawText(
 				textX,
-				textY + ypos,
+				textY,
 				mWidth,
 				fontMetrics().height(),
 				align,
 				mTxt);
 		} else {
 			p->save();
-			complexPaint(p, ypos, textX, textY, align);
+			complexPaint(p, textX, textY, align);
 			p->restore();
 		}
 	};
@@ -98,7 +98,7 @@ protected:
 	/**
 	 * Called when the text won't fit the available space
 	 */
-	virtual void complexPaint(QPainter* p, int ypos, int textX, int textY, int align) const=0;
+	virtual void complexPaint(QPainter* p, int textX, int textY, int align) const=0;
 };
 
 
@@ -114,10 +114,10 @@ public:
 		return fontMetrics().height();
 	}
 
-	void complexPaint(QPainter* p, int ypos, int textX, int textY, int /*align*/) const {
+	void complexPaint(QPainter* p, int textX, int textY, int /*align*/) const {
 		KWordWrap::drawFadeoutText(p,
 			textX,
-			textY + ypos + fontMetrics().ascent(),
+			textY + fontMetrics().ascent(),
 			mWidth,
 			mTxt);
 	}
@@ -158,7 +158,7 @@ public:
 			mTxt);
 	}
 
-	void complexPaint(QPainter* p, int ypos, int textX, int textY, int align) const {
+	void complexPaint(QPainter* p, int textX, int textY, int align) const {
 		Q_ASSERT(mWordWrap);
 		if (!mWordWrap) return;
 
@@ -169,7 +169,7 @@ public:
 		
 		mWordWrap->drawText(p, 
 			textX + xpos,
-			textY + ypos,
+			textY,
 			align);
 	}
 };
@@ -259,7 +259,7 @@ void FileThumbnailViewItem::calcRect(const QString&) {
 	if (isRight) {
 		itemRect.setHeight( QMAX(thumbnailSize + PADDING*2, textH) + SHADOW);
 		itemTextRect.moveLeft(thumbnailSize + PADDING * 2 + SHADOW);
-		itemTextRect.moveTop((itemRect.height() - textH)/2);
+		itemTextRect.moveTop((itemRect.height() - SHADOW - textH)/2);
 	} else {
 		itemPixmapRect.moveLeft( (itemRect.width()-SHADOW - itemPixmapRect.width()) / 2 );
 		itemRect.setHeight(thumbnailSize + PADDING*3 + SHADOW + textH);
@@ -336,18 +336,12 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 	int align = (isRight ? AlignAuto : AlignHCenter) | AlignTop;
 	
-	int ypos=0;
-	if (isRight) {
-		ypos=(textH - textRect().height()) / 2;
-		if (ypos<0) ypos=0;
-	}
-	
 	QValueVector<Line*>::ConstIterator it=mLines.begin();
 	QValueVector<Line*>::ConstIterator itEnd=mLines.end();
 	for (;it!=itEnd; ++it) {
 		const Line* line=*it;
-		line->paint(p, ypos, textX, textY, align);
-		ypos+=line->height();
+		line->paint(p, textX, textY, align);
+		textY+=line->height();
 	}
 }
 
