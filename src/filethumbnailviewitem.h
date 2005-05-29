@@ -37,7 +37,10 @@ namespace Gwenview {
  */
 class FileThumbnailViewItem : public QIconViewItem {
 public:
-	enum { PADDING=4 , SHADOW=1 };
+	class Line;
+	class CroppedLine;
+	class WrappedLine;
+	enum { PADDING=4 , SHADOW=2 };
 
 	FileThumbnailViewItem(QIconView* parent,const QString& text,const QPixmap& icon, KFileItem* fileItem);
 	~FileThumbnailViewItem();
@@ -55,7 +58,8 @@ protected:
 	void updateLines();
 
 	KFileItem* mFileItem;
-	QValueVector<QString> mLines;
+	QValueVector<Line*> mLines;
+
 	QSize mImageSize;
 };
 

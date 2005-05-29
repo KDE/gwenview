@@ -577,20 +577,11 @@ void FileThumbnailView::updateGrid() {
 			+ FileThumbnailViewItem::PADDING*3
 			+ FileThumbnailViewItem::SHADOW
 			+ RIGHT_TEXT_WIDTH);
-		setGridY(
-			d->mThumbnailSize
-			+ FileThumbnailViewItem::PADDING*2
-			+ FileThumbnailViewItem::SHADOW);
 	} else {
 		setGridX(
 			QMAX(d->mThumbnailSize, BOTTOM_MIN_TEXT_WIDTH)
 			+ FileThumbnailViewItem::PADDING*2
 			+ FileThumbnailViewItem::SHADOW);
-		setGridY(
-			d->mThumbnailSize
-			+ FileThumbnailViewItem::PADDING*3
-			+ FileThumbnailViewItem::SHADOW
-			+ fontMetrics().height()*2);
 	}
 	setSpacing(d->mMarginSize);
 }

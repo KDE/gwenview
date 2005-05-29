@@ -46,6 +46,135 @@ static void printRect(const QString& txt,const QRect& rect) {
 #endif
 
 
+/**
+ * An helper class to handle a caption line and help drawing it
+ */
+class FileThumbnailViewItem::Line {
+protected:
+	const QIconViewItem* mItem;
+	QString mTxt;
+	int mWidth;
+public:
+	Line(const QIconViewItem* item, const QString& txt)
+	: mItem(item)
+	, mTxt(txt)
+	, mWidth(-1) {
+	}
+	virtual ~Line() {}
+
+	virtual void setWidth(int width) {
+		mWidth=width;
+	}
+	
+	virtual int height() const=0;
+	
+	void paint(QPainter* p, int ypos, int textX, int textY, int align) const {
+		Q_ASSERT(mWidth!=-1);
+		int length=fontMetrics().width(mTxt);
+		if (length<=mWidth ) {
+			p->drawText(
+				textX,
+				textY + ypos,
+				mWidth,
+				fontMetrics().height(),
+				align,
+				mTxt);
+		} else {
+			p->save();
+			complexPaint(p, ypos, textX, textY, align);
+			p->restore();
+		}
+	};
+
+protected:
+	const FileThumbnailView* view() const {
+		return static_cast<const FileThumbnailView*>(mItem->iconView());
+	}
+
+	QFontMetrics fontMetrics() const {
+		return view()->fontMetrics();
+	}
+
+	/**
+	 * Called when the text won't fit the available space
+	 */
+	virtual void complexPaint(QPainter* p, int ypos, int textX, int textY, int align) const=0;
+};
+
+
+/**
+ * A line which will get cropped if necessary
+ */
+class FileThumbnailViewItem::CroppedLine : public FileThumbnailViewItem::Line {
+public:
+	CroppedLine(const QIconViewItem* item, const QString& txt)
+	: Line(item, txt) {}
+
+	int height() const {
+		return fontMetrics().height();
+	}
+
+	void complexPaint(QPainter* p, int ypos, int textX, int textY, int /*align*/) const {
+		KWordWrap::drawFadeoutText(p,
+			textX,
+			textY + ypos + fontMetrics().ascent(),
+			mWidth,
+			mTxt);
+	}
+};
+
+/**
+ * A line which will get wrapped if necessary
+ */
+
+class FileThumbnailViewItem::WrappedLine : public FileThumbnailViewItem::Line {
+	KWordWrap* mWordWrap;
+public:
+	WrappedLine(const QIconViewItem* item, const QString& txt)
+	: Line(item, txt)
+	, mWordWrap(0) {}
+
+	~WrappedLine() {
+		delete mWordWrap;
+	}
+
+	int height() const {
+		Q_ASSERT(mWordWrap);
+		if (!mWordWrap) return 0;
+		return mWordWrap->boundingRect().height();
+	}
+
+	/**
+	 * Regenerates mWordWrap if the width has changed
+	 */
+	void setWidth(int width) {
+		if (width==mWidth) return;
+		mWidth=width;
+		delete mWordWrap;
+		QFontMetrics fm=fontMetrics();
+		mWordWrap=KWordWrap::formatText(fm,
+			QRect(0, 0, mWidth, fm.height()*3),
+			0 /*flags*/,
+			mTxt);
+	}
+
+	void complexPaint(QPainter* p, int ypos, int textX, int textY, int align) const {
+		Q_ASSERT(mWordWrap);
+		if (!mWordWrap) return;
+
+		int xpos=0;
+		if (align & AlignHCenter) {
+			xpos=( mWidth - mWordWrap->boundingRect().width() ) / 2;
+		}
+		
+		mWordWrap->drawText(p, 
+			textX + xpos,
+			textY + ypos,
+			align);
+	}
+};
+
+
 FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text,const QPixmap& icon, KFileItem* fileItem)
 : QIconViewItem(view,text,icon), mFileItem(fileItem) {
 	updateLines();
@@ -54,13 +183,23 @@ FileThumbnailViewItem::FileThumbnailViewItem(QIconView* view,const QString& text
 
 
 FileThumbnailViewItem::~FileThumbnailViewItem() {
+	QValueVector<Line*>::ConstIterator it=mLines.begin();
+	QValueVector<Line*>::ConstIterator itEnd=mLines.end();
+	for (;it!=itEnd; ++it) {
+		delete *it;
+	}
 }
 
 
 void FileThumbnailViewItem::updateLines() {
+	QValueVector<Line*>::ConstIterator it=mLines.begin();
+	QValueVector<Line*>::ConstIterator itEnd=mLines.end();
+	for (;it!=itEnd; ++it) {
+		delete *it;
+	}
 	mLines.clear();
 	if (!mFileItem) return;
-	
+
 	QString imageSizeLine;
 	if (mImageSize.isValid()) {
 		imageSizeLine=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
@@ -70,40 +209,74 @@ void FileThumbnailViewItem::updateLines() {
 	bool isRight=iconView()->itemTextPos()==QIconView::Right;
 	
 	if (isRight) {
-		mLines.append(mFileItem->name());
-		mLines.append( mFileItem->timeString() );
+		mLines.append( new WrappedLine(this, mFileItem->name()) );
+		mLines.append( new CroppedLine(this, mFileItem->timeString()) );
 		if (!imageSizeLine.isNull()) {
-			mLines.append(imageSizeLine);
+			mLines.append( new CroppedLine(this, imageSizeLine) );
 		}
 		if (!isDir) {
-			mLines.append(KIO::convertSize(mFileItem->size()));
+			mLines.append( new CroppedLine(this, KIO::convertSize(mFileItem->size())) );
 		}
 	} else {
-		mLines.append(mFileItem->name());
+		mLines.append( new WrappedLine(this, mFileItem->name()) );
 		if (!isDir) {
 			QString line=KIO::convertSize(mFileItem->size());
 			if (!imageSizeLine.isNull()) {
 				line.prepend(imageSizeLine + " - ");
 			}
-			mLines.append(line);
+			mLines.append( new CroppedLine(this, line) );
 		}
 	}
+
+	calcRect("");
 }
 
 
 void FileThumbnailViewItem::calcRect(const QString&) {
-	QRect itemRect(x(), y(), iconView()->gridX(), iconView()->gridY());
-
-	QRect itemPixmapRect(0, 0, iconView()->gridX(), iconView()->gridY());
-	QRect itemTextRect(itemPixmapRect);
+	FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
+	bool isRight=view->itemTextPos()==QIconView::Right;
+	
+	int textW=view->gridX();
+	int thumbnailSize=view->thumbnailSize();
+	if (isRight) {
+		textW-=PADDING * 3 + thumbnailSize;
+	} else {
+		textW-=PADDING * 2;
+	}
+	textW-=SHADOW;
+	
+	int textH=0;
+	QValueVector<Line*>::ConstIterator it=mLines.begin();
+	QValueVector<Line*>::ConstIterator itEnd=mLines.end();
+	for (;it!=itEnd; ++it) {
+		(*it)->setWidth(textW);
+		textH+=(*it)->height();
+	}
+	
+	QRect itemRect(x(), y(), view->gridX(), 0);
+	QRect itemPixmapRect(PADDING, PADDING, thumbnailSize, thumbnailSize);
+	QRect itemTextRect(0, 0, textW, textH);
+	if (isRight) {
+		itemRect.setHeight( QMAX(thumbnailSize + PADDING*2, textH) + SHADOW);
+		itemTextRect.moveLeft(thumbnailSize + PADDING * 2 + SHADOW);
+		itemTextRect.moveTop((itemRect.height() - textH)/2);
+	} else {
+		itemPixmapRect.moveLeft( (itemRect.width()-SHADOW - itemPixmapRect.width()) / 2 );
+		itemRect.setHeight(thumbnailSize + PADDING*3 + SHADOW + textH);
+		itemTextRect.moveLeft(PADDING);
+		itemTextRect.moveTop(thumbnailSize + PADDING * 2);
+	}
 	
 	// Update rects
-	if ( itemPixmapRect != pixmapRect() )
+	if ( itemPixmapRect != pixmapRect() ) {
 		setPixmapRect( itemPixmapRect );
-	if ( itemTextRect != textRect() )
+	}
+	if ( itemTextRect != textRect() ) {
 		setTextRect( itemTextRect );
-	if ( itemRect != rect() )
+	}
+	if ( itemRect != rect() ) {
 		setItemRect( itemRect );
+	}
 }
 
 
@@ -117,29 +290,13 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	bool isShownItem=view->shownFileItem() && view->shownFileItem()->extraData(view)==this;
 	int textX, textY, textW, textH;
 
-	if (isRight) {
-		textX= rt.x() + PADDING*2 + view->thumbnailSize();
-		textY= rt.y() + PADDING;
-		textW= rt.width() - PADDING*3 - view->thumbnailSize();
-		textH= rt.height() - PADDING*2;
-	} else {
-		textX= rt.x() + PADDING;
-		textY= rt.y() + PADDING*2 + view->thumbnailSize();
-		textW= rt.width() - PADDING*2;
-		textH= rt.height() - PADDING*3 - view->thumbnailSize();
-	}
-	textW-=SHADOW;
-	textY-=SHADOW;
+	textX=textRect(false).x();
+	textY=textRect(false).y();
+	textW=textRect(false).width();
+	textH=textRect(false).height();
 
 	// Draw pixmap
-	if (isRight) {
-		p->drawPixmap( rt.x() + PADDING, rt.y() + PADDING, *pixmap() );
-	} else {
-		p->drawPixmap(
-			rt.x() + (rt.width() - pixmap()->width())/2,
-			rt.y() + PADDING, 
-			*pixmap() );
-	}
+	p->drawPixmap( pixmapRect(false).topLeft(), *pixmap() );
 
 	// Define colors
 	QColor bg, fg;
@@ -147,7 +304,7 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		bg=cg.highlight();
 		fg=cg.highlightedText();
 	} else {
-		bg=cg.button();
+		bg=cg.mid();
 		fg=cg.text();
 	}
 	if (isShownItem) {
@@ -155,77 +312,42 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	}
 	
 	// Draw frame
+	QRect frmRect=pixmapRect(false);
+	frmRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
 	p->setPen(bg);
-	QRect frmRect(rt);
-	frmRect.addCoords(0, 0, -SHADOW, -SHADOW);
-	p->drawRect(frmRect);
-	if (isSelected()) {
-		if (isRight) {
-			p->fillRect(
-				textX,
-				frmRect.y(),
-				textW + PADDING,
-				textH + PADDING*2,
-				bg);
-		} else {
-			p->fillRect(
-				frmRect.x(),
-				textY,
-				textW + PADDING*2,
-				textH + PADDING,
-				bg);
-		}
+		p->drawRect(frmRect);
+	if (isSelected() || isShownItem) {
+		frmRect.addCoords(1,1,-1,-1);
+		p->drawRect(frmRect);
+		frmRect.addCoords(-1,-1,1,1);
 	}
 	
 	// Draw shadow
-	p->setPen(cg.mid());
-	frmRect.moveBy(SHADOW, SHADOW);
-	p->drawLine(frmRect.topRight(), frmRect.bottomRight() );
-	p->drawLine(frmRect.bottomLeft(), frmRect.bottomRight() );
+	for (int x=0; x<SHADOW; ++x) {
+		p->setPen(cg.base().dark( 100+10*(SHADOW-x) ));
+		frmRect.moveBy(1, 1);
+		p->drawLine(frmRect.topRight(), frmRect.bottomRight() );
+		p->drawLine(frmRect.bottomLeft(), frmRect.bottomRight() );
+	}
 	
 	// Draw text
-	p->setPen(QPen(fg));
-	p->setBackgroundColor(bg);
+	p->setPen(cg.text());
+	p->setBackgroundColor(cg.base());
 
 	int align = (isRight ? AlignAuto : AlignHCenter) | AlignTop;
-
-	int lineHeight=view->fontMetrics().height();
-	int ascent=view->fontMetrics().ascent();
 	
 	int ypos=0;
 	if (isRight) {
-		ypos=(textH - int(mLines.count())*lineHeight) / 2;
+		ypos=(textH - textRect().height()) / 2;
 		if (ypos<0) ypos=0;
 	}
-
-	// Set up the background color for KWordWrap::drawFadeoutText()
-	if (isSelected()) {
-		p->setBackgroundColor(bg);
-	} else {
-		p->setBackgroundColor(cg.base());
-	}
 	
-	QValueVector<QString>::ConstIterator it=mLines.begin();
-	QValueVector<QString>::ConstIterator itEnd=mLines.end();
-	for (;it!=itEnd && ypos + ascent<=textH; ++it, ypos+=lineHeight) {
-		int length=view->fontMetrics().width(*it);
-		if (length>textW) {
-			p->save();
-			KWordWrap::drawFadeoutText(p,
-				textX,
-				textY + ypos + ascent,
-				textW,
-				*it);
-			p->restore();
-		} else {
-			p->drawText(
-				textX,
-				textY + ypos,
-				textW,
-				lineHeight,
-				align,
-				*it);
-		}
+	QValueVector<Line*>::ConstIterator it=mLines.begin();
+	QValueVector<Line*>::ConstIterator itEnd=mLines.end();
+	for (;it!=itEnd; ++it) {
+		const Line* line=*it;
+		line->paint(p, ypos, textX, textY, align);
+		ypos+=line->height();
 	}
 }
 
