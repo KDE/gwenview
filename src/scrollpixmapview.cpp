@@ -905,6 +905,11 @@ void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, in
 		return;
 	}
 
+	if( zoom() != 1.0 ) {
+		image=image.convertDepth(32);
+		image=ImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smooth_algo );
+	}
+
 	if( d->mBrightness != 0 ) {
 		image = ImageUtils::changeBrightness( image, d->mBrightness );
 	}
@@ -915,11 +920,6 @@ void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, in
 
 	if( d->mGamma != 100 ) { // != 1.0
 		image = ImageUtils::changeGamma( image, d->mGamma );
-	}
-
-	if( zoom() != 1.0 ) {
-		image=image.convertDepth(32);
-		image=ImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smooth_algo );
 	}
 
 	if (image.hasAlphaBuffer()) {
