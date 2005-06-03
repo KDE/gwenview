@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="17">
+<kpartgui name="Gwenview" version="18">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -114,9 +114,9 @@
 
 <ToolBar fullWidth="true" name="locationToolBar" newline="true">
   <text>Location Toolbar</text>
-  <Action name="go_up" />
   <Action name="go_back" />
   <Action name="go_forward" />
+  <Action name="go_up" />
   <Action name="go_home" />
   <Action name="clear_location" />
   <Action name="location_label" />
