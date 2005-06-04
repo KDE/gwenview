@@ -32,11 +32,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kparts/genericfactory.h>
 
-#include <src/cache.h>
-#include <src/document.h>
-#include <src/printdialog.h>
-#include <src/scrollpixmapview.h>
-#include <src/imageloader.h>
+#include <gvcore/cache.h>
+#include <gvcore/document.h>
+#include <gvcore/printdialog.h>
+#include <gvcore/scrollpixmapview.h>
+#include <gvcore/imageloader.h>
 
 #include "config.h"
 

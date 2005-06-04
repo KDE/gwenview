@@ -34,17 +34,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kparts/genericfactory.h>
 #include <kio/job.h>
 
-#include <src/fileoperation.h>
-#include <src/archive.h>
-#include <src/cache.h>
-#include <src/document.h>
-#include <src/fileviewbase.h>
-#include <src/fileviewstack.h>
-#include <src/printdialog.h>
-#include <src/scrollpixmapview.h>
-#include <src/slideshowdialog.h>
-#include <src/slideshow.h>
-#include <src/thumbnailloadjob.h>
+#include <gvcore/fileoperation.h>
+#include <gvcore/archive.h>
+#include <gvcore/cache.h>
+#include <gvcore/document.h>
+#include <gvcore/fileviewbase.h>
+#include <gvcore/fileviewstack.h>
+#include <gvcore/printdialog.h>
+#include <gvcore/scrollpixmapview.h>
+#include <gvcore/slideshowdialog.h>
+#include <gvcore/slideshow.h>
+#include <gvcore/thumbnailloadjob.h>
 
 #include "config.h"
 

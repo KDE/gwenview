@@ -5,7 +5,7 @@ kdeinit_LTLIBRARIES = gwenview.la
 
 gwenview_la_SOURCES = dummy.cpp
 
-gwenview_la_LIBADD   = ../src/libgwenviewcore.la
+gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la
 
 # the library search path.
 gwenview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
