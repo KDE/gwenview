@@ -70,29 +70,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 // Local
-#include "fileoperation.h"
-#include "archive.h"
-#include "batchmanipulator.h"
 #include "bookmarkowner.h"
 #include "configdialog.h"
 #include "dirview.h"
-#include "document.h"
-#include "externaltooldialog.h"
-#include "fileviewbase.h"
-#include "fileviewstack.h"
 #include "history.h"
-#include "scrollpixmapview.h"
-#include "slideshow.h"
-#include "slideshowdialog.h"
 #include "metaedit.h"
-#include "printdialog.h"
-#include "cache.h"
-#include "thumbnailloadjob.h"
+
+#include "gvcore/fileoperation.h"
+#include "gvcore/archive.h"
+#include "gvcore/batchmanipulator.h"
+#include "gvcore/document.h"
+#include "gvcore/externaltooldialog.h"
+#include "gvcore/fileviewbase.h"
+#include "gvcore/fileviewstack.h"
+#include "gvcore/scrollpixmapview.h"
+#include "gvcore/slideshow.h"
+#include "gvcore/slideshowdialog.h"
+#include "gvcore/printdialog.h"
+#include "gvcore/cache.h"
+#include "gvcore/thumbnailloadjob.h"
 
 #include "config.h"
 
 #ifdef GV_HAVE_KIPI
-#include "kipiinterface.h"
+#include "gvcore/kipiinterface.h"
 #endif
 
 #include <kcursor.h>

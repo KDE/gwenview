@@ -25,24 +25,20 @@ libgwenviewcore_la_METASOURCES = AUTO
 include_HEADERS = libgwenview_export.h
 
 libgwenviewcore_la_SOURCES = \
-	configfileoperationspage.ui \
-	configfullscreenpage.ui \
-	configimagelistpage.ui \
-	configimageviewpage.ui \
-	configmiscpage.ui \
-	branchpropertiesdialogbase.ui \
+	printdialog.cpp \
+	printdialogpagebase.ui \
 	thumbnailloadjob.cpp \
 	scrollpixmapview.cpp \
-	printdialog.cpp \
 	batchmanipulator.cpp \
-	mainwindow.cpp \
 	document.cpp \
-	dirview.cpp \
+	externaltoolmanager.cpp \
+	externaltoolcontext.cpp \
+	externaltoolaction.cpp \
+	externaltooldialogbase.ui \
+	externaltooldialog.cpp \
 	fileviewstack.cpp \
 	filethumbnailview.cpp \
 	fileoperation.cpp \
-	configdialog.cpp \
-	branchpropertiesdialog.cpp \
 	fileopobject.cpp \
 	filethumbnailviewitem.cpp \
 	qxcfi.cpp \
@@ -54,14 +50,7 @@ libgwenviewcore_la_SOURCES = \
 	imagesavedialog.cpp \
 	slideshowdialog.cpp \
 	slideshowdialogbase.ui \
-	metaedit.cpp \
-	externaltoolmanager.cpp \
-	externaltoolcontext.cpp \
-	externaltoolaction.cpp \
-	externaltooldialogbase.ui \
-	externaltooldialog.cpp \
 	history.cpp \
-	printdialogpagebase.ui \
 	jpegformattype.cpp \
 	pngformattype.cpp \
 	mngformattype.cpp \
@@ -77,5 +66,4 @@ libgwenviewcore_la_SOURCES = \
 	threadgate.cpp \
 	scrollpixmapviewtools.cpp \
 	fullscreenbar.cpp \
-	imageloader.cpp \
-	main.cpp
+	imageloader.cpp

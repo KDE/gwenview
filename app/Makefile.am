@@ -3,7 +3,21 @@ lib_LTLIBRARIES=
 
 kdeinit_LTLIBRARIES = gwenview.la
 
-gwenview_la_SOURCES = dummy.cpp
+gwenview_la_SOURCES = \
+	bookmarkowner.cpp \
+	configfileoperationspage.ui \
+	configfullscreenpage.ui \
+	configimagelistpage.ui \
+	configimageviewpage.ui \
+	configmiscpage.ui \
+	branchpropertiesdialogbase.ui \
+	mainwindow.cpp \
+	metaedit.cpp \
+	dirview.cpp \
+	configdialog.cpp \
+	branchpropertiesdialog.cpp \
+	history.cpp \
+	main.cpp
 
 gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la
 
@@ -19,7 +33,3 @@ METASOURCES = AUTO
 rcdir = $(kde_datadir)/gwenview
 rc_DATA = gwenviewui.rc
 
-dummy.cpp:
-	echo > dummy.cpp
-
-CLEANFILES = dummy.cpp gwenview_dummy.cpp gwenview.la.cpp

@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurldrag.h>
 
 // Local
-#include "fileoperation.h"
+#include "gvcore/fileoperation.h"
 #include "branchpropertiesdialog.h"
 #include "dirview.moc"
 namespace Gwenview {

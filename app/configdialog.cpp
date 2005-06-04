@@ -46,18 +46,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 // Local 
-#include "fileoperation.h"
 #include "configfileoperationspage.h"
 #include "configfullscreenpage.h"
 #include "configimagelistpage.h"
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
-#include "document.h"
-#include "filethumbnailview.h"
-#include "fileviewstack.h"
 #include "mainwindow.h"
-#include "scrollpixmapview.h"
-#include "thumbnailloadjob.h"
+#include "gvcore/document.h"
+#include "gvcore/fileoperation.h"
+#include "gvcore/filethumbnailview.h"
+#include "gvcore/fileviewstack.h"
+#include "gvcore/scrollpixmapview.h"
+#include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
 namespace Gwenview {
