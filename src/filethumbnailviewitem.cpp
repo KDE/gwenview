@@ -295,45 +295,46 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	textW=textRect(false).width();
 	textH=textRect(false).height();
 
-	// Draw pixmap
-	p->drawPixmap( pixmapRect(false).topLeft(), *pixmap() );
-
 	// Define colors
-	QColor bg, fg;
-	if ( isSelected() ) {
-		bg=cg.highlight();
-		fg=cg.highlightedText();
-	} else {
-		bg=cg.mid();
-		fg=cg.text();
-	}
+	QColor bg;
 	if (isShownItem) {
 		bg=view->shownFileItemColor();
+	} else if ( isSelected() ) {
+		bg=cg.highlight();
+	} else {
+		bg=cg.mid();
 	}
 	
 	// Draw frame
 	QRect frmRect=pixmapRect(false);
 	frmRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
-	p->setPen(bg);
-		p->drawRect(frmRect);
 	if (isSelected() || isShownItem) {
-		frmRect.addCoords(1,1,-1,-1);
-		p->drawRect(frmRect);
+		p->fillRect(frmRect, bg);
+		p->setPen(cg.base());
+		frmRect=pixmapRect(false);
 		frmRect.addCoords(-1,-1,1,1);
+		p->drawRect(frmRect);
+	} else {
+		p->setPen(bg);
+		p->drawRect(frmRect);
 	}
 	
 	// Draw shadow
+	QRect shadowRect=pixmapRect(false);
+	shadowRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
 	for (int x=0; x<SHADOW; ++x) {
 		p->setPen(cg.base().dark( 100+10*(SHADOW-x) ));
-		frmRect.moveBy(1, 1);
-		p->drawLine(frmRect.topRight(), frmRect.bottomRight() );
-		p->drawLine(frmRect.bottomLeft(), frmRect.bottomRight() );
+		shadowRect.moveBy(1, 1);
+		p->drawLine(shadowRect.topRight(), shadowRect.bottomRight() );
+		p->drawLine(shadowRect.bottomLeft(), shadowRect.bottomRight() );
 	}
+	
+	// Draw pixmap
+	p->drawPixmap( pixmapRect(false).topLeft(), *pixmap() );
 	
 	// Draw text
 	p->setPen(cg.text());
 	p->setBackgroundColor(cg.base());
-
 	int align = (isRight ? AlignAuto : AlignHCenter) | AlignTop;
 	
 	QValueVector<Line*>::ConstIterator it=mLines.begin();
