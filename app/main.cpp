@@ -34,8 +34,7 @@ static KCmdLineOptions options[] = {
 
 static const char version[] = "1.2.0";
 
-#if !KDE_IS_VERSION(3,3,2)
-// broken KDE_EXPORT, don't use it
+#ifndef __KDE_HAVE_GCC_VISIBILITY
 #undef KDE_EXPORT
 #define KDE_EXPORT
 #endif
