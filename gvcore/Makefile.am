@@ -46,11 +46,9 @@ libgwenviewcore_la_SOURCES = \
 	slideshow.cpp \
 	filedetailview.cpp \
 	filedetailviewitem.cpp \
-	bookmarkowner.cpp \
 	imagesavedialog.cpp \
 	slideshowdialog.cpp \
 	slideshowdialogbase.ui \
-	history.cpp \
 	jpegformattype.cpp \
 	pngformattype.cpp \
 	mngformattype.cpp \
