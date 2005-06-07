@@ -322,7 +322,6 @@ static fastfloat Lanczos(const fastfloat x,const fastfloat support)
     return(Sinc(x,support)*Sinc(x/3.0,support));
   return(0.0);
 }
-#endif
 
 static fastfloat Mitchell(const fastfloat x,const fastfloat)
 {
@@ -347,6 +346,55 @@ static fastfloat Mitchell(const fastfloat x,const fastfloat)
   if (x < 2.0)
     return(Q0+x*(Q1+x*(Q2+x*Q3)));
   return(0.0);
+
+#undef B
+#undef C
+#undef P0
+#undef P2
+#undef P3
+#undef Q0
+#undef Q1
+#undef Q2
+#undef Q3
+}
+#endif
+
+// this is the same like Mitchell, but it has different values
+// for B and C, resulting in sharper images
+// http://sourceforge.net/mailarchive/forum.php?thread_id=7445822&forum_id=1210
+static fastfloat Bicubic(const fastfloat x,const fastfloat)
+{
+#define B   (0.0/3.0)
+#define C   (2.0/3.0)
+#define P0  ((  6.0- 2.0*B       )/6.0)
+#define P2  ((-18.0+12.0*B+ 6.0*C)/6.0)
+#define P3  (( 12.0- 9.0*B- 6.0*C)/6.0)
+#define Q0  ((       8.0*B+24.0*C)/6.0)
+#define Q1  ((     -12.0*B-48.0*C)/6.0)
+#define Q2  ((       6.0*B+30.0*C)/6.0)
+#define Q3  ((     - 1.0*B- 6.0*C)/6.0)
+
+  if (x < -2.0)
+    return(0.0);
+  if (x < -1.0)
+    return(Q0-x*(Q1-x*(Q2-x*Q3)));
+  if (x < 0.0)
+    return(P0+x*x*(P2-x*P3));
+  if (x < 1.0)
+    return(P0+x*x*(P2+x*P3));
+  if (x < 2.0)
+    return(Q0+x*(Q1+x*(Q2+x*Q3)));
+  return(0.0);
+
+#undef B
+#undef C
+#undef P0
+#undef P2
+#undef P3
+#undef Q0
+#undef Q1
+#undef Q2
+#undef Q3
 }
 
 #if 0
@@ -1850,7 +1898,8 @@ int extraScalePixels( SmoothAlgorithm alg, double zoom, double blur )
 		filtersupport = 1.0;
 		break;
 	case SMOOTH_BEST:
-		filter = Mitchell;
+//		filter = Mitchell;
+		filter = Bicubic;
 		filtersupport = 2.0;
 		break;
 	}
@@ -1894,7 +1943,8 @@ QImage scale(const QImage& image, int width, int height,
 		filtersupport = 1.0;
 		break;
 	case SMOOTH_BEST:
-		filter = Mitchell;
+//		filter = Mitchell;
+		filter = Bicubic;
 		filtersupport = 2.0;
 		break;
 	}
