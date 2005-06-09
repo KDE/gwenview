@@ -3,6 +3,9 @@ lib_LTLIBRARIES=
 
 kdeinit_LTLIBRARIES = gwenview.la
 
+# -D_LARGEFILE64_SOURCE is necessary on Debian Woody
+AM_CPPFLAGS = -D_LARGEFILE64_SOURCE
+
 gwenview_la_SOURCES = \
 	bookmarkowner.cpp \
 	configfileoperationspage.ui \
