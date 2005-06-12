@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qpopupmenu.h>
-#include <qtooltip.h>
 
 // KDE
 #include <kaction.h>
@@ -42,13 +41,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/file.h>
 
 // Local
-#include "fileoperation.h"
 #include "archive.h"
 #include "cache.h"
+#include "cursortracker.h"
 #include "externaltoolcontext.h"
 #include "externaltoolmanager.h"
-#include "filethumbnailview.h"
 #include "filedetailview.h"
+#include "fileoperation.h"
+#include "filethumbnailview.h"
 #include "thumbnailsize.h"
 
 #include "fileviewstack.moc"
@@ -80,8 +80,12 @@ inline bool isDirOrArchive(const KFileItem* item) {
 //-----------------------------------------------------------------------
 class FileViewStackPrivate {
 public:
+	~FileViewStackPrivate() {
+		delete mSliderTracker;
+	}
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
+	TipTracker* mSliderTracker;
 };
 
 
@@ -121,16 +125,14 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	
 	// Size slider
 	mSizeSlider=new QSlider(Horizontal, this);
-	mSizeSlider->setTickmarks(QSlider::Below);
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
-	mSizeSlider->setSteps(1, 1);
-	mSizeSlider->setTickInterval(1);
 	
 	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
 	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
 	new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "thumbnails_slider");
+	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
 	
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
@@ -435,7 +437,7 @@ void FileViewStack::updateViewMode() {
 
 void FileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
-	QToolTip::add(mSizeSlider, i18n("Thumbnail size: %1x%2").arg(size).arg(size));
+	d->mSliderTracker->setText(i18n("Thumbnail size: %1x%2").arg(size).arg(size));
 	mFileThumbnailView->setThumbnailSize(size);
 	Cache::instance()->checkThumbnailSize(size);
 }
@@ -1011,6 +1013,8 @@ KFileItem* FileViewStack::findItemByFileName(const QString& fileName) const {
 void FileViewStack::readConfig(KConfig* config,const QString& group) {
 	mFileThumbnailView->readConfig(config,group);
 	mSizeSlider->setValue(mFileThumbnailView->thumbnailSize() / SLIDER_RESOLUTION);
+	// Make sure the tooltip is updated
+	updateThumbnailSize(mSizeSlider->value());
 
 	config->setGroup(group);
 	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);

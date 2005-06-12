@@ -64,4 +64,5 @@ libgwenviewcore_la_SOURCES = \
 	threadgate.cpp \
 	scrollpixmapviewtools.cpp \
 	fullscreenbar.cpp \
-	imageloader.cpp
+	imageloader.cpp \
+	cursortracker.cpp
