@@ -62,7 +62,7 @@ extern "C" {
 #include "thumbnailsize.h"
 namespace Gwenview {
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
@@ -646,14 +646,24 @@ void ThumbnailLoadJob::checkThumbnail() {
 			thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime )
 		{
 			int width=0, height=0;
+			QSize size;
 			bool ok;
 
 			width=thumb.text("Thumb::Image::Width", 0).toInt(&ok);
 			if (ok) height=thumb.text("Thumb::Image::Height", 0).toInt(&ok);
-			if (!ok) {
-				kdWarning() << "Thumbnail for " << mOriginalURI << " does not contain correct image size information\n";
+			if (ok) {
+				size=QSize(width, height);
+			} else {
+				LOG("Thumbnail for " << mOriginalURI << " does not contain correct image size information");
+				KFileMetaInfo fmi(mCurrentURL);
+				KFileMetaInfoItem item=fmi.item("Dimensions");
+				if (item.isValid()) {
+					size=item.value().toSize();
+				} else {
+					LOG("KFileMetaInfo for " << mOriginalURI << " did not get image size information");
+				}
 			}
-			emitThumbnailLoaded(thumb, QSize(width, height));
+			emitThumbnailLoaded(thumb, size);
 			determineNextIcon();
 			return;
 		}
