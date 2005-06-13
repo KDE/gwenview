@@ -62,7 +62,7 @@ extern "C" {
 #include "thumbnailsize.h"
 namespace Gwenview {
 
-#define ENABLE_LOG
+//#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
