@@ -21,9 +21,11 @@ Copyright 2000-2004 Aurélien Gâteau
 #ifndef EXTERNALTOOLCONTEXT_H
 #define EXTERNALTOOLCONTEXT_H
 
+// STL
+#include <list>
+
 // Qt
 #include <qobject.h>
-#include <qptrlist.h>
 
 // KDE
 #include <kurl.h>
@@ -35,7 +37,7 @@ class ExternalToolContext : public QObject {
 Q_OBJECT
 public:
 	ExternalToolContext(QObject* parent,
-		QPtrList<KService> services,
+		std::list<KService*> services,
 		KURL::List urls);
 	QPopupMenu* popupMenu();
 
@@ -43,7 +45,7 @@ private slots:
 	void showExternalToolDialog();
 
 private:
-	QPtrList<KService> mServices;
+	std::list<KService*> mServices;
 	KURL::List mURLs;
 };
 

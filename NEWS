@@ -18,6 +18,7 @@
    The included libexif copy is only used if libexif is not installed. Using it
    is considered deprecated.
  - Tweaked the best smoothing algorithm to produce slightly less blurry results.
+ - External tools are now sorted by name in the menu and the dialog.
 
 2005.04.03 - v1.2.0
 - Fixes:

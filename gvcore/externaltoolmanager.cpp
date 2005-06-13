@@ -18,6 +18,9 @@ Copyright 2000-2004 Aurélien Gâteau
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+// STL
+#include <list>
+
 // Qt
 #include <qdir.h>
 
@@ -80,7 +83,15 @@ struct ExternalToolManagerPrivate {
 	QPtrList<KService> mServices;
 	QString mUserToolDir;
 
-	
+	/**
+	 * Helper function for createContextInternal
+	 */
+	static bool compareKServicePtrByName(const KService* s1, const KService* s2) {
+		Q_ASSERT(s1);
+		Q_ASSERT(s2);
+		return s1->name() < s2->name();
+	}
+
 	ExternalToolContext* createContextInternal(
 		QObject* parent, const KURL::List& urls, const QStringList& mimeTypes)
 	{
@@ -88,7 +99,10 @@ struct ExternalToolManagerPrivate {
 		
 		// Only add to selectionServices the services which can handle all the
 		// different mime types present in the selection
-		QPtrList<KService> selectionServices;
+		//
+		// We use std::list instead of QValueList because it's not possible to
+		// pass a sort functor to qHeapSort
+		std::list<KService*> selectionServices;
 		QPtrListIterator<KService> it(mServices);
 		for (; it.current(); ++it) {
 			KService* service=it.current();
@@ -98,9 +112,10 @@ struct ExternalToolManagerPrivate {
 			
 			QStringList serviceTypes=service->serviceTypes();
 			if (isSubSetOf(mimeTypes, serviceTypes)) {
-				selectionServices.append(service);
+				selectionServices.push_back(service);
 			}
 		}
+		selectionServices.sort(compareKServicePtrByName);
 		
 		return new ExternalToolContext(parent, selectionServices, urls);
 	}

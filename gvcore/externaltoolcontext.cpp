@@ -36,7 +36,7 @@ namespace Gwenview {
 
 ExternalToolContext::ExternalToolContext(
 	QObject* parent,
-	QPtrList<KService> services,
+	std::list<KService*> services,
 	KURL::List urls)
 : QObject(parent)
 , mServices(services)
@@ -52,10 +52,11 @@ void ExternalToolContext::showExternalToolDialog() {
 
 QPopupMenu* ExternalToolContext::popupMenu() {
 	QPopupMenu* menu=new QPopupMenu();
-	QPtrListIterator<KService> it(mServices);
-	for (;it.current(); ++it) {
+	std::list<KService*>::const_iterator it=mServices.begin();
+	std::list<KService*>::const_iterator itEnd=mServices.end();
+	for (;it!=itEnd; ++it) {
 		ExternalToolAction* action=
-			new ExternalToolAction(this, it.current(), mURLs);
+			new ExternalToolAction(this, *it, mURLs);
 		action->plug(menu);
 	}
 

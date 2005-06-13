@@ -98,6 +98,8 @@ struct ExternalToolDialogPrivate {
 			item->setPixmap(0, SmallIcon(it.current()->readIcon()) );
 			item->setDesktopFile(it.current());
 		}
+		mContent->mToolListView->setSortColumn(0);
+		mContent->mToolListView->sort();
 	}
 
 
