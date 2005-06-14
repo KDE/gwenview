@@ -865,6 +865,9 @@ void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, in
 		return;
 	}
 
+	// True if another pass will follow
+	bool fastpass = doDelayedSmoothing() && zoom() != 1.0 && !smooth;
+
 	int* maxRepaintSize = &d->mMaxRepaintSize;
 	ImageUtils::SmoothAlgorithm smooth_algo = ImageUtils::SMOOTH_NONE;
 	if (smooth) {
@@ -950,7 +953,8 @@ void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, in
 		QPainter bufferPainter(&buffer);
 		bufferPainter.setBackgroundColor(painter->backgroundColor());
 		bufferPainter.eraseRect(0,0,paintRect.width(),paintRect.height());
-		bufferPainter.drawImage(widgetRect.topLeft()-paintRect.topLeft(),image);
+		bufferPainter.drawImage(widgetRect.topLeft()-paintRect.topLeft(),image,
+			fastpass?ThresholdDither:0);
 	}
 	painter->drawPixmap(paintRect.topLeft(),buffer);
 
