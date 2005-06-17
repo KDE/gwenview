@@ -35,7 +35,7 @@ namespace Gwenview {
 
 class BatchManipulatorPrivate;
 
-class BatchManipulator : public QObject {
+class LIBGWENVIEW_EXPORT BatchManipulator : public QObject {
 Q_OBJECT
 public:
 	BatchManipulator(QWidget* parent, const KURL::List&, ImageUtils::Orientation);

@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Our includes
 #include "fileviewbase.h"
 #include "busylevelmanager.h"
+#include "libgwenview_export.h"
 
 class QDragEnterEvent;
 class QIconViewItem;
@@ -45,7 +46,7 @@ namespace Gwenview {
 class FileThumbnailViewItem;
 class ThumbnailLoadJob;
 
-class FileThumbnailView : public KIconView, public FileViewBase {
+class LIBGWENVIEW_EXPORT FileThumbnailView : public KIconView, public FileViewBase {
 Q_OBJECT
 	friend class FileThumbnailViewItem;
 	
