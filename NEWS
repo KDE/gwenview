@@ -11,6 +11,7 @@
  - Non-blocking image preloading in advance.
  - With two-pass painting, turn off dithering in the first pass for a small
    performance improvement with non-truecolor displays.
+ - Show hints in the status bar for mouse usage in the image view.
 - Fixes:
  - Show progressive JPEG files really progressively.
  - Fix premature end when decoding MNG images.

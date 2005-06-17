@@ -37,6 +37,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 class QLabel;
+class QTimer;
+class QHBox;
 class QWidgetStack;
 
 class KAction;
@@ -94,6 +96,9 @@ private:
 	KDockWidget* mMetaDock;
 	QLabel* mSBDirLabel;
 	QLabel* mSBDetailLabel;
+	QHBox* mSBHint;
+	QLabel* mSBHintLabel;
+	QTimer* mHintTimer;
 
 	FileViewStack* mFileViewStack;
 	DirView* mDirView;
@@ -220,6 +225,9 @@ private slots:
 	void createHideShowAction(KDockWidget* dock);
 
 	void slotReplug();
+
+	void showHint(const QString&);
+	void hideHint();
 };
 
 

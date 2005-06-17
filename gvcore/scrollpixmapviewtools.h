@@ -49,13 +49,17 @@ public:
 	virtual void wheelEvent(QWheelEvent* event);
 
 	virtual void updateCursor();
+
+    /**
+     * Return a hint about the use of the tool
+     */
+    virtual QString hint() const=0;
 };
 
 
 class ScrollPixmapView::ZoomTool : public ScrollPixmapView::ToolBase {
 private:
-	QCursor mZoomCursor;
-
+    QCursor mZoomCursor;
 	void zoomTo(const QPoint& pos, bool in); 
 
 public:
@@ -67,15 +71,13 @@ public:
 	void rightButtonReleaseEvent(QMouseEvent* event);
 
 	void updateCursor();
+    virtual QString hint() const;
 };
 
 
 class ScrollPixmapView::ScrollTool : public ScrollPixmapView::ToolBase {
 	int mScrollStartX,mScrollStartY;
 	bool mDragStarted;
-
-protected:
-	QCursor mDragCursor,mDraggingCursor;
 
 public:
 	ScrollTool(ScrollPixmapView* view);
@@ -85,6 +87,7 @@ public:
 	void wheelEvent(QWheelEvent* event);
 	
 	void updateCursor(); 
+    virtual QString hint() const;
 };
 
 

@@ -1061,10 +1061,13 @@ bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 	case QEvent::FocusOut:
 		return true;
 
-#if KDE_IS_VERSION( 3, 4, 0 )
 	case QEvent::Enter:
+#if KDE_IS_VERSION( 3, 4, 0 )
 		selectTool( kapp->keyboardMouseState(), true );
+#else
+		emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
 #endif
+		break;
 
 	default:
 		break;
@@ -1101,6 +1104,9 @@ void ScrollPixmapView::selectTool(ButtonState state, bool force) {
 	ToolID oldToolID=d->mToolID;
 	if (state & ControlButton) {
 		d->mToolID=ZOOM;
+		if (d->mToolID!=oldToolID) {
+			emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
+		}
 	} else {
 		d->mToolID=SCROLL;
 	}

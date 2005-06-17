@@ -131,6 +131,9 @@ signals:
 	void selectNext();
 	void zoomChanged(double);
 
+    // Emitted whenever an hint should be displayed
+    void requestHintDisplay(const QString& hint);
+
 protected:
 	virtual void openContextMenu(const QPoint&);
 	virtual void contentsDragEnterEvent(QDragEnterEvent*);

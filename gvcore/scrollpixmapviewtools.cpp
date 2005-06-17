@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE 
 #include <kaction.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 namespace Gwenview {
 
@@ -124,6 +125,11 @@ void ScrollPixmapView::ZoomTool::updateCursor() {
 }
 
 
+QString ScrollPixmapView::ZoomTool::hint() const {
+    return i18n("Left click to zoom in, right click to zoom out. You can also use the mouse wheel.");
+}
+
+
 //----------------------------------------------------------------------------
 //
 // ScrollPixmapView::ScrollTool
@@ -133,15 +139,13 @@ ScrollPixmapView::ScrollTool::ScrollTool(ScrollPixmapView* view)
 : ScrollPixmapView::ToolBase(view)
 , mScrollStartX(0), mScrollStartY(0)
 , mDragStarted(false) {
-	mDragCursor=loadCursor("drag");
-	mDraggingCursor=loadCursor("dragging");
 }
 
 
 void ScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
 	mScrollStartX=event->x();
 	mScrollStartY=event->y();
-	mView->viewport()->setCursor(mDraggingCursor);
+	mView->viewport()->setCursor(SizeAllCursor);
 	mDragStarted=true;
 }
 
@@ -164,7 +168,7 @@ void ScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 	if (!mDragStarted) return;
 
 	mDragStarted=false;
-	mView->viewport()->setCursor(mDragCursor);
+	mView->viewport()->setCursor(ArrowCursor);
 }
 
 
@@ -193,10 +197,15 @@ void ScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
 
 void ScrollPixmapView::ScrollTool::updateCursor() {
 	if (mDragStarted) {
-		mView->viewport()->setCursor(mDraggingCursor);
+		mView->viewport()->setCursor(SizeAllCursor);
 	} else {
-		mView->viewport()->setCursor(mDragCursor);
+		mView->viewport()->setCursor(ArrowCursor);
 	}
+}
+
+
+QString ScrollPixmapView::ScrollTool::hint() const {
+    return i18n("Drag to move the image, middle-click to toggle auto-zoom. Hold the Control key to switch to the zoom tool.");
 }
 
 

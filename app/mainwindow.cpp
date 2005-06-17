@@ -122,6 +122,9 @@ const char CONFIG_SESSION_URL[] = "url";
 // are made to the dock behavior
 const int GWENVIEW_DOCK_VERSION=2;
 
+// The timeout before an hint in the statusbar disappear (in msec)
+const int HINT_TIMEOUT=5000;
+
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
@@ -723,6 +726,29 @@ void MainWindow::resetDockWidgets() {
 }
 
 
+/**
+ * Display a hint as a temporary message in the status bar
+ */
+void MainWindow::showHint(const QString& hint) {
+	mSBHintLabel->setText(hint);
+
+	mSBHint->show();
+	mSBDirLabel->hide();
+	mSBDetailLabel->hide();
+	mHintTimer->start(HINT_TIMEOUT, true);
+}
+
+
+/**
+ * Hide the hint
+ */
+void MainWindow::hideHint() {
+	mSBHint->hide();
+	mSBDirLabel->show();
+	mSBDetailLabel->show();
+}
+
+
 //-----------------------------------------------------------------------
 //
 // GUI
@@ -753,10 +779,9 @@ void MainWindow::updateFileInfo() {
 		QString info=filename + QString(" %1x%2 @ %3%")
 			.arg(mDocument->width()).arg(mDocument->height())
 			.arg(int(mPixmapView->zoom()*100) );
-		mSBDetailLabel->show();
 		mSBDetailLabel->setText(info);
 	} else {
-		mSBDetailLabel->hide();
+		mSBDetailLabel->setText(QString::null);
 	}
 	setCaption(filename);
 }
@@ -801,14 +826,32 @@ void MainWindow::createWidgets() {
 
 	// Status bar
 	mSBDirLabel=new KSqueezedTextLabel("", statusBar());
-	statusBar()->addWidget(mSBDirLabel,1);
 	mSBDetailLabel=new QLabel("", statusBar());
-	statusBar()->addWidget(mSBDetailLabel);
+	
+	mSBHint=new QHBox(statusBar());
+	mSBHint->setPalette(QToolTip::palette());
+	mSBHint->setMargin(1);
+	mSBHint->setFrameStyle( QFrame::Plain | QFrame::Box );
+	mSBHint->setLineWidth( 1 );
+	
+	QLabel* idea=new QLabel(mSBHint);
+	idea->setPixmap(SmallIcon("idea"));
+	mSBHintLabel=new KSqueezedTextLabel(mSBHint);
+	mSBHint->hide();
+	
+	statusBar()->addWidget(mSBHint, 1);
+	statusBar()->addWidget(mSBDirLabel, 1);
+	statusBar()->addWidget(mSBDetailLabel, 0);
+	mHintTimer=new QTimer(this);
+	connect(mHintTimer, SIGNAL(timeout()),
+		this, SLOT(hideHint()) );
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 	mPixmapView=new ScrollPixmapView(mPixmapDock,mDocument,actionCollection());
 	mPixmapDock->setWidget(mPixmapView);
+	connect(mPixmapView, SIGNAL(requestHintDisplay(const QString&)),
+		this, SLOT(showHint(const QString&)) );
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
