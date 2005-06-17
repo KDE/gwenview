@@ -1064,9 +1064,8 @@ bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 	case QEvent::Enter:
 #if KDE_IS_VERSION( 3, 4, 0 )
 		selectTool( kapp->keyboardMouseState(), true );
-#else
-		emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
 #endif
+		emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
 		break;
 
 	default:
