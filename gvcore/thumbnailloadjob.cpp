@@ -656,11 +656,15 @@ void ThumbnailLoadJob::checkThumbnail() {
 			} else {
 				LOG("Thumbnail for " << mOriginalURI << " does not contain correct image size information");
 				KFileMetaInfo fmi(mCurrentURL);
-				KFileMetaInfoItem item=fmi.item("Dimensions");
-				if (item.isValid()) {
-					size=item.value().toSize();
+				if (fmi.isValid()) {
+					KFileMetaInfoItem item=fmi.item("Dimensions");
+					if (item.isValid()) {
+						size=item.value().toSize();
+					} else {
+						LOG("KFileMetaInfoItem for " << mOriginalURI << " did not get image size information");
+					}
 				} else {
-					LOG("KFileMetaInfo for " << mOriginalURI << " did not get image size information");
+					LOG("Could not get a valid KFileMetaInfo instance for " << mOriginalURI);
 				}
 			}
 			emitThumbnailLoaded(thumb, size);
