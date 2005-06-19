@@ -172,6 +172,8 @@ private:
 	void selectTool(ButtonState, bool force);
 	void restartAutoHideTimer();
 
+	void emitRequestHintDisplay();
+
 	// Used by the scroll tool
 	void emitSelectPrevious() { emit selectPrevious(); }
 	void emitSelectNext() { emit selectNext(); }

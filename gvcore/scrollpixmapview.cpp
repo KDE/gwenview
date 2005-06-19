@@ -1065,7 +1065,7 @@ bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 #if KDE_IS_VERSION( 3, 4, 0 )
 		selectTool( kapp->keyboardMouseState(), true );
 #endif
-		emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
+		emitRequestHintDisplay();
 		break;
 
 	default:
@@ -1104,7 +1104,7 @@ void ScrollPixmapView::selectTool(ButtonState state, bool force) {
 	if (state & ControlButton) {
 		d->mToolID=ZOOM;
 		if (d->mToolID!=oldToolID) {
-			emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
+			emitRequestHintDisplay();
 		}
 	} else {
 		d->mToolID=SCROLL;
@@ -1202,6 +1202,13 @@ void ScrollPixmapView::decreaseContrast() {
 // Private
 //
 //------------------------------------------------------------------------
+void ScrollPixmapView::emitRequestHintDisplay() {
+	if (d->mDocument->isNull()) return;
+
+	emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
+}
+
+
 void ScrollPixmapView::slotImageSizeUpdated() {
 	d->mXOffset=0;
 	d->mYOffset=0;
