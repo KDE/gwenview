@@ -22,6 +22,7 @@
    is considered deprecated.
  - Tweaked the best smoothing algorithm to produce slightly less blurry results.
  - External tools are now sorted by name in the menu and the dialog.
+ - Don't crash on some broken JPEGs.
 
 2005.04.03 - v1.2.0
 - Fixes:
