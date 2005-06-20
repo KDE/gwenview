@@ -44,6 +44,7 @@ extern "C" {
 
 // Local
 #include "jpegformattype.h"
+#include "imageutils/jpegerrormanager.h"
 
 namespace Gwenview {
 
@@ -57,26 +58,6 @@ namespace Gwenview {
 static const int MAX_BUFFER = 32768;
 // how long it will consume data before starting outputing progressive scan
 static const int MAX_CONSUMING_TIME = 500;
-
-//-----------------------------------------------------------------------------
-//
-// JPEGErrorManager
-// (Does not follow HACKING naming recommandation to be consistent with
-// jpeg_error_mgr naming)
-//
-//-----------------------------------------------------------------------------
-struct JPEGErrorManager : public jpeg_error_mgr {
-	jmp_buf jmp_buffer;
-
-	static void errorExitCallBack (j_common_ptr cinfo) {
-		JPEGErrorManager* myerr = (JPEGErrorManager*) cinfo->err;
-		char buffer[JMSG_LENGTH_MAX];
-		(*cinfo->err->format_message)(cinfo, buffer);
-		kdWarning() << buffer << endl;
-		longjmp(myerr->jmp_buffer, 1);
-	}
-};
-
 
 //-----------------------------------------------------------------------------
 //
@@ -211,15 +192,14 @@ private:
 
 	// structs for the jpeglib
 	jpeg_decompress_struct mDecompress;
-	JPEGErrorManager mErrorManager;
+	ImageUtils::JPEGErrorManager mErrorManager;
 	JPEGSourceManager mSourceManager;
 };
 
 
 JPEGFormat::JPEGFormat() {
 	memset(&mDecompress, 0, sizeof(mDecompress));
-	mDecompress.err = jpeg_std_error(&mErrorManager);
-	mErrorManager.error_exit=JPEGErrorManager::errorExitCallBack;
+	mDecompress.err = &mErrorManager;
 	jpeg_create_decompress(&mDecompress);
 	mDecompress.src = &mSourceManager;
 	mState = INIT;

@@ -45,6 +45,7 @@ extern "C" {
 #include "imageutils/imageutils.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/jpeg-data.h"
+#include "imageutils/jpegerrormanager.h"
 
 namespace ImageUtils {
 
@@ -186,11 +187,15 @@ struct JPEGContent::Private {
 		jpeg_saved_marker_ptr mark;
 		
 		// Init JPEG structs 
-		struct jpeg_error_mgr jsrcerr;
+		JPEGErrorManager errorManager;
 
-		// Initialize the JPEG decompression object with default error handling
-		srcinfo.err = jpeg_std_error(&jsrcerr);
+		// Initialize the JPEG decompression object
+		srcinfo.err = &errorManager;
 		jpeg_create_decompress(&srcinfo);
+		if (setjmp(errorManager.jmp_buffer)) {
+			kdError() << k_funcinfo << "libjpeg fatal error\n";
+			return false;
+		}
 
 		// Specify data source for decompression
 		setupInmemSource(&srcinfo);
@@ -370,17 +375,26 @@ void JPEGContent::transform(Orientation orientation, bool setComment, const QStr
 	// Init JPEG structs 
 	struct jpeg_decompress_struct srcinfo;
 	struct jpeg_compress_struct dstinfo;
-	struct jpeg_error_mgr jsrcerr, jdsterr;
 	jvirt_barray_ptr * src_coef_arrays;
 	jvirt_barray_ptr * dst_coef_arrays;
 
-	// Initialize the JPEG decompression object with default error handling
-	srcinfo.err = jpeg_std_error(&jsrcerr);
+	// Initialize the JPEG decompression object
+	JPEGErrorManager srcErrorManager;
+	srcinfo.err = &srcErrorManager;
 	jpeg_create_decompress(&srcinfo);
+	if (setjmp(srcErrorManager.jmp_buffer)) {
+		kdError() << k_funcinfo << "libjpeg error in src\n";
+		return;
+	}
 
-	// Initialize the JPEG compression object with default error handling
-	dstinfo.err = jpeg_std_error(&jdsterr);
+	// Initialize the JPEG compression object
+	JPEGErrorManager dstErrorManager;
+	dstinfo.err = &dstErrorManager;
 	jpeg_create_compress(&dstinfo);
+	if (setjmp(dstErrorManager.jmp_buffer)) {
+		kdError() << k_funcinfo << "libjpeg error in dst\n";
+		return;
+	}
 
 	// Specify data source for decompression
 	d->setupInmemSource(&srcinfo);

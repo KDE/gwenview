@@ -28,7 +28,8 @@ noinst_HEADERS = \
 	jpegcontent.h \
 	jinclude.h \
 	jpegint.h \
-	transupp.h
+	transupp.h \
+	jpegerrormanager.h
 
 METASOURCES = AUTO
 
