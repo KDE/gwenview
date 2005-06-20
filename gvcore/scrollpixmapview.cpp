@@ -1048,6 +1048,8 @@ bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 		return viewportKeyEvent(static_cast<QKeyEvent*>(event));
 
 	case QEvent::MouseButtonDblClick:
+		if (d->mToolID==ZOOM) return false;
+				
 		if (d->mActionCollection->action("fullscreen") // may be NULL in KParts
 		    && d->mActionCollection->action("fullscreen")->isEnabled()) {
 			d->mActionCollection->action("fullscreen")->activate();
