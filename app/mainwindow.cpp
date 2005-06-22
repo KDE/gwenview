@@ -18,6 +18,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
+#include <assert.h>
+
 // Qt
 #include <qcursor.h>
 #include <qdir.h>
@@ -57,6 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktoolbarbutton.h>
+#include <ktrader.h>
 #include <kurlcompletion.h>
 #include <kurlpixmapprovider.h>
 #include <kurlrequesterdlg.h>
@@ -180,7 +184,7 @@ MainWindow::MainWindow()
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
-	loadPlugins();
+	initializePlugins();
 	applyMainWindowSettings();
 
 	mFileViewStack->setFocus();
@@ -618,6 +622,7 @@ void MainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
 #ifdef GV_HAVE_KIPI
+	loadPlugins();
 	KIPI::PluginLoader::PluginList pluginList=mPluginLoader->pluginList();
 	KIPI::PluginLoader::PluginList::ConstIterator it(pluginList.begin());
 	KIPI::PluginLoader::PluginList::ConstIterator itEnd(pluginList.end());
@@ -1142,12 +1147,114 @@ void MainWindow::activateLocationLabel() {
 
 
 #ifdef GV_HAVE_KIPI
-void MainWindow::loadPlugins() {
+
+// Only KDE3.5 will have KAccel code that supports slots with KAccelAction* as argument.
+#if !KDE_IS_VERSION( 3, 4, 89 )
+#undef GV_KIPI_PUBLIC_LOAD_PLUGIN
+#endif
+
+// I believe there's a bug/leak in KIPI - calling setup() repeatedly
+// creates new KAction's all the time.
+QValueList<KIPI::Plugin*> setupPlugins;
+
+void MainWindow::initializePlugins() {
+#ifdef GV_KIPI_PUBLIC_LOAD_PLUGIN
+	// Sets up the plugin interface, and load plugins that don't have cached info
+	KIPIInterface* interface = new KIPIInterface(this, mFileViewStack);
+	mPluginLoader = new KIPI::PluginLoader(QStringList(), interface );
+	connect( mPluginLoader, SIGNAL( replug() ), this, SLOT( slotReplug() ) );
+	mPluginAccels = new KAccel( this );
+	KTrader::OfferList offers = KTrader::self()->query("KIPI/Plugin");
+	typedef KIPI::PluginLoader::PluginList KIPIList;
+	// pluginList is a reference, not a copy, so that it sees data updates
+	const KIPIList& pluginList=mPluginLoader->pluginList();
+	for( KIPIList::ConstIterator it1 = pluginList.begin();
+	     it1 != pluginList.end();
+	     ++it1 ) {
+		KIPI::PluginLoader::Info* info = *it1;
+		if (!info->shouldLoad()) continue;
+		// Loading and initializing KIPI plugins takes way too long,
+		// especially given that they only create one or few KAction's.
+		// Therefore try to cache all info necessary to create dummy
+		// wrapper actions that will only cause loading
+		// a KIPI plugin when really needed.
+		KConfigGroup grp( KGlobal::config(), "KIPI/" + info->name());
+		QStringList actions = grp.readListEntry( "Actions" );
+		QStringList shortcuts = grp.readListEntry( "Shortcuts" );
+		Q_UINT32 ctimestamp = grp.readLongNumEntry( "Timestamp", 0 );
+		QString desktopfile;
+		for( KTrader::OfferList::ConstIterator it2 = offers.begin();
+		     it2 != offers.end();
+		     ++it2 ) {
+			KService::Ptr offer = *it2;
+			if( offer->name() == info->name()) {
+				desktopfile = offer->desktopEntryPath();
+				break;
+			}
+		}
+		Q_ASSERT( !desktopfile.isEmpty());
+		Q_UINT32 timestamp = KGlobal::dirs()->calcResourceHash( "services", desktopfile, false );
+		if( actions.isEmpty() || ctimestamp == 0 ||  ctimestamp != timestamp ) {
+			// No valid cached info about this plugin, it needs loading.
+			mPluginLoader->loadPlugin( info );
+			KIPI::Plugin* plugin = info->plugin();
+			if( plugin != NULL ) { // ok
+				plugin->setup( this );
+				setupPlugins.append( plugin );
+				QStringList actions;
+				QStringList shortcuts;
+				// Just plugin()->actions() wouldn't work if some of the actions are in KActionMenu,
+				// this code needs all actions, even non-toplevel ones.
+				KActionPtrList acts = info->plugin()->actionCollection()->actions();
+				for( KActionPtrList::ConstIterator it2 = acts.begin();
+				     it2 != acts.end();
+				     ++it2 ) {
+					KAction* action = *it2;
+					actions << action->name();
+					shortcuts << action->shortcut().toStringInternal();
+				}
+				grp.writeEntry( "Actions", actions );
+				grp.writeEntry( "Shortcuts", shortcuts );
+				grp.writeEntry( "Timestamp", timestamp );
+			}
+		} else {
+			// Ok, build wrappers using the cached info.
+			QStringList::ConstIterator it3 = shortcuts.begin();
+			for( QStringList::ConstIterator it2 = actions.begin();
+			     it2 != actions.end();
+			     ++it2 ) {
+				PluginActionData data;
+				data.name = *it2;
+				data.plugin_name = info->name();
+				data.loaded = false;
+				data.needs_load = false;
+				QString s;
+				if( it3 != shortcuts.end()) { // cope with broken config
+					s = *it3;
+					++it3;
+				}
+				KConfigGroup grp2( KGlobal::config(), "Shortcuts" );
+				KShortcut shortcut( grp2.readEntry( data.name, s ));
+				if( !shortcut.isNull()) {
+					data.action = mPluginAccels->insert( data.name,
+						"should not see", "should not see", shortcut,
+						this, SLOT( pluginShortcut( KAccelAction* )));
+				} else
+					data.action = NULL;
+				mPluginActions.append( data );
+			}
+		}
+	}
+	slotReplug();
+	QPopupMenu* popup = static_cast<QPopupMenu*>(factory()->container("plugins",this));
+	if( popup ) connect( popup, SIGNAL( aboutToShow()), SLOT( loadPlugins()));
+#else
 	// Sets up the plugin interface, and load the plugins
 	KIPIInterface* interface = new KIPIInterface(this, mFileViewStack);
 	mPluginLoader = new KIPI::PluginLoader(QStringList(), interface );
 	connect( mPluginLoader, SIGNAL( replug() ), this, SLOT( slotReplug() ) );
 	mPluginLoader->loadPlugins();
+#endif
 }
 
 
@@ -1178,10 +1285,12 @@ void MainWindow::slotReplug() {
 	for( ; it!=itEnd; ++it ) {
 		if (!(*it)->shouldLoad()) continue;
 		KIPI::Plugin* plugin = (*it)->plugin();
-		Q_ASSERT(plugin);
-		if (!plugin) continue;
+		if (!plugin) continue; // not loaded yet
 
-		plugin->setup(this);
+		if( !setupPlugins.contains(plugin)) {
+			plugin->setup(this);
+			setupPlugins.append(plugin);
+		}
 		KActionPtrList actions = plugin->actions();
 		KActionPtrList::ConstIterator actionIt=actions.begin(), end=actions.end();
 		for (; actionIt!=end; ++actionIt) {
@@ -1216,15 +1325,145 @@ void MainWindow::slotReplug() {
 		}
 	}
 }
+
+// A wrapping KAccel has been activated - find which KIPI plugin
+// needs loading and activate the real action.
+void MainWindow::pluginShortcut( KAccelAction* action ) {
+#ifdef GV_KIPI_PUBLIC_LOAD_PLUGIN
+	for( QValueList< PluginActionData >::Iterator it1 = mPluginActions.begin();
+	     it1 != mPluginActions.end();
+	     ++it1 ) {
+		PluginActionData& data = *it1;
+		if( data.action == action ) {
+			Q_ASSERT( !data.loaded ); // huh?
+			typedef KIPI::PluginLoader::PluginList KIPIList;
+			const KIPIList& pluginList=mPluginLoader->pluginList();
+			for( KIPIList::ConstIterator it2 = pluginList.begin();
+			     it2 != pluginList.end();
+			     ++it2 ) {
+				KIPI::PluginLoader::Info* info = *it2;
+				if( info->name() == data.plugin_name ) {
+					data.needs_load = true;
+					mPluginActionToActivate = data.name;
+					// Cannot remove the accel from mPluginAccels here
+					// because it would crash after returning to KAccel.
+					QTimer::singleShot( 0, this, SLOT( delayedPluginShortcut()));
+					return;
+				}
+			}
+		}
+	}
+	assert( false );
 #else
+	Q_UNUSED( action );
+#endif
+}
+
+void MainWindow::delayedPluginShortcut() {
+#ifdef GV_KIPI_PUBLIC_LOAD_PLUGIN
+	checkPluginsToLoad();
+	if( mPluginActionToActivate.isEmpty()) return;
+	typedef KIPI::PluginLoader::PluginList KIPIList;
+	const KIPIList& pluginList=mPluginLoader->pluginList();
+	for( KIPIList::ConstIterator it1 = pluginList.begin();
+	     it1 != pluginList.end();
+	     ++it1 ) {
+		KIPI::PluginLoader::Info* info = *it1;
+		if( !info->plugin()) continue;
+		KActionPtrList actions = info->plugin()->actionCollection()->actions();
+		for( KActionPtrList::ConstIterator it2 = actions.begin();
+		     it2 != actions.end();
+		     ++it2 ) {
+			if( (*it2)->name() == mPluginActionToActivate ) {
+				mPluginActionToActivate = QString();
+				if( (*it2)->isEnabled())
+					(*it2)->activate();
+				return;
+			}
+		}
+	}
+	mPluginActionToActivate = QString();
+#endif
+}
+
 void MainWindow::loadPlugins() {
+#ifdef GV_KIPI_PUBLIC_LOAD_PLUGIN
+	// force loading all plugins
+	for( QValueList< PluginActionData >::Iterator it = mPluginActions.begin();
+	     it != mPluginActions.end();
+	     ++it ) {
+		if( !(*it).loaded ) {
+			(*it).needs_load = true;
+		}
+	}
+	checkPluginsToLoad();
+#endif // else nothing - already loaded in initializePlugins()
+}
+
+// Loads all plugins that need loading, and replaces wrapper KAccel actions
+// with real actions.
+void MainWindow::checkPluginsToLoad() {
+#ifdef GV_KIPI_PUBLIC_LOAD_PLUGIN
+	bool update = false;
+	for( QValueList< PluginActionData >::Iterator it1 = mPluginActions.begin();
+	     it1 != mPluginActions.end();
+	     ++it1 ) {
+		PluginActionData& data = *it1;
+		if( data.needs_load ) {
+			data.needs_load = false;
+			typedef KIPI::PluginLoader::PluginList KIPIList;
+			// pluginList is a reference, not a copy, so that it sees data updates
+			const KIPIList& pluginList=mPluginLoader->pluginList();
+			for( KIPIList::ConstIterator it2 = pluginList.begin();
+			     it2 != pluginList.end();
+			     ++it2 ) {
+				KIPI::PluginLoader::Info* info = *it2;
+				if( info->name() == data.plugin_name ) {
+					mPluginLoader->loadPlugin( info );
+					if( info->plugin() == NULL )
+						return; // load failed - note that pluginList is a reference
+					// KAccel shortcuts must be removed before initializing the plugin,
+					// otherwise it wouldn't take over the shortcut.
+					for( QValueList< PluginActionData >::Iterator it3 = mPluginActions.begin();
+					     it3 != mPluginActions.end();
+					     ++it3 ) {
+						// remove all accels for this plugin
+						if( (*it3).plugin_name == info->name()) {
+							mPluginAccels->remove( (*it3).name );
+							(*it3).action = NULL;
+							(*it3).loaded = true;
+							(*it3).needs_load = false;
+						}
+					}
+					info->plugin()->setup(this);
+					setupPlugins.append(info->plugin());
+					update = true;
+				}
+			}
+		}
+	}
+	if( update )
+		slotReplug();
+#endif
+}
+    
+#else
+void MainWindow::initializePlugins() {
 	QPopupMenu *popup = static_cast<QPopupMenu*>(
 		factory()->container( "plugins", this));
 	delete popup;
 }
 
+void MainWindow::loadPlugins() {
+}
 
 void MainWindow::slotReplug() {
+}
+
+void MainWindow::pluginShortcut( KAccelAction* ) {
+}
+
+void MainWindow::delayedPluginShortcut() {
 }
 #endif
 

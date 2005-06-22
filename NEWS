@@ -23,6 +23,8 @@
  - Tweaked the best smoothing algorithm to produce slightly less blurry results.
  - External tools are now sorted by name in the menu and the dialog.
  - Don't crash on some broken JPEGs.
+ - KIPI plugins are selectively loaded on-demand, this noticeably improves
+   startup performance with KIPI support enabled (needs KIPI version 0.1.2).
 
 2005.04.03 - v1.2.0
 - Fixes:
