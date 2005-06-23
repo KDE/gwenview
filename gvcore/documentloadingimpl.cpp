@@ -118,8 +118,6 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 	// Update file info
 	setFileSize(d->mLoader->rawData().size());
 
-	emit finished(true);
-
 	// Now we switch to a loaded implementation
 	if ( d->mLoader->frames().count() > 1 ) {
 		switchToImpl( new DocumentAnimatedLoadedImpl(mDocument, d->mLoader->frames()));

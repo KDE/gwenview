@@ -60,6 +60,7 @@ DocumentLoadedImpl::DocumentLoadedImpl(Document* document)
 
 
 void DocumentLoadedImpl::init() {
+	emit finished(true);
 }
 
 
