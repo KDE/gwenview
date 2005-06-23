@@ -215,7 +215,7 @@ MainWindow::MainWindow()
 
 
 bool MainWindow::queryClose() {
-	if (!mDocument->saveBeforeClosing()) return false;
+	mDocument->saveBeforeClosing();
 
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
