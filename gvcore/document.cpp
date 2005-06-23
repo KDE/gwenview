@@ -146,11 +146,7 @@ void Document::setURL(const KURL& paramURL) {
 	BusyLevelManager::instance()->setBusyLevel(this, BUSY_NONE);
 
 	// Ask to save if necessary.
-	if (!saveBeforeClosing()) {
-		// Not saved, notify others that we stay on the image
-		emit loaded(d->mURL);
-		return;
-	}
+	saveBeforeClosing();
 
 	if (localURL.isEmpty()) {
 		reset();
@@ -210,10 +206,7 @@ void Document::slotStatResult(KIO::Job* job) {
 
 
 void Document::setDirURL(const KURL& paramURL) {
-	if (!saveBeforeClosing()) {
-		emit loaded(d->mURL);
-		return;
-	}
+	saveBeforeClosing();
 	d->mURL=paramURL;
 	d->mURL.adjustPath( +1 ); // add trailing /
 	reset();
@@ -484,24 +477,20 @@ void Document::saveAs() {
 	}
 }
 
-bool Document::saveBeforeClosing() {
-	if (!d->mModified) return true;
+void Document::saveBeforeClosing() {
+	if (!d->mModified) return;
 
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 		.arg(url().prettyURL());
 
-	// FIXME: If we definitly switch from questionYesNoCancel to questionYesNo,
-	// change this method to not return anything and change the calling code.
 	int result=KMessageBox::questionYesNo(0, msg, QString::null,
 		KStdGuiItem::save(), KStdGuiItem::discard(), CONFIG_SAVE_AUTOMATICALLY);		
 
 	if (result == KMessageBox::Yes) {
-		msg=saveInternal(url(), d->mImageFormat);	
+		saveInternal(url(), d->mImageFormat);	
 	} else {
 		d->mModified=false;
 	}
-
-	return true;
 }
 
 

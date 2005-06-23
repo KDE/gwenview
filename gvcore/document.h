@@ -96,9 +96,8 @@ public slots:
 	
 	/**
 	 * If the image has been modified, prompt the user to save the changes.
-	 * Returns true if it's safe to switch to another image.
 	 */
-	bool saveBeforeClosing();
+	void saveBeforeClosing();
 
 	// "Image manipulation"
 	void transform(ImageUtils::Orientation);
