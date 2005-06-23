@@ -37,7 +37,7 @@ public:
 	MetaEdit(QWidget *parent, Document*, const char *name="");
 	~MetaEdit();
 protected:
-	bool eventFilter(QObject *o, QEvent *e);
+	bool eventFilter(QObject *, QEvent *);
 private slots:
 	void updateContent();
 	void updateDoc();
@@ -48,6 +48,8 @@ private:
 	Document* mDocument;
 	QTextEdit* mCommentEdit;
 
+	void setComment(const QString&);
+	void setMessage(const QString&);
 	void setEmptyText();
 };
 

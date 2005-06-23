@@ -53,14 +53,12 @@ MetaEdit::~MetaEdit() {
 }
 
 
-bool MetaEdit::eventFilter(QObject *o, QEvent *e) {
-	if (o == mCommentEdit && mEmpty && (mDocument->commentState()==Document::WRITABLE)) {
-		if (e->type() == QEvent::FocusIn) {
-			mCommentEdit->setTextFormat(QTextEdit::PlainText);
-			mCommentEdit->setText("");
-		} else if (e->type() == QEvent::FocusOut) {
-			setEmptyText();
-		}
+bool MetaEdit::eventFilter(QObject*, QEvent *event) {
+	if (mEmpty
+		&& (mDocument->commentState()==Document::WRITABLE)
+		&& (event->type()==QEvent::FocusIn || event->type()==QEvent::FocusOut) 
+	) {
+		setEmptyText();
 	}
 	return false;
 }
@@ -75,29 +73,22 @@ void MetaEdit::setModified(bool m) {
 
 void MetaEdit::updateContent() {
 	if (mDocument->isNull()) {
-		mCommentEdit->setTextFormat(QTextEdit::RichText);
-		mCommentEdit->setText(i18n("<i>No image selected.</i>"));
-		mEmpty = true;
+		setMessage(i18n("No image selected."));
 		return;
 	}
 
-	QString comment=mDocument->comment();
-
-	if (mDocument->commentState() & Document::VALID) {
-		mEmpty = comment.isEmpty();
-		if (mEmpty) {
-			setEmptyText();
-		} else {
-			mCommentEdit->setTextFormat(QTextEdit::PlainText);
-			mCommentEdit->setText(comment);
-		}
-	} else {
-		mCommentEdit->setTextFormat(QTextEdit::RichText);
-		mCommentEdit->setText(i18n("<i>This image cannot be commented.</i>"));
+	if (mDocument->commentState() == Document::NONE) {
+		setMessage(i18n("This image cannot be commented."));
+		return;
 	}
-	bool writable=mDocument->commentState()==Document::WRITABLE;
-	mCommentEdit->setReadOnly(!writable);
-	mCommentEdit->setEnabled(writable);
+	
+	QString comment=mDocument->comment();
+	mEmpty = comment.isEmpty();
+	if (mEmpty) {
+		setEmptyText();
+		return;
+	}
+	setComment(comment);
 }
 
 
@@ -110,14 +101,37 @@ void MetaEdit::updateDoc() {
 
 
 void MetaEdit::setEmptyText() {
-	QString comment;
-	mCommentEdit->setTextFormat(QTextEdit::RichText);
+	Q_ASSERT(mDocument->commentState()!=Document::NONE);
 	if (mDocument->commentState()==Document::WRITABLE) {
-		comment=i18n("<i>Type here to add a comment to this image.</i>");
+		if (mCommentEdit->hasFocus()) {
+			setComment("");
+		} else {
+			setMessage(i18n("Type here to add a comment to this image."));
+		}
 	} else {
-		comment=i18n("<i>No comment available.</i>");
+		setMessage(i18n("No comment available."));
 	}
+}
+
+
+/**
+ * Use mCommentEdit to show the comment and let the user edit it
+ */
+void MetaEdit::setComment(const QString& comment) {
+	Q_ASSERT(mDocument->commentState()!=Document::NONE);
+	mCommentEdit->setTextFormat(QTextEdit::PlainText);
+	mCommentEdit->setReadOnly(mDocument->commentState()==Document::READ_ONLY);
 	mCommentEdit->setText(comment);
+}
+
+
+/**
+ * Use mCommentEdit to display a read-only message
+ */
+void MetaEdit::setMessage(const QString& msg) {
+	mCommentEdit->setTextFormat(QTextEdit::RichText);
+	mCommentEdit->setReadOnly(true);
+	mCommentEdit->setText(QString("<i>%1</i>").arg(msg));
 }
 
 } // namespace

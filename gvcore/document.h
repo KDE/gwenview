@@ -55,7 +55,7 @@ class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
 	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
-	enum CommentState { NONE=0, READ_ONLY=1, VALID=READ_ONLY, WRITABLE=3 };
+	enum CommentState { NONE=0, READ_ONLY=1, WRITABLE=2 };
 	
 	Document(QObject*);
 	~Document();
