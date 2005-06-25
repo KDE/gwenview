@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qptrlist.h>
 
 // KDE
-#include <kaccel.h>
 #include <kmainwindow.h>
 #include <kurl.h>
 
@@ -61,16 +60,6 @@ class ScrollPixmapView;
 class SlideShow;
 class MetaEdit;
 
-
-#ifdef GV_HAVE_KIPI
-struct PluginActionData {
-	QString name;
-	QString plugin_name;
-	bool loaded;
-	bool needs_load;
-	KAccelAction* action;
-};
-#endif
 
 class MainWindow : public KMainWindow {
 Q_OBJECT
@@ -151,15 +140,8 @@ private:
 	bool mShowBusyPtrInFullScreen;
 
 #ifdef GV_HAVE_KIPI
-	void checkPluginsToLoad();
-
 	KIPI::PluginLoader* mPluginLoader;
-	KAccel* mPluginAccels;
-	QValueList< PluginActionData > mPluginActions;
-	QString mPluginActionToActivate;
 #endif
-
-	void initializePlugins();
 
 	void hideToolBars();
 	void showToolBars();
@@ -238,8 +220,6 @@ private slots:
 	void updateWindowActions();
 
 	void loadPlugins();
-	void pluginShortcut( KAccelAction* );
-	void delayedPluginShortcut();
 
 	// Helper function for updateWindowActions()
 	void createHideShowAction(KDockWidget* dock);
