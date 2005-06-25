@@ -866,8 +866,12 @@ void MainWindow::createWidgets() {
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
-	(void)new KToolBar(vbox, "fileViewToolBar", true);
+	KToolBar* tb=new KToolBar(vbox, "", true);
 	mFileViewStack=new FileViewStack(vbox, actionCollection());
+	mFileViewStack->listMode()->plug(tb);
+	mFileViewStack->sideThumbnailMode()->plug(tb);
+	mFileViewStack->bottomThumbnailMode()->plug(tb);
+	actionCollection()->action("thumbnails_slider")->plug(tb);
 	mFileDock->setWidget(vbox);
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);

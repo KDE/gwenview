@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="18">
+<kpartgui name="Gwenview" version="19">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -24,6 +24,11 @@
     <Action name="fullscreen"/> 
     <Action name="slideshow"/>
     <Separator/>
+    <Action name="list_mode" />
+    <Action name="side_thumbnail_mode" />
+    <Action name="bottom_thumbnail_mode" />
+    <Separator/>
+
     <Menu name="colors">
         <text>&amp;Colors</text>
         <Action name="increase_gamma"/>
@@ -122,14 +127,6 @@
   <Action name="location_label" />
   <Action name="location_url" />
   <Action name="location_go" />
-</ToolBar>
-
-<ToolBar name="fileViewToolBar">
-  <text>File View Toolbar</text>
-  <Action name="list_mode" />
-  <Action name="side_thumbnail_mode" />
-  <Action name="bottom_thumbnail_mode" />
-  <Action name="thumbnails_slider" />
 </ToolBar>
 
 <StatusBar/>
