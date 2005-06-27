@@ -388,6 +388,12 @@ void FileThumbnailView::slotUpdateEnded() {
 	Q_ASSERT(d->mProgressWidget);
 	delete d->mProgressWidget;
 	d->mProgressWidget=0L;
+
+	// This is necessary because the image size might have added a new text
+	// line
+	if (itemTextPos()==QIconView::Bottom) {
+		arrangeItemsInGrid();
+	}
 	BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 }
 
