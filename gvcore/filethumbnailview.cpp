@@ -62,6 +62,7 @@ namespace Gwenview {
 static const char* CONFIG_ITEM_TEXT_POS="item text pos";
 static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
 static const char* CONFIG_MARGIN_SIZE="margin size";
+static const char* CONFIG_ITEM_DETAILS="item details";
 
 static const int THUMBNAIL_UPDATE_DELAY=500;
 	
@@ -131,6 +132,7 @@ struct FileThumbnailView::Private {
 	
 	QTimer* mThumbnailUpdateTimer;
 
+	int mItemDetails;
 
 	void updateWaitThumbnail(const FileThumbnailView* view) {
 		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
@@ -163,6 +165,7 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	d->mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 	d->mProgressWidget=0L;
 	d->mThumbnailUpdateTimer=new QTimer(this);
+	d->mItemDetails=FILENAME | IMAGESIZE;
 
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -244,6 +247,20 @@ void FileThumbnailView::setMarginSize(int value) {
 
 int FileThumbnailView::marginSize() const {
 	return d->mMarginSize;
+}
+
+
+void FileThumbnailView::setItemDetails(int details) {
+	d->mItemDetails=details;
+	for (QIconViewItem* item=firstItem(); item; item=item->nextItem()) {
+		static_cast<FileThumbnailViewItem*>(item)->updateLines();
+	}
+	arrangeItemsInGrid();
+}
+
+
+int FileThumbnailView::itemDetails() const {
+	return d->mItemDetails;
 }
 
 
@@ -719,6 +736,7 @@ void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	d->mThumbnailSize=config->readNumEntry(CONFIG_THUMBNAIL_SIZE, 48);
 	d->updateWaitThumbnail(this);
 	d->mMarginSize=config->readNumEntry(CONFIG_MARGIN_SIZE,5);
+	d->mItemDetails=config->readNumEntry(CONFIG_ITEM_DETAILS, FILENAME | IMAGESIZE);
 	int pos=config->readNumEntry(CONFIG_ITEM_TEXT_POS, QIconView::Right);
 	setItemTextPos(QIconView::ItemTextPos(pos));
 
@@ -741,6 +759,7 @@ void FileThumbnailView::writeConfig(KConfig* config,const QString& group) const 
 	config->writeEntry(CONFIG_THUMBNAIL_SIZE,d->mThumbnailSize);
 	config->writeEntry(CONFIG_MARGIN_SIZE,d->mMarginSize);
 	config->writeEntry(CONFIG_ITEM_TEXT_POS, int(itemTextPos()));
+	config->writeEntry(CONFIG_ITEM_DETAILS, d->mItemDetails);
 }
 
 

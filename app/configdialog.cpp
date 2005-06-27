@@ -140,6 +140,12 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mImageListPage->mShownColor->setColor(fileViewStack->shownColor());
 	d->mImageListPage->mStoreThumbnailsInCache->setChecked(ThumbnailLoadJob::storeThumbnailsInCache());
 	d->mImageListPage->mAutoDeleteThumbnailCache->setChecked(d->mMainWindow->showAutoDeleteThumbnailCache());
+	
+	int details=fileViewStack->fileThumbnailView()->itemDetails();
+	d->mImageListPage->mShowFileName->setChecked(details & FileThumbnailView::FILENAME);
+	d->mImageListPage->mShowFileDate->setChecked(details & FileThumbnailView::FILEDATE);
+	d->mImageListPage->mShowFileSize->setChecked(details & FileThumbnailView::FILESIZE);
+	d->mImageListPage->mShowImageSize->setChecked(details & FileThumbnailView::IMAGESIZE);
 
 	connect(d->mImageListPage->mCalculateCacheSize,SIGNAL(clicked()),
 		this,SLOT(calculateCacheSize()));
@@ -209,6 +215,14 @@ void ConfigDialog::slotApply() {
 	fileViewStack->setShownColor(d->mImageListPage->mShownColor->color());
 	ThumbnailLoadJob::setStoreThumbnailsInCache(d->mImageListPage->mStoreThumbnailsInCache->isChecked());
 	d->mMainWindow->setAutoDeleteThumbnailCache(d->mImageListPage->mAutoDeleteThumbnailCache->isChecked());
+	
+	int details=
+		(d->mImageListPage->mShowFileName->isChecked() ? FileThumbnailView::FILENAME : 0)
+		| (d->mImageListPage->mShowFileDate->isChecked() ? FileThumbnailView::FILEDATE : 0)
+		| (d->mImageListPage->mShowFileSize->isChecked() ? FileThumbnailView::FILESIZE : 0)
+		| (d->mImageListPage->mShowImageSize->isChecked() ? FileThumbnailView::IMAGESIZE : 0)
+		;
+	fileViewStack->fileThumbnailView()->setItemDetails(details);
 	
 	// Image View tab
 #if QT_VERSION>=0x030200

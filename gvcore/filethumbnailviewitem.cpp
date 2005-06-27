@@ -200,35 +200,42 @@ void FileThumbnailViewItem::updateLines() {
 	mLines.clear();
 	if (!mFileItem) return;
 
-	QString imageSizeLine;
-	if (mImageSize.isValid()) {
-		imageSizeLine=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
-	}
-	
 	bool isDir=mFileItem->isDir();
-	bool isRight=iconView()->itemTextPos()==QIconView::Right;
-	
-	if (isRight) {
+	if (iconView()->itemTextPos()==QIconView::Right) {
+		// Text is on the right, show everything
 		mLines.append( new WrappedLine(this, mFileItem->name()) );
 		mLines.append( new CroppedLine(this, mFileItem->timeString()) );
-		if (!imageSizeLine.isNull()) {
-			mLines.append( new CroppedLine(this, imageSizeLine) );
+		if (mImageSize.isValid()) {
+			QString txt=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+			mLines.append( new CroppedLine(this, txt) );
 		}
 		if (!isDir) {
 			mLines.append( new CroppedLine(this, KIO::convertSize(mFileItem->size())) );
 		}
+
 	} else {
-		mLines.append( new WrappedLine(this, mFileItem->name()) );
-		if (!isDir) {
-			QString line=KIO::convertSize(mFileItem->size());
-			if (!imageSizeLine.isNull()) {
-				line.prepend(imageSizeLine + " - ");
-			}
-			mLines.append( new CroppedLine(this, line) );
+		// Text is below the icon, only show details selected in
+		// view->itemDetails()
+		FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
+		int details=view->itemDetails();
+		
+		if (details & FileThumbnailView::FILENAME) {
+			mLines.append( new WrappedLine(this, mFileItem->name()) );
 		}
+		if (details & FileThumbnailView::FILEDATE) {
+			mLines.append( new CroppedLine(this, mFileItem->timeString()) );
+		}
+		if (mImageSize.isValid() && (details & FileThumbnailView::IMAGESIZE) ) {
+			QString txt=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+			mLines.append( new CroppedLine(this, txt) );
+		}
+		if (!isDir && (details & FileThumbnailView::FILESIZE)) {
+			mLines.append( new CroppedLine(this, KIO::convertSize(mFileItem->size())) );
+		}
+
 	}
 
-	calcRect("");
+	calcRect();
 }
 
 

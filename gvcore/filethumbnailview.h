@@ -51,6 +51,7 @@ Q_OBJECT
 	friend class FileThumbnailViewItem;
 	
 public:
+	enum ItemDetail { FILENAME=1, FILESIZE=2, FILEDATE=4, IMAGESIZE=8 };
 	FileThumbnailView(QWidget* parent);
 	~FileThumbnailView();
 
@@ -79,6 +80,9 @@ public:
 	void setMarginSize(int value);
 	int marginSize() const;
 
+	void setItemDetails(int);
+	int itemDetails() const;
+	
 	void setItemTextPos(ItemTextPos);
 	
 	void readConfig(KConfig*,const QString&);

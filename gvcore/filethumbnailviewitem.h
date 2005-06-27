@@ -48,6 +48,8 @@ public:
 	KFileItem* fileItem() const { return mFileItem; }
 
 	void setImageSize(const QSize&);
+	
+	void updateLines();
 
 protected:
 	void paintItem(QPainter* painter, const QColorGroup& colorGroup);
@@ -55,7 +57,6 @@ protected:
 	void paintFocus(QPainter*, const QColorGroup&) {}
 	bool acceptDrop(const QMimeSource*) const;
 	void dropped(QDropEvent*, const QValueList<QIconDragItem>&);
-	void updateLines();
 
 	KFileItem* mFileItem;
 	QValueVector<Line*> mLines;
