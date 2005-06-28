@@ -164,7 +164,11 @@ static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 
 
 MainWindow::MainWindow()
-: KMainWindow(), mLoadingCursor(false), mPluginLoader(0)
+: KMainWindow()
+, mLoadingCursor(false)
+#ifdef GV_HAVE_KIPI
+, mPluginLoader(0)
+#endif
 {
 	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
