@@ -292,7 +292,6 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	Q_ASSERT(view);
 	if (!view) return;
 
-	QRect rt=rect();
 	bool isRight=view->itemTextPos()==QIconView::Right;
 	bool isShownItem=view->shownFileItem() && view->shownFileItem()->extraData(view)==this;
 	int textX, textY, textW, textH;
