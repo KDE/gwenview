@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
+#include <qlabel.h>
 #include <qregexp.h>
 #include <qtimer.h>
 
@@ -205,6 +206,7 @@ struct ScrollPixmapView::Private {
 	// Fullscreen stuff
 	bool mFullScreen;
 	FullScreenBar* mFullScreenBar;
+	QLabel* mFullScreenLabel;
 	KActionPtrList mFullScreenActions;
 	
 	// Object state info
@@ -308,6 +310,7 @@ ScrollPixmapView::ScrollPixmapView(QWidget* parent,Document* document, KActionCo
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
 	d->mFullScreenBar=0;
+	d->mFullScreenLabel=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
 	d->mManualZoom=false;
@@ -625,7 +628,10 @@ void ScrollPixmapView::setFullScreen(bool fullScreen) {
 		restartAutoHideTimer();
 		
 		Q_ASSERT(!d->mFullScreenBar);
-		d->mFullScreenBar=new FullScreenBar(this, d->mFullScreenActions);
+		d->mFullScreenBar=new FullScreenBar(this);
+		d->mFullScreenLabel=new QLabel(d->mFullScreenBar);
+		d->mFullScreenBar->plugActions(d->mFullScreenActions);
+		d->mFullScreenBar->plugWidget(d->mFullScreenLabel);
 		updateFullScreenLabel();
 		d->mFullScreenBar->show();
 		
@@ -1486,7 +1492,7 @@ void ScrollPixmapView::updateFullScreenLabel() {
 	case NONE:
 		break;
 	}
-	d->mFullScreenBar->setText(text);
+	d->mFullScreenLabel->setText(text);
 }
 
 

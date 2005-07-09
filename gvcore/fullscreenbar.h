@@ -35,10 +35,12 @@ namespace Gwenview {
 class FullScreenBar : public QLabel {
 Q_OBJECT
 public:
-	FullScreenBar(QWidget* parent, const KActionPtrList& actions);
+	FullScreenBar(QWidget* parent);
 	~FullScreenBar();
+	void plugActions(const KActionPtrList& actions);
+	void plugWidget(QWidget*);
 	void resizeEvent(QResizeEvent* event);
-	void setText(const QString& text);
+	//void setText(const QString& text);
 
 	void slideIn();
 	void slideOut();

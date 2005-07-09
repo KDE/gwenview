@@ -108,13 +108,13 @@ enum BarState { OUT, SLIDING_OUT, SLIDING_IN, IN };
 
 
 struct FullScreenBar::Private {
-	QLabel* mLabel;
 	QTimer mTimer;
 	BarState mState;
+	QHBoxLayout* mLayout;
 };
 
 
-FullScreenBar::FullScreenBar(QWidget* parent, const KActionPtrList& actions)
+FullScreenBar::FullScreenBar(QWidget* parent)
 : QLabel(parent) {
 	d=new Private;
 	d->mState=IN;
@@ -128,31 +128,37 @@ FullScreenBar::FullScreenBar(QWidget* parent, const KActionPtrList& actions)
 	pal.setColor(QColorGroup::ButtonText, fg);
 	setPalette(pal);
 
-	QVBoxLayout* vLayout=new QVBoxLayout(this);
-	QHBoxLayout* layout=new QHBoxLayout(vLayout);
-	vLayout->addSpacing(FULLSCREEN_LABEL_RADIUS);
-	vLayout->setResizeMode(QLayout::Fixed);
+	QGridLayout* outerLayout=new QGridLayout(this,2,2);
+	d->mLayout=new QHBoxLayout;
+	outerLayout->addLayout(d->mLayout, 0, 0);
+	outerLayout->addItem(
+		new QSpacerItem(FULLSCREEN_LABEL_RADIUS, FULLSCREEN_LABEL_RADIUS),
+		1, 0);
+	outerLayout->addItem(
+		new QSpacerItem(FULLSCREEN_LABEL_RADIUS, FULLSCREEN_LABEL_RADIUS),
+		0, 1);
 
-	// Buttons
+	// Make sure the widget is resized when d->mLayout grows
+	outerLayout->setResizeMode(QLayout::Fixed);
+
+	// Timer
+	connect(&d->mTimer, SIGNAL(timeout()), this, SLOT(slotUpdateSlide()) );
+}
+
+
+void FullScreenBar::plugActions(const KActionPtrList& actions) {
 	KActionPtrList::ConstIterator
 		it=actions.begin(),
 		end=actions.end();
 	for (; it!=end; ++it) {
 		ActionButton* btn=new ActionButton(this, *it);
-		layout->addWidget(btn);
+		d->mLayout->addWidget(btn);
 	}
+}
 
-	// Label
-	d->mLabel=new QLabel(this);
-	layout->addWidget(d->mLabel);
-	QFont font=d->mLabel->font();
-	font.setWeight(QFont::Bold);
-	d->mLabel->setFont(font);
 
-	layout->addSpacing(FULLSCREEN_LABEL_RADIUS);
-	
-	// Timer
-	connect(&d->mTimer, SIGNAL(timeout()), this, SLOT(slotUpdateSlide()) );
+void FullScreenBar::plugWidget(QWidget* widget) {
+	d->mLayout->addWidget(widget);
 }
 
 
@@ -183,11 +189,6 @@ void FullScreenBar::resizeEvent(QResizeEvent* event) {
 	// Update the label
 	setPixmap(pixmap);
 	setMask(mask);
-}
-
-
-void FullScreenBar::setText(const QString& text) {
-	d->mLabel->setText(text);
 }
 
 
