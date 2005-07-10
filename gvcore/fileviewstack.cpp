@@ -677,6 +677,21 @@ uint FileViewStack::fileCount() const {
 }
 
 
+int FileViewStack::shownFilePosition() const {
+	KFileItem* shownItem=currentFileView()->shownFileItem();
+	if (!shownItem) return -1;
+	KFileItem* item=currentFileView()->firstFileItem();
+	int position=0;
+	for (;
+		item && item!=shownItem;
+		item=currentFileView()->nextItem(item) )
+	{
+		if (!isDirOrArchive(item)) ++position;
+	}
+	return position;
+}
+
+
 KURL FileViewStack::url() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return mDirURL;

@@ -14,6 +14,8 @@
  - Show hints in the status bar for mouse usage in the image view.
  - It's now possible to define which file information should be displayed in
    the thumbnail view.
+ - In addition to the file count, the status bar now shows the current image
+   position.
 - Fixes:
  - Show progressive JPEG files really progressively.
  - Fix premature end when decoding MNG images.

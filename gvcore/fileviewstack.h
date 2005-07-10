@@ -95,6 +95,7 @@ public:
 	KURL url() const;
 	KURL dirURL() const;
 	uint fileCount() const;
+	int shownFilePosition() const;
 	
 	bool showDirs() const;
 	void setShowDirs(bool);

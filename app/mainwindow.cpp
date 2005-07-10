@@ -745,13 +745,16 @@ void MainWindow::showHint(const QString& hint) {
 //
 //-----------------------------------------------------------------------
 void MainWindow::updateStatusInfo() {
+	int pos=mFileViewStack->shownFilePosition();
 	uint count=mFileViewStack->fileCount();
 	QString filename=mDocument->filename();
 	QString txt;
 	if (count==0) {
 		txt=i18n("No Images");
 	} else {
-		txt=i18n("One Image - %1 %2x%3 @ %4%","%n images - %1 %2x%3 @ %4%",count)
+		txt=i18n("%1/%2 - %3 %4x%5 @ %6%")
+			.arg(pos+1)
+			.arg(count)
 			.arg(filename)
 			.arg(mDocument->width())
 			.arg(mDocument->height())
