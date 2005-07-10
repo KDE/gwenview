@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qevent.h>
+#include <qtooltip.h>
 
 namespace Gwenview {
 
@@ -75,12 +76,7 @@ bool CursorTracker::eventFilter(QObject* object, QEvent* _event) {
 
 TipTracker::TipTracker(const QString& txt, QWidget* reference)
 : CursorTracker(txt, reference) {
-	// Ripped from Qt source
-	QColorGroup cg( Qt::black, QColor(255,255,220),
-			QColor(96,96,96), Qt::black, Qt::black,
-			Qt::black, QColor(255,255,220) );
-	setPalette(QPalette(cg, cg, cg));
-
+	setPalette(QToolTip::palette());
 	setFrameStyle(QFrame::Plain | QFrame::Box);
 	setLineWidth(1);
 	setAlignment(AlignAuto | AlignTop);
