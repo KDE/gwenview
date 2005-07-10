@@ -123,7 +123,7 @@ const char CONFIG_SESSION_URL[] = "url";
 const int GWENVIEW_DOCK_VERSION=2;
 
 // The timeout before an hint in the statusbar disappear (in msec)
-const int HINT_TIMEOUT=5000;
+const int HINT_TIMEOUT=10000;
 
 // Time before we try to load the KIPI plugins (in msec)
 const int LOAD_PLUGIN_DELAY=1000;
@@ -549,11 +549,6 @@ void MainWindow::toggleFullScreen() {
 			mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
-		KActionPtrList actions;
-		actions.append(mFileViewStack->selectPrevious());
-		actions.append(mFileViewStack->selectNext());
-		actions.append(mToggleFullScreen);
-		mPixmapView->setFullScreenActions(actions);
 		mPixmapView->setFullScreen(true);
 		mPixmapView->setFocus();
 	} else {
@@ -739,20 +734,8 @@ void MainWindow::resetDockWidgets() {
 void MainWindow::showHint(const QString& hint) {
 	mSBHintLabel->setText(hint);
 
-	mSBHint->show();
-	mSBDirLabel->hide();
-	mSBDetailLabel->hide();
+	mSBHintLabel->show();
 	mHintTimer->start(HINT_TIMEOUT, true);
-}
-
-
-/**
- * Hide the hint
- */
-void MainWindow::hideHint() {
-	mSBHint->hide();
-	mSBDirLabel->show();
-	mSBDetailLabel->show();
 }
 
 
@@ -762,34 +745,19 @@ void MainWindow::hideHint() {
 //
 //-----------------------------------------------------------------------
 void MainWindow::updateStatusInfo() {
-	QString txt;
 	uint count=mFileViewStack->fileCount();
-#if KDE_IS_VERSION( 3, 4, 0 )
-	QString url=mDocument->dirURL().pathOrURL();
-#else
-	QString url=mDocument->dirURL().prettyURL(0,KURL::StripFileProtocol);
-#endif
-	if (count==0) {
-		txt=i18n("%1 - No Images").arg(url);
-	} else {
-		txt=i18n("%1 - One Image","%1 - %n images",count).arg(url);
-	}
-	mSBDirLabel->setText(txt);
-
-	updateFileInfo();
-}
-
-
-void MainWindow::updateFileInfo() {
 	QString filename=mDocument->filename();
-	if (!filename.isEmpty()) {
-		QString info=filename + QString(" %1x%2 @ %3%")
-			.arg(mDocument->width()).arg(mDocument->height())
-			.arg(int(mPixmapView->zoom()*100) );
-		mSBDetailLabel->setText(info);
+	QString txt;
+	if (count==0) {
+		txt=i18n("No Images");
 	} else {
-		mSBDetailLabel->setText(QString::null);
+		txt=i18n("One Image - %1 %2x%3 @ %4%","%n images - %1 %2x%3 @ %4%",count)
+			.arg(filename)
+			.arg(mDocument->width())
+			.arg(mDocument->height())
+			.arg(int(mPixmapView->zoom()*100) );
 	}
+	mSBDetailLabel->setText(txt);
 	setCaption(filename);
 }
 
@@ -832,26 +800,22 @@ void MainWindow::createWidgets() {
 	mCentralStack->addWidget(mViewModeWidget);
 
 	// Status bar
-	mSBDirLabel=new KSqueezedTextLabel("", statusBar());
 	mSBDetailLabel=new QLabel("", statusBar());
 	
-	mSBHint=new QHBox(statusBar());
-	mSBHint->setPalette(QToolTip::palette());
-	mSBHint->setMargin(1);
-	mSBHint->setFrameStyle( QFrame::Plain | QFrame::Box );
-	mSBHint->setLineWidth( 1 );
+	mSBHintLabel=new KSqueezedTextLabel(statusBar());
+	QFont font=mSBHintLabel->font();
+	font.setItalic(true);
+	mSBHintLabel->setFont(font);
+	mSBHintLabel->hide();
 	
-	QLabel* idea=new QLabel(mSBHint);
-	idea->setPixmap(SmallIcon("idea"));
-	mSBHintLabel=new KSqueezedTextLabel(mSBHint);
-	mSBHint->hide();
-	
-	statusBar()->addWidget(mSBHint, 1);
-	statusBar()->addWidget(mSBDirLabel, 1);
 	statusBar()->addWidget(mSBDetailLabel, 0);
+	QWidget* dummy=new QWidget();
+	dummy->setFixedSize(12, 1);
+	statusBar()->addWidget(dummy);
+	statusBar()->addWidget(mSBHintLabel, 1);
 	mHintTimer=new QTimer(this);
 	connect(mHintTimer, SIGNAL(timeout()),
-		this, SLOT(hideHint()) );
+		mSBHintLabel, SLOT(hide()) );
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
@@ -962,6 +926,12 @@ void MainWindow::createActions() {
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
+		
+	KActionPtrList actions;
+	actions.append(mFileViewStack->selectPrevious());
+	actions.append(mFileViewStack->selectNext());
+	actions.append(mToggleFullScreen);
+	mPixmapView->setFullScreenActions(actions);
 
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
@@ -1048,7 +1018,7 @@ void MainWindow::createConnections() {
 	connect(mPixmapView,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
 	connect(mPixmapView,SIGNAL(zoomChanged(double)),
-		this,SLOT(updateFileInfo()) );
+		this,SLOT(updateStatusInfo()) );
 
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),

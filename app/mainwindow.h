@@ -94,9 +94,7 @@ private:
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	KDockWidget* mMetaDock;
-	QLabel* mSBDirLabel;
 	QLabel* mSBDetailLabel;
-	QHBox* mSBHint;
 	QLabel* mSBHintLabel;
 	QTimer* mHintTimer;
 
@@ -199,12 +197,6 @@ private slots:
 	 */
 	void updateImageActions();
 
-	/**
-	 * Update only caption, allows setting file info
-	 * when folder info is not available yet
-	 */
-	void updateFileInfo();
-
 	void slotShownFileItemRefreshed(const KFileItem* item);
 
 	/**
@@ -227,7 +219,6 @@ private slots:
 	void slotReplug();
 
 	void showHint(const QString&);
-	void hideHint();
 };
 
 
