@@ -59,6 +59,7 @@ class KToggleAction;
 typedef QValueList<KAction *> KActionPtrList;
 
 namespace Gwenview {
+class CaptionFormatterBase;
 class Document;
 
 class LIBGWENVIEW_EXPORT ScrollPixmapView : public QScrollView {
@@ -96,6 +97,8 @@ public:
 	bool fullScreen() const; 
 	void setFullScreenActions(KActionPtrList);
 	void setFullScreen(bool);
+
+    void setOSDFormatter(CaptionFormatterBase*);
 
 	// we use "normal"BackgroundColor because backgroundColor() already exists
 	QColor normalBackgroundColor() const; 

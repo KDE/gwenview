@@ -65,4 +65,5 @@ libgwenviewcore_la_SOURCES = \
 	scrollpixmapviewtools.cpp \
 	fullscreenbar.cpp \
 	imageloader.cpp \
-	cursortracker.cpp
+	cursortracker.cpp \
+	captionformatter.cpp

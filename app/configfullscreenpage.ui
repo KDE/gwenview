@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigFullScreenPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>476</width>
-            <height>309</height>
+            <width>751</width>
+            <height>398</height>
         </rect>
     </property>
     <property name="caption">
@@ -119,7 +119,13 @@
                     </property>
                     <property name="text">
                         <string>Custom (example: %f - %c)
-%f: filename, %p: filepath, %c: comment, %r resolution, \n newline</string>
+- %f: filename
+- %p: filepath
+- %c: comment
+- %r: resolution
+- %n: current image position
+- %N: image count
+- \n: newline</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">

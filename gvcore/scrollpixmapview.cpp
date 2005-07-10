@@ -32,7 +32,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qlabel.h>
-#include <qregexp.h>
 #include <qtimer.h>
 
 // KDE 
@@ -48,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapplication.h>
 
 // Local
+#include "captionformatterbase.h"
 #include "fileoperation.h"
 #include "externaltoolmanager.h"
 #include "externaltoolcontext.h"
@@ -170,6 +170,7 @@ struct ScrollPixmapView::Private {
 	
 	QColor mBackgroundColor;
 	OSDMode mOSDMode;
+	CaptionFormatterBase* mOSDFormatter;
 	QString mFreeOutputFormat;
 	ImageUtils::SmoothAlgorithm mSmoothAlgorithm;
 	bool mDelayedSmoothing;
@@ -322,6 +323,7 @@ ScrollPixmapView::ScrollPixmapView(QWidget* parent,Document* document, KActionCo
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
+	d->mOSDFormatter=0;
 
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -442,6 +444,11 @@ void ScrollPixmapView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
+void ScrollPixmapView::setOSDFormatter(CaptionFormatterBase* formatter) {
+	d->mOSDFormatter=formatter;
+}
+
+
 KToggleAction* ScrollPixmapView::autoZoom() const {
 	return d->mAutoZoom;
 }
@@ -1445,54 +1452,30 @@ void ScrollPixmapView::updateFullScreenLabel() {
 		kdWarning() << "mFullScreenBar does not exist\n";
 		return;
 	}
-	QString path=d->mDocument->url().path();	
-	QString pathFile=d->mDocument->dirURL().path();
-	QString comment=d->mDocument->comment();
-	if (comment.isNull()) {
-		comment=i18n("(No comment)");
+	Q_ASSERT(d->mOSDFormatter);
+	if (!d->mOSDFormatter) {
+		kdWarning() << "mOSDFormatter is not set\n";
+		return;
 	}
-	QString fileName=d->mDocument->filename();
-	QString resolution = QString( "%1x%2" ).arg( d->mDocument->width()).arg( d->mDocument->height());
-
-	QString text;
 	
+	QString format;
 	switch (d->mOSDMode) {
-	case FREE_OUTPUT: {		
-		QString str = d->mFreeOutputFormat;
-		str.replace("\\n", "\n");
-		QStringList strList = QStringList::split(QRegExp("\%"),str,TRUE);
-		for ( QStringList::Iterator it = strList.begin(); it != strList.end(); ++it ) {
-			str = *it;
-			if ((*it).find('f',0,false) == 0) {
-				str = "%" + *it;
-				str.replace(QRegExp("\%[fF]"), fileName);
-			} else if ((*it).find('c',0,false) == 0) {
-				str = "%" + *it;
-				str.replace(QRegExp("\%[Cc]"), comment);
-			} else if ((*it).find('r',0,false) == 0) {
-				str = "%" + *it;
-				str.replace(QRegExp("\%[rR]"), resolution);
-			} else if ((*it).find('p',0,false) == 0) {
-				str = "%" + *it;
-				str.replace(QRegExp("\%[pP]"), pathFile);
-			}
-			text += str;
-		}
+	case FREE_OUTPUT:
+		format = d->mFreeOutputFormat;
 		break;
-	}
 	case PATH:
-		text = path;
+		format = "%p";
 		break;
 	case COMMENT:
-		text = comment;
+		format = "%c";
 		break;
 	case PATH_AND_COMMENT:
-		text = path + "\n" + comment;
+		format = "%p\n%c";
 		break;
 	case NONE:
 		break;
 	}
-	d->mFullScreenLabel->setText(text);
+	d->mFullScreenLabel->setText( (*d->mOSDFormatter)(format));
 }
 
 

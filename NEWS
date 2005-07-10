@@ -16,6 +16,8 @@
    the thumbnail view.
  - In addition to the file count, the status bar now shows the current image
    position.
+ - It's now possible to show the image position and image count in the On
+   Screen Display.
 - Fixes:
  - Show progressive JPEG files really progressively.
  - Fix premature end when decoding MNG images.

@@ -79,6 +79,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileoperation.h"
 #include "gvcore/archive.h"
 #include "gvcore/batchmanipulator.h"
+#include "gvcore/captionformatter.h"
 #include "gvcore/document.h"
 #include "gvcore/externaltooldialog.h"
 #include "gvcore/fileviewbase.h"
@@ -844,6 +845,9 @@ void MainWindow::createWidgets() {
 	mFileDock->setWidget(vbox);
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
+
+	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );
+	mPixmapView->setOSDFormatter(mCaptionFormatter.get());
 
 	// Meta info edit widget
 	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("info"),NULL,
