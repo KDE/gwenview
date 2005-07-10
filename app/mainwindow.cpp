@@ -51,7 +51,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
-#include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -75,6 +74,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "dirview.h"
 #include "history.h"
 #include "metaedit.h"
+#include "truncatedtextlabel.h"
 
 #include "gvcore/fileoperation.h"
 #include "gvcore/archive.h"
@@ -802,7 +802,7 @@ void MainWindow::createWidgets() {
 	// Status bar
 	mSBDetailLabel=new QLabel("", statusBar());
 	
-	mSBHintLabel=new KSqueezedTextLabel(statusBar());
+	mSBHintLabel=new TruncatedTextLabel(statusBar());
 	QFont font=mSBHintLabel->font();
 	font.setItalic(true);
 	mSBHintLabel->setFont(font);
