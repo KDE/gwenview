@@ -68,10 +68,6 @@ static const char* CONFIG_SHOWN_COLOR="shown color";
 
 static const int SLIDER_RESOLUTION=4;
 
-inline bool isDirOrArchive(const KFileItem* item) {
-	return item && (item->isDir() || Archive::fileItemIsArchive(item));
-}
-
 
 //-----------------------------------------------------------------------
 //
@@ -392,7 +388,7 @@ void FileViewStack::slotViewExecuted() {
 void FileViewStack::slotViewClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (!item || isDirOrArchive(item)) return;
+	if (!item || Archive::fileItemIsDirOrArchive(item)) return;
 
 	mSelecting = true;
 	emitURLChanged();
@@ -403,7 +399,7 @@ void FileViewStack::slotViewClicked() {
 void FileViewStack::slotViewDoubleClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
-	if (item && !isDirOrArchive(item)) emit imageDoubleClicked();
+	if (item && !Archive::fileItemIsDirOrArchive(item)) emit imageDoubleClicked();
 }
 
 
@@ -670,7 +666,7 @@ uint FileViewStack::fileCount() const {
 	uint count=currentFileView()->count();
 
 	KFileItem* item=currentFileView()->firstFileItem();
-	while (item && isDirOrArchive(item)) {
+	while (item && Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
 		count--;
 	}
@@ -687,7 +683,7 @@ int FileViewStack::shownFilePosition() const {
 		item && item!=shownItem;
 		item=currentFileView()->nextItem(item) )
 	{
-		if (!isDirOrArchive(item)) ++position;
+		if (!Archive::fileItemIsDirOrArchive(item)) ++position;
 	}
 	return position;
 }
@@ -940,7 +936,7 @@ void FileViewStack::updateActions() {
 
 	// We did not select any image, let's activate everything
 	KFileItem* currentItem=currentFileView()->currentFileItem();
-	if (!currentItem || isDirOrArchive(currentItem)) {
+	if (!currentItem || Archive::fileItemIsDirOrArchive(currentItem)) {
 		mSelectFirst->setEnabled(true);
 		mSelectPrevious->setEnabled(true);
 		mSelectNext->setEnabled(true);
@@ -971,7 +967,7 @@ void FileViewStack::emitURLChanged() {
 
 KFileItem* FileViewStack::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
-	while (item && isDirOrArchive(item)) {
+	while (item && Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
 	}
 	if (item) {
@@ -984,7 +980,7 @@ KFileItem* FileViewStack::findFirstImage() const {
 
 KFileItem* FileViewStack::findLastImage() const {
 	KFileItem* item=currentFileView()->items()->getLast();
-	while (item && isDirOrArchive(item)) {
+	while (item && Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->prevItem(item);
 	}
 	return item;
@@ -995,7 +991,7 @@ KFileItem* FileViewStack::findPreviousImage() const {
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->prevItem(item);
-	} while (item && isDirOrArchive(item));
+	} while (item && Archive::fileItemIsDirOrArchive(item));
 	return item;
 }
 
@@ -1004,7 +1000,7 @@ KFileItem* FileViewStack::findNextImage() const {
 	if (!item) return 0L;
 	do {
 		item=currentFileView()->nextItem(item);
-	} while (item && isDirOrArchive(item));
+	} while (item && Archive::fileItemIsDirOrArchive(item));
 	return item;
 }
 

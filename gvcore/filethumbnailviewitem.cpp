@@ -34,6 +34,7 @@
 #include <kurldrag.h>
 
 // Our includes
+#include "archive.h"
 #include "filethumbnailview.h"
 #include "filethumbnailviewitem.h"
 namespace Gwenview {
@@ -294,6 +295,7 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 
 	bool isRight=view->itemTextPos()==QIconView::Right;
 	bool isShownItem=view->shownFileItem() && view->shownFileItem()->extraData(view)==this;
+	bool isImage=!Archive::fileItemIsDirOrArchive(mFileItem);
 	int textX, textY, textW, textH;
 
 	textX=textRect(false).x();
@@ -311,28 +313,32 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		bg=cg.mid();
 	}
 	
-	// Draw frame
-	QRect frmRect=pixmapRect(false);
-	frmRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
-	if (isSelected() || isShownItem) {
-		p->fillRect(frmRect, bg);
-		p->setPen(cg.base());
-		frmRect=pixmapRect(false);
-		frmRect.addCoords(-1,-1,1,1);
-		p->drawRect(frmRect);
-	} else {
-		p->setPen(bg);
-		p->drawRect(frmRect);
+	if (isImage || isSelected()) {
+		// Draw frame
+		QRect frmRect=pixmapRect(false);
+		frmRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
+		if (isSelected() || isShownItem) {
+			p->fillRect(frmRect, bg);
+			p->setPen(cg.base());
+			frmRect=pixmapRect(false);
+			frmRect.addCoords(-1,-1,1,1);
+			p->drawRect(frmRect);
+		} else {
+			p->setPen(bg);
+			p->drawRect(frmRect);
+		}
 	}
-	
-	// Draw shadow
-	QRect shadowRect=pixmapRect(false);
-	shadowRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
-	for (int x=0; x<SHADOW; ++x) {
-		p->setPen(cg.base().dark( 100+10*(SHADOW-x) ));
-		shadowRect.moveBy(1, 1);
-		p->drawLine(shadowRect.topRight(), shadowRect.bottomRight() );
-		p->drawLine(shadowRect.bottomLeft(), shadowRect.bottomRight() );
+		
+	if (isImage) {
+		// Draw shadow
+		QRect shadowRect=pixmapRect(false);
+		shadowRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
+		for (int x=0; x<SHADOW; ++x) {
+			p->setPen(cg.base().dark( 100+10*(SHADOW-x) ));
+			shadowRect.moveBy(1, 1);
+			p->drawLine(shadowRect.topRight(), shadowRect.bottomRight() );
+			p->drawLine(shadowRect.bottomLeft(), shadowRect.bottomRight() );
+		}
 	}
 	
 	// Draw pixmap

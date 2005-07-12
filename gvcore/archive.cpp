@@ -47,6 +47,10 @@ bool fileItemIsArchive(const KFileItem* item) {
 	return mimeTypeProtocols().contains(item->mimetype());
 }
 
+bool fileItemIsDirOrArchive(const KFileItem* item) {
+	return item->isDir() || Archive::fileItemIsArchive(item);
+}
+
 bool protocolIsArchive(const QString& protocol) {
 	const MimeTypeProtocols& map=mimeTypeProtocols();
 	MimeTypeProtocols::ConstIterator it;
