@@ -1045,6 +1045,8 @@ void MainWindow::createConnections() {
 		mToggleBrowse,SLOT(activate()) );
 	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
 		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
+	connect(mFileViewStack,SIGNAL(sortingChanged()),
+		this, SLOT(updateStatusInfo()) );
 
 	// History connections
 	connect(mHistory, SIGNAL(urlChanged(const KURL&)),

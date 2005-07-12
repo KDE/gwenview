@@ -168,6 +168,7 @@ signals:
 	void completedURLListing(const KURL&);
 	void imageDoubleClicked();
 	void shownFileItemRefreshed(const KFileItem*);
+	void sortingChanged();
 
 
 private slots:

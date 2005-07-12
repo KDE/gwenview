@@ -490,6 +490,7 @@ void FileViewStack::setSorting() {
 		spec=QDir::SortSpec(spec | QDir::Reversed);
 	}
 	currentFileView()->setSorting(QDir::SortSpec(spec | QDir::DirsFirst));
+	emit sortingChanged();
 }
 
 
