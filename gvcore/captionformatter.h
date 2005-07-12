@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "captionformatterbase.h"
+#include "libgwenview_export.h"
 
 namespace Gwenview {
 
@@ -36,7 +37,7 @@ class FileViewStack;
  * An implementation of CaptionFormatterBase, which knows about the Document
  * and FileViewStack instances
  */
-class CaptionFormatter : public CaptionFormatterBase {
+class LIBGWENVIEW_EXPORT CaptionFormatter : public CaptionFormatterBase {
 public:
 	CaptionFormatter(FileViewStack*, Document*);
 	virtual QString operator()(const QString& format);
