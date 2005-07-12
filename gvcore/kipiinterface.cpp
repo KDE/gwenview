@@ -108,7 +108,7 @@ KIPIInterface::KIPIInterface( QWidget* parent, FileViewStack* fileView)
 	connect(d->mFileView, SIGNAL(selectionChanged()),
 		this, SLOT(slotSelectionChanged()) );
 
-	connect(d->mFileView, SIGNAL(completedURLListing(const KURL&)),
+	connect(d->mFileView, SIGNAL(completed()),
 		this, SLOT(slotDirectoryChanged()) );
 }
 

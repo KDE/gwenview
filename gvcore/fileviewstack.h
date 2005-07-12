@@ -165,7 +165,6 @@ signals:
 	void selectionChanged();
 	void completed();
 	void canceled();
-	void completedURLListing(const KURL&);
 	void imageDoubleClicked();
 	void shownFileItemRefreshed(const KFileItem*);
 	void sortingChanged();

@@ -168,9 +168,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	connect(mDirLister,SIGNAL(canceled()),
 		this,SLOT(dirListerCanceled()) );
 
-	// Propagate completed and canceled signals
-	connect(mDirLister,SIGNAL(completed()),
-		this,SIGNAL(completed()) );
+	// Propagate canceled signals
 	connect(mDirLister,SIGNAL(canceled()),
 		this,SIGNAL(canceled()) );
 
@@ -886,7 +884,7 @@ void FileViewStack::delayedDirListerCompleted() {
 	}
 
 	browseToFileNameToSelect();
-	emit completedURLListing(mDirURL);
+	emit completed();
 
 	if (mMode!=FILE_LIST && mThumbnailsNeedUpdate) {
 		mFileThumbnailView->startThumbnailUpdate();
