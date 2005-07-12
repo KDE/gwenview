@@ -21,10 +21,9 @@
 #ifndef _LIBGWENVIEW_EXPORT_H
 #define _LIBGWENVIEW_EXPORT_H
 
+#include <kdemacros.h>
 
 #ifdef __KDE_HAVE_GCC_VISIBILITY
-
-#include <kdemacros.h>
 
 #define LIBGWENVIEW_EXPORT KDE_EXPORT
 
