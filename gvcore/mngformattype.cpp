@@ -80,6 +80,7 @@
 #endif
 
 #include "qdatetime.h"
+#include "mngformattype.h"
 
 //#ifndef QT_NO_IMAGEIO_MNG
 #ifdef HAVE_LIBMNG
@@ -87,7 +88,6 @@
 #include "qimage.h"
 #include "qasyncimageio.h"
 #include "qiodevice.h"
-#include "mngformattype.h"
 
 // Define XMD_H prohibits the included headers of libmng.h to typedef INT32.
 // This is needed for Borland with STL support, since in that case, INT32 is
@@ -512,6 +512,8 @@ void gvInitMngIO()
 
 #else
 void gvInitMngIO() {}
+
+namespace Gwenview {
 #endif
 
 MNG::MNG() { gvInitMngIO(); }
