@@ -31,12 +31,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kdebug.h>
 #include <kfilemetainfo.h>
+#include <kglobalsettings.h>
 #include <kimageio.h>
 #include <kio/job.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprinter.h>
-#include <kglobalsettings.h>
+#include <kstringhandler.h>
 
 // Local
 #include "archive.h"
@@ -296,30 +297,6 @@ void Document::print(KPrinter *pPrinter) {
 	printPainter.end();
 }
 
-static QString minimizeString( const QString& text, const QFontMetrics&
-                                  metrics, int maxWidth ) {
-	if ( text.length() <= 5 )
-		return text; // no sense to cut that tiny little string
-
-	QString txt = text;
-	bool changed = false;
-	while ( metrics.width( txt ) > maxWidth ) {
-		int mid = txt.length() / 2;
-		txt.remove( mid, 2 ); // remove 2 characters in the middle
-		changed = true;
-	}
-
-	if ( changed ) // add "..." in the middle
-	{
-		int mid = txt.length() / 2;
-		if ( mid <= 5 ) // sanity check
-			return txt;
-
-		txt.replace( mid - 1, 3, "..." );
-	}
-
-	return txt;
-}
 
 void Document::doPaint(KPrinter *printer, QPainter *painter) {
 	// will contain the final image to print
@@ -429,7 +406,7 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 	painter->drawImage( QRect( x, y, size.width(), size.height()), image );
 
 	if ( printFilename ) {
-		QString fname = minimizeString( filename(), fMetrics, pdWidth );
+		QString fname = KStringHandler::cPixelSqueeze( filename(), fMetrics, pdWidth );
 		if ( !fname.isEmpty() ) {
 			int fw = fMetrics.width( fname );
 			int x = (pdWidth - fw)/2;
@@ -438,7 +415,7 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 		}
 	}
 	if ( printComment ) {
-		QString comm = comment(); //minimizeString( mFilename, fMetrics, pdWidth );
+		QString comm = comment();
 		if ( !comm.isEmpty() ) {
 			int fw = fMetrics.width( comm );
 			int x = (pdWidth - fw)/2;
