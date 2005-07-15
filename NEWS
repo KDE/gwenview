@@ -18,6 +18,7 @@
    position.
  - It's now possible to show the image position and image count in the On
    Screen Display.
+ - An option has been added to disable automatic rotation of images.
 - Fixes:
  - Show progressive JPEG files really progressively.
  - Fix premature end when decoding MNG images.

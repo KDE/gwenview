@@ -56,6 +56,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileoperation.h"
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
+// This path is necessary when srcdir!=builddir because gvconfig.h is a
+// generated file
+#include <../gvcore/gvconfig.h> 
 #include "gvcore/scrollpixmapview.h"
 #include "gvcore/thumbnailloadjob.h"
 
@@ -178,6 +181,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	
 	// Misc tab
 	d->mMiscPage->mModifiedBehaviorGroup->setButton( int(document->modifiedBehavior()) );
+	d->mMiscPage->mAutoRotateImages->setChecked(GVConfig::self()->autoRotateImages() );
 }
 
 
@@ -267,6 +271,8 @@ void ConfigDialog::slotApply() {
 	int behavior=buttonGroupSelectedId(d->mMiscPage->mModifiedBehaviorGroup);
 #endif
 	document->setModifiedBehavior( static_cast<Document::ModifiedBehavior>(behavior) );
+	
+	GVConfig::self()->setAutoRotateImages(d->mMiscPage->mAutoRotateImages->isChecked() );
 }
 
 

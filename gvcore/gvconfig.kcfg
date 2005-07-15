@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="gwenviewrc"/> 
+  <group name="misc">
+    <entry name="autoRotateImages" type="Bool"> 
+      <label>Whether Gwenview should rotate images if orientation information is available.</label> 
+      <default>true</default>
+    </entry> 
+  </group> 
+</kcfg>

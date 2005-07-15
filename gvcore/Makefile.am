@@ -66,4 +66,7 @@ libgwenviewcore_la_SOURCES = \
 	fullscreenbar.cpp \
 	imageloader.cpp \
 	cursortracker.cpp \
-	captionformatter.cpp
+	captionformatter.cpp \
+	gvconfig.kcfgc
+
+kde_kcfg_DATA = gvconfig.kcfg
