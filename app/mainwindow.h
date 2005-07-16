@@ -41,28 +41,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class QLabel;
 class QTimer;
-class QHBox;
 class QWidgetStack;
 
 class KAction;
 class KDockArea;
 class KDockWidget;
-class KHistoryCombo;
-class KRadioAction;
-class KToggleAction;
-class KToolBarPopupAction;
 class KFileItem;
+class KHistoryCombo;
+class KToggleAction;
+class KToolBar;
+class KToolBarPopupAction;
 class KURLCompletion;
 
 namespace Gwenview {
 class CaptionFormatter;
 class DirView;
-class FileViewStack;
 class Document;
+class FileViewStack;
 class History;
+class MetaEdit;
 class ScrollPixmapView;
 class SlideShow;
-class MetaEdit;
 
 
 class MainWindow : public KMainWindow {
@@ -145,6 +144,7 @@ private:
 	KIPI::PluginLoader* mPluginLoader;
 #endif
 
+	KToolBar* mFileViewToolBar;
 	std::auto_ptr<CaptionFormatter> mCaptionFormatter;
 
 	void hideToolBars();
@@ -152,6 +152,7 @@ private:
 	void createWidgets();
 	void createActions();
 	void createLocationToolBar();
+	void createObjectInteractions();
 	void updateLocationURL();
 	void createConnections();
 

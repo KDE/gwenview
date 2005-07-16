@@ -178,9 +178,10 @@ MainWindow::MainWindow()
 	mDocument=new Document(this);
 	mHistory=new History(actionCollection());
 	// GUI
-	createWidgets();
 	createActions();
+	createWidgets();
 	createLocationToolBar();
+	createObjectInteractions();
 
 	setStandardToolBarMenuEnabled(true);
 	createGUI("gwenviewui.rc", false);
@@ -787,6 +788,10 @@ void MainWindow::updateImageActions() {
 }
 
 
+/**
+ * This method creates all the widgets. Interactions between them and with
+ * actions are created in createObjectInteractions
+ */
 void MainWindow::createWidgets() {
 	KConfig* config=KGlobal::config();
 
@@ -836,18 +841,11 @@ void MainWindow::createWidgets() {
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
-	KToolBar* tb=new KToolBar(vbox, "", true);
+	mFileViewToolBar=new KToolBar(vbox, "", true);
 	mFileViewStack=new FileViewStack(vbox, actionCollection());
-	mFileViewStack->listMode()->plug(tb);
-	mFileViewStack->sideThumbnailMode()->plug(tb);
-	mFileViewStack->bottomThumbnailMode()->plug(tb);
-	actionCollection()->action("thumbnails_slider")->plug(tb);
 	mFileDock->setWidget(vbox);
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
-
-	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );
-	mPixmapView->setOSDFormatter(mCaptionFormatter.get());
 
 	// Meta info edit widget
 	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("info"),NULL,
@@ -903,6 +901,10 @@ void MainWindow::createWidgets() {
 }
 
 
+/**
+ * This method creates all the actions Interactions between them and with
+ * widgets are created in createObjectInteractions
+ */
 void MainWindow::createActions() {
 	// Stack
 	mToggleBrowse=new KToggleAction(i18n("Browse"), "folder", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "toggle_browse");
@@ -933,16 +935,49 @@ void MainWindow::createActions() {
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
-		
+
+	// Go
+	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
+	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
+
+	// Window
+	mResetDockWidgets = new KAction(i18n("Reset"), 0, this, SLOT(resetDockWidgets()), actionCollection(), "reset_dock_widgets");
+
+	// Settings
+	mShowConfigDialog=
+		KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
+	mShowKeyDialog=
+		KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
+	(void)new KAction(i18n("Configure External Tools..."), "configure", 0,
+		this, SLOT(showExternalToolDialog()), actionCollection(), "configure_tools");
+	(void)KStdAction::configureToolbars(
+		this, SLOT(showToolBarDialog()), actionCollection() );
+
+	actionCollection()->readShortcutSettings();
+}
+
+
+/**
+ * This method creates the interactions between objects, when it's called, all
+ * widgets and actions have already been created
+ */
+void MainWindow::createObjectInteractions() {
+	// File view toolbar
+	mFileViewStack->listMode()->plug(mFileViewToolBar);
+	mFileViewStack->sideThumbnailMode()->plug(mFileViewToolBar);
+	mFileViewStack->bottomThumbnailMode()->plug(mFileViewToolBar);
+	actionCollection()->action("thumbnails_slider")->plug(mFileViewToolBar);
+	
+	// Pixmap view caption formatter
+	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );
+	mPixmapView->setOSDFormatter(mCaptionFormatter.get());
+	
+	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
 	actions.append(mFileViewStack->selectPrevious());
 	actions.append(mFileViewStack->selectNext());
 	actions.append(mToggleFullScreen);
 	mPixmapView->setFullScreenActions(actions);
-
-	// Go
-	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
-	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
 
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );
@@ -964,21 +999,6 @@ void MainWindow::createActions() {
 
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
-
-	// Window
-	mResetDockWidgets = new KAction(i18n("Reset"), 0, this, SLOT(resetDockWidgets()), actionCollection(), "reset_dock_widgets");
-
-	// Settings
-	mShowConfigDialog=
-		KStdAction::preferences(this, SLOT(showConfigDialog()), actionCollection() );
-	mShowKeyDialog=
-		KStdAction::keyBindings(this, SLOT(showKeyDialog()), actionCollection() );
-	(void)new KAction(i18n("Configure External Tools..."), "configure", 0,
-		this, SLOT(showExternalToolDialog()), actionCollection(), "configure_tools");
-	(void)KStdAction::configureToolbars(
-		this, SLOT(showToolBarDialog()), actionCollection() );
-
-	actionCollection()->readShortcutSettings();
 }
 
 
