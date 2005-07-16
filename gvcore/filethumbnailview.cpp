@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "thumbnailloadjob.h"
 #include "busylevelmanager.h"
 #include "thumbnailsize.h"
+#include "thumbnaildetailsdialog.h"
 
 #define ENABLE_LOG
 #ifdef ENABLE_LOG
@@ -736,6 +737,12 @@ void FileThumbnailView::startDrag() {
 // Configuration
 //
 //--------------------------------------------------------------------------
+void FileThumbnailView::showThumbnailDetailsDialog() {
+	ThumbnailDetailsDialog dlg(this);
+	dlg.exec();
+};
+
+
 void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 

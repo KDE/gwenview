@@ -221,6 +221,11 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SLOT(slotViewDoubleClicked()) );
 	connect(mFileThumbnailView, SIGNAL(selectionChanged()),
 		this, SIGNAL(selectionChanged()) );
+	
+	// Thumbnail details dialog
+	KAction* action=new KAction(i18n("Edit thumbnail details"), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
+	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)), action, SLOT(setEnabled(bool)) );
+	
 }
 
 

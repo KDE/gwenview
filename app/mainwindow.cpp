@@ -967,6 +967,7 @@ void MainWindow::createObjectInteractions() {
 	mFileViewStack->sideThumbnailMode()->plug(mFileViewToolBar);
 	mFileViewStack->bottomThumbnailMode()->plug(mFileViewToolBar);
 	actionCollection()->action("thumbnails_slider")->plug(mFileViewToolBar);
+	actionCollection()->action("thumbnail_details_dialog")->plug(mFileViewToolBar);
 	
 	// Pixmap view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );

@@ -103,6 +103,8 @@ public slots:
 	void startThumbnailUpdate();
 	void stopThumbnailUpdate();
 
+	void showThumbnailDetailsDialog();
+
 signals:
 	void dropped(QDropEvent*, KFileItem* target);
 
