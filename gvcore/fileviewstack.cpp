@@ -121,6 +121,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	
 	// Size slider
 	mSizeSlider=new QSlider(Horizontal, this);
+	mSizeSlider->setMaximumWidth(150);
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
