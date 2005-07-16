@@ -81,6 +81,7 @@ public:
 	}
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
+	KAction* mThumbnailDetailsDialogAction;
 	TipTracker* mSliderTracker;
 };
 
@@ -224,8 +225,9 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SIGNAL(selectionChanged()) );
 	
 	// Thumbnail details dialog
-	KAction* action=new KAction(i18n("Edit thumbnail details"), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
-	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)), action, SLOT(setEnabled(bool)) );
+	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit thumbnail details"), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
+	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)),
+		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
 	
 }
 
@@ -1051,6 +1053,7 @@ void FileViewStack::readConfig(KConfig* config,const QString& group) {
 	} else {
 		mListMode->setChecked(true);
 	}
+	d->mThumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 
 	QColor defaultColor=colorGroup().highlight().light(150);
 	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR, &defaultColor));
