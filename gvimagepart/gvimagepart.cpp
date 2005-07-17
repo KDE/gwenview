@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <gvcore/cache.h>
 #include <gvcore/document.h>
 #include <gvcore/printdialog.h>
-#include <gvcore/scrollpixmapview.h>
+#include <gvcore/imageview.h>
 #include <gvcore/imageloader.h>
 
 #include "config.h"
@@ -47,10 +47,10 @@ const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
 const char CONFIG_CACHE_GROUP[]="cache";
 
 
-class GVImagePartView : public ScrollPixmapView {
+class GVImagePartView : public ImageView {
 public:
 	GVImagePartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVImagePartBrowserExtension* browserExtension)
-	: ScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	: ImageView(parent, document, actionCollection), mBrowserExtension(browserExtension)
 	{}
 
 protected:
@@ -81,8 +81,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	// Create the widgets
 	mDocument = new Document(this);
 	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( loaded(const KURL&)));
-	mPixmapView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
-	setWidget(mPixmapView);
+	mImageView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
+	setWidget(mImageView);
 
 	mDirLister = new KDirLister;
 	mDirLister->setAutoErrorHandlingEnabled( false, 0 );
@@ -121,9 +121,9 @@ void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
-		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
+		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
 	} else {
-		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
+		mImageView->writeConfig(config, CONFIG_VIEW_GROUP);
 	}
 	delete config;
 	KParts::ReadOnlyPart::partActivateEvent( event );
@@ -190,9 +190,9 @@ void GVImagePart::print() {
 	KPrinter printer;
 
 	printer.setDocName( m_url.filename() );
-	KPrinter::addDialogPage( new PrintDialogPage( mDocument, mPixmapView, "GV page"));
+	KPrinter::addDialogPage( new PrintDialogPage( mDocument, mImageView, "GV page"));
 
-	if (printer.setup(mPixmapView, QString::null, true)) {
+	if (printer.setup(mImageView, QString::null, true)) {
 		mDocument->print(&printer);
 	}
 }

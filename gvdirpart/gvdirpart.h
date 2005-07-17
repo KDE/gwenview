@@ -30,7 +30,7 @@ class KToggleAction;
 
 namespace Gwenview {
 
-class ScrollPixmapView;
+class ImageView;
 class FileViewStack;
 class Document;
 class SlideShow;
@@ -135,7 +135,7 @@ protected:
 	/**
 	 * Scroll widget
 	 */
-	ScrollPixmapView* mPixmapView;
+	ImageView* mImageView;
 
 	/**
 	 * Holds the image

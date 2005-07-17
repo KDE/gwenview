@@ -28,7 +28,7 @@ libgwenviewcore_la_SOURCES = \
 	printdialog.cpp \
 	printdialogpagebase.ui \
 	thumbnailloadjob.cpp \
-	scrollpixmapview.cpp \
+	imageview.cpp \
 	batchmanipulator.cpp \
 	document.cpp \
 	externaltoolmanager.cpp \
@@ -62,7 +62,7 @@ libgwenviewcore_la_SOURCES = \
 	busylevelmanager.cpp \
 	cache.cpp \
 	threadgate.cpp \
-	scrollpixmapviewtools.cpp \
+	imageviewtools.cpp \
 	fullscreenbar.cpp \
 	imageloader.cpp \
 	cursortracker.cpp \

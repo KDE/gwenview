@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include "scrollpixmapview.moc"
+#include "imageview.moc"
 
 #include <assert.h>
 #include <math.h>
@@ -55,7 +55,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fullscreenbar.h"
 #include "imageutils/imageutils.h"
 #include "busylevelmanager.h"
-#include "scrollpixmapviewtools.h"
+#include "imageviewtools.h"
 
 #if !KDE_IS_VERSION( 3, 3, 0 )
 // from kglobal.h
@@ -164,7 +164,7 @@ const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
 
-struct ScrollPixmapView::Private {
+struct ImageView::Private {
 	Document* mDocument;
 	QTimer* mAutoHideTimer;
 	
@@ -277,9 +277,9 @@ struct ScrollPixmapView::Private {
 };
 
 
-class ScrollPixmapView::EventFilter : public QObject {
+class ImageView::EventFilter : public QObject {
 public:
-	EventFilter(ScrollPixmapView* parent)
+	EventFilter(ImageView* parent)
 	: QObject(parent) {}
 		
 	bool eventFilter(QObject*, QEvent* event) {
@@ -287,7 +287,7 @@ public:
 		case QEvent::KeyPress:
 		case QEvent::KeyRelease:
 		case QEvent::AccelOverride:
-			return static_cast< ScrollPixmapView* >( parent())
+			return static_cast< ImageView* >( parent())
 						->viewportKeyEvent(static_cast<QKeyEvent*>(event));
 		default:
 			break;
@@ -298,7 +298,7 @@ public:
 
 
 
-ScrollPixmapView::ScrollPixmapView(QWidget* parent,Document* document, KActionCollection* actionCollection)
+ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* actionCollection)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 {
 	d=new Private;
@@ -396,14 +396,14 @@ ScrollPixmapView::ScrollPixmapView(QWidget* parent,Document* document, KActionCo
 }
 
 
-ScrollPixmapView::~ScrollPixmapView() {
+ImageView::~ImageView() {
 	delete d->mTools[SCROLL];
 	delete d->mTools[ZOOM];
 	delete d;
 }
 
 
-void ScrollPixmapView::slotLoaded() {
+void ImageView::slotLoaded() {
 	if (d->mDocument->isNull()) {
 		resizeContents(0,0);
 		viewport()->repaint(false);
@@ -415,7 +415,7 @@ void ScrollPixmapView::slotLoaded() {
 }
 
 
-void ScrollPixmapView::slotModified() {
+void ImageView::slotModified() {
 	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
 	} else {
@@ -427,7 +427,7 @@ void ScrollPixmapView::slotModified() {
 }
 
 
-void ScrollPixmapView::loadingStarted() {
+void ImageView::loadingStarted() {
 	cancelPending();
 	d->mSmoothingSuspended = true;
 	d->mValidImageArea = QRegion();
@@ -444,102 +444,102 @@ void ScrollPixmapView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::setOSDFormatter(CaptionFormatterBase* formatter) {
+void ImageView::setOSDFormatter(CaptionFormatterBase* formatter) {
 	d->mOSDFormatter=formatter;
 }
 
 
-KToggleAction* ScrollPixmapView::autoZoom() const {
+KToggleAction* ImageView::autoZoom() const {
 	return d->mAutoZoom;
 }
 
 
-KAction* ScrollPixmapView::zoomIn() const {
+KAction* ImageView::zoomIn() const {
 	return d->mZoomIn;
 }
 
 
-KAction* ScrollPixmapView::zoomOut() const {
+KAction* ImageView::zoomOut() const {
 	return d->mZoomOut;
 }
 
 
-KAction* ScrollPixmapView::resetZoom() const {
+KAction* ImageView::resetZoom() const {
 	return d->mResetZoom;
 }
 
 
-KToggleAction* ScrollPixmapView::lockZoom() const {
+KToggleAction* ImageView::lockZoom() const {
 	return d->mLockZoom;
 }
 
 
-double ScrollPixmapView::zoom() const {
+double ImageView::zoom() const {
 	return d->mZoom;
 }
 
 
-bool ScrollPixmapView::fullScreen() const {
+bool ImageView::fullScreen() const {
 	return d->mFullScreen;
 }
 
 
-QColor ScrollPixmapView::normalBackgroundColor() const {
+QColor ImageView::normalBackgroundColor() const {
 	return d->mBackgroundColor;
 }
 
 
-ScrollPixmapView::OSDMode ScrollPixmapView::osdMode() const {
+ImageView::OSDMode ImageView::osdMode() const {
 	return d->mOSDMode;
 }
 
 
-QString ScrollPixmapView::freeOutputFormat() const {
+QString ImageView::freeOutputFormat() const {
 	return d->mFreeOutputFormat;
 }
 
 
-void ScrollPixmapView::setFreeOutputFormat(const QString& format) {
+void ImageView::setFreeOutputFormat(const QString& format) {
 	d->mFreeOutputFormat=format;
 }
 
 
-ImageUtils::SmoothAlgorithm ScrollPixmapView::smoothAlgorithm() const {
+ImageUtils::SmoothAlgorithm ImageView::smoothAlgorithm() const {
 	return d->mSmoothAlgorithm;
 }
 
 
-bool ScrollPixmapView::delayedSmoothing() const {
+bool ImageView::delayedSmoothing() const {
 	return d->mDelayedSmoothing;
 }
 
 
-bool ScrollPixmapView::doDelayedSmoothing() const {
+bool ImageView::doDelayedSmoothing() const {
 	return d->mDelayedSmoothing && d->mSmoothAlgorithm;
 }
 
 
-bool ScrollPixmapView::enlargeSmallImages() const {
+bool ImageView::enlargeSmallImages() const {
 	return d->mEnlargeSmallImages;
 }
 
 
-bool ScrollPixmapView::showScrollBars() const {
+bool ImageView::showScrollBars() const {
 	return d->mShowScrollBars;
 }
 
 
-bool ScrollPixmapView::mouseWheelScroll() const {
+bool ImageView::mouseWheelScroll() const {
 	return d->mMouseWheelScroll;
 }
 
 
-QPoint ScrollPixmapView::offset() const {
+QPoint ImageView::offset() const {
 	return QPoint(d->mXOffset, d->mYOffset);
 }
 
 
-void ScrollPixmapView::setSmoothAlgorithm(ImageUtils::SmoothAlgorithm value) {
+void ImageView::setSmoothAlgorithm(ImageUtils::SmoothAlgorithm value) {
 	if( d->mSmoothAlgorithm == value ) return;
 	d->mSmoothAlgorithm = value;
 	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
@@ -553,7 +553,7 @@ void ScrollPixmapView::setSmoothAlgorithm(ImageUtils::SmoothAlgorithm value) {
 }
 
 
-void ScrollPixmapView::setDelayedSmoothing(bool value) {
+void ImageView::setDelayedSmoothing(bool value) {
 	if (d->mDelayedSmoothing==value) return;
 	d->mDelayedSmoothing=value;
 	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
@@ -567,7 +567,7 @@ void ScrollPixmapView::setDelayedSmoothing(bool value) {
 }
 
 
-void ScrollPixmapView::setEnlargeSmallImages(bool value) {
+void ImageView::setEnlargeSmallImages(bool value) {
 	d->mEnlargeSmallImages=value;
 	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
@@ -575,23 +575,23 @@ void ScrollPixmapView::setEnlargeSmallImages(bool value) {
 }
 
 
-void ScrollPixmapView::setOSDMode(ScrollPixmapView::OSDMode value) {
+void ImageView::setOSDMode(ImageView::OSDMode value) {
 	d->mOSDMode=value;
 }
 
 
-void ScrollPixmapView::setShowScrollBars(bool value) {
+void ImageView::setShowScrollBars(bool value) {
 	d->mShowScrollBars=value;
 	updateScrollBarMode();
 }
 
 
-void ScrollPixmapView::setMouseWheelScroll(bool value) {
+void ImageView::setMouseWheelScroll(bool value) {
 	d->mMouseWheelScroll=value;
 }
 
 
-void ScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
+void ImageView::setZoom(double zoom, int centerX, int centerY) {
 	int viewWidth=visibleWidth();
 	int viewHeight=visibleHeight();
 	double oldZoom=d->mZoom;
@@ -621,12 +621,12 @@ void ScrollPixmapView::setZoom(double zoom, int centerX, int centerY) {
 }
 
 
-void ScrollPixmapView::setFullScreenActions(KActionPtrList actions) {
+void ImageView::setFullScreenActions(KActionPtrList actions) {
 	d->mFullScreenActions=actions;
 }
 
 
-void ScrollPixmapView::setFullScreen(bool fullScreen) {
+void ImageView::setFullScreen(bool fullScreen) {
 	d->mFullScreen=fullScreen;
 	viewport()->setMouseTracking(d->mFullScreen);
 
@@ -656,7 +656,7 @@ void ScrollPixmapView::setFullScreen(bool fullScreen) {
 }
 
 
-void ScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
+void ImageView::setNormalBackgroundColor(const QColor& color) {
 	d->mBackgroundColor=color;
 	viewport()->setBackgroundColor(d->mBackgroundColor);
 }
@@ -667,7 +667,7 @@ void ScrollPixmapView::setNormalBackgroundColor(const QColor& color) {
 // Overloaded methods
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::resizeEvent(QResizeEvent* event) {
+void ImageView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
 	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
 		setZoom(computeAutoZoom());
@@ -690,7 +690,7 @@ inline void composite(uint* rgba,uint value) {
 	}
 }
 
-void ScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
+void ImageView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
 	if( !d->mValidImageArea.isEmpty()) {
 		addPendingPaint( false, QRect( clipx, clipy, clipw, cliph ));
 	} else {
@@ -703,7 +703,7 @@ void ScrollPixmapView::drawContents(QPainter* painter,int clipx,int clipy,int cl
 // There's a queue of areas to paint (each with bool saying whether it's smooth pass).
 // Also, there's a bitfield of pending operations, operations are handled only after
 // there's nothing more to paint (so that smooth pass is started).
-void ScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
+void ImageView::addPendingPaint( bool smooth, QRect rect ) {
 	if( d->mSmoothingSuspended && smooth ) return;
 
 	// try to avoid scheduling already scheduled areas
@@ -718,7 +718,7 @@ void ScrollPixmapView::addPendingPaint( bool smooth, QRect rect ) {
 	addPendingPaintInternal( smooth, rect );
 }
 
-void ScrollPixmapView::addPendingPaintInternal( bool smooth, QRect rect ) {
+void ImageView::addPendingPaintInternal( bool smooth, QRect rect ) {
 	const long long MAX_DIM = 1000000; // if monitors get larger than this, we're in trouble :)
 	// QMap will ensure ordering (non-smooth first, top-to-bottom, left-to-right)
 	long long key = ( smooth ? MAX_DIM * MAX_DIM : 0 ) + rect.y() * MAX_DIM + rect.x();
@@ -741,7 +741,7 @@ void ScrollPixmapView::addPendingPaintInternal( bool smooth, QRect rect ) {
 	scheduleOperation( CHECK_OPERATIONS );
 }
 
-void ScrollPixmapView::checkPendingOperations() {
+void ImageView::checkPendingOperations() {
 	checkPendingOperationsInternal();
 	if( d->mPendingPaints.isEmpty() && d->mPendingOperations == 0 ) {
 		d->mPendingPaintTimer.stop();
@@ -749,7 +749,7 @@ void ScrollPixmapView::checkPendingOperations() {
 	updateBusyLevels();
 }
 
-void ScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
+void ImageView::limitPaintSize( PendingPaint& paint ) {
 	// The only thing that makes time spent in performPaint() vary
 	// is whether there will be scaling and whether there will be smoothing.
 	// So there are three max sizes for each mode.
@@ -774,7 +774,7 @@ void ScrollPixmapView::limitPaintSize( PendingPaint& paint ) {
 }
 
 
-void ScrollPixmapView::checkPendingOperationsInternal() {
+void ImageView::checkPendingOperationsInternal() {
 	if( !d->mPendingPaintTimer.isActive()) // suspended
 		return;
 	while( !d->mPendingPaints.isEmpty()) {
@@ -804,14 +804,14 @@ void ScrollPixmapView::checkPendingOperationsInternal() {
 	}
 }
 
-void ScrollPixmapView::scheduleOperation( Operation operation )
+void ImageView::scheduleOperation( Operation operation )
 {
 	d->mPendingOperations |= operation;
 	slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 	updateBusyLevels();
 }
 
-void ScrollPixmapView::updateBusyLevels() {
+void ImageView::updateBusyLevels() {
 	if( !d->mPendingPaintTimer.isActive()) {
 		BusyLevelManager::instance()->setBusyLevel( this, BUSY_NONE );
 	} else if( !d->mPendingPaints.isEmpty() && !(*d->mPendingPaints.begin()).smooth ) {
@@ -824,7 +824,7 @@ void ScrollPixmapView::updateBusyLevels() {
 	}
 }
 
-void ScrollPixmapView::slotBusyLevelChanged( BusyLevel level ) {
+void ImageView::slotBusyLevelChanged( BusyLevel level ) {
 	bool resume = false;
 	if( level <= BUSY_PAINTING
 		&& !d->mPendingPaints.isEmpty() && !(*d->mPendingPaints.begin()).smooth ) {
@@ -846,13 +846,13 @@ void ScrollPixmapView::slotBusyLevelChanged( BusyLevel level ) {
 // When whole picture needs to be repainted: fullRepaint()
 // When a part of the picture needs to be updated: viewport()->repaint(area,false)
 // All other paints will be changed to progressive painting.
-void ScrollPixmapView::fullRepaint() {
+void ImageView::fullRepaint() {
 	if( !viewport()->isUpdatesEnabled()) return;
 	cancelPending();
 	viewport()->repaint(false);
 }
 
-void ScrollPixmapView::cancelPending() {
+void ImageView::cancelPending() {
 	d->mPendingPaints.clear();
 	d->mPendingNormalRegion = QRegion();
 	d->mPendingSmoothRegion = QRegion();
@@ -864,7 +864,7 @@ void ScrollPixmapView::cancelPending() {
 //#define DEBUG_RECTS
 
 // do the actual painting
-void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth ) {
+void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth ) {
 	#ifdef DEBUG_RECTS
 	static QColor colors[4]={QColor(255,0,0),QColor(0,255,0),QColor(0,0,255),QColor(255,255,0) };
 	static int numColor=0;
@@ -988,7 +988,7 @@ void ScrollPixmapView::performPaint( QPainter* painter, int clipx, int clipy, in
 }
 
 
-void ScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
+void ImageView::viewportMousePressEvent(QMouseEvent* event) {
 	viewport()->setFocus();
 	switch (event->button()) {
 	case Qt::LeftButton:
@@ -1003,7 +1003,7 @@ void ScrollPixmapView::viewportMousePressEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
+void ImageView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state(), true);
 	d->mTools[d->mToolID]->mouseMoveEvent(event);
 	if (d->mFullScreen) {
@@ -1019,7 +1019,7 @@ void ScrollPixmapView::viewportMouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
+void ImageView::viewportMouseReleaseEvent(QMouseEvent* event) {
 	switch (event->button()) {
 	case Qt::LeftButton:
 		if (event->stateAfter() & Qt::RightButton) {
@@ -1053,7 +1053,7 @@ void ScrollPixmapView::viewportMouseReleaseEvent(QMouseEvent* event) {
 }
 
 
-bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
+bool ImageView::eventFilter(QObject* obj, QEvent* event) {
 	switch (event->type()) {
 	case QEvent::KeyPress:
 	case QEvent::KeyRelease:
@@ -1090,7 +1090,7 @@ bool ScrollPixmapView::eventFilter(QObject* obj, QEvent* event) {
 }
 
 
-bool ScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
+bool ImageView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter(), false);
 	if (d->mFullScreen) {
 		restartAutoHideTimer();
@@ -1099,11 +1099,11 @@ bool ScrollPixmapView::viewportKeyEvent(QKeyEvent* event) {
 }
 
 
-void ScrollPixmapView::contentsDragEnterEvent(QDragEnterEvent* event) {
+void ImageView::contentsDragEnterEvent(QDragEnterEvent* event) {
 	event->accept( QUriDrag::canDecode( event ));
 }
 
-void ScrollPixmapView::contentsDropEvent(QDropEvent* event) {
+void ImageView::contentsDropEvent(QDropEvent* event) {
 	KURL::List list;
 	if( KURLDrag::decode( event, list )) {
 		d->mDocument->setURL( list.first());
@@ -1114,7 +1114,7 @@ void ScrollPixmapView::contentsDropEvent(QDropEvent* event) {
  * If force is set, the cursor will be updated even if the tool is not
  * different from the current one.
  */
-void ScrollPixmapView::selectTool(ButtonState state, bool force) {
+void ImageView::selectTool(ButtonState state, bool force) {
 	ToolID oldToolID=d->mToolID;
 	if (state & ControlButton) {
 		d->mToolID=ZOOM;
@@ -1131,7 +1131,7 @@ void ScrollPixmapView::selectTool(ButtonState state, bool force) {
 }
 
 
-void ScrollPixmapView::wheelEvent(QWheelEvent* event) {
+void ImageView::wheelEvent(QWheelEvent* event) {
 	d->mTools[d->mToolID]->wheelEvent(event);
 }
 
@@ -1141,7 +1141,7 @@ void ScrollPixmapView::wheelEvent(QWheelEvent* event) {
 // Slots
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::slotZoomIn() {
+void ImageView::slotZoomIn() {
 	if (d->mAutoZoom->isChecked()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
@@ -1150,7 +1150,7 @@ void ScrollPixmapView::slotZoomIn() {
 }
 
 
-void ScrollPixmapView::slotZoomOut() {
+void ImageView::slotZoomOut() {
 	if (d->mAutoZoom->isChecked()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
@@ -1159,7 +1159,7 @@ void ScrollPixmapView::slotZoomOut() {
 }
 
 
-void ScrollPixmapView::slotResetZoom() {
+void ImageView::slotResetZoom() {
 	if (d->mAutoZoom->isChecked()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
@@ -1168,7 +1168,7 @@ void ScrollPixmapView::slotResetZoom() {
 }
 
 
-void ScrollPixmapView::setAutoZoom(bool value) {
+void ImageView::setAutoZoom(bool value) {
 	updateScrollBarMode();
 	d->mManualZoom = false;
 	if (value) {
@@ -1181,32 +1181,32 @@ void ScrollPixmapView::setAutoZoom(bool value) {
 	}
 }
 
-void ScrollPixmapView::increaseGamma() {
+void ImageView::increaseGamma() {
 	d->mGamma = KCLAMP( d->mGamma + 10, 10, 500 );
 	fullRepaint();
 }
 
-void ScrollPixmapView::decreaseGamma() {
+void ImageView::decreaseGamma() {
 	d->mGamma = KCLAMP( d->mGamma - 10, 10, 500 );
 	fullRepaint();
 }
 
-void ScrollPixmapView::increaseBrightness() {
+void ImageView::increaseBrightness() {
 	d->mBrightness = KCLAMP( d->mBrightness + 5, -100, 100 );
 	fullRepaint();
 }
 
-void ScrollPixmapView::decreaseBrightness() {
+void ImageView::decreaseBrightness() {
 	d->mBrightness = KCLAMP( d->mBrightness - 5, -100, 100 );
 	fullRepaint();
 }
 
-void ScrollPixmapView::increaseContrast() {
+void ImageView::increaseContrast() {
 	d->mContrast = KCLAMP( d->mContrast + 10, 0, 500 );
 	fullRepaint();
 }
 
-void ScrollPixmapView::decreaseContrast() {
+void ImageView::decreaseContrast() {
 	d->mContrast = KCLAMP( d->mContrast - 10, 0, 500 );
 	fullRepaint();
 }
@@ -1217,14 +1217,14 @@ void ScrollPixmapView::decreaseContrast() {
 // Private
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::emitRequestHintDisplay() {
+void ImageView::emitRequestHintDisplay() {
 	if (d->mDocument->isNull()) return;
 
 	emit requestHintDisplay( d->mTools[d->mToolID]->hint() );
 }
 
 
-void ScrollPixmapView::slotImageSizeUpdated() {
+void ImageView::slotImageSizeUpdated() {
 	d->mXOffset=0;
 	d->mYOffset=0;
 
@@ -1260,18 +1260,18 @@ void ScrollPixmapView::slotImageSizeUpdated() {
 	fullRepaint();
 }
 
-void ScrollPixmapView::slotImageRectUpdated(const QRect& imageRect) {
+void ImageView::slotImageRectUpdated(const QRect& imageRect) {
 	d->mValidImageArea += imageRect;
 	viewport()->repaint( d->imageToWidget( imageRect ), false );
 }
 
 
-void ScrollPixmapView::restartAutoHideTimer() {
+void ImageView::restartAutoHideTimer() {
 	d->mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
 
 
-void ScrollPixmapView::openContextMenu(const QPoint& pos) {
+void ImageView::openContextMenu(const QPoint& pos) {
 	QPopupMenu menu(this);
 	bool noImage=d->mDocument->filename().isEmpty();
 	bool validImage=!d->mDocument->isNull();
@@ -1360,7 +1360,7 @@ void ScrollPixmapView::openContextMenu(const QPoint& pos) {
 }
 
 
-void ScrollPixmapView::updateScrollBarMode() {
+void ImageView::updateScrollBarMode() {
 	if ((d->mAutoZoom->isChecked() && !d->mManualZoom) || !d->mShowScrollBars) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
@@ -1371,14 +1371,14 @@ void ScrollPixmapView::updateScrollBarMode() {
 }
 
 
-void ScrollPixmapView::updateContentSize() {
+void ImageView::updateContentSize() {
 	resizeContents(
 		int(d->mDocument->width()*d->mZoom),
 		int(d->mDocument->height()*d->mZoom) );
 }
 
 
-double ScrollPixmapView::computeAutoZoom() const {
+double ImageView::computeAutoZoom() const {
 	if (d->mDocument->isNull()) {
 		return 1.0;
 	}
@@ -1391,7 +1391,7 @@ double ScrollPixmapView::computeAutoZoom() const {
 }
 
 
-double ScrollPixmapView::computeZoom(bool in) const {
+double ImageView::computeZoom(bool in) const {
 	const double F = 0.5; // change in 0.5 steps
 	double autozoom = computeAutoZoom();
 	if (in) {
@@ -1416,7 +1416,7 @@ double ScrollPixmapView::computeZoom(bool in) const {
 }
 
 
-void ScrollPixmapView::updateImageOffset() {
+void ImageView::updateImageOffset() {
 	int viewWidth=width();
 	int viewHeight=height();
 
@@ -1438,7 +1438,7 @@ void ScrollPixmapView::updateImageOffset() {
 }
 
 
-void ScrollPixmapView::slotAutoHide() {
+void ImageView::slotAutoHide() {
 	viewport()->setCursor(blankCursor);
 	if (d->mFullScreenBar) {
 		d->mFullScreenBar->slideOut();
@@ -1446,7 +1446,7 @@ void ScrollPixmapView::slotAutoHide() {
 }
 
 
-void ScrollPixmapView::updateFullScreenLabel() {
+void ImageView::updateFullScreenLabel() {
 	Q_ASSERT(d->mFullScreenBar);
 	if (!d->mFullScreenBar) {
 		kdWarning() << "mFullScreenBar does not exist\n";
@@ -1479,7 +1479,7 @@ void ScrollPixmapView::updateFullScreenLabel() {
 }
 
 
-void ScrollPixmapView::updateZoomActions() {
+void ImageView::updateZoomActions() {
 	// Disable most actions if there's no image
 	if (d->mDocument->isNull()) {
 		d->mZoomIn->setEnabled(false);
@@ -1506,31 +1506,31 @@ void ScrollPixmapView::updateZoomActions() {
 // File operations
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::showFileProperties() {
+void ImageView::showFileProperties() {
 	(void)new KPropertiesDialog(d->mDocument->url());
 }
 
 
-void ScrollPixmapView::renameFile() {
+void ImageView::renameFile() {
 	FileOperation::rename(d->mDocument->url(),this);
 }
 
 
-void ScrollPixmapView::copyFile() {
+void ImageView::copyFile() {
 	KURL::List list;
 	list << d->mDocument->url();
 	FileOperation::copyTo(list,this);
 }
 
 
-void ScrollPixmapView::moveFile() {
+void ImageView::moveFile() {
 	KURL::List list;
 	list << d->mDocument->url();
 	FileOperation::moveTo(list,this);
 }
 
 
-void ScrollPixmapView::deleteFile() {
+void ImageView::deleteFile() {
 	KURL::List list;
 	list << d->mDocument->url();
 	FileOperation::del(list,this);
@@ -1541,7 +1541,7 @@ void ScrollPixmapView::deleteFile() {
 // Config
 //
 //------------------------------------------------------------------------
-void ScrollPixmapView::readConfig(KConfig* config, const QString& group) {
+void ImageView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	d->mOSDMode=static_cast<OSDMode>(config->readNumEntry(CONFIG_OSD_MODE, static_cast<int>(PATH_AND_COMMENT)) );
 	d->mFreeOutputFormat=config->readEntry(CONFIG_FREE_OUTPUT_FORMAT,"%f - %r - %c");
@@ -1577,7 +1577,7 @@ void ScrollPixmapView::readConfig(KConfig* config, const QString& group) {
 }
 
 
-void ScrollPixmapView::writeConfig(KConfig* config, const QString& group) const {
+void ImageView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(d->mOSDMode));
 	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, d->mFreeOutputFormat);	

@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 // Our header
-#include "scrollpixmapviewtools.h"
+#include "imageviewtools.h"
 
 // KDE 
 #include <kaction.h>
@@ -39,49 +39,49 @@ static QCursor loadCursor(const QString& name) {
 
 //----------------------------------------------------------------------------
 //
-// ScrollPixmapView::ToolBase
+// ImageView::ToolBase
 //
 //----------------------------------------------------------------------------
-ScrollPixmapView::ToolBase::ToolBase(ScrollPixmapView* view)
+ImageView::ToolBase::ToolBase(ImageView* view)
 : mView(view) {}
 
 
-ScrollPixmapView::ToolBase::~ToolBase() {}
+ImageView::ToolBase::~ToolBase() {}
 
-void ScrollPixmapView::ToolBase::mouseMoveEvent(QMouseEvent*) {}
-void ScrollPixmapView::ToolBase::leftButtonPressEvent(QMouseEvent*) {}
-void ScrollPixmapView::ToolBase::leftButtonReleaseEvent(QMouseEvent*) {}
+void ImageView::ToolBase::mouseMoveEvent(QMouseEvent*) {}
+void ImageView::ToolBase::leftButtonPressEvent(QMouseEvent*) {}
+void ImageView::ToolBase::leftButtonReleaseEvent(QMouseEvent*) {}
 
-void ScrollPixmapView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
+void ImageView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
 	mView->autoZoom()->activate();
 }
 
-void ScrollPixmapView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
-void ScrollPixmapView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
+void ImageView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
+void ImageView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
 	mView->openContextMenu(event->globalPos());
 }
 
-void ScrollPixmapView::ToolBase::wheelEvent(QWheelEvent* event) {
+void ImageView::ToolBase::wheelEvent(QWheelEvent* event) {
 	event->accept();
 }
 
-void ScrollPixmapView::ToolBase::updateCursor() {
+void ImageView::ToolBase::updateCursor() {
 	mView->viewport()->setCursor(ArrowCursor);
 }
 
 
 //----------------------------------------------------------------------------
 //
-// ScrollPixmapView::ZoomTool
+// ImageView::ZoomTool
 //
 //----------------------------------------------------------------------------
-ScrollPixmapView::ZoomTool::ZoomTool(ScrollPixmapView* view)
-: ScrollPixmapView::ToolBase(view) {
+ImageView::ZoomTool::ZoomTool(ImageView* view)
+: ImageView::ToolBase(view) {
 	mZoomCursor=loadCursor("zoom");
 }
 
 
-void ScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
+void ImageView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 	KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
 	if (!zoomAction->isEnabled()) return;
 
@@ -100,49 +100,49 @@ void ScrollPixmapView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 }
 
 
-void ScrollPixmapView::ZoomTool::leftButtonReleaseEvent(QMouseEvent* event) {
+void ImageView::ZoomTool::leftButtonReleaseEvent(QMouseEvent* event) {
 	zoomTo(event->pos(), true);
 }
 
 
-void ScrollPixmapView::ZoomTool::wheelEvent(QWheelEvent* event) {
+void ImageView::ZoomTool::wheelEvent(QWheelEvent* event) {
 	zoomTo(event->pos(), event->delta()>0);
 	event->accept();
 }
 
 
-void ScrollPixmapView::ZoomTool::rightButtonPressEvent(QMouseEvent*) {
+void ImageView::ZoomTool::rightButtonPressEvent(QMouseEvent*) {
 }
 
 
-void ScrollPixmapView::ZoomTool::rightButtonReleaseEvent(QMouseEvent* event) {
+void ImageView::ZoomTool::rightButtonReleaseEvent(QMouseEvent* event) {
 	zoomTo(event->pos(), false);
 }
 
 
-void ScrollPixmapView::ZoomTool::updateCursor() {
+void ImageView::ZoomTool::updateCursor() {
 	mView->viewport()->setCursor(mZoomCursor);
 }
 
 
-QString ScrollPixmapView::ZoomTool::hint() const {
+QString ImageView::ZoomTool::hint() const {
     return i18n("Left click to zoom in, right click to zoom out. You can also use the mouse wheel.");
 }
 
 
 //----------------------------------------------------------------------------
 //
-// ScrollPixmapView::ScrollTool
+// ImageView::ScrollTool
 //
 //----------------------------------------------------------------------------
-ScrollPixmapView::ScrollTool::ScrollTool(ScrollPixmapView* view)
-: ScrollPixmapView::ToolBase(view)
+ImageView::ScrollTool::ScrollTool(ImageView* view)
+: ImageView::ToolBase(view)
 , mScrollStartX(0), mScrollStartY(0)
 , mDragStarted(false) {
 }
 
 
-void ScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
+void ImageView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
 	mScrollStartX=event->x();
 	mScrollStartY=event->y();
 	mView->viewport()->setCursor(SizeAllCursor);
@@ -150,7 +150,7 @@ void ScrollPixmapView::ScrollTool::leftButtonPressEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
+void ImageView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 	if (!mDragStarted) return;
 
 	int deltaX,deltaY;
@@ -164,7 +164,7 @@ void ScrollPixmapView::ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void ScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
+void ImageView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 	if (!mDragStarted) return;
 
 	mDragStarted=false;
@@ -172,7 +172,7 @@ void ScrollPixmapView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 }
 
 
-void ScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
+void ImageView::ScrollTool::wheelEvent(QWheelEvent* event) {
 	if (mView->mouseWheelScroll()) {
 		int deltaX, deltaY;
 
@@ -195,7 +195,7 @@ void ScrollPixmapView::ScrollTool::wheelEvent(QWheelEvent* event) {
 }
 
 
-void ScrollPixmapView::ScrollTool::updateCursor() {
+void ImageView::ScrollTool::updateCursor() {
 	if (mDragStarted) {
 		mView->viewport()->setCursor(SizeAllCursor);
 	} else {
@@ -204,7 +204,7 @@ void ScrollPixmapView::ScrollTool::updateCursor() {
 }
 
 
-QString ScrollPixmapView::ScrollTool::hint() const {
+QString ImageView::ScrollTool::hint() const {
     return i18n("Drag to move the image, middle-click to toggle auto-zoom. Hold the Control key to switch to the zoom tool.");
 }
 

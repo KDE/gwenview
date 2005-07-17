@@ -18,23 +18,23 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef SCROLLPIXMAPVIEWTOOLS_H
-#define SCROLLPIXMAPVIEWTOOLS_H   
+#ifndef IMAGEVIEWTOOLS_H
+#define IMAGEVIEWTOOLS_H   
 
 // Qt
 #include <qcursor.h>
 
 // Local
-#include "scrollpixmapview.h"
+#include "imageview.h"
 namespace Gwenview {
 
 
-class ScrollPixmapView::ToolBase {
+class ImageView::ToolBase {
 protected:
-	ScrollPixmapView* mView;
+	ImageView* mView;
 
 public:
-	ToolBase(ScrollPixmapView* view);
+	ToolBase(ImageView* view);
 	virtual ~ToolBase();
 	virtual void mouseMoveEvent(QMouseEvent*);
 	
@@ -57,13 +57,13 @@ public:
 };
 
 
-class ScrollPixmapView::ZoomTool : public ScrollPixmapView::ToolBase {
+class ImageView::ZoomTool : public ImageView::ToolBase {
 private:
     QCursor mZoomCursor;
 	void zoomTo(const QPoint& pos, bool in); 
 
 public:
-	ZoomTool(ScrollPixmapView* view);
+	ZoomTool(ImageView* view);
 	void leftButtonReleaseEvent(QMouseEvent* event);
 
 	void wheelEvent(QWheelEvent* event);
@@ -75,12 +75,12 @@ public:
 };
 
 
-class ScrollPixmapView::ScrollTool : public ScrollPixmapView::ToolBase {
+class ImageView::ScrollTool : public ImageView::ToolBase {
 	int mScrollStartX,mScrollStartY;
 	bool mDragStarted;
 
 public:
-	ScrollTool(ScrollPixmapView* view);
+	ScrollTool(ImageView* view);
 	void leftButtonPressEvent(QMouseEvent* event); 
 	void mouseMoveEvent(QMouseEvent* event);
 	void leftButtonReleaseEvent(QMouseEvent*);
@@ -92,5 +92,5 @@ public:
 
 
 } // namespace
-#endif /* SCROLLPIXMAPVIEWTOOLS_H */
+#endif /* IMAGEVIEWTOOLS_H */
 

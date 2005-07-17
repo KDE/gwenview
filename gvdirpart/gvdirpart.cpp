@@ -41,7 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <gvcore/fileviewbase.h>
 #include <gvcore/fileviewstack.h>
 #include <gvcore/printdialog.h>
-#include <gvcore/scrollpixmapview.h>
+#include <gvcore/imageview.h>
 #include <gvcore/slideshowdialog.h>
 #include <gvcore/slideshow.h>
 #include <gvcore/thumbnailloadjob.h>
@@ -59,10 +59,10 @@ const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
 
-class GVDirPartView : public ScrollPixmapView {
+class GVDirPartView : public ImageView {
 public:
 	GVDirPartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
-	: ScrollPixmapView(parent, document, actionCollection), mBrowserExtension(browserExtension)
+	: ImageView(parent, document, actionCollection), mBrowserExtension(browserExtension)
 	{}
 
 protected:
@@ -94,7 +94,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	// Create the widgets
 	mDocument = new Document(this);
 	mFilesView = new FileViewStack(mSplitter, actionCollection());
-	mPixmapView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
+	mImageView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
 	mSlideShow = new SlideShow(mDocument);
 
@@ -137,11 +137,11 @@ void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
 	if (event->activated()) {
 		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
 		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);
-		mPixmapView->readConfig(config, CONFIG_VIEW_GROUP);
+		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
 		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 	} else {
-		mPixmapView->writeConfig(config, CONFIG_VIEW_GROUP);
+		mImageView->writeConfig(config, CONFIG_VIEW_GROUP);
 	}
 	delete config;
 }
@@ -220,9 +220,9 @@ void GVDirPart::print() {
 	KPrinter printer;
 	if ( !mDocument->filename().isEmpty() ) {
 		printer.setDocName( m_url.filename() );
-		KPrinter::addDialogPage( new PrintDialogPage( mDocument, mPixmapView, "GV page"));
+		KPrinter::addDialogPage( new PrintDialogPage( mDocument, mImageView, "GV page"));
 
-		if (printer.setup(mPixmapView, QString::null, true)) {
+		if (printer.setup(mImageView, QString::null, true)) {
 			mDocument->print(&printer);
 		}
 	}

@@ -59,7 +59,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // This path is necessary when srcdir!=builddir because gvconfig.h is a
 // generated file
 #include <../gvcore/gvconfig.h> 
-#include "gvcore/scrollpixmapview.h"
+#include "gvcore/imageview.h"
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
@@ -134,7 +134,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
 
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	ScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
+	ImageView* imageView=d->mMainWindow->imageView();
 	Document* document=d->mMainWindow->document();
 
 	// Image List tab
@@ -156,16 +156,16 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	d->mImageViewPage->mSmoothGroup->setButton(pixmapView->smoothAlgorithm());
-	d->mImageViewPage->mDelayedSmoothing->setChecked(pixmapView->delayedSmoothing());
-	d->mImageViewPage->mBackgroundColor->setColor(pixmapView->normalBackgroundColor());
-	d->mImageViewPage->mAutoZoomEnlarge->setChecked(pixmapView->enlargeSmallImages());
-	d->mImageViewPage->mShowScrollBars->setChecked(pixmapView->showScrollBars());
-	d->mImageViewPage->mMouseWheelGroup->setButton(pixmapView->mouseWheelScroll()?1:0);
+	d->mImageViewPage->mSmoothGroup->setButton(imageView->smoothAlgorithm());
+	d->mImageViewPage->mDelayedSmoothing->setChecked(imageView->delayedSmoothing());
+	d->mImageViewPage->mBackgroundColor->setColor(imageView->normalBackgroundColor());
+	d->mImageViewPage->mAutoZoomEnlarge->setChecked(imageView->enlargeSmallImages());
+	d->mImageViewPage->mShowScrollBars->setChecked(imageView->showScrollBars());
+	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
 	
 	// Full Screen tab
-	d->mFullScreenPage->mOSDModeGroup->setButton(pixmapView->osdMode());
-	d->mFullScreenPage->mFreeOutputFormat->setText(pixmapView->freeOutputFormat());
+	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
+	d->mFullScreenPage->mFreeOutputFormat->setText(imageView->freeOutputFormat());
 	d->mFullScreenPage->mShowBusyPtrInFullScreen->setChecked(d->mMainWindow->showBusyPtrInFullScreen());
 
 	// File Operations tab
@@ -209,7 +209,7 @@ inline int buttonGroupSelectedId(const QButtonGroup* group) {
 
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	ScrollPixmapView* pixmapView=d->mMainWindow->pixmapView();
+	ImageView* imageView=d->mMainWindow->imageView();
 	Document* document=d->mMainWindow->document();
 
 	// Image List tab
@@ -235,12 +235,12 @@ void ConfigDialog::slotApply() {
 	int algo=buttonGroupSelectedId(d->mImageViewPage->mSmoothGroup);
 #endif
 	
-	pixmapView->setSmoothAlgorithm( static_cast<ImageUtils::SmoothAlgorithm>(algo));
-	pixmapView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
-	pixmapView->setDelayedSmoothing(d->mImageViewPage->mDelayedSmoothing->isChecked());
-	pixmapView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
-	pixmapView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
-	pixmapView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
+	imageView->setSmoothAlgorithm( static_cast<ImageUtils::SmoothAlgorithm>(algo));
+	imageView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
+	imageView->setDelayedSmoothing(d->mImageViewPage->mDelayedSmoothing->isChecked());
+	imageView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
+	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
+	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 	
 	// Full Screen tab
 #if QT_VERSION>=0x030200
@@ -248,8 +248,8 @@ void ConfigDialog::slotApply() {
 #else
 	int osdMode=buttonGroupSelectedId(d->mFullScreenPage->mOSDModeGroup);
 #endif
-	pixmapView->setOSDMode( static_cast<ScrollPixmapView::OSDMode>(osdMode) );
-	pixmapView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
+	imageView->setOSDMode( static_cast<ImageView::OSDMode>(osdMode) );
+	imageView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
 	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
 
 	// File Operations tab

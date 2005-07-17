@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#ifndef SCROLLPIXMAPVIEW_H
-#define SCROLLPIXMAPVIEW_H
+#ifndef IMAGEVIEW_H
+#define IMAGEVIEW_H
 
 #include "config.h"
 
@@ -62,7 +62,7 @@ namespace Gwenview {
 class CaptionFormatterBase;
 class Document;
 
-class LIBGWENVIEW_EXPORT ScrollPixmapView : public QScrollView {
+class LIBGWENVIEW_EXPORT ImageView : public QScrollView {
 Q_OBJECT
 
 public:
@@ -81,8 +81,8 @@ public:
 	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 	typedef QMap<ToolID,ToolBase*> Tools;
 
-	ScrollPixmapView(QWidget* parent,Document*,KActionCollection*);
-	~ScrollPixmapView();
+	ImageView(QWidget* parent,Document*,KActionCollection*);
+	~ImageView();
 	void readConfig(KConfig* config, const QString& group);
 	void writeConfig(KConfig* config, const QString& group) const;
 

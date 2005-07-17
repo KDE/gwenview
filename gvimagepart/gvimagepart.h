@@ -29,7 +29,7 @@ class KDirLister;
 class KFileItem;
 
 namespace Gwenview {
-class ScrollPixmapView;
+class ImageView;
 class Document;
 class ImageLoader;
 
@@ -119,7 +119,7 @@ private:
 	/**
 	 * The component's widget
 	 */
-	ScrollPixmapView* mPixmapView;
+	ImageView* mImageView;
 
 	/**
 	 * Holds the image

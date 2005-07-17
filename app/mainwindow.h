@@ -60,7 +60,7 @@ class Document;
 class FileViewStack;
 class History;
 class MetaEdit;
-class ScrollPixmapView;
+class ImageView;
 class SlideShow;
 
 
@@ -70,7 +70,7 @@ public:
 	MainWindow();
 
 	FileViewStack* fileViewStack() const { return mFileViewStack; }
-	ScrollPixmapView* pixmapView() const { return mPixmapView; }
+	ImageView* imageView() const { return mImageView; }
 	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
 	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	Document* document() const { return mDocument; }
@@ -103,7 +103,7 @@ private:
 
 	FileViewStack* mFileViewStack;
 	DirView* mDirView;
-	ScrollPixmapView* mPixmapView;
+	ImageView* mImageView;
 	MetaEdit *mMetaEdit;
 
 	Document* mDocument;

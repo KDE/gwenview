@@ -84,7 +84,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/externaltooldialog.h"
 #include "gvcore/fileviewbase.h"
 #include "gvcore/fileviewstack.h"
-#include "gvcore/scrollpixmapview.h"
+#include "gvcore/imageview.h"
 #include "gvcore/slideshow.h"
 #include "gvcore/slideshowdialog.h"
 #include "gvcore/printdialog.h"
@@ -224,7 +224,7 @@ bool MainWindow::queryClose() {
 
 	KConfig* config=KGlobal::config();
 	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
-	mPixmapView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
+	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
 	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
 	mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
@@ -373,7 +373,7 @@ void MainWindow::renameFile() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->renameFile();
 	} else {
-		mPixmapView->renameFile();
+		mImageView->renameFile();
 	}
 }
 
@@ -382,7 +382,7 @@ void MainWindow::copyFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->copyFiles();
 	} else {
-		mPixmapView->copyFile();
+		mImageView->copyFile();
 	}
 }
 
@@ -391,7 +391,7 @@ void MainWindow::moveFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->moveFiles();
 	} else {
-		mPixmapView->moveFile();
+		mImageView->moveFile();
 	}
 }
 
@@ -400,7 +400,7 @@ void MainWindow::deleteFiles() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->deleteFiles();
 	} else {
-		mPixmapView->deleteFile();
+		mImageView->deleteFile();
 	}
 }
 
@@ -409,7 +409,7 @@ void MainWindow::showFileProperties() {
 	if (mFileViewStack->isVisible()) {
 		mFileViewStack->showFileProperties();
 	} else {
-		mPixmapView->showFileProperties();
+		mImageView->showFileProperties();
 	}
 }
 
@@ -548,11 +548,11 @@ void MainWindow::toggleFullScreen() {
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
 		if (mToggleBrowse->isChecked()) {
-			mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
+			mImageView->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
-		mPixmapView->setFullScreen(true);
-		mPixmapView->setFocus();
+		mImageView->setFullScreen(true);
+		mImageView->setFocus();
 	} else {
 		// Stop the slideshow if it's running, harmless if it does not
 		mSlideShow->stop();
@@ -572,10 +572,10 @@ void MainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		statusBar()->show();
-		mPixmapView->setFullScreen(false);
+		mImageView->setFullScreen(false);
 		
 		if (mToggleBrowse->isChecked()) {
-			mPixmapDock->setWidget(mPixmapView);
+			mPixmapDock->setWidget(mImageView);
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
 		mFileViewStack->setFocus();
@@ -698,13 +698,13 @@ void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 void MainWindow::slotToggleCentralStack() {
 	LOG("");
 	if (mToggleBrowse->isChecked()) {
-		mPixmapDock->setWidget(mPixmapView);
+		mPixmapDock->setWidget(mImageView);
 		mCentralStack->raiseWidget(StackIDBrowse);
 		mFileViewStack->setSilentMode( false );
 		// force re-reading the directory to show the error
 		if( mFileViewStack->lastURLError()) mFileViewStack->retryURL();
 	} else {
-		mPixmapView->reparent(mViewModeWidget, QPoint(0,0));
+		mImageView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
 		mFileViewStack->setSilentMode( true );
 	}
@@ -760,7 +760,7 @@ void MainWindow::updateStatusInfo() {
 			.arg(filename)
 			.arg(mDocument->width())
 			.arg(mDocument->height())
-			.arg(int(mPixmapView->zoom()*100) );
+			.arg(int(mImageView->zoom()*100) );
 	}
 	mSBDetailLabel->setText(txt);
 	setCaption(filename);
@@ -828,9 +828,9 @@ void MainWindow::createWidgets() {
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
-	mPixmapView=new ScrollPixmapView(mPixmapDock,mDocument,actionCollection());
-	mPixmapDock->setWidget(mPixmapView);
-	connect(mPixmapView, SIGNAL(requestHintDisplay(const QString&)),
+	mImageView=new ImageView(mPixmapDock,mDocument,actionCollection());
+	mPixmapDock->setWidget(mImageView);
+	connect(mImageView, SIGNAL(requestHintDisplay(const QString&)),
 		this, SLOT(showHint(const QString&)) );
 
 	// Folder widget
@@ -894,7 +894,7 @@ void MainWindow::createWidgets() {
 	// Load config
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
-	mPixmapView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
+	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
@@ -971,14 +971,14 @@ void MainWindow::createObjectInteractions() {
 	
 	// Pixmap view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );
-	mPixmapView->setOSDFormatter(mCaptionFormatter.get());
+	mImageView->setOSDFormatter(mCaptionFormatter.get());
 	
 	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
 	actions.append(mFileViewStack->selectPrevious());
 	actions.append(mFileViewStack->selectNext());
 	actions.append(mToggleFullScreen);
-	mPixmapView->setFullScreenActions(actions);
+	mImageView->setFullScreenActions(actions);
 
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );
@@ -1041,11 +1041,11 @@ void MainWindow::createConnections() {
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
 
 	// Pixmap view connections
-	connect(mPixmapView,SIGNAL(selectPrevious()),
+	connect(mImageView,SIGNAL(selectPrevious()),
 		mFileViewStack,SLOT(slotSelectPrevious()) );
-	connect(mPixmapView,SIGNAL(selectNext()),
+	connect(mImageView,SIGNAL(selectNext()),
 		mFileViewStack,SLOT(slotSelectNext()) );
-	connect(mPixmapView,SIGNAL(zoomChanged(double)),
+	connect(mImageView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateStatusInfo()) );
 
 	// File view connections
