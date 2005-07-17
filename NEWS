@@ -1,35 +1,34 @@
-2005.xx.xx - v1.3.0
+2005.07.17 - v1.2.91
 - New features:
- - The file view now features three modes: details, thumbnail with text on the
-   right and thumbnail with text on bottom. When using the "info on the right
-   mode", the file size and date is displayed, in addition to the name and
-   resolution.
+ - The file view now features three modes: details, thumbnail with info on the
+   right and thumbnail with info on bottom. In the "info on the right"
+   mode, the file name, date, image size and file size are displayed.
+   In the "info on bottom" mode, the user can choose what information should be
+   displayed.
  - The thumbnail size can now be set with a slider.
  - Thumbnail can now be as big as 256x256.
- - In the "thumbnail with text on bottom" view, the file size is displayed
-   after the image size.
  - Non-blocking image preloading in advance.
  - With two-pass painting, turn off dithering in the first pass for a small
    performance improvement with non-truecolor displays.
- - Show hints in the status bar for mouse usage in the image view.
- - It's now possible to define which file information should be displayed in
-   the thumbnail view.
+ - Hints for mouse usage in the image view are shown in the status bar.
  - In addition to the file count, the status bar now shows the current image
    position.
- - It's now possible to show the image position and image count in the On
-   Screen Display.
+ - Two variables have been introduced for the On Screen Display: %n is the
+   current image position, %N is the image count.
  - An option has been added to disable automatic rotation of images.
 - Fixes:
- - Show progressive JPEG files really progressively.
- - Fix premature end when decoding MNG images.
+ - Progressive JPEG files are really shown progressively.
  - In the thumbnail view, make sure we report image sizes for JPEG with
    embedded thumbnails.
+ - The JPEG loader has been fixed so that it doesn't crash on some broken
+   JPEGs.
+ - Fix premature end when decoding MNG images.
  - Gwenview now dynamically links with installed version of libexif by default.
    The included libexif copy is only used if libexif is not installed. Using it
    is considered deprecated.
- - Tweaked the best smoothing algorithm to produce slightly less blurry results.
+ - The "best" smoothing algorithm has been tweaked to produce slightly less
+   blurry results.
  - External tools are now sorted by name in the menu and the dialog.
- - Don't crash on some broken JPEGs.
 
 2005.04.03 - v1.2.0
 - Fixes:
