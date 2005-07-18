@@ -35,6 +35,6 @@ public:
 	virtual QString operator()(const QString& format)=0;
 };	
 
-}; // namespace
+} // namespace
 
 #endif /* CAPTIONFORMATTERBASE_H */
