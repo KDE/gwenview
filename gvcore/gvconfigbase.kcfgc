@@ -1,5 +1,5 @@
-File=gvconfig.kcfg
-ClassName=GVConfig
+File=gvconfigbase.kcfg
+ClassName=GVConfigBase
 NameSpace=Gwenview
 Singleton=true
 Mutators=true

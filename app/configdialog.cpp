@@ -56,9 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileoperation.h"
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
-// This path is necessary when srcdir!=builddir because gvconfig.h is a
-// generated file
-#include <../gvcore/gvconfig.h> 
+#include "gvcore/gvconfig.h"
 #include "gvcore/imageview.h"
 #include "gvcore/thumbnailloadjob.h"
 
