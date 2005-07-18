@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <config.h>
 #ifdef GV_HAVE_KIPI
 
+#include "libgwenview_export.h"
+
 #include <libkipi/interface.h>
 namespace Gwenview {
 
@@ -31,7 +33,7 @@ class KIPIInterfacePrivate;
 
 class FileViewStack;
 
-class KIPIInterface :public KIPI::Interface {
+class LIBGWENVIEW_EXPORT KIPIInterface :public KIPI::Interface {
 	Q_OBJECT
 
 public:
