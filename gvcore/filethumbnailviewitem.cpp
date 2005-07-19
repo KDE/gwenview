@@ -227,8 +227,11 @@ void FileThumbnailViewItem::updateLines() {
 		if (details & FileThumbnailView::FILEDATE) {
 			mLines.append( new CroppedLine(this, mFileItem->timeString()) );
 		}
-		if (mImageSize.isValid() && (details & FileThumbnailView::IMAGESIZE) ) {
-			QString txt=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+		if (details & FileThumbnailView::IMAGESIZE) {
+			QString txt;
+			if (mImageSize.isValid()) {
+				txt=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
+			}
 			mLines.append( new CroppedLine(this, txt) );
 		}
 		if (!isDir && (details & FileThumbnailView::FILESIZE)) {
