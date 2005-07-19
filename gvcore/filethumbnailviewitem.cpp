@@ -219,8 +219,9 @@ void FileThumbnailViewItem::updateLines() {
 		// view->itemDetails()
 		FileThumbnailView *view=static_cast<FileThumbnailView*>(iconView());
 		int details=view->itemDetails();
+		bool isImage=!Archive::fileItemIsDirOrArchive(mFileItem);
 		
-		if (details & FileThumbnailView::FILENAME) {
+		if (!isImage || (details & FileThumbnailView::FILENAME)) {
 			mLines.append( new WrappedLine(this, mFileItem->name()) );
 		}
 		if (details & FileThumbnailView::FILEDATE) {

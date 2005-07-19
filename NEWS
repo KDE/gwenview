@@ -1,3 +1,7 @@
+2005.xx.xx - v1.2.92
+- Fixes:
+ - In the thumbnail view, make sure we always show folder and archive
+   filenames, even if the filename is not shown for images.
 2005.07.17 - v1.2.91
 - New features:
  - The file view now features three modes: details, thumbnail with info on the
