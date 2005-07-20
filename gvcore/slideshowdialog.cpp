@@ -19,14 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-// Qt includes
+// Qt
 #include <qspinbox.h>
 #include <qcheckbox.h>
 
-// Our includes
+// Local
+#include "slideshowdialog.moc"
+
 #include "slideshow.h"
 #include "slideshowdialogbase.h"
-#include "slideshowdialog.moc"
 namespace Gwenview {
 
 
@@ -42,12 +43,14 @@ SlideShowDialog::SlideShowDialog(QWidget* parent,SlideShow* slideShow)
 	
 	mContent->mDelay->setValue(mSlideShow->delay());
 	mContent->mLoop->setChecked(mSlideShow->loop());
+	mContent->mRandomOrder->setChecked(mSlideShow->random());
 }
 
 
 void SlideShowDialog::slotOk() {
 	mSlideShow->setDelay(mContent->mDelay->value());
 	mSlideShow->setLoop(mContent->mLoop->isChecked());
+	mSlideShow->setRandom(mContent->mRandomOrder->isChecked());
 	accept();
 }
 

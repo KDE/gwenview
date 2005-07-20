@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SlideShowDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>309</width>
-            <height>69</height>
+            <height>111</height>
         </rect>
     </property>
     <property name="caption">
@@ -72,14 +72,6 @@
                 <cstring></cstring>
             </property>
         </widget>
-        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>mLoop</cstring>
-            </property>
-            <property name="text">
-                <string>Loop</string>
-            </property>
-        </widget>
         <spacer row="0" column="2">
             <property name="name">
                 <cstring>Spacer7_2</cstring>
@@ -92,11 +84,27 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>80</width>
+                    <width>16</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>mLoop</cstring>
+            </property>
+            <property name="text">
+                <string>Loop</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>mRandomOrder</cstring>
+            </property>
+            <property name="text">
+                <string>Show images in random order</string>
+            </property>
+        </widget>
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

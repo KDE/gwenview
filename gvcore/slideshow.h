@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qobject.h>
+#include <qvaluevector.h>
 
 // KDE
 #include <kurl.h>
@@ -48,6 +49,9 @@ public:
 	
 	void setDelay(int);
 	int delay() const { return mDelay; }
+
+	void setRandom(bool);
+	bool random() const { return mRandom; }
 	
 	void start(const KURL::List& urls);
 	void stop();
@@ -69,10 +73,11 @@ private:
 	QTimer* mTimer;
 	int mDelay;
 	bool mLoop;
+	bool mRandom;
 	Document* mDocument;
 	bool mStarted;
-	KURL::List mURLs;
-	KURL::List::ConstIterator mStartIt;
+	QValueVector<KURL> mURLs;
+	QValueVector<KURL>::ConstIterator mStartIt;
 	ImageLoader* mPrefetch;
 	int mPrefetchAdvance;
 };

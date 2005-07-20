@@ -8,4 +8,10 @@
       <default>true</default>
     </entry> 
   </group> 
+  <group name="slide show">
+    <entry name="slideShowRandom" key="random" type="Bool">
+      <label>Display slide show images in random order</label>
+      <default>false</default>
+    </entry>
+  </group>
 </kcfg>

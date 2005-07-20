@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+// STL
+#include <algorithm>
+
 // Qt
 #include <qtimer.h>
 
@@ -28,8 +31,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "slideshow.moc"
+
 #include "document.h"
+#include "gvconfig.h"
 #include "imageloader.h"
+
 namespace Gwenview {
 
 
@@ -61,9 +67,17 @@ void SlideShow::setDelay(int delay) {
 	}
 }
 
+void SlideShow::setRandom(bool value) {
+	mRandom=value;
+}
 
 void SlideShow::start(const KURL::List& urls) {
-	mURLs=urls;
+	mURLs.resize(urls.size());
+	qCopy(urls.begin(), urls.end(), mURLs.begin());
+	if (mRandom) {
+		std::random_shuffle(mURLs.begin(), mURLs.end());
+	}
+
 	mStartIt=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (mStartIt==mURLs.end()) {
 		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
@@ -84,7 +98,7 @@ void SlideShow::stop() {
 
 
 void SlideShow::slotTimeout() {
-	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
 		stop();
@@ -117,7 +131,7 @@ void SlideShow::slotLoaded() {
 
 
 void SlideShow::prefetch() {
-	KURL::List::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		return;
 	}
@@ -157,6 +171,7 @@ void SlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mDelay=config->readNumEntry(CONFIG_DELAY,10);
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
+	mRandom=GVConfig::self()->slideShowRandom();
 }
 
 
@@ -164,6 +179,7 @@ void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
 	config->writeEntry(CONFIG_LOOP,mLoop);
+	GVConfig::self()->setSlideShowRandom(mRandom);
 }
 
 } // namespace
