@@ -112,6 +112,9 @@ public:
 	KAction* selectLast() const { return mSelectLast; }
 	KAction* selectPrevious() const { return mSelectPrevious; }
 	KAction* selectNext() const { return mSelectNext; }
+	KAction* selectPreviousDir() const { return mSelectPreviousDir; }
+	KAction* selectNextDir() const { return mSelectNextDir; }
+	KAction* selectFirstSubDir() const { return mSelectFirstSubDir; }
 	KRadioAction* listMode() const { return mListMode; }
 	KRadioAction* sideThumbnailMode() const { return mSideThumbnailMode; }
 	KRadioAction* bottomThumbnailMode() const { return mBottomThumbnailMode; }
@@ -144,6 +147,9 @@ public slots:
 	void slotSelectLast();
 	void slotSelectPrevious();
 	void slotSelectNext();
+	void slotSelectPreviousDir();
+	void slotSelectNextDir();
+	void slotSelectFirstSubDir();
 
 	void updateThumbnail(const KURL&);
 
@@ -223,6 +229,9 @@ private:
 	KAction* mSelectLast;
 	KAction* mSelectPrevious;
 	KAction* mSelectNext;
+	KAction* mSelectPreviousDir;
+	KAction* mSelectNextDir;
+	KAction* mSelectFirstSubDir;
 	
 	KRadioAction* mListMode;
 	KRadioAction* mSideThumbnailMode;
@@ -239,6 +248,11 @@ private:
 	// Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;
 	QString mFileNameToSelect;
+	enum ChangeDirStatusVals {
+		CHANGE_DIR_STATUS_NONE,
+		CHANGE_DIR_STATUS_PREV,
+		CHANGE_DIR_STATUS_NEXT
+	} mChangeDirStatus;
 
 	bool mBrowsing;
 	bool mSelecting;

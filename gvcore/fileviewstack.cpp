@@ -92,7 +92,8 @@ public:
 //
 //-----------------------------------------------------------------------
 FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent), mMode(FILE_LIST), mBrowsing(false), mSelecting(false)
+: QWidgetStack(parent), mMode(FILE_LIST), mChangeDirStatus(CHANGE_DIR_STATUS_NONE), mBrowsing(false),
+  mSelecting(false)
 {
 	d=new FileViewStackPrivate;
 
@@ -112,6 +113,17 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	mSelectNext=new KAction(i18n("&Next"),
 		QApplication::reverseLayout() ? "1leftarrow":"1rightarrow", Key_Space,
 		this,SLOT(slotSelectNext()), actionCollection, "next");
+
+	mSelectPreviousDir=new KAction(i18n("&Previous Folder"),
+		QApplication::reverseLayout() ? "player_fwd":"player_rew", ALT + Key_BackSpace,
+		this,SLOT(slotSelectPreviousDir()), actionCollection, "previousD");
+
+	mSelectNextDir=new KAction(i18n("&Next Folder"),
+		QApplication::reverseLayout() ? "player_rew":"player_fwd", ALT + Key_Space,
+		this,SLOT(slotSelectNextDir()), actionCollection, "nextD");
+
+	mSelectFirstSubDir=new KAction(i18n("&First Sub Folder"), "down", ALT + Key_Down,
+		this,SLOT(slotSelectFirstSubDir()), actionCollection, "firstSubD");
 
 	mListMode=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateViewMode()),actionCollection,"list_mode");
 	mListMode->setExclusiveGroup("thumbnails");
@@ -311,6 +323,36 @@ void FileViewStack::slotSelectPrevious() {
 
 void FileViewStack::slotSelectNext() {
 	browseTo(findNextImage());
+}
+
+void FileViewStack::slotSelectPreviousDir() {
+	mChangeDirStatus = CHANGE_DIR_STATUS_PREV;
+	mDirLister->clearError();
+	mDirLister->openURL(mDirURL.upURL());
+}
+
+void FileViewStack::slotSelectNextDir() {
+	mChangeDirStatus = CHANGE_DIR_STATUS_NEXT;
+	mDirLister->clearError();
+	mDirLister->openURL(mDirURL.upURL());
+}
+
+void FileViewStack::slotSelectFirstSubDir() {
+	KFileItem* item=currentFileView()->firstFileItem();
+	while (item && !Archive::fileItemIsDirOrArchive(item)) {
+		item=currentFileView()->nextItem(item);
+	}
+	if (!item) {
+		LOG("No item found");
+		return;
+	}
+	LOG("item->url(): " << item->url().prettyURL());
+	KURL tmp=item->url();
+	if (Archive::fileItemIsArchive(item)) {
+		tmp.setProtocol(Archive::protocolForMimeType(item->mimetype()));
+	}
+	tmp.adjustPath(1);
+	setDirURL(tmp);
 }
 
 
@@ -891,11 +933,42 @@ void FileViewStack::delayedDirListerCompleted() {
 		mFileThumbnailView->sort(mFileThumbnailView->sortDirection());
 	}
 
-	browseToFileNameToSelect();
-	emit completed();
+	if (mChangeDirStatus != CHANGE_DIR_STATUS_NONE) {
+		KFileItem *item;
+		QString fileName = mDirURL.filename();
+		for (item=currentFileView()->firstFileItem(); item; item=currentFileView()->nextItem(item) ) {
+		if (item->name() == fileName) {
+			if (mChangeDirStatus == CHANGE_DIR_STATUS_NEXT) {
+				do {
+					item=currentFileView()->nextItem(item);
+				} while (item && !Archive::fileItemIsDirOrArchive(item));
+			} else {
+				do {
+					item=currentFileView()->prevItem(item);
+				} while (item && !Archive::fileItemIsDirOrArchive(item));
+			}
+			break;
+		};
+		}
+		mChangeDirStatus = CHANGE_DIR_STATUS_NONE;
+		if (!item) {
+			mDirLister->openURL(mDirURL);
+		} else {
+			KURL tmp=item->url();
+			LOG("item->url(): " << item->url().prettyURL());
+			if (Archive::fileItemIsArchive(item)) {
+				tmp.setProtocol(Archive::protocolForMimeType(item->mimetype()));
+			}
+			tmp.adjustPath(1);
+			setDirURL(tmp);
+		}
+	} else {
+		browseToFileNameToSelect();
+		emit completed();
 
-	if (mMode!=FILE_LIST && mThumbnailsNeedUpdate) {
-		mFileThumbnailView->startThumbnailUpdate();
+		if (mMode!=FILE_LIST && mThumbnailsNeedUpdate) {
+			mFileThumbnailView->startThumbnailUpdate();
+		}
 	}
 }
 
