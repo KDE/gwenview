@@ -141,6 +141,7 @@ protected:
 	virtual void openContextMenu(const QPoint&);
 	virtual void contentsDragEnterEvent(QDragEnterEvent*);
 	virtual void contentsDropEvent(QDropEvent*);
+	virtual void keyPressEvent(QKeyEvent*);
 	
 private:
 	struct Private;

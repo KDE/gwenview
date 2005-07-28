@@ -1110,6 +1110,38 @@ void ImageView::contentsDropEvent(QDropEvent* event) {
 	}
 }
 
+void ImageView::keyPressEvent( QKeyEvent *event ) {
+	QScrollView::keyPressEvent( event );
+	int deltaX, deltaY;
+
+	if (event->state() != Qt::NoButton) {
+		return;
+	}
+	switch (event->key()) {
+	case Key_Up:
+		deltaX =  0;
+		deltaY = -1;
+		break;
+	case Key_Down:
+		deltaX =  0;
+		deltaY =  1;
+		break;
+	case Key_Left:
+		deltaX = -1;
+		deltaY =  0;
+		break;
+	case Key_Right:
+		deltaX =  1;
+		deltaY =  0;
+		break;
+	default:
+		return;
+	}
+	deltaX *= width() / 2;
+	deltaY *= height() / 2;
+	scrollBy (deltaX, deltaY);
+}
+
 /**
  * If force is set, the cursor will be updated even if the tool is not
  * different from the current one.

@@ -6,6 +6,8 @@
    - Alt+Backspace goes to the previous folder
    - Alt+Space goes to the next folder
    (Patch by Michael Rolf)
+ - It's now possible to scroll images with the keyboards
+   (Patch by Michael Rolf)
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.
