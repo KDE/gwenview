@@ -116,14 +116,14 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 	mSelectPreviousDir=new KAction(i18n("&Previous Folder"),
 		QApplication::reverseLayout() ? "player_fwd":"player_rew", ALT + Key_BackSpace,
-		this,SLOT(slotSelectPreviousDir()), actionCollection, "previousD");
+		this,SLOT(slotSelectPreviousDir()), actionCollection, "previous_folder");
 
 	mSelectNextDir=new KAction(i18n("&Next Folder"),
 		QApplication::reverseLayout() ? "player_rew":"player_fwd", ALT + Key_Space,
-		this,SLOT(slotSelectNextDir()), actionCollection, "nextD");
+		this,SLOT(slotSelectNextDir()), actionCollection, "next_folder");
 
 	mSelectFirstSubDir=new KAction(i18n("&First Sub Folder"), "down", ALT + Key_Down,
-		this,SLOT(slotSelectFirstSubDir()), actionCollection, "firstSubD");
+		this,SLOT(slotSelectFirstSubDir()), actionCollection, "first_sub_folder");
 
 	mListMode=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateViewMode()),actionCollection,"list_mode");
 	mListMode->setExclusiveGroup("thumbnails");

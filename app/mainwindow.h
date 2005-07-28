@@ -118,7 +118,6 @@ private:
 	KAction* mShowKeyDialog;
 	KToggleAction* mToggleFullScreen;
 	KAction* mReload;
-	KAction* mOpenHomeDir;
 	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;
 	KAction* mStartSlideShow;
@@ -164,7 +163,7 @@ private slots:
 	void goUp();
 	void goUpTo(int);
 
-	void openHomeDir();
+	void goHome();
 	void renameFile();
 	void copyFiles();
 	void moveFiles();

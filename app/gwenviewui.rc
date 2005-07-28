@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="19">
+<kpartgui name="Gwenview" version="20">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -46,11 +46,21 @@
     <Separator/>
     <Action name="show_dot_files"/>
   </Menu>
-  <Menu name="go_web">
+  <Menu name="go_web" noMerge="1">
+    <text>&amp;Go</text>
     <Action name="first"/>
     <Action name="previous"/>
     <Action name="next"/>
     <Action name="last"/>
+	<Separator/>
+	<Action name="go_back"/>
+	<Action name="go_forward"/>
+	<Action name="go_home"/>
+	<Separator/>
+	<Action name="go_up"/>
+	<Action name="first_sub_folder"/>
+	<Action name="previous_folder"/>
+	<Action name="next_folder"/>
   </Menu>
   <Action name="bookmarks"/>
   <Menu name="settings">

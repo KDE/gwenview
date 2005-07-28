@@ -362,7 +362,7 @@ void MainWindow::goUpTo(int id) {
 // File operations
 //
 //-----------------------------------------------------------------------
-void MainWindow::openHomeDir() {
+void MainWindow::goHome() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
 	mFileViewStack->setDirURL(url);
@@ -938,7 +938,7 @@ void MainWindow::createActions() {
 
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
-	mOpenHomeDir=KStdAction::home(this, SLOT(openHomeDir()), actionCollection() );
+	new KAction( i18n( "Home" ), "gohome", KStdAccel::shortcut(KStdAccel::Home), this, SLOT(goHome()), actionCollection(), "go_home");
 
 	// Window
 	mResetDockWidgets = new KAction(i18n("Reset"), 0, this, SLOT(resetDockWidgets()), actionCollection(), "reset_dock_widgets");
