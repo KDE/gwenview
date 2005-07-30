@@ -735,7 +735,7 @@ void FileThumbnailView::startDrag() {
 void FileThumbnailView::showThumbnailDetailsDialog() {
 	ThumbnailDetailsDialog dlg(this);
 	dlg.exec();
-};
+}
 
 
 void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
