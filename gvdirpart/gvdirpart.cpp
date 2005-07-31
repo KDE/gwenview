@@ -59,15 +59,36 @@ const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
 
-class GVDirPartView : public ImageView {
+class GVDirPartImageView : public ImageView {
 public:
-	GVDirPartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
+	GVDirPartImageView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
 	: ImageView(parent, document, actionCollection), mBrowserExtension(browserExtension)
 	{}
 
 protected:
 	void openContextMenu(const QPoint&) {
 		mBrowserExtension->contextMenu();
+	}
+
+private:
+	GVDirPartBrowserExtension* mBrowserExtension;
+};
+
+
+class GVDirPartFileView : public FileViewStack {
+public:
+	GVDirPartFileView(QWidget* parent, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
+	: FileViewStack(parent, actionCollection)
+	, mBrowserExtension(browserExtension) {}
+
+protected:
+	virtual void openContextMenu(const QPoint& pos) {
+		const KFileItemList* items=currentFileView()->selectedItems();
+		if (items->count()==0) {
+			emit mBrowserExtension->popupMenu(pos, dirURL(), 0);
+		} else {
+			emit mBrowserExtension->popupMenu(pos, *items);
+		}
 	}
 
 private:
@@ -93,8 +114,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	// Create the widgets
 	mDocument = new Document(this);
-	mFilesView = new FileViewStack(mSplitter, actionCollection());
-	mImageView = new GVDirPartView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
+	mFilesView = new GVDirPartFileView(mSplitter, actionCollection(), mBrowserExtension);
+	mImageView = new GVDirPartImageView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
 	mSlideShow = new SlideShow(mDocument);
 

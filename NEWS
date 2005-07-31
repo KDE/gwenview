@@ -11,6 +11,8 @@
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.
+ - When right clicking on files from the folder KPart, show Konqueror popup
+   menu instead of Gwenview.
 
 2005.07.17 - v1.2.91
 - New features:

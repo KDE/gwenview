@@ -175,6 +175,8 @@ signals:
 	void shownFileItemRefreshed(const KFileItem*);
 	void sortingChanged();
 
+protected slots:
+	virtual void openContextMenu(const QPoint& pos);
 
 private slots:
 	void delayedDirListerCompleted();
@@ -187,8 +189,8 @@ private slots:
 
 	void slotViewDoubleClicked();
 	
-	// Context menu
-	void openContextMenu(const QPoint& pos);
+	// These two methods forward the context menu requests from either view to
+	// openContextMenu(const QPoint&);
 	void openContextMenu(KListView*, QListViewItem*, const QPoint&);
 	void openContextMenu(QIconViewItem*,const QPoint&);
 
