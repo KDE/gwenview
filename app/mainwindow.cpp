@@ -815,16 +815,12 @@ void MainWindow::createWidgets() {
 	QFont font=mSBHintLabel->font();
 	font.setItalic(true);
 	mSBHintLabel->setFont(font);
-	mSBHintLabel->hide();
 	
 	statusBar()->addWidget(mSBDetailLabel, 0);
-	QWidget* dummy=new QWidget();
-	dummy->setFixedSize(12, 1);
-	statusBar()->addWidget(dummy);
 	statusBar()->addWidget(mSBHintLabel, 1);
 	mHintTimer=new QTimer(this);
 	connect(mHintTimer, SIGNAL(timeout()),
-		mSBHintLabel, SLOT(hide()) );
+		mSBHintLabel, SLOT(clear()) );
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
