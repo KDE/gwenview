@@ -82,12 +82,12 @@ public:
 	, mBrowserExtension(browserExtension) {}
 
 protected:
-	virtual void openContextMenu(const QPoint& pos) {
-		const KFileItemList* items=currentFileView()->selectedItems();
-		if (items->count()==0) {
-			emit mBrowserExtension->popupMenu(pos, dirURL(), 0);
-		} else {
+	virtual void openContextMenu(const QPoint& pos, bool onItem) {
+		if (onItem) {
+			const KFileItemList* items=currentFileView()->selectedItems();
 			emit mBrowserExtension->popupMenu(pos, *items);
+		} else {
+			emit mBrowserExtension->popupMenu(pos, dirURL(), 0);
 		}
 	}
 

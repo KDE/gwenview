@@ -13,6 +13,9 @@
    filenames, even if the filename is not shown for images.
  - When right clicking on files from the folder KPart, show Konqueror popup
    menu instead of Gwenview.
+ - The context menu which appears when right clicking on the background of a
+   file view now shows information relative to the current folder, rather than
+   the current image.
 
 2005.07.17 - v1.2.91
 - New features:

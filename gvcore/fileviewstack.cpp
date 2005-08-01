@@ -543,14 +543,24 @@ void FileViewStack::setSorting() {
 // Context menu
 //
 //-----------------------------------------------------------------------
-void FileViewStack::openContextMenu(const QPoint& pos) {
-	int selectionSize=currentFileView()->selectedItems()->count();
+void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
+	int selectionSize;
+	ExternalToolContext* externalToolContext;
+	
+	if (onItem) {
+		selectionSize=currentFileView()->selectedItems()->count();
+		externalToolContext=
+			ExternalToolManager::instance()->createContext(
+			this, currentFileView()->selectedItems());
+	} else {
+		selectionSize=0;
+		externalToolContext=
+			ExternalToolManager::instance()->createContext(
+			this, mDirURL);
+	}
 
 	QPopupMenu menu(this);
 
-	ExternalToolContext* externalToolContext=
-		ExternalToolManager::instance()->createContext(
-		this, currentFileView()->selectedItems());
 
 	menu.insertItem(
 		i18n("External Tools"), externalToolContext->popupMenu());
@@ -591,13 +601,13 @@ void FileViewStack::openContextMenu(const QPoint& pos) {
 }
 
 
-void FileViewStack::openContextMenu(KListView*,QListViewItem*,const QPoint& pos) {
-	openContextMenu(pos);
+void FileViewStack::openContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
+	openContextMenu(pos, item!=0);
 }
 
 
-void FileViewStack::openContextMenu(QIconViewItem*,const QPoint& pos) {
-	openContextMenu(pos);
+void FileViewStack::openContextMenu(QIconViewItem* item,const QPoint& pos) {
+	openContextMenu(pos, item!=0);
 }
 
 

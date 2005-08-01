@@ -176,7 +176,7 @@ signals:
 	void sortingChanged();
 
 protected slots:
-	virtual void openContextMenu(const QPoint& pos);
+	virtual void openContextMenu(const QPoint& pos, bool onItem);
 
 private slots:
 	void delayedDirListerCompleted();
