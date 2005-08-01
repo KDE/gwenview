@@ -8,6 +8,8 @@
    (Patch by Michael Rolf)
  - It's now possible to scroll images with the keyboards
    (Patch by Michael Rolf)
+ - The folder view now features two tabs: one to browse the whole folder
+   hierarchy, the other to quickly access bookmarks.
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.

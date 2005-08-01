@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qdir.h>
 #include <qdockarea.h>
 #include <qhbox.h>
+#include <qtabwidget.h>
 #include <qtooltip.h>
 
 // KDE
@@ -70,6 +71,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "bookmarkowner.h"
+#include "bookmarkviewcontroller.h"
 #include "configdialog.h"
 #include "dirview.h"
 #include "history.h"
@@ -831,8 +833,12 @@ void MainWindow::createWidgets() {
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mDirView=new DirView(mFolderDock);
-	mFolderDock->setWidget(mDirView);
+	QTabWidget* tabWidget=new QTabWidget(mFolderDock);
+	mDirView=new DirView(tabWidget);
+	tabWidget->addTab(mDirView, i18n("Folders"));
+	mBookmarkView=new QListView(tabWidget);
+	tabWidget->addTab(mBookmarkView, i18n("Bookmarks"));
+	mFolderDock->setWidget(tabWidget);
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -985,6 +991,10 @@ void MainWindow::createObjectInteractions() {
 	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
 	manager->setUpdate(true);
 	manager->setShowNSBookmarks(false);
+
+	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, manager);
+	connect(ctrl, SIGNAL(openURL(const KURL&)),
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
 
 	BookmarkOwner* bookmarkOwner=new BookmarkOwner(this);
 

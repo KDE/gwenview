@@ -8,6 +8,7 @@ AM_CPPFLAGS = -D_LARGEFILE64_SOURCE
 
 gwenview_la_SOURCES = \
 	bookmarkowner.cpp \
+	bookmarkviewcontroller.cpp \
 	configfileoperationspage.ui \
 	configfullscreenpage.ui \
 	configimagelistpage.ui \
