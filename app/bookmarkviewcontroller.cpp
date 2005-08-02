@@ -137,7 +137,7 @@ void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 void BookmarkViewController::slotContextMenu(QListViewItem* item) {
 	if (!item) return;
 	QPopupMenu menu(d->mListView);
-	menu.insertItem(i18n("Edit"), 
+	menu.insertItem(SmallIcon("edit"), i18n("Edit"), 
 		this, SLOT(editCurrentBookmark()));
 	menu.insertItem(SmallIcon("editdelete"), i18n("Delete Bookmark"),
 		this, SLOT(deleteCurrentBookmark()));
