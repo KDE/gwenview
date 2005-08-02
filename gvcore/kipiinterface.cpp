@@ -49,21 +49,19 @@ namespace Gwenview {
 
 class ImageCollection : public KIPI::ImageCollectionShared {
 public:
-	ImageCollection(const QString& name, const KURL::List& images)
-	: KIPI::ImageCollectionShared(), mName(name), mImages(images) {}
+	ImageCollection(KURL uploadURL, const QString& name, const KURL::List& images)
+	: KIPI::ImageCollectionShared()
+    , mUploadURL(uploadURL)
+    , mName(name)
+    , mImages(images) {}
 
 	QString name() { return mName; }
 	QString comment() { return QString::null; }
-
 	KURL::List images() { return mImages; }
-	// FIXME: Return current URL instead
-	KURL uploadPath() {
-		KURL url;
-		url.setPath(QDir::homeDirPath());
-		return url;
-	}
+	KURL uploadPath() { return mUploadURL; }
 
 private:
+    KURL mUploadURL;
 	QString mName;
 	KURL::List mImages;
 };
@@ -97,6 +95,7 @@ public:
 
 struct KIPIInterfacePrivate {
 	FileViewStack* mFileView;
+    KURL mCurrentURL;
 };
 
 
@@ -125,14 +124,14 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return KIPI::ImageCollection(new ImageCollection(i18n("Folder Content"), list));
+	return KIPI::ImageCollection(new ImageCollection(d->mCurrentURL, i18n("Folder Content"), list));
 }
 
 
 KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
-	return KIPI::ImageCollection(new ImageCollection(i18n("Selected Images"), list));
+	return KIPI::ImageCollection(new ImageCollection(d->mCurrentURL, i18n("Selected Images"), list));
 }
 
 
@@ -174,6 +173,7 @@ void KIPIInterface::slotSelectionChanged() {
 
 
 void KIPIInterface::slotDirectoryChanged() {
+    d->mCurrentURL=d->mFileView->dirURL();
 	emit currentAlbumChanged(d->mFileView->fileCount() > 0);
 }
 
