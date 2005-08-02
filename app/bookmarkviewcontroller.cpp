@@ -62,6 +62,7 @@ struct BookmarkItem : public QListViewItem {
 struct BookmarkViewController::Private {
 	QListView* mListView;
 	KBookmarkManager* mManager;
+	KURL mCurrentURL;
 
 	template <class ItemParent>
 	void addGroup(ItemParent* itemParent, const KBookmarkGroup& group) {
@@ -118,6 +119,11 @@ BookmarkViewController::~BookmarkViewController() {
 }
 
 
+void BookmarkViewController::setURL(const KURL& url) {
+	d->mCurrentURL=url;
+}
+
+
 void BookmarkViewController::fill() {
 	d->mListView->clear();
 	KBookmarkGroup root=d->mManager->root();
@@ -135,13 +141,28 @@ void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 
 
 void BookmarkViewController::slotContextMenu(QListViewItem* item) {
-	if (!item) return;
 	QPopupMenu menu(d->mListView);
-	menu.insertItem(SmallIcon("edit"), i18n("Edit"), 
-		this, SLOT(editCurrentBookmark()));
-	menu.insertItem(SmallIcon("editdelete"), i18n("Delete Bookmark"),
-		this, SLOT(deleteCurrentBookmark()));
+	menu.insertItem(SmallIcon("bookmarkadd"), i18n("Add Bookmark"),
+		this, SLOT(addBookmark()));
+	if (item) {
+		menu.insertSeparator();
+		menu.insertItem(SmallIcon("edit"), i18n("Edit"), 
+			this, SLOT(editCurrentBookmark()));
+		menu.insertItem(SmallIcon("editdelete"), i18n("Delete Bookmark"),
+			this, SLOT(deleteCurrentBookmark()));
+	}
 	menu.exec(QCursor::pos());
+}
+
+
+void BookmarkViewController::addBookmark() {
+	BranchPropertiesDialog dialog(d->mListView);
+	dialog.setContents("", d->mCurrentURL.prettyURL(), d->mCurrentURL.prettyURL());
+	if (dialog.exec()==QDialog::Rejected) return;
+
+	KBookmarkGroup group=d->mManager->root();
+	group.addBookmark(d->mManager, dialog.title(), dialog.url(), dialog.icon());
+	d->mManager->emitChanged(group);
 }
 
 

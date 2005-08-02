@@ -41,10 +41,14 @@ public:
 signals:
 	void openURL(const KURL&);
 
+public slots:
+	void setURL(const KURL&);
+
 private slots:
 	void slotOpenBookmark(QListViewItem*);
 	void fill();
 	void slotContextMenu(QListViewItem*);
+	void addBookmark();
 	void editCurrentBookmark();
 	void deleteCurrentBookmark();
 

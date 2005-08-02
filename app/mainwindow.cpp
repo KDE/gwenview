@@ -995,6 +995,8 @@ void MainWindow::createObjectInteractions() {
 	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, manager);
 	connect(ctrl, SIGNAL(openURL(const KURL&)),
 		mFileViewStack,SLOT(setDirURL(const KURL&)) );
+	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),
+		ctrl, SLOT(setURL(const KURL&)) );
 
 	BookmarkOwner* bookmarkOwner=new BookmarkOwner(this);
 
