@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qheader.h>
 #include <qlistview.h>
 #include <qpopupmenu.h>
+#include <qtooltip.h>
 
 // KDE
 #include <kbookmarkmanager.h>
@@ -98,6 +99,7 @@ BookmarkViewController::BookmarkViewController(QListView* listView, KBookmarkMan
 	d->mListView->setRootIsDecorated(true);
 	d->mListView->addColumn(QString::null);
 	d->mListView->setSorting(-1);
+	QToolTip::add(d->mListView->viewport(), i18n("Right-click here to add, edit or remove bookmarks"));
 
 	connect(d->mListView, SIGNAL(clicked(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
