@@ -22,25 +22,37 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bookmarkviewcontroller.moc"
 
 // Qt
+#include <qcursor.h>
 #include <qheader.h>
 #include <qlistview.h>
-#include <qpainter.h>
+#include <qpopupmenu.h>
 
 // KDE
-#include <kdebug.h>
 #include <kbookmarkmanager.h>
+#include <kdebug.h>
+#include <kdeversion.h>
 #include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kurl.h>
+
+// Local
+#include "branchpropertiesdialog.h"
 
 namespace Gwenview {
 
 struct BookmarkItem : public QListViewItem {
 	template <class ItemParent>
 	BookmarkItem(ItemParent* parent, const KBookmark& bookmark)
-	: QListViewItem(parent, bookmark.text())
+	: QListViewItem(parent)
 	, mBookmark(bookmark)
 	{
-		setPixmap(0, SmallIcon(bookmark.icon()) );
+		refresh();
+	}
+
+	void refresh() {
+		setText(0, mBookmark.text() );
+		setPixmap(0, SmallIcon(mBookmark.icon()) );
 	}
 
 	KBookmark mBookmark;
@@ -90,6 +102,8 @@ BookmarkViewController::BookmarkViewController(QListView* listView, KBookmarkMan
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
 	connect(d->mListView, SIGNAL(returnPressed(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
+	connect(d->mListView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+		this, SLOT(slotContextMenu(QListViewItem*)) );
 
 	// For now, we ignore the caller parameter and just refresh the full list on update
 	connect(d->mManager, SIGNAL(changed(const QString&, const QString&)),
@@ -118,5 +132,85 @@ void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 	if (!url.isValid()) return;
 	emit openURL(url);
 }
+
+
+void BookmarkViewController::slotContextMenu(QListViewItem* item) {
+	if (!item) return;
+	QPopupMenu menu(d->mListView);
+	menu.insertItem(i18n("Edit"), 
+		this, SLOT(editCurrentBookmark()));
+	menu.insertItem(SmallIcon("editdelete"), i18n("Delete Bookmark"),
+		this, SLOT(deleteCurrentBookmark()));
+	menu.exec(QCursor::pos());
+}
+
+
+void BookmarkViewController::editCurrentBookmark() {
+	BookmarkItem* item=static_cast<BookmarkItem*>( d->mListView->currentItem() );
+	Q_ASSERT(item);
+	if (!item) return;
+	KBookmark bookmark=item->mBookmark;
+	
+	BranchPropertiesDialog dialog(d->mListView);
+	dialog.setContents(bookmark.icon(), bookmark.text(), bookmark.url().prettyURL());
+	if (dialog.exec()==QDialog::Rejected) return;
+
+	QDomElement element=bookmark.internalElement();
+	element.setAttribute("icon", dialog.icon());
+	element.setAttribute("href", dialog.url());
+
+	// Find title element (or create it if it does not exist)
+	QDomElement titleElement;
+	QDomNode tmp=element.namedItem("title");
+	if (tmp.isNull()) {
+		titleElement=element.ownerDocument().createElement("title");
+		element.appendChild(titleElement);
+	} else {
+		titleElement=tmp.toElement();
+	}
+	Q_ASSERT(!titleElement.isNull());
+
+	// Get title element content (or create)
+	QDomText titleText;
+	tmp=titleElement.firstChild();
+	if (tmp.isNull()) {
+		titleText=element.ownerDocument().createTextNode("");
+		titleElement.appendChild(titleText);
+	} else {
+		titleText=tmp.toText();
+	}
+	Q_ASSERT(!titleText.isNull());
+
+	// Set title (at last!)
+	titleText.setData(dialog.title());
+	
+	KBookmarkGroup group=bookmark.parentGroup();
+	d->mManager->emitChanged(group);
+}
+
+
+void BookmarkViewController::deleteCurrentBookmark() {
+	BookmarkItem* item=static_cast<BookmarkItem*>( d->mListView->currentItem() );
+	Q_ASSERT(item);
+	if (!item) return;
+	KBookmark bookmark=item->mBookmark;
+
+	int response=KMessageBox::warningContinueCancel(d->mListView,
+		"<qt>" + i18n("Are you sure you want to delete the bookmark <b>%1</b>?").arg(bookmark.text()) + "</qt>",
+		i18n("Delete Bookmark"),
+#if KDE_IS_VERSION(3, 3, 0)
+		KStdGuiItem::del()
+#else
+		KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete Bookmark" ) )
+#endif
+		);
+	if (response==KMessageBox::Cancel) return;
+	
+	KBookmarkGroup group=bookmark.parentGroup();
+	group.deleteBookmark(bookmark);
+	d->mManager->emitChanged(group);
+}
+
+
 
 } // namespace
