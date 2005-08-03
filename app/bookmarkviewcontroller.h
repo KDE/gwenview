@@ -49,6 +49,7 @@ private slots:
 	void fill();
 	void slotContextMenu(QListViewItem*);
 	void addBookmark();
+	void addBookmarkGroup();
 	void editCurrentBookmark();
 	void deleteCurrentBookmark();
 

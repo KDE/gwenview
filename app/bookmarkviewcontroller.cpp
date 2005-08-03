@@ -85,6 +85,22 @@ struct BookmarkViewController::Private {
 			}
 		}
 	}
+
+	KBookmarkGroup findBestParentGroup() {
+		KBookmarkGroup parentGroup;
+		BookmarkItem* item=static_cast<BookmarkItem*>( mListView->currentItem() );
+		if (item) {
+			if (item->mBookmark.isGroup()) {
+				parentGroup=item->mBookmark.toGroup();
+			} else {
+				parentGroup=item->mBookmark.parentGroup();
+			}
+		} else {
+			parentGroup=mManager->root();
+		}
+
+		return parentGroup;
+	}
 };
 
 
@@ -142,15 +158,19 @@ void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 }
 
 
-void BookmarkViewController::slotContextMenu(QListViewItem* item) {
+void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
+	BookmarkItem* item=static_cast<BookmarkItem*>(item_);
 	QPopupMenu menu(d->mListView);
-	menu.insertItem(SmallIcon("bookmarkadd"), i18n("Add Bookmark"),
+	menu.insertItem(SmallIcon("bookmark_add"), i18n("Add a Bookmark..."),
 		this, SLOT(addBookmark()));
+	menu.insertItem(SmallIcon("bookmark_folder"), i18n("Add a Bookmark Folder..."),
+		this, SLOT(addBookmarkGroup()));
+
 	if (item) {
 		menu.insertSeparator();
-		menu.insertItem(SmallIcon("edit"), i18n("Edit"), 
+		menu.insertItem(SmallIcon("edit"), i18n("Edit..."), 
 			this, SLOT(editCurrentBookmark()));
-		menu.insertItem(SmallIcon("editdelete"), i18n("Delete Bookmark"),
+		menu.insertItem(SmallIcon("editdelete"), i18n("Delete"),
 			this, SLOT(deleteCurrentBookmark()));
 	}
 	menu.exec(QCursor::pos());
@@ -162,9 +182,24 @@ void BookmarkViewController::addBookmark() {
 	dialog.setContents("", d->mCurrentURL.prettyURL(), d->mCurrentURL.prettyURL());
 	if (dialog.exec()==QDialog::Rejected) return;
 
-	KBookmarkGroup group=d->mManager->root();
-	group.addBookmark(d->mManager, dialog.title(), dialog.url(), dialog.icon());
-	d->mManager->emitChanged(group);
+	KBookmarkGroup parentGroup=d->findBestParentGroup();
+	parentGroup.addBookmark(d->mManager, dialog.title(), dialog.url(), dialog.icon());
+	d->mManager->emitChanged(parentGroup);
+}
+
+
+void BookmarkViewController::addBookmarkGroup() {
+	BranchPropertiesDialog dialog(d->mListView);
+	if (dialog.exec()==QDialog::Rejected) return;
+
+	KBookmarkGroup parentGroup=d->findBestParentGroup();
+	KBookmarkGroup newGroup=parentGroup.createNewFolder(d->mManager, dialog.title());
+	newGroup.internalElement().setAttribute("icon", dialog.icon());
+	d->mManager->emitChanged(parentGroup);
+	QListViewItem* item=d->mListView->currentItem();
+	if (item) {
+		item->setOpen(true);
+	}
 }
 
 
@@ -180,7 +215,9 @@ void BookmarkViewController::editCurrentBookmark() {
 
 	QDomElement element=bookmark.internalElement();
 	element.setAttribute("icon", dialog.icon());
-	element.setAttribute("href", dialog.url());
+	if (!bookmark.isGroup()) {
+		element.setAttribute("href", dialog.url());
+	}
 
 	// Find title element (or create it if it does not exist)
 	QDomElement titleElement;
@@ -218,14 +255,21 @@ void BookmarkViewController::deleteCurrentBookmark() {
 	if (!item) return;
 	KBookmark bookmark=item->mBookmark;
 
+	QString msg;
+	QString title;
+	if (bookmark.isGroup()) {
+		msg=i18n("Are you sure you want to delete the bookmark folder <b>%1</b>?<br>This will delete the folder and all the bookmarks in it.")
+			.arg(bookmark.text());
+		title=i18n("Delete Bookmark &Folder");
+	} else {
+		msg=i18n("Are you sure you want to delete the bookmark <b>%1</b>?")
+			.arg(bookmark.text());
+		title=i18n("Delete &Bookmark");
+	}
+
 	int response=KMessageBox::warningContinueCancel(d->mListView,
-		"<qt>" + i18n("Are you sure you want to delete the bookmark <b>%1</b>?").arg(bookmark.text()) + "</qt>",
-		i18n("Delete Bookmark"),
-#if KDE_IS_VERSION(3, 3, 0)
-		KStdGuiItem::del()
-#else
-		KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete Bookmark" ) )
-#endif
+		"<qt>" + msg + "</qt>", title,
+		KGuiItem(title, "editdelete")
 		);
 	if (response==KMessageBox::Cancel) return;
 	
@@ -233,7 +277,6 @@ void BookmarkViewController::deleteCurrentBookmark() {
 	group.deleteBookmark(bookmark);
 	d->mManager->emitChanged(group);
 }
-
 
 
 } // namespace
