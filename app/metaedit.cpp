@@ -35,6 +35,7 @@ namespace Gwenview {
 MetaEdit::MetaEdit(QWidget *parent, Document *gvp, const char *name)
 : QVBox(parent, name)
 , mDocument(gvp)
+, mEmpty(true)
 {
 	mCommentEdit=new QTextEdit(this);
 	mCommentEdit->installEventFilter(this);
