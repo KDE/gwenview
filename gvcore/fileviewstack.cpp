@@ -49,6 +49,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filedetailview.h"
 #include "fileoperation.h"
 #include "filethumbnailview.h"
+#include "imageloader.h"
 #include "thumbnailsize.h"
 
 #include "fileviewstack.moc"
@@ -92,8 +93,12 @@ public:
 //
 //-----------------------------------------------------------------------
 FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent), mMode(FILE_LIST), mChangeDirStatus(CHANGE_DIR_STATUS_NONE), mBrowsing(false),
-  mSelecting(false)
+: QWidgetStack(parent)
+, mMode(FILE_LIST)
+, mPrefetch( NULL )
+, mChangeDirStatus(CHANGE_DIR_STATUS_NONE)
+, mBrowsing(false)
+, mSelecting(false)
 {
 	d=new FileViewStackPrivate;
 
@@ -281,6 +286,7 @@ void FileViewStack::setDirURL(const KURL& url) {
 		LOG("Same URL");
 		return;
 	}
+	prefetchDone();
 	mDirURL=url;
 	if (!KProtocolInfo::supportsListing(mDirURL)) {
 		LOG("Protocol does not support listing");
@@ -308,21 +314,38 @@ void FileViewStack::setFileNameToSelect(const QString& fileName) {
 	}
 }
 
+void FileViewStack::prefetch( KFileItem* item ) {
+	prefetchDone();
+	if( item == NULL ) return;
+	mPrefetch = ImageLoader::loader( item->url(), this, BUSY_PRELOADING );
+	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+}
+
+void FileViewStack::prefetchDone() {
+	if( mPrefetch != NULL ) {
+		mPrefetch->release( this );
+		mPrefetch = NULL;
+	}
+}
 
 void FileViewStack::slotSelectFirst() {
-	browseTo(findFirstImage());
+	browseTo( findFirstImage());
+	prefetch( findNextImage());
 }
 
 void FileViewStack::slotSelectLast() {
 	browseTo(findLastImage());
+	prefetch( findPreviousImage());
 }
 
 void FileViewStack::slotSelectPrevious() {
 	browseTo(findPreviousImage());
+	prefetch( findPreviousImage());
 }
 
 void FileViewStack::slotSelectNext() {
 	browseTo(findNextImage());
+	prefetch( findNextImage());
 }
 
 void FileViewStack::slotSelectPreviousDir() {
@@ -357,6 +380,7 @@ void FileViewStack::slotSelectFirstSubDir() {
 
 
 void FileViewStack::browseTo(KFileItem* item) {
+	prefetchDone();
 	if (mBrowsing) return;
 	mBrowsing = true;
 	if (item) {

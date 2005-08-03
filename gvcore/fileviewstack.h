@@ -50,6 +50,7 @@ namespace Gwenview {
 class FileViewBase;
 class FileDetailView;
 class FileThumbnailView;
+class ImageLoader;
 
 
 class FileViewStackPrivate;
@@ -217,6 +218,7 @@ private slots:
 
 	void makeDir();
 	void slotDirMade(KIO::Job* job);
+	void prefetchDone();
 	
 private:
 	FileViewStackPrivate* d;
@@ -225,6 +227,7 @@ private:
 	FileThumbnailView* mFileThumbnailView;
 	DirLister* mDirLister;
 	KURL mDirURL;
+	ImageLoader* mPrefetch;
 
 	// Our actions
 	KAction* mSelectFirst;
@@ -268,6 +271,7 @@ private:
 	void emitURLChanged();
 	void updateActions();
 	void initDirListerFilter();
+	void prefetch( KFileItem* item );
 	
 	KFileItem* findFirstImage() const;
 	KFileItem* findLastImage() const;

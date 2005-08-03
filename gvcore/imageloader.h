@@ -86,6 +86,7 @@ private slots:
 	void slotDecoderThreadFailed();
 	void slotBusyLevelChanged( BusyLevel );
 	void ownerDestroyed();
+	void checkPendingStat();
 
 private:
 	ImageLoader();
@@ -97,8 +98,8 @@ private:
 	void resumeLoading();
 	void finish( bool ok );
 	void startThread();
-	void checkPendingStat();
 	void checkPendingGet();
+	BusyLevel priority() const;
 	
 	// QImageConsumer methods
 	void end();

@@ -287,7 +287,13 @@ void ImageLoader::startLoading( const KURL& url ) {
 		this, SLOT(slotDecoderThreadFailed()) );
 
 	d->mStatPending = true;
-	checkPendingStat();
+	// a slight hack: normal loading (not preloading) may be actually sometimes delayed using
+	// a 0s single shot timer, so delay preloading here a bit too, just in case
+	if( priority() <= BUSY_PRELOADING ) {
+		QTimer::singleShot( 0, this, SLOT( checkPendingStat()));
+	} else {
+		checkPendingStat();
+	}
 }
 
 void ImageLoader::checkPendingStat() {
@@ -520,15 +526,20 @@ void ImageLoader::finish( bool ok ) {
 }
 
 
-void ImageLoader::slotBusyLevelChanged( BusyLevel level ) {
-	// this loader may be needed for normal loading (BUSY_LOADING), or
-	// only for prefetching
+BusyLevel ImageLoader::priority() const {
 	BusyLevel mylevel = BUSY_NONE;
 	for( QValueVector< OwnerData >::ConstIterator it = d->mOwners.begin();
 	     it != d->mOwners.end();
 	     ++it ) {
             mylevel = QMAX( mylevel, (*it).priority );
 	}
+	return mylevel;
+}
+
+void ImageLoader::slotBusyLevelChanged( BusyLevel level ) {
+	// this loader may be needed for normal loading (BUSY_LOADING), or
+	// only for prefetching
+	BusyLevel mylevel = priority();
 	if( level > mylevel ) {
 		suspendLoading();
 	} else {
