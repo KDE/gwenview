@@ -10,6 +10,8 @@
    (Patch by Michael Rolf)
  - The folder view now features two tabs: one to browse the whole folder
    hierarchy, the other to quickly access bookmarks.
+ - Images are now prefetched in advance also when browsing in the thumbnail
+   view using the cursor keys or keys for next/previous.
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.

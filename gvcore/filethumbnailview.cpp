@@ -664,10 +664,16 @@ void FileThumbnailView::slotContentsMoving( int x, int y ) {
 	updateVisibilityInfo( x, y ); // use x,y, the signal is emitted before moving
 }
 
-void FileThumbnailView::slotCurrentChanged(QIconViewItem*) {
+void FileThumbnailView::slotCurrentChanged(QIconViewItem* item ) {
 	// trigger generating thumbnails from the current one
 	updateVisibilityInfo( contentsX(), contentsY());
 	prefetchDone();
+	if( item != NULL && item == firstItem() && firstItem()->nextItem() != NULL ) {
+		d->mPrefetch = ImageLoader::loader(
+			static_cast<const FileThumbnailViewItem*>( firstItem()->nextItem() )->fileItem()->url(),
+			this, BUSY_PRELOADING );
+		connect( d->mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+	}
 }
 
 /**
