@@ -23,19 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef IMAGEVIEW_H
 #define IMAGEVIEW_H
 
-#include "config.h"
-
-#ifdef HAVE_FUNC_ROUND
-#define ROUND(x) round(x)
-#else
-#define ROUND(x) rint(x)
-#endif
-
-#if __GNUC__ < 3
-#define __USE_ISOC99 1
-#endif
-#include <math.h>
-
 // Qt
 #include <qmap.h>
 #include <qscrollview.h>

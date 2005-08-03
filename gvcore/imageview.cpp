@@ -18,6 +18,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
+#include "config.h"
+
 #include "imageview.moc"
 
 #include <assert.h>
@@ -163,6 +166,12 @@ const double MAX_ZOOM=16.0; // Same value as GIMP
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
 const int LIMIT_MAX_REPAINT_SIZE = 10000000;
 
+#ifndef HAVE_LROUND
+inline
+long int lround( double x ) {
+	return static_cast< long int >( x >= 0 ? x + 0.5 : x - 0.5 );
+}
+#endif
 
 struct ImageView::Private {
 	Document* mDocument;
@@ -229,12 +238,12 @@ struct ImageView::Private {
 
 	int imageToWidgetX( int x ) const {
 		if( mZoom == 1.0 ) return x + mXOffset;
-		return int( ROUND( x * mZoom )) + mXOffset;
+		return lround( x * mZoom ) + mXOffset;
 	}
 
 	int imageToWidgetY( int y ) const {
 		if( mZoom == 1.0 ) return y + mYOffset;
-		return int( ROUND( y * mZoom )) + mYOffset;
+		return lround( y * mZoom ) + mYOffset;
 	}
 
 	QPoint imageToWidget( const QPoint& p ) const {
@@ -249,12 +258,12 @@ struct ImageView::Private {
 
 	int widgetToImageX( int x ) const {
 		if( mZoom == 1.0 ) return x - mXOffset;
-		return int( ROUND( ( x - mXOffset ) / mZoom ));
+		return lround( ( x - mXOffset ) / mZoom );
 	}
 
 	int widgetToImageY( int y ) const {
 		if( mZoom == 1.0 ) return y - mYOffset;
-		return int( ROUND( ( y - mYOffset ) / mZoom ));
+		return lround( ( y - mYOffset ) / mZoom );
 	}
 
 	QPoint widgetToImage( const QPoint& p ) const {
