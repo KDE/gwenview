@@ -59,8 +59,8 @@ class ImageLoaderPrivate;
 class LIBGWENVIEW_EXPORT ImageLoader : public QObject, public QImageConsumer {
 Q_OBJECT
 public:
-	static ImageLoader* loader( const KURL& url ); // use this instead of ctor
-	void release(); // use this instead of dtor (disconnect from signals before)
+	static ImageLoader* loader( const KURL& url, const QObject* owner, BusyLevel priority ); // use this instead of ctor
+	void release( const QObject* owner ); // use this instead of dtor
 
 	QImage processedImage() const;
 	ImageFrames frames() const;
@@ -85,17 +85,20 @@ private slots:
 	void slotImageDecoded();
 	void slotDecoderThreadFailed();
 	void slotBusyLevelChanged( BusyLevel );
+	void ownerDestroyed();
 
 private:
 	ImageLoader();
 	~ImageLoader();
-	void ref();
-	void deref();
+	void ref( const QObject* owner, BusyLevel priority );
+	void deref( const QObject* owner );
 	void startLoading( const KURL& url );
 	void suspendLoading();
 	void resumeLoading();
 	void finish( bool ok );
 	void startThread();
+	void checkPendingStat();
+	void checkPendingGet();
 	
 	// QImageConsumer methods
 	void end();

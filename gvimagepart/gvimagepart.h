@@ -108,7 +108,7 @@ private slots:
 	void slotSelectNext();
 	void slotSelectPrevious();
 
-	void prefetchDone( bool ok );
+	void prefetchDone();
 
 private:
 

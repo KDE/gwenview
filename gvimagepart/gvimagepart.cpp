@@ -112,7 +112,6 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 }
 
 GVImagePart::~GVImagePart() {
-	prefetchDone( false );
 	delete mDirLister;
 }
 
@@ -173,15 +172,15 @@ void GVImagePart::loaded(const KURL& url) {
 	emit setWindowCaption(caption);
 	emit completed();
 	emit setStatusBarText(i18n("Done."));
-	prefetchDone( false );
-	mPrefetch = ImageLoader::loader( mLastDirection == DirectionPrevious ? previousURL() : nextURL());
-	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
+	prefetchDone();
+	mPrefetch = ImageLoader::loader( mLastDirection == DirectionPrevious ? previousURL() : nextURL(),
+		this, BUSY_PRELOADING );
+	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
 }
 
-void GVImagePart::prefetchDone( bool ) {
+void GVImagePart::prefetchDone() {
 	if( mPrefetch != NULL ) { 
-		mPrefetch->disconnect( this );
-		mPrefetch->release();
+		mPrefetch->release( this );
 	}
 	mPrefetch = NULL;
 }

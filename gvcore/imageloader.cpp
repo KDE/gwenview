@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "imageloader.h"
 
+#include <assert.h>
+
 // Qt
 #include <qtimer.h>
 
@@ -159,6 +161,11 @@ QImage DecoderThread::popLoadedImage() {
 // ImageLoaderPrivate
 //
 //---------------------------------------------------------------------
+struct OwnerData {
+	const QObject* owner;
+	BusyLevel priority;
+};
+
 class ImageLoaderPrivate {
 public:
 	ImageLoaderPrivate(ImageLoader* impl)
@@ -171,8 +178,9 @@ public:
 	, mAsyncImageComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
-	, mRefcount( 0 )
 	, mDecodeComplete( false )
+	, mStatPending( false )
+	, mGetPending( false )
 	{}
 
 	KURL mURL;
@@ -231,9 +239,14 @@ public:
 
 	QCString mImageFormat;
 
-	int mRefcount; // loaders may be shared
+	QValueVector< OwnerData > mOwners; // loaders may be shared
 
 	bool mDecodeComplete; // is decoding fully completed?
+
+	// KIO::stat() hasn't been done yet (because of being suspended since the beginning)
+	bool mStatPending;
+	// the same for KIO::get()
+	bool mGetPending;
 };
 
 
@@ -273,9 +286,17 @@ void ImageLoader::startLoading( const KURL& url ) {
 	connect(&d->mDecoderThread, SIGNAL(failed()),
 		this, SLOT(slotDecoderThreadFailed()) );
 
+	d->mStatPending = true;
+	checkPendingStat();
+}
+
+void ImageLoader::checkPendingStat() {
+	if( d->mSuspended || !d->mStatPending ) return;
+
 	KIO::Job* job=KIO::stat( d->mURL, false );
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
+	d->mStatPending = false;
 }
 
 void ImageLoader::slotStatResult(KIO::Job* job) {
@@ -316,9 +337,17 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 			}
 		}
 	}
-	
-	// Start loading the image
+
 	d->mTimestamp = urlTimestamp;
+	d->mRawData.resize(0);
+	d->mGetPending = true;
+	checkPendingGet();
+}
+
+void ImageLoader::checkPendingGet() {
+	if( d->mSuspended || !d->mGetPending ) return;
+
+	// Start loading the image
 	KIO::Job* getJob=KIO::get( d->mURL, false, false);
 
 	connect(getJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
@@ -327,8 +356,8 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 	connect(getJob, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotGetResult(KIO::Job*)) );
 
-	d->mRawData.resize(0);
 	d->mTimeSinceLastUpdate.start();
+	d->mGetPending = false;
 }
 	
 
@@ -492,7 +521,15 @@ void ImageLoader::finish( bool ok ) {
 
 
 void ImageLoader::slotBusyLevelChanged( BusyLevel level ) {
-	if( level > BUSY_LOADING ) {
+	// this loader may be needed for normal loading (BUSY_LOADING), or
+	// only for prefetching
+	BusyLevel mylevel = BUSY_NONE;
+	for( QValueVector< OwnerData >::ConstIterator it = d->mOwners.begin();
+	     it != d->mOwners.end();
+	     ++it ) {
+            mylevel = QMAX( mylevel, (*it).priority );
+	}
+	if( level > mylevel ) {
 		suspendLoading();
 	} else {
 		resumeLoading();
@@ -507,6 +544,8 @@ void ImageLoader::suspendLoading() {
 void ImageLoader::resumeLoading() {
 	d->mSuspended = false;
 	d->mDecoderTimer.start(0, false);
+	checkPendingGet();
+	checkPendingStat();
 }
 
 
@@ -645,19 +684,37 @@ bool ImageLoader::completed() const {
 }
 
 
-void ImageLoader::ref() {
-	++d->mRefcount;
+void ImageLoader::ref( const QObject* owner, BusyLevel priority ) {
+	OwnerData data;
+	data.owner = owner;
+	data.priority = priority;
+	d->mOwners.append( data );
+	connect( owner, SIGNAL( destroyed()), SLOT( ownerDestroyed()));
 }
 
-void ImageLoader::deref() {
-	if( --d->mRefcount <= 0 ) {
-		loaders.remove( d->mURL );
-		delete this;
+void ImageLoader::deref( const QObject* owner ) {
+	for( QValueVector< OwnerData >::Iterator it = d->mOwners.begin();
+	     it != d->mOwners.end();
+	     ++it ) {
+		if( (*it).owner == owner ) {
+			d->mOwners.erase( it );
+			if( d->mOwners.count() == 0 ) {
+				loaders.remove( d->mURL );
+				delete this;
+                                return;
+			}
+		}
 	}
+	assert( false );
 }
 
-void ImageLoader::release() {
-	deref();
+void ImageLoader::release( const QObject* owner ) {
+	disconnect( owner );
+	deref( owner );
+}
+
+void ImageLoader::ownerDestroyed() {
+	deref( sender());
 }
 
 //---------------------------------------------------------------------
@@ -666,14 +723,16 @@ void ImageLoader::release() {
 //
 //---------------------------------------------------------------------
 
-ImageLoader* ImageLoader::loader( const KURL& url ) {
+ImageLoader* ImageLoader::loader( const KURL& url, const QObject* owner, BusyLevel priority ) {
 	if( loaders.contains( url )) {
 		ImageLoader* l = loaders[ url ];
-		l->ref();
+		l->ref( owner, priority );
+		// resume if this owner has high priority
+		l->slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 		return l;
 	}
 	ImageLoader* l = new ImageLoader;
-	l->ref();
+	l->ref( owner, priority );
 	loaders[ url ] = l;
 	l->startLoading( url );
 	return l;

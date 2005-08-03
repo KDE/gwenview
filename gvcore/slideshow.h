@@ -66,7 +66,7 @@ signals:
 private slots:
 	void slotTimeout();
 	void slotLoaded();
-	void prefetchDone( bool ok );
+	void prefetchDone();
 
 private:
 	void prefetch();

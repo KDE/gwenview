@@ -44,7 +44,7 @@ static const char* CONFIG_LOOP="loop";
 
 
 SlideShow::SlideShow(Document* document)
-: mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ), mPrefetchAdvance( 1 ) {
+: mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -53,7 +53,6 @@ SlideShow::SlideShow(Document* document)
 }
 
 SlideShow::~SlideShow() {
-	prefetchDone( false );
 }
 
 void SlideShow::setLoop(bool value) {
@@ -86,7 +85,6 @@ void SlideShow::start(const KURL::List& urls) {
 	
 	mTimer->start(mDelay*1000, true);
 	mStarted=true;
-	mPrefetchAdvance = 1;
 	prefetch();
 }
 
@@ -118,7 +116,6 @@ void SlideShow::slotTimeout() {
 	}
 
 	emit nextURL(*it);
-	if( mPrefetchAdvance > 1 ) --mPrefetchAdvance;
 }
 
 
@@ -136,34 +133,25 @@ void SlideShow::prefetch() {
 		return;
 	}
 
-	for( int i = 0;
-	     i < mPrefetchAdvance;
-	     ++i ) {
-		++it;
-		if (it==mURLs.end()) {
-			it=mURLs.begin();
-		}
-		if (it==mStartIt && !mLoop) {
-			return;
-		}
+	++it;
+	if (it==mURLs.end()) {
+		it=mURLs.begin();
 	}
 
-	prefetchDone( false );
-	mPrefetch = ImageLoader::loader( *it );
-	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone( bool )));
+	if (it==mStartIt && !mLoop) {
+		return;
+	}
+
+	if( mPrefetch != NULL ) mPrefetch->release( this );
+	mPrefetch = ImageLoader::loader( *it, this, BUSY_PRELOADING );
+	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
 }
 
-void SlideShow::prefetchDone( bool ok ) {
+void SlideShow::prefetchDone() {
 	if( mPrefetch != NULL ) { 
-		mPrefetch->disconnect( this );
-		mPrefetch->release();
+		mPrefetch->release( this );
+		mPrefetch = NULL;
 	}
-	mPrefetch = NULL;
-	if( !ok ) return;
-// TODO this doesn't work for two reasons:
-// - more distant images could put more needed images from the cache (needs cache priority?)
-// - when doing manual image changes during slideshow, mPrefetchAdvance can get out of sync
-//	if( ++mPrefetchAdvance <= 3 ) prefetch();
 }
 
 //-Configuration--------------------------------------------

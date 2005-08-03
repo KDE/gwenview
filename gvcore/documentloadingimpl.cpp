@@ -71,13 +71,12 @@ DocumentLoadingImpl::DocumentLoadingImpl(Document* document)
 
 DocumentLoadingImpl::~DocumentLoadingImpl() {
 	LOG("");
-	if( d->mLoader != NULL ) d->mLoader->release();
 	delete d;
 }
 
 
 void DocumentLoadingImpl::start() {
-	d->mLoader = ImageLoader::loader( mDocument->url());
+	d->mLoader = ImageLoader::loader( mDocument->url(), this, BUSY_LOADING );
 	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
 	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
 	connect( d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
