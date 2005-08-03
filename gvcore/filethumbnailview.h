@@ -44,7 +44,6 @@ typedef QPtrList<KFileItem> KFileItemList;
 
 namespace Gwenview {
 class FileThumbnailViewItem;
-class ThumbnailLoadJob;
 
 class LIBGWENVIEW_EXPORT FileThumbnailView : public KIconView, public FileViewBase {
 Q_OBJECT
@@ -112,6 +111,7 @@ protected:
 	void showEvent(QShowEvent*);
 	void contentsDragEnterEvent(QDragEnterEvent*);
 	void startDrag();
+	virtual void keyPressEvent( QKeyEvent* );
 
 private:
 	class Private;
@@ -131,6 +131,7 @@ private slots:
 	void slotCurrentChanged(QIconViewItem*);
 	void slotBusyLevelChanged( BusyLevel );
 	void slotUpdateEnded();
+	void prefetchDone();
 };
 
 

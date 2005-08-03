@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "archive.h"
 #include "thumbnailloadjob.h"
 #include "busylevelmanager.h"
+#include "imageloader.h"
 #include "thumbnailsize.h"
 #include "thumbnaildetailsdialog.h"
 
@@ -135,6 +136,8 @@ struct FileThumbnailView::Private {
 
 	int mItemDetails;
 
+	ImageLoader* mPrefetch;
+
 	void updateWaitThumbnail(const FileThumbnailView* view) {
 		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
 		mWaitThumbnail.fill(view->paletteBackgroundColor());
@@ -167,6 +170,7 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	d->mProgressWidget=0L;
 	d->mThumbnailUpdateTimer=new QTimer(this);
 	d->mItemDetails=FILENAME | IMAGESIZE;
+	d->mPrefetch = NULL;
 
 	setAutoArrange(true);
 	QIconView::setSorting(true);
@@ -663,6 +667,7 @@ void FileThumbnailView::slotContentsMoving( int x, int y ) {
 void FileThumbnailView::slotCurrentChanged(QIconViewItem*) {
 	// trigger generating thumbnails from the current one
 	updateVisibilityInfo( contentsX(), contentsY());
+	prefetchDone();
 }
 
 /**
@@ -694,6 +699,56 @@ void FileThumbnailView::updateVisibilityInfo( int x, int y ) {
 		first->fileItem(),
 		first->fileItem(),
 		last->fileItem());
+}
+
+void FileThumbnailView::keyPressEvent( QKeyEvent* e ) {
+// When the user presses e.g. the Down key, try to preload the next image in that direction.
+	if( e->key() != Key_Left
+		&& e->key() != Key_Right
+		&& e->key() != Key_Up
+		&& e->key() != Key_Down ) return KIconView::keyPressEvent( e );
+
+	QIconViewItem* current = currentItem();
+	KIconView::keyPressEvent( e );
+	QIconViewItem* next = NULL;
+	if( current != currentItem() && currentItem() != NULL ) { // it actually moved
+		switch( e->key()) {
+			case Key_Left:
+				next = currentItem()->prevItem();
+				break;
+			case Key_Right:
+				next = currentItem()->nextItem();
+				break;
+			case Key_Up:
+			// This relies on the thumbnails being in a grid ( x() == x() )
+				for( next = currentItem()->prevItem();
+				     next != NULL && next->x() != currentItem()->x();
+				     next = next->prevItem())
+					;
+				break;
+			case Key_Down:
+				for( next = currentItem()->nextItem();
+				     next != NULL && next->x() != currentItem()->x();
+				     next = next->nextItem())
+					;
+				break;
+		}
+
+	}
+	prefetchDone();
+	if( next != NULL ) {
+		d->mPrefetch = ImageLoader::loader(
+			static_cast<const FileThumbnailViewItem*>( next )->fileItem()->url(),
+			this, BUSY_PRELOADING );
+		connect( d->mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+	}
+}
+
+void FileThumbnailView::prefetchDone() {
+	if( d->mPrefetch != NULL ) {
+		d->mPrefetch->release( this );
+		d->mPrefetch = NULL;
+	}
 }
 
 //--------------------------------------------------------------------------
