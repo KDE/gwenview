@@ -712,8 +712,8 @@ void ImageLoader::deref( const QObject* owner ) {
 			if( d->mOwners.count() == 0 ) {
 				loaders.remove( d->mURL );
 				delete this;
-                                return;
 			}
+			return;
 		}
 	}
 	assert( false );
