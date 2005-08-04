@@ -34,8 +34,8 @@ namespace Gwenview {
 // FIXME: Why doesn't MetaEdit inherits from QTextEdit rather than QVBox?
 MetaEdit::MetaEdit(QWidget *parent, Document *gvp, const char *name)
 : QVBox(parent, name)
-, mDocument(gvp)
 , mEmpty(true)
+, mDocument(gvp)
 {
 	mCommentEdit=new QTextEdit(this);
 	mCommentEdit->installEventFilter(this);
