@@ -273,9 +273,12 @@ ImageLoader::~ImageLoader() {
 }
 
 
-void ImageLoader::startLoading( const KURL& url ) {
-	if( !d->mURL.isEmpty()) return; // already loading
+void ImageLoader::setURL( const KURL& url ) {
+	assert( d->mURL.isEmpty());
 	d->mURL = url;
+}
+
+void ImageLoader::startLoading() {
 	d->mTimestamp = Cache::instance()->timestamp( d->mURL );
 	slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 
@@ -287,13 +290,7 @@ void ImageLoader::startLoading( const KURL& url ) {
 		this, SLOT(slotDecoderThreadFailed()) );
 
 	d->mStatPending = true;
-	// a slight hack: normal loading (not preloading) may be actually sometimes delayed using
-	// a 0s single shot timer, so delay preloading here a bit too, just in case
-	if( priority() <= BUSY_PRELOADING ) {
-		QTimer::singleShot( 0, this, SLOT( checkPendingStat()));
-	} else {
-		checkPendingStat();
-	}
+	checkPendingStat();
 }
 
 void ImageLoader::checkPendingStat() {
@@ -745,7 +742,13 @@ ImageLoader* ImageLoader::loader( const KURL& url, const QObject* owner, BusyLev
 	ImageLoader* l = new ImageLoader;
 	l->ref( owner, priority );
 	loaders[ url ] = l;
-	l->startLoading( url );
+	l->setURL( url );
+	// Code using a loader first calls loader() to get ImageLoader* and only after that it can
+	// connect to its signals etc., so don't start loading immediately.
+	// This also helps with preloading jobs, since BUSY_LOADING busy level is not entered immediately
+	// when a new picture is selected, so preloading jobs without this delay could start working
+	// immediately.
+	QTimer::singleShot( priority >= BUSY_LOADING ? 0 : 10, l, SLOT( startLoading()));
 	return l;
 }
 

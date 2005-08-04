@@ -86,18 +86,19 @@ private slots:
 	void slotDecoderThreadFailed();
 	void slotBusyLevelChanged( BusyLevel );
 	void ownerDestroyed();
-	void checkPendingStat();
+	void startLoading();
 
 private:
 	ImageLoader();
 	~ImageLoader();
 	void ref( const QObject* owner, BusyLevel priority );
 	void deref( const QObject* owner );
-	void startLoading( const KURL& url );
 	void suspendLoading();
 	void resumeLoading();
 	void finish( bool ok );
 	void startThread();
+	void setURL( const KURL& url );
+	void checkPendingStat();
 	void checkPendingGet();
 	BusyLevel priority() const;
 	
