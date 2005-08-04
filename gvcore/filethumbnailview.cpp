@@ -668,11 +668,18 @@ void FileThumbnailView::slotCurrentChanged(QIconViewItem* item ) {
 	// trigger generating thumbnails from the current one
 	updateVisibilityInfo( contentsX(), contentsY());
 	prefetchDone();
-	if( item != NULL && item == firstItem() && firstItem()->nextItem() != NULL ) {
-		d->mPrefetch = ImageLoader::loader(
-			static_cast<const FileThumbnailViewItem*>( firstItem()->nextItem() )->fileItem()->url(),
-			this, BUSY_PRELOADING );
-		connect( d->mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+	// if the first image is selected, no matter how, preload the next one
+	for( QIconViewItem* pos = item;
+	     pos != NULL;
+	     pos = pos->nextItem()) {
+		FileThumbnailViewItem* cur = static_cast< FileThumbnailViewItem* >( pos );
+		if( cur->fileItem()->isDir() || Archive::fileItemIsArchive(cur->fileItem())) continue;
+		if( pos == item && pos->nextItem() != NULL ) {
+			d->mPrefetch = ImageLoader::loader(
+				static_cast<const FileThumbnailViewItem*>( cur->nextItem() )->fileItem()->url(),
+				this, BUSY_PRELOADING );
+			connect( d->mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+		}
 	}
 }
 
