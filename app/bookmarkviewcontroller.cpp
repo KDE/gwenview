@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kmimetype.h>
 #include <kurl.h>
 
 // Local
@@ -181,6 +182,7 @@ void BookmarkViewController::addBookmark() {
 	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK);
 	dialog.setTitle(d->mCurrentURL.prettyURL());
 	dialog.setURL(d->mCurrentURL.prettyURL());
+	dialog.setIcon(KMimeType::iconForURL(d->mCurrentURL));
 	if (dialog.exec()==QDialog::Rejected) return;
 
 	KBookmarkGroup parentGroup=d->findBestParentGroup();
