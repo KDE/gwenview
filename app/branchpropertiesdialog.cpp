@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+// Qt
+#include <qlabel.h>
 
 // KDE
 #include <kfile.h>
@@ -34,15 +36,17 @@ namespace Gwenview {
 
 class BranchPropertiesDialogPrivate {
 public:
-
 	BranchPropertiesDialogBase* mContent;
+	BranchPropertiesDialog::Mode mMode;
 };
 
-BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent)
+BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent, BranchPropertiesDialog::Mode mode)
 : KDialogBase(parent,"folderconfig",true,QString::null,Ok|Cancel)
 {
 	d=new BranchPropertiesDialogPrivate;
 	d->mContent=new BranchPropertiesDialogBase(this);
+	d->mMode=mode;
+
 	setMainWidget(d->mContent);
 	setCaption(d->mContent->caption());
 	d->mContent->mUrl->setMode(KFile::Directory);
@@ -50,10 +54,16 @@ BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent)
 	
 	connect(d->mContent->mTitle,SIGNAL(textChanged(const QString&)),
 		this, SLOT(updateOk()));
-	connect(d->mContent->mUrl,SIGNAL(textChanged(const QString&)),
-		this, SLOT(updateOk()));
 	connect(d->mContent->mIcon,SIGNAL(iconChanged(QString)),
 		this, SLOT(updateOk()));
+	
+	if (mode==BOOKMARK_GROUP) {
+		d->mContent->mUrlLabel->hide();
+		d->mContent->mUrl->hide();
+	} else {
+		connect(d->mContent->mUrl,SIGNAL(textChanged(const QString&)),
+			this, SLOT(updateOk()));
+	}
 
 	updateOk();
 }
@@ -62,23 +72,32 @@ BranchPropertiesDialog::~BranchPropertiesDialog() {
 	delete d;
 }
 
-void BranchPropertiesDialog::setContents(const QString& icon, const QString& title, const QString& url) {
-	d->mContent->mTitle->setText(title);
-	d->mContent->mUrl->setURL(url);
-	d->mContent->mIcon->setIcon(icon);
-	setCaption(i18n("Edit Branch"));
+void BranchPropertiesDialog::updateOk() {
+	bool enabled=
+		!d->mContent->mTitle->text().isEmpty()
+		&& (d->mMode==BOOKMARK_GROUP || !d->mContent->mUrl->url().isEmpty());
+
+	enableButton(Ok, enabled);
 }
 
-void BranchPropertiesDialog::updateOk() {
-	enableButton(Ok, !d->mContent->mUrl->url().isEmpty() && !d->mContent->mTitle->text().isEmpty());
+void BranchPropertiesDialog::setIcon(const QString& icon) {
+	d->mContent->mIcon->setIcon(icon);
 }
 
 QString BranchPropertiesDialog::icon() const {
 	return d->mContent->mIcon->icon();
 }
 
+void BranchPropertiesDialog::setTitle(const QString& title) {
+	d->mContent->mTitle->setText(title);
+}
+
 QString BranchPropertiesDialog::title() const {
 	return d->mContent->mTitle->text();
+}
+
+void BranchPropertiesDialog::setURL(const QString& url) {
+	d->mContent->mUrl->setURL(url);
 }
 
 QString BranchPropertiesDialog::url() const {

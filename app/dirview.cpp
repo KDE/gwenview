@@ -604,10 +604,12 @@ void DirView::showBranchPropertiesDialog() {
 
 void DirView::showBranchPropertiesDialog(FileTreeBranch* editItem)
 {
-	BranchPropertiesDialog dialog(this);
+	BranchPropertiesDialog dialog(this, BranchPropertiesDialog::BRANCH);
 
 	if(editItem) {
-		dialog.setContents(editItem->icon(), editItem->name(), editItem->rootUrl().prettyURL());
+		dialog.setIcon(editItem->icon());
+		dialog.setTitle(editItem->name());
+		dialog.setURL(editItem->rootUrl().prettyURL());
 	}
 
 	if(QDialog::Accepted==dialog.exec()) {

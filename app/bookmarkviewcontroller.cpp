@@ -178,8 +178,9 @@ void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
 
 
 void BookmarkViewController::addBookmark() {
-	BranchPropertiesDialog dialog(d->mListView);
-	dialog.setContents("", d->mCurrentURL.prettyURL(), d->mCurrentURL.prettyURL());
+	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK);
+	dialog.setTitle(d->mCurrentURL.prettyURL());
+	dialog.setURL(d->mCurrentURL.prettyURL());
 	if (dialog.exec()==QDialog::Rejected) return;
 
 	KBookmarkGroup parentGroup=d->findBestParentGroup();
@@ -189,7 +190,7 @@ void BookmarkViewController::addBookmark() {
 
 
 void BookmarkViewController::addBookmarkGroup() {
-	BranchPropertiesDialog dialog(d->mListView);
+	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK_GROUP);
 	if (dialog.exec()==QDialog::Rejected) return;
 
 	KBookmarkGroup parentGroup=d->findBestParentGroup();
@@ -208,14 +209,21 @@ void BookmarkViewController::editCurrentBookmark() {
 	Q_ASSERT(item);
 	if (!item) return;
 	KBookmark bookmark=item->mBookmark;
+	bool isGroup=bookmark.isGroup();
 	
-	BranchPropertiesDialog dialog(d->mListView);
-	dialog.setContents(bookmark.icon(), bookmark.text(), bookmark.url().prettyURL());
+	BranchPropertiesDialog dialog(d->mListView,
+		isGroup ? BranchPropertiesDialog::BOOKMARK_GROUP : BranchPropertiesDialog::BOOKMARK);
+
+	dialog.setIcon(bookmark.icon());
+	dialog.setTitle(bookmark.text());
+	if (!isGroup) {
+		dialog.setURL(bookmark.url().prettyURL());
+	}
 	if (dialog.exec()==QDialog::Rejected) return;
 
 	QDomElement element=bookmark.internalElement();
 	element.setAttribute("icon", dialog.icon());
-	if (!bookmark.isGroup()) {
+	if (!isGroup) {
 		element.setAttribute("href", dialog.url());
 	}
 

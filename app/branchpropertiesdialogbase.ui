@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>BranchPropertiesDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>500</width>
-            <height>88</height>
+            <height>90</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,7 +22,7 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>500</width>
+            <width>400</width>
             <height>0</height>
         </size>
     </property>
@@ -38,7 +38,7 @@
         </property>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>mUrlLabel</cstring>
             </property>
             <property name="text">
                 <string>URL:</string>
@@ -90,8 +90,8 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>122</width>
-                    <height>13</height>
+                    <width>383</width>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
@@ -105,6 +105,5 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kicondialog.h</includehint>
 </includehints>
 </UI>

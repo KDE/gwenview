@@ -30,13 +30,16 @@ class BranchPropertiesDialogPrivate;
 class BranchPropertiesDialog : public KDialogBase {
 Q_OBJECT
 public:
-	BranchPropertiesDialog(QWidget* parent);
+	enum Mode { BOOKMARK_GROUP, BOOKMARK, BRANCH };
+	BranchPropertiesDialog(QWidget* parent, Mode mode);
 	~BranchPropertiesDialog();
 
-	void setContents(const QString& icon, const QString& title, const QString& url);
 
+	void setIcon(const QString&);
 	QString icon() const;
+	void setTitle(const QString&);
 	QString title() const;
+	void setURL(const QString&);
 	QString url() const;
 
 protected slots:
