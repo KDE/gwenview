@@ -55,10 +55,12 @@ public:
     , mName(name)
     , mImages(images) {}
 
-	QString name() { return mName; }
-	QString comment() { return QString::null; }
-	KURL::List images() { return mImages; }
-	KURL uploadPath() { return mUploadURL; }
+	QString name()           { return mName; }
+	QString comment()        { return QString::null; }
+	KURL::List images()      { return mImages; }
+	KURL uploadPath()        { return mUploadURL; }
+	bool isDirectory()       { return true; }
+	QString uploadRootName() { return "/"; }
 
 private:
     KURL mUploadURL;
@@ -95,7 +97,6 @@ public:
 
 struct KIPIInterfacePrivate {
 	FileViewStack* mFileView;
-    KURL mCurrentURL;
 };
 
 
@@ -124,14 +125,14 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return KIPI::ImageCollection(new ImageCollection(d->mCurrentURL, i18n("Folder Content"), list));
+	return KIPI::ImageCollection(new ImageCollection(d->mFileView->dirURL(), i18n("Folder Content"), list));
 }
 
 
 KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
-	return KIPI::ImageCollection(new ImageCollection(d->mCurrentURL, i18n("Selected Images"), list));
+	return KIPI::ImageCollection(new ImageCollection(d->mFileView->dirURL(), i18n("Selected Images"), list));
 }
 
 
@@ -173,7 +174,6 @@ void KIPIInterface::slotSelectionChanged() {
 
 
 void KIPIInterface::slotDirectoryChanged() {
-    d->mCurrentURL=d->mFileView->dirURL();
 	emit currentAlbumChanged(d->mFileView->fileCount() > 0);
 }
 
