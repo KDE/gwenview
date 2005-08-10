@@ -35,14 +35,12 @@ public:
 
 	void setContents(const QString& icon, const QString& title, const QString& url);
 
-	QString icon();
-	QString title();
-	QString url();
-
-	int exec();
+	QString icon() const;
+	QString title() const;
+	QString url() const;
 
 protected slots:
-	void enableOk();
+	void updateOk();
 
 private:
 	BranchPropertiesDialogPrivate* d;

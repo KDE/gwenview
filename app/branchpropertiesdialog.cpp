@@ -47,7 +47,15 @@ BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent)
 	setCaption(d->mContent->caption());
 	d->mContent->mUrl->setMode(KFile::Directory);
 	d->mContent->mIcon->setIcon("folder");
-	enableButton(Ok, false);
+	
+	connect(d->mContent->mTitle,SIGNAL(textChanged(const QString&)),
+		this, SLOT(updateOk()));
+	connect(d->mContent->mUrl,SIGNAL(textChanged(const QString&)),
+		this, SLOT(updateOk()));
+	connect(d->mContent->mIcon,SIGNAL(iconChanged(QString)),
+		this, SLOT(updateOk()));
+
+	updateOk();
 }
 
 BranchPropertiesDialog::~BranchPropertiesDialog() {
@@ -61,29 +69,19 @@ void BranchPropertiesDialog::setContents(const QString& icon, const QString& tit
 	setCaption(i18n("Edit Branch"));
 }
 
-int BranchPropertiesDialog::exec() {
-	connect(d->mContent->mTitle,SIGNAL(textChanged(const QString&)),
-		this,SLOT(enableOk()));
-	connect(d->mContent->mUrl,SIGNAL(textChanged(const QString&)),
-		this,SLOT(enableOk()));
-	connect(d->mContent->mIcon,SIGNAL(iconChanged(QString)),
-		this,SLOT(enableOk()));
-	return KDialog::exec();
+void BranchPropertiesDialog::updateOk() {
+	enableButton(Ok, !d->mContent->mUrl->url().isEmpty() );
 }
 
-void BranchPropertiesDialog::enableOk() {
-	enableButton(Ok, true);
-}
-
-QString BranchPropertiesDialog::icon() {
+QString BranchPropertiesDialog::icon() const {
 	return d->mContent->mIcon->icon();
 }
 
-QString BranchPropertiesDialog::title() {
+QString BranchPropertiesDialog::title() const {
 	return d->mContent->mTitle->text();
 }
 
-QString BranchPropertiesDialog::url() {
+QString BranchPropertiesDialog::url() const {
 	return d->mContent->mUrl->url();
 }
 
