@@ -95,6 +95,7 @@ private:
 	QWidget* mViewModeWidget;
 	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
+	KDockWidget* mBookmarkDock;
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	KDockWidget* mMetaDock;

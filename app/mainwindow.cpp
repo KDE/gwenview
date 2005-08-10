@@ -712,12 +712,14 @@ void MainWindow::slotToggleCentralStack() {
 
 void MainWindow::resetDockWidgets() {
 	mFolderDock->undock();
+	mBookmarkDock->undock();
 	mPixmapDock->undock();
 	mMetaDock->undock();
 
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 }
 
 
@@ -822,12 +824,12 @@ void MainWindow::createWidgets() {
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	QTabWidget* tabWidget=new QTabWidget(mFolderDock);
-	mDirView=new DirView(tabWidget);
-	tabWidget->addTab(mDirView, i18n("Folders"));
-	mBookmarkView=new QListView(tabWidget);
-	tabWidget->addTab(mBookmarkView, i18n("Bookmarks"));
-	mFolderDock->setWidget(tabWidget);
+	mDirView=new DirView(mFolderDock);
+	mFolderDock->setWidget(mDirView);
+	
+	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
+	mBookmarkView=new QListView(mBookmarkDock);
+	mBookmarkDock->setWidget(mBookmarkView);
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -857,6 +859,7 @@ void MainWindow::createWidgets() {
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 
 	// Load dock config if up to date
 	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
@@ -1020,6 +1023,7 @@ void MainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
+	createHideShowAction(mBookmarkDock);
 	createHideShowAction(mPixmapDock);
 	createHideShowAction(mMetaDock);
 	plugActionList("winlist", mWindowListActions);
