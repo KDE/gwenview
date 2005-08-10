@@ -192,8 +192,6 @@ MainWindow::MainWindow()
 	updateWindowActions();
 	applyMainWindowSettings();
 
-	mFileViewStack->setFocus();
-
 	if( !kapp->isSessionRestored()) {
 		// Command line
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -216,6 +214,13 @@ MainWindow::MainWindow()
 			updateLocationURL();
 		}
 	}
+	
+	if (mToggleBrowse->isChecked()) {
+		mFileViewStack->setFocus();
+	} else {
+		mImageView->setFocus();
+	}
+
 	QTimer::singleShot(LOAD_PLUGIN_DELAY, this, SLOT(loadPlugins()) );
 }
 
@@ -238,24 +243,6 @@ bool MainWindow::queryClose() {
 	}
 	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 
-	// If we are in fullscreen mode, we need to make the needed GUI elements
-	// visible before saving the window settings.
-	if (mToggleFullScreen->isChecked()) {
-		statusBar()->show();
-
-		if (toolBar()->area()) {
-			toolBar()->area()->show();
-		} else {
-			toolBar()->show();
-		}
-		leftDock()->show();
-		rightDock()->show();
-		topDock()->show();
-		bottomDock()->show();
-
-		menuBar()->show();
-	}
-
 	if (mAutoDeleteThumbnailCache) {
 		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
@@ -266,8 +253,9 @@ bool MainWindow::queryClose() {
 		}
 	}
 	
-	saveMainWindowSettings(KGlobal::config(), "MainWindow");
-
+	if (!mToggleFullScreen->isChecked()) {
+		saveMainWindowSettings(KGlobal::config(), "MainWindow");
+	}
 	return true;
 }
 
@@ -530,6 +518,8 @@ void MainWindow::showToolBars() {
 
 void MainWindow::toggleFullScreen() {
 	if (mToggleFullScreen->isChecked()) {
+		saveMainWindowSettings(KGlobal::config(), "MainWindow");
+
 		showFullScreen();
 		menuBar()->hide();
 		statusBar()->hide();
