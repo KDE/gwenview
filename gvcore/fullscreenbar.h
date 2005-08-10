@@ -42,6 +42,7 @@ public:
 	void resizeEvent(QResizeEvent* event);
 	//void setText(const QString& text);
 
+	void showImmediatly();
 	void slideIn();
 	void slideOut();
 

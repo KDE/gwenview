@@ -419,7 +419,11 @@ void ImageView::slotLoaded() {
 		return;
 	}
 
-	if (d->mFullScreen && d->mOSDMode!=NONE) updateFullScreenLabel();
+	if (d->mFullScreen && d->mOSDMode!=NONE) {
+		updateFullScreenLabel();
+		restartAutoHideTimer();
+		d->mFullScreenBar->showImmediatly();
+	}
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
 

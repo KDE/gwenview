@@ -192,6 +192,13 @@ void FullScreenBar::resizeEvent(QResizeEvent* event) {
 }
 
 
+void FullScreenBar::showImmediatly() {
+	d->mState=IN;
+	d->mTimer.stop();
+	move(0,0);
+}
+
+
 void FullScreenBar::slideIn() {
 	if (d->mState!=IN) {
 		d->mState=SLIDING_IN;

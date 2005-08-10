@@ -21,6 +21,8 @@
    file view now shows information relative to the current folder, rather than
    the current image.
  - The destination URL is now set to the current URL in KIPI plugins.
+ - In fullscreen mode, the On Screen Display comes back when switching images
+   with keyboard shortcuts.
 
 2005.07.17 - v1.2.91
 - New features:
