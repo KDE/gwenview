@@ -70,7 +70,7 @@ void BranchPropertiesDialog::setContents(const QString& icon, const QString& tit
 }
 
 void BranchPropertiesDialog::updateOk() {
-	enableButton(Ok, !d->mContent->mUrl->url().isEmpty() );
+	enableButton(Ok, !d->mContent->mUrl->url().isEmpty() && !d->mContent->mTitle->text().isEmpty());
 }
 
 QString BranchPropertiesDialog::icon() const {
