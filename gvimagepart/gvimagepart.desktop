@@ -27,7 +27,6 @@ Name[sv]=Gwenview bildvisare
 Name[ta]=Gwenview  பிம்பம் பார்வையாளர்
 Name[tg]=Gwenview
 Name[tr]=Gwenview Resim Gösterici
-Name[uk]=Переглядач зображень - Gwenview
 Name[zh_CN]=Gwenview 图像查看器
 MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbm;image/x-xpm
 ServiceTypes=KParts/ReadOnlyPart
