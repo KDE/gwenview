@@ -217,7 +217,7 @@ void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
 
 void BookmarkViewController::addBookmark() {
 	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK);
-	dialog.setTitle(d->mCurrentURL.prettyURL());
+	dialog.setTitle(d->mCurrentURL.fileName());
 	dialog.setURL(d->mCurrentURL.prettyURL());
 	dialog.setIcon(KMimeType::iconForURL(d->mCurrentURL));
 	if (dialog.exec()==QDialog::Rejected) return;
