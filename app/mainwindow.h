@@ -147,6 +147,7 @@ private:
 #endif
 
 	KToolBar* mFileViewToolBar;
+	KToolBar* mBookmarkToolBar;
 	std::auto_ptr<CaptionFormatter> mCaptionFormatter;
 
 	void hideToolBars();

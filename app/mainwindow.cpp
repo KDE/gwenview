@@ -827,9 +827,12 @@ void MainWindow::createWidgets() {
 	mDirView=new DirView(mFolderDock);
 	mFolderDock->setWidget(mDirView);
 	
+	// Bookmark widget
 	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
-	mBookmarkView=new QListView(mBookmarkDock);
-	mBookmarkDock->setWidget(mBookmarkView);
+	QVBox* bmBox=new QVBox(mBookmarkDock);
+	mBookmarkView=new QListView(bmBox);
+	mBookmarkToolBar=new KToolBar(bmBox, "", true);
+	mBookmarkDock->setWidget(bmBox);
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -984,7 +987,7 @@ void MainWindow::createObjectInteractions() {
 	manager->setUpdate(true);
 	manager->setShowNSBookmarks(false);
 
-	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, manager);
+	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, mBookmarkToolBar, manager);
 	connect(ctrl, SIGNAL(openURL(const KURL&)),
 		mFileViewStack,SLOT(setDirURL(const KURL&)) );
 	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),

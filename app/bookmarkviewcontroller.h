@@ -28,6 +28,7 @@ class QListView;
 class QListViewItem;
 class QPoint;
 class KBookmarkManager;
+class KToolBar;
 class KURL;
 
 namespace Gwenview {
@@ -35,7 +36,7 @@ namespace Gwenview {
 class BookmarkViewController : public QObject {
 Q_OBJECT
 public:
-	BookmarkViewController(QListView*, KBookmarkManager*);
+	BookmarkViewController(QListView*, KToolBar*, KBookmarkManager*);
 	~BookmarkViewController();
 
 signals:

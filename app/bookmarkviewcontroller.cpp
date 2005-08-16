@@ -31,6 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtooltip.h>
 
 // KDE
+#include <kaction.h>
+#include <kactioncollection.h>
 #include <kbookmarkmanager.h>
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -38,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
+#include <ktoolbar.h>
 #include <kurl.h>
 
 // Local
@@ -75,7 +78,6 @@ public:
 		if (item->mBookmark.isGroup()) return;
 		
 		QRect rect=mListView->itemRect(item);
-		kdDebug() << rect.left() << "," << rect.top() << "," << rect.width() << "," << rect.height() << endl;
 		tip(rect, item->mBookmark.url().prettyURL());
 	};
 	
@@ -88,6 +90,7 @@ struct BookmarkViewController::Private {
 	KBookmarkManager* mManager;
 	KURL mCurrentURL;
 	std::auto_ptr<BookmarkToolTip> mToolTip;
+	KActionCollection* mActionCollection;
 
 	template <class ItemParent>
 	void addGroup(ItemParent* itemParent, const KBookmarkGroup& group) {
@@ -128,13 +131,14 @@ struct BookmarkViewController::Private {
 };
 
 
-BookmarkViewController::BookmarkViewController(QListView* listView, KBookmarkManager* manager)
+BookmarkViewController::BookmarkViewController(QListView* listView, KToolBar* toolbar, KBookmarkManager* manager)
 : QObject(listView)
 {
 	d=new Private;
 	d->mListView=listView;
-	d->mToolTip.reset(new BookmarkToolTip(listView) );
 	d->mManager=manager;
+	d->mToolTip.reset(new BookmarkToolTip(listView) );
+	d->mActionCollection=new KActionCollection(listView);
 
 	d->mListView->header()->hide();
 	d->mListView->setRootIsDecorated(true);
@@ -152,6 +156,15 @@ BookmarkViewController::BookmarkViewController(QListView* listView, KBookmarkMan
 	// For now, we ignore the caller parameter and just refresh the full list on update
 	connect(d->mManager, SIGNAL(changed(const QString&, const QString&)),
 		this, SLOT(fill()) );
+
+	KAction* action;
+	toolbar->setIconText(KToolBar::IconTextRight);
+	action=new KAction(i18n("Add a bookmark (keep it short)", "Add"), "bookmark_add", 0, 
+			this, SLOT(addBookmark()), d->mActionCollection);
+	action->plug(toolbar);
+	action=new KAction(i18n("Remove a bookmark (keep it short)", "Remove"), "editdelete", 0,
+			this, SLOT(deleteCurrentBookmark()), d->mActionCollection);
+	action->plug(toolbar);
 	
 	fill();
 }
