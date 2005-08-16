@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "bookmarkviewcontroller.moc"
 
+#include <memory>
+
 // Qt
 #include <qcursor.h>
 #include <qheader.h>
@@ -61,10 +63,31 @@ struct BookmarkItem : public QListViewItem {
 };
 
 
+class BookmarkToolTip : public QToolTip {
+public:
+	BookmarkToolTip(QListView* lv)
+	: QToolTip(lv->viewport())
+	, mListView(lv) {}
+
+	void maybeTip(const QPoint& pos) {
+		BookmarkItem *item = static_cast<BookmarkItem*>( mListView->itemAt(pos) );
+		if ( !item) return;
+		if (item->mBookmark.isGroup()) return;
+		
+		QRect rect=mListView->itemRect(item);
+		kdDebug() << rect.left() << "," << rect.top() << "," << rect.width() << "," << rect.height() << endl;
+		tip(rect, item->mBookmark.url().prettyURL());
+	};
+	
+	QListView* mListView;
+};
+
+
 struct BookmarkViewController::Private {
 	QListView* mListView;
 	KBookmarkManager* mManager;
 	KURL mCurrentURL;
+	std::auto_ptr<BookmarkToolTip> mToolTip;
 
 	template <class ItemParent>
 	void addGroup(ItemParent* itemParent, const KBookmarkGroup& group) {
@@ -110,13 +133,14 @@ BookmarkViewController::BookmarkViewController(QListView* listView, KBookmarkMan
 {
 	d=new Private;
 	d->mListView=listView;
+	d->mToolTip.reset(new BookmarkToolTip(listView) );
 	d->mManager=manager;
 
 	d->mListView->header()->hide();
 	d->mListView->setRootIsDecorated(true);
 	d->mListView->addColumn(QString::null);
 	d->mListView->setSorting(-1);
-	QToolTip::add(d->mListView->viewport(), i18n("Right-click here to add, edit or remove bookmarks"));
+	d->mListView->setShowToolTips(false);
 
 	connect(d->mListView, SIGNAL(clicked(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
