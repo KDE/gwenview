@@ -24,6 +24,7 @@
    the current image.
  - The destination URL is now set to the current URL in KIPI plugins.
  - Use the folder name as an album name for KIPI plugins.
+ - Do not add a dummy character at the end of JPEG comments.
  
 2005.07.17 - v1.2.91
 - New features:

@@ -322,37 +322,6 @@ QString JPEGContent::comment() const {
 }
 
 
-// This code is inspired by jpegtools.c from fbida
-static void doSetComment(struct jpeg_decompress_struct *src, const QString& comment) {
-	jpeg_saved_marker_ptr mark;
-	int size;
-
-	/* find or create comment marker */
-	for (mark = src->marker_list;; mark = mark->next) {
-		if (mark->marker == JPEG_COM)
-			break;
-		if (NULL == mark->next) {
-			mark->next = (jpeg_marker_struct*)
-				src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,
-							   sizeof(*mark));
-			mark = mark->next;
-			memset(mark,0,sizeof(*mark));
-			mark->marker = JPEG_COM;
-			break;
-		}
-	}
-
-	/* update comment marker */
-	QCString utf8=comment.utf8();
-	size = utf8.length() +1;
-	mark->data = (JOCTET*)
-		src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,size);
-	mark->original_length = size;
-	mark->data_length = size;
-	memcpy(mark->data, utf8, size);
-}
-
-
 void JPEGContent::transform(Orientation orientation, bool setComment, const QString& comment) {
 	QMap<Orientation,JXFORM_CODE> orientation2jxform;
 	orientation2jxform[NOT_AVAILABLE]= JXFORM_NONE;
@@ -405,12 +374,6 @@ void JPEGContent::transform(Orientation orientation, bool setComment, const QStr
 	// Read file header
 	(void) jpeg_read_header(&srcinfo, TRUE);
 
-	// Set comment
-	if (setComment) {
-		doSetComment(&srcinfo, comment);
-		d->mComment=comment;
-	}
-
 	// Init transformation
 	jpeg_transform_info transformoption;
 	transformoption.transform = orientation2jxform[orientation];
@@ -438,7 +401,13 @@ void JPEGContent::transform(Orientation orientation, bool setComment, const QStr
 
 	/* Start compressor (note no image data is actually written here) */
 	jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-
+	
+	if (setComment) {
+		QCString utf8=comment.utf8();
+		const char* data=utf8;
+		jpeg_write_marker(&dstinfo, JPEG_COM, (const JOCTET*)(data), utf8.length());
+	}
+	
 	/* Copy to the output file any extra markers that we want to preserve */
 	jcopy_markers_execute(&srcinfo, &dstinfo, JCOPYOPT_ALL);
 

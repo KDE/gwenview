@@ -39,10 +39,10 @@ const char* ORIENT6_FILE="orient6.jpg";
 const int ORIENT6_WIDTH=128;  // This size is the size *after* orientation
 const int ORIENT6_HEIGHT=256; // has been applied
 const char* CUT_FILE="cut.jpg";
-const char* ORIENT6_COMMENT="a comment";
+const QString ORIENT6_COMMENT="a comment";
 const char* ORIENT1_FILE="test_orient1.jpg";
 const char* ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
-const char* ORIENT1_VFLIP_COMMENT="vflip!";
+const QString ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 
 
