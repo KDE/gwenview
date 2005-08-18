@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "fileviewbase.h"
 #include "fileviewstack.h"
+#include "imageutils/jpegcontent.h"
 #include "kipiinterface.moc"
 namespace Gwenview {
 
@@ -79,7 +80,13 @@ public:
 	}
 
 	QString description() {
-		return QString::null;
+		if (!_url.isLocalFile()) return QString::null;
+
+		ImageUtils::JPEGContent content;
+		bool ok=content.load(_url.path());
+		if (!ok) return QString::null;
+
+		return content.comment();
 	}
 
 	void setDescription(const QString&) {}
