@@ -40,10 +40,10 @@ public:
 	void plugActions(const KActionPtrList& actions);
 	void plugWidget(QWidget*);
 	void resizeEvent(QResizeEvent* event);
-	//void setText(const QString& text);
 
 	void slideIn();
 	void slideOut();
+	void toggle();
 
 private slots:
 	void slotUpdateSlide();

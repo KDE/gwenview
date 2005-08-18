@@ -6,12 +6,13 @@
    - Alt+Backspace goes to the previous folder
    - Alt+Space goes to the next folder
    (Patch by Michael Rolf)
- - It's now possible to scroll images with the keyboards
+ - It's now possible to scroll images with the keyboard.
    (Patch by Michael Rolf)
  - The folder view now features two tabs: one to browse the whole folder
    hierarchy, the other to quickly access bookmarks.
  - Images are now prefetched in advance also when browsing in the thumbnail
    view using the cursor keys or keys for next/previous.
+ - In full screen mode, pressing Enter will toggle the full screen bar.
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.

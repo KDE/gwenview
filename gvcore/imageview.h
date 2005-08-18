@@ -191,6 +191,7 @@ private slots:
 	void checkPendingOperations();
 	void loadingStarted();
 	void slotBusyLevelChanged(BusyLevel);
+	void toggleFullScreenBar();
 	
 protected:
 	// Overloaded methods

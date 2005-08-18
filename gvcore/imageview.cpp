@@ -159,7 +159,7 @@ const char CONFIG_MAX_SMOOTH_REPAINT_SIZE[]= "max smooth repaint size";
 
 const char CONFIG_PIXMAPWIDGET_GLOBAL_GROUP[]="pixmap widget global";
 
-const int AUTO_HIDE_TIMEOUT=2000;
+const int AUTO_HIDE_TIMEOUT=4000;
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
@@ -211,6 +211,7 @@ struct ImageView::Private {
 	KAction* mDecreaseBrightness;
 	KAction* mIncreaseContrast;
 	KAction* mDecreaseContrast;
+	KAction* mToggleFullscreenBar;
 	KActionCollection* mActionCollection;
 
 	// Fullscreen stuff
@@ -369,6 +370,9 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 		this,SLOT(increaseContrast()),d->mActionCollection,"increase_contrast");
 	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
 		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
+
+	d->mToggleFullscreenBar=new KAction(i18n("Toggle full screen bar"), 0, Key_Return,
+		this,SLOT(toggleFullScreenBar()), d->mActionCollection, "toggle_bar");
 
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
@@ -1252,6 +1256,10 @@ void ImageView::decreaseContrast() {
 	fullRepaint();
 }
 
+void ImageView::toggleFullScreenBar() {
+	if (!d->mFullScreen) return;
+	d->mFullScreenBar->toggle();
+}
 
 //------------------------------------------------------------------------
 //
@@ -1322,6 +1330,8 @@ void ImageView::openContextMenu(const QPoint& pos) {
 	if( d->mActionCollection->action("fullscreen")) {
 		d->mActionCollection->action("fullscreen")->plug(&menu);
 	}
+
+	d->mToggleFullscreenBar->plug(&menu);
 
 	if (validImage) {
 		menu.insertSeparator();

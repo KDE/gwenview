@@ -39,7 +39,7 @@ namespace Gwenview {
 const int FULLSCREEN_LABEL_RADIUS = 6;
 // Intervals are in milliseconds
 const int SLIDE_IN_INTERVAL = 4;
-const int SLIDE_OUT_INTERVAL = 8;
+const int SLIDE_OUT_INTERVAL = 12;
 // Step is in pixels
 const int SLIDE_STEP = 4;
 
@@ -204,6 +204,15 @@ void FullScreenBar::slideOut() {
 	if (d->mState!=OUT) {
 		d->mState=SLIDING_OUT;
 		d->mTimer.start(SLIDE_OUT_INTERVAL);
+	}
+}
+
+
+void FullScreenBar::toggle() {
+	if (d->mState==SLIDING_OUT || d->mState==OUT) {
+		slideIn();
+	} else {
+		slideOut();
 	}
 }
 
