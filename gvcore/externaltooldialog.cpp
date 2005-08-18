@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qwhatsthis.h>
 
 // KDE
-#include <kactivelabel.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kicondialog.h>
@@ -34,6 +33,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <krun.h>
+#include <kurllabel.h>
 #include <kurlrequester.h>
 
 // Local
@@ -279,17 +280,10 @@ ExternalToolDialog::ExternalToolDialog(QWidget* parent)
 		this, SLOT(addTool()) );
 	connect( d->mContent->mDeleteButton, SIGNAL(clicked()),
 		this, SLOT(deleteTool()) );
-	d->mContent->mHelp->disconnect();
-	connect( d->mContent->mHelp, SIGNAL(linkClicked(const QString&)),
+	connect( d->mContent->mHelp, SIGNAL(leftClickedURL()),
 		this, SLOT(showCommandHelp()) );
-	
-	// FIXME: This is necessary because we are in string freeze. Set this in
-	// the .ui file next
-	QString txt=QWhatsThis::textFor(d->mContent->mCommand);
-	txt=QString("<qt>%1</qt>").arg(txt);
-	QWhatsThis::add(d->mContent->mCommand, txt);
-
-	d->mContent->mHelp->setText("<a href='#'>?</a>");
+	connect( d->mContent->mMoreTools, SIGNAL(leftClickedURL(const QString&)),
+		this, SLOT(openURL(const QString&)) );
 }
 
 
@@ -345,6 +339,11 @@ void ExternalToolDialog::showCommandHelp() {
 	KURLRequester* lbl=d->mContent->mCommand;
 	QWhatsThis::display(QWhatsThis::textFor(lbl),
 		lbl->mapToGlobal( lbl->rect().bottomRight() ) );
+}
+
+
+void ExternalToolDialog::openURL(const QString& url) {
+	new KRun(KURL(url));
 }
 
 } // namespace

@@ -47,6 +47,7 @@ private slots:
 	void addTool();
 	void deleteTool();
 	void showCommandHelp();
+	void openURL(const QString& url);
 	
 private:
 	ExternalToolDialogPrivate* d;
