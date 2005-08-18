@@ -22,7 +22,8 @@
    file view now shows information relative to the current folder, rather than
    the current image.
  - The destination URL is now set to the current URL in KIPI plugins.
-
+ - Use the folder name as an album name for KIPI plugins.
+ 
 2005.07.17 - v1.2.91
 - New features:
  - The file view now features three modes: details, thumbnail with info on the

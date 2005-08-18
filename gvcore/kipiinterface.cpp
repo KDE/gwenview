@@ -125,14 +125,16 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	for ( ; it.current(); ++it ) {
 		list.append(it.current()->url());
 	}
-	return KIPI::ImageCollection(new ImageCollection(d->mFileView->dirURL(), i18n("Folder Content"), list));
+	KURL url=d->mFileView->dirURL();
+	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
 
 
 KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
 	KURL::List list=d->mFileView->selectedURLs();
-	return KIPI::ImageCollection(new ImageCollection(d->mFileView->dirURL(), i18n("Selected Images"), list));
+	KURL url=d->mFileView->dirURL();
+	return KIPI::ImageCollection(new ImageCollection(url, i18n("%1 (Selected Images)").arg(url.fileName()), list));
 }
 
 
