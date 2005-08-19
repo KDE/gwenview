@@ -688,6 +688,14 @@ void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 
 void MainWindow::slotToggleCentralStack() {
 	LOG("");
+	// This is a bit tricky. If we are in fullscreen mode, we probably want to
+	// leave it and come back to the current mode, so we reset mToggleBrowse to
+	// its previous state and activate the fullscreen action
+	if (mToggleFullScreen->isChecked()) {
+		mToggleBrowse->setChecked(!mToggleBrowse->isChecked());
+		mToggleFullScreen->activate();
+		return;
+	}
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mImageView);
 		mCentralStack->raiseWidget(StackIDBrowse);
@@ -1051,6 +1059,8 @@ void MainWindow::createConnections() {
 		mFileViewStack,SLOT(slotSelectNext()) );
 	connect(mImageView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateStatusInfo()) );
+	connect(mImageView,SIGNAL(doubleClicked()),
+		mToggleBrowse,SLOT(activate()) );
 
 	// File view connections
 	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),

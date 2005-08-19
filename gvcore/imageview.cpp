@@ -1075,11 +1075,7 @@ bool ImageView::eventFilter(QObject* obj, QEvent* event) {
 
 	case QEvent::MouseButtonDblClick:
 		if (d->mToolID==ZOOM) return false;
-				
-		if (d->mActionCollection->action("fullscreen") // may be NULL in KParts
-		    && d->mActionCollection->action("fullscreen")->isEnabled()) {
-			d->mActionCollection->action("fullscreen")->activate();
-		}
+		emit doubleClicked();		
 		return true;
 
 	// Getting/loosing focus causes repaints, but repainting here is expensive,

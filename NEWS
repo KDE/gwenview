@@ -25,6 +25,8 @@
  - The destination URL is now set to the current URL in KIPI plugins.
  - Use the folder name as an album name for KIPI plugins.
  - Do not add a dummy character at the end of JPEG comments.
+ - Double click behaviour has been changed to always toggle browse mode. It
+   feels more natural this way.
  
 2005.07.17 - v1.2.91
 - New features:

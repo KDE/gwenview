@@ -120,6 +120,7 @@ signals:
 	void selectPrevious();
 	void selectNext();
 	void zoomChanged(double);
+    void doubleClicked();
 
     // Emitted whenever an hint should be displayed
     void requestHintDisplay(const QString& hint);
