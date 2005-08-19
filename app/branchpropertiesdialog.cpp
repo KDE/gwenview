@@ -65,6 +65,18 @@ BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent, BranchProperties
 			this, SLOT(updateOk()));
 	}
 
+	switch (mode) {
+	case BOOKMARK_GROUP:
+		setCaption( i18n("Add/edit a bookmark folder") );
+		break;
+	case BOOKMARK:
+		setCaption( i18n("Add/edit a bookmark") );
+		break;
+	case BRANCH:
+		setCaption( i18n("Add/edit a branch") );
+		break;
+	}
+
 	updateOk();
 }
 
