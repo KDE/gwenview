@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>751</width>
-            <height>398</height>
+            <width>516</width>
+            <height>411</height>
         </rect>
     </property>
     <property name="caption">
@@ -113,27 +113,49 @@
                         <number>3</number>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>radioButton5</cstring>
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioButton5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Custom:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>mFreeOutputFormat</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Custom (example: %f - %c)
-- %f: filename
-- %p: filepath
-- %c: comment
-- %r: resolution
-- %n: current image position
-- %N: image count
-- \n: newline</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>mFreeOutputFormat</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
+                        <string>&lt;qt&gt;
+You can use the following keywords in the Custom field:
+&lt;ul&gt;
+&lt;li&gt;%f: filename&lt;/li&gt;
+&lt;li&gt;%p: filepath&lt;/li&gt;
+&lt;li&gt;%c: comment&lt;/li&gt;
+&lt;li&gt;%r: resolution&lt;/li&gt;
+&lt;li&gt;%n: current image position&lt;/li&gt;
+&lt;li&gt;%N: image count&lt;/li&gt;
+&lt;li&gt;\n: newline&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/qt&gt;</string>
                     </property>
                 </widget>
             </vbox>
@@ -151,7 +173,7 @@
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>16</height>
+                    <height>70</height>
                 </size>
             </property>
         </spacer>
