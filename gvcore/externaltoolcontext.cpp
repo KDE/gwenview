@@ -26,6 +26,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <krun.h>
 #include <kservice.h>
 
 // Local
@@ -50,6 +51,11 @@ void ExternalToolContext::showExternalToolDialog() {
 }
 
 
+void ExternalToolContext::showOpenWithDialog() {
+	KRun::displayOpenWithDialog(mURLs, false /*tempFiles*/);
+}
+
+
 QPopupMenu* ExternalToolContext::popupMenu() {
 	QPopupMenu* menu=new QPopupMenu();
 	std::list<KService*>::const_iterator it=mServices.begin();
@@ -61,6 +67,8 @@ QPopupMenu* ExternalToolContext::popupMenu() {
 	}
 
 	menu->insertSeparator();
+	menu->insertItem(i18n("Other..."),
+		this, SLOT(showOpenWithDialog()) );
 	menu->insertItem(
 		SmallIcon("configure"),
 		i18n("Configure External Tools..."), 

@@ -43,6 +43,7 @@ public:
 
 private slots:
 	void showExternalToolDialog();
+	void showOpenWithDialog();
 
 private:
 	std::list<KService*> mServices;
