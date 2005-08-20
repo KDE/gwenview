@@ -67,13 +67,13 @@ BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent, BranchProperties
 
 	switch (mode) {
 	case BOOKMARK_GROUP:
-		setCaption( i18n("Add/edit a bookmark folder") );
+		setCaption( i18n("Add/Edit Bookmark Folder") );
 		break;
 	case BOOKMARK:
-		setCaption( i18n("Add/edit a bookmark") );
+		setCaption( i18n("Add/Edit Bookmark") );
 		break;
 	case BRANCH:
-		setCaption( i18n("Add/edit a branch") );
+		setCaption( i18n("Add/Edit Branch") );
 		break;
 	}
 
