@@ -16,6 +16,7 @@
  - KIPI plugins can now access JPEG comments.
  - Added zoom in and out actions to the KParts.
  - Added an "Other..." entry to the external tools menu.
+ - Added support for symbolic links to drag'n'drop popup menu.
 - Fixes:
  - In the thumbnail view, make sure we always show folder and archive
    filenames, even if the filename is not shown for images.

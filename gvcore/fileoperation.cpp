@@ -85,8 +85,9 @@ void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, con
 	QPopupMenu menu(parent);
 	if (wasMoved) *wasMoved=false;
 
+	int moveItemID = menu.insertItem( SmallIcon("goto"), i18n("&Move Here") );
 	int copyItemID = menu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here") );
-	int moveItemID = menu.insertItem( i18n("&Move Here") );
+	int linkItemID = menu.insertItem( SmallIcon("www"), i18n("&Link Here") );
 	menu.insertSeparator();
 	menu.insertItem( SmallIcon("cancel"), i18n("Cancel") );
 
@@ -99,6 +100,8 @@ void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, con
 	} else if (id==moveItemID) {
 		KIO::move(urls, target, true);
 		if (wasMoved) *wasMoved=true;
+	} else if (id==linkItemID) {
+		KIO::link(urls, target, true);
 	}
 }
 
