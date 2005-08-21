@@ -1,35 +1,34 @@
-2005.xx.xx - v1.2.92
+2005.08.21 - v1.2.92
 - New features:
  - The slide show can now display images in random order.
- - New shortcuts has been introduced to move in the folder hierarchy: 
+ - New shortcuts have been introduced to browse the folder hierarchy: 
    - Alt+Down goes to the first sub-folder
    - Alt+Backspace goes to the previous folder
    - Alt+Space goes to the next folder
    (Patch by Michael Rolf)
- - It's now possible to scroll images with the keyboard.
+ - It is now possible to scroll images with the keyboard.
    (Patch by Michael Rolf)
- - The folder view now features two tabs: one to browse the whole folder
-   hierarchy, the other to quickly access bookmarks.
+ - A new view has been added to quickly access bookmarks.
  - Images are now prefetched in advance also when browsing in the thumbnail
    view using the cursor keys or keys for next/previous.
  - In full screen mode, pressing Enter will toggle the full screen bar.
  - KIPI plugins can now access JPEG comments.
- - Added zoom in and out actions to the KParts.
- - Added an "Other..." entry to the external tools menu.
- - Added support for symbolic links to drag'n'drop popup menu.
+ - Zoom in and out actions have been added to the KParts.
+ - An "Other..." entry has been added to the external tools menu.
+ - The drag'n'drop popup menu now contains an entry to create a symbolic link.
 - Fixes:
- - In the thumbnail view, make sure we always show folder and archive
-   filenames, even if the filename is not shown for images.
- - When right clicking on files from the folder KPart, show Konqueror popup
-   menu instead of Gwenview.
+ - In the thumbnail view, folder and archive filenames are always shown, even
+   if the user choose to hide image filenames.
+ - When right clicking on files from the folder KPart, the Konqueror popup
+   menu will now appear, instead of Gwenview's menu.
  - The context menu which appears when right clicking on the background of a
    file view now shows information relative to the current folder, rather than
    the current image.
  - The destination URL is now set to the current URL in KIPI plugins.
- - Use the folder name as an album name for KIPI plugins.
- - Do not add a dummy character at the end of JPEG comments.
- - Double click behaviour has been changed to always toggle browse mode. It
-   feels more natural this way.
+ - The folder name is used as the album name for KIPI plugins.
+ - The JPEG comment editor has been fixed to avoid adding a dummy character at
+   the end.
+ - Double click behaviour has been changed to always toggle browse mode.
  
 2005.07.17 - v1.2.91
 - New features:

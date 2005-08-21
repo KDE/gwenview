@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aur�ien G�eau
+Copyright 2000-2005 Aurelien Gateau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char version[] = "1.2.91";
+static const char version[] = "1.2.92";
 
 #ifndef __KDE_HAVE_GCC_VISIBILITY
 #undef KDE_EXPORT
@@ -43,7 +43,7 @@ extern "C"
 KDE_EXPORT int kdemain (int argc, char *argv[]) {
 	KAboutData aboutData("gwenview", I18N_NOOP("Gwenview"),
 		version, I18N_NOOP("An image viewer for KDE"), KAboutData::License_GPL,
-		"Copyright 2000-2004, The Gwenview developers",0,"http://gwenview.sourceforge.net");
+		"Copyright 2000-2005, The Gwenview developers",0,"http://gwenview.sourceforge.net");
 	aboutData.addAuthor("Aurélien Gâteau", I18N_NOOP("Main developer"), "aurelien.gateau@free.fr");
 	aboutData.addAuthor("Luboš Luňák", I18N_NOOP("Developer"), "l.lunak@suse.cz");
 
