@@ -80,9 +80,6 @@
             <property name="text">
                 <string>&amp;Delete</string>
             </property>
-            <property name="accel">
-                <string>Alt+D</string>
-            </property>
         </widget>
         <widget class="QPushButton" row="1" column="0">
             <property name="name">
@@ -90,9 +87,6 @@
             </property>
             <property name="text">
                 <string>&amp;Add</string>
-            </property>
-            <property name="accel">
-                <string>Alt+A</string>
             </property>
         </widget>
         <widget class="KListView" row="0" column="0" rowspan="1" colspan="2">
