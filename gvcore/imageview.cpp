@@ -373,6 +373,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 
 	d->mToggleFullscreenBar=new KAction(i18n("Toggle full screen bar"), 0, Key_Return,
 		this,SLOT(toggleFullScreenBar()), d->mActionCollection, "toggle_bar");
+	d->mToggleFullscreenBar->setEnabled(d->mFullScreen);
 
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
@@ -641,6 +642,7 @@ void ImageView::setFullScreenActions(KActionPtrList actions) {
 
 void ImageView::setFullScreen(bool fullScreen) {
 	d->mFullScreen=fullScreen;
+	d->mToggleFullscreenBar->setEnabled(fullScreen);
 	viewport()->setMouseTracking(d->mFullScreen);
 
 	if (d->mFullScreen) {
