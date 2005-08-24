@@ -1,3 +1,10 @@
+2005.xx.xx - v1.3.0
+- Fixes:
+ - Keyboard shortcuts for file operations now work even if no image is selected.
+ - Pressing Enter to enter a folder works again.
+ - On the image view, the "hand" cursors have been replaced with standard
+   cursors.
+
 2005.08.21 - v1.2.92
 - New features:
  - The slide show can now display images in random order.
