@@ -714,6 +714,7 @@ void MainWindow::slotToggleCentralStack() {
 	for (;it.current(); ++it) {
 		it.current()->setEnabled(mToggleBrowse->isChecked());
 	}
+	updateImageActions();
 	updateLocationURL();
 }
 
@@ -769,23 +770,27 @@ void MainWindow::updateStatusInfo() {
 
 
 void MainWindow::updateImageActions() {
-	bool filenameIsValid=!mDocument->isNull();
+	bool imageActionsEnabled = !mDocument->isNull();
+	
+	mStartSlideShow->setEnabled(imageActionsEnabled);
+	mRotateLeft->setEnabled(imageActionsEnabled);
+	mRotateRight->setEnabled(imageActionsEnabled);
+	mMirror->setEnabled(imageActionsEnabled);
+	mFlip->setEnabled(imageActionsEnabled);
+	mSaveFile->setEnabled(imageActionsEnabled);
+	mSaveFileAs->setEnabled(imageActionsEnabled);
+	mFilePrint->setEnabled(imageActionsEnabled);
+	mReload->setEnabled(imageActionsEnabled);
 
-	mStartSlideShow->setEnabled(filenameIsValid);
-	mRenameFile->setEnabled(filenameIsValid);
-	mCopyFiles->setEnabled(filenameIsValid);
-	mMoveFiles->setEnabled(filenameIsValid);
-	mDeleteFiles->setEnabled(filenameIsValid);
-	mShowFileProperties->setEnabled(filenameIsValid);
-	mRotateLeft->setEnabled(filenameIsValid);
-	mRotateRight->setEnabled(filenameIsValid);
-	mMirror->setEnabled(filenameIsValid);
-	mFlip->setEnabled(filenameIsValid);
-	mSaveFile->setEnabled(filenameIsValid);
-	mSaveFileAs->setEnabled(filenameIsValid);
-	mFilePrint->setEnabled(filenameIsValid);
-	mReload->setEnabled(filenameIsValid);
+	bool fileActionsEnabled = 
+		imageActionsEnabled
+		|| (mFileViewStack->isVisible() && mFileViewStack->selectionSize()>0);
 
+	mRenameFile->setEnabled(fileActionsEnabled);
+	mCopyFiles->setEnabled(fileActionsEnabled);
+	mMoveFiles->setEnabled(fileActionsEnabled);
+	mDeleteFiles->setEnabled(fileActionsEnabled);
+	mShowFileProperties->setEnabled(fileActionsEnabled);
 }
 
 
@@ -984,6 +989,10 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewStack->selectNext());
 	actions.append(mToggleFullScreen);
 	mImageView->setFullScreenActions(actions);
+
+	// Make sure file actions are correctly updated
+	connect(mFileViewStack, SIGNAL(selectionChanged()),
+		this, SLOT(updateImageActions()) );
 
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );
