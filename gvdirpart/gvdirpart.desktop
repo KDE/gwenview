@@ -28,4 +28,4 @@ MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvdirpart
 InitialPreference=5
-Icon=imagegallery
+Icon=gvdirpart
