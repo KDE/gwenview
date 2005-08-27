@@ -48,7 +48,7 @@ class KDockArea;
 class KDockWidget;
 class KFileItem;
 class KHistoryCombo;
-class QListView;
+class KListView;
 class KToggleAction;
 class KToolBar;
 class KToolBarPopupAction;
@@ -105,7 +105,7 @@ private:
 
 	FileViewStack* mFileViewStack;
 	DirView* mDirView;
-	QListView* mBookmarkView;
+	KListView* mBookmarkView;
 	ImageView* mImageView;
 	MetaEdit *mMetaEdit;
 

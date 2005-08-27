@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <klargefile.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -843,7 +844,7 @@ void MainWindow::createWidgets() {
 	// Bookmark widget
 	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
 	QVBox* bmBox=new QVBox(mBookmarkDock);
-	mBookmarkView=new QListView(bmBox);
+	mBookmarkView=new KListView(bmBox);
 	mBookmarkToolBar=new KToolBar(bmBox, "", true);
 	mBookmarkDock->setWidget(bmBox);
 

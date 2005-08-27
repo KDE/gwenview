@@ -24,10 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qobject.h>
 
-class QListView;
 class QListViewItem;
 class QPoint;
 class KBookmarkManager;
+class KListView;
 class KToolBar;
 class KURL;
 
@@ -36,7 +36,7 @@ namespace Gwenview {
 class BookmarkViewController : public QObject {
 Q_OBJECT
 public:
-	BookmarkViewController(QListView*, KToolBar*, KBookmarkManager*);
+	BookmarkViewController(KListView*, KToolBar*, KBookmarkManager*);
 	~BookmarkViewController();
 
 signals:

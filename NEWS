@@ -4,6 +4,8 @@
  - Pressing Enter to enter a folder works again.
  - On the image view, the "hand" cursors have been replaced with standard
    cursors.
+ - The click/double-click behaviour of the bookmark view has been changed to
+   match the behaviour of the folder view.
 
 2005.08.21 - v1.2.92
 - New features:

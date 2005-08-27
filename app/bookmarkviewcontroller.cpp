@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qcursor.h>
 #include <qheader.h>
-#include <qlistview.h>
 #include <qpopupmenu.h>
 #include <qtooltip.h>
 
@@ -37,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
@@ -48,10 +48,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace Gwenview {
 
-struct BookmarkItem : public QListViewItem {
+struct BookmarkItem : public KListViewItem {
 	template <class ItemParent>
 	BookmarkItem(ItemParent* parent, const KBookmark& bookmark)
-	: QListViewItem(parent)
+	: KListViewItem(parent)
 	, mBookmark(bookmark)
 	{
 		refresh();
@@ -68,7 +68,7 @@ struct BookmarkItem : public QListViewItem {
 
 class BookmarkToolTip : public QToolTip {
 public:
-	BookmarkToolTip(QListView* lv)
+	BookmarkToolTip(KListView* lv)
 	: QToolTip(lv->viewport())
 	, mListView(lv) {}
 
@@ -81,12 +81,12 @@ public:
 		tip(rect, item->mBookmark.url().prettyURL());
 	};
 	
-	QListView* mListView;
+	KListView* mListView;
 };
 
 
 struct BookmarkViewController::Private {
-	QListView* mListView;
+	KListView* mListView;
 	KBookmarkManager* mManager;
 	KURL mCurrentURL;
 	std::auto_ptr<BookmarkToolTip> mToolTip;
@@ -131,7 +131,7 @@ struct BookmarkViewController::Private {
 };
 
 
-BookmarkViewController::BookmarkViewController(QListView* listView, KToolBar* toolbar, KBookmarkManager* manager)
+BookmarkViewController::BookmarkViewController(KListView* listView, KToolBar* toolbar, KBookmarkManager* manager)
 : QObject(listView)
 {
 	d=new Private;
@@ -146,7 +146,7 @@ BookmarkViewController::BookmarkViewController(QListView* listView, KToolBar* to
 	d->mListView->setSorting(-1);
 	d->mListView->setShowToolTips(false);
 
-	connect(d->mListView, SIGNAL(clicked(QListViewItem*)),
+	connect(d->mListView, SIGNAL(executed(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
 	connect(d->mListView, SIGNAL(returnPressed(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );

@@ -50,21 +50,23 @@ namespace Gwenview {
 
 class ImageCollection : public KIPI::ImageCollectionShared {
 public:
-	ImageCollection(KURL uploadURL, const QString& name, const KURL::List& images)
+	ImageCollection(KURL dirURL, const QString& name, const KURL::List& images)
 	: KIPI::ImageCollectionShared()
-    , mUploadURL(uploadURL)
+    , mDirURL(dirURL)
     , mName(name)
     , mImages(images) {}
 
 	QString name()           { return mName; }
 	QString comment()        { return QString::null; }
-	KURL::List images()      { return mImages; }
-	KURL uploadPath()        { return mUploadURL; }
+	KURL path()              { return mDirURL; }
 	bool isDirectory()       { return true; }
+	KURL::List images()      { return mImages; }
+	KURL uploadRoot()        { return KURL("/"); }
+	KURL uploadPath()        { return mDirURL; }
 	QString uploadRootName() { return "/"; }
 
 private:
-    KURL mUploadURL;
+    KURL mDirURL;
 	QString mName;
 	KURL::List mImages;
 };
