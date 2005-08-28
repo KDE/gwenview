@@ -112,6 +112,7 @@ void FileOpCopyToObject::operator()() {
 
 // Copy the file
 	KIO::Job* copyJob=KIO::copy(mURLList,destURL,true);
+	copyJob->setWindow(mParent->topLevelWidget());
 	connect( copyJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 
@@ -143,6 +144,7 @@ void FileOpMoveToObject::operator()() {
 
 // Move the file
 	KIO::Job* moveJob=KIO::move(mURLList,destURL,true);
+	moveJob->setWindow(mParent->topLevelWidget());
 	connect( moveJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 
@@ -198,6 +200,7 @@ void FileOpTrashObject::operator()() {
 		trashURL.addPath(mURLList.first().fileName());
 	}
 	KIO::Job* job=KIO::move(mURLList,trashURL);
+	job->setWindow(mParent->topLevelWidget());
 	connect( job, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }
@@ -239,6 +242,7 @@ void FileOpRealDeleteObject::operator()() {
 
 	// Delete the file
 	KIO::Job* removeJob=KIO::del(mURLList,false,true);
+	removeJob->setWindow(mParent->topLevelWidget());
 	connect( removeJob, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }
@@ -262,6 +266,7 @@ void FileOpRenameObject::operator()() {
 	KURL destURL=srcURL;
 	destURL.setFileName(mNewFilename);
 	KIO::Job* job=KIO::move(srcURL,destURL);
+	job->setWindow(mParent->topLevelWidget());
 	connect( job, SIGNAL( result(KIO::Job*) ),
 		this, SLOT( slotResult(KIO::Job*) ) );
 }

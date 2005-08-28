@@ -38,6 +38,7 @@
 #include <qtimer.h>
 
 // KDE 
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kfileitem.h>
@@ -548,6 +549,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 	}
 	if( mOriginalTime == 0 ) { // KIO must be used
 		KIO::Job* job = KIO::stat(mCurrentURL,false);
+		job->setWindow(KApplication::kApplication()->mainWidget());
 		LOG( "KIO::stat orig " << mCurrentURL.url() );
 		addSubjob(job);
 	}
@@ -686,6 +688,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 		KURL url;
 		url.setPath(mTempPath);
 		KIO::Job* job=KIO::file_copy(mCurrentURL, url,-1,true,false,false);
+		job->setWindow(KApplication::kApplication()->mainWidget());
 		LOG("Download remote file " << mCurrentURL.prettyURL());
 		addSubjob(job);
 	}

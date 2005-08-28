@@ -277,7 +277,7 @@ void ConfigDialog::emptyCache() {
 
 	KURL url;
 	url.setPath(dir);
-	if (KIO::NetAccess::del(url, this)) {
+	if (KIO::NetAccess::del(url, topLevelWidget()) ) {
 		KMessageBox::information( this,i18n("Cache emptied.") );
 	}
 }

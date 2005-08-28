@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qwmatrix.h>
 
 // KDE
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kfilemetainfo.h>
 #include <kglobalsettings.h>
@@ -169,6 +170,7 @@ void Document::setURL(const KURL& paramURL) {
 
 	d->mURL = localURL; // this may be fixed after stat() is complete, but set at least something
 	d->mStatJob = KIO::stat( localURL, !localURL.isLocalFile() );
+	d->mStatJob->setWindow(KApplication::kApplication()->mainWidget());
 	connect( d->mStatJob, SIGNAL( result (KIO::Job *) ),
 	   this, SLOT( slotStatResult (KIO::Job *) ) );
 }

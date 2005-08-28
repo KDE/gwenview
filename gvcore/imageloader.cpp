@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtimer.h>
 
 // KDE
+#include <kapplication.h>
 
 // Local
 #include "cache.h"
@@ -297,6 +298,7 @@ void ImageLoader::checkPendingStat() {
 	if( d->mSuspended || !d->mStatPending ) return;
 
 	KIO::Job* job=KIO::stat( d->mURL, false );
+	job->setWindow(KApplication::kApplication()->mainWidget());
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
 	d->mStatPending = false;
@@ -352,6 +354,7 @@ void ImageLoader::checkPendingGet() {
 
 	// Start loading the image
 	KIO::Job* getJob=KIO::get( d->mURL, false, false);
+	getJob->setWindow(KApplication::kApplication()->mainWidget());
 
 	connect(getJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
 		this, SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );

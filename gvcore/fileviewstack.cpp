@@ -166,6 +166,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 	// Dir lister
 	mDirLister=new DirLister;
+	mDirLister->setMainWindow(topLevelWidget());
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 
