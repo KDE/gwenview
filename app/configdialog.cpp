@@ -196,16 +196,6 @@ void ConfigDialog::slotOk() {
 }
 
 
-#if QT_VERSION<0x030200
-// This function emulates int QButtonGroup::selectedId() which does not exist
-// in Qt 3.1
-inline int buttonGroupSelectedId(const QButtonGroup* group) {
-	QButton* button=group->selected();
-	if (!button) return -1;
-	return group->id(button);
-}
-#endif
-
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
@@ -228,11 +218,7 @@ void ConfigDialog::slotApply() {
 	fileViewStack->fileThumbnailView()->setItemDetails(details);
 	
 	// Image View tab
-#if QT_VERSION>=0x030200
 	int algo=d->mImageViewPage->mSmoothGroup->selectedId();
-#else
-	int algo=buttonGroupSelectedId(d->mImageViewPage->mSmoothGroup);
-#endif
 	
 	imageView->setSmoothAlgorithm( static_cast<ImageUtils::SmoothAlgorithm>(algo));
 	imageView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
@@ -242,11 +228,7 @@ void ConfigDialog::slotApply() {
 	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 	
 	// Full Screen tab
-#if QT_VERSION>=0x030200
 	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
-#else
-	int osdMode=buttonGroupSelectedId(d->mFullScreenPage->mOSDModeGroup);
-#endif
 	imageView->setOSDMode( static_cast<ImageView::OSDMode>(osdMode) );
 	imageView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
 	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
@@ -264,11 +246,7 @@ void ConfigDialog::slotApply() {
 #endif
 
 	// Misc tab
-#if QT_VERSION>=0x030200
 	int behavior=d->mMiscPage->mModifiedBehaviorGroup->selectedId();
-#else
-	int behavior=buttonGroupSelectedId(d->mMiscPage->mModifiedBehaviorGroup);
-#endif
 	document->setModifiedBehavior( static_cast<Document::ModifiedBehavior>(behavior) );
 	
 	GVConfig::self()->setAutoRotateImages(d->mMiscPage->mAutoRotateImages->isChecked() );
