@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "captionformatter.h"
 
-// Qt
-#include <qregexp.h>
-
 // KDE
 #include <klocale.h>
 
@@ -53,12 +50,12 @@ QString CaptionFormatter::operator()(const QString& format) {
 	int count=mFileView->fileCount();
 	
 	str.replace("\\n", "\n");
-	str.replace(QRegExp("%f"), fileName);
-	str.replace(QRegExp("%p"), path);
-	str.replace(QRegExp("%c"), comment);
-	str.replace(QRegExp("%r"), resolution);
-	str.replace(QRegExp("%n"), QString::number(position));
-	str.replace(QRegExp("%N"), QString::number(count));
+	str.replace("%f", fileName);
+	str.replace("%p", path);
+	str.replace("%c", comment);
+	str.replace("%r", resolution);
+	str.replace("%n", QString::number(position));
+	str.replace("%N", QString::number(count));
 	return str;
 }
 
