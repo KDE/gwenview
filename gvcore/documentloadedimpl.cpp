@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qtimer.h>
 
 // KDE
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <klargefile.h>
@@ -155,7 +156,7 @@ QString DocumentLoadedImpl::save(const KURL& _url, const QCString& format) const
 			return i18n("Could not write to %1.").arg(url.path());
 		}
 	} else {
-		if (!KIO::NetAccess::upload(tmp.name(),url)) {
+		if (!KIO::NetAccess::upload(tmp.name(), url, KApplication::kApplication()->mainWidget() )) {
 			return i18n("Could not upload the file to %1.").arg(url.prettyURL());
 		}
 	}
