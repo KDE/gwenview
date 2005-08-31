@@ -54,7 +54,7 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 	aboutData.addCredit("GeniusR13", I18N_NOOP("Fixed compilation on KDE 3.0 (v0.16.1)"), "geniusr13@gmx.net");
 	aboutData.addCredit("Ian Koenig", I18N_NOOP("First RPM spec file"), "iguy@ionsphere.org");
 	aboutData.addCredit("Meni Livne", I18N_NOOP("Toolbar layout patch for RTL languages (v0.16.0)"), "livne@kde.org");
-	aboutData.addCredit("Angelo Naselli", I18N_NOOP("Printing support (v1.0.0)"), "random_lx@yahoo.com");
+	aboutData.addCredit("Angelo Naselli", I18N_NOOP("Printing support (v1.0.0)"), "anaselli@linux.it");
 	aboutData.addCredit("Jos van den Oever", I18N_NOOP("File info view (v1.0.0)\nPatch to toggle auto-zoom on click (v1.0.0)"), "jos@vandenoever.info");
 	aboutData.addCredit("Jeroen Peters", I18N_NOOP("Configurable mouse wheel behavior (v1.1.1)"), "jpeters@coldmail.nl");
 	aboutData.addCredit("Andreas Pfaller", I18N_NOOP("Option to prevent Gwenview from automatically loading the first image of a folder (v0.15.0)"), "apfaller@yahoo.com.au");
