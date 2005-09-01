@@ -8,6 +8,7 @@
    match the behaviour of the folder view.
  - Icons of the folder KPart have been enhanced.
  - Authentication dialogs should now always appear over the main window.
+ - Folders are no longer included in the image list of KIPI albums.
 
 2005.08.21 - v1.2.92
 - New features:

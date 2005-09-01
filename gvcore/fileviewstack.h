@@ -124,6 +124,7 @@ public:
 	void setFocus();
 
 	KURL::List selectedURLs() const;
+	KURL::List selectedImageURLs() const;
 	/**
 	 * If set to true, no error messages will be displayed.
 	 */

@@ -421,7 +421,7 @@ void MainWindow::flip() {
 }
 
 void MainWindow::modifyImage(ImageUtils::Orientation orientation) {
-	const KURL::List& urls=mFileViewStack->selectedURLs();
+	const KURL::List& urls=mFileViewStack->selectedImageURLs();
 	if (mFileViewStack->isVisible() && urls.size()>1) {
 		BatchManipulator manipulator(this, urls, orientation);
 		connect(&manipulator, SIGNAL(imageModified(const KURL&)),

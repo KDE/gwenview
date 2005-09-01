@@ -677,6 +677,24 @@ KURL::List FileViewStack::selectedURLs() const {
 }
 
 
+KURL::List FileViewStack::selectedImageURLs() const {
+	KURL::List list;
+
+	KFileItemListIterator it( *currentFileView()->selectedItems() );
+	for ( ; it.current(); ++it ) {
+		KFileItem* item=it.current();
+		if (!Archive::fileItemIsDirOrArchive(item)) {
+			list.append(item->url());
+		}
+	}
+	if (list.isEmpty()) {
+		const KFileItem* item=currentFileView()->shownFileItem();
+		if (item && !Archive::fileItemIsDirOrArchive(item)) list.append(item->url());
+	}
+	return list;
+}
+
+
 void FileViewStack::openParentDir() {
 	KURL url(mDirURL.upURL());
 	emit urlChanged(url);

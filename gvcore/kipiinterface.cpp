@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <libkipi/imageinfoshared.h>
 
 // Local
+#include "archive.h"
 #include "fileviewbase.h"
 #include "fileviewstack.h"
 #include "imageutils/jpegcontent.h"
@@ -132,7 +133,10 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	KURL::List list;
 	KFileItemListIterator it( *d->mFileView->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
-		list.append(it.current()->url());
+		KFileItem* item=it.current();
+		if (!Archive::fileItemIsDirOrArchive(item)) {
+			list.append(it.current()->url());
+		}
 	}
 	KURL url=d->mFileView->dirURL();
 	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
@@ -141,7 +145,7 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 
 KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
-	KURL::List list=d->mFileView->selectedURLs();
+	KURL::List list=d->mFileView->selectedImageURLs();
 	KURL url=d->mFileView->dirURL();
 	return KIPI::ImageCollection(new ImageCollection(url, i18n("%1 (Selected Images)").arg(url.fileName()), list));
 }
