@@ -34,6 +34,10 @@ inline QRgb qRgba ( QRgb rgb, int a )
 
 namespace Gwenview {
 
+int SafeDataStream::at() const {
+  return mDevice->at();
+}
+
 const float INCHESPERMETER = (100. / 2.54);
 
 // Static global values
@@ -1428,19 +1432,34 @@ bool XCFImageFormat::loadProperty ( SafeDataStream& xcf_io, PropType& type,
   char* data;
   Q_UINT32 size;
 
-  // The colormap property size is not the correct number of bytes:
-  // The GIMP source xcf.c has size = 4 + ncolors, but it should be
-  // 4 + 3 * ncolors
-
+  // The COLORMAP property is tricky: in version of GIMP older than 2.0.2, the
+  // property size was wrong (it was 4 + ncolors instead of 4 + 3*ncolors).
+  // This has been fixed in 2.0.2 (*), but the XCF format version has not been
+  // increased, so we can't rely on the property size. The UINT32 after the
+  // property size is the number of colors, which has always been correct, so
+  // we read it, compute the size from it and put it back in the stream.
+  //
+  // * See http://bugzilla.gnome.org/show_bug.cgi?id=142149 and
+  // gimp/app/xcf-save.c, revision 1.42
   if ( type == PROP_COLORMAP ) {
-    xcf_io >> size;
-
+    Q_UINT32 ignoredSize, ncolors;
+    xcf_io >> ignoredSize;
     if ( xcf_io.failed() ) {
       qDebug( "XCF: read failure on property %d size", type );
       return false;
     }
 
-    size = 3 * ( size - 4 ) + 4;
+    xcf_io >> ncolors;
+    if ( xcf_io.failed() ) {
+      qDebug( "XCF: read failure on property %d size", type );
+      return false;
+    }
+    xcf_io.device()->ungetch( ncolors & 0xff);
+    xcf_io.device()->ungetch( (ncolors>> 8) & 0xff );
+    xcf_io.device()->ungetch( (ncolors>>16) & 0xff );
+    xcf_io.device()->ungetch( (ncolors>>24) & 0xff );
+    
+    size=4 + 3 * ncolors;
     data = new char[size];
 
     xcf_io.readRawBytes( data, size );

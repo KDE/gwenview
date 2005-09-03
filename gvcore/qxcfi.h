@@ -91,6 +91,9 @@ public:
 	return readRawBytes(data, len);
   }
 
+  // This method is usefull to debug with gdb. Do not inline it!
+  int at() const;
+
 private:
   QIODevice* mDevice;
   bool mFailed;

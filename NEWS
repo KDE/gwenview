@@ -9,6 +9,8 @@
  - Icons of the folder KPart have been enhanced.
  - Authentication dialogs should now always appear over the main window.
  - Folders are no longer included in the image list of KIPI albums.
+ - A crash which could happen when loading indexed XCF files produced by
+   recent versions of GIMP has been fixed.
 
 2005.08.21 - v1.2.92
 - New features:
