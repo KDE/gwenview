@@ -59,8 +59,6 @@ public:
 
 	QString name()           { return mName; }
 	QString comment()        { return QString::null; }
-	KURL path()              { return mDirURL; }
-	bool isDirectory()       { return true; }
 	KURL::List images()      { return mImages; }
 	KURL uploadRoot()        { return KURL("/"); }
 	KURL uploadPath()        { return mDirURL; }
