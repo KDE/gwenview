@@ -22,7 +22,7 @@ libgwenviewcore_la_LIBADD   = \
 
 libgwenviewcore_la_METASOURCES = AUTO
 
-include_HEADERS = libgwenview_export.h
+noinst_HEADERS = libgwenview_export.h
 
 libgwenviewcore_la_SOURCES = \
 	printdialog.cpp \
