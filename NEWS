@@ -11,6 +11,8 @@
  - Folders are no longer included in the image list of KIPI albums.
  - A crash which could happen when loading indexed XCF files produced by
    recent versions of GIMP has been fixed.
+ - A bug introduced in the previous version which caused EXIF information to be
+   removed after editing a comment has been fixed.
 
 2005.08.21 - v1.2.92
 - New features:

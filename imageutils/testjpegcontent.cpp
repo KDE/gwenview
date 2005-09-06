@@ -27,7 +27,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstring.h>
 
 // KDE
+#include <kapplication.h>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
 #include <kdebug.h>
+#include <kfilemetainfo.h>
 
 // Local
 #include "imageutils/orientation.h"
@@ -41,7 +45,7 @@ const int ORIENT6_HEIGHT=256; // has been applied
 const char* CUT_FILE="cut.jpg";
 const QString ORIENT6_COMMENT="a comment";
 const char* ORIENT1_FILE="test_orient1.jpg";
-const char* ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
+const QString ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
 const QString ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 
@@ -76,9 +80,45 @@ public:
 };
 
 
-int main() {
+typedef QMap<QString,QString> MetaInfoMap;
+
+MetaInfoMap getMetaInfo(const QString& path) {
+	KFileMetaInfo fmi(path);
+	QStringList list=fmi.supportedKeys();
+	QStringList::ConstIterator it=list.begin();
+	MetaInfoMap map;
+	
+	for ( ; it!=list.end(); ++it) {
+		KFileMetaInfoItem item=fmi.item(*it);
+		map[*it]=item.string();
+	}
+
+	return map;
+}
+
+void compareMetaInfo(const QString& path1, const QString& path2, const QStringList& ignoredKeys) {
+	MetaInfoMap mim1=getMetaInfo(path1);
+	MetaInfoMap mim2=getMetaInfo(path2);
+
+	Q_ASSERT(mim1.keys()==mim2.keys());
+	QValueList<QString> keys=mim1.keys();
+	QValueList<QString>::ConstIterator it=keys.begin();
+	for ( ; it!=keys.end(); ++it) {
+		QString key=*it;
+		if (ignoredKeys.contains(key)) continue;
+
+		if (mim1[key]!=mim2[key]) {
+			kdError() << "Meta info differs. Key:" << key << ", V1:" << mim1[key] << ", V2:" << mim2[key] << endl;
+		}
+	}
+}
+
+int main(int argc, char* argv[]) {
 	TestEnvironment testEnv;
 	bool result;
+	KAboutData aboutData("testjpegcontent", "testjpegcontent", "0");
+	KCmdLineArgs::init( argc, argv, &aboutData );
+	KApplication kapplication;
 
 	// Reading info
 	ImageUtils::JPEGContent content;
@@ -108,11 +148,10 @@ int main() {
 	result=content.save(ORIENT1_VFLIP_FILE);
 	Q_ASSERT(result);
 	
-	// We load it again because previous call to content.comment() did not read
-	// from the JPEG, it used a cached entry instead
-	result=content.load(ORIENT1_VFLIP_FILE);
-	Q_ASSERT(result);
-	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
+	// Check the other meta info are still here
+	QStringList ignoredKeys;
+	ignoredKeys << "Orientation" << "Comment";
+	compareMetaInfo(ORIENT6_FILE, ORIENT1_VFLIP_FILE, ignoredKeys);
 
 	// Test that loading and manipulating a truncated file does not crash
 	result=content.load(CUT_FILE);
