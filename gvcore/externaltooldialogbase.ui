@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>723</width>
-            <height>357</height>
+            <height>361</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -39,23 +39,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <spacer row="0" column="0">
-            <property name="name">
-                <cstring>spacer17</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>21</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
         <spacer row="1" column="2">
             <property name="name">
                 <cstring>spacer3_2</cstring>
@@ -130,116 +113,23 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="0" column="2" rowspan="1" colspan="2">
+        <widget class="QFrame" row="0" column="2" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>mDetails</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QButtonGroup" row="2" column="0">
-                    <property name="name">
-                        <cstring>mFileAssociationGroup</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>1</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="title">
-                        <string></string>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>radioButton1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>All images</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>0</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>radioButton2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>All files</string>
-                            </property>
-                            <property name="buttonGroupId">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="2" column="0">
-                            <property name="name">
-                                <cstring>radioButton3</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Custom:</string>
-                            </property>
-                        </widget>
-                        <spacer row="3" column="0">
-                            <property name="name">
-                                <cstring>spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>21</width>
-                                    <height>140</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="KListView" row="2" column="1" rowspan="2" colspan="1">
-                            <column>
-                                <property name="text">
-                                    <string>Mime Type</string>
-                                </property>
-                                <property name="clickable">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="resizable">
-                                    <bool>true</bool>
-                                </property>
-                            </column>
-                            <property name="name">
-                                <cstring>mMimeTypeListView</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="fullWidth">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
+                <property name="margin">
+                    <number>0</number>
+                </property>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>textLabel1_2</cstring>
@@ -343,6 +233,108 @@ You can use keywords in the Command field:
                         </widget>
                     </grid>
                 </widget>
+                <widget class="QButtonGroup" row="2" column="0">
+                    <property name="name">
+                        <cstring>mFileAssociationGroup</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>radioButton1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>All images</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>radioButton2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>All files</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>radioButton3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Custom:</string>
+                            </property>
+                        </widget>
+                        <spacer row="3" column="0">
+                            <property name="name">
+                                <cstring>spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>21</width>
+                                    <height>140</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="KListView" row="2" column="1" rowspan="2" colspan="1">
+                            <column>
+                                <property name="text">
+                                    <string>Mime Type</string>
+                                </property>
+                                <property name="clickable">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="resizable">
+                                    <bool>true</bool>
+                                </property>
+                            </column>
+                            <property name="name">
+                                <cstring>mMimeTypeListView</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="fullWidth">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
             </grid>
         </widget>
     </grid>
@@ -370,12 +362,12 @@ You can use keywords in the Command field:
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>kurllabel.h</includehint>
-    <includehint>klistview.h</includehint>
     <includehint>kicondialog.h</includehint>
     <includehint>kurllabel.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
 </includehints>
 </UI>

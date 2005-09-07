@@ -207,6 +207,8 @@ struct ExternalToolDialogPrivate {
 	
 
 	void updateDetails() {
+		mContent->mDetails->setEnabled(mSelectedItem!=0);
+		
 		if (mSelectedItem) {
 			KDesktopFile* desktopFile=mSelectedItem->desktopFile();
 			if (desktopFile) {
@@ -284,6 +286,12 @@ ExternalToolDialog::ExternalToolDialog(QWidget* parent)
 		this, SLOT(showCommandHelp()) );
 	connect( d->mContent->mMoreTools, SIGNAL(leftClickedURL(const QString&)),
 		this, SLOT(openURL(const QString&)) );
+
+	KListView* view=d->mContent->mToolListView;
+	if (view->firstChild()) {
+		view->setSelected(view->firstChild(), true);
+	}
+	d->updateDetails();
 }
 
 

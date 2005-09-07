@@ -13,6 +13,8 @@
    recent versions of GIMP has been fixed.
  - A bug introduced in the previous version which caused EXIF information to be
    removed after editing a comment has been fixed.
+ - The external tool dialog has been made a bit easier to use by disabling the
+   detail widgets when no tool is selected.
 
 2005.08.21 - v1.2.92
 - New features:
