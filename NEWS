@@ -15,6 +15,7 @@
    removed after editing a comment has been fixed.
  - The external tool dialog has been made a bit easier to use by disabling the
    detail widgets when no tool is selected.
+ - Avoid rare cases of the image KPart getting stuck.
 
 2005.08.21 - v1.2.92
 - New features:

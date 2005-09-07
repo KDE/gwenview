@@ -67,6 +67,7 @@ signals:
 
 private slots:
 	void delayedBusyLevelChanged();
+	void objectDestroyed( QObject* obj );
 
 private:
 	BusyLevelManager();

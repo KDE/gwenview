@@ -65,11 +65,21 @@ BusyLevelManager* BusyLevelManager::instance() {
 void BusyLevelManager::setBusyLevel( QObject* obj, BusyLevel level ) {
 	LOG("BUSY:" << level << ":" << obj << ":" << obj->className() );
 	if( level > BUSY_NONE ) {
-		if( mBusyLevels[ obj ] == level )	return;
+		if( mBusyLevels.contains( obj ) && mBusyLevels[ obj ] == level ) return;
+		if( !mBusyLevels.contains( obj )) {
+			connect( obj, SIGNAL( destroyed( QObject* )), this, SLOT( objectDestroyed( QObject* )));
+		}
 		mBusyLevels[ obj ] = level;
 	} else {
 		mBusyLevels.remove( obj );
+		disconnect( obj, SIGNAL( destroyed( QObject* )), this, SLOT( objectDestroyed( QObject* )));
 	}
+	mDelayedBusyLevelTimer.start( 0, true );
+}
+
+void BusyLevelManager::objectDestroyed( QObject* obj ) {
+	LOG("DESTROYED:" << obj );
+	mBusyLevels.remove( obj );
 	mDelayedBusyLevelTimer.start( 0, true );
 }
 
