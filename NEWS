@@ -16,6 +16,9 @@
  - The external tool dialog has been made a bit easier to use by disabling the
    detail widgets when no tool is selected.
  - Avoid rare cases of the image KPart getting stuck.
+ - By popular demand (*): double clicking on a thumbnail or the image view now
+   toggles fullscreen instead of browse mode.
+   * http://gwenview.sourceforge.net/node/132
 
 2005.08.21 - v1.2.92
 - New features:
