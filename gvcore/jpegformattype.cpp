@@ -311,7 +311,6 @@ int JPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* buf
 		mDecompress.do_fancy_upsampling = true;
 		mDecompress.do_block_smoothing = false;
 		mDecompress.quantize_colors = false;
-		mDecompress.dct_method = JDCT_FASTEST;
 
 		// false: IO suspension
 		if(jpeg_start_decompress(&mDecompress)) {
