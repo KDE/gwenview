@@ -1,4 +1,4 @@
-2005.xx.xx - v1.3.0
+2005.09.11 - v1.3.0
 - Fixes:
  - Keyboard shortcuts for file operations now work even if no image is selected.
  - Pressing Enter to enter a folder works again.
