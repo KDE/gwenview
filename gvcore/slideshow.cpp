@@ -1,7 +1,8 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
+// kate: indent-mode csands; indent-width 4; replace-tabs-save off; replace-tabs off; replace-trailing-space-save off; space-indent off; tabs-indents on; tab-width 4;
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,12 +40,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 
 
+static const char* CONFIG_START_FULLSCREEN="fullscreen";
+static const char* CONFIG_STOP_AT_END="stopAtEnd";
+static const char* CONFIG_RANDOM="random";
+static const char* CONFIG_DELAY_SUFFIX="delaySuffix";
 static const char* CONFIG_DELAY="delay";
 static const char* CONFIG_LOOP="loop";
 
 
 SlideShow::SlideShow(Document* document)
-: mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
+: mStopAtEnd(true), mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -55,20 +60,43 @@ SlideShow::SlideShow(Document* document)
 SlideShow::~SlideShow() {
 }
 
+
 void SlideShow::setLoop(bool value) {
 	mLoop=value;
 }
 
-void SlideShow::setDelay(int delay) {
-	mDelay=delay;
+
+void SlideShow::setDelay(int Delay) {
+		mDelay=Delay; // Slide Show
+    
 	if (mTimer->isActive()) {
-		mTimer->changeInterval(delay*1000);
+		mTimer->changeInterval(delayTimer());
 	}
 }
+
+
+int SlideShow::delayTimer() const {
+	if (mDelaySuffix == "s")
+		return mDelay*1000;
+	else
+		return mDelay;
+}
+
+
+void SlideShow::setDelaySuffix(QString suffix) {
+	mDelaySuffix=suffix;
+}
+
+
+void SlideShow::setFullscreen(bool fullscreen) {
+	mFullscreen=fullscreen;
+}
+
 
 void SlideShow::setRandom(bool value) {
 	mRandom=value;
 }
+
 
 void SlideShow::start(const KURL::List& urls) {
 	mURLs.resize(urls.size());
@@ -83,7 +111,7 @@ void SlideShow::start(const KURL::List& urls) {
 		return;
 	}
 	
-	mTimer->start(mDelay*1000, true);
+	mTimer->start(delayTimer(), true);
 	mStarted=true;
 	prefetch();
 }
@@ -106,12 +134,23 @@ void SlideShow::slotTimeout() {
 
 	++it;
 	if (it==mURLs.end()) {
-		it=mURLs.begin();
+	  // PlayImages not pressed or PlayImages pressed and don't stop at the end
+// 	  if (!mPlayImages || (mPlayImages && !mPlayStopAtEnd))
+		  it=mURLs.begin();
+// 	else
+// 		emit playImagesFinished();
 	}
 
 	if (it==mStartIt && !mLoop) {
-		stop();
-		emit finished();
+		// PlayImages not pressed or PlayImages pressed and loop is enabled
+// 		if (!mPlayImages || (mPlayImages && !mPlayLoop)) {
+			stop();
+// 		}
+	// button play-images not pressed
+// 		if (!mPlayImages)
+// 			emit finished();
+// 		else
+// 			emit playImagesFinished();
 		return;
 	}
 
@@ -121,7 +160,7 @@ void SlideShow::slotTimeout() {
 
 void SlideShow::slotLoaded() {
 	if (mStarted) {
-		mTimer->start(mDelay*1000, true);
+		mTimer->start(delayTimer(), true);
 		prefetch();
 	}
 }
@@ -130,6 +169,8 @@ void SlideShow::slotLoaded() {
 void SlideShow::prefetch() {
 	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
+// 	  if (mPlayImages && mPlayStopAtEnd)
+// 	    emit playImagesFinished();
 		return;
 	}
 
@@ -158,7 +199,12 @@ void SlideShow::prefetchDone() {
 void SlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mDelay=config->readNumEntry(CONFIG_DELAY,10);
+	mDelaySuffix=config->readEntry(CONFIG_DELAY_SUFFIX,"s");
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
+	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
+	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,true);
+	mRandom=config->readBoolEntry(CONFIG_RANDOM,false);
+	
 	mRandom=GVConfig::self()->slideShowRandom();
 }
 
@@ -166,7 +212,12 @@ void SlideShow::readConfig(KConfig* config,const QString& group) {
 void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
+	config->writeEntry(CONFIG_DELAY_SUFFIX,mDelaySuffix);
 	config->writeEntry(CONFIG_LOOP,mLoop);
+	config->writeEntry(CONFIG_START_FULLSCREEN,mFullscreen);
+	config->writeEntry(CONFIG_STOP_AT_END,mStopAtEnd);
+	config->writeEntry(CONFIG_RANDOM,mRandom);
+	
 	GVConfig::self()->setSlideShowRandom(mRandom);
 }
 

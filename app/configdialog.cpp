@@ -1,7 +1,8 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
+// kate: indent-mode csands; indent-width 4; replace-tabs-save off; replace-tabs off; replace-trailing-space-save off; space-indent off; tabs-indents on; tab-width 4;
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -51,6 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configimagelistpage.h"
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
+#include "configslideshow.h"
 #include "mainwindow.h"
 #include "gvcore/document.h"
 #include "gvcore/fileoperation.h"
@@ -59,6 +61,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/gvconfig.h>
 #include "gvcore/imageview.h"
+#include "gvcore/slideshow.h"
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
@@ -71,6 +74,7 @@ public:
 	ConfigFullScreenPage* mFullScreenPage;
 	ConfigFileOperationsPage* mFileOperationsPage;
 	ConfigMiscPage* mMiscPage;
+	ConfigSlideshowPage* mSlideShowPage;
 	MainWindow* mMainWindow;
 #ifdef GV_HAVE_KIPI
 	KIPI::ConfigWidget* mKIPIConfigWidget;
@@ -123,6 +127,9 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mFileOperationsPage = addConfigPage<ConfigFileOperationsPage>(
 		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
 
+	d->mSlideShowPage = addConfigPage<ConfigSlideshowPage>(
+		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow");
+
 #ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
 	addConfigPage(
@@ -161,7 +168,21 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mImageViewPage->mAutoZoomEnlarge->setChecked(imageView->enlargeSmallImages());
 	d->mImageViewPage->mShowScrollBars->setChecked(imageView->showScrollBars());
 	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
+
+	d->mSlideShowPage->mDelay->setValue(d->mMainWindow->slideShow()->delay());
+	d->mSlideShowPage->mDelay->setSuffix(d->mMainWindow->slideShow()->delaySuffix());
+	d->mSlideShowPage->mStopAtEnd->setChecked(d->mMainWindow->slideShow()->stopAtEnd());
+	d->mSlideShowPage->mFullscreen->setChecked(d->mMainWindow->slideShow()->fullscreen());
+	d->mSlideShowPage->mLoop->setChecked(d->mMainWindow->slideShow()->loop());
+	d->mSlideShowPage->mRandomOrder->setChecked(d->mMainWindow->slideShow()->random());
+	if (d->mMainWindow->slideShow()->delaySuffix() == "ms") {
+		d->mSlideShowPage->mDelay->setLineStep(10);
+		d->mSlideShowPage->mDelay->setMinValue(10);
+	}
 	
+	connect(d->mSlideShowPage->mDelay,SIGNAL(valueChanged(int)),
+	        this,SLOT(slotSlideShowDelayClicked(int)));
+  		
 	// Full Screen tab
 	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
 	d->mFullScreenPage->mFreeOutputFormat->setText(imageView->freeOutputFormat());
@@ -199,6 +220,7 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
+	SlideShow* slideShow=d->mMainWindow->slideShow();
 	Document* document=d->mMainWindow->document();
 
 	// Image List tab
@@ -226,6 +248,13 @@ void ConfigDialog::slotApply() {
 	imageView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
 	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
 	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
+
+	slideShow->setLoop(d->mSlideShowPage->mLoop->isChecked());
+	slideShow->setDelay(d->mSlideShowPage->mDelay->value());
+	slideShow->setDelaySuffix(d->mSlideShowPage->mDelay->suffix());
+	slideShow->setRandom(d->mSlideShowPage->mRandomOrder->isChecked());
+	slideShow->setStopAtEnd(d->mSlideShowPage->mStopAtEnd->isChecked());
+	slideShow->setFullscreen(d->mSlideShowPage->mFullscreen->isChecked());
 	
 	// Full Screen tab
 	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
@@ -291,5 +320,28 @@ void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 	KMessageBox::information( this,i18n("Cache emptied.") );
 }
 
+void ConfigDialog::slotSlideShowDelayClicked(int) {
+	// get the spinBox
+	QSpinBox* delay=d->mSlideShowPage->mDelay;
+	// current value is in seconds
+	if(delay->suffix() == "s") {
+		if(delay->value() == 0) {
+			delay->setValue(990);
+			delay->setSuffix("ms");
+			delay->setLineStep(10);
+			delay->setMinValue(10);
+		}
+	} else {
+		// current value is in milli seconds
+		if(delay->value() == 1000) {
+			delay->setSuffix("s");
+			delay->setLineStep(1);
+			delay->setMinValue(0);
+			delay->setValue(1);
+		}
+
+	}
+	
+}
 
 } // namespace

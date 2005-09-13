@@ -1,4 +1,5 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
+// kate: indent-mode csands; indent-width 4; replace-tabs-save off; replace-tabs off; replace-trailing-space-save off; space-indent off; tabs-indents on; tab-width 4;
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aur�ien G�eau
@@ -576,6 +577,15 @@ void MainWindow::toggleFullScreen() {
 
 
 void MainWindow::startSlideShow() {
+	// Slide Show is already running with Play-Stop, stop it
+	if (mSlideShow->isRunning()) {
+		slotSlideShowStop();
+		return;
+	}
+
+	// @todo create 2 new slideshow icons with play and stop symbol
+// 	actionCollection()->action("playimages")->setIconSet(KGlobal::iconLoader()->loadIconSet("player_stop",KIcon::Toolbar));
+    
 	KURL::List list;
 	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
@@ -588,13 +598,17 @@ void MainWindow::startSlideShow() {
 		return;
 	}
 
-	SlideShowDialog dialog(this,mSlideShow);
-	if (!dialog.exec()) return;
-	
-	if (!mToggleFullScreen->isChecked()) {
+	if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
 	mSlideShow->start(list);
+}
+
+
+void MainWindow::slotSlideShowStop() {
+	mSlideShow->stop();
+	// @todo create 2 slideshow buttons with play and stop symbol
+	//	actionCollection()->action("playimages")->setIconSet(KGlobal::iconLoader()->loadIconSet("player_play",KIcon::Toolbar));
 }
 
 
@@ -938,7 +952,7 @@ void MainWindow::createActions() {
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
-
+  
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
 	new KAction( i18n( "Home" ), "gohome", KStdAccel::shortcut(KStdAccel::Home), this, SLOT(goHome()), actionCollection(), "go_home");
@@ -981,6 +995,7 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewStack->selectPrevious());
 	actions.append(mFileViewStack->selectNext());
 	actions.append(mToggleFullScreen);
+	actions.append(mStartSlideShow);
 	mImageView->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
@@ -1099,9 +1114,13 @@ void MainWindow::createConnections() {
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 
+	//@todo finish the slideshow
 	// Slide show
 	connect(mSlideShow,SIGNAL(finished()),
 		mToggleFullScreen,SLOT(activate()) );
+
+// 	connect(mSlideShow,SIGNAL(playImagesFinished()),
+// 		this,SLOT(slotPlayImagesStop()));
 
 	// Location bar
 	connect(mURLEdit, SIGNAL(activated(const QString &)),

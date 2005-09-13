@@ -1,7 +1,8 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
+// kate: indent-mode csands; indent-width 4; replace-tabs-save off; replace-tabs off; replace-trailing-space-save off; space-indent off; tabs-indents on; tab-width 4;
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2004 Aurï¿½ien Gï¿½eau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -37,6 +38,7 @@ public:
 protected slots:
 	void slotOk();
 	void slotApply();
+	void slotSlideShowDelayClicked(int value);
 
 private slots:
 	void calculateCacheSize();

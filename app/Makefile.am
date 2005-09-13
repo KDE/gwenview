@@ -21,7 +21,8 @@ gwenview_la_SOURCES = \
 	configdialog.cpp \
 	branchpropertiesdialog.cpp \
 	history.cpp \
-	main.cpp
+	main.cpp \
+  configslideshow.ui
 
 gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la
 
