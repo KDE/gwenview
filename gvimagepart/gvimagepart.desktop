@@ -35,3 +35,4 @@ MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;imag
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvimagepart
 InitialPreference=5
+Icon=gwenview
