@@ -118,6 +118,7 @@ private:
 	KAction* mRenameFile;
 	KAction* mCopyFiles;
 	KAction* mMoveFiles;
+	KAction* mLinkFiles;
 	KAction* mDeleteFiles;
 	KAction* mShowConfigDialog;
 	KAction* mShowKeyDialog;
@@ -173,6 +174,7 @@ private slots:
 	void renameFile();
 	void copyFiles();
 	void moveFiles();
+	void linkFiles();
 	void deleteFiles();
 	void showFileProperties();
 	void showFileDialog();

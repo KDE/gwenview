@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="20">
+<kpartgui name="Gwenview" version="21">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
     <Action name="file_copy"/>
     <Action name="file_move"/>
+    <Action name="file_link"/>
     <Action name="file_delete"/>
     <Separator/>
     <Action name="file_properties"/>

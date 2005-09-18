@@ -39,6 +39,7 @@ class LIBGWENVIEW_EXPORT FileOperation {
 public:
 	static void copyTo(const KURL::List&,QWidget* parent=0L);
 	static void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+	static void linkTo(const KURL::List& srcURL,QWidget* parent);
 	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);

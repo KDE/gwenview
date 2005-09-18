@@ -119,6 +119,39 @@ void FileOpCopyToObject::operator()() {
 }
 
 
+//-FileOpCopyToObject--------------------------------------------------------------
+
+
+void FileOpLinkToObject::operator()() {
+	KURL destURL;
+
+	if (FileOperation::confirmCopy()) {
+		QString destDir = FileOperation::destDir();
+		if( !destDir.isEmpty()) {
+			destDir += "/";
+		}
+		if (mURLList.size()==1) {
+			destURL=KFileDialog::getSaveURL(destDir + mURLList.first().fileName(),
+					QString::null, mParent, i18n("Link File"));
+		} else {
+			DirSelectDialog dialog(destDir, mParent);
+			dialog.setCaption(i18n("Select Folder Where the Files Will be Linked"));
+			dialog.exec();
+			destURL=dialog.selectedURL();
+		}
+	} else {
+		destURL.setPath(FileOperation::destDir());
+	}
+	if (destURL.isEmpty()) return;
+
+// Copy the file
+	KIO::Job* copyJob=KIO::link(mURLList,destURL,true);
+	copyJob->setWindow(mParent->topLevelWidget());
+	connect( copyJob, SIGNAL( result(KIO::Job*) ),
+		this, SLOT( slotResult(KIO::Job*) ) );
+}
+
+
 //-FileOpMoveToObject--------------------------------------------------------------
 void FileOpMoveToObject::operator()() {
 	KURL destURL;

@@ -161,6 +161,7 @@ public slots:
 	void renameFile();
 	void copyFiles();
 	void moveFiles();
+	void linkFiles();
 
 
 signals:

@@ -113,6 +113,7 @@ public slots:
 	void showFileProperties();
 	void renameFile();
 	void copyFile();
+	void linkFile();
 	void moveFile();
 	void deleteFile();
 

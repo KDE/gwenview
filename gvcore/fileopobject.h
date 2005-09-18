@@ -69,6 +69,13 @@ public:
 	void operator()();
 };
 
+class FileOpLinkToObject : public FileOpObject {
+Q_OBJECT
+public:
+	FileOpLinkToObject(const KURL& url,QWidget* parent=0L) : FileOpObject(url,parent) {}
+	FileOpLinkToObject(const KURL::List& urlList,QWidget* parent=0L) : FileOpObject(urlList,parent) {}
+	void operator()();
+};
 
 class FileOpMoveToObject : public FileOpObject {
 Q_OBJECT

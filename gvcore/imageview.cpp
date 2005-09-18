@@ -1571,6 +1571,11 @@ void ImageView::copyFile() {
 	FileOperation::copyTo(list,this);
 }
 
+void ImageView::linkFile() {
+	KURL::List list;
+	list << d->mDocument->url();
+	FileOperation::linkTo(list,this);
+}
 
 void ImageView::moveFile() {
 	KURL::List list;

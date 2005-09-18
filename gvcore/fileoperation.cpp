@@ -54,6 +54,10 @@ void FileOperation::copyTo(const KURL::List& srcURL,QWidget* parent) {
 	(*op)();
 }
 
+void FileOperation::linkTo(const KURL::List& srcURL,QWidget* parent) {
+	FileOpObject* op=new FileOpLinkToObject(srcURL,parent);
+	(*op)();
+}
 
 void FileOperation::moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op=new FileOpMoveToObject(srcURL,parent);

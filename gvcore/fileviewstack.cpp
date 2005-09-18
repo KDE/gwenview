@@ -614,6 +614,9 @@ void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
 			menu.insertItem( i18n("&Move To...") ),
 			this,SLOT(moveFiles()) );
 		menu.connectItem(
+			menu.insertItem( i18n("&Link to...") ),
+			this,SLOT(linkFiles()) );
+		menu.connectItem(
 			menu.insertItem( i18n("&Delete") ),
 			this,SLOT(deleteFiles()) );
 		menu.insertSeparator();
@@ -707,6 +710,10 @@ void FileViewStack::copyFiles() {
 	FileOperation::copyTo(list,this);
 }
 
+void FileViewStack::linkFiles() {
+	KURL::List list=selectedURLs();
+	FileOperation::linkTo(list,this);
+}
 
 void FileViewStack::moveFiles() {
 	KURL::List list=selectedURLs();
