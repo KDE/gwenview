@@ -1277,18 +1277,17 @@ void ImageView::slotImageSizeUpdated() {
 
 	d->mManualZoom = false;
 	d->mValidImageArea = QRegion();
-	if (d->mAutoZoom->isChecked() && !d->mLockZoom->isChecked()) {
+	if (d->mAutoZoom->isChecked()) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
 	} else {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
-	if( !d->mLockZoom->isChecked()) {
-		d->mManualZoom = false;
-		if( d->mAutoZoom->isChecked()) {
-			setZoom(computeAutoZoom());
-		} else {
+	if( d->mAutoZoom->isChecked()) {
+		setZoom(computeAutoZoom());
+	} else {
+		if( !d->mLockZoom->isChecked()) {
 			setZoom( 1.0 );
 		}
 	}
