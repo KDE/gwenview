@@ -132,9 +132,9 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 	mListMode=new KRadioAction(i18n("Details"),"view_detailed",0,this,SLOT(updateViewMode()),actionCollection,"list_mode");
 	mListMode->setExclusiveGroup("thumbnails");
-	mSideThumbnailMode=new KRadioAction(i18n("Thumbnails with info on side"),"view_multicolumn",0,this,SLOT(updateViewMode()),actionCollection,"side_thumbnail_mode");
+	mSideThumbnailMode=new KRadioAction(i18n("Thumbnails with Info on Side"),"view_multicolumn",0,this,SLOT(updateViewMode()),actionCollection,"side_thumbnail_mode");
 	mSideThumbnailMode->setExclusiveGroup("thumbnails");
-	mBottomThumbnailMode=new KRadioAction(i18n("Thumbnails with info on bottom"),"view_icon",0,this,SLOT(updateViewMode()),actionCollection,"bottom_thumbnail_mode");
+	mBottomThumbnailMode=new KRadioAction(i18n("Thumbnails with Info on Bottom"),"view_icon",0,this,SLOT(updateViewMode()),actionCollection,"bottom_thumbnail_mode");
 	mBottomThumbnailMode->setExclusiveGroup("thumbnails");
 	
 	// Size slider
@@ -243,7 +243,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SIGNAL(selectionChanged()) );
 	
 	// Thumbnail details dialog
-	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit thumbnail details"), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
+	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit Thumbnail Details..."), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
 	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)),
 		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
 	

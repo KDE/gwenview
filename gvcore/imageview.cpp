@@ -384,7 +384,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
 		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
 
-	d->mToggleFullscreenBar=new KAction(i18n("Toggle full screen bar"), 0, Key_Return,
+	d->mToggleFullscreenBar=new KAction(i18n("Toggle Full Screen Bar"), 0, Key_Return,
 		this,SLOT(toggleFullScreenBar()), d->mActionCollection, "toggle_bar");
 	d->mToggleFullscreenBar->setEnabled(d->mFullScreen);
 
