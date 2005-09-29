@@ -53,7 +53,7 @@ void ImageView::ToolBase::leftButtonPressEvent(QMouseEvent*) {}
 void ImageView::ToolBase::leftButtonReleaseEvent(QMouseEvent*) {}
 
 void ImageView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
-	mView->autoZoom()->activate();
+	mView->zoomToFit()->activate();
 }
 
 void ImageView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
@@ -85,8 +85,11 @@ void ImageView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
 	KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
 	if (!zoomAction->isEnabled()) return;
 
-	if (mView->autoZoom()->isChecked()) {
-		mView->autoZoom()->setChecked(false);
+	if (mView->zoomToFit()->isChecked() || mView->zoomToWidth()->isChecked()
+		|| mView->zoomToHeight()->isChecked()) {
+		mView->zoomToFit()->setChecked(false);
+		mView->zoomToWidth()->setChecked(false);
+		mView->zoomToHeight()->setChecked(false);
 		mView->updateScrollBarMode();
 	}
 	QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;

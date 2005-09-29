@@ -6,6 +6,7 @@
  - It's now possible to create symbolic links from the main menu and from the
    image contextual menu.
    (Patch by Steffen Schoenwiese)
+ - Zoom to width/height
  
 2005.09.11 - v1.3.0
 - Fixes:

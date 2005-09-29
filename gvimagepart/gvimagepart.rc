@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="GVImagePart" version="4">
+<kpartgui name="GVImagePart" version="5">
 <MenuBar>
  <Menu name="file"><Text>&amp;File</Text>
   <Action name="saveAs"/>
@@ -18,7 +18,9 @@
         <Action name="increase_contrast"/>
         <Action name="decrease_contrast"/>
     </Menu>
-  <Action name="view_zoom_auto"/>
+  <Action name="view_zoom_to_fit"/>
+  <Action name="view_zoom_to_width"/>
+  <Action name="view_zoom_to_height"/>
   <Action name="view_zoom_in"/>
   <Action name="view_zoom_out"/>
   <Action name="view_actual_size"/>
@@ -28,7 +30,7 @@
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
  <Action name="previous"/>
  <Action name="next"/>
- <Action name="view_zoom_auto"/>
+ <Action name="view_zoom_to_fit"/>
  <Action name="view_zoom_in"/>
  <Action name="view_zoom_out"/>
  <Action name="rotate_right"/>

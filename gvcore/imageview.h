@@ -74,7 +74,9 @@ public:
 	void writeConfig(KConfig* config, const QString& group) const;
 
 	// Properties
-	KToggleAction* autoZoom() const; 
+	KToggleAction* zoomToFit() const; 
+	KToggleAction* zoomToWidth() const; 
+	KToggleAction* zoomToHeight() const; 
 	KAction* zoomIn() const; 
 	KAction* zoomOut() const; 
 	KAction* resetZoom() const; 
@@ -154,8 +156,12 @@ private:
 	void checkPendingOperationsInternal();
 	void updateBusyLevels();
 
+	bool autoZoom( bool ignore_manual = false ) const;
 	double computeZoom(bool in) const;
 	double computeAutoZoom() const;
+	double computeZoomToFit() const;
+	double computeZoomToWidth() const;
+	double computeZoomToHeight() const;
 	
 	void updateImageOffset();
 	void updateScrollBarMode();

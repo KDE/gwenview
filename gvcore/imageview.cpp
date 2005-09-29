@@ -150,7 +150,9 @@ const char CONFIG_ENLARGE_SMALL_IMAGES[]="enlarge small images";
 const char CONFIG_SHOW_SCROLL_BARS[]="show scroll bars";
 const char CONFIG_MOUSE_WHEEL_SCROLL[]="mouse wheel scrolls image";
 const char CONFIG_LOCK_ZOOM[]="lock zoom";
-const char CONFIG_AUTO_ZOOM[]="auto zoom";
+const char CONFIG_ZOOM_TO_FIT[]="auto zoom"; // called so for backwards compatibility
+const char CONFIG_ZOOM_TO_WIDTH[]="zoom to width";
+const char CONFIG_ZOOM_TO_HEIGHT[]="zoom to height";
 const char CONFIG_AUTO_ZOOM_BROWSE[]="auto zoom browse";
 const char CONFIG_BACKGROUND_COLOR[]="background color";
 const char CONFIG_MAX_REPAINT_SIZE[]= "max repaint size";
@@ -200,7 +202,9 @@ struct ImageView::Private {
 	int mGamma, mBrightness, mContrast;
 
 	// Our actions
-	KToggleAction* mAutoZoom;
+	KToggleAction* mZoomToFit;
+	KToggleAction* mZoomToWidth;
+	KToggleAction* mZoomToHeight;
 	KAction* mZoomIn;
 	KAction* mZoomOut;
 	KAction* mResetZoom;
@@ -224,7 +228,7 @@ struct ImageView::Private {
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
-	bool mManualZoom; // overrides mAutoZoom when user manually does zoom in/out
+	bool mManualZoom; // overrides auto zoom actions when user manually does zoom in/out
 	
 	QMap< long long, PendingPaint > mPendingPaints;
 	QRegion mPendingNormalRegion;
@@ -345,9 +349,18 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mTools[d->mToolID]->updateCursor();
 
 	// Create actions
-	d->mAutoZoom=new KToggleAction(i18n("&Auto Zoom"),"viewmagfit",0,d->mActionCollection,"view_zoom_auto");
-	connect(d->mAutoZoom,SIGNAL(toggled(bool)),
+	d->mZoomToFit=new KToggleAction(i18n("Zoom to &Fit"),"viewmagfit",0,d->mActionCollection,"view_zoom_to_fit");
+	connect(d->mZoomToFit,SIGNAL(toggled(bool)),
 		this,SLOT(setAutoZoom(bool)) );
+	d->mZoomToWidth=new KToggleAction(i18n("Zoom to &Width"),0,0,d->mActionCollection,"view_zoom_to_width");
+	connect(d->mZoomToWidth,SIGNAL(toggled(bool)),
+		this,SLOT(setAutoZoom(bool)) );
+	d->mZoomToHeight=new KToggleAction(i18n("Zoom to &Height"),0,0,d->mActionCollection,"view_zoom_to_height");
+	connect(d->mZoomToHeight,SIGNAL(toggled(bool)),
+		this,SLOT(setAutoZoom(bool)) );
+	d->mZoomToFit->setExclusiveGroup("autozoom");
+	d->mZoomToWidth->setExclusiveGroup("autozoom");
+	d->mZoomToHeight->setExclusiveGroup("autozoom");
 
 	d->mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),d->mActionCollection);
 
@@ -430,7 +443,7 @@ void ImageView::slotLoaded() {
 
 
 void ImageView::slotModified() {
-	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
+	if ( autoZoom()) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -463,8 +476,18 @@ void ImageView::setOSDFormatter(CaptionFormatterBase* formatter) {
 }
 
 
-KToggleAction* ImageView::autoZoom() const {
-	return d->mAutoZoom;
+KToggleAction* ImageView::zoomToFit() const {
+	return d->mZoomToFit;
+}
+
+
+KToggleAction* ImageView::zoomToWidth() const {
+	return d->mZoomToWidth;
+}
+
+
+KToggleAction* ImageView::zoomToHeight() const {
+	return d->mZoomToHeight;
 }
 
 
@@ -583,7 +606,7 @@ void ImageView::setDelayedSmoothing(bool value) {
 
 void ImageView::setEnlargeSmallImages(bool value) {
 	d->mEnlargeSmallImages=value;
-	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
+	if ( autoZoom()) {
 		setZoom(computeAutoZoom());
 	}
 }
@@ -684,7 +707,7 @@ void ImageView::setNormalBackgroundColor(const QColor& color) {
 //------------------------------------------------------------------------
 void ImageView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
-	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
+	if ( autoZoom()) {
 		setZoom(computeAutoZoom());
 	} else {
 		updateContentSize();
@@ -1185,7 +1208,7 @@ void ImageView::wheelEvent(QWheelEvent* event) {
 //
 //------------------------------------------------------------------------
 void ImageView::slotZoomIn() {
-	if (d->mAutoZoom->isChecked()) {
+	if ( autoZoom()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
@@ -1194,7 +1217,7 @@ void ImageView::slotZoomIn() {
 
 
 void ImageView::slotZoomOut() {
-	if (d->mAutoZoom->isChecked()) {
+	if ( autoZoom()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
@@ -1203,14 +1226,14 @@ void ImageView::slotZoomOut() {
 
 
 void ImageView::slotResetZoom() {
-	if (d->mAutoZoom->isChecked()) {
+	if ( autoZoom()) {
 		d->mManualZoom = true;
 		updateScrollBarMode();
 	}
 	setZoom(1.0);
 }
 
-
+// this slot is used by all three auto zoom actions since it's the same for all of them
 void ImageView::setAutoZoom(bool value) {
 	updateScrollBarMode();
 	d->mManualZoom = false;
@@ -1277,14 +1300,14 @@ void ImageView::slotImageSizeUpdated() {
 
 	d->mManualZoom = false;
 	d->mValidImageArea = QRegion();
-	if (d->mAutoZoom->isChecked()) {
+	if ( autoZoom( true )) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
 	} else {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
-	if( d->mAutoZoom->isChecked()) {
+	if( autoZoom( true )) {
 		setZoom(computeAutoZoom());
 	} else {
 		if( !d->mLockZoom->isChecked()) {
@@ -1333,7 +1356,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 	if (validImage) {
 		menu.insertSeparator();
 
-		d->mAutoZoom->plug(&menu);
+		d->mZoomToFit->plug(&menu);
 		d->mZoomIn->plug(&menu);
 		d->mZoomOut->plug(&menu);
 		d->mResetZoom->plug(&menu);
@@ -1409,7 +1432,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 
 void ImageView::updateScrollBarMode() {
-	if ((d->mAutoZoom->isChecked() && !d->mManualZoom) || !d->mShowScrollBars) {
+	if ((d->mZoomToFit->isChecked() && !d->mManualZoom) || !d->mShowScrollBars) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1425,8 +1448,21 @@ void ImageView::updateContentSize() {
 		int(d->mDocument->height()*d->mZoom) );
 }
 
+bool ImageView::autoZoom( bool ignore_manual ) const {
+	return ( d->mZoomToFit->isChecked() || d->mZoomToWidth->isChecked()
+			|| d->mZoomToHeight->isChecked())
+		&& ( ignore_manual || !d->mManualZoom );
+}
 
 double ImageView::computeAutoZoom() const {
+	if( d->mZoomToFit->isChecked()) return computeZoomToFit();
+	if( d->mZoomToWidth->isChecked()) return computeZoomToWidth();
+	if( d->mZoomToHeight->isChecked()) return computeZoomToHeight();
+	Q_ASSERT( false );
+	return 1.0;
+}
+
+double ImageView::computeZoomToFit() const {
 	if (d->mDocument->isNull()) {
 		return 1.0;
 	}
@@ -1438,10 +1474,50 @@ double ImageView::computeAutoZoom() const {
 	return zoom;
 }
 
+double ImageView::computeZoomToWidth() const {
+	if (d->mDocument->isNull()) {
+		return 1.0;
+	}
+	int sw = verticalScrollBar()->sizeHint().width(); // geometry is not valid before first show()
+	int w = width();
+	int dw = d->mDocument->width();
+	switch( vScrollBarMode()) {
+	case AlwaysOff:
+		return double(w)/dw;
+	case AlwaysOn:
+		return double(w-sw)/dw;
+	case Auto:
+	default:
+		// there will be a vertical scrollbar if the image's height will be too large
+		if( d->mDocument->height() * (double(w)/dw) > height()) return double(w-sw)/dw;
+		return double(w)/dw;
+	}
+}
+
+double ImageView::computeZoomToHeight() const {
+	if (d->mDocument->isNull()) {
+		return 1.0;
+	}
+	int sh = horizontalScrollBar()->sizeHint().height();
+	int h = height();
+	int dh = d->mDocument->height();
+	switch( vScrollBarMode()) {
+	case AlwaysOff:
+		return double(h)/dh;
+	case AlwaysOn:
+		return double(h-sh)/dh;
+	case Auto:
+	default:
+		if( d->mDocument->width() * (double(h)/dh) > width()) return double(h-sh)/dh;
+		return double(h)/dh;
+	}
+}
 
 double ImageView::computeZoom(bool in) const {
 	const double F = 0.5; // change in 0.5 steps
-	double autozoom = computeAutoZoom();
+	double zoomtofit = computeZoomToFit();
+	double zoomtowidth = computeZoomToWidth();
+	double zoomtoheight = computeZoomToHeight();
 	if (in) {
 		double newzoom;
 		if (d->mZoom>=1.0) {
@@ -1449,7 +1525,9 @@ double ImageView::computeZoom(bool in) const {
 		} else {
 			newzoom = 1/(( ceil(1/d->mZoom/F)-1.0 )*F);
 		}
-		if( d->mZoom < autozoom && autozoom < newzoom ) newzoom = autozoom;
+		if( d->mZoom < zoomtofit && zoomtofit < newzoom ) newzoom = zoomtofit;
+		if( d->mZoom < zoomtowidth && zoomtowidth < newzoom ) newzoom = zoomtowidth;
+		if( d->mZoom < zoomtoheight && zoomtoheight < newzoom ) newzoom = zoomtoheight;
 		return newzoom;
 	} else {
 		double newzoom;
@@ -1458,11 +1536,12 @@ double ImageView::computeZoom(bool in) const {
 		} else {
 			newzoom = 1/(( floor(1/d->mZoom/F)+1.0 )*F);
 		}
-		if( d->mZoom > autozoom && autozoom > newzoom ) newzoom = autozoom;
+		if( d->mZoom > zoomtofit && zoomtofit > newzoom ) newzoom = zoomtofit;
+		if( d->mZoom > zoomtowidth && zoomtowidth > newzoom ) newzoom = zoomtowidth;
+		if( d->mZoom > zoomtoheight && zoomtoheight > newzoom ) newzoom = zoomtoheight;
 		return newzoom;
 	}
 }
-
 
 void ImageView::updateImageOffset() {
 	int viewWidth=width();
@@ -1536,10 +1615,12 @@ void ImageView::updateZoomActions() {
 		return;
 	}
 
-	d->mAutoZoom->setEnabled(true);
+	d->mZoomToFit->setEnabled(true);
+	d->mZoomToWidth->setEnabled(true);
+	d->mZoomToHeight->setEnabled(true);
 	d->mResetZoom->setEnabled(true);
 
-	if (d->mAutoZoom->isChecked() && !d->mManualZoom) {
+	if ( autoZoom()) {
 		d->mZoomIn->setEnabled(true);
 		d->mZoomOut->setEnabled(true);
 	} else {
@@ -1612,7 +1693,9 @@ void ImageView::readConfig(KConfig* config, const QString& group) {
 	d->mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
 	d->mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
 	d->mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
-	d->mAutoZoom->setChecked(config->readBoolEntry(CONFIG_AUTO_ZOOM, true));
+	d->mZoomToFit->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_FIT, true));
+	d->mZoomToWidth->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_WIDTH, false));
+	d->mZoomToHeight->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_HEIGHT, false));
 	updateScrollBarMode();
 	d->mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
 	d->mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
@@ -1639,7 +1722,9 @@ void ImageView::writeConfig(KConfig* config, const QString& group) const {
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, d->mEnlargeSmallImages);
 	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, d->mShowScrollBars);
 	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, d->mMouseWheelScroll);
-	config->writeEntry(CONFIG_AUTO_ZOOM, d->mAutoZoom->isChecked());
+	config->writeEntry(CONFIG_ZOOM_TO_FIT, d->mZoomToFit->isChecked());
+	config->writeEntry(CONFIG_ZOOM_TO_WIDTH, d->mZoomToWidth->isChecked());
+	config->writeEntry(CONFIG_ZOOM_TO_HEIGHT, d->mZoomToHeight->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM, d->mLockZoom->isChecked());
 	config->writeEntry(CONFIG_BACKGROUND_COLOR, d->mBackgroundColor);
 	// following data are internal, and it makes sense to share them between the app and KPart's
