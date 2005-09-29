@@ -26,6 +26,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <qdatetime.h>
 #include <qimage.h>
 #include <qobject.h>
+#include <qtimer.h>
 
 // KDE
 #include <kurl.h>
@@ -36,7 +37,8 @@ Copyright 2000-2004 Aurélien Gâteau
 class KConfig;
 
 namespace Gwenview {
-class LIBGWENVIEW_EXPORT Cache {
+class LIBGWENVIEW_EXPORT Cache : public QObject {
+Q_OBJECT
 public:
 	static Cache* instance();
 	void addImage( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
@@ -49,6 +51,8 @@ public:
 	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
 	void updateAge();
+	void ref();
+	void deref();
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
 	Cache();
@@ -81,6 +85,10 @@ private:
 	QMap< KURL, ImageData > mImages;
 	int mMaxSize;
 	int mThumbnailSize;
+	int mUsageRefcount;
+	QTimer mCleanupTimer;
+private slots:
+	void cleanupTimeout();
 };
 
 } // namespace

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
+#include "gvcore/cache.h"
 #include "mainwindow.h"
 namespace Gwenview {
 
@@ -74,6 +75,7 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 		mainWindow->show();
 	}
 
+	Cache::instance()->ref();
 	return kapplication.exec();
 }
 

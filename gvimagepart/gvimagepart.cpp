@@ -76,6 +76,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	setInstance( GVImageFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
 
+	Cache::instance()->ref();
+
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
 
 	// Create the widgets
@@ -112,6 +114,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 }
 
 GVImagePart::~GVImagePart() {
+	Cache::instance()->deref();
 	delete mDirLister;
 }
 

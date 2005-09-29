@@ -106,6 +106,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	setInstance( GVDirFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
 
+	Cache::instance()->ref();
+
 	mBrowserExtension = new GVDirPartBrowserExtension(this);
 	mBrowserExtension->updateActions();
 
@@ -150,6 +152,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 GVDirPart::~GVDirPart() {
 	delete mSlideShow;
+	Cache::instance()->deref();
 }
 
 

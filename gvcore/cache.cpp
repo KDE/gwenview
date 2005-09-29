@@ -28,6 +28,9 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kio/global.h>
+
+#include "cache.moc"
+
 namespace Gwenview {
 
 // Local
@@ -45,7 +48,9 @@ const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 Cache::Cache()
 : mMaxSize( DEFAULT_MAXSIZE )
 , mThumbnailSize( 0 ) // don't remember size for every thumbnail, but have one global and dump all if needed
+, mUsageRefcount( 0 )
 {
+    connect( &mCleanupTimer, SIGNAL( timeout()), SLOT( cleanupTimeout()));
 }
 
 Cache* Cache::instance() {
@@ -215,6 +220,19 @@ void Cache::readConfig(KConfig* config,const QString& group) {
 	KConfigGroupSaver saver( config, group );
 	mMaxSize = config->readNumEntry( CONFIG_CACHE_MAXSIZE, mMaxSize );
 	checkMaxSize();
+}
+
+void Cache::ref() {
+	++mUsageRefcount;
+	mCleanupTimer.stop();
+}
+
+void Cache::deref() {
+	if( --mUsageRefcount == 0 ) mCleanupTimer.start( 60000, true );
+}
+
+void Cache::cleanupTimeout() {
+	mImages.clear();
 }
 
 Cache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDateTime& t )
