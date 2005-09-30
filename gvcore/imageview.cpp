@@ -370,6 +370,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mResetZoom->setIcon("viewmag1");
 
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
+	d->mLockZoom->setExclusiveGroup("autozoom"); // either lock or autozoom, not both
 
 	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
 		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
