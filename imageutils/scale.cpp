@@ -928,13 +928,13 @@ namespace MImageScale{
         int xup_yup;
     } MImageScaleInfo;
 
-    unsigned int** mimageCalcYPoints(unsigned int *src, int sw, int sh,
+    unsigned int** mimageCalcYPoints(unsigned int *src, int sow, int sh,
                                      int dh);
     int* mimageCalcXPoints(int sw, int dw);
     int* mimageCalcApoints(int s, int d, int up);
     MImageScaleInfo* mimageFreeScaleInfo(MImageScaleInfo *isi);
     MImageScaleInfo *mimageCalcScaleInfo(QImage &img, int sw, int sh,
-                                         int dw, int dh, char aa);
+                                         int dw, int dh, char aa, int sow);
     void mimageSampleRGBA(MImageScaleInfo *isi, unsigned int *dest, int dxx,
                           int dyy, int dx, int dy, int dw, int dh, int dow);
     void mimageScaleAARGBA(MImageScaleInfo *isi, unsigned int *dest, int dxx,
@@ -963,8 +963,14 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
     int w = img.width();
     int h = img.height();
 
+    int sow = img.bytesPerLine();
+    // handle CroppedQImage
+    if( img.height() > 1 && sow != img.scanLine( 1 ) - img.scanLine( 0 ))
+        sow = img.scanLine( 1 ) - img.scanLine( 0 );
+    sow = sow / ( img.depth() / 8 );
+
     MImageScaleInfo *scaleinfo =
-        mimageCalcScaleInfo(img, w, h, dw, dh, true);
+        mimageCalcScaleInfo(img, w, h, dw, dh, true, sow);
     if(!scaleinfo)
         return QImage();
 
@@ -976,17 +982,17 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
     bool haveMMX = KCPUInfo::haveExtension( KCPUInfo::IntelMMX );
     if(haveMMX){
         __mimageScale_mmx_AARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0),
-                                 0, 0, 0, 0, dw, dh, dw, w);
+                                 0, 0, 0, 0, dw, dh, dw, sow);
     }
     else
 #endif
     {
         if(img.hasAlphaBuffer())
             mimageScaleAARGBA(scaleinfo, (unsigned int *)buffer.scanLine(0), 0, 0,
-                              0, 0, dw, dh, dw, w);
+                              0, 0, dw, dh, dw, sow);
         else
             mimageScaleAARGB(scaleinfo, (unsigned int *)buffer.scanLine(0), 0, 0,
-                             0, 0, dw, dh, dw, w);
+                             0, 0, dw, dh, dw, sow);
     }
     mimageFreeScaleInfo(scaleinfo);
     return(buffer);
@@ -1018,7 +1024,7 @@ QImage MImageScale::smoothScale(const QImage& image, int dw, int dh)
 #define YAP                       (yapoints[dyy + y])
 
 unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
-                                              int sw, int sh, int dh)
+                                              int sow, int sh, int dh)
 {
     unsigned int **p;
     int i, j = 0;
@@ -1033,7 +1039,7 @@ unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
     val = 0;
     inc = (sh << 16) / dh;
     for(i = 0; i < dh; i++){
-        p[j++] = src + ((val >> 16) * sw);
+        p[j++] = src + ((val >> 16) * sow);
         val += inc;
     }
     if(rv){
@@ -1134,7 +1140,7 @@ MImageScaleInfo* MImageScale::mimageFreeScaleInfo(MImageScaleInfo *isi)
 }
 
 MImageScaleInfo* MImageScale::mimageCalcScaleInfo(QImage &img, int sw, int sh,
-                                                  int dw, int dh, char aa)
+                                                  int dw, int dh, char aa, int sow)
 {
     MImageScaleInfo *isi;
     int scw, sch;
@@ -1153,7 +1159,7 @@ MImageScaleInfo* MImageScale::mimageCalcScaleInfo(QImage &img, int sw, int sh,
     if(!isi->xpoints)
         return(mimageFreeScaleInfo(isi));
     isi->ypoints = mimageCalcYPoints((unsigned int *)img.scanLine(0),
-                                     img.width(), img.height(), sch);
+                                     sow, img.height(), sch );
     if (!isi->ypoints)
         return(mimageFreeScaleInfo(isi));
     if(aa){

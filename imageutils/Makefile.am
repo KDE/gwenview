@@ -20,7 +20,8 @@ libgvimageutils_la_SOURCES = \
 	transupp.c \
 	asm_scale.S \
 	jpeg-data.c \
-	jpeg-marker.c
+	jpeg-marker.c \
+	croppedqimage.cpp
 
 noinst_HEADERS = \
 	orientation.h \
@@ -29,7 +30,8 @@ noinst_HEADERS = \
 	jinclude.h \
 	jpegint.h \
 	transupp.h \
-	jpegerrormanager.h
+	jpegerrormanager.h \
+	croppedqimage.h
 
 METASOURCES = AUTO
 

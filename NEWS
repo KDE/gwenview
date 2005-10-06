@@ -7,7 +7,9 @@
    image contextual menu.
    (Patch by Steffen Schoenwiese)
  - Zoom to width/height
- 
+- Fixes:
+ - Significantly improved redrawing speed for very large images.
+
 2005.09.11 - v1.3.0
 - Fixes:
  - Keyboard shortcuts for file operations now work even if no image is selected.

@@ -59,6 +59,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageutils/imageutils.h"
 #include "busylevelmanager.h"
 #include "imageviewtools.h"
+#include "imageutils/croppedqimage.h"
 
 #if !KDE_IS_VERSION( 3, 3, 0 )
 // from kglobal.h
@@ -952,16 +953,22 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
-	QImage image = d->mDocument->image().copy( imageRect );
 	QRect widgetRect = d->imageToWidget( imageRect );
-
-	if (image.isNull() || widgetRect.isEmpty()) {
+	if (widgetRect.isEmpty() || imageRect.isEmpty()) {
 		painter->eraseRect(clipx,clipy,clipw,cliph);
 		return;
 	}
 
+// With very large images, just getting a subimage using QImage::copy( QRect ) takes a significant
+// portion of time here (even though it's just copying of data - probably because it's a lot of data).
+// So don't do any subimage copying but instead use CroppedQImage which just manipulates scanline
+// pointers. Note however that it's a bit hackish and there may be trouble if any code accesses
+// the image data directly as a whole. See CroppedQImage for details.
+
+//	QImage image = d->mDocument->image().copy( imageRect );
+	ImageUtils::CroppedQImage image( d->mDocument->image(), imageRect );
+
 	if( zoom() != 1.0 ) {
-		image=image.convertDepth(32);
 		image=ImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smooth_algo );
 	}
 
@@ -977,7 +984,15 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 		image = ImageUtils::changeGamma( image, d->mGamma );
 	}
 
+// Calling normalize() here would make image to be a proper QImage without modified scanlines,
+// so that even calling QImage::copy() would work. However, it seems it's not necessary to call
+// it here. The code above check that QImage::copy() or similar doesn't occur (that zoom() != 1.0
+// is there primarily to avoid that). If any kind of redraw trouble occurs, try uncommenting this
+// line below first.
+//	image.normalize(); // make it use its own data, if needed
+
 	if (image.hasAlphaBuffer()) {
+		image.normalize(); // needed, it will be modified
 		if (image.depth()!=32) {
 			image=image.convertDepth(32);
 		}
