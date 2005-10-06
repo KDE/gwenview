@@ -9,6 +9,7 @@
  - Zoom to width/height
 - Fixes:
  - Significantly improved redrawing speed for very large images.
+ - Fix MMX configure check with GCC 4.x.
 
 2005.09.11 - v1.3.0
 - Fixes:
