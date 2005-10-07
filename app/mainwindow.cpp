@@ -961,7 +961,7 @@ void MainWindow::createActions() {
 	mReload->setEnabled(false);
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
-	mStartSlideShow=new KAction(i18n("Slide Show..."),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
+	mStartSlideShow=new KAction(i18n("Slide Show"),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
   
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
