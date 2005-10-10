@@ -33,7 +33,7 @@ class KIPIInterfacePrivate;
 
 class FileViewStack;
 
-class LIBGWENVIEW_EXPORT KIPIInterface :public KIPI::Interface {
+class KIPIInterface :public KIPI::Interface {
 	Q_OBJECT
 
 public:

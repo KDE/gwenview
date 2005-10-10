@@ -45,7 +45,7 @@ class KFileItem;
 typedef QPtrList<KFileItem> KFileItemList;
 
 namespace Gwenview {
-class LIBGWENVIEW_EXPORT ThumbnailThread : public TSThread {
+class ThumbnailThread : public TSThread {
 Q_OBJECT
 public:
 	void load(
