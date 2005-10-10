@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "document.h"
 #include "gvconfig.h"
 #include "imageloader.h"
+#include "cache.h"
 
 namespace Gwenview {
 
@@ -58,6 +59,7 @@ SlideShow::SlideShow(Document* document)
 }
 
 SlideShow::~SlideShow() {
+	if( !mPriorityURL.isEmpty()) Cache::instance()->setPriorityURL( mPriorityURL, false );
 }
 
 
@@ -120,6 +122,10 @@ void SlideShow::start(const KURL::List& urls) {
 void SlideShow::stop() {
 	mTimer->stop();
 	mStarted=false;
+	if( !mPriorityURL.isEmpty()) {
+		Cache::instance()->setPriorityURL( mPriorityURL, false );
+		mPriorityURL = KURL();
+	}
 }
 
 
@@ -188,12 +194,19 @@ void SlideShow::prefetch() {
 	}
 
 	if( mPrefetch != NULL ) mPrefetch->release( this );
+	// TODO don't use prefetching with disabled optimizations (and add that option ;) )
+	// (and also don't use prefetching in other places if the image won't fit in cache)
 	mPrefetch = ImageLoader::loader( *it, this, BUSY_PRELOADING );
+	if( !mPriorityURL.isEmpty()) Cache::instance()->setPriorityURL( mPriorityURL, false );
+	mPriorityURL = *it;
+	Cache::instance()->setPriorityURL( mPriorityURL, true ); // make sure it will stay in the cache
 	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
 }
 
 void SlideShow::prefetchDone() {
 	if( mPrefetch != NULL ) { 
+		// don't call Cache::setPriorityURL( ... , false ) here - it will still take
+		// a short while to reuse the image from the cache
 		mPrefetch->release( this );
 		mPrefetch = NULL;
 		// prefetching completed and delay has already elapsed

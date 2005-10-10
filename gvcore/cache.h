@@ -27,6 +27,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <qimage.h>
 #include <qobject.h>
 #include <qtimer.h>
+#include <qvaluelist.h>
 
 // KDE
 #include <kurl.h>
@@ -48,6 +49,7 @@ public:
 	QByteArray file( const KURL& url ) const;
 	void getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const;
 	QPixmap thumbnail( const KURL& url, QSize& imagesize ) const;
+	void setPriorityURL( const KURL& url, bool set );
 	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
 	void updateAge();
@@ -75,6 +77,7 @@ private:
 		QDateTime timestamp;
 		mutable int age;
 		bool fast_url;
+		bool priority;
 		int fileSize() const;
 		int imageSize() const;
 		int thumbnailSize() const;
@@ -87,10 +90,10 @@ private:
 	int mThumbnailSize;
 	int mUsageRefcount;
 	QTimer mCleanupTimer;
+	QValueList< KURL > mPriorityURLs;
 private slots:
 	void cleanupTimeout();
 };
 
 } // namespace
 #endif
-

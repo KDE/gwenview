@@ -61,7 +61,28 @@ Cache* Cache::instance() {
 	return &manager;
 }
 
-void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp) {
+// Priority URLs are used e.g. when prefetching for the slideshow - after an image is prefetched,
+// the loader tries to put the image in the cache. When the slideshow advances, the next loader
+// just gets the image from the cache. However, the prefetching may be useless if the image
+// actually doesn't stay long enough in the cache, e.g. because of being too big for the cache.
+// Marking an URL as a priority one will make sure it stays in the cache and that the cache
+// will be even enlarged as necessary if needed.
+void Cache::setPriorityURL( const KURL& url, bool set ) {
+	if( set ) {
+		mPriorityURLs.append( url );
+		if( mImages.contains( url )) {
+			mImages[ url ].priority = true;
+		}
+	} else {
+		mPriorityURLs.remove( url );
+		if( mImages.contains( url )) {
+			mImages[ url ].priority = false;
+		}
+		checkMaxSize();
+	}
+}
+
+void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp ) {
 	LOG(url.prettyURL());
 	updateAge();
 	bool insert = true;
@@ -72,7 +93,10 @@ void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& t
 			insert = false;
 		}
 	}
-	if( insert ) mImages[ url ] = ImageData( url, file, timestamp );
+	if( insert ) {
+		mImages[ url ] = ImageData( url, file, timestamp );
+		if( mPriorityURLs.contains( url )) mImages[ url ].priority = true;
+	}
 	checkMaxSize();
 }
 
@@ -87,7 +111,10 @@ void Cache::addImage( const KURL& url, const ImageFrames& frames, const QCString
 			insert = false;
 		}
 	}
-	if( insert ) mImages[ url ] = ImageData( url, frames, format, timestamp );
+	if( insert ) {
+		mImages[ url ] = ImageData( url, frames, format, timestamp );
+		if( mPriorityURLs.contains( url )) mImages[ url ].priority = true;
+	}
 	checkMaxSize();
 }
 
@@ -103,7 +130,10 @@ void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize image
 			insert = false;
 		}
 	}
-	if( insert ) mImages[ url ] = ImageData( url, thumbnail, imagesize, timestamp );
+	if( insert ) {
+		mImages[ url ] = ImageData( url, thumbnail, imagesize, timestamp );
+		if( mPriorityURLs.contains( url )) mImages[ url ].priority = true;
+	}
 	checkMaxSize();
 }
 
@@ -198,12 +228,12 @@ void Cache::checkMaxSize() {
 			if( !(*it).frames.isEmpty()) ++with_image;
 #endif
 			long long cost = (*it).cost();
-			if( cost > max_cost ) {
+			if( cost > max_cost && ! (*it).priority ) {
 				max_cost = cost;
 				max = it;
 			}
 		}
-		if( size <= mMaxSize ) {
+		if( size <= mMaxSize || max_cost == -1 ) {
 #if 0
 #ifdef DEBUG_CACHE
 			kdDebug() << "Cache: Statistics (" << mImages.size() << "/" << with_file << "/"
@@ -215,6 +245,7 @@ void Cache::checkMaxSize() {
 #ifdef DEBUG_CACHE
 		_cache_url = max.key();
 #endif
+
 		if( !(*max).reduceSize() || (*max).isEmpty()) mImages.remove( max );
 	}
 }
@@ -243,6 +274,7 @@ Cache::ImageData::ImageData( const KURL& url, const QByteArray& f, const QDateTi
 , timestamp( t )
 , age( 0 )
 , fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
+, priority( false )
 {
 	file.detach(); // explicit sharing
 }
@@ -253,6 +285,7 @@ Cache::ImageData::ImageData( const KURL& url, const ImageFrames& frms, const QCS
 , timestamp( t )
 , age( 0 )
 , fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
+, priority( false )
 {
 }
 
@@ -262,6 +295,7 @@ Cache::ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgsiz
 , timestamp( t )
 , age( 0 )
 , fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
+, priority( false )
 {
 }
 

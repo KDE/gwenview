@@ -131,6 +131,7 @@ private:
 	QValueVector<KURL>::ConstIterator mStartIt;
 	ImageLoader* mPrefetch;
 	int mPrefetchAdvance;
+	KURL mPriorityURL;
 };
 
 } // namespace
