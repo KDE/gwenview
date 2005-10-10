@@ -1945,6 +1945,7 @@ QImage scale(const QImage& image, int width, int height,
 		filtersupport = 0.5;
 		break;
 	case SMOOTH_NORMAL:
+	default:
 		filter = Triangle;
 		filtersupport = 1.0;
 		break;
