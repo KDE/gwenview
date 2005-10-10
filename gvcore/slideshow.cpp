@@ -124,6 +124,10 @@ void SlideShow::stop() {
 
 
 void SlideShow::slotTimeout() {
+	// wait for prefetching to finish
+	if( mPrefetch != NULL ) {
+		return;
+	}
 	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
@@ -192,6 +196,10 @@ void SlideShow::prefetchDone() {
 	if( mPrefetch != NULL ) { 
 		mPrefetch->release( this );
 		mPrefetch = NULL;
+		// prefetching completed and delay has already elapsed
+		if( mStarted && !mTimer->isActive()) {
+			slotTimeout();
+		}
 	}
 }
 

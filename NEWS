@@ -8,6 +8,7 @@
    (Patch by Steffen Schoenwiese)
  - Zoom to width/height
  - Read support for X cursors
+ - Slideshow waits for the next image to be fully prefetched before advancing.
 - Fixes:
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.
