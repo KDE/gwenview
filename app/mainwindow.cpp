@@ -132,6 +132,8 @@ const int HINT_TIMEOUT=10000;
 // Time before we try to load the KIPI plugins (in msec)
 const int LOAD_PLUGIN_DELAY=1000;
 
+#undef ENABLE_LOG
+#undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl

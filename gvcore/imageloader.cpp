@@ -37,6 +37,8 @@ namespace Gwenview {
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
 
+#undef ENABLE_LOG
+#undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
