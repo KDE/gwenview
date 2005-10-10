@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpixmap.h>
-#include <qpixmapcache.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <qvaluevector.h>
