@@ -79,6 +79,7 @@ struct ExternalToolDialogPrivate {
 		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 		//FIXME: Factorize the additional mime types
 		mimeTypes.append("image/x-xcf-gimp");
+		mimeTypes.append("image/x-xcursor");
 		mimeTypes.append("image/pjpeg");
 		mimeTypes.append("inode/directory");
 		mimeTypes+=Archive::mimeTypes();

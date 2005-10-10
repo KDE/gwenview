@@ -1050,6 +1050,7 @@ void FileViewStack::dirListerCanceled() {
 void FileViewStack::initDirListerFilter() {
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
+	mimeTypes.append("image/x-xcursor");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
 	if (mShowDirs) {
 		mimeTypes.append("inode/directory");

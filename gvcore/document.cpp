@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "printdialog.h"
 #include "qxcfi.h"
 #include "xpm.h"
+#include "xcursor.h"
 
 #include "document.moc"
 namespace Gwenview {
@@ -110,6 +111,7 @@ Document::Document(QObject* parent)
 		static Gwenview::PNGFormatType sPNGFormatType;
 		static Gwenview::XPM sXPM;
 		static Gwenview::MNG sMNG;
+		static Gwenview::XCursorFormatType sXCursorFormatType;
 	}
 
 	connect( this, SIGNAL( loading()),

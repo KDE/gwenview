@@ -16,7 +16,7 @@ libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_KIPI) \
+	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_KIPI) $(GV_LIB_XCURSOR) \
 	$(GV_LIBEXIF_LIBS) ../imageutils/libgvimageutils.la \
 	../tsthread/libtsthread.la
 
@@ -69,6 +69,7 @@ libgwenviewcore_la_SOURCES = \
 	captionformatter.cpp \
 	gvconfig.kcfgc \
 	thumbnaildetailsdialogbase.ui \
-	thumbnaildetailsdialog.cpp
+	thumbnaildetailsdialog.cpp \
+	xcursor.cpp
 
 kde_kcfg_DATA = gvconfig.kcfg

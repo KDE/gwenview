@@ -97,6 +97,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	// partially duped from FileViewStack::initDirListerFilter()
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
+	mimeTypes.append("image/x-cursor");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
 	mDirLister->setMimeFilter(mimeTypes);
 	mPreviousImage=new KAction(i18n("&Previous Image"),
