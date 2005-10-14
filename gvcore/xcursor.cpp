@@ -20,6 +20,8 @@
 
 #include <config.h>
 
+#include <assert.h>
+
 #include "xcursor.h"
 
 #include <qimage.h>
