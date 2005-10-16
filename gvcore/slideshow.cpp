@@ -131,10 +131,6 @@ void SlideShow::stop() {
 
 
 QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
-	// wait for prefetching to finish
-	if( mPrefetch != NULL ) {
-		return;
-	}
 	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
 		kdWarning() << k_funcinfo << "Current URL not found in list. This should not happen.\n";
@@ -159,6 +155,11 @@ QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
 
 
 void SlideShow::slotTimeout() {
+	// wait for prefetching to finish
+	if( mPrefetch != NULL ) {
+		return;
+	}
+
 	QValueVector<KURL>::ConstIterator it=findNextURL();
 	if (it==mURLs.end()) {
 		stop();
