@@ -102,8 +102,10 @@ public:
 
 signals:
 	void nextURL( const KURL& );
-	void finished();
-	void playImagesFinished();
+	/**
+	 * Slideshow has been started or stopped
+	 */
+	void stateChanged(bool running);
 
 private slots:
 	void slotTimeout();

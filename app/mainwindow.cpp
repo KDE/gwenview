@@ -591,25 +591,30 @@ void MainWindow::toggleFullScreen() {
 void MainWindow::toggleSlideShow() {
 	if (mSlideShow->isRunning()) {
 		mSlideShow->stop();
-	} else {
-		KURL::List list;
-		KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
-		for ( ; it.current(); ++it ) {
-			KFileItem* item=it.current();
-			if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
-				list.append(item->url());
-			}
-		}
-		if (list.count()==0) {
-			return;
-		}
-
-		if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
-			mToggleFullScreen->activate();
-		}
-		mSlideShow->start(list);
+		return;
 	}
- 	mToggleSlideShow->setIcon(mSlideShow->isRunning() ? "player_pause" : "slideshow");
+	
+	KURL::List list;
+	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
+	for ( ; it.current(); ++it ) {
+		KFileItem* item=it.current();
+		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
+			list.append(item->url());
+		}
+	}
+	if (list.count()==0) {
+		return;
+	}
+
+	if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
+		mToggleFullScreen->activate();
+	}
+	mSlideShow->start(list);
+	}
+
+
+void MainWindow::slotSlideShowChanged(bool running) {
+ 	mToggleSlideShow->setIcon(running ? "player_pause" : "slideshow");
 }
 
 
@@ -873,7 +878,6 @@ void MainWindow::createWidgets() {
 
 	// Slide show controller (not really a widget)
 	mSlideShow=new SlideShow(mDocument);
-	connect( mSlideShow, SIGNAL( nextURL( const KURL& )), SLOT( openURL( const KURL& )));
 
 	// Default position on desktop
 	setGeometry(20,20,720,520);
@@ -1064,6 +1068,12 @@ void MainWindow::updateWindowActions() {
 void MainWindow::createConnections() {
 	connect(mGoUp->popupMenu(), SIGNAL(activated(int)),
 		this,SLOT(goUpTo(int)));
+	
+	// Slideshow connections
+	connect( mSlideShow, SIGNAL(nextURL(const KURL&)),
+		SLOT( openURL(const KURL&)) );
+	connect( mSlideShow, SIGNAL( stateChanged(bool)),
+		SLOT( slotSlideShowChanged(bool)) );
 
 	// Dir view connections
 	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),

@@ -191,6 +191,7 @@ private slots:
 	void slotImageLoading();
 	void slotImageLoaded();
 	void toggleSlideShow();
+	void slotSlideShowChanged(bool);
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void slotDirURLChanged(const KURL&);
 	void modifyImage(ImageUtils::Orientation);

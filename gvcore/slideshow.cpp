@@ -116,13 +116,14 @@ void SlideShow::start(const KURL::List& urls) {
 	mTimer->start(delayTimer(), true);
 	mStarted=true;
 	prefetch();
+	emit stateChanged(true);
 }
 
 
 void SlideShow::stop() {
 	mTimer->stop();
 	mStarted=false;
-	emit finished();
+	emit stateChanged(false);
 	if( !mPriorityURL.isEmpty()) {
 		Cache::instance()->setPriorityURL( mPriorityURL, false );
 		mPriorityURL = KURL();
