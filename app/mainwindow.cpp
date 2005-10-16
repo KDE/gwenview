@@ -614,7 +614,7 @@ void MainWindow::toggleSlideShow() {
 
 
 void MainWindow::slotSlideShowChanged(bool running) {
- 	mToggleSlideShow->setIcon(running ? "player_pause" : "slideshow");
+ 	mToggleSlideShow->setIcon(running ? "slideshow_pause" : "slideshow_play");
 }
 
 
@@ -958,7 +958,7 @@ void MainWindow::createActions() {
 	mReload->setEnabled(false);
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
-	mToggleSlideShow=new KAction(i18n("Slide Show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
+	mToggleSlideShow=new KAction(i18n("Slide Show"),"slideshow_play",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
   
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
