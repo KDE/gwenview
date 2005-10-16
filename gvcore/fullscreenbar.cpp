@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qevent.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qpopupmenu.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 
@@ -44,19 +45,57 @@ const int SLIDE_OUT_INTERVAL = 12;
 const int SLIDE_STEP = 4;
 
 
+/**
+ * A KAction aware QToolButton
+ */
 class ActionButton : public QToolButton {
+	
+	/*
+	 * This is hackish: We want our ActionButton to get updated whenever the
+	 * KAction gets updated (for example when the icon changes). Unfortunately,
+	 * containers handling in KAction is hardcoded to KToolBar, QPopupMenu and
+	 * QMenuBar.
+	 * To work around this, we plug the KAction to a DummyPopupMenu which
+	 * inherits from QPopupMenu and notifies our ActionButton whenever it is
+	 * aware of a change in the KAction.
+	 */
+	class DummyPopupMenu : public QPopupMenu {
+	public:
+		DummyPopupMenu(ActionButton* btn)
+		: mActionButton(btn) {}
+
+		void updateItem(int /*id*/) {
+			mActionButton->updateFromAction();
+		}
+		
+		void menuContentsChanged() {
+			mActionButton->updateFromAction();
+		}
+
+	private:
+		ActionButton* mActionButton;
+	};
+	
 public:
 	ActionButton(QWidget* parent, KAction* action)
-	: QToolButton(parent)
+	: QToolButton(parent), mDummyPopupMenu(this), mAction(action)
 	{
+		action->plug(&mDummyPopupMenu);
 		setAutoRaise(true);
-		setIconSet(MainBarIconSet(action->icon()));
-		setTextLabel(action->plainText(), true);
-		setEnabled(action->isEnabled());
+		updateFromAction();
 
 		connect(this, SIGNAL(clicked()), action, SLOT(activate()) );
 		connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)) );
 	}
+
+private:
+	void updateFromAction() {
+		setIconSet(MainBarIconSet(mAction->icon()));
+		setTextLabel(mAction->plainText(), true);
+		setEnabled(mAction->isEnabled());
+	}
+	DummyPopupMenu mDummyPopupMenu;
+	KAction* mAction;
 };
 
 

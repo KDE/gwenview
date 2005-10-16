@@ -126,7 +126,7 @@ private:
 	KAction* mReload;
 	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;
-	KAction* mStartSlideShow;
+	KAction* mToggleSlideShow;
 	KAction* mRotateLeft;
 	KAction* mRotateRight;
 	KAction* mMirror;
@@ -190,8 +190,7 @@ private slots:
 	void applyMainWindowSettings();
 	void slotImageLoading();
 	void slotImageLoaded();
-	void startSlideShow();
-	void slotSlideShowStop();
+	void toggleSlideShow();
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void slotDirURLChanged(const KURL&);
 	void modifyImage(ImageUtils::Orientation);

@@ -557,8 +557,10 @@ void MainWindow::toggleFullScreen() {
 		mImageView->setFullScreen(true);
 		mImageView->setFocus();
 	} else {
-		// Stop the slideshow if it's running, harmless if it does not
-		mSlideShow->stop();
+		// Stop the slideshow if it's running
+		if (mSlideShow->isRunning()) {
+			mToggleSlideShow->activate();
+		}
 
 		// Make sure the file view points to the right URL, it might not be the
 		// case if we are getting out of a slideshow
@@ -586,39 +588,28 @@ void MainWindow::toggleFullScreen() {
 }
 
 
-void MainWindow::startSlideShow() {
-	// Slide Show is already running with Play-Stop, stop it
+void MainWindow::toggleSlideShow() {
 	if (mSlideShow->isRunning()) {
-		slotSlideShowStop();
-		return;
-	}
-
-	// @todo create 2 new slideshow icons with play and stop symbol
-// 	actionCollection()->action("playimages")->setIconSet(KGlobal::iconLoader()->loadIconSet("player_stop",KIcon::Toolbar));
-    
-	KURL::List list;
-	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
-	for ( ; it.current(); ++it ) {
-		KFileItem* item=it.current();
-		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
-			list.append(item->url());
+		mSlideShow->stop();
+	} else {
+		KURL::List list;
+		KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
+		for ( ; it.current(); ++it ) {
+			KFileItem* item=it.current();
+			if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
+				list.append(item->url());
+			}
 		}
-	}
-	if (list.count()==0) {
-		return;
-	}
+		if (list.count()==0) {
+			return;
+		}
 
-	if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
-		mToggleFullScreen->activate();
+		if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
+			mToggleFullScreen->activate();
+		}
+		mSlideShow->start(list);
 	}
-	mSlideShow->start(list);
-}
-
-
-void MainWindow::slotSlideShowStop() {
-	mSlideShow->stop();
-	// @todo create 2 slideshow buttons with play and stop symbol
-	//	actionCollection()->action("playimages")->setIconSet(KGlobal::iconLoader()->loadIconSet("player_play",KIcon::Toolbar));
+ 	mToggleSlideShow->setIcon(mSlideShow->isRunning() ? "player_pause" : "slideshow");
 }
 
 
@@ -789,7 +780,7 @@ void MainWindow::updateStatusInfo() {
 void MainWindow::updateImageActions() {
 	bool imageActionsEnabled = !mDocument->isNull();
 	
-	mStartSlideShow->setEnabled(imageActionsEnabled);
+	mToggleSlideShow->setEnabled(imageActionsEnabled);
 	mRotateLeft->setEnabled(imageActionsEnabled);
 	mRotateRight->setEnabled(imageActionsEnabled);
 	mMirror->setEnabled(imageActionsEnabled);
@@ -963,7 +954,7 @@ void MainWindow::createActions() {
 	mReload->setEnabled(false);
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
-	mStartSlideShow=new KAction(i18n("Slide Show"),"slideshow",0,this,SLOT(startSlideShow()),actionCollection(),"slideshow");
+	mToggleSlideShow=new KAction(i18n("Slide Show"),"slideshow",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
   
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
@@ -1007,7 +998,7 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewStack->selectPrevious());
 	actions.append(mFileViewStack->selectNext());
 	actions.append(mToggleFullScreen);
-	actions.append(mStartSlideShow);
+	actions.append(mToggleSlideShow);
 	mImageView->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
@@ -1125,14 +1116,6 @@ void MainWindow::createConnections() {
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),
 		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
-
-	//@todo finish the slideshow
-	// Slide show
-	connect(mSlideShow,SIGNAL(finished()),
-		mToggleFullScreen,SLOT(activate()) );
-
-// 	connect(mSlideShow,SIGNAL(playImagesFinished()),
-// 		this,SLOT(slotPlayImagesStop()));
 
 	// Location bar
 	connect(mURLEdit, SIGNAL(activated(const QString &)),
