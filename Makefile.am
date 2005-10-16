@@ -1,10 +1,4 @@
-# Do *NOT* indent the content of the ifs, this will break the generated
-# Makefile
-if libexif_internal
-LIBGVEXIFDIR=libgvexif
-endif
-
-SUBDIRS = tsthread $(LIBGVEXIFDIR) imageutils gvcore pics desktopfiles doc tools gvimagepart gvdirpart app
+SUBDIRS = tsthread imageutils gvcore pics desktopfiles doc tools gvimagepart gvdirpart app
 
 EXTRA_DIST = AUTHORS ChangeLog COPYING INSTALL NEWS README TODO CREDITS
 

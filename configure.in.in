@@ -112,19 +112,12 @@ if test -z "$LIBMNG"; then
     AC_WARN([Can't find libmng.h, Gwenview won't be compiled with MNG support])
 fi
 
-# Inspired by extragear/libs/libkexif/configure.in.in
-# libexif detection
-LIBEXIF_INTERNAL=no
-
 PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.12, ,
-        [AC_MSG_WARN([libexif >= 0.5.12 not found. Using internal copy.]) 
-		LIBEXIF_INTERNAL=yes
-		])
+        AC_MSG_ERROR([libexif >= 0.5.12 not found. Please install it.]) 
+		)
 
 AC_SUBST(LIBEXIF_LIBS)
 AC_SUBST(LIBEXIF_CFLAGS)
-
-AM_CONDITIONAL(libexif_internal, [test x$LIBEXIF_INTERNAL = xyes])
 
 KDE_CHECK_HEADERS(X11/Xcursor/Xcursor.h,
     [KDE_CHECK_LIB(Xcursor, XcursorXcFileLoadImages, [
