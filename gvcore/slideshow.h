@@ -111,6 +111,7 @@ private slots:
 	void prefetchDone();
 
 private:
+	QValueVector<KURL>::ConstIterator findNextURL() const;
 	void prefetch();
 	QTimer* mTimer;
 	/** @brief random mode */

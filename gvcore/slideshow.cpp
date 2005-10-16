@@ -122,6 +122,7 @@ void SlideShow::start(const KURL::List& urls) {
 void SlideShow::stop() {
 	mTimer->stop();
 	mStarted=false;
+	emit finished();
 	if( !mPriorityURL.isEmpty()) {
 		Cache::instance()->setPriorityURL( mPriorityURL, false );
 		mPriorityURL = KURL();
@@ -129,41 +130,40 @@ void SlideShow::stop() {
 }
 
 
-void SlideShow::slotTimeout() {
+QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
 	// wait for prefetching to finish
 	if( mPrefetch != NULL ) {
 		return;
 	}
 	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
 	if (it==mURLs.end()) {
-		kdWarning() << k_funcinfo << "Current URL not found in list, aborting.\n";
-		stop();
-		emit finished();
-		return;
+		kdWarning() << k_funcinfo << "Current URL not found in list. This should not happen.\n";
+		return it;
 	}
 
 	++it;
 	if (it==mURLs.end()) {
-	  // PlayImages not pressed or PlayImages pressed and don't stop at the end
-// 	  if (!mPlayImages || (mPlayImages && !mPlayStopAtEnd))
-		  it=mURLs.begin();
-// 	else
-// 		emit playImagesFinished();
+		if (mStopAtEnd) {
+			return it;
+		} else {
+			it=mURLs.begin();
+		}
 	}
 
 	if (it==mStartIt && !mLoop) {
-		// PlayImages not pressed or PlayImages pressed and loop is enabled
-// 		if (!mPlayImages || (mPlayImages && !mPlayLoop)) {
-			stop();
-// 		}
-	// button play-images not pressed
-// 		if (!mPlayImages)
-// 			emit finished();
-// 		else
-// 			emit playImagesFinished();
-		return;
+		return mURLs.end();
 	}
 
+	return it;
+}
+
+
+void SlideShow::slotTimeout() {
+	QValueVector<KURL>::ConstIterator it=findNextURL();
+	if (it==mURLs.end()) {
+		stop();
+		return;
+	}
 	emit nextURL(*it);
 }
 
@@ -177,19 +177,8 @@ void SlideShow::slotLoaded() {
 
 
 void SlideShow::prefetch() {
-	QValueVector<KURL>::ConstIterator it=qFind(mURLs.begin(), mURLs.end(), mDocument->url());
+	QValueVector<KURL>::ConstIterator it=findNextURL();
 	if (it==mURLs.end()) {
-// 	  if (mPlayImages && mPlayStopAtEnd)
-// 	    emit playImagesFinished();
-		return;
-	}
-
-	++it;
-	if (it==mURLs.end()) {
-		it=mURLs.begin();
-	}
-
-	if (it==mStartIt && !mLoop) {
 		return;
 	}
 
