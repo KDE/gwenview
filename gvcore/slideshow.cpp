@@ -215,7 +215,7 @@ void SlideShow::readConfig(KConfig* config,const QString& group) {
 	mDelaySuffix=config->readEntry(CONFIG_DELAY_SUFFIX,"s");
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
 	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
-	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,true);
+	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,false);
 	mRandom=config->readBoolEntry(CONFIG_RANDOM,false);
 	
 	mRandom=GVConfig::self()->slideShowRandom();
