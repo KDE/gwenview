@@ -14,6 +14,7 @@ gwenview_la_SOURCES = \
 	configimagelistpage.ui \
 	configimageviewpage.ui \
 	configmiscpage.ui \
+	configslideshowpage.ui \
 	branchpropertiesdialogbase.ui \
 	mainwindow.cpp \
 	metaedit.cpp \
@@ -21,8 +22,7 @@ gwenview_la_SOURCES = \
 	configdialog.cpp \
 	branchpropertiesdialog.cpp \
 	history.cpp \
-	main.cpp \
-  configslideshow.ui
+	main.cpp
 
 gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la
 

@@ -52,7 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configimagelistpage.h"
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
-#include "configslideshow.h"
+#include "configslideshowpage.h"
 #include "mainwindow.h"
 #include "gvcore/document.h"
 #include "gvcore/fileoperation.h"
