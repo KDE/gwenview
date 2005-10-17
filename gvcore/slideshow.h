@@ -45,6 +45,8 @@ public:
 	SlideShow(Document* document);
 	virtual ~SlideShow();
 
+	enum DelayUnit {SECONDS=0, MILLISECONDS=1};
+
 	/**
 	 * never end automatically
 	 * @param loop true to run in a loop
@@ -57,13 +59,9 @@ public:
 	/** return current delay value */
 	int delay() const { return mDelay; }
 
-	/**
-	 * suffix of the delay spin box
-	 * @param suffix the suffix
-	 */
-	void setDelaySuffix(QString suffix);
+	void setDelayUnit(DelayUnit unit);
 	/** @return delay spin box suffix as QString */
-	QString delaySuffix() const { return mDelaySuffix; }
+	DelayUnit delayUnit() const { return mDelayUnit; }
 
 	/**
 	 * show fullscreen
@@ -124,8 +122,7 @@ private:
 	bool mStopAtEnd;
 	/** @brief delay value between the loaded image and the next image in (milli) seconds */
 	int mDelay;
-	/** @brief suffix milliseconds or seconds */
-	QString mDelaySuffix;
+	DelayUnit mDelayUnit;
 	/** @brief if the current image is one before the start image the slideshow will stop if true */
 	bool mLoop;
 	/** @brief show fullscreen if true */

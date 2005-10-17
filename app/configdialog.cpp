@@ -169,19 +169,22 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mImageViewPage->mShowScrollBars->setChecked(imageView->showScrollBars());
 	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
 
+    // Slide Show tab
 	d->mSlideShowPage->mDelay->setValue(d->mMainWindow->slideShow()->delay());
-	d->mSlideShowPage->mDelay->setSuffix(d->mMainWindow->slideShow()->delaySuffix());
+    SlideShow::DelayUnit unit=d->mMainWindow->slideShow()->delayUnit();
+    if (unit==SlideShow::SECONDS) {
+        d->mSlideShowPage->mDelayUnit->setCurrentItem(0);
+    } else {
+        d->mSlideShowPage->mDelayUnit->setCurrentItem(1);
+		d->mSlideShowPage->mDelay->setLineStep(10);
+    }
 	d->mSlideShowPage->mStopAtEnd->setChecked(d->mMainWindow->slideShow()->stopAtEnd());
 	d->mSlideShowPage->mFullscreen->setChecked(d->mMainWindow->slideShow()->fullscreen());
 	d->mSlideShowPage->mLoop->setChecked(d->mMainWindow->slideShow()->loop());
 	d->mSlideShowPage->mRandomOrder->setChecked(d->mMainWindow->slideShow()->random());
-	if (d->mMainWindow->slideShow()->delaySuffix() == "ms") {
-		d->mSlideShowPage->mDelay->setLineStep(10);
-		d->mSlideShowPage->mDelay->setMinValue(10);
-	}
 	
-	connect(d->mSlideShowPage->mDelay,SIGNAL(valueChanged(int)),
-	        this,SLOT(slotSlideShowDelayClicked(int)));
+	connect(d->mSlideShowPage->mDelayUnit, SIGNAL(activated(int)),
+        this, SLOT(slotSlideShowDelayUnitChanged(int)));
   		
 	// Full Screen tab
 	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
@@ -249,9 +252,14 @@ void ConfigDialog::slotApply() {
 	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
 	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 
+    // Slide Show tab
 	slideShow->setLoop(d->mSlideShowPage->mLoop->isChecked());
 	slideShow->setDelay(d->mSlideShowPage->mDelay->value());
-	slideShow->setDelaySuffix(d->mSlideShowPage->mDelay->suffix());
+    if (d->mSlideShowPage->mDelayUnit->currentItem()==0) {
+        slideShow->setDelayUnit(SlideShow::SECONDS);
+    } else {
+        slideShow->setDelayUnit(SlideShow::MILLISECONDS);
+    }
 	slideShow->setRandom(d->mSlideShowPage->mRandomOrder->isChecked());
 	slideShow->setStopAtEnd(d->mSlideShowPage->mStopAtEnd->isChecked());
 	slideShow->setFullscreen(d->mSlideShowPage->mFullscreen->isChecked());
@@ -320,26 +328,19 @@ void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 	KMessageBox::information( this,i18n("Cache emptied.") );
 }
 
-void ConfigDialog::slotSlideShowDelayClicked(int) {
-	// get the spinBox
-	QSpinBox* delay=d->mSlideShowPage->mDelay;
-	// current value is in seconds
-	if(delay->suffix() == "s") {
-		if(delay->value() == 0) {
-			delay->setValue(990);
-			delay->setSuffix("ms");
-			delay->setLineStep(10);
-			delay->setMinValue(10);
-		}
-	} else {
-		// current value is in milli seconds
-		if(delay->value() == 1000) {
-			delay->setSuffix("s");
-			delay->setLineStep(1);
-			delay->setMinValue(0);
-			delay->setValue(1);
-		}
-
+void ConfigDialog::slotSlideShowDelayUnitChanged(int unit) {
+    QSpinBox* delay=d->mSlideShowPage->mDelay;
+    int value=delay->value();
+    if (unit==0) {
+        // seconds
+        value/=1000;
+        if (value==0) value=1;
+        delay->setValue(value);
+        d->mSlideShowPage->mDelay->setLineStep(1);
+    } else {
+        value*=1000;
+        delay->setValue(value);
+        d->mSlideShowPage->mDelay->setLineStep(10);
 	}
 	
 }

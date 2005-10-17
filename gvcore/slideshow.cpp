@@ -42,15 +42,15 @@ namespace Gwenview {
 
 
 static const char* CONFIG_START_FULLSCREEN="fullscreen";
-static const char* CONFIG_STOP_AT_END="stopAtEnd";
+static const char* CONFIG_STOP_AT_END="stop at end";
 static const char* CONFIG_RANDOM="random";
-static const char* CONFIG_DELAY_SUFFIX="delaySuffix";
+static const char* CONFIG_DELAY_UNIT="delay unit";
 static const char* CONFIG_DELAY="delay";
 static const char* CONFIG_LOOP="loop";
 
 
 SlideShow::SlideShow(Document* document)
-: mStopAtEnd(true), mDelay(10), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
+: mStopAtEnd(false), mDelay(10), mDelayUnit(SlideShow::SECONDS), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -78,7 +78,7 @@ void SlideShow::setDelay(int value) {
 
 
 int SlideShow::delayTimer() const {
-	if (mDelaySuffix == "s") {
+	if (mDelayUnit == SECONDS) {
 		return mDelay*1000;
 	} else {
 		return mDelay;
@@ -86,8 +86,8 @@ int SlideShow::delayTimer() const {
 }
 
 
-void SlideShow::setDelaySuffix(QString suffix) {
-	mDelaySuffix=suffix;
+void SlideShow::setDelayUnit(SlideShow::DelayUnit value) {
+	mDelayUnit=value;
 }
 
 
@@ -212,7 +212,7 @@ void SlideShow::prefetchDone() {
 void SlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
 	mDelay=config->readNumEntry(CONFIG_DELAY,10);
-	mDelaySuffix=config->readEntry(CONFIG_DELAY_SUFFIX,"s");
+	mDelayUnit=static_cast<DelayUnit>( config->readNumEntry(CONFIG_DELAY_UNIT, SECONDS) );
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
 	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
 	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,false);
@@ -225,7 +225,7 @@ void SlideShow::readConfig(KConfig* config,const QString& group) {
 void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
-	config->writeEntry(CONFIG_DELAY_SUFFIX,mDelaySuffix);
+	config->writeEntry(CONFIG_DELAY_UNIT,mDelayUnit);
 	config->writeEntry(CONFIG_LOOP,mLoop);
 	config->writeEntry(CONFIG_START_FULLSCREEN,mFullscreen);
 	config->writeEntry(CONFIG_STOP_AT_END,mStopAtEnd);

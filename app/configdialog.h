@@ -38,7 +38,7 @@ public:
 protected slots:
 	void slotOk();
 	void slotApply();
-	void slotSlideShowDelayClicked(int value);
+	void slotSlideShowDelayUnitChanged(int value);
 
 private slots:
 	void calculateCacheSize();
