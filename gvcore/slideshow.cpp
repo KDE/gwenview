@@ -68,8 +68,8 @@ void SlideShow::setLoop(bool value) {
 }
 
 
-void SlideShow::setDelay(int Delay) {
-		mDelay=Delay; // Slide Show
+void SlideShow::setDelay(int value) {
+	mDelay=value;
     
 	if (mTimer->isActive()) {
 		mTimer->changeInterval(delayTimer());
@@ -78,10 +78,11 @@ void SlideShow::setDelay(int Delay) {
 
 
 int SlideShow::delayTimer() const {
-	if (mDelaySuffix == "s")
+	if (mDelaySuffix == "s") {
 		return mDelay*1000;
-	else
+	} else {
 		return mDelay;
+	}
 }
 
 

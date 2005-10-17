@@ -56,8 +56,6 @@ public:
 	void setDelay(int);
 	/** return current delay value */
 	int delay() const { return mDelay; }
-	/** @return current delay value, milli seconds->value*1000, seconds->value */
-	int delayTimer() const;
 
 	/**
 	 * suffix of the delay spin box
@@ -115,6 +113,10 @@ private slots:
 private:
 	QValueVector<KURL>::ConstIterator findNextURL() const;
 	void prefetch();
+	
+	/** @return current delay value, in milli seconds */
+	int delayTimer() const;
+
 	QTimer* mTimer;
 	/** @brief random mode */
 	bool mRandom;
