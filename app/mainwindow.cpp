@@ -89,7 +89,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileviewstack.h"
 #include "gvcore/imageview.h"
 #include "gvcore/slideshow.h"
-#include "gvcore/slideshowdialog.h"
 #include "gvcore/printdialog.h"
 #include "gvcore/cache.h"
 #include "gvcore/thumbnailloadjob.h"
