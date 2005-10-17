@@ -42,7 +42,6 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <gvcore/fileviewstack.h>
 #include <gvcore/printdialog.h>
 #include <gvcore/imageview.h>
-#include <gvcore/slideshowdialog.h>
 #include <gvcore/slideshow.h>
 #include <gvcore/thumbnailloadjob.h>
 
@@ -215,11 +214,6 @@ KURL GVDirPart::pixmapURL() {
 
 void GVDirPart::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
-		SlideShowDialog dialog(mSplitter, mSlideShow);
-		if (!dialog.exec()) {
-			mToggleSlideShow->setChecked(false);
-			return;
-		}
         KURL::List list;
         KFileItemListIterator it( *mFilesView->currentFileView()->items() );
         for ( ; it.current(); ++it ) {
