@@ -186,7 +186,10 @@ private slots:
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotResetZoom();
-	void setAutoZoom(bool);
+	void setZoomToFit(bool);
+	void setZoomToWidth(bool);
+	void setZoomToHeight(bool);
+	void setLockZoom(bool);
 	void increaseGamma();
 	void decreaseGamma();
 	void increaseBrightness();

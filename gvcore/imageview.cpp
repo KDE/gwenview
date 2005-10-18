@@ -352,16 +352,13 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	// Create actions
 	d->mZoomToFit=new KToggleAction(i18n("Zoom to &Fit"),"viewmagfit",0,d->mActionCollection,"view_zoom_to_fit");
 	connect(d->mZoomToFit,SIGNAL(toggled(bool)),
-		this,SLOT(setAutoZoom(bool)) );
+		this,SLOT(setZoomToFit(bool)) );
 	d->mZoomToWidth=new KToggleAction(i18n("Zoom to &Width"),0,0,d->mActionCollection,"view_zoom_to_width");
 	connect(d->mZoomToWidth,SIGNAL(toggled(bool)),
-		this,SLOT(setAutoZoom(bool)) );
+		this,SLOT(setZoomToWidth(bool)) );
 	d->mZoomToHeight=new KToggleAction(i18n("Zoom to &Height"),0,0,d->mActionCollection,"view_zoom_to_height");
 	connect(d->mZoomToHeight,SIGNAL(toggled(bool)),
-		this,SLOT(setAutoZoom(bool)) );
-	d->mZoomToFit->setExclusiveGroup("autozoom");
-	d->mZoomToWidth->setExclusiveGroup("autozoom");
-	d->mZoomToHeight->setExclusiveGroup("autozoom");
+		this,SLOT(setZoomToHeight(bool)) );
 
 	d->mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),d->mActionCollection);
 
@@ -371,7 +368,8 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mResetZoom->setIcon("viewmag1");
 
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
-	d->mLockZoom->setExclusiveGroup("autozoom"); // either lock or autozoom, not both
+	connect(d->mLockZoom,SIGNAL(toggled(bool)),
+		this,SLOT(setLockZoom(bool)) );
 
 	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
 		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
@@ -1249,8 +1247,18 @@ void ImageView::slotResetZoom() {
 	setZoom(1.0);
 }
 
-// this slot is used by all three auto zoom actions since it's the same for all of them
-void ImageView::setAutoZoom(bool value) {
+// These could be merged using KToggleAction's setExclusiveGroup(),
+// but that's currently a bit problematic WRT activating the already
+// checked action - KDE3.5.0 maintains "one must be active" policy
+// like with radiobuttons, which is wrong here.
+// Also, lock zoom shouldn't first turn off auto zoom but lock
+// at whatever zoom size was active.
+void ImageView::setZoomToFit(bool value) {
+	if( value ) {
+		d->mZoomToWidth->setChecked( false );
+		d->mZoomToHeight->setChecked( false );
+		d->mLockZoom->setChecked( false );
+	}
 	updateScrollBarMode();
 	d->mManualZoom = false;
 	if (value) {
@@ -1261,6 +1269,51 @@ void ImageView::setAutoZoom(bool value) {
 	} else {
 		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
 	}
+}
+
+void ImageView::setZoomToWidth(bool value) {
+	if( value ) {
+		d->mZoomToFit->setChecked( false );
+		d->mZoomToHeight->setChecked( false );
+		d->mLockZoom->setChecked( false );
+	}
+	updateScrollBarMode();
+	d->mManualZoom = false;
+	if (value) {
+		d->mZoomBeforeAuto=d->mZoom;
+		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
+		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
+		setZoom(computeAutoZoom());
+	} else {
+		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+	}
+}
+
+void ImageView::setZoomToHeight(bool value) {
+	if( value ) {
+		d->mZoomToFit->setChecked( false );
+		d->mZoomToWidth->setChecked( false );
+		d->mLockZoom->setChecked( false );
+	}
+	updateScrollBarMode();
+	d->mManualZoom = false;
+	if (value) {
+		d->mZoomBeforeAuto=d->mZoom;
+		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
+		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
+		setZoom(computeAutoZoom());
+	} else {
+		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+	}
+}
+
+void ImageView::setLockZoom(bool value) {
+	if( value ) {
+		d->mZoomToFit->setChecked( false );
+		d->mZoomToWidth->setChecked( false );
+		d->mZoomToHeight->setChecked( false );
+	}
+	// don't change zoom here, keep it even if it was from some auto zoom mode
 }
 
 void ImageView::increaseGamma() {
