@@ -44,13 +44,12 @@ namespace Gwenview {
 static const char* CONFIG_START_FULLSCREEN="fullscreen";
 static const char* CONFIG_STOP_AT_END="stop at end";
 static const char* CONFIG_RANDOM="random";
-static const char* CONFIG_DELAY_UNIT="delay unit";
 static const char* CONFIG_DELAY="delay";
 static const char* CONFIG_LOOP="loop";
 
 
 SlideShow::SlideShow(Document* document)
-: mStopAtEnd(false), mDelay(10), mDelayUnit(SlideShow::SECONDS), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
+: mStopAtEnd(false), mDelay(10.), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -68,26 +67,12 @@ void SlideShow::setLoop(bool value) {
 }
 
 
-void SlideShow::setDelay(int value) {
+void SlideShow::setDelay(double value) {
 	mDelay=value;
     
 	if (mTimer->isActive()) {
-		mTimer->changeInterval(delayTimer());
+		mTimer->changeInterval(int(mDelay*1000));
 	}
-}
-
-
-int SlideShow::delayTimer() const {
-	if (mDelayUnit == SECONDS) {
-		return mDelay*1000;
-	} else {
-		return mDelay;
-	}
-}
-
-
-void SlideShow::setDelayUnit(SlideShow::DelayUnit value) {
-	mDelayUnit=value;
 }
 
 
@@ -114,7 +99,7 @@ void SlideShow::start(const KURL::List& urls) {
 		return;
 	}
 	
-	mTimer->start(delayTimer(), true);
+	mTimer->start(int(mDelay*1000), true);
 	mStarted=true;
 	prefetch();
 	emit stateChanged(true);
@@ -173,7 +158,7 @@ void SlideShow::slotTimeout() {
 
 void SlideShow::slotLoaded() {
 	if (mStarted) {
-		mTimer->start(delayTimer(), true);
+		mTimer->start(int(mDelay*1000), true);
 		prefetch();
 	}
 }
@@ -211,8 +196,7 @@ void SlideShow::prefetchDone() {
 //-Configuration--------------------------------------------
 void SlideShow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
-	mDelay=config->readNumEntry(CONFIG_DELAY,10);
-	mDelayUnit=static_cast<DelayUnit>( config->readNumEntry(CONFIG_DELAY_UNIT, SECONDS) );
+	mDelay=config->readDoubleNumEntry(CONFIG_DELAY,10.);
 	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
 	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
 	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,false);
@@ -225,7 +209,6 @@ void SlideShow::readConfig(KConfig* config,const QString& group) {
 void SlideShow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
-	config->writeEntry(CONFIG_DELAY_UNIT,mDelayUnit);
 	config->writeEntry(CONFIG_LOOP,mLoop);
 	config->writeEntry(CONFIG_START_FULLSCREEN,mFullscreen);
 	config->writeEntry(CONFIG_STOP_AT_END,mStopAtEnd);

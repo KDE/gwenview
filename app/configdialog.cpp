@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
 #include "configslideshowpage.h"
+#include "doublespinbox.h"
 #include "mainwindow.h"
 #include "gvcore/document.h"
 #include "gvcore/fileoperation.h"
@@ -170,21 +171,13 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
 
     // Slide Show tab
-	d->mSlideShowPage->mDelay->setValue(d->mMainWindow->slideShow()->delay());
-    SlideShow::DelayUnit unit=d->mMainWindow->slideShow()->delayUnit();
-    if (unit==SlideShow::SECONDS) {
-        d->mSlideShowPage->mDelayUnit->setCurrentItem(0);
-    } else {
-        d->mSlideShowPage->mDelayUnit->setCurrentItem(1);
-		d->mSlideShowPage->mDelay->setLineStep(10);
-    }
+	d->mSlideShowPage->mDelay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
+	d->mSlideShowPage->mDelay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
+	d->mSlideShowPage->mDelay->setValue( DoubleSpinBox::doubleToInt( d->mMainWindow->slideShow()->delay() ) );
 	d->mSlideShowPage->mStopAtEnd->setChecked(d->mMainWindow->slideShow()->stopAtEnd());
 	d->mSlideShowPage->mFullscreen->setChecked(d->mMainWindow->slideShow()->fullscreen());
 	d->mSlideShowPage->mLoop->setChecked(d->mMainWindow->slideShow()->loop());
 	d->mSlideShowPage->mRandomOrder->setChecked(d->mMainWindow->slideShow()->random());
-	
-	connect(d->mSlideShowPage->mDelayUnit, SIGNAL(activated(int)),
-        this, SLOT(slotSlideShowDelayUnitChanged(int)));
   		
 	// Full Screen tab
 	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
@@ -254,12 +247,7 @@ void ConfigDialog::slotApply() {
 
     // Slide Show tab
 	slideShow->setLoop(d->mSlideShowPage->mLoop->isChecked());
-	slideShow->setDelay(d->mSlideShowPage->mDelay->value());
-    if (d->mSlideShowPage->mDelayUnit->currentItem()==0) {
-        slideShow->setDelayUnit(SlideShow::SECONDS);
-    } else {
-        slideShow->setDelayUnit(SlideShow::MILLISECONDS);
-    }
+	slideShow->setDelay( DoubleSpinBox::intToDouble( d->mSlideShowPage->mDelay->value() ) );
 	slideShow->setRandom(d->mSlideShowPage->mRandomOrder->isChecked());
 	slideShow->setStopAtEnd(d->mSlideShowPage->mStopAtEnd->isChecked());
 	slideShow->setFullscreen(d->mSlideShowPage->mFullscreen->isChecked());
@@ -326,23 +314,6 @@ void ConfigDialog::onCacheEmptied(KIO::Job* job) {
 		return;
 	}
 	KMessageBox::information( this,i18n("Cache emptied.") );
-}
-
-void ConfigDialog::slotSlideShowDelayUnitChanged(int unit) {
-    QSpinBox* delay=d->mSlideShowPage->mDelay;
-    int value=delay->value();
-    if (unit==0) {
-        // seconds
-        value/=1000;
-        if (value==0) value=1;
-        delay->setValue(value);
-        d->mSlideShowPage->mDelay->setLineStep(1);
-    } else {
-        value*=1000;
-        delay->setValue(value);
-        d->mSlideShowPage->mDelay->setLineStep(10);
-	}
-	
 }
 
 } // namespace

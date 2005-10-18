@@ -16,6 +16,7 @@ gwenview_la_SOURCES = \
 	configmiscpage.ui \
 	configslideshowpage.ui \
 	branchpropertiesdialogbase.ui \
+	doublespinbox.cpp \
 	mainwindow.cpp \
 	metaedit.cpp \
 	dirview.cpp \

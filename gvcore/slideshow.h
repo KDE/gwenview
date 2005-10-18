@@ -45,8 +45,6 @@ public:
 	SlideShow(Document* document);
 	virtual ~SlideShow();
 
-	enum DelayUnit {SECONDS=0, MILLISECONDS=1};
-
 	/**
 	 * never end automatically
 	 * @param loop true to run in a loop
@@ -55,13 +53,9 @@ public:
 	/** @return current loop status */
 	bool loop() const { return mLoop; }
 	
-	void setDelay(int);
+	void setDelay(double);
 	/** return current delay value */
-	int delay() const { return mDelay; }
-
-	void setDelayUnit(DelayUnit unit);
-	/** @return delay spin box suffix as QString */
-	DelayUnit delayUnit() const { return mDelayUnit; }
+	double delay() const { return mDelay; }
 
 	/**
 	 * show fullscreen
@@ -111,18 +105,14 @@ private slots:
 private:
 	QValueVector<KURL>::ConstIterator findNextURL() const;
 	void prefetch();
-	
-	/** @return current delay value, in milli seconds */
-	int delayTimer() const;
 
 	QTimer* mTimer;
 	/** @brief random mode */
 	bool mRandom;
 	/** @brief if the file list is at the end it is automatically stopped if true */
 	bool mStopAtEnd;
-	/** @brief delay value between the loaded image and the next image in (milli) seconds */
-	int mDelay;
-	DelayUnit mDelayUnit;
+	/** @brief delay value between the loaded image and the next image in seconds */
+	double mDelay;
 	/** @brief if the current image is one before the start image the slideshow will stop if true */
 	bool mLoop;
 	/** @brief show fullscreen if true */
