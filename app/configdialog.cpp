@@ -85,19 +85,19 @@ public:
 
 // Two helper functions to create the config pages
 template<class T>
-T* addConfigPage(KDialogBase* dialog, const QString& header, const QString& name, const char* iconName) {
-	T* content=new T;
-	addConfigPage(dialog, content, header, name, iconName);
-	return content;
-}
-
-template<class T>
 void addConfigPage(KDialogBase* dialog, T* content, const QString& header, const QString& name, const char* iconName) {
 	QFrame* page=dialog->addPage(name, header, BarIcon(iconName, 32));
 	content->reparent(page, QPoint(0,0));
 	QVBoxLayout* layout=new QVBoxLayout(page, 0, KDialog::spacingHint());
 	layout->addWidget(content);
 	layout->addStretch();
+}
+
+template<class T>
+T* addConfigPage(KDialogBase* dialog, const QString& header, const QString& name, const char* iconName) {
+	T* content=new T;
+	addConfigPage(dialog, content, header, name, iconName);
+	return content;
 }
 
 
