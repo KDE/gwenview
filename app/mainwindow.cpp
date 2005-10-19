@@ -92,6 +92,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/printdialog.h"
 #include "gvcore/cache.h"
 #include "gvcore/thumbnailloadjob.h"
+#include <../gvcore/slideshowconfig.h>
 
 #include "config.h"
 
@@ -236,7 +237,8 @@ bool MainWindow::queryClose() {
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
 	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
-	mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
+	//mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
+	SlideShowConfig::writeConfig();
 	ThumbnailLoadJob::writeConfig(config, CONFIG_THUMBNAILLOADJOB_GROUP);
 
 	// Don't store dock layout if only the image dock is visible. This avoid
@@ -605,7 +607,7 @@ void MainWindow::toggleSlideShow() {
 		return;
 	}
 
-	if (mSlideShow->fullscreen() && !mToggleFullScreen->isChecked()) {
+	if (SlideShowConfig::fullscreen() && !mToggleFullScreen->isChecked()) {
 		mToggleFullScreen->activate();
 	}
 	mSlideShow->start(list);
@@ -917,7 +919,7 @@ void MainWindow::createWidgets() {
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
-	mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
+	//mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }

@@ -19,12 +19,14 @@ Copyright 2005 Aurelien Gateau
 */
 
 // Self
-#include "doublespinbox.h"
+#include "doublespinbox.moc"
 
 // Qt
+#include <qsqlpropertymap.h>
 #include <qvalidator.h>
 
 // KDE
+#include <kapplication.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -32,10 +34,19 @@ namespace Gwenview {
 static const double DOUBLE_FACTOR=1000.;
 static const int INT_FACTOR=int(DOUBLE_FACTOR);
 static const int DOUBLE_PRECISION=2; // DOUBLE_FACTOR precision minus one, to hide round errors
-	
+
+
 DoubleSpinBox::DoubleSpinBox(QWidget* parent, const char* name)
 : QSpinBox(parent, name) {
 	setValidator(new QDoubleValidator(this));
+
+	static bool installed=false;
+	if (!installed) {
+		kapp->installKDEPropertyMap();
+		QSqlPropertyMap *map = QSqlPropertyMap::defaultMap();
+		map->insert("Gwenview::DoubleSpinBox", "doubleValue");
+		installed=true;
+	}
 }
 
 int DoubleSpinBox::doubleToInt(double value) {

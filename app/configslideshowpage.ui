@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigSlideshowPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -12,13 +12,16 @@
             <height>148</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>ConfigSlideshowPage</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>mLoop</cstring>
+                <cstring>kcfg_loop</cstring>
             </property>
             <property name="text">
                 <string>Loop</string>
@@ -26,7 +29,7 @@
         </widget>
         <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>mRandomOrder</cstring>
+                <cstring>kcfg_random</cstring>
             </property>
             <property name="text">
                 <string>Show images in random order</string>
@@ -34,7 +37,7 @@
         </widget>
         <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>mFullscreen</cstring>
+                <cstring>kcfg_fullscreen</cstring>
             </property>
             <property name="text">
                 <string>Start in fullscreen mode</string>
@@ -45,13 +48,10 @@
         </widget>
         <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>mStopAtEnd</cstring>
+                <cstring>kcfg_stopAtEnd</cstring>
             </property>
             <property name="text">
                 <string>Stop on the last image of the folder</string>
-            </property>
-            <property name="accel">
-                <string></string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>By default, if you start the slideshow from the middle of a folder, the slideshow will show all images after the start image, then all images before the start image.
@@ -97,7 +97,7 @@ When this option is enabled, the slideshow will stop on the last image of the fo
         </spacer>
         <widget class="Gwenview::DoubleSpinBox" row="4" column="1">
             <property name="name">
-                <cstring>mDelay</cstring>
+                <cstring>kcfg_delay</cstring>
             </property>
         </widget>
     </grid>
@@ -127,9 +127,9 @@ When this option is enabled, the slideshow will stop on the last image of the fo
 </images>
 <connections>
     <connection>
-        <sender>mLoop</sender>
+        <sender>kcfg_loop</sender>
         <signal>toggled(bool)</signal>
-        <receiver>mStopAtEnd</receiver>
+        <receiver>kcfg_stopAtEnd</receiver>
         <slot>setDisabled(bool)</slot>
     </connection>
 </connections>

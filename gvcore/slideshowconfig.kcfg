@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="gwenviewrc"/> 
+  <group name="slide show">
+    <entry name="random" type="Bool">
+      <label>Display slide show images in random order</label>
+      <default>false</default>
+    </entry>
+    <entry name="fullscreen" type="Bool">
+      <label>Show slideshow in fullscreen mode</label>
+      <default>true</default>
+    </entry>
+    <entry name="loop" type="Bool">
+      <label>Loop on images</label>
+      <default>false</default>
+    </entry>
+    <entry name="stopAtEnd" key="stop at end" type="Bool">
+      <label>Stop at last image of folder</label>
+      <default>false</default>
+    </entry>
+    <entry name="delay" type="Double">
+      <label>Delay between images (in seconds)</label>
+      <default>10.0</default>
+    </entry>
+  </group>
+</kcfg>

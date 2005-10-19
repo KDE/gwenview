@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 
 // Local
+#include <../gvcore/slideshowconfig.h>
 #include "slideshow.moc"
 
 #include "document.h"
@@ -41,15 +42,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 
 
-static const char* CONFIG_START_FULLSCREEN="fullscreen";
-static const char* CONFIG_STOP_AT_END="stop at end";
-static const char* CONFIG_RANDOM="random";
-static const char* CONFIG_DELAY="delay";
-static const char* CONFIG_LOOP="loop";
-
-
 SlideShow::SlideShow(Document* document)
-: mStopAtEnd(false), mDelay(10.), mLoop(false), mDocument(document), mStarted(false), mPrefetch( NULL ) {
+: mDocument(document), mStarted(false), mPrefetch( NULL ) {
 	mTimer=new QTimer(this);
 	connect(mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
@@ -62,11 +56,7 @@ SlideShow::~SlideShow() {
 }
 
 
-void SlideShow::setLoop(bool value) {
-	mLoop=value;
-}
-
-
+#if 0
 void SlideShow::setDelay(double value) {
 	mDelay=value;
     
@@ -74,22 +64,13 @@ void SlideShow::setDelay(double value) {
 		mTimer->changeInterval(int(mDelay*1000));
 	}
 }
-
-
-void SlideShow::setFullscreen(bool fullscreen) {
-	mFullscreen=fullscreen;
-}
-
-
-void SlideShow::setRandom(bool value) {
-	mRandom=value;
-}
+#endif
 
 
 void SlideShow::start(const KURL::List& urls) {
 	mURLs.resize(urls.size());
 	qCopy(urls.begin(), urls.end(), mURLs.begin());
-	if (mRandom) {
+	if (SlideShowConfig::random()) {
 		std::random_shuffle(mURLs.begin(), mURLs.end());
 	}
 
@@ -99,7 +80,7 @@ void SlideShow::start(const KURL::List& urls) {
 		return;
 	}
 	
-	mTimer->start(int(mDelay*1000), true);
+	mTimer->start(int(SlideShowConfig::delay()*1000), true);
 	mStarted=true;
 	prefetch();
 	emit stateChanged(true);
@@ -126,14 +107,14 @@ QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
 
 	++it;
 	if (it==mURLs.end()) {
-		if (mStopAtEnd) {
+		if (SlideShowConfig::stopAtEnd()) {
 			return it;
 		} else {
 			it=mURLs.begin();
 		}
 	}
 
-	if (it==mStartIt && !mLoop) {
+	if (it==mStartIt && !SlideShowConfig::loop()) {
 		return mURLs.end();
 	}
 
@@ -158,7 +139,7 @@ void SlideShow::slotTimeout() {
 
 void SlideShow::slotLoaded() {
 	if (mStarted) {
-		mTimer->start(int(mDelay*1000), true);
+		mTimer->start(int(SlideShowConfig::delay()*1000), true);
 		prefetch();
 	}
 }
@@ -194,27 +175,31 @@ void SlideShow::prefetchDone() {
 }
 
 //-Configuration--------------------------------------------
-void SlideShow::readConfig(KConfig* config,const QString& group) {
+void SlideShow::readConfig(KConfig*,const QString&) {
+	/*
 	config->setGroup(group);
 	mDelay=config->readDoubleNumEntry(CONFIG_DELAY,10.);
-	mLoop=config->readBoolEntry(CONFIG_LOOP,false);
+	//mLoop=config->readBoolEntry(CONFIG_LOOP,false);
 	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
 	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,false);
 	mRandom=config->readBoolEntry(CONFIG_RANDOM,false);
 	
 	mRandom=GVConfig::self()->slideShowRandom();
+	*/
 }
 
 
-void SlideShow::writeConfig(KConfig* config,const QString& group) const {
+void SlideShow::writeConfig(KConfig*,const QString&) const {
+	/*
 	config->setGroup(group);
 	config->writeEntry(CONFIG_DELAY,mDelay);
-	config->writeEntry(CONFIG_LOOP,mLoop);
+	//config->writeEntry(CONFIG_LOOP,mLoop);
 	config->writeEntry(CONFIG_START_FULLSCREEN,mFullscreen);
 	config->writeEntry(CONFIG_STOP_AT_END,mStopAtEnd);
 	config->writeEntry(CONFIG_RANDOM,mRandom);
 	
 	GVConfig::self()->setSlideShowRandom(mRandom);
+	*/
 }
 
 } // namespace

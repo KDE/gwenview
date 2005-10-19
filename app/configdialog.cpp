@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kcolorbutton.h>
+#include <kconfigdialogmanager.h>
 #include <kdeversion.h>
 #include <kdirsize.h>
 #include <kfiledialog.h>
@@ -61,12 +62,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileviewstack.h"
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/gvconfig.h>
+#include <../gvcore/slideshowconfig.h>
 #include "gvcore/imageview.h"
 #include "gvcore/slideshow.h"
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
 namespace Gwenview {
+
+typedef QValueList<KConfigDialogManager*> ConfigManagerList;
 
 class ConfigDialogPrivate {
 public:
@@ -80,6 +84,8 @@ public:
 #ifdef GV_HAVE_KIPI
 	KIPI::ConfigWidget* mKIPIConfigWidget;
 #endif
+
+	ConfigManagerList mManagers;
 };
 
 
@@ -130,6 +136,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mSlideShowPage = addConfigPage<ConfigSlideshowPage>(
 		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow");
+	d->mManagers << new KConfigDialogManager(this, SlideShowConfig::self());
 
 #ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
@@ -171,14 +178,9 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
 
     // Slide Show tab
-	d->mSlideShowPage->mDelay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
-	d->mSlideShowPage->mDelay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
-	d->mSlideShowPage->mDelay->setDoubleValue( d->mMainWindow->slideShow()->delay() );
-	d->mSlideShowPage->mStopAtEnd->setChecked(d->mMainWindow->slideShow()->stopAtEnd());
-	d->mSlideShowPage->mFullscreen->setChecked(d->mMainWindow->slideShow()->fullscreen());
-	d->mSlideShowPage->mLoop->setChecked(d->mMainWindow->slideShow()->loop());
-	d->mSlideShowPage->mRandomOrder->setChecked(d->mMainWindow->slideShow()->random());
-  		
+	d->mSlideShowPage->kcfg_delay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
+	d->mSlideShowPage->kcfg_delay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
+
 	// Full Screen tab
 	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
 	d->mFullScreenPage->mFreeOutputFormat->setText(imageView->freeOutputFormat());
@@ -198,6 +200,11 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	// Misc tab
 	d->mMiscPage->mModifiedBehaviorGroup->setButton( int(document->modifiedBehavior()) );
 	d->mMiscPage->mAutoRotateImages->setChecked(GVConfig::self()->autoRotateImages() );
+	
+	ConfigManagerList::Iterator it(d->mManagers.begin());
+	for (;it!=d->mManagers.end(); ++it) {
+		(*it)->updateWidgets();
+	}
 }
 
 
@@ -216,7 +223,6 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
-	SlideShow* slideShow=d->mMainWindow->slideShow();
 	Document* document=d->mMainWindow->document();
 
 	// Image List tab
@@ -245,13 +251,6 @@ void ConfigDialog::slotApply() {
 	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
 	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 
-    // Slide Show tab
-	slideShow->setLoop(d->mSlideShowPage->mLoop->isChecked());
-	slideShow->setDelay( d->mSlideShowPage->mDelay->doubleValue() );
-	slideShow->setRandom(d->mSlideShowPage->mRandomOrder->isChecked());
-	slideShow->setStopAtEnd(d->mSlideShowPage->mStopAtEnd->isChecked());
-	slideShow->setFullscreen(d->mSlideShowPage->mFullscreen->isChecked());
-	
 	// Full Screen tab
 	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
 	imageView->setOSDMode( static_cast<ImageView::OSDMode>(osdMode) );
@@ -273,6 +272,11 @@ void ConfigDialog::slotApply() {
 	// Misc tab
 	int behavior=d->mMiscPage->mModifiedBehaviorGroup->selectedId();
 	document->setModifiedBehavior( static_cast<Document::ModifiedBehavior>(behavior) );
+	
+	ConfigManagerList::Iterator it(d->mManagers.begin());
+	for (;it!=d->mManagers.end(); ++it) {
+		(*it)->updateSettings();
+	}
 	
 	GVConfig::self()->setAutoRotateImages(d->mMiscPage->mAutoRotateImages->isChecked() );
 }

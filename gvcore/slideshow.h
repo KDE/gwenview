@@ -44,42 +44,6 @@ Q_OBJECT
 public:
 	SlideShow(Document* document);
 	virtual ~SlideShow();
-
-	/**
-	 * never end automatically
-	 * @param loop true to run in a loop
-	 */
-	void setLoop(bool loop);
-	/** @return current loop status */
-	bool loop() const { return mLoop; }
-	
-	void setDelay(double);
-	/** return current delay value */
-	double delay() const { return mDelay; }
-
-	/**
-	 * show fullscreen
-	 * @param fullscreen true to show the slideshow in fullscreen
-	 */
-	void setFullscreen(bool fullscreen);
-	/** @return return current fullscreen mode */
-	bool fullscreen() const { return mFullscreen; }
-
-	/**
-	 * stop at the directory end
-	 * @param stop true to stop
-	 */
-	void setStopAtEnd(bool stop) { mStopAtEnd=stop; }
-	/** @return current stop value */
-	bool stopAtEnd() const { return mStopAtEnd; }
-
-	/**
-	 * show images in a random order
-	 * @param random true to show in random order
-	 */
-	void setRandom(bool random);
-	/** @return current random status */
-	bool random() const { return mRandom; }
 	
 	void start(const KURL::List& urls);
 	void stop();
@@ -107,16 +71,6 @@ private:
 	void prefetch();
 
 	QTimer* mTimer;
-	/** @brief random mode */
-	bool mRandom;
-	/** @brief if the file list is at the end it is automatically stopped if true */
-	bool mStopAtEnd;
-	/** @brief delay value between the loaded image and the next image in seconds */
-	double mDelay;
-	/** @brief if the current image is one before the start image the slideshow will stop if true */
-	bool mLoop;
-	/** @brief show fullscreen if true */
-	bool mFullscreen;
 	Document* mDocument;
 	bool mStarted;
 	QValueVector<KURL> mURLs;

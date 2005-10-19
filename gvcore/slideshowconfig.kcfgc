@@ -1,0 +1,7 @@
+File=slideshowconfig.kcfg
+ClassName=SlideShowConfig
+NameSpace=Gwenview
+Singleton=true
+Mutators=true
+IncludeFiles=gvcore/libgwenview_export.h
+Visibility=LIBGWENVIEW_EXPORT
