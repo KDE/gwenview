@@ -26,8 +26,13 @@ Copyright 2005 Aurelien Gateau
 namespace Gwenview {
 
 class DoubleSpinBox : public QSpinBox {
+	Q_OBJECT
+	Q_PROPERTY(double doubleValue READ doubleValue WRITE setDoubleValue)
 public:
 	DoubleSpinBox(QWidget* parent, const char* name=0);
+
+	void setDoubleValue(double);
+	double doubleValue() const;
 
 	static int doubleToInt(double);
 	static double intToDouble(int);

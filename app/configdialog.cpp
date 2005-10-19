@@ -173,7 +173,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
     // Slide Show tab
 	d->mSlideShowPage->mDelay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
 	d->mSlideShowPage->mDelay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
-	d->mSlideShowPage->mDelay->setValue( DoubleSpinBox::doubleToInt( d->mMainWindow->slideShow()->delay() ) );
+	d->mSlideShowPage->mDelay->setDoubleValue( d->mMainWindow->slideShow()->delay() );
 	d->mSlideShowPage->mStopAtEnd->setChecked(d->mMainWindow->slideShow()->stopAtEnd());
 	d->mSlideShowPage->mFullscreen->setChecked(d->mMainWindow->slideShow()->fullscreen());
 	d->mSlideShowPage->mLoop->setChecked(d->mMainWindow->slideShow()->loop());
@@ -247,7 +247,7 @@ void ConfigDialog::slotApply() {
 
     // Slide Show tab
 	slideShow->setLoop(d->mSlideShowPage->mLoop->isChecked());
-	slideShow->setDelay( DoubleSpinBox::intToDouble( d->mSlideShowPage->mDelay->value() ) );
+	slideShow->setDelay( d->mSlideShowPage->mDelay->doubleValue() );
 	slideShow->setRandom(d->mSlideShowPage->mRandomOrder->isChecked());
 	slideShow->setStopAtEnd(d->mSlideShowPage->mStopAtEnd->isChecked());
 	slideShow->setFullscreen(d->mSlideShowPage->mFullscreen->isChecked());

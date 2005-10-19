@@ -46,6 +46,14 @@ double DoubleSpinBox::intToDouble(int value) {
 	return value/DOUBLE_FACTOR;
 }
 
+double DoubleSpinBox::doubleValue() const {
+	return intToDouble(value());
+}
+
+void DoubleSpinBox::setDoubleValue(double value) {
+	setValue(doubleToInt(value));
+}
+
 QString DoubleSpinBox::mapValueToText(int value) {
 	return KGlobal::locale()->formatNumber(intToDouble(value), DOUBLE_PRECISION);
 }
