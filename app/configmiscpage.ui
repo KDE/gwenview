@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigMiscPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>287</width>
+            <width>289</width>
             <height>239</height>
         </rect>
     </property>
@@ -29,7 +29,7 @@
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>mModifiedBehaviorGroup</cstring>
+                <cstring>kcfg_modifiedBehavior</cstring>
             </property>
             <property name="frameShape">
                 <enum>NoFrame</enum>
@@ -98,7 +98,7 @@
         </spacer>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mAutoRotateImages</cstring>
+                <cstring>kcfg_autoRotateImages</cstring>
             </property>
             <property name="text">
                 <string>Automatically rotate images on load</string>

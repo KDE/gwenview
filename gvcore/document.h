@@ -54,7 +54,6 @@ class DocumentImpl;
 class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
-	enum ModifiedBehavior { ASK=0, SAVE_SILENTLY=1, DISCARD_CHANGES=2 };
 	enum CommentState { NONE=0, READ_ONLY=1, WRITABLE=2 };
 	
 	Document(QObject*);
@@ -72,9 +71,6 @@ public:
 	bool isNull() const { return image().isNull(); }
 	int width() const { return image().width(); }
 	int height() const { return image().height(); }
-
-	void setModifiedBehavior(ModifiedBehavior);
-	ModifiedBehavior modifiedBehavior() const;
 
 	Document::CommentState commentState() const;
 	QString comment() const;

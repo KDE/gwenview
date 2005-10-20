@@ -69,7 +69,6 @@ namespace Gwenview {
 #endif
 
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
-const char* CONFIG_NOTIFICATION_MESSAGES_GROUP="Notification Messages";
 
 //-------------------------------------------------------------------
 //
@@ -474,41 +473,6 @@ void Document::saveBeforeClosing() {
 	} else {
 		d->mModified=false;
 	}
-}
-
-
-//---------------------------------------------------------------------
-//
-// Config
-//
-//---------------------------------------------------------------------
-static Document::ModifiedBehavior stringToModifiedBehavior(const QString& str) {
-	if (str=="yes") return Document::SAVE_SILENTLY;
-	if (str=="no") return Document::DISCARD_CHANGES;
-	return Document::ASK;
-}
-
-static QString modifiedBehaviorToString(Document::ModifiedBehavior behaviour) {
-	if (behaviour==Document::SAVE_SILENTLY) return "yes";
-	if (behaviour==Document::DISCARD_CHANGES) return "no";
-	return "";
-}
-
-
-void Document::setModifiedBehavior(ModifiedBehavior value) {
-	KConfig* config=KGlobal::config();
-	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
-	config->setGroup(CONFIG_NOTIFICATION_MESSAGES_GROUP);
-	config->writeEntry(CONFIG_SAVE_AUTOMATICALLY,
-		modifiedBehaviorToString(value));
-}
-
-
-Document::ModifiedBehavior Document::modifiedBehavior() const {
-	KConfig* config=KGlobal::config();
-	KConfigGroupSaver saver(config, CONFIG_NOTIFICATION_MESSAGES_GROUP);
-	QString str=config->readEntry(CONFIG_SAVE_AUTOMATICALLY);
-	return stringToModifiedBehavior(str.lower());
 }
 
 

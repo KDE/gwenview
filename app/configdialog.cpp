@@ -56,7 +56,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configslideshowpage.h"
 #include "doublespinbox.h"
 #include "mainwindow.h"
-#include "gvcore/document.h"
 #include "gvcore/fileoperation.h"
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
@@ -135,7 +134,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mSlideShowPage = addConfigPage<ConfigSlideshowPage>(
 		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow");
-	d->mManagers << new KConfigDialogManager(this, SlideShowConfig::self());
+	d->mManagers << new KConfigDialogManager(d->mSlideShowPage, SlideShowConfig::self());
 
 #ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
@@ -145,10 +144,12 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
+	d->mManagers << new KConfigDialogManager(d->mMiscPage, GVConfig::self());
+	// Read config, because the modified behavior might have changed
+	GVConfig::self()->readConfig();
 
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
-	Document* document=d->mMainWindow->document();
 
 	// Image List tab
 	d->mImageListPage->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -196,10 +197,6 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mFileOperationsPage->mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
 	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
 	
-	// Misc tab
-	d->mMiscPage->mModifiedBehaviorGroup->setButton( int(document->modifiedBehavior()) );
-	d->mMiscPage->mAutoRotateImages->setChecked(GVConfig::self()->autoRotateImages() );
-	
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
 		(*it)->updateWidgets();
@@ -224,7 +221,6 @@ void ConfigDialog::slotOk() {
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
-	Document* document=d->mMainWindow->document();
 
 	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(d->mImageListPage->mThumbnailMargin->value());
@@ -269,17 +265,11 @@ void ConfigDialog::slotApply() {
 #ifdef GV_HAVE_KIPI
 	d->mKIPIConfigWidget->apply();
 #endif
-
-	// Misc tab
-	int behavior=d->mMiscPage->mModifiedBehaviorGroup->selectedId();
-	document->setModifiedBehavior( static_cast<Document::ModifiedBehavior>(behavior) );
 	
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
 		(*it)->updateSettings();
 	}
-	
-	GVConfig::self()->setAutoRotateImages(d->mMiscPage->mAutoRotateImages->isChecked() );
 }
 
 

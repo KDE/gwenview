@@ -8,4 +8,14 @@
       <default>true</default>
     </entry> 
   </group> 
+  <!-- This is the group for KDialog don't-ask-again checkboxes -->
+  <group name="Notification Messages">
+    <entry name="modifiedBehavior" key="save automatically" type="Enum">
+      <choices>
+        <choice name="ask"/> <!-- == 'ask what to do' -->
+        <choice name="yes"/> <!-- == 'save' -->
+        <choice name="no"/>  <!-- == 'discard' -->
+      </choices>
+    </entry>
+  </group>
 </kcfg>
