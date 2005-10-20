@@ -56,15 +56,11 @@ SlideShow::~SlideShow() {
 }
 
 
-#if 0
-void SlideShow::setDelay(double value) {
-	mDelay=value;
-    
+void SlideShow::slotSettingsChanged() {
 	if (mTimer->isActive()) {
-		mTimer->changeInterval(int(mDelay*1000));
+		mTimer->changeInterval(int(SlideShowConfig::delay()*1000));
 	}
 }
-#endif
 
 
 void SlideShow::start(const KURL::List& urls) {
@@ -174,32 +170,5 @@ void SlideShow::prefetchDone() {
 	}
 }
 
-//-Configuration--------------------------------------------
-void SlideShow::readConfig(KConfig*,const QString&) {
-	/*
-	config->setGroup(group);
-	mDelay=config->readDoubleNumEntry(CONFIG_DELAY,10.);
-	//mLoop=config->readBoolEntry(CONFIG_LOOP,false);
-	mFullscreen=config->readBoolEntry(CONFIG_START_FULLSCREEN,true);
-	mStopAtEnd=config->readBoolEntry(CONFIG_STOP_AT_END,false);
-	mRandom=config->readBoolEntry(CONFIG_RANDOM,false);
-	
-	mRandom=GVConfig::self()->slideShowRandom();
-	*/
-}
-
-
-void SlideShow::writeConfig(KConfig*,const QString&) const {
-	/*
-	config->setGroup(group);
-	config->writeEntry(CONFIG_DELAY,mDelay);
-	//config->writeEntry(CONFIG_LOOP,mLoop);
-	config->writeEntry(CONFIG_START_FULLSCREEN,mFullscreen);
-	config->writeEntry(CONFIG_STOP_AT_END,mStopAtEnd);
-	config->writeEntry(CONFIG_RANDOM,mRandom);
-	
-	GVConfig::self()->setSlideShowRandom(mRandom);
-	*/
-}
 
 } // namespace

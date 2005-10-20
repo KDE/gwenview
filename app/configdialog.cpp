@@ -204,6 +204,8 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
 		(*it)->updateWidgets();
+		connect(*it, SIGNAL(settingsChanged()),
+			this, SIGNAL(settingsChanged()) );
 	}
 }
 

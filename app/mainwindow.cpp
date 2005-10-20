@@ -111,7 +111,6 @@ const char CONFIG_FILEWIDGET_GROUP[]="file widget";
 const char CONFIG_DIRWIDGET_GROUP[]="dir widget";
 const char CONFIG_PIXMAPWIDGET_GROUP[]="pixmap widget";
 const char CONFIG_FILEOPERATION_GROUP[]="file operations";
-const char CONFIG_SLIDESHOW_GROUP[]="slide show";
 const char CONFIG_CACHE_GROUP[]="cache";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 
@@ -237,7 +236,6 @@ bool MainWindow::queryClose() {
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
 	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
-	//mSlideShow->writeConfig(config, CONFIG_SLIDESHOW_GROUP);
 	SlideShowConfig::writeConfig();
 	ThumbnailLoadJob::writeConfig(config, CONFIG_THUMBNAILLOADJOB_GROUP);
 
@@ -621,6 +619,8 @@ void MainWindow::slotSlideShowChanged(bool running) {
 
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
+	connect(&dialog, SIGNAL(settingsChanged()),
+		mSlideShow, SLOT(slotSettingsChanged()) );
 	dialog.exec();
 }
 

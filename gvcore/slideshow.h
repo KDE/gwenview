@@ -50,9 +50,9 @@ public:
 
 	/** @return true if the slideshow is running */
 	bool isRunning() { return mStarted; }
-	
-	void readConfig(KConfig* config,const QString& group);
-	void writeConfig(KConfig* config,const QString& group) const;
+
+public slots:
+	void slotSettingsChanged();
 
 signals:
 	void nextURL( const KURL& );

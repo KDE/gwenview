@@ -53,7 +53,6 @@ namespace Gwenview {
 const char CONFIG_CACHE_GROUP[]="cache";
 const char CONFIG_FILEOPERATION_GROUP[]="file operations";
 const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
-const char CONFIG_SLIDESHOW_GROUP[]="slide show";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
@@ -159,7 +158,6 @@ void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
 	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
 		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
-		mSlideShow->readConfig(config, CONFIG_SLIDESHOW_GROUP);
 		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
 		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);

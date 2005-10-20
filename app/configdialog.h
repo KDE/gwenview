@@ -35,6 +35,9 @@ public:
 	ConfigDialog(MainWindow*);
 	~ConfigDialog();
 
+signals:
+	void settingsChanged();
+
 protected slots:
 	void slotOk();
 	void slotApply();
