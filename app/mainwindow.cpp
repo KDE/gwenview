@@ -93,6 +93,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/cache.h"
 #include "gvcore/thumbnailloadjob.h"
 #include <../gvcore/slideshowconfig.h>
+#include <../gvcore/fullscreenconfig.h>
 
 #include "config.h"
 
@@ -114,7 +115,6 @@ const char CONFIG_FILEOPERATION_GROUP[]="file operations";
 const char CONFIG_CACHE_GROUP[]="cache";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 
-const char CONFIG_BUSYPTR_IN_FS[]="busy ptr in full screen";
 const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
 const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
 const char CONFIG_GWENVIEW_DOCK_VERSION[]="Gwenview version";
@@ -475,7 +475,7 @@ void MainWindow::printFile() {
 //
 //-----------------------------------------------------------------------
 void MainWindow::slotImageLoading() {
-	if (mShowBusyPtrInFullScreen || !mToggleFullScreen->isChecked()) {
+	if (FullScreenConfig::self()->showBusyPtr() || !mToggleFullScreen->isChecked()) {
 		if( !mLoadingCursor ) {
 			kapp->setOverrideCursor(KCursor::workingCursor());
 		}
@@ -1312,14 +1312,12 @@ void MainWindow::setAutoDeleteThumbnailCache(bool value){
 //-----------------------------------------------------------------------
 void MainWindow::readConfig(KConfig* config,const QString& group) {
 	config->setGroup(group);
-	mShowBusyPtrInFullScreen=config->readBoolEntry(CONFIG_BUSYPTR_IN_FS, true);
 	mAutoDeleteThumbnailCache=config->readBoolEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, false);	
 }
 
 
 void MainWindow::writeConfig(KConfig* config,const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_BUSYPTR_IN_FS, mShowBusyPtrInFullScreen);
 	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
 }
 

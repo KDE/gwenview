@@ -60,6 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "busylevelmanager.h"
 #include "imageviewtools.h"
 #include "imageutils/croppedqimage.h"
+#include "fullscreenconfig.h"
 
 #if !KDE_IS_VERSION( 3, 3, 0 )
 // from kglobal.h
@@ -143,8 +144,6 @@ visibleHeight(), contentsToViewport() and viewportToContents().
 
 */
 
-const char CONFIG_OSD_MODE[]="osd mode";
-const char CONFIG_FREE_OUTPUT_FORMAT[]="free output format";
 const char CONFIG_SMOOTH_SCALE[]="smooth scale";
 const char CONFIG_DELAYED_SMOOTHING[]="delayed smoothing";
 const char CONFIG_ENLARGE_SMALL_IMAGES[]="enlarge small images";
@@ -181,9 +180,7 @@ struct ImageView::Private {
 	QTimer* mAutoHideTimer;
 	
 	QColor mBackgroundColor;
-	OSDMode mOSDMode;
 	CaptionFormatterBase* mOSDFormatter;
-	QString mFreeOutputFormat;
 	ImageUtils::SmoothAlgorithm mSmoothAlgorithm;
 	bool mDelayedSmoothing;
 	bool mEnlargeSmallImages;
@@ -437,7 +434,8 @@ void ImageView::slotLoaded() {
 		return;
 	}
 
-	if (d->mFullScreen && d->mOSDMode!=NONE) updateFullScreenLabel();
+	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::self()->osdMode() );
+	if (d->mFullScreen && osdMode!=NONE) updateFullScreenLabel();
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
 
@@ -526,21 +524,6 @@ QColor ImageView::normalBackgroundColor() const {
 }
 
 
-ImageView::OSDMode ImageView::osdMode() const {
-	return d->mOSDMode;
-}
-
-
-QString ImageView::freeOutputFormat() const {
-	return d->mFreeOutputFormat;
-}
-
-
-void ImageView::setFreeOutputFormat(const QString& format) {
-	d->mFreeOutputFormat=format;
-}
-
-
 ImageUtils::SmoothAlgorithm ImageView::smoothAlgorithm() const {
 	return d->mSmoothAlgorithm;
 }
@@ -609,11 +592,6 @@ void ImageView::setEnlargeSmallImages(bool value) {
 	if ( autoZoom()) {
 		setZoom(computeAutoZoom());
 	}
-}
-
-
-void ImageView::setOSDMode(ImageView::OSDMode value) {
-	d->mOSDMode=value;
 }
 
 
@@ -1655,9 +1633,10 @@ void ImageView::updateFullScreenLabel() {
 	}
 	
 	QString format;
-	switch (d->mOSDMode) {
+	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::self()->osdMode() );
+	switch (osdMode) {
 	case FREE_OUTPUT:
-		format = d->mFreeOutputFormat;
+		format = FullScreenConfig::self()->freeOutputFormat();
 		break;
 	case PATH:
 		format = "%p";
@@ -1746,8 +1725,6 @@ void ImageView::deleteFile() {
 //------------------------------------------------------------------------
 void ImageView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
-	d->mOSDMode=static_cast<OSDMode>(config->readNumEntry(CONFIG_OSD_MODE, static_cast<int>(PATH_AND_COMMENT)) );
-	d->mFreeOutputFormat=config->readEntry(CONFIG_FREE_OUTPUT_FORMAT,"%f - %r - %c");
 	
 	// backwards comp.
 	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
@@ -1784,8 +1761,6 @@ void ImageView::readConfig(KConfig* config, const QString& group) {
 
 void ImageView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_OSD_MODE, static_cast<int>(d->mOSDMode));
-	config->writeEntry(CONFIG_FREE_OUTPUT_FORMAT, d->mFreeOutputFormat);	
 	config->writeEntry(CONFIG_SMOOTH_SCALE, d->mSmoothAlgorithm);
 	config->writeEntry(CONFIG_DELAYED_SMOOTHING, d->mDelayedSmoothing);
 	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, d->mEnlargeSmallImages);

@@ -63,6 +63,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <../gvcore/miscconfig.h>
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fileoperationconfig.h>
+#include <../gvcore/fullscreenconfig.h>
 #include "gvcore/imageview.h"
 #include "gvcore/thumbnailloadjob.h"
 
@@ -129,6 +130,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	
 	d->mFullScreenPage = addConfigPage<ConfigFullScreenPage>(
 		this, i18n("Configure Full Screen Mode"), i18n("Full Screen"), "window_fullscreen");
+	d->mManagers << new KConfigDialogManager(d->mFullScreenPage, FullScreenConfig::self());
 
 	d->mFileOperationsPage = addConfigPage<ConfigFileOperationsPage>(
 		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
@@ -182,11 +184,6 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
     // Slide Show tab
 	d->mSlideShowPage->kcfg_delay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
 	d->mSlideShowPage->kcfg_delay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
-
-	// Full Screen tab
-	d->mFullScreenPage->mOSDModeGroup->setButton(imageView->osdMode());
-	d->mFullScreenPage->mFreeOutputFormat->setText(imageView->freeOutputFormat());
-	d->mFullScreenPage->mShowBusyPtrInFullScreen->setChecked(d->mMainWindow->showBusyPtrInFullScreen());
 
 	// File Operations tab
 	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(
@@ -244,12 +241,6 @@ void ConfigDialog::slotApply() {
 	imageView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
 	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
 	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
-
-	// Full Screen tab
-	int osdMode=d->mFullScreenPage->mOSDModeGroup->selectedId();
-	imageView->setOSDMode( static_cast<ImageView::OSDMode>(osdMode) );
-	imageView->setFreeOutputFormat( d->mFullScreenPage->mFreeOutputFormat->text() );
-	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
 
 	// File Operations tab
 	FileOperationConfig::self()->setDeleteToTrash(

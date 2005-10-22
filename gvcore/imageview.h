@@ -93,10 +93,6 @@ public:
 	QColor normalBackgroundColor() const; 
 	void setNormalBackgroundColor(const QColor&);
 
-	OSDMode osdMode() const; 
-	void setOSDMode(OSDMode);
-	QString freeOutputFormat() const; 
-	void setFreeOutputFormat(const QString& outFormat); 
 	ImageUtils::SmoothAlgorithm smoothAlgorithm() const; 
 	void setSmoothAlgorithm(ImageUtils::SmoothAlgorithm);
 	bool doDelayedSmoothing() const; 
