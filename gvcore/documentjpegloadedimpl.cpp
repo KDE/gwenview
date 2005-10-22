@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 // Local
-#include "gvconfig.h"
+#include "gvmiscconfig.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
 #include "documentjpegloadedimpl.moc"
@@ -70,7 +70,7 @@ void DocumentJPEGLoadedImpl::init() {
 	LOG("");
 	ImageUtils::Orientation orientation=d->mJPEGContent.orientation();
 
-	if (GVConfig::self()->autoRotateImages()
+	if (GVMiscConfig::self()->autoRotateImages()
 		&& orientation!=ImageUtils::NOT_AVAILABLE
 		&& orientation!=ImageUtils::NORMAL)
 	{

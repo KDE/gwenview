@@ -58,7 +58,7 @@ extern "C" {
 
 // Local
 #include "cache.h"
-#include "gvconfig.h"
+#include "gvmiscconfig.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
 #include "thumbnailsize.h"
@@ -163,7 +163,7 @@ void ThumbnailThread::loadThumbnail() {
 		if(!loaded) {
 			loaded=loadJPEG();
 		}
-		if (loaded && GVConfig::self()->autoRotateImages()) {
+		if (loaded && GVMiscConfig::self()->autoRotateImages()) {
 			// Rotate if necessary
 			ImageUtils::Orientation orientation = content.orientation();
 			mImage=ImageUtils::transform(mImage,orientation);

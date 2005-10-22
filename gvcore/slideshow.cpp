@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "slideshow.moc"
 
 #include "document.h"
-#include "gvconfig.h"
+#include "gvmiscconfig.h"
 #include "imageloader.h"
 #include "cache.h"
 
