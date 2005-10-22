@@ -803,6 +803,8 @@ PR_(mimageScale_mmx_AARGBA):
 	popl %ebp
 	ret
 
+.section	.note.GNU-stack,"",@progbits
+
 SIZE(mimageScale_mmx_AARGBA)
 
 #endif

@@ -13,6 +13,8 @@
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.
  - Removed internal libexif.
+ - Make sure Gwenview libs do not require an executable stack.
+   (Patch by Christopher Martin)
 
 2005.09.11 - v1.3.0
 - Fixes:
