@@ -60,7 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
 // This path is different because it's a generated file, so it's stored in builddir
-#include <../gvcore/gvmiscconfig.h>
+#include <../gvcore/miscconfig.h>
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fileoperationconfig.h>
 #include "gvcore/imageview.h"
@@ -146,9 +146,9 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
-	d->mManagers << new KConfigDialogManager(d->mMiscPage, GVMiscConfig::self());
+	d->mManagers << new KConfigDialogManager(d->mMiscPage, MiscConfig::self());
 	// Read config, because the modified behavior might have changed
-	GVMiscConfig::self()->readConfig();
+	MiscConfig::self()->readConfig();
 
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();

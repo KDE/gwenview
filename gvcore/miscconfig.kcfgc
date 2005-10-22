@@ -1,5 +1,5 @@
-File=gvmiscconfig.kcfg
-ClassName=GVMiscConfig
+File=miscconfig.kcfg
+ClassName=MiscConfig
 NameSpace=Gwenview
 Singleton=true
 Mutators=true

@@ -55,11 +55,11 @@ libgwenviewcore_la_SOURCES = \
 	imageloader.cpp \
 	cursortracker.cpp \
 	captionformatter.cpp \
-	gvmiscconfig.kcfgc \
+	miscconfig.kcfgc \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \
 	thumbnaildetailsdialogbase.ui \
 	thumbnaildetailsdialog.cpp \
 	xcursor.cpp
 
-kde_kcfg_DATA = gvmiscconfig.kcfg slideshowconfig.kcfg fileoperationconfig.kcfg
+kde_kcfg_DATA = miscconfig.kcfg slideshowconfig.kcfg fileoperationconfig.kcfg
