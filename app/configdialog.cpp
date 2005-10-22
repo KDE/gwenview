@@ -60,8 +60,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
 // This path is different because it's a generated file, so it's stored in builddir
-#include <../gvcore/gvconfig.h>
+#include <../gvcore/gvmiscconfig.h>
 #include <../gvcore/slideshowconfig.h>
+#include <../gvcore/fileoperationconfig.h>
 #include "gvcore/imageview.h"
 #include "gvcore/thumbnailloadjob.h"
 
@@ -131,6 +132,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mFileOperationsPage = addConfigPage<ConfigFileOperationsPage>(
 		this, i18n("Configure File Operations"), i18n("File Operations"), "folder");
+	d->mManagers << new KConfigDialogManager(d->mFileOperationsPage, FileOperationConfig::self());
 
 	d->mSlideShowPage = addConfigPage<ConfigSlideshowPage>(
 		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow");
@@ -144,9 +146,9 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");
-	d->mManagers << new KConfigDialogManager(d->mMiscPage, GVConfig::self());
+	d->mManagers << new KConfigDialogManager(d->mMiscPage, GVMiscConfig::self());
 	// Read config, because the modified behavior might have changed
-	GVConfig::self()->readConfig();
+	GVMiscConfig::self()->readConfig();
 
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
 	ImageView* imageView=d->mMainWindow->imageView();
@@ -187,15 +189,10 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mFullScreenPage->mShowBusyPtrInFullScreen->setChecked(d->mMainWindow->showBusyPtrInFullScreen());
 
 	// File Operations tab
-	d->mFileOperationsPage->mShowCopyDialog->setChecked(FileOperation::confirmCopy());
-	d->mFileOperationsPage->mShowMoveDialog->setChecked(FileOperation::confirmMove());
-
-	d->mFileOperationsPage->mDefaultDestDir->setURL(FileOperation::destDir());
-	d->mFileOperationsPage->mDefaultDestDir->fileDialog()->setMode(
+	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
-	
-	d->mFileOperationsPage->mConfirmBeforeDelete->setChecked(FileOperation::confirmDelete());
-	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperation::deleteToTrash()?1:0);
+
+	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperationConfig::self()->deleteToTrash()?1:0);
 	
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
@@ -255,11 +252,8 @@ void ConfigDialog::slotApply() {
 	d->mMainWindow->setShowBusyPtrInFullScreen(d->mFullScreenPage->mShowBusyPtrInFullScreen->isChecked() );
 
 	// File Operations tab
-	FileOperation::setConfirmCopy(d->mFileOperationsPage->mShowCopyDialog->isChecked());
-	FileOperation::setConfirmMove(d->mFileOperationsPage->mShowMoveDialog->isChecked());
-	FileOperation::setDestDir(d->mFileOperationsPage->mDefaultDestDir->url());
-	FileOperation::setConfirmDelete(d->mFileOperationsPage->mConfirmBeforeDelete->isChecked());
-	FileOperation::setDeleteToTrash(d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
+	FileOperationConfig::self()->setDeleteToTrash(
+		d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
 
 	// KIPI tab
 #ifdef GV_HAVE_KIPI

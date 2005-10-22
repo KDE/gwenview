@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QString;
 class QWidget;
 
-class KConfig;
 class KURL;
 
 #include "libgwenview_export.h"
@@ -43,26 +42,6 @@ public:
 	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 	static void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
-
-	// Config
-	static void readConfig(KConfig*,const QString&);
-	static void kpartConfig();
-	static void writeConfig(KConfig*,const QString&);
-
-	static bool deleteToTrash();
-	static void setDeleteToTrash(bool);
-	
-	static bool confirmDelete();
-	static void setConfirmDelete(bool);
-
-	static bool confirmCopy();
-	static void setConfirmCopy(bool);
-
-	static bool confirmMove();
-	static void setConfirmMove(bool);
-
-	static QString destDir();
-	static void setDestDir(const QString&);
 };
 
 } // namespace

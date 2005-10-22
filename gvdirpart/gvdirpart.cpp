@@ -51,7 +51,6 @@ namespace Gwenview {
 
 // For now let's duplicate
 const char CONFIG_CACHE_GROUP[]="cache";
-const char CONFIG_FILEOPERATION_GROUP[]="file operations";
 const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
@@ -119,7 +118,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	mSlideShow = new SlideShow(mDocument);
 
-	FileOperation::kpartConfig();
 	mFilesView->kpartConfig();
 
 	setWidget(mSplitter);
@@ -157,7 +155,6 @@ GVDirPart::~GVDirPart() {
 void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
 	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
-		FileOperation::readConfig(config, CONFIG_FILEOPERATION_GROUP);
 		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
 		ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);

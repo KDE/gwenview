@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigFileOperationsPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>308</width>
-            <height>245</height>
+            <height>252</height>
         </rect>
     </property>
     <property name="caption">
@@ -29,7 +29,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mShowCopyDialog</cstring>
+                <cstring>kcfg_confirmCopy</cstring>
             </property>
             <property name="text">
                 <string>Show copy dialog</string>
@@ -37,7 +37,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mShowMoveDialog</cstring>
+                <cstring>kcfg_confirmMove</cstring>
             </property>
             <property name="text">
                 <string>Show move dialog</string>
@@ -67,7 +67,7 @@
                 </widget>
                 <widget class="KURLRequester">
                     <property name="name">
-                        <cstring>mDefaultDestDir</cstring>
+                        <cstring>kcfg_destDir</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -107,7 +107,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mConfirmBeforeDelete</cstring>
+                <cstring>kcfg_confirmDelete</cstring>
             </property>
             <property name="text">
                 <string>Ask for confirmation</string>

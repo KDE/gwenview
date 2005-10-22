@@ -32,20 +32,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "fileopobject.h"
 #include "fileoperation.h"
+#include "fileoperationconfig.h"
+
 namespace Gwenview {
-
-
-//-Configuration keys----------------------------------------------
-static const char CONFIG_DELETE_TO_TRASH[] = "delete to trash";
-static const char CONFIG_CONFIRM_DELETE[]  = "confirm file delete";
-static const char CONFIG_CONFIRM_MOVE[]    = "confirm file move";
-static const char CONFIG_CONFIRM_COPY[]    = "confirm file copy";
-static const char CONFIG_DEST_DIR[]        = "destination dir";
-
-
-//-Static configuration data---------------------------------------
-static bool sDeleteToTrash,sConfirmCopy,sConfirmMove,sConfirmDelete;
-static QString sDestDir,sEditor;
 
 
 //-FileOperations--------------------------------------------------
@@ -68,7 +57,7 @@ void FileOperation::moveTo(const KURL::List& srcURL,QWidget* parent,QObject* rec
 
 void FileOperation::del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op;
-	if (sDeleteToTrash) {
+	if (FileOperationConfig::self()->deleteToTrash()) {
 		op=new FileOpTrashObject(url,parent);
 	} else {
 		op=new FileOpRealDeleteObject(url,parent);
@@ -108,86 +97,6 @@ void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, con
 		KIO::link(urls, target, true);
 	}
 }
-
-
-//-Configuration---------------------------------------------------
-void FileOperation::readConfig(KConfig* config,const QString& group) {
-	config->setGroup(group);
-
-	sDeleteToTrash=config->readBoolEntry(CONFIG_DELETE_TO_TRASH,true);
-	sConfirmDelete=config->readBoolEntry(CONFIG_CONFIRM_DELETE,true);
-	sConfirmMove=config->readBoolEntry(CONFIG_CONFIRM_MOVE,true);
-	sConfirmCopy=config->readBoolEntry(CONFIG_CONFIRM_COPY,true);
-
-	sDestDir=config->readPathEntry(CONFIG_DEST_DIR);
-}
-
-
-void FileOperation::kpartConfig() {
-	sDeleteToTrash=true;
-	sConfirmDelete=true;
-	sConfirmMove=true;
-	sConfirmCopy=true;
-}
-
-
-void FileOperation::writeConfig(KConfig* config,const QString& group) {
-	config->setGroup(group);
-
-	config->writeEntry(CONFIG_DELETE_TO_TRASH,sDeleteToTrash);
-	config->writeEntry(CONFIG_CONFIRM_DELETE,sConfirmDelete);
-	config->writeEntry(CONFIG_CONFIRM_MOVE,sConfirmMove);
-	config->writeEntry(CONFIG_CONFIRM_COPY,sConfirmCopy);
-
-	config->writePathEntry(CONFIG_DEST_DIR,sDestDir);
-}
-
-
-
-bool FileOperation::deleteToTrash() {
-	return sDeleteToTrash;
-}
-
-void FileOperation::setDeleteToTrash(bool value) {
-	sDeleteToTrash=value;
-}
-
-
-bool FileOperation::confirmDelete() {
-	return sConfirmDelete;
-}
-
-void FileOperation::setConfirmDelete(bool value) {
-	sConfirmDelete=value;
-}
-
-
-bool FileOperation::confirmCopy() {
-	return sConfirmCopy;
-}
-
-void FileOperation::setConfirmCopy(bool value) {
-	sConfirmCopy=value;
-}
-
-
-bool FileOperation::confirmMove() {
-	return sConfirmMove;
-}
-
-void FileOperation::setConfirmMove(bool value) {
-	sConfirmMove=value;
-}
-
-
-QString FileOperation::destDir() {
-	return sDestDir;
-}
-
-void FileOperation::setDestDir(const QString& value) {
-	sDestDir=value;
-}
-
 
 
 } // namespace

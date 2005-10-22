@@ -175,7 +175,6 @@ MainWindow::MainWindow()
 , mPluginLoader(0)
 #endif
 {
-	FileOperation::readConfig(KGlobal::config(),CONFIG_FILEOPERATION_GROUP);
 	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
 
 	// Backend
@@ -232,7 +231,6 @@ bool MainWindow::queryClose() {
 	mDocument->saveBeforeClosing();
 
 	KConfig* config=KGlobal::config();
-	FileOperation::writeConfig(config, CONFIG_FILEOPERATION_GROUP);
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
 	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);

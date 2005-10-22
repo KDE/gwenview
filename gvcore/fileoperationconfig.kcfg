@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="gwenviewrc"/> 
+  <group name="file operations">
+    <entry name="deleteToTrash" key="delete to trash" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="confirmDelete" key="confirm file delete" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="confirmMove" key="confirm file move" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="confirmCopy" key="confirm file copy" type="Bool">
+      <default>true</default>
+    </entry>
+    
+    <entry name="destDir" key="destination dir" type="Path">
+    </entry>
+  </group>
+</kcfg>
