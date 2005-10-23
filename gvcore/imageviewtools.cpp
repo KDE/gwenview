@@ -26,6 +26,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+
+// Local
+#include "imageviewconfig.h"
+
 namespace Gwenview {
 
 
@@ -176,7 +180,7 @@ void ImageView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 
 
 void ImageView::ScrollTool::wheelEvent(QWheelEvent* event) {
-	if (mView->mouseWheelScroll()) {
+	if (ImageViewConfig::self()->mouseWheelScroll()) {
 		int deltaX, deltaY;
 
 		if (event->state() & AltButton || event->orientation()==Horizontal) {

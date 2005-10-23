@@ -619,6 +619,8 @@ void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mSlideShow, SLOT(slotSettingsChanged()) );
+	connect(&dialog, SIGNAL(settingsChanged()),
+		mImageView, SLOT(updateFromSettings()) );
 	dialog.exec();
 }
 

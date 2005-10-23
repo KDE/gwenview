@@ -61,6 +61,12 @@ libgwenviewcore_la_SOURCES = \
 	miscconfig.kcfgc \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \
-	fullscreenconfig.kcfgc
+	fullscreenconfig.kcfgc \
+	imageviewconfig.kcfgc
 
-kde_kcfg_DATA = miscconfig.kcfg slideshowconfig.kcfg fileoperationconfig.kcfg fullscreenconfig.kcfgc
+kde_kcfg_DATA = \
+	miscconfig.kcfg \
+	slideshowconfig.kcfg \
+	fileoperationconfig.kcfg \
+	fullscreenconfig.kcfg \
+	imageviewconfig.kcfg

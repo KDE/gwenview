@@ -88,22 +88,7 @@ public:
 	void setFullScreen(bool);
 
     void setOSDFormatter(CaptionFormatterBase*);
-
-	// we use "normal"BackgroundColor because backgroundColor() already exists
-	QColor normalBackgroundColor() const; 
-	void setNormalBackgroundColor(const QColor&);
-
-	ImageUtils::SmoothAlgorithm smoothAlgorithm() const; 
-	void setSmoothAlgorithm(ImageUtils::SmoothAlgorithm);
 	bool doDelayedSmoothing() const; 
-	bool delayedSmoothing() const; 
-	void setDelayedSmoothing(bool);
-	bool enlargeSmallImages() const; 
-	void setEnlargeSmallImages(bool);
-	bool showScrollBars() const; 
-	void setShowScrollBars(bool);
-	bool mouseWheelScroll() const; 
-	void setMouseWheelScroll(bool);
 
 
 public slots:
@@ -114,6 +99,8 @@ public slots:
 	void linkFile();
 	void moveFile();
 	void deleteFile();
+
+	void updateFromSettings();
 
 signals:
 	void selectPrevious();

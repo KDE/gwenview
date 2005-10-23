@@ -64,7 +64,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fileoperationconfig.h>
 #include <../gvcore/fullscreenconfig.h>
-#include "gvcore/imageview.h"
+#include <../gvcore/imageviewconfig.h>
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
@@ -127,6 +127,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	
 	d->mImageViewPage = addConfigPage<ConfigImageViewPage>(
 		this, i18n("Configure Image View"), i18n("Image View"), "looknfeel");
+	d->mManagers << new KConfigDialogManager(d->mImageViewPage, ImageViewConfig::self());
 	
 	d->mFullScreenPage = addConfigPage<ConfigFullScreenPage>(
 		this, i18n("Configure Full Screen Mode"), i18n("Full Screen"), "window_fullscreen");
@@ -153,7 +154,6 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	MiscConfig::self()->readConfig();
 
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	ImageView* imageView=d->mMainWindow->imageView();
 
 	// Image List tab
 	d->mImageListPage->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
@@ -174,12 +174,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	d->mImageViewPage->mSmoothGroup->setButton(imageView->smoothAlgorithm());
-	d->mImageViewPage->mDelayedSmoothing->setChecked(imageView->delayedSmoothing());
-	d->mImageViewPage->mBackgroundColor->setColor(imageView->normalBackgroundColor());
-	d->mImageViewPage->mAutoZoomEnlarge->setChecked(imageView->enlargeSmallImages());
-	d->mImageViewPage->mShowScrollBars->setChecked(imageView->showScrollBars());
-	d->mImageViewPage->mMouseWheelGroup->setButton(imageView->mouseWheelScroll()?1:0);
+	d->mImageViewPage->mMouseWheelGroup->setButton(ImageViewConfig::self()->mouseWheelScroll()?1:0);
 
     // Slide Show tab
 	d->mSlideShowPage->kcfg_delay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
@@ -214,7 +209,6 @@ void ConfigDialog::slotOk() {
 
 void ConfigDialog::slotApply() {
 	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-	ImageView* imageView=d->mMainWindow->imageView();
 
 	// Image List tab
 	fileViewStack->fileThumbnailView()->setMarginSize(d->mImageListPage->mThumbnailMargin->value());
@@ -233,14 +227,8 @@ void ConfigDialog::slotApply() {
 	fileViewStack->fileThumbnailView()->setItemDetails(details);
 	
 	// Image View tab
-	int algo=d->mImageViewPage->mSmoothGroup->selectedId();
-	
-	imageView->setSmoothAlgorithm( static_cast<ImageUtils::SmoothAlgorithm>(algo));
-	imageView->setNormalBackgroundColor(d->mImageViewPage->mBackgroundColor->color());
-	imageView->setDelayedSmoothing(d->mImageViewPage->mDelayedSmoothing->isChecked());
-	imageView->setEnlargeSmallImages(d->mImageViewPage->mAutoZoomEnlarge->isChecked());
-	imageView->setShowScrollBars(d->mImageViewPage->mShowScrollBars->isChecked());
-	imageView->setMouseWheelScroll(d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
+	ImageViewConfig::self()->setMouseWheelScroll(
+		d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 
 	// File Operations tab
 	FileOperationConfig::self()->setDeleteToTrash(

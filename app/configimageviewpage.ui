@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigImageViewPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -21,10 +21,13 @@
         </property>
         <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="6">
             <property name="name">
-                <cstring>mAutoZoomEnlarge</cstring>
+                <cstring>kcfg_enlargeSmallImages</cstring>
             </property>
             <property name="text">
                 <string>Enlarge small images when auto &amp;zoom is activated</string>
+            </property>
+            <property name="accel">
+                <string>Alt+Z</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
@@ -37,7 +40,7 @@
         </widget>
         <widget class="KColorButton" row="2" column="2">
             <property name="name">
-                <cstring>mBackgroundColor</cstring>
+                <cstring>kcfg_backgroundColor</cstring>
             </property>
             <property name="text">
                 <string></string>
@@ -78,7 +81,7 @@
                 </property>
                 <widget class="QButtonGroup">
                     <property name="name">
-                        <cstring>mSmoothGroup</cstring>
+                        <cstring>kcfg_smoothAlgorithm</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -191,7 +194,7 @@
                         </property>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>mDelayedSmoothing</cstring>
+                                <cstring>kcfg_delayedSmoothing</cstring>
                             </property>
                             <property name="enabled">
                                 <bool>false</bool>
@@ -296,7 +299,7 @@ Use this option if &amp;your computer is not very fast.</string>
         </widget>
         <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="6">
             <property name="name">
-                <cstring>mShowScrollBars</cstring>
+                <cstring>kcfg_showScrollBars</cstring>
             </property>
             <property name="text">
                 <string>Show scroll bars</string>
@@ -304,11 +307,13 @@ Use this option if &amp;your computer is not very fast.</string>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>mSmoothNone</sender>
         <signal>toggled(bool)</signal>
-        <receiver>mDelayedSmoothing</receiver>
+        <receiver>kcfg_delayedSmoothing</receiver>
         <slot>setDisabled(bool)</slot>
     </connection>
     <connection>

@@ -61,6 +61,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageviewtools.h"
 #include "imageutils/croppedqimage.h"
 #include "fullscreenconfig.h"
+#include "imageviewconfig.h"
 
 #if !KDE_IS_VERSION( 3, 3, 0 )
 // from kglobal.h
@@ -144,17 +145,10 @@ visibleHeight(), contentsToViewport() and viewportToContents().
 
 */
 
-const char CONFIG_SMOOTH_SCALE[]="smooth scale";
-const char CONFIG_DELAYED_SMOOTHING[]="delayed smoothing";
-const char CONFIG_ENLARGE_SMALL_IMAGES[]="enlarge small images";
-const char CONFIG_SHOW_SCROLL_BARS[]="show scroll bars";
-const char CONFIG_MOUSE_WHEEL_SCROLL[]="mouse wheel scrolls image";
 const char CONFIG_LOCK_ZOOM[]="lock zoom";
 const char CONFIG_ZOOM_TO_FIT[]="auto zoom"; // called so for backwards compatibility
 const char CONFIG_ZOOM_TO_WIDTH[]="zoom to width";
 const char CONFIG_ZOOM_TO_HEIGHT[]="zoom to height";
-const char CONFIG_AUTO_ZOOM_BROWSE[]="auto zoom browse";
-const char CONFIG_BACKGROUND_COLOR[]="background color";
 const char CONFIG_MAX_REPAINT_SIZE[]= "max repaint size";
 const char CONFIG_MAX_SCALE_REPAINT_SIZE[]= "max scale repaint size";
 const char CONFIG_MAX_SMOOTH_REPAINT_SIZE[]= "max smooth repaint size";
@@ -179,13 +173,7 @@ struct ImageView::Private {
 	Document* mDocument;
 	QTimer* mAutoHideTimer;
 	
-	QColor mBackgroundColor;
 	CaptionFormatterBase* mOSDFormatter;
-	ImageUtils::SmoothAlgorithm mSmoothAlgorithm;
-	bool mDelayedSmoothing;
-	bool mEnlargeSmallImages;
-	bool mShowScrollBars;
-	bool mMouseWheelScroll;
 	Tools mTools;
 
 	ToolID mToolID;
@@ -519,38 +507,9 @@ bool ImageView::fullScreen() const {
 }
 
 
-QColor ImageView::normalBackgroundColor() const {
-	return d->mBackgroundColor;
-}
-
-
-ImageUtils::SmoothAlgorithm ImageView::smoothAlgorithm() const {
-	return d->mSmoothAlgorithm;
-}
-
-
-bool ImageView::delayedSmoothing() const {
-	return d->mDelayedSmoothing;
-}
-
-
 bool ImageView::doDelayedSmoothing() const {
-	return d->mDelayedSmoothing && d->mSmoothAlgorithm;
-}
-
-
-bool ImageView::enlargeSmallImages() const {
-	return d->mEnlargeSmallImages;
-}
-
-
-bool ImageView::showScrollBars() const {
-	return d->mShowScrollBars;
-}
-
-
-bool ImageView::mouseWheelScroll() const {
-	return d->mMouseWheelScroll;
+	return ImageViewConfig::self()->delayedSmoothing()
+		&& ImageViewConfig::self()->smoothAlgorithm()!=ImageUtils::SMOOTH_NONE;
 }
 
 
@@ -559,9 +518,7 @@ QPoint ImageView::offset() const {
 }
 
 
-void ImageView::setSmoothAlgorithm(ImageUtils::SmoothAlgorithm value) {
-	if( d->mSmoothAlgorithm == value ) return;
-	d->mSmoothAlgorithm = value;
+void ImageView::updateFromSettings() {
 	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
 	d->mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
 	d->mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
@@ -570,39 +527,17 @@ void ImageView::setSmoothAlgorithm(ImageUtils::SmoothAlgorithm value) {
 	} else {
 		fullRepaint();
 	}
-}
-
-
-void ImageView::setDelayedSmoothing(bool value) {
-	if (d->mDelayedSmoothing==value) return;
-	d->mDelayedSmoothing=value;
-	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
-	d->mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
-	d->mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
-	if( doDelayedSmoothing() ) {
-		scheduleOperation( SMOOTH_PASS );
-	} else {
-		fullRepaint();
-	}
-}
-
-
-void ImageView::setEnlargeSmallImages(bool value) {
-	d->mEnlargeSmallImages=value;
+	
+	// If enlargeSmallImage changed
 	if ( autoZoom()) {
 		setZoom(computeAutoZoom());
 	}
-}
-
-
-void ImageView::setShowScrollBars(bool value) {
-	d->mShowScrollBars=value;
+	
 	updateScrollBarMode();
-}
-
-
-void ImageView::setMouseWheelScroll(bool value) {
-	d->mMouseWheelScroll=value;
+	
+	if (!d->mFullScreen) {
+		viewport()->setBackgroundColor(ImageViewConfig::self()->backgroundColor() );
+	}
 }
 
 
@@ -659,7 +594,7 @@ void ImageView::setFullScreen(bool fullScreen) {
 		d->mFullScreenBar->show();
 		
 	} else {
-		viewport()->setBackgroundColor(d->mBackgroundColor);
+		viewport()->setBackgroundColor(ImageViewConfig::self()->backgroundColor() );
 		d->mAutoHideTimer->stop();
 		d->mTools[d->mToolID]->updateCursor();
 		
@@ -669,12 +604,6 @@ void ImageView::setFullScreen(bool fullScreen) {
 			d->mFullScreenBar=0;
 		}
 	}
-}
-
-
-void ImageView::setNormalBackgroundColor(const QColor& color) {
-	d->mBackgroundColor=color;
-	viewport()->setBackgroundColor(d->mBackgroundColor);
 }
 
 
@@ -880,7 +809,7 @@ void ImageView::cancelPending() {
 //#define DEBUG_RECTS
 
 // do the actual painting
-void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool smooth ) {
+void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw, int cliph, bool secondPass ) {
 	#ifdef DEBUG_RECTS
 	static QColor colors[4]={QColor(255,0,0),QColor(0,255,0),QColor(0,0,255),QColor(255,255,0) };
 	static int numColor=0;
@@ -895,34 +824,27 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 	}
 
 	// True if another pass will follow
-	bool fastpass = doDelayedSmoothing() && zoom() != 1.0 && !smooth;
+	bool fastpass = doDelayedSmoothing() && zoom() != 1.0 && !secondPass;
 
 	int* maxRepaintSize = &d->mMaxRepaintSize;
-	ImageUtils::SmoothAlgorithm smooth_algo = ImageUtils::SMOOTH_NONE;
-	if (smooth) {
-		if( zoom() != 1.0 ) {
+	ImageUtils::SmoothAlgorithm smoothAlgo = ImageUtils::SMOOTH_NONE;
+	if( zoom() != 1.0 ) {
+		if (doDelayedSmoothing() && !secondPass) {
+			// Add a second, smoothing pass
+			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
+		} else {
+			// We need to smooth now
 			maxRepaintSize = &d->mMaxSmoothRepaintSize;
-			smooth_algo = d->mSmoothAlgorithm;
-		}
-	} else {
-		if( zoom() != 1.0 ) {
-			smooth_algo=doDelayedSmoothing()
-				?ImageUtils::SMOOTH_NONE
-				:d->mSmoothAlgorithm;
-			maxRepaintSize = doDelayedSmoothing() ? &d->mMaxScaleRepaintSize : &d->mMaxSmoothRepaintSize;
-			
-			if( doDelayedSmoothing() && zoom() != 1.0 ) {
-				addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
-			}
+			smoothAlgo = static_cast<ImageUtils::SmoothAlgorithm>( ImageViewConfig::self()->smoothAlgorithm() );
 		}
 	}
 
-	int extraPixels = ImageUtils::extraScalePixels( smooth_algo, zoom());
+	int extraPixels = ImageUtils::extraScalePixels( smoothAlgo, zoom());
 	QRect imageRect = d->widgetToImageBounding( QRect(clipx,clipy,clipw,cliph), extraPixels );
 	imageRect = imageRect.intersect( QRect( 0, 0, d->mDocument->width(), d->mDocument->height()));
 	QMemArray< QRect > rects = d->mValidImageArea.intersect( imageRect ).rects();
 	for( unsigned int i = 1; i < rects.count(); ++i ) {
-		addPendingPaint( smooth, d->imageToWidget( rects[ i ] ));
+		addPendingPaint( secondPass, d->imageToWidget( rects[ i ] ));
 	}
 	imageRect = rects.count() > 0 ? rects[ 0 ] : QRect();
 	if (imageRect.isEmpty()) {
@@ -945,7 +867,7 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 	ImageUtils::CroppedQImage image( d->mDocument->image(), imageRect );
 
 	if( zoom() != 1.0 ) {
-		image=ImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smooth_algo );
+		image=ImageUtils::scale(image,widgetRect.width(),widgetRect.height(), smoothAlgo );
 	}
 
 	if( d->mBrightness != 0 ) {
@@ -1479,7 +1401,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 
 void ImageView::updateScrollBarMode() {
-	if ((d->mZoomToFit->isChecked() && !d->mManualZoom) || !d->mShowScrollBars) {
+	if ((d->mZoomToFit->isChecked() && !d->mManualZoom) || !ImageViewConfig::self()->showScrollBars()) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1517,7 +1439,7 @@ double ImageView::computeZoomToFit() const {
 	size.scale(width(),height(),QSize::ScaleMin);
 
 	double zoom=double(size.width())/d->mDocument->width();
-	if (zoom>1.0 && !d->mEnlargeSmallImages) return 1.0;
+	if (zoom>1.0 && !ImageViewConfig::self()->enlargeSmallImages()) return 1.0;
 	return zoom;
 }
 
@@ -1726,28 +1648,12 @@ void ImageView::deleteFile() {
 void ImageView::readConfig(KConfig* config, const QString& group) {
 	config->setGroup(group);
 	
-	// backwards comp.
-	if( config->readEntry(CONFIG_SMOOTH_SCALE) == "true" ) {
-		d->mSmoothAlgorithm = ImageUtils::SMOOTH_FAST;
-		d->mDelayedSmoothing = true;
-	} else {
-		int smooth = config->readNumEntry(CONFIG_SMOOTH_SCALE, ImageUtils::SMOOTH_FAST);
-		d->mSmoothAlgorithm = static_cast<ImageUtils::SmoothAlgorithm>(smooth);
-		d->mDelayedSmoothing = config->readBoolEntry(CONFIG_DELAYED_SMOOTHING, true);
-	}
-
-	d->mEnlargeSmallImages=config->readBoolEntry(CONFIG_ENLARGE_SMALL_IMAGES, false);
-	d->mShowScrollBars=config->readBoolEntry(CONFIG_SHOW_SCROLL_BARS, true);
-	d->mMouseWheelScroll=config->readBoolEntry(CONFIG_MOUSE_WHEEL_SCROLL, true);
 	d->mZoomToFit->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_FIT, true));
 	d->mZoomToWidth->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_WIDTH, false));
 	d->mZoomToHeight->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_HEIGHT, false));
-	updateScrollBarMode();
 	d->mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
-	d->mBackgroundColor=config->readColorEntry(CONFIG_BACKGROUND_COLOR, &colorGroup().dark());
-	if (!d->mFullScreen) {
-		viewport()->setBackgroundColor(d->mBackgroundColor);
-	}
+
+	updateFromSettings();
 
 	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
 	d->mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
@@ -1761,16 +1667,11 @@ void ImageView::readConfig(KConfig* config, const QString& group) {
 
 void ImageView::writeConfig(KConfig* config, const QString& group) const {
 	config->setGroup(group);
-	config->writeEntry(CONFIG_SMOOTH_SCALE, d->mSmoothAlgorithm);
-	config->writeEntry(CONFIG_DELAYED_SMOOTHING, d->mDelayedSmoothing);
-	config->writeEntry(CONFIG_ENLARGE_SMALL_IMAGES, d->mEnlargeSmallImages);
-	config->writeEntry(CONFIG_SHOW_SCROLL_BARS, d->mShowScrollBars);
-	config->writeEntry(CONFIG_MOUSE_WHEEL_SCROLL, d->mMouseWheelScroll);
 	config->writeEntry(CONFIG_ZOOM_TO_FIT, d->mZoomToFit->isChecked());
 	config->writeEntry(CONFIG_ZOOM_TO_WIDTH, d->mZoomToWidth->isChecked());
 	config->writeEntry(CONFIG_ZOOM_TO_HEIGHT, d->mZoomToHeight->isChecked());
 	config->writeEntry(CONFIG_LOCK_ZOOM, d->mLockZoom->isChecked());
-	config->writeEntry(CONFIG_BACKGROUND_COLOR, d->mBackgroundColor);
+	
 	// following data are internal, and it makes sense to share them between the app and KPart's
 	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
 	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, d->mMaxRepaintSize);
