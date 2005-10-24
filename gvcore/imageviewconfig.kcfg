@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <include>qapplication.h</include>
+  <include>qpalette.h</include>
+  <kcfgfile name="gwenviewrc"/> 
+  <group name="pixmap widget">
+    <entry name="smoothAlgorithm" key="smooth scale" type="Enum"> 
+      <choices>
+        <choice name="None"/>
+        <choice name="Fast"/>
+        <choice name="Normal"/>
+        <choice name="Best"/>
+      </choices>
+      <default>None</default>
+    </entry> 
+    <entry name="delayedSmoothing" key="delayed smoothing" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="backgroundColor" key="background color" type="Color">
+      <default code="true">QApplication::palette().active().dark()</default>
+    </entry>
+    <entry name="enlargeSmallImages" key="enlarge small images" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="showScrollBars" key="show scroll bars" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="mouseWheelScroll" key="mouse wheel scrolls image" type="Bool">
+      <default>false</default>
+    </entry>
+  </group> 
+</kcfg>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg> 
+  <kcfgfile name="gwenviewrc"/> 
+  <group name="main window">
+    <entry name="showBusyPtr" key="busy ptr in full screen" type="Bool">
+      <default>true</default>
+    </entry>
+  </group>
+  <group name="pixmap widget">
+    <entry name="osdMode" key="osd mode" type="Enum">
+      <choices>
+        <choice name="none"/>
+        <choice name="path"/>
+        <choice name="comment"/>
+        <choice name="path_and_comment"/>
+        <choice name="free_output"/>
+      </choices>
+    </entry>
+    <entry name="freeOutputFormat" key="free output format" type="String">
+      <default>%f - %r - %c</default>
+    </entry>
+  </group>
+</kcfg>
