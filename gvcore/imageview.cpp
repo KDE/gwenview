@@ -834,9 +834,9 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 		} else {
 			// We need to smooth now
-			maxRepaintSize = &d->mMaxSmoothRepaintSize;
 			smoothAlgo = static_cast<ImageUtils::SmoothAlgorithm>( ImageViewConfig::self()->smoothAlgorithm() );
 		}
+		maxRepaintSize = ( smoothAlgo != ImageUtils::SMOOTH_NONE ? &d->mMaxSmoothRepaintSize : &d->mMaxScaleRepaintSize );
 	}
 
 	int extraPixels = ImageUtils::extraScalePixels( smoothAlgo, zoom());
