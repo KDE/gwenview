@@ -51,6 +51,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filethumbnailview.h"
 #include "imageloader.h"
 #include "thumbnailsize.h"
+#include "fileviewconfig.h"
 
 #include "fileviewstack.moc"
 namespace Gwenview {
@@ -63,11 +64,6 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
-
-static const char* CONFIG_START_WITH_THUMBNAILS="start with thumbnails";
-static const char* CONFIG_SHOW_DIRS="show dirs";
-static const char* CONFIG_SHOW_DOT_FILES="show dot files";
-static const char* CONFIG_SHOWN_COLOR="shown color";
 
 static const int SLIDER_RESOLUTION=4;
 
@@ -145,6 +141,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
+	mSizeSlider->setValue(FileViewConfig::self()->thumbnailSize() / SLIDER_RESOLUTION);
 	
 	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
 	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
@@ -249,6 +246,32 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)),
 		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
 	
+
+	mShowDotFiles->setChecked(FileViewConfig::self()->showDotFiles());
+	initDirListerFilter();
+
+	bool startWithThumbnails=FileViewConfig::self()->startWithThumbnails();
+	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
+	mSizeSlider->setEnabled(startWithThumbnails);
+	
+	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
+	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
+	if (startWithThumbnails) {
+		QIconView::ItemTextPos pos;
+		pos=QIconView::ItemTextPos( FileViewConfig::self()->thumbnailTextPos() );
+		mFileThumbnailView->setItemTextPos(pos);
+		if (pos==QIconView::Right) {
+			mSideThumbnailMode->setChecked(true);
+		} else {
+			mBottomThumbnailMode->setChecked(true);
+		}
+		// Make sure the thumbnail view and the slider tooltip are updated
+		updateThumbnailSize(mSizeSlider->value());
+		mFileThumbnailView->startThumbnailUpdate();
+	} else {
+		mListMode->setChecked(true);
+	}
+	d->mThumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 }
 
 
@@ -509,6 +532,7 @@ void FileViewStack::updateViewMode() {
 void FileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
 	d->mSliderTracker->setText(i18n("Thumbnail size: %1x%2").arg(size).arg(size));
+	FileViewConfig::self()->setThumbnailSize(size);
 	mFileThumbnailView->setThumbnailSize(size);
 	Cache::instance()->checkThumbnailSize(size);
 }
@@ -863,21 +887,11 @@ void FileViewStack::setMode(FileViewStack::Mode mode) {
 }
 
 
-bool FileViewStack::showDirs() const {
-	return mShowDirs;
-}
-
-
-void FileViewStack::setShowDirs(bool value) {
-	mShowDirs=value;
+void FileViewStack::updateFromSettings() {
 	initDirListerFilter();
-}
-
-
-void FileViewStack::setShownColor(const QColor& value) {
-	mShownColor=value;
-	mFileDetailView->setShownFileItemColor(mShownColor);
-	mFileThumbnailView->setShownFileItemColor(mShownColor);
+	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
+	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
+	currentFileView()->widget()->update();
 }
 
 
@@ -1054,7 +1068,7 @@ void FileViewStack::initDirListerFilter() {
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/x-xcursor");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
-	if (mShowDirs) {
+	if (FileViewConfig::self()->showDirs()) {
 		mimeTypes.append("inode/directory");
 		mimeTypes+=Archive::mimeTypes();
 	}
@@ -1158,66 +1172,6 @@ KFileItem* FileViewStack::findItemByFileName(const QString& fileName) const {
 	return 0L;
 }
 
-
-//-----------------------------------------------------------------------
-//
-// Configuration
-//
-//-----------------------------------------------------------------------
-void FileViewStack::readConfig(KConfig* config,const QString& group) {
-	mFileThumbnailView->readConfig(config,group);
-	mSizeSlider->setValue(mFileThumbnailView->thumbnailSize() / SLIDER_RESOLUTION);
-	// Make sure the tooltip is updated
-	updateThumbnailSize(mSizeSlider->value());
-
-	config->setGroup(group);
-	mShowDirs=config->readBoolEntry(CONFIG_SHOW_DIRS,true);
-	mShowDotFiles->setChecked(config->readBoolEntry(CONFIG_SHOW_DOT_FILES,false));
-	initDirListerFilter();
-
-	bool startWithThumbnails=config->readBoolEntry(CONFIG_START_WITH_THUMBNAILS,true);
-	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
-	mSizeSlider->setEnabled(startWithThumbnails);
-
-	if (startWithThumbnails) {
-		if (mFileThumbnailView->itemTextPos()==QIconView::Right) {
-			mSideThumbnailMode->setChecked(true);
-		} else {
-			mBottomThumbnailMode->setChecked(true);
-		}
-		mFileThumbnailView->startThumbnailUpdate();
-	} else {
-		mListMode->setChecked(true);
-	}
-	d->mThumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
-
-	QColor defaultColor=colorGroup().highlight().light(150);
-	setShownColor(config->readColorEntry(CONFIG_SHOWN_COLOR, &defaultColor));
-}
-
-void FileViewStack::kpartConfig() {
-	mFileThumbnailView->kpartConfig();
-	mShowDirs=true;
-	mShowDotFiles->setChecked(false);
-	initDirListerFilter();
-
-	setMode(THUMBNAIL);
-
-	mFileThumbnailView->startThumbnailUpdate();
-
-	setShownColor(Qt::red);
-}
-
-void FileViewStack::writeConfig(KConfig* config,const QString& group) const {
-	mFileThumbnailView->writeConfig(config,group);
-
-	config->setGroup(group);
-
-	config->writeEntry(CONFIG_START_WITH_THUMBNAILS,!mListMode->isChecked());
-	config->writeEntry(CONFIG_SHOW_DIRS, mShowDirs);
-	config->writeEntry(CONFIG_SHOW_DOT_FILES, mShowDotFiles->isChecked());
-	config->writeEntry(CONFIG_SHOWN_COLOR,mShownColor);
-}
 
 void FileViewStack::makeDir() {
 	KIO::Job* job;

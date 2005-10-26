@@ -79,16 +79,6 @@ public:
 	FileViewStack(QWidget* parent,KActionCollection*);
 	~FileViewStack();
 
-	// Config
-	void readConfig(KConfig*,const QString&);
-	void writeConfig(KConfig*,const QString&) const;
-	/**
-	 * Used by the KParts, equivalent of readConfig(), this sets
-	 * some values but just uses the defaults rather than using
-	 * KConfig
-	 */
-	void kpartConfig();
-
 	// Properties
 	void setMode(Mode);
 	
@@ -98,14 +88,8 @@ public:
 	uint fileCount() const;
 	int shownFilePosition() const;
 	
-	bool showDirs() const;
-	void setShowDirs(bool);
-	
 	uint selectionSize() const;
 
-	QColor shownColor() const { return mShownColor; }
-	void setShownColor(const QColor&);
-	
 	FileViewBase* currentFileView() const;
 	FileThumbnailView* fileThumbnailView() const { return mFileThumbnailView; }
 	
@@ -162,6 +146,7 @@ public slots:
 	void copyFiles();
 	void moveFiles();
 	void linkFiles();
+	void updateFromSettings();
 
 
 signals:
@@ -247,10 +232,6 @@ private:
 	QSlider* mSizeSlider;
 
 	KToggleAction* mShowDotFiles;
-
-	// configurable settings
-	bool mShowDirs;
-	QColor mShownColor;
 
 	// Temp data used by the dir lister
 	bool mThumbnailsNeedUpdate;

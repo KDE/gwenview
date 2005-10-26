@@ -27,8 +27,9 @@
 #include <klocale.h>
 
 // Our includes
-#include "filedetailview.h"
 #include "filedetailviewitem.h"
+#include "filedetailview.h"
+#include "fileviewconfig.h"
 namespace Gwenview {
 
 
@@ -50,8 +51,9 @@ void FileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column
 	FileDetailView* view=static_cast<FileDetailView*>(listView());
 	FileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
 	if (viewedItem==this) {
-		myCG.setColor(QColorGroup::Text, view->shownFileItemColor());
-		myCG.setColor(QColorGroup::HighlightedText, view->shownFileItemColor());
+		QColor color=FileViewConfig::self()->shownColor();
+		myCG.setColor(QColorGroup::Text, color);
+		myCG.setColor(QColorGroup::HighlightedText, color);
 	}
 	KListViewItem::paintCell(p,myCG,column,width,align);
 }

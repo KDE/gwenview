@@ -62,6 +62,7 @@ extern "C" {
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
 #include "thumbnailsize.h"
+#include "fileviewconfig.h"
 namespace Gwenview {
 
 #undef ENABLE_LOG
@@ -73,12 +74,6 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-
-
-
-const char CONFIG_STORE_THUMBNAILS_IN_CACHE[]="path";
-
-static bool sStoreThumbnailsInCache;
 
 static QString generateOriginalURI(KURL url) {
 	// Don't include the password if any
@@ -700,7 +695,7 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
 	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
 		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
-		sStoreThumbnailsInCache);
+		FileViewConfig::self()->storeThumbnailsInCache());
 }
 
 
@@ -725,33 +720,6 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, QSize size) {
 void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 	QSize size;
 	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap, size);
-}
-
-
-//---------------------------------------------------------------------------
-//
-// Config
-//
-//---------------------------------------------------------------------------
-void ThumbnailLoadJob::readConfig(KConfig* config, const QString& group) {
-	config->setGroup(group);
-	sStoreThumbnailsInCache=config->readBoolEntry(CONFIG_STORE_THUMBNAILS_IN_CACHE,true);
-}
-
-
-void ThumbnailLoadJob::writeConfig(KConfig* config, const QString& group) {
-	config->setGroup(group);
-	config->writeEntry(CONFIG_STORE_THUMBNAILS_IN_CACHE,sStoreThumbnailsInCache);
-}
-
-
-void ThumbnailLoadJob::setStoreThumbnailsInCache(bool store) {
-	sStoreThumbnailsInCache=store;
-}
-
-
-bool ThumbnailLoadJob::storeThumbnailsInCache() {
-	return sStoreThumbnailsInCache;
 }
 
 

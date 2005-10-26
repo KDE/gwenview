@@ -74,18 +74,10 @@ public:
 	FileViewStack* fileViewStack() const { return mFileViewStack; }
 	ImageView* imageView() const { return mImageView; }
 	SlideShow* slideShow() const { return mSlideShow; }
-	bool showBusyPtrInFullScreen() const { return mShowBusyPtrInFullScreen; }
-	bool showAutoDeleteThumbnailCache() const { return mAutoDeleteThumbnailCache; }
 	Document* document() const { return mDocument; }
 #ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* pluginLoader() const { return mPluginLoader; }
 #endif
-
-	void setShowMenuBarInFullScreen(bool);
-	void setShowToolBarInFullScreen(bool);
-	void setShowStatusBarInFullScreen(bool);
-	void setShowBusyPtrInFullScreen(bool);
-	void setAutoDeleteThumbnailCache(bool);
 
 protected:
 	bool queryClose();
@@ -136,14 +128,11 @@ private:
 	KAction* mFilePrint;
 	KAction* mResetDockWidgets;
 	bool	 mLoadingCursor;
-	bool	 mAutoDeleteThumbnailCache;
 	KToggleAction* mToggleBrowse;
 
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
 	QPtrList<KAction> mWindowListActions;
-
-	bool mShowBusyPtrInFullScreen;
 
 #ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* mPluginLoader;
@@ -161,9 +150,6 @@ private:
 	void createObjectInteractions();
 	void updateLocationURL();
 	void createConnections();
-
-	void readConfig(KConfig*,const QString&);
-	void writeConfig(KConfig*,const QString&) const;
 
 private slots:
 	void openURL(const KURL&);

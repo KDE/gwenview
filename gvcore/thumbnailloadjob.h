@@ -141,12 +141,6 @@ public:
 	 */
 	static void deleteImageThumbnail(const KURL& url);
 
-	static void readConfig(KConfig*,const QString& group);
-	static void writeConfig(KConfig*,const QString& group);
-
-	static bool storeThumbnailsInCache();
-	static void setStoreThumbnailsInCache(bool);
-
 signals:
 	/**
 	 * Emitted when the thumbnail for the @p item has been loaded

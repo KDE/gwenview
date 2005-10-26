@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigImageListPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -21,7 +21,7 @@
         </property>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mShowDirs</cstring>
+                <cstring>kcfg_showDirs</cstring>
             </property>
             <property name="text">
                 <string>Show folders and archives</string>
@@ -51,17 +51,10 @@
                 </widget>
                 <widget class="KColorButton">
                     <property name="name">
-                        <cstring>mShownColor</cstring>
+                        <cstring>kcfg_shownColor</cstring>
                     </property>
                     <property name="text">
                         <string></string>
-                    </property>
-                    <property name="color">
-                        <color>
-                            <red>255</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
                     </property>
                 </widget>
                 <spacer>
@@ -151,7 +144,7 @@
                 </widget>
                 <widget class="QSpinBox">
                     <property name="name">
-                        <cstring>mThumbnailMargin</cstring>
+                        <cstring>kcfg_thumbnailMarginSize</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -295,7 +288,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mStoreThumbnailsInCache</cstring>
+                <cstring>kcfg_storeThumbnailsInCache</cstring>
             </property>
             <property name="text">
                 <string>Store thumbnails in cache</string>
@@ -303,7 +296,7 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>mAutoDeleteThumbnailCache</cstring>
+                <cstring>kcfg_deleteCacheOnExit</cstring>
             </property>
             <property name="text">
                 <string>Automatically empty thumbnail cache on exit</string>

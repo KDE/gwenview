@@ -83,15 +83,6 @@ public:
 	int itemDetails() const;
 	
 	void setItemTextPos(ItemTextPos);
-	
-	void readConfig(KConfig*,const QString&);
-	void writeConfig(KConfig*,const QString&) const;
-	/**
-	 * Used by the KParts, equivalent of readConfig(), this sets
-	 * some values but just uses the defaults rather than using
-	 * KConfig
-	 */
-	void kpartConfig();
 
 	void setShownFileItem(KFileItem*);
 

@@ -62,11 +62,13 @@ libgwenviewcore_la_SOURCES = \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \
 	fullscreenconfig.kcfgc \
-	imageviewconfig.kcfgc
+	imageviewconfig.kcfgc \
+	fileviewconfig.kcfgc
 
 kde_kcfg_DATA = \
 	miscconfig.kcfg \
 	slideshowconfig.kcfg \
 	fileoperationconfig.kcfg \
 	fullscreenconfig.kcfg \
-	imageviewconfig.kcfg
+	imageviewconfig.kcfg \
+	fileviewconfig.kcfg

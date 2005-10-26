@@ -62,11 +62,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filethumbnailview.moc"
 namespace Gwenview {
 
-static const char* CONFIG_ITEM_TEXT_POS="item text pos";
-static const char* CONFIG_THUMBNAIL_SIZE="thumbnail size";
-static const char* CONFIG_MARGIN_SIZE="margin size";
-static const char* CONFIG_ITEM_DETAILS="item details";
-
 static const int THUMBNAIL_UPDATE_DELAY=500;
 	
 static const int RIGHT_TEXT_WIDTH=128;
@@ -796,47 +791,9 @@ void FileThumbnailView::startDrag() {
 }
 
 
-//--------------------------------------------------------------------------
-//
-// Configuration
-//
-//--------------------------------------------------------------------------
 void FileThumbnailView::showThumbnailDetailsDialog() {
 	ThumbnailDetailsDialog dlg(this);
 	dlg.exec();
-}
-
-
-void FileThumbnailView::readConfig(KConfig* config,const QString& group) {
-	config->setGroup(group);
-
-	d->mThumbnailSize=config->readNumEntry(CONFIG_THUMBNAIL_SIZE, 48);
-	d->updateWaitThumbnail(this);
-	d->mMarginSize=config->readNumEntry(CONFIG_MARGIN_SIZE,5);
-	d->mItemDetails=config->readNumEntry(CONFIG_ITEM_DETAILS, FILENAME | IMAGESIZE);
-	int pos=config->readNumEntry(CONFIG_ITEM_TEXT_POS, QIconView::Right);
-	setItemTextPos(QIconView::ItemTextPos(pos));
-
-	updateGrid();
-	arrangeItemsInGrid();
-}
-
-void FileThumbnailView::kpartConfig() {
-	d->mThumbnailSize=ThumbnailSize::NORMAL;
-	d->mMarginSize=5;
-
-	updateGrid();
-	setWordWrapIconText(false);
-	arrangeItemsInGrid();
-}
-
-
-void FileThumbnailView::writeConfig(KConfig* config,const QString& group) const {
-	config->setGroup(group);
-	config->writeEntry(CONFIG_THUMBNAIL_SIZE,d->mThumbnailSize);
-	config->writeEntry(CONFIG_MARGIN_SIZE,d->mMarginSize);
-	config->writeEntry(CONFIG_ITEM_TEXT_POS, int(itemTextPos()));
-	config->writeEntry(CONFIG_ITEM_DETAILS, d->mItemDetails);
 }
 
 

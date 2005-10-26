@@ -31,17 +31,15 @@ namespace Gwenview {
 
 class FileViewBase : public KFileView {
 public:
-	FileViewBase() : mShownFileItem(0L), mShownFileItemColor(Qt::red) {}
+	FileViewBase() : mShownFileItem(0L) {}
 	
 	KFileItem* shownFileItem() const { return mShownFileItem; }
 	virtual void setShownFileItem(KFileItem* fileItem) { mShownFileItem=fileItem; }
-
-	QColor shownFileItemColor() const { return mShownFileItemColor; }
-	void setShownFileItemColor(const QColor& value) { mShownFileItemColor=value; }
+	
+	virtual void updateFromSettings() {}
 
 protected:
 	KFileItem* mShownFileItem;
-	QColor mShownFileItemColor;
 };
 
 } // namespace

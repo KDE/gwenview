@@ -94,6 +94,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/thumbnailloadjob.h"
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fullscreenconfig.h>
+#include <../gvcore/fileviewconfig.h>
 
 #include "config.h"
 
@@ -107,15 +108,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 
 const char CONFIG_DOCK_GROUP[]="dock";
-const char CONFIG_MAINWINDOW_GROUP[]="main window";
-const char CONFIG_FILEWIDGET_GROUP[]="file widget";
 const char CONFIG_DIRWIDGET_GROUP[]="dir widget";
 const char CONFIG_PIXMAPWIDGET_GROUP[]="pixmap widget";
 const char CONFIG_CACHE_GROUP[]="cache";
-const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 
-const char CONFIG_SHOW_LOCATION_TOOLBAR[]="show address bar";
-const char CONFIG_AUTO_DELETE_THUMBNAIL_CACHE[]="Delete Thumbnail Cache whe exit";
 const char CONFIG_GWENVIEW_DOCK_VERSION[]="Gwenview version";
 
 const char CONFIG_SESSION_URL[] = "url";
@@ -174,8 +170,6 @@ MainWindow::MainWindow()
 , mPluginLoader(0)
 #endif
 {
-	readConfig(KGlobal::config(),CONFIG_MAINWINDOW_GROUP);
-
 	// Backend
 	mDocument=new Document(this);
 	mHistory=new History(actionCollection());
@@ -231,19 +225,16 @@ bool MainWindow::queryClose() {
 
 	KConfig* config=KGlobal::config();
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
-	mFileViewStack->writeConfig(config, CONFIG_FILEWIDGET_GROUP);
 	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
 	SlideShowConfig::writeConfig();
-	ThumbnailLoadJob::writeConfig(config, CONFIG_THUMBNAILLOADJOB_GROUP);
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
 	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
-	writeConfig(config,CONFIG_MAINWINDOW_GROUP);
 
-	if (mAutoDeleteThumbnailCache) {
+	if (FileViewConfig::self()->deleteCacheOnExit()) {
 		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
 		if (QFile::exists(dir)) {
@@ -620,6 +611,8 @@ void MainWindow::showConfigDialog() {
 		mSlideShow, SLOT(slotSettingsChanged()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mImageView, SLOT(updateFromSettings()) );
+	connect(&dialog, SIGNAL(settingsChanged()),
+		mFileViewStack, SLOT(updateFromSettings()) );
 	dialog.exec();
 }
 
@@ -915,10 +908,8 @@ void MainWindow::createWidgets() {
 	}
 	
 	// Load config
-	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
-	ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
 
@@ -1290,35 +1281,5 @@ void MainWindow::slotReplug() {
 }
 #endif
 
-
-//-----------------------------------------------------------------------
-//
-// Properties
-//
-//-----------------------------------------------------------------------
-void MainWindow::setShowBusyPtrInFullScreen(bool value) {
-	mShowBusyPtrInFullScreen=value;
-}
-
-void MainWindow::setAutoDeleteThumbnailCache(bool value){
-	mAutoDeleteThumbnailCache=value;
-}
-
-
-//-----------------------------------------------------------------------
-//
-// Configuration
-//
-//-----------------------------------------------------------------------
-void MainWindow::readConfig(KConfig* config,const QString& group) {
-	config->setGroup(group);
-	mAutoDeleteThumbnailCache=config->readBoolEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, false);	
-}
-
-
-void MainWindow::writeConfig(KConfig* config,const QString& group) const {
-	config->setGroup(group);
-	config->writeEntry(CONFIG_AUTO_DELETE_THUMBNAIL_CACHE, mAutoDeleteThumbnailCache);
-}
 
 } // namespace

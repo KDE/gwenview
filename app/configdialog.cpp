@@ -57,13 +57,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "doublespinbox.h"
 #include "mainwindow.h"
 #include "gvcore/filethumbnailview.h"
-#include "gvcore/fileviewstack.h"
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/miscconfig.h>
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fileoperationconfig.h>
 #include <../gvcore/fullscreenconfig.h>
 #include <../gvcore/imageviewconfig.h>
+#include <../gvcore/fileviewconfig.h>
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
@@ -123,6 +123,7 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	// Create dialog pages
 	d->mImageListPage = addConfigPage<ConfigImageListPage>(
 		this, i18n("Configure Image List"), i18n("Image List"), "view_icon");
+	d->mManagers << new KConfigDialogManager(d->mImageListPage, FileViewConfig::self());
 	
 	d->mImageViewPage = addConfigPage<ConfigImageViewPage>(
 		this, i18n("Configure Image View"), i18n("Image View"), "looknfeel");
@@ -152,16 +153,8 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	// Read config, because the modified behavior might have changed
 	MiscConfig::self()->readConfig();
 
-	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
-
 	// Image List tab
-	d->mImageListPage->mThumbnailMargin->setValue(fileViewStack->fileThumbnailView()->marginSize());
-	d->mImageListPage->mShowDirs->setChecked(fileViewStack->showDirs());
-	d->mImageListPage->mShownColor->setColor(fileViewStack->shownColor());
-	d->mImageListPage->mStoreThumbnailsInCache->setChecked(ThumbnailLoadJob::storeThumbnailsInCache());
-	d->mImageListPage->mAutoDeleteThumbnailCache->setChecked(d->mMainWindow->showAutoDeleteThumbnailCache());
-	
-	int details=fileViewStack->fileThumbnailView()->itemDetails();
+	int details=FileViewConfig::self()->thumbnailDetails();
 	d->mImageListPage->mShowFileName->setChecked(details & FileThumbnailView::FILENAME);
 	d->mImageListPage->mShowFileDate->setChecked(details & FileThumbnailView::FILEDATE);
 	d->mImageListPage->mShowFileSize->setChecked(details & FileThumbnailView::FILESIZE);
@@ -188,8 +181,6 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
 		(*it)->updateWidgets();
-		connect(*it, SIGNAL(settingsChanged()),
-			this, SIGNAL(settingsChanged()) );
 	}
 }
 
@@ -207,23 +198,19 @@ void ConfigDialog::slotOk() {
 
 
 void ConfigDialog::slotApply() {
-	FileViewStack* fileViewStack=d->mMainWindow->fileViewStack();
+	bool needSignal=false;
 
 	// Image List tab
-	fileViewStack->fileThumbnailView()->setMarginSize(d->mImageListPage->mThumbnailMargin->value());
-	fileViewStack->fileThumbnailView()->arrangeItemsInGrid();
-	fileViewStack->setShowDirs(d->mImageListPage->mShowDirs->isChecked());
-	fileViewStack->setShownColor(d->mImageListPage->mShownColor->color());
-	ThumbnailLoadJob::setStoreThumbnailsInCache(d->mImageListPage->mStoreThumbnailsInCache->isChecked());
-	d->mMainWindow->setAutoDeleteThumbnailCache(d->mImageListPage->mAutoDeleteThumbnailCache->isChecked());
-	
 	int details=
 		(d->mImageListPage->mShowFileName->isChecked() ? FileThumbnailView::FILENAME : 0)
 		| (d->mImageListPage->mShowFileDate->isChecked() ? FileThumbnailView::FILEDATE : 0)
 		| (d->mImageListPage->mShowFileSize->isChecked() ? FileThumbnailView::FILESIZE : 0)
 		| (d->mImageListPage->mShowImageSize->isChecked() ? FileThumbnailView::IMAGESIZE : 0)
 		;
-	fileViewStack->fileThumbnailView()->setItemDetails(details);
+	if (details!=FileViewConfig::self()->thumbnailDetails()) {
+		FileViewConfig::self()->setThumbnailDetails(details);
+		needSignal=true;
+	}
 	
 	// Image View tab
 	ImageViewConfig::self()->setMouseWheelScroll(
@@ -240,7 +227,13 @@ void ConfigDialog::slotApply() {
 	
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
+		if ((*it)->hasChanged()) {
+			needSignal=true;
+		}
 		(*it)->updateSettings();
+	}
+	if (needSignal) {
+		emit settingsChanged();
 	}
 }
 

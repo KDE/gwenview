@@ -37,6 +37,7 @@
 #include "archive.h"
 #include "filethumbnailview.h"
 #include "filethumbnailviewitem.h"
+#include "fileviewconfig.h"
 namespace Gwenview {
 
 
@@ -249,7 +250,7 @@ void FileThumbnailViewItem::calcRect(const QString&) {
 	bool isRight=view->itemTextPos()==QIconView::Right;
 	
 	int textW=view->gridX();
-	int thumbnailSize=view->thumbnailSize();
+	int thumbnailSize=FileViewConfig::self()->thumbnailSize();
 	if (isRight) {
 		textW-=PADDING * 3 + thumbnailSize;
 	} else {
@@ -310,7 +311,7 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	// Define colors
 	QColor bg;
 	if (isShownItem) {
-		bg=view->shownFileItemColor();
+		bg=FileViewConfig::self()->shownColor();
 	} else if ( isSelected() ) {
 		bg=cg.highlight();
 	} else {
