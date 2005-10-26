@@ -56,7 +56,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configslideshowpage.h"
 #include "doublespinbox.h"
 #include "mainwindow.h"
-#include "gvcore/fileoperation.h"
 #include "gvcore/filethumbnailview.h"
 #include "gvcore/fileviewstack.h"
 // This path is different because it's a generated file, so it's stored in builddir
