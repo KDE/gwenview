@@ -111,7 +111,6 @@ const char CONFIG_MAINWINDOW_GROUP[]="main window";
 const char CONFIG_FILEWIDGET_GROUP[]="file widget";
 const char CONFIG_DIRWIDGET_GROUP[]="dir widget";
 const char CONFIG_PIXMAPWIDGET_GROUP[]="pixmap widget";
-const char CONFIG_FILEOPERATION_GROUP[]="file operations";
 const char CONFIG_CACHE_GROUP[]="cache";
 const char CONFIG_THUMBNAILLOADJOB_GROUP[]="thumbnail loading";
 
@@ -919,7 +918,6 @@ void MainWindow::createWidgets() {
 	mFileViewStack->readConfig(config,CONFIG_FILEWIDGET_GROUP);
 	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
-	//mSlideShow->readConfig(config,CONFIG_SLIDESHOW_GROUP);
 	ThumbnailLoadJob::readConfig(config,CONFIG_THUMBNAILLOADJOB_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
