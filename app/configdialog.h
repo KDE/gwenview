@@ -22,17 +22,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
-// KDE includes
+// KDE
 #include <kdialogbase.h>
+
+// KIPI
+namespace KIPI {
+class PluginLoader;
+};
+
+
 namespace Gwenview {
 
-class MainWindow;
 class ConfigDialogPrivate;
 
 class ConfigDialog : public KDialogBase {
 Q_OBJECT
 public:
-	ConfigDialog(MainWindow*);
+	ConfigDialog(QWidget*, KIPI::PluginLoader*);
 	~ConfigDialog();
 
 signals:

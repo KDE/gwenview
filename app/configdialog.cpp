@@ -55,7 +55,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configmiscpage.h"
 #include "configslideshowpage.h"
 #include "doublespinbox.h"
-#include "mainwindow.h"
 #include "gvcore/filethumbnailview.h"
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/miscconfig.h>
@@ -79,7 +78,6 @@ public:
 	ConfigFileOperationsPage* mFileOperationsPage;
 	ConfigMiscPage* mMiscPage;
 	ConfigSlideshowPage* mSlideShowPage;
-	MainWindow* mMainWindow;
 #ifdef GV_HAVE_KIPI
 	KIPI::ConfigWidget* mKIPIConfigWidget;
 #endif
@@ -106,19 +104,18 @@ T* addConfigPage(KDialogBase* dialog, const QString& header, const QString& name
 }
 
 
-ConfigDialog::ConfigDialog(MainWindow* mainWindow)
+ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 : KDialogBase(
 	KDialogBase::IconList,
 	i18n("Configure"),
 	KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
 	KDialogBase::Ok,
-	mainWindow,
+	parent,
 	"ConfigDialog",
 	true,
 	true)
 {
 	d=new ConfigDialogPrivate;
-	d->mMainWindow=mainWindow;
 
 	// Create dialog pages
 	d->mImageListPage = addConfigPage<ConfigImageListPage>(
@@ -142,9 +139,12 @@ ConfigDialog::ConfigDialog(MainWindow* mainWindow)
 	d->mManagers << new KConfigDialogManager(d->mSlideShowPage, SlideShowConfig::self());
 
 #ifdef GV_HAVE_KIPI
-	d->mKIPIConfigWidget = mainWindow->pluginLoader()->configWidget(this);
+	d->mKIPIConfigWidget = pluginLoader->configWidget(this);
 	addConfigPage(
 		this, d->mKIPIConfigWidget, i18n("Configure KIPI Plugins"), i18n("KIPI Plugins"), "kipi");
+#else
+	// Avoid "unused parameter" warning
+	pluginLoader=pluginLoader;
 #endif
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(

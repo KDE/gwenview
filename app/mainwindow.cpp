@@ -606,7 +606,11 @@ void MainWindow::slotSlideShowChanged(bool running) {
 
 
 void MainWindow::showConfigDialog() {
-	ConfigDialog dialog(this);
+#ifdef GV_HAVE_KIPI
+	ConfigDialog dialog(this, mPluginLoader);
+#else
+	ConfigDialog dialog(this, 0);
+#endif
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mSlideShow, SLOT(slotSettingsChanged()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
