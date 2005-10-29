@@ -31,6 +31,7 @@
 #ifdef GV_HAVE_XCURSOR
 #include <X11/Xlib.h>
 #include <X11/Xcursor/Xcursor.h>
+#include <fixx11h.h>
 #endif
 
 namespace Gwenview {
