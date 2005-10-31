@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qptrlist.h>
 
 // KDE
-#include <kfiletreebranch.h>
 #include <kfiletreeview.h>
 
 class QPopupMenu;
@@ -33,15 +32,8 @@ class QShowEvent;
 class KURL;
 
 namespace Gwenview {
-class FileTreeBranch : public KFileTreeBranch {
-public:
-	FileTreeBranch(KFileTreeView* tv, const KURL& url, const QString& title, const QString& icon);
-	~FileTreeBranch() {}
 
-	const QString& icon() const { return mIcon; }
-private:
-	QString mIcon;
-};
+class FileTreeBranch;
 
 class DirView : public KFileTreeView {
 Q_OBJECT

@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kfiletreebranch.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -77,11 +78,19 @@ static QString dirSyntax(const QString &d) {
 	return d;
 }
 
-FileTreeBranch::FileTreeBranch(KFileTreeView *tv, const KURL& url, const QString& title, const QString& icon)
-: KFileTreeBranch(tv, url, title, SmallIcon(icon)),
-mIcon(icon)
-{
-}
+
+class FileTreeBranch : public KFileTreeBranch {
+public:
+	FileTreeBranch(KFileTreeView* tv, const KURL& url, const QString& title, const QString& icon)
+	: KFileTreeBranch(tv, url, title, MainBarIcon(icon))
+	, mIcon(icon) {}
+	~FileTreeBranch() {}
+
+	const QString& icon() const { return mIcon; }
+private:
+	QString mIcon;
+};
+
 
 DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	// Look tweaking
@@ -89,6 +98,7 @@ DirView::DirView(QWidget* parent) : KFileTreeView(parent),mDropTarget(0) {
 	header()->hide();
 	setAllColumnsShowFocus(true);
 	setRootIsDecorated(true);
+	setFullWidth(true);
 
 	// Popup
 	mPopupMenu=new QPopupMenu(this);
