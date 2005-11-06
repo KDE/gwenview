@@ -149,6 +149,7 @@ QString DocumentLoadedImpl::save(const KURL& _url, const QCString& format) const
 	tmp.setAutoDelete(true);
 
 	msg=localSave(tmp.file(), format);
+	tmp.file()->close();
 	if (!msg.isNull()) return msg;
 	setFileSize(QFileInfo(tmp.name()).size());
 
