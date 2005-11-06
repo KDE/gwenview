@@ -57,7 +57,7 @@ class KURLCompletion;
 
 namespace Gwenview {
 class CaptionFormatter;
-class DirView;
+class DirViewController;
 class Document;
 class FileViewStack;
 class History;
@@ -98,7 +98,7 @@ private:
 	QTimer* mHintTimer;
 
 	FileViewStack* mFileViewStack;
-	DirView* mDirView;
+	DirViewController* mDirViewController;
 	KListView* mBookmarkView;
 	ImageView* mImageView;
 	MetaEdit *mMetaEdit;

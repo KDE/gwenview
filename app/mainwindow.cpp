@@ -74,7 +74,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bookmarkowner.h"
 #include "bookmarkviewcontroller.h"
 #include "configdialog.h"
-#include "dirview.h"
+#include "dirviewcontroller.h"
 #include "history.h"
 #include "metaedit.h"
 #include "truncatedtextlabel.h"
@@ -225,12 +225,11 @@ bool MainWindow::queryClose() {
 
 	KConfig* config=KGlobal::config();
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
-	mDirView->writeConfig(config, CONFIG_DIRWIDGET_GROUP);
 	SlideShowConfig::writeConfig();
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
-	if (mFileViewStack->isVisible() || mDirView->isVisible()) {
+	if (mFileViewStack->isVisible() || mDirViewController->widget()->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 
@@ -848,8 +847,8 @@ void MainWindow::createWidgets() {
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mDirView=new DirView(mFolderDock);
-	mFolderDock->setWidget(mDirView);
+	mDirViewController=new DirViewController(mFolderDock);
+	mFolderDock->setWidget(mDirViewController->widget());
 	
 	// Bookmark widget
 	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
@@ -912,7 +911,6 @@ void MainWindow::createWidgets() {
 	}
 	
 	// Load config
-	mDirView->readConfig(config,CONFIG_DIRWIDGET_GROUP);
 	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
@@ -1070,10 +1068,9 @@ void MainWindow::createConnections() {
 		SLOT( slotSlideShowChanged(bool)) );
 
 	// Dir view connections
-	connect(mDirView,SIGNAL(dirURLChanged(const KURL&)),
-		mFileViewStack,SLOT(setDirURL(const KURL&)) );
-
-	connect(mDirView, SIGNAL(dirRenamed(const KURL&, const KURL&)),
+	connect(mDirViewController, SIGNAL(urlChanged(const KURL&)),
+		mFileViewStack, SLOT(setDirURL(const KURL&)) );
+	connect(mDirViewController, SIGNAL(urlRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
 
 	// Pixmap view connections
@@ -1092,7 +1089,7 @@ void MainWindow::createConnections() {
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		this,SLOT(slotDirURLChanged(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
-		mDirView,SLOT(setURL(const KURL&)) );
+		mDirViewController,SLOT(setURL(const KURL&)) );
 	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
 		mHistory,SLOT(addURLToHistory(const KURL&)) );
 

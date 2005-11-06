@@ -19,7 +19,8 @@ gwenview_la_SOURCES = \
 	doublespinbox.cpp \
 	mainwindow.cpp \
 	metaedit.cpp \
-	dirview.cpp \
+	treeview.cpp \
+	dirviewcontroller.cpp \
 	configdialog.cpp \
 	branchpropertiesdialog.cpp \
 	history.cpp \
