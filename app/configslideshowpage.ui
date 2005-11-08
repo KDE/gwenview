@@ -134,7 +134,4 @@ When this option is enabled, the slideshow will stop on the last image of the fo
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>gwenview::doublespinbox.h</includehint>
-</includehints>
 </UI>
