@@ -72,6 +72,7 @@ DirViewController::DirViewController(QWidget* parent)
 }
 
 DirViewController::~DirViewController() {
+	d->mURLBar->writeConfig(KGlobal::config(), "KFileDialog Speedbar");
 	delete d;
 }
 
