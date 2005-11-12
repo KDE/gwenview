@@ -121,12 +121,12 @@ void TreeView::setURL(const KURL& url) {
 	LOG(url.prettyURL());
 	if (currentURL().equals(url,true)) return;
 	if (m_nextUrlToSelect.equals(url,true)) return;
-
-	// Do not update the view if it's hidden, just store the url to
-	// open next time the view is shown
+	slotSetNextUrlToSelect(url);
+	
+	// Do not update the view if it's hidden, the url has been stored with
+	// slotSetNextUrlToSelect. The view will expand to it next time it's shown.
 	if (!isVisible()) {
-		LOG("we are hidden, just store the url");
-		slotSetNextUrlToSelect(url);
+		LOG("We are hidden, just store the url");
 		return;
 	}
 
