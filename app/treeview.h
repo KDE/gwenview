@@ -45,6 +45,9 @@ signals:
 
 protected:
 	virtual void showEvent(QShowEvent*);
+	virtual void contentsDragMoveEvent(QDragMoveEvent*);
+	virtual void contentsDragLeaveEvent(QDragLeaveEvent*);
+	virtual void contentsDropEvent(QDropEvent*);
 
 protected slots:
 	virtual void slotNewTreeViewItems(KFileTreeBranch*, const KFileTreeViewItemList&);
@@ -58,6 +61,8 @@ private slots:
 	// Do not name this slot "slotPopulateFinished", it will clash with
 	// "KFileTreeView::slotPopulateFinished".
 	void slotTreeViewPopulateFinished(KFileTreeViewItem*);
+
+	void autoOpenDropTarget();
 };
 
 

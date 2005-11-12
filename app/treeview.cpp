@@ -20,10 +20,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "treeview.moc"
 
+// Qt
+#include <qtimer.h>
+
 // KDE
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
+#include <kurldrag.h>
+
+// Local
+#include "../gvcore/fileoperation.h"
 
 namespace Gwenview {
 
@@ -44,6 +51,8 @@ const char* DND_PREFIX="dnd";
 struct TreeView::Private {
 	TreeView* mView;
 	KFileTreeBranch* mBranch;
+	KFileTreeViewItem* mDropTarget;
+	QTimer* mAutoOpenTimer;
 
 	KFileTreeViewItem* findViewItem(KFileTreeViewItem* parent,const QString& text) {
 		QListViewItem* item;
@@ -109,6 +118,17 @@ TreeView::TreeView(QWidget* parent)
 	d=new Private;
 	d->mView=this;
 	d->mBranch=0;
+	d->mDropTarget=0;
+	d->mAutoOpenTimer=new QTimer(this);
+	
+	// Drag'n'drop
+	setDragEnabled(true);
+	setDropVisualizer(false);
+	setDropHighlighter(true);
+	setAcceptDrops(true);
+
+	connect(d->mAutoOpenTimer, SIGNAL(timeout()),
+		this, SLOT(autoOpenDropTarget()));
 }
 
 
@@ -139,11 +159,10 @@ void TreeView::slotTreeViewPopulateFinished(KFileTreeViewItem* item) {
 	if (!item) return;
 	KURL url=item->url();
 
-#if 0
-	if (mDropTarget) {
-		startAnimation(mDropTarget,DND_PREFIX,DND_ICON_COUNT);
+	if (d->mDropTarget) {
+		startAnimation(d->mDropTarget,DND_PREFIX,DND_ICON_COUNT);
 	}
-#endif
+
 	LOG("itemURL=" << url);
 	LOG("m_nextUrlToSelect=" << m_nextUrlToSelect);
 
@@ -228,4 +247,87 @@ void TreeView::showEvent(QShowEvent* event) {
 	QWidget::showEvent(event);
 }
 
+
+void TreeView::contentsDragMoveEvent(QDragMoveEvent* event) {
+	if (!KURLDrag::canDecode(event)) {
+		event->ignore();
+		return;
+	}
+
+	// Get a pointer to the new drop item
+	QPoint point(0,event->pos().y());
+	KFileTreeViewItem* newDropTarget=static_cast<KFileTreeViewItem*>( itemAt(contentsToViewport(point)) );
+	if (!newDropTarget) {
+		event->ignore();
+		d->mAutoOpenTimer->stop();
+		if (d->mDropTarget) {
+			stopAnimation(d->mDropTarget);
+			d->mDropTarget=0L;
+		}
+		return;
+	}
+
+	event->accept();
+	if (newDropTarget==d->mDropTarget) return;
+	if (d->mDropTarget) {
+		stopAnimation(d->mDropTarget);
+	}
+
+	// Restart auto open timer if we are over a new item
+	d->mAutoOpenTimer->stop();
+	d->mDropTarget=newDropTarget;
+	startAnimation(newDropTarget,DND_PREFIX,DND_ICON_COUNT);
+	d->mAutoOpenTimer->start(AUTO_OPEN_DELAY,true);
+}
+
+
+void TreeView::contentsDragLeaveEvent(QDragLeaveEvent*) {
+	d->mAutoOpenTimer->stop();
+	if (d->mDropTarget) {
+		stopAnimation(d->mDropTarget);
+		d->mDropTarget=0L;
+	}
+}
+
+
+void TreeView::contentsDropEvent(QDropEvent* event) {
+	d->mAutoOpenTimer->stop();
+
+	// Get data from drop (do it before showing menu to avoid mDropTarget changes)
+	if (!d->mDropTarget) return;
+	KURL dest=d->mDropTarget->url();
+
+	KURL::List urls;
+	if (!KURLDrag::decode(event,urls)) return;
+
+	// Show popup
+	bool wasMoved;
+	FileOperation::openDropURLMenu(this, urls, dest, &wasMoved);
+
+	if (wasMoved) {
+		// If the current url was in the list, set the drop target as the new
+		// current item
+		KURL current=currentURL();
+		KURL::List::ConstIterator it=urls.begin();
+		for (; it!=urls.end(); ++it) {
+			if (current.equals(*it,true)) {
+				setCurrentItem(d->mDropTarget);
+				break;
+			}
+		}
+	}
+
+	// Reset drop target
+	if (d->mDropTarget) {
+		stopAnimation(d->mDropTarget);
+		d->mDropTarget=0L;
+	}
+}
+
+
+void TreeView::autoOpenDropTarget() {
+	if (d->mDropTarget) {
+		d->mDropTarget->setOpen(true);
+	}
+}
 } // namespace
