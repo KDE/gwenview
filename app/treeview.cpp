@@ -241,7 +241,7 @@ void TreeView::slotNewTreeViewItems(KFileTreeBranch* branch, const KFileTreeView
  * hidden
  */
 void TreeView::showEvent(QShowEvent* event) {
-	if (!currentURL().equals(m_nextUrlToSelect,true)) {
+	if (m_nextUrlToSelect.isValid() && !currentURL().equals(m_nextUrlToSelect,true)) {
 		d->setURLInternal(m_nextUrlToSelect);
 	}
 	QWidget::showEvent(event);
