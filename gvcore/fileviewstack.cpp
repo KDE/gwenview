@@ -1013,18 +1013,18 @@ void FileViewStack::delayedDirListerCompleted() {
 		KFileItem *item;
 		QString fileName = mDirURL.filename();
 		for (item=currentFileView()->firstFileItem(); item; item=currentFileView()->nextItem(item) ) {
-		if (item->name() == fileName) {
-			if (mChangeDirStatus == CHANGE_DIR_STATUS_NEXT) {
-				do {
-					item=currentFileView()->nextItem(item);
-				} while (item && !Archive::fileItemIsDirOrArchive(item));
-			} else {
-				do {
-					item=currentFileView()->prevItem(item);
-				} while (item && !Archive::fileItemIsDirOrArchive(item));
-			}
-			break;
-		};
+			if (item->name() == fileName) {
+				if (mChangeDirStatus == CHANGE_DIR_STATUS_NEXT) {
+					do {
+						item=currentFileView()->nextItem(item);
+					} while (item && !Archive::fileItemIsDirOrArchive(item));
+				} else {
+					do {
+						item=currentFileView()->prevItem(item);
+					} while (item && !Archive::fileItemIsDirOrArchive(item));
+				}
+				break;
+			};
 		}
 		mChangeDirStatus = CHANGE_DIR_STATUS_NONE;
 		if (!item) {
