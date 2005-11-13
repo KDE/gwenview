@@ -192,12 +192,14 @@ static void qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
 }
 
 static
-void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr, float screen_gamma=0.0 )
+void setup_qt( QImage& image, png_structp png_ptr, png_infop info_ptr )
 {
-    if ( screen_gamma != 0.0 && png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA) ) {
+    // For now, we will use the PC monitor gamma, if you own a Mac, you'd better use 1.8
+    const double SCREEN_GAMMA=2.2;
+    if ( png_get_valid(png_ptr, info_ptr, PNG_INFO_gAMA) ) {
 	double file_gamma;
 	png_get_gAMA(png_ptr, info_ptr, &file_gamma);
-	png_set_gamma( png_ptr, screen_gamma, file_gamma );
+	png_set_gamma( png_ptr, SCREEN_GAMMA, file_gamma );
     }
 
     png_uint_32 width;
