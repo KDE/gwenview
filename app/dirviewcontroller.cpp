@@ -25,12 +25,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qhbox.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
 
 // KDE
+#include <kiconloader.h>
+#include <kinputdialog.h>
+#include <klocale.h>
+#include <kpropsdlg.h>
 #include <kurlbar.h>
 
 // Local
 #include <treeview.h>
+#include <gvcore/fileoperation.h>
 
 
 namespace Gwenview {
@@ -69,6 +75,9 @@ DirViewController::DirViewController(QWidget* parent)
 
 	connect(d->mTreeView, SIGNAL(selectionChanged(QListViewItem*)),
 		this, SLOT(slotTreeViewSelectionChanged(QListViewItem*)) );
+
+	connect(d->mTreeView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+		this, SLOT(slotTreeViewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 DirViewController::~DirViewController() {
@@ -92,5 +101,73 @@ void DirViewController::slotTreeViewSelectionChanged(QListViewItem* item) {
 	emit urlChanged(d->mTreeView->currentURL());
 }
 
+
+void DirViewController::slotTreeViewContextMenu(KListView*, QListViewItem*, const QPoint& pos) {
+	QPopupMenu menu(d->mTreeView);
+	menu.insertItem(SmallIcon("folder_new"),i18n("New Folder..."),this,SLOT(makeDir()));
+	menu.insertSeparator();
+	menu.insertItem(i18n("Rename..."),this,SLOT(renameDir()));
+	menu.insertItem(SmallIcon("editdelete"),i18n("Delete"),this,SLOT(removeDir()));
+	menu.insertSeparator();
+	menu.insertItem(i18n("Properties"),this,SLOT(showPropertiesDialog()));
+	
+	menu.exec(pos);
+}
+
+
+void DirViewController::makeDir() {
+	KIO::Job* job;
+	if (!d->mTreeView->currentItem()) return;
+
+	bool ok;
+	QString newDir=KInputDialog::getText(
+			i18n("Creating Folder"),
+			i18n("Enter the name of the new folder:"),
+			QString::null, &ok, d->mTreeView);
+	if (!ok) return;
+
+	KURL newURL(d->mTreeView->currentURL());
+	newURL.addPath(newDir);
+	job=KIO::mkdir(newURL);
+
+	connect(job, SIGNAL(result(KIO::Job*)),
+		this, SLOT(slotDirMade(KIO::Job*)) );
+}
+
+
+void DirViewController::slotDirMade(KIO::Job* job) {
+	if (job->error()) {
+		job->showErrorDialog(d->mTreeView);
+		return;
+	}
+	if (!d->mTreeView->currentItem()) return;
+	d->mTreeView->currentItem()->setOpen(true);
+}
+
+
+void DirViewController::renameDir() {
+	if (!d->mTreeView->currentItem()) return;
+	FileOperation::rename(d->mTreeView->currentURL(), d->mTreeView);
+}
+
+
+void DirViewController::removeDir() {
+	if (!d->mTreeView->currentItem()) return;
+
+	KURL::List list;
+	list << d->mTreeView->currentURL();
+	FileOperation::del(list, d->mTreeView);
+	
+	QListViewItem* item=d->mTreeView->currentItem();
+	if (!item) return;
+	item=item->parent();
+	if (!item) return;
+	d->mTreeView->setCurrentItem(item);
+}
+
+
+void DirViewController::showPropertiesDialog() {
+	(void)new KPropertiesDialog(d->mTreeView->currentURL(), d->mTreeView);
+}
 
 } // namespace

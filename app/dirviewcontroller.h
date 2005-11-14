@@ -26,8 +26,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "qobject.h"
 
 class QListViewItem;
+class QPoint;
 class QWidget;
+class KListView;
 class KURL;
+
+namespace KIO {
+class Job;
+}
 
 namespace Gwenview {
 
@@ -51,6 +57,13 @@ private:
 
 private slots:
 	void slotTreeViewSelectionChanged(QListViewItem*);
+	void slotTreeViewContextMenu(KListView*, QListViewItem*, const QPoint&);
+
+	void makeDir();
+	void slotDirMade(KIO::Job*);
+	void renameDir();
+	void removeDir();
+	void showPropertiesDialog();
 };
 
 } // namespace
