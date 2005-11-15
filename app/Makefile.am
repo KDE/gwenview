@@ -17,6 +17,7 @@ gwenview_la_SOURCES = \
 	configslideshowpage.ui \
 	branchpropertiesdialogbase.ui \
 	doublespinbox.cpp \
+	kipiinterface.cpp \
 	mainwindow.cpp \
 	metaedit.cpp \
 	treeview.cpp \
@@ -26,7 +27,7 @@ gwenview_la_SOURCES = \
 	history.cpp \
 	main.cpp
 
-gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la
+gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la $(GV_LIB_KIPI)
 
 # the library search path.
 gwenview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)

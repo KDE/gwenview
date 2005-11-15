@@ -6,7 +6,7 @@ libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
-	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_KIPI) $(GV_LIB_XCURSOR) \
+	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_XCURSOR) \
 	$(LIBEXIF_LIBS) ../imageutils/libgvimageutils.la \
 	../tsthread/libtsthread.la
 
@@ -46,7 +46,6 @@ libgwenviewcore_la_SOURCES = \
 	documentloadedimpl.cpp \
 	documentjpegloadedimpl.cpp \
 	documentanimatedloadedimpl.cpp \
-	kipiinterface.cpp \
 	busylevelmanager.cpp \
 	cache.cpp \
 	threadgate.cpp \

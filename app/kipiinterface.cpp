@@ -35,9 +35,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <libkipi/imageinfoshared.h>
 
 // Local
-#include "archive.h"
-#include "fileviewbase.h"
-#include "fileviewstack.h"
+#include "gvcore/archive.h"
+#include "gvcore/fileviewbase.h"
+#include "gvcore/fileviewstack.h"
 #include "imageutils/jpegcontent.h"
 #include "kipiinterface.moc"
 namespace Gwenview {
