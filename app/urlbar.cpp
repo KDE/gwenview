@@ -29,6 +29,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconloader.h>
 #include <kmimetype.h>
 #include <kurl.h>
+#include <kurldrag.h>
+
+// Local
+#include "../gvcore/fileoperation.h"
 
 namespace Gwenview {
 
@@ -48,7 +52,8 @@ private:
 
 
 URLBar::URLBar(QWidget* parent)
-: KListView(parent) {
+: KListView(parent)
+{
 	setFocusPolicy(NoFocus);
 	header()->hide();
 	addColumn(QString::null);
@@ -56,6 +61,10 @@ URLBar::URLBar(QWidget* parent)
 	setHScrollBarMode(QScrollView::AlwaysOff);
 	setSorting(-1);
 	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+	
+	setDropVisualizer(true);
+	setDropHighlighter(true);
+	setAcceptDrops(true);
 	
 	connect(this, SIGNAL(clicked(QListViewItem*)),
 		this, SLOT(slotClicked(QListViewItem*)) );
@@ -102,5 +111,28 @@ void URLBar::slotClicked(QListViewItem* item) {
 	URLBarItem* urlItem=static_cast<URLBarItem*>(item);
 	emit activated(urlItem->url());
 }
+
+
+void URLBar::contentsDragMoveEvent(QDragMoveEvent* event) {
+	if (KURLDrag::canDecode(event)) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
+}
+
+
+void URLBar::contentsDropEvent(QDropEvent* event) {
+	KURL::List urls;
+	if (!KURLDrag::decode(event,urls)) return;
+
+	// Get a pointer to the drop item
+	QPoint point(0,event->pos().y());
+	URLBarItem* item=static_cast<URLBarItem*>( itemAt(contentsToViewport(point)) );
+	if (!item) return;
+	KURL dest=item->url();
 	
+	FileOperation::openDropURLMenu(this, urls, dest);
+}
+
 } // namespace

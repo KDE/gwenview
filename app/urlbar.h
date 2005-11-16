@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <klistview.h>
 
+class QDragMoveEvent;
+class QDropEvent;
 class QListViewItem;
 
 class KConfig;
@@ -43,6 +45,10 @@ public:
 
 signals:
 	void activated(const KURL&);
+
+protected:
+	virtual void contentsDragMoveEvent(QDragMoveEvent*);
+	virtual void contentsDropEvent(QDropEvent*);
 
 private slots:
 	void slotClicked(QListViewItem*);
