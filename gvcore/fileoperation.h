@@ -26,23 +26,23 @@ class QWidget;
 
 class KURL;
 
-#include "libgwenview_export.h"
 namespace Gwenview {
 /**
- * This namespace-like class handles all steps of a file operation :
+ * This namespace handles all steps of a file operation :
  * - asking the user what to do with a file
  * - performing the operation
  * - showing result dialogs
  */
-class LIBGWENVIEW_EXPORT FileOperation {
-public:
-	static void copyTo(const KURL::List&,QWidget* parent=0L);
-	static void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-	static void linkTo(const KURL::List& srcURL,QWidget* parent);
-	static void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-	static void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-	static void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
-};
+namespace FileOperation {
+
+void copyTo(const KURL::List&,QWidget* parent=0L);
+void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+void linkTo(const KURL::List& srcURL,QWidget* parent);
+void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
+
+} // namespace
 
 } // namespace
 #endif

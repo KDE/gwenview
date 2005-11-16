@@ -37,25 +37,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 
 
-//-FileOperations--------------------------------------------------
-void FileOperation::copyTo(const KURL::List& srcURL,QWidget* parent) {
+namespace FileOperation {
+
+void copyTo(const KURL::List& srcURL,QWidget* parent) {
 	FileOpObject* op=new FileOpCopyToObject(srcURL,parent);
 	(*op)();
 }
 
-void FileOperation::linkTo(const KURL::List& srcURL,QWidget* parent) {
+void linkTo(const KURL::List& srcURL,QWidget* parent) {
 	FileOpObject* op=new FileOpLinkToObject(srcURL,parent);
 	(*op)();
 }
 
-void FileOperation::moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
+void moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op=new FileOpMoveToObject(srcURL,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 
 
-void FileOperation::del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
+void del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op;
 	if (FileOperationConfig::self()->deleteToTrash()) {
 		op=new FileOpTrashObject(url,parent);
@@ -67,14 +68,14 @@ void FileOperation::del(const KURL::List& url,QWidget* parent,QObject* receiver,
 }
 
 
-void FileOperation::rename(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
+void rename(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op=new FileOpRenameObject(url,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(renamed(const QString&)),receiver,slot);
 	(*op)();
 }
 
 
-void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, const KURL& target, bool* wasMoved) {
+void openDropURLMenu(QWidget* parent, const KURL::List& urls, const KURL& target, bool* wasMoved) {
 	QPopupMenu menu(parent);
 	if (wasMoved) *wasMoved=false;
 
@@ -98,5 +99,7 @@ void FileOperation::openDropURLMenu(QWidget* parent, const KURL::List& urls, con
 	}
 }
 
+
+} // namespace FileOperation
 
 } // namespace
