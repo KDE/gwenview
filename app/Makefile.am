@@ -25,6 +25,7 @@ gwenview_la_SOURCES = \
 	configdialog.cpp \
 	branchpropertiesdialog.cpp \
 	history.cpp \
+	urlbar.cpp \
 	main.cpp
 
 gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la $(GV_LIB_KIPI)

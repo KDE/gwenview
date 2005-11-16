@@ -32,10 +32,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <kpropsdlg.h>
-#include <kurlbar.h>
 
 // Local
 #include <treeview.h>
+#include <urlbar.h>
 #include <gvcore/fileoperation.h>
 
 
@@ -43,8 +43,8 @@ namespace Gwenview {
 
 
 struct DirViewController::Private {
-	QHBox* mBox;
-	KURLBar* mURLBar;
+	QSplitter* mBox;
+	URLBar* mURLBar;
 	TreeView* mTreeView;
 };
 
@@ -54,11 +54,10 @@ DirViewController::DirViewController(QWidget* parent)
 {
 	d=new Private;
 
-	d->mBox=new QHBox(parent);
+	d->mBox=new QSplitter(parent);
 	
-	d->mURLBar=new KURLBar(true, d->mBox);
-	d->mURLBar->readConfig(KGlobal::config(), "KFileDialog Speedbar");
-	d->mURLBar->setIconSize(KIcon::SizeSmall);
+	d->mURLBar=new URLBar(d->mBox);
+	d->mURLBar->readConfig(KGlobal::config(), "KFileDialog Speedbar (Global)");
 
 	d->mTreeView=new TreeView(d->mBox);
 	d->mTreeView->addColumn(QString::null);
@@ -81,7 +80,7 @@ DirViewController::DirViewController(QWidget* parent)
 }
 
 DirViewController::~DirViewController() {
-	d->mURLBar->writeConfig(KGlobal::config(), "KFileDialog Speedbar");
+	d->mURLBar->writeConfig(KGlobal::config(), "KFileDialog Speedbar (Global)");
 	delete d;
 }
 
