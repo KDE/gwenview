@@ -52,6 +52,11 @@ protected:
 
 private slots:
 	void slotClicked(QListViewItem*);
+	void slotBookmarkDroppedURL();
+
+private:
+	struct Private;
+	Private* d;
 };
 
 } // namespace

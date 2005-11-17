@@ -23,10 +23,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "urlbar.moc"
 
 // Qt
+#include <qcursor.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
 
 // KDE
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
 #include <kurldrag.h>
@@ -44,16 +47,43 @@ public:
 	{}
 
 	KURL url() const { return mURL; }
-	void setURL(KURL& url) { mURL=url; }
+	void setURL(const KURL& url) { mURL=url; }
 	
 private:
 	KURL mURL;
 };
 
 
+struct URLBar::Private {
+	KURL mDroppedURL;
+	URLBar* mView;
+
+	void addItem(const KURL& url, QString description, QString icon) {
+		if (description.isEmpty()) {
+			description=url.fileName();
+		}
+		
+		if (icon.isEmpty()) {
+			icon=KMimeType::iconForURL(url);
+		}
+		QPixmap pix=SmallIcon(icon);
+
+		URLBarItem* item=new URLBarItem(mView, description);
+		QListViewItem* last=mView->lastItem();
+		if (last) {
+			item->moveItem(last);
+		}
+		item->setPixmap(0, pix);
+		item->setURL(url);
+	}
+};
+
 URLBar::URLBar(QWidget* parent)
 : KListView(parent)
 {
+	d=new Private;
+	d->mView=this;
+
 	setFocusPolicy(NoFocus);
 	header()->hide();
 	addColumn(QString::null);
@@ -72,6 +102,7 @@ URLBar::URLBar(QWidget* parent)
 
 
 URLBar::~URLBar() {
+	delete d;
 }
 
 
@@ -81,22 +112,9 @@ void URLBar::readConfig(KConfig* config, const QString& group) {
 	for (int pos=0; pos<entryCount; ++pos) {
 		KURL url( config->readPathEntry(QString("URL_%1").arg(pos)) );
 		QString description=config->readEntry( QString("Description_%1").arg(pos) );
-		if (description.isEmpty()) {
-			description=url.fileName();
-		}
 		QString icon=config->readEntry( QString("Icon_%1").arg(pos) );
-		if (icon.isEmpty()) {
-			icon=KMimeType::iconForURL(url);
-		}
-		QPixmap pix=SmallIcon(icon);
-
-		URLBarItem* item=new URLBarItem(this, description);
-		QListViewItem* last=lastItem();
-		if (last) {
-			item->moveItem(last);
-		}
-		item->setPixmap(0, pix);
-		item->setURL(url);
+		
+		d->addItem(url, description, icon);
 	}
 }
 
@@ -113,6 +131,11 @@ void URLBar::slotClicked(QListViewItem* item) {
 }
 
 
+void URLBar::slotBookmarkDroppedURL() {
+	d->addItem(d->mDroppedURL, QString::null, QString::null);
+}
+
+
 void URLBar::contentsDragMoveEvent(QDragMoveEvent* event) {
 	if (KURLDrag::canDecode(event)) {
 		event->accept();
@@ -124,15 +147,29 @@ void URLBar::contentsDragMoveEvent(QDragMoveEvent* event) {
 
 void URLBar::contentsDropEvent(QDropEvent* event) {
 	KURL::List urls;
-	if (!KURLDrag::decode(event,urls)) return;
+	if (!KURLDrag::decode(event, urls)) return;
 
 	// Get a pointer to the drop item
 	QPoint point(0,event->pos().y());
 	URLBarItem* item=static_cast<URLBarItem*>( itemAt(contentsToViewport(point)) );
-	if (!item) return;
-	KURL dest=item->url();
 	
-	FileOperation::openDropURLMenu(this, urls, dest);
+	QPopupMenu menu(this);
+	int addBookmarkID=menu.insertItem( SmallIcon("bookmark_add"), i18n("&Add Bookmark"),
+		this, SLOT(slotBookmarkDroppedURL()) );
+	if (urls.count()==1) {
+		d->mDroppedURL=*urls.begin();
+	} else {
+		menu.setItemEnabled(addBookmarkID, false);
+	}
+
+	if (item) {
+		menu.insertSeparator();
+		KURL dest=item->url();
+		FileOperation::fillDropURLMenu(&menu, urls, dest);
+	}
+	menu.insertSeparator();
+	menu.insertItem( SmallIcon("cancel"), i18n("Cancel") );
+	menu.exec(QCursor::pos());
 }
 
 } // namespace
