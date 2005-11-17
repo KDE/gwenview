@@ -21,10 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef FILEOPERATION_H
 #define FILEOPERATION_H
 
-class QString;
-class QWidget;
+// KDE
+#include <kurl.h>
+#include <kio/job.h>
 
-class KURL;
+class QPopupMenu;
+class QWidget;
 
 namespace Gwenview {
 /**
@@ -40,6 +42,45 @@ void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* s
 void linkTo(const KURL::List& srcURL,QWidget* parent);
 void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+
+
+/**
+ * @internal
+ */
+class DropMenuContext : public QObject {
+Q_OBJECT
+public:
+	DropMenuContext(QObject* parent, const KURL::List& src, const KURL& dst, bool* wasMoved)
+	: QObject(parent)
+	, mSrc(src)
+	, mDst(dst)
+	, mWasMoved(wasMoved)
+	{
+		if (mWasMoved) *mWasMoved=false;
+	}
+	
+public slots:
+	void copy() {
+		KIO::copy(mSrc, mDst, true);
+	}
+
+	void move() {
+		KIO::move(mSrc, mDst, true);
+		if (mWasMoved) *mWasMoved=true;
+	}
+
+	void link() {
+		KIO::link(mSrc, mDst, true);
+	}
+
+private:
+	const KURL::List& mSrc;
+	const KURL& mDst;
+	bool* mWasMoved;
+};
+
+
+void fillDropURLMenu(QPopupMenu*, const KURL::List&, const KURL& target, bool* wasMoved=0L);
 void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
 
 } // namespace

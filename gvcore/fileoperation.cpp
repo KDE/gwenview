@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+// Self
+#include "fileoperation.moc"
 
 // Qt
 #include <qcursor.h>
@@ -31,7 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "fileopobject.h"
-#include "fileoperation.h"
 #include "fileoperationconfig.h"
 
 namespace Gwenview {
@@ -75,28 +76,27 @@ void rename(const KURL& url,QWidget* parent,QObject* receiver,const char* slot) 
 }
 
 
+void fillDropURLMenu(QPopupMenu* menu, const KURL::List& urls, const KURL& target, bool* wasMoved) {
+	DropMenuContext* context=new DropMenuContext(menu, urls, target, wasMoved);
+	menu->insertItem( SmallIcon("goto"), i18n("&Move Here"),
+		context, SLOT(move()) );
+	menu->insertItem( SmallIcon("editcopy"), i18n("&Copy Here"),
+		context, SLOT(copy()) );
+	menu->insertItem( SmallIcon("www"), i18n("&Link Here"),
+		context, SLOT(link()) );
+}
+
+
 void openDropURLMenu(QWidget* parent, const KURL::List& urls, const KURL& target, bool* wasMoved) {
 	QPopupMenu menu(parent);
 	if (wasMoved) *wasMoved=false;
 
-	int moveItemID = menu.insertItem( SmallIcon("goto"), i18n("&Move Here") );
-	int copyItemID = menu.insertItem( SmallIcon("editcopy"), i18n("&Copy Here") );
-	int linkItemID = menu.insertItem( SmallIcon("www"), i18n("&Link Here") );
+	fillDropURLMenu(&menu, urls, target, wasMoved);
 	menu.insertSeparator();
 	menu.insertItem( SmallIcon("cancel"), i18n("Cancel") );
 
 	menu.setMouseTracking(true);
-	int id = menu.exec(QCursor::pos());
-
-	// Handle menu choice
-	if (id==copyItemID) {
-		KIO::copy(urls, target, true);
-	} else if (id==moveItemID) {
-		KIO::move(urls, target, true);
-		if (wasMoved) *wasMoved=true;
-	} else if (id==linkItemID) {
-		KIO::link(urls, target, true);
-	}
+	menu.exec(QCursor::pos());
 }
 
 
