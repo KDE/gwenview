@@ -40,8 +40,8 @@ public:
 	URLBar(QWidget* parent);
 	~URLBar();
 
-	void readConfig(KConfig*, const QString& group);
-	void writeConfig(KConfig*, const QString& group);
+	void readConfig();
+	void writeConfig();
 
 signals:
 	void activated(const KURL&);

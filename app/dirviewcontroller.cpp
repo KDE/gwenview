@@ -57,7 +57,6 @@ DirViewController::DirViewController(QWidget* parent)
 	d->mBox=new QSplitter(parent);
 	
 	d->mURLBar=new URLBar(d->mBox);
-	d->mURLBar->readConfig(KGlobal::config(), "KFileDialog Speedbar (Global)");
 
 	d->mTreeView=new TreeView(d->mBox);
 	d->mTreeView->addColumn(QString::null);
@@ -80,7 +79,6 @@ DirViewController::DirViewController(QWidget* parent)
 }
 
 DirViewController::~DirViewController() {
-	d->mURLBar->writeConfig(KGlobal::config(), "KFileDialog Speedbar (Global)");
 	delete d;
 }
 

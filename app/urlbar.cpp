@@ -39,18 +39,54 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace Gwenview {
 
+const QString CONFIG_GROUP="KFileDialog Speedbar (Global)";
+const QString CONFIG_ENTRY_COUNT="Number of Entries";
+const QString CONFIG_URL="URL_%1";
+const QString CONFIG_DESCRIPTION="Description_%1";
+const QString CONFIG_ICON="Icon_%1";
+// Not used for now, but we want to be compatible with KURLBar
+const QString CONFIG_ICON_GROUP="IconGroup_%1";
 
 class URLBarItem : public QListViewItem {
 public:
-	URLBarItem(KListView* parent, const QString& text)
-	: QListViewItem(parent, text)
+	URLBarItem(KListView* parent)
+	: QListViewItem(parent)
 	{}
 
 	KURL url() const { return mURL; }
 	void setURL(const KURL& url) { mURL=url; }
 	
+	void readConfig(KConfig* config, int pos) {
+		mURL=config->readPathEntry(CONFIG_URL.arg(pos));
+		
+		QString description=config->readEntry( CONFIG_DESCRIPTION.arg(pos) );
+		if (description.isEmpty()) {
+			description=mURL.fileName();
+		} else {
+			mCustomDescription=description;
+		}
+		setText(0, description);
+		
+		QString icon=config->readEntry( CONFIG_ICON.arg(pos) );
+		if (icon.isEmpty()) {
+			icon=KMimeType::iconForURL(mURL);
+		} else {
+			mCustomIcon=icon;
+		}
+		setPixmap(0, SmallIcon(icon));
+	}
+
+	void writeConfig(KConfig* config, int pos) {
+		config->writePathEntry(CONFIG_URL.arg(pos), mURL.prettyURL());
+		config->writeEntry(CONFIG_DESCRIPTION.arg(pos), mCustomDescription);
+		config->writeEntry(CONFIG_ICON.arg(pos), mCustomIcon);
+		config->writeEntry(CONFIG_ICON_GROUP.arg(pos), KIcon::Panel);
+	}
+	
 private:
 	KURL mURL;
+	QString mCustomDescription;
+	QString mCustomIcon;
 };
 
 
@@ -58,23 +94,20 @@ struct URLBar::Private {
 	KURL mDroppedURL;
 	URLBar* mView;
 
-	void addItem(const KURL& url, QString description, QString icon) {
-		if (description.isEmpty()) {
-			description=url.fileName();
-		}
-		
-		if (icon.isEmpty()) {
-			icon=KMimeType::iconForURL(url);
-		}
-		QPixmap pix=SmallIcon(icon);
+	void addItem(const KURL& url) {
+		URLBarItem* item=new URLBarItem(mView);
+		item->setURL(url);
+		item->setText(0, url.fileName());
+		QString icon=KMimeType::iconForURL(url);
+		item->setPixmap(0, SmallIcon(icon));
 
-		URLBarItem* item=new URLBarItem(mView, description);
 		QListViewItem* last=mView->lastItem();
 		if (last) {
 			item->moveItem(last);
 		}
-		item->setPixmap(0, pix);
-		item->setURL(url);
+
+		// Save now, so that KFileDialog displays an up-to-date list
+		mView->writeConfig();
 	}
 };
 
@@ -101,6 +134,8 @@ URLBar::URLBar(QWidget* parent)
 	
 	connect(this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+
+	readConfig();
 }
 
 
@@ -109,21 +144,30 @@ URLBar::~URLBar() {
 }
 
 
-void URLBar::readConfig(KConfig* config, const QString& group) {
-	config->setGroup(group);
-	int entryCount=config->readNumEntry("Number of Entries");
+void URLBar::readConfig() {
+	KConfig* config=KGlobal::config();
+	config->setGroup(CONFIG_GROUP);
+	int entryCount=config->readNumEntry(CONFIG_ENTRY_COUNT);
 	for (int pos=0; pos<entryCount; ++pos) {
-		KURL url( config->readPathEntry(QString("URL_%1").arg(pos)) );
-		QString description=config->readEntry( QString("Description_%1").arg(pos) );
-		QString icon=config->readEntry( QString("Icon_%1").arg(pos) );
-		
-		d->addItem(url, description, icon);
+		URLBarItem* item=new URLBarItem(this);
+		item->readConfig(config, pos);
+		QListViewItem* last=lastItem();
+		if (last) {
+			item->moveItem(last);
+		}
 	}
 }
 
 
-void URLBar::writeConfig(KConfig*, const QString& /*group*/) {
-	/* @todo implement */
+void URLBar::writeConfig() {
+	KConfig* config=KGlobal::config();
+	config->setGroup(CONFIG_GROUP);
+	QListViewItem* item=firstChild();
+	config->writeEntry(CONFIG_ENTRY_COUNT, childCount());
+	for (int pos=0; item; item=item->nextSibling(), ++pos) {
+		URLBarItem* urlItem=static_cast<URLBarItem*>(item);
+		urlItem->writeConfig(config, pos);
+	}
 }
 
 
@@ -147,7 +191,7 @@ void URLBar::slotContextMenu(KListView*, QListViewItem* item, const QPoint& pos)
 
 
 void URLBar::slotBookmarkDroppedURL() {
-	d->addItem(d->mDroppedURL, QString::null, QString::null);
+	d->addItem(d->mDroppedURL);
 }
 
 
@@ -160,6 +204,8 @@ void URLBar::deleteBookmark() {
 	QListViewItem* item=selectedItem();
 	if (!item) return;
 	delete item;
+	// Save now, so that KFileDialog displays an up-to-date list
+	writeConfig();
 }
 
 
