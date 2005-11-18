@@ -98,6 +98,9 @@ URLBar::URLBar(QWidget* parent)
 	
 	connect(this, SIGNAL(clicked(QListViewItem*)),
 		this, SLOT(slotClicked(QListViewItem*)) );
+	
+	connect(this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 
@@ -119,7 +122,8 @@ void URLBar::readConfig(KConfig* config, const QString& group) {
 }
 
 
-void URLBar::writeConfig(KConfig*, const QString& group) {
+void URLBar::writeConfig(KConfig*, const QString& /*group*/) {
+	/* @todo implement */
 }
 
 
@@ -131,8 +135,31 @@ void URLBar::slotClicked(QListViewItem* item) {
 }
 
 
+void URLBar::slotContextMenu(KListView*, QListViewItem* item, const QPoint& pos) {
+	if (!item) return;
+	QPopupMenu menu(this);
+	menu.insertItem( SmallIcon("edit"), i18n("Edit..."),
+		this, SLOT(editBookmark()) );
+	menu.insertItem( SmallIcon("editdelete"), i18n("Delete"),
+		this, SLOT(deleteBookmark()) );
+	menu.exec(pos);
+}
+
+
 void URLBar::slotBookmarkDroppedURL() {
 	d->addItem(d->mDroppedURL, QString::null, QString::null);
+}
+
+
+void URLBar::editBookmark() {
+	/* @todo implement */
+}
+
+
+void URLBar::deleteBookmark() {
+	QListViewItem* item=selectedItem();
+	if (!item) return;
+	delete item;
 }
 
 

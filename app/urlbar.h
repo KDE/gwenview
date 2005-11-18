@@ -53,6 +53,9 @@ protected:
 private slots:
 	void slotClicked(QListViewItem*);
 	void slotBookmarkDroppedURL();
+	void slotContextMenu(KListView*, QListViewItem*, const QPoint&);
+	void editBookmark();
+	void deleteBookmark();
 
 private:
 	struct Private;
