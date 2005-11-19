@@ -57,8 +57,10 @@ DirViewController::DirViewController(QWidget* parent)
 	d->mBox=new QSplitter(parent);
 	
 	d->mURLBar=new URLBar(d->mBox);
+	d->mURLBar->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding, 0, 1));
 
 	d->mTreeView=new TreeView(d->mBox);
+	d->mTreeView->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 1, 1));
 	d->mTreeView->addColumn(QString::null);
 	d->mTreeView->header()->hide();
 	d->mTreeView->setAllColumnsShowFocus(true);

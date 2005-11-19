@@ -123,7 +123,7 @@ URLBar::URLBar(QWidget* parent)
 	setFullWidth(true);
 	setHScrollBarMode(QScrollView::AlwaysOff);
 	setSorting(-1);
-	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+	viewport()->setBackgroundMode(PaletteBackground);
 	
 	setDropVisualizer(true);
 	setDropHighlighter(true);
