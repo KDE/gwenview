@@ -134,7 +134,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	mSideThumbnailMode->setExclusiveGroup("thumbnails");
 	mBottomThumbnailMode=new KRadioAction(i18n("Thumbnails with Info on Bottom"),"view_icon",0,this,SLOT(updateViewMode()),actionCollection,"bottom_thumbnail_mode");
 	mBottomThumbnailMode->setExclusiveGroup("thumbnails");
-	
+
 	// Size slider
 	mSizeSlider=new QSlider(Horizontal, this);
 	mSizeSlider->setMaximumWidth(150);
@@ -142,13 +142,13 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
 	mSizeSlider->setValue(FileViewConfig::self()->thumbnailSize() / SLIDER_RESOLUTION);
-	
+
 	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
 	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
 	new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "thumbnails_slider");
 	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
-	
+
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
 	d->mSortAction=new KSelectAction(i18n("Sort"), 0, this, SLOT(setSorting()), actionCollection, "view_sort");
@@ -240,12 +240,12 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SLOT(slotViewDoubleClicked()) );
 	connect(mFileThumbnailView, SIGNAL(selectionChanged()),
 		this, SIGNAL(selectionChanged()) );
-	
+
 	// Thumbnail details dialog
-	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit Thumbnail Details..."), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog"); 
+	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit Thumbnail Details..."), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog");
 	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)),
 		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
-	
+
 
 	mShowDotFiles->setChecked(FileViewConfig::self()->showDotFiles());
 	initDirListerFilter();
@@ -253,7 +253,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	bool startWithThumbnails=FileViewConfig::self()->startWithThumbnails();
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
 	mSizeSlider->setEnabled(startWithThumbnails);
-	
+
 	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
 	if (startWithThumbnails) {
@@ -318,7 +318,7 @@ void FileViewStack::setDirURL(const KURL& url) {
 		LOG("Protocol does not support listing");
 		return;
 	}
-	
+
 	mDirLister->clearError();
 	currentFileView()->setShownFileItem(0L);
 	mFileNameToSelect=QString::null;
@@ -511,7 +511,7 @@ void FileViewStack::updateViewMode() {
 	} else {
 		mFileThumbnailView->setItemTextPos(QIconView::Bottom);
 	}
-	
+
 	// Only switch the view if we are going from no thumbs to either side or
 	// bottom thumbs, not when switching between side and bottom thumbs
 	if (mMode==FILE_LIST) {
@@ -524,7 +524,7 @@ void FileViewStack::updateViewMode() {
 		mFileThumbnailView->addItemList(items);
 		mFileThumbnailView->setShownFileItem(shownFileItem);
 	}
-	
+
 	mFileThumbnailView->startThumbnailUpdate();
 }
 
@@ -597,7 +597,7 @@ void FileViewStack::setSorting() {
 void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
 	int selectionSize;
 	ExternalToolContext* externalToolContext;
-	
+
 	if (onItem) {
 		selectionSize=currentFileView()->selectedItems()->count();
 		externalToolContext=
@@ -640,7 +640,7 @@ void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
 			menu.insertItem( i18n("&Move To...") ),
 			this,SLOT(moveFiles()) );
 		menu.connectItem(
-			menu.insertItem( i18n("&Link to...") ),
+			menu.insertItem( i18n("&Link To...") ),
 			this,SLOT(linkFiles()) );
 		menu.connectItem(
 			menu.insertItem( i18n("&Delete") ),

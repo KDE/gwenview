@@ -102,7 +102,7 @@ void FileOpCopyToObject::operator()() {
 					QString::null, mParent, i18n("Copy File"));
 		} else {
 			DirSelectDialog dialog(destDir, mParent);
-			dialog.setCaption(i18n("Select Folder Where the Files Will be Copied"));
+			dialog.setCaption(i18n("Select Folder Where Files Will be Copied"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
 		}
@@ -167,7 +167,7 @@ void FileOpMoveToObject::operator()() {
 					QString::null, mParent, i18n("Move File"));
 		} else {
 			DirSelectDialog dialog(destDir, mParent);
-			dialog.setCaption(i18n("Select Folder Where the Files Will be Moved"));
+			dialog.setCaption(i18n("Select Folder Where Files Will be Moved"));
 			dialog.exec();
 			destURL=dialog.selectedURL();
 		}

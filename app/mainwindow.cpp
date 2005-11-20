@@ -934,7 +934,7 @@ void MainWindow::createActions() {
 	mRenameFile=new KAction(i18n("&Rename..."),Key_F2,this,SLOT(renameFile()),actionCollection(),"file_rename");
 	mCopyFiles=new KAction(i18n("&Copy To..."),Key_F7,this,SLOT(copyFiles()),actionCollection(),"file_copy");
 	mMoveFiles=new KAction(i18n("&Move To..."),Key_F8,this,SLOT(moveFiles()),actionCollection(),"file_move");
-	mLinkFiles=new KAction(i18n("&Link to..."),Key_F9,this,SLOT(linkFiles()),actionCollection(),"file_link");
+	mLinkFiles=new KAction(i18n("&Link To..."),Key_F9,this,SLOT(linkFiles()),actionCollection(),"file_link");
 	mDeleteFiles=new KAction(i18n("&Delete"),"editdelete",Key_Delete,this,SLOT(deleteFiles()),actionCollection(),"file_delete");
 	mShowFileProperties=new KAction(i18n("Properties"),0,this,SLOT(showFileProperties()),actionCollection(),"file_properties");
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );

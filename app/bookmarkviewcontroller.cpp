@@ -199,9 +199,9 @@ void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
 	BookmarkItem* item=static_cast<BookmarkItem*>(item_);
 	QPopupMenu menu(d->mListView);
-	menu.insertItem(SmallIcon("bookmark_add"), i18n("Add a Bookmark..."),
+	menu.insertItem(SmallIcon("bookmark_add"), i18n("Add Bookmark..."),
 		this, SLOT(addBookmark()));
-	menu.insertItem(SmallIcon("bookmark_folder"), i18n("Add a Bookmark Folder..."),
+	menu.insertItem(SmallIcon("bookmark_folder"), i18n("Add Bookmark Folder..."),
 		this, SLOT(addBookmarkGroup()));
 
 	if (item) {
