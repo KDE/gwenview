@@ -1,4 +1,7 @@
-AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/.. $(LIBEXIF_CFLAGS) $(all_includes)
+# QT_CLEAN_NAMESPACE is needed when building with automake, otherwise
+# compilation fails in jpegcontent.cpp
+AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/.. $(GV_LIBEXIF_CFLAGS) $(all_includes) \
+	-DQT_CLEAN_NAMESPACE
 AM_CCASFLAGS = -I$(srcdir) $(GV_ASM_DEFS)
 
 noinst_LTLIBRARIES = libgvimageutils.la
