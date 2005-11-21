@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qhbox.h>
-#include <qheader.h>
 #include <qpopupmenu.h>
 
 // KDE
@@ -61,11 +60,6 @@ DirViewController::DirViewController(QWidget* parent)
 
 	d->mTreeView=new TreeView(d->mBox);
 	d->mTreeView->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 1, 1));
-	d->mTreeView->addColumn(QString::null);
-	d->mTreeView->header()->hide();
-	d->mTreeView->setAllColumnsShowFocus(true);
-	d->mTreeView->setRootIsDecorated(false);
-	d->mTreeView->setFullWidth(true);
 	
 	connect(d->mURLBar, SIGNAL(activated(const KURL&)),
 		d->mTreeView, SLOT(createBranch(const KURL&)) );

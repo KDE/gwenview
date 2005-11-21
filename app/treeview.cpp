@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "treeview.moc"
 
 // Qt
+#include <qheader.h>
 #include <qtimer.h>
 
 // KDE
@@ -120,6 +121,13 @@ TreeView::TreeView(QWidget* parent)
 	d->mBranch=0;
 	d->mDropTarget=0;
 	d->mAutoOpenTimer=new QTimer(this);
+	
+	// Look
+	addColumn(QString::null);
+	header()->hide();
+	setAllColumnsShowFocus(true);
+	setRootIsDecorated(false);
+	setFullWidth(true);
 	
 	// Drag'n'drop
 	setDragEnabled(true);
