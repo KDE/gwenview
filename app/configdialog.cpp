@@ -54,7 +54,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
 #include "configslideshowpage.h"
-#include "doublespinbox.h"
 #include "gvcore/filethumbnailview.h"
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/miscconfig.h>
@@ -167,10 +166,6 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 
 	// Image View tab
 	d->mImageViewPage->mMouseWheelGroup->setButton(ImageViewConfig::self()->mouseWheelScroll()?1:0);
-
-    // Slide Show tab
-	d->mSlideShowPage->kcfg_delay->setMaxValue( DoubleSpinBox::doubleToInt(10000.) );
-	d->mSlideShowPage->kcfg_delay->setLineStep( DoubleSpinBox::doubleToInt(1.) );
 
 	// File Operations tab
 	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(

@@ -14,7 +14,6 @@ gwenview_la_SOURCES = \
 	configimageviewpage.ui \
 	configmiscpage.ui \
 	configslideshowpage.ui \
-	doublespinbox.cpp \
 	kipiinterface.cpp \
 	mainwindow.cpp \
 	metaedit.cpp \
