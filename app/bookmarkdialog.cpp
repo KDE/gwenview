@@ -81,4 +81,11 @@ void BookmarkDialog::updateOk() {
 }
 
 
+void BookmarkDialog::slotOk() {
+	d->mBookmark->setIcon(d->mContent->mIcon->icon());
+	d->mBookmark->setTitle(d->mContent->mTitle->text());
+	d->mBookmark->setURL(d->mContent->mUrl->url());
+	KDialogBase::slotOk();
+}
+
 } // namespace

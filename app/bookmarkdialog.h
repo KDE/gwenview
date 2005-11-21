@@ -39,6 +39,8 @@ public:
 protected slots:
 	void updateOk();
 
+	virtual void slotOk();
+
 private:
 	struct Private;
 	Private* d;

@@ -36,8 +36,8 @@ const QString CONFIG_ICON_GROUP="IconGroup_%1";
 
 struct Bookmark::Private {
 	KURL mURL;
-	QString mCustomIcon;
-	QString mCustomTitle;
+	QString mIcon;
+	QString mTitle;
 };
 
 
@@ -53,26 +53,28 @@ Bookmark::~Bookmark() {
 
 void Bookmark::initFromURL(const KURL& url) {
 	d->mURL=url;
-	d->mCustomIcon=QString::null;
-	d->mCustomTitle=QString::null;
+	d->mIcon=KMimeType::iconForURL(url);
+	d->mTitle=url.fileName();
 }
 
 
 QString Bookmark::icon() const {
-	if (d->mCustomIcon.isNull()) {
-		return KMimeType::iconForURL(d->mURL);
-	} else {
-		return d->mCustomIcon;
-	}
+	return d->mIcon;
+}
+
+
+void Bookmark::setIcon(const QString& icon) {
+	d->mIcon=icon;
 }
 
 
 QString Bookmark::title() const {
-	if (d->mCustomTitle.isNull()) {
-		return d->mURL.fileName();
-	} else {
-		return d->mCustomTitle;
-	}
+	return d->mTitle;
+}
+
+
+void Bookmark::setTitle(const QString& title) {
+	d->mTitle=title;
 }
 
 
@@ -81,28 +83,33 @@ KURL Bookmark::url() const {
 }
 
 
+void Bookmark::setURL(const KURL& url) {
+	d->mURL=url;
+}
+
+
 void Bookmark::readConfig(KConfig* config, int pos) {
 	d->mURL=config->readPathEntry(CONFIG_URL.arg(pos));
 	
-	QString title=config->readEntry( CONFIG_DESCRIPTION.arg(pos) );
-	if (title.isEmpty()) {
-		title=d->mURL.fileName();
-	} else {
-		d->mCustomTitle=title;
-	}
+	d->mTitle=config->readEntry( CONFIG_DESCRIPTION.arg(pos) );
+	if (d->mTitle.isEmpty()) d->mTitle=d->mURL.fileName();
 	
-	QString icon=config->readEntry( CONFIG_ICON.arg(pos) );
-	if (icon.isEmpty()) {
-		icon=KMimeType::iconForURL(d->mURL);
-	} else {
-		d->mCustomIcon=icon;
-	}
+	d->mIcon=config->readEntry( CONFIG_ICON.arg(pos) );
+	if (d->mIcon.isEmpty()) d->mIcon=KMimeType::iconForURL(d->mURL);
 }
+
 
 void Bookmark::writeConfig(KConfig* config, int pos) const {
 	config->writePathEntry(CONFIG_URL.arg(pos), d->mURL.prettyURL());
-	config->writeEntry(CONFIG_DESCRIPTION.arg(pos), d->mCustomTitle);
-	config->writeEntry(CONFIG_ICON.arg(pos), d->mCustomIcon);
+
+	QString title=d->mTitle;
+	if (title==d->mURL.fileName()) title=QString::null;
+	config->writeEntry(CONFIG_DESCRIPTION.arg(pos), title);
+
+	QString icon=d->mIcon;
+	if (icon==KMimeType::iconForURL(d->mURL)) icon=QString::null;
+	config->writeEntry(CONFIG_ICON.arg(pos), icon);
+	
 	config->writeEntry(CONFIG_ICON_GROUP.arg(pos), KIcon::Panel);
 }
 
