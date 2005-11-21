@@ -92,6 +92,7 @@ URLBar::URLBar(QWidget* parent)
 	addColumn(QString::null);
 	setFullWidth(true);
 	setHScrollBarMode(QScrollView::AlwaysOff);
+	setLineWidth(0);
 	setSorting(-1);
 	viewport()->setBackgroundMode(PaletteBackground);
 	
