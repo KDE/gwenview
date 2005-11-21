@@ -7,15 +7,13 @@ kdeinit_LTLIBRARIES = gwenview.la
 AM_CPPFLAGS = -D_LARGEFILE64_SOURCE
 
 gwenview_la_SOURCES = \
-	bookmarkowner.cpp \
-	bookmarkviewcontroller.cpp \
+	bookmark.cpp \
 	configfileoperationspage.ui \
 	configfullscreenpage.ui \
 	configimagelistpage.ui \
 	configimageviewpage.ui \
 	configmiscpage.ui \
 	configslideshowpage.ui \
-	branchpropertiesdialogbase.ui \
 	doublespinbox.cpp \
 	kipiinterface.cpp \
 	mainwindow.cpp \
@@ -23,7 +21,8 @@ gwenview_la_SOURCES = \
 	treeview.cpp \
 	dirviewcontroller.cpp \
 	configdialog.cpp \
-	branchpropertiesdialog.cpp \
+	bookmarkdialogbase.ui \
+	bookmarkdialog.cpp \
 	history.cpp \
 	urlbar.cpp \
 	main.cpp

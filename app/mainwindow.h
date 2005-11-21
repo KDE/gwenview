@@ -89,7 +89,6 @@ private:
 	QWidget* mViewModeWidget;
 	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
-	KDockWidget* mBookmarkDock;
 	KDockWidget* mFileDock;
 	KDockWidget* mPixmapDock;
 	KDockWidget* mMetaDock;
@@ -99,7 +98,6 @@ private:
 
 	FileViewStack* mFileViewStack;
 	DirViewController* mDirViewController;
-	KListView* mBookmarkView;
 	ImageView* mImageView;
 	MetaEdit *mMetaEdit;
 
@@ -139,7 +137,6 @@ private:
 #endif
 
 	KToolBar* mFileViewToolBar;
-	KToolBar* mBookmarkToolBar;
 	std::auto_ptr<CaptionFormatter> mCaptionFormatter;
 
 	void hideToolBars();

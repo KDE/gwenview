@@ -28,24 +28,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpopupmenu.h>
 
 // KDE
+#include <kconfig.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kmimetype.h>
 #include <kurl.h>
 #include <kurldrag.h>
 
 // Local
 #include "../gvcore/fileoperation.h"
+#include "bookmark.h"
+#include "bookmarkdialog.h"
 
 namespace Gwenview {
 
 const QString CONFIG_GROUP="KFileDialog Speedbar (Global)";
 const QString CONFIG_ENTRY_COUNT="Number of Entries";
-const QString CONFIG_URL="URL_%1";
-const QString CONFIG_DESCRIPTION="Description_%1";
-const QString CONFIG_ICON="Icon_%1";
-// Not used for now, but we want to be compatible with KURLBar
-const QString CONFIG_ICON_GROUP="IconGroup_%1";
 
 class URLBarItem : public QListViewItem {
 public:
@@ -53,40 +50,15 @@ public:
 	: QListViewItem(parent)
 	{}
 
-	KURL url() const { return mURL; }
-	void setURL(const KURL& url) { mURL=url; }
-	
-	void readConfig(KConfig* config, int pos) {
-		mURL=config->readPathEntry(CONFIG_URL.arg(pos));
-		
-		QString description=config->readEntry( CONFIG_DESCRIPTION.arg(pos) );
-		if (description.isEmpty()) {
-			description=mURL.fileName();
-		} else {
-			mCustomDescription=description;
-		}
-		setText(0, description);
-		
-		QString icon=config->readEntry( CONFIG_ICON.arg(pos) );
-		if (icon.isEmpty()) {
-			icon=KMimeType::iconForURL(mURL);
-		} else {
-			mCustomIcon=icon;
-		}
-		setPixmap(0, SmallIcon(icon));
-	}
+	Bookmark* bookmark() { return &mBookmark; }
 
-	void writeConfig(KConfig* config, int pos) {
-		config->writePathEntry(CONFIG_URL.arg(pos), mURL.prettyURL());
-		config->writeEntry(CONFIG_DESCRIPTION.arg(pos), mCustomDescription);
-		config->writeEntry(CONFIG_ICON.arg(pos), mCustomIcon);
-		config->writeEntry(CONFIG_ICON_GROUP.arg(pos), KIcon::Panel);
+	void updateFromBookmark() {
+		setText(0, mBookmark.title());
+		setPixmap(0, SmallIcon(mBookmark.icon()) );
 	}
 	
 private:
-	KURL mURL;
-	QString mCustomDescription;
-	QString mCustomIcon;
+	Bookmark mBookmark;
 };
 
 
@@ -96,10 +68,8 @@ struct URLBar::Private {
 
 	void addItem(const KURL& url) {
 		URLBarItem* item=new URLBarItem(mView);
-		item->setURL(url);
-		item->setText(0, url.fileName());
-		QString icon=KMimeType::iconForURL(url);
-		item->setPixmap(0, SmallIcon(icon));
+		item->bookmark()->initFromURL(url);
+		item->updateFromBookmark();
 
 		QListViewItem* last=mView->lastItem();
 		if (last) {
@@ -150,7 +120,8 @@ void URLBar::readConfig() {
 	int entryCount=config->readNumEntry(CONFIG_ENTRY_COUNT);
 	for (int pos=0; pos<entryCount; ++pos) {
 		URLBarItem* item=new URLBarItem(this);
-		item->readConfig(config, pos);
+		item->bookmark()->readConfig(config, pos);
+		item->updateFromBookmark();
 		QListViewItem* last=lastItem();
 		if (last) {
 			item->moveItem(last);
@@ -166,7 +137,7 @@ void URLBar::writeConfig() {
 	config->writeEntry(CONFIG_ENTRY_COUNT, childCount());
 	for (int pos=0; item; item=item->nextSibling(), ++pos) {
 		URLBarItem* urlItem=static_cast<URLBarItem*>(item);
-		urlItem->writeConfig(config, pos);
+		urlItem->bookmark()->writeConfig(config, pos);
 	}
 }
 
@@ -175,7 +146,7 @@ void URLBar::slotClicked(QListViewItem* item) {
 	if (!item) return;
 
 	URLBarItem* urlItem=static_cast<URLBarItem*>(item);
-	emit activated(urlItem->url());
+	emit activated(urlItem->bookmark()->url());
 }
 
 
@@ -196,7 +167,13 @@ void URLBar::slotBookmarkDroppedURL() {
 
 
 void URLBar::editBookmark() {
-	/* @todo implement */
+	URLBarItem* item=static_cast<URLBarItem*>( selectedItem() );
+	if (!item) return;
+	BookmarkDialog dlg(this, item->bookmark());
+	if (dlg.exec()) {
+		item->updateFromBookmark();
+		writeConfig();
+	}
 }
 
 
@@ -237,7 +214,7 @@ void URLBar::contentsDropEvent(QDropEvent* event) {
 
 	if (item) {
 		menu.insertSeparator();
-		KURL dest=item->url();
+		KURL dest=item->bookmark()->url();
 		FileOperation::fillDropURLMenu(&menu, urls, dest);
 	}
 	menu.insertSeparator();
