@@ -725,6 +725,12 @@ void MainWindow::slotToggleCentralStack() {
 
 
 void MainWindow::resetDockWidgets() {
+	int answer=KMessageBox::warningContinueCancel(this,
+		i18n("You are about to revert the window setup to factory defaults, are you sure?"),
+		QString::null /* caption */,
+		i18n("Reset"));
+	if (answer==KMessageBox::Cancel) return;
+	
 	mFolderDock->undock();
 	mPixmapDock->undock();
 	mMetaDock->undock();
@@ -855,7 +861,7 @@ void MainWindow::createWidgets() {
 
 	// Meta info edit widget
 	mMetaDock = mDockArea->createDockWidget("File Attributes", SmallIcon("info"),NULL,
-		i18n("File Info"));
+		i18n("Image Comment"));
 	mMetaEdit = new MetaEdit(mMetaDock, mDocument);
 	mMetaDock->setWidget(mMetaEdit);
 

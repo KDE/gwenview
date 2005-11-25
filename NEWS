@@ -17,6 +17,8 @@
    (Patch by Christopher Martin)
  - Fix a bug which could lead to truncated images when saving to non-local
    URLs.
+ - Added a confirmation dialog for the window reset menu (Bug 116791).
+ - Renamed the "File Info" window to "Image Comment" (Bug 116791).
 
 2005.09.11 - v1.3.0
 - Fixes:
