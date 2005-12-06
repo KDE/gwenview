@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 #include <kio/job.h>
 
+#include "libgwenview_export.h"
+
 class QPopupMenu;
 class QWidget;
 
@@ -37,11 +39,11 @@ namespace Gwenview {
  */
 namespace FileOperation {
 
-void copyTo(const KURL::List&,QWidget* parent=0L);
-void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-void linkTo(const KURL::List& srcURL,QWidget* parent);
-void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
-void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+LIBGWENVIEW_EXPORT void copyTo(const KURL::List&,QWidget* parent=0L);
+LIBGWENVIEW_EXPORT void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+LIBGWENVIEW_EXPORT void linkTo(const KURL::List& srcURL,QWidget* parent);
+LIBGWENVIEW_EXPORT void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
+LIBGWENVIEW_EXPORT void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 
 
 /**
@@ -80,8 +82,8 @@ private:
 };
 
 
-void fillDropURLMenu(QPopupMenu*, const KURL::List&, const KURL& target, bool* wasMoved=0L);
-void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
+LIBGWENVIEW_EXPORT void fillDropURLMenu(QPopupMenu*, const KURL::List&, const KURL& target, bool* wasMoved=0L);
+LIBGWENVIEW_EXPORT void openDropURLMenu(QWidget* parent, const KURL::List&, const KURL& target, bool* wasMoved=0L);
 
 } // namespace
 

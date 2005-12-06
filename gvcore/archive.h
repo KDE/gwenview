@@ -34,7 +34,7 @@ namespace Gwenview {
 namespace Archive {
 	
 LIBGWENVIEW_EXPORT bool fileItemIsArchive(const KFileItem*);
-bool fileItemIsDirOrArchive(const KFileItem*);
+LIBGWENVIEW_EXPORT bool fileItemIsDirOrArchive(const KFileItem*);
 bool protocolIsArchive(const QString&);
 QStringList mimeTypes();
 QString protocolForMimeType(const QString&);

@@ -42,7 +42,7 @@ enum BusyLevel {
 	BUSY_CHECKING_NEW_IMAGE
 };
 
-class BusyLevelManager : public QObject {
+class LIBGWENVIEW_EXPORT BusyLevelManager : public QObject {
 Q_OBJECT
 public:
 	static BusyLevelManager* instance();

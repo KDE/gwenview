@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include <imageutils/orientation.h>
 
+#include "../gvcore/libgwenview_export.h"
 
 class QImage;
 class QString;
@@ -35,7 +36,7 @@ class QFile;
 namespace ImageUtils {
 
 
-class JPEGContent {
+class LIBGWENVIEW_EXPORT JPEGContent {
 public:
 	JPEGContent();
 	~JPEGContent();
