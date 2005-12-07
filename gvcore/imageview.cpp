@@ -871,20 +871,23 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 	}
 
 	if( d->mBrightness != 0 ) {
+		image.normalize(); // needed, it will be modified
 		image = ImageUtils::changeBrightness( image, d->mBrightness );
 	}
 
 	if( d->mContrast != 100 ) { // != 1.0
+		image.normalize(); // needed, it will be modified
 		image = ImageUtils::changeContrast( image, d->mContrast );
 	}
 
 	if( d->mGamma != 100 ) { // != 1.0
+		image.normalize(); // needed, it will be modified
 		image = ImageUtils::changeGamma( image, d->mGamma );
 	}
 
 // Calling normalize() here would make image to be a proper QImage without modified scanlines,
 // so that even calling QImage::copy() would work. However, it seems it's not necessary to call
-// it here. The code above check that QImage::copy() or similar doesn't occur (that zoom() != 1.0
+// it here. The code above checks that QImage::copy() or similar doesn't occur (that zoom() != 1.0
 // is there primarily to avoid that). If any kind of redraw trouble occurs, try uncommenting this
 // line below first.
 //	image.normalize(); // make it use its own data, if needed
