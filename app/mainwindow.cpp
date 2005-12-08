@@ -221,7 +221,6 @@ bool MainWindow::queryClose() {
 
 	KConfig* config=KGlobal::config();
 	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
-	SlideShowConfig::writeConfig();
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
