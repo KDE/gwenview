@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "documentloadedimpl.moc"
 
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -147,15 +148,29 @@ QString DocumentLoadedImpl::save(const KURL& _url, const QCString& format) const
 	}
 	KTempFile tmp(prefix, "gwenview", mode);
 	tmp.setAutoDelete(true);
-
-	msg=localSave(tmp.file(), format);
-	tmp.file()->close();
+	if (tmp.status()!=0) {
+		QString reason( strerror(tmp.status()) );
+		return i18n("Could not create a temporary file.\nReason: %1.")
+			.arg(reason);
+	}
+	QFile* file=tmp.file();
+	msg=localSave(file, format);
 	if (!msg.isNull()) return msg;
-	setFileSize(QFileInfo(tmp.name()).size());
+	file->close();
+	
+	if (tmp.status()!=0) {
+		QString reason( strerror(tmp.status()) );
+		return i18n("Saving image to a temporary file failed.\nReason: %1.")
+			.arg(reason);
+	}
+	
+	QString tmpName=tmp.name();
+	int tmpSize=QFileInfo(tmpName).size();
+	setFileSize(tmpSize);
 
 	// Move the tmp file to the final dest
 	if (url.isLocalFile()) {
-		if( ::rename( QFile::encodeName( tmp.name() ), QFile::encodeName( url.path())) < 0 ) {
+		if( ::rename( QFile::encodeName(tmpName), QFile::encodeName( url.path())) < 0 ) {
 			return i18n("Could not write to %1.").arg(url.path());
 		}
 	} else {
