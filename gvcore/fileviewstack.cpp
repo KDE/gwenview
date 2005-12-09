@@ -141,7 +141,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
-	mSizeSlider->setValue(FileViewConfig::self()->thumbnailSize() / SLIDER_RESOLUTION);
+	mSizeSlider->setValue(FileViewConfig::thumbnailSize() / SLIDER_RESOLUTION);
 
 	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
 	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
@@ -247,18 +247,18 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
 
 
-	mShowDotFiles->setChecked(FileViewConfig::self()->showDotFiles());
+	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
 	initDirListerFilter();
 
-	bool startWithThumbnails=FileViewConfig::self()->startWithThumbnails();
+	bool startWithThumbnails=FileViewConfig::startWithThumbnails();
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
 	mSizeSlider->setEnabled(startWithThumbnails);
 
-	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
-	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
+	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
+	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
 	if (startWithThumbnails) {
 		QIconView::ItemTextPos pos;
-		pos=QIconView::ItemTextPos( FileViewConfig::self()->thumbnailTextPos() );
+		pos=QIconView::ItemTextPos( FileViewConfig::thumbnailTextPos() );
 		mFileThumbnailView->setItemTextPos(pos);
 		if (pos==QIconView::Right) {
 			mSideThumbnailMode->setChecked(true);
@@ -276,6 +276,11 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 
 FileViewStack::~FileViewStack() {
+	// Store all settings which can be changed from the widget itself
+	FileViewConfig::setStartWithThumbnails(mMode==THUMBNAIL);
+	FileViewConfig::setThumbnailDetails(mFileThumbnailView->itemDetails());
+	FileViewConfig::setThumbnailTextPos( int(mFileThumbnailView->itemTextPos()) );
+	FileViewConfig::writeConfig();
 	delete d;
 	delete mDirLister;
 }
@@ -525,6 +530,7 @@ void FileViewStack::updateViewMode() {
 		mFileThumbnailView->setShownFileItem(shownFileItem);
 	}
 
+	updateThumbnailSize(mSizeSlider->value());
 	mFileThumbnailView->startThumbnailUpdate();
 }
 
@@ -532,7 +538,7 @@ void FileViewStack::updateViewMode() {
 void FileViewStack::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
 	d->mSliderTracker->setText(i18n("Thumbnail size: %1x%2").arg(size).arg(size));
-	FileViewConfig::self()->setThumbnailSize(size);
+	FileViewConfig::setThumbnailSize(size);
 	mFileThumbnailView->setThumbnailSize(size);
 	Cache::instance()->checkThumbnailSize(size);
 }
