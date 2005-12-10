@@ -807,4 +807,4 @@ SIZE(mimageScale_mmx_AARGBA)
 
 #endif
 
-.section	.note.GNU-stack,"",@progbits
+.section	.note.GNU-stack,"",%progbits
