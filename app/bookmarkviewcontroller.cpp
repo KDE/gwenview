@@ -191,8 +191,9 @@ BookmarkViewController::BookmarkViewController(QWidget* parent)
 	d->mListView->addColumn(QString::null);
 	d->mListView->setSorting(-1);
 	d->mListView->setShowToolTips(false);
+	d->mListView->setFullWidth(true);
 
-	connect(d->mListView, SIGNAL(executed(QListViewItem*)),
+	connect(d->mListView, SIGNAL(clicked(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
 	connect(d->mListView, SIGNAL(returnPressed(QListViewItem*)),
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
