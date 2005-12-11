@@ -857,10 +857,8 @@ void MainWindow::createWidgets() {
 	
 	// Bookmark widget
 	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
-	QVBox* bmBox=new QVBox(mBookmarkDock);
-	mBookmarkView=new KListView(bmBox);
-	mBookmarkToolBar=new KToolBar(bmBox, "", true);
-	mBookmarkDock->setWidget(bmBox);
+	mBookmarkViewController=new BookmarkViewController(mBookmarkDock);
+	mBookmarkDock->setWidget(mBookmarkViewController->widget());
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -1015,12 +1013,7 @@ void MainWindow::createObjectInteractions() {
 	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
 	manager->setUpdate(true);
 	manager->setShowNSBookmarks(false);
-
-	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, mBookmarkToolBar, manager);
-	connect(ctrl, SIGNAL(openURL(const KURL&)),
-		mFileViewStack,SLOT(setDirURL(const KURL&)) );
-	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),
-		ctrl, SLOT(setURL(const KURL&)) );
+	mBookmarkViewController->init(manager);
 
 	BookmarkOwner* bookmarkOwner=new BookmarkOwner(this);
 
@@ -1077,6 +1070,12 @@ void MainWindow::createConnections() {
 		mFileViewStack, SLOT(setDirURL(const KURL&)) );
 	connect(mDirViewController, SIGNAL(urlRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
+
+	// Bookmark view connections
+	connect(mBookmarkViewController, SIGNAL(openURL(const KURL&)),
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
+	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),
+		mBookmarkViewController, SLOT(setURL(const KURL&)) );
 
 	// Pixmap view connections
 	connect(mImageView,SIGNAL(selectPrevious()),

@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qheader.h>
 #include <qpopupmenu.h>
 #include <qtooltip.h>
+#include <qvbox.h>
 
 // KDE
 #include <kaction.h>
@@ -86,6 +87,7 @@ public:
 
 
 struct BookmarkViewController::Private {
+	QVBox* mBox;
 	KListView* mListView;
 	KBookmarkManager* mManager;
 	KURL mCurrentURL;
@@ -131,14 +133,18 @@ struct BookmarkViewController::Private {
 };
 
 
-BookmarkViewController::BookmarkViewController(KListView* listView, KToolBar* toolbar, KBookmarkManager* manager)
-: QObject(listView)
+BookmarkViewController::BookmarkViewController(QWidget* parent)
+: QObject(parent)
 {
 	d=new Private;
-	d->mListView=listView;
-	d->mManager=manager;
-	d->mToolTip.reset(new BookmarkToolTip(listView) );
-	d->mActionCollection=new KActionCollection(listView);
+	d->mManager=0;
+
+	d->mBox=new QVBox(parent);
+	
+	// Init listview
+	d->mListView=new KListView(d->mBox);
+	d->mToolTip.reset(new BookmarkToolTip(d->mListView) );
+	d->mActionCollection=new KActionCollection(d->mListView);
 
 	d->mListView->header()->hide();
 	d->mListView->setRootIsDecorated(true);
@@ -153,10 +159,8 @@ BookmarkViewController::BookmarkViewController(KListView* listView, KToolBar* to
 	connect(d->mListView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
 		this, SLOT(slotContextMenu(QListViewItem*)) );
 
-	// For now, we ignore the caller parameter and just refresh the full list on update
-	connect(d->mManager, SIGNAL(changed(const QString&, const QString&)),
-		this, SLOT(fill()) );
-
+	// Init toolbar
+	KToolBar* toolbar=new KToolBar(d->mBox, "", true);
 	KAction* action;
 	toolbar->setIconText(KToolBar::IconTextRight);
 	action=new KAction(i18n("Add a bookmark (keep it short)", "Add"), "bookmark_add", 0, 
@@ -165,8 +169,6 @@ BookmarkViewController::BookmarkViewController(KListView* listView, KToolBar* to
 	action=new KAction(i18n("Remove a bookmark (keep it short)", "Remove"), "editdelete", 0,
 			this, SLOT(deleteCurrentBookmark()), d->mActionCollection);
 	action->plug(toolbar);
-	
-	fill();
 }
 
 
@@ -175,8 +177,25 @@ BookmarkViewController::~BookmarkViewController() {
 }
 
 
+void BookmarkViewController::init(KBookmarkManager* manager) {
+	// This method should not be called twice
+	Q_ASSERT(!d->mManager);
+	
+	d->mManager=manager;
+	// For now, we ignore the caller parameter and just refresh the full list on update
+	connect(d->mManager, SIGNAL(changed(const QString&, const QString&)),
+		this, SLOT(fill()) );
+	fill();
+}
+
+
 void BookmarkViewController::setURL(const KURL& url) {
 	d->mCurrentURL=url;
+}
+
+
+QWidget* BookmarkViewController::widget() const {
+	return d->mBox;
 }
 
 

@@ -27,8 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class QListViewItem;
 class QPoint;
 class KBookmarkManager;
-class KListView;
-class KToolBar;
 class KURL;
 
 namespace Gwenview {
@@ -36,9 +34,13 @@ namespace Gwenview {
 class BookmarkViewController : public QObject {
 Q_OBJECT
 public:
-	BookmarkViewController(KListView*, KToolBar*, KBookmarkManager*);
+	BookmarkViewController(QWidget*);
 	~BookmarkViewController();
 
+	void init(KBookmarkManager*);
+
+	QWidget* widget() const;
+	
 signals:
 	void openURL(const KURL&);
 

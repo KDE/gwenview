@@ -57,6 +57,7 @@ class KURLCompletion;
 
 namespace Gwenview {
 class CaptionFormatter;
+class BookmarkViewController;
 class DirViewController;
 class Document;
 class FileViewStack;
@@ -99,7 +100,7 @@ private:
 
 	FileViewStack* mFileViewStack;
 	DirViewController* mDirViewController;
-	KListView* mBookmarkView;
+	BookmarkViewController* mBookmarkViewController;
 	ImageView* mImageView;
 	MetaEdit *mMetaEdit;
 
