@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>BookmarkDialogBase</class>
+<class>BranchPropertiesDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>BookmarkDialogBase</cstring>
+        <cstring>BranchPropertiesDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>

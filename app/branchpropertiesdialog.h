@@ -18,32 +18,35 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef BOOKMARKDIALOG_H
-#define BOOKMARKDIALOG_H
+#ifndef CONFIGFOLDERDIALOG_H
+#define CONFIGFOLDERDIALOG_H
 
-// KDE
+// KDE includes
 #include <kdialogbase.h>
-
-class KURL;
-
 namespace Gwenview {
 
-class Bookmark;
+class BranchPropertiesDialogPrivate;
 
-class BookmarkDialog : public KDialogBase {
+class BranchPropertiesDialog : public KDialogBase {
 Q_OBJECT
 public:
-	BookmarkDialog(QWidget* parent, Bookmark*);
-	~BookmarkDialog();
+	enum Mode { BOOKMARK_GROUP, BOOKMARK };
+	BranchPropertiesDialog(QWidget* parent, Mode mode);
+	~BranchPropertiesDialog();
+
+
+	void setIcon(const QString&);
+	QString icon() const;
+	void setTitle(const QString&);
+	QString title() const;
+	void setURL(const QString&);
+	QString url() const;
 
 protected slots:
 	void updateOk();
 
-	virtual void slotOk();
-
 private:
-	struct Private;
-	Private* d;
+	BranchPropertiesDialogPrivate* d;
 };
 
 } // namespace

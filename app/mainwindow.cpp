@@ -31,6 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaccel.h>
 #include <kaction.h>
 #include <kapplication.h>
+#include <kbookmarkmanager.h>
+#include <kbookmarkmenu.h>
 #include <kcmdlineargs.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -69,6 +71,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 // Local
+#include "bookmarkowner.h"
+#include "bookmarkviewcontroller.h"
 #include "configdialog.h"
 #include "dirviewcontroller.h"
 #include "history.h"
@@ -731,12 +735,14 @@ void MainWindow::resetDockWidgets() {
 	if (answer==KMessageBox::Cancel) return;
 	
 	mFolderDock->undock();
+	mBookmarkDock->undock();
 	mPixmapDock->undock();
 	mMetaDock->undock();
 
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 }
 
 
@@ -849,6 +855,13 @@ void MainWindow::createWidgets() {
 	mDirViewController=new DirViewController(mFolderDock);
 	mFolderDock->setWidget(mDirViewController->widget());
 	
+	// Bookmark widget
+	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
+	QVBox* bmBox=new QVBox(mBookmarkDock);
+	mBookmarkView=new KListView(bmBox);
+	mBookmarkToolBar=new KToolBar(bmBox, "", true);
+	mBookmarkDock->setWidget(bmBox);
+
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
@@ -876,6 +889,7 @@ void MainWindow::createWidgets() {
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 
 	// Load dock config if up to date
 	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
@@ -993,8 +1007,31 @@ void MainWindow::createObjectInteractions() {
 		this, SLOT(updateImageActions()) );
 
 	// Bookmarks
+	QString file = locate( "data", "kfile/bookmarks.xml" );
+	if (file.isEmpty()) {
+		file = locateLocal( "data", "kfile/bookmarks.xml" );
+	}
+
+	KBookmarkManager* manager=KBookmarkManager::managerForFile(file,false);
+	manager->setUpdate(true);
+	manager->setShowNSBookmarks(false);
+
+	BookmarkViewController* ctrl=new BookmarkViewController(mBookmarkView, mBookmarkToolBar, manager);
+	connect(ctrl, SIGNAL(openURL(const KURL&)),
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
+	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),
+		ctrl, SLOT(setURL(const KURL&)) );
+
+	BookmarkOwner* bookmarkOwner=new BookmarkOwner(this);
+
 	KActionMenu* bookmark=new KActionMenu(i18n( "&Bookmarks" ), "bookmark", actionCollection(), "bookmarks" );
-	/* @todo implement a bookmark menu */
+	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), 0, true);
+
+	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
+		mFileViewStack,SLOT(setDirURL(const KURL&)) );
+
+	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+		bookmarkOwner,SLOT(setURL(const KURL&)) );
 }
 
 
@@ -1018,6 +1055,7 @@ void MainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
+	createHideShowAction(mBookmarkDock);
 	createHideShowAction(mPixmapDock);
 	createHideShowAction(mMetaDock);
 	plugActionList("winlist", mWindowListActions);

@@ -1,8 +1,7 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab:
-// kate: indent-mode csands; indent-width 4; replace-tabs-save off; replace-tabs off; replace-trailing-space-save off; space-indent off; tabs-indents on; tab-width 4;
+// vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2005 Aurelien Gateau
+Copyright 2000-2004 Aurélien Gâteau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,38 +18,36 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef BOOKMARK_H
-#define BOOKMARK_H   
+#ifndef BOOKMARKOWNER_H
+#define BOOKMARKOWNER_H
 
-class QString;
-class KConfig;
-class KURL;
 
+// KDE includes
+#include <kbookmarkmanager.h>
+#include <kurl.h>
 namespace Gwenview {
 
-class Bookmark {
+
+class BookmarkOwner : public QObject, public KBookmarkOwner {
+Q_OBJECT
 public:
-	Bookmark();
-	~Bookmark();
+	BookmarkOwner(QWidget* parent);
 
-	void initFromURL(const KURL&);
-
-	void setIcon(const QString&);
-	QString icon() const;
-	void setTitle(const QString&);
-	QString title() const;
+	// KBookmarkOwner interface
+	void openBookmarkURL(const QString&);
+	QString currentURL() const;
+	
+public slots:
 	void setURL(const KURL&);
-	KURL url() const;
 
-	void readConfig(KConfig*, int pos);
-	void writeConfig(KConfig*, int pos) const;
+signals:
+	void openURL(const KURL&);
 
 private:
-	class Private;
-	Private* d;
+	KURL mURL;
 };
 
 
 } // namespace
+#endif
 
-#endif /* BOOKMARK_H */
