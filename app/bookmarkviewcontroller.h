@@ -24,12 +24,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qobject.h>
 
+// KDE
+#include <klistview.h>
+#include <kurl.h>
+
+class QDragMoveEvent;
+class QDropEvent;
 class QListViewItem;
 class QPoint;
 class KBookmarkManager;
 class KURL;
 
 namespace Gwenview {
+
+	
+/**
+ * A listview on which the user can drop urls
+ */
+class URLDropListView : public KListView {
+Q_OBJECT
+public:
+	URLDropListView(QWidget* parent);
+
+signals:
+	void urlDropped(QDropEvent*, const KURL::List&);
+	
+protected:
+	virtual void contentsDragMoveEvent(QDragMoveEvent* event);
+	virtual void contentsDropEvent(QDropEvent* event);
+};
+
 
 class BookmarkViewController : public QObject {
 Q_OBJECT
@@ -51,7 +75,9 @@ private slots:
 	void slotOpenBookmark(QListViewItem*);
 	void fill();
 	void slotContextMenu(QListViewItem*);
-	void addBookmark();
+	void slotURLDropped(QDropEvent*, const KURL::List&);
+	void slotBookmarkDroppedURL();
+	void bookmarkCurrentURL();
 	void addBookmarkGroup();
 	void editCurrentBookmark();
 	void deleteCurrentBookmark();

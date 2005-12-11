@@ -43,11 +43,31 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmimetype.h>
 #include <ktoolbar.h>
 #include <kurl.h>
+#include <kurldrag.h>
 
 // Local
 #include "branchpropertiesdialog.h"
+#include "../gvcore/fileoperation.h"
 
 namespace Gwenview {
+
+// URLDropListView	
+URLDropListView::URLDropListView(QWidget* parent)
+: KListView(parent) {
+	setAcceptDrops(true);
+}
+
+
+void URLDropListView::contentsDragMoveEvent(QDragMoveEvent* event) {
+	if (KURLDrag::canDecode(event)) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
+}
+
+
+
 
 struct BookmarkItem : public KListViewItem {
 	template <class ItemParent>
@@ -93,6 +113,7 @@ struct BookmarkViewController::Private {
 	KURL mCurrentURL;
 	std::auto_ptr<BookmarkToolTip> mToolTip;
 	KActionCollection* mActionCollection;
+	KURL mDroppedURL;
 
 	template <class ItemParent>
 	void addGroup(ItemParent* itemParent, const KBookmarkGroup& group) {
@@ -130,7 +151,26 @@ struct BookmarkViewController::Private {
 
 		return parentGroup;
 	}
+
+	void bookmarkURL(const KURL& url) {
+		BranchPropertiesDialog dialog(mListView, BranchPropertiesDialog::BOOKMARK);
+		dialog.setTitle(url.fileName());
+		dialog.setURL(url.prettyURL());
+		dialog.setIcon(KMimeType::iconForURL(url));
+		if (dialog.exec()==QDialog::Rejected) return;
+
+		KBookmarkGroup parentGroup=findBestParentGroup();
+		parentGroup.addBookmark(mManager, dialog.title(), dialog.url(), dialog.icon());
+		mManager->emitChanged(parentGroup);
+	}
 };
+
+
+void URLDropListView::contentsDropEvent(QDropEvent* event) {
+	KURL::List urls;
+	if (!KURLDrag::decode(event, urls)) return;
+	emit urlDropped(event, urls);
+}
 
 
 BookmarkViewController::BookmarkViewController(QWidget* parent)
@@ -142,7 +182,7 @@ BookmarkViewController::BookmarkViewController(QWidget* parent)
 	d->mBox=new QVBox(parent);
 	
 	// Init listview
-	d->mListView=new KListView(d->mBox);
+	d->mListView=new URLDropListView(d->mBox);
 	d->mToolTip.reset(new BookmarkToolTip(d->mListView) );
 	d->mActionCollection=new KActionCollection(d->mListView);
 
@@ -158,13 +198,15 @@ BookmarkViewController::BookmarkViewController(QWidget* parent)
 		this, SLOT(slotOpenBookmark(QListViewItem*)) );
 	connect(d->mListView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
 		this, SLOT(slotContextMenu(QListViewItem*)) );
+	connect(d->mListView, SIGNAL(urlDropped(QDropEvent*, const KURL::List&)),
+		this, SLOT(slotURLDropped(QDropEvent*, const KURL::List&)) );
 
 	// Init toolbar
 	KToolBar* toolbar=new KToolBar(d->mBox, "", true);
 	KAction* action;
 	toolbar->setIconText(KToolBar::IconTextRight);
 	action=new KAction(i18n("Add a bookmark (keep it short)", "Add"), "bookmark_add", 0, 
-			this, SLOT(addBookmark()), d->mActionCollection);
+			this, SLOT(bookmarkCurrentURL()), d->mActionCollection);
 	action->plug(toolbar);
 	action=new KAction(i18n("Remove a bookmark (keep it short)", "Remove"), "editdelete", 0,
 			this, SLOT(deleteCurrentBookmark()), d->mActionCollection);
@@ -204,7 +246,39 @@ void BookmarkViewController::fill() {
 	KBookmarkGroup root=d->mManager->root();
 	d->addGroup(d->mListView, root);
 }
+
+
+void BookmarkViewController::slotURLDropped(QDropEvent* event, const KURL::List& urls) {
+	// Get a pointer to the drop item
+	QPoint point(0,event->pos().y());
+	KListView* lst=d->mListView;
+	BookmarkItem* item=static_cast<BookmarkItem*>( lst->itemAt(lst->contentsToViewport(point)) );
 	
+	QPopupMenu menu(lst);
+	int addBookmarkID=menu.insertItem( SmallIcon("bookmark_add"), i18n("&Add Bookmark"),
+		this, SLOT(slotBookmarkDroppedURL()) );
+	if (urls.count()==1) {
+		d->mDroppedURL=*urls.begin();
+	} else {
+		menu.setItemEnabled(addBookmarkID, false);
+	}
+
+	if (item) {
+		menu.insertSeparator();
+		KURL dest=item->mBookmark.url();
+		FileOperation::fillDropURLMenu(&menu, urls, dest);
+	}
+
+	menu.insertSeparator();
+	menu.insertItem( SmallIcon("cancel"), i18n("Cancel") );
+	menu.exec(QCursor::pos());
+}
+
+
+void BookmarkViewController::slotBookmarkDroppedURL() {
+	d->bookmarkURL(d->mDroppedURL);
+}
+
 
 void BookmarkViewController::slotOpenBookmark(QListViewItem* item_) {
 	if (!item_) return;
@@ -219,7 +293,7 @@ void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
 	BookmarkItem* item=static_cast<BookmarkItem*>(item_);
 	QPopupMenu menu(d->mListView);
 	menu.insertItem(SmallIcon("bookmark_add"), i18n("Add Bookmark..."),
-		this, SLOT(addBookmark()));
+		this, SLOT(bookmarkCurrentURL()));
 	menu.insertItem(SmallIcon("bookmark_folder"), i18n("Add Bookmark Folder..."),
 		this, SLOT(addBookmarkGroup()));
 
@@ -234,16 +308,8 @@ void BookmarkViewController::slotContextMenu(QListViewItem* item_) {
 }
 
 
-void BookmarkViewController::addBookmark() {
-	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK);
-	dialog.setTitle(d->mCurrentURL.fileName());
-	dialog.setURL(d->mCurrentURL.prettyURL());
-	dialog.setIcon(KMimeType::iconForURL(d->mCurrentURL));
-	if (dialog.exec()==QDialog::Rejected) return;
-
-	KBookmarkGroup parentGroup=d->findBestParentGroup();
-	parentGroup.addBookmark(d->mManager, dialog.title(), dialog.url(), dialog.icon());
-	d->mManager->emitChanged(parentGroup);
+void BookmarkViewController::bookmarkCurrentURL() {
+	d->bookmarkURL(d->mCurrentURL);
 }
 
 
