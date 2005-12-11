@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "dirviewcontroller.moc"
 
 // Qt
-#include <qhbox.h>
 #include <qpopupmenu.h>
 
 // KDE
@@ -34,7 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include <treeview.h>
-#include <urlbar.h>
 #include <gvcore/fileoperation.h>
 
 
@@ -42,8 +40,6 @@ namespace Gwenview {
 
 
 struct DirViewController::Private {
-	QSplitter* mBox;
-	URLBar* mURLBar;
 	TreeView* mTreeView;
 };
 
@@ -53,19 +49,7 @@ DirViewController::DirViewController(QWidget* parent)
 {
 	d=new Private;
 
-	d->mBox=new QSplitter(parent);
-	
-	d->mURLBar=new URLBar(d->mBox);
-	d->mURLBar->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding, 0, 1));
-
-	d->mTreeView=new TreeView(d->mBox);
-	d->mTreeView->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 1, 1));
-	
-	connect(d->mURLBar, SIGNAL(activated(const KURL&)),
-		d->mTreeView, SLOT(createBranch(const KURL&)) );
-	
-	connect(d->mURLBar, SIGNAL(activated(const KURL&)),
-		this, SIGNAL(urlChanged(const KURL&)) );
+	d->mTreeView=new TreeView(parent);
 
 	connect(d->mTreeView, SIGNAL(selectionChanged(QListViewItem*)),
 		this, SLOT(slotTreeViewSelectionChanged(QListViewItem*)) );
@@ -74,13 +58,14 @@ DirViewController::DirViewController(QWidget* parent)
 		this, SLOT(slotTreeViewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
+
 DirViewController::~DirViewController() {
 	delete d;
 }
 
 
 QWidget* DirViewController::widget() const {
-	return d->mBox;
+	return d->mTreeView;
 }
 
 
