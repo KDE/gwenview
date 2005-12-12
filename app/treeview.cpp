@@ -198,10 +198,7 @@ void TreeView::createBranch(const KURL& url) {
 	if (d->mBranch) {
 		removeBranch(d->mBranch);
 	}
-	QString title=url.fileName();
-	if (title.isEmpty()) {
-		title=url.host();
-	}
+	QString title=url.prettyURL(0, KURL::StripFileProtocol);
 	d->mBranch=addBranch(url, title, SmallIcon(KMimeType::iconForURL(url)) );
 	setDirOnlyMode(d->mBranch, true);
 	d->mBranch->setChildRecurse(false);
