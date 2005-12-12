@@ -24,9 +24,10 @@ gwenview_la_SOURCES = \
 	configdialog.cpp \
 	branchpropertiesdialog.cpp \
 	history.cpp \
+	vtabwidget.cpp \
 	main.cpp
 
-gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la $(GV_LIB_KIPI)
+gwenview_la_LIBADD   = ../gvcore/libgwenviewcore.la $(GV_LIB_KIPI) $(LIB_KUTILS)
 
 # the library search path.
 gwenview_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
@@ -40,3 +41,10 @@ METASOURCES = AUTO
 rcdir = $(kde_datadir)/gwenview
 rc_DATA = gwenviewui.rc
 
+
+check_PROGRAMS = testvtabwidget
+testvtabwidget_SOURCES = testvtabwidget.cpp vtabwidget.cpp
+testvtabwidget_LDADD = \
+	$(LIB_KUTILS) $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
+	$(LIBJPEG)
+testvtabwidget_LDFLAGS = $(all_libraries) 

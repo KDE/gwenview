@@ -78,6 +78,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "history.h"
 #include "metaedit.h"
 #include "truncatedtextlabel.h"
+#include "vtabwidget.h"
 
 #include "gvcore/fileoperation.h"
 #include "gvcore/archive.h"
@@ -735,14 +736,12 @@ void MainWindow::resetDockWidgets() {
 	if (answer==KMessageBox::Cancel) return;
 	
 	mFolderDock->undock();
-	mBookmarkDock->undock();
 	mPixmapDock->undock();
 	mMetaDock->undock();
 
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
-	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 }
 
 
@@ -852,13 +851,14 @@ void MainWindow::createWidgets() {
 
 	// Folder widget
 	mFolderDock = mDockArea->createDockWidget("Folders",SmallIcon("folder_open"),NULL,i18n("Folders"));
-	mDirViewController=new DirViewController(mFolderDock);
-	mFolderDock->setWidget(mDirViewController->widget());
+	VTabWidget* vtabWidget=new VTabWidget(mFolderDock);
+	mFolderDock->setWidget(vtabWidget);
 	
-	// Bookmark widget
-	mBookmarkDock = mDockArea->createDockWidget("Bookmarks", SmallIcon("bookmark"),NULL,i18n("Bookmarks"));
-	mBookmarkViewController=new BookmarkViewController(mBookmarkDock);
-	mBookmarkDock->setWidget(mBookmarkViewController->widget());
+	mDirViewController=new DirViewController(vtabWidget);
+	vtabWidget->addTab(mDirViewController->widget(), SmallIcon("folder"), i18n("Folders"));
+
+	mBookmarkViewController=new BookmarkViewController(vtabWidget);
+	vtabWidget->addTab(mBookmarkViewController->widget(), SmallIcon("bookmark"), i18n("Bookmarks"));
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
@@ -887,7 +887,6 @@ void MainWindow::createWidgets() {
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
 	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
 	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
-	mBookmarkDock->manualDock(mFolderDock, KDockWidget::DockCenter, 0);
 
 	// Load dock config if up to date
 	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
@@ -1048,7 +1047,6 @@ void MainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
-	createHideShowAction(mBookmarkDock);
 	createHideShowAction(mPixmapDock);
 	createHideShowAction(mMetaDock);
 	plugActionList("winlist", mWindowListActions);
