@@ -108,6 +108,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
 	mSplitter->setFocusPolicy(QWidget::ClickFocus);
+	mSplitter->setOpaqueResize(true);
 
 	// Create the widgets
 	mDocument = new Document(this);
