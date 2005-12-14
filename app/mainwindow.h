@@ -72,14 +72,6 @@ Q_OBJECT
 public:
 	MainWindow();
 
-	FileViewStack* fileViewStack() const { return mFileViewStack; }
-	ImageView* imageView() const { return mImageView; }
-	SlideShow* slideShow() const { return mSlideShow; }
-	Document* document() const { return mDocument; }
-#ifdef GV_HAVE_KIPI
-	KIPI::PluginLoader* pluginLoader() const { return mPluginLoader; }
-#endif
-
 protected:
 	bool queryClose();
 	virtual void saveProperties( KConfig* );
