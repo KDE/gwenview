@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qdockarea.h>
 #include <qhbox.h>
 #include <qtabwidget.h>
+#include <qwidgetstack.h>
 
 // KDE
 #include <kaboutdata.h>
@@ -87,7 +88,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/document.h"
 #include "gvcore/externaltooldialog.h"
 #include "gvcore/fileviewbase.h"
-#include "gvcore/fileviewstack.h"
+#include "gvcore/fileviewcontroller.h"
 #include "gvcore/imageview.h"
 #include "gvcore/slideshow.h"
 #include "gvcore/printdialog.h"
@@ -195,14 +196,14 @@ MainWindow::MainWindow()
 		if (args->count()==0) {
 			KURL url;
 			url.setPath( QDir::currentDirPath() );
-			mFileViewStack->setDirURL(url);
+			mFileViewController->setDirURL(url);
 		} else {
 			bool fullscreen=args->isSet("f");
 			if (fullscreen) mToggleFullScreen->activate();
 			KURL url=args->url(0);
 
 			if( urlIsDirectory(this, url)) {
-				mFileViewStack->setDirURL(url);
+				mFileViewController->setDirURL(url);
 			} else {
 				if (!fullscreen) mToggleBrowse->activate();
 				openURL(url);
@@ -212,7 +213,7 @@ MainWindow::MainWindow()
 	}
 	
 	if (mToggleBrowse->isChecked()) {
-		mFileViewStack->setFocus();
+		mFileViewController->widget()->setFocus();
 	} else {
 		mImageView->setFocus();
 	}
@@ -229,7 +230,7 @@ bool MainWindow::queryClose() {
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
-	if (mFileViewStack->isVisible() || mDirViewController->widget()->isVisible()) {
+	if (mFileViewController->widget()->isVisible() || mDirViewController->widget()->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 
@@ -250,13 +251,13 @@ bool MainWindow::queryClose() {
 }
 
 void MainWindow::saveProperties( KConfig* cfg ) {
-	cfg->writeEntry( CONFIG_SESSION_URL, mFileViewStack->url().url());
+	cfg->writeEntry( CONFIG_SESSION_URL, mFileViewController->url().url());
 }
 
 void MainWindow::readProperties( KConfig* cfg ) {
 	KURL url(cfg->readEntry(CONFIG_SESSION_URL));
 	if( urlIsDirectory(this, url)) {
-		mFileViewStack->setDirURL(url);
+		mFileViewController->setDirURL(url);
 	} else {
 		openURL(url);
 	}
@@ -269,8 +270,8 @@ void MainWindow::readProperties( KConfig* cfg ) {
 //-----------------------------------------------------------------------
 void MainWindow::openURL(const KURL& url) {
 	mDocument->setURL(url);
-	mFileViewStack->setDirURL(url.upURL());
-	mFileViewStack->setFileNameToSelect(url.filename());
+	mFileViewController->setDirURL(url.upURL());
+	mFileViewController->setFileNameToSelect(url.filename());
 }
 
 
@@ -300,7 +301,7 @@ void MainWindow::updateLocationURL() {
 	LOG("");
 	KURL url;
 	if (mToggleBrowse->isChecked()) {
-		url=mFileViewStack->dirURL();
+		url=mFileViewController->dirURL();
 		if (!url.isValid()) {
 			url=mDocument->url();
 		}
@@ -331,8 +332,8 @@ void MainWindow::goUpTo(int id) {
 	} else {
 		childURL=mDocument->dirURL();
 	}
-	mFileViewStack->setDirURL(url);
-	mFileViewStack->setFileNameToSelect(childURL.fileName());
+	mFileViewController->setDirURL(url);
+	mFileViewController->setFileNameToSelect(childURL.fileName());
 }
 
 
@@ -344,13 +345,13 @@ void MainWindow::goUpTo(int id) {
 void MainWindow::goHome() {
 	KURL url;
 	url.setPath( QDir::homeDirPath() );
-	mFileViewStack->setDirURL(url);
+	mFileViewController->setDirURL(url);
 }
 
 
 void MainWindow::renameFile() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->renameFile();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->renameFile();
 	} else {
 		mImageView->renameFile();
 	}
@@ -358,16 +359,16 @@ void MainWindow::renameFile() {
 
 
 void MainWindow::copyFiles() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->copyFiles();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->copyFiles();
 	} else {
 		mImageView->copyFile();
 	}
 }
 
 void MainWindow::linkFiles() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->linkFiles();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->linkFiles();
 	} else {
 		mImageView->linkFile();
 	}
@@ -375,8 +376,8 @@ void MainWindow::linkFiles() {
 
 
 void MainWindow::moveFiles() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->moveFiles();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->moveFiles();
 	} else {
 		mImageView->moveFile();
 	}
@@ -384,8 +385,8 @@ void MainWindow::moveFiles() {
 
 
 void MainWindow::deleteFiles() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->deleteFiles();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->deleteFiles();
 	} else {
 		mImageView->deleteFile();
 	}
@@ -393,8 +394,8 @@ void MainWindow::deleteFiles() {
 
 
 void MainWindow::showFileProperties() {
-	if (mFileViewStack->isVisible()) {
-		mFileViewStack->showFileProperties();
+	if (mFileViewController->widget()->isVisible()) {
+		mFileViewController->showFileProperties();
 	} else {
 		mImageView->showFileProperties();
 	}
@@ -418,11 +419,11 @@ void MainWindow::flip() {
 }
 
 void MainWindow::modifyImage(ImageUtils::Orientation orientation) {
-	const KURL::List& urls=mFileViewStack->selectedImageURLs();
-	if (mFileViewStack->isVisible() && urls.size()>1) {
+	const KURL::List& urls=mFileViewController->selectedImageURLs();
+	if (mFileViewController->widget()->isVisible() && urls.size()>1) {
 		BatchManipulator manipulator(this, urls, orientation);
 		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
-			mFileViewStack, SLOT(updateThumbnail(const KURL&)) );
+			mFileViewController, SLOT(updateThumbnail(const KURL&)) );
 		manipulator.apply();
 		if (urls.find(mDocument->url())!=urls.end()) {
 			mDocument->reload();
@@ -550,8 +551,8 @@ void MainWindow::toggleFullScreen() {
 
 		// Make sure the file view points to the right URL, it might not be the
 		// case if we are getting out of a slideshow
-		mFileViewStack->setDirURL(mDocument->url().upURL());
-		mFileViewStack->setFileNameToSelect(mDocument->url().fileName());
+		mFileViewController->setDirURL(mDocument->url().upURL());
+		mFileViewController->setFileNameToSelect(mDocument->url().fileName());
 
 		showNormal();
 		menuBar()->show();
@@ -569,7 +570,7 @@ void MainWindow::toggleFullScreen() {
 			mPixmapDock->setWidget(mImageView);
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
-		mFileViewStack->setFocus();
+		mFileViewController->widget()->setFocus();
 	}
 }
 
@@ -581,7 +582,7 @@ void MainWindow::toggleSlideShow() {
 	}
 	
 	KURL::List list;
-	KFileItemListIterator it( *mFileViewStack->currentFileView()->items() );
+	KFileItemListIterator it( *mFileViewController->currentFileView()->items() );
 	for ( ; it.current(); ++it ) {
 		KFileItem* item=it.current();
 		if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
@@ -615,7 +616,7 @@ void MainWindow::showConfigDialog() {
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mImageView, SLOT(updateFromSettings()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
-		mFileViewStack, SLOT(updateFromSettings()) );
+		mFileViewController, SLOT(updateFromSettings()) );
 	dialog.exec();
 }
 
@@ -669,7 +670,7 @@ void MainWindow::escapePressed() {
 void MainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	LOG(oldURL.prettyURL(0,KURL::StripFileProtocol) << " to " << newURL.prettyURL(0,KURL::StripFileProtocol));
 
-	KURL url(mFileViewStack->dirURL());
+	KURL url(mFileViewController->dirURL());
 	if (!oldURL.isParentOf(url) ) {
 		LOG(oldURL.prettyURL() << " is not a parent of " << url.prettyURL());
 		return;
@@ -680,7 +681,7 @@ void MainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 	QString path=newURL.path() + url.path().mid(oldPath.length());
 	LOG("new path: " << path);
 	url.setPath(path);
-	mFileViewStack->setDirURL(url);
+	mFileViewController->setDirURL(url);
 }
 
 
@@ -689,12 +690,12 @@ void MainWindow::slotGo() {
 	LOG(url.prettyURL());
 	if( urlIsDirectory(this, url)) {
 		LOG(" '-> is a directory");
-		mFileViewStack->setDirURL(url);
+		mFileViewController->setDirURL(url);
 	} else {
 		LOG(" '-> is not a directory");
 		openURL(url);
 	}
-	mFileViewStack->setFocus();
+	mFileViewController->widget()->setFocus();
 }
 
 void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
@@ -708,13 +709,13 @@ void MainWindow::slotToggleCentralStack() {
 	if (mToggleBrowse->isChecked()) {
 		mPixmapDock->setWidget(mImageView);
 		mCentralStack->raiseWidget(StackIDBrowse);
-		mFileViewStack->setSilentMode( false );
+		mFileViewController->setSilentMode( false );
 		// force re-reading the directory to show the error
-		if( mFileViewStack->lastURLError()) mFileViewStack->retryURL();
+		if( mFileViewController->lastURLError()) mFileViewController->retryURL();
 	} else {
 		mImageView->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
-		mFileViewStack->setSilentMode( true );
+		mFileViewController->setSilentMode( true );
 	}
 
 	// Make sure the window list actions are disabled if we are in view mode,
@@ -762,8 +763,8 @@ void MainWindow::showHint(const QString& hint) {
 //
 //-----------------------------------------------------------------------
 void MainWindow::updateStatusInfo() {
-	int pos=mFileViewStack->shownFilePosition();
-	uint count=mFileViewStack->fileCount();
+	int pos=mFileViewController->shownFilePosition();
+	uint count=mFileViewController->fileCount();
 	QString filename=mDocument->filename();
 	QString txt;
 	if (count==0) {
@@ -797,7 +798,7 @@ void MainWindow::updateImageActions() {
 
 	bool fileActionsEnabled = 
 		imageActionsEnabled
-		|| (mFileViewStack->isVisible() && mFileViewStack->selectionSize()>0);
+		|| (mFileViewController->widget()->isVisible() && mFileViewController->selectionSize()>0);
 
 	mRenameFile->setEnabled(fileActionsEnabled);
 	mCopyFiles->setEnabled(fileActionsEnabled);
@@ -863,9 +864,8 @@ void MainWindow::createWidgets() {
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	QVBox* vbox=new QVBox(this);
-	mFileViewToolBar=new KToolBar(vbox, "", true);
-	mFileViewStack=new FileViewStack(vbox, actionCollection());
-	mFileDock->setWidget(vbox);
+	mFileViewController=new FileViewController(vbox, actionCollection());
+	mFileDock->setWidget(mFileViewController->widget());
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
 
@@ -980,27 +980,20 @@ void MainWindow::createActions() {
  * widgets and actions have already been created
  */
 void MainWindow::createObjectInteractions() {
-	// File view toolbar
-	mFileViewStack->listMode()->plug(mFileViewToolBar);
-	mFileViewStack->sideThumbnailMode()->plug(mFileViewToolBar);
-	mFileViewStack->bottomThumbnailMode()->plug(mFileViewToolBar);
-	actionCollection()->action("thumbnails_slider")->plug(mFileViewToolBar);
-	actionCollection()->action("thumbnail_details_dialog")->plug(mFileViewToolBar);
-	
 	// Pixmap view caption formatter
-	mCaptionFormatter.reset( new CaptionFormatter(mFileViewStack, mDocument) );
+	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
 	mImageView->setOSDFormatter(mCaptionFormatter.get());
 	
 	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
-	actions.append(mFileViewStack->selectPrevious());
-	actions.append(mFileViewStack->selectNext());
+	actions.append(mFileViewController->selectPrevious());
+	actions.append(mFileViewController->selectNext());
 	actions.append(mToggleFullScreen);
 	actions.append(mToggleSlideShow);
 	mImageView->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
-	connect(mFileViewStack, SIGNAL(selectionChanged()),
+	connect(mFileViewController, SIGNAL(selectionChanged()),
 		this, SLOT(updateImageActions()) );
 
 	// Bookmarks
@@ -1020,9 +1013,9 @@ void MainWindow::createObjectInteractions() {
 	new KBookmarkMenu(manager, bookmarkOwner, bookmark->popupMenu(), 0, true);
 
 	connect(bookmarkOwner,SIGNAL(openURL(const KURL&)),
-		mFileViewStack,SLOT(setDirURL(const KURL&)) );
+		mFileViewController,SLOT(setDirURL(const KURL&)) );
 
-	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
 		bookmarkOwner,SLOT(setURL(const KURL&)) );
 }
 
@@ -1065,50 +1058,50 @@ void MainWindow::createConnections() {
 
 	// Dir view connections
 	connect(mDirViewController, SIGNAL(urlChanged(const KURL&)),
-		mFileViewStack, SLOT(setDirURL(const KURL&)) );
+		mFileViewController, SLOT(setDirURL(const KURL&)) );
 	connect(mDirViewController, SIGNAL(urlRenamed(const KURL&, const KURL&)),
 		this, SLOT(slotDirRenamed(const KURL&, const KURL&)) );
 
 	// Bookmark view connections
 	connect(mBookmarkViewController, SIGNAL(openURL(const KURL&)),
-		mFileViewStack,SLOT(setDirURL(const KURL&)) );
-	connect(mFileViewStack, SIGNAL(directoryChanged(const KURL&)),
+		mFileViewController,SLOT(setDirURL(const KURL&)) );
+	connect(mFileViewController, SIGNAL(directoryChanged(const KURL&)),
 		mBookmarkViewController, SLOT(setURL(const KURL&)) );
 
 	// Pixmap view connections
 	connect(mImageView,SIGNAL(selectPrevious()),
-		mFileViewStack,SLOT(slotSelectPrevious()) );
+		mFileViewController,SLOT(slotSelectPrevious()) );
 	connect(mImageView,SIGNAL(selectNext()),
-		mFileViewStack,SLOT(slotSelectNext()) );
+		mFileViewController,SLOT(slotSelectNext()) );
 	connect(mImageView,SIGNAL(zoomChanged(double)),
 		this,SLOT(updateStatusInfo()) );
 	connect(mImageView,SIGNAL(doubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
 
 	// File view connections
-	connect(mFileViewStack,SIGNAL(urlChanged(const KURL&)),
+	connect(mFileViewController,SIGNAL(urlChanged(const KURL&)),
 		mDocument,SLOT(setURL(const KURL&)) );
-	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
 		this,SLOT(slotDirURLChanged(const KURL&)) );
-	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
 		mDirViewController,SLOT(setURL(const KURL&)) );
-	connect(mFileViewStack,SIGNAL(directoryChanged(const KURL&)),
+	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
 		mHistory,SLOT(addURLToHistory(const KURL&)) );
 
-	connect(mFileViewStack,SIGNAL(completed()),
+	connect(mFileViewController,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
-	connect(mFileViewStack,SIGNAL(canceled()),
+	connect(mFileViewController,SIGNAL(canceled()),
 		this,SLOT(updateStatusInfo()) );
-	connect(mFileViewStack,SIGNAL(imageDoubleClicked()),
+	connect(mFileViewController,SIGNAL(imageDoubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
-	connect(mFileViewStack,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
+	connect(mFileViewController,SIGNAL(shownFileItemRefreshed(const KFileItem*)),
 		this,SLOT(slotShownFileItemRefreshed(const KFileItem*)) );
-	connect(mFileViewStack,SIGNAL(sortingChanged()),
+	connect(mFileViewController,SIGNAL(sortingChanged()),
 		this, SLOT(updateStatusInfo()) );
 
 	// History connections
 	connect(mHistory, SIGNAL(urlChanged(const KURL&)),
-		mFileViewStack, SLOT(setDirURL(const KURL&)) );
+		mFileViewController, SLOT(setDirURL(const KURL&)) );
 	
 	// Document connections
 	connect(mDocument,SIGNAL(loading()),
@@ -1116,9 +1109,9 @@ void MainWindow::createConnections() {
 	connect(mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotImageLoaded()) );
 	connect(mDocument,SIGNAL(saved(const KURL&)),
-		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
+		mFileViewController,SLOT(updateThumbnail(const KURL&)) );
 	connect(mDocument,SIGNAL(reloaded(const KURL&)),
-		mFileViewStack,SLOT(updateThumbnail(const KURL&)) );
+		mFileViewController,SLOT(updateThumbnail(const KURL&)) );
 
 	// Location bar
 	connect(mURLEdit, SIGNAL(activated(const QString &)),
@@ -1200,7 +1193,7 @@ void MainWindow::loadPlugins() {
 	
 	LOG("Load plugins");
 	// Sets up the plugin interface, and load the plugins
-	KIPIInterface* interface = new KIPIInterface(this, mFileViewStack);
+	KIPIInterface* interface = new KIPIInterface(this, mFileViewController);
 	mPluginLoader = new KIPI::PluginLoader(QStringList(), interface );
 	connect( mPluginLoader, SIGNAL( replug() ), this, SLOT( slotReplug() ) );
 	mPluginLoader->loadPlugins();

@@ -18,14 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef FILEVIEWSTACK_H
-#define FILEVIEWSTACK_H
+#ifndef FILEVIEWCONTROLLER_H
+#define FILEVIEWCONTROLLER_H
 
 // Qt 
 #include <qdir.h>
 #include <qobject.h>
 #include <qslider.h>
-#include <qwidgetstack.h>
 
 // KDE
 #include <kdirlister.h>
@@ -53,7 +52,7 @@ class FileThumbnailView;
 class ImageLoader;
 
 
-class FileViewStackPrivate;
+class FileViewControllerPrivate;
 
 // internal class which allows dynamically turning off visual error reporting
 class DirLister : public KDirLister {
@@ -70,17 +69,18 @@ private:
 	bool mCheck;
 };
 
-class LIBGWENVIEW_EXPORT FileViewStack : public QWidgetStack {
+class LIBGWENVIEW_EXPORT FileViewController : public QObject {
 Q_OBJECT
 
 public:
 	enum Mode { FILE_LIST, THUMBNAIL};
 
-	FileViewStack(QWidget* parent,KActionCollection*);
-	~FileViewStack();
+	FileViewController(QWidget* parent,KActionCollection*);
+	~FileViewController();
 
 	// Properties
 	void setMode(Mode);
+	QWidget* widget() const;
 	
 	QString fileName() const;
 	KURL url() const;
@@ -104,8 +104,6 @@ public:
 	KRadioAction* sideThumbnailMode() const { return mSideThumbnailMode; }
 	KRadioAction* bottomThumbnailMode() const { return mBottomThumbnailMode; }
 	KToggleAction* showDotFiles() const { return mShowDotFiles; }
-
-	void setFocus();
 
 	KURL::List selectedURLs() const;
 	KURL::List selectedImageURLs() const;
@@ -208,7 +206,7 @@ private slots:
 	void prefetchDone();
 	
 private:
-	FileViewStackPrivate* d;
+	FileViewControllerPrivate* d;
 	Mode mMode;
 	FileDetailView* mFileDetailView;
 	FileThumbnailView* mFileThumbnailView;

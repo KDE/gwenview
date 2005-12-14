@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qpopupmenu.h>
+#include <qvbox.h>
+#include <qwidgetstack.h>
 
 // KDE
 #include <kaction.h>
@@ -31,12 +33,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kinputdialog.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
 #include <kprotocolinfo.h>
 #include <kstdaction.h>
+#include <ktoolbar.h>
 #include <kurldrag.h>
-#include <klistview.h>
 #include <kio/job.h>
 #include <kio/file.h>
 
@@ -53,7 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "thumbnailsize.h"
 #include "fileviewconfig.h"
 
-#include "fileviewstack.moc"
+#include "fileviewcontroller.moc"
 namespace Gwenview {
 
 #undef ENABLE_LOG
@@ -70,35 +73,40 @@ static const int SLIDER_RESOLUTION=4;
 
 //-----------------------------------------------------------------------
 //
-// FileViewStackPrivate
+// FileViewControllerPrivate
 //
 //-----------------------------------------------------------------------
-class FileViewStackPrivate {
+class FileViewControllerPrivate {
 public:
-	~FileViewStackPrivate() {
+	~FileViewControllerPrivate() {
 		delete mSliderTracker;
 	}
+	QVBox* mWidget;
+	KToolBar* mToolBar;
+	QWidgetStack* mStack;
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
-	KAction* mThumbnailDetailsDialogAction;
 	TipTracker* mSliderTracker;
 };
 
 
 //-----------------------------------------------------------------------
 //
-// FileViewStack
+// FileViewController
 //
 //-----------------------------------------------------------------------
-FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection)
-: QWidgetStack(parent)
+FileViewController::FileViewController(QWidget* parent,KActionCollection* actionCollection)
+: QObject(this)
 , mMode(FILE_LIST)
 , mPrefetch( NULL )
 , mChangeDirStatus(CHANGE_DIR_STATUS_NONE)
 , mBrowsing(false)
 , mSelecting(false)
 {
-	d=new FileViewStackPrivate;
+	d=new FileViewControllerPrivate;
+	d->mWidget=new QVBox(parent);
+	d->mToolBar=new KToolBar(d->mWidget, "", true);
+	d->mStack=new QWidgetStack(d->mWidget);
 
 	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
@@ -136,7 +144,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	mBottomThumbnailMode->setExclusiveGroup("thumbnails");
 
 	// Size slider
-	mSizeSlider=new QSlider(Horizontal, this);
+	mSizeSlider=new QSlider(Horizontal, d->mToolBar);
 	mSizeSlider->setMaximumWidth(150);
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
@@ -145,7 +153,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 	connect(mSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(updateThumbnailSize(int)) );
 	connect(mListMode, SIGNAL(toggled(bool)), mSizeSlider, SLOT(setDisabled(bool)) );
-	new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "thumbnails_slider");
+	KAction* sliderAction=new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "size_slider");
 	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
 
@@ -165,7 +173,7 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 
 	// Dir lister
 	mDirLister=new DirLister;
-	mDirLister->setMainWindow(topLevelWidget());
+	mDirLister->setMainWindow(d->mWidget->topLevelWidget());
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 
@@ -192,8 +200,8 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this,SIGNAL(canceled()) );
 
 	// File detail widget
-	mFileDetailView=new FileDetailView(this,"filedetailview");
-	addWidget(mFileDetailView,0);
+	mFileDetailView=new FileDetailView(d->mStack, "filedetailview");
+	d->mStack->addWidget(mFileDetailView,0);
 	mFileDetailView->viewport()->installEventFilter(this);
 
 	connect(mFileDetailView,SIGNAL(executed(QListViewItem*)),
@@ -218,8 +226,8 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SIGNAL(selectionChanged()) );
 
 	// Thumbnail widget
-	mFileThumbnailView=new FileThumbnailView(this);
-	addWidget(mFileThumbnailView,1);
+	mFileThumbnailView=new FileThumbnailView(d->mStack);
+	d->mStack->addWidget(mFileThumbnailView,1);
 	mFileThumbnailView->viewport()->installEventFilter(this);
 
 	connect(mFileThumbnailView,SIGNAL(executed(QIconViewItem*)),
@@ -240,12 +248,18 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 		this, SLOT(slotViewDoubleClicked()) );
 	connect(mFileThumbnailView, SIGNAL(selectionChanged()),
 		this, SIGNAL(selectionChanged()) );
-
+	
 	// Thumbnail details dialog
-	d->mThumbnailDetailsDialogAction=new KAction(i18n("Edit Thumbnail Details..."), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog");
+	KAction* thumbnailDetailsDialogAction=new KAction(i18n("Edit Thumbnail Details..."), "configure", 0, mFileThumbnailView, SLOT(showThumbnailDetailsDialog()), actionCollection, "thumbnail_details_dialog");
 	connect(mBottomThumbnailMode, SIGNAL(toggled(bool)),
-		d->mThumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
-
+		thumbnailDetailsDialogAction, SLOT(setEnabled(bool)) );
+	
+	// Fill toolbar
+	mListMode->plug(d->mToolBar);
+	mSideThumbnailMode->plug(d->mToolBar);
+	mBottomThumbnailMode->plug(d->mToolBar);
+	sliderAction->plug(d->mToolBar);
+	thumbnailDetailsDialogAction->plug(d->mToolBar);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
 	initDirListerFilter();
@@ -254,13 +268,8 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
 	mSizeSlider->setEnabled(startWithThumbnails);
 
-	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
-	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
 	if (startWithThumbnails) {
-		QIconView::ItemTextPos pos;
-		pos=QIconView::ItemTextPos( FileViewConfig::thumbnailTextPos() );
-		mFileThumbnailView->setItemTextPos(pos);
-		if (pos==QIconView::Right) {
+		if (mFileThumbnailView->itemTextPos()==QIconView::Right) {
 			mSideThumbnailMode->setChecked(true);
 		} else {
 			mBottomThumbnailMode->setChecked(true);
@@ -271,23 +280,17 @@ FileViewStack::FileViewStack(QWidget* parent,KActionCollection* actionCollection
 	} else {
 		mListMode->setChecked(true);
 	}
-	d->mThumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
+	thumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 }
 
 
-FileViewStack::~FileViewStack() {
-	// Store all settings which can be changed from the widget itself
+FileViewController::~FileViewController() {
+	// Do not access children of mWidget here, they may have already been
+	// deleted since mWidget is not a child of this.
 	FileViewConfig::setStartWithThumbnails(mMode==THUMBNAIL);
-	FileViewConfig::setThumbnailDetails(mFileThumbnailView->itemDetails());
-	FileViewConfig::setThumbnailTextPos( int(mFileThumbnailView->itemTextPos()) );
 	FileViewConfig::writeConfig();
 	delete d;
 	delete mDirLister;
-}
-
-
-void FileViewStack::setFocus() {
-	currentFileView()->widget()->setFocus();
 }
 
 
@@ -295,7 +298,7 @@ void FileViewStack::setFocus() {
  * Do not let double click events propagate if Ctrl or Shift is down, to avoid
  * toggling fullscreen
  */
-bool FileViewStack::eventFilter(QObject*, QEvent* event) {
+bool FileViewController::eventFilter(QObject*, QEvent* event) {
 	if (event->type()!=QEvent::MouseButtonDblClick) return false;
 
 	QMouseEvent* mouseEvent=static_cast<QMouseEvent*>(event);
@@ -306,12 +309,17 @@ bool FileViewStack::eventFilter(QObject*, QEvent* event) {
 }
 
 
+QWidget* FileViewController::widget() const {
+	return d->mWidget;
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Public slots
 //
 //-----------------------------------------------------------------------
-void FileViewStack::setDirURL(const KURL& url) {
+void FileViewController::setDirURL(const KURL& url) {
 	LOG(url.prettyURL());
 	if ( mDirURL.equals(url,true) ) {
 		LOG("Same URL");
@@ -338,60 +346,60 @@ void FileViewStack::setDirURL(const KURL& url) {
  * Sets the file to select once the dir lister is done. If it's not running,
  * immediatly selects the file.
  */
-void FileViewStack::setFileNameToSelect(const QString& fileName) {
+void FileViewController::setFileNameToSelect(const QString& fileName) {
 	mFileNameToSelect=fileName;
 	if (mDirLister->isFinished()) {
 		browseToFileNameToSelect();
 	}
 }
 
-void FileViewStack::prefetch( KFileItem* item ) {
+void FileViewController::prefetch( KFileItem* item ) {
 	prefetchDone();
 	if( item == NULL ) return;
 	mPrefetch = ImageLoader::loader( item->url(), this, BUSY_PRELOADING );
 	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
 }
 
-void FileViewStack::prefetchDone() {
+void FileViewController::prefetchDone() {
 	if( mPrefetch != NULL ) {
 		mPrefetch->release( this );
 		mPrefetch = NULL;
 	}
 }
 
-void FileViewStack::slotSelectFirst() {
+void FileViewController::slotSelectFirst() {
 	browseTo( findFirstImage());
 	prefetch( findNextImage());
 }
 
-void FileViewStack::slotSelectLast() {
+void FileViewController::slotSelectLast() {
 	browseTo(findLastImage());
 	prefetch( findPreviousImage());
 }
 
-void FileViewStack::slotSelectPrevious() {
+void FileViewController::slotSelectPrevious() {
 	browseTo(findPreviousImage());
 	prefetch( findPreviousImage());
 }
 
-void FileViewStack::slotSelectNext() {
+void FileViewController::slotSelectNext() {
 	browseTo(findNextImage());
 	prefetch( findNextImage());
 }
 
-void FileViewStack::slotSelectPreviousDir() {
+void FileViewController::slotSelectPreviousDir() {
 	mChangeDirStatus = CHANGE_DIR_STATUS_PREV;
 	mDirLister->clearError();
 	mDirLister->openURL(mDirURL.upURL());
 }
 
-void FileViewStack::slotSelectNextDir() {
+void FileViewController::slotSelectNextDir() {
 	mChangeDirStatus = CHANGE_DIR_STATUS_NEXT;
 	mDirLister->clearError();
 	mDirLister->openURL(mDirURL.upURL());
 }
 
-void FileViewStack::slotSelectFirstSubDir() {
+void FileViewController::slotSelectFirstSubDir() {
 	KFileItem* item=currentFileView()->firstFileItem();
 	while (item && !Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
@@ -410,7 +418,7 @@ void FileViewStack::slotSelectFirstSubDir() {
 }
 
 
-void FileViewStack::browseTo(KFileItem* item) {
+void FileViewController::browseTo(KFileItem* item) {
 	prefetchDone();
 	if (mBrowsing) return;
 	mBrowsing = true;
@@ -428,7 +436,7 @@ void FileViewStack::browseTo(KFileItem* item) {
 }
 
 
-void FileViewStack::browseToFileNameToSelect() {
+void FileViewController::browseToFileNameToSelect() {
 	// There's something to select
 	if (!mFileNameToSelect.isEmpty()) {
 		browseTo(findItemByFileName(mFileNameToSelect));
@@ -454,7 +462,7 @@ void FileViewStack::browseToFileNameToSelect() {
 }
 
 
-void FileViewStack::updateThumbnail(const KURL& url) {
+void FileViewController::updateThumbnail(const KURL& url) {
 	if (mMode==FILE_LIST) return;
 
 	KFileItem* item=mDirLister->findByURL(url);
@@ -468,7 +476,7 @@ void FileViewStack::updateThumbnail(const KURL& url) {
 // Private slots
 //
 //-----------------------------------------------------------------------
-void FileViewStack::slotViewExecuted() {
+void FileViewController::slotViewExecuted() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return;
 
@@ -488,7 +496,7 @@ void FileViewStack::slotViewExecuted() {
 }
 
 
-void FileViewStack::slotViewClicked() {
+void FileViewController::slotViewClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item || Archive::fileItemIsDirOrArchive(item)) return;
@@ -499,14 +507,14 @@ void FileViewStack::slotViewClicked() {
 }
 
 
-void FileViewStack::slotViewDoubleClicked() {
+void FileViewController::slotViewDoubleClicked() {
 	updateActions();
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (item && !Archive::fileItemIsDirOrArchive(item)) emit imageDoubleClicked();
 }
 
 
-void FileViewStack::updateViewMode() {
+void FileViewController::updateViewMode() {
 	if (mListMode->isChecked()) {
 		setMode(FILE_LIST);
 		return;
@@ -535,7 +543,7 @@ void FileViewStack::updateViewMode() {
 }
 
 
-void FileViewStack::updateThumbnailSize(int size) {
+void FileViewController::updateThumbnailSize(int size) {
 	size*=SLIDER_RESOLUTION;
 	d->mSliderTracker->setText(i18n("Thumbnail size: %1x%2").arg(size).arg(size));
 	FileViewConfig::setThumbnailSize(size);
@@ -544,13 +552,13 @@ void FileViewStack::updateThumbnailSize(int size) {
 }
 
 
-void FileViewStack::toggleShowDotFiles() {
+void FileViewController::toggleShowDotFiles() {
 	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->openURL(mDirURL);
 }
 
 
-void FileViewStack::updateSortMenu(QDir::SortSpec _spec) {
+void FileViewController::updateSortMenu(QDir::SortSpec _spec) {
 	int	spec=_spec & (QDir::Name | QDir::Time | QDir::Size);
 	int item;
 	switch (spec) {
@@ -571,7 +579,7 @@ void FileViewStack::updateSortMenu(QDir::SortSpec _spec) {
 }
 
 
-void FileViewStack::setSorting() {
+void FileViewController::setSorting() {
 	QDir::SortSpec spec;
 
 	switch (d->mSortAction->currentItem()) {
@@ -600,7 +608,7 @@ void FileViewStack::setSorting() {
 // Context menu
 //
 //-----------------------------------------------------------------------
-void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
+void FileViewController::openContextMenu(const QPoint& pos, bool onItem) {
 	int selectionSize;
 	ExternalToolContext* externalToolContext;
 
@@ -616,7 +624,7 @@ void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
 			this, mDirURL);
 	}
 
-	QPopupMenu menu(this);
+	QPopupMenu menu(d->mStack);
 
 
 	menu.insertItem(
@@ -661,12 +669,12 @@ void FileViewStack::openContextMenu(const QPoint& pos, bool onItem) {
 }
 
 
-void FileViewStack::openContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
+void FileViewController::openContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
 	openContextMenu(pos, item!=0);
 }
 
 
-void FileViewStack::openContextMenu(QIconViewItem* item,const QPoint& pos) {
+void FileViewController::openContextMenu(QIconViewItem* item,const QPoint& pos) {
 	openContextMenu(pos, item!=0);
 }
 
@@ -676,7 +684,7 @@ void FileViewStack::openContextMenu(QIconViewItem* item,const QPoint& pos) {
 // Drop URL menu
 //
 //-----------------------------------------------------------------------
-void FileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
+void FileViewController::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 	KURL dest;
 
 	if (item) {
@@ -688,7 +696,7 @@ void FileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 	KURL::List urls;
 	if (!KURLDrag::decode(event,urls)) return;
 
-	FileOperation::openDropURLMenu(this, urls, dest);
+	FileOperation::openDropURLMenu(d->mStack, urls, dest);
 }
 
 
@@ -697,7 +705,7 @@ void FileViewStack::openDropURLMenu(QDropEvent* event, KFileItem* item) {
 // File operations
 //
 //-----------------------------------------------------------------------
-KURL::List FileViewStack::selectedURLs() const {
+KURL::List FileViewController::selectedURLs() const {
 	KURL::List list;
 
 	KFileItemListIterator it( *currentFileView()->selectedItems() );
@@ -712,7 +720,7 @@ KURL::List FileViewStack::selectedURLs() const {
 }
 
 
-KURL::List FileViewStack::selectedImageURLs() const {
+KURL::List FileViewController::selectedImageURLs() const {
 	KURL::List list;
 
 	KFileItemListIterator it( *currentFileView()->selectedItems() );
@@ -730,36 +738,36 @@ KURL::List FileViewStack::selectedImageURLs() const {
 }
 
 
-void FileViewStack::openParentDir() {
+void FileViewController::openParentDir() {
 	KURL url(mDirURL.upURL());
 	emit urlChanged(url);
 	emit directoryChanged(url);
 }
 
 
-void FileViewStack::copyFiles() {
+void FileViewController::copyFiles() {
 	KURL::List list=selectedURLs();
-	FileOperation::copyTo(list,this);
+	FileOperation::copyTo(list, d->mStack);
 }
 
-void FileViewStack::linkFiles() {
+void FileViewController::linkFiles() {
 	KURL::List list=selectedURLs();
-	FileOperation::linkTo(list,this);
+	FileOperation::linkTo(list, d->mStack);
 }
 
-void FileViewStack::moveFiles() {
+void FileViewController::moveFiles() {
 	KURL::List list=selectedURLs();
-	FileOperation::moveTo(list,this);
-}
-
-
-void FileViewStack::deleteFiles() {
-	KURL::List list=selectedURLs();
-	FileOperation::del(list,this);
+	FileOperation::moveTo(list, d->mStack);
 }
 
 
-void FileViewStack::showFileProperties() {
+void FileViewController::deleteFiles() {
+	KURL::List list=selectedURLs();
+	FileOperation::del(list, d->mStack);
+}
+
+
+void FileViewController::showFileProperties() {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	if (selectedItems->count()>0) {
 		(void)new KPropertiesDialog(*selectedItems);
@@ -769,7 +777,7 @@ void FileViewStack::showFileProperties() {
 }
 
 
-void FileViewStack::renameFile() {
+void FileViewController::renameFile() {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	const KFileItem* item;
 	if (selectedItems->count()>0) {
@@ -777,7 +785,7 @@ void FileViewStack::renameFile() {
 	} else {
 		item=currentFileView()->shownFileItem();
 	}
-	if (item) FileOperation::rename(item->url(),this );
+	if (item) FileOperation::rename(item->url(), d->mStack);
 }
 
 
@@ -786,14 +794,14 @@ void FileViewStack::renameFile() {
 // Properties
 //
 //-----------------------------------------------------------------------
-QString FileViewStack::fileName() const {
+QString FileViewController::fileName() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return "";
 	return item->text();
 }
 
 
-FileViewBase* FileViewStack::currentFileView() const {
+FileViewBase* FileViewController::currentFileView() const {
 	if (mMode==FILE_LIST) {
 		return mFileDetailView;
 	} else {
@@ -802,7 +810,7 @@ FileViewBase* FileViewStack::currentFileView() const {
 }
 
 
-uint FileViewStack::fileCount() const {
+uint FileViewController::fileCount() const {
 	uint count=currentFileView()->count();
 
 	KFileItem* item=currentFileView()->firstFileItem();
@@ -814,7 +822,7 @@ uint FileViewStack::fileCount() const {
 }
 
 
-int FileViewStack::shownFilePosition() const {
+int FileViewController::shownFilePosition() const {
 	KFileItem* shownItem=currentFileView()->shownFileItem();
 	if (!shownItem) return -1;
 	KFileItem* item=currentFileView()->firstFileItem();
@@ -829,24 +837,24 @@ int FileViewStack::shownFilePosition() const {
 }
 
 
-KURL FileViewStack::url() const {
+KURL FileViewController::url() const {
 	KFileItem* item=currentFileView()->currentFileItem();
 	if (!item) return mDirURL;
 	return item->url();
 }
 
-KURL FileViewStack::dirURL() const {
+KURL FileViewController::dirURL() const {
 	return mDirURL;
 }
 
 
-uint FileViewStack::selectionSize() const {
+uint FileViewController::selectionSize() const {
 	const KFileItemList* selectedItems=currentFileView()->selectedItems();
 	return selectedItems->count();
 }
 
 
-void FileViewStack::setMode(FileViewStack::Mode mode) {
+void FileViewController::setMode(FileViewController::Mode mode) {
 	const KFileItemList* items;
 	FileViewBase* oldView;
 	FileViewBase* newView;
@@ -864,7 +872,7 @@ void FileViewStack::setMode(FileViewStack::Mode mode) {
 
 	bool wasFocused=oldView->widget()->hasFocus();
 	// Show the new active view
-	raiseWidget(newView->widget());
+	d->mStack->raiseWidget(newView->widget());
 	if (wasFocused) newView->widget()->setFocus();
 
 	// Fill the new view
@@ -893,7 +901,7 @@ void FileViewStack::setMode(FileViewStack::Mode mode) {
 }
 
 
-void FileViewStack::updateFromSettings() {
+void FileViewController::updateFromSettings() {
 	initDirListerFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
@@ -901,12 +909,12 @@ void FileViewStack::updateFromSettings() {
 }
 
 
-void FileViewStack::setSilentMode( bool silent ) {
+void FileViewController::setSilentMode( bool silent ) {
 	mDirLister->setCheck( !silent );
 }
 
 
-void FileViewStack::retryURL() {
+void FileViewController::retryURL() {
 	mDirLister->clearError();
 	mDirLister->openURL( url());
 }
@@ -929,7 +937,7 @@ void DirLister::handleError( KIO::Job* job ) {
 // Dir lister slots
 //
 //-----------------------------------------------------------------------
-void FileViewStack::dirListerDeleteItem(KFileItem* item) {
+void FileViewController::dirListerDeleteItem(KFileItem* item) {
 	KFileItem* newShownItem=0L;
 	const KFileItem* shownItem=currentFileView()->shownFileItem();
 	if (shownItem==item) {
@@ -950,14 +958,14 @@ void FileViewStack::dirListerDeleteItem(KFileItem* item) {
 }
 
 
-void FileViewStack::dirListerNewItems(const KFileItemList& items) {
+void FileViewController::dirListerNewItems(const KFileItemList& items) {
 	LOG("");
 	mThumbnailsNeedUpdate=true;
 	currentFileView()->addItemList(items);
 }
 
 
-void FileViewStack::dirListerRefreshItems(const KFileItemList& list) {
+void FileViewController::dirListerRefreshItems(const KFileItemList& list) {
 	LOG("");
 	const KFileItem* item=currentFileView()->shownFileItem();
 	KFileItemListIterator it(list);
@@ -970,7 +978,7 @@ void FileViewStack::dirListerRefreshItems(const KFileItemList& list) {
 }
 
 
-void FileViewStack::refreshItems(const KURL::List& urls) {
+void FileViewController::refreshItems(const KURL::List& urls) {
 	LOG("");
 	KFileItemList list;
 	for( KURL::List::ConstIterator it = urls.begin();
@@ -987,18 +995,18 @@ void FileViewStack::refreshItems(const KURL::List& urls) {
 }
 
 
-void FileViewStack::dirListerClear() {
+void FileViewController::dirListerClear() {
 	currentFileView()->clear();
 }
 
 
-void FileViewStack::dirListerStarted() {
+void FileViewController::dirListerStarted() {
 	LOG("");
 	mThumbnailsNeedUpdate=false;
 }
 
 
-void FileViewStack::dirListerCompleted() {
+void FileViewController::dirListerCompleted() {
 	LOG("");
 	// Delay the code to be executed when the dir lister has completed its job
 	// to avoid crash in KDirLister (see bug #57991)
@@ -1006,7 +1014,7 @@ void FileViewStack::dirListerCompleted() {
 }
 
 
-void FileViewStack::delayedDirListerCompleted() {
+void FileViewController::delayedDirListerCompleted() {
 	// The call to sort() is a work around to a bug which causes
 	// FileThumbnailView::firstFileItem() to return a wrong item.  This work
 	// around is not in firstFileItem() because it's const and sort() is a non
@@ -1055,7 +1063,7 @@ void FileViewStack::delayedDirListerCompleted() {
 }
 
 
-void FileViewStack::dirListerCanceled() {
+void FileViewController::dirListerCanceled() {
 	if (mMode!=FILE_LIST) {
 		mFileThumbnailView->stopThumbnailUpdate();
 	}
@@ -1069,7 +1077,7 @@ void FileViewStack::dirListerCanceled() {
 // Private
 //
 //-----------------------------------------------------------------------
-void FileViewStack::initDirListerFilter() {
+void FileViewController::initDirListerFilter() {
 	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/x-xcursor");
@@ -1084,7 +1092,7 @@ void FileViewStack::initDirListerFilter() {
 }
 
 
-void FileViewStack::updateActions() {
+void FileViewController::updateActions() {
 	KFileItem* firstImage=findFirstImage();
 
 	// There isn't any image, no need to continue
@@ -1117,7 +1125,7 @@ void FileViewStack::updateActions() {
 }
 
 
-void FileViewStack::emitURLChanged() {
+void FileViewController::emitURLChanged() {
 	KFileItem* item=currentFileView()->currentFileItem();
 	currentFileView()->setShownFileItem(item);
 
@@ -1127,7 +1135,7 @@ void FileViewStack::emitURLChanged() {
 	emit urlChanged(tmp);
 }
 
-KFileItem* FileViewStack::findFirstImage() const {
+KFileItem* FileViewController::findFirstImage() const {
 	KFileItem* item=currentFileView()->firstFileItem();
 	while (item && Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->nextItem(item);
@@ -1140,7 +1148,7 @@ KFileItem* FileViewStack::findFirstImage() const {
 	return item;
 }
 
-KFileItem* FileViewStack::findLastImage() const {
+KFileItem* FileViewController::findLastImage() const {
 	KFileItem* item=currentFileView()->items()->getLast();
 	while (item && Archive::fileItemIsDirOrArchive(item)) {
 		item=currentFileView()->prevItem(item);
@@ -1148,7 +1156,7 @@ KFileItem* FileViewStack::findLastImage() const {
 	return item;
 }
 
-KFileItem* FileViewStack::findPreviousImage() const {
+KFileItem* FileViewController::findPreviousImage() const {
 	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
@@ -1157,7 +1165,7 @@ KFileItem* FileViewStack::findPreviousImage() const {
 	return item;
 }
 
-KFileItem* FileViewStack::findNextImage() const {
+KFileItem* FileViewController::findNextImage() const {
 	KFileItem* item=currentFileView()->shownFileItem();
 	if (!item) return 0L;
 	do {
@@ -1166,7 +1174,7 @@ KFileItem* FileViewStack::findNextImage() const {
 	return item;
 }
 
-KFileItem* FileViewStack::findItemByFileName(const QString& fileName) const {
+KFileItem* FileViewController::findItemByFileName(const QString& fileName) const {
 	KFileItem *item;
 	if (fileName.isEmpty()) return 0L;
 	for (item=currentFileView()->firstFileItem();
@@ -1179,14 +1187,14 @@ KFileItem* FileViewStack::findItemByFileName(const QString& fileName) const {
 }
 
 
-void FileViewStack::makeDir() {
+void FileViewController::makeDir() {
 	KIO::Job* job;
 
 	bool ok;
 	QString newDir=KInputDialog::getText(
 			i18n("Creating Folder"),
 			i18n("Enter the name of the new folder:"),
-			QString::null, &ok, this);
+			QString::null, &ok, d->mStack);
 	if (!ok) return;
 
 	KURL newURL(url().directory());
@@ -1196,9 +1204,9 @@ void FileViewStack::makeDir() {
 	connect( job, SIGNAL(result(KIO::Job*)), this, SLOT(slotDirMade(KIO::Job*)) );
 }
 
-void FileViewStack::slotDirMade(KIO::Job* job) {
+void FileViewController::slotDirMade(KIO::Job* job) {
 	if (job->error()) {
-		job->showErrorDialog(this);
+		job->showErrorDialog(d->mStack);
 		return;
 	}
 }

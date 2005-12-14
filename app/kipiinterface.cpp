@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "gvcore/archive.h"
 #include "gvcore/fileviewbase.h"
-#include "gvcore/fileviewstack.h"
+#include "gvcore/fileviewcontroller.h"
 #include "imageutils/jpegcontent.h"
 #include "kipiinterface.moc"
 namespace Gwenview {
@@ -106,11 +106,11 @@ public:
 
 
 struct KIPIInterfacePrivate {
-	FileViewStack* mFileView;
+	FileViewController* mFileView;
 };
 
 
-KIPIInterface::KIPIInterface( QWidget* parent, FileViewStack* fileView)
+KIPIInterface::KIPIInterface( QWidget* parent, FileViewController* fileView)
 :KIPI::Interface(parent, "Gwenview kipi interface") {
 	d=new KIPIInterfacePrivate;
 	d->mFileView=fileView;

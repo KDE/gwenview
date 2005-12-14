@@ -42,6 +42,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kwordwrap.h>
 
 // Local
+#include "fileviewconfig.h"
 #include "filethumbnailviewitem.h"
 #include "archive.h"
 #include "thumbnailloadjob.h"
@@ -165,7 +166,8 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	d->mWaitPixmap=QPixmap(::locate("appdata", "thumbnail/wait.png"));
 	d->mProgressWidget=0L;
 	d->mThumbnailUpdateTimer=new QTimer(this);
-	d->mItemDetails=FILENAME | IMAGESIZE;
+	d->mMarginSize=FileViewConfig::thumbnailMarginSize();
+	d->mItemDetails=FileViewConfig::thumbnailDetails();
 	d->mPrefetch = NULL;
 
 	setAutoArrange(true);
@@ -175,6 +177,7 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	setShowToolTips(true);
 	setSpacing(0);
 	setAcceptDrops(true);
+	setItemTextPos( QIconView::ItemTextPos(FileViewConfig::thumbnailTextPos()) );
 
 	// We can't use KIconView::Execute mode because in this mode the current
 	// item is unselected after being clicked, so we use KIconView::Select mode
@@ -204,6 +207,9 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 
 FileThumbnailView::~FileThumbnailView() {
 	stopThumbnailUpdate();
+	FileViewConfig::setThumbnailDetails(d->mItemDetails);
+	FileViewConfig::setThumbnailTextPos( int(itemTextPos()) );
+	FileViewConfig::writeConfig();
 	delete d;
 }
 

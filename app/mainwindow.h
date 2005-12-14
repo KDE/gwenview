@@ -51,7 +51,6 @@ class KFileItem;
 class KHistoryCombo;
 class KListView;
 class KToggleAction;
-class KToolBar;
 class KToolBarPopupAction;
 class KURLCompletion;
 
@@ -60,7 +59,7 @@ class CaptionFormatter;
 class BookmarkViewController;
 class DirViewController;
 class Document;
-class FileViewStack;
+class FileViewController;
 class History;
 class MetaEdit;
 class ImageView;
@@ -89,7 +88,7 @@ private:
 	QLabel* mSBHintLabel;
 	QTimer* mHintTimer;
 
-	FileViewStack* mFileViewStack;
+	FileViewController* mFileViewController;
 	DirViewController* mDirViewController;
 	BookmarkViewController* mBookmarkViewController;
 	ImageView* mImageView;
@@ -130,8 +129,6 @@ private:
 	KIPI::PluginLoader* mPluginLoader;
 #endif
 
-	KToolBar* mFileViewToolBar;
-	KToolBar* mBookmarkToolBar;
 	std::auto_ptr<CaptionFormatter> mCaptionFormatter;
 
 	void hideToolBars();

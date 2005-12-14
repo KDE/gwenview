@@ -29,13 +29,13 @@ namespace Gwenview {
 
 class KIPIInterfacePrivate;
 
-class FileViewStack;
+class FileViewController;
 
 class KIPIInterface :public KIPI::Interface {
 	Q_OBJECT
 
 public:
-	KIPIInterface( QWidget* parent, FileViewStack*);
+	KIPIInterface( QWidget* parent, FileViewController*);
 	virtual ~KIPIInterface();
 
 	KIPI::ImageCollection currentAlbum();

@@ -26,7 +26,7 @@ libgwenviewcore_la_SOURCES = \
 	externaltoolaction.cpp \
 	externaltooldialogbase.ui \
 	externaltooldialog.cpp \
-	fileviewstack.cpp \
+	fileviewcontroller.cpp \
 	filethumbnailview.cpp \
 	fileoperation.cpp \
 	fileopobject.cpp \

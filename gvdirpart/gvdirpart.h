@@ -31,7 +31,7 @@ class KToggleAction;
 namespace Gwenview {
 
 class ImageView;
-class FileViewStack;
+class FileViewController;
 class Document;
 class SlideShow;
 
@@ -146,7 +146,7 @@ protected:
 	 * Shows the directory's files and folders
 	 */
 
-	FileViewStack* mFilesView;
+	FileViewController* mFileViewController;
 
 	/**
 	 * This inherits from KParts::BrowserExtention and supplies

@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <gvcore/cache.h>
 #include <gvcore/document.h>
 #include <gvcore/fileviewbase.h>
-#include <gvcore/fileviewstack.h>
+#include <gvcore/fileviewcontroller.h>
 #include <gvcore/printdialog.h>
 #include <gvcore/imageview.h>
 #include <gvcore/slideshow.h>
@@ -70,10 +70,10 @@ private:
 };
 
 
-class GVDirPartFileView : public FileViewStack {
+class GVDirPartFileViewController : public FileViewController {
 public:
-	GVDirPartFileView(QWidget* parent, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
-	: FileViewStack(parent, actionCollection)
+	GVDirPartFileViewController(QWidget* parent, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
+	: FileViewController(parent, actionCollection)
 	, mBrowserExtension(browserExtension) {}
 
 protected:
@@ -111,7 +111,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	// Create the widgets
 	mDocument = new Document(this);
-	mFilesView = new GVDirPartFileView(mSplitter, actionCollection(), mBrowserExtension);
+	mFileViewController = new GVDirPartFileViewController(mSplitter, actionCollection(), mBrowserExtension);
 	mImageView = new GVDirPartImageView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
 
 	mSlideShow = new SlideShow(mDocument);
@@ -121,9 +121,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
-	connect(mFilesView, SIGNAL(urlChanged(const KURL&)),
+	connect(mFileViewController, SIGNAL(urlChanged(const KURL&)),
 		this, SLOT(urlChanged(const KURL&)) );
-	connect(mFilesView, SIGNAL(directoryChanged(const KURL&)),
+	connect(mFileViewController, SIGNAL(directoryChanged(const KURL&)),
 		this, SLOT(directoryChanged(const KURL&)) );
 	connect(mSlideShow, SIGNAL(nextURL(const KURL&)),
 		this, SLOT(urlChanged(const KURL&)) );
@@ -185,7 +185,7 @@ bool GVDirPart::openURL(const KURL& url) {
 	m_url.adjustPath(1);
 
 	emit setWindowCaption( m_url.prettyURL() );
-	mFilesView->setDirURL(m_url);
+	mFileViewController->setDirURL(m_url);
 
 	return true;
 }
@@ -205,7 +205,7 @@ KURL GVDirPart::pixmapURL() {
 void GVDirPart::toggleSlideShow() {
 	if (mToggleSlideShow->isChecked()) {
         KURL::List list;
-        KFileItemListIterator it( *mFilesView->currentFileView()->items() );
+        KFileItemListIterator it( *mFileViewController->currentFileView()->items() );
         for ( ; it.current(); ++it ) {
             KFileItem* item=it.current();
             if (!item->isDir() && !Archive::fileItemIsArchive(item)) {
@@ -247,7 +247,7 @@ void GVDirPart::directoryChanged(const KURL& dirURL) {
 
 void GVDirPart::urlChanged(const KURL& url) {
 	mDocument->setURL( url );
-	mFilesView->setFileNameToSelect( url.filename());
+	mFileViewController->setFileNameToSelect( url.filename());
 }
 
 

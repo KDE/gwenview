@@ -9,6 +9,8 @@
  - Zoom to width/height
  - Read support for X cursors
  - Slideshow waits for the next image to be fully prefetched before advancing.
+ - The file view from the folder KPart now features the same toolbar as in the
+   application.
 - Fixes:
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.

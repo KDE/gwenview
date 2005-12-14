@@ -31,19 +31,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 
 class Document;
-class FileViewStack;
+class FileViewController;
 
 /**
  * An implementation of CaptionFormatterBase, which knows about the Document
- * and FileViewStack instances
+ * and FileViewController instances
  */
 class LIBGWENVIEW_EXPORT CaptionFormatter : public CaptionFormatterBase {
 public:
-	CaptionFormatter(FileViewStack*, Document*);
+	CaptionFormatter(FileViewController*, Document*);
 	virtual QString operator()(const QString& format);
 
 private:
-	FileViewStack* mFileView;
+	FileViewController* mFileView;
 	Document* mDocument;
 };	
 
