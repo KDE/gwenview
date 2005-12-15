@@ -1,0 +1,4 @@
+File=gvdirpartconfig.kcfg
+ClassName=GVDirPartConfig
+Singleton=true
+Mutators=true

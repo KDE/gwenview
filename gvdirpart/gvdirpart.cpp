@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <gvcore/thumbnailloadjob.h>
 
 #include "config.h"
+#include "gvdirpartconfig.h"
 
 namespace Gwenview {
 
@@ -113,7 +114,12 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	// Create the widgets
 	mDocument = new Document(this);
 	mFileViewController = new GVDirPartFileViewController(mSplitter, actionCollection(), mBrowserExtension);
+	int width=GVDirPartConfig::fileViewWidth();
+	if (width!=-1) {
+		mFileViewController->widget()->resize(width, 10);
+	}
 	mImageView = new GVDirPartImageView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
+	mSplitter->setResizeMode(mFileViewController->widget(), QSplitter::KeepSize);
 
 	mSlideShow = new SlideShow(mDocument);
 
@@ -131,10 +137,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
 		this, SLOT(loaded(const KURL&)) );
 
-	QValueList<int> splitterSizes;
-	splitterSizes.append(20);
-	mSplitter->setSizes(splitterSizes);
-
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
 #if KDE_IS_VERSION(3, 3, 0)
 	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));
@@ -144,6 +146,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 }
 
 GVDirPart::~GVDirPart() {
+	GVDirPartConfig::setFileViewWidth(mFileViewController->widget()->width());
+	GVDirPartConfig::writeConfig();
 	delete mSlideShow;
 	Cache::instance()->deref();
 }

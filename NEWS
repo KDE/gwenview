@@ -11,6 +11,8 @@
  - Slideshow waits for the next image to be fully prefetched before advancing.
  - The file view from the folder KPart now features the same toolbar as in the
    application.
+ - The folder KPart now remembers the width of the file view and uses the same
+   configuration as the application (Bug 83343).
 - Fixes:
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.
