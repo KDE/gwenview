@@ -137,6 +137,12 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
 		this, SLOT(loaded(const KURL&)) );
 
+	// For wheel browsing
+	connect(mImageView, SIGNAL(selectPrevious()),
+		mFileViewController, SLOT(slotSelectPrevious()) );
+	connect(mImageView, SIGNAL(selectNext()),
+		mFileViewController, SLOT(slotSelectNext()) );
+
 	mToggleSlideShow = new KToggleAction(i18n("Slide Show..."), "slideshow", 0, this, SLOT(toggleSlideShow()), actionCollection(), "slideshow");
 #if KDE_IS_VERSION(3, 3, 0)
 	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));
