@@ -23,8 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qcursor.h>
 #include <qdir.h>
 #include <qdockarea.h>
-#include <qhbox.h>
-#include <qtabwidget.h>
 #include <qwidgetstack.h>
 
 // KDE
@@ -863,8 +861,7 @@ void MainWindow::createWidgets() {
 
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
-	QVBox* vbox=new QVBox(this);
-	mFileViewController=new FileViewController(vbox, actionCollection());
+	mFileViewController=new FileViewController(this, actionCollection());
 	mFileDock->setWidget(mFileViewController->widget());
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
