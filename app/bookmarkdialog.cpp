@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "bookmarkdialog.moc"
 // Qt
 #include <qlabel.h>
 
@@ -29,22 +30,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlrequester.h>
 
 // Local
-#include "branchpropertiesdialog.h"
-#include "branchpropertiesdialogbase.h"
-#include "branchpropertiesdialog.moc"
+#include "bookmarkdialogbase.h"
 namespace Gwenview {
 
-class BranchPropertiesDialogPrivate {
+class BookmarkDialogPrivate {
 public:
-	BranchPropertiesDialogBase* mContent;
-	BranchPropertiesDialog::Mode mMode;
+	BookmarkDialogBase* mContent;
+	BookmarkDialog::Mode mMode;
 };
 
-BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent, BranchPropertiesDialog::Mode mode)
+BookmarkDialog::BookmarkDialog(QWidget* parent, BookmarkDialog::Mode mode)
 : KDialogBase(parent,"folderconfig",true,QString::null,Ok|Cancel)
 {
-	d=new BranchPropertiesDialogPrivate;
-	d->mContent=new BranchPropertiesDialogBase(this);
+	d=new BookmarkDialogPrivate;
+	d->mContent=new BookmarkDialogBase(this);
 	d->mMode=mode;
 
 	setMainWidget(d->mContent);
@@ -77,11 +76,11 @@ BranchPropertiesDialog::BranchPropertiesDialog(QWidget* parent, BranchProperties
 	updateOk();
 }
 
-BranchPropertiesDialog::~BranchPropertiesDialog() {
+BookmarkDialog::~BookmarkDialog() {
 	delete d;
 }
 
-void BranchPropertiesDialog::updateOk() {
+void BookmarkDialog::updateOk() {
 	bool enabled=
 		!d->mContent->mTitle->text().isEmpty()
 		&& (d->mMode==BOOKMARK_GROUP || !d->mContent->mUrl->url().isEmpty());
@@ -89,27 +88,27 @@ void BranchPropertiesDialog::updateOk() {
 	enableButton(Ok, enabled);
 }
 
-void BranchPropertiesDialog::setIcon(const QString& icon) {
+void BookmarkDialog::setIcon(const QString& icon) {
 	d->mContent->mIcon->setIcon(icon);
 }
 
-QString BranchPropertiesDialog::icon() const {
+QString BookmarkDialog::icon() const {
 	return d->mContent->mIcon->icon();
 }
 
-void BranchPropertiesDialog::setTitle(const QString& title) {
+void BookmarkDialog::setTitle(const QString& title) {
 	d->mContent->mTitle->setText(title);
 }
 
-QString BranchPropertiesDialog::title() const {
+QString BookmarkDialog::title() const {
 	return d->mContent->mTitle->text();
 }
 
-void BranchPropertiesDialog::setURL(const QString& url) {
+void BookmarkDialog::setURL(const QString& url) {
 	d->mContent->mUrl->setURL(url);
 }
 
-QString BranchPropertiesDialog::url() const {
+QString BookmarkDialog::url() const {
 	return d->mContent->mUrl->url();
 }
 

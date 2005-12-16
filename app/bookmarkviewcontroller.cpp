@@ -46,7 +46,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurldrag.h>
 
 // Local
-#include "branchpropertiesdialog.h"
+#include "bookmarkdialog.h"
 #include "../gvcore/fileoperation.h"
 
 namespace Gwenview {
@@ -153,7 +153,7 @@ struct BookmarkViewController::Private {
 	}
 
 	void bookmarkURL(const KURL& url) {
-		BranchPropertiesDialog dialog(mListView, BranchPropertiesDialog::BOOKMARK);
+		BookmarkDialog dialog(mListView, BookmarkDialog::BOOKMARK);
 		dialog.setTitle(url.fileName());
 		dialog.setURL(url.prettyURL());
 		dialog.setIcon(KMimeType::iconForURL(url));
@@ -315,7 +315,7 @@ void BookmarkViewController::bookmarkCurrentURL() {
 
 
 void BookmarkViewController::addBookmarkGroup() {
-	BranchPropertiesDialog dialog(d->mListView, BranchPropertiesDialog::BOOKMARK_GROUP);
+	BookmarkDialog dialog(d->mListView, BookmarkDialog::BOOKMARK_GROUP);
 	if (dialog.exec()==QDialog::Rejected) return;
 
 	KBookmarkGroup parentGroup=d->findBestParentGroup();
@@ -336,8 +336,8 @@ void BookmarkViewController::editCurrentBookmark() {
 	KBookmark bookmark=item->mBookmark;
 	bool isGroup=bookmark.isGroup();
 	
-	BranchPropertiesDialog dialog(d->mListView,
-		isGroup ? BranchPropertiesDialog::BOOKMARK_GROUP : BranchPropertiesDialog::BOOKMARK);
+	BookmarkDialog dialog(d->mListView,
+		isGroup ? BookmarkDialog::BOOKMARK_GROUP : BookmarkDialog::BOOKMARK);
 
 	dialog.setIcon(bookmark.icon());
 	dialog.setTitle(bookmark.text());
