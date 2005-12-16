@@ -19,8 +19,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include "mainwindow.moc"
+
 // Qt
-#include <qcursor.h>
 #include <qdir.h>
 #include <qdockarea.h>
 #include <qwidgetstack.h>
@@ -35,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kcmdlineargs.h>
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kcursor.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kdockwidget.h>
@@ -43,7 +45,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <klargefile.h>
@@ -56,10 +57,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
-#include <ktoolbarbutton.h>
 #include <kurlcompletion.h>
 #include <kurlpixmapprovider.h>
-#include <kurlrequesterdlg.h>
 #include <kprinter.h>
 
 #include <config.h>
@@ -102,9 +101,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "kipiinterface.h"
 #endif
 
-#include <kcursor.h>
-
-#include "mainwindow.moc"
 namespace Gwenview {
 
 const char CONFIG_DOCK_GROUP[]="dock";
