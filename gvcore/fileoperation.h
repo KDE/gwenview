@@ -76,8 +76,8 @@ public slots:
 	}
 
 private:
-	const KURL::List& mSrc;
-	const KURL& mDst;
+	KURL::List mSrc;
+	KURL mDst;
 	bool* mWasMoved;
 };
 
