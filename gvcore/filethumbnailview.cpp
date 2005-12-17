@@ -169,7 +169,9 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	d->mMarginSize=FileViewConfig::thumbnailMarginSize();
 	d->mItemDetails=FileViewConfig::thumbnailDetails();
 	d->mPrefetch = NULL;
+	d->mThumbnailSize = 0;
 
+	setItemTextPos( QIconView::ItemTextPos(FileViewConfig::thumbnailTextPos()) );
 	setAutoArrange(true);
 	QIconView::setSorting(true);
 	setItemsMovable(false);
@@ -177,7 +179,6 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	setShowToolTips(true);
 	setSpacing(0);
 	setAcceptDrops(true);
-	setItemTextPos( QIconView::ItemTextPos(FileViewConfig::thumbnailTextPos()) );
 
 	// We can't use KIconView::Execute mode because in this mode the current
 	// item is unselected after being clicked, so we use KIconView::Select mode
