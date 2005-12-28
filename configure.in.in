@@ -113,7 +113,8 @@ if test -z "$LIBMNG"; then
 fi
 
 PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.12, ,
-        AC_MSG_ERROR([libexif >= 0.5.12 not found. Please install it.]) 
+        AC_MSG_WARN([libexif >= 0.5.12 not found. Please install it.]) 
+	DO_NOT_COMPILE="gwenview $DO_NOT_COMPILE"
 		)
 
 AC_SUBST(LIBEXIF_LIBS)
