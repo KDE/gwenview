@@ -66,6 +66,7 @@ public:
 
 	enum ToolID { SCROLL, ZOOM };
 	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
+	enum ZoomMode { ZOOM_FIT, ZOOM_FIT_WIDTH, ZOOM_FIT_HEIGHT, ZOOM_FREE };
 	typedef QMap<ToolID,ToolBase*> Tools;
 
 	ImageView(QWidget* parent,Document*,KActionCollection*);
@@ -105,7 +106,6 @@ public slots:
 signals:
 	void selectPrevious();
 	void selectNext();
-	void zoomChanged(double);
     void doubleClicked();
 
     // Emitted whenever an hint should be displayed
@@ -139,9 +139,8 @@ private:
 	void checkPendingOperationsInternal();
 	void updateBusyLevels();
 
-	bool autoZoom( bool ignore_manual = false ) const;
+	void updateZoom(ZoomMode, double value=0, int centerX=-1, int centerY=-1);
 	double computeZoom(bool in) const;
-	double computeAutoZoom() const;
 	double computeZoomToFit() const;
 	double computeZoomToWidth() const;
 	double computeZoomToHeight() const;
@@ -169,6 +168,7 @@ private slots:
 	void slotZoomIn();
 	void slotZoomOut();
 	void slotResetZoom();
+	void slotSelectZoom();
 	void setZoomToFit(bool);
 	void setZoomToWidth(bool);
 	void setZoomToHeight(bool);

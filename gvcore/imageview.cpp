@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt 
 #include <qcolor.h>
+#include <qcombobox.h>
 #include <qcursor.h>
 #include <qdatetime.h>
 #include <qevent.h>
@@ -36,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qtimer.h>
+#include <qvaluevector.h>
 
 // KDE 
 #include <kaction.h>
@@ -169,6 +171,7 @@ long int lround( double x ) {
 }
 #endif
 
+
 struct ImageView::Private {
 	Document* mDocument;
 	QTimer* mAutoHideTimer;
@@ -182,15 +185,20 @@ struct ImageView::Private {
 	int mXOffset, mYOffset;
 
 	// Zoom info
+	ZoomMode mZoomMode;
 	double mZoom;
 
 	// Gamma, brightness, contrast - multiplied by 100
 	int mGamma, mBrightness, mContrast;
 
 	// Our actions
+	QComboBox* mZoomCombo;
+	// We do not use KSelectAction because it's not possible to set the combo text
+	KWidgetAction* mZoomComboAction;
 	KToggleAction* mZoomToFit;
 	KToggleAction* mZoomToWidth;
 	KToggleAction* mZoomToHeight;
+	QValueVector<KToggleAction*> mZoomComboActions;
 	KAction* mZoomIn;
 	KAction* mZoomOut;
 	KAction* mResetZoom;
@@ -214,7 +222,6 @@ struct ImageView::Private {
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
 	double mZoomBeforeAuto;
 	int mXCenterBeforeAuto, mYCenterBeforeAuto;
-	bool mManualZoom; // overrides auto zoom actions when user manually does zoom in/out
 	
 	QMap< long long, PendingPaint > mPendingPaints;
 	QRegion mPendingNormalRegion;
@@ -274,6 +281,24 @@ struct ImageView::Private {
 		ret.addCoords( -extra, -extra, extra, extra );
 		return ret;
 	}
+
+	void initZoomCombo() {
+		mZoomCombo->clear();
+		for (QValueVector<KToggleAction*>::iterator it=mZoomComboActions.begin();
+			it!=mZoomComboActions.end();
+			++it)
+		{
+			QString txt=(*it)->plainText();
+			mZoomCombo->insertItem(txt);
+		}
+		
+		const double zoomValues[] = { 0.5, 1, 2 };
+		int nbValues=sizeof(zoomValues) / sizeof(double);
+		for (int pos=0; pos<nbValues; ++pos) {
+			QString txt=QString("%1%").arg( int(zoomValues[pos]*100) );
+			mZoomCombo->insertItem(txt);
+		}
+	}
 };
 
 
@@ -307,6 +332,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mToolID=SCROLL;
 	d->mXOffset=0;
 	d->mYOffset=0;
+	d->mZoomMode=ZOOM_FIT;
 	d->mZoom=1;
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
@@ -314,7 +340,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mFullScreenLabel=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
-	d->mManualZoom=false;
 	d->mPendingOperations= 0 ;
 	d->mSmoothingSuspended= false ;
 	d->mMaxRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
@@ -335,13 +360,13 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mTools[d->mToolID]->updateCursor();
 
 	// Create actions
-	d->mZoomToFit=new KToggleAction(i18n("Zoom to &Fit"),"viewmagfit",0,d->mActionCollection,"view_zoom_to_fit");
+	d->mZoomToFit=new KToggleAction(i18n("Fit to &Window"),"viewmagfit",0,d->mActionCollection,"view_zoom_to_fit");
 	connect(d->mZoomToFit,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToFit(bool)) );
-	d->mZoomToWidth=new KToggleAction(i18n("Zoom to &Width"),0,0,d->mActionCollection,"view_zoom_to_width");
+	d->mZoomToWidth=new KToggleAction(i18n("Fit to &Width"),0,0,d->mActionCollection,"view_zoom_to_width");
 	connect(d->mZoomToWidth,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToWidth(bool)) );
-	d->mZoomToHeight=new KToggleAction(i18n("Zoom to &Height"),0,0,d->mActionCollection,"view_zoom_to_height");
+	d->mZoomToHeight=new KToggleAction(i18n("Fit to &Height"),0,0,d->mActionCollection,"view_zoom_to_height");
 	connect(d->mZoomToHeight,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToHeight(bool)) );
 
@@ -355,6 +380,17 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
 	connect(d->mLockZoom,SIGNAL(toggled(bool)),
 		this,SLOT(setLockZoom(bool)) );
+
+	d->mZoomCombo=new QComboBox(true);
+	connect(d->mZoomCombo, SIGNAL(activated(int)),
+		this, SLOT(slotSelectZoom()) );
+	
+	d->mZoomComboAction=new KWidgetAction(d->mZoomCombo, i18n("Zoom"), 0, 0, 0, d->mActionCollection, "view_zoom_to");
+
+	d->mZoomComboActions.append(d->mZoomToFit);
+	d->mZoomComboActions.append(d->mZoomToWidth);
+	d->mZoomComboActions.append(d->mZoomToHeight);
+	d->initZoomCombo();
 
 	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
 		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
@@ -429,8 +465,8 @@ void ImageView::slotLoaded() {
 
 
 void ImageView::slotModified() {
-	if ( autoZoom()) {
-		setZoom(computeAutoZoom());
+	if (d->mZoomMode!=ZOOM_FREE) {
+		updateZoom(d->mZoomMode);
 	} else {
 		updateContentSize();
 		updateImageOffset();
@@ -529,8 +565,8 @@ void ImageView::updateFromSettings() {
 	}
 	
 	// If enlargeSmallImage changed
-	if ( autoZoom()) {
-		setZoom(computeAutoZoom());
+	if (d->mZoomMode!=ZOOM_FREE) {
+		updateZoom(d->mZoomMode);
 	}
 	
 	updateScrollBarMode();
@@ -542,32 +578,62 @@ void ImageView::updateFromSettings() {
 
 
 void ImageView::setZoom(double zoom, int centerX, int centerY) {
-	int viewWidth=visibleWidth();
-	int viewHeight=visibleHeight();
+	updateZoom(ZOOM_FREE, zoom, centerX, centerY);
+}
+
+
+void ImageView::updateZoom(ZoomMode zoomMode, double value, int centerX, int centerY) {
 	double oldZoom=d->mZoom;
-	d->mZoom=zoom;
-
+	d->mZoomMode=zoomMode;
+	KAction* checkedZoomAction=0;
+	
 	viewport()->setUpdatesEnabled(false);
+	
+	if (zoomMode==ZOOM_FREE) {
+		Q_ASSERT(value!=0);
+		d->mZoom=value;
+	} else {
+		d->mZoomBeforeAuto=d->mZoom;
+		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
+		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
+		
+		if (zoomMode==ZOOM_FIT) {
+			d->mZoom=computeZoomToFit();
+			checkedZoomAction=d->mZoomToFit;
+			
+		} else if (zoomMode==ZOOM_FIT_WIDTH) {
+			d->mZoom=computeZoomToWidth();
+			checkedZoomAction=d->mZoomToWidth;
+			
+		} else {
+			d->mZoom=computeZoomToHeight();
+			checkedZoomAction=d->mZoomToHeight;
+		}
+	}
 
+	// Make sure only one zoom action is toggled on
+	d->mZoomToFit->setChecked(   checkedZoomAction==d->mZoomToFit);
+	d->mZoomToWidth->setChecked( checkedZoomAction==d->mZoomToWidth);
+	d->mZoomToHeight->setChecked(checkedZoomAction==d->mZoomToHeight);
+	
 	updateContentSize();
-
+	
 	// Find the coordinate of the center of the image
 	// and center the view on it
 	if (centerX==-1) {
-		centerX=int( ((viewWidth/2+contentsX()-d->mXOffset)/oldZoom)*d->mZoom );
+		centerX=int( ((visibleWidth()/2+contentsX()-d->mXOffset)/oldZoom)*d->mZoom );
 	}
 	if (centerY==-1) {
-		centerY=int( ((viewHeight/2+contentsY()-d->mYOffset)/oldZoom)*d->mZoom );
+		centerY=int( ((visibleHeight()/2+contentsY()-d->mYOffset)/oldZoom)*d->mZoom );
 	}
 	center(centerX,centerY);
-
+	
+	updateScrollBarMode();
 	updateImageOffset();
 	updateZoomActions();
 
 	viewport()->setUpdatesEnabled(true);
 	fullRepaint();
-
-	emit zoomChanged(d->mZoom);
 }
 
 
@@ -614,8 +680,8 @@ void ImageView::setFullScreen(bool fullScreen) {
 //------------------------------------------------------------------------
 void ImageView::resizeEvent(QResizeEvent* event) {
 	QScrollView::resizeEvent(event);
-	if ( autoZoom()) {
-		setZoom(computeAutoZoom());
+	if (d->mZoomMode!=ZOOM_FREE) {
+		updateZoom(d->mZoomMode);
 	} else {
 		updateContentSize();
 		updateImageOffset();
@@ -1125,90 +1191,60 @@ void ImageView::wheelEvent(QWheelEvent* event) {
 //
 //------------------------------------------------------------------------
 void ImageView::slotZoomIn() {
-	if ( autoZoom()) {
-		d->mManualZoom = true;
-		updateScrollBarMode();
-	}
-	setZoom(computeZoom(true));
+	updateZoom(ZOOM_FREE, computeZoom(true));
 }
 
 
 void ImageView::slotZoomOut() {
-	if ( autoZoom()) {
-		d->mManualZoom = true;
-		updateScrollBarMode();
-	}
-	setZoom(computeZoom(false));
+	updateZoom(ZOOM_FREE, computeZoom(false));
 }
 
 
 void ImageView::slotResetZoom() {
-	if ( autoZoom()) {
-		d->mManualZoom = true;
-		updateScrollBarMode();
-	}
-	setZoom(1.0);
+	updateZoom(ZOOM_FREE, 1.0);
 }
 
-// These could be merged using KToggleAction's setExclusiveGroup(),
-// but that's currently a bit problematic WRT activating the already
-// checked action - KDE3.5.0 maintains "one must be active" policy
-// like with radiobuttons, which is wrong here.
-// Also, lock zoom shouldn't first turn off auto zoom but lock
-// at whatever zoom size was active.
-void ImageView::setZoomToFit(bool value) {
-	if( value ) {
-		d->mZoomToWidth->setChecked( false );
-		d->mZoomToHeight->setChecked( false );
-		d->mLockZoom->setChecked( false );
-	}
-	updateScrollBarMode();
-	d->mManualZoom = false;
-	if (value) {
-		d->mZoomBeforeAuto=d->mZoom;
-		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
-		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
-		setZoom(computeAutoZoom());
+
+void ImageView::slotSelectZoom() {
+	int currentItem=d->mZoomCombo->currentItem();
+
+	if (currentItem>=int(d->mZoomComboActions.count()) ) {
+		QString txt=d->mZoomCombo->currentText();
+		txt=txt.left(txt.find('%'));
+		double value=KGlobal::locale()->readNumber(txt) / 100.0;
+		updateZoom(ZOOM_FREE, value);
 	} else {
-		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+		d->mZoomComboActions[currentItem]->activate();
 	}
 }
 
-void ImageView::setZoomToWidth(bool value) {
-	if( value ) {
-		d->mZoomToFit->setChecked( false );
-		d->mZoomToHeight->setChecked( false );
-		d->mLockZoom->setChecked( false );
-	}
-	updateScrollBarMode();
-	d->mManualZoom = false;
-	if (value) {
-		d->mZoomBeforeAuto=d->mZoom;
-		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
-		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
-		setZoom(computeAutoZoom());
+
+void ImageView::setZoomToFit(bool on) {
+	if (on) {
+		updateZoom(ZOOM_FIT);
 	} else {
-		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+		updateZoom(ZOOM_FREE, d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
 	}
 }
 
-void ImageView::setZoomToHeight(bool value) {
-	if( value ) {
-		d->mZoomToFit->setChecked( false );
-		d->mZoomToWidth->setChecked( false );
-		d->mLockZoom->setChecked( false );
-	}
-	updateScrollBarMode();
-	d->mManualZoom = false;
-	if (value) {
-		d->mZoomBeforeAuto=d->mZoom;
-		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
-		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
-		setZoom(computeAutoZoom());
+
+void ImageView::setZoomToWidth(bool on) {
+	if (on) {
+		updateZoom(ZOOM_FIT_WIDTH);
 	} else {
-		setZoom(d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+		updateZoom(ZOOM_FREE, d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
 	}
 }
+
+
+void ImageView::setZoomToHeight(bool on) {
+	if (on) {
+		updateZoom(ZOOM_FIT_HEIGHT);
+	} else {
+		updateZoom(ZOOM_FREE, d->mZoomBeforeAuto, d->mXCenterBeforeAuto, d->mYCenterBeforeAuto);
+	}
+}
+
 
 void ImageView::setLockZoom(bool value) {
 	if( value ) {
@@ -1270,17 +1306,16 @@ void ImageView::slotImageSizeUpdated() {
 	d->mXOffset=0;
 	d->mYOffset=0;
 
-	d->mManualZoom = false;
 	d->mValidImageArea = QRegion();
-	if ( autoZoom( true )) {
+	if (d->mZoomMode!=ZOOM_FREE) {
 		d->mXCenterBeforeAuto=0;
 		d->mYCenterBeforeAuto=0;
 	} else {
 		horizontalScrollBar()->setValue(0);
 		verticalScrollBar()->setValue(0);
 	}
-	if( autoZoom( true )) {
-		setZoom(computeAutoZoom());
+	if (d->mZoomMode!=ZOOM_FREE) {
+		updateZoom(d->mZoomMode);
 	} else {
 		if( !d->mLockZoom->isChecked()) {
 			setZoom( 1.0 );
@@ -1404,7 +1439,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 
 void ImageView::updateScrollBarMode() {
-	if ((d->mZoomToFit->isChecked() && !d->mManualZoom) || !ImageViewConfig::self()->showScrollBars()) {
+	if (d->mZoomMode==ZOOM_FIT || !ImageViewConfig::self()->showScrollBars()) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1418,20 +1453,6 @@ void ImageView::updateContentSize() {
 	resizeContents(
 		int(d->mDocument->width()*d->mZoom),
 		int(d->mDocument->height()*d->mZoom) );
-}
-
-bool ImageView::autoZoom( bool ignore_manual ) const {
-	return ( d->mZoomToFit->isChecked() || d->mZoomToWidth->isChecked()
-			|| d->mZoomToHeight->isChecked())
-		&& ( ignore_manual || !d->mManualZoom );
-}
-
-double ImageView::computeAutoZoom() const {
-	if( d->mZoomToFit->isChecked()) return computeZoomToFit();
-	if( d->mZoomToWidth->isChecked()) return computeZoomToWidth();
-	if( d->mZoomToHeight->isChecked()) return computeZoomToHeight();
-	Q_ASSERT( false );
-	return 1.0;
 }
 
 double ImageView::computeZoomToFit() const {
@@ -1582,23 +1603,29 @@ void ImageView::updateFullScreenLabel() {
 void ImageView::updateZoomActions() {
 	// Disable most actions if there's no image
 	if (d->mDocument->isNull()) {
+		d->mZoomComboAction->setEnabled(false);
 		d->mZoomIn->setEnabled(false);
 		d->mZoomOut->setEnabled(false);
 		d->mResetZoom->setEnabled(false);
 		return;
 	}
 
+	d->mZoomComboAction->setEnabled(true);
 	d->mZoomToFit->setEnabled(true);
 	d->mZoomToWidth->setEnabled(true);
 	d->mZoomToHeight->setEnabled(true);
 	d->mResetZoom->setEnabled(true);
 
-	if ( autoZoom()) {
-		d->mZoomIn->setEnabled(true);
-		d->mZoomOut->setEnabled(true);
-	} else {
+	
+	if (d->mZoomMode==ZOOM_FREE) {
 		d->mZoomIn->setEnabled(d->mZoom<MAX_ZOOM);
 		d->mZoomOut->setEnabled(d->mZoom>1/MAX_ZOOM);
+		QString zoomText=QString("%1%").arg(int(d->mZoom*100));
+		d->mZoomCombo->setCurrentText(zoomText);
+	} else {
+		d->mZoomIn->setEnabled(true);
+		d->mZoomOut->setEnabled(true);
+		d->mZoomCombo->setCurrentItem(d->mZoomMode);
 	}
 }
 

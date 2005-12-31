@@ -764,13 +764,12 @@ void MainWindow::updateStatusInfo() {
 	if (count==0) {
 		txt=i18n("No Images");
 	} else {
-		txt=i18n("%1/%2 - %3 %4x%5 @ %6%")
+		txt=i18n("%1/%2 - %3 %4x%5")
 			.arg(pos+1)
 			.arg(count)
 			.arg(filename)
 			.arg(mDocument->width())
-			.arg(mDocument->height())
-			.arg(int(mImageView->zoom()*100) );
+			.arg(mDocument->height());
 	}
 	mSBDetailLabel->setText(txt);
 	setCaption(filename);
@@ -1066,8 +1065,6 @@ void MainWindow::createConnections() {
 		mFileViewController,SLOT(slotSelectPrevious()) );
 	connect(mImageView,SIGNAL(selectNext()),
 		mFileViewController,SLOT(slotSelectNext()) );
-	connect(mImageView,SIGNAL(zoomChanged(double)),
-		this,SLOT(updateStatusInfo()) );
 	connect(mImageView,SIGNAL(doubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
 

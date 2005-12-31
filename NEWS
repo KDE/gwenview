@@ -13,6 +13,7 @@
    application.
  - The folder KPart now remembers the width of the file view and uses the same
    configuration as the application (Bug 83343).
+ - A zoom combobox has been added to the application and kpart toolbars.
 - Fixes:
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="22">
+<kpartgui name="Gwenview" version="23">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -119,10 +119,9 @@
   <Separator/>
   <Action name="reload"/>
   <Separator/>
-  <Action name="view_zoom_to_fit"/>
   <Action name="view_zoom_in"/>
+  <Action name="view_zoom_to"/>
   <Action name="view_zoom_out"/>
-  <Action name="view_actual_size"/>
   <Separator/>
   <Action name="rotate_left"/>
   <Action name="rotate_right"/>
