@@ -119,9 +119,6 @@ const int GWENVIEW_DOCK_VERSION=2;
 // The timeout before an hint in the statusbar disappear (in msec)
 const int HINT_TIMEOUT=10000;
 
-// Time before we try to load the KIPI plugins (in msec)
-const int LOAD_PLUGIN_DELAY=1000;
-
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -211,8 +208,6 @@ MainWindow::MainWindow()
 	} else {
 		mImageView->setFocus();
 	}
-
-	QTimer::singleShot(LOAD_PLUGIN_DELAY, this, SLOT(loadPlugins()) );
 }
 
 
@@ -601,6 +596,7 @@ void MainWindow::slotSlideShowChanged(bool running) {
 
 void MainWindow::showConfigDialog() {
 #ifdef GV_HAVE_KIPI
+	if (!mPluginLoader) loadPlugins();
 	ConfigDialog dialog(this, mPluginLoader);
 #else
 	ConfigDialog dialog(this, 0);
@@ -624,17 +620,6 @@ void MainWindow::showExternalToolDialog() {
 void MainWindow::showKeyDialog() {
 	KKeyDialog dialog(true, this);
 	dialog.insert(actionCollection());
-#ifdef GV_HAVE_KIPI
-	KIPI::PluginLoader::PluginList pluginList=mPluginLoader->pluginList();
-	KIPI::PluginLoader::PluginList::ConstIterator it(pluginList.begin());
-	KIPI::PluginLoader::PluginList::ConstIterator itEnd(pluginList.end());
-	for( ; it!=itEnd; ++it ) {
-		KIPI::Plugin* plugin=(*it)->plugin();
-		if (plugin) {
-			dialog.insert(plugin->actionCollection(), (*it)->name());
-		}
-	}
-#endif
 	dialog.configure(true);
 }
 
@@ -1116,6 +1101,15 @@ void MainWindow::createConnections() {
 	// Dock related
 	connect(mDockArea->manager(), SIGNAL(change()),
 		this, SLOT(updateWindowActions()) );
+
+	// Plugin menu
+	QPopupMenu *popup = static_cast<QPopupMenu*>(
+		factory()->container( "plugins", this));
+#ifdef GV_HAVE_KIPI
+    connect(popup, SIGNAL(aboutToShow()), this, SLOT(loadPlugins()) );
+#else
+	delete popup;
+#endif
 }
 
 
@@ -1171,16 +1165,8 @@ void MainWindow::activateLocationLabel() {
 #ifdef GV_HAVE_KIPI
 void MainWindow::loadPlugins() {
 	// Already done
-	Q_ASSERT(!mPluginLoader);
 	if (mPluginLoader) return;
 
-	// Not yet, wait until we're less busy
-	if (BusyLevelManager::instance()->busyLevel() > BUSY_THUMBNAILS) {
-		LOG("Too busy, wait");
-		QTimer::singleShot(LOAD_PLUGIN_DELAY, this, SLOT(loadPlugins()) );
-		return;
-	}
-	
 	LOG("Load plugins");
 	// Sets up the plugin interface, and load the plugins
 	KIPIInterface* interface = new KIPIInterface(this, mFileViewController);
@@ -1257,11 +1243,7 @@ void MainWindow::slotReplug() {
 }
 #else
 void MainWindow::loadPlugins() {
-	QPopupMenu *popup = static_cast<QPopupMenu*>(
-		factory()->container( "plugins", this));
-	delete popup;
 }
-
 
 void MainWindow::slotReplug() {
 }
