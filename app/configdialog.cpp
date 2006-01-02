@@ -138,6 +138,7 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	d->mManagers << new KConfigDialogManager(d->mSlideShowPage, SlideShowConfig::self());
 
 #ifdef GV_HAVE_KIPI
+	Q_ASSERT(pluginLoader);
 	d->mKIPIConfigWidget = pluginLoader->configWidget(this);
 	addConfigPage(
 		this, d->mKIPIConfigWidget, i18n("Configure KIPI Plugins"), i18n("KIPI Plugins"), "kipi");
