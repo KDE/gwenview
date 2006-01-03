@@ -154,7 +154,7 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	MiscConfig::self()->readConfig();
 
 	// Image List tab
-	int details=FileViewConfig::self()->thumbnailDetails();
+	int details=FileViewConfig::thumbnailDetails();
 	d->mImageListPage->mShowFileName->setChecked(details & FileThumbnailView::FILENAME);
 	d->mImageListPage->mShowFileDate->setChecked(details & FileThumbnailView::FILEDATE);
 	d->mImageListPage->mShowFileSize->setChecked(details & FileThumbnailView::FILESIZE);
@@ -166,13 +166,13 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 		this,SLOT(emptyCache()));
 
 	// Image View tab
-	d->mImageViewPage->mMouseWheelGroup->setButton(ImageViewConfig::self()->mouseWheelScroll()?1:0);
+	d->mImageViewPage->mMouseWheelGroup->setButton(ImageViewConfig::mouseWheelScroll()?1:0);
 
 	// File Operations tab
 	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
 
-	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperationConfig::self()->deleteToTrash()?1:0);
+	d->mFileOperationsPage->mDeleteGroup->setButton(FileOperationConfig::deleteToTrash()?1:0);
 	
 	ConfigManagerList::Iterator it(d->mManagers.begin());
 	for (;it!=d->mManagers.end(); ++it) {
@@ -203,17 +203,17 @@ void ConfigDialog::slotApply() {
 		| (d->mImageListPage->mShowFileSize->isChecked() ? FileThumbnailView::FILESIZE : 0)
 		| (d->mImageListPage->mShowImageSize->isChecked() ? FileThumbnailView::IMAGESIZE : 0)
 		;
-	if (details!=FileViewConfig::self()->thumbnailDetails()) {
-		FileViewConfig::self()->setThumbnailDetails(details);
+	if (details!=FileViewConfig::thumbnailDetails()) {
+		FileViewConfig::setThumbnailDetails(details);
 		needSignal=true;
 	}
 	
 	// Image View tab
-	ImageViewConfig::self()->setMouseWheelScroll(
+	ImageViewConfig::setMouseWheelScroll(
 		d->mImageViewPage->mMouseWheelGroup->selected()==d->mImageViewPage->mMouseWheelScroll);
 
 	// File Operations tab
-	FileOperationConfig::self()->setDeleteToTrash(
+	FileOperationConfig::setDeleteToTrash(
 		d->mFileOperationsPage->mDeleteGroup->selected()==d->mFileOperationsPage->mDeleteToTrash);
 
 	// KIPI tab

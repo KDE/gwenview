@@ -59,7 +59,7 @@ void moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const cha
 
 void del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
 	FileOpObject* op;
-	if (FileOperationConfig::self()->deleteToTrash()) {
+	if (FileOperationConfig::deleteToTrash()) {
 		op=new FileOpTrashObject(url,parent);
 	} else {
 		op=new FileOpRealDeleteObject(url,parent);

@@ -158,7 +158,7 @@ void ThumbnailThread::loadThumbnail() {
 		if(!loaded) {
 			loaded=loadJPEG();
 		}
-		if (loaded && MiscConfig::self()->autoRotateImages()) {
+		if (loaded && MiscConfig::autoRotateImages()) {
 			// Rotate if necessary
 			ImageUtils::Orientation orientation = content.orientation();
 			mImage=ImageUtils::transform(mImage,orientation);
@@ -695,7 +695,7 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from " << pixPath);
 	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
 		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
-		FileViewConfig::self()->storeThumbnailsInCache());
+		FileViewConfig::storeThumbnailsInCache());
 }
 
 

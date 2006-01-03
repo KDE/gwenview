@@ -223,7 +223,7 @@ bool MainWindow::queryClose() {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 
-	if (FileViewConfig::self()->deleteCacheOnExit()) {
+	if (FileViewConfig::deleteCacheOnExit()) {
 		QString dir=ThumbnailLoadJob::thumbnailBaseDir();
 
 		if (QFile::exists(dir)) {
@@ -454,7 +454,7 @@ void MainWindow::printFile() {
 //
 //-----------------------------------------------------------------------
 void MainWindow::slotImageLoading() {
-	if (FullScreenConfig::self()->showBusyPtr() || !mToggleFullScreen->isChecked()) {
+	if (FullScreenConfig::showBusyPtr() || !mToggleFullScreen->isChecked()) {
 		if( !mLoadingCursor ) {
 			kapp->setOverrideCursor(KCursor::workingCursor());
 		}

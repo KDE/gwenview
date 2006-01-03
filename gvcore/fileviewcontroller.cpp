@@ -903,8 +903,8 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 void FileViewController::updateFromSettings() {
 	initDirListerFilter();
-	mFileThumbnailView->setMarginSize(FileViewConfig::self()->thumbnailMarginSize());
-	mFileThumbnailView->setItemDetails(FileViewConfig::self()->thumbnailDetails());
+	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
+	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
 	currentFileView()->widget()->update();
 }
 
@@ -1082,7 +1082,7 @@ void FileViewController::initDirListerFilter() {
 	mimeTypes.append("image/x-xcf-gimp");
 	mimeTypes.append("image/x-xcursor");
 	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
-	if (FileViewConfig::self()->showDirs()) {
+	if (FileViewConfig::showDirs()) {
 		mimeTypes.append("inode/directory");
 		mimeTypes+=Archive::mimeTypes();
 	}

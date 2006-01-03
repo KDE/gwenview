@@ -92,8 +92,8 @@ void FileOpObject::slotResult(KIO::Job* job) {
 void FileOpCopyToObject::operator()() {
 	KURL destURL;
 
-	if (FileOperationConfig::self()->confirmCopy()) {
-		QString destDir = FileOperationConfig::self()->destDir();
+	if (FileOperationConfig::confirmCopy()) {
+		QString destDir = FileOperationConfig::destDir();
 		if( !destDir.isEmpty()) {
 			destDir += "/";
 		}
@@ -107,7 +107,7 @@ void FileOpCopyToObject::operator()() {
 			destURL=dialog.selectedURL();
 		}
 	} else {
-		destURL.setPath(FileOperationConfig::self()->destDir());
+		destURL.setPath(FileOperationConfig::destDir());
 	}
 	if (destURL.isEmpty()) return;
 
@@ -126,8 +126,8 @@ void FileOpCopyToObject::operator()() {
 void FileOpLinkToObject::operator()() {
 	KURL destURL;
 
-	if (FileOperationConfig::self()->confirmCopy()) {
-		QString destDir = FileOperationConfig::self()->destDir();
+	if (FileOperationConfig::confirmCopy()) {
+		QString destDir = FileOperationConfig::destDir();
 		if( !destDir.isEmpty()) {
 			destDir += "/";
 		}
@@ -141,7 +141,7 @@ void FileOpLinkToObject::operator()() {
 			destURL=dialog.selectedURL();
 		}
 	} else {
-		destURL.setPath(FileOperationConfig::self()->destDir());
+		destURL.setPath(FileOperationConfig::destDir());
 	}
 	if (destURL.isEmpty()) return;
 
@@ -157,8 +157,8 @@ void FileOpLinkToObject::operator()() {
 void FileOpMoveToObject::operator()() {
 	KURL destURL;
 
-	if (FileOperationConfig::self()->confirmMove()) {
-		QString destDir = FileOperationConfig::self()->destDir();
+	if (FileOperationConfig::confirmMove()) {
+		QString destDir = FileOperationConfig::destDir();
 		if( !destDir.isEmpty()) {
 			destDir += "/";
 		}
@@ -172,7 +172,7 @@ void FileOpMoveToObject::operator()() {
 			destURL=dialog.selectedURL();
 		}
 	} else {
-		destURL.setPath(FileOperationConfig::self()->destDir());
+		destURL.setPath(FileOperationConfig::destDir());
 	}
 	if (destURL.isEmpty()) return;
 
@@ -209,7 +209,7 @@ void FileOpTrashObject::operator()() {
 #endif
 
 	// Confirm operation
-	if (FileOperationConfig::self()->confirmDelete()) {
+	if (FileOperationConfig::confirmDelete()) {
 		int response;
 		if (mURLList.count()>1) {
 			QStringList fileList;
@@ -242,7 +242,7 @@ void FileOpTrashObject::operator()() {
 //-FileOpRealDeleteObject----------------------------------------------------------
 void FileOpRealDeleteObject::operator()() {
 	// Confirm operation
-	if (FileOperationConfig::self()->confirmDelete()) {
+	if (FileOperationConfig::confirmDelete()) {
 		int response;
 		if (mURLList.count()>1) {
 			QStringList fileList;

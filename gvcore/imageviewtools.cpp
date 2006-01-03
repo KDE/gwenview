@@ -180,7 +180,7 @@ void ImageView::ScrollTool::leftButtonReleaseEvent(QMouseEvent*) {
 
 
 void ImageView::ScrollTool::wheelEvent(QWheelEvent* event) {
-	if (ImageViewConfig::self()->mouseWheelScroll()) {
+	if (ImageViewConfig::mouseWheelScroll()) {
 		int deltaX, deltaY;
 
 		if (event->state() & AltButton || event->orientation()==Horizontal) {

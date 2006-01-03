@@ -70,7 +70,7 @@ void DocumentJPEGLoadedImpl::init() {
 	LOG("");
 	ImageUtils::Orientation orientation=d->mJPEGContent.orientation();
 
-	if (MiscConfig::self()->autoRotateImages()
+	if (MiscConfig::autoRotateImages()
 		&& orientation!=ImageUtils::NOT_AVAILABLE
 		&& orientation!=ImageUtils::NORMAL)
 	{

@@ -51,7 +51,7 @@ void FileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column
 	FileDetailView* view=static_cast<FileDetailView*>(listView());
 	FileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
 	if (viewedItem==this) {
-		QColor color=FileViewConfig::self()->shownColor();
+		QColor color=FileViewConfig::shownColor();
 		myCG.setColor(QColorGroup::Text, color);
 		myCG.setColor(QColorGroup::HighlightedText, color);
 	}

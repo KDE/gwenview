@@ -458,7 +458,7 @@ void ImageView::slotLoaded() {
 		return;
 	}
 
-	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::self()->osdMode() );
+	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
 	if (d->mFullScreen && osdMode!=NONE) updateFullScreenLabel();
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
@@ -544,8 +544,8 @@ bool ImageView::fullScreen() const {
 
 
 bool ImageView::doDelayedSmoothing() const {
-	return ImageViewConfig::self()->delayedSmoothing()
-		&& ImageViewConfig::self()->smoothAlgorithm()!=ImageUtils::SMOOTH_NONE;
+	return ImageViewConfig::delayedSmoothing()
+		&& ImageViewConfig::smoothAlgorithm()!=ImageUtils::SMOOTH_NONE;
 }
 
 
@@ -572,7 +572,7 @@ void ImageView::updateFromSettings() {
 	updateScrollBarMode();
 	
 	if (!d->mFullScreen) {
-		viewport()->setBackgroundColor(ImageViewConfig::self()->backgroundColor() );
+		viewport()->setBackgroundColor(ImageViewConfig::backgroundColor() );
 	}
 }
 
@@ -660,7 +660,7 @@ void ImageView::setFullScreen(bool fullScreen) {
 		d->mFullScreenBar->show();
 		
 	} else {
-		viewport()->setBackgroundColor(ImageViewConfig::self()->backgroundColor() );
+		viewport()->setBackgroundColor(ImageViewConfig::backgroundColor() );
 		d->mAutoHideTimer->stop();
 		d->mTools[d->mToolID]->updateCursor();
 		
@@ -900,7 +900,7 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 			addPendingPaint( true, QRect( clipx, clipy, clipw, cliph ));
 		} else {
 			// We need to smooth now
-			smoothAlgo = static_cast<ImageUtils::SmoothAlgorithm>( ImageViewConfig::self()->smoothAlgorithm() );
+			smoothAlgo = static_cast<ImageUtils::SmoothAlgorithm>( ImageViewConfig::smoothAlgorithm() );
 		}
 		maxRepaintSize = ( smoothAlgo != ImageUtils::SMOOTH_NONE ? &d->mMaxSmoothRepaintSize : &d->mMaxScaleRepaintSize );
 	}
@@ -1439,7 +1439,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 
 void ImageView::updateScrollBarMode() {
-	if (d->mZoomMode==ZOOM_FIT || !ImageViewConfig::self()->showScrollBars()) {
+	if (d->mZoomMode==ZOOM_FIT || !ImageViewConfig::showScrollBars()) {
 		setVScrollBarMode(AlwaysOff);
 		setHScrollBarMode(AlwaysOff);
 	} else {
@@ -1463,7 +1463,7 @@ double ImageView::computeZoomToFit() const {
 	size.scale(width(),height(),QSize::ScaleMin);
 
 	double zoom=double(size.width())/d->mDocument->width();
-	if (zoom>1.0 && !ImageViewConfig::self()->enlargeSmallImages()) return 1.0;
+	if (zoom>1.0 && !ImageViewConfig::enlargeSmallImages()) return 1.0;
 	return zoom;
 }
 
@@ -1579,10 +1579,10 @@ void ImageView::updateFullScreenLabel() {
 	}
 	
 	QString format;
-	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::self()->osdMode() );
+	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
 	switch (osdMode) {
 	case FREE_OUTPUT:
-		format = FullScreenConfig::self()->freeOutputFormat();
+		format = FullScreenConfig::freeOutputFormat();
 		break;
 	case PATH:
 		format = "%p";

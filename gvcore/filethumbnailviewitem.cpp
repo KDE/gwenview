@@ -250,7 +250,7 @@ void FileThumbnailViewItem::calcRect(const QString&) {
 	bool isRight=view->itemTextPos()==QIconView::Right;
 	
 	int textW=view->gridX();
-	int thumbnailSize=FileViewConfig::self()->thumbnailSize();
+	int thumbnailSize=FileViewConfig::thumbnailSize();
 	if (isRight) {
 		textW-=PADDING * 3 + thumbnailSize;
 	} else {
@@ -311,7 +311,7 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	// Define colors
 	QColor bg;
 	if (isShownItem) {
-		bg=FileViewConfig::self()->shownColor();
+		bg=FileViewConfig::shownColor();
 	} else if ( isSelected() ) {
 		bg=cg.highlight();
 	} else {
