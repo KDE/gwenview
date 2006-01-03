@@ -147,16 +147,6 @@ visibleHeight(), contentsToViewport() and viewportToContents().
 
 */
 
-const char CONFIG_LOCK_ZOOM[]="lock zoom";
-const char CONFIG_ZOOM_TO_FIT[]="auto zoom"; // called so for backwards compatibility
-const char CONFIG_ZOOM_TO_WIDTH[]="zoom to width";
-const char CONFIG_ZOOM_TO_HEIGHT[]="zoom to height";
-const char CONFIG_MAX_REPAINT_SIZE[]= "max repaint size";
-const char CONFIG_MAX_SCALE_REPAINT_SIZE[]= "max scale repaint size";
-const char CONFIG_MAX_SMOOTH_REPAINT_SIZE[]= "max smooth repaint size";
-
-const char CONFIG_PIXMAPWIDGET_GLOBAL_GROUP[]="pixmap widget global";
-
 const int AUTO_HIDE_TIMEOUT=4000;
 
 const double MAX_ZOOM=16.0; // Same value as GIMP
@@ -230,9 +220,6 @@ struct ImageView::Private {
 	QTimer mPendingPaintTimer;
 	bool mSmoothingSuspended;
 	QRegion mValidImageArea;
-	int mMaxRepaintSize;
-	int mMaxScaleRepaintSize;
-	int mMaxSmoothRepaintSize;
 
 	int imageToWidgetX( int x ) const {
 		if( mZoom == 1.0 ) return x + mXOffset;
@@ -332,7 +319,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mToolID=SCROLL;
 	d->mXOffset=0;
 	d->mYOffset=0;
-	d->mZoomMode=ZOOM_FIT;
+	d->mZoomMode=static_cast<ZoomMode>( ImageViewConfig::zoomMode() );
 	d->mZoom=1;
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
@@ -342,9 +329,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mZoomBeforeAuto=1;
 	d->mPendingOperations= 0 ;
 	d->mSmoothingSuspended= false ;
-	d->mMaxRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
-	d->mMaxScaleRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
-	d->mMaxSmoothRepaintSize= DEFAULT_MAX_REPAINT_SIZE ;
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
@@ -354,6 +338,9 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	setFrameStyle(NoFrame);
 	setAcceptDrops( true );
 	viewport()->setAcceptDrops( true );
+
+	updateScrollBarMode();
+	viewport()->setBackgroundColor(ImageViewConfig::backgroundColor() );
 
 	d->mTools[SCROLL]=new ScrollTool(this);
 	d->mTools[ZOOM]=new ZoomTool(this);
@@ -378,6 +365,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mResetZoom->setIcon("viewmag1");
 
 	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
+	d->mLockZoom->setChecked(ImageViewConfig::lockZoom());
 	connect(d->mLockZoom,SIGNAL(toggled(bool)),
 		this,SLOT(setLockZoom(bool)) );
 
@@ -390,6 +378,9 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mZoomComboActions.append(d->mZoomToFit);
 	d->mZoomComboActions.append(d->mZoomToWidth);
 	d->mZoomComboActions.append(d->mZoomToHeight);
+	if (d->mZoomMode!=ZOOM_FREE) {
+		d->mZoomComboActions[d->mZoomMode]->setChecked(true);
+	}
 	d->initZoomCombo();
 
 	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
@@ -445,6 +436,9 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 
 
 ImageView::~ImageView() {
+	ImageViewConfig::setZoomMode(d->mZoomMode);
+	ImageViewConfig::setLockZoom(d->mLockZoom->isChecked());
+	ImageViewConfig::self()->writeConfig();
 	delete d->mTools[SCROLL];
 	delete d->mTools[ZOOM];
 	delete d;
@@ -555,9 +549,12 @@ QPoint ImageView::offset() const {
 
 
 void ImageView::updateFromSettings() {
-	d->mMaxRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // reset, so that next repaint doesn't
-	d->mMaxScaleRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // possibly take longer
-	d->mMaxSmoothRepaintSize = DEFAULT_MAX_REPAINT_SIZE; // because of smoothing
+	// Reset, so that next repaint doesn't possibly take longer because of
+	// smoothing
+	ImageViewConfig::setMaxRepaintSize(DEFAULT_MAX_REPAINT_SIZE);
+	ImageViewConfig::setMaxScaleRepaintSize(DEFAULT_MAX_REPAINT_SIZE);
+	ImageViewConfig::setMaxSmoothRepaintSize(DEFAULT_MAX_REPAINT_SIZE);
+	
 	if( doDelayedSmoothing() ) {
 		scheduleOperation( SMOOTH_PASS );
 	} else {
@@ -764,12 +761,12 @@ void ImageView::limitPaintSize( PendingPaint& paint ) {
 	// The only thing that makes time spent in performPaint() vary
 	// is whether there will be scaling and whether there will be smoothing.
 	// So there are three max sizes for each mode.
-	int maxSize = d->mMaxRepaintSize;
+	int maxSize = ImageViewConfig::maxRepaintSize();
 	if( d->mZoom != 1.0 ) {
 		if( paint.smooth || !doDelayedSmoothing() ) {
-			maxSize = d->mMaxSmoothRepaintSize;
+			maxSize = ImageViewConfig::maxSmoothRepaintSize();
 		} else {
-			maxSize = d->mMaxScaleRepaintSize;
+			maxSize = ImageViewConfig::maxScaleRepaintSize();
 		}
 	}
 	// don't paint more than max_size pixels at a time
@@ -892,7 +889,6 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 	// True if another pass will follow
 	bool fastpass = doDelayedSmoothing() && zoom() != 1.0 && !secondPass;
 
-	int* maxRepaintSize = &d->mMaxRepaintSize;
 	ImageUtils::SmoothAlgorithm smoothAlgo = ImageUtils::SMOOTH_NONE;
 	if( zoom() != 1.0 ) {
 		if (doDelayedSmoothing() && !secondPass) {
@@ -902,7 +898,6 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 			// We need to smooth now
 			smoothAlgo = static_cast<ImageUtils::SmoothAlgorithm>( ImageViewConfig::smoothAlgorithm() );
 		}
-		maxRepaintSize = ( smoothAlgo != ImageUtils::SMOOTH_NONE ? &d->mMaxSmoothRepaintSize : &d->mMaxScaleRepaintSize );
 	}
 
 	int extraPixels = ImageUtils::extraScalePixels( smoothAlgo, zoom());
@@ -995,8 +990,31 @@ void ImageView::performPaint( QPainter* painter, int clipx, int clipy, int clipw
 	if( paintRect.width() * paintRect.height() >= 10000 ) { // ignore small repaints
 		// try to do one step in 0.1sec
 		int size = paintRect.width() * paintRect.height() * 100 / QMAX( t.elapsed(), 1 );
-		*maxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
-				( size + *maxRepaintSize ) / 2 ));
+		
+		int maxRepaintSize;
+		if (zoom() == 1.0) {
+			maxRepaintSize=ImageViewConfig::maxRepaintSize();
+		} else {
+			if (smoothAlgo!=ImageUtils::SMOOTH_NONE) {
+				maxRepaintSize=ImageViewConfig::maxSmoothRepaintSize();
+			} else {
+				maxRepaintSize=ImageViewConfig::maxScaleRepaintSize();
+			}
+		}
+		
+		maxRepaintSize = KCLAMP(
+			( size + maxRepaintSize ) / 2, 
+			10000, LIMIT_MAX_REPAINT_SIZE);
+		
+		if (zoom() == 1.0) {
+			ImageViewConfig::setMaxRepaintSize(maxRepaintSize);
+		} else {
+			if (smoothAlgo!=ImageUtils::SMOOTH_NONE) {
+				ImageViewConfig::setMaxSmoothRepaintSize(maxRepaintSize);
+			} else {
+				ImageViewConfig::setMaxScaleRepaintSize(maxRepaintSize);
+			}
+		}
 	}
 
 	#ifdef DEBUG_RECTS
@@ -1668,45 +1686,6 @@ void ImageView::deleteFile() {
 	KURL::List list;
 	list << d->mDocument->url();
 	FileOperation::del(list,this);
-}
-
-//------------------------------------------------------------------------
-//
-// Config
-//
-//------------------------------------------------------------------------
-void ImageView::readConfig(KConfig* config, const QString& group) {
-	config->setGroup(group);
-	
-	d->mZoomToFit->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_FIT, true));
-	d->mZoomToWidth->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_WIDTH, false));
-	d->mZoomToHeight->setChecked(config->readBoolEntry(CONFIG_ZOOM_TO_HEIGHT, false));
-	d->mLockZoom->setChecked(config->readBoolEntry(CONFIG_LOCK_ZOOM, false));
-
-	updateFromSettings();
-
-	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
-	d->mMaxRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
-		config->readNumEntry(CONFIG_MAX_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
-	d->mMaxScaleRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
-		config->readNumEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
-	d->mMaxSmoothRepaintSize = QMIN( LIMIT_MAX_REPAINT_SIZE, QMAX( 10000,
-		config->readNumEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, DEFAULT_MAX_REPAINT_SIZE )));
-}
-
-
-void ImageView::writeConfig(KConfig* config, const QString& group) const {
-	config->setGroup(group);
-	config->writeEntry(CONFIG_ZOOM_TO_FIT, d->mZoomToFit->isChecked());
-	config->writeEntry(CONFIG_ZOOM_TO_WIDTH, d->mZoomToWidth->isChecked());
-	config->writeEntry(CONFIG_ZOOM_TO_HEIGHT, d->mZoomToHeight->isChecked());
-	config->writeEntry(CONFIG_LOCK_ZOOM, d->mLockZoom->isChecked());
-	
-	// following data are internal, and it makes sense to share them between the app and KPart's
-	config->setGroup(CONFIG_PIXMAPWIDGET_GLOBAL_GROUP);
-	config->writeEntry(CONFIG_MAX_REPAINT_SIZE, d->mMaxRepaintSize);
-	config->writeEntry(CONFIG_MAX_SCALE_REPAINT_SIZE, d->mMaxScaleRepaintSize);
-	config->writeEntry(CONFIG_MAX_SMOOTH_REPAINT_SIZE, d->mMaxSmoothRepaintSize);
 }
 
 

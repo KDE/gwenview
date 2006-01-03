@@ -52,7 +52,6 @@ namespace Gwenview {
 
 // For now let's duplicate
 const char CONFIG_CACHE_GROUP[]="cache";
-const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
 
 
 class GVDirPartImageView : public ImageView {
@@ -160,14 +159,11 @@ GVDirPart::~GVDirPart() {
 
 
 void GVDirPart::partActivateEvent(KParts::PartActivateEvent* event) {
-	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
-		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
+		KConfig* config=new KConfig("gwenviewrc");
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
-	} else {
-		mImageView->writeConfig(config, CONFIG_VIEW_GROUP);
+		delete config;
 	}
-	delete config;
 }
 
 

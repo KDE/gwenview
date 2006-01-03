@@ -215,7 +215,6 @@ bool MainWindow::queryClose() {
 	mDocument->saveBeforeClosing();
 
 	KConfig* config=KGlobal::config();
-	mImageView->writeConfig(config, CONFIG_PIXMAPWIDGET_GROUP);
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
@@ -890,7 +889,6 @@ void MainWindow::createWidgets() {
 	}
 	
 	// Load config
-	mImageView->readConfig(config,CONFIG_PIXMAPWIDGET_GROUP);
 	Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
 }
 

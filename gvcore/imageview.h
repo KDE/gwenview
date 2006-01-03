@@ -41,7 +41,6 @@ class QTimer;
 class QWheelEvent;
 class KAction;
 class KActionCollection;
-class KConfig;
 class KToggleAction;
 typedef QValueList<KAction *> KActionPtrList;
 
@@ -71,8 +70,6 @@ public:
 
 	ImageView(QWidget* parent,Document*,KActionCollection*);
 	~ImageView();
-	void readConfig(KConfig* config, const QString& group);
-	void writeConfig(KConfig* config, const QString& group) const;
 
 	// Properties
 	KToggleAction* zoomToFit() const; 

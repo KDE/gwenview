@@ -42,8 +42,6 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 
 namespace Gwenview {
 // For now let's duplicate
-const char CONFIG_VIEW_GROUP[]="GwenviewPart View";
-const char CONFIG_JPEGTRAN_GROUP[]="jpegtran";
 const char CONFIG_CACHE_GROUP[]="cache";
 
 
@@ -121,14 +119,11 @@ GVImagePart::~GVImagePart() {
 
 
 void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
-	KConfig* config=new KConfig("gwenviewrc");
 	if (event->activated()) {
+		KConfig* config=new KConfig("gwenviewrc");
 		Cache::instance()->readConfig(config,CONFIG_CACHE_GROUP);
-		mImageView->readConfig(config, CONFIG_VIEW_GROUP);
-	} else {
-		mImageView->writeConfig(config, CONFIG_VIEW_GROUP);
+		delete config;
 	}
-	delete config;
 	KParts::ReadOnlyPart::partActivateEvent( event );
 }
 

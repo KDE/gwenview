@@ -29,5 +29,26 @@
     <entry name="mouseWheelScroll" key="mouse wheel scrolls image" type="Bool">
       <default>false</default>
     </entry>
+    <entry name="zoomMode" type="Enum">
+	  <choices>
+		<choice name="FitWindow"/>
+		<choice name="FitWidth"/>
+		<choice name="FitHeight"/>
+		<choice name="Free"/>
+	  </choices>
+      <default>FitWindow</default>
+    </entry>
+    <entry name="lockZoom" key="lockZoom" type="Bool">
+      <default>false</default>
+    </entry>
+	<entry name="maxRepaintSize" key="max repaint size" type="Int">
+	  <default>10000</default>
+	</entry>
+	<entry name="maxScaleRepaintSize" key="max scale repaint size" type="Int">
+	  <default>10000</default>
+	</entry>
+	<entry name="maxSmoothRepaintSize" key="max smooth repaint size" type="Int">
+	  <default>10000</default>
+	</entry>
   </group> 
 </kcfg>
