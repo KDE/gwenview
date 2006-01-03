@@ -492,41 +492,6 @@ void ImageView::setOSDFormatter(CaptionFormatterBase* formatter) {
 }
 
 
-KToggleAction* ImageView::zoomToFit() const {
-	return d->mZoomToFit;
-}
-
-
-KToggleAction* ImageView::zoomToWidth() const {
-	return d->mZoomToWidth;
-}
-
-
-KToggleAction* ImageView::zoomToHeight() const {
-	return d->mZoomToHeight;
-}
-
-
-KAction* ImageView::zoomIn() const {
-	return d->mZoomIn;
-}
-
-
-KAction* ImageView::zoomOut() const {
-	return d->mZoomOut;
-}
-
-
-KAction* ImageView::resetZoom() const {
-	return d->mResetZoom;
-}
-
-
-KToggleAction* ImageView::lockZoom() const {
-	return d->mLockZoom;
-}
-
-
 double ImageView::zoom() const {
 	return d->mZoom;
 }
@@ -545,6 +510,17 @@ bool ImageView::doDelayedSmoothing() const {
 
 QPoint ImageView::offset() const {
 	return QPoint(d->mXOffset, d->mYOffset);
+}
+	
+
+bool ImageView::canZoom(bool in) const {
+	KAction* zoomAction=in ? d->mZoomIn : d->mZoomOut;
+	return zoomAction->isEnabled();
+}
+
+
+KToggleAction* ImageView::zoomToFit() const {
+	return d->mZoomToFit;
 }
 
 

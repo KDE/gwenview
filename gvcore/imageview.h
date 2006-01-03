@@ -72,13 +72,6 @@ public:
 	~ImageView();
 
 	// Properties
-	KToggleAction* zoomToFit() const; 
-	KToggleAction* zoomToWidth() const; 
-	KToggleAction* zoomToHeight() const; 
-	KAction* zoomIn() const; 
-	KAction* zoomOut() const; 
-	KAction* resetZoom() const; 
-	KToggleAction* lockZoom() const; 
 	double zoom() const; 
 	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const; 
@@ -158,6 +151,8 @@ private:
 
 	// Used by the zoom tool
 	QPoint offset() const;
+	bool canZoom(bool in) const;
+	KToggleAction* zoomToFit() const;
 
 private slots:
 	void slotLoaded();

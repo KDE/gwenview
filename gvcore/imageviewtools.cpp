@@ -86,16 +86,8 @@ ImageView::ZoomTool::ZoomTool(ImageView* view)
 
 
 void ImageView::ZoomTool::zoomTo(const QPoint& pos, bool in) {
-	KAction* zoomAction=in?mView->zoomIn():mView->zoomOut();
-	if (!zoomAction->isEnabled()) return;
+	if (!mView->canZoom(in)) return;
 
-	if (mView->zoomToFit()->isChecked() || mView->zoomToWidth()->isChecked()
-		|| mView->zoomToHeight()->isChecked()) {
-		mView->zoomToFit()->setChecked(false);
-		mView->zoomToWidth()->setChecked(false);
-		mView->zoomToHeight()->setChecked(false);
-		mView->updateScrollBarMode();
-	}
 	QPoint centerPos=QPoint(mView->visibleWidth(), mView->visibleHeight())/2;
 	// Compute image position
 	QPoint imgPos=mView->viewportToContents(pos) - mView->offset();
