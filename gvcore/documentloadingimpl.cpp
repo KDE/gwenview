@@ -98,7 +98,7 @@ void DocumentLoadingImpl::start() {
 			for( unsigned int i = 0; i < rects.count(); ++i ) {
 				emit rectUpdated( rects[ i ] );
 			}
-                }
+		}
 	}
 	if( d->mLoader->completed()) emit imageLoaded( d->mLoader->frames().count() != 0 );
 	// this may be deleted here
