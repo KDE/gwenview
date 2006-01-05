@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -341,7 +342,7 @@ void MainWindow::renameFile() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->renameFile();
 	} else {
-		mImageView->renameFile();
+		FileOperation::rename(mDocument->url(), this);
 	}
 }
 
@@ -350,7 +351,9 @@ void MainWindow::copyFiles() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->copyFiles();
 	} else {
-		mImageView->copyFile();
+		KURL::List list;
+		list << mDocument->url();
+		FileOperation::copyTo(list, this);
 	}
 }
 
@@ -358,7 +361,9 @@ void MainWindow::linkFiles() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->linkFiles();
 	} else {
-		mImageView->linkFile();
+		KURL::List list;
+		list << mDocument->url();
+		FileOperation::linkTo(list, this);
 	}
 }
 
@@ -367,7 +372,9 @@ void MainWindow::moveFiles() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->moveFiles();
 	} else {
-		mImageView->moveFile();
+		KURL::List list;
+		list << mDocument->url();
+		FileOperation::moveTo(list, this);
 	}
 }
 
@@ -376,7 +383,9 @@ void MainWindow::deleteFiles() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->deleteFiles();
 	} else {
-		mImageView->deleteFile();
+		KURL::List list;
+		list << mDocument->url();
+		FileOperation::del(list, this);
 	}
 }
 
@@ -385,7 +394,7 @@ void MainWindow::showFileProperties() {
 	if (mFileViewController->widget()->isVisible()) {
 		mFileViewController->showFileProperties();
 	} else {
-		mImageView->showFileProperties();
+		(void)new KPropertiesDialog(mDocument->url());
 	}
 }
 

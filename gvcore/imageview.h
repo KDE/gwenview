@@ -83,14 +83,6 @@ public:
 
 
 public slots:
-	// File operations
-	void showFileProperties();
-	void renameFile();
-	void copyFile();
-	void linkFile();
-	void moveFile();
-	void deleteFile();
-
 	void updateFromSettings();
 
 signals:

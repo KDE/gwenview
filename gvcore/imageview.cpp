@@ -45,7 +45,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <klocale.h>
-#include <kpropsdlg.h>
 #include <kstandarddirs.h>
 #include <kstdaction.h>
 #include <kurldrag.h>
@@ -53,7 +52,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "captionformatterbase.h"
-#include "fileoperation.h"
 #include "externaltoolmanager.h"
 #include "externaltoolcontext.h"
 #include "document.h"
@@ -1341,6 +1339,15 @@ void ImageView::restartAutoHideTimer() {
 }
 
 
+/**
+ * Little helper to plug an action if it exists
+ */
+inline void plugAction(QPopupMenu* menu, KActionCollection* actionCollection, const char* actionName) {
+	KAction* action=actionCollection->action(actionName);
+	if (action) action->plug(menu);
+}
+
+
 void ImageView::openContextMenu(const QPoint& pos) {
 	QPopupMenu menu(this);
 	bool noImage=d->mDocument->filename().isEmpty();
@@ -1348,9 +1355,7 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 	// The fullscreen item is always there, to be able to leave fullscreen mode
 	// if necessary. But KParts may not have the action itself.
-	if( d->mActionCollection->action("fullscreen")) {
-		d->mActionCollection->action("fullscreen")->plug(&menu);
-	}
+	plugAction(&menu, d->mActionCollection, "fullscreen");
 
 	d->mToggleFullscreenBar->plug(&menu);
 
@@ -1366,35 +1371,19 @@ void ImageView::openContextMenu(const QPoint& pos) {
 
 	menu.insertSeparator();
 
-	if( d->mActionCollection->action("first")) {
-		d->mActionCollection->action("first")->plug(&menu);
-	}
-	if( d->mActionCollection->action("previous")) {
-		d->mActionCollection->action("previous")->plug(&menu);
-	}
-	if( d->mActionCollection->action("next")) {
-		d->mActionCollection->action("next")->plug(&menu);
-	}
-	if( d->mActionCollection->action("last")) {
-		d->mActionCollection->action("last")->plug(&menu);
-	}
+	plugAction(&menu, d->mActionCollection, "first");
+	plugAction(&menu, d->mActionCollection, "previous");
+	plugAction(&menu, d->mActionCollection, "next");
+	plugAction(&menu, d->mActionCollection, "last");
 
 	if (validImage) {
 		menu.insertSeparator();
 
 		QPopupMenu* editMenu=new QPopupMenu(&menu);
-		if( d->mActionCollection->action("rotate_left")) {
-			d->mActionCollection->action("rotate_left")->plug(editMenu);
-		}
-		if( d->mActionCollection->action("rotate_right")) {
-			d->mActionCollection->action("rotate_right")->plug(editMenu);
-		}
-		if( d->mActionCollection->action("mirror")) {
-			d->mActionCollection->action("mirror")->plug(editMenu);
-		}
-		if( d->mActionCollection->action("flip")) {
-			d->mActionCollection->action("flip")->plug(editMenu);
-		}
+		plugAction(editMenu, d->mActionCollection, "rotate_left");
+		plugAction(editMenu, d->mActionCollection, "rotate_right");
+		plugAction(editMenu, d->mActionCollection, "mirror");
+		plugAction(editMenu, d->mActionCollection, "flip");
 		menu.insertItem( i18n("Edit"), editMenu );
 
 		ExternalToolContext* externalToolContext=
@@ -1408,24 +1397,15 @@ void ImageView::openContextMenu(const QPoint& pos) {
 	if (!noImage) {
 		menu.insertSeparator();
 
-		menu.connectItem(
-			menu.insertItem( i18n("&Rename...") ),
-			this,SLOT(renameFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Copy To...") ),
-			this,SLOT(copyFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Move To...") ),
-			this,SLOT(moveFile()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Delete") ),
-			this,SLOT(deleteFile()) );
+		plugAction(&menu, d->mActionCollection, "file_rename");
+		plugAction(&menu, d->mActionCollection, "file_copy");
+		plugAction(&menu, d->mActionCollection, "file_move");
+		plugAction(&menu, d->mActionCollection, "file_link");
+		plugAction(&menu, d->mActionCollection, "file_delete");
 
 		menu.insertSeparator();
 
-		menu.connectItem(
-			menu.insertItem( i18n("Properties") ),
-			this,SLOT(showFileProperties()) );
+		plugAction(&menu, d->mActionCollection, "file_properties");
 	}
 
 	menu.exec(pos);
@@ -1622,47 +1602,5 @@ void ImageView::updateZoomActions() {
 		d->mZoomCombo->setCurrentItem(d->mZoomMode);
 	}
 }
-
-
-//------------------------------------------------------------------------
-//
-// File operations
-//
-//------------------------------------------------------------------------
-void ImageView::showFileProperties() {
-	(void)new KPropertiesDialog(d->mDocument->url());
-}
-
-
-void ImageView::renameFile() {
-	FileOperation::rename(d->mDocument->url(),this);
-}
-
-
-void ImageView::copyFile() {
-	KURL::List list;
-	list << d->mDocument->url();
-	FileOperation::copyTo(list,this);
-}
-
-void ImageView::linkFile() {
-	KURL::List list;
-	list << d->mDocument->url();
-	FileOperation::linkTo(list,this);
-}
-
-void ImageView::moveFile() {
-	KURL::List list;
-	list << d->mDocument->url();
-	FileOperation::moveTo(list,this);
-}
-
-
-void ImageView::deleteFile() {
-	KURL::List list;
-	list << d->mDocument->url();
-	FileOperation::del(list,this);
-}
-
 
 } // namespace
