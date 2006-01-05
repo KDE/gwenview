@@ -79,7 +79,6 @@ public:
 	void setFullScreen(bool);
 
     void setOSDFormatter(CaptionFormatterBase*);
-	bool doDelayedSmoothing() const; 
 
 
 public slots:

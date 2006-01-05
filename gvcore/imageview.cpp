@@ -287,6 +287,12 @@ struct ImageView::Private {
 };
 
 
+inline bool doDelayedSmoothing() {
+	return ImageViewConfig::delayedSmoothing()
+		&& ImageViewConfig::smoothAlgorithm()!=ImageUtils::SMOOTH_NONE;
+}
+
+
 class ImageView::EventFilter : public QObject {
 public:
 	EventFilter(ImageView* parent)
@@ -497,12 +503,6 @@ double ImageView::zoom() const {
 
 bool ImageView::fullScreen() const {
 	return d->mFullScreen;
-}
-
-
-bool ImageView::doDelayedSmoothing() const {
-	return ImageViewConfig::delayedSmoothing()
-		&& ImageViewConfig::smoothAlgorithm()!=ImageUtils::SMOOTH_NONE;
 }
 
 
