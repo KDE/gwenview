@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2006 Aurelien Gateau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -133,6 +133,11 @@ Document::~Document() {
 // Properties
 //
 //---------------------------------------------------------------------
+Document::FileType Document::fileType() const {
+	return d->mImpl->fileType();
+}
+
+
 KURL Document::url() const {
 	return d->mURL;
 }
@@ -503,8 +508,10 @@ void Document::load() {
 	Q_ASSERT(!pixURL.isEmpty());
 	LOG("url: " << pixURL.prettyURL());
 
-	switchToImpl(new DocumentLoadingImpl(this));
+	// DocumentLoadingImpl might emit "finished()" in its "init()" method, so
+	// make sure we emit "loading()" before switching
 	emit loading();
+	switchToImpl(new DocumentLoadingImpl(this));
 }
 
 

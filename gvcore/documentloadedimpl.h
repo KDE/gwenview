@@ -42,6 +42,8 @@ public:
 	void transform(ImageUtils::Orientation);
 	QString save(const KURL&, const QCString& format) const;
 
+	Document::FileType fileType() const { return Document::FILE_IMAGE; }
+
 protected:
 	virtual QString localSave(QFile* file, const QCString& format) const;
 };

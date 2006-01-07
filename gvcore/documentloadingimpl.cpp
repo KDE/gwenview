@@ -24,9 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 
 // KDE
+#include <kmimetype.h>
 
 // Local
 #include "imageloader.h"
+#include "documentvideoloadedimpl.h"
 #include "documentanimatedloadedimpl.h"
 #include "documentloadedimpl.h"
 #include "documentjpegloadedimpl.h"
@@ -66,8 +68,6 @@ DocumentLoadingImpl::DocumentLoadingImpl(Document* document)
 : DocumentImpl(document) {
 	LOG("");
 	d=new DocumentLoadingImplPrivate;
-
-	QTimer::singleShot(0, this, SLOT(start()) );
 }
 
 
@@ -77,7 +77,13 @@ DocumentLoadingImpl::~DocumentLoadingImpl() {
 }
 
 
-void DocumentLoadingImpl::start() {
+void DocumentLoadingImpl::init() {
+	QString mimeType=KMimeType::findByURL(mDocument->url())->name();
+	
+	if (mimeType.startsWith("video/")) {
+		switchToImpl(new DocumentVideoLoadedImpl(mDocument));
+		return;
+	}
 	d->mLoader = ImageLoader::loader( mDocument->url(), this, BUSY_LOADING );
 	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
 	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
@@ -111,7 +117,7 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 	if ( !ok || format.isEmpty()) {
 		// Unknown format, no need to go further
 		emit finished(false);
-		switchToImpl(new DocumentImpl(mDocument));
+		switchToImpl(new DocumentEmptyImpl(mDocument));
 		return;
 	}
 	setImageFormat( format );

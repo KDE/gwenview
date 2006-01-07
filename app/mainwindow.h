@@ -62,7 +62,7 @@ class Document;
 class FileViewController;
 class History;
 class MetaEdit;
-class ImageView;
+class ImageViewController;
 class SlideShow;
 
 
@@ -91,7 +91,7 @@ private:
 	FileViewController* mFileViewController;
 	DirViewController* mDirViewController;
 	BookmarkViewController* mBookmarkViewController;
-	ImageView* mImageView;
+	ImageViewController* mImageViewController;
 	MetaEdit *mMetaEdit;
 
 	Document* mDocument;

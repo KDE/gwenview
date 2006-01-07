@@ -64,6 +64,10 @@ public:
 	bool error() const { return mError; }
 	void clearError() { mError = false; }
 	void setCheck( bool c ) { mCheck = c; }
+
+protected:
+	virtual bool doMimeFilter(const QString&, const QStringList&) const;
+
 private:
 	mutable bool mError;
 	bool mCheck;

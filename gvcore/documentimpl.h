@@ -54,6 +54,8 @@ public:
 	virtual void transform(ImageUtils::Orientation);
 	virtual QString save(const KURL&, const QCString& format) const;
 
+	virtual Document::FileType fileType() const=0;
+
 signals:
 	void finished(bool success);
 	void sizeUpdated(int width, int height);
@@ -69,6 +71,10 @@ public:
 	: DocumentImpl(document) {
 		setImage(QImage(), false);
 		setImageFormat(0);
+	}
+
+	Document::FileType fileType() const {
+		return Document::FILE_EMPTY;
 	}
 };
 

@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2006 Aurelien Gateau
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,38 +18,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef DOCUMENTLOADINGIMPL_H
-#define DOCUMENTLOADINGIMPL_H
+#ifndef DOCUMENTVIDEOLOADEDIMPL_H
+#define DOCUMENTVIDEOLOADEDIMPL_H
 
-// Qt
-#include <qasyncimageio.h>
-
-// Local 
+// Local
+#include "document.h"
 #include "documentimpl.h"
-namespace Gwenview {
 
+namespace Gwenview {
 class Document;
 
-class DocumentLoadingImplPrivate;
-
-class DocumentLoadingImpl : public DocumentImpl {
-Q_OBJECT
+class DocumentVideoLoadedImpl : public DocumentImpl {
 public:
-	DocumentLoadingImpl(Document* document);
-	~DocumentLoadingImpl();
-	virtual void init();
-	virtual Document::FileType fileType() const { return Document::FILE_IMAGE; }
-	
-private:
-	DocumentLoadingImplPrivate* d;
+	DocumentVideoLoadedImpl(Document* document)
+	: DocumentImpl(document) {
+		setImage(QImage(), false);
+		setImageFormat(0);
+	}
 
-private slots:
-	void sizeLoaded(int, int);
-	void imageChanged(const QRect&);
-	void frameLoaded();
-	void imageLoaded( bool ok );
+	void init() {
+		emit finished(true);
+	}
+
+	Document::FileType fileType() const { return Document::FILE_VIDEO; }
 };
 
 } // namespace
-#endif /* DOCUMENTLOADINGIMPL_H */
+#endif /* DOCUMENTVIDEOLOADEDIMPL_H */
 

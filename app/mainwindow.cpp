@@ -88,6 +88,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/fileviewbase.h"
 #include "gvcore/fileviewcontroller.h"
 #include "gvcore/imageview.h"
+#include "gvcore/imageviewcontroller.h"
 #include "gvcore/slideshow.h"
 #include "gvcore/printdialog.h"
 #include "gvcore/cache.h"
@@ -207,7 +208,7 @@ MainWindow::MainWindow()
 	if (mToggleBrowse->isChecked()) {
 		mFileViewController->widget()->setFocus();
 	} else {
-		mImageView->setFocus();
+		mImageViewController->widget()->setFocus();
 	}
 }
 
@@ -535,11 +536,11 @@ void MainWindow::toggleFullScreen() {
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
 		if (mToggleBrowse->isChecked()) {
-			mImageView->reparent(mViewModeWidget, QPoint(0,0));
+			mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
-		mImageView->setFullScreen(true);
-		mImageView->setFocus();
+		mImageViewController->imageView()->setFullScreen(true);
+		mImageViewController->widget()->setFocus();
 	} else {
 		// Stop the slideshow if it's running
 		if (mSlideShow->isRunning()) {
@@ -561,10 +562,10 @@ void MainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		statusBar()->show();
-		mImageView->setFullScreen(false);
+		mImageViewController->imageView()->setFullScreen(false);
 		
 		if (mToggleBrowse->isChecked()) {
-			mPixmapDock->setWidget(mImageView);
+			mPixmapDock->setWidget(mImageViewController->widget());
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
 		mFileViewController->widget()->setFocus();
@@ -612,7 +613,7 @@ void MainWindow::showConfigDialog() {
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mSlideShow, SLOT(slotSettingsChanged()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
-		mImageView, SLOT(updateFromSettings()) );
+		mImageViewController->imageView(), SLOT(updateFromSettings()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mFileViewController, SLOT(updateFromSettings()) );
 	dialog.exec();
@@ -694,13 +695,13 @@ void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 void MainWindow::slotToggleCentralStack() {
 	LOG("");
 	if (mToggleBrowse->isChecked()) {
-		mPixmapDock->setWidget(mImageView);
+		mPixmapDock->setWidget(mImageViewController->widget());
 		mCentralStack->raiseWidget(StackIDBrowse);
 		mFileViewController->setSilentMode( false );
 		// force re-reading the directory to show the error
 		if( mFileViewController->lastURLError()) mFileViewController->retryURL();
 	} else {
-		mImageView->reparent(mViewModeWidget, QPoint(0,0));
+		mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
 		mFileViewController->setSilentMode( true );
 	}
@@ -831,9 +832,9 @@ void MainWindow::createWidgets() {
 
 	// Pixmap widget
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
-	mImageView=new ImageView(mPixmapDock,mDocument,actionCollection());
-	mPixmapDock->setWidget(mImageView);
-	connect(mImageView, SIGNAL(requestHintDisplay(const QString&)),
+	mImageViewController=new ImageViewController(mPixmapDock, mDocument, actionCollection());
+	mPixmapDock->setWidget(mImageViewController->widget());
+	connect(mImageViewController->imageView(), SIGNAL(requestHintDisplay(const QString&)),
 		this, SLOT(showHint(const QString&)) );
 
 	// Folder widget
@@ -966,7 +967,7 @@ void MainWindow::createActions() {
 void MainWindow::createObjectInteractions() {
 	// Pixmap view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
-	mImageView->setOSDFormatter(mCaptionFormatter.get());
+	mImageViewController->imageView()->setOSDFormatter(mCaptionFormatter.get());
 	
 	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
@@ -974,7 +975,7 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewController->selectNext());
 	actions.append(mToggleFullScreen);
 	actions.append(mToggleSlideShow);
-	mImageView->setFullScreenActions(actions);
+	mImageViewController->imageView()->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
 	connect(mFileViewController, SIGNAL(selectionChanged()),
@@ -1053,11 +1054,11 @@ void MainWindow::createConnections() {
 		mBookmarkViewController, SLOT(setURL(const KURL&)) );
 
 	// Pixmap view connections
-	connect(mImageView,SIGNAL(selectPrevious()),
+	connect(mImageViewController->imageView(),SIGNAL(selectPrevious()),
 		mFileViewController,SLOT(slotSelectPrevious()) );
-	connect(mImageView,SIGNAL(selectNext()),
+	connect(mImageViewController->imageView(),SIGNAL(selectNext()),
 		mFileViewController,SLOT(slotSelectNext()) );
-	connect(mImageView,SIGNAL(doubleClicked()),
+	connect(mImageViewController->imageView(),SIGNAL(doubleClicked()),
 		mToggleFullScreen,SLOT(activate()) );
 
 	// File view connections

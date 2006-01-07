@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab
 /*
 Gwenview - A simple image viewer for KDE
-Copyright 2000-2004 Aurélien Gâteau
+Copyright 2000-2006 Aurelien Gateau
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
 	enum CommentState { NONE=0, READ_ONLY=1, WRITABLE=2 };
+	enum FileType { FILE_EMPTY, FILE_IMAGE, FILE_VIDEO };
 	
 	Document(QObject*);
 	~Document();
@@ -66,6 +67,7 @@ public:
 	QString filename() const;
 	const QCString& imageFormat() const;
 	int fileSize() const;
+	FileType fileType() const;
 
 	// Convenience methods
 	bool isNull() const { return image().isNull(); }
