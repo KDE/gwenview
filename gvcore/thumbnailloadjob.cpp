@@ -33,17 +33,14 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qimage.h>
-#include <qpainter.h>
 #include <qpixmap.h>
 #include <qtimer.h>
 
 // KDE 
 #include <kapplication.h>
-#include <kconfig.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
-#include <kio/netaccess.h>
 #include <kio/previewjob.h>
 #include <klargefile.h>
 #include <kmdcodec.h>
