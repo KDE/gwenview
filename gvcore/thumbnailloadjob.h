@@ -149,6 +149,7 @@ signals:
 
 private slots:
 	void slotResult( KIO::Job *job );
+	void slotGotPreview(const KFileItem*, const QPixmap&);
 	void checkThumbnail();
 	void thumbnailReady(const QImage& im, const QSize&);
 

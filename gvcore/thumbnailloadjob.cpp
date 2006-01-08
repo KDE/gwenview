@@ -44,6 +44,7 @@
 #include <kfileitem.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
+#include <kio/previewjob.h>
 #include <klargefile.h>
 #include <kmdcodec.h>
 #include <kstandarddirs.h>
@@ -559,9 +560,9 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 
 	switch (mState) {
 	case STATE_NEXTTHUMB:
-		Q_ASSERT( false );
 		determineNextIcon();
 		return;
+
 	case STATE_STATORIG: {
 		// Could not stat original, drop this one and move on to the next one
 		if (job->error()) {
@@ -676,6 +677,16 @@ void ThumbnailLoadJob::checkThumbnail() {
 	// Thumbnail not found or not valid
 	// If the original is a local file, create the thumbnail
 	// and proceed to next icon, otherwise download the original
+	if (mCurrentItem->mimetype().startsWith("video/")) {
+		KFileItemList list;
+		list.append(mCurrentItem);
+		KIO::Job* job=KIO::filePreview(list, mThumbnailSize);
+		job->setWindow(KApplication::kApplication()->mainWidget());
+		connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
+			this, SLOT(slotGotPreview(const KFileItem*, const QPixmap&)) );
+		addSubjob(job);
+		return;
+	}
 	if (mCurrentURL.isLocalFile()) {
 		startCreatingThumbnail(mCurrentURL.path());
 	} else {
@@ -696,6 +707,17 @@ void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	mThumbnailThread.load( mOriginalURI, mOriginalTime, mCurrentItem->size(),
 		mCurrentItem->mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
 		FileViewConfig::storeThumbnailsInCache());
+}
+
+
+void ThumbnailLoadJob::slotGotPreview(const KFileItem* item, const QPixmap& pixmap) {
+	LOG("");
+	QSize size;
+	emit thumbnailLoaded(item, pixmap, size);
+
+	// Wait until we get in slotResult to load next thumb. This makes sure we
+	// only have one subjob at a time.
+	mState=STATE_NEXTTHUMB;
 }
 
 
