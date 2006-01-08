@@ -25,7 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kdebug.h>
-#include <kdesktopfile.h>
+#include <kmimetype.h>
+#include <kuserprofile.h>
 #include <kparts/componentfactory.h>
 
 // Local
@@ -48,11 +49,28 @@ struct ImageViewController::Private {
 	KActionCollection* mActionCollection;
 	QWidgetStack* mStack;
 	ImageView* mImageView;
+	
+	QString mPlayerLibrary;
 	KParts::ReadOnlyPart* mPlayerPart;
 
 	void createPlayerPart(void) {
-		KService::Ptr service = KService::serviceByDesktopPath("kaboodle_component.desktop");
-		if (!service) return;
+		QString mimeType=KMimeType::findByURL(mDocument->url())->name();
+		KService::Ptr service = KServiceTypeProfile::preferredService(mimeType, "KParts/ReadOnlyPart");
+		if (!service) {
+			mPlayerLibrary=QString::null;
+			delete mPlayerPart;
+			mPlayerPart=0;
+			return;
+		}
+
+		QString library=service->library();
+		Q_ASSERT(!library.isNull());
+		LOG("Library:" << library);
+		if (library==mPlayerLibrary) {
+			LOG("Reusing library");
+			return;
+		}
+		mPlayerLibrary=library;
 		
 		mPlayerPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
 		if (!mPlayerPart) return;
@@ -62,7 +80,7 @@ struct ImageViewController::Private {
 
 	void showPlayerPart(void) {
 		LOG("");
-		if (!mPlayerPart) createPlayerPart();
+		createPlayerPart();
 		if (!mPlayerPart) return;
 		mStack->raiseWidget(mPlayerPart->widget());
 		mPlayerPart->openURL(mDocument->url());
