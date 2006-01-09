@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "imageloader.h"
-#include "documentvideoloadedimpl.h"
+#include "documentotherloadedimpl.h"
 #include "documentanimatedloadedimpl.h"
 #include "documentloadedimpl.h"
 #include "documentjpegloadedimpl.h"
@@ -81,7 +81,7 @@ DocumentLoadingImpl::~DocumentLoadingImpl() {
 void DocumentLoadingImpl::init() {
 	MimeTypeUtils::Kind kind=MimeTypeUtils::urlKind(mDocument->url());
 	if (kind==MimeTypeUtils::KIND_FILE) {
-		switchToImpl(new DocumentVideoLoadedImpl(mDocument));
+		switchToImpl(new DocumentOtherLoadedImpl(mDocument));
 		return;
 	}
 	d->mLoader = ImageLoader::loader( mDocument->url(), this, BUSY_LOADING );

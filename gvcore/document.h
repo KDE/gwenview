@@ -55,7 +55,7 @@ class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
 	enum CommentState { NONE=0, READ_ONLY=1, WRITABLE=2 };
-	enum FileType { FILE_EMPTY, FILE_IMAGE, FILE_VIDEO };
+	enum FileType { FILE_EMPTY, FILE_IMAGE, FILE_OTHER };
 	
 	Document(QObject*);
 	~Document();

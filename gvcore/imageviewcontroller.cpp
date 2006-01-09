@@ -116,7 +116,7 @@ ImageViewController::~ImageViewController() {
 
 void ImageViewController::slotLoaded() {
 	LOG("");
-	if (d->mDocument->fileType()==Document::FILE_VIDEO) {
+	if (d->mDocument->fileType()==Document::FILE_OTHER) {
 		d->showPlayerPart();
 	} else {
 		d->showImageView();

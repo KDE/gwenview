@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef DOCUMENTVIDEOLOADEDIMPL_H
-#define DOCUMENTVIDEOLOADEDIMPL_H
+#ifndef DOCUMENTOTHERLOADEDIMPL_H
+#define DOCUMENTOTHERLOADEDIMPL_H
 
 // Local
 #include "document.h"
@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 namespace Gwenview {
 class Document;
 
-class DocumentVideoLoadedImpl : public DocumentImpl {
+class DocumentOtherLoadedImpl : public DocumentImpl {
 public:
-	DocumentVideoLoadedImpl(Document* document)
+	DocumentOtherLoadedImpl(Document* document)
 	: DocumentImpl(document) {
 		setImage(QImage(), false);
 		setImageFormat(0);
@@ -40,9 +40,9 @@ public:
 		emit finished(true);
 	}
 
-	Document::FileType fileType() const { return Document::FILE_VIDEO; }
+	Document::FileType fileType() const { return Document::FILE_OTHER; }
 };
 
 } // namespace
-#endif /* DOCUMENTVIDEOLOADEDIMPL_H */
+#endif /* DOCUMENTOTHERLOADEDIMPL_H */
 
