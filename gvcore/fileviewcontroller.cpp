@@ -935,7 +935,6 @@ void DirLister::handleError( KIO::Job* job ) {
 
 bool DirLister::doMimeFilter(const QString& mime, const QStringList& filters) const {
 	if (mime.startsWith("video/")) return true;
-	if (mime.startsWith("audio/")) return true;
 	return KDirLister::doMimeFilter(mime, filters);
 }
 
