@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "documentanimatedloadedimpl.h"
 #include "documentloadedimpl.h"
 #include "documentjpegloadedimpl.h"
+#include "mimetypeutils.h"
 
 namespace Gwenview {
 
@@ -78,9 +79,8 @@ DocumentLoadingImpl::~DocumentLoadingImpl() {
 
 
 void DocumentLoadingImpl::init() {
-	QString mimeType=KMimeType::findByURL(mDocument->url())->name();
-	
-	if (mimeType.startsWith("video/")) {
+	MimeTypeUtils::Kind kind=MimeTypeUtils::urlKind(mDocument->url());
+	if (kind==MimeTypeUtils::KIND_FILE) {
 		switchToImpl(new DocumentVideoLoadedImpl(mDocument));
 		return;
 	}

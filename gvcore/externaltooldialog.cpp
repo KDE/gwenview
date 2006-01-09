@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "archive.h"
+#include "mimetypeutils.h"
 #include "externaltoolmanager.h"
 #include "externaltooldialogbase.h"
 #include "externaltooldialog.moc"
@@ -76,11 +77,7 @@ struct ExternalToolDialogPrivate {
 	: mSelectedItem(0L) {}
 	
 	void fillMimeTypeListView() {
-		QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
-		//FIXME: Factorize the additional mime types
-		mimeTypes.append("image/x-xcf-gimp");
-		mimeTypes.append("image/x-xcursor");
-		mimeTypes.append("image/pjpeg");
+		QStringList mimeTypes=MimeTypeUtils::rasterImageMimeTypes();
 		mimeTypes.append("inode/directory");
 		mimeTypes+=Archive::mimeTypes();
 

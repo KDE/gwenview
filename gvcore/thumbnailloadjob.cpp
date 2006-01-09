@@ -56,6 +56,7 @@ extern "C" {
 
 // Local
 #include "cache.h"
+#include "mimetypeutils.h"
 #include "miscconfig.h"
 #include "imageutils/jpegcontent.h"
 #include "imageutils/imageutils.h"
@@ -672,9 +673,25 @@ void ThumbnailLoadJob::checkThumbnail() {
 	}
 
 	// Thumbnail not found or not valid
-	// If the original is a local file, create the thumbnail
-	// and proceed to next icon, otherwise download the original
-	if (mCurrentItem->mimetype().startsWith("video/")) {
+	if ( MimeTypeUtils::rasterImageMimeTypes().contains(mCurrentItem->mimetype()) ) {
+		// This is a raster image
+		if (mCurrentURL.isLocalFile()) {
+			// Original is a local file, create the thumbnail
+			startCreatingThumbnail(mCurrentURL.path());
+		} else {
+			// Original is remote, download it
+			mState=STATE_DOWNLOADORIG;
+			KTempFile tmpFile;
+			mTempPath=tmpFile.name();
+			KURL url;
+			url.setPath(mTempPath);
+			KIO::Job* job=KIO::file_copy(mCurrentURL, url,-1,true,false,false);
+			job->setWindow(KApplication::kApplication()->mainWidget());
+			LOG("Download remote file " << mCurrentURL.prettyURL());
+			addSubjob(job);
+		}
+	} else {
+		// Not a raster image, use a KPreviewJob
 		KFileItemList list;
 		list.append(mCurrentItem);
 		KIO::Job* job=KIO::filePreview(list, mThumbnailSize);
@@ -683,19 +700,6 @@ void ThumbnailLoadJob::checkThumbnail() {
 			this, SLOT(slotGotPreview(const KFileItem*, const QPixmap&)) );
 		addSubjob(job);
 		return;
-	}
-	if (mCurrentURL.isLocalFile()) {
-		startCreatingThumbnail(mCurrentURL.path());
-	} else {
-		mState=STATE_DOWNLOADORIG;
-		KTempFile tmpFile;
-		mTempPath=tmpFile.name();
-		KURL url;
-		url.setPath(mTempPath);
-		KIO::Job* job=KIO::file_copy(mCurrentURL, url,-1,true,false,false);
-		job->setWindow(KApplication::kApplication()->mainWidget());
-		LOG("Download remote file " << mCurrentURL.prettyURL());
-		addSubjob(job);
 	}
 }
 

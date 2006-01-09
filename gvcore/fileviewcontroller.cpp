@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "filethumbnailview.h"
 #include "imageloader.h"
+#include "mimetypeutils.h"
 #include "thumbnailsize.h"
 #include "fileviewconfig.h"
 
@@ -934,6 +935,7 @@ void DirLister::handleError( KIO::Job* job ) {
 
 bool DirLister::doMimeFilter(const QString& mime, const QStringList& filters) const {
 	if (mime.startsWith("video/")) return true;
+	if (mime.startsWith("audio/")) return true;
 	return KDirLister::doMimeFilter(mime, filters);
 }
 
@@ -1084,10 +1086,7 @@ void FileViewController::dirListerCanceled() {
 //
 //-----------------------------------------------------------------------
 void FileViewController::initDirListerFilter() {
-	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
-	mimeTypes.append("image/x-xcf-gimp");
-	mimeTypes.append("image/x-xcursor");
-	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
+	QStringList mimeTypes=MimeTypeUtils::rasterImageMimeTypes();
 	if (FileViewConfig::showDirs()) {
 		mimeTypes.append("inode/directory");
 		mimeTypes+=Archive::mimeTypes();

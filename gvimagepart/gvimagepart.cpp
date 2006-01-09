@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <gvcore/printdialog.h>
 #include <gvcore/imageview.h>
 #include <gvcore/imageloader.h>
+#include <gvcore/mimetypeutils.h>
 
 #include "config.h"
 
@@ -92,11 +93,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 		SLOT( dirListerNewItems( const KFileItemList& )));
 	connect(mDirLister,SIGNAL(deleteItem(KFileItem*)),
 		SLOT(dirListerDeleteItem(KFileItem*)) );
-	// partially duped from FileViewStack::initDirListerFilter()
-	QStringList mimeTypes=KImageIO::mimeTypes(KImageIO::Reading);
-	mimeTypes.append("image/x-xcf-gimp");
-	mimeTypes.append("image/x-cursor");
-	mimeTypes.append("image/pjpeg"); // KImageIO does not return this one :'(
+	
+	QStringList mimeTypes=MimeTypeUtils::rasterImageMimeTypes();
 	mDirLister->setMimeFilter(mimeTypes);
 	mPreviousImage=new KAction(i18n("&Previous Image"),
 		QApplication::reverseLayout() ? "1rightarrow":"1leftarrow", Key_BackSpace,
