@@ -33,7 +33,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char version[] = "1.3.0";
+static const char version[] = "1.3.91";
 
 #ifndef __KDE_HAVE_GCC_VISIBILITY
 #undef KDE_EXPORT
