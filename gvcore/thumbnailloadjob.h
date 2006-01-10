@@ -154,7 +154,7 @@ private slots:
 	void thumbnailReady(const QImage& im, const QSize&);
 
 private:
-	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_NEXTTHUMB } mState;
+	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB } mState;
 
 	QValueList<const KFileItem*> mItems;
 	QValueVector<const KFileItem* > mAllItems;

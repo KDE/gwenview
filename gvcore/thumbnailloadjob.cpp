@@ -553,11 +553,13 @@ void ThumbnailLoadJob::determineNextIcon() {
 
 
 void ThumbnailLoadJob::slotResult(KIO::Job * job) {
+	LOG(mState);
 	subjobs.remove(job);
 	Q_ASSERT(subjobs.isEmpty());	// We should have only one job at a time ...
 
 	switch (mState) {
 	case STATE_NEXTTHUMB:
+		Q_ASSERT(false);
 		determineNextIcon();
 		return;
 
@@ -593,6 +595,10 @@ void ThumbnailLoadJob::slotResult(KIO::Job * job) {
 		} else {
 			startCreatingThumbnail(mTempPath);
 		}
+		return;
+	
+	case STATE_PREVIEWJOB:
+		determineNextIcon();
 		return;
 	}
 }
@@ -692,6 +698,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 		}
 	} else {
 		// Not a raster image, use a KPreviewJob
+		mState=STATE_PREVIEWJOB;
 		KFileItemList list;
 		list.append(mCurrentItem);
 		KIO::Job* job=KIO::filePreview(list, mThumbnailSize);
@@ -715,10 +722,6 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem* item, const QPixmap& pixm
 	LOG("");
 	QSize size;
 	emit thumbnailLoaded(item, pixmap, size);
-
-	// Wait until we get in slotResult to load next thumb. This makes sure we
-	// only have one subjob at a time.
-	mState=STATE_NEXTTHUMB;
 }
 
 
