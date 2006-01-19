@@ -26,6 +26,8 @@
  - Renamed the "File Info" window to "Image Comment" (Bug 116791).
  - KIPI plugins are now only loaded when the "Plugins" menu is opened, leading
    to faster startup time and less memory usage.
+ - In the image KPart, do not switch to another KPart when using the previous
+   and next buttons.
 
 2005.09.11 - v1.3.0
 - Fixes:

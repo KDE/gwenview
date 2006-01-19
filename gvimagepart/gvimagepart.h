@@ -83,11 +83,6 @@ public slots:
 
 protected slots:
 	virtual bool openFile() { return false; }
-	/**
-	 * Sets Konqueror's caption, statusbar and emits completed().
-	 * Called by loaded() signal in Document
-	 */
-	void loaded(const KURL& url);
 
 	/**
 	 * Rotates the current image 90 degrees clockwise
@@ -109,6 +104,9 @@ private slots:
 	void slotSelectPrevious();
 
 	void prefetchDone();
+
+	void slotLoading();
+	void slotLoaded(const KURL& url);
 
 private:
 

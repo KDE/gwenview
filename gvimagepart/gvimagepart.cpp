@@ -45,6 +45,15 @@ namespace Gwenview {
 // For now let's duplicate
 const char CONFIG_CACHE_GROUP[]="cache";
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 
 class GVImagePartView : public ImageView {
 public:
@@ -81,7 +90,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	// Create the widgets
 	mDocument = new Document(this);
-	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( loaded(const KURL&)));
+	connect( mDocument, SIGNAL( loading()), SLOT( slotLoading()));
+	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( slotLoaded(const KURL&)));
 	mImageView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
 	setWidget(mImageView);
 
@@ -153,10 +163,7 @@ bool GVImagePart::openURL(const KURL& url) {
 	if( !sameDir ) {
 		mDirLister->openURL(mDocument->dirURL());
 		mLastDirection = DirectionUnknown;
-	} else {
-		updateNextPrevious();
 	}
-	emit setWindowCaption(url.prettyURL());
 	return true;
 }
 
@@ -164,7 +171,15 @@ QString GVImagePart::filePath() {
 	return m_file;
 }
 
-void GVImagePart::loaded(const KURL& url) {
+void GVImagePart::slotLoading() {
+	emit setWindowCaption(mDocument->url().filename() + " - " + i18n("Loading..."));
+	// Set the location bar URL because we can arrive here if the user click on
+	// previous/next, which do not use openURLRequest
+	emit mBrowserExtension->setLocationBarURL(mDocument->url().pathOrURL());
+	updateNextPrevious();
+}
+
+void GVImagePart::slotLoaded(const KURL& url) {
 	QString caption = url.filename() + QString(" - %1x%2").arg(mDocument->width()).arg(mDocument->height());
 	emit setWindowCaption(caption);
 	emit completed();
@@ -246,9 +261,9 @@ void GVImagePart::slotSelectNext() {
 	KURL newURL = nextURL();
 	if( newURL.isEmpty()) return;
 	mLastDirection = DirectionNext;
-	KParts::URLArgs args;        // Prevent adding all images to history, it feels
-	args.setLockHistory( true ); // better that way when finally going back.
-	mBrowserExtension->openURLRequest( newURL, args );
+	// Do not use mBrowserExtension->openURLRequest to avoid switching to
+	// another KPart
+	mDocument->setURL(newURL);
 }
 
 KURL GVImagePart::previousURL() const {
@@ -266,9 +281,7 @@ void GVImagePart::slotSelectPrevious() {
 	KURL newURL = previousURL();
 	if( newURL.isEmpty()) return;
 	mLastDirection = DirectionPrevious;
-	KParts::URLArgs args;
-	args.setLockHistory( true );
-	mBrowserExtension->openURLRequest( newURL, args );
+	mDocument->setURL(newURL);
 }
 
 /***** GVImagePartBrowserExtension *****/
