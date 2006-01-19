@@ -26,10 +26,9 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdirlister.h>
-#include <kfilemetainfo.h>
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <klocale.h>
+#include <kmimetype.h>
 #include <kparts/genericfactory.h>
 
 #include <gvcore/cache.h>
@@ -296,16 +295,9 @@ GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
 }
 
 void GVImagePartBrowserExtension::contextMenu() {
-	/*FIXME Why is this KFileMetaInfo invalid?
-	KFileMetaInfo metaInfo = KFileMetaInfo(mGVImagePart->filePath());
-	kdDebug() << k_funcinfo << "mGVImagePart->filePath(): " << mGVImagePart->filePath() << endl;
-	kdDebug() << k_funcinfo << "metaInfo.isValid(): " << metaInfo.isValid() << endl;
-	kdDebug() << k_funcinfo << "above" << endl;
-	QString mimeType = metaInfo.mimeType();
-	kdDebug() << k_funcinfo << "below" << endl;
-	emit popupMenu(QCursor::pos(), mGVImagePart->url(), mimeType);
-	*/
-	emit popupMenu(QCursor::pos(), mGVImagePart->url(), 0);
+	KURL url=mGVImagePart->url();
+	QString mimeType=KMimeType::findByURL(url)->name();
+	emit popupMenu(QCursor::pos(), url, mimeType);
 }
 
 void GVImagePartBrowserExtension::print() {
