@@ -62,7 +62,7 @@ void ImageView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
 
 void ImageView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
 void ImageView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
-	mView->openContextMenu(event->globalPos());
+	emit mView->requestContextMenu(event->globalPos());
 }
 
 void ImageView::ToolBase::wheelEvent(QWheelEvent* event) {

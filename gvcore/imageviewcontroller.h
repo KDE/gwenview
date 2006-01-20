@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kaction.h>
 
+class QPoint;
 class QWidget;
 
 namespace Gwenview {
@@ -50,6 +51,7 @@ public:
 
 private slots:
 	void slotLoaded();
+	void openImageViewContextMenu(const QPoint&);
 
 private:
 	struct Private;

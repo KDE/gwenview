@@ -34,7 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qevent.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qvaluevector.h>
@@ -52,8 +51,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "captionformatterbase.h"
-#include "externaltoolmanager.h"
-#include "externaltoolcontext.h"
 #include "document.h"
 #include "fullscreenbar.h"
 #include "imageutils/imageutils.h"
@@ -1336,79 +1333,6 @@ void ImageView::slotImageRectUpdated(const QRect& imageRect) {
 
 void ImageView::restartAutoHideTimer() {
 	d->mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
-}
-
-
-/**
- * Little helper to plug an action if it exists
- */
-inline void plugAction(QPopupMenu* menu, KActionCollection* actionCollection, const char* actionName) {
-	KAction* action=actionCollection->action(actionName);
-	if (action) action->plug(menu);
-}
-
-
-void ImageView::openContextMenu(const QPoint& pos) {
-	QPopupMenu menu(this);
-	bool noImage=d->mDocument->filename().isEmpty();
-	bool validImage=!d->mDocument->isNull();
-
-	// The fullscreen item is always there, to be able to leave fullscreen mode
-	// if necessary. But KParts may not have the action itself.
-	plugAction(&menu, d->mActionCollection, "fullscreen");
-
-	d->mToggleFullscreenBar->plug(&menu);
-
-	if (validImage) {
-		menu.insertSeparator();
-
-		d->mZoomToFit->plug(&menu);
-		d->mZoomIn->plug(&menu);
-		d->mZoomOut->plug(&menu);
-		d->mResetZoom->plug(&menu);
-		d->mLockZoom->plug(&menu);
-	}
-
-	menu.insertSeparator();
-
-	plugAction(&menu, d->mActionCollection, "first");
-	plugAction(&menu, d->mActionCollection, "previous");
-	plugAction(&menu, d->mActionCollection, "next");
-	plugAction(&menu, d->mActionCollection, "last");
-
-	if (validImage) {
-		menu.insertSeparator();
-
-		QPopupMenu* editMenu=new QPopupMenu(&menu);
-		plugAction(editMenu, d->mActionCollection, "rotate_left");
-		plugAction(editMenu, d->mActionCollection, "rotate_right");
-		plugAction(editMenu, d->mActionCollection, "mirror");
-		plugAction(editMenu, d->mActionCollection, "flip");
-		menu.insertItem( i18n("Edit"), editMenu );
-
-		ExternalToolContext* externalToolContext=
-			ExternalToolManager::instance()->createContext(
-			this, d->mDocument->url());
-
-		menu.insertItem(
-			i18n("External Tools"), externalToolContext->popupMenu());
-	}
-
-	if (!noImage) {
-		menu.insertSeparator();
-
-		plugAction(&menu, d->mActionCollection, "file_rename");
-		plugAction(&menu, d->mActionCollection, "file_copy");
-		plugAction(&menu, d->mActionCollection, "file_move");
-		plugAction(&menu, d->mActionCollection, "file_link");
-		plugAction(&menu, d->mActionCollection, "file_delete");
-
-		menu.insertSeparator();
-
-		plugAction(&menu, d->mActionCollection, "file_properties");
-	}
-
-	menu.exec(pos);
 }
 
 

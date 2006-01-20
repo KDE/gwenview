@@ -54,22 +54,6 @@ const char CONFIG_CACHE_GROUP[]="cache";
 #endif
 
 
-class GVImagePartView : public ImageView {
-public:
-	GVImagePartView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVImagePartBrowserExtension* browserExtension)
-	: ImageView(parent, document, actionCollection), mBrowserExtension(browserExtension)
-	{}
-
-protected:
-	void openContextMenu(const QPoint&) {
-		mBrowserExtension->contextMenu();
-	}
-
-private:
-	GVImagePartBrowserExtension* mBrowserExtension;
-};
-
-
 //Factory Code
 typedef KParts::GenericFactory<GVImagePart> GVImageFactory;
 K_EXPORT_COMPONENT_FACTORY( libgvimagepart /*library name*/, GVImageFactory )
@@ -91,7 +75,9 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mDocument = new Document(this);
 	connect( mDocument, SIGNAL( loading()), SLOT( slotLoading()));
 	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( slotLoaded(const KURL&)));
-	mImageView = new GVImagePartView(parentWidget, mDocument, actionCollection(), mBrowserExtension);
+	mImageView = new ImageView(parentWidget, mDocument, actionCollection());
+	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
+		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
 	setWidget(mImageView);
 
 	mDirLister = new KDirLister;
@@ -294,10 +280,10 @@ GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, 
 GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
 }
 
-void GVImagePartBrowserExtension::contextMenu() {
+void GVImagePartBrowserExtension::openContextMenu(const QPoint& pos) {
 	KURL url=mGVImagePart->url();
 	QString mimeType=KMimeType::findByURL(url)->name();
-	emit popupMenu(QCursor::pos(), url, mimeType);
+	emit popupMenu(pos, url, mimeType);
 }
 
 void GVImagePartBrowserExtension::print() {

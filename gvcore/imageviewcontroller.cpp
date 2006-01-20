@@ -21,16 +21,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <imageviewcontroller.moc>
 
 // Qt
+#include <qpopupmenu.h>
 #include <qwidgetstack.h>
 
 // KDE
+#include <kaction.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kmimetype.h>
 #include <kuserprofile.h>
 #include <kparts/componentfactory.h>
 
 // Local
 #include <document.h>
+#include <externaltoolcontext.h>
+#include <externaltoolmanager.h>
 #include <imageview.h>
 
 namespace Gwenview {
@@ -107,6 +112,9 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
+
+	connect(d->mImageView, SIGNAL(requestContextMenu(const QPoint&)),
+		this, SLOT(openImageViewContextMenu(const QPoint&)) );
 }
 
 
@@ -130,5 +138,83 @@ QWidget* ImageViewController::widget() const {
 ImageView* ImageViewController::imageView() const {
 	return d->mImageView;
 }
+
+
+/**
+ * Little helper to plug an action if it exists
+ */
+inline void plugAction(QPopupMenu* menu, KActionCollection* actionCollection, const char* actionName) {
+	KAction* action=actionCollection->action(actionName);
+	if (action) action->plug(menu);
+}
+
+
+void ImageViewController::openImageViewContextMenu(const QPoint& pos) {
+	QPopupMenu menu(d->mImageView);
+	bool noImage=d->mDocument->filename().isEmpty();
+	bool validImage=!d->mDocument->isNull();
+
+	// The fullscreen item is always there, to be able to leave fullscreen mode
+	// if necessary. But KParts may not have the action itself.
+	plugAction(&menu, d->mActionCollection, "fullscreen");
+	
+	// The action which causes the fullscreen toolbar to slide in or out. Not
+	// sure it should be there, but at least it makes the shortcut key for this
+	// action more discoverable.
+	plugAction(&menu, d->mActionCollection, "toggle_bar");
+
+	if (validImage) {
+		menu.insertSeparator();
+
+		plugAction(&menu, d->mActionCollection, "view_zoom_to_fit");
+		plugAction(&menu, d->mActionCollection, "view_zoom_in");
+		plugAction(&menu, d->mActionCollection, "view_zoom_out");
+		plugAction(&menu, d->mActionCollection, "view_actual_size");
+		plugAction(&menu, d->mActionCollection, "view_zoom_lock");
+	}
+
+	menu.insertSeparator();
+
+	plugAction(&menu, d->mActionCollection, "first");
+	plugAction(&menu, d->mActionCollection, "previous");
+	plugAction(&menu, d->mActionCollection, "next");
+	plugAction(&menu, d->mActionCollection, "last");
+
+	if (validImage) {
+		menu.insertSeparator();
+
+		QPopupMenu* editMenu=new QPopupMenu(&menu);
+		plugAction(editMenu, d->mActionCollection, "rotate_left");
+		plugAction(editMenu, d->mActionCollection, "rotate_right");
+		plugAction(editMenu, d->mActionCollection, "mirror");
+		plugAction(editMenu, d->mActionCollection, "flip");
+		menu.insertItem( i18n("Edit"), editMenu );
+
+		ExternalToolContext* externalToolContext=
+			ExternalToolManager::instance()->createContext(
+			this, d->mDocument->url());
+
+		menu.insertItem(
+			i18n("External Tools"), externalToolContext->popupMenu());
+	}
+
+	if (!noImage) {
+		menu.insertSeparator();
+
+		plugAction(&menu, d->mActionCollection, "file_rename");
+		plugAction(&menu, d->mActionCollection, "file_copy");
+		plugAction(&menu, d->mActionCollection, "file_move");
+		plugAction(&menu, d->mActionCollection, "file_link");
+		plugAction(&menu, d->mActionCollection, "file_delete");
+
+		menu.insertSeparator();
+
+		plugAction(&menu, d->mActionCollection, "file_properties");
+	}
+
+	menu.exec(pos);
+}
+
+
 
 } // namespace

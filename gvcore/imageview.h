@@ -88,12 +88,12 @@ signals:
 	void selectPrevious();
 	void selectNext();
     void doubleClicked();
+	void requestContextMenu(const QPoint&);
 
     // Emitted whenever an hint should be displayed
     void requestHintDisplay(const QString& hint);
 
 protected:
-	virtual void openContextMenu(const QPoint&);
 	virtual void contentsDragEnterEvent(QDragEnterEvent*);
 	virtual void contentsDropEvent(QDropEvent*);
 	virtual void keyPressEvent(QKeyEvent*);
