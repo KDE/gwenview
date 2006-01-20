@@ -28,7 +28,8 @@
    to faster startup time and less memory usage.
  - In the image KPart, do not switch to another KPart when using the previous
    and next buttons.
- - In the image KPart, make sure the context menu is adapted to the mimetype.
+ - In the image and folder KParts, make sure the context menu is adapted to the
+   mimetype.
 
 2005.09.11 - v1.3.0
 - Fixes:

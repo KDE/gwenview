@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <kparts/browserextension.h>
 
 // Forward declarations
+class QPoint;
 class QSplitter;
 class KAboutData;
 class KAction;
@@ -49,8 +50,6 @@ public:
 	~GVDirPartBrowserExtension();
 
 public slots:
-	void contextMenu();
-
 	void updateActions();
 	void refresh();
 
@@ -61,6 +60,10 @@ public slots:
 	void editMimeType();
 
 	void print();
+
+private slots:
+	void openContextMenu(const QPoint&);
+	
 private:
 	GVDirPart* mGVDirPart;
 };

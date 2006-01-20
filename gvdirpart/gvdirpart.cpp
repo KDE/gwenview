@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <kicontheme.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <kparts/browserextension.h>
 #include <kparts/genericfactory.h>
@@ -52,22 +53,6 @@ namespace Gwenview {
 
 // For now let's duplicate
 const char CONFIG_CACHE_GROUP[]="cache";
-
-
-class GVDirPartImageView : public ImageView {
-public:
-	GVDirPartImageView(QWidget* parent, Document* document, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
-	: ImageView(parent, document, actionCollection), mBrowserExtension(browserExtension)
-	{}
-
-protected:
-	void openContextMenu(const QPoint&) {
-		mBrowserExtension->contextMenu();
-	}
-
-private:
-	GVDirPartBrowserExtension* mBrowserExtension;
-};
 
 
 class GVDirPartFileViewController : public FileViewController {
@@ -117,7 +102,9 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	if (width!=-1) {
 		mFileViewController->widget()->resize(width, 10);
 	}
-	mImageView = new GVDirPartImageView(mSplitter, mDocument, actionCollection(), mBrowserExtension);
+	mImageView = new ImageView(mSplitter, mDocument, actionCollection());
+	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
+		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
 	mSplitter->setResizeMode(mFileViewController->widget(), QSplitter::KeepSize);
 
 	mSlideShow = new SlideShow(mDocument);
@@ -302,18 +289,12 @@ void GVDirPartBrowserExtension::cut() {
 	kdDebug() << k_funcinfo << endl;
 }
 
-void GVDirPartBrowserExtension::contextMenu() {
-	/*FIXME Why is this KFileMetaInfo invalid?
-	KFileMetaInfo metaInfo = KFileMetaInfo(m_gvImagePart->filePath());
-	kdDebug() << k_funcinfo << "m_gvImagePart->filePath(): " << m_gvImagePart->filePath() << endl;
-	kdDebug() << k_funcinfo << "metaInfo.isValid(): " << metaInfo.isValid() << endl;
-	kdDebug() << k_funcinfo << "above" << endl;
-	QString mimeType = metaInfo.mimeType();
-	kdDebug() << k_funcinfo << "below" << endl;
-	emit popupMenu(QCursor::pos(), m_gvImagePart->url(), mimeType);
-	*/
-	emit popupMenu(QCursor::pos(), mGVDirPart->pixmapURL(), 0);
+void GVDirPartBrowserExtension::openContextMenu(const QPoint& pos) {
+	KURL url=mGVDirPart->url();
+	QString mimeType=KMimeType::findByURL(url)->name();
+	emit popupMenu(pos, url, mimeType);
 }
+
 
 void GVDirPartBrowserExtension::print() {
 	mGVDirPart->print();
