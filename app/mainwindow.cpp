@@ -613,7 +613,7 @@ void MainWindow::showConfigDialog() {
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mSlideShow, SLOT(slotSettingsChanged()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
-		mImageViewController->imageView(), SLOT(updateFromSettings()) );
+		mImageViewController, SLOT(updateFromSettings()) );
 	connect(&dialog, SIGNAL(settingsChanged()),
 		mFileViewController, SLOT(updateFromSettings()) );
 	dialog.exec();
@@ -834,7 +834,7 @@ void MainWindow::createWidgets() {
 	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
 	mImageViewController=new ImageViewController(mPixmapDock, mDocument, actionCollection());
 	mPixmapDock->setWidget(mImageViewController->widget());
-	connect(mImageViewController->imageView(), SIGNAL(requestHintDisplay(const QString&)),
+	connect(mImageViewController, SIGNAL(requestHintDisplay(const QString&)),
 		this, SLOT(showHint(const QString&)) );
 
 	// Folder widget

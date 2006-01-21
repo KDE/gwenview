@@ -115,6 +115,9 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 	connect(d->mImageView, SIGNAL(requestContextMenu(const QPoint&)),
 		this, SLOT(openImageViewContextMenu(const QPoint&)) );
+	
+	connect(d->mImageView, SIGNAL(requestHintDisplay(const QString&)),
+		this, SIGNAL(requestHintDisplay(const QString&)) );
 }
 
 
@@ -133,6 +136,10 @@ void ImageViewController::slotLoaded() {
 
 QWidget* ImageViewController::widget() const {
 	return d->mStack;
+}
+
+void ImageViewController::updateFromSettings() {
+	d->mImageView->updateFromSettings();
 }
 
 ImageView* ImageViewController::imageView() const {

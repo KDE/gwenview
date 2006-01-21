@@ -49,6 +49,12 @@ public:
 	// done
 	ImageView* imageView() const;
 
+public slots:
+	void updateFromSettings();
+
+signals:
+	void requestHintDisplay(const QString&);
+
 private slots:
 	void slotLoaded();
 	void openImageViewContextMenu(const QPoint&);
