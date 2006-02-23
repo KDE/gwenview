@@ -1,5 +1,6 @@
 [Desktop Entry]
 ServiceTypes=image/*
 Name=KolourPaint
+Name[xx]=xxKolourPaintxx
 Icon=kolourpaint
 Exec=kolourpaint %u
