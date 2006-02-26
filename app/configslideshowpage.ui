@@ -12,9 +12,6 @@
             <height>148</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>ConfigSlideshowPage</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>

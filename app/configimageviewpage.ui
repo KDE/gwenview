@@ -26,9 +26,6 @@
             <property name="text">
                 <string>Enlarge small images when auto &amp;zoom is activated</string>
             </property>
-            <property name="accel">
-                <string>Alt+Z</string>
-            </property>
         </widget>
         <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
