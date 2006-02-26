@@ -79,12 +79,8 @@ DocumentLoadingImpl::~DocumentLoadingImpl() {
 
 
 void DocumentLoadingImpl::init() {
-	MimeTypeUtils::Kind kind=MimeTypeUtils::urlKind(mDocument->url());
-	if (kind==MimeTypeUtils::KIND_FILE) {
-		switchToImpl(new DocumentOtherLoadedImpl(mDocument));
-		return;
-	}
 	d->mLoader = ImageLoader::loader( mDocument->url(), this, BUSY_LOADING );
+	connect( d->mLoader, SIGNAL( urlKindDetermined(MimeTypeUtils::Kind)), SLOT( slotURLKindDetermined(MimeTypeUtils::Kind) ));
 	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
 	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
 	connect( d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
@@ -109,6 +105,14 @@ void DocumentLoadingImpl::init() {
 	if( d->mLoader->completed()) emit imageLoaded( d->mLoader->frames().count() != 0 );
 	// this may be deleted here
 }
+
+
+void DocumentLoadingImpl::slotURLKindDetermined(MimeTypeUtils::Kind kind) {
+	if (kind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
+		switchToImpl(new DocumentOtherLoadedImpl(mDocument));
+	}
+}
+
 
 void DocumentLoadingImpl::imageLoaded( bool ok ) {
 	LOG("");

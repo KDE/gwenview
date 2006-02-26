@@ -21,11 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef DOCUMENTLOADINGIMPL_H
 #define DOCUMENTLOADINGIMPL_H
 
-// Qt
-#include <qasyncimageio.h>
-
 // Local 
 #include "documentimpl.h"
+#include "mimetypeutils.h"
+
 namespace Gwenview {
 
 class Document;
@@ -44,6 +43,7 @@ private:
 	DocumentLoadingImplPrivate* d;
 
 private slots:
+	void slotURLKindDetermined(MimeTypeUtils::Kind);
 	void sizeLoaded(int, int);
 	void imageChanged(const QRect&);
 	void frameLoaded();

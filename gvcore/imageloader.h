@@ -33,6 +33,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "tsthread/tsthread.h"
 #include "imageframe.h"
 #include "busylevelmanager.h"
+#include "mimetypeutils.h"
+
 #include "libgwenview_export.h"
 namespace Gwenview {
 class DecoderThread : public TSThread {
@@ -72,6 +74,7 @@ public:
 	bool completed() const;
 
 signals:
+	void urlKindDetermined(MimeTypeUtils::Kind);
 	void sizeLoaded(int, int);
 	void imageChanged(const QRect&); // use processedImage(), is not in frames() yet
 	void frameLoaded();

@@ -21,6 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef MIMETYPEUTILS_H
 #define MIMETYPEUTILS_H   
 
+// Qt
+#include <qcstring.h>
+
 class KFileItem;
 class KURL;
 
@@ -34,6 +37,7 @@ enum Kind { KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
 const QStringList& rasterImageMimeTypes();
 Kind fileItemKind(const KFileItem*);
 Kind urlKind(const KURL&);
+Kind determineKindFromContent(const QByteArray&);
 
 } // namespace FileUtils
 

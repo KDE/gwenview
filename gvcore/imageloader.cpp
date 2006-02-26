@@ -397,13 +397,25 @@ void ImageLoader::slotGetResult(KIO::Job* job) {
 }
 
 
-void ImageLoader::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 	LOG("size: " << chunk.size());
 	if (chunk.size()<=0) return;
 
 	int oldSize=d->mRawData.size();
 	d->mRawData.resize(oldSize + chunk.size());
 	memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
+
+	// Try to determine the data type
+	if (oldSize==0) {
+		MimeTypeUtils::Kind kind=MimeTypeUtils::determineKindFromContent(d->mRawData);
+		if (kind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
+			Q_ASSERT(!d->mDecoderTimer.isActive());
+			job->kill(true /* quietly */);
+			emit urlKindDetermined(kind);
+			return;
+		}
+		emit urlKindDetermined(kind);
+	}
 
 	// Decode the received data
 	if( !d->mDecoderTimer.isActive() && !d->mUseThread) {
