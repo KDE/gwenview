@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmediaplayer/player.h>
 #include <kmimetype.h>
 #include <kuserprofile.h>
 #include <kparts/componentfactory.h>
@@ -89,6 +90,13 @@ struct ImageViewController::Private {
 		if (!mPlayerPart) return;
 		mStack->raiseWidget(mPlayerPart->widget());
 		mPlayerPart->openURL(mDocument->url());
+
+		// If the part implements the KMediaPlayer::Player interface, start
+		// playing (needed for Kaboodle)
+		KMediaPlayer::Player* player=dynamic_cast<KMediaPlayer::Player *>(mPlayerPart);
+		if (player) {
+			player->play();
+		}
 	}
 
 	
