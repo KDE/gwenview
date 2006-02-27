@@ -126,6 +126,11 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	
 	connect(d->mImageView, SIGNAL(requestHintDisplay(const QString&)),
 		this, SIGNAL(requestHintDisplay(const QString&)) );
+
+	// Forward Image view signals
+	connect(d->mImageView, SIGNAL(selectPrevious()), SIGNAL(selectPrevious()) );
+	connect(d->mImageView, SIGNAL(selectNext()), SIGNAL(selectNext()) );
+	connect(d->mImageView, SIGNAL(doubleClicked()), SIGNAL(doubleClicked()) );
 }
 
 

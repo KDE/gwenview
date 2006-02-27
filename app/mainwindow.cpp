@@ -1054,12 +1054,12 @@ void MainWindow::createConnections() {
 		mBookmarkViewController, SLOT(setURL(const KURL&)) );
 
 	// Pixmap view connections
-	connect(mImageViewController->imageView(),SIGNAL(selectPrevious()),
-		mFileViewController,SLOT(slotSelectPrevious()) );
-	connect(mImageViewController->imageView(),SIGNAL(selectNext()),
-		mFileViewController,SLOT(slotSelectNext()) );
-	connect(mImageViewController->imageView(),SIGNAL(doubleClicked()),
-		mToggleFullScreen,SLOT(activate()) );
+	connect(mImageViewController, SIGNAL(selectPrevious()),
+		mFileViewController, SLOT(slotSelectPrevious()) );
+	connect(mImageViewController, SIGNAL(selectNext()),
+		mFileViewController, SLOT(slotSelectNext()) );
+	connect(mImageViewController, SIGNAL(doubleClicked()),
+		mToggleFullScreen, SLOT(activate()) );
 
 	// File view connections
 	connect(mFileViewController,SIGNAL(urlChanged(const KURL&)),

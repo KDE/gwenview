@@ -54,6 +54,9 @@ public slots:
 
 signals:
 	void requestHintDisplay(const QString&);
+	void selectPrevious();
+	void selectNext();
+	void doubleClicked();
 
 private slots:
 	void slotLoaded();
