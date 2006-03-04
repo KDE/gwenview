@@ -539,7 +539,7 @@ void MainWindow::toggleFullScreen() {
 			mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
-		mImageViewController->imageView()->setFullScreen(true);
+		mImageViewController->setFullScreen(true);
 		mImageViewController->widget()->setFocus();
 	} else {
 		// Stop the slideshow if it's running
@@ -562,7 +562,7 @@ void MainWindow::toggleFullScreen() {
 		bottomDock()->show();
 		
 		statusBar()->show();
-		mImageViewController->imageView()->setFullScreen(false);
+		mImageViewController->setFullScreen(false);
 		
 		if (mToggleBrowse->isChecked()) {
 			mPixmapDock->setWidget(mImageViewController->widget());
@@ -967,7 +967,7 @@ void MainWindow::createActions() {
 void MainWindow::createObjectInteractions() {
 	// Pixmap view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
-	mImageViewController->imageView()->setOSDFormatter(mCaptionFormatter.get());
+	mImageViewController->setOSDFormatter(mCaptionFormatter.get());
 	
 	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
@@ -975,7 +975,7 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewController->selectNext());
 	actions.append(mToggleFullScreen);
 	actions.append(mToggleSlideShow);
-	mImageViewController->imageView()->setFullScreenActions(actions);
+	mImageViewController->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
 	connect(mFileViewController, SIGNAL(selectionChanged()),

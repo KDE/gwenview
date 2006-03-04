@@ -45,7 +45,6 @@ class KToggleAction;
 typedef QValueList<KAction *> KActionPtrList;
 
 namespace Gwenview {
-class CaptionFormatterBase;
 class Document;
 
 class LIBGWENVIEW_EXPORT ImageView : public QScrollView {
@@ -64,7 +63,6 @@ public:
 	friend class EventFilter;
 
 	enum ToolID { SCROLL, ZOOM };
-	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 	enum ZoomMode { ZOOM_FIT, ZOOM_FIT_WIDTH, ZOOM_FIT_HEIGHT, ZOOM_FREE };
 	typedef QMap<ToolID,ToolBase*> Tools;
 
@@ -75,10 +73,7 @@ public:
 	double zoom() const; 
 	void setZoom(double zoom, int centerX=-1, int centerY=-1);
 	bool fullScreen() const; 
-	void setFullScreenActions(KActionPtrList);
 	void setFullScreen(bool);
-
-    void setOSDFormatter(CaptionFormatterBase*);
 
 
 public slots:
@@ -162,13 +157,11 @@ private slots:
 	void decreaseBrightness();
 	void increaseContrast();
 	void decreaseContrast();
-	void slotAutoHide();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
 	void checkPendingOperations();
 	void loadingStarted();
 	void slotBusyLevelChanged(BusyLevel);
-	void toggleFullScreenBar();
 	
 protected:
 	// Overloaded methods

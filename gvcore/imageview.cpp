@@ -50,14 +50,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapplication.h>
 
 // Local
-#include "captionformatterbase.h"
 #include "document.h"
-#include "fullscreenbar.h"
 #include "imageutils/imageutils.h"
 #include "busylevelmanager.h"
 #include "imageviewtools.h"
 #include "imageutils/croppedqimage.h"
-#include "fullscreenconfig.h"
 #include "imageviewconfig.h"
 
 #if !KDE_IS_VERSION( 3, 3, 0 )
@@ -142,8 +139,6 @@ visibleHeight(), contentsToViewport() and viewportToContents().
 
 */
 
-const int AUTO_HIDE_TIMEOUT=4000;
-
 const double MAX_ZOOM=16.0; // Same value as GIMP
 
 const int DEFAULT_MAX_REPAINT_SIZE = 10000;
@@ -159,9 +154,7 @@ long int lround( double x ) {
 
 struct ImageView::Private {
 	Document* mDocument;
-	QTimer* mAutoHideTimer;
 	
-	CaptionFormatterBase* mOSDFormatter;
 	Tools mTools;
 
 	ToolID mToolID;
@@ -194,14 +187,13 @@ struct ImageView::Private {
 	KAction* mDecreaseBrightness;
 	KAction* mIncreaseContrast;
 	KAction* mDecreaseContrast;
+	/*
 	KAction* mToggleFullscreenBar;
+	*/
 	KActionCollection* mActionCollection;
 
 	// Fullscreen stuff
 	bool mFullScreen;
-	FullScreenBar* mFullScreenBar;
-	QLabel* mFullScreenLabel;
-	KActionPtrList mFullScreenActions;
 	
 	// Object state info
 	bool mOperaLikePrevious; // Flag to avoid showing the popup menu on Opera like previous
@@ -316,7 +308,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 {
 	d=new Private;
 	d->mDocument=document;
-	d->mAutoHideTimer=new QTimer(this);
 	d->mToolID=SCROLL;
 	d->mXOffset=0;
 	d->mYOffset=0;
@@ -324,8 +315,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mZoom=1;
 	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
-	d->mFullScreenBar=0;
-	d->mFullScreenLabel=0;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
 	d->mPendingOperations= 0 ;
@@ -333,7 +322,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
-	d->mOSDFormatter=0;
 
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -397,10 +385,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
 		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
 
-	d->mToggleFullscreenBar=new KAction(i18n("Toggle Full Screen Bar"), 0, Key_Return,
-		this,SLOT(toggleFullScreenBar()), d->mActionCollection, "toggle_bar");
-	d->mToggleFullscreenBar->setEnabled(d->mFullScreen);
-
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
@@ -416,9 +400,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 
 	connect(d->mDocument, SIGNAL(rectUpdated(const QRect&)),
 		this, SLOT(slotImageRectUpdated(const QRect&)) );
-
-	connect(d->mAutoHideTimer,SIGNAL(timeout()),
-		this,SLOT(slotAutoHide()) );
 
 	connect(&d->mPendingPaintTimer,SIGNAL(timeout()),
 		this,SLOT(checkPendingOperations()) );
@@ -453,8 +434,6 @@ void ImageView::slotLoaded() {
 		return;
 	}
 
-	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
-	if (d->mFullScreen && osdMode!=NONE) updateFullScreenLabel();
 	if (doDelayedSmoothing()) scheduleOperation( SMOOTH_PASS );
 }
 
@@ -488,11 +467,6 @@ void ImageView::loadingStarted() {
 // Properties
 //
 //------------------------------------------------------------------------
-void ImageView::setOSDFormatter(CaptionFormatterBase* formatter) {
-	d->mOSDFormatter=formatter;
-}
-
-
 double ImageView::zoom() const {
 	return d->mZoom;
 }
@@ -605,38 +579,13 @@ void ImageView::updateZoom(ZoomMode zoomMode, double value, int centerX, int cen
 }
 
 
-void ImageView::setFullScreenActions(KActionPtrList actions) {
-	d->mFullScreenActions=actions;
-}
-
-
 void ImageView::setFullScreen(bool fullScreen) {
 	d->mFullScreen=fullScreen;
-	d->mToggleFullscreenBar->setEnabled(fullScreen);
-	viewport()->setMouseTracking(d->mFullScreen);
 
 	if (d->mFullScreen) {
 		viewport()->setBackgroundColor(black);
-		restartAutoHideTimer();
-		
-		Q_ASSERT(!d->mFullScreenBar);
-		d->mFullScreenBar=new FullScreenBar(this);
-		d->mFullScreenLabel=new QLabel(d->mFullScreenBar);
-		d->mFullScreenBar->plugActions(d->mFullScreenActions);
-		d->mFullScreenBar->plugWidget(d->mFullScreenLabel);
-		updateFullScreenLabel();
-		d->mFullScreenBar->show();
-		
 	} else {
 		viewport()->setBackgroundColor(ImageViewConfig::backgroundColor() );
-		d->mAutoHideTimer->stop();
-		d->mTools[d->mToolID]->updateCursor();
-		
-		Q_ASSERT(d->mFullScreenBar);
-		if (d->mFullScreenBar) {
-			delete d->mFullScreenBar;
-			d->mFullScreenBar=0;
-		}
 	}
 }
 
@@ -1016,16 +965,6 @@ void ImageView::viewportMousePressEvent(QMouseEvent* event) {
 void ImageView::viewportMouseMoveEvent(QMouseEvent* event) {
 	selectTool(event->state(), true);
 	d->mTools[d->mToolID]->mouseMoveEvent(event);
-	if (d->mFullScreen) {
-		if (d->mFullScreenBar && d->mFullScreenBar->rect().contains(event->pos())) {
-			d->mAutoHideTimer->stop();
-		} else {
-			restartAutoHideTimer();
-		}
-		if (d->mFullScreenBar) {
-			d->mFullScreenBar->slideIn();
-		}
-	}
 }
 
 
@@ -1098,9 +1037,6 @@ bool ImageView::eventFilter(QObject* obj, QEvent* event) {
 
 bool ImageView::viewportKeyEvent(QKeyEvent* event) {
 	selectTool(event->stateAfter(), false);
-	if (d->mFullScreen) {
-		restartAutoHideTimer();
-	}
 	return false;
 }
 
@@ -1274,10 +1210,6 @@ void ImageView::decreaseContrast() {
 	fullRepaint();
 }
 
-void ImageView::toggleFullScreenBar() {
-	if (!d->mFullScreen) return;
-	d->mFullScreenBar->toggle();
-}
 
 //------------------------------------------------------------------------
 //
@@ -1328,11 +1260,6 @@ void ImageView::slotImageSizeUpdated() {
 void ImageView::slotImageRectUpdated(const QRect& imageRect) {
 	d->mValidImageArea += imageRect;
 	viewport()->repaint( d->imageToWidget( imageRect ), false );
-}
-
-
-void ImageView::restartAutoHideTimer() {
-	d->mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
 }
 
 
@@ -1453,48 +1380,6 @@ void ImageView::updateImageOffset() {
 
 	d->mXOffset=QMAX(0,(viewWidth-zpixWidth)/2);
 	d->mYOffset=QMAX(0,(viewHeight-zpixHeight)/2);
-}
-
-
-void ImageView::slotAutoHide() {
-	viewport()->setCursor(blankCursor);
-	if (d->mFullScreenBar) {
-		d->mFullScreenBar->slideOut();
-	}
-}
-
-
-void ImageView::updateFullScreenLabel() {
-	Q_ASSERT(d->mFullScreenBar);
-	if (!d->mFullScreenBar) {
-		kdWarning() << "mFullScreenBar does not exist\n";
-		return;
-	}
-	Q_ASSERT(d->mOSDFormatter);
-	if (!d->mOSDFormatter) {
-		kdWarning() << "mOSDFormatter is not set\n";
-		return;
-	}
-	
-	QString format;
-	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
-	switch (osdMode) {
-	case FREE_OUTPUT:
-		format = FullScreenConfig::freeOutputFormat();
-		break;
-	case PATH:
-		format = "%p";
-		break;
-	case COMMENT:
-		format = "%c";
-		break;
-	case PATH_AND_COMMENT:
-		format = "%p\n%c";
-		break;
-	case NONE:
-		break;
-	}
-	d->mFullScreenLabel->setText( (*d->mOSDFormatter)(format));
 }
 
 

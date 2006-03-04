@@ -33,6 +33,7 @@ class QWidget;
 namespace Gwenview {
 
 
+class CaptionFormatterBase;
 class Document;
 class ImageView;
 
@@ -44,10 +45,13 @@ public:
 	~ImageViewController();
 	
 	QWidget* widget() const;
+	
+	void setOSDFormatter(CaptionFormatterBase*);
+	void setFullScreen(bool);
+	void setFullScreenActions(const KActionPtrList&);
 
-	// This method should be removed when migration to ImageViewController is
-	// done
-	ImageView* imageView() const;
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
 
 public slots:
 	void updateFromSettings();
@@ -61,6 +65,7 @@ signals:
 private slots:
 	void slotLoaded();
 	void openImageViewContextMenu(const QPoint&);
+	void slotAutoHide();
 
 private:
 	struct Private;
