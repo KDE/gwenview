@@ -457,9 +457,6 @@ void ImageView::loadingStarted() {
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
-	// every loading() signal from Document must be followed by a signal that turns this off
-	QPainter painter( viewport());
-	painter.eraseRect( viewport()->rect());
 }
 
 //------------------------------------------------------------------------
@@ -619,11 +616,21 @@ inline void composite(uint* rgba,uint value) {
 }
 
 void ImageView::drawContents(QPainter* painter,int clipx,int clipy,int clipw,int cliph) {
+	// Erase borders
+	QRect imageRect(0, 0, d->mDocument->width(), d->mDocument->height());
+	imageRect = d->imageToWidget(imageRect);
+	
+	QRect widgetRect = QRect(0, 0, visibleWidth(), visibleHeight());
+
+	QRegion region = QRegion(widgetRect) - imageRect;
+	QMemArray<QRect> rects = region.rects();
+	for(unsigned int pos = 0; pos < rects.count(); ++pos ) {
+		painter->eraseRect(rects[pos]);
+	}
+	
+	// Repaint
 	if( !d->mValidImageArea.isEmpty()) {
 		addPendingPaint( false, QRect( clipx, clipy, clipw, cliph ));
-	} else {
-		// image is empty, simply clear
-		painter->eraseRect( clipx, clipy, clipw, cliph );
 	}
 }
 
