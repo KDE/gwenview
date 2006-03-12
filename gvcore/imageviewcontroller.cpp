@@ -137,11 +137,6 @@ struct ImageViewController::Private {
 
 
 	void updateFullScreenLabel() {
-		Q_ASSERT(mFullScreenBar);
-		if (!mFullScreenBar) {
-			kdWarning() << "mFullScreenBar does not exist\n";
-			return;
-		}
 		Q_ASSERT(mOSDFormatter);
 		if (!mOSDFormatter) {
 			kdWarning() << "mOSDFormatter is not set\n";
@@ -175,13 +170,7 @@ struct ImageViewController::Private {
 	}
 
 
-	void updateBar() {
-		Q_ASSERT(mFullScreenBar);
-		if (!mFullScreenBar) {
-			kdWarning() << "mFullScreenBar does not exist\n";
-			return;
-		}
-
+	void updateFullScreenBarPosition() {
 		int mouseY=mStack->mapFromGlobal(QCursor::pos()).y();
 		bool visible = mFullScreenBar->y()==0;
 		
@@ -195,6 +184,34 @@ struct ImageViewController::Private {
 		}
 	}
 
+	
+	/**
+	 * This function creates the fullscreen toolbar.
+	 * NOTE: It should not be called from/merged with setFullScreenActions,
+	 * otherwise the toolbar will have a one pixel border which will prevent
+	 * reaching easily buttons by pushing the mouse to the top edge of the
+	 * screen.
+	 * My guess is that instanciating the toolbar *before* the main
+	 * window is shown causes the main window to tweak its bars. This happens
+	 * with KDE 3.5.1.
+	 */
+	void initFullScreenBar() {
+		Q_ASSERT(!mFullScreenBar);
+		mFullScreenBar=new KToolBar(mContainer, "FullScreenToolBar");
+		mFullScreenBar->setIconSize(FULL_SCREEN_ICON_SIZE);
+		mFullScreenBar->setMovingEnabled(false);
+		
+		KActionPtrList::ConstIterator
+			it=mFullScreenActions.begin(),
+			end=mFullScreenActions.end();
+
+		for (; it!=end; ++it) {
+			(*it)->plug(mFullScreenBar);
+		}
+		
+		mFullScreenLabel=new QLabel(mFullScreenBar);
+		mFullScreenBar->insertWidget(12 /* id */, 0 /* width */, mFullScreenLabel);
+	}
 };
 
 
@@ -275,25 +292,11 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 
 	if (d->mFullScreen) {
 		d->restartAutoHideTimer();
-		
-		Q_ASSERT(!d->mFullScreenBar);
-
-		d->mFullScreenBar=new KToolBar(d->mContainer);
-		d->mFullScreenBar->setIconSize(FULL_SCREEN_ICON_SIZE);
-		d->mFullScreenBar->setMovingEnabled(false);
-		
-		// Fill the bar
-		KActionPtrList::ConstIterator
-			it=d->mFullScreenActions.begin(),
-			end=d->mFullScreenActions.end();
-		for (; it!=end; ++it) {
-			(*it)->plug(d->mFullScreenBar);
+		if (!d->mFullScreenBar) {
+			d->initFullScreenBar();
 		}
-		d->mFullScreenLabel=new QLabel(d->mFullScreenBar);
-		d->mFullScreenBar->insertWidget(12 /* id */, 0 /* width */, d->mFullScreenLabel);
 		d->updateFullScreenLabel();
 		
-		// Size the bar
 		int width=KGlobalSettings::desktopGeometry(d->mStack).width();
 		int height=FULL_SCREEN_ICON_SIZE + 10;
         d->mFullScreenBar->setGeometry( 0, -height, width, height);
@@ -302,11 +305,7 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 		d->mAutoHideTimer->stop();
 		QApplication::restoreOverrideCursor();
 		
-		Q_ASSERT(d->mFullScreenBar);
-		if (d->mFullScreenBar) {
-			delete d->mFullScreenBar;
-			d->mFullScreenBar=0;
-		}
+		d->mFullScreenBar->hide();
 	}
 }
 
@@ -356,7 +355,7 @@ bool ImageViewController::eventFilter(QObject* object, QEvent* event) {
 	}
 	if (!isAChildOfStack) return false;
 
-	d->updateBar();
+	d->updateFullScreenBarPosition();
 	QApplication::restoreOverrideCursor();
 	d->restartAutoHideTimer();
 	return false;
