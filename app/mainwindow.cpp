@@ -971,10 +971,10 @@ void MainWindow::createObjectInteractions() {
 	
 	// Fullscreen actions in pixmap view
 	KActionPtrList actions;
-	actions.append(mFileViewController->selectPrevious());
-	actions.append(mFileViewController->selectNext());
 	actions.append(mToggleFullScreen);
 	actions.append(mToggleSlideShow);
+	actions.append(mFileViewController->selectPrevious());
+	actions.append(mFileViewController->selectNext());
 	mImageViewController->setFullScreenActions(actions);
 
 	// Make sure file actions are correctly updated
