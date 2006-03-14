@@ -43,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <document.h>
 #include <externaltoolcontext.h>
 #include <externaltoolmanager.h>
+#include <fullscreenbar.h>
 #include <fullscreenconfig.h>
 #include <imageview.h>
 
@@ -59,8 +60,6 @@ namespace Gwenview {
 
 	
 const int AUTO_HIDE_TIMEOUT=4000;
-
-const int FULL_SCREEN_ICON_SIZE=32;
 
 enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 
@@ -84,7 +83,7 @@ struct ImageViewController::Private {
 	
 	// Fullscreen stuff
 	bool mFullScreen;
-	KToolBar* mFullScreenBar;
+	FullScreenBar* mFullScreenBar;
 	QLabel* mFullScreenLabel;
 	KActionPtrList mFullScreenActions;
 	CaptionFormatterBase* mOSDFormatter;
@@ -175,12 +174,11 @@ struct ImageViewController::Private {
 		bool visible = mFullScreenBar->y()==0;
 		
 		if (visible && mouseY>mFullScreenBar->height()) {
-			mFullScreenBar->move(0, -mFullScreenBar->height());
+			mFullScreenBar->slideOut();
 		}
 
 		if (!visible && mouseY<2) {
-			mFullScreenBar->move(0, 0);
-			mFullScreenBar->raise();
+			mFullScreenBar->slideIn();
 		}
 	}
 
@@ -197,9 +195,7 @@ struct ImageViewController::Private {
 	 */
 	void initFullScreenBar() {
 		Q_ASSERT(!mFullScreenBar);
-		mFullScreenBar=new KToolBar(mContainer, "FullScreenToolBar");
-		mFullScreenBar->setIconSize(FULL_SCREEN_ICON_SIZE);
-		mFullScreenBar->setMovingEnabled(false);
+		mFullScreenBar=new FullScreenBar(mContainer);
 		
 		KActionPtrList::ConstIterator
 			it=mFullScreenActions.begin(),
@@ -209,8 +205,11 @@ struct ImageViewController::Private {
 			(*it)->plug(mFullScreenBar);
 		}
 		
-		mFullScreenLabel=new QLabel(mFullScreenBar);
-		mFullScreenBar->insertWidget(12 /* id */, 0 /* width */, mFullScreenLabel);
+		/* we use "kde toolbar widget" to avoid the flat background (looks bad with
+		 * styles like Keramik). See konq_misc.cc.
+		 */
+		mFullScreenLabel=new QLabel(mFullScreenBar, "kde toolbar widget");
+		mFullScreenBar->insertWidget(-1 /* id */, 0 /* width */, mFullScreenLabel);
 	}
 };
 
@@ -296,10 +295,6 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 			d->initFullScreenBar();
 		}
 		d->updateFullScreenLabel();
-		
-		int width=KGlobalSettings::desktopGeometry(d->mStack).width();
-		int height=FULL_SCREEN_ICON_SIZE + 10;
-        d->mFullScreenBar->setGeometry( 0, -height, width, height);
 		d->mFullScreenBar->show();
 	} else {
 		d->mAutoHideTimer->stop();

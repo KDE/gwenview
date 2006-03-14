@@ -51,6 +51,7 @@ libgwenviewcore_la_SOURCES = \
 	cache.cpp \
 	threadgate.cpp \
 	imageviewtools.cpp \
+	fullscreenbar.cpp \
 	imageloader.cpp \
 	cursortracker.cpp \
 	captionformatter.cpp \
