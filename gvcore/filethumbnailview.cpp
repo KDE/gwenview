@@ -365,6 +365,13 @@ void FileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	if (imageList.empty()) return;
 
 	BusyLevelManager::instance()->setBusyLevel( this, BUSY_THUMBNAILS );
+
+	Q_ASSERT(!d->mProgressWidget);
+	d->mProgressWidget=new ProgressWidget(this, imageList.count() );
+	
+	connect(d->mProgressWidget->stopButton(), SIGNAL(clicked()),
+		this, SLOT(stopThumbnailUpdate()) );
+	d->mProgressWidget->show();
 	
 	d->mThumbnailLoadJob = new ThumbnailLoadJob(&imageList, d->mThumbnailSize);
 
@@ -373,11 +380,6 @@ void FileThumbnailView::doStartThumbnailUpdate(const KFileItemList* list) {
 	connect(d->mThumbnailLoadJob, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotUpdateEnded()) );
 
-	Q_ASSERT(!d->mProgressWidget);
-	d->mProgressWidget=new ProgressWidget(this, imageList.count() );
-	connect(d->mProgressWidget->stopButton(), SIGNAL(clicked()),
-		this, SLOT(stopThumbnailUpdate()) );
-	d->mProgressWidget->show();
 	slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
 	// start updating at visible position
 	slotContentsMoving( contentsX(), contentsY());
