@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpopupmenu.h>
+#include <qvbox.h>
 #include <qwidgetstack.h>
 
 // KDE
@@ -37,6 +38,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ktoolbar.h>
 #include <kuserprofile.h>
 #include <kparts/componentfactory.h>
+#include <kxmlguibuilder.h>
+#include <kxmlguifactory.h>
 
 // Local
 #include <captionformatterbase.h>
@@ -58,6 +61,57 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+
+/**
+ * An implementation of a XMLGUIClient for ImageView.
+ * This makes it possible to switch the toolbar content like we do with kparts.
+ */
+class ImageViewXMLGUIClient : public KXMLGUIClient {
+public:
+	ImageViewXMLGUIClient(KActionCollection* collection)
+	: KXMLGUIClient()
+	, mActionCollection(collection)
+	{
+		setXML(
+"<!DOCTYPE kpartgui>"
+//"<kpartgui name='PrivateGVImagePart'>"
+//"<ToolBar name='privatePartToolBar'><text>Part Toolbar</text>"
+"<kpartgui>"
+"<ToolBar>"
+" <Action name='view_zoom_in'/>"
+" <Action name='view_zoom_to'/>"
+" <Action name='view_zoom_out'/>"
+" <Action name='rotate_left'/>"
+" <Action name='rotate_right'/>"
+"</ToolBar>"
+"</kpartgui>");
+	}
+
+	virtual KActionCollection* actionCollection() const {
+		return mActionCollection;
+	}
+
+private:
+	KActionCollection* mActionCollection;
+};
+
+
+/**
+ * A KXMLGUIBuilder which only creates containers for toolbars.
+ */
+class XMLGUIBuilder : public KXMLGUIBuilder {
+public:
+	XMLGUIBuilder(QWidget* parent) : KXMLGUIBuilder(parent) {}
+
+	virtual QWidget* createContainer(QWidget *parent, int index, const QDomElement &element, int &id) {
+		if (element.tagName().lower() == "toolbar") {
+			return KXMLGUIBuilder::createContainer(parent, index, element, id);
+		} else {
+			return 0;
+		}
+	}
+};
+
 	
 const int AUTO_HIDE_TIMEOUT=4000;
 
@@ -73,6 +127,10 @@ struct ImageViewController::Private {
 	Document* mDocument;
 	KActionCollection* mActionCollection;
 	QWidget* mContainer;
+	KToolBar* mToolBar;
+	KXMLGUIFactory* mFactory;
+	XMLGUIBuilder* mBuilder;
+	ImageViewXMLGUIClient* mImageViewXMLGUIClient;
 	QWidgetStack* mStack;
 	ImageView* mImageView;
 	ImageViewController* mImageViewController;
@@ -88,12 +146,32 @@ struct ImageViewController::Private {
 	KActionPtrList mFullScreenActions;
 	CaptionFormatterBase* mOSDFormatter;
 
+
+	void setXMLGUIClient(KXMLGUIClient* client) {
+		QPtrList<KXMLGUIClient> list=mFactory->clients();
+		KXMLGUIClient* oldClient=list.getFirst();
+		if (oldClient) {
+			mFactory->removeClient(oldClient);
+			// There should be at most one client, so the list should be empty
+			// now
+			Q_ASSERT(!mFactory->clients().getFirst());
+		}
+		if (client) {
+			mFactory->addClient(client);
+		}
+	}
+
+
 	void createPlayerPart(void) {
 		QString mimeType=KMimeType::findByURL(mDocument->url())->name();
 		KService::Ptr service = KServiceTypeProfile::preferredService(mimeType, "KParts/ReadOnlyPart");
 		if (!service) {
+			kdWarning() << "Couldn't find a KPart for " << mimeType << endl;
 			mPlayerLibrary=QString::null;
-			delete mPlayerPart;
+			if (mPlayerPart) {
+				setXMLGUIClient(0);
+				delete mPlayerPart;
+			}
 			mPlayerPart=0;
 			return;
 		}
@@ -101,15 +179,21 @@ struct ImageViewController::Private {
 		QString library=service->library();
 		Q_ASSERT(!library.isNull());
 		LOG("Library:" << library);
-		if (library==mPlayerLibrary) {
-			LOG("Reusing library");
-			return;
+		if (library!=mPlayerLibrary) {
+				
+			KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
+			if (!part) {
+				kdWarning() << "Failed to instantiate KPart from library " << library << endl;
+				return;
+			}
+			setXMLGUIClient(0);
+			delete mPlayerPart;
+			mPlayerPart=part;
+			mPlayerLibrary=library;
+			
+			mStack->addWidget(mPlayerPart->widget());
 		}
-		mPlayerLibrary=library;
-		
-		mPlayerPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
-		if (!mPlayerPart) return;
-		mStack->addWidget(mPlayerPart->widget());
+		setXMLGUIClient(mPlayerPart);
 	}
 	
 
@@ -131,7 +215,14 @@ struct ImageViewController::Private {
 	
 	void showImageView(void) {
 		LOG("");
+		// If the part implements the KMediaPlayer::Player interface, stop
+		// playing (needed for Kaboodle)
+		KMediaPlayer::Player* player=dynamic_cast<KMediaPlayer::Player *>(mPlayerPart);
+		if (player) {
+			player->stop();
+		}
 		mStack->raiseWidget(mImageView);
+		setXMLGUIClient(mImageViewXMLGUIClient);
 	}
 
 
@@ -228,17 +319,22 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mAutoHideTimer=new QTimer(this);
 
 	d->mContainer=new QWidget(parent);
-	
 	QVBoxLayout* layout=new QVBoxLayout(d->mContainer);
+	d->mToolBar=new KToolBar(d->mContainer, "imageViewToolBar", true);
+	layout->add(d->mToolBar);
 	d->mStack=new QWidgetStack(d->mContainer);
 	layout->add(d->mStack);
 	
 	d->mImageView=new ImageView(d->mStack, document, actionCollection);
+	d->mImageViewXMLGUIClient=new ImageViewXMLGUIClient(actionCollection);
 	d->mStack->addWidget(d->mImageView);
 
 	KApplication::kApplication()->installEventFilter(this);
 
 	d->mPlayerPart=0;
+	d->mBuilder=new XMLGUIBuilder(d->mToolBar);
+	d->mFactory=new KXMLGUIFactory(d->mBuilder, this);
+
 	d->mFullScreen=false;
 	d->mFullScreenBar=0;
 	d->mFullScreenLabel=0;
@@ -246,7 +342,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
-
+	
 	connect(d->mImageView, SIGNAL(requestContextMenu(const QPoint&)),
 		this, SLOT(openImageViewContextMenu(const QPoint&)) );
 	
@@ -255,7 +351,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 	connect(d->mAutoHideTimer,SIGNAL(timeout()),
 		this,SLOT(slotAutoHide()) );
-
+	
 	// Forward Image view signals
 	connect(d->mImageView, SIGNAL(selectPrevious()), SIGNAL(selectPrevious()) );
 	connect(d->mImageView, SIGNAL(selectNext()), SIGNAL(selectNext()) );
@@ -264,6 +360,8 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 
 ImageViewController::~ImageViewController() {
+	delete d->mImageViewXMLGUIClient;
+	delete d->mBuilder;
 	delete d;
 }
 
@@ -295,12 +393,14 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 			d->initFullScreenBar();
 		}
 		d->updateFullScreenLabel();
-		d->mFullScreenBar->show();
 	} else {
 		d->mAutoHideTimer->stop();
 		QApplication::restoreOverrideCursor();
-		
-		d->mFullScreenBar->hide();
+	}
+
+	d->mToolBar->setHidden(d->mFullScreen);
+	if (d->mFullScreenBar) {
+		d->mFullScreenBar->setHidden(!d->mFullScreen);
 	}
 }
 
@@ -334,7 +434,8 @@ void ImageViewController::updateFromSettings() {
 
 
 /**
- * This application eventFilter monitors mouse moves
+ * This application eventFilter monitors mouse moves and make sure the
+ * position of the fullscreen bar is updated
  */
 bool ImageViewController::eventFilter(QObject* object, QEvent* event) {
 	if (!d->mFullScreen) return false;
