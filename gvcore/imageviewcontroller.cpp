@@ -74,8 +74,6 @@ public:
 	{
 		setXML(
 "<!DOCTYPE kpartgui>"
-//"<kpartgui name='PrivateGVImagePart'>"
-//"<ToolBar name='privatePartToolBar'><text>Part Toolbar</text>"
 "<kpartgui>"
 "<ToolBar>"
 " <Action name='reload'/>"
