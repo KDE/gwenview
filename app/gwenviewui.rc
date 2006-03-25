@@ -114,23 +114,6 @@
   <Action name="fullscreen"/>
   <Action name="slideshow"/>
   <Separator/>
-  <Action name="previous"/>
-  <Action name="next"/>
-  <Separator/>
-  <Action name="reload"/>
-  <Separator/>
-  <Action name="view_zoom_in"/>
-  <Action name="view_zoom_to"/>
-  <Action name="view_zoom_out"/>
-  <Separator/>
-  <Action name="rotate_left"/>
-  <Action name="rotate_right"/>
-  <Action name="mirror"/>
-  <Action name="flip"/>
-</ToolBar>
-
-<ToolBar fullWidth="true" name="locationToolBar" newline="true">
-  <text>Location Toolbar</text>
   <Action name="go_back" />
   <Action name="go_forward" />
   <Action name="go_up" />
