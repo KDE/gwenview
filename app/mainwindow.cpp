@@ -198,14 +198,14 @@ MainWindow::MainWindow()
 			if( urlIsDirectory(this, url)) {
 				mFileViewController->setDirURL(url);
 			} else {
-				if (!fullscreen) mToggleBrowse->activate();
+				if (!fullscreen) mSwitchToViewMode->activate();
 				openURL(url);
 			}
 			updateLocationURL();
 		}
 	}
 	
-	if (mToggleBrowse->isChecked()) {
+	if (mSwitchToBrowseMode->isChecked()) {
 		mFileViewController->widget()->setFocus();
 	} else {
 		mImageViewController->widget()->setFocus();
@@ -290,7 +290,7 @@ void MainWindow::slotDirURLChanged(const KURL& dirURL) {
 void MainWindow::updateLocationURL() {
 	LOG("");
 	KURL url;
-	if (mToggleBrowse->isChecked()) {
+	if (mSwitchToBrowseMode->isChecked()) {
 		url=mFileViewController->dirURL();
 		if (!url.isValid()) {
 			url=mDocument->url();
@@ -535,8 +535,8 @@ void MainWindow::toggleFullScreen() {
 		if (topDock()->isEmpty())	 topDock()->hide();
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
-		if (mToggleBrowse->isChecked()) {
-			mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
+		if (mSwitchToBrowseMode->isChecked()) {
+			mImageViewController->widget()->reparent(mSwitchToViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
 		mImageViewController->setFullScreen(true);
@@ -564,7 +564,7 @@ void MainWindow::toggleFullScreen() {
 		statusBar()->show();
 		mImageViewController->setFullScreen(false);
 		
-		if (mToggleBrowse->isChecked()) {
+		if (mSwitchToBrowseMode->isChecked()) {
 			mPixmapDock->setWidget(mImageViewController->widget());
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
@@ -694,14 +694,14 @@ void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 
 void MainWindow::slotToggleCentralStack() {
 	LOG("");
-	if (mToggleBrowse->isChecked()) {
+	if (mSwitchToBrowseMode->isChecked()) {
 		mPixmapDock->setWidget(mImageViewController->widget());
 		mCentralStack->raiseWidget(StackIDBrowse);
 		mFileViewController->setSilentMode( false );
 		// force re-reading the directory to show the error
 		if( mFileViewController->lastURLError()) mFileViewController->retryURL();
 	} else {
-		mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
+		mImageViewController->widget()->reparent(mSwitchToViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
 		mFileViewController->setSilentMode( true );
 	}
@@ -710,7 +710,7 @@ void MainWindow::slotToggleCentralStack() {
 	// otherwise weird things happens when we go back to browse mode
 	QPtrListIterator<KAction> it(mWindowListActions);
 	for (;it.current(); ++it) {
-		it.current()->setEnabled(mToggleBrowse->isChecked());
+		it.current()->setEnabled(mSwitchToBrowseMode->isChecked());
 	}
 	updateImageActions();
 	updateLocationURL();
@@ -811,10 +811,10 @@ void MainWindow::createWidgets() {
 	mDockArea->manager()->setSplitterHighResolution(true);
 	mDockArea->manager()->setSplitterOpaqueResize(true);
 	
-	mViewModeWidget=new QWidget(mCentralStack);
-	QVBoxLayout* layout=new QVBoxLayout(mViewModeWidget);
+	mSwitchToViewModeWidget=new QWidget(mCentralStack);
+	QVBoxLayout* layout=new QVBoxLayout(mSwitchToViewModeWidget);
 	layout->setAutoAdd(true);
-	mCentralStack->addWidget(mViewModeWidget);
+	mCentralStack->addWidget(mSwitchToViewModeWidget);
 
 	// Status bar
 	mSBDetailLabel=new QLabel("", statusBar());
@@ -909,9 +909,11 @@ void MainWindow::createWidgets() {
  */
 void MainWindow::createActions() {
 	// Stack
-	mToggleBrowse=new KToggleAction(i18n("Browse"), "folder", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "toggle_browse");
-	mToggleBrowse->setChecked(true);
-	mToggleBrowse->setShortcut(CTRL + Key_Return);
+	mSwitchToBrowseMode=new KRadioAction(i18n("Browse"), "view_icon", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "switch_to_browse_mode");
+	mSwitchToBrowseMode->setExclusiveGroup("centralStackMode");
+	mSwitchToBrowseMode->setChecked(true);
+	mSwitchToViewMode=new KRadioAction(i18n("View Image"), "image", 0, this, SLOT(slotToggleCentralStack()), actionCollection(), "switch_to_view_mode");
+	mSwitchToViewMode->setExclusiveGroup("centralStackMode");
 	
 	// File
 	KStdAction::open(this,SLOT(showFileDialog()),actionCollection() );

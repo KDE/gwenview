@@ -50,6 +50,7 @@ class KDockWidget;
 class KFileItem;
 class KHistoryCombo;
 class KListView;
+class KRadioAction;
 class KToggleAction;
 class KToolBarPopupAction;
 class KURLCompletion;
@@ -78,7 +79,7 @@ protected:
 
 private:
 	QWidgetStack* mCentralStack;
-	QWidget* mViewModeWidget;
+	QWidget* mSwitchToViewModeWidget;
 	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;
@@ -98,6 +99,9 @@ private:
 	History* mHistory;
 	SlideShow* mSlideShow;
 
+	KRadioAction* mSwitchToBrowseMode;
+	KRadioAction* mSwitchToViewMode;
+	KToggleAction* mToggleFullScreen;
 	KAction* mRenameFile;
 	KAction* mCopyFiles;
 	KAction* mMoveFiles;
@@ -105,7 +109,6 @@ private:
 	KAction* mDeleteFiles;
 	KAction* mShowConfigDialog;
 	KAction* mShowKeyDialog;
-	KToggleAction* mToggleFullScreen;
 	KAction* mReload;
 	KToolBarPopupAction* mGoUp;
 	KAction* mShowFileProperties;
@@ -119,7 +122,6 @@ private:
 	KAction* mFilePrint;
 	KAction* mResetDockWidgets;
 	bool	 mLoadingCursor;
-	KToggleAction* mToggleBrowse;
 
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;

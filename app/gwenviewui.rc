@@ -21,7 +21,8 @@
     <text>&amp;View</text>
     <Action name="reload"/>
     <Separator/>
-	<Action name="toggle_browse" />
+	<Action name="switch_to_view_mode" />
+	<Action name="switch_to_browse_mode" />
     <Action name="fullscreen"/> 
     <Action name="slideshow"/>
     <Separator/>
@@ -110,7 +111,8 @@
 
 <ToolBar name="mainToolBar" noMerge="1" newline="true">
   <text>Main Toolbar</text>
-  <Action name="toggle_browse"/>
+  <Action name="switch_to_browse_mode"/>
+  <Action name="switch_to_view_mode"/>
   <Action name="fullscreen"/>
   <Action name="slideshow"/>
   <Separator/>
