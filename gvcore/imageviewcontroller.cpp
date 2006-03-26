@@ -76,7 +76,6 @@ public:
 "<!DOCTYPE kpartgui>"
 "<kpartgui>"
 "<ToolBar>"
-" <Action name='reload'/>"
 " <Action name='view_zoom_in'/>"
 " <Action name='view_zoom_to'/>"
 " <Action name='view_zoom_out'/>"

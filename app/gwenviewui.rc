@@ -130,6 +130,7 @@
   <text>Image View Toolbar</text>
   <Action name="previous" />
   <Action name="next" />
+  <Action name="reload" />
   <Separator/>
 </ToolBar>
 
