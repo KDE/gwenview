@@ -909,7 +909,7 @@ void MainWindow::createWidgets() {
  */
 void MainWindow::createActions() {
 	// Stack
-	mSwitchToBrowseMode=new KRadioAction(i18n("Browse"), "view_icon", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "switch_to_browse_mode");
+	mSwitchToBrowseMode=new KRadioAction(i18n("Browse"), "folder_image", CTRL + Key_Return, this, SLOT(slotToggleCentralStack()), actionCollection(), "switch_to_browse_mode");
 	mSwitchToBrowseMode->setExclusiveGroup("centralStackMode");
 	mSwitchToBrowseMode->setChecked(true);
 	mSwitchToViewMode=new KRadioAction(i18n("View Image"), "image", 0, this, SLOT(slotToggleCentralStack()), actionCollection(), "switch_to_view_mode");
@@ -929,8 +929,8 @@ void MainWindow::createActions() {
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
 
 	// Edit
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
+	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_ccw",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
+	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_cw",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0, this, SLOT(mirror()),actionCollection(),"mirror");
 	mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
 

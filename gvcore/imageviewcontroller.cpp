@@ -79,8 +79,6 @@ public:
 " <Action name='view_zoom_in'/>"
 " <Action name='view_zoom_to'/>"
 " <Action name='view_zoom_out'/>"
-" <Action name='rotate_left'/>"
-" <Action name='rotate_right'/>"
 "</ToolBar>"
 "</kpartgui>");
 	}

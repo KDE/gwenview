@@ -109,13 +109,20 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" noMerge="1" newline="true">
+<ToolBar name="mainToolBar" noMerge="1" newline="true" iconText="icontextright">
   <text>Main Toolbar</text>
   <Action name="switch_to_browse_mode"/>
   <Action name="switch_to_view_mode"/>
+  <Separator/>
   <Action name="fullscreen"/>
   <Action name="slideshow"/>
   <Separator/>
+  <Action name="rotate_left"/>
+  <Action name="rotate_right"/>
+</ToolBar>
+
+<ToolBar name="locationToolBar" newline="True">
+  <text>Location Toolbar</text>
   <Action name="go_back" />
   <Action name="go_forward" />
   <Action name="go_up" />
