@@ -978,6 +978,12 @@ void MainWindow::createObjectInteractions() {
 	actions.append(mFileViewController->selectPrevious());
 	actions.append(mFileViewController->selectNext());
 	mImageViewController->setFullScreenActions(actions);
+	
+	KToolBar* tb=mImageViewController->toolBar();
+	mFileViewController->selectPrevious()->plug(tb);
+	mFileViewController->selectNext()->plug(tb);
+	mReload->plug(tb);
+	tb->insertLineSeparator();
 
 	// Make sure file actions are correctly updated
 	connect(mFileViewController, SIGNAL(selectionChanged()),

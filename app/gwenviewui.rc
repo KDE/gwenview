@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="24">
+<kpartgui name="Gwenview" version="25">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -131,14 +131,6 @@
   <Action name="location_label" />
   <Action name="location_url" />
   <Action name="location_go" />
-</ToolBar>
-
-<ToolBar noMerge="1" name="imageViewToolBar" >
-  <text>Image View Toolbar</text>
-  <Action name="previous" />
-  <Action name="next" />
-  <Action name="reload" />
-  <Separator/>
 </ToolBar>
 
 <StatusBar/>

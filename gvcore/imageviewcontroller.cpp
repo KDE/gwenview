@@ -316,7 +316,8 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 	d->mContainer=new QWidget(parent);
 	QVBoxLayout* layout=new QVBoxLayout(d->mContainer);
-	d->mToolBar=new KToolBar(d->mContainer, "imageViewToolBar", true);
+	d->mToolBar=new KToolBar(d->mContainer, "", true);
+
 	layout->add(d->mToolBar);
 	d->mStack=new QWidgetStack(d->mContainer);
 	layout->add(d->mStack);
@@ -421,6 +422,11 @@ void ImageViewController::slotAutoHide() {
 
 QWidget* ImageViewController::widget() const {
 	return d->mContainer;
+}
+
+
+KToolBar* ImageViewController::toolBar() const {
+	return d->mToolBar;
 }
 
 
