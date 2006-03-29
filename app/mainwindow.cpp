@@ -536,7 +536,7 @@ void MainWindow::toggleFullScreen() {
 		if (bottomDock()->isEmpty()) bottomDock()->hide();
 		
 		if (mSwitchToBrowseMode->isChecked()) {
-			mImageViewController->widget()->reparent(mSwitchToViewModeWidget, QPoint(0,0));
+			mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
 		mImageViewController->setFullScreen(true);
@@ -701,7 +701,7 @@ void MainWindow::slotToggleCentralStack() {
 		// force re-reading the directory to show the error
 		if( mFileViewController->lastURLError()) mFileViewController->retryURL();
 	} else {
-		mImageViewController->widget()->reparent(mSwitchToViewModeWidget, QPoint(0,0));
+		mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 		mCentralStack->raiseWidget(StackIDView);
 		mFileViewController->setSilentMode( true );
 	}
@@ -811,10 +811,10 @@ void MainWindow::createWidgets() {
 	mDockArea->manager()->setSplitterHighResolution(true);
 	mDockArea->manager()->setSplitterOpaqueResize(true);
 	
-	mSwitchToViewModeWidget=new QWidget(mCentralStack);
-	QVBoxLayout* layout=new QVBoxLayout(mSwitchToViewModeWidget);
+	mViewModeWidget=new QWidget(mCentralStack);
+	QVBoxLayout* layout=new QVBoxLayout(mViewModeWidget);
 	layout->setAutoAdd(true);
-	mCentralStack->addWidget(mSwitchToViewModeWidget);
+	mCentralStack->addWidget(mViewModeWidget);
 
 	// Status bar
 	mSBDetailLabel=new QLabel("", statusBar());

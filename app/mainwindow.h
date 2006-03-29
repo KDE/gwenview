@@ -79,7 +79,7 @@ protected:
 
 private:
 	QWidgetStack* mCentralStack;
-	QWidget* mSwitchToViewModeWidget;
+	QWidget* mViewModeWidget;
 	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;
