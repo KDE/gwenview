@@ -293,8 +293,12 @@ void FileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QPix
 	iconItem->repaint();
 
 	// Notify progress
-	Q_ASSERT(d->mProgressWidget);
-	d->mProgressWidget->progressBar()->advance(1);
+	if (d->mProgressWidget) {
+		// mProgressWidget might be null if we get called after the thumbnail
+		// job finished. This can happen when the thumbnail job use KPreviewJob
+		// to generate a thumbnail.
+		d->mProgressWidget->progressBar()->advance(1);
+	}
 }
 
 
