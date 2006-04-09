@@ -26,24 +26,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qmap.h>
 #include <qscrollview.h>
-
-// KDE
-#include <kxmlguiclient.h>
+#include <qtimer.h>
+#include <qvaluelist.h>
 
 // Local
 #include "busylevelmanager.h"
 #include "imageutils/imageutils.h"
 #include "libgwenview_export.h"
 class QEvent;
+class QLabel;
 class QMouseEvent;
 class QPainter;
+class QTimer;
 class QWheelEvent;
+class KAction;
+class KActionCollection;
 class KToggleAction;
+typedef QValueList<KAction *> KActionPtrList;
 
 namespace Gwenview {
 class Document;
 
-class LIBGWENVIEW_EXPORT ImageView : public QScrollView, public KXMLGUIClient {
+class LIBGWENVIEW_EXPORT ImageView : public QScrollView {
 Q_OBJECT
 
 public:
@@ -62,7 +66,7 @@ public:
 	enum ZoomMode { ZOOM_FIT, ZOOM_FIT_WIDTH, ZOOM_FIT_HEIGHT, ZOOM_FREE };
 	typedef QMap<ToolID,ToolBase*> Tools;
 
-	ImageView(QWidget* parent,Document*);
+	ImageView(QWidget* parent,Document*,KActionCollection*);
 	~ImageView();
 
 	// Properties

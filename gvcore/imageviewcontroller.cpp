@@ -63,6 +63,36 @@ namespace Gwenview {
 
 
 /**
+ * An implementation of a XMLGUIClient for ImageView.
+ * This makes it possible to switch the toolbar content like we do with kparts.
+ */
+class ImageViewXMLGUIClient : public KXMLGUIClient {
+public:
+	ImageViewXMLGUIClient(KActionCollection* collection)
+	: KXMLGUIClient()
+	, mActionCollection(collection)
+	{
+		setXML(
+"<!DOCTYPE kpartgui>"
+"<kpartgui>"
+"<ToolBar>"
+" <Action name='view_zoom_in'/>"
+" <Action name='view_zoom_to'/>"
+" <Action name='view_zoom_out'/>"
+"</ToolBar>"
+"</kpartgui>");
+	}
+
+	virtual KActionCollection* actionCollection() const {
+		return mActionCollection;
+	}
+
+private:
+	KActionCollection* mActionCollection;
+};
+
+
+/**
  * A KXMLGUIBuilder which only creates containers for toolbars.
  */
 class XMLGUIBuilder : public KXMLGUIBuilder {
@@ -96,6 +126,7 @@ struct ImageViewController::Private {
 	KToolBar* mToolBar;
 	KXMLGUIFactory* mFactory;
 	XMLGUIBuilder* mBuilder;
+	ImageViewXMLGUIClient* mImageViewXMLGUIClient;
 	QWidgetStack* mStack;
 	ImageView* mImageView;
 	ImageViewController* mImageViewController;
@@ -187,7 +218,7 @@ struct ImageViewController::Private {
 			player->stop();
 		}
 		mStack->raiseWidget(mImageView);
-		setXMLGUIClient(mImageView);
+		setXMLGUIClient(mImageViewXMLGUIClient);
 	}
 
 
@@ -291,7 +322,8 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mStack=new QWidgetStack(d->mContainer);
 	layout->add(d->mStack);
 	
-	d->mImageView=new ImageView(d->mStack, document);
+	d->mImageView=new ImageView(d->mStack, document, actionCollection);
+	d->mImageViewXMLGUIClient=new ImageViewXMLGUIClient(actionCollection);
 	d->mStack->addWidget(d->mImageView);
 
 	KApplication::kApplication()->installEventFilter(this);
@@ -325,6 +357,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 
 ImageViewController::~ImageViewController() {
+	delete d->mImageViewXMLGUIClient;
 	delete d->mBuilder;
 	delete d;
 }

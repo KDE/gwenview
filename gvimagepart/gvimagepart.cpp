@@ -75,7 +75,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	mDocument = new Document(this);
 	connect( mDocument, SIGNAL( loading()), SLOT( slotLoading()));
 	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( slotLoaded(const KURL&)));
-	mImageView = new ImageView(parentWidget, mDocument);
+	mImageView = new ImageView(parentWidget, mDocument, actionCollection());
 	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
 		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
 	setWidget(mImageView);

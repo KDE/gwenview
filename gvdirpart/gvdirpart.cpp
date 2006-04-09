@@ -102,7 +102,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	if (width!=-1) {
 		mFileViewController->widget()->resize(width, 10);
 	}
-	mImageView = new ImageView(mSplitter, mDocument);
+	mImageView = new ImageView(mSplitter, mDocument, actionCollection());
 	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
 		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
 	mSplitter->setResizeMode(mFileViewController->widget(), QSplitter::KeepSize);
