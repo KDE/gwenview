@@ -187,10 +187,6 @@ struct ImageView::Private {
 	KAction* mDecreaseBrightness;
 	KAction* mIncreaseContrast;
 	KAction* mDecreaseContrast;
-	/*
-	KAction* mToggleFullscreenBar;
-	*/
-	KActionCollection* mActionCollection;
 
 	// Fullscreen stuff
 	bool mFullScreen;
@@ -303,7 +299,7 @@ public:
 
 
 
-ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* actionCollection)
+ImageView::ImageView(QWidget* parent,Document* document)
 : QScrollView(parent,0L,WResizeNoErase|WRepaintNoErase|WPaintClever)
 {
 	d=new Private;
@@ -313,7 +309,6 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mYOffset=0;
 	d->mZoomMode=static_cast<ZoomMode>( ImageViewConfig::zoomMode() );
 	d->mZoom=1;
-	d->mActionCollection=actionCollection;
 	d->mFullScreen=false;
 	d->mOperaLikePrevious=false;
 	d->mZoomBeforeAuto=1;
@@ -322,6 +317,17 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
+	
+	setXML(
+"<!DOCTYPE kpartgui>"
+"<kpartgui>"
+"<ToolBar>"
+" <Action name='view_zoom_in'/>"
+" <Action name='view_zoom_to'/>"
+" <Action name='view_zoom_out'/>"
+"</ToolBar>"
+"</kpartgui>");
+
 
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -336,24 +342,24 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mTools[d->mToolID]->updateCursor();
 
 	// Create actions
-	d->mZoomToFit=new KToggleAction(i18n("Fit to &Window"),"viewmagfit",0,d->mActionCollection,"view_zoom_to_fit");
+	d->mZoomToFit=new KToggleAction(i18n("Fit to &Window"),"viewmagfit",0,actionCollection(),"view_zoom_to_fit");
 	connect(d->mZoomToFit,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToFit(bool)) );
-	d->mZoomToWidth=new KToggleAction(i18n("Fit to &Width"),0,0,d->mActionCollection,"view_zoom_to_width");
+	d->mZoomToWidth=new KToggleAction(i18n("Fit to &Width"),0,0,actionCollection(),"view_zoom_to_width");
 	connect(d->mZoomToWidth,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToWidth(bool)) );
-	d->mZoomToHeight=new KToggleAction(i18n("Fit to &Height"),0,0,d->mActionCollection,"view_zoom_to_height");
+	d->mZoomToHeight=new KToggleAction(i18n("Fit to &Height"),0,0,actionCollection(),"view_zoom_to_height");
 	connect(d->mZoomToHeight,SIGNAL(toggled(bool)),
 		this,SLOT(setZoomToHeight(bool)) );
 
-	d->mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),d->mActionCollection);
+	d->mZoomIn=KStdAction::zoomIn(this,SLOT(slotZoomIn()),actionCollection());
 
-	d->mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),d->mActionCollection);
+	d->mZoomOut=KStdAction::zoomOut(this,SLOT(slotZoomOut()),actionCollection());
 
-	d->mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),d->mActionCollection);
+	d->mResetZoom=KStdAction::actualSize(this,SLOT(slotResetZoom()),actionCollection());
 	d->mResetZoom->setIcon("viewmag1");
 
-	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,d->mActionCollection,"view_zoom_lock");
+	d->mLockZoom=new KToggleAction(i18n("&Lock Zoom"),"lock",0,actionCollection(),"view_zoom_lock");
 	d->mLockZoom->setChecked(ImageViewConfig::lockZoom());
 	connect(d->mLockZoom,SIGNAL(toggled(bool)),
 		this,SLOT(setLockZoom(bool)) );
@@ -362,7 +368,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	connect(d->mZoomCombo, SIGNAL(activated(int)),
 		this, SLOT(slotSelectZoom()) );
 	
-	d->mZoomComboAction=new KWidgetAction(d->mZoomCombo, i18n("Zoom"), 0, 0, 0, d->mActionCollection, "view_zoom_to");
+	d->mZoomComboAction=new KWidgetAction(d->mZoomCombo, i18n("Zoom"), 0, 0, 0, actionCollection(), "view_zoom_to");
 
 	d->mZoomComboActions.append(d->mZoomToFit);
 	d->mZoomComboActions.append(d->mZoomToWidth);
@@ -373,17 +379,17 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->initZoomCombo();
 
 	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
-		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
+		this,SLOT(increaseGamma()),actionCollection(),"increase_gamma");
 	d->mDecreaseGamma=new KAction(i18n("Decrease Gamma"),0,SHIFT+CTRL+Key_G,
-		this,SLOT(decreaseGamma()),d->mActionCollection,"decrease_gamma");
+		this,SLOT(decreaseGamma()),actionCollection(),"decrease_gamma");
 	d->mIncreaseBrightness=new KAction(i18n("Increase Brightness" ),0,CTRL+Key_B,
-		this,SLOT(increaseBrightness()),d->mActionCollection,"increase_brightness");
+		this,SLOT(increaseBrightness()),actionCollection(),"increase_brightness");
 	d->mDecreaseBrightness=new KAction(i18n("Decrease Brightness" ),0,SHIFT+CTRL+Key_B,
-		this,SLOT(decreaseBrightness()),d->mActionCollection,"decrease_brightness");
+		this,SLOT(decreaseBrightness()),actionCollection(),"decrease_brightness");
 	d->mIncreaseContrast=new KAction(i18n("Increase Contrast" ),0,CTRL+Key_C,
-		this,SLOT(increaseContrast()),d->mActionCollection,"increase_contrast");
+		this,SLOT(increaseContrast()),actionCollection(),"increase_contrast");
 	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
-		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
+		this,SLOT(decreaseContrast()),actionCollection(),"decrease_contrast");
 
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
