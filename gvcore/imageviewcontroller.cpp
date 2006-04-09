@@ -68,9 +68,8 @@ namespace Gwenview {
  */
 class ImageViewXMLGUIClient : public KXMLGUIClient {
 public:
-	ImageViewXMLGUIClient(KActionCollection* collection)
+	ImageViewXMLGUIClient()
 	: KXMLGUIClient()
-	, mActionCollection(collection)
 	{
 		setXML(
 "<!DOCTYPE kpartgui>"
@@ -82,13 +81,6 @@ public:
 "</ToolBar>"
 "</kpartgui>");
 	}
-
-	virtual KActionCollection* actionCollection() const {
-		return mActionCollection;
-	}
-
-private:
-	KActionCollection* mActionCollection;
 };
 
 
@@ -322,8 +314,8 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mStack=new QWidgetStack(d->mContainer);
 	layout->add(d->mStack);
 	
-	d->mImageView=new ImageView(d->mStack, document, actionCollection);
-	d->mImageViewXMLGUIClient=new ImageViewXMLGUIClient(actionCollection);
+	d->mImageViewXMLGUIClient=new ImageViewXMLGUIClient();
+	d->mImageView=new ImageView(d->mStack, document, d->mImageViewXMLGUIClient->actionCollection());
 	d->mStack->addWidget(d->mImageView);
 
 	KApplication::kApplication()->installEventFilter(this);
