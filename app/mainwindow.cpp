@@ -929,8 +929,8 @@ void MainWindow::createActions() {
 	KStdAction::quit( kapp, SLOT (closeAllWindows()), actionCollection() );
 
 	// Edit
-	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_ccw",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
-	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_cw",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
+	mRotateLeft=new KAction(i18n("Rotate &Left"),"rotate_left",CTRL + Key_L, this, SLOT(rotateLeft()),actionCollection(),"rotate_left");
+	mRotateRight=new KAction(i18n("Rotate &Right"),"rotate_right",CTRL + Key_R, this, SLOT(rotateRight()),actionCollection(),"rotate_right");
 	mMirror=new KAction(i18n("&Mirror"),"mirror",0, this, SLOT(mirror()),actionCollection(),"mirror");
 	mFlip=new KAction(i18n("&Flip"),"flip",0, this, SLOT(flip()),actionCollection(),"flip");
 
@@ -967,23 +967,45 @@ void MainWindow::createActions() {
  * widgets and actions have already been created
  */
 void MainWindow::createObjectInteractions() {
-	// Pixmap view caption formatter
+	// Image view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
 	mImageViewController->setOSDFormatter(mCaptionFormatter.get());
 	
-	// Fullscreen actions in pixmap view
-	KActionPtrList actions;
-	actions.append(mToggleFullScreen);
-	actions.append(mToggleSlideShow);
-	actions.append(mFileViewController->selectPrevious());
-	actions.append(mFileViewController->selectNext());
-	mImageViewController->setFullScreenActions(actions);
+	// Actions in image view
+	{
+		KActionPtrList actions;
+		actions
+			<< mToggleFullScreen
+			<< mToggleSlideShow
+			<< mFileViewController->selectPrevious()
+			<< mFileViewController->selectNext()
+			;
+		mImageViewController->setFullScreenCommonActions(actions);
+	}
 	
-	KToolBar* tb=mImageViewController->toolBar();
-	mFileViewController->selectPrevious()->plug(tb);
-	mFileViewController->selectNext()->plug(tb);
-	mReload->plug(tb);
-	tb->insertLineSeparator();
+	{
+		KActionPtrList actions;
+		actions
+			<< mFileViewController->selectPrevious()
+			<< mFileViewController->selectNext()
+			<< mReload
+			;
+		mImageViewController->setNormalCommonActions(actions);
+	}
+
+	{
+		KActionPtrList actions;
+		actions
+			<< actionCollection()->action("view_zoom_in")
+			<< actionCollection()->action("view_zoom_to")
+			<< actionCollection()->action("view_zoom_out")
+			<< mRotateLeft
+			<< mRotateRight
+			<< mMirror
+			<< mFlip
+			;
+		mImageViewController->setImageViewActions(actions);
+	}
 
 	// Make sure file actions are correctly updated
 	connect(mFileViewController, SIGNAL(selectionChanged()),

@@ -47,11 +47,13 @@ public:
 	~ImageViewController();
 	
 	QWidget* widget() const;
-	KToolBar* toolBar() const;
 	
+	void setImageViewActions(const KActionPtrList&);
+
 	void setOSDFormatter(CaptionFormatterBase*);
 	void setFullScreen(bool);
-	void setFullScreenActions(const KActionPtrList&);
+	void setNormalCommonActions(const KActionPtrList&);
+	void setFullScreenCommonActions(const KActionPtrList&);
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);

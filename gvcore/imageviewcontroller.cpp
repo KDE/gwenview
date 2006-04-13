@@ -63,28 +63,6 @@ namespace Gwenview {
 
 
 /**
- * An implementation of a XMLGUIClient for ImageView.
- * This makes it possible to switch the toolbar content like we do with kparts.
- */
-class ImageViewXMLGUIClient : public KXMLGUIClient {
-public:
-	ImageViewXMLGUIClient()
-	: KXMLGUIClient()
-	{
-		setXML(
-"<!DOCTYPE kpartgui>"
-"<kpartgui>"
-"<ToolBar>"
-" <Action name='view_zoom_in'/>"
-" <Action name='view_zoom_to'/>"
-" <Action name='view_zoom_out'/>"
-"</ToolBar>"
-"</kpartgui>");
-	}
-};
-
-
-/**
  * A KXMLGUIBuilder which only creates containers for toolbars.
  */
 class XMLGUIBuilder : public KXMLGUIBuilder {
@@ -112,16 +90,19 @@ enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 //
 //------------------------------------------------------------------------
 struct ImageViewController::Private {
+	ImageViewController* mImageViewController;
+	
 	Document* mDocument;
 	KActionCollection* mActionCollection;
 	QWidget* mContainer;
 	KToolBar* mToolBar;
 	KXMLGUIFactory* mFactory;
 	XMLGUIBuilder* mBuilder;
-	ImageViewXMLGUIClient* mImageViewXMLGUIClient;
 	QWidgetStack* mStack;
+	
 	ImageView* mImageView;
-	ImageViewController* mImageViewController;
+	KActionPtrList mImageViewActions;
+	
 	QTimer* mAutoHideTimer;
 	
 	QString mPlayerLibrary;
@@ -131,7 +112,7 @@ struct ImageViewController::Private {
 	bool mFullScreen;
 	FullScreenBar* mFullScreenBar;
 	QLabel* mFullScreenLabel;
-	KActionPtrList mFullScreenActions;
+	KActionPtrList mFullScreenCommonActions;
 	CaptionFormatterBase* mOSDFormatter;
 
 
@@ -144,6 +125,18 @@ struct ImageViewController::Private {
 			// now
 			Q_ASSERT(!mFactory->clients().getFirst());
 		}
+
+		// Unplug image view actions, if plugged
+		KActionPtrList::Iterator
+			it=mImageViewActions.begin(),
+			end=mImageViewActions.end();
+		for (; it!=end; ++it) {
+			KAction* action=*it;
+			if (action->isPlugged(mToolBar)) {
+				action->unplug(mToolBar);
+			}
+		}
+		
 		if (client) {
 			mFactory->addClient(client);
 		}
@@ -209,8 +202,16 @@ struct ImageViewController::Private {
 		if (player) {
 			player->stop();
 		}
+		setXMLGUIClient(0);
+		
 		mStack->raiseWidget(mImageView);
-		setXMLGUIClient(mImageViewXMLGUIClient);
+		KActionPtrList::Iterator
+			it=mImageViewActions.begin(),
+			end=mImageViewActions.end();
+		for (; it!=end; ++it) {
+			KAction* action=*it;
+			action->plug(mToolBar);
+		}
 	}
 
 
@@ -277,8 +278,8 @@ struct ImageViewController::Private {
 		mFullScreenBar=new FullScreenBar(mContainer);
 		
 		KActionPtrList::ConstIterator
-			it=mFullScreenActions.begin(),
-			end=mFullScreenActions.end();
+			it=mFullScreenCommonActions.begin(),
+			end=mFullScreenCommonActions.end();
 
 		for (; it!=end; ++it) {
 			(*it)->plug(mFullScreenBar);
@@ -298,6 +299,8 @@ struct ImageViewController::Private {
 // ImageViewController
 //
 //------------------------------------------------------------------------
+
+
 ImageViewController::ImageViewController(QWidget* parent, Document* document, KActionCollection* actionCollection)
 : QObject(parent) {
 	d=new Private;
@@ -314,8 +317,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mStack=new QWidgetStack(d->mContainer);
 	layout->add(d->mStack);
 	
-	d->mImageViewXMLGUIClient=new ImageViewXMLGUIClient();
-	d->mImageView=new ImageView(d->mStack, document, d->mImageViewXMLGUIClient->actionCollection());
+	d->mImageView=new ImageView(d->mStack, document, actionCollection);
 	d->mStack->addWidget(d->mImageView);
 
 	KApplication::kApplication()->installEventFilter(this);
@@ -349,7 +351,6 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 
 ImageViewController::~ImageViewController() {
-	delete d->mImageViewXMLGUIClient;
 	delete d->mBuilder;
 	delete d;
 }
@@ -394,8 +395,25 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 }
 
 
-void ImageViewController::setFullScreenActions(const KActionPtrList& actions) {
-	d->mFullScreenActions=actions;
+void ImageViewController::setNormalCommonActions(const KActionPtrList& actions) {
+	KActionPtrList::ConstIterator
+		it=actions.begin(),
+		end=actions.end();
+
+	for (; it!=end; ++it) {
+		(*it)->plug(d->mToolBar);
+	}
+	d->mToolBar->insertLineSeparator();
+}
+
+
+void ImageViewController::setFullScreenCommonActions(const KActionPtrList& actions) {
+	d->mFullScreenCommonActions=actions;
+}
+
+
+void ImageViewController::setImageViewActions(const KActionPtrList& actions) {
+	d->mImageViewActions=actions;
 }
 
 
@@ -414,11 +432,6 @@ void ImageViewController::slotAutoHide() {
 
 QWidget* ImageViewController::widget() const {
 	return d->mContainer;
-}
-
-
-KToolBar* ImageViewController::toolBar() const {
-	return d->mToolBar;
 }
 
 
@@ -521,7 +534,6 @@ void ImageViewController::openImageViewContextMenu(const QPoint& pos) {
 
 	menu.exec(pos);
 }
-
 
 
 } // namespace
