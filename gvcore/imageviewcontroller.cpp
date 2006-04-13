@@ -310,6 +310,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mAutoHideTimer=new QTimer(this);
 
 	d->mContainer=new QWidget(parent);
+	d->mContainer->setMinimumWidth(1); // Make sure we can resize the toolbar smaller than its minimum size
 	QVBoxLayout* layout=new QVBoxLayout(d->mContainer);
 	d->mToolBar=new KToolBar(d->mContainer, "", true);
 
