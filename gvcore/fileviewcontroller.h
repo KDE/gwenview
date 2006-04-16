@@ -209,6 +209,9 @@ private slots:
 	void slotDirMade(KIO::Job* job);
 	void prefetchDone();
 	
+	void resetFileFilter();
+	void slotFileFilterChanged();
+
 private:
 	FileViewControllerPrivate* d;
 	Mode mMode;

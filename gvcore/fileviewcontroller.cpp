@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kaction.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kicontheme.h>
@@ -39,6 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kprotocolinfo.h>
 #include <kstdaction.h>
 #include <ktoolbar.h>
+#include <ktoolbarlabelaction.h>
 #include <kurldrag.h>
 #include <kio/job.h>
 #include <kio/file.h>
@@ -88,6 +90,7 @@ public:
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
 	TipTracker* mSliderTracker;
+	KHistoryCombo* mFileFilterCombo;
 };
 
 
@@ -157,6 +160,23 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	KAction* sliderAction=new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "size_slider");
 	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
+	
+	// File filter combobox
+	d->mFileFilterCombo=new KHistoryCombo(d->mToolBar);
+	d->mFileFilterCombo->setMinimumWidth(d->mFileFilterCombo->fontMetrics().maxWidth()*8);
+	d->mFileFilterCombo->setMaxCount(10);
+	connect(d->mFileFilterCombo, SIGNAL(activated(const QString&)),
+    	this, SLOT(slotFileFilterChanged()) );
+	KWidgetAction* fileFilterAction=new KWidgetAction(d->mFileFilterCombo, i18n("Filter"), 0, 0, 0, actionCollection, "file_filter");
+	
+	KAction* resetFilterAction=new KAction(i18n("Reset Filter"), "locationbar_erase", 0,
+		this, SLOT(resetFileFilter()),
+		actionCollection, "reset_filter");
+	
+	KToolBarLabelAction* fileFilterLabelAction=new KToolBarLabelAction(
+		d->mFileFilterCombo, i18n("F&ilter:"), 0, 0, 0,
+		actionCollection, "filter_label");
+	// /File filter combobox
 
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
@@ -260,7 +280,14 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	mSideThumbnailMode->plug(d->mToolBar);
 	mBottomThumbnailMode->plug(d->mToolBar);
 	sliderAction->plug(d->mToolBar);
+	
+	d->mToolBar->insertLineSeparator();
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
+	
+	d->mToolBar->insertLineSeparator();
+	resetFilterAction->plug(d->mToolBar);
+	fileFilterLabelAction->plug(d->mToolBar);
+	fileFilterAction->plug(d->mToolBar);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
 	initDirListerFilter();
@@ -416,6 +443,23 @@ void FileViewController::slotSelectFirstSubDir() {
 	}
 	tmp.adjustPath(1);
 	setDirURL(tmp);
+}
+
+
+void FileViewController::resetFileFilter() {
+	d->mFileFilterCombo->clearEdit();
+	mDirLister->setNameFilter(QString::null);
+	mDirLister->openURL(mDirURL);
+}
+
+	
+void FileViewController::slotFileFilterChanged() {
+	QString txt=d->mFileFilterCombo->currentText();
+	if (d->mFileFilterCombo->historyItems().findIndex(txt)==-1) {
+		d->mFileFilterCombo->addToHistory(txt);
+	}
+	mDirLister->setNameFilter(txt);
+	mDirLister->openURL(mDirURL);
 }
 
 
