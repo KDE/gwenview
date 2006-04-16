@@ -1003,6 +1003,7 @@ void MainWindow::createObjectInteractions() {
 			<< mRotateRight
 			<< mMirror
 			<< mFlip
+			<< actionCollection()->action("adjust_bcg")
 			;
 		mImageViewController->setImageViewActions(actions);
 	}

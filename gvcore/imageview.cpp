@@ -52,6 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "document.h"
 #include "imageutils/imageutils.h"
+#include "bcgdialog.h"
 #include "busylevelmanager.h"
 #include "imageviewtools.h"
 #include "imageutils/croppedqimage.h"
@@ -181,16 +182,9 @@ struct ImageView::Private {
 	KAction* mZoomOut;
 	KAction* mResetZoom;
 	KToggleAction* mLockZoom;
-	KAction* mIncreaseGamma;
-	KAction* mDecreaseGamma;
-	KAction* mIncreaseBrightness;
-	KAction* mDecreaseBrightness;
-	KAction* mIncreaseContrast;
-	KAction* mDecreaseContrast;
-	/*
-	KAction* mToggleFullscreenBar;
-	*/
+	KAction* mAdjustBCG;
 	KActionCollection* mActionCollection;
+	BCGDialog* mBCGDialog;
 
 	// Fullscreen stuff
 	bool mFullScreen;
@@ -322,6 +316,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
+	d->mBCGDialog = 0;
 
 	setFocusPolicy(StrongFocus);
 	setFrameStyle(NoFrame);
@@ -372,18 +367,8 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	}
 	d->initZoomCombo();
 
-	d->mIncreaseGamma=new KAction(i18n("Increase Gamma"),0,CTRL+Key_G,
-		this,SLOT(increaseGamma()),d->mActionCollection,"increase_gamma");
-	d->mDecreaseGamma=new KAction(i18n("Decrease Gamma"),0,SHIFT+CTRL+Key_G,
-		this,SLOT(decreaseGamma()),d->mActionCollection,"decrease_gamma");
-	d->mIncreaseBrightness=new KAction(i18n("Increase Brightness" ),0,CTRL+Key_B,
-		this,SLOT(increaseBrightness()),d->mActionCollection,"increase_brightness");
-	d->mDecreaseBrightness=new KAction(i18n("Decrease Brightness" ),0,SHIFT+CTRL+Key_B,
-		this,SLOT(decreaseBrightness()),d->mActionCollection,"decrease_brightness");
-	d->mIncreaseContrast=new KAction(i18n("Increase Contrast" ),0,CTRL+Key_C,
-		this,SLOT(increaseContrast()),d->mActionCollection,"increase_contrast");
-	d->mDecreaseContrast=new KAction(i18n("Decrease Contrast" ),0,SHIFT+CTRL+Key_C,
-		this,SLOT(decreaseContrast()),d->mActionCollection,"decrease_contrast");
+	d->mAdjustBCG=new KAction(i18n("Adjust Brightness/Contrast/Gamma"), "colorize", 0,
+		this, SLOT(showBCGDialog()), d->mActionCollection, "adjust_bcg");
 
 	// Connect to some interesting signals
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
@@ -1187,36 +1172,46 @@ void ImageView::setLockZoom(bool value) {
 	// don't change zoom here, keep it even if it was from some auto zoom mode
 }
 
-void ImageView::increaseGamma() {
-	d->mGamma = KCLAMP( d->mGamma + 10, 10, 500 );
+
+void ImageView::showBCGDialog() {
+	if (!d->mBCGDialog) {
+		d->mBCGDialog=new BCGDialog(this);
+	}
+	d->mBCGDialog->show();
+}
+
+
+int ImageView::brightness() const {
+	return d->mBrightness;
+}
+
+
+void ImageView::setBrightness(int value) {
+	d->mBrightness=value;
 	fullRepaint();
 }
 
-void ImageView::decreaseGamma() {
-	d->mGamma = KCLAMP( d->mGamma - 10, 10, 500 );
+
+int ImageView::contrast() const {
+	return d->mContrast - 100;
+}
+
+
+void ImageView::setContrast(int value) {
+	d->mContrast=value + 100;
 	fullRepaint();
 }
 
-void ImageView::increaseBrightness() {
-	d->mBrightness = KCLAMP( d->mBrightness + 5, -100, 100 );
-	fullRepaint();
+
+int ImageView::gamma() const {
+	return d->mGamma - 100;
 }
 
-void ImageView::decreaseBrightness() {
-	d->mBrightness = KCLAMP( d->mBrightness - 5, -100, 100 );
+
+void ImageView::setGamma(int value) {
+	d->mGamma=value + 100;
 	fullRepaint();
 }
-
-void ImageView::increaseContrast() {
-	d->mContrast = KCLAMP( d->mContrast + 10, 0, 500 );
-	fullRepaint();
-}
-
-void ImageView::decreaseContrast() {
-	d->mContrast = KCLAMP( d->mContrast - 10, 0, 500 );
-	fullRepaint();
-}
-
 
 //------------------------------------------------------------------------
 //
@@ -1251,12 +1246,7 @@ void ImageView::slotImageSizeUpdated() {
 	}
 
 	updateZoomActions();
-	d->mIncreaseGamma->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseGamma->setEnabled(!d->mDocument->isNull());
-	d->mIncreaseBrightness->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseBrightness->setEnabled(!d->mDocument->isNull());
-	d->mIncreaseContrast->setEnabled(!d->mDocument->isNull());
-	d->mDecreaseContrast->setEnabled(!d->mDocument->isNull());
+	d->mAdjustBCG->setEnabled(!d->mDocument->isNull());
 
 	updateContentSize();
 	updateImageOffset();

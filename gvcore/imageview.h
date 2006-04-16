@@ -75,8 +75,14 @@ public:
 	bool fullScreen() const; 
 	void setFullScreen(bool);
 
+	int brightness() const;
+	int contrast() const;
+	int gamma() const;
 
 public slots:
+	void setBrightness(int);
+	void setContrast(int);
+	void setGamma(int);
 	void updateFromSettings();
 
 signals:
@@ -151,17 +157,12 @@ private slots:
 	void setZoomToWidth(bool);
 	void setZoomToHeight(bool);
 	void setLockZoom(bool);
-	void increaseGamma();
-	void decreaseGamma();
-	void increaseBrightness();
-	void decreaseBrightness();
-	void increaseContrast();
-	void decreaseContrast();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
 	void checkPendingOperations();
 	void loadingStarted();
 	void slotBusyLevelChanged(BusyLevel);
+	void showBCGDialog();
 	
 protected:
 	// Overloaded methods

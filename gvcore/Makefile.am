@@ -59,6 +59,8 @@ libgwenviewcore_la_SOURCES = \
 	thumbnaildetailsdialog.cpp \
 	xcursor.cpp \
 	mimetypeutils.cpp \
+	bcgdialog.cpp \
+	bcgdialogbase.ui \
 	miscconfig.kcfgc \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \

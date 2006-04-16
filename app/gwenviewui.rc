@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<kpartgui name="Gwenview" version="25">
+<kpartgui name="Gwenview" version="26">
 <MenuBar>
   <Menu name="file">
     <Action name="file_rename"/>
@@ -30,16 +30,8 @@
     <Action name="side_thumbnail_mode" />
     <Action name="bottom_thumbnail_mode" />
     <Separator/>
-
-    <Menu name="colors">
-        <text>&amp;Colors</text>
-        <Action name="increase_gamma"/>
-        <Action name="decrease_gamma"/>
-        <Action name="increase_brightness"/>
-        <Action name="decrease_brightness"/>
-        <Action name="increase_contrast"/>
-        <Action name="decrease_contrast"/>
-    </Menu>
+    <Action name="adjust_bcg"/>
+    <Separator/>
     <Action name="view_zoom_to_fit"/>
     <Action name="view_zoom_to_width"/>
     <Action name="view_zoom_to_height"/>

@@ -1,0 +1,182 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>BCGDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>BCGDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>377</width>
+            <height>140</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Contrast:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>mCSlider</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Gamma:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>mGSlider</cstring>
+            </property>
+        </widget>
+        <widget class="QSlider" row="0" column="1">
+            <property name="name">
+                <cstring>mBSlider</cstring>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QSlider" row="1" column="1">
+            <property name="name">
+                <cstring>mCSlider</cstring>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QSlider" row="2" column="1">
+            <property name="name">
+                <cstring>mGSlider</cstring>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="0" column="2">
+            <property name="name">
+                <cstring>mBSpinBox</cstring>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="2">
+            <property name="name">
+                <cstring>mCSpinBox</cstring>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="2">
+            <property name="name">
+                <cstring>mGSpinBox</cstring>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="minValue">
+                <number>-100</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Brightness:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>mBSlider</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>mBSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mBSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>mCSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mCSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>mGSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mGSpinBox</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>mBSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mBSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>mCSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mCSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>mGSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>mGSlider</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>mBSlider</tabstop>
+    <tabstop>mBSpinBox</tabstop>
+    <tabstop>mCSlider</tabstop>
+    <tabstop>mCSpinBox</tabstop>
+    <tabstop>mGSlider</tabstop>
+    <tabstop>mGSpinBox</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
