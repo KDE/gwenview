@@ -109,6 +109,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 {
 	d=new FileViewControllerPrivate;
 	d->mWidget=new QVBox(parent);
+	d->mWidget->setMinimumWidth(1);
 	d->mToolBar=new KToolBar(d->mWidget, "", true);
 	d->mStack=new QWidgetStack(d->mWidget);
 
@@ -149,6 +150,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 
 	// Size slider
 	mSizeSlider=new QSlider(Horizontal, d->mToolBar);
+	mSizeSlider->setMinimumWidth(50);
 	mSizeSlider->setMaximumWidth(150);
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
@@ -280,8 +282,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	mSideThumbnailMode->plug(d->mToolBar);
 	mBottomThumbnailMode->plug(d->mToolBar);
 	sliderAction->plug(d->mToolBar);
-	
-	d->mToolBar->insertLineSeparator();
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
 	
 	d->mToolBar->insertLineSeparator();
