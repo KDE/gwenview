@@ -275,7 +275,7 @@ void MainWindow::slotDirURLChanged(const KURL& dirURL) {
 		int pos = 0;
 		KURL url = dirURL.upURL();
 		for (; url.hasPath() && pos<10; url=url.upURL(), ++pos) {
-			upPopup->insertItem(url.url());
+			upPopup->insertItem(url.pathOrURL());
 			if (url.path()=="/") break;
 		}
 	} else {
