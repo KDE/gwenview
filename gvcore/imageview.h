@@ -94,6 +94,9 @@ signals:
     // Emitted whenever an hint should be displayed
     void requestHintDisplay(const QString& hint);
 
+	// Emitted whenever brightness, contrast or gamma changes
+	void bcgChanged();
+
 protected:
 	virtual void contentsDragEnterEvent(QDragEnterEvent*);
 	virtual void contentsDropEvent(QDropEvent*);
@@ -157,6 +160,12 @@ private slots:
 	void setZoomToWidth(bool);
 	void setZoomToHeight(bool);
 	void setLockZoom(bool);
+	void increaseGamma();
+	void decreaseGamma();
+	void increaseBrightness();
+	void decreaseBrightness();
+	void increaseContrast();
+	void decreaseContrast();
 	void slotImageSizeUpdated();
 	void slotImageRectUpdated(const QRect&);
 	void checkPendingOperations();

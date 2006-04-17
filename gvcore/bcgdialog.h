@@ -38,7 +38,9 @@ public:
 
 protected:
 	virtual void slotDefault();
-	virtual void showEvent(QShowEvent*);
+
+private slots:
+	void updateFromImageView();
 
 private:
 	struct Private;

@@ -38,12 +38,6 @@ namespace Gwenview {
 struct BCGDialog::Private {
 	ImageView* mView;
 	BCGDialogBase* mContent;
-
-	void initFromImageView() {
-		mContent->mBSlider->setValue(mView->brightness());
-		mContent->mCSlider->setValue(mView->contrast());
-		mContent->mGSlider->setValue(mView->gamma());
-	}
 };
 
 
@@ -61,6 +55,9 @@ BCGDialog::BCGDialog(ImageView* view)
 		view, SLOT(setContrast(int)) );
 	connect(d->mContent->mGSlider, SIGNAL(valueChanged(int)),
 		view, SLOT(setGamma(int)) );
+	
+	connect(view, SIGNAL(bcgChanged()),
+		this, SLOT(updateFromImageView()) );
 }
 
 
@@ -69,16 +66,17 @@ BCGDialog::~BCGDialog() {
 }
 
 
-void BCGDialog::showEvent(QShowEvent*) {
-	d->initFromImageView();
-}
-
-
 void BCGDialog::slotDefault() {
 	d->mView->setBrightness(0);	
 	d->mView->setContrast(0);	
 	d->mView->setGamma(0);	
-	d->initFromImageView();
+}
+
+
+void BCGDialog::updateFromImageView() {
+	d->mContent->mBSlider->setValue(d->mView->brightness());
+	d->mContent->mCSlider->setValue(d->mView->contrast());
+	d->mContent->mGSlider->setValue(d->mView->gamma());
 }
 
 
