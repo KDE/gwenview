@@ -70,6 +70,7 @@ void BCGDialog::slotDefault() {
 	d->mView->setBrightness(0);	
 	d->mView->setContrast(0);	
 	d->mView->setGamma(0);	
+	updateFromImageView();
 }
 
 
