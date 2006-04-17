@@ -363,6 +363,8 @@ void FileViewController::setDirURL(const KURL& url) {
 	mDirLister->clearError();
 	currentFileView()->setShownFileItem(0L);
 	mFileNameToSelect=QString::null;
+	d->mFileFilterCombo->clearEdit();
+	mDirLister->setNameFilter(QString::null);
 	mDirLister->openURL(mDirURL);
 	emit urlChanged(mDirURL);
 	emit directoryChanged(mDirURL);
