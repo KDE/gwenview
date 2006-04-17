@@ -196,6 +196,17 @@ struct ImageViewController::Private {
 	
 	void showImageView(void) {
 		LOG("");
+		if (mStack->visibleWidget()==mImageView) {
+			KAction* action=mImageViewActions.first();
+			if (action && !action->isPlugged(mToolBar)) {
+				// In the ctor, we set the imageview as the visible widget but
+				// we did not fill the toolbar because mImageViewActions was
+				// empty. In this case, fill the toolbar now.
+				plugImageViewActions();
+			}
+			return;
+		}
+
 		// If the part implements the KMediaPlayer::Player interface, stop
 		// playing (needed for Kaboodle)
 		KMediaPlayer::Player* player=dynamic_cast<KMediaPlayer::Player *>(mPlayerPart);
@@ -203,8 +214,11 @@ struct ImageViewController::Private {
 			player->stop();
 		}
 		setXMLGUIClient(0);
-		
+		plugImageViewActions();
 		mStack->raiseWidget(mImageView);
+	}
+
+	void plugImageViewActions() {
 		KActionPtrList::Iterator
 			it=mImageViewActions.begin(),
 			end=mImageViewActions.end();
