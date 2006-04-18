@@ -168,7 +168,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mFileFilterCombo->setMinimumWidth(d->mFileFilterCombo->fontMetrics().maxWidth()*8);
 	d->mFileFilterCombo->setMaxCount(10);
 	connect(d->mFileFilterCombo, SIGNAL(activated(const QString&)),
-    	this, SLOT(slotFileFilterChanged()) );
+    	this, SLOT(applyFileFilter()) );
 	KWidgetAction* fileFilterAction=new KWidgetAction(d->mFileFilterCombo, i18n("Filter"), 0, 0, 0, actionCollection, "file_filter");
 	
 	KAction* resetFilterAction=new KAction(i18n("Reset Filter"), "locationbar_erase", 0,
@@ -450,17 +450,35 @@ void FileViewController::slotSelectFirstSubDir() {
 
 void FileViewController::resetFileFilter() {
 	d->mFileFilterCombo->clearEdit();
-	mDirLister->setNameFilter(QString::null);
-	mDirLister->openURL(mDirURL);
+	applyFileFilter();
 }
 
 	
-void FileViewController::slotFileFilterChanged() {
+void FileViewController::applyFileFilter() {
 	QString txt=d->mFileFilterCombo->currentText();
-	if (d->mFileFilterCombo->historyItems().findIndex(txt)==-1) {
-		d->mFileFilterCombo->addToHistory(txt);
-	}
 	mDirLister->setNameFilter(txt);
+
+	if (txt.isEmpty()) {
+		// Be sure to keep the current item selected
+		KFileItem* item=currentFileView()->currentFileItem();
+		if (item) {
+			mFileNameToSelect=item->name();
+		}
+
+	} else {
+		if (d->mFileFilterCombo->historyItems().findIndex(txt)==-1) {
+			d->mFileFilterCombo->addToHistory(txt);
+		}
+
+		// Find next item matching the filter, if any
+		KFileItem* item=currentFileView()->currentFileItem();
+		for (; item; item=currentFileView()->nextItem(item)) {
+			if (mDirLister->matchesFilter(item->name())) {
+				mFileNameToSelect=item->name();
+				break;
+			}
+		}
+	}
 	mDirLister->openURL(mDirURL);
 }
 

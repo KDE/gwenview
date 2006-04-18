@@ -210,7 +210,7 @@ private slots:
 	void prefetchDone();
 	
 	void resetFileFilter();
-	void slotFileFilterChanged();
+	void applyFileFilter();
 
 private:
 	FileViewControllerPrivate* d;
