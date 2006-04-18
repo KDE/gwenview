@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qdir.h>
+#include <qregexp.h>
 
 // KDE
 #include <kdebug.h>
@@ -75,11 +76,15 @@ private:
 
 
 class ImageInfo : public KIPI::ImageInfoShared {
+	static const QRegExp sExtensionRE;
 public:
 	ImageInfo(KIPI::Interface* interface, const KURL& url) : KIPI::ImageInfoShared(interface, url) {}
 
 	QString title() {
-		return _url.fileName();
+		QString txt=_url.fileName();
+		txt.replace("_", " ");
+		txt.replace(sExtensionRE, "");
+		return txt;
 	}
 
 	QString description() {
@@ -103,6 +108,7 @@ public:
 	void addAttributes(const QMap<QString, QVariant>&) {}
 };
 
+const QRegExp ImageInfo::sExtensionRE("\\.[a-z0-9]+$", false /*caseSensitive*/);
 
 
 struct KIPIInterfacePrivate {
