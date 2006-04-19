@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qpopupmenu.h>
 
 // KDE
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -38,6 +39,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 struct DirViewController::Private {
 	TreeView* mTreeView;
@@ -76,6 +85,7 @@ void DirViewController::setURL(const KURL& url) {
 
 void DirViewController::slotTreeViewSelectionChanged(QListViewItem* item) {
 	if (!item) return;
+	LOG(d->mTreeView->currentURL());
 	emit urlChanged(d->mTreeView->currentURL());
 }
 
