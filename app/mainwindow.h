@@ -211,6 +211,8 @@ private slots:
 	void slotReplug();
 
 	void showHint(const QString&);
+
+	void fillGoUpMenu();
 };
 
 

@@ -268,19 +268,7 @@ void MainWindow::openURL(const KURL& url) {
 void MainWindow::slotDirURLChanged(const KURL& dirURL) {
 	LOG(dirURL.prettyURL(0,KURL::StripFileProtocol));
 	
-	if (dirURL.path()!="/") {
-		mGoUp->setEnabled(true);
-		QPopupMenu *upPopup = mGoUp->popupMenu();
-		upPopup->clear();
-		int pos = 0;
-		KURL url = dirURL.upURL();
-		for (; url.hasPath() && pos<10; url=url.upURL(), ++pos) {
-			upPopup->insertItem(url.pathOrURL());
-			if (url.path()=="/") break;
-		}
-	} else {
-		mGoUp->setEnabled(false);
-	}
+	mGoUp->setEnabled(dirURL.path()!="/");
 
 	updateStatusInfo();
 	updateImageActions();
@@ -304,7 +292,9 @@ void MainWindow::updateLocationURL() {
 }
 
 void MainWindow::goUp() {
-	goUpTo(mGoUp->popupMenu()->idAt(0));
+	KURL url = mFileViewController->dirURL();
+	mFileViewController->setDirURL(url.upURL());
+	mFileViewController->setFileNameToSelect(url.fileName());
 }
 
 void MainWindow::goUpTo(int id) {
@@ -319,6 +309,17 @@ void MainWindow::goUpTo(int id) {
 	}
 	mFileViewController->setDirURL(url);
 	mFileViewController->setFileNameToSelect(childURL.fileName());
+}
+
+void MainWindow::fillGoUpMenu() {
+	QPopupMenu* menu = mGoUp->popupMenu();
+	menu->clear();
+	int pos = 0;
+	KURL url = mFileViewController->dirURL().upURL();
+	for (; url.hasPath() && pos<10; url=url.upURL(), ++pos) {
+		menu->insertItem(url.pathOrURL());
+		if (url.path()=="/") break;
+	}
 }
 
 
@@ -1058,6 +1059,9 @@ void MainWindow::updateWindowActions() {
 
 
 void MainWindow::createConnections() {
+	connect(mGoUp->popupMenu(), SIGNAL(aboutToShow()),
+		this,SLOT(fillGoUpMenu()));
+	
 	connect(mGoUp->popupMenu(), SIGNAL(activated(int)),
 		this,SLOT(goUpTo(int)));
 	
