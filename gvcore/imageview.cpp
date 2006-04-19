@@ -58,18 +58,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "imageutils/croppedqimage.h"
 #include "imageviewconfig.h"
 
-#if !KDE_IS_VERSION( 3, 3, 0 )
-// from kglobal.h
-#define KCLAMP(x,low,high) kClamp(x,low,high)
-template<class T>
-inline const T& kClamp( const T& x, const T& low, const T& high )
-{
-    if ( x < low )       return low;
-    else if ( high < x ) return high;
-    else                 return x;
-}
-#endif
-
 namespace Gwenview {
 
 /*
@@ -1032,9 +1020,7 @@ bool ImageView::eventFilter(QObject* obj, QEvent* event) {
 		return true;
 
 	case QEvent::Enter:
-#if KDE_IS_VERSION( 3, 4, 0 )
 		selectTool( kapp->keyboardMouseState(), true );
-#endif
 		emitRequestHintDisplay();
 		break;
 

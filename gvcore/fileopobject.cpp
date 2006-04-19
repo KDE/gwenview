@@ -187,26 +187,7 @@ void FileOpMoveToObject::operator()() {
 
 //-FileOpTrashObject---------------------------------------------------------------
 void FileOpTrashObject::operator()() {
-#if KDE_IS_VERSION( 3, 3, 89 )
 	KURL trashURL("trash:/");
-#else
-	KURL trashURL;
-	// Get the trash path (and make sure it exists)
-	QString trashPath=KGlobalSettings::trashPath();
-	if ( !QFile::exists(trashPath) ) {
-		KStandardDirs::makeDir( QFile::encodeName(trashPath) );
-	}
-	trashURL.setPath(trashPath);
-
-	// Check we don't want to trash the trash
-	KURL::List::ConstIterator it=mURLList.begin();
-	for (; it!=mURLList.end(); ++it) {
-		if ( (*it).isLocalFile() && (*it).path(1)==trashPath ) {
-			KMessageBox::sorry(0, i18n("You cannot trash the trash bin."));
-			return;
-		}
-	}
-#endif
 
 	// Confirm operation
 	if (FileOperationConfig::confirmDelete()) {
@@ -253,22 +234,14 @@ void FileOpRealDeleteObject::operator()() {
 			response=KMessageBox::warningContinueCancelList(mParent,
 				i18n("Do you really want to delete these files?"),fileList,
 				i18n("Delete Files"),
-#if KDE_IS_VERSION(3, 3, 0)
 				KStdGuiItem::del()
-#else
-				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
-#endif
 				);
 		} else {
 			QString filename=QStyleSheet::escape(mURLList.first().filename());
 			response=KMessageBox::warningContinueCancel(mParent,
 				i18n("<p>Do you really want to delete <b>%1</b>?</p>").arg(filename),
 				i18n("Delete File"),
-#if KDE_IS_VERSION(3, 3, 0)
 				KStdGuiItem::del()
-#else
-				KGuiItem( i18n( "&Delete" ), "editdelete", i18n( "Delete item(s)" ) )
-#endif
 				);
 		}
 		if (response!=KMessageBox::Continue) return;

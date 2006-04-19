@@ -299,13 +299,8 @@ void MainWindow::updateLocationURL() {
 		url=mDocument->url();
 	}
 	LOG(url.prettyURL());
-#if KDE_IS_VERSION( 3, 4, 0 )
 	mURLEdit->setEditText(url.pathOrURL());
 	mURLEdit->addToHistory(url.pathOrURL());
-#else
-	mURLEdit->setEditText(url.prettyURL(0,KURL::StripFileProtocol));
-	mURLEdit->addToHistory(url.prettyURL(0,KURL::StripFileProtocol));
-#endif
 }
 
 void MainWindow::goUp() {
