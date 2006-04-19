@@ -175,7 +175,10 @@ void TreeView::slotTreeViewPopulateFinished(KFileTreeViewItem* item) {
 	LOG("m_nextUrlToSelect=" << m_nextUrlToSelect);
 
 	// We reached the URL to select, get out
-	if (url.equals(m_nextUrlToSelect, true)) return;
+	if (url.equals(m_nextUrlToSelect, true)) {
+		slotSetNextUrlToSelect(KURL());
+		return;
+	}
 
 	// This URL is not a parent of a wanted URL, get out
 	if (!url.isParentOf(m_nextUrlToSelect)) return;
@@ -246,6 +249,7 @@ void TreeView::slotNewTreeViewItems(KFileTreeBranch* branch, const KFileTreeView
  * hidden
  */
 void TreeView::showEvent(QShowEvent* event) {
+	LOG("m_nextUrlToSelect=" << m_nextUrlToSelect.pathOrURL());
 	if (m_nextUrlToSelect.isValid() && !currentURL().equals(m_nextUrlToSelect,true)) {
 		d->setURLInternal(m_nextUrlToSelect);
 	}
