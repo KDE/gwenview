@@ -43,7 +43,7 @@ private:
 	DocumentLoadingImplPrivate* d;
 
 private slots:
-	void slotURLKindDetermined(MimeTypeUtils::Kind);
+	void slotURLKindDetermined();
 	void sizeLoaded(int, int);
 	void imageChanged(const QRect&);
 	void frameLoaded();

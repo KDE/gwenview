@@ -32,7 +32,7 @@ class QStringList;
 namespace Gwenview {
 
 namespace MimeTypeUtils {
-enum Kind { KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
+enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
 
 const QStringList& rasterImageMimeTypes();
 Kind fileItemKind(const KFileItem*);

@@ -68,13 +68,14 @@ public:
 	ImageFrames frames() const;
 	QCString imageFormat() const;
 	QByteArray rawData() const;
+	MimeTypeUtils::Kind urlKind() const;
 	KURL url() const;
 	QSize knownSize() const;
 	QRegion loadedRegion() const; // valid parts of processedImage()
 	bool completed() const;
 
 signals:
-	void urlKindDetermined(MimeTypeUtils::Kind);
+	void urlKindDetermined();
 	void sizeLoaded(int, int);
 	void imageChanged(const QRect&); // use processedImage(), is not in frames() yet
 	void frameLoaded();

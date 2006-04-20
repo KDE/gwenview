@@ -181,6 +181,7 @@ public:
 	, mAsyncImageComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
+	, mURLKind(MimeTypeUtils::KIND_UNKNOWN)
 	, mDecodeComplete( false )
 	, mStatPending( false )
 	, mGetPending( false )
@@ -241,6 +242,8 @@ public:
 	ImageFrames mFrames;
 
 	QCString mImageFormat;
+	
+	MimeTypeUtils::Kind mURLKind;
 
 	QValueVector< OwnerData > mOwners; // loaders may be shared
 
@@ -407,14 +410,16 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 
 	// Try to determine the data type
 	if (oldSize==0) {
-		MimeTypeUtils::Kind kind=MimeTypeUtils::determineKindFromContent(d->mRawData);
-		if (kind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
+		d->mURLKind=MimeTypeUtils::determineKindFromContent(d->mRawData);
+		if (d->mURLKind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
 			Q_ASSERT(!d->mDecoderTimer.isActive());
 			job->kill(true /* quietly */);
-			emit urlKindDetermined(kind);
+			LOG("emit urlKindDetermined(!raster)");
+			emit urlKindDetermined();
 			return;
 		}
-		emit urlKindDetermined(kind);
+		LOG("emit urlKindDetermined(raster)");
+		emit urlKindDetermined();
 	}
 
 	// Decode the received data
@@ -426,10 +431,12 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 
 void ImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
+		LOG("suspended");
 		d->mDecoderTimer.stop();
 		return;
 	}
 	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
+		LOG("mImageFormat is not null");
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -691,6 +698,11 @@ QCString ImageLoader::imageFormat() const {
 
 QByteArray ImageLoader::rawData() const {
 	return d->mRawData;
+}
+
+
+MimeTypeUtils::Kind ImageLoader::urlKind() const {
+	return d->mURLKind;
 }
 
 
