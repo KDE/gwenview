@@ -40,6 +40,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 SlideShow::SlideShow(Document* document)
 : mDocument(document), mStarted(false), mPrefetch( NULL ) {
@@ -118,8 +126,10 @@ QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
 
 
 void SlideShow::slotTimeout() {
+	LOG("");
 	// wait for prefetching to finish
 	if( mPrefetch != NULL ) {
+		LOG("mPrefetch is working");
 		return;
 	}
 
@@ -141,10 +151,12 @@ void SlideShow::slotLoaded() {
 
 
 void SlideShow::prefetch() {
+	LOG("");
 	QValueVector<KURL>::ConstIterator it=findNextURL();
 	if (it==mURLs.end()) {
 		return;
 	}
+	LOG("url=" << (*it).pathOrURL());
 
 	if( mPrefetch != NULL ) mPrefetch->release( this );
 	// TODO don't use prefetching with disabled optimizations (and add that option ;) )
@@ -153,17 +165,39 @@ void SlideShow::prefetch() {
 	if( !mPriorityURL.isEmpty()) Cache::instance()->setPriorityURL( mPriorityURL, false );
 	mPriorityURL = *it;
 	Cache::instance()->setPriorityURL( mPriorityURL, true ); // make sure it will stay in the cache
+	connect( mPrefetch, SIGNAL( urlKindDetermined()), SLOT( slotUrlKindDetermined()));
 	connect( mPrefetch, SIGNAL( imageLoaded( bool )), SLOT( prefetchDone()));
+	
+	if (mPrefetch->urlKind()==MimeTypeUtils::KIND_FILE) {
+		// Prefetch is already done, and this is not a raster image
+		prefetchDone();
+	}
 }
 
+void SlideShow::slotUrlKindDetermined() {
+	LOG("");
+	if (!mPrefetch) return;
+	
+	LOG("mPrefetch!=0");
+	if (mPrefetch->urlKind()==MimeTypeUtils::KIND_FILE) {
+		LOG("KIND_FILE");
+		// This is not a raster image, imageLoaded will not be emitted
+		prefetchDone();
+	}
+}
+
+
 void SlideShow::prefetchDone() {
+	LOG("");
 	if( mPrefetch != NULL ) { 
+		LOG("mPrefetch!=0");
 		// don't call Cache::setPriorityURL( ... , false ) here - it will still take
 		// a short while to reuse the image from the cache
 		mPrefetch->release( this );
 		mPrefetch = NULL;
 		// prefetching completed and delay has already elapsed
 		if( mStarted && !mTimer->isActive()) {
+			LOG("Calling slotTimeout");
 			slotTimeout();
 		}
 	}

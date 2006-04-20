@@ -64,6 +64,7 @@ signals:
 private slots:
 	void slotTimeout();
 	void slotLoaded();
+	void slotUrlKindDetermined();
 	void prefetchDone();
 
 private:
