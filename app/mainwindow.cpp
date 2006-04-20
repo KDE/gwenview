@@ -767,9 +767,10 @@ void MainWindow::updateStatusInfo() {
 
 
 void MainWindow::updateImageActions() {
+	mToggleSlideShow->setEnabled(mDocument->fileType()!=Document::FILE_EMPTY);
+	
 	bool imageActionsEnabled = !mDocument->isNull();
 	
-	mToggleSlideShow->setEnabled(imageActionsEnabled);
 	mRotateLeft->setEnabled(imageActionsEnabled);
 	mRotateRight->setEnabled(imageActionsEnabled);
 	mMirror->setEnabled(imageActionsEnabled);
