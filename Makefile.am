@@ -1,4 +1,4 @@
-SUBDIRS = tsthread imageutils gvcore pics desktopfiles doc tools gvimagepart gvdirpart app
+SUBDIRS = tsthread imageutils gvcore pics desktopfiles doc tools updates gvimagepart gvdirpart app
 
 EXTRA_DIST = AUTHORS ChangeLog COPYING INSTALL NEWS README TODO CREDITS
 
