@@ -54,7 +54,7 @@ public:
 	virtual void transform(ImageUtils::Orientation);
 	virtual QString save(const KURL&, const QCString& format) const;
 
-	virtual Document::FileType fileType() const=0;
+	virtual MimeTypeUtils::Kind urlKind() const=0;
 
 signals:
 	void finished(bool success);
@@ -73,8 +73,8 @@ public:
 		setImageFormat(0);
 	}
 
-	Document::FileType fileType() const {
-		return Document::FILE_EMPTY;
+	MimeTypeUtils::Kind urlKind() const {
+		return MimeTypeUtils::KIND_UNKNOWN;
 	}
 };
 

@@ -40,7 +40,7 @@ public:
 		emit finished(true);
 	}
 
-	Document::FileType fileType() const { return Document::FILE_OTHER; }
+	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_FILE; }
 };
 
 } // namespace

@@ -767,7 +767,7 @@ void MainWindow::updateStatusInfo() {
 
 
 void MainWindow::updateImageActions() {
-	mToggleSlideShow->setEnabled(mDocument->fileType()!=Document::FILE_EMPTY);
+	mToggleSlideShow->setEnabled(mDocument->urlKind()!=MimeTypeUtils::KIND_UNKNOWN);
 	
 	bool imageActionsEnabled = !mDocument->isNull();
 	

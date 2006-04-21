@@ -32,6 +32,7 @@ Copyright 2000-2006 Aurelien Gateau
 
 // Local 
 #include "imageutils/orientation.h"
+#include "mimetypeutils.h"
 #include "libgwenview_export.h"
 namespace KIO { class Job; }
 
@@ -55,7 +56,6 @@ class LIBGWENVIEW_EXPORT Document : public QObject {
 Q_OBJECT
 public:
 	enum CommentState { NONE=0, READ_ONLY=1, WRITABLE=2 };
-	enum FileType { FILE_EMPTY, FILE_IMAGE, FILE_OTHER };
 	
 	Document(QObject*);
 	~Document();
@@ -67,7 +67,7 @@ public:
 	QString filename() const;
 	const QCString& imageFormat() const;
 	int fileSize() const;
-	FileType fileType() const;
+	MimeTypeUtils::Kind urlKind() const;
 
 	// Convenience methods
 	bool isNull() const { return image().isNull(); }

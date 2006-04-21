@@ -133,8 +133,8 @@ Document::~Document() {
 // Properties
 //
 //---------------------------------------------------------------------
-Document::FileType Document::fileType() const {
-	return d->mImpl->fileType();
+MimeTypeUtils::Kind Document::urlKind() const {
+	return d->mImpl->urlKind();
 }
 
 

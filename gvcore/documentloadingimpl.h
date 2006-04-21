@@ -37,7 +37,7 @@ public:
 	DocumentLoadingImpl(Document* document);
 	~DocumentLoadingImpl();
 	virtual void init();
-	virtual Document::FileType fileType() const { return Document::FILE_IMAGE; }
+	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
 	
 private:
 	DocumentLoadingImplPrivate* d;

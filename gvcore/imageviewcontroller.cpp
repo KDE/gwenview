@@ -372,7 +372,7 @@ ImageViewController::~ImageViewController() {
 
 void ImageViewController::slotLoaded() {
 	LOG("");
-	if (d->mDocument->fileType()==Document::FILE_OTHER) {
+	if (d->mDocument->urlKind()==MimeTypeUtils::KIND_FILE) {
 		d->showPlayerPart();
 	} else {
 		d->showImageView();
