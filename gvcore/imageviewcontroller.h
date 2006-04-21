@@ -35,7 +35,6 @@ class KToolBar;
 namespace Gwenview {
 
 
-class CaptionFormatterBase;
 class Document;
 class ImageView;
 
@@ -50,7 +49,6 @@ public:
 	
 	void setImageViewActions(const KActionPtrList&);
 
-	void setOSDFormatter(CaptionFormatterBase*);
 	void setFullScreen(bool);
 	void setNormalCommonActions(const KActionPtrList&);
 	void setFullScreenCommonActions(const KActionPtrList&);

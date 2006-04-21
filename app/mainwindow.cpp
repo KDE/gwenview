@@ -58,6 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <ktoolbarlabelaction.h>
 #include <kurlcompletion.h>
 #include <kurlpixmapprovider.h>
 #include <kprinter.h>
@@ -297,6 +298,29 @@ void MainWindow::goUp() {
 	mFileViewController->setFileNameToSelect(url.fileName());
 }
 
+void MainWindow::updateFullScreenLabel() {
+	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
+	QString format;
+	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
+	switch (osdMode) {
+	case FREE_OUTPUT:
+		format = FullScreenConfig::freeOutputFormat();
+		break;
+	case PATH:
+		format = "%p";
+		break;
+	case COMMENT:
+		format = "%c";
+		break;
+	case PATH_AND_COMMENT:
+		format = "%p\n%c";
+		break;
+	case NONE:
+		break;
+	}
+	mFullScreenLabelAction->label()->setText( (*mCaptionFormatter)(format));
+}
+
 void MainWindow::goUpTo(int id) {
 	KPopupMenu* menu=mGoUp->popupMenu();
 	KURL url(menu->text(id));
@@ -475,6 +499,9 @@ void MainWindow::slotImageLoaded() {
 	updateStatusInfo();
 	updateImageActions();
 	updateLocationURL();
+	if (mToggleFullScreen->isChecked()) {
+		updateFullScreenLabel();
+	}
 }
 
 
@@ -535,6 +562,7 @@ void MainWindow::toggleFullScreen() {
 			mImageViewController->widget()->reparent(mViewModeWidget, QPoint(0,0));
 			mCentralStack->raiseWidget(StackIDView);
 		}
+		updateFullScreenLabel();
 		mImageViewController->setFullScreen(true);
 		mImageViewController->widget()->setFocus();
 	} else {
@@ -937,6 +965,7 @@ void MainWindow::createActions() {
 
 	mToggleFullScreen= KStdAction::fullScreen(this,SLOT(toggleFullScreen()),actionCollection(),0);
 	mToggleSlideShow=new KAction(i18n("Slide Show"),"slideshow_play",0,this,SLOT(toggleSlideShow()),actionCollection(),"slideshow");
+	mFullScreenLabelAction=new KToolBarLabelAction("", 0, 0, 0, actionCollection(), "fullscreen_label");
   
 	// Go
 	mGoUp=new KToolBarPopupAction(i18n("Up"), "up", ALT + Key_Up, this, SLOT(goUp()), actionCollection(), "go_up");
@@ -966,7 +995,6 @@ void MainWindow::createActions() {
 void MainWindow::createObjectInteractions() {
 	// Image view caption formatter
 	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
-	mImageViewController->setOSDFormatter(mCaptionFormatter.get());
 	
 	// Actions in image view
 	{
@@ -976,6 +1004,7 @@ void MainWindow::createObjectInteractions() {
 			<< mToggleSlideShow
 			<< mFileViewController->selectPrevious()
 			<< mFileViewController->selectNext()
+			<< mFullScreenLabelAction
 			;
 		mImageViewController->setFullScreenCommonActions(actions);
 	}

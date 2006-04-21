@@ -52,6 +52,7 @@ class KHistoryCombo;
 class KListView;
 class KRadioAction;
 class KToggleAction;
+class KToolBarLabelAction;
 class KToolBarPopupAction;
 class KURLCompletion;
 
@@ -102,6 +103,7 @@ private:
 	KRadioAction* mSwitchToBrowseMode;
 	KRadioAction* mSwitchToViewMode;
 	KToggleAction* mToggleFullScreen;
+	KToolBarLabelAction* mFullScreenLabelAction;
 	KAction* mRenameFile;
 	KAction* mCopyFiles;
 	KAction* mMoveFiles;
@@ -140,6 +142,7 @@ private:
 	void createLocationToolBar();
 	void createObjectInteractions();
 	void updateLocationURL();
+	void updateFullScreenLabel();
 	void createConnections();
 
 private slots:

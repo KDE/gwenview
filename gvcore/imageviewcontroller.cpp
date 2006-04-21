@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qcursor.h>
-#include <qlabel.h>
 #include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qvbox.h>
@@ -42,12 +41,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kxmlguifactory.h>
 
 // Local
-#include <captionformatterbase.h>
 #include <document.h>
 #include <externaltoolcontext.h>
 #include <externaltoolmanager.h>
 #include <fullscreenbar.h>
-#include <fullscreenconfig.h>
 #include <imageview.h>
 
 namespace Gwenview {
@@ -81,7 +78,6 @@ public:
 	
 const int AUTO_HIDE_TIMEOUT=4000;
 
-enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
 
 
 //------------------------------------------------------------------------
@@ -111,9 +107,7 @@ struct ImageViewController::Private {
 	// Fullscreen stuff
 	bool mFullScreen;
 	FullScreenBar* mFullScreenBar;
-	QLabel* mFullScreenLabel;
 	KActionPtrList mFullScreenCommonActions;
-	CaptionFormatterBase* mOSDFormatter;
 
 
 	void setXMLGUIClient(KXMLGUIClient* client) {
@@ -228,35 +222,6 @@ struct ImageViewController::Private {
 		}
 	}
 
-
-	void updateFullScreenLabel() {
-		Q_ASSERT(mOSDFormatter);
-		if (!mOSDFormatter) {
-			kdWarning() << "mOSDFormatter is not set\n";
-			return;
-		}
-		
-		QString format;
-		OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
-		switch (osdMode) {
-		case FREE_OUTPUT:
-			format = FullScreenConfig::freeOutputFormat();
-			break;
-		case PATH:
-			format = "%p";
-			break;
-		case COMMENT:
-			format = "%c";
-			break;
-		case PATH_AND_COMMENT:
-			format = "%p\n%c";
-			break;
-		case NONE:
-			break;
-		}
-		mFullScreenLabel->setText( (*mOSDFormatter)(format));
-	}
-
 	
 	void restartAutoHideTimer() {
 		mAutoHideTimer->start(AUTO_HIDE_TIMEOUT,true);
@@ -298,12 +263,6 @@ struct ImageViewController::Private {
 		for (; it!=end; ++it) {
 			(*it)->plug(mFullScreenBar);
 		}
-		
-		/* we use "kde toolbar widget" to avoid the flat background (looks bad with
-		 * styles like Keramik). See konq_misc.cc.
-		 */
-		mFullScreenLabel=new QLabel(mFullScreenBar, "kde toolbar widget");
-		mFullScreenBar->insertWidget(-1 /* id */, 0 /* width */, mFullScreenLabel);
 	}
 };
 
@@ -343,8 +302,6 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 
 	d->mFullScreen=false;
 	d->mFullScreenBar=0;
-	d->mFullScreenLabel=0;
-	d->mOSDFormatter=0;
 	
 	connect(d->mDocument,SIGNAL(loaded(const KURL&)),
 		this,SLOT(slotLoaded()) );
@@ -377,14 +334,6 @@ void ImageViewController::slotLoaded() {
 	} else {
 		d->showImageView();
 	}
-	if (d->mFullScreen) {
-		d->updateFullScreenLabel();
-	}
-}
-
-
-void ImageViewController::setOSDFormatter(CaptionFormatterBase* formatter) {
-	d->mOSDFormatter=formatter;
 }
 
 
@@ -397,7 +346,6 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 		if (!d->mFullScreenBar) {
 			d->initFullScreenBar();
 		}
-		d->updateFullScreenLabel();
 	} else {
 		d->mAutoHideTimer->stop();
 		QApplication::restoreOverrideCursor();
