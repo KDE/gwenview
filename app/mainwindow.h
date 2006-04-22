@@ -22,9 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// STL
-#include <memory>
-
 // Qt
 #include <qptrlist.h>
 
@@ -57,7 +54,6 @@ class KToolBarPopupAction;
 class KURLCompletion;
 
 namespace Gwenview {
-class CaptionFormatter;
 class BookmarkViewController;
 class DirViewController;
 class Document;
@@ -132,8 +128,6 @@ private:
 #ifdef GV_HAVE_KIPI
 	KIPI::PluginLoader* mPluginLoader;
 #endif
-
-	std::auto_ptr<CaptionFormatter> mCaptionFormatter;
 
 	void hideToolBars();
 	void showToolBars();

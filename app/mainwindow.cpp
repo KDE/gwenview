@@ -299,26 +299,16 @@ void MainWindow::goUp() {
 }
 
 void MainWindow::updateFullScreenLabel() {
-	enum OSDMode { NONE, PATH, COMMENT, PATH_AND_COMMENT, FREE_OUTPUT };
-	QString format;
-	OSDMode osdMode=static_cast<OSDMode>( FullScreenConfig::osdMode() );
-	switch (osdMode) {
-	case FREE_OUTPUT:
-		format = FullScreenConfig::freeOutputFormat();
-		break;
-	case PATH:
-		format = "%p";
-		break;
-	case COMMENT:
-		format = "%c";
-		break;
-	case PATH_AND_COMMENT:
-		format = "%p\n%c";
-		break;
-	case NONE:
-		break;
-	}
-	mFullScreenLabelAction->label()->setText( (*mCaptionFormatter)(format));
+	CaptionFormatter formatter;
+	formatter.mPath=mDocument->url().path();
+	formatter.mFileName=mDocument->url().fileName();
+	formatter.mComment=mDocument->comment();
+	formatter.mImageSize=mDocument->image().size();
+	formatter.mPosition=mFileViewController->shownFilePosition()+1;
+	formatter.mCount=mFileViewController->fileCount();
+	
+	QString txt=formatter.format( FullScreenConfig::osdFormat() );
+	mFullScreenLabelAction->label()->setText(txt);
 }
 
 void MainWindow::goUpTo(int id) {
@@ -993,9 +983,6 @@ void MainWindow::createActions() {
  * widgets and actions have already been created
  */
 void MainWindow::createObjectInteractions() {
-	// Image view caption formatter
-	mCaptionFormatter.reset( new CaptionFormatter(mFileViewController, mDocument) );
-	
 	// Actions in image view
 	{
 		KActionPtrList actions;

@@ -8,17 +8,9 @@
     </entry>
   </group>
   <group name="pixmap widget">
-    <entry name="osdMode" key="osd mode" type="Enum">
-      <choices>
-        <choice name="none"/>
-        <choice name="path"/>
-        <choice name="comment"/>
-        <choice name="path_and_comment"/>
-        <choice name="free_output"/>
-      </choices>
-    </entry>
-    <entry name="freeOutputFormat" key="free output format" type="String">
-      <default>%f - %r - %c</default>
+    <entry name="osdFormat" type="String">
+      <default>%f - %n/%N
+%c</default>
     </entry>
   </group>
 </kcfg>

@@ -22,29 +22,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define CAPTIONFORMATTER_H   
 
 // Qt
+#include <qsize.h>
 #include <qstring.h>
 
 // Local
-#include "captionformatterbase.h"
 #include "libgwenview_export.h"
 
 namespace Gwenview {
 
-class Document;
-class FileViewController;
 
 /**
- * An implementation of CaptionFormatterBase, which knows about the Document
- * and FileViewController instances
+ * A class to format image captions. Used for example in fullscreen mode.
+ * All attributes of the class are public because it's just a "record" with a
+ * format() function.
  */
-class LIBGWENVIEW_EXPORT CaptionFormatter : public CaptionFormatterBase {
+class LIBGWENVIEW_EXPORT CaptionFormatter {
 public:
-	CaptionFormatter(FileViewController*, Document*);
-	virtual QString operator()(const QString& format);
-
-private:
-	FileViewController* mFileView;
-	Document* mDocument;
+	QString mPath;
+	QString mFileName;
+	QString mComment;
+	QSize mImageSize;
+	int mPosition;
+	int mCount;
+	QString format(const QString& format);
 };	
 
 } // namespace

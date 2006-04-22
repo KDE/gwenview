@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qstylesheet.h>
+#include <qtextedit.h>
+#include <qwhatsthis.h>
 
 // KDE
 #include <kcolorbutton.h>
@@ -39,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
+#include <kurllabel.h>
 #include <kurlrequester.h>
 
 #include <config.h>
@@ -54,6 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configimageviewpage.h"
 #include "configmiscpage.h"
 #include "configslideshowpage.h"
+#include "gvcore/captionformatter.h"
 #include "gvcore/filethumbnailview.h"
 // This path is different because it's a generated file, so it's stored in builddir
 #include <../gvcore/miscconfig.h>
@@ -168,6 +172,13 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	// Image View tab
 	d->mImageViewPage->mMouseWheelGroup->setButton(ImageViewConfig::mouseWheelScroll()?1:0);
 
+	// Full Screen tab
+	QTextEdit* edit=d->mFullScreenPage->kcfg_osdFormat;
+	edit->setMaximumHeight(edit->fontMetrics().height()*3);
+	connect(edit, SIGNAL(textChanged()), SLOT(updateOSDPreview()) );
+	
+	connect(d->mFullScreenPage->mHelp, SIGNAL(leftClickedURL()), SLOT(showOSDHelp()) );
+
 	// File Operations tab
 	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(
 		static_cast<KFile::Mode>(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly));
@@ -239,6 +250,28 @@ void ConfigDialog::calculateCacheSize() {
 	url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
 	unsigned long size=KDirSize::dirSize(url);
 	KMessageBox::information( this,i18n("Cache size is %1").arg(KIO::convertSize(size)) );
+}
+
+
+void ConfigDialog::showOSDHelp() {
+	QTextEdit* edit=d->mFullScreenPage->kcfg_osdFormat;
+	QWhatsThis::display(QWhatsThis::textFor(edit),
+		edit->mapToGlobal( edit->rect().bottomRight() ) );
+}
+
+
+void ConfigDialog::updateOSDPreview() {
+	CaptionFormatter formatter;
+	KURL url("/path/to/some/image.jpg");
+	formatter.mPath=url.path();
+	formatter.mFileName=url.fileName();
+	formatter.mComment=i18n("A comment");
+	formatter.mImageSize=QSize(1600, 1200);
+	formatter.mPosition=4;
+	formatter.mCount=12;
+	
+	QString txt=formatter.format( d->mFullScreenPage->kcfg_osdFormat->text() );
+	d->mFullScreenPage->mOSDPreviewLabel->setText(txt);
 }
 
 

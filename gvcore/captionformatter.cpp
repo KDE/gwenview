@@ -23,39 +23,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <klocale.h>
 
-// Local
-#include "fileviewcontroller.h"
-#include "document.h"
 
 namespace Gwenview {
 
 	
-CaptionFormatter::CaptionFormatter(FileViewController* fileView, Document* document)
-: mFileView(fileView), mDocument(document) {
-}
-
-
-QString CaptionFormatter::operator()(const QString& format) {
-	QString str=format;
-	
-	QString path=mDocument->url().path();
-	QString fileName=mDocument->filename();
-	QString comment=mDocument->comment();
+QString CaptionFormatter::format(const QString& format) {
+	QString comment=mComment;
 	if (comment.isNull()) {
 		comment=i18n("(No comment)");
 	}
-	QString resolution = QString( "%1x%2" ).arg( mDocument->width()).arg( mDocument->height());
 
-	int position=mFileView->shownFilePosition()+1;
-	int count=mFileView->fileCount();
+	QString resolution;
+	if (mImageSize.isValid()) {
+		resolution = QString( "%1x%2" ).arg( mImageSize.width()).arg( mImageSize.height());
+	}
 	
-	str.replace("\\n", "\n");
-	str.replace("%f", fileName);
-	str.replace("%p", path);
+	QString str=format;
+	str.replace("%f", mFileName);
+	str.replace("%p", mPath);
 	str.replace("%c", comment);
 	str.replace("%r", resolution);
-	str.replace("%n", QString::number(position));
-	str.replace("%N", QString::number(count));
+	str.replace("%n", QString::number(mPosition));
+	str.replace("%N", QString::number(mCount));
 	return str;
 }
 
