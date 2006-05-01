@@ -1,0 +1,4 @@
+Id=osdformat
+File=gwenviewrc
+Group=pixmap widget
+Script=gwenview_1.4_osdformat.sh,sh
