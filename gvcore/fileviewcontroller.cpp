@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kicontheme.h>
+#include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kinputdialog.h>
@@ -86,13 +87,36 @@ public:
 	~FileViewControllerPrivate() {
 		delete mSliderTracker;
 	}
+	FileViewController* that;
 	QVBox* mWidget;
 	FilterBar* mFilterBar;
 	KToolBar* mToolBar;
 	QWidgetStack* mStack;
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
+	KToggleAction* mShowFilterAction;
 	TipTracker* mSliderTracker;
+
+	QIconSet mActiveFilterIconSet;
+
+	void initFilter(KActionCollection* actionCollection) {
+		mFilterBar=new FilterBar(mWidget);
+		mFilterBar->hide();
+	
+		mFilterBar->mResetNameCombo->setIconSet(BarIcon("locationbar_erase"));
+		that->connect(mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetFileFilter()) );
+
+		mFilterBar->mNameCombo->setMaxCount(10);
+		that->connect(mFilterBar->mNameCombo, SIGNAL(activated(const QString&)), SLOT(applyFileFilter()) );
+
+		mShowFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "show_filter");
+		mFilterBar->connect(mShowFilterAction, SIGNAL(toggled(bool)), SLOT(setShown(bool)) );	
+		
+		// Prepare a different icon to show filter is active
+		QImage icon=BarIcon("filter").convertToImage();
+		KIconEffect::colorize(icon, Qt::red, 1.0);
+		mActiveFilterIconSet.reset(QPixmap(icon), QIconSet::Automatic);
+	}
 };
 
 
@@ -110,11 +134,13 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 , mSelecting(false)
 {
 	d=new FileViewControllerPrivate;
+	d->that=this;
 	d->mWidget=new QVBox(parent);
 	d->mWidget->setMinimumWidth(1);
 	d->mToolBar=new KToolBar(d->mWidget, "", true);
-	d->mFilterBar=new FilterBar(d->mWidget);
-	d->mFilterBar->hide();
+
+	// Init filter here so that it's properly placed in the vbox
+	d->initFilter(actionCollection);
 	d->mStack=new QWidgetStack(d->mWidget);
 
 	// Actions
@@ -166,17 +192,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	KAction* sliderAction=new KWidgetAction(mSizeSlider, i18n("Thumbnail Size"), 0, 0, 0, actionCollection, "size_slider");
 	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
-	
-	// File filter
-	d->mFilterBar->mResetNameCombo->setIconSet(BarIcon("locationbar_erase"));
-	connect(d->mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetFileFilter()) );
-
-	d->mFilterBar->mNameCombo->setMaxCount(10);
-	connect(d->mFilterBar->mNameCombo, SIGNAL(activated(const QString&)), SLOT(applyFileFilter()) );
-
-	KToggleAction* fileFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "file_filter");
-	connect(fileFilterAction, SIGNAL(toggled(bool)), d->mFilterBar, SLOT(setShown(bool)) );	
-	// /File filter
 
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
@@ -283,7 +298,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
 	
 	d->mToolBar->insertLineSeparator();
-	fileFilterAction->plug(d->mToolBar);
+	d->mShowFilterAction->plug(d->mToolBar);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
 	initDirListerFilter();
@@ -460,8 +475,11 @@ void FileViewController::applyFileFilter() {
 		if (item) {
 			mFileNameToSelect=item->name();
 		}
+		d->mShowFilterAction->setIconSet(BarIconSet("filter"));
 
 	} else {
+		d->mShowFilterAction->setIconSet(d->mActiveFilterIconSet);
+		
 		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
 			d->mFilterBar->mNameCombo->addToHistory(txt);
 		}
