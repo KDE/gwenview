@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qpopupmenu.h>
+#include <qpushbutton.h>
 #include <qvbox.h>
 #include <qwidgetstack.h>
 
@@ -54,6 +55,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filedetailview.h"
 #include "fileoperation.h"
 #include "filethumbnailview.h"
+#include "filterbar.h"
 #include "imageloader.h"
 #include "mimetypeutils.h"
 #include "thumbnailsize.h"
@@ -85,12 +87,12 @@ public:
 		delete mSliderTracker;
 	}
 	QVBox* mWidget;
+	FilterBar* mFilterBar;
 	KToolBar* mToolBar;
 	QWidgetStack* mStack;
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
 	TipTracker* mSliderTracker;
-	KHistoryCombo* mFileFilterCombo;
 };
 
 
@@ -111,6 +113,8 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mWidget=new QVBox(parent);
 	d->mWidget->setMinimumWidth(1);
 	d->mToolBar=new KToolBar(d->mWidget, "", true);
+	d->mFilterBar=new FilterBar(d->mWidget);
+	d->mFilterBar->hide();
 	d->mStack=new QWidgetStack(d->mWidget);
 
 	// Actions
@@ -163,22 +167,16 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mSliderTracker=new TipTracker("", mSizeSlider);
 	// /Size slider
 	
-	// File filter combobox
-	d->mFileFilterCombo=new KHistoryCombo(d->mToolBar);
-	d->mFileFilterCombo->setMinimumWidth(d->mFileFilterCombo->fontMetrics().maxWidth()*8);
-	d->mFileFilterCombo->setMaxCount(10);
-	connect(d->mFileFilterCombo, SIGNAL(activated(const QString&)),
-    	this, SLOT(applyFileFilter()) );
-	KWidgetAction* fileFilterAction=new KWidgetAction(d->mFileFilterCombo, i18n("Filter"), 0, 0, 0, actionCollection, "file_filter");
-	
-	KAction* resetFilterAction=new KAction(i18n("Reset Filter"), "locationbar_erase", 0,
-		this, SLOT(resetFileFilter()),
-		actionCollection, "reset_filter");
-	
-	KToolBarLabelAction* fileFilterLabelAction=new KToolBarLabelAction(
-		d->mFileFilterCombo, i18n("F&ilter:"), 0, 0, 0,
-		actionCollection, "filter_label");
-	// /File filter combobox
+	// File filter
+	d->mFilterBar->mResetNameCombo->setIconSet(BarIcon("locationbar_erase"));
+	connect(d->mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetFileFilter()) );
+
+	d->mFilterBar->mNameCombo->setMaxCount(10);
+	connect(d->mFilterBar->mNameCombo, SIGNAL(activated(const QString&)), SLOT(applyFileFilter()) );
+
+	KToggleAction* fileFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "file_filter");
+	connect(fileFilterAction, SIGNAL(toggled(bool)), d->mFilterBar, SLOT(setShown(bool)) );	
+	// /File filter
 
 	mShowDotFiles=new KToggleAction(i18n("Show &Hidden Files"),CTRL + Key_H,this,SLOT(toggleShowDotFiles()),actionCollection,"show_dot_files");
 
@@ -285,8 +283,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
 	
 	d->mToolBar->insertLineSeparator();
-	resetFilterAction->plug(d->mToolBar);
-	fileFilterLabelAction->plug(d->mToolBar);
 	fileFilterAction->plug(d->mToolBar);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
@@ -363,7 +359,7 @@ void FileViewController::setDirURL(const KURL& url) {
 	mDirLister->clearError();
 	currentFileView()->setShownFileItem(0L);
 	mFileNameToSelect=QString::null;
-	d->mFileFilterCombo->clearEdit();
+	d->mFilterBar->mNameCombo->clearEdit();
 	mDirLister->setNameFilter(QString::null);
 	mDirLister->openURL(mDirURL);
 	emit urlChanged(mDirURL);
@@ -449,13 +445,13 @@ void FileViewController::slotSelectFirstSubDir() {
 
 
 void FileViewController::resetFileFilter() {
-	d->mFileFilterCombo->clearEdit();
+	d->mFilterBar->mNameCombo->clearEdit();
 	applyFileFilter();
 }
 
 	
 void FileViewController::applyFileFilter() {
-	QString txt=d->mFileFilterCombo->currentText();
+	QString txt=d->mFilterBar->mNameCombo->currentText();
 	mDirLister->setNameFilter(txt);
 
 	if (txt.isEmpty()) {
@@ -466,8 +462,8 @@ void FileViewController::applyFileFilter() {
 		}
 
 	} else {
-		if (d->mFileFilterCombo->historyItems().findIndex(txt)==-1) {
-			d->mFileFilterCombo->addToHistory(txt);
+		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
+			d->mFilterBar->mNameCombo->addToHistory(txt);
 		}
 
 		// Find next item matching the filter, if any

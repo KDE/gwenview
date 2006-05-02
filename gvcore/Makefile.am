@@ -32,6 +32,7 @@ libgwenviewcore_la_SOURCES = \
 	fileoperation.cpp \
 	fileopobject.cpp \
 	filethumbnailviewitem.cpp \
+	filterbar.ui \
 	qxcfi.cpp \
 	archive.cpp \
 	slideshow.cpp \
