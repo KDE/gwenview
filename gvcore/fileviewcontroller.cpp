@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
+#include <qdatetimeedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qvbox.h>
@@ -79,6 +80,80 @@ static const int SLIDER_RESOLUTION=4;
 
 //-----------------------------------------------------------------------
 //
+// internal class which allows dynamically turning off visual error reporting
+// 
+//-----------------------------------------------------------------------
+class DirLister : public KDirLister {
+public:
+	DirLister()
+	: KDirLister()
+	, mError(false)
+	, mCheck(false) {}
+
+	virtual bool validURL(const KURL& url) const {
+		if( !url.isValid()) mError = true;
+		if( mCheck ) return KDirLister::validURL( url );
+		return url.isValid();
+	}
+
+	virtual void handleError(KIO::Job* job) {
+		mError = true;
+		if(mCheck) KDirLister::handleError( job );
+	};
+
+	bool error() const {
+		return mError;
+	}
+
+	void clearError() {
+		mError = false;
+	}
+
+	void setCheck(bool c) {
+		mCheck = c;
+	}
+
+	void setFromDate(const QDate& from) {
+		mFromDate = from;
+	}
+
+	void setToDate(const QDate& to) {
+		mToDate = to;
+	}
+
+protected:
+	virtual bool matchesMimeFilter(const KFileItem* item) const {
+		bool result=KDirLister::matchesMimeFilter(item);
+		if (!result) return false;
+		if (!mFromDate.isValid() && !mToDate.isValid()) return result;
+
+		// Convert item time to a QDate
+		time_t time=item->time(KIO::UDS_MODIFICATION_TIME);
+		QDateTime dateTime;
+		dateTime.setTime_t(time);
+		QDate date=dateTime.date();
+
+		if (mFromDate.isValid() && date < mFromDate) return false;
+		if (mToDate.isValid() && date > mToDate) return false;
+		return true;
+	}
+
+	virtual bool DirLister::doMimeFilter(const QString& mime, const QStringList& filters) const {
+		if (mime.startsWith("video/")) return true;
+		if (mime.startsWith("image/svg")) return true;
+		return KDirLister::doMimeFilter(mime, filters);
+	}
+
+private:
+	mutable bool mError;
+	bool mCheck;
+	QDate mFromDate;
+	QDate mToDate;
+};
+
+
+//-----------------------------------------------------------------------
+//
 // FileViewControllerPrivate
 //
 //-----------------------------------------------------------------------
@@ -101,16 +176,25 @@ public:
 
 	void initFilter(KActionCollection* actionCollection) {
 		mFilterBar=new FilterBar(mWidget);
+		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
 	
-		mFilterBar->mResetNameCombo->setIconSet(BarIcon("locationbar_erase"));
-		that->connect(mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetFileFilter()) );
+		QIconSet resetIS=BarIcon("locationbar_erase");
+		mFilterBar->mResetNameCombo->setIconSet(resetIS);
+		mFilterBar->mResetFrom->setIconSet(resetIS);
+		mFilterBar->mResetTo->setIconSet(resetIS);
+
+		that->connect(mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetNameFilter()) );
+		that->connect(mFilterBar->mResetFrom, SIGNAL(clicked()), SLOT(resetFromFilter()) );
+		that->connect(mFilterBar->mResetTo, SIGNAL(clicked()), SLOT(resetToFilter()) );
 
 		mFilterBar->mNameCombo->setMaxCount(10);
-		that->connect(mFilterBar->mNameCombo, SIGNAL(activated(const QString&)), SLOT(applyFileFilter()) );
+		that->connect(mFilterBar->mFilterButton, SIGNAL(clicked()), SLOT(applyFileFilter()) );
 
+		
 		mShowFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "show_filter");
 		mFilterBar->connect(mShowFilterAction, SIGNAL(toggled(bool)), SLOT(setShown(bool)) );	
+
 		
 		// Prepare a different icon to show filter is active
 		QImage icon=BarIcon("filter").convertToImage();
@@ -353,6 +437,11 @@ QWidget* FileViewController::widget() const {
 }
 
 
+bool FileViewController::lastURLError() const {
+	return mDirLister->error();
+}
+
+
 //-----------------------------------------------------------------------
 //
 // Public slots
@@ -459,17 +548,33 @@ void FileViewController::slotSelectFirstSubDir() {
 }
 
 
-void FileViewController::resetFileFilter() {
+void FileViewController::resetNameFilter() {
 	d->mFilterBar->mNameCombo->clearEdit();
+	applyFileFilter();
+}
+
+
+void FileViewController::resetFromFilter() {
+	d->mFilterBar->mFromDateEdit->setDate(QDate());
+	applyFileFilter();
+}
+
+
+void FileViewController::resetToFilter() {
+	d->mFilterBar->mToDateEdit->setDate(QDate());
 	applyFileFilter();
 }
 
 	
 void FileViewController::applyFileFilter() {
 	QString txt=d->mFilterBar->mNameCombo->currentText();
+	QDate from=d->mFilterBar->mFromDateEdit->date();
+	QDate to=d->mFilterBar->mToDateEdit->date();
 	mDirLister->setNameFilter(txt);
+	mDirLister->setFromDate(from);
+	mDirLister->setToDate(to);
 
-	if (txt.isEmpty()) {
+	if (txt.isEmpty() && !from.isValid() && !to.isValid()) {
 		// Be sure to keep the current item selected
 		KFileItem* item=currentFileView()->currentFileItem();
 		if (item) {
@@ -996,25 +1101,6 @@ void FileViewController::setSilentMode( bool silent ) {
 void FileViewController::retryURL() {
 	mDirLister->clearError();
 	mDirLister->openURL( url());
-}
-
-bool DirLister::validURL( const KURL& url ) const {
-	if( !url.isValid()) mError = true;
-	if( mCheck ) return KDirLister::validURL( url );
-	return url.isValid();
-}
-
-
-void DirLister::handleError( KIO::Job* job ) {
-	mError = true;
-	if( mCheck ) KDirLister::handleError( job );
-}
-	
-
-bool DirLister::doMimeFilter(const QString& mime, const QStringList& filters) const {
-	if (mime.startsWith("video/")) return true;
-	if (mime.startsWith("image/svg")) return true;
-	return KDirLister::doMimeFilter(mime, filters);
 }
 
 

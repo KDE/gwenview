@@ -52,26 +52,8 @@ class FileThumbnailView;
 class ImageLoader;
 
 
+class DirLister;
 class FileViewControllerPrivate;
-
-// internal class which allows dynamically turning off visual error reporting
-class DirLister : public KDirLister {
-Q_OBJECT
-public:
-	DirLister() : KDirLister(), mError( false ), mCheck( false ) {}
-	virtual bool validURL( const KURL& ) const;
-	virtual void handleError( KIO::Job * );
-	bool error() const { return mError; }
-	void clearError() { mError = false; }
-	void setCheck( bool c ) { mCheck = c; }
-
-protected:
-	virtual bool doMimeFilter(const QString&, const QStringList&) const;
-
-private:
-	mutable bool mError;
-	bool mCheck;
-};
 
 class LIBGWENVIEW_EXPORT FileViewController : public QObject {
 Q_OBJECT
@@ -118,7 +100,7 @@ public:
 	/**
 	 * Returns true if there was an error since last URL had been opened.
 	 */
-	bool lastURLError() const { return mDirLister->error(); }
+	bool lastURLError() const;
 	/**
 	 * Tries to open again the active URL. Useful for showing error messages
 	 * initially supressed by silent mode.
@@ -209,7 +191,9 @@ private slots:
 	void slotDirMade(KIO::Job* job);
 	void prefetchDone();
 	
-	void resetFileFilter();
+	void resetNameFilter();
+	void resetFromFilter();
+	void resetToFilter();
 	void applyFileFilter();
 
 private:
