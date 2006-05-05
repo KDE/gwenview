@@ -991,6 +991,8 @@ void MainWindow::createObjectInteractions() {
 			<< mToggleSlideShow
 			<< mFileViewController->selectPrevious()
 			<< mFileViewController->selectNext()
+			<< mRotateLeft
+			<< mRotateRight
 			<< mFullScreenLabelAction
 			;
 		mImageViewController->setFullScreenCommonActions(actions);
@@ -1014,9 +1016,6 @@ void MainWindow::createObjectInteractions() {
 			<< actionCollection()->action("view_zoom_out")
 			<< mRotateLeft
 			<< mRotateRight
-			<< mMirror
-			<< mFlip
-			<< actionCollection()->action("adjust_bcg")
 			;
 		mImageViewController->setImageViewActions(actions);
 	}
