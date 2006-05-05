@@ -471,6 +471,7 @@ void ImageViewController::openImageViewContextMenu(const QPoint& pos) {
 		plugAction(editMenu, d->mActionCollection, "rotate_right");
 		plugAction(editMenu, d->mActionCollection, "mirror");
 		plugAction(editMenu, d->mActionCollection, "flip");
+		plugAction(editMenu, d->mActionCollection, "adjust_bcg");
 		menu.insertItem( i18n("Edit"), editMenu );
 
 		ExternalToolContext* externalToolContext=
