@@ -380,8 +380,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	mBottomThumbnailMode->plug(d->mToolBar);
 	sliderAction->plug(d->mToolBar);
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
-	
-	d->mToolBar->insertLineSeparator();
 	d->mShowFilterAction->plug(d->mToolBar);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
