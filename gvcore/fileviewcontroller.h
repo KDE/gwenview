@@ -191,6 +191,7 @@ private slots:
 	void slotDirMade(KIO::Job* job);
 	void prefetchDone();
 	
+	void slotShowFilterToggled(bool);
 	void resetNameFilter();
 	void resetFromFilter();
 	void resetToFilter();

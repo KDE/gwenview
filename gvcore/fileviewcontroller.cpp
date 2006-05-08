@@ -125,6 +125,12 @@ protected:
 	virtual bool matchesMimeFilter(const KFileItem* item) const {
 		bool result=KDirLister::matchesMimeFilter(item);
 		if (!result) return false;
+
+		if (item->isDir() || Archive::fileItemIsArchive(item)) {
+			// Do not filter out dirs or archives
+			return true;
+		}
+
 		if (!mFromDate.isValid() && !mToDate.isValid()) return result;
 
 		// Convert item time to a QDate
@@ -172,8 +178,6 @@ public:
 	KToggleAction* mShowFilterAction;
 	TipTracker* mSliderTracker;
 
-	QIconSet mActiveFilterIconSet;
-
 	void initFilter(KActionCollection* actionCollection) {
 		mFilterBar=new FilterBar(mWidget);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -184,22 +188,25 @@ public:
 		mFilterBar->mResetFrom->setIconSet(resetIS);
 		mFilterBar->mResetTo->setIconSet(resetIS);
 
-		that->connect(mFilterBar->mResetNameCombo, SIGNAL(clicked()), SLOT(resetNameFilter()) );
-		that->connect(mFilterBar->mResetFrom, SIGNAL(clicked()), SLOT(resetFromFilter()) );
-		that->connect(mFilterBar->mResetTo, SIGNAL(clicked()), SLOT(resetToFilter()) );
+		QObject::connect(
+			mFilterBar->mResetNameCombo, SIGNAL(clicked()), 
+			that, SLOT(resetNameFilter()) );
+		QObject::connect(
+			mFilterBar->mResetFrom, SIGNAL(clicked()), 
+			that, SLOT(resetFromFilter()) );
+		QObject::connect(
+			mFilterBar->mResetTo, SIGNAL(clicked()),
+			that, SLOT(resetToFilter()) );
 
 		mFilterBar->mNameCombo->setMaxCount(10);
-		that->connect(mFilterBar->mFilterButton, SIGNAL(clicked()), SLOT(applyFileFilter()) );
-
+		QObject::connect(
+			mFilterBar->mFilterButton, SIGNAL(clicked()),
+			that, SLOT(applyFileFilter()) );
 		
 		mShowFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "show_filter");
-		mFilterBar->connect(mShowFilterAction, SIGNAL(toggled(bool)), SLOT(setShown(bool)) );	
-
-		
-		// Prepare a different icon to show filter is active
-		QImage icon=BarIcon("filter").convertToImage();
-		KIconEffect::colorize(icon, Qt::red, 1.0);
-		mActiveFilterIconSet.reset(QPixmap(icon), QIconSet::Automatic);
+		QObject::connect(
+			mShowFilterAction, SIGNAL(toggled(bool)),
+			that, SLOT(slotShowFilterToggled(bool)) );
 	}
 };
 
@@ -461,8 +468,6 @@ void FileViewController::setDirURL(const KURL& url) {
 	mDirLister->clearError();
 	currentFileView()->setShownFileItem(0L);
 	mFileNameToSelect=QString::null;
-	d->mFilterBar->mNameCombo->clearEdit();
-	mDirLister->setNameFilter(QString::null);
 	mDirLister->openURL(mDirURL);
 	emit urlChanged(mDirURL);
 	emit directoryChanged(mDirURL);
@@ -546,6 +551,12 @@ void FileViewController::slotSelectFirstSubDir() {
 }
 
 
+void FileViewController::slotShowFilterToggled(bool on) {
+	d->mFilterBar->setShown(on);
+	applyFileFilter();
+}
+
+
 void FileViewController::resetNameFilter() {
 	d->mFilterBar->mNameCombo->clearEdit();
 	applyFileFilter();
@@ -565,24 +576,29 @@ void FileViewController::resetToFilter() {
 
 	
 void FileViewController::applyFileFilter() {
-	QString txt=d->mFilterBar->mNameCombo->currentText();
-	QDate from=d->mFilterBar->mFromDateEdit->date();
-	QDate to=d->mFilterBar->mToDateEdit->date();
+	QString txt;
+	QDate from;
+	QDate to;
+
+	// Configure mDirLister, ignore fields if filter bar is hidden
+	if (d->mFilterBar->isVisible()) {
+		txt=d->mFilterBar->mNameCombo->currentText();
+		from=d->mFilterBar->mFromDateEdit->date();
+		to=d->mFilterBar->mToDateEdit->date();
+	}
 	mDirLister->setNameFilter(txt);
 	mDirLister->setFromDate(from);
 	mDirLister->setToDate(to);
 
 	if (txt.isEmpty() && !from.isValid() && !to.isValid()) {
+		// No filtering.
 		// Be sure to keep the current item selected
 		KFileItem* item=currentFileView()->currentFileItem();
 		if (item) {
 			mFileNameToSelect=item->name();
 		}
-		d->mShowFilterAction->setIconSet(BarIconSet("filter"));
 
 	} else {
-		d->mShowFilterAction->setIconSet(d->mActiveFilterIconSet);
-		
 		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
 			d->mFilterBar->mNameCombo->addToHistory(txt);
 		}
