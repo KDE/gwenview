@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigFullScreenPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -55,70 +55,53 @@
                 <string>&lt;b&gt;On Screen Display&lt;/b&gt;</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QTextEdit">
             <property name="name">
-                <cstring>layout3</cstring>
+                <cstring>kcfg_osdFormat</cstring>
             </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Preview:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>mOSDPreviewLabel</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>LineEditPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>file.jpg - 1024x768
-The file comment</string>
-                    </property>
-                </widget>
-                <widget class="KURLLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>mHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Help</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignTop</set>
-                    </property>
-                    <property name="url" stdset="0">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QTextEdit" row="0" column="0">
-                    <property name="name">
-                        <cstring>kcfg_osdFormat</cstring>
-                    </property>
-                    <property name="textFormat">
-                        <enum>PlainText</enum>
-                    </property>
-                    <property name="text">
-                        <string>%f - %n/%N
+            <property name="textFormat">
+                <enum>PlainText</enum>
+            </property>
+            <property name="text">
+                <string>%f - %n/%N
 %c</string>
-                    </property>
-                    <property name="wordWrap">
-                        <enum>WidgetWidth</enum>
-                    </property>
-                    <property name="autoFormatting">
-                        <set>AutoNone</set>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;qt&gt;
+            </property>
+            <property name="wordWrap">
+                <enum>WidgetWidth</enum>
+            </property>
+            <property name="autoFormatting">
+                <set>AutoNone</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Preview:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>mOSDPreviewLabel</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>LineEditPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="text">
+                <string>file.jpg - 1024x768
+The file comment</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;
 You can use the following keywords to format the On Screen Display:
 &lt;ul&gt;
 &lt;li&gt;%f: filename&lt;/li&gt;
@@ -129,9 +112,7 @@ You can use the following keywords to format the On Screen Display:
 &lt;li&gt;%N: image count&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/qt&gt;</string>
-                    </property>
-                </widget>
-            </grid>
+            </property>
         </widget>
         <spacer>
             <property name="name">
@@ -146,16 +127,11 @@ You can use the following keywords to format the On Screen Display:
             <property name="sizeHint">
                 <size>
                     <width>21</width>
-                    <height>50</height>
+                    <height>18</height>
                 </size>
             </property>
         </spacer>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kurllabel.h</includehint>
-</includehints>
 </UI>

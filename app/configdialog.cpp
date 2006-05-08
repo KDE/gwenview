@@ -29,7 +29,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qspinbox.h>
 #include <qstylesheet.h>
 #include <qtextedit.h>
-#include <qwhatsthis.h>
 
 // KDE
 #include <kcolorbutton.h>
@@ -176,8 +175,6 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	QTextEdit* edit=d->mFullScreenPage->kcfg_osdFormat;
 	edit->setMaximumHeight(edit->fontMetrics().height()*3);
 	connect(edit, SIGNAL(textChanged()), SLOT(updateOSDPreview()) );
-	
-	connect(d->mFullScreenPage->mHelp, SIGNAL(leftClickedURL()), SLOT(showOSDHelp()) );
 
 	// File Operations tab
 	d->mFileOperationsPage->kcfg_destDir->fileDialog()->setMode(
@@ -251,13 +248,6 @@ void ConfigDialog::calculateCacheSize() {
 	url.setPath(ThumbnailLoadJob::thumbnailBaseDir());
 	unsigned long size=KDirSize::dirSize(url);
 	KMessageBox::information( this,i18n("Cache size is %1").arg(KIO::convertSize(size)) );
-}
-
-
-void ConfigDialog::showOSDHelp() {
-	QTextEdit* edit=d->mFullScreenPage->kcfg_osdFormat;
-	QWhatsThis::display(QWhatsThis::textFor(edit),
-		edit->mapToGlobal( edit->rect().bottomRight() ) );
 }
 
 

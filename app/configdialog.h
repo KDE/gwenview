@@ -49,7 +49,6 @@ protected slots:
 	void slotApply();
 
 private slots:
-	void showOSDHelp();
 	void updateOSDPreview();
 	void calculateCacheSize();
 	void emptyCache();
