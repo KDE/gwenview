@@ -189,6 +189,7 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	for (;it!=d->mManagers.end(); ++it) {
 		(*it)->updateWidgets();
 	}
+	updateOSDPreview();
 }
 
 
