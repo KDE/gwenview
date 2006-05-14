@@ -175,24 +175,27 @@ public:
 	QWidgetStack* mStack;
 	KSelectAction* mSortAction;
 	KToggleAction* mRevertSortAction;
-	KToggleAction* mShowFilterAction;
 	TipTracker* mSliderTracker;
 
-	void initFilter(KActionCollection* actionCollection) {
+	QHBox* mFilterHBox;
+	QLabel* mFilterLabel;
+	QPushButton* mShowFilterButton;
+
+	void initFilter() {
 		mFilterBar=new FilterBar(mWidget);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
-	
+
 		QIconSet resetIS=BarIcon("locationbar_erase");
 		mFilterBar->mResetNameCombo->setIconSet(resetIS);
 		mFilterBar->mResetFrom->setIconSet(resetIS);
 		mFilterBar->mResetTo->setIconSet(resetIS);
 
 		QObject::connect(
-			mFilterBar->mResetNameCombo, SIGNAL(clicked()), 
+			mFilterBar->mResetNameCombo, SIGNAL(clicked()),
 			that, SLOT(resetNameFilter()) );
 		QObject::connect(
-			mFilterBar->mResetFrom, SIGNAL(clicked()), 
+			mFilterBar->mResetFrom, SIGNAL(clicked()),
 			that, SLOT(resetFromFilter()) );
 		QObject::connect(
 			mFilterBar->mResetTo, SIGNAL(clicked()),
@@ -202,11 +205,20 @@ public:
 		QObject::connect(
 			mFilterBar->mFilterButton, SIGNAL(clicked()),
 			that, SLOT(applyFileFilter()) );
-		
-		mShowFilterAction=new KToggleAction(i18n("Filter"), "filter", 0, 0, 0, actionCollection, "show_filter");
+
+		mFilterHBox=new QHBox(mToolBar, "kde toolbar widget");
+		mFilterHBox->setSpacing(KDialog::spacingHint());
+
+		mFilterLabel=new QLabel(i18n("Not filtered"), mFilterHBox, "kde toolbar widget");
+
+		mShowFilterButton=new QPushButton(i18n("Show filter bar"), mFilterHBox);
+		QFontMetrics fm=mFilterHBox->fontMetrics();
+		int width=QMAX(fm.width(i18n("Show filter bar")), fm.width(i18n("Hide filter bar")));
+		mShowFilterButton->setFixedWidth(width + 12);
+
 		QObject::connect(
-			mShowFilterAction, SIGNAL(toggled(bool)),
-			that, SLOT(slotShowFilterToggled(bool)) );
+			mShowFilterButton, SIGNAL(clicked()),
+			that, SLOT(toggleFilterBar()) );
 	}
 };
 
@@ -231,7 +243,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mToolBar=new KToolBar(d->mWidget, "", true);
 
 	// Init filter here so that it's properly placed in the vbox
-	d->initFilter(actionCollection);
+	d->initFilter();
 	d->mStack=new QWidgetStack(d->mWidget);
 
 	// Actions
@@ -271,8 +283,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 
 	// Size slider
 	mSizeSlider=new QSlider(Horizontal, d->mToolBar);
-	mSizeSlider->setMinimumWidth(50);
-	mSizeSlider->setMaximumWidth(150);
+	mSizeSlider->setFixedWidth(120);
 	mSizeSlider->setRange(
 		ThumbnailSize::MIN/SLIDER_RESOLUTION,
 		ThumbnailSize::LARGE/SLIDER_RESOLUTION);
@@ -385,9 +396,13 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	mListMode->plug(d->mToolBar);
 	mSideThumbnailMode->plug(d->mToolBar);
 	mBottomThumbnailMode->plug(d->mToolBar);
+	d->mToolBar->insertSeparator();
 	sliderAction->plug(d->mToolBar);
+	d->mToolBar->insertSeparator();
 	thumbnailDetailsDialogAction->plug(d->mToolBar);
-	d->mShowFilterAction->plug(d->mToolBar);
+
+	int id=d->mToolBar->insertWidget(-1, 0, d->mFilterHBox);
+	d->mToolBar->alignItemRight(id, true);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
 	initDirListerFilter();
@@ -551,9 +566,14 @@ void FileViewController::slotSelectFirstSubDir() {
 }
 
 
-void FileViewController::slotShowFilterToggled(bool on) {
-	d->mFilterBar->setShown(on);
-	applyFileFilter();
+void FileViewController::toggleFilterBar() {
+	d->mFilterBar->setShown(!d->mFilterBar->isVisible());
+
+	if (d->mFilterBar->isVisible()) {
+		d->mShowFilterButton->setText(i18n("Hide filter bar"));
+	} else {
+		d->mShowFilterButton->setText(i18n("Show filter bar"));
+	}
 }
 
 
@@ -576,22 +596,19 @@ void FileViewController::resetToFilter() {
 
 	
 void FileViewController::applyFileFilter() {
-	QString txt;
-	QDate from;
-	QDate to;
+	// Configure mDirLister
+	QString txt=d->mFilterBar->mNameCombo->currentText();
+	QDate from=d->mFilterBar->mFromDateEdit->date();
+	QDate to=d->mFilterBar->mToDateEdit->date();
 
-	// Configure mDirLister, ignore fields if filter bar is hidden
-	if (d->mFilterBar->isVisible()) {
-		txt=d->mFilterBar->mNameCombo->currentText();
-		from=d->mFilterBar->mFromDateEdit->date();
-		to=d->mFilterBar->mToDateEdit->date();
-	}
 	mDirLister->setNameFilter(txt);
 	mDirLister->setFromDate(from);
 	mDirLister->setToDate(to);
 
 	if (txt.isEmpty() && !from.isValid() && !to.isValid()) {
-		// No filtering.
+		// Not filtered
+		d->mFilterLabel->setText(i18n("Not filtered"));
+
 		// Be sure to keep the current item selected
 		KFileItem* item=currentFileView()->currentFileItem();
 		if (item) {
@@ -599,6 +616,9 @@ void FileViewController::applyFileFilter() {
 		}
 
 	} else {
+		// Filtered
+		d->mFilterLabel->setText(i18n("Filtered"));
+
 		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
 			d->mFilterBar->mNameCombo->addToHistory(txt);
 		}
