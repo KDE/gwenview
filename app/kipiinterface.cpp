@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "gvcore/archive.h"
+#include "gvcore/cache.h"
 #include "gvcore/fileviewbase.h"
 #include "gvcore/fileviewcontroller.h"
 #include "imageutils/jpegcontent.h"
@@ -183,16 +184,26 @@ int KIPIInterface::features() const {
 }
 
 /**
- * We don't need to do anything here, the KDirLister will pick up the image if
- * necessary
+ * KDirLister will pick up the image if necessary, so no updating is needed
+ * here, it is however necessary to discard caches if the plugin preserves timestamp
  */
-bool KIPIInterface::addImage(const KURL&, QString&) {
+bool KIPIInterface::addImage(const KURL& url, QString&) {
+	Cache::instance()->invalidate( url );
 	return true;
+}
+
+void KIPIInterface::delImage(const KURL& url) {
+	Cache::instance()->invalidate( url );
 }
 
 // TODO currently KDirWatch doesn't have watching of files in a directory
 // implemented, so KDirLister will not inform when a file changes
 void KIPIInterface::refreshImages( const KURL::List& urls ) {
+	for( KURL::List::ConstIterator it = urls.begin();
+	     it != urls.end();
+	     ++it ) {
+		Cache::instance()->invalidate( *it );
+	}
 	d->mFileView->refreshItems( urls );
 }
 

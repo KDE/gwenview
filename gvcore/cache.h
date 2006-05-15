@@ -50,6 +50,7 @@ public:
 	void getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const;
 	QPixmap thumbnail( const KURL& url, QSize& imagesize ) const;
 	void setPriorityURL( const KURL& url, bool set );
+	void invalidate( const KURL& url );
 	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
 	void updateAge();

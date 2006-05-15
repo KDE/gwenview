@@ -137,6 +137,10 @@ void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize image
 	checkMaxSize();
 }
 
+void Cache::invalidate( const KURL& url ) {
+	mImages.remove( url );
+}
+
 QDateTime Cache::timestamp( const KURL& url ) const {
 	LOG(url.prettyURL());
 	if( mImages.contains( url )) return mImages[ url ].timestamp;

@@ -43,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Local
 #include "archive.h"
 #include "busylevelmanager.h"
+#include "cache.h"
 #include "documentloadingimpl.h"
 #include "documentimpl.h"
 #include "imagesavedialog.h"
@@ -295,6 +296,7 @@ void Document::slotLoaded() {
 //
 //---------------------------------------------------------------------
 void Document::reload() {
+	Cache::instance()->invalidate( url());
 	load();
 	emit reloaded(url());
 }
