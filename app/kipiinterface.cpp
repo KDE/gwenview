@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qdir.h>
 #include <qregexp.h>
+#include <qtimer.h>
 
 // KDE
 #include <kdebug.h>
@@ -126,6 +127,8 @@ KIPIInterface::KIPIInterface( QWidget* parent, FileViewController* fileView)
 
 	connect(d->mFileView, SIGNAL(completed()),
 		this, SLOT(slotDirectoryChanged()) );
+// delay a bit, so that it's called after loadPlugins()
+	QTimer::singleShot( 0, this, SLOT( init()));
 }
 
 
@@ -133,6 +136,11 @@ KIPIInterface::~KIPIInterface() {
 	delete d;
 }
 
+
+void KIPIInterface::init() {
+	slotDirectoryChanged();
+	slotSelectionChanged();
+}
 
 KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	LOG("");

@@ -52,6 +52,7 @@ private:
 private slots:
 	void slotSelectionChanged();
 	void slotDirectoryChanged();
+	void init();
 };
 
 #endif /* GV_HAVE_KIPI */
