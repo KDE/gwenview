@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qdatetimeedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidgetstack.h>
 
@@ -178,7 +179,7 @@ public:
 	TipTracker* mSliderTracker;
 
 	QHBox* mFilterHBox;
-	QLabel* mFilterLabel;
+	QHBox* mFilterLabel;
 	QPushButton* mShowFilterButton;
 
 	void initFilter() {
@@ -209,7 +210,14 @@ public:
 		mFilterHBox=new QHBox(mToolBar, "kde toolbar widget");
 		mFilterHBox->setSpacing(KDialog::spacingHint());
 
-		mFilterLabel=new QLabel(i18n("Not filtered"), mFilterHBox, "kde toolbar widget");
+		mFilterLabel=new QHBox(mFilterHBox);
+		mFilterLabel->setPalette(QToolTip::palette());
+		mFilterLabel->setFrameStyle(QFrame::LineEditPanel | QFrame::Sunken);
+		mFilterLabel->hide();
+		
+		QLabel* label=new QLabel(mFilterLabel);
+		label->setPixmap(BarIcon("filter"));
+		new QLabel(i18n("Filtered"), mFilterLabel);
 
 		mShowFilterButton=new QPushButton(i18n("Show filter bar"), mFilterHBox);
 		QFontMetrics fm=mFilterHBox->fontMetrics();
@@ -607,7 +615,7 @@ void FileViewController::applyFileFilter() {
 
 	if (txt.isEmpty() && !from.isValid() && !to.isValid()) {
 		// Not filtered
-		d->mFilterLabel->setText(i18n("Not filtered"));
+		d->mFilterLabel->hide();
 
 		// Be sure to keep the current item selected
 		KFileItem* item=currentFileView()->currentFileItem();
@@ -617,7 +625,7 @@ void FileViewController::applyFileFilter() {
 
 	} else {
 		// Filtered
-		d->mFilterLabel->setText(i18n("Filtered"));
+		d->mFilterLabel->show();
 
 		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
 			d->mFilterBar->mNameCombo->addToHistory(txt);
