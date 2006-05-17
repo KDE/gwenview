@@ -68,6 +68,10 @@ class MainWindow : public KMainWindow {
 Q_OBJECT
 public:
 	MainWindow();
+	void setFullScreen(bool);
+
+public slots:
+	void openURL(const KURL&);
 
 protected:
 	bool queryClose();
@@ -140,7 +144,6 @@ private:
 	void createConnections();
 
 private slots:
-	void openURL(const KURL&);
 	void goUp();
 	void goUpTo(int);
 

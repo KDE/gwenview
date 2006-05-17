@@ -33,7 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kapplication.h>
 #include <kbookmarkmanager.h>
 #include <kbookmarkmenu.h>
-#include <kcmdlineargs.h>
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -134,8 +133,6 @@ const int HINT_TIMEOUT=10000;
 enum { StackIDBrowse, StackIDView };
 
 
-// This function is used in the ctor to find out whether to start in viewing
-// or browsing mode if URL is passed on the command line.
 static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 	if( url.filename( false ).isEmpty()) return true; // file:/somewhere/<nothing here>
 	// Do direct stat instead of using KIO if the file is local (faster)
@@ -182,34 +179,12 @@ MainWindow::MainWindow()
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
 	applyMainWindowSettings();
+}
 
-	if( !kapp->isSessionRestored()) {
-		// Command line
-		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-		if (args->count()==0) {
-			KURL url;
-			url.setPath( QDir::currentDirPath() );
-			mFileViewController->setDirURL(url);
-		} else {
-			bool fullscreen=args->isSet("f");
-			if (fullscreen) mToggleFullScreen->activate();
-			KURL url=args->url(0);
-
-			if( urlIsDirectory(this, url)) {
-				mFileViewController->setDirURL(url);
-			} else {
-				if (!fullscreen) mSwitchToViewMode->activate();
-				openURL(url);
-			}
-			updateLocationURL();
-		}
-	}
-	
-	if (mSwitchToBrowseMode->isChecked()) {
-		mFileViewController->widget()->setFocus();
-	} else {
-		mImageViewController->widget()->setFocus();
+void MainWindow::setFullScreen(bool value) {
+	if (value != mToggleFullScreen->isChecked()) {
+		mToggleFullScreen->activate();
 	}
 }
 
@@ -247,11 +222,7 @@ void MainWindow::saveProperties( KConfig* cfg ) {
 
 void MainWindow::readProperties( KConfig* cfg ) {
 	KURL url(cfg->readEntry(CONFIG_SESSION_URL));
-	if( urlIsDirectory(this, url)) {
-		mFileViewController->setDirURL(url);
-	} else {
-		openURL(url);
-	}
+	openURL(url);
 }
 
 //-----------------------------------------------------------------------
@@ -260,9 +231,20 @@ void MainWindow::readProperties( KConfig* cfg ) {
 //
 //-----------------------------------------------------------------------
 void MainWindow::openURL(const KURL& url) {
-	mDocument->setURL(url);
-	mFileViewController->setDirURL(url.upURL());
-	mFileViewController->setFileNameToSelect(url.filename());
+	bool isDir = urlIsDirectory(this, url);
+	LOG("url=" << url.prettyURL() << ", isDir=" << isDir);
+
+	if (isDir) {
+		mFileViewController->setDirURL(url);
+	} else {
+		mDocument->setURL(url);
+		mFileViewController->setDirURL(url.upURL());
+		mFileViewController->setFileNameToSelect(url.filename());
+	}
+	
+	if (!mToggleFullScreen->isChecked() && !isDir && !mSwitchToViewMode->isChecked()) {
+		mSwitchToViewMode->activate();
+	}
 }
 
 
@@ -690,13 +672,7 @@ void MainWindow::slotDirRenamed(const KURL& oldURL, const KURL& newURL) {
 void MainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
 	LOG(url.prettyURL());
-	if( urlIsDirectory(this, url)) {
-		LOG(" '-> is a directory");
-		mFileViewController->setDirURL(url);
-	} else {
-		LOG(" '-> is not a directory");
-		openURL(url);
-	}
+	openURL(url);
 	mFileViewController->widget()->setFocus();
 }
 

@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <qdir.h>
+
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -72,6 +74,19 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 		RESTORE(MainWindow)
 	} else {
 		MainWindow *mainWindow = new MainWindow;
+		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+		bool fullscreen=args->isSet("f");
+		if (fullscreen) mainWindow->setFullScreen(true);
+		
+		KURL url;
+		if (args->count()>0) {
+			url=args->url(0);
+		} else {
+			url.setPath( QDir::currentDirPath() );
+		}
+		mainWindow->openURL(url);
+		
 		mainWindow->show();
 	}
 
