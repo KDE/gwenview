@@ -561,7 +561,7 @@ void MainWindow::toggleFullScreen() {
 		mImageViewController->setFullScreen(false);
 		
 		if (mSwitchToBrowseMode->isChecked()) {
-			mPixmapDock->setWidget(mImageViewController->widget());
+			mImageDock->setWidget(mImageViewController->widget());
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
 		mFileViewController->widget()->setFocus();
@@ -685,7 +685,7 @@ void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
 void MainWindow::slotToggleCentralStack() {
 	LOG("");
 	if (mSwitchToBrowseMode->isChecked()) {
-		mPixmapDock->setWidget(mImageViewController->widget());
+		mImageDock->setWidget(mImageViewController->widget());
 		mCentralStack->raiseWidget(StackIDBrowse);
 		mFileViewController->setSilentMode( false );
 		// force re-reading the directory to show the error
@@ -715,12 +715,12 @@ void MainWindow::resetDockWidgets() {
 	if (answer==KMessageBox::Cancel) return;
 	
 	mFolderDock->undock();
-	mPixmapDock->undock();
+	mImageDock->undock();
 	mMetaDock->undock();
 
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
-	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
-	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mImageDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
+	mMetaDock->manualDock(mImageDock, KDockWidget::DockBottom, 8560);
 }
 
 
@@ -822,9 +822,9 @@ void MainWindow::createWidgets() {
 		mSBHintLabel, SLOT(clear()) );
 
 	// Pixmap widget
-	mPixmapDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
-	mImageViewController=new ImageViewController(mPixmapDock, mDocument, actionCollection());
-	mPixmapDock->setWidget(mImageViewController->widget());
+	mImageDock = mDockArea->createDockWidget("Image",SmallIcon("gwenview"),NULL,i18n("Image"));
+	mImageViewController=new ImageViewController(mImageDock, mDocument, actionCollection());
+	mImageDock->setWidget(mImageViewController->widget());
 	connect(mImageViewController, SIGNAL(requestHintDisplay(const QString&)),
 		this, SLOT(showHint(const QString&)) );
 
@@ -862,8 +862,8 @@ void MainWindow::createWidgets() {
 	// (The "magic numbers" were found by adjusting the layout from within the
 	// app and looking at the result in the configuration file)
 	mFolderDock->manualDock(mFileDock, KDockWidget::DockLeft, 4000);
-	mPixmapDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
-	mMetaDock->manualDock(mPixmapDock, KDockWidget::DockBottom, 8560);
+	mImageDock->manualDock(mFolderDock, KDockWidget::DockBottom, 3734);
+	mMetaDock->manualDock(mImageDock, KDockWidget::DockBottom, 8560);
 
 	// Load dock config if up to date
 	if (config->hasGroup(CONFIG_DOCK_GROUP)) {
@@ -1044,7 +1044,7 @@ void MainWindow::updateWindowActions() {
 	unplugActionList("winlist");
 	mWindowListActions.clear();
 	createHideShowAction(mFolderDock);
-	createHideShowAction(mPixmapDock);
+	createHideShowAction(mImageDock);
 	createHideShowAction(mMetaDock);
 	plugActionList("winlist", mWindowListActions);
 }

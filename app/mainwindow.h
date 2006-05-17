@@ -84,7 +84,7 @@ private:
 	KDockArea* mDockArea;
 	KDockWidget* mFolderDock;
 	KDockWidget* mFileDock;
-	KDockWidget* mPixmapDock;
+	KDockWidget* mImageDock;
 	KDockWidget* mMetaDock;
 	QLabel* mSBDetailLabel;
 	QLabel* mSBHintLabel;
