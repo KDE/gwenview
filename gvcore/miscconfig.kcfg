@@ -7,6 +7,8 @@
       <label>Whether Gwenview should rotate images if orientation information is available.</label> 
       <default>true</default>
     </entry> 
+    <entry name="history" type="PathList">
+    </entry>
   </group> 
   <!-- This is the group for KDialog don't-ask-again checkboxes -->
   <group name="Notification Messages">

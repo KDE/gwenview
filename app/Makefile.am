@@ -27,7 +27,6 @@ gwenview_la_SOURCES = \
 	treeview.cpp \
 	dirviewcontroller.cpp \
 	configdialog.cpp \
-	history.cpp \
 	main.cpp
 
 gwenview_la_LIBADD   = libgwenshared.la ../gvcore/libgwenviewcore.la $(GV_LIB_KIPI) $(LIB_KUTILS)

@@ -74,7 +74,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bookmarkviewcontroller.h"
 #include "configdialog.h"
 #include "dirviewcontroller.h"
-#include "history.h"
 #include "metaedit.h"
 #include "truncatedtextlabel.h"
 #include "vtabwidget.h"
@@ -96,6 +95,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <../gvcore/slideshowconfig.h>
 #include <../gvcore/fullscreenconfig.h>
 #include <../gvcore/fileviewconfig.h>
+#include <../gvcore/miscconfig.h>
 
 #include "config.h"
 
@@ -165,7 +165,7 @@ MainWindow::MainWindow()
 {
 	// Backend
 	mDocument=new Document(this);
-	mHistory=new History(actionCollection());
+
 	// GUI
 	createActions();
 	createWidgets();
@@ -213,6 +213,8 @@ bool MainWindow::queryClose() {
 	if (!mToggleFullScreen->isChecked()) {
 		saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	}
+	MiscConfig::setHistory( mURLEdit->historyItems() );
+	MiscConfig::writeConfig();
 	return true;
 }
 
@@ -1090,8 +1092,6 @@ void MainWindow::createConnections() {
 		this,SLOT(slotDirURLChanged(const KURL&)) );
 	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
 		mDirViewController,SLOT(setURL(const KURL&)) );
-	connect(mFileViewController,SIGNAL(directoryChanged(const KURL&)),
-		mHistory,SLOT(addURLToHistory(const KURL&)) );
 
 	connect(mFileViewController,SIGNAL(completed()),
 		this,SLOT(updateStatusInfo()) );
@@ -1104,10 +1104,6 @@ void MainWindow::createConnections() {
 	connect(mFileViewController,SIGNAL(sortingChanged()),
 		this, SLOT(updateStatusInfo()) );
 
-	// History connections
-	connect(mHistory, SIGNAL(urlChanged(const KURL&)),
-		mFileViewController, SLOT(setDirURL(const KURL&)) );
-	
 	// Document connections
 	connect(mDocument,SIGNAL(loading()),
 		this,SLOT(slotImageLoading()) );
@@ -1148,6 +1144,8 @@ void MainWindow::createLocationToolBar() {
 	mURLEdit=new KHistoryCombo(this);
 	mURLEdit->setDuplicatesEnabled(false);
 	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
+	mURLEdit->setHistoryItems(MiscConfig::history());
+	updateLocationURL();
 
 	mURLEditCompletion=new KURLCompletion();
 	//mURLEditCompletion->setDir("/");
