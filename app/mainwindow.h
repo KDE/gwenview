@@ -58,6 +58,7 @@ class BookmarkViewController;
 class DirViewController;
 class Document;
 class FileViewController;
+class History;
 class MetaEdit;
 class ImageViewController;
 class SlideShow;
@@ -96,6 +97,7 @@ private:
 	MetaEdit *mMetaEdit;
 
 	Document* mDocument;
+	History* mHistory;
 	SlideShow* mSlideShow;
 
 	KRadioAction* mSwitchToBrowseMode;
