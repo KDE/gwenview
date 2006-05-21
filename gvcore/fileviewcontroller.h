@@ -53,13 +53,13 @@ class ImageLoader;
 
 
 class DirLister;
-class FileViewControllerPrivate;
 
 class LIBGWENVIEW_EXPORT FileViewController : public QObject {
 Q_OBJECT
 
 public:
 	enum Mode { FILE_LIST, THUMBNAIL};
+	enum FilterMode { FILTER_IMAGES=1, FILTER_VIDEOS=2, ALL=FILTER_IMAGES | FILTER_VIDEOS, CUSTOM=4 | ALL };
 
 	FileViewController(QWidget* parent,KActionCollection*);
 	~FileViewController();
@@ -191,14 +191,14 @@ private slots:
 	void slotDirMade(KIO::Job* job);
 	void prefetchDone();
 
-	void toggleFilterBar();
 	void resetNameFilter();
 	void resetFromFilter();
 	void resetToFilter();
-	void applyFileFilter();
+	void updateDirListerFilter();
 
 private:
-	FileViewControllerPrivate* d;
+	struct Private;
+	Private* d;
 	Mode mMode;
 	FileDetailView* mFileDetailView;
 	FileThumbnailView* mFileThumbnailView;
@@ -243,7 +243,6 @@ private:
 	void browseToFileNameToSelect();
 	void emitURLChanged();
 	void updateActions();
-	void initDirListerFilter();
 	void prefetch( KFileItem* item );
 	
 	KFileItem* findFirstImage() const;

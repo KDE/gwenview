@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Qt
+#include <qcheckbox.h>
 #include <qdatetimeedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
@@ -114,17 +115,29 @@ public:
 		mCheck = c;
 	}
 
-	void setFromDate(const QDate& from) {
+	void setDateFilter(const QDate& from, const QDate& to) {
 		mFromDate = from;
+		mToDate =to;
 	}
 
-	void setToDate(const QDate& to) {
-		mToDate = to;
+	virtual bool itemMatchFilters(const KFileItem* item) const {
+		if (!matchesFilter(item)) return false;
+		return matchesMimeFilter(item);
 	}
 
-protected:
+public:
 	virtual bool matchesMimeFilter(const KFileItem* item) const {
-		bool result=KDirLister::matchesMimeFilter(item);
+		// Do mime filtering ourself because we use startsWith instead of ==
+		QStringList lst = mimeFilters();
+		QStringList::Iterator it = lst.begin(), end = lst.end();
+		bool result = false;
+		QString type = item->mimetype();
+		for (; it!=end; ++it) {
+			if (type.startsWith(*it)) {
+				result = true;
+				break;
+			}
+		}
 		if (!result) return false;
 
 		if (item->isDir() || Archive::fileItemIsArchive(item)) {
@@ -145,12 +158,6 @@ protected:
 		return true;
 	}
 
-	virtual bool doMimeFilter(const QString& mime, const QStringList& filters) const {
-		if (mime.startsWith("video/")) return true;
-		if (mime.startsWith("image/svg")) return true;
-		return KDirLister::doMimeFilter(mime, filters);
-	}
-
 private:
 	mutable bool mError;
 	bool mCheck;
@@ -161,12 +168,12 @@ private:
 
 //-----------------------------------------------------------------------
 //
-// FileViewControllerPrivate
+// FileViewController::Private
 //
 //-----------------------------------------------------------------------
-class FileViewControllerPrivate {
+class FileViewController::Private {
 public:
-	~FileViewControllerPrivate() {
+	~Private() {
 		delete mSliderTracker;
 	}
 	FileViewController* that;
@@ -179,13 +186,17 @@ public:
 	TipTracker* mSliderTracker;
 
 	QHBox* mFilterHBox;
-	QHBox* mFilterLabel;
-	QPushButton* mShowFilterButton;
+	QComboBox* mFilterComboBox;
+	QMap<int,FilterMode> mIndexToFilterMode;
 
 	void initFilter() {
 		mFilterBar=new FilterBar(mWidget);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
+
+		QColorGroup cg=mFilterBar->palette().active();
+		mFilterBar->mCustomFilterCheckBox->setPaletteBackgroundColor(cg.highlight());
+		mFilterBar->mCustomFilterCheckBox->setPaletteForegroundColor(cg.highlightedText());
 
 		QIconSet resetIS=BarIcon("locationbar_erase");
 		mFilterBar->mResetNameCombo->setIconSet(resetIS);
@@ -205,28 +216,26 @@ public:
 		mFilterBar->mNameCombo->setMaxCount(10);
 		QObject::connect(
 			mFilterBar->mFilterButton, SIGNAL(clicked()),
-			that, SLOT(applyFileFilter()) );
+			that, SLOT(updateDirListerFilter()) );
 
 		mFilterHBox=new QHBox(mToolBar, "kde toolbar widget");
 		mFilterHBox->setSpacing(KDialog::spacingHint());
 
-		mFilterLabel=new QHBox(mFilterHBox);
-		mFilterLabel->setPalette(QToolTip::palette());
-		mFilterLabel->setFrameStyle(QFrame::LineEditPanel | QFrame::Sunken);
-		mFilterLabel->hide();
-		
-		QLabel* label=new QLabel(mFilterLabel);
-		label->setPixmap(BarIcon("filter"));
-		new QLabel(i18n("Filtered"), mFilterLabel);
+		new QLabel(i18n("Filter:"), mFilterHBox);
 
-		mShowFilterButton=new QPushButton(i18n("Show filter bar"), mFilterHBox);
-		QFontMetrics fm=mFilterHBox->fontMetrics();
-		int width=QMAX(fm.width(i18n("Show filter bar")), fm.width(i18n("Hide filter bar")));
-		mShowFilterButton->setFixedWidth(width + 12);
+		mFilterComboBox=new QComboBox(mFilterHBox);
+		mFilterComboBox->insertItem(i18n("All files"), 0);
+		mIndexToFilterMode[0]=ALL;
+		mFilterComboBox->insertItem(i18n("Images only"), 1);
+		mIndexToFilterMode[1]=FILTER_IMAGES;
+		mFilterComboBox->insertItem(i18n("Videos only"), 2);
+		mIndexToFilterMode[2]=FILTER_VIDEOS;
+		mFilterComboBox->insertItem(i18n("Custom"), 3);
+		mIndexToFilterMode[3]=CUSTOM;
 
 		QObject::connect(
-			mShowFilterButton, SIGNAL(clicked()),
-			that, SLOT(toggleFilterBar()) );
+			mFilterComboBox, SIGNAL(activated(int)),
+			that, SLOT(updateDirListerFilter()) );
 	}
 };
 
@@ -244,7 +253,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 , mBrowsing(false)
 , mSelecting(false)
 {
-	d=new FileViewControllerPrivate;
+	d=new Private;
 	d->that=this;
 	d->mWidget=new QVBox(parent);
 	d->mWidget->setMinimumWidth(1);
@@ -413,7 +422,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mToolBar->alignItemRight(id, true);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
-	initDirListerFilter();
+	updateDirListerFilter();
 
 	bool startWithThumbnails=FileViewConfig::startWithThumbnails();
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
@@ -574,76 +583,21 @@ void FileViewController::slotSelectFirstSubDir() {
 }
 
 
-void FileViewController::toggleFilterBar() {
-	d->mFilterBar->setShown(!d->mFilterBar->isVisible());
-
-	if (d->mFilterBar->isVisible()) {
-		d->mShowFilterButton->setText(i18n("Hide filter bar"));
-	} else {
-		d->mShowFilterButton->setText(i18n("Show filter bar"));
-	}
-}
-
-
 void FileViewController::resetNameFilter() {
 	d->mFilterBar->mNameCombo->clearEdit();
-	applyFileFilter();
 }
 
 
 void FileViewController::resetFromFilter() {
 	d->mFilterBar->mFromDateEdit->setDate(QDate());
-	applyFileFilter();
 }
 
 
 void FileViewController::resetToFilter() {
 	d->mFilterBar->mToDateEdit->setDate(QDate());
-	applyFileFilter();
 }
 
 	
-void FileViewController::applyFileFilter() {
-	// Configure mDirLister
-	QString txt=d->mFilterBar->mNameCombo->currentText();
-	QDate from=d->mFilterBar->mFromDateEdit->date();
-	QDate to=d->mFilterBar->mToDateEdit->date();
-
-	mDirLister->setNameFilter(txt);
-	mDirLister->setFromDate(from);
-	mDirLister->setToDate(to);
-
-	if (txt.isEmpty() && !from.isValid() && !to.isValid()) {
-		// Not filtered
-		d->mFilterLabel->hide();
-
-		// Be sure to keep the current item selected
-		KFileItem* item=currentFileView()->currentFileItem();
-		if (item) {
-			mFileNameToSelect=item->name();
-		}
-
-	} else {
-		// Filtered
-		d->mFilterLabel->show();
-
-		if (d->mFilterBar->mNameCombo->historyItems().findIndex(txt)==-1) {
-			d->mFilterBar->mNameCombo->addToHistory(txt);
-		}
-
-		// Find next item matching the filter, if any
-		KFileItem* item=currentFileView()->currentFileItem();
-		for (; item; item=currentFileView()->nextItem(item)) {
-			if (mDirLister->matchesFilter(item->name())) {
-				mFileNameToSelect=item->name();
-				break;
-			}
-		}
-	}
-	mDirLister->openURL(mDirURL);
-}
-
-
 void FileViewController::browseTo(KFileItem* item) {
 	prefetchDone();
 	if (mBrowsing) return;
@@ -1128,7 +1082,7 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 
 void FileViewController::updateFromSettings() {
-	initDirListerFilter();
+	updateDirListerFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
 	currentFileView()->widget()->update();
@@ -1291,15 +1245,55 @@ void FileViewController::dirListerCanceled() {
 // Private
 //
 //-----------------------------------------------------------------------
-void FileViewController::initDirListerFilter() {
-	QStringList mimeTypes=MimeTypeUtils::rasterImageMimeTypes();
+void FileViewController::updateDirListerFilter() {
+	QStringList mimeTypes;
+	FilterMode filterMode = d->mIndexToFilterMode[ d->mFilterComboBox->currentItem() ];
+	
 	if (FileViewConfig::showDirs()) {
-		mimeTypes.append("inode/directory");
-		mimeTypes+=Archive::mimeTypes();
+		mimeTypes << "inode/directory";
+		mimeTypes += Archive::mimeTypes();
 	}
+
+	if (filterMode & FILTER_IMAGES) {
+		mimeTypes += MimeTypeUtils::rasterImageMimeTypes();
+		mimeTypes << "image/svg";
+	}
+	
+	if (filterMode & FILTER_VIDEOS) {
+		mimeTypes << "video/";
+	}
+
+	if (filterMode == CUSTOM) {
+		d->mFilterBar->setShown(true);
+		if (!d->mFilterBar->mCustomFilterCheckBox->isChecked()) {
+			d->mFilterBar->mCustomFilterCheckBox->setChecked(true);
+		}
+		QString txt=d->mFilterBar->mNameCombo->currentText();
+		QDate from=d->mFilterBar->mFromDateEdit->date();
+		QDate to=d->mFilterBar->mToDateEdit->date();
+
+		mDirLister->setNameFilter(txt);
+		mDirLister->setDateFilter(from, to);
+	} else {
+		d->mFilterBar->setShown(false);
+		mDirLister->setNameFilter(QString::null);
+		mDirLister->setDateFilter(QDate(), QDate());
+	}
+
 	mDirLister->setShowingDotFiles(mShowDotFiles->isChecked());
 	mDirLister->setMimeFilter(mimeTypes);
-	mDirLister->emitChanges();
+
+	// Find next item matching the filter if any, so that we can keep it
+	// current
+	KFileItem* item=currentFileView()->currentFileItem();
+	for (; item; item=currentFileView()->nextItem(item)) {
+		if (mDirLister->itemMatchFilters(item)) {
+			mFileNameToSelect=item->name();
+			break;
+		}
+	}
+
+	mDirLister->openURL(mDirURL);
 }
 
 
