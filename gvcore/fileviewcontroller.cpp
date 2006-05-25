@@ -187,7 +187,6 @@ public:
 
 	QHBox* mFilterHBox;
 	QComboBox* mFilterComboBox;
-	QMap<int,FilterMode> mIndexToFilterMode;
 
 	void initFilter() {
 		mFilterBar=new FilterBar(mWidget);
@@ -224,14 +223,10 @@ public:
 		new QLabel(i18n("Filter:"), mFilterHBox);
 
 		mFilterComboBox=new QComboBox(mFilterHBox);
-		mFilterComboBox->insertItem(i18n("All files"), 0);
-		mIndexToFilterMode[0]=ALL;
-		mFilterComboBox->insertItem(i18n("Images only"), 1);
-		mIndexToFilterMode[1]=FILTER_IMAGES;
-		mFilterComboBox->insertItem(i18n("Videos only"), 2);
-		mIndexToFilterMode[2]=FILTER_VIDEOS;
-		mFilterComboBox->insertItem(i18n("Custom"), 3);
-		mIndexToFilterMode[3]=CUSTOM;
+		mFilterComboBox->insertItem(i18n("All files"), ALL);
+		mFilterComboBox->insertItem(i18n("Images only"), IMAGES_ONLY);
+		mFilterComboBox->insertItem(i18n("Videos only"), VIDEOS_ONLY);
+		mFilterComboBox->insertItem(i18n("Custom"), CUSTOM);
 
 		QObject::connect(
 			mFilterComboBox, SIGNAL(activated(int)),
@@ -1247,19 +1242,21 @@ void FileViewController::dirListerCanceled() {
 //-----------------------------------------------------------------------
 void FileViewController::updateDirListerFilter() {
 	QStringList mimeTypes;
-	FilterMode filterMode = d->mIndexToFilterMode[ d->mFilterComboBox->currentItem() ];
+	FilterMode filterMode = static_cast<FilterMode>( d->mFilterComboBox->currentItem() );
+	bool showImages = filterMode == ALL || filterMode == CUSTOM || filterMode ==IMAGES_ONLY;
+	bool showVideos = filterMode == ALL || filterMode == CUSTOM || filterMode ==VIDEOS_ONLY;
 	
 	if (FileViewConfig::showDirs()) {
 		mimeTypes << "inode/directory";
 		mimeTypes += Archive::mimeTypes();
 	}
 
-	if (filterMode & FILTER_IMAGES) {
+	if (showImages) {
 		mimeTypes += MimeTypeUtils::rasterImageMimeTypes();
 		mimeTypes << "image/svg";
 	}
 	
-	if (filterMode & FILTER_VIDEOS) {
+	if (showVideos) {
 		mimeTypes << "video/";
 	}
 
