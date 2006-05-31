@@ -188,7 +188,7 @@ public:
 	QHBox* mFilterHBox;
 	QComboBox* mFilterComboBox;
 
-	void initFilter() {
+	void initFilterBar() {
 		mFilterBar=new FilterBar(mWidget);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
@@ -216,7 +216,9 @@ public:
 		QObject::connect(
 			mFilterBar->mFilterButton, SIGNAL(clicked()),
 			that, SLOT(updateDirListerFilter()) );
+	}
 
+	void initFilterCombo() {
 		mFilterHBox=new QHBox(mToolBar, "kde toolbar widget");
 		mFilterHBox->setSpacing(KDialog::spacingHint());
 
@@ -241,7 +243,7 @@ public:
 //
 //-----------------------------------------------------------------------
 FileViewController::FileViewController(QWidget* parent,KActionCollection* actionCollection)
-: QObject(this)
+: QObject()
 , mMode(FILE_LIST)
 , mPrefetch( NULL )
 , mChangeDirStatus(CHANGE_DIR_STATUS_NONE)
@@ -251,11 +253,17 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d=new Private;
 	d->that=this;
 	d->mWidget=new QVBox(parent);
+
+	// Make the controller a child of mWidget so that we can be sure it will be
+	// deleted *before* it
+	d->mWidget->insertChild(this);
+	
 	d->mWidget->setMinimumWidth(1);
 	d->mToolBar=new KToolBar(d->mWidget, "", true);
 
 	// Init filter here so that it's properly placed in the vbox
-	d->initFilter();
+	d->initFilterBar();
+	d->initFilterCombo();
 	d->mStack=new QWidgetStack(d->mWidget);
 
 	// Actions
@@ -417,7 +425,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->mToolBar->alignItemRight(id, true);
 
 	mShowDotFiles->setChecked(FileViewConfig::showDotFiles());
-	updateDirListerFilter();
 
 	bool startWithThumbnails=FileViewConfig::startWithThumbnails();
 	setMode(startWithThumbnails?THUMBNAIL:FILE_LIST);
@@ -436,14 +443,22 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 		mListMode->setChecked(true);
 	}
 	thumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
+
+	updateFromSettings();
 }
 
-
+	
 FileViewController::~FileViewController() {
-	// Do not access children of mWidget here, they may have already been
-	// deleted since mWidget is not a child of this.
 	FileViewConfig::setStartWithThumbnails(mMode==THUMBNAIL);
+	int filterMode = d->mFilterComboBox->currentItem();
+	FileViewConfig::setFilterMode(filterMode);
+	if (filterMode == CUSTOM) {
+		FileViewConfig::setNameFilter(d->mFilterBar->mNameCombo->currentText());
+		FileViewConfig::setFromDateFilter(d->mFilterBar->mFromDateEdit->date());
+		FileViewConfig::setToDateFilter(d->mFilterBar->mToDateEdit->date());
+	}
 	FileViewConfig::writeConfig();
+	
 	delete d;
 	delete mDirLister;
 }
@@ -1077,6 +1092,12 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 
 void FileViewController::updateFromSettings() {
+	d->mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
+	if (FileViewConfig::filterMode()==CUSTOM) {
+		d->mFilterBar->mNameCombo->setCurrentText(FileViewConfig::nameFilter());
+		d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
+		d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
+	}
 	updateDirListerFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());

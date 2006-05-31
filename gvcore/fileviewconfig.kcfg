@@ -34,6 +34,18 @@
         enum ItemDetail { FILENAME=1, FILESIZE=2, FILEDATE=4, IMAGESIZE=8 };
       </description>
     </entry>
+    <entry name="filterMode" type="Enum">
+      <default>All</default>
+      <choices>
+        <choice name="All"/>
+        <choice name="ImagesOnly"/>
+        <choice name="VideosOnly"/>
+        <choice name="Custom"/>
+      </choices>
+    </entry>
+    <entry name="nameFilter" type="String"></entry>
+    <entry name="fromDateFilter" type="DateTime"></entry>
+    <entry name="toDateFilter" type="DateTime"></entry>
   </group>
 
 
