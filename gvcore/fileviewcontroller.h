@@ -23,8 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt 
 #include <qdir.h>
-#include <qobject.h>
 #include <qslider.h>
+#include <qwidget.h>
 
 // KDE
 #include <kdirlister.h>
@@ -54,7 +54,7 @@ class ImageLoader;
 
 class DirLister;
 
-class LIBGWENVIEW_EXPORT FileViewController : public QObject {
+class LIBGWENVIEW_EXPORT FileViewController : public QWidget {
 Q_OBJECT
 
 public:

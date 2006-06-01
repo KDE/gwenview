@@ -22,10 +22,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qcheckbox.h>
 #include <qdatetimeedit.h>
+#include <qhbox.h>
+#include <qlayout.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <qvbox.h>
 #include <qwidgetstack.h>
 
 // KDE
@@ -177,7 +178,6 @@ public:
 		delete mSliderTracker;
 	}
 	FileViewController* that;
-	QVBox* mWidget;
 	FilterBar* mFilterBar;
 	KToolBar* mToolBar;
 	QWidgetStack* mStack;
@@ -189,7 +189,7 @@ public:
 	QComboBox* mFilterComboBox;
 
 	void initFilterBar() {
-		mFilterBar=new FilterBar(mWidget);
+		mFilterBar=new FilterBar(that);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
 
@@ -243,7 +243,7 @@ public:
 //
 //-----------------------------------------------------------------------
 FileViewController::FileViewController(QWidget* parent,KActionCollection* actionCollection)
-: QObject()
+: QWidget(parent)
 , mMode(FILE_LIST)
 , mPrefetch( NULL )
 , mChangeDirStatus(CHANGE_DIR_STATUS_NONE)
@@ -252,19 +252,18 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 {
 	d=new Private;
 	d->that=this;
-	d->mWidget=new QVBox(parent);
-
-	// Make the controller a child of mWidget so that we can be sure it will be
-	// deleted *before* it
-	d->mWidget->insertChild(this);
-	
-	d->mWidget->setMinimumWidth(1);
-	d->mToolBar=new KToolBar(d->mWidget, "", true);
+	setMinimumWidth(1);
+	d->mToolBar=new KToolBar(this, "", true);
 
 	// Init filter here so that it's properly placed in the vbox
 	d->initFilterBar();
 	d->initFilterCombo();
-	d->mStack=new QWidgetStack(d->mWidget);
+	d->mStack=new QWidgetStack(this);
+	
+	QVBoxLayout *layout=new QVBoxLayout(this);
+	layout->addWidget(d->mToolBar);
+	layout->addWidget(d->mFilterBar);
+	layout->addWidget(d->mStack);
 
 	// Actions
 	mSelectFirst=new KAction(i18n("&First"),
@@ -331,7 +330,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 
 	// Dir lister
 	mDirLister=new DirLister;
-	mDirLister->setMainWindow(d->mWidget->topLevelWidget());
+	mDirLister->setMainWindow(topLevelWidget());
 	connect(mDirLister,SIGNAL(clear()),
 		this,SLOT(dirListerClear()) );
 
@@ -449,18 +448,19 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 
 	
 FileViewController::~FileViewController() {
+	// Save various settings
 	FileViewConfig::setStartWithThumbnails(mMode==THUMBNAIL);
+	
 	int filterMode = d->mFilterComboBox->currentItem();
 	FileViewConfig::setFilterMode(filterMode);
-	if (filterMode == CUSTOM) {
-		FileViewConfig::setNameFilter(d->mFilterBar->mNameCombo->currentText());
-		FileViewConfig::setFromDateFilter(d->mFilterBar->mFromDateEdit->date());
-		FileViewConfig::setToDateFilter(d->mFilterBar->mToDateEdit->date());
-	}
-	FileViewConfig::writeConfig();
 	
-	delete d;
+	FileViewConfig::setNameFilter(d->mFilterBar->mNameCombo->currentText());
+	FileViewConfig::setFromDateFilter(d->mFilterBar->mFromDateEdit->date());
+	FileViewConfig::setToDateFilter(d->mFilterBar->mToDateEdit->date());
+	
+	FileViewConfig::writeConfig();
 	delete mDirLister;
+	delete d;
 }
 
 
@@ -476,11 +476,6 @@ bool FileViewController::eventFilter(QObject*, QEvent* event) {
 		return true;
 	}
 	return false;
-}
-
-
-QWidget* FileViewController::widget() const {
-	return d->mWidget;
 }
 
 

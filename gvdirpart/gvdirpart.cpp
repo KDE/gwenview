@@ -100,12 +100,12 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mFileViewController = new GVDirPartFileViewController(mSplitter, actionCollection(), mBrowserExtension);
 	int width=GVDirPartConfig::fileViewWidth();
 	if (width!=-1) {
-		mFileViewController->widget()->resize(width, 10);
+		mFileViewController->resize(width, 10);
 	}
 	mImageView = new ImageView(mSplitter, mDocument, actionCollection());
 	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
 		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
-	mSplitter->setResizeMode(mFileViewController->widget(), QSplitter::KeepSize);
+	mSplitter->setResizeMode(mFileViewController, QSplitter::KeepSize);
 
 	mSlideShow = new SlideShow(mDocument);
 
@@ -136,7 +136,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 }
 
 GVDirPart::~GVDirPart() {
-	GVDirPartConfig::setFileViewWidth(mFileViewController->widget()->width());
+	GVDirPartConfig::setFileViewWidth(mFileViewController->width());
 	GVDirPartConfig::writeConfig();
 	delete mSlideShow;
 	Cache::instance()->deref();

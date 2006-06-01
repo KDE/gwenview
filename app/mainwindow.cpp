@@ -197,7 +197,7 @@ bool MainWindow::queryClose() {
 
 	// Don't store dock layout if only the image dock is visible. This avoid
 	// saving layout when in "fullscreen" or "image only" mode.
-	if (mFileViewController->widget()->isVisible() || mDirViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible() || mDirViewController->widget()->isVisible()) {
 		mDockArea->writeDockConfig(config,CONFIG_DOCK_GROUP);
 	}
 
@@ -335,7 +335,7 @@ void MainWindow::goHome() {
 
 
 void MainWindow::renameFile() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->renameFile();
 	} else {
 		FileOperation::rename(mDocument->url(), this);
@@ -344,7 +344,7 @@ void MainWindow::renameFile() {
 
 
 void MainWindow::copyFiles() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->copyFiles();
 	} else {
 		KURL::List list;
@@ -354,7 +354,7 @@ void MainWindow::copyFiles() {
 }
 
 void MainWindow::linkFiles() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->linkFiles();
 	} else {
 		KURL::List list;
@@ -365,7 +365,7 @@ void MainWindow::linkFiles() {
 
 
 void MainWindow::moveFiles() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->moveFiles();
 	} else {
 		KURL::List list;
@@ -376,7 +376,7 @@ void MainWindow::moveFiles() {
 
 
 void MainWindow::deleteFiles() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->deleteFiles();
 	} else {
 		KURL::List list;
@@ -387,7 +387,7 @@ void MainWindow::deleteFiles() {
 
 
 void MainWindow::showFileProperties() {
-	if (mFileViewController->widget()->isVisible()) {
+	if (mFileViewController->isVisible()) {
 		mFileViewController->showFileProperties();
 	} else {
 		(void)new KPropertiesDialog(mDocument->url());
@@ -413,7 +413,7 @@ void MainWindow::flip() {
 
 void MainWindow::modifyImage(ImageUtils::Orientation orientation) {
 	const KURL::List& urls=mFileViewController->selectedImageURLs();
-	if (mFileViewController->widget()->isVisible() && urls.size()>1) {
+	if (mFileViewController->isVisible() && urls.size()>1) {
 		BatchManipulator manipulator(this, urls, orientation);
 		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
 			mFileViewController, SLOT(updateThumbnail(const KURL&)) );
@@ -567,7 +567,7 @@ void MainWindow::toggleFullScreen() {
 			mImageDock->setWidget(mImageViewController->widget());
 			mCentralStack->raiseWidget(StackIDBrowse);
 		}
-		mFileViewController->widget()->setFocus();
+		mFileViewController->setFocus();
 	}
 }
 
@@ -676,7 +676,7 @@ void MainWindow::slotGo() {
 	KURL url(mURLEditCompletion->replacedPath(mURLEdit->currentText()));
 	LOG(url.prettyURL());
 	openURL(url);
-	mFileViewController->widget()->setFocus();
+	mFileViewController->setFocus();
 }
 
 void MainWindow::slotShownFileItemRefreshed(const KFileItem*) {
@@ -779,7 +779,7 @@ void MainWindow::updateImageActions() {
 
 	bool fileActionsEnabled = 
 		imageActionsEnabled
-		|| (mFileViewController->widget()->isVisible() && mFileViewController->selectionSize()>0);
+		|| (mFileViewController->isVisible() && mFileViewController->selectionSize()>0);
 
 	mRenameFile->setEnabled(fileActionsEnabled);
 	mCopyFiles->setEnabled(fileActionsEnabled);
@@ -845,7 +845,7 @@ void MainWindow::createWidgets() {
 	// File widget
 	mFileDock = mDockArea->createDockWidget("Files",SmallIcon("image"),NULL,i18n("Files"));
 	mFileViewController=new FileViewController(this, actionCollection());
-	mFileDock->setWidget(mFileViewController->widget());
+	mFileDock->setWidget(mFileViewController);
 	mFileDock->setEnableDocking(KDockWidget::DockNone);
 	mDockArea->setMainDockWidget(mFileDock);
 
