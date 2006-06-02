@@ -59,7 +59,7 @@ Q_OBJECT
 
 public:
 	enum Mode { FILE_LIST, THUMBNAIL};
-	enum FilterMode { ALL, IMAGES_ONLY, VIDEOS_ONLY, CUSTOM };
+	enum FilterMode { ALL, IMAGES_ONLY, VIDEOS_ONLY };
 
 	FileViewController(QWidget* parent,KActionCollection*);
 	~FileViewController();

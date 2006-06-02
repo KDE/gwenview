@@ -187,15 +187,12 @@ public:
 
 	QHBox* mFilterHBox;
 	QComboBox* mFilterComboBox;
+	QCheckBox* mMoreCheckBox;
 
 	void initFilterBar() {
 		mFilterBar=new FilterBar(that);
 		mFilterBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		mFilterBar->hide();
-
-		QColorGroup cg=mFilterBar->palette().active();
-		mFilterBar->mCustomFilterCheckBox->setPaletteBackgroundColor(cg.highlight());
-		mFilterBar->mCustomFilterCheckBox->setPaletteForegroundColor(cg.highlightedText());
 
 		QIconSet resetIS=BarIcon("locationbar_erase");
 		mFilterBar->mResetNameCombo->setIconSet(resetIS);
@@ -227,10 +224,17 @@ public:
 		mFilterComboBox->insertItem(i18n("All files"), ALL);
 		mFilterComboBox->insertItem(i18n("Images only"), IMAGES_ONLY);
 		mFilterComboBox->insertItem(i18n("Videos only"), VIDEOS_ONLY);
-		mFilterComboBox->insertItem(i18n("Custom"), CUSTOM);
 
 		QObject::connect(
 			mFilterComboBox, SIGNAL(activated(int)),
+			that, SLOT(updateDirListerFilter()) );
+
+		mMoreCheckBox = new QCheckBox(i18n("More"), mFilterHBox);
+		QObject::connect(
+			mMoreCheckBox, SIGNAL(toggled(bool)),
+			mFilterBar, SLOT(setShown(bool)) );
+		QObject::connect(
+			mMoreCheckBox, SIGNAL(toggled(bool)),
 			that, SLOT(updateDirListerFilter()) );
 	}
 };
@@ -1087,11 +1091,10 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 void FileViewController::updateFromSettings() {
 	d->mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
-	if (FileViewConfig::filterMode()==CUSTOM) {
-		d->mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
-		d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
-		d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
-	}
+	d->mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
+	d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
+	d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
+	
 	updateDirListerFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
@@ -1258,28 +1261,22 @@ void FileViewController::dirListerCanceled() {
 void FileViewController::updateDirListerFilter() {
 	QStringList mimeTypes;
 	FilterMode filterMode = static_cast<FilterMode>( d->mFilterComboBox->currentItem() );
-	bool showImages = filterMode == ALL || filterMode == CUSTOM || filterMode ==IMAGES_ONLY;
-	bool showVideos = filterMode == ALL || filterMode == CUSTOM || filterMode ==VIDEOS_ONLY;
 	
 	if (FileViewConfig::showDirs()) {
 		mimeTypes << "inode/directory";
 		mimeTypes += Archive::mimeTypes();
 	}
 
-	if (showImages) {
+	if (filterMode != VIDEOS_ONLY) {
 		mimeTypes += MimeTypeUtils::rasterImageMimeTypes();
 		mimeTypes << "image/svg";
 	}
 	
-	if (showVideos) {
+	if (filterMode != IMAGES_ONLY) {
 		mimeTypes << "video/";
 	}
 
-	if (filterMode == CUSTOM) {
-		d->mFilterBar->setShown(true);
-		if (!d->mFilterBar->mCustomFilterCheckBox->isChecked()) {
-			d->mFilterBar->mCustomFilterCheckBox->setChecked(true);
-		}
+	if (d->mMoreCheckBox->isChecked()) {
 		QString txt=d->mFilterBar->mNameEdit->text();
 		QDate from=d->mFilterBar->mFromDateEdit->date();
 		QDate to=d->mFilterBar->mToDateEdit->date();
@@ -1287,7 +1284,6 @@ void FileViewController::updateDirListerFilter() {
 		mDirLister->setNameFilter(txt);
 		mDirLister->setDateFilter(from, to);
 	} else {
-		d->mFilterBar->setShown(false);
 		mDirLister->setNameFilter(QString::null);
 		mDirLister->setDateFilter(QDate(), QDate());
 	}

@@ -40,7 +40,6 @@
         <choice name="All"/>
         <choice name="ImagesOnly"/>
         <choice name="VideosOnly"/>
-        <choice name="Custom"/>
       </choices>
     </entry>
     <entry name="nameFilter" type="String"></entry>

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>538</width>
-            <height>80</height>
+            <width>809</width>
+            <height>28</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,234 +23,214 @@
     <property name="caption">
         <string>FilterBar</string>
     </property>
-    <vbox>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>0</number>
+            <number>3</number>
         </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QCheckBox">
+        <widget class="QPushButton">
             <property name="name">
-                <cstring>mCustomFilterCheckBox</cstring>
+                <cstring>mResetNameCombo</cstring>
             </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
-                <string>Custom Filter</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
+                <string></string>
             </property>
         </widget>
-        <widget class="QFrame">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>frame3</cstring>
+                <cstring>textLabel1</cstring>
             </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
+            <property name="text">
+                <string>Name:</string>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>16</width>
-                            <height>16</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout2</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="0" column="1">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Name:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>mNameCombo</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>mResetFrom</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="QDateEdit" row="1" column="5">
-                            <property name="name">
-                                <cstring>mToDateEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QDateEdit" row="1" column="2">
-                            <property name="name">
-                                <cstring>mFromDateEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="1">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>From:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>mFromDateEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="4">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>To:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>mToDateEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="0" column="6">
-                            <property name="name">
-                                <cstring>mFilterButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Filter</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+F</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="0" column="2" rowspan="1" colspan="4">
-                            <property name="name">
-                                <cstring>mNameEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>mResetNameCombo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="1" column="3">
-                            <property name="name">
-                                <cstring>mResetTo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>16</width>
-                            <height>16</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
+            <property name="buddy" stdset="0">
+                <cstring>mNameCombo</cstring>
+            </property>
         </widget>
-    </vbox>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>mNameEdit</cstring>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1_2_2_2_3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Maximum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>12</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>mResetFrom</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>From:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>mFromDateEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QDateEdit">
+            <property name="name">
+                <cstring>mFromDateEdit</cstring>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1_2_2_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Maximum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>12</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>mResetTo</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>To:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>mToDateEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QDateEdit">
+            <property name="name">
+                <cstring>mToDateEdit</cstring>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1_2_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Maximum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>12</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>mFilterButton</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Filter</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+    </hbox>
 </widget>
-<connections>
-    <connection>
-        <sender>mCustomFilterCheckBox</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>frame3</receiver>
-        <slot>setShown(bool)</slot>
-    </connection>
-</connections>
 <tabstops>
     <tabstop>mResetNameCombo</tabstop>
     <tabstop>mResetFrom</tabstop>
