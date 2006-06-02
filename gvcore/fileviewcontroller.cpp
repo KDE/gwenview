@@ -212,7 +212,6 @@ public:
 			mFilterBar->mResetTo, SIGNAL(clicked()),
 			that, SLOT(resetToFilter()) );
 
-		mFilterBar->mNameCombo->setMaxCount(10);
 		QObject::connect(
 			mFilterBar->mFilterButton, SIGNAL(clicked()),
 			that, SLOT(updateDirListerFilter()) );
@@ -454,7 +453,7 @@ FileViewController::~FileViewController() {
 	int filterMode = d->mFilterComboBox->currentItem();
 	FileViewConfig::setFilterMode(filterMode);
 	
-	FileViewConfig::setNameFilter(d->mFilterBar->mNameCombo->currentText());
+	FileViewConfig::setNameFilter(d->mFilterBar->mNameEdit->text());
 	FileViewConfig::setFromDateFilter(d->mFilterBar->mFromDateEdit->date());
 	FileViewConfig::setToDateFilter(d->mFilterBar->mToDateEdit->date());
 	
@@ -589,7 +588,7 @@ void FileViewController::slotSelectFirstSubDir() {
 
 
 void FileViewController::resetNameFilter() {
-	d->mFilterBar->mNameCombo->clearEdit();
+	d->mFilterBar->mNameEdit->clear();
 }
 
 
@@ -1089,7 +1088,7 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 void FileViewController::updateFromSettings() {
 	d->mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
 	if (FileViewConfig::filterMode()==CUSTOM) {
-		d->mFilterBar->mNameCombo->setCurrentText(FileViewConfig::nameFilter());
+		d->mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
 		d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
 		d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
 	}
@@ -1281,7 +1280,7 @@ void FileViewController::updateDirListerFilter() {
 		if (!d->mFilterBar->mCustomFilterCheckBox->isChecked()) {
 			d->mFilterBar->mCustomFilterCheckBox->setChecked(true);
 		}
-		QString txt=d->mFilterBar->mNameCombo->currentText();
+		QString txt=d->mFilterBar->mNameEdit->text();
 		QDate from=d->mFilterBar->mFromDateEdit->date();
 		QDate to=d->mFilterBar->mToDateEdit->date();
 

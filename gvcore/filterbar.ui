@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>538</width>
-            <height>73</height>
+            <height>80</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -76,38 +76,36 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>87</width>
+                            <width>16</width>
                             <height>16</height>
                         </size>
                     </property>
                 </spacer>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout1</cstring>
+                        <cstring>layout2</cstring>
                     </property>
                     <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QPushButton" row="1" column="3">
+                        <widget class="QLabel" row="0" column="1">
                             <property name="name">
-                                <cstring>mResetTo</cstring>
+                                <cstring>textLabel1</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
                                     <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
+                                    <vsizetype>5</vsizetype>
                                     <horstretch>0</horstretch>
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string></string>
+                                <string>Name:</string>
                             </property>
-                        </widget>
-                        <widget class="QDateEdit" row="1" column="2">
-                            <property name="name">
-                                <cstring>mFromDateEdit</cstring>
+                            <property name="buddy" stdset="0">
+                                <cstring>mNameCombo</cstring>
                             </property>
                         </widget>
                         <widget class="QPushButton" row="1" column="0">
@@ -126,68 +124,14 @@
                                 <string></string>
                             </property>
                         </widget>
-                        <widget class="QPushButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>mResetNameCombo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="KHistoryCombo" row="0" column="2" rowspan="1" colspan="4">
-                            <property name="name">
-                                <cstring>mNameCombo</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton" row="0" column="6">
-                            <property name="name">
-                                <cstring>mFilterButton</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Filter</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+F</string>
-                            </property>
-                        </widget>
                         <widget class="QDateEdit" row="1" column="5">
                             <property name="name">
                                 <cstring>mToDateEdit</cstring>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="0" column="1">
+                        <widget class="QDateEdit" row="1" column="2">
                             <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Name:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>mNameCombo</cstring>
+                                <cstring>mFromDateEdit</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="1">
@@ -228,6 +172,54 @@
                                 <cstring>mToDateEdit</cstring>
                             </property>
                         </widget>
+                        <widget class="QPushButton" row="0" column="6">
+                            <property name="name">
+                                <cstring>mFilterButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Filter</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+F</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="2" rowspan="1" colspan="4">
+                            <property name="name">
+                                <cstring>mNameEdit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>mResetNameCombo</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="1" column="3">
+                            <property name="name">
+                                <cstring>mResetTo</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
                     </grid>
                 </widget>
                 <spacer>
@@ -242,7 +234,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>86</width>
+                            <width>16</width>
                             <height>16</height>
                         </size>
                     </property>
@@ -251,15 +243,7 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
-    <connection>
-        <sender>mNameCombo</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>mFilterButton</receiver>
-        <slot>animateClick()</slot>
-    </connection>
     <connection>
         <sender>mCustomFilterCheckBox</sender>
         <signal>toggled(bool)</signal>
@@ -269,7 +253,6 @@
 </connections>
 <tabstops>
     <tabstop>mResetNameCombo</tabstop>
-    <tabstop>mNameCombo</tabstop>
     <tabstop>mResetFrom</tabstop>
     <tabstop>mFromDateEdit</tabstop>
     <tabstop>mResetTo</tabstop>
@@ -277,8 +260,4 @@
     <tabstop>mFilterButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
-</includehints>
 </UI>
