@@ -335,54 +335,58 @@ void MainWindow::goHome() {
 
 
 void MainWindow::renameFile() {
+	KURL url;
 	if (mFileViewController->isVisible()) {
-		mFileViewController->renameFile();
+		KURL::List list = mFileViewController->selectedURLs();
+		Q_ASSERT(list.count()>0);
+		if (list.count()==0) return;
 	} else {
-		FileOperation::rename(mDocument->url(), this);
+		url = mDocument->url();
 	}
+	FileOperation::rename(url, this);
 }
 
 
 void MainWindow::copyFiles() {
+	KURL::List list;
 	if (mFileViewController->isVisible()) {
-		mFileViewController->copyFiles();
+		list = mFileViewController->selectedURLs();
 	} else {
-		KURL::List list;
 		list << mDocument->url();
-		FileOperation::copyTo(list, this);
 	}
+	FileOperation::copyTo(list, this);
 }
 
 void MainWindow::linkFiles() {
+	KURL::List list;
 	if (mFileViewController->isVisible()) {
-		mFileViewController->linkFiles();
+		list = mFileViewController->selectedURLs();
 	} else {
-		KURL::List list;
 		list << mDocument->url();
-		FileOperation::linkTo(list, this);
 	}
+	FileOperation::linkTo(list, this);
 }
 
 
 void MainWindow::moveFiles() {
+	KURL::List list;
 	if (mFileViewController->isVisible()) {
-		mFileViewController->moveFiles();
+		list = mFileViewController->selectedURLs();
 	} else {
-		KURL::List list;
 		list << mDocument->url();
-		FileOperation::moveTo(list, this);
 	}
+	FileOperation::moveTo(list, this);
 }
 
 
 void MainWindow::deleteFiles() {
+	KURL::List list;
 	if (mFileViewController->isVisible()) {
-		mFileViewController->deleteFiles();
+		list = mFileViewController->selectedURLs();
 	} else {
-		KURL::List list;
 		list << mDocument->url();
-		FileOperation::del(list, this);
 	}
+	FileOperation::del(list, this);
 }
 
 
