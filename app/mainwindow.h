@@ -30,8 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurl.h>
 
 // Local
-#include "imageutils/orientation.h"
-
 #include "config.h"
 #ifdef GV_HAVE_KIPI
 #include <libkipi/pluginloader.h>
@@ -172,7 +170,6 @@ private slots:
 	void slotSlideShowChanged(bool);
 	void slotDirRenamed(const KURL& oldURL, const KURL& newURL);
 	void slotDirURLChanged(const KURL&);
-	void modifyImage(ImageUtils::Orientation);
 	void rotateLeft();
 	void rotateRight();
 	void mirror();

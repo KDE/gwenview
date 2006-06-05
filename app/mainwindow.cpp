@@ -83,7 +83,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/externaltoolmanager.h"
 #include "gvcore/fileoperation.h"
 #include "gvcore/archive.h"
-#include "gvcore/batchmanipulator.h"
 #include "gvcore/captionformatter.h"
 #include "gvcore/document.h"
 #include "gvcore/externaltooldialog.h"
@@ -408,34 +407,19 @@ void MainWindow::showFileProperties() {
 
 
 void MainWindow::rotateLeft() {
-	modifyImage(ImageUtils::ROT_270);
+	mDocument->transform(ImageUtils::ROT_270);
 }
 
 void MainWindow::rotateRight() {
-	modifyImage(ImageUtils::ROT_90);
+	mDocument->transform(ImageUtils::ROT_90);
 }
 
 void MainWindow::mirror() {
-	modifyImage(ImageUtils::HFLIP);
+	mDocument->transform(ImageUtils::HFLIP);
 }
 
 void MainWindow::flip() {
-	modifyImage(ImageUtils::VFLIP);
-}
-
-void MainWindow::modifyImage(ImageUtils::Orientation orientation) {
-	const KURL::List& urls=mFileViewController->selectedImageURLs();
-	if (mFileViewController->isVisible() && urls.size()>1) {
-		BatchManipulator manipulator(this, urls, orientation);
-		connect(&manipulator, SIGNAL(imageModified(const KURL&)),
-			mFileViewController, SLOT(updateThumbnail(const KURL&)) );
-		manipulator.apply();
-		if (urls.find(mDocument->url())!=urls.end()) {
-			mDocument->reload();
-		}
-	} else {
-		mDocument->transform(orientation);
-	}
+	mDocument->transform(ImageUtils::VFLIP);
 }
 
 void MainWindow::showFileDialog() {

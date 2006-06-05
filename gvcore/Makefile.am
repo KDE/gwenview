@@ -20,7 +20,6 @@ libgwenviewcore_la_SOURCES = \
 	thumbnailloadjob.cpp \
 	imageview.cpp \
 	imageviewcontroller.cpp \
-	batchmanipulator.cpp \
 	document.cpp \
 	externaltoolmanager.cpp \
 	externaltoolcontext.cpp \
