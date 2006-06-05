@@ -26,16 +26,71 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 #include "gvcore/cache.h"
+#include <../gvcore/fileviewconfig.h>
 #include "mainwindow.h"
 namespace Gwenview {
 
 static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
+	{ "filter-type <all,images,videos>", I18N_NOOP("Filter by file type"), 0 },
+	{ "filter-name <pattern>", I18N_NOOP("Filter by file pattern (*.jpg, 01*...)"), 0 },
+	{ "filter-from <date>", I18N_NOOP("Only show files newer than <date>"), 0 },
+	{ "filter-to <date>", I18N_NOOP("Only show files older than <date>"), 0 },
 	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
 	KCmdLineLastOption
 };
 
 static const char version[] = "1.3.91";
+
+
+void parseFilterArgs(KCmdLineArgs* args) {
+	QString filterType = args->getOption("filter-type");
+	QString filterName = args->getOption("filter-name");
+	QString filterFrom = args->getOption("filter-from");
+	QString filterTo = args->getOption("filter-to");
+	// Do nothing if there is no filter
+	if (filterType.isEmpty() && filterName.isEmpty() 
+		&& filterFrom.isEmpty() && filterTo.isEmpty())
+	{
+		return;
+	}
+
+	QStringList typeList;
+	typeList << "all" << "images" << "videos";
+	int mode = typeList.findIndex(filterType);
+	if (mode == -1) {
+		kdWarning() << "Invalid value for filter-type option\n";
+	} else {
+		FileViewConfig::setFilterMode(mode);
+	}
+
+	FileViewConfig::setShowFilterBar(
+		!filterName.isEmpty()
+		|| !filterFrom.isEmpty()
+		|| !filterTo.isEmpty() );
+
+	FileViewConfig::setNameFilter(filterName);
+
+	bool ok = false;
+	QDate date;
+	if (!filterFrom.isEmpty()) {
+		date = KGlobal::locale()->readDate(filterFrom, &ok);
+		if (!ok) {
+			kdWarning() << "Invalid value for filter-from option\n";
+		}
+	}
+	FileViewConfig::setFromDateFilter(date);
+
+	date=QDate();
+	if (!filterTo.isEmpty()) {
+		date = KGlobal::locale()->readDate(filterTo, &ok);
+		if (!ok) {
+			kdWarning() << "Invalid value for filter-to option\n";
+		}
+	}
+	FileViewConfig::setToDateFilter(date);
+}
+
 
 #ifndef __KDE_HAVE_GCC_VISIBILITY
 #undef KDE_EXPORT
@@ -73,12 +128,14 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 	if (kapplication.isRestored()) {
 		RESTORE(MainWindow)
 	} else {
-		MainWindow *mainWindow = new MainWindow;
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+		parseFilterArgs(args);
+
+		MainWindow *mainWindow = new MainWindow;
 
 		bool fullscreen=args->isSet("f");
 		if (fullscreen) mainWindow->setFullScreen(true);
-		
+
 		KURL url;
 		if (args->count()>0) {
 			url=args->url(0);
