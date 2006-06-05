@@ -68,7 +68,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	Cache::instance()->ref();
 
 	mBrowserExtension = new GVDirPartBrowserExtension(this);
-	mBrowserExtension->updateActions();
 
 	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
 	mSplitter->setFocusPolicy(QWidget::ClickFocus);
@@ -77,15 +76,11 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	// Create the widgets
 	mDocument = new Document(this);
 	mFileViewController = new FileViewController(mSplitter, actionCollection());
-	connect( mFileViewController, SIGNAL(requestContextMenu(const QPoint&, bool)),
-		mBrowserExtension, SLOT(openFileViewContextMenu(const QPoint&, bool)) );
 	int width=GVDirPartConfig::fileViewWidth();
 	if (width!=-1) {
 		mFileViewController->resize(width, 10);
 	}
 	mImageView = new ImageView(mSplitter, mDocument, actionCollection());
-	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
-		mBrowserExtension, SLOT(openImageViewContextMenu(const QPoint&)) );
 	mSplitter->setResizeMode(mFileViewController, QSplitter::KeepSize);
 
 	mSlideShow = new SlideShow(mDocument);
@@ -95,12 +90,24 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
+	connect(mFileViewController, SIGNAL(requestContextMenu(const QPoint&, bool)),
+		mBrowserExtension, SLOT(openFileViewContextMenu(const QPoint&, bool)) );
+
 	connect(mFileViewController, SIGNAL(urlChanged(const KURL&)),
 		this, SLOT(urlChanged(const KURL&)) );
+
 	connect(mFileViewController, SIGNAL(directoryChanged(const KURL&)),
 		this, SLOT(directoryChanged(const KURL&)) );
+
+	connect(mFileViewController, SIGNAL(selectionChanged()),
+		mBrowserExtension, SLOT(updateActions()) );
+
+	connect(mImageView, SIGNAL(requestContextMenu(const QPoint&)),
+		mBrowserExtension, SLOT(openImageViewContextMenu(const QPoint&)) );
+
 	connect(mSlideShow, SIGNAL(nextURL(const KURL&)),
 		this, SLOT(urlChanged(const KURL&)) );
+
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
 		this, SLOT(loaded(const KURL&)) );
 
@@ -114,6 +121,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	mToggleSlideShow->setCheckedState( i18n("Stop Slide Show" ));
 
 	setXMLFile( "gvdirpart/gvdirpart.rc" );
+	mBrowserExtension->updateActions();
 }
 
 GVDirPart::~GVDirPart() {
@@ -236,37 +244,22 @@ GVDirPartBrowserExtension::~GVDirPartBrowserExtension() {
 }
 
 void GVDirPartBrowserExtension::updateActions() {
-	/*
-	emit enableAction( "copy", true );
-	emit enableAction( "cut", true );
-	emit enableAction( "trash", true);
-	emit enableAction( "del", true );
-	emit enableAction( "editMimeType", true );
-	*/
+	bool somethingSelected = mGVDirPart->fileViewController()->selectionSize() != 0;
+	emit enableAction("trash", somethingSelected);
+	emit enableAction("del", somethingSelected);
 }
 
 void GVDirPartBrowserExtension::del() {
-	kdDebug() << k_funcinfo << endl;
+	FileViewController* fv = mGVDirPart->fileViewController();
+	FileOperation::realDelete(fv->selectedURLs(), fv);
+	
 }
 
 void GVDirPartBrowserExtension::trash() {
-	kdDebug() << k_funcinfo << endl;
+	FileViewController* fv = mGVDirPart->fileViewController();
+	FileOperation::trash(fv->selectedURLs(), fv);
 }
 
-void GVDirPartBrowserExtension::editMimeType() {
-	kdDebug() << k_funcinfo << endl;
-}
-
-void GVDirPartBrowserExtension::refresh() {
-	kdDebug() << k_funcinfo << endl;
-}
-
-void GVDirPartBrowserExtension::copy() {
-	kdDebug() << k_funcinfo << endl;
-}
-void GVDirPartBrowserExtension::cut() {
-	kdDebug() << k_funcinfo << endl;
-}
 
 void GVDirPartBrowserExtension::openFileViewContextMenu(const QPoint& pos, bool onItem) {
     if (onItem) {

@@ -51,13 +51,9 @@ public:
 
 public slots:
 	void updateActions();
-	void refresh();
 
-	void copy();
-	void cut();
 	void trash();
 	void del();
-	void editMimeType();
 
 	void print();
 
