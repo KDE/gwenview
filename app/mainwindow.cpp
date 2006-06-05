@@ -79,6 +79,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "truncatedtextlabel.h"
 #include "vtabwidget.h"
 
+#include "gvcore/externaltoolcontext.h"
+#include "gvcore/externaltoolmanager.h"
 #include "gvcore/fileoperation.h"
 #include "gvcore/archive.h"
 #include "gvcore/batchmanipulator.h"
@@ -390,11 +392,17 @@ void MainWindow::deleteFiles() {
 }
 
 
+void MainWindow::makeDir() {
+	FileOperation::makeDir(mFileViewController->dirURL(), this);
+}
+
+
 void MainWindow::showFileProperties() {
 	if (mFileViewController->isVisible()) {
-		mFileViewController->showFileProperties();
+		const KFileItemList* list = mFileViewController->currentFileView()->selectedItems();
+		(void)new KPropertiesDialog(*list, this);
 	} else {
-		(void)new KPropertiesDialog(mDocument->url());
+		(void)new KPropertiesDialog(mDocument->url(), this);
 	}
 }
 
@@ -461,6 +469,50 @@ void MainWindow::printFile() {
 // Private slots
 //
 //-----------------------------------------------------------------------
+void MainWindow::openFileViewControllerContextMenu(const QPoint& pos, bool onItem) {
+	int selectionSize;
+	ExternalToolContext* externalToolContext;
+
+	if (onItem) {
+		const KFileItemList* items = mFileViewController->currentFileView()->selectedItems();
+		selectionSize = items->count();
+		externalToolContext =
+			ExternalToolManager::instance()->createContext(this, items);
+	} else {
+		selectionSize = 0;
+		externalToolContext =
+			ExternalToolManager::instance()->createContext(this, mFileViewController->dirURL());
+	}
+
+	QPopupMenu menu(this);
+
+	menu.insertItem(
+		i18n("External Tools"), externalToolContext->popupMenu());
+
+	actionCollection()->action("view_sort")->plug(&menu);
+	mGoUp->plug(&menu);
+
+	menu.insertItem(SmallIcon("folder_new"), i18n("New Folder..."), this, SLOT(makeDir()));
+
+	menu.insertSeparator();
+
+	if (selectionSize==1) {
+		mRenameFile->plug(&menu);
+	}
+
+	if (selectionSize>=1) {
+		mCopyFiles->plug(&menu);
+		mMoveFiles->plug(&menu);
+		mLinkFiles->plug(&menu);
+		mDeleteFiles->plug(&menu);
+		menu.insertSeparator();
+	}
+
+	mShowFileProperties->plug(&menu);
+	menu.exec(pos);
+}
+
+
 void MainWindow::slotImageLoading() {
 	if (FullScreenConfig::showBusyPtr() || !mToggleFullScreen->isChecked()) {
 		if( !mLoadingCursor ) {
@@ -1006,6 +1058,9 @@ void MainWindow::createObjectInteractions() {
 	// Make sure file actions are correctly updated
 	connect(mFileViewController, SIGNAL(selectionChanged()),
 		this, SLOT(updateImageActions()) );
+
+	connect(mFileViewController, SIGNAL(requestContextMenu(const QPoint&, bool)),
+		this, SLOT(openFileViewControllerContextMenu(const QPoint&, bool)) );
 
 	// Bookmarks
 	QString file = locate( "data", "kfile/bookmarks.xml" );

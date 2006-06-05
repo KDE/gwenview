@@ -55,27 +55,6 @@ namespace Gwenview {
 const char CONFIG_CACHE_GROUP[]="cache";
 
 
-class GVDirPartFileViewController : public FileViewController {
-public:
-	GVDirPartFileViewController(QWidget* parent, KActionCollection* actionCollection, GVDirPartBrowserExtension* browserExtension)
-	: FileViewController(parent, actionCollection)
-	, mBrowserExtension(browserExtension) {}
-
-protected:
-	virtual void openContextMenu(const QPoint& pos, bool onItem) {
-		if (onItem) {
-			const KFileItemList* items=currentFileView()->selectedItems();
-			emit mBrowserExtension->popupMenu(pos, *items);
-		} else {
-			emit mBrowserExtension->popupMenu(pos, dirURL(), 0);
-		}
-	}
-
-private:
-	GVDirPartBrowserExtension* mBrowserExtension;
-};
-
-
 //Factory Code
 typedef KParts::GenericFactory<GVDirPart> GVDirFactory;
 K_EXPORT_COMPONENT_FACTORY( libgvdirpart /*library name*/, GVDirFactory )
@@ -97,14 +76,16 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 
 	// Create the widgets
 	mDocument = new Document(this);
-	mFileViewController = new GVDirPartFileViewController(mSplitter, actionCollection(), mBrowserExtension);
+	mFileViewController = new FileViewController(mSplitter, actionCollection());
+	connect( mFileViewController, SIGNAL(requestContextMenu(const QPoint&, bool)),
+		mBrowserExtension, SLOT(openFileViewContextMenu(const QPoint&, bool)) );
 	int width=GVDirPartConfig::fileViewWidth();
 	if (width!=-1) {
 		mFileViewController->resize(width, 10);
 	}
 	mImageView = new ImageView(mSplitter, mDocument, actionCollection());
 	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
-		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
+		mBrowserExtension, SLOT(openImageViewContextMenu(const QPoint&)) );
 	mSplitter->setResizeMode(mFileViewController, QSplitter::KeepSize);
 
 	mSlideShow = new SlideShow(mDocument);
@@ -287,7 +268,17 @@ void GVDirPartBrowserExtension::cut() {
 	kdDebug() << k_funcinfo << endl;
 }
 
-void GVDirPartBrowserExtension::openContextMenu(const QPoint& pos) {
+void GVDirPartBrowserExtension::openFileViewContextMenu(const QPoint& pos, bool onItem) {
+    if (onItem) {
+        const KFileItemList* items = mGVDirPart->fileViewController()->currentFileView()->selectedItems();
+        emit popupMenu(pos, *items);
+    } else {
+        emit popupMenu(pos, mGVDirPart->fileViewController()->dirURL(), 0);
+    }
+}
+
+
+void GVDirPartBrowserExtension::openImageViewContextMenu(const QPoint& pos) {
 	KURL url=mGVDirPart->url();
 	QString mimeType=KMimeType::findByURL(url)->name();
 	emit popupMenu(pos, url, mimeType);

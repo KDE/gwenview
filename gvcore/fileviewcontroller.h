@@ -123,13 +123,6 @@ public slots:
 
 	void updateThumbnail(const KURL&);
 
-	void openParentDir();
-	void showFileProperties();
-	void deleteFiles();
-	void renameFile();
-	void copyFiles();
-	void moveFiles();
-	void linkFiles();
 	void updateFromSettings();
 
 
@@ -146,9 +139,7 @@ signals:
 	void imageDoubleClicked();
 	void shownFileItemRefreshed(const KFileItem*);
 	void sortingChanged();
-
-protected slots:
-	virtual void openContextMenu(const QPoint& pos, bool onItem);
+	void requestContextMenu(const QPoint& pos, bool onItem);
 
 private slots:
 	void delayedDirListerCompleted();
@@ -187,7 +178,6 @@ private slots:
 
 	void openDropURLMenu(QDropEvent*, KFileItem*);
 
-	void makeDir();
 	void prefetchDone();
 
 	void resetNameFilter();

@@ -62,7 +62,8 @@ public slots:
 	void print();
 
 private slots:
-	void openContextMenu(const QPoint&);
+	void openFileViewContextMenu(const QPoint&, bool onItem);
+	void openImageViewContextMenu(const QPoint&);
 	
 private:
 	GVDirPart* mGVDirPart;
@@ -91,6 +92,10 @@ public:
 	 * Print the image being viewed if there is one
 	 */
 	void print();
+
+	FileViewController* fileViewController() const { return mFileViewController; }
+
+
 protected:
 	void partActivateEvent(KParts::PartActivateEvent* event);
 

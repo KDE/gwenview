@@ -54,8 +54,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "archive.h"
 #include "cache.h"
 #include "cursortracker.h"
-#include "externaltoolcontext.h"
-#include "externaltoolmanager.h"
 #include "filedetailview.h"
 #include "fileoperation.h"
 #include "filethumbnailview.h"
@@ -796,74 +794,13 @@ void FileViewController::setSorting() {
 // Context menu
 //
 //-----------------------------------------------------------------------
-void FileViewController::openContextMenu(const QPoint& pos, bool onItem) {
-	int selectionSize;
-	ExternalToolContext* externalToolContext;
-
-	if (onItem) {
-		selectionSize=currentFileView()->selectedItems()->count();
-		externalToolContext=
-			ExternalToolManager::instance()->createContext(
-			this, currentFileView()->selectedItems());
-	} else {
-		selectionSize=0;
-		externalToolContext=
-			ExternalToolManager::instance()->createContext(
-			this, mDirURL);
-	}
-
-	QPopupMenu menu(d->mStack);
-
-
-	menu.insertItem(
-		i18n("External Tools"), externalToolContext->popupMenu());
-
-	d->mSortAction->plug(&menu);
-
-	menu.connectItem(
-		menu.insertItem( i18n("Parent Folder") ),
-		this,SLOT(openParentDir()) );
-
-	menu.insertItem(SmallIcon("folder_new"), i18n("New Folder..."), this, SLOT(makeDir()));
-
-	menu.insertSeparator();
-
-	if (selectionSize==1) {
-		menu.connectItem(
-			menu.insertItem( i18n("&Rename...") ),
-			this,SLOT(renameFile()) );
-	}
-
-	if (selectionSize>=1) {
-		menu.connectItem(
-			menu.insertItem( i18n("&Copy To...") ),
-			this,SLOT(copyFiles()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Move To...") ),
-			this,SLOT(moveFiles()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Link To...") ),
-			this,SLOT(linkFiles()) );
-		menu.connectItem(
-			menu.insertItem( i18n("&Delete") ),
-			this,SLOT(deleteFiles()) );
-		menu.insertSeparator();
-	}
-
-	menu.connectItem(
-		menu.insertItem( i18n("Properties") ),
-		this,SLOT(showFileProperties()) );
-	menu.exec(pos);
-}
-
-
 void FileViewController::openContextMenu(KListView*,QListViewItem* item,const QPoint& pos) {
-	openContextMenu(pos, item!=0);
+	emit requestContextMenu(pos, item!=0);
 }
 
 
 void FileViewController::openContextMenu(QIconViewItem* item,const QPoint& pos) {
-	openContextMenu(pos, item!=0);
+	emit requestContextMenu(pos, item!=0);
 }
 
 
@@ -923,57 +860,6 @@ KURL::List FileViewController::selectedImageURLs() const {
 		if (item && !Archive::fileItemIsDirOrArchive(item)) list.append(item->url());
 	}
 	return list;
-}
-
-
-void FileViewController::openParentDir() {
-	KURL url(mDirURL.upURL());
-	emit urlChanged(url);
-	emit directoryChanged(url);
-}
-
-
-void FileViewController::copyFiles() {
-	KURL::List list=selectedURLs();
-	FileOperation::copyTo(list, d->mStack);
-}
-
-void FileViewController::linkFiles() {
-	KURL::List list=selectedURLs();
-	FileOperation::linkTo(list, d->mStack);
-}
-
-void FileViewController::moveFiles() {
-	KURL::List list=selectedURLs();
-	FileOperation::moveTo(list, d->mStack);
-}
-
-
-void FileViewController::deleteFiles() {
-	KURL::List list=selectedURLs();
-	FileOperation::del(list, d->mStack);
-}
-
-
-void FileViewController::showFileProperties() {
-	const KFileItemList* selectedItems=currentFileView()->selectedItems();
-	if (selectedItems->count()>0) {
-		(void)new KPropertiesDialog(*selectedItems);
-	} else {
-		(void)new KPropertiesDialog(mDirURL);
-	}
-}
-
-
-void FileViewController::renameFile() {
-	const KFileItemList* selectedItems=currentFileView()->selectedItems();
-	const KFileItem* item;
-	if (selectedItems->count()>0) {
-		item=selectedItems->getFirst();
-	} else {
-		item=currentFileView()->shownFileItem();
-	}
-	if (item) FileOperation::rename(item->url(), d->mStack);
 }
 
 
@@ -1398,11 +1284,6 @@ KFileItem* FileViewController::findItemByFileName(const QString& fileName) const
 	}
 
 	return 0L;
-}
-
-
-void FileViewController::makeDir() {
-	FileOperation::makeDir(url().directory(), this);
 }
 
 

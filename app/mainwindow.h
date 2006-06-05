@@ -147,6 +147,7 @@ private slots:
 	void goUp();
 	void goUpTo(int);
 
+	void makeDir();
 	void goHome();
 	void renameFile();
 	void copyFiles();
@@ -213,6 +214,8 @@ private slots:
 	void showHint(const QString&);
 
 	void fillGoUpMenu();
+
+	void openFileViewControllerContextMenu(const QPoint& pos, bool onItem);
 };
 
 
