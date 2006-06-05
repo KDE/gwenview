@@ -457,6 +457,7 @@ FileViewController::~FileViewController() {
 	int filterMode = d->mFilterComboBox->currentItem();
 	FileViewConfig::setFilterMode(filterMode);
 	
+	FileViewConfig::setShowFilterBar(d->mShowFilterBarCheckBox->isChecked());
 	FileViewConfig::setNameFilter(d->mFilterBar->mNameEdit->text());
 	FileViewConfig::setFromDateFilter(d->mFilterBar->mFromDateEdit->date());
 	FileViewConfig::setToDateFilter(d->mFilterBar->mToDateEdit->date());
@@ -1091,6 +1092,7 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 void FileViewController::updateFromSettings() {
 	d->mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
+	d->mShowFilterBarCheckBox->setChecked(FileViewConfig::showFilterBar());
 	d->mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
 	d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
 	d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
