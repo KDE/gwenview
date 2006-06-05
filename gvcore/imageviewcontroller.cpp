@@ -389,7 +389,12 @@ void ImageViewController::slotAutoHide() {
 			return;
 		}
 	}
-	QApplication::setOverrideCursor(blankCursor);
+
+	// Only hide cursor if we are not over a dialog
+	QWidget* widget = KApplication::kApplication()->activeWindow();
+	if (!widget || !widget->inherits("QDialog")) {
+		QApplication::setOverrideCursor(blankCursor);
+	}
 }
 
 
@@ -404,13 +409,15 @@ void ImageViewController::updateFromSettings() {
 
 
 /**
- * This application eventFilter monitors mouse moves and make sure the
- * position of the fullscreen bar is updated
+ * This event filter monitors mouse moves and make sure the position of the
+ * fullscreen bar is updated.
  */
 bool ImageViewController::eventFilter(QObject* object, QEvent* event) {
 	if (!d->mFullScreen) return false;
 	if (!event->type()==QEvent::MouseMove) return false;
-			
+
+	// Check we must filter this object. This is an application filter, so we
+	// have to check we are not dealing with another object.
 	bool isAChildOfStack=false;
 	QObject* parentObject;
 	for (parentObject=object->parent(); parentObject; parentObject=parentObject->parent()) {
