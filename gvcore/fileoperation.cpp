@@ -62,12 +62,23 @@ void makeDir(const KURL& parentURL, QWidget* parent) {
 }
 
 void del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
-	FileOpObject* op;
 	if (FileOperationConfig::deleteToTrash()) {
-		op=new FileOpTrashObject(url,parent);
+		trash(url, parent, receiver, slot);
 	} else {
-		op=new FileOpRealDeleteObject(url,parent);
+		realDelete(url, parent, receiver, slot);
 	}
+}
+
+
+void trash(const KURL::List& url, QWidget* parent, QObject* receiver, const char* slot) {
+	FileOpObject* op = new FileOpTrashObject(url,parent);
+	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
+	(*op)();
+}
+
+
+void realDelete(const KURL::List& url, QWidget* parent, QObject* receiver, const char* slot) {
+	FileOpObject* op = new FileOpRealDeleteObject(url,parent);
 	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
