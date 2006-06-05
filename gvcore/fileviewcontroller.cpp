@@ -187,7 +187,7 @@ public:
 
 	QHBox* mFilterHBox;
 	QComboBox* mFilterComboBox;
-	QCheckBox* mMoreCheckBox;
+	QCheckBox* mShowFilterBarCheckBox;
 
 	void initFilterBar() {
 		mFilterBar=new FilterBar(that);
@@ -229,12 +229,12 @@ public:
 			mFilterComboBox, SIGNAL(activated(int)),
 			that, SLOT(updateDirListerFilter()) );
 
-		mMoreCheckBox = new QCheckBox(i18n("More"), mFilterHBox);
+		mShowFilterBarCheckBox = new QCheckBox(i18n("More"), mFilterHBox);
 		QObject::connect(
-			mMoreCheckBox, SIGNAL(toggled(bool)),
+			mShowFilterBarCheckBox, SIGNAL(toggled(bool)),
 			mFilterBar, SLOT(setShown(bool)) );
 		QObject::connect(
-			mMoreCheckBox, SIGNAL(toggled(bool)),
+			mShowFilterBarCheckBox, SIGNAL(toggled(bool)),
 			that, SLOT(updateDirListerFilter()) );
 	}
 };
@@ -1276,7 +1276,7 @@ void FileViewController::updateDirListerFilter() {
 		mimeTypes << "video/";
 	}
 
-	if (d->mMoreCheckBox->isChecked()) {
+	if (d->mShowFilterBarCheckBox->isChecked()) {
 		QString txt=d->mFilterBar->mNameEdit->text();
 		QDate from=d->mFilterBar->mFromDateEdit->date();
 		QDate to=d->mFilterBar->mToDateEdit->date();
