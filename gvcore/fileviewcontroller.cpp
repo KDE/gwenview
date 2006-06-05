@@ -39,7 +39,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kiconeffect.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kinputdialog.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
@@ -1403,27 +1402,8 @@ KFileItem* FileViewController::findItemByFileName(const QString& fileName) const
 
 
 void FileViewController::makeDir() {
-	KIO::Job* job;
-
-	bool ok;
-	QString newDir=KInputDialog::getText(
-			i18n("Creating Folder"),
-			i18n("Enter the name of the new folder:"),
-			QString::null, &ok, d->mStack);
-	if (!ok) return;
-
-	KURL newURL(url().directory());
-	newURL.addPath(newDir);
-	job=KIO::mkdir(newURL);
-
-	connect( job, SIGNAL(result(KIO::Job*)), this, SLOT(slotDirMade(KIO::Job*)) );
+	FileOperation::makeDir(url().directory(), this);
 }
 
-void FileViewController::slotDirMade(KIO::Job* job) {
-	if (job->error()) {
-		job->showErrorDialog(d->mStack);
-		return;
-	}
-}
 
 } // namespace

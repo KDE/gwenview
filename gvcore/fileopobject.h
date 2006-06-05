@@ -85,6 +85,12 @@ public:
 	void operator()();
 };
 
+class FileOpMakeDirObject : public FileOpObject {
+Q_OBJECT
+public:
+    FileOpMakeDirObject(const KURL& url, QWidget* parent=0L) : FileOpObject(url, parent) {}
+	void operator()();
+};
 
 class FileOpTrashObject : public FileOpObject {
 Q_OBJECT

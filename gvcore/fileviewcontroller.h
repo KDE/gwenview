@@ -188,7 +188,6 @@ private slots:
 	void openDropURLMenu(QDropEvent*, KFileItem*);
 
 	void makeDir();
-	void slotDirMade(KIO::Job* job);
 	void prefetchDone();
 
 	void resetNameFilter();

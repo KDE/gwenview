@@ -42,6 +42,7 @@ namespace FileOperation {
 LIBGWENVIEW_EXPORT void copyTo(const KURL::List&,QWidget* parent=0L);
 LIBGWENVIEW_EXPORT void moveTo(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 LIBGWENVIEW_EXPORT void linkTo(const KURL::List& srcURL,QWidget* parent);
+LIBGWENVIEW_EXPORT void makeDir(const KURL& parentURL, QWidget* parent);
 LIBGWENVIEW_EXPORT void del(const KURL::List&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 LIBGWENVIEW_EXPORT void rename(const KURL&,QWidget* parent,QObject* receiver=0L,const char* slot=0L);
 

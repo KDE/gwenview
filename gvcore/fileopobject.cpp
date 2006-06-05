@@ -185,6 +185,25 @@ void FileOpMoveToObject::operator()() {
 }
 
 
+//-FileOpMakeDirObject-------------------------------------------------------------
+void FileOpMakeDirObject::operator()() {
+	bool ok;
+	QString newDir=KInputDialog::getText(
+			i18n("Creating Folder"),
+			i18n("Enter the name of the new folder:"),
+			QString::null, &ok, mParent);
+	if (!ok) return;
+
+	KURL newURL(mURLList.first());
+	newURL.addPath(newDir);
+    KIO::Job* job=KIO::mkdir(newURL);
+	job->setWindow(mParent->topLevelWidget());
+
+	connect( job, SIGNAL(result(KIO::Job*)),
+        this, SLOT( slotResult(KIO::Job*)) );
+}
+
+
 //-FileOpTrashObject---------------------------------------------------------------
 void FileOpTrashObject::operator()() {
 	KURL trashURL("trash:/");
