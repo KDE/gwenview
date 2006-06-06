@@ -79,7 +79,6 @@ public:
 const int AUTO_HIDE_TIMEOUT=4000;
 
 
-
 //------------------------------------------------------------------------
 //
 // ImageViewController::Private
@@ -101,7 +100,6 @@ struct ImageViewController::Private {
 	
 	QTimer* mAutoHideTimer;
 	
-	QString mPlayerLibrary;
 	KParts::ReadOnlyPart* mPlayerPart;
 	
 	// Fullscreen stuff
@@ -138,36 +136,28 @@ struct ImageViewController::Private {
 
 
 	void createPlayerPart(void) {
+        if (mPlayerPart) {
+            setXMLGUIClient(0);
+            delete mPlayerPart;
+        }
+        mPlayerPart=0;
+
 		QString mimeType=KMimeType::findByURL(mDocument->url())->name();
 		KService::Ptr service = KServiceTypeProfile::preferredService(mimeType, "KParts/ReadOnlyPart");
 		if (!service) {
 			kdWarning() << "Couldn't find a KPart for " << mimeType << endl;
-			mPlayerLibrary=QString::null;
-			if (mPlayerPart) {
-				setXMLGUIClient(0);
-				delete mPlayerPart;
-			}
-			mPlayerPart=0;
 			return;
 		}
 
 		QString library=service->library();
 		Q_ASSERT(!library.isNull());
 		LOG("Library:" << library);
-		if (library!=mPlayerLibrary) {
-				
-			KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
-			if (!part) {
-				kdWarning() << "Failed to instantiate KPart from library " << library << endl;
-				return;
-			}
-			setXMLGUIClient(0);
-			delete mPlayerPart;
-			mPlayerPart=part;
-			mPlayerLibrary=library;
-			
-			mStack->addWidget(mPlayerPart->widget());
-		}
+        mPlayerPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
+        if (!mPlayerPart) {
+            kdWarning() << "Failed to instantiate KPart from library " << library << endl;
+            return;
+        }
+        mStack->addWidget(mPlayerPart->widget());
 		setXMLGUIClient(mPlayerPart);
 	}
 	
@@ -201,13 +191,11 @@ struct ImageViewController::Private {
 			return;
 		}
 
-		// If the part implements the KMediaPlayer::Player interface, stop
-		// playing (needed for Kaboodle)
-		KMediaPlayer::Player* player=dynamic_cast<KMediaPlayer::Player *>(mPlayerPart);
-		if (player) {
-			player->stop();
-		}
-		setXMLGUIClient(0);
+        if (mPlayerPart) {
+			setXMLGUIClient(0);
+            delete mPlayerPart;
+			mPlayerPart=0;
+        }
 		plugImageViewActions();
 		mStack->raiseWidget(mImageView);
 	}
