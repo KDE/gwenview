@@ -136,11 +136,11 @@ struct ImageViewController::Private {
 
 
 	void createPlayerPart(void) {
-        if (mPlayerPart) {
-            setXMLGUIClient(0);
-            delete mPlayerPart;
-        }
-        mPlayerPart=0;
+		if (mPlayerPart) {
+			setXMLGUIClient(0);
+			delete mPlayerPart;
+		}
+		mPlayerPart=0;
 
 		QString mimeType=KMimeType::findByURL(mDocument->url())->name();
 		KService::Ptr service = KServiceTypeProfile::preferredService(mimeType, "KParts/ReadOnlyPart");
@@ -152,12 +152,12 @@ struct ImageViewController::Private {
 		QString library=service->library();
 		Q_ASSERT(!library.isNull());
 		LOG("Library:" << library);
-        mPlayerPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
-        if (!mPlayerPart) {
-            kdWarning() << "Failed to instantiate KPart from library " << library << endl;
-            return;
-        }
-        mStack->addWidget(mPlayerPart->widget());
+		mPlayerPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mStack, 0, mStack, 0);
+		if (!mPlayerPart) {
+			kdWarning() << "Failed to instantiate KPart from library " << library << endl;
+			return;
+		}
+		mStack->addWidget(mPlayerPart->widget());
 		setXMLGUIClient(mPlayerPart);
 	}
 	
@@ -191,11 +191,11 @@ struct ImageViewController::Private {
 			return;
 		}
 
-        if (mPlayerPart) {
+		if (mPlayerPart) {
 			setXMLGUIClient(0);
-            delete mPlayerPart;
+			delete mPlayerPart;
 			mPlayerPart=0;
-        }
+		}
 		plugImageViewActions();
 		mStack->raiseWidget(mImageView);
 	}
