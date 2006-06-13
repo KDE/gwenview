@@ -29,11 +29,15 @@ Copyright 2000-2004 Aurélien Gâteau
 
 // KDE
 #include <kurl.h>
+
+// Local
+#include "libgwenview_export.h"
+
 class QPopupMenu;
 class KService;
 
 namespace Gwenview {
-class ExternalToolContext : public QObject {
+class LIBGWENVIEW_EXPORT ExternalToolContext : public QObject {
 Q_OBJECT
 public:
 	ExternalToolContext(QObject* parent,

@@ -24,6 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qcstring.h>
 
+// Local
+#include "libgwenview_export.h"
+
 class KFileItem;
 class KURL;
 
@@ -34,7 +37,7 @@ namespace Gwenview {
 namespace MimeTypeUtils {
 enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
 
-const QStringList& rasterImageMimeTypes();
+LIBGWENVIEW_EXPORT const QStringList& rasterImageMimeTypes();
 Kind fileItemKind(const KFileItem*);
 Kind urlKind(const KURL&);
 Kind determineKindFromContent(const QByteArray&);

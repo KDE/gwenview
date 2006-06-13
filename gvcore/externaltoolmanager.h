@@ -28,6 +28,9 @@ Copyright 2000-2004 Aurélien Gâteau
 // KDE
 #include <kfileitem.h>
 
+// Local
+#include "libgwenview_export.h"
+
 class KActionMenu;
 class KURL;
 
@@ -35,7 +38,7 @@ namespace Gwenview {
 class ExternalToolContext;
 class ExternalToolManagerPrivate;
 
-class ExternalToolManager {
+class LIBGWENVIEW_EXPORT ExternalToolManager {
 public:
 	~ExternalToolManager();
 	

@@ -27,6 +27,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // KDE
 #include <kaction.h>
 
+// Local
+#include "libgwenview_export.h"
+
 class QPoint;
 class QWidget;
 
@@ -39,7 +42,7 @@ class Document;
 class ImageView;
 
 
-class ImageViewController : public QObject {
+class LIBGWENVIEW_EXPORT ImageViewController : public QObject {
 Q_OBJECT
 public:
 	ImageViewController(QWidget* parent, Document*, KActionCollection*);
