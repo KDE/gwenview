@@ -215,10 +215,8 @@ public:
 		mFilterHBox=new QHBox(mToolBar, "kde toolbar widget");
 		mFilterHBox->setSpacing(KDialog::spacingHint());
 
-		new QLabel(i18n("Filter:"), mFilterHBox);
-
 		mFilterComboBox=new QComboBox(mFilterHBox);
-		mFilterComboBox->insertItem(i18n("All files"), ALL);
+		mFilterComboBox->insertItem(i18n("No filter"), ALL);
 		mFilterComboBox->insertItem(i18n("Images only"), IMAGES_ONLY);
 		mFilterComboBox->insertItem(i18n("Videos only"), VIDEOS_ONLY);
 
