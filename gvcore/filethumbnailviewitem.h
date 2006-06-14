@@ -40,7 +40,7 @@ public:
 	class Line;
 	class CroppedLine;
 	class WrappedLine;
-	enum { PADDING=4 , SHADOW=2 };
+	enum { PADDING=4 };
 
 	FileThumbnailViewItem(QIconView* parent,const QString& text,const QPixmap& icon, KFileItem* fileItem);
 	~FileThumbnailViewItem();

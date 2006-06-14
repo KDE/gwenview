@@ -607,13 +607,11 @@ void FileThumbnailView::updateGrid() {
 		setGridX(
 			d->mThumbnailSize
 			+ FileThumbnailViewItem::PADDING*3
-			+ FileThumbnailViewItem::SHADOW
 			+ RIGHT_TEXT_WIDTH);
 	} else {
 		setGridX(
 			QMAX(d->mThumbnailSize, BOTTOM_MIN_TEXT_WIDTH)
-			+ FileThumbnailViewItem::PADDING*2
-			+ FileThumbnailViewItem::SHADOW);
+			+ FileThumbnailViewItem::PADDING*2);
 	}
 	setSpacing(d->mMarginSize);
 }

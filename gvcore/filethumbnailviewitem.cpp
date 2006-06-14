@@ -256,7 +256,6 @@ void FileThumbnailViewItem::calcRect(const QString&) {
 	} else {
 		textW-=PADDING * 2;
 	}
-	textW-=SHADOW;
 	
 	int textH=0;
 	QValueVector<Line*>::ConstIterator it=mLines.begin();
@@ -270,12 +269,12 @@ void FileThumbnailViewItem::calcRect(const QString&) {
 	QRect itemPixmapRect(PADDING, PADDING, thumbnailSize, thumbnailSize);
 	QRect itemTextRect(0, 0, textW, textH);
 	if (isRight) {
-		itemRect.setHeight( QMAX(thumbnailSize + PADDING*2, textH) + SHADOW);
-		itemTextRect.moveLeft(thumbnailSize + PADDING * 2 + SHADOW);
-		itemTextRect.moveTop((itemRect.height() - SHADOW - textH)/2);
+		itemRect.setHeight( QMAX(thumbnailSize + PADDING*2, textH) );
+		itemTextRect.moveLeft(thumbnailSize + PADDING * 2 );
+		itemTextRect.moveTop((itemRect.height() - textH)/2);
 	} else {
-		itemPixmapRect.moveLeft( (itemRect.width()-SHADOW - itemPixmapRect.width()) / 2 );
-		itemRect.setHeight(thumbnailSize + PADDING*3 + SHADOW + textH);
+		itemPixmapRect.moveLeft( (itemRect.width() - itemPixmapRect.width()) / 2 );
+		itemRect.setHeight(thumbnailSize + PADDING*3 + textH);
 		itemTextRect.moveLeft(PADDING);
 		itemTextRect.moveTop(thumbnailSize + PADDING * 2);
 	}
@@ -334,18 +333,6 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 		}
 	}
 		
-	if (isImage) {
-		// Draw shadow
-		QRect shadowRect=pixmapRect(false);
-		shadowRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
-		for (int x=0; x<SHADOW; ++x) {
-			p->setPen(cg.base().dark( 100+10*(SHADOW-x) ));
-			shadowRect.moveBy(1, 1);
-			p->drawLine(shadowRect.topRight(), shadowRect.bottomRight() );
-			p->drawLine(shadowRect.bottomLeft(), shadowRect.bottomRight() );
-		}
-	}
-	
 	// Draw pixmap
 	p->drawPixmap( pixmapRect(false).topLeft(), *pixmap() );
 	
