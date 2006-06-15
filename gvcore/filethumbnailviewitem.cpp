@@ -40,6 +40,7 @@
 #include "fileviewconfig.h"
 namespace Gwenview {
 
+const int SHOWN_ITEM_INDICATOR_SIZE = 8;
 
 #if 0
 static void printRect(const QString& txt,const QRect& rect) {
@@ -301,41 +302,60 @@ void FileThumbnailViewItem::paintItem(QPainter *p, const QColorGroup &cg) {
 	bool isShownItem=view->shownFileItem() && view->shownFileItem()->extraData(view)==this;
 	bool isImage=!Archive::fileItemIsDirOrArchive(mFileItem);
 	int textX, textY, textW, textH;
+	int thumbnailSize=FileViewConfig::thumbnailSize();
 
 	textX=textRect(false).x();
 	textY=textRect(false).y();
 	textW=textRect(false).width();
 	textH=textRect(false).height();
 
-	// Define colors
+	// Draw pixmap
+	QRect pRect = pixmapRect(false);
+	int pixX = pRect.left() + ( thumbnailSize - pixmap()->width() ) / 2;
+	int pixY = pRect.top() + ( thumbnailSize - pixmap()->height() ) / 2;
+	p->drawPixmap( pixX, pixY, *pixmap() );
+
 	QColor bg;
-	if (isShownItem) {
-		bg=FileViewConfig::shownColor();
-	} else if ( isSelected() ) {
+	if ( isSelected() ) {
 		bg=cg.highlight();
 	} else {
 		bg=cg.mid();
+	}
+	
+	// Draw shown item indicator
+	if (isShownItem) {
+		QPointArray pa(3);
+		pa[0] = pixmapRect(false).bottomLeft();
+		pa[0].rx() += pixmapRect(false).width() / 2;
+		pa[0].ry() += PADDING - 1;
+		pa[0].ry() -= SHOWN_ITEM_INDICATOR_SIZE;
+		
+		pa[1] = pa[0];
+		pa[1].rx() -= SHOWN_ITEM_INDICATOR_SIZE;
+		pa[1].ry() += SHOWN_ITEM_INDICATOR_SIZE;
+
+		pa[2] = pa[1];
+		pa[2].rx() += SHOWN_ITEM_INDICATOR_SIZE * 2;
+		
+		p->setBrush(cg.highlight());
+		p->setPen(cg.base());
+		p->drawPolygon(pa);
 	}
 	
 	if (isImage || isSelected()) {
 		// Draw frame
 		QRect frmRect=pixmapRect(false);
 		frmRect.addCoords(-PADDING, -PADDING, PADDING, PADDING);
-		if (isSelected() || isShownItem) {
-			p->fillRect(frmRect, bg);
-			p->setPen(cg.base());
-			frmRect=pixmapRect(false);
-			frmRect.addCoords(-1,-1,1,1);
-			p->drawRect(frmRect);
-		} else {
-			p->setPen(bg);
+		
+		p->setBrush(QBrush());
+		p->setPen(bg);
+		p->drawRect(frmRect);
+		if (isSelected()) {
+			frmRect.addCoords(1, 1, -1, -1);
 			p->drawRect(frmRect);
 		}
 	}
-		
-	// Draw pixmap
-	p->drawPixmap( pixmapRect(false).topLeft(), *pixmap() );
-	
+
 	// Draw text
 	p->setPen(cg.text());
 	p->setBackgroundColor(cg.base());

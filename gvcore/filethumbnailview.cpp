@@ -276,15 +276,7 @@ void FileThumbnailView::setThumbnailPixmap(const KFileItem* fileItem, const QPix
 	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
 	if (!iconItem) return;
 
-	int pixelSize=d->mThumbnailSize;
-
-	// Draw the thumbnail to the center of the icon
-	iconItem->pixmap()->fill(paletteBackgroundColor());
-	QPainter painter(iconItem->pixmap());
-	painter.drawPixmap(
-		(pixelSize-thumbnail.width())/2,
-		(pixelSize-thumbnail.height())/2,
-		thumbnail);
+	iconItem->setPixmap(thumbnail);
 
 	// Update item info
 	if (size.isValid()) {
