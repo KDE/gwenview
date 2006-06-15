@@ -122,6 +122,9 @@ private:
 	void setSortingKey(FileDetailViewItem* item, const KFileItem* i);
 	
 	void startDrag();
+
+	QPixmap mShownItemSelectedPixmap;
+	QPixmap mShownItemUnselectedPixmap;
 };
 
 

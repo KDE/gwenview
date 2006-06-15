@@ -23,6 +23,7 @@
 */
 
 // Qt
+#include <qbitmap.h>
 #include <qevent.h>
 #include <qheader.h>
 #include <qkeycode.h>
@@ -43,6 +44,30 @@
 #include "filedetailviewitem.h"
 #include "filedetailview.moc"
 namespace Gwenview {
+
+
+static QPixmap createShownItemPixmap(int size, const QColor& color) {
+	QPixmap pix(size, size);
+	pix.fill(Qt::red);
+	QPainter painter(&pix);
+	int margin = 2;
+	
+	QPointArray pa(3);
+	int arrowSize = size/2 - margin;
+	int center = size/2 - 1;
+	pa[0] = QPoint((size - arrowSize) / 2, center - arrowSize);
+	pa[1] = QPoint((size + arrowSize) / 2, center);
+	pa[2] = QPoint(pa[0].x(),              center + arrowSize);
+
+	painter.setBrush(color);
+	painter.setPen(color);
+	painter.drawPolygon(pa);
+	painter.end();
+
+	pix.setMask(pix.createHeuristicMask());
+	
+	return pix;
+}
 
 
 FileDetailView::FileDetailView(QWidget *parent, const char *name)
@@ -95,6 +120,10 @@ FileDetailView::FileDetailView(QWidget *parent, const char *name)
 	setAcceptDrops(true);
 	setDropVisualizer(false);
 	setDropHighlighter(false);
+
+	int size = IconSize(KIcon::Small);
+	mShownItemUnselectedPixmap = createShownItemPixmap(size, colorGroup().highlight());
+	mShownItemSelectedPixmap = createShownItemPixmap(size, colorGroup().highlightedText());
 }
 
 

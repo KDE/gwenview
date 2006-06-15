@@ -77,7 +77,7 @@ public:
 	}
 
 	void init();
-	void paintCell(QPainter*,const QColorGroup &,int column,int width,int align);
+	virtual const QPixmap* pixmap(int column) const;
 	
 private:
 	KFileItem* inf;

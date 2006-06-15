@@ -45,17 +45,25 @@ void FileDetailViewItem::init()
 	setText( COL_GROUP, inf->group() );
 }
 
-void FileDetailViewItem::paintCell(QPainter* p,const QColorGroup & cg,int column,int width,int align)
-{
-	QColorGroup myCG=cg;
+
+const QPixmap* FileDetailViewItem::pixmap(int column) const {
+	const QPixmap* normalPix = KListViewItem::pixmap(column);
+	if (column!=0) {
+		return normalPix;
+	}
+
 	FileDetailView* view=static_cast<FileDetailView*>(listView());
 	FileDetailViewItem* viewedItem=view->viewItem(view->shownFileItem());
-	if (viewedItem==this) {
-		QColor color=FileViewConfig::shownColor();
-		myCG.setColor(QColorGroup::Text, color);
-		myCG.setColor(QColorGroup::HighlightedText, color);
+	if (viewedItem!=this) {
+		return normalPix;
 	}
-	KListViewItem::paintCell(p,myCG,column,width,align);
+
+	if (isSelected()) {
+		return &view->mShownItemSelectedPixmap;
+	} else {
+		return &view->mShownItemUnselectedPixmap;
+	}
 }
+
 
 } // namespace
