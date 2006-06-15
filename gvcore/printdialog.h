@@ -34,7 +34,7 @@ class PrintDialogPageBase;
 namespace Gwenview {
 class Document;
 
-enum Units {
+enum Unit {
 	GV_MILLIMETERS = 1,
 	GV_CENTIMETERS,
 	GV_INCHES
@@ -52,22 +52,21 @@ public:
 
 private slots:
 	void toggleRatio(bool enable);
-	void setNewUnit(const QString& string);
-	void setHValue (int value);
-	void setWValue (int value);
+	void slotUnitChanged(const QString& string);
+	void slotHeightChanged(double value);
+	void slotWidthChanged(double value);
 
 private:
-	int scaleWidth() const;
-	int scaleHeight() const;
-	void setScaleWidth(int pixels);
-	void setScaleHeight(int pixels);
+	double scaleWidth() const;
+	double scaleHeight() const;
+	void setScaleWidth(double pixels);
+	void setScaleHeight(double pixels);
 	int getPosition(const QString& align);
 	QString setPosition(int align);
-	int getUnit(const QString& unit);
-	QString setUnit(int unit);
 
 	Document *mDocument;
 	PrintDialogPageBase* mContent;
+	Unit mPreviousUnit;
 };
 
 } // namespace

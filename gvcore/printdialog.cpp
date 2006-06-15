@@ -43,6 +43,37 @@ namespace Gwenview {
 const char* STR_TRUE="true";
 const char* STR_FALSE="false";
 
+static inline Unit stringToUnit(const QString& unit) {
+	if (unit == i18n("Millimeters")) {
+		return GV_MILLIMETERS;
+	} else if (unit == i18n("Centimeters")) {
+		return GV_CENTIMETERS;
+	} else {//Inches
+		return GV_INCHES;
+	}
+}
+
+static inline QString unitToString(Unit unit) {
+	if (unit == GV_MILLIMETERS) {
+		return i18n("Millimeters");
+	} else if (unit == GV_CENTIMETERS) {
+		return i18n("Centimeters");
+	} else { //GV_INCHES
+		return i18n("Inches");
+	}
+}
+
+
+static inline double unitToMM(Unit unit) {
+	if (unit == GV_MILLIMETERS) {
+		return 1.;
+	} else if (unit == GV_CENTIMETERS) {
+		return 10.;
+	} else { //GV_INCHES
+		return 25.4;
+	}
+}
+
 
 PrintDialogPage::PrintDialogPage( Document* document, QWidget *parent, const char *name )
 		: KPrintDialogPage( parent, name ) {
@@ -53,12 +84,12 @@ PrintDialogPage::PrintDialogPage( Document* document, QWidget *parent, const cha
 	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->addWidget( mContent );
 
-	connect(mContent->mWidth, SIGNAL( valueChanged( int )), SLOT( setWValue( int )));
-	connect(mContent->mHeight, SIGNAL( valueChanged( int )), SLOT( setHValue( int )));
+	connect(mContent->mWidth, SIGNAL( valueChanged( double )), SLOT( slotWidthChanged( double )));
+	connect(mContent->mHeight, SIGNAL( valueChanged( double )), SLOT( slotHeightChanged( double )));
 	connect(mContent->mKeepRatio, SIGNAL( toggled( bool )), SLOT( toggleRatio( bool )));
-	connect(mContent->mUnits, SIGNAL(activated(const QString &)), SLOT(setNewUnit(const QString& )));
+	connect(mContent->mUnit, SIGNAL(activated(const QString &)), SLOT(slotUnitChanged(const QString& )));
 
-	toggleRatio(mContent->mScale->isChecked() );
+	mPreviousUnit = GV_MILLIMETERS;
 }
 
 PrintDialogPage::~PrintDialogPage() {}
@@ -75,7 +106,7 @@ void PrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ 
 	opts["app-gwenview-enlargeToFit"] = mContent->mEnlargeToFit->isChecked() ? STR_TRUE : STR_FALSE;
 
 	opts["app-gwenview-scaleKeepRatio"] = mContent->mKeepRatio->isChecked() ? STR_TRUE : STR_FALSE;
-	opts["app-gwenview-scaleUnit"] = QString::number(getUnit(mContent->mUnits->currentText()));
+	opts["app-gwenview-scaleUnit"] = QString::number(stringToUnit(mContent->mUnit->currentText()));
 	opts["app-gwenview-scaleWidth"] = QString::number( scaleWidth() );
 	opts["app-gwenview-scaleHeight"] = QString::number( scaleHeight() );
 
@@ -103,35 +134,35 @@ void PrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 	}
 	mContent->mEnlargeToFit->setChecked( opts["app-gwenview-enlargeToFit"] == STR_TRUE );
 
-	val = opts["app-gwenview-scaleUnit"].toInt( &ok );
+	Unit unit = static_cast<Unit>( opts["app-gwenview-scaleUnit"].toInt( &ok ) );
 	if (ok) {
-		stVal = setUnit(val);
-		mContent->mUnits->setCurrentItem(stVal);
+		stVal = unitToString(unit);
+		mContent->mUnit->setCurrentItem(stVal);
+		mPreviousUnit = unit;
 	}
 
 	mContent->mKeepRatio->setChecked( opts["app-gwenview-scaleKeepRatio"] == STR_TRUE );
 
-	val = opts["app-gwenview-scaleWidth"].toInt( &ok );
-	if ( ok ) setScaleWidth( val );
-	val = opts["app-gwenview-scaleHeight"].toInt( &ok );
-	if ( ok ) setScaleHeight( val );
-
-	toggleRatio(mContent->mScale->isChecked() );
+	double dbl;
+	dbl = opts["app-gwenview-scaleWidth"].toDouble( &ok );
+	if ( ok ) setScaleWidth( dbl );
+	dbl = opts["app-gwenview-scaleHeight"].toDouble( &ok );
+	if ( ok ) setScaleHeight( dbl );
 }
 
-int PrintDialogPage::scaleWidth() const {
+double PrintDialogPage::scaleWidth() const {
 	return mContent->mWidth->value();
 }
 
-int PrintDialogPage::scaleHeight() const {
+double PrintDialogPage::scaleHeight() const {
 	return mContent->mHeight->value();
 }
 
-void PrintDialogPage::setScaleWidth( int value ) {
+void PrintDialogPage::setScaleWidth( double value ) {
 	mContent->mWidth->setValue(value);
 }
 
-void PrintDialogPage::setScaleHeight( int value ) {
+void PrintDialogPage::setScaleHeight( double value ) {
 	mContent->mHeight->setValue(value);
 }
 
@@ -189,34 +220,14 @@ QString PrintDialogPage::setPosition(int align) {
 	return alignment;
 }
 
-int PrintDialogPage::getUnit(const QString& unit) {
-	if (unit == i18n("Millimeters")) {
-		return	GV_MILLIMETERS;
-	} else if (unit == i18n("Centimeters")) {
-		return GV_CENTIMETERS;
-	} else {//Inches
-		return GV_INCHES;
-	}
-}
-
-QString PrintDialogPage::setUnit(int unit) {
-	if (unit == GV_MILLIMETERS) {
-		return i18n("Millimeters");
-	} else if (unit == GV_CENTIMETERS) {
-		return i18n("Centimeters");
-	} else { //GV_INCHES
-		return i18n("Inches");
-	}
-}
-
 // SLOTS
-void PrintDialogPage::setHValue (int value) {
+void PrintDialogPage::slotHeightChanged (double value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 
 	if (mContent->mKeepRatio->isChecked()) {
-		int w = (mDocument->width() * value) / mDocument->height();
-		mContent->mWidth->setValue( w ? w : 1);
+		double width = (mDocument->width() * value) / mDocument->height();
+		mContent->mWidth->setValue( width ? width : 1.);
 	}
 	mContent->mHeight->setValue(value);
 
@@ -225,12 +236,12 @@ void PrintDialogPage::setHValue (int value) {
 
 }
 
-void PrintDialogPage::setWValue (int value) {
+void PrintDialogPage::slotWidthChanged (double value) {
 	mContent->mWidth->blockSignals(true);
 	mContent->mHeight->blockSignals(true);
 	if (mContent->mKeepRatio->isChecked()) {
-		int h = (mDocument->height() * value) / mDocument->width();
-		mContent->mHeight->setValue( h ? h : 1);
+		double height = (mDocument->height() * value) / mDocument->width();
+		mContent->mHeight->setValue( height ? height : 1);
 	}
 	mContent->mWidth->setValue(value);
 	mContent->mWidth->blockSignals(false);
@@ -238,28 +249,39 @@ void PrintDialogPage::setWValue (int value) {
 }
 
 void PrintDialogPage::toggleRatio(bool enable) {
-	if (enable) {
-		float cm = 1;
-		if (getUnit(mContent->mUnits->currentText()) == GV_MILLIMETERS) cm = 10;
-		else if (getUnit(mContent->mUnits->currentText()) == GV_INCHES) cm = 1/(2.54);
-		// 15x10 cm
-		float hValue, wValue;
-		if (mDocument->height() > mDocument->width()) {
-			hValue = cm*15;
-			wValue = (mDocument->width() * (hValue))/ mDocument->height();
-		} else {
-			wValue = cm*15;
-			hValue = (mDocument->height() * wValue)/ mDocument->width();
-		}
-		mContent->mWidth->setValue((int)wValue);
-		mContent->mHeight->setValue((int)hValue);
+	if (!enable) return;
+	double hValue, wValue;
+	if (mDocument->height() > mDocument->width()) {
+		hValue = mContent->mHeight->value();
+		wValue = (mDocument->width() * hValue)/ mDocument->height();
+	} else {
+		wValue = mContent->mWidth->value();
+		hValue = (mDocument->height() * wValue)/ mDocument->width();
 	}
+	
+	mContent->mWidth->blockSignals(true);
+	mContent->mHeight->blockSignals(true);
+	mContent->mWidth->setValue(wValue);
+	mContent->mHeight->setValue(hValue);
+	mContent->mWidth->blockSignals(false);
+	mContent->mHeight->blockSignals(false);
 }
 
 
-void PrintDialogPage::setNewUnit(const QString& string) {
-	mContent->mUnits->setCurrentItem(string);
-	toggleRatio(true); // to do better
+void PrintDialogPage::slotUnitChanged(const QString& string) {
+	Unit newUnit = stringToUnit(string);
+	double ratio = unitToMM(mPreviousUnit) / unitToMM(newUnit);
+
+	mContent->mWidth->blockSignals(true);
+	mContent->mHeight->blockSignals(true);
+
+	mContent->mWidth->setValue( mContent->mWidth->value() * ratio);
+	mContent->mHeight->setValue( mContent->mHeight->value() * ratio);
+
+	mContent->mWidth->blockSignals(false);
+	mContent->mHeight->blockSignals(false);
+
+	mPreviousUnit = newUnit;
 }
 
 

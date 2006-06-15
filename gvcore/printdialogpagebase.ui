@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PrintDialogPageBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>464</width>
-            <height>243</height>
+            <width>511</width>
+            <height>260</height>
         </rect>
     </property>
     <property name="caption">
@@ -230,13 +230,16 @@
                     <property name="text">
                         <string>&amp;Scale to:</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
                     <property name="buttonGroupId">
                         <number>2</number>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>layout4</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -259,7 +262,7 @@
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="KIntSpinBox">
+                        <widget class="KDoubleSpinBox">
                             <property name="name">
                                 <cstring>mWidth</cstring>
                             </property>
@@ -267,10 +270,16 @@
                                 <bool>false</bool>
                             </property>
                             <property name="maxValue">
-                                <number>999999999</number>
+                                <number>1e+06</number>
                             </property>
-                            <property name="minValue">
+                            <property name="lineStep">
                                 <number>1</number>
+                            </property>
+                            <property name="acceptLocalizedNumbers">
+                                <bool>false</bool>
+                            </property>
+                            <property name="precision">
+                                <number>2</number>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -281,7 +290,7 @@
                                 <string>x</string>
                             </property>
                         </widget>
-                        <widget class="KIntSpinBox">
+                        <widget class="KDoubleSpinBox">
                             <property name="name">
                                 <cstring>mHeight</cstring>
                             </property>
@@ -289,10 +298,16 @@
                                 <bool>false</bool>
                             </property>
                             <property name="maxValue">
-                                <number>999999999</number>
+                                <number>1e+06</number>
                             </property>
-                            <property name="minValue">
+                            <property name="lineStep">
                                 <number>1</number>
+                            </property>
+                            <property name="acceptLocalizedNumbers">
+                                <bool>false</bool>
+                            </property>
+                            <property name="precision">
+                                <number>2</number>
                             </property>
                         </widget>
                         <widget class="KComboBox">
@@ -312,7 +327,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>mUnits</cstring>
+                                <cstring>mUnit</cstring>
                             </property>
                             <property name="enabled">
                                 <bool>false</bool>
@@ -341,7 +356,7 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>20</width>
+                                    <width>16</width>
                                     <height>20</height>
                                 </size>
                             </property>
@@ -358,13 +373,7 @@
     <connection>
         <sender>mScale</sender>
         <signal>toggled(bool)</signal>
-        <receiver>mHeight</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>mScale</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>mUnits</receiver>
+        <receiver>mUnit</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -374,15 +383,21 @@
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
+        <sender>mFitToPage</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>mEnlargeToFit</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
         <sender>mScale</sender>
         <signal>toggled(bool)</signal>
         <receiver>mWidth</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
-        <sender>mFitToPage</sender>
+        <sender>mScale</sender>
         <signal>toggled(bool)</signal>
-        <receiver>mEnlargeToFit</receiver>
+        <receiver>mHeight</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>

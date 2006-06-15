@@ -366,16 +366,16 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 		if (scaling==2 /* Scale To */) {
 			int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
 				GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
-			float inches = 1;
+			double inches = 1;
 			if (unit == GV_MILLIMETERS) {
-				inches = 1/25.5;
+				inches = 1/25.4;
 			} else if (unit == GV_CENTIMETERS) {
 				inches = 1/2.54;
 			}
-			float wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
-				1 : printer->option("app-gwenview-scaleWidth").toInt()) * inches;
-			float hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
-				1 : printer->option("app-gwenview-scaleHeight").toInt()) * inches;
+			double wImg = (printer->option("app-gwenview-scaleWidth").isEmpty() ?
+				1 : printer->option("app-gwenview-scaleWidth").toDouble()) * inches;
+			double hImg = (printer->option("app-gwenview-scaleHeight").isEmpty() ?
+				1 : printer->option("app-gwenview-scaleHeight").toDouble()) * inches;
 			size.setWidth( int(wImg * printer->resolution()) );
 			size.setHeight( int(hImg * printer->resolution()) );
 		} else {

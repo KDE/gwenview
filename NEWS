@@ -1,4 +1,4 @@
-2005.xx.xx - v1.3.91
+2006.xx.xx - v1.3.91
 - New features:
  - The slideshow now starts directly. Slideshow options like timing or
    fullscreen can be set from the configuration dialog.
@@ -32,6 +32,8 @@
    and next buttons.
  - In the image and folder KParts, make sure the context menu is adapted to the
    mimetype.
+ - In the print dialog, it's now possible to enter rational values for the
+   width and height.
 
 2005.09.11 - v1.3.0
 - Fixes:
