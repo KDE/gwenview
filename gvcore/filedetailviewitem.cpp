@@ -29,7 +29,6 @@
 // Our includes
 #include "filedetailviewitem.h"
 #include "filedetailview.h"
-#include "fileviewconfig.h"
 namespace Gwenview {
 
 

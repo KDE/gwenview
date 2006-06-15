@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
-  <include>qapplication.h</include>
   <include>qiconview.h</include>
-  <include>qpalette.h</include>
   <kcfgfile name="gwenviewrc"/> 
   <group name="file widget">
     <entry name="showDirs" key="show dirs" type="Bool">
       <default>true</default>
-    </entry>
-    <entry name="shownColor" key="shown color" type="Color">
-      <default code="true">QApplication::palette().active().highlight().light(150)</default>
     </entry>
     <entry name="showDotFiles" key="show dot files" type="Bool">
       <default>false</default>
