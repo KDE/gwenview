@@ -248,7 +248,8 @@ void GVImagePart::slotSelectNext() {
 	mLastDirection = DirectionNext;
 	// Do not use mBrowserExtension->openURLRequest to avoid switching to
 	// another KPart
-	mDocument->setURL(newURL);
+	openURL(newURL);
+	emit mBrowserExtension->openURLNotify();
 }
 
 KURL GVImagePart::previousURL() const {
@@ -266,7 +267,8 @@ void GVImagePart::slotSelectPrevious() {
 	KURL newURL = previousURL();
 	if( newURL.isEmpty()) return;
 	mLastDirection = DirectionPrevious;
-	mDocument->setURL(newURL);
+	openURL(newURL);
+	emit mBrowserExtension->openURLNotify();
 }
 
 /***** GVImagePartBrowserExtension *****/
