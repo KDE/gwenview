@@ -283,7 +283,10 @@ GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
 void GVImagePartBrowserExtension::openContextMenu(const QPoint& pos) {
 	KURL url=mGVImagePart->url();
 	QString mimeType=KMimeType::findByURL(url)->name();
-	emit popupMenu(pos, url, mimeType);
+	KFileItem item(url, mimeType, S_IFREG);
+	KFileItemList list;
+	list.append(&item);
+	emit popupMenu(pos, list);
 }
 
 void GVImagePartBrowserExtension::print() {
