@@ -1,21 +1,24 @@
-2006.xx.xx - v1.3.91
+2006.06.21 - v1.3.91
 - New features:
- - The slideshow now starts directly. Slideshow options like timing or
-   fullscreen can be set from the configuration dialog.
-   (Patch by Martin Filser)
+ - Gwenview can now plays videos and display SVG files.
  - It's now possible to create symbolic links from the main menu and from the
    image contextual menu.
    (Patch by Steffen Schoenwiese)
- - Zoom to width/height
- - Read support for X cursors
- - Slideshow waits for the next image to be fully prefetched before advancing.
+ - Zoom has been improved: you can now zoom to to width or height, and a zoom
+   combobox has been added to the application and KPart toolbars.
+ - Read support for X cursors has been added.
+ - The slideshow now starts directly. Slideshow options like timing or
+   fullscreen can be set from the configuration dialog.
+   (Patch by Martin Filser)
+ - The slideshow now waits for the next image to be fully prefetched before
+   advancing.
+ - The main toolbar is much lighter now that the image specific buttons have
+   been moved to an image view toolbar.
  - The file view from the folder KPart now features the same toolbar as in the
    application.
- - The folder KPart now remembers the width of the file view and uses the same
-   configuration as the application (Bug 83343).
- - A zoom combobox has been added to the application and kpart toolbars.
  - The file view toolbar can now show a filter bar to filter images by name
    and/or date.
+ - The folder view has been reworked (this may not be definitive).
 - Fixes:
  - Significantly improved redrawing speed for very large images.
  - Fix MMX configure check with GCC 4.x.
@@ -26,14 +29,19 @@
    URLs.
  - Added a confirmation dialog for the window reset menu (Bug 116791).
  - Renamed the "File Info" window to "Image Comment" (Bug 116791).
- - KIPI plugins are now only loaded when the "Plugins" menu is opened, leading
-   to faster startup time and less memory usage.
+ - Only load KIPI plugins when the "Plugins" menu is opened, for faster startup
+   time and less memory usage.
+ - The shadow around the thumbnails has been replaced with a light thin border.
+ - The history of the url bar is now remembered among sessions.
+ - In the print dialog, make it possible to enter rational values for width and
+   height.
  - In the image KPart, do not switch to another KPart when using the previous
    and next buttons.
  - In the image and folder KParts, make sure the context menu is adapted to the
    mimetype.
- - In the print dialog, it's now possible to enter rational values for the
-   width and height.
+ - The folder KPart remembers the width of the file view and uses the same
+   configuration as the application (Bug 83343).
+ - In the folder KPart, the "trash/remove" context menu entry has been fixed;
 
 2005.09.11 - v1.3.0
 - Fixes:
