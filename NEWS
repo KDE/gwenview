@@ -27,10 +27,11 @@
    (Patch by Christopher Martin)
  - Fix a bug which could lead to truncated images when saving to non-local
    URLs.
- - Added a confirmation dialog for the window reset menu (Bug 116791).
- - Renamed the "File Info" window to "Image Comment" (Bug 116791).
  - Only load KIPI plugins when the "Plugins" menu is opened, for faster startup
    time and less memory usage.
+ - Added a confirmation dialog for the window reset menu and renamed the "File
+   Info" window to "Image Comment" (Bug 116791).
+ - Simplified configuration of OSD.
  - The shadow around the thumbnails has been replaced with a light thin border.
  - The history of the url bar is now remembered among sessions.
  - In the print dialog, make it possible to enter rational values for width and
