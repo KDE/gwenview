@@ -180,7 +180,7 @@ MainWindow::MainWindow()
 	createConnections();
 	mWindowListActions.setAutoDelete(true);
 	updateWindowActions();
-	applyMainWindowSettings();
+	KMainWindow::applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
 
@@ -676,12 +676,11 @@ void MainWindow::showToolBarDialog() {
 	saveMainWindowSettings(KGlobal::config(), "MainWindow");
 	KEditToolbar dlg(actionCollection());
 	connect(&dlg,SIGNAL(newToolbarConfig()),this,SLOT(applyMainWindowSettings()));
-	if (dlg.exec()) {
-		createGUI();
-	}
+	dlg.exec();
 }
 
 void MainWindow::applyMainWindowSettings() {
+	createGUI();
 	KMainWindow::applyMainWindowSettings(KGlobal::config(), "MainWindow");
 }
 
