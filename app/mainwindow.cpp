@@ -1181,11 +1181,7 @@ void MainWindow::createConnections() {
 	// Plugin menu
 	QPopupMenu *popup = static_cast<QPopupMenu*>(
 		factory()->container( "plugins", this));
-#ifdef GV_HAVE_KIPI
     connect(popup, SIGNAL(aboutToShow()), this, SLOT(loadPlugins()) );
-#else
-	delete popup;
-#endif
 }
 
 
@@ -1319,6 +1315,27 @@ void MainWindow::slotReplug() {
 }
 #else
 void MainWindow::loadPlugins() {
+	// Create a dummy "no KIPI" action list
+	KAction* noPlugin=new KAction(i18n("No KIPI support"), 0, 0, 0, actionCollection(), "no_plugin");
+	noPlugin->setShortcutConfigurable(false);
+	noPlugin->setEnabled(false);
+	QPtrList<KAction> noPluginList;
+	noPluginList.append(noPlugin);
+
+	QStringList lst;
+	lst	<< "image_actions"
+		<< "effect_actions"
+		<< "tool_actions"
+		<< "import_actions"
+		<< "export_actions"
+		<< "batch_actions"
+		<< "collection_actions";
+	
+	// Fill the menu
+	QStringList::ConstIterator catIt=lst.begin(), catItEnd=lst.end();
+	for (; catIt!=catItEnd; ++catIt) {
+		plugActionList(*catIt, noPluginList);
+	}
 }
 
 void MainWindow::slotReplug() {
