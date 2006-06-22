@@ -1,0 +1,11 @@
+if test "$want_kipi" = "yes" ; then
+  if test "$have_kipi" != "yes" ; then
+    echo ""
+    echo "KIPI is not installed. Gwenview will be build without KIPI support."
+    echo ""
+  fi
+else
+  echo ""
+  echo "KIPI support has been disabled. Gwenview will be build without KIPI support."
+  echo ""
+fi
