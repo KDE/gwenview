@@ -36,6 +36,7 @@
  - The history of the url bar is now remembered among sessions.
  - In the print dialog, make it possible to enter rational values for width and
    height.
+ - In the save dialog, always set a filename, even for remote urls (Bug 102008).
  - In the image KPart, do not switch to another KPart when using the previous
    and next buttons.
  - In the image and folder KParts, make sure the context menu is adapted to the

@@ -455,9 +455,9 @@ void Document::save() {
 
 void Document::saveAs() {
 	KURL saveURL;
-	if (url().isLocalFile()) saveURL=url();
 
 	ImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
+	dialog.setSelection(url().fileName());
 	if (!dialog.exec()) return;
 
 	QString msg=saveInternal(saveURL, dialog.imageFormat() );

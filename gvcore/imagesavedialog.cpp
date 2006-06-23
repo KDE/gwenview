@@ -45,7 +45,7 @@ static int findFormatInFilterList(const QStringList& filters, const QString& for
 
 
 ImageSaveDialog::ImageSaveDialog(KURL& url, const QCString& imageFormat, QWidget* parent)
-: KFileDialog(url.path(),QString::null,parent,"imagesavedialog",true)
+: KFileDialog(":ImageSaveDialog",QString::null,parent,"imagesavedialog",true)
 , mURL(url)
 , mImageFormat(imageFormat)
 {
