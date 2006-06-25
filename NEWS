@@ -1,6 +1,6 @@
 2006.06.24 - v1.3.91
 - New features:
- - Gwenview can now plays videos and display SVG files.
+ - Gwenview can now play videos and display SVG files.
  - It's now possible to create symbolic links from the main menu and from the
    image contextual menu.
    (Patch by Steffen Schoenwiese)
@@ -43,7 +43,7 @@
    mimetype.
  - The folder KPart remembers the width of the file view and uses the same
    configuration as the application (Bug 83343).
- - In the folder KPart, the "trash/remove" context menu entry has been fixed;
+ - In the folder KPart, the "trash/remove" context menu entry has been fixed.
 
 2005.09.11 - v1.3.0
 - Fixes:
