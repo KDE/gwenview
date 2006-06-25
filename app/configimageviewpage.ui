@@ -212,7 +212,7 @@
                             </property>
                             <property name="text">
                                 <string>Using this option, Gwenview will display the image as fast as possible, and smooth it after a short delay.
-Use this option if &amp;your computer is not very fast.</string>
+Use this option if your computer is not very fast.</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignTop</set>
