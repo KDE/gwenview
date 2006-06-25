@@ -29,16 +29,18 @@
 // Our includes
 #include "filedetailviewitem.h"
 #include "filedetailview.h"
+#include "timeutils.h"
 namespace Gwenview {
 
 
 void FileDetailViewItem::init()
 {
+	time_t time = TimeUtils::getTime(inf);
 	setPixmap( COL_NAME, inf->pixmap(KIcon::SizeSmall));
 
 	setText( COL_NAME, inf->text() );
 	setText( COL_SIZE, KGlobal::locale()->formatNumber( inf->size(), 0));
-	setText( COL_DATE,	inf->timeString() );
+	setText( COL_DATE, TimeUtils::formatTime(time) );
 	setText( COL_PERM,	inf->permissionsString() );
 	setText( COL_OWNER, inf->user() );
 	setText( COL_GROUP, inf->group() );

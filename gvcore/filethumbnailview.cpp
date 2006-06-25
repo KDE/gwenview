@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "thumbnailloadjob.h"
 #include "busylevelmanager.h"
 #include "imageloader.h"
+#include "timeutils.h"
 #include "thumbnailsize.h"
 #include "thumbnaildetailsdialog.h"
 
@@ -616,14 +617,17 @@ void FileThumbnailView::setSortingKey(QIconViewItem *iconItem, const KFileItem *
 	bool isDirOrArchive=item->isDir() || Archive::fileItemIsArchive(item);
 
 	QString key;
-	if ( spec & QDir::Time )
-		key=sortingKey( item->time( KIO::UDS_MODIFICATION_TIME ),
-								  isDirOrArchive, spec );
-	else if ( spec & QDir::Size )
+	if ( spec & QDir::Time ) {
+		time_t time = TimeUtils::getTime(item);
+		key=sortingKey(time, isDirOrArchive, spec);
+		
+	} else if ( spec & QDir::Size ) {
 		key=sortingKey( item->size(), isDirOrArchive, spec );
-
-	else // Name or Unsorted
+		
+	} else {
+		// Name or Unsorted
 		key=sortingKey( item->text(), isDirOrArchive, spec );
+	}
 
 	iconItem->setKey(key);
 }

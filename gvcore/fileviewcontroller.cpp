@@ -60,6 +60,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "filterbar.h"
 #include "imageloader.h"
 #include "mimetypeutils.h"
+#include "timeutils.h"
 #include "thumbnailsize.h"
 #include "fileviewconfig.h"
 
@@ -146,7 +147,7 @@ public:
 		if (!mFromDate.isValid() && !mToDate.isValid()) return result;
 
 		// Convert item time to a QDate
-		time_t time=item->time(KIO::UDS_MODIFICATION_TIME);
+		time_t time=TimeUtils::getTime(item);
 		QDateTime dateTime;
 		dateTime.setTime_t(time);
 		QDate date=dateTime.date();

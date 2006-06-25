@@ -43,6 +43,7 @@
 #include "archive.h"
 #include "filedetailviewitem.h"
 #include "filedetailview.moc"
+#include "timeutils.h"
 namespace Gwenview {
 
 
@@ -261,24 +262,25 @@ void FileDetailView::updateView( const KFileItem *i )
 }
 
 
-void FileDetailView::setSortingKey( FileDetailViewItem *item,
-									 const KFileItem *i )
+void FileDetailView::setSortingKey( FileDetailViewItem *dvItem, const KFileItem *item)
 {
-	// see also setSorting()
 	QDir::SortSpec spec = KFileView::sorting();
-	bool isDirOrArchive=i->isDir() || Archive::fileItemIsArchive(i);
+	bool isDirOrArchive=item->isDir() || Archive::fileItemIsArchive(item);
 
 	QString key;
-	if ( spec & QDir::Time )
-		key=sortingKey( i->time( KIO::UDS_MODIFICATION_TIME ),
-								  isDirOrArchive, spec );
-	else if ( spec & QDir::Size )
-		key=sortingKey( i->size(), isDirOrArchive, spec );
+	if ( spec & QDir::Time ) {
+		time_t time = TimeUtils::getTime(item);
+		key=sortingKey(time, isDirOrArchive, spec);
+		
+	} else if ( spec & QDir::Size ) {
+		key=sortingKey( item->size(), isDirOrArchive, spec );
+		
+	} else {
+		// Name or Unsorted
+		key=sortingKey( item->text(), isDirOrArchive, spec );
+	}
 
-	else // Name or Unsorted
-		key=sortingKey( i->text(), isDirOrArchive, spec );
-
-	item->setKey(key);
+	dvItem->setKey(key);
 }
 
 

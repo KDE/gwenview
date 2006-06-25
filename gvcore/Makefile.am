@@ -61,6 +61,7 @@ libgwenviewcore_la_SOURCES = \
 	mimetypeutils.cpp \
 	bcgdialog.cpp \
 	bcgdialogbase.ui \
+	timeutils.cpp \
 	miscconfig.kcfgc \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \

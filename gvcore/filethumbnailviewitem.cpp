@@ -38,6 +38,8 @@
 #include "filethumbnailview.h"
 #include "filethumbnailviewitem.h"
 #include "fileviewconfig.h"
+#include "timeutils.h"
+
 namespace Gwenview {
 
 const int SHOWN_ITEM_INDICATOR_SIZE = 8;
@@ -206,8 +208,10 @@ void FileThumbnailViewItem::updateLines() {
 	bool isDir=mFileItem->isDir();
 	if (iconView()->itemTextPos()==QIconView::Right) {
 		// Text is on the right, show everything
+
+		time_t time = TimeUtils::getTime(mFileItem);
 		mLines.append( new WrappedLine(this, mFileItem->name()) );
-		mLines.append( new CroppedLine(this, mFileItem->timeString()) );
+		mLines.append( new CroppedLine(this, TimeUtils::formatTime(time)) );
 		if (mImageSize.isValid()) {
 			QString txt=QString::number(mImageSize.width())+"x"+QString::number(mImageSize.height());
 			mLines.append( new CroppedLine(this, txt) );
@@ -227,7 +231,8 @@ void FileThumbnailViewItem::updateLines() {
 			mLines.append( new WrappedLine(this, mFileItem->name()) );
 		}
 		if (details & FileThumbnailView::FILEDATE) {
-			mLines.append( new CroppedLine(this, mFileItem->timeString()) );
+			time_t time = TimeUtils::getTime(mFileItem);
+			mLines.append( new CroppedLine(this, TimeUtils::formatTime(time)) );
 		}
 		if (details & FileThumbnailView::IMAGESIZE) {
 			QString txt;
