@@ -5,6 +5,7 @@
 - Fixes:
  - Fixed file renaming, which got broken in 1.3.91.
  - Do not reset filters when configuring image list.
+ - Do not set keyboard focus on the location field on startup.
 
 2006.06.24 - v1.3.91
 - New features:
