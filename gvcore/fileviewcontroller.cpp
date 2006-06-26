@@ -471,6 +471,11 @@ FileViewController::~FileViewController() {
 }
 
 
+void FileViewController::setFocus() {
+	currentFileView()->widget()->setFocus();
+}
+
+
 /**
  * Do not let double click events propagate if Ctrl or Shift is down, to avoid
  * toggling fullscreen

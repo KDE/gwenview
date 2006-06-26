@@ -55,6 +55,7 @@ public:
 	void setFullScreen(bool);
 	void setNormalCommonActions(const KActionPtrList&);
 	void setFullScreenCommonActions(const KActionPtrList&);
+	void setFocus();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);

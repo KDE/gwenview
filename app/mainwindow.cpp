@@ -240,10 +240,12 @@ void MainWindow::openURL(const KURL& url) {
 
 	if (isDir) {
 		mFileViewController->setDirURL(url);
+		mFileViewController->setFocus();
 	} else {
 		mDocument->setURL(url);
 		mFileViewController->setDirURL(url.upURL());
 		mFileViewController->setFileNameToSelect(url.filename());
+		mImageViewController->setFocus();
 	}
 	
 	if (!mToggleFullScreen->isChecked() && !isDir && !mSwitchToViewMode->isChecked()) {
@@ -580,7 +582,7 @@ void MainWindow::toggleFullScreen() {
 		}
 		updateFullScreenLabel();
 		mImageViewController->setFullScreen(true);
-		mImageViewController->widget()->setFocus();
+		mImageViewController->setFocus();
 	} else {
 		// Stop the slideshow if it's running
 		if (mSlideShow->isRunning()) {

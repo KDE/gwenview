@@ -66,7 +66,6 @@ public:
 
 	// Properties
 	void setMode(Mode);
-	QWidget* widget() const;
 	
 	QString fileName() const;
 	KURL url() const;
@@ -108,6 +107,8 @@ public:
 	void retryURL();
 
 	void refreshItems( const KURL::List& urls ); // used by a workaround in KIPIInterface
+
+	virtual void setFocus();
 	
 public slots:
 	void setDirURL(const KURL&);

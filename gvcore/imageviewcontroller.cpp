@@ -315,6 +315,18 @@ ImageViewController::~ImageViewController() {
 	delete d;
 }
 
+
+void ImageViewController::setFocus() {
+	QWidget* view;
+	if (d->mPlayerPart) {
+		view = d->mPlayerPart->widget();
+	} else {
+		view = d->mImageView;
+	}
+	view->setFocus();
+}
+
+
 void ImageViewController::slotLoaded() {
 	LOG("");
 	if (d->mDocument->urlKind()==MimeTypeUtils::KIND_FILE) {
