@@ -2,6 +2,9 @@
 - New features:
  - When available, Gwenview now uses the shooting date instead of the file date
    (Bug 98740).
+- Fixes:
+ - Fixed file renaming, which got broken in 1.3.91.
+
 2006.06.24 - v1.3.91
 - New features:
  - Gwenview can now play videos and display SVG files.

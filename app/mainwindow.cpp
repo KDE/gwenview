@@ -339,8 +339,9 @@ void MainWindow::renameFile() {
 	KURL url;
 	if (mFileViewController->isVisible()) {
 		KURL::List list = mFileViewController->selectedURLs();
-		Q_ASSERT(list.count()>0);
-		if (list.count()==0) return;
+		Q_ASSERT(list.count()==1);
+		if (list.count()!=1) return;
+		url = list.first();
 	} else {
 		url = mDocument->url();
 	}
