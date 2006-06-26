@@ -60,7 +60,8 @@ void parseFilterArgs(KCmdLineArgs* args) {
 	typeList << "all" << "images" << "videos";
 	int mode = typeList.findIndex(filterType);
 	if (mode == -1) {
-		kdWarning() << "Invalid value for filter-type option\n";
+		// Default to "all"
+		FileViewConfig::setFilterMode(0);
 	} else {
 		FileViewConfig::setFilterMode(mode);
 	}
