@@ -609,8 +609,8 @@ void MainWindow::toggleFullScreen() {
 		if (mSwitchToBrowseMode->isChecked()) {
 			mImageDock->setWidget(mImageViewController->widget());
 			mCentralStack->raiseWidget(StackIDBrowse);
+			mFileViewController->setFocus();
 		}
-		mFileViewController->setFocus();
 	}
 }
 
