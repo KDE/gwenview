@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>809</width>
-            <height>28</height>
+            <height>30</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -19,6 +19,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>FilterBar</string>
     </property>
     <hbox>
         <property name="name">
@@ -65,6 +68,9 @@
         <widget class="QLineEdit">
             <property name="name">
                 <cstring>mNameEdit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Filter files with wildcards, like *.png</string>
             </property>
         </widget>
         <spacer>
@@ -123,6 +129,10 @@
             <property name="name">
                 <cstring>mFromDateEdit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Only show files newer than or
+equal to this date</string>
+            </property>
         </widget>
         <spacer>
             <property name="name">
@@ -179,6 +189,9 @@
         <widget class="QDateEdit">
             <property name="name">
                 <cstring>mToDateEdit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Only show files older than or equal to this date</string>
             </property>
         </widget>
         <spacer>
