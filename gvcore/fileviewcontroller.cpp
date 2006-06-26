@@ -233,6 +233,14 @@ public:
 			mShowFilterBarCheckBox, SIGNAL(toggled(bool)),
 			that, SLOT(updateDirListerFilter()) );
 	}
+
+	void loadFilterSettings() {
+		mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
+		mShowFilterBarCheckBox->setChecked(FileViewConfig::showFilterBar());
+		mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
+		mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
+		mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
+	}
 };
 
 
@@ -253,8 +261,6 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	d->that=this;
 	setMinimumWidth(1);
 	d->mToolBar=new KToolBar(this, "", true);
-
-	// Init filter here so that it's properly placed in the vbox
 	d->initFilterBar();
 	d->initFilterCombo();
 	d->mStack=new QWidgetStack(this);
@@ -442,6 +448,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	}
 	thumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 
+	d->loadFilterSettings();
 	updateFromSettings();
 }
 
@@ -975,12 +982,6 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 
 void FileViewController::updateFromSettings() {
-	d->mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
-	d->mShowFilterBarCheckBox->setChecked(FileViewConfig::showFilterBar());
-	d->mFilterBar->mNameEdit->setText(FileViewConfig::nameFilter());
-	d->mFilterBar->mFromDateEdit->setDate(FileViewConfig::fromDateFilter().date());
-	d->mFilterBar->mToDateEdit->setDate(FileViewConfig::toDateFilter().date());
-	
 	updateDirListerFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
