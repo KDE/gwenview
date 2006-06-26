@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "timeutils.h"
 
 // KDE
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <kfilemetainfo.h>
 #include <kglobal.h>
@@ -31,13 +32,14 @@ namespace TimeUtils {
 
 time_t getTime(const KFileItem* item) {
 	const KFileMetaInfo& info = item->metaInfo();
-	QVariant value = info.value("Date/time");
-	QDateTime dt = value.toDateTime();
-	if (dt.isValid()) {
-		return dt.toTime_t();
-	} else {
-		return item->time(KIO::UDS_MODIFICATION_TIME);
+	if (info.isValid()) {
+		QVariant value = info.value("Date/time");
+		QDateTime dt = value.toDateTime();
+		if (dt.isValid()) {
+			return dt.toTime_t();
+		}
 	}
+	return item->time(KIO::UDS_MODIFICATION_TIME);
 }
 
 QString formatTime(time_t time) {
