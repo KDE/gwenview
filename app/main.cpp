@@ -35,8 +35,8 @@ static KCmdLineOptions options[] = {
 	{ "f", I18N_NOOP("Start in fullscreen mode"), 0 },
 	{ "filter-type <all,images,videos>", I18N_NOOP("Filter by file type"), 0 },
 	{ "filter-name <pattern>", I18N_NOOP("Filter by file pattern (*.jpg, 01*...)"), 0 },
-	{ "filter-from <date>", I18N_NOOP("Only show files newer than <date>"), 0 },
-	{ "filter-to <date>", I18N_NOOP("Only show files older than <date>"), 0 },
+	{ "filter-from <date>", I18N_NOOP("Only show files newer or equal to <date>"), 0 },
+	{ "filter-to <date>", I18N_NOOP("Only show files older or equal to <date>"), 0 },
 	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
 	KCmdLineLastOption
 };
