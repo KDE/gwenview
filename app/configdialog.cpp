@@ -253,7 +253,8 @@ void ConfigDialog::calculateCacheSize() {
 
 void ConfigDialog::updateOSDPreview() {
 	CaptionFormatter formatter;
-	KURL url("/path/to/some/image.jpg");
+	KURL url;
+	url.setPath(i18n("/path/to/some/image.jpg"));
 	formatter.mPath=url.path();
 	formatter.mFileName=url.fileName();
 	formatter.mComment=i18n("A comment");
