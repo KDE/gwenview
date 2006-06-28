@@ -53,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kpropsdlg.h>
+#include <kprotocolinfo.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -786,20 +787,26 @@ void MainWindow::showHint(const QString& hint) {
 //
 //-----------------------------------------------------------------------
 void MainWindow::updateStatusInfo() {
-	int pos=mFileViewController->shownFilePosition();
-	uint count=mFileViewController->fileCount();
-	QString filename=mDocument->filename();
 	QString txt;
-	if (count==0) {
-		txt=i18n("No Images");
-	} else {
-		txt=i18n("%1/%2 - %3 %4x%5")
-			.arg(pos+1)
-			.arg(count)
-			.arg(filename)
-			.arg(mDocument->width())
-			.arg(mDocument->height());
+
+	if ( KProtocolInfo::supportsListing(mFileViewController->url()) ) {
+		int pos = mFileViewController->shownFilePosition();
+		uint count = mFileViewController->fileCount();
+		if (count > 0) {
+			txt = i18n("%1/%2 - ").arg(pos+1).arg(count);
+		} else {
+			txt = i18n("No images");
+		}
 	}
+
+	QString filename = mDocument->filename();
+	txt += filename;
+
+	QSize size = mDocument->image().size();
+	if (!size.isEmpty()) {
+		txt += QString(" %1x%2").arg(size.width()).arg(size.height());
+	}
+	
 	mSBDetailLabel->setText(txt);
 	setCaption(filename);
 }
