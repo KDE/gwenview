@@ -1021,7 +1021,8 @@ void FileViewController::dirListerDeleteItem(KFileItem* item) {
 	currentFileView()->removeItem(item);
 
 	if (shownItem==item) {
-		currentFileView()->setShownFileItem(newShownItem);
+		currentFileView()->setCurrentItem(newShownItem);
+		currentFileView()->setSelected(newShownItem, true);
 		if (newShownItem) {
 			emit urlChanged(newShownItem->url());
 		} else {
