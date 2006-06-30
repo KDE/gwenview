@@ -10,6 +10,8 @@
    files whose resolution is unknown.
  - Correct of by one error in selection after files have been removed (Bug
    111240).
+ - List of supported archive formats is no longer hard coded, so you can for
+   example add support for rar archives by installing kio_rar (Bug 120974).
 
 2006.06.24 - v1.3.91
 - New features:

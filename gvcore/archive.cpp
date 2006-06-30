@@ -31,13 +31,19 @@ namespace Archive {
 
 typedef QMap<QString,QString> MimeTypeProtocols;
 
+static const char* KDE_PROTOCOL = "X-KDE-LocalProtocol";
+
 static const MimeTypeProtocols& mimeTypeProtocols() {
 	static MimeTypeProtocols map;
 	if (map.isEmpty()) {
-		map["application/x-tar"]="tar";
-		map["application/x-tgz"]="tar";
-		map["application/x-tbz"]="tar";
-		map["application/x-zip"]="zip";
+		KMimeType::List list = KMimeType::allMimeTypes();
+		KMimeType::List::Iterator it=list.begin(), end=list.end();
+		for (; it!=end; ++it) {
+			if ( (*it)->propertyNames().findIndex(KDE_PROTOCOL)!= -1 ) {
+				QString protocol = (*it)->property(KDE_PROTOCOL).toString();
+				map[(*it)->name()] = protocol;
+			}
+		}
 	}
 	return map;
 }
