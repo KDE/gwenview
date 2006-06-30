@@ -217,7 +217,7 @@ public:
 		mFilterHBox->setSpacing(KDialog::spacingHint());
 
 		mFilterComboBox=new QComboBox(mFilterHBox);
-		mFilterComboBox->insertItem(i18n("No filter"), ALL);
+		mFilterComboBox->insertItem(i18n("All files"), ALL);
 		mFilterComboBox->insertItem(i18n("Images only"), IMAGES_ONLY);
 		mFilterComboBox->insertItem(i18n("Videos only"), VIDEOS_ONLY);
 
