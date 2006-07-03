@@ -1200,6 +1200,9 @@ void MainWindow::createLocationToolBar() {
 	mURLEdit->setDuplicatesEnabled(false);
 	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
 	mURLEdit->setHistoryItems(MiscConfig::history());
+	
+	// Avoid stealing focus
+	mURLEdit->setFocusPolicy(ClickFocus);
 
 	mURLEditCompletion=new KURLCompletion();
 

@@ -312,7 +312,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	d->mContrast = 100;
 	d->mBCGDialog = 0;
 
-	setFocusPolicy(StrongFocus);
+	viewport()->setFocusPolicy(WheelFocus);
 	setFrameStyle(NoFrame);
 	setAcceptDrops( true );
 	viewport()->setAcceptDrops( true );
@@ -348,6 +348,8 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 		this,SLOT(setLockZoom(bool)) );
 
 	d->mZoomCombo=new QComboBox(true);
+	// Avoid stealing focus
+	d->mZoomCombo->setFocusPolicy(ClickFocus);
 	connect(d->mZoomCombo, SIGNAL(activated(int)),
 		this, SLOT(slotSelectZoom()) );
 	
