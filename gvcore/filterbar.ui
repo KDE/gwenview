@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>FilterBar</class>
 <widget class="QWidget">
     <property name="name">
@@ -240,6 +240,7 @@ equal to this date</string>
 </widget>
 <tabstops>
     <tabstop>mResetNameCombo</tabstop>
+    <tabstop>mNameEdit</tabstop>
     <tabstop>mResetFrom</tabstop>
     <tabstop>mFromDateEdit</tabstop>
     <tabstop>mResetTo</tabstop>
