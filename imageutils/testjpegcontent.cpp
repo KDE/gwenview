@@ -48,6 +48,7 @@ const char* ORIENT1_FILE="test_orient1.jpg";
 const QString ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
 const QString ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
+const char* TMP_FILE="tmp.jpg";
 
 
 class TestEnvironment {
@@ -147,6 +148,23 @@ int main(int argc, char* argv[]) {
 	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
 	result=content.save(ORIENT1_VFLIP_FILE);
 	Q_ASSERT(result);
+
+    // Test that rotating a file a lot of times does not cause findJxform() to fail
+    result = content.load(ORIENT6_FILE);
+    Q_ASSERT(result);
+    
+    // 12*4 + 1 is the same as 1, since rotating four times brings you back
+    for(int loop=0; loop< 12*4 + 1; ++loop) {
+        content.transform(ImageUtils::ROT_90);
+    }
+    result = content.save(TMP_FILE);
+    Q_ASSERT(result);
+
+    result = content.load(TMP_FILE);
+    Q_ASSERT(result);
+
+    Q_ASSERT(content.size() == QSize(ORIENT6_HEIGHT, ORIENT6_WIDTH));
+    
 	
 	// Check the other meta info are still here
 	QStringList ignoredKeys;
@@ -158,7 +176,8 @@ int main(int argc, char* argv[]) {
 	Q_ASSERT(result);
 	Q_ASSERT(content.orientation() == 6);
 	Q_ASSERT(content.comment() == ORIENT6_COMMENT);
-	kdWarning() << "# Next function should output errors about incomplete image" << endl;
 	content.transform(ImageUtils::VFLIP);
+	kdWarning() << "# Next function should output errors about incomplete image" << endl;
+	content.save(TMP_FILE);
 	kdWarning() << "#" << endl;
 }

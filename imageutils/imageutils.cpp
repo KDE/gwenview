@@ -53,7 +53,7 @@ QImage transform(const QImage& img, Orientation orientation) {
 		matrix.scale(1,-1);
 		break;
 	
-	case ROT_90_HFLIP:
+	case TRANSPOSE:
 		matrix.scale(-1,1);
 		matrix.rotate(90);
 		break;
@@ -62,7 +62,7 @@ QImage transform(const QImage& img, Orientation orientation) {
 		matrix.rotate(90);
 		break;
 	
-	case ROT_90_VFLIP:
+	case TRANSVERSE:
 		matrix.scale(1,-1);
 		matrix.rotate(90);
 		break;

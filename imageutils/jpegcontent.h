@@ -55,8 +55,8 @@ public:
 
 	bool load(const QString& file);
 	bool loadFromData(const QByteArray& rawData);
-	bool save(const QString& file) const;
-	bool save(QFile*) const;
+	bool save(const QString& file);
+	bool save(QFile*);
 
 private:
 	struct Private;
@@ -64,6 +64,7 @@ private:
 
 	JPEGContent(const JPEGContent&);
 	void operator=(const JPEGContent&);
+    void applyPendingChanges();
 };
 
 

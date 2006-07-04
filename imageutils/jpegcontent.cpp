@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
 // System
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +33,7 @@ extern "C" {
 #include <qfile.h>
 #include <qimage.h>
 #include <qmap.h>
+#include <qwmatrix.h>
 
 // KDE
 #include <kdebug.h>
@@ -143,11 +145,14 @@ struct JPEGContent::Private {
 	QByteArray mRawData;
 	QSize mSize;
 	QString mComment;
+	bool mPendingChanges;
+	QWMatrix mTransformMatrix;
 	ExifData* mExifData;
 	ExifEntry* mOrientationEntry;
 	ExifByteOrder mByteOrder;
 
 	Private() {
+		mPendingChanges = false;
 		mExifData=0;
 		mOrientationEntry=0;
 	}
@@ -254,6 +259,8 @@ bool JPEGContent::load(const QString& path) {
 
 
 bool JPEGContent::loadFromData(const QByteArray& data) {
+	d->mPendingChanges = false;
+	d->mTransformMatrix.reset();
 	if (d->mExifData) {
 		exif_data_unref(d->mExifData);
 		d->mExifData=0;
@@ -280,9 +287,9 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 
 	// Adjust the size according to the orientation
 	switch (orientation()) {
-	case ROT_90_HFLIP:
+	case TRANSPOSE:
 	case ROT_90:
-	case ROT_90_VFLIP:
+	case TRANSVERSE:
 	case ROT_270:
 		d->mSize.transpose();
 		break;
@@ -354,18 +361,109 @@ static void doSetComment(struct jpeg_decompress_struct *src, const QString& comm
 }
 
 
-void JPEGContent::transform(Orientation orientation, bool setComment, const QString& comment) {
-	QMap<Orientation,JXFORM_CODE> orientation2jxform;
-	orientation2jxform[NOT_AVAILABLE]= JXFORM_NONE;
-	orientation2jxform[NORMAL]=        JXFORM_NONE;
-	orientation2jxform[HFLIP]=         JXFORM_FLIP_H;
-	orientation2jxform[ROT_180]=       JXFORM_ROT_180;
-	orientation2jxform[VFLIP]=         JXFORM_FLIP_V;
-	orientation2jxform[ROT_90_HFLIP]=  JXFORM_TRANSPOSE;
-	orientation2jxform[ROT_90]=        JXFORM_ROT_90;
-	orientation2jxform[ROT_90_VFLIP]=  JXFORM_TRANSVERSE;
-	orientation2jxform[ROT_270]=       JXFORM_ROT_270;
+static QWMatrix createRotMatrix(int angle) {
+	QWMatrix matrix;
+	matrix.rotate(angle);
+	return matrix;
+}
 
+
+static QWMatrix createScaleMatrix(int dx, int dy) {
+	QWMatrix matrix;
+	matrix.scale(dx, dy);
+	return matrix;
+}
+
+
+
+struct OrientationInfo {
+	OrientationInfo() {}
+	OrientationInfo(Orientation o, QWMatrix m, JXFORM_CODE j)
+	: orientation(o), matrix(m), jxform(j) {}
+
+	Orientation orientation;
+	QWMatrix matrix;
+	JXFORM_CODE jxform;
+};
+typedef QValueList<OrientationInfo> OrientationInfoList;
+
+static const OrientationInfoList& orientationInfoList() {
+	static OrientationInfoList list;
+	if (list.size() == 0) {
+		QWMatrix rot90 = createRotMatrix(90);
+		QWMatrix hflip = createScaleMatrix(-1, 1);
+		QWMatrix vflip = createScaleMatrix(1, -1);
+
+		list
+			<< OrientationInfo(NOT_AVAILABLE, QWMatrix(), JXFORM_NONE)
+			<< OrientationInfo(NORMAL, QWMatrix(), JXFORM_NONE)
+			<< OrientationInfo(HFLIP, hflip, JXFORM_FLIP_H)
+			<< OrientationInfo(ROT_180, createRotMatrix(180), JXFORM_ROT_180)
+			<< OrientationInfo(VFLIP, vflip, JXFORM_FLIP_V)
+			<< OrientationInfo(TRANSPOSE, hflip * rot90, JXFORM_TRANSPOSE)
+			<< OrientationInfo(ROT_90, rot90, JXFORM_ROT_90)
+			<< OrientationInfo(TRANSVERSE, vflip * rot90, JXFORM_TRANSVERSE)
+			<< OrientationInfo(ROT_270, createRotMatrix(270), JXFORM_ROT_270)
+			;
+	}
+	return list;
+}
+
+
+void JPEGContent::transform(Orientation orientation, bool setComment, const QString& comment) {
+	if (setComment) {
+		d->mPendingChanges = true;
+		d->mComment = comment;
+	}
+
+	if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
+		d->mPendingChanges = true;
+		OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
+		for (; it!=end; ++it) {
+			if ( (*it).orientation == orientation ) {
+				d->mTransformMatrix = (*it).matrix * d->mTransformMatrix;
+				break;
+			}
+		}
+		if (it == end) {
+			kdWarning() << k_funcinfo << "Could not find matrix for orientation\n";
+		}
+	}
+}
+
+
+#if 0
+static void dumpMatrix(const QWMatrix& matrix) {
+	kdDebug() << "matrix | " << matrix.m11() << ", " << matrix.m12() << " |\n";
+	kdDebug() << "       | " << matrix.m21() << ", " << matrix.m22() << " |\n";
+	kdDebug() << "       ( " << matrix.dx()  << ", " << matrix.dy()  << " )\n";
+}
+#endif
+
+
+static bool matricesAreSame(const QWMatrix& m1, const QWMatrix& m2, double tolerance) {
+	return fabs( m1.m11() - m2.m11() ) < tolerance
+		&& fabs( m1.m12() - m2.m12() ) < tolerance
+		&& fabs( m1.m21() - m2.m21() ) < tolerance
+		&& fabs( m1.m22() - m2.m22() ) < tolerance
+		&& fabs( m1.dx()  - m2.dx()  ) < tolerance
+		&& fabs( m1.dy()  - m2.dy()  ) < tolerance;
+}
+
+
+static JXFORM_CODE findJxform(const QWMatrix& matrix) {
+	OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
+	for (; it!=end; ++it) {
+		if ( matricesAreSame( (*it).matrix, matrix, 0.001) ) {
+			return (*it).jxform;
+		}
+	}
+	kdWarning() << "findJxform: failed\n";
+	return JXFORM_NONE;
+}
+
+
+void JPEGContent::applyPendingChanges() {
 	if (d->mRawData.size()==0) {
 		kdError() << "No data loaded\n";
 		return;
@@ -403,17 +501,13 @@ void JPEGContent::transform(Orientation orientation, bool setComment, const QStr
 	// Enable saving of extra markers that we want to copy
 	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
 
-	// Read file header
 	(void) jpeg_read_header(&srcinfo, TRUE);
 
-	// Set comment
-	if (setComment) {
-		doSetComment(&srcinfo, comment);
-	}
+	doSetComment(&srcinfo, d->mComment);
 
 	// Init transformation
 	jpeg_transform_info transformoption;
-	transformoption.transform = orientation2jxform[orientation];
+	transformoption.transform = findJxform(d->mTransformMatrix);
 	transformoption.force_grayscale = false;
 	transformoption.trim = false;
 	jtransform_request_workspace(&srcinfo, &transformoption);
@@ -498,7 +592,7 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 }
 
 
-bool JPEGContent::save(const QString& path) const {
+bool JPEGContent::save(const QString& path) {
 	QFile file(path);
 	if (!file.open(IO_WriteOnly)) {
 		kdError() << "Could not open '" << path << "' for writing\n";
@@ -509,10 +603,15 @@ bool JPEGContent::save(const QString& path) const {
 }
 
 
-bool JPEGContent::save(QFile* file) const {
+bool JPEGContent::save(QFile* file) {
 	if (d->mRawData.size()==0) {
 		kdError() << "No data to store in '" << file->name() << "'\n";
 		return false;
+	}
+
+	if (d->mPendingChanges) {
+		applyPendingChanges();
+		d->mPendingChanges = false;
 	}
 
 	if (!d->mExifData) {
