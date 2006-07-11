@@ -41,7 +41,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char version[] = "1.3.91";
+static const char version[] = "1.3.92";
 
 
 void parseFilterArgs(KCmdLineArgs* args) {
