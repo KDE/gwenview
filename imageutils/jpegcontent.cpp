@@ -330,6 +330,13 @@ QString JPEGContent::comment() const {
 }
 
 
+void JPEGContent::setComment(const QString& comment) {
+	d->mPendingChanges = true;
+	d->mComment = comment;
+}
+
+
+
 // This code is inspired by jpegtools.c from fbida
 static void doSetComment(struct jpeg_decompress_struct *src, const QString& comment) {
 	jpeg_saved_marker_ptr mark;
@@ -410,12 +417,7 @@ static const OrientationInfoList& orientationInfoList() {
 }
 
 
-void JPEGContent::transform(Orientation orientation, bool setComment, const QString& comment) {
-	if (setComment) {
-		d->mPendingChanges = true;
-		d->mComment = comment;
-	}
-
+void JPEGContent::transform(Orientation orientation) {
 	if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
 		d->mPendingChanges = true;
 		OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());

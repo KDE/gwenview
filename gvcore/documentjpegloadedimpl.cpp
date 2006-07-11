@@ -50,9 +50,6 @@ namespace Gwenview {
 class DocumentJPEGLoadedImplPrivate {
 public:
 	ImageUtils::JPEGContent mJPEGContent;
-	bool mCommentModified;
-	QString mComment;
-	Document::CommentState mCommentState;
 
 };
 
@@ -61,7 +58,6 @@ DocumentJPEGLoadedImpl::DocumentJPEGLoadedImpl(Document* document, const QByteAr
 : DocumentLoadedImpl(document) {
 	LOG("" << mDocument->url().prettyURL() << ", data size: " << rawData.size() );
 	d=new DocumentJPEGLoadedImplPrivate;
-	d->mCommentModified=false;
 	d->mJPEGContent.loadFromData(rawData);
 }
 
@@ -79,8 +75,6 @@ void DocumentJPEGLoadedImpl::init() {
 		d->mJPEGContent.transform(orientation);
 	}
 
-	d->mCommentState=Document::WRITABLE;
-	d->mComment=d->mJPEGContent.comment();
 	DocumentLoadedImpl::init();
 }
 
@@ -91,9 +85,7 @@ DocumentJPEGLoadedImpl::~DocumentJPEGLoadedImpl() {
 
 
 void DocumentJPEGLoadedImpl::transform(ImageUtils::Orientation orientation) {
-	// Little optimization, update the comment if necessary
-	d->mJPEGContent.transform(orientation, d->mCommentModified, d->mComment);
-	d->mCommentModified=false;
+	d->mJPEGContent.transform(orientation);
 	setImage(ImageUtils::transform(mDocument->image(), orientation), true);
 }
 
@@ -107,12 +99,6 @@ QString DocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format) c
 				mDocument->image(), 128, 128, ImageUtils::SMOOTH_FAST, QImage::ScaleMin));
 		}
 
-		if (d->mCommentModified) {
-			LOG("Comment must be saved");
-			d->mJPEGContent.transform(ImageUtils::NORMAL, true, d->mComment);
-			d->mCommentModified=false;
-		}
-		
 		LOG("JPEG Lossless save");
 		if (!d->mJPEGContent.save(file)) {
 			return i18n("Could not save this JPEG file.");
@@ -127,16 +113,15 @@ QString DocumentJPEGLoadedImpl::localSave(QFile* file, const QCString& format) c
 
 
 QString DocumentJPEGLoadedImpl::comment() const {
-	return d->mComment;
+	return d->mJPEGContent.comment();
 }
 
 void DocumentJPEGLoadedImpl::setComment(const QString& comment) {
-	d->mCommentModified=true;
-	d->mComment=comment;
+	d->mJPEGContent.setComment(comment);
 }
 
 Document::CommentState DocumentJPEGLoadedImpl::commentState() const {
-	return d->mCommentState;
+	return Document::WRITABLE;
 }
 
 

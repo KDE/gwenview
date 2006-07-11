@@ -47,8 +47,9 @@ public:
 	QSize size() const;
 
 	QString comment() const;
+	void setComment(const QString&);
 	
-	void transform(Orientation, bool setComment=false, const QString& comment=QString::null);
+	void transform(Orientation);
 
 	QImage thumbnail() const;
 	void setThumbnail(const QImage&);

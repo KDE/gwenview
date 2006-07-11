@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfilemetainfo.h>
 
 // Local
-#include "imageutils/orientation.h"
+#include "imageutils/imageutils.h"
 #include "imageutils/jpegcontent.h"
 
 using namespace std;
@@ -46,7 +46,6 @@ const char* CUT_FILE="cut.jpg";
 const QString ORIENT6_COMMENT="a comment";
 const char* ORIENT1_FILE="test_orient1.jpg";
 const QString ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
-const QString ORIENT1_VFLIP_COMMENT="vflip!";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 const char* TMP_FILE="tmp.jpg";
 
@@ -114,6 +113,59 @@ void compareMetaInfo(const QString& path1, const QString& path2, const QStringLi
 	}
 }
 
+
+/**
+ * This function tests JPEGContent::transform() by applying a ROT_90
+ * transformation, saving, reloading and applying a ROT_270 to undo the ROT_90.
+ * Saving and reloading are necessary because lossless transformation only
+ * happens in JPEGContent::save()
+ */
+void testTransform() {
+	bool result;
+	QImage finalImage, expectedImage;
+
+	ImageUtils::JPEGContent content;
+	result = content.load(ORIENT6_FILE);
+	Q_ASSERT(result);
+
+	content.transform(ImageUtils::ROT_90);
+	result = content.save(TMP_FILE);
+	Q_ASSERT(result);
+
+	result = content.load(TMP_FILE);
+	Q_ASSERT(result);
+	content.transform(ImageUtils::ROT_270);
+	result = content.save(TMP_FILE);
+	Q_ASSERT(result);
+
+	result = finalImage.load(TMP_FILE);
+	Q_ASSERT(result);
+
+	result = expectedImage.load(ORIENT6_FILE);
+	Q_ASSERT(result);
+
+	Q_ASSERT(finalImage == expectedImage);
+}
+
+
+void testSetComment() {
+	QString comment = "test comment";
+	ImageUtils::JPEGContent content;
+	bool result;
+	result = content.load(ORIENT6_FILE);
+	Q_ASSERT(result);
+
+	content.setComment(comment);
+	Q_ASSERT(content.comment() == comment);
+	result = content.save(TMP_FILE);
+	Q_ASSERT(result);
+
+	result = content.load(TMP_FILE);
+	Q_ASSERT(result);
+	Q_ASSERT(content.comment() == comment);
+}
+
+
 int main(int argc, char* argv[]) {
 	TestEnvironment testEnv;
 	bool result;
@@ -143,11 +195,8 @@ int main(int argc, char* argv[]) {
 	Q_ASSERT(result);
 	Q_ASSERT(content.orientation() == ImageUtils::NORMAL);
 
-	// transform()
-	content.transform(ImageUtils::VFLIP, true, ORIENT1_VFLIP_COMMENT);
-	Q_ASSERT(content.comment() == ORIENT1_VFLIP_COMMENT);
-	result=content.save(ORIENT1_VFLIP_FILE);
-	Q_ASSERT(result);
+	testTransform();
+	testSetComment();
 
     // Test that rotating a file a lot of times does not cause findJxform() to fail
     result = content.load(ORIENT6_FILE);
