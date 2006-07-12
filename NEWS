@@ -15,6 +15,7 @@
  - Some focus bugs have been fixed (Bugs 102852 and 130143).
  - Do not apply lossless rotations until actual saving, this speeds up
    rotations (Bug 130146).
+ - Reduced the width of the filter bar.
 
 2006.06.24 - v1.3.91
 - New features:

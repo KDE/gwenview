@@ -46,28 +46,12 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Name:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>mNameCombo</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
+        <widget class="Gwenview::ClickLineEdit">
             <property name="name">
                 <cstring>mNameEdit</cstring>
+            </property>
+            <property name="clickMessage" stdset="0">
+                <string>Name</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Filter files with wildcards, like *.png</string>
@@ -85,7 +69,7 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>12</width>
+                    <width>16</width>
                     <height>16</height>
                 </size>
             </property>
@@ -146,7 +130,7 @@ equal to this date</string>
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>12</width>
+                    <width>16</width>
                     <height>16</height>
                 </size>
             </property>
@@ -206,7 +190,7 @@ equal to this date</string>
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>12</width>
+                    <width>16</width>
                     <height>16</height>
                 </size>
             </property>
@@ -238,9 +222,32 @@ equal to this date</string>
         </spacer>
     </hbox>
 </widget>
+<customwidgets>
+    <customwidget>
+        <class>Gwenview::ClickLineEdit</class>
+        <header location="local">clicklineedit.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>20</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>1</hordata>
+            <verdata>0</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <property type="String">clickMessage</property>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="818">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002f949444154388db5943168dc6614c77f57343cc10d12dc20c1054e5b0e6ac875ea1dedd2ed0e3ad4e0a1052f860c69c7ae490a1d1bdc4c4d8752770a5d42132834834137f4a20b047a1e0a2ab8200f067d83411f44a03708d2413e3bcef9da42ddb7083ebdeff7fddfff7ddf6b2549c23246a3d12bae20922469b596e067f367afa228425f2ab9c9b1a5fd57102d95344d8967315aead9bab354fae8a747848140d712f615384f1267997909b8ae181c0322fcf2e40d3080be54e85af232c6960ba82b10a0762972302715e0127484f09a22ed0aad4f37b7c10b2f1e7806ce4d4ed4d7536801e293a510ff5c319f5960698dc7e086c764cb673004289aaada6bc0b6b4287aaad4e7b75fe1c1bdbc417584fedb3dc481ec48591c581607969d5b21938f5da0827a0df8dc50c85278702f0360733b623206afd3fc53f549f661ef7ec6deb71961d0673816702e36fbad1570ed123f2ecea09f6c0bd2a9400aec89103f553ef850f8ec4e04c0c31f72d40a82ac572c0e14392c9e2b41c7633206757204416dc8f75f17cc67066b02766e85c44f3d16cf2dd9a1aed47e51b1d3745f51a2eb82d70171042d7dbef9aa81f6ba1ec3f77c5c4f190c7c00ccf13f8101700145a4f1d49e9c43015c11fc50c05196d557b5ac5056c05e07c0233b52548564aacc678620f0e8f502d23f0dbb7733b23f02cc61850051af91b3d66380e81af46f78a40796641f265b1ed6060cdff5f14361f7ae92fe6eb8fd29a8b5785d21da0073fc778a6b9076c5e6478d777bf733e65365e766c83b4388ae5b3effb24faf17608d416bd8dc0a89ba50bd360256153ba0350c86b0733364efbb94dd2f32e27d8fc186db3437cb3046c1697c9d4f2b46630fd75973ddb454b4ae4e570b26db2e6130e0e18f398b996131836630094157d8dc8a984e0b8a524169be9781d3346da6541b96ad188e61f07e487a18628f9650883620ecc1681c35673996f4c51a703c8b41042f04695ba89b2b25c8799603c640661af5ae231425a42f2cf91bcdbb60c5ebf3f4bfc6250fe40ac14992b4fe17f055c3932469fd051dce4f49a767eff00000000049454e44ae426082</data>
+    </image>
+</images>
 <tabstops>
     <tabstop>mResetNameCombo</tabstop>
-    <tabstop>mNameEdit</tabstop>
     <tabstop>mResetFrom</tabstop>
     <tabstop>mFromDateEdit</tabstop>
     <tabstop>mResetTo</tabstop>
@@ -248,4 +255,7 @@ equal to this date</string>
     <tabstop>mFilterButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>doublespinbox.h</includehint>
+</includehints>
 </UI>
