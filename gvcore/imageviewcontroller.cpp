@@ -453,6 +453,8 @@ void ImageViewController::openImageViewContextMenu(const QPoint& pos) {
 	// if necessary. But KParts may not have the action itself.
 	plugAction(&menu, d->mActionCollection, "fullscreen");
 	
+	plugAction(&menu, d->mActionCollection, "slideshow");
+	
 	if (validImage) {
 		menu.insertSeparator();
 
