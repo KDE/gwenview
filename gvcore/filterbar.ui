@@ -255,7 +255,4 @@ equal to this date</string>
     <tabstop>mFilterButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>doublespinbox.h</includehint>
-</includehints>
 </UI>
