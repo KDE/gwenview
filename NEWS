@@ -1,3 +1,7 @@
+2006.07.14 - v1.3.92b
+- Fixes:
+ - Fix build error (if you got errors about doublespinbox.h, this is it).
+
 2006.07.14 - v1.3.92
 - New features:
  - When available, Gwenview now uses the shooting date instead of the file date
