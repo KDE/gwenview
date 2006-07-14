@@ -285,11 +285,15 @@ void FileOpRenameObject::operator()() {
 	InputDialog dlg(mParent);
 	dlg.setCaption(i18n("Renaming File"));
 	dlg.setLabel(i18n("<p>Rename file <b>%1</b> to:</p>").arg(QStyleSheet::escape(filename)));
-	dlg.setButtonOK( KGuiItem(i18n("Rename"), "edit") );
+	dlg.setButtonOK( KGuiItem(i18n("&Rename"), "edit") );
 
 	dlg.lineEdit()->setText(filename);
 	int extPos = filename.findRev('.');
 	if (extPos != -1) {
+		if (filename.mid(extPos - 4, 4) == ".tar") {
+			// Special case: *.tar.*
+			extPos -= 4;
+		}
 		dlg.lineEdit()->setSelection(0, extPos);
 	}
 	if (!dlg.exec()) return;
