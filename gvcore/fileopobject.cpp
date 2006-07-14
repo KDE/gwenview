@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kglobalsettings.h>
-#include <kinputdialog.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileoperation.h"
 #include "fileopobject.moc"
 #include "fileoperationconfig.h"
+#include "inputdialog.h"
 namespace Gwenview {
 
 
@@ -187,12 +188,13 @@ void FileOpMoveToObject::operator()() {
 
 //-FileOpMakeDirObject-------------------------------------------------------------
 void FileOpMakeDirObject::operator()() {
-	bool ok;
-	QString newDir=KInputDialog::getText(
-			i18n("Creating Folder"),
-			i18n("Enter the name of the new folder:"),
-			QString::null, &ok, mParent);
-	if (!ok) return;
+	InputDialog dlg(mParent);
+	dlg.setCaption( i18n("Creating Folder") );
+	dlg.setLabel( i18n("Enter the name of the new folder:") );
+	dlg.setButtonOK( KGuiItem(i18n("Create Folder"), "folder_new") );
+	if (!dlg.exec()) return;
+	
+	QString newDir = dlg.lineEdit()->text();
 
 	KURL newURL(mURLList.first());
 	newURL.addPath(newDir);
@@ -276,19 +278,24 @@ void FileOpRealDeleteObject::operator()() {
 
 //-FileOpRenameObject--------------------------------------------------------------
 void FileOpRenameObject::operator()() {
-	bool ok;
 	KURL srcURL=mURLList.first();
 
-// Prompt for the new filename
-	QString filename=QStyleSheet::escape(srcURL.filename());
-	mNewFilename=KInputDialog::getText(i18n("Renaming File"),
-		i18n("<p>Rename file <b>%1</b> to:</p>").arg(filename),
-		srcURL.filename(),
-		&ok,mParent);
+	// Prompt for the new filename
+	QString filename = srcURL.filename();
+	InputDialog dlg(mParent);
+	dlg.setCaption(i18n("Renaming File"));
+	dlg.setLabel(i18n("<p>Rename file <b>%1</b> to:</p>").arg(QStyleSheet::escape(filename)));
+	dlg.setButtonOK( KGuiItem(i18n("Rename"), "edit") );
 
-	if (!ok) return;
+	dlg.lineEdit()->setText(filename);
+	int extPos = filename.findRev('.');
+	if (extPos != -1) {
+		dlg.lineEdit()->setSelection(0, extPos);
+	}
+	if (!dlg.exec()) return;
+	mNewFilename = dlg.lineEdit()->text();
 
-// Rename the file
+	// Rename the file
 	KURL destURL=srcURL;
 	destURL.setFileName(mNewFilename);
 	KIO::Job* job=KIO::move(srcURL,destURL);

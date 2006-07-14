@@ -104,30 +104,12 @@ void DirViewController::slotTreeViewContextMenu(KListView*, QListViewItem*, cons
 
 
 void DirViewController::makeDir() {
-	KIO::Job* job;
 	if (!d->mTreeView->currentItem()) return;
-
-	bool ok;
-	QString newDir=KInputDialog::getText(
-			i18n("Creating Folder"),
-			i18n("Enter the name of the new folder:"),
-			QString::null, &ok, d->mTreeView);
-	if (!ok) return;
-
-	KURL newURL(d->mTreeView->currentURL());
-	newURL.addPath(newDir);
-	job=KIO::mkdir(newURL);
-
-	connect(job, SIGNAL(result(KIO::Job*)),
-		this, SLOT(slotDirMade(KIO::Job*)) );
+	FileOperation::makeDir(d->mTreeView->currentURL(), d->mTreeView, this, SLOT(slotDirMade()) );
 }
 
 
-void DirViewController::slotDirMade(KIO::Job* job) {
-	if (job->error()) {
-		job->showErrorDialog(d->mTreeView);
-		return;
-	}
+void DirViewController::slotDirMade() {
 	if (!d->mTreeView->currentItem()) return;
 	d->mTreeView->currentItem()->setOpen(true);
 }

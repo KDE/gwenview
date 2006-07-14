@@ -56,8 +56,9 @@ void moveTo(const KURL::List& srcURL,QWidget* parent,QObject* receiver,const cha
 	(*op)();
 }
 
-void makeDir(const KURL& parentURL, QWidget* parent) {
+void makeDir(const KURL& parentURL, QWidget* parent, QObject* receiver, const char* slot) {
     FileOpObject* op=new FileOpMakeDirObject(parentURL, parent);
+	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
 	(*op)();
 }
 

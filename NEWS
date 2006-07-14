@@ -4,6 +4,8 @@
    (Bug 98740).
  - An entry to start the slide show has been added to the image popup menu (Bug
    130407).
+ - In the rename dialogs, the file extension is no longer selected by
+   default (Bug 130408)
 - Fixes:
  - Fixed file renaming, which got broken in 1.3.91.
  - Do not reset filters when configuring image list.

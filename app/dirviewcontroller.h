@@ -60,7 +60,7 @@ private slots:
 	void slotTreeViewContextMenu(KListView*, QListViewItem*, const QPoint&);
 
 	void makeDir();
-	void slotDirMade(KIO::Job*);
+	void slotDirMade();
 	void renameDir();
 	void removeDir();
 	void showPropertiesDialog();
