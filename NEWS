@@ -1,3 +1,9 @@
+2006.xx.xx - v1.3.93
+- Fixes:
+ - The thumbnail files are now generated using correct name and permissions
+   according to Thumbnail Managing Standard
+   (http://jens.triq.net/thumbnail-spec/index.html) (Bug 130937).
+
 2006.07.14 - v1.3.92b
 - Fixes:
  - Fix build error (if you got errors about doublespinbox.h, this is it).
