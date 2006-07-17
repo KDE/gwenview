@@ -65,6 +65,7 @@ extern "C"
 int xcursor_write( XcursorFile*, unsigned char*, int )
 {
     assert( false ); // not write support
+    return 0;
 }
 
 extern "C"
