@@ -77,14 +77,7 @@ namespace Gwenview {
 static QString generateOriginalURI(KURL url) {
 	// Don't include the password if any
 	url.setPass(QString::null);
-	
-	// The TMS defines local files as file:///path/to/file instead of KDE's
-	// way (file:/path/to/file)
-	if (url.protocol() == "file") {
-		return "file://" + url.path();
-	} else {
-		return url.url();
-	}
+	return url.url();
 }
 
 
@@ -193,15 +186,24 @@ void ThumbnailThread::loadThumbnail() {
 		mImage.setText("Thumb::Image::Width", 0, QString::number(mOriginalWidth));
 		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
 		mImage.setText("Software", 0, "Gwenview");
-		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
 
-		QFile thumbnailFile(mThumbnailPath);
-		if (!thumbnailFile.open(IO_WriteOnly)) {
-			kdWarning() << "Could not create thumbnail '" << mThumbnailPath << "'\n";
+		QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize);
+		KStandardDirs::makeDir(thumbnailDir, 0700);
+
+		KTempFile tmp(thumbnailDir + "/gwenview", ".png");
+		tmp.setAutoDelete(true);
+		if (tmp.status()!=0) {
+			QString reason( strerror(tmp.status()) );
+			kdWarning() << "Could not create a temporary file.\nReason: " << reason << endl;
 			return;
 		}
-		fchmod(thumbnailFile.handle(), 0600);
-		mImage.save(&thumbnailFile, "PNG");
+
+		if (!mImage.save(tmp.name(), "PNG")) {
+			kdWarning() << "Could not save thumbnail for file " << mOriginalURI << endl;
+			return;
+		}
+		
+		rename(QFile::encodeName(tmp.name()), QFile::encodeName(mThumbnailPath));
 	}
 }
 
