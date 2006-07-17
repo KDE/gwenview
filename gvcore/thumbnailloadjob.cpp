@@ -194,7 +194,14 @@ void ThumbnailThread::loadThumbnail() {
 		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
 		mImage.setText("Software", 0, "Gwenview");
 		KStandardDirs::makeDir(ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize), 0700);
-		mImage.save(mThumbnailPath, "PNG");
+
+		QFile thumbnailFile(mThumbnailPath);
+		if (!thumbnailFile.open(IO_WriteOnly)) {
+			kdWarning() << "Could not create thumbnail '" << mThumbnailPath << "'\n";
+			return;
+		}
+		fchmod(thumbnailFile.handle(), 0600);
+		mImage.save(&thumbnailFile, "PNG");
 	}
 }
 
