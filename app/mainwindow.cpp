@@ -1200,6 +1200,10 @@ void MainWindow::createLocationToolBar() {
 	mURLEdit->setDuplicatesEnabled(false);
 	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
 	mURLEdit->setHistoryItems(MiscConfig::history());
+
+	// Do not let the combobox get wider than available space, as this would
+	// hide the toolbuttons after it
+	mURLEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	
 	// Avoid stealing focus
 	mURLEdit->setFocusPolicy(ClickFocus);
