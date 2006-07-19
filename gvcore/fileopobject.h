@@ -58,6 +58,8 @@ protected slots:
 protected:
 	QWidget* mParent;
 	KURL::List mURLList;
+
+    void polishJob(KIO::Job*);
 };
 
 
@@ -91,6 +93,15 @@ public:
     FileOpMakeDirObject(const KURL& url, QWidget* parent=0L) : FileOpObject(url, parent) {}
 	void operator()();
 };
+
+class FileOpDelObject : public FileOpObject {
+Q_OBJECT
+public:
+	FileOpDelObject(const KURL& url,QWidget* parent=0L) : FileOpObject(url,parent) {}
+	FileOpDelObject(const KURL::List& urlList,QWidget* parent=0L) : FileOpObject(urlList,parent) {}
+	void operator()();
+};
+
 
 class FileOpTrashObject : public FileOpObject {
 Q_OBJECT

@@ -63,11 +63,9 @@ void makeDir(const KURL& parentURL, QWidget* parent, QObject* receiver, const ch
 }
 
 void del(const KURL::List& url,QWidget* parent,QObject* receiver,const char* slot) {
-	if (FileOperationConfig::deleteToTrash()) {
-		trash(url, parent, receiver, slot);
-	} else {
-		realDelete(url, parent, receiver, slot);
-	}
+	FileOpObject* op = new FileOpDelObject(url,parent);
+	if (receiver && slot) QObject::connect(op,SIGNAL(success()),receiver,slot);
+	(*op)();
 }
 
 

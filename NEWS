@@ -1,4 +1,7 @@
 2006.xx.xx - v1.3.93
+- New features:
+ - Use the same delete dialog as Amarok and Juk, to easily choose between
+   sending files to trash or permanently deleting them.
 - Fixes:
  - The thumbnail files are now generated using correct name and permissions
    according to Thumbnail Managing Standard

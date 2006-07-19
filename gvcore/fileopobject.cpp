@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kurlcombobox.h>
 
 // Local
+#include "deletedialog.h"
 #include "fileoperation.h"
 #include "fileopobject.moc"
 #include "fileoperationconfig.h"
@@ -87,6 +88,13 @@ void FileOpObject::slotResult(KIO::Job* job) {
 }
 
 
+void FileOpObject::polishJob(KIO::Job* job) {
+	job->setWindow(mParent->topLevelWidget());
+	connect( job, SIGNAL( result(KIO::Job*) ),
+		this, SLOT( slotResult(KIO::Job*) ) );
+}
+
+
 //-FileOpCopyToObject--------------------------------------------------------------
 
 
@@ -113,10 +121,8 @@ void FileOpCopyToObject::operator()() {
 	if (destURL.isEmpty()) return;
 
 // Copy the file
-	KIO::Job* copyJob=KIO::copy(mURLList,destURL,true);
-	copyJob->setWindow(mParent->topLevelWidget());
-	connect( copyJob, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+	KIO::Job* job=KIO::copy(mURLList,destURL,true);
+	polishJob(job);
 
 }
 
@@ -147,10 +153,8 @@ void FileOpLinkToObject::operator()() {
 	if (destURL.isEmpty()) return;
 
 // Copy the file
-	KIO::Job* copyJob=KIO::link(mURLList,destURL,true);
-	copyJob->setWindow(mParent->topLevelWidget());
-	connect( copyJob, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+	KIO::Job* job=KIO::link(mURLList,destURL,true);
+	polishJob(job);
 }
 
 
@@ -178,11 +182,8 @@ void FileOpMoveToObject::operator()() {
 	if (destURL.isEmpty()) return;
 
 // Move the file
-	KIO::Job* moveJob=KIO::move(mURLList,destURL,true);
-	moveJob->setWindow(mParent->topLevelWidget());
-	connect( moveJob, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
-
+	KIO::Job* job=KIO::move(mURLList,destURL,true);
+	polishJob(job);
 }
 
 
@@ -199,17 +200,51 @@ void FileOpMakeDirObject::operator()() {
 	KURL newURL(mURLList.first());
 	newURL.addPath(newDir);
     KIO::Job* job=KIO::mkdir(newURL);
-	job->setWindow(mParent->topLevelWidget());
+	polishJob(job);
+}
 
-	connect( job, SIGNAL(result(KIO::Job*)),
-        this, SLOT( slotResult(KIO::Job*)) );
+
+static KIO::Job* createTrashJob(KURL::List lst) {
+	KURL trashURL("trash:/");
+	// Go do it
+	if (lst.count()==1) {
+		// If there's only one file, KIO::move will think we want to overwrite
+		// the trash dir with the file to trash, so we add the file name
+		trashURL.addPath(lst.first().fileName());
+	}
+	return KIO::move(lst, trashURL);
+}
+
+static KIO::Job* createDeleteJob(KURL::List lst) {
+	return KIO::del(lst, false, true);
+}
+
+
+//-FileOpDelObject-----------------------------------------------------------------
+void FileOpDelObject::operator()() {
+	bool shouldDelete;
+	if (FileOperationConfig::confirmDelete()) {
+		DeleteDialog dlg(mParent);
+		dlg.setURLList(mURLList);
+		if (!dlg.exec()) return;
+		shouldDelete = dlg.shouldDelete();
+	} else {
+		shouldDelete = not FileOperationConfig::deleteToTrash();
+	}
+		
+
+	KIO::Job* job;
+	if (shouldDelete) {
+		job = createDeleteJob(mURLList);
+	} else {
+		job = createTrashJob(mURLList);
+	}
+	polishJob(job);
 }
 
 
 //-FileOpTrashObject---------------------------------------------------------------
 void FileOpTrashObject::operator()() {
-	KURL trashURL("trash:/");
-
 	// Confirm operation
 	if (FileOperationConfig::confirmDelete()) {
 		int response;
@@ -229,16 +264,8 @@ void FileOpTrashObject::operator()() {
 		if (response!=KMessageBox::Continue) return;
 	}
 
-	// Go do it
-	if (mURLList.count()==1) {
-		// If there's only one file, KIO::move will think we want to overwrite
-		// the trash dir with the file to trash, so we add the file name
-		trashURL.addPath(mURLList.first().fileName());
-	}
-	KIO::Job* job=KIO::move(mURLList,trashURL);
-	job->setWindow(mParent->topLevelWidget());
-	connect( job, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+	KIO::Job* job = createTrashJob(mURLList);
+	polishJob(job);
 }
 
 //-FileOpRealDeleteObject----------------------------------------------------------
@@ -269,10 +296,8 @@ void FileOpRealDeleteObject::operator()() {
 	}
 
 	// Delete the file
-	KIO::Job* removeJob=KIO::del(mURLList,false,true);
-	removeJob->setWindow(mParent->topLevelWidget());
-	connect( removeJob, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+	KIO::Job* job = createDeleteJob(mURLList);
+	polishJob(job);
 }
 
 
@@ -303,9 +328,7 @@ void FileOpRenameObject::operator()() {
 	KURL destURL=srcURL;
 	destURL.setFileName(mNewFilename);
 	KIO::Job* job=KIO::move(srcURL,destURL);
-	job->setWindow(mParent->topLevelWidget());
-	connect( job, SIGNAL( result(KIO::Job*) ),
-		this, SLOT( slotResult(KIO::Job*) ) );
+	polishJob(job);
 }
 
 

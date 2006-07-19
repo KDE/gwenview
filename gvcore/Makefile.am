@@ -64,6 +64,8 @@ libgwenviewcore_la_SOURCES = \
 	timeutils.cpp \
 	clicklineedit.cpp \
 	inputdialog.cpp \
+	deletedialog.cpp \
+	deletedialogbase.ui \
 	miscconfig.kcfgc \
 	slideshowconfig.kcfgc \
 	fileoperationconfig.kcfgc \
