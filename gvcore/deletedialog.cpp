@@ -79,17 +79,19 @@ void DeleteDialog::accept()
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
 {
+    QString msg, iconName;
     if(shouldDelete) {
-        m_widget->ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
-            "deleted</b> from your hard disk.</qt>"));
-        m_widget->ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
-            KIcon::Desktop, KIcon::SizeLarge));
+        msg = i18n("<qt>These items will be <b>permanently deleted</b> from your hard disk.</qt>");
+        iconName = "messagebox_warning";
     }
     else {
-        m_widget->ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
-        m_widget->ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
-            KIcon::Desktop, KIcon::SizeLarge));
+        msg = i18n("<qt>These items will be moved to the Trash Bin.</qt>");
+        iconName = "trashcan_full";
     }
+    QPixmap icon = KGlobal::iconLoader()->loadIcon(iconName, KIcon::NoGroup, KIcon::SizeMedium);
+
+    m_widget->ddDeleteText->setText(msg);
+    m_widget->ddWarningIcon->setPixmap(icon);
     setButtonGuiItem(Ok, shouldDelete ? KStdGuiItem::del() : m_trashGuiItem);
 }
 

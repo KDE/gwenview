@@ -56,6 +56,12 @@
                     <property name="name">
                         <cstring>ddDeleteText</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>60</height>
+                        </size>
+                    </property>
                     <property name="text">
                         <string>Deletion method placeholder, never shown to user.</string>
                     </property>
@@ -110,8 +116,6 @@
 </widget>
 <customwidgets>
 </customwidgets>
-<connections>
-</connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistbox.h</includehint>
