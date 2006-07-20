@@ -18,6 +18,9 @@
             <height>320</height>
         </size>
     </property>
+    <property name="caption">
+        <string>DeleteDialogBase</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -27,7 +30,7 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>layout3</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -49,26 +52,16 @@
                         <string>Icon Placeholder, not in GUI</string>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout3</cstring>
+                        <cstring>ddDeleteText</cstring>
                     </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>ddDeleteText</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Deletion method placeholder, never shown to user.</string>
-                            </property>
-                            <property name="alignment">
-                                <set>WordBreak|AlignCenter</set>
-                            </property>
-                        </widget>
-                    </vbox>
+                    <property name="text">
+                        <string>Deletion method placeholder, never shown to user.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignCenter</set>
+                    </property>
                 </widget>
             </hbox>
         </widget>
@@ -118,16 +111,7 @@
 <customwidgets>
 </customwidgets>
 <connections>
-    <connection>
-        <sender>ddShouldDelete</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>DeleteDialogBase</receiver>
-        <slot>slotShouldDelete(bool)</slot>
-    </connection>
 </connections>
-<slots>
-    <slot access="protected">slotShouldDelete(bool)</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistbox.h</includehint>

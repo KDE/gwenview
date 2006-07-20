@@ -18,31 +18,12 @@
 #define _DELETEDIALOG_H
 
 
-#include <qcheckbox.h>
 #include <kdialogbase.h>
-#include <kurl.h>
-#include "deletedialogbase.h"
 
-class QStringList;
-class KListBox;
+class DeleteDialogBase;
 class KGuiItem;
-class QLabel;
-class QWidgetStack;
 
 namespace Gwenview {
-
-class DeleteWidget : public DeleteDialogBase
-{
-    Q_OBJECT
-
-public:
-    DeleteWidget(QWidget *parent = 0, const char *name = 0);
-
-    void setURLList(const KURL::List &files);
-
-protected slots:
-    virtual void slotShouldDelete(bool shouldDelete);
-};
 
 class DeleteDialog : public KDialogBase
 {
@@ -52,14 +33,14 @@ public:
     DeleteDialog(QWidget *parent, const char *name = "delete_dialog");
 
     void setURLList(const KURL::List &files);
-    bool shouldDelete() const { return m_widget->ddShouldDelete->isChecked(); }
+    bool shouldDelete() const;
 
 protected slots:
     virtual void accept();
     void slotShouldDelete(bool shouldDelete);
 
 private:
-    DeleteWidget *m_widget;
+    DeleteDialogBase *m_widget;
     KGuiItem m_trashGuiItem;
 };
 

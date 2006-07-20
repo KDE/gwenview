@@ -34,49 +34,9 @@
 
 #include "fileoperationconfig.h"
 #include "deletedialog.h"
+#include "deletedialogbase.h"
 
 namespace Gwenview {
-
-//////////////////////////////////////////////////////////////////////////////
-// DeleteWidget implementation
-//////////////////////////////////////////////////////////////////////////////
-
-DeleteWidget::DeleteWidget(QWidget *parent, const char *name)
-    : DeleteDialogBase(parent, name)
-{
-    bool deleteInstead = ! FileOperationConfig::deleteToTrash();
-    slotShouldDelete(deleteInstead);
-    ddShouldDelete->setChecked(deleteInstead);
-}
-
-void DeleteWidget::setURLList(const KURL::List &files)
-{
-    ddFileList->clear();
-    for( KURL::List::ConstIterator it = files.begin(); it != files.end(); it++)
-    {
-        ddFileList->insertItem( (*it).pathOrURL() );
-    }
-    ddNumFiles->setText(i18n("<b>1</b> file selected.", "<b>%n</b> files selected.", files.count()));
-}
-
-void DeleteWidget::slotShouldDelete(bool shouldDelete)
-{
-    if(shouldDelete) {
-        ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
-            "deleted</b> from your hard disk.</qt>"));
-        ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
-            KIcon::Desktop, KIcon::SizeLarge));
-    }
-    else {
-        ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
-        ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
-            KIcon::Desktop, KIcon::SizeLarge));
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// DeleteDialog implementation
-//////////////////////////////////////////////////////////////////////////////
 
 DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
     KDialogBase(Swallow, WStyle_DialogBorder, parent, name,
@@ -84,21 +44,29 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
         Ok | Cancel, Cancel /* Default */, true /* separator */),
     m_trashGuiItem(i18n("&Send to Trash"), "trashcan_full")
 {
-    m_widget = new DeleteWidget(this, "delete_dialog_widget");
+    m_widget = new DeleteDialogBase(this, "delete_dialog_widget");
     setMainWidget(m_widget);
 
     m_widget->setMinimumSize(400, 300);
     setMinimumSize(410, 326);
     adjustSize();
+    
+    bool deleteInstead = ! FileOperationConfig::deleteToTrash();
+    m_widget->ddShouldDelete->setChecked(deleteInstead);
 
-    slotShouldDelete(shouldDelete());
+    slotShouldDelete(deleteInstead);
     connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(slotShouldDelete(bool)));
 
 }
 
 void DeleteDialog::setURLList(const KURL::List &files)
 {
-    m_widget->setURLList(files);
+    m_widget->ddFileList->clear();
+    for( KURL::List::ConstIterator it = files.begin(); it != files.end(); it++)
+    {
+        m_widget->ddFileList->insertItem( (*it).pathOrURL() );
+    }
+    m_widget->ddNumFiles->setText(i18n("<b>1</b> file selected.", "<b>%n</b> files selected.", files.count()));
 }
 
 void DeleteDialog::accept()
@@ -111,8 +79,25 @@ void DeleteDialog::accept()
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
 {
+    if(shouldDelete) {
+        m_widget->ddDeleteText->setText(i18n("<qt>These items will be <b>permanently "
+            "deleted</b> from your hard disk.</qt>"));
+        m_widget->ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("messagebox_warning",
+            KIcon::Desktop, KIcon::SizeLarge));
+    }
+    else {
+        m_widget->ddDeleteText->setText(i18n("<qt>These items will be moved to the Trash Bin.</qt>"));
+        m_widget->ddWarningIcon->setPixmap(KGlobal::iconLoader()->loadIcon("trashcan_full",
+            KIcon::Desktop, KIcon::SizeLarge));
+    }
     setButtonGuiItem(Ok, shouldDelete ? KStdGuiItem::del() : m_trashGuiItem);
 }
+
+
+bool DeleteDialog::shouldDelete() const {
+    return m_widget->ddShouldDelete->isChecked();
+}
+
 
 } // namespace
 
