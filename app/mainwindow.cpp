@@ -1196,7 +1196,7 @@ void MainWindow::createConnections() {
 
 void MainWindow::createLocationToolBar() {
 	// URL Combo
-	mURLEdit=new KHistoryCombo(this);
+	mURLEdit=new KHistoryCombo();
 	mURLEdit->setDuplicatesEnabled(false);
 	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
 	mURLEdit->setHistoryItems(MiscConfig::history());
@@ -1224,13 +1224,9 @@ void MainWindow::createLocationToolBar() {
 		0, this, SLOT(clearLocationLabel()), actionCollection(), "clear_location");
 
 	// URL Label
-	/* we use "kde toolbar widget" to avoid the flat background (looks bad with
-	 * styles like Keramik). See konq_misc.cc.
-	 */
-	QLabel* urlLabel=new QLabel(i18n("L&ocation:"), this, "kde toolbar widget");
-	(void)new KWidgetAction( urlLabel, i18n("L&ocation: "), Key_F6, this, SLOT( activateLocationLabel()),
-		actionCollection(), "location_label");
-	urlLabel->setBuddy(mURLEdit);
+	KToolBarLabelAction* locationAction = new KToolBarLabelAction(i18n("L&ocation:"), 
+		Key_F6, this, SLOT( activateLocationLabel()), actionCollection(), "location_label");
+	locationAction->setBuddy(mURLEdit);
 
 	// Go button
 	(void)new KAction(i18n("Go"), "key_enter", 0, this, SLOT(slotGo()), actionCollection(), "location_go");

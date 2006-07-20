@@ -6,6 +6,8 @@
  - The thumbnail files are now generated using correct name and permissions
    according to Thumbnail Managing Standard
    (http://jens.triq.net/thumbnail-spec/index.html) (Bug 130937).
+ - In fullscreen mode, a "Location:" text would sometimes appear above the
+   fullscreen toolbar.
 
 2006.07.14 - v1.3.92b
 - Fixes:
