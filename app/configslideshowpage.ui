@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ConfigSlideshowPage</class>
 <widget class="QWidget">
     <property name="name">
@@ -12,9 +12,15 @@
             <height>148</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>ConfigSlideshowPage</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="3">
             <property name="name">
@@ -97,13 +103,13 @@ When this option is enabled, the slideshow will stop on the last image of the fo
                 <cstring>kcfg_delay</cstring>
             </property>
             <property name="maxValue">
-                <number>1000</number>
+                <number>100</number>
             </property>
             <property name="minValue">
-                <number>0.01</number>
+                <number>0</number>
             </property>
             <property name="lineStep">
-                <number>1</number>
+                <number>0.1</number>
             </property>
             <property name="acceptLocalizedNumbers">
                 <bool>false</bool>
