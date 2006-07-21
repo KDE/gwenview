@@ -46,27 +46,25 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
 {
     m_widget = new DeleteDialogBase(this, "delete_dialog_widget");
     setMainWidget(m_widget);
-
+    
     m_widget->setMinimumSize(400, 300);
     setMinimumSize(410, 326);
     adjustSize();
-    
+
     bool deleteInstead = ! FileOperationConfig::deleteToTrash();
     m_widget->ddShouldDelete->setChecked(deleteInstead);
 
-    slotShouldDelete(deleteInstead);
-    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(slotShouldDelete(bool)));
-
+    connect(m_widget->ddShouldDelete, SIGNAL(toggled(bool)), SLOT(updateUI()));
 }
 
 void DeleteDialog::setURLList(const KURL::List &files)
 {
     m_widget->ddFileList->clear();
-    for( KURL::List::ConstIterator it = files.begin(); it != files.end(); it++)
-    {
+    for( KURL::List::ConstIterator it = files.begin(); it != files.end(); it++) {
         m_widget->ddFileList->insertItem( (*it).pathOrURL() );
     }
-    m_widget->ddNumFiles->setText(i18n("<b>1</b> file selected.", "<b>%n</b> files selected.", files.count()));
+    m_widget->ddNumFiles->setText(i18n("<b>1</b> item selected.", "<b>%n</b> items selected.", files.count()));
+    updateUI();
 }
 
 void DeleteDialog::accept()
@@ -77,22 +75,34 @@ void DeleteDialog::accept()
     KDialogBase::accept();
 }
 
-void DeleteDialog::slotShouldDelete(bool shouldDelete)
+
+void DeleteDialog::updateUI()
 {
     QString msg, iconName;
-    if(shouldDelete) {
-        msg = i18n("<qt>These items will be <b>permanently deleted</b> from your hard disk.</qt>");
+    
+    int fileCount = m_widget->ddFileList->count();
+    bool reallyDelete = m_widget->ddShouldDelete->isChecked();
+
+    if(reallyDelete) {
+        msg = i18n(
+            "<qt>This item will be <b>permanently deleted</b> from your hard disk.</qt>",
+            "<qt>These items will be <b>permanently deleted</b> from your hard disk.</qt>",
+            fileCount);
         iconName = "messagebox_warning";
     }
     else {
-        msg = i18n("<qt>These items will be moved to the Trash Bin.</qt>");
+        msg = i18n(
+            "<qt>This item will be moved to the trash bin.</qt>",
+            "<qt>These items will be moved to the trash bin.</qt>",
+            fileCount);
         iconName = "trashcan_full";
     }
     QPixmap icon = KGlobal::iconLoader()->loadIcon(iconName, KIcon::NoGroup, KIcon::SizeMedium);
 
     m_widget->ddDeleteText->setText(msg);
     m_widget->ddWarningIcon->setPixmap(icon);
-    setButtonGuiItem(Ok, shouldDelete ? KStdGuiItem::del() : m_trashGuiItem);
+    
+    setButtonGuiItem(Ok, reallyDelete ? KStdGuiItem::del() : m_trashGuiItem);
 }
 
 

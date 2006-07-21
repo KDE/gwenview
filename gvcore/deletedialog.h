@@ -37,7 +37,9 @@ public:
 
 protected slots:
     virtual void accept();
-    void slotShouldDelete(bool shouldDelete);
+
+private slots:
+    void updateUI();
 
 private:
     DeleteDialogBase *m_widget;

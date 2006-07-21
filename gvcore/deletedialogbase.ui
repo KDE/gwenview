@@ -12,12 +12,6 @@
             <height>374</height>
         </rect>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>420</width>
-            <height>320</height>
-        </size>
-    </property>
     <property name="caption">
         <string>DeleteDialogBase</string>
     </property>
@@ -63,7 +57,7 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>Deletion method placeholder, never shown to user.</string>
+                        <string>Deletion method placeholder, not in GUI</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignCenter</set>
@@ -75,14 +69,11 @@
             <property name="name">
                 <cstring>ddFileList</cstring>
             </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
             <property name="selectionMode">
                 <enum>NoSelection</enum>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>List of files that are about to be deleted.</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This is the list of items that are about to be deleted.</string>
             </property>
         </widget>
         <widget class="QLabel">
@@ -101,13 +92,16 @@
                 <cstring>ddShouldDelete</cstring>
             </property>
             <property name="text">
-                <string>&amp;Delete files instead of moving them to the trash</string>
+                <string>&amp;Delete items instead of moving them to the trash</string>
+            </property>
+            <property name="accel">
+                <string>Alt+D</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>If checked, files will be permanently removed instead of being placed in the Trash Bin</string>
+                <string>If checked, items will be permanently removed instead of being placed in the trash bin</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;qt&gt;&lt;p&gt;If this box is checked, files will be &lt;b&gt;permanently removed&lt;/b&gt; instead of being placed in the Trash Bin.&lt;/p&gt;
+                <string>&lt;qt&gt;&lt;p&gt;If this box is checked, items will be &lt;b&gt;permanently removed&lt;/b&gt; instead of being placed in the trash bin.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Use this option with caution&lt;/em&gt;: Most filesystems are unable to reliably undelete deleted files.&lt;/p&gt;&lt;/qt&gt;</string>
             </property>
