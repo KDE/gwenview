@@ -714,6 +714,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 		job->setWindow(KApplication::kApplication()->mainWidget());
 		connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
 			this, SLOT(slotGotPreview(const KFileItem*, const QPixmap&)) );
+		connect(job, SIGNAL(failed(const KFileItem*)),
+			this, SLOT(emitThumbnailLoadingFailed()) );
 		addSubjob(job);
 		return;
 	}

@@ -152,6 +152,7 @@ private slots:
 	void slotGotPreview(const KFileItem*, const QPixmap&);
 	void checkThumbnail();
 	void thumbnailReady(const QImage& im, const QSize&);
+	void emitThumbnailLoadingFailed();
 
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB } mState;
@@ -194,7 +195,6 @@ private:
 	void startCreatingThumbnail(const QString& path);
 	
 	void emitThumbnailLoaded(const QImage& img, QSize size);
-	void emitThumbnailLoadingFailed();
 
 	void updateItemsOrderHelper( int forward, int backward, int first, int last );
 };
