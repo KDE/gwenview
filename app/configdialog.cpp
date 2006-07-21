@@ -275,11 +275,13 @@ void ConfigDialog::emptyCache() {
 		return;
 	}
 
-	int response=KMessageBox::questionYesNo(this,
+	int response=KMessageBox::warningContinueCancel(this,
 		"<qt>" + i18n("Are you sure you want to empty the thumbnail cache?"
-		" This will remove the folder <b>%1</b>.").arg(QStyleSheet::escape(dir)) + "</qt>");
+		" This will delete the folder <b>%1</b>.").arg(QStyleSheet::escape(dir)) + "</qt>",
+		QString::null,
+		KStdGuiItem::del());
 
-	if (response==KMessageBox::No) return;
+	if (response==KMessageBox::Cancel) return;
 
 	KURL url;
 	url.setPath(dir);
