@@ -605,12 +605,12 @@ void ImageLoader::changed(const QRect& rect) {
 	d->mUpdatedDuringLoad=true;
 	d->mLoadChangedRect |= rect;
 	d->mLoadedRegion |= rect;
-	if( d->mTimeSinceLastUpdate.elapsed() > 200 ) {
+	if( d->mTimeSinceLastUpdate.elapsed() > 100 ) {
 		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
 			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
+		d->mTimeSinceLastUpdate.start();
 		emit imageChanged(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
-		d->mTimeSinceLastUpdate.start();
 	}
 }
 

@@ -57,7 +57,7 @@ namespace Gwenview {
 
 static const int MAX_BUFFER = 32768;
 // how long it will consume data before starting outputing progressive scan
-static const int MAX_CONSUMING_TIME = 500;
+static const int MAX_CONSUMING_TIME = 100;
 
 //-----------------------------------------------------------------------------
 //
