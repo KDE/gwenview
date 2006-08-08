@@ -35,6 +35,8 @@ public:
     void setURLList(const KURL::List &files);
     bool shouldDelete() const;
 
+    QSize sizeHint() const;
+
 protected slots:
     virtual void accept();
 

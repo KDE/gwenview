@@ -49,8 +49,6 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
     setMainWidget(m_widget);
     
     m_widget->setMinimumSize(400, 300);
-    setMinimumSize(410, 326);
-    adjustSize();
 
     actionButton(Ok)->setFocus();
 
@@ -106,12 +104,26 @@ void DeleteDialog::updateUI()
     m_widget->ddWarningIcon->setPixmap(icon);
     
     setButtonGuiItem(Ok, reallyDelete ? KStdGuiItem::del() : m_trashGuiItem);
+    adjustSize();
 }
 
 
 bool DeleteDialog::shouldDelete() const {
     return m_widget->ddShouldDelete->isChecked();
 }
+
+
+QSize DeleteDialog::sizeHint() const {
+    m_widget->adjustSize();
+    QSize hint = m_widget->minimumSize();
+    hint = calculateSize(hint.width(), hint.height());
+
+    // For some reason calculateSize does not return a correct height. As I'm
+    // fed up fighting with it, let's just add a few more pixels.
+    hint.rheight() += 50;
+    return hint;
+}
+    
 
 
 } // namespace
