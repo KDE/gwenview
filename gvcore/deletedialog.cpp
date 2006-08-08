@@ -31,6 +31,7 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qhbox.h>
+#include <qpushbutton.h>
 
 #include "fileoperationconfig.h"
 #include "deletedialog.h"
@@ -50,6 +51,8 @@ DeleteDialog::DeleteDialog(QWidget *parent, const char *name) :
     m_widget->setMinimumSize(400, 300);
     setMinimumSize(410, 326);
     adjustSize();
+
+    actionButton(Ok)->setFocus();
 
     bool deleteInstead = ! FileOperationConfig::deleteToTrash();
     m_widget->ddShouldDelete->setChecked(deleteInstead);
