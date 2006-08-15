@@ -67,6 +67,7 @@ Q_OBJECT
 public:
 	MainWindow();
 	void setFullScreen(bool);
+	FileViewController* fileViewController() const { return mFileViewController; }
 
 public slots:
 	void openURL(const KURL&);

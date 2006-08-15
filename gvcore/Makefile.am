@@ -71,7 +71,8 @@ libgwenviewcore_la_SOURCES = \
 	fileoperationconfig.kcfgc \
 	fullscreenconfig.kcfgc \
 	imageviewconfig.kcfgc \
-	fileviewconfig.kcfgc
+	fileviewconfig.kcfgc \
+	rememberconfig.kcfgc
 
 kde_kcfg_DATA = \
 	miscconfig.kcfg \
@@ -79,4 +80,5 @@ kde_kcfg_DATA = \
 	fileoperationconfig.kcfg \
 	fullscreenconfig.kcfg \
 	imageviewconfig.kcfg \
-	fileviewconfig.kcfg
+	fileviewconfig.kcfg \
+	rememberconfig.kcfg

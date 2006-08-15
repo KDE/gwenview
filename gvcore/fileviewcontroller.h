@@ -126,6 +126,13 @@ public slots:
 
 	void updateFromSettings();
 
+	void setShowFilterBar(bool);
+	// 'int' suck, but I don't want to #include fileviewconfig.h
+	void setFilterMode(int);
+	void setFilterName(const QString&);
+	void setFilterFromDate(const QDate&);
+	void setFilterToDate(const QDate&);
+	void applyFilter();
 
 signals:
 	void urlChanged(const KURL&);
@@ -184,7 +191,6 @@ private slots:
 	void resetNameFilter();
 	void resetFromFilter();
 	void resetToFilter();
-	void updateDirListerFilter();
 
 private:
 	struct Private;

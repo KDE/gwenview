@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <klocale.h>
 
 #include "gvcore/cache.h"
+#include "gvcore/fileviewcontroller.h"
 #include <../gvcore/fileviewconfig.h>
 #include "mainwindow.h"
 namespace Gwenview {
@@ -44,7 +45,7 @@ static KCmdLineOptions options[] = {
 static const char version[] = "1.3.92";
 
 
-void parseFilterArgs(KCmdLineArgs* args) {
+void applyFilterArgs(KCmdLineArgs* args, FileViewController* controller) {
 	QString filterType = args->getOption("filter-type");
 	QString filterName = args->getOption("filter-name");
 	QString filterFrom = args->getOption("filter-from");
@@ -61,17 +62,17 @@ void parseFilterArgs(KCmdLineArgs* args) {
 	int mode = typeList.findIndex(filterType);
 	if (mode == -1) {
 		// Default to "all"
-		FileViewConfig::setFilterMode(0);
+		controller->setFilterMode(0);
 	} else {
-		FileViewConfig::setFilterMode(mode);
+		controller->setFilterMode(mode);
 	}
 
-	FileViewConfig::setShowFilterBar(
+	controller->setShowFilterBar(
 		!filterName.isEmpty()
 		|| !filterFrom.isEmpty()
 		|| !filterTo.isEmpty() );
 
-	FileViewConfig::setNameFilter(filterName);
+	controller->setFilterName(filterName);
 
 	bool ok = false;
 	QDate date;
@@ -81,7 +82,7 @@ void parseFilterArgs(KCmdLineArgs* args) {
 			kdWarning() << "Invalid value for filter-from option\n";
 		}
 	}
-	FileViewConfig::setFromDateFilter(date);
+	controller->setFilterFromDate(date);
 
 	date=QDate();
 	if (!filterTo.isEmpty()) {
@@ -90,7 +91,9 @@ void parseFilterArgs(KCmdLineArgs* args) {
 			kdWarning() << "Invalid value for filter-to option\n";
 		}
 	}
-	FileViewConfig::setToDateFilter(date);
+	controller->setFilterToDate(date);
+
+	controller->applyFilter();
 }
 
 
@@ -131,9 +134,9 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 		RESTORE(MainWindow)
 	} else {
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-		parseFilterArgs(args);
 
 		MainWindow *mainWindow = new MainWindow;
+		applyFilterArgs(args, mainWindow->fileViewController());
 
 		bool fullscreen=args->isSet("f");
 		if (fullscreen) mainWindow->setFullScreen(true);

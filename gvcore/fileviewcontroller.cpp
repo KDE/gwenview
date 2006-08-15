@@ -64,6 +64,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "timeutils.h"
 #include "thumbnailsize.h"
 #include "fileviewconfig.h"
+#include "rememberconfig.h"
 
 #include "fileviewcontroller.moc"
 namespace Gwenview {
@@ -210,7 +211,7 @@ public:
 
 		QObject::connect(
 			mFilterBar->mFilterButton, SIGNAL(clicked()),
-			that, SLOT(updateDirListerFilter()) );
+			that, SLOT(applyFilter()) );
 	}
 
 	void initFilterCombo() {
@@ -224,7 +225,7 @@ public:
 
 		QObject::connect(
 			mFilterComboBox, SIGNAL(activated(int)),
-			that, SLOT(updateDirListerFilter()) );
+			that, SLOT(applyFilter()) );
 
 		mShowFilterBarCheckBox = new QCheckBox(i18n("More"), mFilterHBox);
 		QObject::connect(
@@ -232,8 +233,9 @@ public:
 			mFilterBar, SLOT(setShown(bool)) );
 		QObject::connect(
 			mShowFilterBarCheckBox, SIGNAL(toggled(bool)),
-			that, SLOT(updateDirListerFilter()) );
+			that, SLOT(applyFilter()) );
 	}
+
 
 	void loadFilterSettings() {
 		mFilterComboBox->setCurrentItem(FileViewConfig::filterMode());
@@ -449,7 +451,9 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	}
 	thumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 
-	d->loadFilterSettings();
+	if (RememberConfig::filter()) {
+		d->loadFilterSettings();
+	}
 	updateFromSettings();
 }
 
@@ -988,7 +992,7 @@ void FileViewController::setMode(FileViewController::Mode mode) {
 
 
 void FileViewController::updateFromSettings() {
-	updateDirListerFilter();
+	applyFilter();
 	mFileThumbnailView->setMarginSize(FileViewConfig::thumbnailMarginSize());
 	mFileThumbnailView->setItemDetails(FileViewConfig::thumbnailDetails());
 	currentFileView()->widget()->update();
@@ -1147,12 +1151,32 @@ void FileViewController::dirListerCanceled() {
 }
 
 
-//-----------------------------------------------------------------------
-//
-// Private
-//
-//-----------------------------------------------------------------------
-void FileViewController::updateDirListerFilter() {
+void FileViewController::setShowFilterBar(bool value) {
+	d->mShowFilterBarCheckBox->setChecked(value);
+}
+
+
+void FileViewController::setFilterMode(int mode) {
+	d->mFilterComboBox->setCurrentItem(mode);
+}
+
+
+void FileViewController::setFilterName(const QString& name) {
+	d->mFilterBar->mNameEdit->setText(name);
+}
+
+
+void FileViewController::setFilterFromDate(const QDate& date) {
+	d->mFilterBar->mFromDateEdit->setDate(date);
+}
+
+
+void FileViewController::setFilterToDate(const QDate& date) {
+	d->mFilterBar->mToDateEdit->setDate(date);
+}
+
+
+void FileViewController::applyFilter() {
 	QStringList mimeTypes;
 	FilterMode filterMode = static_cast<FilterMode>( d->mFilterComboBox->currentItem() );
 	

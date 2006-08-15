@@ -1,0 +1,36 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ConfigRememberPage</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ConfigRememberPage</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ConfigRememberPage</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>kcfg_filter</cstring>
+            </property>
+            <property name="text">
+                <string>State of filter</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
