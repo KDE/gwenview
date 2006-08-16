@@ -29,6 +29,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gvcore/cache.h"
 #include "gvcore/fileviewcontroller.h"
 #include <../gvcore/fileviewconfig.h>
+#include <../gvcore/miscconfig.h>
+#include <../gvcore/rememberconfig.h>
 #include "mainwindow.h"
 namespace Gwenview {
 
@@ -145,7 +147,11 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 		if (args->count()>0) {
 			url=args->url(0);
 		} else {
-			url.setPath( QDir::currentDirPath() );
+			if (RememberConfig::url() && MiscConfig::history().count() > 0) {
+				url = KURL(MiscConfig::history()[0]);
+			} else {
+				url.setPath( QDir::currentDirPath() );
+			}
 		}
 		mainWindow->openURL(url);
 		

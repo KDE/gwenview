@@ -2,6 +2,8 @@
 - New features:
  - Use the same delete dialog as Amarok and Juk, to easily choose between
    sending files to trash or permanently deleting them.
+ - A page has been added to let the user select which settings should be
+   remembered when Gwenview is restarted.
 - Fixes:
  - The thumbnail files are now generated using correct name and permissions
    according to Thumbnail Managing Standard

@@ -7,5 +7,9 @@
       <label>Whether Gwenview should remember the file filter.</label> 
       <default>false</default>
     </entry> 
+    <entry name="url" type="Bool"> 
+      <label>Whether Gwenview should remember the last URL.</label> 
+      <default>false</default>
+    </entry> 
   </group> 
 </kcfg>

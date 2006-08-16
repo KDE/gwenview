@@ -29,7 +29,35 @@
             <property name="text">
                 <string>State of filter</string>
             </property>
+            <property name="accel">
+                <string></string>
+            </property>
         </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>kcfg_url</cstring>
+            </property>
+            <property name="text">
+                <string>Last opened URL</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>33</width>
+                    <height>104</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
