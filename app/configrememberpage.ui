@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>480</height>
+            <height>255</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,6 +22,31 @@
         <property name="margin">
             <number>0</number>
         </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Here you can select which settings should be remembered next time you start Gwenview.</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>24</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>kcfg_filter</cstring>
@@ -54,7 +79,7 @@
             <property name="sizeHint">
                 <size>
                     <width>33</width>
-                    <height>104</height>
+                    <height>289</height>
                 </size>
             </property>
         </spacer>

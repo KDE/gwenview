@@ -153,7 +153,7 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 #endif
 
 	ConfigRememberPage* rememberPage = addConfigPage<ConfigRememberPage>(
-		this, i18n("Remember"), i18n("Remember"), "gear");
+		this, i18n("Settings to remember"), i18n("Remember"), "hdd_mount");
 	d->mManagers << new KConfigDialogManager(rememberPage, RememberConfig::self());
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(
