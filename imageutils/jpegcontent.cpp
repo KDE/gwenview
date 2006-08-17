@@ -549,8 +549,8 @@ void JPEGContent::applyPendingChanges() {
 	(void) jpeg_finish_decompress(&srcinfo);
 	jpeg_destroy_decompress(&srcinfo);
 
-	// Reload the new JPEG
-	loadFromData(output);
+	// Set rawData to our new JPEG 
+	d->mRawData = output;
 }
 
 
@@ -616,28 +616,29 @@ bool JPEGContent::save(QFile* file) {
 		d->mPendingChanges = false;
 	}
 
-	if (!d->mExifData) {
-		// There's no Exif info, let's just save the byte array
-		QDataStream stream(file);
-		stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
-		return true;
-	}
+	if (d->mExifData) {
+		// Store Exif info
+		JPEGData* jpegData=jpeg_data_new_from_data((unsigned char*)d->mRawData.data(), d->mRawData.size());
+		if (!jpegData) {
+			kdError() << "Could not create jpegData object\n";
+			return false;
+		}
+		
+		jpeg_data_set_exif_data(jpegData, d->mExifData);
+		unsigned char* dest=0L;
+		unsigned int destSize=0;
+		jpeg_data_save_data(jpegData, &dest, &destSize);
+		jpeg_data_unref(jpegData);
 
-	JPEGData* jpegData=jpeg_data_new_from_data((unsigned char*)d->mRawData.data(), d->mRawData.size());
-	if (!jpegData) {
-		kdError() << "Could not create jpegData object\n";
-		return false;
+		// Update mRawData
+		d->mRawData.assign((char*)dest, destSize);
 	}
-	
-	jpeg_data_set_exif_data(jpegData, d->mExifData);
-	unsigned char* dest=0L;
-	unsigned int destSize=0;
-	jpeg_data_save_data(jpegData, &dest, &destSize);
-	jpeg_data_unref(jpegData);
 	
 	QDataStream stream(file);
-	stream.writeRawBytes((char*)dest, destSize);
-	free(dest);
+	stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
+
+	// Make sure we are up to date
+	loadFromData(d->mRawData);
 	return true;
 }
 

@@ -44,7 +44,6 @@ const int ORIENT6_WIDTH=128;  // This size is the size *after* orientation
 const int ORIENT6_HEIGHT=256; // has been applied
 const char* CUT_FILE="cut.jpg";
 const QString ORIENT6_COMMENT="a comment";
-const char* ORIENT1_FILE="test_orient1.jpg";
 const QString ORIENT1_VFLIP_FILE="test_orient1_vflip.jpg";
 const char* THUMBNAIL_FILE="test_thumbnail.jpg";
 const char* TMP_FILE="tmp.jpg";
@@ -111,6 +110,39 @@ void compareMetaInfo(const QString& path1, const QString& path2, const QStringLi
 			kdError() << "Meta info differs. Key:" << key << ", V1:" << mim1[key] << ", V2:" << mim2[key] << endl;
 		}
 	}
+}
+
+
+void testResetOrientation() {
+	ImageUtils::JPEGContent content;
+	bool result;
+
+	// Test resetOrientation without transform
+	result=content.load(ORIENT6_FILE);
+	Q_ASSERT(result);
+
+	content.resetOrientation();
+
+	result=content.save(TMP_FILE);
+	Q_ASSERT(result);
+
+	result=content.load(TMP_FILE);
+	Q_ASSERT(result);
+	Q_ASSERT(content.orientation() == ImageUtils::NORMAL);
+
+	// Test resetOrientation with transform
+	result=content.load(ORIENT6_FILE);
+	Q_ASSERT(result);
+
+	content.resetOrientation();
+	content.transform(ImageUtils::ROT_90);
+
+	result=content.save(TMP_FILE);
+	Q_ASSERT(result);
+
+	result=content.load(TMP_FILE);
+	Q_ASSERT(result);
+	Q_ASSERT(content.orientation() == ImageUtils::NORMAL);
 }
 
 
@@ -186,15 +218,7 @@ int main(int argc, char* argv[]) {
 	result=thumbnail.save(THUMBNAIL_FILE, "JPEG");
 	Q_ASSERT(result);
 
-	// resetOrientation()
-	content.resetOrientation();
-	result=content.save(ORIENT1_FILE);
-	Q_ASSERT(result);
-
-	result=content.load(ORIENT1_FILE);
-	Q_ASSERT(result);
-	Q_ASSERT(content.orientation() == ImageUtils::NORMAL);
-
+	testResetOrientation();
 	testTransform();
 	testSetComment();
 
