@@ -64,7 +64,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "timeutils.h"
 #include "thumbnailsize.h"
 #include "fileviewconfig.h"
-#include "rememberconfig.h"
+#include "miscconfig.h"
 
 #include "fileviewcontroller.moc"
 namespace Gwenview {
@@ -451,7 +451,7 @@ FileViewController::FileViewController(QWidget* parent,KActionCollection* action
 	}
 	thumbnailDetailsDialogAction->setEnabled(mBottomThumbnailMode->isChecked());
 
-	if (RememberConfig::filter()) {
+	if (MiscConfig::rememberFilter()) {
 		d->loadFilterSettings();
 	}
 	updateFromSettings();

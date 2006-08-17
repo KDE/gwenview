@@ -54,7 +54,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "configfullscreenpage.h"
 #include "configimagelistpage.h"
 #include "configimageviewpage.h"
-#include "configrememberpage.h"
 #include "configmiscpage.h"
 #include "configslideshowpage.h"
 #include "gvcore/captionformatter.h"
@@ -66,7 +65,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <../gvcore/fullscreenconfig.h>
 #include <../gvcore/imageviewconfig.h>
 #include <../gvcore/fileviewconfig.h>
-#include <../gvcore/rememberconfig.h>
 #include "gvcore/thumbnailloadjob.h"
 
 #include "configdialog.moc"
@@ -151,10 +149,6 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	// Avoid "unused parameter" warning
 	pluginLoader=pluginLoader;
 #endif
-
-	ConfigRememberPage* rememberPage = addConfigPage<ConfigRememberPage>(
-		this, i18n("Settings to remember"), i18n("Remember"), "hdd_mount");
-	d->mManagers << new KConfigDialogManager(rememberPage, RememberConfig::self());
 
 	d->mMiscPage = addConfigPage<ConfigMiscPage>(
 		this, i18n("Miscellaneous Settings"), i18n("Misc"), "gear");

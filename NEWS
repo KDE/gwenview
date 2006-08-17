@@ -2,8 +2,8 @@
 - New features:
  - Use the same delete dialog as Amarok and Juk, to easily choose between
    sending files to trash or permanently deleting them.
- - A page has been added to let the user select which settings should be
-   remembered when Gwenview is restarted.
+ - It's not possible to define whether Gwenview should remember the last url
+   and the filter state when it is restarted (Bug 126475).
 - Fixes:
  - The thumbnail files are now generated using correct name and permissions
    according to Thumbnail Managing Standard
