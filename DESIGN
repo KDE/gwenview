@@ -1,0 +1,142 @@
+﻿# Folders
+
+Here is a description of each folder:
+
+* app/
+  Code specific to the standalone application (== not the KParts)
+
+* desktopfiles/
+  Desktop files, to start the standalone application, from the menu and from
+  within Konqueror.
+  
+* doc/
+  Man page. This is not the HTML doc. The HTML doc is in
+  extragear/graphics/doc/gwenview.
+
+* gvcore/
+  Code shared between the application and the KParts.
+
+* gvdirpart/
+  The Gwenview KPart used to browse folders.
+
+* gvimagepart/
+  The Gwenview KPart to display images.
+
+* imageutils/
+  Various image code, like rotation (lossless for JPEG, classic for others),
+  scaling...
+
+* pics/
+  Icons.
+
+* spec/
+  .spec files to build RPM (probably outdated)
+
+* tools/
+  Desktop files describing external tools.
+
+* tsthread/
+  A thread library written by Lubos Lunak.
+
+* updates/
+  Update scripts to migrate configuration files within versions.
+
+
+# Code
+
+In this part we describe the main classes, not getting too deeply into details
+so that this document doesn't get obsoleted too fast :-)
+
+
+## gvcore
+### Document classes
+document.h
+document*impl.h
+
+This is the heart of Gwenview. The Document class represents a media file. It
+uses the "State" design pattern to adapt its behavior depending on its state.
+The various states are implemented in the Document*Impl classes.
+It knows how to load, save, edit a comment, rotate and mirror a document.
+
+
+### Image loader and cache
+imageloader.h
+cache.h
+
+Image loading is done by the ImageLoader classes, which work together with the
+cache to avoid loading an image multiple times.
+A loader may be shared, for example if an image is selected and a thumbnail of
+it is being generated, the same loader will be used by both.
+
+
+### File views
+fileviewcontroller.h
+filedetailview*.h
+filethumbnailview*.h
+fileviewbase.h
+
+The main class is FileViewController, which contains the KDirLister responsible
+for listing folder content. It also contains a QWidgetStack which contains
+both the FileDetailView and the FileThumbnailView.
+FileViewBase is an abstract class, which inherits from KFileView and adds the
+concept of a "shown item": the item currently viewed in the image view.
+
+
+### Image view
+imageview.h
+imageviewtools.h
+
+The ImageView class inherits from QScrollView to show the current image. It
+implements zooming and panning.
+The ImageViewTools implements the different behaviors: for example when you
+use the mouse wheel you will scroll (or browse): This is implemented by the
+ImageView::ScrollTool class. If you press Ctrl and use the mouse wheel, you
+will zoom in the image: This is implemented by the ImageView::ZoomTool.
+
+
+### ImageViewController
+
+ImageViewController contains a stack which contains an ImageView and a KPart.
+The ImageView class is used to show raster images. For SVG images and movies,
+the ImageViewController loads the corresponding KPart.
+
+
+### File operations
+fileoperation.h
+fileopobject.h
+
+These classes implements file operations: from the user interface to the actual
+operation.
+
+
+## app
+
+### Main window
+mainwindow.h
+
+The MainWindow class is responsible for gluing together all components of the
+application.  It is made of a QWidgetStack which contains two pages: one for
+the docked windows (==Browse mode) and another for the ImageViewController
+(==View and Fullscreen modes).
+There is only one instance of ImageViewController. It is 'reparent'ed when the
+QWidgetStack switch between modes.
+
+
+### Folder view
+dirviewcontroller.h
+vtabwidget.h
+bookmarkviewcontroller.h
+treeview.h
+
+These classes implement the folder view. The main class is DirViewController.
+It contains a VTabWidget, which contains an instance of the
+BoookmarkViewController and TreeView classes.
+
+
+## gvdirpart
+
+This KPart is made of a splitter, a FileThumbnailView and an ImageView.
+
+## gvimagepart
+
+This KPart is simply an ImageView.
