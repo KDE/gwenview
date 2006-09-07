@@ -278,6 +278,14 @@ Document::CommentState Document::commentState() const {
 	return d->mImpl->commentState();
 }
 
+/**
+ * Returns the duration of the document in seconds, or 0 if there is no
+ * duration
+ */
+int Document::duration() const {
+	return d->mImpl->duration();
+}
+
 int Document::fileSize() const {
 	return d->mFileSize;
 }

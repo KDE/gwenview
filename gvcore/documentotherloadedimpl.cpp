@@ -18,33 +18,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  
 */
-#ifndef DOCUMENTOTHERLOADEDIMPL_H
-#define DOCUMENTOTHERLOADEDIMPL_H
+// Self
+#include "documentotherloadedimpl.h"
 
-// Local
-#include "document.h"
-#include "documentimpl.h"
+// KDE
+#include <kdebug.h>
+#include <kfilemetainfo.h>
+
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 namespace Gwenview {
-class Document;
 
-class DocumentOtherLoadedImpl : public DocumentImpl {
-public:
-	DocumentOtherLoadedImpl(Document* document)
-	: DocumentImpl(document) {
-		setImage(QImage(), false);
-		setImageFormat(0);
+int DocumentOtherLoadedImpl::duration() const {
+	KFileMetaInfo fmi(mDocument->url());
+	if (!fmi.isValid()) {
+		LOG("No meta info available for " << mDocument->url());
+		return 0;
 	}
-
-	void init() {
-		emit finished(true);
+	
+	KFileMetaInfoItem item=fmi.item("Length");
+	if (!item.isValid()) {
+		kdWarning() << "Can't adjust slideshow time: meta info for " << mDocument->url() << " does not contain 'Length' information.";
+		return 0;
 	}
+	
+	int length = item.value().toInt();
+	LOG("Length for " << mDocument->url() << " is " << length);
 
-	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_FILE; }
-
-	virtual int duration() const;
-};
+	return length;
+}
 
 } // namespace
-#endif /* DOCUMENTOTHERLOADEDIMPL_H */
-

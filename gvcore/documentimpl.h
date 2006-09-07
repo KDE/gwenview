@@ -50,11 +50,13 @@ public:
 	virtual QString comment() const;
 	virtual Document::CommentState commentState() const;
 	virtual void setComment(const QString&);
+	virtual int duration() const;
 	
 	virtual void transform(ImageUtils::Orientation);
 	virtual QString save(const KURL&, const QCString& format) const;
 
 	virtual MimeTypeUtils::Kind urlKind() const=0;
+
 
 signals:
 	void finished(bool success);

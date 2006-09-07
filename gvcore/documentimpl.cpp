@@ -60,6 +60,10 @@ Document::CommentState DocumentImpl::commentState() const {
 void DocumentImpl::setComment(const QString&) {
 }
 
+int DocumentImpl::duration() const {
+	return 0;
+}
+
 void DocumentImpl::transform(ImageUtils::Orientation) {
 }
 

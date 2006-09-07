@@ -70,6 +70,7 @@ private slots:
 private:
 	QValueVector<KURL>::ConstIterator findNextURL() const;
 	void prefetch();
+	int timerInterval();
 
 	QTimer* mTimer;
 	Document* mDocument;

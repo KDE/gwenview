@@ -47,6 +47,7 @@ libgwenviewcore_la_SOURCES = \
 	documentloadedimpl.cpp \
 	documentjpegloadedimpl.cpp \
 	documentanimatedloadedimpl.cpp \
+	documentotherloadedimpl.cpp \
 	busylevelmanager.cpp \
 	cache.cpp \
 	threadgate.cpp \

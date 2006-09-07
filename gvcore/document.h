@@ -77,6 +77,8 @@ public:
 	Document::CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
+
+	int duration() const;
 	
 public slots:
 	void setURL(const KURL&);

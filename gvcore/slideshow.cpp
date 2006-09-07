@@ -65,7 +65,17 @@ SlideShow::~SlideShow() {
 
 void SlideShow::slotSettingsChanged() {
 	if (mTimer->isActive()) {
-		mTimer->changeInterval(int(SlideShowConfig::delay()*1000));
+		mTimer->changeInterval(timerInterval());
+	}
+}
+
+
+int SlideShow::timerInterval() {
+	int documentDuration = mDocument->duration();
+	if (documentDuration != 0) {
+		return documentDuration * 1000;
+	} else {
+		return int(SlideShowConfig::delay()*1000);
 	}
 }
 
@@ -83,7 +93,7 @@ void SlideShow::start(const KURL::List& urls) {
 		return;
 	}
 	
-	mTimer->start(int(SlideShowConfig::delay()*1000), true);
+	mTimer->start(timerInterval(), true);
 	mStarted=true;
 	prefetch();
 	emit stateChanged(true);
@@ -144,7 +154,7 @@ void SlideShow::slotTimeout() {
 
 void SlideShow::slotLoaded() {
 	if (mStarted) {
-		mTimer->start(int(SlideShowConfig::delay()*1000), true);
+		mTimer->start(timerInterval(), true);
 		prefetch();
 	}
 }
