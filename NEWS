@@ -1,7 +1,8 @@
-2006.xx.xx - v1.4.0
+2006.09.16 - v1.4.0
 - Fixes:
  - In a slideshow, let videos play to the end before showing next image/video.
-   For now it works with Avi and Ogg videos, not with Mpeg or Quicktime videos.
+   For now it only works with Avi and Ogg videos, not with Mpeg or Quicktime
+   videos.
 
 2006.07.19 - v1.3.93
 - New features:
