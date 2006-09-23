@@ -73,7 +73,8 @@ DocumentLoadedImpl::~DocumentLoadedImpl() {
 
 
 void DocumentLoadedImpl::transform(ImageUtils::Orientation orientation) {
-	setImage(ImageUtils::transform(mDocument->image(), orientation), true);
+	setImage(ImageUtils::transform(mDocument->image(), orientation));
+	emitImageRectUpdated();
 }
 
 

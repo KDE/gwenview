@@ -43,9 +43,14 @@ public:
 	virtual void init();
 	
 	void switchToImpl(DocumentImpl*);
-	void setImage(QImage, bool update);
+	void setImage(QImage);
 	void setImageFormat(const QCString&);
 	void setFileSize(int) const;
+
+	/**
+	 * Convenience method to emit rectUpdated with the whole image rect
+	 */
+	void emitImageRectUpdated();
 	
 	virtual QString comment() const;
 	virtual Document::CommentState commentState() const;
@@ -60,7 +65,7 @@ public:
 
 signals:
 	void finished(bool success);
-	void sizeUpdated(int width, int height);
+	void sizeUpdated();
 	void rectUpdated(const QRect&);
 	
 protected:
@@ -71,7 +76,7 @@ class DocumentEmptyImpl : public DocumentImpl {
 public:
 	DocumentEmptyImpl(Document* document)
 	: DocumentImpl(document) {
-		setImage(QImage(), false);
+		setImage(QImage());
 		setImageFormat(0);
 	}
 

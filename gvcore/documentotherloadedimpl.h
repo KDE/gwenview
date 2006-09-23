@@ -32,7 +32,7 @@ class DocumentOtherLoadedImpl : public DocumentImpl {
 public:
 	DocumentOtherLoadedImpl(Document* document)
 	: DocumentImpl(document) {
-		setImage(QImage(), false);
+		setImage(QImage());
 		setImageFormat(0);
 	}
 

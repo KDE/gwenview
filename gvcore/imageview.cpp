@@ -388,7 +388,7 @@ ImageView::ImageView(QWidget* parent,Document* document, KActionCollection* acti
 	connect(d->mDocument,SIGNAL(modified()),
 		this,SLOT(slotModified()) );
 
-	connect(d->mDocument, SIGNAL(sizeUpdated(int, int)),
+	connect(d->mDocument, SIGNAL(sizeUpdated()),
 		this, SLOT(slotImageSizeUpdated()) );
 
 	connect(d->mDocument, SIGNAL(rectUpdated(const QRect&)),

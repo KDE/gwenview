@@ -37,8 +37,12 @@ void DocumentImpl::switchToImpl(DocumentImpl* impl) {
 	mDocument->switchToImpl(impl);
 }
 
-void DocumentImpl::setImage(QImage img, bool update) {
-	mDocument->setImage(img, update);
+void DocumentImpl::setImage(QImage img) {
+	mDocument->setImage(img);
+}
+
+void DocumentImpl::emitImageRectUpdated() {
+	emit rectUpdated(mDocument->image().rect());
 }
 
 void DocumentImpl::setImageFormat(const QCString& format) {

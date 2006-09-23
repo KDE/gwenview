@@ -71,7 +71,9 @@ void DocumentAnimatedLoadedImpl::nextFrame() {
 // loading, with MNG the frame delay gets announced only after the frame is ready.
 // See ImageLoader::frameDone() .
 	LOG("" << d->mCurrentFrame );
-	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
+
+	setImage(d->mFrames[ d->mCurrentFrame ].image);
+	emitImageRectUpdated();
 }
 
 DocumentAnimatedLoadedImpl::~DocumentAnimatedLoadedImpl() {
@@ -83,7 +85,8 @@ void DocumentAnimatedLoadedImpl::transform(ImageUtils::Orientation orientation) 
 	for( ImageFrames::Iterator it = d->mFrames.begin(); it != d->mFrames.end(); ++it ) {
 	        (*it).image = ImageUtils::transform( (*it).image, orientation );
 	}
-	setImage( d->mFrames[ d->mCurrentFrame ].image, true );
+	setImage( d->mFrames[ d->mCurrentFrame ].image);
+	emitImageRectUpdated();
 }
 
 

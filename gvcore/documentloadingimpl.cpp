@@ -96,15 +96,13 @@ void DocumentLoadingImpl::init() {
 	QSize s = d->mLoader->knownSize();
 	if( !s.isEmpty()) {
 		if( d->mLoader->frames().count() > 0 ) {
-			setImage( d->mLoader->frames().first().image, false );
-			emit sizeUpdated( s.width(), s.height());
-			emit rectUpdated( QRect( QPoint( 0, 0 ), s ));
+			setImage( d->mLoader->frames().first().image);
+			emitImageRectUpdated();
 		} else {
-			setImage( d->mLoader->processedImage(), false );
-			emit sizeUpdated( s.width(), s.height());
+			setImage( d->mLoader->processedImage());
 			QMemArray< QRect > rects = d->mLoader->loadedRegion().rects();
 			for( unsigned int i = 0; i < rects.count(); ++i ) {
-				emit rectUpdated( rects[ i ] );
+				emit rectUpdated(rects[i]);
 			}
 		}
 	}
@@ -149,21 +147,25 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 
 void DocumentLoadingImpl::imageChanged(const QRect& rect) {
 	if( d->mLoader->frames().count() > 0 ) return;
-	setImage(d->mLoader->processedImage(), false);
-	emit rectUpdated( rect );
+	setImage(d->mLoader->processedImage());
+	emit rectUpdated(rect);
 }
 
 void DocumentLoadingImpl::frameLoaded() {
 	if( d->mLoader->frames().count() == 1 ) {
 		// explicit sharing - don't modify the image in document anymore
-		setImage( d->mLoader->frames().first().image.copy(), false ); 
+		setImage(d->mLoader->frames().first().image.copy()); 
 	}
 }
 
 void DocumentLoadingImpl::sizeLoaded(int width, int height) {
 	LOG(width << "x" << height);
-	setImage( d->mLoader->processedImage(), false);
-	emit sizeUpdated(width, height);
+	// Silence compiler
+	width=width;
+	height=height;
+
+	setImage(d->mLoader->processedImage());
+	emit sizeUpdated();
 }
 
 } // namespace

@@ -229,14 +229,12 @@ const QImage& Document::image() const {
 	return d->mImage;
 }
 
-void Document::setImage(QImage img, bool update) {
+void Document::setImage(QImage img) {
 	bool sizechange = d->mImage.size() != img.size();
-	d->mImage=img;
-	if( update ) {
-		if( sizechange ) emit sizeUpdated( img.width(), img.height());
-		emit rectUpdated(QRect(QPoint(0,0), img.size()) );
-	}
+	d->mImage = img;
+	if( sizechange ) emit sizeUpdated();
 }
+
 
 KURL Document::dirURL() const {
 	if (filename().isEmpty()) {
@@ -505,8 +503,8 @@ void Document::switchToImpl(DocumentImpl* impl) {
 
 	connect(d->mImpl, SIGNAL(finished(bool)),
 		this, SLOT(slotFinished(bool)) );
-	connect(d->mImpl, SIGNAL(sizeUpdated(int, int)),
-		this, SIGNAL(sizeUpdated(int, int)) );
+	connect(d->mImpl, SIGNAL(sizeUpdated()),
+		this, SIGNAL(sizeUpdated()) );
 	connect(d->mImpl, SIGNAL(rectUpdated(const QRect&)),
 		this, SIGNAL(rectUpdated(const QRect&)) );
 	d->mImpl->init();

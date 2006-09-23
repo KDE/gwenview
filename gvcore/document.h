@@ -135,9 +135,9 @@ signals:
 	void rectUpdated(const QRect& rect);
 
 	/**
-	 * Emitted when the size is known (or when it has changed)
+	 * Emitted when the size is known
 	 */
-	void sizeUpdated(int width, int height);
+	void sizeUpdated();
 
 	/**
 	 * Emitted when something goes wrong, like when save fails
@@ -158,8 +158,7 @@ private:
 
 	// These methods are used by DocumentImpl and derived
 	void switchToImpl(DocumentImpl*);
-	// update == true triggers also sizeUpdated() and rectUpdated()
-	void setImage(QImage, bool update);
+	void setImage(QImage);
 	void setImageFormat(const QCString&);
 	void setFileSize(int); 
 	
