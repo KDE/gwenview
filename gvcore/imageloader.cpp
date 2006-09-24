@@ -539,7 +539,7 @@ void ImageLoader::finish( bool ok ) {
 	if (!d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged( d->mLoadChangedRect );
 	} else if (!d->mUpdatedDuringLoad) {
-		emit imageChanged( QRect(QPoint(0,0), lastframe.image.size()) );
+		emit imageChanged( lastframe.image.rect() );
 	}
 	d->mFrames.push_back( lastframe );
 
@@ -615,7 +615,7 @@ void ImageLoader::changed(const QRect& rect) {
 }
 
 void ImageLoader::frameDone() {
-	frameDone( QPoint( 0, 0 ), QRect( 0, 0, d->mDecoder.image().width(), d->mDecoder.image().height()));
+	frameDone( QPoint( 0, 0 ), d->mDecoder.image().rect());
 }
 
 void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
@@ -642,12 +642,11 @@ void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 		d->mTimeSinceLastUpdate.start();
 	}
 	d->mLoadedRegion = QRegion();
-	QImage image = d->mDecoder.image();
-	image.detach();
-	if( offset != QPoint( 0, 0 ) || rect != QRect( 0, 0, image.width(), image.height())) {
-		if( !d->mFrames.isEmpty()) { // not first image - what to do here?
-			QImage im( d->mFrames.last().image);
-			im.detach();
+	QImage image = d->mDecoder.image().copy();
+	if( offset != QPoint( 0, 0 ) || rect != image.rect()) {
+		// Blit last frame below 'image'
+		if( !d->mFrames.isEmpty()) {
+			QImage im = d->mFrames.last().image.copy();
 			bitBlt( &im, offset.x(), offset.y(), &image, rect.x(), rect.y(), rect.width(), rect.height());
 			image = im;
 		}
