@@ -550,9 +550,9 @@ void ImageLoader::finish( bool ok ) {
 BusyLevel ImageLoader::priority() const {
 	BusyLevel mylevel = BUSY_NONE;
 	for( QValueVector< OwnerData >::ConstIterator it = d->mOwners.begin();
-	     it != d->mOwners.end();
-	     ++it ) {
-            mylevel = QMAX( mylevel, (*it).priority );
+			it != d->mOwners.end();
+			++it ) {
+		mylevel = QMAX( mylevel, (*it).priority );
 	}
 	return mylevel;
 }
@@ -645,7 +645,7 @@ void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	QImage image = d->mDecoder.image();
 	image.detach();
 	if( offset != QPoint( 0, 0 ) || rect != QRect( 0, 0, image.width(), image.height())) {
-                if( !d->mFrames.isEmpty()) { // not first image - what to do here?
+		if( !d->mFrames.isEmpty()) { // not first image - what to do here?
 			QImage im( d->mFrames.last().image);
 			im.detach();
 			bitBlt( &im, offset.x(), offset.y(), &image, rect.x(), rect.y(), rect.width(), rect.height());
