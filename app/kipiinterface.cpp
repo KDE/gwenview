@@ -68,6 +68,7 @@ public:
 	KURL uploadRoot()        { return KURL("/"); }
 	KURL uploadPath()        { return mDirURL; }
 	QString uploadRootName() { return "/"; }
+	bool isDirectory()       { return true; }
 
 private:
     KURL mDirURL;
