@@ -468,8 +468,10 @@ void PNGFormat::end(png_structp png, png_infop info)
 	image->setText(text_ptr->key,0,text_ptr->text);
 	text_ptr++;
     }
-    if( !changed_rect.isNull())
+    if( !changed_rect.isNull()) {
         consumer->changed( changed_rect );
+        changed_rect = QRect();
+    }
     QRect r(0,0,image->width(),image->height());
     consumer->frameDone(QPoint(offx,offy),r);
     consumer->end();
