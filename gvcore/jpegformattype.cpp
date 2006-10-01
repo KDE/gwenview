@@ -218,7 +218,7 @@ JPEGFormat::~JPEGFormat() {
 
 int JPEGFormat::decode(QImage& image, QImageConsumer* consumer, const uchar* buffer, int length) {
 #ifdef JPEG_DEBUG
-	qDebug("JPEGFormat::decode(%08lx, %08lx, %08lx, %d)",
+	qDebug("JPEGFormat::decode(%p, %p, %p, %d)",
 	       &image, consumer, buffer, length);
 #endif
 
