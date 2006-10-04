@@ -25,17 +25,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Qt
 #include <qtimer.h>
+#include <qwmatrix.h>
 
 // KDE
 #include <kapplication.h>
 
 // Local
 #include "cache.h"
+#include "imageutils/imageutils.h"
+#include "imageutils/jpegcontent.h"
 
 #include "imageloader.moc"
 namespace Gwenview {
 
 const unsigned int DECODE_CHUNK_SIZE=4096;
+
+/** Interval between image updates, in milli seconds */
+const int IMAGE_UPDATE_INTERVAL=100;
 
 #undef ENABLE_LOG
 #undef LOG
@@ -178,9 +184,10 @@ public:
 	, mUpdatedDuringLoad(false)
 	, mSuspended(false)
 	, mGetComplete(false)
-	, mAsyncImageComplete(false)
+	, mIncrementalDecoderComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
+	, mOrientation(ImageUtils::NOT_AVAILABLE)
 	, mURLKind(MimeTypeUtils::KIND_UNKNOWN)
 	, mDecodeComplete( false )
 	, mStatPending( false )
@@ -211,8 +218,6 @@ public:
 	
 	// Set to true if at least one changed() signals have been emitted
 	bool mUpdatedDuringLoad;
-	// Set to image size if sizeLoaded() signal has been emitted
-	QSize mKnownSize;
 
 	// A rect of recently loaded pixels that the rest of the application has
 	// not been notified about with the imageChanged() signal
@@ -228,7 +233,7 @@ public:
 	bool mGetComplete;
 	
 	// Set to true when all the image has been decoded
-	bool mAsyncImageComplete;
+	bool mIncrementalDecoderComplete;
 
 	// Delay used for next frame after it's finished decoding.
 	int mNextFrameDelay;
@@ -242,6 +247,8 @@ public:
 	ImageFrames mFrames;
 
 	QCString mImageFormat;
+
+	ImageUtils::Orientation mOrientation;
 	
 	MimeTypeUtils::Kind mURLKind;
 
@@ -291,7 +298,7 @@ void ImageLoader::startLoading() {
 	connect(&d->mDecoderTimer, SIGNAL(timeout()), this, SLOT(decodeChunk()) );
 
 	connect(&d->mDecoderThread, SIGNAL(succeeded()),
-		this, SLOT(slotImageDecoded()) );
+		this, SLOT(slotDecoderThreadSucceeded()) );
 	connect(&d->mDecoderThread, SIGNAL(failed()),
 		this, SLOT(slotDecoderThreadFailed()) );
 
@@ -442,16 +449,14 @@ void ImageLoader::decodeChunk() {
 	}
 
 	int chunkSize = QMIN(DECODE_CHUNK_SIZE, int(d->mRawData.size())-d->mDecodedSize);
-	LOG("chunkSize: " << chunkSize);
 	int decodedSize = 0;
 	if (chunkSize>0) {
 		decodedSize = d->mDecoder.decode(
 			(const uchar*)(d->mRawData.data()+d->mDecodedSize),
 			chunkSize);
-		LOG("decodedSize: " << decodedSize);
 
 		if (decodedSize<0) {
-			// We can't use async decoding, switch to decoder thread 
+			// We can't use incremental decoding, switch to threaded decoding
 			d->mDecoderTimer.stop();
 			d->mUseThread=true;
 			if( d->mGetComplete ) startThread();	
@@ -466,10 +471,19 @@ void ImageLoader::decodeChunk() {
 		// We decoded as much as possible from the buffer, wait to receive
 		// more data before coming again in decodeChunk
 		d->mDecoderTimer.stop();
-		if (d->mGetComplete && !d->mAsyncImageComplete) {
-			// No more data is available, the image must be truncated,
-			// let's simulate its end
-			end();
+
+		if (d->mGetComplete) {
+			if (!d->mIncrementalDecoderComplete) {
+				// No more data is available, the image must be truncated,
+				// let's simulate its end
+				kdWarning() << "ImageLoader::decodeChunk(): image is truncated.\n";
+
+				if (d->mProcessedImage.isNull()) {
+					d->mProcessedImage = d->mDecoder.image();
+				}
+				emit imageChanged(d->mProcessedImage.rect());
+				end();
+			}
 		}
 	}
 }
@@ -489,24 +503,13 @@ void ImageLoader::slotDecoderThreadFailed() {
 }
 
 
-void ImageLoader::slotImageDecoded() {
+void ImageLoader::slotDecoderThreadSucceeded() {
 	LOG("");
-
-	// Get image
-	if (d->mUseThread) {
-		d->mFrames.clear();
-		d->mFrames.append( ImageFrame( d->mDecoderThread.popLoadedImage(), 0 ));
-	} else if( d->mFrames.count() == 0 ) {
-		d->mFrames.append( ImageFrame( d->mDecoder.image(), 0 ));
-	}
-	
-	// Set image format
-	QBuffer buffer(d->mRawData);
-	buffer.open(IO_ReadOnly);
-	d->mImageFormat = QImageIO::imageFormat(&buffer);
-	buffer.close();
-
-	finish( true );
+	d->mProcessedImage = d->mDecoderThread.popLoadedImage();
+	d->mFrames.append( ImageFrame( d->mProcessedImage, 0 ));
+	emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
+	emit imageChanged(d->mProcessedImage.rect());
+	finish(true);
 }
 
 
@@ -518,7 +521,7 @@ void ImageLoader::finish( bool ok ) {
 
 	d->mDecodeComplete = true;
 
-	if( !ok || d->mFrames.count() == 0 ) {
+	if( !ok /*|| d->mFrames.count() == 0 */) {
 		d->mFrames.clear();
 		d->mRawData = QByteArray();
 		d->mImageFormat = QCString();
@@ -526,15 +529,22 @@ void ImageLoader::finish( bool ok ) {
 		emit imageLoaded( false );
 		return;
 	}
+	
+	// Set image format
+	QBuffer buffer(d->mRawData);
+	buffer.open(IO_ReadOnly);
+	d->mImageFormat = QImageIO::imageFormat(&buffer);
+	buffer.close();
 
+	/*
 	Cache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
 
 	ImageFrame lastframe = d->mFrames.last();
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
 	d->mProcessedImage = lastframe.image;
 	// The decoder did not cause some signals to be emitted, let's do it now
-	if (d->mKnownSize.isEmpty()) {
-		emit sizeLoaded( lastframe.image.width(), lastframe.image.height());
+	if (d->mLoadedRegion.isEmpty()) {
+		emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
 	}
 	if (!d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged( d->mLoadChangedRect );
@@ -542,6 +552,7 @@ void ImageLoader::finish( bool ok ) {
 		emit imageChanged( lastframe.image.rect() );
 	}
 	d->mFrames.push_back( lastframe );
+	*/
 
 	emit imageLoaded( true );
 }
@@ -589,25 +600,94 @@ void ImageLoader::resumeLoading() {
 void ImageLoader::end() {
 	LOG("");
 
+	// Notify about the last loaded rectangle
+	LOG("mLoadChangedRect " << d->mLoadChangedRect);
+	if (!d->mLoadChangedRect.isEmpty()) {
+		emit imageChanged( d->mLoadChangedRect );
+	}
+
 	d->mDecoderTimer.stop();
-	d->mAsyncImageComplete=true;
-	
+	d->mIncrementalDecoderComplete = true;
+
+	// We are done
+	if( d->mFrames.count() == 0 ) {
+		d->mFrames.append( ImageFrame( d->mDecoder.image(), 0 ));
+	}
 	// The image has been totally decoded, we delay the call to finish because
 	// when we return from this function we will be in decodeChunk(), after the
 	// call to decode(), so we don't want to switch to a new impl yet, since
 	// this means deleting "this".
-	QTimer::singleShot(0, this, SLOT(slotImageDecoded()) );
+	QTimer::singleShot(0, this, SLOT(callFinish()) );
 }
 
-void ImageLoader::changed(const QRect& rect) {
-	d->mProcessedImage = d->mDecoder.image();
+
+void ImageLoader::callFinish() {
+	finish(true);
+}
+
+
+void ImageLoader::changed(const QRect& constRect) {
+	LOG(constRect);
+	QRect rect = constRect;
+	
+	if (d->mLoadedRegion.isEmpty()) {
+		// This is the first time we get called. Init mProcessedImage and emit
+		// sizeLoaded.
+		LOG("mLoadedRegion is empty");
+		
+		// By default, mProcessedImage should use the image from mDecoder
+		d->mProcessedImage = d->mDecoder.image();
+		
+		ImageUtils::JPEGContent content;
+
+		if (content.loadFromData(d->mRawData)) {
+			// This is a JPEG, extract orientation and adjust mProcessedImage
+			// if necessary
+			d->mOrientation = content.orientation();
+			if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
+				QSize size = content.size();
+				d->mProcessedImage = QImage(size, d->mDecoder.image().depth());
+			}
+		}
+		
+		LOG("emit sizeLoaded " << d->mProcessedImage.size());
+		emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
+	}
+
+	// Apply orientation if necessary
+	if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
+		// We can only rotate whole images, so copy the loaded rect in a temp
+		// image, rotate the temp image and copy it to mProcessedImage
+
+		// Copy loaded rect
+		QImage temp(rect.size(), d->mProcessedImage.depth());
+		bitBlt(&temp, 0, 0, 
+			&d->mDecoder.image(), rect.left(), rect.top(), rect.width(), rect.height());
+		
+		// Rotate
+		temp = ImageUtils::transform(temp, d->mOrientation);
+
+		// Compute destination rect
+		QWMatrix matrix = ImageUtils::transformMatrix(d->mOrientation);
+		
+		QRect imageRect = d->mDecoder.image().rect();
+		imageRect = matrix.mapRect(imageRect);
+				
+		rect = matrix.mapRect(rect);
+		rect.moveBy(-imageRect.left(), -imageRect.top());
+		
+		// copy temp to mProcessedImage
+		bitBlt(&d->mProcessedImage, rect.left(), rect.top(),
+			&temp, 0, 0, temp.width(), temp.height());
+	}
+	
+	// Update state tracking vars
 	d->mWasFrameData = true;
-	d->mUpdatedDuringLoad=true;
+	d->mUpdatedDuringLoad = true;
 	d->mLoadChangedRect |= rect;
 	d->mLoadedRegion |= rect;
-	if( d->mTimeSinceLastUpdate.elapsed() > 100 ) {
-		LOG(d->mLoadChangedRect.left() << "-" << d->mLoadChangedRect.top()
-			<< " " << d->mLoadChangedRect.width() << "x" << d->mLoadChangedRect.height() );
+	if( d->mTimeSinceLastUpdate.elapsed() > IMAGE_UPDATE_INTERVAL ) {
+		LOG("emitting imageChanged " << d->mLoadChangedRect);
 		d->mTimeSinceLastUpdate.start();
 		emit imageChanged(d->mLoadChangedRect);
 		d->mLoadChangedRect = QRect();
@@ -619,6 +699,7 @@ void ImageLoader::frameDone() {
 }
 
 void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
+	LOG("");
 	// Another case where the image loading in Qt's is a bit borken.
 	// It's possible to get several notes about a frame being done for one frame (with MNG).
 	if( !d->mWasFrameData ) {
@@ -642,7 +723,14 @@ void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 		d->mTimeSinceLastUpdate.start();
 	}
 	d->mLoadedRegion = QRegion();
-	QImage image = d->mDecoder.image().copy();
+	
+	QImage image;
+	if (d->mProcessedImage.isNull()) {
+		image = d->mDecoder.image().copy();
+	} else {
+		image = d->mProcessedImage.copy();
+	}
+	
 	if( offset != QPoint( 0, 0 ) || rect != image.rect()) {
 		// Blit last frame below 'image'
 		if( !d->mFrames.isEmpty()) {
@@ -666,22 +754,14 @@ void ImageLoader::setFramePeriod(int milliseconds) {
 	}
 }
 
-void ImageLoader::setSize(int width, int height) {
-	LOG(width << "x" << height);
-	d->mKnownSize = QSize( width, height );
-	// FIXME: There must be a better way than creating an empty image
-	d->mProcessedImage = QImage( width, height, 32 );
-	emit sizeLoaded(width, height);
+void ImageLoader::setSize(int, int) {
+	// Do nothing, size is handled when ::changed() is called for the first
+	// time
 }
 
 
 QImage ImageLoader::processedImage() const {
 	return d->mProcessedImage;
-}
-
-
-QSize ImageLoader::knownSize() const {
-	return d->mKnownSize;
 }
 
 

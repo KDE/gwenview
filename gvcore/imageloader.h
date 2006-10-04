@@ -70,7 +70,6 @@ public:
 	QByteArray rawData() const;
 	MimeTypeUtils::Kind urlKind() const;
 	KURL url() const;
-	QSize knownSize() const;
 	QRegion loadedRegion() const; // valid parts of processedImage()
 	bool completed() const;
 
@@ -86,11 +85,12 @@ private slots:
 	void slotDataReceived(KIO::Job*, const QByteArray& chunk);
 	void slotGetResult(KIO::Job*);
 	void decodeChunk();
-	void slotImageDecoded();
 	void slotDecoderThreadFailed();
+	void slotDecoderThreadSucceeded();
 	void slotBusyLevelChanged( BusyLevel );
 	void ownerDestroyed();
 	void startLoading();
+	void callFinish();
 
 private:
 	ImageLoader();

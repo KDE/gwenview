@@ -70,9 +70,6 @@ void DocumentJPEGLoadedImpl::init() {
 		&& orientation!=ImageUtils::NOT_AVAILABLE
 		&& orientation!=ImageUtils::NORMAL)
 	{
-		LOG("jpeg rotating");
-		setImage(ImageUtils::transform(mDocument->image(), orientation));
-		emitImageRectUpdated();
 		d->mJPEGContent.transform(orientation);
 	}
 

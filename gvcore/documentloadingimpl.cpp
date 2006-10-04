@@ -93,13 +93,13 @@ void DocumentLoadingImpl::init() {
 	connect( d->mLoader, SIGNAL( imageLoaded( bool )), SLOT( imageLoaded( bool )));
 
 	// it's possible the loader already has the whole or at least part of the image loaded
-	QSize s = d->mLoader->knownSize();
-	if( !s.isEmpty()) {
+	QImage image = d->mLoader->processedImage();
+	if (!image.isNull()) {
 		if( d->mLoader->frames().count() > 0 ) {
 			setImage( d->mLoader->frames().first().image);
 			emitImageRectUpdated();
 		} else {
-			setImage( d->mLoader->processedImage());
+			setImage(image);
 			QMemArray< QRect > rects = d->mLoader->loadedRegion().rects();
 			for( unsigned int i = 0; i < rects.count(); ++i ) {
 				emit rectUpdated(rects[i]);
@@ -107,7 +107,7 @@ void DocumentLoadingImpl::init() {
 		}
 	}
 	if( d->mLoader->completed()) emit imageLoaded( d->mLoader->frames().count() != 0 );
-	// this may be deleted here
+	// 'this' may be deleted here
 }
 
 
@@ -146,7 +146,7 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 
 
 void DocumentLoadingImpl::imageChanged(const QRect& rect) {
-	if( d->mLoader->frames().count() > 0 ) return;
+	//if( d->mLoader->frames().count() > 0 ) return;
 	setImage(d->mLoader->processedImage());
 	emit rectUpdated(rect);
 }
