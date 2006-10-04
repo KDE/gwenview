@@ -161,7 +161,6 @@ static bool urlIsDirectory(QWidget* parent, const KURL& url) {
 
 MainWindow::MainWindow()
 : KMainWindow()
-, mLoadingCursor(false)
 #ifdef GV_HAVE_KIPI
 , mPluginLoader(0)
 #endif
@@ -503,18 +502,13 @@ void MainWindow::openFileViewControllerContextMenu(const QPoint& pos, bool onIte
 
 void MainWindow::slotImageLoading() {
 	if (FullScreenConfig::showBusyPtr() || !mToggleFullScreen->isChecked()) {
-		if( !mLoadingCursor ) {
-			kapp->setOverrideCursor(KCursor::workingCursor());
-		}
-		mLoadingCursor = true;
+		kapp->setOverrideCursor(KCursor::workingCursor(), true /* replace */);
 	}
 }
 
 
 void MainWindow::slotImageLoaded() {
-	if( mLoadingCursor )
-		kapp->restoreOverrideCursor();
-	mLoadingCursor = false;
+	kapp->restoreOverrideCursor();
 	updateStatusInfo();
 	updateImageActions();
 	updateLocationURL();

@@ -122,7 +122,6 @@ private:
 	KAction* mSaveFileAs;
 	KAction* mFilePrint;
 	KAction* mResetDockWidgets;
-	bool	 mLoadingCursor;
 
 	KHistoryCombo* mURLEdit;
 	KURLCompletion* mURLEditCompletion;
