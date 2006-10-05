@@ -45,11 +45,20 @@ const int IMAGE_UPDATE_INTERVAL=100;
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
-#ifdef ENABLE_LOG
+#undef LOG2
+
+#define ENABLE_LOG 0
+
+#if ENABLE_LOG >= 1
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
 #define LOG(x) ;
+#endif
+
+#if ENABLE_LOG >= 2
+#define LOG2(x) kdDebug() << k_funcinfo << x << endl
+#else
+#define LOG2(x) ;
 #endif
 
 static QMap< KURL, ImageLoader* > sLoaders;
@@ -332,21 +341,28 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 
 	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
+		LOG(d->mURL << ", We have the image in cache");
 		QCString format;
 		d->mRawData = Cache::instance()->file( d->mURL );
 		ImageFrames frames;
 		Cache::instance()->getFrames( d->mURL, frames, format );
 		if( !frames.isEmpty()) {
+			LOG("The image in cache can be used");
 			d->mImageFormat = format;
 			d->mFrames = frames;
+			d->mProcessedImage = d->mFrames[0].image;
+			emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
+			emit imageChanged(d->mProcessedImage.rect());
+			
 			if( !d->mRawData.isNull() || format != "JPEG" ) {
+				// The raw data is only needed for JPEG. If it is already
+				// loaded or if we are loading a JPEG file, we are done.
 				finish( true );
 				return;
 			}
-			// the raw data is needed for JPEG, so it needs to be loaded
-			// if it's not in the cache
 		} else {
 			// Image in cache is broken, let's try the file
+			LOG("The image in cache cannot be used");
 			if( !d->mRawData.isNull()) {
 				d->mTimeSinceLastUpdate.start();
 				d->mDecoderTimer.start(0, false);
@@ -408,7 +424,7 @@ void ImageLoader::slotGetResult(KIO::Job* job) {
 
 
 void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
-	LOG("size: " << chunk.size());
+	LOG2("size: " << chunk.size());
 	if (chunk.size()<=0) return;
 
 	int oldSize=d->mRawData.size();
@@ -443,7 +459,7 @@ void ImageLoader::decodeChunk() {
 		return;
 	}
 	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
-		LOG("mImageFormat is not null");
+		LOG2("mImageFormat is not null");
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -611,7 +627,7 @@ void ImageLoader::end() {
 
 	// We are done
 	if( d->mFrames.count() == 0 ) {
-		d->mFrames.append( ImageFrame( d->mDecoder.image(), 0 ));
+		d->mFrames.append( ImageFrame( d->mProcessedImage, 0 ));
 	}
 	// The image has been totally decoded, we delay the call to finish because
 	// when we return from this function we will be in decodeChunk(), after the
@@ -627,7 +643,7 @@ void ImageLoader::callFinish() {
 
 
 void ImageLoader::changed(const QRect& constRect) {
-	LOG(constRect);
+	LOG("");
 	QRect rect = constRect;
 	
 	if (d->mLoadedRegion.isEmpty()) {
