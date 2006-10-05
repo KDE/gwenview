@@ -52,7 +52,7 @@ const int IMAGE_UPDATE_INTERVAL=100;
 #define LOG(x) ;
 #endif
 
-static QMap< KURL, ImageLoader* > loaders;
+static QMap< KURL, ImageLoader* > sLoaders;
 
 //---------------------------------------------------------------------
 //
@@ -536,9 +536,9 @@ void ImageLoader::finish( bool ok ) {
 	d->mImageFormat = QImageIO::imageFormat(&buffer);
 	buffer.close();
 
-	/*
 	Cache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
 
+	/*
 	ImageFrame lastframe = d->mFrames.last();
 	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
 	d->mProcessedImage = lastframe.image;
@@ -815,7 +815,7 @@ void ImageLoader::deref( const QObject* owner ) {
 		if( (*it).owner == owner ) {
 			d->mOwners.erase( it );
 			if( d->mOwners.count() == 0 ) {
-				loaders.remove( d->mURL );
+				sLoaders.remove( d->mURL );
 				delete this;
 			}
 			return;
@@ -840,24 +840,24 @@ void ImageLoader::ownerDestroyed() {
 //---------------------------------------------------------------------
 
 ImageLoader* ImageLoader::loader( const KURL& url, const QObject* owner, BusyLevel priority ) {
-	if( loaders.contains( url )) {
-		ImageLoader* l = loaders[ url ];
-		l->ref( owner, priority );
+	if( sLoaders.contains( url )) {
+		ImageLoader* loader = sLoaders[ url ];
+		loader->ref( owner, priority );
 		// resume if this owner has high priority
-		l->slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
-		return l;
+		loader->slotBusyLevelChanged( BusyLevelManager::instance()->busyLevel());
+		return loader;
 	}
-	ImageLoader* l = new ImageLoader;
-	l->ref( owner, priority );
-	loaders[ url ] = l;
-	l->setURL( url );
+	ImageLoader* loader = new ImageLoader;
+	loader->ref( owner, priority );
+	sLoaders[ url ] = loader;
+	loader->setURL( url );
 	// Code using a loader first calls loader() to get ImageLoader* and only after that it can
 	// connect to its signals etc., so don't start loading immediately.
 	// This also helps with preloading jobs, since BUSY_LOADING busy level is not entered immediately
 	// when a new picture is selected, so preloading jobs without this delay could start working
 	// immediately.
-	QTimer::singleShot( priority >= BUSY_LOADING ? 0 : 10, l, SLOT( startLoading()));
-	return l;
+	QTimer::singleShot( priority >= BUSY_LOADING ? 0 : 10, loader, SLOT( startLoading()));
+	return loader;
 }
 
 } // namespace
