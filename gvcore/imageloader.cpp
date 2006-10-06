@@ -210,13 +210,15 @@ public:
 	, mGetState(GET_PENDING_STAT)
 	, mDecodeState(DECODE_WAITING)
 	, mDecoder(impl)
-	, mUpdatedDuringLoad(false)
 	, mSuspended(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
 	, mOrientation(ImageUtils::NOT_AVAILABLE)
 	, mURLKind(MimeTypeUtils::KIND_UNKNOWN)
 	{}
+
+	// How many of the raw data we have already decoded
+	unsigned int mDecodedSize;
 
 	GetState mGetState;
 	DecodeState mDecodeState;
@@ -228,9 +230,6 @@ public:
 
 	// The raw data we get
 	QByteArray mRawData;
-
-	// How many of the raw data we have already decoded
-	unsigned int mDecodedSize;
 	
 	// The async decoder and it's waking timer	
 	QImageDecoder mDecoder;
@@ -238,9 +237,6 @@ public:
 
 	// The decoder thread
 	DecoderThread mDecoderThread;
-	
-	// Set to true if at least one changed() signals have been emitted
-	bool mUpdatedDuringLoad;
 
 	// A rect of recently loaded pixels that the rest of the application has
 	// not been notified about with the imageChanged() signal
@@ -581,8 +577,6 @@ void ImageLoader::finish( bool ok ) {
 	}
 	if (!d->mLoadChangedRect.isEmpty()) {
 		emit imageChanged( d->mLoadChangedRect );
-	} else if (!d->mUpdatedDuringLoad) {
-		emit imageChanged( lastframe.image.rect() );
 	}
 	d->mFrames.push_back( lastframe );
 	*/
@@ -720,7 +714,6 @@ void ImageLoader::changed(const QRect& constRect) {
 	
 	// Update state tracking vars
 	d->mWasFrameData = true;
-	d->mUpdatedDuringLoad = true;
 	d->mLoadChangedRect |= rect;
 	d->mLoadedRegion |= rect;
 	if( d->mTimeSinceLastUpdate.elapsed() > IMAGE_UPDATE_INTERVAL ) {
