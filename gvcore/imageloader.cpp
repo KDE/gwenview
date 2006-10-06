@@ -184,24 +184,42 @@ struct OwnerData {
 	BusyLevel priority;
 };
 
+enum GetState { 
+	GET_PENDING_STAT, // Stat has not been started
+	GET_STATING,      // Stat has been started
+	GET_PENDING_GET,  // Stat is done, get has not been started
+	GET_GETTING,      // Get has been started
+	GET_DONE,         // All data has been received
+};
+
+
+enum DecodeState {
+	DECODE_WAITING,                   // No data to decode yet
+	DECODE_PENDING_THREADED_DECODING, // Waiting for all data to start threaded decoding
+	DECODE_THREADED_DECODING,         // Threaded decoder is running
+	DECODE_INCREMENTAL_DECODING,      // Incremental decoder is running
+	DECODE_INCREMENTAL_DECODING_DONE, // Incremental decoder is done
+	DECODE_CACHED,                    // Image has been obtained from cache, but raw data was missing. Wait for get to finish.
+	DECODE_DONE,                      // All done
+};
+
 class ImageLoaderPrivate {
 public:
 	ImageLoaderPrivate(ImageLoader* impl)
 	: mDecodedSize(0)
-	, mUseThread(false)
+	, mGetState(GET_PENDING_STAT)
+	, mDecodeState(DECODE_WAITING)
 	, mDecoder(impl)
 	, mUpdatedDuringLoad(false)
 	, mSuspended(false)
-	, mGetComplete(false)
-	, mIncrementalDecoderComplete(false)
 	, mNextFrameDelay(0)
 	, mWasFrameData(false)
 	, mOrientation(ImageUtils::NOT_AVAILABLE)
 	, mURLKind(MimeTypeUtils::KIND_UNKNOWN)
-	, mDecodeComplete( false )
-	, mStatPending( false )
-	, mGetPending( false )
 	{}
+
+	GetState mGetState;
+	DecodeState mDecodeState;
 
 	KURL mURL;
 
@@ -214,10 +232,6 @@ public:
 	// How many of the raw data we have already decoded
 	unsigned int mDecodedSize;
 	
-	// Whether we are using a thread to decode the image (if the async decoder
-	// failed)
-	bool mUseThread;
-
 	// The async decoder and it's waking timer	
 	QImageDecoder mDecoder;
 	QTimer mDecoderTimer;
@@ -238,12 +252,6 @@ public:
 	// Whether the loading should be suspended
 	bool mSuspended;
 	
-	// Set to true when all the raw data has been received
-	bool mGetComplete;
-	
-	// Set to true when all the image has been decoded
-	bool mIncrementalDecoderComplete;
-
 	// Delay used for next frame after it's finished decoding.
 	int mNextFrameDelay;
 
@@ -262,13 +270,6 @@ public:
 	MimeTypeUtils::Kind mURLKind;
 
 	QValueVector< OwnerData > mOwners; // loaders may be shared
-
-	bool mDecodeComplete; // is decoding fully completed?
-
-	// KIO::stat() hasn't been done yet (because of being suspended since the beginning)
-	bool mStatPending;
-	// the same for KIO::get()
-	bool mGetPending;
 };
 
 
@@ -311,18 +312,17 @@ void ImageLoader::startLoading() {
 	connect(&d->mDecoderThread, SIGNAL(failed()),
 		this, SLOT(slotDecoderThreadFailed()) );
 
-	d->mStatPending = true;
 	checkPendingStat();
 }
 
 void ImageLoader::checkPendingStat() {
-	if( d->mSuspended || !d->mStatPending ) return;
+	if( d->mSuspended || d->mGetState != GET_PENDING_STAT ) return;
 
 	KIO::Job* job=KIO::stat( d->mURL, false );
 	job->setWindow(KApplication::kApplication()->mainWidget());
 	connect(job, SIGNAL(result(KIO::Job*)),
 		this, SLOT(slotStatResult(KIO::Job*)) );
-	d->mStatPending = false;
+	d->mGetState = GET_STATING;
 }
 
 void ImageLoader::slotStatResult(KIO::Job* job) {
@@ -356,14 +356,21 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 			
 			if( !d->mRawData.isNull() || format != "JPEG" ) {
 				// The raw data is only needed for JPEG. If it is already
-				// loaded or if we are loading a JPEG file, we are done.
+				// loaded or if we are not loading a JPEG file, we are done.
 				finish( true );
 				return;
+			} else {
+				// Wait for raw data to be downloaded
+				LOG("Wait for raw data to be downloaded");
+				d->mDecodeState = DECODE_CACHED;
 			}
 		} else {
-			// Image in cache is broken, let's try the file
+			// Image in cache is broken
 			LOG("The image in cache cannot be used");
 			if( !d->mRawData.isNull()) {
+				LOG("Using cached raw data");
+				// Raw data is ok, skip get step and decode it
+				d->mGetState = GET_DONE;
 				d->mTimeSinceLastUpdate.start();
 				d->mDecoderTimer.start(0, false);
 				return;
@@ -373,12 +380,12 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 
 	d->mTimestamp = urlTimestamp;
 	d->mRawData.resize(0);
-	d->mGetPending = true;
+	d->mGetState = GET_PENDING_GET;
 	checkPendingGet();
 }
 
 void ImageLoader::checkPendingGet() {
-	if( d->mSuspended || !d->mGetPending ) return;
+	if( d->mSuspended || d->mGetState != GET_PENDING_GET ) return;
 
 	// Start loading the image
 	KIO::Job* getJob=KIO::get( d->mURL, false, false);
@@ -391,7 +398,7 @@ void ImageLoader::checkPendingGet() {
 		this, SLOT(slotGetResult(KIO::Job*)) );
 
 	d->mTimeSinceLastUpdate.start();
-	d->mGetPending = false;
+	d->mGetState = GET_GETTING;
 }
 	
 
@@ -403,22 +410,27 @@ void ImageLoader::slotGetResult(KIO::Job* job) {
 		return;
 	}
 
-	d->mGetComplete = true;
+	d->mGetState = GET_DONE;
 	
 	// Store raw data in cache
 	// Note: Cache will give high cost to non-JPEG raw data.
 	Cache::instance()->addFile( d->mURL, d->mRawData, d->mTimestamp );
 
-	if( !d->mImageFormat.isNull()) { // image was in cache, but not raw data
-		finish( true );
-		return;
-	}
 
-	// Start the decoder thread if needed
-	if( d->mUseThread ) {
+	switch (d->mDecodeState) {
+	case DECODE_CACHED:
+		// image was in cache, but not raw data
+		finish( true );
+		break;
+
+	case DECODE_PENDING_THREADED_DECODING:
+		// Start the decoder thread if needed
 		startThread();
-	} else { // Finish decoding if needed
-		if( !d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
+		break;
+
+	default:
+		// Finish decoding if needed
+		if (!d->mDecoderTimer.isActive()) d->mDecoderTimer.start(0);
 	}
 }
 
@@ -431,8 +443,8 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 	d->mRawData.resize(oldSize + chunk.size());
 	memcpy(d->mRawData.data()+oldSize, chunk.data(), chunk.size() );
 
-	// Try to determine the data type
 	if (oldSize==0) {
+		// Try to determine the data type
 		d->mURLKind=MimeTypeUtils::determineKindFromContent(d->mRawData);
 		if (d->mURLKind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
 			Q_ASSERT(!d->mDecoderTimer.isActive());
@@ -443,10 +455,18 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 		}
 		LOG("emit urlKindDetermined(raster)");
 		emit urlKindDetermined();
+		
+		// Set image format
+		QBuffer buffer(d->mRawData);
+		buffer.open(IO_ReadOnly);
+		d->mImageFormat = QImageIO::imageFormat(&buffer);
+		buffer.close();
 	}
 
 	// Decode the received data
-	if( !d->mDecoderTimer.isActive() && !d->mUseThread) {
+	if( !d->mDecoderTimer.isActive() && 
+		(d->mDecodeState==DECODE_WAITING || d->mDecodeState==DECODE_INCREMENTAL_DECODING)
+	) {
 		d->mDecoderTimer.start(0);
 	}
 }
@@ -455,11 +475,6 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 void ImageLoader::decodeChunk() {
 	if( d->mSuspended ) {
 		LOG("suspended");
-		d->mDecoderTimer.stop();
-		return;
-	}
-	if( !d->mImageFormat.isNull()) { // image was in cache, only loading the raw data
-		LOG2("mImageFormat is not null");
 		d->mDecoderTimer.stop();
 		return;
 	}
@@ -474,12 +489,18 @@ void ImageLoader::decodeChunk() {
 		if (decodedSize<0) {
 			// We can't use incremental decoding, switch to threaded decoding
 			d->mDecoderTimer.stop();
-			d->mUseThread=true;
-			if( d->mGetComplete ) startThread();	
+			if (d->mGetState == GET_DONE) {
+				startThread();
+			} else {
+				d->mDecodeState = DECODE_PENDING_THREADED_DECODING;
+			}
 			return;
 		}
 
 		// We just decoded some data
+		if (d->mDecodeState == DECODE_WAITING) {
+			d->mDecodeState = DECODE_INCREMENTAL_DECODING;
+		}
 		d->mDecodedSize+=decodedSize;
 	}
 
@@ -488,11 +509,12 @@ void ImageLoader::decodeChunk() {
 		// more data before coming again in decodeChunk
 		d->mDecoderTimer.stop();
 
-		if (d->mGetComplete) {
-			if (!d->mIncrementalDecoderComplete) {
-				// No more data is available, the image must be truncated,
+		if (d->mGetState == GET_DONE) {
+			// All available data has been received.
+			if (d->mDecodeState == DECODE_INCREMENTAL_DECODING) {
+				// Decoder is not finished, the image must be truncated,
 				// let's simulate its end
-				kdWarning() << "ImageLoader::decodeChunk(): image is truncated.\n";
+				kdWarning() << "ImageLoader::decodeChunk(): image '" << d->mURL.prettyURL() << "' is truncated.\n";
 
 				if (d->mProcessedImage.isNull()) {
 					d->mProcessedImage = d->mDecoder.image();
@@ -507,6 +529,7 @@ void ImageLoader::decodeChunk() {
 
 void ImageLoader::startThread() {
 	LOG("starting decoder thread");
+	d->mDecodeState = DECODE_THREADED_DECODING;
 	d->mDecoderThread.setRawData(d->mRawData);
 	d->mDecoderThread.start();
 }
@@ -535,7 +558,7 @@ void ImageLoader::slotDecoderThreadSucceeded() {
 void ImageLoader::finish( bool ok ) {
 	LOG("");
 
-	d->mDecodeComplete = true;
+	d->mDecodeState = DECODE_DONE;
 
 	if( !ok /*|| d->mFrames.count() == 0 */) {
 		d->mFrames.clear();
@@ -546,12 +569,6 @@ void ImageLoader::finish( bool ok ) {
 		return;
 	}
 	
-	// Set image format
-	QBuffer buffer(d->mRawData);
-	buffer.open(IO_ReadOnly);
-	d->mImageFormat = QImageIO::imageFormat(&buffer);
-	buffer.close();
-
 	Cache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
 
 	/*
@@ -623,7 +640,7 @@ void ImageLoader::end() {
 	}
 
 	d->mDecoderTimer.stop();
-	d->mIncrementalDecoderComplete = true;
+	d->mDecodeState = DECODE_INCREMENTAL_DECODING_DONE;
 
 	// We are done
 	if( d->mFrames.count() == 0 ) {
@@ -654,15 +671,19 @@ void ImageLoader::changed(const QRect& constRect) {
 		// By default, mProcessedImage should use the image from mDecoder
 		d->mProcessedImage = d->mDecoder.image();
 		
-		ImageUtils::JPEGContent content;
-
-		if (content.loadFromData(d->mRawData)) {
+		if (d->mImageFormat == "JPEG") {
 			// This is a JPEG, extract orientation and adjust mProcessedImage
 			// if necessary
-			d->mOrientation = content.orientation();
-			if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
-				QSize size = content.size();
-				d->mProcessedImage = QImage(size, d->mDecoder.image().depth());
+			ImageUtils::JPEGContent content;
+
+			if (content.loadFromData(d->mRawData)) {
+				d->mOrientation = content.orientation();
+				if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
+					QSize size = content.size();
+					d->mProcessedImage = QImage(size, d->mDecoder.image().depth());
+				}
+			} else {
+				kdWarning() << "ImageLoader::changed(): JPEGContent could not load '" << d->mURL.prettyURL() << "'\n";
 			}
 		}
 		
@@ -812,7 +833,7 @@ QRegion ImageLoader::loadedRegion() const {
 
 
 bool ImageLoader::completed() const {
-	return d->mDecodeComplete;
+	return d->mDecodeState == DECODE_DONE;
 }
 
 
