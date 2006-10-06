@@ -42,6 +42,8 @@ namespace ImageUtils {
 	QImage changeContrast( const QImage& image, int contrast );
 
 	QImage changeGamma( const QImage& image, int gamma );
+
+	QWMatrix transformMatrix(Orientation orientation);
 }
 
 #endif

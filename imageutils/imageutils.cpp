@@ -34,12 +34,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 namespace ImageUtils {
 
-QImage transform(const QImage& img, Orientation orientation) {
+
+QWMatrix transformMatrix(Orientation orientation) {
 	QWMatrix matrix;
 	switch (orientation) {
 	case NOT_AVAILABLE:
 	case NORMAL:
-		return img;
+		break;
 
 	case HFLIP:
 		matrix.scale(-1,1);
@@ -72,8 +73,18 @@ QImage transform(const QImage& img, Orientation orientation) {
 		break;
 	}
 
-	return img.xForm(matrix);
+	return matrix;
 }
+
+
+QImage transform(const QImage& img, Orientation orientation) {
+	if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
+		return img.xForm(transformMatrix(orientation));
+	} else {
+		return img;
+	}
+}
+
 
 inline
 int changeBrightness( int value, int brightness )
