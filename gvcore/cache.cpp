@@ -52,10 +52,13 @@ const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 
 
 struct ImageData : public KShared {
-	ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
-	ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
-	ImageData( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
-	ImageData( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
+	ImageData( const KURL& url, const QDateTime& _timestamp )
+	: timestamp(_timestamp)
+	, age(0)
+	, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
+	, priority( false ) {
+	}
+
 	void addFile( const QByteArray& file );
 	void addImage( const ImageFrames& frames, const QCString& format );
 	void addThumbnail( const QPixmap& thumbnail, QSize imagesize );
@@ -148,8 +151,10 @@ void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& t
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = new ImageData( url, file, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
+		ImageData* data = new ImageData(url ,timestamp);
+		data->addFile(file);
+		d->mImages[ url ] = data;
+		if( d->mPriorityURLs.contains( url )) data->priority = true;
 	}
 	checkMaxSize();
 }
@@ -166,8 +171,10 @@ void Cache::addImage( const KURL& url, const ImageFrames& frames, const QCString
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = new ImageData( url, frames, format, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
+		ImageData* data = new ImageData(url ,timestamp);
+		data->addImage(frames, format);
+		d->mImages[ url ] = data;
+		if( d->mPriorityURLs.contains( url )) data->priority = true;
 	}
 	checkMaxSize();
 }
@@ -185,8 +192,10 @@ void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize image
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = new ImageData( url, thumbnail, imagesize, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
+		ImageData* data = new ImageData(url ,timestamp);
+		data->addThumbnail( thumbnail, imagesize );
+		d->mImages[ url ] = data;
+		if( d->mPriorityURLs.contains( url )) data->priority = true;
 	}
 	checkMaxSize();
 }
@@ -314,35 +323,6 @@ void Cache::readConfig(KConfig* config,const QString& group) {
 	checkMaxSize();
 }
 
-ImageData::ImageData( const KURL& url, const QByteArray& f, const QDateTime& t )
-: file( f )
-, timestamp( t )
-, age( 0 )
-, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
-, priority( false )
-{
-	file.detach(); // explicit sharing
-}
-
-ImageData::ImageData( const KURL& url, const ImageFrames& frms, const QCString& f, const QDateTime& t )
-: frames( frms )
-, format( f )
-, timestamp( t )
-, age( 0 )
-, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
-, priority( false )
-{
-}
-
-ImageData::ImageData( const KURL& url, const QPixmap& thumb, QSize imgsize, const QDateTime& t )
-: thumbnail( thumb )
-, imagesize( imgsize )
-, timestamp( t )
-, age( 0 )
-, fast_url( url.isLocalFile() && !KIO::probably_slow_mounted( url.path()))
-, priority( false )
-{
-}
 
 void ImageData::addFile( const QByteArray& f ) {
 	file = f;
