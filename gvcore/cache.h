@@ -55,8 +55,6 @@ public:
 	void checkThumbnailSize( int size );
 	void readConfig(KConfig*,const QString& group);
 	void updateAge();
-	void ref();
-	void deref();
 	enum { DEFAULT_MAXSIZE = 16 * 1024 * 1024 }; // 16MiB
 private:
 	Cache();
