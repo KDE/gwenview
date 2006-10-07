@@ -200,15 +200,17 @@ QByteArray Cache::file( const KURL& url ) const {
 	return QByteArray();
 }
 
-void Cache::getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const {
+void Cache::getFrames( const KURL& url, ImageFrames* frames, QCString* format ) const {
 	LOG(url.prettyURL());
-	frames=ImageFrames();
-	format=QCString();
+	Q_ASSERT(frames);
+	Q_ASSERT(format);
+	frames->clear();
+	*format = QCString();
 	if( d->mImages.contains( url )) {
 		const ImageData::Ptr data = d->mImages[ url ];
 		if( data->frames.isEmpty()) return;
-		frames = data->frames;
-		format = data->format;
+		*frames = data->frames;
+		*format = data->format;
 		data->age = 0;
 	}
 }

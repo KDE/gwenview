@@ -338,10 +338,10 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 	if( d->mTimestamp.isValid() && urlTimestamp == d->mTimestamp ) {
 		// We have the image in cache
 		LOG(d->mURL << ", We have the image in cache");
-		QCString format;
 		d->mRawData = Cache::instance()->file( d->mURL );
+		QCString format;
 		ImageFrames frames;
-		Cache::instance()->getFrames( d->mURL, frames, format );
+		Cache::instance()->getFrames( d->mURL, &frames, &format );
 		if( !frames.isEmpty()) {
 			LOG("The image in cache can be used");
 			d->mImageFormat = format;

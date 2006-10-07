@@ -48,7 +48,7 @@ public:
 	void addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
 	QDateTime timestamp( const KURL& url ) const;
 	QByteArray file( const KURL& url ) const;
-	void getFrames( const KURL& url, ImageFrames& frames, QCString& format ) const;
+	void getFrames( const KURL& url, ImageFrames* frames, QCString* format ) const;
 	QPixmap thumbnail( const KURL& url, QSize& imagesize ) const;
 	void setPriorityURL( const KURL& url, bool set );
 	void invalidate( const KURL& url );
