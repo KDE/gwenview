@@ -27,6 +27,7 @@ Copyright 2000-2004 Aurélien Gâteau
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <ksharedptr.h>
 #include <kstaticdeleter.h>
 #include <kio/global.h>
 
@@ -50,7 +51,7 @@ namespace Gwenview {
 const char CONFIG_CACHE_MAXSIZE[]="maxSize";
 
 
-struct ImageData {
+struct ImageData : public KShared {
 	ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 	ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
 	ImageData( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
@@ -74,12 +75,14 @@ struct ImageData {
 	int thumbnailSize() const;
 	bool reduceSize();
 	bool isEmpty() const;
-	ImageData() {}; // stupid QMap
+
+	typedef KSharedPtr<ImageData> Ptr;
 };
 
+typedef QMap<KURL, ImageData::Ptr> ImageMap;
 
 struct Cache::Private {
-	QMap< KURL, ImageData > mImages;
+	ImageMap mImages;
 	int mMaxSize;
 	int mThumbnailSize;
 	QValueList< KURL > mPriorityURLs;
@@ -122,12 +125,12 @@ void Cache::setPriorityURL( const KURL& url, bool set ) {
 	if( set ) {
 		d->mPriorityURLs.append( url );
 		if( d->mImages.contains( url )) {
-			d->mImages[ url ].priority = true;
+			d->mImages[ url ]->priority = true;
 		}
 	} else {
 		d->mPriorityURLs.remove( url );
 		if( d->mImages.contains( url )) {
-			d->mImages[ url ].priority = false;
+			d->mImages[ url ]->priority = false;
 		}
 		checkMaxSize();
 	}
@@ -138,15 +141,15 @@ void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& t
 	updateAge();
 	bool insert = true;
 	if( d->mImages.contains( url )) {
-		ImageData& data = d->mImages[ url ];
-		if( data.timestamp == timestamp ) {
-			data.addFile( file );
+		ImageData::Ptr data = d->mImages[ url ];
+		if( data->timestamp == timestamp ) {
+			data->addFile( file );
 			insert = false;
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = ImageData( url, file, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ].priority = true;
+		d->mImages[ url ] = new ImageData( url, file, timestamp );
+		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
 	}
 	checkMaxSize();
 }
@@ -156,15 +159,15 @@ void Cache::addImage( const KURL& url, const ImageFrames& frames, const QCString
 	updateAge();
 	bool insert = true;
 	if( d->mImages.contains( url )) {
-		ImageData& data = d->mImages[ url ];
-		if( data.timestamp == timestamp ) {
-			data.addImage( frames, format );
+		ImageData::Ptr data = d->mImages[ url ];
+		if( data->timestamp == timestamp ) {
+			data->addImage( frames, format );
 			insert = false;
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = ImageData( url, frames, format, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ].priority = true;
+		d->mImages[ url ] = new ImageData( url, frames, format, timestamp );
+		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
 	}
 	checkMaxSize();
 }
@@ -175,15 +178,15 @@ void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize image
 //	updateAge();
 	bool insert = true;
 	if( d->mImages.contains( url )) {
-		ImageData& data = d->mImages[ url ];
-		if( data.timestamp == timestamp ) {
-			data.addThumbnail( thumbnail, imagesize );
+		ImageData::Ptr data = d->mImages[ url ];
+		if( data->timestamp == timestamp ) {
+			data->addThumbnail( thumbnail, imagesize );
 			insert = false;
 		}
 	}
 	if( insert ) {
-		d->mImages[ url ] = ImageData( url, thumbnail, imagesize, timestamp );
-		if( d->mPriorityURLs.contains( url )) d->mImages[ url ].priority = true;
+		d->mImages[ url ] = new ImageData( url, thumbnail, imagesize, timestamp );
+		if( d->mPriorityURLs.contains( url )) d->mImages[ url ]->priority = true;
 	}
 	checkMaxSize();
 }
@@ -194,17 +197,17 @@ void Cache::invalidate( const KURL& url ) {
 
 QDateTime Cache::timestamp( const KURL& url ) const {
 	LOG(url.prettyURL());
-	if( d->mImages.contains( url )) return d->mImages[ url ].timestamp;
+	if( d->mImages.contains( url )) return d->mImages[ url ]->timestamp;
 	return QDateTime();
 }
 
 QByteArray Cache::file( const KURL& url ) const {
 	LOG(url.prettyURL());
 	if( d->mImages.contains( url )) {
-		const ImageData& data = d->mImages[ url ];
-		if( data.file.isNull()) return QByteArray();
-		data.age = 0;
-		return data.file;
+		const ImageData::Ptr data = d->mImages[ url ];
+		if( data->file.isNull()) return QByteArray();
+		data->age = 0;
+		return data->file;
 	}
 	return QByteArray();
 }
@@ -214,41 +217,41 @@ void Cache::getFrames( const KURL& url, ImageFrames& frames, QCString& format ) 
 	frames=ImageFrames();
 	format=QCString();
 	if( d->mImages.contains( url )) {
-		const ImageData& data = d->mImages[ url ];
-		if( data.frames.isEmpty()) return;
-		frames = data.frames;
-		format = data.format;
-		data.age = 0;
+		const ImageData::Ptr data = d->mImages[ url ];
+		if( data->frames.isEmpty()) return;
+		frames = data->frames;
+		format = data->format;
+		data->age = 0;
 	}
 }
 
 QPixmap Cache::thumbnail( const KURL& url, QSize& imagesize ) const {
 	if( d->mImages.contains( url )) {
-		const ImageData& data = d->mImages[ url ];
-		if( data.thumbnail.isNull()) return QPixmap();
-		imagesize = data.imagesize;
+		const ImageData::Ptr data = d->mImages[ url ];
+		if( data->thumbnail.isNull()) return QPixmap();
+		imagesize = data->imagesize;
 //		data.age = 0;
-		return data.thumbnail;
+		return data->thumbnail;
 	}
 	return QPixmap();
 }
 
 void Cache::updateAge() {
-	for( QMap< KURL, ImageData >::Iterator it = d->mImages.begin();
+	for( ImageMap::Iterator it = d->mImages.begin();
 		it != d->mImages.end();
 		++it ) {
-		(*it).age++;
+		(*it)->age++;
 	}
 }
 
 void Cache::checkThumbnailSize( int size ) {
 	if( size != d->mThumbnailSize ) {
 		// simply remove all thumbnails, should happen rarely
-		for( QMap< KURL, ImageData >::Iterator it = d->mImages.begin();
+		for( ImageMap::Iterator it = d->mImages.begin();
 			it != d->mImages.end();
 			) {
-			if( !(*it).thumbnail.isNull()) {
-				QMap< KURL, ImageData >::Iterator it2 = it;
+			if( !(*it)->thumbnail.isNull()) {
+				ImageMap::Iterator it2 = it;
 				++it;
 				d->mImages.remove( it2 );
 			} else {
@@ -266,24 +269,24 @@ static KURL _cache_url; // hack only for debugging for item to show also its key
 void Cache::checkMaxSize() {
 	for(;;) {
 		int size = 0;
-		QMap< KURL, ImageData >::Iterator max;
+		ImageMap::Iterator max;
 		long long max_cost = -1;
 #ifdef DEBUG_CACHE
 		int with_file = 0;
 		int with_thumb = 0;
 		int with_image = 0;
 #endif
-		for( QMap< KURL, ImageData >::Iterator it = d->mImages.begin();
+		for( ImageMap::Iterator it = d->mImages.begin();
 			it != d->mImages.end();
 			++it ) {
-			size += (*it).size();
+			size += (*it)->size();
 #ifdef DEBUG_CACHE
 			if( !(*it).file.isNull()) ++with_file;
 			if( !(*it).thumbnail.isNull()) ++with_thumb;
 			if( !(*it).frames.isEmpty()) ++with_image;
 #endif
-			long long cost = (*it).cost();
-			if( cost > max_cost && ! (*it).priority ) {
+			long long cost = (*it)->cost();
+			if( cost > max_cost && ! (*it)->priority ) {
 				max_cost = cost;
 				max = it;
 			}
@@ -301,7 +304,7 @@ void Cache::checkMaxSize() {
 		_cache_url = max.key();
 #endif
 
-		if( !(*max).reduceSize() || (*max).isEmpty()) d->mImages.remove( max );
+		if( !(*max)->reduceSize() || (*max)->isEmpty()) d->mImages.remove( max );
 	}
 }
 
