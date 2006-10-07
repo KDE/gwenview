@@ -157,7 +157,6 @@ KDE_EXPORT int kdemain (int argc, char *argv[]) {
 		mainWindow->show();
 	}
 
-	Cache::instance()->ref();
 	return kapplication.exec();
 }
 

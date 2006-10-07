@@ -42,6 +42,7 @@ class LIBGWENVIEW_EXPORT Cache : public QObject {
 Q_OBJECT
 public:
 	static Cache* instance();
+	~Cache();
 	void addImage( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
 	void addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
 	void addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
@@ -89,11 +90,7 @@ private:
 	QMap< KURL, ImageData > mImages;
 	int mMaxSize;
 	int mThumbnailSize;
-	int mUsageRefcount;
-	QTimer mCleanupTimer;
 	QValueList< KURL > mPriorityURLs;
-private slots:
-	void cleanupTimeout();
 };
 
 } // namespace

@@ -65,8 +65,6 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	setInstance( GVDirFactory::instance() );
 	KGlobal::locale()->insertCatalogue( "gwenview" );
 
-	Cache::instance()->ref();
-
 	mBrowserExtension = new GVDirPartBrowserExtension(this);
 
 	mSplitter = new QSplitter(Qt::Horizontal, parentWidget, "gwenview-kpart-splitter");
@@ -128,7 +126,6 @@ GVDirPart::~GVDirPart() {
 	GVDirPartConfig::setFileViewWidth(mFileViewController->width());
 	GVDirPartConfig::writeConfig();
 	delete mSlideShow;
-	Cache::instance()->deref();
 }
 
 
