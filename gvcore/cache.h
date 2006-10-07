@@ -61,36 +61,8 @@ public:
 private:
 	Cache();
 	void checkMaxSize();
-	struct ImageData {
-		ImageData( const KURL& url, const QByteArray& file, const QDateTime& timestamp );
-		ImageData( const KURL& url, const QImage& image, const QCString& format, const QDateTime& timestamp );
-		ImageData( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp );
-		ImageData( const KURL& url, const QPixmap& thumbnail, QSize imagesize, const QDateTime& timestamp );
-		void addFile( const QByteArray& file );
-		void addImage( const ImageFrames& frames, const QCString& format );
-		void addThumbnail( const QPixmap& thumbnail, QSize imagesize );
-		long long cost() const;
-		int size() const;
-		QByteArray file;
-		ImageFrames frames;
-		QPixmap thumbnail;
-		QSize imagesize;
-		QCString format;
-		QDateTime timestamp;
-		mutable int age;
-		bool fast_url;
-		bool priority;
-		int fileSize() const;
-		int imageSize() const;
-		int thumbnailSize() const;
-		bool reduceSize();
-		bool isEmpty() const;
-		ImageData() {}; // stupid QMap
-	};
-	QMap< KURL, ImageData > mImages;
-	int mMaxSize;
-	int mThumbnailSize;
-	QValueList< KURL > mPriorityURLs;
+	class Private;
+	Private* d;
 };
 
 } // namespace
