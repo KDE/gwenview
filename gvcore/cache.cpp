@@ -89,6 +89,23 @@ struct Cache::Private {
 	int mMaxSize;
 	int mThumbnailSize;
 	QValueList< KURL > mPriorityURLs;
+
+
+	/**
+	 * This function tries to returns a valid ImageData for url and timestamp.
+	 * If it can't find one, it will create a new one and return it.
+	 */
+	ImageData::Ptr getOrCreateImageData(const KURL& url, const QDateTime& timestamp) {
+		if (mImages.contains(url)) {
+			ImageData::Ptr data = mImages[url];
+			if (data->timestamp == timestamp) return data;
+		}
+
+		ImageData::Ptr data = new ImageData(url, timestamp);
+		mImages[url] = data;
+		if (mPriorityURLs.contains(url)) data->priority = true;
+		return data;
+	}
 };
 
 
@@ -139,43 +156,18 @@ void Cache::setPriorityURL( const KURL& url, bool set ) {
 	}
 }
 
+
 void Cache::addFile( const KURL& url, const QByteArray& file, const QDateTime& timestamp ) {
 	LOG(url.prettyURL());
 	updateAge();
-	bool insert = true;
-	if( d->mImages.contains( url )) {
-		ImageData::Ptr data = d->mImages[ url ];
-		if( data->timestamp == timestamp ) {
-			data->addFile( file );
-			insert = false;
-		}
-	}
-	if( insert ) {
-		ImageData* data = new ImageData(url ,timestamp);
-		data->addFile(file);
-		d->mImages[ url ] = data;
-		if( d->mPriorityURLs.contains( url )) data->priority = true;
-	}
+	d->getOrCreateImageData(url, timestamp)->addFile(file);
 	checkMaxSize();
 }
 
 void Cache::addImage( const KURL& url, const ImageFrames& frames, const QCString& format, const QDateTime& timestamp ) {
 	LOG(url.prettyURL());
 	updateAge();
-	bool insert = true;
-	if( d->mImages.contains( url )) {
-		ImageData::Ptr data = d->mImages[ url ];
-		if( data->timestamp == timestamp ) {
-			data->addImage( frames, format );
-			insert = false;
-		}
-	}
-	if( insert ) {
-		ImageData* data = new ImageData(url ,timestamp);
-		data->addImage(frames, format);
-		d->mImages[ url ] = data;
-		if( d->mPriorityURLs.contains( url )) data->priority = true;
-	}
+	d->getOrCreateImageData(url, timestamp)->addImage(frames, format);
 	checkMaxSize();
 }
 
@@ -183,20 +175,7 @@ void Cache::addThumbnail( const KURL& url, const QPixmap& thumbnail, QSize image
 // Thumbnails are many and often - things would age too quickly. Therefore
 // when adding thumbnails updateAge() is called from the outside only once for all of them.
 //	updateAge();
-	bool insert = true;
-	if( d->mImages.contains( url )) {
-		ImageData::Ptr data = d->mImages[ url ];
-		if( data->timestamp == timestamp ) {
-			data->addThumbnail( thumbnail, imagesize );
-			insert = false;
-		}
-	}
-	if( insert ) {
-		ImageData* data = new ImageData(url ,timestamp);
-		data->addThumbnail( thumbnail, imagesize );
-		d->mImages[ url ] = data;
-		if( d->mPriorityURLs.contains( url )) data->priority = true;
-	}
+	d->getOrCreateImageData(url, timestamp)->addThumbnail(thumbnail, imagesize);
 	checkMaxSize();
 }
 
