@@ -402,7 +402,11 @@ void MainWindow::makeDir() {
 void MainWindow::showFileProperties() {
 	if (mFileViewController->isVisible()) {
 		const KFileItemList* list = mFileViewController->currentFileView()->selectedItems();
-		(void)new KPropertiesDialog(*list, this);
+		if (list->count() > 0) {
+			(void)new KPropertiesDialog(*list, this);
+		} else {
+			(void)new KPropertiesDialog(mFileViewController->dirURL(), this);
+		}
 	} else {
 		(void)new KPropertiesDialog(mDocument->url(), this);
 	}
