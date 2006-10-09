@@ -2,6 +2,8 @@
 - Fixes:
  - Fix crash when showing current folder properties from context menu (Bug
    129890)
+ - Load JPEG rotated images using the right rotation directly instead of
+   loading them first and rotate them after (Bug 117173)
 
 2006.09.16 - v1.4.0
 - Fixes:

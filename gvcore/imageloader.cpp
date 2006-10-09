@@ -266,6 +266,14 @@ public:
 	MimeTypeUtils::Kind mURLKind;
 
 	QValueVector< OwnerData > mOwners; // loaders may be shared
+	
+	
+	void determineImageFormat() {
+		Q_ASSERT(mRawData.size()>0);
+		QBuffer buffer(mRawData);
+		buffer.open(IO_ReadOnly);
+		mImageFormat = QImageIO::imageFormat(&buffer);
+	}
 };
 
 
@@ -339,26 +347,22 @@ void ImageLoader::slotStatResult(KIO::Job* job) {
 		// We have the image in cache
 		LOG(d->mURL << ", We have the image in cache");
 		d->mRawData = Cache::instance()->file( d->mURL );
-		QCString format;
-		ImageFrames frames;
-		Cache::instance()->getFrames( d->mURL, &frames, &format );
-		if( !frames.isEmpty()) {
+		Cache::instance()->getFrames(d->mURL, &d->mFrames, &d->mImageFormat);
+
+		if( !d->mFrames.isEmpty()) {
 			LOG("The image in cache can be used");
-			d->mImageFormat = format;
-			d->mFrames = frames;
 			d->mProcessedImage = d->mFrames[0].image;
 			emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
 			emit imageChanged(d->mProcessedImage.rect());
 			
-			if( !d->mRawData.isNull() || format != "JPEG" ) {
-				// The raw data is only needed for JPEG. If it is already
-				// loaded or if we are not loading a JPEG file, we are done.
-				finish( true );
-				return;
-			} else {
-				// Wait for raw data to be downloaded
+			if (d->mRawData.isNull() && d->mImageFormat=="JPEG") {
+				// Raw data is needed for JPEG, wait for it to be downloaded
 				LOG("Wait for raw data to be downloaded");
 				d->mDecodeState = DECODE_CACHED;
+			} else {
+				// We don't care about raw data
+				finish(true);
+				return;
 			}
 		} else {
 			// Image in cache is broken
@@ -451,14 +455,8 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 		}
 		LOG("emit urlKindDetermined(raster)");
 		emit urlKindDetermined();
-		
-		// Set image format
-		QBuffer buffer(d->mRawData);
-		buffer.open(IO_ReadOnly);
-		d->mImageFormat = QImageIO::imageFormat(&buffer);
-		buffer.close();
 	}
-
+	
 	// Decode the received data
 	if( !d->mDecoderTimer.isActive() && 
 		(d->mDecodeState==DECODE_WAITING || d->mDecodeState==DECODE_INCREMENTAL_DECODING)
@@ -549,14 +547,14 @@ void ImageLoader::slotDecoderThreadSucceeded() {
 
 
 /**
- * Make the final adjustments to the image.
+ * Cache image and emit imageLoaded
  */
 void ImageLoader::finish( bool ok ) {
 	LOG("");
 
 	d->mDecodeState = DECODE_DONE;
 
-	if( !ok /*|| d->mFrames.count() == 0 */) {
+	if (!ok) {
 		d->mFrames.clear();
 		d->mRawData = QByteArray();
 		d->mImageFormat = QCString();
@@ -565,22 +563,11 @@ void ImageLoader::finish( bool ok ) {
 		return;
 	}
 	
+	if (d->mImageFormat.isEmpty()) {
+		d->determineImageFormat();
+	}
+	Q_ASSERT(d->mFrames.count() > 0);
 	Cache::instance()->addImage( d->mURL, d->mFrames, d->mImageFormat, d->mTimestamp );
-
-	/*
-	ImageFrame lastframe = d->mFrames.last();
-	d->mFrames.pop_back(); // maintain that processedImage() is not included when calling imageChanged()
-	d->mProcessedImage = lastframe.image;
-	// The decoder did not cause some signals to be emitted, let's do it now
-	if (d->mLoadedRegion.isEmpty()) {
-		emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
-	}
-	if (!d->mLoadChangedRect.isEmpty()) {
-		emit imageChanged( d->mLoadChangedRect );
-	}
-	d->mFrames.push_back( lastframe );
-	*/
-
 	emit imageLoaded( true );
 }
 
@@ -654,7 +641,7 @@ void ImageLoader::callFinish() {
 
 
 void ImageLoader::changed(const QRect& constRect) {
-	LOG("");
+	LOG2("");
 	QRect rect = constRect;
 	
 	if (d->mLoadedRegion.isEmpty()) {
@@ -665,6 +652,10 @@ void ImageLoader::changed(const QRect& constRect) {
 		// By default, mProcessedImage should use the image from mDecoder
 		d->mProcessedImage = d->mDecoder.image();
 		
+		if (d->mImageFormat.isEmpty()) {
+			d->determineImageFormat();
+		}
+		Q_ASSERT(!d->mImageFormat.isEmpty());
 		if (d->mImageFormat == "JPEG") {
 			// This is a JPEG, extract orientation and adjust mProcessedImage
 			// if necessary
@@ -771,7 +762,6 @@ void ImageLoader::frameDone(const QPoint& offset, const QRect& rect) {
 	}
 	d->mFrames.append( ImageFrame( image, d->mNextFrameDelay ));
 	d->mNextFrameDelay = 0;
-	emit frameLoaded();
 }
 
 void ImageLoader::setLooping(int) {

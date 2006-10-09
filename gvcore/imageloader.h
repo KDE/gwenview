@@ -76,8 +76,7 @@ public:
 signals:
 	void urlKindDetermined();
 	void sizeLoaded(int, int);
-	void imageChanged(const QRect&); // use processedImage(), is not in frames() yet
-	void frameLoaded();
+	void imageChanged(const QRect&);
 	void imageLoaded( bool ok );
 
 private slots:

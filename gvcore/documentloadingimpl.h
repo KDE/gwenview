@@ -46,7 +46,6 @@ private slots:
 	void slotURLKindDetermined();
 	void sizeLoaded(int, int);
 	void imageChanged(const QRect&);
-	void frameLoaded();
 	void imageLoaded( bool ok );
 };
 

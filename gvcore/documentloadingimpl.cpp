@@ -89,7 +89,6 @@ void DocumentLoadingImpl::init() {
 	connect( d->mLoader, SIGNAL( urlKindDetermined()), SLOT( slotURLKindDetermined() ));
 	connect( d->mLoader, SIGNAL( sizeLoaded( int, int )), SLOT( sizeLoaded( int, int )));
 	connect( d->mLoader, SIGNAL( imageChanged( const QRect& )), SLOT( imageChanged( const QRect& )));
-	connect( d->mLoader, SIGNAL( frameLoaded()), SLOT( frameLoaded()));
 	connect( d->mLoader, SIGNAL( imageLoaded( bool )), SLOT( imageLoaded( bool )));
 
 	// it's possible the loader already has the whole or at least part of the image loaded
@@ -106,7 +105,7 @@ void DocumentLoadingImpl::init() {
 			}
 		}
 	}
-	if( d->mLoader->completed()) emit imageLoaded( d->mLoader->frames().count() != 0 );
+	if( d->mLoader->completed()) imageLoaded( d->mLoader->frames().count() != 0 );
 	// 'this' may be deleted here
 }
 
@@ -146,17 +145,11 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 
 
 void DocumentLoadingImpl::imageChanged(const QRect& rect) {
-	//if( d->mLoader->frames().count() > 0 ) return;
+	LOG(rect);
 	setImage(d->mLoader->processedImage());
 	emit rectUpdated(rect);
 }
 
-void DocumentLoadingImpl::frameLoaded() {
-	if( d->mLoader->frames().count() == 1 ) {
-		// explicit sharing - don't modify the image in document anymore
-		setImage(d->mLoader->frames().first().image.copy()); 
-	}
-}
 
 void DocumentLoadingImpl::sizeLoaded(int width, int height) {
 	LOG(width << "x" << height);
