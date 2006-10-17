@@ -785,27 +785,26 @@ void MainWindow::showHint(const QString& hint) {
 //
 //-----------------------------------------------------------------------
 void MainWindow::updateStatusInfo() {
-	QString txt;
+	QStringList tokens;
 
 	if ( KProtocolInfo::supportsListing(mFileViewController->url()) ) {
 		int pos = mFileViewController->shownFilePosition();
 		uint count = mFileViewController->fileCount();
 		if (count > 0) {
-			txt = i18n("%1/%2 - ").arg(pos+1).arg(count);
+			tokens << i18n("%1/%2").arg(pos+1).arg(count);
 		} else {
-			txt = i18n("No images");
+			tokens << i18n("No images");
 		}
 	}
 
 	QString filename = mDocument->filename();
-	txt += filename;
 
 	QSize size = mDocument->image().size();
 	if (!size.isEmpty()) {
-		txt += QString(" %1x%2").arg(size.width()).arg(size.height());
+		tokens << i18n("%1 x %2 pixels").arg(size.width()).arg(size.height());
 	}
 	
-	mSBDetailLabel->setText(txt);
+	mSBDetailLabel->setText(tokens.join(" - "));
 	setCaption(filename);
 }
 

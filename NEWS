@@ -4,6 +4,9 @@
    129890)
  - Load JPEG rotated images using the right rotation directly instead of
    loading them first and rotate them after (Bug 117173)
+ - Do not show the name of the current file in the status bar: it's already
+   shown in the title bar and it was causing the mainwindow to be enlarged if
+   the name was very long (Bug 127004)
 
 2006.09.16 - v1.4.0
 - Fixes:
