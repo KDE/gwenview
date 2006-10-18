@@ -45,6 +45,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fileviewconfig.h"
 #include "filethumbnailviewitem.h"
 #include "archive.h"
+#include "dragpixmapgenerator.h"
 #include "thumbnailloadjob.h"
 #include "busylevelmanager.h"
 #include "imageloader.h"
@@ -69,6 +70,8 @@ static const int THUMBNAIL_UPDATE_DELAY=500;
 static const int RIGHT_TEXT_WIDTH=128;
 static const int BOTTOM_MIN_TEXT_WIDTH=96;
 
+// Offset between cursor and dragged images
+static const int DRAG_OFFSET=16;
 
 class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
@@ -773,11 +776,38 @@ void FileThumbnailView::prefetchDone() {
 //
 //--------------------------------------------------------------------------
 void FileThumbnailView::startDrag() {
+	/**
+	 * The pixmap provider for DragPixmapGenerator
+	 */
+	struct PixmapProvider : public DragPixmapProvider<KFileItem*> {
+		PixmapProvider(FileThumbnailView* view)
+		: mView(view) {}
+
+		QPixmap pixmapForItem(KFileItem* fileItem) {
+			FileThumbnailViewItem* iconItem = viewItem(mView, fileItem);
+			Q_ASSERT(iconItem);
+			if (!iconItem) return QPixmap();
+			
+			QPixmap* pix = iconItem->pixmap();
+			Q_ASSERT(pix);
+			if (!pix) return QPixmap();
+			return *pix;
+		}
+		
+		FileThumbnailView* mView;
+	};
+	PixmapProvider provider(this);
+
+
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
 
+	DragPixmapGenerator<KFileItem*> generator;
+	generator.setItemPixmapProvider(&provider);
+	
 	for ( ; it.current(); ++it ) {
 		urls.append(it.current()->url());
+		generator.addItem(it.current());
 	}
 
 	if (urls.isEmpty()) {
@@ -786,14 +816,9 @@ void FileThumbnailView::startDrag() {
 	}
 
 	QDragObject* drag=new KURLDrag(urls, this, 0);
-	QPixmap dragPixmap;
-	if (urls.count()>1) {
-		dragPixmap=SmallIcon("kmultiple");
-	} else {
-		dragPixmap=KFileView::selectedItems()->getFirst()->pixmap(16);
-	}
-	drag->setPixmap( dragPixmap, QPoint(dragPixmap.width()/2, dragPixmap.height()/2) );
+	QPixmap dragPixmap = generator.generate();
 
+	drag->setPixmap( dragPixmap, QPoint(-DRAG_OFFSET, -DRAG_OFFSET));
 	drag->dragCopy();
 }
 
