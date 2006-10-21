@@ -5,6 +5,7 @@
   <Action name="saveAs"/>
  </Menu>
  <Menu name="edit">
+  <Action name="rotate_left"/>
   <Action name="rotate_right"/>
  </Menu>
  <Menu name="view"><Text>&amp;View</Text>
@@ -33,6 +34,7 @@
  <Action name="view_zoom_in"/>
  <Action name="view_zoom_to"/>
  <Action name="view_zoom_out"/>
+ <Action name="rotate_left"/>
  <Action name="rotate_right"/>
 </ToolBar>
 </kpartgui>

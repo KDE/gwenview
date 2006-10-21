@@ -86,6 +86,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 	setWidget(mSplitter);
 
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
+	new KAction(i18n("Rotate &Left"), "rotate_ccw", CTRL + Key_L, this, SLOT(rotateLeft()), actionCollection(), "rotate_left");
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
 	connect(mFileViewController, SIGNAL(requestContextMenu(const QPoint&, bool)),
@@ -212,6 +213,10 @@ void GVDirPart::print() {
 			mDocument->print(&printer);
 		}
 	}
+}
+
+void GVDirPart::rotateLeft() {
+	mDocument->transform(ImageUtils::ROT_270);
 }
 
 void GVDirPart::rotateRight() {

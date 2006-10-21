@@ -98,6 +98,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	updateNextPrevious();
 
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
+	new KAction(i18n("Rotate &Left"), "rotate_ccw", CTRL + Key_L, this, SLOT(rotateLeft()), actionCollection(), "rotate_left");
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
 	setXMLFile( "gvimagepart/gvimagepart.rc" );
@@ -188,6 +189,10 @@ void GVImagePart::print() {
 	if (printer.setup(mImageView, QString::null, true)) {
 		mDocument->print(&printer);
 	}
+}
+
+void GVImagePart::rotateLeft() {
+	mDocument->transform(ImageUtils::ROT_270);
 }
 
 void GVImagePart::rotateRight() {

@@ -121,6 +121,11 @@ protected slots:
 	void loaded(const KURL& url);
 
 	/**
+	 * Rotates the current image 90 degrees counter clockwise
+	 */
+	void rotateLeft();
+
+	/**
 	 * Rotates the current image 90 degrees clockwise
 	 */
 	void rotateRight();
