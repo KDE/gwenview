@@ -10,6 +10,8 @@ noinst_LTLIBRARIES = libgwenshared.la
 
 libgwenshared_la_SOURCES = vtabwidget.cpp
 
+gwenview_COMPILE_FIRST = ../gvcore/miscconfig.h ../gvcore/slideshowconfig.h ../gvcore/fileoperationconfig.h ../gvcore/fullscreenconfig.h ../gvcore/imageviewconfig.h ../gvcore/fileviewconfig.h
+
 gwenview_la_SOURCES = \
 	bookmarkowner.cpp \
 	bookmarkviewcontroller.cpp \
