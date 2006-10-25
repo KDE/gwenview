@@ -774,10 +774,10 @@ void FileThumbnailView::prefetchDone() {
 //--------------------------------------------------------------------------
 void FileThumbnailView::startDrag() {
 	/**
-	 * The pixmap provider for DragPixmapGenerator
+	 * The item drawer for DragPixmapGenerator
 	 */
-	struct PixmapProvider : public DragPixmapProvider<KFileItem*> {
-		PixmapProvider(FileThumbnailView* view)
+	struct ItemDrawer : public DragPixmapItemDrawer<KFileItem*> {
+		ItemDrawer(FileThumbnailView* view)
 		: mView(view) {}
 
 		QSize itemSize(KFileItem* fileItem) {
@@ -826,14 +826,14 @@ void FileThumbnailView::startDrag() {
 		
 		FileThumbnailView* mView;
 	};
-	PixmapProvider provider(this);
+	ItemDrawer drawer(this);
 
 
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
 
 	DragPixmapGenerator<KFileItem*> generator;
-	generator.setItemPixmapProvider(&provider);
+	generator.setItemDrawer(&drawer);
 	
 	for ( ; it.current(); ++it ) {
 		urls.append(it.current()->url());

@@ -38,11 +38,11 @@ class DragPixmapGenerator;
 
 
 template <class T>
-class DragPixmapProvider {
+class DragPixmapItemDrawer {
 public:
-	DragPixmapProvider()
+	DragPixmapItemDrawer()
 	: mGenerator(0) {}
-	virtual ~DragPixmapProvider() {}
+	virtual ~DragPixmapItemDrawer() {}
 	virtual void setGenerator(DragPixmapGenerator<T>* generator) {
 		mGenerator = generator;
 	}
@@ -69,7 +69,7 @@ public:
 	static const uint DRAG_OFFSET=16;
 
 
-	/** Maximum width of an item painted by DragPixmapProvider */
+	/** Maximum width of an item painted by DragPixmapItemDrawer */
 	static const int ITEM_MAX_WIDTH=128;
 
 	static const int MAX_HEIGHT=200;
@@ -93,29 +93,29 @@ public:
 
 	/**
 	 * Returns the width of the generated pixmap, not including the margin.
-	 * To be used by DragPixmapProvider<T>::drawItem. Should not be used
+	 * To be used by DragPixmapItemDrawer<T>::drawItem. Should not be used
 	 * anywhere else since this value is initialized in generate().
 	 */
 	int pixmapWidth() const {
 		return mPixmapWidth;
 	}
 
-    void setItemPixmapProvider(DragPixmapProvider<T>* provider) {
-		mProvider = provider;
-		provider->setGenerator(this);
+    void setItemDrawer(DragPixmapItemDrawer<T>* drawer) {
+		mItemDrawer = drawer;
+		drawer->setGenerator(this);
 	}
 
     QPixmap generate() {
 		int width = 0, height = 0;
 		int dragCount = 0;
-		int spacing = mProvider->spacing();
+		int spacing = mItemDrawer->spacing();
 
 		// Compute pixmap size and update dragCount
 		QValueListIterator<T> it = mItemList.begin();
 		QValueListIterator<T> end = mItemList.end();
 		height = -spacing;
 		for (; it!= end && height < MAX_HEIGHT; ++dragCount, ++it) {
-			QSize itemSize = mProvider->itemSize(*it);
+			QSize itemSize = mItemDrawer->itemSize(*it);
 			Q_ASSERT(itemSize.width() <= ITEM_MAX_WIDTH);
 			
 			width = QMAX(width, itemSize.width());
@@ -139,8 +139,8 @@ public:
 		it = mItemList.begin();
 		height = DRAG_MARGIN;
 		for (int pos=0; pos < dragCount; ++pos, ++it) {
-			mProvider->drawItem(&painter, DRAG_MARGIN, height, *it);
-			height += mProvider->itemSize(*it).height() + spacing;
+			mItemDrawer->drawItem(&painter, DRAG_MARGIN, height, *it);
+			height += mItemDrawer->itemSize(*it).height() + spacing;
 		}
 		painter.end();
 
@@ -150,7 +150,7 @@ public:
 
 private:
 	QValueList<T> mItemList;
-	DragPixmapProvider<T>* mProvider;
+	DragPixmapItemDrawer<T>* mItemDrawer;
 	int mPixmapWidth;
 };
 

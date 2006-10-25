@@ -466,10 +466,10 @@ void FileDetailView::listingCompleted()
 void FileDetailView::startDrag()
 {
 	/**
-	 * The pixmap provider for DragPixmapGenerator
+	 * The item drawer for DragPixmapGenerator
 	 */
-	struct PixmapProvider : public DragPixmapProvider<KFileItem*> {
-		PixmapProvider(const QFontMetrics& fontMetrics)
+	struct ItemDrawer : public DragPixmapItemDrawer<KFileItem*> {
+		ItemDrawer(const QFontMetrics& fontMetrics)
 		: mFontMetrics(fontMetrics) {}
 
 		QSize itemSize(KFileItem* fileItem) {
@@ -491,14 +491,14 @@ void FileDetailView::startDrag()
 		
 		QFontMetrics mFontMetrics;
 	};
-	PixmapProvider provider(fontMetrics());
+	ItemDrawer drawer(fontMetrics());
 
 
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
 
 	DragPixmapGenerator<KFileItem*> generator;
-	generator.setItemPixmapProvider(&provider);
+	generator.setItemDrawer(&drawer);
 	
 	for ( ; it.current(); ++it ) {
 		urls.append(it.current()->url());
