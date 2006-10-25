@@ -20,7 +20,6 @@ libgwenviewcore_la_SOURCES = \
 	thumbnailloadjob.cpp \
 	imageview.cpp \
 	imageviewcontroller.cpp \
-	dragpixmapgenerator.cpp \
 	document.cpp \
 	externaltoolmanager.cpp \
 	externaltoolcontext.cpp \

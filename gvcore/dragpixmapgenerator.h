@@ -27,14 +27,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qvaluelist.h>
 #include <qvaluevector.h>
 
+// KDE
+#include <qtooltip.h>
+
 namespace Gwenview {
+
+
+template <class T>
+class DragPixmapGenerator;
 
 
 template <class T>
 class DragPixmapProvider {
 public:
+	DragPixmapProvider()
+	: mGenerator(0) {}
 	virtual ~DragPixmapProvider() {}
-	virtual QPixmap pixmapForItem(T)=0;
+	virtual void setGenerator(DragPixmapGenerator<T>* generator) {
+		mGenerator = generator;
+	}
+	virtual QSize itemSize(T)=0;
+	virtual void drawItem(QPainter*, int left, int top, T)=0;
+	virtual int spacing() const { 
+		return 0;
+	}
+
+protected:
+	DragPixmapGenerator<T>* mGenerator;
 };
 
 
@@ -44,7 +63,22 @@ QPixmap dragPixmapGeneratorHelper(QValueVector<QPixmap> pixmapVector);
 template <class T>
 class DragPixmapGenerator {
 public:
-	static const uint MAX_PIXMAP_COUNT=4;
+	static const uint MAX_ITEM_COUNT=4;
+
+	/** Offset between cursor and dragged images */
+	static const uint DRAG_OFFSET=16;
+
+
+	/** Maximum width of an item painted by DragPixmapProvider */
+	static const int ITEM_MAX_WIDTH=128;
+
+	static const int MAX_HEIGHT=200;
+
+	static const int DRAG_MARGIN=4;
+
+
+	DragPixmapGenerator()
+	: mPixmapWidth(0) {}
 
 
     void addItem(const T& item) {
@@ -52,28 +86,72 @@ public:
 	}
 
 
-    void setItemPixmapProvider(DragPixmapProvider<T>* provider) {
-		mProvider = provider;
+	int maxWidth() const {
+		return ITEM_MAX_WIDTH;
 	}
 
-	
+
+	/**
+	 * Returns the width of the generated pixmap, not including the margin.
+	 * To be used by DragPixmapProvider<T>::drawItem. Should not be used
+	 * anywhere else since this value is initialized in generate().
+	 */
+	int pixmapWidth() const {
+		return mPixmapWidth;
+	}
+
+    void setItemPixmapProvider(DragPixmapProvider<T>* provider) {
+		mProvider = provider;
+		provider->setGenerator(this);
+	}
+
     QPixmap generate() {
-		int dragCount = QMIN(mItemList.count(), MAX_PIXMAP_COUNT);
-		QValueVector<QPixmap> pixmapVector;
+		int width = 0, height = 0;
+		int dragCount = 0;
+		int spacing = mProvider->spacing();
 
+		// Compute pixmap size and update dragCount
 		QValueListIterator<T> it = mItemList.begin();
-		for (int pos=0; pos < dragCount; ++pos, ++it) {
-			QPixmap pix = mProvider->pixmapForItem(*it);
-			pixmapVector.push_back(pix);
+		QValueListIterator<T> end = mItemList.end();
+		height = -spacing;
+		for (; it!= end && height < MAX_HEIGHT; ++dragCount, ++it) {
+			QSize itemSize = mProvider->itemSize(*it);
+			Q_ASSERT(itemSize.width() <= ITEM_MAX_WIDTH);
+			
+			width = QMAX(width, itemSize.width());
+			height += itemSize.height() + spacing;
 		}
+		
+		mPixmapWidth = width;
 
-		return dragPixmapGeneratorHelper(pixmapVector);
+		// Init pixmap
+		QPixmap pixmap(width + 2*DRAG_MARGIN, height + 2*DRAG_MARGIN);
+		QColorGroup cg = QToolTip::palette().active();
+
+		pixmap.fill(cg.base());
+		QPainter painter(&pixmap);
+		
+		// Draw border
+		painter.setPen(cg.dark());
+		painter.drawRect(pixmap.rect());
+		
+		// Draw items
+		it = mItemList.begin();
+		height = DRAG_MARGIN;
+		for (int pos=0; pos < dragCount; ++pos, ++it) {
+			mProvider->drawItem(&painter, DRAG_MARGIN, height, *it);
+			height += mProvider->itemSize(*it).height() + spacing;
+		}
+		painter.end();
+
+		return pixmap;
 	}
 
 
 private:
 	QValueList<T> mItemList;
 	DragPixmapProvider<T>* mProvider;
+	int mPixmapWidth;
 };
 
 

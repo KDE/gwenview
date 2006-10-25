@@ -70,9 +70,6 @@ static const int THUMBNAIL_UPDATE_DELAY=500;
 static const int RIGHT_TEXT_WIDTH=128;
 static const int BOTTOM_MIN_TEXT_WIDTH=96;
 
-// Offset between cursor and dragged images
-static const int DRAG_OFFSET=16;
-
 class ProgressWidget : public QFrame {
 	KProgress* mProgressBar;
 	QPushButton* mStop;
@@ -783,15 +780,48 @@ void FileThumbnailView::startDrag() {
 		PixmapProvider(FileThumbnailView* view)
 		: mView(view) {}
 
-		QPixmap pixmapForItem(KFileItem* fileItem) {
+		QSize itemSize(KFileItem* fileItem) {
+			QPixmap* pix = pixmapFromFileItem(fileItem);
+			if (!pix) return QSize();
+					
+			QSize size = pix->size();
+			int maxWidth = mGenerator->maxWidth();
+			if (size.width() > maxWidth) {
+				size.rheight() = size.height() * maxWidth / size.width();
+				size.rwidth() = maxWidth;
+			}
+			return size;
+		}
+
+		int spacing() const {
+			return 2;
+		}
+			
+		void drawItem(QPainter* painter, int left, int top, KFileItem* fileItem) {
+			QPixmap* pix = pixmapFromFileItem(fileItem);
+			if (!pix) return;
+
+			QSize size = itemSize(fileItem);
+			left += (mGenerator->pixmapWidth() - size.width()) / 2;
+			if (size == pix->size()) {
+				painter->drawPixmap(left, top, *pix);
+				return;
+			}
+			
+			QImage img = pix->convertToImage();
+			img = img.smoothScale(size, QImage::ScaleMin);
+			painter->drawImage(left, top, img);
+		}
+
+		QPixmap* pixmapFromFileItem(KFileItem* fileItem) {
 			FileThumbnailViewItem* iconItem = viewItem(mView, fileItem);
 			Q_ASSERT(iconItem);
-			if (!iconItem) return QPixmap();
+			if (!iconItem) return 0;
 			
 			QPixmap* pix = iconItem->pixmap();
 			Q_ASSERT(pix);
-			if (!pix) return QPixmap();
-			return *pix;
+			if (!pix) return 0;
+			return pix;
 		}
 		
 		FileThumbnailView* mView;
@@ -818,7 +848,7 @@ void FileThumbnailView::startDrag() {
 	QDragObject* drag=new KURLDrag(urls, this, 0);
 	QPixmap dragPixmap = generator.generate();
 
-	drag->setPixmap( dragPixmap, QPoint(-DRAG_OFFSET, -DRAG_OFFSET));
+	drag->setPixmap( dragPixmap, QPoint(generator.DRAG_OFFSET, -generator.DRAG_OFFSET));
 	drag->dragCopy();
 }
 

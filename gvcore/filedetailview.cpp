@@ -38,9 +38,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kurldrag.h>
+#include <kwordwrap.h>
 
 // Local
 #include "archive.h"
+#include "dragpixmapgenerator.h"
 #include "filedetailviewitem.h"
 #include "filedetailview.moc"
 #include "timeutils.h"
@@ -463,11 +465,44 @@ void FileDetailView::listingCompleted()
 
 void FileDetailView::startDrag()
 {
+	/**
+	 * The pixmap provider for DragPixmapGenerator
+	 */
+	struct PixmapProvider : public DragPixmapProvider<KFileItem*> {
+		PixmapProvider(const QFontMetrics& fontMetrics)
+		: mFontMetrics(fontMetrics) {}
+
+		QSize itemSize(KFileItem* fileItem) {
+			if (!fileItem) return QSize();
+			QString name = fileItem->name();
+			int width = QMIN(mGenerator->maxWidth(), mFontMetrics.width(name));
+			int height = mFontMetrics.height();
+			return QSize(width, height);
+		}
+				
+		void drawItem(QPainter* painter, int left, int top, KFileItem* fileItem) {
+			QString name = fileItem->name();
+			painter->save();
+			KWordWrap::drawFadeoutText(painter, 
+				left, top + mFontMetrics.ascent(), 
+				mGenerator->maxWidth(), name);
+			painter->restore();
+		}
+		
+		QFontMetrics mFontMetrics;
+	};
+	PixmapProvider provider(fontMetrics());
+
+
 	KURL::List urls;
 	KFileItemListIterator it(*KFileView::selectedItems());
 
+	DragPixmapGenerator<KFileItem*> generator;
+	generator.setItemPixmapProvider(&provider);
+	
 	for ( ; it.current(); ++it ) {
 		urls.append(it.current()->url());
+		generator.addItem(it.current());
 	}
 
 	if (urls.isEmpty()) {
@@ -476,14 +511,9 @@ void FileDetailView::startDrag()
 	}
 
 	QDragObject* drag=new KURLDrag(urls, this, 0);
-	QPixmap dragPixmap;
-	if (urls.count()>1) {
-		dragPixmap=SmallIcon("kmultiple");
-	} else {
-		dragPixmap=KFileView::selectedItems()->getFirst()->pixmap(16);
-	}
-	drag->setPixmap( dragPixmap, QPoint(dragPixmap.width()/2, dragPixmap.height()/2) );
+	QPixmap dragPixmap = generator.generate();
 
+	drag->setPixmap( dragPixmap, QPoint(-generator.DRAG_OFFSET, -generator.DRAG_OFFSET));
 	drag->dragCopy();
 }
 
