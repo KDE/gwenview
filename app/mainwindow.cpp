@@ -124,6 +124,9 @@ const int GWENVIEW_DOCK_VERSION=2;
 // The timeout before an hint in the statusbar disappear (in msec)
 const int HINT_TIMEOUT=10000;
 
+// How many items should be stored in history
+const int HISTORY_MAX_COUNT=20;
+
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -1196,6 +1199,7 @@ void MainWindow::createLocationToolBar() {
 	mURLEdit=new KHistoryCombo();
 	mURLEdit->setDuplicatesEnabled(false);
 	mURLEdit->setPixmapProvider(new KURLPixmapProvider);
+	mURLEdit->setMaxCount(HISTORY_MAX_COUNT);
 	mURLEdit->setHistoryItems(MiscConfig::history());
 
 	// Do not let the combobox get wider than available space, as this would
