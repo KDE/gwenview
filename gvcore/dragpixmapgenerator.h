@@ -21,14 +21,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef DRAGPIXMAPGENERATOR_H
 #define DRAGPIXMAPGENERATOR_H
 
-
 // Qt
+#include <qapplication.h>
 #include <qpixmap.h>
+#include <qtooltip.h>
 #include <qvaluelist.h>
 #include <qvaluevector.h>
 
 // KDE
-#include <qtooltip.h>
+#include <klocale.h>
 
 namespace Gwenview {
 
@@ -63,8 +64,6 @@ QPixmap dragPixmapGeneratorHelper(QValueVector<QPixmap> pixmapVector);
 template <class T>
 class DragPixmapGenerator {
 public:
-	static const uint MAX_ITEM_COUNT=4;
-
 	/** Offset between cursor and dragged images */
 	static const uint DRAG_OFFSET=16;
 
@@ -109,6 +108,9 @@ public:
 		int width = 0, height = 0;
 		int dragCount = 0;
 		int spacing = mItemDrawer->spacing();
+		bool listCropped;
+		QString bottomText;
+		QFontMetrics fm = QApplication::fontMetrics();
 
 		// Compute pixmap size and update dragCount
 		QValueListIterator<T> it = mItemList.begin();
@@ -120,6 +122,14 @@ public:
 			
 			width = QMAX(width, itemSize.width());
 			height += itemSize.height() + spacing;
+		}
+
+		listCropped = it != end;
+		if (listCropped) {
+			// If list has been cropped, leave space for item count text
+			height += fm.height();
+			bottomText = i18n("%1 items").arg(mItemList.count());
+			width = QMAX(width, fm.width("... " + bottomText));
 		}
 		
 		mPixmapWidth = width;
@@ -141,6 +151,14 @@ public:
 		for (int pos=0; pos < dragCount; ++pos, ++it) {
 			mItemDrawer->drawItem(&painter, DRAG_MARGIN, height, *it);
 			height += mItemDrawer->itemSize(*it).height() + spacing;
+		}
+
+		// Draw text if necessary
+		if (listCropped) {
+			int posY= height + fm.ascent();
+			painter.drawText(DRAG_MARGIN, posY, "...");
+			int offset = width - fm.width(bottomText);
+			painter.drawText(DRAG_MARGIN + offset, posY, bottomText);
 		}
 		painter.end();
 
