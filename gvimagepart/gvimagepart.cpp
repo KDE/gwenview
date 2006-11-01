@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <qpoint.h>
 
 #include <kaction.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdirlister.h>
@@ -80,7 +81,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 
 	mDirLister = new KDirLister;
 	mDirLister->setAutoErrorHandlingEnabled( false, 0 );
-	mDirLister->setMainWindow( parentWidget->topLevelWidget());
+	mDirLister->setMainWindow(KApplication::kApplication()->mainWidget());
 	connect( mDirLister, SIGNAL( clear()), SLOT( dirListerClear()));
 	connect( mDirLister, SIGNAL( newItems( const KFileItemList& )),
 		SLOT( dirListerNewItems( const KFileItemList& )));

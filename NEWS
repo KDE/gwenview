@@ -11,6 +11,7 @@
    the name was very long (Bug 127004)
  - Show the "rotate left" button in KParts.
  - Use Exiv2 instead of libexif to fix troubles with some JPEG (Bug 136112).
+ - Fix crash when using Gwenview KPart in kwebdesktop (Bug 130379).
 
 2006.09.16 - v1.4.0
 - Fixes:
