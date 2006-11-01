@@ -10,6 +10,7 @@
    shown in the title bar and it was causing the mainwindow to be enlarged if
    the name was very long (Bug 127004)
  - Show the "rotate left" button in KParts.
+ - Use Exiv2 instead of libexif to fix troubles with some JPEG (Bug 136112).
 
 2006.09.16 - v1.4.0
 - Fixes:

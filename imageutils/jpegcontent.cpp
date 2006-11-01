@@ -38,15 +38,13 @@ extern "C" {
 // KDE
 #include <kdebug.h>
 
-// Exif
-#include "exif-data.h"
-#include "exif-ifd.h"
-#include "exif-utils.h"
+// Exiv2
+#include <exiv2/exif.hpp>
+#include <exiv2/image.hpp>
 
 // Local
 #include "imageutils/imageutils.h"
 #include "imageutils/jpegcontent.h"
-#include "imageutils/jpeg-data.h"
 #include "imageutils/jpegerrormanager.h"
 
 namespace ImageUtils {
@@ -145,16 +143,12 @@ struct JPEGContent::Private {
 	QByteArray mRawData;
 	QSize mSize;
 	QString mComment;
-	bool mPendingChanges;
+	bool mPendingTransformation;
 	QWMatrix mTransformMatrix;
-	ExifData* mExifData;
-	ExifEntry* mOrientationEntry;
-	ExifByteOrder mByteOrder;
+	Exiv2::ExifData mExifData;
 
 	Private() {
-		mPendingChanges = false;
-		mExifData=0;
-		mOrientationEntry=0;
+		mPendingTransformation = false;
 	}
 
 	void setupInmemSource(j_decompress_ptr cinfo) {
@@ -187,7 +181,7 @@ struct JPEGContent::Private {
 
 		dest->mOutput=outputData;
 	}
-	bool readJPEGInfo() {
+	bool readSize() {
 		struct jpeg_decompress_struct srcinfo;
 		jpeg_saved_marker_ptr mark;
 		
@@ -215,15 +209,6 @@ struct JPEGContent::Private {
 		}
 		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
 		
-		// Read the comment, if any
-		mComment=QString::null;
-		for (mark = srcinfo.marker_list; mark; mark = mark->next) {
-			if (mark->marker == JPEG_COM) {
-				mComment=QString::fromUtf8((const char*)(mark->data), mark->data_length);
-				break;
-			}
-		}
-		
 		jpeg_destroy_decompress(&srcinfo);
 		return true;
 	}
@@ -241,9 +226,6 @@ JPEGContent::JPEGContent() {
 
 
 JPEGContent::~JPEGContent() {
-	if (d->mExifData) {
-		exif_data_unref(d->mExifData);
-	}
 	delete d;
 }
 
@@ -259,12 +241,8 @@ bool JPEGContent::load(const QString& path) {
 
 
 bool JPEGContent::loadFromData(const QByteArray& data) {
-	d->mPendingChanges = false;
+	d->mPendingTransformation = false;
 	d->mTransformMatrix.reset();
-	if (d->mExifData) {
-		exif_data_unref(d->mExifData);
-		d->mExifData=0;
-	}
 
 	d->mRawData = data;
 	if (d->mRawData.size()==0) {
@@ -272,18 +250,19 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 		return false;
 	}
 
-	if (!d->readJPEGInfo()) return false;
+	if (!d->readSize()) return false;
 
-	d->mExifData = exif_data_new_from_data((unsigned char*)data.data(), data.size());
-	if (!d->mExifData) {
-		kdError() << "Could not load exif data\n";
+	Exiv2::Image::AutoPtr image;
+	try {
+		image = Exiv2::ImageFactory::open((unsigned char*)data.data(), data.size());
+	} catch (Exiv2::Error&) {
+		kdError() << "Could not load image with Exiv2\n";
 		return false;
 	}
-	d->mByteOrder = exif_data_get_byte_order(d->mExifData);
-	
-	d->mOrientationEntry =
-		exif_content_get_entry(d->mExifData->ifd[EXIF_IFD_0],
-			EXIF_TAG_ORIENTATION);
+	image->readMetadata();
+
+	d->mExifData = image->exifData();
+	d->mComment = QString::fromUtf8( image->comment().c_str() );
 
 	// Adjust the size according to the orientation
 	switch (orientation()) {
@@ -302,21 +281,23 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 
 
 Orientation JPEGContent::orientation() const {
-	if (!d->mOrientationEntry) {
+	Exiv2::ExifKey key("Exif.Image.Orientation");
+	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+	if (it == d->mExifData.end()) {
 		return NOT_AVAILABLE;
 	}
-	short value=exif_get_short(d->mOrientationEntry->data, d->mByteOrder);
-	if (value<NORMAL || value>ROT_270) return NOT_AVAILABLE;
-	return Orientation(value);
+	return Orientation( it->toLong() );
 }
 
 
 void JPEGContent::resetOrientation() {
-	if (!d->mOrientationEntry) {
+	Exiv2::ExifKey key("Exif.Image.Orientation");
+	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+	if (it == d->mExifData.end()) {
 		return;
 	}
-	exif_set_short(d->mOrientationEntry->data, d->mByteOrder,
-		short(ImageUtils::NORMAL));
+
+	*it = uint16_t(ImageUtils::NORMAL);
 }
 
 
@@ -331,40 +312,7 @@ QString JPEGContent::comment() const {
 
 
 void JPEGContent::setComment(const QString& comment) {
-	d->mPendingChanges = true;
 	d->mComment = comment;
-}
-
-
-
-// This code is inspired by jpegtools.c from fbida
-static void doSetComment(struct jpeg_decompress_struct *src, const QString& comment) {
-	jpeg_saved_marker_ptr mark;
-	int size;
-
-	/* find or create comment marker */
-	for (mark = src->marker_list;; mark = mark->next) {
-		if (mark->marker == JPEG_COM)
-			break;
-		if (NULL == mark->next) {
-			mark->next = (jpeg_marker_struct*)
-				src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,
-							   sizeof(*mark));
-			mark = mark->next;
-			memset(mark,0,sizeof(*mark));
-			mark->marker = JPEG_COM;
-			break;
-		}
-	}
-
-	/* update comment marker */
-	QCString utf8=comment.utf8();
-	size = utf8.length();
-	mark->data = (JOCTET*)
-		src->mem->alloc_large((j_common_ptr)src,JPOOL_IMAGE,size);
-	mark->original_length = size;
-	mark->data_length = size;
-	memcpy(mark->data, utf8, size);
 }
 
 
@@ -419,7 +367,7 @@ static const OrientationInfoList& orientationInfoList() {
 
 void JPEGContent::transform(Orientation orientation) {
 	if (orientation != NOT_AVAILABLE && orientation != NORMAL) {
-		d->mPendingChanges = true;
+		d->mPendingTransformation = true;
 		OrientationInfoList::ConstIterator it(orientationInfoList().begin()), end(orientationInfoList().end());
 		for (; it!=end; ++it) {
 			if ( (*it).orientation == orientation ) {
@@ -465,7 +413,7 @@ static JXFORM_CODE findJxform(const QWMatrix& matrix) {
 }
 
 
-void JPEGContent::applyPendingChanges() {
+void JPEGContent::applyPendingTransformation() {
 	if (d->mRawData.size()==0) {
 		kdError() << "No data loaded\n";
 		return;
@@ -504,8 +452,6 @@ void JPEGContent::applyPendingChanges() {
 	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
 
 	(void) jpeg_read_header(&srcinfo, TRUE);
-
-	doSetComment(&srcinfo, d->mComment);
 
 	// Init transformation
 	jpeg_transform_info transformoption;
@@ -556,24 +502,19 @@ void JPEGContent::applyPendingChanges() {
 
 QImage JPEGContent::thumbnail() const {
 	QImage image;
-	if( d->mExifData && d->mExifData->data ) {
-		image.loadFromData( d->mExifData->data, d->mExifData->size, "JPEG" );
+	if (!d->mExifData.empty()) {
+		Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
+		image.loadFromData(thumbnail.pData_, thumbnail.size_);
 	}
 	return image;
 }
 
 
 void JPEGContent::setThumbnail(const QImage& thumbnail) {
-	if( !d->mExifData) {
+	if (d->mExifData.empty()) {
 		return;
 	}
 	
-	if(d->mExifData->data) {
-		free(d->mExifData->data);
-		d->mExifData->data=0;
-	}
-	d->mExifData->size=0;
-
 	QByteArray array;
 	QBuffer buffer(array);
 	buffer.open(IO_WriteOnly);
@@ -584,13 +525,7 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 		return;
 	}
 	
-	d->mExifData->size=array.size();
-	d->mExifData->data=(unsigned char*)malloc(d->mExifData->size);
-	if (!d->mExifData->data) {
-		kdError() << "Could not allocate memory for thumbnail\n";
-		return;
-	}
-	memcpy(d->mExifData->data, array.data(), array.size());
+	d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
 }
 
 
@@ -611,28 +546,22 @@ bool JPEGContent::save(QFile* file) {
 		return false;
 	}
 
-	if (d->mPendingChanges) {
-		applyPendingChanges();
-		d->mPendingChanges = false;
+	if (d->mPendingTransformation) {
+		applyPendingTransformation();
+		d->mPendingTransformation = false;
 	}
 
-	if (d->mExifData) {
-		// Store Exif info
-		JPEGData* jpegData=jpeg_data_new_from_data((unsigned char*)d->mRawData.data(), d->mRawData.size());
-		if (!jpegData) {
-			kdError() << "Could not create jpegData object\n";
-			return false;
-		}
-		
-		jpeg_data_set_exif_data(jpegData, d->mExifData);
-		unsigned char* dest=0L;
-		unsigned int destSize=0;
-		jpeg_data_save_data(jpegData, &dest, &destSize);
-		jpeg_data_unref(jpegData);
+	Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((unsigned char*)d->mRawData.data(), d->mRawData.size());
 
-		// Update mRawData
-		d->mRawData.assign((char*)dest, destSize);
-	}
+	// Store Exif info
+	image->setExifData(d->mExifData);
+	image->setComment(d->mComment.utf8().data());
+	image->writeMetadata();
+	
+	// Update mRawData
+	Exiv2::BasicIo& io = image->io();
+	d->mRawData.resize(io.size());
+	io.read((unsigned char*)d->mRawData.data(), io.size());
 	
 	QDataStream stream(file);
 	stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());

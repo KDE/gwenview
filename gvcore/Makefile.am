@@ -7,7 +7,7 @@ libgwenviewcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 libgwenviewcore_la_LIBADD   = \
 	$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_KDEPRINT) $(LIB_QT) \
 	$(LIBJPEG) $(LIBPNG) $(LIBMNG) $(GV_LIB_XCURSOR) \
-	$(LIBEXIF_LIBS) -lkmediaplayer ../imageutils/libgvimageutils.la \
+	-lkmediaplayer ../imageutils/libgvimageutils.la \
 	../tsthread/libtsthread.la
 
 libgwenviewcore_la_METASOURCES = AUTO

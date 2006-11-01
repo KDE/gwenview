@@ -65,7 +65,7 @@ private:
 
 	JPEGContent(const JPEGContent&);
 	void operator=(const JPEGContent&);
-    void applyPendingChanges();
+    void applyPendingTransformation();
 };
 
 
