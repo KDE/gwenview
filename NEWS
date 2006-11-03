@@ -1,6 +1,8 @@
 2006.xx.xx - v1.4.1
 - New features:
  - Show preview of images when dragging them.
+ - Added "back/forward/reload/save as" actions to the KPart context menu
+   (Bug 127560).
 - Fixes:
  - Fix crash when showing current folder properties from context menu (Bug
    129890)
@@ -12,9 +14,9 @@
  - Show the "rotate left" button in KParts.
  - Use Exiv2 instead of libexif to fix troubles with some JPEG (Bug 136112).
  - Fix crash when using Gwenview KPart in kwebdesktop (Bug 130379).
- - Added back/forward/reload/save as to KPart context menu (Bug 127560).
  - Fix content of KPart context menu when viewing remote images.
  - Do not let the KPart title get overriden when switching tabs.
+ - Make context menu behavior coherent with KDE (Bug 136449).
 
 2006.09.16 - v1.4.0
 - Fixes:
