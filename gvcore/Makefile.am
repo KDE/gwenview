@@ -14,7 +14,10 @@ libgwenviewcore_la_METASOURCES = AUTO
 
 noinst_HEADERS = libgwenview_export.h
 
+# Be sure to keep pngformattype.cpp first, to avoid troubles with --enable-final
+# See bug #134919
 libgwenviewcore_la_SOURCES = \
+	pngformattype.cpp \
 	printdialog.cpp \
 	printdialogpagebase.ui \
 	thumbnailloadjob.cpp \
@@ -39,7 +42,6 @@ libgwenviewcore_la_SOURCES = \
 	filedetailviewitem.cpp \
 	imagesavedialog.cpp \
 	jpegformattype.cpp \
-	pngformattype.cpp \
 	mngformattype.cpp \
 	xpm.cpp \
 	documentimpl.cpp \
