@@ -93,7 +93,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		mBrowserExtension, SLOT(openFileViewContextMenu(const QPoint&, bool)) );
 
 	connect(mFileViewController, SIGNAL(urlChanged(const KURL&)),
-		this, SLOT(urlChanged(const KURL&)) );
+		mDocument, SLOT(setURL(const KURL&)) );
 
 	connect(mFileViewController, SIGNAL(directoryChanged(const KURL&)),
 		this, SLOT(directoryChanged(const KURL&)) );
@@ -105,7 +105,7 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		mBrowserExtension, SLOT(openImageViewContextMenu(const QPoint&)) );
 
 	connect(mSlideShow, SIGNAL(nextURL(const KURL&)),
-		this, SLOT(urlChanged(const KURL&)) );
+		this, SLOT(slotSlideShowChanged(const KURL&)) );
 
 	connect(mDocument, SIGNAL(loaded(const KURL&)),
 		this, SLOT(loaded(const KURL&)) );
@@ -228,7 +228,7 @@ void GVDirPart::directoryChanged(const KURL& dirURL) {
 	emit mBrowserExtension->openURLRequest(dirURL);
 }
 
-void GVDirPart::urlChanged(const KURL& url) {
+void GVDirPart::slotSlideShowChanged(const KURL& url) {
 	mDocument->setURL( url );
 	mFileViewController->setFileNameToSelect( url.filename());
 }

@@ -132,7 +132,7 @@ protected slots:
 
 	void directoryChanged(const KURL& dirURL);
 
-	void urlChanged( const KURL& );
+	void slotSlideShowChanged( const KURL& );
 
 protected:
 	/**
