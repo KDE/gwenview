@@ -13,7 +13,7 @@ METASOURCES = AUTO
 
 # Install the XML-UI file to its correct location
 gvdir = $(kde_datadir)/gvimagepart
-gv_DATA = gvimagepart.rc
+gv_DATA = gvimagepart.rc gvimagepartpopup.rc
 
 # Install the .desktop file into the kde_services directory
 kde_services_DATA = gvimagepart.desktop

@@ -1,0 +1,7 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="gvimagepartpopup" version="1">
+    <Menu name="popupmenu">
+        <Separator />
+        <Action name="saveAs" />
+    </Menu>
+</kpartgui>

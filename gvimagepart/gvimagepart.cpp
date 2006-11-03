@@ -76,7 +76,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	connect( mDocument, SIGNAL( loaded(const KURL&)), SLOT( slotLoaded(const KURL&)));
 	mImageView = new ImageView(parentWidget, mDocument, actionCollection());
 	connect( mImageView, SIGNAL(requestContextMenu(const QPoint&)),
-		mBrowserExtension, SLOT(openContextMenu(const QPoint&)) );
+		this, SLOT(openContextMenu(const QPoint&)) );
 	setWidget(mImageView);
 
 	mDirLister = new KDirLister;
@@ -274,6 +274,39 @@ void GVImagePart::slotSelectPrevious() {
 	emit mBrowserExtension->openURLNotify();
 }
 
+
+/**
+ * Overload KXMLGUIClient so that we can call setXML
+ */
+class PopupGUIClient : public KXMLGUIClient {
+public:
+	PopupGUIClient( KInstance *inst, const QString &doc ) {
+		setInstance( inst );
+		setXML( doc );
+	}
+};
+
+
+void GVImagePart::openContextMenu(const QPoint& pos) {
+	QString doc = KXMLGUIFactory::readConfigFile( "gvimagepartpopup.rc", true, instance() );
+	PopupGUIClient guiClient(instance(), doc);
+	
+	KStdAction::saveAs( mDocument, SLOT(saveAs()), guiClient.actionCollection(), "saveAs" );
+	
+	QString mimeType=KMimeType::findByURL(m_url)->name();
+	
+	KParts::URLArgs urlArgs;
+	urlArgs.serviceType = mimeType;
+
+	KParts::BrowserExtension::PopupFlags flags = 
+		KParts::BrowserExtension::ShowNavigationItems 
+		| KParts::BrowserExtension::ShowUp
+		| KParts::BrowserExtension::ShowReload;
+	
+	emit mBrowserExtension->popupMenu(&guiClient, pos, m_url, urlArgs, flags, S_IFREG);
+}
+
+
 /***** GVImagePartBrowserExtension *****/
 
 GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, const char* name)
@@ -283,15 +316,6 @@ GVImagePartBrowserExtension::GVImagePartBrowserExtension(GVImagePart* viewPart, 
 }
 
 GVImagePartBrowserExtension::~GVImagePartBrowserExtension() {
-}
-
-void GVImagePartBrowserExtension::openContextMenu(const QPoint& pos) {
-	KURL url=mGVImagePart->url();
-	QString mimeType=KMimeType::findByURL(url)->name();
-	KFileItem item(url, mimeType, S_IFREG);
-	KFileItemList list;
-	list.append(&item);
-	emit popupMenu(pos, list);
 }
 
 void GVImagePartBrowserExtension::print() {

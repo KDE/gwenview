@@ -51,9 +51,6 @@ public:
 public slots:
 	void print();
 
-private slots:
-	void openContextMenu(const QPoint&);
-
 private:
 	GVImagePart* mGVImagePart;
 
@@ -117,6 +114,8 @@ private slots:
 
 	void slotLoading();
 	void slotLoaded(const KURL& url);
+	
+    void openContextMenu(const QPoint&);
 
 private:
 
