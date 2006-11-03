@@ -82,11 +82,6 @@ Kind urlKind(const KURL& url) {
 	return mimeTypeKind(mimeType);
 }
 
-Kind determineKindFromContent(const QByteArray& content) {
-	KMimeType::Ptr ptr=KMimeType::findByContent(content);
-	return mimeTypeKind(ptr->name());
-}
-
 
 } // namespace MimeTypeUtils
 } // namespace Gwenview
