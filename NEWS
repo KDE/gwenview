@@ -20,6 +20,7 @@
  - Fix compilation with --enable-final (Bug 134919).
  - Do not loose selection when switching from detail to thumbnail view 
    (Bug 126218).
+ - In KPart, do not loose selection when starting a drag.
 
 2006.09.16 - v1.4.0
 - Fixes:
