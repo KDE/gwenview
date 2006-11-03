@@ -60,9 +60,11 @@ void ImageView::ToolBase::midButtonReleaseEvent(QMouseEvent*) {
 	mView->zoomToFit()->activate();
 }
 
-void ImageView::ToolBase::rightButtonPressEvent(QMouseEvent*) {}
-void ImageView::ToolBase::rightButtonReleaseEvent(QMouseEvent* event) {
+void ImageView::ToolBase::rightButtonPressEvent(QMouseEvent* event) {
 	emit mView->requestContextMenu(event->globalPos());
+}
+
+void ImageView::ToolBase::rightButtonReleaseEvent(QMouseEvent*) {
 }
 
 void ImageView::ToolBase::wheelEvent(QWheelEvent* event) {
