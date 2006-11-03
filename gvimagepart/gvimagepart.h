@@ -97,7 +97,8 @@ protected slots:
 	void rotateRight();
 
 protected:
-	void partActivateEvent(KParts::PartActivateEvent* event);
+	virtual void partActivateEvent(KParts::PartActivateEvent* event);
+	virtual void guiActivateEvent( KParts::GUIActivateEvent* event);
 
 private slots:
 

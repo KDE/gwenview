@@ -120,6 +120,19 @@ void GVImagePart::partActivateEvent(KParts::PartActivateEvent* event) {
 }
 
 
+void GVImagePart::guiActivateEvent( KParts::GUIActivateEvent* event) {
+	// Stolen from KHTMLImage
+	//
+	// prevent the base implementation from emitting setWindowCaption with
+	// our url. It destroys our pretty, previously caption. Konq saves/restores
+	// the caption for us anyway.
+	if (event->activated()) {
+		return;
+	}
+	KParts::ReadOnlyPart::guiActivateEvent(event);
+}
+
+
 KAboutData* GVImagePart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvimagepart", I18N_NOOP("GVImagePart"),
 						"0.1", I18N_NOOP("Image Viewer"),
