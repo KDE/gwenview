@@ -484,7 +484,7 @@ void FileThumbnailView::setSelected(const KFileItem* fileItem,bool enable) {
 	if (!fileItem) return;
 
 	FileThumbnailViewItem* iconItem=viewItem(this, fileItem);
-	if (iconItem) QIconView::setSelected(iconItem,enable);
+	if (iconItem) QIconView::setSelected(iconItem, enable, true /* do not unselect others */);
 }
 
 
