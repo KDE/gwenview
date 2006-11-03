@@ -293,10 +293,8 @@ void GVImagePart::openContextMenu(const QPoint& pos) {
 	
 	KStdAction::saveAs( mDocument, SLOT(saveAs()), guiClient.actionCollection(), "saveAs" );
 	
-	QString mimeType=KMimeType::findByURL(m_url)->name();
-	
 	KParts::URLArgs urlArgs;
-	urlArgs.serviceType = mimeType;
+	urlArgs.serviceType = mDocument->mimeType();
 
 	KParts::BrowserExtension::PopupFlags flags = 
 		KParts::BrowserExtension::ShowNavigationItems 

@@ -81,6 +81,7 @@ public:
 	KURL mURL;
 	bool mModified;
 	QImage mImage;
+	QString mMimeType;
 	QCString mImageFormat;
 	DocumentImpl* mImpl;
 	QGuardedPtr<KIO::StatJob> mStatJob;
@@ -134,6 +135,14 @@ Document::~Document() {
 // Properties
 //
 //---------------------------------------------------------------------
+QString Document::mimeType() const {
+	return d->mMimeType;
+}
+
+void Document::setMimeType(const QString& mimeType) {
+	d->mMimeType = mimeType;
+}
+
 MimeTypeUtils::Kind Document::urlKind() const {
 	return d->mImpl->urlKind();
 }

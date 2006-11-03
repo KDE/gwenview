@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kapplication.h>
+#include <kmimetype.h>
 
 // Local
 #include "cache.h"
@@ -263,6 +264,7 @@ public:
 
 	ImageUtils::Orientation mOrientation;
 	
+	QString mMimeType;
 	MimeTypeUtils::Kind mURLKind;
 
 	QValueVector< OwnerData > mOwners; // loaders may be shared
@@ -445,7 +447,9 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 
 	if (oldSize==0) {
 		// Try to determine the data type
-		d->mURLKind=MimeTypeUtils::determineKindFromContent(d->mRawData);
+		KMimeType::Ptr ptr = KMimeType::findByContent(d->mRawData);
+		d->mMimeType = ptr->name();
+		d->mURLKind = MimeTypeUtils::mimeTypeKind(d->mMimeType);
 		if (d->mURLKind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
 			Q_ASSERT(!d->mDecoderTimer.isActive());
 			job->kill(true /* quietly */);
@@ -797,6 +801,11 @@ QCString ImageLoader::imageFormat() const {
 
 QByteArray ImageLoader::rawData() const {
 	return d->mRawData;
+}
+
+
+QString ImageLoader::mimeType() const {
+	return d->mMimeType;
 }
 
 

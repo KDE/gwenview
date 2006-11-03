@@ -68,6 +68,7 @@ public:
 	ImageFrames frames() const;
 	QCString imageFormat() const;
 	QByteArray rawData() const;
+	QString mimeType() const;
 	MimeTypeUtils::Kind urlKind() const;
 	KURL url() const;
 	QRegion loadedRegion() const; // valid parts of processedImage()

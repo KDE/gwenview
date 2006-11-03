@@ -129,6 +129,7 @@ void DocumentLoadingImpl::imageLoaded( bool ok ) {
 		return;
 	}
 	setImageFormat( format );
+	setMimeType(d->mLoader->mimeType());
 
 	// Update file info
 	setFileSize(d->mLoader->rawData().size());

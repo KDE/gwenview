@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MIMETYPEUTILS_H   
 
 // Qt
-#include <qcstring.h>
+#include <qcstring.h> // For QByteArray
 
 // Local
 #include "libgwenview_export.h"
@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class KFileItem;
 class KURL;
 
+class QString;
 class QStringList;
 
 namespace Gwenview {
@@ -40,6 +41,7 @@ enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE }
 LIBGWENVIEW_EXPORT const QStringList& rasterImageMimeTypes();
 Kind fileItemKind(const KFileItem*);
 Kind urlKind(const KURL&);
+Kind mimeTypeKind(const QString& mimeType);
 Kind determineKindFromContent(const QByteArray&);
 
 } // namespace FileUtils

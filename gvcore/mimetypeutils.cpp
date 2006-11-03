@@ -52,7 +52,7 @@ const QStringList& rasterImageMimeTypes() {
 }
 
 	
-static Kind mimeTypeKind(const QString& mimeType) {
+Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith("inode/directory")) {
 		return KIND_DIR;
 	}

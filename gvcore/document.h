@@ -67,6 +67,7 @@ public:
 	QString filename() const;
 	const QCString& imageFormat() const;
 	int fileSize() const;
+	QString mimeType() const;
 	MimeTypeUtils::Kind urlKind() const;
 
 	// Convenience methods
@@ -160,6 +161,7 @@ private:
 	void switchToImpl(DocumentImpl*);
 	void setImage(QImage);
 	void setImageFormat(const QCString&);
+	void setMimeType(const QString&);
 	void setFileSize(int); 
 	
 	void reset();

@@ -44,6 +44,7 @@ public:
 	
 	void switchToImpl(DocumentImpl*);
 	void setImage(QImage);
+	void setMimeType(const QString&);
 	void setImageFormat(const QCString&);
 	void setFileSize(int) const;
 
@@ -78,6 +79,7 @@ public:
 	: DocumentImpl(document) {
 		setImage(QImage());
 		setImageFormat(0);
+		setMimeType("application/x-zerosize");
 	}
 
 	MimeTypeUtils::Kind urlKind() const {

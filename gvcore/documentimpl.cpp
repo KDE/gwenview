@@ -49,6 +49,10 @@ void DocumentImpl::setImageFormat(const QCString& format) {
 	mDocument->setImageFormat(format);
 }
 
+void DocumentImpl::setMimeType(const QString& mimeType) {
+	mDocument->setMimeType(mimeType);
+}
+
 void DocumentImpl::setFileSize(int size) const {
 	mDocument->setFileSize(size);
 }
