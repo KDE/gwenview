@@ -450,6 +450,10 @@ void ImageView::loadingStarted() {
 	d->mGamma = 100;
 	d->mBrightness = 0;
 	d->mContrast = 100;
+	
+	if (!d->mLockZoom->isChecked()) {
+		d->mZoomBeforeAuto = 1.;
+	}
 }
 
 //------------------------------------------------------------------------
@@ -515,6 +519,7 @@ void ImageView::setZoom(double zoom, int centerX, int centerY) {
 
 
 void ImageView::updateZoom(ZoomMode zoomMode, double value, int centerX, int centerY) {
+	ZoomMode oldZoomMode = d->mZoomMode;
 	double oldZoom=d->mZoom;
 	d->mZoomMode=zoomMode;
 	KAction* checkedZoomAction=0;
@@ -525,7 +530,11 @@ void ImageView::updateZoom(ZoomMode zoomMode, double value, int centerX, int cen
 		Q_ASSERT(value!=0);
 		d->mZoom=value;
 	} else {
-		d->mZoomBeforeAuto=d->mZoom;
+		if (oldZoomMode == ZOOM_FREE) {
+			// Only store zoom before auto if we were in ZOOM_FREE mode, otherwise
+			// we will store the computed auto zoom value (Bug 134590)
+			d->mZoomBeforeAuto = d->mZoom;
+		}
 		d->mXCenterBeforeAuto=width()/2  + contentsX() + d->mXOffset;
 		d->mYCenterBeforeAuto=height()/2 + contentsY() + d->mYOffset;
 		
