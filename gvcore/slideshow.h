@@ -78,7 +78,6 @@ private:
 	QValueVector<KURL> mURLs;
 	QValueVector<KURL>::ConstIterator mStartIt;
 	ImageLoader* mPrefetch;
-	int mPrefetchAdvance;
 	KURL mPriorityURL;
 };
 
