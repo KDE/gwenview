@@ -119,16 +119,16 @@ QValueVector<KURL>::ConstIterator SlideShow::findNextURL() const {
 	}
 
 	++it;
-	if (it==mURLs.end()) {
-		if (SlideShowConfig::stopAtEnd()) {
-			return it;
-		} else {
-			it=mURLs.begin();
+	if (SlideShowConfig::loop()) {
+		// Looping, if we reach the end, start again
+		if (it==mURLs.end()) {
+			it = mURLs.begin();
 		}
-	}
-
-	if (it==mStartIt && !SlideShowConfig::loop()) {
-		return mURLs.end();
+	} else {
+		// Not looping, have we reached the end?
+		if ((it==mURLs.end() && SlideShowConfig::stopAtEnd()) || it==mStartIt) {
+			it = mURLs.end();
+		}
 	}
 
 	return it;
