@@ -71,6 +71,14 @@ namespace Gwenview {
 
 const char* CONFIG_SAVE_AUTOMATICALLY="save automatically";
 
+
+/**
+ * Returns a widget suitable to use as a dialog parent
+ */
+static QWidget* dialogParentWidget() {
+	return KApplication::kApplication()->mainWidget();
+}
+
 //-------------------------------------------------------------------
 //
 // DocumentPrivate
@@ -400,7 +408,7 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 
 
 		if (size.width() > pdWidth || size.height() > pdHeight) {
-			int resp = KMessageBox::warningYesNoCancel(0,
+			int resp = KMessageBox::warningYesNoCancel(dialogParentWidget(),
 				i18n("The image will not fit on the page, what do you want to do?"),
 				QString::null,KStdGuiItem::cont(),
 				i18n("Shrink") );
@@ -463,7 +471,7 @@ void Document::transform(ImageUtils::Orientation orientation) {
 void Document::save() {
 	QString msg=saveInternal(url(), d->mImageFormat);
 	if (!msg.isNull()) {
-		KMessageBox::error(0, msg);
+		KMessageBox::error(dialogParentWidget(), msg);
 	}
 }
 
@@ -471,13 +479,13 @@ void Document::save() {
 void Document::saveAs() {
 	KURL saveURL;
 
-	ImageSaveDialog dialog(saveURL, d->mImageFormat, 0);
+	ImageSaveDialog dialog(saveURL, d->mImageFormat, dialogParentWidget());
 	dialog.setSelection(url().fileName());
 	if (!dialog.exec()) return;
 
 	QString msg=saveInternal(saveURL, dialog.imageFormat() );
 	if (!msg.isNull()) {
-		KMessageBox::error(0, msg);
+		KMessageBox::error(dialogParentWidget(), msg);
 	}
 }
 
@@ -487,7 +495,7 @@ void Document::saveBeforeClosing() {
 	QString msg=i18n("<qt>The image <b>%1</b> has been modified, do you want to save the changes?</qt>")
 		.arg(url().prettyURL());
 
-	int result=KMessageBox::questionYesNo(0, msg, QString::null,
+	int result=KMessageBox::questionYesNo(dialogParentWidget(), msg, QString::null,
 		KStdGuiItem::save(), KStdGuiItem::discard(), CONFIG_SAVE_AUTOMATICALLY);		
 
 	if (result == KMessageBox::Yes) {
