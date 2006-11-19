@@ -63,6 +63,8 @@ public:
 
 	virtual MimeTypeUtils::Kind urlKind() const=0;
 
+	virtual bool canBeSaved() const=0;
+
 
 signals:
 	void finished(bool success);
@@ -84,6 +86,10 @@ public:
 
 	MimeTypeUtils::Kind urlKind() const {
 		return MimeTypeUtils::KIND_UNKNOWN;
+	}
+
+	bool canBeSaved() const {
+		return false;
 	}
 };
 

@@ -38,6 +38,7 @@ public:
 	~DocumentLoadingImpl();
 	virtual void init();
 	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
+	virtual bool canBeSaved() const { return false; }
 	
 private:
 	DocumentLoadingImplPrivate* d;

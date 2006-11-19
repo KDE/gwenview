@@ -42,6 +42,8 @@ public:
 
 	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_FILE; }
 
+	virtual bool canBeSaved() const { return false; }
+
 	virtual int duration() const;
 };
 

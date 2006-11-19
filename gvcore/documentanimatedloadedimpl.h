@@ -46,6 +46,7 @@ public:
 	void init();
 	
 	void transform(ImageUtils::Orientation);
+	virtual bool canBeSaved() const { return false; }
 
 protected:
 	QString localSave(QFile*, const QCString& format) const;

@@ -69,6 +69,12 @@ public:
 	int fileSize() const;
 	QString mimeType() const;
 	MimeTypeUtils::Kind urlKind() const;
+	bool isModified() const;
+
+	/**
+	 * Returns true if Gwenview knows how to save such an image
+	 */
+	bool canBeSaved() const;
 
 	// Convenience methods
 	bool isNull() const { return image().isNull(); }

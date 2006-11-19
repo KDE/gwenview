@@ -43,6 +43,7 @@ public:
 	QString save(const KURL&, const QCString& format) const;
 
 	virtual MimeTypeUtils::Kind urlKind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
+	virtual bool canBeSaved() const { return true; }
 
 protected:
 	virtual QString localSave(QFile* file, const QCString& format) const;

@@ -305,6 +305,14 @@ int Document::fileSize() const {
 	return d->mFileSize;
 }
 
+bool Document::canBeSaved() const {
+	return d->mImpl->canBeSaved();
+}
+
+bool Document::isModified() const {
+	return d->mModified;
+}
+
 void Document::slotLoading() {
 	BusyLevelManager::instance()->setBusyLevel( this, BUSY_LOADING );
 }
