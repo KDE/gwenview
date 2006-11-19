@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 
 #include <qapplication.h>
 #include <qcursor.h>
+#include <qfile.h>
 #include <qpoint.h>
 
 #include <kaction.h>
@@ -27,13 +28,16 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdirlister.h>
+#include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kmimetype.h>
 #include <kparts/genericfactory.h>
 
 #include <gvcore/cache.h>
 #include <gvcore/document.h>
+#include <gvcore/fileoperation.h>
 #include <gvcore/printdialog.h>
 #include <gvcore/imageview.h>
 #include <gvcore/imageloader.h>
@@ -47,12 +51,24 @@ const char CONFIG_CACHE_GROUP[]="cache";
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kdDebug() << k_funcinfo << x << endl
 #else
 #define LOG(x) ;
 #endif
+
+
+static bool storeData(QWidget* parent, QFile* file, const QByteArray& data) {
+	uint sizeWritten = file->writeBlock(data);
+	if (sizeWritten != data.size()) {
+		KMessageBox::error(
+			parent,
+			i18n("Could not save image to a temporary file"));
+		return false;
+	}
+	return true;
+}
 
 
 //Factory Code
@@ -98,7 +114,7 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 		this,SLOT(slotSelectNext()), actionCollection(), "next");
 	updateNextPrevious();
 
-	KStdAction::saveAs( mDocument, SLOT(saveAs()), actionCollection(), "saveAs" );
+	KStdAction::saveAs( this, SLOT(saveAs()), actionCollection(), "saveAs" );
 	new KAction(i18n("Rotate &Left"), "rotate_ccw", CTRL + Key_L, this, SLOT(rotateLeft()), actionCollection(), "rotate_left");
 	new KAction(i18n("Rotate &Right"), "rotate_cw", CTRL + Key_R, this, SLOT(rotateRight()), actionCollection(), "rotate_right");
 
@@ -288,6 +304,103 @@ void GVImagePart::slotSelectPrevious() {
 }
 
 
+void GVImagePart::saveAs() {
+	if (!mDocument->isModified()) {
+		saveOriginalAs();
+		return;
+	}
+
+	if (mDocument->canBeSaved()) {
+		mDocument->saveAs();
+		return;
+	}
+
+	KGuiItem saveItem(i18n("&Save Original"), "filesaveas");
+	int result = KMessageBox::warningContinueCancel(
+		widget(), 
+		i18n("Gwenview KPart can't save the modifications you made. Do you want to save the original image?"),
+		i18n("Warning"),
+		saveItem);
+
+	if (result == KMessageBox::Cancel) return;
+
+	saveOriginalAs();
+}
+
+
+void GVImagePart::showJobError(KIO::Job* job) {
+	if (job->error() != 0) { 
+		job->showErrorDialog(widget());
+	}
+}
+
+
+void GVImagePart::saveOriginalAs() {
+	KURL srcURL = mDocument->url();
+	KURL dstURL = KFileDialog::getSaveURL(
+		srcURL.fileName(),
+		QString::null,
+		widget());
+	if (!dstURL.isValid()) return;
+
+	// Try to get data from the cache to avoid downloading the image again.
+	QByteArray data = Cache::instance()->file(srcURL);
+
+	if (data.size() == 0) {
+		// We need to read the image again. Let KIO::copy do the work.
+		KIO::Job* job = KIO::copy(srcURL, dstURL);
+		job->setWindow(widget());
+		connect(job, SIGNAL(result(KIO::Job*)),
+			this, SLOT(showJobError(KIO::Job*)) );
+		return;
+	}
+
+	if (dstURL.isLocalFile()) {
+		// Destination is a local file, store it ourself
+		QString path = dstURL.path();
+		QFile file(path);
+		if (!file.open(IO_WriteOnly)) {
+			KMessageBox::error(
+				widget(),
+				i18n("Could not open '%1' for writing.").arg(path));
+			return;
+		}
+		storeData(widget(), &file, data);
+		return;
+	}
+
+	// We need to send the data to a remote location
+	new DataUploader(widget(), data, dstURL);
+}
+
+
+DataUploader::DataUploader(QWidget* dialogParent, const QByteArray& data, const KURL& dstURL)
+: mDialogParent(dialogParent)
+{
+	mTempFile.setAutoDelete(true);
+
+	// Store it in a temp file
+	if (! storeData(dialogParent, mTempFile.file(), data) ) return;
+
+	// Now upload it
+	KURL tmpURL;
+	tmpURL.setPath(mTempFile.name());
+	KIO::Job* job = KIO::copy(tmpURL, dstURL);
+	job->setWindow(dialogParent);
+	connect(job, SIGNAL(result(KIO::Job*)),
+		this, SLOT(slotJobFinished(KIO::Job*)) );
+}
+
+
+void DataUploader::slotJobFinished(KIO::Job* job) {
+	if (job->error() != 0) { 
+		job->showErrorDialog(mDialogParent);
+	}
+
+	delete this;
+}
+
+
 /**
  * Overload KXMLGUIClient so that we can call setXML
  */
@@ -304,7 +417,7 @@ void GVImagePart::openContextMenu(const QPoint& pos) {
 	QString doc = KXMLGUIFactory::readConfigFile( "gvimagepartpopup.rc", true, instance() );
 	PopupGUIClient guiClient(instance(), doc);
 	
-	KStdAction::saveAs( mDocument, SLOT(saveAs()), guiClient.actionCollection(), "saveAs" );
+	KStdAction::saveAs( this, SLOT(saveAs()), guiClient.actionCollection(), "saveAs" );
 	
 	KParts::URLArgs urlArgs;
 	urlArgs.serviceType = mDocument->mimeType();

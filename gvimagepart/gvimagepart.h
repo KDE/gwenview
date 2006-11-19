@@ -21,8 +21,10 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307, USA.
 
 #include <kparts/part.h>
 #include <kparts/browserextension.h>
+#include <ktempfile.h>
 
 // Forward declarations
+class QFile;
 class QPoint;
 
 class KAboutData;
@@ -118,11 +120,16 @@ private slots:
 	
     void openContextMenu(const QPoint&);
 
+	void saveAs();
+	
+	void showJobError(KIO::Job* job);
+
 private:
 
 	void updateNextPrevious();
 	KURL nextURL() const;
 	KURL previousURL() const;
+	void saveOriginalAs();
 
 	/**
 	 * The component's widget
@@ -151,6 +158,23 @@ private:
 	ImageLoader* mPrefetch;
 	enum LastDirection { DirectionUnknown, DirectionNext, DirectionPrevious };
 	LastDirection mLastDirection; // used for prefetching
+};
+
+
+/**
+ * This simple helper class uploads data to a remote URL asynchronously
+ */
+class DataUploader : public QObject {
+	Q_OBJECT
+public:
+	DataUploader(QWidget* dialogParent, const QByteArray& data, const KURL& destURL);
+
+private slots:
+	void slotJobFinished(KIO::Job*);
+
+private:
+	KTempFile mTempFile;
+	QWidget* mDialogParent;
 };
 
 } // namespace

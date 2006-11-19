@@ -22,6 +22,9 @@
    (Bug 126218).
  - In KPart, do not loose selection when starting a drag.
  - Fixed behavior of the middle-mouse button (Bug 134590).
+ - Saving in KPart now does a copy of the image instead of recompressing it,
+   unless the user rotated the image, this ensures the KPart won't fail to
+   save certain files (Bug 131833).
 
 2006.09.16 - v1.4.0
 - Fixes:
