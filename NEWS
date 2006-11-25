@@ -1,16 +1,16 @@
-2006.xx.xx - v1.4.1
+2006.11.26 - v1.4.1
 - New features:
  - Show preview of images when dragging them.
  - Added "back/forward/reload/save as" actions to the KPart context menu
    (Bug 127560).
 - Fixes:
  - Fix crash when showing current folder properties from context menu (Bug
-   129890)
+   129890).
  - Load JPEG rotated images using the right rotation directly instead of
-   loading them first and rotate them after (Bug 117173)
+   loading them first and rotate them after (Bug 117173).
  - Do not show the name of the current file in the status bar: it's already
    shown in the title bar and it was causing the mainwindow to be enlarged if
-   the name was very long (Bug 127004)
+   the name was very long (Bug 127004).
  - Show the "rotate left" button in KParts.
  - Use Exiv2 instead of libexif to fix troubles with some JPEG (Bug 136112).
  - Fix crash when using Gwenview KPart in kwebdesktop (Bug 130379).
@@ -22,8 +22,8 @@
    (Bug 126218).
  - In KPart, do not loose selection when starting a drag.
  - Fixed behavior of the middle-mouse button (Bug 134590).
- - Saving in KPart now does a copy of the image instead of recompressing it,
-   unless the user rotated the image, this ensures the KPart won't fail to
+ - Unless the user rotated the image, saving from the KPart now does a copy of
+   the image instead of recompressing it. This ensures the KPart won't fail to
    save certain files (Bug 131833).
 
 2006.09.16 - v1.4.0
