@@ -4,6 +4,7 @@
 - Fixes:
  - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop 
  - Bug 131162: Autorotate images preference setting is forgotten
+ - Bug 132556: Gwenview asks to save the wrong file if the modified file is read-only
 
 2006.11.26 - v1.4.1
 - New features:
