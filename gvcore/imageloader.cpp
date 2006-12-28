@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Local
 #include "cache.h"
+#include "miscconfig.h"
 #include "imageutils/imageutils.h"
 #include "imageutils/jpegcontent.h"
 
@@ -662,12 +663,13 @@ void ImageLoader::changed(const QRect& constRect) {
 		Q_ASSERT(!d->mImageFormat.isEmpty());
 		if (d->mImageFormat == "JPEG") {
 			// This is a JPEG, extract orientation and adjust mProcessedImage
-			// if necessary
+			// if necessary according to misc options
 			ImageUtils::JPEGContent content;
 
 			if (content.loadFromData(d->mRawData)) {
-				d->mOrientation = content.orientation();
-				if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
+				d->mOrientation = content.orientation(); 
+				if (MiscConfig::autoRotateImages() && 
+					d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
 					QSize size = content.size();
 					d->mProcessedImage = QImage(size, d->mDecoder.image().depth());
 				}
@@ -680,8 +682,9 @@ void ImageLoader::changed(const QRect& constRect) {
 		emit sizeLoaded(d->mProcessedImage.width(), d->mProcessedImage.height());
 	}
 
-	// Apply orientation if necessary
-	if (d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
+	// Apply orientation if necessary and if wanted by user settings (misc options)
+	if (MiscConfig::autoRotateImages() && 
+		d->mOrientation != ImageUtils::NOT_AVAILABLE && d->mOrientation != ImageUtils::NORMAL) {
 		// We can only rotate whole images, so copy the loaded rect in a temp
 		// image, rotate the temp image and copy it to mProcessedImage
 
