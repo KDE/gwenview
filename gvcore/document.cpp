@@ -480,6 +480,8 @@ void Document::save() {
 	QString msg=saveInternal(url(), d->mImageFormat);
 	if (!msg.isNull()) {
 		KMessageBox::error(dialogParentWidget(), msg);
+		// If it can't be saved we leave it as modified, because user
+		// could choose to save it to another path with saveAs
 	}
 }
 
@@ -493,6 +495,8 @@ void Document::saveAs() {
 
 	QString msg=saveInternal(saveURL, dialog.imageFormat() );
 	if (!msg.isNull()) {
+		// If it can't be saved we leave it as modified, because user
+		// could choose a wrong readonly path from dialog and retry to
 		KMessageBox::error(dialogParentWidget(), msg);
 	}
 }
@@ -508,6 +512,10 @@ void Document::saveBeforeClosing() {
 
 	if (result == KMessageBox::Yes) {
 		saveInternal(url(), d->mImageFormat);	
+		// If it can't be saved it's useless to leave it as modified
+		// since user is closing this image and changing to another one
+		d->mModified=false;
+		//FIXME it should be nice to tell the user it failed
 	} else {
 		d->mModified=false;
 	}
