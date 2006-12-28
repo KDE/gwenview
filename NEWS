@@ -1,3 +1,10 @@
+2007.xx.yy - v
+- New features:
+
+- Fixes:
+ - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop 
+ - Bug 131162: Autorotate images preference setting is forgotten
+
 2006.11.26 - v1.4.1
 - New features:
  - Show preview of images when dragging them.
