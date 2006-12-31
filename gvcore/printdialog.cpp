@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "document.h"
 #include "printdialogpagebase.h"
 #include "printdialog.moc"
+
 namespace Gwenview {
 
 
@@ -99,9 +100,9 @@ void PrintDialogPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ 
 	opts["app-gwenview-printFilename"] = mContent->mAddFileName->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-printComment"] = mContent->mAddComment->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-scale"] = QString::number(
-		mContent->mNoScale->isChecked() ? 0
-		: mContent->mFitToPage->isChecked() ? 1
-		: 2);
+		mContent->mNoScale->isChecked() ? GV_NOSCALE
+		: mContent->mFitToPage->isChecked() ? GV_FITTOPAGE
+		: GV_SCALE);
 	opts["app-gwenview-fitToPage"] = mContent->mFitToPage->isChecked() ? STR_TRUE : STR_FALSE;
 	opts["app-gwenview-enlargeToFit"] = mContent->mEnlargeToFit->isChecked() ? STR_TRUE : STR_FALSE;
 
@@ -125,13 +126,14 @@ void PrintDialogPage::setOptions( const QMap<QString,QString>& opts ) {
 
 	mContent->mAddFileName->setChecked( opts["app-gwenview-printFilename"] == STR_TRUE );
 	mContent->mAddComment->setChecked( opts["app-gwenview-printComment"] == STR_TRUE );
-	
-	val = opts["app-gwenview-scale"].toInt( &ok );
-	if (ok) {
-		mContent->mScaleGroup->setButton( val );
-	} else {
-		mContent->mScaleGroup->setButton( 0 );
-	}
+	// Starts from id 1 because 0 is returned if not ok, and seems to have a weird
+	// problem with id 2 (last id) otherwise :(
+	ScaleId scaleButtonId = static_cast<ScaleId>( opts["app-gwenview-scale"].toInt( &ok ) );
+ 	if (ok) {
+		mContent->mScaleGroup->setButton( scaleButtonId );
+ 	} else {
+ 		mContent->mScaleGroup->setButton( GV_NOSCALE );
+ 	}
 	mContent->mEnlargeToFit->setChecked( opts["app-gwenview-enlargeToFit"] == STR_TRUE );
 
 	Unit unit = static_cast<Unit>( opts["app-gwenview-scaleUnit"].toInt( &ok ) );
@@ -250,12 +252,17 @@ void PrintDialogPage::slotWidthChanged (double value) {
 
 void PrintDialogPage::toggleRatio(bool enable) {
 	if (!enable) return;
+	// choosing a startup value of 15x10 cm (common photo dimention)
+	// mContent->mHeight->value() or mContent->mWidth->value()
+	// are usually empty at startup and hxw (0x0) isn't good IMO keeping ratio
 	double hValue, wValue;
 	if (mDocument->height() > mDocument->width()) {
 		hValue = mContent->mHeight->value();
+		if (!hValue) hValue = 150*unitToMM(mPreviousUnit);
 		wValue = (mDocument->width() * hValue)/ mDocument->height();
 	} else {
 		wValue = mContent->mWidth->value();
+		if (!wValue) wValue = 150*unitToMM(mPreviousUnit);
 		hValue = (mDocument->height() * wValue)/ mDocument->width();
 	}
 	

@@ -40,6 +40,12 @@ enum Unit {
 	GV_INCHES
 };
 
+enum ScaleId {
+	GV_NOSCALE=1,
+	GV_FITTOPAGE,
+	GV_SCALE
+};
+
 class LIBGWENVIEW_EXPORT PrintDialogPage : public KPrintDialogPage {
 	Q_OBJECT
 

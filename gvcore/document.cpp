@@ -388,13 +388,13 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 	int scaling = printer->option( "app-gwenview-scale" ).toInt();
 
 	QSize size = image.size();
-	if (scaling==1 /* Fit to page */) {
+	if (scaling==GV_FITTOPAGE /* Fit to page */) {
 		bool enlargeToFit = printer->option( "app-gwenview-enlargeToFit" ) != f;
 		if ((image.width() > pdWidth || image.height() > pdHeight) || enlargeToFit) {
 			size.scale( pdWidth, pdHeight, QSize::ScaleMin );
 		}
 	} else {
-		if (scaling==2 /* Scale To */) {
+		if (scaling==GV_SCALE /* Scale To */) {
 			int unit = (printer->option("app-gwenview-scaleUnit").isEmpty() ?
 				GV_INCHES : printer->option("app-gwenview-scaleUnit").toInt());
 			double inches = 1;
@@ -410,7 +410,7 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 			size.setWidth( int(wImg * printer->resolution()) );
 			size.setHeight( int(hImg * printer->resolution()) );
 		} else {
-			/* No scaling */
+			/* GV_NOSCALE: no scaling */
 			size = image.size();
 		}
 
