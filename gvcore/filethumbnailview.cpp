@@ -135,6 +135,7 @@ struct FileThumbnailView::Private {
 	int mItemDetails;
 
 	ImageLoader* mPrefetch;
+	ThumbnailDetailsDialog* mThumbnailsDetailDialog;
 
 	void updateWaitThumbnail(const FileThumbnailView* view) {
 		mWaitThumbnail=QPixmap(mThumbnailSize, mThumbnailSize);
@@ -171,6 +172,7 @@ FileThumbnailView::FileThumbnailView(QWidget* parent)
 	d->mItemDetails=FileViewConfig::thumbnailDetails();
 	d->mPrefetch = NULL;
 	d->mThumbnailSize = 0;
+	d->mThumbnailsDetailDialog = 0;
 
 	setItemTextPos( QIconView::ItemTextPos(FileViewConfig::thumbnailTextPos()) );
 	setAutoArrange(true);
@@ -854,8 +856,10 @@ void FileThumbnailView::startDrag() {
 
 
 void FileThumbnailView::showThumbnailDetailsDialog() {
-	ThumbnailDetailsDialog dlg(this);
-	dlg.exec();
+	if (!d->mThumbnailsDetailDialog) {
+		d->mThumbnailsDetailDialog = new ThumbnailDetailsDialog(this);
+	}
+	d->mThumbnailsDetailDialog->show();
 }
 
 

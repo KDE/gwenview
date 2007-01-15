@@ -34,9 +34,8 @@ public:
 	ThumbnailDetailsDialog(FileThumbnailView* view);
 	~ThumbnailDetailsDialog();
 
-protected:
-	virtual void slotApply();
-	virtual void slotOk();
+private slots:
+	void applyChanges();
 
 private:
 	struct Private;

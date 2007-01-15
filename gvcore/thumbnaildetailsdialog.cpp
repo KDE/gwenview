@@ -38,8 +38,8 @@ struct ThumbnailDetailsDialog::Private {
 	
 ThumbnailDetailsDialog::ThumbnailDetailsDialog(FileThumbnailView* view)
 : KDialogBase(
-	view, 0, true /* modal */, QString::null, KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
-	KDialogBase::Ok, true /* separator */)
+	view, 0, false /* modal */, QString::null, KDialogBase::Close,
+	KDialogBase::Close, true /* separator */)
 , d(new ThumbnailDetailsDialog::Private)
 {
 	d->mView=view;
@@ -52,6 +52,11 @@ ThumbnailDetailsDialog::ThumbnailDetailsDialog(FileThumbnailView* view)
 	d->mContent->mShowFileDate->setChecked(details & FileThumbnailView::FILEDATE);
 	d->mContent->mShowFileSize->setChecked(details & FileThumbnailView::FILESIZE);
 	d->mContent->mShowImageSize->setChecked(details & FileThumbnailView::IMAGESIZE);
+
+	connect(d->mContent->mShowFileName, SIGNAL(toggled(bool)), SLOT(applyChanges()) );
+	connect(d->mContent->mShowFileDate, SIGNAL(toggled(bool)), SLOT(applyChanges()) );
+	connect(d->mContent->mShowFileSize, SIGNAL(toggled(bool)), SLOT(applyChanges()) );
+	connect(d->mContent->mShowImageSize, SIGNAL(toggled(bool)), SLOT(applyChanges()) );
 }
 
 ThumbnailDetailsDialog::~ThumbnailDetailsDialog() {
@@ -59,7 +64,7 @@ ThumbnailDetailsDialog::~ThumbnailDetailsDialog() {
 }
 
 
-void ThumbnailDetailsDialog::slotApply() {
+void ThumbnailDetailsDialog::applyChanges() {
 	int details=
 		(d->mContent->mShowFileName->isChecked() ? FileThumbnailView::FILENAME : 0)
 		| (d->mContent->mShowFileDate->isChecked() ? FileThumbnailView::FILEDATE : 0)
@@ -67,12 +72,6 @@ void ThumbnailDetailsDialog::slotApply() {
 		| (d->mContent->mShowImageSize->isChecked() ? FileThumbnailView::IMAGESIZE : 0)
 		;
 	d->mView->setItemDetails(details);
-}
-
-
-void ThumbnailDetailsDialog::slotOk() {
-	slotApply();
-	accept();
 }
 
 

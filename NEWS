@@ -1,8 +1,10 @@
 2007.xx.yy - v
 - New features:
+ - Settings in the dialog to edit the thumbnail view details are now directly
+   applied, no need to click "Apply" anymore.
 
 - Fixes:
- - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop 
+ - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop
  - Bug 131162: Autorotate images preference setting is forgotten
  - Bug 132556: Gwenview asks to save the wrong file if the modified file is read-only
  - Bug 111641: When several printing images in a row, "Keep Ratio" keeps ratio of first image
