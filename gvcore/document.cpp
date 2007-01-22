@@ -411,10 +411,21 @@ void Document::doPaint(KPrinter *printer, QPainter *painter) {
 			size.setHeight( int(hImg * printer->resolution()) );
 		} else {
 			/* GV_NOSCALE: no scaling */
-			size = image.size();
+			// try to get the density info so that we can print using original size
+			// known if it is am image from scanner for instance
+			const float INCHESPERMETER = (100. / 2.54);
+			if (image.dotsPerMeterX())
+			{
+				double wImg = double(size.width()) / double(image.dotsPerMeterX()) * INCHESPERMETER;
+				size.setWidth( int(wImg *printer->resolution()) );
+			}
+			if (image.dotsPerMeterY())
+			{
+				double hImg = double(size.height()) / double(image.dotsPerMeterY()) * INCHESPERMETER;
+				size.setHeight( int(hImg *printer->resolution()) );
+			}
 		}
-
-
+    
 		if (size.width() > pdWidth || size.height() > pdHeight) {
 			int resp = KMessageBox::warningYesNoCancel(dialogParentWidget(),
 				i18n("The image will not fit on the page, what do you want to do?"),

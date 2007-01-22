@@ -453,6 +453,29 @@ again:
 
 			if(consumer) consumer->end();
 
+			// get the density X and Y info and the related units to have
+			// the aspect ratio of the image
+			// field: units -- one byte: Units for the X and Y densities
+			// 0 => no units, X and Y specify the pixel aspect ratio
+			// 1 => X and Y are dots per inch
+			// 2 => X and Y are dots per cm
+			// Xdensity -- two bytes 
+			// Ydensity -- two bytes
+			const float INCHESPERMETER = (100. / 2.54);
+			switch (mDecompress.density_unit)
+			{
+				case 0:  // no units
+				break;
+				case 1:  // dots per inch
+					image.setDotsPerMeterX(int(mDecompress.X_density * INCHESPERMETER));
+					image.setDotsPerMeterY(int(mDecompress.Y_density * INCHESPERMETER));
+				break;
+				case 2:  // dots per cm
+					image.setDotsPerMeterX(mDecompress.X_density * 100);
+					image.setDotsPerMeterY(mDecompress.Y_density * 100);
+				break;
+			}
+
 			mSourceManager.at_eof = true;
 
 			(void) jpeg_finish_decompress(&mDecompress);
