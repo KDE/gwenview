@@ -1,0 +1,45 @@
+This document describes the various steps to port/rewrite Gwenview for KDE4.
+
+# Skeleton
+
+Implement the three view modes and toggling of the sidebar. Use basic
+widgets to show image and dir content.
+
+# Document view
+
+Implement the switch between the raster image, SVG and video views. Evaluate if
+all view can be KParts (raster image view needs to be able to fill the
+sidebar).
+
+# Image view
+
+Either use QGraphicsView or port Gwenview::ImageView to implement the real
+image view widget. If possible implement it as a KPart.
+
+# Image loader
+
+Port Gwenview::Document. Try to improve the following aspects:
+- Use only one way to decode images: either threaded or not.
+- Provide a more generic way to access image metainfo (maybe use KDE API)
+  instead of having lots of JPEG specific code around.
+
+# Sidebar
+
+Implement a sidebar widget. API should contain:
+- SideBar::GroupPtr SideBar::createGroup(i18n("My group"))
+- void SideBar::Group::addAction(KAction*)
+
+# Implement sidebar actions
+
+- file info
+- file tasks
+- image tasks
+
+# Thumbnail view
+
+Implement a custom delegate to draw content
+
+# Folder KPart
+
+Implement the folder KPart. Try to improve code reuse to avoid code duplication
+between the folder and the image KParts.

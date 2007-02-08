@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+
+<ToolBar name="mainToolBar" >
+	<text>Main Toolbar</text>
+	<Action name="thumbs_only" />
+	<Action name="thumbs_and_image" />
+	<Action name="image_only" />
+</ToolBar>
+
+<MenuBar>
+	<Menu name="view" >
+		<text>&amp;View</text>
+		<Action name="thumbs_only" />
+		<Action name="thumbs_and_image" />
+		<Action name="image_only" />
+	</Menu>
+</MenuBar>
+
+</kcfg>
