@@ -22,9 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QDir>
 #include <QFrame>
+#include <QGridLayout>
 #include <QLabel>
 #include <QListView>
 #include <QTimer>
+#include <QToolButton>
 #include <QSplitter>
 
 // KDE
@@ -32,8 +34,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kaction.h>
 #include <kdirlister.h>
 #include <kdirmodel.h>
+#include <kfileitem.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <kurlrequester.h>
 
 // Local
 #include <lib/thumbnailview.h>
@@ -44,6 +48,8 @@ namespace Gwenview {
 struct MainWindow::Private {
 	MainWindow* mWindow;
 	QLabel* mDocumentView;
+	QToolButton* mGoUpButton;
+	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
 	QFrame* mSideBar;
 
@@ -51,6 +57,7 @@ struct MainWindow::Private {
 	QAction* mThumbsOnlyAction;
 	QAction* mThumbsAndImageAction;
 	QAction* mImageOnlyAction;
+	QAction* mGoUpAction;
 
 	KDirModel* mDirModel;
 
@@ -65,8 +72,39 @@ struct MainWindow::Private {
 		mDocumentView = new QLabel(viewSplitter);
 		mDocumentView->setText("Bla");
 
-		mThumbnailView = new ThumbnailView(viewSplitter);
+		setupThumbnailView(viewSplitter);
+	}
+
+	void setupThumbnailView(QWidget* parent) {
+		QWidget* container = new QWidget(parent);
+
+		// mThumbnailView
+		mThumbnailView = new ThumbnailView(container);
 		mThumbnailView->setModel(mDirModel);
+		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
+			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
+		connect(mThumbnailView, SIGNAL(doubleClicked(const QModelIndex&)),
+			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
+
+		// mGoUpButton
+		mGoUpButton = new QToolButton(container);
+		mGoUpButton->setAutoRaise(true);
+
+		// mUrlRequester
+		mUrlRequester = new KUrlRequester(container);
+		mUrlRequester->setMode(KFile::Directory);
+		connect(mUrlRequester, SIGNAL(urlSelected(const KUrl&)),
+			mWindow, SLOT(openUrl(const KUrl&)) );
+		connect(mUrlRequester, SIGNAL(returnPressed(const QString&)),
+			mWindow, SLOT(openUrlFromString(const QString&)) );
+
+		// Layout
+		QGridLayout* layout = new QGridLayout(container);
+		layout->setSpacing(0);
+		layout->setMargin(0);
+		layout->addWidget(mThumbnailView, 0, 0, 1, 2);
+		layout->addWidget(mGoUpButton, 1, 0);
+		layout->addWidget(mUrlRequester, 1, 1);
 	}
 
 	void setupActions() {
@@ -90,6 +128,14 @@ struct MainWindow::Private {
 
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
+
+		mGoUpAction = actionCollection->addAction("go_up");
+		mGoUpAction->setText(i18n("Go Up"));
+		mGoUpAction->setIcon(KIcon("up"));
+		connect(mGoUpAction, SIGNAL(triggered()),
+			mWindow, SLOT(goUp()) );
+
+		mGoUpButton->setDefaultAction(mGoUpAction);
 	}
 
 };
@@ -129,8 +175,39 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 void MainWindow::initDirModel() {
 	KUrl url;
 	url.setPath(QDir::currentPath());
-	d->mDirModel->dirLister()->openUrl(url);
+	openUrl(url);
 }
 
+
+void MainWindow::openUrlFromIndex(const QModelIndex& index) {
+	if (!index.isValid()) {
+		return;
+	}
+
+	KFileItem* item = d->mDirModel->itemForIndex(index);
+	if (item->isDir()) {
+		openUrl(item->url());
+	}
+}
+
+
+void MainWindow::goUp() {
+	KUrl url = d->mDirModel->dirLister()->url();
+	url = url.upUrl();
+	openUrl(url);
+}
+
+
+void MainWindow::openUrl(const KUrl& url) {
+	d->mDirModel->dirLister()->openUrl(url);
+	d->mUrlRequester->setUrl(url);
+	d->mGoUpAction->setEnabled(url.path() != "/");
+}
+
+
+void MainWindow::openUrlFromString(const QString& str) {
+	KUrl url(str);
+	openUrl(url);
+}
 
 } // namespace

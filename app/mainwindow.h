@@ -26,6 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <memory>
 
+class QModelIndex;
+
+class KUrl;
+
 namespace Gwenview {
 
 class MainWindow : public KMainWindow {
@@ -35,6 +39,10 @@ public:
 	   
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
+	void openUrl(const KUrl&);
+	void openUrlFromIndex(const QModelIndex&);
+	void openUrlFromString(const QString& str);
+	void goUp();
 
 	void initDirModel();
 
