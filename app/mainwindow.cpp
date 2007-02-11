@@ -52,6 +52,7 @@ struct MainWindow::Private {
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
+	QWidget* mThumbnailViewPanel;
 	QFrame* mSideBar;
 
 	QActionGroup* mViewModeActionGroup;
@@ -77,10 +78,10 @@ struct MainWindow::Private {
 	}
 
 	void setupThumbnailView(QWidget* parent) {
-		QWidget* container = new QWidget(parent);
+		mThumbnailViewPanel = new QWidget(parent);
 
 		// mThumbnailView
-		mThumbnailView = new ThumbnailView(container);
+		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
 			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
@@ -88,11 +89,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
 
 		// mGoUpButton
-		mGoUpButton = new QToolButton(container);
+		mGoUpButton = new QToolButton(mThumbnailViewPanel);
 		mGoUpButton->setAutoRaise(true);
 
 		// mUrlRequester
-		mUrlRequester = new KUrlRequester(container);
+		mUrlRequester = new KUrlRequester(mThumbnailViewPanel);
 		mUrlRequester->setMode(KFile::Directory);
 		connect(mUrlRequester, SIGNAL(urlSelected(const KUrl&)),
 			mWindow, SLOT(openUrl(const KUrl&)) );
@@ -100,7 +101,7 @@ struct MainWindow::Private {
 			mWindow, SLOT(openUrlFromString(const QString&)) );
 
 		// Layout
-		QGridLayout* layout = new QGridLayout(container);
+		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
 		layout->setSpacing(0);
 		layout->setMargin(0);
 		layout->addWidget(mThumbnailView, 0, 0, 1, 2);
@@ -169,7 +170,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	}
 
 	d->mDocumentView->setVisible(showDocument);
-	d->mThumbnailView->setVisible(showThumbnail);
+	d->mThumbnailViewPanel->setVisible(showThumbnail);
 }
 
 
