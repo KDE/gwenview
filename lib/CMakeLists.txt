@@ -1,4 +1,8 @@
-set(gwenviewlib_SRCS thumbnailview.cpp)
+set(gwenviewlib_SRCS
+    thumbnailview.cpp
+    archiveutils.cpp
+    mimetypeutils.cpp
+    )
 kde4_automoc(${gwenviewlib_SRCS})
 
 kde4_add_library(gwenviewlib ${gwenviewlib_SRCS})

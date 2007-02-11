@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/thumbnailview.h>
+#include <lib/mimetypeutils.h>
 
 namespace Gwenview {
 
@@ -173,6 +174,13 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 
 
 void MainWindow::initDirModel() {
+	KDirLister* dirLister = d->mDirModel->dirLister();
+	QStringList mimeTypes;
+	mimeTypes += MimeTypeUtils::dirMimeTypes();
+	mimeTypes += MimeTypeUtils::imageMimeTypes();
+	mimeTypes += MimeTypeUtils::videoMimeTypes();
+	dirLister->setMimeFilter(mimeTypes);
+
 	KUrl url;
 	url.setPath(QDir::currentPath());
 	openUrl(url);
