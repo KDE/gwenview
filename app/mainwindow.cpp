@@ -1,6 +1,6 @@
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau
+Copyright 2007 AurÃ©lien GÃ¢teau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kdirlister.h>
-#include <kdirmodel.h>
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -42,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include <lib/thumbnailview.h>
 #include <lib/mimetypeutils.h>
+#include <lib/sorteddirmodel.h>
 
 namespace Gwenview {
 
@@ -61,7 +61,7 @@ struct MainWindow::Private {
 	QAction* mImageOnlyAction;
 	QAction* mGoUpAction;
 
-	KDirModel* mDirModel;
+	SortedDirModel* mDirModel;
 
 	void setupWidgets() {
 		QSplitter* centralSplitter = new QSplitter(Qt::Horizontal, mWindow);
@@ -148,7 +148,7 @@ MainWindow::MainWindow()
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
-	d->mDirModel = new KDirModel(this);
+	d->mDirModel = new SortedDirModel(this);
 	d->setupWidgets();
 	d->setupActions();
 	QTimer::singleShot(0, this, SLOT(initDirModel()) );

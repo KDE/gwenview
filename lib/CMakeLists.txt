@@ -1,7 +1,8 @@
 set(gwenviewlib_SRCS
-    thumbnailview.cpp
     archiveutils.cpp
     mimetypeutils.cpp
+	sorteddirmodel.cpp
+    thumbnailview.cpp
     )
 kde4_automoc(${gwenviewlib_SRCS})
 
