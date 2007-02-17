@@ -39,9 +39,12 @@ public:
 	   
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
-	void openUrl(const KUrl&);
-	void openUrlFromIndex(const QModelIndex&);
-	void openUrlFromString(const QString& str);
+	void openDirUrl(const KUrl&);
+	void openDirUrlFromString(const QString& str);
+	void openDirUrlFromIndex(const QModelIndex&);
+
+	void openDocumentUrl(const KUrl&);
+	void openDocumentUrlFromIndex(const QModelIndex&);
 	void goUp();
 
 	void initDirModel();

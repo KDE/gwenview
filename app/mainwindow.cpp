@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 #include <kfileitem.h>
 #include <klocale.h>
+#include <kmimetype.h>
+#include <kparts/componentfactory.h>
 #include <kurl.h>
 #include <kurlrequester.h>
 
@@ -45,15 +47,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
 
 struct MainWindow::Private {
 	MainWindow* mWindow;
-	QLabel* mDocumentView;
+	QWidget* mDocumentView;
+	QVBoxLayout* mDocumentLayout;
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
 	QWidget* mThumbnailViewPanel;
 	QFrame* mSideBar;
+	KParts::ReadOnlyPart* mPart;
+	QString mPartLibrary;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mThumbsOnlyAction;
@@ -71,8 +84,9 @@ struct MainWindow::Private {
 		mSideBar = new QFrame(centralSplitter);
 		mSideBar->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
-		mDocumentView = new QLabel(viewSplitter);
-		mDocumentView->setText("Bla");
+		mDocumentView = new QWidget(viewSplitter);
+		mDocumentLayout = new QVBoxLayout(mDocumentView);
+		mDocumentLayout->setMargin(0);
 
 		setupThumbnailView(viewSplitter);
 	}
@@ -84,9 +98,11 @@ struct MainWindow::Private {
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
-			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
+			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView, SIGNAL(doubleClicked(const QModelIndex&)),
-			mWindow, SLOT(openUrlFromIndex(const QModelIndex&)) );
+			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
+		connect(mThumbnailView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+			mWindow, SLOT(openDocumentUrlFromIndex(const QModelIndex&)) );
 
 		// mGoUpButton
 		mGoUpButton = new QToolButton(mThumbnailViewPanel);
@@ -96,9 +112,9 @@ struct MainWindow::Private {
 		mUrlRequester = new KUrlRequester(mThumbnailViewPanel);
 		mUrlRequester->setMode(KFile::Directory);
 		connect(mUrlRequester, SIGNAL(urlSelected(const KUrl&)),
-			mWindow, SLOT(openUrl(const KUrl&)) );
+			mWindow, SLOT(openDirUrl(const KUrl&)) );
 		connect(mUrlRequester, SIGNAL(returnPressed(const QString&)),
-			mWindow, SLOT(openUrlFromString(const QString&)) );
+			mWindow, SLOT(openDirUrlFromString(const QString&)) );
 
 		// Layout
 		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
@@ -140,6 +156,45 @@ struct MainWindow::Private {
 		mGoUpButton->setDefaultAction(mGoUpAction);
 	}
 
+	void deletePart() {
+		if (mPart) {
+			//mWindow->setXMLGUIClient(0);
+			delete mPart;
+			mPartLibrary = QString();
+		}
+		mPart=0;
+	}
+
+	void createPartForUrl(const KUrl& url) {
+
+		QString mimeType=KMimeType::findByUrl(url)->name();
+
+		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
+		if (offers.isEmpty()) {
+			kWarning() << "Couldn't find a KPart for " << mimeType << endl;
+			deletePart();
+			return;
+		}
+
+		KService::Ptr service = offers.first();
+		QString library=service->library();
+		Q_ASSERT(!library.isNull());
+		if (library == mPartLibrary) {
+			LOG("Reusing current part");
+			return;
+		} else {
+			LOG("Loading part from library: " << library);
+			deletePart();
+		}
+		mPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mDocumentView /*parentWidget*/, mDocumentView /*parent*/);
+		if (!mPart) {
+			kWarning() << "Failed to instantiate KPart from library " << library << endl;
+			return;
+		}
+		mPartLibrary = library;
+		mDocumentLayout->addWidget(mPart->widget());
+		//mWindow->setXMLGUIClient(mPart);
+	}
 };
 
 
@@ -149,6 +204,7 @@ d(new MainWindow::Private)
 {
 	d->mWindow = this;
 	d->mDirModel = new SortedDirModel(this);
+	d->mPart = 0;
 	d->setupWidgets();
 	d->setupActions();
 	QTimer::singleShot(0, this, SLOT(initDirModel()) );
@@ -184,18 +240,30 @@ void MainWindow::initDirModel() {
 
 	KUrl url;
 	url.setPath(QDir::currentPath());
-	openUrl(url);
+	openDirUrl(url);
 }
 
 
-void MainWindow::openUrlFromIndex(const QModelIndex& index) {
+void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
 		return;
 	}
 
 	KFileItem* item = d->mDirModel->itemForIndex(index);
 	if (item->isDir()) {
-		openUrl(item->url());
+		openDirUrl(item->url());
+	}
+}
+
+
+void MainWindow::openDocumentUrlFromIndex(const QModelIndex& index) {
+	if (!index.isValid()) {
+		return;
+	}
+
+	KFileItem* item = d->mDirModel->itemForIndex(index);
+	if (!item->isDir()) {
+		openDocumentUrl(item->url());
 	}
 }
 
@@ -203,20 +271,27 @@ void MainWindow::openUrlFromIndex(const QModelIndex& index) {
 void MainWindow::goUp() {
 	KUrl url = d->mDirModel->dirLister()->url();
 	url = url.upUrl();
-	openUrl(url);
+	openDirUrl(url);
 }
 
 
-void MainWindow::openUrl(const KUrl& url) {
+void MainWindow::openDirUrl(const KUrl& url) {
 	d->mDirModel->dirLister()->openUrl(url);
 	d->mUrlRequester->setUrl(url);
 	d->mGoUpAction->setEnabled(url.path() != "/");
 }
 
 
-void MainWindow::openUrlFromString(const QString& str) {
+void MainWindow::openDirUrlFromString(const QString& str) {
 	KUrl url(str);
-	openUrl(url);
+	openDirUrl(url);
+}
+
+void MainWindow::openDocumentUrl(const KUrl& url) {
+	d->createPartForUrl(url);
+	if (!d->mPart) return;
+
+	d->mPart->openUrl(url);
 }
 
 } // namespace
