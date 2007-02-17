@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+<?xml version="1.0"?>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="gwenview" version="28">
 
 <ToolBar name="mainToolBar" >
 	<text>Main Toolbar</text>
 	<Action name="thumbs_only" />
 	<Action name="thumbs_and_image" />
 	<Action name="image_only" />
+	<Separator/>
+	<Merge/>
 </ToolBar>
 
 <MenuBar>
@@ -16,7 +17,9 @@
 		<Action name="thumbs_only" />
 		<Action name="thumbs_and_image" />
 		<Action name="image_only" />
+		<Separator>
+		<Merge/>
 	</Menu>
 </MenuBar>
 
-</kcfg>
+</kpartgui>
