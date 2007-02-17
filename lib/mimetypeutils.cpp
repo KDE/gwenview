@@ -70,7 +70,7 @@ const QStringList& imageMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
 		list = rasterImageMimeTypes();
-		list.append("image/svg");
+		list.append("image/svg+xml");
 	}
 
 	return list;
