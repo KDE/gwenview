@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/componentfactory.h>
 #include <kurl.h>
 #include <kurlrequester.h>
+#include <kxmlguifactory.h>
 
 // Local
 #include <lib/thumbnailview.h>
@@ -156,50 +157,57 @@ struct MainWindow::Private {
 		mGoUpButton->setDefaultAction(mGoUpAction);
 	}
 
-	void deletePart() {
-		if (mPart) {
-			//mWindow->setXMLGUIClient(0);
-			delete mPart;
-			mPartLibrary = QString();
-		}
-		mPart=0;
-	}
 
 	void createPartForUrl(const KUrl& url) {
 
 		QString mimeType=KMimeType::findByUrl(url)->name();
 
+		// Get a list of possible parts
 		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
 		if (offers.isEmpty()) {
 			kWarning() << "Couldn't find a KPart for " << mimeType << endl;
-			deletePart();
+			if (mPart) {
+				mWindow->createGUI(0);
+				delete mPart;
+				mPartLibrary = QString();
+				mPart=0;
+			}
 			return;
 		}
 
+		// Check if we are already using it
 		KService::Ptr service = offers.first();
 		QString library=service->library();
 		Q_ASSERT(!library.isNull());
 		if (library == mPartLibrary) {
 			LOG("Reusing current part");
 			return;
-		} else {
-			LOG("Loading part from library: " << library);
-			deletePart();
 		}
-		mPart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mDocumentView /*parentWidget*/, mDocumentView /*parent*/);
-		if (!mPart) {
+
+		// Load new part
+		LOG("Loading part from library: " << library);
+		KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mDocumentView /*parentWidget*/, mDocumentView /*parent*/);
+		if (!part) {
 			kWarning() << "Failed to instantiate KPart from library " << library << endl;
 			return;
 		}
+
+		mDocumentLayout->addWidget(part->widget());
+		mWindow->createGUI(part);
+
+		// Delete the old part, don't do it before mWindow->createGUI(),
+		// otherwise some UI elements from the old part won't be properly
+		// removed. 
+		delete mPart;
+		mPart = part;
+
 		mPartLibrary = library;
-		mDocumentLayout->addWidget(mPart->widget());
-		//mWindow->setXMLGUIClient(mPart);
 	}
 };
 
 
 MainWindow::MainWindow()
-: KMainWindow(0),
+: KParts::MainWindow(),
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
@@ -208,7 +216,7 @@ d(new MainWindow::Private)
 	d->setupWidgets();
 	d->setupActions();
 	QTimer::singleShot(0, this, SLOT(initDirModel()) );
-	setupGUI();
+	createShellGUI();
 }
 
 
@@ -292,6 +300,10 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	if (!d->mPart) return;
 
 	d->mPart->openUrl(url);
+}
+
+void MainWindow::slotSetStatusBarText(const QString&) {
+	// FIXME: Show message somewhere
 }
 
 } // namespace

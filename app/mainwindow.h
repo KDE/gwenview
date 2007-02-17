@@ -1,6 +1,6 @@
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau
+Copyright 2007 AurÃ©lien GÃ¢teau
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,9 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// Qt
 #include <QAction>
 
-#include <KMainWindow>
+// KDE
+#include <kparts/mainwindow.h>
 
 #include <memory>
 
@@ -32,10 +34,13 @@ class KUrl;
 
 namespace Gwenview {
 
-class MainWindow : public KMainWindow {
+class MainWindow : public KParts::MainWindow {
 Q_OBJECT
 public:
 	MainWindow();
+
+protected:
+	virtual void slotSetStatusBarText(const QString&);
 	   
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
