@@ -944,6 +944,7 @@ namespace MImageScale{
                           int dyy, int dx, int dy, int dw, int dh, int dow, int
                           sow);
     QImage smoothScale(const QImage& img, int dw, int dh);
+    typedef long long llong;
 }
 
 #ifdef HAVE_X86_MMX
@@ -1028,7 +1029,8 @@ unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
 {
     unsigned int **p;
     int i, j = 0;
-    int val, inc, rv = 0;
+    int rv = 0;
+    llong val, inc;
 
     if(dh < 0){
         dh = -dh;
@@ -1037,7 +1039,7 @@ unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
     p = new unsigned int* [dh+1];
 
     val = 0;
-    inc = (sh << 16) / dh;
+    inc = (llong(sh) << 16) / dh;
     for(i = 0; i < dh; i++){
         p[j++] = src + ((val >> 16) * sow);
         val += inc;
@@ -1055,7 +1057,8 @@ unsigned int** MImageScale::mimageCalcYPoints(unsigned int *src,
 int* MImageScale::mimageCalcXPoints(int sw, int dw)
 {
     int *p, i, j = 0;
-    int val, inc, rv = 0;
+    int rv = 0;
+    llong val, inc;
 
     if(dw < 0){
         dw = -dw;
@@ -1064,7 +1067,7 @@ int* MImageScale::mimageCalcXPoints(int sw, int dw)
     p = new int[dw+1];
 
     val = 0;
-    inc = (sw << 16) / dw;
+    inc = (llong(sw) << 16) / dw;
     for(i = 0; i < dw; i++){
         p[j++] = (val >> 16);
         val += inc;
@@ -1092,10 +1095,10 @@ int* MImageScale::mimageCalcApoints(int s, int d, int up)
 
     /* scaling up */
     if(up){
-        int val, inc;
+        llong val, inc;
 
         val = 0;
-        inc = (s << 16) / d;
+        inc = (llong(s) << 16) / d;
         for(i = 0; i < d; i++){
             p[j++] = (val >> 8) - ((val >> 8) & 0xffffff00);
             if((val >> 16) >= (s - 1))
@@ -1105,10 +1108,11 @@ int* MImageScale::mimageCalcApoints(int s, int d, int up)
     }
     /* scaling down */
     else{
-        int val, inc, ap, Cp;
+        llong val, inc;
+        int ap, Cp;
         val = 0;
-        inc = (s << 16) / d;
-        Cp = ((d << 14) / s) + 1;
+        inc = (llong(s) << 16) / d;
+        Cp = ((llong(d) << 14) / s) + 1;
         for(i = 0; i < d; i++){
             ap = ((0x100 - ((val >> 8) & 0xff)) * Cp) >> 8;
             p[j] = ap | (Cp << 16);
