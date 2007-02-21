@@ -4,7 +4,7 @@ AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/.. $(LIBEXIF_CFLAGS) $(all_includes) \
 	-DQT_CLEAN_NAMESPACE
 AM_CCASFLAGS = -I$(srcdir) $(GV_ASM_DEFS)
 
-CXXFLAGS = -fexceptions
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 noinst_LTLIBRARIES = libgvimageutils.la
 
