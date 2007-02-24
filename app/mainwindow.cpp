@@ -254,8 +254,10 @@ d(new MainWindow::Private)
 
 void MainWindow::openUrl(const KUrl& url) {
 	if (urlIsDirectory(this, url)) {
+		d->mThumbsAndImageAction->trigger();
 		openDirUrl(url);
 	} else {
+		d->mImageOnlyAction->trigger();
 		openDocumentUrl(url);
 	}
 }
