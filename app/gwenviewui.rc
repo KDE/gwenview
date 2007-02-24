@@ -9,6 +9,8 @@
 	<Action name="image_only" />
 	<Separator/>
 	<Merge/>
+	<Separator/>
+	<Action name="toggle_sidebar" />
 </ToolBar>
 
 <MenuBar>
@@ -19,6 +21,8 @@
 		<Action name="image_only" />
 		<Separator>
 		<Merge/>
+		<Separator/>
+		<Action name="toggle_sidebar" />
 	</Menu>
 </MenuBar>
 

@@ -94,6 +94,7 @@ struct MainWindow::Private {
 	QAction* mThumbsAndImageAction;
 	QAction* mImageOnlyAction;
 	QAction* mGoUpAction;
+	QAction* mToggleSideBarAction;
 
 	SortedDirModel* mDirModel;
 
@@ -175,6 +176,10 @@ struct MainWindow::Private {
 			mWindow, SLOT(goUp()) );
 
 		mGoUpButton->setDefaultAction(mGoUpAction);
+
+		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
+		connect(mToggleSideBarAction, SIGNAL(triggered()),
+			mWindow, SLOT(toggleSideBar()) );
 	}
 
 
@@ -233,6 +238,13 @@ struct MainWindow::Private {
 		dirLister->setMimeFilter(mimeTypes);
 	}
 
+	void updateToggleSideBarAction() {
+		if (mSideBar->isVisible()) {
+			mToggleSideBarAction->setText(i18n("Hide Side Bar"));
+		} else {
+			mToggleSideBarAction->setText(i18n("Show Side Bar"));
+		}
+	}
 
 };
 
@@ -258,8 +270,10 @@ void MainWindow::openUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mImageOnlyAction->trigger();
+		d->mSideBar->hide();
 		openDocumentUrl(url);
 	}
+	d->updateToggleSideBarAction();
 }
 
 
@@ -333,6 +347,11 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 
 void MainWindow::slotSetStatusBarText(const QString&) {
 	// FIXME: Show message somewhere
+}
+
+void MainWindow::toggleSideBar() {
+	d->mSideBar->setVisible(!d->mSideBar->isVisible());
+	d->updateToggleSideBarAction();
 }
 
 } // namespace

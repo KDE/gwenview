@@ -52,6 +52,7 @@ private Q_SLOTS:
 	void openDocumentUrl(const KUrl&);
 	void openDocumentUrlFromIndex(const QModelIndex&);
 	void goUp();
+	void toggleSideBar();
 
 private:
 	class Private;
