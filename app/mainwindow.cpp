@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mainwindow.moc"
 
 // Qt
-#include <QDir>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
@@ -32,8 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kde_file.h>
 #include <kdirlister.h>
 #include <kfileitem.h>
+#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
@@ -56,6 +57,25 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
+
+static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
+	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
+		return true; // file:/somewhere/<nothing here>
+	}
+
+	// Do direct stat instead of using KIO if the file is local (faster)
+	if( url.isLocalFile() && !KIO::probably_slow_mounted( url.path())) {
+		KDE_struct_stat buff;
+		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
+			return S_ISDIR( buff.st_mode );
+		}
+	}
+	KIO::UDSEntry entry;
+	if( KIO::NetAccess::stat( url, entry, parent)) {
+		return entry.isDir();
+	}
+	return false;
+}
 
 struct MainWindow::Private {
 	MainWindow* mWindow;
@@ -203,6 +223,17 @@ struct MainWindow::Private {
 
 		mPartLibrary = library;
 	}
+
+	void initDirModel() {
+		KDirLister* dirLister = mDirModel->dirLister();
+		QStringList mimeTypes;
+		mimeTypes += MimeTypeUtils::dirMimeTypes();
+		mimeTypes += MimeTypeUtils::imageMimeTypes();
+		mimeTypes += MimeTypeUtils::videoMimeTypes();
+		dirLister->setMimeFilter(mimeTypes);
+	}
+
+
 };
 
 
@@ -213,10 +244,20 @@ d(new MainWindow::Private)
 	d->mWindow = this;
 	d->mDirModel = new SortedDirModel(this);
 	d->mPart = 0;
+	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
-	QTimer::singleShot(0, this, SLOT(initDirModel()) );
+
 	createShellGUI();
+}
+
+
+void MainWindow::openUrl(const KUrl& url) {
+	if (urlIsDirectory(this, url)) {
+		openDirUrl(url);
+	} else {
+		openDocumentUrl(url);
+	}
 }
 
 
@@ -235,20 +276,6 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 
 	d->mDocumentView->setVisible(showDocument);
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
-}
-
-
-void MainWindow::initDirModel() {
-	KDirLister* dirLister = d->mDirModel->dirLister();
-	QStringList mimeTypes;
-	mimeTypes += MimeTypeUtils::dirMimeTypes();
-	mimeTypes += MimeTypeUtils::imageMimeTypes();
-	mimeTypes += MimeTypeUtils::videoMimeTypes();
-	dirLister->setMimeFilter(mimeTypes);
-
-	KUrl url;
-	url.setPath(QDir::currentPath());
-	openDirUrl(url);
 }
 
 

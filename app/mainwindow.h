@@ -38,6 +38,7 @@ class MainWindow : public KParts::MainWindow {
 Q_OBJECT
 public:
 	MainWindow();
+	void openUrl(const KUrl&);
 
 protected:
 	virtual void slotSetStatusBarText(const QString&);
@@ -51,8 +52,6 @@ private Q_SLOTS:
 	void openDocumentUrl(const KUrl&);
 	void openDocumentUrlFromIndex(const QModelIndex&);
 	void goUp();
-
-	void initDirModel();
 
 private:
 	class Private;
