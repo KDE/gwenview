@@ -1,5 +1,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/gwenview)
-set(gwenview_SRCS main.cpp mainwindow.cpp)
+set(gwenview_SRCS
+	documentview.cpp
+	main.cpp
+	mainwindow.cpp
+	)
 kde4_automoc(${gwenview_SRCS})
 
 kde4_add_executable(gwenview ${gwenview_SRCS})

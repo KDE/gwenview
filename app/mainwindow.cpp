@@ -43,9 +43,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kxmlguifactory.h>
 
 // Local
-#include <lib/thumbnailview.h>
+#include "documentview.h"
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
+#include <lib/thumbnailview.h>
 
 namespace Gwenview {
 
@@ -79,7 +80,7 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 
 struct MainWindow::Private {
 	MainWindow* mWindow;
-	QWidget* mDocumentView;
+	DocumentView* mDocumentView;
 	QVBoxLayout* mDocumentLayout;
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
@@ -106,7 +107,8 @@ struct MainWindow::Private {
 		mSideBar = new QFrame(centralSplitter);
 		mSideBar->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
-		mDocumentView = new QWidget(viewSplitter);
+		mDocumentView = new DocumentView(viewSplitter);
+
 		mDocumentLayout = new QVBoxLayout(mDocumentView);
 		mDocumentLayout->setMargin(0);
 
