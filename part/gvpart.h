@@ -34,15 +34,22 @@ class GVPart : public KParts::ReadOnlyPart {
 public:
 	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
 
-	virtual void setReadWrite(bool rw=true);
 	static KAboutData* createAboutData();
 
 protected:
 	virtual bool openFile();
 
+private Q_SLOTS:
+	void zoomActualSize();
+	void zoomIn();
+	void zoomOut();
+
 private:
 	QGraphicsScene* mScene;
 	QGraphicsView* mView;
+	qreal mZoom;
+
+	void updateZoom();
 };
 
 } // namespace

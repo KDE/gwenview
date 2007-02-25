@@ -25,6 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QGraphicsView>
 
 // KDE
+#include <kactioncollection.h>
+#include <kdebug.h>
+#include <kstandardaction.h>
 #include <kparts/genericfactory.h>
 
 //Factory Code
@@ -36,11 +39,17 @@ namespace Gwenview {
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 : KParts::ReadOnlyPart(parent) 
+, mZoom(1.0)
 {
 	mScene = new QGraphicsScene(parent);
 	mView = new QGraphicsView(parentWidget);
 	mView->setScene(mScene);
 	setWidget(mView);
+
+	KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
+	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
+	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
+	setXMLFile("gvpart/gvpart.rc");
 }
 
 bool GVPart::openFile() {
@@ -56,16 +65,37 @@ bool GVPart::openFile() {
 }
 
 
-void GVPart::setReadWrite(bool /*rw*/) {
-}
-
-
 KAboutData* GVPart::createAboutData() {
 	KAboutData* aboutData = new KAboutData( "gvpart", I18N_NOOP("GVPart"),
 		"2.0", I18N_NOOP("Image Viewer"),
 		KAboutData::License_GPL,
 		"Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>");
 	return aboutData;
+}
+
+
+void GVPart::zoomActualSize() {
+	mZoom = 1.;
+	updateZoom();
+}
+
+
+void GVPart::zoomIn() {
+	mZoom *= 2;
+	updateZoom();
+}
+
+
+void GVPart::zoomOut() {
+	mZoom /= 2;
+	updateZoom();
+}
+
+
+void GVPart::updateZoom() {
+	QMatrix matrix;
+	matrix.scale(mZoom, mZoom);
+	mView->setMatrix(matrix);
 }
 
 } // namespace
