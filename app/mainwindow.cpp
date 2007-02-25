@@ -248,6 +248,14 @@ struct MainWindow::Private {
 		}
 	}
 
+	void resetDocumentView() {
+		if (mPart) {
+			mWindow->createGUI(0);
+			delete mPart;
+			mPartLibrary = QString();
+			mPart=0;
+		}
+	}
 };
 
 
@@ -332,6 +340,7 @@ void MainWindow::openDirUrl(const KUrl& url) {
 	d->mDirModel->dirLister()->openUrl(url);
 	d->mUrlRequester->setUrl(url);
 	d->mGoUpAction->setEnabled(url.path() != "/");
+	d->resetDocumentView();
 }
 
 
