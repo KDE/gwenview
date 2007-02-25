@@ -4,3 +4,4 @@ include_directories(${KDE4_INCLUDES})
 
 subdirs(app)
 subdirs(lib)
+subdirs(part)
