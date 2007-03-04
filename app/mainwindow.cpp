@@ -43,7 +43,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kxmlguifactory.h>
 
 // Local
+#include "abstractcontextmanageritem.h"
+#include "contextmanager.h"
 #include "documentview.h"
+#include "sidebar.h"
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
@@ -58,6 +61,19 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
+
+
+class TestContextManagerItem : public AbstractContextManagerItem {
+	void updateSideBar(const KFileItemList& itemList, SideBar* sideBar) {
+		SideBarGroup* group = sideBar->createGroup(i18n("Selection"));
+		Q_FOREACH(KFileItem* item, itemList) {
+			QLabel* label = new QLabel(sideBar);
+			label->setText(item->name());
+			group->addWidget(label);
+		}
+	}
+};
+
 
 static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
@@ -86,7 +102,7 @@ struct MainWindow::Private {
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
 	QWidget* mThumbnailViewPanel;
-	QFrame* mSideBar;
+	SideBar* mSideBar;
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
 
@@ -98,15 +114,14 @@ struct MainWindow::Private {
 	QAction* mToggleSideBarAction;
 
 	SortedDirModel* mDirModel;
+	ContextManager* mContextManager;
 
 	void setupWidgets() {
 		QSplitter* centralSplitter = new QSplitter(Qt::Horizontal, mWindow);
 		mWindow->setCentralWidget(centralSplitter);
 
 		QSplitter* viewSplitter = new QSplitter(Qt::Vertical, centralSplitter);
-		mSideBar = new QFrame(centralSplitter);
-		mSideBar->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-
+		mSideBar = new SideBar(centralSplitter);
 		mDocumentView = new DocumentView(viewSplitter);
 
 		mDocumentLayout = new QVBoxLayout(mDocumentView);
@@ -121,12 +136,15 @@ struct MainWindow::Private {
 		// mThumbnailView
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
+		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView, SIGNAL(doubleClicked(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
 			mWindow, SLOT(openDocumentUrlFromIndex(const QModelIndex&)) );
+		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+			mWindow, SLOT(updateSideBar()) );
 
 		// mGoUpButton
 		mGoUpButton = new QToolButton(mThumbnailViewPanel);
@@ -185,6 +203,13 @@ struct MainWindow::Private {
 	}
 
 
+	void setupContextManager() {
+		mContextManager = new ContextManager(mWindow);
+		AbstractContextManagerItem* item = new TestContextManagerItem;
+		mContextManager->addItem(item);
+	}
+
+
 	void createPartForUrl(const KUrl& url) {
 
 		QString mimeType=KMimeType::findByUrl(url)->name();
@@ -213,7 +238,10 @@ struct MainWindow::Private {
 
 		// Load new part
 		LOG("Loading part from library: " << library);
-		KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(service, mDocumentView /*parentWidget*/, mDocumentView /*parent*/);
+		KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(
+			service,
+			mDocumentView /*parentWidget*/,
+			mDocumentView /*parent*/);
 		if (!part) {
 			kWarning() << "Failed to instantiate KPart from library " << library << endl;
 			return;
@@ -269,6 +297,7 @@ d(new MainWindow::Private)
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
+	d->setupContextManager();
 
 	createShellGUI();
 }
@@ -352,7 +381,6 @@ void MainWindow::openDirUrlFromString(const QString& str) {
 void MainWindow::openDocumentUrl(const KUrl& url) {
 	d->createPartForUrl(url);
 	if (!d->mPart) return;
-
 	d->mPart->openUrl(url);
 }
 
@@ -365,4 +393,17 @@ void MainWindow::toggleSideBar() {
 	d->updateToggleSideBarAction();
 }
 
+
+void MainWindow::updateSideBar() {
+	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+	QModelIndexList indexList = selection.indexes();
+
+	KFileItemList itemList;
+	Q_FOREACH(QModelIndex index, indexList) {
+		KFileItem* item = d->mDirModel->itemForIndex(index);
+		itemList << item;
+	}
+
+	d->mContextManager->updateSideBar(itemList, d->mSideBar);
+}
 } // namespace

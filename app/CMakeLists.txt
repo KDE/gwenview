@@ -1,8 +1,10 @@
 include_directories(${CMAKE_SOURCE_DIR}/gwenview)
 set(gwenview_SRCS
+	contextmanager.cpp
 	documentview.cpp
 	main.cpp
 	mainwindow.cpp
+	sidebar.cpp
 	)
 kde4_automoc(${gwenview_SRCS})
 

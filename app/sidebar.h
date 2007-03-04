@@ -17,49 +17,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SIDEBAR_H
+#define SIDEBAR_H
 
 // Qt
-#include <QAction>
-
-// KDE
-#include <kparts/mainwindow.h>
-
-#include <memory>
-
-class QModelIndex;
-
-class KUrl;
+#include <QFrame>
+#include <QVBoxLayout>
 
 namespace Gwenview {
 
-class MainWindow : public KParts::MainWindow {
-Q_OBJECT
+class SideBar;
+
+class SideBarGroup : public QFrame {
+	Q_OBJECT
+	friend class SideBar;
 public:
-	MainWindow();
-	void openUrl(const KUrl&);
-
-protected:
-	virtual void slotSetStatusBarText(const QString&);
-	   
-private Q_SLOTS:
-	void setActiveViewModeAction(QAction* action);
-	void openDirUrl(const KUrl&);
-	void openDirUrlFromString(const QString& str);
-	void openDirUrlFromIndex(const QModelIndex&);
-
-	void openDocumentUrl(const KUrl&);
-	void openDocumentUrlFromIndex(const QModelIndex&);
-	void goUp();
-	void toggleSideBar();
-	void updateSideBar();
+	void addWidget(QWidget*);
 
 private:
-	class Private;
-	std::auto_ptr<Private> d;
+	SideBarGroup(QWidget*, const QString& title);
+};
+
+
+class SideBar : public QFrame {
+	Q_OBJECT
+public:
+	SideBar(QWidget* parent);
+
+	void clear();
+
+	SideBarGroup* createGroup(const QString& title);
+
+	QVBoxLayout* mLayout;
+	QList<SideBarGroup*> mGroupList;
 };
 
 } // namespace
 
-#endif /* MAINWINDOW_H */
+#endif /* SIDEBAR_H */

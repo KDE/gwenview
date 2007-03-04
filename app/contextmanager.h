@@ -17,49 +17,39 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef CONTEXTMANAGER_H
+#define CONTEXTMANAGER_H
 
 // Qt
-#include <QAction>
+#include <QObject>
 
-// KDE
-#include <kparts/mainwindow.h>
-
-#include <memory>
-
-class QModelIndex;
-
-class KUrl;
+class KFileItemList;
 
 namespace Gwenview {
 
-class MainWindow : public KParts::MainWindow {
-Q_OBJECT
+class SideBar;
+
+class AbstractContextManagerItem;
+
+/**
+ * Manage the update of the contextual parts of the applications, 
+ * like the sidebar or the context menu.
+ */
+class ContextManager : public QObject {
+	Q_OBJECT
 public:
-	MainWindow();
-	void openUrl(const KUrl&);
+	ContextManager(QObject* parent);
 
-protected:
-	virtual void slotSetStatusBarText(const QString&);
-	   
-private Q_SLOTS:
-	void setActiveViewModeAction(QAction* action);
-	void openDirUrl(const KUrl&);
-	void openDirUrlFromString(const QString& str);
-	void openDirUrlFromIndex(const QModelIndex&);
+	~ContextManager();
 
-	void openDocumentUrl(const KUrl&);
-	void openDocumentUrlFromIndex(const QModelIndex&);
-	void goUp();
-	void toggleSideBar();
-	void updateSideBar();
+	void addItem(AbstractContextManagerItem* item);
+
+	void updateSideBar(const KFileItemList& itemList, SideBar* sideBar);
 
 private:
-	class Private;
-	std::auto_ptr<Private> d;
+	QList<AbstractContextManagerItem*> mList;
 };
 
 } // namespace
 
-#endif /* MAINWINDOW_H */
+#endif /* CONTEXTMANAGER_H */
