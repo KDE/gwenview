@@ -64,13 +64,50 @@ namespace Gwenview {
 
 
 class TestContextManagerItem : public AbstractContextManagerItem {
+public:
 	void updateSideBar(const KFileItemList& itemList, SideBar* sideBar) {
-		SideBarGroup* group = sideBar->createGroup(i18n("Selection"));
-		Q_FOREACH(KFileItem* item, itemList) {
-			QLabel* label = new QLabel(sideBar);
-			label->setText(item->name());
-			group->addWidget(label);
+		if (itemList.count() == 0) {
+			return;
 		}
+
+		SideBarGroup* group = sideBar->createGroup(i18n("Selection"));
+		if (itemList.count() == 1) {
+			fillSelectionGroup(itemList.first(), group);
+			return;
+		}
+
+		fillSelectionGroup(itemList, group);
+	}
+
+	void fillSelectionGroup(const KFileItem* item, SideBarGroup* group) {
+		QLabel* label = new QLabel();
+		label->setWordWrap(true);
+		label->setText(
+			i18n("Name: %1\nSize: %2", item->name(), item->size())
+			);
+		group->addWidget(label);
+	}
+
+	void fillSelectionGroup(const KFileItemList& itemList, SideBarGroup* group) {
+		int folderCount = 0, fileCount = 0;
+		Q_FOREACH(KFileItem* item, itemList) {
+			if (item->isDir()) {
+				folderCount++;
+			} else {
+				fileCount++;
+			}
+		}
+		QLabel* label = new QLabel();
+		group->addWidget(label);
+
+		if (folderCount == 0) {
+			label->setText(i18n("%1 files selected", fileCount));
+		} else if (fileCount == 0) {
+			label->setText(i18n("%1 folders selected", folderCount));
+		} else {
+			label->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
+		}
+
 	}
 };
 
