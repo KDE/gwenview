@@ -47,26 +47,34 @@ void SideBarGroup::addWidget(QWidget* widget) {
 }
 
 
+struct SideBar::Private {
+	QVBoxLayout* mLayout;
+	QList<SideBarGroup*> mGroupList;
+};
+
+
 SideBar::SideBar(QWidget* parent)
 : QFrame(parent) {
-	mLayout = new QVBoxLayout(this);
+	d.reset(new Private);
 	setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-	mLayout->addStretch();
+
+	d->mLayout = new QVBoxLayout(this);
+	d->mLayout->addStretch();
 }
 
 
 void SideBar::clear() {
-	Q_FOREACH(QWidget* widget, mGroupList) {
+	Q_FOREACH(QWidget* widget, d->mGroupList) {
 		delete widget;
 	}
-	mGroupList.clear();
+	d->mGroupList.clear();
 }
 
 SideBarGroup* SideBar::createGroup(const QString& title) {
 	SideBarGroup* group = new SideBarGroup(this, title);
-	mLayout->insertWidget(mLayout->count() - 1, group);
+	d->mLayout->insertWidget(d->mLayout->count() - 1, group);
 
-	mGroupList << group;
+	d->mGroupList << group;
 	return group;
 }
 

@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
+#include <memory>
+
 // Qt
 #include <QFrame>
 #include <QVBoxLayout>
@@ -48,8 +50,9 @@ public:
 
 	SideBarGroup* createGroup(const QString& title);
 
-	QVBoxLayout* mLayout;
-	QList<SideBarGroup*> mGroupList;
+private:
+	struct Private;
+	std::auto_ptr<Private> d;
 };
 
 } // namespace
