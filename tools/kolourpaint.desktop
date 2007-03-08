@@ -1,7 +1,5 @@
 [Desktop Entry]
 ServiceTypes=image/*
 Name=KolourPaint
-Name[pa]=ਕੇ-ਰੰਗ-ਪੇਂਟ
-Name[xx]=xxKolourPaintxx
 Icon=kolourpaint
 Exec=kolourpaint %u
