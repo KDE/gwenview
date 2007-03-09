@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Image View
+Name[el]=Προβολή εικόνων
 MimeType=inode/directory
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=libgvdirpart

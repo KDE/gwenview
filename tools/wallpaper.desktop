@@ -3,3 +3,4 @@ ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 6
 Icon=background
 Name=Set as Wallpaper
+Name[el]=Ορισμός σαν Ταπετσαρία

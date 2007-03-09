@@ -3,3 +3,4 @@ ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2
 Icon=background
 Name=Set as Tiled Wallpaper
+Name[el]=Ορισμός σαν Ταπετσαρία σε παράθεση

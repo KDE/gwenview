@@ -3,3 +3,4 @@ ServiceTypes=image/*
 Exec=gimp-remote -n %F
 Icon=gimp
 Name=The GIMP
+Name[el]=Το GIMP
