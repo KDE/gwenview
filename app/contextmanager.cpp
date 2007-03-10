@@ -36,15 +36,21 @@ ContextManager::~ContextManager() {
 }
 
 
-void ContextManager::addItem(AbstractContextManagerItem* item) {
-	mList << item;
+void ContextManager::setSideBar(SideBar* sideBar) {
+	mSideBar = sideBar;
 }
 
 
-void ContextManager::updateSideBar(const KFileItemList& itemList, SideBar* sideBar) {
-	sideBar->clear();
+void ContextManager::addItem(AbstractContextManagerItem* item) {
+	Q_ASSERT(mSideBar);
+	mList << item;
+	item->setSideBar(mSideBar);
+}
+
+
+void ContextManager::updateSideBar(const KFileItemList& itemList) {
 	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		item->updateSideBar(itemList, sideBar);
+		item->updateSideBar(itemList);
 	}
 }
 

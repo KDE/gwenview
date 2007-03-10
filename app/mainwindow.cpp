@@ -65,30 +65,44 @@ namespace Gwenview {
 
 class TestContextManagerItem : public AbstractContextManagerItem {
 public:
-	void updateSideBar(const KFileItemList& itemList, SideBar* sideBar) {
+	void setSideBar(SideBar* sideBar) {
+		mOneFileLabel = new QLabel();
+		mOneFileLabel->setWordWrap(true);
+
+		mMultipleFilesLabel = new QLabel();
+
+		mGroup = sideBar->createGroup(i18n("Selection"));
+		mGroup->addWidget(mOneFileLabel);
+		mGroup->addWidget(mMultipleFilesLabel);
+
+		mGroup->hide();
+	}
+
+	void updateSideBar(const KFileItemList& itemList) {
 		if (itemList.count() == 0) {
+			mGroup->hide();
 			return;
 		}
 
-		SideBarGroup* group = sideBar->createGroup(i18n("Selection"));
+		mGroup->show();
 		if (itemList.count() == 1) {
-			fillSelectionGroup(itemList.first(), group);
+			fillOneFileGroup(itemList.first());
 			return;
 		}
 
-		fillSelectionGroup(itemList, group);
+		fillMultipleItemsGroup(itemList);
 	}
 
-	void fillSelectionGroup(const KFileItem* item, SideBarGroup* group) {
-		QLabel* label = new QLabel();
-		label->setWordWrap(true);
-		label->setText(
-			i18n("Name: %1\nSize: %2", item->name(), item->size())
+private:
+	void fillOneFileGroup(const KFileItem* item) {
+		mOneFileLabel->setText(
+			i18n("%1\n%2\n%3", item->name(), item->timeString(), item->size())
 			);
-		group->addWidget(label);
+		mOneFileLabel->show();
+		mMultipleFilesLabel->hide();
 	}
 
-	void fillSelectionGroup(const KFileItemList& itemList, SideBarGroup* group) {
+	void fillMultipleItemsGroup(const KFileItemList& itemList) {
 		int folderCount = 0, fileCount = 0;
 		Q_FOREACH(KFileItem* item, itemList) {
 			if (item->isDir()) {
@@ -97,18 +111,22 @@ public:
 				fileCount++;
 			}
 		}
-		QLabel* label = new QLabel();
-		group->addWidget(label);
 
 		if (folderCount == 0) {
-			label->setText(i18n("%1 files selected", fileCount));
+			mMultipleFilesLabel->setText(i18n("%1 files selected", fileCount));
 		} else if (fileCount == 0) {
-			label->setText(i18n("%1 folders selected", folderCount));
+			mMultipleFilesLabel->setText(i18n("%1 folders selected", folderCount));
 		} else {
-			label->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
+			mMultipleFilesLabel->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
 		}
-
+		mOneFileLabel->hide();
+		mMultipleFilesLabel->show();
 	}
+
+	SideBarGroup* mGroup;
+
+	QLabel* mOneFileLabel;
+	QLabel* mMultipleFilesLabel;
 };
 
 
@@ -242,6 +260,7 @@ struct MainWindow::Private {
 
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
+		mContextManager->setSideBar(mSideBar);
 		AbstractContextManagerItem* item = new TestContextManagerItem;
 		mContextManager->addItem(item);
 	}
@@ -441,6 +460,6 @@ void MainWindow::updateSideBar() {
 		itemList << item;
 	}
 
-	d->mContextManager->updateSideBar(itemList, d->mSideBar);
+	d->mContextManager->updateSideBar(itemList);
 }
 } // namespace

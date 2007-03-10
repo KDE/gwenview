@@ -44,10 +44,13 @@ public:
 
 	void addItem(AbstractContextManagerItem* item);
 
-	void updateSideBar(const KFileItemList& itemList, SideBar* sideBar);
+	void updateSideBar(const KFileItemList& itemList);
+
+	void setSideBar(SideBar*);
 
 private:
 	QList<AbstractContextManagerItem*> mList;
+	SideBar* mSideBar;
 };
 
 } // namespace

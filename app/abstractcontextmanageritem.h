@@ -28,7 +28,8 @@ class SideBar;
 class AbstractContextManagerItem {
 public:
 	virtual ~AbstractContextManagerItem() {}
-	virtual void updateSideBar(const KFileItemList&, SideBar*) = 0;
+	virtual void setSideBar(SideBar*) = 0;
+	virtual void updateSideBar(const KFileItemList&) = 0;
 };
 
 } // namespace
