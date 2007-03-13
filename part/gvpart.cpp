@@ -53,7 +53,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 }
 
 bool GVPart::openFile() {
-	QPixmap pix(m_file);
+	QPixmap pix(localFilePath());
 	QList<QGraphicsItem*> items = mScene->items();
 	if (!items.isEmpty()) {
 		QGraphicsItem* item = items.first();
