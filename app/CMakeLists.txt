@@ -4,6 +4,7 @@ set(gwenview_SRCS
 	documentview.cpp
 	main.cpp
 	mainwindow.cpp
+	selectioncontextmanageritem.cpp
 	sidebar.cpp
 	)
 kde4_automoc(${gwenview_SRCS})

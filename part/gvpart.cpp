@@ -30,21 +30,51 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
 
+// Local
+#include "../lib/document.h"
+
 //Factory Code
 typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
 K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
+class ImageItem : public QGraphicsItem {
+public:
+	QRectF boundingRect() const {
+		return mImage.rect();
+	}
+
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
+		painter->drawImage(0, 0, mImage);
+	}
+
+	void setImage(const QImage& image) {
+		mImage = image;
+		update();
+	}
+
+	QImage& image() {
+		return mImage;
+	}
+
+private:
+	QImage mImage;
+};
+
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
-: KParts::ReadOnlyPart(parent) 
+: ImageViewPart(parent) 
 , mZoom(1.0)
 {
 	mScene = new QGraphicsScene(parent);
 	mView = new QGraphicsView(parentWidget);
 	mView->setScene(mScene);
+	mItem = new ImageItem();
+	mScene->addItem(mItem);
 	setWidget(mView);
+
+	mDocument = new Document;
 
 	KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
@@ -53,14 +83,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 }
 
 bool GVPart::openFile() {
-	QPixmap pix(localFilePath());
-	QList<QGraphicsItem*> items = mScene->items();
-	if (!items.isEmpty()) {
-		QGraphicsItem* item = items.first();
-		mScene->removeItem(item);
-		delete item;
-	}
-	mScene->addPixmap(pix);
+	mDocument->load(localFilePath());
+	mItem->setImage(mDocument->image());
 	return true;
 }
 
@@ -98,4 +122,7 @@ void GVPart::updateZoom() {
 	mView->setMatrix(matrix);
 }
 
+Document* GVPart::document() {
+	return mDocument;
+}
 } // namespace

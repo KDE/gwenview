@@ -17,48 +17,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef GVPART_H
-#define GVPART_H
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 
-#include "../lib/imageviewpart.h"
+#include <memory>
 
-class QGraphicsScene;
-class QGraphicsView;
+// Qt
+#include <QObject>
 
-class KAboutData;
+class QImage;
 
 namespace Gwenview {
 
-class ImageItem;
-
-class GVPart : public ImageViewPart {
+class Document : public QObject {
 	Q_OBJECT
 public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
+	Document();
+	void load(const QString&);
 
-	static KAboutData* createAboutData();
+	QImage& image();
 
-	virtual Document* document();
-
-protected:
-	virtual bool openFile();
-
-private Q_SLOTS:
-	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
+Q_SIGNALS:
+	void loaded();
 
 private:
-	QGraphicsScene* mScene;
-	QGraphicsView* mView;
-	ImageItem* mItem;
-	qreal mZoom;
-	Document* mDocument;
-
-	void updateZoom();
+	struct Private;
+	std::auto_ptr<Private> d;
 };
 
 } // namespace
 
-
-#endif /* GVPART_H */
+#endif /* DOCUMENT_H */

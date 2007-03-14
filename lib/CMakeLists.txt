@@ -1,5 +1,7 @@
 set(gwenviewlib_SRCS
     archiveutils.cpp
+	document.cpp
+	imageviewpart.cpp
     mimetypeutils.cpp
 	sorteddirmodel.cpp
     thumbnailview.cpp

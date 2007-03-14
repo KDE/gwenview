@@ -29,6 +29,7 @@ namespace Gwenview {
 
 class SideBar;
 
+class ImageViewPart;
 class AbstractContextManagerItem;
 
 /**
@@ -47,6 +48,8 @@ public:
 	void updateSideBar(const KFileItemList& itemList);
 
 	void setSideBar(SideBar*);
+
+	void setImageView(ImageViewPart*);
 
 private:
 	QList<AbstractContextManagerItem*> mList;

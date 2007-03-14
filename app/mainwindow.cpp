@@ -43,10 +43,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kxmlguifactory.h>
 
 // Local
-#include "abstractcontextmanageritem.h"
 #include "contextmanager.h"
 #include "documentview.h"
+#include "selectioncontextmanageritem.h"
 #include "sidebar.h"
+#include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
@@ -61,73 +62,6 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
-
-
-class TestContextManagerItem : public AbstractContextManagerItem {
-public:
-	void setSideBar(SideBar* sideBar) {
-		mOneFileLabel = new QLabel();
-		mOneFileLabel->setWordWrap(true);
-
-		mMultipleFilesLabel = new QLabel();
-
-		mGroup = sideBar->createGroup(i18n("Selection"));
-		mGroup->addWidget(mOneFileLabel);
-		mGroup->addWidget(mMultipleFilesLabel);
-
-		mGroup->hide();
-	}
-
-	void updateSideBar(const KFileItemList& itemList) {
-		if (itemList.count() == 0) {
-			mGroup->hide();
-			return;
-		}
-
-		mGroup->show();
-		if (itemList.count() == 1) {
-			fillOneFileGroup(itemList.first());
-			return;
-		}
-
-		fillMultipleItemsGroup(itemList);
-	}
-
-private:
-	void fillOneFileGroup(const KFileItem* item) {
-		mOneFileLabel->setText(
-			i18n("%1\n%2\n%3", item->name(), item->timeString(), item->size())
-			);
-		mOneFileLabel->show();
-		mMultipleFilesLabel->hide();
-	}
-
-	void fillMultipleItemsGroup(const KFileItemList& itemList) {
-		int folderCount = 0, fileCount = 0;
-		Q_FOREACH(KFileItem* item, itemList) {
-			if (item->isDir()) {
-				folderCount++;
-			} else {
-				fileCount++;
-			}
-		}
-
-		if (folderCount == 0) {
-			mMultipleFilesLabel->setText(i18n("%1 files selected", fileCount));
-		} else if (fileCount == 0) {
-			mMultipleFilesLabel->setText(i18n("%1 folders selected", folderCount));
-		} else {
-			mMultipleFilesLabel->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
-		}
-		mOneFileLabel->hide();
-		mMultipleFilesLabel->show();
-	}
-
-	SideBarGroup* mGroup;
-
-	QLabel* mOneFileLabel;
-	QLabel* mMultipleFilesLabel;
-};
 
 
 static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
@@ -261,7 +195,7 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
-		AbstractContextManagerItem* item = new TestContextManagerItem;
+		AbstractContextManagerItem* item = new SelectionContextManagerItem();
 		mContextManager->addItem(item);
 	}
 
@@ -303,6 +237,8 @@ struct MainWindow::Private {
 			return;
 		}
 
+		ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
+		mContextManager->setImageView(ivPart);
 		mDocumentLayout->addWidget(part->widget());
 		mWindow->createGUI(part);
 
@@ -462,4 +398,5 @@ void MainWindow::updateSideBar() {
 
 	d->mContextManager->updateSideBar(itemList);
 }
+
 } // namespace

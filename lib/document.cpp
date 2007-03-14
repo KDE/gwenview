@@ -17,49 +17,33 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "contextmanager.moc"
+#include "document.moc"
 
-// Local
-#include "sidebar.h"
-#include "abstractcontextmanageritem.h"
+// Qt
+#include <QImage>
 
 namespace Gwenview {
 
-ContextManager::ContextManager(QObject* parent)
-: QObject(parent) {}
+
+struct Document::Private {
+	QImage mImage;
+};
 
 
-ContextManager::~ContextManager() {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		delete item;
-	}
+Document::Document() 
+: QObject() {
+	d.reset(new Document::Private);
 }
 
 
-void ContextManager::setSideBar(SideBar* sideBar) {
-	mSideBar = sideBar;
+void Document::load(const QString& path) {
+	d->mImage.load(path);
+	loaded();
 }
 
 
-void ContextManager::addItem(AbstractContextManagerItem* item) {
-	Q_ASSERT(mSideBar);
-	mList << item;
-	item->setSideBar(mSideBar);
+QImage& Document::image() {
+	return d->mImage;
 }
-
-
-void ContextManager::updateSideBar(const KFileItemList& itemList) {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		item->updateSideBar(itemList);
-	}
-}
-
-
-void ContextManager::setImageView(ImageViewPart* imageView) {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		item->setImageView(imageView);
-	}
-}
-
 
 } // namespace

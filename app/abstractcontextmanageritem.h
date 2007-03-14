@@ -21,8 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef ABSTRACTCONTEXTMANAGERITEM_H
 #define ABSTRACTCONTEXTMANAGERITEM_H
 
+class KFileItemList;
+
 namespace Gwenview {
 
+class ImageViewPart;
 class SideBar;
 
 class AbstractContextManagerItem {
@@ -30,6 +33,7 @@ public:
 	virtual ~AbstractContextManagerItem() {}
 	virtual void setSideBar(SideBar*) = 0;
 	virtual void updateSideBar(const KFileItemList&) = 0;
+	virtual void setImageView(ImageViewPart*) = 0;
 };
 
 } // namespace
