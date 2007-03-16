@@ -24,12 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QSortFilterProxyModel>
 
+#include "gwenviewlib_export.h"
+
 class KDirLister;
 class KFileItem;
 
 namespace Gwenview {
 
-class SortedDirModel : public QSortFilterProxyModel {
+class GWENVIEWLIB_EXPORT SortedDirModel : public QSortFilterProxyModel {
 public:
 	SortedDirModel(QObject* parent);
 	KDirLister* dirLister();

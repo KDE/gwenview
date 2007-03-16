@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #ifndef MIMETYPEUTILS_H
-#define MIMETYPEUTILS_H   
+#define MIMETYPEUTILS_H
+
+#include "gwenviewlib_export.h"
 
 // Local
 class QStringList;
@@ -28,9 +30,9 @@ namespace Gwenview {
 
 namespace MimeTypeUtils {
 
-const QStringList& dirMimeTypes();
-const QStringList& imageMimeTypes();
-const QStringList& videoMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList& dirMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList& imageMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList& videoMimeTypes();
 
 /* FIXME: Remove if not needed
 enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };

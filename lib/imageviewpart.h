@@ -23,11 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kparts/part.h>
 
+#include "gwenviewlib_export.h"
+
 namespace Gwenview {
 
 class Document;
 
-class ImageViewPart : public KParts::ReadOnlyPart {
+class GWENVIEWLIB_EXPORT ImageViewPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
 public:
 	ImageViewPart(QObject* parent);
