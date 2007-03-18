@@ -114,15 +114,20 @@ void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 		connect(mDocument, SIGNAL(loaded()), SLOT(updatePreview()));
 	} else {
 		mDocument = 0;
+		mOneFileImageLabel->hide();
 	}
 }
 
 void SelectionContextManagerItem::updatePreview() {
-	if (!mDocument) return;
+	Q_ASSERT(mDocument);
+	if (!mDocument) {
+		return;
+	}
 
 	kDebug() << "Image size:" << mDocument->image().size() << endl;
 	QImage image = mDocument->image().scaled(160, 160, Qt::KeepAspectRatio);
 	mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
+	mOneFileImageLabel->show();
 }
 
 } // namespace
