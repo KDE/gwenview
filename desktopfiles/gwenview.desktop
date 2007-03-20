@@ -105,5 +105,5 @@ Terminal=false
 Icon=gwenview
 Type=Application
 Categories=Qt;KDE;Application;Graphics;
-MimeType=image/gif;image/x-xpixmap;image/x-xbitmap;image/jpeg;image/x-pcx;image/bmp;image/png;image/x-ico;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-graymap;image/tiff;image/x-tga;
+MimeType=image/gif;image/x-xpm;image/x-xbm;image/jpeg;image/x-pcx;image/x-bmp;image/png;image/x-ico;image/x-portable-bitmap;image/x-portable-pixmap;image/x-portable-greymap;image/tiff;image/x-targa;
 DocPath=gwenview/index.html
