@@ -124,7 +124,6 @@ void SelectionContextManagerItem::updatePreview() {
 		return;
 	}
 
-	kDebug() << "Image size:" << mDocument->image().size() << endl;
 	QImage image = mDocument->image().scaled(160, 160, Qt::KeepAspectRatio);
 	mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
 	mOneFileImageLabel->show();
