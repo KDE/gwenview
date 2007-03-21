@@ -57,10 +57,8 @@ const QStringList& rasterImageMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
 		list=KImageIO::mimeTypes(KImageIO::Reading);
-		list.append("image/x-xcf-gimp");
+		list.append("image/x-xcf");
 		list.append("image/x-xcursor");
-		// KImageIO does not return this one :'(
-		list.append("image/pjpeg");
 	}
 	return list;
 }
