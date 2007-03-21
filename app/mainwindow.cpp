@@ -242,6 +242,9 @@ struct MainWindow::Private {
 		mDocumentLayout->addWidget(part->widget());
 		mWindow->createGUI(part);
 
+		// Make sure our file list is filled when the part is done.
+		connect(part, SIGNAL(completed()), mWindow, SLOT(startDirLister()) );
+
 		// Delete the old part, don't do it before mWindow->createGUI(),
 		// otherwise some UI elements from the old part won't be properly
 		// removed. 
@@ -382,11 +385,17 @@ void MainWindow::slotSetStatusBarText(const QString&) {
 
 void MainWindow::toggleSideBar() {
 	d->mSideBar->setVisible(!d->mSideBar->isVisible());
+	if (d->mSideBar->isVisible()) {
+		updateSideBar();
+	}
 	d->updateToggleSideBarAction();
 }
 
 
 void MainWindow::updateSideBar() {
+	if (!d->mSideBar->isVisible()) {
+		return;
+	}
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
 	QModelIndexList indexList = selection.indexes();
 
@@ -397,6 +406,15 @@ void MainWindow::updateSideBar() {
 	}
 
 	d->mContextManager->updateSideBar(itemList);
+}
+
+void MainWindow::startDirLister() {
+	Q_ASSERT(d->mPart);
+	KUrl url = d->mPart->url();
+	url.setFileName("");
+	if (!url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+		d->mDirModel->dirLister()->openUrl(url);
+	}
 }
 
 } // namespace

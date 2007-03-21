@@ -54,6 +54,7 @@ private Q_SLOTS:
 	void goUp();
 	void toggleSideBar();
 	void updateSideBar();
+	void startDirLister();
 
 private:
 	class Private;
