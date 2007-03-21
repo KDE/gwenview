@@ -36,6 +36,7 @@ public:
 	SortedDirModel(QObject* parent);
 	KDirLister* dirLister();
 	KFileItem* itemForIndex(const QModelIndex& index) const;
+	QModelIndex indexForItem(const KFileItem* item) const;
 
 private:
 	struct Private;
