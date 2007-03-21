@@ -261,6 +261,9 @@ struct MainWindow::Private {
 		mimeTypes += MimeTypeUtils::imageMimeTypes();
 		mimeTypes += MimeTypeUtils::videoMimeTypes();
 		dirLister->setMimeFilter(mimeTypes);
+
+		connect(dirLister, SIGNAL(newItems(const KFileItemList&)),
+			mWindow, SLOT(slotDirListerNewItems(const KFileItemList&)) );
 	}
 
 	void updateToggleSideBarAction() {
@@ -417,4 +420,24 @@ void MainWindow::startDirLister() {
 	}
 }
 
+
+void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
+	if (!d->mPart) {
+		return;
+	}
+	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+	if (selection.size() > 0) {
+		return;
+	}
+
+	KUrl url = d->mPart->url();
+	Q_FOREACH(KFileItem* item, list) {
+		if (item->url() == url) {
+			QModelIndex index = d->mDirModel->indexForItem(item);
+			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+			return;
+		}
+	}
+
+}
 } // namespace

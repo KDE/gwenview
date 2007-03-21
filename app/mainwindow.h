@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class QModelIndex;
 
+class KFileItemList;
 class KUrl;
 
 namespace Gwenview {
@@ -55,6 +56,13 @@ private Q_SLOTS:
 	void toggleSideBar();
 	void updateSideBar();
 	void startDirLister();
+	
+	/**
+	 * If an image is loaded but there is no item selected for it in the file
+	 * view, this function will select the corresponding item if it comes up in
+	 * list.
+	 */
+	void slotDirListerNewItems(const KFileItemList& list);
 
 private:
 	class Private;
