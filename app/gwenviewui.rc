@@ -8,6 +8,9 @@
 	<Action name="thumbs_and_image" />
 	<Action name="image_only" />
 	<Separator/>
+	<Action name="go_to_previous" />
+	<Action name="go_to_next" />
+	<Separator/>
 	<Merge/>
 	<Separator/>
 	<Action name="toggle_sidebar" />

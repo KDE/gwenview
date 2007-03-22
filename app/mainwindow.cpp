@@ -100,6 +100,8 @@ struct MainWindow::Private {
 	QAction* mThumbsAndImageAction;
 	QAction* mImageOnlyAction;
 	QAction* mGoUpAction;
+	QAction* mGoToPreviousAction;
+	QAction* mGoToNextAction;
 	QAction* mToggleSideBarAction;
 
 	SortedDirModel* mDirModel;
@@ -130,8 +132,8 @@ struct MainWindow::Private {
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView, SIGNAL(doubleClicked(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
-		connect(mThumbnailView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-			mWindow, SLOT(openDocumentUrlFromIndex(const QModelIndex&)) );
+		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+			mWindow, SLOT(openSelectedDocument()) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(updateSideBar()) );
 
@@ -177,6 +179,16 @@ struct MainWindow::Private {
 
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
+
+		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
+		mGoToPreviousAction->setText(i18n("Previous"));
+		connect(mGoToPreviousAction, SIGNAL(triggered()),
+			mWindow, SLOT(goToPrevious()) );
+
+		mGoToNextAction = actionCollection->addAction("go_to_next");
+		mGoToNextAction->setText(i18n("Next"));
+		connect(mGoToNextAction, SIGNAL(triggered()),
+			mWindow, SLOT(goToNext()) );
 
 		mGoUpAction = actionCollection->addAction("go_up");
 		mGoUpAction->setText(i18n("Go Up"));
@@ -282,6 +294,19 @@ struct MainWindow::Private {
 			mPart=0;
 		}
 	}
+
+	void goTo(int offset) {
+		QItemSelection selection = mThumbnailView->selectionModel()->selection();
+		if (selection.size() == 0) {
+			return;
+		}
+		QModelIndex index = selection.indexes()[0];
+		int row = index.row() + offset;
+		index = mDirModel->index(row, 0);
+		if (index.isValid()) {
+			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+		}
+	}
 };
 
 
@@ -344,7 +369,13 @@ void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 }
 
 
-void MainWindow::openDocumentUrlFromIndex(const QModelIndex& index) {
+void MainWindow::openSelectedDocument() {
+	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+	if (selection.size() == 0) {
+		return;
+	}
+
+	QModelIndex index = selection.indexes()[0];
 	if (!index.isValid()) {
 		return;
 	}
@@ -440,4 +471,15 @@ void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 	}
 
 }
+
+
+void MainWindow::goToPrevious() {
+	d->goTo(-1);
+}
+
+
+void MainWindow::goToNext() {
+	d->goTo(1);
+}
+
 } // namespace
