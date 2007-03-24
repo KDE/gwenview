@@ -54,7 +54,13 @@ private Q_SLOTS:
 	void goUp();
 	void toggleSideBar();
 	void updateSideBar();
-	void startDirLister();
+
+	/**
+	 * Init all the file list stuff. This should only be necessary when
+	 * Gwenview is started with an image as a parameter (in this case we load
+	 * the image before looking at the content of the image folder)
+	 */
+	void slotPartCompleted();
 	
 	/**
 	 * If an image is loaded but there is no item selected for it in the file

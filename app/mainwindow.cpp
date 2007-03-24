@@ -256,7 +256,7 @@ struct MainWindow::Private {
 		mWindow->createGUI(part);
 
 		// Make sure our file list is filled when the part is done.
-		connect(part, SIGNAL(completed()), mWindow, SLOT(startDirLister()) );
+		connect(part, SIGNAL(completed()), mWindow, SLOT(slotPartCompleted()) );
 
 		// Delete the old part, don't do it before mWindow->createGUI(),
 		// otherwise some UI elements from the old part won't be properly
@@ -324,6 +324,11 @@ struct MainWindow::Private {
 		if (index.isValid()) {
 			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
 		}
+	}
+
+	void updateUrlRequester(const KUrl& url) {
+		mUrlRequester->setUrl(url);
+		mGoUpAction->setEnabled(url.path() != "/");
 	}
 };
 
@@ -415,8 +420,7 @@ void MainWindow::goUp() {
 
 void MainWindow::openDirUrl(const KUrl& url) {
 	d->mDirModel->dirLister()->openUrl(url);
-	d->mUrlRequester->setUrl(url);
-	d->mGoUpAction->setEnabled(url.path() != "/");
+	d->updateUrlRequester(url);
 	d->resetDocumentView();
 }
 
@@ -461,13 +465,17 @@ void MainWindow::updateSideBar() {
 	d->mContextManager->updateSideBar(itemList);
 }
 
-void MainWindow::startDirLister() {
+void MainWindow::slotPartCompleted() {
 	Q_ASSERT(d->mPart);
 	KUrl url = d->mPart->url();
 	url.setFileName("");
-	if (!url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
-		d->mDirModel->dirLister()->openUrl(url);
+	if (url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+		// All is synchronized, nothing to do
+		return;
 	}
+
+	d->mDirModel->dirLister()->openUrl(url);
+	d->updateUrlRequester(url);
 }
 
 
