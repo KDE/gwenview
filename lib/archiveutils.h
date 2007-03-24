@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Qt
 #include <qstringlist.h>
 
+class KFileItem;
+
 namespace Gwenview {
 
 /**
@@ -31,9 +33,9 @@ namespace Gwenview {
  */
 namespace ArchiveUtils {
 	
-/* FIXME remove if not needed
 bool fileItemIsArchive(const KFileItem*);
 bool fileItemIsDirOrArchive(const KFileItem*);
+/* FIXME remove if not needed
 bool protocolIsArchive(const QString&);
 */
 QStringList mimeTypes();
