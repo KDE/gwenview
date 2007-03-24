@@ -298,6 +298,7 @@ struct MainWindow::Private {
 			mPart=0;
 		}
 	}
+
 	QModelIndex getRelativeIndex(int offset) {
 		if (!mPart) {
 			return QModelIndex();
@@ -306,6 +307,10 @@ struct MainWindow::Private {
 		QModelIndex index = mDirModel->indexForUrl(url);
 		int row = index.row() + offset;
 		index = mDirModel->index(row, 0);
+		if (!index.isValid()) {
+			return QModelIndex();
+		}
+
 		KFileItem* item = mDirModel->itemForIndex(index);
 		if (item && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			return index;
