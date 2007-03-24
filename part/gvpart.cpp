@@ -25,8 +25,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QGraphicsView>
 
 // KDE
+#include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <kicon.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
 
@@ -76,7 +78,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 
 	mDocument = new Document;
 
-	KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
+	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
+	action->setIcon(KIcon("viewmag1"));
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 	setXMLFile("gvpart/gvpart.rc");
