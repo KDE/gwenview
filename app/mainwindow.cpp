@@ -328,6 +328,7 @@ d(new MainWindow::Private)
 	d->setupWidgets();
 	d->setupActions();
 	d->setupContextManager();
+	updatePreviousNextActions();
 
 	createShellGUI();
 }
