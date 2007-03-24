@@ -181,19 +181,19 @@ struct MainWindow::Private {
 
 		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
 		mGoToPreviousAction->setText(i18n("Previous"));
-		mGoToPreviousAction->setIcon(KIcon("go-previous"));
+		mGoToPreviousAction->setIcon(KIcon("arrow-left"));
 		connect(mGoToPreviousAction, SIGNAL(triggered()),
 			mWindow, SLOT(goToPrevious()) );
 
 		mGoToNextAction = actionCollection->addAction("go_to_next");
 		mGoToNextAction->setText(i18n("Next"));
-		mGoToNextAction->setIcon(KIcon("go-next"));
+		mGoToNextAction->setIcon(KIcon("arrow-right"));
 		connect(mGoToNextAction, SIGNAL(triggered()),
 			mWindow, SLOT(goToNext()) );
 
 		mGoUpAction = actionCollection->addAction("go_up");
 		mGoUpAction->setText(i18n("Go Up"));
-		mGoUpAction->setIcon(KIcon("up"));
+		mGoUpAction->setIcon(KIcon("go-up"));
 		connect(mGoUpAction, SIGNAL(triggered()),
 			mWindow, SLOT(goUp()) );
 
