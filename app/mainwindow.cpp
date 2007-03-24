@@ -305,7 +305,13 @@ struct MainWindow::Private {
 		}
 		QModelIndex index = selection.indexes()[0];
 		int row = index.row() + offset;
-		return mDirModel->index(row, 0);
+		index = mDirModel->index(row, 0);
+		KFileItem* item = mDirModel->itemForIndex(index);
+		if (item && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			return index;
+		} else {
+			return QModelIndex();
+		}
 	}
 
 	void goTo(int offset) {
@@ -500,14 +506,10 @@ void MainWindow::goToNext() {
 
 
 void MainWindow::updatePreviousNextActions() {
-	QModelIndex index = d->getRelativeIndex(-1);
-	if (index.isValid()) {
-		KFileItem* item = d->mDirModel->itemForIndex(index);
-		bool enabled = item && !ArchiveUtils::fileItemIsDirOrArchive(item);
-		d->mGoToPreviousAction->setEnabled(enabled);
-	} else {
-		d->mGoToPreviousAction->setEnabled(false);
-	}
+	QModelIndex index;
+	
+	index = d->getRelativeIndex(-1);
+	d->mGoToPreviousAction->setEnabled(index.isValid());
 
 	index = d->getRelativeIndex(1);
 	d->mGoToNextAction->setEnabled(index.isValid());
