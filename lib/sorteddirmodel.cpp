@@ -66,4 +66,10 @@ QModelIndex SortedDirModel::indexForItem(const KFileItem* item) const {
 	return mapFromSource(sourceIndex);
 }
 
+
+QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
+	QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
+	return mapFromSource(sourceIndex);
+}
+
 } //namespace

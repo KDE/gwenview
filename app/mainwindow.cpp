@@ -299,11 +299,11 @@ struct MainWindow::Private {
 		}
 	}
 	QModelIndex getRelativeIndex(int offset) {
-		QItemSelection selection = mThumbnailView->selectionModel()->selection();
-		if (selection.size() == 0) {
+		if (!mPart) {
 			return QModelIndex();
 		}
-		QModelIndex index = selection.indexes()[0];
+		KUrl url = mPart->url();
+		QModelIndex index = mDirModel->indexForUrl(url);
 		int row = index.row() + offset;
 		index = mDirModel->index(row, 0);
 		KFileItem* item = mDirModel->itemForIndex(index);
