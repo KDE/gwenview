@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentview.h"
 #include "selectioncontextmanageritem.h"
 #include "sidebar.h"
+#include <lib/archiveutils.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
@@ -133,9 +134,7 @@ struct MainWindow::Private {
 		connect(mThumbnailView, SIGNAL(doubleClicked(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-			mWindow, SLOT(openSelectedDocument()) );
-		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-			mWindow, SLOT(updateSideBar()) );
+			mWindow, SLOT(slotSelectionChanged()) );
 
 		// mGoUpButton
 		mGoUpButton = new QToolButton(mThumbnailViewPanel);
@@ -276,6 +275,9 @@ struct MainWindow::Private {
 
 		connect(dirLister, SIGNAL(newItems(const KFileItemList&)),
 			mWindow, SLOT(slotDirListerNewItems(const KFileItemList&)) );
+
+		connect(dirLister, SIGNAL(deleteItem(KFileItem*)),
+			mWindow, SLOT(updatePreviousNextActions()) );
 	}
 
 	void updateToggleSideBarAction() {
@@ -294,15 +296,18 @@ struct MainWindow::Private {
 			mPart=0;
 		}
 	}
-
-	void goTo(int offset) {
+	QModelIndex getRelativeIndex(int offset) {
 		QItemSelection selection = mThumbnailView->selectionModel()->selection();
 		if (selection.size() == 0) {
-			return;
+			return QModelIndex();
 		}
 		QModelIndex index = selection.indexes()[0];
 		int row = index.row() + offset;
-		index = mDirModel->index(row, 0);
+		return mDirModel->index(row, 0);
+	}
+
+	void goTo(int offset) {
+		QModelIndex index = getRelativeIndex(offset);
 		if (index.isValid()) {
 			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
 		}
@@ -452,12 +457,21 @@ void MainWindow::startDirLister() {
 }
 
 
+void MainWindow::slotSelectionChanged() {
+	openSelectedDocument();
+	updateSideBar();
+	updatePreviousNextActions();
+}
+
+
 void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 	if (!d->mPart) {
 		return;
 	}
+
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
 	if (selection.size() > 0) {
+		updatePreviousNextActions();
 		return;
 	}
 
@@ -469,7 +483,6 @@ void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 			return;
 		}
 	}
-
 }
 
 
@@ -481,5 +494,21 @@ void MainWindow::goToPrevious() {
 void MainWindow::goToNext() {
 	d->goTo(1);
 }
+
+
+void MainWindow::updatePreviousNextActions() {
+	QModelIndex index = d->getRelativeIndex(-1);
+	if (index.isValid()) {
+		KFileItem* item = d->mDirModel->itemForIndex(index);
+		bool enabled = item && !ArchiveUtils::fileItemIsDirOrArchive(item);
+		d->mGoToPreviousAction->setEnabled(enabled);
+	} else {
+		d->mGoToPreviousAction->setEnabled(false);
+	}
+
+	index = d->getRelativeIndex(1);
+	d->mGoToNextAction->setEnabled(index.isValid());
+}
+
 
 } // namespace

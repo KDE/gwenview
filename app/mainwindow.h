@@ -51,7 +51,6 @@ private Q_SLOTS:
 	void openDirUrlFromIndex(const QModelIndex&);
 
 	void openDocumentUrl(const KUrl&);
-	void openSelectedDocument();
 	void goUp();
 	void toggleSideBar();
 	void updateSideBar();
@@ -64,12 +63,17 @@ private Q_SLOTS:
 	 */
 	void slotDirListerNewItems(const KFileItemList& list);
 
+	void slotSelectionChanged();
+
 	void goToPrevious();
 	void goToNext();
+	void updatePreviousNextActions();
 
 private:
 	class Private;
 	std::auto_ptr<Private> d;
+
+	void openSelectedDocument();
 };
 
 } // namespace
