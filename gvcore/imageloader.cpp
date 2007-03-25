@@ -673,6 +673,8 @@ void ImageLoader::changed(const QRect& constRect) {
 					QSize size = content.size();
 					d->mProcessedImage = QImage(size, d->mDecoder.image().depth());
 				}
+				d->mProcessedImage.setDotsPerMeterX(content.getDotsPerMeterX());
+				d->mProcessedImage.setDotsPerMeterY(content.getDotsPerMeterY());
 			} else {
 				kdWarning() << "ImageLoader::changed(): JPEGContent could not load '" << d->mURL.prettyURL() << "'\n";
 			}

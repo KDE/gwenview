@@ -43,6 +43,9 @@ public:
 	
 	Orientation orientation() const;
 	void resetOrientation();
+  
+	int getDotsPerMeterX() const;
+	int getDotsPerMeterY() const;
 
 	QSize size() const;
 
