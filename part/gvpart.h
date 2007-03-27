@@ -34,7 +34,7 @@ namespace Gwenview {
 class ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
-	ImageView::ImageView(QWidget* parent);
+	ImageView(QWidget* parent);
 
 	void setImage(const QImage& image);
 
