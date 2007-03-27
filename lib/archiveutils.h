@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #ifndef ARCHIVEUTILS_H
 
+#include "gwenviewlib_export.h"
+
 // Qt
 #include <qstringlist.h>
 
@@ -33,8 +35,8 @@ namespace Gwenview {
  */
 namespace ArchiveUtils {
 	
-bool fileItemIsArchive(const KFileItem*);
-bool fileItemIsDirOrArchive(const KFileItem*);
+GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem*);
+GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem*);
 /* FIXME remove if not needed
 bool protocolIsArchive(const QString&);
 */
