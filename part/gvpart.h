@@ -20,16 +20,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef GVPART_H
 #define GVPART_H
 
+// Qt
+#include <QAbstractScrollArea>
+
+// Local
 #include "../lib/imageviewpart.h"
 
-class QGraphicsScene;
-class QGraphicsView;
-
 class KAboutData;
+class KAction;
 
 namespace Gwenview {
 
-class ImageItem;
+class ImageView : public QAbstractScrollArea {
+	Q_OBJECT
+public:
+	ImageView::ImageView(QWidget* parent);
+
+	void setImage(const QImage& image);
+
+	void setZoom(qreal zoom);
+
+	qreal zoom() const;
+
+	bool zoomToFit() const;
+
+public Q_SLOTS:
+	void setZoomToFit(bool on);
+
+protected:
+	virtual void paintEvent(QPaintEvent*);
+
+	virtual void resizeEvent(QResizeEvent*);
+
+private:
+	void updateScrollBars();
+	qreal computeZoomToFit() const;
+	QImage mImage;
+	qreal mZoom;
+	bool mZoomToFit;
+};
 
 class GVPart : public ImageViewPart {
 	Q_OBJECT
@@ -49,13 +78,9 @@ private Q_SLOTS:
 	void zoomOut();
 
 private:
-	QGraphicsScene* mScene;
-	QGraphicsView* mView;
-	ImageItem* mItem;
-	qreal mZoom;
+	ImageView* mView;
 	Document* mDocument;
-
-	void updateZoom();
+	KAction* mZoomToFitAction;
 };
 
 } // namespace

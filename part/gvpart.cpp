@@ -20,9 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvpart.moc"
 
 // Qt
-#include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QGraphicsView>
+#include <QPainter>
+#include <QScrollBar>
 
 // KDE
 #include <kaction.h>
@@ -41,42 +40,135 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
-class ImageItem : public QGraphicsItem {
-public:
-	QRectF boundingRect() const {
-		return mImage.rect();
-	}
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-		painter->drawImage(0, 0, mImage);
-	}
+ImageView::ImageView(QWidget* parent)
+: QAbstractScrollArea(parent)
+{
+	mZoom = 1.;
+	mZoomToFit = true;
+	setFrameShape(QFrame::NoFrame);
+	setViewport(new QWidget());
+	horizontalScrollBar()->setSingleStep(16);
+	verticalScrollBar()->setSingleStep(16);
+}
 
-	void setImage(const QImage& image) {
-		mImage = image;
-		update();
-	}
+void ImageView::setImage(const QImage& image) {
+	mImage = image;
+	updateScrollBars();
+	update();
+}
 
-	QImage& image() {
-		return mImage;
-	}
+void ImageView::paintEvent(QPaintEvent*) {
+	QWidget* widget = viewport();
 
-private:
-	QImage mImage;
-};
+	QImage buffer(
+		int(widget->width() / mZoom),
+		int(widget->height() / mZoom),
+		QImage::Format_ARGB32_Premultiplied);
+	{
+		if (mImage.hasAlphaChannel()) {
+			buffer.fill(0);
+		}
+		QPainter painter(&buffer);
+		int posX, posY;
+		if (mZoomToFit) {
+			posX = 0;
+			posY = 0;
+		} else {
+			posX = int(horizontalScrollBar()->value() / mZoom);
+			posY = int(verticalScrollBar()->value() / mZoom);
+		}
+		painter.drawImage(0, 0, mImage,
+			posX, posY,
+			buffer.width(),
+			buffer.height());
+	}
+	buffer = buffer.scaled(widget->size());
+
+	QPainter painter(widget);
+	painter.drawImage(0, 0, buffer);
+}
+
+void ImageView::resizeEvent(QResizeEvent*) {
+	if (mZoomToFit) {
+		setZoom(computeZoomToFit());
+	} else {
+		updateScrollBars();
+	}
+}
+
+void ImageView::setZoom(qreal zoom) {
+	mZoom = zoom;
+	updateScrollBars();
+	update();
+}
+
+qreal ImageView::zoom() const {
+	return mZoom;
+}
+
+bool ImageView::zoomToFit() const {
+	return mZoomToFit;
+}
+
+void ImageView::setZoomToFit(bool on) {
+	mZoomToFit = on;
+	if (mZoomToFit) {
+		setZoom(computeZoomToFit());
+	} else {
+		setZoom(1.);
+	}
+}
+
+void ImageView::updateScrollBars() {
+	if (mZoomToFit) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		return;
+	}
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+	int max;
+	int width = viewport()->width();
+	int height = viewport()->height();
+
+	max = qMax(0, int(mImage.width() * mZoom) - width);
+	horizontalScrollBar()->setRange(0, max);
+	horizontalScrollBar()->setPageStep(width);
+
+	max = qMax(0, int(mImage.height() * mZoom) - height);
+	verticalScrollBar()->setRange(0, max);
+	verticalScrollBar()->setPageStep(height);
+}
+
+qreal ImageView::computeZoomToFit() const {
+	int width = viewport()->width();
+	int height = viewport()->height();
+	qreal zoom = qreal(width) / mImage.width();
+	if ( int(mImage.height() * zoom) > height) {
+		zoom = qreal(height) / mImage.height();
+	}
+	return zoom;
+}
+
+
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 : ImageViewPart(parent) 
-, mZoom(1.0)
 {
-	mScene = new QGraphicsScene(parent);
-	mView = new QGraphicsView(parentWidget);
-	mView->setScene(mScene);
-	mItem = new ImageItem();
-	mScene->addItem(mItem);
+	mDocument = new Document;
+	mView = new ImageView(parentWidget);
 	setWidget(mView);
 
-	mDocument = new Document;
+	mZoomToFitAction = new KAction(actionCollection());
+	mZoomToFitAction->setCheckable(true);
+	mZoomToFitAction->setChecked(mView->zoomToFit());
+	mZoomToFitAction->setText(i18n("Zoom To Fit"));
+	mZoomToFitAction->setIcon(KIcon("zoom-best-fit"));
+	connect(mZoomToFitAction, SIGNAL(toggled(bool)), mView, SLOT(setZoomToFit(bool)) );
+	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
 	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
 	action->setIcon(KIcon("viewmag1"));
@@ -85,9 +177,10 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	setXMLFile("gvpart/gvpart.rc");
 }
 
+
 bool GVPart::openFile() {
 	mDocument->load(localFilePath());
-	mItem->setImage(mDocument->image());
+	mView->setImage(mDocument->image());
 	return true;
 }
 
@@ -102,28 +195,22 @@ KAboutData* GVPart::createAboutData() {
 
 
 void GVPart::zoomActualSize() {
-	mZoom = 1.;
-	updateZoom();
+	mZoomToFitAction->setChecked(false);
+	mView->setZoom(1.);
 }
 
 
 void GVPart::zoomIn() {
-	mZoom *= 2;
-	updateZoom();
+	mZoomToFitAction->setChecked(false);
+	mView->setZoom(mView->zoom() * 2);
 }
 
 
 void GVPart::zoomOut() {
-	mZoom /= 2;
-	updateZoom();
+	mZoomToFitAction->setChecked(false);
+	mView->setZoom(mView->zoom() / 2);
 }
 
-
-void GVPart::updateZoom() {
-	QMatrix matrix;
-	matrix.scale(mZoom, mZoom);
-	mView->setMatrix(matrix);
-}
 
 Document* GVPart::document() {
 	return mDocument;
