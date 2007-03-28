@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/gwenview)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 set(gwenview_SRCS
 	contextmanager.cpp
 	documentview.cpp
@@ -10,7 +10,7 @@ set(gwenview_SRCS
 kde4_automoc(${gwenview_SRCS})
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
-target_link_libraries(gwenview ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} gwenviewlib)
+target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} gwenviewlib)
 
 install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
 install(FILES gwenviewui.rc
