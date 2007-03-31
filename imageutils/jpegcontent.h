@@ -44,8 +44,8 @@ public:
 	Orientation orientation() const;
 	void resetOrientation();
   
-	int getDotsPerMeterX() const;
-	int getDotsPerMeterY() const;
+	int dotsPerMeterX() const;
+	int dotsPerMeterY() const;
 
 	QSize size() const;
 
@@ -69,6 +69,7 @@ private:
 	JPEGContent(const JPEGContent&);
 	void operator=(const JPEGContent&);
     void applyPendingTransformation();
+	int dotsPerMeter(const QString& keyName) const;
 };
 
 

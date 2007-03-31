@@ -290,45 +290,26 @@ Orientation JPEGContent::orientation() const {
 }
 
 
-int JPEGContent::getDotsPerMeterX() const {
-	Exiv2::ExifKey keyResUnit("Exif.Image.ResolutionUnit");
-	Exiv2::ExifData::iterator it = d->mExifData.findKey(keyResUnit);
-	if (it == d->mExifData.end()) {
-		return 0;
-	}
-	int XRes = it->toLong();
-	Exiv2::ExifKey keyXResolution("Exif.Image.XResolution");
-	it = d->mExifData.findKey(keyXResolution);
-	if (it == d->mExifData.end()) {
-		return 0;
-	}
-	// The unit for measuring XResolution and YResolution. The same unit is used for both XResolution and YResolution.
-	//     If the image resolution in unknown, 2 (inches) is designated.
-	//         Default = 2
-	//         2 = inches
-	//         3 = centimeters
-	//         Other = reserved
-	const float INCHESPERMETER = (100. / 2.54); 
-	switch (XRes) {
-	case 3:  // dots per cm 
-		return (it->toLong() * 100); 
-	default:  // dots per inch 
-		return (it->toLong() * INCHESPERMETER); 
-	}
-
-	return 0;
+int JPEGContent::dotsPerMeterX() const {
+	return dotsPerMeter("XResolution");
 }
 
 
-int JPEGContent::getDotsPerMeterY() const {
+int JPEGContent::dotsPerMeterY() const {
+	return dotsPerMeter("YResolution");
+}
+
+
+int JPEGContent::dotsPerMeter(const QString& keyName) const {
 	Exiv2::ExifKey keyResUnit("Exif.Image.ResolutionUnit");
 	Exiv2::ExifData::iterator it = d->mExifData.findKey(keyResUnit);
 	if (it == d->mExifData.end()) {
 		return 0;
 	}
-	int YRes = it->toLong();
-	Exiv2::ExifKey keyYResolution("Exif.Image.YResolution");
-	it = d->mExifData.findKey(keyYResolution);
+	int res = it->toLong();
+	QString keyVal = "Exif.Image." + keyName;
+	Exiv2::ExifKey keyResolution(keyVal.ascii());
+	it = d->mExifData.findKey(keyResolution);
 	if (it == d->mExifData.end()) {
 		return 0;
 	}
@@ -339,7 +320,7 @@ int JPEGContent::getDotsPerMeterY() const {
 	//         3 = centimeters
 	//         Other = reserved
 	const float INCHESPERMETER = (100. / 2.54); 
-	switch (YRes) { 
+	switch (res) {
 	case 3:  // dots per cm 
 		return (it->toLong() * 100); 
 	default:  // dots per inch 
