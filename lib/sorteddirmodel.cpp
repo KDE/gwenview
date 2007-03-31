@@ -17,10 +17,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "sorteddirmodel.h"
+#include "sorteddirmodel.moc"
+
+// Qt
+#include <QIcon>
 
 // KDE
+#include <kdirlister.h>
 #include <kdirmodel.h>
+#include <kio/previewjob.h>
 
 namespace Gwenview {
 
@@ -36,9 +41,10 @@ SortedDirModel::SortedDirModel(QObject* parent)
 	d->mSourceModel = new KDirModel(this);
 	setSourceModel(d->mSourceModel);
 	setDynamicSortFilter(true);
-    setSortRole(Qt::DisplayRole);
-    setSortCaseSensitivity(Qt::CaseInsensitive);
-    sort(KDirModel::Name);
+	sort(KDirModel::Name);
+
+	connect(dirLister(), SIGNAL(newItems(const KFileItemList&)),
+		SLOT(generatePreviews(const KFileItemList&)) );
 }
 
 
@@ -70,6 +76,42 @@ QModelIndex SortedDirModel::indexForItem(const KFileItem* item) const {
 QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 	QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
 	return mapFromSource(sourceIndex);
+}
+
+
+bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
+	KFileItem* leftItem = d->mSourceModel->itemForIndex(left);
+	KFileItem* rightItem = d->mSourceModel->itemForIndex(right);
+	Q_ASSERT(leftItem);
+	Q_ASSERT(rightItem);
+
+	bool leftIsDir = leftItem->isDir();
+	bool rightIsDir = rightItem->isDir();
+	if (leftIsDir && !rightIsDir) {
+		return true;
+	}
+	if (!leftIsDir && rightIsDir) {
+		return false;
+	}
+	return leftItem->name().toLower() < rightItem->name().toLower();
+}
+
+
+void SortedDirModel::generatePreviews(const KFileItemList& list) {
+	KIO::PreviewJob* job = KIO::filePreview(list, 128);
+	connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
+		SLOT(setItemPreview(const KFileItem*, const QPixmap&)));
+}
+
+
+void SortedDirModel::setItemPreview(const KFileItem* item, const QPixmap& pixmap) {
+	Q_ASSERT(item != 0);
+	QModelIndex index = indexForItem(item);
+	if (!index.isValid()) {
+		kWarning() << "setItemPreview: invalid index\n";
+		return;
+	}
+	setData(index, QIcon(pixmap), Qt::DecorationRole);
 }
 
 } //namespace
