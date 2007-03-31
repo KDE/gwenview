@@ -497,6 +497,8 @@ void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 		return;
 	}
 
+	// If the item for the image visible in the part is in the list, select it
+	// in the view
 	KUrl url = d->mPart->url();
 	Q_FOREACH(KFileItem* item, list) {
 		if (item->url() == url) {
