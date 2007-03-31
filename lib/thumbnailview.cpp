@@ -28,4 +28,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailView::Private) {
 	setViewMode(QListView::IconMode);
+	setResizeMode(QListView::Adjust);
+	setMovement(QListView::Static);
 }
