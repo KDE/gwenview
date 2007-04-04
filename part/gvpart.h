@@ -54,7 +54,7 @@ protected:
 
 	virtual void resizeEvent(QResizeEvent*);
 
-	virtual void ImageView::scrollContentsBy(int dx, int dy);
+	virtual void scrollContentsBy(int dx, int dy);
 
 private Q_SLOTS:
 	void updateFromScaler(int left, int top, const QImage& image);
