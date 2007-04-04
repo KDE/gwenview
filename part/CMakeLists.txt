@@ -1,4 +1,6 @@
 set(gvpart_SRCS
+	#imageview.cpp
+	#imageviewtools.cpp
 	gvpart.cpp
 	)
 

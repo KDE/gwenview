@@ -31,6 +31,8 @@ class KAction;
 
 namespace Gwenview {
 
+class ImageScaler;
+
 class ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
@@ -52,12 +54,20 @@ protected:
 
 	virtual void resizeEvent(QResizeEvent*);
 
+	virtual void ImageView::scrollContentsBy(int dx, int dy);
+
+private Q_SLOTS:
+	void updateFromScaler(int left, int top, const QImage& image);
+
 private:
 	void updateScrollBars();
 	qreal computeZoomToFit() const;
+	void startScaler();
 	QImage mImage;
 	qreal mZoom;
 	bool mZoomToFit;
+	QImage mBuffer;
+	ImageScaler* mScaler;
 };
 
 class GVPart : public ImageViewPart {
