@@ -79,12 +79,7 @@ QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 }
 
 
-bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-	KFileItem* leftItem = d->mSourceModel->itemForIndex(left);
-	KFileItem* rightItem = d->mSourceModel->itemForIndex(right);
-	Q_ASSERT(leftItem);
-	Q_ASSERT(rightItem);
-
+static bool kFileItemLessThan(const KFileItem* leftItem, const KFileItem* rightItem) {
 	bool leftIsDir = leftItem->isDir();
 	bool rightIsDir = rightItem->isDir();
 	if (leftIsDir && !rightIsDir) {
@@ -97,8 +92,20 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 }
 
 
+bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
+	KFileItem* leftItem = d->mSourceModel->itemForIndex(left);
+	KFileItem* rightItem = d->mSourceModel->itemForIndex(right);
+	Q_ASSERT(leftItem);
+	Q_ASSERT(rightItem);
+
+	return kFileItemLessThan(leftItem, rightItem);
+}
+
+
 void SortedDirModel::generatePreviews(const KFileItemList& list) {
-	KIO::PreviewJob* job = KIO::filePreview(list, 128);
+	KFileItemList sortedList = list;
+	qSort(sortedList.begin(), sortedList.end(), kFileItemLessThan);
+	KIO::PreviewJob* job = KIO::filePreview(sortedList, 128);
 	connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
 		SLOT(setItemPreview(const KFileItem*, const QPixmap&)));
 }
