@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "imagescaler.moc"
 
+#include <math.h>
+
 // Qt
 #include <QImage>
 #include <QRegion>
@@ -61,13 +63,11 @@ void ImageScaler::setZoom(qreal zoom) {
 
 void ImageScaler::setRegion(const QRegion& region) {
 	d->mRegion = region;
+	d->mTimer->start();	
 }
 
 void ImageScaler::addRegion(const QRegion& region) {
 	d->mRegion |= region;
-}
-
-void ImageScaler::start() const {
 	d->mTimer->start();	
 }
 
@@ -79,6 +79,26 @@ void ImageScaler::processChunk() {
 	Q_ASSERT(!d->mRegion.isEmpty());
 
 	QRect rect = d->mRegion.rects()[0];
+	QRect sourceRect(
+		QPoint(
+			int( floor(rect.left() / d->mZoom) ),
+			int( floor(rect.top() / d->mZoom) )
+			),
+		QPoint(
+			int( ceil(rect.right() / d->mZoom) ),
+			int( ceil(rect.bottom() / d->mZoom) )
+			)
+		);
+	sourceRect = sourceRect.intersected(d->mImage.rect());
+	
+	rect = QRect(
+		int(sourceRect.left() * d->mZoom),
+		int(sourceRect.top() * d->mZoom),
+		int(sourceRect.width() * d->mZoom),
+		int(sourceRect.height() * d->mZoom)
+		);
+	Q_ASSERT(!rect.isEmpty());
+
 	d->mRegion -= rect;
 	if (d->mRegion.isEmpty()) {
 		d->mTimer->stop();

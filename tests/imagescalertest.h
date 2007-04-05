@@ -81,4 +81,5 @@ class ImageScalerTest : public QObject {
 private Q_SLOTS:
 	void testScaleFullImage();
 	void testScalePartialImage();
+	void testScaleFullImageTwoPasses();
 };

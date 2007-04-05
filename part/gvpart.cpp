@@ -68,7 +68,6 @@ void ImageView::startScaler() {
 	mScaler->setZoom(mZoom);
 	QRect rect(QPoint(0, 0), mImage.size() * mZoom);
 	mScaler->setRegion(QRegion(rect));
-	mScaler->start();
 }
 
 void ImageView::paintEvent(QPaintEvent* event) {
@@ -181,7 +180,6 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	region |= rect;
 
 	mScaler->addRegion(region);
-	mScaler->start();
 	viewport()->update();
 }
 

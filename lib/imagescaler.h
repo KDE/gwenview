@@ -40,7 +40,6 @@ public:
 	void setZoom(qreal);
 	void setRegion(const QRegion&);
 	void addRegion(const QRegion&);
-	void start() const;
 
 	bool isRunning();
 
