@@ -99,7 +99,5 @@ void ImageScalerTest::testScalePartialImage() {
 	}
 
 	QImage scaledImage = client.createFullImage();
-	scaledImage.save("scaled.png", "PNG");
-	expectedImage.save("expected.png", "PNG");
 	QCOMPARE(scaledImage, expectedImage);
 }
