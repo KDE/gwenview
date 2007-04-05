@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include <memory>
 #include "gwenviewlib_export.h"
 
 // Qt
@@ -30,10 +29,12 @@ class QImage;
 
 namespace Gwenview {
 
+class DocumentPrivate;
 class GWENVIEWLIB_EXPORT Document : public QObject {
 	Q_OBJECT
 public:
 	Document();
+	~Document();
 	void load(const QString&);
 
 	QImage& image();
@@ -42,8 +43,7 @@ Q_SIGNALS:
 	void loaded();
 
 private:
-	struct Private;
-	std::auto_ptr<Private> d;
+	DocumentPrivate * const d;
 };
 
 } // namespace

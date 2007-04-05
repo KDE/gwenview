@@ -25,14 +25,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 
-struct Document::Private {
+struct DocumentPrivate {
 	QImage mImage;
 };
 
 
 Document::Document() 
-: QObject() {
-	d.reset(new Document::Private);
+: QObject()
+, d(new DocumentPrivate) {
+}
+
+
+Document::~Document() {
+	delete d;
 }
 
 
