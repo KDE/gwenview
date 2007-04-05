@@ -29,14 +29,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
-struct SortedDirModel::Private {
+struct SortedDirModelPrivate {
 	KDirModel* mSourceModel;
 };
 
 
 SortedDirModel::SortedDirModel(QObject* parent)
 : QSortFilterProxyModel(parent)
-, d(new SortedDirModel::Private)
+, d(new SortedDirModelPrivate)
 {
 	d->mSourceModel = new KDirModel(this);
 	setSourceModel(d->mSourceModel);
@@ -45,6 +45,11 @@ SortedDirModel::SortedDirModel(QObject* parent)
 
 	connect(dirLister(), SIGNAL(newItems(const KFileItemList&)),
 		SLOT(generatePreviews(const KFileItemList&)) );
+}
+
+
+SortedDirModel::~SortedDirModel() {
+	delete d;
 }
 
 

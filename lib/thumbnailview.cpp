@@ -20,14 +20,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailview.moc"
 
 
-struct ThumbnailView::Private {
+struct ThumbnailViewPrivate {
 };
 
 
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
-, d(new ThumbnailView::Private) {
+, d(new ThumbnailViewPrivate) {
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);
+}
+
+
+ThumbnailView::~ThumbnailView() {
+	delete d;
 }
