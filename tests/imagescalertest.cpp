@@ -19,11 +19,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include <qtest_kde.h>
 
+#include <QList>
+
 #include "../lib/imagescaler.h"
 
 #include "imagescalertest.moc"
 
 QTEST_KDEMAIN( ImageScalerTest, GUI )
+
+void ImageScalerTest::testScaledRect_data() {
+	QTest::addColumn<QRectF>("input");
+	QTest::addColumn<QRect>("expected");
+
+	QTest::newRow("overflow right") << QRectF(1.0, 1.0, 2.7, 3.2) << QRect(1, 1, 3, 4);
+	QTest::newRow("overflow left") << QRectF(0.5, 1.0, 2.0, 3.2) << QRect(0, 1, 3, 4);
+	QTest::newRow("overflow both") << QRectF(0.5, 1.0, 2.6, 3.2) << QRect(0, 1, 4, 4);
+}
+
+void ImageScalerTest::testScaledRect() {
+	QFETCH(QRectF, input);
+	QFETCH(QRect, expected);
+	QCOMPARE(Gwenview::ImageScaler::containingRect(input), expected);
+}
 
 /**
  * Scale whole image in one pass
@@ -104,23 +121,8 @@ void ImageScalerTest::testScalePartialImage() {
 	}
 
 	QImage scaledImage = client.createFullImage();
-	expectedImage.save("expected.png", "PNG");
-	image.save("image.png", "PNG");
-	scaledImage.save("scaled.png", "PNG");
 
-	QCOMPARE(scaledImage.size(), expectedImage.size());
-	// The scaler may produce more pixels than necessary. This is not an error,
-	// but it means we need to skip transparent pixels of expectedImage to
-	// check.
-	for(int y=0; y<expectedImage.height(); ++y) {
-		for(int x=0; x<expectedImage.height(); ++x) {
-			QRgb expectedPixel = expectedImage.pixel(x, y);
-			if (qAlpha(expectedPixel) == 0) {
-				continue;
-			}
-			QCOMPARE(scaledImage.pixel(x,y), expectedPixel);
-		}
-	}
+	QCOMPARE(scaledImage, expectedImage);
 }
 
 
@@ -130,41 +132,46 @@ void ImageScalerTest::testScalePartialImage() {
  */
 void ImageScalerTest::testScaleFullImageTwoPasses() {
 	QImage image(10, 10, QImage::Format_ARGB32);
-	const int zoom = 2;
 	{
 		QPainter painter(&image);
 		painter.fillRect(image.rect(), Qt::white);
 		painter.drawLine(0, 0, image.width(), image.height());
 	}
 
-	Gwenview::ImageScaler scaler;
-	ImageScalerClient client(&scaler);
+	QList<double> zoomList;
+	zoomList << 0.5 << 2.0;
+	Q_FOREACH(double zoom, zoomList) {
+		Gwenview::ImageScaler scaler;
+		ImageScalerClient client(&scaler);
 
-	scaler.setImage(image);
-	scaler.setZoom(zoom);
-	scaler.setRegion(
-		QRect(
-			0, 0,
-			image.width() * zoom / 3, image.height() * zoom)
-		);
+		scaler.setImage(image);
+		scaler.setZoom(zoom);
+		int zWidth = int(image.width() * zoom);
+		int zHeight = int(image.width() * zoom);
+		int partialZWidth = zWidth / 3;
+		scaler.setRegion(
+			QRect(
+				0, 0,
+				partialZWidth, zHeight)
+			);
 
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
+		while (scaler.isRunning()) {
+			QTest::qWait(30);
+		}
+
+		scaler.addRegion(
+			QRect(
+				partialZWidth, 0,
+				zWidth - partialZWidth, zHeight)
+			);
+
+		while (scaler.isRunning()) {
+			QTest::qWait(30);
+		}
+
+		QImage expectedImage = image.scaled(image.size() * zoom);
+
+		QImage scaledImage = client.createFullImage();
+		QCOMPARE(expectedImage, scaledImage);
 	}
-
-	scaler.addRegion(
-		QRect(
-			image.width() * zoom / 3, 0,
-			image.width() * zoom * 2 / 3, image.height() * zoom)
-		);
-
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
-
-	QImage expectedImage = image.scaled(image.size() * zoom);
-
-	QImage scaledImage = client.createFullImage();
-
-	QCOMPARE(expectedImage, scaledImage);
 }

@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gwenviewlib_export.h"
 
 class QImage;
+class QRect;
+class QRectF;
 class QRegion;
 
 namespace Gwenview {
@@ -42,6 +44,8 @@ public:
 	void addRegion(const QRegion&);
 
 	bool isRunning();
+
+	static QRect containingRect(const QRectF& rectF);
 
 Q_SIGNALS:
 	void scaledRect(int left, int top, const QImage&);

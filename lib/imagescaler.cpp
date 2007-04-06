@@ -75,44 +75,54 @@ bool ImageScaler::isRunning() {
 	return d->mTimer->isActive();
 }
 
+QRect ImageScaler::containingRect(const QRectF& rectF) {
+	return QRect(
+		QPoint(
+			int(floor(rectF.left())),
+			int(floor(rectF.top()))
+			),
+		QPoint(
+			int(ceil(rectF.right() - 1.)),
+			int(ceil(rectF.bottom() - 1.))
+			)
+		);
+	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
+}
+
 void ImageScaler::processChunk() {
 	Q_ASSERT(!d->mRegion.isEmpty());
 
 	QRect rect = d->mRegion.rects()[0];
-	QRect sourceRect(
-		QPoint(
-			int( floor(rect.left() / d->mZoom) ),
-			int( floor(rect.top() / d->mZoom) )
-			),
-		QPoint(
-			int( ceil(rect.right() / d->mZoom) ),
-			int( ceil(rect.bottom() / d->mZoom) )
-			)
-		);
+
+	// If rect contains "half" pixels, make sure sourceRect includes them
+	QRectF sourceRectF(
+		rect.left() / d->mZoom,
+		rect.top() / d->mZoom,
+		rect.width() / d->mZoom,
+		rect.height() / d->mZoom);
+
+	QRect sourceRect = containingRect(sourceRectF);
 	sourceRect = sourceRect.intersected(d->mImage.rect());
 	
-	rect = QRect(
-		int(sourceRect.left() * d->mZoom),
-		int(sourceRect.top() * d->mZoom),
-		int(sourceRect.width() * d->mZoom),
-		int(sourceRect.height() * d->mZoom)
-		);
-	Q_ASSERT(!rect.isEmpty());
+	// destRect is almost like rect, but it contains only "full" pixels
+	QRectF destRectF(
+			sourceRectF.left() * d->mZoom,
+			sourceRectF.top() * d->mZoom,
+			sourceRectF.width() * d->mZoom,
+			sourceRectF.height() * d->mZoom
+			);
+	QRect destRect = containingRect(destRectF);
+	Q_ASSERT(!destRect.isEmpty());
 
-	d->mRegion -= rect;
+	d->mRegion -= destRect;
 	if (d->mRegion.isEmpty()) {
 		d->mTimer->stop();
 	}
 
 	QImage tmp;
-	tmp = d->mImage.copy(
-		int(rect.left() / d->mZoom),
-		int(rect.top() / d->mZoom), 
-		int(rect.width() / d->mZoom),
-		int(rect.height() / d->mZoom)
-		);
-	tmp = tmp.scaled(rect.size());
-	scaledRect(rect.left(), rect.top(), tmp);
+	tmp = d->mImage.copy(sourceRect);
+	tmp = tmp.scaled(destRect.size());
+	scaledRect(destRect.left(), destRect.top(), tmp);
 }
 
 } // namespace
