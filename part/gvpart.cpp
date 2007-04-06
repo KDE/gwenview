@@ -50,6 +50,7 @@ ImageView::ImageView(QWidget* parent)
 	mZoomToFit = true;
 	setFrameShape(QFrame::NoFrame);
 	setViewport(new QWidget());
+	viewport()->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	mScaler = new ImageScaler(this);
