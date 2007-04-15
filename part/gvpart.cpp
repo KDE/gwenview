@@ -54,6 +54,7 @@ ImageView::ImageView(QWidget* parent)
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	mScaler = new ImageScaler(this);
+	mScaler->setTransformationMode(Qt::SmoothTransformation);
 	connect(mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
