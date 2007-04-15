@@ -181,3 +181,23 @@ void ImageScalerTest::testScaleFullImageTwoPasses_data() {
 	QTest::newRow("2.0") << 2.0;
 	QTest::newRow("4.0") << 4.0;
 }
+
+
+/**
+ * When zooming out, make sure that we don't crash when scaling an area which
+ * have one dimension smaller than one pixel in the destination. 
+ */
+void ImageScalerTest::testScaleThinArea() {
+	QImage image(10, 10, QImage::Format_ARGB32);
+	image.fill(0);
+
+	Gwenview::ImageScaler scaler;
+
+	const qreal zoom = 0.25;
+	scaler.setImage(image);
+	scaler.setZoom(zoom);
+	scaler.setRegion(QRect(0, 0, image.width(), 2));
+	while (scaler.isRunning()) {
+		QTest::qWait(30);
+	}
+}

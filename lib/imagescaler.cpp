@@ -99,6 +99,10 @@ void ImageScaler::processChunk() {
 	Q_ASSERT(!d->mRegion.isEmpty());
 
 	QRect rect = d->mRegion.rects()[0];
+	d->mRegion -= rect;
+	if (d->mRegion.isEmpty()) {
+		d->mTimer->stop();
+	}
 
 	// If rect contains "half" pixels, make sure sourceRect includes them
 	QRectF sourceRectF(
@@ -115,15 +119,9 @@ void ImageScaler::processChunk() {
 	QRect destRect = QRect(
 		int(sourceRect.left() * d->mZoom),
 		int(sourceRect.top() * d->mZoom),
-		int(sourceRect.width() * d->mZoom),
-		int(sourceRect.height() * d->mZoom)
+		qMax(int(sourceRect.width() * d->mZoom), 1),
+		qMax(int(sourceRect.height() * d->mZoom), 1)
 		);
-	Q_ASSERT(!destRect.isEmpty());
-
-	d->mRegion -= destRect;
-	if (d->mRegion.isEmpty()) {
-		d->mTimer->stop();
-	}
 
 	QImage tmp;
 	tmp = d->mImage.copy(sourceRect);
