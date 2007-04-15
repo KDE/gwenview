@@ -43,6 +43,8 @@ public:
 	void setRegion(const QRegion&);
 	void addRegion(const QRegion&);
 
+	void setTransformationMode(Qt::TransformationMode);
+
 	bool isRunning();
 
 	static QRect containingRect(const QRectF& rectF);

@@ -31,7 +31,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+// Amount of pixels to keep so that smooth scale is correct
+static const int SMOOTH_MARGIN = 8;
+
 struct ImageScalerPrivate {
+	Qt::TransformationMode mTransformationMode;
 	QImage mImage;
 	qreal mZoom;
 	QRegion mRegion;
@@ -41,6 +45,7 @@ struct ImageScalerPrivate {
 ImageScaler::ImageScaler(QObject* parent)
 : QObject(parent)
 , d(new ImageScalerPrivate) {
+	d->mTransformationMode = Qt::FastTransformation;
 	d->mTimer = new QTimer(this);
 	connect(d->mTimer, SIGNAL(timeout()),
 		SLOT(processChunk()) );
@@ -59,6 +64,10 @@ void ImageScaler::setImage(const QImage& image) {
 
 void ImageScaler::setZoom(qreal zoom) {
 	d->mZoom = zoom;
+}
+
+void ImageScaler::setTransformationMode(Qt::TransformationMode mode) {
+	d->mTransformationMode = mode;
 }
 
 void ImageScaler::setRegion(const QRegion& region) {
@@ -114,7 +123,7 @@ void ImageScaler::processChunk() {
 	QRect sourceRect = containingRect(sourceRectF);
 	sourceRect = sourceRect.intersected(d->mImage.rect());
 	Q_ASSERT(!sourceRect.isEmpty());
-	
+
 	// destRect is almost like rect, but it contains only "full" pixels
 	QRect destRect = QRect(
 		int(sourceRect.left() * d->mZoom),
@@ -124,8 +133,31 @@ void ImageScaler::processChunk() {
 		);
 
 	QImage tmp;
-	tmp = d->mImage.copy(sourceRect);
-	tmp = tmp.scaled(destRect.size());
+	if (d->mTransformationMode == Qt::FastTransformation) {
+		tmp = d->mImage.copy(sourceRect);
+		tmp = tmp.scaled(
+			destRect.width(),
+			destRect.height(),
+			Qt::IgnoreAspectRatio,
+			d->mTransformationMode);
+	} else {
+		// Adjust sourceRect so that the scaling algorithm has enough pixels around
+		// to correctly smooth borders
+		sourceRect.adjust(-SMOOTH_MARGIN, -SMOOTH_MARGIN, SMOOTH_MARGIN, SMOOTH_MARGIN);
+
+		// Scale the source rect
+		tmp = d->mImage.copy(sourceRect);
+		int destMargin = int(SMOOTH_MARGIN * d->mZoom);
+		tmp = tmp.scaled(
+			destRect.width() + 2 * destMargin,
+			destRect.height() + 2 * destMargin,
+			Qt::IgnoreAspectRatio,
+			d->mTransformationMode);
+
+		// Remove the extra pixels added before
+		tmp = tmp.copy(destMargin, destMargin, destRect.width(), destRect.height());
+	}
+
 	scaledRect(destRect.left(), destRect.top(), tmp);
 }
 
