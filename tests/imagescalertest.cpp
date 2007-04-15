@@ -131,6 +131,7 @@ void ImageScalerTest::testScalePartialImage() {
  * Scale whole image in two passes, not using exact pixel boundaries
  */
 void ImageScalerTest::testScaleFullImageTwoPasses() {
+	QFETCH(qreal, zoom);
 	QImage image(10, 10, QImage::Format_ARGB32);
 	{
 		QPainter painter(&image);
@@ -138,40 +139,44 @@ void ImageScalerTest::testScaleFullImageTwoPasses() {
 		painter.drawLine(0, 0, image.width(), image.height());
 	}
 
-	QList<double> zoomList;
-	zoomList << 0.5 << 2.0;
-	Q_FOREACH(double zoom, zoomList) {
-		Gwenview::ImageScaler scaler;
-		ImageScalerClient client(&scaler);
+	Gwenview::ImageScaler scaler;
+	ImageScalerClient client(&scaler);
 
-		scaler.setImage(image);
-		scaler.setZoom(zoom);
-		int zWidth = int(image.width() * zoom);
-		int zHeight = int(image.width() * zoom);
-		int partialZWidth = zWidth / 3;
-		scaler.setRegion(
-			QRect(
-				0, 0,
-				partialZWidth, zHeight)
-			);
+	scaler.setImage(image);
+	scaler.setZoom(zoom);
+	int zWidth = int(image.width() * zoom);
+	int zHeight = int(image.width() * zoom);
+	int partialZWidth = zWidth / 3;
+	scaler.setRegion(
+		QRect(
+			0, 0,
+			partialZWidth, zHeight)
+		);
 
-		while (scaler.isRunning()) {
-			QTest::qWait(30);
-		}
-
-		scaler.addRegion(
-			QRect(
-				partialZWidth, 0,
-				zWidth - partialZWidth, zHeight)
-			);
-
-		while (scaler.isRunning()) {
-			QTest::qWait(30);
-		}
-
-		QImage expectedImage = image.scaled(image.size() * zoom);
-
-		QImage scaledImage = client.createFullImage();
-		QCOMPARE(expectedImage, scaledImage);
+	while (scaler.isRunning()) {
+		QTest::qWait(30);
 	}
+
+	scaler.addRegion(
+		QRect(
+			partialZWidth, 0,
+			zWidth - partialZWidth, zHeight)
+		);
+
+	while (scaler.isRunning()) {
+		QTest::qWait(30);
+	}
+
+	QImage expectedImage = image.scaled(image.size() * zoom);
+
+	QImage scaledImage = client.createFullImage();
+	QCOMPARE(expectedImage, scaledImage);
+}
+
+
+void ImageScalerTest::testScaleFullImageTwoPasses_data() {
+	QTest::addColumn<qreal>("zoom");
+
+	QTest::newRow("0.5") << 0.5;
+	QTest::newRow("2.0") << 2.0;
 }
