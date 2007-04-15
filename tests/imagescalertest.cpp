@@ -179,4 +179,5 @@ void ImageScalerTest::testScaleFullImageTwoPasses_data() {
 
 	QTest::newRow("0.5") << 0.5;
 	QTest::newRow("2.0") << 2.0;
+	QTest::newRow("4.0") << 4.0;
 }

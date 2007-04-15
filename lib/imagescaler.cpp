@@ -63,12 +63,18 @@ void ImageScaler::setZoom(qreal zoom) {
 
 void ImageScaler::setRegion(const QRegion& region) {
 	d->mRegion = region;
-	d->mTimer->start();	
+	if(!d->mRegion.isEmpty()) {
+		d->mTimer->start();
+	} else {
+		d->mTimer->stop();
+	}
 }
 
 void ImageScaler::addRegion(const QRegion& region) {
 	d->mRegion |= region;
-	d->mTimer->start();	
+	if(!d->mRegion.isEmpty()) {
+		d->mTimer->start();
+	}
 }
 
 bool ImageScaler::isRunning() {
@@ -103,15 +109,15 @@ void ImageScaler::processChunk() {
 
 	QRect sourceRect = containingRect(sourceRectF);
 	sourceRect = sourceRect.intersected(d->mImage.rect());
+	Q_ASSERT(!sourceRect.isEmpty());
 	
 	// destRect is almost like rect, but it contains only "full" pixels
-	QRectF destRectF(
-			sourceRectF.left() * d->mZoom,
-			sourceRectF.top() * d->mZoom,
-			sourceRectF.width() * d->mZoom,
-			sourceRectF.height() * d->mZoom
-			);
-	QRect destRect = containingRect(destRectF);
+	QRect destRect = QRect(
+		int(sourceRect.left() * d->mZoom),
+		int(sourceRect.top() * d->mZoom),
+		int(sourceRect.width() * d->mZoom),
+		int(sourceRect.height() * d->mZoom)
+		);
 	Q_ASSERT(!destRect.isEmpty());
 
 	d->mRegion -= destRect;
