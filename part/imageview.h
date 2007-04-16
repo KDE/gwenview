@@ -17,43 +17,53 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef GVPART_H
-#define GVPART_H
+#ifndef IMAGEVIEW_H
+#define IMAGEVIEW_H
 
-// Local
-#include "../lib/imageviewpart.h"
-
-class KAboutData;
-class KAction;
+// Qt
+#include <QAbstractScrollArea>
 
 namespace Gwenview {
 
-class ImageView;
+class ImageScaler;
 
-class GVPart : public ImageViewPart {
+class ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
+	ImageView(QWidget* parent);
 
-	static KAboutData* createAboutData();
+	void setImage(const QImage& image);
 
-	virtual Document* document();
+	void setZoom(qreal zoom);
+
+	qreal zoom() const;
+
+	bool zoomToFit() const;
+
+public Q_SLOTS:
+	void setZoomToFit(bool on);
 
 protected:
-	virtual bool openFile();
+	virtual void paintEvent(QPaintEvent*);
+
+	virtual void resizeEvent(QResizeEvent*);
+
+	virtual void scrollContentsBy(int dx, int dy);
 
 private Q_SLOTS:
-	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
+	void updateFromScaler(int left, int top, const QImage& image);
 
 private:
-	ImageView* mView;
-	Document* mDocument;
-	KAction* mZoomToFitAction;
+	void updateScrollBars();
+	qreal computeZoomToFit() const;
+	void startScaler();
+	QImage mImage;
+	qreal mZoom;
+	bool mZoomToFit;
+	QImage mBuffer;
+	ImageScaler* mScaler;
 };
 
 } // namespace
 
-
-#endif /* GVPART_H */
+#endif /* IMAGEVIEW_H */
