@@ -153,7 +153,7 @@ qreal ImageView::computeZoomToFit() const {
 
 void ImageView::scrollContentsBy(int dx, int dy) {
 	// Scroll existing
-	QImage newBuffer(d->mBuffer.size(), QImage::Format_ARGB32_Premultiplied);
+	QImage newBuffer(d->mBuffer.size(), QImage::Format_ARGB32);
 	newBuffer.fill(0);
 	{
 		QPainter painter(&newBuffer);
