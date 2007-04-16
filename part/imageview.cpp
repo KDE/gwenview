@@ -31,49 +31,63 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 
+struct ImageViewPrivate {
+	QImage mImage;
+	qreal mZoom;
+	bool mZoomToFit;
+	QImage mBuffer;
+	ImageScaler* mScaler;
+};
+
+
 ImageView::ImageView(QWidget* parent)
 : QAbstractScrollArea(parent)
+, d(new ImageViewPrivate)
 {
-	mZoom = 1.;
-	mZoomToFit = true;
+	d->mZoom = 1.;
+	d->mZoomToFit = true;
 	setFrameShape(QFrame::NoFrame);
 	setViewport(new QWidget());
 	viewport()->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
-	mScaler = new ImageScaler(this);
-	mScaler->setTransformationMode(Qt::SmoothTransformation);
-	connect(mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
+	d->mScaler = new ImageScaler(this);
+	d->mScaler->setTransformationMode(Qt::SmoothTransformation);
+	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
 
+ImageView::~ImageView() {
+	delete d;
+}
+
 void ImageView::setImage(const QImage& image) {
-	mImage = image;
+	d->mImage = image;
 	updateScrollBars();
 	startScaler();
 }
 
 void ImageView::startScaler() {
-	mScaler->setImage(mImage);
-	mScaler->setZoom(mZoom);
-	QRect rect(QPoint(0, 0), mImage.size() * mZoom);
-	mScaler->setRegion(QRegion(rect));
+	d->mScaler->setImage(d->mImage);
+	d->mScaler->setZoom(d->mZoom);
+	QRect rect(QPoint(0, 0), d->mImage.size() * d->mZoom);
+	d->mScaler->setRegion(QRegion(rect));
 }
 
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(viewport());
 	painter.setClipRect(event->rect());
-	painter.drawImage(0, 0, mBuffer);
+	painter.drawImage(0, 0, d->mBuffer);
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
-	QImage tmp = mBuffer.copy(0, 0, viewport()->width(), viewport()->height());
-	mBuffer = QImage(viewport()->size(), QImage::Format_ARGB32);
+	QImage tmp = d->mBuffer.copy(0, 0, viewport()->width(), viewport()->height());
+	d->mBuffer = QImage(viewport()->size(), QImage::Format_ARGB32);
 	{
-		QPainter painter(&mBuffer);
+		QPainter painter(&d->mBuffer);
 		painter.drawImage(0, 0, tmp);
 	}
-	if (mZoomToFit) {
+	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	} else {
 		updateScrollBars();
@@ -82,22 +96,22 @@ void ImageView::resizeEvent(QResizeEvent*) {
 }
 
 void ImageView::setZoom(qreal zoom) {
-	mZoom = zoom;
+	d->mZoom = zoom;
 	updateScrollBars();
 	startScaler();
 }
 
 qreal ImageView::zoom() const {
-	return mZoom;
+	return d->mZoom;
 }
 
 bool ImageView::zoomToFit() const {
-	return mZoomToFit;
+	return d->mZoomToFit;
 }
 
 void ImageView::setZoomToFit(bool on) {
-	mZoomToFit = on;
-	if (mZoomToFit) {
+	d->mZoomToFit = on;
+	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	} else {
 		setZoom(1.);
@@ -105,7 +119,7 @@ void ImageView::setZoomToFit(bool on) {
 }
 
 void ImageView::updateScrollBars() {
-	if (mZoomToFit) {
+	if (d->mZoomToFit) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		return;
@@ -117,11 +131,11 @@ void ImageView::updateScrollBars() {
 	int width = viewport()->width();
 	int height = viewport()->height();
 
-	max = qMax(0, int(mImage.width() * mZoom) - width);
+	max = qMax(0, int(d->mImage.width() * d->mZoom) - width);
 	horizontalScrollBar()->setRange(0, max);
 	horizontalScrollBar()->setPageStep(width);
 
-	max = qMax(0, int(mImage.height() * mZoom) - height);
+	max = qMax(0, int(d->mImage.height() * d->mZoom) - height);
 	verticalScrollBar()->setRange(0, max);
 	verticalScrollBar()->setPageStep(height);
 }
@@ -129,9 +143,9 @@ void ImageView::updateScrollBars() {
 qreal ImageView::computeZoomToFit() const {
 	int width = viewport()->width();
 	int height = viewport()->height();
-	qreal zoom = qreal(width) / mImage.width();
-	if ( int(mImage.height() * zoom) > height) {
-		zoom = qreal(height) / mImage.height();
+	qreal zoom = qreal(width) / d->mImage.width();
+	if ( int(d->mImage.height() * zoom) > height) {
+		zoom = qreal(height) / d->mImage.height();
 	}
 	return zoom;
 }
@@ -139,13 +153,13 @@ qreal ImageView::computeZoomToFit() const {
 
 void ImageView::scrollContentsBy(int dx, int dy) {
 	// Scroll existing
-	QImage newBuffer(mBuffer.size(), QImage::Format_ARGB32_Premultiplied);
+	QImage newBuffer(d->mBuffer.size(), QImage::Format_ARGB32_Premultiplied);
 	newBuffer.fill(0);
 	{
 		QPainter painter(&newBuffer);
-		painter.drawImage(dx, dy, mBuffer);
+		painter.drawImage(dx, dy, d->mBuffer);
 	}
-	mBuffer = newBuffer;
+	d->mBuffer = newBuffer;
 
 	// Scale missing parts
 	QRegion region;
@@ -169,7 +183,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	}
 	region |= rect;
 
-	mScaler->addRegion(region);
+	d->mScaler->addRegion(region);
 	viewport()->update();
 }
 
@@ -178,7 +192,7 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 	left -= horizontalScrollBar()->value();
 	top -= verticalScrollBar()->value();
 	{
-		QPainter painter(&mBuffer);
+		QPainter painter(&d->mBuffer);
 		painter.drawImage(left, top, image);
 	}
 	viewport()->update(left, top, image.width(), image.height());

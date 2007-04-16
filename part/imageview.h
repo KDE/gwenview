@@ -27,10 +27,12 @@ namespace Gwenview {
 
 class ImageScaler;
 
+class ImageViewPrivate;
 class ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
 	ImageView(QWidget* parent);
+	~ImageView();
 
 	void setImage(const QImage& image);
 
@@ -57,11 +59,8 @@ private:
 	void updateScrollBars();
 	qreal computeZoomToFit() const;
 	void startScaler();
-	QImage mImage;
-	qreal mZoom;
-	bool mZoomToFit;
-	QImage mBuffer;
-	ImageScaler* mScaler;
+
+	ImageViewPrivate* const d;
 };
 
 } // namespace
