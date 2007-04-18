@@ -24,6 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPaintEvent>
 #include <QScrollBar>
 
+// KDE
+#include <kdebug.h>
+
 // Local
 #include "../lib/imagescaler.h"
 
@@ -77,12 +80,33 @@ void ImageView::startScaler() {
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(viewport());
 	painter.setClipRect(event->rect());
-	painter.drawImage(0, 0, d->mBuffer);
+	int left = qMax( (viewport()->width() - d->mBuffer.width()) / 2, 0);
+	int top = qMax( (viewport()->height() - d->mBuffer.height()) / 2, 0);
+
+	// Erase pixels around the image
+	QRect imageRect(QPoint(left, top), d->mBuffer.size());
+	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
+	Q_FOREACH(QRect rect, emptyRegion.rects()) {
+		painter.fillRect(rect, Qt::black);
+	}
+
+	painter.drawImage(left, top, d->mBuffer);
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
-	QImage newBuffer = QImage(viewport()->size(), QImage::Format_ARGB32);
-	newBuffer.fill(0);
+	QSize visibleSize;
+	qreal zoom;
+	if (d->mZoomToFit) {
+		zoom = computeZoomToFit();
+	} else {
+		zoom = d->mZoom;
+	}
+
+	visibleSize = d->mImage.size() * zoom;
+	visibleSize = visibleSize.boundedTo(viewport()->size());
+
+	QImage newBuffer = QImage(visibleSize, QImage::Format_ARGB32);
+	newBuffer.fill(qRgb(0, 0, 0));
 	{
 		QPainter painter(&newBuffer);
 		painter.drawImage(0, 0, d->mBuffer);
@@ -196,7 +220,9 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 		QPainter painter(&d->mBuffer);
 		painter.drawImage(left, top, image);
 	}
-	viewport()->update(left, top, image.width(), image.height());
+	// FIXME: take image offset into account and do not update the whole
+	// viewport
+	viewport()->update();//left, top, image.width(), image.height());
 }
 
 
