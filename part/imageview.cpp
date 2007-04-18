@@ -81,12 +81,13 @@ void ImageView::paintEvent(QPaintEvent* event) {
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
-	QImage tmp = d->mBuffer.copy(0, 0, viewport()->width(), viewport()->height());
-	d->mBuffer = QImage(viewport()->size(), QImage::Format_ARGB32);
+	QImage newBuffer = QImage(viewport()->size(), QImage::Format_ARGB32);
+	newBuffer.fill(0);
 	{
-		QPainter painter(&d->mBuffer);
-		painter.drawImage(0, 0, tmp);
+		QPainter painter(&newBuffer);
+		painter.drawImage(0, 0, d->mBuffer);
 	}
+	d->mBuffer = newBuffer;
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	} else {
