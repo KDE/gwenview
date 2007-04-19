@@ -57,7 +57,6 @@ private Q_SLOTS:
 
 private:
 	void updateScrollBars();
-	qreal computeZoomToFit() const;
 	void startScaler();
 
 	ImageViewPrivate* const d;

@@ -48,6 +48,31 @@ struct ImageViewPrivate {
 
 		return QPoint(left, top);
 	}
+
+	qreal computeZoomToFit() const {
+		int width = mViewport->width();
+		int height = mViewport->height();
+		qreal zoom = qreal(width) / mImage.width();
+		if ( int(mImage.height() * zoom) > height) {
+			zoom = qreal(height) / mImage.height();
+		}
+		return zoom;
+	}
+
+	QImage createBuffer() const {
+		QSize visibleSize;
+		qreal zoom;
+		if (mZoomToFit) {
+			zoom = computeZoomToFit();
+		} else {
+			zoom = mZoom;
+		}
+
+		visibleSize = mImage.size() * zoom;
+		visibleSize = visibleSize.boundedTo(mViewport->size());
+
+		return QImage(visibleSize, QImage::Format_ARGB32);
+	}
 };
 
 
@@ -75,12 +100,15 @@ ImageView::~ImageView() {
 
 void ImageView::setImage(const QImage& image) {
 	d->mImage = image;
+	d->mBuffer = d->createBuffer();
+	d->mBuffer.fill(qRgb(0, 0, 0));
 	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
+		setZoom(d->computeZoomToFit());
 	} else {
 		updateScrollBars();
 		startScaler();
 	}
+	d->mViewport->update();
 }
 
 void ImageView::startScaler() {
@@ -126,7 +154,7 @@ void ImageView::resizeEvent(QResizeEvent*) {
 	}
 	d->mBuffer = newBuffer;
 	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
+		setZoom(d->computeZoomToFit());
 	} else {
 		updateScrollBars();
 		startScaler();
@@ -150,7 +178,7 @@ bool ImageView::zoomToFit() const {
 void ImageView::setZoomToFit(bool on) {
 	d->mZoomToFit = on;
 	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
+		setZoom(d->computeZoomToFit());
 	} else {
 		setZoom(1.);
 	}
@@ -176,16 +204,6 @@ void ImageView::updateScrollBars() {
 	max = qMax(0, int(d->mImage.height() * d->mZoom) - height);
 	verticalScrollBar()->setRange(0, max);
 	verticalScrollBar()->setPageStep(height);
-}
-
-qreal ImageView::computeZoomToFit() const {
-	int width = d->mViewport->width();
-	int height = d->mViewport->height();
-	qreal zoom = qreal(width) / d->mImage.width();
-	if ( int(d->mImage.height() * zoom) > height) {
-		zoom = qreal(height) / d->mImage.height();
-	}
-	return zoom;
 }
 
 
