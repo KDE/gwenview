@@ -41,6 +41,13 @@ struct ImageViewPrivate {
 	bool mZoomToFit;
 	QImage mBuffer;
 	ImageScaler* mScaler;
+
+	QPoint imageOffset() const {
+		int left = qMax( (mViewport->width() - mBuffer.width()) / 2, 0);
+		int top = qMax( (mViewport->height() - mBuffer.height()) / 2, 0);
+
+		return QPoint(left, top);
+	}
 };
 
 
@@ -90,13 +97,13 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	int top = qMax( (viewport()->height() - d->mBuffer.height()) / 2, 0);
 
 	// Erase pixels around the image
-	QRect imageRect(QPoint(left, top), d->mBuffer.size());
+	QRect imageRect(offset, d->mBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
 	Q_FOREACH(QRect rect, emptyRegion.rects()) {
 		painter.fillRect(rect, Qt::black);
 	}
 
-	painter.drawImage(left, top, d->mBuffer);
+	painter.drawImage(offset, d->mBuffer);
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
