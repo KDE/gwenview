@@ -121,8 +121,7 @@ void ImageView::startScaler() {
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
-	int left = qMax( (viewport()->width() - d->mBuffer.width()) / 2, 0);
-	int top = qMax( (viewport()->height() - d->mBuffer.height()) / 2, 0);
+	QPoint offset = d->imageOffset();
 
 	// Erase pixels around the image
 	QRect imageRect(offset, d->mBuffer.size());
@@ -135,18 +134,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
-	QSize visibleSize;
-	qreal zoom;
-	if (d->mZoomToFit) {
-		zoom = computeZoomToFit();
-	} else {
-		zoom = d->mZoom;
-	}
-
-	visibleSize = d->mImage.size() * zoom;
-	visibleSize = visibleSize.boundedTo(viewport()->size());
-
-	QImage newBuffer = QImage(visibleSize, QImage::Format_ARGB32);
+	QImage newBuffer = d->createBuffer();
 	newBuffer.fill(qRgb(0, 0, 0));
 	{
 		QPainter painter(&newBuffer);
@@ -251,9 +239,12 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 		QPainter painter(&d->mBuffer);
 		painter.drawImage(left, top, image);
 	}
-	// FIXME: take image offset into account and do not update the whole
-	// viewport
-	viewport()->update();//left, top, image.width(), image.height());
+	QPoint offset = d->imageOffset();
+	d->mViewport->update(
+		offset.x() + left,
+		offset.y() + top,
+		image.width(),
+		image.height());
 }
 
 
