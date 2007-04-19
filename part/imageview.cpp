@@ -35,6 +35,7 @@ namespace Gwenview {
 
 
 struct ImageViewPrivate {
+	QWidget* mViewport;
 	QImage mImage;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -50,8 +51,9 @@ ImageView::ImageView(QWidget* parent)
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
 	setFrameShape(QFrame::NoFrame);
-	setViewport(new QWidget());
-	viewport()->setAttribute(Qt::WA_OpaquePaintEvent, true);
+	d->mViewport = new QWidget();
+	setViewport(d->mViewport);
+	d->mViewport->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
@@ -66,8 +68,12 @@ ImageView::~ImageView() {
 
 void ImageView::setImage(const QImage& image) {
 	d->mImage = image;
-	updateScrollBars();
-	startScaler();
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	} else {
+		updateScrollBars();
+		startScaler();
+	}
 }
 
 void ImageView::startScaler() {
@@ -78,7 +84,7 @@ void ImageView::startScaler() {
 }
 
 void ImageView::paintEvent(QPaintEvent* event) {
-	QPainter painter(viewport());
+	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
 	int left = qMax( (viewport()->width() - d->mBuffer.width()) / 2, 0);
 	int top = qMax( (viewport()->height() - d->mBuffer.height()) / 2, 0);
@@ -153,8 +159,8 @@ void ImageView::updateScrollBars() {
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 	int max;
-	int width = viewport()->width();
-	int height = viewport()->height();
+	int width = d->mViewport->width();
+	int height = d->mViewport->height();
 
 	max = qMax(0, int(d->mImage.width() * d->mZoom) - width);
 	horizontalScrollBar()->setRange(0, max);
@@ -166,8 +172,8 @@ void ImageView::updateScrollBars() {
 }
 
 qreal ImageView::computeZoomToFit() const {
-	int width = viewport()->width();
-	int height = viewport()->height();
+	int width = d->mViewport->width();
+	int height = d->mViewport->height();
 	qreal zoom = qreal(width) / d->mImage.width();
 	if ( int(d->mImage.height() * zoom) > height) {
 		zoom = qreal(height) / d->mImage.height();
@@ -190,8 +196,8 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	QRegion region;
 	int posX = horizontalScrollBar()->value();
 	int posY = verticalScrollBar()->value();
-	int width = viewport()->width();
-	int height = viewport()->height();
+	int width = d->mViewport->width();
+	int height = d->mViewport->height();
 
 	QRect rect;
 	if (dx > 0) {
@@ -209,7 +215,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	region |= rect;
 
 	d->mScaler->addRegion(region);
-	viewport()->update();
+	d->mViewport->update();
 }
 
 
