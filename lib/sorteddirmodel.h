@@ -41,7 +41,7 @@ public:
 	~SortedDirModel();
 	KDirLister* dirLister();
 	KFileItem* itemForIndex(const QModelIndex& index) const;
-	QModelIndex indexForItem(const KFileItem* item) const;
+	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 
 protected:
@@ -49,7 +49,7 @@ protected:
 
 private Q_SLOTS:
 	void generatePreviews(const KFileItemList&);
-	void setItemPreview(const KFileItem*, const QPixmap&);
+	void setItemPreview(const KFileItem&, const QPixmap&);
 
 private:
 	SortedDirModelPrivate * const d;

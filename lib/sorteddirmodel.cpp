@@ -68,12 +68,12 @@ KFileItem* SortedDirModel::itemForIndex(const QModelIndex& index) const {
 }
 
 
-QModelIndex SortedDirModel::indexForItem(const KFileItem* item) const {
-	if (!item) {
+QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const {
+	if (item.isNull()) {
 		return QModelIndex();
 	}
 
-	QModelIndex sourceIndex = d->mSourceModel->indexForItem(*item);
+	QModelIndex sourceIndex = d->mSourceModel->indexForItem(item);
 	return mapFromSource(sourceIndex);
 }
 
@@ -110,14 +110,18 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 void SortedDirModel::generatePreviews(const KFileItemList& list) {
 	KFileItemList sortedList = list;
 	qSort(sortedList.begin(), sortedList.end(), kFileItemLessThan);
-	KIO::PreviewJob* job = KIO::filePreview(sortedList, 128);
-	connect(job, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
-		SLOT(setItemPreview(const KFileItem*, const QPixmap&)));
+	// Must turn QList<KFileItem *> to QList<KFileItem>...
+	QList<KFileItem> itemsToPreview;
+	foreach( KFileItem* it, sortedList )
+		itemsToPreview.append( *it );
+	KIO::PreviewJob* job = KIO::filePreview(itemsToPreview, 128);
+	connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
+		SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
 }
 
 
-void SortedDirModel::setItemPreview(const KFileItem* item, const QPixmap& pixmap) {
-	Q_ASSERT(item != 0);
+void SortedDirModel::setItemPreview(const KFileItem& item, const QPixmap& pixmap) {
+	Q_ASSERT(!item.isNull());
 	QModelIndex index = indexForItem(item);
 	if (!index.isValid()) {
 		kWarning() << "setItemPreview: invalid index\n";
