@@ -53,10 +53,11 @@ Q_SIGNALS:
 	void scaledRect(int left, int top, const QImage&);
 
 private Q_SLOTS:
-	void processChunk();
+	void doScale();
 
 private:
 	ImageScalerPrivate * const d;
+	void processChunk(const QRect&);
 };
 
 } // namespace

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QImage>
 #include <QRegion>
+#include <QTime>
 #include <QTimer>
 
 // KDE
@@ -33,6 +34,10 @@ namespace Gwenview {
 
 // Amount of pixels to keep so that smooth scale is correct
 static const int SMOOTH_MARGIN = 8;
+
+static const int MAX_CHUNK_AREA = 100 * 100;
+
+static const int MAX_SCALE_TIME = 2000;
 
 struct ImageScalerPrivate {
 	Qt::TransformationMode mTransformationMode;
@@ -48,7 +53,7 @@ ImageScaler::ImageScaler(QObject* parent)
 	d->mTransformationMode = Qt::FastTransformation;
 	d->mTimer = new QTimer(this);
 	connect(d->mTimer, SIGNAL(timeout()),
-		SLOT(processChunk()) );
+		SLOT(doScale()) );
 }
 
 ImageScaler::~ImageScaler() {
@@ -104,15 +109,25 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
 }
 
-void ImageScaler::processChunk() {
+void ImageScaler::doScale() {
 	Q_ASSERT(!d->mRegion.isEmpty());
-
-	QRect rect = d->mRegion.rects()[0];
-	d->mRegion -= rect;
-	if (d->mRegion.isEmpty()) {
-		d->mTimer->stop();
+	QTime chrono;
+	chrono.start();
+	while (chrono.elapsed() < MAX_SCALE_TIME && !d->mRegion.isEmpty()) {
+		QRect rect = d->mRegion.rects()[0];
+		if (rect.width() * rect.height() > MAX_CHUNK_AREA) {
+			int height = qMax(1, MAX_CHUNK_AREA / rect.width());
+			rect.setHeight(height);
+		}
+		d->mRegion -= rect;
+		if (d->mRegion.isEmpty()) {
+			d->mTimer->stop();
+		}
+		processChunk(rect);
 	}
+}
 
+void ImageScaler::processChunk(const QRect& rect) {
 	// If rect contains "half" pixels, make sure sourceRect includes them
 	QRectF sourceRectF(
 		rect.left() / d->mZoom,
