@@ -38,4 +38,4 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 	return Document::Ptr(doc);
 }
 
-}; // namespace
+} // namespace
