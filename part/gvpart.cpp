@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "imageview.h"
-#include "../lib/document.h"
+#include "../lib/documentfactory.h"
 
 //Factory Code
 typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
@@ -41,7 +41,6 @@ namespace Gwenview {
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 : ImageViewPart(parent) 
 {
-	mDocument = new Document;
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
 
@@ -62,7 +61,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 
 
 bool GVPart::openFile() {
-	mDocument->load(localFilePath());
+	mDocument = DocumentFactory::instance()->load(localFilePath());
 	mView->setImage(mDocument->image());
 	return true;
 }
@@ -95,7 +94,7 @@ void GVPart::zoomOut() {
 }
 
 
-Document* GVPart::document() {
+Document::Ptr GVPart::document() {
 	return mDocument;
 }
 } // namespace

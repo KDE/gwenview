@@ -17,43 +17,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef GVPART_H
-#define GVPART_H
+#ifndef DOCUMENTFACTORY_H
+#define DOCUMENTFACTORY_H
 
-// Local
-#include "../lib/imageviewpart.h"
+// Qt
+#include <QObject>
 
-class KAboutData;
-class KAction;
+#include "document.h"
+
+class KUrl;
 
 namespace Gwenview {
 
-class ImageView;
-
-class GVPart : public ImageViewPart {
+class GWENVIEWLIB_EXPORT DocumentFactory : public QObject {
 	Q_OBJECT
 public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
+	static DocumentFactory* instance();
 
-	static KAboutData* createAboutData();
-
-	virtual Document::Ptr document();
-
-protected:
-	virtual bool openFile();
-
-private Q_SLOTS:
-	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
+	Document::Ptr load(const KUrl&);
 
 private:
-	ImageView* mView;
-	Document::Ptr mDocument;
-	KAction* mZoomToFitAction;
+	DocumentFactory();
 };
 
 } // namespace
-
-
-#endif /* GVPART_H */
+#endif /* DOCUMENTFACTORY_H */

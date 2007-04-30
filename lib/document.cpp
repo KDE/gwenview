@@ -22,6 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QImage>
 
+// KDE
+#include <KUrl>
+
 namespace Gwenview {
 
 
@@ -41,14 +44,18 @@ Document::~Document() {
 }
 
 
-void Document::load(const QString& path) {
-	d->mImage.load(path);
+void Document::load(const KUrl& url) {
+	d->mImage.load(url.path());
 	loaded();
 }
 
 
 QImage& Document::image() {
 	return d->mImage;
+}
+
+bool Document::isLoaded() const {
+	return true;
 }
 
 } // namespace

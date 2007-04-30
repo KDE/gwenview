@@ -35,7 +35,7 @@ namespace Gwenview {
 
 SelectionContextManagerItem::SelectionContextManagerItem()
 : AbstractContextManagerItem()
-, mDocument(0) {
+, mImageView(0) {
 }
 
 void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
@@ -105,26 +105,32 @@ void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& it
 }
 
 void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
-	if (mDocument) {
-		disconnect(mDocument, 0, this, 0);
+	if (mImageView) {
+		disconnect(mImageView, 0, this, 0);
 	}
 
 	if (imageView) {
-		mDocument = imageView->document();
-		connect(mDocument, SIGNAL(loaded()), SLOT(updatePreview()));
+		mImageView = imageView;
+		connect(imageView, SIGNAL(completed()), SLOT(updatePreview()));
 	} else {
-		mDocument = 0;
+		mImageView = 0;
 		mOneFileImageLabel->hide();
 	}
 }
 
 void SelectionContextManagerItem::updatePreview() {
-	Q_ASSERT(mDocument);
-	if (!mDocument) {
+	Q_ASSERT(mImageView);
+	if (!mImageView) {
 		return;
 	}
 
-	QImage image = mDocument->image().scaled(160, 160, Qt::KeepAspectRatio);
+	Document::Ptr document = mImageView->document();
+	Q_ASSERT(document);
+	if (!document) {
+		return;
+	}
+
+	QImage image = document->image().scaled(160, 160, Qt::KeepAspectRatio);
 	mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
 	mOneFileImageLabel->show();
 }

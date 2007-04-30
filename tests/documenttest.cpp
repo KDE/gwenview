@@ -17,43 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef GVPART_H
-#define GVPART_H
+// Qt
+#include <QImage>
+
+// KDE
+#include <qtest_kde.h>
 
 // Local
-#include "../lib/imageviewpart.h"
+#include "../lib/documentfactory.h"
 
-class KAboutData;
-class KAction;
+#include "documenttest.moc"
 
-namespace Gwenview {
+QTEST_KDEMAIN( DocumentTest, GUI )
 
-class ImageView;
+using namespace Gwenview;
 
-class GVPart : public ImageViewPart {
-	Q_OBJECT
-public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
-
-	static KAboutData* createAboutData();
-
-	virtual Document::Ptr document();
-
-protected:
-	virtual bool openFile();
-
-private Q_SLOTS:
-	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
-
-private:
-	ImageView* mView;
-	Document::Ptr mDocument;
-	KAction* mZoomToFitAction;
-};
-
-} // namespace
-
-
-#endif /* GVPART_H */
+void DocumentTest::testLoad() {
+	KUrl url("test.png");
+	QImage image(url.path());
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	while (!doc->isLoaded()) {
+		QTest::qWait(30);
+	}
+	QCOMPARE(image, doc->image());
+}

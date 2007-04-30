@@ -17,43 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef GVPART_H
-#define GVPART_H
+// Qt
+#include <QObject>
 
-// Local
-#include "../lib/imageviewpart.h"
-
-class KAboutData;
-class KAction;
-
-namespace Gwenview {
-
-class ImageView;
-
-class GVPart : public ImageViewPart {
+class DocumentTest : public QObject {
 	Q_OBJECT
-public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
-
-	static KAboutData* createAboutData();
-
-	virtual Document::Ptr document();
-
-protected:
-	virtual bool openFile();
 
 private Q_SLOTS:
-	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
-
-private:
-	ImageView* mView;
-	Document::Ptr mDocument;
-	KAction* mZoomToFitAction;
+	void testLoad();
 };
-
-} // namespace
-
-
-#endif /* GVPART_H */

@@ -24,18 +24,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QObject>
+#include <QSharedData>
+
+// KDE
+#include <ksharedptr.h>
 
 class QImage;
 
+class KUrl;
+
 namespace Gwenview {
 
+class DocumentFactory;
 class DocumentPrivate;
-class GWENVIEWLIB_EXPORT Document : public QObject {
+class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
-	Document();
+	typedef KSharedPtr<Document> Ptr;
 	~Document();
-	void load(const QString&);
+	void load(const KUrl&);
+
+	bool isLoaded() const;
 
 	QImage& image();
 
@@ -43,6 +52,8 @@ Q_SIGNALS:
 	void loaded();
 
 private:
+	friend class DocumentFactory;
+	Document();
 	DocumentPrivate * const d;
 };
 

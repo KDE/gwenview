@@ -32,7 +32,6 @@ class KFileItem;
 
 namespace Gwenview {
 
-class Document;
 class SideBarGroup;
 
 class SelectionContextManagerItem : public QObject, public AbstractContextManagerItem {
@@ -59,7 +58,6 @@ private:
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
 	ImageViewPart* mImageView;
-	Document* mDocument;
 };
 
 } // namespace
