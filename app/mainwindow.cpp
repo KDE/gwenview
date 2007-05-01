@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <kmountpoint.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
@@ -71,7 +72,10 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	}
 
 	// Do direct stat instead of using KIO if the file is local (faster)
-	if( url.isLocalFile() && !KIO::probably_slow_mounted( url.path())) {
+        KMountPoint::List mpl = KMountPoint::currentMountPoints();
+        KMountPoint::Ptr mp = mpl.findByPath( url.path() );
+
+	if( url.isLocalFile() && !mp->probablySlow()) {
 		KDE_struct_stat buff;
 		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
 			return S_ISDIR( buff.st_mode );
@@ -502,7 +506,7 @@ void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 	KUrl url = d->mPart->url();
 	Q_FOREACH(KFileItem* item, list) {
 		if (item->url() == url) {
-			QModelIndex index = d->mDirModel->indexForItem(item);
+			QModelIndex index = d->mDirModel->indexForItem(*item);
 			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
 			return;
 		}
