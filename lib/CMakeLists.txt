@@ -1,9 +1,13 @@
 set(gwenviewlib_SRCS
+	abstractdocumentimpl.cpp
     archiveutils.cpp
 	document.cpp
 	documentfactory.cpp
+	documentloadedimpl.cpp
+	emptydocumentimpl.cpp
 	imagescaler.cpp
 	imageviewpart.cpp
+	loadingdocumentimpl.cpp
     mimetypeutils.cpp
 	sorteddirmodel.cpp
     thumbnailview.cpp

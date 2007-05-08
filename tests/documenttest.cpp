@@ -34,10 +34,27 @@ using namespace Gwenview;
 
 void DocumentTest::testLoad() {
 	KUrl url("test.png");
-	QImage image(url.path());
+	QImage image;
+	bool ok = image.load(url.path());
+	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	while (!doc->isLoaded()) {
 		QTest::qWait(30);
 	}
 	QCOMPARE(image, doc->image());
+}
+
+/**
+ * Check that deleting a document while it is loading does not crash
+ */
+void DocumentTest::testDeleteWhileLoading() {
+	{
+		KUrl url("test.png");
+		QImage image;
+		bool ok = image.load(url.path());
+		QVERIFY2(ok, "Could not load 'test.png'");
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
+	}
+	// Wait two seconds. If the test fails we will get a segfault while waiting
+	QTest::qWait(2000);
 }

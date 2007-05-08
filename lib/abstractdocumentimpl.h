@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
 Copyright 2007 Aurélien Gâteau
@@ -14,59 +15,54 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef DOCUMENT_H
-#define DOCUMENT_H
-
-#include "gwenviewlib_export.h"
+#ifndef ABSTRACTDOCUMENTIMPL_H
+#define ABSTRACTDOCUMENTIMPL_H
 
 // Qt
 #include <QObject>
-#include <QSharedData>
 
 // KDE
-#include <ksharedptr.h>
+
+// Local
 
 class QImage;
 class QRect;
 
-class KUrl;
-
 namespace Gwenview {
 
-class AbstractDocumentImpl;
-class DocumentFactory;
-class DocumentPrivate;
+class Document;
 
-class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
+class AbstractDocumentImplPrivate;
+class AbstractDocumentImpl : public QObject {
 	Q_OBJECT
 public:
-	typedef KSharedPtr<Document> Ptr;
-	~Document();
-	void load(const KUrl&);
+	AbstractDocumentImpl(Document*);
+	virtual ~AbstractDocumentImpl();
 
-	bool isLoaded() const;
+	/**
+	 * This method is called by Document::switchToImpl after it has connected
+	 * signals to the object
+	 */
+	virtual void init() = 0;
 
-	QImage& image();
-
-	KUrl url() const;
+	virtual bool isLoaded() const = 0;
 
 Q_SIGNALS:
 	void loaded();
 
+protected:
+	Document* document() const;
+	void setDocumentImage(const QImage& image);
+	void switchToImpl(AbstractDocumentImpl*  impl);
+
 private:
-	friend class DocumentFactory;
-	friend class AbstractDocumentImpl;
-
-	void setImage(const QImage&);
-	void switchToImpl(AbstractDocumentImpl* impl);
-
-	Document();
-	DocumentPrivate * const d;
+	AbstractDocumentImplPrivate* const d;
 };
+
 
 } // namespace
 
-#endif /* DOCUMENT_H */
+#endif /* ABSTRACTDOCUMENTIMPL_H */

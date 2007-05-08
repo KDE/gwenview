@@ -41,11 +41,13 @@ public:
 
 protected:
 	virtual bool openFile();
+	virtual bool openUrl(const KUrl&);
 
 private Q_SLOTS:
 	void zoomActualSize();
 	void zoomIn();
 	void zoomOut();
+	void setViewImageFromDocument();
 
 private:
 	ImageView* mView;

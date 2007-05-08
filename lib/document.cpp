@@ -25,10 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <KUrl>
 
+// Local
+#include "emptydocumentimpl.h"
+#include "loadingdocumentimpl.h"
+
 namespace Gwenview {
 
 
 struct DocumentPrivate {
+	AbstractDocumentImpl* mImpl;
+	KUrl mUrl;
 	QImage mImage;
 };
 
@@ -36,17 +42,19 @@ struct DocumentPrivate {
 Document::Document() 
 : QObject()
 , d(new DocumentPrivate) {
+    d->mImpl = new EmptyDocumentImpl(this);
 }
 
 
 Document::~Document() {
+	delete d->mImpl;
 	delete d;
 }
 
 
 void Document::load(const KUrl& url) {
-	d->mImage.load(url.path());
-	loaded();
+	d->mUrl = url;
+    switchToImpl(new LoadingDocumentImpl(this));
 }
 
 
@@ -55,7 +63,30 @@ QImage& Document::image() {
 }
 
 bool Document::isLoaded() const {
-	return true;
+	return d->mImpl->isLoaded();
+}
+
+
+void Document::switchToImpl(AbstractDocumentImpl* impl) {
+	// There should always be an implementation defined
+	Q_ASSERT(d->mImpl);
+	Q_ASSERT(impl);
+	delete d->mImpl;
+	d->mImpl=impl;
+
+	connect(d->mImpl, SIGNAL(loaded()),
+		this, SIGNAL(loaded()) );
+	d->mImpl->init();
+}
+
+
+void Document::setImage(const QImage& image) {
+	d->mImage = image;
+}
+
+
+KUrl Document::url() const {
+	return d->mUrl;
 }
 
 } // namespace

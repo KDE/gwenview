@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
 Copyright 2007 Aurélien Gâteau
@@ -14,16 +15,34 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
+// Self
+#include "emptydocumentimpl.h"
+
 // Qt
-#include <QObject>
 
-class DocumentTest : public QObject {
-	Q_OBJECT
+// KDE
 
-private Q_SLOTS:
-	void testLoad();
-	void testDeleteWhileLoading();
-};
+// Local
+
+namespace Gwenview {
+
+EmptyDocumentImpl::EmptyDocumentImpl(Document* document)
+: AbstractDocumentImpl(document)
+{}
+
+
+EmptyDocumentImpl::~EmptyDocumentImpl()
+{}
+
+
+void EmptyDocumentImpl::init() {
+}
+
+bool EmptyDocumentImpl::isLoaded() const {
+	return false;
+}
+
+} // namespace

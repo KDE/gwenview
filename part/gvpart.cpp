@@ -61,9 +61,28 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 
 
 bool GVPart::openFile() {
-	mDocument = DocumentFactory::instance()->load(localFilePath());
-	mView->setImage(mDocument->image());
+	return false;
+}
+
+
+bool GVPart::openUrl(const KUrl& url) {
+	if (!url.isValid()) {
+		return false;
+	}
+	setUrl(url);
+	mDocument = DocumentFactory::instance()->load(url);
+	connect(mDocument.data(), SIGNAL(loaded()), SLOT(setViewImageFromDocument()) );
+	if (mDocument->isLoaded()) {
+		setViewImageFromDocument();
+	}
 	return true;
+}
+
+
+void GVPart::setViewImageFromDocument() {
+	mView->setImage(mDocument->image());
+	emit setWindowCaption( url().prettyUrl() );
+	emit completed();
 }
 
 
