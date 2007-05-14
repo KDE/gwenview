@@ -6,6 +6,7 @@ set(gwenviewlib_SRCS
 	documentloadedimpl.cpp
 	emptydocumentimpl.cpp
 	imagescaler.cpp
+	imageutils.cpp
 	imageviewpart.cpp
 	jpegcontent.cpp
 	loadingdocumentimpl.cpp

@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/documentfactory.h"
+#include "../lib/imageutils.h"
 
 #include "documenttest.moc"
 
@@ -57,4 +58,21 @@ void DocumentTest::testDeleteWhileLoading() {
 	}
 	// Wait two seconds. If the test fails we will get a segfault while waiting
 	QTest::qWait(2000);
+}
+
+void DocumentTest::testLoadRotated() {
+	KUrl url("orient6.jpg");
+	QImage image;
+	bool ok = image.load(url.path());
+	QVERIFY2(ok, "Could not load 'orient6.jpg'");
+	QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
+	image = image.transformed(matrix);
+	image.save("expected.png", "PNG");
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	while (!doc->isLoaded()) {
+		QTest::qWait(30);
+	}
+	doc->image().save("result.png", "PNG");
+	QCOMPARE(image, doc->image());
 }

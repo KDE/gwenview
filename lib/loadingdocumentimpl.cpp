@@ -22,7 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "loadingdocumentimpl.moc"
 
 // Qt
+#include <QByteArray>
 #include <QImage>
+#include <QImageReader>
 #include <QThread>
 
 // KDE
@@ -31,6 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "document.h"
 #include "documentloadedimpl.h"
+#include "imageutils.h"
+#include "jpegcontent.h"
 
 namespace Gwenview {
 
@@ -38,7 +42,21 @@ namespace Gwenview {
 class LoadingThread : public QThread {
 public:
 	virtual void run() {
-		mImage.load(mUrl.path());
+		QString path = mUrl.path();
+		QByteArray format = QImageReader::imageFormat(path);
+		bool ok = mImage.load(path, format.data());
+		if (!ok) {
+			return;
+		}
+		if (format == "jpeg") {
+			JpegContent content;
+			if (!content.load(path)) {
+				return;
+			}
+			Gwenview::Orientation orientation = content.orientation();
+			QMatrix matrix = ImageUtils::transformMatrix(orientation);
+			mImage = mImage.transformed(matrix);
+		}
 	}
 
 	KUrl mUrl;
