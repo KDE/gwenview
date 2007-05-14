@@ -201,3 +201,11 @@ void ImageScalerTest::testScaleThinArea() {
 		QTest::qWait(30);
 	}
 }
+
+
+void ImageScalerTest::testDontStartWithoutImage() {
+	Gwenview::ImageScaler scaler;
+	scaler.setZoom(1.0);
+	scaler.setRegion(QRect(0, 0, 10, 10));
+	QVERIFY(!scaler.isRunning());
+}

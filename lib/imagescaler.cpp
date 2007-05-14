@@ -77,18 +77,18 @@ void ImageScaler::setTransformationMode(Qt::TransformationMode mode) {
 
 void ImageScaler::setRegion(const QRegion& region) {
 	d->mRegion = region;
-	if(!d->mRegion.isEmpty()) {
-		d->mTimer->start();
-	} else {
+	if (d->mRegion.isEmpty()) {
 		d->mTimer->stop();
+		return;
+	}
+
+	if (!d->mImage.isNull()) {
+		d->mTimer->start();
 	}
 }
 
 void ImageScaler::addRegion(const QRegion& region) {
-	d->mRegion |= region;
-	if(!d->mRegion.isEmpty()) {
-		d->mTimer->start();
-	}
+	setRegion(d->mRegion | region);
 }
 
 bool ImageScaler::isRunning() {
