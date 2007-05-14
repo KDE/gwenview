@@ -35,6 +35,7 @@ namespace Gwenview {
 
 
 struct ImageViewPrivate {
+	ImageView* mView;
 	QWidget* mViewport;
 	QImage mImage;
 	qreal mZoom;
@@ -73,6 +74,17 @@ struct ImageViewPrivate {
 
 		return QImage(visibleSize, QImage::Format_ARGB32);
 	}
+
+	QRect mapViewportToZoomedImage(const QRect& viewportRect) {
+		QRect rect = QRect(
+			viewportRect.x() + mView->horizontalScrollBar()->value(),
+			viewportRect.y() + mView->verticalScrollBar()->value(),
+			viewportRect.width(),
+			viewportRect.height()
+		);
+
+		return rect;
+	}
 };
 
 
@@ -80,6 +92,7 @@ ImageView::ImageView(QWidget* parent)
 : QAbstractScrollArea(parent)
 , d(new ImageViewPrivate)
 {
+	d->mView = this;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
 	setFrameShape(QFrame::NoFrame);
@@ -114,7 +127,8 @@ void ImageView::setImage(const QImage& image) {
 void ImageView::startScaler() {
 	d->mScaler->setImage(d->mImage);
 	d->mScaler->setZoom(d->mZoom);
-	QRect rect(QPoint(0, 0), d->mImage.size() * d->mZoom);
+
+	QRect rect = d->mapViewportToZoomedImage(d->mViewport->rect());
 	d->mScaler->setRegion(QRegion(rect));
 }
 
