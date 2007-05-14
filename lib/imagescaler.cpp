@@ -137,7 +137,9 @@ void ImageScaler::processChunk(const QRect& rect) {
 
 	QRect sourceRect = containingRect(sourceRectF);
 	sourceRect = sourceRect.intersected(d->mImage.rect());
-	Q_ASSERT(!sourceRect.isEmpty());
+	if (sourceRect.isEmpty()) {
+		return;
+	}
 
 	// destRect is almost like rect, but it contains only "full" pixels
 	QRect destRect = QRect(
