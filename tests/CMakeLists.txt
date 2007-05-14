@@ -22,3 +22,14 @@ kde4_automoc(${documenttest_SRCS})
 kde4_add_test(documenttest ${documenttest_SRCS})
 
 target_link_libraries(documenttest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+# JPEGContent
+set(jpegcontenttest_SRCS
+	jpegcontenttest.cpp
+	)
+
+kde4_automoc(${jpegcontenttest_SRCS})
+
+kde4_add_test(jpegcontenttest ${jpegcontenttest_SRCS})
+
+target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
