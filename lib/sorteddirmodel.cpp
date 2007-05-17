@@ -112,8 +112,9 @@ void SortedDirModel::generatePreviews(const KFileItemList& list) {
 	qSort(sortedList.begin(), sortedList.end(), kFileItemLessThan);
 	// Must turn QList<KFileItem *> to QList<KFileItem>...
 	QList<KFileItem> itemsToPreview;
-	foreach( KFileItem* it, sortedList )
+	Q_FOREACH( KFileItem* it, sortedList ) {
 		itemsToPreview.append( *it );
+	}
 	KIO::PreviewJob* job = KIO::filePreview(itemsToPreview, 128);
 	connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 		SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
