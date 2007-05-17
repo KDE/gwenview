@@ -30,6 +30,29 @@ public:
 	ThumbnailView(QWidget* parent);
 	~ThumbnailView();
 
+	/**
+	 * Sets the thumbnail size, in pixels.
+	 */
+	void setThumbnailSize(int pixel);
+
+	/**
+	 * Returns the thumbnail size.
+	 */
+	int thumbnailSize() const;
+
+	/**
+	 * Returns the width of an item. This width is proportional to the
+	 * thumbnail size.
+	 */
+	int itemWidth() const;
+
+	/**
+	 * Returns the height of an item. This width is proportional to the
+	 * thumbnail size.
+	 */
+	int itemHeight() const;	
+
+
 private:
 	ThumbnailViewPrivate * const d;
 };
