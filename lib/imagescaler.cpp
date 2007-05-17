@@ -142,9 +142,11 @@ void ImageScaler::processChunk(const QRect& rect) {
 	}
 
 	// destRect is almost like rect, but it contains only "full" pixels
+	// (We use lrint to avoid missing lines (see
+	// ImageScalerTest::testScaleDownBigImage)
 	QRect destRect = QRect(
-		int(sourceRect.left() * d->mZoom),
-		int(sourceRect.top() * d->mZoom),
+		lrint(sourceRect.left() * d->mZoom),
+		lrint(sourceRect.top() * d->mZoom),
 		qMax(int(sourceRect.width() * d->mZoom), 1),
 		qMax(int(sourceRect.height() * d->mZoom), 1)
 		);
