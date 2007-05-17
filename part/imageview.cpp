@@ -165,6 +165,7 @@ void ImageView::resizeEvent(QResizeEvent*) {
 
 void ImageView::setZoom(qreal zoom) {
 	d->mZoom = zoom;
+	kDebug() << "setZoom: " << zoom << endl;
 	updateScrollBars();
 	startScaler();
 }
