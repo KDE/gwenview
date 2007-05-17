@@ -209,3 +209,29 @@ void ImageScalerTest::testDontStartWithoutImage() {
 	scaler.setRegion(QRect(0, 0, 10, 10));
 	QVERIFY(!scaler.isRunning());
 }
+
+
+/**
+ * Test that scaling down a big image (==bigger than MAX_CHUNK_AREA) does not
+ * produce any gap
+ */
+void ImageScalerTest::testScaleDownBigImage() {
+	QImage image(1704, 2272, QImage::Format_RGB32);
+	image.fill(255);
+
+	Gwenview::ImageScaler scaler;
+	ImageScalerClient client(&scaler);
+
+	const qreal zoom = 0.28125;
+	scaler.setImage(image);
+	scaler.setZoom(zoom);
+	scaler.setRegion(QRect( QPoint(0, 0), image.size() * zoom));
+	while (scaler.isRunning()) {
+		QTest::qWait(30);
+	}
+
+	QImage scaledImage = client.createFullImage();
+
+	QImage expectedImage = image.scaled(scaledImage.size());
+	QCOMPARE(expectedImage, scaledImage);
+}

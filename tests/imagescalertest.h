@@ -87,4 +87,5 @@ private Q_SLOTS:
 	void testScaleFullImageTwoPasses_data();
 	void testScaleThinArea();
 	void testDontStartWithoutImage();
+	void testScaleDownBigImage();
 };
