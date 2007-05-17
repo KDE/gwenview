@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QByteArray>
 #include <QImage>
 #include <QImageReader>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QThread>
 
 // KDE
@@ -42,6 +44,7 @@ namespace Gwenview {
 class LoadingThread : public QThread {
 public:
 	virtual void run() {
+		QMutexLocker lock(&mMutex);
 		QString path = mUrl.path();
 		QByteArray format = QImageReader::imageFormat(path);
 		bool ok = mImage.load(path, format.data());
@@ -59,6 +62,18 @@ public:
 		}
 	}
 
+	void setUrl(const KUrl& url) {
+		QMutexLocker lock(&mMutex);
+		mUrl = url;
+	}
+
+	const QImage& image() const {
+		QMutexLocker lock(&mMutex);
+		return mImage;
+	}
+
+private:
+	mutable QMutex mMutex;
 	KUrl mUrl;
 	QImage mImage;
 };
@@ -84,7 +99,7 @@ LoadingDocumentImpl::~LoadingDocumentImpl() {
 }
 
 void LoadingDocumentImpl::init() {
-	d->mThread.mUrl = document()->url();
+	d->mThread.setUrl(document()->url());
 	connect(&d->mThread, SIGNAL(finished()), SLOT(slotImageLoaded()) );
 	d->mThread.start();
 }
@@ -97,9 +112,9 @@ bool LoadingDocumentImpl::isLoaded() const {
 
 void LoadingDocumentImpl::slotImageLoaded() {
 	Q_ASSERT(d->mThread.isFinished());
-	setDocumentImage(d->mThread.mImage);
+	setDocumentImage(d->mThread.image());
 	loaded();
-	switchToImpl(new DocumentLoadedImpl(document(), d->mThread.mImage));
+	switchToImpl(new DocumentLoadedImpl(document()));
 }
 
 } // namespace

@@ -34,10 +34,9 @@ struct DocumentLoadedImplPrivate {
 };
 
 
-DocumentLoadedImpl::DocumentLoadedImpl(Document* document, const QImage& image)
+DocumentLoadedImpl::DocumentLoadedImpl(Document* document)
 : AbstractDocumentImpl(document)
 , d(new DocumentLoadedImplPrivate) {
-	setDocumentImage(image);
 }
 
 

@@ -34,7 +34,7 @@ namespace Gwenview {
 class DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl {
 public:
-	DocumentLoadedImpl(Document*, const QImage& image);
+	DocumentLoadedImpl(Document*);
 	~DocumentLoadedImpl();
 
 	virtual void init();
