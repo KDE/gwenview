@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QListView>
 #include "gwenviewlib_export.h"
 
+namespace Gwenview {
+
 class ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
 	Q_OBJECT
@@ -56,5 +58,7 @@ public:
 private:
 	ThumbnailViewPrivate * const d;
 };
+
+} // namespace
 
 #endif /* THUMBNAILVIEW_H */

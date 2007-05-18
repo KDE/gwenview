@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QtGui/QPainterPath>
 #include <QtGui/QToolTip>
 
+namespace Gwenview {
+
 /** Space between the item outer rect and the content */
 const int ITEM_MARGIN = 11;
 
@@ -258,3 +260,5 @@ int ThumbnailView::itemWidth() const {
 int ThumbnailView::itemHeight() const {
 	return d->mThumbnailSize + fontMetrics().height() + 3*ITEM_MARGIN;
 }
+
+} // namespace
