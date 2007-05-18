@@ -50,6 +50,8 @@ public:
 
 	SideBarGroup* createGroup(const QString& title);
 
+	virtual QSize sizeHint() const;
+
 private:
 	struct Private;
 	std::auto_ptr<Private> d;

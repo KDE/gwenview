@@ -78,4 +78,9 @@ SideBarGroup* SideBar::createGroup(const QString& title) {
 	return group;
 }
 
+QSize SideBar::sizeHint() const {
+	return QSize(200, 200);
+}
+
+
 } // namespace

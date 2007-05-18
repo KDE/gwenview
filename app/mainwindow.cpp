@@ -118,6 +118,12 @@ struct MainWindow::Private {
 
 		QSplitter* viewSplitter = new QSplitter(Qt::Vertical, centralSplitter);
 		mSideBar = new SideBar(centralSplitter);
+
+		// Make sure the side bar does not grow or shrink when the window is
+		// resized
+		centralSplitter->setStretchFactor(0, 1);
+		centralSplitter->setStretchFactor(1, 0);
+
 		mDocumentView = new DocumentView(viewSplitter);
 
 		mDocumentLayout = new QVBoxLayout(mDocumentView);
