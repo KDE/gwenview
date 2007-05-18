@@ -116,20 +116,19 @@ struct MainWindow::Private {
 		QSplitter* centralSplitter = new QSplitter(Qt::Horizontal, mWindow);
 		mWindow->setCentralWidget(centralSplitter);
 
-		QSplitter* viewSplitter = new QSplitter(Qt::Vertical, centralSplitter);
-		mSideBar = new SideBar(centralSplitter);
+		setupThumbnailView(centralSplitter);
 
-		// Make sure the side bar does not grow or shrink when the window is
-		// resized
-		centralSplitter->setStretchFactor(0, 1);
-		centralSplitter->setStretchFactor(1, 0);
-
-		mDocumentView = new DocumentView(viewSplitter);
-
+		mDocumentView = new DocumentView(centralSplitter);
 		mDocumentLayout = new QVBoxLayout(mDocumentView);
 		mDocumentLayout->setMargin(0);
 
-		setupThumbnailView(viewSplitter);
+		mSideBar = new SideBar(centralSplitter);
+
+		// Make sure neither the thumbnail view nor the side bar grow or shrink
+		// when the window is resized
+		centralSplitter->setStretchFactor(0, 0);
+		centralSplitter->setStretchFactor(1, 1);
+		centralSplitter->setStretchFactor(2, 0);
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -162,9 +161,9 @@ struct MainWindow::Private {
 		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
 		layout->setSpacing(0);
 		layout->setMargin(0);
-		layout->addWidget(mThumbnailView, 0, 0, 1, 2);
-		layout->addWidget(mGoUpButton, 1, 0);
-		layout->addWidget(mUrlRequester, 1, 1);
+		layout->addWidget(mGoUpButton, 0, 0);
+		layout->addWidget(mUrlRequester, 0, 1);
+		layout->addWidget(mThumbnailView, 1, 0, 1, 2);
 	}
 
 	void setupActions() {
