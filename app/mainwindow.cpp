@@ -93,8 +93,6 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 struct MainWindow::Private {
 	MainWindow* mWindow;
 	DocumentView* mDocumentView;
-	QVBoxLayout* mDocumentLayout;
-	KStatusBar* mStatusBar;
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
@@ -255,8 +253,8 @@ struct MainWindow::Private {
 		LOG("Loading part from library: " << library);
 		KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(
 			service,
-			mDocumentView /*parentWidget*/,
-			mDocumentView /*parent*/);
+			mDocumentView->viewContainer() /*parentWidget*/,
+			mDocumentView->viewContainer() /*parent*/);
 		if (!part) {
 			kWarning() << "Failed to instantiate KPart from library " << library << endl;
 			return;
@@ -265,17 +263,17 @@ struct MainWindow::Private {
 		// Handle statusbar extension otherwise a statusbar will get created in
 		// the main window.
 		KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
+		KStatusBar* statusBar = mDocumentView->statusBar();
 		if (extension) {
-			extension->setStatusBar(mStatusBar);
-			mStatusBar->show();
+			extension->setStatusBar(statusBar);
+			statusBar->show();
 		} else {
-			mStatusBar->hide();
+			statusBar->hide();
 		}
 
 		ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
 		mContextManager->setImageView(ivPart);
-		// Insert the widget above the status bar
-		mDocumentLayout->insertWidget(0, part->widget(), 1);
+		mDocumentView->setView(part->widget());
 		mWindow->createGUI(part);
 
 		// Make sure our file list is filled when the part is done.
@@ -315,6 +313,7 @@ struct MainWindow::Private {
 
 	void resetDocumentView() {
 		if (mPart) {
+			mDocumentView->setView(0);
 			mContextManager->setImageView(0);
 			mWindow->createGUI(0);
 			delete mPart;
@@ -461,7 +460,7 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 }
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
-	d->mStatusBar->showMessage(message);
+	d->mDocumentView->statusBar()->showMessage(message);
 }
 
 void MainWindow::toggleSideBar() {

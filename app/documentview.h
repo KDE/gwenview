@@ -21,19 +21,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENTVIEW_H
 
 // Qt
-#include <QWidget>
+#include <QStackedWidget>
+
+class KStatusBar;
 
 namespace Gwenview {
 
-class DocumentView : public QWidget {
+class DocumentViewPrivate;
+
+/**
+ * Holds the active document view, or show a message if there is document
+ * selected
+ */
+class DocumentView : public QStackedWidget {
 	Q_OBJECT
 public:
 	DocumentView(QWidget*);
+	~DocumentView();
+
+	/**
+	 * Set the current view. If view is 0, show a "no document" message
+	 */
+	void setView(QWidget* view);
+
+	QWidget* viewContainer() const;
+
+	KStatusBar* statusBar() const;
 
 	virtual QSize sizeHint() const;
 
-protected:
-	virtual void paintEvent(QPaintEvent*);
+private:
+	DocumentViewPrivate* const d;
 };
 
 } // namespace

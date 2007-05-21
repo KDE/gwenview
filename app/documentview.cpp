@@ -20,26 +20,67 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentview.moc"
 
 // Qt
-#include <QPainter>
+#include <QLabel>
+#include <QVBoxLayout>
 
 // KDE
 #include <klocale.h>
+#include <kstatusbar.h>
 
 
 namespace Gwenview {
 
-DocumentView::DocumentView(QWidget* parent)
-: QWidget(parent)
-{}
+struct DocumentViewPrivate {
+	QLabel* mNoDocumentLabel;
+	QWidget* mViewContainer;
+	QVBoxLayout* mViewContainerLayout;
+	KStatusBar* mStatusBar;
+};
 
+DocumentView::DocumentView(QWidget* parent)
+: QStackedWidget(parent)
+, d(new DocumentViewPrivate)
+{
+	d->mNoDocumentLabel = new QLabel(this);
+	addWidget(d->mNoDocumentLabel);
+	d->mNoDocumentLabel->setText(i18n("No document selected"));
+	d->mNoDocumentLabel->setAlignment(Qt::AlignCenter);
+
+	d->mViewContainer = new QWidget(this);
+	addWidget(d->mViewContainer);
+	d->mStatusBar = new KStatusBar(d->mViewContainer);
+	d->mStatusBar->hide();
+
+	d->mViewContainerLayout = new QVBoxLayout(d->mViewContainer);
+	d->mViewContainerLayout->addWidget(d->mStatusBar);
+	d->mViewContainerLayout->setMargin(0);
+	d->mViewContainerLayout->setSpacing(0);
+}
+
+DocumentView::~DocumentView() {
+	delete d;
+}
+
+void DocumentView::setView(QWidget* view) {
+	if (view) {
+		// Insert the widget above the status bar
+		d->mViewContainerLayout->insertWidget(0 /* position */, view, 1 /* stretch */);
+		setCurrentWidget(d->mViewContainer);
+	} else {
+		setCurrentWidget(d->mNoDocumentLabel);
+	}
+}
+
+QWidget* DocumentView::viewContainer() const {
+	return d->mViewContainer;
+}
+
+KStatusBar* DocumentView::statusBar() const {
+	return d->mStatusBar;
+}
 
 QSize DocumentView::sizeHint() const {
 	return QSize(400, 300);
-}
-
-void DocumentView::paintEvent(QPaintEvent*) {
-	QPainter painter(this);
-	painter.drawText(rect(), Qt::AlignCenter, i18n("No document selected"));
 }
 
 } // namespace
