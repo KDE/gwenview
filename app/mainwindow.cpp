@@ -39,6 +39,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
+#include <kparts/statusbarextension.h>
+#include <kstatusbar.h>
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kxmlguifactory.h>
@@ -92,6 +94,7 @@ struct MainWindow::Private {
 	MainWindow* mWindow;
 	DocumentView* mDocumentView;
 	QVBoxLayout* mDocumentLayout;
+	KStatusBar* mStatusBar;
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
@@ -259,9 +262,20 @@ struct MainWindow::Private {
 			return;
 		}
 
+		// Handle statusbar extension otherwise a statusbar will get created in
+		// the main window.
+		KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
+		if (extension) {
+			extension->setStatusBar(mStatusBar);
+			mStatusBar->show();
+		} else {
+			mStatusBar->hide();
+		}
+
 		ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
 		mContextManager->setImageView(ivPart);
-		mDocumentLayout->addWidget(part->widget());
+		// Insert the widget above the status bar
+		mDocumentLayout->insertWidget(0, part->widget(), 1);
 		mWindow->createGUI(part);
 
 		// Make sure our file list is filled when the part is done.
@@ -445,8 +459,8 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	d->mPart->openUrl(url);
 }
 
-void MainWindow::slotSetStatusBarText(const QString&) {
-	// FIXME: Show message somewhere
+void MainWindow::slotSetStatusBarText(const QString& message) {
+	d->mStatusBar->showMessage(message);
 }
 
 void MainWindow::toggleSideBar() {
