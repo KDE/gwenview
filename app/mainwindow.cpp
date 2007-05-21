@@ -315,6 +315,7 @@ struct MainWindow::Private {
 
 	void resetDocumentView() {
 		if (mPart) {
+			mContextManager->setImageView(0);
 			mWindow->createGUI(0);
 			delete mPart;
 			mPartLibrary = QString();
