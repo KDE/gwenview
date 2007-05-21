@@ -57,7 +57,7 @@ void ImageScalerTest::testScaleFullImage() {
 	Gwenview::ImageScaler scaler;
 	scaler.setImage(image);
 	scaler.setZoom(zoom);
-	scaler.setRegion(QRect(QPoint(0,0), image.size() * zoom));
+	scaler.setDestinationRegion(QRect(QPoint(0,0), image.size() * zoom));
 
 	QImage expectedImage = image.scaled( image.size() * zoom);
 
@@ -88,12 +88,12 @@ void ImageScalerTest::testScalePartialImage() {
 	Gwenview::ImageScaler scaler;
 	scaler.setImage(image);
 	scaler.setZoom(zoom);
-	scaler.setRegion(
+	scaler.setDestinationRegion(
 		QRect(
 			0, 0,
 			image.width() * zoom / 2, image.height() * zoom)
 		);
-	scaler.addRegion(
+	scaler.addDestinationRegion(
 		QRect(
 			0, 0,
 			image.width() * zoom, image.height() * zoom / 2)
@@ -147,7 +147,7 @@ void ImageScalerTest::testScaleFullImageTwoPasses() {
 	int zWidth = int(image.width() * zoom);
 	int zHeight = int(image.width() * zoom);
 	int partialZWidth = zWidth / 3;
-	scaler.setRegion(
+	scaler.setDestinationRegion(
 		QRect(
 			0, 0,
 			partialZWidth, zHeight)
@@ -157,7 +157,7 @@ void ImageScalerTest::testScaleFullImageTwoPasses() {
 		QTest::qWait(30);
 	}
 
-	scaler.addRegion(
+	scaler.addDestinationRegion(
 		QRect(
 			partialZWidth, 0,
 			zWidth - partialZWidth, zHeight)
@@ -196,7 +196,7 @@ void ImageScalerTest::testScaleThinArea() {
 	const qreal zoom = 0.25;
 	scaler.setImage(image);
 	scaler.setZoom(zoom);
-	scaler.setRegion(QRect(0, 0, image.width(), 2));
+	scaler.setDestinationRegion(QRect(0, 0, image.width(), 2));
 	while (scaler.isRunning()) {
 		QTest::qWait(30);
 	}
@@ -206,7 +206,7 @@ void ImageScalerTest::testScaleThinArea() {
 void ImageScalerTest::testDontStartWithoutImage() {
 	Gwenview::ImageScaler scaler;
 	scaler.setZoom(1.0);
-	scaler.setRegion(QRect(0, 0, 10, 10));
+	scaler.setDestinationRegion(QRect(0, 0, 10, 10));
 	QVERIFY(!scaler.isRunning());
 }
 
@@ -225,7 +225,7 @@ void ImageScalerTest::testScaleDownBigImage() {
 	const qreal zoom = 0.28125;
 	scaler.setImage(image);
 	scaler.setZoom(zoom);
-	scaler.setRegion(QRect( QPoint(0, 0), image.size() * zoom));
+	scaler.setDestinationRegion(QRect( QPoint(0, 0), image.size() * zoom));
 	while (scaler.isRunning()) {
 		QTest::qWait(30);
 	}

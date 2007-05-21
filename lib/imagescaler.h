@@ -40,8 +40,8 @@ public:
 	~ImageScaler();
 	void setImage(const QImage&);
 	void setZoom(qreal);
-	void setRegion(const QRegion&);
-	void addRegion(const QRegion&);
+	void setDestinationRegion(const QRegion&);
+	void addDestinationRegion(const QRegion&);
 
 	void setTransformationMode(Qt::TransformationMode);
 
