@@ -118,11 +118,7 @@ struct MainWindow::Private {
 		mWindow->setCentralWidget(centralSplitter);
 
 		setupThumbnailView(centralSplitter);
-
 		mDocumentView = new DocumentView(centralSplitter);
-		mDocumentLayout = new QVBoxLayout(mDocumentView);
-		mDocumentLayout->setMargin(0);
-
 		mSideBar = new SideBar(centralSplitter);
 
 		// Make sure neither the thumbnail view nor the side bar grow or shrink
