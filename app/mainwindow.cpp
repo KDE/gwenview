@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
+#include <ktogglefullscreenaction.h>
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kxmlguifactory.h>
@@ -110,6 +111,7 @@ struct MainWindow::Private {
 	QAction* mGoToPreviousAction;
 	QAction* mGoToNextAction;
 	QAction* mToggleSideBarAction;
+	KToggleFullScreenAction* mFullScreenAction;
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -197,6 +199,8 @@ struct MainWindow::Private {
 
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
+
+		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen()), mWindow, actionCollection);
 
 		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
 		mGoToPreviousAction->setText(i18n("Previous"));
@@ -560,6 +564,17 @@ void MainWindow::updatePreviousNextActions() {
 
 	index = d->getRelativeIndex(1);
 	d->mGoToNextAction->setEnabled(index.isValid());
+}
+
+
+void MainWindow::toggleFullScreen() {
+	if (d->mFullScreenAction->isChecked()) {
+		// Go full screen
+		showFullScreen();
+	} else {
+		// Back to normal
+		showNormal();
+	}
 }
 
 

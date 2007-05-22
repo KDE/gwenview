@@ -75,6 +75,8 @@ private Q_SLOTS:
 	void goToNext();
 	void updatePreviousNextActions();
 
+	void toggleFullScreen();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;

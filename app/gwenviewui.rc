@@ -8,7 +8,8 @@
 		<Action name="thumbs_only" />
 		<Action name="thumbs_and_image" />
 		<Action name="image_only" />
-		<Separator>
+		<Action name="fullscreen" />
+		<Separator/>
 		<Merge/>
 		<Separator/>
 		<Action name="toggle_sidebar" />
@@ -20,6 +21,7 @@
 	<Action name="thumbs_only" />
 	<Action name="thumbs_and_image" />
 	<Action name="image_only" />
+	<Action name="fullscreen" />
 	<Separator/>
 	<Action name="go_to_previous" />
 	<Action name="go_to_next" />
