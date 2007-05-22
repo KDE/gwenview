@@ -255,6 +255,21 @@ ThumbnailView::~ThumbnailView() {
 
 void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
+	if (!model()) {
+		return;
+	}
+
+	QList<KFileItem> itemsToPreview;
+	int count = model()->rowCount();
+	for (int pos = 0; pos < count; ++pos) {
+		QModelIndex index = model()->index(pos, 0);
+		QVariant data = index.data(KDirModel::FileItemRole);
+		KFileItem item = qvariant_cast<KFileItem>(data);
+		itemsToPreview.append(item);
+	}
+
+	Q_ASSERT(d->mThumbnailViewHelper);
+	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview, d->mThumbnailSize);
 }
 
 int ThumbnailView::thumbnailSize() const {

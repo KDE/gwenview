@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 #include <QToolButton>
 #include <QSplitter>
+#include <QSlider>
 
 // KDE
 #include <kactioncollection.h>
@@ -155,6 +156,16 @@ struct MainWindow::Private {
 		connect(mUrlRequester, SIGNAL(returnPressed(const QString&)),
 			mWindow, SLOT(openDirUrlFromString(const QString&)) );
 
+		// Thumbnail slider
+		KStatusBar* statusBar = new KStatusBar(mThumbnailViewPanel);
+		QSlider* slider = new QSlider(statusBar);
+		statusBar->addPermanentWidget(slider);
+		slider->setMinimum(40);
+		slider->setMaximum(256);
+		slider->setValue(128);
+		slider->setOrientation(Qt::Horizontal);
+		connect(slider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
+
 		// Layout
 		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
 		layout->setSpacing(0);
@@ -162,6 +173,7 @@ struct MainWindow::Private {
 		layout->addWidget(mGoUpButton, 0, 0);
 		layout->addWidget(mUrlRequester, 0, 1);
 		layout->addWidget(mThumbnailView, 1, 0, 1, 2);
+		layout->addWidget(statusBar, 2, 0, 1, 2);
 	}
 
 	void setupActions() {

@@ -37,11 +37,6 @@ public:
 	void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
 	/**
-	 * Sets the thumbnail size, in pixels.
-	 */
-	void setThumbnailSize(int pixel);
-
-	/**
 	 * Returns the thumbnail size.
 	 */
 	int thumbnailSize() const;
@@ -57,6 +52,12 @@ public:
 	 * thumbnail size.
 	 */
 	int itemHeight() const;	
+
+public Q_SLOTS:
+	/**
+	 * Sets the thumbnail size, in pixels.
+	 */
+	void setThumbnailSize(int pixel);
 
 protected:
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
