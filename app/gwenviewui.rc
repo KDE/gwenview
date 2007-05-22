@@ -2,6 +2,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="gwenview" version="28">
 
+<MenuBar>
+	<Menu name="view" >
+		<text>&amp;View</text>
+		<Action name="thumbs_only" />
+		<Action name="thumbs_and_image" />
+		<Action name="image_only" />
+		<Separator>
+		<Merge/>
+		<Separator/>
+		<Action name="toggle_sidebar" />
+	</Menu>
+</MenuBar>
+
 <ToolBar name="mainToolBar" >
 	<text>Main Toolbar</text>
 	<Action name="thumbs_only" />
@@ -15,18 +28,5 @@
 	<Separator/>
 	<Action name="toggle_sidebar" />
 </ToolBar>
-
-<MenuBar>
-	<Menu name="view" >
-		<text>&amp;View</text>
-		<Action name="thumbs_only" />
-		<Action name="thumbs_and_image" />
-		<Action name="image_only" />
-		<Separator>
-		<Merge/>
-		<Separator/>
-		<Action name="toggle_sidebar" />
-	</Menu>
-</MenuBar>
 
 </kpartgui>
