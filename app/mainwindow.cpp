@@ -134,6 +134,7 @@ struct MainWindow::Private {
 		// mThumbnailView
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
+		mThumbnailView->setThumbnailViewHelper(mDirModel);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );

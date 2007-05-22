@@ -42,9 +42,6 @@ SortedDirModel::SortedDirModel(QObject* parent)
 	setSourceModel(d->mSourceModel);
 	setDynamicSortFilter(true);
 	sort(KDirModel::Name);
-
-	connect(dirLister(), SIGNAL(newItems(const KFileItemList&)),
-		SLOT(generatePreviews(const KFileItemList&)) );
 }
 
 
@@ -107,15 +104,8 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 }
 
 
-void SortedDirModel::generatePreviews(const KFileItemList& list) {
-	KFileItemList sortedList = list;
-	qSort(sortedList.begin(), sortedList.end(), kFileItemLessThan);
-	// Must turn QList<KFileItem *> to QList<KFileItem>...
-	QList<KFileItem> itemsToPreview;
-	Q_FOREACH( KFileItem* it, sortedList ) {
-		itemsToPreview.append( *it );
-	}
-	KIO::PreviewJob* job = KIO::filePreview(itemsToPreview, 128);
+void SortedDirModel::generateThumbnailsForItems(const QList<KFileItem>& list, int size) {
+	KIO::PreviewJob* job = KIO::filePreview(list, size);
 	connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 		SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
 }

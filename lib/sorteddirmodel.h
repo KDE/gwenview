@@ -23,18 +23,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QSortFilterProxyModel>
 
 #include "gwenviewlib_export.h"
+#include "abstractthumbnailviewhelper.h"
 
 class QPixmap;
 
 class KDirLister;
 class KFileItem;
-class KFileItemList;
 class KUrl;
 
 namespace Gwenview {
 
 class SortedDirModelPrivate;
-class GWENVIEWLIB_EXPORT SortedDirModel : public QSortFilterProxyModel {
+class GWENVIEWLIB_EXPORT SortedDirModel : public QSortFilterProxyModel, public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:
 	SortedDirModel(QObject* parent);
@@ -44,11 +44,15 @@ public:
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 
+	/**
+	 * Implements AbstractThumbnailViewHelper
+	 */
+	virtual void generateThumbnailsForItems(const QList<KFileItem>&, int size);
+
 protected:
 	virtual bool lessThan(const QModelIndex&, const QModelIndex&) const;
 
 private Q_SLOTS:
-	void generatePreviews(const KFileItemList&);
 	void setItemPreview(const KFileItem&, const QPixmap&);
 
 private:

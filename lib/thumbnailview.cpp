@@ -24,6 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QtGui/QPainterPath>
 #include <QtGui/QToolTip>
 
+// KDE
+#include <kdirmodel.h>
+
+// Local
+#include "abstractthumbnailviewhelper.h"
+
 namespace Gwenview {
 
 /** Space between the item outer rect and the content */
@@ -219,6 +225,7 @@ private:
 
 struct ThumbnailViewPrivate {
 	int mThumbnailSize;
+	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 };
 
 
@@ -236,6 +243,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setVerticalScrollMode(ScrollPerPixel);
 	setHorizontalScrollMode(ScrollPerPixel);
 
+	d->mThumbnailViewHelper = 0;
 	setThumbnailSize(128);
 }
 
@@ -259,6 +267,25 @@ int ThumbnailView::itemWidth() const {
 
 int ThumbnailView::itemHeight() const {
 	return d->mThumbnailSize + fontMetrics().height() + 3*ITEM_MARGIN;
+}
+
+void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper) {
+	d->mThumbnailViewHelper = helper;
+}
+
+void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) {
+	QListView::rowsInserted(parent, start, end);
+
+	QList<KFileItem> itemsToPreview;
+	for (int pos=start; pos<=end; ++pos) {
+		QModelIndex index = model()->index(pos, 0, parent);
+		QVariant data = index.data(KDirModel::FileItemRole);
+		KFileItem item = qvariant_cast<KFileItem>(data);
+		itemsToPreview.append(item);
+	}
+
+	Q_ASSERT(d->mThumbnailViewHelper);
+	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview, d->mThumbnailSize);
 }
 
 } // namespace

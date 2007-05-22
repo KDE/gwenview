@@ -25,12 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+class AbstractThumbnailViewHelper;
+
 class ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
 	Q_OBJECT
 public:
 	ThumbnailView(QWidget* parent);
 	~ThumbnailView();
+
+	void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
 	/**
 	 * Sets the thumbnail size, in pixels.
@@ -54,6 +58,8 @@ public:
 	 */
 	int itemHeight() const;	
 
+protected:
+	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private:
 	ThumbnailViewPrivate * const d;
