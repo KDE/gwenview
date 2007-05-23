@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
+#include <kmenubar.h>
 #include <kmountpoint.h>
 #include <klocale.h>
 #include <kmimetype.h>
@@ -43,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
 #include <ktogglefullscreenaction.h>
+#include <ktoolbar.h>
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kxmlguifactory.h>
@@ -102,6 +104,7 @@ struct MainWindow::Private {
 	SideBar* mSideBar;
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
+	KToolBar* mFullScreenBar;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mThumbsOnlyAction;
@@ -366,6 +369,13 @@ struct MainWindow::Private {
 		mUrlRequester->setUrl(url);
 		mGoUpAction->setEnabled(url.path() != "/");
 	}
+
+	void createFullScreenBar() {
+		mFullScreenBar = new KToolBar(mDocumentView);
+		mFullScreenBar->addAction(mFullScreenAction);
+		mFullScreenBar->addAction(mGoToPreviousAction);
+		mFullScreenBar->addAction(mGoToNextAction);
+	}
 };
 
 
@@ -376,6 +386,7 @@ d(new MainWindow::Private)
 	d->mWindow = this;
 	d->mDirModel = new SortedDirModel(this);
 	d->mPart = 0;
+	d->mFullScreenBar = 0;
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
@@ -571,9 +582,18 @@ void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
 		showFullScreen();
+		menuBar()->hide();
+		toolBar()->hide();
+		if (!d->mFullScreenBar) {
+			d->createFullScreenBar();
+		}
+		d->mFullScreenBar->show();
 	} else {
 		// Back to normal
 		showNormal();
+		menuBar()->show();
+		toolBar()->show();
+		d->mFullScreenBar->hide();
 	}
 }
 
