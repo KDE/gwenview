@@ -372,9 +372,11 @@ struct MainWindow::Private {
 
 	void createFullScreenBar() {
 		mFullScreenBar = new KToolBar(mDocumentView);
+		mFullScreenBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 		mFullScreenBar->addAction(mFullScreenAction);
 		mFullScreenBar->addAction(mGoToPreviousAction);
 		mFullScreenBar->addAction(mGoToNextAction);
+		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
 };
 
