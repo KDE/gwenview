@@ -55,6 +55,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "selectioncontextmanageritem.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
+#include <lib/fullscreenbar.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
@@ -104,7 +105,7 @@ struct MainWindow::Private {
 	SideBar* mSideBar;
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
-	KToolBar* mFullScreenBar;
+	FullScreenBar* mFullScreenBar;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mThumbsOnlyAction;
@@ -371,8 +372,7 @@ struct MainWindow::Private {
 	}
 
 	void createFullScreenBar() {
-		mFullScreenBar = new KToolBar(mDocumentView);
-		mFullScreenBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+		mFullScreenBar = new FullScreenBar(mDocumentView);
 		mFullScreenBar->addAction(mFullScreenAction);
 		mFullScreenBar->addAction(mGoToPreviousAction);
 		mFullScreenBar->addAction(mGoToNextAction);
