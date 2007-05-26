@@ -19,9 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "fullscreenbar.h"
+#include "fullscreenbar.moc"
 
 // Qt
+#include <QApplication>
+#include <QEvent>
+#include <QTimeLine>
+#include <QTimer>
 
 // KDE
 
@@ -30,7 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+static const int SLIDE_DURATION = 300;
+static const int AUTO_HIDE_TIMEOUT = 3000;
+
+
 struct FullScreenBarPrivate {
+	QTimeLine* mTimeLine;
+	QTimer* mAutoHideTimer;
 };
 
 
@@ -39,11 +49,73 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 , d(new FullScreenBarPrivate) {
 	setToolButtonStyle(Qt::ToolButtonIconOnly);
 	setAutoFillBackground(true);
+
+	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
+	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );
+	connect(d->mTimeLine, SIGNAL(finished()), SLOT(slotTimeLineFinished()) );
+
+	d->mAutoHideTimer = new QTimer(this);
+	d->mAutoHideTimer->setInterval(AUTO_HIDE_TIMEOUT);
+	d->mAutoHideTimer->setSingleShot(true);
+	connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(slideOut()) );
 }
 
 
 FullScreenBar::~FullScreenBar() {
 	delete d;
+}
+
+
+void FullScreenBar::moveBar(qreal value) {
+	move(0, -height() + int(value * height()) );
+}
+
+
+void FullScreenBar::setActivated(bool activated) {
+	if (activated) {
+		qApp->installEventFilter(this);
+		slideIn();
+	} else {
+		qApp->removeEventFilter(this);
+		hide();
+	}
+}
+
+
+void FullScreenBar::slideOut() {
+	d->mTimeLine->setDirection(QTimeLine::Backward);
+	d->mTimeLine->start();
+}
+
+
+void FullScreenBar::slideIn() {
+	if (!isVisible()) {
+		move(0, -150);
+		show();
+	}
+	d->mTimeLine->setDirection(QTimeLine::Forward);
+	d->mTimeLine->start();
+}
+
+
+bool FullScreenBar::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::MouseMove) {
+		if (y() == 0) {
+			d->mAutoHideTimer->start();
+		} else {
+			slideIn();
+		}
+		return false;
+	}
+
+	return false;
+}
+
+
+void FullScreenBar::slotTimeLineFinished() {
+	if (d->mTimeLine->direction() == QTimeLine::Forward) {
+		d->mAutoHideTimer->start();
+	}
 }
 
 

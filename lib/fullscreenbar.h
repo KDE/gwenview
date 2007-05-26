@@ -30,14 +30,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QEvent;
+
 namespace Gwenview {
 
 
 class FullScreenBarPrivate;
 class GWENVIEWLIB_EXPORT FullScreenBar : public KToolBar {
+	Q_OBJECT
 public:
 	FullScreenBar(QWidget* parent);
 	~FullScreenBar();
+
+	void setActivated(bool);
+
+public Q_SLOTS:
+	void slideIn();
+	void slideOut();
+
+private Q_SLOTS:
+	void moveBar(qreal);
+	void slotTimeLineFinished();
+
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
 
 private:
 	FullScreenBarPrivate* const d;

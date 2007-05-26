@@ -589,9 +589,10 @@ void MainWindow::toggleFullScreen() {
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
 		}
-		d->mFullScreenBar->show();
+		d->mFullScreenBar->setActivated(true);
 	} else {
 		// Back to normal
+		d->mFullScreenBar->setActivated(false);
 		showNormal();
 		menuBar()->show();
 		toolBar()->show();
