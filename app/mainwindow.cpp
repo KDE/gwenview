@@ -95,6 +95,11 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	return false;
 }
 
+struct MainWindowState {
+    QAction* mActiveViewModeAction;
+    bool mSideBarVisible;
+};
+
 struct MainWindow::Private {
 	MainWindow* mWindow;
 	DocumentView* mDocumentView;
@@ -119,6 +124,8 @@ struct MainWindow::Private {
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
+
+    MainWindowState mStateBeforeFullScreen;
 
 	void setupWidgets() {
 		QSplitter* centralSplitter = new QSplitter(Qt::Horizontal, mWindow);
@@ -583,6 +590,12 @@ void MainWindow::updatePreviousNextActions() {
 void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
+		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
+
+		d->mImageOnlyAction->trigger();
+		d->mSideBar->hide();
+
 		showFullScreen();
 		menuBar()->hide();
 		toolBar()->hide();
@@ -591,6 +604,9 @@ void MainWindow::toggleFullScreen() {
 		}
 		d->mFullScreenBar->setActivated(true);
 	} else {
+		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
+		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+
 		// Back to normal
 		d->mFullScreenBar->setActivated(false);
 		showNormal();
