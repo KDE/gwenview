@@ -41,6 +41,12 @@ static const int AUTO_HIDE_TIMEOUT = 3000;
 struct FullScreenBarPrivate {
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideTimer;
+
+	void startTimeLine() {
+		if (mTimeLine->state() != QTimeLine::Running) {
+			mTimeLine->start();
+		}
+	}
 };
 
 
@@ -84,7 +90,7 @@ void FullScreenBar::setActivated(bool activated) {
 
 void FullScreenBar::slideOut() {
 	d->mTimeLine->setDirection(QTimeLine::Backward);
-	d->mTimeLine->start();
+	d->startTimeLine();
 }
 
 
@@ -94,7 +100,7 @@ void FullScreenBar::slideIn() {
 		show();
 	}
 	d->mTimeLine->setDirection(QTimeLine::Forward);
-	d->mTimeLine->start();
+	d->startTimeLine();
 }
 
 
