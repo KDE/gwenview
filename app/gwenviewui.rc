@@ -5,9 +5,9 @@
 <MenuBar>
 	<Menu name="view" >
 		<text>&amp;View</text>
-		<Action name="thumbs_only" />
-		<Action name="thumbs_and_image" />
-		<Action name="image_only" />
+		<Action name="browse" />
+		<Action name="preview" />
+		<Action name="view" />
 		<Action name="fullscreen" />
 		<Separator/>
 		<Merge/>
@@ -18,9 +18,9 @@
 
 <ToolBar name="mainToolBar" >
 	<text>Main Toolbar</text>
-	<Action name="thumbs_only" />
-	<Action name="thumbs_and_image" />
-	<Action name="image_only" />
+	<Action name="browse" />
+	<Action name="preview" />
+	<Action name="view" />
 	<Action name="fullscreen" />
 	<Separator/>
 	<Action name="go_to_previous" />

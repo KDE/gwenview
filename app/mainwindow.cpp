@@ -113,9 +113,9 @@ struct MainWindow::Private {
 	FullScreenBar* mFullScreenBar;
 
 	QActionGroup* mViewModeActionGroup;
-	QAction* mThumbsOnlyAction;
-	QAction* mThumbsAndImageAction;
-	QAction* mImageOnlyAction;
+	QAction* mBrowseAction;
+	QAction* mPreviewAction;
+	QAction* mViewAction;
 	QAction* mGoUpAction;
 	QAction* mGoToPreviousAction;
 	QAction* mGoToNextAction;
@@ -191,22 +191,25 @@ struct MainWindow::Private {
 
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
-		mThumbsOnlyAction = actionCollection->addAction("thumbs_only");
-		mThumbsOnlyAction->setText(i18n("Thumbnails"));
-		mThumbsOnlyAction->setCheckable(true);
+		mBrowseAction = actionCollection->addAction("browse");
+		mBrowseAction->setText(i18n("Browse"));
+		mBrowseAction->setCheckable(true);
+		mBrowseAction->setIcon(KIcon("view-icon"));
 
-		mThumbsAndImageAction = actionCollection->addAction("thumbs_and_image");
-		mThumbsAndImageAction->setText(i18n("Thumbnails and Image"));
-		mThumbsAndImageAction->setCheckable(true);
+		mPreviewAction = actionCollection->addAction("preview");
+		mPreviewAction->setText(i18n("Preview"));
+		mPreviewAction->setIcon(KIcon("view-choose"));
+		mPreviewAction->setCheckable(true);
 
-		mImageOnlyAction = actionCollection->addAction("image_only");
-		mImageOnlyAction->setText(i18n("Image"));
-		mImageOnlyAction->setCheckable(true);
+		mViewAction = actionCollection->addAction("view");
+		mViewAction->setText(i18n("View"));
+		mViewAction->setIcon(KIcon("image"));
+		mViewAction->setCheckable(true);
 
 		mViewModeActionGroup = new QActionGroup(mWindow);
-		mViewModeActionGroup->addAction(mThumbsOnlyAction);
-		mViewModeActionGroup->addAction(mThumbsAndImageAction);
-		mViewModeActionGroup->addAction(mImageOnlyAction);
+		mViewModeActionGroup->addAction(mBrowseAction);
+		mViewModeActionGroup->addAction(mPreviewAction);
+		mViewModeActionGroup->addAction(mViewAction);
 
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
@@ -234,6 +237,7 @@ struct MainWindow::Private {
 		mGoUpButton->setDefaultAction(mGoUpAction);
 
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
+		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		connect(mToggleSideBarAction, SIGNAL(triggered()),
 			mWindow, SLOT(toggleSideBar()) );
 	}
@@ -408,10 +412,10 @@ d(new MainWindow::Private)
 
 void MainWindow::openUrl(const KUrl& url) {
 	if (urlIsDirectory(this, url)) {
-		d->mThumbsAndImageAction->trigger();
+		d->mPreviewAction->trigger();
 		openDirUrl(url);
 	} else {
-		d->mImageOnlyAction->trigger();
+		d->mViewAction->trigger();
 		d->mSideBar->hide();
 		openDocumentUrl(url);
 	}
@@ -421,10 +425,10 @@ void MainWindow::openUrl(const KUrl& url) {
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	bool showDocument, showThumbnail;
-	if (action == d->mThumbsOnlyAction) {
+	if (action == d->mBrowseAction) {
 		showDocument = false;
 		showThumbnail = true;
-	} else if (action == d->mThumbsAndImageAction) {
+	} else if (action == d->mPreviewAction) {
 		showDocument = true;
 		showThumbnail = true;
 	} else { // image only
@@ -593,7 +597,7 @@ void MainWindow::toggleFullScreen() {
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
 
-		d->mImageOnlyAction->trigger();
+		d->mViewAction->trigger();
 		d->mSideBar->hide();
 
 		showFullScreen();
