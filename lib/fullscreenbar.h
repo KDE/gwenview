@@ -49,6 +49,7 @@ public Q_SLOTS:
 	void slideOut();
 
 private Q_SLOTS:
+	void autoHide();
 	void moveBar(qreal);
 	void slotTimeLineFinished();
 
