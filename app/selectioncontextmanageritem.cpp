@@ -23,8 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 
 // KDE
-#include <klocale.h>
 #include <kfileitem.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 // Local
 #include "sidebar.h"
@@ -76,8 +77,9 @@ void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
 }
 
 void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
+	QString fileSize = KGlobal::locale()->formatByteSize(item->size());
 	mOneFileTextLabel->setText(
-		i18n("%1\n%2\n%3", item->name(), item->timeString(), item->size())
+		i18n("%1\n%2\n%3", item->name(), item->timeString(), fileSize)
 		);
 	mOneFileWidget->show();
 	mMultipleFilesLabel->hide();
