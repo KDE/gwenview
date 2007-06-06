@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 	} else {
 		url.setPath( QDir::currentPath() );
 	}
-	
+	args->clear();	
 	window->show();
 	window->openUrl(url);
 
