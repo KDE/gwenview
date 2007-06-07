@@ -114,7 +114,7 @@ public:
 			bgColor = option.palette.color(cg, QPalette::Highlight);
 			fgColor = option.palette.color(cg, QPalette::HighlightedText);
 		} else {
-			bgColor = option.palette.color(cg, QPalette::Button);
+			bgColor = option.palette.color(cg, QPalette::Window);
 			fgColor = option.palette.color(cg, QPalette::Text);
 		}
 
@@ -199,7 +199,7 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
-	viewport()->setBackgroundRole(QPalette::Button);
+	viewport()->setBackgroundRole(QPalette::Window);
 
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
