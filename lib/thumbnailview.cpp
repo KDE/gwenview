@@ -44,33 +44,6 @@ const int SELECTION_ALPHA1 = 32;
 const int SELECTION_ALPHA2 = 128;
 
 
-static QPainterPath createRoundRectPainterPath(const QSize& size, int radius) {
-	int width = size.width();
-	int height = size.height();
-	QRect rect(0, 0, width, height);
-
-	QPainterPath roundRectPath;
-	roundRectPath.moveTo(radius, 0);
-	roundRectPath.arcTo(0, 0, radius, radius, 90.0, 90.0);
-
-	roundRectPath.lineTo(0, height - radius - 1);
-
-	roundRectPath.arcTo(0, height - radius - 1, radius, radius, 180.0, 90.0);
-
-	roundRectPath.lineTo(width - radius - 1, height - 1);
-
-	roundRectPath.arcTo(width - radius - 1, height - radius -1 , radius, radius, 270.0, 90.0);
-
-	roundRectPath.lineTo(width - 1, radius);
-
-	roundRectPath.arcTo(width - radius - 1, 0, radius, radius, 0.0, 90.0);
-
-	roundRectPath.closeSubpath();
-
-	return roundRectPath;
-}
-
-
 /**
  * An ItemDelegate which generates thumbnails for images. It also makes sure
  * all items are of the same size.
@@ -135,28 +108,36 @@ public:
 			cg = QPalette::Disabled;
 		}
 
-		// Draw selection
+		// Select colors
+		QColor bgColor, fgColor;
 		if (option.state & QStyle::State_Selected) {
-			int width = mView->itemWidth();
-			QRect selectionRect(
-				rect.left() + (rect.width() - width) / 2,
-				rect.top(),
-				width,
-				rect.height());
-			QColor borderColor = option.palette.color(cg, QPalette::Highlight);
-			QColor fillColor = borderColor;
-			fillColor.setAlpha(SELECTION_ALPHA1);
-			drawSelectionRect(painter, selectionRect, borderColor, fillColor);
+			bgColor = option.palette.color(cg, QPalette::Highlight);
+			fgColor = option.palette.color(cg, QPalette::HighlightedText);
+		} else {
+			bgColor = option.palette.color(cg, QPalette::Button);
+			fgColor = option.palette.color(cg, QPalette::Text);
 		}
 
+		// Draw background
+		painter->fillRect(rect, bgColor);
+		painter->setPen(bgColor.dark(140));
+		painter->drawRect(rect);
+
 		// Draw thumbnail
-		painter->drawPixmap(
+		QRect thumbnailRect = QRect(
 			rect.left() + (rect.width() - thumbnail.width())/2,
 			rect.top() + (mView->thumbnailSize() - thumbnail.height())/2 + ITEM_MARGIN,
-			thumbnail);
+			thumbnail.width(),
+			thumbnail.height());
+
+		KFileItem item = qvariant_cast<KFileItem>(index.data(KDirModel::FileItemRole));
+		if (!item.isDir()) {
+			drawThumbnailBackRect(painter, thumbnailRect);
+		}
+		painter->drawPixmap(thumbnailRect.topLeft(), thumbnail);
 
 		// Draw text
-		painter->setPen(option.palette.color(cg, QPalette::Text));
+		painter->setPen(fgColor);
 
 		painter->drawText(
 			rect.left() + (rect.width() - textWidth) / 2,
@@ -166,25 +147,11 @@ public:
 
 
 private:
-	void drawSelectionRect(QPainter * painter, QRect rect, const QColor & borderColor, const QColor & fillColor) const {
-
-		painter->setRenderHint(QPainter::Antialiasing);
-
-		rect.adjust(SELECTION_BORDER_SIZE, SELECTION_BORDER_SIZE, 0, 0);
-
-		QPainterPath roundRectPath = createRoundRectPainterPath(rect.size(), SELECTION_CORNER_RADIUS);
-
-		QLinearGradient gradient(0, 0, 0, rect.height());
-		gradient.setColorAt(0.0, fillColor);
-		QColor fillColor2 = fillColor;
-		fillColor2.setAlpha(SELECTION_ALPHA2);
-		gradient.setColorAt(1.0, fillColor2);
-		painter->setBrush(gradient);
-		painter->setPen(QPen(borderColor, SELECTION_BORDER_SIZE));
-
-		painter->translate(rect.left(), rect.top());
-		painter->drawPath(roundRectPath);
-		painter->translate(-rect.left(), -rect.top());
+	void drawThumbnailBackRect(QPainter* painter, const QRect& thumbnailRect) const {
+		QRect thumbnailBackRect = thumbnailRect.adjusted(-1, -1, 1, 1);
+		painter->fillRect(thumbnailBackRect, Qt::white);
+		thumbnailBackRect.adjust(0, 0, -1, -1);
+		painter->drawRect(thumbnailBackRect);
 	}
 
 	/**
@@ -277,7 +244,7 @@ int ThumbnailView::thumbnailSize() const {
 }
 
 int ThumbnailView::itemWidth() const {
-	return int(d->mThumbnailSize * 1.4);
+	return d->mThumbnailSize + 2 * ITEM_MARGIN;
 }
 
 int ThumbnailView::itemHeight() const {
