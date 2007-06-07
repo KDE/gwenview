@@ -199,6 +199,8 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
+	viewport()->setBackgroundRole(QPalette::Button);
+
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);
