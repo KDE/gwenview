@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "thumbnailview.moc"
 
+#include <QTimer>
+
 #include <QtGui/QHelpEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
@@ -42,6 +44,8 @@ const int SELECTION_CORNER_RADIUS = 10;
 const int SELECTION_BORDER_SIZE = 2;
 const int SELECTION_ALPHA1 = 32;
 const int SELECTION_ALPHA2 = 128;
+
+const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
 
 
 /**
@@ -81,6 +85,7 @@ public:
 		QVariant value = index.data(Qt::DecorationRole);
 		QIcon icon = qvariant_cast<QIcon>(value);
 		QPixmap thumbnail = icon.pixmap(mView->thumbnailSize(), mView->thumbnailSize());
+		thumbnail = thumbnail.scaled(QSize(mView->thumbnailSize(), mView->thumbnailSize()), Qt::KeepAspectRatio);
 		QRect rect = option.rect;
 
 #ifdef DEBUG_RECT
@@ -199,6 +204,7 @@ struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
+	QTimer mThumbnailGenerationTimer;
 };
 
 
@@ -220,6 +226,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 	d->mThumbnailViewHelper = 0;
 	setThumbnailSize(128);
+
+	d->mThumbnailGenerationTimer.setInterval(THUMBNAIL_GENERATION_TIMEOUT);
+	d->mThumbnailGenerationTimer.setSingleShot(true);
+	connect(&d->mThumbnailGenerationTimer, SIGNAL(timeout()), SLOT(generateThumbnails()) );
 }
 
 
@@ -230,6 +240,12 @@ ThumbnailView::~ThumbnailView() {
 
 void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
+	d->mItemDelegate->clearElidedTextMap();
+	d->mThumbnailGenerationTimer.start();
+	setGridSize(QSize(itemWidth(), itemHeight()));
+}
+
+void ThumbnailView::generateThumbnails() {
 	if (!model()) {
 		return;
 	}
