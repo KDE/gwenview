@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef IMAGEUTILS_H
 #define IMAGEUTILS_H
 
+#include "gwenviewlib_export.h"
 #include "orientation.h"
 
 class QMatrix;
@@ -28,7 +29,7 @@ class QMatrix;
 namespace Gwenview {
 namespace ImageUtils {
 
-QMatrix transformMatrix(Orientation);
+GWENVIEWLIB_EXPORT QMatrix transformMatrix(Orientation);
 
 } // namespace
 } // namespace
