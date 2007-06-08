@@ -56,6 +56,11 @@ public:
 	{}
 
 
+	void clearElidedTextMap() {
+		mElidedTextMap.clear();
+	}
+
+
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const {
 		return QSize( mView->itemWidth(), mView->itemHeight() );
 	}
@@ -192,6 +197,7 @@ private:
 
 struct ThumbnailViewPrivate {
 	int mThumbnailSize;
+	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 };
 
@@ -205,9 +211,9 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);
 
-	PreviewItemDelegate* delegate = new PreviewItemDelegate(this);
-	setItemDelegate(delegate);
-	viewport()->installEventFilter(delegate);
+	d->mItemDelegate = new PreviewItemDelegate(this);
+	setItemDelegate(d->mItemDelegate);
+	viewport()->installEventFilter(d->mItemDelegate);
 
 	setVerticalScrollMode(ScrollPerPixel);
 	setHorizontalScrollMode(ScrollPerPixel);
@@ -227,6 +233,8 @@ void ThumbnailView::setThumbnailSize(int value) {
 	if (!model()) {
 		return;
 	}
+
+	d->mItemDelegate->clearElidedTextMap();
 
 	QList<KFileItem> itemsToPreview;
 	int count = model()->rowCount();
