@@ -437,6 +437,11 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	}
 
 	d->mDocumentView->setVisible(showDocument);
+	if (showDocument && !d->mPart) {
+		openSelectedDocument();
+	} else if (!showDocument && d->mPart) {
+		d->resetDocumentView();
+	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
 }
 
@@ -454,6 +459,10 @@ void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 
 
 void MainWindow::openSelectedDocument() {
+	if (!d->mDocumentView->isVisible()) {
+		return;
+	}
+
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
 	if (selection.size() == 0) {
 		return;
