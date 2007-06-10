@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include <lib/imageviewpart.h>
 #include <lib/document.h>
+#include <lib/documentfactory.h>
 
 namespace Gwenview {
 
@@ -42,6 +43,7 @@ struct SelectionContextManagerItemPrivate {
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
 	ImageViewPart* mImageView;
+	Document::Ptr mDocument;
 };
 
 SelectionContextManagerItem::SelectionContextManagerItem()
@@ -79,6 +81,8 @@ void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
 void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
 	if (itemList.count() == 0) {
 		d->mGroup->hide();
+		// "Garbage collect" document
+		d->mDocument = 0;
 		return;
 	}
 
@@ -96,11 +100,16 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 	d->mOneFileTextLabel->setText(
 		i18n("%1\n%2\n%3", item->name(), item->timeString(), fileSize)
 		);
+	d->mDocument = DocumentFactory::instance()->load(item->url());
+	connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 }
 
 void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
+	// "Garbage collect" document
+	d->mDocument = 0;
+
 	int folderCount = 0, fileCount = 0;
 	Q_FOREACH(KFileItem* item, itemList) {
 		if (item->isDir()) {
@@ -128,7 +137,6 @@ void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 
 	if (imageView) {
 		d->mImageView = imageView;
-		connect(imageView, SIGNAL(completed()), SLOT(updatePreview()));
 	} else {
 		d->mImageView = 0;
 		d->mOneFileImageLabel->hide();
@@ -136,18 +144,12 @@ void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 }
 
 void SelectionContextManagerItem::updatePreview() {
-	Q_ASSERT(d->mImageView);
-	if (!d->mImageView) {
+	Q_ASSERT(d->mDocument);
+	if (!d->mDocument) {
 		return;
 	}
 
-	Document::Ptr document = d->mImageView->document();
-	Q_ASSERT(document);
-	if (!document) {
-		return;
-	}
-
-	QImage image = document->image().scaled(160, 160, Qt::KeepAspectRatio);
+	QImage image = d->mDocument->image().scaled(160, 160, Qt::KeepAspectRatio);
 	d->mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
 	d->mOneFileImageLabel->show();
 }
