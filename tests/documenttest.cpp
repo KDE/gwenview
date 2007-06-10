@@ -76,3 +76,15 @@ void DocumentTest::testLoadRotated() {
 	doc->image().save("result.png", "PNG");
 	QCOMPARE(image, doc->image());
 }
+
+/**
+ * Checks that asking the DocumentFactory the same document twice in a row does
+ * not load it twice
+ */
+void DocumentTest::testMultipleLoads() {
+	KUrl url("orient6.jpg");
+	Document::Ptr doc1 = DocumentFactory::instance()->load(url);
+	Document::Ptr doc2 = DocumentFactory::instance()->load(url);
+
+	QCOMPARE(doc1.data(), doc2.data());
+}
