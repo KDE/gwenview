@@ -26,18 +26,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "abstractcontextmanageritem.h"
 
-class QLabel;
-
 class KFileItem;
 
 namespace Gwenview {
 
-class SideBarGroup;
+class SelectionContextManagerItemPrivate;
 
 class SelectionContextManagerItem : public QObject, public AbstractContextManagerItem {
 	Q_OBJECT
 public:
 	SelectionContextManagerItem();
+	~SelectionContextManagerItem();
 
 	virtual void setImageView(ImageViewPart*);
 	virtual void setSideBar(SideBar* sideBar);
@@ -51,13 +50,7 @@ private:
 
 	void fillMultipleItemsGroup(const KFileItemList& itemList);
 
-	SideBarGroup* mGroup;
-
-	QWidget* mOneFileWidget;
-	QLabel* mOneFileImageLabel;
-	QLabel* mOneFileTextLabel;
-	QLabel* mMultipleFilesLabel;
-	ImageViewPart* mImageView;
+	SelectionContextManagerItemPrivate * const d;
 };
 
 } // namespace

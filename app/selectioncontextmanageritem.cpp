@@ -34,40 +34,55 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+struct SelectionContextManagerItemPrivate {
+	SideBarGroup* mGroup;
+
+	QWidget* mOneFileWidget;
+	QLabel* mOneFileImageLabel;
+	QLabel* mOneFileTextLabel;
+	QLabel* mMultipleFilesLabel;
+	ImageViewPart* mImageView;
+};
+
 SelectionContextManagerItem::SelectionContextManagerItem()
 : AbstractContextManagerItem()
-, mImageView(0) {
+, d(new SelectionContextManagerItemPrivate) {
+	d->mImageView = 0;
+}
+
+SelectionContextManagerItem::~SelectionContextManagerItem() {
+	delete d;
 }
 
 void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
-	mOneFileWidget = new QWidget();
+	d->mOneFileWidget = new QWidget();
 
-	mOneFileImageLabel = new QLabel(mOneFileWidget);
+	d->mOneFileImageLabel = new QLabel(d->mOneFileWidget);
 
-	mOneFileTextLabel = new QLabel(mOneFileWidget);
-	mOneFileTextLabel->setWordWrap(true);
+	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
+	d->mOneFileTextLabel->setWordWrap(true);
 
-	QVBoxLayout* layout = new QVBoxLayout(mOneFileWidget);
+	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(0);
-	layout->addWidget(mOneFileImageLabel);
-	layout->addWidget(mOneFileTextLabel);
+	layout->addWidget(d->mOneFileImageLabel);
+	layout->addWidget(d->mOneFileTextLabel);
 
-	mMultipleFilesLabel = new QLabel();
+	d->mMultipleFilesLabel = new QLabel();
 
-	mGroup = sideBar->createGroup(i18n("Selection"));
-	mGroup->addWidget(mOneFileWidget);
-	mGroup->addWidget(mMultipleFilesLabel);
+	d->mGroup = sideBar->createGroup(i18n("Selection"));
+	d->mGroup->addWidget(d->mOneFileWidget);
+	d->mGroup->addWidget(d->mMultipleFilesLabel);
 
-	mGroup->hide();
+	d->mGroup->hide();
 }
 
 void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
 	if (itemList.count() == 0) {
-		mGroup->hide();
+		d->mGroup->hide();
 		return;
 	}
 
-	mGroup->show();
+	d->mGroup->show();
 	if (itemList.count() == 1) {
 		fillOneFileGroup(itemList.first());
 		return;
@@ -78,11 +93,11 @@ void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
 
 void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 	QString fileSize = KGlobal::locale()->formatByteSize(item->size());
-	mOneFileTextLabel->setText(
+	d->mOneFileTextLabel->setText(
 		i18n("%1\n%2\n%3", item->name(), item->timeString(), fileSize)
 		);
-	mOneFileWidget->show();
-	mMultipleFilesLabel->hide();
+	d->mOneFileWidget->show();
+	d->mMultipleFilesLabel->hide();
 }
 
 void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
@@ -96,45 +111,45 @@ void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& it
 	}
 
 	if (folderCount == 0) {
-		mMultipleFilesLabel->setText(i18n("%1 files selected", fileCount));
+		d->mMultipleFilesLabel->setText(i18n("%1 files selected", fileCount));
 	} else if (fileCount == 0) {
-		mMultipleFilesLabel->setText(i18n("%1 folders selected", folderCount));
+		d->mMultipleFilesLabel->setText(i18n("%1 folders selected", folderCount));
 	} else {
-		mMultipleFilesLabel->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
+		d->mMultipleFilesLabel->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
 	}
-	mOneFileWidget->hide();
-	mMultipleFilesLabel->show();
+	d->mOneFileWidget->hide();
+	d->mMultipleFilesLabel->show();
 }
 
 void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
-	if (mImageView) {
-		disconnect(mImageView, 0, this, 0);
+	if (d->mImageView) {
+		disconnect(d->mImageView, 0, this, 0);
 	}
 
 	if (imageView) {
-		mImageView = imageView;
+		d->mImageView = imageView;
 		connect(imageView, SIGNAL(completed()), SLOT(updatePreview()));
 	} else {
-		mImageView = 0;
-		mOneFileImageLabel->hide();
+		d->mImageView = 0;
+		d->mOneFileImageLabel->hide();
 	}
 }
 
 void SelectionContextManagerItem::updatePreview() {
-	Q_ASSERT(mImageView);
-	if (!mImageView) {
+	Q_ASSERT(d->mImageView);
+	if (!d->mImageView) {
 		return;
 	}
 
-	Document::Ptr document = mImageView->document();
+	Document::Ptr document = d->mImageView->document();
 	Q_ASSERT(document);
 	if (!document) {
 		return;
 	}
 
 	QImage image = document->image().scaled(160, 160, Qt::KeepAspectRatio);
-	mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
-	mOneFileImageLabel->show();
+	d->mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
+	d->mOneFileImageLabel->show();
 }
 
 } // namespace
