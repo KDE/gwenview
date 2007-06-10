@@ -102,6 +102,7 @@ struct MainWindowState {
 
 struct MainWindow::Private {
 	MainWindow* mWindow;
+	QSplitter* mCentralSplitter;
 	DocumentView* mDocumentView;
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
@@ -128,18 +129,12 @@ struct MainWindow::Private {
     MainWindowState mStateBeforeFullScreen;
 
 	void setupWidgets() {
-		QSplitter* centralSplitter = new QSplitter(Qt::Horizontal, mWindow);
-		mWindow->setCentralWidget(centralSplitter);
+		mCentralSplitter = new QSplitter(Qt::Horizontal, mWindow);
+		mWindow->setCentralWidget(mCentralSplitter);
 
-		setupThumbnailView(centralSplitter);
-		mDocumentView = new DocumentView(centralSplitter);
-		mSideBar = new SideBar(centralSplitter);
-
-		// Make sure neither the thumbnail view nor the side bar grow or shrink
-		// when the window is resized
-		centralSplitter->setStretchFactor(0, 0);
-		centralSplitter->setStretchFactor(1, 1);
-		centralSplitter->setStretchFactor(2, 0);
+		setupThumbnailView(mCentralSplitter);
+		mDocumentView = new DocumentView(mCentralSplitter);
+		mSideBar = new SideBar(mCentralSplitter);
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -430,6 +425,12 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		showDocument = true;
 		showThumbnail = false;
 	}
+
+	// Adjust splitter policy. Thumbnail should only stretch if there is no
+	// document view.
+	d->mCentralSplitter->setStretchFactor(0, showDocument ? 0 : 1); // thumbnail
+	d->mCentralSplitter->setStretchFactor(1, 1); // image
+	d->mCentralSplitter->setStretchFactor(2, 0); // sidebar
 
 	d->mDocumentView->setVisible(showDocument);
 	if (showDocument && !d->mPart) {
