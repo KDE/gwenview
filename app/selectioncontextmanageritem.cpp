@@ -100,10 +100,16 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 	d->mOneFileTextLabel->setText(
 		i18n("%1\n%2\n%3", item->name(), item->timeString(), fileSize)
 		);
-	d->mDocument = DocumentFactory::instance()->load(item->url());
-	connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
+
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
+
+	if (item->isDir()) {
+		d->mOneFileImageLabel->hide();
+	} else {
+		d->mDocument = DocumentFactory::instance()->load(item->url());
+		connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
+	}
 }
 
 void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
@@ -135,12 +141,7 @@ void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 		disconnect(d->mImageView, 0, this, 0);
 	}
 
-	if (imageView) {
-		d->mImageView = imageView;
-	} else {
-		d->mImageView = 0;
-		d->mOneFileImageLabel->hide();
-	}
+	d->mImageView = imageView;
 }
 
 void SelectionContextManagerItem::updatePreview() {
