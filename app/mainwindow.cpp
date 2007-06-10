@@ -259,12 +259,7 @@ struct MainWindow::Private {
 		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
 		if (offers.isEmpty()) {
 			kWarning() << "Couldn't find a KPart for " << mimeType << endl;
-			if (mPart) {
-				mWindow->createGUI(0);
-				delete mPart;
-				mPartLibrary = QString();
-				mPart=0;
-			}
+			resetDocumentView();
 			return;
 		}
 
