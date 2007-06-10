@@ -29,15 +29,20 @@ class KUrl;
 
 namespace Gwenview {
 
+class DocumentFactoryPrivate;
+
 class GWENVIEWLIB_EXPORT DocumentFactory : public QObject {
 	Q_OBJECT
 public:
 	static DocumentFactory* instance();
+	~DocumentFactory();
 
 	Document::Ptr load(const KUrl&);
 
 private:
 	DocumentFactory();
+
+	DocumentFactoryPrivate* const d;
 };
 
 } // namespace

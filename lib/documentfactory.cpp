@@ -24,7 +24,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
-DocumentFactory::DocumentFactory() {
+struct DocumentFactoryPrivate {
+};
+
+DocumentFactory::DocumentFactory()
+: d(new DocumentFactoryPrivate) {
+}
+
+DocumentFactory::~DocumentFactory() {
+	delete d;
 }
 
 DocumentFactory* DocumentFactory::instance() {
