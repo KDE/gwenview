@@ -75,7 +75,7 @@ void JpegContentTest::initTestCase() {
 
 void JpegContentTest::cleanupTestCase() {
 	QDir::current().remove(CUT_FILE);
-};
+}
 
 
 typedef QMap<QString,QString> MetaInfoMap;
