@@ -167,6 +167,7 @@ struct MainWindow::Private {
 		// Thumbnail slider
 		KStatusBar* statusBar = new KStatusBar(mThumbnailViewPanel);
 		QSlider* slider = new QSlider(statusBar);
+		slider->setMaximumWidth(200);
 		statusBar->addPermanentWidget(slider);
 		slider->setMinimum(40);
 		slider->setMaximum(256);
