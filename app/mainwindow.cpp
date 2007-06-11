@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kapplication.h>
 #include <kde_file.h>
 #include <kdirlister.h>
 #include <kfileitem.h>
@@ -187,6 +188,9 @@ struct MainWindow::Private {
 
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
+
+		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
+
 		mBrowseAction = actionCollection->addAction("browse");
 		mBrowseAction->setText(i18n("Browse"));
 		mBrowseAction->setCheckable(true);
