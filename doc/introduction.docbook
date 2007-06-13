@@ -1,0 +1,27 @@
+<chapter id="introduction">
+<title>Introduction</title>
+
+<sect1 id="what-is-gwenview">
+<title>What is &kappname;</title>
+
+<para>
+&kappname; is a fast and easy to use image viewer for KDE.
+</para>
+
+<para>
+It features a folder tree window and a file list window to provide easy
+navigation of your file hierarchy.  &kappname; uses docked windows, so you can
+alter its layout any way you wish. You can also browse your images in
+full-screen mode, or embedded within &konqueror; using the Image View and Kpart.</para>
+
+<para>Image loading is handled by the Qt library, so &kappname; supports all
+image formats your Qt installation supports. &kappname; correctly displays images
+with an alpha channel as well as animations.</para>
+
+<para>&kappname; supports the displaying and editing of EXIF comments in JPEG
+images. Lossless JPEG transforms such as rotations and mirroring are also supported.</para>
+
+</sect1>
+
+</chapter>
+<!-- vim: set ft=xml: -->

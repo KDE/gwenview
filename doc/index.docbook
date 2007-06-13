@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN"
+"dtd/kdex.dtd" [
+  <!ENTITY kappname "Gwenview">
+  <!ENTITY package "gwenview">
+  <!ENTITY introduction SYSTEM "introduction.docbook">
+  <!ENTITY interface SYSTEM "interface.docbook">
+  <!ENTITY mouse SYSTEM "mouse.docbook">
+  <!ENTITY keybindings SYSTEM "keybindings.docbook">
+  <!ENTITY docked_windows SYSTEM "docked_windows.docbook">
+  <!ENTITY external_tools SYSTEM "external_tools.docbook">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+]>
+
+<book lang="&language;">
+<title>Gwenview User Manual</title>
+
+<bookinfo>
+<authorgroup>
+<author>
+<firstname>Aurélien</firstname>
+<surname>Gâteau</surname>
+<affiliation><address><email>aurelien.gateau@free.fr</email></address></affiliation>
+</author>
+<author>
+<firstname>Christopher</firstname><surname>Martin</surname>
+<affiliation><address><email>chrsmrtn@debian.org</email></address></affiliation>
+</author>
+</authorgroup>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+<copyright>
+<year>2005</year>
+<holder>Aurélien Gâteau</holder>
+</copyright>
+<!-- <legalnotice>&FDLNotice;</legalnotice> -->
+
+<date>2005-08-21</date>
+<releaseinfo>1.2.92</releaseinfo>
+<abstract>
+<para>&kappname; is an image viewer for KDE.</para>
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>image</keyword>
+<keyword>viewer</keyword>
+<keyword>artist</keyword>
+<keyword>photo</keyword>
+<keyword>picture</keyword>
+</keywordset>
+</bookinfo>
+&introduction;
+&interface;
+
+&external_tools;
+
+<chapter id="tips">
+<title>Tips</title>
+&mouse;
+&keybindings;
+&docked_windows;
+</chapter>
+
+</book>

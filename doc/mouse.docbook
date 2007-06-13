@@ -1,0 +1,41 @@
+<sect1 id='mouse'><title>Using the mouse</title>
+  
+<sect2 id='mouse_panning'><title>Panning with the mouse</title>
+<itemizedlist>
+  <listitem><para>Holding down the left mouse button on an image allows you to
+      scroll the image.</para></listitem>
+  <listitem><para>The mouse wheel will scroll the image up and
+      down.</para></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'><title>Zooming with the mouse</title>
+<itemizedlist>
+  <listitem><para>Clicking the middle mouse button will toggle the auto zoom
+      on/off.</para></listitem>
+  <listitem><para>Hold down the Control key, then either use the mouse wheel to
+      zoom in and out or left click to zoom in and right click to zoom
+      out.</para></listitem>
+
+  <listitem><para>The mouse wheel, used while holding down the Alt key, will
+      scroll the image horizontally.</para></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'><title>Browsing with the mouse</title>
+<itemizedlist>
+  <listitem><para>Double-clicking on an image toggles Browse
+      mode.</para></listitem>
+  <listitem><para>By default, the mouse wheel will scroll the image up and down. But,
+  this can be configured to browse the images in the current directory
+  instead.</para></listitem>
+  <listitem><para>Hold down the left mouse button over an image, then click the right
+      button to go to the next image.</para>
+    <para>Hold down the right button, then click the
+      left button to load the previous image.</para></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+<!-- vim: set ft=xml: -->

@@ -1,0 +1,70 @@
+<sect1 id='docked_windows'><title>Docked windows</title>
+<para>The &kappname; interface is composed of a number of smaller docked windows.
+Manipulating these windows can be difficult at first. To focus a particular
+window in the &kappname; interface, simply click within it.</para>
+
+<para>Each docked window has a small grip bar along the top. It contains a dock/undock button
+resembling an arrow at its right end and a close button resembling the
+letter X. It looks like this:
+
+<screenshot>
+  <screeninfo>Grip bar of a docked window</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="dock_grip.png" format="PNG" />
+    </imageobject>
+    <textobject>
+      <phrase>Grip bar of a docked window</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<itemizedlist>
+  <listitem><para>Clicking the close button on a docked window will remove it from the interface.
+To bring it back, select its name in the <guimenu>Window</guimenu>
+menu.</para></listitem>
+
+  <listitem>
+    <para>To resize docked windows, drag the border between the
+      windows.
+    </para>
+  </listitem>
+  <listitem>
+    <para>To re-arrange the docked windows, drag a window by its grip bar
+      over to the desired position. While dragging, a small box
+      outline will appear to indicate the position the window
+      will take when you end the drag.
+    </para>
+    <para>If you wish to stack two windows and use tabs to choose between them,
+    drag the window to the very center of the other window with which you wish
+    to stack.
+    </para>
+  </listitem>
+  <listitem>
+    <para>To undock a window, either click the dock/undock button in its top right corner, or
+      double-click on the window's grip bar.</para>
+    <para>Double-clicking again or clicking on the dock/undock button, should return the window to its original
+      position.</para>
+    <para>You can also dock an undocked window by dragging its grip bar back to a
+point within the general interface, just as if you were rearranging an already
+docked window.</para>
+  </listitem>
+
+  <listitem>
+    <para>The file view window cannot be undocked or moved, but by moving other windows
+      around, it can itself be shifted about.</para> 
+  </listitem>
+
+  <listitem>
+    <para>While dragging a window, press the <keycap>Escape</keycap> key to cancel the operation. To reset
+  the docked windows to the default &kappname; layout, use 
+      <menuchoice>
+        <guimenu>Window</guimenu>
+        <guimenuitem>Reset</guimenuitem>
+      </menuchoice>.
+    </para>
+  </listitem>
+</itemizedlist>
+</sect1>
+<!-- vim: set ft=xml: -->

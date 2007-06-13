@@ -1,0 +1,21 @@
+<sect1 id="keybindings">
+<title>Key bindings</title>
+
+<para>&kappname; comes with a range of keyboard shortcuts, all of which can be viewed and remapped by
+  selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+      Shortcuts...</guimenuitem></menuchoice>. Note that in the Files and Folders windows,
+all the normal KDE shortcuts are functional, unless otherwise remapped.</para>
+
+<para>A few of the most useful default bindings are:</para>
+
+<itemizedlist>
+  <listitem><para><keycap>Space</keycap>: Displays the next image in the directory.</para></listitem>
+  <listitem><para><keycap>Backspace</keycap>: Displays the previous image in the directory.</para></listitem>
+  <listitem><para><keycombo
+        action="simul">&Ctrl;<keycap>Return</keycap></keycombo>: Toggles between Browse and View modes.</para></listitem>
+  <listitem><para><keycombo action="simul">&Ctrl;
+        &Shift;<keycap>F</keycap></keycombo>: Activates Full Screen mode.</para></listitem>
+  <listitem><para><keycap>Escape</keycap>: Exits from Full Screen mode.</para></listitem>
+</itemizedlist>
+</sect1>
+<!-- vim: set ft=xml: -->

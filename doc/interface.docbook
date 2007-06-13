@@ -1,0 +1,50 @@
+<chapter id="interface">
+<title>The interface</title>
+
+<sect1 id='browse_and_view_modes'><title>Browse and View modes</title>
+  
+<para>By default, &kappname; opens in Browse mode.</para>
+
+<para>In this mode you can easily navigate through your files and folders. As
+  you can see on the screenshot, the preview window shows the current image as
+  well as any embedded image comment.</para>
+
+<screenshot>
+  <screeninfo>Browse Mode Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+ 
+<para>From the Browse mode, 
+  unchecking
+  <menuchoice>
+    <shortcut>
+      <keycombo action="simul">&Ctrl;<keycap>Return</keycap></keycombo>
+    </shortcut>
+    <guimenu>View</guimenu>
+    <guimenuitem>Browse</guimenuitem>
+  </menuchoice>
+  will put you in View mode, where the image takes all the
+  space of the window.</para>
+
+<screenshot>
+  <screeninfo>View Mode Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<tip><para>You can start directly in View mode by starting &kappname; with an image
+    as an argument.</para>
+</tip>
+
+</sect1>
+
+</chapter>
+<!-- vim: set ft=xml: -->
