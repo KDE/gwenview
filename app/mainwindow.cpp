@@ -37,10 +37,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
+#include <kimageio.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <kmountpoint.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
@@ -400,6 +402,7 @@ struct MainWindow::Private {
 			QModelIndex index = mThumbnailView->currentIndex();
 			Q_ASSERT(index.isValid());
 			KFileItem* item = mDirModel->itemForIndex(index);
+			Q_ASSERT(item);
 			return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
 		}
 	}
@@ -417,6 +420,39 @@ struct MainWindow::Private {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 		actionCollection->action("file_save")->setEnabled(canSave);
 		actionCollection->action("file_save_as")->setEnabled(canSave);
+	}
+
+	KUrl currentUrl() const {
+		if (mDocumentView->isVisible() && mPart) {
+			return mPart->url();
+		} else {
+			QModelIndex index = mThumbnailView->currentIndex();
+			if (!index.isValid()) {
+				return KUrl();
+			}
+			KFileItem* item = mDirModel->itemForIndex(index);
+			Q_ASSERT(item);
+			return item->url();
+		}
+	}
+
+	QString currentMimeType() const {
+		if (mDocumentView->isVisible() && mPart) {
+			return MimeTypeUtils::urlMimeType(mPart->url());
+		} else {
+			QModelIndex index = mThumbnailView->currentIndex();
+			if (!index.isValid()) {
+				return QString();
+			}
+			KFileItem* item = mDirModel->itemForIndex(index);
+			Q_ASSERT(item);
+			return item->mimetype();
+		}
+	}
+
+	void doSave(const KUrl& url, const QString& format) {
+		Q_ASSERT(url.isValid());
+		kDebug() << "doSave: " << url << ", " << format << endl;
 	}
 };
 
@@ -667,12 +703,47 @@ void MainWindow::toggleFullScreen() {
 
 
 void MainWindow::save() {
+	QString mimeType = d->currentMimeType();
+	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
+	if (!availableMimeTypes.contains(mimeType)) {
+		KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
+		saveUsingAnotherFormat.setText(i18n("Save using another format"));
+		int result = KMessageBox::warningContinueCancel(
+			this,
+			i18n("Gwenview can't save images in '%1' format.").arg(mimeType),
+			QString() /* caption */,
+			saveUsingAnotherFormat
+			);
+		if (result == KMessageBox::Continue) {
+			saveAs();
+		}
+		return;
+	}
+	QStringList typeList = KImageIO::typeForMime(mimeType);
+	Q_ASSERT(typeList.count() > 0);
+	d->doSave(d->currentUrl(), typeList[0]);
 }
 
 
 void MainWindow::saveAs() {
-	KUrl url = KFileDialog::getSaveUrl(
-		KUrl(), QString(), this);
+	KFileDialog dialog(d->currentUrl(), QString(), this);
+	dialog.setOperationMode(KFileDialog::Saving);
+
+	// Init mime filter
+	QString mimeType = d->currentMimeType();
+	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
+	dialog.setMimeFilter(availableMimeTypes, mimeType);
+
+	// Show dialog
+	if (!dialog.exec()) {
+		return;
+	}
+
+	// Start save
+	mimeType = dialog.currentMimeFilter();
+	QStringList typeList = KImageIO::typeForMime(mimeType);
+	Q_ASSERT(typeList.count() > 0);
+	d->doSave(dialog.selectedUrl(), typeList[0]);
 }
 
 
