@@ -24,9 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstringlist.h>
 
 // KDE
+#include <kfileitem.h>
 /* FIXME
 #include <kapplication.h>
-#include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kurl.h>
@@ -87,12 +87,11 @@ const QStringList& videoMimeTypes() {
 }
 
 
-/* FIXME: Remove if not needed
 Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith("inode/directory")) {
 		return KIND_DIR;
 	}
-	if (Archive::mimeTypes().contains(mimeType)) {
+	if (ArchiveUtils::mimeTypes().contains(mimeType)) {
 		return KIND_ARCHIVE;
 	}
 	if (rasterImageMimeTypes().contains(mimeType)) {
@@ -108,6 +107,7 @@ Kind fileItemKind(const KFileItem* item) {
 }
 
 
+/*
 Kind urlKind(const KURL& url) {
 	QString mimeType;
 	if (url.isLocalFile()) {

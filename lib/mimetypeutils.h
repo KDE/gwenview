@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 class QStringList;
 
+class KFileItem;
+
 namespace Gwenview {
 
 namespace MimeTypeUtils {
@@ -34,12 +36,10 @@ GWENVIEWLIB_EXPORT const QStringList& dirMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& imageMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& videoMimeTypes();
 
-/* FIXME: Remove if not needed
 enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
-Kind fileItemKind(const KFileItem*);
-Kind urlKind(const KURL&);
-Kind mimeTypeKind(const QString& mimeType);
-*/
+GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem*);
+//Kind urlKind(const KURL&);
+GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
 
 } // namespace MimeTypeUtils
 
