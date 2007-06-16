@@ -30,8 +30,8 @@ namespace Gwenview {
 class DocumentViewPrivate;
 
 /**
- * Holds the active document view, or show a message if there is document
- * selected
+ * Holds the active document view, or show a message if there is no active
+ * document
  */
 class DocumentView : public QStackedWidget {
 	Q_OBJECT
