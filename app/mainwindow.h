@@ -77,6 +77,10 @@ private Q_SLOTS:
 
 	void toggleFullScreen();
 
+	void save();
+
+	void saveAs();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;

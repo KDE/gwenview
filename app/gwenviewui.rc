@@ -5,8 +5,8 @@
 <MenuBar>
 	<Menu name="file" >
 		<text>&amp;File</text>
-		<Action name="save"/>
-		<Action name="saveAs"/>
+		<Action name="file_save"/>
+		<Action name="file_save_as"/>
 		<Separator/>
 		<Action name="quit"/>
 	</Menu>

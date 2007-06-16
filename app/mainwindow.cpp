@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kapplication.h>
 #include <kde_file.h>
 #include <kdirlister.h>
+#include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
@@ -189,6 +190,8 @@ struct MainWindow::Private {
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 
+		KStandardAction::save(mWindow, SLOT(save()), actionCollection);
+		KStandardAction::saveAs(mWindow, SLOT(saveAs()), actionCollection);
 		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
 
 		mBrowseAction = actionCollection->addAction("browse");
@@ -384,6 +387,37 @@ struct MainWindow::Private {
 		mFullScreenBar->addAction(mGoToNextAction);
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
+
+	bool currentDocumentIsRasterImage() {
+		if (mDocumentView->isVisible()) {
+			// If the document view is visible, we assume we have a raster
+			// image if and only if we are using the ImageViewPart. This avoids
+			// having to determine the mimetype a second time.
+			// FIXME: KPart code should move to DocumentView and DocumentView
+			// should be able to answer whether it's showing a raster image.
+			return dynamic_cast<ImageViewPart*>(mPart) != 0;
+		} else {
+			QModelIndex index = mThumbnailView->currentIndex();
+			Q_ASSERT(index.isValid());
+			KFileItem* item = mDirModel->itemForIndex(index);
+			return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
+		}
+	}
+
+	void updateFileActions() {
+		// We can save if only one file is selected and if it's a raster image
+		bool canSave;
+		if (mThumbnailViewPanel->isVisible()
+			&& mThumbnailView->selectionModel()->selectedIndexes().count() != 1)
+		{
+			canSave = false;
+		} else {
+			canSave = currentDocumentIsRasterImage();
+		}
+		KActionCollection* actionCollection = mWindow->actionCollection();
+		actionCollection->action("file_save")->setEnabled(canSave);
+		actionCollection->action("file_save_as")->setEnabled(canSave);
+	}
 };
 
 
@@ -552,6 +586,7 @@ void MainWindow::slotPartCompleted() {
 void MainWindow::slotSelectionChanged() {
 	openSelectedDocument();
 	updateSideBar();
+	d->updateFileActions();
 	updatePreviousNextActions();
 }
 
@@ -628,6 +663,16 @@ void MainWindow::toggleFullScreen() {
 		toolBar()->show();
 		d->mFullScreenBar->hide();
 	}
+}
+
+
+void MainWindow::save() {
+}
+
+
+void MainWindow::saveAs() {
+	KUrl url = KFileDialog::getSaveUrl(
+		KUrl(), QString(), this);
 }
 
 
