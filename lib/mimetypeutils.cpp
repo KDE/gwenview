@@ -24,13 +24,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <qstringlist.h>
 
 // KDE
-#include <kfileitem.h>
-/* FIXME
 #include <kapplication.h>
+#include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kurl.h>
-*/
 
 #include <kimageio.h>
 
@@ -87,6 +85,16 @@ const QStringList& videoMimeTypes() {
 }
 
 
+QString urlMimeType(const KUrl& url) {
+	QString mimeType;
+	if (url.isLocalFile()) {
+		return KMimeType::findByUrl(url)->name();
+	} else {
+		return KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
+	}
+}
+
+
 Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith("inode/directory")) {
 		return KIND_DIR;
@@ -107,17 +115,9 @@ Kind fileItemKind(const KFileItem* item) {
 }
 
 
-/*
-Kind urlKind(const KURL& url) {
-	QString mimeType;
-	if (url.isLocalFile()) {
-		mimeType=KMimeType::findByURL(url)->name();
-	} else {
-		mimeType=KIO::NetAccess::mimetype(url, KApplication::kApplication()->mainWidget());
-	}
-	return mimeTypeKind(mimeType);
+Kind urlKind(const KUrl& url) {
+	return mimeTypeKind(urlMimeType(url));
 }
-*/
 
 } // namespace MimeTypeUtils
 } // namespace Gwenview
