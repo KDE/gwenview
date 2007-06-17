@@ -3,7 +3,6 @@ ServiceTypes=image/*
 Exec=dcop kdesktop KBackgroundIface setWallpaper %u 2
 Icon=background
 Name=Set as Tiled Wallpaper
-Name[bg]=Използване като тапет със застилане
 Name[ca]=Estableix com a paper pintat (mosaic)
 Name[cs]=Použít jako dlaždice na plochu
 Name[da]=Sæt som fliselagt tapet

@@ -4,7 +4,6 @@ Exec=dcop kdesktop KBackgroundIface setWallpaper %u 6
 Icon=background
 Name=Set as Wallpaper
 Name[ar]=عيين كورق جدار
-Name[bg]=Използване като тапет
 Name[ca]=Estableix com a paper pintat
 Name[cs]=Použít jako tapetu
 Name[cy]=Gosod fel Papur Wal
