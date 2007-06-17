@@ -22,8 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentloadedimpl.h"
 
 // Qt
+#include <QImage>
 
 // KDE
+#include <kurl.h>
 
 // Local
 
@@ -51,6 +53,18 @@ void DocumentLoadedImpl::init() {
 
 bool DocumentLoadedImpl::isLoaded() const {
 	return true;
+}
+
+
+Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QString& format) {
+	// FIXME: Handle remote urls
+	Q_ASSERT(url.isLocalFile());
+	bool ok = document()->image().save(url.path(), format.toAscii());
+	if (ok) {
+		return Document::SR_OK;
+	} else {
+		return Document::SR_OtherError;
+	}
 }
 
 

@@ -45,4 +45,8 @@ bool EmptyDocumentImpl::isLoaded() const {
 	return false;
 }
 
+Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QString&) {
+	return Document::SR_OtherError;
+}
+
 } // namespace

@@ -28,4 +28,5 @@ private Q_SLOTS:
 	void testDeleteWhileLoading();
 	void testLoadRotated();
 	void testMultipleLoads();
+	void testSave();
 };

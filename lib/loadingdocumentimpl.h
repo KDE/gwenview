@@ -40,6 +40,7 @@ public:
 
 	virtual void init();
 	virtual bool isLoaded() const;
+	virtual Document::SaveResult save(const KUrl&, const QString& format);
 
 private Q_SLOTS:
 	void slotImageLoaded();

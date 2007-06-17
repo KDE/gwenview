@@ -117,4 +117,9 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	switchToImpl(new DocumentLoadedImpl(document()));
 }
 
+
+Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QString&) {
+	return Document::SR_OtherError;
+}
+
 } // namespace

@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "document.moc"
 
 // Qt
+#include <QApplication>
 #include <QImage>
 
 // KDE
@@ -87,6 +88,13 @@ void Document::setImage(const QImage& image) {
 
 KUrl Document::url() const {
 	return d->mUrl;
+}
+
+Document::SaveResult Document::save(const KUrl& url, const QString& format) {
+	while (!isLoaded()) {
+		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
+	return d->mImpl->save(url, format);
 }
 
 } // namespace

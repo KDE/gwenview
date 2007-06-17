@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include "document.h"
 
 class QImage;
 class QRect;
@@ -49,6 +50,8 @@ public:
 	virtual void init() = 0;
 
 	virtual bool isLoaded() const = 0;
+
+	virtual Document::SaveResult save(const KUrl&, const QString& format) = 0;
 
 Q_SIGNALS:
 	void loaded();

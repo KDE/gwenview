@@ -59,6 +59,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "selectioncontextmanageritem.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
+#include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
@@ -449,11 +450,6 @@ struct MainWindow::Private {
 			return item->mimetype();
 		}
 	}
-
-	void doSave(const KUrl& url, const QString& format) {
-		Q_ASSERT(url.isValid());
-		kDebug() << "doSave: " << url << ", " << format << endl;
-	}
 };
 
 
@@ -721,12 +717,16 @@ void MainWindow::save() {
 	}
 	QStringList typeList = KImageIO::typeForMime(mimeType);
 	Q_ASSERT(typeList.count() > 0);
-	d->doSave(d->currentUrl(), typeList[0]);
+
+	KUrl url = d->currentUrl();
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->save(url, typeList[0]);
 }
 
 
 void MainWindow::saveAs() {
-	KFileDialog dialog(d->currentUrl(), QString(), this);
+	KUrl url = d->currentUrl();
+	KFileDialog dialog(url, QString(), this);
 	dialog.setOperationMode(KFileDialog::Saving);
 
 	// Init mime filter
@@ -743,7 +743,8 @@ void MainWindow::saveAs() {
 	mimeType = dialog.currentMimeFilter();
 	QStringList typeList = KImageIO::typeForMime(mimeType);
 	Q_ASSERT(typeList.count() > 0);
-	d->doSave(dialog.selectedUrl(), typeList[0]);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->save(dialog.selectedUrl(), typeList[0]);
 }
 
 

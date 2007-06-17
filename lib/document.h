@@ -43,6 +43,12 @@ class DocumentPrivate;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
+	enum SaveResult {
+		SR_OK,
+		SR_ReadOnly,
+		SR_OtherError
+	};
+
 	typedef KSharedPtr<Document> Ptr;
 	~Document();
 	void load(const KUrl&);
@@ -52,6 +58,8 @@ public:
 	QImage& image();
 
 	KUrl url() const;
+
+	SaveResult save(const KUrl& url, const QString& format);
 
 Q_SIGNALS:
 	void loaded();
