@@ -1,6 +1,3 @@
-# Tests don't need to go into toplevel/bin, they are fine in the current dir.
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 # ImageScaler
 set(imagescalertest_SRCS
 	imagescalertest.cpp
@@ -8,7 +5,7 @@ set(imagescalertest_SRCS
 
 kde4_automoc(${imagescalertest_SRCS})
 
-kde4_add_test(imagescalertest ${imagescalertest_SRCS})
+kde4_add_test_executable(imagescalertest ${imagescalertest_SRCS})
 
 target_link_libraries(imagescalertest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -19,7 +16,7 @@ set(documenttest_SRCS
 
 kde4_automoc(${documenttest_SRCS})
 
-kde4_add_test(documenttest ${documenttest_SRCS})
+kde4_add_test_executable(documenttest ${documenttest_SRCS})
 
 target_link_libraries(documenttest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -30,6 +27,6 @@ set(jpegcontenttest_SRCS
 
 kde4_automoc(${jpegcontenttest_SRCS})
 
-kde4_add_test(jpegcontenttest ${jpegcontenttest_SRCS})
+kde4_add_test_executable(jpegcontenttest ${jpegcontenttest_SRCS})
 
 target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
