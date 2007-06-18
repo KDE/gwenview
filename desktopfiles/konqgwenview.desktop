@@ -6,6 +6,7 @@ Actions=gwenview;
 [Desktop Action gwenview]
 Name=Browse with Gwenview
 Name[ar]=تصفح بواسطة Gwenview
+Name[bg]=Преглед с Gwenview
 Name[br]=Furchal gant Gwenview
 Name[bs]=Pregledaj sa Gwenview
 Name[ca]=Navega amb el Gwenview
