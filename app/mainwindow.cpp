@@ -374,7 +374,7 @@ struct MainWindow::Private {
 	void goTo(int offset) {
 		QModelIndex index = getRelativeIndex(offset);
 		if (index.isValid()) {
-			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
 		}
 	}
 
