@@ -100,6 +100,11 @@ void FullScreenBar::setActivated(bool activated) {
 
 
 void FullScreenBar::autoHide() {
+	if (rect().contains(QCursor::pos())) {
+		// Do nothing if the cursor is over the bar
+		d->mAutoHideTimer->start();
+		return;
+	}
 	d->hideCursor();
 	slideOut();
 }
