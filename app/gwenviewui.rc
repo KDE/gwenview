@@ -21,6 +21,12 @@
 		<Separator/>
 		<Action name="toggle_sidebar" />
 	</Menu>
+	<Menu name="go_web" >
+		<Action name="go_to_previous"/>
+		<Action name="go_to_next"/>
+		<Separator/>
+		<Action name="go_up"/>
+	</Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" >
