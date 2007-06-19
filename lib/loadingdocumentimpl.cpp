@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QByteArray>
+#include <QFile>
 #include <QImage>
 #include <QImageReader>
 #include <QMutex>
@@ -47,7 +48,14 @@ public:
 		QMutexLocker lock(&mMutex);
 		QString path = mUrl.path();
 		QByteArray format = QImageReader::imageFormat(path);
-		bool ok = mImage.load(path, format.data());
+		QFile file(path);
+		bool ok = file.open(QIODevice::ReadOnly);
+		if (!ok) {
+			return;
+		}
+		mData = file.readAll();
+
+		ok = mImage.loadFromData(mData, format.data());
 		if (!ok) {
 			return;
 		}
@@ -75,6 +83,7 @@ public:
 private:
 	mutable QMutex mMutex;
 	KUrl mUrl;
+	QByteArray mData;
 	QImage mImage;
 };
 
