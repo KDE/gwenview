@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentloadedimpl.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
+#include "jpegdocumentloadedimpl.h"
 
 namespace Gwenview {
 
@@ -47,7 +48,7 @@ public:
 	virtual void run() {
 		QMutexLocker lock(&mMutex);
 		QString path = mUrl.path();
-		QByteArray format = QImageReader::imageFormat(path);
+		mFormat = QImageReader::imageFormat(path);
 		QFile file(path);
 		bool ok = file.open(QIODevice::ReadOnly);
 		if (!ok) {
@@ -55,11 +56,11 @@ public:
 		}
 		mData = file.readAll();
 
-		ok = mImage.loadFromData(mData, format.data());
+		ok = mImage.loadFromData(mData, mFormat.data());
 		if (!ok) {
 			return;
 		}
-		if (format == "jpeg") {
+		if (mFormat == "jpeg") {
 			JpegContent content;
 			if (!content.load(path)) {
 				return;
@@ -75,6 +76,16 @@ public:
 		mUrl = url;
 	}
 
+	const QByteArray& format() const {
+		QMutexLocker lock(&mMutex);
+		return mFormat;
+	}
+
+	const QByteArray& data() const {
+		QMutexLocker lock(&mMutex);
+		return mData;
+	}
+
 	const QImage& image() const {
 		QMutexLocker lock(&mMutex);
 		return mImage;
@@ -84,6 +95,7 @@ private:
 	mutable QMutex mMutex;
 	KUrl mUrl;
 	QByteArray mData;
+	QByteArray mFormat;
 	QImage mImage;
 };
 
@@ -123,7 +135,11 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	Q_ASSERT(d->mThread.isFinished());
 	setDocumentImage(d->mThread.image());
 	loaded();
-	switchToImpl(new DocumentLoadedImpl(document()));
+	if (d->mThread.format() == "jpeg") {
+		switchToImpl(new JpegDocumentLoadedImpl(document(), d->mThread.data()));
+	} else {
+		switchToImpl(new DocumentLoadedImpl(document()));
+	}
 }
 
 

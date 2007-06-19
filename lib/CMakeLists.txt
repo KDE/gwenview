@@ -10,6 +10,7 @@ set(gwenviewlib_SRCS
 	imageutils.cpp
 	imageviewpart.cpp
 	jpegcontent.cpp
+	jpegdocumentloadedimpl.cpp
 	loadingdocumentimpl.cpp
     mimetypeutils.cpp
 	sorteddirmodel.cpp
