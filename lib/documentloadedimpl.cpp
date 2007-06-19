@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentloadedimpl.h"
 
 // Qt
+#include <QFile>
 #include <QImage>
 
 // KDE
@@ -56,10 +57,21 @@ bool DocumentLoadedImpl::isLoaded() const {
 }
 
 
+bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QString& format) {
+	return document()->image().save(device, format.toAscii());
+}
+
+
 Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QString& format) {
 	// FIXME: Handle remote urls
 	Q_ASSERT(url.isLocalFile());
-	bool ok = document()->image().save(url.path(), format.toAscii());
+	QFile file(url.path());
+	bool ok;
+	ok = file.open(QIODevice::WriteOnly);
+	if (!ok) {
+		return Document::SR_OtherError;
+	}
+	ok = saveInternal(&file, format);
 	if (ok) {
 		return Document::SR_OK;
 	} else {

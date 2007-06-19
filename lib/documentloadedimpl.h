@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentimpl.h"
 
+class QIODevice;
+
 namespace Gwenview {
 
 
@@ -40,6 +42,9 @@ public:
 	virtual void init();
 	virtual bool isLoaded() const;
 	virtual Document::SaveResult save(const KUrl&, const QString& format);
+
+protected:
+	virtual bool saveInternal(QIODevice* device, const QString& format);
 
 private:
 	DocumentLoadedImplPrivate* const d;

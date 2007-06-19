@@ -39,6 +39,9 @@ public:
 	JpegDocumentLoadedImpl(Document*, const QByteArray& data);
 	~JpegDocumentLoadedImpl();
 
+protected:
+	virtual bool saveInternal(QIODevice* device, const QString& format);
+
 private:
 	JpegDocumentLoadedImplPrivate* const d;
 };

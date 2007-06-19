@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "jpegdocumentloadedimpl.h"
 
 // Qt
+#include <QIODevice>
 
 // KDE
 
@@ -46,5 +47,14 @@ JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl() {
 	delete d;
 }
 
+
+bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QString& format) {
+	if (format == "jpeg") {
+		int size = device->write(d->mData);
+		return size == d->mData.size();
+	} else {
+		return DocumentLoadedImpl::saveInternal(device, format);
+	}
+}
 
 } // namespace
