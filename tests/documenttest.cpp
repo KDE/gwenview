@@ -103,3 +103,20 @@ void DocumentTest::testSave() {
 	QImage image("result.png", "PNG");
 	QCOMPARE(doc->image(), image);
 }
+
+void DocumentTest::testLosslessSave() {
+	KUrl url("orient6.jpg");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	KUrl destUrl(QDir::currentPath() + "/result.jpg");
+	Document::SaveResult result = doc->save(destUrl, "jpeg");
+	QCOMPARE(result, Document::SR_OK);
+
+	QFile originalFile(url.path());
+	originalFile.open(QIODevice::ReadOnly);
+	QByteArray originalData = originalFile.readAll();
+
+	QFile resultFile(destUrl.path());
+	resultFile.open(QIODevice::ReadOnly);
+	QByteArray resultData = resultFile.readAll();
+	QCOMPARE(originalData, resultData);
+}
