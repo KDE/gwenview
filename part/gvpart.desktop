@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Type=Service
 Name=Gwenview Image Viewer
+Name[el]=Προβολέας εικόνων Gwenview
+Name[is]=Gwenview myndskoðari
 Name[zh_TW]=Gwenview 影像檢視程式
 MimeType=image/gif;image/jpeg;image/png;image/x-bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbm;image/x-xpm
 ServiceTypes=KParts/ReadOnlyPart
