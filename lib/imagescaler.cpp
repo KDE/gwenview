@@ -33,9 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 // Amount of pixels to keep so that smooth scale is correct
-static const int SMOOTH_MARGIN = 8;
+static const int SMOOTH_MARGIN = 3;
 
-static const int MAX_CHUNK_AREA = 100 * 100;
+static const int MAX_CHUNK_AREA = 1000 * 100;
 
 static const int MAX_SCALE_TIME = 2000;
 
@@ -135,49 +135,62 @@ void ImageScaler::processChunk(const QRect& rect) {
 		rect.width() / d->mZoom,
 		rect.height() / d->mZoom);
 
+	sourceRectF = sourceRectF.intersected(d->mImage.rect());
 	QRect sourceRect = containingRect(sourceRectF);
-	sourceRect = sourceRect.intersected(d->mImage.rect());
 	if (sourceRect.isEmpty()) {
 		return;
 	}
 
-	// destRect is almost like rect, but it contains only "full" pixels
-	// (We use lrint to avoid missing lines (see
-	// ImageScalerTest::testScaleDownBigImage)
-	QRect destRect = QRect(
-		lrint(sourceRect.left() * d->mZoom),
-		lrint(sourceRect.top() * d->mZoom),
-		qMax(int(sourceRect.width() * d->mZoom), 1),
-		qMax(int(sourceRect.height() * d->mZoom), 1)
-		);
+	// Compute smooth margin
+	bool needsSmoothMargins = d->mTransformationMode == Qt::SmoothTransformation;
 
-	QImage tmp;
-	if (d->mTransformationMode == Qt::FastTransformation) {
-		tmp = d->mImage.copy(sourceRect);
-		tmp = tmp.scaled(
-			destRect.width(),
-			destRect.height(),
-			Qt::IgnoreAspectRatio,
-			d->mTransformationMode);
+	int sourceLeftMargin, sourceRightMargin, sourceTopMargin, sourceBottomMargin;
+	int destLeftMargin, destRightMargin, destTopMargin, destBottomMargin;
+	if (needsSmoothMargins) {
+		sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
+		sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
+		sourceRightMargin = qMin(d->mImage.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
+		sourceBottomMargin = qMin(d->mImage.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+		sourceRect.adjust(
+			-sourceLeftMargin,
+			-sourceTopMargin,
+			sourceRightMargin,
+			sourceBottomMargin);
+		destLeftMargin = int(sourceLeftMargin * d->mZoom);
+		destTopMargin = int(sourceTopMargin * d->mZoom);
+		destRightMargin = int(sourceRightMargin * d->mZoom);
+		destBottomMargin = int(sourceBottomMargin * d->mZoom);
 	} else {
-		// Adjust sourceRect so that the scaling algorithm has enough pixels around
-		// to correctly smooth borders
-		sourceRect.adjust(-SMOOTH_MARGIN, -SMOOTH_MARGIN, SMOOTH_MARGIN, SMOOTH_MARGIN);
-
-		// Scale the source rect
-		tmp = d->mImage.copy(sourceRect);
-		int destMargin = int(SMOOTH_MARGIN * d->mZoom);
-		tmp = tmp.scaled(
-			destRect.width() + 2 * destMargin,
-			destRect.height() + 2 * destMargin,
-			Qt::IgnoreAspectRatio,
-			d->mTransformationMode);
-
-		// Remove the extra pixels added before
-		tmp = tmp.copy(destMargin, destMargin, destRect.width(), destRect.height());
+		sourceLeftMargin = sourceRightMargin = sourceTopMargin = sourceBottomMargin = 0;
+		destLeftMargin = destRightMargin = destTopMargin = destBottomMargin = 0;
 	}
 
-	scaledRect(destRect.left(), destRect.top(), tmp);
+	// destRect is almost like rect, but it contains only "full" pixels
+	QRectF destRectF = QRectF(
+		sourceRect.left() * d->mZoom,
+		sourceRect.top() * d->mZoom,
+		sourceRect.width() * d->mZoom,
+		sourceRect.height() * d->mZoom
+		);
+	QRect destRect = containingRect(destRectF);
+
+	QImage tmp;
+	tmp = d->mImage.copy(sourceRect);
+	tmp = tmp.scaled(
+		destRect.width(),
+		destRect.height(),
+		Qt::KeepAspectRatio,
+		d->mTransformationMode);
+
+	if (needsSmoothMargins) {
+		tmp = tmp.copy(
+			destLeftMargin, destTopMargin,
+			destRect.width() - (destLeftMargin + destRightMargin),
+			destRect.height() - (destTopMargin + destBottomMargin)
+			);
+	}
+
+	scaledRect(destRect.left() + destLeftMargin, destRect.top() + destTopMargin, tmp);
 }
 
 } // namespace
