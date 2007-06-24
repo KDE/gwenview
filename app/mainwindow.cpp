@@ -564,6 +564,9 @@ void MainWindow::openDirUrlFromString(const QString& str) {
 }
 
 void MainWindow::openDocumentUrl(const KUrl& url) {
+	if (d->mPart && d->mPart->url() == url) {
+		return;
+	}
 	d->createPartForUrl(url);
 	if (!d->mPart) return;
 	d->mPart->openUrl(url);
