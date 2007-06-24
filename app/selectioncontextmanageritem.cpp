@@ -109,6 +109,10 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 	} else {
 		d->mDocument = DocumentFactory::instance()->load(item->url());
 		connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
+		// If it's already loaded, trigger updatePreview ourself
+		if (d->mDocument->isLoaded()) {
+			updatePreview();
+		}
 	}
 }
 
