@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=Gwenview Image Viewer
+Name[de]=Gwenview Bildbetrachter
 Name[el]=Προβολέας εικόνων Gwenview
+Name[fa]=مشاهده‌گر تصویر Gwenview
 Name[is]=Gwenview myndskoðari
 Name[pt]=Visualizador de Imagens Gwenview
 Name[pt_BR]=Visualizador de Imagens Gwenview
