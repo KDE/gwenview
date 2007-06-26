@@ -89,6 +89,9 @@ void FullScreenBar::moveBar(qreal value) {
 void FullScreenBar::setActivated(bool activated) {
 	if (activated) {
 		qApp->installEventFilter(this);
+		// Make sure the widget is not partially visible on start
+		move(0, -150);
+		show();
 		d->hideCursor();
 	} else {
 		qApp->removeEventFilter(this);
@@ -117,10 +120,6 @@ void FullScreenBar::slideOut() {
 
 
 void FullScreenBar::slideIn() {
-	if (!isVisible()) {
-		move(0, -150);
-		show();
-	}
 	// Make sure auto hide timer does not kick in while we are sliding in
 	d->mAutoHideTimer->stop();
 	d->mTimeLine->setDirection(QTimeLine::Forward);

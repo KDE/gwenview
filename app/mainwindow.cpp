@@ -693,7 +693,6 @@ void MainWindow::toggleFullScreen() {
 		showNormal();
 		menuBar()->show();
 		toolBar()->show();
-		d->mFullScreenBar->hide();
 	}
 }
 
