@@ -297,6 +297,10 @@ void MainWindow::updateFullScreenLabel() {
 	formatter.mImageSize=mDocument->image().size();
 	formatter.mPosition=mFileViewController->shownFilePosition()+1;
 	formatter.mCount=mFileViewController->fileCount();
+	formatter.mAperture=mDocument->aperture();
+	formatter.mExposureTime=mDocument->exposureTime();
+	formatter.mIso=mDocument->iso();
+	formatter.mFocalLength=mDocument->focalLength();
 	
 	QString txt=formatter.format( FullScreenConfig::osdFormat() );
 	mFullScreenLabelAction->label()->setText(txt);

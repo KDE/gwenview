@@ -51,7 +51,14 @@ public:
 
 	QString comment() const;
 	void setComment(const QString&);
-	
+
+	QString aperture() const;
+	QString exposureTime() const;
+	QString iso() const;
+	QString focalLength() const;
+
+	QString getExifInformation(const QString exifkey) const;
+
 	void transform(Orientation);
 
 	QImage thumbnail() const;

@@ -41,6 +41,11 @@ public:
 	QString mPath;
 	QString mFileName;
 	QString mComment;
+	QString mAperture;
+	QString mFocalLength;
+	QString mExposureTime;
+	QString mIso;
+
 	QSize mImageSize;
 	int mPosition;
 	int mCount;

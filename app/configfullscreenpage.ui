@@ -113,6 +113,10 @@ You can use the following keywords to format the On Screen Display:
 &lt;li&gt;%r: resolution&lt;/li&gt;
 &lt;li&gt;%n: current image position&lt;/li&gt;
 &lt;li&gt;%N: image count&lt;/li&gt;
+&lt;li&gt;%a: aperture&lt;/li&gt;
+&lt;li&gt;%t: exposure time&lt;/li&gt;
+&lt;li&gt;%i: iso&lt;/li&gt;
+&lt;li&gt;%l: focal length&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/qt&gt;</string>
             </property>

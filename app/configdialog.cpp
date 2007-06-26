@@ -261,6 +261,10 @@ void ConfigDialog::updateOSDPreview() {
 	formatter.mImageSize=QSize(1600, 1200);
 	formatter.mPosition=4;
 	formatter.mCount=12;
+	formatter.mAperture="F2.8";
+	formatter.mExposureTime="1/60 s";
+	formatter.mIso="100";
+	formatter.mFocalLength="8.88 mm";
 	
 	QString txt=formatter.format( d->mFullScreenPage->kcfg_osdFormat->text() );
 	d->mFullScreenPage->mOSDPreviewLabel->setText(txt);

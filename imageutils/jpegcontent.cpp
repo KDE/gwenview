@@ -143,6 +143,11 @@ struct JPEGContent::Private {
 	QByteArray mRawData;
 	QSize mSize;
 	QString mComment;
+	QString mAperture;
+	QString mExposureTime;
+	QString mFocalLength;
+	QString mIso;
+
 	bool mPendingTransformation;
 	QWMatrix mTransformMatrix;
 	Exiv2::ExifData mExifData;
@@ -264,6 +269,11 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 	d->mExifData = image->exifData();
 	d->mComment = QString::fromUtf8( image->comment().c_str() );
 
+	d->mAperture=aperture();
+	d->mExposureTime=exposureTime();
+	d->mIso=iso();
+	d->mFocalLength=iso();
+
 	// Adjust the size according to the orientation
 	switch (orientation()) {
 	case TRANSPOSE:
@@ -351,11 +361,46 @@ QString JPEGContent::comment() const {
 	return d->mComment;
 }
 
+QString JPEGContent::getExifInformation(const QString exifkey) const {
+	QString ret;
+	
+	Exiv2::ExifKey key(exifkey.latin1());
+	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
+
+	if (it != d->mExifData.end()) {
+               std::ostringstream outputString;
+               outputString << *it;
+               ret=QString(outputString.str().c_str());
+	}
+	else {
+		ret="n/a";
+	}
+	return ret;
+}
+
+QString JPEGContent::aperture() const {
+	d->mAperture=getExifInformation("Exif.Photo.FNumber");
+	return d->mAperture;
+}
+
+QString JPEGContent::exposureTime() const {
+	d->mExposureTime=getExifInformation("Exif.Photo.ExposureTime");
+	return d->mExposureTime;
+}
+
+QString JPEGContent::iso() const {
+	d->mIso=getExifInformation("Exif.Photo.ISOSpeedRatings");
+	return d->mIso;
+}
+
+QString JPEGContent::focalLength() const {
+	d->mFocalLength=getExifInformation("Exif.Photo.FocalLength");
+	return d->mFocalLength;
+}
 
 void JPEGContent::setComment(const QString& comment) {
 	d->mComment = comment;
 }
-
 
 static QWMatrix createRotMatrix(int angle) {
 	QWMatrix matrix;

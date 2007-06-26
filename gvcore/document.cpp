@@ -283,6 +283,22 @@ QString Document::comment() const {
 	return d->mImpl->comment();
 }
 
+QString Document::aperture() const {
+	return d->mImpl->aperture();
+}
+
+QString Document::exposureTime() const {
+       return d->mImpl->exposureTime();
+}
+
+QString Document::iso() const {
+	return d->mImpl->iso();
+}
+
+QString Document::focalLength() const {
+	return d->mImpl->focalLength();
+}
+
 void Document::setComment(const QString& comment) {
 	d->mImpl->setComment(comment);
 	d->mModified=true;

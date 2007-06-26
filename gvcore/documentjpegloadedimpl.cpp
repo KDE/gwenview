@@ -119,6 +119,22 @@ void DocumentJPEGLoadedImpl::setComment(const QString& comment) {
 	d->mJPEGContent.setComment(comment);
 }
 
+QString DocumentJPEGLoadedImpl::aperture() const {
+	return d->mJPEGContent.aperture();
+}
+
+QString DocumentJPEGLoadedImpl::exposureTime() const {
+	return d->mJPEGContent.exposureTime();
+}
+
+QString DocumentJPEGLoadedImpl::iso() const {
+	return d->mJPEGContent.iso();
+}
+
+QString DocumentJPEGLoadedImpl::focalLength() const {
+	return d->mJPEGContent.focalLength();
+}
+
 Document::CommentState DocumentJPEGLoadedImpl::commentState() const {
 	return Document::WRITABLE;
 }

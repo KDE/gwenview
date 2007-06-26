@@ -84,6 +84,10 @@ public:
 	Document::CommentState commentState() const;
 	QString comment() const;
 	void setComment(const QString&);
+	QString aperture() const;
+	QString exposureTime() const;
+	QString iso() const;
+	QString focalLength() const;
 
 	int duration() const;
 	

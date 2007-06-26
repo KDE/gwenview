@@ -45,6 +45,11 @@ QString CaptionFormatter::format(const QString& format) {
 	str.replace("%r", resolution);
 	str.replace("%n", QString::number(mPosition));
 	str.replace("%N", QString::number(mCount));
+	str.replace("%a", mAperture);
+	str.replace("%t", mExposureTime);
+	str.replace("%i", mIso);
+	str.replace("%l", mFocalLength);
+
 	return str;
 }
 

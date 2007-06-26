@@ -42,7 +42,12 @@ public:
 	QString comment() const;
 	void setComment(const QString&);
 	Document::CommentState commentState() const;
-	
+
+	QString aperture() const;
+	QString exposureTime() const;
+	QString iso() const;
+	QString focalLength() const;
+
 	void transform(ImageUtils::Orientation);
 
 protected:

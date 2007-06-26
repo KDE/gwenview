@@ -57,6 +57,22 @@ void DocumentImpl::setFileSize(int size) const {
 	mDocument->setFileSize(size);
 }
 
+QString DocumentImpl::aperture() const {
+	return QString::null;
+}
+
+QString DocumentImpl::exposureTime() const {
+	return QString::null;
+}
+
+QString DocumentImpl::iso() const {
+	return QString::null;
+}
+
+QString DocumentImpl::focalLength() const {
+	return QString::null;
+}
+
 QString DocumentImpl::comment() const {
 	return QString::null;
 }

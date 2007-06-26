@@ -2,7 +2,8 @@
 - New features:
  - Settings in the dialog to edit the thumbnail view details are now directly
    applied, no need to click "Apply" anymore.
-
+ - OSD can now display more image information: aperture, focal length, iso and
+   exposure time. Patch by Carles Pina i Estany.
 - Fixes:
  - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop
  - Bug 131162: Autorotate images preference setting is forgotten

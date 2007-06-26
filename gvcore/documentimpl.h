@@ -52,7 +52,12 @@ public:
 	 * Convenience method to emit rectUpdated with the whole image rect
 	 */
 	void emitImageRectUpdated();
-	
+
+	virtual QString aperture() const;
+	virtual QString exposureTime() const;
+	virtual QString iso() const;
+	virtual QString focalLength() const;
+
 	virtual QString comment() const;
 	virtual Document::CommentState commentState() const;
 	virtual void setComment(const QString&);
