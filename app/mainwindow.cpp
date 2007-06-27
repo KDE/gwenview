@@ -256,7 +256,12 @@ void MainWindow::openURL(const KURL& url) {
 	}
 }
 
-
+void MainWindow::slotRenamed(const QString& fileName) {
+	KURL url = mDocument->url();
+	url.setFileName(fileName);
+	mDocument->setURL(url);
+}
+	
 void MainWindow::slotDirURLChanged(const KURL& dirURL) {
 	LOG(dirURL.prettyURL(0,KURL::StripFileProtocol));
 	
@@ -354,7 +359,7 @@ void MainWindow::renameFile() {
 	} else {
 		url = mDocument->url();
 	}
-	FileOperation::rename(url, this);
+	FileOperation::rename(url, this, this, SLOT(slotRenamed(const QString &)));
 }
 
 

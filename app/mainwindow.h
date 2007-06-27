@@ -148,6 +148,7 @@ private slots:
 	void makeDir();
 	void goHome();
 	void renameFile();
+	void slotRenamed(const QString&);
 	void copyFiles();
 	void moveFiles();
 	void linkFiles();
