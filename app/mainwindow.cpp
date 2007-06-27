@@ -349,10 +349,7 @@ struct MainWindow::Private {
 	}
 
 	QModelIndex getRelativeIndex(int offset) {
-		if (!mPart) {
-			return QModelIndex();
-		}
-		KUrl url = mPart->url();
+		KUrl url = currentUrl();
 		QModelIndex index = mDirModel->indexForUrl(url);
 		int row = index.row() + offset;
 		index = mDirModel->index(row, 0);
@@ -371,7 +368,7 @@ struct MainWindow::Private {
 	void goTo(int offset) {
 		QModelIndex index = getRelativeIndex(offset);
 		if (index.isValid()) {
-			mThumbnailView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+			mThumbnailView->setCurrentIndex(index);
 		}
 	}
 
