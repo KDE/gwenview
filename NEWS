@@ -5,6 +5,7 @@
  - OSD can now display more image information: aperture, focal length, iso and
    exposure time. Patch by Carles Pina i Estany.
 - Fixes:
+ - Bug 123516: After renaming, thumbnail panel is not updated
  - Bug 138467: Crash in Exiv2 readMetadata when reading image saved in Photoshop
  - Bug 131162: Autorotate images preference setting is forgotten
  - Bug 132556: Gwenview asks to save the wrong file if the modified file is read-only
