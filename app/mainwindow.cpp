@@ -125,6 +125,10 @@ struct MainWindow::Private {
 	QAction* mGoUpAction;
 	QAction* mGoToPreviousAction;
 	QAction* mGoToNextAction;
+	QAction* mRotateLeftAction;
+	QAction* mRotateRightAction;
+	QAction* mMirrorAction;
+	QAction* mFlipAction;
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 
@@ -238,6 +242,30 @@ struct MainWindow::Private {
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
 		mGoUpButton->setDefaultAction(mGoUpAction);
+
+		mRotateLeftAction = actionCollection->addAction("rotate_left");
+		mRotateLeftAction->setText(i18n("Rotate Left"));
+		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
+		mRotateLeftAction->setShortcut(Qt::Key_Control + Qt::Key_L);
+		connect(mRotateLeftAction, SIGNAL(triggered()),
+			mWindow, SLOT(rotateLeft()) );
+
+		mRotateRightAction = actionCollection->addAction("rotate_right");
+		mRotateRightAction->setText(i18n("Rotate Right"));
+		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
+		mRotateRightAction->setShortcut(Qt::Key_Control + Qt::Key_R);
+		connect(mRotateRightAction, SIGNAL(triggered()),
+			mWindow, SLOT(rotateRight()) );
+
+		mMirrorAction = actionCollection->addAction("mirror");
+		mMirrorAction->setText(i18n("Mirror"));
+		connect(mMirrorAction, SIGNAL(triggered()),
+			mWindow, SLOT(mirror()) );
+
+		mFlipAction = actionCollection->addAction("flip");
+		mFlipAction->setText(i18n("Flip"));
+		connect(mFlipAction, SIGNAL(triggered()),
+			mWindow, SLOT(flip()) );
 
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
@@ -741,6 +769,22 @@ void MainWindow::saveAs() {
 	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(dialog.selectedUrl(), typeList[0]);
+}
+
+
+void MainWindow::rotateLeft() {
+}
+
+
+void MainWindow::rotateRight() {
+}
+
+
+void MainWindow::mirror() {
+}
+
+
+void MainWindow::flip() {
 }
 
 

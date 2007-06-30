@@ -19,6 +19,12 @@
 		<Separator/>
 		<Action name="toggle_sidebar" />
 	</Menu>
+	<Menu name="edit" >
+		<Action name="rotate_left" />
+		<Action name="rotate_right" />
+		<Action name="mirror" />
+		<Action name="flip" />
+	</Menu>
 	<Menu name="go_web" >
 		<Action name="go_to_previous"/>
 		<Action name="go_to_next"/>
@@ -27,7 +33,7 @@
 	</Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" >
+<ToolBar name="mainToolBar" noMerge="1">
 	<text>Main Toolbar</text>
 	<Action name="browse" />
 	<Action name="preview" />
@@ -36,6 +42,9 @@
 	<Separator/>
 	<Action name="go_to_previous" />
 	<Action name="go_to_next" />
+	<Separator/>
+	<Action name="rotate_left" />
+	<Action name="rotate_right" />
 	<Separator/>
 	<Merge/>
 	<Separator/>

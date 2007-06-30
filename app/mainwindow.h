@@ -81,6 +81,11 @@ private Q_SLOTS:
 
 	void saveAs();
 
+	void rotateLeft();
+	void rotateRight();
+	void mirror();
+	void flip();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;
