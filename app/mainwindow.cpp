@@ -65,6 +65,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
+#include <lib/transformimageoperation.h>
 
 namespace Gwenview {
 
@@ -472,6 +473,28 @@ struct MainWindow::Private {
 			return item->mimetype();
 		}
 	}
+
+	void applyImageOperation(AbstractImageOperation* op) {
+		QItemSelection selection = mThumbnailView->selectionModel()->selection();
+		QModelIndexList indexList = selection.indexes();
+		Q_ASSERT(indexList.count() > 0);
+		if (indexList.count() > 1) {
+			Q_FOREACH(QModelIndex index, indexList) {
+				KFileItem* item = mDirModel->itemForIndex(index);
+				KUrl url = item->url();
+				Document::Ptr doc = DocumentFactory::instance()->load(url);
+				op->apply(doc);
+				// TODO: Batch dialog, showing progress and errors
+				if (doc->isModified()) {
+					doc->save(url, doc->format());
+				}
+			}
+		} else {
+			KFileItem* item = mDirModel->itemForIndex(indexList[0]);
+			Document::Ptr doc = DocumentFactory::instance()->load(item->url());
+			op->apply(doc);
+		}
+	}
 };
 
 
@@ -773,18 +796,26 @@ void MainWindow::saveAs() {
 
 
 void MainWindow::rotateLeft() {
+	TransformImageOperation op(TransformImageOperation::RotateLeft);
+	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::rotateRight() {
+	TransformImageOperation op(TransformImageOperation::RotateRight);
+	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::mirror() {
+	TransformImageOperation op(TransformImageOperation::Mirror);
+	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::flip() {
+	TransformImageOperation op(TransformImageOperation::Flip);
+	d->applyImageOperation(&op);
 }
 
 

@@ -1,5 +1,6 @@
 set(gwenviewlib_SRCS
 	abstractdocumentimpl.cpp
+	abstractimageoperation.cpp
     archiveutils.cpp
 	document.cpp
 	documentfactory.cpp
@@ -16,6 +17,7 @@ set(gwenviewlib_SRCS
 	sorteddirmodel.cpp
     thumbnailview.cpp
 	transupp.c
+	transformimageoperation.cpp
     )
 kde4_automoc(${gwenviewlib_SRCS})
 
