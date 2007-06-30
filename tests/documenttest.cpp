@@ -96,6 +96,7 @@ void DocumentTest::testSave() {
 	KUrl destUrl(QDir::currentPath() + "/result.png");
 	Document::SaveResult result = doc->save(destUrl, "png");
 	QCOMPARE(result, Document::SR_OK);
+	QCOMPARE(doc->format().data(), "png");
 
 	QVERIFY2(doc->isLoaded(),
 		"Document is supposed to finish loading before saving"

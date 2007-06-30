@@ -58,7 +58,11 @@ bool DocumentLoadedImpl::isLoaded() const {
 
 
 bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QString& format) {
-	return document()->image().save(device, format.toAscii());
+	bool ok = document()->image().save(device, format.toAscii());
+	if (ok) {
+		setDocumentFormat(format.toAscii());
+	}
+	return ok;
 }
 
 
