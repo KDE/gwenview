@@ -31,7 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QThread>
 
 // KDE
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 
 // Local
 #include "document.h"
@@ -147,6 +148,10 @@ void LoadingDocumentImpl::slotImageLoaded() {
 
 Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QByteArray&) {
 	return Document::SR_OtherError;
+}
+
+void LoadingDocumentImpl::setImage(const QImage&) {
+	kWarning() << k_funcinfo << " should not be called\n";
 }
 
 } // namespace

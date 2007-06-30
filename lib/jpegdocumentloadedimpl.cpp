@@ -57,4 +57,12 @@ bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& f
 	}
 }
 
+
+void JpegDocumentLoadedImpl::setImage(const QImage& image) {
+	DocumentLoadedImpl::setImage(image);
+	// mData is no longer relevant, so we'd better switch to a normal loaded
+	// impl
+	switchToImpl(new DocumentLoadedImpl(document()));
+}
+
 } // namespace

@@ -49,4 +49,8 @@ Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QByteArray&) {
 	return Document::SR_OtherError;
 }
 
+void EmptyDocumentImpl::setImage(const QImage&) {
+	// Don't do anything for now, but we could imagine switching to loaded impl
+}
+
 } // namespace

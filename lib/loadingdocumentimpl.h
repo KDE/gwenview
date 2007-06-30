@@ -41,6 +41,7 @@ public:
 	virtual void init();
 	virtual bool isLoaded() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
+	virtual void setImage(const QImage&);
 
 private Q_SLOTS:
 	void slotImageLoaded();

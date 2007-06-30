@@ -122,3 +122,23 @@ void DocumentTest::testLosslessSave() {
 	QByteArray resultData = resultFile.readAll();
 	QCOMPARE(originalData, resultData);
 }
+
+void DocumentTest::testModify() {
+	KUrl url("orient6.jpg");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	while (!doc->isLoaded()) {
+		QTest::qWait(30);
+	}
+	QVERIFY(!doc->isModified());
+
+	QImage image(10, 10, QImage::Format_ARGB32);
+	image.fill(QColor(Qt::white).rgb());
+
+	doc->setImage(image);
+	QVERIFY(doc->isModified());
+
+	KUrl destUrl(QDir::currentPath() + "/modify.png");
+	QCOMPARE(doc->save(destUrl, "png"), Document::SR_OK);
+
+	QVERIFY(!doc->isModified());
+}

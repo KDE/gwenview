@@ -38,6 +38,7 @@ class JpegDocumentLoadedImpl : public DocumentLoadedImpl {
 public:
 	JpegDocumentLoadedImpl(Document*, const QByteArray& data);
 	~JpegDocumentLoadedImpl();
+	virtual void setImage(const QImage&);
 
 protected:
 	virtual bool saveInternal(QIODevice* device, const QByteArray& format);

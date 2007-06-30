@@ -84,4 +84,9 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 }
 
 
+void DocumentLoadedImpl::setImage(const QImage& image) {
+	setDocumentImage(image);
+	document()->setModified(true);
+}
+
 } // namespace

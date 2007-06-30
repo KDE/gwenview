@@ -57,7 +57,7 @@ void AbstractDocumentImpl::switchToImpl(AbstractDocumentImpl*  impl) {
 
 
 void AbstractDocumentImpl::setDocumentImage(const QImage& image) {
-	d->mDocument->setImage(image);
+	d->mDocument->setImageInternal(image);
 }
 
 

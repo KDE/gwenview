@@ -57,7 +57,20 @@ public:
 
 	bool isModified() const;
 
+	/**
+	 * Mark the image as modified. Should be called when image pixels have been
+	 * altered outside Document.
+	 */
+	void setModified(bool modified);
+
 	QImage& image();
+
+	/**
+	 * Replaces the current image with image.
+	 * Calling this while the document is loaded won't do anything.
+	 * isModified() will return true after this.
+	 */
+	void setImage(const QImage& image);
 
 	KUrl url() const;
 
@@ -72,7 +85,7 @@ private:
 	friend class DocumentFactory;
 	friend class AbstractDocumentImpl;
 
-	void setImage(const QImage&);
+	void setImageInternal(const QImage&);
 	void setFormat(const QByteArray&);
 	void switchToImpl(AbstractDocumentImpl* impl);
 

@@ -53,6 +53,8 @@ public:
 
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format) = 0;
 
+	virtual void setImage(const QImage&) = 0;
+
 Q_SIGNALS:
 	void loaded();
 

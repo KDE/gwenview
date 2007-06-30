@@ -38,6 +38,7 @@ struct DocumentPrivate {
 	KUrl mUrl;
 	QImage mImage;
 	QByteArray mFormat;
+	bool mModified;
 };
 
 
@@ -45,6 +46,7 @@ Document::Document()
 : QObject()
 , d(new DocumentPrivate) {
     d->mImpl = new EmptyDocumentImpl(this);
+	d->mModified = false;
 }
 
 
@@ -83,6 +85,16 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 
 
 void Document::setImage(const QImage& image) {
+	// Don't init mImage directly, because:
+	// - This should not be called until document has finished loading.
+	// - Some impl will want to do special stuff (ex: jpegloaded implementation will
+	// switch to loaded implementation since it won't hold valid raw data
+	// anymore)
+	d->mImpl->setImage(image);
+}
+
+
+void Document::setImageInternal(const QImage& image) {
 	d->mImage = image;
 }
 
@@ -95,7 +107,12 @@ Document::SaveResult Document::save(const KUrl& url, const QString& format) {
 	while (!isLoaded()) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
-	return d->mImpl->save(url, format.toAscii());
+	Document::SaveResult result = d->mImpl->save(url, format.toAscii());
+	if (result == SR_OK) {
+		d->mModified = false;
+	}
+
+	return result;
 }
 
 QByteArray Document::format() const {
@@ -107,7 +124,11 @@ void Document::setFormat(const QByteArray& format) {
 }
 
 bool Document::isModified() const {
-	return false;
+	return d->mModified;
+}
+
+void Document::setModified(bool modified) {
+	d->mModified = modified;
 }
 
 } // namespace
