@@ -145,7 +145,7 @@ void LoadingDocumentImpl::slotImageLoaded() {
 }
 
 
-Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QString&) {
+Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QByteArray&) {
 	return Document::SR_OtherError;
 }
 

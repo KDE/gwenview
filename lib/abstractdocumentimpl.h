@@ -51,7 +51,7 @@ public:
 
 	virtual bool isLoaded() const = 0;
 
-	virtual Document::SaveResult save(const KUrl&, const QString& format) = 0;
+	virtual Document::SaveResult save(const KUrl&, const QByteArray& format) = 0;
 
 Q_SIGNALS:
 	void loaded();

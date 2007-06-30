@@ -41,10 +41,10 @@ public:
 
 	virtual void init();
 	virtual bool isLoaded() const;
-	virtual Document::SaveResult save(const KUrl&, const QString& format);
+	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 
 protected:
-	virtual bool saveInternal(QIODevice* device, const QString& format);
+	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
 private:
 	DocumentLoadedImplPrivate* const d;

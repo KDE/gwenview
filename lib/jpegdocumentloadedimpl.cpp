@@ -48,7 +48,7 @@ JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl() {
 }
 
 
-bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QString& format) {
+bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
 	if (format == "jpeg") {
 		int size = device->write(d->mData);
 		return size == d->mData.size();

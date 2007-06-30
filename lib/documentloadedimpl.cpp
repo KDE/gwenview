@@ -57,16 +57,16 @@ bool DocumentLoadedImpl::isLoaded() const {
 }
 
 
-bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QString& format) {
-	bool ok = document()->image().save(device, format.toAscii());
+bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
+	bool ok = document()->image().save(device, format);
 	if (ok) {
-		setDocumentFormat(format.toAscii());
+		setDocumentFormat(format);
 	}
 	return ok;
 }
 
 
-Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QString& format) {
+Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
 	// FIXME: Handle remote urls
 	Q_ASSERT(url.isLocalFile());
 	QFile file(url.path());

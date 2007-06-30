@@ -40,7 +40,7 @@ public:
 	~JpegDocumentLoadedImpl();
 
 protected:
-	virtual bool saveInternal(QIODevice* device, const QString& format);
+	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
 
 private:
 	JpegDocumentLoadedImplPrivate* const d;

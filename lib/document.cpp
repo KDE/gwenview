@@ -95,7 +95,7 @@ Document::SaveResult Document::save(const KUrl& url, const QString& format) {
 	while (!isLoaded()) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
-	return d->mImpl->save(url, format);
+	return d->mImpl->save(url, format.toAscii());
 }
 
 QByteArray Document::format() const {

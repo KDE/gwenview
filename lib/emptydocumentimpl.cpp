@@ -45,7 +45,7 @@ bool EmptyDocumentImpl::isLoaded() const {
 	return false;
 }
 
-Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QString&) {
+Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QByteArray&) {
 	return Document::SR_OtherError;
 }
 
