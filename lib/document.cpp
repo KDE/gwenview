@@ -37,6 +37,7 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	QImage mImage;
+	QByteArray mFormat;
 };
 
 
@@ -95,6 +96,18 @@ Document::SaveResult Document::save(const KUrl& url, const QString& format) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 	return d->mImpl->save(url, format);
+}
+
+QByteArray Document::format() const {
+	return d->mFormat;
+}
+
+void Document::setFormat(const QByteArray& format) {
+	d->mFormat = format;
+}
+
+bool Document::isModified() const {
+	return false;
 }
 
 } // namespace

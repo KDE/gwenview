@@ -43,6 +43,7 @@ void DocumentTest::testLoad() {
 		QTest::qWait(30);
 	}
 	QCOMPARE(image, doc->image());
+	QCOMPARE(doc->format().data(), "png");
 }
 
 /**
@@ -93,14 +94,14 @@ void DocumentTest::testSave() {
 	KUrl url("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	KUrl destUrl(QDir::currentPath() + "/result.png");
-	Document::SaveResult result = doc->save(destUrl, "PNG");
+	Document::SaveResult result = doc->save(destUrl, "png");
 	QCOMPARE(result, Document::SR_OK);
 
 	QVERIFY2(doc->isLoaded(),
 		"Document is supposed to finish loading before saving"
 		);
 	
-	QImage image("result.png", "PNG");
+	QImage image("result.png", "png");
 	QCOMPARE(doc->image(), image);
 }
 

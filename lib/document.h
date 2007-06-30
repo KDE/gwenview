@@ -55,11 +55,15 @@ public:
 
 	bool isLoaded() const;
 
+	bool isModified() const;
+
 	QImage& image();
 
 	KUrl url() const;
 
 	SaveResult save(const KUrl& url, const QString& format);
+
+	QByteArray format() const;
 
 Q_SIGNALS:
 	void loaded();
@@ -69,6 +73,7 @@ private:
 	friend class AbstractDocumentImpl;
 
 	void setImage(const QImage&);
+	void setFormat(const QByteArray&);
 	void switchToImpl(AbstractDocumentImpl* impl);
 
 	Document();

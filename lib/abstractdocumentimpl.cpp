@@ -60,4 +60,8 @@ void AbstractDocumentImpl::setDocumentImage(const QImage& image) {
 	d->mDocument->setImage(image);
 }
 
+
+void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format) {
+	d->mDocument->setFormat(format);
+}
 } // namespace

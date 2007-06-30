@@ -59,6 +59,7 @@ Q_SIGNALS:
 protected:
 	Document* document() const;
 	void setDocumentImage(const QImage& image);
+	void setDocumentFormat(const QByteArray& format);
 	void switchToImpl(AbstractDocumentImpl*  impl);
 
 private:

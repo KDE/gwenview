@@ -135,7 +135,9 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	Q_ASSERT(d->mThread.isFinished());
 	setDocumentImage(d->mThread.image());
 	loaded();
-	if (d->mThread.format() == "jpeg") {
+	QByteArray format = d->mThread.format();
+	setDocumentFormat(format);
+	if (format == "jpeg") {
 		switchToImpl(new JpegDocumentLoadedImpl(document(), d->mThread.data()));
 	} else {
 		switchToImpl(new DocumentLoadedImpl(document()));
