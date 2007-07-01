@@ -796,25 +796,25 @@ void MainWindow::saveAs() {
 
 
 void MainWindow::rotateLeft() {
-	TransformImageOperation op(Document::RotateLeft);
+	TransformImageOperation op(ROT_90);
 	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::rotateRight() {
-	TransformImageOperation op(Document::RotateRight);
+	TransformImageOperation op(ROT_270);
 	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::mirror() {
-	TransformImageOperation op(Document::Mirror);
+	TransformImageOperation op(HFLIP);
 	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::flip() {
-	TransformImageOperation op(Document::Flip);
+	TransformImageOperation op(VFLIP);
 	d->applyImageOperation(&op);
 }
 

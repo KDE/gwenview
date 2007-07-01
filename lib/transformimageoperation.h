@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractimageoperation.h"
 
-#include "document.h"
+#include "orientation.h"
 
 namespace Gwenview {
 
@@ -38,7 +38,7 @@ namespace Gwenview {
 class TransformImageOperationPrivate;
 class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation {
 public:
-	TransformImageOperation(Document::Transformation);
+	TransformImageOperation(Orientation);
 	~TransformImageOperation();
 
 	virtual void apply(Document::Ptr);

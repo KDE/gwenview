@@ -29,6 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <ksharedptr.h>
 
+// Local
+#include "orientation.h"
+
 class QImage;
 class QRect;
 
@@ -43,13 +46,6 @@ class DocumentPrivate;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
-	enum Transformation {
-		RotateLeft,
-		RotateRight,
-		Mirror,
-		Flip
-	};
-
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,
@@ -85,7 +81,7 @@ public:
 	 * Transformations are handled by the Document class because it can be
 	 * done in a lossless way by some Document implementations.
 	 */
-	void applyTransformation(Transformation);
+	void applyTransformation(Orientation);
 
 	KUrl url() const;
 

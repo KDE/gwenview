@@ -132,7 +132,7 @@ void Document::setModified(bool modified) {
 }
 
 
-void Document::applyTransformation(Document::Transformation) {
+void Document::applyTransformation(Orientation) {
 }
 
 } // namespace
