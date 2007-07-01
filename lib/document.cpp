@@ -91,6 +91,9 @@ void Document::setImage(const QImage& image) {
 	// switch to loaded implementation since it won't hold valid raw data
 	// anymore)
 	d->mImpl->setImage(image);
+	// FIXME introduce a different signal: imageChanged(). It should be
+	// triggered from the impl, if the image actually changed.
+	loaded();
 }
 
 
@@ -132,7 +135,8 @@ void Document::setModified(bool modified) {
 }
 
 
-void Document::applyTransformation(Orientation) {
+void Document::applyTransformation(Orientation orientation) {
+	d->mImpl->applyTransformation(orientation);
 }
 
 } // namespace

@@ -796,13 +796,13 @@ void MainWindow::saveAs() {
 
 
 void MainWindow::rotateLeft() {
-	TransformImageOperation op(ROT_90);
+	TransformImageOperation op(ROT_270);
 	d->applyImageOperation(&op);
 }
 
 
 void MainWindow::rotateRight() {
-	TransformImageOperation op(ROT_270);
+	TransformImageOperation op(ROT_90);
 	d->applyImageOperation(&op);
 }
 

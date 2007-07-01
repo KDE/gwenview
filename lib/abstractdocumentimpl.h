@@ -55,6 +55,8 @@ public:
 
 	virtual void setImage(const QImage&) = 0;
 
+	virtual void applyTransformation(Orientation) {}
+
 Q_SIGNALS:
 	void loaded();
 

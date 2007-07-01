@@ -24,11 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QFile>
 #include <QImage>
+#include <QMatrix>
 
 // KDE
 #include <kurl.h>
 
 // Local
+#include "imageutils.h"
 
 namespace Gwenview {
 
@@ -87,6 +89,14 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 void DocumentLoadedImpl::setImage(const QImage& image) {
 	setDocumentImage(image);
 	document()->setModified(true);
+}
+
+
+void DocumentLoadedImpl::applyTransformation(Orientation orientation) {
+	QImage image = document()->image();
+	QMatrix matrix = ImageUtils::transformMatrix(orientation);
+	image = image.transformed(matrix);
+	document()->setImage(image);
 }
 
 } // namespace

@@ -43,6 +43,7 @@ public:
 	virtual bool isLoaded() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
+	virtual void applyTransformation(Orientation orientation);
 
 protected:
 	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
