@@ -131,4 +131,8 @@ void Document::setModified(bool modified) {
 	d->mModified = modified;
 }
 
+
+void Document::applyTransformation(Document::Transformation) {
+}
+
 } // namespace

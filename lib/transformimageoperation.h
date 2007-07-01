@@ -30,19 +30,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractimageoperation.h"
 
+#include "document.h"
+
 namespace Gwenview {
 
 
 class TransformImageOperationPrivate;
 class GWENVIEWLIB_EXPORT TransformImageOperation : public AbstractImageOperation {
 public:
-	enum Transformation {
-		RotateLeft,
-		RotateRight,
-		Mirror,
-		Flip
-	};
-	TransformImageOperation(Transformation);
+	TransformImageOperation(Document::Transformation);
 	~TransformImageOperation();
 
 	virtual void apply(Document::Ptr);

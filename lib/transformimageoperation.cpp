@@ -31,11 +31,13 @@ namespace Gwenview {
 
 
 struct TransformImageOperationPrivate {
+	Document::Transformation mTransformation;
 };
 
 
-TransformImageOperation::TransformImageOperation(TransformImageOperation::Transformation)
+TransformImageOperation::TransformImageOperation(Document::Transformation transformation)
 : d(new TransformImageOperationPrivate) {
+	d->mTransformation = transformation;
 }
 
 
@@ -43,7 +45,9 @@ TransformImageOperation::~TransformImageOperation() {
 	delete d;
 }
 
-void TransformImageOperation::apply(Document::Ptr) {
+
+void TransformImageOperation::apply(Document::Ptr doc) {
+	doc->applyTransformation(d->mTransformation);
 }
 
 } // namespace

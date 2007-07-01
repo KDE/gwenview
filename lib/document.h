@@ -43,6 +43,13 @@ class DocumentPrivate;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
+	enum Transformation {
+		RotateLeft,
+		RotateRight,
+		Mirror,
+		Flip
+	};
+
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,
@@ -71,6 +78,14 @@ public:
 	 * isModified() will return true after this.
 	 */
 	void setImage(const QImage& image);
+
+	/**
+	 * Apply a transformation to the document image.
+	 *
+	 * Transformations are handled by the Document class because it can be
+	 * done in a lossless way by some Document implementations.
+	 */
+	void applyTransformation(Transformation);
 
 	KUrl url() const;
 
