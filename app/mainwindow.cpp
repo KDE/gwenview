@@ -767,7 +767,7 @@ void MainWindow::save() {
 
 	KUrl url = d->currentUrl();
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(url, typeList[0]);
+	doc->save(url, typeList[0].toAscii());
 }
 
 
@@ -791,7 +791,7 @@ void MainWindow::saveAs() {
 	QStringList typeList = KImageIO::typeForMime(mimeType);
 	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(dialog.selectedUrl(), typeList[0]);
+	doc->save(dialog.selectedUrl(), typeList[0].toAscii());
 }
 
 

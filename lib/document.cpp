@@ -103,11 +103,11 @@ KUrl Document::url() const {
 	return d->mUrl;
 }
 
-Document::SaveResult Document::save(const KUrl& url, const QString& format) {
+Document::SaveResult Document::save(const KUrl& url, const QByteArray& format) {
 	while (!isLoaded()) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
-	Document::SaveResult result = d->mImpl->save(url, format.toAscii());
+	Document::SaveResult result = d->mImpl->save(url, format);
 	if (result == SR_OK) {
 		d->mModified = false;
 	}

@@ -74,7 +74,7 @@ public:
 
 	KUrl url() const;
 
-	SaveResult save(const KUrl& url, const QString& format);
+	SaveResult save(const KUrl& url, const QByteArray& format);
 
 	QByteArray format() const;
 
