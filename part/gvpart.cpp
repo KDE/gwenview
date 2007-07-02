@@ -87,10 +87,10 @@ void GVPart::setViewImageFromDocument() {
 
 
 KAboutData* GVPart::createAboutData() {
-	KAboutData* aboutData = new KAboutData( "gvpart", I18N_NOOP("GVPart"),
-		"2.0", I18N_NOOP("Image Viewer"),
+	KAboutData* aboutData = new KAboutData( "gvpart", 0, ki18n("GVPart"),
+		"2.0", ki18n("Image Viewer"),
 		KAboutData::License_GPL,
-		"Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>");
+		ki18n("Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>"));
 	return aboutData;
 }
 

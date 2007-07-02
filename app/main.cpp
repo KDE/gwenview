@@ -31,16 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "mainwindow.h"
 
-static KCmdLineOptions options[] = {
-	{ "+[file or folder]", I18N_NOOP("A starting file or folder"), 0 },
-	KCmdLineLastOption
-};
-
 int main(int argc, char *argv[]) {
-	KAboutData aboutData( "gwenview", "Gwenview",
-		"2.0", "An Image Viewer",
-		KAboutData::License_GPL, "(c) 2007" );
+	KAboutData aboutData( "gwenview", 0, ki18n("Gwenview"),
+		"2.0", ki18n("An Image Viewer"),
+		KAboutData::License_GPL, ki18n("(c) 2007") );
 	KCmdLineArgs::init( argc, argv, &aboutData );
+
+	KCmdLineOptions options;
+	options.add("+[file or folder]", ki18n("A starting file or folder"));
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	KApplication app;
