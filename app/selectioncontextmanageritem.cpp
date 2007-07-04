@@ -108,6 +108,7 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 		d->mOneFileImageLabel->hide();
 	} else {
 		d->mDocument = DocumentFactory::instance()->load(item->url());
+		connect(d->mDocument.data(), SIGNAL(imageRectUpdated()), SLOT(updatePreview()) );
 		connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
 		// If it's already loaded, trigger updatePreview ourself
 		if (d->mDocument->isLoaded()) {

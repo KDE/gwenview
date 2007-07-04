@@ -58,6 +58,7 @@ public:
 	virtual void applyTransformation(Orientation) {}
 
 Q_SIGNALS:
+	void imageRectUpdated();
 	void loaded();
 
 protected:

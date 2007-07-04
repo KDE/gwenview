@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
+#include <QConicalGradient>
 #include <QImage>
+#include <QPainter>
 
 // KDE
 #include <qtest_kde.h>
@@ -107,19 +109,64 @@ void DocumentTest::testSave() {
 }
 
 void DocumentTest::testLosslessSave() {
-	KUrl url("orient6.jpg");
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	KUrl destUrl(QDir::currentPath() + "/result.jpg");
-	Document::SaveResult result = doc->save(destUrl, "jpeg");
+	KUrl url1("orient6.jpg");
+	Document::Ptr doc = DocumentFactory::instance()->load(url1);
+	KUrl url2(QDir::currentPath() + "/orient1.jpg");
+	Document::SaveResult result = doc->save(url2, "jpeg");
 	QCOMPARE(result, Document::SR_OK);
 
-	QImage originalImage;
-	QVERIFY(originalImage.load(url.path()));
+	QImage image1;
+	QVERIFY(image1.load(url1.path()));
 
-	QImage resultImage;
-	QVERIFY(resultImage.load(destUrl.path()));
+	QImage image2;
+	QVERIFY(image2.load(url2.path()));
 
-	QCOMPARE(originalImage, resultImage);
+	QCOMPARE(image1, image2);
+}
+
+void DocumentTest::testLosslessRotate() {
+	// Generate test image
+	QImage image1(200, 96, QImage::Format_RGB32);
+	{
+		QPainter painter(&image1);
+		QConicalGradient gradient(QPointF(100, 48), 100);
+		gradient.setColorAt(0, Qt::white);
+		gradient.setColorAt(1, Qt::blue);
+		painter.fillRect(image1.rect(), gradient);
+	}
+
+	KUrl url1(QDir::currentPath() + "/lossless1.jpg");
+	QVERIFY(image1.save(url1.path(), "jpeg"));
+
+	// Load it as a Gwenview document
+	Document::Ptr doc = DocumentFactory::instance()->load(url1);
+	while (!doc->isLoaded()) {
+		QTest::qWait(30);
+	}
+
+	// Rotate one time
+	doc->applyTransformation(ROT_90);
+
+	// Save it
+	KUrl url2(QDir::currentPath() + "/lossless2.jpg");
+	doc->save(url2, "jpeg");
+
+	// Load the saved image
+	doc = DocumentFactory::instance()->load(url2);
+	while (!doc->isLoaded()) {
+		QTest::qWait(30);
+	}
+
+	// Rotate the other way
+	doc->applyTransformation(ROT_270);
+	doc->save(url2, "jpeg");
+
+	// Compare the saved images
+	QVERIFY(image1.load(url1.path()));
+	QImage image2;
+	QVERIFY(image2.load(url2.path()));
+
+	QCOMPARE(image1, image2);
 }
 
 void DocumentTest::testModify() {

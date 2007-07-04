@@ -90,6 +90,7 @@ public:
 	QByteArray format() const;
 
 Q_SIGNALS:
+	void imageRectUpdated();
 	void loaded();
 
 private:

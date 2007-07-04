@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "jpegdocumentloadedimpl.h"
 
 // Qt
+#include <QImage>
 #include <QIODevice>
 
 // KDE
@@ -53,6 +54,12 @@ JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl() {
 
 bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
 	if (format == "jpeg") {
+		d->mJpegContent->resetOrientation();
+		if (!d->mJpegContent->thumbnail().isNull()) {
+			QImage thumbnail = document()->image().scaled(128, 128, Qt::KeepAspectRatio);
+			d->mJpegContent->setThumbnail(thumbnail);
+		}
+
 		return d->mJpegContent->save(device);
 	} else {
 		return DocumentLoadedImpl::saveInternal(device, format);
@@ -62,9 +69,15 @@ bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& f
 
 void JpegDocumentLoadedImpl::setImage(const QImage& image) {
 	DocumentLoadedImpl::setImage(image);
-	// mData is no longer relevant, so we'd better switch to a normal loaded
-	// impl
+	// mJpegContent is no longer relevant, so we'd better switch to a normal
+	// loaded impl
 	switchToImpl(new DocumentLoadedImpl(document()));
+}
+
+
+void JpegDocumentLoadedImpl::applyTransformation(Orientation orientation) {
+	DocumentLoadedImpl::applyTransformation(orientation);
+	d->mJpegContent->transform(orientation);
 }
 
 } // namespace

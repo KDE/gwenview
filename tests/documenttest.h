@@ -30,5 +30,6 @@ private Q_SLOTS:
 	void testMultipleLoads();
 	void testSave();
 	void testLosslessSave();
+	void testLosslessRotate();
 	void testModify();
 };

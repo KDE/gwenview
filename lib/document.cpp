@@ -80,6 +80,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 
 	connect(d->mImpl, SIGNAL(loaded()),
 		this, SIGNAL(loaded()) );
+	connect(d->mImpl, SIGNAL(imageRectUpdated()),
+		this, SIGNAL(imageRectUpdated()) );
 	d->mImpl->init();
 }
 
@@ -91,9 +93,6 @@ void Document::setImage(const QImage& image) {
 	// switch to loaded implementation since it won't hold valid raw data
 	// anymore)
 	d->mImpl->setImage(image);
-	// FIXME introduce a different signal: imageChanged(). It should be
-	// triggered from the impl, if the image actually changed.
-	loaded();
 }
 
 
