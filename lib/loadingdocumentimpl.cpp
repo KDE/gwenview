@@ -46,6 +46,14 @@ namespace Gwenview {
 
 class LoadingThread : public QThread {
 public:
+	LoadingThread()
+	: mJpegContent(0) {
+	}
+
+	~LoadingThread() {
+		delete mJpegContent;
+	}
+
 	virtual void run() {
 		QMutexLocker lock(&mMutex);
 		QString path = mUrl.path();
@@ -62,11 +70,11 @@ public:
 			return;
 		}
 		if (mFormat == "jpeg") {
-			JpegContent content;
-			if (!content.load(path)) {
+			mJpegContent = new JpegContent();
+			if (!mJpegContent->load(path)) {
 				return;
 			}
-			Gwenview::Orientation orientation = content.orientation();
+			Gwenview::Orientation orientation = mJpegContent->orientation();
 			QMatrix matrix = ImageUtils::transformMatrix(orientation);
 			mImage = mImage.transformed(matrix);
 		}
@@ -92,12 +100,20 @@ public:
 		return mImage;
 	}
 
+	JpegContent* popJpegContent() {
+		QMutexLocker lock(&mMutex);
+		JpegContent* tmp = mJpegContent;
+		mJpegContent = 0;
+		return tmp;
+	}
+
 private:
 	mutable QMutex mMutex;
 	KUrl mUrl;
 	QByteArray mData;
 	QByteArray mFormat;
 	QImage mImage;
+	JpegContent* mJpegContent;
 };
 
 
@@ -139,7 +155,10 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	QByteArray format = d->mThread.format();
 	setDocumentFormat(format);
 	if (format == "jpeg") {
-		switchToImpl(new JpegDocumentLoadedImpl(document(), d->mThread.data()));
+		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
+			document(),
+			d->mThread.popJpegContent());
+		switchToImpl(impl);
 	} else {
 		switchToImpl(new DocumentLoadedImpl(document()));
 	}

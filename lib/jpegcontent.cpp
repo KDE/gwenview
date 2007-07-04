@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+#include "jpegcontent.h"
+
 // System
 #include <math.h>
 #include <stdio.h>
@@ -44,7 +46,6 @@ extern "C" {
 #include <exiv2/image.hpp>
 
 // Local
-#include "jpegcontent.h"
 #include "jpegerrormanager.h"
 
 namespace Gwenview {
@@ -577,9 +578,9 @@ bool JpegContent::save(const QString& path) {
 }
 
 
-bool JpegContent::save(QFile* file) {
+bool JpegContent::save(QIODevice* device) {
 	if (d->mRawData.size()==0) {
-		kError() << "No data to store in '" << file->fileName() << "'\n";
+		kError() << "No data to store\n";
 		return false;
 	}
 
@@ -600,7 +601,7 @@ bool JpegContent::save(QFile* file) {
 	d->mRawData.resize(io.size());
 	io.read((unsigned char*)d->mRawData.data(), io.size());
 	
-	QDataStream stream(file);
+	QDataStream stream(device);
 	stream.writeRawData(d->mRawData.data(), d->mRawData.size());
 
 	// Make sure we are up to date

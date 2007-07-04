@@ -26,8 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gwenviewlib_export.h"
 
 class QImage;
+class QSize;
 class QString;
-class QFile;
+class QIODevice;
 
 namespace Gwenview {
 
@@ -56,7 +57,7 @@ public:
 	bool load(const QString& file);
 	bool loadFromData(const QByteArray& rawData);
 	bool save(const QString& file);
-	bool save(QFile*);
+	bool save(QIODevice*);
 
 private:
 	struct Private;

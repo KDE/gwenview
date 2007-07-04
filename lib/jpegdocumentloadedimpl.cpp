@@ -27,31 +27,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include "jpegcontent.h"
 
 namespace Gwenview {
 
 
 struct JpegDocumentLoadedImplPrivate {
-	QByteArray mData;
+	JpegContent* mJpegContent;
 };
 
 
-JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document* doc, const QByteArray& data)
+JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document* doc, JpegContent* jpegContent)
 : DocumentLoadedImpl(doc)
 , d(new JpegDocumentLoadedImplPrivate) {
-	d->mData = data;
+	Q_ASSERT(jpegContent);
+	d->mJpegContent = jpegContent;
 }
 
 
 JpegDocumentLoadedImpl::~JpegDocumentLoadedImpl() {
+	delete d->mJpegContent;
 	delete d;
 }
 
 
 bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
 	if (format == "jpeg") {
-		int size = device->write(d->mData);
-		return size == d->mData.size();
+		return d->mJpegContent->save(device);
 	} else {
 		return DocumentLoadedImpl::saveInternal(device, format);
 	}

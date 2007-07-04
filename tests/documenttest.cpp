@@ -113,14 +113,13 @@ void DocumentTest::testLosslessSave() {
 	Document::SaveResult result = doc->save(destUrl, "jpeg");
 	QCOMPARE(result, Document::SR_OK);
 
-	QFile originalFile(url.path());
-	originalFile.open(QIODevice::ReadOnly);
-	QByteArray originalData = originalFile.readAll();
+	QImage originalImage;
+	QVERIFY(originalImage.load(url.path()));
 
-	QFile resultFile(destUrl.path());
-	resultFile.open(QIODevice::ReadOnly);
-	QByteArray resultData = resultFile.readAll();
-	QCOMPARE(originalData, resultData);
+	QImage resultImage;
+	QVERIFY(resultImage.load(destUrl.path()));
+
+	QCOMPARE(originalImage, resultImage);
 }
 
 void DocumentTest::testModify() {

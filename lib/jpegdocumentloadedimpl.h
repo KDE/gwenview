@@ -32,11 +32,12 @@ class QByteArray;
 
 namespace Gwenview {
 
+class JpegContent;
 
 class JpegDocumentLoadedImplPrivate;
 class JpegDocumentLoadedImpl : public DocumentLoadedImpl {
 public:
-	JpegDocumentLoadedImpl(Document*, const QByteArray& data);
+	JpegDocumentLoadedImpl(Document*, JpegContent*);
 	~JpegDocumentLoadedImpl();
 	virtual void setImage(const QImage&);
 
