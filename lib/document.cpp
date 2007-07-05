@@ -105,13 +105,20 @@ KUrl Document::url() const {
 	return d->mUrl;
 }
 
-Document::SaveResult Document::save(const KUrl& url, const QByteArray& format) {
+
+void Document::waitUntilLoaded() const {
 	while (!isLoaded()) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
+}
+
+
+Document::SaveResult Document::save(const KUrl& url, const QByteArray& format) {
+	waitUntilLoaded();
 	Document::SaveResult result = d->mImpl->save(url, format);
 	if (result == SR_OK) {
 		d->mModified = false;
+		saved(url);
 	}
 
 	return result;

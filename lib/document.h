@@ -89,9 +89,12 @@ public:
 
 	QByteArray format() const;
 
+	void waitUntilLoaded() const;
+
 Q_SIGNALS:
 	void imageRectUpdated();
 	void loaded();
+	void saved(const KUrl&);
 
 private:
 	friend class DocumentFactory;

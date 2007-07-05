@@ -41,9 +41,7 @@ void DocumentTest::testLoad() {
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	while (!doc->isLoaded()) {
-		QTest::qWait(30);
-	}
+	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 	QCOMPARE(doc->format().data(), "png");
 }
@@ -73,9 +71,7 @@ void DocumentTest::testLoadRotated() {
 	image.save("expected.png", "PNG");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	while (!doc->isLoaded()) {
-		QTest::qWait(30);
-	}
+	doc->waitUntilLoaded();
 	doc->image().save("result.png", "PNG");
 	QCOMPARE(image, doc->image());
 }
@@ -140,9 +136,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load it as a Gwenview document
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
-	while (!doc->isLoaded()) {
-		QTest::qWait(30);
-	}
+	doc->waitUntilLoaded();
 
 	// Rotate one time
 	doc->applyTransformation(ROT_90);
@@ -153,9 +147,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load the saved image
 	doc = DocumentFactory::instance()->load(url2);
-	while (!doc->isLoaded()) {
-		QTest::qWait(30);
-	}
+	doc->waitUntilLoaded();
 
 	// Rotate the other way
 	doc->applyTransformation(ROT_270);
@@ -172,9 +164,7 @@ void DocumentTest::testLosslessRotate() {
 void DocumentTest::testModify() {
 	KUrl url("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	while (!doc->isLoaded()) {
-		QTest::qWait(30);
-	}
+	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
 
 	QImage image(10, 10, QImage::Format_ARGB32);
