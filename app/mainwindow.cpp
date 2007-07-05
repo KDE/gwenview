@@ -248,14 +248,14 @@ struct MainWindow::Private {
 		mRotateLeftAction = actionCollection->addAction("rotate_left");
 		mRotateLeftAction->setText(i18n("Rotate Left"));
 		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
-		mRotateLeftAction->setShortcut(Qt::Key_Control + Qt::Key_L);
+		mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 		connect(mRotateLeftAction, SIGNAL(triggered()),
 			mWindow, SLOT(rotateLeft()) );
 
 		mRotateRightAction = actionCollection->addAction("rotate_right");
 		mRotateRightAction->setText(i18n("Rotate Right"));
 		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
-		mRotateRightAction->setShortcut(Qt::Key_Control + Qt::Key_R);
+		mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 		connect(mRotateRightAction, SIGNAL(triggered()),
 			mWindow, SLOT(rotateRight()) );
 
