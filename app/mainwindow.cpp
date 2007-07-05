@@ -85,8 +85,8 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	}
 
 	// Do direct stat instead of using KIO if the file is local (faster)
-        KMountPoint::List mpl = KMountPoint::currentMountPoints();
-        KMountPoint::Ptr mp = mpl.findByPath( url.path() );
+	KMountPoint::List mpl = KMountPoint::currentMountPoints();
+	KMountPoint::Ptr mp = mpl.findByPath( url.path() );
 
 	if( url.isLocalFile() && !mp->probablySlow()) {
 		KDE_struct_stat buff;
@@ -102,8 +102,8 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 }
 
 struct MainWindowState {
-    QAction* mActiveViewModeAction;
-    bool mSideBarVisible;
+	QAction* mActiveViewModeAction;
+	bool mSideBarVisible;
 };
 
 struct MainWindow::Private {
@@ -136,7 +136,7 @@ struct MainWindow::Private {
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
 
-    MainWindowState mStateBeforeFullScreen;
+	MainWindowState mStateBeforeFullScreen;
 
 	void setupWidgets() {
 		mCentralSplitter = new QSplitter(Qt::Horizontal, mWindow);

@@ -40,7 +40,7 @@ public:
 	
 	Orientation orientation() const;
 	void resetOrientation();
-  
+
 	int dotsPerMeterX() const;
 	int dotsPerMeterY() const;
 
@@ -65,7 +65,7 @@ private:
 
 	JpegContent(const JpegContent&);
 	void operator=(const JpegContent&);
-    void applyPendingTransformation();
+	void applyPendingTransformation();
 	int dotsPerMeter(const QString& keyName) const;
 };
 

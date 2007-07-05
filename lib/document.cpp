@@ -45,7 +45,7 @@ struct DocumentPrivate {
 Document::Document() 
 : QObject()
 , d(new DocumentPrivate) {
-    d->mImpl = new EmptyDocumentImpl(this);
+	d->mImpl = new EmptyDocumentImpl(this);
 	d->mModified = false;
 }
 
@@ -58,7 +58,7 @@ Document::~Document() {
 
 void Document::load(const KUrl& url) {
 	d->mUrl = url;
-    switchToImpl(new LoadingDocumentImpl(this));
+	switchToImpl(new LoadingDocumentImpl(this));
 }
 
 

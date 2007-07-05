@@ -77,7 +77,7 @@ const QStringList& videoMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
 #ifdef __GNUC__
-        #warning implement MimeTypeUtils::videoMimeTypes()
+	#warning implement MimeTypeUtils::videoMimeTypes()
 #endif
 	}
 
