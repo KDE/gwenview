@@ -431,19 +431,23 @@ struct MainWindow::Private {
 		}
 	}
 
-	void updateFileActions() {
-		// We can save if only one file is selected and if it's a raster image
-		bool canSave;
+	void updateActions() {
+		// We can modify if only one file is selected and if it's a raster image
+		bool canModify;
 		if (mThumbnailViewPanel->isVisible()
 			&& mThumbnailView->selectionModel()->selectedIndexes().count() != 1)
 		{
-			canSave = false;
+			canModify = false;
 		} else {
-			canSave = currentDocumentIsRasterImage();
+			canModify = currentDocumentIsRasterImage();
 		}
 		KActionCollection* actionCollection = mWindow->actionCollection();
-		actionCollection->action("file_save")->setEnabled(canSave);
-		actionCollection->action("file_save_as")->setEnabled(canSave);
+		actionCollection->action("file_save")->setEnabled(canModify);
+		actionCollection->action("file_save_as")->setEnabled(canModify);
+		mRotateLeftAction->setEnabled(canModify);
+		mRotateRightAction->setEnabled(canModify);
+		mMirrorAction->setEnabled(canModify);
+		mFlipAction->setEnabled(canModify);
 	}
 
 	KUrl currentUrl() const {
@@ -477,23 +481,14 @@ struct MainWindow::Private {
 	void applyImageOperation(AbstractImageOperation* op) {
 		QItemSelection selection = mThumbnailView->selectionModel()->selection();
 		QModelIndexList indexList = selection.indexes();
-		Q_ASSERT(indexList.count() > 0);
-		if (indexList.count() > 1) {
-			Q_FOREACH(QModelIndex index, indexList) {
-				KFileItem* item = mDirModel->itemForIndex(index);
-				KUrl url = item->url();
-				Document::Ptr doc = DocumentFactory::instance()->load(url);
-				op->apply(doc);
-				// TODO: Batch dialog, showing progress and errors
-				if (doc->isModified()) {
-					doc->save(url, doc->format());
-				}
-			}
-		} else {
-			KFileItem* item = mDirModel->itemForIndex(indexList[0]);
-			Document::Ptr doc = DocumentFactory::instance()->load(item->url());
-			op->apply(doc);
-		}
+
+		// For now, we only support operation on one image
+		Q_ASSERT(indexList.count() == 1);
+
+		KFileItem* item = mDirModel->itemForIndex(indexList[0]);
+		Document::Ptr doc = DocumentFactory::instance()->load(item->url());
+		doc->waitUntilLoaded();
+		op->apply(doc);
 	}
 };
 
@@ -666,7 +661,7 @@ void MainWindow::slotPartCompleted() {
 void MainWindow::slotSelectionChanged() {
 	openSelectedDocument();
 	updateSideBar();
-	d->updateFileActions();
+	d->updateActions();
 	updatePreviousNextActions();
 }
 
