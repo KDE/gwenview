@@ -86,6 +86,8 @@ private Q_SLOTS:
 	void mirror();
 	void flip();
 
+	void slotDocumentSaved(const KUrl&);
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;

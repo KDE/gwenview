@@ -113,6 +113,7 @@ struct MainWindow::Private {
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
+	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
 	KParts::ReadOnlyPart* mPart;
@@ -176,14 +177,14 @@ struct MainWindow::Private {
 
 		// Thumbnail slider
 		KStatusBar* statusBar = new KStatusBar(mThumbnailViewPanel);
-		QSlider* slider = new QSlider(statusBar);
-		slider->setMaximumWidth(200);
-		statusBar->addPermanentWidget(slider);
-		slider->setMinimum(40);
-		slider->setMaximum(256);
-		slider->setValue(128);
-		slider->setOrientation(Qt::Horizontal);
-		connect(slider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
+		mThumbnailSlider = new QSlider(statusBar);
+		mThumbnailSlider->setMaximumWidth(200);
+		statusBar->addPermanentWidget(mThumbnailSlider);
+		mThumbnailSlider->setMinimum(40);
+		mThumbnailSlider->setMaximum(256);
+		mThumbnailSlider->setValue(128);
+		mThumbnailSlider->setOrientation(Qt::Horizontal);
+		connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
 
 		// Layout
 		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
@@ -510,6 +511,8 @@ d(new MainWindow::Private)
 	updatePreviousNextActions();
 
 	createShellGUI();
+	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
+		SLOT(slotDocumentSaved(const KUrl&)) );
 }
 
 
@@ -813,6 +816,24 @@ void MainWindow::mirror() {
 void MainWindow::flip() {
 	TransformImageOperation op(VFLIP);
 	d->applyImageOperation(&op);
+}
+
+
+void MainWindow::slotDocumentSaved(const KUrl& url) {
+	QModelIndex index = d->mDirModel->indexForUrl(url);
+	if (!index.isValid()) {
+		return;
+	}
+
+	KFileItem* item = d->mDirModel->itemForIndex(index);
+	if (!item) {
+		return;
+	}
+
+	QList<KFileItem> list;
+	list << *item;
+	int size = d->mThumbnailSlider->value();
+	d->mDirModel->generateThumbnailsForItems(list, size);
 }
 
 
