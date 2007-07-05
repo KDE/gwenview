@@ -434,15 +434,18 @@ struct MainWindow::Private {
 	}
 
 	void updateActions() {
-		// We can modify if only one file is selected and if it's a raster image
-		bool canModify;
-		if (mThumbnailViewPanel->isVisible()
-			&& mThumbnailView->selectionModel()->selectedIndexes().count() != 1)
-		{
-			canModify = false;
-		} else {
-			canModify = currentDocumentIsRasterImage();
+		bool canModify = currentDocumentIsRasterImage();
+		if (!mDocumentView->isVisible()) {
+			// Since we only support image operations on one image for now,
+			// disable actions if several images are selected and the document
+			// view is not visible.
+			QItemSelection selection = mThumbnailView->selectionModel()->selection();
+			QModelIndexList indexList = selection.indexes();
+			if (indexList.count() != 1) {
+				canModify = false;
+			}
 		}
+
 		KActionCollection* actionCollection = mWindow->actionCollection();
 		actionCollection->action("file_save")->setEnabled(canModify);
 		actionCollection->action("file_save_as")->setEnabled(canModify);
@@ -481,14 +484,10 @@ struct MainWindow::Private {
 	}
 
 	void applyImageOperation(AbstractImageOperation* op) {
-		QItemSelection selection = mThumbnailView->selectionModel()->selection();
-		QModelIndexList indexList = selection.indexes();
+		// For now, we only support operations on one image
+		KUrl url = currentUrl();
 
-		// For now, we only support operation on one image
-		Q_ASSERT(indexList.count() == 1);
-
-		KFileItem* item = mDirModel->itemForIndex(indexList[0]);
-		Document::Ptr doc = DocumentFactory::instance()->load(item->url());
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		doc->waitUntilLoaded();
 		op->apply(doc);
 	}
