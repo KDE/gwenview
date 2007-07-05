@@ -424,7 +424,9 @@ struct MainWindow::Private {
 			return dynamic_cast<ImageViewPart*>(mPart) != 0;
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
-			Q_ASSERT(index.isValid());
+			if (!index.isValid()) {
+				return false;
+			}
 			KFileItem* item = mDirModel->itemForIndex(index);
 			Q_ASSERT(item);
 			return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
@@ -505,6 +507,7 @@ d(new MainWindow::Private)
 	d->setupWidgets();
 	d->setupActions();
 	d->setupContextManager();
+	d->updateActions();
 	updatePreviousNextActions();
 
 	createShellGUI();
