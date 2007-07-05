@@ -72,6 +72,7 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 		doc->load(url);
 		ptr = Document::Ptr(doc);
 		d->mDocumentMap[url] = ptr;
+		connect(doc, SIGNAL(saved(const KUrl&)), SIGNAL(saved(const KUrl&)) );
 	}
 	d->garbageCollect();
 	return ptr;

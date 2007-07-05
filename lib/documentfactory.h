@@ -39,6 +39,9 @@ public:
 
 	Document::Ptr load(const KUrl&);
 
+Q_SIGNALS:
+	void saved(const KUrl&);
+
 private:
 	DocumentFactory();
 
