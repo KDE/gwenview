@@ -77,9 +77,10 @@ private Q_SLOTS:
 
 	void toggleFullScreen();
 
-	void save();
-
-	void saveAs();
+	void saveCurrent();
+	void saveCurrentAs();
+	void save(const KUrl&);
+	void saveAs(const KUrl&);
 
 	void rotateLeft();
 	void rotateRight();

@@ -39,10 +39,6 @@ struct SaveBarPrivate {
 	QLabel* mMessage;
 	QLabel* mActions;
 
-	void save() {
-		kDebug() << "save\n";
-	}
-
 	void saveAll() {
 		kDebug() << "save all\n";
 	}
@@ -106,7 +102,8 @@ void SaveBar::updateContent() {
 
 void SaveBar::triggerAction(const QString& action) {
 	if (action == "save") {
-		d->save();
+		QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+		requestSave(lst[0]);
 	} else if (action == "saveAll") {
 		d->saveAll();
 	} else {

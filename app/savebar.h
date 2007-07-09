@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class KUrl;
+
 namespace Gwenview {
 
 
@@ -37,6 +39,9 @@ class SaveBar : public QWidget {
 public:
 	SaveBar(QWidget* parent);
 	~SaveBar();
+
+Q_SIGNALS:
+	void requestSave(const KUrl&);
 
 private:
 	SaveBarPrivate* const d;

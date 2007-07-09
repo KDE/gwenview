@@ -145,6 +145,7 @@ struct MainWindow::Private {
 		QWidget* centralWidget = new QWidget(mWindow);
 		mWindow->setCentralWidget(centralWidget);
 		mSaveBar = new SaveBar(centralWidget);
+
 		mCentralSplitter = new QSplitter(Qt::Horizontal, centralWidget);
 		QVBoxLayout* layout = new QVBoxLayout(centralWidget);
 		layout->addWidget(mSaveBar);
@@ -154,6 +155,9 @@ struct MainWindow::Private {
 		setupThumbnailView(mCentralSplitter);
 		mDocumentView = new DocumentView(mCentralSplitter);
 		mSideBar = new SideBar(mCentralSplitter);
+
+		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
+			mWindow, SLOT(save(const KUrl&)) );
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -207,8 +211,8 @@ struct MainWindow::Private {
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 
-		KStandardAction::save(mWindow, SLOT(save()), actionCollection);
-		KStandardAction::saveAs(mWindow, SLOT(saveAs()), actionCollection);
+		KStandardAction::save(mWindow, SLOT(saveCurrent()), actionCollection);
+		KStandardAction::saveAs(mWindow, SLOT(saveCurrentAs()), actionCollection);
 		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
 
 		mBrowseAction = actionCollection->addAction("browse");
@@ -753,8 +757,18 @@ void MainWindow::toggleFullScreen() {
 }
 
 
-void MainWindow::save() {
-	QString mimeType = d->currentMimeType();
+void MainWindow::saveCurrent() {
+	save(d->currentUrl());
+}
+
+
+void MainWindow::saveCurrentAs() {
+	saveAs(d->currentUrl());
+}
+
+
+void MainWindow::save(const KUrl& url) {
+	QString mimeType = MimeTypeUtils::urlMimeType(url);
 	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
 	if (!availableMimeTypes.contains(mimeType)) {
 		KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
@@ -766,26 +780,24 @@ void MainWindow::save() {
 			saveUsingAnotherFormat
 			);
 		if (result == KMessageBox::Continue) {
-			saveAs();
+			saveAs(url);
 		}
 		return;
 	}
 	QStringList typeList = KImageIO::typeForMime(mimeType);
 	Q_ASSERT(typeList.count() > 0);
 
-	KUrl url = d->currentUrl();
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(url, typeList[0].toAscii());
 }
 
 
-void MainWindow::saveAs() {
-	KUrl url = d->currentUrl();
+void MainWindow::saveAs(const KUrl& url) {
 	KFileDialog dialog(url, QString(), this);
 	dialog.setOperationMode(KFileDialog::Saving);
 
 	// Init mime filter
-	QString mimeType = d->currentMimeType();
+	QString mimeType = MimeTypeUtils::urlMimeType(url);
 	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
 	dialog.setMimeFilter(availableMimeTypes, mimeType);
 
