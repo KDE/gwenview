@@ -22,8 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "savebar.moc"
 
 // Qt
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QProgressDialog>
 
 // KDE
 #include <kdebug.h>
@@ -36,11 +38,30 @@ namespace Gwenview {
 
 
 struct SaveBarPrivate {
+	QWidget* mSaveBar;
 	QLabel* mMessage;
 	QLabel* mActions;
 
 	void saveAll() {
-		kDebug() << "save all\n";
+		QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+
+		// TODO: Save in a separate thread?
+		QProgressDialog progress(mSaveBar);
+		progress.setLabelText(i18n("Saving..."));
+		progress.setCancelButtonText(i18n("&Stop"));
+		progress.setMinimum(0);
+		progress.setMinimum(lst.size());
+		progress.setWindowModality(Qt::WindowModal);
+
+		Q_FOREACH(KUrl url, lst) {
+			Document::Ptr doc = DocumentFactory::instance()->load(url);
+			doc->save(url, doc->format());
+			progress.setValue(progress.value() + 1);
+			if (progress.wasCanceled()) {
+				return;
+			}
+			qApp->processEvents();
+		}
 	}
 };
 
@@ -48,6 +69,7 @@ struct SaveBarPrivate {
 SaveBar::SaveBar(QWidget* parent)
 : QWidget(parent)
 , d(new SaveBarPrivate) {
+	d->mSaveBar = this;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	d->mMessage = new QLabel(this);
 	d->mMessage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
