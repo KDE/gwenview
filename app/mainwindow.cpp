@@ -151,6 +151,7 @@ struct MainWindow::Private {
 		layout->addWidget(mSaveBar);
 		layout->addWidget(mCentralSplitter);
 		layout->setMargin(0);
+		layout->setSpacing(0);
 
 		setupThumbnailView(mCentralSplitter);
 		mDocumentView = new DocumentView(mCentralSplitter);

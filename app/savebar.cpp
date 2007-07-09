@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QProgressDialog>
+#include <QToolTip>
 
 // KDE
 #include <kdebug.h>
@@ -69,6 +70,8 @@ struct SaveBarPrivate {
 SaveBar::SaveBar(QWidget* parent)
 : QWidget(parent)
 , d(new SaveBarPrivate) {
+	setPalette(QToolTip::palette());
+	setAutoFillBackground(true);
 	d->mSaveBar = this;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	d->mMessage = new QLabel(this);
