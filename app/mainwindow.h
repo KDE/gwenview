@@ -87,7 +87,7 @@ private Q_SLOTS:
 	void mirror();
 	void flip();
 
-	void slotDocumentSaved(const KUrl&);
+	void generateThumbnailForUrl(const KUrl&);
 
 private:
 	class Private;

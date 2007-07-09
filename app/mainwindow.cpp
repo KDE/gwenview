@@ -525,7 +525,9 @@ d(new MainWindow::Private)
 
 	createShellGUI();
 	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
-		SLOT(slotDocumentSaved(const KUrl&)) );
+		SLOT(generateThumbnailForUrl(const KUrl&)) );
+	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
+		SLOT(generateThumbnailForUrl(const KUrl&)) );
 }
 
 
@@ -840,7 +842,7 @@ void MainWindow::flip() {
 }
 
 
-void MainWindow::slotDocumentSaved(const KUrl& url) {
+void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 	QModelIndex index = d->mDirModel->indexForUrl(url);
 	if (!index.isValid()) {
 		return;
