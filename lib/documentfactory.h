@@ -41,6 +41,8 @@ public:
 
 	QList<KUrl> modifiedDocumentList() const;
 
+	bool hasUrl(const KUrl&) const;
+
 Q_SIGNALS:
 	void saved(const KUrl&);
 	void modified(const KUrl&);

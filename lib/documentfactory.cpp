@@ -96,4 +96,9 @@ QList<KUrl> DocumentFactory::modifiedDocumentList() const {
 	return list;
 }
 
+
+bool DocumentFactory::hasUrl(const KUrl& url) const {
+	return d->mDocumentMap.contains(url);
+}
+
 } // namespace
