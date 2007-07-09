@@ -95,6 +95,7 @@ Q_SIGNALS:
 	void imageRectUpdated();
 	void loaded();
 	void saved(const KUrl&);
+	void modified(const KUrl&);
 
 private:
 	friend class DocumentFactory;

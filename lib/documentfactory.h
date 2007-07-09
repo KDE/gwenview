@@ -39,8 +39,11 @@ public:
 
 	Document::Ptr load(const KUrl&);
 
+	QList<KUrl> modifiedDocumentList() const;
+
 Q_SIGNALS:
 	void saved(const KUrl&);
+	void modified(const KUrl&);
 
 private:
 	DocumentFactory();

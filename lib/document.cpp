@@ -136,8 +136,11 @@ bool Document::isModified() const {
 	return d->mModified;
 }
 
-void Document::setModified(bool modified) {
-	d->mModified = modified;
+void Document::setModified(bool value) {
+	d->mModified = value;
+	if (d->mModified) {
+		modified(d->mUrl);
+	}
 }
 
 

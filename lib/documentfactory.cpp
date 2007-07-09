@@ -40,7 +40,8 @@ struct DocumentFactoryPrivate {
 			end = mDocumentMap.end();
 
 		while (it!=end) {
-			if (it.value().count() == 1) {
+			Document::Ptr doc = it.value();
+			if (doc.count() == 1 && !doc->isModified()) {
 				it = mDocumentMap.erase(it);
 			} else {
 				++it;
@@ -73,9 +74,26 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 		ptr = Document::Ptr(doc);
 		d->mDocumentMap[url] = ptr;
 		connect(doc, SIGNAL(saved(const KUrl&)), SIGNAL(saved(const KUrl&)) );
+		connect(doc, SIGNAL(modified(const KUrl&)), SIGNAL(modified(const KUrl&)) );
 	}
 	d->garbageCollect();
 	return ptr;
+}
+
+QList<KUrl> DocumentFactory::modifiedDocumentList() const {
+	DocumentMap::Iterator
+		it = d->mDocumentMap.begin(),
+		end = d->mDocumentMap.end();
+
+	QList<KUrl> list;
+	for (;it!=end; ++it) {
+		Document::Ptr doc = it.value();
+		if (doc->isModified()) {
+			list << doc->url();
+		}
+	}
+
+	return list;
 }
 
 } // namespace
