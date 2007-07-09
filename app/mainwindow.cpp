@@ -56,6 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "contextmanager.h"
 #include "documentview.h"
+#include "savebar.h"
 #include "selectioncontextmanageritem.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
@@ -119,6 +120,7 @@ struct MainWindow::Private {
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
 	FullScreenBar* mFullScreenBar;
+	SaveBar* mSaveBar;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
@@ -140,8 +142,14 @@ struct MainWindow::Private {
 	MainWindowState mStateBeforeFullScreen;
 
 	void setupWidgets() {
-		mCentralSplitter = new QSplitter(Qt::Horizontal, mWindow);
-		mWindow->setCentralWidget(mCentralSplitter);
+		QWidget* centralWidget = new QWidget(mWindow);
+		mWindow->setCentralWidget(centralWidget);
+		mSaveBar = new SaveBar(centralWidget);
+		mCentralSplitter = new QSplitter(Qt::Horizontal, centralWidget);
+		QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+		layout->addWidget(mSaveBar);
+		layout->addWidget(mCentralSplitter);
+		layout->setMargin(0);
 
 		setupThumbnailView(mCentralSplitter);
 		mDocumentView = new DocumentView(mCentralSplitter);
@@ -513,10 +521,6 @@ d(new MainWindow::Private)
 	createShellGUI();
 	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
 		SLOT(slotDocumentSaved(const KUrl&)) );
-	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
-		SLOT(updateSaveBar()) );
-	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
-		SLOT(updateSaveBar()) );
 }
 
 
@@ -838,14 +842,6 @@ void MainWindow::slotDocumentSaved(const KUrl& url) {
 	list << *item;
 	int size = d->mThumbnailSlider->value();
 	d->mDirModel->generateThumbnailsForItems(list, size);
-}
-
-
-void MainWindow::updateSaveBar() {
-	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-	Q_FOREACH(KUrl url, lst) {
-		kDebug() << "modified: " << url << endl;
-	}
 }
 
 

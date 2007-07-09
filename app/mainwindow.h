@@ -87,7 +87,6 @@ private Q_SLOTS:
 	void flip();
 
 	void slotDocumentSaved(const KUrl&);
-	void updateSaveBar();
 
 private:
 	class Private;
