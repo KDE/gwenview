@@ -3,7 +3,6 @@ set(gvpart_SRCS
 	gvpart.cpp
 	)
 
-kde4_automoc(${gvpart_SRCS})
 
 kde4_add_plugin(gvpart ${gvpart_SRCS})
 

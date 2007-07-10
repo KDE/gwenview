@@ -8,7 +8,6 @@ set(gwenview_SRCS
 	selectioncontextmanageritem.cpp
 	sidebar.cpp
 	)
-kde4_automoc(${gwenview_SRCS})
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} gwenviewlib)

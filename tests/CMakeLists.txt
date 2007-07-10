@@ -3,7 +3,6 @@ set(imagescalertest_SRCS
 	imagescalertest.cpp
 	)
 
-kde4_automoc(${imagescalertest_SRCS})
 
 kde4_add_test_executable(imagescalertest ${imagescalertest_SRCS})
 
@@ -14,7 +13,6 @@ set(documenttest_SRCS
 	documenttest.cpp
 	)
 
-kde4_automoc(${documenttest_SRCS})
 
 kde4_add_test_executable(documenttest ${documenttest_SRCS})
 
@@ -25,7 +23,6 @@ set(jpegcontenttest_SRCS
 	jpegcontenttest.cpp
 	)
 
-kde4_automoc(${jpegcontenttest_SRCS})
 
 kde4_add_test_executable(jpegcontenttest ${jpegcontenttest_SRCS})
 
