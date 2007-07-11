@@ -159,6 +159,8 @@ struct MainWindow::Private {
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mWindow, SLOT(save(const KUrl&)) );
+		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
+			mWindow, SLOT(openDocumentUrl(const KUrl&)) );
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -505,6 +507,15 @@ struct MainWindow::Private {
 		doc->waitUntilLoaded();
 		op->apply(doc);
 	}
+
+
+	void updateSaveBar() {
+		if (mPart) {
+			mSaveBar->setCurrentUrl(mPart->url());
+		} else {
+			mSaveBar->setCurrentUrl(KUrl());
+		}
+	}
 };
 
 
@@ -531,6 +542,7 @@ d(new MainWindow::Private)
 }
 
 
+// FIXME: Rename to setInitialUrl
 void MainWindow::openUrl(const KUrl& url) {
 	if (urlIsDirectory(this, url)) {
 		d->mPreviewAction->trigger();
@@ -667,8 +679,13 @@ void MainWindow::updateSideBar() {
 void MainWindow::slotPartCompleted() {
 	Q_ASSERT(d->mPart);
 	KUrl url = d->mPart->url();
-	url.setFileName("");
-	if (url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+	KUrl dirUrl = url;
+	dirUrl.setFileName("");
+	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+		QModelIndex index = d->mDirModel->indexForUrl(url);
+		if (index.isValid()) {
+			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+		}
 		// All is synchronized, nothing to do
 		return;
 	}
@@ -683,6 +700,7 @@ void MainWindow::slotSelectionChanged() {
 	updateSideBar();
 	d->updateActions();
 	updatePreviousNextActions();
+	d->updateSaveBar();
 }
 
 

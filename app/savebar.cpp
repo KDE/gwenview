@@ -42,6 +42,7 @@ struct SaveBarPrivate {
 	QWidget* mSaveBar;
 	QLabel* mMessage;
 	QLabel* mActions;
+	KUrl mCurrentUrl;
 
 	void saveAll() {
 		QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
@@ -111,29 +112,74 @@ void SaveBar::updateContent() {
 	show();
 
 	QStringList links;
-	if (lst.size() == 1) {
-		KUrl url = lst[0];
-		d->mMessage->setText(i18n("One image modified: %1", url.pathOrUrl()) );
-		links << "<a href='save'>Save</a>";
+	QString message;
+
+	if (lst.contains(d->mCurrentUrl)) {
+		message = i18n("Current image modified");
+
+		if (lst.size() > 1) {
+			QString previous = i18n("Previous modified image");
+			QString next = i18n("Next modified image");
+			if (d->mCurrentUrl == lst[0]) {
+				links << previous;
+			} else {
+				links << QString("<a href='previous'>%1</a>").arg(previous);
+			}
+			if (d->mCurrentUrl == lst[lst.size() - 1]) {
+				links << next;
+			} else {
+				links << QString("<a href='next'>%1</a>").arg(next);
+			}
+		}
 	} else {
-		d->mMessage->setText(i18n("%1 images modified", lst.size()) );
-		links << "<a href='saveAll'>Save All</a>";
+		message = i18np("One image modified", "%1 images modified", lst.size());
+		if (lst.size() > 1) {
+			links << QString("<a href='first'>%1</a>").arg(i18n("Go to first modified image"));
+		} else {
+			links << QString("<a href='first'>%1</a>").arg(i18n("Go to it"));
+		}
+	}
+
+	if (lst.contains(d->mCurrentUrl)) {
+		links << QString("<a href='save'>%1</a>").arg(i18n("Save"));
+	}
+	if (lst.size() > 1) {
+		links << QString("<a href='saveAll'>%1</a>").arg(i18n("Save All"));
 	}
 
 
+	d->mMessage->setText(message);
 	d->mActions->setText(links.join(" | "));
 }
 
 
 void SaveBar::triggerAction(const QString& action) {
+	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 	if (action == "save") {
-		QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-		requestSave(lst[0]);
+		requestSave(d->mCurrentUrl);
 	} else if (action == "saveAll") {
 		d->saveAll();
+	} else if (action == "first") {
+		goToUrl(lst[0]);
+	} else if (action == "previous") {
+		int pos = lst.indexOf(d->mCurrentUrl);
+		--pos;
+		Q_ASSERT(pos >= 0);
+		goToUrl(lst[pos]);
+	} else if (action == "next") {
+		int pos = lst.indexOf(d->mCurrentUrl);
+		++pos;
+		Q_ASSERT(pos < lst.size());
+		goToUrl(lst[pos]);
 	} else {
 		kWarning() << "Unknown action: " << action << endl;
 	}
+}
+
+
+void SaveBar::setCurrentUrl(const KUrl& url) {
+	d->mCurrentUrl = url;
+	updateContent();
 }
 
 

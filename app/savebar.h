@@ -40,8 +40,11 @@ public:
 	SaveBar(QWidget* parent);
 	~SaveBar();
 
+	void setCurrentUrl(const KUrl&);
+
 Q_SIGNALS:
 	void requestSave(const KUrl&);
+	void goToUrl(const KUrl&);
 
 private:
 	SaveBarPrivate* const d;
