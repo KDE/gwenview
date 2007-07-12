@@ -141,6 +141,8 @@ struct MainWindow::Private {
 
 	MainWindowState mStateBeforeFullScreen;
 
+	KUrl mUrlToSelect;
+
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
 		mWindow->setCentralWidget(centralWidget);
@@ -160,7 +162,7 @@ struct MainWindow::Private {
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mWindow, SLOT(save(const KUrl&)) );
 		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
-			mWindow, SLOT(openDocumentUrl(const KUrl&)) );
+			mWindow, SLOT(goToUrl(const KUrl&)) );
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -368,7 +370,7 @@ struct MainWindow::Private {
 		dirLister->setMimeFilter(mimeTypes);
 
 		connect(dirLister, SIGNAL(newItems(const KFileItemList&)),
-			mWindow, SLOT(slotDirListerNewItems(const KFileItemList&)) );
+			mWindow, SLOT(slotDirListerNewItems()) );
 
 		connect(dirLister, SIGNAL(deleteItem(KFileItem*)),
 			mWindow, SLOT(updatePreviousNextActions()) );
@@ -510,10 +512,18 @@ struct MainWindow::Private {
 
 
 	void updateSaveBar() {
-		if (mPart) {
-			mSaveBar->setCurrentUrl(mPart->url());
-		} else {
-			mSaveBar->setCurrentUrl(KUrl());
+		mSaveBar->setCurrentUrl(currentUrl());
+	}
+
+	void selectUrlToSelect() {
+		if (!mUrlToSelect.isValid()) {
+			return;
+		}
+		QModelIndex index = mDirModel->indexForUrl(mUrlToSelect);
+		if (index.isValid()) {
+			mThumbnailView->setCurrentIndex(index);
+			mUrlToSelect = KUrl();
+			updateSaveBar();
 		}
 	}
 };
@@ -627,6 +637,9 @@ void MainWindow::goUp() {
 
 
 void MainWindow::openDirUrl(const KUrl& url) {
+	if (url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+		return;
+	}
 	d->mDirModel->dirLister()->openUrl(url);
 	d->updateUrlRequester(url);
 	d->resetDocumentView();
@@ -645,6 +658,8 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	d->createPartForUrl(url);
 	if (!d->mPart) return;
 	d->mPart->openUrl(url);
+	d->mUrlToSelect = url;
+	d->selectUrlToSelect();
 }
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
@@ -690,8 +705,8 @@ void MainWindow::slotPartCompleted() {
 		return;
 	}
 
-	d->mDirModel->dirLister()->openUrl(url);
-	d->updateUrlRequester(url);
+	d->mDirModel->dirLister()->openUrl(dirUrl);
+	d->updateUrlRequester(dirUrl);
 }
 
 
@@ -704,7 +719,7 @@ void MainWindow::slotSelectionChanged() {
 }
 
 
-void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
+void MainWindow::slotDirListerNewItems() {
 	if (!d->mPart) {
 		return;
 	}
@@ -715,16 +730,9 @@ void MainWindow::slotDirListerNewItems(const KFileItemList& list) {
 		return;
 	}
 
-	// If the item for the image visible in the part is in the list, select it
-	// in the view
-	KUrl url = d->mPart->url();
-	Q_FOREACH(KFileItem* item, list) {
-		if (item->url() == url) {
-			QModelIndex index = d->mDirModel->indexForItem(*item);
-			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
-			return;
-		}
-	}
+	// Nothing selected in the view yet, check if there was an url waiting to
+	// be selected
+	d->selectUrlToSelect();
 }
 
 
@@ -735,6 +743,21 @@ void MainWindow::goToPrevious() {
 
 void MainWindow::goToNext() {
 	d->goTo(1);
+}
+
+
+void MainWindow::goToUrl(const KUrl& url) {
+	if (d->mDocumentView->isVisible()) {
+		openDocumentUrl(url);
+		// No need to change thumbnail view, slotPartCompleted will do the work
+		// for us
+	} else {
+		KUrl dirUrl = url;
+		dirUrl.setFileName("");
+		openDirUrl(dirUrl);
+		d->mUrlToSelect = url;
+		d->selectUrlToSelect();
+	}
 }
 
 

@@ -51,6 +51,7 @@ private Q_SLOTS:
 	void openDirUrlFromIndex(const QModelIndex&);
 
 	void openDocumentUrl(const KUrl&);
+	void goToUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar();
 	void updateSideBar();
@@ -67,7 +68,7 @@ private Q_SLOTS:
 	 * view, this function will select the corresponding item if it comes up in
 	 * list.
 	 */
-	void slotDirListerNewItems(const KFileItemList& list);
+	void slotDirListerNewItems();
 
 	void slotSelectionChanged();
 
