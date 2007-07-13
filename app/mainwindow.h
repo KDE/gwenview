@@ -43,6 +43,7 @@ public:
 
 protected:
 	virtual void slotSetStatusBarText(const QString&);
+	virtual bool queryClose();
 	   
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);

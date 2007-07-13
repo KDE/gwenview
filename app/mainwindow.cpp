@@ -901,4 +901,25 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 }
 
 
+bool MainWindow::queryClose() {
+	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+	if (list.size() == 0) {
+		return true;
+	}
+
+	int answer = KMessageBox::warningContinueCancel( this,
+		i18np("One image has been modified.", "%1 images have been modified.", list.size())
+		+ "\n" + i18n("If you quit now, your changes will be lost."),
+		QString(),
+		KGuiItem(i18n("Discard Changes")));
+
+	switch (answer) {
+	case KMessageBox::Continue:
+		return true;
+	default: // cancel
+		return false;
+	}
+}
+
+
 } // namespace
