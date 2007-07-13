@@ -552,8 +552,7 @@ d(new MainWindow::Private)
 }
 
 
-// FIXME: Rename to setInitialUrl
-void MainWindow::openUrl(const KUrl& url) {
+void MainWindow::setInitialUrl(const KUrl& url) {
 	if (urlIsDirectory(this, url)) {
 		d->mPreviewAction->trigger();
 		openDirUrl(url);

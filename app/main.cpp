@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 	}
 	args->clear();	
 	window->show();
-	window->openUrl(url);
+	window->setInitialUrl(url);
 
 	return app.exec();
 }

@@ -39,7 +39,10 @@ class MainWindow : public KParts::MainWindow {
 Q_OBJECT
 public:
 	MainWindow();
-	void openUrl(const KUrl&);
+	/**
+	 * Defines the url to display when the window is shown for the first time.
+	 */
+	void setInitialUrl(const KUrl&);
 
 protected:
 	virtual void slotSetStatusBarText(const QString&);
