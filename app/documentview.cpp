@@ -127,6 +127,15 @@ KParts::ReadOnlyPart* DocumentView::part() const {
 }
 
 
+KUrl DocumentView::url() const {
+	if (!d->mPart) {
+		return KUrl();
+	}
+
+	return d->mPart->url();
+}
+
+
 void DocumentView::reset() {
 	if (!d->mPart) {
 		return;

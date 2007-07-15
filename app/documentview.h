@@ -70,6 +70,11 @@ public:
 
 	virtual QSize sizeHint() const;
 
+	/**
+	 * Returns the url of the current document, or an invalid url if unknown
+	 */
+	KUrl url() const;
+
 Q_SIGNALS:
 	/**
 	 * Emitted whenever the part changes. Main window should call createGui on

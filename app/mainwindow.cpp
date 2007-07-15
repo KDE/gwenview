@@ -402,7 +402,7 @@ struct MainWindow::Private {
 
 	KUrl currentUrl() const {
 		if (mDocumentView->isVisible() && mDocumentView->part()) {
-			return mDocumentView->part()->url();
+			return mDocumentView->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -416,7 +416,7 @@ struct MainWindow::Private {
 
 	QString currentMimeType() const {
 		if (mDocumentView->isVisible() && mDocumentView->part()) {
-			return MimeTypeUtils::urlMimeType(mDocumentView->part()->url());
+			return MimeTypeUtils::urlMimeType(mDocumentView->url());
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -578,7 +578,7 @@ void MainWindow::openDirUrlFromString(const QString& str) {
 }
 
 void MainWindow::openDocumentUrl(const KUrl& url) {
-	if (d->mDocumentView->part() && d->mDocumentView->part()->url() == url) {
+	if (d->mDocumentView->url() == url) {
 		return;
 	}
 	d->mDocumentView->createPartForUrl(url);
@@ -619,7 +619,7 @@ void MainWindow::updateSideBar() {
 
 void MainWindow::slotPartCompleted() {
 	Q_ASSERT(d->mDocumentView->part());
-	KUrl url = d->mDocumentView->part()->url();
+	KUrl url = d->mDocumentView->url();
 	KUrl dirUrl = url;
 	dirUrl.setFileName("");
 	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
