@@ -363,12 +363,7 @@ struct MainWindow::Private {
 
 	bool currentDocumentIsRasterImage() {
 		if (mDocumentView->isVisible()) {
-			// If the document view is visible, we assume we have a raster
-			// image if and only if we are using the ImageViewPart. This avoids
-			// having to determine the mimetype a second time.
-			// FIXME: KPart code should move to DocumentView and DocumentView
-			// should be able to answer whether it's showing a raster image.
-			return dynamic_cast<ImageViewPart*>(mDocumentView->part()) != 0;
+			return mDocumentView->currentDocumentIsRasterImage();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {

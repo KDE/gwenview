@@ -70,6 +70,8 @@ public:
 	 */
 	bool openUrl(const KUrl& url);
 
+	bool currentDocumentIsRasterImage() const;
+
 Q_SIGNALS:
 	/**
 	 * Emitted whenever the part changes. Main window should call createGui on

@@ -212,4 +212,12 @@ bool DocumentView::openUrl(const KUrl& url) {
 }
 
 
+bool DocumentView::currentDocumentIsRasterImage() const {
+	// If the document view is visible, we assume we have a raster
+	// image if and only if we are using the ImageViewPart. This avoids
+	// having to determine the mimetype a second time.
+	return dynamic_cast<ImageViewPart*>(d->mPart) != 0;
+}
+
+
 } // namespace
