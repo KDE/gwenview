@@ -43,9 +43,6 @@ public:
 	DocumentView(QWidget* parent, KParts::MainWindow* mainWindow);
 	~DocumentView();
 
-	// FIXME: REFACTOR
-	void createPartForUrl(const KUrl& url);
-
 	/**
 	 * Initialize the context manager, this is needed because DocumentView must
 	 * notify the context manager whenever its ImageView changes
@@ -75,6 +72,11 @@ public:
 	 */
 	KUrl url() const;
 
+	/**
+	 * Opens url. Returns true on success
+	 */
+	bool openUrl(const KUrl& url);
+
 Q_SIGNALS:
 	/**
 	 * Emitted whenever the part changes. Main window should call createGui on
@@ -84,6 +86,8 @@ Q_SIGNALS:
 
 private:
 	DocumentViewPrivate* const d;
+
+	void createPartForUrl(const KUrl& url);
 };
 
 } // namespace

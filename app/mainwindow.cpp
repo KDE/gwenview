@@ -581,9 +581,9 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	if (d->mDocumentView->url() == url) {
 		return;
 	}
-	d->mDocumentView->createPartForUrl(url);
-	if (!d->mDocumentView->part()) return;
-	d->mDocumentView->part()->openUrl(url);
+	if (!d->mDocumentView->openUrl(url)) {
+		return;
+	}
 	d->mUrlToSelect = url;
 	d->selectUrlToSelect();
 }

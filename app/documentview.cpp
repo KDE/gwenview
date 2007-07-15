@@ -208,4 +208,15 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	d->mPartLibrary = library;
 }
 
+
+bool DocumentView::openUrl(const KUrl& url) {
+	createPartForUrl(url);
+	if (!d->mPart) {
+		return false;
+	}
+	d->mPart->openUrl(url);
+	return true;
+}
+
+
 } // namespace
