@@ -117,11 +117,6 @@ QSize DocumentView::sizeHint() const {
 }
 
 
-KParts::ReadOnlyPart* DocumentView::part() const {
-	return d->mPart;
-}
-
-
 KUrl DocumentView::url() const {
 	if (!d->mPart) {
 		return KUrl();
@@ -217,6 +212,11 @@ bool DocumentView::currentDocumentIsRasterImage() const {
 	// image if and only if we are using the ImageViewPart. This avoids
 	// having to determine the mimetype a second time.
 	return dynamic_cast<ImageViewPart*>(d->mPart) != 0;
+}
+
+
+bool DocumentView::isEmpty() const {
+	return !d->mPart;
 }
 
 

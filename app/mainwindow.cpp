@@ -59,7 +59,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
-#include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
@@ -398,7 +397,7 @@ struct MainWindow::Private {
 	}
 
 	KUrl currentUrl() const {
-		if (mDocumentView->isVisible() && mDocumentView->part()) {
+		if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
 			return mDocumentView->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
@@ -412,7 +411,7 @@ struct MainWindow::Private {
 	}
 
 	QString currentMimeType() const {
-		if (mDocumentView->isVisible() && mDocumentView->part()) {
+		if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
 			return MimeTypeUtils::urlMimeType(mDocumentView->url());
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
@@ -509,9 +508,9 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	d->mCentralSplitter->setStretchFactor(2, 0); // sidebar
 
 	d->mDocumentView->setVisible(showDocument);
-	if (showDocument && !d->mDocumentView->part()) {
+	if (showDocument && d->mDocumentView->isEmpty()) {
 		openSelectedDocument();
-	} else if (!showDocument && d->mDocumentView->part()) {
+	} else if (!showDocument && !d->mDocumentView->isEmpty()) {
 		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
@@ -615,7 +614,7 @@ void MainWindow::updateSideBar() {
 }
 
 void MainWindow::slotPartCompleted() {
-	Q_ASSERT(d->mDocumentView->part());
+	Q_ASSERT(!d->mDocumentView->isEmpty());
 	KUrl url = d->mDocumentView->url();
 	KUrl dirUrl = url;
 	dirUrl.setFileName("");
@@ -643,7 +642,7 @@ void MainWindow::slotSelectionChanged() {
 
 
 void MainWindow::slotDirListerNewItems() {
-	if (!d->mDocumentView->part()) {
+	if (d->mDocumentView->isEmpty()) {
 		return;
 	}
 

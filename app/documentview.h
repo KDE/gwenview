@@ -56,8 +56,6 @@ public:
 
 	KStatusBar* statusBar() const;
 
-	KParts::ReadOnlyPart* part() const;
-
 	virtual QSize sizeHint() const;
 
 	/**
@@ -71,6 +69,8 @@ public:
 	bool openUrl(const KUrl& url);
 
 	bool currentDocumentIsRasterImage() const;
+
+	bool isEmpty() const;
 
 Q_SIGNALS:
 	/**
