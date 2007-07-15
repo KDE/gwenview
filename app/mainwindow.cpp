@@ -43,9 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmountpoint.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
-#include <kparts/componentfactory.h>
-#include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
@@ -117,8 +114,6 @@ struct MainWindow::Private {
 	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
-	KParts::ReadOnlyPart* mPart;
-	QString mPartLibrary;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
 
@@ -156,7 +151,10 @@ struct MainWindow::Private {
 		layout->setSpacing(0);
 
 		setupThumbnailView(mCentralSplitter);
-		mDocumentView = new DocumentView(mCentralSplitter);
+		mDocumentView = new DocumentView(mCentralSplitter, mWindow);
+		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
+			mWindow, SLOT(createGui(KParts::Part*)) );
+
 		mSideBar = new SideBar(mCentralSplitter);
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
@@ -301,66 +299,6 @@ struct MainWindow::Private {
 	}
 
 
-	void createPartForUrl(const KUrl& url) {
-
-		QString mimeType=KMimeType::findByUrl(url)->name();
-
-		// Get a list of possible parts
-		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
-		if (offers.isEmpty()) {
-			kWarning() << "Couldn't find a KPart for " << mimeType << endl;
-			resetDocumentView();
-			return;
-		}
-
-		// Check if we are already using it
-		KService::Ptr service = offers.first();
-		QString library=service->library();
-		Q_ASSERT(!library.isNull());
-		if (library == mPartLibrary) {
-			LOG("Reusing current part");
-			return;
-		}
-
-		// Load new part
-		LOG("Loading part from library: " << library);
-		KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(
-			service,
-			mDocumentView->viewContainer() /*parentWidget*/,
-			mDocumentView->viewContainer() /*parent*/);
-		if (!part) {
-			kWarning() << "Failed to instantiate KPart from library " << library << endl;
-			return;
-		}
-
-		// Handle statusbar extension otherwise a statusbar will get created in
-		// the main window.
-		KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
-		KStatusBar* statusBar = mDocumentView->statusBar();
-		if (extension) {
-			extension->setStatusBar(statusBar);
-			statusBar->show();
-		} else {
-			statusBar->hide();
-		}
-
-		ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
-		mContextManager->setImageView(ivPart);
-		mDocumentView->setView(part->widget());
-		mWindow->createGUI(part);
-
-		// Make sure our file list is filled when the part is done.
-		connect(part, SIGNAL(completed()), mWindow, SLOT(slotPartCompleted()) );
-
-		// Delete the old part, don't do it before mWindow->createGUI(),
-		// otherwise some UI elements from the old part won't be properly
-		// removed. 
-		delete mPart;
-		mPart = part;
-
-		mPartLibrary = library;
-	}
-
 	void initDirModel() {
 		KDirLister* dirLister = mDirModel->dirLister();
 		QStringList mimeTypes;
@@ -381,17 +319,6 @@ struct MainWindow::Private {
 			mToggleSideBarAction->setText(i18n("Hide Side Bar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Side Bar"));
-		}
-	}
-
-	void resetDocumentView() {
-		if (mPart) {
-			mDocumentView->setView(0);
-			mContextManager->setImageView(0);
-			mWindow->createGUI(0);
-			delete mPart;
-			mPartLibrary = QString();
-			mPart=0;
 		}
 	}
 
@@ -439,7 +366,7 @@ struct MainWindow::Private {
 			// having to determine the mimetype a second time.
 			// FIXME: KPart code should move to DocumentView and DocumentView
 			// should be able to answer whether it's showing a raster image.
-			return dynamic_cast<ImageViewPart*>(mPart) != 0;
+			return dynamic_cast<ImageViewPart*>(mDocumentView->part()) != 0;
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -474,8 +401,8 @@ struct MainWindow::Private {
 	}
 
 	KUrl currentUrl() const {
-		if (mDocumentView->isVisible() && mPart) {
-			return mPart->url();
+		if (mDocumentView->isVisible() && mDocumentView->part()) {
+			return mDocumentView->part()->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -488,8 +415,8 @@ struct MainWindow::Private {
 	}
 
 	QString currentMimeType() const {
-		if (mDocumentView->isVisible() && mPart) {
-			return MimeTypeUtils::urlMimeType(mPart->url());
+		if (mDocumentView->isVisible() && mDocumentView->part()) {
+			return MimeTypeUtils::urlMimeType(mDocumentView->part()->url());
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -535,7 +462,6 @@ d(new MainWindow::Private)
 {
 	d->mWindow = this;
 	d->mDirModel = new SortedDirModel(this);
-	d->mPart = 0;
 	d->mFullScreenBar = 0;
 	d->initDirModel();
 	d->setupWidgets();
@@ -543,6 +469,7 @@ d(new MainWindow::Private)
 	d->setupContextManager();
 	d->updateActions();
 	updatePreviousNextActions();
+	d->mDocumentView->setContextManager(d->mContextManager);
 
 	createShellGUI();
 	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
@@ -585,10 +512,10 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	d->mCentralSplitter->setStretchFactor(2, 0); // sidebar
 
 	d->mDocumentView->setVisible(showDocument);
-	if (showDocument && !d->mPart) {
+	if (showDocument && !d->mDocumentView->part()) {
 		openSelectedDocument();
-	} else if (!showDocument && d->mPart) {
-		d->resetDocumentView();
+	} else if (!showDocument && d->mDocumentView->part()) {
+		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
 }
@@ -641,7 +568,7 @@ void MainWindow::openDirUrl(const KUrl& url) {
 	}
 	d->mDirModel->dirLister()->openUrl(url);
 	d->updateUrlRequester(url);
-	d->resetDocumentView();
+	d->mDocumentView->reset();
 }
 
 
@@ -651,12 +578,12 @@ void MainWindow::openDirUrlFromString(const QString& str) {
 }
 
 void MainWindow::openDocumentUrl(const KUrl& url) {
-	if (d->mPart && d->mPart->url() == url) {
+	if (d->mDocumentView->part() && d->mDocumentView->part()->url() == url) {
 		return;
 	}
-	d->createPartForUrl(url);
-	if (!d->mPart) return;
-	d->mPart->openUrl(url);
+	d->mDocumentView->createPartForUrl(url);
+	if (!d->mDocumentView->part()) return;
+	d->mDocumentView->part()->openUrl(url);
 	d->mUrlToSelect = url;
 	d->selectUrlToSelect();
 }
@@ -691,8 +618,8 @@ void MainWindow::updateSideBar() {
 }
 
 void MainWindow::slotPartCompleted() {
-	Q_ASSERT(d->mPart);
-	KUrl url = d->mPart->url();
+	Q_ASSERT(d->mDocumentView->part());
+	KUrl url = d->mDocumentView->part()->url();
 	KUrl dirUrl = url;
 	dirUrl.setFileName("");
 	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
@@ -719,7 +646,7 @@ void MainWindow::slotSelectionChanged() {
 
 
 void MainWindow::slotDirListerNewItems() {
-	if (!d->mPart) {
+	if (!d->mDocumentView->part()) {
 		return;
 	}
 

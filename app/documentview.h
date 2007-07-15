@@ -24,9 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStackedWidget>
 
 class KStatusBar;
+class KUrl;
+
+namespace KParts { class ReadOnlyPart; class MainWindow; }
 
 namespace Gwenview {
 
+class ContextManager;
 class DocumentViewPrivate;
 
 /**
@@ -36,19 +40,42 @@ class DocumentViewPrivate;
 class DocumentView : public QStackedWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget*);
+	DocumentView(QWidget* parent, KParts::MainWindow* mainWindow);
 	~DocumentView();
+
+	// FIXME: REFACTOR
+	void createPartForUrl(const KUrl& url);
+
+	/**
+	 * Initialize the context manager, this is needed because DocumentView must
+	 * notify the context manager whenever its ImageView changes
+	 */
+	void setContextManager(ContextManager*);
 
 	/**
 	 * Set the current view. If view is 0, show a "no document" message
 	 */
 	void setView(QWidget* view);
 
+	/**
+	 * Reset the view
+	 */
+	void reset();
+
 	QWidget* viewContainer() const;
 
 	KStatusBar* statusBar() const;
 
+	KParts::ReadOnlyPart* part() const;
+
 	virtual QSize sizeHint() const;
+
+Q_SIGNALS:
+	/**
+	 * Emitted whenever the part changes. Main window should call createGui on
+	 * it.
+	 */
+	void partChanged(KParts::ReadOnlyPart*);
 
 private:
 	DocumentViewPrivate* const d;

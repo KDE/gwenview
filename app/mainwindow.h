@@ -33,6 +33,8 @@ class QModelIndex;
 class KFileItemList;
 class KUrl;
 
+namespace KParts { class ReadOnlyPart; }
+
 namespace Gwenview {
 
 class MainWindow : public KParts::MainWindow {
