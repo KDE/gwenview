@@ -50,16 +50,9 @@ public:
 	void setContextManager(ContextManager*);
 
 	/**
-	 * Set the current view. If view is 0, show a "no document" message
-	 */
-	void setView(QWidget* view);
-
-	/**
 	 * Reset the view
 	 */
 	void reset();
-
-	QWidget* viewContainer() const;
 
 	KStatusBar* statusBar() const;
 

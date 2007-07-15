@@ -47,20 +47,32 @@ namespace Gwenview {
 #endif
 
 struct DocumentViewPrivate {
+	DocumentView* mView;
 	ContextManager* mContextManager;
 	QLabel* mNoDocumentLabel;
-	QWidget* mViewContainer;
-	QVBoxLayout* mViewContainerLayout;
+	QWidget* mPartContainer;
+	QVBoxLayout* mPartContainerLayout;
 	KStatusBar* mStatusBar;
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
+
+	void setPartWidget(QWidget* partWidget) {
+		if (partWidget) {
+			// Insert the widget above the status bar
+			mPartContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
+			mView->setCurrentWidget(mPartContainer);
+		} else {
+			mView->setCurrentWidget(mNoDocumentLabel);
+		}
+	}
 };
 
 DocumentView::DocumentView(QWidget* parent)
 : QStackedWidget(parent)
 , d(new DocumentViewPrivate)
 {
+	d->mView = this;
 	d->mContextManager = 0;
 	d->mPart = 0;
 
@@ -74,15 +86,15 @@ DocumentView::DocumentView(QWidget* parent)
 	palette.setColor(QPalette::WindowText, Qt::white);
 	d->mNoDocumentLabel->setPalette(palette);
 
-	d->mViewContainer = new QWidget(this);
-	addWidget(d->mViewContainer);
-	d->mStatusBar = new KStatusBar(d->mViewContainer);
+	d->mPartContainer = new QWidget(this);
+	addWidget(d->mPartContainer);
+	d->mStatusBar = new KStatusBar(d->mPartContainer);
 	d->mStatusBar->hide();
 
-	d->mViewContainerLayout = new QVBoxLayout(d->mViewContainer);
-	d->mViewContainerLayout->addWidget(d->mStatusBar);
-	d->mViewContainerLayout->setMargin(0);
-	d->mViewContainerLayout->setSpacing(0);
+	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
+	d->mPartContainerLayout->addWidget(d->mStatusBar);
+	d->mPartContainerLayout->setMargin(0);
+	d->mPartContainerLayout->setSpacing(0);
 }
 
 
@@ -95,20 +107,6 @@ void DocumentView::setContextManager(ContextManager* manager) {
 	d->mContextManager = manager;
 }
 
-
-void DocumentView::setView(QWidget* view) {
-	if (view) {
-		// Insert the widget above the status bar
-		d->mViewContainerLayout->insertWidget(0 /* position */, view, 1 /* stretch */);
-		setCurrentWidget(d->mViewContainer);
-	} else {
-		setCurrentWidget(d->mNoDocumentLabel);
-	}
-}
-
-QWidget* DocumentView::viewContainer() const {
-	return d->mViewContainer;
-}
 
 KStatusBar* DocumentView::statusBar() const {
 	return d->mStatusBar;
@@ -137,7 +135,7 @@ void DocumentView::reset() {
 	if (!d->mPart) {
 		return;
 	}
-	setView(0);
+	d->setPartWidget(0);
 	d->mContextManager->setImageView(0);
 	partChanged(0);
 	delete d->mPart;
@@ -170,8 +168,8 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	LOG("Loading part from library: " << library);
 	KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(
 		service,
-		viewContainer() /*parentWidget*/,
-		viewContainer() /*parent*/);
+		d->mPartContainer /*parentWidget*/,
+		d->mPartContainer /*parent*/);
 	if (!part) {
 		kWarning() << "Failed to instantiate KPart from library " << library << endl;
 		return;
@@ -189,7 +187,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 
 	ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
 	d->mContextManager->setImageView(ivPart);
-	setView(part->widget());
+	d->setPartWidget(part->widget());
 	partChanged(part);
 
 	connect(part, SIGNAL(completed()), SIGNAL(completed()) );
