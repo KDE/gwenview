@@ -195,9 +195,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	setView(part->widget());
 	partChanged(part);
 
-	// Make sure our file list is filled when the part is done.
-	// FIXME: REFACTOR
-	connect(part, SIGNAL(completed()), d->mMainWindow, SLOT(slotPartCompleted()) );
+	connect(part, SIGNAL(completed()), SIGNAL(completed()) );
 
 	// Delete the old part, don't do it before mMainWindow->createGUI(),
 	// otherwise some UI elements from the old part won't be properly

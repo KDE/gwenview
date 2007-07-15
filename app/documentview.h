@@ -84,6 +84,11 @@ Q_SIGNALS:
 	 */
 	void partChanged(KParts::ReadOnlyPart*);
 
+	/**
+	 * Emitted when the part has finished loading
+	 */
+	void completed();
+
 private:
 	DocumentViewPrivate* const d;
 

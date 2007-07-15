@@ -154,6 +154,8 @@ struct MainWindow::Private {
 		mDocumentView = new DocumentView(mCentralSplitter, mWindow);
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGui(KParts::Part*)) );
+		connect(mDocumentView, SIGNAL(completed()),
+			mWindow, SLOT(slotPartCompleted()) );
 
 		mSideBar = new SideBar(mCentralSplitter);
 
