@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class KStatusBar;
 class KUrl;
 
-namespace KParts { class ReadOnlyPart; class MainWindow; }
+namespace KParts { class ReadOnlyPart; }
 
 namespace Gwenview {
 
@@ -40,7 +40,7 @@ class DocumentViewPrivate;
 class DocumentView : public QStackedWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget* parent, KParts::MainWindow* mainWindow);
+	DocumentView(QWidget* parent);
 	~DocumentView();
 
 	/**

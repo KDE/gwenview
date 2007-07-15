@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
-#include <kparts/mainwindow.h>
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
 
@@ -48,7 +47,6 @@ namespace Gwenview {
 #endif
 
 struct DocumentViewPrivate {
-	KParts::MainWindow* mMainWindow;
 	ContextManager* mContextManager;
 	QLabel* mNoDocumentLabel;
 	QWidget* mViewContainer;
@@ -59,11 +57,10 @@ struct DocumentViewPrivate {
 	QString mPartLibrary;
 };
 
-DocumentView::DocumentView(QWidget* parent, KParts::MainWindow* mainWindow)
+DocumentView::DocumentView(QWidget* parent)
 : QStackedWidget(parent)
 , d(new DocumentViewPrivate)
 {
-	d->mMainWindow = mainWindow;
 	d->mContextManager = 0;
 	d->mPart = 0;
 

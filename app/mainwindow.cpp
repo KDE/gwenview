@@ -151,7 +151,7 @@ struct MainWindow::Private {
 		layout->setSpacing(0);
 
 		setupThumbnailView(mCentralSplitter);
-		mDocumentView = new DocumentView(mCentralSplitter, mWindow);
+		mDocumentView = new DocumentView(mCentralSplitter);
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGui(KParts::Part*)) );
 		connect(mDocumentView, SIGNAL(completed()),
