@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class KStatusBar;
 class KUrl;
 
-namespace KParts { class ReadOnlyPart; }
+namespace KParts { class Part; }
 
 namespace Gwenview {
 
@@ -77,7 +77,7 @@ Q_SIGNALS:
 	 * Emitted whenever the part changes. Main window should call createGui on
 	 * it.
 	 */
-	void partChanged(KParts::ReadOnlyPart*);
+	void partChanged(KParts::Part*);
 
 	/**
 	 * Emitted when the part has finished loading

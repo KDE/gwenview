@@ -151,10 +151,10 @@ struct MainWindow::Private {
 
 		setupThumbnailView(mCentralSplitter);
 		mDocumentView = new DocumentView(mCentralSplitter);
-		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
-			mWindow, SLOT(createGui(KParts::Part*)) );
 		connect(mDocumentView, SIGNAL(completed()),
 			mWindow, SLOT(slotPartCompleted()) );
+		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
+			mWindow, SLOT(createGUI(KParts::Part*)) );
 
 		mSideBar = new SideBar(mCentralSplitter);
 
