@@ -43,6 +43,8 @@ public:
 
 	bool hasUrl(const KUrl&) const;
 
+	void clearCache();
+
 Q_SIGNALS:
 	void saved(const KUrl&);
 	void modified(const KUrl&);

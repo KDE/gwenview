@@ -101,4 +101,10 @@ bool DocumentFactory::hasUrl(const KUrl& url) const {
 	return d->mDocumentMap.contains(url);
 }
 
+
+void DocumentFactory::clearCache() {
+	d->mDocumentMap.clear();
+}
+
+
 } // namespace

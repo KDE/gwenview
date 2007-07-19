@@ -57,6 +57,7 @@ void DocumentTest::testDeleteWhileLoading() {
 		QVERIFY2(ok, "Could not load 'test.png'");
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 	}
+	DocumentFactory::instance()->clearCache();
 	// Wait two seconds. If the test fails we will get a segfault while waiting
 	QTest::qWait(2000);
 }

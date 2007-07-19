@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "loadingdocumentimpl.moc"
 
 // Qt
+#include <QBuffer>
 #include <QByteArray>
 #include <QFile>
 #include <QImage>
@@ -42,6 +43,81 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "jpegdocumentloadedimpl.h"
 
 namespace Gwenview {
+
+#undef ENABLE_LOG
+#undef LOG
+#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
+/**
+ * CancellableBuffer
+ * This class acts like QBuffer, but will simulates a truncated file if the
+ * TSThread which was passed to its constructor has been asked for cancellation
+ */
+class CancellableBuffer : public QBuffer {
+public:
+	CancellableBuffer()
+	: mCancel(false)
+	{}
+
+	void cancel() {
+		QMutexLocker lock(&mMutex);
+		mCancel = true;
+	}
+
+	bool atEnd() const {
+		if (testCancel()) {
+			LOG("cancel detected");
+			return true;
+		}
+		return QBuffer::atEnd();
+	}
+
+	qint64 bytesAvailable() const {
+		if (testCancel()) {
+			LOG("cancel detected");
+			return 0;
+		}
+		return QBuffer::bytesAvailable();
+	}
+
+	bool canReadLine() const {
+		if (testCancel()) {
+			LOG("cancel detected");
+			return 0;
+		}
+		return QBuffer::canReadLine();
+	}
+
+	qint64 readData(char * data, qint64 maxSize) {
+		if (testCancel()) {
+			LOG("cancel detected");
+			return 0;
+		}
+		return QBuffer::readData(data, maxSize);
+	}
+
+	qint64 readLineData(char * data, qint64 maxSize) {
+		if (testCancel()) {
+			LOG("cancel detected");
+			return 0;
+		}
+		return QBuffer::readLineData(data, maxSize);
+	}
+
+private:
+	bool testCancel() const {
+		QMutexLocker lock(&mMutex);
+		return mCancel;
+	}
+
+	mutable QMutex mMutex;
+	bool mCancel;
+};
 
 
 class LoadingThread : public QThread {
@@ -64,8 +140,10 @@ public:
 			return;
 		}
 		mData = file.readAll();
+		mBuffer.setBuffer(&mData);
+		mBuffer.open(QIODevice::ReadOnly);
 
-		ok = mImage.loadFromData(mData, mFormat.data());
+		ok = mImage.load(&mBuffer, mFormat.data());
 		if (!ok) {
 			return;
 		}
@@ -78,6 +156,10 @@ public:
 			QMatrix matrix = ImageUtils::transformMatrix(orientation);
 			mImage = mImage.transformed(matrix);
 		}
+	}
+
+	void cancel() {
+		mBuffer.cancel();
 	}
 
 	void setUrl(const KUrl& url) {
@@ -110,6 +192,7 @@ public:
 private:
 	mutable QMutex mMutex;
 	KUrl mUrl;
+	CancellableBuffer mBuffer;
 	QByteArray mData;
 	QByteArray mFormat;
 	QImage mImage;
@@ -129,8 +212,10 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 
 
 LoadingDocumentImpl::~LoadingDocumentImpl() {
+	LOG("");
 	if (d->mThread.isRunning()) {
-		d->mThread.terminate();
+		LOG("");
+		d->mThread.cancel();
 		d->mThread.wait();
 	}
 	delete d;
