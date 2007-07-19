@@ -458,7 +458,7 @@ struct MainWindow::Private {
 	}
 
 
-	void updateSaveBar() {
+	void spreadCurrentUrl() {
 		KUrl url = currentUrl();
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
@@ -472,7 +472,7 @@ struct MainWindow::Private {
 		if (index.isValid()) {
 			mThumbnailView->setCurrentIndex(index);
 			mUrlToSelect = KUrl();
-			updateSaveBar();
+			spreadCurrentUrl();
 		}
 	}
 };
@@ -663,7 +663,7 @@ void MainWindow::slotSelectionChanged() {
 	updateSideBar();
 	d->updateActions();
 	updatePreviousNextActions();
-	d->updateSaveBar();
+	d->spreadCurrentUrl();
 }
 
 
