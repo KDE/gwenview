@@ -14,6 +14,7 @@ set(gwenviewlib_SRCS
 	jpegdocumentloadedimpl.cpp
 	loadingdocumentimpl.cpp
     mimetypeutils.cpp
+	slideshow.cpp
 	sorteddirmodel.cpp
     thumbnailview.cpp
 	transupp.c

@@ -83,6 +83,7 @@ private Q_SLOTS:
 	void updatePreviousNextActions();
 
 	void toggleFullScreen();
+	void toggleSlideShow();
 
 	void saveCurrent();
 	void saveCurrentAs();

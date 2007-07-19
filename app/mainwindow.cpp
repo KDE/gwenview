@@ -60,6 +60,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/mimetypeutils.h>
+#include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
 #include <lib/transformimageoperation.h>
@@ -115,6 +116,7 @@ struct MainWindow::Private {
 	SideBar* mSideBar;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
+	SlideShow* mSlideShow;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
@@ -129,6 +131,7 @@ struct MainWindow::Private {
 	QAction* mFlipAction;
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
+	QAction* mToggleSlideShowAction;
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -158,9 +161,14 @@ struct MainWindow::Private {
 
 		mSideBar = new SideBar(mCentralSplitter);
 
+		mSlideShow = new SlideShow(mWindow);
+
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mWindow, SLOT(save(const KUrl&)) );
 		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
+			mWindow, SLOT(goToUrl(const KUrl&)) );
+
+		connect(mSlideShow, SIGNAL(goToUrl(const KUrl&)),
 			mWindow, SLOT(goToUrl(const KUrl&)) );
 	}
 
@@ -289,6 +297,11 @@ struct MainWindow::Private {
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		connect(mToggleSideBarAction, SIGNAL(triggered()),
 			mWindow, SLOT(toggleSideBar()) );
+
+		mToggleSlideShowAction = actionCollection->addAction("toggle_slideshow");
+		updateSlideShowAction();
+		connect(mToggleSlideShowAction, SIGNAL(triggered()),
+			mWindow, SLOT(toggleSlideShow()) );
 	}
 
 
@@ -357,6 +370,7 @@ struct MainWindow::Private {
 		mFullScreenBar->addAction(mFullScreenAction);
 		mFullScreenBar->addAction(mGoToPreviousAction);
 		mFullScreenBar->addAction(mGoToNextAction);
+		mFullScreenBar->addAction(mToggleSlideShowAction);
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
 
@@ -394,6 +408,16 @@ struct MainWindow::Private {
 		mRotateRightAction->setEnabled(canModify);
 		mMirrorAction->setEnabled(canModify);
 		mFlipAction->setEnabled(canModify);
+	}
+
+	void updateSlideShowAction() {
+		if (mSlideShow->isRunning()) {
+			mToggleSlideShowAction->setText(i18n("Stop slideshow"));
+			mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
+		} else {
+			mToggleSlideShowAction->setText(i18n("Start slideshow"));
+			mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
+		}
 	}
 
 	KUrl currentUrl() const {
@@ -435,7 +459,9 @@ struct MainWindow::Private {
 
 
 	void updateSaveBar() {
-		mSaveBar->setCurrentUrl(currentUrl());
+		KUrl url = currentUrl();
+		mSaveBar->setCurrentUrl(url);
+		mSlideShow->setCurrentUrl(url);
 	}
 
 	void selectUrlToSelect() {
@@ -802,6 +828,25 @@ void MainWindow::mirror() {
 void MainWindow::flip() {
 	TransformImageOperation op(VFLIP);
 	d->applyImageOperation(&op);
+}
+
+
+void MainWindow::toggleSlideShow() {
+	if (d->mSlideShow->isRunning()) {
+		d->mSlideShow->stop();
+	} else {
+		QList<KUrl> list;
+		for (int pos=0; pos < d->mDirModel->rowCount(); ++pos) {
+			QModelIndex index = d->mDirModel->index(pos, 0);
+			KFileItem* item = d->mDirModel->itemForIndex(index);
+			MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
+			if (kind == MimeTypeUtils::KIND_FILE || kind == MimeTypeUtils::KIND_RASTER_IMAGE) {
+				list << item->url();
+			}
+		}
+		d->mSlideShow->start(list);
+	}
+	d->updateSlideShowAction();
 }
 
 
