@@ -29,13 +29,16 @@ namespace Gwenview {
 
 /**
  * This class is used by the ThumbnailView to request various things.
- * For now it can ask for thumbnails.
  */
 class AbstractThumbnailViewHelper {
 public:
 	virtual ~AbstractThumbnailViewHelper() {}
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size) = 0;
+
+	virtual void showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list) = 0;
+
+	virtual void showContextMenuForViewport(QWidget* parent) = 0;
 };
 
 } // namespace

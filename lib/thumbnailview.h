@@ -66,6 +66,7 @@ protected:
 
 private Q_SLOTS:
 	void generateThumbnails();
+	void showContextMenu();
 
 private:
 	ThumbnailViewPrivate * const d;

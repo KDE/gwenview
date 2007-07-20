@@ -22,13 +22,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailviewhelper.moc"
 
 // Qt
+#include <QCursor>
 #include <QIcon>
 #include <QPainter>
 
 // KDE
+#include <kdirlister.h>
 #include <kdirmodel.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kpropertiesdialog.h>
 
 // Local
 #include "documentfactory.h"
@@ -93,5 +98,31 @@ void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& p
 	d->mModel->setData(index, QIcon(pixmap), Qt::DecorationRole);
 }
 
+
+void ThumbnailViewHelper::showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list) {
+	KMenu popup(parent);
+	QAction* propertiesAction = popup.addAction(i18n("Properties"));
+
+	QAction* action = popup.exec(QCursor::pos());
+	if (action == propertiesAction) {
+		KFileItemList itemList;
+		Q_FOREACH(KFileItem item, list) {
+			itemList << &item;
+		}
+		KPropertiesDialog::showDialog(itemList, parent);
+	}
+}
+
+
+void ThumbnailViewHelper::showContextMenuForViewport(QWidget* parent) {
+	KMenu popup(parent);
+	QAction* propertiesAction = popup.addAction(i18n("Properties"));
+
+	QAction* action = popup.exec(QCursor::pos());
+	if (action == propertiesAction) {
+		KUrl url = d->mModel->dirLister()->url();
+		KPropertiesDialog::showDialog(url, parent);
+	}
+}
 
 } // namespace

@@ -49,6 +49,10 @@ public:
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size);
 
+	virtual void showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list);
+
+	virtual void showContextMenuForViewport(QWidget* parent);
+
 private Q_SLOTS:
 	void setItemPreview(const KFileItem&, const QPixmap&);
 

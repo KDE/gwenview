@@ -230,6 +230,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	d->mThumbnailGenerationTimer.setInterval(THUMBNAIL_GENERATION_TIMEOUT);
 	d->mThumbnailGenerationTimer.setSingleShot(true);
 	connect(&d->mThumbnailGenerationTimer, SIGNAL(timeout()), SLOT(generateThumbnails()) );
+
+	setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(showContextMenu()) );
 }
 
 
@@ -298,6 +302,22 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 
 	Q_ASSERT(d->mThumbnailViewHelper);
 	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview, d->mThumbnailSize);
+}
+
+void ThumbnailView::showContextMenu() {
+	QModelIndexList selection = selectionModel()->selectedIndexes();
+	QList<KFileItem> list;
+	Q_FOREACH(QModelIndex index, selection) {
+		QVariant data = index.data(KDirModel::FileItemRole);
+		KFileItem item = qvariant_cast<KFileItem>(data);
+		list.append(item);
+	}
+
+	if (list.size() > 0) {
+		d->mThumbnailViewHelper->showContextMenuForItems(this, list);
+	} else {
+		d->mThumbnailViewHelper->showContextMenuForViewport(this);
+	}
 }
 
 } // namespace
