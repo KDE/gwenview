@@ -36,6 +36,8 @@ public:
 
 	void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
+	AbstractThumbnailViewHelper* thumbnailViewHelper() const;
+
 	/**
 	 * Returns the thumbnail size.
 	 */

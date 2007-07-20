@@ -281,6 +281,10 @@ void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper) 
 	d->mThumbnailViewHelper = helper;
 }
 
+AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
+	return d->mThumbnailViewHelper;
+}
+
 void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) {
 	QListView::rowsInserted(parent, start, end);
 

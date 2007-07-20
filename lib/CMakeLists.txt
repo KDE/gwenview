@@ -16,7 +16,8 @@ set(gwenviewlib_SRCS
     mimetypeutils.cpp
 	slideshow.cpp
 	sorteddirmodel.cpp
-    thumbnailview.cpp
+	thumbnailview.cpp
+	thumbnailviewhelper.cpp
 	transupp.c
 	transformimageoperation.cpp
     )

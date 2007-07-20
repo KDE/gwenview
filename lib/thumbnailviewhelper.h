@@ -1,3 +1,4 @@
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
 Copyright 2007 Aurélien Gâteau
@@ -14,43 +15,48 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef SORTEDDIRMODEL_H
-#define SORTEDDIRMODEL_H
-
-#include <QSortFilterProxyModel>
+#ifndef THUMBNAILVIEWHELPER_H
+#define THUMBNAILVIEWHELPER_H
 
 #include "gwenviewlib_export.h"
+
+// Qt
+#include <QObject>
+
+// KDE
+
+// Local
 #include "abstractthumbnailviewhelper.h"
 
+class SortedDirModel;
 class QPixmap;
 
-class KDirLister;
 class KFileItem;
-class KUrl;
 
 namespace Gwenview {
 
-class SortedDirModelPrivate;
-class GWENVIEWLIB_EXPORT SortedDirModel : public QSortFilterProxyModel {
+class SortedDirModel;
+
+class ThumbnailViewHelperPrivate;
+class GWENVIEWLIB_EXPORT ThumbnailViewHelper : public QObject, public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:
-	SortedDirModel(QObject* parent);
-	~SortedDirModel();
-	KDirLister* dirLister();
-	KFileItem* itemForIndex(const QModelIndex& index) const;
-	QModelIndex indexForItem(const KFileItem& item) const;
-	QModelIndex indexForUrl(const KUrl& url) const;
+	ThumbnailViewHelper(SortedDirModel* model);
+	~ThumbnailViewHelper();
 
-protected:
-	virtual bool lessThan(const QModelIndex&, const QModelIndex&) const;
+	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size);
+
+private Q_SLOTS:
+	void setItemPreview(const KFileItem&, const QPixmap&);
 
 private:
-	SortedDirModelPrivate * const d;
+	ThumbnailViewHelperPrivate* const d;
 };
+
 
 } // namespace
 
-#endif /* SORTEDDIRMODEL_H */
+#endif /* THUMBNAILVIEWHELPER_H */

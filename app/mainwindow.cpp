@@ -63,6 +63,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
+#include <lib/thumbnailviewhelper.h>
 #include <lib/transformimageoperation.h>
 
 namespace Gwenview {
@@ -178,7 +179,8 @@ struct MainWindow::Private {
 		// mThumbnailView
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
-		mThumbnailView->setThumbnailViewHelper(mDirModel);
+		ThumbnailViewHelper* helper = new ThumbnailViewHelper(mDirModel);
+		mThumbnailView->setThumbnailViewHelper(helper);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
@@ -864,7 +866,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 	QList<KFileItem> list;
 	list << *item;
 	int size = d->mThumbnailSlider->value();
-	d->mDirModel->generateThumbnailsForItems(list, size);
+	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list, size);
 }
 
 
