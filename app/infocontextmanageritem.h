@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef SELECTIONCONTEXTMANAGERITEM_H
-#define SELECTIONCONTEXTMANAGERITEM_H
+#ifndef INFOCONTEXTMANAGERITEM_H
+#define INFOCONTEXTMANAGERITEM_H
 
 // Qt
 #include <QList>
@@ -31,13 +31,13 @@ class KFileItem;
 
 namespace Gwenview {
 
-class SelectionContextManagerItemPrivate;
+class InfoContextManagerItemPrivate;
 
-class SelectionContextManagerItem : public AbstractContextManagerItem {
+class InfoContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	SelectionContextManagerItem(ContextManager*);
-	~SelectionContextManagerItem();
+	InfoContextManagerItem(ContextManager*);
+	~InfoContextManagerItem();
 
 	virtual void setImageView(ImageViewPart*);
 	virtual void setSideBar(SideBar* sideBar);
@@ -51,9 +51,9 @@ private:
 
 	void fillMultipleItemsGroup(const QList<KFileItem>& itemList);
 
-	SelectionContextManagerItemPrivate * const d;
+	InfoContextManagerItemPrivate * const d;
 };
 
 } // namespace
 
-#endif /* SELECTIONCONTEXTMANAGERITEM_H */
+#endif /* INFOCONTEXTMANAGERITEM_H */

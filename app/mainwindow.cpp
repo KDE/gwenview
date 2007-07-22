@@ -54,7 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "savebar.h"
-#include "selectioncontextmanageritem.h"
+#include "infocontextmanageritem.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
 #include <lib/documentfactory.h>
@@ -310,7 +310,7 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
-		AbstractContextManagerItem* item = new SelectionContextManagerItem(mContextManager);
+		AbstractContextManagerItem* item = new InfoContextManagerItem(mContextManager);
 		mContextManager->addItem(item);
 	}
 

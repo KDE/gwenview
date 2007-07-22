@@ -3,10 +3,10 @@ set(gwenview_SRCS
 	abstractcontextmanageritem.cpp
 	contextmanager.cpp
 	documentview.cpp
+	infocontextmanageritem.cpp
 	main.cpp
 	mainwindow.cpp
 	savebar.cpp
-	selectioncontextmanageritem.cpp
 	sidebar.cpp
 	)
 

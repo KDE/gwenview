@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#include "selectioncontextmanageritem.moc"
+#include "infocontextmanageritem.moc"
 
 // Qt
 #include <QLabel>
@@ -45,7 +45,7 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-struct SelectionContextManagerItemPrivate {
+struct InfoContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
@@ -57,21 +57,21 @@ struct SelectionContextManagerItemPrivate {
 	Document::Ptr mDocument;
 };
 
-SelectionContextManagerItem::SelectionContextManagerItem(ContextManager* manager)
+InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
-, d(new SelectionContextManagerItemPrivate) {
+, d(new InfoContextManagerItemPrivate) {
 	d->mImageView = 0;
 	d->mSideBar = 0;
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
 }
 
-SelectionContextManagerItem::~SelectionContextManagerItem() {
+InfoContextManagerItem::~InfoContextManagerItem() {
 	delete d;
 }
 
 
-void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
+void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mSideBar = sideBar;
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
@@ -89,7 +89,7 @@ void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	d->mMultipleFilesLabel = new QLabel();
 
-	d->mGroup = sideBar->createGroup(i18n("Selection"));
+	d->mGroup = sideBar->createGroup(i18n("Information"));
 	d->mGroup->addWidget(d->mOneFileWidget);
 	d->mGroup->addWidget(d->mMultipleFilesLabel);
 
@@ -97,7 +97,7 @@ void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
-void SelectionContextManagerItem::updateSideBarContent() {
+void InfoContextManagerItem::updateSideBarContent() {
 	LOG("updateSideBarContent");
 	if (!d->mSideBar->isVisible()) {
 		LOG("updateSideBarContent: not visible, not updating");
@@ -122,7 +122,7 @@ void SelectionContextManagerItem::updateSideBarContent() {
 	fillMultipleItemsGroup(itemList);
 }
 
-void SelectionContextManagerItem::fillOneFileGroup(const KFileItem& item) {
+void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	QString fileSize = KGlobal::locale()->formatByteSize(item.size());
 	d->mOneFileTextLabel->setText(
 		i18n("%1\n%2\n%3", item.name(), item.timeString(), fileSize)
@@ -146,7 +146,7 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	}
 }
 
-void SelectionContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
+void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
 	// "Garbage collect" document
 	d->mDocument = 0;
 
@@ -171,7 +171,7 @@ void SelectionContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>&
 }
 
 // FIXME: Remove?
-void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
+void InfoContextManagerItem::setImageView(ImageViewPart* imageView) {
 	if (d->mImageView) {
 		disconnect(d->mImageView, 0, this, 0);
 	}
@@ -179,7 +179,7 @@ void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 	d->mImageView = imageView;
 }
 
-void SelectionContextManagerItem::updatePreview() {
+void InfoContextManagerItem::updatePreview() {
 	Q_ASSERT(d->mDocument);
 	if (!d->mDocument) {
 		return;
