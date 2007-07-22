@@ -121,6 +121,8 @@ struct FileOpsContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 	QAction* mCopyToAction;
+	QAction* mMoveToAction;
+	QAction* mLinkToAction;
 	QAction* mTrashAction;
 	QAction* mDelAction;
 	QAction* mShowPropertiesAction;
@@ -221,6 +223,18 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	connect(d->mCopyToAction, SIGNAL(triggered()),
 		SLOT(copyTo()) );
 
+	d->mMoveToAction = new QAction(this);
+	d->mMoveToAction->setText(i18nc("Verb", "Move To"));
+	d->mMoveToAction->setIcon(KIcon("file-copy"));
+	connect(d->mMoveToAction, SIGNAL(triggered()),
+		SLOT(moveTo()) );
+
+	d->mLinkToAction = new QAction(this);
+	d->mLinkToAction->setText(i18nc("Verb", "Link To"));
+	d->mLinkToAction->setIcon(KIcon("file-copy"));
+	connect(d->mLinkToAction, SIGNAL(triggered()),
+		SLOT(linkTo()) );
+
 	d->mTrashAction = new QAction(this);
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
 	d->mTrashAction->setIcon(KIcon("edit-trash"));
@@ -278,6 +292,8 @@ void FileOpsContextManagerItem::updateActions() {
 	bool selectionNotEmpty = list.count() > 0;
 
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
+	d->mMoveToAction->setEnabled(selectionNotEmpty);
+	d->mLinkToAction->setEnabled(selectionNotEmpty);
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 
@@ -297,6 +313,8 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	}
 
 	addIfEnabled(d->mGroup, d->mCopyToAction);
+	addIfEnabled(d->mGroup, d->mMoveToAction);
+	addIfEnabled(d->mGroup, d->mLinkToAction);
 	addIfEnabled(d->mGroup, d->mTrashAction);
 	addIfEnabled(d->mGroup, d->mDelAction);
 	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
@@ -330,6 +348,16 @@ void FileOpsContextManagerItem::del() {
 
 void FileOpsContextManagerItem::copyTo() {
 	d->copyMoveOrLink(COPY);
+}
+
+
+void FileOpsContextManagerItem::moveTo() {
+	d->copyMoveOrLink(MOVE);
+}
+
+
+void FileOpsContextManagerItem::linkTo() {
+	d->copyMoveOrLink(LINK);
 }
 
 
