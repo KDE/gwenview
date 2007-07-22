@@ -22,10 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileopscontextmanageritem.h"
 
 // Qt
+#include <QAction>
 
 // KDE
 #include <kfileitem.h>
 #include <klocale.h>
+#include <kpropertiesdialog.h>
 
 // Local
 #include "contextmanager.h"
@@ -37,6 +39,7 @@ namespace Gwenview {
 struct FileOpsContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
+	QAction* mShowPropertiesAction;
 };
 
 
@@ -45,6 +48,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
+	
+	d->mShowPropertiesAction = new QAction(this);
+	d->mShowPropertiesAction->setText(i18n("Properties"));
+	d->mShowPropertiesAction->setIcon(KIcon("file-properties"));
+	connect(d->mShowPropertiesAction, SIGNAL(triggered()),
+		SLOT(showProperties()) );
 }
 
 
@@ -75,6 +84,19 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	}
 
 	d->mGroup->show();
+	d->mGroup->clear();
+	d->mGroup->addAction(d->mShowPropertiesAction);
 }
+
+
+void FileOpsContextManagerItem::showProperties() {
+	QList<KFileItem> list = contextManager()->selection();
+	KFileItemList itemList;
+	Q_FOREACH(KFileItem item, list) {
+		itemList << &item;
+	}
+	KPropertiesDialog::showDialog(itemList, d->mSideBar);
+}
+
 
 } // namespace

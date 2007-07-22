@@ -43,6 +43,7 @@ public:
 
 private Q_SLOTS:
 	void updateSideBarContent();
+	void showProperties();
 
 private:
 	FileOpsContextManagerItemPrivate* const d;
