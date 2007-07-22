@@ -48,6 +48,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
+	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
+		SLOT(updateSideBarContent()) );
 	
 	d->mShowPropertiesAction = new QAction(this);
 	d->mShowPropertiesAction->setText(i18n("Properties"));
@@ -68,7 +70,6 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 		SLOT(updateSideBarContent()) );
 
 	d->mGroup = sideBar->createGroup(i18n("File Operations"));
-	d->mGroup->hide();
 }
 
 
@@ -83,24 +84,29 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	}
 
 	QList<KFileItem> list = contextManager()->selection();
-	if (list.count() == 0) {
-		d->mGroup->hide();
-		return;
+	d->mGroup->clear();
+	if (list.count() > 0) {
+		// TODO: Insert selection actions
+	} else {
+		// TODO: Insert current dir actions
 	}
 
-	d->mGroup->show();
-	d->mGroup->clear();
 	d->mGroup->addAction(d->mShowPropertiesAction);
 }
 
 
 void FileOpsContextManagerItem::showProperties() {
 	QList<KFileItem> list = contextManager()->selection();
-	KFileItemList itemList;
-	Q_FOREACH(KFileItem item, list) {
-		itemList << &item;
+	if (list.count() > 0) {
+		KFileItemList itemList;
+		Q_FOREACH(KFileItem item, list) {
+			itemList << &item;
+		}
+		KPropertiesDialog::showDialog(itemList, d->mSideBar);
+	} else {
+		KUrl url = contextManager()->currentDirUrl();
+		KPropertiesDialog::showDialog(url, d->mSideBar);
 	}
-	KPropertiesDialog::showDialog(itemList, d->mSideBar);
 }
 
 
