@@ -47,6 +47,8 @@ public:
 
 private Q_SLOTS:
 	void updateSideBarContent();
+	void trash();
+	void del();
 	void showProperties();
 
 private:
