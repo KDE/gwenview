@@ -20,14 +20,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.moc"
 
 // Qt
+#include <QAction>
 #include <QLabel>
 #include <QVBoxLayout>
 
 namespace Gwenview {
 
 
+struct SideBarGroupPrivate {
+	QWidget* mContainer;
+};
+
+
 SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
-: QFrame(parent) {
+: QFrame(parent)
+, d(new SideBarGroupPrivate) {
+	d->mContainer = 0;
 	new QVBoxLayout(this);
 	setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 
@@ -38,12 +46,36 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 	label->setText(title);
 
 	layout()->addWidget(label);
+	clear();
+}
+
+
+SideBarGroup::~SideBarGroup() {
+	delete d;
 }
 
 
 void SideBarGroup::addWidget(QWidget* widget) {
-	widget->setParent(this);
-	layout()->addWidget(widget);
+	widget->setParent(d->mContainer);
+	d->mContainer->layout()->addWidget(widget);
+}
+
+
+void SideBarGroup::clear() {
+	delete d->mContainer;
+
+	d->mContainer = new QWidget(this);
+	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
+	containerLayout->setMargin(0);
+
+	layout()->addWidget(d->mContainer);
+}
+
+
+void SideBarGroup::addAction(QAction* action) {
+	QLabel* label = new QLabel();
+	label->setText(action->text());
+	addWidget(label);
 }
 
 

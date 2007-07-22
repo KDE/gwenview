@@ -30,14 +30,20 @@ namespace Gwenview {
 
 class SideBar;
 
+class SideBarGroupPrivate;
 class SideBarGroup : public QFrame {
 	Q_OBJECT
 	friend class SideBar;
 public:
+	~SideBarGroup();
+
 	void addWidget(QWidget*);
+	void addAction(QAction*);
+	void clear();
 
 private:
 	SideBarGroup(QWidget*, const QString& title);
+	SideBarGroupPrivate* const d;
 };
 
 
