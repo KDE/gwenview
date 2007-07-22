@@ -119,8 +119,8 @@ struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
-	QAction* mTrashPropertiesAction;
-	QAction* mDelPropertiesAction;
+	QAction* mTrashAction;
+	QAction* mDelAction;
 	QAction* mShowPropertiesAction;
 
 	void delOrTrash(Operation operation) {
@@ -159,18 +159,18 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateSideBarContent()) );
 
-	d->mTrashPropertiesAction = new QAction(this);
-	d->mTrashPropertiesAction->setText(i18nc("Verb", "Trash"));
-	d->mTrashPropertiesAction->setIcon(KIcon("edit-trash"));
-	d->mTrashPropertiesAction->setShortcut(Qt::Key_Delete);
-	connect(d->mTrashPropertiesAction, SIGNAL(triggered()),
+	d->mTrashAction = new QAction(this);
+	d->mTrashAction->setText(i18nc("Verb", "Trash"));
+	d->mTrashAction->setIcon(KIcon("edit-trash"));
+	d->mTrashAction->setShortcut(Qt::Key_Delete);
+	connect(d->mTrashAction, SIGNAL(triggered()),
 		SLOT(trash()) );
 
-	d->mDelPropertiesAction = new QAction(this);
-	d->mDelPropertiesAction->setText(i18n("Delete"));
-	d->mDelPropertiesAction->setIcon(KIcon("edit-delete"));
-	d->mTrashPropertiesAction->setShortcut(Qt::Key_Shift + Qt::Key_Delete);
-	connect(d->mDelPropertiesAction, SIGNAL(triggered()),
+	d->mDelAction = new QAction(this);
+	d->mDelAction->setText(i18n("Delete"));
+	d->mDelAction->setIcon(KIcon("edit-delete"));
+	d->mDelAction->setShortcut(Qt::Key_Shift + Qt::Key_Delete);
+	connect(d->mDelAction, SIGNAL(triggered()),
 		SLOT(del()) );
 
 	d->mShowPropertiesAction = new QAction(this);
@@ -207,9 +207,13 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 
 	QList<KFileItem> list = contextManager()->selection();
 	d->mGroup->clear();
-	if (list.count() > 0) {
-		d->mGroup->addAction(d->mTrashPropertiesAction);
-		d->mGroup->addAction(d->mDelPropertiesAction);
+	bool selectionNotEmpty = list.count() > 0;
+	d->mTrashAction->setEnabled(selectionNotEmpty);
+	d->mDelAction->setEnabled(selectionNotEmpty);
+
+	if (selectionNotEmpty) {
+		d->mGroup->addAction(d->mTrashAction);
+		d->mGroup->addAction(d->mDelAction);
 	} else {
 		// TODO: Insert current dir actions
 	}
