@@ -43,6 +43,9 @@ public:
 	virtual void setImageView(ImageViewPart*) {}
 	virtual void setSideBar(SideBar* sideBar);
 
+	QAction* copyToAction() const;
+	QAction* moveToAction() const;
+	QAction* linkToAction() const;
 	QAction* trashAction() const;
 	QAction* delAction() const;
 	QAction* showPropertiesAction() const;

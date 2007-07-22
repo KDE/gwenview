@@ -115,6 +115,10 @@ inline void addIfEnabled(KMenu& popup, QAction* action) {
 
 void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	KMenu popup(parent);
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->copyToAction());
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->moveToAction());
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->linkToAction());
+	popup.addSeparator();
 	addIfEnabled(popup, d->mFileOpsContextManagerItem->trashAction());
 	addIfEnabled(popup, d->mFileOpsContextManagerItem->delAction());
 	popup.addSeparator();

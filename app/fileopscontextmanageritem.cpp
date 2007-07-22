@@ -268,6 +268,21 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
+QAction* FileOpsContextManagerItem::copyToAction() const {
+	return d->mCopyToAction;
+}
+
+
+QAction* FileOpsContextManagerItem::moveToAction() const {
+	return d->mMoveToAction;
+}
+
+
+QAction* FileOpsContextManagerItem::linkToAction() const {
+	return d->mLinkToAction;
+}
+
+
 QAction* FileOpsContextManagerItem::trashAction() const {
 	return d->mTrashAction;
 }
