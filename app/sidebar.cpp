@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QLabel>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 namespace Gwenview {
@@ -73,9 +74,11 @@ void SideBarGroup::clear() {
 
 
 void SideBarGroup::addAction(QAction* action) {
-	QLabel* label = new QLabel();
-	label->setText(action->text());
-	addWidget(label);
+	QToolButton* button = new QToolButton();
+	button->setAutoRaise(true);
+	button->setDefaultAction(action);
+	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	addWidget(button);
 }
 
 
