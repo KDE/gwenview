@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 
 // KDE
+#include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kguiitem.h>
 #include <kio/copyjob.h>
@@ -119,9 +120,64 @@ struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
+	QAction* mCopyToAction;
 	QAction* mTrashAction;
 	QAction* mDelAction;
 	QAction* mShowPropertiesAction;
+
+
+	void copyMoveOrLink(Operation operation) {
+		QList<KFileItem> list = mContextManagerItem->contextManager()->selection();
+		Q_ASSERT(list.count() > 0);
+		KUrl::List urlList = urlListFromKFileItemList(list);
+
+		KFileDialog dialog(
+			KUrl("kfiledialog:///<copyMoveOrLink>"),
+			QString() /* filter */,
+			mSideBar);
+		switch (operation) {
+		case COPY:
+			dialog.setCaption(i18n("Copy To"));
+			break;
+		case MOVE:
+			dialog.setCaption(i18n("Move To"));
+			break;
+		case LINK:
+			dialog.setCaption(i18n("Link To"));
+			break;
+		default:
+			Q_ASSERT(0);
+		}
+		dialog.setOperationMode(KFileDialog::Saving);
+		if (urlList.count() == 1) {
+			dialog.setMode(KFile::File);
+			dialog.setSelection(urlList[0].fileName());
+		} else {
+			dialog.setMode(KFile::ExistingOnly | KFile::Directory);
+		}
+		if (!dialog.exec()) {
+			return;
+		}
+
+		KUrl destUrl = dialog.selectedUrl();
+		switch (operation) {
+		case COPY:
+			KIO::copy(urlList, destUrl);
+			break;
+
+		case MOVE:
+			KIO::move(urlList, destUrl);
+			break;
+
+		case LINK:
+			KIO::link(urlList, destUrl);
+			break;
+
+		default:
+			Q_ASSERT(0);
+		}
+	}
+
 
 	void delOrTrash(Operation operation) {
 		QList<KFileItem> list = mContextManagerItem->contextManager()->selection();
@@ -158,6 +214,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 		SLOT(updateActions()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateActions()) );
+
+	d->mCopyToAction = new QAction(this);
+	d->mCopyToAction->setText(i18nc("Verb", "Copy To"));
+	d->mCopyToAction->setIcon(KIcon("file-copy"));
+	connect(d->mCopyToAction, SIGNAL(triggered()),
+		SLOT(copyTo()) );
 
 	d->mTrashAction = new QAction(this);
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
@@ -214,6 +276,8 @@ void FileOpsContextManagerItem::updateActions() {
 	QList<KFileItem> list = contextManager()->selection();
 	d->mGroup->clear();
 	bool selectionNotEmpty = list.count() > 0;
+
+	d->mCopyToAction->setEnabled(selectionNotEmpty);
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 
@@ -232,6 +296,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 		return;
 	}
 
+	addIfEnabled(d->mGroup, d->mCopyToAction);
 	addIfEnabled(d->mGroup, d->mTrashAction);
 	addIfEnabled(d->mGroup, d->mDelAction);
 	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
@@ -260,6 +325,11 @@ void FileOpsContextManagerItem::trash() {
 
 void FileOpsContextManagerItem::del() {
 	d->delOrTrash(DEL);
+}
+
+
+void FileOpsContextManagerItem::copyTo() {
+	d->copyMoveOrLink(COPY);
 }
 
 

@@ -50,6 +50,8 @@ public:
 private Q_SLOTS:
 	void updateActions();
 	void updateSideBarContent();
+
+	void copyTo();
 	void trash();
 	void del();
 	void showProperties();
