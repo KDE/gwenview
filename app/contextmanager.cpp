@@ -69,4 +69,18 @@ void ContextManager::setImageView(ImageViewPart* imageView) {
 }
 
 
+void ContextManager::setCurrentDirUrl(const KUrl& url) {
+	if (url.equals(mCurrentDirUrl, KUrl::CompareWithoutTrailingSlash)) {
+		return;
+	}
+	mCurrentDirUrl = url;
+	currentDirUrlChanged();
+}
+
+
+KUrl ContextManager::currentDirUrl() const {
+	return mCurrentDirUrl;
+}
+
+
 } // namespace

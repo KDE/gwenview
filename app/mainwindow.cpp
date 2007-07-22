@@ -368,7 +368,8 @@ struct MainWindow::Private {
 		}
 	}
 
-	void updateUrlRequester(const KUrl& url) {
+	void spreadCurrentDirUrl(const KUrl& url) {
+		mContextManager->setCurrentDirUrl(url);
 		mUrlRequester->setUrl(url);
 		mGoUpAction->setEnabled(url.path() != "/");
 	}
@@ -597,7 +598,7 @@ void MainWindow::openDirUrl(const KUrl& url) {
 		return;
 	}
 	d->mDirModel->dirLister()->openUrl(url);
-	d->updateUrlRequester(url);
+	d->spreadCurrentDirUrl(url);
 	d->mDocumentView->reset();
 }
 
@@ -656,7 +657,7 @@ void MainWindow::slotPartCompleted() {
 	}
 
 	d->mDirModel->dirLister()->openUrl(dirUrl);
-	d->updateUrlRequester(dirUrl);
+	d->spreadCurrentDirUrl(dirUrl);
 }
 
 
