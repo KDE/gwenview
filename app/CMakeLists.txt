@@ -9,6 +9,7 @@ set(gwenview_SRCS
 	mainwindow.cpp
 	savebar.cpp
 	sidebar.cpp
+	thumbnailviewhelper.cpp
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})

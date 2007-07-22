@@ -21,15 +21,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef THUMBNAILVIEWHELPER_H
 #define THUMBNAILVIEWHELPER_H
 
-#include "gwenviewlib_export.h"
-
 // Qt
 #include <QObject>
 
 // KDE
 
 // Local
-#include "abstractthumbnailviewhelper.h"
+#include <lib/abstractthumbnailviewhelper.h>
 
 class SortedDirModel;
 class QPixmap;
@@ -41,7 +39,7 @@ namespace Gwenview {
 class SortedDirModel;
 
 class ThumbnailViewHelperPrivate;
-class GWENVIEWLIB_EXPORT ThumbnailViewHelper : public QObject, public AbstractThumbnailViewHelper {
+class ThumbnailViewHelper : public QObject, public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:
 	ThumbnailViewHelper(SortedDirModel* model);

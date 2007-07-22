@@ -57,6 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "infocontextmanageritem.h"
 #include "savebar.h"
 #include "sidebar.h"
+#include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
@@ -64,7 +65,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
-#include <lib/thumbnailviewhelper.h>
 #include <lib/transformimageoperation.h>
 
 namespace Gwenview {
