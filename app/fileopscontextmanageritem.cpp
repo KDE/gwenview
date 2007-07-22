@@ -51,7 +51,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	
 	d->mShowPropertiesAction = new QAction(this);
 	d->mShowPropertiesAction->setText(i18n("Properties"));
-	d->mShowPropertiesAction->setIcon(KIcon("file-properties"));
+	d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
 	connect(d->mShowPropertiesAction, SIGNAL(triggered()),
 		SLOT(showProperties()) );
 }
