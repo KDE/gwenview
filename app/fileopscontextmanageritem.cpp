@@ -72,6 +72,11 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
+QAction* FileOpsContextManagerItem::showPropertiesAction() const {
+	return d->mShowPropertiesAction;
+}
+
+
 void FileOpsContextManagerItem::updateSideBarContent() {
 	if (!d->mSideBar->isVisible()) {
 		return;

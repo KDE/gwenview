@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kpropertiesdialog.h>
 
 // Local
+#include "fileopscontextmanageritem.h"
 #include <lib/documentfactory.h>
 #include <lib/sorteddirmodel.h>
 
@@ -44,6 +45,7 @@ namespace Gwenview {
 
 struct ThumbnailViewHelperPrivate {
 	SortedDirModel* mModel;
+	FileOpsContextManagerItem* mFileOpsContextManagerItem;
 };
 
 
@@ -88,6 +90,11 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 }
 
 
+void ThumbnailViewHelper::setFileOpsContextManagerItem(FileOpsContextManagerItem* item) {
+	d->mFileOpsContextManagerItem = item;
+}
+
+
 void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& pixmap) {
 	Q_ASSERT(!item.isNull());
 	QModelIndex index = d->mModel->indexForItem(item);
@@ -101,16 +108,8 @@ void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& p
 
 void ThumbnailViewHelper::showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list) {
 	KMenu popup(parent);
-	QAction* propertiesAction = popup.addAction(i18n("Properties"));
-
-	QAction* action = popup.exec(QCursor::pos());
-	if (action == propertiesAction) {
-		KFileItemList itemList;
-		Q_FOREACH(KFileItem item, list) {
-			itemList << &item;
-		}
-		KPropertiesDialog::showDialog(itemList, parent);
-	}
+	popup.addAction(d->mFileOpsContextManagerItem->showPropertiesAction());
+	popup.exec(QCursor::pos());
 }
 
 

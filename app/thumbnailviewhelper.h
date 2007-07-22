@@ -37,6 +37,7 @@ class KFileItem;
 namespace Gwenview {
 
 class SortedDirModel;
+class FileOpsContextManagerItem;
 
 class ThumbnailViewHelperPrivate;
 class ThumbnailViewHelper : public QObject, public AbstractThumbnailViewHelper {
@@ -50,6 +51,8 @@ public:
 	virtual void showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list);
 
 	virtual void showContextMenuForViewport(QWidget* parent);
+
+	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
 private Q_SLOTS:
 	void setItemPreview(const KFileItem&, const QPixmap&);

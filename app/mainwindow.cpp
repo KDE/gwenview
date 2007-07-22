@@ -113,6 +113,7 @@ struct MainWindow::Private {
 	QToolButton* mGoUpButton;
 	KUrlRequester* mUrlRequester;
 	ThumbnailView* mThumbnailView;
+	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
@@ -180,8 +181,8 @@ struct MainWindow::Private {
 		// mThumbnailView
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
-		ThumbnailViewHelper* helper = new ThumbnailViewHelper(mDirModel);
-		mThumbnailView->setThumbnailViewHelper(helper);
+		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel);
+		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(activated(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
@@ -311,11 +312,12 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
-		AbstractContextManagerItem* item;
-		item = new InfoContextManagerItem(mContextManager);
-		mContextManager->addItem(item);
-		item = new FileOpsContextManagerItem(mContextManager);
-		mContextManager->addItem(item);
+
+		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
+
+		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
+		mContextManager->addItem(fileOpsItem);
+		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
 	}
 
 

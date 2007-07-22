@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractcontextmanageritem.h"
 
+class QAction;
+
 namespace Gwenview {
 
 
@@ -40,6 +42,8 @@ public:
 
 	virtual void setImageView(ImageViewPart*) {}
 	virtual void setSideBar(SideBar* sideBar);
+
+	QAction* showPropertiesAction() const;
 
 private Q_SLOTS:
 	void updateSideBarContent();
