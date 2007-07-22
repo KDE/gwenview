@@ -106,9 +106,19 @@ void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& p
 }
 
 
+inline void addIfEnabled(KMenu& popup, QAction* action) {
+	if (action->isEnabled()) {
+		popup.addAction(action);
+	}
+}
+
+
 void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	KMenu popup(parent);
-	popup.addAction(d->mFileOpsContextManagerItem->showPropertiesAction());
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->trashAction());
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->delAction());
+	popup.addSeparator();
+	addIfEnabled(popup, d->mFileOpsContextManagerItem->showPropertiesAction());
 	popup.exec(QCursor::pos());
 }
 
