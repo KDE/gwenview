@@ -21,19 +21,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef ABSTRACTCONTEXTMANAGERITEM_H
 #define ABSTRACTCONTEXTMANAGERITEM_H
 
+// Qt
+#include <QObject>
+
 class KFileItemList;
 
 namespace Gwenview {
 
+class ContextManager;
 class ImageViewPart;
 class SideBar;
 
-class AbstractContextManagerItem {
+class AbstractContextManagerItemPrivate;
+class AbstractContextManagerItem : public QObject {
+	Q_OBJECT
 public:
-	virtual ~AbstractContextManagerItem() {}
+	AbstractContextManagerItem(ContextManager*);
+	virtual ~AbstractContextManagerItem();
+
 	virtual void setSideBar(SideBar*) = 0;
-	virtual void updateSideBar(const KFileItemList&) = 0;
 	virtual void setImageView(ImageViewPart*) = 0;
+
+	ContextManager* contextManager() const;
+
+private:
+	AbstractContextManagerItemPrivate * const d;
 };
 
 } // namespace

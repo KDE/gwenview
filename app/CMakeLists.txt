@@ -1,5 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 set(gwenview_SRCS
+	abstractcontextmanageritem.cpp
 	contextmanager.cpp
 	documentview.cpp
 	main.cpp

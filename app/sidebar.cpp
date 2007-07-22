@@ -83,4 +83,10 @@ QSize SideBar::sizeHint() const {
 }
 
 
+void SideBar::showEvent(QShowEvent* event) {
+	aboutToShow();
+	QFrame::showEvent(event);
+}
+
+
 } // namespace

@@ -21,9 +21,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define CONTEXTMANAGER_H
 
 // Qt
+#include <QList>
 #include <QObject>
 
-class KFileItemList;
+class KFileItem;
 
 namespace Gwenview {
 
@@ -45,14 +46,20 @@ public:
 
 	void addItem(AbstractContextManagerItem* item);
 
-	void updateSideBar(const KFileItemList& itemList);
+	void setSelection(const QList<KFileItem>& itemList);
+
+	QList<KFileItem> selection() const;
 
 	void setSideBar(SideBar*);
 
 	void setImageView(ImageViewPart*);
 
+Q_SIGNALS:
+	void selectionChanged();
+
 private:
 	QList<AbstractContextManagerItem*> mList;
+	QList<KFileItem> mSelection;
 	SideBar* mSideBar;
 };
 

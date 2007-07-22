@@ -310,7 +310,7 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
-		AbstractContextManagerItem* item = new SelectionContextManagerItem();
+		AbstractContextManagerItem* item = new SelectionContextManagerItem(mContextManager);
 		mContextManager->addItem(item);
 	}
 
@@ -618,27 +618,21 @@ void MainWindow::slotSetStatusBarText(const QString& message) {
 
 void MainWindow::toggleSideBar() {
 	d->mSideBar->setVisible(!d->mSideBar->isVisible());
-	if (d->mSideBar->isVisible()) {
-		updateSideBar();
-	}
 	d->updateToggleSideBarAction();
 }
 
 
-void MainWindow::updateSideBar() {
-	if (!d->mSideBar->isVisible()) {
-		return;
-	}
+void MainWindow::updateContextManager() {
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
 	QModelIndexList indexList = selection.indexes();
 
-	KFileItemList itemList;
+	QList<KFileItem> itemList;
 	Q_FOREACH(QModelIndex index, indexList) {
 		KFileItem* item = d->mDirModel->itemForIndex(index);
-		itemList << item;
+		itemList << *item;
 	}
 
-	d->mContextManager->updateSideBar(itemList);
+	d->mContextManager->setSelection(itemList);
 }
 
 void MainWindow::slotPartCompleted() {
@@ -662,7 +656,7 @@ void MainWindow::slotPartCompleted() {
 
 void MainWindow::slotSelectionChanged() {
 	openSelectedDocument();
-	updateSideBar();
+	updateContextManager();
 	d->updateActions();
 	updatePreviousNextActions();
 	d->spreadCurrentUrl();

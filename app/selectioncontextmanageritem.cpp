@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include "contextmanager.h"
 #include "sidebar.h"
 #include <lib/imageviewpart.h>
 #include <lib/document.h>
@@ -35,7 +36,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << k_funcinfo << x << endl
+#else
+#define LOG(x) ;
+#endif
+
 struct SelectionContextManagerItemPrivate {
+	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
 	QWidget* mOneFileWidget;
@@ -46,17 +57,24 @@ struct SelectionContextManagerItemPrivate {
 	Document::Ptr mDocument;
 };
 
-SelectionContextManagerItem::SelectionContextManagerItem()
-: AbstractContextManagerItem()
+SelectionContextManagerItem::SelectionContextManagerItem(ContextManager* manager)
+: AbstractContextManagerItem(manager)
 , d(new SelectionContextManagerItemPrivate) {
 	d->mImageView = 0;
+	d->mSideBar = 0;
+	connect(contextManager(), SIGNAL(selectionChanged()),
+		SLOT(updateSideBarContent()) );
 }
 
 SelectionContextManagerItem::~SelectionContextManagerItem() {
 	delete d;
 }
 
+
 void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
+	d->mSideBar = sideBar;
+	connect(sideBar, SIGNAL(aboutToShow()),
+		SLOT(updateSideBarContent()) );
 	d->mOneFileWidget = new QWidget();
 
 	d->mOneFileImageLabel = new QLabel(d->mOneFileWidget);
@@ -78,7 +96,16 @@ void SelectionContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mGroup->hide();
 }
 
-void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
+
+void SelectionContextManagerItem::updateSideBarContent() {
+	LOG("updateSideBarContent");
+	if (!d->mSideBar->isVisible()) {
+		LOG("updateSideBarContent: not visible, not updating");
+		return;
+	}
+	LOG("updateSideBarContent: really updating");
+
+	QList<KFileItem> itemList = contextManager()->selection();
 	if (itemList.count() == 0) {
 		d->mGroup->hide();
 		// "Garbage collect" document
@@ -95,21 +122,23 @@ void SelectionContextManagerItem::updateSideBar(const KFileItemList& itemList) {
 	fillMultipleItemsGroup(itemList);
 }
 
-void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
-	QString fileSize = KGlobal::locale()->formatByteSize(item->size());
+void SelectionContextManagerItem::fillOneFileGroup(const KFileItem& item) {
+	QString fileSize = KGlobal::locale()->formatByteSize(item.size());
 	d->mOneFileTextLabel->setText(
-		i18n("%1\n%2\n%3", item->name(), item->timeString(), fileSize)
+		i18n("%1\n%2\n%3", item.name(), item.timeString(), fileSize)
 		);
 
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
-	if (item->isDir()) {
+	if (item.isDir()) {
 		d->mOneFileImageLabel->hide();
 	} else {
-		d->mDocument = DocumentFactory::instance()->load(item->url());
-		connect(d->mDocument.data(), SIGNAL(imageRectUpdated()), SLOT(updatePreview()) );
-		connect(d->mDocument.data(), SIGNAL(loaded()), SLOT(updatePreview()) );
+		d->mDocument = DocumentFactory::instance()->load(item.url());
+		connect(d->mDocument.data(), SIGNAL(imageRectUpdated()),
+			SLOT(updatePreview()) );
+		connect(d->mDocument.data(), SIGNAL(loaded()),
+			SLOT(updatePreview()) );
 		// If it's already loaded, trigger updatePreview ourself
 		if (d->mDocument->isLoaded()) {
 			updatePreview();
@@ -117,13 +146,13 @@ void SelectionContextManagerItem::fillOneFileGroup(const KFileItem* item) {
 	}
 }
 
-void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
+void SelectionContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
 	// "Garbage collect" document
 	d->mDocument = 0;
 
 	int folderCount = 0, fileCount = 0;
-	Q_FOREACH(KFileItem* item, itemList) {
-		if (item->isDir()) {
+	Q_FOREACH(KFileItem item, itemList) {
+		if (item.isDir()) {
 			folderCount++;
 		} else {
 			fileCount++;
@@ -141,6 +170,7 @@ void SelectionContextManagerItem::fillMultipleItemsGroup(const KFileItemList& it
 	d->mMultipleFilesLabel->show();
 }
 
+// FIXME: Remove?
 void SelectionContextManagerItem::setImageView(ImageViewPart* imageView) {
 	if (d->mImageView) {
 		disconnect(d->mImageView, 0, this, 0);

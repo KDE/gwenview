@@ -17,43 +17,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef SELECTIONCONTEXTMANAGERITEM_H
-#define SELECTIONCONTEXTMANAGERITEM_H
-
-// Qt
-#include <QList>
-#include <QObject>
+#include "abstractcontextmanageritem.moc"
 
 // Local
-#include "abstractcontextmanageritem.h"
-
-class KFileItem;
+#include "contextmanager.h"
 
 namespace Gwenview {
 
-class SelectionContextManagerItemPrivate;
-
-class SelectionContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
-public:
-	SelectionContextManagerItem(ContextManager*);
-	~SelectionContextManagerItem();
-
-	virtual void setImageView(ImageViewPart*);
-	virtual void setSideBar(SideBar* sideBar);
-
-private Q_SLOTS:
-	void updatePreview();
-	void updateSideBarContent();
-
-private:
-	void fillOneFileGroup(const KFileItem& item);
-
-	void fillMultipleItemsGroup(const QList<KFileItem>& itemList);
-
-	SelectionContextManagerItemPrivate * const d;
+struct AbstractContextManagerItemPrivate {
+	ContextManager* mContextManager;
 };
 
-} // namespace
+AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)
+: QObject(manager)
+, d(new AbstractContextManagerItemPrivate) {
+	d->mContextManager = manager;
+}
 
-#endif /* SELECTIONCONTEXTMANAGERITEM_H */
+
+AbstractContextManagerItem::~AbstractContextManagerItem() {
+	delete d;
+}
+
+
+ContextManager* AbstractContextManagerItem::contextManager() const {
+	return d->mContextManager;
+}
+
+} // namespace

@@ -19,6 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "contextmanager.moc"
 
+// KDE
+#include <kfileitem.h>
+
 // Local
 #include "sidebar.h"
 #include "abstractcontextmanageritem.h"
@@ -48,10 +51,14 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 }
 
 
-void ContextManager::updateSideBar(const KFileItemList& itemList) {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		item->updateSideBar(itemList);
-	}
+void ContextManager::setSelection(const QList<KFileItem>& list) {
+	mSelection = list;
+	selectionChanged();
+}
+
+
+QList<KFileItem> ContextManager::selection() const {
+	return mSelection;
 }
 
 

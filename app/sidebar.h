@@ -52,6 +52,12 @@ public:
 
 	virtual QSize sizeHint() const;
 
+Q_SIGNALS:
+	void aboutToShow();
+
+protected:
+	virtual void showEvent(QShowEvent*);
+
 private:
 	struct Private;
 	std::auto_ptr<Private> d;
