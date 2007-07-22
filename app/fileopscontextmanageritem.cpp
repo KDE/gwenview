@@ -155,9 +155,9 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	d->mContextManagerItem = this;
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(updateActions()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(updateActions()) );
 
 	d->mTrashAction = new QAction(this);
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
@@ -169,7 +169,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	d->mDelAction = new QAction(this);
 	d->mDelAction->setText(i18n("Delete"));
 	d->mDelAction->setIcon(KIcon("edit-delete"));
-	d->mDelAction->setShortcut(Qt::Key_Shift + Qt::Key_Delete);
+	d->mDelAction->setShortcut(Qt::ShiftModifier | Qt::Key_Delete);
 	connect(d->mDelAction, SIGNAL(triggered()),
 		SLOT(del()) );
 
@@ -195,30 +195,46 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
+QAction* FileOpsContextManagerItem::trashAction() const {
+	return d->mTrashAction;
+}
+
+
+QAction* FileOpsContextManagerItem::delAction() const {
+	return d->mDelAction;
+}
+
+
 QAction* FileOpsContextManagerItem::showPropertiesAction() const {
 	return d->mShowPropertiesAction;
 }
 
 
-void FileOpsContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar->isVisible()) {
-		return;
-	}
-
+void FileOpsContextManagerItem::updateActions() {
 	QList<KFileItem> list = contextManager()->selection();
 	d->mGroup->clear();
 	bool selectionNotEmpty = list.count() > 0;
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 
-	if (selectionNotEmpty) {
-		d->mGroup->addAction(d->mTrashAction);
-		d->mGroup->addAction(d->mDelAction);
-	} else {
-		// TODO: Insert current dir actions
+	updateSideBarContent();
+}
+
+
+inline void addIfEnabled(SideBarGroup* group, QAction* action) {
+	if (action->isEnabled()) {
+		group->addAction(action);
+	}
+}
+
+void FileOpsContextManagerItem::updateSideBarContent() {
+	if (!d->mSideBar->isVisible()) {
+		return;
 	}
 
-	d->mGroup->addAction(d->mShowPropertiesAction);
+	addIfEnabled(d->mGroup, d->mTrashAction);
+	addIfEnabled(d->mGroup, d->mDelAction);
+	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
 }
 
 

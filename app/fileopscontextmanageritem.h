@@ -43,9 +43,12 @@ public:
 	virtual void setImageView(ImageViewPart*) {}
 	virtual void setSideBar(SideBar* sideBar);
 
+	QAction* trashAction() const;
+	QAction* delAction() const;
 	QAction* showPropertiesAction() const;
 
 private Q_SLOTS:
+	void updateActions();
 	void updateSideBarContent();
 	void trash();
 	void del();
