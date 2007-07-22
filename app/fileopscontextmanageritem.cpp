@@ -219,19 +219,16 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 
 	d->mCopyToAction = new QAction(this);
 	d->mCopyToAction->setText(i18nc("Verb", "Copy To"));
-	d->mCopyToAction->setIcon(KIcon("file-copy"));
 	connect(d->mCopyToAction, SIGNAL(triggered()),
 		SLOT(copyTo()) );
 
 	d->mMoveToAction = new QAction(this);
 	d->mMoveToAction->setText(i18nc("Verb", "Move To"));
-	d->mMoveToAction->setIcon(KIcon("file-copy"));
 	connect(d->mMoveToAction, SIGNAL(triggered()),
 		SLOT(moveTo()) );
 
 	d->mLinkToAction = new QAction(this);
 	d->mLinkToAction->setText(i18nc("Verb", "Link To"));
-	d->mLinkToAction->setIcon(KIcon("file-copy"));
 	connect(d->mLinkToAction, SIGNAL(triggered()),
 		SLOT(linkTo()) );
 
