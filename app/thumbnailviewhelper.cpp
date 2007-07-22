@@ -106,22 +106,11 @@ void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& p
 }
 
 
-void ThumbnailViewHelper::showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list) {
+void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	KMenu popup(parent);
 	popup.addAction(d->mFileOpsContextManagerItem->showPropertiesAction());
 	popup.exec(QCursor::pos());
 }
 
-
-void ThumbnailViewHelper::showContextMenuForViewport(QWidget* parent) {
-	KMenu popup(parent);
-	QAction* propertiesAction = popup.addAction(i18n("Properties"));
-
-	QAction* action = popup.exec(QCursor::pos());
-	if (action == propertiesAction) {
-		KUrl url = d->mModel->dirLister()->url();
-		KPropertiesDialog::showDialog(url, parent);
-	}
-}
 
 } // namespace

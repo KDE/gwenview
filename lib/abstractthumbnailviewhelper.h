@@ -36,9 +36,7 @@ public:
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size) = 0;
 
-	virtual void showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list) = 0;
-
-	virtual void showContextMenuForViewport(QWidget* parent) = 0;
+	virtual void showContextMenu(QWidget* parent) = 0;
 };
 
 } // namespace

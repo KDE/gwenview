@@ -305,19 +305,7 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 }
 
 void ThumbnailView::showContextMenu() {
-	QModelIndexList selection = selectionModel()->selectedIndexes();
-	QList<KFileItem> list;
-	Q_FOREACH(QModelIndex index, selection) {
-		QVariant data = index.data(KDirModel::FileItemRole);
-		KFileItem item = qvariant_cast<KFileItem>(data);
-		list.append(item);
-	}
-
-	if (list.size() > 0) {
-		d->mThumbnailViewHelper->showContextMenuForItems(this, list);
-	} else {
-		d->mThumbnailViewHelper->showContextMenuForViewport(this);
-	}
+	d->mThumbnailViewHelper->showContextMenu(this);
 }
 
 } // namespace

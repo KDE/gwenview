@@ -48,9 +48,7 @@ public:
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size);
 
-	virtual void showContextMenuForItems(QWidget* parent, const QList<KFileItem>& list);
-
-	virtual void showContextMenuForViewport(QWidget* parent);
+	virtual void showContextMenu(QWidget* parent);
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
