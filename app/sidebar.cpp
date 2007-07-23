@@ -46,6 +46,8 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 	label->setFont(font);
 	label->setText(title);
 
+	layout()->setMargin(4);
+	layout()->setSpacing(0);
 	layout()->addWidget(label);
 	clear();
 }
@@ -68,6 +70,7 @@ void SideBarGroup::clear() {
 	d->mContainer = new QWidget(this);
 	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
 	containerLayout->setMargin(0);
+	containerLayout->setSpacing(0);
 
 	layout()->addWidget(d->mContainer);
 }
@@ -94,6 +97,8 @@ SideBar::SideBar(QWidget* parent)
 	setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
 	d->mLayout = new QVBoxLayout(this);
+	d->mLayout->setMargin(4);
+	d->mLayout->setSpacing(4);
 	d->mLayout->addStretch();
 }
 
