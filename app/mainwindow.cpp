@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QFrame>
 #include <QGridLayout>
+#include <QInputDialog>
 #include <QLabel>
 #include <QListView>
 #include <QTimer>
@@ -63,6 +64,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/mimetypeutils.h>
+#include <lib/resizeimageoperation.h>
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
@@ -133,6 +135,7 @@ struct MainWindow::Private {
 	QAction* mRotateRightAction;
 	QAction* mMirrorAction;
 	QAction* mFlipAction;
+	QAction* mResizeAction;
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	QAction* mToggleSlideShowAction;
@@ -298,6 +301,11 @@ struct MainWindow::Private {
 		connect(mFlipAction, SIGNAL(triggered()),
 			mWindow, SLOT(flip()) );
 
+		mResizeAction = actionCollection->addAction("resize");
+		mResizeAction->setText(i18n("Resize"));
+		connect(mResizeAction, SIGNAL(triggered()),
+			mWindow, SLOT(resizeImage()) );
+
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		connect(mToggleSideBarAction, SIGNAL(triggered()),
@@ -317,7 +325,7 @@ struct MainWindow::Private {
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
 		QList<QAction*> actionList;
-		actionList << mRotateLeftAction << mRotateRightAction;
+		actionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction;
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, actionList));
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
@@ -835,6 +843,21 @@ void MainWindow::mirror() {
 
 void MainWindow::flip() {
 	TransformImageOperation op(VFLIP);
+	d->applyImageOperation(&op);
+}
+
+
+void MainWindow::resizeImage() {
+	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+	doc->waitUntilLoaded();
+	int size = qMax(doc->image().width(), doc->image().height());
+	bool ok = false;
+	size = QInputDialog::getInteger(this, i18n("Image Resizing"), i18n("Enter the new size of the image:"), size, 0, 10000,
+		10 /* step */, &ok);
+	if (!ok) {
+		return;
+	}
+	ResizeImageOperation op(size);
 	d->applyImageOperation(&op);
 }
 
