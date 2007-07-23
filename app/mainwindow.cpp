@@ -54,6 +54,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
+#include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #include "savebar.h"
 #include "sidebar.h"
@@ -314,6 +315,10 @@ struct MainWindow::Private {
 		mContextManager->setSideBar(mSideBar);
 
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
+
+		QList<QAction*> actionList;
+		actionList << mRotateLeftAction << mRotateRightAction;
+		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, actionList));
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
 		mContextManager->addItem(fileOpsItem);

@@ -4,6 +4,7 @@ set(gwenview_SRCS
 	contextmanager.cpp
 	documentview.cpp
 	infocontextmanageritem.cpp
+	imageopscontextmanageritem.cpp
 	fileopscontextmanageritem.cpp
 	main.cpp
 	mainwindow.cpp
