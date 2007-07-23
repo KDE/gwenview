@@ -61,6 +61,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
+#include <lib/cropdialog.h>
+#include <lib/cropimageoperation.h>
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/mimetypeutils.h>
@@ -136,6 +138,7 @@ struct MainWindow::Private {
 	QAction* mMirrorAction;
 	QAction* mFlipAction;
 	QAction* mResizeAction;
+	QAction* mCropAction;
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	QAction* mToggleSlideShowAction;
@@ -306,6 +309,11 @@ struct MainWindow::Private {
 		connect(mResizeAction, SIGNAL(triggered()),
 			mWindow, SLOT(resizeImage()) );
 
+		mCropAction = actionCollection->addAction("crop");
+		mCropAction->setText(i18n("Crop"));
+		connect(mCropAction, SIGNAL(triggered()),
+			mWindow, SLOT(crop()) );
+
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		connect(mToggleSideBarAction, SIGNAL(triggered()),
@@ -325,7 +333,7 @@ struct MainWindow::Private {
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
 		QList<QAction*> actionList;
-		actionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction;
+		actionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction;
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, actionList));
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
@@ -858,6 +866,19 @@ void MainWindow::resizeImage() {
 		return;
 	}
 	ResizeImageOperation op(size);
+	d->applyImageOperation(&op);
+}
+
+
+void MainWindow::crop() {
+	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+	doc->waitUntilLoaded();
+	CropDialog dialog(this);
+	dialog.setImageSize(doc->image().size());
+	if (!dialog.exec()) {
+		return;
+	}
+	CropImageOperation op(dialog.cropRect());
 	d->applyImageOperation(&op);
 }
 

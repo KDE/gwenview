@@ -2,6 +2,8 @@ set(gwenviewlib_SRCS
 	abstractdocumentimpl.cpp
 	abstractimageoperation.cpp
     archiveutils.cpp
+	cropdialog.cpp
+	cropimageoperation.cpp
 	document.cpp
 	documentfactory.cpp
 	documentloadedimpl.cpp
@@ -21,6 +23,10 @@ set(gwenviewlib_SRCS
 	transupp.c
 	transformimageoperation.cpp
     )
+
+kde4_add_ui_files(gwenviewlib_SRCS
+	cropdialog.ui
+	)
 
 kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
 set_target_properties(gwenviewlib PROPERTIES VERSION 1.0.0 SOVERSION 1 )

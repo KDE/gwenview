@@ -95,6 +95,7 @@ private Q_SLOTS:
 	void mirror();
 	void flip();
 	void resizeImage();
+	void crop();
 
 	void generateThumbnailForUrl(const KUrl&);
 
