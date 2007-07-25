@@ -438,6 +438,8 @@ struct MainWindow::Private {
 		mRotateRightAction->setEnabled(canModify);
 		mMirrorAction->setEnabled(canModify);
 		mFlipAction->setEnabled(canModify);
+		mResizeAction->setEnabled(canModify);
+		mCropAction->setEnabled(canModify);
 	}
 
 	void updateSlideShowAction() {
