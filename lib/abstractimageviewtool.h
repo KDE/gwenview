@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QMouseEvent;
 class QPainter;
 
 namespace Gwenview {
@@ -44,6 +45,10 @@ public:
 	ImageView* imageView() const;
 
 	virtual void paint(QPainter*) = 0;
+
+	virtual bool mousePressEvent(QMouseEvent*) { return false; }
+	virtual bool mouseMoveEvent(QMouseEvent*) { return false; }
+	virtual bool mouseReleaseEvent(QMouseEvent*) { return false; }
 
 private:
 	AbstractImageViewToolPrivate * const d;

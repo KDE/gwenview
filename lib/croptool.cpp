@@ -22,11 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "croptool.h"
 
 // Qt
+#include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
 #include <QRect>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "imageview.h"
@@ -37,6 +39,7 @@ namespace Gwenview {
 
 
 enum CropHandle {
+	CH_None,
 	CH_Top = 1,
 	CH_Left = 2,
 	CH_Right = 4,
@@ -52,22 +55,23 @@ struct CropToolPrivate {
 	CropTool* mCropTool;
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
+	CropHandle mMovingHandle;
 
 	QRect handleViewportRect(CropHandle handle) {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
 		int left, top;
 		if (handle & CH_Top) {
-			top = viewportCropRect.top() - HANDLE_SIZE;
+			top = viewportCropRect.top() - HANDLE_SIZE / 2;
 		} else if (handle & CH_Bottom) {
-			top = viewportCropRect.bottom();
+			top = viewportCropRect.bottom() - HANDLE_SIZE / 2;
 		} else {
 			top = viewportCropRect.top() + (viewportCropRect.height() - HANDLE_SIZE) / 2;
 		}
 
 		if (handle & CH_Left) {
-			left = viewportCropRect.left() - HANDLE_SIZE;
+			left = viewportCropRect.left() - HANDLE_SIZE / 2;
 		} else if (handle & CH_Right) {
-			left = viewportCropRect.right();
+			left = viewportCropRect.right() - HANDLE_SIZE / 2;
 		} else {
 			left = viewportCropRect.left() + (viewportCropRect.width() - HANDLE_SIZE) / 2;
 		}
@@ -82,6 +86,7 @@ CropTool::CropTool(QObject* parent)
 , d(new CropToolPrivate) {
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
+	d->mMovingHandle = CH_None;
 }
 
 
@@ -105,5 +110,58 @@ void CropTool::paint(QPainter* painter) {
 		painter->fillRect(rect, Qt::black);
 	}
 }
+
+
+bool CropTool::mousePressEvent(QMouseEvent* event) {
+	Q_ASSERT(d->mMovingHandle == CH_None);
+	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
+		QRect rect = d->handleViewportRect(handle);
+		if (rect.contains(event->pos())) {
+			d->mMovingHandle = handle;
+			break;
+		}
+	}
+
+	if (d->mMovingHandle == CH_None) {
+		return false;
+	}
+
+	return true;
+}
+
+
+bool CropTool::mouseMoveEvent(QMouseEvent* event) {
+	if (d->mMovingHandle == CH_None) {
+		return false;
+	}
+
+	QPoint point = imageView()->mapToImage(event->pos());
+	int posX = point.x(), posY = point.y();
+	if (d->mMovingHandle & CH_Top) {
+		d->mRect.setTop(posY);
+	} else if (d->mMovingHandle & CH_Bottom) {
+		d->mRect.setBottom(posY);
+	}
+	if (d->mMovingHandle & CH_Left) {
+		d->mRect.setLeft(posX);
+	} else if (d->mMovingHandle & CH_Right) {
+		d->mRect.setRight(posX);
+	}
+
+	imageView()->viewport()->update();
+	rectUpdated(d->mRect);
+
+	return true;
+}
+
+
+bool CropTool::mouseReleaseEvent(QMouseEvent*) {
+	if (d->mMovingHandle == CH_None) {
+		return false;
+	}
+	d->mMovingHandle = CH_None;
+	return true;
+}
+
 
 } // namespace

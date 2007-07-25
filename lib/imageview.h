@@ -51,8 +51,10 @@ public:
 	QPoint imageOffset() const;
 
 	QPoint mapToViewport(const QPoint& src);
+	QPoint mapToImage(const QPoint& src);
 
 	QRect mapToViewport(const QRect& src);
+	QRect mapToImage(const QRect& src);
 
 public Q_SLOTS:
 	void setZoomToFit(bool on);
@@ -63,6 +65,10 @@ protected:
 	virtual void resizeEvent(QResizeEvent*);
 
 	virtual void scrollContentsBy(int dx, int dy);
+
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void mouseReleaseEvent(QMouseEvent*);
 
 private Q_SLOTS:
 	void updateFromScaler(int left, int top, const QImage& image);

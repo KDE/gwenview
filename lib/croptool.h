@@ -43,6 +43,10 @@ public:
 
 	virtual void paint(QPainter*);
 
+	virtual bool mousePressEvent(QMouseEvent*);
+	virtual bool mouseMoveEvent(QMouseEvent*);
+	virtual bool mouseReleaseEvent(QMouseEvent*);
+
 Q_SIGNALS:
 	void rectUpdated(const QRect&);
 

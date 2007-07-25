@@ -296,8 +296,57 @@ QPoint ImageView::mapToViewport(const QPoint& src) {
 QRect ImageView::mapToViewport(const QRect& src) {
 	QRect dst(
 		mapToViewport(src.topLeft()),
-		src.size() * d->mZoom);
+		mapToViewport(src.bottomRight())
+	);
 	return dst;
+}
+
+
+QPoint ImageView::mapToImage(const QPoint& src) {
+	QPoint dst = src;
+	
+	dst.rx() += horizontalScrollBar()->value();
+	dst.ry() += verticalScrollBar()->value();
+
+	dst -= imageOffset();
+
+	return QPoint(int(dst.x() / d->mZoom), int(dst.y() / d->mZoom));
+}
+
+
+QRect ImageView::mapToImage(const QRect& src) {
+	QRect dst(
+		mapToImage(src.topLeft()),
+		mapToImage(src.bottomRight())
+	);
+	return dst;
+}
+
+
+void ImageView::mousePressEvent(QMouseEvent* event) {
+	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
+		if (tool->mousePressEvent(event)) {
+			return;
+		}
+	}
+}
+
+
+void ImageView::mouseMoveEvent(QMouseEvent* event) {
+	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
+		if (tool->mouseMoveEvent(event)) {
+			return;
+		}
+	}
+}
+
+
+void ImageView::mouseReleaseEvent(QMouseEvent* event) {
+	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
+		if (tool->mouseReleaseEvent(event)) {
+			return;
+		}
+	}
 }
 
 
