@@ -51,6 +51,7 @@ enum CropHandle {
 struct CropToolPrivate {
 	CropTool* mCropTool;
 	QRect mRect;
+	QList<CropHandle> mCropHandleList;
 
 	QRect handleViewportRect(CropHandle handle) {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
@@ -80,6 +81,7 @@ CropTool::CropTool(QObject* parent)
 : AbstractImageViewTool(parent)
 , d(new CropToolPrivate) {
 	d->mCropTool = this;
+	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 }
 
 
@@ -98,9 +100,7 @@ void CropTool::paint(QPainter* painter) {
 	QRect rect = imageView()->mapToViewport(d->mRect);
 	painter->drawRect(rect);
 
-	QList<CropHandle> lst;
-	lst << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
-	Q_FOREACH(CropHandle handle, lst) {
+	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
 		rect = d->handleViewportRect(handle);
 		painter->fillRect(rect, Qt::black);
 	}
