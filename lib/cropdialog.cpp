@@ -90,10 +90,13 @@ QRect CropDialog::cropRect() const {
 void CropDialog::setImageSize(const QSize& size) {
 	d->leftSpinBox->setMaximum(size.width());
 	d->widthSpinBox->setMaximum(size.width());
-	d->widthSpinBox->setValue(size.width());
 	d->topSpinBox->setMaximum(size.height());
 	d->heightSpinBox->setMaximum(size.height());
-	d->heightSpinBox->setValue(size.height());
+
+	d->leftSpinBox->setValue(size.width() / 3);
+	d->widthSpinBox->setValue(size.width() / 3);
+	d->topSpinBox->setValue(size.height() / 3);
+	d->heightSpinBox->setValue(size.height() / 3);
 }
 
 
