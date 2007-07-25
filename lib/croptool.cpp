@@ -65,8 +65,12 @@ void CropTool::paint(QPainter* painter) {
 		int(d->mRect.height() * zoom)
 	);
 
-	rect.setLeft(rect.left() - imageView()->horizontalScrollBar()->value());
-	rect.setTop(rect.top() - imageView()->verticalScrollBar()->value());
+	QPoint offset = imageView()->imageOffset();
+
+	rect.moveLeft(rect.left() + offset.x() - imageView()->horizontalScrollBar()->value());
+
+	rect.moveTop(rect.top() + offset.y() - imageView()->verticalScrollBar()->value());
+
 	painter->drawRect(rect);
 }
 

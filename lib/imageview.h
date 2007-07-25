@@ -48,6 +48,8 @@ public:
 
 	bool zoomToFit() const;
 
+	QPoint imageOffset() const;
+
 public Q_SLOTS:
 	void setZoomToFit(bool on);
 

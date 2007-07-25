@@ -45,12 +45,6 @@ struct ImageViewPrivate {
 	ImageScaler* mScaler;
 	QList<AbstractImageViewTool*> mToolList;
 
-	QPoint imageOffset() const {
-		int left = qMax( (mViewport->width() - mBuffer.width()) / 2, 0);
-		int top = qMax( (mViewport->height() - mBuffer.height()) / 2, 0);
-
-		return QPoint(left, top);
-	}
 
 	qreal computeZoomToFit() const {
 		int width = mViewport->width();
@@ -137,7 +131,7 @@ void ImageView::startScaler() {
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
-	QPoint offset = d->imageOffset();
+	QPoint offset = imageOffset();
 
 	// Erase pixels around the image
 	QRect imageRect(offset, d->mBuffer.size());
@@ -167,6 +161,13 @@ void ImageView::resizeEvent(QResizeEvent*) {
 		updateScrollBars();
 		startScaler();
 	}
+}
+
+QPoint ImageView::imageOffset() const {
+	int left = qMax( (d->mViewport->width() - d->mBuffer.width()) / 2, 0);
+	int top = qMax( (d->mViewport->height() - d->mBuffer.height()) / 2, 0);
+
+	return QPoint(left, top);
 }
 
 void ImageView::setZoom(qreal zoom) {
@@ -259,7 +260,7 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 		QPainter painter(&d->mBuffer);
 		painter.drawImage(left, top, image);
 	}
-	QPoint offset = d->imageOffset();
+	QPoint offset = imageOffset();
 	d->mViewport->update(
 		offset.x() + left,
 		offset.y() + top,
