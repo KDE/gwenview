@@ -262,4 +262,8 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 }
 
 
+void ImageView::addTool(AbstractImageViewTool*) {
+}
+
+
 } // namespace

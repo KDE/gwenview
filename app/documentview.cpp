@@ -220,4 +220,9 @@ bool DocumentView::isEmpty() const {
 }
 
 
+ImageViewPart* DocumentView::imageViewPart() const {
+	return dynamic_cast<ImageViewPart*>(d->mPart);
+}
+
+
 } // namespace

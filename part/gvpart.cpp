@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/genericfactory.h>
 
 // Local
-#include "imageview.h"
+#include "../lib/imageview.h"
 #include "../lib/documentfactory.h"
 
 //Factory Code
@@ -116,5 +116,10 @@ void GVPart::zoomOut() {
 
 Document::Ptr GVPart::document() {
 	return mDocument;
+}
+
+
+ImageView* GVPart::imageView() const {
+	return mView;
 }
 } // namespace

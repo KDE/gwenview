@@ -32,15 +32,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class ImageView;
 
 class CropDialogPrivate;
 class GWENVIEWLIB_EXPORT CropDialog : public KDialog {
+	Q_OBJECT
 public:
-	CropDialog(QWidget* parent);
+	CropDialog(QWidget* parent, ImageView*);
 	~CropDialog();
 
 	QRect cropRect() const;
 	void setImageSize(const QSize&);
+
+private Q_SLOTS:
+	void updateCropToolRect();
+	void setCropRect(const QRect& rect);
 
 private:
 	CropDialogPrivate* const d;

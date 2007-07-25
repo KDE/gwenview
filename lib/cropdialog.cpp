@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "cropdialog.h"
+#include "cropdialog.moc"
 
 // Qt
 #include <QSpinBox>
@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "klocale.h"
 
 // Local
+#include "croptool.h"
+#include "imageview.h"
 #include "ui_cropdialog.h"
 
 namespace Gwenview {
@@ -35,12 +37,15 @@ namespace Gwenview {
 
 struct CropDialogPrivate : public Ui_CropDialog {
 	QWidget* mWidget;
+	CropTool* mCropTool;
 };
 
 
-CropDialog::CropDialog(QWidget* parent)
+CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 : KDialog(parent)
 , d(new CropDialogPrivate) {
+	d->mCropTool = new CropTool(this);
+	imageView->addTool(d->mCropTool);
 	d->mWidget = new QWidget(this);
 	setMainWidget(d->mWidget);
 	d->setupUi(d->mWidget);
@@ -49,6 +54,18 @@ CropDialog::CropDialog(QWidget* parent)
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Crop"));
 	showButtonSeparator(true);
+
+	connect(d->mCropTool, SIGNAL(rectUpdated(const QRect&)),
+		SLOT(setCropRect(const QRect&)) );
+
+	connect(d->leftSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(updateCropToolRect()) );
+	connect(d->topSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(updateCropToolRect()) );
+	connect(d->widthSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(updateCropToolRect()) );
+	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(updateCropToolRect()) );
 }
 
 
@@ -75,6 +92,19 @@ void CropDialog::setImageSize(const QSize& size) {
 	d->topSpinBox->setMaximum(size.height());
 	d->heightSpinBox->setMaximum(size.height());
 	d->heightSpinBox->setValue(size.height());
+}
+
+
+void CropDialog::setCropRect(const QRect& rect) {
+	d->leftSpinBox->setValue(rect.left());
+	d->topSpinBox->setValue(rect.top());
+	d->widthSpinBox->setValue(rect.width());
+	d->heightSpinBox->setValue(rect.height());
+}
+
+
+void CropDialog::updateCropToolRect() {
+	d->mCropTool->setRect(cropRect());
 }
 
 

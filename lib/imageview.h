@@ -20,19 +20,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef IMAGEVIEW_H
 #define IMAGEVIEW_H
 
+#include "gwenviewlib_export.h"
+
 // Qt
 #include <QAbstractScrollArea>
 
 namespace Gwenview {
 
+class AbstractImageViewTool;
 class ImageScaler;
 
 class ImageViewPrivate;
-class ImageView : public QAbstractScrollArea {
+class GWENVIEWLIB_EXPORT ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
 	ImageView(QWidget* parent);
 	~ImageView();
+
+	void addTool(AbstractImageViewTool*);
 
 	void setImage(const QImage& image);
 

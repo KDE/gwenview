@@ -4,6 +4,7 @@ set(gwenviewlib_SRCS
     archiveutils.cpp
 	cropdialog.cpp
 	cropimageoperation.cpp
+	croptool.cpp
 	document.cpp
 	documentfactory.cpp
 	documentloadedimpl.cpp
@@ -11,6 +12,7 @@ set(gwenviewlib_SRCS
 	fullscreenbar.cpp
 	imagescaler.cpp
 	imageutils.cpp
+	imageview.cpp
 	imageviewpart.cpp
 	jpegcontent.cpp
 	jpegdocumentloadedimpl.cpp

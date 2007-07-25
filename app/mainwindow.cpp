@@ -65,6 +65,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/cropimageoperation.h>
 #include <lib/documentfactory.h>
 #include <lib/fullscreenbar.h>
+#include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/slideshow.h>
@@ -149,6 +150,8 @@ struct MainWindow::Private {
 	MainWindowState mStateBeforeFullScreen;
 
 	KUrl mUrlToSelect;
+
+	CropDialog* mCropDialog;
 
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
@@ -875,13 +878,23 @@ void MainWindow::resizeImage() {
 void MainWindow::crop() {
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
 	doc->waitUntilLoaded();
-	CropDialog dialog(this);
-	dialog.setImageSize(doc->image().size());
-	if (!dialog.exec()) {
-		return;
+	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
+	Q_ASSERT(imageViewPart);
+	d->mCropDialog = new CropDialog(this, imageViewPart->imageView());
+	d->mCropDialog->setImageSize(doc->image().size());
+	d->mCropDialog->show();
+	connect(d->mCropDialog, SIGNAL(finished(int)),
+		SLOT(slotCropDialogFinished(int)) );
+}
+
+
+void MainWindow::slotCropDialogFinished(int result) {
+	if (result == QDialog::Accepted) {
+		CropImageOperation op(d->mCropDialog->cropRect());
+		d->applyImageOperation(&op);
 	}
-	CropImageOperation op(dialog.cropRect());
-	d->applyImageOperation(&op);
+	d->mCropDialog->deleteLater();
+	d->mCropDialog = 0;
 }
 
 

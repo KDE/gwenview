@@ -39,6 +39,8 @@ public:
 
 	virtual Document::Ptr document();
 
+	virtual ImageView* imageView() const;
+
 protected:
 	virtual bool openFile();
 	virtual bool openUrl(const KUrl&);

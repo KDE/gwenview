@@ -31,12 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 class Document;
+class ImageView;
 
 class GWENVIEWLIB_EXPORT ImageViewPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
 public:
 	ImageViewPart(QObject* parent);
 	virtual Document::Ptr document() = 0;
+	virtual ImageView* imageView() const = 0;
 };
 
 } // namespace

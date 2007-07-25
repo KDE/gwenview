@@ -32,6 +32,7 @@ namespace Gwenview {
 
 class ContextManager;
 class DocumentViewPrivate;
+class ImageViewPart;
 
 /**
  * Holds the active document view, or show a message if there is no active
@@ -71,6 +72,12 @@ public:
 	bool currentDocumentIsRasterImage() const;
 
 	bool isEmpty() const;
+
+	/**
+	 * Returns the image view part, if the current part really is an
+	 * ImageViewPart.
+	 */
+	ImageViewPart* imageViewPart() const;
 
 Q_SIGNALS:
 	/**
