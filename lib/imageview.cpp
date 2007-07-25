@@ -271,11 +271,13 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 
 void ImageView::appendTool(AbstractImageViewTool* tool) {
 	d->mToolList.append(tool);
+	d->mViewport->update();
 }
 
 
 void ImageView::removeTool(AbstractImageViewTool* tool) {
 	d->mToolList.removeAll(tool);
+	d->mViewport->update();
 }
 
 
