@@ -50,6 +50,10 @@ public:
 
 	QPoint imageOffset() const;
 
+	QPoint mapToViewport(const QPoint& src);
+
+	QRect mapToViewport(const QRect& src);
+
 public Q_SLOTS:
 	void setZoomToFit(bool on);
 

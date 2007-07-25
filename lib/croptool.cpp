@@ -57,6 +57,8 @@ void CropTool::setRect(const QRect& rect) {
 
 
 void CropTool::paint(QPainter* painter) {
+	QRect rect = imageView()->mapToViewport(d->mRect);
+	/*
 	qreal zoom = imageView()->zoom();
 	QRect rect(
 		int(d->mRect.left() * zoom),
@@ -70,7 +72,7 @@ void CropTool::paint(QPainter* painter) {
 	rect.moveLeft(rect.left() + offset.x() - imageView()->horizontalScrollBar()->value());
 
 	rect.moveTop(rect.top() + offset.y() - imageView()->verticalScrollBar()->value());
-
+	*/
 	painter->drawRect(rect);
 }
 

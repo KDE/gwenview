@@ -281,4 +281,24 @@ void ImageView::removeTool(AbstractImageViewTool* tool) {
 }
 
 
+QPoint ImageView::mapToViewport(const QPoint& src) {
+	QPoint dst(int(src.x() * d->mZoom), int(src.y() * d->mZoom));
+
+	dst += imageOffset();
+
+	dst.rx() -= horizontalScrollBar()->value();
+	dst.ry() -= verticalScrollBar()->value();
+
+	return dst;
+}
+
+
+QRect ImageView::mapToViewport(const QRect& src) {
+	QRect dst(
+		mapToViewport(src.topLeft()),
+		src.size() * d->mZoom);
+	return dst;
+}
+
+
 } // namespace
