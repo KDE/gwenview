@@ -1,6 +1,7 @@
 set(gwenviewlib_SRCS
 	abstractdocumentimpl.cpp
 	abstractimageoperation.cpp
+	abstractimageviewtool.cpp
     archiveutils.cpp
 	cropdialog.cpp
 	cropimageoperation.cpp

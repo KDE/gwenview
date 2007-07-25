@@ -28,7 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 
 // Local
-#include "../lib/imagescaler.h"
+#include "abstractimageviewtool.h"
+#include "imagescaler.h"
 
 
 namespace Gwenview {
@@ -42,6 +43,7 @@ struct ImageViewPrivate {
 	bool mZoomToFit;
 	QImage mBuffer;
 	ImageScaler* mScaler;
+	QList<AbstractImageViewTool*> mToolList;
 
 	QPoint imageOffset() const {
 		int left = qMax( (mViewport->width() - mBuffer.width()) / 2, 0);
@@ -145,6 +147,10 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	}
 
 	painter.drawImage(offset, d->mBuffer);
+
+	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
+		tool->paint(&painter);
+	}
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
@@ -262,7 +268,13 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 }
 
 
-void ImageView::addTool(AbstractImageViewTool*) {
+void ImageView::appendTool(AbstractImageViewTool* tool) {
+	d->mToolList.append(tool);
+}
+
+
+void ImageView::removeTool(AbstractImageViewTool* tool) {
+	d->mToolList.removeAll(tool);
 }
 
 

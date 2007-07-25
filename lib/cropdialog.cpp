@@ -45,7 +45,7 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 : KDialog(parent)
 , d(new CropDialogPrivate) {
 	d->mCropTool = new CropTool(this);
-	imageView->addTool(d->mCropTool);
+	d->mCropTool->setImageView(imageView);
 	d->mWidget = new QWidget(this);
 	setMainWidget(d->mWidget);
 	d->setupUi(d->mWidget);
