@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "imageview.h"
 
-static const int HANDLE_SIZE = 10;
+static const int HANDLE_RADIUS = 5;
 
 namespace Gwenview {
 
@@ -61,22 +61,22 @@ struct CropToolPrivate {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
 		int left, top;
 		if (handle & CH_Top) {
-			top = viewportCropRect.top() - HANDLE_SIZE / 2;
+			top = viewportCropRect.top() - HANDLE_RADIUS;
 		} else if (handle & CH_Bottom) {
-			top = viewportCropRect.bottom() - HANDLE_SIZE / 2;
+			top = viewportCropRect.bottom() - HANDLE_RADIUS;
 		} else {
-			top = viewportCropRect.top() + (viewportCropRect.height() - HANDLE_SIZE) / 2;
+			top = viewportCropRect.top() + viewportCropRect.height() / 2 - HANDLE_RADIUS;
 		}
 
 		if (handle & CH_Left) {
-			left = viewportCropRect.left() - HANDLE_SIZE / 2;
+			left = viewportCropRect.left() - HANDLE_RADIUS;
 		} else if (handle & CH_Right) {
-			left = viewportCropRect.right() - HANDLE_SIZE / 2;
+			left = viewportCropRect.right() - HANDLE_RADIUS;
 		} else {
-			left = viewportCropRect.left() + (viewportCropRect.width() - HANDLE_SIZE) / 2;
+			left = viewportCropRect.left() + viewportCropRect.width() / 2 - HANDLE_RADIUS;
 		}
 
-		return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
+		return QRect(left, top, HANDLE_RADIUS * 2 + 1, HANDLE_RADIUS * 2 + 1);
 	}
 };
 
@@ -103,11 +103,24 @@ void CropTool::setRect(const QRect& rect) {
 
 void CropTool::paint(QPainter* painter) {
 	QRect rect = imageView()->mapToViewport(d->mRect);
+
+	QRect imageRect = imageView()->rect();
+
+	QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
+	Q_FOREACH(QRect outerRect, outerRegion.rects()) {
+		painter->fillRect(outerRect, QColor(0, 0, 0, 128));
+	}
+
+	painter->setPen(QPen(Qt::black));
+
+	rect.adjust(0, 0, -1, -1);
 	painter->drawRect(rect);
 
+	painter->setBrush(Qt::gray);
+	painter->setRenderHint(QPainter::Antialiasing);
 	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
 		rect = d->handleViewportRect(handle);
-		painter->fillRect(rect, Qt::black);
+		painter->drawEllipse(rect);
 	}
 }
 
