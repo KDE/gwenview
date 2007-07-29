@@ -84,6 +84,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 	}
 	if (filteredList.size() > 0) {
 		KIO::PreviewJob* job = KIO::filePreview(filteredList, size);
+		job->setIgnoreMaximumSize();
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
 	}
