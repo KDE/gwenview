@@ -35,15 +35,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 /** Space between the item outer rect and the content */
-const int ITEM_MARGIN = 11;
+const int ITEM_MARGIN = 5;
 
-const int DEFAULT_COLUMN_COUNT = 4;
-const int DEFAULT_ROW_COUNT = 3;
-
-const int SELECTION_CORNER_RADIUS = 10;
-const int SELECTION_BORDER_SIZE = 2;
-const int SELECTION_ALPHA1 = 32;
-const int SELECTION_ALPHA2 = 128;
+const int SPACING = 11;
 
 const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
 
@@ -119,19 +113,24 @@ public:
 		}
 
 		// Select colors
-		QColor bgColor, fgColor;
+		QColor bgColor, borderColor, fgColor;
 		if (option.state & QStyle::State_Selected) {
 			bgColor = option.palette.color(cg, QPalette::Highlight);
+			borderColor = bgColor.dark(140);
 			fgColor = option.palette.color(cg, QPalette::HighlightedText);
 		} else {
-			bgColor = option.palette.color(cg, QPalette::Window);
+			bgColor = option.palette.color(cg, QPalette::Window).light(110);
+			borderColor = option.palette.color(cg, QPalette::Window).dark(120);
 			fgColor = option.palette.color(cg, QPalette::Text);
 		}
 
 		// Draw background
+		painter->setPen(borderColor);
 		painter->fillRect(rect, bgColor);
-		painter->setPen(bgColor.dark(140));
-		painter->drawRect(rect);
+
+		QRect borderRect = rect;
+		borderRect.adjust(0, 0, -1, -1);
+		painter->drawRect(borderRect);
 
 		// Draw thumbnail
 		QRect thumbnailRect = QRect(
@@ -216,6 +215,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);
+	setSpacing(SPACING);
 
 	d->mItemDelegate = new PreviewItemDelegate(this);
 	setItemDelegate(d->mItemDelegate);
@@ -246,7 +246,6 @@ void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
 	d->mItemDelegate->clearElidedTextMap();
 	d->mThumbnailGenerationTimer.start();
-	setGridSize(QSize(itemWidth(), itemHeight()));
 }
 
 void ThumbnailView::generateThumbnails() {
