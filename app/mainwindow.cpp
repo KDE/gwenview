@@ -689,9 +689,9 @@ void MainWindow::slotPartCompleted() {
 
 void MainWindow::slotSelectionChanged() {
 	openSelectedDocument();
-	updateContextManager();
 	d->updateActions();
 	updatePreviousNextActions();
+	updateContextManager();
 	d->spreadCurrentUrl();
 }
 
