@@ -10,6 +10,7 @@ set(gwenviewlib_SRCS
 	documentfactory.cpp
 	documentloadedimpl.cpp
 	emptydocumentimpl.cpp
+	expandbutton.cpp
 	fullscreenbar.cpp
 	imagescaler.cpp
 	imageutils.cpp
