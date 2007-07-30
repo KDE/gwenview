@@ -174,6 +174,7 @@ struct MainWindow::Private {
 			mWindow, SLOT(createGUI(KParts::Part*)) );
 
 		QScrollArea* scrollArea = new QScrollArea(mCentralSplitter);
+		scrollArea->setFrameStyle(QFrame::NoFrame);
 		mSideBar = new SideBar(scrollArea);
 		scrollArea->setWidget(mSideBar);
 		scrollArea->setWidgetResizable(true);

@@ -25,11 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QToolButton>
 #include <QVBoxLayout>
 
+// Local
+#include "lib/expandbutton.h"
+
 namespace Gwenview {
 
 
 struct SideBarGroupPrivate {
-	QWidget* mContainer;
+	QFrame* mClosedContainer;
+	QFrame* mContainer;
+	ExpandButton* mTitleButton;
 };
 
 
@@ -38,17 +43,26 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 , d(new SideBarGroupPrivate) {
 	d->mContainer = 0;
 	new QVBoxLayout(this);
-	setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 
-	QLabel* label = new QLabel(this);
-	QFont font(label->font());
+	d->mTitleButton = new ExpandButton(this);
+	d->mTitleButton->setChecked(true);
+	d->mTitleButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	d->mTitleButton->setFixedHeight(d->mTitleButton->sizeHint().height() * 3 / 2);
+	QFont font(d->mTitleButton->font());
 	font.setBold(true);
-	label->setFont(font);
-	label->setText(title);
+	d->mTitleButton->setFont(font);
+	d->mTitleButton->setText(title);
 
-	layout()->setMargin(4);
+	layout()->setMargin(0);
 	layout()->setSpacing(0);
-	layout()->addWidget(label);
+	layout()->addWidget(d->mTitleButton);
+
+	d->mClosedContainer = new QFrame(this);
+	d->mClosedContainer->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+	d->mClosedContainer->hide();
+	d->mClosedContainer->setFixedHeight(d->mClosedContainer->frameWidth() * 2);
+	layout()->addWidget(d->mClosedContainer);
+
 	clear();
 }
 
@@ -67,12 +81,19 @@ void SideBarGroup::addWidget(QWidget* widget) {
 void SideBarGroup::clear() {
 	delete d->mContainer;
 
-	d->mContainer = new QWidget(this);
+	d->mContainer = new QFrame(this);
+	d->mContainer->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+	d->mContainer->setBackgroundRole(QPalette::Base);
 	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
 	containerLayout->setMargin(0);
 	containerLayout->setSpacing(0);
 
 	layout()->addWidget(d->mContainer);
+
+	connect(d->mTitleButton, SIGNAL(toggled(bool)),
+		d->mContainer, SLOT(setVisible(bool)) );
+	connect(d->mTitleButton, SIGNAL(toggled(bool)),
+		d->mClosedContainer, SLOT(setHidden(bool)) );
 }
 
 
@@ -96,8 +117,8 @@ SideBar::SideBar(QWidget* parent)
 	d.reset(new Private);
 
 	d->mLayout = new QVBoxLayout(this);
-	d->mLayout->setMargin(4);
-	d->mLayout->setSpacing(4);
+	d->mLayout->setMargin(0);
+	d->mLayout->setSpacing(0);
 	d->mLayout->addStretch();
 }
 
