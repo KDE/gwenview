@@ -92,9 +92,8 @@ struct SideBar::Private {
 
 
 SideBar::SideBar(QWidget* parent)
-: QFrame(parent) {
+: QWidget(parent) {
 	d.reset(new Private);
-	setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
 	d->mLayout = new QVBoxLayout(this);
 	d->mLayout->setMargin(4);
@@ -125,7 +124,7 @@ QSize SideBar::sizeHint() const {
 
 void SideBar::showEvent(QShowEvent* event) {
 	aboutToShow();
-	QFrame::showEvent(event);
+	QWidget::showEvent(event);
 }
 
 

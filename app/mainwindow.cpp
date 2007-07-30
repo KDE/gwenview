@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QListView>
 #include <QTimer>
 #include <QToolButton>
+#include <QScrollArea>
 #include <QSplitter>
 #include <QSlider>
 
@@ -172,7 +173,10 @@ struct MainWindow::Private {
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGUI(KParts::Part*)) );
 
-		mSideBar = new SideBar(mCentralSplitter);
+		QScrollArea* scrollArea = new QScrollArea(mCentralSplitter);
+		mSideBar = new SideBar(scrollArea);
+		scrollArea->setWidget(mSideBar);
+		scrollArea->setWidgetResizable(true);
 
 		mSlideShow = new SlideShow(mWindow);
 
