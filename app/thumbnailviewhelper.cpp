@@ -42,6 +42,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+const int THUMBNAIL_SIZE = 256;
+
 
 struct ThumbnailViewHelperPrivate {
 	SortedDirModel* mModel;
@@ -61,7 +63,7 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& list, int size) {
+void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& list) {
 	QList<KFileItem> filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
 	Q_FOREACH(KFileItem item, list) {
@@ -70,8 +72,8 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 			doc->waitUntilLoaded();
 			if (doc->isModified()) {
 				QImage image = doc->image();
-				if (image.width() > size || image.height() > size) {
-					image = image.scaled(size, size, Qt::KeepAspectRatio);
+				if (image.width() > THUMBNAIL_SIZE || image.height() > THUMBNAIL_SIZE) {
+					image = image.scaled(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Qt::KeepAspectRatio);
 				}
 				QPainter painter(&image);
 				QPixmap pix = SmallIcon("document-save");
@@ -86,7 +88,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
-		KIO::PreviewJob* job = KIO::filePreview(filteredList, size);
+		KIO::PreviewJob* job = KIO::filePreview(filteredList, THUMBNAIL_SIZE);
 		job->setIgnoreMaximumSize();
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			SLOT(setItemPreview(const KFileItem&, const QPixmap&)));

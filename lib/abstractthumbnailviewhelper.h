@@ -34,7 +34,7 @@ class AbstractThumbnailViewHelper {
 public:
 	virtual ~AbstractThumbnailViewHelper() {}
 
-	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size) = 0;
+	virtual void generateThumbnailsForItems(const QList<KFileItem>& list) = 0;
 
 	virtual void showContextMenu(QWidget* parent) = 0;
 };

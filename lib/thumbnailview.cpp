@@ -226,9 +226,9 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	d->mThumbnailViewHelper = 0;
 	setThumbnailSize(128);
 
-	d->mThumbnailGenerationTimer.setInterval(THUMBNAIL_GENERATION_TIMEOUT);
-	d->mThumbnailGenerationTimer.setSingleShot(true);
-	connect(&d->mThumbnailGenerationTimer, SIGNAL(timeout()), SLOT(generateThumbnails()) );
+	//d->mThumbnailGenerationTimer.setInterval(THUMBNAIL_GENERATION_TIMEOUT);
+	//d->mThumbnailGenerationTimer.setSingleShot(true);
+	//connect(&d->mThumbnailGenerationTimer, SIGNAL(timeout()), SLOT(generateThumbnails()) );
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -244,7 +244,8 @@ ThumbnailView::~ThumbnailView() {
 void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
 	d->mItemDelegate->clearElidedTextMap();
-	d->mThumbnailGenerationTimer.start();
+	setSpacing(SPACING);
+	//d->mThumbnailGenerationTimer.start();
 }
 
 void ThumbnailView::generateThumbnails() {
@@ -264,7 +265,7 @@ void ThumbnailView::generateThumbnails() {
 	}
 
 	Q_ASSERT(d->mThumbnailViewHelper);
-	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview, d->mThumbnailSize);
+	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview);
 }
 
 int ThumbnailView::thumbnailSize() const {
@@ -299,7 +300,7 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 	}
 
 	Q_ASSERT(d->mThumbnailViewHelper);
-	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview, d->mThumbnailSize);
+	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview);
 }
 
 void ThumbnailView::showContextMenu() {

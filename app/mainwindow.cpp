@@ -968,8 +968,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 	QList<KFileItem> list;
 	list << *item;
-	int size = d->mThumbnailSlider->value();
-	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list, size);
+	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list);
 }
 
 

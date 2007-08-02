@@ -46,7 +46,7 @@ public:
 	ThumbnailViewHelper(SortedDirModel* model);
 	~ThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const QList<KFileItem>& list, int size);
+	virtual void generateThumbnailsForItems(const QList<KFileItem>& list);
 
 	virtual void showContextMenu(QWidget* parent);
 
