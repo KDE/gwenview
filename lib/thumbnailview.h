@@ -65,7 +65,6 @@ protected:
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
-	void generateThumbnails();
 	void showContextMenu();
 
 private:

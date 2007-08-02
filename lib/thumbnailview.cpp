@@ -202,7 +202,6 @@ struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
-	QTimer mThumbnailGenerationTimer;
 };
 
 
@@ -226,10 +225,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	d->mThumbnailViewHelper = 0;
 	setThumbnailSize(128);
 
-	//d->mThumbnailGenerationTimer.setInterval(THUMBNAIL_GENERATION_TIMEOUT);
-	//d->mThumbnailGenerationTimer.setSingleShot(true);
-	//connect(&d->mThumbnailGenerationTimer, SIGNAL(timeout()), SLOT(generateThumbnails()) );
-
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
@@ -245,27 +240,6 @@ void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
 	d->mItemDelegate->clearElidedTextMap();
 	setSpacing(SPACING);
-	//d->mThumbnailGenerationTimer.start();
-}
-
-void ThumbnailView::generateThumbnails() {
-	if (!model()) {
-		return;
-	}
-
-	d->mItemDelegate->clearElidedTextMap();
-
-	QList<KFileItem> itemsToPreview;
-	int count = model()->rowCount();
-	for (int pos = 0; pos < count; ++pos) {
-		QModelIndex index = model()->index(pos, 0);
-		QVariant data = index.data(KDirModel::FileItemRole);
-		KFileItem item = qvariant_cast<KFileItem>(data);
-		itemsToPreview.append(item);
-	}
-
-	Q_ASSERT(d->mThumbnailViewHelper);
-	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview);
 }
 
 int ThumbnailView::thumbnailSize() const {
