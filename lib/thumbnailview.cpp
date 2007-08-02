@@ -79,7 +79,9 @@ public:
 		QVariant value = index.data(Qt::DecorationRole);
 		QIcon icon = qvariant_cast<QIcon>(value);
 		QPixmap thumbnail = icon.pixmap(mView->thumbnailSize(), mView->thumbnailSize());
-		thumbnail = thumbnail.scaled(QSize(mView->thumbnailSize(), mView->thumbnailSize()), Qt::KeepAspectRatio);
+		if (thumbnail.width() > mView->thumbnailSize() || thumbnail.height() > mView->thumbnailSize()) {
+			thumbnail = thumbnail.scaled(QSize(mView->thumbnailSize(), mView->thumbnailSize()), Qt::KeepAspectRatio);
+		}
 		QRect rect = option.rect;
 
 #ifdef DEBUG_RECT
@@ -143,7 +145,10 @@ public:
 		if (!item.isDir()) {
 			drawThumbnailBackRect(painter, thumbnailRect);
 		}
-		painter->drawPixmap(thumbnailRect.topLeft(), thumbnail);
+		painter->drawPixmap(
+			thumbnailRect.left() + (thumbnailRect.width() - thumbnail.width()) / 2,
+			thumbnailRect.top() + (thumbnailRect.height() - thumbnail.height()) / 2,
+			thumbnail);
 
 		// Draw text
 		painter->setPen(fgColor);

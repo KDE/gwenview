@@ -68,19 +68,22 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 		if (factory->hasUrl(item.url())) {
 			Document::Ptr doc = factory->load(item.url());
 			doc->waitUntilLoaded();
-			QImage image = doc->image().scaled(size, size, Qt::KeepAspectRatio);
 			if (doc->isModified()) {
+				QImage image = doc->image();
+				if (image.width() > size || image.height() > size) {
+					image = image.scaled(size, size, Qt::KeepAspectRatio);
+				}
 				QPainter painter(&image);
 				QPixmap pix = SmallIcon("document-save");
 				painter.drawPixmap(
 					image.width() - pix.width(),
 					image.height() - pix.height(),
 					pix);
+				setItemPreview(item, QPixmap::fromImage(image));
+				continue;
 			}
-			setItemPreview(item, QPixmap::fromImage(image));
-		} else {
-			filteredList << item;
 		}
+		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
 		KIO::PreviewJob* job = KIO::filePreview(filteredList, size);
