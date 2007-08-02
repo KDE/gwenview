@@ -200,7 +200,7 @@ struct FileOpsContextManagerItemPrivate {
 			break;
 
 		default:
-			kWarning() << "Unknown operation " << operation << endl;
+			kWarning() << "Unknown operation " << operation ;
 			break;
 		}
 	}

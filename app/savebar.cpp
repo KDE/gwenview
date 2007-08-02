@@ -172,7 +172,7 @@ void SaveBar::triggerAction(const QString& action) {
 		Q_ASSERT(pos < lst.size());
 		goToUrl(lst[pos]);
 	} else {
-		kWarning() << "Unknown action: " << action << endl;
+		kWarning() << "Unknown action: " << action ;
 	}
 }
 

@@ -35,7 +35,7 @@ namespace Gwenview {
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << k_funcinfo << x << endl
+#define LOG(x) kDebug() << k_funcinfo << x
 #else
 #define LOG(x) ;
 #endif

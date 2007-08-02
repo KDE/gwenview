@@ -74,7 +74,7 @@ void inmem_init_source(j_decompress_ptr cinfo) {
  */
 int inmem_fill_input_buffer(j_decompress_ptr cinfo) {
 	static JOCTET fakeEOI[2]={ JOCTET(0xFF), JOCTET(JPEG_EOI)};
-	kWarning() << k_funcinfo << " Image is incomplete" << endl;
+	kWarning() << k_funcinfo << " Image is incomplete" ;
 	cinfo->src->next_input_byte=fakeEOI;
 	cinfo->src->bytes_in_buffer=2;
 	return true;
@@ -101,9 +101,9 @@ struct inmem_dest_mgr : public jpeg_destination_mgr {
 
 	void dump() {
 		kDebug() << "dest_mgr:\n";
-		kDebug() << "- next_output_byte: " << next_output_byte << endl;
-		kDebug() << "- free_in_buffer: " << free_in_buffer << endl;
-		kDebug() << "- output size: " << mOutput->size() << endl;
+		kDebug() << "- next_output_byte: " << next_output_byte;
+		kDebug() << "- free_in_buffer: " << free_in_buffer;
+		kDebug() << "- output size: " << mOutput->size();
 	}
 };
 

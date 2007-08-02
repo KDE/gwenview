@@ -41,7 +41,7 @@ namespace Gwenview {
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << k_funcinfo << x << endl
+#define LOG(x) kDebug() << k_funcinfo << x
 #else
 #define LOG(x) ;
 #endif
@@ -145,7 +145,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	// Get a list of possible parts
 	const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
 	if (offers.isEmpty()) {
-		kWarning() << "Couldn't find a KPart for " << mimeType << endl;
+		kWarning() << "Couldn't find a KPart for " << mimeType ;
 		reset();
 		return;
 	}
@@ -166,7 +166,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 		d->mPartContainer /*parentWidget*/,
 		d->mPartContainer /*parent*/);
 	if (!part) {
-		kWarning() << "Failed to instantiate KPart from library " << library << endl;
+		kWarning() << "Failed to instantiate KPart from library " << library ;
 		return;
 	}
 

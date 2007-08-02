@@ -251,7 +251,7 @@ void JpegContentTest::testLoadTruncated() {
 	QCOMPARE(int(content.orientation()), 6);
 	QCOMPARE(content.comment() , ORIENT6_COMMENT);
 	content.transform(Gwenview::VFLIP);
-	kWarning() << "# Next function should output errors about incomplete image" << endl;
+	kWarning() << "# Next function should output errors about incomplete image" ;
 	content.save(TMP_FILE);
-	kWarning() << "#" << endl;
+	kWarning() << "#" ;
 }
