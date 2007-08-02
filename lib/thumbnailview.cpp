@@ -78,9 +78,10 @@ public:
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 		QVariant value = index.data(Qt::DecorationRole);
 		QIcon icon = qvariant_cast<QIcon>(value);
-		QPixmap thumbnail = icon.pixmap(mView->thumbnailSize(), mView->thumbnailSize());
-		if (thumbnail.width() > mView->thumbnailSize() || thumbnail.height() > mView->thumbnailSize()) {
-			thumbnail = thumbnail.scaled(QSize(mView->thumbnailSize(), mView->thumbnailSize()), Qt::KeepAspectRatio);
+		int thumbnailSize = mView->thumbnailSize();
+		QPixmap thumbnail = icon.pixmap(thumbnailSize, thumbnailSize);
+		if (thumbnail.width() > thumbnailSize || thumbnail.height() > thumbnailSize) {
+			thumbnail = thumbnail.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
 		}
 		QRect rect = option.rect;
 
@@ -137,7 +138,7 @@ public:
 		// Draw thumbnail
 		QRect thumbnailRect = QRect(
 			rect.left() + (rect.width() - thumbnail.width())/2,
-			rect.top() + (mView->thumbnailSize() - thumbnail.height())/2 + ITEM_MARGIN,
+			rect.top() + (thumbnailSize - thumbnail.height())/2 + ITEM_MARGIN,
 			thumbnail.width(),
 			thumbnail.height());
 
@@ -155,7 +156,7 @@ public:
 
 		painter->drawText(
 			rect.left() + (rect.width() - textWidth) / 2,
-			rect.top() + ITEM_MARGIN + mView->thumbnailSize() + ITEM_MARGIN + option.fontMetrics.ascent(),
+			rect.top() + ITEM_MARGIN + thumbnailSize + ITEM_MARGIN + option.fontMetrics.ascent(),
 			text);
 	}
 
