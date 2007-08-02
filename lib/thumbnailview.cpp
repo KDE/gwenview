@@ -142,9 +142,9 @@ public:
 			thumbnail.width(),
 			thumbnail.height());
 
-		KFileItem item = qvariant_cast<KFileItem>(index.data(KDirModel::FileItemRole));
-		if (!item.isDir()) {
-			drawThumbnailBackRect(painter, thumbnailRect);
+		if (!thumbnail.hasAlphaChannel()) {
+			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
+			painter->drawRect(borderRect);
 		}
 		painter->drawPixmap(
 			thumbnailRect.left() + (thumbnailRect.width() - thumbnail.width()) / 2,
@@ -162,13 +162,6 @@ public:
 
 
 private:
-	void drawThumbnailBackRect(QPainter* painter, const QRect& thumbnailRect) const {
-		QRect thumbnailBackRect = thumbnailRect.adjusted(-1, -1, 1, 1);
-		painter->fillRect(thumbnailBackRect, Qt::white);
-		thumbnailBackRect.adjust(0, 0, -1, -1);
-		painter->drawRect(thumbnailBackRect);
-	}
-
 	/**
 	 * Show a tooltip only if the item has been elided.
 	 * This function places the tooltip over the item text.
