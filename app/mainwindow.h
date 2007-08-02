@@ -76,6 +76,11 @@ private Q_SLOTS:
 	 */
 	void slotDirListerNewItems();
 
+	/**
+	 * If no image is selected, select the first one available.
+	 */
+	void slotDirListerCompleted();
+
 	void slotSelectionChanged();
 
 	void goToPrevious();

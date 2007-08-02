@@ -363,6 +363,9 @@ struct MainWindow::Private {
 
 		connect(dirLister, SIGNAL(deleteItem(KFileItem*)),
 			mWindow, SLOT(updatePreviousNextActions()) );
+
+		connect(dirLister, SIGNAL(completed()),
+			mWindow, SLOT(slotDirListerCompleted()) );
 	}
 
 	void updateToggleSideBarAction() {
@@ -395,6 +398,23 @@ struct MainWindow::Private {
 		if (index.isValid()) {
 			mThumbnailView->setCurrentIndex(index);
 		}
+	}
+
+	void goToFirstDocument() {
+		QModelIndex index;
+		for(int row=0;; ++row) {
+			index = mDirModel->index(row, 0);
+			if (!index.isValid()) {
+				return;
+			}
+
+			KFileItem* item = mDirModel->itemForIndex(index);
+			if (item && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+				break;
+			}
+		}
+		Q_ASSERT(index.isValid());
+		mThumbnailView->setCurrentIndex(index);
 	}
 
 	void spreadCurrentDirUrl(const KUrl& url) {
@@ -715,6 +735,19 @@ void MainWindow::slotDirListerNewItems() {
 	// Nothing selected in the view yet, check if there was an url waiting to
 	// be selected
 	d->selectUrlToSelect();
+}
+
+
+void MainWindow::slotDirListerCompleted() {
+	if (!d->mDocumentView->isEmpty()) {
+		return;
+	}
+	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+	if (selection.indexes().count() > 0) {
+		return;
+	}
+
+	d->goToFirstDocument();
 }
 
 
