@@ -23,6 +23,7 @@ set(gwenviewlib_SRCS
 	slideshow.cpp
 	sorteddirmodel.cpp
 	resizeimageoperation.cpp
+	thumbnailloadjob.cpp
 	thumbnailview.cpp
 	transupp.c
 	transformimageoperation.cpp

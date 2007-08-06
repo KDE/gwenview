@@ -38,7 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "fileopscontextmanageritem.h"
 #include <lib/documentfactory.h>
+#include <lib/mimetypeutils.h>
 #include <lib/sorteddirmodel.h>
+#include <lib/thumbnailloadjob.h>
 
 namespace Gwenview {
 
@@ -67,6 +69,11 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 	QList<KFileItem> filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
 	Q_FOREACH(KFileItem item, list) {
+		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(&item);
+		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
+			continue;
+		}
+
 		if (factory->hasUrl(item.url())) {
 			Document::Ptr doc = factory->load(item.url());
 			doc->waitUntilLoaded();
@@ -85,13 +92,14 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 				continue;
 			}
 		}
+
 		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
-		KIO::PreviewJob* job = KIO::filePreview(filteredList, THUMBNAIL_SIZE);
-		job->setIgnoreMaximumSize();
-		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
+		ThumbnailLoadJob* job = new ThumbnailLoadJob(filteredList, THUMBNAIL_SIZE);
+		connect(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
 			SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
+		job->start();
 	}
 }
 
