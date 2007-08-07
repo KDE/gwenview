@@ -56,8 +56,7 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath,
-		int size,
-		bool storeThumbnail);
+		int size);
 
 	void cancel();
 
@@ -84,7 +83,6 @@ private:
 	QMutex mMutex;
 	QWaitCondition mCond;
 	int mThumbnailSize;
-	bool mStoreThumbnailsInCache;
 	bool mCancel;
 };
 

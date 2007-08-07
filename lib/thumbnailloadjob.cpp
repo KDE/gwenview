@@ -103,7 +103,7 @@ void ThumbnailThread::load(
 	const QString& originalUri, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
 	const QString& thumbnailPath,
-	int size, bool storeThumbnail)
+	int size)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -115,7 +115,6 @@ void ThumbnailThread::load(
 	mPixPath = pixPath;
 	mThumbnailPath = thumbnailPath;
 	mThumbnailSize = size;
-	mStoreThumbnailsInCache = storeThumbnail;
 	if(!isRunning()) start();
 	mCond.wakeOne();
 }
@@ -219,7 +218,7 @@ void ThumbnailThread::loadThumbnail() {
 
 	//if( testCancel()) return;
 
-	if( mStoreThumbnailsInCache && needCaching ) {
+	if (needCaching) {
 		mImage.setText("Thumb::Uri", 0, mOriginalUri);
 		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
 		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
@@ -748,8 +747,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from" << pixPath);
 	mThumbnailThread.load( mOriginalUri, mOriginalTime, mCurrentItem.size(),
-		mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailSize,
-		true /*FileViewConfig::storeThumbnailsInCache()*/);
+		mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailSize);
 }
 
 
