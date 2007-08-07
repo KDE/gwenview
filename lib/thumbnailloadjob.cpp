@@ -188,7 +188,7 @@ void ThumbnailThread::loadThumbnail() {
 		if(!loaded) {
 			loaded = loadJpeg();
 		}
-		if (loaded /*&& MiscConfig::autoRotateImages()*/) {
+		if (loaded) {
 			// Rotate if necessary
 			Orientation orientation = content.orientation();
 			QMatrix matrix = ImageUtils::transformMatrix(orientation);
@@ -204,8 +204,6 @@ void ThumbnailThread::loadThumbnail() {
 			mOriginalHeight=originalImage.height();
 			int thumbSize=mThumbnailSize<=THUMBNAILSIZE_NORMAL ? THUMBNAILSIZE_NORMAL : THUMBNAILSIZE_LARGE;
 
-			//if( testCancel()) return;
-
 			if (qMax(mOriginalWidth, mOriginalHeight)<=thumbSize ) {
 				mImage=originalImage;
 				needCaching = false;
@@ -215,8 +213,6 @@ void ThumbnailThread::loadThumbnail() {
 			loaded = true;
 		}
 	}
-
-	//if( testCancel()) return;
 
 	if (needCaching) {
 		mImage.setText("Thumb::Uri", 0, mOriginalUri);
@@ -767,11 +763,9 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, QSize size) {
 		// Scale down thumbnail if necessary
 		thumbImg = img.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
 	} else {
-		thumbImg=img;
+		thumbImg = img;
 	}
-	QDateTime tm;
-	tm.setTime_t( mOriginalTime );
-	QPixmap thumb = QPixmap::fromImage( thumbImg ); // store as QPixmap in cache (faster to retrieve, no conversion needed)
+	QPixmap thumb = QPixmap::fromImage(thumbImg);
 	emit thumbnailLoaded(mCurrentItem, thumb, size);
 }
 
