@@ -46,7 +46,50 @@ struct SlideShowPrivate {
 	QVector<KUrl> mUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
 	KUrl mCurrentUrl;
+
+
+	QVector<KUrl>::ConstIterator findNextUrl() const {
+		QVector<KUrl>::ConstIterator it=qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
+		if (it==mUrls.end()) {
+			kWarning() << k_funcinfo << "Current url not found in list. This should not happen.\n";
+			return it;
+		}
+
+		++it;
+		// FIXME: loop
+		if (/*SlideShowConfig::loop()*/ false) {
+			// Looping, if we reach the end, start again
+			if (it==mUrls.end()) {
+				it = mUrls.begin();
+			}
+		} else {
+			// Not looping, have we reached the end?
+			// FIXME: stopAtEnd
+			if ((it==mUrls.end() /*&& SlideShowConfig::stopAtEnd()*/) || it==mStartIt) {
+				it = mUrls.end();
+			}
+		}
+
+		return it;
+	}
+
+
+	int timerInterval() {
+		/*
+		int documentDuration = d->mDocument->duration();
+		if (documentDuration != 0) {
+			return documentDuration * 1000;
+		} else {
+			return int(SlideShowConfig::delay()*1000);
+		}
+		*/
+		// FIXME interval is hardcoded
+		return 1000;
+	}
 };
+
+
+
 
 SlideShow::SlideShow(QObject* parent)
 : QObject(parent)
@@ -59,20 +102,6 @@ SlideShow::SlideShow(QObject* parent)
 
 SlideShow::~SlideShow() {
 	delete d;
-}
-
-
-int SlideShow::timerInterval() {
-	/*
-	int documentDuration = d->mDocument->duration();
-	if (documentDuration != 0) {
-		return documentDuration * 1000;
-	} else {
-		return int(SlideShowConfig::delay()*1000);
-	}
-	*/
-	// FIXME interval is hardcoded
-	return 1000;
 }
 
 
@@ -92,7 +121,7 @@ void SlideShow::start(const QList<KUrl>& urls) {
 		return;
 	}
 	
-	d->mTimer->setInterval(timerInterval());
+	d->mTimer->setInterval(d->timerInterval());
 	d->mTimer->setSingleShot(false);
 	d->mTimer->start();
 	d->mStarted=true;
@@ -107,35 +136,9 @@ void SlideShow::stop() {
 }
 
 
-QVector<KUrl>::ConstIterator SlideShow::findNextUrl() const {
-	QVector<KUrl>::ConstIterator it=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
-	if (it==d->mUrls.end()) {
-		kWarning() << k_funcinfo << "Current url not found in list. This should not happen.\n";
-		return it;
-	}
-
-	++it;
-	// FIXME: loop
-	if (/*SlideShowConfig::loop()*/ false) {
-		// Looping, if we reach the end, start again
-		if (it==d->mUrls.end()) {
-			it = d->mUrls.begin();
-		}
-	} else {
-		// Not looping, have we reached the end?
-		// FIXME: stopAtEnd
-		if ((it==d->mUrls.end() /*&& SlideShowConfig::stopAtEnd()*/) || it==d->mStartIt) {
-			it = d->mUrls.end();
-		}
-	}
-
-	return it;
-}
-
-
 void SlideShow::slotTimeout() {
 	LOG("");
-	QVector<KUrl>::ConstIterator it=findNextUrl();
+	QVector<KUrl>::ConstIterator it = d->findNextUrl();
 	if (it==d->mUrls.end()) {
 		stop();
 		return;

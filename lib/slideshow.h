@@ -59,9 +59,6 @@ private Q_SLOTS:
 	void slotTimeout();
 
 private:
-	QVector<KUrl>::ConstIterator findNextUrl() const;
-	int timerInterval();
-
 	SlideShowPrivate* const d;
 };
 
