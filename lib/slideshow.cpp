@@ -32,6 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 
+// Local
+#include <slideshowconfig.h>
+
 namespace Gwenview {
 
 #undef ENABLE_LOG
@@ -102,11 +105,12 @@ SlideShow::SlideShow(QObject* parent)
 
 	d->mOptionsButton = new QToolButton();
 
-	setInterval(4.);
+	d->mIntervalSpinBox->setValue(SlideShowConfig::interval());
 }
 
 
 SlideShow::~SlideShow() {
+	SlideShowConfig::self()->writeConfig();
 	delete d;
 }
 
@@ -136,8 +140,10 @@ void SlideShow::start(const QList<KUrl>& urls) {
 
 
 void SlideShow::updateTimerInterval() {
-	int interval = int(d->mIntervalSpinBox->value() * 1000);
-	d->mTimer->setInterval(interval);
+	double sInterval = d->mIntervalSpinBox->value();
+	int msInterval = int(sInterval * 1000);
+	d->mTimer->setInterval(msInterval);
+	SlideShowConfig::setInterval(sInterval);
 }
 
 
@@ -176,16 +182,6 @@ QWidget* SlideShow::intervalWidget() const {
 
 QWidget* SlideShow::optionsWidget() const {
 	return d->mOptionsButton;
-}
-
-
-double SlideShow::interval() const {
-	return d->mIntervalSpinBox->value();
-}
-
-
-void SlideShow::setInterval(double value) {
-	d->mIntervalSpinBox->setValue(value);
 }
 
 

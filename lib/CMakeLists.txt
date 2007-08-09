@@ -33,6 +33,10 @@ kde4_add_ui_files(gwenviewlib_SRCS
 	cropdialog.ui
 	)
 
+kde4_add_kcfg_files(gwenviewlib_SRCS
+	slideshowconfig.kcfgc
+	)
+
 kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
 set_target_properties(gwenviewlib PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 target_link_libraries(gwenviewlib ${KDE4_KPARTS_LIBS} ${JPEG_LIBRARY} ${EXIV2_LIBRARIES})
