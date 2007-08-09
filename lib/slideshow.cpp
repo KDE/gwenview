@@ -23,13 +23,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //#include <algorithm>
 
 // Qt
+#include <QAction>
 #include <QDoubleSpinBox>
+#include <QMenu>
 #include <QTimer>
 #include <QToolButton>
 
 // KDE
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kicon.h>
 #include <klocale.h>
 
 // Local
@@ -56,6 +59,7 @@ struct SlideShowPrivate {
 	QDoubleSpinBox* mIntervalSpinBox;
 	QToolButton* mOptionsButton;
 
+	QAction* mLoopAction;
 
 	QVector<KUrl>::ConstIterator findNextUrl() const {
 		QVector<KUrl>::ConstIterator it=qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
@@ -66,7 +70,7 @@ struct SlideShowPrivate {
 
 		++it;
 		// FIXME: loop
-		if (/*SlideShowConfig::loop()*/ false) {
+		if (SlideShowConfig::loop()) {
 			// Looping, if we reach the end, start again
 			if (it==mUrls.end()) {
 				it = mUrls.begin();
@@ -104,7 +108,16 @@ SlideShow::SlideShow(QObject* parent)
 		SLOT(updateTimerInterval()) );
 
 	d->mOptionsButton = new QToolButton();
+	d->mOptionsButton->setIcon(KIcon("configure"));
+	d->mOptionsButton->setToolTip(i18n("Slideshow options"));
+	QMenu* menu = new QMenu(d->mOptionsButton);
+	d->mOptionsButton->setMenu(menu);
+	d->mOptionsButton->setPopupMode(QToolButton::InstantPopup);
+	d->mLoopAction = menu->addAction(i18n("Loop"));
+	d->mLoopAction->setCheckable(true);
+	connect(d->mLoopAction, SIGNAL(triggered()), SLOT(updateConfig()) );
 
+	d->mLoopAction->setChecked(SlideShowConfig::loop());
 	d->mIntervalSpinBox->setValue(SlideShowConfig::interval());
 }
 
@@ -182,6 +195,11 @@ QWidget* SlideShow::intervalWidget() const {
 
 QWidget* SlideShow::optionsWidget() const {
 	return d->mOptionsButton;
+}
+
+
+void SlideShow::updateConfig() {
+	SlideShowConfig::setLoop(d->mLoopAction->isChecked());
 }
 
 
