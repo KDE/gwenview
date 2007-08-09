@@ -23,11 +23,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //#include <algorithm>
 
 // Qt
+#include <QDoubleSpinBox>
 #include <QTimer>
+#include <QToolButton>
 
 // KDE
 #include <kconfig.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 namespace Gwenview {
 
@@ -46,6 +49,9 @@ struct SlideShowPrivate {
 	QVector<KUrl> mUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
 	KUrl mCurrentUrl;
+
+	QDoubleSpinBox* mIntervalSpinBox;
+	QToolButton* mOptionsButton;
 
 
 	QVector<KUrl>::ConstIterator findNextUrl() const {
@@ -72,20 +78,6 @@ struct SlideShowPrivate {
 
 		return it;
 	}
-
-
-	int timerInterval() {
-		/*
-		int documentDuration = d->mDocument->duration();
-		if (documentDuration != 0) {
-			return documentDuration * 1000;
-		} else {
-			return int(SlideShowConfig::delay()*1000);
-		}
-		*/
-		// FIXME interval is hardcoded
-		return 1000;
-	}
 };
 
 
@@ -95,10 +87,24 @@ SlideShow::SlideShow(QObject* parent)
 : QObject(parent)
 , d(new SlideShowPrivate) {
 	d->mStarted = false;
+
 	d->mTimer = new QTimer(this);
 	connect(d->mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
+
+	d->mIntervalSpinBox = new QDoubleSpinBox();
+	d->mIntervalSpinBox->setSuffix(i18n(" seconds"));
+	d->mIntervalSpinBox->setMinimum(0.5);
+	d->mIntervalSpinBox->setMaximum(999999.);
+	d->mIntervalSpinBox->setDecimals(1);
+	connect(d->mIntervalSpinBox, SIGNAL(valueChanged(double)),
+		SLOT(updateTimerInterval()) );
+
+	d->mOptionsButton = new QToolButton();
+
+	setInterval(4.);
 }
+
 
 SlideShow::~SlideShow() {
 	delete d;
@@ -121,11 +127,17 @@ void SlideShow::start(const QList<KUrl>& urls) {
 		return;
 	}
 	
-	d->mTimer->setInterval(d->timerInterval());
+	updateTimerInterval();
 	d->mTimer->setSingleShot(false);
 	d->mTimer->start();
 	d->mStarted=true;
 	stateChanged(true);
+}
+
+
+void SlideShow::updateTimerInterval() {
+	int interval = int(d->mIntervalSpinBox->value() * 1000);
+	d->mTimer->setInterval(interval);
 }
 
 
@@ -154,6 +166,26 @@ void SlideShow::setCurrentUrl(const KUrl& url) {
 
 bool SlideShow::isRunning() const {
 	return d->mStarted;
+}
+
+
+QWidget* SlideShow::intervalWidget() const {
+	return d->mIntervalSpinBox;
+}
+
+
+QWidget* SlideShow::optionsWidget() const {
+	return d->mOptionsButton;
+}
+
+
+double SlideShow::interval() const {
+	return d->mIntervalSpinBox->value();
+}
+
+
+void SlideShow::setInterval(double value) {
+	d->mIntervalSpinBox->setValue(value);
 }
 
 

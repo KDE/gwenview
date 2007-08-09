@@ -43,10 +43,17 @@ public:
 	void start(const QList<KUrl>& urls);
 	void stop();
 
+	QWidget* intervalWidget() const;
+
+	QWidget* optionsWidget() const;
+
 	/** @return true if the slideshow is running */
 	bool isRunning() const;
 
 	void setCurrentUrl(const KUrl& url);
+
+	double interval() const;
+	void setInterval(double);
 
 Q_SIGNALS:
 	void goToUrl( const KUrl& );
@@ -57,6 +64,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotTimeout();
+	void updateTimerInterval();
 
 private:
 	SlideShowPrivate* const d;

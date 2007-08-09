@@ -429,7 +429,12 @@ struct MainWindow::Private {
 		mFullScreenBar->addAction(mFullScreenAction);
 		mFullScreenBar->addAction(mGoToPreviousAction);
 		mFullScreenBar->addAction(mGoToNextAction);
+
+		mFullScreenBar->addSeparator();
 		mFullScreenBar->addAction(mToggleSlideShowAction);
+		mFullScreenBar->addWidget(mSlideShow->intervalWidget());
+		mFullScreenBar->addWidget(mSlideShow->optionsWidget());
+
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
 
