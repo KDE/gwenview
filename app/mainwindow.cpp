@@ -123,6 +123,7 @@ struct MainWindow::Private {
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
+	QScrollArea* mSideBarScrollArea;
 	SideBar* mSideBar;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
@@ -173,11 +174,11 @@ struct MainWindow::Private {
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGUI(KParts::Part*)) );
 
-		QScrollArea* scrollArea = new QScrollArea(mCentralSplitter);
-		scrollArea->setFrameStyle(QFrame::NoFrame);
-		mSideBar = new SideBar(scrollArea);
-		scrollArea->setWidget(mSideBar);
-		scrollArea->setWidgetResizable(true);
+		mSideBarScrollArea = new QScrollArea(mCentralSplitter);
+		mSideBarScrollArea->setFrameStyle(QFrame::NoFrame);
+		mSideBar = new SideBar(mSideBarScrollArea);
+		mSideBarScrollArea->setWidget(mSideBar);
+		mSideBarScrollArea->setWidgetResizable(true);
 
 		mSlideShow = new SlideShow(mWindow);
 
@@ -369,7 +370,7 @@ struct MainWindow::Private {
 	}
 
 	void updateToggleSideBarAction() {
-		if (mSideBar->isVisible()) {
+		if (mSideBarScrollArea->isVisible()) {
 			mToggleSideBarAction->setText(i18n("Hide Side Bar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Side Bar"));
@@ -567,7 +568,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		d->mSideBar->hide();
+		d->mSideBarScrollArea->hide();
 		openDocumentUrl(url);
 	}
 	d->updateToggleSideBarAction();
@@ -675,7 +676,7 @@ void MainWindow::slotSetStatusBarText(const QString& message) {
 }
 
 void MainWindow::toggleSideBar() {
-	d->mSideBar->setVisible(!d->mSideBar->isVisible());
+	d->mSideBarScrollArea->setVisible(!d->mSideBarScrollArea->isVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -791,10 +792,10 @@ void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
-		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarScrollArea->isVisible();
 
 		d->mViewAction->trigger();
-		d->mSideBar->hide();
+		d->mSideBarScrollArea->hide();
 
 		showFullScreen();
 		menuBar()->hide();
@@ -805,7 +806,7 @@ void MainWindow::toggleFullScreen() {
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
-		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mSideBarScrollArea->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
 		d->mFullScreenBar->setActivated(false);
