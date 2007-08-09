@@ -33,6 +33,7 @@ class QTimer;
 
 namespace Gwenview {
 
+struct SlideShowPrivate;
 class GWENVIEWLIB_EXPORT SlideShow : public QObject {
 	Q_OBJECT
 public:
@@ -43,7 +44,7 @@ public:
 	void stop();
 
 	/** @return true if the slideshow is running */
-	bool isRunning() { return mStarted; }
+	bool isRunning() const;
 
 	void setCurrentUrl(const KUrl& url);
 
@@ -61,11 +62,7 @@ private:
 	QVector<KUrl>::ConstIterator findNextUrl() const;
 	int timerInterval();
 
-	QTimer* mTimer;
-	bool mStarted;
-	QVector<KUrl> mUrls;
-	QVector<KUrl>::ConstIterator mStartIt;
-	KUrl mCurrentUrl;
+	SlideShowPrivate* const d;
 };
 
 } // namespace

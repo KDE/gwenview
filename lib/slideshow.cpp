@@ -40,21 +40,31 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+struct SlideShowPrivate {
+	QTimer* mTimer;
+	bool mStarted;
+	QVector<KUrl> mUrls;
+	QVector<KUrl>::ConstIterator mStartIt;
+	KUrl mCurrentUrl;
+};
+
 SlideShow::SlideShow(QObject* parent)
 : QObject(parent)
-, mStarted(false) {
-	mTimer=new QTimer(this);
-	connect(mTimer, SIGNAL(timeout()),
+, d(new SlideShowPrivate) {
+	d->mStarted = false;
+	d->mTimer = new QTimer(this);
+	connect(d->mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
 }
 
 SlideShow::~SlideShow() {
+	delete d;
 }
 
 
 int SlideShow::timerInterval() {
 	/*
-	int documentDuration = mDocument->duration();
+	int documentDuration = d->mDocument->duration();
 	if (documentDuration != 0) {
 		return documentDuration * 1000;
 	} else {
@@ -67,39 +77,39 @@ int SlideShow::timerInterval() {
 
 
 void SlideShow::start(const QList<KUrl>& urls) {
-	mUrls.resize(urls.size());
-	qCopy(urls.begin(), urls.end(), mUrls.begin());
+	d->mUrls.resize(urls.size());
+	qCopy(urls.begin(), urls.end(), d->mUrls.begin());
 	// FIXME: random
 	/*
 	if (SlideShowConfig::random()) {
-		std::random_shuffle(mUrls.begin(), mUrls.end());
+		std::random_shuffle(d->mUrls.begin(), d->mUrls.end());
 	}
 	*/
 
-	mStartIt=qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
-	if (mStartIt==mUrls.end()) {
+	d->mStartIt=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
+	if (d->mStartIt==d->mUrls.end()) {
 		kWarning() << k_funcinfo << "Current url not found in list, aborting.\n";
 		return;
 	}
 	
-	mTimer->setInterval(timerInterval());
-	mTimer->setSingleShot(false);
-	mTimer->start();
-	mStarted=true;
+	d->mTimer->setInterval(timerInterval());
+	d->mTimer->setSingleShot(false);
+	d->mTimer->start();
+	d->mStarted=true;
 	stateChanged(true);
 }
 
 
 void SlideShow::stop() {
-	mTimer->stop();
-	mStarted=false;
+	d->mTimer->stop();
+	d->mStarted=false;
 	stateChanged(false);
 }
 
 
 QVector<KUrl>::ConstIterator SlideShow::findNextUrl() const {
-	QVector<KUrl>::ConstIterator it=qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
-	if (it==mUrls.end()) {
+	QVector<KUrl>::ConstIterator it=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
+	if (it==d->mUrls.end()) {
 		kWarning() << k_funcinfo << "Current url not found in list. This should not happen.\n";
 		return it;
 	}
@@ -108,14 +118,14 @@ QVector<KUrl>::ConstIterator SlideShow::findNextUrl() const {
 	// FIXME: loop
 	if (/*SlideShowConfig::loop()*/ false) {
 		// Looping, if we reach the end, start again
-		if (it==mUrls.end()) {
-			it = mUrls.begin();
+		if (it==d->mUrls.end()) {
+			it = d->mUrls.begin();
 		}
 	} else {
 		// Not looping, have we reached the end?
 		// FIXME: stopAtEnd
-		if ((it==mUrls.end() /*&& SlideShowConfig::stopAtEnd()*/) || it==mStartIt) {
-			it = mUrls.end();
+		if ((it==d->mUrls.end() /*&& SlideShowConfig::stopAtEnd()*/) || it==d->mStartIt) {
+			it = d->mUrls.end();
 		}
 	}
 
@@ -126,7 +136,7 @@ QVector<KUrl>::ConstIterator SlideShow::findNextUrl() const {
 void SlideShow::slotTimeout() {
 	LOG("");
 	QVector<KUrl>::ConstIterator it=findNextUrl();
-	if (it==mUrls.end()) {
+	if (it==d->mUrls.end()) {
 		stop();
 		return;
 	}
@@ -135,7 +145,12 @@ void SlideShow::slotTimeout() {
 
 
 void SlideShow::setCurrentUrl(const KUrl& url) {
-	mCurrentUrl = url;
+	d->mCurrentUrl = url;
+}
+
+
+bool SlideShow::isRunning() const {
+	return d->mStarted;
 }
 
 
