@@ -81,10 +81,8 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mNoDocumentLabel->setText(i18n("No document selected"));
 	d->mNoDocumentLabel->setAlignment(Qt::AlignCenter);
 	d->mNoDocumentLabel->setAutoFillBackground(true);
-	QPalette palette;
-	palette.setColor(QPalette::Window, Qt::black);
-	palette.setColor(QPalette::WindowText, Qt::white);
-	d->mNoDocumentLabel->setPalette(palette);
+	d->mNoDocumentLabel->setBackgroundRole(QPalette::Dark);
+	d->mNoDocumentLabel->setForegroundRole(QPalette::Text);
 
 	d->mPartContainer = new QWidget(this);
 	addWidget(d->mPartContainer);

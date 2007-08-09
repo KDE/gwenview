@@ -122,18 +122,19 @@ public:
 			borderColor = bgColor.dark(140);
 			fgColor = option.palette.color(cg, QPalette::HighlightedText);
 		} else {
-			bgColor = option.palette.color(cg, QPalette::Window).light(110);
-			borderColor = option.palette.color(cg, QPalette::Window).dark(120);
+			bgColor = option.palette.color(cg, QPalette::Window);
 			fgColor = option.palette.color(cg, QPalette::Text);
+			borderColor = fgColor;
 		}
+		painter->setPen(borderColor);
 
 		// Draw background
-		painter->setPen(borderColor);
-		painter->fillRect(rect, bgColor);
-
-		QRect borderRect = rect;
-		borderRect.adjust(0, 0, -1, -1);
-		painter->drawRect(borderRect);
+		if (option.state & QStyle::State_Selected) {
+			painter->fillRect(rect, bgColor);
+			QRect borderRect = rect;
+			borderRect.adjust(0, 0, -1, -1);
+			painter->drawRect(borderRect);
+		}
 
 		// Draw thumbnail
 		QRect thumbnailRect = QRect(
@@ -208,7 +209,7 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
-	viewport()->setBackgroundRole(QPalette::Window);
+	viewport()->setBackgroundRole(QPalette::Dark);
 
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);

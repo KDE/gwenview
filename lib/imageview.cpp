@@ -94,6 +94,7 @@ ImageView::ImageView(QWidget* parent)
 	setFrameShape(QFrame::NoFrame);
 	d->mViewport = new QWidget();
 	setViewport(d->mViewport);
+	d->mViewport->setBackgroundRole(QPalette::Dark);
 	d->mViewport->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
@@ -137,7 +138,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QRect imageRect(offset, d->mBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
 	Q_FOREACH(QRect rect, emptyRegion.rects()) {
-		painter.fillRect(rect, Qt::black);
+		painter.eraseRect(rect);
 	}
 
 	painter.drawImage(offset, d->mBuffer);
