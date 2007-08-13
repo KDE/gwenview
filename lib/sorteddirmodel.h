@@ -40,7 +40,7 @@ public:
 	SortedDirModel(QObject* parent);
 	~SortedDirModel();
 	KDirLister* dirLister();
-	KFileItem* itemForIndex(const QModelIndex& index) const;
+	KFileItem itemForIndex(const QModelIndex& index) const;
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 

@@ -55,9 +55,9 @@ KDirLister* SortedDirModel::dirLister() {
 }
 
 
-KFileItem* SortedDirModel::itemForIndex(const QModelIndex& index) const {
+KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
 	if (!index.isValid()) {
-		return 0;
+		return KFileItem();
 	}
 
 	QModelIndex sourceIndex = mapToSource(index);
@@ -84,25 +84,22 @@ QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 }
 
 
-static bool kFileItemLessThan(const KFileItem* leftItem, const KFileItem* rightItem) {
-	bool leftIsDir = leftItem->isDir();
-	bool rightIsDir = rightItem->isDir();
+static bool kFileItemLessThan(const KFileItem& leftItem, const KFileItem& rightItem) {
+	bool leftIsDir = leftItem.isDir();
+	bool rightIsDir = rightItem.isDir();
 	if (leftIsDir && !rightIsDir) {
 		return true;
 	}
 	if (!leftIsDir && rightIsDir) {
 		return false;
 	}
-	return leftItem->name().toLower() < rightItem->name().toLower();
+	return leftItem.name().toLower() < rightItem.name().toLower();
 }
 
 
 bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-	KFileItem* leftItem = d->mSourceModel->itemForIndex(left);
-	KFileItem* rightItem = d->mSourceModel->itemForIndex(right);
-	Q_ASSERT(leftItem);
-	Q_ASSERT(rightItem);
-
+	KFileItem leftItem = d->mSourceModel->itemForIndex(left);
+	KFileItem rightItem = d->mSourceModel->itemForIndex(right);
 	return kFileItemLessThan(leftItem, rightItem);
 }
 
