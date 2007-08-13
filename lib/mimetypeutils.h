@@ -41,7 +41,7 @@ GWENVIEWLIB_EXPORT const QStringList& videoMimeTypes();
 GWENVIEWLIB_EXPORT QString urlMimeType(const KUrl&);
 
 enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
-GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem*);
+GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem&);
 GWENVIEWLIB_EXPORT Kind urlKind(const KUrl&);
 GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
 

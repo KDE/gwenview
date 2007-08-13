@@ -109,9 +109,9 @@ Kind mimeTypeKind(const QString& mimeType) {
 	return KIND_FILE;
 }
 
-	
-Kind fileItemKind(const KFileItem* item) {
-	return mimeTypeKind(item->mimetype());
+
+Kind fileItemKind(const KFileItem& item) {
+	return mimeTypeKind(item.mimetype());
 }
 
 

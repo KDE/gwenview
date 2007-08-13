@@ -386,8 +386,8 @@ struct MainWindow::Private {
 			return QModelIndex();
 		}
 
-		KFileItem* item = mDirModel->itemForIndex(index);
-		if (item && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+		KFileItem item = mDirModel->itemForIndex(index);
+		if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			return index;
 		} else {
 			return QModelIndex();
@@ -409,8 +409,8 @@ struct MainWindow::Private {
 				return;
 			}
 
-			KFileItem* item = mDirModel->itemForIndex(index);
-			if (item && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			KFileItem item = mDirModel->itemForIndex(index);
+			if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 				break;
 			}
 		}
@@ -446,8 +446,8 @@ struct MainWindow::Private {
 			if (!index.isValid()) {
 				return false;
 			}
-			KFileItem* item = mDirModel->itemForIndex(index);
-			Q_ASSERT(item);
+			KFileItem item = mDirModel->itemForIndex(index);
+			Q_ASSERT(!item.isNull());
 			return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
 		}
 	}
@@ -494,9 +494,9 @@ struct MainWindow::Private {
 			if (!index.isValid()) {
 				return KUrl();
 			}
-			KFileItem* item = mDirModel->itemForIndex(index);
-			Q_ASSERT(item);
-			return item->url();
+			KFileItem item = mDirModel->itemForIndex(index);
+			Q_ASSERT(!item.isNull());
+			return item.url();
 		}
 	}
 
@@ -508,9 +508,9 @@ struct MainWindow::Private {
 			if (!index.isValid()) {
 				return QString();
 			}
-			KFileItem* item = mDirModel->itemForIndex(index);
-			Q_ASSERT(item);
-			return item->mimetype();
+			KFileItem item = mDirModel->itemForIndex(index);
+			Q_ASSERT(!item.isNull());
+			return item.mimetype();
 		}
 	}
 
@@ -614,9 +614,9 @@ void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 		return;
 	}
 
-	KFileItem* item = d->mDirModel->itemForIndex(index);
-	if (item->isDir()) {
-		openDirUrl(item->url());
+	KFileItem item = d->mDirModel->itemForIndex(index);
+	if (item.isDir()) {
+		openDirUrl(item.url());
 	}
 }
 
@@ -636,9 +636,9 @@ void MainWindow::openSelectedDocument() {
 		return;
 	}
 
-	KFileItem* item = d->mDirModel->itemForIndex(index);
-	if (!item->isDir()) {
-		openDocumentUrl(item->url());
+	KFileItem item = d->mDirModel->itemForIndex(index);
+	if (!item.isDir()) {
+		openDocumentUrl(item.url());
 	}
 }
 
@@ -692,8 +692,7 @@ void MainWindow::updateContextManager() {
 
 	QList<KFileItem> itemList;
 	Q_FOREACH(QModelIndex index, indexList) {
-		KFileItem* item = d->mDirModel->itemForIndex(index);
-		itemList << *item;
+		itemList << d->mDirModel->itemForIndex(index);
 	}
 
 	d->mContextManager->setSelection(itemList);
@@ -784,7 +783,7 @@ void MainWindow::goToUrl(const KUrl& url) {
 
 void MainWindow::updatePreviousNextActions() {
 	QModelIndex index;
-	
+
 	index = d->getRelativeIndex(-1);
 	d->mGoToPreviousAction->setEnabled(index.isValid());
 
@@ -949,10 +948,10 @@ void MainWindow::toggleSlideShow() {
 		QList<KUrl> list;
 		for (int pos=0; pos < d->mDirModel->rowCount(); ++pos) {
 			QModelIndex index = d->mDirModel->index(pos, 0);
-			KFileItem* item = d->mDirModel->itemForIndex(index);
+			KFileItem item = d->mDirModel->itemForIndex(index);
 			MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
 			if (kind == MimeTypeUtils::KIND_FILE || kind == MimeTypeUtils::KIND_RASTER_IMAGE) {
-				list << item->url();
+				list << item.url();
 			}
 		}
 		d->mSlideShow->start(list);
@@ -967,13 +966,13 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 		return;
 	}
 
-	KFileItem* item = d->mDirModel->itemForIndex(index);
-	if (!item) {
+	KFileItem item = d->mDirModel->itemForIndex(index);
+	if (item.isNull()) {
 		return;
 	}
 
 	QList<KFileItem> list;
-	list << *item;
+	list << item;
 	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list);
 }
 

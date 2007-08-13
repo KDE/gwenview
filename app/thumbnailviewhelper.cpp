@@ -69,7 +69,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 	QList<KFileItem> filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
 	Q_FOREACH(KFileItem item, list) {
-		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(&item);
+		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
 		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
 			continue;
 		}

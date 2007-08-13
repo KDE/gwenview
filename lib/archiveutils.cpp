@@ -48,12 +48,12 @@ static const MimeTypeProtocols& mimeTypeProtocols() {
 	return map;
 }
 
-bool fileItemIsArchive(const KFileItem* item) {
-	return mimeTypeProtocols().contains(item->mimetype());
+bool fileItemIsArchive(const KFileItem& item) {
+	return mimeTypeProtocols().contains(item.mimetype());
 }
 
-bool fileItemIsDirOrArchive(const KFileItem* item) {
-	return item->isDir() || fileItemIsArchive(item);
+bool fileItemIsDirOrArchive(const KFileItem& item) {
+	return item.isDir() || fileItemIsArchive(item);
 }
 
 /*

@@ -34,9 +34,9 @@ namespace Gwenview {
  * Helper functions to deal with archives
  */
 namespace ArchiveUtils {
-	
+
 GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem*);
-GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem*);
+GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem&);
 /* FIXME remove if not needed
 bool protocolIsArchive(const QString&);
 */
