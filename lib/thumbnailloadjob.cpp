@@ -80,7 +80,7 @@ static const int THUMBNAILSIZE_LARGE = 256;
 
 static QString generateOriginalUri(KUrl url) {
 	// Don't include the password if any
-	url.setPass(QString::null);
+	url.setPass(QString::null);	//krazy:exclude=nullstrassign for old broken gcc
 	return url.url();
 }
 
@@ -625,7 +625,7 @@ void ThumbnailLoadJob::slotResult(KJob * job) {
 			emitThumbnailLoadingFailed();
 			LOG("Delete temp file" << mTempPath);
 			QFile::remove(mTempPath);
-			mTempPath = QString::null;
+			mTempPath = QString();
 			determineNextIcon();
 		} else {
 			startCreatingThumbnail(mTempPath);
@@ -650,7 +650,7 @@ void ThumbnailLoadJob::thumbnailReady( const QImage& im, const QSize& _size) {
 	if( !mTempPath.isEmpty()) {
 		LOG("Delete temp file" << mTempPath);
 		QFile::remove(mTempPath);
-		mTempPath = QString::null;
+		mTempPath = QString();
 	}
 	determineNextIcon();
 }

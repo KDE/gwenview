@@ -181,7 +181,7 @@ private:
 		QString elidedText = it.value();
 		if (elidedText.length() == fullText.length()) {
 			// text and tooltip are the same, don't show tooltip
-			fullText = QString::null;
+			fullText = QString();
 		}
 		QRect rect = view->visualRect(index);
 		QPoint pos(rect.left() + ITEM_MARGIN, rect.top() + mView->thumbnailSize() + ITEM_MARGIN);
