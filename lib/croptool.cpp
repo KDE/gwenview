@@ -47,7 +47,8 @@ enum CropHandle {
 	CH_TopLeft = CH_Top | CH_Left,
 	CH_BottomLeft = CH_Bottom | CH_Left,
 	CH_TopRight = CH_Top | CH_Right,
-	CH_BottomRight = CH_Bottom | CH_Right
+	CH_BottomRight = CH_Bottom | CH_Right,
+	CH_Content = 16
 };
 
 
@@ -56,6 +57,7 @@ struct CropToolPrivate {
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
+	QPoint mLastMouseMovePos;
 
 	QRect handleViewportRect(CropHandle handle) {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
@@ -87,11 +89,17 @@ struct CropToolPrivate {
 				return handle;
 			}
 		}
+		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
+		if (viewportCropRect.contains(pos)) {
+			return CH_Content;
+		}
 		return CH_None;
 	}
 
 
-	void updateCursor(const QPoint& pos) {
+	void updateCursor(QMouseEvent* event) {
+		QPoint pos = event->pos();
+		bool buttonDown = event->buttons() != Qt::NoButton;
 		CropHandle handle = mMovingHandle;
 		if (handle == CH_None) {
 			handle = handleAt(pos);
@@ -117,6 +125,10 @@ struct CropToolPrivate {
 		case CH_Top:
 		case CH_Bottom:
 			shape = Qt::SizeVerCursor;
+			break;
+
+		case CH_Content:
+			shape = buttonDown ? Qt::ClosedHandCursor : Qt::OpenHandCursor;
 			break;
 
 		default:
@@ -173,17 +185,18 @@ void CropTool::paint(QPainter* painter) {
 
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
+	d->updateCursor(event);
 	Q_ASSERT(d->mMovingHandle == CH_None);
 	d->mMovingHandle = d->handleAt(event->pos());
 
-	if (d->mMovingHandle == CH_None) {
-		return;
+	if (d->mMovingHandle == CH_Content) {
+		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
 }
 
 
 void CropTool::mouseMoveEvent(QMouseEvent* event) {
-	d->updateCursor(event->pos());
+	d->updateCursor(event);
 
 	if (d->mMovingHandle == CH_None) {
 		return;
@@ -201,13 +214,19 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	} else if (d->mMovingHandle & CH_Right) {
 		d->mRect.setRight( qMax(posX, d->mRect.left()) );
 	}
+	if (d->mMovingHandle == CH_Content) {
+		QPoint delta = point - d->mLastMouseMovePos;
+		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
+		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
+	}
 
 	imageView()->viewport()->update();
 	rectUpdated(d->mRect);
 }
 
 
-void CropTool::mouseReleaseEvent(QMouseEvent*) {
+void CropTool::mouseReleaseEvent(QMouseEvent* event) {
+	d->updateCursor(event);
 	if (d->mMovingHandle == CH_None) {
 		return;
 	}
