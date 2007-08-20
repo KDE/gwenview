@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="28">
+<kpartgui name="gwenview" version="29">
 
 <MenuBar>
 	<Menu name="file" >
@@ -30,6 +30,14 @@
 		<Action name="go_to_next"/>
 		<Separator/>
 		<Action name="go_up"/>
+	</Menu>
+	<Menu name="settings" noMerge="1">
+		<text>&amp;Settings</text>
+		<!--
+		Disable merging because we don't want the "fullscreen" action to appear
+		here, since it's already in the "view" menu.
+		-->
+		<Action name="options_configure_keybinding"/>
 	</Menu>
 </MenuBar>
 

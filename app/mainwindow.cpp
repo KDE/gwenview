@@ -334,6 +334,9 @@ struct MainWindow::Private {
 			mWindow, SLOT(toggleSlideShow()) );
 		connect(mSlideShow, SIGNAL(stateChanged(bool)),
 			mWindow, SLOT(updateSlideShowAction()) );
+
+		KStandardAction::keyBindings(mWindow->guiFactory(),
+			SLOT(configureShortcuts()), actionCollection);
 	}
 
 
