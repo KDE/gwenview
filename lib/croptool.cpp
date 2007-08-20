@@ -192,14 +192,14 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	QPoint point = imageView()->mapToImage(event->pos());
 	int posX = point.x(), posY = point.y();
 	if (d->mMovingHandle & CH_Top) {
-		d->mRect.setTop(posY);
+		d->mRect.setTop( qMin(posY, d->mRect.bottom()) );
 	} else if (d->mMovingHandle & CH_Bottom) {
-		d->mRect.setBottom(posY);
+		d->mRect.setBottom( qMax(posY, d->mRect.top()) );
 	}
 	if (d->mMovingHandle & CH_Left) {
-		d->mRect.setLeft(posX);
+		d->mRect.setLeft( qMin(posX, d->mRect.right()) );
 	} else if (d->mMovingHandle & CH_Right) {
-		d->mRect.setRight(posX);
+		d->mRect.setRight( qMax(posX, d->mRect.left()) );
 	}
 
 	imageView()->viewport()->update();
