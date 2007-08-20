@@ -300,7 +300,6 @@ QAction* FileOpsContextManagerItem::showPropertiesAction() const {
 
 void FileOpsContextManagerItem::updateActions() {
 	QList<KFileItem> list = contextManager()->selection();
-	d->mGroup->clear();
 	bool selectionNotEmpty = list.count() > 0;
 
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
@@ -324,6 +323,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 		return;
 	}
 
+	d->mGroup->clear();
 	addIfEnabled(d->mGroup, d->mCopyToAction);
 	addIfEnabled(d->mGroup, d->mMoveToAction);
 	addIfEnabled(d->mGroup, d->mLinkToAction);
