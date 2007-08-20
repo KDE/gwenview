@@ -32,20 +32,22 @@ class QRect;
 
 namespace Gwenview {
 
+class ImageView;
+
 class CropToolPrivate;
 class CropTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
-	CropTool(QObject* parent);
+	CropTool(ImageView* parent);
 	~CropTool();
 
 	void setRect(const QRect&);
 
 	virtual void paint(QPainter*);
 
-	virtual bool mousePressEvent(QMouseEvent*);
-	virtual bool mouseMoveEvent(QMouseEvent*);
-	virtual bool mouseReleaseEvent(QMouseEvent*);
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void mouseReleaseEvent(QMouseEvent*);
 
 Q_SIGNALS:
 	void rectUpdated(const QRect&);

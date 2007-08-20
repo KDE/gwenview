@@ -44,9 +44,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 {
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
-	ScrollTool* scrollTool = new ScrollTool(this);
-	scrollTool->setImageView(mView);
-	mView->appendTool(scrollTool);
+	ScrollTool* scrollTool = new ScrollTool(mView);
+	mView->setCurrentTool(scrollTool);
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);

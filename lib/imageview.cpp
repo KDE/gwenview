@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPointer>
 #include <QScrollBar>
 
 // KDE
@@ -43,7 +44,7 @@ struct ImageViewPrivate {
 	bool mZoomToFit;
 	QImage mBuffer;
 	ImageScaler* mScaler;
-	QList<AbstractImageViewTool*> mToolList;
+	QPointer<AbstractImageViewTool> mTool;
 
 
 	qreal computeZoomToFit() const {
@@ -144,8 +145,8 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 	painter.drawImage(offset, d->mBuffer);
 
-	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
-		tool->paint(&painter);
+	if (d->mTool) {
+		d->mTool->paint(&painter);
 	}
 }
 
@@ -298,15 +299,20 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 }
 
 
-void ImageView::appendTool(AbstractImageViewTool* tool) {
-	d->mToolList.append(tool);
+void ImageView::setCurrentTool(AbstractImageViewTool* tool) {
+	if (d->mTool) {
+		d->mTool->toolDeactivated();
+	}
+	d->mTool = tool;
+	if (d->mTool) {
+		d->mTool->toolActivated();
+	}
 	d->mViewport->update();
 }
 
 
-void ImageView::removeTool(AbstractImageViewTool* tool) {
-	d->mToolList.removeAll(tool);
-	d->mViewport->update();
+AbstractImageViewTool* ImageView::currentTool() const {
+	return d->mTool;
 }
 
 
@@ -353,28 +359,22 @@ QRect ImageView::mapToImage(const QRect& src) {
 
 
 void ImageView::mousePressEvent(QMouseEvent* event) {
-	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
-		if (tool->mousePressEvent(event)) {
-			return;
-		}
+	if (d->mTool) {
+		d->mTool->mousePressEvent(event);
 	}
 }
 
 
 void ImageView::mouseMoveEvent(QMouseEvent* event) {
-	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
-		if (tool->mouseMoveEvent(event)) {
-			return;
-		}
+	if (d->mTool) {
+		d->mTool->mouseMoveEvent(event);
 	}
 }
 
 
 void ImageView::mouseReleaseEvent(QMouseEvent* event) {
-	Q_FOREACH(AbstractImageViewTool* tool, d->mToolList) {
-		if (tool->mouseReleaseEvent(event)) {
-			return;
-		}
+	if (d->mTool) {
+		d->mTool->mouseReleaseEvent(event);
 	}
 }
 

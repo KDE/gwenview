@@ -40,8 +40,8 @@ struct ScrollToolPrivate {
 };
 
 
-ScrollTool::ScrollTool(QObject* parent)
-: AbstractImageViewTool(parent)
+ScrollTool::ScrollTool(ImageView* view)
+: AbstractImageViewTool(view)
 , d(new ScrollToolPrivate) {
 	d->mDragStarted = false;
 }
@@ -52,17 +52,17 @@ ScrollTool::~ScrollTool() {
 }
 
 
-bool ScrollTool::mousePressEvent(QMouseEvent* event) {
+void ScrollTool::mousePressEvent(QMouseEvent* event) {
 	d->mScrollStartY = event->y();
 	d->mScrollStartX = event->x();
 	d->mDragStarted = true;
-	return true;
+	imageView()->viewport()->setCursor(Qt::ClosedHandCursor);
 }
 
 
-bool ScrollTool::mouseMoveEvent(QMouseEvent* event) {
+void ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 	if (!d->mDragStarted) {
-		return false;
+		return;
 	}
 
 	int deltaX,deltaY;
@@ -76,17 +76,26 @@ bool ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 		imageView()->horizontalScrollBar()->value() + deltaX);
 	imageView()->verticalScrollBar()->setValue(
 		imageView()->verticalScrollBar()->value() + deltaY);
-	return true;
 }
 
 
-bool ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
+void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
 	if (!d->mDragStarted) {
-		return false;
+		return;
 	}
 
 	d->mDragStarted = false;
-	return true;
+	imageView()->viewport()->setCursor(Qt::OpenHandCursor);
+}
+
+
+void ScrollTool::toolActivated() {
+	imageView()->viewport()->setCursor(Qt::OpenHandCursor);
+}
+
+
+void ScrollTool::toolDeactivated() {
+	imageView()->viewport()->setCursor(Qt::ArrowCursor);
 }
 
 

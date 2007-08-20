@@ -81,8 +81,8 @@ struct CropToolPrivate {
 };
 
 
-CropTool::CropTool(QObject* parent)
-: AbstractImageViewTool(parent)
+CropTool::CropTool(ImageView* view)
+: AbstractImageViewTool(view)
 , d(new CropToolPrivate) {
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
@@ -125,7 +125,7 @@ void CropTool::paint(QPainter* painter) {
 }
 
 
-bool CropTool::mousePressEvent(QMouseEvent* event) {
+void CropTool::mousePressEvent(QMouseEvent* event) {
 	Q_ASSERT(d->mMovingHandle == CH_None);
 	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
 		QRect rect = d->handleViewportRect(handle);
@@ -136,16 +136,14 @@ bool CropTool::mousePressEvent(QMouseEvent* event) {
 	}
 
 	if (d->mMovingHandle == CH_None) {
-		return false;
+		return;
 	}
-
-	return true;
 }
 
 
-bool CropTool::mouseMoveEvent(QMouseEvent* event) {
+void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	if (d->mMovingHandle == CH_None) {
-		return false;
+		return;
 	}
 
 	QPoint point = imageView()->mapToImage(event->pos());
@@ -163,17 +161,14 @@ bool CropTool::mouseMoveEvent(QMouseEvent* event) {
 
 	imageView()->viewport()->update();
 	rectUpdated(d->mRect);
-
-	return true;
 }
 
 
-bool CropTool::mouseReleaseEvent(QMouseEvent*) {
+void CropTool::mouseReleaseEvent(QMouseEvent*) {
 	if (d->mMovingHandle == CH_None) {
-		return false;
+		return;
 	}
 	d->mMovingHandle = CH_None;
-	return true;
 }
 
 

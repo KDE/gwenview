@@ -37,8 +37,8 @@ public:
 	ImageView(QWidget* parent);
 	~ImageView();
 
-	void appendTool(AbstractImageViewTool*);
-	void removeTool(AbstractImageViewTool*);
+	void setCurrentTool(AbstractImageViewTool*);
+	AbstractImageViewTool* currentTool() const;
 
 	void setImage(const QImage& image);
 

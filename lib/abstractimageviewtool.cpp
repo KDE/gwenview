@@ -33,36 +33,24 @@ namespace Gwenview {
 
 
 struct AbstractImageViewToolPrivate {
-	QPointer<ImageView> mImageView;
+	ImageView* mImageView;
 };
 
 
-AbstractImageViewTool::AbstractImageViewTool(QObject* parent)
-: QObject(parent)
+AbstractImageViewTool::AbstractImageViewTool(ImageView* view)
+: QObject(view)
 , d(new AbstractImageViewToolPrivate) {
-	d->mImageView = 0;
+	d->mImageView = view;
 }
 
 
 AbstractImageViewTool::~AbstractImageViewTool() {
-	if (d->mImageView) {
-		d->mImageView->removeTool(this);
-	}
 	delete d;
 }
 
 
 ImageView* AbstractImageViewTool::imageView() const {
 	return d->mImageView;
-}
-
-
-void AbstractImageViewTool::setImageView(ImageView* imageView) {
-	if (d->mImageView) {
-		d->mImageView->removeTool(this);
-	}
-	d->mImageView = imageView;
-	d->mImageView->appendTool(this);
 }
 
 

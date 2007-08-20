@@ -40,17 +40,19 @@ class ImageView;
 class AbstractImageViewToolPrivate;
 class GWENVIEWLIB_EXPORT AbstractImageViewTool : public QObject {
 public:
-	AbstractImageViewTool(QObject* parent);
+	AbstractImageViewTool(ImageView* view);
 	virtual ~AbstractImageViewTool();
 
-	void setImageView(ImageView* imageView);
 	ImageView* imageView() const;
 
 	virtual void paint(QPainter*) {}
 
-	virtual bool mousePressEvent(QMouseEvent*) { return false; }
-	virtual bool mouseMoveEvent(QMouseEvent*) { return false; }
-	virtual bool mouseReleaseEvent(QMouseEvent*) { return false; }
+	virtual void mousePressEvent(QMouseEvent*) {}
+	virtual void mouseMoveEvent(QMouseEvent*) {}
+	virtual void mouseReleaseEvent(QMouseEvent*) {}
+
+	virtual void toolActivated() {}
+	virtual void toolDeactivated() {}
 
 private:
 	AbstractImageViewToolPrivate * const d;

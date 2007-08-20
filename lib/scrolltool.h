@@ -36,12 +36,15 @@ namespace Gwenview {
 class ScrollToolPrivate;
 class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
 public:
-	ScrollTool(QObject* parent);
+	ScrollTool(ImageView* view);
 	~ScrollTool();
 
-	virtual bool mousePressEvent(QMouseEvent*);
-	virtual bool mouseMoveEvent(QMouseEvent*);
-	virtual bool mouseReleaseEvent(QMouseEvent*);
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void mouseReleaseEvent(QMouseEvent*);
+
+	virtual void toolActivated();
+	virtual void toolDeactivated();
 
 private:
 	ScrollToolPrivate* const d;

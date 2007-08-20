@@ -37,6 +37,7 @@ namespace Gwenview {
 
 struct CropDialogPrivate : public Ui_CropDialog {
 	QWidget* mWidget;
+	AbstractImageViewTool* mPreviousTool;
 	CropTool* mCropTool;
 	bool mUpdatingFromCropTool;
 };
@@ -46,8 +47,9 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 : KDialog(parent)
 , d(new CropDialogPrivate) {
 	d->mUpdatingFromCropTool = false;
-	d->mCropTool = new CropTool(this);
-	d->mCropTool->setImageView(imageView);
+	d->mCropTool = new CropTool(imageView);
+	d->mPreviousTool = imageView->currentTool();
+	imageView->setCurrentTool(d->mCropTool);
 	d->mWidget = new QWidget(this);
 	setMainWidget(d->mWidget);
 	d->setupUi(d->mWidget);
@@ -72,6 +74,7 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 
 
 CropDialog::~CropDialog() {
+	d->mCropTool->imageView()->setCurrentTool(d->mPreviousTool);
 	delete d;
 }
 
