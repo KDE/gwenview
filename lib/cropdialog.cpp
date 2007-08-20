@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "cropdialog.moc"
 
 // Qt
+#include <QPointer>
 #include <QSpinBox>
 
 // KDE
@@ -38,7 +39,7 @@ namespace Gwenview {
 struct CropDialogPrivate : public Ui_CropDialog {
 	QWidget* mWidget;
 	AbstractImageViewTool* mPreviousTool;
-	CropTool* mCropTool;
+	QPointer<CropTool> mCropTool;
 	bool mUpdatingFromCropTool;
 };
 
@@ -74,7 +75,11 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 
 
 CropDialog::~CropDialog() {
-	d->mCropTool->imageView()->setCurrentTool(d->mPreviousTool);
+	// The crop tool is owned by the image view, so it may already have been
+	// deleted, for example if we quit while the dialog is still opened.
+	if (d->mCropTool) {
+		d->mCropTool->imageView()->setCurrentTool(d->mPreviousTool);
+	}
 	delete d;
 }
 
