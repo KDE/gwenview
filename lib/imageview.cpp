@@ -72,10 +72,26 @@ struct ImageViewPrivate {
 		return QImage(visibleSize, QImage::Format_ARGB32);
 	}
 
+	int hScroll() const {
+		if (mZoomToFit) {
+			return 0;
+		} else {
+			return mView->horizontalScrollBar()->value();
+		}
+	}
+
+	int vScroll() const {
+		if (mZoomToFit) {
+			return 0;
+		} else {
+			return mView->verticalScrollBar()->value();
+		}
+	}
+
 	QRect mapViewportToZoomedImage(const QRect& viewportRect) {
 		QRect rect = QRect(
-			viewportRect.x() + mView->horizontalScrollBar()->value(),
-			viewportRect.y() + mView->verticalScrollBar()->value(),
+			viewportRect.x() + hScroll(),
+			viewportRect.y() + vScroll(),
 			viewportRect.width(),
 			viewportRect.height()
 		);
@@ -258,8 +274,8 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 	// Scale missing parts
 	QRegion region;
-	int posX = horizontalScrollBar()->value();
-	int posY = verticalScrollBar()->value();
+	int posX = d->hScroll();
+	int posY = d->vScroll();
 	int width = d->mViewport->width();
 	int height = d->mViewport->height();
 
@@ -284,8 +300,9 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 
 void ImageView::updateFromScaler(int left, int top, const QImage& image) {
-	left -= horizontalScrollBar()->value();
-	top -= verticalScrollBar()->value();
+	left -= d->hScroll();
+	top -= d->vScroll();
+
 	{
 		QPainter painter(&d->mBuffer);
 		painter.drawImage(left, top, image);
@@ -321,8 +338,8 @@ QPoint ImageView::mapToViewport(const QPoint& src) {
 
 	dst += imageOffset();
 
-	dst.rx() -= horizontalScrollBar()->value();
-	dst.ry() -= verticalScrollBar()->value();
+	dst.rx() -= d->hScroll();
+	dst.ry() -= d->vScroll();
 
 	return dst;
 }
@@ -340,8 +357,8 @@ QRect ImageView::mapToViewport(const QRect& src) {
 QPoint ImageView::mapToImage(const QPoint& src) {
 	QPoint dst = src;
 	
-	dst.rx() += horizontalScrollBar()->value();
-	dst.ry() += verticalScrollBar()->value();
+	dst.rx() += d->hScroll();
+	dst.ry() += d->vScroll();
 
 	dst -= imageOffset();
 
