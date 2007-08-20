@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef ABSTRACTIMAGEVIEWTOOL_H
 #define ABSTRACTIMAGEVIEWTOOL_H
 
+#include "gwenviewlib_export.h"
+
 // Qt
 #include <QObject>
 
@@ -36,7 +38,7 @@ namespace Gwenview {
 class ImageView;
 
 class AbstractImageViewToolPrivate;
-class AbstractImageViewTool : public QObject {
+class GWENVIEWLIB_EXPORT AbstractImageViewTool : public QObject {
 public:
 	AbstractImageViewTool(QObject* parent);
 	virtual ~AbstractImageViewTool();
@@ -44,7 +46,7 @@ public:
 	void setImageView(ImageView* imageView);
 	ImageView* imageView() const;
 
-	virtual void paint(QPainter*) = 0;
+	virtual void paint(QPainter*) {}
 
 	virtual bool mousePressEvent(QMouseEvent*) { return false; }
 	virtual bool mouseMoveEvent(QMouseEvent*) { return false; }

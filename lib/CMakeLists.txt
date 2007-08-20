@@ -21,6 +21,7 @@ set(gwenviewlib_SRCS
 	loadingdocumentimpl.cpp
     mimetypeutils.cpp
 	slideshow.cpp
+	scrolltool.cpp
 	sorteddirmodel.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp

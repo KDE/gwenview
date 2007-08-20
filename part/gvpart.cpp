@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/imageview.h"
+#include "../lib/scrolltool.h"
 #include "../lib/documentfactory.h"
 
 //Factory Code
@@ -43,6 +44,9 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 {
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
+	ScrollTool* scrollTool = new ScrollTool(this);
+	scrollTool->setImageView(mView);
+	mView->appendTool(scrollTool);
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);

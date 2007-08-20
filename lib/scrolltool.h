@@ -18,52 +18,36 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-// Self
-#include "abstractimageviewtool.h"
+#ifndef SCROLLTOOL_H
+#define SCROLLTOOL_H
+
+#include "gwenviewlib_export.h"
 
 // Qt
-#include <QPointer>
 
 // KDE
 
 // Local
-#include "imageview.h"
+#include "abstractimageviewtool.h"
 
 namespace Gwenview {
 
 
-struct AbstractImageViewToolPrivate {
-	QPointer<ImageView> mImageView;
+class ScrollToolPrivate;
+class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
+public:
+	ScrollTool(QObject* parent);
+	~ScrollTool();
+
+	virtual bool mousePressEvent(QMouseEvent*);
+	virtual bool mouseMoveEvent(QMouseEvent*);
+	virtual bool mouseReleaseEvent(QMouseEvent*);
+
+private:
+	ScrollToolPrivate* const d;
 };
 
 
-AbstractImageViewTool::AbstractImageViewTool(QObject* parent)
-: QObject(parent)
-, d(new AbstractImageViewToolPrivate) {
-	d->mImageView = 0;
-}
-
-
-AbstractImageViewTool::~AbstractImageViewTool() {
-	if (d->mImageView) {
-		d->mImageView->removeTool(this);
-	}
-	delete d;
-}
-
-
-ImageView* AbstractImageViewTool::imageView() const {
-	return d->mImageView;
-}
-
-
-void AbstractImageViewTool::setImageView(ImageView* imageView) {
-	if (d->mImageView) {
-		d->mImageView->removeTool(this);
-	}
-	d->mImageView = imageView;
-	d->mImageView->appendTool(this);
-}
-
-
 } // namespace
+
+#endif /* SCROLLTOOL_H */
