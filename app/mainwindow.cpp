@@ -329,9 +329,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(toggleSideBar()) );
 
 		mToggleSlideShowAction = actionCollection->addAction("toggle_slideshow");
-		updateSlideShowAction();
+		mWindow->updateSlideShowAction();
 		connect(mToggleSlideShowAction, SIGNAL(triggered()),
 			mWindow, SLOT(toggleSlideShow()) );
+		connect(mSlideShow, SIGNAL(stateChanged(bool)),
+			mWindow, SLOT(updateSlideShowAction()) );
 	}
 
 
@@ -474,16 +476,6 @@ struct MainWindow::Private {
 		mFlipAction->setEnabled(canModify);
 		mResizeAction->setEnabled(canModify);
 		mCropAction->setEnabled(canModify);
-	}
-
-	void updateSlideShowAction() {
-		if (mSlideShow->isRunning()) {
-			mToggleSlideShowAction->setText(i18n("Stop slideshow"));
-			mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
-		} else {
-			mToggleSlideShowAction->setText(i18n("Start slideshow"));
-			mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
-		}
 	}
 
 	KUrl currentUrl() const {
@@ -956,8 +948,20 @@ void MainWindow::toggleSlideShow() {
 		}
 		d->mSlideShow->start(list);
 	}
-	d->updateSlideShowAction();
+	updateSlideShowAction();
 }
+
+
+void MainWindow::updateSlideShowAction() {
+	if (d->mSlideShow->isRunning()) {
+		d->mToggleSlideShowAction->setText(i18n("Stop slideshow"));
+		d->mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
+	} else {
+		d->mToggleSlideShowAction->setText(i18n("Start slideshow"));
+		d->mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
+	}
+}
+
 
 
 void MainWindow::generateThumbnailForUrl(const KUrl& url) {
