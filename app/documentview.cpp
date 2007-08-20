@@ -223,4 +223,14 @@ ImageViewPart* DocumentView::imageViewPart() const {
 }
 
 
+void DocumentView::setViewBackgroundColor(const QColor& color) {
+	if (!d->mPart) {
+		return;
+	}
+	QPalette palette = d->mPart->widget()->palette();
+	palette.setColor(d->mPart->widget()->backgroundRole(), color);
+	d->mPart->widget()->setPalette(palette);
+}
+
+
 } // namespace

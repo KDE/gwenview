@@ -92,9 +92,9 @@ ImageView::ImageView(QWidget* parent)
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
 	setFrameShape(QFrame::NoFrame);
+	setBackgroundRole(QPalette::Dark);
 	d->mViewport = new QWidget();
 	setViewport(d->mViewport);
-	d->mViewport->setBackgroundRole(QPalette::Dark);
 	d->mViewport->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
@@ -137,8 +137,9 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	// Erase pixels around the image
 	QRect imageRect(offset, d->mBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
+	QColor bgColor = palette().color(backgroundRole());
 	Q_FOREACH(QRect rect, emptyRegion.rects()) {
-		painter.eraseRect(rect);
+		painter.fillRect(rect, bgColor);
 	}
 
 	painter.drawImage(offset, d->mBuffer);

@@ -790,6 +790,7 @@ void MainWindow::toggleFullScreen() {
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarScrollArea->isVisible();
 
+		d->mDocumentView->setViewBackgroundColor(Qt::black);
 		d->mViewAction->trigger();
 		d->mSideBarScrollArea->hide();
 
@@ -805,6 +806,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSideBarScrollArea->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
+		d->mDocumentView->setViewBackgroundColor(palette().dark().color());
 		d->mSlideShow->stop();
 		d->mFullScreenBar->setActivated(false);
 		showNormal();

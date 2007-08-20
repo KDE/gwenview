@@ -73,6 +73,8 @@ public:
 
 	bool isEmpty() const;
 
+	void setViewBackgroundColor(const QColor&);
+
 	/**
 	 * Returns the image view part, if the current part really is an
 	 * ImageViewPart.
