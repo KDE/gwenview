@@ -78,6 +78,53 @@ struct CropToolPrivate {
 
 		return QRect(left, top, HANDLE_RADIUS * 2 + 1, HANDLE_RADIUS * 2 + 1);
 	}
+
+
+	CropHandle handleAt(const QPoint& pos) {
+		Q_FOREACH(CropHandle handle, mCropHandleList) {
+			QRect rect = handleViewportRect(handle);
+			if (rect.contains(pos)) {
+				return handle;
+			}
+		}
+		return CH_None;
+	}
+
+
+	void updateCursor(const QPoint& pos) {
+		CropHandle handle = mMovingHandle;
+		if (handle == CH_None) {
+			handle = handleAt(pos);
+		}
+
+		Qt::CursorShape shape;
+		switch (handle) {
+		case CH_TopLeft:
+		case CH_BottomRight:
+			shape = Qt::SizeFDiagCursor;
+			break;
+		
+		case CH_TopRight:
+		case CH_BottomLeft:
+			shape = Qt::SizeBDiagCursor;
+			break;
+
+		case CH_Left:
+		case CH_Right:
+			shape = Qt::SizeHorCursor;
+			break;
+
+		case CH_Top:
+		case CH_Bottom:
+			shape = Qt::SizeVerCursor;
+			break;
+
+		default:
+			shape = Qt::ArrowCursor;
+			break;
+		}
+		mCropTool->imageView()->viewport()->setCursor(shape);
+	}
 };
 
 
@@ -127,13 +174,7 @@ void CropTool::paint(QPainter* painter) {
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
 	Q_ASSERT(d->mMovingHandle == CH_None);
-	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
-		QRect rect = d->handleViewportRect(handle);
-		if (rect.contains(event->pos())) {
-			d->mMovingHandle = handle;
-			break;
-		}
-	}
+	d->mMovingHandle = d->handleAt(event->pos());
 
 	if (d->mMovingHandle == CH_None) {
 		return;
@@ -142,6 +183,8 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 
 
 void CropTool::mouseMoveEvent(QMouseEvent* event) {
+	d->updateCursor(event->pos());
+
 	if (d->mMovingHandle == CH_None) {
 		return;
 	}

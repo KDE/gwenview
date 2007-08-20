@@ -115,6 +115,7 @@ ImageView::ImageView(QWidget* parent)
 	setBackgroundRole(QPalette::Dark);
 	d->mViewport = new QWidget();
 	setViewport(d->mViewport);
+	d->mViewport->setMouseTracking(true);
 	d->mViewport->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
