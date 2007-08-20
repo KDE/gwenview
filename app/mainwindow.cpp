@@ -805,6 +805,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSideBarScrollArea->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
+		d->mSlideShow->stop();
 		d->mFullScreenBar->setActivated(false);
 		showNormal();
 		menuBar()->show();
