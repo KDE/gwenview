@@ -61,7 +61,7 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
 	}
 
 	QModelIndex sourceIndex = mapToSource(index);
-	return *d->mSourceModel->itemForIndex(sourceIndex);
+	return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
 
@@ -98,8 +98,8 @@ static bool kFileItemLessThan(const KFileItem& leftItem, const KFileItem& rightI
 
 
 bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-	KFileItem leftItem = *d->mSourceModel->itemForIndex(left);
-	KFileItem rightItem = *d->mSourceModel->itemForIndex(right);
+	KFileItem leftItem = d->mSourceModel->itemForIndex(left);
+	KFileItem rightItem = d->mSourceModel->itemForIndex(right);
 	return kFileItemLessThan(leftItem, rightItem);
 }
 
