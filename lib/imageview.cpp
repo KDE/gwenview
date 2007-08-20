@@ -220,13 +220,40 @@ void ImageView::updateScrollBars() {
 
 void ImageView::scrollContentsBy(int dx, int dy) {
 	// Scroll existing
-	QImage newBuffer(d->mBuffer.size(), QImage::Format_ARGB32);
-	newBuffer.fill(0);
-	{
-		QPainter painter(&newBuffer);
-		painter.drawImage(dx, dy, d->mBuffer);
+	// FIXME: Could be optimized a bit further by looping on the image rows one
+	// time only.
+	uchar* src;
+	uchar* dst;
+	int bpl = d->mBuffer.bytesPerLine();
+	int delta;
+	if (dy != 0) {
+		if (dy > 0) {
+			dst = d->mBuffer.bits() + (d->mBuffer.height() - 1) * bpl;
+			src = dst - dy * bpl;
+			delta = -bpl;
+		} else {
+			dst = d->mBuffer.bits();
+			src = dst - dy * bpl;
+			delta = bpl;
+		}
+		for (int loop=0; loop < d->mBuffer.height() - qAbs(dy); ++loop, src += delta, dst += delta) {
+			memcpy(dst, src, bpl);
+		}
 	}
-	d->mBuffer = newBuffer;
+
+	if (dx != 0) {
+		delta = bpl;
+		if (dx > 0) {
+			src = d->mBuffer.bits();
+			dst = src + dx * 4;
+		} else {
+			dst = d->mBuffer.bits();
+			src = dst - dx * 4;
+		}
+		for (int loop=0; loop < d->mBuffer.height(); ++loop, src += delta, dst += delta) {
+			memmove(dst, src, (d->mBuffer.width() - qAbs(dx)) * 4 );
+		}
+	}
 
 	// Scale missing parts
 	QRegion region;
