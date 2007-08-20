@@ -44,7 +44,7 @@ namespace Gwenview {
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << k_funcinfo << x
+#define LOG(x) kDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -75,7 +75,7 @@ struct SlideShowPrivate {
 	KUrl findNextOrderedUrl() {
 		QVector<KUrl>::ConstIterator it = qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
 		if (it == mUrls.end()) {
-			kWarning() << k_funcinfo << "Current url not found in list. This should not happen.\n";
+			kWarning() << "Current url not found in list. This should not happen.\n";
 			return KUrl();
 		}
 
@@ -178,7 +178,7 @@ void SlideShow::start(const QList<KUrl>& urls) {
 
 	d->mStartIt=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
 	if (d->mStartIt==d->mUrls.end()) {
-		kWarning() << k_funcinfo << "Current url not found in list, aborting.\n";
+		kWarning() << "Current url not found in list, aborting.\n";
 		return;
 	}
 

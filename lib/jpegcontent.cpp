@@ -74,7 +74,7 @@ void inmem_init_source(j_decompress_ptr cinfo) {
  */
 int inmem_fill_input_buffer(j_decompress_ptr cinfo) {
 	static JOCTET fakeEOI[2]={ JOCTET(0xFF), JOCTET(JPEG_EOI)};
-	kWarning() << k_funcinfo << " Image is incomplete" ;
+	kWarning() << " Image is incomplete" ;
 	cinfo->src->next_input_byte=fakeEOI;
 	cinfo->src->bytes_in_buffer=2;
 	return true;
@@ -190,7 +190,7 @@ struct JpegContent::Private {
 		srcinfo.err = &errorManager;
 		jpeg_create_decompress(&srcinfo);
 		if (setjmp(errorManager.jmp_buffer)) {
-			kError() << k_funcinfo << "libjpeg fatal error\n";
+			kError() << "libjpeg fatal error\n";
 			return false;
 		}
 
@@ -415,7 +415,7 @@ void JpegContent::transform(Orientation orientation) {
 			}
 		}
 		if (it == end) {
-			kWarning() << k_funcinfo << "Could not find matrix for orientation\n";
+			kWarning() << "Could not find matrix for orientation\n";
 		}
 	}
 }
@@ -471,7 +471,7 @@ void JpegContent::applyPendingTransformation() {
 	srcinfo.err = &srcErrorManager;
 	jpeg_create_decompress(&srcinfo);
 	if (setjmp(srcErrorManager.jmp_buffer)) {
-		kError() << k_funcinfo << "libjpeg error in src\n";
+		kError() << "libjpeg error in src\n";
 		return;
 	}
 
@@ -480,7 +480,7 @@ void JpegContent::applyPendingTransformation() {
 	dstinfo.err = &dstErrorManager;
 	jpeg_create_compress(&dstinfo);
 	if (setjmp(dstErrorManager.jmp_buffer)) {
-		kError() << k_funcinfo << "libjpeg error in dst\n";
+		kError() << "libjpeg error in dst\n";
 		return;
 	}
 

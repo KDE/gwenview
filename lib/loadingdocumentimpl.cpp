@@ -48,7 +48,7 @@ namespace Gwenview {
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << k_funcinfo << x
+#define LOG(x) kDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -255,7 +255,7 @@ Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QByteArray&) {
 }
 
 void LoadingDocumentImpl::setImage(const QImage&) {
-	kWarning() << k_funcinfo << " should not be called\n";
+	kWarning() << " should not be called\n";
 }
 
 } // namespace
