@@ -66,6 +66,7 @@ private Q_SLOTS:
 	void slotTimeout();
 	void updateTimerInterval();
 	void updateConfig();
+	void slotRandomActionToggled(bool on);
 
 private:
 	SlideShowPrivate* const d;

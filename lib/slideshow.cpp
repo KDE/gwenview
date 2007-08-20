@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "slideshow.moc"
 
 // STL
-//#include <algorithm>
+#include <algorithm>
 
 // Qt
 #include <QAction>
@@ -53,6 +53,7 @@ struct SlideShowPrivate {
 	QTimer* mTimer;
 	bool mStarted;
 	QVector<KUrl> mUrls;
+	QVector<KUrl> mShuffledUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
 	KUrl mCurrentUrl;
 
@@ -60,30 +61,65 @@ struct SlideShowPrivate {
 	QToolButton* mOptionsButton;
 
 	QAction* mLoopAction;
+	QAction* mRandomAction;
 
-	QVector<KUrl>::ConstIterator findNextUrl() const {
-		QVector<KUrl>::ConstIterator it=qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
-		if (it==mUrls.end()) {
+	KUrl findNextUrl() {
+		if (SlideShowConfig::random()) {
+			return findNextRandomUrl();
+		} else {
+			return findNextOrderedUrl();
+		}
+	}
+
+
+	KUrl findNextOrderedUrl() {
+		QVector<KUrl>::ConstIterator it = qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
+		if (it == mUrls.end()) {
 			kWarning() << k_funcinfo << "Current url not found in list. This should not happen.\n";
-			return it;
+			return KUrl();
 		}
 
 		++it;
-		// FIXME: loop
 		if (SlideShowConfig::loop()) {
 			// Looping, if we reach the end, start again
-			if (it==mUrls.end()) {
+			if (it == mUrls.end()) {
 				it = mUrls.begin();
 			}
 		} else {
 			// Not looping, have we reached the end?
 			// FIXME: stopAtEnd
-			if ((it==mUrls.end() /*&& SlideShowConfig::stopAtEnd()*/) || it==mStartIt) {
+			if (/*(it==mUrls.end() && SlideShowConfig::stopAtEnd()) ||*/ it == mStartIt) {
 				it = mUrls.end();
 			}
 		}
 
-		return it;
+		if (it != mUrls.end()) {
+			return *it;
+		} else {
+			return KUrl();
+		}
+	}
+
+
+	void initShuffledUrls() {
+		mShuffledUrls = mUrls;
+		std::random_shuffle(mShuffledUrls.begin(), mShuffledUrls.end());
+	}
+
+
+	KUrl findNextRandomUrl() {
+		if (mShuffledUrls.empty()) {
+			if (SlideShowConfig::loop()) {
+				initShuffledUrls();
+			} else {
+				return KUrl();
+			}
+		}
+
+		KUrl url = mShuffledUrls.last();
+		mShuffledUrls.pop_back();
+
+		return url;
 	}
 };
 
@@ -113,11 +149,19 @@ SlideShow::SlideShow(QObject* parent)
 	QMenu* menu = new QMenu(d->mOptionsButton);
 	d->mOptionsButton->setMenu(menu);
 	d->mOptionsButton->setPopupMode(QToolButton::InstantPopup);
+
 	d->mLoopAction = menu->addAction(i18n("Loop"));
 	d->mLoopAction->setCheckable(true);
 	connect(d->mLoopAction, SIGNAL(triggered()), SLOT(updateConfig()) );
 
+	d->mRandomAction = menu->addAction(i18n("Random"));
+	d->mRandomAction->setCheckable(true);
+	connect(d->mRandomAction, SIGNAL(toggled(bool)), SLOT(slotRandomActionToggled(bool)) );
+	connect(d->mRandomAction, SIGNAL(triggered()), SLOT(updateConfig()) );
+
+
 	d->mLoopAction->setChecked(SlideShowConfig::loop());
+	d->mRandomAction->setChecked(SlideShowConfig::random());
 	d->mIntervalSpinBox->setValue(SlideShowConfig::interval());
 }
 
@@ -131,17 +175,15 @@ SlideShow::~SlideShow() {
 void SlideShow::start(const QList<KUrl>& urls) {
 	d->mUrls.resize(urls.size());
 	qCopy(urls.begin(), urls.end(), d->mUrls.begin());
-	// FIXME: random
-	/*
-	if (SlideShowConfig::random()) {
-		std::random_shuffle(d->mUrls.begin(), d->mUrls.end());
-	}
-	*/
 
 	d->mStartIt=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
 	if (d->mStartIt==d->mUrls.end()) {
 		kWarning() << k_funcinfo << "Current url not found in list, aborting.\n";
 		return;
+	}
+
+	if (SlideShowConfig::random()) {
+		d->initShuffledUrls();
 	}
 	
 	updateTimerInterval();
@@ -169,12 +211,13 @@ void SlideShow::stop() {
 
 void SlideShow::slotTimeout() {
 	LOG("");
-	QVector<KUrl>::ConstIterator it = d->findNextUrl();
-	if (it==d->mUrls.end()) {
+	KUrl url = d->findNextUrl();
+	LOG("url:" << url);
+	if (!url.isValid()) {
 		stop();
 		return;
 	}
-	goToUrl(*it);
+	goToUrl(url);
 }
 
 
@@ -200,6 +243,14 @@ QWidget* SlideShow::optionsWidget() const {
 
 void SlideShow::updateConfig() {
 	SlideShowConfig::setLoop(d->mLoopAction->isChecked());
+	SlideShowConfig::setRandom(d->mRandomAction->isChecked());
+}
+
+
+void SlideShow::slotRandomActionToggled(bool on) {
+	if (on && d->mStarted) {
+		d->initShuffledUrls();
+	}
 }
 
 
