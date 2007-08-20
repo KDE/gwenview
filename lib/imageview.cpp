@@ -69,7 +69,10 @@ struct ImageViewPrivate {
 		visibleSize = mImage.size() * zoom;
 		visibleSize = visibleSize.boundedTo(mViewport->size());
 
-		return QImage(visibleSize, QImage::Format_ARGB32);
+		QImage buffer(visibleSize, QImage::Format_ARGB32);
+		QColor bgColor = mView->palette().color(mView->backgroundRole());
+		buffer.fill(bgColor.rgba());
+		return buffer;
 	}
 
 	int hScroll() const {
@@ -128,7 +131,6 @@ ImageView::~ImageView() {
 void ImageView::setImage(const QImage& image) {
 	d->mImage = image;
 	d->mBuffer = d->createBuffer();
-	d->mBuffer.fill(qRgb(0, 0, 0));
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
 	} else {
@@ -168,7 +170,6 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 void ImageView::resizeEvent(QResizeEvent*) {
 	QImage newBuffer = d->createBuffer();
-	newBuffer.fill(qRgb(0, 0, 0));
 	{
 		QPainter painter(&newBuffer);
 		painter.drawImage(0, 0, d->mBuffer);
