@@ -128,6 +128,11 @@ void ImageScaler::doScale() {
 }
 
 void ImageScaler::processChunk(const QRect& rect) {
+	if (qAbs(d->mZoom - 1.0) < 0.001) {
+		QImage tmp = d->mImage.copy(rect);
+		scaledRect(rect.left(), rect.top(), tmp);
+		return;
+	}
 	// If rect contains "half" pixels, make sure sourceRect includes them
 	QRectF sourceRectF(
 		rect.left() / d->mZoom,
