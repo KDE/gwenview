@@ -33,11 +33,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kio/job.h>
+#include <kio/jobclasses.h>
 #include <kurl.h>
 
 // Local
 #include "document.h"
 #include "documentloadedimpl.h"
+#include "emptydocumentimpl.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
@@ -132,24 +135,17 @@ public:
 
 	virtual void run() {
 		QMutexLocker lock(&mMutex);
-		QString path = mUrl.path();
-		mFormat = QImageReader::imageFormat(path);
-		QFile file(path);
-		bool ok = file.open(QIODevice::ReadOnly);
-		if (!ok) {
-			return;
-		}
-		mData = file.readAll();
 		mBuffer.setBuffer(&mData);
 		mBuffer.open(QIODevice::ReadOnly);
+		mFormat = QImageReader::imageFormat(&mBuffer);
 
-		ok = mImage.load(&mBuffer, mFormat.data());
+		bool ok = mImage.load(&mBuffer, mFormat.data());
 		if (!ok) {
 			return;
 		}
 		if (mFormat == "jpeg") {
 			mJpegContent = new JpegContent();
-			if (!mJpegContent->load(path)) {
+			if (!mJpegContent->loadFromData(mData)) {
 				return;
 			}
 			Gwenview::Orientation orientation = mJpegContent->orientation();
@@ -162,19 +158,14 @@ public:
 		mBuffer.cancel();
 	}
 
-	void setUrl(const KUrl& url) {
+	void setData(const QByteArray& data) {
 		QMutexLocker lock(&mMutex);
-		mUrl = url;
+		mData = data;
 	}
 
 	const QByteArray& format() const {
 		QMutexLocker lock(&mMutex);
 		return mFormat;
-	}
-
-	const QByteArray& data() const {
-		QMutexLocker lock(&mMutex);
-		return mData;
 	}
 
 	const QImage& image() const {
@@ -191,7 +182,6 @@ public:
 
 private:
 	mutable QMutex mMutex;
-	KUrl mUrl;
 	CancellableBuffer mBuffer;
 	QByteArray mData;
 	QByteArray mFormat;
@@ -201,6 +191,8 @@ private:
 
 
 struct LoadingDocumentImplPrivate {
+	QPointer<KIO::TransferJob> mTransferJob;
+	QByteArray mData;
 	LoadingThread mThread;
 };
 
@@ -213,6 +205,9 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 
 LoadingDocumentImpl::~LoadingDocumentImpl() {
 	LOG("");
+	if (d->mTransferJob) {
+		d->mTransferJob->kill();
+	}
 	if (d->mThread.isRunning()) {
 		LOG("");
 		d->mThread.cancel();
@@ -222,7 +217,28 @@ LoadingDocumentImpl::~LoadingDocumentImpl() {
 }
 
 void LoadingDocumentImpl::init() {
-	d->mThread.setUrl(document()->url());
+	d->mTransferJob = KIO::get(document()->url());
+	connect(d->mTransferJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+		SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
+	connect(d->mTransferJob, SIGNAL(result(KJob*)),
+		SLOT(slotTransferFinished(KJob*)) );
+	d->mTransferJob->start();
+}
+
+
+void LoadingDocumentImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+	d->mData.append(chunk);
+}
+
+
+void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
+	if (job->error()) {
+		//FIXME: Better error handling
+		kWarning() << job->errorString();
+		switchToImpl(new EmptyDocumentImpl(document()));
+		return;
+	}
+	d->mThread.setData(d->mData);
 	connect(&d->mThread, SIGNAL(finished()), SLOT(slotImageLoaded()) );
 	d->mThread.start();
 }

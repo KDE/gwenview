@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentimpl.h"
 
+class KJob;
+namespace KIO { class Job; }
+
 namespace Gwenview {
 
 
@@ -45,6 +48,8 @@ public:
 
 private Q_SLOTS:
 	void slotImageLoaded();
+	void slotDataReceived(KIO::Job*, const QByteArray&);
+	void slotTransferFinished(KJob*);
 
 private:
 	LoadingDocumentImplPrivate* const d;
