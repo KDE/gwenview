@@ -62,8 +62,8 @@ void DocumentTest::testLoadRemote() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
 	QImage image = doc->image();
-	QCOMPARE(image.width(), 100);
-	QCOMPARE(image.height(), 80);
+	QCOMPARE(image.width(), 300);
+	QCOMPARE(image.height(), 200);
 }
 
 /**
