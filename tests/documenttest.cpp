@@ -19,10 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 // Qt
 #include <QConicalGradient>
+#include <QDir>
 #include <QImage>
 #include <QPainter>
 
 // KDE
+#include <kio/netaccess.h>
 #include <qtest_kde.h>
 
 // Local
@@ -44,6 +46,19 @@ void DocumentTest::testLoad() {
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 	QCOMPARE(doc->format().data(), "png");
+}
+
+void DocumentTest::testLoadRemote() {
+	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
+	KUrl url(urlString);
+
+	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test archive not found");
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	QImage image = doc->image();
+	QCOMPARE(image.width(), 100);
+	QCOMPARE(image.height(), 80);
 }
 
 /**

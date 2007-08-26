@@ -25,6 +25,7 @@ class DocumentTest : public QObject {
 
 private Q_SLOTS:
 	void testLoad();
+	void testLoadRemote();
 	void testDeleteWhileLoading();
 	void testLoadRotated();
 	void testMultipleLoads();
