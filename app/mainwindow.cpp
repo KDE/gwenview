@@ -394,6 +394,7 @@ struct MainWindow::Private {
 		QModelIndex index = getRelativeIndex(offset);
 		if (index.isValid()) {
 			mThumbnailView->setCurrentIndex(index);
+			mThumbnailView->scrollTo(index);
 		}
 	}
 
