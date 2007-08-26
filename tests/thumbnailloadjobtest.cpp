@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <qtest_kde.h>
 #include <kdebug.h>
+#include <kio/deletejob.h>
 
 // Local
 #include "../lib/thumbnailloadjob.h"
@@ -38,8 +39,8 @@ using namespace Gwenview;
 QTEST_KDEMAIN(ThumbnailLoadJobTest, GUI)
 
 
-QString testDirPath() {
-	return QDir::currentPath() + "/testdir";
+QString sandBoxPath() {
+	return QDir::currentPath() + "/sandbox";
 }
 
 
@@ -48,17 +49,23 @@ void createTestImage(const QString& name, int width, int height, QColor color) {
 	QPainter painter(&image);
 	painter.fillRect(image.rect(), color);
 	painter.end();
-	image.save(testDirPath() + "/" + name, "png");
+	image.save(sandBoxPath() + "/" + name, "png");
 }
 
 
 void ThumbnailLoadJobTest::initTestCase() {
-	QDir dir(testDirPath());
+	ThumbnailLoadJob::setThumbnailBaseDir(sandBoxPath() + "/thumbnails/");
+}
+
+
+static void resetSandBox() {
+	QDir dir(sandBoxPath());
 	if (dir.exists()) {
-		dir.rmpath(".");
+		KUrl sandBoxUrl("file://" + sandBoxPath());
+		KIO::Job* job = KIO::del(sandBoxUrl);
+		QVERIFY2(job->exec(), "Couldn't delete sandbox");
 	}
 	dir.mkpath(".");
-	ThumbnailLoadJob::setThumbnailBaseDir(testDirPath() + "/thumbnails/");
 	createTestImage("red.png", 300, 200, Qt::red);
 	createTestImage("blue.png", 200, 300, Qt::blue);
 	createTestImage("small.png", 50, 50, Qt::green);
@@ -66,7 +73,8 @@ void ThumbnailLoadJobTest::initTestCase() {
 
 
 void ThumbnailLoadJobTest::testLoadLocal() {
-	QDir dir(testDirPath());
+	resetSandBox();
+	QDir dir(sandBoxPath());
 
 	QList<KFileItem> list;
 	Q_FOREACH(QFileInfo info, dir.entryInfoList()) {
@@ -88,4 +96,27 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 	// thumbnail
 	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
 	QCOMPARE(entryList.count(), 2);
+}
+
+
+void ThumbnailLoadJobTest::testLoadRemote() {
+	resetSandBox();
+	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
+	KUrl url(urlString);
+	QList<KFileItem> list;
+	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+	list << item;
+
+	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, 128);
+	// FIXME: job->exec() causes a double free(), so wait for the job to be
+	// deleted instead
+	//job->exec();
+	job->start();
+	while (job) {
+		QTest::qWait(100);
+	}
+
+	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(128);
+	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
+	QCOMPARE(entryList.count(), 1);
 }
