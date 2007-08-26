@@ -57,8 +57,9 @@ struct ImageViewPrivate {
 		return qMin(zoom, 1.0);
 	}
 
-	QImage createBuffer() const {
-		QSize visibleSize;
+
+	QSize requiredBufferSize() const {
+		QSize size;
 		qreal zoom;
 		if (mZoomToFit) {
 			zoom = computeZoomToFit();
@@ -66,14 +67,35 @@ struct ImageViewPrivate {
 			zoom = mZoom;
 		}
 
-		visibleSize = mImage.size() * zoom;
-		visibleSize = visibleSize.boundedTo(mViewport->size());
+		size = mImage.size() * zoom;
+		size = size.boundedTo(mViewport->size());
 
-		QImage buffer(visibleSize, QImage::Format_ARGB32);
+		return size;
+	}
+
+
+	QImage createBuffer() const {
+		QSize size = requiredBufferSize();
+		QImage buffer(size, QImage::Format_ARGB32);
 		QColor bgColor = mView->palette().color(mView->backgroundRole());
 		buffer.fill(bgColor.rgba());
 		return buffer;
 	}
+
+
+	void resizeBuffer() {
+		QSize size = requiredBufferSize();
+		if (size == mBuffer.size()) {
+			return;
+		}
+		QImage newBuffer = createBuffer();
+		{
+			QPainter painter(&newBuffer);
+			painter.drawImage(0, 0, mBuffer);
+		}
+		mBuffer = newBuffer;
+	}
+
 
 	int hScroll() const {
 		if (mZoomToFit) {
@@ -170,15 +192,10 @@ void ImageView::paintEvent(QPaintEvent* event) {
 }
 
 void ImageView::resizeEvent(QResizeEvent*) {
-	QImage newBuffer = d->createBuffer();
-	{
-		QPainter painter(&newBuffer);
-		painter.drawImage(0, 0, d->mBuffer);
-	}
-	d->mBuffer = newBuffer;
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
 	} else {
+		d->resizeBuffer();
 		updateScrollBars();
 		startScaler();
 	}
@@ -192,7 +209,13 @@ QPoint ImageView::imageOffset() const {
 }
 
 void ImageView::setZoom(qreal zoom) {
+	qreal oldZoom = d->mZoom;
 	d->mZoom = zoom;
+	d->resizeBuffer();
+	if (d->mZoom < oldZoom && (d->mBuffer.width() < d->mViewport->width() || d->mBuffer.height() < d->mViewport->height())) {
+		// Trigger an update to erase borders
+		d->mViewport->update();
+	}
 	updateScrollBars();
 	startScaler();
 	emit zoomChanged();
