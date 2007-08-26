@@ -56,6 +56,9 @@ public:
 	QRect mapToViewport(const QRect& src);
 	QRect mapToImage(const QRect& src);
 
+Q_SIGNALS:
+	void zoomChanged();
+
 public Q_SLOTS:
 	void setZoomToFit(bool on);
 

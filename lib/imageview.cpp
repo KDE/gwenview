@@ -195,6 +195,7 @@ void ImageView::setZoom(qreal zoom) {
 	d->mZoom = zoom;
 	updateScrollBars();
 	startScaler();
+	emit zoomChanged();
 }
 
 qreal ImageView::zoom() const {

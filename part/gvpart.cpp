@@ -46,6 +46,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	setWidget(mView);
 	ScrollTool* scrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(scrollTool);
+	connect(mView, SIGNAL(zoomChanged()), SLOT(updateCaption()) );
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
@@ -85,7 +86,7 @@ bool GVPart::openUrl(const KUrl& url) {
 
 void GVPart::setViewImageFromDocument() {
 	mView->setImage(mDocument->image());
-	emit setWindowCaption( url().prettyUrl() );
+	updateCaption();
 	emit completed();
 }
 
@@ -96,6 +97,14 @@ KAboutData* GVPart::createAboutData() {
 		KAboutData::License_GPL,
 		ki18n("Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>"));
 	return aboutData;
+}
+
+
+void GVPart::updateCaption() {
+	int intZoom = int(mView->zoom() * 100);
+	QString urlString = url().pathOrUrl();
+	QString caption = QString("%1 - %2%").arg(urlString).arg(intZoom);
+	emit setWindowCaption(caption);
 }
 
 
