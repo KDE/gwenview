@@ -204,8 +204,8 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 			//, QPoint(d->hScroll() % d->mBackgroundTexture.width(), d->vScroll() % d->mBackgroundTexture.height())
 			);
-		painter.drawImage(offset, d->mBuffer);
 	}
+	painter.drawImage(offset, d->mBuffer);
 
 	if (d->mTool) {
 		d->mTool->paint(&painter);
