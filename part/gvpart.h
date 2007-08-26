@@ -46,6 +46,7 @@ protected:
 	virtual bool openUrl(const KUrl&);
 
 private Q_SLOTS:
+	void setZoomToFit(bool);
 	void zoomActualSize();
 	void zoomIn();
 	void zoomOut();
@@ -55,6 +56,8 @@ private:
 	ImageView* mView;
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
+
+	void disableZoomToFit();
 };
 
 } // namespace

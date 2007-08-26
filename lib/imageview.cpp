@@ -209,8 +209,6 @@ void ImageView::setZoomToFit(bool on) {
 	d->mZoomToFit = on;
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
-	} else {
-		setZoom(1.);
 	}
 }
 

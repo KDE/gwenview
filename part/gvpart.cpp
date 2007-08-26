@@ -52,7 +52,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	mZoomToFitAction->setChecked(mView->zoomToFit());
 	mZoomToFitAction->setText(i18n("Zoom To Fit"));
 	mZoomToFitAction->setIcon(KIcon("zoom-best-fit"));
-	connect(mZoomToFitAction, SIGNAL(toggled(bool)), mView, SLOT(setZoomToFit(bool)) );
+	connect(mZoomToFitAction, SIGNAL(toggled(bool)), SLOT(setZoomToFit(bool)) );
 	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
 	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
@@ -99,21 +99,45 @@ KAboutData* GVPart::createAboutData() {
 }
 
 
+void GVPart::setZoomToFit(bool on) {
+	mView->setZoomToFit(on);
+	if (!on) {
+		mView->setZoom(1.);
+	}
+}
+
+
 void GVPart::zoomActualSize() {
-	mZoomToFitAction->setChecked(false);
+	disableZoomToFit();
 	mView->setZoom(1.);
 }
 
 
 void GVPart::zoomIn() {
-	mZoomToFitAction->setChecked(false);
+	disableZoomToFit();
 	mView->setZoom(mView->zoom() * 2);
 }
 
 
 void GVPart::zoomOut() {
-	mZoomToFitAction->setChecked(false);
+	disableZoomToFit();
 	mView->setZoom(mView->zoom() / 2);
+}
+
+
+void GVPart::disableZoomToFit() {
+	// We can't disable zoom to fit by calling
+	// mZoomToFitAction->setChecked(false) directly because it would trigger
+	// the action slot, which would set zoom to 100%.
+	// If zoomToFit is on and the image is at 33%, pressing zoom in should
+	// show the image at 66%, not 200%.
+	if (!mView->zoomToFit()) {
+		return;
+	}
+	mView->setZoomToFit(false);
+	mZoomToFitAction->blockSignals(true);
+	mZoomToFitAction->setChecked(false);
+	mZoomToFitAction->blockSignals(false);
 }
 
 
