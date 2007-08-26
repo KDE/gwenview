@@ -646,11 +646,6 @@ void MainWindow::openDirUrl(const KUrl& url) {
 }
 
 
-void MainWindow::openDirUrlFromString(const QString& str) {
-	KUrl url(str);
-	openDirUrl(url);
-}
-
 void MainWindow::openDocumentUrl(const KUrl& url) {
 	if (d->mDocumentView->url() == url) {
 		return;
