@@ -312,8 +312,9 @@ bool ThumbnailThread::loadJpeg() {
 		break;
 	case 1: // B&W image
 		mImage = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
+		mImage.setNumColors(256);
 		for (int i=0; i<256; i++) {
-			mImage.setColor(i, qRgb(i,i,i));
+			mImage.setColor(i, qRgba(i, i, i, 255));
 		}
 		break;
 	default:
