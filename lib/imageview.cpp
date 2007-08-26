@@ -54,7 +54,7 @@ struct ImageViewPrivate {
 		if ( int(mImage.height() * zoom) > height) {
 			zoom = qreal(height) / mImage.height();
 		}
-		return zoom;
+		return qMin(zoom, 1.0);
 	}
 
 	QImage createBuffer() const {
