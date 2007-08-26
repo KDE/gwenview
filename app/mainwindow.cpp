@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QFrame>
-#include <QInputDialog>
 #include <QLabel>
 #include <QListView>
 #include <QTimer>
@@ -40,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <kimageio.h>
+#include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <kmountpoint.h>
@@ -892,8 +892,12 @@ void MainWindow::resizeImage() {
 	doc->waitUntilLoaded();
 	int size = qMax(doc->image().width(), doc->image().height());
 	bool ok = false;
-	size = QInputDialog::getInteger(this, i18n("Image Resizing"), i18n("Enter the new size of the image:"), size, 0, 10000,
-		10 /* step */, &ok);
+	size = KInputDialog::getInteger(
+		i18n("Image Resizing"),
+		i18n("Enter the new size of the image:"),
+		size, 0, 10000, 10 /* step */,
+		&ok,
+		this);
 	if (!ok) {
 		return;
 	}
