@@ -27,3 +27,12 @@ set(jpegcontenttest_SRCS
 kde4_add_test_executable(jpegcontenttest ${jpegcontenttest_SRCS})
 
 target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+# ThumbnailLoadJob
+set(thumbnailloadjobtest_SRCS
+	thumbnailloadjobtest.cpp
+	)
+
+kde4_add_test_executable(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
+
+target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
