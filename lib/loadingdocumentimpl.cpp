@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <kmountpoint.h>
 #include <kurl.h>
 
 // Local
@@ -191,15 +192,23 @@ private:
 
 
 struct LoadingDocumentImplPrivate {
+	LoadingDocumentImpl* mImpl;
 	QPointer<KIO::TransferJob> mTransferJob;
 	QByteArray mData;
 	LoadingThread mThread;
+
+	void startLoadingThread() {
+		mThread.setData(mData);
+		QObject::connect(&mThread, SIGNAL(finished()), mImpl, SLOT(slotImageLoaded()) );
+		mThread.start();
+	}
 };
 
 
 LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate) {
+	d->mImpl = this;
 }
 
 
@@ -217,12 +226,30 @@ LoadingDocumentImpl::~LoadingDocumentImpl() {
 }
 
 void LoadingDocumentImpl::init() {
-	d->mTransferJob = KIO::get(document()->url());
-	connect(d->mTransferJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
-		SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
-	connect(d->mTransferJob, SIGNAL(result(KJob*)),
-		SLOT(slotTransferFinished(KJob*)) );
-	d->mTransferJob->start();
+	KUrl url = document()->url();
+	// Check if we should open directly
+	KMountPoint::List mpl = KMountPoint::currentMountPoints();
+	KMountPoint::Ptr mp = mpl.findByPath( url.path() );
+
+	if (url.isLocalFile() && !mp->probablySlow()) {
+		// Load file content directly
+		QFile file(url.path());
+		if (!file.open(QIODevice::ReadOnly)) {
+			kWarning() << "Couldn't open" << url;
+			switchToImpl(new EmptyDocumentImpl(document()));
+			return;
+		}
+		d->mData = file.readAll();
+		d->startLoadingThread();
+	} else {
+		// Transfer file via KIO
+		d->mTransferJob = KIO::get(document()->url());
+		connect(d->mTransferJob, SIGNAL(data(KIO::Job*, const QByteArray&)),
+			SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
+		connect(d->mTransferJob, SIGNAL(result(KJob*)),
+			SLOT(slotTransferFinished(KJob*)) );
+		d->mTransferJob->start();
+	}
 }
 
 
@@ -238,9 +265,7 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
 	}
-	d->mThread.setData(d->mData);
-	connect(&d->mThread, SIGNAL(finished()), SLOT(slotImageLoaded()) );
-	d->mThread.start();
+	d->startLoadingThread();
 }
 
 
