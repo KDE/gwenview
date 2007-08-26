@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QFrame>
-#include <QGridLayout>
 #include <QInputDialog>
 #include <QLabel>
 #include <QListView>
@@ -39,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
+#include <kfileplacesmodel.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
@@ -49,7 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <kurl.h>
-#include <kurlrequester.h>
+#include <kurlnavigator.h>
 #include <kxmlguifactory.h>
 
 // Local
@@ -117,8 +117,7 @@ struct MainWindow::Private {
 	MainWindow* mWindow;
 	QSplitter* mCentralSplitter;
 	DocumentView* mDocumentView;
-	QToolButton* mGoUpButton;
-	KUrlRequester* mUrlRequester;
+	KUrlNavigator* mUrlNavigator;
 	ThumbnailView* mThumbnailView;
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
@@ -207,17 +206,11 @@ struct MainWindow::Private {
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
-		// mGoUpButton
-		mGoUpButton = new QToolButton(mThumbnailViewPanel);
-		mGoUpButton->setAutoRaise(true);
-
-		// mUrlRequester
-		mUrlRequester = new KUrlRequester(mThumbnailViewPanel);
-		mUrlRequester->setMode(KFile::Directory);
-		connect(mUrlRequester, SIGNAL(urlSelected(const KUrl&)),
+		// mUrlNavigator
+		KFilePlacesModel* places = new KFilePlacesModel(mThumbnailViewPanel);
+		mUrlNavigator = new KUrlNavigator(places, KUrl(), mThumbnailViewPanel);
+		connect(mUrlNavigator, SIGNAL(urlChanged(const KUrl&)),
 			mWindow, SLOT(openDirUrl(const KUrl&)) );
-		connect(mUrlRequester, SIGNAL(returnPressed(const QString&)),
-			mWindow, SLOT(openDirUrlFromString(const QString&)) );
 
 		// Thumbnail slider
 		KStatusBar* statusBar = new KStatusBar(mThumbnailViewPanel);
@@ -231,13 +224,12 @@ struct MainWindow::Private {
 		connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
 
 		// Layout
-		QGridLayout* layout = new QGridLayout(mThumbnailViewPanel);
+		QVBoxLayout* layout = new QVBoxLayout(mThumbnailViewPanel);
 		layout->setSpacing(0);
 		layout->setMargin(0);
-		layout->addWidget(mGoUpButton, 0, 0);
-		layout->addWidget(mUrlRequester, 0, 1);
-		layout->addWidget(mThumbnailView, 1, 0, 1, 2);
-		layout->addWidget(statusBar, 2, 0, 1, 2);
+		layout->addWidget(mUrlNavigator);
+		layout->addWidget(mThumbnailView);
+		layout->addWidget(statusBar);
 	}
 
 	void setupActions() {
@@ -287,7 +279,6 @@ struct MainWindow::Private {
 			mWindow, SLOT(goToNext()) );
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
-		mGoUpButton->setDefaultAction(mGoUpAction);
 
 		mRotateLeftAction = actionCollection->addAction("rotate_left");
 		mRotateLeftAction->setText(i18n("Rotate Left"));
@@ -425,7 +416,7 @@ struct MainWindow::Private {
 
 	void spreadCurrentDirUrl(const KUrl& url) {
 		mContextManager->setCurrentDirUrl(url);
-		mUrlRequester->setUrl(url);
+		mUrlNavigator->setUrl(url);
 		mGoUpAction->setEnabled(url.path() != "/");
 	}
 

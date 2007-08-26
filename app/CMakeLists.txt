@@ -14,7 +14,7 @@ set(gwenview_SRCS
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
-target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} gwenviewlib)
+target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} ${KDE4_KFILE_LIBS} gwenviewlib)
 
 install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
 install(FILES gwenviewui.rc
