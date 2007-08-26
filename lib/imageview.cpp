@@ -38,6 +38,7 @@ namespace Gwenview {
 
 struct ImageViewPrivate {
 	ImageView* mView;
+	QPixmap mBackgroundTexture;
 	QWidget* mViewport;
 	QImage mImage;
 	qreal mZoom;
@@ -45,6 +46,16 @@ struct ImageViewPrivate {
 	QImage mBuffer;
 	ImageScaler* mScaler;
 	QPointer<AbstractImageViewTool> mTool;
+
+
+	void createBackgroundTexture() {
+		mBackgroundTexture = QPixmap(32, 32);
+		QPainter painter(&mBackgroundTexture);
+		painter.fillRect(mBackgroundTexture.rect(), QColor(128, 128, 128));
+		QColor light = QColor(192, 192, 192);
+		painter.fillRect(0, 0, 16, 16, light);
+		painter.fillRect(16, 16, 16, 16, light);
+	}
 
 
 	qreal computeZoomToFit() const {
@@ -133,6 +144,7 @@ ImageView::ImageView(QWidget* parent)
 	d->mView = this;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
+	d->createBackgroundTexture();
 	setFrameShape(QFrame::NoFrame);
 	setBackgroundRole(QPalette::Dark);
 	d->mViewport = new QWidget();
@@ -184,7 +196,16 @@ void ImageView::paintEvent(QPaintEvent* event) {
 		painter.fillRect(rect, bgColor);
 	}
 
-	painter.drawImage(offset, d->mBuffer);
+	if (d->mImage.hasAlphaChannel()) {
+		painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
+			// This option makes the background scroll with the image, like GIMP
+			// and others do. I think having a fixed background makes it easier to
+			// distinguish transparent parts, so I comment it out for now.
+
+			//, QPoint(d->hScroll() % d->mBackgroundTexture.width(), d->vScroll() % d->mBackgroundTexture.height())
+			);
+		painter.drawImage(offset, d->mBuffer);
+	}
 
 	if (d->mTool) {
 		d->mTool->paint(&painter);
@@ -329,6 +350,7 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 
 	{
 		QPainter painter(&d->mBuffer);
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
 		painter.drawImage(left, top, image);
 	}
 	QPoint offset = imageOffset();
