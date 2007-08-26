@@ -721,14 +721,22 @@ void ThumbnailLoadJob::checkThumbnail() {
 		} else {
 			// Original is remote, download it
 			mState=STATE_DOWNLOADORIG;
-			KTemporaryFile tmpFile;
-			tmpFile.setAutoRemove(false);
-			mTempPath=tmpFile.fileName();
+			
+			KTemporaryFile tempFile;
+			tempFile.setAutoRemove(false);
+			if (!tempFile.open()) {
+				kWarning() << "Couldn't create temp file to download " << mCurrentUrl.prettyUrl();
+				emitThumbnailLoadingFailed();
+				determineNextIcon();
+				return;
+			}
+			mTempPath = tempFile.fileName();
+
 			KUrl url;
 			url.setPath(mTempPath);
 			KIO::Job* job=KIO::file_copy(mCurrentUrl, url,-1,true,false,false);
 			job->ui()->setWindow(KApplication::kApplication()->activeWindow());
-			LOG("Download remote file" << mCurrentUrl.prettyUrl());
+			LOG("Download remote file" << mCurrentUrl.prettyUrl() << "to" << url.pathOrUrl());
 			addSubjob(job);
 		}
 	} else {
