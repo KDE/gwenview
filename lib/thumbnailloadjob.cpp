@@ -359,11 +359,17 @@ bool ThumbnailThread::loadJpeg() {
 // ThumbnailLoadJob static methods
 //
 //------------------------------------------------------------------------
+static QString sThumbnailBaseDir;
 QString ThumbnailLoadJob::thumbnailBaseDir() {
-	static QString dir;
-	if (!dir.isEmpty()) return dir;
-	dir=QDir::homePath() + "/.thumbnails/";
-	return dir;
+	if (sThumbnailBaseDir.isEmpty()) {
+		sThumbnailBaseDir = QDir::homePath() + "/.thumbnails/";
+	}
+	return sThumbnailBaseDir;
+}
+
+
+void ThumbnailLoadJob::setThumbnailBaseDir(const QString& dir) {
+	sThumbnailBaseDir = dir;
 }
 
 

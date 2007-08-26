@@ -125,6 +125,11 @@ public:
 	static QString thumbnailBaseDir();
 
 	/**
+	 * Sets the thumbnail base dir, usefull for unit-testing
+	 */
+	static void setThumbnailBaseDir(const QString&);
+
+	/**
 	 * Returns the thumbnail base dir, for the @p size
 	 */
 	static QString thumbnailBaseDir(int size);
