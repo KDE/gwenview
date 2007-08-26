@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="29">
+<kpartgui name="gwenview" version="30">
 
 <MenuBar>
 	<Menu name="file" >
@@ -24,6 +24,9 @@
 		<Action name="rotate_right" />
 		<Action name="mirror" />
 		<Action name="flip" />
+		<Separator/>
+		<Action name="resize" />
+		<Action name="crop" />
 	</Menu>
 	<Menu name="go_web" >
 		<Action name="go_to_previous"/>
