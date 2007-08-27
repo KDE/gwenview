@@ -46,6 +46,11 @@ public:
 	 */
 	void setInitialUrl(const KUrl&);
 
+public Q_SLOTS:
+	virtual void setCaption(const QString&);
+
+	virtual void setCaption(const QString&, bool modified);
+
 protected:
 	virtual void slotSetStatusBarText(const QString&);
 	virtual bool queryClose();
@@ -60,6 +65,7 @@ private Q_SLOTS:
 	void goUp();
 	void toggleSideBar();
 	void updateContextManager();
+	void updateModifiedFlag();
 
 	/**
 	 * Init all the file list stuff. This should only be necessary when

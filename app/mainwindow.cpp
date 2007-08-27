@@ -154,6 +154,8 @@ struct MainWindow::Private {
 
 	CropDialog* mCropDialog;
 
+	QString mCaption;
+
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
 		mWindow->setCentralWidget(centralWidget);
@@ -551,6 +553,30 @@ d(new MainWindow::Private)
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
+
+	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
+		SLOT(updateModifiedFlag()) );
+	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
+		SLOT(updateModifiedFlag()) );
+}
+
+
+void MainWindow::setCaption(const QString& caption) {
+	// Keep a trace of caption to use it in updateModifiedFlag()
+	d->mCaption = caption;
+	KParts::MainWindow::setCaption(caption);
+}
+
+void MainWindow::setCaption(const QString& caption, bool modified) {
+	d->mCaption = caption;
+	KParts::MainWindow::setCaption(caption, modified);
+}
+
+
+void MainWindow::updateModifiedFlag() {
+	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
+	bool modified = list.count() > 0;
+	setCaption(d->mCaption, modified);
 }
 
 
