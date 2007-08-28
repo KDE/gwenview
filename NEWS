@@ -12,6 +12,8 @@
  - Bug 111641: When several printing images in a row, "Keep Ratio" keeps ratio of first image
  - Avoid crash when viewing extremely large images.
  - Fix optimization compiler flags being disabled for scaling code.
+ - In fullscreen mode, make sure the cursor does not come back after moving to
+   the next image. Patch by Carles Pina i Estany.
 
 2006.11.26 - v1.4.1
 - New features:

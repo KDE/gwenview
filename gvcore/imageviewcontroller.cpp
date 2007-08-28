@@ -98,7 +98,9 @@ struct ImageViewController::Private {
 	ImageView* mImageView;
 	KActionPtrList mImageViewActions;
 	
+	// Hide cursor stuff
 	QTimer* mAutoHideTimer;
+	bool mCursorHidden;
 	
 	KParts::ReadOnlyPart* mPlayerPart;
 	
@@ -269,6 +271,7 @@ ImageViewController::ImageViewController(QWidget* parent, Document* document, KA
 	d->mDocument=document;
 	d->mActionCollection=actionCollection;
 	d->mAutoHideTimer=new QTimer(this);
+	d->mCursorHidden=false;
 
 	d->mContainer=new QWidget(parent);
 	d->mContainer->setMinimumWidth(1); // Make sure we can resize the toolbar smaller than its minimum size
@@ -349,6 +352,7 @@ void ImageViewController::setFullScreen(bool fullScreen) {
 	} else {
 		d->mAutoHideTimer->stop();
 		QApplication::restoreOverrideCursor();
+		d->mCursorHidden=false;
 	}
 
 	d->mToolBar->setHidden(d->mFullScreen);
@@ -394,6 +398,7 @@ void ImageViewController::slotAutoHide() {
 	QWidget* widget = KApplication::kApplication()->activeWindow();
 	if (!widget || !widget->inherits("QDialog")) {
 		QApplication::setOverrideCursor(blankCursor);
+		d->mCursorHidden=true;
 	}
 }
 
@@ -429,8 +434,18 @@ bool ImageViewController::eventFilter(QObject* object, QEvent* event) {
 	if (!isAChildOfStack) return false;
 
 	d->updateFullScreenBarPosition();
-	QApplication::restoreOverrideCursor();
-	d->restartAutoHideTimer();
+
+	if (event->type()==QEvent::MouseMove) {
+		d->mCursorHidden=false;
+		d->restartAutoHideTimer();
+	}
+
+	if (d->mCursorHidden) {
+		QApplication::setOverrideCursor(blankCursor,true);
+	} else {
+		QApplication::restoreOverrideCursor();
+	}
+
 	return false;
 }
 

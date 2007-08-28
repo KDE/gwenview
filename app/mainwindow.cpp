@@ -524,7 +524,10 @@ void MainWindow::slotImageLoading() {
 
 
 void MainWindow::slotImageLoaded() {
-	kapp->restoreOverrideCursor();
+	// Reciproc of slotImageLoading
+	if (FullScreenConfig::showBusyPtr() || !mToggleFullScreen->isChecked()) {
+		kapp->restoreOverrideCursor();
+	}
 	updateStatusInfo();
 	updateImageActions();
 	updateLocationURL();
