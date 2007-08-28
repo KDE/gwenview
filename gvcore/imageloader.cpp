@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // KDE
 #include <kapplication.h>
+#include <kimageio.h>
 #include <kmimetype.h>
 
 // Local
@@ -437,6 +438,16 @@ void ImageLoader::slotGetResult(KIO::Job* job) {
 	}
 }
 
+// There is no way in KImageIO to get the mimeType from the image format.
+// This function assumes KImageIO::types and KImageIO::mimeTypes return items
+// in the same order (which they do, according to the source code).
+static QString mimeTypeFromFormat(const char* format) {
+	QStringList formats = KImageIO::types(KImageIO::Reading);
+	QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
+	int pos = formats.findIndex(QString::fromAscii(format));
+	Q_ASSERT(pos != -1);
+	return mimeTypes[pos];
+}
 
 void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 	LOG2("size: " << chunk.size());
@@ -448,9 +459,18 @@ void ImageLoader::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 
 	if (oldSize==0) {
 		// Try to determine the data type
-		KMimeType::Ptr ptr = KMimeType::findByContent(d->mRawData);
-		d->mMimeType = ptr->name();
-		d->mURLKind = MimeTypeUtils::mimeTypeKind(d->mMimeType);
+		QBuffer buffer(d->mRawData);
+		buffer.open(IO_ReadOnly);
+		const char* format = QImageIO::imageFormat(&buffer);
+		if (format) {
+			// This is a raster image, get the mime type now
+			d->mURLKind = MimeTypeUtils::KIND_RASTER_IMAGE;
+			d->mMimeType = mimeTypeFromFormat(format);
+		} else {
+			KMimeType::Ptr ptr = KMimeType::findByContent(d->mRawData);
+			d->mMimeType = ptr->name();
+			d->mURLKind = MimeTypeUtils::mimeTypeKind(d->mMimeType);
+		}
 		if (d->mURLKind!=MimeTypeUtils::KIND_RASTER_IMAGE) {
 			Q_ASSERT(!d->mDecoderTimer.isActive());
 			job->kill(true /* quietly */);
