@@ -20,10 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SORTEDDIRMODEL_H
 #define SORTEDDIRMODEL_H
 
-#include <QSortFilterProxyModel>
+// KDE
+#include <kdirsortfilterproxymodel.h>
 
+// Local
 #include "gwenviewlib_export.h"
-#include "abstractthumbnailviewhelper.h"
 
 class QPixmap;
 
@@ -34,7 +35,7 @@ class KUrl;
 namespace Gwenview {
 
 class SortedDirModelPrivate;
-class GWENVIEWLIB_EXPORT SortedDirModel : public QSortFilterProxyModel {
+class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel {
 	Q_OBJECT
 public:
 	SortedDirModel(QObject* parent);
@@ -43,9 +44,6 @@ public:
 	KFileItem itemForIndex(const QModelIndex& index) const;
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
-
-protected:
-	virtual bool lessThan(const QModelIndex&, const QModelIndex&) const;
 
 private:
 	SortedDirModelPrivate * const d;

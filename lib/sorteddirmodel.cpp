@@ -35,13 +35,11 @@ struct SortedDirModelPrivate {
 
 
 SortedDirModel::SortedDirModel(QObject* parent)
-: QSortFilterProxyModel(parent)
+: KDirSortFilterProxyModel(parent)
 , d(new SortedDirModelPrivate)
 {
 	d->mSourceModel = new KDirModel(this);
 	setSourceModel(d->mSourceModel);
-	setDynamicSortFilter(true);
-	sort(KDirModel::Name);
 }
 
 
@@ -81,26 +79,6 @@ QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 	}
 	QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
 	return mapFromSource(sourceIndex);
-}
-
-
-static bool kFileItemLessThan(const KFileItem& leftItem, const KFileItem& rightItem) {
-	bool leftIsDir = leftItem.isDir();
-	bool rightIsDir = rightItem.isDir();
-	if (leftIsDir && !rightIsDir) {
-		return true;
-	}
-	if (!leftIsDir && rightIsDir) {
-		return false;
-	}
-	return leftItem.name().toLower() < rightItem.name().toLower();
-}
-
-
-bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-	KFileItem leftItem = d->mSourceModel->itemForIndex(left);
-	KFileItem rightItem = d->mSourceModel->itemForIndex(right);
-	return kFileItemLessThan(leftItem, rightItem);
 }
 
 
