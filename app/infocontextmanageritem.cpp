@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "infocontextmanageritem.moc"
 
+#include <exiv2/exif.hpp>
+
 // Qt
 #include <QLabel>
 
@@ -52,6 +54,7 @@ struct InfoContextManagerItemPrivate {
 	QWidget* mOneFileWidget;
 	QLabel* mOneFileImageLabel;
 	QLabel* mOneFileTextLabel;
+	QLabel* mMetaDataLabel;
 	QLabel* mMultipleFilesLabel;
 	ImageViewPart* mImageView;
 	Document::Ptr mDocument;
@@ -82,10 +85,15 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
 	d->mOneFileTextLabel->setWordWrap(true);
 
+	d->mMetaDataLabel = new QLabel(d->mOneFileWidget);
+	d->mMetaDataLabel->setWordWrap(true);
+	d->mMetaDataLabel->hide();
+
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(0);
 	layout->addWidget(d->mOneFileImageLabel);
 	layout->addWidget(d->mOneFileTextLabel);
+	layout->addWidget(d->mMetaDataLabel);
 
 	d->mMultipleFilesLabel = new QLabel();
 
@@ -139,6 +147,9 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 			SLOT(updatePreview()) );
 		connect(d->mDocument.data(), SIGNAL(loaded()),
 			SLOT(updatePreview()) );
+		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
+			SLOT(updateMetaData()) );
+		updateMetaData();
 		// If it's already loaded, trigger updatePreview ourself
 		if (d->mDocument->isLoaded()) {
 			updatePreview();
@@ -189,5 +200,50 @@ void InfoContextManagerItem::updatePreview() {
 	d->mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
 	d->mOneFileImageLabel->show();
 }
+
+
+static void addExifValue(QStringList& list, const Exiv2::ExifData& exifData, const char* keyName) {
+	Exiv2::ExifKey key(keyName);
+	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+
+	if (it == exifData.end()) {
+		return;
+	}
+
+	QString label = QString::fromUtf8(it->tagLabel().c_str());
+	std::ostringstream stream;
+	stream << *it;
+	QString value = QString::fromUtf8(stream.str().c_str());
+	list << i18n("%1: %2", label, value);
+}
+
+
+void InfoContextManagerItem::updateMetaData() {
+	LOG("updateMetaData()");
+	Q_ASSERT(d->mDocument);
+	if (!d->mDocument) {
+		return;
+	}
+
+	const Exiv2::Image* exiv2Image = d->mDocument->exiv2Image();
+	if (!exiv2Image) {
+		return;
+	}
+
+	if (!exiv2Image->supportsMetadata(Exiv2::mdExif)) {
+		d->mMetaDataLabel->hide();
+		return;
+	}
+	const Exiv2::ExifData& exifData = exiv2Image->exifData();
+
+	QStringList list;
+	addExifValue(list, exifData, "Exif.Photo.ISOSpeedRatings");
+	addExifValue(list, exifData, "Exif.Photo.ExposureTime");
+	addExifValue(list, exifData, "Exif.Photo.Flash");
+
+	d->mMetaDataLabel->setText(list.join("\n"));
+	d->mMetaDataLabel->show();
+}
+
 
 } // namespace
