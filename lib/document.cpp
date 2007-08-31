@@ -37,6 +37,7 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	QImage mImage;
+	Exiv2::Image::AutoPtr mExiv2Image;
 	QByteArray mFormat;
 	bool mModified;
 };
@@ -82,6 +83,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 		this, SIGNAL(loaded()) );
 	connect(d->mImpl, SIGNAL(imageRectUpdated()),
 		this, SIGNAL(imageRectUpdated()) );
+	connect(d->mImpl, SIGNAL(metaDataLoaded()),
+		this, SIGNAL(metaDataLoaded()) );
 	d->mImpl->init();
 }
 
@@ -146,6 +149,16 @@ void Document::setModified(bool value) {
 
 void Document::applyTransformation(Orientation orientation) {
 	d->mImpl->applyTransformation(orientation);
+}
+
+
+const Exiv2::Image* Document::exiv2Image() const {
+	return d->mExiv2Image.get();
+}
+
+
+void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
+	d->mExiv2Image = image;
 }
 
 } // namespace

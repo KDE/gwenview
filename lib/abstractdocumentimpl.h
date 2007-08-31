@@ -60,11 +60,13 @@ public:
 Q_SIGNALS:
 	void imageRectUpdated();
 	void loaded();
+	void metaDataLoaded();
 
 protected:
 	Document* document() const;
 	void setDocumentImage(const QImage& image);
 	void setDocumentFormat(const QByteArray& format);
+	void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl*  impl);
 
 private:

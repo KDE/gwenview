@@ -53,6 +53,7 @@ private Q_SLOTS:
 
 private:
 	LoadingDocumentImplPrivate* const d;
+	friend class LoadingDocumentImplPrivate;
 };
 
 

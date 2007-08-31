@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "gwenviewlib_export.h"
 
+#include <exiv2/image.hpp>
+
 // Qt
 #include <QObject>
 #include <QSharedData>
@@ -91,11 +93,14 @@ public:
 
 	void waitUntilLoaded() const;
 
+	const Exiv2::Image* exiv2Image() const;
+
 Q_SIGNALS:
 	void imageRectUpdated();
 	void loaded();
 	void saved(const KUrl&);
 	void modified(const KUrl&);
+	void metaDataLoaded();
 
 private:
 	friend class DocumentFactory;
@@ -103,6 +108,7 @@ private:
 
 	void setImageInternal(const QImage&);
 	void setFormat(const QByteArray&);
+	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl* impl);
 
 	Document();
