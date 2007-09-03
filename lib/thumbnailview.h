@@ -61,8 +61,9 @@ public Q_SLOTS:
 	 */
 	void setThumbnailSize(int pixel);
 
-protected:
+protected Q_SLOTS:
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
 	void showContextMenu();

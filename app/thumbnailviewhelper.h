@@ -48,6 +48,8 @@ public:
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list);
 
+	virtual void abortThumbnailGenerationForItems(const QList<KFileItem>& list);
+
 	virtual void showContextMenu(QWidget* parent);
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);

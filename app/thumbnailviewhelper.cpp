@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCursor>
 #include <QIcon>
 #include <QPainter>
+#include <QPointer>
 
 // KDE
 #include <kdirlister.h>
@@ -50,6 +51,7 @@ const int THUMBNAIL_SIZE = 256;
 struct ThumbnailViewHelperPrivate {
 	SortedDirModel* mModel;
 	FileOpsContextManagerItem* mFileOpsContextManagerItem;
+	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
 };
 
 
@@ -96,10 +98,27 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
-		ThumbnailLoadJob* job = new ThumbnailLoadJob(filteredList, THUMBNAIL_SIZE);
-		connect(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
-			SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
-		job->start();
+		if (!d->mThumbnailLoadJob) {
+			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, THUMBNAIL_SIZE);
+			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
+				SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
+			d->mThumbnailLoadJob->start();
+		} else {
+			Q_FOREACH(KFileItem item, filteredList) {
+				d->mThumbnailLoadJob->appendItem(item);
+			}
+		}
+	}
+}
+
+
+void ThumbnailViewHelper::abortThumbnailGenerationForItems(const QList<KFileItem>& list) {
+	if (!d->mThumbnailLoadJob) {
+		return;
+	}
+	Q_FOREACH(KFileItem item, list) {
+		kDebug() << "aborting" << item.url();
+		d->mThumbnailLoadJob->itemRemoved(item);
 	}
 }
 

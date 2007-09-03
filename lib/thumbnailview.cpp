@@ -278,6 +278,23 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview);
 }
 
+
+void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
+	QListView::rowsAboutToBeRemoved(parent, start, end);
+
+	QList<KFileItem> itemList;
+	for (int pos=start; pos<=end; ++pos) {
+		QModelIndex index = model()->index(pos, 0, parent);
+		QVariant data = index.data(KDirModel::FileItemRole);
+		KFileItem item = qvariant_cast<KFileItem>(data);
+		itemList.append(item);
+	}
+
+	Q_ASSERT(d->mThumbnailViewHelper);
+	d->mThumbnailViewHelper->abortThumbnailGenerationForItems(itemList);
+}
+
+
 void ThumbnailView::showContextMenu() {
 	d->mThumbnailViewHelper->showContextMenu(this);
 }
