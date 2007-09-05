@@ -47,6 +47,23 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+
+static void addExifValue(QStringList& list, const Exiv2::ExifData& exifData, const char* keyName) {
+	Exiv2::ExifKey key(keyName);
+	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+
+	if (it == exifData.end()) {
+		return;
+	}
+
+	QString label = QString::fromUtf8(it->tagLabel().c_str());
+	std::ostringstream stream;
+	stream << *it;
+	QString value = QString::fromUtf8(stream.str().c_str());
+	list << i18n("%1: %2", label, value);
+}
+
+
 struct InfoContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
@@ -54,11 +71,33 @@ struct InfoContextManagerItemPrivate {
 	QWidget* mOneFileWidget;
 	QLabel* mOneFileImageLabel;
 	QLabel* mOneFileTextLabel;
-	QLabel* mMetaDataLabel;
 	QLabel* mMultipleFilesLabel;
 	ImageViewPart* mImageView;
+	KFileItem mFileItem;
 	Document::Ptr mDocument;
+
+
+	void addMetaDataLines(QStringList& list) {
+		if (!mDocument) {
+			return;
+		}
+
+		const Exiv2::Image* exiv2Image = mDocument->exiv2Image();
+		if (!exiv2Image) {
+			return;
+		}
+
+		if (!exiv2Image->supportsMetadata(Exiv2::mdExif)) {
+			return;
+		}
+		const Exiv2::ExifData& exifData = exiv2Image->exifData();
+
+		addExifValue(list, exifData, "Exif.Photo.ISOSpeedRatings");
+		addExifValue(list, exifData, "Exif.Photo.ExposureTime");
+		addExifValue(list, exifData, "Exif.Photo.Flash");
+	}
 };
+
 
 InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
@@ -85,15 +124,10 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
 	d->mOneFileTextLabel->setWordWrap(true);
 
-	d->mMetaDataLabel = new QLabel(d->mOneFileWidget);
-	d->mMetaDataLabel->setWordWrap(true);
-	d->mMetaDataLabel->hide();
-
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(0);
 	layout->addWidget(d->mOneFileImageLabel);
 	layout->addWidget(d->mOneFileTextLabel);
-	layout->addWidget(d->mMetaDataLabel);
 
 	d->mMultipleFilesLabel = new QLabel();
 
@@ -131,11 +165,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 }
 
 void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
-	QString fileSize = KGlobal::locale()->formatByteSize(item.size());
-	d->mOneFileTextLabel->setText(
-		i18n("%1\n%2\n%3", item.name(), item.timeString(), fileSize)
-		);
-
+	d->mFileItem = item;
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
@@ -148,13 +178,13 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 		connect(d->mDocument.data(), SIGNAL(loaded()),
 			SLOT(updatePreview()) );
 		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
-			SLOT(updateMetaData()) );
-		updateMetaData();
+			SLOT(updateOneFileInfo()) );
 		// If it's already loaded, trigger updatePreview ourself
 		if (d->mDocument->isLoaded()) {
 			updatePreview();
 		}
 	}
+	updateOneFileInfo();
 }
 
 void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
@@ -202,47 +232,17 @@ void InfoContextManagerItem::updatePreview() {
 }
 
 
-static void addExifValue(QStringList& list, const Exiv2::ExifData& exifData, const char* keyName) {
-	Exiv2::ExifKey key(keyName);
-	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
-
-	if (it == exifData.end()) {
-		return;
-	}
-
-	QString label = QString::fromUtf8(it->tagLabel().c_str());
-	std::ostringstream stream;
-	stream << *it;
-	QString value = QString::fromUtf8(stream.str().c_str());
-	list << i18n("%1: %2", label, value);
-}
-
-
-void InfoContextManagerItem::updateMetaData() {
-	LOG("updateMetaData()");
-	Q_ASSERT(d->mDocument);
-	if (!d->mDocument) {
-		return;
-	}
-
-	const Exiv2::Image* exiv2Image = d->mDocument->exiv2Image();
-	if (!exiv2Image) {
-		return;
-	}
-
-	if (!exiv2Image->supportsMetadata(Exiv2::mdExif)) {
-		d->mMetaDataLabel->hide();
-		return;
-	}
-	const Exiv2::ExifData& exifData = exiv2Image->exifData();
-
+void InfoContextManagerItem::updateOneFileInfo() {
+	QString fileSize = KGlobal::locale()->formatByteSize(d->mFileItem.size());
 	QStringList list;
-	addExifValue(list, exifData, "Exif.Photo.ISOSpeedRatings");
-	addExifValue(list, exifData, "Exif.Photo.ExposureTime");
-	addExifValue(list, exifData, "Exif.Photo.Flash");
+	list << d->mFileItem.name()
+		<< d->mFileItem.timeString()
+		<< fileSize;
 
-	d->mMetaDataLabel->setText(list.join("\n"));
-	d->mMetaDataLabel->show();
+	d->addMetaDataLines(list);
+
+	d->mOneFileTextLabel->setText(list.join("\n"));
+	d->mOneFileTextLabel->show();
 }
 
 
