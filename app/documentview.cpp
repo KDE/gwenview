@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstatusbar.h>
 
 // Local
-#include "contextmanager.h"
 #include <lib/imageviewpart.h>
 
 
@@ -48,7 +47,6 @@ namespace Gwenview {
 
 struct DocumentViewPrivate {
 	DocumentView* mView;
-	ContextManager* mContextManager;
 	QLabel* mNoDocumentLabel;
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
@@ -73,7 +71,6 @@ DocumentView::DocumentView(QWidget* parent)
 , d(new DocumentViewPrivate)
 {
 	d->mView = this;
-	d->mContextManager = 0;
 	d->mPart = 0;
 
 	d->mNoDocumentLabel = new QLabel(this);
@@ -98,11 +95,6 @@ DocumentView::DocumentView(QWidget* parent)
 
 DocumentView::~DocumentView() {
 	delete d;
-}
-
-
-void DocumentView::setContextManager(ContextManager* manager) {
-	d->mContextManager = manager;
 }
 
 

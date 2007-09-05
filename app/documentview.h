@@ -30,7 +30,6 @@ namespace KParts { class Part; }
 
 namespace Gwenview {
 
-class ContextManager;
 class DocumentViewPrivate;
 class ImageViewPart;
 
@@ -43,12 +42,6 @@ class DocumentView : public QStackedWidget {
 public:
 	DocumentView(QWidget* parent);
 	~DocumentView();
-
-	/**
-	 * Initialize the context manager, this is needed because DocumentView must
-	 * notify the context manager whenever its ImageView changes
-	 */
-	void setContextManager(ContextManager*);
 
 	/**
 	 * Reset the view

@@ -546,7 +546,6 @@ d(new MainWindow::Private)
 	d->setupContextManager();
 	d->updateActions();
 	updatePreviousNextActions();
-	d->mDocumentView->setContextManager(d->mContextManager);
 
 	createShellGUI();
 	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
