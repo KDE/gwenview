@@ -62,13 +62,6 @@ QList<KFileItem> ContextManager::selection() const {
 }
 
 
-void ContextManager::setImageView(ImageViewPart* imageView) {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		item->setImageView(imageView);
-	}
-}
-
-
 void ContextManager::setCurrentDirUrl(const KUrl& url) {
 	if (url.equals(mCurrentDirUrl, KUrl::CompareWithoutTrailingSlash)) {
 		return;

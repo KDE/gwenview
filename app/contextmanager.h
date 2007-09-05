@@ -59,8 +59,6 @@ public:
 
 	void setSideBar(SideBar*);
 
-	void setImageView(ImageViewPart*);
-
 Q_SIGNALS:
 	void selectionChanged();
 	void currentDirUrlChanged();

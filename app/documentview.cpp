@@ -129,7 +129,6 @@ void DocumentView::reset() {
 		return;
 	}
 	d->setPartWidget(0);
-	d->mContextManager->setImageView(0);
 	partChanged(0);
 	delete d->mPart;
 	d->mPartLibrary = QString();
@@ -178,8 +177,6 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 		statusBar()->hide();
 	}
 
-	ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
-	d->mContextManager->setImageView(ivPart);
 	d->setPartWidget(part->widget());
 	partChanged(part);
 

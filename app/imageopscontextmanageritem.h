@@ -42,7 +42,6 @@ public:
 	~ImageOpsContextManagerItem();
 
 	virtual void setSideBar(SideBar* sideBar);
-	virtual void setImageView(ImageViewPart*) {};
 
 private Q_SLOTS:
 	void updateSideBarContent();

@@ -39,7 +39,6 @@ public:
 	InfoContextManagerItem(ContextManager*);
 	~InfoContextManagerItem();
 
-	virtual void setImageView(ImageViewPart*);
 	virtual void setSideBar(SideBar* sideBar);
 
 private Q_SLOTS:

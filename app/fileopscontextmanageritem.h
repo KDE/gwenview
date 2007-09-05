@@ -40,7 +40,6 @@ public:
 	FileOpsContextManagerItem(ContextManager*);
 	~FileOpsContextManagerItem();
 
-	virtual void setImageView(ImageViewPart*) {}
 	virtual void setSideBar(SideBar* sideBar);
 
 	QAction* copyToAction() const;

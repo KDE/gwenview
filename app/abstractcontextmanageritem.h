@@ -40,7 +40,6 @@ public:
 	virtual ~AbstractContextManagerItem();
 
 	virtual void setSideBar(SideBar*) = 0;
-	virtual void setImageView(ImageViewPart*) = 0;
 
 	ContextManager* contextManager() const;
 

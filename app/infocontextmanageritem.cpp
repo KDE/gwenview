@@ -72,7 +72,6 @@ struct InfoContextManagerItemPrivate {
 	QLabel* mOneFileImageLabel;
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
-	ImageViewPart* mImageView;
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
 
@@ -102,7 +101,6 @@ struct InfoContextManagerItemPrivate {
 InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 , d(new InfoContextManagerItemPrivate) {
-	d->mImageView = 0;
 	d->mSideBar = 0;
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
@@ -211,14 +209,6 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& item
 	d->mMultipleFilesLabel->show();
 }
 
-// FIXME: Remove?
-void InfoContextManagerItem::setImageView(ImageViewPart* imageView) {
-	if (d->mImageView) {
-		disconnect(d->mImageView, 0, this, 0);
-	}
-
-	d->mImageView = imageView;
-}
 
 void InfoContextManagerItem::updatePreview() {
 	Q_ASSERT(d->mDocument);
