@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "abstractcontextmanageritem.h"
 
+class QStringList;
 class KFileItem;
 
 namespace Gwenview {
@@ -40,6 +41,8 @@ public:
 	~InfoContextManagerItem();
 
 	virtual void setSideBar(SideBar* sideBar);
+
+	void setPreferedMetaInfoKeyList(const QStringList& keyList);
 
 private Q_SLOTS:
 	void updatePreview();

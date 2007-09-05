@@ -48,22 +48,6 @@ namespace Gwenview {
 #endif
 
 
-static void addExifValue(QStringList& list, const Exiv2::ExifData& exifData, const char* keyName) {
-	Exiv2::ExifKey key(keyName);
-	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
-
-	if (it == exifData.end()) {
-		return;
-	}
-
-	QString label = QString::fromUtf8(it->tagLabel().c_str());
-	std::ostringstream stream;
-	stream << *it;
-	QString value = QString::fromUtf8(stream.str().c_str());
-	list << i18n("%1: %2", label, value);
-}
-
-
 struct InfoContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
@@ -75,12 +59,21 @@ struct InfoContextManagerItemPrivate {
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
 
+	QStringList mPreferedMetaInfoKeyList;
 
-	void addMetaDataLines(QStringList& list) {
+
+	void getExiv2MetaInfoKey(const QString& key, QString* caption, QString* value) {
 		if (!mDocument) {
 			return;
 		}
 
+		if (key.startsWith("Exif")) {
+			getExifMetaInfoKey(key, caption, value);
+		}
+	}
+
+
+	void getExifMetaInfoKey(const QString& keyName, QString* caption, QString* value) {
 		const Exiv2::Image* exiv2Image = mDocument->exiv2Image();
 		if (!exiv2Image) {
 			return;
@@ -91,9 +84,17 @@ struct InfoContextManagerItemPrivate {
 		}
 		const Exiv2::ExifData& exifData = exiv2Image->exifData();
 
-		addExifValue(list, exifData, "Exif.Photo.ISOSpeedRatings");
-		addExifValue(list, exifData, "Exif.Photo.ExposureTime");
-		addExifValue(list, exifData, "Exif.Photo.Flash");
+		Exiv2::ExifKey key(keyName.toAscii().data());
+		Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+
+		if (it == exifData.end()) {
+			return;
+		}
+
+		*caption = QString::fromUtf8(it->tagLabel().c_str());
+		std::ostringstream stream;
+		stream << *it;
+		*value = QString::fromUtf8(stream.str().c_str());
 	}
 };
 
@@ -104,6 +105,16 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 	d->mSideBar = 0;
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
+
+	QStringList list;
+	list << "KFileItem.Name"
+		<< "KFileItem.Size"
+		<< "KFileItem.Time"
+		<< "Exif.Photo.ISOSpeedRatings"
+		<< "Exif.Photo.ExposureTime"
+		<< "Exif.Photo.Flash"
+		;
+	setPreferedMetaInfoKeyList(list);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
@@ -222,14 +233,34 @@ void InfoContextManagerItem::updatePreview() {
 }
 
 
-void InfoContextManagerItem::updateOneFileInfo() {
-	QString fileSize = KGlobal::locale()->formatByteSize(d->mFileItem.size());
-	QStringList list;
-	list << d->mFileItem.name()
-		<< d->mFileItem.timeString()
-		<< fileSize;
+void InfoContextManagerItem::setPreferedMetaInfoKeyList(const QStringList& keyList) {
+	d->mPreferedMetaInfoKeyList = keyList;
+}
 
-	d->addMetaDataLines(list);
+
+void InfoContextManagerItem::updateOneFileInfo() {
+	QStringList list;
+
+	Q_FOREACH(QString key, d->mPreferedMetaInfoKeyList) {
+		QString caption;
+		QString value;
+		if (key == "KFileItem.Name") {
+			caption = i18n("Name");
+			value = d->mFileItem.name();
+		} else if (key == "KFileItem.Size") {
+			caption = i18n("File Size");
+			value = KGlobal::locale()->formatByteSize(d->mFileItem.size());
+		} else if (key == "KFileItem.Time") {
+			caption = i18n("File Time");
+			value = d->mFileItem.timeString();
+		} else {
+			d->getExiv2MetaInfoKey(key, &caption, &value);
+		}
+
+		if (!caption.isEmpty() && !value.isEmpty()) {
+			list.append(i18n("%1: %2", caption, value));
+		}
+	}
 
 	d->mOneFileTextLabel->setText(list.join("\n"));
 	d->mOneFileTextLabel->show();
