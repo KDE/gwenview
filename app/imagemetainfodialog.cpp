@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "imagemetainfodialog.moc"
 
 // Qt
+#include <QTreeView>
 
 // KDE
 
@@ -33,6 +34,7 @@ namespace Gwenview {
 
 struct ImageMetaInfoDialogPrivate {
 	ImageMetaInfo* mInfo;
+	QTreeView* mTreeView;
 };
 
 
@@ -40,6 +42,9 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 : KDialog(parent)
 , d(new ImageMetaInfoDialogPrivate) {
 	d->mInfo = 0;
+	d->mTreeView = new QTreeView(this);
+	setMainWidget(d->mTreeView);
+	setButtons(KDialog::Close);
 }
 
 
