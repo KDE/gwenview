@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Exiv2
 #include <exiv2/exif.hpp>
 #include <exiv2/image.hpp>
+#include <exiv2/iptc.hpp>
 
 // Local
 
@@ -190,8 +191,11 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 
 void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[1];
-	QModelIndex parentExifIndex = index(1, 0);
-	d->clearGroup(exifGroup, parentExifIndex);
+	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupList[2];
+	QModelIndex exifIndex = index(1, 0);
+	QModelIndex iptcIndex = index(2, 0);
+	d->clearGroup(exifGroup, exifIndex);
+	d->clearGroup(iptcGroup, iptcIndex);
 
 	if (!image) {
 		return;
@@ -205,9 +209,20 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 			exifData.begin(),
 			exifData.end()
 			);
-		
-		d->notifyGroupFilled(exifGroup, parentExifIndex);
-	}
+
+		d->notifyGroupFilled(exifGroup, exifIndex);
+
+	if (image->supportsMetadata(Exiv2::mdIptc)) {
+		const Exiv2::IptcData& iptcData = image->iptcData();
+
+		fillExivGroup(
+			iptcGroup,
+			iptcData.begin(),
+			iptcData.end()
+			);
+
+		d->notifyGroupFilled(iptcGroup, iptcIndex);
+	}}
 };
 
 
