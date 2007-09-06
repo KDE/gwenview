@@ -22,10 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "imagemetainfodialog.moc"
 
 // Qt
+#include <QHeaderView>
+#include <QLayout>
 #include <QTreeView>
-#include <QListView>
 
 // KDE
+#include <klocale.h>
 
 // Local
 #include <lib/imagemetainfo.h>
@@ -45,6 +47,7 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 	d->mInfo = 0;
 	d->mTreeView = new QTreeView(this);
 	setMainWidget(d->mTreeView);
+	setCaption(i18n("Meta Information"));
 	setButtons(KDialog::Close);
 }
 
@@ -57,6 +60,7 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog() {
 void ImageMetaInfoDialog::setImageMetaInfo(ImageMetaInfo* info) {
 	d->mInfo = info;
 	d->mTreeView->setModel(info);
+	d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - layout()->margin()*2);
 	d->mTreeView->expandAll();
 }
 
