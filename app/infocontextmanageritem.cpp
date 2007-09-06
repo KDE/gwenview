@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
+#include <QPushButton>
 
 // KDE
 #include <kfileitem.h>
@@ -28,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
+#include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/imagemetainfo.h>
 #include <lib/imageviewpart.h>
@@ -58,6 +60,7 @@ struct InfoContextManagerItemPrivate {
 	ImageMetaInfo mImageMetaInfo;
 
 	QStringList mPreferedMetaInfoKeyList;
+	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
 };
 
 
@@ -95,10 +98,14 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
 	d->mOneFileTextLabel->setWordWrap(true);
 
+	QPushButton* moreButton = new QPushButton(d->mOneFileWidget);
+	moreButton->setText(i18n("More..."));
+
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(0);
 	layout->addWidget(d->mOneFileImageLabel);
 	layout->addWidget(d->mOneFileTextLabel);
+	layout->addWidget(moreButton);
 
 	d->mMultipleFilesLabel = new QLabel();
 
@@ -107,6 +114,8 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mGroup->addWidget(d->mMultipleFilesLabel);
 
 	d->mGroup->hide();
+
+	connect(moreButton, SIGNAL(clicked()), SLOT(showMetaInfoDialog()) );
 }
 
 
@@ -220,6 +229,16 @@ void InfoContextManagerItem::updateOneFileInfo() {
 
 	d->mOneFileTextLabel->setText(list.join("\n"));
 	d->mOneFileTextLabel->show();
+}
+
+
+void InfoContextManagerItem::showMetaInfoDialog() {
+	if (!d->mImageMetaInfoDialog) {
+		d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mOneFileWidget);
+		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
+		d->mImageMetaInfoDialog->setImageMetaInfo(&d->mImageMetaInfo);
+	}
+	d->mImageMetaInfoDialog->show();
 }
 
 

@@ -48,6 +48,7 @@ private Q_SLOTS:
 	void updatePreview();
 	void updateSideBarContent();
 	void updateOneFileInfo();
+	void showMetaInfoDialog();
 
 private:
 	void fillOneFileGroup(const KFileItem& item);
