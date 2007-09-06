@@ -112,33 +112,8 @@ private:
 
 
 struct ImageMetaInfoPrivate {
-	KFileItem mFileItem;
-	const Exiv2::Image* mExiv2Image;
 	QList<MetaInfoGroup*> mMetaInfoGroupList;
 	ImageMetaInfo* mModel;
-
-	void getExifInfoForKey(const QString& keyName, QString* label, QString* value) {
-		if (!mExiv2Image) {
-			return;
-		}
-
-		if (!mExiv2Image->supportsMetadata(Exiv2::mdExif)) {
-			return;
-		}
-		const Exiv2::ExifData& exifData = mExiv2Image->exifData();
-
-		Exiv2::ExifKey key(keyName.toAscii().data());
-		Exiv2::ExifData::const_iterator it = exifData.findKey(key);
-
-		if (it == exifData.end()) {
-			return;
-		}
-
-		*label = QString::fromUtf8(it->tagLabel().c_str());
-		std::ostringstream stream;
-		stream << *it;
-		*value = QString::fromUtf8(stream.str().c_str());
-	}
 
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
@@ -175,8 +150,6 @@ ImageMetaInfo::~ImageMetaInfo() {
 
 
 void ImageMetaInfo::setFileItem(const KFileItem& item) {
-	d->mFileItem = item;
-
 	MetaInfoGroup* group = d->mMetaInfoGroupList[0];
 	QModelIndex parent = index(0, 0);
 	d->clearGroup(group, parent);
@@ -216,7 +189,6 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 
 
 void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
-	d->mExiv2Image = image;
 	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[1];
 	QModelIndex parentExifIndex = index(1, 0);
 	d->clearGroup(exifGroup, parentExifIndex);
