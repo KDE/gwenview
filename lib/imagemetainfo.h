@@ -56,6 +56,7 @@ public:
 
 private:
 	ImageMetaInfoPrivate* const d;
+	friend class ImageMetaInfoPrivate;
 };
 
 

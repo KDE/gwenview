@@ -115,6 +115,7 @@ struct ImageMetaInfoPrivate {
 	KFileItem mFileItem;
 	const Exiv2::Image* mExiv2Image;
 	QList<MetaInfoGroup*> mMetaInfoGroupList;
+	ImageMetaInfo* mModel;
 
 	void getExifInfoForKey(const QString& keyName, QString* label, QString* value) {
 		if (!mExiv2Image) {
@@ -138,14 +139,32 @@ struct ImageMetaInfoPrivate {
 		stream << *it;
 		*value = QString::fromUtf8(stream.str().c_str());
 	}
+
+
+	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
+		if (group->size() > 0) {
+			group->clear();
+			mModel->beginRemoveRows(parent, 0, group->size() - 1);
+			mModel->endRemoveRows();
+		}
+	}
+
+
+	void notifyGroupFilled(MetaInfoGroup* group, const QModelIndex& parent) {
+		mModel->beginInsertRows(parent, 0, group->size() - 1);
+		mModel->endInsertRows();
+	}
 };
 
 
 ImageMetaInfo::ImageMetaInfo()
 : d(new ImageMetaInfoPrivate) {
+	d->mModel = this;
 	d->mMetaInfoGroupList
 		<< new MetaInfoGroup(i18n("File Information"))
-		<< new MetaInfoGroup(i18n("Exif Information"));
+		<< new MetaInfoGroup(i18n("Exif Information"))
+		<< new MetaInfoGroup(i18n("Iptc Information"))
+		;
 }
 
 
@@ -160,11 +179,7 @@ void ImageMetaInfo::setFileItem(const KFileItem& item) {
 
 	MetaInfoGroup* group = d->mMetaInfoGroupList[0];
 	QModelIndex parent = index(0, 0);
-	if (group->size() > 0) {
-		group->clear();
-		beginRemoveRows(parent, 0, group->size() - 1);
-		endRemoveRows();
-	}
+	d->clearGroup(group, parent);
 	group->addEntry(
 		"KFileItem.Name",
 		i18n("Name"),
@@ -182,33 +197,13 @@ void ImageMetaInfo::setFileItem(const KFileItem& item) {
 		i18n("File Time"),
 		item.timeString()
 		);
-	beginInsertRows(parent, 0, group->size() - 1);
-	endInsertRows();
+	d->notifyGroupFilled(group, parent);
 }
 
 
-void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
-	d->mExiv2Image = image;
-	MetaInfoGroup* group = d->mMetaInfoGroupList[1];
-	QModelIndex parent = index(1, 0);
-	if (group->size() > 0) {
-		group->clear();
-		beginRemoveRows(parent, 0, group->size() - 1);
-		endRemoveRows();
-	}
-
-	if (!image) {
-		return;
-	}
-
-	if (!image->supportsMetadata(Exiv2::mdExif)) {
-		return;
-	}
-	const Exiv2::ExifData& exifData = image->exifData();
-
-	Exiv2::ExifData::const_iterator
-		it = exifData.begin(),
-		end = exifData.end();
+template <class iterator>
+static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
+	iterator it = begin;
 	for (;it != end; ++it) {
 		QString key = QString::fromUtf8(it->key().c_str());
 		QString label = QString::fromUtf8(it->tagLabel().c_str());
@@ -217,10 +212,31 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 		QString value = QString::fromUtf8(stream.str().c_str());
 		group->addEntry(key, label, value);
 	}
-
-	beginInsertRows(parent, 0, group->size() - 1);
-	endInsertRows();
 }
+
+
+void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
+	d->mExiv2Image = image;
+	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[1];
+	QModelIndex parentExifIndex = index(1, 0);
+	d->clearGroup(exifGroup, parentExifIndex);
+
+	if (!image) {
+		return;
+	}
+
+	if (image->supportsMetadata(Exiv2::mdExif)) {
+		const Exiv2::ExifData& exifData = image->exifData();
+
+		fillExivGroup(
+			exifGroup,
+			exifData.begin(),
+			exifData.end()
+			);
+		
+		d->notifyGroupFilled(exifGroup, parentExifIndex);
+	}
+};
 
 
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
