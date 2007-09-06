@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QTreeView>
+#include <QListView>
 
 // KDE
 
@@ -55,6 +56,13 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog() {
 
 void ImageMetaInfoDialog::setImageMetaInfo(ImageMetaInfo* info) {
 	d->mInfo = info;
+	d->mTreeView->setModel(info);
+	d->mTreeView->expandAll();
+}
+
+
+QSize ImageMetaInfoDialog::sizeHint() const {
+	return QSize(400, 300);
 }
 
 

@@ -43,6 +43,8 @@ public:
 
 	void setImageMetaInfo(ImageMetaInfo*);
 
+	virtual QSize sizeHint() const;
+
 private:
 	ImageMetaInfoDialogPrivate* const d;
 };
