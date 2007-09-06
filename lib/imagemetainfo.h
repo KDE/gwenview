@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gwenviewlib_export.h"
 
 // Qt
+#include <QAbstractItemModel>
 
 // KDE
 
@@ -37,7 +38,7 @@ namespace Gwenview {
 
 
 class ImageMetaInfoPrivate;
-class GWENVIEWLIB_EXPORT ImageMetaInfo {
+class GWENVIEWLIB_EXPORT ImageMetaInfo : public QAbstractItemModel {
 public:
 	ImageMetaInfo();
 	~ImageMetaInfo();
@@ -46,6 +47,12 @@ public:
 	void setExiv2Image(const Exiv2::Image*);
 
 	void getInfoForKey(const QString& key, QString* label, QString* value) const;
+	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
+	virtual QModelIndex parent(const QModelIndex&) const;
+	virtual int rowCount(const QModelIndex&) const;
+	virtual int columnCount(const QModelIndex&) const;
+	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
 private:
 	ImageMetaInfoPrivate* const d;

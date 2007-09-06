@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -38,25 +39,82 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct ImageMetaInfoPrivate {
-	KFileItem mFileItem;
-	const Exiv2::Image* mExiv2Image;
+static const int noParentId = -1;
 
-	void getFileItemInfoForKey(const QString& key, QString* label, QString* value) {
-		if (key == "KFileItem.Name") {
-			*label = i18n("Name");
-			*value = mFileItem.name();
-		} else if (key == "KFileItem.Size") {
-			*label = i18n("File Size");
-			*value = KGlobal::locale()->formatByteSize(mFileItem.size());
-		} else if (key == "KFileItem.Time") {
-			*label = i18n("File Time");
-			*value = mFileItem.timeString();
-		} else {
-			kWarning() << "Unknown KFileItem metainfo key" << key;
+
+class MetaInfoGroup {
+	struct Entry {
+		QString mKey;
+		QString mLabel;
+		QString mValue;
+	};
+public:
+	MetaInfoGroup(const QString& label)
+	: mLabel(label) {}
+
+
+	~MetaInfoGroup() {
+		qDeleteAll(mList);
+	}
+
+
+	void clear() {
+		qDeleteAll(mList);
+		mList.clear();
+	}
+
+
+	void addEntry(const QString& key, const QString& label, const QString& value) {
+		Entry* entry = new Entry;
+		entry->mKey = key;
+		entry->mLabel = label;
+		entry->mValue = value;
+		mList << entry;
+	}
+
+
+	void getInfoForKey(const QString& key, QString* label, QString* value) const {
+		Q_FOREACH(Entry* entry, mList) {
+			if (entry->mKey == key) {
+				*label = entry->mLabel;
+				*value = entry->mValue;
+				return;
+			}
 		}
 	}
 
+
+	QString getLabelForKeyAt(int row) const {
+		Q_ASSERT(row < mList.size());
+		return mList[row]->mLabel;
+	}
+
+
+	QString getValueForKeyAt(int row) const {
+		Q_ASSERT(row < mList.size());
+		return mList[row]->mValue;
+	}
+
+
+	int size() const {
+		return mList.size();
+	}
+
+
+	QString label() const {
+		return mLabel;
+	}
+
+private:
+	QList<Entry*> mList;
+	QString mLabel;
+};
+
+
+struct ImageMetaInfoPrivate {
+	KFileItem mFileItem;
+	const Exiv2::Image* mExiv2Image;
+	QList<MetaInfoGroup*> mMetaInfoGroupList;
 
 	void getExifInfoForKey(const QString& keyName, QString* label, QString* value) {
 		if (!mExiv2Image) {
@@ -85,33 +143,193 @@ struct ImageMetaInfoPrivate {
 
 ImageMetaInfo::ImageMetaInfo()
 : d(new ImageMetaInfoPrivate) {
+	d->mMetaInfoGroupList
+		<< new MetaInfoGroup(i18n("File Information"))
+		<< new MetaInfoGroup(i18n("Exif Information"));
 }
 
 
 ImageMetaInfo::~ImageMetaInfo() {
+	qDeleteAll(d->mMetaInfoGroupList);
 	delete d;
 }
 
 
 void ImageMetaInfo::setFileItem(const KFileItem& item) {
 	d->mFileItem = item;
+
+	MetaInfoGroup* group = d->mMetaInfoGroupList[0];
+	QModelIndex parent = index(0, 0);
+	if (group->size() > 0) {
+		group->clear();
+		beginRemoveRows(parent, 0, group->size() - 1);
+		endRemoveRows();
+	}
+	group->addEntry(
+		"KFileItem.Name",
+		i18n("Name"),
+		item.name()
+		);
+
+	group->addEntry(
+		"KFileItem.Size",
+		i18n("File Size"),
+		KGlobal::locale()->formatByteSize(item.size())
+		);
+
+	group->addEntry(
+		"KFileItem.Time",
+		i18n("File Time"),
+		item.timeString()
+		);
+	beginInsertRows(parent, 0, group->size() - 1);
+	endInsertRows();
 }
 
 
 void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 	d->mExiv2Image = image;
+	MetaInfoGroup* group = d->mMetaInfoGroupList[1];
+	QModelIndex parent = index(1, 0);
+	if (group->size() > 0) {
+		group->clear();
+		beginRemoveRows(parent, 0, group->size() - 1);
+		endRemoveRows();
+	}
+
+	if (!image) {
+		return;
+	}
+
+	if (!image->supportsMetadata(Exiv2::mdExif)) {
+		return;
+	}
+	const Exiv2::ExifData& exifData = image->exifData();
+
+	Exiv2::ExifData::const_iterator
+		it = exifData.begin(),
+		end = exifData.end();
+	for (;it != end; ++it) {
+		QString key = QString::fromUtf8(it->key().c_str());
+		QString label = QString::fromUtf8(it->tagLabel().c_str());
+		std::ostringstream stream;
+		stream << *it;
+		QString value = QString::fromUtf8(stream.str().c_str());
+		group->addEntry(key, label, value);
+	}
+
+	beginInsertRows(parent, 0, group->size() - 1);
+	endInsertRows();
 }
 
 
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
+	MetaInfoGroup* group;
 	if (key.startsWith("KFileItem")) {
-		d->getFileItemInfoForKey(key, label, value);
+		group = d->mMetaInfoGroupList[0];
 	} else if (key.startsWith("Exif")) {
-		d->getExifInfoForKey(key, label, value);
+		group = d->mMetaInfoGroupList[1];
 	} else {
 		kWarning() << "Unknown metainfo key" << key;
+		return;
+	}
+	group->getInfoForKey(key, label, value);
+}
+
+
+QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) const {
+	if (!parent.isValid()) {
+		// This is a group
+		if (col > 0) {
+			return QModelIndex();
+		}
+		if (row >= d->mMetaInfoGroupList.size()) {
+			return QModelIndex();
+		}
+		return createIndex(row, col, noParentId);
+	} else {
+		// This is an entry
+		if (col > 1) {
+			return QModelIndex();
+		}
+		int internalId = parent.row();
+		if (row >= d->mMetaInfoGroupList[internalId]->size()) {
+			return QModelIndex();
+		}
+		return createIndex(row, col, internalId);
 	}
 }
 
+
+QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
+	if (!index.isValid()) {
+		return QModelIndex();
+	}
+	if (index.internalId() == noParentId) {
+		return QModelIndex();
+	} else {
+		return createIndex(index.internalId(), 0, noParentId);
+	}
+}
+
+
+int ImageMetaInfo::rowCount(const QModelIndex& parent) const {
+	if (!parent.isValid()) {
+		return d->mMetaInfoGroupList.size();
+	} else if (parent.internalId() == noParentId) {
+		return d->mMetaInfoGroupList[parent.row()]->size();
+	} else {
+		return 0;
+	}
+}
+
+
+int ImageMetaInfo::columnCount(const QModelIndex& /*parent*/) const {
+	return 2;
+}
+
+
+QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
+	if (role != Qt::DisplayRole) {
+		return QVariant();
+	}
+
+	if (!index.isValid()) {
+		return QVariant();
+	}
+
+	if (index.internalId() == noParentId) {
+		if (index.column() > 0) {
+			return QVariant();
+		}
+		QString label = d->mMetaInfoGroupList[index.row()]->label();
+		return QVariant(label);
+	}
+
+	MetaInfoGroup* group = d->mMetaInfoGroupList[index.internalId()];
+	if (index.column() == 0) {
+		return group->getLabelForKeyAt(index.row());
+	} else {
+		return group->getValueForKeyAt(index.row());
+	}
+}
+
+
+QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int role) const {
+	if (orientation == Qt::Vertical || role != Qt::DisplayRole) {
+		return QVariant();
+	}
+
+	QString caption;
+	if (section == 0) {
+		caption = i18n("Property");
+	} else if (section == 1) {
+		caption = i18n("Value");
+	} else {
+		kWarning() << "Unknown section" << section;
+	}
+
+	return QVariant(caption);
+}
 
 } // namespace
