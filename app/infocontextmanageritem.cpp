@@ -19,19 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "infocontextmanageritem.moc"
 
-#include <exiv2/exif.hpp>
-
 // Qt
 #include <QLabel>
 
 // KDE
 #include <kfileitem.h>
-#include <kglobal.h>
 #include <klocale.h>
 
 // Local
 #include "contextmanager.h"
 #include "sidebar.h"
+#include <lib/imagemetainfo.h>
 #include <lib/imageviewpart.h>
 #include <lib/document.h>
 #include <lib/documentfactory.h>
@@ -56,46 +54,10 @@ struct InfoContextManagerItemPrivate {
 	QLabel* mOneFileImageLabel;
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
-	KFileItem mFileItem;
 	Document::Ptr mDocument;
+	ImageMetaInfo mImageMetaInfo;
 
 	QStringList mPreferedMetaInfoKeyList;
-
-
-	void getExiv2MetaInfoKey(const QString& key, QString* caption, QString* value) {
-		if (!mDocument) {
-			return;
-		}
-
-		if (key.startsWith("Exif")) {
-			getExifMetaInfoKey(key, caption, value);
-		}
-	}
-
-
-	void getExifMetaInfoKey(const QString& keyName, QString* caption, QString* value) {
-		const Exiv2::Image* exiv2Image = mDocument->exiv2Image();
-		if (!exiv2Image) {
-			return;
-		}
-
-		if (!exiv2Image->supportsMetadata(Exiv2::mdExif)) {
-			return;
-		}
-		const Exiv2::ExifData& exifData = exiv2Image->exifData();
-
-		Exiv2::ExifKey key(keyName.toAscii().data());
-		Exiv2::ExifData::const_iterator it = exifData.findKey(key);
-
-		if (it == exifData.end()) {
-			return;
-		}
-
-		*caption = QString::fromUtf8(it->tagLabel().c_str());
-		std::ostringstream stream;
-		stream << *it;
-		*value = QString::fromUtf8(stream.str().c_str());
-	}
 };
 
 
@@ -174,7 +136,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 }
 
 void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
-	d->mFileItem = item;
+	d->mImageMetaInfo.setFileItem(item);
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
@@ -239,26 +201,20 @@ void InfoContextManagerItem::setPreferedMetaInfoKeyList(const QStringList& keyLi
 
 
 void InfoContextManagerItem::updateOneFileInfo() {
+	if (d->mDocument) {
+		d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
+	} else {
+		d->mImageMetaInfo.setExiv2Image(0);
+	}
 	QStringList list;
 
 	Q_FOREACH(QString key, d->mPreferedMetaInfoKeyList) {
-		QString caption;
+		QString label;
 		QString value;
-		if (key == "KFileItem.Name") {
-			caption = i18n("Name");
-			value = d->mFileItem.name();
-		} else if (key == "KFileItem.Size") {
-			caption = i18n("File Size");
-			value = KGlobal::locale()->formatByteSize(d->mFileItem.size());
-		} else if (key == "KFileItem.Time") {
-			caption = i18n("File Time");
-			value = d->mFileItem.timeString();
-		} else {
-			d->getExiv2MetaInfoKey(key, &caption, &value);
-		}
+		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
 
-		if (!caption.isEmpty() && !value.isEmpty()) {
-			list.append(i18n("%1: %2", caption, value));
+		if (!label.isEmpty() && !value.isEmpty()) {
+			list.append(i18n("%1: %2", label, value));
 		}
 	}
 

@@ -12,6 +12,7 @@ set(gwenviewlib_SRCS
 	emptydocumentimpl.cpp
 	expandbutton.cpp
 	fullscreenbar.cpp
+    imagemetainfo.cpp
 	imagescaler.cpp
 	imageutils.cpp
 	imageview.cpp
