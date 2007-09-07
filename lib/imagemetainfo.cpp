@@ -223,7 +223,7 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 
 		d->notifyGroupFilled(iptcGroup, iptcIndex);
 	}}
-};
+}
 
 
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
