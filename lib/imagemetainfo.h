@@ -45,6 +45,7 @@ public:
 
 	void setFileItem(const KFileItem&);
 	void setExiv2Image(const Exiv2::Image*);
+	void setPreferedMetaInfoKeyList(const QStringList& keyList);
 
 	void getInfoForKey(const QString& key, QString* label, QString* value) const;
 	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;

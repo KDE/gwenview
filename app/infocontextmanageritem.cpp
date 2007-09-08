@@ -206,6 +206,7 @@ void InfoContextManagerItem::updatePreview() {
 
 void InfoContextManagerItem::setPreferedMetaInfoKeyList(const QStringList& keyList) {
 	d->mPreferedMetaInfoKeyList = keyList;
+	d->mImageMetaInfo.setPreferedMetaInfoKeyList(keyList);
 }
 
 

@@ -85,6 +85,12 @@ public:
 	}
 
 
+	QString getKeyAt(int row) const {
+		Q_ASSERT(row < mList.size());
+		return mList[row]->mKey;
+	}
+
+
 	QString getLabelForKeyAt(int row) const {
 		Q_ASSERT(row < mList.size());
 		return mList[row]->mLabel;
@@ -115,6 +121,7 @@ private:
 struct ImageMetaInfoPrivate {
 	QList<MetaInfoGroup*> mMetaInfoGroupList;
 	ImageMetaInfo* mModel;
+	QStringList mPreferedMetaInfoKeyList;
 
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
@@ -129,6 +136,35 @@ struct ImageMetaInfoPrivate {
 	void notifyGroupFilled(MetaInfoGroup* group, const QModelIndex& parent) {
 		mModel->beginInsertRows(parent, 0, group->size() - 1);
 		mModel->endInsertRows();
+	}
+
+
+	QVariant displayData(const QModelIndex& index) const {
+		if (index.internalId() == noParentId) {
+			if (index.column() > 0) {
+				return QVariant();
+			}
+			QString label = mMetaInfoGroupList[index.row()]->label();
+			return QVariant(label);
+		}
+
+		MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
+		if (index.column() == 0) {
+			return group->getLabelForKeyAt(index.row());
+		} else {
+			return group->getValueForKeyAt(index.row());
+		}
+	}
+
+
+	QVariant checkStateData(const QModelIndex& index) const {
+		if (index.internalId() != noParentId & index.column() == 0) {
+			MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
+			bool checked = mPreferedMetaInfoKeyList.contains(group->getKeyAt(index.row()));
+			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
+		} else {
+			return QVariant();
+		}
 	}
 };
 
@@ -211,6 +247,7 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 			);
 
 		d->notifyGroupFilled(exifGroup, exifIndex);
+	}
 
 	if (image->supportsMetadata(Exiv2::mdIptc)) {
 		const Exiv2::IptcData& iptcData = image->iptcData();
@@ -222,7 +259,12 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 			);
 
 		d->notifyGroupFilled(iptcGroup, iptcIndex);
-	}}
+	}
+}
+
+
+void ImageMetaInfo::setPreferedMetaInfoKeyList(const QStringList& keyList) {
+	d->mPreferedMetaInfoKeyList = keyList;
 }
 
 
@@ -293,27 +335,17 @@ int ImageMetaInfo::columnCount(const QModelIndex& /*parent*/) const {
 
 
 QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
-	if (role != Qt::DisplayRole) {
-		return QVariant();
-	}
-
 	if (!index.isValid()) {
 		return QVariant();
 	}
 
-	if (index.internalId() == noParentId) {
-		if (index.column() > 0) {
-			return QVariant();
-		}
-		QString label = d->mMetaInfoGroupList[index.row()]->label();
-		return QVariant(label);
-	}
-
-	MetaInfoGroup* group = d->mMetaInfoGroupList[index.internalId()];
-	if (index.column() == 0) {
-		return group->getLabelForKeyAt(index.row());
-	} else {
-		return group->getValueForKeyAt(index.row());
+	switch (role) {
+	case Qt::DisplayRole:
+		return d->displayData(index);
+	case Qt::CheckStateRole:
+		return d->checkStateData(index);
+	default:
+		return QVariant();
 	}
 }
 
@@ -334,5 +366,6 @@ QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int
 
 	return QVariant(caption);
 }
+
 
 } // namespace
