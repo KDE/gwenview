@@ -20,3 +20,4 @@ target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} ${KDE4_KFILE_LIBS} gwenviewli
 install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
 install(FILES gwenviewui.rc
 		DESTINATION ${DATA_INSTALL_DIR}/gwenview)
+install(FILES gwenview.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
