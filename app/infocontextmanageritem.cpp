@@ -53,7 +53,6 @@ struct InfoContextManagerItemPrivate {
 	SideBarGroup* mGroup;
 
 	QWidget* mOneFileWidget;
-	QLabel* mOneFileImageLabel;
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
 	Document::Ptr mDocument;
@@ -94,8 +93,6 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 		SLOT(updateSideBarContent()) );
 	d->mOneFileWidget = new QWidget();
 
-	d->mOneFileImageLabel = new QLabel(d->mOneFileWidget);
-
 	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
 	d->mOneFileTextLabel->setWordWrap(true);
 
@@ -104,7 +101,6 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(0);
-	layout->addWidget(d->mOneFileImageLabel);
 	layout->addWidget(d->mOneFileTextLabel);
 	layout->addWidget(moreButton);
 
@@ -150,21 +146,12 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
-	if (item.isDir()) {
-		d->mOneFileImageLabel->hide();
-	} else {
+	if (!item.isDir()) {
 		d->mDocument = DocumentFactory::instance()->load(item.url());
-		connect(d->mDocument.data(), SIGNAL(imageRectUpdated()),
-			SLOT(updatePreview()) );
-		connect(d->mDocument.data(), SIGNAL(loaded()),
-			SLOT(updatePreview()) );
 		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
 			SLOT(slotMetaDataLoaded()) );
-		// If it's already loaded, trigger updatePreview ourself
-		if (d->mDocument->isLoaded()) {
-			updatePreview();
-		}
 	}
+	// FIXME: slotMetaDataLoaded will be called twice
 	slotMetaDataLoaded();
 }
 
@@ -190,18 +177,6 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& item
 	}
 	d->mOneFileWidget->hide();
 	d->mMultipleFilesLabel->show();
-}
-
-
-void InfoContextManagerItem::updatePreview() {
-	Q_ASSERT(d->mDocument);
-	if (!d->mDocument) {
-		return;
-	}
-
-	QImage image = d->mDocument->image().scaled(160, 160, Qt::KeepAspectRatio);
-	d->mOneFileImageLabel->setPixmap(QPixmap::fromImage(image));
-	d->mOneFileImageLabel->show();
 }
 
 

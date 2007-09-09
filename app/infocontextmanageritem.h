@@ -44,7 +44,6 @@ public:
 
 private Q_SLOTS:
 	void slotMetaDataLoaded();
-	void updatePreview();
 	void updateSideBarContent();
 	void updateOneFileInfo();
 	void showMetaInfoDialog();
