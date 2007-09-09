@@ -350,6 +350,26 @@ QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
 }
 
 
+bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int role) {
+	if (role != Qt::CheckStateRole) {
+		return false;
+	}
+
+	if (index.internalId() == noParentId) {
+		return false;
+	}
+
+	MetaInfoGroup* group = d->mMetaInfoGroupList[index.internalId()];
+	QString key = group->getKeyAt(index.row());
+	if (value == Qt::Checked) {
+		d->mPreferedMetaInfoKeyList << key;
+	} else {
+		d->mPreferedMetaInfoKeyList.removeAll(key);
+	}
+	return true;
+}
+
+
 QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int role) const {
 	if (orientation == Qt::Vertical || role != Qt::DisplayRole) {
 		return QVariant();
@@ -365,6 +385,15 @@ QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int
 	}
 
 	return QVariant(caption);
+}
+
+
+Qt::ItemFlags ImageMetaInfo::flags(const QModelIndex& index) const {
+	Qt::ItemFlags fl = QAbstractItemModel::flags(index);
+	if (index.internalId() != noParentId && index.column() == 0) {
+		fl |= Qt::ItemIsUserCheckable;
+	}
+	return fl;
 }
 
 
