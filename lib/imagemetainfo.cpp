@@ -373,6 +373,7 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 		d->mPreferedMetaInfoKeyList.removeAll(key);
 	}
 	emit preferedMetaInfoKeyListChanged(d->mPreferedMetaInfoKeyList);
+	emit dataChanged(index, index);
 	return true;
 }
 
