@@ -42,9 +42,8 @@ public:
 
 	virtual void setSideBar(SideBar* sideBar);
 
-	void setPreferedMetaInfoKeyList(const QStringList& keyList);
-
 private Q_SLOTS:
+	void slotMetaDataLoaded();
 	void updatePreview();
 	void updateSideBarContent();
 	void updateOneFileInfo();

@@ -59,7 +59,6 @@ struct InfoContextManagerItemPrivate {
 	Document::Ptr mDocument;
 	ImageMetaInfo mImageMetaInfo;
 
-	QStringList mPreferedMetaInfoKeyList;
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
 };
 
@@ -79,7 +78,9 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 		<< "Exif.Photo.ExposureTime"
 		<< "Exif.Photo.Flash"
 		;
-	setPreferedMetaInfoKeyList(list);
+	connect(&d->mImageMetaInfo, SIGNAL(preferedMetaInfoKeyListChanged(const QStringList&)),
+		SLOT(updateOneFileInfo()) );
+	d->mImageMetaInfo.setPreferedMetaInfoKeyList(list);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
@@ -158,13 +159,13 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 		connect(d->mDocument.data(), SIGNAL(loaded()),
 			SLOT(updatePreview()) );
 		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
-			SLOT(updateOneFileInfo()) );
+			SLOT(slotMetaDataLoaded()) );
 		// If it's already loaded, trigger updatePreview ourself
 		if (d->mDocument->isLoaded()) {
 			updatePreview();
 		}
 	}
-	updateOneFileInfo();
+	slotMetaDataLoaded();
 }
 
 void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
@@ -204,21 +205,23 @@ void InfoContextManagerItem::updatePreview() {
 }
 
 
-void InfoContextManagerItem::setPreferedMetaInfoKeyList(const QStringList& keyList) {
-	d->mPreferedMetaInfoKeyList = keyList;
-	d->mImageMetaInfo.setPreferedMetaInfoKeyList(keyList);
-}
-
-
-void InfoContextManagerItem::updateOneFileInfo() {
+void InfoContextManagerItem::slotMetaDataLoaded() {
 	if (d->mDocument) {
 		d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
 	} else {
 		d->mImageMetaInfo.setExiv2Image(0);
 	}
-	QStringList list;
+	updateOneFileInfo();
+}
 
-	Q_FOREACH(QString key, d->mPreferedMetaInfoKeyList) {
+
+void InfoContextManagerItem::updateOneFileInfo() {
+	if (!d->mSideBar) {
+		// Not initialized yet
+		return;
+	}
+	QStringList list;
+	Q_FOREACH(QString key, d->mImageMetaInfo.preferedMetaInfoKeyList()) {
 		QString label;
 		QString value;
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);

@@ -263,8 +263,14 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 }
 
 
+QStringList ImageMetaInfo::preferedMetaInfoKeyList() const {
+	return d->mPreferedMetaInfoKeyList;
+}
+
+
 void ImageMetaInfo::setPreferedMetaInfoKeyList(const QStringList& keyList) {
 	d->mPreferedMetaInfoKeyList = keyList;
+	emit preferedMetaInfoKeyListChanged(d->mPreferedMetaInfoKeyList);
 }
 
 
@@ -366,6 +372,7 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 	} else {
 		d->mPreferedMetaInfoKeyList.removeAll(key);
 	}
+	emit preferedMetaInfoKeyListChanged(d->mPreferedMetaInfoKeyList);
 	return true;
 }
 

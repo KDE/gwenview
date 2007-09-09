@@ -39,12 +39,15 @@ namespace Gwenview {
 
 class ImageMetaInfoPrivate;
 class GWENVIEWLIB_EXPORT ImageMetaInfo : public QAbstractItemModel {
+	Q_OBJECT
 public:
 	ImageMetaInfo();
 	~ImageMetaInfo();
 
 	void setFileItem(const KFileItem&);
 	void setExiv2Image(const Exiv2::Image*);
+
+	QStringList preferedMetaInfoKeyList() const;
 	void setPreferedMetaInfoKeyList(const QStringList& keyList);
 
 	void getInfoForKey(const QString& key, QString* label, QString* value) const;
@@ -56,6 +59,9 @@ public:
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+
+Q_SIGNALS:
+	void preferedMetaInfoKeyListChanged(const QStringList&);
 
 private:
 	ImageMetaInfoPrivate* const d;
