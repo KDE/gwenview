@@ -96,13 +96,15 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
 	d->mOneFileTextLabel->setWordWrap(true);
 
-	QPushButton* moreButton = new QPushButton(d->mOneFileWidget);
-	moreButton->setText(i18n("More..."));
+	QLabel* moreLabel = new QLabel(d->mOneFileWidget);
+	moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18n("More...")));
+	moreLabel->setAlignment(Qt::AlignRight);
 
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
-	layout->setMargin(0);
+	layout->setMargin(2);
+	layout->setSpacing(2);
 	layout->addWidget(d->mOneFileTextLabel);
-	layout->addWidget(moreButton);
+	layout->addWidget(moreLabel);
 
 	d->mMultipleFilesLabel = new QLabel();
 
@@ -112,7 +114,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	d->mGroup->hide();
 
-	connect(moreButton, SIGNAL(clicked()), SLOT(showMetaInfoDialog()) );
+	connect(moreLabel, SIGNAL(linkActivated(const QString&)), SLOT(showMetaInfoDialog()) );
 }
 
 
