@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
+#include <gwenviewconfig.h>
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/imagemetainfo.h>
@@ -69,20 +70,16 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
 
-	QStringList list;
-	list << "KFileItem.Name"
-		<< "KFileItem.Size"
-		<< "KFileItem.Time"
-		<< "Exif.Photo.ISOSpeedRatings"
-		<< "Exif.Photo.ExposureTime"
-		<< "Exif.Photo.Flash"
-		;
+	QStringList list = GwenviewConfig::preferedMetaInfoKeyList();
 	connect(&d->mImageMetaInfo, SIGNAL(preferedMetaInfoKeyListChanged(const QStringList&)),
 		SLOT(updateOneFileInfo()) );
 	d->mImageMetaInfo.setPreferedMetaInfoKeyList(list);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
+	QStringList list = d->mImageMetaInfo.preferedMetaInfoKeyList();
+	GwenviewConfig::setPreferedMetaInfoKeyList(list);
+	GwenviewConfig::self()->writeConfig();
 	delete d;
 }
 

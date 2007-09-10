@@ -1,0 +1,5 @@
+File=gwenviewconfig.kcfg
+ClassName=GwenviewConfig
+NameSpace=Gwenview
+Singleton=true
+Mutators=true
