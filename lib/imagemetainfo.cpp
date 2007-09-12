@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-static const int noParentId = -1;
+enum { NoGroup = -1, FileGroup, ExifGroup, IptcGroup };
 
 
 class MetaInfoGroup {
@@ -140,7 +140,7 @@ struct ImageMetaInfoPrivate {
 
 
 	QVariant displayData(const QModelIndex& index) const {
-		if (index.internalId() == noParentId) {
+		if (index.internalId() == NoGroup) {
 			if (index.column() > 0) {
 				return QVariant();
 			}
@@ -158,7 +158,7 @@ struct ImageMetaInfoPrivate {
 
 
 	QVariant checkStateData(const QModelIndex& index) const {
-		if (index.internalId() != noParentId & index.column() == 0) {
+		if (index.internalId() != NoGroup & index.column() == 0) {
 			MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
 			bool checked = mPreferredMetaInfoKeyList.contains(group->getKeyAt(index.row()));
 			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
@@ -187,8 +187,8 @@ ImageMetaInfo::~ImageMetaInfo() {
 
 
 void ImageMetaInfo::setFileItem(const KFileItem& item) {
-	MetaInfoGroup* group = d->mMetaInfoGroupList[0];
-	QModelIndex parent = index(0, 0);
+	MetaInfoGroup* group = d->mMetaInfoGroupList[FileGroup];
+	QModelIndex parent = index(FileGroup, 0);
 	d->clearGroup(group, parent);
 	group->addEntry(
 		"KFileItem.Name",
@@ -226,10 +226,10 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 
 
 void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
-	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[1];
-	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupList[2];
-	QModelIndex exifIndex = index(1, 0);
-	QModelIndex iptcIndex = index(2, 0);
+	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[ExifGroup];
+	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupList[IptcGroup];
+	QModelIndex exifIndex = index(ExifGroup, 0);
+	QModelIndex iptcIndex = index(IptcGroup, 0);
 	d->clearGroup(exifGroup, exifIndex);
 	d->clearGroup(iptcGroup, iptcIndex);
 
@@ -277,9 +277,11 @@ void ImageMetaInfo::setPreferredMetaInfoKeyList(const QStringList& keyList) {
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
 	if (key.startsWith("KFileItem")) {
-		group = d->mMetaInfoGroupList[0];
+		group = d->mMetaInfoGroupList[FileGroup];
 	} else if (key.startsWith("Exif")) {
-		group = d->mMetaInfoGroupList[1];
+		group = d->mMetaInfoGroupList[ExifGroup];
+	} else if (key.startsWith("Iptc")) {
+		group = d->mMetaInfoGroupList[IptcGroup];
 	} else {
 		kWarning() << "Unknown metainfo key" << key;
 		return;
@@ -297,17 +299,17 @@ QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) co
 		if (row >= d->mMetaInfoGroupList.size()) {
 			return QModelIndex();
 		}
-		return createIndex(row, col, noParentId);
+		return createIndex(row, col, NoGroup);
 	} else {
 		// This is an entry
 		if (col > 1) {
 			return QModelIndex();
 		}
-		int internalId = parent.row();
-		if (row >= d->mMetaInfoGroupList[internalId]->size()) {
+		int group = parent.row();
+		if (row >= d->mMetaInfoGroupList[group]->size()) {
 			return QModelIndex();
 		}
-		return createIndex(row, col, internalId);
+		return createIndex(row, col, group);
 	}
 }
 
@@ -316,10 +318,10 @@ QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
 	if (!index.isValid()) {
 		return QModelIndex();
 	}
-	if (index.internalId() == noParentId) {
+	if (index.internalId() == NoGroup) {
 		return QModelIndex();
 	} else {
-		return createIndex(index.internalId(), 0, noParentId);
+		return createIndex(index.internalId(), 0, NoGroup);
 	}
 }
 
@@ -327,7 +329,7 @@ QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
 int ImageMetaInfo::rowCount(const QModelIndex& parent) const {
 	if (!parent.isValid()) {
 		return d->mMetaInfoGroupList.size();
-	} else if (parent.internalId() == noParentId) {
+	} else if (parent.internalId() == NoGroup) {
 		return d->mMetaInfoGroupList[parent.row()]->size();
 	} else {
 		return 0;
@@ -361,7 +363,7 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 		return false;
 	}
 
-	if (index.internalId() == noParentId) {
+	if (index.internalId() == NoGroup) {
 		return false;
 	}
 
@@ -398,7 +400,7 @@ QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int
 
 Qt::ItemFlags ImageMetaInfo::flags(const QModelIndex& index) const {
 	Qt::ItemFlags fl = QAbstractItemModel::flags(index);
-	if (index.internalId() != noParentId && index.column() == 0) {
+	if (index.internalId() != NoGroup && index.column() == 0) {
 		fl |= Qt::ItemIsUserCheckable;
 	}
 	return fl;
