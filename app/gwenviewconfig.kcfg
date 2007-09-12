@@ -3,7 +3,7 @@
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
 	<group name="SideBar">
-		<entry name="PreferedMetaInfoKeyList" type="StringList">
+		<entry name="PreferredMetaInfoKeyList" type="StringList">
 		<default>KFileItem.Name,KFileItem.Size,KFileItem.Time,Exif.Photo.ISOSpeedRatings,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
 		</entry>
 	</group>

@@ -47,8 +47,8 @@ public:
 	void setFileItem(const KFileItem&);
 	void setExiv2Image(const Exiv2::Image*);
 
-	QStringList preferedMetaInfoKeyList() const;
-	void setPreferedMetaInfoKeyList(const QStringList& keyList);
+	QStringList preferredMetaInfoKeyList() const;
+	void setPreferredMetaInfoKeyList(const QStringList& keyList);
 
 	void getInfoForKey(const QString& key, QString* label, QString* value) const;
 	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
@@ -61,7 +61,7 @@ public:
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
 Q_SIGNALS:
-	void preferedMetaInfoKeyListChanged(const QStringList&);
+	void preferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
 	ImageMetaInfoPrivate* const d;

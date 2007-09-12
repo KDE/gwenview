@@ -121,7 +121,7 @@ private:
 struct ImageMetaInfoPrivate {
 	QList<MetaInfoGroup*> mMetaInfoGroupList;
 	ImageMetaInfo* mModel;
-	QStringList mPreferedMetaInfoKeyList;
+	QStringList mPreferredMetaInfoKeyList;
 
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
@@ -160,7 +160,7 @@ struct ImageMetaInfoPrivate {
 	QVariant checkStateData(const QModelIndex& index) const {
 		if (index.internalId() != noParentId & index.column() == 0) {
 			MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
-			bool checked = mPreferedMetaInfoKeyList.contains(group->getKeyAt(index.row()));
+			bool checked = mPreferredMetaInfoKeyList.contains(group->getKeyAt(index.row()));
 			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
 		} else {
 			return QVariant();
@@ -263,14 +263,14 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 }
 
 
-QStringList ImageMetaInfo::preferedMetaInfoKeyList() const {
-	return d->mPreferedMetaInfoKeyList;
+QStringList ImageMetaInfo::preferredMetaInfoKeyList() const {
+	return d->mPreferredMetaInfoKeyList;
 }
 
 
-void ImageMetaInfo::setPreferedMetaInfoKeyList(const QStringList& keyList) {
-	d->mPreferedMetaInfoKeyList = keyList;
-	emit preferedMetaInfoKeyListChanged(d->mPreferedMetaInfoKeyList);
+void ImageMetaInfo::setPreferredMetaInfoKeyList(const QStringList& keyList) {
+	d->mPreferredMetaInfoKeyList = keyList;
+	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
 }
 
 
@@ -368,11 +368,11 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 	MetaInfoGroup* group = d->mMetaInfoGroupList[index.internalId()];
 	QString key = group->getKeyAt(index.row());
 	if (value == Qt::Checked) {
-		d->mPreferedMetaInfoKeyList << key;
+		d->mPreferredMetaInfoKeyList << key;
 	} else {
-		d->mPreferedMetaInfoKeyList.removeAll(key);
+		d->mPreferredMetaInfoKeyList.removeAll(key);
 	}
-	emit preferedMetaInfoKeyListChanged(d->mPreferedMetaInfoKeyList);
+	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
 	emit dataChanged(index, index);
 	return true;
 }

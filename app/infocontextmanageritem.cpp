@@ -70,15 +70,15 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
 
-	QStringList list = GwenviewConfig::preferedMetaInfoKeyList();
-	connect(&d->mImageMetaInfo, SIGNAL(preferedMetaInfoKeyListChanged(const QStringList&)),
+	QStringList list = GwenviewConfig::preferredMetaInfoKeyList();
+	connect(&d->mImageMetaInfo, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 		SLOT(updateOneFileInfo()) );
-	d->mImageMetaInfo.setPreferedMetaInfoKeyList(list);
+	d->mImageMetaInfo.setPreferredMetaInfoKeyList(list);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
-	QStringList list = d->mImageMetaInfo.preferedMetaInfoKeyList();
-	GwenviewConfig::setPreferedMetaInfoKeyList(list);
+	QStringList list = d->mImageMetaInfo.preferredMetaInfoKeyList();
+	GwenviewConfig::setPreferredMetaInfoKeyList(list);
 	GwenviewConfig::self()->writeConfig();
 	delete d;
 }
@@ -195,7 +195,7 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		return;
 	}
 	QStringList list;
-	Q_FOREACH(QString key, d->mImageMetaInfo.preferedMetaInfoKeyList()) {
+	Q_FOREACH(QString key, d->mImageMetaInfo.preferredMetaInfoKeyList()) {
 		QString label;
 		QString value;
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
