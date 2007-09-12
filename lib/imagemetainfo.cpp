@@ -44,12 +44,13 @@ enum { NoGroup = -1, FileGroup, ExifGroup, IptcGroup };
 
 
 class MetaInfoGroup {
+public:
 	struct Entry {
 		QString mKey;
 		QString mLabel;
 		QString mValue;
 	};
-public:
+
 	MetaInfoGroup(const QString& label)
 	: mLabel(label) {}
 
@@ -112,6 +113,10 @@ public:
 		return mLabel;
 	}
 
+	const QList<Entry*>& entryList() const {
+		return mList;
+	}
+
 private:
 	QList<Entry*> mList;
 	QString mLabel;
@@ -165,6 +170,19 @@ struct ImageMetaInfoPrivate {
 		} else {
 			return QVariant();
 		}
+	}
+
+	void sortPreferredMetaInfoKeyList() {
+		QStringList sortedList;
+		Q_FOREACH(MetaInfoGroup* group, mMetaInfoGroupVector) {
+			Q_FOREACH(MetaInfoGroup::Entry* entry, group->entryList()) {
+				QString key = entry->mKey;
+				if (mPreferredMetaInfoKeyList.contains(key)) {
+					sortedList << key;
+				}
+			}
+		}
+		mPreferredMetaInfoKeyList = sortedList;
 	}
 };
 
@@ -370,6 +388,7 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 	QString key = group->getKeyAt(index.row());
 	if (value == Qt::Checked) {
 		d->mPreferredMetaInfoKeyList << key;
+		d->sortPreferredMetaInfoKeyList();
 	} else {
 		d->mPreferredMetaInfoKeyList.removeAll(key);
 	}
