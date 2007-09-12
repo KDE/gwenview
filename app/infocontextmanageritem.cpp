@@ -201,11 +201,11 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
-			list.append(i18n("%1: %2", label, value));
+			list.append(i18n("<b>%1:</b> %2", label, value));
 		}
 	}
 
-	d->mOneFileTextLabel->setText(list.join("\n"));
+	d->mOneFileTextLabel->setText(list.join("<br>\n"));
 	d->mOneFileTextLabel->show();
 }
 
