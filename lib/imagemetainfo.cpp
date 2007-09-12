@@ -119,7 +119,7 @@ private:
 
 
 struct ImageMetaInfoPrivate {
-	QList<MetaInfoGroup*> mMetaInfoGroupList;
+	QVector<MetaInfoGroup*> mMetaInfoGroupVector;
 	ImageMetaInfo* mModel;
 	QStringList mPreferredMetaInfoKeyList;
 
@@ -144,11 +144,11 @@ struct ImageMetaInfoPrivate {
 			if (index.column() > 0) {
 				return QVariant();
 			}
-			QString label = mMetaInfoGroupList[index.row()]->label();
+			QString label = mMetaInfoGroupVector[index.row()]->label();
 			return QVariant(label);
 		}
 
-		MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
+		MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];
 		if (index.column() == 0) {
 			return group->getLabelForKeyAt(index.row());
 		} else {
@@ -159,7 +159,7 @@ struct ImageMetaInfoPrivate {
 
 	QVariant checkStateData(const QModelIndex& index) const {
 		if (index.internalId() != NoGroup & index.column() == 0) {
-			MetaInfoGroup* group = mMetaInfoGroupList[index.internalId()];
+			MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];
 			bool checked = mPreferredMetaInfoKeyList.contains(group->getKeyAt(index.row()));
 			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
 		} else {
@@ -172,22 +172,21 @@ struct ImageMetaInfoPrivate {
 ImageMetaInfo::ImageMetaInfo()
 : d(new ImageMetaInfoPrivate) {
 	d->mModel = this;
-	d->mMetaInfoGroupList
-		<< new MetaInfoGroup(i18n("File Information"))
-		<< new MetaInfoGroup(i18n("Exif Information"))
-		<< new MetaInfoGroup(i18n("Iptc Information"))
-		;
+	d->mMetaInfoGroupVector.resize(3);
+	d->mMetaInfoGroupVector[FileGroup] = new MetaInfoGroup(i18n("File Information"));
+	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18n("Exif Information"));
+	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18n("Iptc Information"));
 }
 
 
 ImageMetaInfo::~ImageMetaInfo() {
-	qDeleteAll(d->mMetaInfoGroupList);
+	qDeleteAll(d->mMetaInfoGroupVector);
 	delete d;
 }
 
 
 void ImageMetaInfo::setFileItem(const KFileItem& item) {
-	MetaInfoGroup* group = d->mMetaInfoGroupList[FileGroup];
+	MetaInfoGroup* group = d->mMetaInfoGroupVector[FileGroup];
 	QModelIndex parent = index(FileGroup, 0);
 	d->clearGroup(group, parent);
 	group->addEntry(
@@ -226,8 +225,8 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 
 
 void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
-	MetaInfoGroup* exifGroup = d->mMetaInfoGroupList[ExifGroup];
-	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupList[IptcGroup];
+	MetaInfoGroup* exifGroup = d->mMetaInfoGroupVector[ExifGroup];
+	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
 	QModelIndex exifIndex = index(ExifGroup, 0);
 	QModelIndex iptcIndex = index(IptcGroup, 0);
 	d->clearGroup(exifGroup, exifIndex);
@@ -277,11 +276,11 @@ void ImageMetaInfo::setPreferredMetaInfoKeyList(const QStringList& keyList) {
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
 	if (key.startsWith("KFileItem")) {
-		group = d->mMetaInfoGroupList[FileGroup];
+		group = d->mMetaInfoGroupVector[FileGroup];
 	} else if (key.startsWith("Exif")) {
-		group = d->mMetaInfoGroupList[ExifGroup];
+		group = d->mMetaInfoGroupVector[ExifGroup];
 	} else if (key.startsWith("Iptc")) {
-		group = d->mMetaInfoGroupList[IptcGroup];
+		group = d->mMetaInfoGroupVector[IptcGroup];
 	} else {
 		kWarning() << "Unknown metainfo key" << key;
 		return;
@@ -296,7 +295,7 @@ QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) co
 		if (col > 0) {
 			return QModelIndex();
 		}
-		if (row >= d->mMetaInfoGroupList.size()) {
+		if (row >= d->mMetaInfoGroupVector.size()) {
 			return QModelIndex();
 		}
 		return createIndex(row, col, NoGroup);
@@ -306,7 +305,7 @@ QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) co
 			return QModelIndex();
 		}
 		int group = parent.row();
-		if (row >= d->mMetaInfoGroupList[group]->size()) {
+		if (row >= d->mMetaInfoGroupVector[group]->size()) {
 			return QModelIndex();
 		}
 		return createIndex(row, col, group);
@@ -328,9 +327,9 @@ QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
 
 int ImageMetaInfo::rowCount(const QModelIndex& parent) const {
 	if (!parent.isValid()) {
-		return d->mMetaInfoGroupList.size();
+		return d->mMetaInfoGroupVector.size();
 	} else if (parent.internalId() == NoGroup) {
-		return d->mMetaInfoGroupList[parent.row()]->size();
+		return d->mMetaInfoGroupVector[parent.row()]->size();
 	} else {
 		return 0;
 	}
@@ -367,7 +366,7 @@ bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int
 		return false;
 	}
 
-	MetaInfoGroup* group = d->mMetaInfoGroupList[index.internalId()];
+	MetaInfoGroup* group = d->mMetaInfoGroupVector[index.internalId()];
 	QString key = group->getKeyAt(index.row());
 	if (value == Qt::Checked) {
 		d->mPreferredMetaInfoKeyList << key;
