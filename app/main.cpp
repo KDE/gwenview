@@ -43,7 +43,7 @@ static KCmdLineOptions options[] = {
 	KCmdLineLastOption
 };
 
-static const char version[] = "1.4.1";
+static const char version[] = "1.4.2";
 
 
 void applyFilterArgs(KCmdLineArgs* args, FileViewController* controller) {
