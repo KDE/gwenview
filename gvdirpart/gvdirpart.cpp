@@ -63,7 +63,8 @@ GVDirPart::GVDirPart(QWidget* parentWidget, const char* /*widgetName*/, QObject*
 		     const QStringList &) : KParts::ReadOnlyPart( parent, name )  {
 	GVDirFactory::instance()->iconLoader()->addAppDir( "gwenview");
 	setInstance( GVDirFactory::instance() );
-	KGlobal::locale()->insertCatalogue( "gwenview" );
+	KGlobal::locale()->insertCatalogue("gwenview");
+	KGlobal::locale()->setActiveCatalogue("gwenview");
 
 	mBrowserExtension = new GVDirPartBrowserExtension(this);
 

@@ -82,7 +82,8 @@ GVImagePart::GVImagePart(QWidget* parentWidget, const char* /*widgetName*/, QObj
 	, mLastDirection( DirectionUnknown )  {
 	GVImageFactory::instance()->iconLoader()->addAppDir( "gwenview");
 	setInstance( GVImageFactory::instance() );
-	KGlobal::locale()->insertCatalogue( "gwenview" );
+	KGlobal::locale()->insertCatalogue("gwenview");
+	KGlobal::locale()->setActiveCatalogue("gwenview");
 
 	mBrowserExtension = new GVImagePartBrowserExtension(this);
 

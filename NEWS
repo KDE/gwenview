@@ -1,4 +1,4 @@
-2007.xx.yy - v
+2007.09.15 - v1.4.2
 - New features:
  - Settings in the dialog to edit the thumbnail view details are now directly
    applied, no need to click "Apply" anymore.
@@ -14,6 +14,8 @@
  - Fix optimization compiler flags being disabled for scaling code.
  - In fullscreen mode, make sure the cursor does not come back after moving to
    the next image. Patch by Carles Pina i Estany.
+ - Bug 130511: In the KParts, make Gwenview translations the active one, to
+   avoid using KDELibs instead.
 
 2006.11.26 - v1.4.1
 - New features:
