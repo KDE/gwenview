@@ -15,6 +15,10 @@ set(gwenview_SRCS
 	thumbnailviewhelper.cpp
 	)
 
+kde4_add_ui_files(gwenview_SRCS
+	configdialog.ui
+	)
+
 kde4_add_kcfg_files(gwenview_SRCS
 	gwenviewconfig.kcfgc
 	)
