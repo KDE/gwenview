@@ -53,6 +53,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kxmlguifactory.h>
 
 // Local
+#include "configdialog.h"
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
@@ -330,6 +331,9 @@ struct MainWindow::Private {
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
+
+		KStandardAction::preferences(mWindow,
+			SLOT(showConfigDialog()), actionCollection);
 	}
 
 
@@ -1021,6 +1025,12 @@ bool MainWindow::queryClose() {
 	default: // cancel
 		return false;
 	}
+}
+
+
+void MainWindow::showConfigDialog() {
+	ConfigDialog dialog(this);
+	dialog.exec();
 }
 
 

@@ -110,6 +110,7 @@ private Q_SLOTS:
 	void slotCropDialogFinished(int result);
 
 	void generateThumbnailForUrl(const KUrl&);
+	void showConfigDialog();
 
 private:
 	class Private;
