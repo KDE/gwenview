@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kdialog.h>
+#include <kconfigdialog.h>
 
 // Local
 
@@ -32,7 +32,7 @@ namespace Gwenview {
 
 
 class ConfigDialogPrivate;
-class ConfigDialog : public KDialog {
+class ConfigDialog : public KConfigDialog {
 public:
 	ConfigDialog(QWidget* parent);
 	~ConfigDialog();

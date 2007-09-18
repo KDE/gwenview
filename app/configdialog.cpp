@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "ui_configdialog.h"
+#include "gwenviewconfig.h"
 
 namespace Gwenview {
 
@@ -36,11 +37,12 @@ struct ConfigDialogPrivate : public Ui_ConfigDialog {
 
 
 ConfigDialog::ConfigDialog(QWidget* parent)
-: KDialog(parent)
+: KConfigDialog(parent, "Settings", GwenviewConfig::self())
 , d(new ConfigDialogPrivate) {
+	setFaceType(KPageDialog::Plain);
 	QWidget* widget = new QWidget(this);
-	setMainWidget(widget);
 	d->setupUi(widget);
+	addPage(widget, "");
 }
 
 

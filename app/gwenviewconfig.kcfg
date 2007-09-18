@@ -7,5 +7,11 @@
 		<default>KFileItem.Name,KFileItem.Size,KFileItem.Time,Exif.Photo.ISOSpeedRatings,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
 		</entry>
 	</group>
+
+	<group name="General">
+		<entry name="ViewBackgroundColor" type="Color">
+			<default>#666666</default>
+		</entry>
+	</group>
 </kcfg>
 
