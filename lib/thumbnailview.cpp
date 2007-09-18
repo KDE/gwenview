@@ -122,8 +122,9 @@ public:
 			borderColor = bgColor.dark(140);
 			fgColor = option.palette.color(cg, QPalette::HighlightedText);
 		} else {
-			bgColor = option.palette.color(cg, QPalette::Window);
-			fgColor = option.palette.color(cg, QPalette::Text);
+			QWidget* viewport = mView->viewport();
+			bgColor = viewport->palette().color(viewport->backgroundRole());
+			fgColor = viewport->palette().color(viewport->foregroundRole());
 			borderColor = fgColor;
 		}
 		painter->setPen(borderColor);
@@ -209,8 +210,6 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
-	viewport()->setBackgroundRole(QPalette::Dark);
-
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);

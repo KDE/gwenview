@@ -146,7 +146,7 @@ ImageView::ImageView(QWidget* parent)
 	d->mZoomToFit = true;
 	d->createBackgroundTexture();
 	setFrameShape(QFrame::NoFrame);
-	setBackgroundRole(QPalette::Dark);
+	setBackgroundRole(QPalette::Base);
 	d->mViewport = new QWidget();
 	setViewport(d->mViewport);
 	d->mViewport->setMouseTracking(true);

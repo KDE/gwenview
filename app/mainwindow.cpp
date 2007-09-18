@@ -57,6 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
+#include "gwenviewconfig.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #include "savebar.h"
@@ -552,6 +553,7 @@ d(new MainWindow::Private)
 	updatePreviousNextActions();
 
 	createShellGUI();
+	loadConfig();
 	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
@@ -810,6 +812,7 @@ void MainWindow::toggleFullScreen() {
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarScrollArea->isVisible();
 
 		d->mDocumentView->setViewBackgroundColor(Qt::black);
+
 		d->mViewAction->trigger();
 		d->mSideBarScrollArea->hide();
 
@@ -825,7 +828,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSideBarScrollArea->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
-		d->mDocumentView->setViewBackgroundColor(palette().dark().color());
+		d->mDocumentView->setViewBackgroundColor(GwenviewConfig::viewBackgroundColor());
 		d->mSlideShow->stop();
 		d->mFullScreenBar->setActivated(false);
 		showNormal();
@@ -1030,7 +1033,22 @@ bool MainWindow::queryClose() {
 
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
+	connect(&dialog, SIGNAL(settingsChanged(const QString&)), SLOT(loadConfig()));
 	dialog.exec();
+}
+
+
+void MainWindow::loadConfig() {
+	QColor bgColor = GwenviewConfig::viewBackgroundColor();
+	QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
+
+	QWidget* widget = d->mThumbnailView->viewport();
+	QPalette palette = widget->palette();
+	palette.setColor(QPalette::Base, bgColor);
+	palette.setColor(QPalette::Text, fgColor);
+	widget->setPalette(palette);
+
+	d->mDocumentView->setPalette(palette);
 }
 
 
