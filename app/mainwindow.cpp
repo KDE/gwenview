@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFrame>
 #include <QLabel>
 #include <QListView>
+#include <QPainter>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QTimer>
 #include <QToolButton>
 #include <QScrollArea>
@@ -241,6 +244,7 @@ struct MainWindow::Private {
 
 		KStandardAction::save(mWindow, SLOT(saveCurrent()), actionCollection);
 		KStandardAction::saveAs(mWindow, SLOT(saveCurrentAs()), actionCollection);
+		KStandardAction::print(mWindow, SLOT(print()), actionCollection);
 		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
 
 		mBrowseAction = actionCollection->addAction("browse");
@@ -1049,6 +1053,32 @@ void MainWindow::loadConfig() {
 	widget->setPalette(palette);
 
 	d->mDocumentView->setPalette(palette);
+}
+
+
+void MainWindow::print() {
+	if (!d->currentDocumentIsRasterImage()) {
+		return;
+	}
+
+	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+
+	QPrinter printer;
+	QPrintDialog dialog(&printer, this);
+	if (!dialog.exec()) {
+		return;
+	}
+
+	doc->waitUntilLoaded();
+	QImage image = doc->image();
+
+	QPainter painter(&printer);
+	QRect rect = painter.viewport();
+	QSize size = image.size();
+	size.scale(rect.size(), Qt::KeepAspectRatio);
+	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+	painter.setWindow(image.rect());
+	painter.drawImage(0, 0, image);
 }
 
 

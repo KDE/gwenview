@@ -112,6 +112,7 @@ private Q_SLOTS:
 	void generateThumbnailForUrl(const KUrl&);
 	void showConfigDialog();
 	void loadConfig();
+	void print();
 
 private:
 	class Private;
