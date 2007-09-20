@@ -78,8 +78,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 
 		if (factory->hasUrl(item.url())) {
 			Document::Ptr doc = factory->load(item.url());
-			doc->waitUntilLoaded();
-			if (doc->isModified()) {
+			if (doc->isLoaded() && doc->isModified()) {
 				QImage image = doc->image();
 				if (image.width() > THUMBNAIL_SIZE || image.height() > THUMBNAIL_SIZE) {
 					image = image.scaled(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Qt::KeepAspectRatio);
@@ -90,6 +89,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 					image.width() - pix.width(),
 					image.height() - pix.height(),
 					pix);
+				painter.end();
 				setItemPreview(item, QPixmap::fromImage(image));
 				continue;
 			}
