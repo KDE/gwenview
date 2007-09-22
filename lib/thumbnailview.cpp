@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirmodel.h>
 
 // Local
+#include "archiveutils.h"
 #include "abstractthumbnailviewhelper.h"
 
 namespace Gwenview {
@@ -76,10 +77,8 @@ public:
 
 
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-		QVariant value = index.data(Qt::DecorationRole);
-		QIcon icon = qvariant_cast<QIcon>(value);
 		int thumbnailSize = mView->thumbnailSize();
-		QPixmap thumbnail = icon.pixmap(thumbnailSize, thumbnailSize);
+		QPixmap thumbnail = mView->thumbnailForIndex(index);
 		if (thumbnail.width() > thumbnailSize || thumbnail.height() > thumbnailSize) {
 			thumbnail = thumbnail.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
 		}
@@ -204,6 +203,8 @@ struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
+	QMap<QUrl, QPixmap> mThumbnailForUrl;
+	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 };
 
 
@@ -256,25 +257,12 @@ int ThumbnailView::itemHeight() const {
 
 void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper) {
 	d->mThumbnailViewHelper = helper;
+	connect(helper, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)),
+		SLOT(setThumbnail(const KFileItem&, const QPixmap&)) );
 }
 
 AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
 	return d->mThumbnailViewHelper;
-}
-
-void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) {
-	QListView::rowsInserted(parent, start, end);
-
-	QList<KFileItem> itemsToPreview;
-	for (int pos=start; pos<=end; ++pos) {
-		QModelIndex index = model()->index(pos, 0, parent);
-		QVariant data = index.data(KDirModel::FileItemRole);
-		KFileItem item = qvariant_cast<KFileItem>(data);
-		itemsToPreview.append(item);
-	}
-
-	Q_ASSERT(d->mThumbnailViewHelper);
-	d->mThumbnailViewHelper->generateThumbnailsForItems(itemsToPreview);
 }
 
 
@@ -284,8 +272,14 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 	QList<KFileItem> itemList;
 	for (int pos=start; pos<=end; ++pos) {
 		QModelIndex index = model()->index(pos, 0, parent);
+
 		QVariant data = index.data(KDirModel::FileItemRole);
 		KFileItem item = qvariant_cast<KFileItem>(data);
+
+		QUrl url = item.url();
+		d->mThumbnailForUrl.remove(url);
+		d->mPersistentIndexForUrl.remove(url);
+
 		itemList.append(item);
 	}
 
@@ -296,6 +290,42 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 
 void ThumbnailView::showContextMenu() {
 	d->mThumbnailViewHelper->showContextMenu(this);
+}
+
+
+void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
+	QUrl url = item.url();
+	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl[url];
+	if (!persistentIndex.isValid()) {
+		return;
+	}
+	d->mThumbnailForUrl[url] = pixmap;
+
+	QRect rect = visualRect(persistentIndex);
+	update(rect);
+	viewport()->update(rect);
+}
+
+
+QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
+	QVariant data = index.data(KDirModel::FileItemRole);
+	KFileItem item = qvariant_cast<KFileItem>(data);
+
+	QUrl url = item.url();
+	QMap<QUrl, QPixmap>::ConstIterator it = d->mThumbnailForUrl.find(url);
+	if (it != d->mThumbnailForUrl.constEnd()) {
+		return it.value();
+	}
+
+	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
+		return item.pixmap(128);
+	}
+
+	QList<KFileItem> list;
+	list << item;
+	d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
+	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
+	return QPixmap();
 }
 
 } // namespace

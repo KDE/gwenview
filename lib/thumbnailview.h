@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QListView>
 #include "gwenviewlib_export.h"
 
+class KFileItem;
+class QPixmap;
+
 namespace Gwenview {
 
 class AbstractThumbnailViewHelper;
@@ -53,7 +56,9 @@ public:
 	 * Returns the height of an item. This width is proportional to the
 	 * thumbnail size.
 	 */
-	int itemHeight() const;	
+	int itemHeight() const;
+
+	QPixmap thumbnailForIndex(const QModelIndex&);
 
 public Q_SLOTS:
 	/**
@@ -62,11 +67,11 @@ public Q_SLOTS:
 	void setThumbnailSize(int pixel);
 
 protected Q_SLOTS:
-	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 
 private Q_SLOTS:
 	void showContextMenu();
+	void setThumbnail(const KFileItem&, const QPixmap&);
 
 private:
 	ThumbnailViewPrivate * const d;

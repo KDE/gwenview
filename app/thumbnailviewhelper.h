@@ -22,28 +22,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define THUMBNAILVIEWHELPER_H
 
 // Qt
-#include <QObject>
 
 // KDE
 
 // Local
 #include <lib/abstractthumbnailviewhelper.h>
 
-class SortedDirModel;
-class QPixmap;
-
-class KFileItem;
-
 namespace Gwenview {
 
-class SortedDirModel;
 class FileOpsContextManagerItem;
 
 class ThumbnailViewHelperPrivate;
-class ThumbnailViewHelper : public QObject, public AbstractThumbnailViewHelper {
+class ThumbnailViewHelper : public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:
-	ThumbnailViewHelper(SortedDirModel* model);
+	ThumbnailViewHelper(QObject* parent);
 	~ThumbnailViewHelper();
 
 	virtual void generateThumbnailsForItems(const QList<KFileItem>& list);
@@ -53,9 +46,6 @@ public:
 	virtual void showContextMenu(QWidget* parent);
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
-
-private Q_SLOTS:
-	void setItemPreview(const KFileItem&, const QPixmap&);
 
 private:
 	ThumbnailViewHelperPrivate* const d;

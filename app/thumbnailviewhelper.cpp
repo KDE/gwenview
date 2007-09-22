@@ -40,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fileopscontextmanageritem.h"
 #include <lib/documentfactory.h>
 #include <lib/mimetypeutils.h>
-#include <lib/sorteddirmodel.h>
 #include <lib/thumbnailloadjob.h>
 
 namespace Gwenview {
@@ -49,16 +48,14 @@ const int THUMBNAIL_SIZE = 256;
 
 
 struct ThumbnailViewHelperPrivate {
-	SortedDirModel* mModel;
 	FileOpsContextManagerItem* mFileOpsContextManagerItem;
 	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
 };
 
 
-ThumbnailViewHelper::ThumbnailViewHelper(SortedDirModel* model)
-: QObject(model)
+ThumbnailViewHelper::ThumbnailViewHelper(QObject* parent)
+: AbstractThumbnailViewHelper(parent)
 , d(new ThumbnailViewHelperPrivate) {
-	d->mModel = model;
 }
 
 
@@ -90,7 +87,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 					image.height() - pix.height(),
 					pix);
 				painter.end();
-				setItemPreview(item, QPixmap::fromImage(image));
+				thumbnailLoaded(item, QPixmap::fromImage(image));
 				continue;
 			}
 		}
@@ -101,7 +98,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 		if (!d->mThumbnailLoadJob) {
 			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, THUMBNAIL_SIZE);
 			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
-				SLOT(setItemPreview(const KFileItem&, const QPixmap&)));
+				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
 			d->mThumbnailLoadJob->start();
 		} else {
 			Q_FOREACH(KFileItem item, filteredList) {
@@ -125,17 +122,6 @@ void ThumbnailViewHelper::abortThumbnailGenerationForItems(const QList<KFileItem
 
 void ThumbnailViewHelper::setFileOpsContextManagerItem(FileOpsContextManagerItem* item) {
 	d->mFileOpsContextManagerItem = item;
-}
-
-
-void ThumbnailViewHelper::setItemPreview(const KFileItem& item, const QPixmap& pixmap) {
-	Q_ASSERT(!item.isNull());
-	QModelIndex index = d->mModel->indexForItem(item);
-	if (!index.isValid()) {
-		kWarning() << "setItemPreview: invalid index\n";
-		return;
-	}
-	d->mModel->setData(index, QIcon(pixmap), Qt::DecorationRole);
 }
 
 

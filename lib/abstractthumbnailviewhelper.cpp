@@ -17,39 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef ABSTRACTTHUMBNAILVIEWHELPER_H
-#define ABSTRACTTHUMBNAILVIEWHELPER_H
-
-#include "gwenviewlib_export.h"
-
-// Qt
-#include <QList>
-#include <QObject>
-
-class KFileItem;
-class QPixmap;
+#include "abstractthumbnailviewhelper.moc"
 
 namespace Gwenview {
 
-/**
- * This class is used by the ThumbnailView to request various things.
- */
-class GWENVIEWLIB_EXPORT AbstractThumbnailViewHelper : public QObject {
-	Q_OBJECT
-public:
-	AbstractThumbnailViewHelper(QObject* parent);
-	virtual ~AbstractThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const QList<KFileItem>& list) = 0;
+AbstractThumbnailViewHelper::AbstractThumbnailViewHelper(QObject* parent)
+: QObject(parent) {
+}
 
-	virtual void abortThumbnailGenerationForItems(const QList<KFileItem>& list) = 0;
 
-	virtual void showContextMenu(QWidget* parent) = 0;
+AbstractThumbnailViewHelper::~AbstractThumbnailViewHelper() {
+}
 
-Q_SIGNALS:
-	void thumbnailLoaded(const KFileItem&, const QPixmap&);
-};
 
 } // namespace
-
-#endif /* ABSTRACTTHUMBNAILVIEWHELPER_H */
