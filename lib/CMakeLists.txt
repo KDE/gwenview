@@ -1,27 +1,34 @@
 set(gwenviewlib_SRCS
-	abstractdocumentimpl.cpp
+	document/abstractdocumentimpl.cpp
+	document/abstractdocumentimpl.h
+	document/document.cpp
+	document/documentfactory.cpp
+	document/documentfactory.h
+	document/document.h
+	document/documentloadedimpl.cpp
+	document/documentloadedimpl.h
+	document/emptydocumentimpl.cpp
+	document/emptydocumentimpl.h
+	document/jpegdocumentloadedimpl.cpp
+	document/jpegdocumentloadedimpl.h
+	document/loadingdocumentimpl.cpp
+	document/loadingdocumentimpl.h
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	abstractthumbnailviewhelper.cpp
-    archiveutils.cpp
+	archiveutils.cpp
 	cropdialog.cpp
 	cropimageoperation.cpp
 	croptool.cpp
-	document.cpp
-	documentfactory.cpp
-	documentloadedimpl.cpp
-	emptydocumentimpl.cpp
 	expandbutton.cpp
 	fullscreenbar.cpp
-    imagemetainfo.cpp
+	imagemetainfo.cpp
 	imagescaler.cpp
 	imageutils.cpp
 	imageview.cpp
 	imageviewpart.cpp
 	jpegcontent.cpp
-	jpegdocumentloadedimpl.cpp
-	loadingdocumentimpl.cpp
-    mimetypeutils.cpp
+	mimetypeutils.cpp
 	slideshow.cpp
 	scrolltool.cpp
 	sorteddirmodel.cpp
@@ -30,7 +37,7 @@ set(gwenviewlib_SRCS
 	thumbnailview.cpp
 	transupp.c
 	transformimageoperation.cpp
-    )
+	)
 
 kde4_add_ui_files(gwenviewlib_SRCS
 	cropdialog.ui

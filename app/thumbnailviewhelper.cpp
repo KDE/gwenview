@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "fileopscontextmanageritem.h"
-#include <lib/documentfactory.h>
+#include <lib/document/documentfactory.h>
 #include <lib/mimetypeutils.h>
 #include <lib/thumbnailloadjob.h>
 

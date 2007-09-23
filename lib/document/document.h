@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "gwenviewlib_export.h"
+#include "../gwenviewlib_export.h"
 
 #include <exiv2/image.hpp>
 
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ksharedptr.h>
 
 // Local
-#include "orientation.h"
+#include "../orientation.h"
 
 class QImage;
 class QRect;

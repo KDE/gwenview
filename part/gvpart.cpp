@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/imageview.h"
 #include "../lib/scrolltool.h"
-#include "../lib/documentfactory.h"
+#include "../lib/document/documentfactory.h"
 
 //Factory Code
 typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;

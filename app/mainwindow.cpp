@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/cropdialog.h>
 #include <lib/cropimageoperation.h>
-#include <lib/documentfactory.h>
+#include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>

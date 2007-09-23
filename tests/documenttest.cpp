@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <qtest_kde.h>
 
 // Local
-#include "../lib/documentfactory.h"
+#include "../lib/document/documentfactory.h"
 #include "../lib/imageutils.h"
 
 #include "documenttest.moc"
