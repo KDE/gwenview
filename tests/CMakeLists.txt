@@ -1,10 +1,11 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 # ImageScaler
 set(imagescalertest_SRCS
 	imagescalertest.cpp
 	)
 
 
-kde4_add_test_executable(imagescalertest ${imagescalertest_SRCS})
+kde4_add_executable(imagescalertest TEST ${imagescalertest_SRCS})
 
 target_link_libraries(imagescalertest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -14,7 +15,7 @@ set(documenttest_SRCS
 	)
 
 
-kde4_add_test_executable(documenttest ${documenttest_SRCS})
+kde4_add_executable(documenttest TEST ${documenttest_SRCS})
 
 target_link_libraries(documenttest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -24,7 +25,7 @@ set(jpegcontenttest_SRCS
 	)
 
 
-kde4_add_test_executable(jpegcontenttest ${jpegcontenttest_SRCS})
+kde4_add_executable(jpegcontenttest TEST ${jpegcontenttest_SRCS})
 
 target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -33,6 +34,6 @@ set(thumbnailloadjobtest_SRCS
 	thumbnailloadjobtest.cpp
 	)
 
-kde4_add_test_executable(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
+kde4_add_executable(thumbnailloadjobtest TEST ${thumbnailloadjobtest_SRCS})
 
 target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
