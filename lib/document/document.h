@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../orientation.h"
 
 class QImage;
-class QRect;
+class QSize;
 
 class KUrl;
 
@@ -57,6 +57,8 @@ public:
 	typedef KSharedPtr<Document> Ptr;
 	~Document();
 	void load(const KUrl&);
+
+	bool isMetaDataLoaded() const;
 
 	bool isLoaded() const;
 
@@ -95,6 +97,8 @@ public:
 
 	const Exiv2::Image* exiv2Image() const;
 
+	QSize size() const;
+
 Q_SIGNALS:
 	void imageRectUpdated();
 	void loaded();
@@ -108,8 +112,11 @@ private:
 
 	void setImageInternal(const QImage&);
 	void setFormat(const QByteArray&);
+	void setSize(const QSize&);
 	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl* impl);
+
+	void emitMetaDataLoaded();
 
 	Document();
 	DocumentPrivate * const d;

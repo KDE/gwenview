@@ -21,7 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef LOADINGTHREAD_H
 #define LOADINGTHREAD_H
 
+// Exiv2
+#include <exiv2/image.hpp>
+
 // Qt
+#include <QSize>
 #include <QThread>
 
 // KDE
@@ -36,6 +40,7 @@ class JpegContent;
 
 class LoadingThreadPrivate;
 class LoadingThread : public QThread {
+	Q_OBJECT
 public:
 	LoadingThread();
 	~LoadingThread();
@@ -48,7 +53,14 @@ public:
 
 	const QImage& image() const;
 
+	QSize size() const;
+
+	Exiv2::Image::AutoPtr popExiv2Image();
+
 	JpegContent* popJpegContent();
+
+Q_SIGNALS:
+	void metaDataLoaded();
 
 protected:
 	virtual void run();

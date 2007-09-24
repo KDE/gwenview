@@ -47,6 +47,7 @@ public:
 	virtual void setImage(const QImage&);
 
 private Q_SLOTS:
+	void slotMetaDataLoaded();
 	void slotImageLoaded();
 	void slotDataReceived(KIO::Job*, const QByteArray&);
 	void slotTransferFinished(KJob*);

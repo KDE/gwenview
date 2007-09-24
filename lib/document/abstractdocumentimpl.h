@@ -65,6 +65,7 @@ Q_SIGNALS:
 protected:
 	Document* document() const;
 	void setDocumentImage(const QImage& image);
+	void setDocumentImageSize(const QSize& size);
 	void setDocumentFormat(const QByteArray& format);
 	void setDocumentExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl*  impl);

@@ -61,6 +61,11 @@ void AbstractDocumentImpl::setDocumentImage(const QImage& image) {
 }
 
 
+void AbstractDocumentImpl::setDocumentImageSize(const QSize& size) {
+	d->mDocument->setSize(size);
+}
+
+
 void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format) {
 	d->mDocument->setFormat(format);
 }

@@ -61,16 +61,11 @@ struct LoadingDocumentImplPrivate {
 	LoadingThread mThread;
 
 	void startLoadingThread() {
-		try {
-			Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((unsigned char*)mData.data(), mData.size());
-			image->readMetadata();
-			mImpl->setDocumentExiv2Image(image);
-		} catch (Exiv2::Error&) {
-			kWarning() << "Could not load image with Exiv2\n";
-		}
-
 		mThread.setData(mData);
-		QObject::connect(&mThread, SIGNAL(finished()), mImpl, SLOT(slotImageLoaded()) );
+		QObject::connect(&mThread, SIGNAL(metaDataLoaded()),
+			mImpl, SLOT(slotMetaDataLoaded()) );
+		QObject::connect(&mThread, SIGNAL(finished()),
+			mImpl, SLOT(slotImageLoaded()) );
 		mThread.start();
 	}
 };
@@ -142,6 +137,14 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 
 bool LoadingDocumentImpl::isLoaded() const {
 	return false;
+}
+
+
+void LoadingDocumentImpl::slotMetaDataLoaded() {
+	QSize size = d->mThread.size();
+	Exiv2::Image::AutoPtr exiv2Image = d->mThread.popExiv2Image();
+	setDocumentImageSize(size);
+	setDocumentExiv2Image(exiv2Image);
 }
 
 

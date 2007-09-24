@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "loadingthread.h"
+#include "loadingthread.moc"
 
 // Qt
 #include <QBuffer>
@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QMutexLocker>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "imageutils.h"
@@ -122,6 +123,42 @@ struct LoadingThreadPrivate {
 	QByteArray mFormat;
 	QImage mImage;
 	JpegContent* mJpegContent;
+
+	mutable QMutex mMetaDataMutex;
+	QSize mImageSize;
+	Exiv2::Image::AutoPtr mExiv2Image;
+
+	bool loadMetaData(QImageReader* reader) {
+		QMutexLocker locker(&mMetaDataMutex);
+
+		mFormat = reader->format();
+
+		try {
+			mExiv2Image = Exiv2::ImageFactory::open(
+				(unsigned char*)mData.data(), mData.size());
+			mExiv2Image->readMetadata();
+		} catch (Exiv2::Error&) {
+			kWarning() << "Could not load image with Exiv2\n";
+		}
+
+		if (mFormat == "jpeg") {
+			mJpegContent = new JpegContent();
+			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
+				return false;
+			}
+
+			// Use the size from JpegContent, as its correctly transposed if the
+			// image has been rotated
+			mImageSize = mJpegContent->size();
+		} else {
+			mImageSize = reader->size();
+			// FIXME: For now we assume the size is always valid, it simplifies the
+			// rest of the code
+			Q_ASSERT(mImageSize.isValid());
+		}
+
+		return true;
+	}
 };
 
 
@@ -141,17 +178,23 @@ void LoadingThread::run() {
 	QMutexLocker lock(&d->mMutex);
 	d->mBuffer.setBuffer(&d->mData);
 	d->mBuffer.open(QIODevice::ReadOnly);
-	d->mFormat = QImageReader::imageFormat(&d->mBuffer);
+	QImageReader reader(&d->mBuffer);
 
-	bool ok = d->mImage.load(&d->mBuffer, d->mFormat.data());
+	if (!d->loadMetaData(&reader)) {
+		return;
+	}
+
+	emit metaDataLoaded();
+
+	// WARNING: Do not access d->mExiv2Image after metaDataLoaded() has been
+	// called, since the LoadingDocumentImpl may pop it.
+
+	bool ok = reader.read(&d->mImage);
 	if (!ok) {
 		return;
 	}
-	if (d->mFormat == "jpeg") {
-		d->mJpegContent = new JpegContent();
-		if (!d->mJpegContent->loadFromData(d->mData)) {
-			return;
-		}
+
+	if (d->mJpegContent) {
 		Gwenview::Orientation orientation = d->mJpegContent->orientation();
 		QMatrix matrix = ImageUtils::transformMatrix(orientation);
 		d->mImage = d->mImage.transformed(matrix);
@@ -171,8 +214,20 @@ void LoadingThread::setData(const QByteArray& data) {
 
 
 const QByteArray& LoadingThread::format() const {
-	QMutexLocker lock(&d->mMutex);
+	QMutexLocker lock(&d->mMetaDataMutex);
 	return d->mFormat;
+}
+
+
+QSize LoadingThread::size() const {
+	QMutexLocker lock(&d->mMetaDataMutex);
+	return d->mImageSize;
+}
+
+
+Exiv2::Image::AutoPtr LoadingThread::popExiv2Image() {
+	QMutexLocker lock(&d->mMetaDataMutex);
+	return d->mExiv2Image;
 }
 
 
@@ -188,5 +243,6 @@ JpegContent* LoadingThread::popJpegContent() {
 	d->mJpegContent = 0;
 	return tmp;
 }
+
 
 } // namespace

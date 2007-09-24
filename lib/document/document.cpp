@@ -24,7 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QImage>
 
 // KDE
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 
 // Local
 #include "emptydocumentimpl.h"
@@ -36,6 +37,7 @@ namespace Gwenview {
 struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
+	QSize mSize;
 	QImage mImage;
 	Exiv2::Image::AutoPtr mExiv2Image;
 	QByteArray mFormat;
@@ -67,8 +69,14 @@ QImage& Document::image() {
 	return d->mImage;
 }
 
+
 bool Document::isLoaded() const {
 	return d->mImpl->isLoaded();
+}
+
+
+bool Document::isMetaDataLoaded() const {
+	return d->mExiv2Image.get() && d->mSize.isValid() && !d->mFormat.isEmpty();
 }
 
 
@@ -131,9 +139,18 @@ QByteArray Document::format() const {
 	return d->mFormat;
 }
 
+
 void Document::setFormat(const QByteArray& format) {
 	d->mFormat = format;
+	emitMetaDataLoaded();
 }
+
+
+void Document::setSize(const QSize& size) {
+	d->mSize = size;
+	emitMetaDataLoaded();
+}
+
 
 bool Document::isModified() const {
 	return d->mModified;
@@ -159,6 +176,17 @@ const Exiv2::Image* Document::exiv2Image() const {
 
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
+	emitMetaDataLoaded();
 }
+
+
+void Document::emitMetaDataLoaded() {
+	if (isMetaDataLoaded()) {
+		// FIXME: Check this is emitted only once while loading
+		kDebug() << "emitMetaDataLoaded";
+		emit metaDataLoaded();
+	}
+}
+
 
 } // namespace

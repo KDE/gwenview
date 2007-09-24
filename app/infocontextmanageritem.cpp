@@ -149,9 +149,11 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 		d->mDocument = DocumentFactory::instance()->load(item.url());
 		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
 			SLOT(slotMetaDataLoaded()) );
+
+		if (d->mDocument->isMetaDataLoaded()) {
+			slotMetaDataLoaded();
+		}
 	}
-	// FIXME: slotMetaDataLoaded will be called twice
-	slotMetaDataLoaded();
 }
 
 void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
@@ -180,11 +182,9 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& item
 
 
 void InfoContextManagerItem::slotMetaDataLoaded() {
-	if (d->mDocument) {
-		d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
-	} else {
-		d->mImageMetaInfo.setExiv2Image(0);
-	}
+	Q_ASSERT(d->mDocument);
+	//d->mImageMetaInfo.setImageSize(d->mDocument->size());
+	d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
 }
 
