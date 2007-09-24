@@ -56,6 +56,7 @@ struct InfoContextManagerItemPrivate {
 	QWidget* mOneFileWidget;
 	QLabel* mOneFileTextLabel;
 	QLabel* mMultipleFilesLabel;
+	KFileItem mFileItem;
 	Document::Ptr mDocument;
 	ImageMetaInfo mImageMetaInfo;
 
@@ -141,7 +142,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 }
 
 void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
-	d->mImageMetaInfo.setFileItem(item);
+	d->mFileItem = item;
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
@@ -183,7 +184,7 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& item
 
 void InfoContextManagerItem::slotMetaDataLoaded() {
 	Q_ASSERT(d->mDocument);
-	//d->mImageMetaInfo.setImageSize(d->mDocument->size());
+	d->mImageMetaInfo.setGeneralInfo(d->mFileItem, d->mDocument->size());
 	d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
 }

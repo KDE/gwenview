@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-enum { NoGroup = -1, FileGroup, ExifGroup, IptcGroup };
+enum { NoGroup = -1, GeneralGroup, ExifGroup, IptcGroup };
 
 
 class MetaInfoGroup {
@@ -191,9 +191,9 @@ ImageMetaInfo::ImageMetaInfo()
 : d(new ImageMetaInfoPrivate) {
 	d->mModel = this;
 	d->mMetaInfoGroupVector.resize(3);
-	d->mMetaInfoGroupVector[FileGroup] = new MetaInfoGroup(i18n("File Information"));
-	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18n("Exif Information"));
-	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18n("Iptc Information"));
+	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18n("General"));
+	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18n("Exif"));
+	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18n("Iptc"));
 }
 
 
@@ -203,27 +203,40 @@ ImageMetaInfo::~ImageMetaInfo() {
 }
 
 
-void ImageMetaInfo::setFileItem(const KFileItem& item) {
-	MetaInfoGroup* group = d->mMetaInfoGroupVector[FileGroup];
-	QModelIndex parent = index(FileGroup, 0);
+void ImageMetaInfo::setGeneralInfo(const KFileItem& item, const QSize& size) {
+	MetaInfoGroup* group = d->mMetaInfoGroupVector[GeneralGroup];
+	QModelIndex parent = index(GeneralGroup, 0);
 	d->clearGroup(group, parent);
 	group->addEntry(
-		"KFileItem.Name",
+		"General.Name",
 		i18n("Name"),
 		item.name()
 		);
 
 	group->addEntry(
-		"KFileItem.Size",
+		"General.Size",
 		i18n("File Size"),
 		KGlobal::locale()->formatByteSize(item.size())
 		);
 
 	group->addEntry(
-		"KFileItem.Time",
+		"General.Time",
 		i18n("File Time"),
 		item.timeString()
 		);
+
+	QString imageSize = i18n("%1x%2", size.width(), size.height());
+	double megaPixels = size.width() * size.height() / 1000000.;
+	if (megaPixels > 0.1) {
+		QString megaPixelsString = QString::number(megaPixels, 'f', 1);
+		imageSize += " " + i18n("(%1MP)", megaPixelsString);
+	}
+	group->addEntry(
+		"General.ImageSize",
+		i18n("Image Size"),
+		imageSize
+		);
+
 	d->notifyGroupFilled(group, parent);
 }
 
@@ -293,8 +306,8 @@ void ImageMetaInfo::setPreferredMetaInfoKeyList(const QStringList& keyList) {
 
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
-	if (key.startsWith("KFileItem")) {
-		group = d->mMetaInfoGroupVector[FileGroup];
+	if (key.startsWith("General")) {
+		group = d->mMetaInfoGroupVector[GeneralGroup];
 	} else if (key.startsWith("Exif")) {
 		group = d->mMetaInfoGroupVector[ExifGroup];
 	} else if (key.startsWith("Iptc")) {

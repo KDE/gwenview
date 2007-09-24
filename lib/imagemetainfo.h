@@ -44,7 +44,7 @@ public:
 	ImageMetaInfo();
 	~ImageMetaInfo();
 
-	void setFileItem(const KFileItem&);
+	void setGeneralInfo(const KFileItem&, const QSize& imageSize);
 	void setExiv2Image(const Exiv2::Image*);
 
 	QStringList preferredMetaInfoKeyList() const;
