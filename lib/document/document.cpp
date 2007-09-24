@@ -146,6 +146,11 @@ void Document::setFormat(const QByteArray& format) {
 }
 
 
+QSize Document::size() const {
+	return d->mSize;
+}
+
+
 void Document::setSize(const QSize& size) {
 	d->mSize = size;
 	emitMetaDataLoaded();
