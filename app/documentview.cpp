@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentview.moc"
 
 // Qt
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -54,6 +56,8 @@ struct DocumentViewPrivate {
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
+
+	bool mAutoResizeMainWindow;
 
 	void setPartWidget(QWidget* partWidget) {
 		if (partWidget) {
@@ -160,6 +164,11 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 		return;
 	}
 
+	if (dynamic_cast<ImageViewPart*>(part)) {
+		connect(part, SIGNAL(resizeRequested(const QSize&)),
+			d->mView, SLOT(resizeMainWindow(const QSize&)) );
+	}
+
 	// Handle statusbar extension otherwise a statusbar will get created in
 	// the main window.
 	KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
@@ -220,6 +229,54 @@ void DocumentView::setViewBackgroundColor(const QColor& color) {
 	QPalette palette = d->mPart->widget()->palette();
 	palette.setColor(d->mPart->widget()->backgroundRole(), color);
 	d->mPart->widget()->setPalette(palette);
+}
+
+
+void DocumentView::setAutoResizeMainWindow(bool value) {
+	d->mAutoResizeMainWindow = value;
+}
+
+
+void DocumentView::resizeMainWindow(const QSize& _size) {
+	if (!d->mAutoResizeMainWindow) {
+		return;
+	}
+	if (window()->isMaximized() || window()->isMinimized() || (window()->windowState() & Qt::WindowFullScreen)) {
+		return;
+	}
+
+	QSize size = _size;
+
+	// innerMargin is the margin around the view, not including the window
+	// frame
+	QSize innerMargin = window()->geometry().size() - geometry().size();
+	// frameMargin is the size of the frame around the window
+	QSize frameMargin = window()->frameGeometry().size() - window()->geometry().size();
+
+	// Adjust size
+	QRect availableRect = QApplication::desktop()->availableGeometry();
+	QSize maxSize = availableRect.size() - innerMargin - frameMargin;
+
+	if (size.width() > maxSize.width() || size.height() > maxSize.height()) {
+		size.scale(maxSize, Qt::KeepAspectRatio);
+	}
+
+	QRect windowRect = window()->geometry();
+	windowRect.setSize(size + innerMargin);
+
+	// Move the window if it does not fit in the screen
+	int rightFrameMargin = window()->frameGeometry().right() - window()->geometry().right();
+	if (windowRect.right() + rightFrameMargin > availableRect.right()) {
+		windowRect.moveRight(availableRect.right() - rightFrameMargin);
+	}
+
+	int bottomFrameMargin = window()->frameGeometry().bottom() - window()->geometry().bottom();
+	if (windowRect.bottom() + bottomFrameMargin > availableRect.bottom()) {
+		windowRect.moveBottom(availableRect.bottom() - bottomFrameMargin);
+	}
+
+	// Define geometry
+	window()->setGeometry(windowRect);
 }
 
 

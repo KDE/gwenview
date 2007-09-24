@@ -68,6 +68,8 @@ public:
 
 	void setViewBackgroundColor(const QColor&);
 
+	void setAutoResizeMainWindow(bool);
+
 	/**
 	 * Returns the image view part, if the current part really is an
 	 * ImageViewPart.
@@ -85,6 +87,9 @@ Q_SIGNALS:
 	 * Emitted when the part has finished loading
 	 */
 	void completed();
+
+private Q_SLOTS:
+	void resizeMainWindow(const QSize&);
 
 private:
 	DocumentViewPrivate* const d;

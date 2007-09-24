@@ -603,16 +603,19 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
-	bool showDocument, showThumbnail;
+	bool showDocument, showThumbnail, autoResize;
 	if (action == d->mBrowseAction) {
 		showDocument = false;
 		showThumbnail = true;
+		autoResize = false;
 	} else if (action == d->mPreviewAction) {
 		showDocument = true;
 		showThumbnail = true;
+		autoResize = false;
 	} else { // image only
 		showDocument = true;
 		showThumbnail = false;
+		autoResize = true;
 	}
 
 	// Adjust splitter policy. Thumbnail should only stretch if there is no
@@ -628,6 +631,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
+	d->mDocumentView->setAutoResizeMainWindow(autoResize);
 }
 
 

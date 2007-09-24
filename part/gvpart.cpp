@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/imageview.h"
 #include "../lib/scrolltool.h"
+#include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 
 //Factory Code
@@ -88,6 +89,9 @@ void GVPart::setViewImageFromDocument() {
 	mView->setImage(mDocument->image());
 	updateCaption();
 	emit completed();
+	if (mView->zoomToFit()) {
+		resizeRequested(mDocument->image().size());
+	}
 }
 
 
@@ -158,4 +162,6 @@ Document::Ptr GVPart::document() {
 ImageView* GVPart::imageView() const {
 	return mView;
 }
+
+
 } // namespace
