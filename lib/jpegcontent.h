@@ -30,6 +30,8 @@ class QSize;
 class QString;
 class QIODevice;
 
+namespace Exiv2 { class Image; }
+
 namespace Gwenview {
 
 
@@ -56,6 +58,10 @@ public:
 
 	bool load(const QString& file);
 	bool loadFromData(const QByteArray& rawData);
+	/**
+	 * Use this version of loadFromData if you already have an Exiv2::Image*
+	 */
+	bool loadFromData(const QByteArray& rawData, Exiv2::Image*);
 	bool save(const QString& file);
 	bool save(QIODevice*);
 

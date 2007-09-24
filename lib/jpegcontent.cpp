@@ -239,6 +239,20 @@ bool JpegContent::load(const QString& path) {
 
 
 bool JpegContent::loadFromData(const QByteArray& data) {
+	Exiv2::Image::AutoPtr image;
+	try {
+		image = Exiv2::ImageFactory::open((unsigned char*)data.data(), data.size());
+		image->readMetadata();
+	} catch (Exiv2::Error&) {
+		kError() << "Could not load image with Exiv2\n";
+		return false;
+	}
+
+	return loadFromData(data, image.get());
+}
+
+
+bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image) {
 	d->mPendingTransformation = false;
 	d->mTransformMatrix.reset();
 
@@ -250,17 +264,8 @@ bool JpegContent::loadFromData(const QByteArray& data) {
 
 	if (!d->readSize()) return false;
 
-	Exiv2::Image::AutoPtr image;
-	try {
-		image = Exiv2::ImageFactory::open((unsigned char*)data.data(), data.size());
-		image->readMetadata();
-	} catch (Exiv2::Error&) {
-		kError() << "Could not load image with Exiv2\n";
-		return false;
-	}
-
-	d->mExifData = image->exifData();
-	d->mComment = QString::fromUtf8( image->comment().c_str() );
+	d->mExifData = exiv2Image->exifData();
+	d->mComment = QString::fromUtf8( exiv2Image->comment().c_str() );
 
 	// Adjust the size according to the orientation
 	switch (orientation()) {
