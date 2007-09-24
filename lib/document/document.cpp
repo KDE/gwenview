@@ -187,8 +187,6 @@ void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 
 void Document::emitMetaDataLoaded() {
 	if (isMetaDataLoaded()) {
-		// FIXME: Check this is emitted only once while loading
-		kDebug() << "emitMetaDataLoaded";
 		emit metaDataLoaded();
 	}
 }
