@@ -22,14 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "loadingdocumentimpl.moc"
 
 // Qt
-#include <QBuffer>
 #include <QByteArray>
 #include <QFile>
 #include <QImage>
-#include <QImageReader>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QThread>
+#include <QPointer>
 
 // KDE
 #include <kdebug.h>
@@ -42,9 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "document.h"
 #include "documentloadedimpl.h"
 #include "emptydocumentimpl.h"
-#include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
+#include "loadingthread.h"
 
 namespace Gwenview {
 
@@ -56,139 +52,6 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
-
-/**
- * CancellableBuffer
- * This class acts like QBuffer, but will simulates a truncated file if the
- * TSThread which was passed to its constructor has been asked for cancellation
- */
-class CancellableBuffer : public QBuffer {
-public:
-	CancellableBuffer()
-	: mCancel(false)
-	{}
-
-	void cancel() {
-		QMutexLocker lock(&mMutex);
-		mCancel = true;
-	}
-
-	bool atEnd() const {
-		if (testCancel()) {
-			LOG("cancel detected");
-			return true;
-		}
-		return QBuffer::atEnd();
-	}
-
-	qint64 bytesAvailable() const {
-		if (testCancel()) {
-			LOG("cancel detected");
-			return 0;
-		}
-		return QBuffer::bytesAvailable();
-	}
-
-	bool canReadLine() const {
-		if (testCancel()) {
-			LOG("cancel detected");
-			return 0;
-		}
-		return QBuffer::canReadLine();
-	}
-
-	qint64 readData(char * data, qint64 maxSize) {
-		if (testCancel()) {
-			LOG("cancel detected");
-			return 0;
-		}
-		return QBuffer::readData(data, maxSize);
-	}
-
-	qint64 readLineData(char * data, qint64 maxSize) {
-		if (testCancel()) {
-			LOG("cancel detected");
-			return 0;
-		}
-		return QBuffer::readLineData(data, maxSize);
-	}
-
-private:
-	bool testCancel() const {
-		QMutexLocker lock(&mMutex);
-		return mCancel;
-	}
-
-	mutable QMutex mMutex;
-	bool mCancel;
-};
-
-
-class LoadingThread : public QThread {
-public:
-	LoadingThread()
-	: mJpegContent(0) {
-	}
-
-	~LoadingThread() {
-		delete mJpegContent;
-	}
-
-	virtual void run() {
-		QMutexLocker lock(&mMutex);
-		mBuffer.setBuffer(&mData);
-		mBuffer.open(QIODevice::ReadOnly);
-		mFormat = QImageReader::imageFormat(&mBuffer);
-
-		bool ok = mImage.load(&mBuffer, mFormat.data());
-		if (!ok) {
-			return;
-		}
-		if (mFormat == "jpeg") {
-			mJpegContent = new JpegContent();
-			if (!mJpegContent->loadFromData(mData)) {
-				return;
-			}
-			Gwenview::Orientation orientation = mJpegContent->orientation();
-			QMatrix matrix = ImageUtils::transformMatrix(orientation);
-			mImage = mImage.transformed(matrix);
-		}
-	}
-
-	void cancel() {
-		mBuffer.cancel();
-	}
-
-	void setData(const QByteArray& data) {
-		QMutexLocker lock(&mMutex);
-		mData = data;
-	}
-
-	const QByteArray& format() const {
-		QMutexLocker lock(&mMutex);
-		return mFormat;
-	}
-
-	const QImage& image() const {
-		QMutexLocker lock(&mMutex);
-		return mImage;
-	}
-
-	JpegContent* popJpegContent() {
-		QMutexLocker lock(&mMutex);
-		JpegContent* tmp = mJpegContent;
-		mJpegContent = 0;
-		return tmp;
-	}
-
-private:
-	mutable QMutex mMutex;
-	CancellableBuffer mBuffer;
-	QByteArray mData;
-	QByteArray mFormat;
-	QImage mImage;
-	JpegContent* mJpegContent;
-};
 
 
 struct LoadingDocumentImplPrivate {

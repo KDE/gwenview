@@ -1,18 +1,12 @@
 set(gwenviewlib_SRCS
 	document/abstractdocumentimpl.cpp
-	document/abstractdocumentimpl.h
 	document/document.cpp
 	document/documentfactory.cpp
-	document/documentfactory.h
-	document/document.h
 	document/documentloadedimpl.cpp
-	document/documentloadedimpl.h
 	document/emptydocumentimpl.cpp
-	document/emptydocumentimpl.h
 	document/jpegdocumentloadedimpl.cpp
-	document/jpegdocumentloadedimpl.h
 	document/loadingdocumentimpl.cpp
-	document/loadingdocumentimpl.h
+	document/loadingthread.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	abstractthumbnailviewhelper.cpp
