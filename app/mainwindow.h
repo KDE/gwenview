@@ -79,7 +79,7 @@ private Q_SLOTS:
 	 * view, this function will select the corresponding item if it comes up in
 	 * list.
 	 */
-	void slotDirListerNewItems();
+	void slotDirModelNewItems();
 
 	/**
 	 * If no image is selected, select the first one available.

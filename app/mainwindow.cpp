@@ -366,8 +366,8 @@ struct MainWindow::Private {
 		mimeTypes += MimeTypeUtils::videoMimeTypes();
 		dirLister->setMimeFilter(mimeTypes);
 
-		connect(dirLister, SIGNAL(newItems(const KFileItemList&)),
-			mWindow, SLOT(slotDirListerNewItems()) );
+		connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			mWindow, SLOT(slotDirModelNewItems()) );
 
 		connect(dirLister, SIGNAL(deleteItem(KFileItem*)),
 			mWindow, SLOT(updatePreviousNextActions()) );
@@ -729,12 +729,10 @@ void MainWindow::slotPartCompleted() {
 		if (index.isValid()) {
 			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
 		}
-		// All is synchronized, nothing to do
-		return;
+	} else {
+		d->mDirModel->dirLister()->openUrl(dirUrl);
+		d->spreadCurrentDirUrl(dirUrl);
 	}
-
-	d->mDirModel->dirLister()->openUrl(dirUrl);
-	d->spreadCurrentDirUrl(dirUrl);
 }
 
 
@@ -747,7 +745,7 @@ void MainWindow::slotSelectionChanged() {
 }
 
 
-void MainWindow::slotDirListerNewItems() {
+void MainWindow::slotDirModelNewItems() {
 	if (d->mDocumentView->isEmpty()) {
 		return;
 	}
