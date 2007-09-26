@@ -34,11 +34,20 @@ class ImageViewPrivate;
 class GWENVIEWLIB_EXPORT ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:
+	enum AlphaBackgroundMode {
+		AlphaBackgroundCheckBoard,
+		AlphaBackgroundSolid
+	};
+
 	ImageView(QWidget* parent);
 	~ImageView();
 
 	void setCurrentTool(AbstractImageViewTool*);
 	AbstractImageViewTool* currentTool() const;
+
+	void setAlphaBackgroundMode(AlphaBackgroundMode mode);
+
+	void setAlphaBackgroundColor(const QColor& color);
 
 	void setImage(const QImage& image);
 

@@ -40,6 +40,8 @@ struct ImageViewPrivate {
 	ImageView* mView;
 	QPixmap mBackgroundTexture;
 	QWidget* mViewport;
+	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
+	QColor mAlphaBackgroundColor;
 	QImage mImage;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -141,6 +143,9 @@ ImageView::ImageView(QWidget* parent)
 : QAbstractScrollArea(parent)
 , d(new ImageViewPrivate)
 {
+	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
+	d->mAlphaBackgroundColor = Qt::black;
+
 	d->mView = this;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
@@ -162,6 +167,19 @@ ImageView::ImageView(QWidget* parent)
 ImageView::~ImageView() {
 	delete d;
 }
+
+
+void ImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
+	d->mAlphaBackgroundMode = mode;
+	d->mViewport->update();
+}
+
+
+void ImageView::setAlphaBackgroundColor(const QColor& color) {
+	d->mAlphaBackgroundColor = color;
+	d->mViewport->update();
+}
+
 
 void ImageView::setImage(const QImage& image) {
 	d->mImage = image;
@@ -197,13 +215,17 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	}
 
 	if (d->mImage.hasAlphaChannel()) {
-		painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
-			// This option makes the background scroll with the image, like GIMP
-			// and others do. I think having a fixed background makes it easier to
-			// distinguish transparent parts, so I comment it out for now.
+		if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
+			painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
+				// This option makes the background scroll with the image, like GIMP
+				// and others do. I think having a fixed background makes it easier to
+				// distinguish transparent parts, so I comment it out for now.
 
-			//, QPoint(d->hScroll() % d->mBackgroundTexture.width(), d->vScroll() % d->mBackgroundTexture.height())
-			);
+				//, QPoint(d->hScroll() % d->mBackgroundTexture.width(), d->vScroll() % d->mBackgroundTexture.height())
+				);
+		} else {
+			painter.fillRect(imageRect, d->mAlphaBackgroundColor);
+		}
 	}
 	painter.drawImage(offset, d->mBuffer);
 
