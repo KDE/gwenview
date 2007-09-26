@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "loadingthread.moc"
 
+// Exiv2
+#include <exiv2/error.hpp>
+
 // Qt
 #include <QBuffer>
 #include <QImage>
