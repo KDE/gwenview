@@ -44,7 +44,9 @@ kde4_add_ui_files(gwenviewlib_SRCS
 	cropdialog.ui
 	)
 
+# TODO: merge config files
 kde4_add_kcfg_files(gwenviewlib_SRCS
+	gwenviewconfig.kcfgc
 	slideshowconfig.kcfgc
 	)
 

@@ -29,9 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
-#include <gwenviewconfig.h>
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
+#include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfo.h>
 #include <lib/imageviewpart.h>
 #include <lib/document/document.h>

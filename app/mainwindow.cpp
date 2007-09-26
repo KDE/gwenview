@@ -60,7 +60,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
-#include "gwenviewconfig.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #include "savebar.h"
@@ -71,6 +70,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
+#include <lib/gwenviewconfig.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/resizeimageoperation.h>

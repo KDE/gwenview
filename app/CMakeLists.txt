@@ -1,4 +1,8 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(
+	${CMAKE_CURRENT_SOURCE_DIR}/..
+	${CMAKE_CURRENT_BINARY_DIR}/..
+	)
+
 set(gwenview_SRCS
 	abstractcontextmanageritem.cpp
 	configdialog.cpp
@@ -17,10 +21,6 @@ set(gwenview_SRCS
 
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
-	)
-
-kde4_add_kcfg_files(gwenview_SRCS
-	gwenviewconfig.kcfgc
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
