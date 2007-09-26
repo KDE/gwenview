@@ -33,6 +33,13 @@ set(gwenviewlib_SRCS
 	transformimageoperation.cpp
 	)
 
+set_source_files_properties(
+	document/loadingthread.cpp
+	jpegcontent.cpp
+	PROPERTIES
+	COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
+	)
+
 kde4_add_ui_files(gwenviewlib_SRCS
 	cropdialog.ui
 	)
