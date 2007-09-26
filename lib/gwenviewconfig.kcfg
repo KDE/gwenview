@@ -2,6 +2,7 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
+	<include>lib/imageview.h</include>
 	<group name="SideBar">
 		<entry name="PreferredMetaInfoKeyList" type="StringList">
 		<default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
@@ -11,6 +12,19 @@
 	<group name="General">
 		<entry name="ViewBackgroundColor" type="Color">
 			<default>#666666</default>
+		</entry>
+	</group>
+
+	<group name="ImageView">
+		<entry name="AlphaBackgroundMode" type="Enum">
+			<choices name="Gwenview::ImageView::AlphaBackgroundMode">
+				<choice name="ImageView::AlphaBackgroundCheckBoard"/>
+				<choice name="ImageView::AlphaBackgroundSolid"/>
+			</choices>
+			<default>ImageView::AlphaBackgroundCheckBoard</default>
+		</entry>
+		<entry name="AlphaBackgroundColor" type="Color">
+			<default>#ffffff</default>
 		</entry>
 	</group>
 </kcfg>

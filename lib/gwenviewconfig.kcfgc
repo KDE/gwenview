@@ -3,5 +3,6 @@ ClassName=GwenviewConfig
 NameSpace=Gwenview
 Singleton=true
 Mutators=true
-IncludeFiles=gwenviewlib_export.h
+UseEnumTypes=true
+IncludeFiles=lib/gwenviewlib_export.h
 Visibility=GWENVIEWLIB_EXPORT

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/genericfactory.h>
 
 // Local
+#include "../lib/gwenviewconfig.h"
 #include "../lib/imageview.h"
 #include "../lib/scrolltool.h"
 #include "../lib/document/document.h"
@@ -62,6 +63,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 	setXMLFile("gvpart/gvpart.rc");
+
+	loadConfig();
 }
 
 
@@ -161,6 +164,12 @@ Document::Ptr GVPart::document() {
 
 ImageView* GVPart::imageView() const {
 	return mView;
+}
+
+
+void GVPart::loadConfig() {
+	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
+	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
 }
 
 

@@ -1040,6 +1040,11 @@ bool MainWindow::queryClose() {
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
 	connect(&dialog, SIGNAL(settingsChanged(const QString&)), SLOT(loadConfig()));
+	ImageViewPart* part = d->mDocumentView->imageViewPart();
+	if (part) {
+		connect(&dialog, SIGNAL(settingsChanged(const QString&)),
+			part, SLOT(loadConfig()));
+	}
 	dialog.exec();
 }
 

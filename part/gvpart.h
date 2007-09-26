@@ -41,6 +41,8 @@ public:
 
 	virtual ImageView* imageView() const;
 
+	virtual void loadConfig();
+
 protected:
 	virtual bool openFile();
 	virtual bool openUrl(const KUrl&);
