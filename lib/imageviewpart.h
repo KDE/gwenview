@@ -39,6 +39,8 @@ public:
 	ImageViewPart(QObject* parent);
 	virtual Document::Ptr document() = 0;
 	virtual ImageView* imageView() const = 0;
+
+public Q_SLOTS:
 	virtual void loadConfig() = 0;
 
 Q_SIGNALS:

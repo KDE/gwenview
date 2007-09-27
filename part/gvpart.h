@@ -41,6 +41,7 @@ public:
 
 	virtual ImageView* imageView() const;
 
+public Q_SLOTS:
 	virtual void loadConfig();
 
 protected:
