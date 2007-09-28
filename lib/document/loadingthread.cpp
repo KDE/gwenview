@@ -140,8 +140,9 @@ struct LoadingThreadPrivate {
 			mExiv2Image = Exiv2::ImageFactory::open(
 				(unsigned char*)mData.data(), mData.size());
 			mExiv2Image->readMetadata();
-		} catch (Exiv2::Error&) {
-			kWarning() << "Could not load image with Exiv2\n";
+		} catch (std::exception& except) {
+			kWarning() << "Could not load image with Exiv2, reported error:";
+			kWarning() << except.what();
 		}
 
 		if (mFormat == "jpeg") {
