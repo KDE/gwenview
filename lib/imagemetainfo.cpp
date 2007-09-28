@@ -139,6 +139,9 @@ struct ImageMetaInfoPrivate {
 
 
 	void notifyGroupFilled(MetaInfoGroup* group, const QModelIndex& parent) {
+		if (group->size() == 0) {
+			return;
+		}
 		mModel->beginInsertRows(parent, 0, group->size() - 1);
 		mModel->endInsertRows();
 	}
