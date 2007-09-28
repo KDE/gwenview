@@ -114,6 +114,8 @@ private Q_SLOTS:
 	void loadConfig();
 	void print();
 
+	void handleResizeRequest(const QSize&);
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;

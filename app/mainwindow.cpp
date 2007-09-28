@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mainwindow.moc"
 
 // Qt
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QFrame>
 #include <QLabel>
 #include <QListView>
@@ -179,6 +181,8 @@ struct MainWindow::Private {
 			mWindow, SLOT(slotPartCompleted()) );
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGUI(KParts::Part*)) );
+		connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+			mWindow, SLOT(handleResizeRequest(const QSize&)) );
 
 		mSideBarScrollArea = new QScrollArea(mCentralSplitter);
 		mSideBarScrollArea->setFrameStyle(QFrame::NoFrame);
@@ -603,19 +607,16 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
-	bool showDocument, showThumbnail, autoResize;
+	bool showDocument, showThumbnail;
 	if (action == d->mBrowseAction) {
 		showDocument = false;
 		showThumbnail = true;
-		autoResize = false;
 	} else if (action == d->mPreviewAction) {
 		showDocument = true;
 		showThumbnail = true;
-		autoResize = false;
 	} else { // image only
 		showDocument = true;
 		showThumbnail = false;
-		autoResize = true;
 	}
 
 	// Adjust splitter policy. Thumbnail should only stretch if there is no
@@ -631,7 +632,6 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
-	d->mDocumentView->setAutoResizeMainWindow(autoResize);
 }
 
 
@@ -1086,6 +1086,49 @@ void MainWindow::print() {
 	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
 	painter.setWindow(image.rect());
 	painter.drawImage(0, 0, image);
+}
+
+
+void MainWindow::handleResizeRequest(const QSize& _size) {
+	if (!d->mViewAction->isChecked()) {
+		return;
+	}
+	if (isMaximized() || isMinimized() || d->mFullScreenAction->isChecked()) {
+		return;
+	}
+
+	QSize size = _size;
+
+	// innerMargin is the margin around the view, not including the window
+	// frame
+	QSize innerMargin = geometry().size() - d->mDocumentView->geometry().size();
+	// frameMargin is the size of the frame around the window
+	QSize frameMargin = frameGeometry().size() - geometry().size();
+
+	// Adjust size
+	QRect availableRect = QApplication::desktop()->availableGeometry();
+	QSize maxSize = availableRect.size() - innerMargin - frameMargin;
+
+	if (size.width() > maxSize.width() || size.height() > maxSize.height()) {
+		size.scale(maxSize, Qt::KeepAspectRatio);
+	}
+
+	QRect windowRect = geometry();
+	windowRect.setSize(size + innerMargin);
+
+	// Move the window if it does not fit in the screen
+	int rightFrameMargin = frameGeometry().right() - geometry().right();
+	if (windowRect.right() + rightFrameMargin > availableRect.right()) {
+		windowRect.moveRight(availableRect.right() - rightFrameMargin);
+	}
+
+	int bottomFrameMargin = frameGeometry().bottom() - geometry().bottom();
+	if (windowRect.bottom() + bottomFrameMargin > availableRect.bottom()) {
+		windowRect.moveBottom(availableRect.bottom() - bottomFrameMargin);
+	}
+
+	// Define geometry
+	setGeometry(windowRect);
 }
 
 
