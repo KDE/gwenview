@@ -543,6 +543,27 @@ struct MainWindow::Private {
 			spreadCurrentUrl();
 		}
 	}
+
+	/**
+	 * Compute a width which ensures the "next" button is always visible
+	 */
+	int computeMinimumWidth() {
+		QWidget* widget = mWindow->toolBar()->widgetForAction(mGoToNextAction);
+		int width;
+		if (widget) {
+			QPoint pos = widget->rect().topRight();
+			pos = widget->mapTo(mWindow, pos);
+			width = pos.x();
+			width += mWindow->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+
+			// Add a few more pixels to prevent the "next" button from going
+			// in the toolbar extent.
+			width += 10;
+		} else {
+			width = mWindow->menuBar()->width();
+		}
+		return width;
+	}
 };
 
 
@@ -1111,6 +1132,11 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 
 	if (size.width() > maxSize.width() || size.height() > maxSize.height()) {
 		size.scale(maxSize, Qt::KeepAspectRatio);
+	}
+
+	int minWidth = d->computeMinimumWidth();
+	if (size.width() < minWidth) {
+		size.setWidth(minWidth);
 	}
 
 	QRect windowRect = geometry();
