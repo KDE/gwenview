@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Gwenview
+Name[x-test]=xxGwenviewxx
 GenericName=Image Viewer
 GenericName[af]=Beeld Aansig
 GenericName[be]=Праглядчык відарысаў
@@ -61,6 +62,7 @@ Comment[nl]=Een eenvoudige afbeeldingenviewer
 Comment[pt]=Um visualizador de imagens simples
 Comment[pt_BR]=Um visualizador de imagens simples
 Comment[sv]=En enkel bildvisare
+Comment[x-test]=xxA simple image viewerxx
 Comment[zh_CN]=简单图像查看器
 Comment[zh_TW]=一個簡單的影像檢視程式
 Exec=gwenview %u -caption "%c" %i
