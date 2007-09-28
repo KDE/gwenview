@@ -131,8 +131,8 @@ struct ImageMetaInfoPrivate {
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
 		if (group->size() > 0) {
-			group->clear();
 			mModel->beginRemoveRows(parent, 0, group->size() - 1);
+			group->clear();
 			mModel->endRemoveRows();
 		}
 	}
