@@ -338,7 +338,7 @@ void FileOpsContextManagerItem::showProperties() {
 	if (list.count() > 0) {
 		KFileItemList itemList;
 		Q_FOREACH(KFileItem item, list) {
-			itemList << &item;
+			itemList << item;
 		}
 		KPropertiesDialog::showDialog(itemList, d->mSideBar);
 	} else {
