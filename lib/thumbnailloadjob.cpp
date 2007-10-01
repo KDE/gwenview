@@ -422,7 +422,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const QList<KFileItem>& items, int size)
 	LOG((int)this);
 
 	mBrokenPixmap = KIconLoader::global()->loadIcon("file_broken",
-		K3Icon::NoGroup, THUMBNAILSIZE_MIN);
+		KIconLoader::NoGroup, THUMBNAILSIZE_MIN);
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items.empty());
