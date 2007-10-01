@@ -336,11 +336,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 void FileOpsContextManagerItem::showProperties() {
 	QList<KFileItem> list = contextManager()->selection();
 	if (list.count() > 0) {
-		KFileItemList itemList;
-		Q_FOREACH(KFileItem item, list) {
-			itemList << item;
-		}
-		KPropertiesDialog::showDialog(itemList, d->mSideBar);
+		KPropertiesDialog::showDialog(list, d->mSideBar);
 	} else {
 		KUrl url = contextManager()->currentDirUrl();
 		KPropertiesDialog::showDialog(url, d->mSideBar);
