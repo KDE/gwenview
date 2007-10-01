@@ -29,13 +29,14 @@ namespace Gwenview {
 
 namespace ArchiveUtils {
 
-typedef QMap<QString,QString> MimeTypeProtocols;
+typedef QMap<QString,QString> ArchiveProtocolForMimeTypes;
 
 static const char* KDE_PROTOCOL = "X-KDE-LocalProtocol";
 
-static const MimeTypeProtocols& mimeTypeProtocols() {
-	static MimeTypeProtocols map;
-	if (map.isEmpty()) {
+static const ArchiveProtocolForMimeTypes& archiveProtocolForMimeTypes() {
+	static ArchiveProtocolForMimeTypes map;
+	static bool initialized = false;
+	if (!initialized) {
 		KMimeType::List list = KMimeType::allMimeTypes();
 		KMimeType::List::Iterator it=list.begin(), end=list.end();
 		for (; it!=end; ++it) {
@@ -44,12 +45,16 @@ static const MimeTypeProtocols& mimeTypeProtocols() {
 				map[(*it)->name()] = protocol;
 			}
 		}
+		initialized = true;
+		if (map.empty()) {
+			kWarning() << "No archive protocol found.";
+		}
 	}
 	return map;
 }
 
 bool fileItemIsArchive(const KFileItem& item) {
-	return mimeTypeProtocols().contains(item.mimetype());
+	return archiveProtocolForMimeTypes().contains(item.mimetype());
 }
 
 bool fileItemIsDirOrArchive(const KFileItem& item) {
@@ -58,8 +63,8 @@ bool fileItemIsDirOrArchive(const KFileItem& item) {
 
 /*
 bool protocolIsArchive(const QString& protocol) {
-	const MimeTypeProtocols& map=mimeTypeProtocols();
-	MimeTypeProtocols::ConstIterator it;
+	const ArchiveProtocolForMimeTypes& map=archiveProtocolForMimeTypes();
+	ArchiveProtocolForMimeTypes::ConstIterator it;
 	for (it=map.begin();it!=map.end();++it) {
 		if (it.data()==protocol) return true;
 	}
@@ -67,12 +72,12 @@ bool protocolIsArchive(const QString& protocol) {
 }
 */
 QStringList mimeTypes() {
-	return mimeTypeProtocols().keys();
+	return archiveProtocolForMimeTypes().keys();
 }
 
 /*
 QString protocolForMimeType(const QString& mimeType) {
-	return mimeTypeProtocols()[mimeType];
+	return archiveProtocolForMimeTypes()[mimeType];
 }
 */
 
