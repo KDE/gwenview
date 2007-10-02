@@ -65,6 +65,11 @@ void Document::load(const KUrl& url) {
 }
 
 
+void Document::reload() {
+	load(d->mUrl);
+}
+
+
 QImage& Document::image() {
 	return d->mImage;
 }
@@ -88,7 +93,7 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 	d->mImpl=impl;
 
 	connect(d->mImpl, SIGNAL(loaded()),
-		this, SIGNAL(loaded()) );
+		this, SLOT(emitLoaded()) );
 	connect(d->mImpl, SIGNAL(imageRectUpdated()),
 		this, SIGNAL(imageRectUpdated()) );
 	connect(d->mImpl, SIGNAL(metaDataLoaded()),
@@ -189,6 +194,11 @@ void Document::emitMetaDataLoaded() {
 	if (isMetaDataLoaded()) {
 		emit metaDataLoaded();
 	}
+}
+
+
+void Document::emitLoaded() {
+	emit loaded(d->mUrl);
 }
 
 

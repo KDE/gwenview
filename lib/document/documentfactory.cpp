@@ -48,6 +48,8 @@ struct DocumentFactoryPrivate {
 			}
 		}
 	}
+
+	QList<KUrl> mModifiedDocumentList;
 };
 
 DocumentFactory::DocumentFactory()
@@ -73,27 +75,19 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 		doc->load(url);
 		ptr = Document::Ptr(doc);
 		d->mDocumentMap[url] = ptr;
-		connect(doc, SIGNAL(saved(const KUrl&)), SIGNAL(saved(const KUrl&)) );
-		connect(doc, SIGNAL(modified(const KUrl&)), SIGNAL(modified(const KUrl&)) );
+		connect(doc, SIGNAL(loaded(const KUrl&)),
+			SLOT(slotLoaded(const KUrl&)) );
+		connect(doc, SIGNAL(saved(const KUrl&)),
+			SLOT(slotSaved(const KUrl&)) );
+		connect(doc, SIGNAL(modified(const KUrl&)),
+			SLOT(slotModified(const KUrl&)) );
 	}
 	d->garbageCollect();
 	return ptr;
 }
 
 QList<KUrl> DocumentFactory::modifiedDocumentList() const {
-	DocumentMap::Iterator
-		it = d->mDocumentMap.begin(),
-		end = d->mDocumentMap.end();
-
-	QList<KUrl> list;
-	for (;it!=end; ++it) {
-		Document::Ptr doc = it.value();
-		if (doc->isModified()) {
-			list << doc->url();
-		}
-	}
-
-	return list;
+	return d->mModifiedDocumentList;
 }
 
 
@@ -104,6 +98,31 @@ bool DocumentFactory::hasUrl(const KUrl& url) const {
 
 void DocumentFactory::clearCache() {
 	d->mDocumentMap.clear();
+}
+
+
+void DocumentFactory::slotLoaded(const KUrl& url) {
+	if (d->mModifiedDocumentList.contains(url)) {
+		d->mModifiedDocumentList.removeAll(url);
+		emit modifiedDocumentListChanged();
+		emit documentChanged(url);
+	}
+}
+
+
+void DocumentFactory::slotSaved(const KUrl& url) {
+	d->mModifiedDocumentList.removeAll(url);
+	emit modifiedDocumentListChanged();
+	emit documentChanged(url);
+}
+
+
+void DocumentFactory::slotModified(const KUrl& url) {
+	if (!d->mModifiedDocumentList.contains(url)) {
+		d->mModifiedDocumentList << url;
+		emit modifiedDocumentListChanged();
+	}
+	emit documentChanged(url);
 }
 
 

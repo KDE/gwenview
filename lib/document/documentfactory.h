@@ -46,8 +46,13 @@ public:
 	void clearCache();
 
 Q_SIGNALS:
-	void saved(const KUrl&);
-	void modified(const KUrl&);
+	void modifiedDocumentListChanged();
+	void documentChanged(const KUrl&);
+
+private Q_SLOTS:
+	void slotLoaded(const KUrl&);
+	void slotSaved(const KUrl&);
+	void slotModified(const KUrl&);
 
 private:
 	DocumentFactory();

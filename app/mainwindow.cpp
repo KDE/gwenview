@@ -251,6 +251,11 @@ struct MainWindow::Private {
 		KStandardAction::print(mWindow, SLOT(print()), actionCollection);
 		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
 
+		QAction* action = actionCollection->addAction("reload");
+		action->setText(i18n("Reload"));
+		connect(action, SIGNAL(triggered()),
+			mWindow, SLOT(reload()) );
+
 		mBrowseAction = actionCollection->addAction("browse");
 		mBrowseAction->setText(i18n("Browse"));
 		mBrowseAction->setCheckable(true);
@@ -583,14 +588,10 @@ d(new MainWindow::Private)
 
 	createShellGUI();
 	loadConfig();
-	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
-		SLOT(generateThumbnailForUrl(const KUrl&)) );
-	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
+	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
-	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
-		SLOT(updateModifiedFlag()) );
-	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
+	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateModifiedFlag()) );
 }
 
@@ -872,6 +873,13 @@ void MainWindow::saveCurrent() {
 
 void MainWindow::saveCurrentAs() {
 	saveAs(d->currentUrl());
+}
+
+
+void MainWindow::reload() {
+	KUrl url = d->currentUrl();
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->reload();
 }
 
 

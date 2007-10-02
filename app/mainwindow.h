@@ -98,6 +98,7 @@ private Q_SLOTS:
 
 	void saveCurrent();
 	void saveCurrentAs();
+	void reload();
 	void save(const KUrl&);
 	void saveAs(const KUrl&);
 

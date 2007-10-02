@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="31">
+<kpartgui name="gwenview" version="32">
 
 <MenuBar>
 	<Menu name="file" >
 		<Action name="file_save"/>
 		<Action name="file_save_as"/>
+		<Separator/>
+		<Action name="reload"/>
 		<Separator/>
 		<Action name="file_print"/>
 		<Separator/>

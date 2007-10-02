@@ -87,9 +87,7 @@ SaveBar::SaveBar(QWidget* parent)
 	layout->setSpacing(0);
 	hide();
 
-	connect(DocumentFactory::instance(), SIGNAL(saved(const KUrl&)),
-		SLOT(updateContent()) );
-	connect(DocumentFactory::instance(), SIGNAL(modified(const KUrl&)),
+	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateContent()) );
 
 	connect(d->mActions, SIGNAL(linkActivated(const QString&)),

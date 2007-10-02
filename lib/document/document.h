@@ -58,6 +58,8 @@ public:
 	~Document();
 	void load(const KUrl&);
 
+	void reload();
+
 	bool isMetaDataLoaded() const;
 
 	bool isLoaded() const;
@@ -101,10 +103,13 @@ public:
 
 Q_SIGNALS:
 	void imageRectUpdated();
-	void loaded();
+	void loaded(const KUrl&);
 	void saved(const KUrl&);
 	void modified(const KUrl&);
 	void metaDataLoaded();
+
+private Q_SLOTS:
+	void emitLoaded();
 
 private:
 	friend class DocumentFactory;
