@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScrollArea>
 #include <QSplitter>
 #include <QSlider>
+#include <QVBoxLayout>
 
 // KDE
 #include <kactioncollection.h>
@@ -129,7 +130,6 @@ struct MainWindow::Private {
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
-	QScrollArea* mSideBarScrollArea;
 	SideBar* mSideBar;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
@@ -184,11 +184,7 @@ struct MainWindow::Private {
 		connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
 			mWindow, SLOT(handleResizeRequest(const QSize&)) );
 
-		mSideBarScrollArea = new QScrollArea(mCentralSplitter);
-		mSideBarScrollArea->setFrameStyle(QFrame::NoFrame);
-		mSideBar = new SideBar(mSideBarScrollArea);
-		mSideBarScrollArea->setWidget(mSideBar);
-		mSideBarScrollArea->setWidgetResizable(true);
+		mSideBar = new SideBar(mCentralSplitter);
 
 		mSlideShow = new SlideShow(mWindow);
 
@@ -386,7 +382,7 @@ struct MainWindow::Private {
 	}
 
 	void updateToggleSideBarAction() {
-		if (mSideBarScrollArea->isVisible()) {
+		if (mSideBar->isVisible()) {
 			mToggleSideBarAction->setText(i18n("Hide Side Bar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Side Bar"));
@@ -621,7 +617,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		d->mSideBarScrollArea->hide();
+		d->mSideBar->hide();
 		openDocumentUrl(url);
 	}
 	d->updateToggleSideBarAction();
@@ -724,7 +720,7 @@ void MainWindow::slotSetStatusBarText(const QString& message) {
 }
 
 void MainWindow::toggleSideBar() {
-	d->mSideBarScrollArea->setVisible(!d->mSideBarScrollArea->isVisible());
+	d->mSideBar->setVisible(!d->mSideBar->isVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -837,12 +833,12 @@ void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
-		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarScrollArea->isVisible();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
 
 		d->mDocumentView->setViewBackgroundColor(Qt::black);
 
 		d->mViewAction->trigger();
-		d->mSideBarScrollArea->hide();
+		d->mSideBar->hide();
 
 		showFullScreen();
 		menuBar()->hide();
@@ -853,7 +849,7 @@ void MainWindow::toggleFullScreen() {
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
-		d->mSideBarScrollArea->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
 		d->mDocumentView->setViewBackgroundColor(GwenviewConfig::viewBackgroundColor());

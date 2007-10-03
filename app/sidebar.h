@@ -24,8 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QFrame>
-#include <QVBoxLayout>
-#include <QWidget>
+#include <QScrollArea>
 
 namespace Gwenview {
 
@@ -48,7 +47,7 @@ private:
 };
 
 
-class SideBar : public QWidget {
+class SideBar : public QScrollArea {
 	Q_OBJECT
 public:
 	SideBar(QWidget* parent);

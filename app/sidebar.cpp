@@ -109,17 +109,24 @@ void SideBarGroup::addAction(QAction* action) {
 struct SideBar::Private {
 	QVBoxLayout* mLayout;
 	QList<SideBarGroup*> mGroupList;
+	QWidget* mWidget;
 };
 
 
 SideBar::SideBar(QWidget* parent)
-: QWidget(parent) {
+: QScrollArea(parent) {
 	d.reset(new Private);
 
-	d->mLayout = new QVBoxLayout(this);
+	d->mWidget = new QWidget(this);
+
+	d->mLayout = new QVBoxLayout(d->mWidget);
 	d->mLayout->setMargin(0);
 	d->mLayout->setSpacing(0);
 	d->mLayout->addStretch();
+
+	setFrameStyle(QFrame::NoFrame);
+	setWidget(d->mWidget);
+	setWidgetResizable(true);
 }
 
 
@@ -131,7 +138,7 @@ void SideBar::clear() {
 }
 
 SideBarGroup* SideBar::createGroup(const QString& title) {
-	SideBarGroup* group = new SideBarGroup(this, title);
+	SideBarGroup* group = new SideBarGroup(d->mWidget, title);
 	d->mLayout->insertWidget(d->mLayout->count() - 1, group);
 
 	d->mGroupList << group;
@@ -145,7 +152,7 @@ QSize SideBar::sizeHint() const {
 
 void SideBar::showEvent(QShowEvent* event) {
 	aboutToShow();
-	QWidget::showEvent(event);
+	QScrollArea::showEvent(event);
 }
 
 
