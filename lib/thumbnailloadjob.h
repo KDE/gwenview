@@ -95,7 +95,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob(const QList<KFileItem>& itemList, int size);
+	ThumbnailLoadJob(const KFileItemList& itemList, int size);
 	virtual ~ThumbnailLoadJob();
 
 	/**
@@ -158,7 +158,7 @@ private Q_SLOTS:
 private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB } mState;
 
-	QList<KFileItem> mItems;
+	KFileItemList mItems;
 	QVector<KFileItem > mAllItems;
 	QVector< bool > mProcessedState;
 	KFileItem mCurrentItem;

@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QObject>
 
 class KFileItem;
+class KFileItemList;
 class QPixmap;
 
 namespace Gwenview {
@@ -40,9 +41,9 @@ public:
 	AbstractThumbnailViewHelper(QObject* parent);
 	virtual ~AbstractThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const QList<KFileItem>& list) = 0;
+	virtual void generateThumbnailsForItems(const KFileItemList& list) = 0;
 
-	virtual void abortThumbnailGenerationForItems(const QList<KFileItem>& list) = 0;
+	virtual void abortThumbnailGenerationForItems(const KFileItemList& list) = 0;
 
 	virtual void showContextMenu(QWidget* parent) = 0;
 

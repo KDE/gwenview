@@ -269,7 +269,7 @@ AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
 void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
 	QListView::rowsAboutToBeRemoved(parent, start, end);
 
-	QList<KFileItem> itemList;
+	KFileItemList itemList;
 	for (int pos=start; pos<=end; ++pos) {
 		QModelIndex index = model()->index(pos, 0, parent);
 
@@ -321,7 +321,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 		return item.pixmap(128);
 	}
 
-	QList<KFileItem> list;
+	KFileItemList list;
 	list << item;
 	d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 	d->mThumbnailViewHelper->generateThumbnailsForItems(list);

@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-static KUrl::List urlListFromKFileItemList(const QList<KFileItem> list) {
+static KUrl::List urlListFromKFileItemList(const KFileItemList list) {
 	KUrl::List urlList;
 	Q_FOREACH(KFileItem item, list) {
 		urlList << item.url();
@@ -129,7 +129,7 @@ struct FileOpsContextManagerItemPrivate {
 
 
 	void copyMoveOrLink(Operation operation) {
-		QList<KFileItem> list = mContextManagerItem->contextManager()->selection();
+		KFileItemList list = mContextManagerItem->contextManager()->selection();
 		Q_ASSERT(list.count() > 0);
 		KUrl::List urlList = urlListFromKFileItemList(list);
 
@@ -182,7 +182,7 @@ struct FileOpsContextManagerItemPrivate {
 
 
 	void delOrTrash(Operation operation) {
-		QList<KFileItem> list = mContextManagerItem->contextManager()->selection();
+		KFileItemList list = mContextManagerItem->contextManager()->selection();
 		Q_ASSERT(list.count() > 0);
 		KUrl::List urlList = urlListFromKFileItemList(list);
 
@@ -299,7 +299,7 @@ QAction* FileOpsContextManagerItem::showPropertiesAction() const {
 
 
 void FileOpsContextManagerItem::updateActions() {
-	QList<KFileItem> list = contextManager()->selection();
+	KFileItemList list = contextManager()->selection();
 	bool selectionNotEmpty = list.count() > 0;
 
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
@@ -334,7 +334,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 
 
 void FileOpsContextManagerItem::showProperties() {
-	QList<KFileItem> list = contextManager()->selection();
+	KFileItemList list = contextManager()->selection();
 	if (list.count() > 0) {
 		KPropertiesDialog::showDialog(list, d->mSideBar);
 	} else {

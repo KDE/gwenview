@@ -51,13 +51,13 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 }
 
 
-void ContextManager::setSelection(const QList<KFileItem>& list) {
+void ContextManager::setSelection(const KFileItemList& list) {
 	mSelection = list;
 	selectionChanged();
 }
 
 
-QList<KFileItem> ContextManager::selection() const {
+KFileItemList ContextManager::selection() const {
 	return mSelection;
 }
 

@@ -414,7 +414,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
  updateItemsOrder() builds mItems from mAllItems
 */
 
-ThumbnailLoadJob::ThumbnailLoadJob(const QList<KFileItem>& items, int size)
+ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, int size)
 : KIO::Job(), mState( STATE_NEXTTHUMB ),
   mCurrentVisibleIndex( -1 ), mFirstVisibleIndex( -1 ), mLastVisibleIndex( -1 ),
   mThumbnailSize(size)
@@ -743,7 +743,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 		// Not a raster image, use a KPreviewJob
 		LOG("Starting a KPreviewJob for" << mCurrentItem.url());
 		mState=STATE_PREVIEWJOB;
-		QList<KFileItem> list;
+		KFileItemList list;
 		list.append(mCurrentItem);
 		KIO::Job* job=KIO::filePreview(list, mThumbnailSize);
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());

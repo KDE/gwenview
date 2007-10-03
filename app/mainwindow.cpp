@@ -733,7 +733,7 @@ void MainWindow::updateContextManager() {
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
 	QModelIndexList indexList = selection.indexes();
 
-	QList<KFileItem> itemList;
+	KFileItemList itemList;
 	Q_FOREACH(QModelIndex index, indexList) {
 		itemList << d->mDirModel->itemForIndex(index);
 	}
@@ -1039,7 +1039,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 		return;
 	}
 
-	QList<KFileItem> list;
+	KFileItemList list;
 	list << item;
 	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list);
 }

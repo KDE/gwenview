@@ -76,7 +76,7 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 	resetSandBox();
 	QDir dir(sandBoxPath());
 
-	QList<KFileItem> list;
+	KFileItemList list;
 	Q_FOREACH(QFileInfo info, dir.entryInfoList()) {
 		KUrl url("file://" + info.absoluteFilePath());
 		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -103,7 +103,7 @@ void ThumbnailLoadJobTest::testLoadRemote() {
 	resetSandBox();
 	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
 	KUrl url(urlString);
-	QList<KFileItem> list;
+	KFileItemList list;
 	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 	list << item;
 

@@ -64,8 +64,8 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& list) {
-	QList<KFileItem> filteredList;
+void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) {
+	KFileItemList filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
 	Q_FOREACH(KFileItem item, list) {
 		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
@@ -109,7 +109,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const QList<KFileItem>& lis
 }
 
 
-void ThumbnailViewHelper::abortThumbnailGenerationForItems(const QList<KFileItem>& list) {
+void ThumbnailViewHelper::abortThumbnailGenerationForItems(const KFileItemList& list) {
 	if (!d->mThumbnailLoadJob) {
 		return;
 	}

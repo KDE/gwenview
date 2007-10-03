@@ -26,8 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kurl.h>
-
-class KFileItem;
+#include <kfileitem.h>
 
 namespace Gwenview {
 
@@ -53,9 +52,9 @@ public:
 
 	KUrl currentDirUrl() const;
 
-	void setSelection(const QList<KFileItem>& itemList);
+	void setSelection(const KFileItemList& itemList);
 
-	QList<KFileItem> selection() const;
+	KFileItemList selection() const;
 
 	void setSideBar(SideBar*);
 
@@ -66,7 +65,7 @@ Q_SIGNALS:
 private:
 	//FIXME: use d pointer
 	QList<AbstractContextManagerItem*> mList;
-	QList<KFileItem> mSelection;
+	KFileItemList mSelection;
 	SideBar* mSideBar;
 	KUrl mCurrentDirUrl;
 };

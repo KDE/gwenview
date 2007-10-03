@@ -124,7 +124,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 	}
 	LOG("updateSideBarContent: really updating");
 
-	QList<KFileItem> itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selection();
 	if (itemList.count() == 0) {
 		d->mGroup->hide();
 		// "Garbage collect" document
@@ -157,7 +157,7 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	}
 }
 
-void InfoContextManagerItem::fillMultipleItemsGroup(const QList<KFileItem>& itemList) {
+void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
 	// "Garbage collect" document
 	d->mDocument = 0;
 

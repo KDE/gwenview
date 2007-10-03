@@ -51,7 +51,7 @@ private Q_SLOTS:
 private:
 	void fillOneFileGroup(const KFileItem& item);
 
-	void fillMultipleItemsGroup(const QList<KFileItem>& itemList);
+	void fillMultipleItemsGroup(const KFileItemList& itemList);
 
 	InfoContextManagerItemPrivate * const d;
 };
