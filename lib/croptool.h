@@ -49,6 +49,8 @@ public:
 	virtual void mouseMoveEvent(QMouseEvent*);
 	virtual void mouseReleaseEvent(QMouseEvent*);
 
+	virtual void toolActivated();
+
 Q_SIGNALS:
 	void rectUpdated(const QRect&);
 

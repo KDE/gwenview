@@ -126,7 +126,7 @@ struct CropToolPrivate {
 			break;
 
 		default:
-			shape = Qt::ArrowCursor;
+			shape = Qt::ForbiddenCursor;
 			break;
 		}
 		mCropTool->imageView()->viewport()->setCursor(shape);
@@ -184,8 +184,6 @@ void CropTool::paint(QPainter* painter) {
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
 	Q_ASSERT(d->mMovingHandle == CH_None);
-	d->mMovingHandle = d->handleAt(event->pos());
-	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
 
 	if (d->mRect.x() == UNINITIALIZED_X) {
 		// Nothing selected, user is creating the crop rect
@@ -194,7 +192,10 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 
 		imageView()->viewport()->update();
 		rectUpdated(d->mRect);
+		return;
 	}
+	d->mMovingHandle = d->handleAt(event->pos());
+	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
 
 	if (d->mMovingHandle == CH_Content) {
 		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
@@ -203,7 +204,7 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 
 
 void CropTool::mouseMoveEvent(QMouseEvent* event) {
-	if (event->buttons() == Qt::NoButton) {
+	if (event->buttons() == Qt::NoButton && d->mRect.x() != UNINITIALIZED_X) {
 		// Make sure cursor is updated when moving over handles
 		CropHandle handle = d->handleAt(event->pos());
 		d->updateCursor(handle, false/* buttonDown*/);
@@ -261,9 +262,14 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 }
 
 
-void CropTool::mouseReleaseEvent(QMouseEvent*) {
+void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 	d->mMovingHandle = CH_None;
-	d->updateCursor(d->mMovingHandle, false /*buttonDown*/);
+	d->updateCursor(d->handleAt(event->pos()), false);
+}
+
+
+void CropTool::toolActivated() {
+	imageView()->viewport()->setCursor(Qt::CrossCursor);
 }
 
 
