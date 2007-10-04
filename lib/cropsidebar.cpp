@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "cropdialog.moc"
+#include "cropsidebar.moc"
 
 // Qt
 #include <QPointer>
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "croptool.h"
 #include "imageview.h"
-#include "ui_cropdialog.h"
+#include "ui_cropsidebar.h"
 
 namespace Gwenview {
 

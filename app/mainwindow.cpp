@@ -70,7 +70,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
-#include <lib/cropdialog.h>
+#include <lib/cropsidebar.h>
 #include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>

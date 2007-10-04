@@ -16,7 +16,7 @@ set(gwenviewlib_SRCS
 	abstractimageviewtool.cpp
 	abstractthumbnailviewhelper.cpp
 	archiveutils.cpp
-	cropdialog.cpp
+	cropsidebar.cpp
 	cropimageoperation.cpp
 	croptool.cpp
 	expandbutton.cpp
@@ -46,7 +46,7 @@ set_source_files_properties(
 	)
 
 kde4_add_ui_files(gwenviewlib_SRCS
-	cropdialog.ui
+	cropsidebar.ui
 	)
 
 # TODO: merge config files

@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef CROPDIALOG_H
-#define CROPDIALOG_H
+#ifndef CROPSIDEBAR_H
+#define CROPSIDEBAR_H
 
 #include "gwenviewlib_export.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace
 
-#endif /* CROPDIALOG_H */
+#endif /* CROPSIDEBAR_H */
