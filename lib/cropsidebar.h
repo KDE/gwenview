@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include <lib/document/document.h>
 
 namespace Gwenview {
 
@@ -38,21 +39,20 @@ class CropSideBarPrivate;
 class GWENVIEWLIB_EXPORT CropSideBar : public QWidget {
 	Q_OBJECT
 public:
-	CropSideBar(QWidget* parent, ImageView*);
+	CropSideBar(QWidget* parent, ImageView*, Document::Ptr);
 	~CropSideBar();
 
 	QRect cropRect() const;
 	void setImageSize(const QSize&);
 
 Q_SIGNALS:
-	void finished(int);
+	void done();
 
 private Q_SLOTS:
 	void updateCropToolRect();
 	void setCropRect(const QRect& rect);
 
-	void slotAccepted();
-	void slotRejected();
+	void crop();
 
 private:
 	CropSideBarPrivate* const d;

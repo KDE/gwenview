@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "klocale.h"
 
 // Local
+#include "cropimageoperation.h"
 #include "croptool.h"
 #include "imageview.h"
 #include "ui_cropsidebar.h"
@@ -38,6 +39,7 @@ namespace Gwenview {
 
 
 struct CropSideBarPrivate : public Ui_CropSideBar {
+	Document::Ptr mDocument;
 	QWidget* mWidget;
 	AbstractImageViewTool* mPreviousTool;
 	QPointer<CropTool> mCropTool;
@@ -45,9 +47,10 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 };
 
 
-CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView)
+CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr document)
 : QWidget(parent)
 , d(new CropSideBarPrivate) {
+	d->mDocument = document;
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = new CropTool(imageView);
 	d->mPreviousTool = imageView->currentTool();
@@ -75,10 +78,10 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView)
 		SLOT(updateCropToolRect()) );
 
 	connect(d->buttonBox, SIGNAL(accepted()),
-		SLOT(slotAccepted()) );
+		SLOT(crop()) );
 	
 	connect(d->buttonBox, SIGNAL(rejected()),
-		SLOT(slotRejected()) );
+		SIGNAL(done()) );
 }
 
 
@@ -134,12 +137,11 @@ void CropSideBar::updateCropToolRect() {
 }
 
 
-void CropSideBar::slotAccepted() {
-	emit finished(QDialog::Accepted);
+void CropSideBar::crop() {
+	CropImageOperation op(cropRect());
+	op.apply(d->mDocument);
+	emit done();
 }
 
 
-void CropSideBar::slotRejected() {
-	emit finished(QDialog::Rejected);
-}
 } // namespace

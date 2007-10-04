@@ -71,7 +71,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
 #include <lib/cropsidebar.h>
-#include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
@@ -160,8 +159,6 @@ struct MainWindow::Private {
 	MainWindowState mStateBeforeFullScreen;
 
 	KUrl mUrlToSelect;
-
-	CropSideBar* mCropSideBar;
 
 	QString mCaption;
 
@@ -587,13 +584,6 @@ struct MainWindow::Private {
 		mSideBarContainer->setCurrentWidget(widget);
 		mSideBarContainer->show();
 	}
-
-
-	void hideTemporarySideBar() {
-		Q_ASSERT(mSideBarContainer->currentWidget() != mSideBar);
-		mSideBarContainer->currentWidget()->deleteLater();
-		mSideBarContainer->setCurrentWidget(mSideBar);
-	}
 };
 
 
@@ -1004,23 +994,11 @@ void MainWindow::crop() {
 	doc->waitUntilLoaded();
 	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
 	Q_ASSERT(imageViewPart);
-	d->mCropSideBar = new CropSideBar(this, imageViewPart->imageView());
-	d->mCropSideBar->setImageSize(doc->image().size());
-	connect(d->mCropSideBar, SIGNAL(finished(int)),
-		SLOT(slotCropSideBarFinished(int)) );
+	CropSideBar* cropSideBar = new CropSideBar(this, imageViewPart->imageView(), doc);
+	cropSideBar->setImageSize(doc->image().size());
+	connect(cropSideBar, SIGNAL(done()), SLOT(hideTemporarySideBar()) );
 
-	d->showTemporarySideBar(d->mCropSideBar);
-}
-
-
-void MainWindow::slotCropSideBarFinished(int result) {
-	if (result == QDialog::Accepted) {
-		CropImageOperation op(d->mCropSideBar->cropRect());
-		d->applyImageOperation(&op);
-	}
-	d->mCropSideBar->deleteLater();
-	d->mCropSideBar = 0;
-	d->hideTemporarySideBar();
+	d->showTemporarySideBar(cropSideBar);
 }
 
 
@@ -1190,6 +1168,14 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 
 	// Define geometry
 	setGeometry(windowRect);
+}
+
+
+void MainWindow::hideTemporarySideBar() {
+	QWidget* temporarySideBar = d->mSideBarContainer->currentWidget();
+	Q_ASSERT(temporarySideBar != d->mSideBar);
+	temporarySideBar->deleteLater();
+	d->mSideBarContainer->setCurrentWidget(d->mSideBar);
 }
 
 

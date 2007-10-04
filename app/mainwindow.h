@@ -108,7 +108,6 @@ private Q_SLOTS:
 	void flip();
 	void resizeImage();
 	void crop();
-	void slotCropSideBarFinished(int result);
 
 	void generateThumbnailForUrl(const KUrl&);
 	void showConfigDialog();
@@ -116,6 +115,8 @@ private Q_SLOTS:
 	void print();
 
 	void handleResizeRequest(const QSize&);
+
+	void hideTemporarySideBar();
 
 private:
 	class Private;
