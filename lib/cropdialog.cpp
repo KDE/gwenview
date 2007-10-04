@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QPointer>
+#include <QPushButton>
 #include <QSpinBox>
 
 // KDE
@@ -45,20 +46,21 @@ struct CropDialogPrivate : public Ui_CropDialog {
 
 
 CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
-: KDialog(parent)
+: QWidget(parent)
 , d(new CropDialogPrivate) {
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = new CropTool(imageView);
 	d->mPreviousTool = imageView->currentTool();
 	imageView->setCurrentTool(d->mCropTool);
 	d->mWidget = new QWidget(this);
-	setMainWidget(d->mWidget);
 	d->setupUi(d->mWidget);
 
-	setCaption(i18n("Crop Image"));
-	setButtons(KDialog::Ok | KDialog::Cancel);
-	setButtonText(KDialog::Ok, i18n("&Crop"));
-	showButtonSeparator(true);
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->addWidget(d->mWidget);
+
+	QPushButton* ok = d->buttonBox->button(QDialogButtonBox::Ok);
+	Q_ASSERT(ok);
+	ok->setText(i18n("Crop"));
 
 	connect(d->mCropTool, SIGNAL(rectUpdated(const QRect&)),
 		SLOT(setCropRect(const QRect&)) );
@@ -71,6 +73,12 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 		SLOT(updateCropToolRect()) );
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(updateCropToolRect()) );
+
+	connect(d->buttonBox, SIGNAL(accepted()),
+		SLOT(slotAccepted()) );
+	
+	connect(d->buttonBox, SIGNAL(rejected()),
+		SLOT(slotRejected()) );
 }
 
 
@@ -126,4 +134,12 @@ void CropDialog::updateCropToolRect() {
 }
 
 
+void CropDialog::slotAccepted() {
+	emit finished(QDialog::Accepted);
+}
+
+
+void CropDialog::slotRejected() {
+	emit finished(QDialog::Rejected);
+}
 } // namespace

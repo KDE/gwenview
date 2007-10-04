@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gwenviewlib_export.h"
 
 // Qt
+#include <QWidget>
 
 // KDE
-#include <kdialog.h>
 
 // Local
 
@@ -35,7 +35,7 @@ namespace Gwenview {
 class ImageView;
 
 class CropDialogPrivate;
-class GWENVIEWLIB_EXPORT CropDialog : public KDialog {
+class GWENVIEWLIB_EXPORT CropDialog : public QWidget {
 	Q_OBJECT
 public:
 	CropDialog(QWidget* parent, ImageView*);
@@ -44,9 +44,15 @@ public:
 	QRect cropRect() const;
 	void setImageSize(const QSize&);
 
+Q_SIGNALS:
+	void finished(int);
+
 private Q_SLOTS:
 	void updateCropToolRect();
 	void setCropRect(const QRect& rect);
+
+	void slotAccepted();
+	void slotRejected();
 
 private:
 	CropDialogPrivate* const d;

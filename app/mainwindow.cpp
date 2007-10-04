@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QScrollArea>
 #include <QSplitter>
 #include <QSlider>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 
 // KDE
@@ -131,6 +132,7 @@ struct MainWindow::Private {
 	QSlider* mThumbnailSlider;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
+	QStackedWidget* mSideBarContainer;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
 	SlideShow* mSlideShow;
@@ -184,7 +186,9 @@ struct MainWindow::Private {
 		connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
 			mWindow, SLOT(handleResizeRequest(const QSize&)) );
 
-		mSideBar = new SideBar(mCentralSplitter);
+		mSideBarContainer = new QStackedWidget(mCentralSplitter);
+		mSideBar = new SideBar(mSideBarContainer);
+		mSideBarContainer->addWidget(mSideBar);
 
 		mSlideShow = new SlideShow(mWindow);
 
@@ -382,7 +386,7 @@ struct MainWindow::Private {
 	}
 
 	void updateToggleSideBarAction() {
-		if (mSideBar->isVisible()) {
+		if (mSideBarContainer->isVisible()) {
 			mToggleSideBarAction->setText(i18n("Hide Side Bar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Side Bar"));
@@ -565,6 +569,31 @@ struct MainWindow::Private {
 		}
 		return width;
 	}
+
+
+	void showTemporarySideBar(QWidget* sideBar) {
+		// Move the sideBar inside a widget so that we can add a stretch below
+		// it.
+		QWidget* widget = new QWidget(mSideBarContainer);
+		sideBar->setParent(widget);
+
+		QVBoxLayout* layout = new QVBoxLayout(widget);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(sideBar);
+		layout->addStretch();
+
+		mSideBarContainer->addWidget(widget);
+		mSideBarContainer->setCurrentWidget(widget);
+		mSideBarContainer->show();
+	}
+
+
+	void hideTemporarySideBar() {
+		Q_ASSERT(mSideBarContainer->currentWidget() != mSideBar);
+		mSideBarContainer->currentWidget()->deleteLater();
+		mSideBarContainer->setCurrentWidget(mSideBar);
+	}
 };
 
 
@@ -617,7 +646,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		d->mSideBar->hide();
+		d->mSideBarContainer->hide();
 		openDocumentUrl(url);
 	}
 	d->updateToggleSideBarAction();
@@ -720,7 +749,7 @@ void MainWindow::slotSetStatusBarText(const QString& message) {
 }
 
 void MainWindow::toggleSideBar() {
-	d->mSideBar->setVisible(!d->mSideBar->isVisible());
+	d->mSideBarContainer->setVisible(!d->mSideBarContainer->isVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -833,12 +862,12 @@ void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
-		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
 
 		d->mDocumentView->setViewBackgroundColor(Qt::black);
 
 		d->mViewAction->trigger();
-		d->mSideBar->hide();
+		d->mSideBarContainer->hide();
 
 		showFullScreen();
 		menuBar()->hide();
@@ -849,7 +878,7 @@ void MainWindow::toggleFullScreen() {
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
-		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
 		d->mDocumentView->setViewBackgroundColor(GwenviewConfig::viewBackgroundColor());
@@ -977,9 +1006,10 @@ void MainWindow::crop() {
 	Q_ASSERT(imageViewPart);
 	d->mCropDialog = new CropDialog(this, imageViewPart->imageView());
 	d->mCropDialog->setImageSize(doc->image().size());
-	d->mCropDialog->show();
 	connect(d->mCropDialog, SIGNAL(finished(int)),
 		SLOT(slotCropDialogFinished(int)) );
+
+	d->showTemporarySideBar(d->mCropDialog);
 }
 
 
@@ -990,6 +1020,7 @@ void MainWindow::slotCropDialogFinished(int result) {
 	}
 	d->mCropDialog->deleteLater();
 	d->mCropDialog = 0;
+	d->hideTemporarySideBar();
 }
 
 
