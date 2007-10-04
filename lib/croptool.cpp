@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 static const int HANDLE_RADIUS = 5;
 
+static const int UNINITIALIZED_X = -1;
+
 namespace Gwenview {
 
 
@@ -146,6 +148,7 @@ CropTool::CropTool(ImageView* view)
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 	d->mMovingHandle = CH_None;
+	d->mRect.setX(UNINITIALIZED_X);
 }
 
 
@@ -161,6 +164,9 @@ void CropTool::setRect(const QRect& rect) {
 
 
 void CropTool::paint(QPainter* painter) {
+	if (d->mRect.x() == UNINITIALIZED_X) {
+		return;
+	}
 	QRect rect = imageView()->mapToViewport(d->mRect);
 
 	QRect imageRect = imageView()->rect();
@@ -189,6 +195,15 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 	Q_ASSERT(d->mMovingHandle == CH_None);
 	d->mMovingHandle = d->handleAt(event->pos());
 
+	if (d->mRect.x() == UNINITIALIZED_X) {
+		// Nothing selected, user is creating the crop rect
+		QPoint pos = imageView()->mapToImage(event->pos());
+		d->mRect = QRect(pos, QSize(0, 0));
+
+		imageView()->viewport()->update();
+		rectUpdated(d->mRect);
+	}
+
 	if (d->mMovingHandle == CH_Content) {
 		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
@@ -196,14 +211,42 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 
 
 void CropTool::mouseMoveEvent(QMouseEvent* event) {
-	d->updateCursor(event);
-
-	if (d->mMovingHandle == CH_None) {
+	if (event->buttons() == Qt::NoButton) {
+		// Make sure cursor is updated when moving over handles
+		d->updateCursor(event);
 		return;
 	}
 
 	QPoint point = imageView()->mapToImage(event->pos());
 	int posX = point.x(), posY = point.y();
+
+	if (d->mRect.x() != UNINITIALIZED_X && d->mRect.size() == QSize(0, 0)) {
+		// User is creating rect, thus d->mMovingHandle has not been set yet,
+		// figure it out now
+		if (posX == d->mRect.x() || posY == d->mRect.y()) {
+			// We can't figure the handle yet
+			return;
+		}
+		if (posX < d->mRect.x()) {
+			d->mMovingHandle = CH_Left;
+		} else {
+			d->mMovingHandle = CH_Right;
+		}
+
+		if (posY < d->mRect.y()) {
+			d->mMovingHandle = CropHandle(d->mMovingHandle | CH_Top);
+		} else {
+			d->mMovingHandle = CropHandle(d->mMovingHandle | CH_Bottom);
+		}
+
+		// Now that we have d->mMovingHandle, we can set the matching cursor shape
+		d->updateCursor(event);
+	}
+
+	if (d->mMovingHandle == CH_None) {
+		return;
+	}
+
 	if (d->mMovingHandle & CH_Top) {
 		d->mRect.setTop( qMin(posY, d->mRect.bottom()) );
 	} else if (d->mMovingHandle & CH_Bottom) {

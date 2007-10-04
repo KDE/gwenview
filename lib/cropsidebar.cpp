@@ -52,11 +52,6 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 		widthSpinBox->setMaximum(size.width());
 		topSpinBox->setMaximum(size.height());
 		heightSpinBox->setMaximum(size.height());
-
-		leftSpinBox->setValue(size.width() / 3);
-		widthSpinBox->setValue(size.width() / 3);
-		topSpinBox->setValue(size.height() / 3);
-		heightSpinBox->setValue(size.height() / 3);
 	}
 };
 
