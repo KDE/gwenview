@@ -44,6 +44,20 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 	AbstractImageViewTool* mPreviousTool;
 	QPointer<CropTool> mCropTool;
 	bool mUpdatingFromCropTool;
+
+
+	void initWidgets() {
+		QSize size = mDocument->image().size();
+		leftSpinBox->setMaximum(size.width());
+		widthSpinBox->setMaximum(size.width());
+		topSpinBox->setMaximum(size.height());
+		heightSpinBox->setMaximum(size.height());
+
+		leftSpinBox->setValue(size.width() / 3);
+		widthSpinBox->setValue(size.width() / 3);
+		topSpinBox->setValue(size.height() / 3);
+		heightSpinBox->setValue(size.height() / 3);
+	}
 };
 
 
@@ -82,6 +96,10 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	
 	connect(d->buttonBox, SIGNAL(rejected()),
 		SIGNAL(done()) );
+
+	// Don't do this before signals are connected, otherwise the tool won't get
+	// initialized
+	d->initWidgets();
 }
 
 
@@ -103,19 +121,6 @@ QRect CropSideBar::cropRect() const {
 		d->heightSpinBox->value()
 		);
 	return rect;
-}
-
-
-void CropSideBar::setImageSize(const QSize& size) {
-	d->leftSpinBox->setMaximum(size.width());
-	d->widthSpinBox->setMaximum(size.width());
-	d->topSpinBox->setMaximum(size.height());
-	d->heightSpinBox->setMaximum(size.height());
-
-	d->leftSpinBox->setValue(size.width() / 3);
-	d->widthSpinBox->setValue(size.width() / 3);
-	d->topSpinBox->setValue(size.height() / 3);
-	d->heightSpinBox->setValue(size.height() / 3);
 }
 
 

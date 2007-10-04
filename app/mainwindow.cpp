@@ -995,7 +995,6 @@ void MainWindow::crop() {
 	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
 	Q_ASSERT(imageViewPart);
 	CropSideBar* cropSideBar = new CropSideBar(this, imageViewPart->imageView(), doc);
-	cropSideBar->setImageSize(doc->image().size());
 	connect(cropSideBar, SIGNAL(done()), SLOT(hideTemporarySideBar()) );
 
 	d->showTemporarySideBar(cropSideBar);

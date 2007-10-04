@@ -43,7 +43,6 @@ public:
 	~CropSideBar();
 
 	QRect cropRect() const;
-	void setImageSize(const QSize&);
 
 Q_SIGNALS:
 	void done();
