@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>CropDialog</class>
- <widget class="QWidget" name="CropDialog" >
+ <class>CropSideBar</class>
+ <widget class="QWidget" name="CropSideBar" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -8,9 +8,6 @@
     <width>248</width>
     <height>189</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>Crop</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

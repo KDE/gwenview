@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct CropDialogPrivate : public Ui_CropDialog {
+struct CropSideBarPrivate : public Ui_CropSideBar {
 	QWidget* mWidget;
 	AbstractImageViewTool* mPreviousTool;
 	QPointer<CropTool> mCropTool;
@@ -45,9 +45,9 @@ struct CropDialogPrivate : public Ui_CropDialog {
 };
 
 
-CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
+CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView)
 : QWidget(parent)
-, d(new CropDialogPrivate) {
+, d(new CropSideBarPrivate) {
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = new CropTool(imageView);
 	d->mPreviousTool = imageView->currentTool();
@@ -82,7 +82,7 @@ CropDialog::CropDialog(QWidget* parent, ImageView* imageView)
 }
 
 
-CropDialog::~CropDialog() {
+CropSideBar::~CropSideBar() {
 	// The crop tool is owned by the image view, so it may already have been
 	// deleted, for example if we quit while the dialog is still opened.
 	if (d->mCropTool) {
@@ -92,7 +92,7 @@ CropDialog::~CropDialog() {
 }
 
 
-QRect CropDialog::cropRect() const {
+QRect CropSideBar::cropRect() const {
 	QRect rect(
 		d->leftSpinBox->value(),
 		d->topSpinBox->value(),
@@ -103,7 +103,7 @@ QRect CropDialog::cropRect() const {
 }
 
 
-void CropDialog::setImageSize(const QSize& size) {
+void CropSideBar::setImageSize(const QSize& size) {
 	d->leftSpinBox->setMaximum(size.width());
 	d->widthSpinBox->setMaximum(size.width());
 	d->topSpinBox->setMaximum(size.height());
@@ -116,7 +116,7 @@ void CropDialog::setImageSize(const QSize& size) {
 }
 
 
-void CropDialog::setCropRect(const QRect& rect) {
+void CropSideBar::setCropRect(const QRect& rect) {
 	d->mUpdatingFromCropTool = true;
 	d->leftSpinBox->setValue(rect.left());
 	d->topSpinBox->setValue(rect.top());
@@ -126,7 +126,7 @@ void CropDialog::setCropRect(const QRect& rect) {
 }
 
 
-void CropDialog::updateCropToolRect() {
+void CropSideBar::updateCropToolRect() {
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
@@ -134,12 +134,12 @@ void CropDialog::updateCropToolRect() {
 }
 
 
-void CropDialog::slotAccepted() {
+void CropSideBar::slotAccepted() {
 	emit finished(QDialog::Accepted);
 }
 
 
-void CropDialog::slotRejected() {
+void CropSideBar::slotRejected() {
 	emit finished(QDialog::Rejected);
 }
 } // namespace

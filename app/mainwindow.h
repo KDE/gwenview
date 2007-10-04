@@ -108,7 +108,7 @@ private Q_SLOTS:
 	void flip();
 	void resizeImage();
 	void crop();
-	void slotCropDialogFinished(int result);
+	void slotCropSideBarFinished(int result);
 
 	void generateThumbnailForUrl(const KUrl&);
 	void showConfigDialog();

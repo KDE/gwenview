@@ -161,7 +161,7 @@ struct MainWindow::Private {
 
 	KUrl mUrlToSelect;
 
-	CropDialog* mCropDialog;
+	CropSideBar* mCropSideBar;
 
 	QString mCaption;
 
@@ -1004,22 +1004,22 @@ void MainWindow::crop() {
 	doc->waitUntilLoaded();
 	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
 	Q_ASSERT(imageViewPart);
-	d->mCropDialog = new CropDialog(this, imageViewPart->imageView());
-	d->mCropDialog->setImageSize(doc->image().size());
-	connect(d->mCropDialog, SIGNAL(finished(int)),
-		SLOT(slotCropDialogFinished(int)) );
+	d->mCropSideBar = new CropSideBar(this, imageViewPart->imageView());
+	d->mCropSideBar->setImageSize(doc->image().size());
+	connect(d->mCropSideBar, SIGNAL(finished(int)),
+		SLOT(slotCropSideBarFinished(int)) );
 
-	d->showTemporarySideBar(d->mCropDialog);
+	d->showTemporarySideBar(d->mCropSideBar);
 }
 
 
-void MainWindow::slotCropDialogFinished(int result) {
+void MainWindow::slotCropSideBarFinished(int result) {
 	if (result == QDialog::Accepted) {
-		CropImageOperation op(d->mCropDialog->cropRect());
+		CropImageOperation op(d->mCropSideBar->cropRect());
 		d->applyImageOperation(&op);
 	}
-	d->mCropDialog->deleteLater();
-	d->mCropDialog = 0;
+	d->mCropSideBar->deleteLater();
+	d->mCropSideBar = 0;
 	d->hideTemporarySideBar();
 }
 

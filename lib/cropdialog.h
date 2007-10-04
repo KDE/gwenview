@@ -34,12 +34,12 @@ namespace Gwenview {
 
 class ImageView;
 
-class CropDialogPrivate;
-class GWENVIEWLIB_EXPORT CropDialog : public QWidget {
+class CropSideBarPrivate;
+class GWENVIEWLIB_EXPORT CropSideBar : public QWidget {
 	Q_OBJECT
 public:
-	CropDialog(QWidget* parent, ImageView*);
-	~CropDialog();
+	CropSideBar(QWidget* parent, ImageView*);
+	~CropSideBar();
 
 	QRect cropRect() const;
 	void setImageSize(const QSize&);
@@ -55,7 +55,7 @@ private Q_SLOTS:
 	void slotRejected();
 
 private:
-	CropDialogPrivate* const d;
+	CropSideBarPrivate* const d;
 };
 
 
