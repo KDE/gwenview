@@ -132,6 +132,7 @@ struct MainWindow::Private {
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
 	QStackedWidget* mSideBarContainer;
+	bool mSideBarWasVisibleBeforeTemporarySideBar;
 	FullScreenBar* mFullScreenBar;
 	SaveBar* mSaveBar;
 	SlideShow* mSlideShow;
@@ -569,6 +570,7 @@ struct MainWindow::Private {
 
 
 	void showTemporarySideBar(QWidget* sideBar) {
+		mSideBarWasVisibleBeforeTemporarySideBar = mSideBarContainer->isVisible();
 		// Move the sideBar inside a widget so that we can add a stretch below
 		// it.
 		QWidget* widget = new QWidget(mSideBarContainer);
@@ -1174,6 +1176,10 @@ void MainWindow::hideTemporarySideBar() {
 	QWidget* temporarySideBar = d->mSideBarContainer->currentWidget();
 	Q_ASSERT(temporarySideBar != d->mSideBar);
 	temporarySideBar->deleteLater();
+
+	if (!d->mSideBarWasVisibleBeforeTemporarySideBar) {
+		d->mSideBarContainer->hide();
+	}
 	d->mSideBarContainer->setCurrentWidget(d->mSideBar);
 }
 
