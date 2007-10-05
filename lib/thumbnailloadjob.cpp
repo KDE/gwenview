@@ -592,7 +592,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		}
 	}
 	if( mOriginalTime == 0 ) { // KIO must be used
-		KIO::Job* job = KIO::stat(mCurrentUrl,false);
+		KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
 		job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		LOG( "KIO::stat orig" << mCurrentUrl.url() );
 		addSubjob(job);
@@ -734,7 +734,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 
 			KUrl url;
 			url.setPath(mTempPath);
-			KIO::Job* job=KIO::file_copy(mCurrentUrl, url,-1,true,false,false);
+			KIO::Job* job=KIO::file_copy(mCurrentUrl, url,-1, KIO::Overwrite | KIO::HideProgressInfo);
 			job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 			LOG("Download remote file" << mCurrentUrl.prettyUrl() << "to" << url.pathOrUrl());
 			addSubjob(job);
