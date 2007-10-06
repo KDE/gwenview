@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 #include <klocale.h>
+#include <kurl.h>
 
 // Local
 #include "lib/document/documentfactory.h"

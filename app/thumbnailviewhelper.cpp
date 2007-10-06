@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kdebug.h>
 #include <kpropertiesdialog.h>
 
 // Local

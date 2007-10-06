@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kdebug.h>
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
