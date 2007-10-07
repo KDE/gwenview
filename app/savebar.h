@@ -42,6 +42,8 @@ public:
 
 	void setCurrentUrl(const KUrl&);
 
+	bool saveAll();
+
 Q_SIGNALS:
 	void requestSave(const KUrl&);
 	void goToUrl(const KUrl&);

@@ -1057,15 +1057,23 @@ bool MainWindow::queryClose() {
 		return true;
 	}
 
-	int answer = KMessageBox::warningContinueCancel( this,
+	KGuiItem yes(i18n("Save All Changes"));
+	KGuiItem no(i18n("Discard Changes"));
+	int answer = KMessageBox::warningYesNoCancel(
+		this,
 		i18np("One image has been modified.", "%1 images have been modified.", list.size())
-		+ "\n" + i18n("If you quit now, your changes will be lost."),
-		QString(),
-		KGuiItem(i18n("Discard Changes")));
+			+ "\n" + i18n("If you quit now, your changes will be lost."),
+		QString() /* caption */,
+		yes,
+		no);
 
 	switch (answer) {
-	case KMessageBox::Continue:
+	case KMessageBox::Yes:
+		return d->mSaveBar->saveAll();
+
+	case KMessageBox::No:
 		return true;
+
 	default: // cancel
 		return false;
 	}
