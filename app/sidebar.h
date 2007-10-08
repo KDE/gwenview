@@ -41,6 +41,9 @@ public:
 	void addAction(QAction*);
 	void clear();
 
+protected:
+	virtual void paintEvent(QPaintEvent*);
+
 private:
 	SideBarGroup(QWidget*, const QString& title);
 	SideBarGroupPrivate* const d;

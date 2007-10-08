@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QLabel>
+#include <QPainter>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -32,7 +33,6 @@ namespace Gwenview {
 
 
 struct SideBarGroupPrivate {
-	QFrame* mClosedContainer;
 	QFrame* mContainer;
 	ExpandButton* mTitleButton;
 };
@@ -42,8 +42,6 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 : QFrame(parent)
 , d(new SideBarGroupPrivate) {
 	d->mContainer = 0;
-	new QVBoxLayout(this);
-
 	d->mTitleButton = new ExpandButton(this);
 	d->mTitleButton->setChecked(true);
 	d->mTitleButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -53,15 +51,10 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 	d->mTitleButton->setFont(font);
 	d->mTitleButton->setText(title);
 
-	layout()->setMargin(0);
-	layout()->setSpacing(0);
-	layout()->addWidget(d->mTitleButton);
-
-	d->mClosedContainer = new QFrame(this);
-	d->mClosedContainer->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-	d->mClosedContainer->hide();
-	d->mClosedContainer->setFixedHeight(d->mClosedContainer->frameWidth() * 2);
-	layout()->addWidget(d->mClosedContainer);
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+	layout->addWidget(d->mTitleButton);
 
 	clear();
 }
@@ -69,6 +62,18 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 
 SideBarGroup::~SideBarGroup() {
 	delete d;
+}
+
+
+void SideBarGroup::paintEvent(QPaintEvent* event) {
+	QFrame::paintEvent(event);
+	if (y() != 0) {
+		// Draw a separator, but only if we are not the first group
+		QPainter painter(this);
+		QPen pen(palette().mid().color());
+		painter.setPen(pen);
+		painter.drawLine(rect().topLeft(), rect().topRight());
+	}
 }
 
 
@@ -82,7 +87,6 @@ void SideBarGroup::clear() {
 	delete d->mContainer;
 
 	d->mContainer = new QFrame(this);
-	d->mContainer->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 	d->mContainer->setBackgroundRole(QPalette::Base);
 	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
 	containerLayout->setMargin(0);
@@ -92,8 +96,6 @@ void SideBarGroup::clear() {
 
 	connect(d->mTitleButton, SIGNAL(toggled(bool)),
 		d->mContainer, SLOT(setVisible(bool)) );
-	connect(d->mTitleButton, SIGNAL(toggled(bool)),
-		d->mClosedContainer, SLOT(setHidden(bool)) );
 }
 
 
