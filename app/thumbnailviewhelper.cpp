@@ -141,4 +141,14 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 }
 
 
+void ThumbnailViewHelper::saveDocument(const KUrl& url) {
+	Q_ASSERT(DocumentFactory::instance()->hasUrl(url));
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	Q_ASSERT(doc->isLoaded());
+	if (doc->isModified()) {
+		doc->save(url, doc->format());
+	}
+}
+
+
 } // namespace
