@@ -60,6 +60,12 @@ public:
 
 	QPixmap thumbnailForIndex(const QModelIndex&);
 
+	/**
+	 * Returns true if the document pointed by the index has been modified
+	 * inside Gwenview.
+	 */
+	bool isModified(const QModelIndex&) const;
+
 public Q_SLOTS:
 	/**
 	 * Sets the thumbnail size, in pixels.

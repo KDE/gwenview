@@ -82,13 +82,6 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 				if (image.width() > THUMBNAIL_SIZE || image.height() > THUMBNAIL_SIZE) {
 					image = image.scaled(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Qt::KeepAspectRatio);
 				}
-				QPainter painter(&image);
-				QPixmap pix = SmallIcon("document-save");
-				painter.drawPixmap(
-					image.width() - pix.width(),
-					image.height() - pix.height(),
-					pix);
-				painter.end();
 				thumbnailLoaded(item, QPixmap::fromImage(image));
 				continue;
 			}

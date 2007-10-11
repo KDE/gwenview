@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "archiveutils.h"
 #include "abstractthumbnailviewhelper.h"
+#include <lib/document/documentfactory.h>
 
 namespace Gwenview {
 
@@ -52,7 +53,9 @@ public:
 	PreviewItemDelegate(ThumbnailView* view)
 	: QAbstractItemDelegate(view)
 	, mView(view)
-	{}
+	{
+		mModifiedPixmap = SmallIcon("document-save", 22);
+	}
 
 
 	void clearElidedTextMap() {
@@ -152,6 +155,23 @@ public:
 			thumbnailRect.top() + (thumbnailRect.height() - thumbnail.height()) / 2,
 			thumbnail);
 
+		// Draw modified overlay
+		if (mView->isModified(index)) {
+			QRect overlayRect = QRect(
+				thumbnailRect.right() - mModifiedPixmap.width() + 1,
+				thumbnailRect.bottom() - mModifiedPixmap.height() + 1,
+				mModifiedPixmap.width(),
+				mModifiedPixmap.height());
+			const int overlayMargin = 2;
+			overlayRect.adjust(-2*overlayMargin, -2*overlayMargin, 0, 0);
+
+			painter->fillRect(overlayRect, QColor(0, 0, 0, 128));
+			painter->drawPixmap(
+				overlayRect.left() + overlayMargin,
+				overlayRect.top() + overlayMargin,
+				mModifiedPixmap);
+		}
+
 		// Draw text
 		painter->setPen(fgColor);
 
@@ -196,6 +216,7 @@ private:
 	mutable QMap<QString, QString> mElidedTextMap;
 
 	ThumbnailView* mView;
+	QPixmap mModifiedPixmap;
 };
 
 
@@ -242,6 +263,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	d->mItemDelegate->clearElidedTextMap();
 	setSpacing(SPACING);
 }
+
 
 int ThumbnailView::thumbnailSize() const {
 	return d->mThumbnailSize;
@@ -327,5 +349,21 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
 	return QPixmap();
 }
+
+
+bool ThumbnailView::isModified(const QModelIndex& index) const {
+	QVariant data = index.data(KDirModel::FileItemRole);
+	KFileItem item = qvariant_cast<KFileItem>(data);
+	QUrl url = item.url();
+	DocumentFactory* factory = DocumentFactory::instance();
+
+	if (factory->hasUrl(url)) {
+		Document::Ptr doc = factory->load(item.url());
+		return doc->isLoaded() && doc->isModified();
+	} else {
+		return false;
+	}
+}
+
 
 } // namespace
