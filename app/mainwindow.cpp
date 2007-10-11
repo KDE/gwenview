@@ -1057,7 +1057,7 @@ bool MainWindow::queryClose() {
 		return true;
 	}
 
-	KGuiItem yes(i18n("Save All Changes"));
+	KGuiItem yes(i18n("Save All Changes"), "document-save");
 	KGuiItem no(i18n("Discard Changes"));
 	int answer = KMessageBox::warningYesNoCancel(
 		this,
