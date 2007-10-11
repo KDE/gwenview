@@ -45,8 +45,6 @@ public:
 
 	virtual void showContextMenu(QWidget* parent);
 
-	virtual void saveDocument(const KUrl&);
-
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
 private:
