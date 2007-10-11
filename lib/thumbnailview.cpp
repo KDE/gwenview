@@ -48,6 +48,19 @@ const int SPACING = 11;
 const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
 
 
+static KFileItem fileItemForIndex(const QModelIndex& index) {
+	Q_ASSERT(index.isValid());
+	QVariant data = index.data(KDirModel::FileItemRole);
+	return qvariant_cast<KFileItem>(data);
+}
+
+
+static KUrl urlForIndex(const QModelIndex& index) {
+	KFileItem item = fileItemForIndex(index);
+	return item.url();
+}
+
+
 /**
  * An ItemDelegate which generates thumbnails for images. It also makes sure
  * all items are of the same size.
@@ -152,9 +165,15 @@ public:
 			// Same index, nothing to do
 			return false;
 		}
-
 		mIndexUnderCursor = index;
+
+		bool showButtonFrame = false;
 		if (mIndexUnderCursor.isValid()) {
+			KFileItem item = fileItemForIndex(mIndexUnderCursor);
+			showButtonFrame = !ArchiveUtils::fileItemIsDirOrArchive(item);
+		}
+
+		if (showButtonFrame) {
 			QRect rect = mView->visualRect(mIndexUnderCursor);
 			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
 			mButtonFrame->show();
@@ -444,14 +463,6 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
 	return QPixmap();
-}
-
-
-static KUrl urlForIndex(const QModelIndex& index) {
-	Q_ASSERT(index.isValid());
-	QVariant data = index.data(KDirModel::FileItemRole);
-	KFileItem item = qvariant_cast<KFileItem>(data);
-	return item.url();
 }
 
 
