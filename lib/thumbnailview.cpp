@@ -19,14 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "thumbnailview.moc"
 
+#include <QHBoxLayout>
+#include <QHelpEvent>
+#include <QPainter>
+#include <QPainterPath>
 #include <QTimer>
-
-#include <QtGui/QHelpEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPainterPath>
-#include <QtGui/QToolTip>
+#include <QToolButton>
+#include <QToolTip>
 
 // KDE
+#include <kdebug.h>
 #include <kdirmodel.h>
 
 // Local
@@ -38,6 +40,9 @@ namespace Gwenview {
 
 /** Space between the item outer rect and the content */
 const int ITEM_MARGIN = 5;
+
+/** Border around gadget icons */
+const int GADGET_MARGIN = 2;
 
 const int SPACING = 11;
 
@@ -54,7 +59,60 @@ public:
 	: QAbstractItemDelegate(view)
 	, mView(view)
 	{
-		mModifiedPixmap = SmallIcon("document-save", 22);
+		mModifiedPixmap = SmallIcon("document-save");
+
+		mButtonFrame = new QFrame(mView->viewport());
+		mButtonFrame->setStyleSheet(
+			"QFrame {"
+			"	background-color:"
+			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+			"		stop:0 #444, stop: 0.6 black, stop:1 black);"
+			"	border: 1px solid #ccc;"
+			"	padding: 2px;"
+			"	border-radius: 4px;"
+			"}"
+
+			"QToolButton {"
+			"	padding: 2px;"
+			"	border-radius: 2px;"
+			"}"
+
+			"QToolButton:hover {"
+			"	border: 1px solid #aaa;"
+			"}"
+
+			"QToolButton:pressed {"
+			"	background-color:"
+			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+			"		stop:0 #222, stop: 0.6 black, stop:1 black);"
+			"	border: 1px solid #444;"
+			"}"
+			);
+		mButtonFrame->setAutoFillBackground(true);
+		mButtonFrame->setBackgroundRole(QPalette::Button);
+		mButtonFrame->hide();
+
+		mSaveButton = new QToolButton(mButtonFrame);
+		mSaveButton->setIconSize(mModifiedPixmap.size());
+		mSaveButton->setIcon(mModifiedPixmap);
+		mSaveButton->setAutoRaise(true);
+
+		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
+		rotateLeftButton->setIconSize(mModifiedPixmap.size());
+		rotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
+		rotateLeftButton->setAutoRaise(true);
+
+		QToolButton* rotateRightButton = new QToolButton(mButtonFrame);
+		rotateRightButton->setIconSize(mModifiedPixmap.size());
+		rotateRightButton->setIcon(SmallIcon("object-rotate-right"));
+		rotateRightButton->setAutoRaise(true);
+
+		QHBoxLayout* layout = new QHBoxLayout(mButtonFrame);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(mSaveButton);
+		layout->addWidget(rotateLeftButton);
+		layout->addWidget(rotateRightButton);
 	}
 
 
@@ -74,6 +132,23 @@ public:
 			QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
 			showToolTip(view, helpEvent);
 			return true;
+
+		} else if (event->type() == QEvent::HoverMove) {
+			QHoverEvent* hoverEvent = static_cast<QHoverEvent*>(event);
+			return hoverEventFilter(hoverEvent);
+		}
+		return false;
+	}
+
+
+	bool hoverEventFilter(QHoverEvent* event) {
+		QModelIndex index = mView->indexAt(event->pos());
+		if (index.isValid()) {
+			QRect rect = mView->visualRect(index);
+			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
+			mButtonFrame->show();
+		} else {
+			mButtonFrame->hide();
 		}
 		return false;
 	}
@@ -155,20 +230,17 @@ public:
 			thumbnailRect.top() + (thumbnailRect.height() - thumbnail.height()) / 2,
 			thumbnail);
 
-		// Draw modified overlay
+		// Draw modified indicator
 		if (mView->isModified(index)) {
-			QRect overlayRect = QRect(
-				thumbnailRect.right() - mModifiedPixmap.width() + 1,
-				thumbnailRect.bottom() - mModifiedPixmap.height() + 1,
-				mModifiedPixmap.width(),
-				mModifiedPixmap.height());
-			const int overlayMargin = 2;
-			overlayRect.adjust(-2*overlayMargin, -2*overlayMargin, 0, 0);
+			QRect saveRect(
+				rect.x() + GADGET_MARGIN,
+				rect.y() + GADGET_MARGIN,
+				mSaveButton->sizeHint().width(),
+				mSaveButton->sizeHint().height());
 
-			painter->fillRect(overlayRect, QColor(0, 0, 0, 128));
 			painter->drawPixmap(
-				overlayRect.left() + overlayMargin,
-				overlayRect.top() + overlayMargin,
+				saveRect.x() + (saveRect.width() - mModifiedPixmap.width()) / 2,
+				saveRect.y() + (saveRect.height() - mModifiedPixmap.height()) / 2,
 				mModifiedPixmap);
 		}
 
@@ -217,6 +289,8 @@ private:
 
 	ThumbnailView* mView;
 	QPixmap mModifiedPixmap;
+	QToolButton* mSaveButton;
+	QFrame* mButtonFrame;
 };
 
 
@@ -240,6 +314,11 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	d->mItemDelegate = new PreviewItemDelegate(this);
 	setItemDelegate(d->mItemDelegate);
 	viewport()->installEventFilter(d->mItemDelegate);
+
+	viewport()->setMouseTracking(true);
+	// Set this attribute, otherwise the item delegate won't get the
+	// State_MouseOver state
+	viewport()->setAttribute(Qt::WA_Hover);
 
 	setVerticalScrollMode(ScrollPerPixel);
 	setHorizontalScrollMode(ScrollPerPixel);
