@@ -96,16 +96,22 @@ public:
 		mSaveButton->setIconSize(mModifiedPixmap.size());
 		mSaveButton->setIcon(mModifiedPixmap);
 		mSaveButton->setAutoRaise(true);
+		connect(mSaveButton, SIGNAL(clicked()),
+			mView, SLOT(slotSaveClicked()) );
 
 		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
 		rotateLeftButton->setIconSize(mModifiedPixmap.size());
 		rotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
 		rotateLeftButton->setAutoRaise(true);
+		connect(rotateLeftButton, SIGNAL(clicked()),
+			mView, SLOT(slotRotateLeftClicked()) );
 
 		QToolButton* rotateRightButton = new QToolButton(mButtonFrame);
 		rotateRightButton->setIconSize(mModifiedPixmap.size());
 		rotateRightButton->setIcon(SmallIcon("object-rotate-right"));
 		rotateRightButton->setAutoRaise(true);
+		connect(rotateRightButton, SIGNAL(clicked()),
+			mView, SLOT(slotRotateRightClicked()) );
 
 		QHBoxLayout* layout = new QHBoxLayout(mButtonFrame);
 		layout->setMargin(0);
@@ -142,9 +148,9 @@ public:
 
 
 	bool hoverEventFilter(QHoverEvent* event) {
-		QModelIndex index = mView->indexAt(event->pos());
-		if (index.isValid()) {
-			QRect rect = mView->visualRect(index);
+		mIndexUnderCursor = mView->indexAt(event->pos());
+		if (mIndexUnderCursor.isValid()) {
+			QRect rect = mView->visualRect(mIndexUnderCursor);
 			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
 			mButtonFrame->show();
 		} else {
@@ -254,6 +260,11 @@ public:
 	}
 
 
+	QModelIndex indexUnderCursor() const {
+		return mIndexUnderCursor;
+	}
+
+
 private:
 	/**
 	 * Show a tooltip only if the item has been elided.
@@ -291,6 +302,7 @@ private:
 	QPixmap mModifiedPixmap;
 	QToolButton* mSaveButton;
 	QFrame* mButtonFrame;
+	QModelIndex mIndexUnderCursor;
 };
 
 
@@ -430,6 +442,14 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 }
 
 
+static KUrl urlForIndex(const QModelIndex& index) {
+	Q_ASSERT(index.isValid());
+	QVariant data = index.data(KDirModel::FileItemRole);
+	KFileItem item = qvariant_cast<KFileItem>(data);
+	return item.url();
+}
+
+
 bool ThumbnailView::isModified(const QModelIndex& index) const {
 	QVariant data = index.data(KDirModel::FileItemRole);
 	KFileItem item = qvariant_cast<KFileItem>(data);
@@ -442,6 +462,24 @@ bool ThumbnailView::isModified(const QModelIndex& index) const {
 	} else {
 		return false;
 	}
+}
+
+
+void ThumbnailView::slotSaveClicked() {
+	QModelIndex index = d->mItemDelegate->indexUnderCursor();
+	saveDocumentRequested(urlForIndex(index));
+}
+
+
+void ThumbnailView::slotRotateLeftClicked() {
+	QModelIndex index = d->mItemDelegate->indexUnderCursor();
+	rotateDocumentLeftRequested(urlForIndex(index));
+}
+
+
+void ThumbnailView::slotRotateRightClicked() {
+	QModelIndex index = d->mItemDelegate->indexUnderCursor();
+	rotateDocumentRightRequested(urlForIndex(index));
 }
 
 

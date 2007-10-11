@@ -215,6 +215,13 @@ struct MainWindow::Private {
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
+		connect(mThumbnailView, SIGNAL(saveDocumentRequested(const KUrl&)),
+			mWindow, SLOT(save(const KUrl&)) );
+		connect(mThumbnailView, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
+			mWindow, SLOT(rotateLeft(const KUrl&)) );
+		connect(mThumbnailView, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
+			mWindow, SLOT(rotateRight(const KUrl&)) );
+
 		// mUrlNavigator
 		KFilePlacesModel* places = new KFilePlacesModel(mThumbnailViewPanel);
 		mUrlNavigator = new KUrlNavigator(places, KUrl(), mThumbnailViewPanel);
@@ -300,14 +307,14 @@ struct MainWindow::Private {
 		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
 		mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
 		connect(mRotateLeftAction, SIGNAL(triggered()),
-			mWindow, SLOT(rotateLeft()) );
+			mWindow, SLOT(rotateCurrentLeft()) );
 
 		mRotateRightAction = actionCollection->addAction("rotate_right");
 		mRotateRightAction->setText(i18n("Rotate Right"));
 		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
 		mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
 		connect(mRotateRightAction, SIGNAL(triggered()),
-			mWindow, SLOT(rotateRight()) );
+			mWindow, SLOT(rotateCurrentRight()) );
 
 		mMirrorAction = actionCollection->addAction("mirror");
 		mMirrorAction->setText(i18n("Mirror"));
@@ -948,15 +955,31 @@ void MainWindow::saveAs(const KUrl& url) {
 }
 
 
-void MainWindow::rotateLeft() {
+void MainWindow::rotateCurrentLeft() {
 	TransformImageOperation op(ROT_270);
 	d->applyImageOperation(&op);
 }
 
 
-void MainWindow::rotateRight() {
+void MainWindow::rotateLeft(const KUrl& url) {
+	TransformImageOperation op(ROT_270);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	op.apply(doc);
+}
+
+
+void MainWindow::rotateCurrentRight() {
 	TransformImageOperation op(ROT_90);
 	d->applyImageOperation(&op);
+}
+
+
+void MainWindow::rotateRight(const KUrl& url) {
+	TransformImageOperation op(ROT_90);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	op.apply(doc);
 }
 
 

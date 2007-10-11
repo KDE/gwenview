@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gwenviewlib_export.h"
 
 class KFileItem;
+class KUrl;
 class QPixmap;
 
 namespace Gwenview {
@@ -66,6 +67,11 @@ public:
 	 */
 	bool isModified(const QModelIndex&) const;
 
+Q_SIGNALS:
+	void saveDocumentRequested(const KUrl&);
+	void rotateDocumentLeftRequested(const KUrl&);
+	void rotateDocumentRightRequested(const KUrl&);
+
 public Q_SLOTS:
 	/**
 	 * Sets the thumbnail size, in pixels.
@@ -78,6 +84,10 @@ protected Q_SLOTS:
 private Q_SLOTS:
 	void showContextMenu();
 	void setThumbnail(const KFileItem&, const QPixmap&);
+
+	void slotSaveClicked();
+	void slotRotateLeftClicked();
+	void slotRotateRightClicked();
 
 private:
 	ThumbnailViewPrivate * const d;

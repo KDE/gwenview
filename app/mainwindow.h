@@ -102,8 +102,10 @@ private Q_SLOTS:
 	void save(const KUrl&);
 	void saveAs(const KUrl&);
 
-	void rotateLeft();
-	void rotateRight();
+	void rotateCurrentLeft();
+	void rotateLeft(const KUrl&);
+	void rotateCurrentRight();
+	void rotateRight(const KUrl&);
 	void mirror();
 	void flip();
 	void resizeImage();
