@@ -147,7 +147,13 @@ public:
 
 
 	bool hoverEventFilter(QHoverEvent* event) {
-		mIndexUnderCursor = mView->indexAt(event->pos());
+		QModelIndex index = mView->indexAt(event->pos());
+		if (index == mIndexUnderCursor) {
+			// Same index, nothing to do
+			return false;
+		}
+
+		mIndexUnderCursor = index;
 		if (mIndexUnderCursor.isValid()) {
 			QRect rect = mView->visualRect(mIndexUnderCursor);
 			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
