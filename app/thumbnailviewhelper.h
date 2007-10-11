@@ -45,6 +45,8 @@ public:
 
 	virtual void showContextMenu(QWidget* parent);
 
+	virtual bool isDocumentModified(const KUrl& url);
+
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
 private:

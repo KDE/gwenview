@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KFileItem;
 class KFileItemList;
+class KUrl;
 class QPixmap;
 
 namespace Gwenview {
@@ -46,6 +47,8 @@ public:
 	virtual void abortThumbnailGenerationForItems(const KFileItemList& list) = 0;
 
 	virtual void showContextMenu(QWidget* parent) = 0;
+
+	virtual bool isDocumentModified(const KUrl& url) = 0;
 
 Q_SIGNALS:
 	void thumbnailLoaded(const KFileItem&, const QPixmap&);

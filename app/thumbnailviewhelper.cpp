@@ -141,4 +141,16 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 }
 
 
+bool ThumbnailViewHelper::isDocumentModified(const KUrl& url) {
+	DocumentFactory* factory = DocumentFactory::instance();
+
+	if (factory->hasUrl(url)) {
+		Document::Ptr doc = factory->load(url);
+		return doc->isLoaded() && doc->isModified();
+	} else {
+		return false;
+	}
+}
+
+
 } // namespace

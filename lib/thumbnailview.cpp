@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "archiveutils.h"
 #include "abstractthumbnailviewhelper.h"
-#include <lib/document/documentfactory.h>
 
 namespace Gwenview {
 
@@ -451,17 +450,8 @@ static KUrl urlForIndex(const QModelIndex& index) {
 
 
 bool ThumbnailView::isModified(const QModelIndex& index) const {
-	QVariant data = index.data(KDirModel::FileItemRole);
-	KFileItem item = qvariant_cast<KFileItem>(data);
-	QUrl url = item.url();
-	DocumentFactory* factory = DocumentFactory::instance();
-
-	if (factory->hasUrl(url)) {
-		Document::Ptr doc = factory->load(item.url());
-		return doc->isLoaded() && doc->isModified();
-	} else {
-		return false;
-	}
+	KUrl url = urlForIndex(index);
+	return d->mThumbnailViewHelper->isDocumentModified(url);
 }
 
 
