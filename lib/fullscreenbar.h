@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gwenviewlib_export.h"
 
 // Qt
+#include <QFrame>
 
 // KDE
-#include <ktoolbar.h>
 
 // Local
 
@@ -36,13 +36,17 @@ namespace Gwenview {
 
 
 class FullScreenBarPrivate;
-class GWENVIEWLIB_EXPORT FullScreenBar : public KToolBar {
+class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame {
 	Q_OBJECT
 public:
 	FullScreenBar(QWidget* parent);
 	~FullScreenBar();
 
 	void setActivated(bool);
+
+	void addAction(QAction*);
+	void addSeparator();
+	void addWidget(QWidget*);
 
 public Q_SLOTS:
 	void slideIn();

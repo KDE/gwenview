@@ -25,7 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QApplication>
 #include <QBitmap>
 #include <QEvent>
+#include <QHBoxLayout>
 #include <QTimeLine>
+#include <QToolButton>
 #include <QTimer>
 
 // KDE
@@ -43,6 +45,7 @@ static const int AUTO_HIDE_TIMEOUT = 3000;
 struct FullScreenBarPrivate {
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideTimer;
+	QHBoxLayout* mLayout;
 
 	void startTimeLine() {
 		if (mTimeLine->state() != QTimeLine::Running) {
@@ -60,10 +63,23 @@ struct FullScreenBarPrivate {
 
 
 FullScreenBar::FullScreenBar(QWidget* parent)
-: KToolBar(parent)
+: QFrame(parent)
 , d(new FullScreenBarPrivate) {
-	setToolButtonStyle(Qt::ToolButtonIconOnly);
-	setAutoFillBackground(true);
+	d->mLayout = new QHBoxLayout(this);
+	d->mLayout->setMargin(0);
+	d->mLayout->setSpacing(0);
+	setStyleSheet(
+		"QFrame {"
+			"background-color: black; "
+			"border: 0px solid black;"
+			"border-bottom: 1px solid #ccc;"
+			"border-right: 1px solid #ccc;"
+			"padding-bottom: 4px;"
+			"padding-right: 4px;"
+		"}"
+		"QToolButton {"
+			"background-color: black;"
+		"}");
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );
@@ -148,6 +164,26 @@ void FullScreenBar::slotTimeLineFinished() {
 	if (d->mTimeLine->direction() == QTimeLine::Forward) {
 		d->mAutoHideTimer->start();
 	}
+}
+
+
+void FullScreenBar::addAction(QAction* action) {
+	QToolButton* button = new QToolButton(this);
+	button->setAutoRaise(true);
+	button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+	d->mLayout->addWidget(button);
+	button->setIconSize(QSize(32, 32));
+	button->setDefaultAction(action);
+}
+
+
+void FullScreenBar::addSeparator() {
+	d->mLayout->addSpacing(12);
+}
+
+
+void FullScreenBar::addWidget(QWidget* widget) {
+	d->mLayout->addWidget(widget);
 }
 
 
