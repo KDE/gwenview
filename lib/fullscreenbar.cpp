@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-static const int SLIDE_DURATION = 300;
+static const int SLIDE_DURATION = 150;
 static const int AUTO_HIDE_TIMEOUT = 3000;
 
 
