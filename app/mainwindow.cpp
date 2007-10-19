@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QTimer>
 #include <QToolButton>
 #include <QScrollArea>
+#include <QShortcut>
 #include <QSplitter>
 #include <QSlider>
 #include <QStackedWidget>
@@ -285,6 +286,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
 
 		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen()), mWindow, actionCollection);
+
+		QShortcut* exitFullScreenShortcut = new QShortcut(mWindow);
+		exitFullScreenShortcut->setKey(Qt::Key_Escape);
+		connect(exitFullScreenShortcut, SIGNAL(activated()),
+			mWindow, SLOT(exitFullScreen()) );
 
 		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
 		mGoToPreviousAction->setText(i18n("Previous"));
@@ -854,6 +860,13 @@ void MainWindow::updatePreviousNextActions() {
 
 	index = d->getRelativeIndex(1);
 	d->mGoToNextAction->setEnabled(index.isValid());
+}
+
+
+void MainWindow::exitFullScreen() {
+	if (d->mFullScreenAction->isChecked()) {
+		d->mFullScreenAction->trigger();
+	}
 }
 
 

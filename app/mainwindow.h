@@ -92,6 +92,7 @@ private Q_SLOTS:
 	void goToNext();
 	void updatePreviousNextActions();
 
+	void exitFullScreen();
 	void toggleFullScreen();
 	void toggleSlideShow();
 	void updateSlideShowAction();
