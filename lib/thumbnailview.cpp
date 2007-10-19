@@ -346,6 +346,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setResizeMode(QListView::Adjust);
 	setMovement(QListView::Static);
 	setSpacing(SPACING);
+	setDragEnabled(true);
 
 	d->mItemDelegate = new PreviewItemDelegate(this);
 	setItemDelegate(d->mItemDelegate);
