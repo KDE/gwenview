@@ -59,7 +59,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
 	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
-	action->setIcon(KIcon("viewmag1"));
+	action->setIcon(KIcon("zoom-original"));
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 	setXMLFile("gvpart/gvpart.rc");
