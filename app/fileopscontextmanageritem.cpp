@@ -98,7 +98,7 @@ static bool askDeleteConfirmation( const KUrl::List & selectedUrls, Operation op
 			i18np( "Do you really want to move this item to the trash?", "Do you really want to move these %1 items to the trash?", prettyList.count()),
 			prettyList,
 			i18n( "Move to Trash" ),
-			KGuiItem( i18nc( "Verb", "&Trash" ), "edit-trash"),
+			KGuiItem( i18nc( "Verb", "&Trash" ), "user-trash"),
 			KStandardGuiItem::cancel(),
 			keyName, KMessageBox::Notify | KMessageBox::Dangerous);
 	}
@@ -235,7 +235,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 
 	d->mTrashAction = new QAction(this);
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
-	d->mTrashAction->setIcon(KIcon("edit-trash"));
+	d->mTrashAction->setIcon(KIcon("user-trash"));
 	d->mTrashAction->setShortcut(Qt::Key_Delete);
 	connect(d->mTrashAction, SIGNAL(triggered()),
 		SLOT(trash()) );
