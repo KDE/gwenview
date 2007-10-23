@@ -25,13 +25,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <memory>
 
 // Qt
+#include <QCheckBox>
 #include <QPainter>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QVBoxLayout>
 
 // KDE
+#include <klocale.h>
+#include <kdeprintdialog.h>
 
 // Local
+//#include <printoptionspage.h>
+class PrintOptionsPage : public QWidget {
+public:
+	PrintOptionsPage(QWidget* parent)
+	: QWidget(parent) {
+		mScaleToPage = new QCheckBox(this);
+		mScaleToPage->setText("Scale To Page");
+		QVBoxLayout* layout = new QVBoxLayout(this);
+		layout->addWidget(mScaleToPage);
+		setWindowTitle(i18n("Image Options"));
+	}
+
+	void saveConfig() {
+	}
+
+	bool scaleToPage() const {
+		return mScaleToPage->isChecked();
+	}
+
+private:
+	QCheckBox* mScaleToPage;
+};
 
 namespace Gwenview {
 
@@ -53,16 +79,18 @@ PrintHelper::~PrintHelper() {
 
 
 void PrintHelper::print(Document::Ptr doc) {
-	/*PrintOptionsPage* optionsPage = new PrintOptionsPage(this);
 	QPrinter printer;
-	QPrintDialog* dialog = KdePrint::createPrintDialog(&printer,
-		QList<QWidget*>() << optionsPage,
-		this);*/
-	QPrinter printer;
-	std::auto_ptr<QPrintDialog> dialog( new QPrintDialog(&printer, d->mParent) );
+	PrintOptionsPage* optionsPage = new PrintOptionsPage(d->mParent);
+
+	std::auto_ptr<QPrintDialog> dialog(
+		KdePrint::createPrintDialog(&printer,
+			QList<QWidget*>() << optionsPage,
+			d->mParent)
+		);
+	dialog->setWindowTitle(i18n("Print Image"));
 	bool wantToPrint = dialog->exec();
 
-	//optionsPage->saveSettings();
+	optionsPage->saveConfig();
 	if (!wantToPrint) {
 		return;
 	}
@@ -73,7 +101,9 @@ void PrintHelper::print(Document::Ptr doc) {
 	QPainter painter(&printer);
 	QRect rect = painter.viewport();
 	QSize size = image.size();
-	size.scale(rect.size(), Qt::KeepAspectRatio);
+	if (optionsPage->scaleToPage()) {
+		size.scale(rect.size(), Qt::KeepAspectRatio);
+	}
 	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
 	painter.setWindow(image.rect());
 	painter.drawImage(0, 0, image);
