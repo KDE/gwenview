@@ -14,6 +14,7 @@ set(gwenview_SRCS
 	fileopscontextmanageritem.cpp
 	main.cpp
 	mainwindow.cpp
+	printhelper.cpp
 	savebar.cpp
 	sidebar.cpp
 	thumbnailviewhelper.cpp

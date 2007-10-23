@@ -26,8 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 #include <QListView>
 #include <QPainter>
-#include <QPrinter>
-#include <QPrintDialog>
 #include <QTimer>
 #include <QToolButton>
 #include <QScrollArea>
@@ -67,6 +65,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileopscontextmanageritem.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
+#include "printhelper.h"
 #include "savebar.h"
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
@@ -1149,23 +1148,8 @@ void MainWindow::print() {
 	}
 
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
-
-	QPrinter printer;
-	QPrintDialog dialog(&printer, this);
-	if (!dialog.exec()) {
-		return;
-	}
-
-	doc->waitUntilLoaded();
-	QImage image = doc->image();
-
-	QPainter painter(&printer);
-	QRect rect = painter.viewport();
-	QSize size = image.size();
-	size.scale(rect.size(), Qt::KeepAspectRatio);
-	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
-	painter.setWindow(image.rect());
-	painter.drawImage(0, 0, image);
+	PrintHelper printHelper(this);
+	printHelper.print(doc);
 }
 
 
