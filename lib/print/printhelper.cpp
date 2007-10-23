@@ -82,9 +82,10 @@ PrintHelper::~PrintHelper() {
 
 
 void PrintHelper::print(Document::Ptr doc) {
+	doc->waitUntilLoaded();
 	QPrinter printer;
 
-	PrintOptionsPage* optionsPage = new PrintOptionsPage;
+	PrintOptionsPage* optionsPage = new PrintOptionsPage(doc->size());
 	optionsPage->loadConfig();
 
 	std::auto_ptr<QPrintDialog> dialog(
@@ -99,8 +100,6 @@ void PrintHelper::print(Document::Ptr doc) {
 	if (!wantToPrint) {
 		return;
 	}
-
-	doc->waitUntilLoaded();
 
 	QPainter painter(&printer);
 	QRect rect = painter.viewport();

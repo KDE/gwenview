@@ -32,6 +32,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+class SignalBlocker {
+public:
+	SignalBlocker(QObject* object) {
+		mObject = object;
+		mWasBlocked = object->blockSignals(true);
+	}
+
+	~SignalBlocker() {
+		mObject->blockSignals(mWasBlocked);
+	}
+
+private:
+	QObject* mObject;
+	bool mWasBlocked;
+};
+
+
 static inline double unitToInches(PrintOptionsPage::Unit unit) {
 	if (unit == PrintOptionsPage::Inches) {
 		return 1.;
@@ -44,17 +61,28 @@ static inline double unitToInches(PrintOptionsPage::Unit unit) {
 
 
 struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
+	QSize mImageSize;
 	QButtonGroup mScaleGroup;
 };
 
 
-PrintOptionsPage::PrintOptionsPage()
+PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 : QWidget()
 , d(new PrintOptionsPagePrivate) {
 	d->setupUi(this);
+	d->mImageSize = imageSize;
 	d->mScaleGroup.addButton(d->mNoScale, NoScale);
 	d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
 	d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
+
+	connect(d->mWidth, SIGNAL(valueChanged(double)),
+		SLOT(adjustHeightToRatio()) );
+
+	connect(d->mHeight, SIGNAL(valueChanged(double)),
+		SLOT(adjustWidthToRatio()) );
+
+	connect(d->mKeepRatio, SIGNAL(toggled(bool)),
+		SLOT(adjustHeightToRatio()) );
 }
 
 
@@ -88,7 +116,32 @@ double PrintOptionsPage::scaleHeight() const {
 }
 
 
+void PrintOptionsPage::adjustWidthToRatio() {
+	if (!d->mKeepRatio->isChecked()) {
+		return;
+	}
+	double width = d->mImageSize.width() * d->mHeight->value() / d->mImageSize.height();
+
+	SignalBlocker blocker(d->mWidth);
+	d->mWidth->setValue(width ? width : 1.);
+}
+
+
+void PrintOptionsPage::adjustHeightToRatio() {
+	if (!d->mKeepRatio->isChecked()) {
+		return;
+	}
+	double height = d->mImageSize.height() * d->mWidth->value() / d->mImageSize.width();
+
+	SignalBlocker blocker(d->mHeight);
+	d->mHeight->setValue(height ? height : 1.);
+}
+
+
 void PrintOptionsPage::loadConfig() {
+	if (d->mKeepRatio->isChecked()) {
+		adjustHeightToRatio();
+	}
 }
 
 

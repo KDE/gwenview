@@ -48,7 +48,7 @@ public:
 		Inches
 	};
 
-	PrintOptionsPage();
+	PrintOptionsPage(const QSize& imageSize);
 	~PrintOptionsPage();
 
 	ScaleMode scaleMode() const;
@@ -59,6 +59,10 @@ public:
 
 	void loadConfig();
 	void saveConfig();
+
+private Q_SLOTS:
+	void adjustWidthToRatio();
+	void adjustHeightToRatio();
 
 private:
 	PrintOptionsPagePrivate* const d;
