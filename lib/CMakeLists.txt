@@ -28,6 +28,7 @@ set(gwenviewlib_SRCS
 	imageviewpart.cpp
 	jpegcontent.cpp
 	mimetypeutils.cpp
+	print/printhelper.cpp
 	slideshow.cpp
 	scrolltool.cpp
 	sorteddirmodel.cpp

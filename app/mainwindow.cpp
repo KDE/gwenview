@@ -65,7 +65,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileopscontextmanageritem.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
-#include "printhelper.h"
 #include "savebar.h"
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
@@ -76,6 +75,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gwenviewconfig.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
+#include <lib/print/printhelper.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>

@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef PRINTHELPER_H
 #define PRINTHELPER_H
 
+#include "../gwenviewlib_export.h"
+
 // Qt
 
 // KDE
@@ -34,7 +36,7 @@ namespace Gwenview {
 
 
 class PrintHelperPrivate;
-class PrintHelper {
+class GWENVIEWLIB_EXPORT PrintHelper {
 public:
 	PrintHelper(QWidget* parent);
 	~PrintHelper();
