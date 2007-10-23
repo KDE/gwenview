@@ -67,6 +67,30 @@ struct PrintHelperPrivate {
 		}
 		return size;
 	}
+
+
+	QPoint adjustPosition(PrintOptionsPage* optionsPage, const QSize& imageSize, const QSize & viewportSize) {
+		Qt::Alignment alignment = optionsPage->alignment();
+		int posX, posY;
+
+		if (alignment & Qt::AlignLeft) {
+			posX = 0;
+		} else if (alignment & Qt::AlignHCenter) {
+			posX = (viewportSize.width() - imageSize.width()) / 2;
+		} else {
+			posX = viewportSize.width() - imageSize.width();
+		}
+
+		if (alignment & Qt::AlignTop) {
+			posY = 0;
+		} else if (alignment & Qt::AlignVCenter) {
+			posY = (viewportSize.height() - imageSize.height()) / 2;
+		} else {
+			posY = viewportSize.height() - imageSize.height();
+		}
+
+		return QPoint(posX, posY);
+	}
 };
 
 
@@ -104,7 +128,8 @@ void PrintHelper::print(Document::Ptr doc) {
 	QPainter painter(&printer);
 	QRect rect = painter.viewport();
 	QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
-	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+	QPoint pos = d->adjustPosition(optionsPage, size, rect.size());
+	painter.setViewport(pos.x(), pos.y(), size.width(), size.height());
 
 	QImage image = doc->image();
 	painter.setWindow(image.rect());

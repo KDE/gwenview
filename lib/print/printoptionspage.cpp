@@ -71,6 +71,17 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 , d(new PrintOptionsPagePrivate) {
 	d->setupUi(this);
 	d->mImageSize = imageSize;
+
+	d->mPosition->setItemData(0, int(Qt::AlignTop     | Qt::AlignLeft));
+	d->mPosition->setItemData(1, int(Qt::AlignTop     | Qt::AlignHCenter));
+	d->mPosition->setItemData(2, int(Qt::AlignTop     | Qt::AlignRight));
+	d->mPosition->setItemData(3, int(Qt::AlignVCenter | Qt::AlignLeft));
+	d->mPosition->setItemData(4, int(Qt::AlignVCenter | Qt::AlignHCenter));
+	d->mPosition->setItemData(5, int(Qt::AlignVCenter | Qt::AlignRight));
+	d->mPosition->setItemData(6, int(Qt::AlignBottom  | Qt::AlignLeft));
+	d->mPosition->setItemData(7, int(Qt::AlignBottom  | Qt::AlignHCenter));
+	d->mPosition->setItemData(8, int(Qt::AlignBottom  | Qt::AlignRight));
+
 	d->mScaleGroup.addButton(d->mNoScale, NoScale);
 	d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
 	d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
@@ -88,6 +99,12 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 
 PrintOptionsPage::~PrintOptionsPage() {
 	delete d;
+}
+
+
+Qt::Alignment PrintOptionsPage::alignment() const {
+	QVariant data = d->mPosition->itemData(d->mPosition->currentIndex());
+	return Qt::Alignment(data.toInt());
 }
 
 

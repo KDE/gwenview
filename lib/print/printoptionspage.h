@@ -51,6 +51,7 @@ public:
 	PrintOptionsPage(const QSize& imageSize);
 	~PrintOptionsPage();
 
+	Qt::Alignment alignment() const;
 	ScaleMode scaleMode() const;
 	bool enlargeSmallerImages() const;
 	Unit scaleUnit() const;
