@@ -29,6 +29,7 @@ set(gwenviewlib_SRCS
 	jpegcontent.cpp
 	mimetypeutils.cpp
 	print/printhelper.cpp
+	print/printoptionspage.cpp
 	slideshow.cpp
 	scrolltool.cpp
 	sorteddirmodel.cpp
@@ -48,6 +49,7 @@ set_source_files_properties(
 
 kde4_add_ui_files(gwenviewlib_SRCS
 	cropsidebar.ui
+	print/printoptionspage.ui
 	)
 
 # TODO: merge config files

@@ -36,34 +36,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdeprintdialog.h>
 
 // Local
-//#include <printoptionspage.h>
-class PrintOptionsPage : public QWidget {
-public:
-	PrintOptionsPage(QWidget* parent)
-	: QWidget(parent) {
-		mScaleToPage = new QCheckBox(this);
-		mScaleToPage->setText("Scale To Page");
-		QVBoxLayout* layout = new QVBoxLayout(this);
-		layout->addWidget(mScaleToPage);
-		setWindowTitle(i18n("Image Options"));
-	}
-
-	void saveConfig() {
-	}
-
-	bool scaleToPage() const {
-		return mScaleToPage->isChecked();
-	}
-
-private:
-	QCheckBox* mScaleToPage;
-};
+#include "printoptionspage.h"
 
 namespace Gwenview {
 
 
 struct PrintHelperPrivate {
 	QWidget* mParent;
+
+	QSize adjustSize(PrintOptionsPage* optionsPage, Document::Ptr doc, int printerResolution, const QSize & viewportSize) {
+		QSize size = doc->size();
+		PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
+		if (scaleMode == PrintOptionsPage::ScaleToPage) {
+			bool imageBiggerThanPaper =
+				size.width() > viewportSize.width()
+				|| size.height() > viewportSize.height();
+
+			if (imageBiggerThanPaper || optionsPage->enlargeSmallerImages()) {
+				size.scale(viewportSize, Qt::KeepAspectRatio);
+			}
+
+		} else if (scaleMode == PrintOptionsPage::ScaleToCustomSize) {
+			double wImg = optionsPage->scaleWidth();
+			double hImg = optionsPage->scaleHeight();
+			size.setWidth( int(wImg * printerResolution) );
+			size.setHeight( int(hImg * printerResolution) );
+
+		} else {
+			// No scale
+		}
+		return size;
+	}
 };
 
 
@@ -80,7 +83,9 @@ PrintHelper::~PrintHelper() {
 
 void PrintHelper::print(Document::Ptr doc) {
 	QPrinter printer;
-	PrintOptionsPage* optionsPage = new PrintOptionsPage(d->mParent);
+
+	PrintOptionsPage* optionsPage = new PrintOptionsPage;
+	optionsPage->loadConfig();
 
 	std::auto_ptr<QPrintDialog> dialog(
 		KdePrint::createPrintDialog(&printer,
@@ -96,15 +101,13 @@ void PrintHelper::print(Document::Ptr doc) {
 	}
 
 	doc->waitUntilLoaded();
-	QImage image = doc->image();
 
 	QPainter painter(&printer);
 	QRect rect = painter.viewport();
-	QSize size = image.size();
-	if (optionsPage->scaleToPage()) {
-		size.scale(rect.size(), Qt::KeepAspectRatio);
-	}
+	QSize size = d->adjustSize(optionsPage, doc, printer.resolution(), rect.size());
 	painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+
+	QImage image = doc->image();
 	painter.setWindow(image.rect());
 	painter.drawImage(0, 0, image);
 }
