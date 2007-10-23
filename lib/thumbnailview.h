@@ -20,11 +20,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef THUMBNAILVIEW_H
 #define THUMBNAILVIEW_H
 
-#include <QListView>
 #include "gwenviewlib_export.h"
 
+// Qt
+#include <QListView>
+
+// KDE
+#include <kurl.h>
+
 class KFileItem;
-class KUrl;
+class QDragEnterEvent;
+class QDragMoveEvent;
+class QDropEvent;
 class QPixmap;
 
 namespace Gwenview {
@@ -71,12 +78,20 @@ Q_SIGNALS:
 	void saveDocumentRequested(const KUrl&);
 	void rotateDocumentLeftRequested(const KUrl&);
 	void rotateDocumentRightRequested(const KUrl&);
+	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
 public Q_SLOTS:
 	/**
 	 * Sets the thumbnail size, in pixels.
 	 */
 	void setThumbnailSize(int pixel);
+
+protected:
+	virtual void dragEnterEvent(QDragEnterEvent*);
+
+	virtual void dragMoveEvent(QDragMoveEvent*);
+
+	virtual void dropEvent(QDropEvent*);
 
 protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);

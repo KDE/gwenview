@@ -448,6 +448,7 @@ struct MainWindow::Private {
 
 	void spreadCurrentDirUrl(const KUrl& url) {
 		mContextManager->setCurrentDirUrl(url);
+		mThumbnailViewHelper->setCurrentDirUrl(url);
 		mUrlNavigator->setUrl(url);
 		mGoUpAction->setEnabled(url.path() != "/");
 	}

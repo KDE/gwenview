@@ -45,9 +45,15 @@ public:
 
 	virtual void showContextMenu(QWidget* parent);
 
+	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
+
+	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
+
 	virtual bool isDocumentModified(const KUrl& url);
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
+
+	void setCurrentDirUrl(const KUrl&);
 
 private:
 	ThumbnailViewHelperPrivate* const d;

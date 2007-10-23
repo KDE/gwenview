@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "thumbnailview.moc"
 
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QHBoxLayout>
 #include <QHelpEvent>
 #include <QPainter>
@@ -344,9 +346,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 , d(new ThumbnailViewPrivate) {
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
-	setMovement(QListView::Static);
 	setSpacing(SPACING);
 	setDragEnabled(true);
+	setAcceptDrops(true);
+	setDropIndicatorShown(true);
 
 	d->mItemDelegate = new PreviewItemDelegate(this);
 	setItemDelegate(d->mItemDelegate);
@@ -488,6 +491,41 @@ void ThumbnailView::slotRotateLeftClicked() {
 void ThumbnailView::slotRotateRightClicked() {
 	QModelIndex index = d->mItemDelegate->indexUnderCursor();
 	rotateDocumentRightRequested(urlForIndex(index));
+}
+
+
+void ThumbnailView::dragEnterEvent(QDragEnterEvent* event) {
+	if (event->mimeData()->hasUrls()) {
+		event->acceptProposedAction();
+	}
+}
+
+
+void ThumbnailView::dragMoveEvent(QDragMoveEvent* event) {
+	// Necessary, otherwise we don't reach dropEvent()
+	event->acceptProposedAction();
+}
+
+
+void ThumbnailView::dropEvent(QDropEvent* event) {
+	const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+	if (urlList.isEmpty()) {
+		return;
+	}
+
+	QModelIndex destIndex = indexAt(event->pos());
+	if (destIndex.isValid()) {
+		KFileItem item = fileItemForIndex(destIndex);
+		if (item.isDir()) {
+			KUrl destUrl = item.url();
+			d->mThumbnailViewHelper->showMenuForUrlDroppedOnDir(this, urlList, destUrl);
+			return;
+		}
+	}
+
+	d->mThumbnailViewHelper->showMenuForUrlDroppedOnViewport(this, urlList);
+
+	event->acceptProposedAction();
 }
 
 
