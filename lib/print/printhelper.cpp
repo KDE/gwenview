@@ -64,6 +64,15 @@ struct PrintHelperPrivate {
 
 		} else {
 			// No scale
+			const double INCHES_PER_METER = 100. / 2.54;
+			int dpmX = doc->image().dotsPerMeterX();
+			int dpmY = doc->image().dotsPerMeterY();
+			if (dpmX > 0 && dpmY > 0) {
+				double wImg = double(size.width()) / double(dpmX) * INCHES_PER_METER;
+				double hImg = double(size.height()) / double(dpmY) * INCHES_PER_METER;
+				size.setWidth( int(wImg * printerResolution) );
+				size.setHeight( int(hImg * printerResolution) );
+			}
 		}
 		return size;
 	}
