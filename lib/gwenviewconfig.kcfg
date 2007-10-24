@@ -27,5 +27,13 @@
 			<default>#ffffff</default>
 		</entry>
 	</group>
+
+	<group name="Print">
+		<entry name="PrintPosition" type="Int">
+			<default code="true">
+				Qt::AlignHCenter | Qt::AlignVCenter
+			</default>
+		</entry>
+	</group>
 </kcfg>
 

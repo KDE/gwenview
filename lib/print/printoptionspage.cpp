@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <ui_printoptionspage.h>
+#include <gwenviewconfig.h>
 
 namespace Gwenview {
 
@@ -156,6 +157,12 @@ void PrintOptionsPage::adjustHeightToRatio() {
 
 
 void PrintOptionsPage::loadConfig() {
+	int position = GwenviewConfig::printPosition();
+	int index = d->mPosition->findData(position);
+	if (index != -1) {
+		d->mPosition->setCurrentIndex(index);
+	}
+
 	if (d->mKeepRatio->isChecked()) {
 		adjustHeightToRatio();
 	}
@@ -163,6 +170,9 @@ void PrintOptionsPage::loadConfig() {
 
 
 void PrintOptionsPage::saveConfig() {
+	QVariant data = d->mPosition->itemData(d->mPosition->currentIndex());
+	GwenviewConfig::setPrintPosition(data.toInt());
+	GwenviewConfig::self()->writeConfig();
 }
 
 
