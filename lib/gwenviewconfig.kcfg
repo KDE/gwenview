@@ -3,6 +3,7 @@
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
 	<include>lib/imageview.h</include>
+	<include>lib/print/printoptionspage.h</include>
 	<group name="SideBar">
 		<entry name="PreferredMetaInfoKeyList" type="StringList">
 		<default>General.Name,General.ImageSize,Exif.Photo.ExposureTime,Exif.Photo.Flash</default>
@@ -33,6 +34,15 @@
 			<default code="true">
 				Qt::AlignHCenter | Qt::AlignVCenter
 			</default>
+		</entry>
+
+		<entry name="PrintScaleMode" type="Enum">
+			<choices name="Gwenview::PrintOptionsPage::ScaleMode">
+				<choice name="PrintOptionsPage::NoScale"/>
+				<choice name="PrintOptionsPage::ScaleToPage"/>
+				<choice name="PrintOptionsPage::ScaleToCustomSize"/>
+			</choices>
+			<default>PrintOptionsPage::ScaleToPage</default>
 		</entry>
 	</group>
 </kcfg>

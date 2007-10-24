@@ -163,6 +163,11 @@ void PrintOptionsPage::loadConfig() {
 		d->mPosition->setCurrentIndex(index);
 	}
 
+	QAbstractButton* button = d->mScaleGroup.button(GwenviewConfig::printScaleMode());
+	if (button) {
+		button->setChecked(true);
+	}
+
 	if (d->mKeepRatio->isChecked()) {
 		adjustHeightToRatio();
 	}
@@ -172,6 +177,10 @@ void PrintOptionsPage::loadConfig() {
 void PrintOptionsPage::saveConfig() {
 	QVariant data = d->mPosition->itemData(d->mPosition->currentIndex());
 	GwenviewConfig::setPrintPosition(data.toInt());
+
+	ScaleMode scaleMode = ScaleMode( d->mScaleGroup.checkedId() );
+	GwenviewConfig::setPrintScaleMode(scaleMode);
+
 	GwenviewConfig::self()->writeConfig();
 }
 
