@@ -28,27 +28,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kconfigdialogmanager.h>
 
 // Local
-#include <ui_printoptionspage.h>
 #include <gwenviewconfig.h>
+#include <signalblocker.h>
+#include <ui_printoptionspage.h>
 
 namespace Gwenview {
-
-
-class SignalBlocker {
-public:
-	SignalBlocker(QObject* object) {
-		mObject = object;
-		mWasBlocked = object->blockSignals(true);
-	}
-
-	~SignalBlocker() {
-		mObject->blockSignals(mWasBlocked);
-	}
-
-private:
-	QObject* mObject;
-	bool mWasBlocked;
-};
 
 
 static inline double unitToInches(PrintOptionsPage::Unit unit) {
