@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QButtonGroup>
 
 // KDE
+#include <kconfigdialogmanager.h>
 
 // Local
 #include <ui_printoptionspage.h>
@@ -64,6 +65,7 @@ static inline double unitToInches(PrintOptionsPage::Unit unit) {
 struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
 	QSize mImageSize;
 	QButtonGroup mScaleGroup;
+	KConfigDialogManager* mConfigDialogManager;
 };
 
 
@@ -72,6 +74,7 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 , d(new PrintOptionsPagePrivate) {
 	d->setupUi(this);
 	d->mImageSize = imageSize;
+	d->mConfigDialogManager = new KConfigDialogManager(this, GwenviewConfig::self());
 
 	d->mPosition->setItemData(0, int(Qt::AlignTop     | Qt::AlignLeft));
 	d->mPosition->setItemData(1, int(Qt::AlignTop     | Qt::AlignHCenter));
@@ -87,13 +90,13 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 	d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
 	d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
 
-	connect(d->mWidth, SIGNAL(valueChanged(double)),
+	connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)),
 		SLOT(adjustHeightToRatio()) );
 
-	connect(d->mHeight, SIGNAL(valueChanged(double)),
+	connect(d->kcfg_PrintHeight, SIGNAL(valueChanged(double)),
 		SLOT(adjustWidthToRatio()) );
 
-	connect(d->mKeepRatio, SIGNAL(toggled(bool)),
+	connect(d->kcfg_PrintKeepRatio, SIGNAL(toggled(bool)),
 		SLOT(adjustHeightToRatio()) );
 }
 
@@ -115,44 +118,44 @@ PrintOptionsPage::ScaleMode PrintOptionsPage::scaleMode() const {
 
 
 bool PrintOptionsPage::enlargeSmallerImages() const {
-	return d->mEnlargeSmallerImages->isChecked();
+	return d->kcfg_PrintEnlargeSmallerImages->isChecked();
 }
 
 
 PrintOptionsPage::Unit PrintOptionsPage::scaleUnit() const {
-	return PrintOptionsPage::Unit(d->mUnit->currentIndex());
+	return PrintOptionsPage::Unit(d->kcfg_PrintUnit->currentIndex());
 }
 
 
 double PrintOptionsPage::scaleWidth() const {
-	return d->mWidth->value() * unitToInches(scaleUnit());
+	return d->kcfg_PrintWidth->value() * unitToInches(scaleUnit());
 }
 
 
 double PrintOptionsPage::scaleHeight() const {
-	return d->mHeight->value() * unitToInches(scaleUnit());
+	return d->kcfg_PrintHeight->value() * unitToInches(scaleUnit());
 }
 
 
 void PrintOptionsPage::adjustWidthToRatio() {
-	if (!d->mKeepRatio->isChecked()) {
+	if (!d->kcfg_PrintKeepRatio->isChecked()) {
 		return;
 	}
-	double width = d->mImageSize.width() * d->mHeight->value() / d->mImageSize.height();
+	double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() / d->mImageSize.height();
 
-	SignalBlocker blocker(d->mWidth);
-	d->mWidth->setValue(width ? width : 1.);
+	SignalBlocker blocker(d->kcfg_PrintWidth);
+	d->kcfg_PrintWidth->setValue(width ? width : 1.);
 }
 
 
 void PrintOptionsPage::adjustHeightToRatio() {
-	if (!d->mKeepRatio->isChecked()) {
+	if (!d->kcfg_PrintKeepRatio->isChecked()) {
 		return;
 	}
-	double height = d->mImageSize.height() * d->mWidth->value() / d->mImageSize.width();
+	double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
 
-	SignalBlocker blocker(d->mHeight);
-	d->mHeight->setValue(height ? height : 1.);
+	SignalBlocker blocker(d->kcfg_PrintHeight);
+	d->kcfg_PrintHeight->setValue(height ? height : 1.);
 }
 
 
@@ -168,7 +171,9 @@ void PrintOptionsPage::loadConfig() {
 		button->setChecked(true);
 	}
 
-	if (d->mKeepRatio->isChecked()) {
+	d->mConfigDialogManager->updateWidgets();
+
+	if (d->kcfg_PrintKeepRatio->isChecked()) {
 		adjustHeightToRatio();
 	}
 }
@@ -180,6 +185,8 @@ void PrintOptionsPage::saveConfig() {
 
 	ScaleMode scaleMode = ScaleMode( d->mScaleGroup.checkedId() );
 	GwenviewConfig::setPrintScaleMode(scaleMode);
+
+	d->mConfigDialogManager->updateSettings();
 
 	GwenviewConfig::self()->writeConfig();
 }

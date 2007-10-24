@@ -164,7 +164,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="mEnlargeSmallerImages" >
+         <widget class="QCheckBox" name="kcfg_PrintEnlargeSmallerImages" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -223,7 +223,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="mWidth" >
+         <widget class="QDoubleSpinBox" name="kcfg_PrintWidth" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -243,7 +243,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QDoubleSpinBox" name="mHeight" >
+         <widget class="QDoubleSpinBox" name="kcfg_PrintHeight" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -253,7 +253,7 @@
          </widget>
         </item>
         <item>
-         <widget class="KComboBox" name="mUnit" >
+         <widget class="KComboBox" name="kcfg_PrintUnit" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -278,7 +278,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="mKeepRatio" >
+         <widget class="QCheckBox" name="kcfg_PrintKeepRatio" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -346,7 +346,7 @@
   <connection>
    <sender>mScaleTo</sender>
    <signal>toggled(bool)</signal>
-   <receiver>mUnit</receiver>
+   <receiver>kcfg_PrintUnit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -362,7 +362,7 @@
   <connection>
    <sender>mScaleTo</sender>
    <signal>toggled(bool)</signal>
-   <receiver>mKeepRatio</receiver>
+   <receiver>kcfg_PrintKeepRatio</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -378,7 +378,7 @@
   <connection>
    <sender>mScaleToPage</sender>
    <signal>toggled(bool)</signal>
-   <receiver>mEnlargeSmallerImages</receiver>
+   <receiver>kcfg_PrintEnlargeSmallerImages</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -394,7 +394,7 @@
   <connection>
    <sender>mScaleTo</sender>
    <signal>toggled(bool)</signal>
-   <receiver>mWidth</receiver>
+   <receiver>kcfg_PrintWidth</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -410,7 +410,7 @@
   <connection>
    <sender>mScaleTo</sender>
    <signal>toggled(bool)</signal>
-   <receiver>mHeight</receiver>
+   <receiver>kcfg_PrintHeight</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
