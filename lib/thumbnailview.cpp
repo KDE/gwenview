@@ -47,7 +47,25 @@ const int GADGET_MARGIN = 2;
 
 const int SPACING = 11;
 
+const int ROUND_RECT_RADIUS = 10;
+
 const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
+
+
+// Copied from KFileItemDelegate
+static QPainterPath roundedRectangle(const QRectF &rect, qreal radius) {
+	QPainterPath path(QPointF(rect.left(), rect.top() + radius));
+	path.quadTo(rect.left(), rect.top(), rect.left() + radius, rect.top());         // Top left corner
+	path.lineTo(rect.right() - radius, rect.top());                                 // Top side
+	path.quadTo(rect.right(), rect.top(), rect.right(), rect.top() + radius);       // Top right corner
+	path.lineTo(rect.right(), rect.bottom() - radius);                              // Right side
+	path.quadTo(rect.right(), rect.bottom(), rect.right() - radius, rect.bottom()); // Bottom right corner
+	path.lineTo(rect.left() + radius, rect.bottom());                               // Bottom side
+	path.quadTo(rect.left(), rect.bottom(), rect.left(), rect.bottom() - radius);   // Bottom left corner
+	path.closeSubpath();
+
+	return path;
+}
 
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
@@ -236,10 +254,11 @@ public:
 			fgColor = viewport->palette().color(viewport->foregroundRole());
 			borderColor = fgColor;
 		}
-		painter->setPen(borderColor);
 
 		// Draw background
-		drawBackground(painter, option, rect, bgColor);
+		if (option.state & QStyle::State_Selected) {
+			drawBackground(painter, rect, bgColor, borderColor);
+		}
 
 		// Draw thumbnail
 		QRect thumbnailRect = QRect(
@@ -249,13 +268,11 @@ public:
 			thumbnail.height());
 
 		if (!thumbnail.hasAlphaChannel()) {
+			painter->setPen(borderColor);
 			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
 			painter->drawRect(borderRect);
 		}
-		painter->drawPixmap(
-			thumbnailRect.left() + (thumbnailRect.width() - thumbnail.width()) / 2,
-			thumbnailRect.top() + (thumbnailRect.height() - thumbnail.height()) / 2,
-			thumbnail);
+		painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnail);
 
 		// Draw modified indicator
 		if (mView->isModified(index)) {
@@ -287,13 +304,15 @@ public:
 
 
 private:
-	void drawBackground(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QColor& bgColor) const {
-		if (option.state & QStyle::State_Selected) {
-			painter->fillRect(rect, bgColor);
-			QRect borderRect = rect;
-			borderRect.adjust(0, 0, -1, -1);
-			painter->drawRect(borderRect);
-		}
+	void drawBackground(QPainter* painter, const QRect& rect, const QColor& bgColor, const QColor& borderColor) const {
+		painter->setRenderHint(QPainter::Antialiasing);
+
+		QRectF rectF = QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5);
+
+		QPainterPath path = roundedRectangle(rectF, ROUND_RECT_RADIUS);
+		painter->fillPath(path, bgColor);
+		painter->setPen(borderColor);
+		painter->drawPath(path);
 	}
 
 
