@@ -123,6 +123,7 @@ void FullScreenBar::setActivated(bool activated) {
 		qApp->installEventFilter(this);
 		// Make sure the widget is not partially visible on start
 		move(0, -150);
+		raise();
 		show();
 		d->hideCursor();
 	} else {
