@@ -184,7 +184,10 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 
 
 void InfoContextManagerItem::slotMetaDataLoaded() {
-	Q_ASSERT(d->mDocument);
+	// We might not have a document anymore if we just selected two files
+	if (!d->mDocument) {
+		return;
+	}
 	d->mImageMetaInfo.setGeneralInfo(d->mFileItem, d->mDocument->size());
 	d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
