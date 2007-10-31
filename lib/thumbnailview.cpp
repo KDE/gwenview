@@ -239,12 +239,7 @@ public:
 		painter->setPen(borderColor);
 
 		// Draw background
-		if (option.state & QStyle::State_Selected) {
-			painter->fillRect(rect, bgColor);
-			QRect borderRect = rect;
-			borderRect.adjust(0, 0, -1, -1);
-			painter->drawRect(borderRect);
-		}
+		drawBackground(painter, option, rect, bgColor);
 
 		// Draw thumbnail
 		QRect thumbnailRect = QRect(
@@ -292,6 +287,16 @@ public:
 
 
 private:
+	void drawBackground(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QColor& bgColor) const {
+		if (option.state & QStyle::State_Selected) {
+			painter->fillRect(rect, bgColor);
+			QRect borderRect = rect;
+			borderRect.adjust(0, 0, -1, -1);
+			painter->drawRect(borderRect);
+		}
+	}
+
+
 	/**
 	 * Show a tooltip only if the item has been elided.
 	 * This function places the tooltip over the item text.
