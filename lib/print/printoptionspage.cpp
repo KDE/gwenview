@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QButtonGroup>
+#include <QGridLayout>
+#include <QToolButton>
 
 // KDE
 #include <kconfigdialogmanager.h>
@@ -49,7 +51,65 @@ static inline double unitToInches(PrintOptionsPage::Unit unit) {
 struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
 	QSize mImageSize;
 	QButtonGroup mScaleGroup;
+	QButtonGroup mPositionGroup;
 	KConfigDialogManager* mConfigDialogManager;
+
+	void initPositionFrame() {
+		mPositionFrame->setAutoFillBackground(true);
+		QPalette palette = mPositionFrame->palette();
+		QColor bgColor = palette.base().color();
+		QColor gridColor = palette.mid().color();
+		QColor borderColor = palette.dark().color();
+		QColor hoverColor = palette.alternateBase().color();
+		QColor selectedColor = palette.highlight().color();
+		mPositionFrame->setStyleSheet(
+			"QFrame {"
+			"	background-color:" + gridColor.name() + ";"
+			"	border: 1px solid " + borderColor.name() + ";"
+			"}"
+			"QToolButton {"
+			"	border: none;"
+			"	background: " + bgColor.name() + ";"
+			"}"
+			"QToolButton:hover {"
+			"	background: " + hoverColor.name() + ";"
+			"	border: 1px solid " + selectedColor.name() + ";"
+			"}"
+			"QToolButton:checked {"
+			"	background-color: " + selectedColor.name() + ";"
+			"}"
+			);
+
+		QGridLayout* layout = new QGridLayout(mPositionFrame);
+		layout->setMargin(0);
+		layout->setSpacing(1);
+		for (int row = 0; row < 3; ++row) {
+			for (int col = 0; col < 3; ++col) {
+				QToolButton* button = new QToolButton(mPositionFrame);
+				button->setFixedSize(40, 40);
+				button->setCheckable(true);
+				layout->addWidget(button, row, col);
+
+				Qt::Alignment alignment;
+				if (row == 0) {
+					alignment = Qt::AlignTop;
+				} else if (row == 1) {
+					alignment = Qt::AlignVCenter;
+				} else {
+					alignment = Qt::AlignBottom;
+				}
+				if (col == 0) {
+					alignment |= Qt::AlignLeft;
+				} else if (col == 1) {
+					alignment |= Qt::AlignHCenter;
+				} else {
+					alignment |= Qt::AlignRight;
+				}
+
+				mPositionGroup.addButton(button, int(alignment));
+			}
+		}
+	}
 };
 
 
@@ -60,15 +120,7 @@ PrintOptionsPage::PrintOptionsPage(const QSize& imageSize)
 	d->mImageSize = imageSize;
 	d->mConfigDialogManager = new KConfigDialogManager(this, GwenviewConfig::self());
 
-	d->mPosition->setItemData(0, int(Qt::AlignTop     | Qt::AlignLeft));
-	d->mPosition->setItemData(1, int(Qt::AlignTop     | Qt::AlignHCenter));
-	d->mPosition->setItemData(2, int(Qt::AlignTop     | Qt::AlignRight));
-	d->mPosition->setItemData(3, int(Qt::AlignVCenter | Qt::AlignLeft));
-	d->mPosition->setItemData(4, int(Qt::AlignVCenter | Qt::AlignHCenter));
-	d->mPosition->setItemData(5, int(Qt::AlignVCenter | Qt::AlignRight));
-	d->mPosition->setItemData(6, int(Qt::AlignBottom  | Qt::AlignLeft));
-	d->mPosition->setItemData(7, int(Qt::AlignBottom  | Qt::AlignHCenter));
-	d->mPosition->setItemData(8, int(Qt::AlignBottom  | Qt::AlignRight));
+	d->initPositionFrame();
 
 	d->mScaleGroup.addButton(d->mNoScale, NoScale);
 	d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
@@ -91,8 +143,9 @@ PrintOptionsPage::~PrintOptionsPage() {
 
 
 Qt::Alignment PrintOptionsPage::alignment() const {
-	QVariant data = d->mPosition->itemData(d->mPosition->currentIndex());
-	return Qt::Alignment(data.toInt());
+	int id = d->mPositionGroup.checkedId();
+	kWarning() << "alignment=" << id;
+	return Qt::Alignment(id);
 }
 
 
@@ -144,15 +197,20 @@ void PrintOptionsPage::adjustHeightToRatio() {
 
 
 void PrintOptionsPage::loadConfig() {
-	int position = GwenviewConfig::printPosition();
-	int index = d->mPosition->findData(position);
-	if (index != -1) {
-		d->mPosition->setCurrentIndex(index);
-	}
+	QAbstractButton* button;
 
-	QAbstractButton* button = d->mScaleGroup.button(GwenviewConfig::printScaleMode());
+	button = d->mPositionGroup.button(GwenviewConfig::printPosition());
 	if (button) {
 		button->setChecked(true);
+	} else {
+		kWarning() << "Unknown button for position group";
+	}
+
+	button = d->mScaleGroup.button(GwenviewConfig::printScaleMode());
+	if (button) {
+		button->setChecked(true);
+	} else {
+		kWarning() << "Unknown button for scale group";
 	}
 
 	d->mConfigDialogManager->updateWidgets();
@@ -164,8 +222,8 @@ void PrintOptionsPage::loadConfig() {
 
 
 void PrintOptionsPage::saveConfig() {
-	QVariant data = d->mPosition->itemData(d->mPosition->currentIndex());
-	GwenviewConfig::setPrintPosition(data.toInt());
+	int position = d->mPositionGroup.checkedId();
+	GwenviewConfig::setPrintPosition(position);
 
 	ScaleMode scaleMode = ScaleMode( d->mScaleGroup.checkedId() );
 	GwenviewConfig::setPrintScaleMode(scaleMode);
