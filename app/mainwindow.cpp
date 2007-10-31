@@ -884,10 +884,10 @@ void MainWindow::toggleFullScreen() {
 		showFullScreen();
 		menuBar()->hide();
 		toolBar()->hide();
+		d->mSaveBar->setForceHide(true);
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
 		}
-		d->mSaveBar->setForceHide(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
