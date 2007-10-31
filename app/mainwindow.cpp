@@ -887,6 +887,7 @@ void MainWindow::toggleFullScreen() {
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
 		}
+		d->mSaveBar->setForceHide(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
@@ -895,6 +896,7 @@ void MainWindow::toggleFullScreen() {
 		// Back to normal
 		d->mDocumentView->setViewBackgroundColor(GwenviewConfig::viewBackgroundColor());
 		d->mSlideShow->stop();
+		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
 		showNormal();
 		menuBar()->show();

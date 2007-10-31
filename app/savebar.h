@@ -42,6 +42,12 @@ public:
 
 	void setCurrentUrl(const KUrl&);
 
+	/**
+	 * Keep save bar hidden even if there are modifications.
+	 * Useful for fullscreen mode.
+	 */
+	void setForceHide(bool);
+
 	bool saveAll();
 
 Q_SIGNALS:

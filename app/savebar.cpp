@@ -44,6 +44,7 @@ struct SaveBarPrivate {
 	QLabel* mMessage;
 	QLabel* mActions;
 	KUrl mCurrentUrl;
+	bool mForceHide;
 };
 
 
@@ -59,6 +60,8 @@ SaveBar::SaveBar(QWidget* parent)
 	d->mActions = new QLabel(this);
 	d->mActions->setAlignment(Qt::AlignRight);
 	d->mActions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	d->mForceHide = false;
+
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->addWidget(d->mMessage);
 	layout->addWidget(d->mActions);
@@ -79,7 +82,22 @@ SaveBar::~SaveBar() {
 }
 
 
+void SaveBar::setForceHide(bool value) {
+	d->mForceHide = value;
+	if (d->mForceHide) {
+		hide();
+	} else {
+		updateContent();
+	}
+}
+
+
 void SaveBar::updateContent() {
+	if (d->mForceHide) {
+		hide();
+		return;
+	}
+
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 	if (lst.size() == 0) {
 		hide();
