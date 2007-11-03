@@ -47,6 +47,7 @@ extern "C" {
 
 // Local
 #include "jpegerrormanager.h"
+#include "exiv2imageloader.h"
 
 namespace Gwenview {
 
@@ -240,13 +241,12 @@ bool JpegContent::load(const QString& path) {
 
 bool JpegContent::loadFromData(const QByteArray& data) {
 	Exiv2::Image::AutoPtr image;
-	try {
-		image = Exiv2::ImageFactory::open((unsigned char*)data.data(), data.size());
-		image->readMetadata();
-	} catch (Exiv2::Error&) {
-		kError() << "Could not load image with Exiv2\n";
-		return false;
+	Exiv2ImageLoader loader;
+	if (!loader.load(data)) {
+		kError() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
 	}
+	image = loader.popImage();
+	image->readMetadata();
 
 	return loadFromData(data, image.get());
 }

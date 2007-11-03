@@ -21,9 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "loadingthread.moc"
 
-// Exiv2
-#include <exiv2/error.hpp>
-
 // Qt
 #include <QBuffer>
 #include <QImage>
@@ -36,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 
 // Local
+#include "exiv2imageloader.h"
 #include "imageutils.h"
 #include "jpegcontent.h"
 #include "orientation.h"
@@ -136,13 +134,9 @@ struct LoadingThreadPrivate {
 
 		mFormat = reader->format();
 
-		try {
-			mExiv2Image = Exiv2::ImageFactory::open(
-				(unsigned char*)mData.data(), mData.size());
-			mExiv2Image->readMetadata();
-		} catch (std::exception& except) {
-			kWarning() << "Could not load image with Exiv2, reported error:";
-			kWarning() << except.what();
+		Exiv2ImageLoader loader;
+		if (loader.load(mData)) {
+			mExiv2Image = loader.popImage();
 		}
 
 		if (mFormat == "jpeg") {

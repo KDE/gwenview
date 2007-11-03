@@ -21,6 +21,7 @@ set(gwenviewlib_SRCS
 	cropimageoperation.cpp
 	croptool.cpp
 	expandbutton.cpp
+	exiv2imageloader.cpp
 	fullscreenbar.cpp
 	imagemetainfo.cpp
 	imagescaler.cpp
@@ -42,8 +43,7 @@ set(gwenviewlib_SRCS
 	)
 
 set_source_files_properties(
-	document/loadingthread.cpp
-	jpegcontent.cpp
+	exiv2imageloader.cpp
 	PROPERTIES
 	COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
 	)
