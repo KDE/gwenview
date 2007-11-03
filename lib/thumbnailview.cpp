@@ -359,44 +359,57 @@ private:
 
 	void drawShadow(QPainter* painter, const QRect& rect) const {
 		const int shadowStrength = 96;
-		const int shadowSize = 4;
-		const int shadowOffsetX = 0;
-		const int shadowOffsetY = 1;
-		QImage image(rect.width() + 2*shadowSize, rect.height() + 2*shadowSize, QImage::Format_ARGB32);
-		image.fill(0);
-		{
-			QPainter imgPainter(&image);
-			QColor color = QColor(0, 0, 0, shadowStrength);
-			imgPainter.fillRect(shadowSize, shadowSize, rect.width(), rect.height(), color);
+		const int shadowSize = 5;
+		const QPoint shadowOffset(0, 1);
+		const QColor transparent(0, 0, 0, 0);
 
-			for (int pos = 0; pos < shadowSize; ++pos) {
-				double delta = pos / double(shadowSize);
-				int alpha = int(shadowStrength * delta);
-				color = QColor(0, 0, 0, alpha);
-				imgPainter.setPen(color);
-				imgPainter.drawLine(shadowSize, pos, image.width() - 1 - shadowSize, pos);
-				imgPainter.drawLine(shadowSize, image.height() - 1 - pos, image.width() - 1 - shadowSize, image.height() - 1 - pos);
-				imgPainter.drawLine(pos, shadowSize, pos, image.height() - 1 - shadowSize);
-				imgPainter.drawLine(image.width() - 1 - pos, shadowSize, image.width() - 1 - pos, image.height() - 1 - shadowSize);
-			}
+		QPixmap pix(2*shadowSize + 1, 2*shadowSize+1);
+		pix.fill(transparent);
+		{
+			QPainter pixPainter(&pix);
+			QRadialGradient gradient;
+			gradient.setRadius(shadowSize);
+			gradient.setCenter(shadowSize, shadowSize);
+			gradient.setFocalPoint(shadowSize, shadowSize);
+			gradient.setColorAt(0, QColor(0, 0, 0, shadowStrength));
+			gradient.setColorAt(1, transparent);
+			pixPainter.fillRect(pix.rect(), gradient);
+
+			/*
+			pixPainter.setPen(Qt::red);
+			pixPainter.drawRect(pix.rect().adjusted(0, 0, -1, -1));
+			pixPainter.setPen(Qt::blue);
+			pixPainter.drawPoint(shadowSize, 0);
+			pixPainter.drawPoint(0, shadowSize);
+			pixPainter.drawPoint(shadowSize*2, shadowSize);
+			pixPainter.drawPoint(shadowSize, shadowSize*2);
+			*/
 		}
-		for (int posY = 0; posY < shadowSize; ++posY) {
-			for (int posX = 0; posX < shadowSize; ++posX) {
-				double dX = (shadowSize - posX) / double(shadowSize);
-				double dY = (shadowSize - posY) / double(shadowSize);
-				double delta = 1 - sqrt(dX*dX + dY*dY);
-				if (delta < 0.) {
-					continue;
-				}
-				int alpha = int(shadowStrength * delta);
-				QRgb rgb = qRgba(0, 0, 0, alpha);
-				image.setPixel(posX, posY, rgb);
-				image.setPixel(image.width() - 1 - posX, posY, rgb);
-				image.setPixel(posX, image.height() - 1 - posY, rgb);
-				image.setPixel(image.width() - 1 - posX, image.height() - 1 - posY, rgb);
-			}
-		}
-		painter->drawImage(rect.left() - shadowSize + shadowOffsetX, rect.top() - shadowSize + shadowOffsetY, image);
+
+		painter->translate(shadowOffset);
+
+		// Top left
+		painter->drawPixmap(rect.x() - shadowSize, rect.y() - shadowSize, pix, 0, 0,                           shadowSize, shadowSize);
+		// Top right
+		painter->drawPixmap(rect.right() + 1, rect.y() - shadowSize,      pix, shadowSize + 1, 0,              shadowSize, shadowSize);
+		// Bottom left
+		painter->drawPixmap(rect.x() - shadowSize, rect.bottom(),         pix, 0, shadowSize + 1,              shadowSize, shadowSize);
+		// Bottom right
+		painter->drawPixmap(rect.right() + 1, rect.bottom(),              pix, shadowSize + 1, shadowSize + 1, shadowSize, shadowSize);
+
+		QPixmap top = pix.copy(shadowSize, 0, 1, shadowSize);
+		painter->drawTiledPixmap(rect.x(), rect.y() - shadowSize, rect.width(), shadowSize, top);
+
+		QPixmap bottom = pix.copy(shadowSize, shadowSize + 1, 1, shadowSize);
+		painter->drawTiledPixmap(rect.x(), rect.bottom(), rect.width(), shadowSize, bottom);
+
+		QPixmap left = pix.copy(0, shadowSize, shadowSize, 1);
+		painter->drawTiledPixmap(rect.x() - shadowSize, rect.y(), shadowSize, rect.height() - 1, left);
+
+		QPixmap right = pix.copy(shadowSize + 1, shadowSize, shadowSize, 1);
+		painter->drawTiledPixmap(rect.right() + 1, rect.y(), shadowSize, rect.height() - 1, right);
+
+		painter->translate(-shadowOffset);
 	}
 
 
