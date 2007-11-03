@@ -19,6 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "thumbnailview.moc"
 
+// Std
+#include <math.h>
+
+// Qt
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QHBoxLayout>
@@ -79,6 +83,29 @@ static KUrl urlForIndex(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
 	return item.url();
 }
+
+
+ThumbnailView::Thumbnail::Thumbnail(const QPixmap& pixmap)
+: mPixmap(pixmap) {
+	if (mPixmap.isNull()) {
+		mOpaque = true;
+		return;
+	}
+	QImage img = mPixmap.toImage();
+	int a1 = qAlpha(img.pixel(0, 0));
+	int a2 = qAlpha(img.pixel(img.width() - 1, 0));
+	int a3 = qAlpha(img.pixel(0, img.height() - 1));
+	int a4 = qAlpha(img.pixel(img.width() - 1, img.height() - 1));
+	mOpaque = a1 + a2 + a3 + a4 == 4*255;
+}
+
+
+ThumbnailView::Thumbnail::Thumbnail() {}
+
+
+ThumbnailView::Thumbnail::Thumbnail(const ThumbnailView::Thumbnail& other)
+: mPixmap(other.mPixmap)
+, mOpaque(other.mOpaque) {}
 
 
 /**
@@ -206,9 +233,10 @@ public:
 
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 		int thumbnailSize = mView->thumbnailSize();
-		QPixmap thumbnail = mView->thumbnailForIndex(index);
-		if (thumbnail.width() > thumbnailSize || thumbnail.height() > thumbnailSize) {
-			thumbnail = thumbnail.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
+		ThumbnailView::Thumbnail thumbnail = mView->thumbnailForIndex(index);
+		QPixmap thumbnailPix = thumbnail.mPixmap;
+		if (thumbnailPix.width() > thumbnailSize || thumbnailPix.height() > thumbnailSize) {
+			thumbnailPix = thumbnailPix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
 		}
 		QRect rect = option.rect;
 
@@ -252,7 +280,13 @@ public:
 			QWidget* viewport = mView->viewport();
 			bgColor = viewport->palette().color(viewport->backgroundRole());
 			fgColor = viewport->palette().color(viewport->foregroundRole());
-			borderColor = fgColor;
+
+			if (bgColor.value() < 128) {
+				borderColor = bgColor.dark(200);
+			} else {
+				borderColor = bgColor.light(200);
+			}
+			//borderColor = fgColor;
 		}
 
 		// Draw background
@@ -261,18 +295,25 @@ public:
 		}
 
 		// Draw thumbnail
-		QRect thumbnailRect = QRect(
-			rect.left() + (rect.width() - thumbnail.width())/2,
-			rect.top() + (thumbnailSize - thumbnail.height())/2 + ITEM_MARGIN,
-			thumbnail.width(),
-			thumbnail.height());
+		if (!thumbnailPix.isNull()) {
+			QRect thumbnailRect = QRect(
+				rect.left() + (rect.width() - thumbnailPix.width())/2,
+				rect.top() + (thumbnailSize - thumbnailPix.height())/2 + ITEM_MARGIN,
+				thumbnailPix.width(),
+				thumbnailPix.height());
 
-		if (!thumbnail.hasAlphaChannel()) {
-			painter->setPen(borderColor);
-			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
-			painter->drawRect(borderRect);
+			if (!(option.state & QStyle::State_Selected) && thumbnail.mOpaque) {
+				drawShadow(painter, thumbnailRect);
+			}
+
+			if (thumbnail.mOpaque) {
+				painter->setPen(borderColor);
+				painter->setRenderHint(QPainter::Antialiasing, false);
+				QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
+				painter->drawRect(borderRect);
+			}
+			painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnailPix);
 		}
-		painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnail);
 
 		// Draw modified indicator
 		if (mView->isModified(index)) {
@@ -313,6 +354,49 @@ private:
 		painter->fillPath(path, bgColor);
 		painter->setPen(borderColor);
 		painter->drawPath(path);
+	}
+
+
+	void drawShadow(QPainter* painter, const QRect& rect) const {
+		const int shadowStrength = 96;
+		const int shadowSize = 4;
+		const int shadowOffsetX = 0;
+		const int shadowOffsetY = 1;
+		QImage image(rect.width() + 2*shadowSize, rect.height() + 2*shadowSize, QImage::Format_ARGB32);
+		image.fill(0);
+		{
+			QPainter imgPainter(&image);
+			QColor color = QColor(0, 0, 0, shadowStrength);
+			imgPainter.fillRect(shadowSize, shadowSize, rect.width(), rect.height(), color);
+
+			for (int pos = 0; pos < shadowSize; ++pos) {
+				double delta = pos / double(shadowSize);
+				int alpha = int(shadowStrength * delta);
+				color = QColor(0, 0, 0, alpha);
+				imgPainter.setPen(color);
+				imgPainter.drawLine(shadowSize, pos, image.width() - 1 - shadowSize, pos);
+				imgPainter.drawLine(shadowSize, image.height() - 1 - pos, image.width() - 1 - shadowSize, image.height() - 1 - pos);
+				imgPainter.drawLine(pos, shadowSize, pos, image.height() - 1 - shadowSize);
+				imgPainter.drawLine(image.width() - 1 - pos, shadowSize, image.width() - 1 - pos, image.height() - 1 - shadowSize);
+			}
+		}
+		for (int posY = 0; posY < shadowSize; ++posY) {
+			for (int posX = 0; posX < shadowSize; ++posX) {
+				double dX = (shadowSize - posX) / double(shadowSize);
+				double dY = (shadowSize - posY) / double(shadowSize);
+				double delta = 1 - sqrt(dX*dX + dY*dY);
+				if (delta < 0.) {
+					continue;
+				}
+				int alpha = int(shadowStrength * delta);
+				QRgb rgb = qRgba(0, 0, 0, alpha);
+				image.setPixel(posX, posY, rgb);
+				image.setPixel(image.width() - 1 - posX, posY, rgb);
+				image.setPixel(posX, image.height() - 1 - posY, rgb);
+				image.setPixel(image.width() - 1 - posX, image.height() - 1 - posY, rgb);
+			}
+		}
+		painter->drawImage(rect.left() - shadowSize + shadowOffsetX, rect.top() - shadowSize + shadowOffsetY, image);
 	}
 
 
@@ -360,7 +444,7 @@ struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
-	QMap<QUrl, QPixmap> mThumbnailForUrl;
+	QMap<QUrl, ThumbnailView::Thumbnail> mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 };
 
@@ -464,7 +548,10 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 	if (!persistentIndex.isValid()) {
 		return;
 	}
-	d->mThumbnailForUrl[url] = pixmap;
+
+	// Alpha check
+
+	d->mThumbnailForUrl[url] = Thumbnail(pixmap);
 
 	QRect rect = visualRect(persistentIndex);
 	update(rect);
@@ -472,25 +559,25 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 }
 
 
-QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
+ThumbnailView::Thumbnail ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	QVariant data = index.data(KDirModel::FileItemRole);
 	KFileItem item = qvariant_cast<KFileItem>(data);
 
 	QUrl url = item.url();
-	QMap<QUrl, QPixmap>::ConstIterator it = d->mThumbnailForUrl.find(url);
+	QMap<QUrl, Thumbnail>::ConstIterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.constEnd()) {
 		return it.value();
 	}
 
 	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		return item.pixmap(128);
+		return Thumbnail(item.pixmap(128));
 	}
 
 	KFileItemList list;
 	list << item;
 	d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
-	return QPixmap();
+	return Thumbnail(QPixmap());
 }
 
 
