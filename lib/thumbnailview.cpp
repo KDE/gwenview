@@ -55,6 +55,10 @@ const int ROUND_RECT_RADIUS = 10;
 
 const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
 
+const int SHADOW_STRENGTH = 128;
+
+const int SHADOW_SIZE = 4;
+
 
 // Copied from KFileItemDelegate
 static QPainterPath roundedRectangle(const QRectF &rect, qreal radius) {
@@ -69,6 +73,76 @@ static QPainterPath roundedRectangle(const QRectF &rect, qreal radius) {
 	path.closeSubpath();
 
 	return path;
+}
+
+
+static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius) {
+	QPixmap pix(size);
+	const QColor transparent(0, 0, 0, 0);
+	pix.fill(transparent);
+
+	QPainter painter(&pix);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+	// Fill middle
+	painter.fillRect(pix.rect().adjusted(radius, radius, -radius, -radius), color);
+
+	// Corners
+	QRadialGradient gradient;
+	gradient.setColorAt(0, color);
+	gradient.setColorAt(1, transparent);
+	gradient.setRadius(radius);
+	QPoint center;
+
+	// Top Left
+	center = QPoint(radius, radius);
+	gradient.setCenter(center);
+	gradient.setFocalPoint(center);
+	painter.fillRect(0, 0, radius, radius, gradient);
+
+	// Top right
+	center = QPoint(size.width() - radius, radius);
+	gradient.setCenter(center);
+	gradient.setFocalPoint(center);
+	painter.fillRect(center.x(), 0, radius, radius, gradient);
+
+	// Bottom left
+	center = QPoint(radius, size.height() - radius);
+	gradient.setCenter(center);
+	gradient.setFocalPoint(center);
+	painter.fillRect(0, center.y(), radius, radius, gradient);
+
+	// Bottom right
+	center = QPoint(size.width() - radius, size.height() - radius);
+	gradient.setCenter(center);
+	gradient.setFocalPoint(center);
+	painter.fillRect(center.x(), center.y(), radius, radius, gradient);
+
+	// Borders
+	QLinearGradient linearGradient;
+	linearGradient.setColorAt(0, color);
+	linearGradient.setColorAt(1, transparent);
+
+	// Top
+	linearGradient.setStart(0, radius);
+	linearGradient.setFinalStop(0, 0);
+	painter.fillRect(radius, 0, size.width() - 2*radius, radius, linearGradient);
+
+	// Bottom
+	linearGradient.setStart(0, size.height() - radius);
+	linearGradient.setFinalStop(0, size.height());
+	painter.fillRect(radius, int(linearGradient.start().y()), size.width() - 2*radius, radius, linearGradient);
+
+	// Left
+	linearGradient.setStart(radius, 0);
+	linearGradient.setFinalStop(0, 0);
+	painter.fillRect(0, radius, radius, size.height() - 2*radius, linearGradient);
+
+	// Right
+	linearGradient.setStart(size.width() - radius, 0);
+	linearGradient.setFinalStop(size.width(), 0);
+	painter.fillRect(int(linearGradient.start().x()), radius, radius, size.height() - 2*radius, linearGradient);
+	return pix;
 }
 
 
@@ -358,58 +432,18 @@ private:
 
 
 	void drawShadow(QPainter* painter, const QRect& rect) const {
-		const int shadowStrength = 96;
-		const int shadowSize = 5;
-		const QPoint shadowOffset(0, 1);
-		const QColor transparent(0, 0, 0, 0);
+		const QPoint shadowOffset(-SHADOW_SIZE, -SHADOW_SIZE + 1);
 
-		QPixmap pix(2*shadowSize + 1, 2*shadowSize+1);
-		pix.fill(transparent);
-		{
-			QPainter pixPainter(&pix);
-			QRadialGradient gradient;
-			gradient.setRadius(shadowSize);
-			gradient.setCenter(shadowSize, shadowSize);
-			gradient.setFocalPoint(shadowSize, shadowSize);
-			gradient.setColorAt(0, QColor(0, 0, 0, shadowStrength));
-			gradient.setColorAt(1, transparent);
-			pixPainter.fillRect(pix.rect(), gradient);
+		int key = rect.height() * 1000 + rect.width();
 
-			/*
-			pixPainter.setPen(Qt::red);
-			pixPainter.drawRect(pix.rect().adjusted(0, 0, -1, -1));
-			pixPainter.setPen(Qt::blue);
-			pixPainter.drawPoint(shadowSize, 0);
-			pixPainter.drawPoint(0, shadowSize);
-			pixPainter.drawPoint(shadowSize*2, shadowSize);
-			pixPainter.drawPoint(shadowSize, shadowSize*2);
-			*/
+		ShadowCache::Iterator it = mShadowCache.find(key);
+		if (it == mShadowCache.end()) {
+			QSize size = QSize(rect.width() + 2*SHADOW_SIZE, rect.height() + 2*SHADOW_SIZE);
+			QColor color(0, 0, 0, SHADOW_STRENGTH);
+			QPixmap shadow = generateFuzzyRect(size, color, SHADOW_SIZE);
+			it = mShadowCache.insert(key, shadow);
 		}
-
-		painter->translate(shadowOffset);
-
-		// Top left
-		painter->drawPixmap(rect.x() - shadowSize, rect.y() - shadowSize, pix, 0, 0,                           shadowSize, shadowSize);
-		// Top right
-		painter->drawPixmap(rect.right() + 1, rect.y() - shadowSize,      pix, shadowSize + 1, 0,              shadowSize, shadowSize);
-		// Bottom left
-		painter->drawPixmap(rect.x() - shadowSize, rect.bottom(),         pix, 0, shadowSize + 1,              shadowSize, shadowSize);
-		// Bottom right
-		painter->drawPixmap(rect.right() + 1, rect.bottom(),              pix, shadowSize + 1, shadowSize + 1, shadowSize, shadowSize);
-
-		QPixmap top = pix.copy(shadowSize, 0, 1, shadowSize);
-		painter->drawTiledPixmap(rect.x(), rect.y() - shadowSize, rect.width(), shadowSize, top);
-
-		QPixmap bottom = pix.copy(shadowSize, shadowSize + 1, 1, shadowSize);
-		painter->drawTiledPixmap(rect.x(), rect.bottom(), rect.width(), shadowSize, bottom);
-
-		QPixmap left = pix.copy(0, shadowSize, shadowSize, 1);
-		painter->drawTiledPixmap(rect.x() - shadowSize, rect.y(), shadowSize, rect.height() - 1, left);
-
-		QPixmap right = pix.copy(shadowSize + 1, shadowSize, shadowSize, 1);
-		painter->drawTiledPixmap(rect.right() + 1, rect.y(), shadowSize, rect.height() - 1, right);
-
-		painter->translate(-shadowOffset);
+		painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
 	}
 
 
@@ -444,6 +478,10 @@ private:
 	 * Maps full text to elided text.
 	 */
 	mutable QMap<QString, QString> mElidedTextMap;
+
+	// Key is height * 1000 + width
+	typedef QMap<int, QPixmap> ShadowCache;
+	mutable ShadowCache mShadowCache;
 
 	ThumbnailView* mView;
 	QPixmap mModifiedPixmap;
