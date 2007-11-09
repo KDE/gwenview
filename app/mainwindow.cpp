@@ -1237,7 +1237,10 @@ void MainWindow::preloadNextUrl() {
 	KFileItem item = d->mDirModel->itemForIndex(nextIndex);
 
 	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		DocumentFactory::instance()->load(item.url());
+		KUrl url = item.url();
+		if (url.isLocalFile()) {
+			DocumentFactory::instance()->load(url);
+		}
 	}
 }
 
