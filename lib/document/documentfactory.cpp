@@ -20,14 +20,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentfactory.moc"
 
 // Qt
+#include <QDateTime>
 #include <QMap>
 
 // KDE
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 
 namespace Gwenview {
 
-typedef QMap<KUrl, Document::Ptr> DocumentMap;
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
+static const int MAX_UNREFERENCED_IMAGES = 3;
+
+/**
+ * This internal structure holds the document and the last time it has been
+ * accessed. This access time is used to "garbage collect" the loaded
+ * documents.
+ */
+struct DocumentInfo {
+	Document::Ptr mDocument;
+	QDateTime mLastAccess;
+};
+
+/**
+ * Our collection of DocumentInfo instances. We keep them as pointers to avoid
+ * altering DocumentInfo::mDocument refcount, since we rely on it to garbage
+ * collect documents.
+ */
+typedef QMap<KUrl, DocumentInfo*> DocumentMap;
+
 struct DocumentFactoryPrivate {
 	DocumentMap mDocumentMap;
 
@@ -35,17 +64,45 @@ struct DocumentFactoryPrivate {
 	 * Removes items in mDocumentMap which are no longer referenced elsewhere
 	 */
 	void garbageCollect() {
+		// Build a map of all unreferenced images
+		typedef QMap<QDateTime, KUrl> UnreferencedImages;
+		UnreferencedImages unreferencedImages;
+
 		DocumentMap::Iterator
 			it = mDocumentMap.begin(),
 			end = mDocumentMap.end();
-
-		while (it!=end) {
-			Document::Ptr doc = it.value();
-			if (doc.count() == 1 && !doc->isModified()) {
-				it = mDocumentMap.erase(it);
-			} else {
-				++it;
+		for (;it!=end; ++it) {
+			DocumentInfo* info = it.value();
+			if (info->mDocument.count() == 1 && !info->mDocument->isModified()) {
+				unreferencedImages[info->mLastAccess] = it.key();
 			}
+		}
+
+		// Remove oldest unreferenced images. Since the map is sorted by key,
+		// the oldest one is always unreferencedImages.begin().
+		for (
+			UnreferencedImages::Iterator unreferencedIt = unreferencedImages.begin();
+			unreferencedImages.count() > MAX_UNREFERENCED_IMAGES;
+			unreferencedIt = unreferencedImages.erase(unreferencedIt))
+		{
+			KUrl url = unreferencedIt.value();
+			LOG("Collecting" << url);
+			it = mDocumentMap.find(url);
+			Q_ASSERT(it != mDocumentMap.end());
+			delete it.value();
+			mDocumentMap.erase(it);
+		}
+	}
+
+	void logDocumentMap() {
+		kDebug() << "mDocumentMap:";
+		DocumentMap::Iterator
+			it = mDocumentMap.begin(),
+			end = mDocumentMap.end();
+		for(; it!=end; ++it) {
+			kDebug() << "-" << it.key()
+				<< "refCount=" << it.value()->mDocument.count()
+				<< "lastAccess=" << it.value()->mLastAccess;
 		}
 	}
 
@@ -57,6 +114,12 @@ DocumentFactory::DocumentFactory()
 }
 
 DocumentFactory::~DocumentFactory() {
+	DocumentMap::Iterator
+		it = d->mDocumentMap.begin(),
+		end = d->mDocumentMap.end();
+	for (; it!=end; ++it) {
+		delete it.value();
+	}
 	delete d;
 }
 
@@ -66,25 +129,39 @@ DocumentFactory* DocumentFactory::instance() {
 }
 
 Document::Ptr DocumentFactory::load(const KUrl& url) {
+	DocumentInfo* info = 0;
+
 	DocumentMap::ConstIterator it = d->mDocumentMap.find(url);
-	Document::Ptr ptr;
+
 	if (it != d->mDocumentMap.end()) {
-		ptr = it.value();
+		LOG("url already loaded:" << url);
+		info = it.value();
+		info->mLastAccess = QDateTime::currentDateTime();
 	} else {
+		LOG("loading:" << url);
 		Document* doc = new Document();
 		doc->load(url);
-		ptr = Document::Ptr(doc);
-		d->mDocumentMap[url] = ptr;
+		Document::Ptr docPtr = Document::Ptr(doc);
+		info = new DocumentInfo;
+		info->mDocument = docPtr;
+		info->mLastAccess = QDateTime::currentDateTime();
+		d->mDocumentMap[url] = info;
 		connect(doc, SIGNAL(loaded(const KUrl&)),
 			SLOT(slotLoaded(const KUrl&)) );
 		connect(doc, SIGNAL(saved(const KUrl&)),
 			SLOT(slotSaved(const KUrl&)) );
 		connect(doc, SIGNAL(modified(const KUrl&)),
 			SLOT(slotModified(const KUrl&)) );
+
+		d->garbageCollect();
+	#ifdef ENABLE_LOG
+		d->logDocumentMap();
+	#endif
 	}
-	d->garbageCollect();
-	return ptr;
+	Q_ASSERT(info);
+	return info->mDocument;
 }
+
 
 QList<KUrl> DocumentFactory::modifiedDocumentList() const {
 	return d->mModifiedDocumentList;

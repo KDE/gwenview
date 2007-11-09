@@ -94,6 +94,9 @@ namespace Gwenview {
 #endif
 
 
+static const int PRELOAD_DELAY = 1000;
+
+
 static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
 		return true; // file:/somewhere/<nothing here>
@@ -794,6 +797,7 @@ void MainWindow::slotSelectionChanged() {
 	updatePreviousNextActions();
 	updateContextManager();
 	d->spreadCurrentUrl();
+	QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()) );
 }
 
 
@@ -1212,6 +1216,29 @@ void MainWindow::hideTemporarySideBar() {
 		d->mSideBarContainer->hide();
 	}
 	d->mSideBarContainer->setCurrentWidget(d->mSideBar);
+}
+
+
+void MainWindow::preloadNextUrl() {
+	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
+	if (selection.size() != 1) {
+		return;
+	}
+
+	QModelIndex index = selection.indexes()[0];
+	if (!index.isValid()) {
+		return;
+	}
+
+	QModelIndex nextIndex = d->mDirModel->sibling(index.row() + 1, index.column(), index);
+	if (!nextIndex.isValid()) {
+		return;
+	}
+	KFileItem item = d->mDirModel->itemForIndex(nextIndex);
+
+	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+		DocumentFactory::instance()->load(item.url());
+	}
 }
 
 

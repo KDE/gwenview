@@ -121,6 +121,8 @@ private Q_SLOTS:
 
 	void hideTemporarySideBar();
 
+	void preloadNextUrl();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;
