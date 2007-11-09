@@ -137,6 +137,7 @@ struct LoadingThreadPrivate {
 		Exiv2ImageLoader loader;
 		if (loader.load(mData)) {
 			mExiv2Image = loader.popImage();
+			mExiv2Image->readMetadata();
 		}
 
 		if (mFormat == "jpeg") {
