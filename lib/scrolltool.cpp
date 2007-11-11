@@ -53,6 +53,9 @@ ScrollTool::~ScrollTool() {
 
 
 void ScrollTool::mousePressEvent(QMouseEvent* event) {
+	if (imageView()->zoomToFit()) {
+		return;
+	}
 	d->mScrollStartY = event->y();
 	d->mScrollStartX = event->x();
 	d->mDragStarted = true;
