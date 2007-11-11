@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void zoomOut();
 	void setViewImageFromDocument();
 	void updateCaption();
+	void showContextMenu();
 
 private:
 	ImageView* mView;

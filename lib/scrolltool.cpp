@@ -56,6 +56,11 @@ void ScrollTool::mousePressEvent(QMouseEvent* event) {
 	if (imageView()->zoomToFit()) {
 		return;
 	}
+
+	if (event->button() != Qt::LeftButton) {
+		return;
+	}
+
 	d->mScrollStartY = event->y();
 	d->mScrollStartX = event->x();
 	d->mDragStarted = true;

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
 
@@ -48,6 +49,9 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	setWidget(mView);
 	ScrollTool* scrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(scrollTool);
+	mView->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged()), SLOT(updateCaption()) );
 
 	mZoomToFitAction = new KAction(actionCollection());
@@ -170,6 +174,24 @@ ImageView* GVPart::imageView() const {
 void GVPart::loadConfig() {
 	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+}
+
+
+inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name) {
+	QAction* action = actionCollection->action(name);
+	if (action) {
+		menu->addAction(action);
+	}
+}
+
+
+void GVPart::showContextMenu() {
+	KMenu menu(mView);
+	addActionToMenu(&menu, actionCollection(), "view_actual_size");
+	addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
+	addActionToMenu(&menu, actionCollection(), "view_zoom_in");
+	addActionToMenu(&menu, actionCollection(), "view_zoom_out");
+	menu.exec(QCursor::pos());
 }
 
 
