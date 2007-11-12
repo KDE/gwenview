@@ -47,6 +47,7 @@ public Q_SLOTS:
 protected:
 	virtual bool openFile();
 	virtual bool openUrl(const KUrl&);
+	virtual bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
 	void setZoomToFit(bool);

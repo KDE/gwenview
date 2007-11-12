@@ -19,6 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "gvpart.moc"
 
+// Qt
+#include <QMouseEvent>
+
 // KDE
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -50,6 +53,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	ScrollTool* scrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(scrollTool);
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
+	mView->viewport()->installEventFilter(this);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged()), SLOT(updateCaption()) );
@@ -192,6 +196,18 @@ void GVPart::showContextMenu() {
 	addActionToMenu(&menu, actionCollection(), "view_zoom_in");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_out");
 	menu.exec(QCursor::pos());
+}
+
+
+bool GVPart::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+		if (mouseEvent->button() == Qt::MidButton) {
+			mZoomToFitAction->trigger();
+			return true;
+		}
+	}
+	return false;
 }
 
 
