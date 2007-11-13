@@ -252,6 +252,12 @@ QPoint ImageView::imageOffset() const {
 }
 
 void ImageView::setZoom(qreal zoom) {
+	QPoint center = mapToImage(QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2));
+	setZoom(zoom, center);
+}
+
+
+void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	qreal oldZoom = d->mZoom;
 	d->mZoom = zoom;
 	d->resizeBuffer();
@@ -259,7 +265,14 @@ void ImageView::setZoom(qreal zoom) {
 		// Trigger an update to erase borders
 		d->mViewport->update();
 	}
+
 	updateScrollBars();
+
+	int hScrollValue = int(center.x() * d->mZoom) - d->mViewport->width() / 2;
+	int vScrollValue = int(center.y() * d->mZoom) - d->mViewport->height() / 2;
+	horizontalScrollBar()->setValue(hScrollValue);
+	verticalScrollBar()->setValue(vScrollValue);
+
 	startScaler();
 	emit zoomChanged();
 }
