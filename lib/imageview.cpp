@@ -334,8 +334,11 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 			dst = d->mBuffer.bits();
 			src = dst - dx * 4;
 		}
-		for (int loop=0; loop < d->mBuffer.height(); ++loop, src += delta, dst += delta) {
-			memmove(dst, src, (d->mBuffer.width() - qAbs(dx)) * 4 );
+		int moveSize = (d->mBuffer.width() - qAbs(dx)) * 4;
+		if (moveSize > 0) {
+			for (int loop=0; loop < d->mBuffer.height(); ++loop, src += delta, dst += delta) {
+				memmove(dst, src, moveSize);
+			}
 		}
 	}
 
