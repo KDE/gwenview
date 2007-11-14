@@ -133,6 +133,9 @@ struct LoadingThreadPrivate {
 		QMutexLocker locker(&mMetaDataMutex);
 
 		mFormat = reader->format();
+		if (mFormat.isEmpty()) {
+			return false;
+		}
 
 		Exiv2ImageLoader loader;
 		if (loader.load(mData)) {
