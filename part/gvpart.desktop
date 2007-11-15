@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Gwenview Image Viewer
 Name[bg]=KView Image Viewer
@@ -28,7 +27,7 @@ Name[x-test]=xxGwenview Image Viewerxx
 Name[zh_CN]=Gwenview 图像查看器
 Name[zh_TW]=Gwenview 影像檢視程式
 MimeType=image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-ico;image/x-krl;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;
-ServiceTypes=KParts/ReadOnlyPart
+X-KDE-ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=gvpart
 InitialPreference=12
 Icon=gwenview
