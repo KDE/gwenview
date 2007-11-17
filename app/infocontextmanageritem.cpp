@@ -147,6 +147,10 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
+	d->mImageMetaInfo.setFileItem(d->mFileItem);
+	d->mImageMetaInfo.setImageSize(QSize());
+	d->mImageMetaInfo.setExiv2Image(0);
+	updateOneFileInfo();
 	if (!item.isDir()) {
 		d->mDocument = DocumentFactory::instance()->load(item.url());
 		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
@@ -188,7 +192,7 @@ void InfoContextManagerItem::slotMetaDataLoaded() {
 	if (!d->mDocument) {
 		return;
 	}
-	d->mImageMetaInfo.setGeneralInfo(d->mFileItem, d->mDocument->size());
+	d->mImageMetaInfo.setImageSize(d->mDocument->size());
 	d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
 }

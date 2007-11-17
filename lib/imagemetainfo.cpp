@@ -244,12 +244,6 @@ ImageMetaInfo::~ImageMetaInfo() {
 }
 
 
-void ImageMetaInfo::setGeneralInfo(const KFileItem& item, const QSize& size) {
-	setFileItem(item);
-	setImageSize(size);
-}
-
-
 void ImageMetaInfo::setFileItem(const KFileItem& item) {
 	QString sizeString = KGlobal::locale()->formatByteSize(item.size());
 
@@ -260,11 +254,16 @@ void ImageMetaInfo::setFileItem(const KFileItem& item) {
 
 
 void ImageMetaInfo::setImageSize(const QSize& size) {
-	QString imageSize = i18n("%1x%2", size.width(), size.height());
-	double megaPixels = size.width() * size.height() / 1000000.;
-	if (megaPixels > 0.1) {
-		QString megaPixelsString = QString::number(megaPixels, 'f', 1);
-		imageSize += " " + i18n("(%1MP)", megaPixelsString);
+	QString imageSize;
+	if (size.isValid()) {
+		imageSize = i18n("%1x%2", size.width(), size.height());
+		double megaPixels = size.width() * size.height() / 1000000.;
+		if (megaPixels > 0.1) {
+			QString megaPixelsString = QString::number(megaPixels, 'f', 1);
+			imageSize += " " + i18n("(%1MP)", megaPixelsString);
+		}
+	} else {
+		imageSize = "-";
 	}
 	d->setGroupEntryValue(GeneralGroup, "General.ImageSize", imageSize);
 }
