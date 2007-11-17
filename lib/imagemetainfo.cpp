@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-enum { NoGroup = -1, GeneralGroup, ExifGroup, IptcGroup };
+enum GroupRow { NoGroup = -1, GeneralGroup, ExifGroup, IptcGroup };
 
 
 class MetaInfoGroup {
@@ -104,6 +104,24 @@ public:
 	}
 
 
+	QString setValueForKeyAt(int row, const QString& value) {
+		Q_ASSERT(row < mList.size());
+		return mList[row]->mValue = value;
+	}
+
+
+	int getKeyRow(const QString& key) const {
+		int row = 0;
+		Q_FOREACH(Entry* entry, mList) {
+			if (entry->mKey == key) {
+				return row;
+			}
+			++row;
+		}
+		return -1;
+	}
+
+
 	int size() const {
 		return mList.size();
 	}
@@ -147,6 +165,16 @@ struct ImageMetaInfoPrivate {
 	}
 
 
+	void setGroupEntryValue(GroupRow groupRow, const QString& key, const QString& value) {
+		MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
+		int entryRow = group->getKeyRow(key);
+		group->setValueForKeyAt(entryRow, value);
+		QModelIndex groupIndex = mModel->index(groupRow, 0);
+		QModelIndex entryIndex = mModel->index(entryRow, 1, groupIndex);
+		emit mModel->dataChanged(entryIndex, entryIndex);
+	}
+
+
 	QVariant displayData(const QModelIndex& index) const {
 		if (index.internalId() == NoGroup) {
 			if (index.column() > 0) {
@@ -187,6 +215,15 @@ struct ImageMetaInfoPrivate {
 		}
 		mPreferredMetaInfoKeyList = sortedList;
 	}
+
+
+	void initGeneralGroup() {
+		MetaInfoGroup* group = mMetaInfoGroupVector[GeneralGroup];
+		group->addEntry("General.Name", i18n("Name"), QString());
+		group->addEntry("General.Size", i18n("File Size"), QString());
+		group->addEntry("General.Time", i18n("File Time"), QString());
+		group->addEntry("General.ImageSize", i18n("Image Size"), QString());
+	}
 };
 
 
@@ -197,6 +234,7 @@ ImageMetaInfo::ImageMetaInfo()
 	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18n("General"));
 	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18n("Exif"));
 	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18n("Iptc"));
+	d->initGeneralGroup();
 }
 
 
@@ -207,40 +245,28 @@ ImageMetaInfo::~ImageMetaInfo() {
 
 
 void ImageMetaInfo::setGeneralInfo(const KFileItem& item, const QSize& size) {
-	MetaInfoGroup* group = d->mMetaInfoGroupVector[GeneralGroup];
-	QModelIndex parent = index(GeneralGroup, 0);
-	d->clearGroup(group, parent);
-	group->addEntry(
-		"General.Name",
-		i18n("Name"),
-		item.name()
-		);
+	setFileItem(item);
+	setImageSize(size);
+}
 
-	group->addEntry(
-		"General.Size",
-		i18n("File Size"),
-		KGlobal::locale()->formatByteSize(item.size())
-		);
 
-	group->addEntry(
-		"General.Time",
-		i18n("File Time"),
-		item.timeString()
-		);
+void ImageMetaInfo::setFileItem(const KFileItem& item) {
+	QString sizeString = KGlobal::locale()->formatByteSize(item.size());
 
+	d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
+	d->setGroupEntryValue(GeneralGroup, "General.Size", sizeString);
+	d->setGroupEntryValue(GeneralGroup, "General.Time", item.timeString());
+}
+
+
+void ImageMetaInfo::setImageSize(const QSize& size) {
 	QString imageSize = i18n("%1x%2", size.width(), size.height());
 	double megaPixels = size.width() * size.height() / 1000000.;
 	if (megaPixels > 0.1) {
 		QString megaPixelsString = QString::number(megaPixels, 'f', 1);
 		imageSize += " " + i18n("(%1MP)", megaPixelsString);
 	}
-	group->addEntry(
-		"General.ImageSize",
-		i18n("Image Size"),
-		imageSize
-		);
-
-	d->notifyGroupFilled(group, parent);
+	d->setGroupEntryValue(GeneralGroup, "General.ImageSize", imageSize);
 }
 
 
