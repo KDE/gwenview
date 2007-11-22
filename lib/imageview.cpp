@@ -127,9 +127,10 @@ struct ImageViewPrivate {
 	}
 
 	QRect mapViewportToZoomedImage(const QRect& viewportRect) {
+		QPoint offset = mView->imageOffset();
 		QRect rect = QRect(
-			viewportRect.x() + hScroll(),
-			viewportRect.y() + vScroll(),
+			viewportRect.x() + hScroll() - offset.x(),
+			viewportRect.y() + vScroll() - offset.y(),
 			viewportRect.width(),
 			viewportRect.height()
 		);
