@@ -38,7 +38,7 @@ class GWENVIEWLIB_EXPORT ImageScaler : public QObject {
 public:
 	ImageScaler(QObject* parent=0);
 	~ImageScaler();
-	void setImage(const QImage&);
+	void setImage(const QImage*);
 	void setZoom(qreal);
 	void setDestinationRegion(const QRegion&);
 	void addDestinationRegion(const QRegion&);

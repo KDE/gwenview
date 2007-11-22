@@ -37,12 +37,14 @@ namespace Gwenview {
 
 
 struct ImageViewPrivate {
+	const QImage mEmptyImage;
+
 	ImageView* mView;
 	QPixmap mBackgroundTexture;
 	QWidget* mViewport;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
-	QImage mImage;
+	const QImage* mImage;
 	qreal mZoom;
 	bool mZoomToFit;
 	QImage mBuffer;
@@ -63,9 +65,9 @@ struct ImageViewPrivate {
 	qreal computeZoomToFit() const {
 		int width = mViewport->width();
 		int height = mViewport->height();
-		qreal zoom = qreal(width) / mImage.width();
-		if ( int(mImage.height() * zoom) > height) {
-			zoom = qreal(height) / mImage.height();
+		qreal zoom = qreal(width) / mImage->width();
+		if ( int(mImage->height() * zoom) > height) {
+			zoom = qreal(height) / mImage->height();
 		}
 		return qMin(zoom, 1.0);
 	}
@@ -80,7 +82,7 @@ struct ImageViewPrivate {
 			zoom = mZoom;
 		}
 
-		size = mImage.size() * zoom;
+		size = mImage->size() * zoom;
 		size = size.boundedTo(mViewport->size());
 
 		return size;
@@ -147,6 +149,7 @@ ImageView::ImageView(QWidget* parent)
 	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
 	d->mAlphaBackgroundColor = Qt::black;
 
+	d->mImage = &d->mEmptyImage;
 	d->mView = this;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
@@ -182,8 +185,14 @@ void ImageView::setAlphaBackgroundColor(const QColor& color) {
 }
 
 
-void ImageView::setImage(const QImage& image) {
-	d->mImage = image;
+void ImageView::setImage(const QImage* image) {
+	if (image) {
+		d->mImage = image;
+	} else {
+		// This little trick makes sure d->mImage always point to a valid
+		// image, even if we were given an NULL pointer.
+		d->mImage = &d->mEmptyImage;
+	}
 	d->mBuffer = d->createBuffer();
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
@@ -191,18 +200,35 @@ void ImageView::setImage(const QImage& image) {
 		updateScrollBars();
 		startScaler();
 	}
+	d->mScaler->setDestinationRegion(QRegion());
 	d->mViewport->update();
 }
 
 
-QImage ImageView::image() const {
-	return d->mImage;
+const QImage* ImageView::image() const {
+	if (d->mImage == &d->mEmptyImage) {
+		return 0;
+	} else {
+		return d->mImage;
+	}
 }
 
 
 void ImageView::updateImageRect(const QRect& imageRect) {
+	kDebug() << "imageRect" << imageRect;
 	QRect viewportRect = mapToViewport(imageRect);
-	d->mViewport->update(viewportRect);
+	viewportRect = viewportRect.intersected(d->mViewport->rect());
+	if (viewportRect.isEmpty()) {
+		return;
+	}
+	kDebug() << "viewportRect" << viewportRect;
+
+	QRect zoomedImageRect = d->mapViewportToZoomedImage(viewportRect);
+	kDebug() << "zoomedImageRect" << zoomedImageRect;
+	kDebug() << "---";
+
+	d->mScaler->addDestinationRegion(QRegion(zoomedImageRect));
+	d->mViewport->update();
 }
 
 
@@ -227,7 +253,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 		painter.fillRect(rect, bgColor);
 	}
 
-	if (d->mImage.hasAlphaChannel()) {
+	if (d->mImage->hasAlphaChannel()) {
 		if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
 			painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
 				// This option makes the background scroll with the image, like GIMP
@@ -318,11 +344,11 @@ void ImageView::updateScrollBars() {
 	int width = d->mViewport->width();
 	int height = d->mViewport->height();
 
-	max = qMax(0, int(d->mImage.width() * d->mZoom) - width);
+	max = qMax(0, int(d->mImage->width() * d->mZoom) - width);
 	horizontalScrollBar()->setRange(0, max);
 	horizontalScrollBar()->setPageStep(width);
 
-	max = qMax(0, int(d->mImage.height() * d->mZoom) - height);
+	max = qMax(0, int(d->mImage->height() * d->mZoom) - height);
 	verticalScrollBar()->setRange(0, max);
 	verticalScrollBar()->setPageStep(height);
 }
@@ -396,6 +422,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 
 void ImageView::updateFromScaler(int left, int top, const QImage& image) {
+	kDebug() << left << top << image.size();
 	left -= d->hScroll();
 	top -= d->vScroll();
 

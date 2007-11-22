@@ -41,7 +41,7 @@ static const int MAX_SCALE_TIME = 2000;
 
 struct ImageScalerPrivate {
 	Qt::TransformationMode mTransformationMode;
-	QImage mImage;
+	const QImage* mImage;
 	qreal mZoom;
 	QRegion mRegion;
 	QTimer* mTimer;
@@ -60,7 +60,7 @@ ImageScaler::~ImageScaler() {
 	delete d;
 }
 
-void ImageScaler::setImage(const QImage& image) {
+void ImageScaler::setImage(const QImage* image) {
 	if (d->mTimer->isActive()) {
 		d->mTimer->stop();
 	}
@@ -82,7 +82,7 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 		return;
 	}
 
-	if (!d->mImage.isNull()) {
+	if (d->mImage && !d->mImage->isNull()) {
 		d->mTimer->start();
 	}
 }
@@ -129,7 +129,7 @@ void ImageScaler::doScale() {
 
 void ImageScaler::processChunk(const QRect& rect) {
 	if (qAbs(d->mZoom - 1.0) < 0.001) {
-		QImage tmp = d->mImage.copy(rect);
+		QImage tmp = d->mImage->copy(rect);
 		scaledRect(rect.left(), rect.top(), tmp);
 		return;
 	}
@@ -140,7 +140,7 @@ void ImageScaler::processChunk(const QRect& rect) {
 		rect.width() / d->mZoom,
 		rect.height() / d->mZoom);
 
-	sourceRectF = sourceRectF.intersected(d->mImage.rect());
+	sourceRectF = sourceRectF.intersected(d->mImage->rect());
 	QRect sourceRect = containingRect(sourceRectF);
 	if (sourceRect.isEmpty()) {
 		return;
@@ -154,8 +154,8 @@ void ImageScaler::processChunk(const QRect& rect) {
 	if (needsSmoothMargins) {
 		sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
 		sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
-		sourceRightMargin = qMin(d->mImage.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
-		sourceBottomMargin = qMin(d->mImage.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+		sourceRightMargin = qMin(d->mImage->rect().right() - sourceRect.right(), SMOOTH_MARGIN);
+		sourceBottomMargin = qMin(d->mImage->rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
 		sourceRect.adjust(
 			-sourceLeftMargin,
 			-sourceTopMargin,
@@ -180,7 +180,7 @@ void ImageScaler::processChunk(const QRect& rect) {
 	QRect destRect = containingRect(destRectF);
 
 	QImage tmp;
-	tmp = d->mImage.copy(sourceRect);
+	tmp = d->mImage->copy(sourceRect);
 	tmp = tmp.scaled(
 		destRect.width(),
 		destRect.height(),

@@ -49,9 +49,16 @@ public:
 
 	void setAlphaBackgroundColor(const QColor& color);
 
-	void setImage(const QImage& image);
+	/**
+	 * Set the image to display in this view. Note that we pass a pointer, not
+	 * a reference, to make it more explicit that we do not keep a copy of the
+	 * image. In particular, if the image gets modified outside (for example
+	 * because it is loaded progressively), the view will still points to the
+	 * modified image: it won't detach its own copy.
+	 */
+	void setImage(const QImage* image);
 
-	QImage image() const;
+	const QImage* image() const;
 
 	void setZoom(qreal zoom);
 
