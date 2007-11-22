@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../orientation.h"
 
 class QImage;
+class QRect;
 class QSize;
 
 class KUrl;
@@ -102,7 +103,7 @@ public:
 	QSize size() const;
 
 Q_SIGNALS:
-	void imageRectUpdated();
+	void imageRectUpdated(const QRect&);
 	void loaded(const KUrl&);
 	void saved(const KUrl&);
 	void modified(const KUrl&);

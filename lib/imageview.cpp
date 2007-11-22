@@ -193,6 +193,18 @@ void ImageView::setImage(const QImage& image) {
 	d->mViewport->update();
 }
 
+
+QImage ImageView::image() const {
+	return d->mImage;
+}
+
+
+void ImageView::updateImageRect(const QRect& imageRect) {
+	QRect viewportRect = mapToViewport(imageRect);
+	d->mViewport->update(viewportRect);
+}
+
+
 void ImageView::startScaler() {
 	d->mScaler->setImage(d->mImage);
 	d->mScaler->setZoom(d->mZoom);

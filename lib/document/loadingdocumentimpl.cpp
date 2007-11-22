@@ -151,6 +151,7 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 void LoadingDocumentImpl::slotImageLoaded() {
 	Q_ASSERT(d->mThread.isFinished());
 	setDocumentImage(d->mThread.image());
+	imageRectUpdated(d->mThread.image().rect());
 	loaded();
 	QByteArray format = d->mThread.format();
 	setDocumentFormat(format);

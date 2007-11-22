@@ -58,7 +58,7 @@ public:
 	virtual void applyTransformation(Orientation) {}
 
 Q_SIGNALS:
-	void imageRectUpdated();
+	void imageRectUpdated(const QRect&);
 	void loaded();
 	void metaDataLoaded();
 

@@ -89,7 +89,7 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 void DocumentLoadedImpl::setImage(const QImage& image) {
 	setDocumentImage(image);
 	document()->setModified(true);
-	imageRectUpdated();
+	imageRectUpdated(image.rect());
 }
 
 
@@ -99,7 +99,7 @@ void DocumentLoadedImpl::applyTransformation(Orientation orientation) {
 	image = image.transformed(matrix);
 	setDocumentImage(image);
 	document()->setModified(true);
-	imageRectUpdated();
+	imageRectUpdated(image.rect());
 }
 
 } // namespace

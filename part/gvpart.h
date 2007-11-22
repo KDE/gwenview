@@ -57,6 +57,7 @@ private Q_SLOTS:
 	void setViewImageFromDocument();
 	void updateCaption();
 	void showContextMenu();
+	void slotImageRectUpdated(const QRect&);
 
 private:
 	ImageView* mView;

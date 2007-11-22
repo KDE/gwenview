@@ -86,11 +86,14 @@ bool GVPart::openUrl(const KUrl& url) {
 		return false;
 	}
 	setUrl(url);
+	mView->setImage(QImage());
 	mDocument = DocumentFactory::instance()->load(url);
-	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SLOT(setViewImageFromDocument()) );
-	connect(mDocument.data(), SIGNAL(imageRectUpdated()), SLOT(setViewImageFromDocument()) );
+	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SIGNAL(completed()) );
+	connect(mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)), SLOT(slotImageRectUpdated(const QRect&)) );
 	if (mDocument->isLoaded()) {
 		setViewImageFromDocument();
+		mView->updateImageRect(mDocument->image().rect());
+		emit completed();
 	}
 	return true;
 }
@@ -99,10 +102,18 @@ bool GVPart::openUrl(const KUrl& url) {
 void GVPart::setViewImageFromDocument() {
 	mView->setImage(mDocument->image());
 	updateCaption();
-	emit completed();
 	if (mView->zoomToFit()) {
 		resizeRequested(mDocument->image().size());
 	}
+	emit completed();
+}
+
+
+void GVPart::slotImageRectUpdated(const QRect& rect) {
+	if (mView->image().isNull()) {
+		setViewImageFromDocument();
+	}
+	mView->updateImageRect(rect);
 }
 
 

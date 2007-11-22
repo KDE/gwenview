@@ -51,6 +51,8 @@ public:
 
 	void setImage(const QImage& image);
 
+	QImage image() const;
+
 	void setZoom(qreal zoom);
 
 	/**
@@ -77,6 +79,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 	void setZoomToFit(bool on);
+
+	void updateImageRect(const QRect&);
 
 protected:
 	virtual void paintEvent(QPaintEvent*);
