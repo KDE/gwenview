@@ -105,7 +105,6 @@ void GVPart::setViewImageFromDocument() {
 	if (mView->zoomToFit()) {
 		resizeRequested(mDocument->image().size());
 	}
-	emit completed();
 }
 
 
