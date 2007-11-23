@@ -55,7 +55,7 @@ void ImageScalerTest::testScaleFullImage() {
 	}
 
 	Gwenview::ImageScaler scaler;
-	scaler.setImage(image);
+	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect(QPoint(0,0), image.size() * zoom));
 
@@ -86,7 +86,7 @@ void ImageScalerTest::testScalePartialImage() {
 	}
 
 	Gwenview::ImageScaler scaler;
-	scaler.setImage(image);
+	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(
 		QRect(
@@ -142,7 +142,7 @@ void ImageScalerTest::testScaleFullImageTwoPasses() {
 	Gwenview::ImageScaler scaler;
 	ImageScalerClient client(&scaler);
 
-	scaler.setImage(image);
+	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	int zWidth = int(image.width() * zoom);
 	int zHeight = int(image.width() * zoom);
@@ -194,7 +194,7 @@ void ImageScalerTest::testScaleThinArea() {
 	Gwenview::ImageScaler scaler;
 
 	const qreal zoom = 0.25;
-	scaler.setImage(image);
+	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect(0, 0, image.width(), 2));
 	while (scaler.isRunning()) {
@@ -223,7 +223,7 @@ void ImageScalerTest::testScaleDownBigImage() {
 	ImageScalerClient client(&scaler);
 
 	const qreal zoom = 0.28125;
-	scaler.setImage(image);
+	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect( QPoint(0, 0), image.size() * zoom));
 	while (scaler.isRunning()) {
