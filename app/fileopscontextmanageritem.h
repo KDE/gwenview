@@ -48,6 +48,7 @@ public:
 	QAction* trashAction() const;
 	QAction* delAction() const;
 	QAction* showPropertiesAction() const;
+	QAction* createFolderAction() const;
 
 private Q_SLOTS:
 	void updateActions();
@@ -59,6 +60,7 @@ private Q_SLOTS:
 	void trash();
 	void del();
 	void showProperties();
+	void createFolder();
 
 private:
 	FileOpsContextManagerItemPrivate* const d;

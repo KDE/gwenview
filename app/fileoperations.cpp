@@ -26,8 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kguiitem.h>
+#include <kinputdialog.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
+#include <kio/job.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -199,6 +201,26 @@ void trash(const KUrl::List& urlList, QWidget* parent) {
 
 void del(const KUrl::List& urlList, QWidget* parent) {
 	delOrTrash(DEL, urlList, parent);
+}
+
+
+void createFolder(const KUrl& parentUrl, QWidget* parent) {
+	bool ok;
+	QString name = KInputDialog::getText(
+		i18n("Create Folder"),
+		i18n("Enter the name of the folder to create:"),
+		QString(),
+		&ok,
+		parent);
+
+	if (!ok) {
+		return;
+	}
+
+	KUrl url = parentUrl;
+	url.addPath(name);
+
+	KIO::mkdir(url);
 }
 
 

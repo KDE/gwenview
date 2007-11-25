@@ -35,6 +35,8 @@ void linkTo(const KUrl::List& urlList, QWidget* parent);
 void trash(const KUrl::List& urlList, QWidget* parent);
 void del(const KUrl::List& urlList, QWidget* parent);
 
+void createFolder(const KUrl& parentUrl, QWidget* parent);
+
 } // namespace
 
 } // namespace

@@ -47,6 +47,7 @@ struct FileOpsContextManagerItemPrivate {
 	QAction* mTrashAction;
 	QAction* mDelAction;
 	QAction* mShowPropertiesAction;
+	QAction* mCreateFolderAction;
 
 
 	KUrl::List urlList() const {
@@ -101,6 +102,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
 	connect(d->mShowPropertiesAction, SIGNAL(triggered()),
 		SLOT(showProperties()) );
+
+	d->mCreateFolderAction = new QAction(this);
+	d->mCreateFolderAction->setText(i18n("Create Folder"));
+	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
+	connect(d->mCreateFolderAction, SIGNAL(triggered()),
+		SLOT(createFolder()) );
 }
 
 
@@ -148,6 +155,11 @@ QAction* FileOpsContextManagerItem::showPropertiesAction() const {
 }
 
 
+QAction* FileOpsContextManagerItem::createFolderAction() const {
+	return d->mCreateFolderAction;
+}
+
+
 void FileOpsContextManagerItem::updateActions() {
 	KFileItemList list = contextManager()->selection();
 	bool selectionNotEmpty = list.count() > 0;
@@ -174,6 +186,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	}
 
 	d->mGroup->clear();
+	addIfEnabled(d->mGroup, d->mCreateFolderAction);
 	addIfEnabled(d->mGroup, d->mCopyToAction);
 	addIfEnabled(d->mGroup, d->mMoveToAction);
 	addIfEnabled(d->mGroup, d->mLinkToAction);
@@ -216,6 +229,12 @@ void FileOpsContextManagerItem::moveTo() {
 
 void FileOpsContextManagerItem::linkTo() {
 	FileOperations::linkTo(d->urlList(), d->mSideBar);
+}
+
+
+void FileOpsContextManagerItem::createFolder() {
+	KUrl url = contextManager()->currentDirUrl();
+	FileOperations::createFolder(url, d->mSideBar);
 }
 
 
