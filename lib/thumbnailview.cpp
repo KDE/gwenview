@@ -194,8 +194,7 @@ public:
 	{
 		mModifiedPixmap = SmallIcon("document-save");
 
-		mButtonFrame = new QFrame(mView->viewport());
-		mButtonFrame->setStyleSheet(
+		QString styleSheet =
 			"QFrame {"
 			"	background-color:"
 			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
@@ -219,18 +218,14 @@ public:
 			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
 			"		stop:0 #222, stop: 0.6 black, stop:1 black);"
 			"	border: 1px solid #444;"
-			"}"
-			);
+			"}";
+
+		// Button frame
+		mButtonFrame = new QFrame(mView->viewport());
+		mButtonFrame->setStyleSheet(styleSheet);
 		mButtonFrame->setAutoFillBackground(true);
 		mButtonFrame->setBackgroundRole(QPalette::Button);
 		mButtonFrame->hide();
-
-		mSaveButton = new QToolButton(mButtonFrame);
-		mSaveButton->setIconSize(mModifiedPixmap.size());
-		mSaveButton->setIcon(mModifiedPixmap);
-		mSaveButton->setAutoRaise(true);
-		connect(mSaveButton, SIGNAL(clicked()),
-			mView, SLOT(slotSaveClicked()) );
 
 		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
 		rotateLeftButton->setIconSize(mModifiedPixmap.size());
@@ -251,6 +246,24 @@ public:
 		layout->setSpacing(0);
 		layout->addWidget(rotateLeftButton);
 		layout->addWidget(rotateRightButton);
+
+		// Save button frame
+		mSaveButtonFrame = new QFrame(mView->viewport());
+		mSaveButtonFrame->setStyleSheet(styleSheet);
+		mSaveButtonFrame->setAutoFillBackground(true);
+		mSaveButtonFrame->setBackgroundRole(QPalette::Button);
+		mSaveButtonFrame->hide();
+
+		mSaveButton = new QToolButton(mSaveButtonFrame);
+		mSaveButton->setIconSize(mModifiedPixmap.size());
+		mSaveButton->setIcon(mModifiedPixmap);
+		mSaveButton->setAutoRaise(true);
+		connect(mSaveButton, SIGNAL(clicked()),
+			mView, SLOT(slotSaveClicked()) );
+
+		layout = new QHBoxLayout(mSaveButtonFrame);
+		layout->setMargin(0);
+		layout->setSpacing(0);
 		layout->addWidget(mSaveButton);
 	}
 
@@ -288,19 +301,26 @@ public:
 		}
 		mIndexUnderCursor = index;
 
-		bool showButtonFrame = false;
+		bool showButtonFrames = false;
 		if (mIndexUnderCursor.isValid()) {
 			KFileItem item = fileItemForIndex(mIndexUnderCursor);
-			showButtonFrame = !ArchiveUtils::fileItemIsDirOrArchive(item);
+			showButtonFrames = !ArchiveUtils::fileItemIsDirOrArchive(item);
 		}
 
-		if (showButtonFrame) {
+		if (showButtonFrames) {
 			QRect rect = mView->visualRect(mIndexUnderCursor);
 			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
-			mSaveButton->setVisible(mView->isModified(mIndexUnderCursor));
 			mButtonFrame->show();
+
+			if (mView->isModified(mIndexUnderCursor)) {
+				showSaveButtonFrame(rect);
+			} else {
+				mSaveButtonFrame->hide();
+			}
+
 		} else {
 			mButtonFrame->hide();
+			mSaveButtonFrame->hide();
 		}
 		return false;
 	}
@@ -393,21 +413,32 @@ public:
 		// Draw modified indicator
 		bool isModified = mView->isModified(index);
 		if (isModified) {
-			QRect saveRect(
-				rect.x() + GADGET_MARGIN,
-				rect.y() + GADGET_MARGIN,
+			// Draws the mModifiedPixmap pixmap at the exact same place where
+			// it will be drawn when mSaveButtonFrame is shown.
+			// This code assumes the save button pixmap is drawn in the middle
+			// of the button. This should be the case unless the CSS is
+			// changed.
+			QPoint framePosition = saveButtonFramePosition(rect);
+			QRect saveButtonRect(
+				framePosition.x() + mSaveButton->x(),
+				framePosition.y() + mSaveButton->y(),
 				mSaveButton->sizeHint().width(),
 				mSaveButton->sizeHint().height());
 
-			painter->drawPixmap(
-				saveRect.x() + (saveRect.width() - mModifiedPixmap.width()) / 2,
-				saveRect.y() + (saveRect.height() - mModifiedPixmap.height()) / 2,
-				mModifiedPixmap);
+			int posX = saveButtonRect.x() + (saveButtonRect.width() - mModifiedPixmap.width()) / 2;
+			int posY = saveButtonRect.y() + (saveButtonRect.height() - mModifiedPixmap.height()) / 2;
+
+			painter->drawPixmap(posX, posY, mModifiedPixmap);
 		}
 
 		if (index == mIndexUnderCursor) {
-			mSaveButton->setVisible(isModified);
-			mButtonFrame->adjustSize();
+			if (isModified) {
+				// If we just rotated the image with the buttons from the
+				// button frame, we need to show the save button frame right now.
+				showSaveButtonFrame(rect);
+			} else {
+				mSaveButtonFrame->hide();
+			}
 		}
 
 		// Draw text
@@ -426,6 +457,20 @@ public:
 
 
 private:
+	QPoint saveButtonFramePosition(const QRect& itemRect) const {
+		int posX = itemRect.right() - GADGET_MARGIN - mSaveButtonFrame->sizeHint().width();
+		int posY = itemRect.bottom() - GADGET_MARGIN - mSaveButtonFrame->sizeHint().height();
+
+		return QPoint(posX, posY);
+	}
+
+
+	void showSaveButtonFrame(const QRect& itemRect) const {
+		mSaveButtonFrame->move(saveButtonFramePosition(itemRect));
+		mSaveButtonFrame->show();
+	}
+
+
 	void drawBackground(QPainter* painter, const QRect& rect, const QColor& bgColor, const QColor& borderColor) const {
 		painter->setRenderHint(QPainter::Antialiasing);
 
@@ -494,6 +539,7 @@ private:
 	QPixmap mModifiedPixmap;
 	QToolButton* mSaveButton;
 	QFrame* mButtonFrame;
+	QFrame* mSaveButtonFrame;
 	QModelIndex mIndexUnderCursor;
 };
 
