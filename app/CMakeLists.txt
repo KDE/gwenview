@@ -9,6 +9,7 @@ set(gwenview_SRCS
 	configdialog.cpp
 	contextmanager.cpp
 	documentview.cpp
+	fileoperations.cpp
 	infocontextmanageritem.cpp
 	imagemetainfodialog.cpp
 	imageopscontextmanageritem.cpp
