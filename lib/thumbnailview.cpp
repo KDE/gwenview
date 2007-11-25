@@ -227,6 +227,13 @@ public:
 		mButtonFrame->setBackgroundRole(QPalette::Button);
 		mButtonFrame->hide();
 
+		QToolButton* fullScreenButton = new QToolButton(mButtonFrame);
+		fullScreenButton->setIconSize(mModifiedPixmap.size());
+		fullScreenButton->setIcon(SmallIcon("view-fullscreen"));
+		fullScreenButton->setAutoRaise(true);
+		connect(fullScreenButton, SIGNAL(clicked()),
+			mView, SLOT(slotFullScreenClicked()) );
+
 		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
 		rotateLeftButton->setIconSize(mModifiedPixmap.size());
 		rotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
@@ -244,6 +251,7 @@ public:
 		QHBoxLayout* layout = new QHBoxLayout(mButtonFrame);
 		layout->setMargin(0);
 		layout->setSpacing(0);
+		layout->addWidget(fullScreenButton);
 		layout->addWidget(rotateLeftButton);
 		layout->addWidget(rotateRightButton);
 
@@ -706,6 +714,12 @@ void ThumbnailView::slotRotateLeftClicked() {
 void ThumbnailView::slotRotateRightClicked() {
 	QModelIndex index = d->mItemDelegate->indexUnderCursor();
 	rotateDocumentRightRequested(urlForIndex(index));
+}
+
+
+void ThumbnailView::slotFullScreenClicked() {
+	QModelIndex index = d->mItemDelegate->indexUnderCursor();
+	showDocumentInFullScreenRequested(urlForIndex(index));
 }
 
 

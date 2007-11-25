@@ -224,6 +224,8 @@ struct MainWindow::Private {
 			mWindow, SLOT(rotateLeft(const KUrl&)) );
 		connect(mThumbnailView, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
 			mWindow, SLOT(rotateRight(const KUrl&)) );
+		connect(mThumbnailView, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
+			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
 
 		// mUrlNavigator
 		KFilePlacesModel* places = new KFilePlacesModel(mThumbnailViewPanel);
@@ -971,6 +973,12 @@ void MainWindow::saveAs(const KUrl& url) {
 	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(dialog.selectedUrl(), typeList[0].toAscii());
+}
+
+
+void MainWindow::showDocumentInFullScreen(const KUrl& url) {
+	openDocumentUrl(url);
+	d->mFullScreenAction->trigger();
 }
 
 

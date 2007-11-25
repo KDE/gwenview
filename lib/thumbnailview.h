@@ -86,6 +86,7 @@ Q_SIGNALS:
 	void saveDocumentRequested(const KUrl&);
 	void rotateDocumentLeftRequested(const KUrl&);
 	void rotateDocumentRightRequested(const KUrl&);
+	void showDocumentInFullScreenRequested(const KUrl&);
 	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
 public Q_SLOTS:
@@ -111,6 +112,7 @@ private Q_SLOTS:
 	void slotSaveClicked();
 	void slotRotateLeftClicked();
 	void slotRotateRightClicked();
+	void slotFullScreenClicked();
 
 private:
 	ThumbnailViewPrivate * const d;
