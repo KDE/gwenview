@@ -249,9 +249,9 @@ public:
 		QHBoxLayout* layout = new QHBoxLayout(mButtonFrame);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(mSaveButton);
 		layout->addWidget(rotateLeftButton);
 		layout->addWidget(rotateRightButton);
+		layout->addWidget(mSaveButton);
 	}
 
 
