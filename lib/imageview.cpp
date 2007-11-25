@@ -215,17 +215,13 @@ const QImage* ImageView::image() const {
 
 
 void ImageView::updateImageRect(const QRect& imageRect) {
-	kDebug() << "imageRect" << imageRect;
 	QRect viewportRect = mapToViewport(imageRect);
 	viewportRect = viewportRect.intersected(d->mViewport->rect());
 	if (viewportRect.isEmpty()) {
 		return;
 	}
-	kDebug() << "viewportRect" << viewportRect;
 
 	QRect zoomedImageRect = d->mapViewportToZoomedImage(viewportRect);
-	kDebug() << "zoomedImageRect" << zoomedImageRect;
-	kDebug() << "---";
 
 	d->mScaler->addDestinationRegion(QRegion(zoomedImageRect));
 	d->mViewport->update();
@@ -422,7 +418,6 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 
 void ImageView::updateFromScaler(int left, int top, const QImage& image) {
-	kDebug() << left << top << image.size();
 	left -= d->hScroll();
 	top -= d->vScroll();
 
