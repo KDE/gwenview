@@ -297,6 +297,7 @@ public:
 		if (showButtonFrame) {
 			QRect rect = mView->visualRect(mIndexUnderCursor);
 			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
+			mSaveButton->setVisible(mView->isModified(mIndexUnderCursor));
 			mButtonFrame->show();
 		} else {
 			mButtonFrame->hide();
@@ -390,7 +391,8 @@ public:
 		}
 
 		// Draw modified indicator
-		if (mView->isModified(index)) {
+		bool isModified = mView->isModified(index);
+		if (isModified) {
 			QRect saveRect(
 				rect.x() + GADGET_MARGIN,
 				rect.y() + GADGET_MARGIN,
@@ -401,6 +403,11 @@ public:
 				saveRect.x() + (saveRect.width() - mModifiedPixmap.width()) / 2,
 				saveRect.y() + (saveRect.height() - mModifiedPixmap.height()) / 2,
 				mModifiedPixmap);
+		}
+
+		if (index == mIndexUnderCursor) {
+			mSaveButton->setVisible(isModified);
+			mButtonFrame->adjustSize();
 		}
 
 		// Draw text
