@@ -129,6 +129,7 @@ private:
 	std::auto_ptr<Private> d;
 
 	void openSelectedDocument();
+	void saveConfig();
 };
 
 } // namespace

@@ -29,6 +29,12 @@
 		</entry>
 	</group>
 
+	<group name="ThumbnailView">
+		<entry name="ThumbnailSize" type="Int">
+			<default>128</default>
+		</entry>
+	</group>
+
 	<group name="Print">
 		<entry name="PrintPosition" type="Int">
 			<default code="true">

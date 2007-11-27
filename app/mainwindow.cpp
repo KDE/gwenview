@@ -240,7 +240,6 @@ struct MainWindow::Private {
 		statusBar->addPermanentWidget(mThumbnailSlider);
 		mThumbnailSlider->setMinimum(40);
 		mThumbnailSlider->setMaximum(256);
-		mThumbnailSlider->setValue(128);
 		mThumbnailSlider->setOrientation(Qt::Horizontal);
 		connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
 
@@ -1102,6 +1101,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 
 bool MainWindow::queryClose() {
+	saveConfig();
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
 		return true;
@@ -1153,6 +1153,13 @@ void MainWindow::loadConfig() {
 	widget->setPalette(palette);
 
 	d->mDocumentView->setPalette(palette);
+
+	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
+}
+
+
+void MainWindow::saveConfig() {
+	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
 }
 
 
