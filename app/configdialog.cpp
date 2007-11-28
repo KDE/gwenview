@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "configdialog.h"
 
 // Qt
+#include <QLayout>
 
 // KDE
 
@@ -42,6 +43,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	setFaceType(KPageDialog::Plain);
 	QWidget* widget = new QWidget(this);
 	d->setupUi(widget);
+	widget->layout()->setMargin(0);
 	addPage(widget, "");
 }
 
