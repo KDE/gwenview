@@ -40,7 +40,6 @@ namespace Gwenview {
 
 
 struct SaveBarPrivate {
-	QWidget* mSaveBar;
 	QLabel* mMessage;
 	QLabel* mActions;
 	KUrl mCurrentUrl;
@@ -53,7 +52,6 @@ SaveBar::SaveBar(QWidget* parent)
 , d(new SaveBarPrivate) {
 	setPalette(QToolTip::palette());
 	setAutoFillBackground(true);
-	d->mSaveBar = this;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	d->mMessage = new QLabel(this);
 	d->mMessage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -182,7 +180,7 @@ bool SaveBar::saveAll() {
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
 	// TODO: Save in a separate thread?
-	QProgressDialog progress(d->mSaveBar);
+	QProgressDialog progress(this);
 	progress.setLabelText(i18n("Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
