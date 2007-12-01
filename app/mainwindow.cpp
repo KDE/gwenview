@@ -173,8 +173,8 @@ struct MainWindow::Private {
 
 		mCentralSplitter = new QSplitter(Qt::Horizontal, centralWidget);
 		QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-		layout->addWidget(mSaveBar);
 		layout->addWidget(mCentralSplitter);
+		layout->addWidget(mSaveBar);
 		layout->setMargin(0);
 		layout->setSpacing(0);
 

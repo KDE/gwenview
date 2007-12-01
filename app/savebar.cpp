@@ -36,7 +36,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "lib/document/documentfactory.h"
 
+
 namespace Gwenview {
+
+
+static QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV) {
+	int hue, saturation, value;
+	color.getHsv(&hue, &saturation, &value);
+	return QColor::fromHsv(hue + deltaH, saturation + deltaS, value + deltaV);
+}
 
 
 struct SaveBarPrivate {
@@ -44,14 +52,34 @@ struct SaveBarPrivate {
 	QLabel* mActions;
 	KUrl mCurrentUrl;
 	bool mForceHide;
+
+	void initBackground(QWidget* widget) {
+		widget->setAutoFillBackground(true);
+
+		QColor color = QToolTip::palette().base().color();
+		QColor borderColor = adjustedHsv(color, 0, 150, 0);
+		QColor darkColor = adjustedHsv(color, 0, 200, -100);
+
+		QString css =
+			"QWidget {"
+			"	background-color:"
+			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+			"		stop:0 %1, stop:0.3 %2, stop:1 %2);"
+			"	border-top: 1px solid %3;"
+			"}";
+		css = css
+			.arg(darkColor.name())
+			.arg(color.name())
+			.arg(borderColor.name());
+		widget->setStyleSheet(css);
+	}
 };
 
 
 SaveBar::SaveBar(QWidget* parent)
 : QWidget(parent)
 , d(new SaveBarPrivate) {
-	setPalette(QToolTip::palette());
-	setAutoFillBackground(true);
+	d->initBackground(this);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	d->mMessage = new QLabel(this);
 	d->mMessage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
