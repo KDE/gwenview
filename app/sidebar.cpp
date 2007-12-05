@@ -26,6 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QToolButton>
 #include <QVBoxLayout>
 
+// KDE
+#include <kglobalsettings.h>
+
 // Local
 #include "lib/expandbutton.h"
 
@@ -129,6 +132,7 @@ SideBar::SideBar(QWidget* parent)
 	setFrameStyle(QFrame::NoFrame);
 	setWidget(d->mWidget);
 	setWidgetResizable(true);
+	setFont(KGlobalSettings::toolBarFont());
 }
 
 
