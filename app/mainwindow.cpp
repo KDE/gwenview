@@ -262,6 +262,7 @@ struct MainWindow::Private {
 
 		QAction* action = actionCollection->addAction("reload");
 		action->setText(i18n("Reload"));
+		action->setIcon(KIcon("view-refresh"));
 		connect(action, SIGNAL(triggered()),
 			mWindow, SLOT(reload()) );
 
