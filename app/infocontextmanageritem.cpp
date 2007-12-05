@@ -21,12 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
+#include <QPainter>
+#include <QPair>
 #include <QPushButton>
 #include <QVBoxLayout>
 
 // KDE
 #include <kfileitem.h>
 #include <klocale.h>
+#include <kwordwrap.h>
 
 // Local
 #include "contextmanager.h"
@@ -50,12 +53,81 @@ namespace Gwenview {
 #endif
 
 
+/**
+ * This widget is capable of showing multiple lines of key/value pairs. It
+ * fades out the value if it does not fit the available width.
+ */
+class KeyValueWidget : public QWidget {
+public:
+	KeyValueWidget(QWidget* parent)
+	: QWidget(parent) {}
+
+	void addItem(const QString& key, const QString& value) {
+		mList << ListItem(key, value);
+	}
+
+	// FIXME: KDE4.1: see call to addItem() at the end of the file
+	void addItem(const QString& line_) {
+		QString line = line_;
+		line.replace("<b>", "", Qt::CaseInsensitive);
+		line.replace("</b>", "", Qt::CaseInsensitive);
+		// Assume we still have a ":" in the text
+		QString key = line.section(QChar(':'), 0, 0, QString::SectionIncludeTrailingSep);
+		QString value = line.section(QChar(':'), 1);
+		addItem(key, value);
+	}
+
+	void clear() {
+		mList.clear();
+	}
+
+	virtual QSize sizeHint() const {
+		int height = fontMetrics().height() * mList.size();
+		return QSize(-1, height);
+	}
+
+	virtual QSize minimumSizeHint() const {
+		return sizeHint();
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		QPainter painter(this);
+		int posY = fontMetrics().ascent();
+		int lineHeight = fontMetrics().height();
+		int maxWidth = width();
+
+		QFont keyFont(font());
+		keyFont.setBold(true);
+		QFontMetrics keyFM(keyFont, this);
+
+		Q_FOREACH(ListItem item, mList) {
+			QString key = item.first;
+			QString value = item.second;
+			painter.save();
+			painter.setFont(keyFont);
+			painter.drawText(0, posY, key);
+			int posX = keyFM.width(key);
+
+			painter.setFont(font());
+			KWordWrap::drawFadeoutText(&painter, posX, posY, maxWidth - posX, value);
+			posY += lineHeight;
+			painter.restore();
+		}
+	}
+
+private:
+	typedef QPair<QString, QString> ListItem;
+	QList<ListItem> mList;
+};
+
+
 struct InfoContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
 	QWidget* mOneFileWidget;
-	QLabel* mOneFileTextLabel;
+	KeyValueWidget* mKeyValueWidget;
 	QLabel* mMultipleFilesLabel;
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
@@ -92,8 +164,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 		SLOT(updateSideBarContent()) );
 	d->mOneFileWidget = new QWidget();
 
-	d->mOneFileTextLabel = new QLabel(d->mOneFileWidget);
-	d->mOneFileTextLabel->setWordWrap(true);
+	d->mKeyValueWidget = new KeyValueWidget(d->mOneFileWidget);
 
 	QLabel* moreLabel = new QLabel(d->mOneFileWidget);
 	moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18n("More...")));
@@ -102,7 +173,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
 	layout->setMargin(2);
 	layout->setSpacing(2);
-	layout->addWidget(d->mOneFileTextLabel);
+	layout->addWidget(d->mKeyValueWidget);
 	layout->addWidget(moreLabel);
 
 	d->mMultipleFilesLabel = new QLabel();
@@ -204,18 +275,22 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		return;
 	}
 	QStringList list;
+	d->mKeyValueWidget->clear();
 	Q_FOREACH(QString key, d->mImageMetaInfo.preferredMetaInfoKeyList()) {
 		QString label;
 		QString value;
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
-			list.append(i18n("<b>%1:</b> %2", label, value));
+			d->mKeyValueWidget->addItem(i18n("<b>%1:</b> %2", label, value));
+			//FIXME: KDE4.1: Replace line above with the following line. Can't
+			//do this now as it would break string freeze.
+			//d->mKeyValueWidget->addItem(label, value);
 		}
 	}
+	d->mKeyValueWidget->updateGeometry();
 
-	d->mOneFileTextLabel->setText(list.join("<br>\n"));
-	d->mOneFileTextLabel->show();
+	d->mKeyValueWidget->show();
 }
 
 
