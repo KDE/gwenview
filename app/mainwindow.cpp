@@ -652,7 +652,7 @@ void MainWindow::updateModifiedFlag() {
 
 void MainWindow::setInitialUrl(const KUrl& url) {
 	if (urlIsDirectory(this, url)) {
-		d->mPreviewAction->trigger();
+		d->mBrowseAction->trigger();
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
