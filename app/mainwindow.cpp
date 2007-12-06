@@ -1261,4 +1261,9 @@ void MainWindow::preloadNextUrl() {
 }
 
 
+QSize MainWindow::sizeHint() const {
+	return QSize(750, 500);
+}
+
+
 } // namespace

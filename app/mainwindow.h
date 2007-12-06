@@ -54,7 +54,8 @@ public Q_SLOTS:
 protected:
 	virtual void slotSetStatusBarText(const QString&);
 	virtual bool queryClose();
-	   
+	virtual QSize sizeHint() const;
+
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
 	void openDirUrl(const KUrl&);
