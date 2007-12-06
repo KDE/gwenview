@@ -66,17 +66,6 @@ public:
 		mList << ListItem(key, value);
 	}
 
-	// FIXME: KDE4.1: see call to addItem() at the end of the file
-	void addItem(const QString& line_) {
-		QString line = line_;
-		line.replace("<b>", "", Qt::CaseInsensitive);
-		line.replace("</b>", "", Qt::CaseInsensitive);
-		// Assume we still have a ":" in the text
-		QString key = line.section(QChar(':'), 0, 0, QString::SectionIncludeTrailingSep);
-		QString value = line.section(QChar(':'), 1);
-		addItem(key, value);
-	}
-
 	void clear() {
 		mList.clear();
 	}
@@ -101,9 +90,21 @@ protected:
 		keyFont.setBold(true);
 		QFontMetrics keyFM(keyFont, this);
 
+		QRegExp re("<b>([^<]+)</b>(.*)");
 		Q_FOREACH(ListItem item, mList) {
 			QString key = item.first;
 			QString value = item.second;
+
+			// FIXME: KDE4.1: Remove this when string freeze is lifted
+			QString tmp = i18n("<b>%1:</b> %2", key, value);
+			int pos = re.indexIn(tmp);
+			if (pos > -1) {
+				key = re.cap(1);
+				value = re.cap(2);
+			} else {
+				key += ':';
+			}
+
 			painter.save();
 			painter.setFont(keyFont);
 			painter.drawText(0, posY, key);
@@ -282,10 +283,7 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
-			d->mKeyValueWidget->addItem(i18n("<b>%1:</b> %2", label, value));
-			//FIXME: KDE4.1: Replace line above with the following line. Can't
-			//do this now as it would break string freeze.
-			//d->mKeyValueWidget->addItem(label, value);
+			d->mKeyValueWidget->addItem(label, value);
 		}
 	}
 	d->mKeyValueWidget->updateGeometry();
