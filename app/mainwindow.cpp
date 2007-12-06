@@ -623,6 +623,7 @@ d(new MainWindow::Private)
 
 	createShellGUI();
 	loadConfig();
+	setAutoSaveSettings();
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
