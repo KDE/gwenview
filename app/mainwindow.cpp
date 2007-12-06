@@ -258,7 +258,7 @@ struct MainWindow::Private {
 		KStandardAction::save(mWindow, SLOT(saveCurrent()), actionCollection);
 		KStandardAction::saveAs(mWindow, SLOT(saveCurrentAs()), actionCollection);
 		KStandardAction::print(mWindow, SLOT(print()), actionCollection);
-		KStandardAction::quit(KApplication::kApplication(), SLOT(quit()), actionCollection);
+		KStandardAction::quit(KApplication::kApplication(), SLOT(closeAllWindows()), actionCollection);
 
 		QAction* action = actionCollection->addAction("reload");
 		action->setText(i18n("Reload"));
