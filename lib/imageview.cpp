@@ -141,7 +141,7 @@ struct ImageViewPrivate {
 	}
 
 	// At least gcc 3.4.6 on FreeBSD requires a default constructor.
-	ImageViewPrivate() { };
+	ImageViewPrivate() { }
 };
 
 
