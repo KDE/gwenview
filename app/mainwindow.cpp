@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kapplication.h>
 #include <kde_file.h>
 #include <kdirlister.h>
+#include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
@@ -363,6 +364,9 @@ struct MainWindow::Private {
 
 		KStandardAction::preferences(mWindow,
 			SLOT(showConfigDialog()), actionCollection);
+
+		KStandardAction::configureToolbars(mWindow,
+			SLOT(configureToolbars()), actionCollection);
 	}
 
 
@@ -1141,6 +1145,21 @@ void MainWindow::showConfigDialog() {
 			part, SLOT(loadConfig()));
 	}
 	dialog.exec();
+}
+
+
+void MainWindow::configureToolbars() {
+	KConfigGroup cg = KGlobal::config()->group("MainWindow");
+	saveMainWindowSettings(cg);
+	KEditToolBar dlg(factory(), this);
+	connect(&dlg,SIGNAL(newToolBarConfig()),this,SLOT(slotNewToolbarConfig()));
+	dlg.exec();
+}
+
+
+void MainWindow::slotNewToolbarConfig() {
+	KConfigGroup cg = KGlobal::config()->group("MainWindow");
+	applyMainWindowSettings(cg);
 }
 
 

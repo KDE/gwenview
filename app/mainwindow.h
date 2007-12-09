@@ -125,6 +125,9 @@ private Q_SLOTS:
 
 	void preloadNextUrl();
 
+	void configureToolbars();
+	void slotNewToolbarConfig();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;
