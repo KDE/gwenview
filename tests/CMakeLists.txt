@@ -37,3 +37,12 @@ set(thumbnailloadjobtest_SRCS
 kde4_add_executable(thumbnailloadjobtest TEST ${thumbnailloadjobtest_SRCS})
 
 target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+# SlideContainer
+set(slidecontainertest_SRCS
+	slidecontainertest.cpp
+	)
+
+kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
+
+target_link_libraries(slidecontainertest gwenviewlib)

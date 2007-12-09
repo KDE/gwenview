@@ -32,6 +32,7 @@ set(gwenviewlib_SRCS
 	mimetypeutils.cpp
 	print/printhelper.cpp
 	print/printoptionspage.cpp
+	slidecontainer.cpp
 	slideshow.cpp
 	scrolltool.cpp
 	sorteddirmodel.cpp
