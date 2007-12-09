@@ -29,17 +29,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 
+/**
+ * This widget is design to contain one child widget, the "content" widget.
+ * It will start hidden by default. Calling slideIn() will slide in the content
+ * widget from the top border. Calling slideOut() will slide it out.
+ */
 class GWENVIEWLIB_EXPORT SlideContainer : public QFrame {
 	Q_OBJECT
 public:
 	SlideContainer(QWidget* parent = 0);
 
+	/**
+	 * Returns the content widget
+	 */
 	QWidget* content() const;
+
+	/**
+	 * Defines the content widget
+	 */
 	void setContent(QWidget* content);
 
 
 public Q_SLOTS:
+	/**
+	 * Slides the content widget in.
+	 * Calling it multiple times won't cause the animation to be replayed.
+	 */
 	void slideIn();
+
+	/**
+	 * Slides the content widget out.
+	 * Calling it multiple times won't cause the animation to be replayed.
+	 */
 	void slideOut();
 
 protected:
