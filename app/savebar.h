@@ -22,11 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #define SAVEBAR_H
 
 // Qt
-#include <QWidget>
 
 // KDE
 
 // Local
+#include <lib/slidecontainer.h>
 
 class KUrl;
 
@@ -34,7 +34,7 @@ namespace Gwenview {
 
 
 class SaveBarPrivate;
-class SaveBar : public QWidget {
+class SaveBar : public SlideContainer {
 	Q_OBJECT
 public:
 	SaveBar(QWidget* parent);

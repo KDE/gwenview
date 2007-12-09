@@ -48,6 +48,7 @@ static QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int delta
 
 
 struct SaveBarPrivate {
+	QWidget* mSaveBarWidget;
 	QLabel* mMessage;
 	QLabel* mActions;
 	KUrl mCurrentUrl;
@@ -58,17 +59,16 @@ struct SaveBarPrivate {
 
 		QColor color = QToolTip::palette().base().color();
 		QColor borderColor = adjustedHsv(color, 0, 150, 0);
-		QColor darkColor = adjustedHsv(color, 0, 200, -100);
 
 		QString css =
 			"QWidget {"
-			"	background-color:"
-			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"		stop:0 %1, stop:0.3 %2, stop:1 %2);"
-			"	border-top: 1px solid %3;"
+			"	background-color: %1;"
+			"	border-top: 1px solid %2;"
+			"	border-bottom: 1px solid %2;"
+			"	padding-top: 3px;"
+			"	padding-bottom: 3px;"
 			"}";
 		css = css
-			.arg(darkColor.name())
 			.arg(color.name())
 			.arg(borderColor.name());
 		widget->setStyleSheet(css);
@@ -77,23 +77,26 @@ struct SaveBarPrivate {
 
 
 SaveBar::SaveBar(QWidget* parent)
-: QWidget(parent)
+: SlideContainer(parent)
 , d(new SaveBarPrivate) {
-	d->initBackground(this);
+	d->mSaveBarWidget = new QWidget();
+	d->initBackground(d->mSaveBarWidget);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mMessage = new QLabel(this);
+	d->mMessage = new QLabel(d->mSaveBarWidget);
 	d->mMessage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mActions = new QLabel(this);
+	d->mActions = new QLabel(d->mSaveBarWidget);
 	d->mActions->setAlignment(Qt::AlignRight);
 	d->mActions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->mForceHide = false;
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	QHBoxLayout* layout = new QHBoxLayout(d->mSaveBarWidget);
 	layout->addWidget(d->mMessage);
 	layout->addWidget(d->mActions);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	hide();
+
+	setContent(d->mSaveBarWidget);
 
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateContent()) );
@@ -111,7 +114,7 @@ SaveBar::~SaveBar() {
 void SaveBar::setForceHide(bool value) {
 	d->mForceHide = value;
 	if (d->mForceHide) {
-		hide();
+		slideOut();
 	} else {
 		updateContent();
 	}
@@ -120,17 +123,17 @@ void SaveBar::setForceHide(bool value) {
 
 void SaveBar::updateContent() {
 	if (d->mForceHide) {
-		hide();
+		slideOut();
 		return;
 	}
 
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 	if (lst.size() == 0) {
-		hide();
+		slideOut();
 		return;
 	}
 
-	show();
+	slideIn();
 
 	QStringList links;
 	QString message;
