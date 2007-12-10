@@ -279,7 +279,7 @@ struct MainWindow::Private {
 
 		mViewAction = actionCollection->addAction("view");
 		mViewAction->setText(i18n("View"));
-		mViewAction->setIcon(KIcon("image"));
+		mViewAction->setIcon(KIcon("view-preview"));
 		mViewAction->setCheckable(true);
 
 		mViewModeActionGroup = new QActionGroup(mWindow);
