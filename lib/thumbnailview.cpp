@@ -43,20 +43,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
-/** Space between the item outer rect and the content */
+/**
+ * Space between the item outer rect and the content, and between the
+ * thumbnail and the caption
+ */
 const int ITEM_MARGIN = 5;
+
+/** How darker is the border line around selection */
+const int SELECTION_BORDER_DARKNESS = 140;
+
+/** Radius of the selection rounded corners, in pixels */
+const int SELECTION_RADIUS = 10;
 
 /** Border around gadget icons */
 const int GADGET_MARGIN = 2;
 
+/** How many pixels between items */
 const int SPACING = 11;
 
-const int ROUND_RECT_RADIUS = 10;
-
-const int THUMBNAIL_GENERATION_TIMEOUT = 1000;
-
+/** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
 
+/** How many pixels around the thumbnail are shadowed */
 const int SHADOW_SIZE = 4;
 
 
@@ -195,7 +203,7 @@ public:
 		mModifiedPixmap = SmallIcon("document-save");
 
 		QColor bgColor = mView->palette().highlight().color();
-		QColor borderColor = bgColor.dark(140);
+		QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 
 		QString styleSheet =
 			"QFrame {"
@@ -379,7 +387,7 @@ public:
 		QColor bgColor, borderColor, fgColor;
 		if (option.state & QStyle::State_Selected) {
 			bgColor = option.palette.color(cg, QPalette::Highlight);
-			borderColor = bgColor.dark(140);
+			borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 			fgColor = option.palette.color(cg, QPalette::HighlightedText);
 		} else {
 			QWidget* viewport = mView->viewport();
@@ -487,7 +495,7 @@ private:
 
 		QRectF rectF = QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5);
 
-		QPainterPath path = roundedRectangle(rectF, ROUND_RECT_RADIUS);
+		QPainterPath path = roundedRectangle(rectF, SELECTION_RADIUS);
 		painter->fillPath(path, bgColor);
 		painter->setPen(borderColor);
 		painter->drawPath(path);
