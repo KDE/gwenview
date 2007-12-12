@@ -389,7 +389,6 @@ public:
 			} else {
 				borderColor = bgColor.light(200);
 			}
-			//borderColor = fgColor;
 		}
 
 		// Draw background
