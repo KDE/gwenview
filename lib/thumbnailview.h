@@ -83,6 +83,12 @@ public:
 	bool isModified(const QModelIndex&) const;
 
 Q_SIGNALS:
+	/**
+	 * It seems we can't use the 'activated()' signals for now because it does
+	 * not now about KDE single vs doubleclick settings. The indexActivated()
+	 * signals replaces it for now.
+	 */
+	void indexActivated(const QModelIndex&);
 	void saveDocumentRequested(const KUrl&);
 	void rotateDocumentLeftRequested(const KUrl&);
 	void rotateDocumentRightRequested(const KUrl&);

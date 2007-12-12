@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kdirmodel.h>
+#include <kglobalsettings.h>
 
 // Local
 #include "archiveutils.h"
@@ -600,6 +601,14 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
+
+	if (KGlobalSettings::singleClick()) {
+		connect(this, SIGNAL(clicked(const QModelIndex&)),
+			SIGNAL(indexActivated(const QModelIndex&)) );
+	} else {
+		connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
+			SIGNAL(indexActivated(const QModelIndex&)) );
+	}
 }
 
 
