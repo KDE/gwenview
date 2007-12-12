@@ -194,31 +194,33 @@ public:
 	{
 		mModifiedPixmap = SmallIcon("document-save");
 
+		QColor bgColor = mView->palette().highlight().color();
+		QColor borderColor = bgColor.dark(140);
+
 		QString styleSheet =
 			"QFrame {"
-			"	background-color:"
-			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"		stop:0 #444, stop: 0.6 black, stop:1 black);"
-			"	border: 1px solid #ccc;"
-			"	padding: 2px;"
-			"	border-radius: 4px;"
+			"	background-color: %1;"
+			"	border: 1px solid %1;"
+			"	padding: 1px;"
+			"	border-radius: 6px;"
 			"}"
 
 			"QToolButton {"
 			"	padding: 2px;"
-			"	border-radius: 2px;"
+			"	border-radius: 4px;"
 			"}"
 
 			"QToolButton:hover {"
-			"	border: 1px solid #aaa;"
+			"	border: 1px solid %2;"
 			"}"
 
 			"QToolButton:pressed {"
 			"	background-color:"
 			"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"		stop:0 #222, stop: 0.6 black, stop:1 black);"
-			"	border: 1px solid #444;"
+			"		stop:0 %2, stop:1 %1);"
+			"	border: 1px solid %2;"
 			"}";
+		styleSheet = styleSheet.arg(bgColor.name()).arg(borderColor.name());
 
 		// Button frame
 		mButtonFrame = new QFrame(mView->viewport());
