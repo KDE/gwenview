@@ -466,8 +466,10 @@ public:
 
 private:
 	QPoint saveButtonFramePosition(const QRect& itemRect) const {
-		int posX = itemRect.right() - GADGET_MARGIN - mSaveButtonFrame->sizeHint().width();
-		int posY = itemRect.bottom() - GADGET_MARGIN - mSaveButtonFrame->sizeHint().height();
+		QSize frameSize = mSaveButtonFrame->sizeHint();
+		int textHeight = mView->fontMetrics().height();
+		int posX = itemRect.right() - GADGET_MARGIN - frameSize.width();
+		int posY = itemRect.bottom() - GADGET_MARGIN - textHeight - frameSize.height();
 
 		return QPoint(posX, posY);
 	}
