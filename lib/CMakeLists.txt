@@ -30,6 +30,7 @@ set(gwenviewlib_SRCS
 	imageviewpart.cpp
 	jpegcontent.cpp
 	mimetypeutils.cpp
+	paintutils.cpp
 	print/printhelper.cpp
 	print/printoptionspage.cpp
 	slidecontainer.cpp
