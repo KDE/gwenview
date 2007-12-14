@@ -35,16 +35,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "lib/document/documentfactory.h"
+#include "lib/paintutils.h"
 
 
 namespace Gwenview {
-
-
-static QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV) {
-	int hue, saturation, value;
-	color.getHsv(&hue, &saturation, &value);
-	return QColor::fromHsv(hue + deltaH, saturation + deltaS, value + deltaV);
-}
 
 
 struct SaveBarPrivate {
@@ -58,7 +52,7 @@ struct SaveBarPrivate {
 		widget->setAutoFillBackground(true);
 
 		QColor color = QToolTip::palette().base().color();
-		QColor borderColor = adjustedHsv(color, 0, 150, 0);
+		QColor borderColor = PaintUtils::adjustedHsv(color, 0, 150, 0);
 
 		QString css =
 			"QWidget {"
