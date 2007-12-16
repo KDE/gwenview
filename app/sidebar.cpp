@@ -106,6 +106,15 @@ void SideBarGroup::addAction(QAction* action) {
 	QToolButton* button = new QToolButton();
 	button->setAutoRaise(true);
 	button->setDefaultAction(action);
+
+	if (action->icon().isNull()) {
+		// Assign an empty icons to the button if there is no icon associated
+		// with the action so that all button texts are correctly aligned.
+		QPixmap pix(button->iconSize());
+		pix.fill(Qt::transparent);
+		button->setIcon(QIcon(pix));
+	}
+
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	addWidget(button);
 }
