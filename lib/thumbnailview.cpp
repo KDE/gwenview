@@ -192,6 +192,7 @@ public:
 		mSaveButton->setIconSize(mModifiedPixmap.size());
 		mSaveButton->setIcon(mModifiedPixmap);
 		mSaveButton->setAutoRaise(true);
+
 		connect(mSaveButton, SIGNAL(clicked()),
 			mView, SLOT(slotSaveClicked()) );
 
@@ -199,6 +200,24 @@ public:
 		layout->setMargin(0);
 		layout->setSpacing(0);
 		layout->addWidget(mSaveButton);
+
+		initSaveButtonFramePixmap();
+	}
+
+	void initSaveButtonFramePixmap() {
+		// Necessary otherwise we won't see the save button itself
+		mSaveButtonFrame->adjustSize();
+
+		// This is hackish.
+		// Show/hide the frame to make sure mSaveButtonFrame->render produces
+		// something coherent.
+		mSaveButtonFrame->show();
+		mSaveButtonFrame->repaint();
+		mSaveButtonFrame->hide();
+
+		mSaveButtonFramePixmap = QPixmap(mSaveButtonFrame->size());//QImage(mSaveButtonFrame->size(), QImage::Format_ARGB32_Premultiplied);
+		mSaveButtonFramePixmap.fill(Qt::transparent);
+		mSaveButtonFrame->render(&mSaveButtonFramePixmap, QPoint(), QRegion(), QWidget::DrawChildren);
 	}
 
 
@@ -346,22 +365,10 @@ public:
 		// Draw modified indicator
 		bool isModified = mView->isModified(index);
 		if (isModified) {
-			// Draws the mModifiedPixmap pixmap at the exact same place where
-			// it will be drawn when mSaveButtonFrame is shown.
-			// This code assumes the save button pixmap is drawn in the middle
-			// of the button. This should be the case unless the CSS is
-			// changed.
+			// Draws a pixmap of the save button frame, as an indicator that
+			// the image has been modified
 			QPoint framePosition = saveButtonFramePosition(rect);
-			QRect saveButtonRect(
-				framePosition.x() + mSaveButton->x(),
-				framePosition.y() + mSaveButton->y(),
-				mSaveButton->sizeHint().width(),
-				mSaveButton->sizeHint().height());
-
-			int posX = saveButtonRect.x() + (saveButtonRect.width() - mModifiedPixmap.width()) / 2;
-			int posY = saveButtonRect.y() + (saveButtonRect.height() - mModifiedPixmap.height()) / 2;
-
-			painter->drawPixmap(posX, posY, mModifiedPixmap);
+			painter->drawPixmap(framePosition, mSaveButtonFramePixmap);
 		}
 
 		if (index == mIndexUnderCursor) {
@@ -472,6 +479,7 @@ private:
 
 	ThumbnailView* mView;
 	QPixmap mModifiedPixmap;
+	QPixmap mSaveButtonFramePixmap;
 	QToolButton* mSaveButton;
 	QFrame* mButtonFrame;
 	QFrame* mSaveButtonFrame;
