@@ -116,8 +116,6 @@ public:
 	: QAbstractItemDelegate(view)
 	, mView(view)
 	{
-		mModifiedPixmap = SmallIcon("document-save");
-
 		QColor bgColor = mView->palette().highlight().color();
 		QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 
@@ -154,21 +152,18 @@ public:
 		mButtonFrame->hide();
 
 		QToolButton* fullScreenButton = new QToolButton(mButtonFrame);
-		fullScreenButton->setIconSize(mModifiedPixmap.size());
 		fullScreenButton->setIcon(SmallIcon("view-fullscreen"));
 		fullScreenButton->setAutoRaise(true);
 		connect(fullScreenButton, SIGNAL(clicked()),
 			mView, SLOT(slotFullScreenClicked()) );
 
 		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
-		rotateLeftButton->setIconSize(mModifiedPixmap.size());
 		rotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
 		rotateLeftButton->setAutoRaise(true);
 		connect(rotateLeftButton, SIGNAL(clicked()),
 			mView, SLOT(slotRotateLeftClicked()) );
 
 		QToolButton* rotateRightButton = new QToolButton(mButtonFrame);
-		rotateRightButton->setIconSize(mModifiedPixmap.size());
 		rotateRightButton->setIcon(SmallIcon("object-rotate-right"));
 		rotateRightButton->setAutoRaise(true);
 		connect(rotateRightButton, SIGNAL(clicked()),
@@ -188,18 +183,17 @@ public:
 		mSaveButtonFrame->setBackgroundRole(QPalette::Button);
 		mSaveButtonFrame->hide();
 
-		mSaveButton = new QToolButton(mSaveButtonFrame);
-		mSaveButton->setIconSize(mModifiedPixmap.size());
-		mSaveButton->setIcon(mModifiedPixmap);
-		mSaveButton->setAutoRaise(true);
+		QToolButton* saveButton = new QToolButton(mSaveButtonFrame);
+		saveButton->setIcon(SmallIcon("document-save"));
+		saveButton->setAutoRaise(true);
 
-		connect(mSaveButton, SIGNAL(clicked()),
+		connect(saveButton, SIGNAL(clicked()),
 			mView, SLOT(slotSaveClicked()) );
 
 		layout = new QHBoxLayout(mSaveButtonFrame);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(mSaveButton);
+		layout->addWidget(saveButton);
 
 		initSaveButtonFramePixmap();
 	}
@@ -478,11 +472,9 @@ private:
 	mutable ShadowCache mShadowCache;
 
 	ThumbnailView* mView;
-	QPixmap mModifiedPixmap;
-	QPixmap mSaveButtonFramePixmap;
-	QToolButton* mSaveButton;
 	QFrame* mButtonFrame;
 	QFrame* mSaveButtonFrame;
+	QPixmap mSaveButtonFramePixmap;
 	QModelIndex mIndexUnderCursor;
 };
 
