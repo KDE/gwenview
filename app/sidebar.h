@@ -20,8 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
-#include <memory>
-
 // Qt
 #include <QFrame>
 #include <QScrollArea>
@@ -50,10 +48,12 @@ private:
 };
 
 
+class SideBarPrivate;
 class SideBar : public QScrollArea {
 	Q_OBJECT
 public:
 	SideBar(QWidget* parent);
+	~SideBar();
 
 	void clear();
 
@@ -68,8 +68,7 @@ protected:
 	virtual void showEvent(QShowEvent*);
 
 private:
-	struct Private;
-	std::auto_ptr<Private> d;
+	SideBarPrivate* const d;
 };
 
 } // namespace

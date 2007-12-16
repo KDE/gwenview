@@ -111,7 +111,7 @@ void SideBarGroup::addAction(QAction* action) {
 }
 
 
-struct SideBar::Private {
+struct SideBarPrivate {
 	QVBoxLayout* mLayout;
 	QList<SideBarGroup*> mGroupList;
 	QWidget* mWidget;
@@ -119,9 +119,8 @@ struct SideBar::Private {
 
 
 SideBar::SideBar(QWidget* parent)
-: QScrollArea(parent) {
-	d.reset(new Private);
-
+: QScrollArea(parent)
+, d(new SideBarPrivate) {
 	d->mWidget = new QWidget(this);
 
 	d->mLayout = new QVBoxLayout(d->mWidget);
@@ -133,6 +132,11 @@ SideBar::SideBar(QWidget* parent)
 	setWidget(d->mWidget);
 	setWidgetResizable(true);
 	setFont(KGlobalSettings::toolBarFont());
+}
+
+
+SideBar::~SideBar() {
+	delete d;
 }
 
 
