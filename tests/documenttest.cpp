@@ -53,6 +53,12 @@ void DocumentTest::testLoad() {
 	QCOMPARE(doc->format().data(), "png");
 }
 
+void DocumentTest::testLoadEmpty() {
+	KUrl url = urlForTestFile("empty.png");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+}
+
 void DocumentTest::testLoadRemote() {
 	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
 	KUrl url(urlString);
