@@ -123,6 +123,7 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 struct MainWindowState {
 	QAction* mActiveViewModeAction;
 	bool mSideBarVisible;
+	Qt::WindowStates mWindowState;
 };
 
 struct MainWindow::Private {
@@ -880,17 +881,19 @@ void MainWindow::exitFullScreen() {
 
 
 void MainWindow::toggleFullScreen() {
+	setUpdatesEnabled(false);
 	if (d->mFullScreenAction->isChecked()) {
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
+		d->mStateBeforeFullScreen.mWindowState = windowState();
 
 		d->mDocumentView->setViewBackgroundColor(Qt::black);
 
 		d->mViewAction->trigger();
 		d->mSideBarContainer->hide();
 
-		showFullScreen();
+		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
 		d->mSaveBar->setForceHide(true);
@@ -907,10 +910,11 @@ void MainWindow::toggleFullScreen() {
 		d->mSlideShow->stop();
 		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
-		showNormal();
+		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->show();
 		toolBar()->show();
 	}
+	setUpdatesEnabled(true);
 }
 
 
