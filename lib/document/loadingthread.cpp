@@ -155,9 +155,6 @@ struct LoadingThreadPrivate {
 			mImageSize = mJpegContent->size();
 		} else {
 			mImageSize = reader->size();
-			// FIXME: For now we assume the size is always valid, it simplifies the
-			// rest of the code
-			Q_ASSERT(mImageSize.isValid());
 		}
 
 		return true;
@@ -187,7 +184,9 @@ void LoadingThread::run() {
 		return;
 	}
 
-	emit metaDataLoaded();
+	if (d->mImageSize.isValid()) {
+		emit metaDataLoaded();
+	}
 
 	// WARNING: Do not access d->mExiv2Image after metaDataLoaded() has been
 	// called, since the LoadingDocumentImpl may pop it.
@@ -195,6 +194,13 @@ void LoadingThread::run() {
 	bool ok = reader.read(&d->mImage);
 	if (!ok) {
 		return;
+	}
+
+	if (!d->mImageSize.isValid()) {
+		// loadMetaData() failed to read the image size. Now that we have
+		// loaded the image we can initialize it and notify others.
+		d->mImageSize = d->mImage.size();
+		emit metaDataLoaded();
 	}
 
 	if (d->mJpegContent) {
