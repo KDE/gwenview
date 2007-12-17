@@ -246,7 +246,6 @@ bool JpegContent::loadFromData(const QByteArray& data) {
 		kError() << "Could not load image with Exiv2, reported error:" << loader.errorMessage();
 	}
 	image = loader.popImage();
-	image->readMetadata();
 
 	return loadFromData(data, image.get());
 }

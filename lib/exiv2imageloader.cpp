@@ -55,6 +55,7 @@ Exiv2ImageLoader::~Exiv2ImageLoader() {
 bool Exiv2ImageLoader::load(const QByteArray& data) {
 	try {
 		d->mImage = Exiv2::ImageFactory::open((unsigned char*)data.constData(), data.size());
+		d->mImage->readMetadata();
 #if EXIV2_VERSION >= EXIV2_MAKE_VERSION(0, 14, 0)
 	// For some unknown reason, trying to catch Exiv2::Error fails with Exiv2
 	// >=0.14. For now, just catch std::exception. I would welcome any
