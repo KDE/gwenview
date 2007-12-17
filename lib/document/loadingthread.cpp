@@ -134,6 +134,7 @@ struct LoadingThreadPrivate {
 
 		mFormat = reader->format();
 		if (mFormat.isEmpty()) {
+			kWarning() << "Unknown image format";
 			return false;
 		}
 
