@@ -60,6 +60,9 @@ const int SELECTION_RADIUS = 10;
 /** Border around gadget icons */
 const int GADGET_MARGIN = 2;
 
+/** Radius of the gadget frame, in pixels */
+const int GADGET_RADIUS = 3;
+
 /** How many pixels between items */
 const int SPACING = 11;
 
@@ -68,6 +71,57 @@ const int SHADOW_STRENGTH = 128;
 
 /** How many pixels around the thumbnail are shadowed */
 const int SHADOW_SIZE = 4;
+
+
+/**
+ * A frame with a rounded semi-opaque background. Since it's not possible (yet)
+ * to define non-opaque colors in Qt stylesheets, we do it the old way: by
+ * reimplementing paintEvent().
+ */
+class GlossyFrame : public QFrame {
+public:
+	GlossyFrame(QWidget* parent = 0)
+	: QFrame(parent)
+	, mOpaque(false)
+	{}
+
+	void setOpaque(bool value) {
+		if (value != mOpaque) {
+			mOpaque = value;
+			update();
+		}
+	}
+
+	void setBackgroundColor(const QColor& color) {
+		QPalette pal = palette();
+		pal.setColor(backgroundRole(), color);
+		setPalette(pal);
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent* /*event*/) {
+		QColor color = palette().color(backgroundRole());
+		QRectF rectF = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
+		QPainterPath path = PaintUtils::roundedRectangle(rectF, GADGET_RADIUS);
+
+		QPainter painter(this);
+		painter.setRenderHint(QPainter::Antialiasing);
+
+		if (mOpaque) {
+			painter.fillPath(path, color);
+		} else {
+			QLinearGradient gradient(rect().topLeft(), rect().bottomLeft());
+			gradient.setColorAt(0, PaintUtils::alphaAdjustedF(color, 0.9));
+			gradient.setColorAt(1, PaintUtils::alphaAdjustedF(color, 0.4));
+			painter.fillPath(path, gradient);
+		}
+		painter.setPen(color);
+		painter.drawPath(path);
+	}
+
+private:
+	bool mOpaque;
+};
 
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
@@ -120,14 +174,8 @@ public:
 		QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 
 		QString styleSheet =
-			"QFrame {"
-			"	background-color: %1;"
-			"	border: 1px solid %1;"
-			"	padding: 1px;"
-			"	border-radius: 6px;"
-			"}"
-
 			"QToolButton {"
+			"	margin: 1px;"
 			"	padding: 2px;"
 			"	border-radius: 4px;"
 			"}"
@@ -145,10 +193,9 @@ public:
 		styleSheet = styleSheet.arg(bgColor.name()).arg(borderColor.name());
 
 		// Button frame
-		mButtonFrame = new QFrame(mView->viewport());
+		mButtonFrame = new GlossyFrame(mView->viewport());
 		mButtonFrame->setStyleSheet(styleSheet);
-		mButtonFrame->setAutoFillBackground(true);
-		mButtonFrame->setBackgroundRole(QPalette::Button);
+		mButtonFrame->setBackgroundColor(bgColor);
 		mButtonFrame->hide();
 
 		QToolButton* fullScreenButton = new QToolButton(mButtonFrame);
@@ -177,10 +224,9 @@ public:
 		layout->addWidget(rotateRightButton);
 
 		// Save button frame
-		mSaveButtonFrame = new QFrame(mView->viewport());
+		mSaveButtonFrame = new GlossyFrame(mView->viewport());
 		mSaveButtonFrame->setStyleSheet(styleSheet);
-		mSaveButtonFrame->setAutoFillBackground(true);
-		mSaveButtonFrame->setBackgroundRole(QPalette::Button);
+		mSaveButtonFrame->setBackgroundColor(bgColor);
 		mSaveButtonFrame->hide();
 
 		QToolButton* saveButton = new QToolButton(mSaveButtonFrame);
@@ -256,7 +302,11 @@ public:
 
 		if (showButtonFrames) {
 			QRect rect = mView->visualRect(mIndexUnderCursor);
-			mButtonFrame->move(rect.x() + GADGET_MARGIN, rect.y() + GADGET_MARGIN);
+			mButtonFrame->adjustSize();
+			updateButtonFrameOpacity();
+			int posX = rect.x() + (rect.width() - mButtonFrame->width()) / 2;
+			int posY = rect.y() + GADGET_MARGIN;
+			mButtonFrame->move(posX, posY);
 			mButtonFrame->show();
 
 			if (mView->isModified(mIndexUnderCursor)) {
@@ -390,6 +440,13 @@ public:
 	}
 
 
+	void updateButtonFrameOpacity() {
+		bool isSelected = mView->selectionModel()->isSelected(mIndexUnderCursor);
+		mButtonFrame->setOpaque(isSelected);
+		mSaveButtonFrame->setOpaque(isSelected);
+	}
+
+
 private:
 	QPoint saveButtonFramePosition(const QRect& itemRect) const {
 		QSize frameSize = mSaveButtonFrame->sizeHint();
@@ -472,8 +529,8 @@ private:
 	mutable ShadowCache mShadowCache;
 
 	ThumbnailView* mView;
-	QFrame* mButtonFrame;
-	QFrame* mSaveButtonFrame;
+	GlossyFrame* mButtonFrame;
+	GlossyFrame* mSaveButtonFrame;
 	QPixmap mSaveButtonFramePixmap;
 	QModelIndex mIndexUnderCursor;
 };
@@ -690,6 +747,12 @@ void ThumbnailView::dropEvent(QDropEvent* event) {
 	d->mThumbnailViewHelper->showMenuForUrlDroppedOnViewport(this, urlList);
 
 	event->acceptProposedAction();
+}
+
+
+void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
+	QListView::selectionChanged(selected, deselected);
+	d->mItemDelegate->updateButtonFrameOpacity();
 }
 
 
