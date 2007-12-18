@@ -209,7 +209,7 @@ public:
 		mSaveButtonFrame->repaint();
 		mSaveButtonFrame->hide();
 
-		mSaveButtonFramePixmap = QPixmap(mSaveButtonFrame->size());//QImage(mSaveButtonFrame->size(), QImage::Format_ARGB32_Premultiplied);
+		mSaveButtonFramePixmap = QPixmap(mSaveButtonFrame->size());
 		mSaveButtonFramePixmap.fill(Qt::transparent);
 		mSaveButtonFrame->render(&mSaveButtonFramePixmap, QPoint(), QRegion(), QWidget::DrawChildren);
 	}
