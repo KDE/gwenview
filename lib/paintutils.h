@@ -55,6 +55,12 @@ GWENVIEWLIB_EXPORT QPixmap generateFuzzyRect(const QSize& size, const QColor& co
  */
 GWENVIEWLIB_EXPORT QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV);
 
+/**
+ * Returns a modified version of @p color, where alpha has been set to @p
+ * alphaF.
+ */
+GWENVIEWLIB_EXPORT QColor alphaAdjustedF(const QColor& color, qreal alphaF);
+
 } // namespace
 
 } // namespace

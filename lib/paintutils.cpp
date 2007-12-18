@@ -123,5 +123,12 @@ QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV) {
 }
 
 
+QColor alphaAdjustedF(const QColor& color, qreal alphaF) {
+	QColor tmp = color;
+	tmp.setAlphaF(alphaF);
+	return tmp;
+}
+
+
 } // namespace
 } // namespace
