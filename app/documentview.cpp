@@ -152,13 +152,16 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	}
 
 	// Load new part
-	LOG("Loading part from library: " << library);
-	KParts::ReadOnlyPart* part = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>(
-		service,
-		d->mPartContainer /*parentWidget*/,
-		d->mPartContainer /*parent*/);
+	LOG("Loading part from library" << library);
+	KPluginFactory* factory = KPluginLoader(library).factory();
+	if (!factory) {
+		kWarning() << "Failed to load library" << library;
+		return;
+	}
+	LOG("Loading part from library" << library);
+	KParts::ReadOnlyPart* part = factory->create<KParts::ReadOnlyPart>(d->mPartContainer);
 	if (!part) {
-		kWarning() << "Failed to instantiate KPart from library " << library ;
+		kWarning() << "Failed to instantiate KPart from library" << library ;
 		return;
 	}
 
