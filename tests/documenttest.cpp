@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 
 // KDE
+#include <kdebug.h>
 #include <kio/netaccess.h>
 #include <qtest_kde.h>
 
@@ -70,6 +71,28 @@ void DocumentTest::testLoadRemote() {
 	QImage image = doc->image();
 	QCOMPARE(image.width(), 300);
 	QCOMPARE(image.height(), 200);
+}
+
+void DocumentTest::testSaveRemote() {
+	KUrl srcUrl = urlForTestFile("test.png");
+	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
+	doc->waitUntilLoaded();
+
+	KUrl dstUrl;
+	dstUrl.setProtocol("trash");
+	dstUrl.setPath("/test.png");
+	Document::SaveResult result = doc->save(dstUrl, "png");
+	QCOMPARE(result, Document::SR_UploadFailed);
+
+	if (qgetenv("REMOTE_SFTP_TEST").isEmpty()) {
+		kWarning() << "*** Define the environment variable REMOTE_SFTP_TEST to try saving an image to sftp://localhost/tmp/test.png";
+	} else {
+		dstUrl.setProtocol("sftp");
+		dstUrl.setHost("localhost");
+		dstUrl.setPath("/tmp/test.png");
+		result = doc->save(dstUrl, "png");
+		QCOMPARE(result, Document::SR_OK);
+	}
 }
 
 /**

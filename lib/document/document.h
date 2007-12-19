@@ -52,6 +52,7 @@ public:
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,
+		SR_UploadFailed,
 		SR_OtherError
 	};
 

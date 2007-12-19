@@ -21,13 +21,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "documentloadedimpl.h"
 
+// STL
+#include <memory>
+
 // Qt
 #include <QImage>
 #include <QMatrix>
 
 // KDE
 #include <kdebug.h>
+#include <kio/netaccess.h>
 #include <ksavefile.h>
+#include <ktemporaryfile.h>
 #include <kurl.h>
 
 // Local
@@ -70,22 +75,49 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
 
 
 Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
-	// FIXME: Handle remote urls
-	Q_ASSERT(url.isLocalFile());
-	KSaveFile file(url.path());
+	QString fileName;
+
+	// This tmp is used to save to remote urls.
+	// It's an auto_ptr, this way it's not instantiated for local urls, but
+	// for remote urls we are sure it will remove its file when we leave the
+	// function.
+	std::auto_ptr<KTemporaryFile> tmp;
+
+	if (url.isLocalFile()) {
+		fileName = url.path();
+	} else {
+		tmp.reset(new KTemporaryFile);
+		tmp->setAutoRemove(true);
+		tmp->open();
+		fileName = tmp->fileName();
+	}
+
+	KSaveFile file(fileName);
 
 	if (!file.open()) {
 		kWarning() << "Couldn't open" << url.pathOrUrl() << "for writing, probably read only";
 		return Document::SR_ReadOnly;
 	}
 
-	if (saveInternal(&file, format)) {
-		return Document::SR_OK;
-	} else {
+	if (!saveInternal(&file, format)) {
 		kWarning() << "Saving" << url.pathOrUrl() << "failed";
 		file.abort();
 		return Document::SR_OtherError;
 	}
+
+	if (!file.finalize()) {
+		kWarning() << "Couldn't replace" << url.pathOrUrl() << "with new file";
+		return Document::SR_OtherError;
+	}
+
+	if (!url.isLocalFile()) {
+		if (!KIO::NetAccess::upload(fileName, url, 0)) {
+			kWarning() << "Couldn't upload to" << url.pathOrUrl();
+			return Document::SR_UploadFailed;
+		}
+	}
+
+	return Document::SR_OK;
 }
 
 
