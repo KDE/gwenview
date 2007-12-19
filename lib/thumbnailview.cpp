@@ -137,6 +137,17 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 
+static QToolButton* createFrameButton(QWidget* parent, const char* iconName) {
+	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+	QToolButton* button = new QToolButton(parent);
+	button->setIcon(SmallIcon(iconName));
+	button->setIconSize(QSize(size, size));
+	button->setAutoRaise(true);
+
+	return button;
+}
+
+
 ThumbnailView::Thumbnail::Thumbnail(const QPixmap& pixmap)
 : mPixmap(pixmap) {
 	if (mPixmap.isNull()) {
@@ -198,21 +209,15 @@ public:
 		mButtonFrame->setBackgroundColor(bgColor);
 		mButtonFrame->hide();
 
-		QToolButton* fullScreenButton = new QToolButton(mButtonFrame);
-		fullScreenButton->setIcon(SmallIcon("view-fullscreen"));
-		fullScreenButton->setAutoRaise(true);
+		QToolButton* fullScreenButton = createFrameButton(mButtonFrame, "view-fullscreen");
 		connect(fullScreenButton, SIGNAL(clicked()),
 			mView, SLOT(slotFullScreenClicked()) );
 
-		QToolButton* rotateLeftButton = new QToolButton(mButtonFrame);
-		rotateLeftButton->setIcon(SmallIcon("object-rotate-left"));
-		rotateLeftButton->setAutoRaise(true);
+		QToolButton* rotateLeftButton = createFrameButton(mButtonFrame, "object-rotate-left");
 		connect(rotateLeftButton, SIGNAL(clicked()),
 			mView, SLOT(slotRotateLeftClicked()) );
 
-		QToolButton* rotateRightButton = new QToolButton(mButtonFrame);
-		rotateRightButton->setIcon(SmallIcon("object-rotate-right"));
-		rotateRightButton->setAutoRaise(true);
+		QToolButton* rotateRightButton = createFrameButton(mButtonFrame, "object-rotate-right");
 		connect(rotateRightButton, SIGNAL(clicked()),
 			mView, SLOT(slotRotateRightClicked()) );
 
@@ -229,10 +234,7 @@ public:
 		mSaveButtonFrame->setBackgroundColor(bgColor);
 		mSaveButtonFrame->hide();
 
-		QToolButton* saveButton = new QToolButton(mSaveButtonFrame);
-		saveButton->setIcon(SmallIcon("document-save"));
-		saveButton->setAutoRaise(true);
-
+		QToolButton* saveButton = createFrameButton(mSaveButtonFrame, "document-save");
 		connect(saveButton, SIGNAL(clicked()),
 			mView, SLOT(slotSaveClicked()) );
 
