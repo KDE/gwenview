@@ -943,7 +943,7 @@ void MainWindow::save(const KUrl& url) {
 		saveUsingAnotherFormat.setText(i18n("Save using another format"));
 		int result = KMessageBox::warningContinueCancel(
 			this,
-			i18n("Gwenview can't save images in '%1' format.").arg(mimeType),
+			i18n("Gwenview can't save images in '%1' format.", mimeType),
 			QString() /* caption */,
 			saveUsingAnotherFormat
 			);
