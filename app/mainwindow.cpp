@@ -936,27 +936,29 @@ void MainWindow::reload() {
 
 
 void MainWindow::save(const KUrl& url) {
-	QString mimeType = MimeTypeUtils::urlMimeType(url);
-	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
-	if (!availableMimeTypes.contains(mimeType)) {
-		KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
-		saveUsingAnotherFormat.setText(i18n("Save using another format"));
-		int result = KMessageBox::warningContinueCancel(
-			this,
-			i18n("Gwenview can't save images in '%1' format.", mimeType),
-			QString() /* caption */,
-			saveUsingAnotherFormat
-			);
-		if (result == KMessageBox::Continue) {
-			saveAs(url);
-		}
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	QByteArray format = doc->format();
+	QStringList availableTypes = KImageIO::types(KImageIO::Writing);
+	if (availableTypes.contains(QString(format))) {
+		doc->save(url, format);
+		// FIXME: check return code of Document::save()
 		return;
 	}
-	QStringList typeList = KImageIO::typeForMime(mimeType);
-	Q_ASSERT(typeList.count() > 0);
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(url, typeList[0].toAscii());
+	// We don't know how to save in 'format', ask the user for a format we can
+	// write to.
+	KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
+	saveUsingAnotherFormat.setText(i18n("Save using another format"));
+	int result = KMessageBox::warningContinueCancel(
+		this,
+		i18n("Gwenview can't save images in '%1' format.", QString(format)),
+		QString() /* caption */,
+		saveUsingAnotherFormat
+		);
+	if (result == KMessageBox::Continue) {
+		saveAs(url);
+	}
 }
 
 
