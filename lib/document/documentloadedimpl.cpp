@@ -22,11 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "documentloadedimpl.h"
 
 // Qt
-#include <QFile>
 #include <QImage>
 #include <QMatrix>
 
 // KDE
+#include <kdebug.h>
+#include <ksavefile.h>
 #include <kurl.h>
 
 // Local
@@ -71,16 +72,18 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
 Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
 	// FIXME: Handle remote urls
 	Q_ASSERT(url.isLocalFile());
-	QFile file(url.path());
-	bool ok;
-	ok = file.open(QIODevice::WriteOnly);
-	if (!ok) {
-		return Document::SR_OtherError;
+	KSaveFile file(url.path());
+
+	if (!file.open()) {
+		kWarning() << "Couldn't open" << url.pathOrUrl() << "for writing, probably read only";
+		return Document::SR_ReadOnly;
 	}
-	ok = saveInternal(&file, format);
-	if (ok) {
+
+	if (saveInternal(&file, format)) {
 		return Document::SR_OK;
 	} else {
+		kWarning() << "Saving" << url.pathOrUrl() << "failed";
+		file.abort();
 		return Document::SR_OtherError;
 	}
 }
