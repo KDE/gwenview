@@ -61,7 +61,7 @@ const int SELECTION_RADIUS = 10;
 const int GADGET_MARGIN = 2;
 
 /** Radius of the gadget frame, in pixels */
-const int GADGET_RADIUS = 3;
+const int GADGET_RADIUS = 6;
 
 /** How many pixels between items */
 const int SPACING = 11;
@@ -101,6 +101,7 @@ public:
 protected:
 	virtual void paintEvent(QPaintEvent* /*event*/) {
 		QColor color = palette().color(backgroundRole());
+		QColor borderColor;
 		QRectF rectF = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
 		QPainterPath path = PaintUtils::roundedRectangle(rectF, GADGET_RADIUS);
 
@@ -109,13 +110,15 @@ protected:
 
 		if (mOpaque) {
 			painter.fillPath(path, color);
+			borderColor = color;
 		} else {
 			QLinearGradient gradient(rect().topLeft(), rect().bottomLeft());
 			gradient.setColorAt(0, PaintUtils::alphaAdjustedF(color, 0.9));
-			gradient.setColorAt(1, PaintUtils::alphaAdjustedF(color, 0.4));
+			gradient.setColorAt(1, PaintUtils::alphaAdjustedF(color, 0.7));
 			painter.fillPath(path, gradient);
+			borderColor = color.dark(SELECTION_BORDER_DARKNESS);
 		}
-		painter.setPen(color);
+		painter.setPen(borderColor);
 		painter.drawPath(path);
 	}
 
@@ -185,8 +188,11 @@ public:
 		QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 
 		QString styleSheet =
+			"QFrame {"
+			"	padding: 1px;"
+			"}"
+
 			"QToolButton {"
-			"	margin: 1px;"
 			"	padding: 2px;"
 			"	border-radius: 4px;"
 			"}"
