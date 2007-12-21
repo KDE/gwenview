@@ -286,7 +286,11 @@ void InfoContextManagerItem::updateOneFileInfo() {
 			d->mKeyValueWidget->addItem(label, value);
 		}
 	}
+
+	// FIXME: This should be handled by mKeyValueWidget: it should schedule a
+	// delayed update when clear() and addItem() are called.
 	d->mKeyValueWidget->updateGeometry();
+	d->mKeyValueWidget->update();
 
 	d->mKeyValueWidget->show();
 }
