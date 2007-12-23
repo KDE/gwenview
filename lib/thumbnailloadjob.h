@@ -30,7 +30,6 @@
 // Qt
 #include <QImage>
 #include <QPixmap>
-#include <QList>
 #include <QMutex>
 #include <QThread>
 #include <QVector>

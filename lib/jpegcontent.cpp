@@ -35,7 +35,6 @@ extern "C" {
 #include <QFile>
 #include <QImage>
 #include <QImageWriter>
-#include <QMap>
 #include <QMatrix>
 
 // KDE

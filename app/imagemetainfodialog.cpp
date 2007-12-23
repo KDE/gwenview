@@ -22,10 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imagemetainfodialog.moc"
 
 // Qt
+#include <QTreeView>
 #include <QHeaderView>
 #include <QLayout>
-#include <QTreeView>
-
 // KDE
 #include <klocale.h>
 

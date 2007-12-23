@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QPointer>
 #include <QPushButton>
-#include <QSpinBox>
 
 // KDE
 #include "klocale.h"
