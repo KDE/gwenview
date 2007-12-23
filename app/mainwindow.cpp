@@ -1203,9 +1203,10 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 
 	QSize size = _size;
 
+	int sideBarWidth = d->mSideBar->isVisible() ? d->mSideBar->width() : 0;
 	// innerMargin is the margin around the view, not including the window
 	// frame
-	QSize innerMargin = geometry().size() - d->mDocumentView->geometry().size();
+	QSize innerMargin = QSize(sideBarWidth, menuBar()->height() + toolBar()->height());
 	// frameMargin is the size of the frame around the window
 	QSize frameMargin = frameGeometry().size() - geometry().size();
 
