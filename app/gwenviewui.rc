@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="33">
+<kpartgui name="gwenview" version="34">
 
 <MenuBar>
 	<Menu name="file" >
@@ -32,7 +32,7 @@
 		<Action name="resize" />
 		<Action name="crop" />
 	</Menu>
-	<Menu name="go_web" >
+	<Menu name="go" >
 		<Action name="go_to_previous"/>
 		<Action name="go_to_next"/>
 		<Separator/>
