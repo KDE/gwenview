@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/imageviewpart.h>
+#include <lib/mimetypeutils.h>
 
 
 namespace Gwenview {
@@ -134,17 +135,24 @@ void DocumentView::reset() {
 void DocumentView::createPartForUrl(const KUrl& url) {
 	QString mimeType=KMimeType::findByUrl(url)->name();
 
-	// Get a list of possible parts
-	const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
-	if (offers.isEmpty()) {
-		kWarning() << "Couldn't find a KPart for " << mimeType ;
-		reset();
-		return;
-	}
+	QString library;
+	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
+		LOG("Enforcing use of Gwenview part");
+		library = "gvpart";
+	} else {
+		LOG("Query system for available parts for" << mimeType);
+		// Get a list of possible parts
+		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
+		if (offers.isEmpty()) {
+			kWarning() << "Couldn't find a KPart for " << mimeType ;
+			reset();
+			return;
+		}
 
-	// Check if we are already using it
-	KService::Ptr service = offers.first();
-	QString library=service->library();
+		// Check if we are already using it
+		KService::Ptr service = offers.first();
+		library=service->library();
+	}
 	Q_ASSERT(!library.isNull());
 	if (library == d->mPartLibrary) {
 		LOG("Reusing current part");
