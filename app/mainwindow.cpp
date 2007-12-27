@@ -181,8 +181,6 @@ struct MainWindow::Private {
 			mWindow, SLOT(slotPartCompleted()) );
 		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGUI(KParts::Part*)) );
-		connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
-			mWindow, SLOT(handleResizeRequest(const QSize&)) );
 
 		mSideBarContainer = new QStackedWidget(mCentralSplitter);
 		mSideBar = new SideBar(mSideBarContainer);
@@ -656,6 +654,9 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 	} else {
 		d->mViewAction->trigger();
 		d->mSideBarContainer->hide();
+		// Resize the window once image is loaded
+		connect(d->mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+			d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 		openDocumentUrl(url);
 	}
 	d->updateToggleSideBarAction();
@@ -1195,6 +1196,10 @@ void MainWindow::print() {
 
 
 void MainWindow::handleResizeRequest(const QSize& _size) {
+	// Disconnect ourself to avoid resizing again when we load another image
+	disconnect(d->mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+		d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
+
 	if (!d->mViewAction->isChecked()) {
 		return;
 	}
