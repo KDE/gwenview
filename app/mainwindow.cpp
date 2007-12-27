@@ -52,6 +52,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 #include <kurlnavigator.h>
 #include <kxmlguifactory.h>
+#include <kwindowsystem.h>
 
 // Local
 #include "configdialog.h"
@@ -1211,7 +1212,12 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 	QSize frameMargin = frameGeometry().size() - geometry().size();
 
 	// Adjust size
-	QRect availableRect = QApplication::desktop()->availableGeometry();
+	QRect availableRect;
+	#ifdef Q_WS_X11
+	availableRect = KWindowSystem::workArea();
+	#else
+	availableRect = QApplication::desktop()->availableGeometry();
+	#endif
 	QSize maxSize = availableRect.size() - innerMargin - frameMargin;
 
 	if (size.width() > maxSize.width() || size.height() > maxSize.height()) {
