@@ -478,24 +478,30 @@ void ThumbnailLoadJob::appendItem(const KFileItem& item) {
 }
 
 
-void ThumbnailLoadJob::itemRemoved(const KFileItem& item) {
-	// If we are removing the next item, update to be the item after or the
-	// first if we removed the last item
-	mItems.removeAll( item );
-	int index = thumbnailIndex( item );
-	if( index >= 0 ) {
-		mAllItems.erase( mAllItems.begin() + index );
-		mProcessedState.erase( mProcessedState.begin() + index );
+void ThumbnailLoadJob::removeItems(const KFileItemList& itemList) {
+	Q_FOREACH(KFileItem item, itemList) {
+		// If we are removing the next item, update to be the item after or the
+		// first if we removed the last item
+		mItems.removeAll( item );
+		int index = thumbnailIndex( item );
+		if( index >= 0 ) {
+			mAllItems.erase( mAllItems.begin() + index );
+			mProcessedState.erase( mProcessedState.begin() + index );
+		}
+
+		if (item == mCurrentItem) {
+			// Abort current item
+			mCurrentItem = KFileItem();
+			if (hasSubjobs()) {
+				KJob* job = subjobs().first();
+				job->kill();
+				removeSubjob(job);
+			}
+		}
 	}
 
-	if (item == mCurrentItem) {
-		// Abort
-		mCurrentItem = KFileItem();
-		if (hasSubjobs()) {
-			KJob* job = subjobs().first();
-			job->kill();
-			removeSubjob(job);
-		}
+	// No more current item, carry on to the next remaining item
+	if (mCurrentItem.isNull()) {
 		determineNextIcon();
 	}
 }

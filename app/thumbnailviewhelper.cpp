@@ -105,12 +105,8 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 
 
 void ThumbnailViewHelper::abortThumbnailGenerationForItems(const KFileItemList& list) {
-	if (!d->mThumbnailLoadJob) {
-		return;
-	}
-	Q_FOREACH(KFileItem item, list) {
-		kDebug() << "aborting" << item.url();
-		d->mThumbnailLoadJob->itemRemoved(item);
+	if (d->mThumbnailLoadJob) {
+		d->mThumbnailLoadJob->removeItems(list);
 	}
 }
 

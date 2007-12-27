@@ -103,9 +103,9 @@ public:
 	void start();
 
 	/**
-	 * To be called whenever an item is removed from the view
+	 * To be called whenever items are removed from the view
 	 */
-	void itemRemoved(const KFileItem& item);
+	void removeItems(const KFileItemList& itemList);
 
 
 	/**
