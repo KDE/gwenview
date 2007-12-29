@@ -421,7 +421,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, int size)
 {
 	LOG((int)this);
 
-	mBrokenPixmap = KIconLoader::global()->loadIcon("file_broken",
+	mBrokenPixmap = KIconLoader::global()->loadIcon("image-missing",
 		KIconLoader::NoGroup, THUMBNAILSIZE_MIN);
 
 	// Look for images and store the items in our todo list
