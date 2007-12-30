@@ -84,6 +84,7 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 
 	if (d->mImage && !d->mImage->isNull()) {
 		d->mTimer->start();
+		doScale();
 	}
 }
 
