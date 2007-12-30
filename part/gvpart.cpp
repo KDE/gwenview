@@ -50,7 +50,7 @@ namespace Gwenview {
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent) 
 {
-	bool gwenviewHost = args.contains("gwenviewHost");
+	mGwenviewHost = args.contains("gwenviewHost");
 
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
@@ -75,7 +75,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 
-	if (!gwenviewHost) {
+	if (!mGwenviewHost) {
 		addPartSpecificActions();
 	}
 
@@ -215,6 +215,10 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 void GVPart::showContextMenu() {
 	KMenu menu(mView);
+	if (!mGwenviewHost) {
+		addActionToMenu(&menu, actionCollection(), "file_save_as");
+		menu.addSeparator();
+	}
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_in");

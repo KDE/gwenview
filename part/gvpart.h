@@ -64,6 +64,7 @@ private:
 	ImageView* mView;
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
+	bool mGwenviewHost;
 
 	void disableZoomToFit();
 	void addPartSpecificActions();
