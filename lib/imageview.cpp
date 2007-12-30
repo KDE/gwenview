@@ -47,7 +47,8 @@ struct ImageViewPrivate {
 	const QImage* mImage;
 	qreal mZoom;
 	bool mZoomToFit;
-	QImage mBuffer;
+	QPixmap mCurrentBuffer;
+	QPixmap mAlternateBuffer;
 	ImageScaler* mScaler;
 	QPointer<AbstractImageViewTool> mTool;
 
@@ -89,9 +90,9 @@ struct ImageViewPrivate {
 	}
 
 
-	QImage createBuffer() const {
+	QPixmap createBuffer() const {
 		QSize size = requiredBufferSize();
-		QImage buffer(size, QImage::Format_ARGB32);
+		QPixmap buffer(size);
 		QColor bgColor = mView->palette().color(mView->backgroundRole());
 		buffer.fill(bgColor.rgba());
 		return buffer;
@@ -100,15 +101,15 @@ struct ImageViewPrivate {
 
 	void resizeBuffer() {
 		QSize size = requiredBufferSize();
-		if (size == mBuffer.size()) {
+		if (size == mCurrentBuffer.size()) {
 			return;
 		}
-		QImage newBuffer = createBuffer();
+		QPixmap newBuffer = createBuffer();
 		{
 			QPainter painter(&newBuffer);
-			painter.drawImage(0, 0, mBuffer);
+			painter.drawPixmap(0, 0, mCurrentBuffer);
 		}
-		mBuffer = newBuffer;
+		mCurrentBuffer = newBuffer;
 	}
 
 
@@ -196,7 +197,8 @@ void ImageView::setImage(const QImage* image) {
 		// image, even if we were given an NULL pointer.
 		d->mImage = &d->mEmptyImage;
 	}
-	d->mBuffer = d->createBuffer();
+	d->mCurrentBuffer = d->createBuffer();
+	d->mAlternateBuffer = QPixmap();
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
 	} else {
@@ -245,7 +247,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QPoint offset = imageOffset();
 
 	// Erase pixels around the image
-	QRect imageRect(offset, d->mBuffer.size());
+	QRect imageRect(offset, d->mCurrentBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
 	QColor bgColor = palette().color(backgroundRole());
 	Q_FOREACH(QRect rect, emptyRegion.rects()) {
@@ -265,7 +267,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 			painter.fillRect(imageRect, d->mAlphaBackgroundColor);
 		}
 	}
-	painter.drawImage(offset, d->mBuffer);
+	painter.drawPixmap(offset, d->mCurrentBuffer);
 
 	if (d->mTool) {
 		d->mTool->paint(&painter);
@@ -283,8 +285,8 @@ void ImageView::resizeEvent(QResizeEvent*) {
 }
 
 QPoint ImageView::imageOffset() const {
-	int left = qMax( (d->mViewport->width() - d->mBuffer.width()) / 2, 0);
-	int top = qMax( (d->mViewport->height() - d->mBuffer.height()) / 2, 0);
+	int left = qMax( (d->mViewport->width() - d->mCurrentBuffer.width()) / 2, 0);
+	int top = qMax( (d->mViewport->height() - d->mCurrentBuffer.height()) / 2, 0);
 
 	return QPoint(left, top);
 }
@@ -299,7 +301,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	qreal oldZoom = d->mZoom;
 	d->mZoom = zoom;
 	d->resizeBuffer();
-	if (d->mZoom < oldZoom && (d->mBuffer.width() < d->mViewport->width() || d->mBuffer.height() < d->mViewport->height())) {
+	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
 		d->mViewport->update();
 	}
@@ -355,43 +357,15 @@ void ImageView::updateScrollBars() {
 
 void ImageView::scrollContentsBy(int dx, int dy) {
 	// Scroll existing
-	// FIXME: Could be optimized a bit further by looping on the image rows one
-	// time only.
-	uchar* src;
-	uchar* dst;
-	int bpl = d->mBuffer.bytesPerLine();
-	int delta;
-	if (dy != 0) {
-		if (dy > 0) {
-			dst = d->mBuffer.bits() + (d->mBuffer.height() - 1) * bpl;
-			src = dst - dy * bpl;
-			delta = -bpl;
-		} else {
-			dst = d->mBuffer.bits();
-			src = dst - dy * bpl;
-			delta = bpl;
+	{
+		if (d->mAlternateBuffer.isNull()) {
+			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
 		}
-		for (int loop=0; loop < d->mBuffer.height() - qAbs(dy); ++loop, src += delta, dst += delta) {
-			memcpy(dst, src, bpl);
-		}
+		QPainter painter(&d->mAlternateBuffer);
+		painter.fillRect(d->mAlternateBuffer.rect(), Qt::black);
+		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
 	}
-
-	if (dx != 0) {
-		delta = bpl;
-		if (dx > 0) {
-			src = d->mBuffer.bits();
-			dst = src + dx * 4;
-		} else {
-			dst = d->mBuffer.bits();
-			src = dst - dx * 4;
-		}
-		int moveSize = (d->mBuffer.width() - qAbs(dx)) * 4;
-		if (moveSize > 0) {
-			for (int loop=0; loop < d->mBuffer.height(); ++loop, src += delta, dst += delta) {
-				memmove(dst, src, moveSize);
-			}
-		}
-	}
+	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
 
 	// Scale missing parts
 	QRegion region;
@@ -425,7 +399,7 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 	top -= d->vScroll();
 
 	{
-		QPainter painter(&d->mBuffer);
+		QPainter painter(&d->mCurrentBuffer);
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
 		painter.drawImage(left, top, image);
 	}
