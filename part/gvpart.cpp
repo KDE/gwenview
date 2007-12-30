@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kfiledialog.h>
 #include <kicon.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
@@ -246,7 +247,22 @@ void GVPart::saveAs() {
 		return;
 	}
 
-	KIO::file_copy(srcUrl, dstUrl);
+	KIO::Job* job = KIO::file_copy(srcUrl, dstUrl);
+	connect(job, SIGNAL(result(KJob*)),
+		this, SLOT(showJobError(KJob*)) );
+}
+
+
+void GVPart::showJobError(KJob* job) {
+	if (job->error() != 0) {
+		KIO::JobUiDelegate* ui = static_cast<KIO::Job*>(job)->ui();
+		if (!ui) {
+			kError() << "Saving failed. job->ui() is null.";
+			return;
+		}
+		ui->setWindow(widget());
+		ui->showErrorMessage();
+	}
 }
 
 

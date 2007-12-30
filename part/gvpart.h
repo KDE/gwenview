@@ -59,6 +59,7 @@ private Q_SLOTS:
 	void showContextMenu();
 	void slotImageRectUpdated(const QRect&);
 	void saveAs();
+	void showJobError(KJob*);
 
 private:
 	ImageView* mView;
