@@ -136,9 +136,11 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	QString mimeType=KMimeType::findByUrl(url)->name();
 
 	QString library;
+	QVariantList partArgs;
 	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
 		LOG("Enforcing use of Gwenview part");
 		library = "gvpart";
+		partArgs << QVariant("gwenviewHost");
 	} else {
 		LOG("Query system for available parts for" << mimeType);
 		// Get a list of possible parts
@@ -167,7 +169,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 		return;
 	}
 	LOG("Loading part from library" << library);
-	KParts::ReadOnlyPart* part = factory->create<KParts::ReadOnlyPart>(d->mPartContainer);
+	KParts::ReadOnlyPart* part = factory->create<KParts::ReadOnlyPart>(d->mPartContainer, partArgs);
 	if (!part) {
 		kWarning() << "Failed to instantiate KPart from library" << library ;
 		return;

@@ -26,7 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <kfiledialog.h>
 #include <kicon.h>
+#include <kio/job.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
@@ -45,9 +47,11 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 namespace Gwenview {
 
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
+GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent) 
 {
+	bool gwenviewHost = args.contains("gwenviewHost");
+
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
 	ScrollTool* scrollTool = new ScrollTool(mView);
@@ -70,9 +74,19 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList&)
 	action->setIcon(KIcon("zoom-original"));
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
+
+	if (!gwenviewHost) {
+		addPartSpecificActions();
+	}
+
 	setXMLFile("gvpart/gvpart.rc");
 
 	loadConfig();
+}
+
+
+void GVPart::addPartSpecificActions() {
+	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 }
 
 
@@ -218,6 +232,17 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		}
 	}
 	return false;
+}
+
+
+void GVPart::saveAs() {
+	KUrl srcUrl = url();
+	KUrl dstUrl = KFileDialog::getSaveUrl(srcUrl.fileName(), QString(), widget());
+	if (!dstUrl.isValid()) {
+		return;
+	}
+
+	KIO::file_copy(srcUrl, dstUrl);
 }
 
 

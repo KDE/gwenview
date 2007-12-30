@@ -58,6 +58,7 @@ private Q_SLOTS:
 	void updateCaption();
 	void showContextMenu();
 	void slotImageRectUpdated(const QRect&);
+	void saveAs();
 
 private:
 	ImageView* mView;
@@ -65,6 +66,7 @@ private:
 	KAction* mZoomToFitAction;
 
 	void disableZoomToFit();
+	void addPartSpecificActions();
 };
 
 } // namespace
