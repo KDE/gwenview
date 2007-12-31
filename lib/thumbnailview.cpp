@@ -757,6 +757,17 @@ void ThumbnailView::dropEvent(QDropEvent* event) {
 }
 
 
+void ThumbnailView::keyPressEvent(QKeyEvent* event) {
+	QListView::keyPressEvent(event);
+	if (event->key() == Qt::Key_Return) {
+		const QModelIndex index = selectionModel()->currentIndex();
+		if (index.isValid() && selectionModel()->selectedIndexes().count() == 1) {
+			emit indexActivated(index);
+		}
+	}
+}
+
+
 void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
 	QListView::selectionChanged(selected, deselected);
 	d->mItemDelegate->updateButtonFrameOpacity();

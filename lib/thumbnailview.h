@@ -108,6 +108,8 @@ protected:
 
 	virtual void dropEvent(QDropEvent*);
 
+	virtual void keyPressEvent(QKeyEvent*);
+
 protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
