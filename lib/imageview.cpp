@@ -90,12 +90,15 @@ struct ImageViewPrivate {
 	}
 
 
-	QPixmap createBuffer() const {
+	void createBuffer() {
 		QSize size = requiredBufferSize();
-		QPixmap buffer(size);
+		if (!size.isValid()) {
+			return;
+		}
+		mCurrentBuffer = QPixmap(size);
+		mAlternateBuffer = QPixmap();
 		QColor bgColor = mView->palette().color(mView->backgroundRole());
-		buffer.fill(bgColor.rgba());
-		return buffer;
+		mCurrentBuffer.fill(bgColor.rgba());
 	}
 
 
@@ -104,12 +107,12 @@ struct ImageViewPrivate {
 		if (size == mCurrentBuffer.size()) {
 			return;
 		}
-		QPixmap newBuffer = createBuffer();
+		QPixmap oldBuffer = mCurrentBuffer;
+		createBuffer();
 		{
-			QPainter painter(&newBuffer);
-			painter.drawPixmap(0, 0, mCurrentBuffer);
+			QPainter painter(&mCurrentBuffer);
+			painter.drawPixmap(0, 0, oldBuffer);
 		}
-		mCurrentBuffer = newBuffer;
 	}
 
 
@@ -197,8 +200,7 @@ void ImageView::setImage(const QImage* image) {
 		// image, even if we were given an NULL pointer.
 		d->mImage = &d->mEmptyImage;
 	}
-	d->mCurrentBuffer = d->createBuffer();
-	d->mAlternateBuffer = QPixmap();
+	d->createBuffer();
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
 	} else {
@@ -300,6 +302,9 @@ void ImageView::setZoom(qreal zoom) {
 void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	qreal oldZoom = d->mZoom;
 	d->mZoom = zoom;
+	if (d->mImage->isNull()) {
+		return;
+	}
 	d->resizeBuffer();
 	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
