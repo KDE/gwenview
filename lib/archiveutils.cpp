@@ -31,12 +31,14 @@ namespace ArchiveUtils {
 
 typedef QMap<QString,QString> ArchiveProtocolForMimeTypes;
 
-static const char* KDE_PROTOCOL = "X-KDE-LocalProtocol";
-
 static const ArchiveProtocolForMimeTypes& archiveProtocolForMimeTypes() {
 	static ArchiveProtocolForMimeTypes map;
 	static bool initialized = false;
 	if (!initialized) {
+		// FIXME: This code used to work in KDE3. For now stick with an
+		// hardcoded list of mimetypes, stolen from Dolphin code
+		#if 0
+		static const char* KDE_PROTOCOL = "X-KDE-LocalProtocol";
 		KMimeType::List list = KMimeType::allMimeTypes();
 		KMimeType::List::Iterator it=list.begin(), end=list.end();
 		for (; it!=end; ++it) {
@@ -45,6 +47,13 @@ static const ArchiveProtocolForMimeTypes& archiveProtocolForMimeTypes() {
 				map[(*it)->name()] = protocol;
 			}
 		}
+		#endif
+		map["application/zip"] = "zip";
+		map["application/x-tar"] = "tar";
+		map["application/x-tarz"] = "tar";
+		map["application/x-bzip-compressed-tar"] = "tar";
+		map["application/x-compressed-tar"] = "tar";
+		map["application/x-tzo"] = "tar";
 		initialized = true;
 		if (map.empty()) {
 			kWarning() << "No archive protocol found.";
@@ -75,11 +84,9 @@ QStringList mimeTypes() {
 	return archiveProtocolForMimeTypes().keys();
 }
 
-/*
 QString protocolForMimeType(const QString& mimeType) {
 	return archiveProtocolForMimeTypes()[mimeType];
 }
-*/
 
 } // namespace ArchiveUtils
 

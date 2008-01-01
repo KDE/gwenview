@@ -40,10 +40,8 @@ GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem&);
 /* FIXME remove if not needed
 bool protocolIsArchive(const QString&);
 */
-QStringList mimeTypes();
-/* FIXME remove if not needed
-QString protocolForMimeType(const QString&);
-*/
+GWENVIEWLIB_EXPORT QStringList mimeTypes();
+GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString&);
 
 } // namespace ArchiveUtils
 

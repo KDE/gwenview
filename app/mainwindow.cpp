@@ -714,6 +714,11 @@ void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 	KFileItem item = d->mDirModel->itemForIndex(index);
 	if (item.isDir()) {
 		openDirUrl(item.url());
+	} else if (ArchiveUtils::fileItemIsArchive(item)) {
+		KUrl url = item.url();
+		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
+		url.setProtocol(protocol);
+		openDirUrl(url);
 	}
 }
 
@@ -734,7 +739,7 @@ void MainWindow::openSelectedDocument() {
 	}
 
 	KFileItem item = d->mDirModel->itemForIndex(index);
-	if (!item.isDir()) {
+	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		openDocumentUrl(item.url());
 	}
 }
