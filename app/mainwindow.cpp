@@ -262,11 +262,11 @@ struct MainWindow::Private {
 		mBrowseAction = actionCollection->addAction("browse");
 		mBrowseAction->setText(i18n("Browse"));
 		mBrowseAction->setCheckable(true);
-		mBrowseAction->setIcon(KIcon("view-icon"));
+		mBrowseAction->setIcon(KIcon("view-list-icons"));
 
 		mPreviewAction = actionCollection->addAction("preview");
 		mPreviewAction->setText(i18n("Preview"));
-		mPreviewAction->setIcon(KIcon("view-choose"));
+		mPreviewAction->setIcon(KIcon("view-list-details"));
 		mPreviewAction->setCheckable(true);
 
 		mViewAction = actionCollection->addAction("view");
@@ -291,14 +291,14 @@ struct MainWindow::Private {
 
 		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
 		mGoToPreviousAction->setText(i18n("Previous"));
-		mGoToPreviousAction->setIcon(KIcon("arrow-left"));
+		mGoToPreviousAction->setIcon(KIcon("go-previous")); // FIXME: RTL support would probably be a good idea, but I have no time right now
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 		connect(mGoToPreviousAction, SIGNAL(triggered()),
 			mWindow, SLOT(goToPrevious()) );
 
 		mGoToNextAction = actionCollection->addAction("go_to_next");
 		mGoToNextAction->setText(i18n("Next"));
-		mGoToNextAction->setIcon(KIcon("arrow-right"));
+		mGoToNextAction->setIcon(KIcon("go-next")); // FIXME: RTL support would probably be a good idea, but I have no time right now
 		mGoToNextAction->setShortcut(Qt::Key_Space);
 		connect(mGoToNextAction, SIGNAL(triggered()),
 			mWindow, SLOT(goToNext()) );
