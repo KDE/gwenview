@@ -92,6 +92,7 @@ namespace Gwenview {
 
 static const int PRELOAD_DELAY = 1000;
 
+static const char* MAINWINDOW_SETTINGS = "MainWindow";
 
 static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
@@ -600,6 +601,19 @@ struct MainWindow::Private {
 		mSideBarContainer->setCurrentWidget(widget);
 		mSideBarContainer->show();
 	}
+
+
+	void loadMainWindowConfig() {
+		KConfigGroup cg(KGlobal::config(), MAINWINDOW_SETTINGS);
+		mWindow->applyMainWindowSettings(cg);
+	}
+
+
+	void saveMainWindowConfig() {
+		KConfigGroup cg(KGlobal::config(), MAINWINDOW_SETTINGS);
+		mWindow->saveMainWindowSettings(cg);
+		KGlobal::config()->sync();
+	}
 };
 
 
@@ -619,7 +633,7 @@ d(new MainWindow::Private)
 
 	createShellGUI();
 	loadConfig();
-	setAutoSaveSettings();
+	d->loadMainWindowConfig();
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
@@ -879,6 +893,10 @@ void MainWindow::exitFullScreen() {
 void MainWindow::toggleFullScreen() {
 	setUpdatesEnabled(false);
 	if (d->mFullScreenAction->isChecked()) {
+		// Save MainWindow config now, this way if we quit while in
+		// fullscreen, we are sure latest MainWindow changes are remembered.
+		d->saveMainWindowConfig();
+
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
@@ -1108,6 +1126,11 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 bool MainWindow::queryClose() {
 	saveConfig();
+	if (!d->mFullScreenAction->isChecked()) {
+		// Do not save config in fullscreen, we don't want to restart without
+		// menu bar or toolbars...
+		d->saveMainWindowConfig();
+	}
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
 		return true;
