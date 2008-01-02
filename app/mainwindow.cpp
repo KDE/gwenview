@@ -820,6 +820,7 @@ void MainWindow::slotPartCompleted() {
 
 void MainWindow::slotSelectionChanged() {
 	openSelectedDocument();
+	hideTemporarySideBar();
 	d->updateActions();
 	updatePreviousNextActions();
 	updateContextManager();
@@ -1292,7 +1293,9 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 
 void MainWindow::hideTemporarySideBar() {
 	QWidget* temporarySideBar = d->mSideBarContainer->currentWidget();
-	Q_ASSERT(temporarySideBar != d->mSideBar);
+	if (temporarySideBar == d->mSideBar) {
+		return;
+	}
 	temporarySideBar->deleteLater();
 
 	if (!d->mSideBarWasVisibleBeforeTemporarySideBar) {
