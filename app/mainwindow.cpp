@@ -1076,10 +1076,13 @@ void MainWindow::resizeImage() {
 
 
 void MainWindow::crop() {
+	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
+	if (!imageViewPart) {
+		kError() << "No ImageViewPart available!";
+		return;
+	}
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
 	doc->waitUntilLoaded();
-	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
-	Q_ASSERT(imageViewPart);
 	CropSideBar* cropSideBar = new CropSideBar(this, imageViewPart->imageView(), doc);
 	connect(cropSideBar, SIGNAL(done()), SLOT(hideTemporarySideBar()) );
 
