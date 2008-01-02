@@ -228,6 +228,15 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 		return;
 	}
 
+	QSize bufferSize = d->requiredBufferSize();
+	if (bufferSize != d->mCurrentBuffer.size()) {
+		// Since the required buffer size is not the same as our current buffer
+		// size, the image must have been resized. Call setImage(), it will
+		// take care of resizing the buffer and repainting the whole image.
+		setImage(d->mImage);
+		return;
+	}
+
 	QRect zoomedImageRect = d->mapViewportToZoomedImage(viewportRect);
 
 	d->mScaler->addDestinationRegion(QRegion(zoomedImageRect));
