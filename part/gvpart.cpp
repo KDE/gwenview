@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/scrolltool.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
+#include "gvbrowserextension.h"
 
 //Factory Code
 typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
@@ -88,6 +89,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 
 void GVPart::addPartSpecificActions() {
 	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
+
+	new GVBrowserExtension(this);
 }
 
 
