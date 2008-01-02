@@ -503,7 +503,7 @@ struct MainWindow::Private {
 		mMirrorAction->setEnabled(canModify);
 		mFlipAction->setEnabled(canModify);
 		mResizeAction->setEnabled(canModify);
-		mCropAction->setEnabled(canModify);
+		mCropAction->setEnabled(canModify && mDocumentView->isVisible());
 	}
 
 	KUrl currentUrl() const {
@@ -703,6 +703,12 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
+
+	// Update actions and context because some context actions depends on the
+	// view mode, for example: cropping should only be enabled when the
+	// document view is visible.
+	d->updateActions();
+	updateContextManager();
 }
 
 
