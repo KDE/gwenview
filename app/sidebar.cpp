@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
+#include <kiconloader.h>
 #include <kglobalsettings.h>
 
 // Local
@@ -139,10 +140,12 @@ void SideBarGroup::clear() {
 
 
 void SideBarGroup::addAction(QAction* action) {
+	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
 	QToolButton* button = new SideBarButton();
 	button->setAutoRaise(true);
 	button->setDefaultAction(action);
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	button->setIconSize(QSize(size, size));
 	addWidget(button);
 }
 
