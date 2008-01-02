@@ -34,6 +34,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 
+/**
+ * A button which always leave room for an icon, even if there is none, so that
+ * all button texts are correctly aligned.
+ */
+class SideBarButton : public QToolButton {
+protected:
+	virtual void paintEvent(QPaintEvent* event) {
+		forceIcon();
+		QToolButton::paintEvent(event);
+	}
+
+	virtual QSize sizeHint() const {
+		const_cast<SideBarButton*>(this)->forceIcon();
+		return QToolButton::sizeHint();
+	}
+
+private:
+	void forceIcon() {
+		if (!icon().isNull()) {
+			return;
+		}
+
+		// Assign an empty icon to the button if there is no icon associated
+		// with the action so that all button texts are correctly aligned.
+		QSize wantedSize = iconSize();
+		if (mEmptyIcon.isNull() || mEmptyIcon.actualSize(wantedSize) != wantedSize) {
+			QPixmap pix(wantedSize);
+			pix.fill(Qt::transparent);
+			mEmptyIcon.addPixmap(pix);
+		}
+		setIcon(mEmptyIcon);
+	}
+
+	QIcon mEmptyIcon;
+};
+
+
 struct SideBarGroupPrivate {
 	QFrame* mContainer;
 	ExpandButton* mTitleButton;
@@ -102,18 +139,9 @@ void SideBarGroup::clear() {
 
 
 void SideBarGroup::addAction(QAction* action) {
-	QToolButton* button = new QToolButton();
+	QToolButton* button = new SideBarButton();
 	button->setAutoRaise(true);
 	button->setDefaultAction(action);
-
-	if (action->icon().isNull()) {
-		// Assign an empty icons to the button if there is no icon associated
-		// with the action so that all button texts are correctly aligned.
-		QPixmap pix(button->iconSize());
-		pix.fill(Qt::transparent);
-		button->setIcon(QIcon(pix));
-	}
-
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	addWidget(button);
 }
