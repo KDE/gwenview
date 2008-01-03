@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Gwenview
+Name[hi]=ग्वेन-व्यू
 Name[ne]=जीवेनभ्यू
 Name[x-test]=xxGwenviewxx
 GenericName=Image Viewer
@@ -21,6 +22,7 @@ GenericName[fr]=Visionneuse d'images
 GenericName[ga]=Amharcán Íomhánna
 GenericName[gl]=Visor de imaxes
 GenericName[he]=מציג תמונות
+GenericName[hi]=छवि प्रदर्शक
 GenericName[hr]=Preglednik slika
 GenericName[hu]=Képnézegető
 GenericName[is]=Myndskoðari
@@ -68,9 +70,11 @@ Comment[fi]=Yksinkertainen kuvannäytin
 Comment[fr]=Visionneuse simple d'images
 Comment[ga]=Amharcán simplí íomhánna
 Comment[gl]=Un visor de imaxes
+Comment[hi]=एक सरल चित्र प्रदर्शक
 Comment[is]=Einfaldur myndskoðari
 Comment[it]=Un semplice visore di immagini
 Comment[ja]=シンプルな画像ビューア
+Comment[km]=កម្មវិធី​មើល​រូបភាព​ធម្មតា
 Comment[ko]=간단한 그림 뷰어
 Comment[lv]=Vienkāršs attēlu skatītājs
 Comment[nds]=En eenfach Bildkieker
