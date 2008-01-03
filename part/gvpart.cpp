@@ -68,7 +68,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	mZoomToFitAction->setCheckable(true);
 	mZoomToFitAction->setChecked(mView->zoomToFit());
 	mZoomToFitAction->setText(i18n("Zoom To Fit"));
-	mZoomToFitAction->setIcon(KIcon("zoom-best-fit"));
+	mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
 	connect(mZoomToFitAction, SIGNAL(toggled(bool)), SLOT(setZoomToFit(bool)) );
 	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
