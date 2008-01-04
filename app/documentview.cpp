@@ -133,7 +133,7 @@ void DocumentView::reset() {
 
 
 void DocumentView::createPartForUrl(const KUrl& url) {
-	QString mimeType=KMimeType::findByUrl(url)->name();
+	QString mimeType = MimeTypeUtils::urlMimeType(url);
 
 	QString library;
 	QVariantList partArgs;
