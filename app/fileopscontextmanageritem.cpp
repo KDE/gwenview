@@ -69,17 +69,17 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 		SLOT(updateActions()) );
 
 	d->mCopyToAction = new QAction(this);
-	d->mCopyToAction->setText(i18nc("Verb", "Copy To"));
+	d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
 	connect(d->mCopyToAction, SIGNAL(triggered()),
 		SLOT(copyTo()) );
 
 	d->mMoveToAction = new QAction(this);
-	d->mMoveToAction->setText(i18nc("Verb", "Move To"));
+	d->mMoveToAction->setText(i18nc("Verb", "Move To..."));
 	connect(d->mMoveToAction, SIGNAL(triggered()),
 		SLOT(moveTo()) );
 
 	d->mLinkToAction = new QAction(this);
-	d->mLinkToAction->setText(i18nc("Verb", "Link To"));
+	d->mLinkToAction->setText(i18nc("Verb", "Link To..."));
 	connect(d->mLinkToAction, SIGNAL(triggered()),
 		SLOT(linkTo()) );
 
@@ -104,7 +104,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 		SLOT(showProperties()) );
 
 	d->mCreateFolderAction = new QAction(this);
-	d->mCreateFolderAction->setText(i18n("Create Folder"));
+	d->mCreateFolderAction->setText(i18n("Create Folder..."));
 	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
 	connect(d->mCreateFolderAction, SIGNAL(triggered()),
 		SLOT(createFolder()) );

@@ -1125,10 +1125,10 @@ void MainWindow::toggleSlideShow() {
 
 void MainWindow::updateSlideShowAction() {
 	if (d->mSlideShow->isRunning()) {
-		d->mToggleSlideShowAction->setText(i18n("Stop slideshow"));
+		d->mToggleSlideShowAction->setText(i18n("Stop Slideshow"));
 		d->mToggleSlideShowAction->setIcon(KIcon("media-playback-pause"));
 	} else {
-		d->mToggleSlideShowAction->setText(i18n("Start slideshow"));
+		d->mToggleSlideShowAction->setText(i18n("Start Slideshow"));
 		d->mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
 	}
 }

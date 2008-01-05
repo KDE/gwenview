@@ -31,7 +31,7 @@
       <item>
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>&amp;View Background Color:</string>
+         <string>&amp;View background color:</string>
         </property>
         <property name="buddy" >
          <cstring>kcfg_ViewBackgroundColor</cstring>
@@ -64,7 +64,7 @@
    <item>
     <widget class="KButtonGroup" name="kcfg_AlphaBackgroundMode" >
      <property name="title" >
-      <string>Transparent Image Background:</string>
+      <string>Transparent Image Background</string>
      </property>
      <layout class="QVBoxLayout" >
       <property name="margin" >
@@ -84,7 +84,7 @@
         <item>
          <widget class="QRadioButton" name="checkBoardRadioButton" >
           <property name="text" >
-           <string>&amp;Check Board</string>
+           <string>&amp;Check board</string>
           </property>
           <property name="checked" >
            <bool>true</bool>
@@ -117,7 +117,7 @@
         <item>
          <widget class="QRadioButton" name="solidColorRadioButton" >
           <property name="text" >
-           <string>&amp;Solid Color</string>
+           <string>&amp;Solid color:</string>
           </property>
          </widget>
         </item>
