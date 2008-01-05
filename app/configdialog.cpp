@@ -137,7 +137,7 @@ ConfigDialog::ConfigDialog(QWidget* parent, KIPI::PluginLoader* pluginLoader)
 	d->mManagers << new KConfigDialogManager(d->mFileOperationsPage, FileOperationConfig::self());
 
 	d->mSlideShowPage = addConfigPage<ConfigSlideshowPage>(
-		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow");
+		this, i18n("SlideShow"), i18n("SlideShow"), "slideshow_play");
 	d->mManagers << new KConfigDialogManager(d->mSlideShowPage, SlideShowConfig::self());
 
 #ifdef GV_HAVE_KIPI
