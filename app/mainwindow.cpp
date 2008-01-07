@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmountpoint.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kprotocolmanager.h>
 #include <kstatusbar.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
@@ -699,7 +700,15 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	d->mDocumentView->setVisible(showDocument);
 	if (showDocument && d->mDocumentView->isEmpty()) {
 		openSelectedDocument();
-	} else if (!showDocument && !d->mDocumentView->isEmpty()) {
+	} else if (!showDocument
+		&& !d->mDocumentView->isEmpty()
+		&& KProtocolManager::supportsListing(d->mDocumentView->url()))
+	{
+		// Reset the view to spare resources, but don't do it if we can't
+		// browse the url, otherwise if the user starts Gwenview this way:
+		// gwenview http://example.com/example.png
+		// and switch to browse mode, switching back to view mode won't bring
+		// his image back.
 		d->mDocumentView->reset();
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
@@ -804,6 +813,10 @@ void MainWindow::updateContextManager() {
 void MainWindow::slotPartCompleted() {
 	Q_ASSERT(!d->mDocumentView->isEmpty());
 	KUrl url = d->mDocumentView->url();
+	if (!KProtocolManager::supportsListing(url)) {
+		return;
+	}
+
 	KUrl dirUrl = url;
 	dirUrl.setFileName("");
 	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
