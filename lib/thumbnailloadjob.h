@@ -123,7 +123,7 @@ public:
 	static QString thumbnailBaseDir();
 
 	/**
-	 * Sets the thumbnail base dir, usefull for unit-testing
+	 * Sets the thumbnail base dir, useful for unit-testing
 	 */
 	static void setThumbnailBaseDir(const QString&);
 
