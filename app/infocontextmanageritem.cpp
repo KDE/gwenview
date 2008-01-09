@@ -80,6 +80,7 @@ public:
 	}
 
 protected:
+	// FIXME: RTL Support
 	virtual void paintEvent(QPaintEvent*) {
 		QPainter painter(this);
 		int posY = fontMetrics().ascent();
@@ -90,20 +91,13 @@ protected:
 		keyFont.setBold(true);
 		QFontMetrics keyFM(keyFont, this);
 
-		QRegExp re("<b>([^<]+)</b>(.*)");
 		Q_FOREACH(const ListItem& item, mList) {
 			QString key = item.first;
 			QString value = item.second;
 
-			// FIXME: KDE4.1: Remove this when string freeze is lifted
-			QString tmp = i18n("<b>%1:</b> %2", key, value);
-			int pos = re.indexIn(tmp);
-			if (pos > -1) {
-				key = re.cap(1);
-				value = re.cap(2);
-			} else {
-				key += ':';
-			}
+			key = i18nc(
+				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
+				"%1: ", key);
 
 			painter.save();
 			painter.setFont(keyFont);
