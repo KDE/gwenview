@@ -493,7 +493,7 @@ void JpegContent::applyPendingTransformation() {
 	// Enable saving of extra markers that we want to copy
 	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
 
-	(void) jpeg_read_header(&srcinfo, TRUE);
+	(void) jpeg_read_header(&srcinfo, true);
 
 	// Init transformation
 	jpeg_transform_info transformoption;

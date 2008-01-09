@@ -280,7 +280,7 @@ bool ThumbnailThread::loadJpeg() {
 	// Init decompression
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, inputFile);
-	jpeg_read_header(&cinfo, TRUE);
+	jpeg_read_header(&cinfo, true);
 
 	// Get image size and check if we need a thumbnail
 	int size= mThumbnailSize <= THUMBNAILSIZE_NORMAL ? THUMBNAILSIZE_NORMAL : THUMBNAILSIZE_LARGE;
