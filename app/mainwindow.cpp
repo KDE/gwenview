@@ -1166,10 +1166,13 @@ bool MainWindow::queryClose() {
 
 	KGuiItem yes(i18n("Save All Changes"), "document-save");
 	KGuiItem no(i18n("Discard Changes"));
+    QString msg =
+        i18np("One image has been modified.", "%1 images have been modified.", list.size())
+		+ '\n'
+        + i18n("If you quit now, your changes will be lost.");
 	int answer = KMessageBox::warningYesNoCancel(
 		this,
-		i18np("One image has been modified.", "%1 images have been modified.", list.size())
-			+ '\n' + i18n("If you quit now, your changes will be lost."),
+        msg,
 		QString() /* caption */,
 		yes,
 		no);
