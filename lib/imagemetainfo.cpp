@@ -219,10 +219,10 @@ struct ImageMetaInfoPrivate {
 
 	void initGeneralGroup() {
 		MetaInfoGroup* group = mMetaInfoGroupVector[GeneralGroup];
-		group->addEntry("General.Name", i18n("Name"), QString());
-		group->addEntry("General.Size", i18n("File Size"), QString());
-		group->addEntry("General.Time", i18n("File Time"), QString());
-		group->addEntry("General.ImageSize", i18n("Image Size"), QString());
+		group->addEntry("General.Name", i18nc("@item:intable Image file name", "Name"), QString());
+		group->addEntry("General.Size", i18nc("@item:intable", "File Size"), QString());
+		group->addEntry("General.Time", i18nc("@item:intable", "File Time"), QString());
+		group->addEntry("General.ImageSize", i18nc("@item:intable", "Image Size"), QString());
 	}
 };
 
@@ -231,9 +231,9 @@ ImageMetaInfo::ImageMetaInfo()
 : d(new ImageMetaInfoPrivate) {
 	d->mModel = this;
 	d->mMetaInfoGroupVector.resize(3);
-	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18n("General"));
-	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18n("Exif"));
-	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18n("Iptc"));
+	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
+	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18nc("@title:group", "Exif"));
+	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18nc("@title:group", "Iptc"));
 	d->initGeneralGroup();
 }
 
@@ -256,11 +256,17 @@ void ImageMetaInfo::setFileItem(const KFileItem& item) {
 void ImageMetaInfo::setImageSize(const QSize& size) {
 	QString imageSize;
 	if (size.isValid()) {
-		imageSize = i18n("%1x%2", size.width(), size.height());
+		imageSize = i18nc(
+			"@item:intable %1 is image width, %2 is image height",
+			"%1x%2", size.width(), size.height());
+
 		double megaPixels = size.width() * size.height() / 1000000.;
 		if (megaPixels > 0.1) {
 			QString megaPixelsString = QString::number(megaPixels, 'f', 1);
-			imageSize += ' ' + i18n("(%1MP)", megaPixelsString);
+			imageSize += ' ';
+			imageSize + i18nc(
+				"@item:intable %1 is number of millions of pixels in image",
+				"(%1MP)", megaPixelsString);
 		}
 	} else {
 		imageSize = "-";
@@ -446,9 +452,9 @@ QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int
 
 	QString caption;
 	if (section == 0) {
-		caption = i18n("Property");
+		caption = i18nc("@title:column", "Property");
 	} else if (section == 1) {
-		caption = i18n("Value");
+		caption = i18nc("@title:column", "Value");
 	} else {
 		kWarning() << "Unknown section" << section;
 	}

@@ -136,7 +136,7 @@ SlideShow::SlideShow(QObject* parent)
 			this, SLOT(slotTimeout()) );
 
 	d->mIntervalSpinBox = new QDoubleSpinBox();
-	d->mIntervalSpinBox->setSuffix(i18n(" seconds"));
+	d->mIntervalSpinBox->setSuffix(i18nc("@item:intext spinbox suffix for slideshow interval", " seconds"));
 	d->mIntervalSpinBox->setMinimum(0.5);
 	d->mIntervalSpinBox->setMaximum(999999.);
 	d->mIntervalSpinBox->setDecimals(1);
@@ -145,16 +145,16 @@ SlideShow::SlideShow(QObject* parent)
 
 	d->mOptionsButton = new QToolButton();
 	d->mOptionsButton->setIcon(KIcon("configure"));
-	d->mOptionsButton->setToolTip(i18n("Slideshow options"));
+	d->mOptionsButton->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
 	QMenu* menu = new QMenu(d->mOptionsButton);
 	d->mOptionsButton->setMenu(menu);
 	d->mOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
-	d->mLoopAction = menu->addAction(i18n("Loop"));
+	d->mLoopAction = menu->addAction(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
 	d->mLoopAction->setCheckable(true);
 	connect(d->mLoopAction, SIGNAL(triggered()), SLOT(updateConfig()) );
 
-	d->mRandomAction = menu->addAction(i18n("Random"));
+	d->mRandomAction = menu->addAction(i18nc("@item:inmenu toggle random order in slideshow", "Random"));
 	d->mRandomAction->setCheckable(true);
 	connect(d->mRandomAction, SIGNAL(toggled(bool)), SLOT(slotRandomActionToggled(bool)) );
 	connect(d->mRandomAction, SIGNAL(triggered()), SLOT(updateConfig()) );

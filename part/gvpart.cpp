@@ -135,10 +135,18 @@ void GVPart::slotImageRectUpdated(const QRect& rect) {
 
 
 KAboutData* GVPart::createAboutData() {
-	KAboutData* aboutData = new KAboutData( "gvpart", 0, ki18n("GVPart"),
-		"2.0", ki18n("Image Viewer"),
-		KAboutData::License_GPL,
-		ki18n("Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>"));
+	KAboutData* aboutData = new KAboutData(
+		"gvpart",                /* appname */
+		"gwenview",              /* catalogName */
+		ki18n("Gwenview KPart"), /* programName */
+		"2.0");                  /* version */
+	aboutData->setShortDescription(ki18n("An Image Viewer"));
+	aboutData->setLicense(KAboutData::License_GPL);
+	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
+	aboutData->addAuthor(
+		ki18n("Aurélien Gâteau"),
+		ki18n("Main developer"),
+		"aurelien.gateau@free.fr");
 	return aboutData;
 }
 

@@ -168,7 +168,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mKeyValueWidget = new KeyValueWidget(d->mOneFileWidget);
 
 	QLabel* moreLabel = new QLabel(d->mOneFileWidget);
-	moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18n("More...")));
+	moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
 	moreLabel->setAlignment(Qt::AlignRight);
 
 	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);

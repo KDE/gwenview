@@ -31,9 +31,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
-	KAboutData aboutData( "gwenview", 0, ki18n("Gwenview"),
-		"2.0", ki18n("An Image Viewer"),
-		KAboutData::License_GPL, ki18n("(c) 2007") );
+	KAboutData aboutData(
+		"gwenview",        /* appname */
+		0,                 /* catalogName */
+		ki18n("Gwenview"), /* programName */
+		"2.0");            /* version */
+	aboutData.setShortDescription(ki18n("An Image Viewer"));
+	aboutData.setLicense(KAboutData::License_GPL);
+	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
+	aboutData.addAuthor(
+		ki18n("Aurélien Gâteau"),
+		ki18n("Main developer"),
+		"aurelien.gateau@free.fr");
+
 	KCmdLineArgs::init( argc, argv, &aboutData );
 
 	KCmdLineOptions options;

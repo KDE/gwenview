@@ -256,7 +256,7 @@ struct MainWindow::Private {
 		KStandardAction::quit(KApplication::kApplication(), SLOT(closeAllWindows()), actionCollection);
 
 		QAction* action = actionCollection->addAction("reload");
-		action->setText(i18n("Reload"));
+		action->setText(i18nc("@action reload the currently viewed image", "Reload"));
 		action->setIcon(KIcon("view-refresh"));
 		connect(action, SIGNAL(triggered()),
 			mWindow, SLOT(reload()) );
@@ -292,14 +292,14 @@ struct MainWindow::Private {
 			mWindow, SLOT(exitFullScreen()) );
 
 		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
-		mGoToPreviousAction->setText(i18n("Previous"));
+		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
 		mGoToPreviousAction->setIcon(KIcon("go-previous")); // FIXME: RTL support would probably be a good idea, but I have no time right now
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 		connect(mGoToPreviousAction, SIGNAL(triggered()),
 			mWindow, SLOT(goToPrevious()) );
 
 		mGoToNextAction = actionCollection->addAction("go_to_next");
-		mGoToNextAction->setText(i18n("Next"));
+		mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
 		mGoToNextAction->setIcon(KIcon("go-next")); // FIXME: RTL support would probably be a good idea, but I have no time right now
 		mGoToNextAction->setShortcut(Qt::Key_Space);
 		connect(mGoToNextAction, SIGNAL(triggered()),

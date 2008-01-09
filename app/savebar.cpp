@@ -206,7 +206,7 @@ bool SaveBar::saveAll() {
 
 	// TODO: Save in a separate thread?
 	QProgressDialog progress(this);
-	progress.setLabelText(i18n("Saving..."));
+	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
 	progress.setMinimum(lst.size());
