@@ -44,7 +44,7 @@ QString sandBoxPath() {
 }
 
 
-void createTestImage(const QString& name, int width, int height, QColor color) {
+void createTestImage(const QString& name, int width, int height, const QColor& color) {
 	QImage image(width, height, QImage::Format_RGB32);
 	QPainter painter(&image);
 	painter.fillRect(image.rect(), color);

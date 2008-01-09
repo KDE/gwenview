@@ -77,7 +77,8 @@ static const int THUMBNAILSIZE_MIN = 48;
 static const int THUMBNAILSIZE_NORMAL = 128;
 static const int THUMBNAILSIZE_LARGE = 256;
 
-static QString generateOriginalUri(KUrl url) {
+static QString generateOriginalUri(const KUrl& url_) {
+	KUrl url = url_;
 	// Don't include the password if any
 	url.setPass(QString::null);	//krazy:exclude=nullstrassign for old broken gcc
 	return url.url();
@@ -651,8 +652,8 @@ void ThumbnailLoadJob::slotResult(KJob * job) {
 }
 
 
-void ThumbnailLoadJob::thumbnailReady( const QImage& im, const QSize& _size) {
-	QImage img = im;
+void ThumbnailLoadJob::thumbnailReady( const QImage& _img, const QSize& _size) {
+	QImage img = _img;
 	QSize size = _size;
 	if ( !img.isNull()) {
 		emitThumbnailLoaded(img, size);
@@ -774,7 +775,7 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixm
 }
 
 
-void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, QSize size) {
+void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size) {
 	LOG(mCurrentItem.url());
 	int biggestDimension=qMax(img.width(), img.height());
 

@@ -191,7 +191,7 @@ private:
 	void determineNextIcon();
 	void startCreatingThumbnail(const QString& path);
 
-	void emitThumbnailLoaded(const QImage& img, QSize size);
+	void emitThumbnailLoaded(const QImage& img, const QSize& size);
 
 	void updateItemsOrderHelper( int forward, int backward, int first, int last );
 };
