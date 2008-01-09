@@ -803,7 +803,7 @@ void MainWindow::updateContextManager() {
 	QModelIndexList indexList = selection.indexes();
 
 	KFileItemList itemList;
-	Q_FOREACH(QModelIndex index, indexList) {
+	Q_FOREACH(const QModelIndex& index, indexList) {
 		itemList << d->mDirModel->itemForIndex(index);
 	}
 

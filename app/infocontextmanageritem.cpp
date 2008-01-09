@@ -91,7 +91,7 @@ protected:
 		QFontMetrics keyFM(keyFont, this);
 
 		QRegExp re("<b>([^<]+)</b>(.*)");
-		Q_FOREACH(ListItem item, mList) {
+		Q_FOREACH(const ListItem& item, mList) {
 			QString key = item.first;
 			QString value = item.second;
 
@@ -239,7 +239,7 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 	d->mDocument = 0;
 
 	int folderCount = 0, fileCount = 0;
-	Q_FOREACH(KFileItem item, itemList) {
+	Q_FOREACH(const KFileItem& item, itemList) {
 		if (item.isDir()) {
 			folderCount++;
 		} else {
@@ -277,7 +277,7 @@ void InfoContextManagerItem::updateOneFileInfo() {
 	}
 	QStringList list;
 	d->mKeyValueWidget->clear();
-	Q_FOREACH(QString key, d->mImageMetaInfo.preferredMetaInfoKeyList()) {
+	Q_FOREACH(const QString& key, d->mImageMetaInfo.preferredMetaInfoKeyList()) {
 		QString label;
 		QString value;
 		d->mImageMetaInfo.getInfoForKey(key, &label, &value);

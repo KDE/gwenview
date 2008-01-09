@@ -479,7 +479,7 @@ void ThumbnailLoadJob::appendItem(const KFileItem& item) {
 
 
 void ThumbnailLoadJob::removeItems(const KFileItemList& itemList) {
-	Q_FOREACH(KFileItem item, itemList) {
+	Q_FOREACH(const KFileItem& item, itemList) {
 		// If we are removing the next item, update to be the item after or the
 		// first if we removed the last item
 		mItems.removeAll( item );

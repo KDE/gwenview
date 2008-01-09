@@ -68,7 +68,7 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) {
 	KFileItemList filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
-	Q_FOREACH(KFileItem item, list) {
+	Q_FOREACH(const KFileItem& item, list) {
 		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
 		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
 			continue;
@@ -95,7 +95,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
 			d->mThumbnailLoadJob->start();
 		} else {
-			Q_FOREACH(KFileItem item, filteredList) {
+			Q_FOREACH(const KFileItem& item, filteredList) {
 				d->mThumbnailLoadJob->appendItem(item);
 			}
 		}

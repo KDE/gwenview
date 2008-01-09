@@ -261,7 +261,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QRect imageRect(offset, d->mCurrentBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
 	QColor bgColor = palette().color(backgroundRole());
-	Q_FOREACH(QRect rect, emptyRegion.rects()) {
+	Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
 		painter.fillRect(rect, bgColor);
 	}
 

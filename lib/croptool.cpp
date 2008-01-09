@@ -84,7 +84,7 @@ struct CropToolPrivate {
 
 
 	CropHandle handleAt(const QPoint& pos) {
-		Q_FOREACH(CropHandle handle, mCropHandleList) {
+		Q_FOREACH(const CropHandle& handle, mCropHandleList) {
 			QRect rect = handleViewportRect(handle);
 			if (rect.contains(pos)) {
 				return handle;
@@ -163,7 +163,7 @@ void CropTool::paint(QPainter* painter) {
 	QRect imageRect = imageView()->rect();
 
 	QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
-	Q_FOREACH(QRect outerRect, outerRegion.rects()) {
+	Q_FOREACH(const QRect& outerRect, outerRegion.rects()) {
 		painter->fillRect(outerRect, QColor(0, 0, 0, 128));
 	}
 
@@ -174,7 +174,7 @@ void CropTool::paint(QPainter* painter) {
 
 	painter->setBrush(Qt::gray);
 	painter->setRenderHint(QPainter::Antialiasing);
-	Q_FOREACH(CropHandle handle, d->mCropHandleList) {
+	Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
 		rect = d->handleViewportRect(handle);
 		painter->drawEllipse(rect);
 	}

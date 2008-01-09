@@ -77,7 +77,7 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 	QDir dir(sandBoxPath());
 
 	KFileItemList list;
-	Q_FOREACH(QFileInfo info, dir.entryInfoList()) {
+	Q_FOREACH(const QFileInfo& info, dir.entryInfoList()) {
 		KUrl url("file://" + info.absoluteFilePath());
 		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 		list << item;

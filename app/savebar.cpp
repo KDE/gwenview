@@ -212,7 +212,7 @@ bool SaveBar::saveAll() {
 	progress.setMinimum(lst.size());
 	progress.setWindowModality(Qt::WindowModal);
 
-	Q_FOREACH(KUrl url, lst) {
+	Q_FOREACH(const KUrl& url, lst) {
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		Document::SaveResult saveResult = doc->save(url, doc->format());
 		if (saveResult != Document::SR_OK) {
