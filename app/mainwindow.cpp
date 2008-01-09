@@ -1169,7 +1169,7 @@ bool MainWindow::queryClose() {
 	int answer = KMessageBox::warningYesNoCancel(
 		this,
 		i18np("One image has been modified.", "%1 images have been modified.", list.size())
-			+ "\n" + i18n("If you quit now, your changes will be lost."),
+			+ '\n' + i18n("If you quit now, your changes will be lost."),
 		QString() /* caption */,
 		yes,
 		no);

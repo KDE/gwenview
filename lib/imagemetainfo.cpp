@@ -260,7 +260,7 @@ void ImageMetaInfo::setImageSize(const QSize& size) {
 		double megaPixels = size.width() * size.height() / 1000000.;
 		if (megaPixels > 0.1) {
 			QString megaPixelsString = QString::number(megaPixels, 'f', 1);
-			imageSize += " " + i18n("(%1MP)", megaPixelsString);
+			imageSize += ' ' + i18n("(%1MP)", megaPixelsString);
 		}
 	} else {
 		imageSize = "-";

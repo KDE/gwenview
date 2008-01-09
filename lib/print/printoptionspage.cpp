@@ -64,19 +64,19 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
 		QColor selectedColor = palette.highlight().color();
 		mPositionFrame->setStyleSheet(
 			"QFrame {"
-			"	background-color:" + gridColor.name() + ";"
-			"	border: 1px solid " + borderColor.name() + ";"
+			"	background-color:" + gridColor.name() + "; "
+			"	border: 1px solid " + borderColor.name() + "; "
 			"}"
 			"QToolButton {"
 			"	border: none;"
-			"	background: " + bgColor.name() + ";"
+			"	background: " + bgColor.name() + "; "
 			"}"
 			"QToolButton:hover {"
-			"	background: " + hoverColor.name() + ";"
-			"	border: 1px solid " + selectedColor.name() + ";"
+			"	background: " + hoverColor.name() + "; "
+			"	border: 1px solid " + selectedColor.name() + "; "
 			"}"
 			"QToolButton:checked {"
-			"	background-color: " + selectedColor.name() + ";"
+			"	background-color: " + selectedColor.name() + "; "
 			"}"
 			);
 

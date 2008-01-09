@@ -49,7 +49,7 @@ void createTestImage(const QString& name, int width, int height, QColor color) {
 	QPainter painter(&image);
 	painter.fillRect(image.rect(), color);
 	painter.end();
-	image.save(sandBoxPath() + "/" + name, "png");
+	image.save(sandBoxPath() + '/' + name, "png");
 }
 
 

@@ -81,7 +81,7 @@ void JpegContentTest::cleanupTestCase() {
 typedef QMap<QString,QString> MetaInfoMap;
 
 MetaInfoMap getMetaInfo(const char* path) {
-	QString fullPath = QDir::currentPath() + "/" + path;
+	QString fullPath = QDir::currentPath() + '/' + path;
 	KFileMetaInfo fmi(fullPath);
 	QStringList list=fmi.supportedKeys();
 	QStringList::ConstIterator it=list.begin();
