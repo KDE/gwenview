@@ -18,12 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+// Self
+#include "archiveutils.h"
 
 // KDE
-#include <kfileitem.h>
 #include <kdebug.h>
-// Local
-#include "archiveutils.h"
+#include <kfileitem.h>
+
 namespace Gwenview {
 
 

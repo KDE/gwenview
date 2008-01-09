@@ -24,13 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <kdebug.h>
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
-#include <kdebug.h>
 
 // Local
 #include <lib/imageviewpart.h>

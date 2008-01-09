@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPointer>
 
 // KDE
+#include <kdebug.h>
 #include <kdirlister.h>
 #include <kdirmodel.h>
 #include <kiconloader.h>
@@ -33,9 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kdebug.h>
 #include <kpropertiesdialog.h>
-#include <kdebug.h>
 
 // Local
 #include "fileopscontextmanageritem.h"

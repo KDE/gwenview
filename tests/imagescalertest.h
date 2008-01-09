@@ -17,6 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+#ifndef IMAGESCALERTEST_H
+#define IMAGESCALERTEST_H
+
 #include "../lib/imagescaler.h"
 
 // Qt
@@ -89,3 +92,5 @@ private Q_SLOTS:
 	void testDontStartWithoutImage();
 	void testScaleDownBigImage();
 };
+
+#endif // IMAGESCALERTEST_H
