@@ -40,8 +40,8 @@ set(gwenviewlib_SRCS
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview.cpp
-	transupp.c
 	transformimageoperation.cpp
+	libjpeg/transupp.c
 	)
 
 set_source_files_properties(
