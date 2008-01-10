@@ -2,6 +2,7 @@
 Name=Gwenview
 Name[hi]=ग्वेन-व्यू
 Name[ne]=जीवेनभ्यू
+Name[pa]=ਜੀਵੀਨ-ਵਿਊ
 Name[x-test]=xxGwenviewxx
 GenericName=Image Viewer
 GenericName[af]=Beeld Aansig
@@ -79,6 +80,7 @@ Comment[ko]=간단한 그림 뷰어
 Comment[lv]=Vienkāršs attēlu skatītājs
 Comment[nds]=En eenfach Bildkieker
 Comment[nl]=Een eenvoudige afbeeldingenviewer
+Comment[pa]=ਇੱਕ ਸਧਾਰਨ ਚਿੱਤਰ ਦਰਸ਼ਕ
 Comment[pl]=Prosta przeglądarka obrazków
 Comment[pt]=Um visualizador de imagens simples
 Comment[pt_BR]=Um visualizador de imagens simples
