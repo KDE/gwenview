@@ -173,7 +173,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	d->mMultipleFilesLabel = new QLabel();
 
-	d->mGroup = sideBar->createGroup(i18n("Information"));
+	d->mGroup = sideBar->createGroup(i18nc("@title:group", "Information"));
 	d->mGroup->addWidget(d->mOneFileWidget);
 	d->mGroup->addWidget(d->mMultipleFilesLabel);
 
@@ -242,11 +242,11 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 	}
 
 	if (folderCount == 0) {
-		d->mMultipleFilesLabel->setText(i18n("%1 files selected", fileCount));
+		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 files selected", fileCount));
 	} else if (fileCount == 0) {
-		d->mMultipleFilesLabel->setText(i18n("%1 folders selected", folderCount));
+		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 folders selected", folderCount));
 	} else {
-		d->mMultipleFilesLabel->setText(i18n("%1 folders and %2 files selected", folderCount, fileCount));
+		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 folders and %2 files selected", folderCount, fileCount));
 	}
 	d->mOneFileWidget->hide();
 	d->mMultipleFilesLabel->show();
