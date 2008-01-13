@@ -291,19 +291,15 @@ struct MainWindow::Private {
 		connect(exitFullScreenShortcut, SIGNAL(activated()),
 			mWindow, SLOT(exitFullScreen()) );
 
-		mGoToPreviousAction = actionCollection->addAction("go_to_previous");
+		mGoToPreviousAction = KStandardAction::prior(mWindow, SLOT(goToPrevious()), actionCollection);
 		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
-		mGoToPreviousAction->setIcon(KIcon("go-previous")); // FIXME: RTL support would probably be a good idea, but I have no time right now
+		mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
-		connect(mGoToPreviousAction, SIGNAL(triggered()),
-			mWindow, SLOT(goToPrevious()) );
 
-		mGoToNextAction = actionCollection->addAction("go_to_next");
+		mGoToNextAction = KStandardAction::next(mWindow, SLOT(goToNext()), actionCollection);
 		mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
-		mGoToNextAction->setIcon(KIcon("go-next")); // FIXME: RTL support would probably be a good idea, but I have no time right now
+		mGoToNextAction->setToolTip(i18n("Go to Next Image"));
 		mGoToNextAction->setShortcut(Qt::Key_Space);
-		connect(mGoToNextAction, SIGNAL(triggered()),
-			mWindow, SLOT(goToNext()) );
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
 
