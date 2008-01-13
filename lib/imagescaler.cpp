@@ -23,12 +23,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QImage>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QRegion>
-#include <QTime>
 #include <QTimer>
 
 // KDE
 #include <kdebug.h>
+
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
 
 namespace Gwenview {
 
@@ -44,16 +54,21 @@ struct ImageScalerPrivate {
 	const QImage* mImage;
 	qreal mZoom;
 	QRegion mRegion;
-	QTimer* mTimer;
+
+	QMutex mMutex;
+	bool mStopRequested;
+
+	void stop() {
+		QMutexLocker locker(&mMutex);
+		mStopRequested = true;
+	}
 };
 
 ImageScaler::ImageScaler(QObject* parent)
-: QObject(parent)
+: QThread(parent)
 , d(new ImageScalerPrivate) {
 	d->mTransformationMode = Qt::FastTransformation;
-	d->mTimer = new QTimer(this);
-	connect(d->mTimer, SIGNAL(timeout()),
-		SLOT(doScale()) );
+	d->mStopRequested = false;
 }
 
 ImageScaler::~ImageScaler() {
@@ -61,40 +76,52 @@ ImageScaler::~ImageScaler() {
 }
 
 void ImageScaler::setImage(const QImage* image) {
-	if (d->mTimer->isActive()) {
-		d->mTimer->stop();
-	}
+	d->stop();
+	wait();
 	d->mImage = image;
 }
 
 void ImageScaler::setZoom(qreal zoom) {
+	d->stop();
+	wait();
 	d->mZoom = zoom;
 }
 
 void ImageScaler::setTransformationMode(Qt::TransformationMode mode) {
+	d->stop();
+	wait();
 	d->mTransformationMode = mode;
 }
 
 void ImageScaler::setDestinationRegion(const QRegion& region) {
+	LOG(region);
+	d->stop();
+	wait();
 	d->mRegion = region;
 	if (d->mRegion.isEmpty()) {
-		d->mTimer->stop();
 		return;
 	}
 
 	if (d->mImage && !d->mImage->isNull()) {
-		d->mTimer->start();
-		doScale();
+		start();
 	}
 }
 
 void ImageScaler::addDestinationRegion(const QRegion& region) {
-	setDestinationRegion(d->mRegion | region);
+	LOG(region);
+	{
+		QMutexLocker locker(&d->mMutex);
+		d->mRegion |= region;
+		if (d->mRegion.isEmpty()) {
+			return;
+		}
+	}
+
+	if (d->mImage && !d->mImage->isNull() && !isRunning()) {
+		start();
+	}
 }
 
-bool ImageScaler::isRunning() {
-	return d->mTimer->isActive();
-}
 
 QRect ImageScaler::containingRect(const QRectF& rectF) {
 	return QRect(
@@ -110,23 +137,45 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
 }
 
-void ImageScaler::doScale() {
-	Q_ASSERT(!d->mRegion.isEmpty());
-	QTime chrono;
-	chrono.start();
-	while (chrono.elapsed() < MAX_SCALE_TIME && !d->mRegion.isEmpty()) {
-		QRect rect = d->mRegion.rects()[0];
-		if (rect.width() * rect.height() > MAX_CHUNK_AREA) {
-			int height = qMax(1, MAX_CHUNK_AREA / rect.width());
-			rect.setHeight(height);
-		}
-		d->mRegion -= rect;
-		if (d->mRegion.isEmpty()) {
-			d->mTimer->stop();
-		}
-		processChunk(rect);
+
+void ImageScaler::run() {
+	LOG("Starting");
+	{
+		QMutexLocker locker(&d->mMutex);
+		d->mStopRequested = false;
 	}
+
+	while (true) {
+		QRect rect;
+		// Extract a rect to scale from d->mRegion
+		{
+			QMutexLocker locker(&d->mMutex);
+			if (d->mStopRequested) {
+				LOG("Stopped");
+				break;
+			}
+
+			rect = d->mRegion.rects()[0];
+			if (rect.width() * rect.height() > MAX_CHUNK_AREA) {
+				int height = qMax(1, MAX_CHUNK_AREA / rect.width());
+				rect.setHeight(height);
+			}
+		}
+
+		LOG(rect);
+		processChunk(rect);
+
+		{
+			QMutexLocker locker(&d->mMutex);
+			d->mRegion -= rect;
+			if (d->mRegion.isEmpty()) {
+				break;
+			}
+		}
+	}
+	LOG("Done");
 }
+
 
 void ImageScaler::processChunk(const QRect& rect) {
 	if (qAbs(d->mZoom - 1.0) < 0.001) {
