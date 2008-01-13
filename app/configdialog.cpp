@@ -44,7 +44,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	d->setupUi(widget);
 	widget->layout()->setMargin(0);
 	addPage(widget, "");
-    setHelp(QString(),"gwenview");
+	setHelp(QString(), "gwenview");
 }
 
 
