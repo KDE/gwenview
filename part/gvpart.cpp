@@ -1,6 +1,6 @@
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2007-2008 Aurélien Gâteau <aurelien.gateau@free.fr>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -139,7 +139,7 @@ KAboutData* GVPart::createAboutData() {
 		"gvpart",                /* appname */
 		"gwenview",              /* catalogName */
 		ki18n("Gwenview KPart"), /* programName */
-		"2.0");                  /* version */
+		"2.1");                  /* version */
 	aboutData->setShortDescription(ki18n("An Image Viewer"));
 	aboutData->setLicense(KAboutData::License_GPL);
 	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
