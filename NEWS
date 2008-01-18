@@ -1,3 +1,7 @@
+2008.xx.xx - v1.4.3
+- Fixes:
+ - Bug 155518: Unable to open BMP's with 1bpp.
+
 2007.09.15 - v1.4.2
 - New features:
  - Settings in the dialog to edit the thumbnail view details are now directly

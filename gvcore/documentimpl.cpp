@@ -38,6 +38,11 @@ void DocumentImpl::switchToImpl(DocumentImpl* impl) {
 }
 
 void DocumentImpl::setImage(QImage img) {
+	if (img.depth() == 1) {
+		// 1 bit depth images are difficult to scale. Let's convert to 8 bit
+		// depth. See bug #155518.
+		img = img.convertDepth(8);
+	}
 	mDocument->setImage(img);
 }
 
