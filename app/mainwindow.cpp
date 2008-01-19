@@ -1011,6 +1011,21 @@ void MainWindow::saveAs(const KUrl& url) {
 		return;
 	}
 
+	// Check for overwrite
+	if (KIO::NetAccess::exists(dialog.selectedUrl(), KIO::NetAccess::DestinationSide, this)) {
+		int answer = KMessageBox::warningContinueCancel(
+			this,
+			i18nc("@info",
+				"A file named <filename>%1</filename> already exists.\n"
+				"Are you sure you want to overwrite it?",
+				url.fileName()),
+			QString(),
+			KStandardGuiItem::overwrite());
+		if (answer == KMessageBox::Cancel) {
+			return;
+		}
+	}
+
 	// Start save
 	mimeType = dialog.currentMimeFilter();
 	QStringList typeList = KImageIO::typeForMime(mimeType);
