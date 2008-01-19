@@ -55,28 +55,21 @@ struct PrintOptionsPagePrivate : public Ui_PrintOptionsPage {
 	KConfigDialogManager* mConfigDialogManager;
 
 	void initPositionFrame() {
-		mPositionFrame->setAutoFillBackground(true);
-		QPalette palette = mPositionFrame->palette();
-		QColor bgColor = palette.base().color();
-		QColor gridColor = palette.mid().color();
-		QColor borderColor = palette.dark().color();
-		QColor hoverColor = palette.alternateBase().color();
-		QColor selectedColor = palette.highlight().color();
 		mPositionFrame->setStyleSheet(
 			"QFrame {"
-			"	background-color:" + gridColor.name() + "; "
-			"	border: 1px solid " + borderColor.name() + "; "
+			"	background-color: palette(mid);"
+			"	border: 1px solid palette(dark);"
 			"}"
 			"QToolButton {"
 			"	border: none;"
-			"	background: " + bgColor.name() + "; "
+			"	background: palette(base);"
 			"}"
 			"QToolButton:hover {"
-			"	background: " + hoverColor.name() + "; "
-			"	border: 1px solid " + selectedColor.name() + "; "
+			"	background: palette(alternate-base);"
+			"	border: 1px solid palette(highlight);"
 			"}"
 			"QToolButton:checked {"
-			"	background-color: " + selectedColor.name() + "; "
+			"	background-color: palette(highlight);"
 			"}"
 			);
 
