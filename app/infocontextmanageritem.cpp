@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/gwenviewconfig.h>
-#include <lib/imagemetainfo.h>
+#include <lib/preferredimagemetainfomodel.h>
 #include <lib/imageviewpart.h>
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>

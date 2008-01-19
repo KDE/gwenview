@@ -23,7 +23,7 @@ set(gwenviewlib_SRCS
 	expandbutton.cpp
 	exiv2imageloader.cpp
 	fullscreenbar.cpp
-	imagemetainfo.cpp
+	imagemetainfomodel.cpp
 	imagescaler.cpp
 	imageutils.cpp
 	imageview.cpp
@@ -31,6 +31,7 @@ set(gwenviewlib_SRCS
 	jpegcontent.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
+	preferredimagemetainfomodel.cpp
 	print/printhelper.cpp
 	print/printoptionspage.cpp
 	slidecontainer.cpp

@@ -64,29 +64,6 @@ private:
 };
 
 
-class PreferredImageMetaInfoModelPrivate;
-class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public ImageMetaInfoModel {
-	Q_OBJECT
-public:
-	PreferredImageMetaInfoModel();
-	~PreferredImageMetaInfoModel();
-
-	QStringList preferredMetaInfoKeyList() const;
-	void setPreferredMetaInfoKeyList(const QStringList& keyList);
-
-	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-	virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
-	virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-
-Q_SIGNALS:
-	void preferredMetaInfoKeyListChanged(const QStringList&);
-
-private:
-	PreferredImageMetaInfoModelPrivate* const d;
-	friend class PreferredImageMetaInfoModelPrivate;
-};
-
-
 } // namespace
 
 #endif /* IMAGEMETAINFO_H */
