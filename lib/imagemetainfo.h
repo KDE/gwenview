@@ -37,12 +37,12 @@ namespace Exiv2 { class Image; }
 namespace Gwenview {
 
 
-class ImageMetaInfoPrivate;
-class GWENVIEWLIB_EXPORT ImageMetaInfo : public QAbstractItemModel {
+class ImageMetaInfoModelPrivate;
+class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
-	ImageMetaInfo();
-	~ImageMetaInfo();
+	ImageMetaInfoModel();
+	~ImageMetaInfoModel();
 
 	void setFileItem(const KFileItem&);
 	void setImageSize(const QSize&);
@@ -59,13 +59,13 @@ public:
 	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
 private:
-	ImageMetaInfoPrivate* const d;
-	friend class ImageMetaInfoPrivate;
+	ImageMetaInfoModelPrivate* const d;
+	friend class ImageMetaInfoModelPrivate;
 };
 
 
 class PreferredImageMetaInfoModelPrivate;
-class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public ImageMetaInfo {
+class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public ImageMetaInfoModel {
 	Q_OBJECT
 public:
 	PreferredImageMetaInfoModel();

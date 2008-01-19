@@ -141,9 +141,9 @@ private:
 };
 
 
-struct ImageMetaInfoPrivate {
+struct ImageMetaInfoModelPrivate {
 	QVector<MetaInfoGroup*> mMetaInfoGroupVector;
-	ImageMetaInfo* mModel;
+	ImageMetaInfoModel* mModel;
 
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
@@ -202,8 +202,8 @@ struct ImageMetaInfoPrivate {
 };
 
 
-ImageMetaInfo::ImageMetaInfo()
-: d(new ImageMetaInfoPrivate) {
+ImageMetaInfoModel::ImageMetaInfoModel()
+: d(new ImageMetaInfoModelPrivate) {
 	d->mModel = this;
 	d->mMetaInfoGroupVector.resize(3);
 	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
@@ -213,13 +213,13 @@ ImageMetaInfo::ImageMetaInfo()
 }
 
 
-ImageMetaInfo::~ImageMetaInfo() {
+ImageMetaInfoModel::~ImageMetaInfoModel() {
 	qDeleteAll(d->mMetaInfoGroupVector);
 	delete d;
 }
 
 
-void ImageMetaInfo::setFileItem(const KFileItem& item) {
+void ImageMetaInfoModel::setFileItem(const KFileItem& item) {
 	QString sizeString = KGlobal::locale()->formatByteSize(item.size());
 
 	d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());
@@ -228,7 +228,7 @@ void ImageMetaInfo::setFileItem(const KFileItem& item) {
 }
 
 
-void ImageMetaInfo::setImageSize(const QSize& size) {
+void ImageMetaInfoModel::setImageSize(const QSize& size) {
 	QString imageSize;
 	if (size.isValid()) {
 		imageSize = i18nc(
@@ -264,7 +264,7 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 }
 
 
-void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
+void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 	MetaInfoGroup* exifGroup = d->mMetaInfoGroupVector[ExifGroup];
 	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
 	QModelIndex exifIndex = index(ExifGroup, 0);
@@ -302,7 +302,7 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 }
 
 
-void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
+void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
 	if (key.startsWith("General")) {
 		group = d->mMetaInfoGroupVector[GeneralGroup];
@@ -318,7 +318,7 @@ void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* v
 }
 
 
-QString ImageMetaInfo::keyForIndex(const QModelIndex& index) const {
+QString ImageMetaInfoModel::keyForIndex(const QModelIndex& index) const {
 	if (index.internalId() == NoGroup) {
 		return QString();
 	}
@@ -327,7 +327,7 @@ QString ImageMetaInfo::keyForIndex(const QModelIndex& index) const {
 }
 
 
-QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) const {
+QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex& parent) const {
 	if (!parent.isValid()) {
 		// This is a group
 		if (col > 0) {
@@ -351,7 +351,7 @@ QModelIndex ImageMetaInfo::index(int row, int col, const QModelIndex& parent) co
 }
 
 
-QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
+QModelIndex ImageMetaInfoModel::parent(const QModelIndex& index) const {
 	if (!index.isValid()) {
 		return QModelIndex();
 	}
@@ -363,7 +363,7 @@ QModelIndex ImageMetaInfo::parent(const QModelIndex& index) const {
 }
 
 
-int ImageMetaInfo::rowCount(const QModelIndex& parent) const {
+int ImageMetaInfoModel::rowCount(const QModelIndex& parent) const {
 	if (!parent.isValid()) {
 		return d->mMetaInfoGroupVector.size();
 	} else if (parent.internalId() == NoGroup) {
@@ -374,12 +374,12 @@ int ImageMetaInfo::rowCount(const QModelIndex& parent) const {
 }
 
 
-int ImageMetaInfo::columnCount(const QModelIndex& /*parent*/) const {
+int ImageMetaInfoModel::columnCount(const QModelIndex& /*parent*/) const {
 	return 2;
 }
 
 
-QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
+QVariant ImageMetaInfoModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid()) {
 		return QVariant();
 	}
@@ -393,7 +393,7 @@ QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
 }
 
 
-QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant ImageMetaInfoModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if (orientation == Qt::Vertical || role != Qt::DisplayRole) {
 		return QVariant();
 	}
@@ -488,7 +488,7 @@ QVariant PreferredImageMetaInfoModel::data(const QModelIndex& index, int role) c
 		return d->checkStateData(index);
 
 	default:
-		return ImageMetaInfo::data(index, role);
+		return ImageMetaInfoModel::data(index, role);
 	}
 }
 
