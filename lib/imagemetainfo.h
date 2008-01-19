@@ -48,16 +48,33 @@ public:
 	void setImageSize(const QSize&);
 	void setExiv2Image(const Exiv2::Image*);
 
+	QString keyForIndex(const QModelIndex&) const;
+	void getInfoForKey(const QString& key, QString* label, QString* value) const;
+
+	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
+	virtual QModelIndex parent(const QModelIndex&) const;
+	virtual int rowCount(const QModelIndex& = QModelIndex()) const;
+	virtual int columnCount(const QModelIndex& = QModelIndex()) const;
+	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+
+private:
+	ImageMetaInfoPrivate* const d;
+	friend class ImageMetaInfoPrivate;
+};
+
+
+class PreferredImageMetaInfoModelPrivate;
+class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public ImageMetaInfo {
+	Q_OBJECT
+public:
+	PreferredImageMetaInfoModel();
+	~PreferredImageMetaInfoModel();
+
 	QStringList preferredMetaInfoKeyList() const;
 	void setPreferredMetaInfoKeyList(const QStringList& keyList);
 
-	void getInfoForKey(const QString& key, QString* label, QString* value) const;
-	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
-	virtual QModelIndex parent(const QModelIndex&) const;
-	virtual int rowCount(const QModelIndex&) const;
-	virtual int columnCount(const QModelIndex&) const;
 	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role);
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
@@ -65,8 +82,8 @@ Q_SIGNALS:
 	void preferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
-	ImageMetaInfoPrivate* const d;
-	friend class ImageMetaInfoPrivate;
+	PreferredImageMetaInfoModelPrivate* const d;
+	friend class PreferredImageMetaInfoModelPrivate;
 };
 
 

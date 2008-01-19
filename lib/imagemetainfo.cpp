@@ -144,7 +144,6 @@ private:
 struct ImageMetaInfoPrivate {
 	QVector<MetaInfoGroup*> mMetaInfoGroupVector;
 	ImageMetaInfo* mModel;
-	QStringList mPreferredMetaInfoKeyList;
 
 
 	void clearGroup(MetaInfoGroup* group, const QModelIndex& parent) {
@@ -190,30 +189,6 @@ struct ImageMetaInfoPrivate {
 		} else {
 			return group->getValueForKeyAt(index.row());
 		}
-	}
-
-
-	QVariant checkStateData(const QModelIndex& index) const {
-		if (index.internalId() != NoGroup & index.column() == 0) {
-			MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];
-			bool checked = mPreferredMetaInfoKeyList.contains(group->getKeyAt(index.row()));
-			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
-		} else {
-			return QVariant();
-		}
-	}
-
-	void sortPreferredMetaInfoKeyList() {
-		QStringList sortedList;
-		Q_FOREACH(MetaInfoGroup* group, mMetaInfoGroupVector) {
-			Q_FOREACH(MetaInfoGroup::Entry* entry, group->entryList()) {
-				QString key = entry->mKey;
-				if (mPreferredMetaInfoKeyList.contains(key)) {
-					sortedList << key;
-				}
-			}
-		}
-		mPreferredMetaInfoKeyList = sortedList;
 	}
 
 
@@ -327,17 +302,6 @@ void ImageMetaInfo::setExiv2Image(const Exiv2::Image* image) {
 }
 
 
-QStringList ImageMetaInfo::preferredMetaInfoKeyList() const {
-	return d->mPreferredMetaInfoKeyList;
-}
-
-
-void ImageMetaInfo::setPreferredMetaInfoKeyList(const QStringList& keyList) {
-	d->mPreferredMetaInfoKeyList = keyList;
-	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
-}
-
-
 void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
 	if (key.startsWith("General")) {
@@ -351,6 +315,15 @@ void ImageMetaInfo::getInfoForKey(const QString& key, QString* label, QString* v
 		return;
 	}
 	group->getInfoForKey(key, label, value);
+}
+
+
+QString ImageMetaInfo::keyForIndex(const QModelIndex& index) const {
+	if (index.internalId() == NoGroup) {
+		return QString();
+	}
+	MetaInfoGroup* group = d->mMetaInfoGroupVector[index.internalId()];
+	return group->getKeyAt(index.row());
 }
 
 
@@ -414,34 +387,9 @@ QVariant ImageMetaInfo::data(const QModelIndex& index, int role) const {
 	switch (role) {
 	case Qt::DisplayRole:
 		return d->displayData(index);
-	case Qt::CheckStateRole:
-		return d->checkStateData(index);
 	default:
 		return QVariant();
 	}
-}
-
-
-bool ImageMetaInfo::setData(const QModelIndex& index, const QVariant& value, int role) {
-	if (role != Qt::CheckStateRole) {
-		return false;
-	}
-
-	if (index.internalId() == NoGroup) {
-		return false;
-	}
-
-	MetaInfoGroup* group = d->mMetaInfoGroupVector[index.internalId()];
-	QString key = group->getKeyAt(index.row());
-	if (value == Qt::Checked) {
-		d->mPreferredMetaInfoKeyList << key;
-		d->sortPreferredMetaInfoKeyList();
-	} else {
-		d->mPreferredMetaInfoKeyList.removeAll(key);
-	}
-	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
-	emit dataChanged(index, index);
-	return true;
 }
 
 
@@ -463,12 +411,107 @@ QVariant ImageMetaInfo::headerData(int section, Qt::Orientation orientation, int
 }
 
 
-Qt::ItemFlags ImageMetaInfo::flags(const QModelIndex& index) const {
+//// FIXME: Move to a separate file ////
+struct PreferredImageMetaInfoModelPrivate {
+	PreferredImageMetaInfoModel* mModel;
+	QStringList mPreferredMetaInfoKeyList;
+
+
+	QVariant checkStateData(const QModelIndex& index) const {
+		if (index.internalId() != NoGroup & index.column() == 0) {
+			QString key = mModel->keyForIndex(index);
+			bool checked = mPreferredMetaInfoKeyList.contains(key);
+			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
+		} else {
+			return QVariant();
+		}
+	}
+
+
+	void sortPreferredMetaInfoKeyList() {
+		QStringList sortedList;
+		int groupCount = mModel->rowCount();
+		for (int groupRow = 0; groupRow < groupCount; ++groupRow) {
+			QModelIndex groupIndex = mModel->index(groupRow, 0);
+			int keyCount = mModel->rowCount(groupIndex);
+			for (int keyRow = 0; keyRow < keyCount; ++keyRow) {
+				QModelIndex keyIndex = mModel->index(keyRow, 0, groupIndex);
+				QString key = mModel->keyForIndex(keyIndex);
+				if (mPreferredMetaInfoKeyList.contains(key)) {
+					sortedList << key;
+				}
+			}
+		}
+		mPreferredMetaInfoKeyList = sortedList;
+	}
+};
+
+
+PreferredImageMetaInfoModel::PreferredImageMetaInfoModel()
+: d(new PreferredImageMetaInfoModelPrivate) {
+	d->mModel = this;
+}
+
+
+PreferredImageMetaInfoModel::~PreferredImageMetaInfoModel() {
+	delete d;
+}
+
+
+QStringList PreferredImageMetaInfoModel::preferredMetaInfoKeyList() const {
+	return d->mPreferredMetaInfoKeyList;
+}
+
+
+void PreferredImageMetaInfoModel::setPreferredMetaInfoKeyList(const QStringList& keyList) {
+	d->mPreferredMetaInfoKeyList = keyList;
+	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
+}
+
+
+Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex& index) const {
 	Qt::ItemFlags fl = QAbstractItemModel::flags(index);
 	if (index.internalId() != NoGroup && index.column() == 0) {
 		fl |= Qt::ItemIsUserCheckable;
 	}
 	return fl;
+}
+
+
+QVariant PreferredImageMetaInfoModel::data(const QModelIndex& index, int role) const {
+	if (!index.isValid()) {
+		return QVariant();
+	}
+
+	switch (role) {
+	case Qt::CheckStateRole:
+		return d->checkStateData(index);
+
+	default:
+		return ImageMetaInfo::data(index, role);
+	}
+}
+
+
+bool PreferredImageMetaInfoModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+	if (role != Qt::CheckStateRole) {
+		return false;
+	}
+
+	if (index.internalId() == NoGroup) {
+		return false;
+	}
+
+	QString key = keyForIndex(index);
+	if (value == Qt::Checked) {
+		d->mPreferredMetaInfoKeyList << key;
+		d->sortPreferredMetaInfoKeyList();
+	} else {
+		d->mPreferredMetaInfoKeyList.removeAll(key);
+	}
+	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
+	emit dataChanged(index, index);
+	return true;
 }
 
 

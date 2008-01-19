@@ -126,7 +126,7 @@ struct InfoContextManagerItemPrivate {
 	QLabel* mMultipleFilesLabel;
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
-	ImageMetaInfo mImageMetaInfo;
+	PreferredImageMetaInfoModel mPreferredImageMetaInfoModel;
 
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
 };
@@ -140,13 +140,13 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 		SLOT(updateSideBarContent()) );
 
 	QStringList list = GwenviewConfig::preferredMetaInfoKeyList();
-	connect(&d->mImageMetaInfo, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
+	connect(&d->mPreferredImageMetaInfoModel, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 		SLOT(updateOneFileInfo()) );
-	d->mImageMetaInfo.setPreferredMetaInfoKeyList(list);
+	d->mPreferredImageMetaInfoModel.setPreferredMetaInfoKeyList(list);
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
-	QStringList list = d->mImageMetaInfo.preferredMetaInfoKeyList();
+	QStringList list = d->mPreferredImageMetaInfoModel.preferredMetaInfoKeyList();
 	GwenviewConfig::setPreferredMetaInfoKeyList(list);
 	GwenviewConfig::self()->writeConfig();
 	delete d;
@@ -213,9 +213,9 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
-	d->mImageMetaInfo.setFileItem(d->mFileItem);
-	d->mImageMetaInfo.setImageSize(QSize());
-	d->mImageMetaInfo.setExiv2Image(0);
+	d->mPreferredImageMetaInfoModel.setFileItem(d->mFileItem);
+	d->mPreferredImageMetaInfoModel.setImageSize(QSize());
+	d->mPreferredImageMetaInfoModel.setExiv2Image(0);
 	updateOneFileInfo();
 	if (!item.isDir()) {
 		d->mDocument = DocumentFactory::instance()->load(item.url());
@@ -258,8 +258,8 @@ void InfoContextManagerItem::slotMetaDataLoaded() {
 	if (!d->mDocument) {
 		return;
 	}
-	d->mImageMetaInfo.setImageSize(d->mDocument->size());
-	d->mImageMetaInfo.setExiv2Image(d->mDocument->exiv2Image());
+	d->mPreferredImageMetaInfoModel.setImageSize(d->mDocument->size());
+	d->mPreferredImageMetaInfoModel.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
 }
 
@@ -271,10 +271,10 @@ void InfoContextManagerItem::updateOneFileInfo() {
 	}
 	QStringList list;
 	d->mKeyValueWidget->clear();
-	Q_FOREACH(const QString& key, d->mImageMetaInfo.preferredMetaInfoKeyList()) {
+	Q_FOREACH(const QString& key, d->mPreferredImageMetaInfoModel.preferredMetaInfoKeyList()) {
 		QString label;
 		QString value;
-		d->mImageMetaInfo.getInfoForKey(key, &label, &value);
+		d->mPreferredImageMetaInfoModel.getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
 			d->mKeyValueWidget->addItem(label, value);
@@ -294,7 +294,7 @@ void InfoContextManagerItem::showMetaInfoDialog() {
 	if (!d->mImageMetaInfoDialog) {
 		d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mOneFileWidget);
 		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-		d->mImageMetaInfoDialog->setImageMetaInfo(&d->mImageMetaInfo);
+		d->mImageMetaInfoDialog->setImageMetaInfo(&d->mPreferredImageMetaInfoModel);
 	}
 	d->mImageMetaInfoDialog->show();
 }

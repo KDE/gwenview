@@ -35,7 +35,7 @@ namespace Gwenview {
 
 
 struct ImageMetaInfoDialogPrivate {
-	ImageMetaInfo* mInfo;
+	PreferredImageMetaInfoModel* mInfo;
 	QTreeView* mTreeView;
 };
 
@@ -56,7 +56,7 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog() {
 }
 
 
-void ImageMetaInfoDialog::setImageMetaInfo(ImageMetaInfo* info) {
+void ImageMetaInfoDialog::setImageMetaInfo(PreferredImageMetaInfoModel* info) {
 	d->mInfo = info;
 	d->mTreeView->setModel(info);
 	d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - layout()->margin()*2);
