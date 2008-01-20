@@ -288,6 +288,8 @@ void ImageView::paintEvent(QPaintEvent* event) {
 void ImageView::resizeEvent(QResizeEvent*) {
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
+		horizontalScrollBar()->setRange(0, 0);
+		verticalScrollBar()->setRange(0, 0);
 	} else {
 		d->resizeBuffer();
 		updateScrollBars();
