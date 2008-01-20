@@ -155,6 +155,7 @@ struct MainWindow::Private {
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	QAction* mToggleSlideShowAction;
+	KToggleAction* mShowMenuBarAction;
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -348,6 +349,8 @@ struct MainWindow::Private {
 			mWindow, SLOT(toggleSlideShow()) );
 		connect(mSlideShow, SIGNAL(stateChanged(bool)),
 			mWindow, SLOT(updateSlideShowAction()) );
+
+		mShowMenuBarAction = KStandardAction::showMenubar(mWindow, SLOT(toggleMenuBar()), actionCollection);
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
@@ -946,7 +949,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
-		menuBar()->show();
+		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->show();
 	}
 	setUpdatesEnabled(true);
@@ -1225,6 +1228,13 @@ void MainWindow::configureToolbars() {
 void MainWindow::slotNewToolbarConfig() {
 	KConfigGroup cg = KGlobal::config()->group("MainWindow");
 	applyMainWindowSettings(cg);
+}
+
+
+void MainWindow::toggleMenuBar() {
+	if (!d->mFullScreenAction->isChecked()) {
+		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
+	}
 }
 
 

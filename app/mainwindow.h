@@ -128,6 +128,8 @@ private Q_SLOTS:
 	void configureToolbars();
 	void slotNewToolbarConfig();
 
+	void toggleMenuBar();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;
