@@ -288,6 +288,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 void ImageView::resizeEvent(QResizeEvent*) {
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
+		// Make sure one can't use mousewheel in zoom-to-fit mode
 		horizontalScrollBar()->setRange(0, 0);
 		verticalScrollBar()->setRange(0, 0);
 	} else {
