@@ -136,7 +136,12 @@ void FullScreenBar::setActivated(bool activated) {
 
 
 void FullScreenBar::autoHide() {
-	if (rect().contains(QCursor::pos())) {
+	Q_ASSERT(parentWidget());
+	// Do not use QCursor::pos() directly, as it won't work in Xinerama because
+	// rect().topLeft() is not always (0,0)
+	QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
+
+	if (rect().contains(pos)) {
 		// Do nothing if the cursor is over the bar
 		d->mAutoHideTimer->start();
 		return;
