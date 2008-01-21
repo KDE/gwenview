@@ -73,7 +73,6 @@ void AbstractDocumentImpl::setDocumentFormat(const QByteArray& format) {
 
 void AbstractDocumentImpl::setDocumentExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mDocument->setExiv2Image(image);
-	metaDataLoaded();
 }
 
 

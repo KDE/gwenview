@@ -96,8 +96,6 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 		this, SLOT(emitLoaded()) );
 	connect(d->mImpl, SIGNAL(imageRectUpdated(const QRect&)),
 		this, SIGNAL(imageRectUpdated(const QRect&)) );
-	connect(d->mImpl, SIGNAL(metaDataLoaded()),
-		this, SIGNAL(metaDataLoaded()) );
 	d->mImpl->init();
 }
 

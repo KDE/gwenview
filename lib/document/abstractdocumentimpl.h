@@ -60,7 +60,6 @@ public:
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void loaded();
-	void metaDataLoaded();
 
 protected:
 	Document* document() const;
