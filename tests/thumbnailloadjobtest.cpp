@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/thumbnailloadjob.h"
+#include "testutils.h"
 
 
 using namespace Gwenview;
@@ -101,8 +102,12 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 
 void ThumbnailLoadJobTest::testLoadRemote() {
 	resetSandBox();
-	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
-	KUrl url(urlString);
+
+	QString testTarGzPath = pathForTestFile("test.tar.gz");
+	KUrl url;
+	url.setProtocol("tar");
+	url.setPath(testTarGzPath + "/test.png");
+
 	KFileItemList list;
 	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 	list << item;
