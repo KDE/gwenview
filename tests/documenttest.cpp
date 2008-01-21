@@ -38,9 +38,20 @@ QTEST_KDEMAIN( DocumentTest, GUI )
 
 using namespace Gwenview;
 
+static QString pathForTestFile(const QString& name) {
+	return QString("%1/%2").arg(KDESRCDIR).arg(name);
+}
+
 static KUrl urlForTestFile(const QString& name) {
-	QString urlString = QString("file://%1/%2").arg(QDir::currentPath()).arg(name);
-	return KUrl(urlString);
+	KUrl url;
+	url.setPath(pathForTestFile(name));
+	return url;
+}
+
+static KUrl urlForTestOutputFile(const QString& name) {
+	KUrl url;
+	url.setPath(QString("%1/%2").arg(QDir::currentPath()).arg(name));
+	return url;
 }
 
 void DocumentTest::testLoad() {
@@ -61,8 +72,10 @@ void DocumentTest::testLoadEmpty() {
 }
 
 void DocumentTest::testLoadRemote() {
-	QString urlString = QString("tar://%1/test.tar.gz/test.png").arg(QDir::currentPath());
-	KUrl url(urlString);
+	QString testTarGzPath = pathForTestFile("test.tar.gz");
+	KUrl url;
+	url.setProtocol("tar");
+	url.setPath(testTarGzPath + "/test.png");
 
 	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test archive not found");
 
@@ -118,11 +131,9 @@ void DocumentTest::testLoadRotated() {
 	QVERIFY2(ok, "Could not load 'orient6.jpg'");
 	QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
 	image = image.transformed(matrix);
-	image.save("expected.png", "PNG");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
-	doc->image().save("result.png", "PNG");
 	QCOMPARE(image, doc->image());
 }
 
@@ -141,7 +152,7 @@ void DocumentTest::testMultipleLoads() {
 void DocumentTest::testSave() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	KUrl destUrl = urlForTestFile("result.png");
+	KUrl destUrl = urlForTestOutputFile("result.png");
 	Document::SaveResult result = doc->save(destUrl, "png");
 	QCOMPARE(result, Document::SR_OK);
 	QCOMPARE(doc->format().data(), "png");
@@ -157,7 +168,7 @@ void DocumentTest::testSave() {
 void DocumentTest::testLosslessSave() {
 	KUrl url1 = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
-	KUrl url2 = urlForTestFile("orient1.jpg");
+	KUrl url2 = urlForTestOutputFile("orient1.jpg");
 	Document::SaveResult result = doc->save(url2, "jpeg");
 	QCOMPARE(result, Document::SR_OK);
 
@@ -181,7 +192,7 @@ void DocumentTest::testLosslessRotate() {
 		painter.fillRect(image1.rect(), gradient);
 	}
 
-	KUrl url1 = urlForTestFile("lossless1.jpg");
+	KUrl url1 = urlForTestOutputFile("lossless1.jpg");
 	QVERIFY(image1.save(url1.path(), "jpeg"));
 
 	// Load it as a Gwenview document
@@ -192,7 +203,7 @@ void DocumentTest::testLosslessRotate() {
 	doc->applyTransformation(ROT_90);
 
 	// Save it
-	KUrl url2 = urlForTestFile("lossless2.jpg");
+	KUrl url2 = urlForTestOutputFile("lossless2.jpg");
 	doc->save(url2, "jpeg");
 
 	// Load the saved image
@@ -223,7 +234,7 @@ void DocumentTest::testModify() {
 	doc->setImage(image);
 	QVERIFY(doc->isModified());
 
-	KUrl destUrl = urlForTestFile("modify.png");
+	KUrl destUrl = urlForTestOutputFile("modify.png");
 	QCOMPARE(doc->save(destUrl, "png"), Document::SR_OK);
 
 	QVERIFY(!doc->isModified());
