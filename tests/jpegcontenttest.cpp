@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/orientation.h"
 #include "../lib/jpegcontent.h"
+#include "testutils.h"
 
 using namespace std;
 
@@ -53,7 +54,7 @@ QTEST_KDEMAIN(JpegContentTest, GUI)
 
 void JpegContentTest::initTestCase() {
 	bool result;
-	QFile in(ORIENT6_FILE);
+	QFile in(pathForTestFile(ORIENT6_FILE));
 	result=in.open(QIODevice::ReadOnly);
 	QVERIFY(result);
 	
@@ -118,7 +119,7 @@ void JpegContentTest::testResetOrientation() {
 	bool result;
 
 	// Test resetOrientation without transform
-	result=content.load(ORIENT6_FILE);
+	result=content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	content.resetOrientation();
@@ -131,7 +132,7 @@ void JpegContentTest::testResetOrientation() {
 	QCOMPARE(content.orientation(), Gwenview::NORMAL);
 
 	// Test resetOrientation with transform
-	result=content.load(ORIENT6_FILE);
+	result=content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	content.resetOrientation();
@@ -157,7 +158,7 @@ void JpegContentTest::testTransform() {
 	QImage finalImage, expectedImage;
 
 	Gwenview::JpegContent content;
-	result = content.load(ORIENT6_FILE);
+	result = content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	content.transform(Gwenview::ROT_90);
@@ -173,7 +174,7 @@ void JpegContentTest::testTransform() {
 	result = finalImage.load(TMP_FILE);
 	QVERIFY(result);
 
-	result = expectedImage.load(ORIENT6_FILE);
+	result = expectedImage.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	QCOMPARE(finalImage , expectedImage);
@@ -184,7 +185,7 @@ void JpegContentTest::testSetComment() {
 	QString comment = "test comment";
 	Gwenview::JpegContent content;
 	bool result;
-	result = content.load(ORIENT6_FILE);
+	result = content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	content.setComment(comment);
@@ -200,7 +201,7 @@ void JpegContentTest::testSetComment() {
 
 void JpegContentTest::testReadInfo() {
 	Gwenview::JpegContent content;
-	bool result=content.load(ORIENT6_FILE);
+	bool result=content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 	QCOMPARE(int(content.orientation()), 6);
 	QCOMPARE(content.comment() , ORIENT6_COMMENT);
@@ -209,7 +210,7 @@ void JpegContentTest::testReadInfo() {
 
 void JpegContentTest::testThumbnail() {
 	Gwenview::JpegContent content;
-	bool result=content.load(ORIENT6_FILE);
+	bool result=content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 	QImage thumbnail=content.thumbnail();
 	result=thumbnail.save(THUMBNAIL_FILE, "JPEG");
@@ -219,9 +220,9 @@ void JpegContentTest::testThumbnail() {
 void JpegContentTest::testMultipleRotations() {
 	// Test that rotating a file a lot of times does not cause findJxform() to fail
 	Gwenview::JpegContent content;
-	bool result=content.load(ORIENT6_FILE);
+	bool result=content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
-	result = content.load(ORIENT6_FILE);
+	result = content.load(pathForTestFile(ORIENT6_FILE));
 	QVERIFY(result);
 
 	// 12*4 + 1 is the same as 1, since rotating four times brings you back
