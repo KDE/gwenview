@@ -81,9 +81,8 @@ void JpegContentTest::cleanupTestCase() {
 
 typedef QMap<QString,QString> MetaInfoMap;
 
-MetaInfoMap getMetaInfo(const char* path) {
-	QString fullPath = QDir::currentPath() + '/' + path;
-	KFileMetaInfo fmi(fullPath);
+MetaInfoMap getMetaInfo(const QString& path) {
+	KFileMetaInfo fmi(path);
 	QStringList list=fmi.supportedKeys();
 	QStringList::ConstIterator it=list.begin();
 	MetaInfoMap map;
@@ -96,7 +95,7 @@ MetaInfoMap getMetaInfo(const char* path) {
 	return map;
 }
 
-void compareMetaInfo(const char* path1, const char* path2, const QStringList& ignoredKeys) {
+void compareMetaInfo(const QString& path1, const QString& path2, const QStringList& ignoredKeys) {
 	MetaInfoMap mim1=getMetaInfo(path1);
 	MetaInfoMap mim2=getMetaInfo(path2);
 
@@ -107,9 +106,13 @@ void compareMetaInfo(const char* path1, const char* path2, const QStringList& ig
 		QString key=*it;
 		if (ignoredKeys.contains(key)) continue;
 
-		if (mim1[key]!=mim2[key]) {
-			kError() << "Meta info differs. Key:" << key << ", V1:" << mim1[key] << ", V2:" << mim2[key] << endl;
-		}
+		QString msg =
+			QString("Meta info differs for key '%1': v1=%2 v2=%3")
+				.arg(key)
+				.arg(mim1[key])
+				.arg(mim2[key]);
+
+		QVERIFY2(mim1[key] == mim2[key], msg.toUtf8());
 	}
 }
 
@@ -241,7 +244,7 @@ void JpegContentTest::testMultipleRotations() {
 	// Check the other meta info are still here
 	QStringList ignoredKeys;
 	ignoredKeys << "Orientation" << "Comment";
-	//compareMetaInfo(ORIENT6_FILE, ORIENT1_VFLIP_FILE, ignoredKeys);
+	compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(ORIENT1_VFLIP_FILE), ignoredKeys);
 }
 
 void JpegContentTest::testLoadTruncated() {
