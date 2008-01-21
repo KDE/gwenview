@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/document/documentfactory.h"
 #include "../lib/imageutils.h"
+#include "testutils.h"
 
 #include "documenttest.moc"
 
@@ -38,21 +39,6 @@ QTEST_KDEMAIN( DocumentTest, GUI )
 
 using namespace Gwenview;
 
-static QString pathForTestFile(const QString& name) {
-	return QString("%1/%2").arg(KDESRCDIR).arg(name);
-}
-
-static KUrl urlForTestFile(const QString& name) {
-	KUrl url;
-	url.setPath(pathForTestFile(name));
-	return url;
-}
-
-static KUrl urlForTestOutputFile(const QString& name) {
-	KUrl url;
-	url.setPath(QString("%1/%2").arg(QDir::currentPath()).arg(name));
-	return url;
-}
 
 void DocumentTest::testLoad() {
 	KUrl url = urlForTestFile("test.png");
