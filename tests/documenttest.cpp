@@ -225,3 +225,36 @@ void DocumentTest::testModify() {
 
 	QVERIFY(!doc->isModified());
 }
+
+void DocumentTest::testMetaData() {
+	KUrl url = urlForTestFile("orient6.jpg");
+	DocumentFactory::instance()->clearCache();
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+	// We cleared the cache, so the document should not be loaded
+	Q_ASSERT(!doc->isLoaded());
+
+	// Wait until we receive the metaDataLoaded() signal
+	QSignalSpy metaDataLoadedSpy(doc.data(), SIGNAL(metaDataLoaded()));
+	while (metaDataLoadedSpy.count() == 0) {
+		QTest::qWait(100);
+	}
+
+	// Extract an exif key
+	const Exiv2::Image* exiv2Image = doc->exiv2Image();
+	QVERIFY(exiv2Image);
+
+	const Exiv2::ExifData& exifData = exiv2Image->exifData();
+	Exiv2::ExifKey key("Exif.Image.Make");
+	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
+	QVERIFY2(it != exifData.end(), "Couldn't find wanted Exif key");
+
+	std::string exifValue = it->toString();
+	QCOMPARE(exifValue.c_str(), "Canon");
+
+	// Wait until the image has completely been loaded and check we don't
+	// receive the metaDataLoaded signals too many times.
+	doc->waitUntilLoaded();
+	QCOMPARE(metaDataLoadedSpy.count(), 1);
+}
+
