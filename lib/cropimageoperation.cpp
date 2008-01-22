@@ -53,6 +53,7 @@ void CropImageOperation::apply(Document::Ptr doc) {
 	QImage src = doc->image();
 	QImage dst(d->mRect.size(), src.format());
 	QPainter painter(&dst);
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	painter.drawImage(QPoint(0, 0), src, d->mRect);
 	painter.end();
 	doc->setImage(dst);
