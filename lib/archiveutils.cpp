@@ -87,16 +87,6 @@ bool fileItemIsDirOrArchive(const KFileItem& item) {
 	return item.isDir() || fileItemIsArchive(item);
 }
 
-/*
-bool protocolIsArchive(const QString& protocol) {
-	const ArchiveProtocolForMimeTypes& map=archiveProtocolForMimeTypes();
-	ArchiveProtocolForMimeTypes::ConstIterator it;
-	for (it=map.begin();it!=map.end();++it) {
-		if (it.data()==protocol) return true;
-	}
-	return false;
-}
-*/
 QStringList mimeTypes() {
 	return archiveProtocolForMimeTypes().keys();
 }

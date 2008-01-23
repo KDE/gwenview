@@ -35,13 +35,26 @@ namespace Gwenview {
  */
 namespace ArchiveUtils {
 
-GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem&);
-GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem&);
-/* FIXME remove if not needed
-bool protocolIsArchive(const QString&);
-*/
+/**
+ * Returns true if @p item is an archive
+ */
+GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem& item);
+
+/**
+ * Returns true if @p item is a dir or an archive
+ */
+GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem& item);
+
+/**
+ * Returns a list of known archive mime types
+ */
 GWENVIEWLIB_EXPORT QStringList mimeTypes();
-GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString&);
+
+/**
+ * Returns the protocol associated with @p mimeType.
+ * For example, returns "tar" for application/x-tar
+ */
+GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString& mimeType);
 
 } // namespace ArchiveUtils
 
