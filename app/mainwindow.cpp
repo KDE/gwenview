@@ -361,6 +361,12 @@ struct MainWindow::Private {
 
 		KStandardAction::configureToolbars(mWindow,
 			SLOT(configureToolbars()), actionCollection);
+
+		KAction* editLocationAction = actionCollection->addAction("edit_location");
+		editLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
+		editLocationAction->setShortcut(Qt::Key_F6);
+		connect(editLocationAction, SIGNAL(triggered()),
+			mWindow, SLOT(editLocation()));
 	}
 
 
@@ -1374,4 +1380,8 @@ QSize MainWindow::sizeHint() const {
 }
 
 
+void MainWindow::editLocation() {
+	d->mUrlNavigator->setUrlEditable(true);
+	d->mUrlNavigator->setFocus();
+}
 } // namespace

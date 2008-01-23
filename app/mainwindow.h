@@ -130,6 +130,8 @@ private Q_SLOTS:
 
 	void toggleMenuBar();
 
+	void editLocation();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;
