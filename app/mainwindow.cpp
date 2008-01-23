@@ -1094,17 +1094,21 @@ void MainWindow::flip() {
 void MainWindow::resizeImage() {
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
 	doc->waitUntilLoaded();
-	int size = qMax(doc->image().width(), doc->image().height());
+	int size = GwenviewConfig::imageResizeLastSize();
+	if (size == -1) {
+		size = qMax(doc->image().width(), doc->image().height());
+	}
 	bool ok = false;
 	size = KInputDialog::getInteger(
 		i18n("Image Resizing"),
 		i18n("Enter the new size of the image:"),
-		size, 0, 10000, 10 /* step */,
+		size, 0, 100000, 10 /* step */,
 		&ok,
 		this);
 	if (!ok) {
 		return;
 	}
+	GwenviewConfig::setImageResizeLastSize(size);
 	ResizeImageOperation op(size);
 	d->applyImageOperation(&op);
 }

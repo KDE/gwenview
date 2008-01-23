@@ -100,5 +100,12 @@
 			<default>5.0</default>
 		</entry>
 	</group>
+
+	<group name="ImageResize">
+		<entry name="ImageResizeLastSize" type="Int">
+			<!-- Last size used to resize image, -1 if none -->
+			<default>-1</default>
+		</entry>
+	</group>
 </kcfg>
 
