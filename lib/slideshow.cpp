@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <klocale.h>
 
 // Local
-#include <slideshowconfig.h>
+#include <gwenviewconfig.h>
 
 namespace Gwenview {
 
@@ -64,7 +64,7 @@ struct SlideShowPrivate {
 	QAction* mRandomAction;
 
 	KUrl findNextUrl() {
-		if (SlideShowConfig::random()) {
+		if (GwenviewConfig::random()) {
 			return findNextRandomUrl();
 		} else {
 			return findNextOrderedUrl();
@@ -80,7 +80,7 @@ struct SlideShowPrivate {
 		}
 
 		++it;
-		if (SlideShowConfig::loop()) {
+		if (GwenviewConfig::loop()) {
 			// Looping, if we reach the end, start again
 			if (it == mUrls.end()) {
 				it = mUrls.begin();
@@ -88,7 +88,7 @@ struct SlideShowPrivate {
 		} else {
 			// Not looping, have we reached the end?
 			// FIXME: stopAtEnd
-			if (/*(it==mUrls.end() && SlideShowConfig::stopAtEnd()) ||*/ it == mStartIt) {
+			if (/*(it==mUrls.end() && GwenviewConfig::stopAtEnd()) ||*/ it == mStartIt) {
 				it = mUrls.end();
 			}
 		}
@@ -109,7 +109,7 @@ struct SlideShowPrivate {
 
 	KUrl findNextRandomUrl() {
 		if (mShuffledUrls.empty()) {
-			if (SlideShowConfig::loop()) {
+			if (GwenviewConfig::loop()) {
 				initShuffledUrls();
 			} else {
 				return KUrl();
@@ -160,14 +160,14 @@ SlideShow::SlideShow(QObject* parent)
 	connect(d->mRandomAction, SIGNAL(triggered()), SLOT(updateConfig()) );
 
 
-	d->mLoopAction->setChecked(SlideShowConfig::loop());
-	d->mRandomAction->setChecked(SlideShowConfig::random());
-	d->mIntervalSpinBox->setValue(SlideShowConfig::interval());
+	d->mLoopAction->setChecked(GwenviewConfig::loop());
+	d->mRandomAction->setChecked(GwenviewConfig::random());
+	d->mIntervalSpinBox->setValue(GwenviewConfig::interval());
 }
 
 
 SlideShow::~SlideShow() {
-	SlideShowConfig::self()->writeConfig();
+	GwenviewConfig::self()->writeConfig();
 	delete d;
 }
 
@@ -182,7 +182,7 @@ void SlideShow::start(const QList<KUrl>& urls) {
 		return;
 	}
 
-	if (SlideShowConfig::random()) {
+	if (GwenviewConfig::random()) {
 		d->initShuffledUrls();
 	}
 	
@@ -198,7 +198,7 @@ void SlideShow::updateTimerInterval() {
 	double sInterval = d->mIntervalSpinBox->value();
 	int msInterval = int(sInterval * 1000);
 	d->mTimer->setInterval(msInterval);
-	SlideShowConfig::setInterval(sInterval);
+	GwenviewConfig::setInterval(sInterval);
 }
 
 
@@ -242,8 +242,8 @@ QWidget* SlideShow::optionsWidget() const {
 
 
 void SlideShow::updateConfig() {
-	SlideShowConfig::setLoop(d->mLoopAction->isChecked());
-	SlideShowConfig::setRandom(d->mRandomAction->isChecked());
+	GwenviewConfig::setLoop(d->mLoopAction->isChecked());
+	GwenviewConfig::setRandom(d->mRandomAction->isChecked());
 }
 
 
