@@ -351,6 +351,7 @@ struct MainWindow::Private {
 			mWindow, SLOT(updateSlideShowAction()) );
 
 		mShowMenuBarAction = KStandardAction::showMenubar(mWindow, SLOT(toggleMenuBar()), actionCollection);
+		mShowMenuBarAction->setChecked(mWindow->menuBar()->isVisible());
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
