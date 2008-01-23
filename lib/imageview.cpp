@@ -170,7 +170,6 @@ ImageView::ImageView(QWidget* parent)
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
-	d->mScaler->setTransformationMode(Qt::SmoothTransformation);
 	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
@@ -317,6 +316,15 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	if (d->mImage->isNull()) {
 		return;
 	}
+
+	// If we zoom more than twice, then assume the user wants to see the real
+	// pixels, for example to fine tune a crop operation
+	if (d->mZoom < 2.) {
+		d->mScaler->setTransformationMode(Qt::SmoothTransformation);
+	} else {
+		d->mScaler->setTransformationMode(Qt::FastTransformation);
+	}
+
 	d->resizeBuffer();
 	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
