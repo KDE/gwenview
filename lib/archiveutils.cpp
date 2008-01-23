@@ -63,8 +63,24 @@ static const ArchiveProtocolForMimeTypes& archiveProtocolForMimeTypes() {
 	return map;
 }
 
+// We do not use QMap::operator[] because we need to compare using
+// KMimeType::is()
+static ArchiveProtocolForMimeTypes::ConstIterator findProtocol(const KMimeType::Ptr mimeType) {
+	ArchiveProtocolForMimeTypes::ConstIterator
+		it = archiveProtocolForMimeTypes().constBegin(),
+		end = archiveProtocolForMimeTypes().constEnd();
+	for (; it!=end; ++it) {
+		if (mimeType->is(it.key())) {
+			return it;
+		}
+	}
+	return end;
+}
+
 bool fileItemIsArchive(const KFileItem& item) {
-	return archiveProtocolForMimeTypes().contains(item.mimetype());
+	KMimeType::Ptr mimeType = item.determineMimeType();
+	ArchiveProtocolForMimeTypes::ConstIterator it = findProtocol(mimeType);
+	return it != archiveProtocolForMimeTypes().end();
 }
 
 bool fileItemIsDirOrArchive(const KFileItem& item) {
@@ -85,8 +101,10 @@ QStringList mimeTypes() {
 	return archiveProtocolForMimeTypes().keys();
 }
 
-QString protocolForMimeType(const QString& mimeType) {
-	return archiveProtocolForMimeTypes()[mimeType];
+QString protocolForMimeType(const QString& mimeTypeName) {
+	KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(mimeTypeName);
+	ArchiveProtocolForMimeTypes::ConstIterator it = findProtocol(mimeTypePtr);
+	return it.value();
 }
 
 } // namespace ArchiveUtils
