@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN"
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN"
 "dtd/kdex.dtd" [
   <!ENTITY kappname "Gwenview">
   <!ENTITY package "gwenview">
@@ -38,7 +38,7 @@
 <date>2005-08-21</date>
 <releaseinfo>1.2.92</releaseinfo>
 <abstract>
-<para>&kappname; is an image viewer for KDE.</para>
+<para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
 <keywordset>
 <keyword>KDE</keyword>
