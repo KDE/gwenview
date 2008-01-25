@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 #include "gwenviewlib_export.h"
 
+// Qt
+#include <QSortFilterProxyModel>
+
 // Local
 #include "imagemetainfomodel.h"
 
@@ -30,18 +33,15 @@ namespace Gwenview {
 
 
 /**
- * This model extends ImageMetaInfoModel to make it possible to select your
- * preferred image metainfo key by checking them.
+ * This model uses an instance of ImageMetaInfoModel to make it possible to
+ * select your preferred image metainfo keys by checking them.
  */
 class PreferredImageMetaInfoModelPrivate;
-class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public ImageMetaInfoModel {
+class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyModel {
 	Q_OBJECT
 public:
-	PreferredImageMetaInfoModel();
+	PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list);
 	~PreferredImageMetaInfoModel();
-
-	QStringList preferredMetaInfoKeyList() const;
-	void setPreferredMetaInfoKeyList(const QStringList& keyList);
 
 	virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role);

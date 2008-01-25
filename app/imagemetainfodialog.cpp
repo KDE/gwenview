@@ -25,8 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QTreeView>
 #include <QHeaderView>
 #include <QLayout>
+
 // KDE
 #include <klocale.h>
+
+// STL
+#include <memory>
 
 // Local
 #include <lib/preferredimagemetainfomodel.h>
@@ -35,7 +39,7 @@ namespace Gwenview {
 
 
 struct ImageMetaInfoDialogPrivate {
-	PreferredImageMetaInfoModel* mInfo;
+	std::auto_ptr<PreferredImageMetaInfoModel> mModel;
 	QTreeView* mTreeView;
 };
 
@@ -43,7 +47,6 @@ struct ImageMetaInfoDialogPrivate {
 ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 : KDialog(parent)
 , d(new ImageMetaInfoDialogPrivate) {
-	d->mInfo = 0;
 	d->mTreeView = new QTreeView(this);
 	setMainWidget(d->mTreeView);
 	setCaption(i18n("Meta Information"));
@@ -56,9 +59,11 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog() {
 }
 
 
-void ImageMetaInfoDialog::setImageMetaInfo(PreferredImageMetaInfoModel* info) {
-	d->mInfo = info;
-	d->mTreeView->setModel(info);
+void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringList& list) {
+	d->mModel.reset(new PreferredImageMetaInfoModel(model, list));
+	connect(d->mModel.get(), SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
+		this, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)) );
+	d->mTreeView->setModel(d->mModel.get());
 	d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - layout()->margin()*2);
 	d->mTreeView->expandAll();
 }

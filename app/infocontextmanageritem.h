@@ -45,6 +45,7 @@ private Q_SLOTS:
 	void updateSideBarContent();
 	void updateOneFileInfo();
 	void showMetaInfoDialog();
+	void slotPreferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
 	void fillOneFileGroup(const KFileItem& item);

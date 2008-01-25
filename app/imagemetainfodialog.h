@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-class PreferredImageMetaInfoModel;
+class ImageMetaInfoModel;
 
 
 class ImageMetaInfoDialogPrivate;
@@ -41,9 +41,15 @@ public:
 	ImageMetaInfoDialog(QWidget* parent);
 	~ImageMetaInfoDialog();
 
-	void setImageMetaInfo(PreferredImageMetaInfoModel*);
+	/**
+	 * Defines the image metainfo model and the preferred metainfo key list.
+	 */
+	void setMetaInfo(ImageMetaInfoModel*, const QStringList& list);
 
 	virtual QSize sizeHint() const;
+
+Q_SIGNALS:
+	void preferredMetaInfoKeyListChanged(const QStringList&);
 
 private:
 	ImageMetaInfoDialogPrivate* const d;

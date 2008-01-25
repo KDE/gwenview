@@ -21,22 +21,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "preferredimagemetainfomodel.h"
 
-
 // Qt
 #include <QStringList>
+
+// KDE
+#include <kdebug.h>
 
 
 namespace Gwenview {
 
 
 struct PreferredImageMetaInfoModelPrivate {
-	PreferredImageMetaInfoModel* mModel;
+	const ImageMetaInfoModel* mModel;
 	QStringList mPreferredMetaInfoKeyList;
 
 
-	QVariant checkStateData(const QModelIndex& index) const {
-		if (index.parent().isValid() & index.column() == 0) {
-			QString key = mModel->keyForIndex(index);
+	QVariant checkStateData(const QModelIndex& sourceIndex) const {
+		if (sourceIndex.parent().isValid() & sourceIndex.column() == 0) {
+			QString key = mModel->keyForIndex(sourceIndex);
 			bool checked = mPreferredMetaInfoKeyList.contains(key);
 			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
 		} else {
@@ -64,9 +66,11 @@ struct PreferredImageMetaInfoModelPrivate {
 };
 
 
-PreferredImageMetaInfoModel::PreferredImageMetaInfoModel()
+PreferredImageMetaInfoModel::PreferredImageMetaInfoModel(ImageMetaInfoModel* model, const QStringList& list)
 : d(new PreferredImageMetaInfoModelPrivate) {
-	d->mModel = this;
+	d->mModel = model;
+	setSourceModel(model);
+	d->mPreferredMetaInfoKeyList = list;
 }
 
 
@@ -75,20 +79,10 @@ PreferredImageMetaInfoModel::~PreferredImageMetaInfoModel() {
 }
 
 
-QStringList PreferredImageMetaInfoModel::preferredMetaInfoKeyList() const {
-	return d->mPreferredMetaInfoKeyList;
-}
-
-
-void PreferredImageMetaInfoModel::setPreferredMetaInfoKeyList(const QStringList& keyList) {
-	d->mPreferredMetaInfoKeyList = keyList;
-	emit preferredMetaInfoKeyListChanged(d->mPreferredMetaInfoKeyList);
-}
-
-
 Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex& index) const {
-	Qt::ItemFlags fl = QAbstractItemModel::flags(index);
-	if (index.parent().isValid() && index.column() == 0) {
+	QModelIndex sourceIndex = mapToSource(index);
+	Qt::ItemFlags fl = d->mModel->flags(sourceIndex);
+	if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
 		fl |= Qt::ItemIsUserCheckable;
 	}
 	return fl;
@@ -96,30 +90,32 @@ Qt::ItemFlags PreferredImageMetaInfoModel::flags(const QModelIndex& index) const
 
 
 QVariant PreferredImageMetaInfoModel::data(const QModelIndex& index, int role) const {
-	if (!index.isValid()) {
+	QModelIndex sourceIndex = mapToSource(index);
+	if (!sourceIndex.isValid()) {
 		return QVariant();
 	}
 
 	switch (role) {
 	case Qt::CheckStateRole:
-		return d->checkStateData(index);
+		return d->checkStateData(sourceIndex);
 
 	default:
-		return ImageMetaInfoModel::data(index, role);
+		return d->mModel->data(sourceIndex, role);
 	}
 }
 
 
 bool PreferredImageMetaInfoModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+	QModelIndex sourceIndex = mapToSource(index);
 	if (role != Qt::CheckStateRole) {
 		return false;
 	}
 
-	if (!index.parent().isValid()) {
+	if (!sourceIndex.parent().isValid()) {
 		return false;
 	}
 
-	QString key = keyForIndex(index);
+	QString key = d->mModel->keyForIndex(sourceIndex);
 	if (value == Qt::Checked) {
 		d->mPreferredMetaInfoKeyList << key;
 		d->sortPreferredMetaInfoKeyList();
