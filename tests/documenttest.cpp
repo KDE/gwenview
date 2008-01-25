@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/document/documentfactory.h"
+#include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
 #include "testutils.h"
 
@@ -243,16 +244,8 @@ void DocumentTest::testMetaData() {
 	}
 
 	// Extract an exif key
-	const Exiv2::Image* exiv2Image = doc->exiv2Image();
-	QVERIFY(exiv2Image);
-
-	const Exiv2::ExifData& exifData = exiv2Image->exifData();
-	Exiv2::ExifKey key("Exif.Image.Make");
-	Exiv2::ExifData::const_iterator it = exifData.findKey(key);
-	QVERIFY2(it != exifData.end(), "Couldn't find wanted Exif key");
-
-	std::string exifValue = it->toString();
-	QCOMPARE(exifValue.c_str(), "Canon");
+	QString value = doc->metaInfo()->getValueForKey("Exif.Image.Make");
+	QCOMPARE(value, QString::fromUtf8("Canon"));
 
 	// Wait until the image has completely been loaded and check we don't
 	// receive the metaDataLoaded signals too many times.

@@ -45,6 +45,7 @@ namespace Gwenview {
 class AbstractDocumentImpl;
 class DocumentFactory;
 class DocumentPrivate;
+class ImageMetaInfoModel;
 
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
@@ -102,6 +103,8 @@ public:
 	const Exiv2::Image* exiv2Image() const;
 
 	QSize size() const;
+
+	ImageMetaInfoModel* metaInfo() const;
 
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);

@@ -25,10 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <kfileitem.h>
 #include <kurl.h>
 
 // Local
 #include "emptydocumentimpl.h"
+#include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
 
 namespace Gwenview {
@@ -41,6 +43,7 @@ struct DocumentPrivate {
 	QImage mImage;
 	Exiv2::Image::AutoPtr mExiv2Image;
 	QByteArray mFormat;
+	ImageMetaInfoModel mImageMetaInfoModel;
 	bool mModified;
 };
 
@@ -61,6 +64,8 @@ Document::~Document() {
 
 void Document::load(const KUrl& url) {
 	d->mUrl = url;
+	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+	d->mImageMetaInfoModel.setFileItem(fileItem);
 	switchToImpl(new LoadingDocumentImpl(this));
 }
 
@@ -156,6 +161,7 @@ QSize Document::size() const {
 
 void Document::setSize(const QSize& size) {
 	d->mSize = size;
+	d->mImageMetaInfoModel.setImageSize(size);
 	emitMetaDataLoaded();
 }
 
@@ -184,7 +190,13 @@ const Exiv2::Image* Document::exiv2Image() const {
 
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
+	d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
 	emitMetaDataLoaded();
+}
+
+
+ImageMetaInfoModel* Document::metaInfo() const {
+	return &d->mImageMetaInfoModel;
 }
 
 
