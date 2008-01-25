@@ -50,6 +50,7 @@ public:
 
 	QString keyForIndex(const QModelIndex&) const;
 	void getInfoForKey(const QString& key, QString* label, QString* value) const;
+	QString getValueForKey(const QString& key) const;
 
 	virtual QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const;
 	virtual QModelIndex parent(const QModelIndex&) const;

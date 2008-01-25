@@ -318,6 +318,13 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
 }
 
 
+QString ImageMetaInfoModel::getValueForKey(const QString& key) const {
+	QString label, value;
+	getInfoForKey(key, &label, &value);
+	return value;
+}
+
+
 QString ImageMetaInfoModel::keyForIndex(const QModelIndex& index) const {
 	if (index.internalId() == NoGroup) {
 		return QString();
