@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
+#include <lib/archiveutils.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
 #include <lib/imageviewpart.h>
@@ -126,9 +127,16 @@ struct InfoContextManagerItemPrivate {
 	QLabel* mMultipleFilesLabel;
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
-	ImageMetaInfoModel mImageMetaInfoModel;
 
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
+
+	void updateMetaInfoDialog() {
+		if (!mImageMetaInfoDialog) {
+			return;
+		}
+		ImageMetaInfoModel* model = mDocument ? mDocument->metaInfo() : 0;
+		mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::preferredMetaInfoKeyList());
+	}
 };
 
 
@@ -188,16 +196,18 @@ void InfoContextManagerItem::updateSideBarContent() {
 		d->mGroup->hide();
 		// "Garbage collect" document
 		d->mDocument = 0;
+		d->updateMetaInfoDialog();
 		return;
 	}
 
 	d->mGroup->show();
-	if (itemList.count() == 1) {
-		fillOneFileGroup(itemList.first());
-		return;
+	KFileItem item = itemList.first();
+	if (itemList.count() == 1 && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+		fillOneFileGroup(item);
+	} else {
+		fillMultipleItemsGroup(itemList);
 	}
-
-	fillMultipleItemsGroup(itemList);
+	d->updateMetaInfoDialog();
 }
 
 void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
@@ -205,19 +215,12 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
-	d->mImageMetaInfoModel.setFileItem(d->mFileItem);
-	d->mImageMetaInfoModel.setImageSize(QSize());
-	d->mImageMetaInfoModel.setExiv2Image(0);
-	updateOneFileInfo();
-	if (!item.isDir()) {
-		d->mDocument = DocumentFactory::instance()->load(item.url());
-		connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
-			SLOT(slotMetaDataLoaded()) );
+	d->mDocument = DocumentFactory::instance()->load(item.url());
+	connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
+		SLOT(slotMetaDataLoaded()) );
 
-		if (d->mDocument->isMetaDataLoaded()) {
-			slotMetaDataLoaded();
-		}
-	}
+	d->updateMetaInfoDialog();
+	updateOneFileInfo();
 }
 
 void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
@@ -236,7 +239,7 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 	if (folderCount == 0) {
 		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 files selected", fileCount));
 	} else if (fileCount == 0) {
-		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 folders selected", folderCount));
+		d->mMultipleFilesLabel->setText(i18ncp("@label", "One folder selected", "%1 folders selected", folderCount));
 	} else {
 		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 folders and %2 files selected", folderCount, fileCount));
 	}
@@ -250,8 +253,6 @@ void InfoContextManagerItem::slotMetaDataLoaded() {
 	if (!d->mDocument) {
 		return;
 	}
-	d->mImageMetaInfoModel.setImageSize(d->mDocument->size());
-	d->mImageMetaInfoModel.setExiv2Image(d->mDocument->exiv2Image());
 	updateOneFileInfo();
 }
 
@@ -261,12 +262,18 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		// Not initialized yet
 		return;
 	}
+
+	if (!d->mDocument) {
+		return;
+	}
+
 	QStringList list;
 	d->mKeyValueWidget->clear();
+	ImageMetaInfoModel* metaInfoModel = d->mDocument->metaInfo();
 	Q_FOREACH(const QString& key, GwenviewConfig::preferredMetaInfoKeyList()) {
 		QString label;
 		QString value;
-		d->mImageMetaInfoModel.getInfoForKey(key, &label, &value);
+		metaInfoModel->getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
 			d->mKeyValueWidget->addItem(label, value);
@@ -289,7 +296,7 @@ void InfoContextManagerItem::showMetaInfoDialog() {
 		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
 	}
-	d->mImageMetaInfoDialog->setMetaInfo(&d->mImageMetaInfoModel, GwenviewConfig::preferredMetaInfoKeyList());
+	d->mImageMetaInfoDialog->setMetaInfo(d->mDocument->metaInfo(), GwenviewConfig::preferredMetaInfoKeyList());
 	d->mImageMetaInfoDialog->show();
 }
 
