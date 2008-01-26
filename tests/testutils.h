@@ -41,9 +41,13 @@ inline KUrl urlForTestFile(const QString& name) {
 	return url;
 }
 
+inline QString pathForTestOutputFile(const QString& name) {
+	return QString("%1/%2").arg(QDir::currentPath()).arg(name);
+}
+
 inline KUrl urlForTestOutputFile(const QString& name) {
 	KUrl url;
-	url.setPath(QString("%1/%2").arg(QDir::currentPath()).arg(name));
+	url.setPath(pathForTestOutputFile(name));
 	return url;
 }
 
