@@ -229,7 +229,7 @@ void DocumentTest::testModify() {
 	QVERIFY(!doc->isModified());
 }
 
-void DocumentTest::testMetaData() {
+void DocumentTest::testMetaDataJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	DocumentFactory::instance()->clearCache();
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
@@ -246,10 +246,24 @@ void DocumentTest::testMetaData() {
 	// Extract an exif key
 	QString value = doc->metaInfo()->getValueForKey("Exif.Image.Make");
 	QCOMPARE(value, QString::fromUtf8("Canon"));
-
-	// Wait until the image has completely been loaded and check we don't
-	// receive the metaDataLoaded signals too many times.
-	doc->waitUntilLoaded();
-	QCOMPARE(metaDataLoadedSpy.count(), 1);
 }
 
+
+void DocumentTest::testMetaDataBmp() {
+	KUrl url = urlForTestOutputFile("metadata.bmp");
+	const int width = 200;
+	const int height = 100;
+	QImage image(width, height, QImage::Format_ARGB32);
+	image.fill(Qt::black);
+	image.save(url.path(), "BMP");
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	QSignalSpy metaDataLoadedSpy(doc.data(), SIGNAL(metaDataLoaded()));
+	doc->waitUntilLoaded();
+
+	Q_ASSERT(metaDataLoadedSpy.count() >= 1);
+
+	QString value = doc->metaInfo()->getValueForKey("General.ImageSize");
+	QString expectedValue = QString("%1x%2").arg(width).arg(height);
+	QCOMPARE(value, expectedValue);
+}

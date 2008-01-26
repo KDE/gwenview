@@ -63,8 +63,6 @@ public:
 
 	void reload();
 
-	bool isMetaDataLoaded() const;
-
 	bool isLoaded() const;
 
 	bool isModified() const;
@@ -125,8 +123,6 @@ private:
 	void setSize(const QSize&);
 	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl* impl);
-
-	void emitMetaDataLoaded();
 
 	Document();
 	DocumentPrivate * const d;

@@ -85,11 +85,6 @@ bool Document::isLoaded() const {
 }
 
 
-bool Document::isMetaDataLoaded() const {
-	return d->mExiv2Image.get() && d->mSize.isValid() && !d->mFormat.isEmpty();
-}
-
-
 void Document::switchToImpl(AbstractDocumentImpl* impl) {
 	// There should always be an implementation defined
 	Q_ASSERT(d->mImpl);
@@ -151,7 +146,7 @@ QByteArray Document::format() const {
 
 void Document::setFormat(const QByteArray& format) {
 	d->mFormat = format;
-	emitMetaDataLoaded();
+	emit metaDataLoaded();
 }
 
 
@@ -166,7 +161,7 @@ void Document::setSize(const QSize& size) {
 	}
 	d->mSize = size;
 	d->mImageMetaInfoModel.setImageSize(size);
-	emitMetaDataLoaded();
+	emit metaDataLoaded();
 }
 
 
@@ -195,19 +190,12 @@ const Exiv2::Image* Document::exiv2Image() const {
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
 	d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
-	emitMetaDataLoaded();
+	emit metaDataLoaded();
 }
 
 
 ImageMetaInfoModel* Document::metaInfo() const {
 	return &d->mImageMetaInfoModel;
-}
-
-
-void Document::emitMetaDataLoaded() {
-	if (isMetaDataLoaded()) {
-		emit metaDataLoaded();
-	}
 }
 
 

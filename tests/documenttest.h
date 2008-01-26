@@ -38,7 +38,8 @@ private Q_SLOTS:
 	void testLosslessSave();
 	void testLosslessRotate();
 	void testModify();
-	void testMetaData();
+	void testMetaDataJpeg();
+	void testMetaDataBmp();
 };
 
 #endif // DOCUMENTTEST_H
