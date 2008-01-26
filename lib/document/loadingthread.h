@@ -60,7 +60,7 @@ public:
 	JpegContent* popJpegContent();
 
 Q_SIGNALS:
-	void metaDataLoaded();
+	void metaDataUpdated();
 
 protected:
 	virtual void run();

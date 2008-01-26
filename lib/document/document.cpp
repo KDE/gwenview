@@ -146,7 +146,7 @@ QByteArray Document::format() const {
 
 void Document::setFormat(const QByteArray& format) {
 	d->mFormat = format;
-	emit metaDataLoaded();
+	emit metaDataUpdated();
 }
 
 
@@ -161,7 +161,7 @@ void Document::setSize(const QSize& size) {
 	}
 	d->mSize = size;
 	d->mImageMetaInfoModel.setImageSize(size);
-	emit metaDataLoaded();
+	emit metaDataUpdated();
 }
 
 
@@ -190,7 +190,7 @@ const Exiv2::Image* Document::exiv2Image() const {
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
 	d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
-	emit metaDataLoaded();
+	emit metaDataUpdated();
 }
 
 

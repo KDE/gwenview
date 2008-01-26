@@ -109,7 +109,7 @@ Q_SIGNALS:
 	void loaded(const KUrl&);
 	void saved(const KUrl&);
 	void modified(const KUrl&);
-	void metaDataLoaded();
+	void metaDataUpdated();
 
 private Q_SLOTS:
 	void emitLoaded();

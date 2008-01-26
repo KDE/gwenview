@@ -62,7 +62,7 @@ struct LoadingDocumentImplPrivate {
 
 	void startLoadingThread() {
 		mThread.setData(mData);
-		QObject::connect(&mThread, SIGNAL(metaDataLoaded()),
+		QObject::connect(&mThread, SIGNAL(metaDataUpdated()),
 			mImpl, SLOT(slotMetaDataLoaded()) );
 		QObject::connect(&mThread, SIGNAL(finished()),
 			mImpl, SLOT(slotImageLoaded()) );

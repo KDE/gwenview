@@ -184,10 +184,10 @@ void LoadingThread::run() {
 	}
 
 	if (d->mImageSize.isValid()) {
-		emit metaDataLoaded();
+		emit metaDataUpdated();
 	}
 
-	// WARNING: Do not access d->mExiv2Image after metaDataLoaded() has been
+	// WARNING: Do not access d->mExiv2Image after metaDataUpdated() has been
 	// called, since the LoadingDocumentImpl may pop it.
 
 	bool ok = reader.read(&d->mImage);
@@ -199,7 +199,7 @@ void LoadingThread::run() {
 		// loadMetaData() failed to read the image size. Now that we have
 		// loaded the image we can initialize it and notify others.
 		d->mImageSize = d->mImage.size();
-		emit metaDataLoaded();
+		emit metaDataUpdated();
 	}
 
 	if (d->mJpegContent) {

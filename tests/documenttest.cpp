@@ -237,9 +237,9 @@ void DocumentTest::testMetaDataJpeg() {
 	// We cleared the cache, so the document should not be loaded
 	Q_ASSERT(!doc->isLoaded());
 
-	// Wait until we receive the metaDataLoaded() signal
-	QSignalSpy metaDataLoadedSpy(doc.data(), SIGNAL(metaDataLoaded()));
-	while (metaDataLoadedSpy.count() == 0) {
+	// Wait until we receive the metaDataUpdated() signal
+	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
+	while (metaDataUpdatedSpy.count() == 0) {
 		QTest::qWait(100);
 	}
 
@@ -258,10 +258,10 @@ void DocumentTest::testMetaDataBmp() {
 	image.save(url.path(), "BMP");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy metaDataLoadedSpy(doc.data(), SIGNAL(metaDataLoaded()));
+	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
 	doc->waitUntilLoaded();
 
-	Q_ASSERT(metaDataLoadedSpy.count() >= 1);
+	Q_ASSERT(metaDataUpdatedSpy.count() >= 1);
 
 	QString value = doc->metaInfo()->getValueForKey("General.ImageSize");
 	QString expectedValue = QString("%1x%2").arg(width).arg(height);
