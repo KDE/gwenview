@@ -145,7 +145,7 @@ KAboutData* GVPart::createAboutData() {
 
 void GVPart::updateCaption() {
 	int intZoom = int(mView->zoom() * 100);
-	QString urlString = url().pathOrUrl();
+	QString urlString = url().fileName();
 	QString caption = QString("%1 - %2%").arg(urlString).arg(intZoom);
 	emit setWindowCaption(caption);
 }
