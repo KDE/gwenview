@@ -117,6 +117,7 @@ void Document::setImage(const QImage& image) {
 
 void Document::setImageInternal(const QImage& image) {
 	d->mImage = image;
+	setSize(d->mImage.size());
 }
 
 
@@ -160,6 +161,9 @@ QSize Document::size() const {
 
 
 void Document::setSize(const QSize& size) {
+	if (size == d->mSize) {
+		return;
+	}
 	d->mSize = size;
 	d->mImageMetaInfoModel.setImageSize(size);
 	emitMetaDataLoaded();
