@@ -217,7 +217,7 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 
 	d->mDocument = DocumentFactory::instance()->load(item.url());
 	connect(d->mDocument.data(), SIGNAL(metaDataLoaded()),
-		SLOT(slotMetaDataLoaded()) );
+		SLOT(updateOneFileInfo()) );
 
 	d->updateMetaInfoDialog();
 	updateOneFileInfo();
@@ -245,15 +245,6 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 	}
 	d->mOneFileWidget->hide();
 	d->mMultipleFilesLabel->show();
-}
-
-
-void InfoContextManagerItem::slotMetaDataLoaded() {
-	// We might not have a document anymore if we just selected two files
-	if (!d->mDocument) {
-		return;
-	}
-	updateOneFileInfo();
 }
 
 

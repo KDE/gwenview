@@ -41,7 +41,6 @@ public:
 	virtual void setSideBar(SideBar* sideBar);
 
 private Q_SLOTS:
-	void slotMetaDataLoaded();
 	void updateSideBarContent();
 	void updateOneFileInfo();
 	void showMetaInfoDialog();
