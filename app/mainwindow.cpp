@@ -340,6 +340,7 @@ struct MainWindow::Private {
 
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
+		mToggleSideBarAction->setShortcut(Qt::Key_F11);
 		connect(mToggleSideBarAction, SIGNAL(triggered()),
 			mWindow, SLOT(toggleSideBar()) );
 
