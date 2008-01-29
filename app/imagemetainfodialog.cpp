@@ -70,6 +70,8 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 : KDialog(parent)
 , d(new ImageMetaInfoDialogPrivate) {
 	d->mTreeView = new ExpandedTreeView(this);
+	d->mTreeView->setRootIsDecorated(false);
+	d->mTreeView->setIndentation(0);
 	setMainWidget(d->mTreeView);
 	setCaption(i18n("Meta Information"));
 	setButtons(KDialog::Close);
