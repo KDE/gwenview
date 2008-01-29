@@ -358,7 +358,6 @@ struct MainWindow::Private {
 			mWindow, SLOT(updateSlideShowAction()) );
 
 		mShowMenuBarAction = KStandardAction::showMenubar(mWindow, SLOT(toggleMenuBar()), actionCollection);
-		mShowMenuBarAction->setChecked(mWindow->menuBar()->isVisible());
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
@@ -1432,6 +1431,14 @@ void MainWindow::preloadNextUrl() {
 
 QSize MainWindow::sizeHint() const {
 	return QSize(750, 500);
+}
+
+
+void MainWindow::showEvent(QShowEvent *event) {
+	// We need to delay initializing the action state until the menu bar has
+	// been initialized, that's why it's done only in the showEvent()
+	d->mShowMenuBarAction->setChecked(menuBar()->isVisible());
+	KParts::MainWindow::showEvent(event);
 }
 
 

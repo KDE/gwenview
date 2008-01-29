@@ -55,6 +55,7 @@ protected:
 	virtual void slotSetStatusBarText(const QString&);
 	virtual bool queryClose();
 	virtual QSize sizeHint() const;
+	virtual void showEvent(QShowEvent*);
 
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
