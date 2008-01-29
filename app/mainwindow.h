@@ -132,6 +132,8 @@ private Q_SLOTS:
 
 	void editLocation();
 
+	void updateFullScreenInformation();
+
 private:
 	class Private;
 	std::auto_ptr<Private> d;

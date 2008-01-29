@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QLabel>
 #include <QTimer>
 #include <QShortcut>
 #include <QSplitter>
@@ -69,6 +70,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/cropsidebar.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
+#include <lib/imagemetainfomodel.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
@@ -166,6 +168,8 @@ struct MainWindow::Private {
 
 	QString mCaption;
 
+	QLabel *mInformationLabel;
+
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
 		mWindow->setCentralWidget(centralWidget);
@@ -190,6 +194,8 @@ struct MainWindow::Private {
 		mSideBarContainer->addWidget(mSideBar);
 
 		mSlideShow = new SlideShow(mWindow);
+
+		mInformationLabel = new QLabel();
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mWindow, SLOT(save(const KUrl&)) );
@@ -472,6 +478,8 @@ struct MainWindow::Private {
 		mFullScreenBar->addAction(mToggleSlideShowAction);
 		mFullScreenBar->addWidget(mSlideShow->intervalWidget());
 		mFullScreenBar->addWidget(mSlideShow->optionsWidget());
+
+		mFullScreenBar->addWidget(mInformationLabel);
 
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
@@ -791,8 +799,50 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	if (!d->mDocumentView->openUrl(url)) {
 		return;
 	}
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	connect(doc.data(),SIGNAL(metaDataUpdated()),
+		SLOT(updateFullScreenInformation()) );
+	updateFullScreenInformation();
+
 	d->mUrlToSelect = url;
 	d->selectUrlToSelect();
+}
+
+void MainWindow::updateFullScreenInformation() {
+	if (!d->mFullScreenAction->isChecked()) {
+		return;
+	}
+
+	KUrl url = d->currentUrl();
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+	ImageMetaInfoModel *imageMetaInfo;
+	imageMetaInfo = doc->metaInfo();
+
+	QString aperture, exposureTime, iso, focalLength;
+	QString filename;
+
+	aperture = imageMetaInfo->getValueForKey("Exif.Photo.FNumber");
+	exposureTime = imageMetaInfo->getValueForKey("Exif.Photo.ExposureTime");
+	iso = imageMetaInfo->getValueForKey("Exif.Photo.ISOSpeedRatings");
+	focalLength = imageMetaInfo->getValueForKey("Exif.Photo.FocalLength");
+
+	filename = imageMetaInfo->getValueForKey("General.Name");
+
+	QString info = GwenviewConfig::fullScreenInfo();
+	info.replace("%a", aperture);
+	info.replace("%t", exposureTime);
+	info.replace("%i", iso);
+	info.replace("%l", focalLength);
+	info.replace("%f", filename);
+
+	d->mInformationLabel->setText(info);
+
+	if (d->mFullScreenBar) {
+		d->mFullScreenBar->resize(d->mFullScreenBar->sizeHint());
+	}
 }
 
 void MainWindow::slotSetStatusBarText(const QString& message) {

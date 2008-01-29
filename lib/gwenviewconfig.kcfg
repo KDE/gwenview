@@ -16,6 +16,12 @@
 		</entry>
 	</group>
 
+	<group name="FullScreen">
+		<entry name="FullScreenInfo" type="String">
+			<default>%f</default>
+		</entry>
+	</group>
+
 	<group name="ImageView">
 		<entry name="AlphaBackgroundMode" type="Enum">
 			<choices name="Gwenview::ImageView::AlphaBackgroundMode">

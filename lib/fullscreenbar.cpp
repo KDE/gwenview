@@ -68,8 +68,9 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 	d->mLayout = new QHBoxLayout(this);
 	d->mLayout->setMargin(0);
 	d->mLayout->setSpacing(0);
+	setObjectName("fullScreenBar");
 	setStyleSheet(
-		"QFrame {"
+		"#fullScreenBar {"
 		"	background-color:"
 		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
 		"		stop:0 #444, stop: 0.6 black, stop:1 black);"
@@ -94,6 +95,10 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
 		"		stop:0 #222, stop: 0.6 black, stop:1 black);"
 		"	border: 1px solid #444;"
+		"}"
+
+		"QLabel {"
+		"	color: #ccc;"
 		"}"
 		);
 
