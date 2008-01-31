@@ -575,6 +575,9 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setHorizontalScrollMode(ScrollPerPixel);
 
 	d->mThumbnailViewHelper = 0;
+	// Make sure mThumbnailSize is initialized before calling setThumbnailSize,
+	// since it will compare the new size with the old one
+	d->mThumbnailSize = 0;
 	setThumbnailSize(128);
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
@@ -597,6 +600,9 @@ ThumbnailView::~ThumbnailView() {
 
 
 void ThumbnailView::setThumbnailSize(int value) {
+	if (d->mThumbnailSize == value) {
+		return;
+	}
 	d->mThumbnailSize = value;
 	d->mItemDelegate->clearElidedTextMap();
 	setSpacing(SPACING);
