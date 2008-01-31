@@ -1312,6 +1312,10 @@ void MainWindow::loadConfig() {
 	d->mDocumentView->setPalette(palette);
 
 	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
+	// If GwenviewConfig::thumbnailSize() returns the current value of
+	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
+	// won't be updated. That's why we do it ourself.
+	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
 }
 
 
