@@ -259,6 +259,7 @@ struct MainWindow::Private {
 
 		KStandardAction::save(mWindow, SLOT(saveCurrent()), actionCollection);
 		KStandardAction::saveAs(mWindow, SLOT(saveCurrentAs()), actionCollection);
+		KStandardAction::open(mWindow, SLOT(openFile()), actionCollection);
 		KStandardAction::print(mWindow, SLOT(print()), actionCollection);
 		KStandardAction::quit(KApplication::kApplication(), SLOT(closeAllWindows()), actionCollection);
 
@@ -1093,6 +1094,23 @@ void MainWindow::saveAs(const KUrl& url) {
 	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(dialog.selectedUrl(), typeList[0].toAscii());
+}
+
+
+void MainWindow::openFile() {
+	KUrl dirUrl = d->mDirModel->dirLister()->url();
+
+	KFileDialog dialog(dirUrl, QString(), this);
+	dialog.setCaption(i18nc("@title:window", "Open Image"));
+	QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
+	dialog.setMimeFilter(mimeFilter);
+	dialog.setOperationMode(KFileDialog::Opening);
+	if (!dialog.exec()) {
+		return;
+	}
+
+	KUrl url = dialog.selectedUrl();
+	goToUrl(url);
 }
 
 

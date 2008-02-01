@@ -101,6 +101,7 @@ private Q_SLOTS:
 
 	void saveCurrent();
 	void saveCurrentAs();
+	void openFile();
 	void reload();
 	void save(const KUrl&);
 	void saveAs(const KUrl&);
