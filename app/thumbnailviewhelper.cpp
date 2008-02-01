@@ -163,13 +163,13 @@ void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const
 void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
 	KMenu menu(parent);
 	QAction* moveAction = menu.addAction(
-		KIcon("goto-page"),
+		KIcon("go-jump"),
 		i18n("Move Here"));
 	QAction* copyAction = menu.addAction(
 		KIcon("edit-copy"),
 		i18n("Copy Here"));
 	QAction* linkAction = menu.addAction(
-		KIcon("www"),
+		/*KIcon("insert-link"),*/ // FIXME: Uncomment when insert-link icon exists
 		i18n("Link Here"));
 	menu.addSeparator();
 	menu.addAction(
