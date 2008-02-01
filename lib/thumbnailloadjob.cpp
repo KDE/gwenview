@@ -265,7 +265,7 @@ bool ThumbnailThread::loadJpeg() {
 	struct jpeg_decompress_struct cinfo;
 
 	// Open file
-	FILE* inputFile=fopen(QFile::encodeName( mPixPath ).data(), "rb");
+	FILE* inputFile = KDE_fopen(QFile::encodeName( mPixPath ).data(), "rb");
 	if(!inputFile) return false;
 
 	// Error handling
