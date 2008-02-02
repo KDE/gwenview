@@ -50,7 +50,7 @@ namespace Gwenview {
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
-: ImageViewPart(parent) 
+: ImageViewPart(parent)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
 
@@ -173,7 +173,8 @@ void GVPart::zoomIn() {
 
 void GVPart::zoomOut() {
 	disableZoomToFit();
-	mView->setZoom(mView->zoom() / 2);
+        if ( mView->zoom() > 0.01 )
+            mView->setZoom(mView->zoom() / 2);
 }
 
 
@@ -226,7 +227,7 @@ void GVPart::showContextMenu() {
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_in");
-	addActionToMenu(&menu, actionCollection(), "view_zoom_out");
+ 	addActionToMenu(&menu, actionCollection(), "view_zoom_out");
 	menu.exec(QCursor::pos());
 }
 
