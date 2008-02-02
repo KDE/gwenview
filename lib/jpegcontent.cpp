@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <string.h>
 extern "C" {
 #include <jpeglib.h>
-#include "libjpeg/transupp.h"
+#include "transupp.h"
 }
 
 // Qt
