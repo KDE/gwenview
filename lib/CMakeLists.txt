@@ -29,6 +29,7 @@ set(gwenviewlib_SRCS
 	imageutils.cpp
 	imageview.cpp
 	imageviewpart.cpp
+	invisiblebuttongroup.cpp
 	jpegcontent.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
