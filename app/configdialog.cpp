@@ -28,11 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "ui_configdialog.h"
 #include <lib/gwenviewconfig.h>
+#include <lib/invisiblebuttongroup.h>
 
 namespace Gwenview {
 
 
 struct ConfigDialogPrivate : public Ui_ConfigDialog {
+	InvisibleButtonGroup* mAlphaBackgroundModeGroup;
 };
 
 
@@ -43,6 +45,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	QWidget* widget = new QWidget(this);
 	d->setupUi(widget);
 	widget->layout()->setMargin(0);
+
+	d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
+	d->mAlphaBackgroundModeGroup->setObjectName("kcfg_AlphaBackgroundMode");
+	d->mAlphaBackgroundModeGroup->addButton(d->checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
+	d->mAlphaBackgroundModeGroup->addButton(d->solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
+
 	addPage(widget, "");
 	setHelp(QString(), "gwenview");
 }
