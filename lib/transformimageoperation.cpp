@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
+#include <klocale.h>
 
 // Local
 
@@ -38,6 +39,25 @@ struct TransformImageOperationPrivate {
 TransformImageOperation::TransformImageOperation(Orientation orientation)
 : d(new TransformImageOperationPrivate) {
 	d->mOrientation = orientation;
+	switch (d->mOrientation) {
+	case ROT_90:
+		setText(i18n("Rotate Left"));
+		break;
+	case ROT_270:
+		setText(i18n("Rotate Right"));
+		break;
+	case HFLIP:
+		setText(i18n("Mirror"));
+		break;
+	case VFLIP:
+		setText(i18n("Flip"));
+		break;
+	default:
+		// We should not get there because the transformations listed above are
+		// the only one available from the UI. Define a default text nevertheless.
+		setText(i18n("Transform"));
+		break;
+	}
 }
 
 

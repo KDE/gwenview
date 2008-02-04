@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 
 // KDE
+#include <klocale.h>
 
 // Local
 #include "document/document.h"
@@ -42,6 +43,7 @@ struct CropImageOperationPrivate {
 CropImageOperation::CropImageOperation(const QRect& rect)
 : d(new CropImageOperationPrivate) {
 	d->mRect = rect;
+	setText(i18n("Crop"));
 }
 
 

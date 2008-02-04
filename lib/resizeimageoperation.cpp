@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 
 // KDE
+#include <klocale.h>
 
 // Local
 #include "document/document.h"
@@ -41,6 +42,7 @@ struct ResizeImageOperationPrivate {
 ResizeImageOperation::ResizeImageOperation(int size)
 : d(new ResizeImageOperationPrivate) {
 	d->mSize = size;
+	setText(i18n("Resize"));
 }
 
 
