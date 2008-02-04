@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <qtest_kde.h>
 
 // Local
+#include "../lib/abstractimageoperation.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
@@ -212,15 +213,23 @@ void DocumentTest::testLosslessRotate() {
 }
 
 void DocumentTest::testModify() {
+	class TestOperation : public AbstractImageOperation {
+	public:
+		void redo() {
+			QImage image(10, 10, QImage::Format_ARGB32);
+			image.fill(QColor(Qt::white).rgb());
+			document()->setImage(image);
+		}
+	};
+
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
 
-	QImage image(10, 10, QImage::Format_ARGB32);
-	image.fill(QColor(Qt::white).rgb());
-
-	doc->setImage(image);
+	TestOperation* op = new TestOperation;
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
 	QVERIFY(doc->isModified());
 
 	KUrl destUrl = urlForTestOutputFile("modify.png");

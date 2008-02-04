@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QSplitter>
 #include <QSlider>
 #include <QStackedWidget>
+#include <QUndoGroup>
 #include <QVBoxLayout>
 
 // KDE
@@ -49,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmessagebox.h>
 #include <kprotocolmanager.h>
 #include <kstatusbar.h>
+#include <kstandardshortcut.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <kurl.h>
@@ -376,6 +378,28 @@ struct MainWindow::Private {
 			mWindow, SLOT(editLocation()));
 	}
 
+	void setupUndoActions() {
+		// There is no KUndoGroup similar to KUndoStack. This code basically
+		// does the same as KUndoStack, but for the KUndoGroup actions.
+		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+		QAction* action;
+		KActionCollection* actionCollection =  mWindow->actionCollection();
+
+		action = undoGroup->createRedoAction(actionCollection);
+		action->setObjectName(KStandardAction::name(KStandardAction::Redo));
+		action->setIcon(KIcon("edit-redo"));
+		action->setIconText(i18n("Redo"));
+		action->setShortcuts(KStandardShortcut::redo());
+		actionCollection->addAction(action->objectName(), action);
+
+		action = undoGroup->createUndoAction(actionCollection);
+		action->setObjectName(KStandardAction::name(KStandardAction::Undo));
+		action->setIcon(KIcon("edit-undo"));
+		action->setIconText(i18n("Undo"));
+		action->setShortcuts(KStandardShortcut::undo());
+		actionCollection->addAction(action->objectName(), action);
+	}
+
 
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
@@ -556,7 +580,8 @@ struct MainWindow::Private {
 
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		doc->waitUntilLoaded();
-		op->apply(doc);
+		op->setDocument(doc);
+		doc->undoStack()->push(op);
 	}
 
 
@@ -643,6 +668,7 @@ d(new MainWindow::Private)
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
+	d->setupUndoActions();
 	d->setupContextManager();
 	d->updateActions();
 	updatePreviousNextActions();
@@ -805,6 +831,10 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 		SLOT(updateFullScreenInformation()) );
 	updateFullScreenInformation();
 
+	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+	undoGroup->addStack(doc->undoStack());
+	undoGroup->setActiveStack(doc->undoStack());
+
 	d->mUrlToSelect = url;
 	d->selectUrlToSelect();
 }
@@ -889,7 +919,15 @@ void MainWindow::slotPartCompleted() {
 
 
 void MainWindow::slotSelectionChanged() {
-	openSelectedDocument();
+	if (d->mDocumentView->isVisible()) {
+		openSelectedDocument();
+	} else {
+		KUrl url = d->currentUrl();
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
+		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+		undoGroup->addStack(doc->undoStack());
+		undoGroup->setActiveStack(doc->undoStack());
+	}
 	hideTemporarySideBar();
 	d->updateActions();
 	updatePreviousNextActions();
@@ -1121,42 +1159,46 @@ void MainWindow::showDocumentInFullScreen(const KUrl& url) {
 
 
 void MainWindow::rotateCurrentLeft() {
-	TransformImageOperation op(ROT_270);
-	d->applyImageOperation(&op);
+	TransformImageOperation* op = new TransformImageOperation(ROT_270);
+	d->applyImageOperation(op);
 }
 
 
 void MainWindow::rotateLeft(const KUrl& url) {
-	TransformImageOperation op(ROT_270);
+	kDebug();
+	TransformImageOperation* op = new TransformImageOperation(ROT_270);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
-	op.apply(doc);
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
 }
 
 
 void MainWindow::rotateCurrentRight() {
-	TransformImageOperation op(ROT_90);
-	d->applyImageOperation(&op);
+	TransformImageOperation* op = new TransformImageOperation(ROT_90);
+	d->applyImageOperation(op);
 }
 
 
 void MainWindow::rotateRight(const KUrl& url) {
-	TransformImageOperation op(ROT_90);
+	kDebug();
+	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
-	op.apply(doc);
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
 }
 
 
 void MainWindow::mirror() {
-	TransformImageOperation op(HFLIP);
-	d->applyImageOperation(&op);
+	TransformImageOperation* op = new TransformImageOperation(HFLIP);
+	d->applyImageOperation(op);
 }
 
 
 void MainWindow::flip() {
-	TransformImageOperation op(VFLIP);
-	d->applyImageOperation(&op);
+	TransformImageOperation* op = new TransformImageOperation(VFLIP);
+	d->applyImageOperation(op);
 }
 
 
@@ -1178,8 +1220,8 @@ void MainWindow::resizeImage() {
 		return;
 	}
 	GwenviewConfig::setImageResizeLastSize(size);
-	ResizeImageOperation op(size);
-	d->applyImageOperation(&op);
+	ResizeImageOperation* op = new ResizeImageOperation(size);
+	d->applyImageOperation(op);
 }
 
 

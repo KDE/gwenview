@@ -34,6 +34,7 @@ namespace Gwenview {
 
 struct ResizeImageOperationPrivate {
 	int mSize;
+	QImage mOriginalImage;
 };
 
 
@@ -48,10 +49,16 @@ ResizeImageOperation::~ResizeImageOperation() {
 }
 
 
-void ResizeImageOperation::apply(Document::Ptr doc) {
-	QImage image = doc->image();
+void ResizeImageOperation::redo() {
+	QImage image = document()->image();
+	d->mOriginalImage = image;
 	image = image.scaled(d->mSize, d->mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	doc->setImage(image);
+	document()->setImage(image);
+}
+
+
+void ResizeImageOperation::undo() {
+	document()->setImage(d->mOriginalImage);
 }
 
 

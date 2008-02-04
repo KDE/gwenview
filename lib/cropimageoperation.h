@@ -41,7 +41,8 @@ public:
 	CropImageOperation(const QRect&);
 	~CropImageOperation();
 
-	virtual void apply(Document::Ptr);
+	virtual void redo();
+	virtual void undo();
 
 private:
 	CropImageOperationPrivate* const d;

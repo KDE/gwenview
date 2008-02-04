@@ -31,16 +31,28 @@ namespace Gwenview {
 
 
 struct AbstractImageOperationPrivate {
+	Document::Ptr mDocument;
 };
 
 
 AbstractImageOperation::AbstractImageOperation()
-: d(new AbstractImageOperationPrivate) {
+: QUndoCommand()
+, d(new AbstractImageOperationPrivate) {
 }
 
 
 AbstractImageOperation::~AbstractImageOperation() {
 	delete d;
+}
+
+
+void AbstractImageOperation::setDocument(Document::Ptr doc) {
+	d->mDocument = doc;
+}
+
+
+Document::Ptr AbstractImageOperation::document() const {
+	return d->mDocument;
 }
 
 

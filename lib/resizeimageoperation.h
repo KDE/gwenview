@@ -39,7 +39,8 @@ public:
 	ResizeImageOperation(int size);
 	~ResizeImageOperation();
 
-	virtual void apply(Document::Ptr);
+	virtual void redo();
+	virtual void undo();
 
 private:
 	ResizeImageOperationPrivate* const d;

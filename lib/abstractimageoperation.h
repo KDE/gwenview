@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "gwenviewlib_export.h"
 
 // Qt
+#include <QUndoCommand>
 
 // KDE
 
@@ -34,12 +35,13 @@ namespace Gwenview {
 
 
 class AbstractImageOperationPrivate;
-class GWENVIEWLIB_EXPORT AbstractImageOperation {
+class GWENVIEWLIB_EXPORT AbstractImageOperation : public QUndoCommand {
 public:
 	AbstractImageOperation();
 	virtual ~AbstractImageOperation();
 
-	virtual void apply(Document::Ptr) = 0;
+	void setDocument(Document::Ptr);
+	Document::Ptr document() const;
 
 private:
 	AbstractImageOperationPrivate* const d;

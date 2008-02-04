@@ -137,8 +137,9 @@ void CropSideBar::updateCropToolRect() {
 
 
 void CropSideBar::crop() {
-	CropImageOperation op(cropRect());
-	op.apply(d->mDocument);
+	CropImageOperation* op = new CropImageOperation(cropRect());
+	op->setDocument(d->mDocument);
+	d->mDocument->undoStack()->push(op);
 	emit done();
 }
 

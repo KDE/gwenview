@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QImage;
 class QRect;
 class QSize;
+class QUndoStack;
 
 class KUrl;
 
@@ -67,18 +68,14 @@ public:
 
 	bool isModified() const;
 
-	/**
-	 * Mark the image as modified. Should be called when image pixels have been
-	 * altered outside Document.
-	 */
-	void setModified(bool modified);
-
 	QImage& image();
 
 	/**
 	 * Replaces the current image with image.
 	 * Calling this while the document is loaded won't do anything.
-	 * isModified() will return true after this.
+	 *
+	 * This method should only be called from a subclass of
+	 * AbstractImageOperation and applied through Document::undoStack().
 	 */
 	void setImage(const QImage& image);
 
@@ -87,6 +84,9 @@ public:
 	 *
 	 * Transformations are handled by the Document class because it can be
 	 * done in a lossless way by some Document implementations.
+	 *
+	 * This method should only be called from a subclass of
+	 * AbstractImageOperation and applied through Document::undoStack().
 	 */
 	void applyTransformation(Orientation);
 
@@ -104,6 +104,8 @@ public:
 
 	ImageMetaInfoModel* metaInfo() const;
 
+	QUndoStack* undoStack() const;
+
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void loaded(const KUrl&);
@@ -113,6 +115,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void emitLoaded();
+	void slotUndoIndexChanged();
 
 private:
 	friend class DocumentFactory;

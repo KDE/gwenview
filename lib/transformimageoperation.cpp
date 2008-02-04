@@ -46,8 +46,26 @@ TransformImageOperation::~TransformImageOperation() {
 }
 
 
-void TransformImageOperation::apply(Document::Ptr doc) {
-	doc->applyTransformation(d->mOrientation);
+void TransformImageOperation::redo() {
+	document()->applyTransformation(d->mOrientation);
 }
+
+
+void TransformImageOperation::undo() {
+	Orientation orientation;
+	switch (d->mOrientation) {
+	case ROT_90:
+		orientation = ROT_270;
+		break;
+	case ROT_270:
+		orientation = ROT_90;
+		break;
+	default:
+		orientation = d->mOrientation;
+		break;
+	}
+	document()->applyTransformation(orientation);
+}
+
 
 } // namespace

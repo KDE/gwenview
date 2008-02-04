@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QDateTime>
 #include <QMap>
+#include <QUndoGroup>
 
 // KDE
 #include <kdebug.h>
@@ -59,6 +60,7 @@ typedef QMap<KUrl, DocumentInfo*> DocumentMap;
 
 struct DocumentFactoryPrivate {
 	DocumentMap mDocumentMap;
+	QUndoGroup mUndoGroup;
 
 	/**
 	 * Removes items in mDocumentMap which are no longer referenced elsewhere
@@ -200,6 +202,11 @@ void DocumentFactory::slotModified(const KUrl& url) {
 		emit modifiedDocumentListChanged();
 	}
 	emit documentChanged(url);
+}
+
+
+QUndoGroup* DocumentFactory::undoGroup() {
+	return &d->mUndoGroup;
 }
 
 

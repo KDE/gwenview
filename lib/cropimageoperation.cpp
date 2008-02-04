@@ -35,6 +35,7 @@ namespace Gwenview {
 
 struct CropImageOperationPrivate {
 	QRect mRect;
+	QImage mOriginalImage;
 };
 
 
@@ -49,14 +50,20 @@ CropImageOperation::~CropImageOperation() {
 }
 
 
-void CropImageOperation::apply(Document::Ptr doc) {
-	QImage src = doc->image();
+void CropImageOperation::redo() {
+	QImage src = document()->image();
+	d->mOriginalImage = src;
 	QImage dst(d->mRect.size(), src.format());
 	QPainter painter(&dst);
 	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	painter.drawImage(QPoint(0, 0), src, d->mRect);
 	painter.end();
-	doc->setImage(dst);
+	document()->setImage(dst);
+}
+
+
+void CropImageOperation::undo() {
+	document()->setImage(d->mOriginalImage);
 }
 
 

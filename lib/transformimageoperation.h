@@ -41,7 +41,8 @@ public:
 	TransformImageOperation(Orientation);
 	~TransformImageOperation();
 
-	virtual void apply(Document::Ptr);
+	virtual void redo();
+	virtual void undo();
 
 private:
 	TransformImageOperationPrivate* const d;

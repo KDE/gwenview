@@ -123,7 +123,6 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 
 void DocumentLoadedImpl::setImage(const QImage& image) {
 	setDocumentImage(image);
-	document()->setModified(true);
 	imageRectUpdated(image.rect());
 }
 
@@ -133,7 +132,6 @@ void DocumentLoadedImpl::applyTransformation(Orientation orientation) {
 	QMatrix matrix = ImageUtils::transformMatrix(orientation);
 	image = image.transformed(matrix);
 	setDocumentImage(image);
-	document()->setModified(true);
 	imageRectUpdated(image.rect());
 }
 

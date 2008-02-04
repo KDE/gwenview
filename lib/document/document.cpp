@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QImage>
+#include <QUndoStack>
 
 // KDE
 #include <kdebug.h>
@@ -44,7 +45,7 @@ struct DocumentPrivate {
 	Exiv2::Image::AutoPtr mExiv2Image;
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
-	bool mModified;
+	QUndoStack mUndoStack;
 };
 
 
@@ -52,7 +53,7 @@ Document::Document()
 : QObject()
 , d(new DocumentPrivate) {
 	d->mImpl = new EmptyDocumentImpl(this);
-	d->mModified = false;
+	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 }
 
 
@@ -63,6 +64,7 @@ Document::~Document() {
 
 
 void Document::load(const KUrl& url) {
+	d->mUndoStack.clear();
 	d->mUrl = url;
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
@@ -132,7 +134,7 @@ Document::SaveResult Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
 	Document::SaveResult result = d->mImpl->save(url, format);
 	if (result == SR_OK) {
-		d->mModified = false;
+		d->mUndoStack.setClean();
 		saved(url);
 	}
 
@@ -166,14 +168,7 @@ void Document::setSize(const QSize& size) {
 
 
 bool Document::isModified() const {
-	return d->mModified;
-}
-
-void Document::setModified(bool value) {
-	d->mModified = value;
-	if (d->mModified) {
-		modified(d->mUrl);
-	}
+	return !d->mUndoStack.isClean();
 }
 
 
@@ -201,6 +196,21 @@ ImageMetaInfoModel* Document::metaInfo() const {
 
 void Document::emitLoaded() {
 	emit loaded(d->mUrl);
+}
+
+
+QUndoStack* Document::undoStack() const {
+	return &d->mUndoStack;
+}
+
+
+void Document::slotUndoIndexChanged() {
+	if (d->mUndoStack.isClean()) {
+		// This does not really correspond to a save
+		saved(d->mUrl);
+	} else {
+		modified(d->mUrl);
+	}
 }
 
 
