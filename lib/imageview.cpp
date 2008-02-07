@@ -70,7 +70,7 @@ struct ImageViewPrivate {
 		if ( int(mImage->height() * zoom) > height) {
 			zoom = qreal(height) / mImage->height();
 		}
-		return qMin(zoom, 3.);
+		return qMin(zoom, 1.0);
 	}
 
 
