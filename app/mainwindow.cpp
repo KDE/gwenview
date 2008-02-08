@@ -922,11 +922,20 @@ void MainWindow::slotSelectionChanged() {
 	if (d->mDocumentView->isVisible()) {
 		openSelectedDocument();
 	} else {
-		KUrl url = d->currentUrl();
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
+		QModelIndex index = d->mThumbnailView->currentIndex();
+		KFileItem item;
+		if (index.isValid()) {
+			item = d->mDirModel->itemForIndex(index);
+		}
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-		undoGroup->addStack(doc->undoStack());
-		undoGroup->setActiveStack(doc->undoStack());
+		if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			KUrl url = item.url();
+			Document::Ptr doc = DocumentFactory::instance()->load(url);
+			undoGroup->addStack(doc->undoStack());
+			undoGroup->setActiveStack(doc->undoStack());
+		} else {
+			undoGroup->setActiveStack(0);
+		}
 	}
 	hideTemporarySideBar();
 	d->updateActions();
