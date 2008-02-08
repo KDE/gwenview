@@ -784,18 +784,13 @@ void MainWindow::openSelectedDocument() {
 		return;
 	}
 
-	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
-	if (selection.size() == 0) {
-		return;
-	}
-
-	QModelIndex index = selection.indexes()[0];
+	QModelIndex index = d->mThumbnailView->currentIndex();
 	if (!index.isValid()) {
 		return;
 	}
 
 	KFileItem item = d->mDirModel->itemForIndex(index);
-	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+	if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		openDocumentUrl(item.url());
 	}
 }
