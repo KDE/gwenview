@@ -33,6 +33,14 @@
 		<entry name="AlphaBackgroundColor" type="Color">
 			<default>#ffffff</default>
 		</entry>
+
+		<entry name="MouseWheelBehavior" type="Enum">
+			<choices name="Gwenview::ImageView::MouseWheelBehavior">
+				<choice name="ImageView::MouseWheelScroll"/>
+				<choice name="ImageView::MouseWheelBrowse"/>
+			</choices>
+			<default>ImageView::MouseWheelScroll</default>
+		</entry>
 	</group>
 
 	<group name="ThumbnailView">

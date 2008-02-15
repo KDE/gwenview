@@ -44,6 +44,7 @@ struct ImageViewPrivate {
 	QWidget* mViewport;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
+	ImageView::MouseWheelBehavior mMouseWheelBehavior;
 	const QImage* mImage;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -155,6 +156,7 @@ ImageView::ImageView(QWidget* parent)
 {
 	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
 	d->mAlphaBackgroundColor = Qt::black;
+	d->mMouseWheelBehavior = MouseWheelScroll;
 
 	d->mImage = &d->mEmptyImage;
 	d->mView = this;
@@ -188,6 +190,16 @@ void ImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
 void ImageView::setAlphaBackgroundColor(const QColor& color) {
 	d->mAlphaBackgroundColor = color;
 	d->mViewport->update();
+}
+
+
+void ImageView::setMouseWheelBehavior(ImageView::MouseWheelBehavior behavior) {
+	d->mMouseWheelBehavior = behavior;
+}
+
+
+ImageView::MouseWheelBehavior ImageView::mouseWheelBehavior() const {
+	return d->mMouseWheelBehavior;
 }
 
 

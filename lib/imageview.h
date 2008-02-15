@@ -39,6 +39,11 @@ public:
 		AlphaBackgroundSolid
 	};
 
+	enum MouseWheelBehavior {
+		MouseWheelScroll,
+		MouseWheelBrowse
+	};
+
 	ImageView(QWidget* parent);
 	~ImageView();
 
@@ -48,6 +53,10 @@ public:
 	void setAlphaBackgroundMode(AlphaBackgroundMode mode);
 
 	void setAlphaBackgroundColor(const QColor& color);
+
+	void setMouseWheelBehavior(MouseWheelBehavior);
+
+	MouseWheelBehavior mouseWheelBehavior() const;
 
 	/**
 	 * Set the image to display in this view. Note that we pass a pointer, not

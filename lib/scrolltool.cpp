@@ -99,8 +99,7 @@ void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
 
 
 void ScrollTool::wheelEvent(QWheelEvent* event) {
-	if (false/*imageView()->scrollOnWheelEvent()*/) {
-		// Scroll
+	if (imageView()->mouseWheelBehavior() == ImageView::MouseWheelScroll) {
 		// Forward events to the scrollbars, like
 		// QAbstractScrollArea::wheelEvent() do.
 		if (event->orientation() == Qt::Horizontal) {

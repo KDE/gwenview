@@ -35,6 +35,7 @@ namespace Gwenview {
 
 struct ConfigDialogPrivate : public Ui_ConfigDialog {
 	InvisibleButtonGroup* mAlphaBackgroundModeGroup;
+	InvisibleButtonGroup* mWheelBehaviorGroup;
 };
 
 
@@ -50,6 +51,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	d->mAlphaBackgroundModeGroup->setObjectName("kcfg_AlphaBackgroundMode");
 	d->mAlphaBackgroundModeGroup->addButton(d->checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
 	d->mAlphaBackgroundModeGroup->addButton(d->solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
+
+	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
+	d->mWheelBehaviorGroup->setObjectName("kcfg_MouseWheelBehavior");
+	d->mWheelBehaviorGroup->addButton(d->mouseWheelScrollRadioButton, int(ImageView::MouseWheelScroll));
+	d->mWheelBehaviorGroup->addButton(d->mouseWheelBrowseRadioButton, int(ImageView::MouseWheelBrowse));
 
 	addPage(widget, "");
 	setHelp(QString(), "gwenview");
