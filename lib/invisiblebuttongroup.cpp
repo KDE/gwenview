@@ -72,7 +72,10 @@ void InvisibleButtonGroup::addButton(QAbstractButton* button, int id) {
 
 
 void InvisibleButtonGroup::setSelected(int id) {
-	d->mGroup->button(id)->setChecked(true);
+	QAbstractButton* button = d->mGroup->button(id);
+	if (button) {
+		button->setChecked(true);
+	}
 }
 
 
