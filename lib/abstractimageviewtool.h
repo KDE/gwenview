@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 
 class QMouseEvent;
+class QWheelEvent;
 class QPainter;
 
 namespace Gwenview {
@@ -50,6 +51,7 @@ public:
 	virtual void mousePressEvent(QMouseEvent*) {}
 	virtual void mouseMoveEvent(QMouseEvent*) {}
 	virtual void mouseReleaseEvent(QMouseEvent*) {}
+	virtual void wheelEvent(QWheelEvent*) {}
 
 	virtual void toolActivated() {}
 	virtual void toolDeactivated() {}

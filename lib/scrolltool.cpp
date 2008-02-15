@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "scrolltool.h"
 
 // Qt
+#include <QApplication>
 #include <QMouseEvent>
 #include <QScrollBar>
 
@@ -94,6 +95,27 @@ void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
 
 	d->mDragStarted = false;
 	imageView()->viewport()->setCursor(Qt::OpenHandCursor);
+}
+
+
+void ScrollTool::wheelEvent(QWheelEvent* event) {
+	if (false/*imageView()->scrollOnWheelEvent()*/) {
+		// Scroll
+		// Forward events to the scrollbars, like
+		// QAbstractScrollArea::wheelEvent() do.
+		if (event->orientation() == Qt::Horizontal) {
+			QApplication::sendEvent(imageView()->horizontalScrollBar(), event);
+		} else {
+			QApplication::sendEvent(imageView()->verticalScrollBar(), event);
+		}
+	} else {
+		// Browse
+		if (event->delta() > 0) {
+			imageView()->emitPreviousImageRequested();
+		} else {
+			imageView()->emitNextImageRequested();
+		}
+	}
 }
 
 

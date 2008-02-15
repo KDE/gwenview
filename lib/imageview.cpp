@@ -517,4 +517,21 @@ void ImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 
+void ImageView::wheelEvent(QWheelEvent* event) {
+	if (d->mTool) {
+		d->mTool->wheelEvent(event);
+	}
+}
+
+
+void ImageView::emitPreviousImageRequested() {
+	emit previousImageRequested();
+}
+
+
+void ImageView::emitNextImageRequested() {
+	emit nextImageRequested();
+}
+
+
 } // namespace

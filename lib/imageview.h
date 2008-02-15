@@ -81,8 +81,13 @@ public:
 	QRect mapToViewport(const QRect& src);
 	QRect mapToImage(const QRect& src);
 
+	void emitPreviousImageRequested();
+	void emitNextImageRequested();
+
 Q_SIGNALS:
 	void zoomChanged();
+	void previousImageRequested();
+	void nextImageRequested();
 
 public Q_SLOTS:
 	void setZoomToFit(bool on);
@@ -99,6 +104,7 @@ protected:
 	virtual void mousePressEvent(QMouseEvent*);
 	virtual void mouseMoveEvent(QMouseEvent*);
 	virtual void mouseReleaseEvent(QMouseEvent*);
+	virtual void wheelEvent(QWheelEvent*);
 
 private Q_SLOTS:
 	void updateFromScaler(int left, int top, const QImage& image);
