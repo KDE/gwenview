@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstatusbar.h>
 
 // Local
+#include <lib/imageview.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 
@@ -174,9 +175,14 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 		return;
 	}
 
-	if (dynamic_cast<ImageViewPart*>(part)) {
-		connect(part, SIGNAL(resizeRequested(const QSize&)),
+	ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
+	if (ivPart) {
+		connect(ivPart, SIGNAL(resizeRequested(const QSize&)),
 			d->mView, SIGNAL(resizeRequested(const QSize&)) );
+		connect(ivPart->imageView(), SIGNAL(previousImageRequested()),
+			d->mView, SIGNAL(previousImageRequested()) );
+		connect(ivPart->imageView(), SIGNAL(nextImageRequested()),
+			d->mView, SIGNAL(nextImageRequested()) );
 	}
 
 	// Handle statusbar extension otherwise a statusbar will get created in
