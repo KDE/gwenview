@@ -273,7 +273,7 @@ struct MainWindow::Private {
 		timer->setInterval(350);
 		timer->setSingleShot(true);
 		connect(timer, SIGNAL(timeout()),
-			mWindow, SLOT(setNameFilter()));
+			mWindow, SLOT(applyNameFilter()));
 
 		mFilterEdit = new KLineEdit(mFilterBar);
 		mFilterEdit->setClickMessage(i18n("Enter search terms here"));
@@ -1565,7 +1565,7 @@ void MainWindow::editLocation() {
 }
 
 
-void MainWindow::setNameFilter() {
+void MainWindow::applyNameFilter() {
 	d->mDirModel->setFilterRegExp(d->mFilterEdit->text());
 	updatePreviousNextActions();
 }
