@@ -1574,5 +1574,12 @@ void MainWindow::applyNameFilter() {
 void MainWindow::toggleFilterBarVisibility(bool value) {
 	d->mFilterBar->setVisible(value);
 	d->mShowFilterBar->setChecked(value);
+	if (value) {
+		d->mFilterEdit->setFocus();
+	} else {
+		d->mFilterEdit->clear();
+	}
 }
+
+
 } // namespace
