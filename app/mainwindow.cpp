@@ -45,7 +45,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
-#include <kmountpoint.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprotocolmanager.h>
@@ -82,6 +81,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview.h>
 #include <lib/transformimageoperation.h>
+#include <lib/urlutils.h>
 
 namespace Gwenview {
 
@@ -105,10 +105,7 @@ static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
 	}
 
 	// Do direct stat instead of using KIO if the file is local (faster)
-	KMountPoint::List mpl = KMountPoint::currentMountPoints();
-	KMountPoint::Ptr mp = mpl.findByPath( url.path() );
-
-	if( url.isLocalFile() && !mp->probablySlow()) {
+	if (UrlUtils::urlIsFastLocalFile(url)) {
 		KDE_struct_stat buff;
 		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
 			return S_ISDIR( buff.st_mode );

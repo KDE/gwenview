@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
-#include <kmountpoint.h>
 #include <kurl.h>
 
 // Local
@@ -41,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
 #include "loadingthread.h"
+#include "urlutils.h"
 
 namespace Gwenview {
 
@@ -93,11 +93,8 @@ LoadingDocumentImpl::~LoadingDocumentImpl() {
 
 void LoadingDocumentImpl::init() {
 	KUrl url = document()->url();
-	// Check if we should open directly
-	KMountPoint::List mpl = KMountPoint::currentMountPoints();
-	KMountPoint::Ptr mp = mpl.findByPath( url.path() );
 
-	if (url.isLocalFile() && !mp->probablySlow()) {
+	if (UrlUtils::urlIsFastLocalFile(url)) {
 		// Load file content directly
 		QFile file(url.path());
 		if (!file.open(QIODevice::ReadOnly)) {

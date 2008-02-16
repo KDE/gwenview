@@ -44,6 +44,7 @@ set(gwenviewlib_SRCS
 	thumbnailloadjob.cpp
 	thumbnailview.cpp
 	transformimageoperation.cpp
+	urlutils.cpp
 	libjpeg/transupp.c
 	)
 

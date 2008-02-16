@@ -46,7 +46,6 @@
 #include <kiconloader.h>
 #include <kio/jobuidelegate.h>
 #include <kio/previewjob.h>
-#include <kmountpoint.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
@@ -61,6 +60,8 @@ extern "C" {
 #include "mimetypeutils.h"
 #include "jpegcontent.h"
 #include "imageutils.h"
+#include "urlutils.h"
+
 namespace Gwenview {
 
 #undef ENABLE_LOG
@@ -587,14 +588,11 @@ void ThumbnailLoadJob::determineNextIcon() {
 	mCurrentUrl.cleanPath();
 
 	// Do direct stat instead of using KIO if the file is local (faster)
-	if( mCurrentUrl.isLocalFile()) {
-		KMountPoint::Ptr mountPoint = KMountPoint::currentMountPoints().findByPath(mCurrentUrl.path());
-		if (!mountPoint->probablySlow()) {
-			KDE_struct_stat buff;
-			if ( KDE_stat( QFile::encodeName(mCurrentUrl.path()), &buff ) == 0 )  {
-				mOriginalTime = buff.st_mtime;
-				QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
-			}
+	if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
+		KDE_struct_stat buff;
+		if ( KDE_stat( QFile::encodeName(mCurrentUrl.path()), &buff ) == 0 )  {
+			mOriginalTime = buff.st_mtime;
+			QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
 		}
 	}
 	if( mOriginalTime == 0 ) { // KIO must be used
