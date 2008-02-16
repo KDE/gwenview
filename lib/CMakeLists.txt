@@ -42,6 +42,7 @@ set(gwenviewlib_SRCS
 	thumbnailview.cpp
 	transupp.c
 	transformimageoperation.cpp
+	urlutils.cpp
 	)
 
 set_source_files_properties(
