@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStackedWidget>
 #include <QUndoGroup>
 #include <QVBoxLayout>
+#include <QToolButton>
 
 // KDE
 #include <kactioncollection.h>
@@ -56,6 +57,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurlnavigator.h>
 #include <kxmlguifactory.h>
 #include <kwindowsystem.h>
+#include <klineedit.h>
 
 // Local
 #include "configdialog.h"
@@ -132,6 +134,8 @@ struct MainWindow::Private {
 	ThumbnailView* mThumbnailView;
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
+	QWidget* mFilterBar;
+	KLineEdit* mFilterEdit;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
 	QStackedWidget* mSideBarContainer;
@@ -157,6 +161,7 @@ struct MainWindow::Private {
 	KToggleFullScreenAction* mFullScreenAction;
 	QAction* mToggleSlideShowAction;
 	KToggleAction* mShowMenuBarAction;
+	KToggleAction* mShowFilterBar;
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -248,13 +253,50 @@ struct MainWindow::Private {
 		mThumbnailSlider->setOrientation(Qt::Horizontal);
 		connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
 
+		setupFilterBar();
+
 		// Layout
 		QVBoxLayout* layout = new QVBoxLayout(mThumbnailViewPanel);
 		layout->setSpacing(0);
 		layout->setMargin(0);
 		layout->addWidget(mUrlNavigator);
 		layout->addWidget(mThumbnailView);
+		layout->addWidget(mFilterBar);
 		layout->addWidget(statusBar);
+	}
+
+	void setupFilterBar() {
+		mFilterBar = new QWidget(mThumbnailViewPanel);
+		mFilterBar->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+
+		QTimer* timer = new QTimer(mFilterBar);
+		timer->setInterval(350);
+		timer->setSingleShot(true);
+		connect(timer, SIGNAL(timeout()),
+			mWindow, SLOT(setNameFilter()));
+
+		mFilterEdit = new KLineEdit(mFilterBar);
+		mFilterEdit->setClickMessage(i18n("Enter search terms here"));
+		mFilterEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		mFilterEdit->setClearButtonShown(true);
+		mFilterEdit->setToolTip(i18n("Enter space-separated terms to search in the thumbnail view."));
+		connect(mFilterEdit, SIGNAL(textChanged(const QString &)),
+			timer, SLOT(start()));
+
+		QLabel* label = new QLabel(i18nc("@label:textbox", "Filter:"), mFilterBar);
+		label->setBuddy(mFilterEdit);
+
+		QToolButton* closeButton = new QToolButton(mFilterBar);
+		closeButton->setAutoRaise(true);
+		closeButton->setIcon(KIcon("dialog-close"));
+		closeButton->setToolTip(i18nc("@info:tooltip", "Hide Filter Bar"));
+		connect(closeButton, SIGNAL(clicked(bool)), mWindow, SLOT(toggleFilterBarVisibility(bool)));
+
+		QHBoxLayout* filterBoxLayout = new QHBoxLayout(mFilterBar);
+		filterBoxLayout->addWidget(label);
+		filterBoxLayout->addWidget(mFilterEdit);
+		filterBoxLayout->addWidget(closeButton);
+		mFilterBar->hide();
 	}
 
 	void setupActions() {
@@ -362,6 +404,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(updateSlideShowAction()) );
 
 		mShowMenuBarAction = KStandardAction::showMenubar(mWindow, SLOT(toggleMenuBar()), actionCollection);
+
+		mShowFilterBar = actionCollection->add<KToggleAction>("toggle_filterbar");
+		mShowFilterBar->setText(i18nc("@action:inmenu Tools", "Show Filter Bar"));
+		mShowFilterBar->setShortcut(Qt::CTRL | Qt::Key_I);
+		connect(mShowFilterBar, SIGNAL(triggered(bool)), mWindow, SLOT(toggleFilterBarVisibility(bool)));
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
@@ -1515,5 +1562,17 @@ void MainWindow::showEvent(QShowEvent *event) {
 void MainWindow::editLocation() {
 	d->mUrlNavigator->setUrlEditable(true);
 	d->mUrlNavigator->setFocus();
+}
+
+
+void MainWindow::setNameFilter() {
+	d->mDirModel->setFilterRegExp(d->mFilterEdit->text());
+	updatePreviousNextActions();
+}
+
+
+void MainWindow::toggleFilterBarVisibility(bool value) {
+	d->mFilterBar->setVisible(value);
+	d->mShowFilterBar->setChecked(value);
 }
 } // namespace

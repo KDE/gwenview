@@ -135,6 +135,8 @@ private Q_SLOTS:
 	void editLocation();
 
 	void updateFullScreenInformation();
+	void setNameFilter();
+	void toggleFilterBarVisibility(bool);
 
 private:
 	class Private;
