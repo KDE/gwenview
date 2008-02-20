@@ -120,7 +120,6 @@ private Q_SLOTS:
 
 private:
 	void updateScrollBars();
-	void startScaler();
 
 	ImageViewPrivate* const d;
 };

@@ -145,6 +145,12 @@ struct ImageViewPrivate {
 		return rect;
 	}
 
+
+	void setScalerRegionToVisibleRect() {
+		QRect rect = mapViewportToZoomedImage(mViewport->rect());
+		mScaler->setDestinationRegion(QRegion(rect));
+	}
+
 	// At least gcc 3.4.6 on FreeBSD requires a default constructor.
 	ImageViewPrivate() { }
 };
@@ -217,9 +223,7 @@ void ImageView::setImage(const QImage* image) {
 		setZoom(d->computeZoomToFit());
 	} else {
 		updateScrollBars();
-		startScaler();
 	}
-	d->mScaler->setDestinationRegion(QRegion());
 	d->mViewport->update();
 }
 
@@ -255,13 +259,6 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 	d->mViewport->update();
 }
 
-
-void ImageView::startScaler() {
-	d->mScaler->setZoom(d->mZoom);
-
-	QRect rect = d->mapViewportToZoomedImage(d->mViewport->rect());
-	d->mScaler->setDestinationRegion(QRegion(rect));
-}
 
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
@@ -305,7 +302,7 @@ void ImageView::resizeEvent(QResizeEvent*) {
 	} else {
 		d->resizeBuffer();
 		updateScrollBars();
-		startScaler();
+		d->setScalerRegionToVisibleRect();
 	}
 }
 
@@ -329,6 +326,8 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 		return;
 	}
 
+	d->mScaler->setZoom(d->mZoom);
+
 	// If we zoom more than twice, then assume the user wants to see the real
 	// pixels, for example to fine tune a crop operation
 	if (d->mZoom < 2.) {
@@ -350,7 +349,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	horizontalScrollBar()->setValue(hScrollValue);
 	verticalScrollBar()->setValue(vScrollValue);
 
-	startScaler();
+	d->setScalerRegionToVisibleRect();
 	emit zoomChanged();
 }
 
