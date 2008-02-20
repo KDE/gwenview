@@ -212,6 +212,7 @@ void ImageView::setImage(const QImage* image) {
 		d->mImage = &d->mEmptyImage;
 	}
 	d->createBuffer();
+	d->mScaler->setImage(d->mImage);
 	if (d->mZoomToFit) {
 		setZoom(d->computeZoomToFit());
 	} else {
@@ -256,7 +257,6 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 
 
 void ImageView::startScaler() {
-	d->mScaler->setImage(d->mImage);
 	d->mScaler->setZoom(d->mZoom);
 
 	QRect rect = d->mapViewportToZoomedImage(d->mViewport->rect());
