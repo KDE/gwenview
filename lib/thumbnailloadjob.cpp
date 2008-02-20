@@ -240,7 +240,7 @@ void ThumbnailThread::loadThumbnail() {
 			return;
 		}
 
-		rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
+		KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
 	}
 }
 
