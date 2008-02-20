@@ -52,6 +52,7 @@ struct ImageViewPrivate {
 	QPixmap mAlternateBuffer;
 	ImageScaler* mScaler;
 	QPointer<AbstractImageViewTool> mTool;
+	bool mInsideSetZoom;
 
 
 	void createBackgroundTexture() {
@@ -178,6 +179,7 @@ ImageView::ImageView(QWidget* parent)
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
+	d->mInsideSetZoom = false;
 	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
@@ -326,8 +328,6 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 		return;
 	}
 
-	d->mScaler->setZoom(d->mZoom);
-
 	// If we zoom more than twice, then assume the user wants to see the real
 	// pixels, for example to fine tune a crop operation
 	if (d->mZoom < 2.) {
@@ -342,13 +342,16 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 		d->mViewport->update();
 	}
 
+	d->mInsideSetZoom = true;
 	updateScrollBars();
 
 	int hScrollValue = int(center.x() * d->mZoom) - d->mViewport->width() / 2;
 	int vScrollValue = int(center.y() * d->mZoom) - d->mViewport->height() / 2;
 	horizontalScrollBar()->setValue(hScrollValue);
 	verticalScrollBar()->setValue(vScrollValue);
+	d->mInsideSetZoom = false;
 
+	d->mScaler->setZoom(d->mZoom);
 	d->setScalerRegionToVisibleRect();
 	emit zoomChanged();
 }
@@ -392,6 +395,11 @@ void ImageView::updateScrollBars() {
 
 
 void ImageView::scrollContentsBy(int dx, int dy) {
+	if (d->mInsideSetZoom) {
+		// Do not scroll anything: since we are zooming the whole viewport will
+		// eventually be repainted
+		return;
+	}
 	// Scroll existing
 	{
 		if (d->mAlternateBuffer.isNull()) {
