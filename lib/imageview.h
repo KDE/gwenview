@@ -63,9 +63,10 @@ public:
 	void setZoom(qreal zoom);
 
 	/**
-	 * Change zoom level, making sure the view is centered on the center point
+	 * Change zoom level, making sure the point at @p center stays at the
+	 * same position after zooming, if possible.
 	 * @param zoom the zoom level
-	 * @param center the center point, in image coordinates
+	 * @param center the center point, in viewport coordinates
 	 */
 	void setZoom(qreal zoom, const QPoint& center);
 

@@ -304,7 +304,7 @@ QPoint ImageView::imageOffset() const {
 }
 
 void ImageView::setZoom(qreal zoom) {
-	QPoint center = mapToImage(QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2));
+	QPoint center = QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2);
 	setZoom(zoom, center);
 }
 
@@ -324,6 +324,8 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 		d->mScaler->setTransformationMode(Qt::FastTransformation);
 	}
 
+	// Get offset *before* resizing the buffer, otherwise we get the new offset
+	QPoint oldOffset = imageOffset();
 	d->resizeBuffer();
 	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
@@ -331,12 +333,46 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	}
 
 	d->mInsideSetZoom = true;
-	updateScrollBars();
 
-	int hScrollValue = int(center.x() * d->mZoom) - d->mViewport->width() / 2;
-	int vScrollValue = int(center.y() * d->mZoom) - d->mViewport->height() / 2;
-	horizontalScrollBar()->setValue(hScrollValue);
-	verticalScrollBar()->setValue(vScrollValue);
+	/*
+	We want to keep the point at viewport coordinates "center" at the same
+	position after zooming. The coordinates of this point in image coordinates
+	can be expressed like this:
+
+	                      oldScroll + center
+	imagePointAtOldZoom = ------------------
+	                           oldZoom
+
+	                   scroll + center
+	imagePointAtZoom = ---------------
+	                        zoom
+
+	So we want:
+
+	    imagePointAtOldZoom = imagePointAtZoom
+
+	    oldScroll + center   scroll + center
+	<=> ------------------ = ---------------
+	          oldZoom             zoom
+
+	              zoom
+	<=> scroll = ------- (oldScroll + center) - center
+	             oldZoom
+	*/
+
+	/*
+	Compute oldScroll
+	It's useless to take the new offset in consideration because if a direction
+	of the new offset is not 0, we won't be able to center on a specific point
+	in that direction.
+	*/
+	QPointF oldScroll = QPointF(d->hScroll(), d->vScroll()) - oldOffset;
+
+	QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
+
+	updateScrollBars();
+	horizontalScrollBar()->setValue(int(scroll.x()));
+	verticalScrollBar()->setValue(int(scroll.y()));
 	d->mInsideSetZoom = false;
 
 	d->mScaler->setZoom(d->mZoom);

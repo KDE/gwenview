@@ -48,6 +48,8 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
+const qreal ZOOM_MIN = 1/16.;
+const qreal ZOOM_MAX = 16.;
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
@@ -179,17 +181,33 @@ void GVPart::zoomActualSize() {
 }
 
 
-void GVPart::zoomIn() {
-	disableZoomToFit();
-	mView->setZoom(mView->zoom() * 2);
+void GVPart::zoomIn(const QPoint& center) {
+	zoom(ZoomIn, center);
 }
 
 
-void GVPart::zoomOut() {
+void GVPart::zoomOut(const QPoint& center) {
+	zoom(ZoomOut, center);
+}
+
+
+void GVPart::zoom(GVPart::ZoomDirection direction, const QPoint& _center) {
 	disableZoomToFit();
-	if (mView->zoom() > 0.01) {
-		mView->setZoom(mView->zoom() / 2);
+	QPoint center;
+	if (_center == QPoint(-1, -1)) {
+		center = QPoint(mView->viewport()->width() / 2, mView->viewport()->height() / 2);
+	} else {
+		center = _center;
 	}
+	qreal zoom = mView->zoom();
+	if (direction == ZoomIn) {
+		zoom *= 2;
+	} else {
+		zoom /= 2;
+	}
+	zoom = qBound(ZOOM_MIN, zoom, ZOOM_MAX);
+
+	mView->setZoom(zoom, center);
 }
 
 
@@ -260,9 +278,9 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		// Ctrl + Left or right button => zoom in or out
 		if (mouseEvent->modifiers() == Qt::ControlModifier) {
 			if (mouseEvent->button() == Qt::LeftButton) {
-				zoomIn();
+				zoomIn(mouseEvent->pos());
 			} else if (mouseEvent->button() == Qt::RightButton) {
-				zoomOut();
+				zoomOut(mouseEvent->pos());
 			}
 			return true;
 		}
@@ -272,9 +290,9 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
 		if (wheelEvent->modifiers() & Qt::ControlModifier) {
 			if (wheelEvent->delta() > 0) {
-				zoomOut();
+				zoomOut(wheelEvent->pos());
 			} else {
-				zoomIn();
+				zoomIn(wheelEvent->pos());
 			}
 			return true;
 		}

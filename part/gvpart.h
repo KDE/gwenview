@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef GVPART_H
 #define GVPART_H
 
+// Qt
+#include <QPoint>
+
 // Local
 #include "../lib/imageviewpart.h"
 
@@ -53,8 +56,8 @@ protected:
 private Q_SLOTS:
 	void setZoomToFit(bool);
 	void zoomActualSize();
-	void zoomIn();
-	void zoomOut();
+	void zoomIn(const QPoint& center = QPoint(-1,-1));
+	void zoomOut(const QPoint& center = QPoint(-1,-1));
 	void setViewImageFromDocument();
 	void updateCaption();
 	void showContextMenu();
@@ -71,6 +74,8 @@ private:
 
 	void disableZoomToFit();
 	void addPartSpecificActions();
+	enum ZoomDirection { ZoomIn, ZoomOut };
+	void zoom(ZoomDirection, const QPoint& center = QPoint(-1, -1));
 };
 
 } // namespace
