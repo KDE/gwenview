@@ -179,9 +179,9 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	if (ivPart) {
 		connect(ivPart, SIGNAL(resizeRequested(const QSize&)),
 			d->mView, SIGNAL(resizeRequested(const QSize&)) );
-		connect(ivPart->imageView(), SIGNAL(previousImageRequested()),
+		connect(ivPart, SIGNAL(previousImageRequested()),
 			d->mView, SIGNAL(previousImageRequested()) );
-		connect(ivPart->imageView(), SIGNAL(nextImageRequested()),
+		connect(ivPart, SIGNAL(nextImageRequested()),
 			d->mView, SIGNAL(nextImageRequested()) );
 	}
 

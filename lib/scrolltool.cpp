@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "scrolltool.h"
+#include "scrolltool.moc"
 
 // Qt
 #include <QApplication>
@@ -35,6 +35,7 @@ namespace Gwenview {
 
 
 struct ScrollToolPrivate {
+	ScrollTool::MouseWheelBehavior mMouseWheelBehavior;
 	int mScrollStartX;
 	int mScrollStartY;
 	bool mDragStarted;
@@ -45,11 +46,22 @@ ScrollTool::ScrollTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new ScrollToolPrivate) {
 	d->mDragStarted = false;
+	d->mMouseWheelBehavior = MouseWheelScroll;
 }
 
 
 ScrollTool::~ScrollTool() {
 	delete d;
+}
+
+
+void ScrollTool::setMouseWheelBehavior(ScrollTool::MouseWheelBehavior behavior) {
+	d->mMouseWheelBehavior = behavior;
+}
+
+
+ScrollTool::MouseWheelBehavior ScrollTool::mouseWheelBehavior() const {
+	return d->mMouseWheelBehavior;
 }
 
 
@@ -99,7 +111,7 @@ void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
 
 
 void ScrollTool::wheelEvent(QWheelEvent* event) {
-	if (imageView()->mouseWheelBehavior() == ImageView::MouseWheelScroll) {
+	if (d->mMouseWheelBehavior == MouseWheelScroll) {
 		// Forward events to the scrollbars, like
 		// QAbstractScrollArea::wheelEvent() do.
 		if (event->orientation() == Qt::Horizontal) {
@@ -110,9 +122,9 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 	} else {
 		// Browse
 		if (event->delta() > 0) {
-			imageView()->emitPreviousImageRequested();
+			emit previousImageRequested();
 		} else {
-			imageView()->emitNextImageRequested();
+			emit nextImageRequested();
 		}
 	}
 }

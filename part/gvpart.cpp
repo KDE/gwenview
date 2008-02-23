@@ -56,8 +56,14 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
-	ScrollTool* scrollTool = new ScrollTool(mView);
-	mView->setCurrentTool(scrollTool);
+
+	mScrollTool = new ScrollTool(mView);
+	mView->setCurrentTool(mScrollTool);
+	connect(mScrollTool, SIGNAL(previousImageRequested()),
+		SIGNAL(previousImageRequested()) );
+	connect(mScrollTool, SIGNAL(nextImageRequested()),
+		SIGNAL(nextImageRequested()) );
+
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	mView->viewport()->installEventFilter(this);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -216,7 +222,7 @@ ImageView* GVPart::imageView() const {
 void GVPart::loadConfig() {
 	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
-	mView->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
+	mScrollTool->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
 }
 
 

@@ -35,7 +35,13 @@ namespace Gwenview {
 
 class ScrollToolPrivate;
 class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
+	Q_OBJECT
 public:
+	enum MouseWheelBehavior {
+		MouseWheelScroll,
+		MouseWheelBrowse
+	};
+
 	ScrollTool(ImageView* view);
 	~ScrollTool();
 
@@ -46,6 +52,13 @@ public:
 
 	virtual void toolActivated();
 	virtual void toolDeactivated();
+
+	void setMouseWheelBehavior(MouseWheelBehavior);
+	MouseWheelBehavior mouseWheelBehavior() const;
+
+Q_SIGNALS:
+	void previousImageRequested();
+	void nextImageRequested();
 
 private:
 	ScrollToolPrivate* const d;

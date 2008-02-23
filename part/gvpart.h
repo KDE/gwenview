@@ -29,6 +29,7 @@ class KAction;
 namespace Gwenview {
 
 class ImageView;
+class ScrollTool;
 
 class GVPart : public ImageViewPart {
 	Q_OBJECT
@@ -66,6 +67,7 @@ private:
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
 	bool mGwenviewHost;
+	ScrollTool* mScrollTool;
 
 	void disableZoomToFit();
 	void addPartSpecificActions();

@@ -3,6 +3,7 @@
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
 	<include>lib/imageview.h</include>
+	<include>lib/scrolltool.h</include>
 	<include>lib/print/printoptionspage.h</include>
 	<group name="SideBar">
 		<entry name="PreferredMetaInfoKeyList" type="StringList">
@@ -35,11 +36,11 @@
 		</entry>
 
 		<entry name="MouseWheelBehavior" type="Enum">
-			<choices name="Gwenview::ImageView::MouseWheelBehavior">
-				<choice name="ImageView::MouseWheelScroll"/>
-				<choice name="ImageView::MouseWheelBrowse"/>
+			<choices name="Gwenview::ScrollTool::MouseWheelBehavior">
+				<choice name="ScrollTool::MouseWheelScroll"/>
+				<choice name="ScrollTool::MouseWheelBrowse"/>
 			</choices>
-			<default>ImageView::MouseWheelScroll</default>
+			<default>ScrollTool::MouseWheelScroll</default>
 		</entry>
 	</group>
 

@@ -45,6 +45,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void resizeRequested(const QSize&);
+	void previousImageRequested();
+	void nextImageRequested();
 };
 
 } // namespace
