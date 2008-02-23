@@ -244,12 +244,44 @@ void GVPart::showContextMenu() {
 
 bool GVPart::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
+		// Middle click => toggle zoom to fit
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 		if (mouseEvent->button() == Qt::MidButton) {
 			mZoomToFitAction->trigger();
 			return true;
 		}
+
+		// Ctrl + Left or right button => zoom in or out
+		if (mouseEvent->modifiers() == Qt::ControlModifier) {
+			if (mouseEvent->button() == Qt::LeftButton) {
+				zoomIn();
+			} else if (mouseEvent->button() == Qt::RightButton) {
+				zoomOut();
+			}
+			return true;
+		}
+
+	} else if (event->type() == QEvent::Wheel) {
+		// Ctrl + Wheel => zoom in or out
+		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
+		if (wheelEvent->modifiers() & Qt::ControlModifier) {
+			if (wheelEvent->delta() > 0) {
+				zoomOut();
+			} else {
+				zoomIn();
+			}
+			return true;
+		}
+
+	} else if (event->type() == QEvent::ContextMenu) {
+		// Filter out context menu if Ctrl is down to avoid showing it when
+		// zooming out with Ctrl + Right button
+		QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
+		if (contextMenuEvent->modifiers() == Qt::ControlModifier) {
+			return true;
+		}
 	}
+
 	return false;
 }
 
