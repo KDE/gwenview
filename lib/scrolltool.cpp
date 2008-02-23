@@ -66,6 +66,16 @@ ScrollTool::MouseWheelBehavior ScrollTool::mouseWheelBehavior() const {
 
 
 void ScrollTool::mousePressEvent(QMouseEvent* event) {
+	if (event->modifiers() == Qt::ControlModifier) {
+		// Ctrl + Left or right button => zoom in or out
+		if (event->button() == Qt::LeftButton) {
+			emit zoomInRequested(event->pos());
+		} else if (event->button() == Qt::RightButton) {
+			emit zoomOutRequested(event->pos());
+		}
+		return;
+	}
+
 	if (imageView()->zoomToFit()) {
 		return;
 	}
@@ -111,6 +121,16 @@ void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
 
 
 void ScrollTool::wheelEvent(QWheelEvent* event) {
+	if (event->modifiers() & Qt::ControlModifier) {
+		// Ctrl + wheel => zoom in or out
+		if (event->delta() > 0) {
+			emit zoomOutRequested(event->pos());
+		} else {
+			emit zoomInRequested(event->pos());
+		}
+		return;
+	}
+
 	if (d->mMouseWheelBehavior == MouseWheelScroll) {
 		// Forward events to the scrollbars, like
 		// QAbstractScrollArea::wheelEvent() do.
@@ -132,11 +152,27 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 
 void ScrollTool::toolActivated() {
 	imageView()->viewport()->setCursor(Qt::OpenHandCursor);
+	imageView()->viewport()->installEventFilter(this);
 }
 
 
 void ScrollTool::toolDeactivated() {
+	imageView()->viewport()->removeEventFilter(this);
 	imageView()->viewport()->setCursor(Qt::ArrowCursor);
+}
+
+
+bool ScrollTool::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::ContextMenu) {
+		// Filter out context menu if Ctrl is down to avoid showing it when
+		// zooming out with Ctrl + Right button
+		QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
+		if (contextMenuEvent->modifiers() == Qt::ControlModifier) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

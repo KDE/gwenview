@@ -65,6 +65,10 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 		SIGNAL(previousImageRequested()) );
 	connect(mScrollTool, SIGNAL(nextImageRequested()),
 		SIGNAL(nextImageRequested()) );
+	connect(mScrollTool, SIGNAL(zoomInRequested(const QPoint&)),
+		SLOT(zoomIn(const QPoint&)) );
+	connect(mScrollTool, SIGNAL(zoomOutRequested(const QPoint&)),
+		SLOT(zoomOut(const QPoint&)) );
 
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	mView->viewport()->installEventFilter(this);
@@ -272,36 +276,6 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 		if (mouseEvent->button() == Qt::MidButton) {
 			mZoomToFitAction->trigger();
-			return true;
-		}
-
-		// Ctrl + Left or right button => zoom in or out
-		if (mouseEvent->modifiers() == Qt::ControlModifier) {
-			if (mouseEvent->button() == Qt::LeftButton) {
-				zoomIn(mouseEvent->pos());
-			} else if (mouseEvent->button() == Qt::RightButton) {
-				zoomOut(mouseEvent->pos());
-			}
-			return true;
-		}
-
-	} else if (event->type() == QEvent::Wheel) {
-		// Ctrl + Wheel => zoom in or out
-		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
-		if (wheelEvent->modifiers() & Qt::ControlModifier) {
-			if (wheelEvent->delta() > 0) {
-				zoomOut(wheelEvent->pos());
-			} else {
-				zoomIn(wheelEvent->pos());
-			}
-			return true;
-		}
-
-	} else if (event->type() == QEvent::ContextMenu) {
-		// Filter out context menu if Ctrl is down to avoid showing it when
-		// zooming out with Ctrl + Right button
-		QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
-		if (contextMenuEvent->modifiers() == Qt::ControlModifier) {
 			return true;
 		}
 	}

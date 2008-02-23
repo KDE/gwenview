@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "abstractimageviewtool.h"
 
+class QPoint;
+
 namespace Gwenview {
 
 
@@ -57,8 +59,13 @@ public:
 	MouseWheelBehavior mouseWheelBehavior() const;
 
 Q_SIGNALS:
+	void zoomInRequested(const QPoint&);
+	void zoomOutRequested(const QPoint&);
 	void previousImageRequested();
 	void nextImageRequested();
+
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
 
 private:
 	ScrollToolPrivate* const d;
