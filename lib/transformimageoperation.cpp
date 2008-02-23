@@ -41,10 +41,10 @@ TransformImageOperation::TransformImageOperation(Orientation orientation)
 	d->mOrientation = orientation;
 	switch (d->mOrientation) {
 	case ROT_90:
-		setText(i18n("Rotate Left"));
+		setText(i18n("Rotate Right"));
 		break;
 	case ROT_270:
-		setText(i18n("Rotate Right"));
+		setText(i18n("Rotate Left"));
 		break;
 	case HFLIP:
 		setText(i18n("Mirror"));
