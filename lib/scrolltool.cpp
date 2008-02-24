@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 // Local
 #include "imageview.h"
@@ -41,6 +42,7 @@ struct ScrollToolPrivate {
 	int mScrollStartX;
 	int mScrollStartY;
 	State mState;
+	QCursor mZoomCursor;
 };
 
 
@@ -49,6 +51,10 @@ ScrollTool::ScrollTool(ImageView* view)
 , d(new ScrollToolPrivate) {
 	d->mState = StateNone;
 	d->mMouseWheelBehavior = MouseWheelScroll;
+
+	QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
+	QPixmap cursorPixmap = QPixmap(path);
+	d->mZoomCursor = QCursor(cursorPixmap);
 }
 
 
@@ -155,7 +161,7 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 void ScrollTool::keyPressEvent(QKeyEvent* event) {
 	if (event->modifiers() == Qt::ControlModifier && d->mState == StateNone) {
 		d->mState = StateZooming;
-		imageView()->viewport()->setCursor(Qt::UpArrowCursor);
+		imageView()->viewport()->setCursor(d->mZoomCursor);
 	}
 }
 
