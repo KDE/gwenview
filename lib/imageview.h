@@ -101,6 +101,8 @@ protected:
 	virtual void mouseMoveEvent(QMouseEvent*);
 	virtual void mouseReleaseEvent(QMouseEvent*);
 	virtual void wheelEvent(QWheelEvent*);
+	virtual void keyPressEvent(QKeyEvent*);
+	virtual void keyReleaseEvent(QKeyEvent*);
 
 private Q_SLOTS:
 	void updateFromScaler(int left, int top, const QImage& image);

@@ -567,4 +567,20 @@ void ImageView::wheelEvent(QWheelEvent* event) {
 }
 
 
+void ImageView::keyPressEvent(QKeyEvent* event) {
+	if (d->mTool) {
+		d->mTool->keyPressEvent(event);
+	}
+	QAbstractScrollArea::keyPressEvent(event);
+}
+
+
+void ImageView::keyReleaseEvent(QKeyEvent* event) {
+	if (d->mTool) {
+		d->mTool->keyReleaseEvent(event);
+	}
+	QAbstractScrollArea::keyReleaseEvent(event);
+}
+
+
 } // namespace

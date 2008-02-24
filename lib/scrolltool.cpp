@@ -27,25 +27,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QScrollBar>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "imageview.h"
 
 namespace Gwenview {
 
+enum State { StateNone, StateZooming, StateDragging };
 
 struct ScrollToolPrivate {
 	ScrollTool::MouseWheelBehavior mMouseWheelBehavior;
 	int mScrollStartX;
 	int mScrollStartY;
-	bool mDragStarted;
+	State mState;
 };
 
 
 ScrollTool::ScrollTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new ScrollToolPrivate) {
-	d->mDragStarted = false;
+	d->mState = StateNone;
 	d->mMouseWheelBehavior = MouseWheelScroll;
 }
 
@@ -86,13 +88,13 @@ void ScrollTool::mousePressEvent(QMouseEvent* event) {
 
 	d->mScrollStartY = event->y();
 	d->mScrollStartX = event->x();
-	d->mDragStarted = true;
+	d->mState = StateDragging;
 	imageView()->viewport()->setCursor(Qt::ClosedHandCursor);
 }
 
 
 void ScrollTool::mouseMoveEvent(QMouseEvent* event) {
-	if (!d->mDragStarted) {
+	if (d->mState != StateDragging) {
 		return;
 	}
 
@@ -111,11 +113,11 @@ void ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 
 
 void ScrollTool::mouseReleaseEvent(QMouseEvent* /*event*/) {
-	if (!d->mDragStarted) {
+	if (d->mState != StateDragging) {
 		return;
 	}
 
-	d->mDragStarted = false;
+	d->mState = StateNone;
 	imageView()->viewport()->setCursor(Qt::OpenHandCursor);
 }
 
@@ -146,6 +148,22 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 		} else {
 			emit nextImageRequested();
 		}
+	}
+}
+
+
+void ScrollTool::keyPressEvent(QKeyEvent* event) {
+	if (event->modifiers() == Qt::ControlModifier && d->mState == StateNone) {
+		d->mState = StateZooming;
+		imageView()->viewport()->setCursor(Qt::UpArrowCursor);
+	}
+}
+
+
+void ScrollTool::keyReleaseEvent(QKeyEvent* event) {
+	if (!(event->modifiers() & Qt::ControlModifier) && d->mState == StateZooming) {
+		d->mState = StateNone;
+		imageView()->viewport()->setCursor(Qt::ArrowCursor);
 	}
 }
 
