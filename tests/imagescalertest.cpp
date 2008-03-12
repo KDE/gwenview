@@ -54,17 +54,12 @@ void ImageScalerTest::testScaleFullImage() {
 	}
 
 	Gwenview::ImageScaler scaler;
+	ImageScalerClient client(&scaler);
 	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect(QPoint(0,0), image.size() * zoom));
 
 	QImage expectedImage = image.scaled( image.size() * zoom);
-
-	ImageScalerClient client(&scaler);
-
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
 
 	QImage scaledImage = client.createFullImage();
 	QCOMPARE(scaledImage, expectedImage);
@@ -85,6 +80,7 @@ void ImageScalerTest::testScalePartialImage() {
 	}
 
 	Gwenview::ImageScaler scaler;
+	ImageScalerClient client(&scaler);
 	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(
@@ -111,12 +107,6 @@ void ImageScalerTest::testScalePartialImage() {
 			expectedImage.width() / zoom,
 			expectedImage.height() / zoom / 2);
 		painter.drawImage(0, 0, tmp.scaled(tmp.size() * zoom));
-	}
-
-	ImageScalerClient client(&scaler);
-
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
 	}
 
 	QImage scaledImage = client.createFullImage();
