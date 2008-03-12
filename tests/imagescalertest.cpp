@@ -83,16 +83,15 @@ void ImageScalerTest::testScalePartialImage() {
 	ImageScalerClient client(&scaler);
 	scaler.setImage(&image);
 	scaler.setZoom(zoom);
-	scaler.setDestinationRegion(
-		QRect(
-			0, 0,
-			image.width() * zoom / 2, image.height() * zoom)
-		);
-	scaler.addDestinationRegion(
-		QRect(
-			0, 0,
-			image.width() * zoom, image.height() * zoom / 2)
-		);
+	QRegion region;
+	region |= QRect(
+		0, 0,
+		image.width() * zoom / 2, image.height() * zoom);
+
+	region |= QRect(
+		0, 0,
+		image.width() * zoom, image.height() * zoom / 2);
+	scaler.setDestinationRegion(region);
 
 	QImage expectedImage(image.size() * zoom, image.format());
 	expectedImage.fill(0);
@@ -142,19 +141,11 @@ void ImageScalerTest::testScaleFullImageTwoPasses() {
 			partialZWidth, zHeight)
 		);
 
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
-
-	scaler.addDestinationRegion(
+	scaler.setDestinationRegion(
 		QRect(
 			partialZWidth, 0,
 			zWidth - partialZWidth, zHeight)
 		);
-
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
 
 	QImage expectedImage = image.scaled(image.size() * zoom);
 
@@ -186,17 +177,16 @@ void ImageScalerTest::testScaleThinArea() {
 	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect(0, 0, image.width(), 2));
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
 }
 
 
-void ImageScalerTest::testDontStartWithoutImage() {
+/**
+ * Test instantiating a scaler without setting an image won't crash
+ */
+void ImageScalerTest::testDontCrashWithoutImage() {
 	Gwenview::ImageScaler scaler;
 	scaler.setZoom(1.0);
 	scaler.setDestinationRegion(QRect(0, 0, 10, 10));
-	QVERIFY(!scaler.isRunning());
 }
 
 
@@ -215,9 +205,6 @@ void ImageScalerTest::testScaleDownBigImage() {
 	scaler.setImage(&image);
 	scaler.setZoom(zoom);
 	scaler.setDestinationRegion(QRect( QPoint(0, 0), image.size() * zoom));
-	while (scaler.isRunning()) {
-		QTest::qWait(30);
-	}
 
 	QImage scaledImage = client.createFullImage();
 
