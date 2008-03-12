@@ -330,7 +330,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 
 	// Get offset *before* resizing the buffer, otherwise we get the new offset
 	QPoint oldOffset = imageOffset();
-	d->resizeBuffer();
+	d->createBuffer();
 	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
 		d->mViewport->update();

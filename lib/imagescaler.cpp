@@ -45,10 +45,6 @@ namespace Gwenview {
 // Amount of pixels to keep so that smooth scale is correct
 static const int SMOOTH_MARGIN = 3;
 
-static const int MAX_CHUNK_AREA = 1000 * 100;
-
-static const int MAX_SCALE_TIME = 2000;
-
 struct ImageScalerPrivate {
 	Qt::TransformationMode mTransformationMode;
 	const QImage* mImage;
@@ -103,7 +99,8 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 	}
 
 	if (d->mImage && !d->mImage->isNull()) {
-		start();
+		//start();
+		run();
 	}
 }
 
@@ -118,7 +115,8 @@ void ImageScaler::addDestinationRegion(const QRegion& region) {
 	}
 
 	if (d->mImage && !d->mImage->isNull() && !isRunning()) {
-		start();
+		//start();
+		run();
 	}
 }
 
@@ -145,33 +143,24 @@ void ImageScaler::run() {
 		d->mStopRequested = false;
 	}
 
-	while (true) {
+	bool done = false;
+	while (!done) {
 		QRect rect;
 		// Extract a rect to scale from d->mRegion
 		{
 			QMutexLocker locker(&d->mMutex);
 			if (d->mStopRequested) {
-				LOG("Stopped");
-				break;
+				LOG("Stopped before processing rect");
+				return;
 			}
 
 			rect = d->mRegion.rects()[0];
-			if (rect.width() * rect.height() > MAX_CHUNK_AREA) {
-				int height = qMax(1, MAX_CHUNK_AREA / rect.width());
-				rect.setHeight(height);
-			}
+			d->mRegion -= rect;
+			done = d->mRegion.isEmpty();
 		}
 
 		LOG(rect);
 		processChunk(rect);
-
-		{
-			QMutexLocker locker(&d->mMutex);
-			d->mRegion -= rect;
-			if (d->mRegion.isEmpty()) {
-				break;
-			}
-		}
 	}
 	LOG("Done");
 }
