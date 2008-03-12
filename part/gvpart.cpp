@@ -205,9 +205,9 @@ void GVPart::zoom(GVPart::ZoomDirection direction, const QPoint& _center) {
 	}
 	qreal zoom = mView->zoom();
 	if (direction == ZoomIn) {
-		zoom *= 2;
+		zoom += 0.5;
 	} else {
-		zoom /= 2;
+		zoom -= 0.5;
 	}
 	zoom = qBound(ZOOM_MIN, zoom, ZOOM_MAX);
 
