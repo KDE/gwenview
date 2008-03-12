@@ -311,6 +311,10 @@ void ImageView::setZoom(qreal zoom) {
 
 void ImageView::setZoom(qreal zoom, const QPoint& center) {
 	qreal oldZoom = d->mZoom;
+	if (qAbs(zoom - oldZoom) < 0.001) {
+		return;
+	}
+
 	d->mZoom = zoom;
 	if (d->mImage->isNull()) {
 		return;
