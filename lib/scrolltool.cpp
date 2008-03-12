@@ -132,9 +132,9 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 	if (event->modifiers() & Qt::ControlModifier) {
 		// Ctrl + wheel => zoom in or out
 		if (event->delta() > 0) {
-			emit zoomOutRequested(event->pos());
-		} else {
 			emit zoomInRequested(event->pos());
+		} else {
+			emit zoomOutRequested(event->pos());
 		}
 		return;
 	}
