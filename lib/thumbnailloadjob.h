@@ -106,16 +106,15 @@ public:
 	 */
 	void removeItems(const KFileItemList& itemList);
 
+	/**
+	 * Returns the list of items waiting for a thumbnail
+	 */
+	const KFileItemList& pendingItems() const;
 
 	/**
 	 * Add an item to a running job
 	 */
 	void appendItem(const KFileItem& item);
-
-	/**
-	 * Sets items in range first..last to be generated first, starting with current.
-	 */
-	void setPriorityItems(const KFileItem& current, const KFileItem& first, const KFileItem& last);
 
 	/**
 	 * Returns the thumbnail base dir, independent of the thumbnail size
@@ -157,14 +156,7 @@ private:
 	enum { STATE_STATORIG, STATE_DOWNLOADORIG, STATE_PREVIEWJOB, STATE_NEXTTHUMB } mState;
 
 	KFileItemList mItems;
-	QVector<KFileItem > mAllItems;
-	QVector< bool > mProcessedState;
 	KFileItem mCurrentItem;
-	int thumbnailIndex( const KFileItem& item ) const;
-	void updateItemsOrder();
-
-	// indexes of the current, fist and last visible thumbnails
-	int mCurrentVisibleIndex, mFirstVisibleIndex, mLastVisibleIndex;
 
 	// The Url of the current item (always equivalent to m_items.first()->item()->url())
 	KUrl mCurrentUrl;
@@ -192,16 +184,7 @@ private:
 	void startCreatingThumbnail(const QString& path);
 
 	void emitThumbnailLoaded(const QImage& img, const QSize& size);
-
-	void updateItemsOrderHelper( int forward, int backward, int first, int last );
 };
-
-inline
-int ThumbnailLoadJob::thumbnailIndex( const KFileItem& item ) const {
-	QVector<KFileItem >::ConstIterator pos = qFind( mAllItems.begin(), mAllItems.end(), item );
-	if( pos != mAllItems.end()) return pos - mAllItems.begin();
-	return -1;
-}
 
 } // namespace
 #endif
