@@ -47,6 +47,8 @@ public:
 
 	virtual void abortThumbnailGenerationForItems(const KFileItemList& list) = 0;
 
+	virtual void abortThumbnailGeneration() = 0;
+
 	virtual void showContextMenu(QWidget* parent) = 0;
 
 	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;

@@ -110,6 +110,13 @@ void ThumbnailViewHelper::abortThumbnailGenerationForItems(const KFileItemList& 
 }
 
 
+void ThumbnailViewHelper::abortThumbnailGeneration() {
+	if (d->mThumbnailLoadJob) {
+		d->mThumbnailLoadJob->removeItems(d->mThumbnailLoadJob->pendingItems());
+	}
+}
+
+
 void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url) {
 	d->mCurrentDirUrl = url;
 }
