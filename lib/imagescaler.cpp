@@ -63,6 +63,7 @@ struct ImageScalerPrivate {
 ImageScaler::ImageScaler(QObject* parent)
 : QThread(parent)
 , d(new ImageScalerPrivate) {
+	d->mImage = 0;
 	d->mTransformationMode = Qt::FastTransformation;
 	d->mStopRequested = false;
 }
