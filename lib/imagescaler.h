@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QObject>
-#include <QThread>
 
 #include "gwenviewlib_export.h"
 
@@ -34,7 +33,7 @@ class QRegion;
 namespace Gwenview {
 
 class ImageScalerPrivate;
-class GWENVIEWLIB_EXPORT ImageScaler : public QThread {
+class GWENVIEWLIB_EXPORT ImageScaler : public QObject {
 	Q_OBJECT
 public:
 	ImageScaler(QObject* parent=0);
@@ -42,21 +41,18 @@ public:
 	void setImage(const QImage*);
 	void setZoom(qreal);
 	void setDestinationRegion(const QRegion&);
-	void addDestinationRegion(const QRegion&);
 
 	void setTransformationMode(Qt::TransformationMode);
 
 	static QRect containingRect(const QRectF& rectF);
-
-protected:
-	virtual void run();
 
 Q_SIGNALS:
 	void scaledRect(int left, int top, const QImage&);
 
 private:
 	ImageScalerPrivate * const d;
-	void processChunk(const QRect&);
+	void doScale();
+	void scaleRect(const QRect&);
 };
 
 } // namespace

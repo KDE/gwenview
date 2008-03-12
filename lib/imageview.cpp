@@ -459,7 +459,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	}
 	region |= rect;
 
-	d->mScaler->addDestinationRegion(region);
+	d->mScaler->setDestinationRegion(region);
 	d->mViewport->update();
 }
 

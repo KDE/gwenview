@@ -23,8 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QImage>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QRegion>
 #include <QTimer>
 
@@ -50,22 +48,13 @@ struct ImageScalerPrivate {
 	const QImage* mImage;
 	qreal mZoom;
 	QRegion mRegion;
-
-	QMutex mMutex;
-	bool mStopRequested;
-
-	void stop() {
-		QMutexLocker locker(&mMutex);
-		mStopRequested = true;
-	}
 };
 
 ImageScaler::ImageScaler(QObject* parent)
-: QThread(parent)
+: QObject(parent)
 , d(new ImageScalerPrivate) {
 	d->mImage = 0;
 	d->mTransformationMode = Qt::FastTransformation;
-	d->mStopRequested = false;
 }
 
 ImageScaler::~ImageScaler() {
@@ -73,51 +62,26 @@ ImageScaler::~ImageScaler() {
 }
 
 void ImageScaler::setImage(const QImage* image) {
-	d->stop();
-	wait();
 	d->mImage = image;
 }
 
 void ImageScaler::setZoom(qreal zoom) {
-	d->stop();
-	wait();
 	d->mZoom = zoom;
 }
 
 void ImageScaler::setTransformationMode(Qt::TransformationMode mode) {
-	d->stop();
-	wait();
 	d->mTransformationMode = mode;
 }
 
 void ImageScaler::setDestinationRegion(const QRegion& region) {
 	LOG(region);
-	d->stop();
-	wait();
 	d->mRegion = region;
 	if (d->mRegion.isEmpty()) {
 		return;
 	}
 
 	if (d->mImage && !d->mImage->isNull()) {
-		//start();
-		run();
-	}
-}
-
-void ImageScaler::addDestinationRegion(const QRegion& region) {
-	LOG(region);
-	{
-		QMutexLocker locker(&d->mMutex);
-		d->mRegion |= region;
-		if (d->mRegion.isEmpty()) {
-			return;
-		}
-	}
-
-	if (d->mImage && !d->mImage->isNull() && !isRunning()) {
-		//start();
-		run();
+		doScale();
 	}
 }
 
@@ -137,37 +101,23 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 }
 
 
-void ImageScaler::run() {
+void ImageScaler::doScale() {
 	LOG("Starting");
-	{
-		QMutexLocker locker(&d->mMutex);
-		d->mStopRequested = false;
-	}
 
-	bool done = false;
-	while (!done) {
+	while (!d->mRegion.isEmpty()) {
 		QRect rect;
 		// Extract a rect to scale from d->mRegion
-		{
-			QMutexLocker locker(&d->mMutex);
-			if (d->mStopRequested) {
-				LOG("Stopped before processing rect");
-				return;
-			}
-
-			rect = d->mRegion.rects()[0];
-			d->mRegion -= rect;
-			done = d->mRegion.isEmpty();
-		}
+		rect = d->mRegion.rects()[0];
+		d->mRegion -= rect;
 
 		LOG(rect);
-		processChunk(rect);
+		scaleRect(rect);
 	}
 	LOG("Done");
 }
 
 
-void ImageScaler::processChunk(const QRect& rect) {
+void ImageScaler::scaleRect(const QRect& rect) {
 	if (qAbs(d->mZoom - 1.0) < 0.001) {
 		QImage tmp = d->mImage->copy(rect);
 		tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
