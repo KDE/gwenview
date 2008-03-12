@@ -142,6 +142,7 @@ void SideBarGroup::clear() {
 void SideBarGroup::addAction(QAction* action) {
 	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
 	QToolButton* button = new SideBarButton();
+	button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 	button->setAutoRaise(true);
 	button->setDefaultAction(action);
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
