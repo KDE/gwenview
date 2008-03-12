@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QHelpEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -549,6 +550,16 @@ struct ThumbnailViewPrivate {
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 	QMap<QUrl, ThumbnailView::Thumbnail> mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
+	QTimer mScheduledThumbnailGenerationTimer;
+
+	void scheduleThumbnailGenerationForVisibleItems() {
+		if (!mThumbnailViewHelper) {
+			// Not initialized yet
+			return;
+		}
+		mThumbnailViewHelper->abortThumbnailGeneration();
+		mScheduledThumbnailGenerationTimer.start();
+	}
 };
 
 
@@ -581,6 +592,11 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	d->mThumbnailSize = 0;
 	setThumbnailSize(128);
 
+	d->mScheduledThumbnailGenerationTimer.setSingleShot(true);
+	d->mScheduledThumbnailGenerationTimer.setInterval(500);
+	connect(&d->mScheduledThumbnailGenerationTimer, SIGNAL(timeout()),
+		SLOT(generateThumbnailsForVisibleItems()) );
+
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
@@ -607,6 +623,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
 	d->mItemDelegate->clearElidedTextMap();
 	setSpacing(SPACING);
+	d->scheduleThumbnailGenerationForVisibleItems();
 }
 
 
@@ -655,6 +672,12 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 }
 
 
+void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) {
+	QListView::rowsInserted(parent, start, end);
+	d->mScheduledThumbnailGenerationTimer.start();
+}
+
+
 void ThumbnailView::showContextMenu() {
 	d->mThumbnailViewHelper->showContextMenu(this);
 }
@@ -691,10 +714,6 @@ ThumbnailView::Thumbnail ThumbnailView::thumbnailForIndex(const QModelIndex& ind
 		return Thumbnail(item.pixmap(128));
 	}
 
-	KFileItemList list;
-	list << item;
-	d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
-	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
 	return Thumbnail(QPixmap());
 }
 
@@ -775,9 +794,49 @@ void ThumbnailView::keyPressEvent(QKeyEvent* event) {
 }
 
 
+void ThumbnailView::resizeEvent(QResizeEvent* event) {
+	QListView::resizeEvent(event);
+	d->scheduleThumbnailGenerationForVisibleItems();
+}
+
+
 void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
 	QListView::selectionChanged(selected, deselected);
 	d->mItemDelegate->updateButtonFrameOpacity();
+}
+
+
+void ThumbnailView::scrollContentsBy(int dx, int dy) {
+	QListView::scrollContentsBy(dx, dy);
+	d->scheduleThumbnailGenerationForVisibleItems();
+}
+
+
+void ThumbnailView::generateThumbnailsForVisibleItems() {
+	KFileItemList list;
+	QRect viewportRect = viewport()->rect();
+	for (int row=0; row < model()->rowCount(); ++row) {
+		// Filter out invisible items
+		QModelIndex index = model()->index(row, 0);
+		QRect rect = visualRect(index);
+		if (!viewportRect.intersects(rect)) {
+			continue;
+		}
+
+		// Filter out items which already have a thumbnail
+		KFileItem item = fileItemForIndex(index);
+		QUrl url = item.url();
+		if (d->mThumbnailForUrl.contains(url)) {
+			continue;
+		}
+
+		// Add the item to our list and to mPersistentIndexForUrl, so that
+		// setThumbnail() can find the item to update
+		list << item;
+		d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
+	}
+
+	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
 }
 
 

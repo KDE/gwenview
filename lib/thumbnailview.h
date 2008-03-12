@@ -110,8 +110,13 @@ protected:
 
 	virtual void keyPressEvent(QKeyEvent*);
 
+	virtual void resizeEvent(QResizeEvent*);
+
+	virtual void scrollContentsBy(int dx, int dy);
+
 protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private Q_SLOTS:
@@ -122,6 +127,7 @@ private Q_SLOTS:
 	void slotRotateLeftClicked();
 	void slotRotateRightClicked();
 	void slotFullScreenClicked();
+	void generateThumbnailsForVisibleItems();
 
 private:
 	ThumbnailViewPrivate * const d;
