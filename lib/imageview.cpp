@@ -243,9 +243,7 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 		return;
 	}
 
-	QRect zoomedImageRect = d->mapViewportToZoomedImage(viewportRect);
-
-	d->mScaler->addDestinationRegion(QRegion(zoomedImageRect));
+	d->setScalerRegionToVisibleRect();
 	d->mViewport->update();
 }
 
