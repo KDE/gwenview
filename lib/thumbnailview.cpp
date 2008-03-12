@@ -555,6 +555,8 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
+	d->mThumbnailViewHelper = 0;
+
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setSpacing(SPACING);
@@ -574,7 +576,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setVerticalScrollMode(ScrollPerPixel);
 	setHorizontalScrollMode(ScrollPerPixel);
 
-	d->mThumbnailViewHelper = 0;
 	// Make sure mThumbnailSize is initialized before calling setThumbnailSize,
 	// since it will compare the new size with the old one
 	d->mThumbnailSize = 0;
