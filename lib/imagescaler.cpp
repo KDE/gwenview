@@ -180,6 +180,7 @@ void ImageScaler::run() {
 void ImageScaler::processChunk(const QRect& rect) {
 	if (qAbs(d->mZoom - 1.0) < 0.001) {
 		QImage tmp = d->mImage->copy(rect);
+		tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 		scaledRect(rect.left(), rect.top(), tmp);
 		return;
 	}
@@ -231,6 +232,7 @@ void ImageScaler::processChunk(const QRect& rect) {
 
 	QImage tmp;
 	tmp = d->mImage->copy(sourceRect);
+	tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 	tmp = tmp.scaled(
 		destRect.width(),
 		destRect.height(),
