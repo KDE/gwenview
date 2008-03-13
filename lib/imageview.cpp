@@ -308,15 +308,15 @@ void ImageView::setZoom(qreal zoom) {
 
 
 void ImageView::setZoom(qreal zoom, const QPoint& center) {
+	if (d->mImage->isNull()) {
+		return;
+	}
+
 	qreal oldZoom = d->mZoom;
 	if (qAbs(zoom - oldZoom) < 0.001) {
 		return;
 	}
-
 	d->mZoom = zoom;
-	if (d->mImage->isNull()) {
-		return;
-	}
 
 	// If we zoom more than twice, then assume the user wants to see the real
 	// pixels, for example to fine tune a crop operation
