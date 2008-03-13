@@ -62,18 +62,6 @@ public:
 	 */
 	int thumbnailSize() const;
 
-	/**
-	 * Returns the width of an item. This width is proportional to the
-	 * thumbnail size.
-	 */
-	int itemWidth() const;
-
-	/**
-	 * Returns the height of an item. This width is proportional to the
-	 * thumbnail size.
-	 */
-	int itemHeight() const;
-
 	Thumbnail thumbnailForIndex(const QModelIndex&);
 
 	/**
@@ -94,6 +82,15 @@ Q_SIGNALS:
 	void rotateDocumentRightRequested(const KUrl&);
 	void showDocumentInFullScreenRequested(const KUrl&);
 	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
+
+	void thumbnailSizeChanged(int);
+
+	/**
+	 * Emitted whenever selectionChanged() is called.
+	 * This signal is suffixed with "Signal" because
+	 * QAbstractItemView::selectionChanged() is a slot.
+	 */
+	void selectionChangedSignal(const QItemSelection&, const QItemSelection&);
 
 public Q_SLOTS:
 	/**

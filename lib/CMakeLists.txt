@@ -42,6 +42,7 @@ set(gwenviewlib_SRCS
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
+	thumbnailview/previewitemdelegate.cpp
 	thumbnailview/thumbnailview.cpp
 	transformimageoperation.cpp
 	urlutils.cpp
