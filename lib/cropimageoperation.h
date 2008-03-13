@@ -21,14 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef CROPIMAGEOPERATION_H
 #define CROPIMAGEOPERATION_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractimageoperation.h"
+#include <lib/abstractimageoperation.h>
 
 class QRect;
 

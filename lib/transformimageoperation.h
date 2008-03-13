@@ -21,16 +21,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef TRANSFORMIMAGEOPERATION_H
 #define TRANSFORMIMAGEOPERATION_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractimageoperation.h"
+#include <lib/abstractimageoperation.h>
 
-#include "orientation.h"
+#include <lib/orientation.h>
 
 namespace Gwenview {
 

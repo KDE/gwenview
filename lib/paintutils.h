@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef PAINTUTILS_H
 #define PAINTUTILS_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 
 class QColor;

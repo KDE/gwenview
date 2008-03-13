@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFrame>
 #include <QTimeLine>
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 namespace Gwenview {
 

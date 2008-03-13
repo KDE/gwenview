@@ -24,7 +24,7 @@
 #ifndef THUMBNAILLOADJOB_H
 #define THUMBNAILLOADJOB_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 #include <QImage>

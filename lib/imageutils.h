@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef IMAGEUTILS_H
 #define IMAGEUTILS_H
 
-#include "gwenviewlib_export.h"
-#include "orientation.h"
+#include <lib/gwenviewlib_export.h>
+#include <lib/orientation.h>
 
 class QMatrix;
 

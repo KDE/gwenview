@@ -21,14 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef SCROLLTOOL_H
 #define SCROLLTOOL_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractimageviewtool.h"
+#include <lib/abstractimageviewtool.h>
 
 class QPoint;
 

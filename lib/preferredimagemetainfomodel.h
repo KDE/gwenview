@@ -21,13 +21,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef PREFERREDIMAGEMETAINFOMODEL_H
 #define PREFERREDIMAGEMETAINFOMODEL_H
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 #include <QSortFilterProxyModel>
 
 // Local
-#include "imagemetainfomodel.h"
+#include <lib/imagemetainfomodel.h>
 
 namespace Gwenview {
 

@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 class QImage;
 class QRect;

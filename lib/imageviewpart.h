@@ -24,9 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kparts/part.h>
 
 // Local
-#include "../lib/document/document.h"
+#include <lib/document/document.h>
 
-#include "gwenviewlib_export.h"
+#include <lib/gwenviewlib_export.h>
 
 namespace Gwenview {
 
