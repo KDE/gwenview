@@ -72,9 +72,9 @@ public:
 
 Q_SIGNALS:
 	/**
-	 * It seems we can't use the 'activated()' signals for now because it does
-	 * not now about KDE single vs doubleclick settings. The indexActivated()
-	 * signals replaces it for now.
+	 * It seems we can't use the 'activated()' signal for now because it does
+	 * not know about KDE single vs doubleclick settings. The indexActivated()
+	 * signal replaces it.
 	 */
 	void indexActivated(const QModelIndex&);
 	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
