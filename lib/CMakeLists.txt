@@ -2,6 +2,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/libjpeg
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${CMAKE_CURRENT_BINARY_DIR}/..
+	${CMAKE_CURRENT_BINARY_DIR}
 	${EXIV2_INCLUDE_DIR}
 	)
 
@@ -16,7 +17,6 @@ set(gwenviewlib_SRCS
 	document/loadingthread.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
-	abstractthumbnailviewhelper.cpp
 	archiveutils.cpp
 	cropsidebar.cpp
 	cropimageoperation.cpp
@@ -42,7 +42,8 @@ set(gwenviewlib_SRCS
 	sorteddirmodel.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
-	thumbnailview.cpp
+	thumbnailview/abstractthumbnailviewhelper.cpp
+	thumbnailview/thumbnailview.cpp
 	transformimageoperation.cpp
 	urlutils.cpp
 	libjpeg/transupp.c
