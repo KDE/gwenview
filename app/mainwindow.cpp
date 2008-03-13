@@ -81,6 +81,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/resizeimageoperation.h>
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
+#include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/transformimageoperation.h>
 #include <lib/urlutils.h>
@@ -220,22 +221,27 @@ struct MainWindow::Private {
 		// mThumbnailView
 		mThumbnailView = new ThumbnailView(mThumbnailViewPanel);
 		mThumbnailView->setModel(mDirModel);
+
 		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel);
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
+
+		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
+		connect(delegate, SIGNAL(saveDocumentRequested(const KUrl&)),
+			mWindow, SLOT(save(const KUrl&)) );
+		connect(delegate, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
+			mWindow, SLOT(rotateLeft(const KUrl&)) );
+		connect(delegate, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
+			mWindow, SLOT(rotateRight(const KUrl&)) );
+		connect(delegate, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
+			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
+
+		mThumbnailView->setItemDelegate(delegate);
+
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
 			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
-
-		connect(mThumbnailView, SIGNAL(saveDocumentRequested(const KUrl&)),
-			mWindow, SLOT(save(const KUrl&)) );
-		connect(mThumbnailView, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
-			mWindow, SLOT(rotateLeft(const KUrl&)) );
-		connect(mThumbnailView, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
-			mWindow, SLOT(rotateRight(const KUrl&)) );
-		connect(mThumbnailView, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
-			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
 
 		// mUrlNavigator
 		KFilePlacesModel* places = new KFilePlacesModel(mThumbnailViewPanel);

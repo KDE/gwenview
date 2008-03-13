@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
+#include <kurl.h>
 
 // Local
 #include "archiveutils.h"
@@ -71,6 +72,12 @@ static KFileItem fileItemForIndex(const QModelIndex& index) {
 	Q_ASSERT(index.isValid());
 	QVariant data = index.data(KDirModel::FileItemRole);
 	return qvariant_cast<KFileItem>(data);
+}
+
+
+static KUrl urlForIndex(const QModelIndex& index) {
+	KFileItem item = fileItemForIndex(index);
+	return item.url();
 }
 
 
@@ -337,15 +344,15 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 
 	QToolButton* fullScreenButton = createFrameButton(d->mButtonFrame, "view-fullscreen");
 	connect(fullScreenButton, SIGNAL(clicked()),
-		d->mView, SLOT(slotFullScreenClicked()) );
+		SLOT(slotFullScreenClicked()) );
 
 	QToolButton* rotateLeftButton = createFrameButton(d->mButtonFrame, "object-rotate-left");
 	connect(rotateLeftButton, SIGNAL(clicked()),
-		d->mView, SLOT(slotRotateLeftClicked()) );
+		SLOT(slotRotateLeftClicked()) );
 
 	QToolButton* rotateRightButton = createFrameButton(d->mButtonFrame, "object-rotate-right");
 	connect(rotateRightButton, SIGNAL(clicked()),
-		d->mView, SLOT(slotRotateRightClicked()) );
+		SLOT(slotRotateRightClicked()) );
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mButtonFrame);
 	layout->setMargin(0);
@@ -362,7 +369,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 
 	QToolButton* saveButton = createFrameButton(d->mSaveButtonFrame, "document-save");
 	connect(saveButton, SIGNAL(clicked()),
-		d->mView, SLOT(slotSaveClicked()) );
+		SLOT(slotSaveClicked()) );
 
 	layout = new QHBoxLayout(d->mSaveButtonFrame);
 	layout->setMargin(0);
@@ -509,11 +516,6 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 }
 
 
-QModelIndex PreviewItemDelegate::indexUnderCursor() const {
-	return d->mIndexUnderCursor;
-}
-
-
 void PreviewItemDelegate::updateButtonFrameOpacity() {
 	bool isSelected = d->mView->selectionModel()->isSelected(d->mIndexUnderCursor);
 	d->mButtonFrame->setOpaque(isSelected);
@@ -524,6 +526,26 @@ void PreviewItemDelegate::updateButtonFrameOpacity() {
 void PreviewItemDelegate::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
 	d->mElidedTextMap.clear();
+}
+
+
+void PreviewItemDelegate::slotSaveClicked() {
+	saveDocumentRequested(urlForIndex(d->mIndexUnderCursor));
+}
+
+
+void PreviewItemDelegate::slotRotateLeftClicked() {
+	rotateDocumentLeftRequested(urlForIndex(d->mIndexUnderCursor));
+}
+
+
+void PreviewItemDelegate::slotRotateRightClicked() {
+	rotateDocumentRightRequested(urlForIndex(d->mIndexUnderCursor));
+}
+
+
+void PreviewItemDelegate::slotFullScreenClicked() {
+	showDocumentInFullScreenRequested(urlForIndex(d->mIndexUnderCursor));
 }
 
 

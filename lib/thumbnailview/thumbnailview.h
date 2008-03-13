@@ -77,10 +77,6 @@ Q_SIGNALS:
 	 * signals replaces it for now.
 	 */
 	void indexActivated(const QModelIndex&);
-	void saveDocumentRequested(const KUrl&);
-	void rotateDocumentLeftRequested(const KUrl&);
-	void rotateDocumentRightRequested(const KUrl&);
-	void showDocumentInFullScreenRequested(const KUrl&);
 	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
 	void thumbnailSizeChanged(int);
@@ -120,10 +116,6 @@ private Q_SLOTS:
 	void showContextMenu();
 	void setThumbnail(const KFileItem&, const QPixmap&);
 
-	void slotSaveClicked();
-	void slotRotateLeftClicked();
-	void slotRotateRightClicked();
-	void slotFullScreenClicked();
 	void generateThumbnailsForVisibleItems();
 
 private:

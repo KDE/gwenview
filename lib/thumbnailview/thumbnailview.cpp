@@ -35,7 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "archiveutils.h"
 #include "abstractthumbnailviewhelper.h"
-#include "previewitemdelegate.h"
 
 namespace Gwenview {
 
@@ -81,7 +80,6 @@ ThumbnailView::Thumbnail::Thumbnail(const ThumbnailView::Thumbnail& other)
 
 struct ThumbnailViewPrivate {
 	int mThumbnailSize;
-	PreviewItemDelegate* mItemDelegate;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 	QMap<QUrl, ThumbnailView::Thumbnail> mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
@@ -109,9 +107,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setDragEnabled(true);
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);
-
-	d->mItemDelegate = new PreviewItemDelegate(this);
-	setItemDelegate(d->mItemDelegate);
 
 	viewport()->setMouseTracking(true);
 	// Set this attribute, otherwise the item delegate won't get the
@@ -248,30 +243,6 @@ ThumbnailView::Thumbnail ThumbnailView::thumbnailForIndex(const QModelIndex& ind
 bool ThumbnailView::isModified(const QModelIndex& index) const {
 	KUrl url = urlForIndex(index);
 	return d->mThumbnailViewHelper->isDocumentModified(url);
-}
-
-
-void ThumbnailView::slotSaveClicked() {
-	QModelIndex index = d->mItemDelegate->indexUnderCursor();
-	saveDocumentRequested(urlForIndex(index));
-}
-
-
-void ThumbnailView::slotRotateLeftClicked() {
-	QModelIndex index = d->mItemDelegate->indexUnderCursor();
-	rotateDocumentLeftRequested(urlForIndex(index));
-}
-
-
-void ThumbnailView::slotRotateRightClicked() {
-	QModelIndex index = d->mItemDelegate->indexUnderCursor();
-	rotateDocumentRightRequested(urlForIndex(index));
-}
-
-
-void ThumbnailView::slotFullScreenClicked() {
-	QModelIndex index = d->mItemDelegate->indexUnderCursor();
-	showDocumentInFullScreenRequested(urlForIndex(index));
 }
 
 

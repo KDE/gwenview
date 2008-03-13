@@ -21,12 +21,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef PREVIEWITEMDELEGATE_H
 #define PREVIEWITEMDELEGATE_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QAbstractItemDelegate>
 
 // KDE
 
 // Local
+
+class KUrl;
 
 namespace Gwenview {
 
@@ -40,7 +44,7 @@ class PreviewItemDelegatePrivate;
  * An ItemDelegate which generates thumbnails for images. It also makes sure
  * all items are of the same size.
  */
-class PreviewItemDelegate : public QAbstractItemDelegate {
+class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QAbstractItemDelegate {
 	Q_OBJECT
 public:
 	PreviewItemDelegate(ThumbnailView*);
@@ -49,11 +53,20 @@ public:
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
 
-	QModelIndex indexUnderCursor() const;
+Q_SIGNALS:
+	void saveDocumentRequested(const KUrl&);
+	void rotateDocumentLeftRequested(const KUrl&);
+	void rotateDocumentRightRequested(const KUrl&);
+	void showDocumentInFullScreenRequested(const KUrl&);
 
 private Q_SLOTS:
 	void setThumbnailSize(int);
 	void updateButtonFrameOpacity();
+
+	void slotSaveClicked();
+	void slotRotateLeftClicked();
+	void slotRotateRightClicked();
+	void slotFullScreenClicked();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
