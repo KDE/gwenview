@@ -111,9 +111,10 @@ void GVPart::updateZoomSnapValues() {
 	for (qreal zoom = 1; zoom <= ZOOM_MAX ; zoom += 0.5) {
 		mZoomSnapValues << zoom;
 	}
-	qreal zoomToFit = mView->computeZoomToFit();
-	QList<qreal>::iterator it = qLowerBound(mZoomSnapValues.begin(), mZoomSnapValues.end(), zoomToFit);
-	mZoomSnapValues.insert(it, zoomToFit);
+	mZoomSnapValues
+		<< mView->computeZoomToFitWidth()
+		<< mView->computeZoomToFitHeight();
+	qSort(mZoomSnapValues);
 }
 
 

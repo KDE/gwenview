@@ -547,6 +547,22 @@ qreal ImageView::computeZoomToFit() const {
 }
 
 
+qreal ImageView::computeZoomToFitWidth() const {
+    if (d->mImage->isNull()) {
+        return 1.;
+    }
+    return qreal(d->mViewport->width()) / d->mImage->width();
+}
+
+
+qreal ImageView::computeZoomToFitHeight() const {
+    if (d->mImage->isNull()) {
+        return 1.;
+    }
+    return qreal(d->mViewport->height()) / d->mImage->height();
+}
+
+
 void ImageView::mousePressEvent(QMouseEvent* event) {
 	if (d->mTool) {
 		d->mTool->mousePressEvent(event);
