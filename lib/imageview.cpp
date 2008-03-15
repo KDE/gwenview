@@ -64,22 +64,11 @@ struct ImageViewPrivate {
 	}
 
 
-	qreal computeZoomToFit() const {
-		int width = mViewport->width();
-		int height = mViewport->height();
-		qreal zoom = qreal(width) / mImage->width();
-		if ( int(mImage->height() * zoom) > height) {
-			zoom = qreal(height) / mImage->height();
-		}
-		return qMin(zoom, 1.0);
-	}
-
-
 	QSize requiredBufferSize() const {
 		QSize size;
 		qreal zoom;
 		if (mZoomToFit) {
-			zoom = computeZoomToFit();
+			zoom = mView->computeZoomToFit();
 		} else {
 			zoom = mZoom;
 		}
@@ -210,7 +199,7 @@ void ImageView::setImage(const QImage* image) {
 	d->createBuffer();
 	d->mScaler->setImage(d->mImage);
 	if (d->mZoomToFit) {
-		setZoom(d->computeZoomToFit());
+		setZoom(computeZoomToFit());
 	} else {
 		updateScrollBars();
 	}
@@ -283,7 +272,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 void ImageView::resizeEvent(QResizeEvent*) {
 	if (d->mZoomToFit) {
-		setZoom(d->computeZoomToFit());
+		setZoom(computeZoomToFit());
 		// Make sure one can't use mousewheel in zoom-to-fit mode
 		horizontalScrollBar()->setRange(0, 0);
 		verticalScrollBar()->setRange(0, 0);
@@ -393,7 +382,7 @@ bool ImageView::zoomToFit() const {
 void ImageView::setZoomToFit(bool on) {
 	d->mZoomToFit = on;
 	if (d->mZoomToFit) {
-		setZoom(d->computeZoomToFit());
+		setZoom(computeZoomToFit());
 	}
 }
 
@@ -541,6 +530,20 @@ QRect ImageView::mapToImage(const QRect& src) {
 		mapToImage(src.bottomRight())
 	);
 	return dst;
+}
+
+
+qreal ImageView::computeZoomToFit() const {
+    if (d->mImage->isNull()) {
+        return 1.;
+    }
+    int width = d->mViewport->width();
+    int height = d->mViewport->height();
+    qreal zoom = qreal(width) / d->mImage->width();
+    if ( int(d->mImage->height() * zoom) > height) {
+        zoom = qreal(height) / d->mImage->height();
+    }
+    return qMin(zoom, 1.0);
 }
 
 

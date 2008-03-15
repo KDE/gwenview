@@ -82,6 +82,8 @@ public:
 	QRect mapToViewport(const QRect& src);
 	QRect mapToImage(const QRect& src);
 
+	qreal computeZoomToFit() const;
+
 Q_SIGNALS:
 	void zoomChanged();
 
