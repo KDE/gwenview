@@ -199,6 +199,9 @@ void ImageView::setImage(const QImage* image) {
 	d->createBuffer();
 	d->mScaler->setImage(d->mImage);
 	if (d->mZoomToFit) {
+		// Set the zoom to an invalid value to make sure setZoom() does not
+		// return early because the new zoom is the same as the old zoom.
+		d->mZoom = -1;
 		setZoom(computeZoomToFit());
 	} else {
 		updateScrollBars();
