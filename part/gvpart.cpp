@@ -48,13 +48,16 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
-const qreal ZOOM_MIN = 1/16.;
+const qreal REAL_DELTA = 0.001;
+
+const qreal ZOOM_MIN = 0.1;
 const qreal ZOOM_MAX = 16.;
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
+	updateZoomSnapValues();
 
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
@@ -96,6 +99,17 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	setXMLFile("gvpart/gvpart.rc");
 
 	loadConfig();
+}
+
+
+void GVPart::updateZoomSnapValues() {
+	mZoomSnapValues.clear();
+	for (qreal zoom = 1/ZOOM_MIN; zoom > 1. ; zoom -= 1.) {
+		mZoomSnapValues << 1/zoom;
+	}
+	for (qreal zoom = 1; zoom <= ZOOM_MAX ; zoom += 0.5) {
+		mZoomSnapValues << zoom;
+	}
 }
 
 
@@ -186,28 +200,38 @@ void GVPart::zoomActualSize() {
 
 
 void GVPart::zoomIn(const QPoint& center) {
-	zoom(ZoomIn, center);
+	qreal currentZoom = mView->zoom();
+	Q_FOREACH(qreal zoom, mZoomSnapValues) {
+		if (zoom > currentZoom + REAL_DELTA) {
+			setZoom(zoom, center);
+			return;
+		}
+	}
 }
 
 
 void GVPart::zoomOut(const QPoint& center) {
-	zoom(ZoomOut, center);
+	qreal currentZoom = mView->zoom();
+
+	QListIterator<qreal> it(mZoomSnapValues);
+	it.toBack();
+	while (it.hasPrevious()) {
+		qreal zoom = it.previous();
+		if (zoom < currentZoom - REAL_DELTA) {
+			setZoom(zoom, center);
+			return;
+		}
+	}
 }
 
 
-void GVPart::zoom(GVPart::ZoomDirection direction, const QPoint& _center) {
+void GVPart::setZoom(qreal zoom, const QPoint& _center) {
 	disableZoomToFit();
 	QPoint center;
 	if (_center == QPoint(-1, -1)) {
 		center = QPoint(mView->viewport()->width() / 2, mView->viewport()->height() / 2);
 	} else {
 		center = _center;
-	}
-	qreal zoom = mView->zoom();
-	if (direction == ZoomIn) {
-		zoom += 0.5;
-	} else {
-		zoom -= 0.5;
 	}
 	zoom = qBound(ZOOM_MIN, zoom, ZOOM_MAX);
 

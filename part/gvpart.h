@@ -71,11 +71,13 @@ private:
 	KAction* mZoomToFitAction;
 	bool mGwenviewHost;
 	ScrollTool* mScrollTool;
+	QList<qreal> mZoomSnapValues;
 
 	void disableZoomToFit();
 	void addPartSpecificActions();
-	enum ZoomDirection { ZoomIn, ZoomOut };
-	void zoom(ZoomDirection, const QPoint& center = QPoint(-1, -1));
+	void setZoom(qreal, const QPoint& center = QPoint(-1, -1));
+
+	void updateZoomSnapValues();
 };
 
 } // namespace
