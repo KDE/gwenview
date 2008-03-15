@@ -57,7 +57,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
-	updateZoomSnapValues();
 
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
@@ -78,6 +77,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged()), SLOT(updateCaption()) );
+
+	updateZoomSnapValues();
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
@@ -110,6 +111,9 @@ void GVPart::updateZoomSnapValues() {
 	for (qreal zoom = 1; zoom <= ZOOM_MAX ; zoom += 0.5) {
 		mZoomSnapValues << zoom;
 	}
+	qreal zoomToFit = mView->computeZoomToFit();
+	QList<qreal>::iterator it = qLowerBound(mZoomSnapValues.begin(), mZoomSnapValues.end(), zoomToFit);
+	mZoomSnapValues.insert(it, zoomToFit);
 }
 
 
@@ -302,6 +306,8 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 			mZoomToFitAction->trigger();
 			return true;
 		}
+	} else if (event->type() == QEvent::Resize) {
+		updateZoomSnapValues();
 	}
 
 	return false;
