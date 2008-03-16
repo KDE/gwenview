@@ -20,7 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvpart.moc"
 
 // Qt
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMouseEvent>
+#include <QSlider>
+#include <QTimer>
+#include <QToolButton>
 
 // KDE
 #include <kaction.h>
@@ -33,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
+#include <kparts/statusbarextension.h>
 
 // Local
 #include "../lib/gwenviewconfig.h"
@@ -41,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "gvbrowserextension.h"
+
 
 //Factory Code
 typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
@@ -52,6 +59,32 @@ const qreal REAL_DELTA = 0.001;
 
 const qreal ZOOM_MIN = 0.1;
 const qreal ZOOM_MAX = 16.;
+
+
+int sliderValueForZoom(qreal zoom) {
+	if (zoom >= 1.) {
+		return int( 100 * (zoom - 1.) / (ZOOM_MAX - 1) );
+	} else {
+		return int( 100 *
+			(zoom - ZOOM_MIN) / (1 - ZOOM_MIN)
+			) - 100;
+	}
+}
+
+
+qreal zoomForSliderValue(int sliderValue) {
+	if (sliderValue >= 0) {
+		return (ZOOM_MAX - 1) * (sliderValue / 100.) + 1.;
+	} else {
+		return
+			(sliderValue + 100) // [0, 100]
+			/ 100.              // [0., 1.]
+			* (1 - ZOOM_MIN)    // [0., 1 - ZOOM_MIN]
+			+ ZOOM_MIN          // [ZOOM_MIN, 1]
+			;
+	}
+}
+
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
@@ -76,9 +109,12 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	mView->viewport()->installEventFilter(this);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
-	connect(mView, SIGNAL(zoomChanged()), SLOT(updateCaption()) );
+	connect(mView, SIGNAL(zoomChanged()), SLOT(slotZoomChanged()) );
 
 	updateZoomSnapValues();
+
+	mZoomLabel = new QLabel;
+	mZoomSlider = new QSlider;
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
@@ -96,6 +132,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	if (!mGwenviewHost) {
 		addPartSpecificActions();
 	}
+	mStatusBarExtension = new KParts::StatusBarExtension(this);
+	QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
 
 	setXMLFile("gvpart/gvpart.rc");
 
@@ -122,6 +160,48 @@ void GVPart::addPartSpecificActions() {
 	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
 	new GVBrowserExtension(this);
+}
+
+
+void GVPart::initStatusBarExtension() {
+	QWidget* mainContainer = new QWidget;
+
+	QWidget* container = new QFrame;
+	container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+	container->setObjectName("zoomStatusBarWidget");
+	QHBoxLayout* layout = new QHBoxLayout(mainContainer);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+	layout->addStretch();
+	layout->addWidget(container);
+
+	QToolButton* zoomToFitButton = new QToolButton;
+	zoomToFitButton->setDefaultAction(actionCollection()->action("view_zoom_to_fit"));
+	zoomToFitButton->setObjectName("zoomToFitButton");
+
+	QToolButton* actualSizeButton = new QToolButton;
+	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
+	actualSizeButton->setObjectName("actualSizeButton");
+
+	mZoomLabel->setObjectName("zoomLabel");
+	mZoomLabel->setFixedWidth(mZoomLabel->fontMetrics().width(" 1000% "));
+	mZoomLabel->setAlignment(Qt::AlignCenter);
+
+	mZoomSlider->setObjectName("zoomSlider");
+	mZoomSlider->setOrientation(Qt::Horizontal);
+	mZoomSlider->setRange(sliderValueForZoom(ZOOM_MIN), sliderValueForZoom(ZOOM_MAX));
+	mZoomSlider->setMinimumWidth(200);
+	connect(mZoomSlider, SIGNAL(valueChanged(int)), SLOT(applyZoomSliderValue()) );
+
+	layout = new QHBoxLayout(container);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+	layout->addWidget(zoomToFitButton);
+	layout->addWidget(actualSizeButton);
+	layout->addWidget(mZoomLabel);
+	layout->addWidget(mZoomSlider);
+
+	mStatusBarExtension->addStatusBarItem(mainContainer, 1, true);
 }
 
 
@@ -165,6 +245,13 @@ void GVPart::slotImageRectUpdated(const QRect& rect) {
 }
 
 
+void GVPart::applyZoomSliderValue() {
+	disableZoomToFit();
+	qreal zoom = zoomForSliderValue(mZoomSlider->value());
+	setZoom(zoom);
+}
+
+
 KAboutData* GVPart::createAboutData() {
 	KAboutData* aboutData = new KAboutData(
 		"gvpart",                /* appname */
@@ -183,10 +270,17 @@ KAboutData* GVPart::createAboutData() {
 
 
 void GVPart::updateCaption() {
-	int intZoom = int(mView->zoom() * 100);
-	QString urlString = url().fileName();
-	QString caption = QString("%1 - %2%").arg(urlString).arg(intZoom);
+	QString caption = url().fileName();
 	emit setWindowCaption(caption);
+}
+
+
+void GVPart::slotZoomChanged() {
+	int intZoom = int(mView->zoom() * 100);
+	mZoomLabel->setText(QString("%1%").arg(intZoom));
+	mZoomSlider->blockSignals(true);
+	mZoomSlider->setValue(sliderValueForZoom(mView->zoom()));
+	mZoomSlider->blockSignals(false);
 }
 
 

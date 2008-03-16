@@ -29,6 +29,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class KAboutData;
 class KAction;
 
+class QLabel;
+class QSlider;
+
+namespace KParts {
+class StatusBarExtension;
+}
+
 namespace Gwenview {
 
 class ImageView;
@@ -64,6 +71,9 @@ private Q_SLOTS:
 	void slotImageRectUpdated(const QRect&);
 	void saveAs();
 	void showJobError(KJob*);
+	void initStatusBarExtension();
+	void applyZoomSliderValue();
+	void slotZoomChanged();
 
 private:
 	ImageView* mView;
@@ -72,6 +82,9 @@ private:
 	bool mGwenviewHost;
 	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
+	KParts::StatusBarExtension* mStatusBarExtension;
+	QLabel* mZoomLabel;
+	QSlider* mZoomSlider;
 
 	void disableZoomToFit();
 	void addPartSpecificActions();
