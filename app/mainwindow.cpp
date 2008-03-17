@@ -206,7 +206,7 @@ struct MainWindow::Private {
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
-			mWindow, SLOT(openDirUrlFromIndex(const QModelIndex&)) );
+			mWindow, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
@@ -718,7 +718,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 }
 
 
-void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
+void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 	if (!index.isValid()) {
 		return;
 	}
@@ -731,6 +731,8 @@ void MainWindow::openDirUrlFromIndex(const QModelIndex& index) {
 		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
 		url.setProtocol(protocol);
 		openDirUrl(url);
+	} else {
+		d->mViewAction->trigger();
 	}
 }
 
