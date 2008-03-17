@@ -60,7 +60,7 @@ protected:
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
 	void openDirUrl(const KUrl&);
-	void openDirUrlFromIndex(const QModelIndex&);
+	void slotThumbnailViewIndexActivated(const QModelIndex&);
 
 	void openDocumentUrl(const KUrl&);
 	void goToUrl(const KUrl&);
