@@ -80,8 +80,11 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mGroup->addWidget(container);
 
 	d->mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
+	connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
+
+	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
+		SLOT(storeDescription()));
 }
 
 
@@ -95,6 +98,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 
 	bool first = true;
 	int rating = 0;
+	QString description;
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QString urlString = item.url().url();
 		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
@@ -107,9 +111,16 @@ void NepomukContextManagerItem::updateSideBarContent() {
 			rating = 0;
 		}
 
+		if (first) {
+			description = resource.description();
+		} else if (description != resource.description()) {
+			description = QString();
+		}
+
 		first = false;
 	}
 	d->mRatingWidget->setRating(rating);
+	d->mDescriptionLineEdit->setText(description);
 	d->mTagWidget->setTaggedResources(resourceList);
 }
 
@@ -118,6 +129,15 @@ void NepomukContextManagerItem::slotRatingChanged(int rating) {
 	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
 	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
 		resource.setRating(rating);
+	}
+}
+
+
+void NepomukContextManagerItem::storeDescription() {
+	QString description = d->mDescriptionLineEdit->text();
+	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
+	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
+		resource.setDescription(description);
 	}
 }
 
