@@ -748,6 +748,11 @@ d(new MainWindow::Private)
 }
 
 
+MainWindow::~MainWindow() {
+	delete d;
+}
+
+
 void MainWindow::setCaption(const QString& caption) {
 	// Keep a trace of caption to use it in updateModifiedFlag()
 	d->mCaption = caption;

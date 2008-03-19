@@ -26,8 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kparts/mainwindow.h>
 
-#include <memory>
-
 class QModelIndex;
 
 class KFileItemList;
@@ -41,6 +39,7 @@ class MainWindow : public KParts::MainWindow {
 Q_OBJECT
 public:
 	MainWindow();
+	~MainWindow();
 	/**
 	 * Defines the url to display when the window is shown for the first time.
 	 */
@@ -140,7 +139,7 @@ private Q_SLOTS:
 
 private:
 	class Private;
-	std::auto_ptr<Private> d;
+	MainWindow::Private* const d;
 
 	void openSelectedDocument();
 	void saveConfig();
