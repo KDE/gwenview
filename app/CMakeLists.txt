@@ -3,7 +3,7 @@ include_directories(
 	${EXIV2_INCLUDE_DIR}
 	)
 
-# For gwenviewconfig.h
+# For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
 	${CMAKE_CURRENT_BINARY_DIR}/..
 	)
@@ -25,13 +25,25 @@ set(gwenview_SRCS
 	thumbnailviewhelper.cpp
 	)
 
+if (Nepomuk_FOUND)
+	set (gwenview_SRCS
+		${gwenview_SRCS}
+		nepomukcontextmanageritem.cpp
+		)
+endif (Nepomuk_FOUND)
+
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
 
-target_link_libraries(gwenview ${KDE4_KPARTS_LIBS} ${KDE4_KFILE_LIBS} gwenviewlib)
+target_link_libraries(gwenview
+	${KDE4_KPARTS_LIBS}
+	${KDE4_KFILE_LIBS}
+	${NEPOMUK_LIBRARIES}
+	gwenviewlib
+	)
 
 install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
 install(FILES gwenviewui.rc

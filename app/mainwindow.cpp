@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "mainwindow.moc"
+#include <config-gwenview.h>
 
 // Qt
 #include <QApplication>
@@ -66,6 +67,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "fileopscontextmanageritem.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
+#ifdef Nepomuk_FOUND
+#include "nepomukcontextmanageritem.h"
+#endif
 #include "savebar.h"
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
@@ -468,6 +472,10 @@ struct MainWindow::Private {
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
 		mContextManager->addItem(fileOpsItem);
 		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
+
+		#ifdef Nepomuk_FOUND
+		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
+		#endif
 	}
 
 
