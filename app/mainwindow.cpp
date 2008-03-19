@@ -490,7 +490,9 @@ struct MainWindow::Private {
 		connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
 			mWindow, SLOT(slotDirModelNewItems()) );
 
-		connect(dirLister, SIGNAL(deleteItem(const KFileItem&)),
+		connect(mDirModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+			mWindow, SLOT(updatePreviousNextActions()) );
+		connect(mDirModel, SIGNAL(modelReset()),
 			mWindow, SLOT(updatePreviousNextActions()) );
 
 		connect(dirLister, SIGNAL(completed()),
