@@ -75,7 +75,7 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
 
-	d->mGroup = sideBar->createGroup(i18n("Meta Informations"));
+	d->mGroup = sideBar->createGroup(i18n("Meta Information"));
 
 	d->mRatingWidget = new KRatingWidget;
     connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
