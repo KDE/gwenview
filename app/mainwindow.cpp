@@ -465,6 +465,10 @@ struct MainWindow::Private {
 
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
+		#ifdef Nepomuk_FOUND
+		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
+		#endif
+
 		QList<QAction*> actionList;
 		actionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction;
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, actionList));
@@ -472,10 +476,6 @@ struct MainWindow::Private {
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
 		mContextManager->addItem(fileOpsItem);
 		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
-
-		#ifdef Nepomuk_FOUND
-		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
-		#endif
 	}
 
 
