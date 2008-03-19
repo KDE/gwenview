@@ -42,6 +42,7 @@ public:
 
 private Q_SLOTS:
 	void updateSideBarContent();
+	void slotRatingChanged(int rating);
 
 private:
 	NepomukContextManagerItemPrivate* const d;

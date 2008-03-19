@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Nepomuk
 #include <nepomuk/global.h>
 #include <nepomuk/kmetadatatagwidget.h>
+#include <nepomuk/kratingwidget.h>
 #include <nepomuk/resource.h>
 #include <nepomuk/tag.h>
 
@@ -42,6 +43,7 @@ namespace Gwenview {
 
 
 struct NepomukContextManagerItemPrivate {
+	KRatingWidget* mRatingWidget;
 	Nepomuk::TagWidget* mTagWidget;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
@@ -51,6 +53,7 @@ struct NepomukContextManagerItemPrivate {
 NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 , d(new NepomukContextManagerItemPrivate) {
+	d->mRatingWidget = 0;
 	d->mTagWidget = 0;
 	d->mSideBar = 0;
 	d->mGroup = 0;
@@ -73,7 +76,14 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 		SLOT(updateSideBarContent()) );
 
 	d->mGroup = sideBar->createGroup(i18n("Meta Informations"));
+
+	d->mRatingWidget = new KRatingWidget;
+    connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
+		SLOT(slotRatingChanged(int)));
+
 	d->mTagWidget = new Nepomuk::TagWidget;
+
+	d->mGroup->addWidget(d->mRatingWidget);
 	d->mGroup->addWidget(d->mTagWidget);
 }
 
@@ -83,14 +93,35 @@ void NepomukContextManagerItem::updateSideBarContent() {
 		return;
 	}
 
-	QList<Nepomuk::Resource> fileRes;
+	QList<Nepomuk::Resource> resourceList;
 	KFileItemList itemList = contextManager()->selection();
+
+	bool first = true;
+	int rating = 0;
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QString urlString = item.url().url();
-		Nepomuk::Resource file( urlString, Soprano::Vocabulary::Xesam::File() );
-		fileRes.append( file );
+		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+		resourceList << resource;
+
+		if (first) {
+			rating = resource.rating();
+		} else if (rating != (int)resource.rating()) {
+			// Ratings aren't the same, reset
+			rating = 0;
+		}
+
+		first = false;
 	}
-	d->mTagWidget->setTaggedResources(fileRes);
+	d->mRatingWidget->setRating(rating);
+	d->mTagWidget->setTaggedResources(resourceList);
+}
+
+
+void NepomukContextManagerItem::slotRatingChanged(int rating) {
+	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
+	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
+		resource.setRating(rating);
+	}
 }
 
 
