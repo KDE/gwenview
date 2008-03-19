@@ -89,12 +89,12 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 QRect ImageScaler::containingRect(const QRectF& rectF) {
 	return QRect(
 		QPoint(
-			int(floor(rectF.left())),
-			int(floor(rectF.top()))
+			qRound(floor(rectF.left())),
+			qRound(floor(rectF.top()))
 			),
 		QPoint(
-			int(ceil(rectF.right() - 1.)),
-			int(ceil(rectF.bottom() - 1.))
+			qRound(ceil(rectF.right() - 1.)),
+			qRound(ceil(rectF.bottom() - 1.))
 			)
 		);
 	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
