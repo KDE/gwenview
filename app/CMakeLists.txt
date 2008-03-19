@@ -34,6 +34,7 @@ endif (Nepomuk_FOUND)
 
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
+	nepomuksidebaritem.ui
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})

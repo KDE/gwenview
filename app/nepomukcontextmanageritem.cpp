@@ -38,13 +38,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "contextmanager.h"
 #include "sidebar.h"
+#include "ui_nepomuksidebaritem.h"
 
 namespace Gwenview {
 
 
-struct NepomukContextManagerItemPrivate {
-	KRatingWidget* mRatingWidget;
-	Nepomuk::TagWidget* mTagWidget;
+struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 };
@@ -53,8 +52,6 @@ struct NepomukContextManagerItemPrivate {
 NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 , d(new NepomukContextManagerItemPrivate) {
-	d->mRatingWidget = 0;
-	d->mTagWidget = 0;
 	d->mSideBar = 0;
 	d->mGroup = 0;
 
@@ -77,14 +74,14 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	d->mGroup = sideBar->createGroup(i18n("Meta Information"));
 
-	d->mRatingWidget = new KRatingWidget;
+	QWidget* container = new QWidget;
+	d->setupUi(container);
+	container->layout()->setMargin(0);
+	d->mGroup->addWidget(container);
+
+	d->mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
-
-	d->mTagWidget = new Nepomuk::TagWidget;
-
-	d->mGroup->addWidget(d->mRatingWidget);
-	d->mGroup->addWidget(d->mTagWidget);
 }
 
 
