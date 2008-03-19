@@ -176,7 +176,7 @@ void ImageScaler::scaleRect(const QRect& rect) {
 	tmp = tmp.scaled(
 		destRect.width(),
 		destRect.height(),
-		Qt::KeepAspectRatio,
+		Qt::IgnoreAspectRatio, // Do not use KeepAspectRatio, it can lead to skipped rows or columns
 		d->mTransformationMode);
 
 	if (needsSmoothMargins) {
