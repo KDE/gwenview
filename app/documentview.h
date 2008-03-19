@@ -48,6 +48,8 @@ public:
 	 */
 	void reset();
 
+	void setStatusBarVisible(bool visible);
+
 	KStatusBar* statusBar() const;
 
 	virtual QSize sizeHint() const;

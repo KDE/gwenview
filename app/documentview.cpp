@@ -54,6 +54,7 @@ struct DocumentViewPrivate {
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
 	KStatusBar* mStatusBar;
+	bool mStatusBarVisible;
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
@@ -105,6 +106,13 @@ DocumentView::~DocumentView() {
 KStatusBar* DocumentView::statusBar() const {
 	return d->mStatusBar;
 }
+
+
+void DocumentView::setStatusBarVisible(bool visible) {
+	d->mStatusBarVisible = visible;
+	d->mStatusBar->setVisible(visible);
+}
+
 
 QSize DocumentView::sizeHint() const {
 	return QSize(400, 300);
@@ -190,7 +198,8 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
 	if (extension) {
 		extension->setStatusBar(statusBar());
-		statusBar()->show();
+		// Only show the status bar if asked (ie, not in fullscreen)
+		statusBar()->setVisible(d->mStatusBarVisible);
 	} else {
 		statusBar()->hide();
 	}

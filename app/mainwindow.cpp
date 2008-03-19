@@ -1090,6 +1090,7 @@ void MainWindow::toggleFullScreen() {
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
+		d->mDocumentView->setStatusBarVisible(false);
 		d->mSaveBar->setForceHide(true);
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
@@ -1106,6 +1107,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
+		d->mDocumentView->setStatusBarVisible(true);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->show();
 	}
