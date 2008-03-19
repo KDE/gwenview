@@ -833,13 +833,16 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 
 	KFileItem item = d->mDirModel->itemForIndex(index);
 	if (item.isDir()) {
+		// Item is a dir, open it
 		openDirUrl(item.url());
 	} else if (ArchiveUtils::fileItemIsArchive(item)) {
+		// Item is an archive, tweak url then open it
 		KUrl url = item.url();
 		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
 		url.setProtocol(protocol);
 		openDirUrl(url);
 	} else {
+		// Item is a document, switch to view mode
 		d->mViewAction->trigger();
 	}
 }
