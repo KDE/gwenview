@@ -465,8 +465,12 @@ void ImageView::updateFromScaler(int left, int top, const QImage& image) {
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
 		painter.drawImage(left, top, image);
 		// Debug rects
-		//painter.setPen(Qt::red);
-		//painter.drawRect(left, top, image.width() - 1, image.height() - 1);
+		/*
+		QPen pen(Qt::red);
+		pen.setStyle(Qt::DotLine);
+		painter.setPen(pen);
+		painter.drawRect(left, top, image.width() - 1, image.height() - 1);
+		*/
 	}
 	QPoint offset = imageOffset();
 	d->mViewport->update(
