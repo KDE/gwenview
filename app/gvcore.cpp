@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/mimetypeutils.h>
+#include <lib/transformimageoperation.h>
 
 namespace Gwenview {
 
@@ -151,6 +152,24 @@ void GvCore::saveAs(const KUrl& url) {
 	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(saveAsUrl, typeList[0].toAscii());
+}
+
+
+void GvCore::rotateLeft(const KUrl& url) {
+	TransformImageOperation* op = new TransformImageOperation(ROT_270);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
+}
+
+
+void GvCore::rotateRight(const KUrl& url) {
+	TransformImageOperation* op = new TransformImageOperation(ROT_90);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->waitUntilLoaded();
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
 }
 
 

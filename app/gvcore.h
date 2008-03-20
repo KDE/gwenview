@@ -44,6 +44,8 @@ public Q_SLOTS:
 	void saveAll();
 	void save(const KUrl&);
 	void saveAs(const KUrl&);
+	void rotateLeft(const KUrl&);
+	void rotateRight(const KUrl&);
 
 private:
 	GvCorePrivate* const d;

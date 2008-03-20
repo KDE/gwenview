@@ -236,9 +236,9 @@ struct MainWindow::Private {
 		connect(delegate, SIGNAL(saveDocumentRequested(const KUrl&)),
 			mGvCore, SLOT(save(const KUrl&)) );
 		connect(delegate, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
-			mWindow, SLOT(rotateLeft(const KUrl&)) );
+			mGvCore, SLOT(rotateLeft(const KUrl&)) );
 		connect(delegate, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
-			mWindow, SLOT(rotateRight(const KUrl&)) );
+			mGvCore, SLOT(rotateRight(const KUrl&)) );
 		connect(delegate, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
 			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
 
@@ -1174,29 +1174,9 @@ void MainWindow::rotateCurrentLeft() {
 }
 
 
-void MainWindow::rotateLeft(const KUrl& url) {
-	kDebug();
-	TransformImageOperation* op = new TransformImageOperation(ROT_270);
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->waitUntilLoaded();
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
-}
-
-
 void MainWindow::rotateCurrentRight() {
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	d->applyImageOperation(op);
-}
-
-
-void MainWindow::rotateRight(const KUrl& url) {
-	kDebug();
-	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->waitUntilLoaded();
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
 }
 
 

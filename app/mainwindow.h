@@ -105,9 +105,7 @@ private Q_SLOTS:
 
 	void showDocumentInFullScreen(const KUrl&);
 	void rotateCurrentLeft();
-	void rotateLeft(const KUrl&);
 	void rotateCurrentRight();
-	void rotateRight(const KUrl&);
 	void mirror();
 	void flip();
 	void resizeImage();
