@@ -607,15 +607,27 @@ struct MainWindow::Private {
 	}
 
 
-	KFileItemList selectedItemList() const {
-		QItemSelection selection = mThumbnailView->selectionModel()->selection();
-		QModelIndexList indexList = selection.indexes();
+	void updateContextDependentComponents() {
+		// Gather info
+		KUrl url = currentUrl();
+		KFileItemList selectedItemList;
+		if (KProtocolManager::supportsListing(url)) {
+			QItemSelection selection = mThumbnailView->selectionModel()->selection();
+			QModelIndexList indexList = selection.indexes();
 
-		KFileItemList itemList;
-		Q_FOREACH(const QModelIndex& index, indexList) {
-			itemList << mDirModel->itemForIndex(index);
+			Q_FOREACH(const QModelIndex& index, indexList) {
+				selectedItemList << mDirModel->itemForIndex(index);
+			}
+		} else if (url.isValid()) {
+			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+			selectedItemList << item;
 		}
-		return itemList;
+
+		// Update
+		mContextManager->setSelection(selectedItemList);
+		mContextManager->setCurrentUrl(url);
+		mSaveBar->setCurrentUrl(url);
+		mSlideShow->setCurrentUrl(url);
 	}
 };
 
@@ -722,6 +734,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 			d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 		openDocumentUrl(url);
 	}
+	d->updateContextDependentComponents();
 	d->updateToggleSideBarAction();
 }
 
@@ -937,16 +950,7 @@ void MainWindow::slotSelectionChanged() {
 	hideTemporarySideBar();
 	d->updateActions();
 	updatePreviousNextActions();
-
-	// Gather info for other components
-	KUrl url = d->currentUrl();
-	KFileItemList selectedItemList = d->selectedItemList();
-
-	// Update the other components
-	d->mContextManager->setSelection(selectedItemList);
-	d->mContextManager->setCurrentUrl(url);
-	d->mSaveBar->setCurrentUrl(url);
-	d->mSlideShow->setCurrentUrl(url);
+	d->updateContextDependentComponents();
 
 	// Start preloading
 	QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()) );
