@@ -430,7 +430,7 @@ struct MainWindow::Private {
 
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, mWindow));
 
-		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
+		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mWindow->actionCollection());
 		mContextManager->addItem(fileOpsItem);
 		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
 	}

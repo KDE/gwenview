@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QAction>
 
 // KDE
+#include <kaction.h>
+#include <kactioncollection.h>
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kpropertiesdialog.h>
@@ -51,14 +53,22 @@ struct FileOpsContextManagerItemPrivate {
 
 
 	KUrl::List urlList() const {
+		KUrl::List urlList;
+
 		KFileItemList list = mContextManagerItem->contextManager()->selection();
-		Q_ASSERT(list.count() > 0);
-		return list.urlList();
+		if (list.count() > 0) {
+			urlList = list.urlList();
+		} else {
+			KUrl url = mContextManagerItem->contextManager()->currentUrl();
+			Q_ASSERT(url.isValid());
+			urlList << url;
+		}
+		return urlList;
 	}
 };
 
 
-FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
+FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	d->mContextManagerItem = this;
@@ -68,42 +78,42 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager)
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateActions()) );
 
-	d->mCopyToAction = new QAction(this);
+	d->mCopyToAction = actionCollection->addAction("file_copy_to");
 	d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
 	connect(d->mCopyToAction, SIGNAL(triggered()),
 		SLOT(copyTo()) );
 
-	d->mMoveToAction = new QAction(this);
+	d->mMoveToAction = actionCollection->addAction("file_move_to");
 	d->mMoveToAction->setText(i18nc("Verb", "Move To..."));
 	connect(d->mMoveToAction, SIGNAL(triggered()),
 		SLOT(moveTo()) );
 
-	d->mLinkToAction = new QAction(this);
+	d->mLinkToAction = actionCollection->addAction("file_link_to");
 	d->mLinkToAction->setText(i18nc("Verb", "Link To..."));
 	connect(d->mLinkToAction, SIGNAL(triggered()),
 		SLOT(linkTo()) );
 
-	d->mTrashAction = new QAction(this);
+	d->mTrashAction = actionCollection->addAction("file_trash");
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
 	d->mTrashAction->setIcon(KIcon("user-trash"));
 	d->mTrashAction->setShortcut(Qt::Key_Delete);
 	connect(d->mTrashAction, SIGNAL(triggered()),
 		SLOT(trash()) );
 
-	d->mDelAction = new QAction(this);
+	d->mDelAction = actionCollection->addAction("file_delete");
 	d->mDelAction->setText(i18n("Delete"));
 	d->mDelAction->setIcon(KIcon("edit-delete"));
 	d->mDelAction->setShortcut(Qt::ShiftModifier | Qt::Key_Delete);
 	connect(d->mDelAction, SIGNAL(triggered()),
 		SLOT(del()) );
 
-	d->mShowPropertiesAction = new QAction(this);
+	d->mShowPropertiesAction = actionCollection->addAction("file_show_properties");
 	d->mShowPropertiesAction->setText(i18n("Properties"));
 	d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
 	connect(d->mShowPropertiesAction, SIGNAL(triggered()),
 		SLOT(showProperties()) );
 
-	d->mCreateFolderAction = new QAction(this);
+	d->mCreateFolderAction = actionCollection->addAction("file_create_folder");
 	d->mCreateFolderAction->setText(i18n("Create Folder..."));
 	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
 	connect(d->mCreateFolderAction, SIGNAL(triggered()),

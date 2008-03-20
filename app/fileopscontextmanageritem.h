@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "abstractcontextmanageritem.h"
 
 class QAction;
+class KActionCollection;
 
 namespace Gwenview {
 
@@ -37,7 +38,7 @@ class FileOpsContextManagerItemPrivate;
 class FileOpsContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	FileOpsContextManagerItem(ContextManager*);
+	FileOpsContextManagerItem(ContextManager*, KActionCollection*);
 	~FileOpsContextManagerItem();
 
 	virtual void setSideBar(SideBar* sideBar);
