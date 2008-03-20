@@ -22,10 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "savebar.moc"
 
 // Qt
-#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QProgressDialog>
 #include <QToolTip>
 
 // KDE
@@ -176,7 +174,7 @@ void SaveBar::triggerAction(const QString& action) {
 	if (action == "save") {
 		requestSave(d->mCurrentUrl);
 	} else if (action == "saveAll") {
-		saveAll();
+		requestSaveAll();
 	} else if (action == "first") {
 		goToUrl(lst[0]);
 	} else if (action == "previous") {
@@ -198,35 +196,6 @@ void SaveBar::triggerAction(const QString& action) {
 void SaveBar::setCurrentUrl(const KUrl& url) {
 	d->mCurrentUrl = url;
 	updateContent();
-}
-
-
-bool SaveBar::saveAll() {
-	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-
-	// TODO: Save in a separate thread?
-	QProgressDialog progress(this);
-	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
-	progress.setCancelButtonText(i18n("&Stop"));
-	progress.setMinimum(0);
-	progress.setMinimum(lst.size());
-	progress.setWindowModality(Qt::WindowModal);
-
-	Q_FOREACH(const KUrl& url, lst) {
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		Document::SaveResult saveResult = doc->save(url, doc->format());
-		if (saveResult != Document::SR_OK) {
-			// FIXME: Message
-			return false;
-		}
-		progress.setValue(progress.value() + 1);
-		if (progress.wasCanceled()) {
-			return false;
-		}
-		qApp->processEvents();
-	}
-
-	return true;
 }
 
 

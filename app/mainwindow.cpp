@@ -65,6 +65,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
+#include "gvcore.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #ifdef Nepomuk_FOUND
@@ -132,6 +133,7 @@ struct MainWindowState {
 };
 
 struct MainWindow::Private {
+	GvCore* mGvCore;
 	MainWindow* mWindow;
 	QSplitter* mCentralSplitter;
 	DocumentView* mDocumentView;
@@ -212,6 +214,8 @@ struct MainWindow::Private {
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mWindow, SLOT(save(const KUrl&)) );
+		connect(mSaveBar, SIGNAL(requestSaveAll()),
+			mGvCore, SLOT(saveAll()) );
 		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
 			mWindow, SLOT(goToUrl(const KUrl&)) );
 
@@ -716,6 +720,7 @@ MainWindow::MainWindow()
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
+	d->mGvCore = new GvCore(this);
 	d->mDirModel = new SortedDirModel(this);
 	d->mFullScreenBar = 0;
 	d->initDirModel();
@@ -1384,7 +1389,8 @@ bool MainWindow::queryClose() {
 
 	switch (answer) {
 	case KMessageBox::Yes:
-		return d->mSaveBar->saveAll();
+		d->mGvCore->saveAll();
+		return DocumentFactory::instance()->modifiedDocumentList().size() == 0;
 
 	case KMessageBox::No:
 		return true;

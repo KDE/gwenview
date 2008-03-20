@@ -12,6 +12,7 @@ set(gwenview_SRCS
 	abstractcontextmanageritem.cpp
 	configdialog.cpp
 	contextmanager.cpp
+	gvcore.cpp
 	documentview.cpp
 	fileoperations.cpp
 	infocontextmanageritem.cpp

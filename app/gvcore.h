@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2008 Aurélien Gâteau <aurelien.gateau@free.fr>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -15,53 +15,37 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef SAVEBAR_H
-#define SAVEBAR_H
+#ifndef GVCORE_H
+#define GVCORE_H
 
 // Qt
+#include <QObject>
 
 // KDE
 
 // Local
-#include <lib/slidecontainer.h>
-
-class KUrl;
 
 namespace Gwenview {
 
 
-class SaveBarPrivate;
-class SaveBar : public SlideContainer {
+class GvCorePrivate;
+class GvCore : public QObject {
 	Q_OBJECT
 public:
-	SaveBar(QWidget* parent);
-	~SaveBar();
+	GvCore(QWidget* mainWindow);
+	~GvCore();
 
-	void setCurrentUrl(const KUrl&);
-
-	/**
-	 * Keep save bar hidden even if there are modifications.
-	 * Useful for fullscreen mode.
-	 */
-	void setForceHide(bool);
-
-Q_SIGNALS:
-	void requestSave(const KUrl&);
-	void requestSaveAll();
-	void goToUrl(const KUrl&);
+public Q_SLOTS:
+	void saveAll();
 
 private:
-	SaveBarPrivate* const d;
-
-private Q_SLOTS:
-	void updateContent();
-	void triggerAction(const QString& action);
+	GvCorePrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* SAVEBAR_H */
+#endif /* GVCORE_H */
