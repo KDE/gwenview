@@ -22,32 +22,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #define IMAGEOPSCONTEXTMANAGERITEM_H
 
 // Qt
-#include <QList>
 
 // KDE
 
 // Local
 #include "abstractcontextmanageritem.h"
 
-class QAction;
+class KActionCollection;
 
 namespace Gwenview {
 
 
-class ImageOpsContextManagerItemPrivate;
+class MainWindow;
+
+
 class ImageOpsContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	ImageOpsContextManagerItem(ContextManager*, QList<QAction*>);
+	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
 	~ImageOpsContextManagerItem();
 
 	virtual void setSideBar(SideBar* sideBar);
 
 private Q_SLOTS:
+	void updateActions();
 	void updateSideBarContent();
+	void rotateLeft();
+	void rotateRight();
+	void mirror();
+	void flip();
+	void resizeImage();
+	void crop();
 
 private:
-	ImageOpsContextManagerItemPrivate* const d;
+	class Private;
+	Private* const d;
 };
 
 

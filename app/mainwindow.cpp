@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
-#include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <klocale.h>
@@ -74,7 +73,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
-#include <lib/cropsidebar.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/imagemetainfomodel.h>
@@ -82,12 +80,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
-#include <lib/resizeimageoperation.h>
 #include <lib/slideshow.h>
 #include <lib/sorteddirmodel.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
-#include <lib/transformimageoperation.h>
 #include <lib/urlutils.h>
 
 namespace Gwenview {
@@ -157,12 +153,6 @@ struct MainWindow::Private {
 	QAction* mGoUpAction;
 	QAction* mGoToPreviousAction;
 	QAction* mGoToNextAction;
-	QAction* mRotateLeftAction;
-	QAction* mRotateRightAction;
-	QAction* mMirrorAction;
-	QAction* mFlipAction;
-	QAction* mResizeAction;
-	QAction* mCropAction;
 	QAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	QAction* mToggleSlideShowAction;
@@ -369,40 +359,6 @@ struct MainWindow::Private {
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
 
-		mRotateLeftAction = actionCollection->addAction("rotate_left");
-		mRotateLeftAction->setText(i18n("Rotate Left"));
-		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
-		mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
-		connect(mRotateLeftAction, SIGNAL(triggered()),
-			mWindow, SLOT(rotateCurrentLeft()) );
-
-		mRotateRightAction = actionCollection->addAction("rotate_right");
-		mRotateRightAction->setText(i18n("Rotate Right"));
-		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
-		mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
-		connect(mRotateRightAction, SIGNAL(triggered()),
-			mWindow, SLOT(rotateCurrentRight()) );
-
-		mMirrorAction = actionCollection->addAction("mirror");
-		mMirrorAction->setText(i18n("Mirror"));
-		connect(mMirrorAction, SIGNAL(triggered()),
-			mWindow, SLOT(mirror()) );
-
-		mFlipAction = actionCollection->addAction("flip");
-		mFlipAction->setText(i18n("Flip"));
-		connect(mFlipAction, SIGNAL(triggered()),
-			mWindow, SLOT(flip()) );
-
-		mResizeAction = actionCollection->addAction("resize");
-		mResizeAction->setText(i18n("Resize"));
-		connect(mResizeAction, SIGNAL(triggered()),
-			mWindow, SLOT(resizeImage()) );
-
-		mCropAction = actionCollection->addAction("crop");
-		mCropAction->setText(i18n("Crop"));
-		connect(mCropAction, SIGNAL(triggered()),
-			mWindow, SLOT(crop()) );
-
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		mToggleSideBarAction->setShortcut(Qt::Key_F11);
@@ -472,9 +428,7 @@ struct MainWindow::Private {
 		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
 		#endif
 
-		QList<QAction*> actionList;
-		actionList << mRotateLeftAction << mRotateRightAction << mMirrorAction << mFlipAction << mResizeAction << mCropAction;
-		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, actionList));
+		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, mWindow));
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager);
 		mContextManager->addItem(fileOpsItem);
@@ -575,42 +529,21 @@ struct MainWindow::Private {
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
 
-	bool currentDocumentIsRasterImage() {
-		if (mDocumentView->isVisible()) {
-			return mDocumentView->currentDocumentIsRasterImage();
-		} else {
-			QModelIndex index = mThumbnailView->currentIndex();
-			if (!index.isValid()) {
-				return false;
-			}
-			KFileItem item = mDirModel->itemForIndex(index);
-			Q_ASSERT(!item.isNull());
-			return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
-		}
-	}
 
 	void updateActions() {
-		bool canModify = currentDocumentIsRasterImage();
+		bool canSave = mWindow->currentDocumentIsRasterImage();
 		if (!mDocumentView->isVisible()) {
-			// Since we only support image operations on one image for now,
-			// disable actions if several images are selected and the document
-			// view is not visible.
+			// Saving only makes sense if exactly one image is selected
 			QItemSelection selection = mThumbnailView->selectionModel()->selection();
 			QModelIndexList indexList = selection.indexes();
 			if (indexList.count() != 1) {
-				canModify = false;
+				canSave = false;
 			}
 		}
 
 		KActionCollection* actionCollection = mWindow->actionCollection();
-		actionCollection->action("file_save")->setEnabled(canModify);
-		actionCollection->action("file_save_as")->setEnabled(canModify);
-		mRotateLeftAction->setEnabled(canModify);
-		mRotateRightAction->setEnabled(canModify);
-		mMirrorAction->setEnabled(canModify);
-		mFlipAction->setEnabled(canModify);
-		mResizeAction->setEnabled(canModify);
-		mCropAction->setEnabled(canModify && mDocumentView->isVisible());
+		actionCollection->action("file_save")->setEnabled(canSave);
+		actionCollection->action("file_save_as")->setEnabled(canSave);
 	}
 
 	KUrl currentUrl() const {
@@ -641,18 +574,8 @@ struct MainWindow::Private {
 		}
 	}
 
-	void applyImageOperation(AbstractImageOperation* op) {
-		// For now, we only support operations on one image
-		KUrl url = currentUrl();
-
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		doc->waitUntilLoaded();
-		op->setDocument(doc);
-		doc->undoStack()->push(op);
-	}
-
-
 	void spreadCurrentUrl() {
+		kDebug();
 		KUrl url = currentUrl();
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
@@ -690,27 +613,6 @@ struct MainWindow::Private {
 		}
 		return width;
 	}
-
-
-	void showTemporarySideBar(QWidget* sideBar) {
-		mSideBarWasVisibleBeforeTemporarySideBar = mSideBarContainer->isVisible();
-		// Move the sideBar inside a widget so that we can add a stretch below
-		// it.
-		QWidget* widget = new QWidget(mSideBarContainer);
-		sideBar->setParent(widget);
-
-		QVBoxLayout* layout = new QVBoxLayout(widget);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		layout->addWidget(sideBar);
-		layout->addStretch();
-
-		mSideBarContainer->addWidget(widget);
-		mSideBarContainer->setCurrentWidget(widget);
-		mSideBarContainer->show();
-	}
-
-
 };
 
 
@@ -743,6 +645,45 @@ d(new MainWindow::Private)
 
 MainWindow::~MainWindow() {
 	delete d;
+}
+
+
+DocumentView* MainWindow::documentView() const {
+	return d->mDocumentView;
+}
+
+
+bool MainWindow::currentDocumentIsRasterImage() const {
+	if (d->mDocumentView->isVisible()) {
+		return d->mDocumentView->currentDocumentIsRasterImage();
+	} else {
+		QModelIndex index = d->mThumbnailView->currentIndex();
+		if (!index.isValid()) {
+			return false;
+		}
+		KFileItem item = d->mDirModel->itemForIndex(index);
+		Q_ASSERT(!item.isNull());
+		return MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE;
+	}
+}
+
+
+void MainWindow::showTemporarySideBar(QWidget* sideBar) {
+	d->mSideBarWasVisibleBeforeTemporarySideBar = d->mSideBarContainer->isVisible();
+	// Move the sideBar inside a widget so that we can add a stretch below
+	// it.
+	QWidget* widget = new QWidget(d->mSideBarContainer);
+	sideBar->setParent(widget);
+
+	QVBoxLayout* layout = new QVBoxLayout(widget);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+	layout->addWidget(sideBar);
+	layout->addStretch();
+
+	d->mSideBarContainer->addWidget(widget);
+	d->mSideBarContainer->setCurrentWidget(widget);
+	d->mSideBarContainer->show();
 }
 
 
@@ -816,11 +757,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	}
 	d->mThumbnailViewPanel->setVisible(showThumbnail);
 
-	// Update actions and context because some context actions depends on the
-	// view mode, for example: cropping should only be enabled when the
-	// document view is visible.
-	d->updateActions();
-	updateContextManager();
+	emit viewModeChanged();
 }
 
 
@@ -1168,68 +1105,6 @@ void MainWindow::showDocumentInFullScreen(const KUrl& url) {
 }
 
 
-void MainWindow::rotateCurrentLeft() {
-	TransformImageOperation* op = new TransformImageOperation(ROT_270);
-	d->applyImageOperation(op);
-}
-
-
-void MainWindow::rotateCurrentRight() {
-	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	d->applyImageOperation(op);
-}
-
-
-void MainWindow::mirror() {
-	TransformImageOperation* op = new TransformImageOperation(HFLIP);
-	d->applyImageOperation(op);
-}
-
-
-void MainWindow::flip() {
-	TransformImageOperation* op = new TransformImageOperation(VFLIP);
-	d->applyImageOperation(op);
-}
-
-
-void MainWindow::resizeImage() {
-	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
-	doc->waitUntilLoaded();
-	int size = GwenviewConfig::imageResizeLastSize();
-	if (size == -1) {
-		size = qMax(doc->image().width(), doc->image().height());
-	}
-	bool ok = false;
-	size = KInputDialog::getInteger(
-		i18n("Image Resizing"),
-		i18n("Enter the new size of the image:"),
-		size, 0, 100000, 10 /* step */,
-		&ok,
-		this);
-	if (!ok) {
-		return;
-	}
-	GwenviewConfig::setImageResizeLastSize(size);
-	ResizeImageOperation* op = new ResizeImageOperation(size);
-	d->applyImageOperation(op);
-}
-
-
-void MainWindow::crop() {
-	ImageViewPart* imageViewPart = d->mDocumentView->imageViewPart();
-	if (!imageViewPart) {
-		kError() << "No ImageViewPart available!";
-		return;
-	}
-	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
-	doc->waitUntilLoaded();
-	CropSideBar* cropSideBar = new CropSideBar(this, imageViewPart->imageView(), doc);
-	connect(cropSideBar, SIGNAL(done()), SLOT(hideTemporarySideBar()) );
-
-	d->showTemporarySideBar(cropSideBar);
-}
-
-
 void MainWindow::toggleSlideShow() {
 	if (d->mSlideShow->isRunning()) {
 		d->mSlideShow->stop();
@@ -1383,7 +1258,7 @@ void MainWindow::saveConfig() {
 
 
 void MainWindow::print() {
-	if (!d->currentDocumentIsRasterImage()) {
+	if (!currentDocumentIsRasterImage()) {
 		return;
 	}
 

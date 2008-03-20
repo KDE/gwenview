@@ -35,6 +35,8 @@ namespace KParts { class ReadOnlyPart; }
 
 namespace Gwenview {
 
+class DocumentView;
+
 class MainWindow : public KParts::MainWindow {
 Q_OBJECT
 public:
@@ -45,10 +47,21 @@ public:
 	 */
 	void setInitialUrl(const KUrl&);
 
+	DocumentView* documentView() const;
+
+	bool currentDocumentIsRasterImage() const;
+
+	void showTemporarySideBar(QWidget* sideBar);
+
+Q_SIGNALS:
+	void viewModeChanged();
+
 public Q_SLOTS:
 	virtual void setCaption(const QString&);
 
 	virtual void setCaption(const QString&, bool modified);
+
+	void hideTemporarySideBar();
 
 protected:
 	virtual void slotSetStatusBarText(const QString&);
@@ -104,12 +117,6 @@ private Q_SLOTS:
 	void reload();
 
 	void showDocumentInFullScreen(const KUrl&);
-	void rotateCurrentLeft();
-	void rotateCurrentRight();
-	void mirror();
-	void flip();
-	void resizeImage();
-	void crop();
 
 	void generateThumbnailForUrl(const KUrl&);
 	void showConfigDialog();
@@ -117,8 +124,6 @@ private Q_SLOTS:
 	void print();
 
 	void handleResizeRequest(const QSize&);
-
-	void hideTemporarySideBar();
 
 	void preloadNextUrl();
 
