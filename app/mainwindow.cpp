@@ -574,13 +574,6 @@ struct MainWindow::Private {
 		}
 	}
 
-	void spreadCurrentUrl() {
-		kDebug();
-		KUrl url = currentUrl();
-		mSaveBar->setCurrentUrl(url);
-		mSlideShow->setCurrentUrl(url);
-	}
-
 	void selectUrlToSelect() {
 		if (!mUrlToSelect.isValid()) {
 			return;
@@ -611,6 +604,18 @@ struct MainWindow::Private {
 			width = mWindow->menuBar()->width();
 		}
 		return width;
+	}
+
+
+	KFileItemList selectedItemList() const {
+		QItemSelection selection = mThumbnailView->selectionModel()->selection();
+		QModelIndexList indexList = selection.indexes();
+
+		KFileItemList itemList;
+		Q_FOREACH(const QModelIndex& index, indexList) {
+			itemList << mDirModel->itemForIndex(index);
+		}
+		return itemList;
 	}
 };
 
@@ -883,18 +888,6 @@ void MainWindow::toggleSideBar() {
 }
 
 
-void MainWindow::updateContextManager() {
-	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
-	QModelIndexList indexList = selection.indexes();
-
-	KFileItemList itemList;
-	Q_FOREACH(const QModelIndex& index, indexList) {
-		itemList << d->mDirModel->itemForIndex(index);
-	}
-
-	d->mContextManager->setSelection(itemList);
-}
-
 void MainWindow::slotPartCompleted() {
 	Q_ASSERT(!d->mDocumentView->isEmpty());
 	KUrl url = d->mDocumentView->url();
@@ -918,8 +911,12 @@ void MainWindow::slotPartCompleted() {
 
 void MainWindow::slotSelectionChanged() {
 	if (d->mDocumentView->isVisible()) {
+		// The user selected a new file in the thumbnail view, since the
+		// document view is visible, let's show it
 		openSelectedDocument();
 	} else {
+		// No document view, we need to load the document to set the undo group
+		// of document factory to the correct QUndoStack
 		QModelIndex index = d->mThumbnailView->currentIndex();
 		KFileItem item;
 		if (index.isValid()) {
@@ -935,11 +932,22 @@ void MainWindow::slotSelectionChanged() {
 			undoGroup->setActiveStack(0);
 		}
 	}
+
+	// Update UI
 	hideTemporarySideBar();
 	d->updateActions();
 	updatePreviousNextActions();
-	updateContextManager();
-	d->spreadCurrentUrl();
+
+	// Gather info for other components
+	KUrl url = d->currentUrl();
+	KFileItemList selectedItemList = d->selectedItemList();
+
+	// Update the other components
+	d->mContextManager->setSelection(selectedItemList);
+	d->mSaveBar->setCurrentUrl(url);
+	d->mSlideShow->setCurrentUrl(url);
+
+	// Start preloading
 	QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()) );
 }
 

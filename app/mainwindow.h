@@ -78,7 +78,6 @@ private Q_SLOTS:
 	void goToUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar();
-	void updateContextManager();
 	void updateModifiedFlag();
 
 	/**
