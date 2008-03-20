@@ -589,7 +589,6 @@ struct MainWindow::Private {
 		if (index.isValid()) {
 			mThumbnailView->setCurrentIndex(index);
 			mUrlToSelect = KUrl();
-			spreadCurrentUrl();
 		}
 	}
 
