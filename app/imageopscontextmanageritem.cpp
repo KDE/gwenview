@@ -146,6 +146,8 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 		SLOT(updateActions()) );
 	connect(mainWindow, SIGNAL(viewModeChanged()),
 		SLOT(updateActions()) );
+	connect(mainWindow->documentView(), SIGNAL(completed()),
+		SLOT(updateActions()) );
 }
 
 
