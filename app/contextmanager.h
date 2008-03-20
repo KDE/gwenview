@@ -48,6 +48,10 @@ public:
 
 	void addItem(AbstractContextManagerItem* item);
 
+	void setCurrentUrl(const KUrl&);
+
+	KUrl currentUrl() const;
+
 	void setCurrentDirUrl(const KUrl&);
 
 	KUrl currentDirUrl() const;
@@ -68,6 +72,7 @@ private:
 	KFileItemList mSelection;
 	SideBar* mSideBar;
 	KUrl mCurrentDirUrl;
+	KUrl mCurrentUrl;
 };
 
 } // namespace

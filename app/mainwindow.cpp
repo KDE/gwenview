@@ -944,6 +944,7 @@ void MainWindow::slotSelectionChanged() {
 
 	// Update the other components
 	d->mContextManager->setSelection(selectedItemList);
+	d->mContextManager->setCurrentUrl(url);
 	d->mSaveBar->setCurrentUrl(url);
 	d->mSlideShow->setCurrentUrl(url);
 

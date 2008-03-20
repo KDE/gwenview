@@ -76,4 +76,14 @@ KUrl ContextManager::currentDirUrl() const {
 }
 
 
+void ContextManager::setCurrentUrl(const KUrl& url) {
+	mCurrentUrl = url;
+}
+
+
+KUrl ContextManager::currentUrl() const {
+	return mCurrentUrl;
+}
+
+
 } // namespace

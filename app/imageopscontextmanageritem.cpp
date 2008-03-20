@@ -113,19 +113,9 @@ struct ImageOpsContextManagerItem::Private {
 	}
 
 
-	KUrl currentUrl() const {
-		KFileItemList list = that->contextManager()->selection();
-		if (list.count() > 0) {
-			return list[0].url();
-		} else {
-			return KUrl();
-		}
-	}
-
-
 	void applyImageOperation(AbstractImageOperation* op) {
 		// For now, we only support operations on one image
-		KUrl url = currentUrl();
+		KUrl url = that->contextManager()->currentUrl();
 
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		doc->waitUntilLoaded();
@@ -237,7 +227,7 @@ void ImageOpsContextManagerItem::flip() {
 
 
 void ImageOpsContextManagerItem::resizeImage() {
-	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
 	doc->waitUntilLoaded();
 	int size = GwenviewConfig::imageResizeLastSize();
 	if (size == -1) {
@@ -265,7 +255,7 @@ void ImageOpsContextManagerItem::crop() {
 		kError() << "No ImageViewPart available!";
 		return;
 	}
-	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
+	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
 	doc->waitUntilLoaded();
 	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageViewPart->imageView(), doc);
 	connect(cropSideBar, SIGNAL(done()),
