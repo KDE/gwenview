@@ -127,7 +127,9 @@ private Q_SLOTS:
 	void preloadNextUrl();
 
 	void configureToolbars();
-	void slotNewToolbarConfig();
+
+	void saveMainWindowConfig();
+	void loadMainWindowConfig();
 
 	void toggleMenuBar();
 

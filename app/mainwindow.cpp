@@ -708,17 +708,6 @@ struct MainWindow::Private {
 	}
 
 
-	void loadMainWindowConfig() {
-		KConfigGroup cg(KGlobal::config(), MAINWINDOW_SETTINGS);
-		mWindow->applyMainWindowSettings(cg);
-	}
-
-
-	void saveMainWindowConfig() {
-		KConfigGroup cg(KGlobal::config(), MAINWINDOW_SETTINGS);
-		mWindow->saveMainWindowSettings(cg);
-		KGlobal::config()->sync();
-	}
 };
 
 
@@ -739,7 +728,7 @@ d(new MainWindow::Private)
 
 	createShellGUI();
 	loadConfig();
-	d->loadMainWindowConfig();
+	loadMainWindowConfig();
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
@@ -1093,7 +1082,7 @@ void MainWindow::toggleFullScreen() {
 	if (d->mFullScreenAction->isChecked()) {
 		// Save MainWindow config now, this way if we quit while in
 		// fullscreen, we are sure latest MainWindow changes are remembered.
-		d->saveMainWindowConfig();
+		saveMainWindowConfig();
 
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
@@ -1373,7 +1362,7 @@ bool MainWindow::queryClose() {
 	if (!d->mFullScreenAction->isChecked()) {
 		// Do not save config in fullscreen, we don't want to restart without
 		// menu bar or toolbars...
-		d->saveMainWindowConfig();
+		saveMainWindowConfig();
 	}
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
@@ -1419,17 +1408,23 @@ void MainWindow::showConfigDialog() {
 
 
 void MainWindow::configureToolbars() {
-	KConfigGroup cg = KGlobal::config()->group("MainWindow");
-	saveMainWindowSettings(cg);
+	saveMainWindowConfig();
 	KEditToolBar dlg(factory(), this);
-	connect(&dlg,SIGNAL(newToolBarConfig()),this,SLOT(slotNewToolbarConfig()));
+	connect(&dlg, SIGNAL(newToolBarConfig()), SLOT(loadMainWindowConfig()));
 	dlg.exec();
 }
 
 
-void MainWindow::slotNewToolbarConfig() {
-	KConfigGroup cg = KGlobal::config()->group("MainWindow");
+void MainWindow::loadMainWindowConfig() {
+	KConfigGroup cg = KGlobal::config()->group(MAINWINDOW_SETTINGS);
 	applyMainWindowSettings(cg);
+}
+
+
+void MainWindow::saveMainWindowConfig() {
+	KConfigGroup cg = KGlobal::config()->group(MAINWINDOW_SETTINGS);
+	saveMainWindowSettings(cg);
+	KGlobal::config()->sync();
 }
 
 
