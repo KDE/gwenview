@@ -102,8 +102,6 @@ private Q_SLOTS:
 	void saveCurrentAs();
 	void openFile();
 	void reload();
-	void save(const KUrl&);
-	void saveAs(const KUrl&);
 
 	void showDocumentInFullScreen(const KUrl&);
 	void rotateCurrentLeft();

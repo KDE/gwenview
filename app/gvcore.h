@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class KUrl;
+
 namespace Gwenview {
 
 
@@ -40,6 +42,8 @@ public:
 
 public Q_SLOTS:
 	void saveAll();
+	void save(const KUrl&);
+	void saveAs(const KUrl&);
 
 private:
 	GvCorePrivate* const d;

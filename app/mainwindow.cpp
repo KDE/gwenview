@@ -43,7 +43,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
-#include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmenubar.h>
@@ -213,7 +212,7 @@ struct MainWindow::Private {
 		mInformationLabel = new QLabel();
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
-			mWindow, SLOT(save(const KUrl&)) );
+			mGvCore, SLOT(save(const KUrl&)) );
 		connect(mSaveBar, SIGNAL(requestSaveAll()),
 			mGvCore, SLOT(saveAll()) );
 		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
@@ -235,7 +234,7 @@ struct MainWindow::Private {
 
 		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
 		connect(delegate, SIGNAL(saveDocumentRequested(const KUrl&)),
-			mWindow, SLOT(save(const KUrl&)) );
+			mGvCore, SLOT(save(const KUrl&)) );
 		connect(delegate, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
 			mWindow, SLOT(rotateLeft(const KUrl&)) );
 		connect(delegate, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
@@ -1128,12 +1127,12 @@ void MainWindow::toggleFullScreen() {
 
 
 void MainWindow::saveCurrent() {
-	save(d->currentUrl());
+	d->mGvCore->save(d->currentUrl());
 }
 
 
 void MainWindow::saveCurrentAs() {
-	saveAs(d->currentUrl());
+	d->mGvCore->saveAs(d->currentUrl());
 }
 
 
@@ -1144,69 +1143,6 @@ void MainWindow::reload() {
 }
 
 
-void MainWindow::save(const KUrl& url) {
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->waitUntilLoaded();
-	QByteArray format = doc->format();
-	QStringList availableTypes = KImageIO::types(KImageIO::Writing);
-	if (availableTypes.contains(QString(format))) {
-		doc->save(url, format);
-		// FIXME: check return code of Document::save()
-		return;
-	}
-
-	// We don't know how to save in 'format', ask the user for a format we can
-	// write to.
-	KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
-	saveUsingAnotherFormat.setText(i18n("Save using another format"));
-	int result = KMessageBox::warningContinueCancel(
-		this,
-		i18n("Gwenview cannot save images in '%1' format.", QString(format)),
-		QString() /* caption */,
-		saveUsingAnotherFormat
-		);
-	if (result == KMessageBox::Continue) {
-		saveAs(url);
-	}
-}
-
-
-void MainWindow::saveAs(const KUrl& url) {
-	KFileDialog dialog(url, QString(), this);
-	dialog.setOperationMode(KFileDialog::Saving);
-
-	// Init mime filter
-	QString mimeType = MimeTypeUtils::urlMimeType(url);
-	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
-	dialog.setMimeFilter(availableMimeTypes, mimeType);
-
-	// Show dialog
-	if (!dialog.exec()) {
-		return;
-	}
-
-	// Check for overwrite
-	if (KIO::NetAccess::exists(dialog.selectedUrl(), KIO::NetAccess::DestinationSide, this)) {
-		int answer = KMessageBox::warningContinueCancel(
-			this,
-			i18nc("@info",
-				"A file named <filename>%1</filename> already exists.\n"
-				"Are you sure you want to overwrite it?",
-				url.fileName()),
-			QString(),
-			KStandardGuiItem::overwrite());
-		if (answer == KMessageBox::Cancel) {
-			return;
-		}
-	}
-
-	// Start save
-	mimeType = dialog.currentMimeFilter();
-	QStringList typeList = KImageIO::typeForMime(mimeType);
-	Q_ASSERT(typeList.count() > 0);
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(dialog.selectedUrl(), typeList[0].toAscii());
-}
 
 
 void MainWindow::openFile() {
