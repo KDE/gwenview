@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QStackedWidget>
 
+class QPalette;
+
 class KStatusBar;
 class KUrl;
 
@@ -52,6 +54,8 @@ public:
 	void reset();
 
 	void setFullScreenMode(bool fullScreen);
+
+	void setNormalPalette(const QPalette&);
 
 	KStatusBar* statusBar() const;
 

@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "thumbnailbarview.h"
-#include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
@@ -58,6 +57,8 @@ struct DocumentViewPrivate {
 	KStatusBar* mStatusBar;
 	ThumbnailBarView* mThumbnailBar;
 	bool mFullScreenMode;
+	QPalette mNormalPalette;
+	QPalette mFullScreenPalette;
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
@@ -72,21 +73,18 @@ struct DocumentViewPrivate {
 		}
 	}
 
-	void updatePartBackgroundColor() {
+	void applyPalette() {
+		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
+		mView->setPalette(palette);
+
 		if (!mPart) {
 			return;
 		}
 
-		QColor color;
-		if (mFullScreenMode) {
-			color = Qt::black;
-		} else {
-			color = GwenviewConfig::viewBackgroundColor();
-		}
-
-		QPalette palette = mPart->widget()->palette();
-		palette.setColor(mPart->widget()->backgroundRole(), color);
-		mPart->widget()->setPalette(palette);
+		QPalette partPalette = mPart->widget()->palette();
+		partPalette.setBrush(mPart->widget()->backgroundRole(), palette.base());
+		partPalette.setBrush(mPart->widget()->foregroundRole(), palette.text());
+		mPart->widget()->setPalette(partPalette);
 	}
 };
 
@@ -97,6 +95,10 @@ DocumentView::DocumentView(QWidget* parent)
 {
 	d->mView = this;
 	d->mPart = 0;
+	d->mFullScreenMode = false;
+	d->mFullScreenPalette = QPalette(palette());
+	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
+	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
 	d->mNoDocumentLabel = new QLabel(this);
 	addWidget(d->mNoDocumentLabel);
@@ -137,7 +139,7 @@ KStatusBar* DocumentView::statusBar() const {
 void DocumentView::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBar->setVisible(!fullScreenMode);
-	d->updatePartBackgroundColor();
+	d->applyPalette();
 }
 
 
@@ -246,7 +248,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	delete d->mPart;
 	d->mPart = part;
 
-	d->updatePartBackgroundColor();
+	d->applyPalette();
 
 	d->mPartLibrary = library;
 }
@@ -277,6 +279,12 @@ bool DocumentView::isEmpty() const {
 
 ImageViewPart* DocumentView::imageViewPart() const {
 	return dynamic_cast<ImageViewPart*>(d->mPart);
+}
+
+
+void DocumentView::setNormalPalette(const QPalette& palette) {
+	d->mNormalPalette = palette;
+	d->applyPalette();
 }
 
 

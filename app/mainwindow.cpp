@@ -1298,7 +1298,7 @@ void MainWindow::loadConfig() {
 	palette.setColor(QPalette::Text, fgColor);
 	widget->setPalette(palette);
 
-	d->mDocumentView->setPalette(palette);
+	d->mDocumentView->setNormalPalette(palette);
 
 	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
 	// If GwenviewConfig::thumbnailSize() returns the current value of
