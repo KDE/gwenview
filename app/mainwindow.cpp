@@ -183,15 +183,7 @@ struct MainWindow::Private {
 		layout->setSpacing(0);
 
 		setupThumbnailView(mCentralSplitter);
-		mDocumentView = new DocumentView(mCentralSplitter);
-		connect(mDocumentView, SIGNAL(completed()),
-			mWindow, SLOT(slotPartCompleted()) );
-		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
-			mWindow, SLOT(createGUI(KParts::Part*)) );
-		connect(mDocumentView, SIGNAL(previousImageRequested()),
-			mWindow, SLOT(goToPrevious()) );
-		connect(mDocumentView, SIGNAL(nextImageRequested()),
-			mWindow, SLOT(goToNext()) );
+		setupDocumentView(mCentralSplitter);
 
 		mSideBarContainer = new QStackedWidget(mCentralSplitter);
 		mSideBar = new SideBar(mSideBarContainer);
@@ -266,6 +258,18 @@ struct MainWindow::Private {
 		layout->addWidget(mThumbnailView);
 		layout->addWidget(mFilterBar);
 		layout->addWidget(statusBar);
+	}
+
+	void setupDocumentView(QWidget* parent) {
+		mDocumentView = new DocumentView(parent);
+		connect(mDocumentView, SIGNAL(completed()),
+			mWindow, SLOT(slotPartCompleted()) );
+		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
+			mWindow, SLOT(createGUI(KParts::Part*)) );
+		connect(mDocumentView, SIGNAL(previousImageRequested()),
+			mWindow, SLOT(goToPrevious()) );
+		connect(mDocumentView, SIGNAL(nextImageRequested()),
+			mWindow, SLOT(goToNext()) );
 	}
 
 	void setupFilterBar() {
