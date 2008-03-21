@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstatusbar.h>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
@@ -54,7 +55,7 @@ struct DocumentViewPrivate {
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
 	KStatusBar* mStatusBar;
-	bool mStatusBarVisible;
+	bool mFullScreenMode;
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
@@ -67,6 +68,23 @@ struct DocumentViewPrivate {
 		} else {
 			mView->setCurrentWidget(mNoDocumentLabel);
 		}
+	}
+
+	void updatePartBackgroundColor() {
+		if (!mPart) {
+			return;
+		}
+
+		QColor color;
+		if (mFullScreenMode) {
+			color = Qt::black;
+		} else {
+			color = GwenviewConfig::viewBackgroundColor();
+		}
+
+		QPalette palette = mPart->widget()->palette();
+		palette.setColor(mPart->widget()->backgroundRole(), color);
+		mPart->widget()->setPalette(palette);
 	}
 };
 
@@ -108,9 +126,10 @@ KStatusBar* DocumentView::statusBar() const {
 }
 
 
-void DocumentView::setStatusBarVisible(bool visible) {
-	d->mStatusBarVisible = visible;
-	d->mStatusBar->setVisible(visible);
+void DocumentView::setFullScreenMode(bool fullScreenMode) {
+	d->mFullScreenMode = fullScreenMode;
+	d->mStatusBar->setVisible(!fullScreenMode);
+	d->updatePartBackgroundColor();
 }
 
 
@@ -198,8 +217,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
 	if (extension) {
 		extension->setStatusBar(statusBar());
-		// Only show the status bar if asked (ie, not in fullscreen)
-		statusBar()->setVisible(d->mStatusBarVisible);
+		statusBar()->setVisible(!d->mFullScreenMode);
 	} else {
 		statusBar()->hide();
 	}
@@ -214,6 +232,8 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	// removed. 
 	delete d->mPart;
 	d->mPart = part;
+
+	d->updatePartBackgroundColor();
 
 	d->mPartLibrary = library;
 }
@@ -244,16 +264,6 @@ bool DocumentView::isEmpty() const {
 
 ImageViewPart* DocumentView::imageViewPart() const {
 	return dynamic_cast<ImageViewPart*>(d->mPart);
-}
-
-
-void DocumentView::setViewBackgroundColor(const QColor& color) {
-	if (!d->mPart) {
-		return;
-	}
-	QPalette palette = d->mPart->widget()->palette();
-	palette.setColor(d->mPart->widget()->backgroundRole(), color);
-	d->mPart->widget()->setPalette(palette);
 }
 
 

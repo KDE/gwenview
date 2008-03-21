@@ -48,7 +48,7 @@ public:
 	 */
 	void reset();
 
-	void setStatusBarVisible(bool visible);
+	void setFullScreenMode(bool fullScreen);
 
 	KStatusBar* statusBar() const;
 
@@ -67,8 +67,6 @@ public:
 	bool currentDocumentIsRasterImage() const;
 
 	bool isEmpty() const;
-
-	void setViewBackgroundColor(const QColor&);
 
 	/**
 	 * Returns the image view part, if the current part really is an

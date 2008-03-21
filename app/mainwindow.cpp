@@ -1042,15 +1042,13 @@ void MainWindow::toggleFullScreen() {
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
 
-		d->mDocumentView->setViewBackgroundColor(Qt::black);
-
 		d->mViewAction->trigger();
 		d->mSideBarContainer->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
-		d->mDocumentView->setStatusBarVisible(false);
+		d->mDocumentView->setFullScreenMode(true);
 		d->mSaveBar->setForceHide(true);
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
@@ -1062,12 +1060,11 @@ void MainWindow::toggleFullScreen() {
 		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
-		d->mDocumentView->setViewBackgroundColor(GwenviewConfig::viewBackgroundColor());
+		d->mDocumentView->setFullScreenMode(false);
 		d->mSlideShow->stop();
 		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
-		d->mDocumentView->setStatusBarVisible(true);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->show();
 	}
