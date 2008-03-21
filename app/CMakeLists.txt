@@ -24,6 +24,7 @@ set(gwenview_SRCS
 	savebar.cpp
 	sidebar.cpp
 	thumbnailviewhelper.cpp
+	thumbnailbarview.cpp
 	)
 
 if (Nepomuk_FOUND)

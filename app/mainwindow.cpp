@@ -71,6 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #include "savebar.h"
 #include "sidebar.h"
+#include "thumbnailbarview.h"
 #include "thumbnailviewhelper.h"
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
@@ -125,6 +126,7 @@ struct MainWindowState {
 	QAction* mActiveViewModeAction;
 	bool mSideBarVisible;
 	Qt::WindowStates mWindowState;
+	bool mThumbnailBarVisible;
 };
 
 struct MainWindow::Private {
@@ -158,6 +160,7 @@ struct MainWindow::Private {
 	QAction* mToggleSlideShowAction;
 	KToggleAction* mShowMenuBarAction;
 	KToggleAction* mShowFilterBar;
+	KToggleAction* mToggleThumbnailBarAction;
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -270,6 +273,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(goToPrevious()) );
 		connect(mDocumentView, SIGNAL(nextImageRequested()),
 			mWindow, SLOT(goToNext()) );
+
+		ThumbnailBarView* bar = mDocumentView->thumbnailBar();
+		bar->setModel(mDirModel);
+		bar->setThumbnailViewHelper(mThumbnailViewHelper);
+		bar->setSelectionModel(mThumbnailView->selectionModel());
 	}
 
 	void setupFilterBar() {
@@ -382,6 +390,12 @@ struct MainWindow::Private {
 		mShowFilterBar->setText(i18nc("@action:inmenu Tools", "Show Filter Bar"));
 		mShowFilterBar->setShortcut(Qt::CTRL | Qt::Key_I);
 		connect(mShowFilterBar, SIGNAL(triggered(bool)), mWindow, SLOT(toggleFilterBarVisibility(bool)));
+
+		mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
+		mToggleThumbnailBarAction->setText(i18n("Show Thumbnail Bar"));
+		mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_T);
+		connect(mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
+			mDocumentView->thumbnailBar(), SLOT(setVisible(bool)));
 
 		KStandardAction::keyBindings(mWindow->guiFactory(),
 			SLOT(configureShortcuts()), actionCollection);
@@ -519,16 +533,35 @@ struct MainWindow::Private {
 
 	void createFullScreenBar() {
 		mFullScreenBar = new FullScreenBar(mDocumentView);
-		mFullScreenBar->addAction(mFullScreenAction);
-		mFullScreenBar->addAction(mGoToPreviousAction);
-		mFullScreenBar->addAction(mGoToNextAction);
+		QWidget* container = new QWidget;
+		QToolBar* bar = new QToolBar;
+		bar->setFloatable(false);
+		bar->setIconSize(QSize(32, 32));
+		bar->addAction(mFullScreenAction);
+		bar->addAction(mGoToPreviousAction);
+		bar->addAction(mGoToNextAction);
 
-		mFullScreenBar->addSeparator();
-		mFullScreenBar->addAction(mToggleSlideShowAction);
-		mFullScreenBar->addWidget(mSlideShow->intervalWidget());
-		mFullScreenBar->addWidget(mSlideShow->optionsWidget());
+		bar->addSeparator();
+		bar->addAction(mToggleSlideShowAction);
+		bar->addWidget(mSlideShow->intervalWidget());
+		bar->addWidget(mSlideShow->optionsWidget());
 
-		mFullScreenBar->addWidget(mInformationLabel);
+		ThumbnailBarView* view = new ThumbnailBarView(container);
+		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(view);
+		view->setModel(mDirModel);
+		view->setThumbnailViewHelper(mThumbnailViewHelper);
+		view->setItemDelegate(delegate);
+		view->setSelectionModel(mThumbnailView->selectionModel());
+		view->setThumbnailSize(64);
+
+		QGridLayout* layout = new QGridLayout(container);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(bar, 0, 0);
+		layout->addWidget(mInformationLabel, 1, 0);
+		layout->addWidget(view, 0, 1, 2, 1);
+
+		mFullScreenBar->addWidget(container);
 
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
@@ -1045,6 +1078,7 @@ void MainWindow::toggleFullScreen() {
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
+		d->mStateBeforeFullScreen.mThumbnailBarVisible = d->mToggleThumbnailBarAction->isChecked();
 
 		d->mViewAction->trigger();
 		d->mSideBarContainer->hide();
@@ -1054,9 +1088,13 @@ void MainWindow::toggleFullScreen() {
 		toolBar()->hide();
 		d->mDocumentView->setFullScreenMode(true);
 		d->mSaveBar->setForceHide(true);
+		if (d->mToggleThumbnailBarAction->isChecked()) {
+			d->mToggleThumbnailBarAction->trigger();
+		}
 		if (!d->mFullScreenBar) {
 			d->createFullScreenBar();
 		}
+		d->mToggleThumbnailBarAction->setEnabled(false);
 		d->mFullScreenBar->setActivated(true);
 		updateFullScreenInformation();
 	} else {
@@ -1066,11 +1104,16 @@ void MainWindow::toggleFullScreen() {
 		// Back to normal
 		d->mDocumentView->setFullScreenMode(false);
 		d->mSlideShow->stop();
+		if (d->mStateBeforeFullScreen.mThumbnailBarVisible) {
+			d->mToggleThumbnailBarAction->trigger();
+		}
 		d->mSaveBar->setForceHide(false);
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->show();
+
+		d->mToggleThumbnailBarAction->setEnabled(true);
 	}
 	setUpdatesEnabled(true);
 }

@@ -32,6 +32,7 @@ namespace Gwenview {
 
 class DocumentViewPrivate;
 class ImageViewPart;
+class ThumbnailBarView;
 
 /**
  * Holds the active document view, or show a message if there is no active
@@ -42,6 +43,8 @@ class DocumentView : public QStackedWidget {
 public:
 	DocumentView(QWidget* parent);
 	~DocumentView();
+
+	ThumbnailBarView* thumbnailBar() const;
 
 	/**
 	 * Reset the view

@@ -48,6 +48,7 @@ public:
 	void addSeparator();
 	void addWidget(QWidget*);
 
+	QSize sizeHint() const;
 public Q_SLOTS:
 	void slideIn();
 	void slideOut();

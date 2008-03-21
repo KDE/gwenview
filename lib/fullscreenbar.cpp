@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QBitmap>
 #include <QEvent>
 #include <QHBoxLayout>
@@ -74,11 +75,14 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 		"	background-color:"
 		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
 		"		stop:0 #444, stop: 0.6 black, stop:1 black);"
-		"	border-right: 1px solid #ccc;"
-		"	border-bottom: 1px solid #ccc;"
-		"	padding-right: 2px;"
-		"	padding-bottom: 2px;"
-		"	border-bottom-right-radius: 4px;"
+		"	border: 0px;"
+		"	border-bottom: 1px solid gray;"
+		"	padding: 0px;"
+		"}"
+
+		"QToolBar {"
+		"	margin: 0px;"
+		"	padding: 0px;"
 		"}"
 
 		"QToolButton {"
@@ -117,6 +121,10 @@ FullScreenBar::~FullScreenBar() {
 	delete d;
 }
 
+QSize FullScreenBar::sizeHint() const {
+	int width = QApplication::desktop()->screenGeometry(this).width();
+	return QSize(width, QFrame::sizeHint().height());
+}
 
 void FullScreenBar::moveBar(qreal value) {
 	move(0, -height() + int(value * height()) );

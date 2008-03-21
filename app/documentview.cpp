@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstatusbar.h>
 
 // Local
+#include "thumbnailbarview.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
 #include <lib/imageviewpart.h>
@@ -55,6 +56,7 @@ struct DocumentViewPrivate {
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
 	KStatusBar* mStatusBar;
+	ThumbnailBarView* mThumbnailBar;
 	bool mFullScreenMode;
 
 	KParts::ReadOnlyPart* mPart;
@@ -109,8 +111,14 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mStatusBar = new KStatusBar(d->mPartContainer);
 	d->mStatusBar->hide();
 
+	d->mThumbnailBar = new ThumbnailBarView(d->mPartContainer);
+	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
+	d->mThumbnailBar->setItemDelegate(delegate);
+	d->mThumbnailBar->hide();
+
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
 	d->mPartContainerLayout->addWidget(d->mStatusBar);
+	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
 	d->mPartContainerLayout->setMargin(0);
 	d->mPartContainerLayout->setSpacing(0);
 }
@@ -130,6 +138,11 @@ void DocumentView::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBar->setVisible(!fullScreenMode);
 	d->updatePartBackgroundColor();
+}
+
+
+ThumbnailBarView* DocumentView::thumbnailBar() const {
+	return d->mThumbnailBar;
 }
 
 
