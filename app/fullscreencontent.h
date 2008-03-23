@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 class QLabel;
 
 class KActionCollection;
+class KUrl;
 
 namespace Gwenview {
 
@@ -51,7 +52,7 @@ public:
 
 	ThumbnailBarView* thumbnailBar() const;
 
-	QLabel* informationLabel() const;
+	void updateInformationLabel(const KUrl& url);
 
 private:
 	FullScreenContentPrivate* const d;

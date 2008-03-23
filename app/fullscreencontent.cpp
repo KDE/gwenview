@@ -32,6 +32,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "thumbnailbarview.h"
+#include <lib/document/document.h>
+#include <lib/document/documentfactory.h>
+#include <lib/gwenviewconfig.h>
+#include <lib/imagemetainfomodel.h>
 #include <lib/slideshow.h>
 
 namespace Gwenview {
@@ -84,8 +88,29 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const {
 }
 
 
-QLabel* FullScreenContent::informationLabel() const {
-	return d->mInformationLabel;
+void FullScreenContent::updateInformationLabel(const KUrl& url) {
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+	ImageMetaInfoModel* imageMetaInfo = doc->metaInfo();
+
+	QString aperture, exposureTime, iso, focalLength;
+	QString filename;
+
+	aperture = imageMetaInfo->getValueForKey("Exif.Photo.FNumber");
+	exposureTime = imageMetaInfo->getValueForKey("Exif.Photo.ExposureTime");
+	iso = imageMetaInfo->getValueForKey("Exif.Photo.ISOSpeedRatings");
+	focalLength = imageMetaInfo->getValueForKey("Exif.Photo.FocalLength");
+
+	filename = imageMetaInfo->getValueForKey("General.Name");
+
+	QString info = GwenviewConfig::fullScreenInfo();
+	info.replace("%a", aperture);
+	info.replace("%t", exposureTime);
+	info.replace("%i", iso);
+	info.replace("%l", focalLength);
+	info.replace("%f", filename);
+
+	d->mInformationLabel->setText(info);
 }
 
 

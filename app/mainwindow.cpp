@@ -77,7 +77,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
-#include <lib/imagemetainfomodel.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
@@ -145,6 +144,7 @@ struct MainWindow::Private {
 	QStackedWidget* mSideBarContainer;
 	bool mSideBarWasVisibleBeforeTemporarySideBar;
 	FullScreenBar* mFullScreenBar;
+	FullScreenContent* mFullScreenContent;
 	SaveBar* mSaveBar;
 	SlideShow* mSlideShow;
 
@@ -169,8 +169,6 @@ struct MainWindow::Private {
 	KUrl mUrlToSelect;
 
 	QString mCaption;
-
-	QLabel *mInformationLabel;
 
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
@@ -533,12 +531,10 @@ struct MainWindow::Private {
 		// Note: if you define the widget parent now, the code will segfault
 		// too!
 		QWidget* widget = new QWidget;
-		FullScreenContent* content = new FullScreenContent(
+		mFullScreenContent = new FullScreenContent(
 			widget, mWindow->actionCollection(), mSlideShow);
 
-		mInformationLabel = content->informationLabel();
-
-		ThumbnailBarView* view = content->thumbnailBar();
+		ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
 		view->setModel(mDirModel);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
 		view->setSelectionModel(mThumbnailView->selectionModel());
@@ -886,31 +882,7 @@ void MainWindow::updateFullScreenInformation() {
 	}
 
 	KUrl url = d->currentUrl();
-
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-
-	ImageMetaInfoModel *imageMetaInfo;
-	imageMetaInfo = doc->metaInfo();
-
-	QString aperture, exposureTime, iso, focalLength;
-	QString filename;
-
-	aperture = imageMetaInfo->getValueForKey("Exif.Photo.FNumber");
-	exposureTime = imageMetaInfo->getValueForKey("Exif.Photo.ExposureTime");
-	iso = imageMetaInfo->getValueForKey("Exif.Photo.ISOSpeedRatings");
-	focalLength = imageMetaInfo->getValueForKey("Exif.Photo.FocalLength");
-
-	filename = imageMetaInfo->getValueForKey("General.Name");
-
-	QString info = GwenviewConfig::fullScreenInfo();
-	info.replace("%a", aperture);
-	info.replace("%t", exposureTime);
-	info.replace("%i", iso);
-	info.replace("%l", focalLength);
-	info.replace("%f", filename);
-
-	d->mInformationLabel->setText(info);
-	d->mFullScreenBar->resize(d->mFullScreenBar->sizeHint());
+	d->mFullScreenContent->updateInformationLabel(url);
 }
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
