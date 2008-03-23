@@ -75,6 +75,26 @@ struct DocumentViewPrivate {
 		mToggleThumbnailBarButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 		mToggleThumbnailBarButton->setAutoRaise(true);
 		mToggleThumbnailBarButton->setFocusPolicy(Qt::NoFocus);
+		mToggleThumbnailBarButton->setStyleSheet(
+			"QToolButton {"
+			"	margin-left: 2px;"
+			"	border-top-left-radius: 6px;"
+			"	border-top-right-radius: 6px;"
+			"	border: 1px solid rgba(0, 0, 0, 20%);"
+			"	border-bottom: 0;"
+			"}"
+
+			"QToolButton::hover {"
+			"	background-color: rgba(255, 255, 255, 20%);"
+			"}"
+
+			"QToolButton::on {"
+			"	background-color: rgba(0, 0, 0, 10%);"
+			"	border: 1px solid rgba(0, 0, 0, 20%);"
+			"	border-bottom: 0;"
+			"}"
+			);
+		mToggleThumbnailBarButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 		QHBoxLayout* layout = new QHBoxLayout(container);
 		layout->setMargin(0);
 		layout->setSpacing(0);
@@ -146,7 +166,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mPartContainerLayout->setSpacing(0);
 
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
-	d->mToggleThumbnailBarAction->setText(i18n("Show Thumbnail Bar"));
+	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
 	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
 	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_T);
 	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
