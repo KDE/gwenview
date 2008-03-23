@@ -58,6 +58,7 @@ struct DocumentViewPrivate {
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
 	QToolButton* mToggleThumbnailBarButton;
+	QWidget* mStatusBarContainer;
 	KStatusBar* mStatusBar;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
@@ -69,7 +70,7 @@ struct DocumentViewPrivate {
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
 
-	void setupStatusBar(QWidget* container) {
+	void setupStatusBar() {
 		mStatusBar = new KStatusBar;
 		mToggleThumbnailBarButton = new QToolButton;
 		mToggleThumbnailBarButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -95,7 +96,7 @@ struct DocumentViewPrivate {
 			"}"
 			);
 		mToggleThumbnailBarButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-		QHBoxLayout* layout = new QHBoxLayout(container);
+		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
 		layout->addWidget(mToggleThumbnailBarButton, 0, Qt::AlignLeft);
@@ -151,8 +152,8 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mPartContainer = new QWidget(this);
 	addWidget(d->mPartContainer);
 
-	QWidget* statusBarContainer = new QWidget;
-	d->setupStatusBar(statusBarContainer);
+	d->mStatusBarContainer = new QWidget;
+	d->setupStatusBar();
 
 	d->mThumbnailBar = new ThumbnailBarView(d->mPartContainer);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
@@ -160,7 +161,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mThumbnailBar->hide();
 
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
-	d->mPartContainerLayout->addWidget(statusBarContainer);
+	d->mPartContainerLayout->addWidget(d->mStatusBarContainer);
 	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
 	d->mPartContainerLayout->setMargin(0);
 	d->mPartContainerLayout->setSpacing(0);
@@ -187,7 +188,7 @@ KStatusBar* DocumentView::statusBar() const {
 
 void DocumentView::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
-	d->mStatusBar->setVisible(!fullScreenMode);
+	d->mStatusBarContainer->setVisible(!fullScreenMode);
 	d->applyPalette();
 	if (fullScreenMode) {
 		d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
@@ -290,9 +291,6 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 	KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
 	if (extension) {
 		extension->setStatusBar(statusBar());
-		statusBar()->setVisible(!d->mFullScreenMode);
-	} else {
-		statusBar()->hide();
 	}
 
 	d->setPartWidget(part->widget());
