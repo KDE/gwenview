@@ -15,6 +15,7 @@ set(gwenview_SRCS
 	gvcore.cpp
 	documentview.cpp
 	fileoperations.cpp
+	fullscreencontent.cpp
 	infocontextmanageritem.cpp
 	imagemetainfodialog.cpp
 	imageopscontextmanageritem.cpp

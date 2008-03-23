@@ -63,6 +63,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentview.h"
 #include "fileopscontextmanageritem.h"
+#include "fullscreencontent.h"
 #include "gvcore.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
@@ -191,8 +192,6 @@ struct MainWindow::Private {
 		mSideBarContainer->addWidget(mSideBar);
 
 		mSlideShow = new SlideShow(mWindow);
-
-		mInformationLabel = new QLabel();
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
 			mGvCore, SLOT(save(const KUrl&)) );
@@ -525,20 +524,12 @@ struct MainWindow::Private {
 
 	void createFullScreenBar() {
 		mFullScreenBar = new FullScreenBar(mDocumentView);
-		QWidget* container = new QWidget;
-		QToolBar* bar = new QToolBar;
-		bar->setFloatable(false);
-		bar->setIconSize(QSize(32, 32));
-		bar->addAction(mFullScreenAction);
-		bar->addAction(mGoToPreviousAction);
-		bar->addAction(mGoToNextAction);
+		QWidget* widget = new QWidget;
+		FullScreenContent* content = new FullScreenContent(
+			widget, mWindow->actionCollection(), mSlideShow);
+		ThumbnailBarView* view = content->thumbnailBar();
+		mInformationLabel = content->informationLabel();
 
-		bar->addSeparator();
-		bar->addAction(mToggleSlideShowAction);
-		bar->addWidget(mSlideShow->intervalWidget());
-		bar->addWidget(mSlideShow->optionsWidget());
-
-		ThumbnailBarView* view = new ThumbnailBarView(container);
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(view);
 		view->setModel(mDirModel);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
@@ -546,14 +537,7 @@ struct MainWindow::Private {
 		view->setSelectionModel(mThumbnailView->selectionModel());
 		view->setThumbnailSize(64);
 
-		QGridLayout* layout = new QGridLayout(container);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		layout->addWidget(bar, 0, 0);
-		layout->addWidget(mInformationLabel, 1, 0);
-		layout->addWidget(view, 0, 1, 2, 1);
-
-		mFullScreenBar->addWidget(container);
+		mFullScreenBar->addWidget(widget);
 
 		mFullScreenBar->resize(mFullScreenBar->sizeHint());
 	}
@@ -889,6 +873,10 @@ void MainWindow::updateFullScreenInformation() {
 		return;
 	}
 
+	if (!d->mFullScreenBar) {
+		return;
+	}
+
 	KUrl url = d->currentUrl();
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
@@ -914,10 +902,7 @@ void MainWindow::updateFullScreenInformation() {
 	info.replace("%f", filename);
 
 	d->mInformationLabel->setText(info);
-
-	if (d->mFullScreenBar) {
-		d->mFullScreenBar->resize(d->mFullScreenBar->sizeHint());
-	}
+	d->mFullScreenBar->resize(d->mFullScreenBar->sizeHint());
 }
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
