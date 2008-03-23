@@ -44,11 +44,8 @@ public:
 
 	void setActivated(bool);
 
-	void addAction(QAction*);
-	void addSeparator();
-	void addWidget(QWidget*);
+	virtual QSize sizeHint() const;
 
-	QSize sizeHint() const;
 public Q_SLOTS:
 	void slideIn();
 	void slideOut();

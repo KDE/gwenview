@@ -524,19 +524,30 @@ struct MainWindow::Private {
 
 	void createFullScreenBar() {
 		mFullScreenBar = new FullScreenBar(mDocumentView);
+
+		// This widget should not be necessary. We should be able to use
+		// mFullScreenBar as a parent for widgets created by FullScreenContent,
+		// but this triggers a stack overflow in the CSS code, probably caused
+		// by the slideshow combobox.
+		// Adding an intermediary widget works around that bug.
+		// Note: if you define the widget parent now, the code will segfault
+		// too!
 		QWidget* widget = new QWidget;
 		FullScreenContent* content = new FullScreenContent(
 			widget, mWindow->actionCollection(), mSlideShow);
-		ThumbnailBarView* view = content->thumbnailBar();
+
 		mInformationLabel = content->informationLabel();
 
+		ThumbnailBarView* view = content->thumbnailBar();
 		view->setModel(mDirModel);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
 		view->setSelectionModel(mThumbnailView->selectionModel());
 
-		mFullScreenBar->addWidget(widget);
+		QHBoxLayout* layout = new QHBoxLayout(mFullScreenBar);
+		layout->setMargin(0);
+		layout->addWidget(widget);
 
-		mFullScreenBar->resize(mFullScreenBar->sizeHint());
+		mFullScreenBar->adjustSize();
 	}
 
 
