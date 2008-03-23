@@ -140,8 +140,8 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mThumbnailBar->hide();
 
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
-	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
 	d->mPartContainerLayout->addWidget(statusBarContainer);
+	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
 	d->mPartContainerLayout->setMargin(0);
 	d->mPartContainerLayout->setSpacing(0);
 
