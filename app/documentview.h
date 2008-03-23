@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class QPalette;
 
+class KActionCollection;
 class KStatusBar;
 class KUrl;
 
@@ -43,7 +44,7 @@ class ThumbnailBarView;
 class DocumentView : public QStackedWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget* parent);
+	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
 
 	ThumbnailBarView* thumbnailBar() const;

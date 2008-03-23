@@ -21,15 +21,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
 #include <kstatusbar.h>
+#include <ktoggleaction.h>
 
 // Local
 #include "thumbnailbarview.h"
@@ -54,14 +57,30 @@ struct DocumentViewPrivate {
 	QLabel* mNoDocumentLabel;
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
+	QToolButton* mToggleThumbnailBarButton;
 	KStatusBar* mStatusBar;
 	ThumbnailBarView* mThumbnailBar;
+	KToggleAction* mToggleThumbnailBarAction;
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
+	bool mThumbnailBarVisibleBeforeFullScreen;
 
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
+
+	void setupStatusBar(QWidget* container) {
+		mStatusBar = new KStatusBar;
+		mToggleThumbnailBarButton = new QToolButton;
+		mToggleThumbnailBarButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		mToggleThumbnailBarButton->setAutoRaise(true);
+		mToggleThumbnailBarButton->setFocusPolicy(Qt::NoFocus);
+		QHBoxLayout* layout = new QHBoxLayout(container);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(mToggleThumbnailBarButton, 0, Qt::AlignLeft);
+		layout->addWidget(mStatusBar);
+	}
 
 	void setPartWidget(QWidget* partWidget) {
 		if (partWidget) {
@@ -89,13 +108,14 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent)
+DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 : QStackedWidget(parent)
 , d(new DocumentViewPrivate)
 {
 	d->mView = this;
 	d->mPart = 0;
 	d->mFullScreenMode = false;
+	d->mThumbnailBarVisibleBeforeFullScreen = false;
 	d->mFullScreenPalette = QPalette(palette());
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
@@ -110,8 +130,9 @@ DocumentView::DocumentView(QWidget* parent)
 
 	d->mPartContainer = new QWidget(this);
 	addWidget(d->mPartContainer);
-	d->mStatusBar = new KStatusBar(d->mPartContainer);
-	d->mStatusBar->hide();
+
+	QWidget* statusBarContainer = new QWidget;
+	d->setupStatusBar(statusBarContainer);
 
 	d->mThumbnailBar = new ThumbnailBarView(d->mPartContainer);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
@@ -119,10 +140,18 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mThumbnailBar->hide();
 
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
-	d->mPartContainerLayout->addWidget(d->mStatusBar);
 	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
+	d->mPartContainerLayout->addWidget(statusBarContainer);
 	d->mPartContainerLayout->setMargin(0);
 	d->mPartContainerLayout->setSpacing(0);
+
+	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
+	d->mToggleThumbnailBarAction->setText(i18n("Show Thumbnail Bar"));
+	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
+	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_T);
+	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
+		d->mThumbnailBar, SLOT(setVisible(bool)));
+	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 }
 
 
@@ -140,6 +169,15 @@ void DocumentView::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBar->setVisible(!fullScreenMode);
 	d->applyPalette();
+	if (fullScreenMode) {
+		d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
+		if (d->mThumbnailBarVisibleBeforeFullScreen) {
+			d->mToggleThumbnailBarAction->trigger();
+		}
+	} else if (d->mThumbnailBarVisibleBeforeFullScreen) {
+		d->mToggleThumbnailBarAction->trigger();
+	}
+	d->mToggleThumbnailBarAction->setEnabled(!fullScreenMode);
 }
 
 
