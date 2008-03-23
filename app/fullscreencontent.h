@@ -52,7 +52,13 @@ public:
 
 	ThumbnailBarView* thumbnailBar() const;
 
-	void updateInformationLabel(const KUrl& url);
+	void setCurrentUrl(const KUrl&);
+
+protected:
+	bool eventFilter(QObject*, QEvent*);
+
+private Q_SLOTS:
+	void updateInformationLabel();
 
 private:
 	FullScreenContentPrivate* const d;

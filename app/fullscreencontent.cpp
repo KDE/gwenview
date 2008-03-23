@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fullscreencontent.h"
 
 // Qt
+#include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
 #include <QToolBar>
@@ -44,12 +45,15 @@ namespace Gwenview {
 struct FullScreenContentPrivate {
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
+	Document::Ptr mCurrentDocument;
 };
 
 
 FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionCollection, SlideShow* slideShow)
 : QObject(parent)
 , d(new FullScreenContentPrivate) {
+	parent->installEventFilter(this);
+
 	QToolBar* bar = new QToolBar;
 	bar->setFloatable(false);
 	bar->setIconSize(QSize(32, 32));
@@ -88,10 +92,25 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const {
 }
 
 
-void FullScreenContent::updateInformationLabel(const KUrl& url) {
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+void FullScreenContent::setCurrentUrl(const KUrl& url) {
+	d->mCurrentDocument = DocumentFactory::instance()->load(url);
+	connect(d->mCurrentDocument.data(),SIGNAL(metaDataUpdated()),
+		SLOT(updateInformationLabel()) );
+	updateInformationLabel();
+}
 
-	ImageMetaInfoModel* imageMetaInfo = doc->metaInfo();
+
+void FullScreenContent::updateInformationLabel() {
+	if (!d->mCurrentDocument) {
+		kWarning() << "No document";
+		return;
+	}
+
+	if (!d->mInformationLabel->isVisible()) {
+		return;
+	}
+
+	ImageMetaInfoModel* imageMetaInfo = d->mCurrentDocument->metaInfo();
 
 	QString aperture, exposureTime, iso, focalLength;
 	QString filename;
@@ -111,6 +130,14 @@ void FullScreenContent::updateInformationLabel(const KUrl& url) {
 	info.replace("%f", filename);
 
 	d->mInformationLabel->setText(info);
+}
+
+
+bool FullScreenContent::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::Show) {
+		updateInformationLabel();
+	}
+	return false;
 }
 
 

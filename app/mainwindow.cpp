@@ -520,7 +520,7 @@ struct MainWindow::Private {
 		mGoUpAction->setEnabled(url.path() != "/");
 	}
 
-	void createFullScreenBar() {
+	void setupFullScreenBar() {
 		mFullScreenBar = new FullScreenBar(mDocumentView);
 
 		// This widget should not be necessary. We should be able to use
@@ -662,6 +662,7 @@ d(new MainWindow::Private)
 	d->setupActions();
 	d->setupUndoActions();
 	d->setupContextManager();
+	d->setupFullScreenBar();
 	d->updateActions();
 	updatePreviousNextActions();
 
@@ -859,11 +860,9 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 		return;
 	}
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	connect(doc.data(),SIGNAL(metaDataUpdated()),
-		SLOT(updateFullScreenInformation()) );
-	updateFullScreenInformation();
+	d->mFullScreenContent->setCurrentUrl(url);
 
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 	undoGroup->addStack(doc->undoStack());
 	undoGroup->setActiveStack(doc->undoStack());
@@ -872,18 +871,6 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	d->selectUrlToSelect();
 }
 
-void MainWindow::updateFullScreenInformation() {
-	if (!d->mFullScreenAction->isChecked()) {
-		return;
-	}
-
-	if (!d->mFullScreenBar) {
-		return;
-	}
-
-	KUrl url = d->currentUrl();
-	d->mFullScreenContent->updateInformationLabel(url);
-}
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
 	d->mDocumentView->statusBar()->showMessage(message);
@@ -1044,11 +1031,7 @@ void MainWindow::toggleFullScreen() {
 		toolBar()->hide();
 		d->mDocumentView->setFullScreenMode(true);
 		d->mSaveBar->setForceHide(true);
-		if (!d->mFullScreenBar) {
-			d->createFullScreenBar();
-		}
 		d->mFullScreenBar->setActivated(true);
-		updateFullScreenInformation();
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
