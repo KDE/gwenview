@@ -530,12 +530,9 @@ struct MainWindow::Private {
 		ThumbnailBarView* view = content->thumbnailBar();
 		mInformationLabel = content->informationLabel();
 
-		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(view);
 		view->setModel(mDirModel);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
-		view->setItemDelegate(delegate);
 		view->setSelectionModel(mThumbnailView->selectionModel());
-		view->setThumbnailSize(64);
 
 		mFullScreenBar->addWidget(widget);
 

@@ -59,6 +59,9 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	bar->addWidget(slideShow->optionsWidget());
 
 	d->mThumbnailBar = new ThumbnailBarView(parent);
+	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
+	d->mThumbnailBar->setItemDelegate(delegate);
+	d->mThumbnailBar->setThumbnailSize(64);
 
 	d->mInformationLabel = new QLabel;
 
