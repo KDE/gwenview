@@ -108,6 +108,8 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 	d->mAutoHideTimer->setInterval(AUTO_HIDE_TIMEOUT);
 	d->mAutoHideTimer->setSingleShot(true);
 	connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(autoHide()) );
+
+	hide();
 }
 
 
