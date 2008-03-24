@@ -209,7 +209,7 @@ bool SaveBar::saveAll() {
 	progress.setLabelText(i18n("Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
-	progress.setMinimum(lst.size());
+	progress.setMaximum(lst.size());
 	progress.setWindowModality(Qt::WindowModal);
 
 	Q_FOREACH(KUrl url, lst) {
