@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 int main(int argc, char *argv[]) {
 	KAboutData aboutData( "gwenview", 0, ki18n("Gwenview"),
-		"2.0", ki18n("An Image Viewer"),
+		"2.0.3", ki18n("An Image Viewer"),
 		KAboutData::License_GPL, ki18n("(c) 2007") );
 	KCmdLineArgs::init( argc, argv, &aboutData );
 
