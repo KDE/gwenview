@@ -656,7 +656,6 @@ d(new MainWindow::Private)
 	d->mWindow = this;
 	d->mGvCore = new GvCore(this);
 	d->mDirModel = new SortedDirModel(this);
-	d->mFullScreenBar = 0;
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
