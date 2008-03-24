@@ -577,20 +577,6 @@ struct MainWindow::Private {
 		}
 	}
 
-	QString currentMimeType() const {
-		if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
-			return MimeTypeUtils::urlMimeType(mDocumentView->url());
-		} else {
-			QModelIndex index = mThumbnailView->currentIndex();
-			if (!index.isValid()) {
-				return QString();
-			}
-			KFileItem item = mDirModel->itemForIndex(index);
-			Q_ASSERT(!item.isNull());
-			return item.mimetype();
-		}
-	}
-
 	void selectUrlToSelect() {
 		if (!mUrlToSelect.isValid()) {
 			return;

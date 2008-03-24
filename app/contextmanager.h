@@ -52,6 +52,8 @@ public:
 
 	KUrl currentUrl() const;
 
+	QString currentUrlMimeType() const;
+
 	void setCurrentDirUrl(const KUrl&);
 
 	KUrl currentDirUrl() const;

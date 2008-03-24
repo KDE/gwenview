@@ -86,4 +86,28 @@ KUrl ContextManager::currentUrl() const {
 }
 
 
+QString ContextManager::currentUrlMimeType() const {
+	/*
+	if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
+		return MimeTypeUtils::urlMimeType(mDocumentView->url());
+	} else {
+		QModelIndex index = mThumbnailView->currentIndex();
+		if (!index.isValid()) {
+			return QString();
+		}
+		KFileItem item = mDirModel->itemForIndex(index);
+		Q_ASSERT(!item.isNull());
+		return item.mimetype();
+	}
+	*/
+	// FIXME
+	Q_FOREACH(const KFileItem& item, mSelection) {
+		if (item.url() == mCurrentUrl) {
+			return item.mimetype();
+		}
+	}
+	return QString();
+}
+
+
 } // namespace
