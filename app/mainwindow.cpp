@@ -1021,7 +1021,7 @@ void MainWindow::saveAs(const KUrl& url) {
 			i18nc("@info",
 				"A file named <filename>%1</filename> already exists.\n"
 				"Are you sure you want to overwrite it?",
-				url.fileName()),
+				dialog.selectedUrl().fileName()),
 			QString(),
 			KStandardGuiItem::overwrite());
 		if (answer == KMessageBox::Cancel) {
