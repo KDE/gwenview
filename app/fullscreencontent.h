@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 class QLabel;
+class QStringList;
 
 class KActionCollection;
 class KUrl;
@@ -59,6 +60,9 @@ protected:
 
 private Q_SLOTS:
 	void updateInformationLabel();
+	void updateMetaInfoDialog();
+	void configureInformationLabel();
+	void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
 
 private:
 	FullScreenContentPrivate* const d;

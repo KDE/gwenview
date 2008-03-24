@@ -18,8 +18,8 @@
 	</group>
 
 	<group name="FullScreen">
-		<entry name="FullScreenInfo" type="String">
-			<default>%f</default>
+		<entry name="FullScreenPreferredMetaInfoKeyList" type="StringList">
+			<default>General.Name,Exif.Image.DateTime</default>
 		</entry>
 	</group>
 
