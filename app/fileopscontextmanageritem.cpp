@@ -23,14 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QAction>
+#include <QMenu>
 
 // KDE
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <klocale.h>
+#include <kmimetypetrader.h>
+#include <kopenwithdialog.h>
 #include <kpropertiesdialog.h>
-#include <kdebug.h>
+#include <krun.h>
+#include <kservice.h>
 
 // Local
 #include "contextmanager.h"
@@ -50,7 +55,8 @@ struct FileOpsContextManagerItemPrivate {
 	QAction* mDelAction;
 	QAction* mShowPropertiesAction;
 	QAction* mCreateFolderAction;
-
+	QAction* mOpenWithAction;
+	QMap<QString, KService::Ptr> mServiceForName;
 
 	KUrl::List urlList() const {
 		KUrl::List urlList;
@@ -118,6 +124,15 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
 	connect(d->mCreateFolderAction, SIGNAL(triggered()),
 		SLOT(createFolder()) );
+
+	d->mOpenWithAction = actionCollection->addAction("file_open_with");
+	d->mOpenWithAction->setText(i18n("Open With..."));
+	QMenu* menu = new QMenu;
+	d->mOpenWithAction->setMenu(menu);
+	connect(menu, SIGNAL(aboutToShow()),
+		SLOT(populateOpenMenu()) );
+	connect(menu, SIGNAL(triggered(QAction*)),
+		SLOT(openWith(QAction*)) );
 }
 
 
@@ -180,6 +195,9 @@ void FileOpsContextManagerItem::updateActions() {
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 
+	KUrl url = contextManager()->currentUrl();
+	d->mOpenWithAction->setEnabled(url.isValid());
+
 	updateSideBarContent();
 }
 
@@ -203,6 +221,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	addIfEnabled(d->mGroup, d->mTrashAction);
 	addIfEnabled(d->mGroup, d->mDelAction);
 	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
+	addIfEnabled(d->mGroup, d->mOpenWithAction);
 }
 
 
@@ -245,6 +264,60 @@ void FileOpsContextManagerItem::linkTo() {
 void FileOpsContextManagerItem::createFolder() {
 	KUrl url = contextManager()->currentDirUrl();
 	FileOperations::createFolder(url, d->mSideBar);
+}
+
+
+void FileOpsContextManagerItem::populateOpenMenu() {
+	QMenu* openMenu = d->mOpenWithAction->menu();
+	QList<QAction*> currentActions = openMenu->actions();
+	qDeleteAll(currentActions);
+
+	QString mimeType = contextManager()->currentUrlMimeType();
+	KService::List services = KMimeTypeTrader::self()->query(mimeType);
+
+	d->mServiceForName.clear();
+	Q_FOREACH(const KService::Ptr service, services) {
+		d->mServiceForName[service->name()] = service;
+	}
+
+	Q_FOREACH(const KService::Ptr service, d->mServiceForName) {
+		QString text = service->name().replace( "&", "&&" );
+		QAction* action = openMenu->addAction(text);
+		action->setIcon(KIcon(service->icon()));
+		action->setData(service->name());
+	}
+
+	openMenu->addSeparator();
+	openMenu->addAction(i18n("Other Application..."));
+}
+
+
+void FileOpsContextManagerItem::openWith(QAction* action) {
+	Q_ASSERT(action);
+	KService::Ptr service;
+	KUrl::List list = d->urlList();
+
+	QString name = action->data().toString();
+	if (name.isEmpty()) {
+		// Other Application...
+		KOpenWithDialog dlg(list, d->mSideBar);
+		if (!dlg.exec()) {
+			return;
+		}
+		service = dlg.service();
+
+		if (!service) {
+			// User entered a custom command
+			Q_ASSERT(!dlg.text().isEmpty());
+			KRun::run(dlg.text(), list, d->mSideBar);
+			return;
+		}
+	} else {
+		service = d->mServiceForName[name];
+	}
+
+	Q_ASSERT(service);
+	KRun::run(*service, list, d->mSideBar);
 }
 
 

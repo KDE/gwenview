@@ -62,6 +62,8 @@ private Q_SLOTS:
 	void del();
 	void showProperties();
 	void createFolder();
+	void populateOpenMenu();
+	void openWith(QAction* action);
 
 private:
 	FileOpsContextManagerItemPrivate* const d;
