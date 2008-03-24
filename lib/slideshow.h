@@ -44,8 +44,6 @@ public:
 	void start(const QList<KUrl>& urls);
 	void stop();
 
-	QWidget* intervalWidget() const;
-
 	QAction* loopAction() const;
 	QAction* randomAction() const;
 

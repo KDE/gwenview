@@ -24,7 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QAction>
-#include <QDoubleSpinBox>
 #include <QMenu>
 #include <QTimer>
 
@@ -55,8 +54,6 @@ struct SlideShowPrivate {
 	QVector<KUrl> mShuffledUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
 	KUrl mCurrentUrl;
-
-	QDoubleSpinBox* mIntervalSpinBox;
 
 	QAction* mLoopAction;
 	QAction* mRandomAction;
@@ -138,14 +135,6 @@ SlideShow::SlideShow(QObject* parent)
 	connect(d->mTimer, SIGNAL(timeout()),
 			this, SLOT(slotTimeout()) );
 
-	d->mIntervalSpinBox = new QDoubleSpinBox();
-	d->mIntervalSpinBox->setSuffix(i18nc("@item:intext spinbox suffix for slideshow interval", " seconds"));
-	d->mIntervalSpinBox->setMinimum(0.5);
-	d->mIntervalSpinBox->setMaximum(999999.);
-	d->mIntervalSpinBox->setDecimals(1);
-	connect(d->mIntervalSpinBox, SIGNAL(valueChanged(double)),
-		SLOT(setInterval(double)) );
-
 	d->mLoopAction = new QAction(this);
 	d->mLoopAction->setText(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
 	d->mLoopAction->setCheckable(true);
@@ -159,7 +148,6 @@ SlideShow::SlideShow(QObject* parent)
 
 	d->mLoopAction->setChecked(GwenviewConfig::loop());
 	d->mRandomAction->setChecked(GwenviewConfig::random());
-	d->mIntervalSpinBox->setValue(GwenviewConfig::interval());
 }
 
 
@@ -233,11 +221,6 @@ void SlideShow::setCurrentUrl(const KUrl& url) {
 
 bool SlideShow::isRunning() const {
 	return d->mStarted;
-}
-
-
-QWidget* SlideShow::intervalWidget() const {
-	return d->mIntervalSpinBox;
 }
 
 

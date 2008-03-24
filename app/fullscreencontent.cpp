@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fullscreencontent.h"
 
 // Qt
+#include <QDoubleSpinBox>
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
@@ -62,6 +63,20 @@ struct FullScreenContentPrivate {
 
 		return button;
 	}
+
+
+	QWidget* createSlideShowIntervalWidget(SlideShow* slideShow) {
+		QDoubleSpinBox* spinBox = new QDoubleSpinBox;
+		spinBox->setSuffix(i18nc("@item:intext spinbox suffix for slideshow interval", " seconds"));
+		spinBox->setMinimum(0.5);
+		spinBox->setMaximum(999999.);
+		spinBox->setDecimals(1);
+		spinBox->setValue(GwenviewConfig::interval());
+		QObject::connect(spinBox, SIGNAL(valueChanged(double)),
+			slideShow, SLOT(setInterval(double)) );
+
+		return spinBox;
+	}
 };
 
 
@@ -71,6 +86,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	parent->installEventFilter(this);
 
 	QWidget* optionsButton = d->createOptionsButton(slideShow);
+	QWidget* slideShowIntervalWidget = d->createSlideShowIntervalWidget(slideShow);
 
 	QToolBar* bar = new QToolBar;
 	bar->setFloatable(false);
@@ -81,7 +97,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 
 	bar->addSeparator();
 	bar->addAction(actionCollection->action("toggle_slideshow"));
-	bar->addWidget(slideShow->intervalWidget());
+	bar->addWidget(slideShowIntervalWidget);
 	bar->addWidget(optionsButton);
 
 	d->mThumbnailBar = new ThumbnailBarView(parent);
