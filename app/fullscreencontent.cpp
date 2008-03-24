@@ -25,11 +25,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMenu>
 #include <QToolBar>
+#include <QToolButton>
 
 // KDE
-#include "kaction.h"
-#include "kactioncollection.h"
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <klocale.h>
 
 // Local
 #include "thumbnailbarview.h"
@@ -46,6 +49,19 @@ struct FullScreenContentPrivate {
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
 	Document::Ptr mCurrentDocument;
+
+	QWidget* createOptionsButton(SlideShow* slideShow) {
+		QToolButton* button = new QToolButton;
+		button->setIcon(KIcon("configure"));
+		button->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
+		QMenu* menu = new QMenu(button);
+		button->setMenu(menu);
+		button->setPopupMode(QToolButton::InstantPopup);
+		menu->addAction(slideShow->loopAction());
+		menu->addAction(slideShow->randomAction());
+
+		return button;
+	}
 };
 
 
@@ -53,6 +69,8 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 : QObject(parent)
 , d(new FullScreenContentPrivate) {
 	parent->installEventFilter(this);
+
+	QWidget* optionsButton = d->createOptionsButton(slideShow);
 
 	QToolBar* bar = new QToolBar;
 	bar->setFloatable(false);
@@ -64,7 +82,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	bar->addSeparator();
 	bar->addAction(actionCollection->action("toggle_slideshow"));
 	bar->addWidget(slideShow->intervalWidget());
-	bar->addWidget(slideShow->optionsWidget());
+	bar->addWidget(optionsButton);
 
 	d->mThumbnailBar = new ThumbnailBarView(parent);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);

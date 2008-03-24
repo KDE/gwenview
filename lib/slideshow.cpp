@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDoubleSpinBox>
 #include <QMenu>
 #include <QTimer>
-#include <QToolButton>
 
 // KDE
 #include <kconfig.h>
@@ -58,7 +57,6 @@ struct SlideShowPrivate {
 	KUrl mCurrentUrl;
 
 	QDoubleSpinBox* mIntervalSpinBox;
-	QToolButton* mOptionsButton;
 
 	QAction* mLoopAction;
 	QAction* mRandomAction;
@@ -143,22 +141,16 @@ SlideShow::SlideShow(QObject* parent)
 	connect(d->mIntervalSpinBox, SIGNAL(valueChanged(double)),
 		SLOT(updateTimerInterval()) );
 
-	d->mOptionsButton = new QToolButton();
-	d->mOptionsButton->setIcon(KIcon("configure"));
-	d->mOptionsButton->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
-	QMenu* menu = new QMenu(d->mOptionsButton);
-	d->mOptionsButton->setMenu(menu);
-	d->mOptionsButton->setPopupMode(QToolButton::InstantPopup);
-
-	d->mLoopAction = menu->addAction(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
+	d->mLoopAction = new QAction(this);
+	d->mLoopAction->setText(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
 	d->mLoopAction->setCheckable(true);
 	connect(d->mLoopAction, SIGNAL(triggered()), SLOT(updateConfig()) );
 
-	d->mRandomAction = menu->addAction(i18nc("@item:inmenu toggle random order in slideshow", "Random"));
+	d->mRandomAction = new QAction(this);
+	d->mRandomAction->setText(i18nc("@item:inmenu toggle random order in slideshow", "Random"));
 	d->mRandomAction->setCheckable(true);
 	connect(d->mRandomAction, SIGNAL(toggled(bool)), SLOT(slotRandomActionToggled(bool)) );
 	connect(d->mRandomAction, SIGNAL(triggered()), SLOT(updateConfig()) );
-
 
 	d->mLoopAction->setChecked(GwenviewConfig::loop());
 	d->mRandomAction->setChecked(GwenviewConfig::random());
@@ -169,6 +161,16 @@ SlideShow::SlideShow(QObject* parent)
 SlideShow::~SlideShow() {
 	GwenviewConfig::self()->writeConfig();
 	delete d;
+}
+
+
+QAction* SlideShow::loopAction() const {
+	return d->mLoopAction;
+}
+
+
+QAction* SlideShow::randomAction() const {
+	return d->mRandomAction;
 }
 
 
@@ -233,11 +235,6 @@ bool SlideShow::isRunning() const {
 
 QWidget* SlideShow::intervalWidget() const {
 	return d->mIntervalSpinBox;
-}
-
-
-QWidget* SlideShow::optionsWidget() const {
-	return d->mOptionsButton;
 }
 
 

@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <kurl.h>
+
+class QAction;
 class QTimer;
 
 namespace Gwenview {
@@ -44,7 +46,8 @@ public:
 
 	QWidget* intervalWidget() const;
 
-	QWidget* optionsWidget() const;
+	QAction* loopAction() const;
+	QAction* randomAction() const;
 
 	/** @return true if the slideshow is running */
 	bool isRunning() const;
