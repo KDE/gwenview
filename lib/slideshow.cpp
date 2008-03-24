@@ -119,6 +119,11 @@ struct SlideShowPrivate {
 
 		return url;
 	}
+
+
+	void updateTimerInterval() {
+		mTimer->setInterval(int(GwenviewConfig::interval() * 1000));
+	}
 };
 
 
@@ -139,7 +144,7 @@ SlideShow::SlideShow(QObject* parent)
 	d->mIntervalSpinBox->setMaximum(999999.);
 	d->mIntervalSpinBox->setDecimals(1);
 	connect(d->mIntervalSpinBox, SIGNAL(valueChanged(double)),
-		SLOT(updateTimerInterval()) );
+		SLOT(setInterval(double)) );
 
 	d->mLoopAction = new QAction(this);
 	d->mLoopAction->setText(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
@@ -188,7 +193,7 @@ void SlideShow::start(const QList<KUrl>& urls) {
 		d->initShuffledUrls();
 	}
 	
-	updateTimerInterval();
+	d->updateTimerInterval();
 	d->mTimer->setSingleShot(false);
 	d->mTimer->start();
 	d->mStarted=true;
@@ -196,11 +201,9 @@ void SlideShow::start(const QList<KUrl>& urls) {
 }
 
 
-void SlideShow::updateTimerInterval() {
-	double sInterval = d->mIntervalSpinBox->value();
-	int msInterval = int(sInterval * 1000);
-	d->mTimer->setInterval(msInterval);
+void SlideShow::setInterval(double sInterval) {
 	GwenviewConfig::setInterval(sInterval);
+	d->updateTimerInterval();
 }
 
 

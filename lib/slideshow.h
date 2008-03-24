@@ -54,7 +54,7 @@ public:
 
 	void setCurrentUrl(const KUrl& url);
 
-	double interval() const;
+public Q_SLOTS:
 	void setInterval(double);
 
 Q_SIGNALS:
@@ -66,7 +66,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotTimeout();
-	void updateTimerInterval();
 	void updateConfig();
 	void slotRandomActionToggled(bool on);
 
