@@ -607,8 +607,7 @@ struct MainWindow::Private {
 		}
 
 		// Update
-		mContextManager->setSelection(selectedItemList);
-		mContextManager->setCurrentUrl(url);
+		mContextManager->setContext(url, selectedItemList);
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
 	}

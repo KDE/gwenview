@@ -48,8 +48,6 @@ public:
 
 	void addItem(AbstractContextManagerItem* item);
 
-	void setCurrentUrl(const KUrl&);
-
 	KUrl currentUrl() const;
 
 	QString currentUrlMimeType() const;
@@ -58,7 +56,7 @@ public:
 
 	KUrl currentDirUrl() const;
 
-	void setSelection(const KFileItemList& itemList);
+	void setContext(const KUrl& currentUrl, const KFileItemList& selection);
 
 	KFileItemList selection() const;
 

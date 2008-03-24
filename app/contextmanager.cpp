@@ -51,8 +51,9 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 }
 
 
-void ContextManager::setSelection(const KFileItemList& list) {
-	mSelection = list;
+void ContextManager::setContext(const KUrl& currentUrl, const KFileItemList& selection) {
+	mCurrentUrl = currentUrl;
+	mSelection = selection;
 	selectionChanged();
 }
 
@@ -73,11 +74,6 @@ void ContextManager::setCurrentDirUrl(const KUrl& url) {
 
 KUrl ContextManager::currentDirUrl() const {
 	return mCurrentDirUrl;
-}
-
-
-void ContextManager::setCurrentUrl(const KUrl& url) {
-	mCurrentUrl = url;
 }
 
 
