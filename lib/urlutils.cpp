@@ -22,8 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "urlutils.h"
 
 // Qt
+#include <QApplication>
+#include <QFile>
 
 // KDE
+#include <kde_file.h>
+#include <kio/netaccess.h>
 #include <kmountpoint.h>
 #include <kurl.h>
 
@@ -48,6 +52,35 @@ bool urlIsFastLocalFile(const KUrl& url) {
 
 	return !mountPoint->probablySlow();
 }
+
+
+bool urlIsDirectory(const KUrl& url) {
+	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
+		return true; // file:/somewhere/<nothing here>
+	}
+
+	// Do direct stat instead of using KIO if the file is local (faster)
+	if (UrlUtils::urlIsFastLocalFile(url)) {
+		KDE_struct_stat buff;
+		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
+			return S_ISDIR( buff.st_mode );
+		}
+	}
+
+	QWidgetList list = QApplication::topLevelWidgets();
+	QWidget* parent;
+	if (list.count() > 0) {
+		parent = list[0];
+	} else {
+		parent = 0;
+	}
+	KIO::UDSEntry entry;
+	if( KIO::NetAccess::stat( url, entry, parent)) {
+		return entry.isDir();
+	}
+	return false;
+}
+
 
 } // namespace
 

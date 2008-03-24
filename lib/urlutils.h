@@ -41,6 +41,11 @@ namespace UrlUtils {
  */
 GWENVIEWLIB_EXPORT bool urlIsFastLocalFile(const KUrl& url);
 
+/**
+ * Returns whether the url is a directory.
+ */
+GWENVIEWLIB_EXPORT bool urlIsDirectory(const KUrl& url);
+
 } // namespace
 
 } // namespace

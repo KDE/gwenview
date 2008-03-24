@@ -37,13 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kapplication.h>
-#include <kde_file.h>
 #include <kdirlister.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
-#include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -103,24 +101,6 @@ static const int PRELOAD_DELAY = 1000;
 
 static const char* MAINWINDOW_SETTINGS = "MainWindow";
 
-static bool urlIsDirectory(QWidget* parent, const KUrl& url) {
-	if( url.fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
-		return true; // file:/somewhere/<nothing here>
-	}
-
-	// Do direct stat instead of using KIO if the file is local (faster)
-	if (UrlUtils::urlIsFastLocalFile(url)) {
-		KDE_struct_stat buff;
-		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
-			return S_ISDIR( buff.st_mode );
-		}
-	}
-	KIO::UDSEntry entry;
-	if( KIO::NetAccess::stat( url, entry, parent)) {
-		return entry.isDir();
-	}
-	return false;
-}
 
 struct MainWindowState {
 	QAction* mActiveViewModeAction;
@@ -726,7 +706,7 @@ void MainWindow::updateModifiedFlag() {
 
 
 void MainWindow::setInitialUrl(const KUrl& url) {
-	if (urlIsDirectory(this, url)) {
+	if (UrlUtils::urlIsDirectory(url)) {
 		d->mBrowseAction->trigger();
 		openDirUrl(url);
 	} else {
