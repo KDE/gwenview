@@ -147,6 +147,9 @@ void SideBarGroup::addAction(QAction* action) {
 	button->setDefaultAction(action);
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	button->setIconSize(QSize(size, size));
+	if (action->menu()) {
+		button->setPopupMode(QToolButton::InstantPopup);
+	}
 	addWidget(button);
 }
 
