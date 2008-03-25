@@ -38,7 +38,7 @@ class LoadingDocumentImplPrivate;
 class LoadingDocumentImpl : public AbstractDocumentImpl {
 	Q_OBJECT
 public:
-	LoadingDocumentImpl(Document*, Document::LoadState);
+	LoadingDocumentImpl(Document*, Document::LoadType);
 	~LoadingDocumentImpl();
 
 	virtual void init();

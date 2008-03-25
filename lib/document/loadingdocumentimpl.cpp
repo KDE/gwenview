@@ -63,7 +63,7 @@ namespace Gwenview {
 
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
-	Document::LoadState mLoadState;
+	Document::LoadType mLoadType;
 	QPointer<KIO::TransferJob> mTransferJob;
 	QFuture<bool> mMetaDataFuture;
 	QFutureWatcher<bool> mMetaDataFutureWatcher;
@@ -136,12 +136,12 @@ struct LoadingDocumentImplPrivate {
 };
 
 
-LoadingDocumentImpl::LoadingDocumentImpl(Document* document, Document::LoadState state)
+LoadingDocumentImpl::LoadingDocumentImpl(Document* document, Document::LoadType loadType)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate) {
 	d->mImpl = this;
 	d->mMetaDataLoaded = false;
-	d->mLoadState = state;
+	d->mLoadType = loadType;
 	d->mJpegContent = 0;
 
 	connect(&d->mMetaDataFutureWatcher, SIGNAL(finished()),
@@ -188,7 +188,7 @@ void LoadingDocumentImpl::init() {
 void LoadingDocumentImpl::finishLoading() {
 	Q_ASSERT(!d->mMetaDataFutureWatcher.isRunning());
 	Q_ASSERT(d->mMetaDataLoaded);
-	d->mLoadState = Document::LoadAll;
+	d->mLoadType = Document::LoadAll;
 
 	d->mImageDataFuture = QtConcurrent::run(d, &LoadingDocumentImplPrivate::loadImageData);
 	d->mImageDataFutureWatcher.setFuture(d->mImageDataFuture);
@@ -235,7 +235,7 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 
 	d->mMetaDataLoaded = true;
 
-	if (d->mLoadState == Document::LoadAll) {
+	if (d->mLoadType == Document::LoadAll) {
 		finishLoading();
 	}
 }

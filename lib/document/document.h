@@ -58,7 +58,7 @@ public:
 		SR_OtherError
 	};
 
-	enum LoadState {
+	enum LoadType {
 		LoadMetaData,
 		LoadAll
 	};
@@ -146,7 +146,7 @@ private:
 	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl* impl);
 
-	Document(const KUrl&, Document::LoadState);
+	Document(const KUrl&, Document::LoadType);
 	DocumentPrivate * const d;
 };
 

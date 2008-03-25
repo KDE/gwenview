@@ -49,7 +49,7 @@ struct DocumentPrivate {
 };
 
 
-Document::Document(const KUrl& url, Document::LoadState state)
+Document::Document(const KUrl& url, Document::LoadType loadType)
 : QObject()
 , d(new DocumentPrivate) {
 	d->mImpl = 0;
@@ -58,7 +58,7 @@ Document::Document(const KUrl& url, Document::LoadState state)
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
-	switchToImpl(new LoadingDocumentImpl(this, state));
+	switchToImpl(new LoadingDocumentImpl(this, loadType));
 }
 
 

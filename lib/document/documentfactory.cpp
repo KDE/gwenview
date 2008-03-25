@@ -127,7 +127,7 @@ DocumentFactory* DocumentFactory::instance() {
 	return &factory;
 }
 
-Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadState) {
+Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadType loadType) {
 	DocumentInfo* info = 0;
 
 	DocumentMap::Iterator it = d->mFullyLoadedDocumentMap.find(url);
@@ -142,7 +142,7 @@ Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadSta
 	it = d->mMetaDataLoadedDocumentMap.find(url);
 	if (it != d->mMetaDataLoadedDocumentMap.end()) {
 		LOG(url.fileName() << "url in mMetaDataLoadedDocumentMap");
-		if (loadState == Document::LoadMetaData) {
+		if (loadType == Document::LoadMetaData) {
 			info = it.value();
 			info->mLastAccess = QDateTime::currentDateTime();
 			return info->mDocument;
@@ -164,8 +164,8 @@ Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadSta
 	// At this point we couldn't find the document in either maps
 
 	// Start loading the document
-	LOG(url.fileName() << "loading" << (loadState == Document::LoadAll ? "all" : "metadata"));
-	Document* doc = new Document(url, loadState);
+	LOG(url.fileName() << "loading" << (loadType == Document::LoadAll ? "all" : "metadata"));
+	Document* doc = new Document(url, loadType);
 	connect(doc, SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded(const KUrl&)) );
 	connect(doc, SIGNAL(saved(const KUrl&)),
@@ -181,7 +181,7 @@ Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadSta
 
 	// Place DocumentInfo in the appropriate map
 	DocumentMap& map =
-		loadState == Document::LoadAll
+		loadType == Document::LoadAll
 		? d->mFullyLoadedDocumentMap
 		: d->mMetaDataLoadedDocumentMap;
 
@@ -201,9 +201,9 @@ QList<KUrl> DocumentFactory::modifiedDocumentList() const {
 }
 
 
-bool DocumentFactory::hasUrl(const KUrl& url, Document::LoadState loadState) const {
+bool DocumentFactory::hasUrl(const KUrl& url, Document::LoadType loadType) const {
 	const DocumentMap& map =
-		loadState == Document::LoadAll
+		loadType == Document::LoadAll
 		? d->mFullyLoadedDocumentMap
 		: d->mMetaDataLoadedDocumentMap;
 	return map.contains(url);
