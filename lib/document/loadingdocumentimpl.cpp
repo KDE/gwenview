@@ -138,8 +138,10 @@ bool LoadingDocumentImpl::isLoaded() const {
 
 
 void LoadingDocumentImpl::slotMetaDataLoaded() {
+	QByteArray format = d->mThread.format();
 	QSize size = d->mThread.size();
 	Exiv2::Image::AutoPtr exiv2Image = d->mThread.popExiv2Image();
+	setDocumentFormat(format);
 	setDocumentImageSize(size);
 	setDocumentExiv2Image(exiv2Image);
 }
@@ -150,9 +152,7 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	setDocumentImage(d->mThread.image());
 	imageRectUpdated(d->mThread.image().rect());
 	loaded();
-	QByteArray format = d->mThread.format();
-	setDocumentFormat(format);
-	if (format == "jpeg") {
+	if (document()->format() == "jpeg") {
 		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
 			document(),
 			d->mThread.popJpegContent());
