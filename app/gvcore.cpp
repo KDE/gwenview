@@ -23,8 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QList>
 #include <QProgressDialog>
+#include <QtConcurrentMap>
 #include <QWidget>
 
 // KDE
@@ -60,6 +63,12 @@ GvCore::~GvCore() {
 }
 
 
+static void saveDocument(const KUrl& url) {
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->save(url, doc->format());
+}
+
+
 void GvCore::saveAll() {
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
@@ -69,22 +78,22 @@ void GvCore::saveAll() {
 	progress.setMinimum(0);
 	progress.setMaximum(lst.size());
 	progress.setWindowModality(Qt::WindowModal);
-	progress.show();
 
-	// FIXME: Save in a separate thread
-	Q_FOREACH(const KUrl& url, lst) {
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		Document::SaveResult saveResult = doc->save(url, doc->format());
-		if (saveResult != Document::SR_OK) {
-			// FIXME: Message
-			return;
-		}
-		progress.setValue(progress.value() + 1);
-		if (progress.wasCanceled()) {
-			return;
-		}
-		qApp->processEvents();
-	}
+	QFuture<void> future = QtConcurrent::map(lst, saveDocument);
+
+	QFutureWatcher<void> watcher;
+	watcher.setFuture(future);
+	connect(&watcher, SIGNAL(progressValueChanged(int)),
+		&progress, SLOT(setValue(int)) );
+
+	connect(&watcher, SIGNAL(finished()),
+		&progress, SLOT(close()) );
+
+	connect(&progress, SIGNAL(canceled()),
+		&watcher, SLOT(cancel()) );
+
+	progress.exec();
+	watcher.waitForFinished();
 }
 
 
