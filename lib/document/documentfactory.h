@@ -39,7 +39,7 @@ public:
 	static DocumentFactory* instance();
 	~DocumentFactory();
 
-	Document::Ptr load(const KUrl&);
+	Document::Ptr load(const KUrl&, Document::LoadState state = Document::LoadAll);
 
 	QList<KUrl> modifiedDocumentList() const;
 

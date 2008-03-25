@@ -215,7 +215,7 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
-	d->mDocument = DocumentFactory::instance()->load(item.url());
+	d->mDocument = DocumentFactory::instance()->load(item.url(), Document::LoadMetaData);
 	connect(d->mDocument.data(), SIGNAL(metaDataUpdated()),
 		SLOT(updateOneFileInfo()) );
 

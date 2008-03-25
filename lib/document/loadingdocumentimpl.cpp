@@ -56,27 +56,40 @@ namespace Gwenview {
 
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
+	Document::LoadState mLoadState;
+	bool mMetaDataLoaded;
 	QPointer<KIO::TransferJob> mTransferJob;
 	QByteArray mData;
 	LoadingThread mThread;
 
 	void startLoadingThread() {
-		mThread.setData(mData);
-		QObject::connect(&mThread, SIGNAL(metaDataLoaded()),
-			mImpl, SLOT(slotMetaDataLoaded()) );
-		QObject::connect(&mThread, SIGNAL(sizeUpdated()),
-			mImpl, SLOT(slotSizeUpdated()) );
-		QObject::connect(&mThread, SIGNAL(finished()),
-			mImpl, SLOT(slotImageLoaded()) );
+		LoadingThread::Tasks tasks;
+		if (!mMetaDataLoaded) {
+			tasks |= LoadingThread::TaskLoadMetaData;
+		}
+		if (mLoadState == Document::LoadAll) {
+			tasks |= LoadingThread::TaskLoadImage;
+		}
+		mThread.setTasks(tasks);
+
 		mThread.start();
 	}
 };
 
 
-LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
+LoadingDocumentImpl::LoadingDocumentImpl(Document* document, Document::LoadState state)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate) {
 	d->mImpl = this;
+	d->mMetaDataLoaded = false;
+	d->mLoadState = state;
+
+	connect(&d->mThread, SIGNAL(metaDataLoaded()),
+		SLOT(slotMetaDataLoaded()) );
+	connect(&d->mThread, SIGNAL(sizeUpdated()),
+		SLOT(slotSizeUpdated()) );
+	connect(&d->mThread, SIGNAL(finished()),
+		SLOT(slotFinished()) );
 }
 
 
@@ -105,6 +118,7 @@ void LoadingDocumentImpl::init() {
 			return;
 		}
 		d->mData = file.readAll();
+		d->mThread.setData(d->mData);
 		d->startLoadingThread();
 	} else {
 		// Transfer file via KIO
@@ -115,6 +129,15 @@ void LoadingDocumentImpl::init() {
 			SLOT(slotTransferFinished(KJob*)) );
 		d->mTransferJob->start();
 	}
+}
+
+
+void LoadingDocumentImpl::finishLoading() {
+	d->mThread.wait();
+	Q_ASSERT(d->mLoadState == Document::LoadMetaData);
+	Q_ASSERT(d->mMetaDataLoaded);
+	d->mLoadState = Document::LoadAll;
+	d->startLoadingThread();
 }
 
 
@@ -130,7 +153,13 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
 	}
+	d->mThread.setData(d->mData);
 	d->startLoadingThread();
+}
+
+
+bool LoadingDocumentImpl::isMetaDataLoaded() const {
+	return d->mMetaDataLoaded;
 }
 
 
@@ -143,9 +172,12 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 	QByteArray format = d->mThread.format();
 	QSize size = d->mThread.size();
 	Exiv2::Image::AutoPtr exiv2Image = d->mThread.popExiv2Image();
+
 	setDocumentFormat(format);
 	setDocumentImageSize(size);
 	setDocumentExiv2Image(exiv2Image);
+
+	d->mMetaDataLoaded = true;
 }
 
 
@@ -155,18 +187,20 @@ void LoadingDocumentImpl::slotSizeUpdated() {
 }
 
 
-void LoadingDocumentImpl::slotImageLoaded() {
+void LoadingDocumentImpl::slotFinished() {
 	Q_ASSERT(d->mThread.isFinished());
-	setDocumentImage(d->mThread.image());
-	imageRectUpdated(d->mThread.image().rect());
-	loaded();
-	if (document()->format() == "jpeg") {
-		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
-			document(),
-			d->mThread.popJpegContent());
-		switchToImpl(impl);
-	} else {
-		switchToImpl(new DocumentLoadedImpl(document()));
+	if (d->mLoadState == Document::LoadAll) {
+		setDocumentImage(d->mThread.image());
+		imageRectUpdated(d->mThread.image().rect());
+		emit loaded();
+		if (document()->format() == "jpeg") {
+			JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
+				document(),
+				d->mThread.popJpegContent());
+			switchToImpl(impl);
+		} else {
+			switchToImpl(new DocumentLoadedImpl(document()));
+		}
 	}
 }
 

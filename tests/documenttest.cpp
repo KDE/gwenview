@@ -241,7 +241,7 @@ void DocumentTest::testModify() {
 void DocumentTest::testMetaDataJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	DocumentFactory::instance()->clearCache();
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::MetaData);
 
 	// We cleared the cache, so the document should not be loaded
 	Q_ASSERT(!doc->isLoaded());
@@ -266,9 +266,9 @@ void DocumentTest::testMetaDataBmp() {
 	image.fill(Qt::black);
 	image.save(url.path(), "BMP");
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::MetaData);
 	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
-	doc->waitUntilLoaded();
+	doc->waitUntilMetaDataLoaded();
 
 	Q_ASSERT(metaDataUpdatedSpy.count() >= 1);
 

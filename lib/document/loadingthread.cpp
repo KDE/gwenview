@@ -119,6 +119,7 @@ private:
 
 struct LoadingThreadPrivate {
 	mutable QMutex mMutex;
+	LoadingThread::Tasks mTasks;
 	CancellableBuffer mBuffer;
 	QByteArray mData;
 	QByteArray mFormat;
@@ -175,36 +176,43 @@ LoadingThread::~LoadingThread() {
 
 void LoadingThread::run() {
 	QMutexLocker lock(&d->mMutex);
+	QImageReader reader(&d->mBuffer);
 	d->mBuffer.setBuffer(&d->mData);
 	d->mBuffer.open(QIODevice::ReadOnly);
-	QImageReader reader(&d->mBuffer);
 
-	if (!d->loadMetaData(&reader)) {
-		return;
+	if (d->mTasks & TaskLoadMetaData) {
+		kDebug() << "Loading meta data";
+		if (!d->loadMetaData(&reader)) {
+			return;
+		}
+		emit metaDataLoaded();
 	}
 
-	emit metaDataLoaded();
+	if (d->mTasks & TaskLoadImage) {
+		kDebug() << "Loading image";
+		// WARNING: Do not access d->mExiv2Image after metaDataLoaded() has been
+		// called, since the LoadingDocumentImpl will have popped it.
 
-	// WARNING: Do not access d->mExiv2Image after metaDataLoaded() has been
-	// called, since the LoadingDocumentImpl will have popped it.
+		bool ok = reader.read(&d->mImage);
+		if (!ok) {
+			return;
+		}
 
-	bool ok = reader.read(&d->mImage);
-	if (!ok) {
-		return;
+		if (!d->mImageSize.isValid()) {
+			// loadMetaData() failed to read the image size. Now that we have
+			// loaded the image we can initialize it and notify others.
+			d->mImageSize = d->mImage.size();
+			emit sizeUpdated();
+		}
+
+		if (d->mJpegContent) {
+			Gwenview::Orientation orientation = d->mJpegContent->orientation();
+			QMatrix matrix = ImageUtils::transformMatrix(orientation);
+			d->mImage = d->mImage.transformed(matrix);
+		}
 	}
 
-	if (!d->mImageSize.isValid()) {
-		// loadMetaData() failed to read the image size. Now that we have
-		// loaded the image we can initialize it and notify others.
-		d->mImageSize = d->mImage.size();
-		emit sizeUpdated();
-	}
-
-	if (d->mJpegContent) {
-		Gwenview::Orientation orientation = d->mJpegContent->orientation();
-		QMatrix matrix = ImageUtils::transformMatrix(orientation);
-		d->mImage = d->mImage.transformed(matrix);
-	}
+	d->mBuffer.close();
 }
 
 
@@ -216,6 +224,12 @@ void LoadingThread::cancel() {
 void LoadingThread::setData(const QByteArray& data) {
 	QMutexLocker lock(&d->mMutex);
 	d->mData = data;
+}
+
+
+void LoadingThread::setTasks(LoadingThread::Tasks tasks) {
+	QMutexLocker lock(&d->mMutex);
+	d->mTasks = tasks;
 }
 
 

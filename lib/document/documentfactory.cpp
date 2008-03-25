@@ -130,7 +130,7 @@ DocumentFactory* DocumentFactory::instance() {
 	return &factory;
 }
 
-Document::Ptr DocumentFactory::load(const KUrl& url) {
+Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadState) {
 	DocumentInfo* info = 0;
 
 	DocumentMap::ConstIterator it = d->mDocumentMap.find(url);

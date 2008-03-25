@@ -42,12 +42,20 @@ class LoadingThreadPrivate;
 class LoadingThread : public QThread {
 	Q_OBJECT
 public:
+	enum Task {
+		TaskLoadMetaData=1,
+		TaskLoadImage=2
+	};
+	Q_DECLARE_FLAGS(Tasks, Task);
+
 	LoadingThread();
 	~LoadingThread();
 
 	void cancel();
 
 	void setData(const QByteArray&);
+
+	void setTasks(Tasks);
 
 	const QByteArray& format() const;
 
@@ -74,6 +82,8 @@ protected:
 private:
 	LoadingThreadPrivate* const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(LoadingThread::Tasks);
 
 
 } // namespace

@@ -889,7 +889,7 @@ void MainWindow::slotSelectionChanged() {
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 		if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			KUrl url = item.url();
-			Document::Ptr doc = DocumentFactory::instance()->load(url);
+			Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
 			undoGroup->addStack(doc->undoStack());
 			undoGroup->setActiveStack(doc->undoStack());
 		} else {

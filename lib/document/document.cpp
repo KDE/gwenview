@@ -63,16 +63,25 @@ Document::~Document() {
 }
 
 
-void Document::load(const KUrl& url) {
-	d->mUndoStack.clear();
-	d->mUrl = url;
-	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-	d->mImageMetaInfoModel.setFileItem(fileItem);
-	switchToImpl(new LoadingDocumentImpl(this));
+void Document::load(const KUrl& url, Document::LoadState state) {
+	if (d->mUrl.isValid()) {
+		Q_ASSERT(state == Document::LoadState::LoadAll);
+		LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(d->mImpl);
+		Q_ASSERT(impl);
+		impl->finishLoading();
+	} else {
+		d->mUndoStack.clear();
+		d->mUrl = url;
+		KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+		d->mImageMetaInfoModel.setFileItem(fileItem);
+		switchToImpl(new LoadingDocumentImpl(this, state));
+	}
 }
 
 
 void Document::reload() {
+	// Reset url to force a full reload
+	d->mUrl = KUrl();
 	load(d->mUrl);
 }
 

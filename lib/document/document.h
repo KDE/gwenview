@@ -58,9 +58,14 @@ public:
 		SR_OtherError
 	};
 
+	enum LoadState {
+		LoadMetaData,
+		LoadAll
+	};
+
 	typedef KSharedPtr<Document> Ptr;
 	~Document();
-	void load(const KUrl&);
+	void load(const KUrl&, Document::LoadState);
 
 	void reload();
 
@@ -97,6 +102,8 @@ public:
 	QByteArray format() const;
 
 	void waitUntilLoaded() const;
+
+	void waitUntilMetaDataLoaded() const;
 
 	const Exiv2::Image* exiv2Image() const;
 
