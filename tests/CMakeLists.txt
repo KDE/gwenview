@@ -9,7 +9,7 @@ set(imagescalertest_SRCS
 	)
 
 
-kde4_add_executable(imagescalertest TEST ${imagescalertest_SRCS})
+kde4_add_unit_test(imagescalertest ${imagescalertest_SRCS})
 
 target_link_libraries(imagescalertest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -19,7 +19,7 @@ set(documenttest_SRCS
 	)
 
 
-kde4_add_executable(documenttest TEST ${documenttest_SRCS})
+kde4_add_unit_test(documenttest ${documenttest_SRCS})
 
 target_link_libraries(documenttest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -29,7 +29,7 @@ set(jpegcontenttest_SRCS
 	)
 
 
-kde4_add_executable(jpegcontenttest TEST ${jpegcontenttest_SRCS})
+kde4_add_unit_test(jpegcontenttest ${jpegcontenttest_SRCS})
 
 target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
 
@@ -38,7 +38,7 @@ set(thumbnailloadjobtest_SRCS
 	thumbnailloadjobtest.cpp
 	)
 
-kde4_add_executable(thumbnailloadjobtest TEST ${thumbnailloadjobtest_SRCS})
+kde4_add_unit_test(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
 
 target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
 
