@@ -66,7 +66,7 @@ void DocumentTest::testLoadTwoPasses() {
 	doc->waitUntilMetaDataLoaded();
 	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
 	QCOMPARE(doc->format().data(), "png");
-	doc->finishLoading();
+	doc = DocumentFactory::instance()->load(url, Document::LoadAll);
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 }
