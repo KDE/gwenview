@@ -55,10 +55,29 @@ void DocumentTest::testLoad() {
 	QCOMPARE(doc->format().data(), "png");
 }
 
+void DocumentTest::testLoadTwoPasses() {
+	DocumentFactory::instance()->clearCache();
+
+	KUrl url = urlForTestFile("test.png");
+	QImage image;
+	bool ok = image.load(url.path());
+	QVERIFY2(ok, "Could not load 'test.png'");
+	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
+	doc->waitUntilMetaDataLoaded();
+	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
+	QCOMPARE(doc->format().data(), "png");
+	doc->finishLoading();
+	doc->waitUntilLoaded();
+	QCOMPARE(image, doc->image());
+}
+
 void DocumentTest::testLoadEmpty() {
 	KUrl url = urlForTestFile("empty.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->waitUntilLoaded();
+	while (doc->loadingState() == Document::Loading) {
+		QTest::qWait(100);
+	}
+	QCOMPARE(doc->loadingState(), Document::LoadingFailed);
 }
 
 void DocumentTest::testLoadRemote() {
@@ -147,7 +166,7 @@ void DocumentTest::testSave() {
 	QCOMPARE(result, Document::SR_OK);
 	QCOMPARE(doc->format().data(), "png");
 
-	QVERIFY2(doc->isLoaded(),
+	QVERIFY2(doc->loadingState() == Document::Loaded,
 		"Document is supposed to finish loading before saving"
 		);
 	
@@ -241,10 +260,10 @@ void DocumentTest::testModify() {
 void DocumentTest::testMetaDataJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	DocumentFactory::instance()->clearCache();
-	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::MetaData);
+	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
 
 	// We cleared the cache, so the document should not be loaded
-	Q_ASSERT(!doc->isLoaded());
+	Q_ASSERT(doc->loadingState() == Document::Loading);
 
 	// Wait until we receive the metaDataUpdated() signal
 	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
@@ -266,7 +285,7 @@ void DocumentTest::testMetaDataBmp() {
 	image.fill(Qt::black);
 	image.save(url.path(), "BMP");
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::MetaData);
+	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
 	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
 	doc->waitUntilMetaDataLoaded();
 

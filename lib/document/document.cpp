@@ -49,11 +49,16 @@ struct DocumentPrivate {
 };
 
 
-Document::Document() 
+Document::Document(const KUrl& url, Document::LoadState state)
 : QObject()
 , d(new DocumentPrivate) {
-	d->mImpl = new EmptyDocumentImpl(this);
+	d->mImpl = 0;
+	d->mUrl = url;
+
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
+	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+	d->mImageMetaInfoModel.setFileItem(fileItem);
+	switchToImpl(new LoadingDocumentImpl(this, state));
 }
 
 
@@ -63,26 +68,20 @@ Document::~Document() {
 }
 
 
-void Document::load(const KUrl& url, Document::LoadState state) {
-	if (d->mUrl.isValid()) {
-		Q_ASSERT(state == Document::LoadState::LoadAll);
+void Document::finishLoading() {
+	if (loadingState() == Loading) {
 		LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(d->mImpl);
 		Q_ASSERT(impl);
 		impl->finishLoading();
-	} else {
-		d->mUndoStack.clear();
-		d->mUrl = url;
-		KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-		d->mImageMetaInfoModel.setFileItem(fileItem);
-		switchToImpl(new LoadingDocumentImpl(this, state));
 	}
 }
 
 
 void Document::reload() {
-	// Reset url to force a full reload
-	d->mUrl = KUrl();
-	load(d->mUrl);
+	d->mUndoStack.clear();
+	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
+	d->mImageMetaInfoModel.setFileItem(fileItem);
+	switchToImpl(new LoadingDocumentImpl(this, Document::LoadAll));
 }
 
 
@@ -91,16 +90,21 @@ QImage& Document::image() {
 }
 
 
-bool Document::isLoaded() const {
-	return d->mImpl->isLoaded();
+bool Document::isMetaDataLoaded() const {
+	return d->mImpl->isMetaDataLoaded();
+}
+
+
+Document::LoadingState Document::loadingState() const {
+	return d->mImpl->loadingState();
 }
 
 
 void Document::switchToImpl(AbstractDocumentImpl* impl) {
-	// There should always be an implementation defined
-	Q_ASSERT(d->mImpl);
 	Q_ASSERT(impl);
-	delete d->mImpl;
+	if (d->mImpl) {
+		d->mImpl->deleteLater();
+	}
 	d->mImpl=impl;
 
 	connect(d->mImpl, SIGNAL(loaded()),
@@ -132,8 +136,15 @@ KUrl Document::url() const {
 }
 
 
+void Document::waitUntilMetaDataLoaded() const {
+	while (!isMetaDataLoaded()) {
+		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
+}
+
+
 void Document::waitUntilLoaded() const {
-	while (!isLoaded()) {
+	while (loadingState() != Loaded) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 }

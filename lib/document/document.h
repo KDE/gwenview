@@ -63,13 +63,20 @@ public:
 		LoadAll
 	};
 
+	enum LoadingState {
+		Loading,
+		Loaded,
+		LoadingFailed
+	};
+
 	typedef KSharedPtr<Document> Ptr;
 	~Document();
-	void load(const KUrl&, Document::LoadState);
 
 	void reload();
 
-	bool isLoaded() const;
+	bool isMetaDataLoaded() const;
+
+	LoadingState loadingState() const;
 
 	bool isModified() const;
 
@@ -101,9 +108,9 @@ public:
 
 	QByteArray format() const;
 
-	void waitUntilLoaded() const;
-
 	void waitUntilMetaDataLoaded() const;
+
+	void waitUntilLoaded() const;
 
 	const Exiv2::Image* exiv2Image() const;
 
@@ -128,13 +135,18 @@ private:
 	friend class DocumentFactory;
 	friend class AbstractDocumentImpl;
 
+	/**
+	 * Load the image pixels if this document has only loaded meta data
+	 */
+	void finishLoading();
+
 	void setImageInternal(const QImage&);
 	void setFormat(const QByteArray&);
 	void setSize(const QSize&);
 	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void switchToImpl(AbstractDocumentImpl* impl);
 
-	Document();
+	Document(const KUrl&, Document::LoadState);
 	DocumentPrivate * const d;
 };
 

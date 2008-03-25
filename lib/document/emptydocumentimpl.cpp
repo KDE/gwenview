@@ -41,8 +41,12 @@ EmptyDocumentImpl::~EmptyDocumentImpl()
 void EmptyDocumentImpl::init() {
 }
 
-bool EmptyDocumentImpl::isLoaded() const {
+bool EmptyDocumentImpl::isMetaDataLoaded() const {
 	return false;
+}
+
+Document::LoadingState EmptyDocumentImpl::loadingState() const {
+	return Document::LoadingFailed;
 }
 
 Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QByteArray&) {

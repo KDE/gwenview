@@ -60,8 +60,13 @@ void DocumentLoadedImpl::init() {
 }
 
 
-bool DocumentLoadedImpl::isLoaded() const {
+bool DocumentLoadedImpl::isMetaDataLoaded() const {
 	return true;
+}
+
+
+Document::LoadingState DocumentLoadedImpl::loadingState() const {
+	return Document::Loaded;
 }
 
 

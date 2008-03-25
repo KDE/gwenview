@@ -59,20 +59,21 @@ struct DocumentInfo {
 typedef QMap<KUrl, DocumentInfo*> DocumentMap;
 
 struct DocumentFactoryPrivate {
-	DocumentMap mDocumentMap;
+	DocumentMap mMetaDataLoadedDocumentMap;
+	DocumentMap mFullyLoadedDocumentMap;
 	QUndoGroup mUndoGroup;
 
 	/**
-	 * Removes items in mDocumentMap which are no longer referenced elsewhere
+	 * Removes items in a map if they are no longer referenced elsewhere
 	 */
-	void garbageCollect() {
+	void garbageCollect(DocumentMap& map) {
 		// Build a map of all unreferenced images
 		typedef QMap<QDateTime, KUrl> UnreferencedImages;
 		UnreferencedImages unreferencedImages;
 
 		DocumentMap::Iterator
-			it = mDocumentMap.begin(),
-			end = mDocumentMap.end();
+			it = map.begin(),
+			end = map.end();
 		for (;it!=end; ++it) {
 			DocumentInfo* info = it.value();
 			if (info->mDocument.count() == 1 && !info->mDocument->isModified()) {
@@ -89,18 +90,18 @@ struct DocumentFactoryPrivate {
 		{
 			KUrl url = unreferencedIt.value();
 			LOG("Collecting" << url);
-			it = mDocumentMap.find(url);
-			Q_ASSERT(it != mDocumentMap.end());
+			it = map.find(url);
+			Q_ASSERT(it != map.end());
 			delete it.value();
-			mDocumentMap.erase(it);
+			map.erase(it);
 		}
 	}
 
-	void logDocumentMap() {
-		kDebug() << "mDocumentMap:";
-		DocumentMap::Iterator
-			it = mDocumentMap.begin(),
-			end = mDocumentMap.end();
+	void logDocumentMap(const DocumentMap& map) {
+		kDebug() << "map:";
+		DocumentMap::ConstIterator
+			it = map.constBegin(),
+			end = map.constEnd();
 		for(; it!=end; ++it) {
 			kDebug() << "-" << it.key()
 				<< "refCount=" << it.value()->mDocument.count()
@@ -116,12 +117,8 @@ DocumentFactory::DocumentFactory()
 }
 
 DocumentFactory::~DocumentFactory() {
-	DocumentMap::Iterator
-		it = d->mDocumentMap.begin(),
-		end = d->mDocumentMap.end();
-	for (; it!=end; ++it) {
-		delete it.value();
-	}
+	qDeleteAll(d->mFullyLoadedDocumentMap);
+	qDeleteAll(d->mMetaDataLoadedDocumentMap);
 	delete d;
 }
 
@@ -133,35 +130,69 @@ DocumentFactory* DocumentFactory::instance() {
 Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadState loadState) {
 	DocumentInfo* info = 0;
 
-	DocumentMap::ConstIterator it = d->mDocumentMap.find(url);
+	DocumentMap::Iterator it = d->mFullyLoadedDocumentMap.find(url);
 
-	if (it != d->mDocumentMap.end()) {
-		LOG("url already loaded:" << url);
+	if (it != d->mFullyLoadedDocumentMap.end()) {
+		LOG(url.fileName() << "url in mFullyLoadedDocumentMap");
 		info = it.value();
 		info->mLastAccess = QDateTime::currentDateTime();
-	} else {
-		LOG("loading:" << url);
-		Document* doc = new Document();
-		doc->load(url);
-		Document::Ptr docPtr = Document::Ptr(doc);
-		info = new DocumentInfo;
-		info->mDocument = docPtr;
-		info->mLastAccess = QDateTime::currentDateTime();
-		d->mDocumentMap[url] = info;
-		connect(doc, SIGNAL(loaded(const KUrl&)),
-			SLOT(slotLoaded(const KUrl&)) );
-		connect(doc, SIGNAL(saved(const KUrl&)),
-			SLOT(slotSaved(const KUrl&)) );
-		connect(doc, SIGNAL(modified(const KUrl&)),
-			SLOT(slotModified(const KUrl&)) );
-
-		d->garbageCollect();
-	#ifdef ENABLE_LOG
-		d->logDocumentMap();
-	#endif
+		return info->mDocument;
 	}
-	Q_ASSERT(info);
-	return info->mDocument;
+
+	it = d->mMetaDataLoadedDocumentMap.find(url);
+	if (it != d->mMetaDataLoadedDocumentMap.end()) {
+		LOG(url.fileName() << "url in mMetaDataLoadedDocumentMap");
+		if (loadState == Document::LoadMetaData) {
+			info = it.value();
+			info->mLastAccess = QDateTime::currentDateTime();
+			return info->mDocument;
+		} else {
+			// Meta data already loaded, we need to load image pixels
+			LOG(url.fileName() << "need to load image pixels");
+
+			// Move DocumentInfo to the mFullyLoadedDocumentMap map
+			info = it.value();
+			d->mMetaDataLoadedDocumentMap.erase(it);
+			d->mFullyLoadedDocumentMap[url] = info;
+
+			// Start loading image pixels
+			info->mDocument->finishLoading();
+			return info->mDocument;
+		}
+	}
+
+	// At this point we couldn't find the document in either maps
+
+	// Start loading the document
+	LOG(url.fileName() << "loading" << (loadState == Document::LoadAll ? "all" : "metadata"));
+	Document* doc = new Document(url, loadState);
+	connect(doc, SIGNAL(loaded(const KUrl&)),
+		SLOT(slotLoaded(const KUrl&)) );
+	connect(doc, SIGNAL(saved(const KUrl&)),
+		SLOT(slotSaved(const KUrl&)) );
+	connect(doc, SIGNAL(modified(const KUrl&)),
+		SLOT(slotModified(const KUrl&)) );
+
+	// Create DocumentInfo instance
+	info = new DocumentInfo;
+	Document::Ptr docPtr(doc);
+	info->mDocument = docPtr;
+	info->mLastAccess = QDateTime::currentDateTime();
+
+	// Place DocumentInfo in the appropriate map
+	DocumentMap& map =
+		loadState == Document::LoadAll
+		? d->mFullyLoadedDocumentMap
+		: d->mMetaDataLoadedDocumentMap;
+
+	map[url] = info;
+
+	d->garbageCollect(map);
+	#ifdef ENABLE_LOG
+	d->logDocumentMap(map);
+	#endif
+
+	return docPtr;
 }
 
 
@@ -170,13 +201,18 @@ QList<KUrl> DocumentFactory::modifiedDocumentList() const {
 }
 
 
-bool DocumentFactory::hasUrl(const KUrl& url) const {
-	return d->mDocumentMap.contains(url);
+bool DocumentFactory::hasUrl(const KUrl& url, Document::LoadState loadState) const {
+	const DocumentMap& map =
+		loadState == Document::LoadAll
+		? d->mFullyLoadedDocumentMap
+		: d->mMetaDataLoadedDocumentMap;
+	return map.contains(url);
 }
 
 
 void DocumentFactory::clearCache() {
-	d->mDocumentMap.clear();
+	d->mFullyLoadedDocumentMap.clear();
+	d->mMetaDataLoadedDocumentMap.clear();
 }
 
 

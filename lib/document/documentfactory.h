@@ -43,7 +43,7 @@ public:
 
 	QList<KUrl> modifiedDocumentList() const;
 
-	bool hasUrl(const KUrl&) const;
+	bool hasUrl(const KUrl&, Document::LoadState) const;
 
 	void clearCache();
 

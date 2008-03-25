@@ -36,7 +36,8 @@ public:
 	~EmptyDocumentImpl();
 
 	virtual void init();
-	virtual bool isLoaded() const;
+	virtual bool isMetaDataLoaded() const;
+	virtual Document::LoadingState loadingState() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
 };

@@ -49,7 +49,9 @@ public:
 	 */
 	virtual void init() = 0;
 
-	virtual bool isLoaded() const = 0;
+	virtual bool isMetaDataLoaded() const = 0;
+
+	virtual Document::LoadingState loadingState() const = 0;
 
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format) = 0;
 

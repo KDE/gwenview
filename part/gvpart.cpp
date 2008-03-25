@@ -219,7 +219,7 @@ bool GVPart::openUrl(const KUrl& url) {
 	mDocument = DocumentFactory::instance()->load(url);
 	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SIGNAL(completed()) );
 	connect(mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)), SLOT(slotImageRectUpdated(const QRect&)) );
-	if (mDocument->isLoaded()) {
+	if (mDocument->loadingState() == Document::Loaded) {
 		setViewImageFromDocument();
 		mView->updateImageRect(mDocument->image().rect());
 		emit completed();

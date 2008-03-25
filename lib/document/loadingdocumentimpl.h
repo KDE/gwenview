@@ -38,11 +38,12 @@ class LoadingDocumentImplPrivate;
 class LoadingDocumentImpl : public AbstractDocumentImpl {
 	Q_OBJECT
 public:
-	LoadingDocumentImpl(Document*);
+	LoadingDocumentImpl(Document*, Document::LoadState);
 	~LoadingDocumentImpl();
 
 	virtual void init();
-	virtual bool isLoaded() const;
+	virtual bool isMetaDataLoaded() const;
+	virtual Document::LoadingState loadingState() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
 
@@ -51,7 +52,6 @@ public:
 private Q_SLOTS:
 	void slotMetaDataLoaded();
 	void slotImageLoaded();
-	void slotSizeUpdated();
 	void slotDataReceived(KIO::Job*, const QByteArray&);
 	void slotTransferFinished(KJob*);
 

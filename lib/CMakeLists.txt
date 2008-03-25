@@ -13,7 +13,6 @@ set(gwenviewlib_SRCS
 	document/emptydocumentimpl.cpp
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
-	document/loadingthread.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	archiveutils.cpp

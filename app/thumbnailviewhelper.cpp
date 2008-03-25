@@ -74,9 +74,9 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 			continue;
 		}
 
-		if (factory->hasUrl(item.url())) {
+		if (factory->hasUrl(item.url(), Document::LoadAll)) {
 			Document::Ptr doc = factory->load(item.url());
-			if (doc->isLoaded() && doc->isModified()) {
+			if (doc->loadingState() == Document::Loaded && doc->isModified()) {
 				QImage image = doc->image();
 				if (image.width() > THUMBNAIL_SIZE || image.height() > THUMBNAIL_SIZE) {
 					image = image.scaled(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Qt::KeepAspectRatio);
@@ -153,9 +153,9 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 bool ThumbnailViewHelper::isDocumentModified(const KUrl& url) {
 	DocumentFactory* factory = DocumentFactory::instance();
 
-	if (factory->hasUrl(url)) {
+	if (factory->hasUrl(url, Document::LoadAll)) {
 		Document::Ptr doc = factory->load(url);
-		return doc->isLoaded() && doc->isModified();
+		return doc->loadingState() == Document::Loaded && doc->isModified();
 	} else {
 		return false;
 	}

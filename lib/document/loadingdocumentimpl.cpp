@@ -22,10 +22,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "loadingdocumentimpl.moc"
 
 // Qt
+#include <QBuffer>
 #include <QByteArray>
 #include <QFile>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QImage>
+#include <QImageReader>
 #include <QPointer>
+#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -37,9 +42,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "document.h"
 #include "documentloadedimpl.h"
 #include "emptydocumentimpl.h"
+#include "exiv2imageloader.h"
+#include "imageutils.h"
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
-#include "loadingthread.h"
+#include "orientation.h"
 #include "urlutils.h"
 
 namespace Gwenview {
@@ -57,22 +64,74 @@ namespace Gwenview {
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
 	Document::LoadState mLoadState;
-	bool mMetaDataLoaded;
 	QPointer<KIO::TransferJob> mTransferJob;
+	QFuture<bool> mMetaDataFuture;
+	QFutureWatcher<bool> mMetaDataFutureWatcher;
+	QFuture<void> mImageDataFuture;
+	QFutureWatcher<void> mImageDataFutureWatcher;
+
+	// State related fields
+	bool mMetaDataLoaded;
 	QByteArray mData;
-	LoadingThread mThread;
+	QByteArray mFormat;
+	QSize mImageSize;
+	Exiv2::Image::AutoPtr mExiv2Image;
+	JpegContent* mJpegContent;
+	QImage mImage;
 
-	void startLoadingThread() {
-		LoadingThread::Tasks tasks;
-		if (!mMetaDataLoaded) {
-			tasks |= LoadingThread::TaskLoadMetaData;
-		}
-		if (mLoadState == Document::LoadAll) {
-			tasks |= LoadingThread::TaskLoadImage;
-		}
-		mThread.setTasks(tasks);
+	void startLoading() {
+		Q_ASSERT(!mMetaDataLoaded);
+		mMetaDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaData);
+		mMetaDataFutureWatcher.setFuture(mMetaDataFuture);
+	}
 
-		mThread.start();
+	bool loadMetaData() {
+		QBuffer buffer;
+		buffer.setBuffer(&mData);
+		buffer.open(QIODevice::ReadOnly);
+		QImageReader reader(&buffer);
+		mFormat = reader.format();
+		if (mFormat.isEmpty()) {
+			return false;
+		}
+
+		Exiv2ImageLoader loader;
+		if (loader.load(mData)) {
+			mExiv2Image = loader.popImage();
+		}
+
+		if (mFormat == "jpeg") {
+			mJpegContent = new JpegContent();
+			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
+				return false;
+			}
+
+			// Use the size from JpegContent, as its correctly transposed if the
+			// image has been rotated
+			mImageSize = mJpegContent->size();
+		} else {
+			mImageSize = reader.size();
+		}
+
+		return true;
+	}
+
+	void loadImageData() {
+		QBuffer buffer;
+		buffer.setBuffer(&mData);
+		buffer.open(QIODevice::ReadOnly);
+		QImageReader reader(&buffer);
+
+		bool ok = reader.read(&mImage);
+		if (!ok) {
+			return;
+		}
+
+		if (mJpegContent) {
+			Gwenview::Orientation orientation = mJpegContent->orientation();
+			QMatrix matrix = ImageUtils::transformMatrix(orientation);
+			mImage = mImage.transformed(matrix);
+		}
 	}
 };
 
@@ -83,13 +142,13 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document, Document::LoadState
 	d->mImpl = this;
 	d->mMetaDataLoaded = false;
 	d->mLoadState = state;
+	d->mJpegContent = 0;
 
-	connect(&d->mThread, SIGNAL(metaDataLoaded()),
+	connect(&d->mMetaDataFutureWatcher, SIGNAL(finished()),
 		SLOT(slotMetaDataLoaded()) );
-	connect(&d->mThread, SIGNAL(sizeUpdated()),
-		SLOT(slotSizeUpdated()) );
-	connect(&d->mThread, SIGNAL(finished()),
-		SLOT(slotFinished()) );
+
+	connect(&d->mImageDataFutureWatcher, SIGNAL(finished()),
+		SLOT(slotImageLoaded()) );
 }
 
 
@@ -97,11 +156,6 @@ LoadingDocumentImpl::~LoadingDocumentImpl() {
 	LOG("");
 	if (d->mTransferJob) {
 		d->mTransferJob->kill();
-	}
-	if (d->mThread.isRunning()) {
-		LOG("");
-		d->mThread.cancel();
-		d->mThread.wait();
 	}
 	delete d;
 }
@@ -118,8 +172,7 @@ void LoadingDocumentImpl::init() {
 			return;
 		}
 		d->mData = file.readAll();
-		d->mThread.setData(d->mData);
-		d->startLoadingThread();
+		d->startLoading();
 	} else {
 		// Transfer file via KIO
 		d->mTransferJob = KIO::get(document()->url());
@@ -133,11 +186,12 @@ void LoadingDocumentImpl::init() {
 
 
 void LoadingDocumentImpl::finishLoading() {
-	d->mThread.wait();
-	Q_ASSERT(d->mLoadState == Document::LoadMetaData);
+	Q_ASSERT(!d->mMetaDataFutureWatcher.isRunning());
 	Q_ASSERT(d->mMetaDataLoaded);
 	d->mLoadState = Document::LoadAll;
-	d->startLoadingThread();
+
+	d->mImageDataFuture = QtConcurrent::run(d, &LoadingDocumentImplPrivate::loadImageData);
+	d->mImageDataFutureWatcher.setFuture(d->mImageDataFuture);
 }
 
 
@@ -153,8 +207,7 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
 	}
-	d->mThread.setData(d->mData);
-	d->startLoadingThread();
+	d->startLoading();
 }
 
 
@@ -163,44 +216,49 @@ bool LoadingDocumentImpl::isMetaDataLoaded() const {
 }
 
 
-bool LoadingDocumentImpl::isLoaded() const {
-	return false;
+Document::LoadingState LoadingDocumentImpl::loadingState() const {
+	return Document::Loading;
 }
 
 
 void LoadingDocumentImpl::slotMetaDataLoaded() {
-	QByteArray format = d->mThread.format();
-	QSize size = d->mThread.size();
-	Exiv2::Image::AutoPtr exiv2Image = d->mThread.popExiv2Image();
+	Q_ASSERT(!d->mMetaDataFuture.isRunning());
+	if (!d->mMetaDataFuture.result()) {
+		kWarning() << document()->url() << "Loading metadata failed";
+		switchToImpl(new EmptyDocumentImpl(document()));
+		return;
+	}
 
-	setDocumentFormat(format);
-	setDocumentImageSize(size);
-	setDocumentExiv2Image(exiv2Image);
+	setDocumentFormat(d->mFormat);
+	setDocumentImageSize(d->mImageSize);
+	setDocumentExiv2Image(d->mExiv2Image);
 
 	d->mMetaDataLoaded = true;
-}
 
-
-void LoadingDocumentImpl::slotSizeUpdated() {
-	QSize size = d->mThread.size();
-	setDocumentImageSize(size);
-}
-
-
-void LoadingDocumentImpl::slotFinished() {
-	Q_ASSERT(d->mThread.isFinished());
 	if (d->mLoadState == Document::LoadAll) {
-		setDocumentImage(d->mThread.image());
-		imageRectUpdated(d->mThread.image().rect());
-		emit loaded();
-		if (document()->format() == "jpeg") {
-			JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
-				document(),
-				d->mThread.popJpegContent());
-			switchToImpl(impl);
-		} else {
-			switchToImpl(new DocumentLoadedImpl(document()));
-		}
+		finishLoading();
+	}
+}
+
+
+void LoadingDocumentImpl::slotImageLoaded() {
+	if (!document()->size().isValid()) {
+		// This can happen if the image decoder was not able to tell us the
+		// image size without decoding it
+		Q_ASSERT(d->mImageSize.isValid());
+		setDocumentImageSize(d->mImageSize);
+	}
+
+	setDocumentImage(d->mImage);
+	imageRectUpdated(d->mImage.rect());
+	emit loaded();
+	if (d->mFormat == "jpeg") {
+		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
+			document(),
+			d->mJpegContent);
+		switchToImpl(impl);
+	} else {
+		switchToImpl(new DocumentLoadedImpl(document()));
 	}
 }
 
