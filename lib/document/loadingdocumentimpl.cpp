@@ -62,8 +62,10 @@ struct LoadingDocumentImplPrivate {
 
 	void startLoadingThread() {
 		mThread.setData(mData);
-		QObject::connect(&mThread, SIGNAL(metaDataUpdated()),
+		QObject::connect(&mThread, SIGNAL(metaDataLoaded()),
 			mImpl, SLOT(slotMetaDataLoaded()) );
+		QObject::connect(&mThread, SIGNAL(sizeUpdated()),
+			mImpl, SLOT(slotSizeUpdated()) );
 		QObject::connect(&mThread, SIGNAL(finished()),
 			mImpl, SLOT(slotImageLoaded()) );
 		mThread.start();
@@ -144,6 +146,12 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 	setDocumentFormat(format);
 	setDocumentImageSize(size);
 	setDocumentExiv2Image(exiv2Image);
+}
+
+
+void LoadingDocumentImpl::slotSizeUpdated() {
+	QSize size = d->mThread.size();
+	setDocumentImageSize(size);
 }
 
 

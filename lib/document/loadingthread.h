@@ -60,7 +60,13 @@ public:
 	JpegContent* popJpegContent();
 
 Q_SIGNALS:
-	void metaDataUpdated();
+	void metaDataLoaded();
+
+	/**
+	 * This signal is emitted if the loader was not able to determine image
+	 * size without loading the whole image
+	 */
+	void sizeUpdated();
 
 protected:
 	virtual void run();

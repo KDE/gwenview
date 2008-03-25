@@ -49,6 +49,7 @@ public:
 private Q_SLOTS:
 	void slotMetaDataLoaded();
 	void slotImageLoaded();
+	void slotSizeUpdated();
 	void slotDataReceived(KIO::Job*, const QByteArray&);
 	void slotTransferFinished(KJob*);
 
