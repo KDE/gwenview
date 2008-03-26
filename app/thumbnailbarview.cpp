@@ -2,6 +2,7 @@
 /*
 Gwenview: an image viewer
 Copyright 2008 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2008 Ilya Konkov <eruart@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -46,12 +47,26 @@ const int ITEM_MARGIN = 5;
 const int SHADOW_STRENGTH = 127;
 
 /** How many pixels around the thumbnail are shadowed */
-const int SHADOW_SIZE = 3;
+const int SHADOW_SIZE = 4;
 
 
 static QString rgba(const QColor &color) {
-	QString rgba("rgba(%1, %2, %3, %4)");
-	return rgba.arg(QString::number(color.red()), QString::number(color.green()), QString::number(color.red()), QString::number(color.alpha()));
+	return QString::fromAscii("rgba(%1, %2, %3, %4)")
+		.arg(color.red())
+		.arg(color.green())
+		.arg(color.blue())
+		.arg(color.alpha());
+}
+
+
+static QString gradient(const QColor &color, int value) {
+	QString grad =
+		"qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+		"stop:0 %1, stop: 1 %2)";
+	return grad.arg(
+		rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))),
+		rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2)))
+		);
 }
 
 
@@ -62,7 +77,6 @@ struct ThumbnailBarItemDelegatePrivate {
 
 	ThumbnailBarItemDelegate* mDelegate;
 	ThumbnailView* mView;
-	int mThumbnailSize;
 	QColor borderColor;
 
 	void showToolTip(QHelpEvent* helpEvent) {
@@ -100,15 +114,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	setThumbnailSize(view->thumbnailSize());
 
-	QWidget* viewport = view->viewport();
-	QColor bgColor = viewport->palette().color(viewport->backgroundRole());
-
-	if (bgColor.value() < 128) {
-		d->borderColor = bgColor.darker(200);
-	} else {
-		d->borderColor = bgColor.lighter(200);
-	}
-	d->borderColor = PaintUtils::adjustedHsv(d->borderColor, 0, - d->borderColor.saturation(), 0);
+	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.7);
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
@@ -121,8 +127,7 @@ QSize ThumbnailBarItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*
 
 
 void ThumbnailBarItemDelegate::setThumbnailSize(int value) {
-	d->mThumbnailSize = value;
-	d->mView->setGridSize(QSize(value + ITEM_MARGIN*2 + 1, value + ITEM_MARGIN*2 + 1));
+	d->mView->setGridSize(QSize(value + ITEM_MARGIN * 2, value + ITEM_MARGIN * 2));
 }
 
 
@@ -146,7 +151,7 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	ThumbnailView::Thumbnail thumbnail = d->mView->thumbnailForIndex(index);
 	QPixmap thumbnailPix = thumbnail.mPixmap;
-	QSize thumbnailSize = d->mView->gridSize() - QSize(ITEM_MARGIN*2 + 1, ITEM_MARGIN*3 + 1);
+	QSize thumbnailSize = d->mView->gridSize() - QSize(ITEM_MARGIN * 2, ITEM_MARGIN * 2);
 	if (thumbnailPix.width() > thumbnailSize.width() || thumbnailPix.height() > thumbnailSize.height()) {
 		thumbnailPix = thumbnailPix.scaled(thumbnailSize, Qt::KeepAspectRatio);
 	}
@@ -161,7 +166,7 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 	if (!thumbnailPix.isNull()) {
 		QRect thumbnailRect = QRect(
 			rect.left() + (rect.width() - thumbnailPix.width())/2,
-			rect.top() + (rect.height() - thumbnailPix.height())/2 ,
+			rect.top() + (rect.height() - thumbnailPix.height())/2 - 1,
 		    thumbnailPix.width(),
 		    thumbnailPix.height());
 
@@ -185,6 +190,64 @@ ThumbnailBarItemDelegate::~ThumbnailBarItemDelegate() {
 }
 
 
+/**
+ * This proxy style makes it possible to override the value returned by
+ * styleHint() which leads to not-so-nice results with some styles.
+ */
+class ProxyStyle : public QWindowsStyle {
+public:
+	ProxyStyle(QStyle* baseStyle) : QWindowsStyle() {
+		mBaseStyle = baseStyle;
+	}
+
+	void drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const {
+		mBaseStyle->drawPrimitive(pe, opt, p, w);
+	}
+
+	void drawControl(ControlElement element, const QStyleOption *opt, QPainter *p, const QWidget *w = 0) const {
+		mBaseStyle->drawControl(element, opt, p, w);
+	}
+
+	void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p, const QWidget *w = 0) const {
+		mBaseStyle->drawComplexControl(cc, opt, p, w);
+	}
+
+	int styleHint(StyleHint sh, const QStyleOption *opt = 0, const QWidget *w = 0, QStyleHintReturn *shret = 0) const {
+		switch (sh) {
+		case SH_ItemView_ShowDecorationSelected:
+			return true;
+		case SH_ScrollView_FrameOnlyAroundContents:
+			return false;
+		default:
+			return QWindowsStyle::styleHint(sh, opt, w, shret);
+		}
+	}
+
+	void polish(QApplication* application) {
+		mBaseStyle->polish(application);
+	}
+
+	void polish(QPalette& palette) {
+		mBaseStyle->polish(palette);
+	}
+
+	void polish(QWidget* widget) {
+		mBaseStyle->polish(widget);
+	}
+
+	void unpolish(QWidget* widget) {
+		mBaseStyle->unpolish(widget);
+	}
+
+	void unpolish(QApplication* application) {
+		mBaseStyle->unpolish(application);
+	}
+
+private:
+	QStyle* mBaseStyle;
+};
+
+
 ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 : ThumbnailView(parent) {
 	setObjectName("thumbnailBarView");
@@ -194,26 +257,17 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	setWrapping(false);
 	setThumbnailSize(80);
 
-	QStyle* defaultStyle = style();
-	setStyle(mStyle = new QWindowsStyle);
-	setStyleSheet(defaultStyleSheet());
-	horizontalScrollBar()->setStyle(defaultStyle);
+	mStyle = new ProxyStyle(style());
+	setStyle(mStyle);
+	setFullScreenMode(false);
 
-	// Since QWindowsStyle is used context menu won't be painted by system style. Avoid it by this hack:
-	ThumbnailView::disconnect(SIGNAL(customContextMenuRequested(const QPoint&)));
-	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
-	    SLOT(showContextMenu()) );
+	// Vertical spacing between viewport and scrollbar.
+	setViewportMargins(0, 0, 0, 2);
 }
 
 
 ThumbnailBarView::~ThumbnailBarView() {
 	delete mStyle;
-}
-
-
-void ThumbnailBarView::showContextMenu() {
-	// Using parentWidget as parent of menu to paint it by system style.
-	thumbnailViewHelper()->showContextMenu(parentWidget());
 }
 
 
@@ -227,104 +281,119 @@ QSize ThumbnailBarView::sizeHint() const {
 }
 
 
-QString ThumbnailBarView::defaultStyleSheet() const {
-	QColor bgColor, bgSelColor;
-	bgSelColor = viewport()->palette().color(QPalette::Normal, QPalette::Highlight);
-	bgColor = viewport()->palette().color(viewport()->backgroundRole());
+void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
+	QColor bgColor = fullScreenMode ? QColor(Qt::black) :
+			palette().color(QPalette::Normal, QPalette::Window);
+	QColor bgSelColor = palette().color(QPalette::Normal, QPalette::Highlight);
 
 	// Avoid dark and bright colors
-	bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (128 * 2 + bgColor.value()) / 3);
-	bgSelColor.setHsv(bgSelColor.hue(), bgSelColor.saturation(), (128 * 2 + bgSelColor.value()) / 3);
+	bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
 
-
-	QString itemCss =
-		"QListView::item {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.05 %1, stop:1 %2);"
-		"	border-left: 1px solid "
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.05 %3, stop:1 %4);"
-		"	border-right: 1px solid "
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.05 %4, stop:1 %5);"
-		"}";
-	itemCss = itemCss.arg(
-		bgColor.lighter(125).name(),
-		bgColor.darker(125).name(),
-		bgColor.lighter(170).name(),
-		bgColor.name(),
-		bgColor.darker(170).name());
+	QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
+	QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
+	QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
 
 	QString viewCss =
 		"#thumbnailBarView {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.05 %1, stop:1 %2);"
-		"	border: 1px solid #444;"
+		"	background-color: rgba(0, 0, 0, 10%);"
+		"	border: 1px solid rgba(0, 0, 0, 35%);"
+		"	border-radius: 2px;"
+		"	padding: %1px;"
 		"}";
-	viewCss = viewCss.arg(bgColor.darker(125).name(), bgColor.name());
+	viewCss = viewCss.arg(QString::number(fullScreenMode ? 0 : 1));
 
-	QColor borderSelColor(0, 0, 0, 127);
-	QString itemSelCss =
-		"QListView::item:selected {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.05 %1, stop:1 %2);"
-		"	border-left: 1px solid %3;"
+	QString viewportCss =
+		"QWidget { "
+		"	background-color: %1;"
+		"}";
+	viewportCss = viewportCss.arg(rgba(bgColor));
+	viewport()->setStyleSheet(viewportCss);
+
+	QString itemCss =
+		"QListView::item {"
+		"	background-color: %1;"
+		"	border-left: 1px solid %2;"
 		"	border-right: 1px solid %3;"
 		"}";
+	itemCss = itemCss.arg(
+		gradient(bgColor, 46),
+		gradient(leftBorderColor, 36),
+		gradient(rightBorderColor, 26));
+
+	QString itemSelCss =
+		"QListView::item:selected {"
+		"	background-color: %1;"
+		"	border-left: 1px solid %2;"
+		"	border-right: 1px solid %2;"
+		"}";
 	itemSelCss = itemSelCss.arg(
-	    bgSelColor.lighter(125).name(),
-	    bgSelColor.darker(125).name(),
-	    rgba(borderSelColor));
+		gradient(bgSelColor, 56),
+		rgba(borderSelColor));
 
-	QString scrollbarCss =
-		"QScrollBar:horizontal {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop: 0 black, stop: 0.4 %1, stop: 1 %2);"
-		"	height: 8px;"
-		"	border-top: 1px solid black;"
-		"}";
-	scrollbarCss = scrollbarCss.arg(bgColor.darker(200).name(), bgColor.darker(175).name());
+	if (fullScreenMode) {
+		QString scrollbarCss =
+			"QScrollBar:horizontal {"
+			"	background-color: transparent;"
+			"	height: 8px;"
+			"}";
 
-	QString handle =
-		"background:"
-		"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"	stop: 0 %1, stop: 0.17 %2,"
-		"	stop: 0.2 %3, stop: 0.8 %4,"
-		"	stop: 0.83 %2, stop: 1 %1);"
-		"border: 1px solid"
-		"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"	stop: 0 #242424, stop: 0.2 %2,"
-		"	stop: 0.70 %2, stop: 1 #242424);"
-		"border-top: 0px;"
-		"border-bottom: 0px;"
-		"}";
+		QString handle =
+			"background:"
+			"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+			"	stop: 0 %1, stop: 0.17 %2,"
+			"	stop: 0.2 %3, stop: 0.8 %4,"
+			"	stop: 0.83 %2, stop: 1 %1);"
+			"border: 1px solid"
+			"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+			"	stop: 0 #242424, stop: 0.2 %2,"
+			"	stop: 0.70 %2, stop: 1 #242424);"
+			"border-top: 0px;"
+			"border-bottom: 0px;"
+			"}";
 
-	QColor handleBase = QColor::fromHsv(bgColor.hue(), bgColor.saturation() / 2, (bgColor.value() + 255) / 2);
-	QColor handleSelBase = handleBase.lighter(110);
-	QString handleCss =
-		"QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal, QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {"
-		"	width: 0;"
-		"	border: 0;"
-		"}"
-		"QScrollBar::handle:horizontal {"
-		"	min-width: 20px;" +
-		handle.arg(
-			handleBase.darker(170).name(),
-			handleBase.darker(125).name(),
-			handleBase.darker(140).name(),
-			handleBase.lighter(115).name()) +
-		"QScrollBar::handle:hover {" +
-		handle.arg(
-			handleSelBase.darker(170).name(),
-			handleSelBase.darker(125).name(),
-			handleSelBase.darker(140).name(),
-			handleSelBase.lighter(115).name());
+		QColor handleBase = QColor::fromHsv(bgColor.hue(), bgColor.saturation() / 2, (bgColor.value() + 255) / 2);
+		QColor handleSelBase = handleBase.lighter(110);
+		QString handleCss =
+			"QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,"
+			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {"
+			"	width: 0;"
+			"	border: 0;"
+			"}"
+			"QScrollBar::handle:horizontal {"
+			"	min-width: 20px;" +
+			handle.arg(
+				handleBase.darker(170).name(),
+				handleBase.darker(125).name(),
+				handleBase.darker(140).name(),
+				handleBase.lighter(115).name()) +
+			"QScrollBar::handle:hover {" +
+			handle.arg(
+				handleSelBase.darker(170).name(),
+				handleSelBase.darker(125).name(),
+				handleSelBase.darker(140).name(),
+				handleSelBase.lighter(115).name());
+		viewCss += scrollbarCss + handleCss;
+	}
+	setStyleSheet(viewCss + itemCss + itemSelCss);
+}
 
-	return viewCss + itemCss + itemSelCss + scrollbarCss + handleCss;
+
+void ThumbnailBarView::paintEvent(QPaintEvent* event) {
+	ThumbnailView::paintEvent(event);
+
+	if (!horizontalScrollBar()->maximum()) {
+		// Thumbnails doesn't fully cover viewport, draw a shadow after last item.
+		QPainter painter(viewport());
+		QLinearGradient linearGradient;
+		linearGradient.setColorAt(0, QColor(0, 0, 0, 127));
+		linearGradient.setColorAt(1, QColor(0, 0, 0, 0));
+
+		QModelIndex index = model()->index(model()->rowCount() - 1, 0);
+		QRect rect = rectForIndex(index);
+		linearGradient.setStart(rect.topRight());
+		linearGradient.setFinalStop(rect.topRight() + QPoint(5, 0));
+		painter.fillRect(rect.topRight().x(), 0, 5, rect.height(), linearGradient);
+	}
 }
 
 

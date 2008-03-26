@@ -2,6 +2,7 @@
 /*
 Gwenview: an image viewer
 Copyright 2008 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2008 Ilya Konkov <eruart@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -62,13 +63,13 @@ public:
 	~ThumbnailBarView();
 
 	QSize sizeHint() const;
+	void setFullScreenMode(bool);
 
-private Q_SLOTS:
-	void showContextMenu();
+protected:
+	void paintEvent(QPaintEvent*);
 
 private:
 	QStyle* mStyle;
-	QString defaultStyleSheet() const;
 };
 
 } // namespace
