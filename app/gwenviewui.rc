@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="38">
+<kpartgui name="gwenview" version="39">
 
 <MenuBar>
 	<Menu name="file" >
@@ -24,7 +24,6 @@
 	</Menu>
 	<Menu name="view" >
 		<Action name="browse" />
-		<Action name="preview" />
 		<Action name="view" />
 		<Action name="fullscreen" />
 		<Separator/>
@@ -67,7 +66,6 @@
 <ToolBar name="mainToolBar" noMerge="1">
 	<text>Main Toolbar</text>
 	<Action name="browse" />
-	<Action name="preview" />
 	<Action name="view" />
 	<Action name="fullscreen" />
 	<Separator/>

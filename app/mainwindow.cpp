@@ -108,6 +108,7 @@ struct MainWindowState {
 	Qt::WindowStates mWindowState;
 };
 
+
 struct MainWindow::Private {
 	GvCore* mGvCore;
 	MainWindow* mWindow;
@@ -121,6 +122,7 @@ struct MainWindow::Private {
 	KLineEdit* mFilterEdit;
 	QWidget* mThumbnailViewPanel;
 	SideBar* mSideBar;
+	QStackedWidget* mViewStackedWidget;
 	QStackedWidget* mSideBarContainer;
 	bool mSideBarWasVisibleBeforeTemporarySideBar;
 	FullScreenBar* mFullScreenBar;
@@ -130,7 +132,6 @@ struct MainWindow::Private {
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
-	QAction* mPreviewAction;
 	QAction* mViewAction;
 	QAction* mGoUpAction;
 	QAction* mGoToPreviousAction;
@@ -162,12 +163,20 @@ struct MainWindow::Private {
 		layout->setMargin(0);
 		layout->setSpacing(0);
 
-		setupThumbnailView(mCentralSplitter);
-		setupDocumentView(mCentralSplitter);
+		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
+
+		setupThumbnailView(mViewStackedWidget);
+		setupDocumentView(mViewStackedWidget);
+		mViewStackedWidget->addWidget(mThumbnailViewPanel);
+		mViewStackedWidget->addWidget(mDocumentView);
+		mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
 
 		mSideBarContainer = new QStackedWidget(mCentralSplitter);
 		mSideBar = new SideBar(mSideBarContainer);
 		mSideBarContainer->addWidget(mSideBar);
+
+		mCentralSplitter->setStretchFactor(0, 1);
+		mCentralSplitter->setStretchFactor(1, 0);
 
 		mSlideShow = new SlideShow(mWindow);
 
@@ -309,11 +318,6 @@ struct MainWindow::Private {
 		mBrowseAction->setCheckable(true);
 		mBrowseAction->setIcon(KIcon("view-list-icons"));
 
-		mPreviewAction = actionCollection->addAction("preview");
-		mPreviewAction->setText(i18n("Preview"));
-		mPreviewAction->setIcon(KIcon("view-list-details"));
-		mPreviewAction->setCheckable(true);
-
 		mViewAction = actionCollection->addAction("view");
 		mViewAction->setText(i18n("View"));
 		mViewAction->setIcon(KIcon("view-preview"));
@@ -321,7 +325,6 @@ struct MainWindow::Private {
 
 		mViewModeActionGroup = new QActionGroup(mWindow);
 		mViewModeActionGroup->addAction(mBrowseAction);
-		mViewModeActionGroup->addAction(mPreviewAction);
 		mViewModeActionGroup->addAction(mViewAction);
 
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
@@ -728,39 +731,26 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
-	bool showDocument, showThumbnail;
-	if (action == d->mBrowseAction) {
-		showDocument = false;
-		showThumbnail = true;
-	} else if (action == d->mPreviewAction) {
-		showDocument = true;
-		showThumbnail = true;
-	} else { // image only
-		showDocument = true;
-		showThumbnail = false;
+	if (action == d->mViewAction) {
+		// Switching to view mode
+		d->mViewStackedWidget->setCurrentWidget(d->mDocumentView);
+		if (d->mDocumentView->isEmpty()) {
+			openSelectedDocument();
+		}
+	} else {
+		// Switching to browse mode
+		d->mViewStackedWidget->setCurrentWidget(d->mThumbnailViewPanel);
+		if (!d->mDocumentView->isEmpty()
+			&& KProtocolManager::supportsListing(d->mDocumentView->url()))
+		{
+			// Reset the view to spare resources, but don't do it if we can't
+			// browse the url, otherwise if the user starts Gwenview this way:
+			// gwenview http://example.com/example.png
+			// and switch to browse mode, switching back to view mode won't bring
+			// his image back.
+			d->mDocumentView->reset();
+		}
 	}
-
-	// Adjust splitter policy. Thumbnail should only stretch if there is no
-	// document view.
-	d->mCentralSplitter->setStretchFactor(0, showDocument ? 0 : 1); // thumbnail
-	d->mCentralSplitter->setStretchFactor(1, 1); // image
-	d->mCentralSplitter->setStretchFactor(2, 0); // sidebar
-
-	d->mDocumentView->setVisible(showDocument);
-	if (showDocument && d->mDocumentView->isEmpty()) {
-		openSelectedDocument();
-	} else if (!showDocument
-		&& !d->mDocumentView->isEmpty()
-		&& KProtocolManager::supportsListing(d->mDocumentView->url()))
-	{
-		// Reset the view to spare resources, but don't do it if we can't
-		// browse the url, otherwise if the user starts Gwenview this way:
-		// gwenview http://example.com/example.png
-		// and switch to browse mode, switching back to view mode won't bring
-		// his image back.
-		d->mDocumentView->reset();
-	}
-	d->mThumbnailViewPanel->setVisible(showThumbnail);
 
 	emit viewModeChanged();
 }
