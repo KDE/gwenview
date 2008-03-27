@@ -45,9 +45,12 @@ kde4_add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview
 	${KDE4_KPARTS_LIBS}
 	${KDE4_KFILE_LIBS}
-	${NEPOMUK_LIBRARIES}
 	gwenviewlib
 	)
+
+if (Nepomuk_FOUND)
+	target_link_libraries(gwenview ${NEPOMUK_LIBRARIES})
+endif (Nepomuk_FOUND)
 
 install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
 install(FILES gwenviewui.rc
