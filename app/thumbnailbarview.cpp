@@ -114,7 +114,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	setThumbnailSize(view->thumbnailSize());
 
-	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.7);
+	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
@@ -261,8 +261,6 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	setStyle(mStyle);
 	setFullScreenMode(false);
 
-	// Vertical spacing between viewport and scrollbar.
-	setViewportMargins(0, 0, 0, 2);
 }
 
 
@@ -282,7 +280,7 @@ QSize ThumbnailBarView::sizeHint() const {
 
 
 void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
-	QColor bgColor = fullScreenMode ? QColor(Qt::black) :
+	QColor bgColor = fullScreenMode ? QColor(10, 10, 10) :
 			palette().color(QPalette::Normal, QPalette::Window);
 	QColor bgSelColor = palette().color(QPalette::Normal, QPalette::Highlight);
 
@@ -335,45 +333,44 @@ void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
 			"QScrollBar:horizontal {"
 			"	background-color: transparent;"
 			"	height: 8px;"
+			"	padding: 0 2px 0px 2px;"
+			"}"
+			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, "
+			"QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {"
+			"	width: 0px;"
+			"	border: 0px;"
 			"}";
 
 		QString handle =
 			"background:"
 			"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"	stop: 0 %1, stop: 0.17 %2,"
-			"	stop: 0.2 %3, stop: 0.8 %4,"
-			"	stop: 0.83 %2, stop: 1 %1);"
-			"border: 1px solid"
-			"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"	stop: 0 #242424, stop: 0.2 %2,"
-			"	stop: 0.70 %2, stop: 1 #242424);"
-			"border-top: 0px;"
-			"border-bottom: 0px;"
+			"	stop: 0 %1, stop: 0.5 %2,"
+			"	stop: 0.51 %3, stop: 1 %2);"
+			"border: 1px solid %2;"
+			"border-top: 1px solid %4;"
 			"}";
 
-		QColor handleBase = QColor::fromHsv(bgColor.hue(), bgColor.saturation() / 2, (bgColor.value() + 255) / 2);
-		QColor handleSelBase = handleBase.lighter(110);
+		QColor handleColor(86, 86, 86);
+		QColor handleHoverColor = handleColor.lighter(110);
 		QString handleCss =
-			"QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,"
-			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {"
-			"	width: 0;"
-			"	border: 0;"
-			"}"
 			"QScrollBar::handle:horizontal {"
+			"	border-radius: 3px;"
 			"	min-width: 20px;" +
 			handle.arg(
-				handleBase.darker(170).name(),
-				handleBase.darker(125).name(),
-				handleBase.darker(140).name(),
-				handleBase.lighter(115).name()) +
+				rgba(handleColor),
+				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0, -32)),
+				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0, -64)),
+				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0,  24))) +
 			"QScrollBar::handle:hover {" +
 			handle.arg(
-				handleSelBase.darker(170).name(),
-				handleSelBase.darker(125).name(),
-				handleSelBase.darker(140).name(),
-				handleSelBase.lighter(115).name());
+				rgba(handleHoverColor),
+				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0, -32)),
+				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0, -64)),
+				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0,  24)));
 		viewCss += scrollbarCss + handleCss;
 	}
+	// Vertical spacing between viewport and scrollbar.
+	setViewportMargins(0, 0, 0, fullScreenMode ? 1 : 2);
 	setStyleSheet(viewCss + itemCss + itemSelCss);
 }
 
