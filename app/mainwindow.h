@@ -137,6 +137,7 @@ private Q_SLOTS:
 
 	void applyNameFilter();
 	void toggleFilterBarVisibility(bool);
+	void toggleViewMode();
 
 private:
 	class Private;
