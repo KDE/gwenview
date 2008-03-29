@@ -62,6 +62,7 @@ public:
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void loaded();
+	void loadingFailed();
 
 protected:
 	Document* document() const;

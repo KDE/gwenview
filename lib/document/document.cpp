@@ -109,6 +109,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 
 	connect(d->mImpl, SIGNAL(loaded()),
 		this, SLOT(emitLoaded()) );
+	connect(d->mImpl, SIGNAL(loadingFailed()),
+		this, SLOT(emitLoadingFailed()) );
 	connect(d->mImpl, SIGNAL(imageRectUpdated(const QRect&)),
 		this, SIGNAL(imageRectUpdated(const QRect&)) );
 	d->mImpl->init();
@@ -216,6 +218,11 @@ ImageMetaInfoModel* Document::metaInfo() const {
 
 void Document::emitLoaded() {
 	emit loaded(d->mUrl);
+}
+
+
+void Document::emitLoadingFailed() {
+	emit loadingFailed(d->mUrl);
 }
 
 

@@ -225,6 +225,7 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 	Q_ASSERT(!d->mMetaDataFuture.isRunning());
 	if (!d->mMetaDataFuture.result()) {
 		kWarning() << document()->url() << "Loading metadata failed";
+		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
 	}

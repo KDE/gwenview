@@ -123,12 +123,14 @@ public:
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void loaded(const KUrl&);
+	void loadingFailed(const KUrl&);
 	void saved(const KUrl&);
 	void modified(const KUrl&);
 	void metaDataUpdated();
 
 private Q_SLOTS:
 	void emitLoaded();
+	void emitLoadingFailed();
 	void slotUndoIndexChanged();
 
 private:
