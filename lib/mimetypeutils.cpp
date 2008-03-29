@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kapplication.h>
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
@@ -84,12 +85,14 @@ const QStringList& videoMimeTypes() {
 
 
 QString urlMimeType(const KUrl& url) {
-	QString mimeType;
-	if (url.isLocalFile()) {
-		return KMimeType::findByUrl(url)->name();
-	} else {
-		return KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
+	// Try a simple guess, using extension for remote urls
+	QString mimeType = KMimeType::findByUrl(url)->name();
+	if (mimeType == "application/octet-stream") {
+		// No luck, look deeper. This can happens with http urls if the filename
+		// does not provide any extension.
+		mimeType = KIO::NetAccess::mimetype(url, KApplication::kApplication()->activeWindow());
 	}
+	return mimeType;
 }
 
 
