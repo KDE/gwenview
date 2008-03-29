@@ -74,6 +74,7 @@ private Q_SLOTS:
 	void initStatusBarExtension();
 	void applyZoomSliderValue();
 	void slotZoomChanged();
+	void slotLoadingFailed();
 
 private:
 	ImageView* mView;

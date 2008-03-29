@@ -81,12 +81,13 @@ struct ImageViewPrivate {
 
 
 	void createBuffer() {
+		mAlternateBuffer = QPixmap();
 		QSize size = requiredBufferSize();
 		if (!size.isValid()) {
+			mCurrentBuffer = QPixmap();
 			return;
 		}
 		mCurrentBuffer = QPixmap(size);
-		mAlternateBuffer = QPixmap();
 		QColor bgColor = mView->palette().color(mView->backgroundRole());
 		mCurrentBuffer.fill(bgColor.rgba());
 	}
