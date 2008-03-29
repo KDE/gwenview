@@ -113,9 +113,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 
 	updateZoomSnapValues();
 
-	mZoomLabel = new QLabel;
-	mZoomSlider = new QSlider;
-
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
 	mZoomToFitAction->setChecked(mView->zoomToFit());
@@ -132,6 +129,9 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	if (!mGwenviewHost) {
 		addPartSpecificActions();
 	}
+
+	createStatusBarWidget();
+
 	mStatusBarExtension = new KParts::StatusBarExtension(this);
 	QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
 
@@ -163,13 +163,13 @@ void GVPart::addPartSpecificActions() {
 }
 
 
-void GVPart::initStatusBarExtension() {
-	QWidget* mainContainer = new QWidget;
+void GVPart::createStatusBarWidget() {
+	mStatusBarWidgetContainer = new QWidget;
 
 	QWidget* container = new QFrame;
 	container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 	container->setObjectName("zoomStatusBarWidget");
-	QHBoxLayout* layout = new QHBoxLayout(mainContainer);
+	QHBoxLayout* layout = new QHBoxLayout(mStatusBarWidgetContainer);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	layout->addStretch();
@@ -183,10 +183,12 @@ void GVPart::initStatusBarExtension() {
 	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
 	actualSizeButton->setObjectName("actualSizeButton");
 
+	mZoomLabel = new QLabel;
 	mZoomLabel->setObjectName("zoomLabel");
 	mZoomLabel->setFixedWidth(mZoomLabel->fontMetrics().width(" 1000% "));
 	mZoomLabel->setAlignment(Qt::AlignCenter);
 
+	mZoomSlider = new QSlider;
 	mZoomSlider->setObjectName("zoomSlider");
 	mZoomSlider->setOrientation(Qt::Horizontal);
 	mZoomSlider->setRange(sliderValueForZoom(ZOOM_MIN), sliderValueForZoom(ZOOM_MAX));
@@ -200,8 +202,11 @@ void GVPart::initStatusBarExtension() {
 	layout->addWidget(actualSizeButton);
 	layout->addWidget(mZoomLabel);
 	layout->addWidget(mZoomSlider);
+}
 
-	mStatusBarExtension->addStatusBarItem(mainContainer, 1, true);
+
+void GVPart::initStatusBarExtension() {
+	mStatusBarExtension->addStatusBarItem(mStatusBarWidgetContainer, 1, true);
 }
 
 

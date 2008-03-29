@@ -83,6 +83,8 @@ private:
 	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
 	KParts::StatusBarExtension* mStatusBarExtension;
+
+	QWidget* mStatusBarWidgetContainer;
 	QLabel* mZoomLabel;
 	QSlider* mZoomSlider;
 
@@ -91,6 +93,7 @@ private:
 	void setZoom(qreal, const QPoint& center = QPoint(-1, -1));
 
 	void updateZoomSnapValues();
+	void createStatusBarWidget();
 };
 
 } // namespace
