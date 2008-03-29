@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kicon.h>
+#include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kmenu.h>
@@ -46,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/scrolltool.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
+#include "../lib/widgetfloater.h"
 #include "gvbrowserextension.h"
 
 
@@ -131,6 +133,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	}
 
 	createStatusBarWidget();
+	createErrorLabel();
 
 	mStatusBarExtension = new KParts::StatusBarExtension(this);
 	QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
@@ -205,8 +208,42 @@ void GVPart::createStatusBarWidget() {
 }
 
 
+void GVPart::createErrorLabel() {
+	QPixmap pix = KIconLoader::global()->loadIcon(
+		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
+	QLabel* pixLabel = new QLabel;
+	pixLabel->setPixmap(pix);
+
+	mErrorLabel = new QLabel;
+
+	mErrorWidget = new QFrame;
+	mErrorWidget->setObjectName("errorWidget");
+	mErrorWidget->setStyleSheet(
+		"#errorWidget {"
+		"	background-color: palette(window);"
+		"	border: 1px solid palette(dark);"
+		"	padding: 6px;"
+		"}"
+		);
+
+
+	QHBoxLayout* layout = new QHBoxLayout(mErrorWidget);
+	layout->setMargin(0);
+	layout->addWidget(pixLabel);
+	layout->addWidget(mErrorLabel);
+
+	WidgetFloater* floater = new WidgetFloater(mView);
+	floater->setAlignment(Qt::AlignCenter);
+	floater->setChildWidget(mErrorWidget);
+
+	mErrorWidget->hide();
+}
+
+
 void GVPart::initStatusBarExtension() {
-	mStatusBarExtension->addStatusBarItem(mStatusBarWidgetContainer, 1, true);
+	if (!mDocument || mDocument->loadingState() != Document::LoadingFailed) {
+		mStatusBarExtension->addStatusBarItem(mStatusBarWidgetContainer, 1, true);
+	}
 }
 
 
@@ -220,6 +257,12 @@ bool GVPart::openUrl(const KUrl& url) {
 		return false;
 	}
 	setUrl(url);
+	mErrorWidget->hide();
+	if (mStatusBarWidgetContainer->parent()) {
+		// Don't show mStatusBarWidgetContainer until it has been embedded in
+		// the statusbar by GVPart::initStatusBarExtension()
+		mStatusBarWidgetContainer->show();
+	}
 	mView->setImage(0);
 	mDocument = DocumentFactory::instance()->load(url);
 	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SIGNAL(completed()) );
@@ -229,6 +272,8 @@ bool GVPart::openUrl(const KUrl& url) {
 		setViewImageFromDocument();
 		mView->updateImageRect(mDocument->image().rect());
 		emit completed();
+	} else if (mDocument->loadingState() == Document::LoadingFailed) {
+		slotLoadingFailed();
 	}
 	return true;
 }
@@ -237,6 +282,13 @@ bool GVPart::openUrl(const KUrl& url) {
 void GVPart::slotLoadingFailed() {
 	mView->setImage(0);
 	updateCaption();
+	emit completed();
+	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());
+	mErrorLabel->setText(msg);
+	mErrorWidget->adjustSize();
+	mErrorWidget->show();
+
+	mStatusBarWidgetContainer->hide();
 }
 
 

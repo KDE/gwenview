@@ -89,12 +89,16 @@ private:
 	QLabel* mZoomLabel;
 	QSlider* mZoomSlider;
 
+	QWidget* mErrorWidget;
+	QLabel* mErrorLabel;
+
 	void disableZoomToFit();
 	void addPartSpecificActions();
 	void setZoom(qreal, const QPoint& center = QPoint(-1, -1));
 
 	void updateZoomSnapValues();
 	void createStatusBarWidget();
+	void createErrorLabel();
 };
 
 } // namespace
