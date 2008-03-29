@@ -130,8 +130,8 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 , d(new Private) {
 	d->that = this;
 	d->mMainWindow = mainWindow;
-        d->mSideBar = 0; 
-        d->mGroup = 0;
+	d->mSideBar = 0;
+	d->mGroup = 0;
 	d->setupActions();
 	updateActions();
 	connect(contextManager(), SIGNAL(selectionChanged()),
