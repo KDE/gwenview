@@ -329,12 +329,17 @@ int JPEGContent::dotsPerMeter(const QString& keyName) const {
 	//         2 = inches
 	//         3 = centimeters
 	//         Other = reserved
-	const float INCHESPERMETER = (100. / 2.54); 
+	const double INCHESPERMETER = (100. / 2.54); 
+	Exiv2::Rational r = it->toRational();
+	if (r.second == 0) {
+		// a rational with 0 as second will make hang toLong() conversion
+		r.second = 1;
+	}
 	switch (res) {
 	case 3:  // dots per cm 
-		return (it->toLong() * 100); 
+		return int(double(r.first) * 100 / double(r.second)); 
 	default:  // dots per inch 
-		return (it->toLong() * INCHESPERMETER); 
+		return int(double(r.first) * INCHESPERMETER / double(r.second)); 
 	}
 
 	return 0;
