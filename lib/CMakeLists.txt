@@ -46,6 +46,7 @@ set(gwenviewlib_SRCS
 	transformimageoperation.cpp
 	urlutils.cpp
 	libjpeg/transupp.c
+	widgetfloater.cpp
 	)
 
 set_source_files_properties(
