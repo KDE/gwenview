@@ -119,6 +119,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 
 	d->mInformationLabel = new QLabel;
 	d->mInformationLabel->setWordWrap(true);
+	d->mInformationLabel->setAlignment(Qt::AlignCenter);
 
 	QGridLayout* layout = new QGridLayout(parent);
 	layout->setMargin(0);
