@@ -75,6 +75,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 		"}"
 
 		"QToolBar {"
+		"	border: 0px;"
 		"	margin: 0px;"
 		"	padding: 0px;"
 		"}"
