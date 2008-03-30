@@ -95,7 +95,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 		"	border: 1px solid #444;"
 		"}"
 
-		"QLabel {"
+		".QLabel {"
 		"	color: #ccc;"
 		"}"
 		);
