@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/thumbnailview/thumbnailview.h>
 
+class QTimeLine;
+
 namespace Gwenview {
 
 
@@ -68,8 +70,14 @@ public:
 protected:
 	void paintEvent(QPaintEvent*);
 
+	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
 private:
 	QStyle* mStyle;
+	QTimeLine* mTimeLine;
+
+	void smoothScrollTo(const QModelIndex& index);
+	int horizontalScrollToValue(const QRect& rect);
 };
 
 } // namespace
