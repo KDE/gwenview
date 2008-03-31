@@ -133,7 +133,6 @@ struct MainWindow::Private {
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
 	QAction* mViewAction;
-	QAction* mToggleViewModeAction;
 	QAction* mGoUpAction;
 	QAction* mGoToPreviousAction;
 	QAction* mGoToNextAction;
@@ -333,12 +332,6 @@ struct MainWindow::Private {
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
 
-		mToggleViewModeAction = actionCollection->addAction("toggle_view_mode");
-		mToggleViewModeAction->setShortcut(Qt::Key_F3);
-		updateToggleViewModeAction();
-		connect(mToggleViewModeAction, SIGNAL(triggered()),
-			mWindow, SLOT(toggleViewMode()) );
-
 		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen()), mWindow, actionCollection);
 
 		QShortcut* reduceLevelOfDetailsShortcut = new QShortcut(mWindow);
@@ -462,16 +455,6 @@ struct MainWindow::Private {
 			mToggleSideBarAction->setText(i18n("Show Sidebar"));
 		}
 	}
-
-
-	void updateToggleViewModeAction() {
-		if (mViewAction->isChecked()) {
-			mToggleViewModeAction->setText(i18n("Switch to browse mode"));
-		} else {
-			mToggleViewModeAction->setText(i18n("Switch to view mode"));
-		}
-	}
-
 
 	QModelIndex getRelativeIndex(int offset) {
 		KUrl url = currentUrl();
@@ -771,18 +754,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		}
 	}
 
-	d->updateToggleViewModeAction();
-
 	emit viewModeChanged();
-}
-
-
-void MainWindow::toggleViewMode() {
-	if (d->mViewAction->isChecked()) {
-		d->mBrowseAction->trigger();
-	} else {
-		d->mViewAction->trigger();
-	}
 }
 
 
