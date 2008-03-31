@@ -258,6 +258,8 @@ struct MainWindow::Private {
 			mWindow, SLOT(goToPrevious()) );
 		connect(mDocumentView, SIGNAL(nextImageRequested()),
 			mWindow, SLOT(goToNext()) );
+		connect(mDocumentView, SIGNAL(enterFullScreenRequested()),
+			mWindow, SLOT(enterFullScreen()) );
 
 		ThumbnailBarView* bar = mDocumentView->thumbnailBar();
 		bar->setModel(mDirModel);
@@ -339,10 +341,10 @@ struct MainWindow::Private {
 
 		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen()), mWindow, actionCollection);
 
-		QShortcut* exitFullScreenShortcut = new QShortcut(mWindow);
-		exitFullScreenShortcut->setKey(Qt::Key_Escape);
-		connect(exitFullScreenShortcut, SIGNAL(activated()),
-			mWindow, SLOT(exitFullScreen()) );
+		QShortcut* reduceLevelOfDetailsShortcut = new QShortcut(mWindow);
+		reduceLevelOfDetailsShortcut->setKey(Qt::Key_Escape);
+		connect(reduceLevelOfDetailsShortcut, SIGNAL(activated()),
+			mWindow, SLOT(reduceLevelOfDetails()) );
 
 		mGoToPreviousAction = KStandardAction::prior(mWindow, SLOT(goToPrevious()), actionCollection);
 		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
@@ -992,9 +994,18 @@ void MainWindow::updatePreviousNextActions() {
 }
 
 
-void MainWindow::exitFullScreen() {
+void MainWindow::enterFullScreen() {
+	if (!d->mFullScreenAction->isChecked()) {
+		d->mFullScreenAction->trigger();
+	}
+}
+
+
+void MainWindow::reduceLevelOfDetails() {
 	if (d->mFullScreenAction->isChecked()) {
 		d->mFullScreenAction->trigger();
+	} else if (d->mViewAction->isChecked()) {
+		d->mBrowseAction->trigger();
 	}
 }
 

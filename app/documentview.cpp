@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
+#include <QShortcut>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -140,6 +141,10 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mFullScreenPalette = QPalette(palette());
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
+
+	QShortcut* enterFullScreenShortcut = new QShortcut(d->mView);
+	enterFullScreenShortcut->setKey(Qt::Key_Return);
+	connect(enterFullScreenShortcut, SIGNAL(activated()), SIGNAL(enterFullScreenRequested()) );
 
 	d->mNoDocumentLabel = new QLabel(this);
 	addWidget(d->mNoDocumentLabel);

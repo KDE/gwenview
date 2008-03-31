@@ -100,6 +100,8 @@ Q_SIGNALS:
 
 	void nextImageRequested();
 
+	void enterFullScreenRequested();
+
 private:
 	DocumentViewPrivate* const d;
 
