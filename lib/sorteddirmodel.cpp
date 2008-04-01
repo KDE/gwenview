@@ -31,6 +31,7 @@ namespace Gwenview {
 
 struct SortedDirModelPrivate {
 	KDirModel* mSourceModel;
+	QStringList mMimeExcludeFilter;
 };
 
 
@@ -79,6 +80,27 @@ QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 	}
 	QModelIndex sourceIndex = d->mSourceModel->indexForUrl(url);
 	return mapFromSource(sourceIndex);
+}
+
+
+void SortedDirModel::setMimeExcludeFilter(const QStringList &mimeList) {
+	if (d->mMimeExcludeFilter == mimeList) {
+		return;
+	}
+	d->mMimeExcludeFilter = mimeList;
+	invalidateFilter();
+}
+
+
+bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const {
+	if (!d->mMimeExcludeFilter.isEmpty()) {
+		QModelIndex index = d->mSourceModel->index(row, 0, parent);
+		QString mimeType = d->mSourceModel->itemForIndex(index).mimetype();
+		if (d->mMimeExcludeFilter.contains(mimeType)) {
+			return false;
+		}
+	}
+	return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
 
 

@@ -45,6 +45,11 @@ public:
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 
+	virtual void setMimeExcludeFilter(const QStringList &mimeList);
+
+protected:
+	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
+
 private:
 	SortedDirModelPrivate * const d;
 };

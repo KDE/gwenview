@@ -735,6 +735,8 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (action == d->mViewAction) {
 		// Switching to view mode
+		QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
+		d->mDirModel->setMimeExcludeFilter(mimeFilter);
 		d->mViewStackedWidget->setCurrentWidget(d->mDocumentView);
 		if (d->mDocumentView->isEmpty()) {
 			openSelectedDocument();
@@ -752,6 +754,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 			// his image back.
 			d->mDocumentView->reset();
 		}
+		d->mDirModel->setMimeExcludeFilter(QStringList());
 	}
 
 	emit viewModeChanged();
