@@ -44,7 +44,7 @@
           <number>2</number>
          </property>
          <property name="maximum" >
-          <number>62</number>
+          <number>60</number>
          </property>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
@@ -136,22 +136,6 @@
     <hint type="destinationlabel" >
      <x>364</x>
      <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mSlideShowIntervalSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>mSlideShowIntervalLabel</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>230</x>
-     <y>79</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>305</x>
-     <y>89</y>
     </hint>
    </hints>
   </connection>

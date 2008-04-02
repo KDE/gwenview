@@ -64,6 +64,7 @@ private Q_SLOTS:
 	void configureInformationLabel();
 	void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
 	void showFullScreenConfigDialog();
+	void updateSlideShowIntervalLabel();
 
 private:
 	FullScreenContentPrivate* const d;

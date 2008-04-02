@@ -98,6 +98,7 @@ struct FullScreenContentPrivate {
 	QLabel* mInformationLabel;
 	Document::Ptr mCurrentDocument;
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
+	QPointer<FullScreenConfigDialog> mFullScreenConfigDialog;
 	QToolButton* mOptionsButton;
 
 	void createOptionsButton() {
@@ -258,6 +259,19 @@ void FullScreenContent::updateMetaInfoDialog() {
 }
 
 
+static QString formatSlideShowIntervalText(int value) {
+	return i18ncp("Slideshow interval in seconds", "%1 sec", "%1 secs", value);
+}
+
+
+void FullScreenContent::updateSlideShowIntervalLabel() {
+	Q_ASSERT(d->mFullScreenConfigDialog);
+	int value = d->mFullScreenConfigDialog->mSlideShowIntervalSlider->value();
+	QString text = formatSlideShowIntervalText(value);
+	d->mFullScreenConfigDialog->mSlideShowIntervalLabel->setText(text);
+}
+
+
 static void setupCheckBox(QCheckBox* checkBox, QAction* action) {
 	checkBox->setChecked(action->isChecked());
 	QObject::connect(checkBox, SIGNAL(toggled(bool)),
@@ -266,6 +280,7 @@ static void setupCheckBox(QCheckBox* checkBox, QAction* action) {
 
 void FullScreenContent::showFullScreenConfigDialog() {
 	FullScreenConfigDialog* dialog = new FullScreenConfigDialog(d->mOptionsButton);
+	d->mFullScreenConfigDialog = dialog;
 	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 	dialog->setObjectName("configDialog");
 	QString styleSheet = loadFullScreenStyleSheet();
@@ -273,16 +288,29 @@ void FullScreenContent::showFullScreenConfigDialog() {
 		dialog->setStyleSheet(styleSheet);
 	}
 
+	// Checkboxes
 	setupCheckBox(dialog->mSlideShowLoopCheckBox, d->mSlideShow->loopAction());
 	setupCheckBox(dialog->mSlideShowRandomCheckBox, d->mSlideShow->randomAction());
 
+	// Interval slider
+	dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
 	connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
 		d->mSlideShow, SLOT(setInterval(int)) );
-	dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
 
+	// Interval label
+	connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+		SLOT(updateSlideShowIntervalLabel()) );
+	QString text = formatSlideShowIntervalText(88);
+	int width = dialog->mSlideShowIntervalLabel->fontMetrics().width(text);
+	dialog->mSlideShowIntervalLabel->setFixedWidth(width);
+	updateSlideShowIntervalLabel();
+
+	// Config button
 	connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
 		SLOT(configureInformationLabel()) );
 
+	// Show dialog below the button
+	// FIXME: RTL
 	QPoint pos = d->mOptionsButton->mapToGlobal(QPoint(0, d->mOptionsButton->height()));
 	dialog->move(pos);
 	dialog->show();
