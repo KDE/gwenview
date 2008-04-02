@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Exiv2
+#include <string.h>
 #include <exiv2/image.hpp>
 
 // Local
