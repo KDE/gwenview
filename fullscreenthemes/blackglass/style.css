@@ -25,10 +25,6 @@
 	image:url($themeDir/checked.png);
 }
 
-#configDialog QDoubleSpinBox {
-	background-color: black;
-}
-
 #configDialog QLabel[isTitle=true] {
 	font-weight: bold;
 	color: white;
