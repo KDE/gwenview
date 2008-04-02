@@ -46,6 +46,12 @@ QPushButton:hover {
 		stop:0 #444, stop: 0.6 black, stop:1 black);
 }
 
+QPushButton:pressed {
+	background-color: #111;
+	padding-right: 1px;
+	padding-bottom: 1px;
+}
+
 /* QSlider */
 QSlider::groove {
 	background-color:
