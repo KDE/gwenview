@@ -22,19 +22,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fullscreencontent.h"
 
 // Qt
-#include <QDoubleSpinBox>
+#include <QAction>
+#include <QCheckBox>
+#include <QDialog>
 #include <QEvent>
+#include <QFile>
 #include <QGridLayout>
 #include <QLabel>
-#include <QMenu>
 #include <QPointer>
+#include <QPushButton>
 #include <QToolBar>
 #include <QToolButton>
 
 // KDE
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <klocale.h>
+#include <kmacroexpander.h>
+#include <kstandarddirs.h>
 
 // Local
 #include "imagemetainfodialog.h"
@@ -45,47 +49,132 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/imagemetainfomodel.h>
 #include <lib/slideshow.h>
 
+
 namespace Gwenview {
+
+
+static QString loadFullScreenStyleSheet() {
+	// Get themeDir
+	QString themeName = GwenviewConfig::fullScreenTheme();
+	QString themeDir = KStandardDirs::locate("appdata", "fullscreenthemes/" + themeName + "/");
+	if (themeDir.isEmpty()) {
+		kWarning() << "Couldn't find fullscreen theme" << themeName;
+		return QString();
+	}
+
+	// Read css file
+	QString styleSheetPath = themeDir + "/style.css";
+	QFile file(styleSheetPath);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		kWarning() << "Couldn't open" << styleSheetPath;
+		return QString();
+	}
+	QString styleSheet = QString::fromUtf8(file.readAll());
+
+	// Replace vars
+	QHash<QString, QString> macros;
+	macros["themeDir"] = themeDir;
+	styleSheet = KMacroExpander::expandMacros(styleSheet, macros, QLatin1Char('$'));
+
+	return styleSheet;
+}
+
+
+class FullScreenConfigDialog : public QFrame {
+public:
+	FullScreenConfigDialog(QWidget* parent)
+	: QFrame(parent) {
+		setWindowFlags(Qt::Popup);
+		setObjectName("configDialog");
+
+		QString styleSheet = loadFullScreenStyleSheet();
+		if (!styleSheet.isEmpty()) {
+			setStyleSheet(styleSheet);
+		}
+
+		QPushButton* closeButton = new QPushButton;
+		closeButton->setText(i18n("Close"));
+		connect(closeButton, SIGNAL(clicked()), SLOT(close()) );
+
+		QVBoxLayout* mainLayout = new QVBoxLayout(this);
+		mLayout = new QVBoxLayout;
+		mainLayout->addLayout(mLayout);
+		mainLayout->addWidget(closeButton);
+	}
+
+	void addAction(QAction* action) {
+		if (action->isCheckable()) {
+			QCheckBox* checkBox = new QCheckBox;
+			checkBox->setText(action->text());
+			checkBox->setChecked(action->isChecked());
+			QObject::connect(checkBox, SIGNAL(toggled(bool)),
+				action, SLOT(trigger()) );
+			mLayout->addWidget(checkBox);
+
+		} else {
+			QPushButton* button = new QPushButton(this);
+			button->setText(action->text());
+			QObject::connect(button, SIGNAL(clicked()),
+				action, SLOT(trigger()) );
+			mLayout->addWidget(button);
+		}
+	}
+
+	void addWidget(QWidget* widget) {
+		widget->setParent(this);
+		mLayout->addWidget(widget);
+	}
+
+private:
+	QVBoxLayout* mLayout;
+};
 
 
 struct FullScreenContentPrivate {
 	FullScreenContent* that;
+	SlideShow* mSlideShow;
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
 	Document::Ptr mCurrentDocument;
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
+	QToolButton* mOptionsButton;
 
-	QWidget* createOptionsButton(SlideShow* slideShow) {
-		QToolButton* button = new QToolButton;
-		button->setIcon(KIcon("configure"));
-		button->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
-		QMenu* menu = new QMenu(button);
-		button->setMenu(menu);
-		button->setPopupMode(QToolButton::InstantPopup);
-		menu->addAction(slideShow->loopAction());
-		menu->addAction(slideShow->randomAction());
-
-		menu->addSeparator();
-
-		QAction* action = menu->addAction(i18nc("@menu:item", "Configure displayed information"));
-		QObject::connect(action, SIGNAL(triggered()),
-			that, SLOT(configureInformationLabel()) );
-
-		return button;
+	void createOptionsButton() {
+		mOptionsButton = new QToolButton;
+		mOptionsButton->setIcon(KIcon("configure"));
+		mOptionsButton->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
+		QObject::connect(mOptionsButton, SIGNAL(clicked()),
+			that, SLOT(showFullScreenConfigDialog()) );
 	}
 
 
-	QWidget* createSlideShowIntervalWidget(SlideShow* slideShow) {
-		QDoubleSpinBox* spinBox = new QDoubleSpinBox;
-		spinBox->setSuffix(i18nc("@item:intext spinbox suffix for slideshow interval", " seconds"));
-		spinBox->setMinimum(0.5);
-		spinBox->setMaximum(999999.);
-		spinBox->setDecimals(1);
-		spinBox->setValue(GwenviewConfig::interval());
-		QObject::connect(spinBox, SIGNAL(valueChanged(double)),
-			slideShow, SLOT(setInterval(double)) );
+	QWidget* createSlideShowIntervalWidget() {
+		QSlider* slider = new QSlider;
+		slider->setRange(2, 60);
+		slider->setOrientation(Qt::Horizontal);
+		slider->setMinimumWidth(180);
+		QObject::connect(slider, SIGNAL(valueChanged(int)),
+			mSlideShow, SLOT(setInterval(int)) );
 
-		return spinBox;
+		QLabel* label = new QLabel;
+		QObject::connect(slider, SIGNAL(valueChanged(int)),
+			label, SLOT(setNum(int)) );
+		label->setFixedWidth(label->fontMetrics().width(" 88 "));
+
+		slider->setValue(int(GwenviewConfig::interval()));
+
+		QLabel* caption = new QLabel;
+		caption->setText(i18n("Slideshow interval:"));
+		caption->setBuddy(slider);
+
+		QWidget* container = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(container);
+		layout->setMargin(0);
+		layout->addWidget(caption);
+		layout->addWidget(slider);
+		layout->addWidget(label);
+
+		return container;
 	}
 };
 
@@ -94,10 +183,10 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 : QObject(parent)
 , d(new FullScreenContentPrivate) {
 	d->that = this;
+	d->mSlideShow = slideShow;
 	parent->installEventFilter(this);
 
-	QWidget* optionsButton = d->createOptionsButton(slideShow);
-	QWidget* slideShowIntervalWidget = d->createSlideShowIntervalWidget(slideShow);
+	d->createOptionsButton();
 
 	QToolBar* bar = new QToolBar;
 	bar->setFloatable(false);
@@ -106,10 +195,8 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	bar->addAction(actionCollection->action("go_previous"));
 	bar->addAction(actionCollection->action("go_next"));
 
-	bar->addSeparator();
 	bar->addAction(actionCollection->action("toggle_slideshow"));
-	bar->addWidget(slideShowIntervalWidget);
-	bar->addWidget(optionsButton);
+	bar->addWidget(d->mOptionsButton);
 
 	d->mThumbnailBar = new ThumbnailBarView(parent);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
@@ -207,6 +294,27 @@ void FullScreenContent::updateMetaInfoDialog() {
 	}
 	ImageMetaInfoModel* model = d->mCurrentDocument ? d->mCurrentDocument->metaInfo() : 0;
 	d->mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
+}
+
+
+void FullScreenContent::showFullScreenConfigDialog() {
+	FullScreenConfigDialog* dialog = new FullScreenConfigDialog(d->mOptionsButton);
+	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
+	dialog->addAction(d->mSlideShow->loopAction());
+	dialog->addAction(d->mSlideShow->randomAction());
+
+	QWidget* slideShowIntervalWidget = d->createSlideShowIntervalWidget();
+	dialog->addWidget(slideShowIntervalWidget);
+
+	QAction* action = new QAction(dialog);
+	action->setText(i18nc("@menu:item", "Configure displayed information"));
+	dialog->addAction(action);
+	QObject::connect(action, SIGNAL(triggered()),
+		SLOT(configureInformationLabel()) );
+
+	QPoint pos = d->mOptionsButton->mapToGlobal(QPoint(0, d->mOptionsButton->height()));
+	dialog->move(pos);
+	dialog->show();
 }
 
 

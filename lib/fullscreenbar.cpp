@@ -151,7 +151,7 @@ void FullScreenBar::autoHide() {
 	// rect().topLeft() is not always (0,0)
 	QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
 
-	if (rect().contains(pos)) {
+	if (rect().contains(pos) || qApp->activePopupWidget()) {
 		// Do nothing if the cursor is over the bar
 		d->mAutoHideTimer->start();
 		return;

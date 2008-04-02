@@ -189,8 +189,8 @@ void SlideShow::start(const QList<KUrl>& urls) {
 }
 
 
-void SlideShow::setInterval(double sInterval) {
-	GwenviewConfig::setInterval(sInterval);
+void SlideShow::setInterval(int intervalInSeconds) {
+	GwenviewConfig::setInterval(double(intervalInSeconds));
 	d->updateTimerInterval();
 }
 

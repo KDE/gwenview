@@ -53,7 +53,7 @@ public:
 	void setCurrentUrl(const KUrl& url);
 
 public Q_SLOTS:
-	void setInterval(double);
+	void setInterval(int);
 
 Q_SIGNALS:
 	void goToUrl( const KUrl& );

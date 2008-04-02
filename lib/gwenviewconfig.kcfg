@@ -21,6 +21,9 @@
 		<entry name="FullScreenPreferredMetaInfoKeyList" type="StringList">
 			<default>General.Name,Exif.Image.DateTime</default>
 		</entry>
+		<entry name="FullScreenTheme" type="String">
+			<default>blackglass</default>
+		</entry>
 	</group>
 
 	<group name="ImageView">
