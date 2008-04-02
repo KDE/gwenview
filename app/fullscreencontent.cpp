@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "imagemetainfodialog.h"
 #include "thumbnailbarview.h"
+#include "ui_fullscreenconfigdialog.h"
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
@@ -80,53 +81,13 @@ static QString loadFullScreenStyleSheet() {
 }
 
 
-class FullScreenConfigDialog : public QFrame {
+class FullScreenConfigDialog : public QFrame, public Ui_FullScreenConfigDialog {
 public:
 	FullScreenConfigDialog(QWidget* parent)
 	: QFrame(parent) {
 		setWindowFlags(Qt::Popup);
-		setObjectName("configDialog");
-
-		QString styleSheet = loadFullScreenStyleSheet();
-		if (!styleSheet.isEmpty()) {
-			setStyleSheet(styleSheet);
-		}
-
-		QPushButton* closeButton = new QPushButton;
-		closeButton->setText(i18n("Close"));
-		connect(closeButton, SIGNAL(clicked()), SLOT(close()) );
-
-		QVBoxLayout* mainLayout = new QVBoxLayout(this);
-		mLayout = new QVBoxLayout;
-		mainLayout->addLayout(mLayout);
-		mainLayout->addWidget(closeButton);
+		setupUi(this);
 	}
-
-	void addAction(QAction* action) {
-		if (action->isCheckable()) {
-			QCheckBox* checkBox = new QCheckBox;
-			checkBox->setText(action->text());
-			checkBox->setChecked(action->isChecked());
-			QObject::connect(checkBox, SIGNAL(toggled(bool)),
-				action, SLOT(trigger()) );
-			mLayout->addWidget(checkBox);
-
-		} else {
-			QPushButton* button = new QPushButton(this);
-			button->setText(action->text());
-			QObject::connect(button, SIGNAL(clicked()),
-				action, SLOT(trigger()) );
-			mLayout->addWidget(button);
-		}
-	}
-
-	void addWidget(QWidget* widget) {
-		widget->setParent(this);
-		mLayout->addWidget(widget);
-	}
-
-private:
-	QVBoxLayout* mLayout;
 };
 
 
@@ -297,19 +258,29 @@ void FullScreenContent::updateMetaInfoDialog() {
 }
 
 
+static void setupCheckBox(QCheckBox* checkBox, QAction* action) {
+	checkBox->setChecked(action->isChecked());
+	QObject::connect(checkBox, SIGNAL(toggled(bool)),
+		action, SLOT(trigger()) );
+}
+
 void FullScreenContent::showFullScreenConfigDialog() {
 	FullScreenConfigDialog* dialog = new FullScreenConfigDialog(d->mOptionsButton);
 	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-	dialog->addAction(d->mSlideShow->loopAction());
-	dialog->addAction(d->mSlideShow->randomAction());
+	dialog->setObjectName("configDialog");
+	QString styleSheet = loadFullScreenStyleSheet();
+	if (!styleSheet.isEmpty()) {
+		dialog->setStyleSheet(styleSheet);
+	}
 
-	QWidget* slideShowIntervalWidget = d->createSlideShowIntervalWidget();
-	dialog->addWidget(slideShowIntervalWidget);
+	setupCheckBox(dialog->mSlideShowLoopCheckBox, d->mSlideShow->loopAction());
+	setupCheckBox(dialog->mSlideShowRandomCheckBox, d->mSlideShow->randomAction());
 
-	QAction* action = new QAction(dialog);
-	action->setText(i18nc("@menu:item", "Configure displayed information"));
-	dialog->addAction(action);
-	QObject::connect(action, SIGNAL(triggered()),
+	connect(dialog->mSlideShowIntervalSlider, SIGNAL(valueChanged(int)),
+		d->mSlideShow, SLOT(setInterval(int)) );
+	dialog->mSlideShowIntervalSlider->setValue(int(GwenviewConfig::interval()));
+
+	connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
 		SLOT(configureInformationLabel()) );
 
 	QPoint pos = d->mOptionsButton->mapToGlobal(QPoint(0, d->mOptionsButton->height()));

@@ -37,6 +37,7 @@ endif (Nepomuk_FOUND)
 
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
+	fullscreenconfigdialog.ui
 	nepomuksidebaritem.ui
 	)
 

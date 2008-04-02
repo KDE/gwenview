@@ -1,0 +1,159 @@
+<ui version="4.0" >
+ <class>FullScreenConfigDialog</class>
+ <widget class="QWidget" name="FullScreenConfigDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>366</width>
+    <height>188</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <layout class="QFormLayout" name="formLayout" >
+     <property name="fieldGrowthPolicy" >
+      <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     </property>
+     <item row="0" column="1" >
+      <widget class="QCheckBox" name="mSlideShowLoopCheckBox" >
+       <property name="text" >
+        <string>Loop</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QCheckBox" name="mSlideShowRandomCheckBox" >
+       <property name="text" >
+        <string>Random</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>Interval:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <layout class="QHBoxLayout" name="horizontalLayout" >
+       <item>
+        <widget class="QSlider" name="mSlideShowIntervalSlider" >
+         <property name="minimum" >
+          <number>2</number>
+         </property>
+         <property name="maximum" >
+          <number>62</number>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="mSlideShowIntervalLabel" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>30</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QPushButton" name="mConfigureDisplayedInformationButton" >
+       <property name="text" >
+        <string>Configure Displayed Information</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item>
+      <spacer name="horizontalSpacer" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mCloseButton" >
+       <property name="text" >
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>mSlideShowLoopCheckBox</tabstop>
+  <tabstop>mSlideShowRandomCheckBox</tabstop>
+  <tabstop>mSlideShowIntervalSlider</tabstop>
+  <tabstop>mConfigureDisplayedInformationButton</tabstop>
+  <tabstop>mCloseButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>mCloseButton</sender>
+   <signal>clicked()</signal>
+   <receiver>FullScreenConfigDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>325</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>364</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSlideShowIntervalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>mSlideShowIntervalLabel</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>230</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>305</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
