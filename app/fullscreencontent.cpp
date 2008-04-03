@@ -27,7 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCheckBox>
 #include <QDialog>
 #include <QEvent>
-#include <QFile>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
@@ -38,10 +37,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kmacroexpander.h>
-#include <kstandarddirs.h>
 
 // Local
+#include "fullscreentheme.h"
 #include "imagemetainfodialog.h"
 #include "thumbnailbarview.h"
 #include "ui_fullscreenconfigdialog.h"
@@ -53,33 +51,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 
 namespace Gwenview {
-
-
-static QString loadFullScreenStyleSheet() {
-	// Get themeDir
-	QString themeName = GwenviewConfig::fullScreenTheme();
-	QString themeDir = KStandardDirs::locate("appdata", "fullscreenthemes/" + themeName + "/");
-	if (themeDir.isEmpty()) {
-		kWarning() << "Couldn't find fullscreen theme" << themeName;
-		return QString();
-	}
-
-	// Read css file
-	QString styleSheetPath = themeDir + "/style.css";
-	QFile file(styleSheetPath);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		kWarning() << "Couldn't open" << styleSheetPath;
-		return QString();
-	}
-	QString styleSheet = QString::fromUtf8(file.readAll());
-
-	// Replace vars
-	QHash<QString, QString> macros;
-	macros["themeDir"] = themeDir;
-	styleSheet = KMacroExpander::expandMacros(styleSheet, macros, QLatin1Char('$'));
-
-	return styleSheet;
-}
 
 
 static QToolButton* createButtonBarButton() {
@@ -146,7 +117,8 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	parent->installEventFilter(this);
 
 	// Apply theme
-	QString styleSheet = loadFullScreenStyleSheet();
+	FullScreenTheme* theme = FullScreenTheme::currentTheme();
+	QString styleSheet = theme->styleSheet();
 	if (!styleSheet.isEmpty()) {
 		parent->setStyleSheet(styleSheet);
 	}
