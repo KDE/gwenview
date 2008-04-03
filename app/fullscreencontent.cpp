@@ -161,12 +161,14 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->createOptionsButton();
 	buttonBarLayout->addWidget(d->mOptionsButton);
 
+	// Thumbnail bar
 	d->mThumbnailBar = new ThumbnailBarView(parent);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
 	d->mThumbnailBar->setThumbnailSize(64);
 	d->mThumbnailBar->setFullScreenMode(true);
 
+	// mInformationLabel
 	d->mInformationLabel = new QLabel;
 	d->mInformationLabel->setWordWrap(true);
 	d->mInformationLabel->setAlignment(Qt::AlignCenter);
@@ -279,6 +281,9 @@ void FullScreenContent::updateSlideShowIntervalLabel() {
 }
 
 
+/**
+ * Helper function for showFullScreenConfigDialog
+ */
 static void setupCheckBox(QCheckBox* checkBox, QAction* action) {
 	checkBox->setChecked(action->isChecked());
 	QObject::connect(checkBox, SIGNAL(toggled(bool)),
