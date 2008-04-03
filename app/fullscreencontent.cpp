@@ -310,8 +310,15 @@ void FullScreenContent::showFullScreenConfigDialog() {
 		SLOT(configureInformationLabel()) );
 
 	// Show dialog below the button
-	// FIXME: RTL
-	QPoint pos = d->mOptionsButton->mapToGlobal(QPoint(0, d->mOptionsButton->height()));
+	QRect buttonRect = d->mOptionsButton->rect();
+	QPoint pos;
+	if (dialog->isRightToLeft()) {
+		pos = buttonRect.bottomRight();
+		pos.rx() -= dialog->width() - 1;
+	} else {
+		pos = buttonRect.bottomLeft();
+	}
+	pos = d->mOptionsButton->mapToGlobal(pos);
 	dialog->move(pos);
 	dialog->show();
 }
