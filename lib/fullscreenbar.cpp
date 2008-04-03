@@ -64,42 +64,6 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 : QFrame(parent)
 , d(new FullScreenBarPrivate) {
 	setObjectName("fullScreenBar");
-	setStyleSheet(
-		"#fullScreenBar {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop:0 #444, stop: 0.6 black, stop:1 black);"
-		"	border: 0px;"
-		"	border-bottom: 1px solid gray;"
-		"	padding: 0px;"
-		"}"
-
-		"QToolBar {"
-		"	border: 0px;"
-		"	margin: 0px;"
-		"	padding: 0px;"
-		"}"
-
-		"QToolButton {"
-		"	padding: 2px;"
-		"	border-radius: 2px;"
-		"}"
-
-		"QToolButton:hover {"
-		"	border: 1px solid #aaa;"
-		"}"
-
-		"QToolButton:pressed {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop:0 #222, stop: 0.6 black, stop:1 black);"
-		"	border: 1px solid #444;"
-		"}"
-
-		".QLabel {"
-		"	color: #ccc;"
-		"}"
-		);
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );

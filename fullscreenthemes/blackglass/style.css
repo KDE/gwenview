@@ -1,11 +1,6 @@
-#configDialog {
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 #444, stop: 0.6 black, stop:1 black);
-	border: 1px solid gray;
-}
-
-#configDialog * {
+/* Default text color for most widgets, but not tooltips (hence the '.' before
+ * QLabel */
+.QLabel, QPushButton, QToolButton, QCheckBox {
 	color: #ccc;
 }
 
@@ -14,8 +9,38 @@ QCheckBox::indicator, QPushButton, QSlider::groove, QSlider::handle {
 	border: 1px solid #666;
 }
 
-QCheckBox::indicator:hover, QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
+QCheckBox::indicator:hover, QToolButton::hover, QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
 	border: 1px solid #ccc;
+}
+
+/* QToolButton */
+QToolButton {
+	padding: 2px;
+	border-radius: 2px;
+}
+
+QToolButton:pressed {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #222, stop: 0.6 black, stop:1 black);
+	border: 1px solid #444;
+}
+
+/* Containers */
+#fullScreenBar {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #444, stop: 0.6 black, stop:1 black);
+	border: 0px;
+	border-bottom: 1px solid gray;
+	padding: 0px;
+}
+
+#configDialog {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #444, stop: 0.6 black, stop:1 black);
+	border: 1px solid gray;
 }
 
 /* QCheckBox */

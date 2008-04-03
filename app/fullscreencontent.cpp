@@ -145,7 +145,15 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->mSlideShow = slideShow;
 	parent->installEventFilter(this);
 
+	// Apply theme
+	QString styleSheet = loadFullScreenStyleSheet();
+	if (!styleSheet.isEmpty()) {
+		parent->setStyleSheet(styleSheet);
+	}
+
+	// Button bar
 	QWidget* buttonBar = new QWidget;
+	buttonBar->setObjectName("buttonBar");
 	QHBoxLayout* buttonBarLayout = new QHBoxLayout(buttonBar);
 	buttonBarLayout->setMargin(0);
 	buttonBarLayout->setSpacing(0);
@@ -295,10 +303,6 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	d->mFullScreenConfigDialog = dialog;
 	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 	dialog->setObjectName("configDialog");
-	QString styleSheet = loadFullScreenStyleSheet();
-	if (!styleSheet.isEmpty()) {
-		dialog->setStyleSheet(styleSheet);
-	}
 
 	// Checkboxes
 	setupCheckBox(dialog->mSlideShowLoopCheckBox, d->mSlideShow->loopAction());
