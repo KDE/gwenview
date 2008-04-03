@@ -158,7 +158,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	buttonBarLayout->setMargin(0);
 	buttonBarLayout->setSpacing(0);
 	QStringList actionNameList;
-	actionNameList << "fullscreen" << "go_previous" << "go_next" << "toggle_slideshow";
+	actionNameList << "fullscreen" << "go_previous" << "go_next" << "rotate_left" << "rotate_right" << "toggle_slideshow";
 	Q_FOREACH(const QString& actionName, actionNameList) {
 		QAction* action = actionCollection->action(actionName);
 		QToolButton* button = createButtonBarButton();
