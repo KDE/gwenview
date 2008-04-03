@@ -30,9 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimeLine>
 #include <QToolTip>
 #include <QWindowsStyle>
+
 // KDE
 
 // Local
+#include "fullscreentheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
 
@@ -342,13 +344,39 @@ void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
 			"QScrollBar:horizontal {"
 			"	background-color: transparent;"
 			"	height: 8px;"
+			"	margin: 0 10px 0px 10px;"
 			"	padding: 0 2px 0px 2px;"
 			"}"
-			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal, "
-			"QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {"
+			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { "
 			"	width: 0px;"
 			"	border: 0px;"
+			"}"
+			"QScrollBar::add-line:horizontal {"
+			"	width: 10px;"
+			"	border: 0px;"
+			"	background: transparent;"
+			"	subcontrol-position: right;"
+			"	subcontrol-origin: margin;"
+			"}"
+			"QScrollBar::sub-line:horizontal {"
+			"	width: 10px;"
+			"	border: 0px;"
+			"	background: transparent;"
+			"	subcontrol-position: left;"
+			"	subcontrol-origin: margin;"
+			"}"
+			"QScrollBar:left-arrow:horizontal {"
+			"	background: url($themeDir/scroll-left.png);"
+			"	height: 7px;"
+			"	width: 7px;"
+			"}"
+			"QScrollBar:right-arrow:horizontal {"
+			"	background: url($themeDir/scroll-right.png);"
+			"	height: 7px;"
+			"	width: 7px;"
 			"}";
+		FullScreenTheme* theme = FullScreenTheme::currentTheme();
+		scrollbarCss = theme->replaceThemeVars(scrollbarCss);
 
 		QString handle =
 			"background:"
