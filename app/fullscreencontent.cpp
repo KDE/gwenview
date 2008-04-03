@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QApplication>
 #include <QCheckBox>
 #include <QDialog>
 #include <QEvent>
@@ -31,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLabel>
 #include <QPointer>
 #include <QPushButton>
-#include <QToolBar>
+#include <QStyle>
 #include <QToolButton>
 
 // KDE
@@ -82,8 +83,27 @@ static QString loadFullScreenStyleSheet() {
 
 
 static QToolButton* createButtonBarButton() {
-	QToolButton* button = new QToolButton;
-	button->setIconSize(QSize(32, 32));
+	// Subclass QToolButton to make initStyleOption public
+	class ToolButton : public QToolButton {
+	public:
+		void initStyleOption(QStyleOptionToolButton* option) const {
+			return QToolButton::initStyleOption(option);
+		}
+	};
+
+	ToolButton* button = new ToolButton;
+	QSize iconSize = QSize(32, 32);
+	button->setIconSize(iconSize);
+
+	// When the action icon changes, the button gets a few pixels larger. This
+	// is probably caused by the css styling.
+	// Setting a fixed size prevents this problem.
+	QStyleOptionToolButton opt;
+	button->initStyleOption(&opt);
+	QSize buttonSize = button->style()
+		->sizeFromContents(QStyle::CT_ToolButton, &opt, iconSize, button)
+		.expandedTo(QApplication::globalStrut());
+	button->setFixedSize(buttonSize);
 	return button;
 }
 
