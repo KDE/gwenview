@@ -115,36 +115,6 @@ struct FullScreenContentPrivate {
 		QObject::connect(mOptionsButton, SIGNAL(clicked()),
 			that, SLOT(showFullScreenConfigDialog()) );
 	}
-
-
-	QWidget* createSlideShowIntervalWidget() {
-		QSlider* slider = new QSlider;
-		slider->setRange(2, 60);
-		slider->setOrientation(Qt::Horizontal);
-		slider->setMinimumWidth(180);
-		QObject::connect(slider, SIGNAL(valueChanged(int)),
-			mSlideShow, SLOT(setInterval(int)) );
-
-		QLabel* label = new QLabel;
-		QObject::connect(slider, SIGNAL(valueChanged(int)),
-			label, SLOT(setNum(int)) );
-		label->setFixedWidth(label->fontMetrics().width(" 88 "));
-
-		slider->setValue(int(GwenviewConfig::interval()));
-
-		QLabel* caption = new QLabel;
-		caption->setText(i18n("Slideshow interval:"));
-		caption->setBuddy(slider);
-
-		QWidget* container = new QWidget;
-		QHBoxLayout* layout = new QHBoxLayout(container);
-		layout->setMargin(0);
-		layout->addWidget(caption);
-		layout->addWidget(slider);
-		layout->addWidget(label);
-
-		return container;
-	}
 };
 
 
