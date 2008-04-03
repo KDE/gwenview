@@ -81,6 +81,13 @@ static QString loadFullScreenStyleSheet() {
 }
 
 
+static QToolButton* createButtonBarButton() {
+	QToolButton* button = new QToolButton;
+	button->setIconSize(QSize(32, 32));
+	return button;
+}
+
+
 class FullScreenConfigDialog : public QFrame, public Ui_FullScreenConfigDialog {
 public:
 	FullScreenConfigDialog(QWidget* parent)
@@ -102,7 +109,7 @@ struct FullScreenContentPrivate {
 	QToolButton* mOptionsButton;
 
 	void createOptionsButton() {
-		mOptionsButton = new QToolButton;
+		mOptionsButton = createButtonBarButton();
 		mOptionsButton->setIcon(KIcon("configure"));
 		mOptionsButton->setToolTip(i18nc("@info:tooltip", "Slideshow options"));
 		QObject::connect(mOptionsButton, SIGNAL(clicked()),
@@ -148,17 +155,21 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->mSlideShow = slideShow;
 	parent->installEventFilter(this);
 
+	QWidget* buttonBar = new QWidget;
+	QHBoxLayout* buttonBarLayout = new QHBoxLayout(buttonBar);
+	buttonBarLayout->setMargin(0);
+	buttonBarLayout->setSpacing(0);
+	QStringList actionNameList;
+	actionNameList << "fullscreen" << "go_previous" << "go_next" << "toggle_slideshow";
+	Q_FOREACH(const QString& actionName, actionNameList) {
+		QAction* action = actionCollection->action(actionName);
+		QToolButton* button = createButtonBarButton();
+		button->setDefaultAction(action);
+		buttonBarLayout->addWidget(button);
+	}
+
 	d->createOptionsButton();
-
-	QToolBar* bar = new QToolBar;
-	bar->setFloatable(false);
-	bar->setIconSize(QSize(32, 32));
-	bar->addAction(actionCollection->action("fullscreen"));
-	bar->addAction(actionCollection->action("go_previous"));
-	bar->addAction(actionCollection->action("go_next"));
-
-	bar->addAction(actionCollection->action("toggle_slideshow"));
-	bar->addWidget(d->mOptionsButton);
+	buttonBarLayout->addWidget(d->mOptionsButton);
 
 	d->mThumbnailBar = new ThumbnailBarView(parent);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
@@ -170,10 +181,16 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->mInformationLabel->setWordWrap(true);
 	d->mInformationLabel->setAlignment(Qt::AlignCenter);
 
+	/*
+	Layout looks like this:
+	buttonBar         |
+	------------------| mThumbnailBar
+	mInformationLabel |
+	*/
 	QGridLayout* layout = new QGridLayout(parent);
 	layout->setMargin(0);
 	layout->setSpacing(0);
-	layout->addWidget(bar, 0, 0);
+	layout->addWidget(buttonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 	layout->addWidget(d->mInformationLabel, 1, 0);
 	layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
 }
