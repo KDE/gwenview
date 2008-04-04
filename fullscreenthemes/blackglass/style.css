@@ -169,26 +169,6 @@ QScrollBar::handle:hover {
 	border-top: 1px solid rgb(118, 118, 118);
 }
 
-/* QListView::Item */
-QListView::item {
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgb(62, 62, 62), stop: 1 rgb(16, 16, 16));
-	border-left: 1px solid
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgb(77, 77, 77), stop: 1 rgb(41, 41, 41));
-	border-right: 1px solid
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgb(13, 13, 13), stop: 1 rgb(0, 0, 0));
-}
-
-QListView::item:selected {
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgb(73, 160, 240), stop: 1 rgb(56, 122, 184));
-	border-left: 1px solid rgb(46, 101, 152);
-	border-right: 1px solid rgb(46, 101, 152);
-}
 
 /* Misc */
 QLabel[isTitle=true] {
