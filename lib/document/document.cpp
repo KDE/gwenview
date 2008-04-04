@@ -129,6 +129,9 @@ void Document::setImage(const QImage& image) {
 
 void Document::setImageInternal(const QImage& image) {
 	d->mImage = image;
+
+	// If we didn't get the image size before decoding the full image, set it
+	// now
 	setSize(d->mImage.size());
 }
 
