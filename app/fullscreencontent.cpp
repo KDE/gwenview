@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QApplication>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QEvent>
 #include <QGridLayout>
@@ -91,6 +92,7 @@ public:
 
 struct FullScreenContentPrivate {
 	FullScreenContent* that;
+	QWidget* mWidget;
 	SlideShow* mSlideShow;
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
@@ -106,6 +108,21 @@ struct FullScreenContentPrivate {
 		QObject::connect(mOptionsButton, SIGNAL(clicked()),
 			that, SLOT(showFullScreenConfigDialog()) );
 	}
+
+	void setupThemeListWidget(QListWidget* listWidget) {
+		QStringList themeList = FullScreenTheme::themeNameList();
+		listWidget->addItems(themeList);
+		int row = themeList.indexOf(FullScreenTheme::currentThemeName());
+		listWidget->setCurrentRow(row);
+
+		QObject::connect(listWidget, SIGNAL(currentTextChanged(const QString&)),
+			that, SLOT(setCurrentFullScreenTheme(const QString&)) );
+	}
+
+	void applyCurrentFullScreenTheme() {
+		FullScreenTheme theme(FullScreenTheme::currentThemeName());
+		mWidget->setStyleSheet(theme.styleSheet());
+	}
 };
 
 
@@ -113,15 +130,12 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 : QObject(parent)
 , d(new FullScreenContentPrivate) {
 	d->that = this;
+	d->mWidget = parent;
 	d->mSlideShow = slideShow;
 	parent->installEventFilter(this);
 
 	// Apply theme
-	FullScreenTheme* theme = FullScreenTheme::currentTheme();
-	QString styleSheet = theme->styleSheet();
-	if (!styleSheet.isEmpty()) {
-		parent->setStyleSheet(styleSheet);
-	}
+	d->applyCurrentFullScreenTheme();
 
 	// Button bar
 	QWidget* buttonBar = new QWidget;
@@ -210,6 +224,12 @@ void FullScreenContent::updateInformationLabel() {
 }
 
 
+void FullScreenContent::setCurrentFullScreenTheme(const QString& themeName) {
+	FullScreenTheme::setCurrentThemeName(themeName);
+	d->applyCurrentFullScreenTheme();
+}
+
+
 bool FullScreenContent::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::Show) {
 		updateInformationLabel();
@@ -295,6 +315,8 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	// Config button
 	connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
 		SLOT(configureInformationLabel()) );
+
+	d->setupThemeListWidget(dialog->mThemeListWidget);
 
 	// Show dialog below the button
 	QRect buttonRect = d->mOptionsButton->rect();

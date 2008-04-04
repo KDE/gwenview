@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 class QString;
+class QStringList;
 
 namespace Gwenview {
 
@@ -35,15 +36,18 @@ namespace Gwenview {
 class FullScreenThemePrivate;
 class FullScreenTheme {
 public:
-	static FullScreenTheme* currentTheme();
+	FullScreenTheme(const QString& themeName);
 	QString styleSheet() const;
 	QString replaceThemeVars(const QString& styleSheet);
 
 	~FullScreenTheme();
 
+	static QStringList themeNameList();
+	static QString currentThemeName();
+	static void setCurrentThemeName(const QString&);
+
 private:
 	FullScreenThemePrivate* const d;
-	FullScreenTheme(const QString& themeName);
 };
 
 

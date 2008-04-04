@@ -56,6 +56,27 @@ QCheckBox::indicator:checked {
 	image:url($themeDir/checked.png);
 }
 
+/* Config dialog list */
+#configDialog QListView {
+	background-color: #333;
+	border: 1px solid #666;
+}
+
+#configDialog QListView:focus {
+	border: 1px solid #ccc;
+}
+
+#configDialog QListView::item {
+	color: #aaa;
+}
+
+#configDialog QListView::item:selected {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #888, stop:1 #444);
+	color: #ccc;
+}
+
 /* QPushButton */
 #configDialog QPushButton {
 	background-color:

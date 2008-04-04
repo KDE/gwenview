@@ -22,10 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fullscreentheme.h"
 
 // Qt
+#include <QDir>
 #include <QFile>
 #include <QString>
 
 // KDE
+#include <kcategorizedsortfilterproxymodel.h>
+#include <kcomponentdata.h>
 #include <kmacroexpander.h>
 #include <kstandarddirs.h>
 
@@ -33,6 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 
 namespace Gwenview {
+
+
+static const char* THEME_BASE_DIR = "fullscreenthemes/";
 
 
 struct FullScreenThemePrivate {
@@ -44,7 +50,7 @@ struct FullScreenThemePrivate {
 FullScreenTheme::FullScreenTheme(const QString& themeName)
 : d(new FullScreenThemePrivate) {
 	// Get theme dir
-	d->mThemeDir = KStandardDirs::locate("appdata", "fullscreenthemes/" + themeName + "/");
+	d->mThemeDir = KStandardDirs::locate("appdata", THEME_BASE_DIR + themeName + "/");
 	if (d->mThemeDir.isEmpty()) {
 		kWarning() << "Couldn't find fullscreen theme" << themeName;
 		return;
@@ -80,9 +86,36 @@ QString FullScreenTheme::replaceThemeVars(const QString& styleSheet) {
 }
 
 
-FullScreenTheme* FullScreenTheme::currentTheme() {
-	static FullScreenTheme obj(GwenviewConfig::fullScreenTheme());
-	return &obj;
+QString FullScreenTheme::currentThemeName() {
+	return GwenviewConfig::fullScreenTheme();
+}
+
+
+void FullScreenTheme::setCurrentThemeName(const QString& name) {
+	GwenviewConfig::setFullScreenTheme(name);
+}
+
+
+static bool themeNameLessThan(const QString& s1, const QString& s2) {
+	return KCategorizedSortFilterProxyModel::naturalCompare(
+		s1.toLower(), s2.toLower()) < 0;
+}
+
+
+QStringList FullScreenTheme::themeNameList() {
+	QStringList list;
+	QStringList themeBaseDirs =
+		KGlobal::mainComponent().dirs()
+		->findDirs("appdata", THEME_BASE_DIR);
+	Q_FOREACH(const QString& themeBaseDir, themeBaseDirs) {
+		kDebug() << themeBaseDir;
+		QDir dir(themeBaseDir);
+		list += dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+	}
+	qSort(list.begin(), list.end(), themeNameLessThan);
+	kDebug() << list;
+
+	return list;
 }
 
 
