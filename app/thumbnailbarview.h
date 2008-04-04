@@ -65,7 +65,6 @@ public:
 	~ThumbnailBarView();
 
 	QSize sizeHint() const;
-	void setFullScreenMode(bool);
 
 protected:
 	void paintEvent(QPaintEvent*);

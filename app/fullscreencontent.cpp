@@ -146,7 +146,6 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
 	d->mThumbnailBar->setThumbnailSize(64);
-	d->mThumbnailBar->setFullScreenMode(true);
 
 	// mInformationLabel
 	d->mInformationLabel = new QLabel;

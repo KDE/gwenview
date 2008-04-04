@@ -251,7 +251,6 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 
 	mStyle = new ProxyStyle(style());
 	setStyle(mStyle);
-	setFullScreenMode(false);
 }
 
 
@@ -267,12 +266,6 @@ QSize ThumbnailBarView::sizeHint() const {
 	int f = 2 * frameWidth();
 	hint.setHeight(size + f + hsbExt);
 	return hint;
-}
-
-
-void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
-	// Vertical spacing between viewport and scrollbar.
-	setViewportMargins(0, 0, 0, fullScreenMode ? 1 : 2);
 }
 
 
