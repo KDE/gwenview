@@ -28,6 +28,7 @@ class DocumentTest : public QObject {
 
 private Q_SLOTS:
 	void testLoad();
+	void testLoad_data();
 	void testLoadTwoPasses();
 	void testLoadEmpty();
 	void testLoadRemote();

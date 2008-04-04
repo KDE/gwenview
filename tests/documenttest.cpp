@@ -45,14 +45,25 @@ using namespace Gwenview;
 
 
 void DocumentTest::testLoad() {
-	KUrl url = urlForTestFile("test.png");
-	QImage image;
-	bool ok = image.load(url.path());
-	QVERIFY2(ok, "Could not load 'test.png'");
+	QFETCH(QString, fileName);
+	QFETCH(QByteArray, expectedFormat);
+	QFETCH(QImage, expectedImage);
+	KUrl url = urlForTestFile(fileName);
+	QVERIFY2(!expectedImage.isNull(), "Could not load test image");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilLoaded();
-	QCOMPARE(image, doc->image());
-	QCOMPARE(doc->format().data(), "png");
+	QCOMPARE(expectedImage, doc->image());
+	QCOMPARE(expectedFormat, doc->format());
+}
+
+#define NEW_ROW(fileName, format) QTest::newRow(fileName) << fileName << QByteArray(format) << QImage(pathForTestFile(fileName))
+void DocumentTest::testLoad_data() {
+	QTest::addColumn<QString>("fileName");
+	QTest::addColumn<QByteArray>("expectedFormat");
+	QTest::addColumn<QImage>("expectedImage");
+
+	NEW_ROW("test.png", "png");
+	NEW_ROW("test.eps", "eps");
 }
 
 void DocumentTest::testLoadTwoPasses() {
