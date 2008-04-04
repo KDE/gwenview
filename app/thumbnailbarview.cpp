@@ -58,26 +58,6 @@ const int SHADOW_STRENGTH = 127;
 const int SHADOW_SIZE = 4;
 
 
-static QString rgba(const QColor &color) {
-	return QString::fromAscii("rgba(%1, %2, %3, %4)")
-		.arg(color.red())
-		.arg(color.green())
-		.arg(color.blue())
-		.arg(color.alpha());
-}
-
-
-static QString gradient(const QColor &color, int value) {
-	QString grad =
-		"qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"stop:0 %1, stop: 1 %2)";
-	return grad.arg(
-		rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))),
-		rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2)))
-		);
-}
-
-
 struct ThumbnailBarItemDelegatePrivate {
 	// Key is height * 1000 + width
 	typedef QMap<int, QPixmap> ShadowCache;
@@ -291,124 +271,8 @@ QSize ThumbnailBarView::sizeHint() const {
 
 
 void ThumbnailBarView::setFullScreenMode(bool fullScreenMode) {
-	QColor bgColor = fullScreenMode ? QColor(10, 10, 10) :
-			palette().color(QPalette::Normal, QPalette::Window);
-	QColor bgSelColor = palette().color(QPalette::Normal, QPalette::Highlight);
-
-	// Avoid dark and bright colors
-	bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
-
-	QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
-	QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
-	QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
-
-	QString viewCss =
-		"#thumbnailBarView {"
-		"	background-color: rgba(0, 0, 0, 10%);"
-		"	border: 1px solid rgba(0, 0, 0, 35%);"
-		"	border-radius: 2px;"
-		"	padding: %1px;"
-		"}";
-	viewCss = viewCss.arg(QString::number(fullScreenMode ? 0 : 1));
-
-	QString viewportCss =
-		"QWidget { "
-		"	background-color: %1;"
-		"}";
-	viewportCss = viewportCss.arg(rgba(bgColor));
-	viewport()->setStyleSheet(viewportCss);
-
-	QString itemCss =
-		"QListView::item {"
-		"	background-color: %1;"
-		"	border-left: 1px solid %2;"
-		"	border-right: 1px solid %3;"
-		"}";
-	itemCss = itemCss.arg(
-		gradient(bgColor, 46),
-		gradient(leftBorderColor, 36),
-		gradient(rightBorderColor, 26));
-
-	QString itemSelCss =
-		"QListView::item:selected {"
-		"	background-color: %1;"
-		"	border-left: 1px solid %2;"
-		"	border-right: 1px solid %2;"
-		"}";
-	itemSelCss = itemSelCss.arg(
-		gradient(bgSelColor, 56),
-		rgba(borderSelColor));
-
-	if (fullScreenMode) {
-		QString scrollbarCss =
-			"QScrollBar:horizontal {"
-			"	background-color: transparent;"
-			"	height: 8px;"
-			"	margin: 0 10px 0px 10px;"
-			"	padding: 0 2px 0px 2px;"
-			"}"
-			"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { "
-			"	width: 0px;"
-			"	border: 0px;"
-			"}"
-			"QScrollBar::add-line:horizontal {"
-			"	width: 10px;"
-			"	border: 0px;"
-			"	background: transparent;"
-			"	subcontrol-position: right;"
-			"	subcontrol-origin: margin;"
-			"}"
-			"QScrollBar::sub-line:horizontal {"
-			"	width: 10px;"
-			"	border: 0px;"
-			"	background: transparent;"
-			"	subcontrol-position: left;"
-			"	subcontrol-origin: margin;"
-			"}"
-			"QScrollBar:left-arrow:horizontal {"
-			"	background: url($themeDir/scroll-left.png);"
-			"	height: 7px;"
-			"	width: 7px;"
-			"}"
-			"QScrollBar:right-arrow:horizontal {"
-			"	background: url($themeDir/scroll-right.png);"
-			"	height: 7px;"
-			"	width: 7px;"
-			"}";
-		FullScreenTheme* theme = FullScreenTheme::currentTheme();
-		scrollbarCss = theme->replaceThemeVars(scrollbarCss);
-
-		QString handle =
-			"background:"
-			"	qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			"	stop: 0 %1, stop: 0.5 %2,"
-			"	stop: 0.51 %3, stop: 1 %2);"
-			"border: 1px solid %2;"
-			"border-top: 1px solid %4;"
-			"}";
-
-		QColor handleColor(86, 86, 86);
-		QColor handleHoverColor = handleColor.lighter(110);
-		QString handleCss =
-			"QScrollBar::handle:horizontal {"
-			"	border-radius: 3px;"
-			"	min-width: 20px;" +
-			handle.arg(
-				rgba(handleColor),
-				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0, -32)),
-				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0, -64)),
-				rgba(PaintUtils::adjustedHsv(handleColor, 0, 0,  24))) +
-			"QScrollBar::handle:hover {" +
-			handle.arg(
-				rgba(handleHoverColor),
-				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0, -32)),
-				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0, -64)),
-				rgba(PaintUtils::adjustedHsv(handleHoverColor, 0, 0,  24)));
-		viewCss += scrollbarCss + handleCss;
-	}
 	// Vertical spacing between viewport and scrollbar.
 	setViewportMargins(0, 0, 0, fullScreenMode ? 1 : 2);
-	setStyleSheet(viewCss + itemCss + itemSelCss);
 }
 
 

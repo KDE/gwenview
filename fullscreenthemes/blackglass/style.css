@@ -102,6 +102,94 @@ QSlider::handle:hover {
 		stop:0 #444, stop: 0.6 black, stop:1 black);
 }
 
+/* Thumbnail bar */
+#thumbnailBarView {
+	background-color: rgba(0, 0, 0, 10%);
+	border: 1px solid rgba(0, 0, 0, 35%);
+	border-radius: 2px;
+	padding: 0px;
+}
+
+/* QScrollBar */
+QScrollBar:horizontal {
+	background-color: transparent;
+	height: 8px;
+	margin: 0 10px 0px 10px;
+	padding: 0 2px 0px 2px;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+	width: 0px;
+	border: 0px;
+}
+
+QScrollBar::add-line:horizontal {
+	width: 10px;
+	border: 0px;
+	background: transparent;
+	subcontrol-position: right;
+	subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+	width: 10px;
+	border: 0px;
+	background: transparent;
+	subcontrol-position: left;
+	subcontrol-origin: margin;
+}
+
+QScrollBar:left-arrow:horizontal {
+	background: url($themeDir/scroll-left.png);
+	height: 7px;
+	width: 7px;
+}
+
+QScrollBar:right-arrow:horizontal {
+	background: url($themeDir/scroll-right.png);
+	height: 7px;
+	width: 7px;
+}
+
+QScrollBar::handle:horizontal {
+	border-radius: 3px;
+	min-width: 20px;
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop: 0 rgb(86, 86, 86), stop: 0.5 rgb(54, 54, 54), stop: 0.51 rgb(22, 22, 22), stop: 1 rgb(54, 54, 54));
+	border: 1px solid rgb(54, 54, 54);
+	border-top: 1px solid rgb(110, 110, 110);
+}
+
+QScrollBar::handle:hover {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop: 0 rgb(94, 94, 94), stop: 0.5 rgb(62, 62, 62), stop: 0.51 rgb(30, 30, 30), stop: 1 rgb(62, 62, 62));
+	border: 1px solid rgb(62, 62, 62);
+	border-top: 1px solid rgb(118, 118, 118);
+}
+
+/* QListView::Item */
+QListView::item {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 rgb(62, 62, 62), stop: 1 rgb(16, 16, 16));
+	border-left: 1px solid
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 rgb(77, 77, 77), stop: 1 rgb(41, 41, 41));
+	border-right: 1px solid
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 rgb(13, 13, 13), stop: 1 rgb(0, 0, 0));
+}
+
+QListView::item:selected {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 rgb(73, 160, 240), stop: 1 rgb(56, 122, 184));
+	border-left: 1px solid rgb(46, 101, 152);
+	border-right: 1px solid rgb(46, 101, 152);
+}
+
 /* Misc */
 QLabel[isTitle=true] {
 	font-weight: bold;

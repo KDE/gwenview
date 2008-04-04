@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageview.h>
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
+#include <lib/paintutils.h>
 
 
 namespace Gwenview {
@@ -52,6 +53,27 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
+
+
+static QString rgba(const QColor &color) {
+	return QString::fromAscii("rgba(%1, %2, %3, %4)")
+		.arg(color.red())
+		.arg(color.green())
+		.arg(color.blue())
+		.arg(color.alpha());
+}
+
+
+static QString gradient(const QColor &color, int value) {
+	QString grad =
+		"qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+		"stop:0 %1, stop: 1 %2)";
+	return grad.arg(
+		rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))),
+		rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2)))
+		);
+}
+
 
 struct DocumentViewPrivate {
 	DocumentView* mView;
@@ -102,6 +124,54 @@ struct DocumentViewPrivate {
 		layout->setSpacing(0);
 		layout->addWidget(mToggleThumbnailBarButton, 0, Qt::AlignLeft);
 		layout->addWidget(mStatusBar);
+	}
+
+	void setupThumbnailBar() {
+		mThumbnailBar = new ThumbnailBarView(mPartContainer);
+		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
+		mThumbnailBar->setItemDelegate(delegate);
+		mThumbnailBar->hide();
+
+		QColor bgColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Window);
+		QColor bgSelColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Highlight);
+
+		// Avoid dark and bright colors
+		bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
+
+		QColor leftBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, qMin(20, 255 - bgColor.value()));
+		QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
+		QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
+
+		QString viewCss =
+			"#thumbnailBarView {"
+			"	background-color: rgba(0, 0, 0, 10%);"
+			"	border: 1px solid rgba(0, 0, 0, 35%);"
+			"	border-radius: 2px;"
+			"	padding: 1px;"
+			"}";
+
+		QString itemCss =
+			"QListView::item {"
+			"	background-color: %1;"
+			"	border-left: 1px solid %2;"
+			"	border-right: 1px solid %3;"
+			"}";
+		itemCss = itemCss.arg(
+			gradient(bgColor, 46),
+			gradient(leftBorderColor, 36),
+			gradient(rightBorderColor, 26));
+
+		QString itemSelCss =
+			"QListView::item:selected {"
+			"	background-color: %1;"
+			"	border-left: 1px solid %2;"
+			"	border-right: 1px solid %2;"
+			"}";
+		itemSelCss = itemSelCss.arg(
+			gradient(bgSelColor, 56),
+			rgba(borderSelColor));
+
+		mThumbnailBar->setStyleSheet(viewCss + itemCss + itemSelCss);
 	}
 
 	void setPartWidget(QWidget* partWidget) {
@@ -160,10 +230,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mStatusBarContainer = new QWidget;
 	d->setupStatusBar();
 
-	d->mThumbnailBar = new ThumbnailBarView(d->mPartContainer);
-	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
-	d->mThumbnailBar->setItemDelegate(delegate);
-	d->mThumbnailBar->hide();
+	d->setupThumbnailBar();
 
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
 	d->mPartContainerLayout->addWidget(d->mStatusBarContainer);
