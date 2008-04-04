@@ -243,13 +243,7 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 
 
 void LoadingDocumentImpl::slotImageLoaded() {
-	if (!document()->size().isValid()) {
-		// This can happen if the image decoder was not able to tell us the
-		// image size without decoding it
-		Q_ASSERT(d->mImageSize.isValid());
-		setDocumentImageSize(d->mImageSize);
-	}
-
+	Q_ASSERT(!d->mImage.isNull());
 	setDocumentImage(d->mImage);
 	imageRectUpdated(d->mImage.rect());
 	emit loaded();
