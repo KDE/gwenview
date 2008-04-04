@@ -1,15 +1,15 @@
 /* Default text color for most widgets, but not tooltips (hence the '.' before
  * QLabel */
-.QLabel, QPushButton, QToolButton, QCheckBox {
+.QLabel, #configDialog QPushButton, QToolButton, QCheckBox {
 	color: #ccc;
 }
 
 /* Default borders, normal and hover */
-QCheckBox::indicator, QPushButton, QSlider::groove, QSlider::handle {
+QCheckBox::indicator, #configDialog QPushButton, QSlider::groove, QSlider::handle {
 	border: 1px solid #666;
 }
 
-QCheckBox::indicator:hover, QToolButton::hover, QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
+QCheckBox::indicator:hover, QToolButton::hover, #configDialog QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
 	border: 1px solid #ccc;
 }
 
@@ -57,7 +57,7 @@ QCheckBox::indicator:checked {
 }
 
 /* QPushButton */
-QPushButton {
+#configDialog QPushButton {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
 		stop:0 #333, stop: 0.5 black, stop:1 black);
@@ -65,13 +65,13 @@ QPushButton {
 	padding: 3px;
 }
 
-QPushButton:hover {
+#configDialog QPushButton:hover {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
 		stop:0 #444, stop: 0.6 black, stop:1 black);
 }
 
-QPushButton:pressed {
+#configDialog QPushButton:pressed {
 	background-color: #111;
 	padding-right: 1px;
 	padding-bottom: 1px;
@@ -200,4 +200,90 @@ QLabel[isTitle=true] {
 	border: none;
 	border-top: 1px solid gray;
 	height: 3px;
+}
+
+/* Thumbnail Bar */
+#thumbnailBarView {
+	background-color: black;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#thumbnailBarView::item {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3e3e3e, stop: 1 #101010);
+	border-left: 1px solid
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #4d4d4d, stop: 1 #292929);
+	border-right: 1px solid
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 #0d0d0d, stop: 1 #000000);
+}
+
+#thumbnailBarView::item:selected {
+	background-color: palette(highlight);
+	border-left: 1px solid palette(dark);
+	border-right: 1px solid palette(dark);
+}
+
+#thumbnailBarView QScrollBar:horizontal {
+	background-color: transparent;
+	height: 8px;
+	padding: 0 2px 0px 2px;
+	margin: 0 10px 0px 10px;
+}
+
+#thumbnailBarView QScrollBar::add-page:horizontal,
+#thumbnailBarView QScrollBar::sub-page:horizontal {
+	width: 0px;
+	border: 0px;
+}
+
+#thumbnailBarView QScrollBar::add-line:horizontal {
+	width: 10px;
+	border: 0px;
+	background: transparent;
+	subcontrol-position: right;
+	subcontrol-origin: margin;
+}
+
+#thumbnailBarView QScrollBar::sub-line:horizontal {
+	width: 10px;
+	border: 0px;
+	background: transparent;
+	subcontrol-position: left;
+	subcontrol-origin: margin;
+}
+
+#thumbnailBarView QScrollBar:left-arrow:horizontal {
+	background: url($themeDir/scroll-left.png);
+	height: 7px;
+	width: 7px;
+}
+
+#thumbnailBarView QScrollBar:right-arrow:horizontal {
+	background: url($themeDir/scroll-right.png);
+	height: 7px;
+	width: 7px;
+}
+
+#thumbnailBarView QScrollBar::handle:horizontal {
+	border-radius: 3px;
+	min-width: 20px;
+	background:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop: 0 #565656, stop: 0.5 #363636,
+		stop: 0.51 #161616, stop: 1 #363636);
+	border: 1px solid #363636;
+	border-top: 1px solid #6e6e6e;
+}
+
+#thumbnailBarView QScrollBar::handle:hover {
+	background:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop: 0 #5e5e5e, stop: 0.5 #3e3e3e,
+		stop: 0.51 #1e1e1e, stop: 1 #3e3e3e);
+	border: 1px solid #3e3e3e;
+	border-top: 1px solid #767676;
 }
