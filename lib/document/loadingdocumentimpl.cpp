@@ -100,7 +100,7 @@ struct LoadingDocumentImplPrivate {
 			mExiv2Image = loader.popImage();
 		}
 
-		if (mFormat == "jpeg") {
+		if (mFormat == "jpeg" && mExiv2Image.get()) {
 			mJpegContent = new JpegContent();
 			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
 				return false;
@@ -247,7 +247,7 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	setDocumentImage(d->mImage);
 	imageRectUpdated(d->mImage.rect());
 	emit loaded();
-	if (d->mFormat == "jpeg") {
+	if (d->mJpegContent) {
 		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
 			document(),
 			d->mJpegContent);
