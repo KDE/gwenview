@@ -63,7 +63,7 @@ void DocumentTest::testLoad_data() {
 	QTest::addColumn<QImage>("expectedImage");
 
 	NEW_ROW("test.png", "png");
-	NEW_ROW("test.eps", "eps");
+	NEW_ROW("160216_no_size_before_decoding.eps", "eps");
 	NEW_ROW("160382_corrupted.jpeg", "jpeg");
 }
 
