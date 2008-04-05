@@ -64,6 +64,7 @@ void DocumentTest::testLoad_data() {
 
 	NEW_ROW("test.png", "png");
 	NEW_ROW("test.eps", "eps");
+	NEW_ROW("160382_corrupted.jpeg", "jpeg");
 }
 
 void DocumentTest::testLoadTwoPasses() {
