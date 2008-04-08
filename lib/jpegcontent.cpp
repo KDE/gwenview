@@ -46,49 +46,12 @@ extern "C" {
 
 // Local
 #include "jpegerrormanager.h"
+#include "iodevicejpegsourcemanager.h"
 #include "exiv2imageloader.h"
 
 namespace Gwenview {
 
 const int INMEM_DST_DELTA=4096;
-
-
-//------------------------------------------
-//
-// In-memory data source manager for libjpeg
-//
-//------------------------------------------
-struct inmem_src_mgr : public jpeg_source_mgr {
-	QByteArray* mInput;
-};
-
-void inmem_init_source(j_decompress_ptr cinfo) {
-	inmem_src_mgr* src=(inmem_src_mgr*)(cinfo->src);
-	src->next_input_byte=(const JOCTET*)( src->mInput->data() );
-	src->bytes_in_buffer=src->mInput->size();
-}
-
-/**
- * If this function is called, it means the JPEG file is broken. We feed the
- * decoder with fake EOI has specified in the libjpeg documentation.
- */
-int inmem_fill_input_buffer(j_decompress_ptr cinfo) {
-	static JOCTET fakeEOI[2]={ JOCTET(0xFF), JOCTET(JPEG_EOI)};
-	kWarning() << " Image is incomplete" ;
-	cinfo->src->next_input_byte=fakeEOI;
-	cinfo->src->bytes_in_buffer=2;
-	return true;
-}
-
-void inmem_skip_input_data(j_decompress_ptr cinfo, long num_bytes) {
-	if (num_bytes<=0) return;
-	Q_ASSERT(num_bytes>=long(cinfo->src->bytes_in_buffer));
-	cinfo->src->next_input_byte+=num_bytes;
-	cinfo->src->bytes_in_buffer-=num_bytes;
-}
-
-void inmem_term_source(j_decompress_ptr /*cinfo*/) {
-}
 
 
 //-----------------------------------------------
@@ -150,23 +113,7 @@ struct JpegContent::Private {
 		mPendingTransformation = false;
 	}
 
-	void setupInmemSource(j_decompress_ptr cinfo) {
-		Q_ASSERT(!cinfo->src);
-		inmem_src_mgr* src = (inmem_src_mgr*)
-			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-										sizeof(inmem_src_mgr));
-		cinfo->src=(struct jpeg_source_mgr*)(src);
 
-		src->init_source=inmem_init_source;
-		src->fill_input_buffer=inmem_fill_input_buffer;
-		src->skip_input_data=inmem_skip_input_data;
-		src->resync_to_restart=jpeg_resync_to_restart;
-		src->term_source=inmem_term_source;
-
-		src->mInput=&mRawData;
-	}
-
-	
 	void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData) {
 		Q_ASSERT(!cinfo->dest);
 		inmem_dest_mgr* dest = (inmem_dest_mgr*)
@@ -195,7 +142,9 @@ struct JpegContent::Private {
 		}
 
 		// Specify data source for decompression
-		setupInmemSource(&srcinfo);
+		QBuffer buffer(&mRawData);
+		buffer.open(QIODevice::ReadOnly);
+		IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
 
 		// Read the header
 		jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);
@@ -488,7 +437,9 @@ void JpegContent::applyPendingTransformation() {
 	}
 
 	// Specify data source for decompression
-	d->setupInmemSource(&srcinfo);
+	QBuffer buffer(&d->mRawData);
+	buffer.open(QIODevice::ReadOnly);
+	IODeviceJpegSourceManager::setup(&srcinfo, &buffer);
 
 	// Enable saving of extra markers that we want to copy
 	jcopy_markers_setup(&srcinfo, JCOPYOPT_ALL);

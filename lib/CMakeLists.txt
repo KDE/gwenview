@@ -28,6 +28,7 @@ set(gwenviewlib_SRCS
 	imageview.cpp
 	imageviewpart.cpp
 	invisiblebuttongroup.cpp
+	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
