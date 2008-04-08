@@ -58,7 +58,7 @@ static int fill_input_buffer(j_decompress_ptr cinfo) {
 		 * in the libjpeg documentation.
 		 */
 		static JOCTET fakeEOI[2] = { JOCTET(0xFF), JOCTET(JPEG_EOI)};
-		//kWarning() << "Image is incomplete";
+		kWarning() << "Image is incomplete";
 		cinfo->src->next_input_byte = fakeEOI;
 		cinfo->src->bytes_in_buffer = 2;
 	}
