@@ -31,6 +31,14 @@ class QIODevice;
 struct jpeg_decompress_struct;
 
 namespace Gwenview {
+
+/**
+ * This namespace provides a function which makes it possible to decode JPEG
+ * files with libjpeg from a QIODevice instance.
+ *
+ * To use it, simply call setup() to initialize your jpeg_decompress_struct
+ * with QIODevice-ready callbacks. The device should be opened for reading.
+ */
 namespace IODeviceJpegSourceManager {
 
 void setup(jpeg_decompress_struct* cinfo, QIODevice* ioDevice);
