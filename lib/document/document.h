@@ -120,9 +120,9 @@ public:
 
 	QSize size() const;
 
-    int width() const { return size().width(); }
+	int width() const { return size().width(); }
 
-    int height() const { return size().height(); }
+	int height() const { return size().height(); }
 
 	ImageMetaInfoModel* metaInfo() const;
 
