@@ -265,6 +265,10 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 
 
 void ImageView::paintEvent(QPaintEvent* event) {
+	if (!d->mDocument) {
+		return;
+	}
+
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
 	QPoint offset = imageOffset();
