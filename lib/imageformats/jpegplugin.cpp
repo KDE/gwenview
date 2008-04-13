@@ -52,9 +52,11 @@ QImageIOPlugin::Capabilities JpegPlugin::capabilities(QIODevice *device, const Q
 	if (device->isReadable() && JpegHandler::canRead(device)) {
 		cap |= CanRead;
 	}
+	if (device->isWritable()) {
+		cap |= CanWrite;
+	}
 	return cap;
 }
-
 
 QImageIOHandler *JpegPlugin::create(QIODevice *device, const QByteArray &format) const {
 	QImageIOHandler *handler = new JpegHandler;

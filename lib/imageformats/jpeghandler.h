@@ -32,6 +32,9 @@ namespace Gwenview {
 
 
 class JpegHandlerPrivate;
+/**
+ * A Jpeg handler which is more aggressive when loading down sampled images.
+ */
 class JpegHandler : public QImageIOHandler {
 public:
 	JpegHandler();
@@ -39,8 +42,7 @@ public:
 
 	bool canRead() const;
 	bool read(QImage *image);
-
-	QByteArray name() const;
+	bool write(const QImage& image);
 
 	static bool canRead(QIODevice *device);
 
