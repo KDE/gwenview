@@ -23,6 +23,7 @@ set(gwenview_SRCS
 	fileopscontextmanageritem.cpp
 	main.cpp
 	mainwindow.cpp
+	preloader.cpp
 	savebar.cpp
 	sidebar.cpp
 	thumbnailviewhelper.cpp

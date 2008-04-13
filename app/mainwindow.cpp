@@ -68,6 +68,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef Nepomuk_FOUND
 #include "nepomukcontextmanageritem.h"
 #endif
+#include "preloader.h"
 #include "savebar.h"
 #include "sidebar.h"
 #include "thumbnailbarview.h"
@@ -129,6 +130,7 @@ struct MainWindow::Private {
 	FullScreenContent* mFullScreenContent;
 	SaveBar* mSaveBar;
 	SlideShow* mSlideShow;
+	Preloader* mPreloader;
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
@@ -619,6 +621,7 @@ d(new MainWindow::Private)
 	d->mWindow = this;
 	d->mGvCore = new GvCore(this);
 	d->mDirModel = new SortedDirModel(this);
+	d->mPreloader = new Preloader(this);
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
@@ -1309,12 +1312,7 @@ void MainWindow::preloadNextUrl() {
 	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		KUrl url = item.url();
 		if (url.isLocalFile()) {
-			Document::Ptr doc = DocumentFactory::instance()->load(url);
-			// Preload the image to fit in fullscreen mode.
-			/* FIXME
-			QSize = QApplication::desktopWidget()->screenGeometry().size();
-			doc->prepareDownSampledImageForSize(size);
-			*/
+			d->mPreloader->preload(url);
 		}
 	}
 }
