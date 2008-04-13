@@ -53,3 +53,12 @@ set(slidecontainertest_SRCS
 kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
 
 target_link_libraries(slidecontainertest gwenviewlib)
+
+# imageloadbench
+set(imageloadbench_SRCS
+	imageloadbench.cpp
+	)
+
+kde4_add_executable(imageloadbench TEST ${imageloadbench_SRCS})
+
+target_link_libraries(imageloadbench gwenviewlib)
