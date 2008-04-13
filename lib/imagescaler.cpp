@@ -103,13 +103,7 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 
 void ImageScaler::doScale() {
 	LOG("Starting");
-
-	while (!d->mRegion.isEmpty()) {
-		QRect rect;
-		// Extract a rect to scale from d->mRegion
-		rect = d->mRegion.rects()[0];
-		d->mRegion -= rect;
-
+	Q_FOREACH(const QRect& rect, d->mRegion.rects()) {
 		LOG(rect);
 		scaleRect(rect);
 	}
