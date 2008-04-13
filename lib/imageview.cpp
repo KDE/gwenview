@@ -191,9 +191,14 @@ void ImageView::setAlphaBackgroundColor(const QColor& color) {
 
 
 void ImageView::setDocument(Document::Ptr document) {
+	if (d->mDocument) {
+		disconnect(d->mDocument.data(), 0, this, 0);
+	}
 	d->mDocument = document;
 	if (document) {
 		d->mImage = &document->image();
+		connect(document.data(), SIGNAL(imageRectUpdated(const QRect&)),
+			SLOT(updateImageRect(const QRect&)) );
 	} else {
 		// This little trick makes sure d->mImage always point to a valid
 		// image, even if we were given an NULL pointer.

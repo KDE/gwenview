@@ -65,15 +65,14 @@ private Q_SLOTS:
 	void zoomActualSize();
 	void zoomIn(const QPoint& center = QPoint(-1,-1));
 	void zoomOut(const QPoint& center = QPoint(-1,-1));
-	void setViewImageFromDocument();
 	void updateCaption();
 	void showContextMenu();
-	void slotImageRectUpdated(const QRect&);
 	void saveAs();
 	void showJobError(KJob*);
 	void initStatusBarExtension();
 	void applyZoomSliderValue();
 	void slotZoomChanged();
+	void slotLoaded();
 	void slotLoadingFailed();
 
 private:

@@ -88,8 +88,6 @@ Q_SIGNALS:
 public Q_SLOTS:
 	void setZoomToFit(bool on);
 
-	void updateImageRect(const QRect&);
-
 protected:
 	virtual void paintEvent(QPaintEvent*);
 
@@ -106,6 +104,7 @@ protected:
 
 private Q_SLOTS:
 	void updateFromScaler(int left, int top, const QImage& image);
+	void updateImageRect(const QRect&);
 
 private:
 	void updateScrollBars();

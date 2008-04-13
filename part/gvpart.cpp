@@ -263,14 +263,13 @@ bool GVPart::openUrl(const KUrl& url) {
 		// the statusbar by GVPart::initStatusBarExtension()
 		mStatusBarWidgetContainer->show();
 	}
-	mView->setDocument(Document::Ptr());
 	mDocument = DocumentFactory::instance()->load(url);
-	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SIGNAL(completed()) );
+	mView->setDocument(mDocument);
+	updateCaption();
+	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()) );
 	connect(mDocument.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
-	connect(mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)), SLOT(slotImageRectUpdated(const QRect&)) );
 	if (mDocument->loadingState() == Document::Loaded) {
-		setViewImageFromDocument();
-		emit completed();
+		slotLoaded();
 	} else if (mDocument->loadingState() == Document::LoadingFailed) {
 		slotLoadingFailed();
 	}
@@ -280,7 +279,6 @@ bool GVPart::openUrl(const KUrl& url) {
 
 void GVPart::slotLoadingFailed() {
 	mView->setDocument(Document::Ptr());
-	updateCaption();
 	emit completed();
 	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());
 	mErrorLabel->setText(msg);
@@ -291,20 +289,10 @@ void GVPart::slotLoadingFailed() {
 }
 
 
-void GVPart::setViewImageFromDocument() {
-	mView->setDocument(mDocument);
-	updateCaption();
+void GVPart::slotLoaded() {
+	emit completed();
 	if (mView->zoomToFit()) {
 		resizeRequested(mDocument->image().size());
-	}
-}
-
-
-void GVPart::slotImageRectUpdated(const QRect& rect) {
-	if (!mView->document()) {
-		setViewImageFromDocument();
-	} else {
-		mView->updateImageRect(rect);
 	}
 }
 
