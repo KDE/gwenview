@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 #include <QSharedData>
+#include <QSize>
 
 // KDE
 #include <ksharedptr.h>
@@ -118,6 +119,10 @@ public:
 	const Exiv2::Image* exiv2Image() const;
 
 	QSize size() const;
+
+    int width() const { return size().width(); }
+
+    int height() const { return size().height(); }
 
 	ImageMetaInfoModel* metaInfo() const;
 
