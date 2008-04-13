@@ -212,6 +212,10 @@ void ImageView::setDocument(Document::Ptr document) {
 		d->mZoom = -1;
 		setZoom(computeZoomToFit());
 	} else {
+		if (d->mDocument && d->mDocument->loadingState() == Document::Loaded) {
+			QRect rect(QPoint(0, 0), d->mDocument->size());
+			updateImageRect(rect);
+		}
 		updateScrollBars();
 	}
 	d->mViewport->update();
