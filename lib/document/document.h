@@ -83,6 +83,8 @@ public:
 
 	QImage& image();
 
+	const QImage& downSampledImage(qreal zoom) const;
+
 	/**
 	 * Replaces the current image with image.
 	 * Calling this while the document is loaded won't do anything.

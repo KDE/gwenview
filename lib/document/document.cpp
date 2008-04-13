@@ -42,6 +42,7 @@ struct DocumentPrivate {
 	KUrl mUrl;
 	QSize mSize;
 	QImage mImage;
+	QMap<int, QImage> mDownSampledImageMap;
 	Exiv2::Image::AutoPtr mExiv2Image;
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
@@ -90,6 +91,31 @@ QImage& Document::image() {
 }
 
 
+const QImage& Document::downSampledImage(qreal zoom) const {
+	if (d->mImage.isNull()) {
+		return d->mImage;
+	}
+
+	/*
+	 * invertedZoom is the biggest power of 2 for which zoom < 1/invertedZoom.
+	 * Example:
+	 * zoom = 0.4 == 1/2.5 => invertedZoom = 2 (1/2.5 < 1/2)
+	 * zoom = 0.2 == 1/5   => invertedZoom = 4 (1/5   < 1/4)
+	*/
+	int invertedZoom;
+	for (invertedZoom = 1; zoom < 1./(invertedZoom*2); invertedZoom*=2);
+	if (invertedZoom == 1) {
+		return d->mImage;
+	}
+
+	if (!d->mDownSampledImageMap.contains(invertedZoom)) {
+		d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
+	}
+
+	return d->mDownSampledImageMap[invertedZoom];
+}
+
+
 bool Document::isMetaDataLoaded() const {
 	return d->mImpl->isMetaDataLoaded();
 }
@@ -129,6 +155,7 @@ void Document::setImage(const QImage& image) {
 
 void Document::setImageInternal(const QImage& image) {
 	d->mImage = image;
+	d->mDownSampledImageMap.clear();
 
 	// If we didn't get the image size before decoding the full image, set it
 	// now
