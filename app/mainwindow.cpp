@@ -1316,7 +1316,8 @@ void MainWindow::preloadNextUrl() {
 	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		KUrl url = item.url();
 		if (url.isLocalFile()) {
-			d->mPreloader->preload(url);
+			QSize size = d->mViewStackedWidget->size();
+			d->mPreloader->preload(url, size);
 		}
 	}
 }

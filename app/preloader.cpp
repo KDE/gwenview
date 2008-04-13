@@ -22,8 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "preloader.moc"
 
 // Qt
-#include <QApplication>
-#include <QDesktopWidget>
 
 // KDE
 #include <kdebug.h>
@@ -33,9 +31,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
 
 struct PreloaderPrivate {
 	Document::Ptr mDocument;
+	QSize mSize;
 };
 
 
@@ -50,18 +57,19 @@ Preloader::~Preloader() {
 }
 
 
-void Preloader::preload(const KUrl& url) {
-	kDebug() << "url=" << url;
+void Preloader::preload(const KUrl& url, const QSize& size) {
+	LOG("url=" << url);
 	if (d->mDocument) {
 		disconnect(d->mDocument.data(), 0, this, 0);
 	}
 
 	d->mDocument = DocumentFactory::instance()->load(url);
+	d->mSize = size;
 	connect(d->mDocument.data(), SIGNAL(metaDataUpdated()),
 		SLOT(doPreload()) );
 
 	if (d->mDocument->size().isValid()) {
-		kDebug() << "size is already available";
+		LOG("size is already available");
 		doPreload();
 	}
 }
@@ -69,23 +77,20 @@ void Preloader::preload(const KUrl& url) {
 
 void Preloader::doPreload() {
 	if (!d->mDocument->size().isValid()) {
-		kDebug() << "size not available yet";
+		LOG("size not available yet");
 		return;
 	}
 
-	// Preload the image to fit in fullscreen mode.
-	QSize screenSize = QApplication::desktop()->screenGeometry().size();
-
 	qreal zoom = qMin(
-		screenSize.width() / qreal(d->mDocument->width()),
-		screenSize.height() / qreal(d->mDocument->height())
+		d->mSize.width() / qreal(d->mDocument->width()),
+		d->mSize.height() / qreal(d->mDocument->height())
 		);
 
 	if (zoom < Document::MaxDownSampledZoom) {
-		kDebug() << "preloading down sampled, zoom=" << zoom;
+		LOG("preloading down sampled, zoom=" << zoom);
 		d->mDocument->prepareDownSampledImageForZoom(zoom);
 	} else {
-		kDebug() << "preloading full image";
+		LOG("preloading full image");
 		d->mDocument->loadFullImage();
 	}
 
@@ -93,7 +98,6 @@ void Preloader::doPreload() {
 	// from being garbage collected.
 	disconnect(d->mDocument.data(), 0, this, 0);
 	d->mDocument = 0;
-
 }
 
 

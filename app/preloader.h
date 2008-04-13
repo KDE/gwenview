@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QSize;
+
 class KUrl;
 
 namespace Gwenview {
@@ -36,8 +38,7 @@ namespace Gwenview {
 class PreloaderPrivate;
 
 /**
- * This class preloads a document. It's optimized toward the most common usage:
- * showing an image in fullscreen in zoom-to-fit mode.
+ * This class preloads a document to fit a specific size.
  */
 class Preloader : public QObject {
 	Q_OBJECT
@@ -45,7 +46,7 @@ public:
 	Preloader(QObject* parent);
 	~Preloader();
 
-	void preload(const KUrl&);
+	void preload(const KUrl&, const QSize&);
 
 private Q_SLOTS:
 	void doPreload();
