@@ -264,7 +264,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 		painter.fillRect(rect, bgColor);
 	}
 
-	if (d->mImage->hasAlphaChannel()) {
+	if (d->mDocument->hasAlphaChannel()) {
 		if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
 			painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
 				// This option makes the background scroll with the image, like GIMP

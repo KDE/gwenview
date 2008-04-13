@@ -124,6 +124,8 @@ public:
 
 	int height() const { return size().height(); }
 
+	bool hasAlphaChannel() const;
+
 	ImageMetaInfoModel* metaInfo() const;
 
 	QUndoStack* undoStack() const;

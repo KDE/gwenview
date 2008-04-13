@@ -209,6 +209,15 @@ QSize Document::size() const {
 }
 
 
+bool Document::hasAlphaChannel() const {
+	if (d->mImage.isNull()) {
+		return false;
+	} else {
+		return d->mImage.hasAlphaChannel();
+	}
+}
+
+
 void Document::setSize(const QSize& size) {
 	if (size == d->mSize) {
 		return;
