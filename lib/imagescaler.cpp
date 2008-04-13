@@ -29,6 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 
+// Local
+#include <lib/document/document.h>
+
 #undef ENABLE_LOG
 #undef LOG
 //#define ENABLE_LOG
@@ -45,7 +48,7 @@ static const int SMOOTH_MARGIN = 3;
 
 struct ImageScalerPrivate {
 	Qt::TransformationMode mTransformationMode;
-	const QImage* mImage;
+	Document::Ptr mDocument;
 	qreal mZoom;
 	QRegion mRegion;
 };
@@ -53,7 +56,6 @@ struct ImageScalerPrivate {
 ImageScaler::ImageScaler(QObject* parent)
 : QObject(parent)
 , d(new ImageScalerPrivate) {
-	d->mImage = 0;
 	d->mTransformationMode = Qt::FastTransformation;
 }
 
@@ -61,8 +63,8 @@ ImageScaler::~ImageScaler() {
 	delete d;
 }
 
-void ImageScaler::setImage(const QImage* image) {
-	d->mImage = image;
+void ImageScaler::setDocument(Document::Ptr document) {
+	d->mDocument = document;
 }
 
 void ImageScaler::setZoom(qreal zoom) {
@@ -80,7 +82,7 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 		return;
 	}
 
-	if (d->mImage && !d->mImage->isNull()) {
+	if (d->mDocument) {
 		doScale();
 	}
 }
@@ -103,13 +105,7 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 
 void ImageScaler::doScale() {
 	LOG("Starting");
-
-	while (!d->mRegion.isEmpty()) {
-		QRect rect;
-		// Extract a rect to scale from d->mRegion
-		rect = d->mRegion.rects()[0];
-		d->mRegion -= rect;
-
+	Q_FOREACH(const QRect& rect, d->mRegion.rects()) {
 		LOG(rect);
 		scaleRect(rect);
 	}
@@ -118,20 +114,32 @@ void ImageScaler::doScale() {
 
 
 void ImageScaler::scaleRect(const QRect& rect) {
-	if (qAbs(d->mZoom - 1.0) < 0.001) {
-		QImage tmp = d->mImage->copy(rect);
+	const qreal REAL_DELTA = 0.001;
+	if (qAbs(d->mZoom - 1.0) < REAL_DELTA) {
+		QImage tmp = d->mDocument->image().copy(rect);
 		tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 		scaledRect(rect.left(), rect.top(), tmp);
 		return;
 	}
+
+	QImage image;
+	qreal zoom;
+	if (d->mZoom < 1) {
+		image = d->mDocument->downSampledImage(d->mZoom);
+		qreal zoom1 = qreal(image.width()) / d->mDocument->width();
+		zoom = d->mZoom / zoom1;
+	} else {
+		image = d->mDocument->image();
+		zoom = d->mZoom;
+	}
 	// If rect contains "half" pixels, make sure sourceRect includes them
 	QRectF sourceRectF(
-		rect.left() / d->mZoom,
-		rect.top() / d->mZoom,
-		rect.width() / d->mZoom,
-		rect.height() / d->mZoom);
+		rect.left() / zoom,
+		rect.top() / zoom,
+		rect.width() / zoom,
+		rect.height() / zoom);
 
-	sourceRectF = sourceRectF.intersected(d->mImage->rect());
+	sourceRectF = sourceRectF.intersected(image.rect());
 	QRect sourceRect = containingRect(sourceRectF);
 	if (sourceRect.isEmpty()) {
 		return;
@@ -145,17 +153,17 @@ void ImageScaler::scaleRect(const QRect& rect) {
 	if (needsSmoothMargins) {
 		sourceLeftMargin = qMin(sourceRect.left(), SMOOTH_MARGIN);
 		sourceTopMargin = qMin(sourceRect.top(), SMOOTH_MARGIN);
-		sourceRightMargin = qMin(d->mImage->rect().right() - sourceRect.right(), SMOOTH_MARGIN);
-		sourceBottomMargin = qMin(d->mImage->rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
+		sourceRightMargin = qMin(image.rect().right() - sourceRect.right(), SMOOTH_MARGIN);
+		sourceBottomMargin = qMin(image.rect().bottom() - sourceRect.bottom(), SMOOTH_MARGIN);
 		sourceRect.adjust(
 			-sourceLeftMargin,
 			-sourceTopMargin,
 			sourceRightMargin,
 			sourceBottomMargin);
-		destLeftMargin = int(sourceLeftMargin * d->mZoom);
-		destTopMargin = int(sourceTopMargin * d->mZoom);
-		destRightMargin = int(sourceRightMargin * d->mZoom);
-		destBottomMargin = int(sourceBottomMargin * d->mZoom);
+		destLeftMargin = int(sourceLeftMargin * zoom);
+		destTopMargin = int(sourceTopMargin * zoom);
+		destRightMargin = int(sourceRightMargin * zoom);
+		destBottomMargin = int(sourceBottomMargin * zoom);
 	} else {
 		sourceLeftMargin = sourceRightMargin = sourceTopMargin = sourceBottomMargin = 0;
 		destLeftMargin = destRightMargin = destTopMargin = destBottomMargin = 0;
@@ -163,15 +171,15 @@ void ImageScaler::scaleRect(const QRect& rect) {
 
 	// destRect is almost like rect, but it contains only "full" pixels
 	QRectF destRectF = QRectF(
-		sourceRect.left() * d->mZoom,
-		sourceRect.top() * d->mZoom,
-		sourceRect.width() * d->mZoom,
-		sourceRect.height() * d->mZoom
+		sourceRect.left() * zoom,
+		sourceRect.top() * zoom,
+		sourceRect.width() * zoom,
+		sourceRect.height() * zoom
 		);
 	QRect destRect = containingRect(destRectF);
 
 	QImage tmp;
-	tmp = d->mImage->copy(sourceRect);
+	tmp = image.copy(sourceRect);
 	tmp.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 	tmp = tmp.scaled(
 		destRect.width(),

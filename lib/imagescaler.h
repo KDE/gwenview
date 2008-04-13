@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
+// KDE
+#include <ksharedptr.h>
+
 #include <lib/gwenviewlib_export.h>
 
 class QImage;
@@ -32,13 +35,15 @@ class QRegion;
 
 namespace Gwenview {
 
+class Document;
+
 class ImageScalerPrivate;
 class GWENVIEWLIB_EXPORT ImageScaler : public QObject {
 	Q_OBJECT
 public:
 	ImageScaler(QObject* parent=0);
 	~ImageScaler();
-	void setImage(const QImage*);
+	void setDocument(KSharedPtr<Document>);
 	void setZoom(qreal);
 	void setDestinationRegion(const QRegion&);
 

@@ -198,7 +198,7 @@ void ImageView::setImage(const QImage* image) {
 		d->mImage = &d->mEmptyImage;
 	}
 	d->createBuffer();
-	d->mScaler->setImage(d->mImage);
+	d->mScaler->setDocument(d->mDocument);
 	if (d->mZoomToFit) {
 		// Set the zoom to an invalid value to make sure setZoom() does not
 		// return early because the new zoom is the same as the old zoom.
