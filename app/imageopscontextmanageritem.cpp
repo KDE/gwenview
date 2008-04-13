@@ -118,6 +118,7 @@ struct ImageOpsContextManagerItem::Private {
 		KUrl url = that->contextManager()->currentUrl();
 
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
+		doc->loadFullImage();
 		doc->waitUntilLoaded();
 		op->setDocument(doc);
 		doc->undoStack()->push(op);
@@ -230,6 +231,7 @@ void ImageOpsContextManagerItem::flip() {
 
 void ImageOpsContextManagerItem::resizeImage() {
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	int size = GwenviewConfig::imageResizeLastSize();
 	if (size == -1) {
@@ -258,7 +260,6 @@ void ImageOpsContextManagerItem::crop() {
 		return;
 	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
-	doc->waitUntilLoaded();
 	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageViewPart->imageView(), doc);
 	connect(cropSideBar, SIGNAL(done()),
 		d->mMainWindow, SLOT(hideTemporarySideBar()) );

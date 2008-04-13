@@ -99,6 +99,7 @@ void GvCore::saveAll() {
 
 void GvCore::save(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QByteArray format = doc->format();
 	QStringList availableTypes = KImageIO::types(KImageIO::Writing);
@@ -167,6 +168,7 @@ void GvCore::saveAs(const KUrl& url) {
 void GvCore::rotateLeft(const KUrl& url) {
 	TransformImageOperation* op = new TransformImageOperation(ROT_270);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
@@ -176,6 +178,7 @@ void GvCore::rotateLeft(const KUrl& url) {
 void GvCore::rotateRight(const KUrl& url) {
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
