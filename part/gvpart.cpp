@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/scrolltool.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
+#include "../lib/imageformats/imageformats.h"
 #include "../lib/widgetfloater.h"
 #include "gvbrowserextension.h"
 
@@ -129,6 +130,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 
 	if (!mGwenviewHost) {
+		Gwenview::ImageFormats::registerPlugins();
 		addPartSpecificActions();
 	}
 

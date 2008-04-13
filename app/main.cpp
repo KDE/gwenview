@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmessagebox.h>
 
 // Local
+#include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
@@ -51,6 +52,8 @@ int main(int argc, char *argv[]) {
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	KApplication app;
+
+	Gwenview::ImageFormats::registerPlugins();
 
 	Gwenview::MainWindow* window = new Gwenview::MainWindow();
 	KUrl url;
