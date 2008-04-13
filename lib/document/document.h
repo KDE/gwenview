@@ -53,6 +53,8 @@ class ImageMetaInfoModel;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
+	static const qreal MaxDownSampledZoom = 0.5;
+
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,
@@ -60,14 +62,10 @@ public:
 		SR_OtherError
 	};
 
-	enum LoadType {
-		LoadMetaData,
-		LoadAll
-	};
-
 	enum LoadingState {
 		Loading,
 		Loaded,
+		MetaDataLoaded,
 		LoadingFailed
 	};
 
@@ -76,7 +74,17 @@ public:
 
 	void reload();
 
-	bool isMetaDataLoaded() const;
+	void loadFullImage();
+
+	/**
+	 * Prepare a version of the image down sampled to be a bit bigger than
+	 * size() * @a zoom.
+	 * Do not ask for a down sampled image for @a zoom >= to MaxDownSampledZoom.
+	 *
+	 * @return true if the image is ready, false if not. In this case the
+	 * downSampledImageReady() signal will be emitted.
+	 */
+	bool prepareDownSampledImageForZoom(qreal zoom);
 
 	LoadingState loadingState() const;
 
@@ -131,6 +139,7 @@ public:
 	QUndoStack* undoStack() const;
 
 Q_SIGNALS:
+	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);
 	void loaded(const KUrl&);
 	void loadingFailed(const KUrl&);
@@ -147,18 +156,14 @@ private:
 	friend class DocumentFactory;
 	friend class AbstractDocumentImpl;
 
-	/**
-	 * Load the image pixels if this document has only loaded meta data
-	 */
-	void finishLoading();
-
 	void setImageInternal(const QImage&);
 	void setFormat(const QByteArray&);
 	void setSize(const QSize&);
 	void setExiv2Image(Exiv2::Image::AutoPtr);
+	void setDownSampledImage(const QImage&, int invertedZoom);
 	void switchToImpl(AbstractDocumentImpl* impl);
 
-	Document(const KUrl&, Document::LoadType);
+	Document(const KUrl&);
 	DocumentPrivate * const d;
 };
 

@@ -47,10 +47,16 @@ struct DocumentPrivate {
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
 	QUndoStack mUndoStack;
+
+	void scheduleImageLoading(int invertedZoom) {
+		LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(mImpl);
+		Q_ASSERT(impl);
+		impl->loadImage(invertedZoom);
+	}
 };
 
 
-Document::Document(const KUrl& url, Document::LoadType loadType)
+Document::Document(const KUrl& url)
 : QObject()
 , d(new DocumentPrivate) {
 	d->mImpl = 0;
@@ -59,7 +65,7 @@ Document::Document(const KUrl& url, Document::LoadType loadType)
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
-	switchToImpl(new LoadingDocumentImpl(this, loadType));
+	switchToImpl(new LoadingDocumentImpl(this));
 }
 
 
@@ -69,20 +75,11 @@ Document::~Document() {
 }
 
 
-void Document::finishLoading() {
-	if (loadingState() == Loading) {
-		LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(d->mImpl);
-		Q_ASSERT(impl);
-		impl->finishLoading();
-	}
-}
-
-
 void Document::reload() {
 	d->mUndoStack.clear();
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
-	switchToImpl(new LoadingDocumentImpl(this, Document::LoadAll));
+	switchToImpl(new LoadingDocumentImpl(this));
 }
 
 
@@ -91,33 +88,32 @@ QImage& Document::image() {
 }
 
 
-const QImage& Document::downSampledImage(qreal zoom) const {
-	if (d->mImage.isNull()) {
-		return d->mImage;
-	}
-
-	/*
-	 * invertedZoom is the biggest power of 2 for which zoom < 1/invertedZoom.
-	 * Example:
-	 * zoom = 0.4 == 1/2.5 => invertedZoom = 2 (1/2.5 < 1/2)
-	 * zoom = 0.2 == 1/5   => invertedZoom = 4 (1/5   < 1/4)
-	*/
+/**
+ * invertedZoom is the biggest power of 2 for which zoom < 1/invertedZoom.
+ * Example:
+ * zoom = 0.4 == 1/2.5 => invertedZoom = 2 (1/2.5 < 1/2)
+ * zoom = 0.2 == 1/5   => invertedZoom = 4 (1/5   < 1/4)
+ */
+inline int invertedZoomForZoom(qreal zoom) {
 	int invertedZoom;
 	for (invertedZoom = 1; zoom < 1./(invertedZoom*2); invertedZoom*=2);
+	return invertedZoom;
+}
+
+
+const QImage& Document::downSampledImage(qreal zoom) const {
+	static const QImage sNullImage;
+
+	int invertedZoom = invertedZoomForZoom(zoom);
 	if (invertedZoom == 1) {
 		return d->mImage;
 	}
 
 	if (!d->mDownSampledImageMap.contains(invertedZoom)) {
-		d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
+		return sNullImage;
 	}
 
 	return d->mDownSampledImageMap[invertedZoom];
-}
-
-
-bool Document::isMetaDataLoaded() const {
-	return d->mImpl->isMetaDataLoaded();
 }
 
 
@@ -169,14 +165,18 @@ KUrl Document::url() const {
 
 
 void Document::waitUntilMetaDataLoaded() const {
-	while (!isMetaDataLoaded()) {
+	while (loadingState() == Loading) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 }
 
 
 void Document::waitUntilLoaded() const {
-	while (loadingState() != Loaded) {
+	while (true) {
+		LoadingState state = loadingState();
+		if (state == Loaded || state == LoadingFailed) {
+			return;
+		}
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 }
@@ -250,8 +250,55 @@ void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 }
 
 
+void Document::setDownSampledImage(const QImage& image, int invertedZoom) {
+	Q_ASSERT(!d->mDownSampledImageMap.contains(invertedZoom));
+	d->mDownSampledImageMap[invertedZoom] = image;
+	emit downSampledImageReady();
+}
+
+
 ImageMetaInfoModel* Document::metaInfo() const {
 	return &d->mImageMetaInfoModel;
+}
+
+
+void Document::loadFullImage() {
+	switch (loadingState()) {
+	case Loading:
+	case MetaDataLoaded:
+		// Schedule full image loading
+		d->scheduleImageLoading(1);
+		break;
+	case Loaded:
+		break;
+	case LoadingFailed:
+		kWarning() << "Can't load full image: loading has already failed";
+		break;
+	}
+}
+
+
+bool Document::prepareDownSampledImageForZoom(qreal zoom) {
+	if (zoom >= MaxDownSampledZoom) {
+		kWarning() << "No need to call prepareDownSampledImageForZoom if zoom >= " << MaxDownSampledZoom;
+		return true;
+	}
+
+	int invertedZoom = invertedZoomForZoom(zoom);
+	if (d->mDownSampledImageMap.contains(invertedZoom)) {
+		return true;
+	}
+
+	if (loadingState() == Loaded) {
+		// Resample image from the full one
+		d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
+		return true;
+	}
+
+	// Schedule down sampled image loading
+	d->scheduleImageLoading(invertedZoom);
+
+	return false;
 }
 
 

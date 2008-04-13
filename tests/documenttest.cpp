@@ -51,6 +51,7 @@ void DocumentTest::testLoad() {
 	KUrl url = urlForTestFile(fileName);
 	QVERIFY2(!expectedImage.isNull(), "Could not load test image");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(expectedImage, doc->image());
 	QCOMPARE(expectedFormat, doc->format());
@@ -74,11 +75,11 @@ void DocumentTest::testLoadTwoPasses() {
 	QImage image;
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
-	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->waitUntilMetaDataLoaded();
 	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
 	QCOMPARE(doc->format().data(), "png");
-	doc = DocumentFactory::instance()->load(url, Document::LoadAll);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 }
@@ -94,6 +95,27 @@ void DocumentTest::testLoadEmpty() {
 	QCOMPARE(loadingFailedSpy.count(), 1);
 }
 
+void DocumentTest::testLoadDownSampled() {
+	DocumentFactory::instance()->clearCache();
+
+	KUrl url = urlForTestFile("test.png");
+	QImage image;
+	bool ok = image.load(url.path());
+	QVERIFY2(ok, "Could not load 'test.png'");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	bool ready = doc->prepareDownSampledImageForZoom(0.4);
+	QVERIFY2(!ready, "There should not be a down sampled image at this point");
+
+	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
+	while (downSampledImageReadySpy.count() == 0) {
+		QTest::qWait(100);
+	}
+	QImage downSampledImage = doc->downSampledImage(0.4);
+	QVERIFY2(!downSampledImage.isNull(), "Down sampled image should not be null");
+
+	QCOMPARE(downSampledImage.size(), doc->size() / 2);
+}
+
 void DocumentTest::testLoadRemote() {
 	QString testTarGzPath = pathForTestFile("test.tar.gz");
 	KUrl url;
@@ -103,6 +125,7 @@ void DocumentTest::testLoadRemote() {
 	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test archive not found");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QImage image = doc->image();
 	QCOMPARE(image.width(), 300);
@@ -112,6 +135,7 @@ void DocumentTest::testLoadRemote() {
 void DocumentTest::testSaveRemote() {
 	KUrl srcUrl = urlForTestFile("test.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 
 	KUrl dstUrl;
@@ -156,6 +180,7 @@ void DocumentTest::testLoadRotated() {
 	image = image.transformed(matrix);
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 }
@@ -220,6 +245,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load it as a Gwenview document
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 
 	// Rotate one time
@@ -231,6 +257,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load the saved image
 	doc = DocumentFactory::instance()->load(url2);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 
 	// Rotate the other way
@@ -257,6 +284,7 @@ void DocumentTest::testModify() {
 
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
 
@@ -274,7 +302,7 @@ void DocumentTest::testModify() {
 void DocumentTest::testMetaDataJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	DocumentFactory::instance()->clearCache();
-	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	// We cleared the cache, so the document should not be loaded
 	Q_ASSERT(doc->loadingState() == Document::Loading);
@@ -299,7 +327,7 @@ void DocumentTest::testMetaDataBmp() {
 	image.fill(Qt::black);
 	image.save(url.path(), "BMP");
 
-	Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
 	doc->waitUntilMetaDataLoaded();
 

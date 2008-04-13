@@ -38,7 +38,7 @@ class LoadingDocumentImplPrivate;
 class LoadingDocumentImpl : public AbstractDocumentImpl {
 	Q_OBJECT
 public:
-	LoadingDocumentImpl(Document*, Document::LoadType);
+	LoadingDocumentImpl(Document*);
 	~LoadingDocumentImpl();
 
 	virtual void init();
@@ -47,7 +47,7 @@ public:
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
 
-	void finishLoading();
+	void loadImage(int invertedZoom);
 
 private Q_SLOTS:
 	void slotMetaDataLoaded();

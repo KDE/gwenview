@@ -74,7 +74,7 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 			continue;
 		}
 
-		if (factory->hasUrl(item.url(), Document::LoadAll)) {
+		if (factory->hasUrl(item.url())) {
 			Document::Ptr doc = factory->load(item.url());
 			if (doc->loadingState() == Document::Loaded && doc->isModified()) {
 				QImage image = doc->image();
@@ -153,7 +153,7 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 bool ThumbnailViewHelper::isDocumentModified(const KUrl& url) {
 	DocumentFactory* factory = DocumentFactory::instance();
 
-	if (factory->hasUrl(url, Document::LoadAll)) {
+	if (factory->hasUrl(url)) {
 		Document::Ptr doc = factory->load(url);
 		return doc->loadingState() == Document::Loaded && doc->isModified();
 	} else {

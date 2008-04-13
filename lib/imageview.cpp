@@ -37,15 +37,12 @@ namespace Gwenview {
 
 
 struct ImageViewPrivate {
-	const QImage mEmptyImage;
-
 	ImageView* mView;
 	QPixmap mBackgroundTexture;
 	QWidget* mViewport;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
 	Document::Ptr mDocument;
-	const QImage* mImage;
 	qreal mZoom;
 	bool mZoomToFit;
 	QPixmap mCurrentBuffer;
@@ -157,7 +154,6 @@ ImageView::ImageView(QWidget* parent)
 	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
 	d->mAlphaBackgroundColor = Qt::black;
 
-	d->mImage = &d->mEmptyImage;
 	d->mView = this;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
@@ -198,15 +194,32 @@ void ImageView::setDocument(Document::Ptr document) {
 		disconnect(d->mDocument.data(), 0, this, 0);
 	}
 	d->mDocument = document;
-	if (document) {
-		d->mImage = &document->image();
-		connect(document.data(), SIGNAL(imageRectUpdated(const QRect&)),
-			SLOT(updateImageRect(const QRect&)) );
-	} else {
-		// This little trick makes sure d->mImage always point to a valid
-		// image, even if we were given an NULL pointer.
-		d->mImage = &d->mEmptyImage;
+	if (!document) {
+		return;
 	}
+
+	connect(document.data(), SIGNAL(imageRectUpdated(const QRect&)),
+		SLOT(updateImageRect(const QRect&)) );
+	connect(document.data(), SIGNAL(metaDataUpdated()),
+		SLOT(finishSetDocument()) );
+
+	if (d->mDocument->size().isValid()) {
+		finishSetDocument();
+	}
+}
+
+
+void ImageView::finishSetDocument() {
+	if (!d->mDocument->size().isValid()) {
+		// No valid image size available, wait a bit more
+		return;
+	}
+
+	// We don't want this method to be called after document is loaded, so
+	// disconnect ourself
+	disconnect(d->mDocument.data(), SIGNAL(metaDataUpdated()),
+		this, SLOT(finishSetDocument()) );
+
 	d->createBuffer();
 	d->mScaler->setDocument(d->mDocument);
 	if (d->mZoomToFit) {
@@ -552,8 +565,8 @@ QRect ImageView::mapToImage(const QRect& src) {
 
 
 qreal ImageView::computeZoomToFit() const {
-    if (!d->mDocument) {
-        return 1.;
+    if (!d->mDocument || !d->mDocument->size().isValid()) {
+        return 0;
     }
     int width = d->mViewport->width();
     int height = d->mViewport->height();

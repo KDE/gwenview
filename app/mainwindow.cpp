@@ -871,7 +871,7 @@ void MainWindow::slotSelectionChanged() {
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 		if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			KUrl url = item.url();
-			Document::Ptr doc = DocumentFactory::instance()->load(url, Document::LoadMetaData);
+			Document::Ptr doc = DocumentFactory::instance()->load(url);
 			undoGroup->addStack(doc->undoStack());
 			undoGroup->setActiveStack(doc->undoStack());
 		} else {
@@ -1309,7 +1309,12 @@ void MainWindow::preloadNextUrl() {
 	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		KUrl url = item.url();
 		if (url.isLocalFile()) {
-			DocumentFactory::instance()->load(url);
+			Document::Ptr doc = DocumentFactory::instance()->load(url);
+			// Preload the image to fit in fullscreen mode.
+			/* FIXME
+			QSize = QApplication::desktopWidget()->screenGeometry().size();
+			doc->prepareDownSampledImageForSize(size);
+			*/
 		}
 	}
 }

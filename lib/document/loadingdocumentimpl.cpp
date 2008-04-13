@@ -53,7 +53,7 @@ namespace Gwenview {
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kDebug() << x
 #else
@@ -63,14 +63,16 @@ namespace Gwenview {
 
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
-	Document::LoadType mLoadType;
 	QPointer<KIO::TransferJob> mTransferJob;
 	QFuture<bool> mMetaDataFuture;
 	QFutureWatcher<bool> mMetaDataFutureWatcher;
 	QFuture<void> mImageDataFuture;
 	QFutureWatcher<void> mImageDataFutureWatcher;
 
-	// State related fields
+	// If != 0, this means we need to load an image at zoom =
+	// 1/mImageDataInvertedZoom
+	int mImageDataInvertedZoom;
+
 	bool mMetaDataLoaded;
 	QByteArray mData;
 	QByteArray mFormat;
@@ -83,6 +85,14 @@ struct LoadingDocumentImplPrivate {
 		Q_ASSERT(!mMetaDataLoaded);
 		mMetaDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaData);
 		mMetaDataFutureWatcher.setFuture(mMetaDataFuture);
+	}
+
+	void startImageDataLoading() {
+		LOG("");
+		Q_ASSERT(mMetaDataLoaded);
+		Q_ASSERT(mImageDataInvertedZoom != 0);
+		mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
+		mImageDataFutureWatcher.setFuture(mImageDataFuture);
 	}
 
 	bool loadMetaData() {
@@ -122,6 +132,19 @@ struct LoadingDocumentImplPrivate {
 		buffer.open(QIODevice::ReadOnly);
 		QImageReader reader(&buffer);
 
+		LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
+		if (mImageSize.isValid()
+			&& mImageDataInvertedZoom != 1
+			/*&& reader.supportsOption(QImageIOHandler::ScaledSize)*/
+			)
+		{
+			// Do not use mImageSize here: QImageReader needs a non-transposed
+			// image size
+			QSize size = reader.size() / mImageDataInvertedZoom;
+			LOG("Setting scaled size to" << size);
+			reader.setScaledSize(size);
+		}
+
 		bool ok = reader.read(&mImage);
 		if (!ok) {
 			return;
@@ -136,13 +159,13 @@ struct LoadingDocumentImplPrivate {
 };
 
 
-LoadingDocumentImpl::LoadingDocumentImpl(Document* document, Document::LoadType loadType)
+LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate) {
 	d->mImpl = this;
 	d->mMetaDataLoaded = false;
-	d->mLoadType = loadType;
 	d->mJpegContent = 0;
+	d->mImageDataInvertedZoom = 0;
 
 	connect(&d->mMetaDataFutureWatcher, SIGNAL(finished()),
 		SLOT(slotMetaDataLoaded()) );
@@ -185,13 +208,18 @@ void LoadingDocumentImpl::init() {
 }
 
 
-void LoadingDocumentImpl::finishLoading() {
-	Q_ASSERT(!d->mMetaDataFutureWatcher.isRunning());
-	Q_ASSERT(d->mMetaDataLoaded);
-	d->mLoadType = Document::LoadAll;
+void LoadingDocumentImpl::loadImage(int invertedZoom) {
+	if (d->mImageDataInvertedZoom == invertedZoom) {
+		LOG("Already loading an image at invertedZoom=" << invertedZoom);
+		return;
+	}
+	d->mImageDataFutureWatcher.waitForFinished();
+	d->mImageDataInvertedZoom = invertedZoom;
 
-	d->mImageDataFuture = QtConcurrent::run(d, &LoadingDocumentImplPrivate::loadImageData);
-	d->mImageDataFutureWatcher.setFuture(d->mImageDataFuture);
+	// FIXME: Document reason for test (remote download)
+	if (!d->mMetaDataFutureWatcher.isRunning() && d->mMetaDataLoaded) {
+		d->startImageDataLoading();
+	}
 }
 
 
@@ -217,7 +245,11 @@ bool LoadingDocumentImpl::isMetaDataLoaded() const {
 
 
 Document::LoadingState LoadingDocumentImpl::loadingState() const {
-	return Document::Loading;
+	if (d->mMetaDataLoaded) {
+		return Document::MetaDataLoaded;
+	} else {
+		return Document::Loading;
+	}
 }
 
 
@@ -236,14 +268,22 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 
 	d->mMetaDataLoaded = true;
 
-	if (d->mLoadType == Document::LoadAll) {
-		finishLoading();
+	// Start image loading if necessary
+	if (d->mImageDataInvertedZoom != 0) {
+		d->startImageDataLoading();
 	}
 }
 
 
 void LoadingDocumentImpl::slotImageLoaded() {
 	Q_ASSERT(!d->mImage.isNull());
+
+	if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
+		// We loaded a down sampled image
+		setDocumentDownSampledImage(d->mImage, d->mImageDataInvertedZoom);
+		return;
+	}
+
 	setDocumentImage(d->mImage);
 	imageRectUpdated(d->mImage.rect());
 	emit loaded();

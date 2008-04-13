@@ -39,11 +39,11 @@ public:
 	static DocumentFactory* instance();
 	~DocumentFactory();
 
-	Document::Ptr load(const KUrl&, Document::LoadType loadType = Document::LoadAll);
+	Document::Ptr load(const KUrl&);
 
 	QList<KUrl> modifiedDocumentList() const;
 
-	bool hasUrl(const KUrl&, Document::LoadType) const;
+	bool hasUrl(const KUrl&) const;
 
 	void clearCache();
 

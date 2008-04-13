@@ -76,4 +76,9 @@ void AbstractDocumentImpl::setDocumentExiv2Image(Exiv2::Image::AutoPtr image) {
 }
 
 
+void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int invertedZoom) {
+	d->mDocument->setDownSampledImage(image, invertedZoom);
+}
+
+
 } // namespace

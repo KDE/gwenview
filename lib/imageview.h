@@ -103,6 +103,13 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent*);
 
 private Q_SLOTS:
+	/**
+	 * This method performs the necessary adjustments to get the view ready to
+	 * display the document set with setDocument(). It needs to be postponed
+	 * because setDocument() can be called with a document which has not been
+	 * loaded yet and whose size is unknown.
+	 */
+	void finishSetDocument();
 	void updateFromScaler(int left, int top, const QImage& image);
 	void updateImageRect(const QRect&);
 

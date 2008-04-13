@@ -56,8 +56,10 @@ Q_SIGNALS:
 
 private:
 	ImageScalerPrivate * const d;
-	void doScale();
 	void scaleRect(const QRect&);
+
+private Q_SLOTS:
+	void doScale();
 };
 
 } // namespace

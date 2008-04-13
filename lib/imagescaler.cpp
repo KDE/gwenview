@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #undef ENABLE_LOG
 #undef LOG
-//#define ENABLE_LOG
+#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kDebug() << x
 #else
@@ -57,6 +57,7 @@ ImageScaler::ImageScaler(QObject* parent)
 : QObject(parent)
 , d(new ImageScalerPrivate) {
 	d->mTransformationMode = Qt::FastTransformation;
+	d->mZoom = 0;
 }
 
 ImageScaler::~ImageScaler() {
@@ -64,7 +65,12 @@ ImageScaler::~ImageScaler() {
 }
 
 void ImageScaler::setDocument(Document::Ptr document) {
+	if (d->mDocument) {
+		disconnect(d->mDocument.data(), 0, this, 0);
+	}
 	d->mDocument = document;
+	connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
+		SLOT(doScale()) );
 }
 
 void ImageScaler::setZoom(qreal zoom) {
@@ -82,7 +88,7 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 		return;
 	}
 
-	if (d->mDocument) {
+	if (d->mDocument && d->mZoom > 0) {
 		doScale();
 	}
 }
@@ -104,6 +110,17 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 
 
 void ImageScaler::doScale() {
+	if (d->mZoom < Document::MaxDownSampledZoom) {
+		if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
+			LOG("Asked for a down sampled image");
+			return;
+		}
+	} else if (d->mDocument->image().isNull()) {
+		LOG("Asked for the full image");
+		d->mDocument->loadFullImage();
+		return;
+	}
+
 	LOG("Starting");
 	Q_FOREACH(const QRect& rect, d->mRegion.rects()) {
 		LOG(rect);
@@ -124,8 +141,9 @@ void ImageScaler::scaleRect(const QRect& rect) {
 
 	QImage image;
 	qreal zoom;
-	if (d->mZoom < 1) {
+	if (d->mZoom < Document::MaxDownSampledZoom) {
 		image = d->mDocument->downSampledImage(d->mZoom);
+		Q_ASSERT(!image.isNull());
 		qreal zoom1 = qreal(image.width()) / d->mDocument->width();
 		zoom = d->mZoom / zoom1;
 	} else {

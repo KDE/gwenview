@@ -31,6 +31,7 @@ private Q_SLOTS:
 	void testLoad_data();
 	void testLoadTwoPasses();
 	void testLoadEmpty();
+	void testLoadDownSampled();
 	void testLoadRemote();
 	void testDeleteWhileLoading();
 	void testLoadRotated();

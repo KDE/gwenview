@@ -59,8 +59,7 @@ struct DocumentInfo {
 typedef QMap<KUrl, DocumentInfo*> DocumentMap;
 
 struct DocumentFactoryPrivate {
-	DocumentMap mMetaDataLoadedDocumentMap;
-	DocumentMap mFullyLoadedDocumentMap;
+	DocumentMap mDocumentMap;
 	QUndoGroup mUndoGroup;
 
 	/**
@@ -117,8 +116,7 @@ DocumentFactory::DocumentFactory()
 }
 
 DocumentFactory::~DocumentFactory() {
-	qDeleteAll(d->mFullyLoadedDocumentMap);
-	qDeleteAll(d->mMetaDataLoadedDocumentMap);
+	qDeleteAll(d->mDocumentMap);
 	delete d;
 }
 
@@ -127,45 +125,23 @@ DocumentFactory* DocumentFactory::instance() {
 	return &factory;
 }
 
-Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadType loadType) {
+Document::Ptr DocumentFactory::load(const KUrl& url) {
 	DocumentInfo* info = 0;
 
-	DocumentMap::Iterator it = d->mFullyLoadedDocumentMap.find(url);
+	DocumentMap::Iterator it = d->mDocumentMap.find(url);
 
-	if (it != d->mFullyLoadedDocumentMap.end()) {
-		LOG(url.fileName() << "url in mFullyLoadedDocumentMap");
+	if (it != d->mDocumentMap.end()) {
+		LOG(url.fileName() << "url in mDocumentMap");
 		info = it.value();
 		info->mLastAccess = QDateTime::currentDateTime();
 		return info->mDocument;
 	}
 
-	it = d->mMetaDataLoadedDocumentMap.find(url);
-	if (it != d->mMetaDataLoadedDocumentMap.end()) {
-		LOG(url.fileName() << "url in mMetaDataLoadedDocumentMap");
-		if (loadType == Document::LoadMetaData) {
-			info = it.value();
-			info->mLastAccess = QDateTime::currentDateTime();
-			return info->mDocument;
-		} else {
-			// Meta data already loaded, we need to load image pixels
-			LOG(url.fileName() << "need to load image pixels");
-
-			// Move DocumentInfo to the mFullyLoadedDocumentMap map
-			info = it.value();
-			d->mMetaDataLoadedDocumentMap.erase(it);
-			d->mFullyLoadedDocumentMap[url] = info;
-
-			// Start loading image pixels
-			info->mDocument->finishLoading();
-			return info->mDocument;
-		}
-	}
-
-	// At this point we couldn't find the document in either maps
+	// At this point we couldn't find the document in the map
 
 	// Start loading the document
-	LOG(url.fileName() << "loading" << (loadType == Document::LoadAll ? "all" : "metadata"));
-	Document* doc = new Document(url, loadType);
+	LOG(url.fileName() << "loading");
+	Document* doc = new Document(url);
 	connect(doc, SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded(const KUrl&)) );
 	connect(doc, SIGNAL(saved(const KUrl&)),
@@ -179,17 +155,12 @@ Document::Ptr DocumentFactory::load(const KUrl& url, Document::LoadType loadType
 	info->mDocument = docPtr;
 	info->mLastAccess = QDateTime::currentDateTime();
 
-	// Place DocumentInfo in the appropriate map
-	DocumentMap& map =
-		loadType == Document::LoadAll
-		? d->mFullyLoadedDocumentMap
-		: d->mMetaDataLoadedDocumentMap;
+	// Place DocumentInfo in the map
+	d->mDocumentMap[url] = info;
 
-	map[url] = info;
-
-	d->garbageCollect(map);
+	d->garbageCollect(d->mDocumentMap);
 	#ifdef ENABLE_LOG
-	d->logDocumentMap(map);
+	d->logDocumentMap(d->mDocumentMap);
 	#endif
 
 	return docPtr;
@@ -201,18 +172,14 @@ QList<KUrl> DocumentFactory::modifiedDocumentList() const {
 }
 
 
-bool DocumentFactory::hasUrl(const KUrl& url, Document::LoadType loadType) const {
-	const DocumentMap& map =
-		loadType == Document::LoadAll
-		? d->mFullyLoadedDocumentMap
-		: d->mMetaDataLoadedDocumentMap;
-	return map.contains(url);
+bool DocumentFactory::hasUrl(const KUrl& url) const {
+	return d->mDocumentMap.contains(url);
 }
 
 
 void DocumentFactory::clearCache() {
-	d->mFullyLoadedDocumentMap.clear();
-	d->mMetaDataLoadedDocumentMap.clear();
+	qDeleteAll(d->mDocumentMap);
+	d->mDocumentMap.clear();
 }
 
 
