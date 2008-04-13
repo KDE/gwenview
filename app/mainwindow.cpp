@@ -1303,12 +1303,16 @@ void MainWindow::preloadNextUrl() {
 		return;
 	}
 
-	QModelIndex nextIndex = d->mDirModel->sibling(index.row() + 1, index.column(), index);
-	if (!nextIndex.isValid()) {
-		return;
+	if (d->mViewAction->isChecked()) {
+		// If we are in view mode, preload the next url, otherwise preload the
+		// selected one
+		index = d->mDirModel->sibling(index.row() + 1, index.column(), index);
+		if (!index.isValid()) {
+			return;
+		}
 	}
-	KFileItem item = d->mDirModel->itemForIndex(nextIndex);
 
+	KFileItem item = d->mDirModel->itemForIndex(index);
 	if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		KUrl url = item.url();
 		if (url.isLocalFile()) {
