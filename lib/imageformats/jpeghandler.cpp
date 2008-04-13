@@ -41,6 +41,15 @@ extern "C" {
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
 
 struct JpegFatalError : public jpeg_error_mgr {
 	jmp_buf mJmpBuffer;
@@ -111,7 +120,7 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 	} else {
 		cinfo.scale_denom = 1;
 	}
-	kDebug() << "cinfo.scale_denom=" << cinfo.scale_denom;
+	LOG("cinfo.scale_denom=" << cinfo.scale_denom);
 
 	// Init image
 	jpeg_start_decompress(&cinfo);
@@ -197,7 +206,7 @@ bool JpegHandler::canRead(QIODevice* device) {
 
 
 bool JpegHandler::read(QImage* image) {
-	kDebug();
+	LOG("");
 	if (!canRead()) {
 		return false;
 	}
