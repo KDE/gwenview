@@ -268,6 +268,7 @@ bool GVPart::openUrl(const KUrl& url) {
 	mDocument = DocumentFactory::instance()->load(url);
 	mView->setDocument(mDocument);
 	updateCaption();
+	connect(mDocument.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
 	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()) );
 	connect(mDocument.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
 	if (mDocument->loadingState() == Document::Loaded) {
@@ -296,6 +297,10 @@ void GVPart::slotLoaded() {
 	if (mView->zoomToFit()) {
 		resizeRequested(mDocument->size());
 	}
+
+	// We don't want to emit completed() again if we receive another
+	// downSampledImageReady() or loaded() signal from the current document.
+	disconnect(mDocument.data(), 0, this, SLOT(slotLoaded()) );
 }
 
 
