@@ -44,6 +44,7 @@ struct ImageViewPrivate {
 	QWidget* mViewport;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
+	Document::Ptr mDocument;
 	const QImage* mImage;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -189,9 +190,10 @@ void ImageView::setAlphaBackgroundColor(const QColor& color) {
 }
 
 
-void ImageView::setImage(const QImage* image) {
-	if (image) {
-		d->mImage = image;
+void ImageView::setDocument(Document::Ptr document) {
+	d->mDocument = document;
+	if (document) {
+		d->mImage = &document->image();
 	} else {
 		// This little trick makes sure d->mImage always point to a valid
 		// image, even if we were given an NULL pointer.
@@ -211,12 +213,8 @@ void ImageView::setImage(const QImage* image) {
 }
 
 
-const QImage* ImageView::image() const {
-	if (d->mImage == &d->mEmptyImage) {
-		return 0;
-	} else {
-		return d->mImage;
-	}
+Document::Ptr ImageView::document() const {
+	return d->mDocument;
 }
 
 
@@ -230,9 +228,9 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 	QSize bufferSize = d->requiredBufferSize();
 	if (bufferSize != d->mCurrentBuffer.size()) {
 		// Since the required buffer size is not the same as our current buffer
-		// size, the image must have been resized. Call setImage(), it will
+		// size, the image must have been resized. Call setDocument(), it will
 		// take care of resizing the buffer and repainting the whole image.
-		setImage(d->mImage);
+		setDocument(d->mDocument);
 		return;
 	}
 

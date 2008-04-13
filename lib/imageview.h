@@ -25,6 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAbstractScrollArea>
 
+// Local
+#include <lib/document/document.h>
+
 namespace Gwenview {
 
 class AbstractImageViewTool;
@@ -49,16 +52,9 @@ public:
 
 	void setAlphaBackgroundColor(const QColor& color);
 
-	/**
-	 * Set the image to display in this view. Note that we pass a pointer, not
-	 * a reference, to make it more explicit that we do not keep a copy of the
-	 * image. In particular, if the image gets modified outside (for example
-	 * because it is loaded progressively), the view will still points to the
-	 * modified image: it won't detach its own copy.
-	 */
-	void setImage(const QImage* image);
+	void setDocument(Document::Ptr document);
 
-	const QImage* image() const;
+	Document::Ptr document() const;
 
 	void setZoom(qreal zoom);
 

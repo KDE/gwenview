@@ -263,7 +263,7 @@ bool GVPart::openUrl(const KUrl& url) {
 		// the statusbar by GVPart::initStatusBarExtension()
 		mStatusBarWidgetContainer->show();
 	}
-	mView->setImage(0);
+	mView->setDocument(Document::Ptr());
 	mDocument = DocumentFactory::instance()->load(url);
 	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SIGNAL(completed()) );
 	connect(mDocument.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
@@ -279,7 +279,7 @@ bool GVPart::openUrl(const KUrl& url) {
 
 
 void GVPart::slotLoadingFailed() {
-	mView->setImage(0);
+	mView->setDocument(Document::Ptr());
 	updateCaption();
 	emit completed();
 	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());
@@ -292,7 +292,7 @@ void GVPart::slotLoadingFailed() {
 
 
 void GVPart::setViewImageFromDocument() {
-	mView->setImage(&mDocument->image());
+	mView->setDocument(mDocument);
 	updateCaption();
 	if (mView->zoomToFit()) {
 		resizeRequested(mDocument->image().size());
@@ -301,7 +301,7 @@ void GVPart::setViewImageFromDocument() {
 
 
 void GVPart::slotImageRectUpdated(const QRect& rect) {
-	if (!mView->image()) {
+	if (!mView->document()) {
 		setViewImageFromDocument();
 	} else {
 		mView->updateImageRect(rect);
