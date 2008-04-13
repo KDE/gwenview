@@ -46,7 +46,7 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 
 
 	void initWidgets() {
-		QSize size = mDocument->image().size();
+		QSize size = mDocument->size();
 		leftSpinBox->setMaximum(size.width());
 		widthSpinBox->setMaximum(size.width());
 		topSpinBox->setMaximum(size.height());

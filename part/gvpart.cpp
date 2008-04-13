@@ -292,7 +292,7 @@ void GVPart::slotLoadingFailed() {
 void GVPart::slotLoaded() {
 	emit completed();
 	if (mView->zoomToFit()) {
-		resizeRequested(mDocument->image().size());
+		resizeRequested(mDocument->size());
 	}
 }
 

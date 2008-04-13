@@ -66,6 +66,9 @@ struct ImageViewPrivate {
 
 
 	QSize requiredBufferSize() const {
+		if (!mDocument) {
+			return QSize();
+		}
 		QSize size;
 		qreal zoom;
 		if (mZoomToFit) {
@@ -74,7 +77,7 @@ struct ImageViewPrivate {
 			zoom = mZoom;
 		}
 
-		size = mImage->size() * zoom;
+		size = mDocument->size() * zoom;
 		size = size.boundedTo(mViewport->size());
 
 		return size;
@@ -308,7 +311,7 @@ void ImageView::setZoom(qreal zoom) {
 
 
 void ImageView::setZoom(qreal zoom, const QPoint& center) {
-	if (d->mImage->isNull()) {
+	if (!d->mDocument) {
 		return;
 	}
 
@@ -398,7 +401,7 @@ void ImageView::setZoomToFit(bool on) {
 }
 
 void ImageView::updateScrollBars() {
-	if (d->mZoomToFit) {
+	if (!d->mDocument || d->mZoomToFit) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		return;
@@ -410,11 +413,11 @@ void ImageView::updateScrollBars() {
 	int width = d->mViewport->width();
 	int height = d->mViewport->height();
 
-	max = qMax(0, int(d->mImage->width() * d->mZoom) - width);
+	max = qMax(0, int(d->mDocument->width() * d->mZoom) - width);
 	horizontalScrollBar()->setRange(0, max);
 	horizontalScrollBar()->setPageStep(width);
 
-	max = qMax(0, int(d->mImage->height() * d->mZoom) - height);
+	max = qMax(0, int(d->mDocument->height() * d->mZoom) - height);
 	verticalScrollBar()->setRange(0, max);
 	verticalScrollBar()->setPageStep(height);
 }
@@ -549,32 +552,32 @@ QRect ImageView::mapToImage(const QRect& src) {
 
 
 qreal ImageView::computeZoomToFit() const {
-    if (d->mImage->isNull()) {
+    if (!d->mDocument) {
         return 1.;
     }
     int width = d->mViewport->width();
     int height = d->mViewport->height();
-    qreal zoom = qreal(width) / d->mImage->width();
-    if ( int(d->mImage->height() * zoom) > height) {
-        zoom = qreal(height) / d->mImage->height();
+    qreal zoom = qreal(width) / d->mDocument->width();
+    if ( int(d->mDocument->height() * zoom) > height) {
+        zoom = qreal(height) / d->mDocument->height();
     }
     return qMin(zoom, 1.0);
 }
 
 
 qreal ImageView::computeZoomToFitWidth() const {
-    if (d->mImage->isNull()) {
+    if (!d->mDocument) {
         return 1.;
     }
-    return qreal(d->mViewport->width()) / d->mImage->width();
+    return qreal(d->mViewport->width()) / d->mDocument->width();
 }
 
 
 qreal ImageView::computeZoomToFitHeight() const {
-    if (d->mImage->isNull()) {
+    if (!d->mDocument) {
         return 1.;
     }
-    return qreal(d->mViewport->height()) / d->mImage->height();
+    return qreal(d->mViewport->height()) / d->mDocument->height();
 }
 
 

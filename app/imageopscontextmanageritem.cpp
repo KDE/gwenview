@@ -233,7 +233,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 	doc->waitUntilLoaded();
 	int size = GwenviewConfig::imageResizeLastSize();
 	if (size == -1) {
-		size = qMax(doc->image().width(), doc->image().height());
+		size = qMax(doc->width(), doc->height());
 	}
 	bool ok = false;
 	size = KInputDialog::getInteger(
