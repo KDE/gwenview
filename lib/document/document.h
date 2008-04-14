@@ -50,6 +50,21 @@ class DocumentFactory;
 class DocumentPrivate;
 class ImageMetaInfoModel;
 
+
+/**
+ * This class represents a raster image.
+ *
+ * It handles loading and saving the image, applying operations and maintaining
+ * the document undo stack.
+ *
+ * It is capable of loading down sampled versions of an image using
+ * prepareDownSampledImageForZoom() and downSampledImage(). Down sampled images
+ * load much faster than the full image but you need to load the full image to
+ * manipulate it( use loadFullImage() to do so).
+ *
+ * To get a Document instance for url, ask for one with
+ * DocumentFactory::instance()->load(url);
+ */
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
@@ -61,10 +76,10 @@ public:
 	};
 
 	enum LoadingState {
-		Loading,
-		Loaded,
-		MetaDataLoaded,
-		LoadingFailed
+		Loading,        ///< Image is loading
+		MetaDataLoaded, ///< Image is still loading, but meta data has been loaded */
+		Loaded,         ///< Full image has been loaded
+		LoadingFailed   ///< Image loading has failed
 	};
 
 	typedef KSharedPtr<Document> Ptr;
