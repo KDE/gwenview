@@ -135,7 +135,7 @@ struct LoadingDocumentImplPrivate {
 		LOG("mImageDataInvertedZoom=" << mImageDataInvertedZoom);
 		if (mImageSize.isValid()
 			&& mImageDataInvertedZoom != 1
-			/*&& reader.supportsOption(QImageIOHandler::ScaledSize)*/
+			&& reader.supportsOption(QImageIOHandler::ScaledSize)
 			)
 		{
 			// Do not use mImageSize here: QImageReader needs a non-transposed
