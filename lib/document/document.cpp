@@ -239,11 +239,6 @@ void Document::applyTransformation(Orientation orientation) {
 }
 
 
-const Exiv2::Image* Document::exiv2Image() const {
-	return d->mExiv2Image.get();
-}
-
-
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
 	d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());

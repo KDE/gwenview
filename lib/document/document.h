@@ -137,8 +137,6 @@ public:
 
 	void waitUntilLoaded() const;
 
-	const Exiv2::Image* exiv2Image() const;
-
 	QSize size() const;
 
 	int width() const { return size().width(); }
