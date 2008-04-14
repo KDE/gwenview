@@ -36,8 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
-static const qreal MaxDownSampledZoom = 0.5;
-
 struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
@@ -55,6 +53,11 @@ struct DocumentPrivate {
 		impl->loadImage(invertedZoom);
 	}
 };
+
+
+qreal Document::maxDownSampledZoom() {
+	return 0.5;
+}
 
 
 Document::Document(const KUrl& url)
@@ -275,8 +278,8 @@ void Document::loadFullImage() {
 
 
 bool Document::prepareDownSampledImageForZoom(qreal zoom) {
-	if (zoom >= MaxDownSampledZoom) {
-		kWarning() << "No need to call prepareDownSampledImageForZoom if zoom >= " << MaxDownSampledZoom;
+	if (zoom >= maxDownSampledZoom()) {
+		kWarning() << "No need to call prepareDownSampledImageForZoom if zoom >= " << maxDownSampledZoom();
 		return true;
 	}
 

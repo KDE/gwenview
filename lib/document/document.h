@@ -68,6 +68,14 @@ class ImageMetaInfoModel;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
+	/**
+	 * Document won't produce down sampled images for any zoom value higher than maxDownSampledZoom().
+	 *
+	 * Note: We can't use the enum {} trick to declare this constant, that's
+	 * why it's defined as a static method
+	 */
+	static qreal maxDownSampledZoom();
+
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,

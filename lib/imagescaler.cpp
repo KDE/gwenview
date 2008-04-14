@@ -110,7 +110,7 @@ QRect ImageScaler::containingRect(const QRectF& rectF) {
 
 
 void ImageScaler::doScale() {
-	if (d->mZoom < Document::MaxDownSampledZoom) {
+	if (d->mZoom < Document::maxDownSampledZoom()) {
 		if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
 			LOG("Asked for a down sampled image");
 			return;
@@ -141,7 +141,7 @@ void ImageScaler::scaleRect(const QRect& rect) {
 
 	QImage image;
 	qreal zoom;
-	if (d->mZoom < Document::MaxDownSampledZoom) {
+	if (d->mZoom < Document::maxDownSampledZoom()) {
 		image = d->mDocument->downSampledImage(d->mZoom);
 		Q_ASSERT(!image.isNull());
 		qreal zoom1 = qreal(image.width()) / d->mDocument->width();

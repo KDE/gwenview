@@ -86,7 +86,7 @@ void Preloader::doPreload() {
 		d->mSize.height() / qreal(d->mDocument->height())
 		);
 
-	if (zoom < Document::MaxDownSampledZoom) {
+	if (zoom < Document::maxDownSampledZoom()) {
 		LOG("preloading down sampled, zoom=" << zoom);
 		d->mDocument->prepareDownSampledImageForZoom(zoom);
 	} else {
