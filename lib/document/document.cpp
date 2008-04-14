@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+static const qreal MaxDownSampledZoom = 0.5;
 
 struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;

@@ -53,8 +53,6 @@ class ImageMetaInfoModel;
 class GWENVIEWLIB_EXPORT Document : public QObject, public QSharedData {
 	Q_OBJECT
 public:
-	static const qreal MaxDownSampledZoom = 0.5;
-
 	enum SaveResult {
 		SR_OK,
 		SR_ReadOnly,
