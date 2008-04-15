@@ -65,7 +65,7 @@ QImageIOHandler *JpegPlugin::create(QIODevice *device, const QByteArray &format)
 	return handler;
 }
 
-Q_EXPORT_STATIC_PLUGIN(JpegPlugin);
+Q_EXPORT_STATIC_PLUGIN(JpegPlugin)
 
 
 } // namespace
