@@ -65,6 +65,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvcore.h"
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
+#ifdef KIPI_FOUND
+#include "kipiinterface.h"
+#endif
 #ifdef Nepomuk_FOUND
 #include "nepomukcontextmanageritem.h"
 #endif
@@ -131,6 +134,9 @@ struct MainWindow::Private {
 	SaveBar* mSaveBar;
 	SlideShow* mSlideShow;
 	Preloader* mPreloader;
+#ifdef KIPI_FOUND
+	KIPIInterface* mKIPIInterface;
+#endif
 
 	QActionGroup* mViewModeActionGroup;
 	QAction* mBrowseAction;
@@ -639,6 +645,10 @@ d(new MainWindow::Private)
 
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateModifiedFlag()) );
+
+#ifdef KIPI_FOUND
+	d->mKIPIInterface = new KIPIInterface(this);
+#endif
 }
 
 
