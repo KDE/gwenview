@@ -656,6 +656,9 @@ MainWindow::~MainWindow() {
 	delete d;
 }
 
+ContextManager* MainWindow::contextManager() const {
+	return d->mContextManager;
+}
 
 DocumentView* MainWindow::documentView() const {
 	return d->mDocumentView;

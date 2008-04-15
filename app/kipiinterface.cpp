@@ -40,11 +40,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // local
 #include "mainwindow.h"
+#include "contextmanager.h"
 #include <lib/jpegcontent.h>
 
 namespace Gwenview {
 #undef ENABLE_LOG
 #undef LOG
+
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
 #define LOG(x) kDebug() << x
@@ -133,14 +135,12 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
 	d->mPluginLoader = 0;
 
 	d->setupPluginsMenu();
-#if 0
-//TODO connect signals to whom?
-	connect(d->mMainWindow, SIGNAL(selectionChanged()),
+	QObject::connect(d->mMainWindow->contextManager(), SIGNAL(selectionChanged()),
 		this, SLOT(slotSelectionChanged()) );
-
-	connect(d->mMainWindow, SIGNAL(completed()),
+	QObject::connect(d->mMainWindow->contextManager(), SIGNAL(currentDirUrlChanged()),
 		this, SLOT(slotDirectoryChanged()) );
-
+#if 0
+//TODO instead of delaying can we load them all at start-up to use actions somewhere else?
 // delay a bit, so that it's called after loadPlugins()
 	QTimer::singleShot( 0, this, SLOT( init()));
 #endif
@@ -238,14 +238,23 @@ void KIPIInterface::init() {
 }
 
 KIPI::ImageCollection KIPIInterface::currentAlbum() {
-//TODO
-	return KIPI::ImageCollection(0);
+//TODO check if correct
+	LOG("");
+	KUrl url = d->mMainWindow->contextManager()->currentDirUrl();
+	KUrl::List list;
+	
+	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
 
 
 KIPI::ImageCollection KIPIInterface::currentSelection() {
-//TODO
-	return KIPI::ImageCollection(0);
+	LOG("");
+
+	KFileItemList fileList = d->mMainWindow->contextManager()->selection();
+	KUrl::List list = fileList.urlList();
+	KUrl url = d->mMainWindow->contextManager()->currentUrl();
+	
+	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
 
 
@@ -271,6 +280,7 @@ int KIPIInterface::features() const {
  * here, it is however necessary to discard caches if the plugin preserves timestamp
  */
 bool KIPIInterface::addImage(const KUrl&, QString&) {
+//TODO	setContext(const KUrl& currentUrl, const KFileItemList& selection)?
 	//Cache::instance()->invalidate( url );
 	return true;
 }
@@ -292,12 +302,13 @@ KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent) {
 }
 
 void KIPIInterface::slotSelectionChanged() {
-	//emit selectionChanged(d->mFileView->selectionSize() > 0);
+	emit selectionChanged(d->mMainWindow->contextManager()->selection().count() >0);
 }
 
 
 void KIPIInterface::slotDirectoryChanged() {
-	//emit currentAlbumChanged(d->mFileView->fileCount() > 0);
+// TODO check if getting it from selected
+	emit currentAlbumChanged(d->mMainWindow->contextManager()->selection().count() >0);
 }
 
 } //namespace

@@ -1,6 +1,7 @@
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${EXIV2_INCLUDE_DIR}
+	${KIPI_INCLUDE_DIR}
 	)
 
 # For lib/gwenviewconfig.h and config-gwenview.h
@@ -37,6 +38,13 @@ if (Nepomuk_FOUND)
 		)
 endif (Nepomuk_FOUND)
 
+if (KIPI_FOUND)
+	set (gwenview_SRCS
+		${gwenview_SRCS}
+		kipiinterface.cpp
+		)
+endif (KIPI_FOUND)
+
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
 	fullscreenconfigdialog.ui
@@ -48,6 +56,7 @@ kde4_add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview
 	${KDE4_KPARTS_LIBS}
 	${KDE4_KFILE_LIBS}
+	${KIPI_LIBRARIES}
 	gwenviewlib
 	)
 

@@ -36,6 +36,7 @@ namespace KParts { class ReadOnlyPart; }
 namespace Gwenview {
 
 class DocumentView;
+class ContextManager;
 
 class MainWindow : public KParts::MainWindow {
 Q_OBJECT
@@ -48,6 +49,8 @@ public:
 	void setInitialUrl(const KUrl&);
 
 	DocumentView* documentView() const;
+
+	ContextManager* contextManager() const;
 
 	bool currentDocumentIsRasterImage() const;
 
