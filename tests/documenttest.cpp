@@ -110,7 +110,7 @@ void DocumentTest::testLoadDownSampled() {
 	while (downSampledImageReadySpy.count() == 0) {
 		QTest::qWait(100);
 	}
-	QImage downSampledImage = doc->downSampledImage(0.4);
+	QImage downSampledImage = doc->downSampledImageForZoom(0.4);
 	QVERIFY2(!downSampledImage.isNull(), "Down sampled image should not be null");
 
 	QCOMPARE(downSampledImage.size(), doc->size() / 2);

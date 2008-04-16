@@ -105,7 +105,7 @@ inline int invertedZoomForZoom(qreal zoom) {
 }
 
 
-const QImage& Document::downSampledImage(qreal zoom) const {
+const QImage& Document::downSampledImageForZoom(qreal zoom) const {
 	static const QImage sNullImage;
 
 	int invertedZoom = invertedZoomForZoom(zoom);

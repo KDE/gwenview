@@ -142,7 +142,7 @@ void ImageScaler::scaleRect(const QRect& rect) {
 	QImage image;
 	qreal zoom;
 	if (d->mZoom < Document::maxDownSampledZoom()) {
-		image = d->mDocument->downSampledImage(d->mZoom);
+		image = d->mDocument->downSampledImageForZoom(d->mZoom);
 		Q_ASSERT(!image.isNull());
 		qreal zoom1 = qreal(image.width()) / d->mDocument->width();
 		zoom = d->mZoom / zoom1;

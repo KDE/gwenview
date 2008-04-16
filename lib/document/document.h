@@ -58,9 +58,9 @@ class ImageMetaInfoModel;
  * the document undo stack.
  *
  * It is capable of loading down sampled versions of an image using
- * prepareDownSampledImageForZoom() and downSampledImage(). Down sampled images
- * load much faster than the full image but you need to load the full image to
- * manipulate it( use loadFullImage() to do so).
+ * prepareDownSampledImageForZoom() and downSampledImageForZoom(). Down sampled
+ * images load much faster than the full image but you need to load the full
+ * image to manipulate it( use loadFullImage() to do so).
  *
  * To get a Document instance for url, ask for one with
  * DocumentFactory::instance()->load(url);
@@ -113,7 +113,7 @@ public:
 
 	const QImage& image() const;
 
-	const QImage& downSampledImage(qreal zoom) const;
+	const QImage& downSampledImageForZoom(qreal zoom) const;
 
 	/**
 	 * Replaces the current image with image.
