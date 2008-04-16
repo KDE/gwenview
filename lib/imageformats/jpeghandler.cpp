@@ -67,6 +67,18 @@ struct JpegFatalError : public jpeg_error_mgr {
 };
 
 
+static void expand24to32bpp(QImage* image) {
+	for (int j=0; j<image->height(); j++) {
+		uchar *in = image->scanLine(j) + (image->width() - 1)*3;
+		QRgb *out = (QRgb*)( image->scanLine(j) ) + image->width() - 1;
+
+		for (int i=image->width() - 1; i>=0; --i, --out, in -= 3) {
+			*out = qRgb(in[0], in[1], in[2]);
+		}
+	}
+}
+
+
 static QSize getJpegSize(QIODevice* ioDevice) {
 	struct jpeg_decompress_struct cinfo;
 	QSize size;
@@ -155,14 +167,7 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 
 	// Expand 24->32 bpp
 	if ( cinfo.output_components == 3 ) {
-		for (uint j=0; j<cinfo.output_height; j++) {
-			uchar *in = image->scanLine(j) + (cinfo.output_width - 1)*3;
-			QRgb *out = (QRgb*)( image->scanLine(j) ) + cinfo.output_width - 1;
-
-			for (int i=cinfo.output_width - 1; i>=0; --i, --out, in -= 3) {
-				*out = qRgb(in[0], in[1], in[2]);
-			}
-		}
+		expand24to32bpp(image);
 	}
 
 	if (scaledSize.isValid()) {
