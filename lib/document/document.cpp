@@ -87,7 +87,7 @@ void Document::reload() {
 }
 
 
-QImage& Document::image() {
+const QImage& Document::image() const {
 	return d->mImage;
 }
 

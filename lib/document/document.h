@@ -111,7 +111,7 @@ public:
 
 	bool isModified() const;
 
-	QImage& image();
+	const QImage& image() const;
 
 	const QImage& downSampledImage(qreal zoom) const;
 
