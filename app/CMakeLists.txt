@@ -1,8 +1,11 @@
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${EXIV2_INCLUDE_DIR}
-	${KIPI_INCLUDE_DIR}
 	)
+
+if (KIPI_FOUND)
+	include_directories(${KIPI_INCLUDE_DIR})
+endif (KIPI_FOUND)
 
 # For lib/gwenviewconfig.h and config-gwenview.h
 include_directories(
