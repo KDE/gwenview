@@ -81,7 +81,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
-#include <lib/sorteddirmodel.h>
+#include <lib/metadata/sorteddirmodel.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/urlutils.h>
 

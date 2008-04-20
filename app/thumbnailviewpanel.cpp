@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurlnavigator.h>
 
 // Local
-#include <lib/sorteddirmodel.h>
+#include <lib/metadata/sorteddirmodel.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
 
