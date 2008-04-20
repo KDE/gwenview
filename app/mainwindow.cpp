@@ -345,6 +345,7 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
+		mContextManager->setDirModel(mDirModel);
 
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 

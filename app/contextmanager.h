@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 class SideBar;
+class SortedDirModel;
 
 class ImageViewPart;
 class AbstractContextManagerItem;
@@ -62,6 +63,10 @@ public:
 
 	void setSideBar(SideBar*);
 
+	void setDirModel(SortedDirModel*);
+
+	SortedDirModel* dirModel() const;
+
 Q_SIGNALS:
 	void selectionChanged();
 	void currentDirUrlChanged();
@@ -71,6 +76,7 @@ private:
 	QList<AbstractContextManagerItem*> mList;
 	KFileItemList mSelection;
 	SideBar* mSideBar;
+	SortedDirModel* mDirModel;
 	KUrl mCurrentDirUrl;
 	KUrl mCurrentUrl;
 };

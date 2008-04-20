@@ -29,7 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 ContextManager::ContextManager(QObject* parent)
-: QObject(parent) {}
+: QObject(parent)
+, mDirModel(0) {}
 
 
 ContextManager::~ContextManager() {
@@ -106,4 +107,12 @@ QString ContextManager::currentUrlMimeType() const {
 }
 
 
+SortedDirModel* ContextManager::dirModel() const {
+	return mDirModel;
+}
+
+
+void ContextManager::setDirModel(SortedDirModel* dirModel) {
+	mDirModel = dirModel;
+}
 } // namespace
