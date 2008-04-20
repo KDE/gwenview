@@ -79,7 +79,11 @@ target_link_libraries(gwenviewlib
 	)
 
 if (Nepomuk_FOUND)
-	target_link_libraries(gwenviewlib ${NEPOMUK_LIBRARIES})
+	find_package(Soprano)
+	target_link_libraries(gwenviewlib
+		${NEPOMUK_LIBRARIES}
+		${SOPRANO_LIBRARIES}
+		)
 endif (Nepomuk_FOUND)
 
 install(TARGETS gwenviewlib DESTINATION ${LIB_INSTALL_DIR})
