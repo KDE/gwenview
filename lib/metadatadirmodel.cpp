@@ -117,7 +117,6 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 
 
 void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
-	kDebug() << url;
 	QString urlString = url.url();
 	MetaData metaData;
 	metaData.mRating = int(urlString[urlString.length() - 2].toAscii()) % 6;
@@ -128,7 +127,6 @@ void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
 void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const QVariant& variant) {
 	MetaData metaData;
 	metaData.fromVariant(variant);
-	kDebug() << url << " rating:" << metaData.mRating;
 	QModelIndex index = indexForUrl(url);
 	if (index.isValid()) {
 		d->mMetaDataForIndex[index] = metaData;
