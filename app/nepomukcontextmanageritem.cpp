@@ -27,18 +27,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 
 // Nepomuk
-#include <nepomuk/global.h>
-#include <nepomuk/kmetadatatagwidget.h>
 #include <nepomuk/kratingwidget.h>
-#include <nepomuk/resource.h>
-#include <nepomuk/tag.h>
-
-#include <Soprano/Vocabulary/Xesam>
 
 // Local
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "ui_nepomuksidebaritem.h"
+#include <lib/metadatadirmodel.h>
+#include <lib/sorteddirmodel.h>
 
 namespace Gwenview {
 
@@ -80,6 +76,8 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mGroup->addWidget(container);
 
 	d->mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	d->mRatingWidget->setHalfStepsEnabled(false);
+	d->mRatingWidget->setMaxRating(5);
 	connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
 
@@ -88,57 +86,72 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
+inline int ratingForVariant(const QVariant& variant) {
+	if (variant.isValid()) {
+		return variant.toInt();
+	} else {
+		return 0;
+	}
+}
+
+
 void NepomukContextManagerItem::updateSideBarContent() {
 	if (!d->mSideBar->isVisible()) {
 		return;
 	}
 
-	QList<Nepomuk::Resource> resourceList;
 	KFileItemList itemList = contextManager()->selection();
 
 	bool first = true;
 	int rating = 0;
 	QString description;
+	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
-		QString urlString = item.url().url();
-		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
-		resourceList << resource;
+		QModelIndex index = dirModel->indexForItem(item);
 
+		QVariant value = dirModel->data(index, MetaDataDirModel::RatingRole);
 		if (first) {
-			rating = resource.rating();
-		} else if (rating != (int)resource.rating()) {
+			rating = ratingForVariant(value);
+		} else if (rating != ratingForVariant(value)) {
 			// Ratings aren't the same, reset
 			rating = 0;
 		}
 
+		/*
 		if (first) {
 			description = resource.description();
 		} else if (description != resource.description()) {
 			description = QString();
 		}
+		*/
 
 		first = false;
 	}
 	d->mRatingWidget->setRating(rating);
-	d->mDescriptionLineEdit->setText(description);
-	d->mTagWidget->setTaggedResources(resourceList);
+	//d->mDescriptionLineEdit->setText(description);
+	//d->mTagWidget->setTaggedResources(resourceList);
 }
 
 
 void NepomukContextManagerItem::slotRatingChanged(int rating) {
-	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
-	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
-		resource.setRating(rating);
+	KFileItemList itemList = contextManager()->selection();
+
+	SortedDirModel* dirModel = contextManager()->dirModel();
+	Q_FOREACH(const KFileItem& item, itemList) {
+		QModelIndex index = dirModel->indexForItem(item);
+		dirModel->setData(index, rating, MetaDataDirModel::RatingRole);
 	}
 }
 
 
 void NepomukContextManagerItem::storeDescription() {
+	/*
 	QString description = d->mDescriptionLineEdit->text();
 	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
 	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
 		resource.setDescription(description);
 	}
+	*/
 }
 
 
