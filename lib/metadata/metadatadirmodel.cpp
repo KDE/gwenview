@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "metadatadirmodel.moc"
+#include <config-gwenview.h>
 
 // Qt
 #include <QtConcurrentRun>
@@ -27,21 +28,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 
-#define FAKE_METADATA_BACKEND
-
-// Nepomuk
-#ifndef FAKE_METADATA_BACKEND
-#include <nepomuk/global.h>
-#include <nepomuk/resource.h>
-#include <nepomuk/tag.h>
-
-#include <Soprano/Vocabulary/Xesam>
-#endif
-
 // Local
 #include "abstractmetadatabackend.h"
-#ifdef FAKE_METADATA_BACKEND
+
+#ifdef GWENVIEW_METADATA_BACKEND_FAKE
 #include "fakemetadatabackend.h"
+
+#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
+#include "nepomukmetadatabackend.h"
+
+#else
+#ifdef __GNUC__
+	#error No metadata backend defined
+#endif
 #endif
 
 namespace Gwenview {
@@ -54,23 +53,12 @@ struct MetaDataDirModelPrivate {
 };
 
 
-/*
-#ifdef FAKE_METADATA_BACKEND
-#else
-	QString urlString = url.url();
-	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
-	resource.setRating(metaData.mRating);
-#endif
-}
-*/
-
-
 MetaDataDirModel::MetaDataDirModel(QObject* parent)
 : KDirModel(parent)
 , d(new MetaDataDirModelPrivate) {
-#ifdef FAKE_METADATA_BACKEND
+#ifdef GWENVIEW_METADATA_BACKEND_FAKE
 	d->mBackEnd = new FakeMetaDataBackEnd(this);
-#else
+#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
 	d->mBackEnd = new NepomukMetaDataBackEnd(this);
 #endif
 
@@ -136,14 +124,6 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 		return KDirModel::setData(index, data, role);
 	}
 }
-
-
-/*
-#else
-	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
-	metaData.mRating = resource.rating();
-#endif
-*/
 
 
 void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {

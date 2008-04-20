@@ -73,6 +73,12 @@ if (GWENVIEW_METADATA_BACKEND_FAKE)
 		)
 endif (GWENVIEW_METADATA_BACKEND_FAKE)
 
+if (GWENVIEW_METADATA_BACKEND_NEPOMUK)
+	set(gwenviewlib_SRCS
+		${gwenviewlib_SRCS}
+		metadata/nepomukmetadatabackend.cpp
+		)
+endif (GWENVIEW_METADATA_BACKEND_NEPOMUK)
 
 set_source_files_properties(
 	exiv2imageloader.cpp
