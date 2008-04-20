@@ -35,11 +35,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
 #include <kurl.h>
+#include <nepomuk/kratingpainter.h>
 
 // Local
 #include "archiveutils.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
+#include "../metadatadirmodel.h"
 
 namespace Gwenview {
 
@@ -513,6 +515,17 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		rect.left() + (rect.width() - textWidth) / 2,
 		rect.top() + ITEM_MARGIN + thumbnailSize + ITEM_MARGIN + option.fontMetrics.ascent(),
 		text);
+
+	// Draw rating
+	QVariant value = index.data(MetaDataDirModel::RatingRole);
+	if (value.isValid()) {
+		int rating = value.toInt() * 2;
+		QRect ratingRect(rect);
+		ratingRect.setWidth(ratingRect.width() / 2);
+		ratingRect.setHeight(ITEM_MARGIN + thumbnailSize);
+		KRatingPainter::paintRating(painter, ratingRect,
+			Qt::AlignLeft | Qt::AlignBottom, rating);
+	}
 }
 
 

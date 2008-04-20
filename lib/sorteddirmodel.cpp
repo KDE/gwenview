@@ -22,16 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
+#include <kdebug.h>
 #include <kdirlister.h>
-#include <kdirmodel.h>
 
 // Local
+#include "metadatadirmodel.h"
 
 namespace Gwenview {
 
+
 struct SortedDirModelPrivate {
-	KDirModel* mSourceModel;
+	MetaDataDirModel* mSourceModel;
 	QStringList mMimeExcludeFilter;
+	int mMinimumRating;
 };
 
 
@@ -39,7 +42,8 @@ SortedDirModel::SortedDirModel(QObject* parent)
 : KDirSortFilterProxyModel(parent)
 , d(new SortedDirModelPrivate)
 {
-	d->mSourceModel = new KDirModel(this);
+	d->mSourceModel = new MetaDataDirModel(this);
+	d->mMinimumRating = 0;
 	setSourceModel(d->mSourceModel);
 }
 
@@ -51,6 +55,13 @@ SortedDirModel::~SortedDirModel() {
 
 KDirLister* SortedDirModel::dirLister() {
 	return d->mSourceModel->dirLister();
+}
+
+
+void SortedDirModel::setMinimumRating(int rating) {
+	kDebug() << "rating=" << rating;
+	d->mMinimumRating = rating;
+	invalidateFilter();
 }
 
 
@@ -93,10 +104,21 @@ void SortedDirModel::setMimeExcludeFilter(const QStringList &mimeList) {
 
 
 bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const {
+	QModelIndex index = d->mSourceModel->index(row, 0, parent);
 	if (!d->mMimeExcludeFilter.isEmpty()) {
-		QModelIndex index = d->mSourceModel->index(row, 0, parent);
 		QString mimeType = d->mSourceModel->itemForIndex(index).mimetype();
 		if (d->mMimeExcludeFilter.contains(mimeType)) {
+			return false;
+		}
+	}
+	if (d->mMinimumRating > 0) {
+		if (d->mSourceModel->metaDataAvailableForIndex(index)) {
+			int rating = d->mSourceModel->data(index, MetaDataDirModel::RatingRole).toInt();
+			if (rating < d->mMinimumRating) {
+				return false;
+			}
+		} else {
+			d->mSourceModel->retrieveMetaDataForIndex(index);
 			return false;
 		}
 	}

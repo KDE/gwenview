@@ -33,6 +33,7 @@ set(gwenviewlib_SRCS
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
+	metadatadirmodel.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
 	preferredimagemetainfomodel.cpp
@@ -76,5 +77,9 @@ target_link_libraries(gwenviewlib
 	${JPEG_LIBRARY}
 	${EXIV2_LIBRARIES}
 	)
+
+if (Nepomuk_FOUND)
+	target_link_libraries(gwenviewlib ${NEPOMUK_LIBRARIES})
+endif (Nepomuk_FOUND)
 
 install(TARGETS gwenviewlib DESTINATION ${LIB_INSTALL_DIR})

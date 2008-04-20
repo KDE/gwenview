@@ -47,10 +47,14 @@ public:
 
 	virtual void setMimeExcludeFilter(const QStringList &mimeList);
 
+public Q_SLOTS:
+	void setMinimumRating(int);
+
 protected:
 	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
 
 private:
+	friend class SortedDirModelPrivate;
 	SortedDirModelPrivate * const d;
 };
 

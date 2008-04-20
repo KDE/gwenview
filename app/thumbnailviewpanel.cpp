@@ -69,15 +69,25 @@ struct ThumbnailViewPanelPrivate {
 		KFilePlacesModel* places = new KFilePlacesModel(that);
 		mUrlNavigator = new KUrlNavigator(places, KUrl(), that);
 
+		// Rating slider
+		QSlider* ratingSlider = new QSlider;
+		ratingSlider->setOrientation(Qt::Horizontal);
+		ratingSlider->setMinimum(0);
+		ratingSlider->setMaximum(5);
+		QObject::connect(ratingSlider, SIGNAL(valueChanged(int)), mDirModel, SLOT(setMinimumRating(int)) );
+
 		// Thumbnail slider
-		KStatusBar* statusBar = new KStatusBar(that);
-		mThumbnailSlider = new QSlider(statusBar);
+		mThumbnailSlider = new QSlider;
 		mThumbnailSlider->setMaximumWidth(200);
-		statusBar->addPermanentWidget(mThumbnailSlider);
 		mThumbnailSlider->setMinimum(40);
 		mThumbnailSlider->setMaximum(256);
 		mThumbnailSlider->setOrientation(Qt::Horizontal);
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
+
+		// Status bar
+		KStatusBar* statusBar = new KStatusBar(that);
+		statusBar->addPermanentWidget(ratingSlider);
+		statusBar->addPermanentWidget(mThumbnailSlider);
 
 		setupFilterBar();
 
