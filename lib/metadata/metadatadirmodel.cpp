@@ -39,22 +39,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #endif
 
 // Local
+#include "abstractmetadatabackend.h"
+#ifdef FAKE_METADATA_BACKEND
+#include "fakemetadatabackend.h"
+#endif
 
 namespace Gwenview {
-
-
-struct MetaData {
-	int mRating;
-};
 
 typedef QMap<QModelIndex, MetaData> MetaDataMap;
 
 struct MetaDataDirModelPrivate {
 	MetaDataMap mMetaDataForIndex;
+	AbstractMetaDataBackEnd* mBackEnd;
 };
 
 
-static void storeMetaDataForUrl(const KUrl& url, const MetaData& metaData) {
+/*
 #ifdef FAKE_METADATA_BACKEND
 #else
 	QString urlString = url.url();
@@ -62,14 +62,19 @@ static void storeMetaDataForUrl(const KUrl& url, const MetaData& metaData) {
 	resource.setRating(metaData.mRating);
 #endif
 }
+*/
 
 
 MetaDataDirModel::MetaDataDirModel(QObject* parent)
 : KDirModel(parent)
 , d(new MetaDataDirModelPrivate) {
-	qRegisterMetaType<MetaData>("MetaData");
+#ifdef FAKE_METADATA_BACKEND
+	d->mBackEnd = new FakeMetaDataBackEnd(this);
+#else
+	d->mBackEnd = new NepomukMetaDataBackEnd(this);
+#endif
 
-	connect(this, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
+	connect(d->mBackEnd, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
 		SLOT(storeRetrievedMetaData(const KUrl&, const MetaData&)),
 		Qt::QueuedConnection);
 }
@@ -95,7 +100,7 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 		return;
 	}
 	KUrl url = item.url();
-	QtConcurrent::run(this, &MetaDataDirModel::retrieveMetaDataForUrl, url);
+	d->mBackEnd->retrieveMetaData(url);
 }
 
 
@@ -125,7 +130,7 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 		KFileItem item = itemForIndex(index);
 		Q_ASSERT(!item.isNull());
 		KUrl url = item.url();
-		QtConcurrent::run(storeMetaDataForUrl, url, metaData);
+		d->mBackEnd->storeMetaData(url, metaData);
 		return true;
 	} else {
 		return KDirModel::setData(index, data, role);
@@ -133,18 +138,12 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 }
 
 
-void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
-	QString urlString = url.url();
-	MetaData metaData;
-
-#ifdef FAKE_METADATA_BACKEND
-	metaData.mRating = int(urlString[urlString.length() - 2].toAscii()) % 6;
+/*
 #else
 	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
 	metaData.mRating = resource.rating();
 #endif
-	emit metaDataRetrieved(url, metaData);
-}
+*/
 
 
 void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {

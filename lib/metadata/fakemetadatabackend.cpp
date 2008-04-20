@@ -18,51 +18,29 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef METADATADIRMODEL_H
-#define METADATADIRMODEL_H
+// Self
+#include "fakemetadatabackend.h"
 
 // Qt
 
 // KDE
-#include <kdirmodel.h>
+#include <kurl.h>
 
 // Local
-
-class KUrl;
 
 namespace Gwenview {
 
 
-class MetaData;
-class MetaDataDirModelPrivate;
-class MetaDataDirModel : public KDirModel {
-	Q_OBJECT
-public:
-	enum {
-		RatingRole = 0x21a43a51
-	};
-	MetaDataDirModel(QObject* parent);
-	~MetaDataDirModel();
+void FakeMetaDataBackEnd::storeMetaData(const KUrl&, const MetaData&) {
+}
 
-	bool metaDataAvailableForIndex(const QModelIndex&) const;
 
-	void retrieveMetaDataForIndex(const QModelIndex&);
-
-	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-
-	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
-
-Q_SIGNALS:
-	void metaDataRetrieved(const KUrl&, const MetaData&);
-
-private:
-	MetaDataDirModelPrivate* const d;
-
-private Q_SLOTS:
-	void storeRetrievedMetaData(const KUrl& url, const MetaData&);
-};
+void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
+	QString urlString = url.url();
+	MetaData metaData;
+	metaData.mRating = int(urlString[urlString.length() - 2].toAscii()) % 6;
+	emit metaDataRetrieved(url, metaData);
+}
 
 
 } // namespace
-
-#endif /* METADATADIRMODEL_H */

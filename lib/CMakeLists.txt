@@ -33,6 +33,8 @@ set(gwenviewlib_SRCS
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
+	metadata/abstractmetadatabackend.cpp
+	metadata/fakemetadatabackend.cpp
 	metadata/sorteddirmodel.cpp
 	metadata/metadatadirmodel.cpp
 	mimetypeutils.cpp

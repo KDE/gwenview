@@ -18,51 +18,30 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef METADATADIRMODEL_H
-#define METADATADIRMODEL_H
+#ifndef FAKEMETADATABACKEND_H
+#define FAKEMETADATABACKEND_H
 
 // Qt
 
 // KDE
-#include <kdirmodel.h>
 
 // Local
-
-class KUrl;
+#include "abstractmetadatabackend.h"
 
 namespace Gwenview {
 
 
-class MetaData;
-class MetaDataDirModelPrivate;
-class MetaDataDirModel : public KDirModel {
+class FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:
-	enum {
-		RatingRole = 0x21a43a51
-	};
-	MetaDataDirModel(QObject* parent);
-	~MetaDataDirModel();
+	FakeMetaDataBackEnd(QObject* parent) : AbstractMetaDataBackEnd(parent) {}
 
-	bool metaDataAvailableForIndex(const QModelIndex&) const;
+	virtual void storeMetaData(const KUrl&, const MetaData&);
 
-	void retrieveMetaDataForIndex(const QModelIndex&);
-
-	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-
-	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
-
-Q_SIGNALS:
-	void metaDataRetrieved(const KUrl&, const MetaData&);
-
-private:
-	MetaDataDirModelPrivate* const d;
-
-private Q_SLOTS:
-	void storeRetrievedMetaData(const KUrl& url, const MetaData&);
+	virtual void retrieveMetaData(const KUrl&);
 };
 
 
 } // namespace
 
-#endif /* METADATADIRMODEL_H */
+#endif /* FAKEMETADATABACKEND_H */
