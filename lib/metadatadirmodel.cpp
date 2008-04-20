@@ -27,6 +27,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 
+#define FAKE_METADATA_BACKEND
+
+// Nepomuk
+#ifndef FAKE_METADATA_BACKEND
+#include <nepomuk/global.h>
+#include <nepomuk/resource.h>
+#include <nepomuk/tag.h>
+
+#include <Soprano/Vocabulary/Xesam>
+#endif
+
 // Local
 
 namespace Gwenview {
@@ -52,6 +63,16 @@ typedef QMap<QModelIndex, MetaData> MetaDataMap;
 struct MetaDataDirModelPrivate {
 	MetaDataMap mMetaDataForIndex;
 };
+
+
+static void storeMetaDataForUrl(const KUrl& url, const MetaData& metaData) {
+#ifdef FAKE_METADATA_BACKEND
+#else
+	QString urlString = url.url();
+	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+	resource.setRating(metaData.mRating);
+#endif
+}
 
 
 MetaDataDirModel::MetaDataDirModel(QObject* parent)
@@ -107,8 +128,15 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
 	if (role == RatingRole) {
 		int rating = data.toInt();
-		d->mMetaDataForIndex[index].mRating = rating;
+		MetaData metaData = d->mMetaDataForIndex[index];
+		metaData.mRating = rating;
+		d->mMetaDataForIndex[index] = metaData;
 		emit dataChanged(index, index);
+
+		KFileItem item = itemForIndex(index);
+		Q_ASSERT(!item.isNull());
+		KUrl url = item.url();
+		QtConcurrent::run(storeMetaDataForUrl, url, metaData);
 		return true;
 	} else {
 		return KDirModel::setData(index, data, role);
@@ -119,7 +147,13 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
 	QString urlString = url.url();
 	MetaData metaData;
+
+#ifdef FAKE_METADATA_BACKEND
 	metaData.mRating = int(urlString[urlString.length() - 2].toAscii()) % 6;
+#else
+	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+	metaData.mRating = resource.rating();
+#endif
 	emit metaDataRetrieved(url, metaData.toVariant());
 }
 
