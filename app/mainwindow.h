@@ -137,11 +137,6 @@ private Q_SLOTS:
 
 	void toggleMenuBar();
 
-	void editLocation();
-
-	void applyNameFilter();
-	void toggleFilterBarVisibility(bool);
-
 private:
 	class Private;
 	MainWindow::Private* const d;
