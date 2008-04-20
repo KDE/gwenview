@@ -33,7 +33,8 @@ set(gwenviewlib_SRCS
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
-	metadatadirmodel.cpp
+	metadata/sorteddirmodel.cpp
+	metadata/metadatadirmodel.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
 	preferredimagemetainfomodel.cpp
@@ -42,7 +43,6 @@ set(gwenviewlib_SRCS
 	slidecontainer.cpp
 	slideshow.cpp
 	scrolltool.cpp
-	sorteddirmodel.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp

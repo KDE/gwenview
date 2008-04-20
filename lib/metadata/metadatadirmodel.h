@@ -33,6 +33,7 @@ class KUrl;
 namespace Gwenview {
 
 
+class MetaData;
 class MetaDataDirModelPrivate;
 class MetaDataDirModel : public KDirModel {
 	Q_OBJECT
@@ -52,7 +53,7 @@ public:
 	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
 Q_SIGNALS:
-	void metaDataRetrieved(const KUrl&, const QVariant&);
+	void metaDataRetrieved(const KUrl&, const MetaData&);
 
 private:
 	MetaDataDirModelPrivate* const d;
@@ -60,7 +61,7 @@ private:
 	void retrieveMetaDataForUrl(const KUrl&);
 
 private Q_SLOTS:
-	void storeRetrievedMetaData(const KUrl& url, const QVariant& variant);
+	void storeRetrievedMetaData(const KUrl& url, const MetaData&);
 };
 
 

@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "archiveutils.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
-#include "../metadatadirmodel.h"
+#include "../metadata/metadatadirmodel.h"
 
 namespace Gwenview {
 

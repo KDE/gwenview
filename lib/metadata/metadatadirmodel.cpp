@@ -45,17 +45,6 @@ namespace Gwenview {
 
 struct MetaData {
 	int mRating;
-
-	QVariant toVariant() const {
-		QList<QVariant> list;
-		list << mRating;
-		return QVariant(list);
-	}
-
-	void fromVariant(const QVariant& variant) {
-		QList<QVariant> list = variant.toList();
-		mRating = list[0].toInt();
-	}
 };
 
 typedef QMap<QModelIndex, MetaData> MetaDataMap;
@@ -78,10 +67,10 @@ static void storeMetaDataForUrl(const KUrl& url, const MetaData& metaData) {
 MetaDataDirModel::MetaDataDirModel(QObject* parent)
 : KDirModel(parent)
 , d(new MetaDataDirModelPrivate) {
-	qRegisterMetaType<QVariant>("QVariant");
+	qRegisterMetaType<MetaData>("MetaData");
 
-	connect(this, SIGNAL(metaDataRetrieved(const KUrl&, const QVariant&)),
-		SLOT(storeRetrievedMetaData(const KUrl&, const QVariant&)),
+	connect(this, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
+		SLOT(storeRetrievedMetaData(const KUrl&, const MetaData&)),
 		Qt::QueuedConnection);
 }
 
@@ -154,13 +143,11 @@ void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
 	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
 	metaData.mRating = resource.rating();
 #endif
-	emit metaDataRetrieved(url, metaData.toVariant());
+	emit metaDataRetrieved(url, metaData);
 }
 
 
-void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const QVariant& variant) {
-	MetaData metaData;
-	metaData.fromVariant(variant);
+void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {
 	QModelIndex index = indexForUrl(url);
 	if (index.isValid()) {
 		d->mMetaDataForIndex[index] = metaData;

@@ -36,8 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "ui_nepomuksidebaritem.h"
-#include <lib/metadatadirmodel.h>
-#include <lib/sorteddirmodel.h>
+#include <lib/metadata/metadatadirmodel.h>
+#include <lib/metadata/sorteddirmodel.h>
 
 namespace Gwenview {
 
