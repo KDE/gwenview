@@ -51,7 +51,7 @@ public:
 
 private Q_SLOTS:
 	void applyNameFilter();
-	void toggleFilterBarVisibility(bool);
+	void toggleFilterBarVisibility();
 	void editLocation();
 
 private:

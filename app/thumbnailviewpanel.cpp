@@ -51,7 +51,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	ThumbnailViewPanel* that;
 	KUrlNavigator* mUrlNavigator;
 	SortedDirModel* mDirModel;
-	KToggleAction* mShowFilterBar;
+	QAction* mShowFilterBar;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -80,10 +80,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)) );
 
-		setupFilterBar();
-	}
-
-	void setupFilterBar() {
+		// Filter bar
 		QTimer* timer = new QTimer(mFilterBar);
 		timer->setInterval(350);
 		timer->setSingleShot(true);
@@ -93,25 +90,33 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		QObject::connect(mFilterEdit, SIGNAL(textChanged(const QString &)),
 			timer, SLOT(start()));
 
-		mCloseButton->setIcon(KIcon("dialog-close"));
-		QObject::connect(mCloseButton, SIGNAL(clicked(bool)),
-			that, SLOT(toggleFilterBarVisibility(bool)));
-
 		mFilterBar->hide();
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
-		mShowFilterBar = actionCollection->add<KToggleAction>("toggle_filterbar");
-		mShowFilterBar->setText(i18nc("@action:inmenu Tools", "Show Filter Bar"));
+		mShowFilterBar = actionCollection->addAction("toggle_filterbar");
 		mShowFilterBar->setShortcut(Qt::CTRL | Qt::Key_I);
-		QObject::connect(mShowFilterBar, SIGNAL(triggered(bool)),
-			that, SLOT(toggleFilterBarVisibility(bool)));
+		QObject::connect(mShowFilterBar, SIGNAL(triggered()),
+			that, SLOT(toggleFilterBarVisibility()));
+		updateShowFilterBarAction();
+
+		mFilterBarButton->setDefaultAction(mShowFilterBar);
 
 		KAction* editLocationAction = actionCollection->addAction("edit_location");
 		editLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
 		editLocationAction->setShortcut(Qt::Key_F6);
 		QObject::connect(editLocationAction, SIGNAL(triggered()),
 			that, SLOT(editLocation()));
+	}
+
+	void updateShowFilterBarAction() {
+		QString text;
+		if (mFilterBar->isVisible()) {
+			text = i18nc("@action:inmenu Tools", "Hide Filter Bar");
+		} else {
+			text = i18nc("@action:inmenu Tools", "Show Filter Bar");
+		}
+		mShowFilterBar->setText(text);
 	}
 };
 
@@ -146,12 +151,14 @@ KUrlNavigator* ThumbnailViewPanel::urlNavigator() const {
 }
 
 
-void ThumbnailViewPanel::toggleFilterBarVisibility(bool value) {
-	d->mFilterBar->setVisible(value);
-	d->mShowFilterBar->setChecked(value);
-	if (value) {
-		d->mFilterEdit->setFocus();
+void ThumbnailViewPanel::toggleFilterBarVisibility() {
+	bool visible = !d->mFilterBar->isVisible();
+	d->mFilterBar->setVisible(visible);
+	d->updateShowFilterBarAction();
+	if (visible) {
+		d->mRatingSlider->setFocus();
 	} else {
+		d->mRatingSlider->setValue(0);
 		d->mFilterEdit->clear();
 	}
 }
