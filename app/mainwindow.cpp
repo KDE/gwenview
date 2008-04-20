@@ -64,7 +64,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef KIPI_FOUND
 #include "kipiinterface.h"
 #endif
-#ifdef Nepomuk_FOUND
+#ifndef GWENVIEW_METADATA_BACKEND_NONE
 #include "nepomukcontextmanageritem.h"
 #endif
 #include "preloader.h"
@@ -349,7 +349,7 @@ struct MainWindow::Private {
 
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
-		#ifdef Nepomuk_FOUND
+		#ifndef GWENVIEW_METADATA_BACKEND_NONE
 		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
 		#endif
 

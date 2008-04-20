@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 */
 // Self
 #include "previewitemdelegate.moc"
+#include <config-gwenview.h>
 
 // Qt
 #include <QHBoxLayout>
@@ -41,7 +42,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "archiveutils.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
+#ifndef GWENVIEW_METADATA_BACKEND_NONE
 #include "../metadata/metadatadirmodel.h"
+#endif
 
 namespace Gwenview {
 
@@ -516,6 +519,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		rect.top() + ITEM_MARGIN + thumbnailSize + ITEM_MARGIN + option.fontMetrics.ascent(),
 		text);
 
+#ifndef GWENVIEW_METADATA_BACKEND_NONE
 	// Draw rating
 	QVariant value = index.data(MetaDataDirModel::RatingRole);
 	if (value.isValid()) {
@@ -526,6 +530,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		KRatingPainter::paintRating(painter, ratingRect,
 			Qt::AlignLeft | Qt::AlignBottom, rating);
 	}
+#endif
 }
 
 

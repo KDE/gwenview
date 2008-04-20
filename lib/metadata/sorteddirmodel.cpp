@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "sorteddirmodel.moc"
+#include <config-gwenview.h>
 
 // Qt
 
@@ -26,13 +27,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 
 // Local
+#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#include <kdirmodel.h>
+#else
 #include "metadatadirmodel.h"
+#endif
 
 namespace Gwenview {
 
 
 struct SortedDirModelPrivate {
+#ifdef GWENVIEW_METADATA_BACKEND_NONE
+	KDirModel* mSourceModel;
+#else
 	MetaDataDirModel* mSourceModel;
+#endif
 	QStringList mMimeExcludeFilter;
 	int mMinimumRating;
 };
@@ -42,7 +51,11 @@ SortedDirModel::SortedDirModel(QObject* parent)
 : KDirSortFilterProxyModel(parent)
 , d(new SortedDirModelPrivate)
 {
+#ifdef GWENVIEW_METADATA_BACKEND_NONE
+	d->mSourceModel = new KDirModel(this);
+#else
 	d->mSourceModel = new MetaDataDirModel(this);
+#endif
 	d->mMinimumRating = 0;
 	setSourceModel(d->mSourceModel);
 }
@@ -111,6 +124,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 			return false;
 		}
 	}
+#ifndef GWENVIEW_METADATA_BACKEND_NONE
 	if (d->mMinimumRating > 0) {
 		if (d->mSourceModel->metaDataAvailableForIndex(index)) {
 			int rating = d->mSourceModel->data(index, MetaDataDirModel::RatingRole).toInt();
@@ -122,6 +136,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 			return false;
 		}
 	}
+#endif
 	return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
 

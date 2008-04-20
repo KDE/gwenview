@@ -1,2 +1,5 @@
 #cmakedefine Nepomuk_FOUND 1
+#cmakedefine GWENVIEW_METADATA_BACKEND_NONE 1
+#cmakedefine GWENVIEW_METADATA_BACKEND_FAKE 1
+#cmakedefine GWENVIEW_METADATA_BACKEND_NEPOMUK 1
 #cmakedefine KIPI_FOUND 1

@@ -5,6 +5,11 @@ include_directories(
 	${EXIV2_INCLUDE_DIR}
 	)
 
+# For config-gwenview.h
+include_directories(
+	${CMAKE_CURRENT_BINARY_DIR}/..
+	)
+
 set(gwenviewlib_SRCS
 	document/abstractdocumentimpl.cpp
 	document/document.cpp
@@ -33,10 +38,7 @@ set(gwenviewlib_SRCS
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
-	metadata/abstractmetadatabackend.cpp
-	metadata/fakemetadatabackend.cpp
 	metadata/sorteddirmodel.cpp
-	metadata/metadatadirmodel.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
 	preferredimagemetainfomodel.cpp
@@ -55,6 +57,22 @@ set(gwenviewlib_SRCS
 	libjpeg/transupp.c
 	widgetfloater.cpp
 	)
+
+if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+	set(gwenviewlib_SRCS
+		${gwenviewlib_SRCS}
+		metadata/abstractmetadatabackend.cpp
+		metadata/metadatadirmodel.cpp
+		)
+endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+
+if (GWENVIEW_METADATA_BACKEND_FAKE)
+	set(gwenviewlib_SRCS
+		${gwenviewlib_SRCS}
+		metadata/fakemetadatabackend.cpp
+		)
+endif (GWENVIEW_METADATA_BACKEND_FAKE)
+
 
 set_source_files_properties(
 	exiv2imageloader.cpp
@@ -80,12 +98,11 @@ target_link_libraries(gwenviewlib
 	${EXIV2_LIBRARIES}
 	)
 
-if (Nepomuk_FOUND)
-	find_package(Soprano)
+if (NOT GWENVIEW_METADATA_BACKEND_NONE)
 	target_link_libraries(gwenviewlib
 		${NEPOMUK_LIBRARIES}
 		${SOPRANO_LIBRARIES}
 		)
-endif (Nepomuk_FOUND)
+endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
 
 install(TARGETS gwenviewlib DESTINATION ${LIB_INSTALL_DIR})
