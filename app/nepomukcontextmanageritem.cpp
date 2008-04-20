@@ -22,8 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "nepomukcontextmanageritem.moc"
 
 // Qt
+#include <QShortcut>
+#include <QSignalMapper>
 
 // KDE
+#include <kdebug.h>
 #include <klocale.h>
 
 // Nepomuk
@@ -40,14 +43,29 @@ namespace Gwenview {
 
 
 struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
+	NepomukContextManagerItem* that;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
+
+	void setupShortcuts() {
+		Q_ASSERT(mSideBar);
+		QSignalMapper* mapper = new QSignalMapper(that);
+		for (int rating=0; rating <= 5; ++rating) {
+			QShortcut* shortcut = new QShortcut(mSideBar);
+			shortcut->setKey(Qt::Key_0 + rating);
+			QObject::connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()) );
+			mapper->setMapping(shortcut, rating);
+		}
+		QObject::connect(mapper, SIGNAL(mapped(int)), mRatingWidget, SLOT(setRating(int)) );
+		QObject::connect(mapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
+	}
 };
 
 
 NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 , d(new NepomukContextManagerItemPrivate) {
+	d->that = this;
 	d->mSideBar = 0;
 	d->mGroup = 0;
 
@@ -83,6 +101,8 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
 		SLOT(storeDescription()));
+
+	d->setupShortcuts();
 }
 
 
@@ -127,6 +147,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 
 		first = false;
 	}
+	kDebug() << rating;
 	d->mRatingWidget->setRating(rating);
 	//d->mDescriptionLineEdit->setText(description);
 	//d->mTagWidget->setTaggedResources(resourceList);
