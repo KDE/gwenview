@@ -53,6 +53,7 @@ kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
 	fullscreenconfigdialog.ui
 	nepomuksidebaritem.ui
+	thumbnailviewpanel.ui
 	)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})

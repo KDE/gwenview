@@ -42,23 +42,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/metadata/sorteddirmodel.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
+#include <ui_thumbnailviewpanel.h>
 
 namespace Gwenview {
 
 
-struct ThumbnailViewPanelPrivate {
+struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	ThumbnailViewPanel* that;
-	ThumbnailView* mThumbnailView;
 	KUrlNavigator* mUrlNavigator;
-	QSlider* mThumbnailSlider;
-	QWidget* mFilterBar;
-	KLineEdit* mFilterEdit;
 	SortedDirModel* mDirModel;
 	KToggleAction* mShowFilterBar;
 
 	void setupWidgets() {
+		setupUi(that);
+		that->layout()->setMargin(0);
+
 		// mThumbnailView
-		mThumbnailView = new ThumbnailView(that);
 		mThumbnailView->setModel(mDirModel);
 
 		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
@@ -68,71 +67,36 @@ struct ThumbnailViewPanelPrivate {
 		// mUrlNavigator
 		KFilePlacesModel* places = new KFilePlacesModel(that);
 		mUrlNavigator = new KUrlNavigator(places, KUrl(), that);
+		static_cast<QVBoxLayout*>(that->layout())->insertWidget(0, mUrlNavigator);
 
 		// Rating slider
-		QSlider* ratingSlider = new QSlider;
-		ratingSlider->setOrientation(Qt::Horizontal);
-		ratingSlider->setMinimum(0);
-		ratingSlider->setMaximum(5);
-		QObject::connect(ratingSlider, SIGNAL(valueChanged(int)), mDirModel, SLOT(setMinimumRating(int)) );
+		mRatingSlider->setOrientation(Qt::Horizontal);
+		mRatingSlider->setMinimum(0);
+		mRatingSlider->setMaximum(5);
+		QObject::connect(mRatingSlider, SIGNAL(valueChanged(int)),
+			mDirModel, SLOT(setMinimumRating(int)) );
 
 		// Thumbnail slider
-		mThumbnailSlider = new QSlider;
-		mThumbnailSlider->setMaximumWidth(200);
-		mThumbnailSlider->setMinimum(40);
-		mThumbnailSlider->setMaximum(256);
-		mThumbnailSlider->setOrientation(Qt::Horizontal);
-		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)), mThumbnailView, SLOT(setThumbnailSize(int)) );
-
-		// Status bar
-		KStatusBar* statusBar = new KStatusBar(that);
-		statusBar->addPermanentWidget(ratingSlider);
-		statusBar->addPermanentWidget(mThumbnailSlider);
+		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
+			mThumbnailView, SLOT(setThumbnailSize(int)) );
 
 		setupFilterBar();
-
-		// Layout
-		QVBoxLayout* layout = new QVBoxLayout(that);
-		layout->setSpacing(0);
-		layout->setMargin(0);
-		layout->addWidget(mUrlNavigator);
-		layout->addWidget(mThumbnailView);
-		layout->addWidget(mFilterBar);
-		layout->addWidget(statusBar);
 	}
 
 	void setupFilterBar() {
-		mFilterBar = new QWidget(that);
-		mFilterBar->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-
 		QTimer* timer = new QTimer(mFilterBar);
 		timer->setInterval(350);
 		timer->setSingleShot(true);
 		QObject::connect(timer, SIGNAL(timeout()),
 			that, SLOT(applyNameFilter()));
 
-		mFilterEdit = new KLineEdit(mFilterBar);
-		mFilterEdit->setClickMessage(i18n("Enter search terms here"));
-		mFilterEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-		mFilterEdit->setClearButtonShown(true);
-		mFilterEdit->setToolTip(i18n("Enter space-separated terms to search in the thumbnail view."));
 		QObject::connect(mFilterEdit, SIGNAL(textChanged(const QString &)),
 			timer, SLOT(start()));
 
-		QLabel* label = new QLabel(i18nc("@label:textbox", "Filter:"), mFilterBar);
-		label->setBuddy(mFilterEdit);
-
-		QToolButton* closeButton = new QToolButton(mFilterBar);
-		closeButton->setAutoRaise(true);
-		closeButton->setIcon(KIcon("dialog-close"));
-		closeButton->setToolTip(i18nc("@info:tooltip", "Hide Filter Bar"));
-		QObject::connect(closeButton, SIGNAL(clicked(bool)),
+		mCloseButton->setIcon(KIcon("dialog-close"));
+		QObject::connect(mCloseButton, SIGNAL(clicked(bool)),
 			that, SLOT(toggleFilterBarVisibility(bool)));
 
-		QHBoxLayout* filterBoxLayout = new QHBoxLayout(mFilterBar);
-		filterBoxLayout->addWidget(label);
-		filterBoxLayout->addWidget(mFilterEdit);
-		filterBoxLayout->addWidget(closeButton);
 		mFilterBar->hide();
 	}
 
