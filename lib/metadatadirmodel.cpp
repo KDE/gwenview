@@ -104,6 +104,18 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 }
 
 
+bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
+	if (role == RatingRole) {
+		int rating = data.toInt();
+		d->mMetaDataForIndex[index].mRating = rating;
+		emit dataChanged(index, index);
+		return true;
+	} else {
+		return KDirModel::setData(index, data, role);
+	}
+}
+
+
 void MetaDataDirModel::retrieveMetaDataForUrl(const KUrl& url) {
 	kDebug() << url;
 	QString urlString = url.url();

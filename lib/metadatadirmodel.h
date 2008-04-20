@@ -49,6 +49,8 @@ public:
 
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
+	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+
 Q_SIGNALS:
 	void metaDataRetrieved(const KUrl&, const QVariant&);
 
