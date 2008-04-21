@@ -37,7 +37,7 @@ struct PreferredImageMetaInfoModelPrivate {
 
 
 	QVariant checkStateData(const QModelIndex& sourceIndex) const {
-		if (sourceIndex.parent().isValid() & sourceIndex.column() == 0) {
+		if (sourceIndex.parent().isValid() && sourceIndex.column() == 0) {
 			QString key = mModel->keyForIndex(sourceIndex);
 			bool checked = mPreferredMetaInfoKeyList.contains(key);
 			return QVariant(checked ? Qt::Checked: Qt::Unchecked);
