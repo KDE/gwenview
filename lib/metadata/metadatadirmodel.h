@@ -35,6 +35,10 @@ namespace Gwenview {
 
 class MetaData;
 class MetaDataDirModelPrivate;
+/**
+ * Extends KDirModel by providing read/write access to image metadata such as
+ * rating, tags and descriptions.
+ */
 class MetaDataDirModel : public KDirModel {
 	Q_OBJECT
 public:

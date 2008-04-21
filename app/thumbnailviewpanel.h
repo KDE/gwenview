@@ -39,6 +39,10 @@ class SortedDirModel;
 class ThumbnailView;
 
 class ThumbnailViewPanelPrivate;
+/**
+ * This class contains all the necessary widgets displayed in browse mode:
+ * the thumbnail view, the url navigator, the bottom bar.
+ */
 class ThumbnailViewPanel : public QWidget {
 	Q_OBJECT
 public:

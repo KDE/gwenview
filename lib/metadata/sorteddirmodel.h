@@ -35,6 +35,12 @@ class KUrl;
 namespace Gwenview {
 
 class SortedDirModelPrivate;
+
+
+/**
+ * This model makes it possible to show all images in a folder.
+ * It can filter images based on name and metadata.
+ */
 class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel {
 	Q_OBJECT
 public:

@@ -32,10 +32,19 @@ class KUrl;
 
 namespace Gwenview {
 
+
+/**
+ * A POD struct used by AbstractMetaDataBackEnd to store the metadata
+ * associated to an url.
+ */
 struct MetaData {
 	int mRating;
 };
 
+
+/**
+ * An abstract class, used by MetaDataDirModel to store and retrieve metadata.
+ */
 class AbstractMetaDataBackEnd : public QObject {
 	Q_OBJECT
 public:

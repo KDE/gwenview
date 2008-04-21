@@ -32,6 +32,11 @@ namespace Gwenview {
 
 
 class NepomukMetaDataBackEndPrivate;
+
+
+/**
+ * A real metadata backend using Nepomuk to store and retrieve metadata.
+ */
 class NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:

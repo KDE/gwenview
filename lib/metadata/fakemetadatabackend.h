@@ -31,6 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+/**
+ * A fake metadata backend, useful to test the ui layer.
+ * It provides fake rating values based on the image url.
+ */
 class FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:
