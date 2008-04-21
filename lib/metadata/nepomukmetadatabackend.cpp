@@ -22,6 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "nepomukmetadatabackend.h"
 
 // Qt
+#include <QMutex>
+#include <QMutexLocker>
+#include <QQueue>
+#include <QThread>
+#include <QWaitCondition>
 
 // KDE
 #include <kurl.h>
@@ -37,14 +42,111 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+struct Task {
+	Task(const KUrl& url): mUrl(url) {}
+	virtual ~Task() {}
+	virtual void execute() = 0;
+
+	KUrl mUrl;
+};
+
+
+struct RetrieveTask : public Task {
+	RetrieveTask(NepomukMetaDataBackEnd* backEnd, const KUrl& url)
+	: Task(url), mBackEnd(backEnd) {}
+
+	virtual void execute() {
+		QString urlString = mUrl.url();
+		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+
+		MetaData metaData;
+		metaData.mRating = resource.rating();
+		mBackEnd->emitMetaDataRetrieved(mUrl, metaData);
+	}
+
+	NepomukMetaDataBackEnd* mBackEnd;
+};
+
+
+struct StoreTask : public Task {
+	StoreTask(const KUrl& url, const MetaData& metaData)
+	: Task(url), mMetaData(metaData) {}
+
+	virtual void execute() {
+		QString urlString = mUrl.url();
+		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+		resource.setRating(mMetaData.mRating);
+	}
+
+	MetaData mMetaData;
+};
+
+
+typedef QQueue<Task*> TaskQueue;
+
+class MetaDataThread : public QThread {
+public:
+	MetaDataThread()
+	: mDeleting(false)
+	{}
+
+	~MetaDataThread() {
+		{
+			QMutexLocker locker(&mMutex);
+			mDeleting = true;
+		}
+		// Notify the thread so that it doesn't stay blocked waiting for mQueueNotEmpty
+		mQueueNotEmpty.wakeAll();
+
+		wait();
+		qDeleteAll(mTaskQueue);
+	}
+
+
+	void enqueueTask(Task* task) {
+		{
+			QMutexLocker locker(&mMutex);
+			mTaskQueue.enqueue(task);
+		}
+		mQueueNotEmpty.wakeAll();
+	}
+
+
+	virtual void run() {
+		while (true) {
+			Task* task;
+			{
+				QMutexLocker locker(&mMutex);
+				if (mTaskQueue.isEmpty()) {
+					mQueueNotEmpty.wait(&mMutex);
+				}
+				if (mDeleting) {
+					return;
+				}
+				task = mTaskQueue.dequeue();
+			}
+			task->execute();
+		}
+	}
+
+
+private:
+	TaskQueue mTaskQueue;
+	QMutex mMutex;
+	QWaitCondition mQueueNotEmpty;
+	bool mDeleting;
+};
+
 
 struct NepomukMetaDataBackEndPrivate {
+	MetaDataThread mThread;
 };
 
 
 NepomukMetaDataBackEnd::NepomukMetaDataBackEnd(QObject* parent)
 : AbstractMetaDataBackEnd(parent)
 , d(new NepomukMetaDataBackEndPrivate) {
+	d->mThread.start();
 }
 
 
@@ -54,18 +156,18 @@ NepomukMetaDataBackEnd::~NepomukMetaDataBackEnd() {
 
 
 void NepomukMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
-	QString urlString = url.url();
-	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
-	resource.setRating(metaData.mRating);
+	StoreTask* task = new StoreTask(url, metaData);
+	d->mThread.enqueueTask(task);
 }
 
 
 void NepomukMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
-	QString urlString = url.url();
-	Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+	RetrieveTask* task = new RetrieveTask(this, url);
+	d->mThread.enqueueTask(task);
+}
 
-	MetaData metaData;
-	metaData.mRating = resource.rating();
+
+void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaData& metaData) {
 	emit metaDataRetrieved(url, metaData);
 }
 

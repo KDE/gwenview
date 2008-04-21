@@ -47,6 +47,8 @@ public:
 
 	virtual void retrieveMetaData(const KUrl&);
 
+	void emitMetaDataRetrieved(const KUrl&, const MetaData&);
+
 private:
 	NepomukMetaDataBackEndPrivate* const d;
 };
