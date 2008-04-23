@@ -45,10 +45,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QMap<QModelIndex, MetaData> MetaDataMap;
+typedef QMap<QModelIndex, MetaData> MetaDataCache;
 
 struct MetaDataDirModelPrivate {
-	MetaDataMap mMetaDataForIndex;
+	MetaDataCache mMetaDataCache;
 	AbstractMetaDataBackEnd* mBackEnd;
 };
 
@@ -74,7 +74,7 @@ MetaDataDirModel::~MetaDataDirModel() {
 
 
 bool MetaDataDirModel::metaDataAvailableForIndex(const QModelIndex& index) const {
-	return d->mMetaDataForIndex.contains(index);
+	return d->mMetaDataCache.contains(index);
 }
 
 
@@ -94,8 +94,8 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 
 QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 	if (role == RatingRole) {
-		MetaDataMap::ConstIterator it = d->mMetaDataForIndex.find(index);
-		if (it != d->mMetaDataForIndex.end()) {
+		MetaDataCache::ConstIterator it = d->mMetaDataCache.find(index);
+		if (it != d->mMetaDataCache.end()) {
 			return it.value().mRating;
 		} else {
 			const_cast<MetaDataDirModel*>(this)->retrieveMetaDataForIndex(index);
@@ -110,9 +110,9 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
 	if (role == RatingRole) {
 		int rating = data.toInt();
-		MetaData metaData = d->mMetaDataForIndex[index];
+		MetaData metaData = d->mMetaDataCache[index];
 		metaData.mRating = rating;
-		d->mMetaDataForIndex[index] = metaData;
+		d->mMetaDataCache[index] = metaData;
 		emit dataChanged(index, index);
 
 		KFileItem item = itemForIndex(index);
@@ -129,7 +129,7 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {
 	QModelIndex index = indexForUrl(url);
 	if (index.isValid()) {
-		d->mMetaDataForIndex[index] = metaData;
+		d->mMetaDataCache[index] = metaData;
 		emit dataChanged(index, index);
 	}
 }
