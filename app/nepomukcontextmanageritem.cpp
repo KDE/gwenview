@@ -146,7 +146,6 @@ void NepomukContextManagerItem::updateSideBarContent() {
 
 		first = false;
 	}
-	kDebug() << rating;
 	d->mRatingWidget->setRating(rating);
 	d->mDescriptionLineEdit->setText(description);
 	//d->mTagWidget->setTaggedResources(resourceList);
