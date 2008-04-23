@@ -61,6 +61,7 @@ struct RetrieveTask : public Task {
 
 		MetaData metaData;
 		metaData.mRating = resource.rating();
+		metaData.mDescription = resource.description();
 		mBackEnd->emitMetaDataRetrieved(mUrl, metaData);
 	}
 
@@ -76,6 +77,7 @@ struct StoreTask : public Task {
 		QString urlString = mUrl.url();
 		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
 		resource.setRating(mMetaData.mRating);
+		resource.setDescription(mMetaData.mDescription);
 	}
 
 	MetaData mMetaData;

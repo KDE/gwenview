@@ -43,7 +43,8 @@ class MetaDataDirModel : public KDirModel {
 	Q_OBJECT
 public:
 	enum {
-		RatingRole = 0x21a43a51
+		RatingRole = 0x21a43a51,
+		DescriptionRole = 0x26FB33FA
 	};
 	MetaDataDirModel(QObject* parent);
 	~MetaDataDirModel();

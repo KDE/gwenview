@@ -137,19 +137,18 @@ void NepomukContextManagerItem::updateSideBarContent() {
 			rating = 0;
 		}
 
-		/*
+		QString indexDescription = index.data(MetaDataDirModel::DescriptionRole).toString();
 		if (first) {
-			description = resource.description();
-		} else if (description != resource.description()) {
+			description = indexDescription;
+		} else if (description != indexDescription) {
 			description = QString();
 		}
-		*/
 
 		first = false;
 	}
 	kDebug() << rating;
 	d->mRatingWidget->setRating(rating);
-	//d->mDescriptionLineEdit->setText(description);
+	d->mDescriptionLineEdit->setText(description);
 	//d->mTagWidget->setTaggedResources(resourceList);
 }
 
@@ -166,13 +165,14 @@ void NepomukContextManagerItem::slotRatingChanged(int rating) {
 
 
 void NepomukContextManagerItem::storeDescription() {
-	/*
 	QString description = d->mDescriptionLineEdit->text();
-	QList<Nepomuk::Resource> resourceList = d->mTagWidget->taggedResources();
-	Q_FOREACH(Nepomuk::Resource resource, resourceList) {
-		resource.setDescription(description);
+	KFileItemList itemList = contextManager()->selection();
+
+	SortedDirModel* dirModel = contextManager()->dirModel();
+	Q_FOREACH(const KFileItem& item, itemList) {
+		QModelIndex index = dirModel->indexForItem(item);
+		dirModel->setData(index, description, MetaDataDirModel::DescriptionRole);
 	}
-	*/
 }
 
 

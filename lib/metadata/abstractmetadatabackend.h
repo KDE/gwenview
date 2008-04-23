@@ -39,6 +39,7 @@ namespace Gwenview {
  */
 struct MetaData {
 	int mRating;
+	QString mDescription;
 };
 
 

@@ -106,7 +106,7 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 
 
 QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
-	if (role == RatingRole) {
+	if (role == RatingRole || role == DescriptionRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
 			return QVariant();
@@ -114,7 +114,15 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 		KUrl url = item.url();
 		MetaDataCache::ConstIterator it = d->mMetaDataCache.find(url);
 		if (it != d->mMetaDataCache.end()) {
-			return it.value().mRating;
+			if (role == RatingRole) {
+				return it.value().mRating;
+			} else if (role == DescriptionRole) {
+				return it.value().mDescription;
+			} else {
+				// We should never reach this part
+				Q_ASSERT(0);
+				return QVariant();
+			}
 		} else {
 			const_cast<MetaDataDirModel*>(this)->retrieveMetaDataForIndex(index);
 			return QVariant();
@@ -126,8 +134,7 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 
 
 bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
-	if (role == RatingRole) {
-		int rating = data.toInt();
+	if (role == RatingRole || role == DescriptionRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
 			kWarning() << "no item found for this index";
@@ -135,7 +142,14 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 		}
 		KUrl url = item.url();
 		MetaData metaData = d->mMetaDataCache[url];
-		metaData.mRating = rating;
+		if (role == RatingRole) {
+			metaData.mRating = data.toInt();
+		} else if (role == DescriptionRole) {
+			metaData.mDescription = data.toString();
+		} else {
+			// We should never reach this part
+			Q_ASSERT(0);
+		}
 		d->mMetaDataCache[url] = metaData;
 		emit dataChanged(index, index);
 
