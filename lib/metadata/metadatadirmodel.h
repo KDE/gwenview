@@ -64,6 +64,9 @@ private:
 
 private Q_SLOTS:
 	void storeRetrievedMetaData(const KUrl& url, const MetaData&);
+
+	void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
+	void slotModelAboutToBeReset();
 };
 
 

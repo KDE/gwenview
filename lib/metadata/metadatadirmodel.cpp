@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <config-gwenview.h>
 
 // Qt
-#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -45,7 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QMap<QModelIndex, MetaData> MetaDataCache;
+typedef QMap<KUrl, MetaData> MetaDataCache;
 
 struct MetaDataDirModelPrivate {
 	MetaDataCache mMetaDataCache;
@@ -65,6 +64,12 @@ MetaDataDirModel::MetaDataDirModel(QObject* parent)
 	connect(d->mBackEnd, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
 		SLOT(storeRetrievedMetaData(const KUrl&, const MetaData&)),
 		Qt::QueuedConnection);
+
+	connect(this, SIGNAL(modelAboutToBeReset()),
+		SLOT(slotModelAboutToBeReset()) );
+
+	connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+		SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)) );
 }
 
 
@@ -74,7 +79,15 @@ MetaDataDirModel::~MetaDataDirModel() {
 
 
 bool MetaDataDirModel::metaDataAvailableForIndex(const QModelIndex& index) const {
-	return d->mMetaDataCache.contains(index);
+	if (!index.isValid()) {
+		return false;
+	}
+	KFileItem item = itemForIndex(index);
+	if (item.isNull()) {
+		return false;
+	}
+	KUrl url = item.url();
+	return d->mMetaDataCache.contains(url);
 }
 
 
@@ -94,7 +107,12 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 
 QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 	if (role == RatingRole) {
-		MetaDataCache::ConstIterator it = d->mMetaDataCache.find(index);
+		KFileItem item = itemForIndex(index);
+		if (item.isNull()) {
+			return QVariant();
+		}
+		KUrl url = item.url();
+		MetaDataCache::ConstIterator it = d->mMetaDataCache.find(url);
 		if (it != d->mMetaDataCache.end()) {
 			return it.value().mRating;
 		} else {
@@ -110,14 +128,17 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
 	if (role == RatingRole) {
 		int rating = data.toInt();
-		MetaData metaData = d->mMetaDataCache[index];
+		KFileItem item = itemForIndex(index);
+		if (item.isNull()) {
+			kWarning() << "no item found for this index";
+			return false;
+		}
+		KUrl url = item.url();
+		MetaData metaData = d->mMetaDataCache[url];
 		metaData.mRating = rating;
-		d->mMetaDataCache[index] = metaData;
+		d->mMetaDataCache[url] = metaData;
 		emit dataChanged(index, index);
 
-		KFileItem item = itemForIndex(index);
-		Q_ASSERT(!item.isNull());
-		KUrl url = item.url();
 		d->mBackEnd->storeMetaData(url, metaData);
 		return true;
 	} else {
@@ -129,9 +150,27 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {
 	QModelIndex index = indexForUrl(url);
 	if (index.isValid()) {
-		d->mMetaDataCache[index] = metaData;
+		d->mMetaDataCache[url] = metaData;
 		emit dataChanged(index, index);
 	}
+}
+
+
+void MetaDataDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
+	for (int pos = start; pos <= end; ++pos) {
+		QModelIndex idx = index(pos, 0, parent);
+		KFileItem item = itemForIndex(idx);
+		if (item.isNull()) {
+			continue;
+		}
+		KUrl url = item.url();
+		d->mMetaDataCache.remove(url);
+	}
+}
+
+
+void MetaDataDirModel::slotModelAboutToBeReset() {
+	d->mMetaDataCache.clear();
 }
 
 
