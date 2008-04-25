@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <config-gwenview.h>
 
 // Qt
+#include <QHash>
 
 // KDE
 #include <kdebug.h>
@@ -44,7 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QMap<KUrl, MetaData> MetaDataCache;
+typedef QHash<KUrl, MetaData> MetaDataCache;
 
 struct MetaDataDirModelPrivate {
 	MetaDataCache mMetaDataCache;
