@@ -107,7 +107,7 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 
 
 QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
-	if (role == RatingRole || role == DescriptionRole) {
+	if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
 			return QVariant();
@@ -119,6 +119,8 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 				return it.value().mRating;
 			} else if (role == DescriptionRole) {
 				return it.value().mDescription;
+			} else if (role == TagsRole) {
+				return it.value().mTags.toVariant();
 			} else {
 				// We should never reach this part
 				Q_ASSERT(0);
@@ -135,7 +137,7 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 
 
 bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
-	if (role == RatingRole || role == DescriptionRole) {
+	if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
 			kWarning() << "no item found for this index";
@@ -147,6 +149,8 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 			metaData.mRating = data.toInt();
 		} else if (role == DescriptionRole) {
 			metaData.mDescription = data.toString();
+		} else if (role == TagsRole) {
+			metaData.mTags = TagSet::fromVariant(data);
 		} else {
 			// We should never reach this part
 			Q_ASSERT(0);
