@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "ui_nepomuksidebaritem.h"
+#include <lib/metadata/abstractmetadatabackend.h>
 #include <lib/metadata/metadatadirmodel.h>
 #include <lib/metadata/sorteddirmodel.h>
 
@@ -102,6 +103,11 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
 		SLOT(storeDescription()));
 
+	connect(d->mTagWidget, SIGNAL(tagAssigned(const QString&)),
+		SLOT(assignTag(const QString&)) );
+	connect(d->mTagWidget, SIGNAL(tagRemoved(const QString&)),
+		SLOT(removeTag(const QString&)) );
+
 	d->setupShortcuts();
 }
 
@@ -126,6 +132,13 @@ void NepomukContextManagerItem::updateSideBarContent() {
 	int rating = 0;
 	QString description;
 	SortedDirModel* dirModel = contextManager()->dirModel();
+
+	// This hash stores for how many items the tag is present
+	// If you have 3 items, and only 2 have the "Holiday" tag,
+	// then tagHash["Holiday"] will be 2 at the end of the loop.
+	typedef QHash<QString, int> TagHash;
+	TagHash tagHash;
+
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
 
@@ -144,11 +157,35 @@ void NepomukContextManagerItem::updateSideBarContent() {
 			description = QString();
 		}
 
+		// Fill tagHash, incrementing the tag count if it's already there
+		TagSet tagSet = TagSet::fromVariant(index.data(MetaDataDirModel::TagsRole));
+		kDebug() << "tagSet=" << tagSet;
+		Q_FOREACH(const QString& tag, tagSet) {
+			TagHash::Iterator it = tagHash.find(tag);
+			if (it == tagHash.end()) {
+				tagHash[tag] = 1;
+			} else {
+				++it.value();
+			}
+		}
+
 		first = false;
 	}
 	d->mRatingWidget->setRating(rating);
 	d->mDescriptionLineEdit->setText(description);
-	//d->mTagWidget->setTaggedResources(resourceList);
+
+	// Init tagInfo from tagHash
+	TagInfo tagInfo;
+	int itemCount = itemList.count();
+	TagHash::ConstIterator
+		it = tagHash.begin(),
+		end = tagHash.end();
+	for (; it!=end; ++it) {
+		QString tag = it.key();
+		int count = it.value();
+		tagInfo[tag] = count == itemCount;
+	}
+	d->mTagWidget->setTagInfo(tagInfo);
 }
 
 
@@ -171,6 +208,36 @@ void NepomukContextManagerItem::storeDescription() {
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
 		dirModel->setData(index, description, MetaDataDirModel::DescriptionRole);
+	}
+}
+
+
+void NepomukContextManagerItem::assignTag(const QString& tag) {
+	KFileItemList itemList = contextManager()->selection();
+
+	SortedDirModel* dirModel = contextManager()->dirModel();
+	Q_FOREACH(const KFileItem& item, itemList) {
+		QModelIndex index = dirModel->indexForItem(item);
+		TagSet tags = TagSet::fromVariant( dirModel->data(index, MetaDataDirModel::TagsRole) );
+		if (!tags.contains(tag)) {
+			tags << tag;
+			dirModel->setData(index, tags.toVariant(), MetaDataDirModel::TagsRole);
+		}
+	}
+}
+
+
+void NepomukContextManagerItem::removeTag(const QString& tag) {
+	KFileItemList itemList = contextManager()->selection();
+
+	SortedDirModel* dirModel = contextManager()->dirModel();
+	Q_FOREACH(const KFileItem& item, itemList) {
+		QModelIndex index = dirModel->indexForItem(item);
+		TagSet tags = TagSet::fromVariant( dirModel->data(index, MetaDataDirModel::TagsRole) );
+		if (tags.contains(tag)) {
+			tags.remove(tag);
+			dirModel->setData(index, tags.toVariant(), MetaDataDirModel::TagsRole);
+		}
 	}
 }
 

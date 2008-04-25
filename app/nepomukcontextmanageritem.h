@@ -44,6 +44,8 @@ private Q_SLOTS:
 	void updateSideBarContent();
 	void slotRatingChanged(int rating);
 	void storeDescription();
+	void assignTag(const QString&);
+	void removeTag(const QString&);
 
 private:
 	NepomukContextManagerItemPrivate* const d;
