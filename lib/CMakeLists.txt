@@ -63,6 +63,7 @@ if (NOT GWENVIEW_METADATA_BACKEND_NONE)
 		${gwenviewlib_SRCS}
 		metadata/abstractmetadatabackend.cpp
 		metadata/metadatadirmodel.cpp
+		metadata/tagwidget.cpp
 		)
 endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
 
