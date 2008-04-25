@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "fakemetadatabackend.h"
 
 // Qt
+#include <QStringList>
 
 // KDE
 #include <kurl.h>
@@ -38,7 +39,14 @@ void FakeMetaDataBackEnd::storeMetaData(const KUrl&, const MetaData&) {
 void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
 	QString urlString = url.url();
 	MetaData metaData;
-	metaData.mRating = int(urlString[urlString.length() - 2].toAscii()) % 6;
+	metaData.mRating = int(urlString.length()) % 6;
+	metaData.mDescription = url.fileName();
+	QStringList lst = urlString.split("/");
+	Q_FOREACH(const QString& token, lst) {
+		if (!token.isEmpty()) {
+			metaData.mTags << token;
+		}
+	}
 	emit metaDataRetrieved(url, metaData);
 }
 

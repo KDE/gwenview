@@ -21,8 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef ABSTRACTMETADATABACKEND_H
 #define ABSTRACTMETADATABACKEND_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QObject>
+#include <QSet>
 
 // KDE
 
@@ -34,12 +37,29 @@ namespace Gwenview {
 
 
 /**
+ * This class represents the set of tags associated to an url.
+ *
+ * It provides convenience methods to convert to and from QVariant, which are
+ * useful to communicate with MetaDataDirModel.
+ */
+class GWENVIEWLIB_EXPORT TagSet : public QSet<QString> {
+public:
+	TagSet();
+	TagSet(const QSet<QString>&);
+
+	QVariant toVariant() const;
+	static TagSet fromVariant(const QVariant&);
+};
+
+
+/**
  * A POD struct used by AbstractMetaDataBackEnd to store the metadata
  * associated to an url.
  */
 struct MetaData {
 	int mRating;
 	QString mDescription;
+	TagSet mTags;
 };
 
 

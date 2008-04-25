@@ -62,6 +62,9 @@ struct RetrieveTask : public Task {
 		MetaData metaData;
 		metaData.mRating = resource.rating();
 		metaData.mDescription = resource.description();
+		Q_FOREACH(const Nepomuk::Tag& tag, resource.tags()) {
+			metaData.mTags << tag.genericLabel();
+		}
 		mBackEnd->emitMetaDataRetrieved(mUrl, metaData);
 	}
 
@@ -78,6 +81,11 @@ struct StoreTask : public Task {
 		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
 		resource.setRating(mMetaData.mRating);
 		resource.setDescription(mMetaData.mDescription);
+		QList<Nepomuk::Tag> tags;
+		Q_FOREACH(const QString& label, mMetaData.mTags) {
+			tags << Nepomuk::Tag(label);
+		}
+		resource.setTags(tags);
 	}
 
 	MetaData mMetaData;

@@ -23,12 +23,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QMetaType>
+#include <QStringList>
+#include <QVariant>
 
 // KDE
 
 // Local
 
 namespace Gwenview {
+
+
+TagSet::TagSet()
+: QSet<QString>() {}
+
+TagSet::TagSet(const QSet<QString>& set)
+: QSet<QString>(set) {}
+
+
+QVariant TagSet::toVariant() const {
+	QStringList lst = toList();
+	return QVariant(lst);
+}
+
+
+TagSet TagSet::fromVariant(const QVariant& variant) {
+	QStringList lst = variant.toStringList();
+	return TagSet::fromList(lst);
+}
 
 
 AbstractMetaDataBackEnd::AbstractMetaDataBackEnd(QObject* parent)
