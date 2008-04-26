@@ -276,11 +276,11 @@ void FileOpsContextManagerItem::populateOpenMenu() {
 	KService::List services = KMimeTypeTrader::self()->query(mimeType);
 
 	d->mServiceForName.clear();
-	Q_FOREACH(const KService::Ptr service, services) {
+	Q_FOREACH(const KService::Ptr &service, services) {
 		d->mServiceForName[service->name()] = service;
 	}
 
-	Q_FOREACH(const KService::Ptr service, d->mServiceForName) {
+	Q_FOREACH(const KService::Ptr &service, d->mServiceForName) {
 		QString text = service->name().replace( "&", "&&" );
 		QAction* action = openMenu->addAction(text);
 		action->setIcon(KIcon(service->icon()));
