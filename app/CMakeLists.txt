@@ -52,6 +52,7 @@ endif (KIPI_FOUND)
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
 	fullscreenconfigdialog.ui
+	metadatadialog.ui
 	nepomuksidebaritem.ui
 	thumbnailviewpanel.ui
 	)

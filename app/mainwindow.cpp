@@ -343,6 +343,8 @@ struct MainWindow::Private {
 
 
 	void setupContextManager() {
+		KActionCollection* actionCollection = mWindow->actionCollection();
+
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
 		mContextManager->setDirModel(mDirModel);
@@ -350,12 +352,12 @@ struct MainWindow::Private {
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
 		#ifndef GWENVIEW_METADATA_BACKEND_NONE
-		mContextManager->addItem(new NepomukContextManagerItem(mContextManager));
+		mContextManager->addItem(new NepomukContextManagerItem(mContextManager, actionCollection));
 		#endif
 
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, mWindow));
 
-		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mWindow->actionCollection());
+		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, actionCollection);
 		mContextManager->addItem(fileOpsItem);
 		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
 	}

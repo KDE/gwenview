@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSignalMapper>
 
 // KDE
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -36,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "ui_nepomuksidebaritem.h"
+#include "ui_metadatadialog.h"
 #include <lib/metadata/abstractmetadatabackend.h>
 #include <lib/metadata/metadatadirmodel.h>
 #include <lib/metadata/sorteddirmodel.h>
@@ -43,10 +45,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+struct MetaDataDialog : public QDialog, public Ui_MetaDataDialog {
+	MetaDataDialog(QWidget* parent)
+	: QDialog(parent) {
+		setupUi(this);
+	}
+};
+
+
 struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 	NepomukContextManagerItem* that;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
+	KActionCollection* mActionCollection;
+	QPointer<MetaDataDialog> mMetaDataDialog;
+	TagInfo mTagInfo;
 
 	void setupShortcuts() {
 		Q_ASSERT(mSideBar);
@@ -60,17 +73,50 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 		QObject::connect(mapper, SIGNAL(mapped(int)), mRatingWidget, SLOT(setRating(int)) );
 		QObject::connect(mapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
 	}
+
+
+	void updateTagLabel() {
+		if (that->contextManager()->selection().isEmpty()) {
+			mTagLabel->clear();
+			return;
+		}
+		TagInfo::ConstIterator
+			it = mTagInfo.constBegin(),
+			end = mTagInfo.constEnd();
+		QStringList tags;
+		for (; it!=end; ++it) {
+			QString tag = it.key();
+			if (!it.value()) {
+				// Tag is not present for all urls
+				tag += '*';
+			}
+			tags << tag;
+		}
+
+		QString editLink = i18n("Edit");
+		QString text = tags.join(", ") + QString(" <a href='edit'>%1</a>").arg(editLink);
+		mTagLabel->setText(text);
+	}
+
+
+	void updateMetaDataDialog() {
+		mMetaDataDialog->mTagWidget->setEnabled(!that->contextManager()->selection().isEmpty());
+		mMetaDataDialog->mTagWidget->setTagInfo(mTagInfo);
+	}
 };
 
 
-NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager)
+NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
 : AbstractContextManagerItem(manager)
 , d(new NepomukContextManagerItemPrivate) {
 	d->that = this;
 	d->mSideBar = 0;
 	d->mGroup = 0;
+	d->mActionCollection = actionCollection;
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
+		SLOT(updateSideBarContent()) );
+	connect(contextManager(), SIGNAL(selectionDataChanged()),
 		SLOT(updateSideBarContent()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateSideBarContent()) );
@@ -103,10 +149,8 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
 		SLOT(storeDescription()));
 
-	connect(d->mTagWidget, SIGNAL(tagAssigned(const QString&)),
-		SLOT(assignTag(const QString&)) );
-	connect(d->mTagWidget, SIGNAL(tagRemoved(const QString&)),
-		SLOT(removeTag(const QString&)) );
+	connect(d->mTagLabel, SIGNAL(linkActivated(const QString&)),
+		SLOT(showMetaDataDialog()) );
 
 	d->setupShortcuts();
 }
@@ -159,7 +203,6 @@ void NepomukContextManagerItem::updateSideBarContent() {
 
 		// Fill tagHash, incrementing the tag count if it's already there
 		TagSet tagSet = TagSet::fromVariant(index.data(MetaDataDirModel::TagsRole));
-		kDebug() << "tagSet=" << tagSet;
 		Q_FOREACH(const QString& tag, tagSet) {
 			TagHash::Iterator it = tagHash.find(tag);
 			if (it == tagHash.end()) {
@@ -175,7 +218,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 	d->mDescriptionLineEdit->setText(description);
 
 	// Init tagInfo from tagHash
-	TagInfo tagInfo;
+	d->mTagInfo.clear();
 	int itemCount = itemList.count();
 	TagHash::ConstIterator
 		it = tagHash.begin(),
@@ -183,9 +226,13 @@ void NepomukContextManagerItem::updateSideBarContent() {
 	for (; it!=end; ++it) {
 		QString tag = it.key();
 		int count = it.value();
-		tagInfo[tag] = count == itemCount;
+		d->mTagInfo[tag] = count == itemCount;
 	}
-	d->mTagWidget->setTagInfo(tagInfo);
+
+	d->updateTagLabel();
+	if (d->mMetaDataDialog) {
+		d->updateMetaDataDialog();
+	}
 }
 
 
@@ -239,6 +286,26 @@ void NepomukContextManagerItem::removeTag(const QString& tag) {
 			dirModel->setData(index, tags.toVariant(), MetaDataDirModel::TagsRole);
 		}
 	}
+}
+
+
+void NepomukContextManagerItem::showMetaDataDialog() {
+	if (!d->mMetaDataDialog) {
+		d->mMetaDataDialog = new MetaDataDialog(d->mSideBar);
+		d->mMetaDataDialog->setAttribute(Qt::WA_DeleteOnClose, true);
+
+		connect(d->mMetaDataDialog->mPreviousButton, SIGNAL(clicked()),
+			d->mActionCollection->action("go_previous"), SLOT(trigger()) );
+		connect(d->mMetaDataDialog->mNextButton, SIGNAL(clicked()),
+			d->mActionCollection->action("go_next"), SLOT(trigger()) );
+
+		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagAssigned(const QString&)),
+			SLOT(assignTag(const QString&)) );
+		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagRemoved(const QString&)),
+			SLOT(removeTag(const QString&)) );
+	}
+	d->updateMetaDataDialog();
+	d->mMetaDataDialog->show();
 }
 
 

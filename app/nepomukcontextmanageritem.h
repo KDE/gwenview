@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractcontextmanageritem.h"
 
+class KActionCollection;
+
 namespace Gwenview {
 
 
@@ -35,7 +37,7 @@ class NepomukContextManagerItemPrivate;
 class NepomukContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	NepomukContextManagerItem(ContextManager*);
+	NepomukContextManagerItem(ContextManager*, KActionCollection*);
 	~NepomukContextManagerItem();
 
 	virtual void setSideBar(SideBar*);
@@ -46,6 +48,7 @@ private Q_SLOTS:
 	void storeDescription();
 	void assignTag(const QString&);
 	void removeTag(const QString&);
+	void showMetaDataDialog();
 
 private:
 	NepomukContextManagerItemPrivate* const d;

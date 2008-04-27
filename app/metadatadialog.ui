@@ -1,0 +1,85 @@
+<ui version="4.0" >
+ <class>MetaDataDialog</class>
+ <widget class="QWidget" name="MetaDataDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>323</width>
+    <height>355</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Tag Editor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="Gwenview::TagWidget" native="1" name="mTagWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" >
+     <item>
+      <widget class="QPushButton" name="mPreviousButton" >
+       <property name="text" >
+        <string>Previous</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mNextButton" >
+       <property name="text" >
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KDialogButtonBox" name="kdialogbuttonbox" >
+       <property name="standardButtons" >
+        <set>QDialogButtonBox::Close</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>kdialogbuttonbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Gwenview::TagWidget</class>
+   <extends>QWidget</extends>
+   <header location="global" >lib/metadata/tagwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>kdialogbuttonbox</sender>
+   <signal>rejected()</signal>
+   <receiver>MetaDataDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>299</x>
+     <y>331</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>317</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
