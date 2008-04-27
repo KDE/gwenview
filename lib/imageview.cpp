@@ -42,6 +42,7 @@ struct ImageViewPrivate {
 	QWidget* mViewport;
 	ImageView::AlphaBackgroundMode mAlphaBackgroundMode;
 	QColor mAlphaBackgroundColor;
+	bool mEnlargeSmallerImages;
 	Document::Ptr mDocument;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -186,6 +187,14 @@ void ImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
 void ImageView::setAlphaBackgroundColor(const QColor& color) {
 	d->mAlphaBackgroundColor = color;
 	d->mViewport->update();
+}
+
+
+void ImageView::setEnlargeSmallerImages(bool value) {
+	d->mEnlargeSmallerImages = value;
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 
@@ -578,7 +587,12 @@ qreal ImageView::computeZoomToFit() const {
 	if ( int(d->mDocument->height() * zoom) > height) {
 		zoom = qreal(height) / d->mDocument->height();
 	}
-	return qMin(zoom, 1.0);
+
+	if (!d->mEnlargeSmallerImages) {
+		zoom = qMin(zoom, 1.0);
+	}
+
+	return zoom;
 }
 
 

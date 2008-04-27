@@ -426,6 +426,7 @@ ImageView* GVPart::imageView() const {
 void GVPart::loadConfig() {
 	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+	mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 	mScrollTool->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
 }
 

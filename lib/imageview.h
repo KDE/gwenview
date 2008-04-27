@@ -52,6 +52,8 @@ public:
 
 	void setAlphaBackgroundColor(const QColor& color);
 
+	void setEnlargeSmallerImages(bool value);
+
 	void setDocument(Document::Ptr document);
 
 	Document::Ptr document() const;
