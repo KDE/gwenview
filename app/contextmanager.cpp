@@ -42,6 +42,7 @@ ContextManager::ContextManager(QObject* parent)
 : QObject(parent)
 , d(new ContextManagerPrivate)
 {
+	d->mSideBar = 0;
 	d->mDirModel = 0;
 }
 
