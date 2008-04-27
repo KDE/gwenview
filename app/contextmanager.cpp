@@ -19,12 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "contextmanager.moc"
 
+// Qt
+#include <QTimer>
+
 // KDE
 #include <kfileitem.h>
 
 // Local
 #include "sidebar.h"
 #include "abstractcontextmanageritem.h"
+#include <lib/metadata/sorteddirmodel.h>
 
 namespace Gwenview {
 
@@ -35,6 +39,12 @@ struct ContextManagerPrivate {
 	SortedDirModel* mDirModel;
 	KUrl mCurrentDirUrl;
 	KUrl mCurrentUrl;
+
+	QTimer* mSelectionDataChangedTimer;
+
+	void scheduleEmittingSelectionDataChanged() {
+		mSelectionDataChangedTimer->start();
+	}
 };
 
 
@@ -42,6 +52,12 @@ ContextManager::ContextManager(QObject* parent)
 : QObject(parent)
 , d(new ContextManagerPrivate)
 {
+	d->mSelectionDataChangedTimer = new QTimer(this);
+	d->mSelectionDataChangedTimer->setInterval(500);
+	d->mSelectionDataChangedTimer->setSingleShot(true);
+	connect(d->mSelectionDataChangedTimer, SIGNAL(timeout()),
+		SIGNAL(selectionDataChanged()) );
+
 	d->mSideBar = 0;
 	d->mDirModel = 0;
 }
@@ -127,5 +143,25 @@ SortedDirModel* ContextManager::dirModel() const {
 
 void ContextManager::setDirModel(SortedDirModel* dirModel) {
 	d->mDirModel = dirModel;
+
+	connect(d->mDirModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+		SLOT(slotDirModelDataChanged(const QModelIndex&, const QModelIndex&)) );
 }
+
+
+void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
+	// Look if a selected item has changed, if there is one, schedule emission
+	// of a selectionDataChanged() signal. Don't emit it directly to avoid
+	// spamming the context items in case of a mass change.
+	for (int row=topLeft.row(); row <= bottomRight.row(); ++row) {
+		const QModelIndex index = d->mDirModel->index(row, 0);
+		const KFileItem item = d->mDirModel->itemForIndex(index);
+		if (d->mSelection.contains(item)) {
+			d->scheduleEmittingSelectionDataChanged();
+			return;
+		}
+	}
+}
+
+
 } // namespace

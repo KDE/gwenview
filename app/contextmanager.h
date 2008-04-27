@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 #include <kfileitem.h>
 
+class QModelIndex;
+
 namespace Gwenview {
 
 class SideBar;
@@ -71,7 +73,11 @@ public:
 
 Q_SIGNALS:
 	void selectionChanged();
+	void selectionDataChanged();
 	void currentDirUrlChanged();
+
+private Q_SLOTS:
+	void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private:
 	ContextManagerPrivate* const d;
