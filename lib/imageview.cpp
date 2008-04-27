@@ -569,32 +569,32 @@ QRect ImageView::mapToImage(const QRect& src) {
 
 
 qreal ImageView::computeZoomToFit() const {
-    if (!d->mDocument || !d->mDocument->size().isValid()) {
-        return 0;
-    }
-    int width = d->mViewport->width();
-    int height = d->mViewport->height();
-    qreal zoom = qreal(width) / d->mDocument->width();
-    if ( int(d->mDocument->height() * zoom) > height) {
-        zoom = qreal(height) / d->mDocument->height();
-    }
-    return qMin(zoom, 1.0);
+	if (!d->mDocument || !d->mDocument->size().isValid()) {
+		return 0;
+	}
+	int width = d->mViewport->width();
+	int height = d->mViewport->height();
+	qreal zoom = qreal(width) / d->mDocument->width();
+	if ( int(d->mDocument->height() * zoom) > height) {
+		zoom = qreal(height) / d->mDocument->height();
+	}
+	return qMin(zoom, 1.0);
 }
 
 
 qreal ImageView::computeZoomToFitWidth() const {
-    if (!d->mDocument) {
-        return 1.;
-    }
-    return qreal(d->mViewport->width()) / d->mDocument->width();
+	if (!d->mDocument) {
+		return 1.;
+	}
+	return qreal(d->mViewport->width()) / d->mDocument->width();
 }
 
 
 qreal ImageView::computeZoomToFitHeight() const {
-    if (!d->mDocument) {
-        return 1.;
-    }
-    return qreal(d->mViewport->height()) / d->mDocument->height();
+	if (!d->mDocument) {
+		return 1.;
+	}
+	return qreal(d->mViewport->height()) / d->mDocument->height();
 }
 
 
