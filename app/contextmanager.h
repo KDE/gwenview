@@ -36,6 +36,8 @@ class SortedDirModel;
 class ImageViewPart;
 class AbstractContextManagerItem;
 
+class ContextManagerPrivate;
+
 /**
  * Manage the update of the contextual parts of the applications, 
  * like the sidebar or the context menu.
@@ -72,13 +74,7 @@ Q_SIGNALS:
 	void currentDirUrlChanged();
 
 private:
-	//FIXME: use d pointer
-	QList<AbstractContextManagerItem*> mList;
-	KFileItemList mSelection;
-	SideBar* mSideBar;
-	SortedDirModel* mDirModel;
-	KUrl mCurrentDirUrl;
-	KUrl mCurrentUrl;
+	ContextManagerPrivate* const d;
 };
 
 } // namespace

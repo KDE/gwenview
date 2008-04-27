@@ -28,78 +28,90 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+struct ContextManagerPrivate {
+	QList<AbstractContextManagerItem*> mList;
+	KFileItemList mSelection;
+	SideBar* mSideBar;
+	SortedDirModel* mDirModel;
+	KUrl mCurrentDirUrl;
+	KUrl mCurrentUrl;
+};
+
+
 ContextManager::ContextManager(QObject* parent)
 : QObject(parent)
-, mDirModel(0) {}
+, d(new ContextManagerPrivate)
+{
+	d->mDirModel = 0;
+}
 
 
 ContextManager::~ContextManager() {
-	Q_FOREACH(AbstractContextManagerItem* item, mList) {
-		delete item;
-	}
+	qDeleteAll(d->mList);
+	delete d;
 }
 
 
 void ContextManager::setSideBar(SideBar* sideBar) {
-	mSideBar = sideBar;
+	d->mSideBar = sideBar;
 }
 
 
 void ContextManager::addItem(AbstractContextManagerItem* item) {
-	Q_ASSERT(mSideBar);
-	mList << item;
-	item->setSideBar(mSideBar);
+	Q_ASSERT(d->mSideBar);
+	d->mList << item;
+	item->setSideBar(d->mSideBar);
 }
 
 
 void ContextManager::setContext(const KUrl& currentUrl, const KFileItemList& selection) {
-	mCurrentUrl = currentUrl;
-	mSelection = selection;
+	d->mCurrentUrl = currentUrl;
+	d->mSelection = selection;
 	selectionChanged();
 }
 
 
 KFileItemList ContextManager::selection() const {
-	return mSelection;
+	return d->mSelection;
 }
 
 
 void ContextManager::setCurrentDirUrl(const KUrl& url) {
-	if (url.equals(mCurrentDirUrl, KUrl::CompareWithoutTrailingSlash)) {
+	if (url.equals(d->mCurrentDirUrl, KUrl::CompareWithoutTrailingSlash)) {
 		return;
 	}
-	mCurrentDirUrl = url;
+	d->mCurrentDirUrl = url;
 	currentDirUrlChanged();
 }
 
 
 KUrl ContextManager::currentDirUrl() const {
-	return mCurrentDirUrl;
+	return d->mCurrentDirUrl;
 }
 
 
 KUrl ContextManager::currentUrl() const {
-	return mCurrentUrl;
+	return d->mCurrentUrl;
 }
 
 
 QString ContextManager::currentUrlMimeType() const {
 	/*
-	if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
-		return MimeTypeUtils::urlMimeType(mDocumentView->url());
+	if (d->mDocumentView->isVisible() && !d->mDocumentView->isEmpty()) {
+		return MimeTypeUtils::urlMimeType(d->mDocumentView->url());
 	} else {
-		QModelIndex index = mThumbnailView->currentIndex();
+		QModelIndex index = d->mThumbnailView->currentIndex();
 		if (!index.isValid()) {
 			return QString();
 		}
-		KFileItem item = mDirModel->itemForIndex(index);
+		KFileItem item = d->mDirModel->itemForIndex(index);
 		Q_ASSERT(!item.isNull());
 		return item.mimetype();
 	}
 	*/
 	// FIXME
-	Q_FOREACH(const KFileItem& item, mSelection) {
-		if (item.url() == mCurrentUrl) {
+	Q_FOREACH(const KFileItem& item, d->mSelection) {
+		if (item.url() == d->mCurrentUrl) {
 			return item.mimetype();
 		}
 	}
@@ -108,11 +120,11 @@ QString ContextManager::currentUrlMimeType() const {
 
 
 SortedDirModel* ContextManager::dirModel() const {
-	return mDirModel;
+	return d->mDirModel;
 }
 
 
 void ContextManager::setDirModel(SortedDirModel* dirModel) {
-	mDirModel = dirModel;
+	d->mDirModel = dirModel;
 }
 } // namespace
