@@ -22,26 +22,83 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tagwidget.moc"
 
 // Qt
-#include <QRegExp>
-#include <QSet>
+#include <QHeaderView>
+#include <QItemDelegate>
+#include <QListWidget>
+#include <QPainter>
+#include <QVBoxLayout>
 
 // KDE
+#include <kiconloader.h>
+#include <klineedit.h>
 
 // Local
 
 namespace Gwenview {
 
+class TagItemDelegate : public QItemDelegate {
+public:
+	TagItemDelegate(QObject* parent = 0)
+	: QItemDelegate(parent)
+	, mRemovePixmap(SmallIcon("list-remove"))
+	{}
+
+protected:
+	void drawDisplay(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text) const {
+		QItemDelegate::drawDisplay(painter, option, rect, text);
+		int left = rect.right() - mRemovePixmap.width();
+		int top = rect.top() + (rect.height() - mRemovePixmap.height() ) / 2;
+		painter->drawPixmap(left, top, mRemovePixmap);
+	}
+
+private:
+	QPixmap mRemovePixmap;
+};
+
 
 struct TagWidgetPrivate {
+	TagWidget* that;
 	TagInfo mTagInfo;
+	QListWidget* mTreeWidget;
+	KLineEdit* mLineEdit;
+
+	void setupWidgets() {
+		mTreeWidget = new QListWidget;
+		mTreeWidget->setItemDelegate(new TagItemDelegate(mTreeWidget));
+		mLineEdit = new KLineEdit;
+
+		QVBoxLayout* layout = new QVBoxLayout(that);
+		layout->setMargin(0);
+		layout->setSpacing(2);
+		layout->addWidget(mTreeWidget);
+		layout->addWidget(mLineEdit);
+	}
+
+
+	void fillTreeWidget() {
+		mTreeWidget->clear();
+
+		TagInfo::ConstIterator
+			it = mTagInfo.begin(),
+			end = mTagInfo.end();
+		for(; it!=end; ++it) {
+			new QListWidgetItem(it.key(), mTreeWidget);
+		}
+	}
 };
 
 
 TagWidget::TagWidget(QWidget* parent)
-: QLineEdit(parent)
+: QWidget(parent)
 , d(new TagWidgetPrivate) {
-	connect(this, SIGNAL(editingFinished()),
-		SLOT(slotEditingFinished()) );
+	d->that = this;
+	d->setupWidgets();
+
+	connect(d->mTreeWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+		SLOT(slotItemClicked(QListWidgetItem*)) );
+
+	connect(d->mLineEdit, SIGNAL(returnPressed()),
+		SLOT(assignTag()) );
 }
 
 
@@ -52,33 +109,29 @@ TagWidget::~TagWidget() {
 
 void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 	d->mTagInfo = tagInfo;
-
-	QStringList lst;
-	TagInfo::ConstIterator
-		it = tagInfo.begin(),
-		end = tagInfo.end();
-	for(; it!=end; ++it) {
-		lst << it.key();
-	}
-
-	setText(lst.join(", "));
+	d->fillTreeWidget();
 }
 
 
-void TagWidget::slotEditingFinished() {
-	QSet<QString> newTagSet = text().split(QRegExp(", *")).toSet();
-	QSet<QString> oldTagSet = d->mTagInfo.keys().toSet();
+void TagWidget::assignTag() {
+	QString tag = d->mLineEdit->text();
+	d->mTagInfo[tag] = true;
+	d->fillTreeWidget();
+	d->mLineEdit->clear();
 
-	QSet<QString> assignedTagSet = newTagSet - oldTagSet;
-	QSet<QString> removedTagSet = oldTagSet - newTagSet;
+	emit tagAssigned(tag);
+}
 
-	Q_FOREACH(const QString& tag, assignedTagSet) {
-		emit tagAssigned(tag);
+
+void TagWidget::slotItemClicked(QListWidgetItem* item) {
+	if (!item) {
+		return;
 	}
+	QString tag = item->text();
+	d->mTagInfo.remove(tag);
+	d->fillTreeWidget();
 
-	Q_FOREACH(const QString& tag, removedTagSet) {
-		emit tagRemoved(tag);
-	}
+	emit tagRemoved(tag);
 }
 
 

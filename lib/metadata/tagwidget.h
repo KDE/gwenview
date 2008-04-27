@@ -26,18 +26,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QMap>
 #include <QString>
+#include <QWidget>
 
 // KDE
-#include <qlineedit.h>
 
 // Local
+
+class QListWidgetItem;
 
 namespace Gwenview {
 
 typedef QMap<QString, bool> TagInfo;
 
 class TagWidgetPrivate;
-class GWENVIEWLIB_EXPORT TagWidget : public QLineEdit {
+class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
 	Q_OBJECT
 public:
 	TagWidget(QWidget* parent = 0);
@@ -49,7 +51,8 @@ Q_SIGNALS:
 	void tagRemoved(const QString&);
 
 private Q_SLOTS:
-	void slotEditingFinished();
+	void assignTag();
+	void slotItemClicked(QListWidgetItem* item);
 
 private:
 	TagWidgetPrivate* const d;
