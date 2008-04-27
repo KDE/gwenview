@@ -65,7 +65,9 @@ struct TagWidgetPrivate {
 	void setupWidgets() {
 		mTreeWidget = new QListWidget;
 		mTreeWidget->setItemDelegate(new TagItemDelegate(mTreeWidget));
+
 		mLineEdit = new KLineEdit;
+		mLineEdit->setTrapReturnKey(true);
 
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
