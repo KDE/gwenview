@@ -51,4 +51,14 @@ inline KUrl urlForTestOutputFile(const QString& name) {
 	return url;
 }
 
+bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
+	for (int x = 0; x < timeout; ++x) {
+		if (spy.count() > 0) {
+			return true;
+		}
+		QTest::qWait(1000);
+	}
+	return false;
+}
+
 #endif /* TESTUTILS_H */
