@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef NEPOMUKMETADATABACKEND_H
 #define NEPOMUKMETADATABACKEND_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -37,7 +39,7 @@ class NepomukMetaDataBackEndPrivate;
 /**
  * A real metadata backend using Nepomuk to store and retrieve metadata.
  */
-class NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
+class GWENVIEWLIB_EXPORT NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:
 	NepomukMetaDataBackEnd(QObject* parent);

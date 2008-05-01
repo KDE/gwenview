@@ -2,6 +2,11 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	)
 
+# For config-gwenview.h
+include_directories(
+	${CMAKE_CURRENT_BINARY_DIR}/..
+	)
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 
@@ -44,6 +49,15 @@ set(thumbnailloadjobtest_SRCS
 kde4_add_unit_test(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
 
 target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+# MetaDataBackEndTest
+set(metadatabackendtest_SRCS
+	metadatabackendtest.cpp
+	)
+
+kde4_add_unit_test(metadatabackendtest ${metadatabackendtest_SRCS})
+
+target_link_libraries(metadatabackendtest gwenviewlib ${QT_QTTEST_LIBRARY})
 
 # SlideContainer
 set(slidecontainertest_SRCS
