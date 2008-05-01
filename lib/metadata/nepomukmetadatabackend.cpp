@@ -127,6 +127,9 @@ public:
 			Task* task;
 			{
 				QMutexLocker locker(&mMutex);
+				if (mDeleting) {
+					return;
+				}
 				if (mTaskQueue.isEmpty()) {
 					mQueueNotEmpty.wait(&mMutex);
 				}
