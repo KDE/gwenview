@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "abstractmetadatabackend.h"
+#include "../archiveutils.h"
 
 #ifdef GWENVIEW_METADATA_BACKEND_FAKE
 #include "fakemetadatabackend.h"
@@ -99,6 +100,9 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 	KFileItem item = itemForIndex(index);
 	if (item.isNull()) {
 		kWarning() << "invalid item";
+		return;
+	}
+	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		return;
 	}
 	KUrl url = item.url();
