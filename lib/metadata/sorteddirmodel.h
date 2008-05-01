@@ -34,6 +34,7 @@ class KUrl;
 
 namespace Gwenview {
 
+class AbstractMetaDataBackEnd;
 class SortedDirModelPrivate;
 
 
@@ -52,6 +53,8 @@ public:
 	QModelIndex indexForUrl(const KUrl& url) const;
 
 	virtual void setMimeExcludeFilter(const QStringList &mimeList);
+
+	AbstractMetaDataBackEnd* metaDataBackEnd() const;
 
 public Q_SLOTS:
 	void setMinimumRating(int);

@@ -33,6 +33,7 @@ class KUrl;
 namespace Gwenview {
 
 
+class AbstractMetaDataBackEnd;
 class MetaData;
 class MetaDataDirModelPrivate;
 /**
@@ -57,6 +58,8 @@ public:
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
+
+	AbstractMetaDataBackEnd* metaDataBackEnd() const;
 
 Q_SIGNALS:
 	void metaDataRetrieved(const KUrl&, const MetaData&);

@@ -34,9 +34,9 @@ namespace Gwenview {
 
 
 TagSet::TagSet()
-: QSet<QString>() {}
+: QSet<MetaDataTag>() {}
 
-TagSet::TagSet(const QSet<QString>& set)
+TagSet::TagSet(const QSet<MetaDataTag>& set)
 : QSet<QString>(set) {}
 
 

@@ -41,13 +41,23 @@ void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
 	MetaData metaData;
 	metaData.mRating = int(urlString.length()) % 6;
 	metaData.mDescription = url.fileName();
-	QStringList lst = urlString.split("/");
+	QStringList lst = url.path().split("/");
 	Q_FOREACH(const QString& token, lst) {
 		if (!token.isEmpty()) {
-			metaData.mTags << token;
+			metaData.mTags << '#' + token.toLower();
 		}
 	}
 	emit metaDataRetrieved(url, metaData);
+}
+
+
+QString FakeMetaDataBackEnd::labelForTag(const MetaDataTag& tag) const {
+	return tag[1].toUpper() + tag.mid(2);
+}
+
+
+MetaDataTag FakeMetaDataBackEnd::tagForLabel(const QString& label) const {
+	return '#' + label.toLower();
 }
 
 

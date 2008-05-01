@@ -141,4 +141,9 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 }
 
 
+AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
+	return d->mSourceModel->metaDataBackEnd();
+}
+
+
 } //namespace

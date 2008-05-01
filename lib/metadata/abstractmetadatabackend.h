@@ -36,16 +36,19 @@ class KUrl;
 namespace Gwenview {
 
 
+typedef QString MetaDataTag;
+
+
 /**
  * This class represents the set of tags associated to an url.
  *
  * It provides convenience methods to convert to and from QVariant, which are
  * useful to communicate with MetaDataDirModel.
  */
-class GWENVIEWLIB_EXPORT TagSet : public QSet<QString> {
+class GWENVIEWLIB_EXPORT TagSet : public QSet<MetaDataTag> {
 public:
 	TagSet();
-	TagSet(const QSet<QString>&);
+	TagSet(const QSet<MetaDataTag>&);
 
 	QVariant toVariant() const;
 	static TagSet fromVariant(const QVariant&);
@@ -74,6 +77,10 @@ public:
 	virtual void storeMetaData(const KUrl&, const MetaData&) = 0;
 
 	virtual void retrieveMetaData(const KUrl&) = 0;
+
+	virtual QString labelForTag(const MetaDataTag&) const = 0;
+
+	virtual MetaDataTag tagForLabel(const QString&) const = 0;
 
 Q_SIGNALS:
 	void metaDataRetrieved(const KUrl&, const MetaData&);

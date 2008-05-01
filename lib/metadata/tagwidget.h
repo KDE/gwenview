@@ -25,18 +25,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QMap>
-#include <QString>
 #include <QWidget>
 
 // KDE
 
 // Local
+#include <lib/metadata/abstractmetadatabackend.h>
 
 class QListWidgetItem;
 
 namespace Gwenview {
 
-typedef QMap<QString, bool> TagInfo;
+typedef QMap<MetaDataTag, bool> TagInfo;
 
 class TagWidgetPrivate;
 class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
@@ -45,10 +45,11 @@ public:
 	TagWidget(QWidget* parent = 0);
 	~TagWidget();
 	void setTagInfo(const TagInfo&);
+	void setMetaDataBackEnd(AbstractMetaDataBackEnd*);
 
 Q_SIGNALS:
-	void tagAssigned(const QString&);
-	void tagRemoved(const QString&);
+	void tagAssigned(const MetaDataTag&);
+	void tagRemoved(const MetaDataTag&);
 
 private Q_SLOTS:
 	void assignTag();

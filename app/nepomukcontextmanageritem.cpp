@@ -80,21 +80,25 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 			mTagLabel->clear();
 			return;
 		}
+
+		AbstractMetaDataBackEnd* backEnd = that->contextManager()->dirModel()->metaDataBackEnd();
+
 		TagInfo::ConstIterator
 			it = mTagInfo.constBegin(),
 			end = mTagInfo.constEnd();
-		QStringList tags;
+		QStringList labels;
 		for (; it!=end; ++it) {
-			QString tag = it.key();
+			MetaDataTag tag = it.key();
+			QString label = backEnd->labelForTag(tag);
 			if (!it.value()) {
 				// Tag is not present for all urls
-				tag += '*';
+				label += '*';
 			}
-			tags << tag;
+			labels << label;
 		}
 
 		QString editLink = i18n("Edit");
-		QString text = tags.join(", ") + QString(" <a href='edit'>%1</a>").arg(editLink);
+		QString text = labels.join(", ") + QString(" <a href='edit'>%1</a>").arg(editLink);
 		mTagLabel->setText(text);
 	}
 
@@ -259,7 +263,7 @@ void NepomukContextManagerItem::storeDescription() {
 }
 
 
-void NepomukContextManagerItem::assignTag(const QString& tag) {
+void NepomukContextManagerItem::assignTag(const MetaDataTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -274,7 +278,7 @@ void NepomukContextManagerItem::assignTag(const QString& tag) {
 }
 
 
-void NepomukContextManagerItem::removeTag(const QString& tag) {
+void NepomukContextManagerItem::removeTag(const MetaDataTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -299,10 +303,12 @@ void NepomukContextManagerItem::showMetaDataDialog() {
 		connect(d->mMetaDataDialog->mNextButton, SIGNAL(clicked()),
 			d->mActionCollection->action("go_next"), SLOT(trigger()) );
 
-		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagAssigned(const QString&)),
-			SLOT(assignTag(const QString&)) );
-		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagRemoved(const QString&)),
-			SLOT(removeTag(const QString&)) );
+		AbstractMetaDataBackEnd* backEnd = contextManager()->dirModel()->metaDataBackEnd();
+		d->mMetaDataDialog->mTagWidget->setMetaDataBackEnd(backEnd);
+		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagAssigned(const MetaDataTag&)),
+			SLOT(assignTag(const MetaDataTag&)) );
+		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagRemoved(const MetaDataTag&)),
+			SLOT(removeTag(const MetaDataTag&)) );
 	}
 	d->updateMetaDataDialog();
 	d->mMetaDataDialog->show();

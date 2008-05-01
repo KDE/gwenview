@@ -197,4 +197,9 @@ void MetaDataDirModel::slotModelAboutToBeReset() {
 }
 
 
+AbstractMetaDataBackEnd* MetaDataDirModel::metaDataBackEnd() const {
+	return d->mBackEnd;
+}
+
+
 } // namespace

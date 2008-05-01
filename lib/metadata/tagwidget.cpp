@@ -55,12 +55,16 @@ private:
 	QPixmap mRemovePixmap;
 };
 
+enum {
+	TagRole = Qt::UserRole
+};
 
 struct TagWidgetPrivate {
 	TagWidget* that;
 	TagInfo mTagInfo;
 	QListWidget* mTreeWidget;
 	KLineEdit* mLineEdit;
+	AbstractMetaDataBackEnd* mBackEnd;
 
 	void setupWidgets() {
 		mTreeWidget = new QListWidget;
@@ -71,20 +75,23 @@ struct TagWidgetPrivate {
 
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
-		layout->setSpacing(2);
 		layout->addWidget(mTreeWidget);
 		layout->addWidget(mLineEdit);
 	}
 
 
 	void fillTreeWidget() {
+		Q_ASSERT(mBackEnd);
 		mTreeWidget->clear();
 
 		TagInfo::ConstIterator
 			it = mTagInfo.begin(),
 			end = mTagInfo.end();
 		for(; it!=end; ++it) {
-			new QListWidgetItem(it.key(), mTreeWidget);
+			MetaDataTag tag = it.key();
+			QString label = mBackEnd->labelForTag(tag);
+			QListWidgetItem* item = new QListWidgetItem(label, mTreeWidget);
+			item->setData(TagRole, QVariant(tag));
 		}
 	}
 };
@@ -94,6 +101,7 @@ TagWidget::TagWidget(QWidget* parent)
 : QWidget(parent)
 , d(new TagWidgetPrivate) {
 	d->that = this;
+	d->mBackEnd = 0;
 	d->setupWidgets();
 
 	connect(d->mTreeWidget, SIGNAL(itemClicked(QListWidgetItem*)),
@@ -109,6 +117,11 @@ TagWidget::~TagWidget() {
 }
 
 
+void TagWidget::setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
+	d->mBackEnd = backEnd;
+}
+
+
 void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 	d->mTagInfo = tagInfo;
 	d->fillTreeWidget();
@@ -116,7 +129,9 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 
 
 void TagWidget::assignTag() {
-	QString tag = d->mLineEdit->text();
+	Q_ASSERT(d->mBackEnd);
+	QString label = d->mLineEdit->text();
+	MetaDataTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
 	d->fillTreeWidget();
 	d->mLineEdit->clear();
@@ -129,7 +144,7 @@ void TagWidget::slotItemClicked(QListWidgetItem* item) {
 	if (!item) {
 		return;
 	}
-	QString tag = item->text();
+	MetaDataTag tag = item->data(TagRole).toString();
 	d->mTagInfo.remove(tag);
 	d->fillTreeWidget();
 

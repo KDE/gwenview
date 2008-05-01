@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "abstractcontextmanageritem.h"
+#include <lib/metadata/abstractmetadatabackend.h>
 
 class KActionCollection;
 
@@ -46,8 +47,8 @@ private Q_SLOTS:
 	void updateSideBarContent();
 	void slotRatingChanged(int rating);
 	void storeDescription();
-	void assignTag(const QString&);
-	void removeTag(const QString&);
+	void assignTag(const MetaDataTag&);
+	void removeTag(const MetaDataTag&);
 	void showMetaDataDialog();
 
 private:

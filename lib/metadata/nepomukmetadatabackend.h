@@ -47,6 +47,10 @@ public:
 
 	virtual void retrieveMetaData(const KUrl&);
 
+	virtual QString labelForTag(const MetaDataTag&) const;
+
+	virtual MetaDataTag tagForLabel(const QString&) const;
+
 	void emitMetaDataRetrieved(const KUrl&, const MetaData&);
 
 private:

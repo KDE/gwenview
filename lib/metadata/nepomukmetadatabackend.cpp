@@ -63,7 +63,7 @@ struct RetrieveTask : public Task {
 		metaData.mRating = resource.rating();
 		metaData.mDescription = resource.description();
 		Q_FOREACH(const Nepomuk::Tag& tag, resource.tags()) {
-			metaData.mTags << tag.genericLabel();
+			metaData.mTags << tag.resourceUri().toString();
 		}
 		mBackEnd->emitMetaDataRetrieved(mUrl, metaData);
 	}
@@ -82,8 +82,8 @@ struct StoreTask : public Task {
 		resource.setRating(mMetaData.mRating);
 		resource.setDescription(mMetaData.mDescription);
 		QList<Nepomuk::Tag> tags;
-		Q_FOREACH(const QString& label, mMetaData.mTags) {
-			tags << Nepomuk::Tag(label);
+		Q_FOREACH(const MetaDataTag& uri, mMetaData.mTags) {
+			tags << Nepomuk::Tag(uri);
 		}
 		resource.setTags(tags);
 	}
@@ -179,6 +179,30 @@ void NepomukMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
 
 void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaData& metaData) {
 	emit metaDataRetrieved(url, metaData);
+}
+
+
+QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
+	Nepomuk::Tag tag(uri);
+	Q_ASSERT(tag.exists());
+	return tag.label();
+}
+
+
+MetaDataTag NepomukMetaDataBackEnd::tagForLabel(const QString& label) const {
+	// FIXME There is got to be a faster way
+	QList<Nepomuk::Tag> list = Nepomuk::Tag::allTags();
+	Q_FOREACH(const Nepomuk::Tag& tag, list) {
+		if (tag.label() == label) {
+			return tag.resourceUri().toString();
+		}
+	}
+
+	// Not found, create the tag
+	Nepomuk::Tag tag(label);
+	tag.setLabel(label);
+	tag.addIdentifier(label);
+	return tag.resourceUri().toString();
 }
 
 

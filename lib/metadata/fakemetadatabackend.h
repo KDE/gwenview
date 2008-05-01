@@ -43,6 +43,10 @@ public:
 	virtual void storeMetaData(const KUrl&, const MetaData&);
 
 	virtual void retrieveMetaData(const KUrl&);
+
+	virtual QString labelForTag(const MetaDataTag&) const;
+
+	virtual MetaDataTag tagForLabel(const QString&) const;
 };
 
 
