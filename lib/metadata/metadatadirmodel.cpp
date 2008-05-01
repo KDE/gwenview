@@ -58,7 +58,7 @@ MetaDataDirModel::MetaDataDirModel(QObject* parent)
 : KDirModel(parent)
 , d(new MetaDataDirModelPrivate) {
 #ifdef GWENVIEW_METADATA_BACKEND_FAKE
-	d->mBackEnd = new FakeMetaDataBackEnd(this);
+	d->mBackEnd = new FakeMetaDataBackEnd(this, FakeMetaDataBackEnd::InitializeRandom);
 #elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
 	d->mBackEnd = new NepomukMetaDataBackEnd(this);
 #endif

@@ -21,9 +21,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FAKEMETADATABACKEND_H
 #define FAKEMETADATABACKEND_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
+#include <QHash>
 
 // KDE
+#include <kurl.h>
 
 // Local
 #include "abstractmetadatabackend.h"
@@ -35,10 +39,11 @@ namespace Gwenview {
  * A fake metadata backend, useful to test the ui layer.
  * It provides fake rating values based on the image url.
  */
-class FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
+class GWENVIEWLIB_EXPORT FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:
-	FakeMetaDataBackEnd(QObject* parent) : AbstractMetaDataBackEnd(parent) {}
+	enum InitializeMode { InitializeEmpty, InitializeRandom };
+	FakeMetaDataBackEnd(QObject* parent, InitializeMode initializeMode);
 
 	virtual void storeMetaData(const KUrl&, const MetaData&);
 
@@ -47,6 +52,10 @@ public:
 	virtual QString labelForTag(const MetaDataTag&) const;
 
 	virtual MetaDataTag tagForLabel(const QString&) const;
+
+private:
+	QHash<KUrl, MetaData> mMetaDataForUrl;
+	InitializeMode mInitializeMode;
 };
 
 

@@ -32,22 +32,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-void FakeMetaDataBackEnd::storeMetaData(const KUrl&, const MetaData&) {
+FakeMetaDataBackEnd::FakeMetaDataBackEnd(QObject* parent, InitializeMode mode)
+: AbstractMetaDataBackEnd(parent)
+, mInitializeMode(mode) {}
+
+
+void FakeMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
+	mMetaDataForUrl[url] = metaData;
 }
 
 
 void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
-	QString urlString = url.url();
-	MetaData metaData;
-	metaData.mRating = int(urlString.length()) % 6;
-	metaData.mDescription = url.fileName();
-	QStringList lst = url.path().split("/");
-	Q_FOREACH(const QString& token, lst) {
-		if (!token.isEmpty()) {
-			metaData.mTags << '#' + token.toLower();
+	if (!mMetaDataForUrl.contains(url)) {
+		QString urlString = url.url();
+		MetaData metaData;
+		if (mInitializeMode == InitializeRandom) {
+			metaData.mRating = int(urlString.length()) % 6;
+			metaData.mDescription = url.fileName();
+			QStringList lst = url.path().split("/");
+			Q_FOREACH(const QString& token, lst) {
+				if (!token.isEmpty()) {
+					metaData.mTags << '#' + token.toLower();
+				}
+			}
+		} else {
+			metaData.mRating = 0;
 		}
+		mMetaDataForUrl[url] = metaData;
 	}
-	emit metaDataRetrieved(url, metaData);
+	emit metaDataRetrieved(url, mMetaDataForUrl.value(url));
 }
 
 
