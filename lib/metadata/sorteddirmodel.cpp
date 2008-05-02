@@ -142,7 +142,11 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 
 
 AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
+#ifdef GWENVIEW_METADATA_BACKEND_NONE
+        return 0;
+#else
 	return d->mSourceModel->metaDataBackEnd();
+#endif
 }
 
 
