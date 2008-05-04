@@ -150,7 +150,11 @@
       </widget>
      </item>
      <item row="0" column="0" colspan="3" >
-      <widget class="QComboBox" name="ratioComboBox" />
+      <widget class="QComboBox" name="ratioComboBox" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
