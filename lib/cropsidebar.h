@@ -48,7 +48,9 @@ Q_SIGNALS:
 	void done();
 
 private Q_SLOTS:
-	void updateCropToolRect();
+	void slotPositionChanged();
+	void slotWidthChanged();
+	void slotHeightChanged();
 	void setCropRect(const QRect& rect);
 
 	void crop();

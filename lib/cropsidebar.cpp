@@ -45,6 +45,13 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 	bool mUpdatingFromCropTool;
 
 
+	double cropRatio() const {
+		int width = ratioWidthSpinBox->value();
+		int height = ratioHeightSpinBox->value();
+		return height / double(width);
+	}
+
+
 	void addRatioToComboBox(const QSize& size, const QString& _label = QString()) {
 		QString label = _label;
 		if (label.isEmpty()) {
@@ -120,13 +127,13 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 		SLOT(setCropRect(const QRect&)) );
 
 	connect(d->leftSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(updateCropToolRect()) );
+		SLOT(slotPositionChanged()) );
 	connect(d->topSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(updateCropToolRect()) );
+		SLOT(slotPositionChanged()) );
 	connect(d->widthSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(updateCropToolRect()) );
+		SLOT(slotWidthChanged()) );
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(updateCropToolRect()) );
+		SLOT(slotHeightChanged()) );
 
 	connect(d->buttonBox, SIGNAL(accepted()),
 		SLOT(crop()) );
@@ -181,9 +188,33 @@ void CropSideBar::setCropRect(const QRect& rect) {
 }
 
 
-void CropSideBar::updateCropToolRect() {
+void CropSideBar::slotPositionChanged() {
 	if (d->mUpdatingFromCropTool) {
 		return;
+	}
+	d->mCropTool->setRect(cropRect());
+}
+
+
+void CropSideBar::slotWidthChanged() {
+	if (d->mUpdatingFromCropTool) {
+		return;
+	}
+	if (d->constrainRatioCheckBox->isChecked()) {
+		int height = int(d->widthSpinBox->value() * d->cropRatio());
+		d->heightSpinBox->setValue(height);
+	}
+	d->mCropTool->setRect(cropRect());
+}
+
+
+void CropSideBar::slotHeightChanged() {
+	if (d->mUpdatingFromCropTool) {
+		return;
+	}
+	if (d->constrainRatioCheckBox->isChecked()) {
+		int width = int(d->heightSpinBox->value() / d->cropRatio());
+		d->widthSpinBox->setValue(width);
 	}
 	d->mCropTool->setRect(cropRect());
 }
@@ -203,9 +234,7 @@ void CropSideBar::applyRatioConstraint() {
 		return;
 	}
 
-	int width = d->ratioWidthSpinBox->value();
-	int height = d->ratioHeightSpinBox->value();
-	double ratio = height / double(width);
+	double ratio = d->cropRatio();
 	d->mCropTool->setCropRatio(ratio);
 
 	d->heightSpinBox->setValue(int(d->widthSpinBox->value() * ratio));
