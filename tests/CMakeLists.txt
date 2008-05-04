@@ -55,9 +55,13 @@ set(metadatabackendtest_SRCS
 	metadatabackendtest.cpp
 	)
 
+if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+
 kde4_add_unit_test(metadatabackendtest ${metadatabackendtest_SRCS})
 
 target_link_libraries(metadatabackendtest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
 
 # SlideContainer
 set(slidecontainertest_SRCS
