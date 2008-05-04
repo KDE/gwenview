@@ -52,6 +52,7 @@ private Q_SLOTS:
 	void setCropRect(const QRect& rect);
 
 	void crop();
+	void applyRatioConstraint();
 
 private:
 	CropSideBarPrivate* const d;

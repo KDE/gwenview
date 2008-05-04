@@ -41,6 +41,8 @@ public:
 	CropTool(ImageView* parent);
 	~CropTool();
 
+	void setCropRatio(double ratio);
+
 	void setRect(const QRect&);
 
 	virtual void paint(QPainter*);

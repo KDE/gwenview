@@ -91,6 +91,13 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	connect(d->buttonBox, SIGNAL(rejected()),
 		SIGNAL(done()) );
 
+	connect(d->constrainRatioCheckBox, SIGNAL(toggled(bool)),
+		SLOT(applyRatioConstraint()) );
+	connect(d->ratioWidthSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(applyRatioConstraint()) );
+	connect(d->ratioHeightSpinBox, SIGNAL(valueChanged(int)),
+		SLOT(applyRatioConstraint()) );
+
 	// Don't do this before signals are connected, otherwise the tool won't get
 	// initialized
 	d->initWidgets();
@@ -141,6 +148,21 @@ void CropSideBar::crop() {
 	op->setDocument(d->mDocument);
 	d->mDocument->undoStack()->push(op);
 	emit done();
+}
+
+
+void CropSideBar::applyRatioConstraint() {
+	if (!d->constrainRatioCheckBox->isChecked()) {
+		d->mCropTool->setCropRatio(0);
+		return;
+	}
+
+	int width = d->ratioWidthSpinBox->value();
+	int height = d->ratioHeightSpinBox->value();
+	double ratio = height / double(width);
+	d->mCropTool->setCropRatio(ratio);
+
+	d->heightSpinBox->setValue(int(d->widthSpinBox->value() * ratio));
 }
 
 

@@ -59,6 +59,7 @@ struct CropToolPrivate {
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
 	QPoint mLastMouseMovePos;
+	double mCropRatio;
 
 	QRect handleViewportRect(CropHandle handle) {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
@@ -140,11 +141,17 @@ CropTool::CropTool(ImageView* view)
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 	d->mMovingHandle = CH_None;
 	d->mRect.setX(UNINITIALIZED_X);
+	d->mCropRatio = 0.;
 }
 
 
 CropTool::~CropTool() {
 	delete d;
+}
+
+
+void CropTool::setCropRatio(double ratio) {
+	d->mCropRatio = ratio;
 }
 
 
@@ -250,6 +257,27 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	} else if (d->mMovingHandle & CH_Right) {
 		d->mRect.setRight( qMax(posX, d->mRect.left()) );
 	}
+
+	if (d->mCropRatio > 0.) {
+		if (d->mMovingHandle == CH_Top || d->mMovingHandle == CH_Bottom) {
+			// Top or bottom
+			int width = int(d->mRect.height() / d->mCropRatio);
+			d->mRect.setWidth(width);
+		} else if (d->mMovingHandle == CH_Left || d->mMovingHandle == CH_Right) {
+			// Left or right
+			int height = int(d->mRect.width() * d->mCropRatio);
+			d->mRect.setHeight(height);
+		} else if (d->mMovingHandle & CH_Top) {
+			// Top left or top right
+			int height = int(d->mRect.width() * d->mCropRatio);
+			d->mRect.setTop(d->mRect.bottom() - height);
+		} else if (d->mMovingHandle & CH_Bottom) {
+			// Bottom left or bottom right
+			int height = int(d->mRect.width() * d->mCropRatio);
+			d->mRect.setHeight(height);
+		}
+	}
+
 	if (d->mMovingHandle == CH_Content) {
 		QPoint delta = point - d->mLastMouseMovePos;
 		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
