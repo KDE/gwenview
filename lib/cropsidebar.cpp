@@ -80,6 +80,8 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 			size.transpose();
 			addRatioToComboBox(size);
 		}
+
+		ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
 	}
 
 
