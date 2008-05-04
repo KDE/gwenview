@@ -193,18 +193,12 @@ QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
 
 
 MetaDataTag NepomukMetaDataBackEnd::tagForLabel(const QString& label) const {
-	// FIXME There is got to be a faster way
-	QList<Nepomuk::Tag> list = Nepomuk::Tag::allTags();
-	Q_FOREACH(const Nepomuk::Tag& tag, list) {
-		if (tag.label() == label) {
-			return tag.resourceUri().toString();
-		}
-	}
-
-	// Not found, create the tag
 	Nepomuk::Tag tag(label);
-	tag.setLabel(label);
-	tag.addIdentifier(label);
+	if (!tag.exists()) {
+		// Not found, create the tag
+		tag.setLabel(label);
+		tag.addIdentifier(label);
+	}
 	return tag.resourceUri().toString();
 }
 
