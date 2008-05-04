@@ -103,6 +103,7 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	imageView->setCurrentTool(d->mCropTool);
 	d->mWidget = new QWidget(this);
 	d->setupUi(d->mWidget);
+	d->mWidget->layout()->setMargin(0);
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(d->mWidget);
