@@ -53,6 +53,7 @@ private Q_SLOTS:
 
 	void crop();
 	void applyRatioConstraint();
+	void setRatioConstraintFromComboBox();
 
 private:
 	CropSideBarPrivate* const d;

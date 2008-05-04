@@ -45,7 +45,45 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 	bool mUpdatingFromCropTool;
 
 
-	void initWidgets() {
+	void addRatioToComboBox(const QSize& size, const QString& _label = QString()) {
+		QString label = _label;
+		if (label.isEmpty()) {
+			label = QString("%1 x %2").arg(size.width()).arg(size.height());
+		}
+		ratioComboBox->addItem(label, QVariant(size));
+	}
+
+
+	void addSeparatorToComboBox() {
+		ratioComboBox->insertSeparator(ratioComboBox->count());
+	}
+
+
+	void initRatioComboBox() {
+		QList<QSize> ratioList;
+		ratioList
+			<< QSize(3, 2)
+			<< QSize(4, 3)
+			<< QSize(5, 4)
+			<< QSize(6, 4)
+			<< QSize(7, 5)
+			<< QSize(10, 8);
+
+		addRatioToComboBox(QSize(1, 1), i18n("Square"));
+		addSeparatorToComboBox();
+
+		Q_FOREACH(const QSize& size, ratioList) {
+			addRatioToComboBox(size);
+		}
+		addSeparatorToComboBox();
+		Q_FOREACH(QSize size, ratioList) {
+			size.transpose();
+			addRatioToComboBox(size);
+		}
+	}
+
+
+	void initSpinBoxes() {
 		QSize size = mDocument->size();
 		leftSpinBox->setMaximum(size.width());
 		widthSpinBox->setMaximum(size.width());
@@ -73,6 +111,8 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	Q_ASSERT(ok);
 	ok->setText(i18n("Crop"));
 
+	d->initRatioComboBox();
+
 	connect(d->mCropTool, SIGNAL(rectUpdated(const QRect&)),
 		SLOT(setCropRect(const QRect&)) );
 
@@ -98,9 +138,12 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	connect(d->ratioHeightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(applyRatioConstraint()) );
 
+	connect(d->ratioComboBox, SIGNAL(activated(int)),
+		SLOT(setRatioConstraintFromComboBox()) );
+
 	// Don't do this before signals are connected, otherwise the tool won't get
 	// initialized
-	d->initWidgets();
+	d->initSpinBoxes();
 }
 
 
@@ -163,6 +206,20 @@ void CropSideBar::applyRatioConstraint() {
 	d->mCropTool->setCropRatio(ratio);
 
 	d->heightSpinBox->setValue(int(d->widthSpinBox->value() * ratio));
+}
+
+
+void CropSideBar::setRatioConstraintFromComboBox() {
+	QVariant data = d->ratioComboBox->itemData(d->ratioComboBox->currentIndex());
+	if (!data.isValid()) {
+		return;
+	}
+
+	QSize size = data.toSize();
+	d->ratioWidthSpinBox->blockSignals(true);
+	d->ratioWidthSpinBox->setValue(size.width());
+	d->ratioWidthSpinBox->blockSignals(false);
+	d->ratioHeightSpinBox->setValue(size.height());
 }
 
 
