@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class QModelIndex;
 
-class KFileItemList;
 class KUrl;
 
 namespace KParts { class ReadOnlyPart; }

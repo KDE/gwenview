@@ -39,7 +39,6 @@
 #include <kfileitem.h>
 
 // Local
-class KConfig;
 
 namespace Gwenview {
 class ThumbnailThread : public QThread {

@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 namespace Gwenview {
 
 class AbstractImageViewTool;
-class ImageScaler;
 
 class ImageViewPrivate;
 class GWENVIEWLIB_EXPORT ImageView : public QAbstractScrollArea {

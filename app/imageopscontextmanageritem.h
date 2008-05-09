@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "abstractcontextmanageritem.h"
 
-class KActionCollection;
 
 namespace Gwenview {
 

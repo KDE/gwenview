@@ -35,7 +35,6 @@ namespace Gwenview {
 class SideBar;
 class SortedDirModel;
 
-class ImageViewPart;
 class AbstractContextManagerItem;
 
 class ContextManagerPrivate;
