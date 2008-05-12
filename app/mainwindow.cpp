@@ -82,6 +82,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
+#include <lib/signalblocker.h>
 #include <lib/metadata/sorteddirmodel.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/urlutils.h>
@@ -305,6 +306,11 @@ struct MainWindow::Private {
 		mGoToNextAction->setShortcut(Qt::Key_Space);
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
+
+		action = actionCollection->addAction("go_start_page");
+		action->setText(i18nc("@action", "Start Page"));
+		connect(action, SIGNAL(triggered()),
+			mWindow, SLOT(showStartPage()) );
 
 		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
@@ -762,6 +768,12 @@ void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
 	d->mBrowseAction->setEnabled(true);
 	d->mViewAction->setEnabled(true);
 	openDirUrl(url);
+
+	if (d->mBrowseAction->isChecked()) {
+		// Silently uncheck the action so that trigger() does the right thing
+		SignalBlocker blocker(d->mBrowseAction);
+		d->mBrowseAction->setChecked(false);
+	}
 	d->mBrowseAction->trigger();
 }
 

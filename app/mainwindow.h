@@ -47,8 +47,6 @@ public:
 	 */
 	void setInitialUrl(const KUrl&);
 
-	void showStartPage();
-
 	DocumentView* documentView() const;
 
 	ContextManager* contextManager() const;
@@ -78,6 +76,7 @@ private Q_SLOTS:
 	void openDirUrl(const KUrl&);
 	void slotThumbnailViewIndexActivated(const QModelIndex&);
 
+	void showStartPage();
 	void slotStartPageUrlSelected(const KUrl&);
 
 	void openDocumentUrl(const KUrl&);

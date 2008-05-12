@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="39">
+<kpartgui name="gwenview" version="40">
 
 <MenuBar>
 	<Menu name="file" >
@@ -49,6 +49,8 @@
 		<Action name="go_next"/>
 		<Separator/>
 		<Action name="go_up"/>
+		<Separator/>
+		<Action name="go_start_page"/>
 	</Menu>
 	<Menu name="plugins">
 		<text>&amp;Plugins</text>
