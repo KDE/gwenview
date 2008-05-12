@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <krandom.h>
 #include <ktemporaryfile.h>
 #include <qtest_kde.h>
 
@@ -100,7 +101,7 @@ void MetaDataBackEndTest::testRating() {
 
 
 void MetaDataBackEndTest::testTagForLabel() {
-	QString label = "Holidays in London";
+	QString label = "testTagForLabel-" + KRandom::randomString(5);
 	MetaDataTag tag1 = mBackEnd->tagForLabel(label);
 	QVERIFY(!tag1.isEmpty());
 
