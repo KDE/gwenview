@@ -94,7 +94,11 @@ void FullScreenBar::moveBar(qreal value) {
 
 void FullScreenBar::setActivated(bool activated) {
 	if (activated) {
-		qApp->installEventFilter(this);
+		// Delay installation of event filter because switching to fullscreen
+		// cause a few window adjustments, which seems to generate unwanted
+		// mouse events, which cause the bar to slide in.
+		QTimer::singleShot(500, this, SLOT(delayedInstallEventFilter()));
+
 		// Make sure the widget is not partially visible on start
 		move(0, -150);
 		raise();
@@ -106,6 +110,11 @@ void FullScreenBar::setActivated(bool activated) {
 		d->mAutoHideTimer->stop();
 		QApplication::restoreOverrideCursor();
 	}
+}
+
+
+void FullScreenBar::delayedInstallEventFilter() {
+	qApp->installEventFilter(this);
 }
 
 
