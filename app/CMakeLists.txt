@@ -30,6 +30,7 @@ set(gwenview_SRCS
 	preloader.cpp
 	savebar.cpp
 	sidebar.cpp
+	startpage.cpp
 	thumbnailviewhelper.cpp
 	thumbnailviewpanel.cpp
 	thumbnailbarview.cpp

@@ -70,6 +70,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "preloader.h"
 #include "savebar.h"
 #include "sidebar.h"
+#include "startpage.h"
 #include "thumbnailbarview.h"
 #include "thumbnailviewhelper.h"
 #include "thumbnailviewpanel.h"
@@ -119,6 +120,7 @@ struct MainWindow::Private {
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	QSlider* mThumbnailSlider;
 	ThumbnailViewPanel* mThumbnailViewPanel;
+	StartPage* mStartPage;
 	SideBar* mSideBar;
 	QStackedWidget* mViewStackedWidget;
 	QStackedWidget* mSideBarContainer;
@@ -168,8 +170,10 @@ struct MainWindow::Private {
 
 		setupThumbnailView(mViewStackedWidget);
 		setupDocumentView(mViewStackedWidget);
+		setupStartPage(mViewStackedWidget);
 		mViewStackedWidget->addWidget(mThumbnailViewPanel);
 		mViewStackedWidget->addWidget(mDocumentView);
+		mViewStackedWidget->addWidget(mStartPage);
 		mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
 
 		mSideBarContainer = new QStackedWidget(mCentralSplitter);
@@ -242,6 +246,14 @@ struct MainWindow::Private {
 		bar->setThumbnailViewHelper(mThumbnailViewHelper);
 		bar->setSelectionModel(mThumbnailView->selectionModel());
 	}
+
+
+	void setupStartPage(QWidget* parent) {
+		mStartPage = new StartPage(parent);
+		connect(mStartPage, SIGNAL(urlSelected(const KUrl&)),
+			mWindow, SLOT(slotStartPageUrlSelected(const KUrl&)) );
+	}
+
 
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
@@ -646,7 +658,9 @@ void MainWindow::updateModifiedFlag() {
 
 
 void MainWindow::setInitialUrl(const KUrl& url) {
-	if (UrlUtils::urlIsDirectory(url)) {
+	if (!url.isValid()) {
+		showStartPage();
+	} else if (UrlUtils::urlIsDirectory(url)) {
 		d->mBrowseAction->trigger();
 		openDirUrl(url);
 	} else {
@@ -734,6 +748,21 @@ void MainWindow::goUp() {
 	KUrl url = d->mDirModel->dirLister()->url();
 	url = url.upUrl();
 	openDirUrl(url);
+}
+
+
+void MainWindow::showStartPage() {
+	d->mBrowseAction->setEnabled(false);
+	d->mViewAction->setEnabled(false);
+	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
+}
+
+
+void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
+	d->mBrowseAction->setEnabled(true);
+	d->mViewAction->setEnabled(true);
+	openDirUrl(url);
+	d->mBrowseAction->trigger();
 }
 
 
