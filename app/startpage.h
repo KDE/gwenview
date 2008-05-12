@@ -22,13 +22,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define STARTPAGE_H
 
 // Qt
-#include <QWidget>
+#include <QFrame>
 
 // KDE
 
 // Local
 
 class QModelIndex;
+class QPalette;
 
 class KFilePlacesModel;
 class KUrl;
@@ -37,11 +38,13 @@ namespace Gwenview {
 
 
 class StartPagePrivate;
-class StartPage : public QWidget {
+class StartPage : public QFrame {
 	Q_OBJECT
 public:
 	StartPage(QWidget* parent);
 	~StartPage();
+
+	void applyPalette(const QPalette&);
 
 Q_SIGNALS:
 	void urlSelected(const KUrl& url);

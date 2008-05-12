@@ -55,6 +55,7 @@ kde4_add_ui_files(gwenview_SRCS
 	fullscreenconfigdialog.ui
 	metadatadialog.ui
 	nepomuksidebaritem.ui
+	startpage.ui
 	thumbnailviewpanel.ui
 	)
 

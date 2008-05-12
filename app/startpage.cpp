@@ -23,34 +23,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QListView>
-#include <QVBoxLayout>
 
 // KDE
 #include <kfileplacesmodel.h>
 
 // Local
+#include <ui_startpage.h>
 
 namespace Gwenview {
 
 
-struct StartPagePrivate {
-	KFilePlacesModel* mFilePlacesModel;
-	QListView* mListView;
+struct StartPagePrivate : public Ui_StartPage{
+	KFilePlacesModel* mBookmarksModel;
 };
 
 
 StartPage::StartPage(QWidget* parent)
-: QWidget(parent)
+: QFrame(parent)
 , d(new StartPagePrivate) {
-	d->mFilePlacesModel = new KFilePlacesModel(this);
+	d->setupUi(this);
 
-	d->mListView = new QListView;
-	d->mListView->setModel(d->mFilePlacesModel);
+	d->mBookmarksModel = new KFilePlacesModel(this);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->addWidget(d->mListView);
+	d->mBookmarksView->setModel(d->mBookmarksModel);
 
-	connect(d->mListView, SIGNAL(clicked(const QModelIndex&)),
+	connect(d->mBookmarksView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
 }
 
@@ -60,8 +57,35 @@ StartPage::~StartPage() {
 }
 
 
+void StartPage::applyPalette(const QPalette& newPalette) {
+	QColor bgColor = newPalette.base().color();
+	QColor fgColor = newPalette.text().color();
+
+	QPalette pal = palette();
+	pal.setBrush(backgroundRole(), newPalette.base());
+	setPalette(pal);
+
+	QString css = QString::fromUtf8(
+		"QLabel, QListView {"
+		"	color: %1;"
+		"}"
+
+		"QLabel {"
+		"	font-weight: bold;"
+		"	border-bottom: 1px solid %1;"
+		"}"
+
+		"QListView {"
+		"	background-color: transparent;"
+		"}"
+		)
+		.arg(fgColor.name());
+	setStyleSheet(css);
+}
+
+
 void StartPage::slotListViewClicked(const QModelIndex& index) {
-	KUrl url = d->mFilePlacesModel->url(index);
+	KUrl url = d->mBookmarksModel->url(index);
 	emit urlSelected(url);
 }
 
