@@ -189,7 +189,7 @@ void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaDa
 QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
 	Nepomuk::Tag tag(uri);
 	Q_ASSERT(tag.exists());
-	return tag.genericLabel();
+	return tag.label();
 }
 
 
