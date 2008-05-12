@@ -84,7 +84,11 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 
 
 void StartPage::slotListViewClicked(const QModelIndex& index) {
-	KUrl url = d->mBookmarksModel->url(index);
+	if (!index.isValid()) {
+		return;
+	}
+	QVariant data = index.data(KFilePlacesModel::UrlRole);
+	KUrl url = data.toUrl();
 	emit urlSelected(url);
 }
 
