@@ -55,6 +55,9 @@ public:
 
 	void showTemporarySideBar(QWidget* sideBar);
 
+public Q_SLOTS:
+	void showStartPage();
+
 Q_SIGNALS:
 	void viewModeChanged();
 
@@ -76,7 +79,6 @@ private Q_SLOTS:
 	void openDirUrl(const KUrl&);
 	void slotThumbnailViewIndexActivated(const QModelIndex&);
 
-	void showStartPage();
 	void slotStartPageUrlSelected(const KUrl&);
 
 	void openDocumentUrl(const KUrl&);

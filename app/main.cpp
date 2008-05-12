@@ -71,8 +71,13 @@ int main(int argc, char *argv[]) {
 	Gwenview::ImageFormats::registerPlugins();
 
 	Gwenview::MainWindow* window = new Gwenview::MainWindow();
+	if (url.isValid()) {
+		window->setInitialUrl(url);
+	} else {
+		window->showStartPage();
+	}
+
 	window->show();
-	window->setInitialUrl(url);
 	if (startInFullScreen) {
 		window->actionCollection()->action("fullscreen")->trigger();
 	} else {

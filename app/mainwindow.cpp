@@ -665,9 +665,8 @@ void MainWindow::updateModifiedFlag() {
 
 
 void MainWindow::setInitialUrl(const KUrl& url) {
-	if (!url.isValid()) {
-		showStartPage();
-	} else if (UrlUtils::urlIsDirectory(url)) {
+	Q_ASSERT(url.isValid());
+	if (UrlUtils::urlIsDirectory(url)) {
 		d->mBrowseAction->trigger();
 		openDirUrl(url);
 	} else {
@@ -763,9 +762,10 @@ void MainWindow::showStartPage() {
 	d->mViewAction->setEnabled(false);
 	d->mFullScreenAction->setEnabled(false);
 	d->mToggleSideBarAction->setEnabled(false);
-	if (d->mSideBarContainer->isVisible()) {
-		d->mToggleSideBarAction->trigger();
-	}
+
+	d->mSideBarContainer->hide();
+	d->updateToggleSideBarAction();
+
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 }
 
