@@ -20,6 +20,8 @@
 		<Action name="file_create_folder"/>
 		<Action name="file_open_with"/>
 		<Separator/>
+		<Action name="add_folder_to_places"/>
+		<Separator/>
 		<Action name="quit"/>
 	</Menu>
 	<Menu name="view" >

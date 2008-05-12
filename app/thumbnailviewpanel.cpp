@@ -49,6 +49,7 @@ namespace Gwenview {
 
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	ThumbnailViewPanel* that;
+	KFilePlacesModel* mFilePlacesModel;
 	KUrlNavigator* mUrlNavigator;
 	SortedDirModel* mDirModel;
 	QAction* mShowFilterBar;
@@ -65,8 +66,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 		// mUrlNavigator
-		KFilePlacesModel* places = new KFilePlacesModel(that);
-		mUrlNavigator = new KUrlNavigator(places, KUrl(), that);
+		mFilePlacesModel = new KFilePlacesModel(that);
+		mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), that);
 		static_cast<QVBoxLayout*>(that->layout())->insertWidget(0, mUrlNavigator);
 
 		// Rating slider
@@ -107,6 +108,11 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		editLocationAction->setShortcut(Qt::Key_F6);
 		QObject::connect(editLocationAction, SIGNAL(triggered()),
 			that, SLOT(editLocation()));
+
+		KAction* action = actionCollection->addAction("add_folder_to_places");
+		action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
+		QObject::connect(action, SIGNAL(triggered()),
+			that, SLOT(addFolderToPlaces()));
 	}
 
 	void updateShowFilterBarAction() {
@@ -172,6 +178,16 @@ void ThumbnailViewPanel::applyNameFilter() {
 void ThumbnailViewPanel::editLocation() {
 	d->mUrlNavigator->setUrlEditable(true);
 	d->mUrlNavigator->setFocus();
+}
+
+
+void ThumbnailViewPanel::addFolderToPlaces() {
+	KUrl url = d->mUrlNavigator->url();
+	QString text = url.fileName();
+	if (text.isEmpty()) {
+		text = url.pathOrUrl();
+	}
+	d->mFilePlacesModel->addPlace(text, url);
 }
 
 

@@ -57,6 +57,7 @@ private Q_SLOTS:
 	void applyNameFilter();
 	void toggleFilterBarVisibility();
 	void editLocation();
+	void addFolderToPlaces();
 
 private:
 	ThumbnailViewPanelPrivate* const d;
