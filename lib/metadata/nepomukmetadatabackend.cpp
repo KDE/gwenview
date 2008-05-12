@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWaitCondition>
 
 // KDE
+#include <kdebug.h>
 #include <kurl.h>
 
 // Nepomuk
@@ -188,7 +189,7 @@ void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaDa
 QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
 	Nepomuk::Tag tag(uri);
 	Q_ASSERT(tag.exists());
-	return tag.label();
+	return tag.genericLabel();
 }
 
 
@@ -197,7 +198,6 @@ MetaDataTag NepomukMetaDataBackEnd::tagForLabel(const QString& label) const {
 	if (!tag.exists()) {
 		// Not found, create the tag
 		tag.setLabel(label);
-		tag.addIdentifier(label);
 	}
 	return tag.resourceUri().toString();
 }
