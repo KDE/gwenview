@@ -402,7 +402,7 @@ struct MainWindow::Private {
 	}
 
 	void updateToggleSideBarAction() {
-		if (mSideBarContainer->isVisible()) {
+		if (mSideBarContainer->isVisibleTo(mSideBarContainer->parentWidget())) {
 			mToggleSideBarAction->setText(i18n("Hide Sidebar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Sidebar"));
