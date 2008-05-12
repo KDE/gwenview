@@ -23,9 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QListView>
+#include <QStandardItemModel>
 
 // KDE
 #include <kfileplacesmodel.h>
+#include <kicon.h>
+#include <kmimetype.h>
 
 // Local
 #include <ui_startpage.h>
@@ -35,6 +38,28 @@ namespace Gwenview {
 
 struct StartPagePrivate : public Ui_StartPage{
 	KFilePlacesModel* mBookmarksModel;
+	QStandardItemModel* mRecentFoldersModel;
+
+	void updateRecentFoldersModel() {
+		//QStringList list = GwenviewConfig::recentFolders();
+		QStringList list;
+		list << "/home" << "/";
+
+		mRecentFoldersModel->clear();
+		Q_FOREACH(const QString& urlString, list) {
+			KUrl url(urlString);
+
+			QStandardItem* item = new QStandardItem;
+			item->setText(url.pathOrUrl());
+
+			QString iconName = KMimeType::iconNameForUrl(url);
+			item->setIcon(KIcon(iconName));
+
+			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
+
+			mRecentFoldersModel->appendRow(item);
+		}
+	}
 };
 
 
@@ -44,10 +69,15 @@ StartPage::StartPage(QWidget* parent)
 	d->setupUi(this);
 
 	d->mBookmarksModel = new KFilePlacesModel(this);
+	d->mRecentFoldersModel = new QStandardItemModel(this);
 
 	d->mBookmarksView->setModel(d->mBookmarksModel);
+	d->mRecentFoldersView->setModel(d->mRecentFoldersModel);
 
 	connect(d->mBookmarksView, SIGNAL(clicked(const QModelIndex&)),
+		SLOT(slotListViewClicked(const QModelIndex&)) );
+
+	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
 }
 
@@ -90,6 +120,12 @@ void StartPage::slotListViewClicked(const QModelIndex& index) {
 	QVariant data = index.data(KFilePlacesModel::UrlRole);
 	KUrl url = data.toUrl();
 	emit urlSelected(url);
+}
+
+
+void StartPage::showEvent(QShowEvent* event) {
+	d->updateRecentFoldersModel();
+	QFrame::showEvent(event);
 }
 
 

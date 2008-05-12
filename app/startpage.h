@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QModelIndex;
 class QPalette;
+class QShowEvent;
 
 class KFilePlacesModel;
 class KUrl;
@@ -48,6 +49,9 @@ public:
 
 Q_SIGNALS:
 	void urlSelected(const KUrl& url);
+
+protected:
+	virtual void showEvent(QShowEvent*);
 
 private Q_SLOTS:
 	void slotListViewClicked(const QModelIndex& index);
