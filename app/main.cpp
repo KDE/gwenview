@@ -19,9 +19,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 // Qt
 #include <QDir>
+#include <QTimer>
 
 // KDE
 #include <kaboutdata.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -48,22 +50,34 @@ int main(int argc, char *argv[]) {
 	KCmdLineArgs::init( argc, argv, &aboutData );
 
 	KCmdLineOptions options;
+	options.add("f", ki18n("Start in fullscreen mode"));
 	options.add("+[file or folder]", ki18n("A starting file or folder"));
 	KCmdLineArgs::addCmdLineOptions( options );
+
+	KUrl url;
+	bool startInFullScreen = false;
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	if (args->count() > 0) {
+		url = args->url(0);
+	}
+
+	if (url.isValid() && args->isSet("f")) {
+		startInFullScreen = true;
+	}
+	args->clear();
 
 	KApplication app;
 
 	Gwenview::ImageFormats::registerPlugins();
 
 	Gwenview::MainWindow* window = new Gwenview::MainWindow();
-	KUrl url;
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if (args->count()>0) {
-		url=args->url(0);
-	}
-	args->clear();
 	window->show();
 	window->setInitialUrl(url);
+	if (startInFullScreen) {
+		window->actionCollection()->action("fullscreen")->trigger();
+	} else {
+		window->show();
+	}
 
 	return app.exec();
 }
