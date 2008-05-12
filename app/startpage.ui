@@ -22,6 +22,12 @@
    <enum>QFrame::Sunken</enum>
   </property>
   <layout class="QGridLayout" name="gridLayout" >
+   <property name="horizontalSpacing" >
+    <number>20</number>
+   </property>
+   <property name="margin" >
+    <number>20</number>
+   </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >

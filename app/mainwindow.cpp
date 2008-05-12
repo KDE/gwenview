@@ -760,6 +760,11 @@ void MainWindow::goUp() {
 void MainWindow::showStartPage() {
 	d->mBrowseAction->setEnabled(false);
 	d->mViewAction->setEnabled(false);
+	d->mFullScreenAction->setEnabled(false);
+	d->mToggleSideBarAction->setEnabled(false);
+	if (d->mSideBarContainer->isVisible()) {
+		d->mToggleSideBarAction->trigger();
+	}
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 }
 
@@ -767,6 +772,8 @@ void MainWindow::showStartPage() {
 void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
 	d->mBrowseAction->setEnabled(true);
 	d->mViewAction->setEnabled(true);
+	d->mFullScreenAction->setEnabled(true);
+	d->mToggleSideBarAction->setEnabled(true);
 	openDirUrl(url);
 
 	if (d->mBrowseAction->isChecked()) {
