@@ -59,10 +59,9 @@ int main(int argc, char *argv[]) {
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if (args->count() > 0) {
 		url = args->url(0);
-	}
-
-	if (url.isValid() && args->isSet("f")) {
-		startInFullScreen = true;
+		if (url.isValid() && args->isSet("f")) {
+			startInFullScreen = true;
+		}
 	}
 	args->clear();
 
