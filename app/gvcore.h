@@ -40,6 +40,8 @@ public:
 	GvCore(QWidget* mainWindow);
 	~GvCore();
 
+	void addUrlToRecentFolders(const KUrl&);
+
 public Q_SLOTS:
 	void saveAll();
 	void save(const KUrl&);

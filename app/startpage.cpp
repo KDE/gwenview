@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <ui_startpage.h>
+#include <lib/gwenviewconfig.h>
 
 namespace Gwenview {
 
@@ -41,9 +42,7 @@ struct StartPagePrivate : public Ui_StartPage{
 	QStandardItemModel* mRecentFoldersModel;
 
 	void updateRecentFoldersModel() {
-		//QStringList list = GwenviewConfig::recentFolders();
-		QStringList list;
-		list << "/home" << "/";
+		QStringList list = GwenviewConfig::recentFolders();
 
 		mRecentFoldersModel->clear();
 		Q_FOREACH(const QString& urlString, list) {

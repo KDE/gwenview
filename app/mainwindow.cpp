@@ -456,6 +456,7 @@ struct MainWindow::Private {
 		mThumbnailViewHelper->setCurrentDirUrl(url);
 		mUrlNavigator->setUrl(url);
 		mGoUpAction->setEnabled(url.path() != "/");
+		mGvCore->addUrlToRecentFolders(url);
 	}
 
 	void setupFullScreenBar() {

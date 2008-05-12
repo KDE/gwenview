@@ -15,6 +15,9 @@
 		<entry name="ViewBackgroundColor" type="Color">
 			<default>#666666</default>
 		</entry>
+		<entry name="RecentFolders" type="StringList">
+			<default></default>
+		</entry>
 	</group>
 
 	<group name="FullScreen">

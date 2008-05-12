@@ -40,8 +40,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/document/documentfactory.h>
+#include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/transformimageoperation.h>
+
+static const int MAX_RECENT_FOLDER = 20;
 
 namespace Gwenview {
 
@@ -60,6 +63,29 @@ GvCore::GvCore(QWidget* parent)
 
 GvCore::~GvCore() {
 	delete d;
+}
+
+
+void GvCore::addUrlToRecentFolders(const KUrl& url) {
+	QStringList list = GwenviewConfig::recentFolders();
+	QString urlString =url.url();
+	int index = list.indexOf(urlString);
+
+	if (index == 0) {
+		// Nothing to do, it's already the first recent folder.
+		return;
+	} else if (index != -1) {
+		// Remove it from the list. This way it will get inserted at the
+		// beginning.
+		list.removeAt(index);
+	}
+
+	list.insert(0, urlString);
+	while (list.size() > MAX_RECENT_FOLDER) {
+		list.removeLast();
+	}
+
+	GwenviewConfig::setRecentFolders(list);
 }
 
 
