@@ -58,7 +58,6 @@ StartPage::~StartPage() {
 
 
 void StartPage::applyPalette(const QPalette& newPalette) {
-	QColor bgColor = newPalette.base().color();
 	QColor fgColor = newPalette.text().color();
 
 	QPalette pal = palette();
