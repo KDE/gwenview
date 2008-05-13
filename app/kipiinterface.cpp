@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <kdebug.h>
 #include <kurl.h>
 #include <kxmlguifactory.h>
+#include <kdirlister.h>
 
 // KIPI
 #include <libkipi/imagecollectionshared.h>
@@ -42,6 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "mainwindow.h"
 #include "contextmanager.h"
 #include <lib/jpegcontent.h>
+#include <lib/metadata/sorteddirmodel.h>
 
 namespace Gwenview {
 #undef ENABLE_LOG
@@ -238,11 +240,13 @@ void KIPIInterface::init() {
 }
 
 KIPI::ImageCollection KIPIInterface::currentAlbum() {
-//TODO check if correct
 	LOG("");
 	KUrl url = d->mMainWindow->contextManager()->currentDirUrl();
-	KUrl::List list;
-	
+
+	KFileItemList fileList =
+				d->mMainWindow->contextManager()->dirModel()->dirLister()->itemsForDir(url);
+	KUrl::List list = fileList.urlList();
+
 	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
 
