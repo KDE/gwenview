@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kactioncollection.h>
+#include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -40,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/metadata/sorteddirmodel.h>
+#include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <ui_thumbnailviewpanel.h>
@@ -53,6 +55,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KUrlNavigator* mUrlNavigator;
 	SortedDirModel* mDirModel;
 	QAction* mShowFilterBar;
+	int mDocumentCount;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -124,6 +127,35 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		}
 		mShowFilterBar->setText(text);
 	}
+
+	void updateDocumentCountLabel() {
+		QString text = i18ncp("@label", "%1 document", "%1 documents", mDocumentCount);
+		mDocumentCountLabel->setText(text);
+	}
+
+	void setupDocumentCountConnections() {
+		QObject::connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			that, SLOT(slotDirModelRowsInserted(const QModelIndex&, int, int)) );
+
+		QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+			that, SLOT(slotDirModelRowsAboutToBeRemoved(const QModelIndex&, int, int)) );
+
+		QObject::connect(mDirModel, SIGNAL(modelReset()),
+			that, SLOT(slotDirModelReset()) );
+	}
+
+
+	int documentCountInIndexRange(const QModelIndex& parent, int start, int end) {
+		int count = 0;
+		for (int row=start; row<=end; ++row) {
+			QModelIndex index = mDirModel->index(row, 0, parent);
+			KFileItem item = mDirModel->itemForIndex(index);
+			if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+				++count;
+			}
+		}
+		return count;
+	}
 };
 
 
@@ -132,8 +164,10 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 , d(new ThumbnailViewPanelPrivate) {
 	d->that = this;
 	d->mDirModel = dirModel;
+	d->mDocumentCount = 0;
 	d->setupWidgets();
 	d->setupActions(actionCollection);
+	d->setupDocumentCountConnections();
 }
 
 
@@ -188,6 +222,30 @@ void ThumbnailViewPanel::addFolderToPlaces() {
 		text = url.pathOrUrl();
 	}
 	d->mFilePlacesModel->addPlace(text, url);
+}
+
+
+void ThumbnailViewPanel::slotDirModelRowsInserted(const QModelIndex& parent, int start, int end) {
+	int count = d->documentCountInIndexRange(parent, start, end);
+	if (count > 0) {
+		d->mDocumentCount += count;
+		d->updateDocumentCountLabel();
+	}
+}
+
+
+void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
+	int count = d->documentCountInIndexRange(parent, start, end);
+	if (count > 0) {
+		d->mDocumentCount -= count;
+		d->updateDocumentCountLabel();
+	}
+}
+
+
+void ThumbnailViewPanel::slotDirModelReset() {
+	d->mDocumentCount = 0;
+	d->updateDocumentCountLabel();
 }
 
 

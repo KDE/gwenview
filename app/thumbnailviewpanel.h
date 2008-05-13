@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QModelIndex;
 class QSlider;
 
 class KActionCollection;
@@ -58,6 +59,10 @@ private Q_SLOTS:
 	void toggleFilterBarVisibility();
 	void editLocation();
 	void addFolderToPlaces();
+
+	void slotDirModelRowsInserted(const QModelIndex& parent, int start, int end);
+	void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+	void slotDirModelReset();
 
 private:
 	ThumbnailViewPanelPrivate* const d;
