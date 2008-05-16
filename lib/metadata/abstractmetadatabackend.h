@@ -74,6 +74,8 @@ class AbstractMetaDataBackEnd : public QObject {
 public:
 	AbstractMetaDataBackEnd(QObject* parent);
 
+	virtual TagSet allTags() const = 0;
+
 	virtual void storeMetaData(const KUrl&, const MetaData&) = 0;
 
 	virtual void retrieveMetaData(const KUrl&) = 0;

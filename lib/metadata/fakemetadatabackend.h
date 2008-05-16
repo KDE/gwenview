@@ -45,6 +45,8 @@ public:
 	enum InitializeMode { InitializeEmpty, InitializeRandom };
 	FakeMetaDataBackEnd(QObject* parent, InitializeMode initializeMode);
 
+	virtual TagSet allTags() const;
+
 	virtual void storeMetaData(const KUrl&, const MetaData&);
 
 	virtual void retrieveMetaData(const KUrl&);

@@ -42,6 +42,17 @@ void FakeMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaDat
 }
 
 
+TagSet FakeMetaDataBackEnd::allTags() const {
+	TagSet set;
+	set
+		<< tagForLabel("beach")
+		<< tagForLabel("mountains")
+		<< tagForLabel("wallpaper")
+		;
+	return set;
+}
+
+
 void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
 	if (!mMetaDataForUrl.contains(url)) {
 		QString urlString = url.url();

@@ -45,6 +45,8 @@ public:
 	NepomukMetaDataBackEnd(QObject* parent);
 	~NepomukMetaDataBackEnd();
 
+	virtual TagSet allTags() const;
+
 	virtual void storeMetaData(const KUrl&, const MetaData&);
 
 	virtual void retrieveMetaData(const KUrl&);

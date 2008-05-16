@@ -169,6 +169,18 @@ NepomukMetaDataBackEnd::~NepomukMetaDataBackEnd() {
 }
 
 
+TagSet NepomukMetaDataBackEnd::allTags() const {
+	QList<Nepomuk::Tag> list = Nepomuk::Tag::allTags();
+
+	TagSet set;
+	Q_FOREACH(const Nepomuk::Tag& tag, list) {
+		set << tag.resourceUri().toString();
+	}
+
+	return set;
+}
+
+
 void NepomukMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
 	StoreTask* task = new StoreTask(url, metaData);
 	d->mThread.enqueueTask(task);
