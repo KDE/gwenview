@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifdef GWENVIEW_METADATA_BACKEND_NONE
 #include <kdirmodel.h>
 #else
+#include "abstractmetadatabackend.h"
 #include "metadatadirmodel.h"
 #endif
 
@@ -41,6 +42,7 @@ struct SortedDirModelPrivate {
 	KDirModel* mSourceModel;
 #else
 	MetaDataDirModel* mSourceModel;
+	TagSet mTagSet;
 #endif
 	QStringList mMimeExcludeFilter;
 	int mMinimumRating;
@@ -72,7 +74,6 @@ KDirLister* SortedDirModel::dirLister() {
 
 
 void SortedDirModel::setMinimumRating(int rating) {
-	kDebug() << "rating=" << rating;
 	d->mMinimumRating = rating;
 	invalidateFilter();
 }
@@ -125,14 +126,26 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 		}
 	}
 #ifndef GWENVIEW_METADATA_BACKEND_NONE
-	if (d->mMinimumRating > 0) {
-		if (d->mSourceModel->metaDataAvailableForIndex(index)) {
-			int rating = d->mSourceModel->data(index, MetaDataDirModel::RatingRole).toInt();
-			if (rating < d->mMinimumRating) {
-				return false;
-			}
-		} else {
+	if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
+		// Make sure we have metadata, otherwise retrieve it and return false,
+		// we will be called again later when metadata is there.
+		if (!d->mSourceModel->metaDataAvailableForIndex(index)) {
 			d->mSourceModel->retrieveMetaDataForIndex(index);
+			return false;
+		}
+	}
+
+	if (d->mMinimumRating > 0) {
+		int rating = d->mSourceModel->data(index, MetaDataDirModel::RatingRole).toInt();
+		if (rating < d->mMinimumRating) {
+			return false;
+		}
+	}
+
+	if (!d->mTagSet.isEmpty()) {
+		TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, MetaDataDirModel::TagsRole));
+		TagSet commonSet = indexTagSet & d->mTagSet;
+		if (commonSet.size() < d->mTagSet.size()) {
 			return false;
 		}
 	}
@@ -143,9 +156,18 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 
 AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
 #ifdef GWENVIEW_METADATA_BACKEND_NONE
-        return 0;
+	return 0;
 #else
 	return d->mSourceModel->metaDataBackEnd();
+#endif
+}
+
+
+void SortedDirModel::setTagSetFilter(const TagSet& tagSet) {
+#ifndef GWENVIEW_METADATA_BACKEND_NONE
+	kDebug() << tagSet;
+	d->mTagSet = tagSet;
+	invalidateFilter();
 #endif
 }
 

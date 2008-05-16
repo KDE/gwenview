@@ -35,6 +35,7 @@ namespace Gwenview {
 
 class AbstractMetaDataBackEnd;
 class SortedDirModelPrivate;
+class TagSet;
 
 
 /**
@@ -52,6 +53,8 @@ public:
 	QModelIndex indexForUrl(const KUrl& url) const;
 
 	virtual void setMimeExcludeFilter(const QStringList &mimeList);
+
+	void setTagSetFilter(const TagSet& tagSet);
 
 	AbstractMetaDataBackEnd* metaDataBackEnd() const;
 
