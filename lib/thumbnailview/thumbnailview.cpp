@@ -178,9 +178,15 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 	KFileItemList itemList;
 	for (int pos=start; pos<=end; ++pos) {
 		QModelIndex index = model()->index(pos, 0, parent);
-
-		QVariant data = index.data(KDirModel::FileItemRole);
-		KFileItem item = qvariant_cast<KFileItem>(data);
+		if (!index.isValid()) {
+			kDebug() << "Skipping invalid index" << pos;
+			continue;
+		}
+		KFileItem item = fileItemForIndex(index);
+		if (item.isNull()) {
+			kDebug() << "Skipping invalid item!" << index.data().toString();
+			continue;
+		}
 
 		QUrl url = item.url();
 		d->mThumbnailForUrl.remove(url);
