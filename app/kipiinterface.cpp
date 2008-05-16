@@ -35,13 +35,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <libkipi/imagecollectionshared.h>
 #include <libkipi/imageinfo.h>
 #include <libkipi/imageinfoshared.h>
-#include <libkipi/imagecollectionshared.h>
 #include <libkipi/plugin.h>
 #include <libkipi/pluginloader.h>
 
 // local
 #include "mainwindow.h"
 #include "contextmanager.h"
+#include "kipiuploadwidget.h"
 #include <lib/jpegcontent.h>
 #include <lib/metadata/sorteddirmodel.h>
 
@@ -56,27 +56,6 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-class ImageCollection : public KIPI::ImageCollectionShared {
-public:
-	ImageCollection(KUrl dirURL, const QString& name, const KUrl::List& images)
-	: KIPI::ImageCollectionShared()
-    , mDirURL(dirURL)
-    , mName(name)
-    , mImages(images) {}
-
-	QString name()           { return mName; }
-	QString comment()        { return QString::null; }
-	KUrl::List images()      { return mImages; }
-	KUrl uploadRoot()        { return KUrl("/"); }
-	KUrl uploadPath()        { return mDirURL; }
-	QString uploadRootName() { return "/"; }
-	bool isDirectory()       { return true; }
-
-private:
-    KUrl mDirURL;
-	QString mName;
-	KUrl::List mImages;
-};
 
 class KIPIImageInfo : public KIPI::ImageInfoShared {
 	static const QRegExp sExtensionRE;
@@ -302,7 +281,7 @@ KIPI::ImageCollectionSelector* KIPIInterface::imageCollectionSelector(QWidget *p
 }
 
 KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent) {
-	return 0;
+	return (new KipiUploadWidget(this, parent));
 }
 
 void KIPIInterface::slotSelectionChanged() {

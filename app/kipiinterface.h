@@ -22,6 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define KIPIINTERFACE_H
 
 #include <libkipi/interface.h>
+#include <libkipi/imagecollectionshared.h>
+
 namespace Gwenview {
 
 class KIPIInterfacePrivate;
@@ -57,6 +59,28 @@ private Q_SLOTS:
 
 private:
 	KIPIInterfacePrivate* const d;
+};
+
+class ImageCollection : public KIPI::ImageCollectionShared {
+public:
+	ImageCollection(KUrl dirURL, const QString& name, const KUrl::List& images)
+	: KIPI::ImageCollectionShared()
+    , mDirURL(dirURL)
+    , mName(name)
+    , mImages(images) {}
+
+	QString name()           { return mName; }
+	QString comment()        { return QString::null; }
+	KUrl::List images()      { return mImages; }
+	KUrl uploadRoot()        { return KUrl("/"); }
+	KUrl uploadPath()        { return mDirURL; }
+	QString uploadRootName() { return "/"; }
+	bool isDirectory()       { return true; }
+
+private:
+    KUrl mDirURL;
+	QString mName;
+	KUrl::List mImages;
 };
 
 } // namespace

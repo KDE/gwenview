@@ -47,6 +47,7 @@ if (KIPI_FOUND)
 	set (gwenview_SRCS
 		${gwenview_SRCS}
 		kipiinterface.cpp
+		kipiuploadwidget.cpp
 		)
 endif (KIPI_FOUND)
 
