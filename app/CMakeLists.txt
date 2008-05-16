@@ -19,6 +19,7 @@ set(gwenview_SRCS
 	gvcore.cpp
 	documentview.cpp
 	fileoperations.cpp
+	filterwidget.cpp
 	fullscreencontent.cpp
 	fullscreentheme.cpp
 	infocontextmanageritem.cpp

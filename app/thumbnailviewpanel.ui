@@ -5,104 +5,46 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>454</height>
+    <width>520</width>
+    <height>433</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout_2" >
    <property name="spacing" >
     <number>0</number>
    </property>
    <item>
-    <widget class="Gwenview::ThumbnailView" name="mThumbnailView" />
+    <widget class="QWidget" native="1" name="mUrlNavigatorContainer" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>10</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QWidget" native="1" name="mFilterBar" >
-     <layout class="QHBoxLayout" name="horizontalLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
-         <string>Minimum Rating:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>mRatingSlider</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="mRatingSlider" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum" >
-         <number>5</number>
-        </property>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition" >
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Filter:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>mFilterEdit</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="KLineEdit" name="mFilterEdit" >
-        <property name="clickMessage" >
-         <string>Enter search term here...</string>
-        </property>
-        <property name="showClearButton" stdset="0" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <widget class="Gwenview::ThumbnailView" name="mThumbnailView" />
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2" >
      <item>
-      <widget class="QToolButton" name="mFilterBarButton" >
-       <property name="text" >
-        <string>...</string>
-       </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
-      </widget>
+      <widget class="Gwenview::FilterWidget" native="1" name="mFilterWidget" />
      </item>
      <item>
       <widget class="QLabel" name="mDocumentCountLabel" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -116,10 +58,16 @@
      </item>
      <item>
       <widget class="QSlider" name="mThumbnailSlider" >
-       <property name="maximumSize" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
         <size>
-         <width>200</width>
-         <height>16777215</height>
+         <width>120</width>
+         <height>0</height>
         </size>
        </property>
        <property name="minimum" >
@@ -142,14 +90,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>Gwenview::ThumbnailView</class>
    <extends>QListView</extends>
    <header location="global" >lib/thumbnailview/thumbnailview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Gwenview::FilterWidget</class>
+   <extends>QWidget</extends>
+   <header>filterwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

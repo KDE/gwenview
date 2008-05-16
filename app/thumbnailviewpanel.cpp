@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kactioncollection.h>
+#include <kdebug.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <klineedit.h>
@@ -40,7 +41,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurlnavigator.h>
 
 // Local
+#include <lib/metadata/abstractmetadatabackend.h>
+#include <lib/metadata/tagmodel.h>
+
 #include <lib/metadata/sorteddirmodel.h>
+#include <lib/metadata/tagmodel.h>
 #include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
@@ -54,7 +59,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KFilePlacesModel* mFilePlacesModel;
 	KUrlNavigator* mUrlNavigator;
 	SortedDirModel* mDirModel;
-	QAction* mShowFilterBar;
 	int mDocumentCount;
 
 	void setupWidgets() {
@@ -68,44 +72,23 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		mThumbnailView->setItemDelegate(delegate);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-		// mUrlNavigator
+		// mUrlNavigator (use stupid layouting code because KUrlNavigator ctor
+		// can't be used directly from Designer)
 		mFilePlacesModel = new KFilePlacesModel(that);
-		mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), that);
-		static_cast<QVBoxLayout*>(that->layout())->insertWidget(0, mUrlNavigator);
-
-		// Rating slider
-		mRatingSlider->setOrientation(Qt::Horizontal);
-		mRatingSlider->setMinimum(0);
-		mRatingSlider->setMaximum(5);
-		QObject::connect(mRatingSlider, SIGNAL(valueChanged(int)),
-			mDirModel, SLOT(setMinimumRating(int)) );
+		mUrlNavigator = new KUrlNavigator(mFilePlacesModel, KUrl(), mUrlNavigatorContainer);
+		QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
+		layout->setMargin(0);
+		layout->addWidget(mUrlNavigator);
 
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)) );
 
-		// Filter bar
-		QTimer* timer = new QTimer(mFilterBar);
-		timer->setInterval(350);
-		timer->setSingleShot(true);
-		QObject::connect(timer, SIGNAL(timeout()),
-			that, SLOT(applyNameFilter()));
-
-		QObject::connect(mFilterEdit, SIGNAL(textChanged(const QString &)),
-			timer, SLOT(start()));
-
-		mFilterBar->hide();
+		// Filter widget
+		mFilterWidget->setDirModel(mDirModel);
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
-		mShowFilterBar = actionCollection->addAction("toggle_filterbar");
-		mShowFilterBar->setShortcut(Qt::CTRL | Qt::Key_I);
-		QObject::connect(mShowFilterBar, SIGNAL(triggered()),
-			that, SLOT(toggleFilterBarVisibility()));
-		updateShowFilterBarAction();
-
-		mFilterBarButton->setDefaultAction(mShowFilterBar);
-
 		KAction* editLocationAction = actionCollection->addAction("edit_location");
 		editLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
 		editLocationAction->setShortcut(Qt::Key_F6);
@@ -116,16 +99,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
 		QObject::connect(action, SIGNAL(triggered()),
 			that, SLOT(addFolderToPlaces()));
-	}
-
-	void updateShowFilterBarAction() {
-		QString text;
-		if (mFilterBar->isVisible()) {
-			text = i18nc("@action:inmenu Tools", "Hide Filter Bar");
-		} else {
-			text = i18nc("@action:inmenu Tools", "Show Filter Bar");
-		}
-		mShowFilterBar->setText(text);
 	}
 
 	void updateDocumentCountLabel() {
@@ -188,24 +161,6 @@ QSlider* ThumbnailViewPanel::thumbnailSlider() const {
 
 KUrlNavigator* ThumbnailViewPanel::urlNavigator() const {
 	return d->mUrlNavigator;
-}
-
-
-void ThumbnailViewPanel::toggleFilterBarVisibility() {
-	bool visible = !d->mFilterBar->isVisible();
-	d->mFilterBar->setVisible(visible);
-	d->updateShowFilterBarAction();
-	if (visible) {
-		d->mRatingSlider->setFocus();
-	} else {
-		d->mRatingSlider->setValue(0);
-		d->mFilterEdit->clear();
-	}
-}
-
-
-void ThumbnailViewPanel::applyNameFilter() {
-	d->mDirModel->setFilterRegExp(d->mFilterEdit->text());
 }
 
 

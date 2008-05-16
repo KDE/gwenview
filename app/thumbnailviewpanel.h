@@ -55,8 +55,6 @@ public:
 	KUrlNavigator* urlNavigator() const;
 
 private Q_SLOTS:
-	void applyNameFilter();
-	void toggleFilterBarVisibility();
 	void editLocation();
 	void addFolderToPlaces();
 

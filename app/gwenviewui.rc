@@ -31,7 +31,6 @@
 		<Separator/>
 		<Merge/>
 		<Separator/>
-		<Action name="toggle_filterbar"/>
 		<Action name="toggle_sidebar" />
 	</Menu>
 	<Menu name="edit" >
