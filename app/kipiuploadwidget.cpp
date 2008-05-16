@@ -1,8 +1,7 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab
+// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
-Gwenview - A simple image viewer for KDE
-
-Copyright  2008      Angelo Naselli
+Gwenview: an image viewer
+Copyright 2008 Aurélien Gâteau <aurelien.gateau@free.fr>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,90 +15,44 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-
-// Qt includes.
-
-// #include <QHeaderView>
-// // #include <QTreeWidget>
-// #include <QHBoxLayout>
-
-// KDE includes.
-
-// #include <klocale.h>
-// #include <kdialog.h>
-#include <kurlrequester.h>
-#include <kdirlister.h>
-
-// Local includes.
-#include "kipiinterface.h"
-#include "kipiuploadwidget.h"
+// Self
 #include "kipiuploadwidget.moc"
+
+// Qt
+#include <QLabel>
+#include <QVBoxLayout>
+
+// KDE
+#include <klocale.h>
+
+// Local
+#include "kipiinterface.h"
 
 namespace Gwenview {
 
-class KipiUploadWidgetPriv
-{
-public:
-	KipiUploadWidgetPriv()
-	{
-		pDirView       = 0;
-		pKipiInterface = 0;
-	}
 
-	KUrlRequester *pDirView;
-	KIPIInterface *pKipiInterface;
-};
+KIPIUploadWidget::KIPIUploadWidget(KIPIInterface* interface, QWidget* parent)
+: KIPI::UploadWidget(parent)
+, mInterface(interface) {
+	QLabel* label = new QLabel(this);
+	KUrl url = mInterface->currentAlbum().uploadPath();
+	label->setText(i18n("Images will be uploaded here:\n%1", url.pathOrUrl()));
+	label->setWordWrap(true);
 
-KipiUploadWidget::KipiUploadWidget(KIPIInterface* interface, QWidget *parent)
-                : KIPI::UploadWidget(parent)
-{
-	d = new KipiUploadWidgetPriv();
-	d->pKipiInterface = interface;
-
-	// Fetch the current album, so we can start out there.
-	KIPI::ImageCollection album = interface->currentAlbum();
-
-	// If no current album selected, get the first album in the list.
-	if ( !album.isValid() || !album.isDirectory() )
-		album = interface->allAlbums().first();
-
-	d->pDirView = new KUrlRequester(album.uploadRoot().path(),this);
-
-	// ------------------------------------------------------------------------------------
-
-	connect(d->pDirView, SIGNAL(urlSelected (const KUrl &)),
-			this, SLOT(selectUrl(const KUrl &)));
-//             this, SIGNAL(selectionChanged()));
-
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->setMargin(0);
+	layout->addWidget(label);
 }
 
-KipiUploadWidget::~KipiUploadWidget() 
-{
-	delete d;
-}
 
-KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
-{
-	KUrl url = d->pDirView->url();
-	KDirLister dl;
-	dl.openUrl(url);
-	KFileItemList fileList = dl.itemsForDir(url);
-	KUrl::List list = fileList.urlList();
-
-	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
+KIPI::ImageCollection KIPIUploadWidget::selectedImageCollection() const {
+	return mInterface->currentAlbum();
 }
 
 
 
-// SLOT
-void KipiUploadWidget::selectUrl(const KUrl &)
-{
-  //TODO
 
-  emit selectionChanged();
-}
-
-}// namespace
+} // namespace

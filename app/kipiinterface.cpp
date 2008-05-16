@@ -282,7 +282,7 @@ KIPI::ImageCollectionSelector* KIPIInterface::imageCollectionSelector(QWidget *p
 }
 
 KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent) {
-	return (new KipiUploadWidget(this, parent));
+	return (new KIPIUploadWidget(this, parent));
 }
 
 void KIPIInterface::slotSelectionChanged() {
