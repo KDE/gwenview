@@ -22,13 +22,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tagwidget.moc"
 
 // Qt
+#include <QCompleter>
 #include <QHeaderView>
 #include <QItemDelegate>
 #include <QListWidget>
 #include <QPainter>
+#include <QStringListModel>
 #include <QVBoxLayout>
 
 // KDE
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 
@@ -59,12 +62,52 @@ enum {
 	TagRole = Qt::UserRole
 };
 
+class TagCompleterModel : public QStringListModel {
+public:
+	TagCompleterModel(QObject* parent)
+	: QStringListModel(parent)
+	, mBackEnd(0) {}
+
+
+	void update(const TagInfo& tagInfo) {
+		Q_ASSERT(mBackEnd);
+		TagSet set = mBackEnd->allTags();
+		TagInfo::ConstIterator
+			it = tagInfo.begin(),
+			end = tagInfo.end();
+		for(; it!=end; ++it) {
+			if (it.value()) {
+				set.remove(it.key());
+			}
+		}
+
+		QStringList lst;
+		Q_FOREACH(const MetaDataTag& tag, set) {
+			lst << mBackEnd->labelForTag(tag);
+		}
+
+		setStringList(lst);
+	}
+
+
+	void setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
+		mBackEnd = backEnd;
+	}
+
+
+private:
+	AbstractMetaDataBackEnd* mBackEnd;
+};
+
+
 struct TagWidgetPrivate {
 	TagWidget* that;
 	TagInfo mTagInfo;
 	QListWidget* mTreeWidget;
 	KLineEdit* mLineEdit;
 	AbstractMetaDataBackEnd* mBackEnd;
+	TagCompleterModel* mTagCompleterModel;
+
 
 	void setupWidgets() {
 		mTreeWidget = new QListWidget;
@@ -72,6 +115,12 @@ struct TagWidgetPrivate {
 
 		mLineEdit = new KLineEdit;
 		mLineEdit->setTrapReturnKey(true);
+
+		mTagCompleterModel = new TagCompleterModel(that);
+		QCompleter* completer = new QCompleter(that);
+		completer->setCaseSensitivity(Qt::CaseInsensitive);
+		completer->setModel(mTagCompleterModel);
+		mLineEdit->setCompleter(completer);
 
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
@@ -93,6 +142,13 @@ struct TagWidgetPrivate {
 			QListWidgetItem* item = new QListWidgetItem(label, mTreeWidget);
 			item->setData(TagRole, QVariant(tag));
 		}
+
+		updateCompleterModel();
+	}
+
+
+	void updateCompleterModel() {
+		mTagCompleterModel->update(mTagInfo);
 	}
 };
 
@@ -119,6 +175,7 @@ TagWidget::~TagWidget() {
 
 void TagWidget::setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
 	d->mBackEnd = backEnd;
+	d->mTagCompleterModel->setMetaDataBackEnd(backEnd);
 }
 
 
