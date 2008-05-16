@@ -47,6 +47,7 @@ endif (Nepomuk_FOUND)
 if (KIPI_FOUND)
 	set (gwenview_SRCS
 		${gwenview_SRCS}
+		kipiimagecollectionselector.cpp
 		kipiinterface.cpp
 		kipiuploadwidget.cpp
 		)

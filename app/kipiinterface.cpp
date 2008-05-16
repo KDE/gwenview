@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // local
 #include "mainwindow.h"
 #include "contextmanager.h"
+#include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
 #include <lib/jpegcontent.h>
 #include <lib/metadata/sorteddirmodel.h>
@@ -277,7 +278,7 @@ void KIPIInterface::refreshImages( const KUrl::List&) {
 }
 
 KIPI::ImageCollectionSelector* KIPIInterface::imageCollectionSelector(QWidget *parent) {
-	return 0;
+	return new KIPIImageCollectionSelector(this, parent);
 }
 
 KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent) {
