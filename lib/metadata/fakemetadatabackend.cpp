@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "fakemetadatabackend.h"
+#include "fakemetadatabackend.moc"
 
 // Qt
 #include <QStringList>
@@ -34,22 +34,32 @@ namespace Gwenview {
 
 FakeMetaDataBackEnd::FakeMetaDataBackEnd(QObject* parent, InitializeMode mode)
 : AbstractMetaDataBackEnd(parent)
-, mInitializeMode(mode) {}
-
-
-void FakeMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
-	mMetaDataForUrl[url] = metaData;
-}
-
-
-TagSet FakeMetaDataBackEnd::allTags() const {
-	TagSet set;
-	set
+, mInitializeMode(mode) {
+	mAllTags
 		<< tagForLabel("beach")
 		<< tagForLabel("mountains")
 		<< tagForLabel("wallpaper")
 		;
-	return set;
+}
+
+
+void FakeMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
+	mMetaDataForUrl[url] = metaData;
+	mergeTagsWithAllTags(metaData.mTags);
+}
+
+
+void FakeMetaDataBackEnd::mergeTagsWithAllTags(const TagSet& set) {
+	int size = mAllTags.size();
+	mAllTags |= set;
+	if (mAllTags.size() > size) {
+		emit allTagsUpdated();
+	}
+}
+
+
+TagSet FakeMetaDataBackEnd::allTags() const {
+	return mAllTags;
 }
 
 
@@ -66,6 +76,9 @@ void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
 					metaData.mTags << '#' + token.toLower();
 				}
 			}
+			metaData.mTags << QString("#length-%1").arg(url.fileName().length());
+
+			mergeTagsWithAllTags(metaData.mTags);
 		} else {
 			metaData.mRating = 0;
 		}

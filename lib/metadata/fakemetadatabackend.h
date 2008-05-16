@@ -55,9 +55,15 @@ public:
 
 	virtual MetaDataTag tagForLabel(const QString&) const;
 
+Q_SIGNALS:
+	void allTagsUpdated();
+
 private:
+	void mergeTagsWithAllTags(const TagSet&);
+
 	QHash<KUrl, MetaData> mMetaDataForUrl;
 	InitializeMode mInitializeMode;
+	TagSet mAllTags;
 };
 
 

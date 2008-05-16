@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef TAGMODEL_H
 #define TAGMODEL_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QStandardItemModel>
 
@@ -34,7 +36,8 @@ class AbstractMetaDataBackEnd;
 
 
 class TagModelPrivate;
-class TagModel : public QStandardItemModel {
+class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel {
+	Q_OBJECT
 public:
 	TagModel(QObject*, AbstractMetaDataBackEnd*);
 	~TagModel();
@@ -42,6 +45,9 @@ public:
 	enum {
 		TagRole = Qt::UserRole
 	};
+
+private Q_SLOTS:
+	void refresh();
 
 private:
 	TagModelPrivate* const d;

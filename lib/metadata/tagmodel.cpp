@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "tagmodel.h"
+#include "tagmodel.moc"
 
 // Qt
 
@@ -32,20 +32,30 @@ namespace Gwenview {
 
 
 struct TagModelPrivate {
+	AbstractMetaDataBackEnd* mBackEnd;
 };
 
 
 TagModel::TagModel(QObject* parent, AbstractMetaDataBackEnd* backEnd)
 : QStandardItemModel(parent)
 , d(new TagModelPrivate) {
-	TagSet set = backEnd->allTags();
+	d->mBackEnd = backEnd;
+	refresh();
+	connect(backEnd, SIGNAL(allTagsUpdated()), SLOT(refresh()) );
+}
 
+
+void TagModel::refresh() {
+	TagSet set = d->mBackEnd->allTags();
+
+	clear();
 	Q_FOREACH(const MetaDataTag& tag, set) {
-		QString label = backEnd->labelForTag(tag);
+		QString label = d->mBackEnd->labelForTag(tag);
 		QStandardItem* item = new QStandardItem(label);
 		item->setData(tag, TagRole);
 		appendRow(item);
 	}
+	sort(0);
 }
 
 
