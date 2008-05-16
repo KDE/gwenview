@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QItemDelegate>
 #include <QListWidget>
 #include <QPainter>
-#include <QStringListModel>
+#include <QSortFilterProxyModel>
 #include <QVBoxLayout>
 
 // KDE
@@ -36,8 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klineedit.h>
 
 // Local
+#include <lib/metadata/tagmodel.h>
 
 namespace Gwenview {
+
 
 class TagItemDelegate : public QItemDelegate {
 public:
@@ -58,45 +60,44 @@ private:
 	QPixmap mRemovePixmap;
 };
 
-enum {
-	TagRole = Qt::UserRole
-};
 
-class TagCompleterModel : public QStringListModel {
+class TagCompleterModel : public QSortFilterProxyModel {
 public:
 	TagCompleterModel(QObject* parent)
-	: QStringListModel(parent)
-	, mBackEnd(0) {}
+	: QSortFilterProxyModel(parent)
+	{
+	}
 
 
-	void update(const TagInfo& tagInfo) {
-		Q_ASSERT(mBackEnd);
-		TagSet set = mBackEnd->allTags();
+	void setTagInfo(const TagInfo& tagInfo) {
+		mExcludedTagSet.clear();
 		TagInfo::ConstIterator
 			it = tagInfo.begin(),
 			end = tagInfo.end();
 		for(; it!=end; ++it) {
 			if (it.value()) {
-				set.remove(it.key());
+				mExcludedTagSet << it.key();
 			}
 		}
-
-		QStringList lst;
-		Q_FOREACH(const MetaDataTag& tag, set) {
-			lst << mBackEnd->labelForTag(tag);
-		}
-
-		setStringList(lst);
+		invalidate();
 	}
 
 
 	void setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
-		mBackEnd = backEnd;
+		setSourceModel(new TagModel(this, backEnd));
+	}
+
+
+protected:
+	virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
+		QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+		MetaDataTag tag = sourceIndex.data(TagModel::TagRole).toString();
+		return !mExcludedTagSet.contains(tag);
 	}
 
 
 private:
-	AbstractMetaDataBackEnd* mBackEnd;
+	TagSet mExcludedTagSet;
 };
 
 
@@ -140,7 +141,7 @@ struct TagWidgetPrivate {
 			MetaDataTag tag = it.key();
 			QString label = mBackEnd->labelForTag(tag);
 			QListWidgetItem* item = new QListWidgetItem(label, mTreeWidget);
-			item->setData(TagRole, QVariant(tag));
+			item->setData(TagModel::TagRole, QVariant(tag));
 		}
 
 		updateCompleterModel();
@@ -148,7 +149,7 @@ struct TagWidgetPrivate {
 
 
 	void updateCompleterModel() {
-		mTagCompleterModel->update(mTagInfo);
+		mTagCompleterModel->setTagInfo(mTagInfo);
 	}
 };
 
@@ -201,7 +202,7 @@ void TagWidget::slotItemClicked(QListWidgetItem* item) {
 	if (!item) {
 		return;
 	}
-	MetaDataTag tag = item->data(TagRole).toString();
+	MetaDataTag tag = item->data(TagModel::TagRole).toString();
 	d->mTagInfo.remove(tag);
 	d->fillTreeWidget();
 
