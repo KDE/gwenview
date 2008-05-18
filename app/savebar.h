@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/slidecontainer.h>
 
+class KActionCollection;
 class KUrl;
 
 namespace Gwenview {
@@ -37,7 +38,7 @@ class SaveBarPrivate;
 class SaveBar : public SlideContainer {
 	Q_OBJECT
 public:
-	SaveBar(QWidget* parent);
+	SaveBar(QWidget* parent, KActionCollection* collection);
 	~SaveBar();
 
 	void setCurrentUrl(const KUrl&);

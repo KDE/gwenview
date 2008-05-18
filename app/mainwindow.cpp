@@ -158,7 +158,7 @@ struct MainWindow::Private {
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
 		mWindow->setCentralWidget(centralWidget);
-		mSaveBar = new SaveBar(centralWidget);
+		mSaveBar = new SaveBar(centralWidget, mWindow->actionCollection());
 
 		mCentralSplitter = new QSplitter(Qt::Horizontal, centralWidget);
 		QVBoxLayout* layout = new QVBoxLayout(centralWidget);

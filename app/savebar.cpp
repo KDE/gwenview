@@ -24,9 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QToolButton>
 #include <QToolTip>
 
 // KDE
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -40,7 +42,10 @@ namespace Gwenview {
 
 
 struct SaveBarPrivate {
+	KActionCollection* mActionCollection;
 	QWidget* mSaveBarWidget;
+	QToolButton* mUndoButton;
+	QToolButton* mRedoButton;
 	QLabel* mMessageLabel;
 	QLabel* mActionsLabel;
 	KUrl mCurrentUrl;
@@ -53,40 +58,61 @@ struct SaveBarPrivate {
 		QColor borderColor = PaintUtils::adjustedHsv(color, 0, 150, 0);
 
 		QString css =
-			"QWidget {"
+			".QWidget {"
 			"	background-color: %1;"
 			"	border-top: 1px solid %2;"
 			"	border-bottom: 1px solid %2;"
-			"	padding-top: 3px;"
-			"	padding-bottom: 3px;"
-			"}";
+			"}"
+			;
 		css = css
 			.arg(color.name())
 			.arg(borderColor.name());
 		widget->setStyleSheet(css);
 	}
+
+
+	void updateUndoButtons() {
+		mUndoButton->setDefaultAction(mActionCollection->action("edit_undo"));
+		mUndoButton->show();
+		mRedoButton->setDefaultAction(mActionCollection->action("edit_redo"));
+		mRedoButton->show();
+	}
 };
 
 
-SaveBar::SaveBar(QWidget* parent)
+SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 : SlideContainer(parent)
 , d(new SaveBarPrivate) {
+	d->mActionCollection = actionCollection;
 	d->mSaveBarWidget = new QWidget();
 	d->initBackground(d->mSaveBarWidget);
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
 	d->mMessageLabel = new QLabel(d->mSaveBarWidget);
-	d->mMessageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	d->mMessageLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+	d->mUndoButton = new QToolButton;
+	d->mUndoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	d->mUndoButton->hide();
+
+	d->mRedoButton = new QToolButton;
+	d->mRedoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	d->mRedoButton->hide();
+
 	d->mActionsLabel = new QLabel(d->mSaveBarWidget);
 	d->mActionsLabel->setAlignment(Qt::AlignRight);
-	d->mActionsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	d->mForceHide = false;
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mSaveBarWidget);
 	layout->addWidget(d->mMessageLabel);
+	layout->addWidget(d->mUndoButton);
+	layout->addWidget(d->mRedoButton);
 	layout->addWidget(d->mActionsLabel);
-	layout->setMargin(0);
-	layout->setSpacing(0);
+	layout->setMargin(3);
+	layout->setSpacing(3);
 	hide();
+
+	setFixedHeight(d->mUndoButton->sizeHint().height() + 2*layout->margin());
 
 	setContent(d->mSaveBarWidget);
 
@@ -133,6 +159,8 @@ void SaveBar::updateContent() {
 	if (lst.contains(d->mCurrentUrl)) {
 		message = i18n("Current image modified");
 
+		d->updateUndoButtons();
+
 		if (lst.size() > 1) {
 			QString previous = i18n("Previous modified image");
 			QString next = i18n("Next modified image");
@@ -148,6 +176,9 @@ void SaveBar::updateContent() {
 			}
 		}
 	} else {
+		d->mUndoButton->hide();
+		d->mRedoButton->hide();
+
 		message = i18np("One image modified", "%1 images modified", lst.size());
 		if (lst.size() > 1) {
 			links << QString("<a href='first'>%1</a>").arg(i18n("Go to first modified image"));
