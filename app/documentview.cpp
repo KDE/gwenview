@@ -241,7 +241,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
 	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
-	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_T);
+	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
 	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
 		d->mThumbnailBar, SLOT(setVisible(bool)));
 	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
