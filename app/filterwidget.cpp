@@ -57,7 +57,7 @@ namespace Gwenview {
 enum FilterType {
 	FilterByName = 0,
 	FilterByTag,
-	FilterByRating,
+	FilterByRating
 };
 
 
