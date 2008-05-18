@@ -75,7 +75,13 @@ if (Nepomuk_FOUND)
 	target_link_libraries(gwenview ${NEPOMUK_LIBRARIES})
 endif (Nepomuk_FOUND)
 
-install(TARGETS gwenview DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS gwenview
+	DESTINATION ${BIN_INSTALL_DIR})
+
 install(FILES gwenviewui.rc
-		DESTINATION ${DATA_INSTALL_DIR}/gwenview)
-install(FILES gwenview.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+	DESTINATION ${DATA_INSTALL_DIR}/gwenview)
+
+install(FILES gwenview.desktop
+	DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES slideshow.desktop
+	DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus )
