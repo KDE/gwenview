@@ -127,6 +127,8 @@ struct TagWidgetPrivate {
 		layout->setMargin(0);
 		layout->addWidget(mTreeWidget);
 		layout->addWidget(mLineEdit);
+
+		that->setTabOrder(mLineEdit, mTreeWidget);
 	}
 
 
