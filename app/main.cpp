@@ -51,16 +51,21 @@ int main(int argc, char *argv[]) {
 
 	KCmdLineOptions options;
 	options.add("f", ki18n("Start in fullscreen mode"));
+	options.add("s", ki18n("Start in slideshow mode"));
 	options.add("+[file or folder]", ki18n("A starting file or folder"));
 	KCmdLineArgs::addCmdLineOptions( options );
 
 	KUrl url;
 	bool startInFullScreen = false;
+	bool startSlideShow = false;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if (args->count() > 0) {
 		url = args->url(0);
-		if (url.isValid() && args->isSet("f")) {
+		if (url.isValid() && (args->isSet("f") || args->isSet("s"))) {
 			startInFullScreen = true;
+			if (args->isSet("s")) {
+				startSlideShow = true;
+			}
 		}
 	}
 	args->clear();
@@ -83,5 +88,10 @@ int main(int argc, char *argv[]) {
 		window->show();
 	}
 
+	if (startSlideShow) {
+		// Hack: Delay slideshow a bit so that dir list is not empty
+		QAction* slideShowAction = window->actionCollection()->action("toggle_slideshow");
+		QTimer::singleShot(500, slideShowAction, SLOT(trigger()) );
+	}
 	return app.exec();
 }

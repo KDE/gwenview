@@ -89,6 +89,11 @@ QSize FullScreenBar::sizeHint() const {
 
 void FullScreenBar::moveBar(qreal value) {
 	move(0, -height() + int(value * height()) );
+
+	// For some reason, if Gwenview is started with command line options to
+	// start a slideshow, the bar might end up below the view. Calling raise()
+	// here fixes it.
+	raise();
 }
 
 
