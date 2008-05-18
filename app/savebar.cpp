@@ -41,8 +41,8 @@ namespace Gwenview {
 
 struct SaveBarPrivate {
 	QWidget* mSaveBarWidget;
-	QLabel* mMessage;
-	QLabel* mActions;
+	QLabel* mMessageLabel;
+	QLabel* mActionsLabel;
 	KUrl mCurrentUrl;
 	bool mForceHide;
 
@@ -74,16 +74,16 @@ SaveBar::SaveBar(QWidget* parent)
 	d->mSaveBarWidget = new QWidget();
 	d->initBackground(d->mSaveBarWidget);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mMessage = new QLabel(d->mSaveBarWidget);
-	d->mMessage->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mActions = new QLabel(d->mSaveBarWidget);
-	d->mActions->setAlignment(Qt::AlignRight);
-	d->mActions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	d->mMessageLabel = new QLabel(d->mSaveBarWidget);
+	d->mMessageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	d->mActionsLabel = new QLabel(d->mSaveBarWidget);
+	d->mActionsLabel->setAlignment(Qt::AlignRight);
+	d->mActionsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->mForceHide = false;
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mSaveBarWidget);
-	layout->addWidget(d->mMessage);
-	layout->addWidget(d->mActions);
+	layout->addWidget(d->mMessageLabel);
+	layout->addWidget(d->mActionsLabel);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	hide();
@@ -93,7 +93,7 @@ SaveBar::SaveBar(QWidget* parent)
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateContent()) );
 
-	connect(d->mActions, SIGNAL(linkActivated(const QString&)),
+	connect(d->mActionsLabel, SIGNAL(linkActivated(const QString&)),
 		SLOT(triggerAction(const QString&)) );
 }
 
@@ -164,8 +164,8 @@ void SaveBar::updateContent() {
 	}
 
 
-	d->mMessage->setText(message);
-	d->mActions->setText(links.join(" | "));
+	d->mMessageLabel->setText(message);
+	d->mActionsLabel->setText(links.join(" | "));
 }
 
 
