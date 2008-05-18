@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSignalMapper>
 
 // KDE
+#include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -60,6 +61,7 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 	KActionCollection* mActionCollection;
 	QPointer<MetaDataDialog> mMetaDataDialog;
 	TagInfo mTagInfo;
+	QAction* mEditTagsAction;
 
 	void setupShortcuts() {
 		Q_ASSERT(mSideBar);
@@ -117,6 +119,12 @@ NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager, KA
 	d->mSideBar = 0;
 	d->mGroup = 0;
 	d->mActionCollection = actionCollection;
+	d->mEditTagsAction = d->mActionCollection->addAction("edit_tags");
+	Q_ASSERT(d->mEditTagsAction);
+	d->mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
+	d->mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
+	connect(d->mEditTagsAction, SIGNAL(triggered()),
+		SLOT(showMetaDataDialog()) );
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
@@ -154,7 +162,7 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 		SLOT(storeDescription()));
 
 	connect(d->mTagLabel, SIGNAL(linkActivated(const QString&)),
-		SLOT(showMetaDataDialog()) );
+		d->mEditTagsAction, SLOT(trigger()) );
 
 	d->setupShortcuts();
 }
@@ -233,6 +241,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 		d->mTagInfo[tag] = count == itemCount;
 	}
 
+	d->mEditTagsAction->setEnabled(!contextManager()->selection().isEmpty());
 	d->updateTagLabel();
 	if (d->mMetaDataDialog) {
 		d->updateMetaDataDialog();

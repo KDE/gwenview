@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="40">
+<kpartgui name="gwenview" version="41">
 
 <MenuBar>
 	<Menu name="file" >
@@ -36,6 +36,8 @@
 	<Menu name="edit" >
 		<Action name="edit_undo" />
 		<Action name="edit_redo" />
+		<Separator/>
+		<Action name="edit_tags" />
 		<Separator/>
 		<Action name="rotate_left" />
 		<Action name="rotate_right" />
