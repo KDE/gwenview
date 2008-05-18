@@ -47,6 +47,8 @@ public:
 	 */
 	void setInitialUrl(const KUrl&);
 
+	void startSlideShow();
+
 	DocumentView* documentView() const;
 
 	ContextManager* contextManager() const;

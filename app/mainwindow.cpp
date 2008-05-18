@@ -129,6 +129,7 @@ struct MainWindow::Private {
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
 	SaveBar* mSaveBar;
+	bool mStartSlideShowWhenDirListerCompleted;
 	SlideShow* mSlideShow;
 	Preloader* mPreloader;
 #ifdef KIPI_FOUND
@@ -184,6 +185,7 @@ struct MainWindow::Private {
 		mCentralSplitter->setStretchFactor(0, 1);
 		mCentralSplitter->setStretchFactor(1, 0);
 
+		mStartSlideShowWhenDirListerCompleted = false;
 		mSlideShow = new SlideShow(mWindow);
 
 		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
@@ -682,6 +684,14 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 }
 
 
+void MainWindow::startSlideShow() {
+	// We need to wait until we have listed all images in the dirlister to
+	// start the slideshow because the SlideShow objects needs an image list to
+	// work.
+	d->mStartSlideShowWhenDirListerCompleted = true;
+}
+
+
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (action == d->mViewAction) {
 		// Switching to view mode
@@ -896,6 +906,10 @@ void MainWindow::slotDirModelNewItems() {
 
 
 void MainWindow::slotDirListerCompleted() {
+	if (d->mStartSlideShowWhenDirListerCompleted) {
+		d->mStartSlideShowWhenDirListerCompleted = false;
+		QTimer::singleShot(0, d->mToggleSlideShowAction, SLOT(trigger()));
+	}
 	if (!d->mDocumentView->isEmpty()) {
 		return;
 	}

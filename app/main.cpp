@@ -89,9 +89,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (startSlideShow) {
-		// Hack: Delay slideshow a bit so that dir list is not empty
-		QAction* slideShowAction = window->actionCollection()->action("toggle_slideshow");
-		QTimer::singleShot(500, slideShowAction, SLOT(trigger()) );
+		window->startSlideShow();
 	}
 	return app.exec();
 }
