@@ -5,5 +5,10 @@ Actions=slideshow;
 
 [Desktop Action slideshow]
 Name=Start a Slideshow
+Name[ga]=Rith Taispeántas Sleamhnán
+Name[pt]=Iniciar uma Apresentação
+Name[pt_BR]=Iniciar uma apresentação
+Name[uk]=Почати показ слайдів
+Name[zh_TW]=開始投影秀
 Icon=gwenview
 Exec=gwenview -s %u
