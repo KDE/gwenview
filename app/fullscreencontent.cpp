@@ -53,17 +53,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+// Subclass QToolButton to make initStyleOption public
+class ButtonBarButton : public QToolButton {
+public:
+	void initStyleOption(QStyleOptionToolButton* option) const {
+		return QToolButton::initStyleOption(option);
+	}
+};
 
 static QToolButton* createButtonBarButton() {
-	// Subclass QToolButton to make initStyleOption public
-	class ToolButton : public QToolButton {
-	public:
-		void initStyleOption(QStyleOptionToolButton* option) const {
-			return QToolButton::initStyleOption(option);
-		}
-	};
 
-	ToolButton* button = new ToolButton;
+	ButtonBarButton* button = new ButtonBarButton;
 	QSize iconSize = QSize(32, 32);
 	button->setIconSize(iconSize);
 
