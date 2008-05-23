@@ -152,10 +152,11 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	loaded();
 	QByteArray format = d->mThread.format();
 	setDocumentFormat(format);
-	if (format == "jpeg") {
+	JpegContent* jpegContent = d->mThread.popJpegContent();
+	if (jpegContent) {
 		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
 			document(),
-			d->mThread.popJpegContent());
+			jpegContent);
 		switchToImpl(impl);
 	} else {
 		switchToImpl(new DocumentLoadedImpl(document()));

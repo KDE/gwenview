@@ -143,7 +143,7 @@ struct LoadingThreadPrivate {
 			mExiv2Image = loader.popImage();
 		}
 
-		if (mFormat == "jpeg") {
+		if (mFormat == "jpeg" && mExiv2Image.get()) {
 			mJpegContent = new JpegContent();
 			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
 				return false;
