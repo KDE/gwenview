@@ -26,15 +26,15 @@
 
 <sect2 id='mouse_browsing'><title>Browsing with the mouse</title>
 <itemizedlist>
-  <listitem><para>Double-clicking on an image toggles Browse
-      mode.</para></listitem>
-  <listitem><para>By default, the mouse wheel will scroll the image up and down. But,
-  this can be configured to browse the images in the current directory
-  instead.</para></listitem>
-  <listitem><para>Hold down the left mouse button over an image, then click the right
-      button to go to the next image.</para>
-    <para>Hold down the right button, then click the
-      left button to load the previous image.</para></listitem>
+  <listitem><para>When in Browse mode, clicking an image switches into View mode and
+  shows that image.</para></listitem>
+  <listitem><para>When in Browse mode, scrolling the mouse wheel will scroll up
+  or down the thumbail view area.</para></listitem>
+  <listitem><para>If the Mouse Behaviour option in
+  <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+  &kappname;</guimenuitem></menuchoice>
+  is set to Browse, scrolling the mouse wheel while in View Mode will 
+  move you through the images in the folder.</para></listitem>
 </itemizedlist>
 </sect2>
 </sect1>

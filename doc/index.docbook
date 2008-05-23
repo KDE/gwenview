@@ -27,11 +27,20 @@
 <firstname>Christopher</firstname><surname>Martin</surname>
 <affiliation><address><email>chrsmrtn@debian.org</email></address></affiliation>
 </author>
+<author>
+<firstname>Henry</firstname>
+<surname>de Valence</surname>
+<affiliation><address><email>hdevalence@gmail.com</email></address></affiliation>
+</author>
 </authorgroup>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 <copyright>
 <year>2005</year>
 <holder>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year>2008</year>
+<holder>Henry de Valence</holder>
 </copyright>
 <!-- <legalnotice>&FDLNotice;</legalnotice> -->
 

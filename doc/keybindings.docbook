@@ -11,10 +11,9 @@ all the normal KDE shortcuts are functional, unless otherwise remapped.</para>
 <itemizedlist>
   <listitem><para><keycap>Space</keycap>: Displays the next image in the directory.</para></listitem>
   <listitem><para><keycap>Backspace</keycap>: Displays the previous image in the directory.</para></listitem>
-  <listitem><para><keycombo
-        action="simul">&Ctrl;<keycap>Return</keycap></keycombo>: Toggles between Browse and View modes.</para></listitem>
-  <listitem><para><keycombo action="simul">&Ctrl;
-        &Shift;<keycap>F</keycap></keycombo>: Activates Full Screen mode.</para></listitem>
+ <!-- <listitem><para><keycombo
+        action="simul">&Ctrl;<keycap>Return</keycap></keycombo>: Toggles between Browse and View modes.</para></listitem> -->
+  <listitem><para><keycap>F11</keycap>: Activates Full Screen mode.</para></listitem>
   <listitem><para><keycap>Escape</keycap>: Exits from Full Screen mode.</para></listitem>
 </itemizedlist>
 </sect1>
