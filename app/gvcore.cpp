@@ -66,9 +66,13 @@ GvCore::~GvCore() {
 }
 
 
-void GvCore::addUrlToRecentFolders(const KUrl& url) {
+void GvCore::addUrlToRecentFolders(const KUrl& _url) {
+	KUrl url(_url);
+	url.cleanPath();
+	url.adjustPath(KUrl::RemoveTrailingSlash);
+	QString urlString = url.url();
+
 	QStringList list = GwenviewConfig::recentFolders();
-	QString urlString =url.url();
 	int index = list.indexOf(urlString);
 
 	if (index == 0) {
