@@ -93,7 +93,7 @@ void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringLi
 	}
 	d->mTreeView->setModel(d->mModel.get());
 
-	d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - layout()->margin()*2);
+	d->mTreeView->header()->resizeSection(0, sizeHint().width() / 2 - KDialog::marginHint()*2);
 }
 
 
