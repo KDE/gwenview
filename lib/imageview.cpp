@@ -90,8 +90,7 @@ struct ImageViewPrivate {
 			return;
 		}
 		mCurrentBuffer = QPixmap(size);
-		QColor bgColor = mView->palette().color(mView->backgroundRole());
-		mCurrentBuffer.fill(bgColor.rgba());
+		mCurrentBuffer.fill(Qt::transparent);
 	}
 
 
@@ -460,8 +459,8 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 		if (d->mAlternateBuffer.isNull()) {
 			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
 		}
+		d->mAlternateBuffer.fill(Qt::transparent);
 		QPainter painter(&d->mAlternateBuffer);
-		painter.fillRect(d->mAlternateBuffer.rect(), Qt::black);
 		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
 	}
 	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
