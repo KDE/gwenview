@@ -82,6 +82,21 @@ struct ImageViewPrivate {
 	}
 
 
+	void drawAlphaBackground(QPainter* painter, const QRect& viewportRect, const QPoint& zoomedImageTopLeft) {
+		if (mAlphaBackgroundMode == ImageView::AlphaBackgroundCheckBoard) {
+			QPoint textureOffset(
+				zoomedImageTopLeft.x() % mBackgroundTexture.width(),
+				zoomedImageTopLeft.y() % mBackgroundTexture.height()
+				);
+			painter->drawTiledPixmap(
+				viewportRect,
+				mBackgroundTexture,
+				textureOffset);
+		} else {
+			painter->fillRect(viewportRect, mAlphaBackgroundColor);
+		}
+	}
+
 	void createBuffer() {
 		mAlternateBuffer = QPixmap();
 		QSize size = requiredBufferSize();
@@ -90,7 +105,10 @@ struct ImageViewPrivate {
 			return;
 		}
 		mCurrentBuffer = QPixmap(size);
-		mCurrentBuffer.fill(Qt::transparent);
+		if (mDocument->hasAlphaChannel()) {
+			QPainter painter(&mCurrentBuffer);
+			drawAlphaBackground(&painter, mCurrentBuffer.rect(), QPoint(hScroll(), vScroll()));
+		}
 	}
 
 
@@ -289,19 +307,6 @@ void ImageView::paintEvent(QPaintEvent* event) {
 		painter.fillRect(rect, bgColor);
 	}
 
-	if (d->mDocument->hasAlphaChannel()) {
-		if (d->mAlphaBackgroundMode == AlphaBackgroundCheckBoard) {
-			painter.drawTiledPixmap(imageRect, d->mBackgroundTexture
-				// This option makes the background scroll with the image, like GIMP
-				// and others do. I think having a fixed background makes it easier to
-				// distinguish transparent parts, so I comment it out for now.
-
-				//, QPoint(d->hScroll() % d->mBackgroundTexture.width(), d->vScroll() % d->mBackgroundTexture.height())
-				);
-		} else {
-			painter.fillRect(imageRect, d->mAlphaBackgroundColor);
-		}
-	}
 	painter.drawPixmap(offset, d->mCurrentBuffer);
 
 	if (d->mTool) {
@@ -459,7 +464,6 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 		if (d->mAlternateBuffer.isNull()) {
 			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
 		}
-		d->mAlternateBuffer.fill(Qt::transparent);
 		QPainter painter(&d->mAlternateBuffer);
 		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
 	}
@@ -492,26 +496,33 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 }
 
 
-void ImageView::updateFromScaler(int left, int top, const QImage& image) {
-	left -= d->hScroll();
-	top -= d->vScroll();
+void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
+	int viewportLeft = zoomedImageLeft - d->hScroll();
+	int viewportTop = zoomedImageTop - d->vScroll();
 
 	{
 		QPainter painter(&d->mCurrentBuffer);
-		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		painter.drawImage(left, top, image);
+		if (d->mDocument->hasAlphaChannel()) {
+			d->drawAlphaBackground(
+				&painter, QRect(viewportLeft, viewportTop, image.width(), image.height()),
+				QPoint(zoomedImageLeft, zoomedImageTop)
+				);
+		} else {
+			painter.setCompositionMode(QPainter::CompositionMode_Source);
+		}
+		painter.drawImage(viewportLeft, viewportTop, image);
 		// Debug rects
 		/*
 		QPen pen(Qt::red);
 		pen.setStyle(Qt::DotLine);
 		painter.setPen(pen);
-		painter.drawRect(left, top, image.width() - 1, image.height() - 1);
+		painter.drawRect(viewportLeft, viewportTop, image.width() - 1, image.height() - 1);
 		*/
 	}
 	QPoint offset = imageOffset();
 	d->mViewport->update(
-		offset.x() + left,
-		offset.y() + top,
+		offset.x() + viewportLeft,
+		offset.y() + viewportTop,
 		image.width(),
 		image.height());
 }
