@@ -114,6 +114,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
 	void showContextMenu();
+	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
 	void setThumbnail(const KFileItem&, const QPixmap&);
 
 	void generateThumbnailsForVisibleItems();

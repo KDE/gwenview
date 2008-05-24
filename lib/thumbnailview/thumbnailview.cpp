@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <math.h>
 
 // Qt
+#include <QApplication>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QTimer>
@@ -132,10 +133,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 	if (KGlobalSettings::singleClick()) {
 		connect(this, SIGNAL(clicked(const QModelIndex&)),
-			SIGNAL(indexActivated(const QModelIndex&)) );
+			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
 	} else {
 		connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-			SIGNAL(indexActivated(const QModelIndex&)) );
+			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
 	}
 }
 
@@ -208,6 +209,13 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 
 void ThumbnailView::showContextMenu() {
 	d->mThumbnailViewHelper->showContextMenu(this);
+}
+
+
+void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index) {
+	if (QApplication::keyboardModifiers() == Qt::NoModifier) {
+		emit indexActivated(index);
+	}
 }
 
 
