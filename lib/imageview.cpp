@@ -160,6 +160,13 @@ struct ImageViewPrivate {
 		mScaler->setDestinationRegion(QRegion(rect));
 	}
 
+
+	void forceBufferRecreation() {
+		createBuffer();
+		setScalerRegionToVisibleRect();
+	}
+
+
 	// At least gcc 3.4.6 on FreeBSD requires a default constructor.
 	ImageViewPrivate() { }
 };
@@ -197,13 +204,17 @@ ImageView::~ImageView() {
 
 void ImageView::setAlphaBackgroundMode(AlphaBackgroundMode mode) {
 	d->mAlphaBackgroundMode = mode;
-	d->mViewport->update();
+	if (d->mDocument && d->mDocument->hasAlphaChannel()) {
+		d->forceBufferRecreation();
+	}
 }
 
 
 void ImageView::setAlphaBackgroundColor(const QColor& color) {
 	d->mAlphaBackgroundColor = color;
-	d->mViewport->update();
+	if (d->mDocument && d->mDocument->hasAlphaChannel()) {
+		d->forceBufferRecreation();
+	}
 }
 
 
