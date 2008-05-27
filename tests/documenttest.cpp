@@ -104,15 +104,18 @@ void DocumentTest::testLoadEmpty() {
 }
 
 void DocumentTest::testLoadDownSampled() {
-	KUrl url = urlForTestFile("test.png");
+	// Note: for now we only support down sampling on jpeg, do not use test.png
+	// here
+	KUrl url = urlForTestFile("orient6.jpg");
 	QImage image;
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
 	bool ready = doc->prepareDownSampledImageForZoom(0.4);
 	QVERIFY2(!ready, "There should not be a down sampled image at this point");
 
-	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
 	while (downSampledImageReadySpy.count() == 0) {
 		QTest::qWait(100);
 	}
