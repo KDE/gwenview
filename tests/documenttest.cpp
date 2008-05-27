@@ -209,6 +209,8 @@ void DocumentTest::testMultipleLoads() {
 void DocumentTest::testSave() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
+
 	KUrl destUrl = urlForTestOutputFile("result.png");
 	Document::SaveResult result = doc->save(destUrl, "png");
 	QCOMPARE(result, Document::SR_OK);
@@ -225,6 +227,8 @@ void DocumentTest::testSave() {
 void DocumentTest::testLosslessSave() {
 	KUrl url1 = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
+	doc->loadFullImage();
+
 	KUrl url2 = urlForTestOutputFile("orient1.jpg");
 	Document::SaveResult result = doc->save(url2, "jpeg");
 	QCOMPARE(result, Document::SR_OK);
