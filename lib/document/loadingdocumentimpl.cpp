@@ -177,6 +177,13 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 
 LoadingDocumentImpl::~LoadingDocumentImpl() {
 	LOG("");
+	// Disconnect watchers to make sure they do not trigger further work
+	d->mMetaDataFutureWatcher.disconnect();
+	d->mImageDataFutureWatcher.disconnect();
+
+	d->mMetaDataFutureWatcher.waitForFinished();
+	d->mImageDataFutureWatcher.waitForFinished();
+
 	if (d->mTransferJob) {
 		d->mTransferJob->kill();
 	}
