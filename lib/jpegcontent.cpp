@@ -230,6 +230,11 @@ bool JpegContent::loadFromData(const QByteArray& data, Exiv2::Image* exiv2Image)
 }
 
 
+QByteArray JpegContent::rawData() const {
+	return d->mRawData;
+}
+
+
 Orientation JpegContent::orientation() const {
 	Exiv2::ExifKey key("Exif.Image.Orientation");
 	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);

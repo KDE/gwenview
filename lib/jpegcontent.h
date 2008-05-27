@@ -65,6 +65,8 @@ public:
 	bool save(const QString& file);
 	bool save(QIODevice*);
 
+	QByteArray rawData() const;
+
 private:
 	struct Private;
 	Private *d;

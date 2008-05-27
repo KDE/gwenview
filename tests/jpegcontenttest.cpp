@@ -259,3 +259,17 @@ void JpegContentTest::testLoadTruncated() {
 	content.save(TMP_FILE);
 	kWarning() << "#" ;
 }
+
+void JpegContentTest::testRawData() {
+	Gwenview::JpegContent content;
+	bool result=content.load(pathForTestFile(ORIENT6_FILE));
+	QVERIFY(result);
+
+	QByteArray fileData;
+	QFile file(pathForTestFile(ORIENT6_FILE));
+	result = file.open(QIODevice::ReadOnly);
+	QVERIFY(result);
+	fileData = file.readAll();
+
+	QCOMPARE(content.rawData(), fileData);
+}

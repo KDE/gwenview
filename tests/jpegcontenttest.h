@@ -36,6 +36,7 @@ private Q_SLOTS:
 	void testSetComment();
 	void testMultipleRotations();
 	void testLoadTruncated();
+	void testRawData();
 };
 
 #endif // JPEGCONTENTTEST_H
