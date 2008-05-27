@@ -48,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imageformats/imageformats.h"
+#include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
 #include "gvbrowserextension.h"
 
@@ -266,6 +267,11 @@ bool GVPart::openUrl(const KUrl& url) {
 		mStatusBarWidgetContainer->show();
 	}
 	mDocument = DocumentFactory::instance()->load(url);
+	if (!mGwenviewHost && !UrlUtils::urlIsFastLocalFile(url)) {
+		// Keep raw data of remote files to avoid downloading them again in
+		// saveAs()
+		mDocument->setKeepRawData(true);
+	}
 	mView->setDocument(mDocument);
 	updateCaption();
 	connect(mDocument.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
