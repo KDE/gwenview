@@ -157,6 +157,12 @@ public:
 
 	QUndoStack* undoStack() const;
 
+	/**
+	 * Returns the compressed version of the document.
+	 * It may have been discarded if it were too big.
+	 */
+	QByteArray rawData() const;
+
 Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);

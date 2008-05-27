@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #define ABSTRACTDOCUMENTIMPL_H
 
 // Qt
+#include <QByteArray>
 #include <QObject>
 
 // KDE
@@ -58,6 +59,8 @@ public:
 	virtual void setImage(const QImage&) = 0;
 
 	virtual void applyTransformation(Orientation) {}
+
+	virtual QByteArray rawData() const { return QByteArray(); }
 
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);

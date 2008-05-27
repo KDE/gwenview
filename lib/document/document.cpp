@@ -168,6 +168,11 @@ KUrl Document::url() const {
 }
 
 
+QByteArray Document::rawData() const {
+	return d->mImpl->rawData();
+}
+
+
 void Document::waitUntilMetaDataLoaded() const {
 	while (loadingState() == Loading) {
 		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);

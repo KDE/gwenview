@@ -476,7 +476,13 @@ void GVPart::saveAs() {
 		return;
 	}
 
-	KIO::Job* job = KIO::file_copy(srcUrl, dstUrl);
+	KIO::Job* job;
+	QByteArray rawData = mDocument->rawData();
+	if (rawData.length() > 0) {
+		job = KIO::storedPut(rawData, dstUrl, -1);
+	} else {
+		job = KIO::file_copy(srcUrl, dstUrl);
+	}
 	connect(job, SIGNAL(result(KJob*)),
 		this, SLOT(showJobError(KJob*)) );
 }
