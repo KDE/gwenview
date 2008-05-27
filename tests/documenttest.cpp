@@ -44,6 +44,16 @@ QTEST_KDEMAIN( DocumentTest, GUI )
 using namespace Gwenview;
 
 
+void DocumentTest::initTestCase() {
+	qRegisterMetaType<KUrl>("KUrl");
+}
+
+
+void DocumentTest::init() {
+	DocumentFactory::instance()->clearCache();
+}
+
+
 void DocumentTest::testLoad() {
 	QFETCH(QString, fileName);
 	QFETCH(QByteArray, expectedFormat);
@@ -69,8 +79,6 @@ void DocumentTest::testLoad_data() {
 }
 
 void DocumentTest::testLoadTwoPasses() {
-	DocumentFactory::instance()->clearCache();
-
 	KUrl url = urlForTestFile("test.png");
 	QImage image;
 	bool ok = image.load(url.path());
@@ -96,8 +104,6 @@ void DocumentTest::testLoadEmpty() {
 }
 
 void DocumentTest::testLoadDownSampled() {
-	DocumentFactory::instance()->clearCache();
-
 	KUrl url = urlForTestFile("test.png");
 	QImage image;
 	bool ok = image.load(url.path());
@@ -301,7 +307,6 @@ void DocumentTest::testModify() {
 
 void DocumentTest::testMetaDataJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
-	DocumentFactory::instance()->clearCache();
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	// We cleared the cache, so the document should not be loaded

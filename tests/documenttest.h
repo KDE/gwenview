@@ -43,6 +43,9 @@ private Q_SLOTS:
 	void testModify();
 	void testMetaDataJpeg();
 	void testMetaDataBmp();
+
+	void initTestCase();
+	void init();
 };
 
 #endif // DOCUMENTTEST_H
