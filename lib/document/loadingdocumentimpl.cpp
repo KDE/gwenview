@@ -216,8 +216,9 @@ void LoadingDocumentImpl::loadImage(int invertedZoom) {
 	d->mImageDataFutureWatcher.waitForFinished();
 	d->mImageDataInvertedZoom = invertedZoom;
 
-	// FIXME: Document reason for test (remote download)
-	if (!d->mMetaDataFutureWatcher.isRunning() && d->mMetaDataLoaded) {
+	if (d->mMetaDataLoaded) {
+		// Do not test on mMetaDataFuture.isRunning() here: it might not have
+		// started if we are downloading the image from a remote url
 		d->startImageDataLoading();
 	}
 }
