@@ -76,7 +76,7 @@ if (Nepomuk_FOUND)
 endif (Nepomuk_FOUND)
 
 install(TARGETS gwenview
-	DESTINATION ${BIN_INSTALL_DIR})
+	${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES gwenviewui.rc
 	DESTINATION ${DATA_INSTALL_DIR}/gwenview)
