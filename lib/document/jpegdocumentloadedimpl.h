@@ -41,6 +41,7 @@ public:
 	~JpegDocumentLoadedImpl();
 	virtual void setImage(const QImage&);
 	virtual void applyTransformation(Orientation orientation);
+	virtual QByteArray rawData() const;
 
 protected:
 	virtual bool saveInternal(QIODevice* device, const QByteArray& format);

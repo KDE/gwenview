@@ -36,7 +36,7 @@ namespace Gwenview {
 class DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl {
 public:
-	DocumentLoadedImpl(Document*);
+	DocumentLoadedImpl(Document*, const QByteArray&);
 	~DocumentLoadedImpl();
 
 	virtual void init();
@@ -45,6 +45,7 @@ public:
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
 	virtual void applyTransformation(Orientation orientation);
+	virtual QByteArray rawData() const;
 
 protected:
 	virtual bool saveInternal(QIODevice* device, const QByteArray& format);

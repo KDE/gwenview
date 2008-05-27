@@ -157,9 +157,13 @@ public:
 
 	QUndoStack* undoStack() const;
 
+	void setKeepRawData(bool);
+
+	bool keepRawData() const;
+
 	/**
-	 * Returns the compressed version of the document.
-	 * It may have been discarded if it were too big.
+	 * Returns the compressed version of the document, if it is still
+	 * available.
 	 */
 	QByteArray rawData() const;
 

@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <memory>
 
 // Qt
+#include <QByteArray>
 #include <QImage>
 #include <QMatrix>
 
@@ -42,12 +43,16 @@ namespace Gwenview {
 
 
 struct DocumentLoadedImplPrivate {
+	QByteArray mRawData;
 };
 
 
-DocumentLoadedImpl::DocumentLoadedImpl(Document* document)
+DocumentLoadedImpl::DocumentLoadedImpl(Document* document, const QByteArray& rawData)
 : AbstractDocumentImpl(document)
 , d(new DocumentLoadedImplPrivate) {
+	if (document->keepRawData()) {
+		d->mRawData = rawData;
+	}
 }
 
 
@@ -139,5 +144,11 @@ void DocumentLoadedImpl::applyTransformation(Orientation orientation) {
 	setDocumentImage(image);
 	imageRectUpdated(image.rect());
 }
+
+
+QByteArray DocumentLoadedImpl::rawData() const {
+	return d->mRawData;
+}
+
 
 } // namespace

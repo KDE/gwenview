@@ -287,14 +287,17 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	setDocumentImage(d->mImage);
 	imageRectUpdated(d->mImage.rect());
 	emit loaded();
+	DocumentLoadedImpl* impl;
 	if (d->mJpegContent) {
-		JpegDocumentLoadedImpl* impl = new JpegDocumentLoadedImpl(
+		impl = new JpegDocumentLoadedImpl(
 			document(),
 			d->mJpegContent);
-		switchToImpl(impl);
 	} else {
-		switchToImpl(new DocumentLoadedImpl(document()));
+		impl = new DocumentLoadedImpl(
+			document(),
+			d->mData);
 	}
+	switchToImpl(impl);
 }
 
 

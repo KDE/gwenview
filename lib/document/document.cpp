@@ -39,6 +39,7 @@ namespace Gwenview {
 struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
+	bool mKeepRawData;
 	QSize mSize;
 	QImage mImage;
 	QMap<int, QImage> mDownSampledImageMap;
@@ -65,6 +66,7 @@ Document::Document(const KUrl& url)
 , d(new DocumentPrivate) {
 	d->mImpl = 0;
 	d->mUrl = url;
+	d->mKeepRawData = false;
 
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -170,6 +172,16 @@ KUrl Document::url() const {
 
 QByteArray Document::rawData() const {
 	return d->mImpl->rawData();
+}
+
+
+bool Document::keepRawData() const {
+	return d->mKeepRawData;
+}
+
+
+void Document::setKeepRawData(bool value) {
+	d->mKeepRawData = value;
 }
 
 

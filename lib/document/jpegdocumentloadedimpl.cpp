@@ -39,7 +39,7 @@ struct JpegDocumentLoadedImplPrivate {
 
 
 JpegDocumentLoadedImpl::JpegDocumentLoadedImpl(Document* doc, JpegContent* jpegContent)
-: DocumentLoadedImpl(doc)
+: DocumentLoadedImpl(doc, QByteArray() /* rawData */)
 , d(new JpegDocumentLoadedImplPrivate) {
 	Q_ASSERT(jpegContent);
 	d->mJpegContent = jpegContent;
@@ -71,7 +71,7 @@ void JpegDocumentLoadedImpl::setImage(const QImage& image) {
 	DocumentLoadedImpl::setImage(image);
 	// mJpegContent is no longer relevant, so we'd better switch to a normal
 	// loaded impl
-	switchToImpl(new DocumentLoadedImpl(document()));
+	switchToImpl(new DocumentLoadedImpl(document(), QByteArray() /* rawData */));
 }
 
 
@@ -79,5 +79,11 @@ void JpegDocumentLoadedImpl::applyTransformation(Orientation orientation) {
 	DocumentLoadedImpl::applyTransformation(orientation);
 	d->mJpegContent->transform(orientation);
 }
+
+
+QByteArray JpegDocumentLoadedImpl::rawData() const {
+	return d->mJpegContent->rawData();
+}
+
 
 } // namespace
