@@ -85,7 +85,7 @@ public:
 
 	enum LoadingState {
 		Loading,        ///< Image is loading
-		MetaDataLoaded, ///< Image is still loading, but meta data has been loaded */
+		MetaDataLoaded, ///< Image is still loading, but meta data has been loaded
 		Loaded,         ///< Full image has been loaded
 		LoadingFailed   ///< Image loading has failed
 	};
