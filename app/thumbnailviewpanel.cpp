@@ -22,11 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailviewpanel.moc"
 
 // Qt
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QSlider>
-#include <QTimer>
-#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE

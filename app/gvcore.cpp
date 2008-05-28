@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gvcore.h"
 
 // Qt
-#include <QApplication>
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QList>

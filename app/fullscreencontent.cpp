@@ -25,8 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAction>
 #include <QApplication>
 #include <QCheckBox>
-#include <QComboBox>
-#include <QDialog>
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>

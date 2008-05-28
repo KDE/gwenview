@@ -1,5 +1,5 @@
-#include <QApplication>
 #include <QBuffer>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
 #include <QImage>

@@ -31,7 +31,6 @@
 #include <QPixmap>
 #include <QMutex>
 #include <QThread>
-#include <QVector>
 #include <QWaitCondition>
 
 // KDE
