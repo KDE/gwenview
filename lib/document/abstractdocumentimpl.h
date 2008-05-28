@@ -64,6 +64,7 @@ public:
 
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
+	void metaDataLoaded();
 	void loaded();
 	void loadingFailed();
 

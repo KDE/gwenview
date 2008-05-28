@@ -91,6 +91,7 @@ struct LoadingDocumentImplPrivate {
 		LOG("");
 		Q_ASSERT(mMetaDataLoaded);
 		Q_ASSERT(mImageDataInvertedZoom != 0);
+		Q_ASSERT(!mImageDataFuture.isRunning());
 		mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
 		mImageDataFutureWatcher.setFuture(mImageDataFuture);
 	}
@@ -275,9 +276,12 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 	setDocumentExiv2Image(d->mExiv2Image);
 
 	d->mMetaDataLoaded = true;
+	emit metaDataLoaded();
 
 	// Start image loading if necessary
-	if (d->mImageDataInvertedZoom != 0) {
+	// We test if mImageDataFuture is not already running because code connected to
+	// metaDataLoaded() signal could have called loadImage()
+	if (!d->mImageDataFuture.isRunning() && d->mImageDataInvertedZoom != 0) {
 		d->startImageDataLoading();
 	}
 }

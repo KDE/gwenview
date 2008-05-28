@@ -135,6 +135,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 	}
 	d->mImpl=impl;
 
+	connect(d->mImpl, SIGNAL(metaDataLoaded()),
+		this, SLOT(emitMetaDataLoaded()) );
 	connect(d->mImpl, SIGNAL(loaded()),
 		this, SLOT(emitLoaded()) );
 	connect(d->mImpl, SIGNAL(loadingFailed()),
@@ -315,6 +317,11 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom) {
 	d->scheduleImageLoading(invertedZoom);
 
 	return false;
+}
+
+
+void Document::emitMetaDataLoaded() {
+	emit metaDataLoaded(d->mUrl);
 }
 
 

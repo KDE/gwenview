@@ -170,6 +170,7 @@ public:
 Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);
+	void metaDataLoaded(const KUrl&);
 	void loaded(const KUrl&);
 	void loadingFailed(const KUrl&);
 	void saved(const KUrl&);
@@ -177,6 +178,7 @@ Q_SIGNALS:
 	void metaDataUpdated();
 
 private Q_SLOTS:
+	void emitMetaDataLoaded();
 	void emitLoaded();
 	void emitLoadingFailed();
 	void slotUndoIndexChanged();
