@@ -104,6 +104,8 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent*);
 
 private Q_SLOTS:
+	void slotDocumentMetaDataLoaded();
+
 	/**
 	 * This method performs the necessary adjustments to get the view ready to
 	 * display the document set with setDocument(). It needs to be postponed

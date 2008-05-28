@@ -235,10 +235,8 @@ void ImageView::setDocument(Document::Ptr document) {
 		return;
 	}
 
-	connect(document.data(), SIGNAL(imageRectUpdated(const QRect&)),
-		SLOT(updateImageRect(const QRect&)) );
-	connect(document.data(), SIGNAL(metaDataUpdated()),
-		SLOT(finishSetDocument()) );
+	connect(d->mDocument.data(), SIGNAL(metaDataLoaded(const KUrl&)),
+		SLOT(slotDocumentMetaDataLoaded()) );
 
 	if (d->mDocument->size().isValid()) {
 		finishSetDocument();
@@ -246,19 +244,31 @@ void ImageView::setDocument(Document::Ptr document) {
 }
 
 
+void ImageView::slotDocumentMetaDataLoaded() {
+	if (d->mDocument->size().isValid()) {
+		finishSetDocument();
+	} else {
+		// Could not retrieve image size from meta data, we need to load the
+		// full image now.
+		connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
+			SLOT(finishSetDocument()) );
+		d->mDocument->loadFullImage();
+	}
+}
+
+
 void ImageView::finishSetDocument() {
 	if (!d->mDocument->size().isValid()) {
-		// No valid image size available, wait a bit more
+		kError() << "No valid image size available, this should not happen!";
 		return;
 	}
 
-	// We don't want this method to be called after document is loaded, so
-	// disconnect ourself
-	disconnect(d->mDocument.data(), SIGNAL(metaDataUpdated()),
-		this, SLOT(finishSetDocument()) );
-
 	d->createBuffer();
 	d->mScaler->setDocument(d->mDocument);
+
+	connect(d->mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)),
+		SLOT(updateImageRect(const QRect&)) );
+
 	if (d->mZoomToFit) {
 		// Set the zoom to an invalid value to make sure setZoom() does not
 		// return early because the new zoom is the same as the old zoom.
