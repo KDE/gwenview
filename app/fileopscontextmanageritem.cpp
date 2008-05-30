@@ -133,6 +133,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 		SLOT(populateOpenMenu()) );
 	connect(menu, SIGNAL(triggered(QAction*)),
 		SLOT(openWith(QAction*)) );
+        updateActions();
 }
 
 
@@ -209,7 +210,7 @@ inline void addIfEnabled(SideBarGroup* group, QAction* action) {
 }
 
 void FileOpsContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar->isVisible()) {
+	if (!d->mSideBar ||  !d->mSideBar->isVisible()) {
 		return;
 	}
 
