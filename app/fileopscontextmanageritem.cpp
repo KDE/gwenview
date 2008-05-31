@@ -78,6 +78,8 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	d->mContextManagerItem = this;
+	d->mSideBar = 0;
+	d->mGroup = 0;
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateActions()) );
