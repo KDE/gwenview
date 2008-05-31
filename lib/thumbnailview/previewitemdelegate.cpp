@@ -307,7 +307,8 @@ struct PreviewItemDelegatePrivate {
 
 
 PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
-: d(new PreviewItemDelegatePrivate) {
+: QAbstractItemDelegate(view)
+, d(new PreviewItemDelegatePrivate) {
 	d->mDelegate = this;
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
