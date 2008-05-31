@@ -140,6 +140,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 
 
 FileOpsContextManagerItem::~FileOpsContextManagerItem() {
+	delete d->mOpenWithAction->menu();
 	delete d;
 }
 
