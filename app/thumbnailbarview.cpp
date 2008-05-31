@@ -96,7 +96,8 @@ struct ThumbnailBarItemDelegatePrivate {
 
 
 ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
-: d(new ThumbnailBarItemDelegatePrivate) {
+: QAbstractItemDelegate(view)
+, d(new ThumbnailBarItemDelegatePrivate) {
 	d->mDelegate = this;
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
