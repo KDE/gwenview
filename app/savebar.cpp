@@ -49,7 +49,7 @@ struct SaveBarPrivate {
 	QLabel* mMessageLabel;
 	QLabel* mActionsLabel;
 	KUrl mCurrentUrl;
-	bool mForceHide;
+	bool mFullScreenMode;
 
 	void initBackground(QWidget* widget) {
 		widget->setAutoFillBackground(true);
@@ -101,7 +101,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mActionsLabel = new QLabel(d->mSaveBarWidget);
 	d->mActionsLabel->setAlignment(Qt::AlignRight);
 	d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mForceHide = false;
+	d->mFullScreenMode = false;
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mSaveBarWidget);
 	layout->addWidget(d->mMessageLabel);
@@ -129,9 +129,9 @@ SaveBar::~SaveBar() {
 }
 
 
-void SaveBar::setForceHide(bool value) {
-	d->mForceHide = value;
-	if (d->mForceHide) {
+void SaveBar::setFullScreenMode(bool value) {
+	d->mFullScreenMode = value;
+	if (d->mFullScreenMode) {
 		slideOut();
 	} else {
 		updateContent();
@@ -140,7 +140,7 @@ void SaveBar::setForceHide(bool value) {
 
 
 void SaveBar::updateContent() {
-	if (d->mForceHide) {
+	if (d->mFullScreenMode) {
 		slideOut();
 		return;
 	}

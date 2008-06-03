@@ -993,7 +993,7 @@ void MainWindow::toggleFullScreen() {
 		menuBar()->hide();
 		toolBar()->hide();
 		d->mDocumentView->setFullScreenMode(true);
-		d->mSaveBar->setForceHide(true);
+		d->mSaveBar->setFullScreenMode(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
 		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
@@ -1002,7 +1002,7 @@ void MainWindow::toggleFullScreen() {
 		// Back to normal
 		d->mDocumentView->setFullScreenMode(false);
 		d->mSlideShow->stop();
-		d->mSaveBar->setForceHide(false);
+		d->mSaveBar->setFullScreenMode(false);
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
