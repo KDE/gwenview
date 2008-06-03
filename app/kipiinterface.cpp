@@ -159,13 +159,13 @@ struct MenuInfo {
 void KIPIInterface::slotReplug() {
 	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
 	CategoryMap categoryMap;
-	categoryMap[KIPI::IMAGESPLUGIN]=MenuInfo("image_actions");
-	categoryMap[KIPI::EFFECTSPLUGIN]=MenuInfo("effect_actions");
-	categoryMap[KIPI::TOOLSPLUGIN]=MenuInfo("tool_actions");
-	categoryMap[KIPI::IMPORTPLUGIN]=MenuInfo("import_actions");
-	categoryMap[KIPI::EXPORTPLUGIN]=MenuInfo("export_actions");
-	categoryMap[KIPI::BATCHPLUGIN]=MenuInfo("batch_actions");
-	categoryMap[KIPI::COLLECTIONSPLUGIN]=MenuInfo("collection_actions");
+	categoryMap[KIPI::ImagesPlugin]=MenuInfo("image_actions");
+	categoryMap[KIPI::EffectsPlugin]=MenuInfo("effect_actions");
+	categoryMap[KIPI::ToolsPlugin]=MenuInfo("tool_actions");
+	categoryMap[KIPI::ImportPlugin]=MenuInfo("import_actions");
+	categoryMap[KIPI::ExportPlugin]=MenuInfo("export_actions");
+	categoryMap[KIPI::BatchPlugin]=MenuInfo("batch_actions");
+	categoryMap[KIPI::CollectionsPlugin]=MenuInfo("collection_actions");
 
 	// Fill the mActions
 	KIPI::PluginLoader::PluginList pluginList = d->mPluginLoader->pluginList();
