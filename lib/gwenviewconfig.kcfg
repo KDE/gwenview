@@ -18,6 +18,12 @@
 		<entry name="RecentFolders" type="StringList">
 			<default></default>
 		</entry>
+
+		<entry name="PercentageOfMemoryUsageWarning" type="Double">
+			<default>0.5</default>
+			<whatsthis>The percentage of memory used by Gwenview before it
+			warns the user and suggest saving changes.</whatsthis>
+		</entry>
 	</group>
 
 	<group name="FullScreen">

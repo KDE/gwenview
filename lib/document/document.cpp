@@ -241,6 +241,14 @@ bool Document::hasAlphaChannel() const {
 }
 
 
+int Document::memoryUsage() const {
+	// FIXME: Take undo stack into account
+	int usage = d->mImage.numBytes();
+	usage += rawData().length();
+	return usage;
+}
+
+
 void Document::setSize(const QSize& size) {
 	if (size == d->mSize) {
 		return;

@@ -162,6 +162,11 @@ public:
 	bool keepRawData() const;
 
 	/**
+	 * Returns how much bytes the document is using
+	 */
+	int memoryUsage() const;
+
+	/**
 	 * Returns the compressed version of the document, if it is still
 	 * available.
 	 */

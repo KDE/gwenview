@@ -39,6 +39,7 @@ set(gwenviewlib_SRCS
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
 	metadata/sorteddirmodel.cpp
+	memoryutils.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
 	preferredimagemetainfomodel.cpp
