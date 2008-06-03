@@ -27,10 +27,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QString>
 
 // KDE
-#include <kcategorizedsortfilterproxymodel.h>
 #include <kcomponentdata.h>
 #include <kmacroexpander.h>
 #include <kstandarddirs.h>
+#include <kstringhandler.h>
 
 // Local
 #include <lib/gwenviewconfig.h>
@@ -97,8 +97,7 @@ void FullScreenTheme::setCurrentThemeName(const QString& name) {
 
 
 static bool themeNameLessThan(const QString& s1, const QString& s2) {
-	return KCategorizedSortFilterProxyModel::naturalCompare(
-		s1.toLower(), s2.toLower()) < 0;
+	return KStringHandler::naturalCompare(s1.toLower(), s2.toLower()) < 0;
 }
 
 
