@@ -46,7 +46,7 @@ struct IODeviceJpegSourceManager : public jpeg_source_mgr {
 };
 
 
-static int fill_input_buffer(j_decompress_ptr cinfo) {
+static boolean fill_input_buffer(j_decompress_ptr cinfo) {
 	IODeviceJpegSourceManager* src = static_cast<IODeviceJpegSourceManager*>(cinfo->src);
 	Q_ASSERT(src->mIODevice);
 	int readSize = src->mIODevice->read((char*)src->mBuffer, SOURCE_MANAGER_BUFFER_SIZE);

@@ -79,7 +79,7 @@ void inmem_init_destination(j_compress_ptr cinfo) {
 	dest->next_output_byte=(JOCTET*)(dest->mOutput->data() );
 }
 
-int inmem_empty_output_buffer(j_compress_ptr cinfo) {
+boolean inmem_empty_output_buffer(j_compress_ptr cinfo) {
 	inmem_dest_mgr* dest=(inmem_dest_mgr*)(cinfo->dest);
 	dest->mOutput->resize(dest->mOutput->size() + INMEM_DST_DELTA);
 	dest->next_output_byte=(JOCTET*)( dest->mOutput->data() + dest->mOutput->size() - INMEM_DST_DELTA );
