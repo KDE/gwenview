@@ -106,6 +106,9 @@ target_link_libraries(gwenviewlib
 	${JPEG_LIBRARY}
 	${EXIV2_LIBRARIES}
 	)
+if( WIN32 )
+target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
+endif( WIN32 )
 
 if (NOT GWENVIEW_METADATA_BACKEND_NONE)
 	target_link_libraries(gwenviewlib
