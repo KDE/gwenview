@@ -188,8 +188,6 @@ struct MainWindow::Private {
 		mStartSlideShowWhenDirListerCompleted = false;
 		mSlideShow = new SlideShow(mWindow);
 
-		connect(mSaveBar, SIGNAL(requestSave(const KUrl&)),
-			mGvCore, SLOT(save(const KUrl&)) );
 		connect(mSaveBar, SIGNAL(requestSaveAll()),
 			mGvCore, SLOT(saveAll()) );
 		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),

@@ -51,7 +51,6 @@ public:
 	void setFullScreenMode(bool);
 
 Q_SIGNALS:
-	void requestSave(const KUrl&);
 	void requestSaveAll();
 	void goToUrl(const KUrl&);
 

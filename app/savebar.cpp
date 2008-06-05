@@ -51,6 +51,8 @@ struct SaveBarPrivate {
 	QWidget* mTopRowWidget;
 	QToolButton* mUndoButton;
 	QToolButton* mRedoButton;
+	QToolButton* mSaveCurrentUrlButton;
+	QToolButton* mSaveAllButton;
 	QLabel* mMessageLabel;
 	QLabel* mActionsLabel;
 	QFrame* mTooManyChangesFrame;
@@ -181,12 +183,8 @@ struct SaveBarPrivate {
 			}
 		}
 
-		if (lst.contains(mCurrentUrl)) {
-			links << QString("<a href='save'>%1</a>").arg(i18n("Save"));
-		}
-		if (lst.size() > 1) {
-			links << QString("<a href='saveAll'>%1</a>").arg(i18n("Save All"));
-		}
+		mSaveCurrentUrlButton->setVisible(lst.contains(mCurrentUrl));
+		mSaveAllButton->setVisible(lst.size() >= 1);
 
 		mMessageLabel->setText(message);
 		mActionsLabel->setText(links.join(" | "));
@@ -207,6 +205,12 @@ struct SaveBarPrivate {
 	}
 };
 
+QToolButton* createToolButton() {
+	QToolButton* button = new QToolButton;
+	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	button->hide();
+	return button;
+}
 
 SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 : SlideContainer(parent)
@@ -220,13 +224,10 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mMessageLabel = new QLabel;
 	d->mMessageLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
-	d->mUndoButton = new QToolButton;
-	d->mUndoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-	d->mUndoButton->hide();
-
-	d->mRedoButton = new QToolButton;
-	d->mRedoButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-	d->mRedoButton->hide();
+	d->mUndoButton = createToolButton();
+	d->mRedoButton = createToolButton();
+	d->mSaveCurrentUrlButton = createToolButton();
+	d->mSaveAllButton = createToolButton();
 
 	d->mActionsLabel = new QLabel;
 	d->mActionsLabel->setAlignment(Qt::AlignRight);
@@ -241,6 +242,8 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	rowLayout->addWidget(d->mUndoButton);
 	rowLayout->addWidget(d->mRedoButton);
 	rowLayout->addWidget(d->mActionsLabel);
+	rowLayout->addWidget(d->mSaveCurrentUrlButton);
+	rowLayout->addWidget(d->mSaveAllButton);
 	rowLayout->setMargin(0);
 
 	// Setup bottom row
@@ -276,6 +279,13 @@ SaveBar::~SaveBar() {
 void SaveBar::initActionDependentWidgets() {
 	d->mUndoButton->setDefaultAction(d->mActionCollection->action("edit_undo"));
 	d->mRedoButton->setDefaultAction(d->mActionCollection->action("edit_redo"));
+	d->mSaveCurrentUrlButton->setDefaultAction(d->mActionCollection->action("file_save"));
+
+	// FIXME: Not using an action for now
+	d->mSaveAllButton->setText(i18n("Save All"));
+	connect(d->mSaveAllButton, SIGNAL(clicked()),
+		SIGNAL(requestSaveAll()) );
+
 	int height = d->mUndoButton->sizeHint().height();
 	d->mTopRowWidget->setFixedHeight(height);
 	d->updateWidgetSizes();
@@ -320,11 +330,7 @@ void SaveBar::updateContent() {
 
 void SaveBar::triggerAction(const QString& action) {
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
-	if (action == "save") {
-		requestSave(d->mCurrentUrl);
-	} else if (action == "saveAll") {
-		requestSaveAll();
-	} else if (action == "first") {
+	if (action == "first") {
 		goToUrl(lst[0]);
 	} else if (action == "previous") {
 		int pos = lst.indexOf(d->mCurrentUrl);
