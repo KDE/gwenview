@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // KDE
 #include <kactioncollection.h>
+#include <kcolorscheme.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -55,9 +56,38 @@ struct SaveBarPrivate {
 	KUrl mCurrentUrl;
 	bool mFullScreenMode;
 
-	void initBackground(QWidget* widget) {
-		widget->setAutoFillBackground(true);
+	void createTooManyChangesLabel() {
+		mTooManyChangesLabel = new QLabel;
+		mTooManyChangesLabel->setObjectName("tooManyChangesLabel");
+		mTooManyChangesLabel->setText(
+			i18n("You have modified many images. To avoid memory problems, you should save your changes.")
+			);
+		mTooManyChangesLabel->hide();
 
+		// CSS
+		KColorScheme scheme(mSaveBarWidget->palette().currentColorGroup(), KColorScheme::Window);
+		QColor warningBackgroundColor = scheme.background(KColorScheme::NegativeBackground).color();
+		QColor warningBorderColor = PaintUtils::adjustedHsv(warningBackgroundColor, 0, 150, 0);
+		QColor warningColor = scheme.foreground(KColorScheme::NegativeText).color();
+
+		QString css =
+			"#tooManyChangesLabel {"
+			"	background-color: %1;"
+			"	border: 1px solid %2;"
+			"	border-radius: 4px;"
+			"	padding: 3px;"
+			"	color: %3;"
+			"}"
+			;
+		css = css
+			.arg(warningBackgroundColor.name())
+			.arg(warningBorderColor.name())
+			.arg(warningColor.name())
+			;
+		mTooManyChangesLabel->setStyleSheet(css);
+	}
+
+	void applyNormalStyleSheet() {
 		QColor color = QToolTip::palette().base().color();
 		QColor borderColor = PaintUtils::adjustedHsv(color, 0, 150, 0);
 
@@ -68,18 +98,20 @@ struct SaveBarPrivate {
 			"	border-bottom: 1px solid %2;"
 			"}"
 			;
+
 		css = css
 			.arg(color.name())
-			.arg(borderColor.name());
-		widget->setStyleSheet(css);
+			.arg(borderColor.name())
+			;
+		mSaveBarWidget->setStyleSheet(css);
 	}
 
-
-	void updateUndoButtons() {
-		mUndoButton->setDefaultAction(mActionCollection->action("edit_undo"));
-		mUndoButton->show();
-		mRedoButton->setDefaultAction(mActionCollection->action("edit_redo"));
-		mRedoButton->show();
+	void applyFullScreenStyleSheet() {
+		QString css =
+			".QWidget {"
+			"	background-color: #333;"
+			"}";
+		mSaveBarWidget->setStyleSheet(css);
 	}
 
 
@@ -103,7 +135,8 @@ struct SaveBarPrivate {
 		if (lst.contains(mCurrentUrl)) {
 			message = i18n("Current image modified");
 
-			updateUndoButtons();
+			mUndoButton->show();
+			mRedoButton->show();
 
 			if (lst.size() > 1) {
 				QString previous = i18n("Previous modified image");
@@ -144,7 +177,14 @@ struct SaveBarPrivate {
 
 
 	void updateWidgetSizes() {
-		int height = mSaveBarWidget->sizeHint().height();
+		QVBoxLayout* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
+		int topRowHeight = mFullScreenMode ? 0 : mTopRowWidget->height();
+		int bottomRowHeight = mTooManyChangesLabel->isVisibleTo(mSaveBarWidget) ? mTooManyChangesLabel->sizeHint().height() : 0;
+
+		int height = 2 * layout->margin() + topRowHeight + bottomRowHeight;
+		if (topRowHeight > 0 && bottomRowHeight > 0) {
+			height += layout->spacing();
+		}
 		mSaveBarWidget->setFixedHeight(height);
 		that->setFixedHeight(height);
 	}
@@ -158,7 +198,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mFullScreenMode = false;
 	d->mActionCollection = actionCollection;
 	d->mSaveBarWidget = new QWidget();
-	d->initBackground(d->mSaveBarWidget);
+	d->applyNormalStyleSheet();
 
 	d->mMessageLabel = new QLabel;
 	d->mMessageLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -175,11 +215,9 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mActionsLabel->setAlignment(Qt::AlignRight);
 	d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-	d->mTooManyChangesLabel = new QLabel;
-	d->mTooManyChangesLabel->setText(
-		i18n("You have modified many images. To avoid memory problems, you should save your changes.")
-		);
+	d->createTooManyChangesLabel();
 
+	// Setup top row
 	d->mTopRowWidget = new QWidget;
 	QHBoxLayout* rowLayout = new QHBoxLayout(d->mTopRowWidget);
 	rowLayout->addWidget(d->mMessageLabel);
@@ -187,20 +225,23 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	rowLayout->addWidget(d->mRedoButton);
 	rowLayout->addWidget(d->mActionsLabel);
 	rowLayout->setMargin(0);
-	// Use mUndoButton sizehint instead of d->mTopRowWidget sizehint because at this time mUndoButton is hidden
-	d->mTopRowWidget->setFixedHeight(d->mUndoButton->sizeHint().height());
 
+	// Setup bottom row
+	QHBoxLayout* bottomRowLayout = new QHBoxLayout;
+	bottomRowLayout->addStretch();
+	bottomRowLayout->addWidget(d->mTooManyChangesLabel);
+	bottomRowLayout->addStretch();
+
+	// Gather everything together
 	QVBoxLayout* layout = new QVBoxLayout(d->mSaveBarWidget);
 	layout->addWidget(d->mTopRowWidget);
-	layout->addWidget(d->mTooManyChangesLabel);
+	layout->addLayout(bottomRowLayout);
 	layout->setMargin(3);
 	layout->setSpacing(3);
 
 	hide();
 
 	setContent(d->mSaveBarWidget);
-
-	d->updateWidgetSizes();
 
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateContent()) );
@@ -215,8 +256,22 @@ SaveBar::~SaveBar() {
 }
 
 
+void SaveBar::initActionDependentWidgets() {
+	d->mUndoButton->setDefaultAction(d->mActionCollection->action("edit_undo"));
+	d->mRedoButton->setDefaultAction(d->mActionCollection->action("edit_redo"));
+	int height = d->mUndoButton->sizeHint().height();
+	d->mTopRowWidget->setFixedHeight(height);
+	d->updateWidgetSizes();
+}
+
+
 void SaveBar::setFullScreenMode(bool value) {
 	d->mFullScreenMode = value;
+	if (value) {
+		d->applyFullScreenStyleSheet();
+	} else {
+		d->applyNormalStyleSheet();
+	}
 	updateContent();
 }
 

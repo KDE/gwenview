@@ -584,6 +584,7 @@ d(new MainWindow::Private)
 	d->setupFullScreenBar();
 	d->updateActions();
 	updatePreviousNextActions();
+	d->mSaveBar->initActionDependentWidgets();
 
 	createShellGUI();
 	loadConfig();

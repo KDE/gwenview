@@ -41,6 +41,11 @@ public:
 	SaveBar(QWidget* parent, KActionCollection* collection);
 	~SaveBar();
 
+	/**
+	 * Init widgets which depend on an initialized actionCollection
+	 */
+	void initActionDependentWidgets();
+
 	void setCurrentUrl(const KUrl&);
 
 	void setFullScreenMode(bool);
