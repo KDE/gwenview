@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kurl.h>
 
@@ -52,17 +53,31 @@ struct SaveBarPrivate {
 	QToolButton* mRedoButton;
 	QLabel* mMessageLabel;
 	QLabel* mActionsLabel;
-	QLabel* mTooManyChangesLabel;
+	QFrame* mTooManyChangesFrame;
 	KUrl mCurrentUrl;
 	bool mFullScreenMode;
 
-	void createTooManyChangesLabel() {
-		mTooManyChangesLabel = new QLabel;
-		mTooManyChangesLabel->setObjectName("tooManyChangesLabel");
-		mTooManyChangesLabel->setText(
+	void createTooManyChangesFrame() {
+		mTooManyChangesFrame = new QFrame;
+
+		// Icon
+		QLabel* iconLabel = new QLabel;
+		QPixmap pix = KIconLoader::global()->loadIcon(
+			"dialog-warning", KIconLoader::Dialog, KIconLoader::SizeSmall);
+		iconLabel->setPixmap(pix);
+
+		// Text label
+		QLabel* textLabel = new QLabel;
+		textLabel->setText(
 			i18n("You have modified many images. To avoid memory problems, you should save your changes.")
 			);
-		mTooManyChangesLabel->hide();
+
+		// Layout
+		QHBoxLayout* layout = new QHBoxLayout(mTooManyChangesFrame);
+		layout->setMargin(0);
+		layout->addWidget(iconLabel);
+		layout->addWidget(textLabel);
+		mTooManyChangesFrame->hide();
 
 		// CSS
 		KColorScheme scheme(mSaveBarWidget->palette().currentColorGroup(), KColorScheme::Window);
@@ -71,11 +86,13 @@ struct SaveBarPrivate {
 		QColor warningColor = scheme.foreground(KColorScheme::NegativeText).color();
 
 		QString css =
-			"#tooManyChangesLabel {"
+			".QFrame {"
 			"	background-color: %1;"
 			"	border: 1px solid %2;"
 			"	border-radius: 4px;"
 			"	padding: 3px;"
+			"}"
+			".QFrame QLabel {"
 			"	color: %3;"
 			"}"
 			;
@@ -84,7 +101,7 @@ struct SaveBarPrivate {
 			.arg(warningBorderColor.name())
 			.arg(warningColor.name())
 			;
-		mTooManyChangesLabel->setStyleSheet(css);
+		mTooManyChangesFrame->setStyleSheet(css);
 	}
 
 	void applyNormalStyleSheet() {
@@ -115,7 +132,7 @@ struct SaveBarPrivate {
 	}
 
 
-	void updateTooManyChangesLabel(const QList<KUrl>& list) {
+	void updateTooManyChangesFrame(const QList<KUrl>& list) {
 		qreal maxPercentageOfMemoryUsage = GwenviewConfig::percentageOfMemoryUsageWarning();
 		int maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
 		int memoryUsage = 0;
@@ -124,7 +141,7 @@ struct SaveBarPrivate {
 			memoryUsage += doc->memoryUsage();
 		}
 
-		mTooManyChangesLabel->setVisible(memoryUsage > maxMemoryUsage);
+		mTooManyChangesFrame->setVisible(memoryUsage > maxMemoryUsage);
 	}
 
 
@@ -179,7 +196,7 @@ struct SaveBarPrivate {
 	void updateWidgetSizes() {
 		QVBoxLayout* layout = static_cast<QVBoxLayout*>(mSaveBarWidget->layout());
 		int topRowHeight = mFullScreenMode ? 0 : mTopRowWidget->height();
-		int bottomRowHeight = mTooManyChangesLabel->isVisibleTo(mSaveBarWidget) ? mTooManyChangesLabel->sizeHint().height() : 0;
+		int bottomRowHeight = mTooManyChangesFrame->isVisibleTo(mSaveBarWidget) ? mTooManyChangesFrame->sizeHint().height() : 0;
 
 		int height = 2 * layout->margin() + topRowHeight + bottomRowHeight;
 		if (topRowHeight > 0 && bottomRowHeight > 0) {
@@ -215,7 +232,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mActionsLabel->setAlignment(Qt::AlignRight);
 	d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-	d->createTooManyChangesLabel();
+	d->createTooManyChangesFrame();
 
 	// Setup top row
 	d->mTopRowWidget = new QWidget;
@@ -229,7 +246,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	// Setup bottom row
 	QHBoxLayout* bottomRowLayout = new QHBoxLayout;
 	bottomRowLayout->addStretch();
-	bottomRowLayout->addWidget(d->mTooManyChangesLabel);
+	bottomRowLayout->addWidget(d->mTooManyChangesFrame);
 	bottomRowLayout->addStretch();
 
 	// Gather everything together
@@ -290,10 +307,10 @@ void SaveBar::updateContent() {
 		d->updateTopRowWidget(lst);
 	}
 
-	d->updateTooManyChangesLabel(lst);
+	d->updateTooManyChangesFrame(lst);
 
 	d->updateWidgetSizes();
-	if (d->mFullScreenMode && !d->mTooManyChangesLabel->isVisibleTo(d->mSaveBarWidget)) {
+	if (d->mFullScreenMode && !d->mTooManyChangesFrame->isVisibleTo(d->mSaveBarWidget)) {
 		slideOut();
 	} else {
 		slideIn();
