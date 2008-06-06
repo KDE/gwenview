@@ -230,7 +230,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mSaveAllButton = createToolButton();
 
 	d->mActionsLabel = new QLabel;
-	d->mActionsLabel->setAlignment(Qt::AlignRight);
+	d->mActionsLabel->setAlignment(Qt::AlignCenter);
 	d->mActionsLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	d->createTooManyChangesFrame();
