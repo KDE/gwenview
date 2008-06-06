@@ -44,6 +44,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
+QToolButton* createToolButton() {
+	QToolButton* button = new QToolButton;
+	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+	button->hide();
+	return button;
+}
+
+
 struct SaveBarPrivate {
 	SaveBar* that;
 	KActionCollection* mActionCollection;
@@ -53,6 +61,7 @@ struct SaveBarPrivate {
 	QToolButton* mRedoButton;
 	QToolButton* mSaveCurrentUrlButton;
 	QToolButton* mSaveAllButton;
+	QToolButton* mSaveAllFullScreenButton;
 	QLabel* mMessageLabel;
 	QLabel* mActionsLabel;
 	QFrame* mTooManyChangesFrame;
@@ -74,11 +83,14 @@ struct SaveBarPrivate {
 			i18n("You have modified many images. To avoid memory problems, you should save your changes.")
 			);
 
+		mSaveAllFullScreenButton = createToolButton();
+
 		// Layout
 		QHBoxLayout* layout = new QHBoxLayout(mTooManyChangesFrame);
 		layout->setMargin(0);
 		layout->addWidget(iconLabel);
 		layout->addWidget(textLabel);
+		layout->addWidget(mSaveAllFullScreenButton);
 		mTooManyChangesFrame->hide();
 
 		// CSS
@@ -205,12 +217,6 @@ struct SaveBarPrivate {
 	}
 };
 
-QToolButton* createToolButton() {
-	QToolButton* button = new QToolButton;
-	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-	button->hide();
-	return button;
-}
 
 SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 : SlideContainer(parent)
@@ -286,6 +292,10 @@ void SaveBar::initActionDependentWidgets() {
 	connect(d->mSaveAllButton, SIGNAL(clicked()),
 		SIGNAL(requestSaveAll()) );
 
+	d->mSaveAllFullScreenButton->setText(i18n("Save All"));
+	connect(d->mSaveAllFullScreenButton, SIGNAL(clicked()),
+		SIGNAL(requestSaveAll()) );
+
 	int height = d->mUndoButton->sizeHint().height();
 	d->mTopRowWidget->setFixedHeight(height);
 	d->updateWidgetSizes();
@@ -294,6 +304,7 @@ void SaveBar::initActionDependentWidgets() {
 
 void SaveBar::setFullScreenMode(bool value) {
 	d->mFullScreenMode = value;
+	d->mSaveAllFullScreenButton->setVisible(value);
 	if (value) {
 		d->applyFullScreenStyleSheet();
 	} else {
