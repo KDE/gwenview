@@ -19,8 +19,7 @@ endif (GWENVIEW_METADATA_BACKEND STREQUAL "None")
 
 if (NOT GWENVIEW_METADATA_BACKEND_NONE)
 	# We need Nepomuk widgets in all cases
-	find_package(Soprano)
-	find_package(Nepomuk)
+	find_package(Nepomuk REQUIRED)
 endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
 
 # TODO: Move other Gwenview specific macro_optional_find_package lines here
