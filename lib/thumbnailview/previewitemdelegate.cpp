@@ -303,6 +303,13 @@ struct PreviewItemDelegatePrivate {
 	int itemHeight() const {
 		return mThumbnailSize + mView->fontMetrics().height() + 3*ITEM_MARGIN;
 	}
+
+
+	void selectIndexUnderCursorIfNoMultiSelection() {
+		if (mView->selectionModel()->selectedIndexes().size() <= 1) {
+			mView->setCurrentIndex(mIndexUnderCursor);
+		}
+	}
 };
 
 
@@ -556,11 +563,13 @@ void PreviewItemDelegate::slotSaveClicked() {
 
 
 void PreviewItemDelegate::slotRotateLeftClicked() {
+	d->selectIndexUnderCursorIfNoMultiSelection();
 	rotateDocumentLeftRequested(urlForIndex(d->mIndexUnderCursor));
 }
 
 
 void PreviewItemDelegate::slotRotateRightClicked() {
+	d->selectIndexUnderCursorIfNoMultiSelection();
 	rotateDocumentRightRequested(urlForIndex(d->mIndexUnderCursor));
 }
 
