@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 #include <QMouseEvent>
 #include <QSlider>
+#include <QStyleOptionToolButton>
+#include <QStylePainter>
 #include <QTimer>
 #include <QToolButton>
 
@@ -51,6 +53,70 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
 #include "gvbrowserextension.h"
+
+
+// FIXME: Move to its own file
+/**
+ * A tool button which can be grouped with another and look like one solid bar:
+ *
+ * ( button1 | button2 )
+ */
+class CutToolButton : public QToolButton {
+public:
+	enum CutType {
+		CutLeft,
+		CutRight
+	};
+
+	CutToolButton(QWidget* parent=0)
+	: QToolButton(parent)
+	, mCutType(CutLeft) {}
+
+	void setCutType(CutToolButton::CutType cutType) {
+		mCutType = cutType;
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent* /*event*/) {
+		QStylePainter painter(this);
+		QStyleOptionToolButton opt;
+		initStyleOption(&opt);
+		QStyleOptionToolButton panelOpt = opt;
+
+		// Panel
+		QRect& panelRect = panelOpt.rect;
+		switch (mCutType) {
+		case CutLeft:
+			panelRect.setWidth(panelRect.width() * 2);
+			break;
+		case CutRight:
+			panelRect.setLeft(panelRect.left() - panelRect.width());
+			break;
+		}
+		painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
+
+		// Separator
+		int x;
+		QColor color;
+		if (mCutType == CutRight) {
+			color = opt.palette.color(QPalette::Light);
+			x = opt.rect.left();
+		} else {
+			color = opt.palette.color(QPalette::Mid);
+			x = opt.rect.right();
+		}
+		painter.setPen(color);
+		int y1 = opt.rect.top() + 6;
+		int y2 = opt.rect.bottom() - 6;
+		painter.drawLine(x, y1, x, y2);
+
+		// Text
+		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
+	}
+
+private:
+	CutType mCutType;
+};
 
 
 //Factory Code
@@ -122,11 +188,13 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	mZoomToFitAction->setChecked(mView->zoomToFit());
 	mZoomToFitAction->setText(i18n("Zoom to Fit"));
 	mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
+	mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 	connect(mZoomToFitAction, SIGNAL(toggled(bool)), SLOT(setZoomToFit(bool)) );
 	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
 	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
 	action->setIcon(KIcon("zoom-original"));
+	action->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 
@@ -181,33 +249,44 @@ void GVPart::createStatusBarWidget() {
 	layout->addStretch();
 	layout->addWidget(container);
 
-	QToolButton* zoomToFitButton = new QToolButton;
+	CutToolButton* zoomToFitButton = new CutToolButton;
+	zoomToFitButton->setCutType(CutToolButton::CutLeft);
 	zoomToFitButton->setDefaultAction(actionCollection()->action("view_zoom_to_fit"));
-	zoomToFitButton->setObjectName("zoomToFitButton");
 
-	QToolButton* actualSizeButton = new QToolButton;
+	CutToolButton* actualSizeButton = new CutToolButton;
+	actualSizeButton->setCutType(CutToolButton::CutRight);
 	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
-	actualSizeButton->setObjectName("actualSizeButton");
 
 	mZoomLabel = new QLabel;
-	mZoomLabel->setObjectName("zoomLabel");
 	mZoomLabel->setFixedWidth(mZoomLabel->fontMetrics().width(" 1000% "));
 	mZoomLabel->setAlignment(Qt::AlignCenter);
 
 	mZoomSlider = new QSlider;
-	mZoomSlider->setObjectName("zoomSlider");
 	mZoomSlider->setOrientation(Qt::Horizontal);
 	mZoomSlider->setRange(sliderValueForZoom(ZOOM_MIN), sliderValueForZoom(ZOOM_MAX));
 	mZoomSlider->setMinimumWidth(200);
 	connect(mZoomSlider, SIGNAL(valueChanged(int)), SLOT(applyZoomSliderValue()) );
 
+	// Adjust sizes
+	zoomToFitButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+	actualSizeButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+	zoomToFitButton->setFocusPolicy(Qt::NoFocus);
+	actualSizeButton->setFocusPolicy(Qt::NoFocus);
+	int width = qMax(zoomToFitButton->sizeHint().width(), actualSizeButton->sizeHint().width());
+	int height = qMax(mZoomLabel->sizeHint().height(), mZoomSlider->sizeHint().height());
+	zoomToFitButton->setFixedWidth(width);
+	zoomToFitButton->setFixedHeight(height);
+	actualSizeButton->setFixedWidth(width);
+	actualSizeButton->setFixedHeight(height);
+
+	// Layout
 	layout = new QHBoxLayout(container);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	layout->addWidget(zoomToFitButton);
 	layout->addWidget(actualSizeButton);
-	layout->addWidget(mZoomLabel);
 	layout->addWidget(mZoomSlider);
+	layout->addWidget(mZoomLabel);
 }
 
 
