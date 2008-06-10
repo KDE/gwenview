@@ -70,6 +70,8 @@ private Q_SLOTS:
 	void saveAs();
 	void showJobError(KJob*);
 	void initStatusBarExtension();
+	void slotZoomSliderActionTriggered();
+	void slotZoomSliderRangeChanged();
 	void applyZoomSliderValue();
 	void slotZoomChanged();
 	void slotLoaded();
@@ -80,6 +82,7 @@ private:
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
 	bool mGwenviewHost;
+	bool mZoomUpdatedBySlider;
 	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
 	KParts::StatusBarExtension* mStatusBarExtension;
@@ -98,6 +101,8 @@ private:
 	void updateZoomSnapValues();
 	void createStatusBarWidget();
 	void createErrorLabel();
+
+	qreal computeMinimumZoom() const;
 };
 
 } // namespace

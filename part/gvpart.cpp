@@ -19,6 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "gvpart.moc"
 
+// stdc++
+#include <cmath>
+
 // Qt
 #include <QHBoxLayout>
 #include <QLabel>
@@ -47,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/gwenviewconfig.h"
 #include "../lib/imageview.h"
 #include "../lib/scrolltool.h"
+#include "../lib/signalblocker.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imageformats/imageformats.h"
@@ -125,39 +129,27 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
-const qreal REAL_DELTA = 0.001;
+static const qreal REAL_DELTA = 0.001;
 
-const qreal ZOOM_MIN = 0.1;
-const qreal ZOOM_MAX = 16.;
+static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
-int sliderValueForZoom(qreal zoom) {
-	if (zoom >= 1.) {
-		return int( 100 * (zoom - 1.) / (ZOOM_MAX - 1) );
-	} else {
-		return int( 100 *
-			(zoom - ZOOM_MIN) / (1 - ZOOM_MIN)
-			) - 100;
-	}
+static const qreal MAGIC_K = 1.04;
+static const qreal MAGIC_OFFSET = 16.;
+static const qreal PRECISION = 100.;
+inline int sliderValueForZoom(qreal zoom) {
+	return int( PRECISION * (log(zoom) / log(MAGIC_K) + MAGIC_OFFSET) );
 }
 
 
-qreal zoomForSliderValue(int sliderValue) {
-	if (sliderValue >= 0) {
-		return (ZOOM_MAX - 1) * (sliderValue / 100.) + 1.;
-	} else {
-		return
-			(sliderValue + 100) // [0, 100]
-			/ 100.              // [0., 1.]
-			* (1 - ZOOM_MIN)    // [0., 1 - ZOOM_MIN]
-			+ ZOOM_MIN          // [ZOOM_MIN, 1]
-			;
-	}
+inline qreal zoomForSliderValue(int sliderValue) {
+	return pow(MAGIC_K, sliderValue / PRECISION - MAGIC_OFFSET);
 }
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
+, mZoomUpdatedBySlider(false)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
 
@@ -180,8 +172,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged()), SLOT(slotZoomChanged()) );
-
-	updateZoomSnapValues();
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
@@ -215,12 +205,21 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 }
 
 
+qreal GVPart::computeMinimumZoom() const {
+	// There is no point zooming out less than zoomToFit, but make sure it does
+	// not get too small either
+	return qMax(0.001, qMin(mView->computeZoomToFit(), 1.));
+}
+
 void GVPart::updateZoomSnapValues() {
+	qreal min = computeMinimumZoom();
+	mZoomSlider->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
+
 	mZoomSnapValues.clear();
-	for (qreal zoom = 1/ZOOM_MIN; zoom > 1. ; zoom -= 1.) {
+	for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
 		mZoomSnapValues << 1/zoom;
 	}
-	for (qreal zoom = 1; zoom <= ZOOM_MAX ; zoom += 0.5) {
+	for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 0.5) {
 		mZoomSnapValues << zoom;
 	}
 	mZoomSnapValues
@@ -263,9 +262,11 @@ void GVPart::createStatusBarWidget() {
 
 	mZoomSlider = new QSlider;
 	mZoomSlider->setOrientation(Qt::Horizontal);
-	mZoomSlider->setRange(sliderValueForZoom(ZOOM_MIN), sliderValueForZoom(ZOOM_MAX));
 	mZoomSlider->setMinimumWidth(200);
-	connect(mZoomSlider, SIGNAL(valueChanged(int)), SLOT(applyZoomSliderValue()) );
+	mZoomSlider->setSingleStep(int(PRECISION));
+	mZoomSlider->setPageStep(3 * mZoomSlider->singleStep());
+	connect(mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
+	connect(mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	// Adjust sizes
 	zoomToFitButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -287,6 +288,8 @@ void GVPart::createStatusBarWidget() {
 	layout->addWidget(actualSizeButton);
 	layout->addWidget(mZoomSlider);
 	layout->addWidget(mZoomLabel);
+
+	updateZoomSnapValues();
 }
 
 
@@ -389,10 +392,37 @@ void GVPart::slotLoaded() {
 }
 
 
-void GVPart::applyZoomSliderValue() {
+void GVPart::slotZoomSliderRangeChanged() {
+	// If the range minimum gets higher than the current slider value, apply the zoom
+	// slider value.
+	// The range change is caused by a resize of the window, if zoom-to-fit is
+	// set, resizing the window automatically adjusts zoom, thus there is no
+	// need to apply slider value in this case.
+	if (!mView->zoomToFit()) {
+		applyZoomSliderValue();
+	}
+}
+
+
+void GVPart::slotZoomSliderActionTriggered() {
+	// The slider value changed because of the user (not because of range
+	// changes). In this case disable zoom and apply slider value.
 	disableZoomToFit();
-	qreal zoom = zoomForSliderValue(mZoomSlider->value());
+	applyZoomSliderValue();
+}
+
+
+void GVPart::applyZoomSliderValue() {
+	// Use QSlider::sliderPosition(), not QSlider::value() because when we are
+	// called from slotZoomSliderActionTriggered(), QSlider::value() has not
+	// been updated yet.
+	qreal zoom = zoomForSliderValue(mZoomSlider->sliderPosition());
+
+	// Set this flag to prevent slotZoomChanged() from changing the slider
+	// value
+	mZoomUpdatedBySlider = true;
 	setZoom(zoom);
+	mZoomUpdatedBySlider = false;
 }
 
 
@@ -422,9 +452,13 @@ void GVPart::updateCaption() {
 void GVPart::slotZoomChanged() {
 	int intZoom = int(mView->zoom() * 100);
 	mZoomLabel->setText(QString("%1%").arg(intZoom));
-	mZoomSlider->blockSignals(true);
-	mZoomSlider->setValue(sliderValueForZoom(mView->zoom()));
-	mZoomSlider->blockSignals(false);
+
+	// Update slider, but only if the change does not come from it.
+	if (!mZoomUpdatedBySlider) {
+		SignalBlocker blocker(mZoomSlider);
+		int value = sliderValueForZoom(mView->zoom());
+		mZoomSlider->setValue(value);
+	}
 }
 
 
@@ -476,7 +510,7 @@ void GVPart::setZoom(qreal zoom, const QPoint& _center) {
 	} else {
 		center = _center;
 	}
-	zoom = qBound(ZOOM_MIN, zoom, ZOOM_MAX);
+	zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 
 	mView->setZoom(zoom, center);
 }
