@@ -6,6 +6,7 @@ Actions=slideshow;
 [Desktop Action slideshow]
 Name=Start a Slideshow
 Name[ca]=Inicia una presentació amb diapositives
+Name[el]=Έναρξη προβολής σλάιντ
 Name[es]=Comenzar una presentación
 Name[et]=Käivita slaidiseanss
 Name[fr]=Démarrer un diaporama
