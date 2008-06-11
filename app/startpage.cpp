@@ -118,6 +118,12 @@ void StartPage::slotListViewClicked(const QModelIndex& index) {
 	}
 	QVariant data = index.data(KFilePlacesModel::UrlRole);
 	KUrl url = data.toUrl();
+
+	// Prevent dir lister error
+	if (!url.isValid()) {
+		kError() << "Tried to open an invalid url";
+		return;
+	}
 	emit urlSelected(url);
 }
 
