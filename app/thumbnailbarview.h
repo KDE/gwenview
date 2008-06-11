@@ -46,8 +46,6 @@ public:
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
 
-private Q_SLOTS:
-	void setThumbnailSize(int);
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
@@ -64,11 +62,10 @@ public:
 	ThumbnailBarView(QWidget *);
 	~ThumbnailBarView();
 
-	QSize sizeHint() const;
-
 protected:
 	void paintEvent(QPaintEvent*);
 
+	virtual void resizeEvent(QResizeEvent * event);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:

@@ -157,7 +157,6 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->mThumbnailBar = new ThumbnailBarView(parent);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
-	d->mThumbnailBar->setThumbnailSize(64);
 
 	// mInformationLabel
 	d->mInformationLabel = new QLabel;
@@ -176,6 +175,8 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	layout->addWidget(buttonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 	layout->addWidget(d->mInformationLabel, 1, 0);
 	layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
+
+	d->mWidget->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
 }
 
 
@@ -278,6 +279,12 @@ void FullScreenContent::updateSlideShowIntervalLabel() {
 }
 
 
+void FullScreenContent::setFullScreenBarHeight(int value) {
+	d->mWidget->setFixedHeight(value);
+	GwenviewConfig::setFullScreenBarHeight(value);
+}
+
+
 /**
  * Helper function for showFullScreenConfigDialog
  */
@@ -315,6 +322,11 @@ void FullScreenContent::showFullScreenConfigDialog() {
 		SLOT(configureInformationLabel()) );
 
 	d->setupThemeListWidget(dialog->mThemeListWidget);
+
+	// Height slider
+	dialog->mHeightSlider->setValue(d->mWidget->height());
+	connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
+		this, SLOT(setFullScreenBarHeight(int)) );
 
 	// Show dialog below the button
 	QRect buttonRect = d->mOptionsButton->rect();

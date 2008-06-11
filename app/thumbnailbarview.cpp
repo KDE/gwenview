@@ -101,22 +101,13 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 	d->mDelegate = this;
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
-	setThumbnailSize(view->thumbnailSize());
 
 	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
-
-	connect(view, SIGNAL(thumbnailSizeChanged(int)),
-		SLOT(setThumbnailSize(int)) );
 }
 
 
 QSize ThumbnailBarItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const {
 	return d->mView->gridSize();
-}
-
-
-void ThumbnailBarItemDelegate::setThumbnailSize(int value) {
-	d->mView->setGridSize(QSize(value + ITEM_MARGIN * 2, value + ITEM_MARGIN * 2));
 }
 
 
@@ -248,7 +239,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 	setWrapping(false);
-	setThumbnailSize(80);
+	setMaximumHeight(256);
 
 	mStyle = new ProxyStyle(style());
 	setStyle(mStyle);
@@ -259,15 +250,6 @@ ThumbnailBarView::~ThumbnailBarView() {
 	delete mStyle;
 }
 
-
-QSize ThumbnailBarView::sizeHint() const {
-	QSize hint = ThumbnailView::sizeHint();
-	int size = gridSize().height();
-	int hsbExt = horizontalScrollBar()->sizeHint().height();
-	int f = 2 * frameWidth();
-	hint.setHeight(size + f + hsbExt);
-	return hint;
-}
 
 
 void ThumbnailBarView::paintEvent(QPaintEvent* event) {
@@ -286,6 +268,14 @@ void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 		linearGradient.setFinalStop(rect.topRight() + QPoint(5, 0));
 		painter.fillRect(rect.topRight().x(), 0, 5, rect.height(), linearGradient);
 	}
+}
+
+
+void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
+	ThumbnailView::resizeEvent(event);
+
+	int size = height() - (horizontalScrollBar()->sizeHint().height() + 2 * frameWidth());
+	setGridSize(QSize(size, size));
 }
 
 

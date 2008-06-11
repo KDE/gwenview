@@ -102,6 +102,9 @@ Q_SIGNALS:
 
 	void enterFullScreenRequested();
 
+private Q_SLOTS:
+	void saveSplitterSizes(int, int);
+
 private:
 	DocumentViewPrivate* const d;
 

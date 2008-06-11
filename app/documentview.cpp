@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QShortcut>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QSplitter>
 
 // KDE
 #include <kactioncollection.h>
@@ -41,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
+#include <lib/gwenviewconfig.h>
 
 
 namespace Gwenview {
@@ -78,6 +80,7 @@ static QString gradient(const QColor &color, int value) {
 struct DocumentViewPrivate {
 	DocumentView* mView;
 	QLabel* mNoDocumentLabel;
+	QSplitter *mThumbnailSplitter;
 	QWidget* mPartContainer;
 	QVBoxLayout* mPartContainerLayout;
 	QToolButton* mToggleThumbnailBarButton;
@@ -178,7 +181,7 @@ struct DocumentViewPrivate {
 		if (partWidget) {
 			// Insert the widget above the status bar
 			mPartContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
-			mView->setCurrentWidget(mPartContainer);
+			mView->setCurrentWidget(mThumbnailSplitter);
 		} else {
 			mView->setCurrentWidget(mNoDocumentLabel);
 		}
@@ -225,16 +228,22 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mNoDocumentLabel->setForegroundRole(QPalette::Text);
 
 	d->mPartContainer = new QWidget(this);
-	addWidget(d->mPartContainer);
 
 	d->mStatusBarContainer = new QWidget;
 	d->setupStatusBar();
 
 	d->setupThumbnailBar();
 
+	d->mThumbnailSplitter = new QSplitter(Qt::Vertical ,this);
+	d->mThumbnailSplitter->addWidget(d->mPartContainer);
+	d->mThumbnailSplitter->addWidget(d->mThumbnailBar);
+	d->mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+	addWidget(d->mThumbnailSplitter);
+	connect(d->mThumbnailSplitter, SIGNAL(splitterMoved(int,int)),
+		this, SLOT(saveSplitterSizes(int, int)));
+
 	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
 	d->mPartContainerLayout->addWidget(d->mStatusBarContainer);
-	d->mPartContainerLayout->addWidget(d->mThumbnailBar);
 	d->mPartContainerLayout->setMargin(0);
 	d->mPartContainerLayout->setSpacing(0);
 
@@ -415,5 +424,9 @@ void DocumentView::setNormalPalette(const QPalette& palette) {
 	d->applyPalette();
 }
 
+
+void DocumentView::saveSplitterSizes(int /*pos*/, int /*index*/) {
+	GwenviewConfig::setThumbnailSplitterSizes(d->mThumbnailSplitter->sizes());
+}
 
 } // namespace

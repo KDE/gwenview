@@ -65,6 +65,7 @@ private Q_SLOTS:
 	void showFullScreenConfigDialog();
 	void updateSlideShowIntervalLabel();
 	void setCurrentFullScreenTheme(const QString& themeName);
+	void setFullScreenBarHeight(int value);
 
 private:
 	FullScreenContentPrivate* const d;
