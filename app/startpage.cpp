@@ -94,16 +94,16 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 	setPalette(pal);
 
 	QString css = QString::fromUtf8(
-		"QLabel, QListView {"
+		"#StartPage > QLabel, #StartPage > QListView {"
 		"	color: %1;"
 		"}"
 
-		"QLabel {"
+		"#StartPage > QLabel {"
 		"	font-weight: bold;"
 		"	border-bottom: 1px solid %1;"
 		"}"
 
-		"QListView {"
+		"#StartPage > QListView {"
 		"	background-color: transparent;"
 		"}"
 		)
