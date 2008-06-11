@@ -73,8 +73,8 @@ StartPage::StartPage(QWidget* parent)
 	d->mBookmarksView->setModel(d->mBookmarksModel);
 	d->mRecentFoldersView->setModel(d->mRecentFoldersModel);
 
-	connect(d->mBookmarksView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotListViewClicked(const QModelIndex&)) );
+	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
+		SIGNAL(urlSelected(const KUrl&)) );
 
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
