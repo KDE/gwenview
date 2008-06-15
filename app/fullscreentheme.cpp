@@ -107,12 +107,10 @@ QStringList FullScreenTheme::themeNameList() {
 		KGlobal::mainComponent().dirs()
 		->findDirs("appdata", THEME_BASE_DIR);
 	Q_FOREACH(const QString& themeBaseDir, themeBaseDirs) {
-		kDebug() << themeBaseDir;
 		QDir dir(themeBaseDir);
 		list += dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 	}
 	qSort(list.begin(), list.end(), themeNameLessThan);
-	kDebug() << list;
 
 	return list;
 }
