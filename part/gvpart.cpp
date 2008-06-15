@@ -27,10 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 #include <QMouseEvent>
 #include <QSlider>
-#include <QStyleOptionToolButton>
-#include <QStylePainter>
 #include <QTimer>
-#include <QToolButton>
 
 // KDE
 #include <kaction.h>
@@ -54,73 +51,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imageformats/imageformats.h"
+#include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
 #include "gvbrowserextension.h"
-
-
-// FIXME: Move to its own file
-/**
- * A tool button which can be grouped with another and look like one solid bar:
- *
- * ( button1 | button2 )
- */
-class CutToolButton : public QToolButton {
-public:
-	enum CutType {
-		CutLeft,
-		CutRight
-	};
-
-	CutToolButton(QWidget* parent=0)
-	: QToolButton(parent)
-	, mCutType(CutLeft) {}
-
-	void setCutType(CutToolButton::CutType cutType) {
-		mCutType = cutType;
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent* /*event*/) {
-		QStylePainter painter(this);
-		QStyleOptionToolButton opt;
-		initStyleOption(&opt);
-		QStyleOptionToolButton panelOpt = opt;
-
-		// Panel
-		QRect& panelRect = panelOpt.rect;
-		switch (mCutType) {
-		case CutLeft:
-			panelRect.setWidth(panelRect.width() * 2);
-			break;
-		case CutRight:
-			panelRect.setLeft(panelRect.left() - panelRect.width());
-			break;
-		}
-		painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
-
-		// Separator
-		int x;
-		QColor color;
-		if (mCutType == CutRight) {
-			color = opt.palette.color(QPalette::Light);
-			x = opt.rect.left();
-		} else {
-			color = opt.palette.color(QPalette::Mid);
-			x = opt.rect.right();
-		}
-		painter.setPen(color);
-		int y1 = opt.rect.top() + 6;
-		int y2 = opt.rect.bottom() - 6;
-		painter.drawLine(x, y1, x, y2);
-
-		// Text
-		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
-	}
-
-private:
-	CutType mCutType;
-};
 
 
 //Factory Code
@@ -248,12 +182,12 @@ void GVPart::createStatusBarWidget() {
 	layout->addStretch();
 	layout->addWidget(container);
 
-	CutToolButton* zoomToFitButton = new CutToolButton;
-	zoomToFitButton->setCutType(CutToolButton::CutLeft);
+	StatusBarToolButton* zoomToFitButton = new StatusBarToolButton;
+	zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
 	zoomToFitButton->setDefaultAction(actionCollection()->action("view_zoom_to_fit"));
 
-	CutToolButton* actualSizeButton = new CutToolButton;
-	actualSizeButton->setCutType(CutToolButton::CutRight);
+	StatusBarToolButton* actualSizeButton = new StatusBarToolButton;
+	actualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
 	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
 
 	mZoomLabel = new QLabel;
@@ -269,16 +203,9 @@ void GVPart::createStatusBarWidget() {
 	connect(mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	// Adjust sizes
-	zoomToFitButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-	actualSizeButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-	zoomToFitButton->setFocusPolicy(Qt::NoFocus);
-	actualSizeButton->setFocusPolicy(Qt::NoFocus);
 	int width = qMax(zoomToFitButton->sizeHint().width(), actualSizeButton->sizeHint().width());
-	int height = qMax(mZoomLabel->sizeHint().height(), mZoomSlider->sizeHint().height());
 	zoomToFitButton->setFixedWidth(width);
-	zoomToFitButton->setFixedHeight(height);
 	actualSizeButton->setFixedWidth(width);
-	actualSizeButton->setFixedHeight(height);
 
 	// Layout
 	layout = new QHBoxLayout(container);

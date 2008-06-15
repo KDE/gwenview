@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/statusbartoolbutton.h>
 
 
 namespace Gwenview {
@@ -98,35 +99,15 @@ struct DocumentViewPrivate {
 
 	void setupStatusBar() {
 		mStatusBar = new KStatusBar;
-		mToggleThumbnailBarButton = new QToolButton;
-		mToggleThumbnailBarButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-		mToggleThumbnailBarButton->setAutoRaise(true);
-		mToggleThumbnailBarButton->setFocusPolicy(Qt::NoFocus);
-		mToggleThumbnailBarButton->setStyleSheet(
-			"QToolButton {"
-			"	margin-left: 2px;"
-			"	border-top-left-radius: 6px;"
-			"	border-top-right-radius: 6px;"
-			"	border: 1px solid rgba(0, 0, 0, 20%);"
-			"	border-bottom: 0;"
-			"}"
+		KStatusBar* toggleThumbnailBarButtonStatusBar = new KStatusBar;
+		mToggleThumbnailBarButton = new StatusBarToolButton;
+		toggleThumbnailBarButtonStatusBar->addPermanentWidget(mToggleThumbnailBarButton);
 
-			"QToolButton::hover {"
-			"	background-color: rgba(255, 255, 255, 20%);"
-			"}"
-
-			"QToolButton::on {"
-			"	background-color: rgba(0, 0, 0, 10%);"
-			"	border: 1px solid rgba(0, 0, 0, 20%);"
-			"	border-bottom: 0;"
-			"}"
-			);
-		mToggleThumbnailBarButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(mToggleThumbnailBarButton, 0, Qt::AlignLeft);
-		layout->addWidget(mStatusBar);
+		layout->addWidget(toggleThumbnailBarButtonStatusBar);
+		layout->addWidget(mStatusBar, 1);
 	}
 
 	void setupThumbnailBar() {
