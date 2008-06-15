@@ -509,6 +509,11 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		}
 	} else if (event->type() == QEvent::Resize) {
 		updateZoomSnapValues();
+	} else if (event->type() == QEvent::Hide) {
+		// See bug #161443
+		mStatusBarWidgetContainer->hide();
+	} else if (event->type() == QEvent::Show) {
+		mStatusBarWidgetContainer->show();
 	}
 
 	return false;
