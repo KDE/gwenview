@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
+#include <QWindowsStyle>
 
 // KDE
 #include <kactioncollection.h>
@@ -131,6 +132,14 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	d->mWidget = parent;
 	d->mSlideShow = slideShow;
 	parent->installEventFilter(this);
+
+	// Hardcode base style. This is necessary because some styles like
+	// to paint stuff with an event filter rather than overloading QStyle
+	// methods, overwriting the stylesheet rendering.
+	// Oxygen is one of those styles.
+	QStyle* style = new QWindowsStyle;
+	d->mWidget->setStyle(style);
+	style->setParent(d->mWidget);
 
 	// Apply theme
 	d->applyCurrentFullScreenTheme();
@@ -241,6 +250,9 @@ bool FullScreenContent::eventFilter(QObject*, QEvent* event) {
 void FullScreenContent::configureInformationLabel() {
 	if (!d->mImageMetaInfoDialog) {
 		d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mInformationLabel);
+		// Do not let the fullscreen theme propagate to this dialog for now,
+		// it's already quite complicated to create a theme
+		d->mImageMetaInfoDialog->setStyle(QApplication::style());
 		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
