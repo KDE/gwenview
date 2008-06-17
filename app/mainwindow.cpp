@@ -268,6 +268,7 @@ struct MainWindow::Private {
 		QAction* action = actionCollection->addAction("reload");
 		action->setText(i18nc("@action reload the currently viewed image", "Reload"));
 		action->setIcon(KIcon("view-refresh"));
+		action->setShortcut(Qt::Key_F5);
 		connect(action, SIGNAL(triggered()),
 			mWindow, SLOT(reload()) );
 
