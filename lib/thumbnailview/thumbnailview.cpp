@@ -102,6 +102,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 , d(new ThumbnailViewPrivate) {
 	d->mThumbnailViewHelper = 0;
 
+	setFrameShape(QFrame::NoFrame);
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
 	setSpacing(SPACING);

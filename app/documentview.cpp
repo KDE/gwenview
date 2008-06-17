@@ -147,9 +147,7 @@ struct DocumentViewPrivate {
 		QString viewCss =
 			"#thumbnailBarView {"
 			"	background-color: rgba(0, 0, 0, 10%);"
-			"	border: 1px solid rgba(0, 0, 0, 35%);"
-			"	border-radius: 2px;"
-			"	padding: 1px;"
+			"	border-top: 1px solid rgba(0, 0, 0, 35%);"
 			"}";
 
 		QString itemCss =
