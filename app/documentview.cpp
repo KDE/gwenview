@@ -22,9 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QLabel>
 #include <QShortcut>
+#include <QSplitter>
+#include <QStylePainter>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QSplitter>
 
 // KDE
 #include <kactioncollection.h>
@@ -56,6 +57,23 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
+
+
+class StatusBarContainer : public QWidget {
+protected:
+	virtual void paintEvent(QPaintEvent* event) {
+		QWidget::paintEvent(event);
+		QStylePainter painter(this);
+		QStyleOptionFrameV2 opt;
+		opt.initFrom(this);
+		opt.lineWidth = 1;
+		opt.midLineWidth = 0;
+		opt.state |= QStyle::State_Sunken;
+		const int margin = 20;
+		opt.rect.adjust(-margin, -margin, margin, 0);
+		painter.drawPrimitive(QStyle::PE_Frame, opt);
+	}
+};
 
 
 static QString rgba(const QColor &color) {
@@ -210,7 +228,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 
 	d->mPartContainer = new QWidget(this);
 
-	d->mStatusBarContainer = new QWidget;
+	d->mStatusBarContainer = new StatusBarContainer;
 	d->setupStatusBar();
 
 	d->setupThumbnailBar();
