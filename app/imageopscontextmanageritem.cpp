@@ -85,16 +85,19 @@ struct ImageOpsContextManagerItem::Private {
 
 		mMirrorAction = actionCollection->addAction("mirror");
 		mMirrorAction->setText(i18n("Mirror"));
+		mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
 		connect(mMirrorAction, SIGNAL(triggered()),
 			that, SLOT(mirror()) );
 
 		mFlipAction = actionCollection->addAction("flip");
 		mFlipAction->setText(i18n("Flip"));
+		mFlipAction->setIcon(KIcon("object-flip-vertical"));
 		connect(mFlipAction, SIGNAL(triggered()),
 			that, SLOT(flip()) );
 
 		mResizeAction = actionCollection->addAction("resize");
 		mResizeAction->setText(i18n("Resize"));
+		mResizeAction->setIcon(KIcon("transform-scale"));
 		connect(mResizeAction, SIGNAL(triggered()),
 			that, SLOT(resizeImage()) );
 
