@@ -59,23 +59,6 @@ namespace Gwenview {
 #endif
 
 
-class StatusBarContainer : public QWidget {
-protected:
-	virtual void paintEvent(QPaintEvent* event) {
-		QWidget::paintEvent(event);
-		QStylePainter painter(this);
-		QStyleOptionFrameV2 opt;
-		opt.initFrom(this);
-		opt.lineWidth = 1;
-		opt.midLineWidth = 0;
-		opt.state |= QStyle::State_Sunken;
-		const int margin = 20;
-		opt.rect.adjust(-margin, -margin, margin, 0);
-		painter.drawPrimitive(QStyle::PE_Frame, opt);
-	}
-};
-
-
 static QString rgba(const QColor &color) {
 	return QString::fromAscii("rgba(%1, %2, %3, %4)")
 		.arg(color.red())
@@ -94,6 +77,54 @@ static QString gradient(const QColor &color, int value) {
 		rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2)))
 		);
 }
+
+
+class SplitterHandle : public QSplitterHandle {
+public:
+	SplitterHandle(Qt::Orientation orientation, QSplitter* parent)
+	: QSplitterHandle(orientation, parent) {}
+
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		QStylePainter painter(this);
+
+		QStyleOption opt;
+		opt.initFrom(this);
+
+		// Draw a thin styled line below splitter handle
+		QStyleOption lineOpt = opt;
+		const int lineSize = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this);
+		const int margin = 4 * lineSize;
+		lineOpt.rect = QRect(-margin, height() - lineSize, width() + 2*margin, height());
+		lineOpt.state |= QStyle::State_Sunken;
+		painter.drawPrimitive(QStyle::PE_Frame, lineOpt);
+
+		// Draw the normal splitter handle
+		opt.rect.adjust(0, 0, 0, -lineSize);
+		painter.drawControl(QStyle::CE_Splitter, opt);
+	}
+};
+
+
+/**
+ * Home made splitter to be able to define a custom handle:
+ * We want to show a thin line between the splitter and the thumbnail bar but
+ * we don't do it with css because "border-top:" forces a border around the
+ * whole widget (Qt 4.4.0)
+ */
+class Splitter : public QSplitter {
+public:
+	Splitter(Qt::Orientation orientation, QWidget* parent)
+	: QSplitter(orientation, parent) {
+		const int lineSize = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this);
+		setHandleWidth(handleWidth() + lineSize);
+	}
+
+protected:
+	virtual QSplitterHandle* createHandle() {
+		return new SplitterHandle(orientation(), this);
+	}
+};
 
 
 struct DocumentViewPrivate {
@@ -147,7 +178,6 @@ struct DocumentViewPrivate {
 		QString viewCss =
 			"#thumbnailBarView {"
 			"	background-color: rgba(0, 0, 0, 10%);"
-			"	border-top: 1px solid rgba(0, 0, 0, 35%);"
 			"}";
 
 		QString itemCss =
@@ -226,12 +256,12 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 
 	d->mPartContainer = new QWidget(this);
 
-	d->mStatusBarContainer = new StatusBarContainer;
+	d->mStatusBarContainer = new QWidget;
 	d->setupStatusBar();
 
 	d->setupThumbnailBar();
 
-	d->mThumbnailSplitter = new QSplitter(Qt::Vertical ,this);
+	d->mThumbnailSplitter = new Splitter(Qt::Vertical ,this);
 	d->mThumbnailSplitter->addWidget(d->mPartContainer);
 	d->mThumbnailSplitter->addWidget(d->mThumbnailBar);
 	d->mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
