@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QPainter>
 #include <QTimer>
 
 // KDE
@@ -85,6 +86,7 @@ struct ThumbnailViewPrivate {
 	QMap<QUrl, ThumbnailView::Thumbnail> mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
+	ThumbnailView::Thumbnail mWaitingThumbnail;
 
 	void scheduleThumbnailGenerationForVisibleItems() {
 		if (!mThumbnailViewHelper) {
@@ -152,6 +154,25 @@ void ThumbnailView::setThumbnailSize(int value) {
 		return;
 	}
 	d->mThumbnailSize = value;
+
+	// mWaitingThumbnail
+	int waitingThumbnailSize;
+	if (value > 64) {
+		waitingThumbnailSize = 48;
+	} else {
+		waitingThumbnailSize = 32;
+	}
+	if (d->mWaitingThumbnail.mPixmap.width() != waitingThumbnailSize) {
+		QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
+		QPixmap pix(icon.size());
+		pix.fill(Qt::transparent);
+		QPainter painter(&pix);
+		painter.setOpacity(0.5);
+		painter.drawPixmap(0, 0, icon);
+		painter.end();
+		d->mWaitingThumbnail = Thumbnail(pix);
+	}
+
 	thumbnailSizeChanged(value);
 	setSpacing(SPACING);
 	d->scheduleThumbnailGenerationForVisibleItems();
@@ -251,7 +272,7 @@ ThumbnailView::Thumbnail ThumbnailView::thumbnailForIndex(const QModelIndex& ind
 		return Thumbnail(item.pixmap(128));
 	}
 
-	return Thumbnail(QPixmap());
+	return d->mWaitingThumbnail;
 }
 
 
