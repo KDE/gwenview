@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <cmath>
 
 // Qt
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
@@ -183,12 +184,18 @@ void GVPart::createStatusBarWidget() {
 	layout->addWidget(container);
 
 	StatusBarToolButton* zoomToFitButton = new StatusBarToolButton;
-	zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
 	zoomToFitButton->setDefaultAction(actionCollection()->action("view_zoom_to_fit"));
 
 	StatusBarToolButton* actualSizeButton = new StatusBarToolButton;
-	actualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
 	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
+
+	if (QApplication::isLeftToRight()) {
+		zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
+		actualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
+	} else {
+		actualSizeButton->setGroupPosition(StatusBarToolButton::GroupLeft);
+		zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupRight);
+	}
 
 	mZoomLabel = new QLabel;
 	mZoomLabel->setFixedWidth(mZoomLabel->fontMetrics().width(" 1000% "));
