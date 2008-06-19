@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmessagebox.h>
 #include <kprotocolmanager.h>
 #include <kstatusbar.h>
+#include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
@@ -1025,6 +1026,17 @@ void MainWindow::saveCurrentAs() {
 void MainWindow::reload() {
 	KUrl url = d->currentUrl();
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	if (doc->isModified()) {
+		KGuiItem cont = KStandardGuiItem::cont();
+		cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
+		int answer = KMessageBox::warningContinueCancel(this,
+			i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
+			QString() /* caption */,
+			cont);
+		if (answer != KMessageBox::Continue) {
+			return;
+		}
+	}
 	doc->reload();
 }
 
