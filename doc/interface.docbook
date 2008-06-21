@@ -129,7 +129,7 @@ button. Clicking again will restore it. </para>
   </mediaobject>
 </screenshot>
 
-<para>The slider at the bottom left controls the zoom of the image. The
+<para>The slider at the bottom right controls the zoom of the image. The
 <guiicon>Zoom to Fit</guiicon> button and the <guiicon>Actual Size</guiicon>
 button are next to the zoom slider and are two preset zoom levels. The
 <guiicon>Zoom to Fit</guiicon> button zooms the current image to fit the size
