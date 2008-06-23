@@ -127,6 +127,31 @@ protected:
 };
 
 
+/*
+ * Layout of mThumbnailSplitter is:
+ *
+ * +-mThumbnailSplitter--------------------------------+
+ * |+-mPartContainer----------------------------------+|
+ * ||..part widget....................................||
+ * ||.                                               .||
+ * ||.                                               .||
+ * ||.                                               .||
+ * ||.                                               .||
+ * ||.                                               .||
+ * ||.................................................||
+ * ||+-mStatusBarContainer---------------------------+||
+ * |||+---------------------------++-mStatusBar-----+|||
+ * ||||[mToggleThumbnailBarButton]||                ||||
+ * |||+---------------------------++----------------+|||
+ * ||+-----------------------------------------------+||
+ * |+-------------------------------------------------+|
+ * |===================================================|
+ * |+-mThumbnailBar-----------------------------------+|
+ * ||                                                 ||
+ * ||                                                 ||
+ * |+-------------------------------------------------+|
+ * +---------------------------------------------------+
+ */
 struct DocumentViewPrivate {
 	DocumentView* mView;
 	QLabel* mNoDocumentLabel;
@@ -146,7 +171,17 @@ struct DocumentViewPrivate {
 	KParts::ReadOnlyPart* mPart;
 	QString mPartLibrary;
 
+	void setupNoDocumentLabel() {
+		mNoDocumentLabel = new QLabel(mView);
+		mNoDocumentLabel->setText(i18n("No document selected"));
+		mNoDocumentLabel->setAlignment(Qt::AlignCenter);
+		mNoDocumentLabel->setAutoFillBackground(true);
+		mNoDocumentLabel->setBackgroundRole(QPalette::Base);
+		mNoDocumentLabel->setForegroundRole(QPalette::Text);
+	}
+
 	void setupStatusBar() {
+		mStatusBarContainer = new QWidget;
 		mStatusBar = new KStatusBar;
 		KStatusBar* toggleThumbnailBarButtonStatusBar = new KStatusBar;
 		mToggleThumbnailBarButton = new StatusBarToolButton;
@@ -204,6 +239,23 @@ struct DocumentViewPrivate {
 		mThumbnailBar->setStyleSheet(viewCss + itemCss + itemSelCss);
 	}
 
+	void setupPartContainer() {
+		mPartContainer = new QWidget;
+		mPartContainerLayout = new QVBoxLayout(mPartContainer);
+		mPartContainerLayout->addWidget(mStatusBarContainer);
+		mPartContainerLayout->setMargin(0);
+		mPartContainerLayout->setSpacing(0);
+	}
+
+	void setupSplitter() {
+		mThumbnailSplitter = new Splitter(Qt::Vertical, mView);
+		mThumbnailSplitter->addWidget(mPartContainer);
+		mThumbnailSplitter->addWidget(mThumbnailBar);
+		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+		QObject::connect(mThumbnailSplitter, SIGNAL(splitterMoved(int,int)),
+			mView, SLOT(saveSplitterSizes(int, int)));
+	}
+
 	void setPartWidget(QWidget* partWidget) {
 		if (partWidget) {
 			// Insert the widget above the status bar
@@ -246,33 +298,18 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	enterFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(enterFullScreenShortcut, SIGNAL(activated()), SIGNAL(enterFullScreenRequested()) );
 
-	d->mNoDocumentLabel = new QLabel(this);
-	addWidget(d->mNoDocumentLabel);
-	d->mNoDocumentLabel->setText(i18n("No document selected"));
-	d->mNoDocumentLabel->setAlignment(Qt::AlignCenter);
-	d->mNoDocumentLabel->setAutoFillBackground(true);
-	d->mNoDocumentLabel->setBackgroundRole(QPalette::Base);
-	d->mNoDocumentLabel->setForegroundRole(QPalette::Text);
+	d->setupNoDocumentLabel();
 
-	d->mPartContainer = new QWidget(this);
-
-	d->mStatusBarContainer = new QWidget;
 	d->setupStatusBar();
 
 	d->setupThumbnailBar();
 
-	d->mThumbnailSplitter = new Splitter(Qt::Vertical ,this);
-	d->mThumbnailSplitter->addWidget(d->mPartContainer);
-	d->mThumbnailSplitter->addWidget(d->mThumbnailBar);
-	d->mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
-	addWidget(d->mThumbnailSplitter);
-	connect(d->mThumbnailSplitter, SIGNAL(splitterMoved(int,int)),
-		this, SLOT(saveSplitterSizes(int, int)));
+	d->setupPartContainer();
 
-	d->mPartContainerLayout = new QVBoxLayout(d->mPartContainer);
-	d->mPartContainerLayout->addWidget(d->mStatusBarContainer);
-	d->mPartContainerLayout->setMargin(0);
-	d->mPartContainerLayout->setSpacing(0);
+	d->setupSplitter();
+
+	addWidget(d->mNoDocumentLabel);
+	addWidget(d->mThumbnailSplitter);
 
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
