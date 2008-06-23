@@ -54,6 +54,8 @@ public:
 	QSlider* thumbnailSlider() const;
 	KUrlNavigator* urlNavigator() const;
 
+	void setStatusBarHeight(int);
+
 private Q_SLOTS:
 	void editLocation();
 	void addFolderToPlaces();

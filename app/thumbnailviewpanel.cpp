@@ -76,6 +76,10 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		layout->setMargin(0);
 		layout->addWidget(mUrlNavigator);
 
+		// StatusBar container, a standard widget with QStatusBar-like margins
+		// (see QStatusBar::reformat())
+		mStatusBarContainer->layout()->setContentsMargins(2, 3, 2, 2);
+
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)) );
@@ -142,6 +146,11 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 
 ThumbnailViewPanel::~ThumbnailViewPanel() {
 	delete d;
+}
+
+
+void ThumbnailViewPanel::setStatusBarHeight(int height) {
+	d->mStatusBarContainer->setFixedHeight(height);
 }
 
 

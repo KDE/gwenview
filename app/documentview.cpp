@@ -331,6 +331,11 @@ KStatusBar* DocumentView::statusBar() const {
 }
 
 
+void DocumentView::setStatusBarHeight(int height) {
+	d->mStatusBarContainer->setFixedHeight(height);
+}
+
+
 void DocumentView::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBarContainer->setVisible(!fullScreenMode);

@@ -58,6 +58,8 @@ public:
 
 	void setNormalPalette(const QPalette&);
 
+	void setStatusBarHeight(int);
+
 	KStatusBar* statusBar() const;
 
 	virtual QSize sizeHint() const;

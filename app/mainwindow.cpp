@@ -173,6 +173,7 @@ struct MainWindow::Private {
 
 		setupThumbnailView(mViewStackedWidget);
 		setupDocumentView(mViewStackedWidget);
+		setupStatusBars();
 		setupStartPage(mViewStackedWidget);
 		mViewStackedWidget->addWidget(mThumbnailViewPanel);
 		mViewStackedWidget->addWidget(mDocumentView);
@@ -247,6 +248,13 @@ struct MainWindow::Private {
 		bar->setModel(mDirModel);
 		bar->setThumbnailViewHelper(mThumbnailViewHelper);
 		bar->setSelectionModel(mThumbnailView->selectionModel());
+	}
+
+	void setupStatusBars() {
+		const int frameWidth = mWindow->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, mWindow);
+		const int height = mWindow->fontMetrics().height() + 4 * frameWidth;
+		mThumbnailViewPanel->setStatusBarHeight(height);
+		mDocumentView->setStatusBarHeight(height);
 	}
 
 
