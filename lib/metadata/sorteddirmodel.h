@@ -52,6 +52,11 @@ public:
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 
+	/**
+	 * A list of file extensions we should skip
+	 */
+	void setBlackListedExtensions(const QStringList& list);
+
 	virtual void setMimeExcludeFilter(const QStringList &mimeList);
 
 	void setTagSetFilter(const TagSet& tagSet);

@@ -1220,6 +1220,8 @@ void MainWindow::loadConfig() {
 	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
 	// won't be updated. That's why we do it ourself.
 	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
+
+	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
 }
 
 

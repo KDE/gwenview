@@ -24,6 +24,13 @@
 			<whatsthis>The percentage of memory used by Gwenview before it
 			warns the user and suggest saving changes.</whatsthis>
 		</entry>
+
+		<entry name="BlackListedExtensions" type="StringList">
+			<default>nef,cr2</default>
+			<whatsthis>A list of filename extensions Gwenview should not try to
+			load. This is useful to exclude raw files which are recognized as
+			TIFF or JPEG.</whatsthis>
+		</entry>
 	</group>
 
 	<group name="FullScreen">

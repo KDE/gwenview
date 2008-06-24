@@ -44,6 +44,7 @@ struct SortedDirModelPrivate {
 	MetaDataDirModel* mSourceModel;
 	TagSet mTagSet;
 #endif
+	QStringList mBlackListedExtensions;
 	QStringList mMimeExcludeFilter;
 	int mMinimumRating;
 };
@@ -70,6 +71,11 @@ SortedDirModel::~SortedDirModel() {
 
 KDirLister* SortedDirModel::dirLister() {
 	return d->mSourceModel->dirLister();
+}
+
+
+void SortedDirModel::setBlackListedExtensions(const QStringList& list) {
+	d->mBlackListedExtensions = list;
 }
 
 
@@ -119,9 +125,15 @@ void SortedDirModel::setMimeExcludeFilter(const QStringList &mimeList) {
 
 bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const {
 	QModelIndex index = d->mSourceModel->index(row, 0, parent);
+	KFileItem fileItem = d->mSourceModel->itemForIndex(index);
+
+	QString extension = fileItem.name().section('.', -1).toLower();
+	if (d->mBlackListedExtensions.contains(extension)) {
+		return false;
+	}
+
 	if (!d->mMimeExcludeFilter.isEmpty()) {
-		QString mimeType = d->mSourceModel->itemForIndex(index).mimetype();
-		if (d->mMimeExcludeFilter.contains(mimeType)) {
+		if (d->mMimeExcludeFilter.contains(fileItem.mimetype())) {
 			return false;
 		}
 	}
