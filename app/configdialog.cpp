@@ -44,6 +44,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 : KConfigDialog(parent, "Settings", GwenviewConfig::self())
 , d(new ConfigDialogPrivate) {
 	setFaceType(KPageDialog::Plain);
+	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
+	showButtonSeparator(true);
 	QWidget* widget = new QWidget(this);
 	d->setupUi(widget);
 	widget->layout()->setMargin(0);
@@ -59,7 +61,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	d->mWheelBehaviorGroup->addButton(d->mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
 
 	addPage(widget, "");
-	setHelp(QString(), "gwenview");
 }
 
 
