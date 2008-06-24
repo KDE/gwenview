@@ -288,7 +288,12 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 
 
 void LoadingDocumentImpl::slotImageLoaded() {
-	Q_ASSERT(!d->mImage.isNull());
+	if (d->mImage.isNull()) {
+		kWarning() << document()->url() << "Loading image failed";
+		emit loadingFailed();
+		switchToImpl(new EmptyDocumentImpl(document()));
+		return;
+	}
 
 	if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
 		// We loaded a down sampled image
