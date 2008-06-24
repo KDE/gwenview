@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "infocontextmanageritem.moc"
 
 // Qt
+#include <QFormLayout>
 #include <QLabel>
 #include <QPainter>
 #include <QPair>
@@ -29,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kfileitem.h>
 #include <klocale.h>
+#include <ksqueezedtextlabel.h>
 #include <kwordwrap.h>
 
 // Local
@@ -55,66 +57,39 @@ namespace Gwenview {
 
 
 /**
- * This widget is capable of showing multiple lines of key/value pairs. It
- * fades out the value if it does not fit the available width.
+ * This widget is capable of showing multiple lines of key/value pairs.
  */
 class KeyValueWidget : public QWidget {
 public:
 	KeyValueWidget(QWidget* parent)
-	: QWidget(parent) {}
+	: QWidget(parent)
+	, mLayout(new QFormLayout(this)) {
+		mLayout->setLabelAlignment(Qt::AlignRight);
+		setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	}
 
-	void addItem(const QString& key, const QString& value) {
-		mList << ListItem(key, value);
+	void addRow(const QString& key, const QString& value) {
+		QString keyString = i18nc(
+				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
+				"%1: ", key);
+		// FIXME: Call "trimmed()" to avoid breaking string freeze
+		keyString = keyString.trimmed();
+
+		KSqueezedTextLabel* valueLabel = new KSqueezedTextLabel;
+		valueLabel->setTextElideMode(Qt::ElideRight);
+		valueLabel->setText(value);
+		valueLabel->setFocusPolicy(Qt::NoFocus);
+		mLayout->addRow(keyString, valueLabel);
 	}
 
 	void clear() {
-		mList.clear();
-	}
-
-	virtual QSize sizeHint() const {
-		int height = fontMetrics().height() * mList.size();
-		return QSize(-1, height);
-	}
-
-	virtual QSize minimumSizeHint() const {
-		return sizeHint();
-	}
-
-protected:
-	// FIXME: RTL Support
-	virtual void paintEvent(QPaintEvent*) {
-		QPainter painter(this);
-		int posY = fontMetrics().ascent();
-		int lineHeight = fontMetrics().height();
-		int maxWidth = width();
-
-		QFont keyFont(font());
-		keyFont.setBold(true);
-		QFontMetrics keyFM(keyFont, this);
-
-		Q_FOREACH(const ListItem& item, mList) {
-			QString key = item.first;
-			QString value = item.second;
-
-			key = i18nc(
-				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-				"%1: ", key);
-
-			painter.save();
-			painter.setFont(keyFont);
-			painter.drawText(0, posY, key);
-			int posX = keyFM.width(key);
-
-			painter.setFont(font());
-			KWordWrap::drawFadeoutText(&painter, posX, posY, maxWidth - posX, value);
-			posY += lineHeight;
-			painter.restore();
+		Q_FOREACH(QWidget* child, findChildren<QWidget*>()) {
+			child->deleteLater();
 		}
 	}
 
 private:
-	typedef QPair<QString, QString> ListItem;
-	QList<ListItem> mList;
+	QFormLayout* mLayout;
 };
 
 
@@ -122,11 +97,14 @@ struct InfoContextManagerItemPrivate {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
+	// One selection fields
 	QWidget* mOneFileWidget;
 	KeyValueWidget* mKeyValueWidget;
-	QLabel* mMultipleFilesLabel;
 	KFileItem mFileItem;
 	Document::Ptr mDocument;
+
+	// Multiple selection fields
+	QLabel* mMultipleFilesLabel;
 
 	QPointer<ImageMetaInfoDialog> mImageMetaInfoDialog;
 
@@ -267,14 +245,9 @@ void InfoContextManagerItem::updateOneFileInfo() {
 		metaInfoModel->getInfoForKey(key, &label, &value);
 
 		if (!label.isEmpty() && !value.isEmpty()) {
-			d->mKeyValueWidget->addItem(label, value);
+			d->mKeyValueWidget->addRow(label, value);
 		}
 	}
-
-	// FIXME: This should be handled by mKeyValueWidget: it should schedule a
-	// delayed update when clear() and addItem() are called.
-	d->mKeyValueWidget->updateGeometry();
-	d->mKeyValueWidget->update();
 
 	d->mKeyValueWidget->show();
 }
