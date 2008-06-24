@@ -75,11 +75,15 @@ public:
 		// FIXME: Call "trimmed()" to avoid breaking string freeze
 		keyString = keyString.trimmed();
 
+		QLabel* keyLabel = new QLabel;
+		keyLabel->setText(keyString);
+
 		KSqueezedTextLabel* valueLabel = new KSqueezedTextLabel;
 		valueLabel->setTextElideMode(Qt::ElideRight);
 		valueLabel->setText(value);
 		valueLabel->setFocusPolicy(Qt::NoFocus);
-		mLayout->addRow(keyString, valueLabel);
+
+		mLayout->addRow(keyLabel, valueLabel);
 	}
 
 	void clear() {
