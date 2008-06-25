@@ -397,24 +397,6 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-
-
-/*
-
- This class tries to first generate the most important thumbnails, i.e.
- first the currently selected one, then the ones that are visible, and then
- the rest, the closer the the currently selected one the sooner
-
- mAllItems contains all thumbnails
- mItems contains pending thumbnails, in the priority order
- mCurrentItem is currently processed thumbnail, already removed from mItems
- mProcessedState needs to match mAllItems, and contains information about every
-   thumbnail whether it has been already processed
-
- thumbnailIndex() returns index of a thumbnail in mAllItems, or -1
- updateItemsOrder() builds mItems from mAllItems
-*/
-
 ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, int size)
 : KIO::Job()
 , mState( STATE_NEXTTHUMB )
