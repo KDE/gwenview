@@ -57,31 +57,13 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 
-ThumbnailView::Thumbnail::Thumbnail(const QPixmap& pixmap)
-: mPixmap(pixmap) {
-	if (mPixmap.isNull()) {
-		mOpaque = true;
-		return;
-	}
-	mOpaque = !mPixmap.hasAlphaChannel();
-}
-
-
-ThumbnailView::Thumbnail::Thumbnail() {}
-
-
-ThumbnailView::Thumbnail::Thumbnail(const ThumbnailView::Thumbnail& other)
-: mPixmap(other.mPixmap)
-, mOpaque(other.mOpaque) {}
-
-
 struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
-	QMap<QUrl, ThumbnailView::Thumbnail> mThumbnailForUrl;
+	QMap<QUrl, QPixmap> mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
-	ThumbnailView::Thumbnail mWaitingThumbnail;
+	QPixmap mWaitingThumbnail;
 
 	void scheduleThumbnailGenerationForVisibleItems() {
 		if (!mThumbnailViewHelper) {
@@ -157,7 +139,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	} else {
 		waitingThumbnailSize = 32;
 	}
-	if (d->mWaitingThumbnail.mPixmap.width() != waitingThumbnailSize) {
+	if (d->mWaitingThumbnail.width() != waitingThumbnailSize) {
 		QPixmap icon = DesktopIcon("chronometer", waitingThumbnailSize);
 		QPixmap pix(icon.size());
 		pix.fill(Qt::transparent);
@@ -165,7 +147,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 		painter.setOpacity(0.5);
 		painter.drawPixmap(0, 0, icon);
 		painter.end();
-		d->mWaitingThumbnail = Thumbnail(pix);
+		d->mWaitingThumbnail = pix;
 	}
 
 	thumbnailSizeChanged(value);
@@ -245,7 +227,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 
 	// Alpha check
 
-	d->mThumbnailForUrl[url] = Thumbnail(pixmap);
+	d->mThumbnailForUrl[url] = pixmap;
 
 	QRect rect = visualRect(persistentIndex);
 	update(rect);
@@ -253,18 +235,18 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 }
 
 
-ThumbnailView::Thumbnail ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
+QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	QVariant data = index.data(KDirModel::FileItemRole);
 	KFileItem item = qvariant_cast<KFileItem>(data);
 
 	QUrl url = item.url();
-	QMap<QUrl, Thumbnail>::ConstIterator it = d->mThumbnailForUrl.find(url);
+	QMap<QUrl, QPixmap>::ConstIterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.constEnd()) {
 		return it.value();
 	}
 
 	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		return Thumbnail(item.pixmap(128));
+		return item.pixmap(128);
 	}
 
 	return d->mWaitingThumbnail;

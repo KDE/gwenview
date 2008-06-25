@@ -42,14 +42,6 @@ class ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
 	Q_OBJECT
 public:
-	struct Thumbnail {
-		Thumbnail(const QPixmap& pixmap);
-		Thumbnail(const Thumbnail& other);
-		Thumbnail();
-		QPixmap mPixmap;
-		bool mOpaque;
-	};
-
 	ThumbnailView(QWidget* parent);
 	~ThumbnailView();
 
@@ -62,7 +54,7 @@ public:
 	 */
 	int thumbnailSize() const;
 
-	Thumbnail thumbnailForIndex(const QModelIndex&);
+	QPixmap thumbnailForIndex(const QModelIndex&);
 
 	/**
 	 * Returns true if the document pointed by the index has been modified

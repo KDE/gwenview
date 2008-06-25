@@ -129,8 +129,8 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 
 
 void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
-	ThumbnailView::Thumbnail thumbnail = d->mView->thumbnailForIndex(index);
-	QPixmap thumbnailPix = thumbnail.mPixmap;
+	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+	const bool opaque = !thumbnailPix.hasAlphaChannel();
 	QSize thumbnailSize = d->mView->gridSize() - QSize(ITEM_MARGIN * 2, ITEM_MARGIN * 2);
 	if (thumbnailPix.width() > thumbnailSize.width() || thumbnailPix.height() > thumbnailSize.height()) {
 		thumbnailPix = thumbnailPix.scaled(thumbnailSize, Qt::KeepAspectRatio);
@@ -150,11 +150,8 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 		    thumbnailPix.width(),
 		    thumbnailPix.height());
 
-		if (/*!(option.state & QStyle::State_Selected) && */ thumbnail.mOpaque) {
+		if (opaque) {
 			d->drawShadow(painter, thumbnailRect);
-		}
-
-		if (thumbnail.mOpaque) {
 			painter->setPen(d->borderColor);
 			painter->setRenderHint(QPainter::Antialiasing, false);
 			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
