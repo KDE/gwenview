@@ -318,6 +318,7 @@ struct MainWindow::Private {
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
 
 		action = actionCollection->addAction("go_start_page");
+		action->setIcon(KIcon("go-home"));
 		action->setText(i18nc("@action", "Start Page"));
 		connect(action, SIGNAL(triggered()),
 			mWindow, SLOT(showStartPage()) );
@@ -593,6 +594,7 @@ d(new MainWindow::Private)
 	d->updateActions();
 	updatePreviousNextActions();
 	d->mSaveBar->initActionDependentWidgets();
+	d->mThumbnailViewPanel->initActionDependentWidgets();
 
 	createShellGUI();
 	loadConfig();

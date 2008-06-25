@@ -56,6 +56,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KUrlNavigator* mUrlNavigator;
 	SortedDirModel* mDirModel;
 	int mDocumentCount;
+	KActionCollection* mActionCollection;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -138,6 +139,7 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->that = this;
 	d->mDirModel = dirModel;
 	d->mDocumentCount = 0;
+	d->mActionCollection = actionCollection;
 	d->setupWidgets();
 	d->setupActions(actionCollection);
 	d->setupDocumentCountConnections();
@@ -146,6 +148,11 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 
 ThumbnailViewPanel::~ThumbnailViewPanel() {
 	delete d;
+}
+
+
+void ThumbnailViewPanel::initActionDependentWidgets() {
+	d->mStartPageButton->setDefaultAction(d->mActionCollection->action("go_start_page"));
 }
 
 

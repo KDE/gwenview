@@ -50,6 +50,8 @@ public:
 	ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
 	~ThumbnailViewPanel();
 
+	void initActionDependentWidgets();
+
 	ThumbnailView* thumbnailView() const;
 	QSlider* thumbnailSlider() const;
 	KUrlNavigator* urlNavigator() const;
