@@ -63,12 +63,7 @@ ThumbnailView::Thumbnail::Thumbnail(const QPixmap& pixmap)
 		mOpaque = true;
 		return;
 	}
-	QImage img = mPixmap.toImage();
-	int a1 = qAlpha(img.pixel(0, 0));
-	int a2 = qAlpha(img.pixel(img.width() - 1, 0));
-	int a3 = qAlpha(img.pixel(0, img.height() - 1));
-	int a4 = qAlpha(img.pixel(img.width() - 1, img.height() - 1));
-	mOpaque = a1 + a2 + a3 + a4 == 4*255;
+	mOpaque = !mPixmap.hasAlphaChannel();
 }
 
 
