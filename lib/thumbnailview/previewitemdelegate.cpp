@@ -423,9 +423,6 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	int thumbnailSize = d->mThumbnailSize;
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
-	if (thumbnailPix.width() > thumbnailSize || thumbnailPix.height() > thumbnailSize) {
-		thumbnailPix = thumbnailPix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
-	}
 	QRect rect = option.rect;
 
 #ifdef DEBUG_RECT

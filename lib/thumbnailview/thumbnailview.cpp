@@ -238,18 +238,26 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	QVariant data = index.data(KDirModel::FileItemRole);
 	KFileItem item = qvariant_cast<KFileItem>(data);
-
 	QUrl url = item.url();
+
+	QPixmap pix;
+
 	QMap<QUrl, QPixmap>::ConstIterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.constEnd()) {
-		return it.value();
+		pix = it.value();
+	} else if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
+		pix = item.pixmap(128);
+		d->mThumbnailForUrl[url] = pix;
+	} else {
+		pix = d->mWaitingThumbnail;
 	}
 
-	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		return item.pixmap(128);
+	int maxSize = qMax(pix.width(), pix.height());
+	if (maxSize > d->mThumbnailSize) {
+		return pix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
+	} else {
+		return pix;
 	}
-
-	return d->mWaitingThumbnail;
 }
 
 
