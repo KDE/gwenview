@@ -89,8 +89,9 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
+		ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(THUMBNAIL_SIZE);
 		if (!d->mThumbnailLoadJob) {
-			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, THUMBNAIL_SIZE);
+			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, size);
 			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
 				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
 			d->mThumbnailLoadJob->start();

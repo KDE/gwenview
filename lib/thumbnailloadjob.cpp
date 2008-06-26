@@ -74,10 +74,6 @@ namespace Gwenview {
 #endif
 
 
-static const int THUMBNAILSIZE_MIN = 48;
-static const int THUMBNAILSIZE_NORMAL = 128;
-static const int THUMBNAILSIZE_LARGE = 256;
-
 static QString generateOriginalUri(const KUrl& url_) {
 	KUrl url = url_;
 	// Don't include the password if any
@@ -86,7 +82,7 @@ static QString generateOriginalUri(const KUrl& url_) {
 }
 
 
-static QString generateThumbnailPath(const QString& uri, int size) {
+static QString generateThumbnailPath(const QString& uri, ThumbnailSize::Enum size) {
 	KMD5 md5( QFile::encodeName(uri) );
 	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir(size);
 	return baseDir + QString(QFile::encodeName( md5.hexDigest())) + ".png";
@@ -104,7 +100,7 @@ void ThumbnailThread::load(
 	const QString& originalUri, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
 	const QString& thumbnailPath,
-	int size)
+	ThumbnailSize::Enum size)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -171,6 +167,7 @@ void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
 	bool loaded=false;
 	bool needCaching=true;
+	int pixelSize = ThumbnailSize::pixelSize(mThumbnailSize);
 
 	// If it's a Jpeg, try to load a small image directly from the file
 	if (isJpeg()) {
@@ -181,8 +178,8 @@ void ThumbnailThread::loadThumbnail() {
 		mImage = content.thumbnail();
 
 		if( !mImage.isNull()
-			&& ( mImage.width() >= mThumbnailSize // don't use small thumbnails
-			|| mImage.height() >= mThumbnailSize )) {
+			&& ( mImage.width() >= pixelSize // don't use small thumbnails
+			|| mImage.height() >= pixelSize )) {
 			loaded = true;
 			needCaching = false;
 		}
@@ -203,13 +200,12 @@ void ThumbnailThread::loadThumbnail() {
 		if (originalImage.load(mPixPath)) {
 			mOriginalWidth=originalImage.width();
 			mOriginalHeight=originalImage.height();
-			int thumbSize=mThumbnailSize<=THUMBNAILSIZE_NORMAL ? THUMBNAILSIZE_NORMAL : THUMBNAILSIZE_LARGE;
 
-			if (qMax(mOriginalWidth, mOriginalHeight)<=thumbSize ) {
+			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize ) {
 				mImage=originalImage;
 				needCaching = false;
 			} else {
-				mImage = originalImage.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
+				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 			}
 			loaded = true;
 		}
@@ -285,7 +281,7 @@ bool ThumbnailThread::loadJpeg() {
 	jpeg_read_header(&cinfo, true);
 
 	// Get image size and check if we need a thumbnail
-	int size= mThumbnailSize <= THUMBNAILSIZE_NORMAL ? THUMBNAILSIZE_NORMAL : THUMBNAILSIZE_LARGE;
+	int size = ThumbnailSize::pixelSize(mThumbnailSize);
 	int imgSize = qMax(cinfo.image_width, cinfo.image_height);
 
 	if (imgSize<=size) {
@@ -374,12 +370,15 @@ void ThumbnailLoadJob::setThumbnailBaseDir(const QString& dir) {
 }
 
 
-QString ThumbnailLoadJob::thumbnailBaseDir(int size) {
+QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailSize::Enum size) {
 	QString dir = thumbnailBaseDir();
-	if (size<=THUMBNAILSIZE_NORMAL) {
-		dir+="normal/";
-	} else {
-		dir+="large/";
+	switch (size) {
+	case ThumbnailSize::Normal:
+		dir += "normal/";
+		break;
+	case ThumbnailSize::Large:
+		dir += "large/";
+		break;
 	}
 	return dir;
 }
@@ -387,8 +386,8 @@ QString ThumbnailLoadJob::thumbnailBaseDir(int size) {
 
 void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 	QString uri=generateOriginalUri(url);
-	QFile::remove(generateThumbnailPath(uri, THUMBNAILSIZE_NORMAL));
-	QFile::remove(generateThumbnailPath(uri, THUMBNAILSIZE_LARGE));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::Normal));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::Large));
 }
 
 
@@ -397,7 +396,7 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, int size)
+ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailSize::Enum size)
 : KIO::Job()
 , mState( STATE_NEXTTHUMB )
 , mThumbnailSize(size)
@@ -405,7 +404,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, int size)
 	LOG((int)this);
 
 	mBrokenPixmap = KIconLoader::global()->loadIcon("image-missing",
-		KIconLoader::NoGroup, THUMBNAILSIZE_MIN);
+		KIconLoader::NoGroup, 48);
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items.empty());
@@ -665,7 +664,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 		mState=STATE_PREVIEWJOB;
 		KFileItemList list;
 		list.append(mCurrentItem);
-		KIO::Job* job=KIO::filePreview(list, mThumbnailSize);
+		KIO::Job* job=KIO::filePreview(list, ThumbnailSize::pixelSize(mThumbnailSize));
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			this, SLOT(slotGotPreview(const KFileItem&, const QPixmap&)) );
@@ -691,16 +690,7 @@ void ThumbnailLoadJob::slotGotPreview(const KFileItem& item, const QPixmap& pixm
 
 void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size) {
 	LOG(mCurrentItem.url());
-	int biggestDimension=qMax(img.width(), img.height());
-
-	QImage thumbImg;
-	if (biggestDimension>mThumbnailSize) {
-		// Scale down thumbnail if necessary
-		thumbImg = img.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
-	} else {
-		thumbImg = img;
-	}
-	QPixmap thumb = QPixmap::fromImage(thumbImg);
+	QPixmap thumb = QPixmap::fromImage(img);
 	emit thumbnailLoaded(mCurrentItem, thumb, size);
 }
 

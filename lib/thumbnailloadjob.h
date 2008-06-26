@@ -38,6 +38,7 @@
 #include <kfileitem.h>
 
 // Local
+#include <lib/thumbnailsize.h>
 
 namespace Gwenview {
 class ThumbnailThread : public QThread {
@@ -52,7 +53,7 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath,
-		int size);
+		ThumbnailSize::Enum size);
 
 	void cancel();
 
@@ -78,7 +79,7 @@ private:
 	int mOriginalHeight;
 	QMutex mMutex;
 	QWaitCondition mCond;
-	int mThumbnailSize;
+	ThumbnailSize::Enum mThumbnailSize;
 	bool mCancel;
 };
 
@@ -91,7 +92,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob(const KFileItemList& itemList, int size);
+	ThumbnailLoadJob(const KFileItemList& itemList, ThumbnailSize::Enum size);
 	virtual ~ThumbnailLoadJob();
 
 	/**
@@ -127,7 +128,7 @@ public:
 	/**
 	 * Returns the thumbnail base dir, for the @p size
 	 */
-	static QString thumbnailBaseDir(int size);
+	static QString thumbnailBaseDir(ThumbnailSize::Enum size);
 
 
 	/**
@@ -172,7 +173,7 @@ private:
 	QString mTempPath;
 
 	// Thumbnail size
-	int mThumbnailSize;
+	ThumbnailSize::Enum mThumbnailSize;
 
 	QPixmap mBrokenPixmap;
 

@@ -83,7 +83,7 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 		list << item;
 	}
-	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, 128);
+	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailSize::Normal);
 	// FIXME: job->exec() causes a double free(), so wait for the job to be
 	// deleted instead
 	//job->exec();
@@ -92,7 +92,7 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 		QTest::qWait(100);
 	}
 
-	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(128);
+	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailSize::Normal);
 	// There should be 2 files, because small.png is too small to have a
 	// thumbnail
 	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
@@ -112,7 +112,7 @@ void ThumbnailLoadJobTest::testLoadRemote() {
 	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 	list << item;
 
-	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, 128);
+	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailSize::Normal);
 	// FIXME: job->exec() causes a double free(), so wait for the job to be
 	// deleted instead
 	//job->exec();
@@ -121,7 +121,7 @@ void ThumbnailLoadJobTest::testLoadRemote() {
 		QTest::qWait(100);
 	}
 
-	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(128);
+	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailSize::Normal);
 	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
 	QCOMPARE(entryList.count(), 1);
 }
