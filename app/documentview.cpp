@@ -302,9 +302,9 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 
 	d->setupStatusBar();
 
-	d->setupThumbnailBar();
-
 	d->setupPartContainer();
+
+	d->setupThumbnailBar();
 
 	d->setupSplitter();
 
