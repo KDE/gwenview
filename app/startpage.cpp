@@ -71,6 +71,7 @@ StartPage::StartPage(QWidget* parent)
 	d->mRecentFoldersModel = new QStandardItemModel(this);
 
 	d->mBookmarksView->setModel(d->mBookmarksModel);
+	d->mBookmarksView->setAutoResizeItemsEnabled(false);
 	d->mRecentFoldersView->setModel(d->mRecentFoldersModel);
 
 	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
