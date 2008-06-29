@@ -39,7 +39,7 @@ public:
 	ThumbnailViewHelper(QObject* parent);
 	~ThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const KFileItemList& list);
+	virtual void generateThumbnailsForItems(const KFileItemList& list, ThumbnailSize::Enum);
 
 	virtual void abortThumbnailGenerationForItems(const KFileItemList& list);
 

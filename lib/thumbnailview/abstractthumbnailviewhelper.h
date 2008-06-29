@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kurl.h>
 
+// Local
+#include <lib/thumbnailsize.h>
+
 class KFileItem;
 class KFileItemList;
 class QPixmap;
@@ -43,7 +46,7 @@ public:
 	AbstractThumbnailViewHelper(QObject* parent);
 	virtual ~AbstractThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const KFileItemList& list) = 0;
+	virtual void generateThumbnailsForItems(const KFileItemList& list, ThumbnailSize::Enum) = 0;
 
 	virtual void abortThumbnailGenerationForItems(const KFileItemList& list) = 0;
 

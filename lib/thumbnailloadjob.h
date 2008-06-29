@@ -116,6 +116,11 @@ public:
 	void appendItem(const KFileItem& item);
 
 	/**
+	 * Defines size of thumbnails to generate
+	 */
+	void setThumbnailSize(ThumbnailSize::Enum size);
+
+	/**
 	 * Returns the thumbnail base dir, independent of the thumbnail size
 	 */
 	static QString thumbnailBaseDir();

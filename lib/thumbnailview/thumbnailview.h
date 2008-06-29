@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 class KFileItem;
+class KFileItemList;
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;
@@ -61,6 +62,11 @@ public:
 	 * inside Gwenview.
 	 */
 	bool isModified(const QModelIndex&) const;
+
+	/**
+	 * Generate thumbnails for items from @a list.
+	 */
+	void generateThumbnailsForItems(const KFileItemList& list);
 
 Q_SIGNALS:
 	/**

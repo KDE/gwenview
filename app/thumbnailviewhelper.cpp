@@ -44,8 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview {
 
-const int THUMBNAIL_SIZE = 256;
-
 
 struct ThumbnailViewHelperPrivate {
 	FileOpsContextManagerItem* mFileOpsContextManagerItem;
@@ -65,9 +63,10 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) {
+void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list, ThumbnailSize::Enum thumbnailSize) {
 	KFileItemList filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
+	const int pixelSize = ThumbnailSize::pixelSize(thumbnailSize);
 	Q_FOREACH(const KFileItem& item, list) {
 		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
 		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -78,8 +77,8 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 			Document::Ptr doc = factory->load(item.url());
 			if (doc->loadingState() == Document::Loaded && doc->isModified()) {
 				QImage image = doc->image();
-				if (image.width() > THUMBNAIL_SIZE || image.height() > THUMBNAIL_SIZE) {
-					image = image.scaled(THUMBNAIL_SIZE, THUMBNAIL_SIZE, Qt::KeepAspectRatio);
+				if (image.width() > pixelSize || image.height() > pixelSize) {
+					image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 				}
 				thumbnailLoaded(item, QPixmap::fromImage(image));
 				continue;
@@ -89,13 +88,13 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list) 
 		filteredList << item;
 	}
 	if (filteredList.size() > 0) {
-		ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(THUMBNAIL_SIZE);
 		if (!d->mThumbnailLoadJob) {
-			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, size);
+			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, thumbnailSize);
 			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
 				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
 			d->mThumbnailLoadJob->start();
 		} else {
+			d->mThumbnailLoadJob->setThumbnailSize(thumbnailSize);
 			Q_FOREACH(const KFileItem& item, filteredList) {
 				d->mThumbnailLoadJob->appendItem(item);
 			}

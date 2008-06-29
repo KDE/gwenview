@@ -447,6 +447,11 @@ const KFileItemList& ThumbnailLoadJob::pendingItems() const {
 }
 
 
+void ThumbnailLoadJob::setThumbnailSize(ThumbnailSize::Enum size) {
+	mThumbnailSize = size;
+}
+
+
 //-Internal--------------------------------------------------------------
 void ThumbnailLoadJob::appendItem(const KFileItem& item) {
 	if (!mItems.contains(item)) {

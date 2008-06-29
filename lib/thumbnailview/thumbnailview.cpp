@@ -355,7 +355,12 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 	}
 
-	d->mThumbnailViewHelper->generateThumbnailsForItems(list);
+	generateThumbnailsForItems(list);
+}
+
+
+void ThumbnailView::generateThumbnailsForItems(const KFileItemList& list) {
+	d->mThumbnailViewHelper->generateThumbnailsForItems(list, ThumbnailSize::Large);
 }
 
 

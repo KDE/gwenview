@@ -1120,7 +1120,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 	KFileItemList list;
 	list << item;
-	d->mThumbnailView->thumbnailViewHelper()->generateThumbnailsForItems(list);
+	d->mThumbnailView->generateThumbnailsForItems(list);
 }
 
 
