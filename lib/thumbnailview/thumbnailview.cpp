@@ -283,12 +283,20 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	QPixmap pix;
 
 	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
-	ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
-	if (it != d->mThumbnailForUrl.constEnd()) {
+	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
+	if (it != d->mThumbnailForUrl.end()) {
 		pix = it.value().pixmapForGroup(group);
-		if (pix.isNull() && group == ThumbnailGroup::Large && !it.value().normalPix.isNull()) {
-			// Use an up-sampled version of the normal size thumbnail
-			pix = it.value().normalPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
+		if (pix.isNull()) {
+			if (group == ThumbnailGroup::Large && !it.value().normalPix.isNull()) {
+				// Use an up-sampled version of the normal size thumbnail
+				pix = it.value().normalPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
+			} else if (group == ThumbnailGroup::Normal && !it.value().largePix.isNull()) {
+				// Generate the normal version from the large version and use
+				// it
+				int normalPixelSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
+				pix = it.value().largePix.scaled(normalPixelSize, normalPixelSize, Qt::KeepAspectRatio);
+				it.value().normalPix = pix;
+			}
 		}
 	}
 
