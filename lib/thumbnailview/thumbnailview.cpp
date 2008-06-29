@@ -56,11 +56,24 @@ static KUrl urlForIndex(const QModelIndex& index) {
 	return item.url();
 }
 
+struct Thumbnail {
+	QPixmap normalPix;
+	QPixmap largePix;
+	inline const QPixmap& pixmapForSize(ThumbnailSize::Enum size) const {
+		return size == ThumbnailSize::Large ? largePix : normalPix;
+	}
+
+	inline QPixmap& pixmapForSize(ThumbnailSize::Enum size) {
+		return size == ThumbnailSize::Large ? largePix : normalPix;
+	}
+};
+
+typedef QMap<QUrl, Thumbnail> ThumbnailForUrlMap;
 
 struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
-	QMap<QUrl, QPixmap> mThumbnailForUrl;
+	ThumbnailForUrlMap mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
 	QPixmap mWaitingThumbnail;
@@ -130,6 +143,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	if (d->mThumbnailSize == value) {
 		return;
 	}
+	kDebug() << this << value;
 	d->mThumbnailSize = value;
 
 	// mWaitingThumbnail
@@ -225,9 +239,8 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 		return;
 	}
 
-	// Alpha check
-
-	d->mThumbnailForUrl[url] = pixmap;
+	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	d->mThumbnailForUrl[url].pixmapForSize(size) = pixmap;
 
 	QRect rect = visualRect(persistentIndex);
 	update(rect);
@@ -242,14 +255,27 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 
 	QPixmap pix;
 
-	QMap<QUrl, QPixmap>::ConstIterator it = d->mThumbnailForUrl.find(url);
+	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.constEnd()) {
-		pix = it.value();
-	} else if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		pix = item.pixmap(128);
-		d->mThumbnailForUrl[url] = pix;
-	} else {
-		pix = d->mWaitingThumbnail;
+		pix = it.value().pixmapForSize(size);
+		if (pix.isNull() && size == ThumbnailSize::Large && !it.value().normalPix.isNull()) {
+			// Use an up-sampled version of the normal size thumbnail
+			pix = it.value().normalPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
+		}
+	}
+
+	if (pix.isNull()) {
+		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			pix = item.pixmap(128);
+			// Fill both sizes, because we don't want to show an up-sampled
+			// version of the normal icons.
+			Thumbnail& thumbnail = d->mThumbnailForUrl[url];
+			thumbnail.normalPix = pix;
+			thumbnail.largePix = pix;
+		} else {
+			pix = d->mWaitingThumbnail;
+		}
 	}
 
 	int maxSize = qMax(pix.width(), pix.height());
@@ -332,6 +358,9 @@ void ThumbnailView::scrollContentsBy(int dx, int dy) {
 
 
 void ThumbnailView::generateThumbnailsForVisibleItems() {
+	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	kDebug() << this << "size: " << d->mThumbnailSize;
+	kDebug() << this << "group:" << (size == ThumbnailSize::Large ? "large": "normal");
 	KFileItemList list;
 	QRect viewportRect = viewport()->rect();
 	for (int row=0; row < model()->rowCount(); ++row) {
@@ -345,7 +374,8 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		// Filter out items which already have a thumbnail
 		KFileItem item = fileItemForIndex(index);
 		QUrl url = item.url();
-		if (d->mThumbnailForUrl.contains(url)) {
+		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
+		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForSize(size).isNull()) {
 			continue;
 		}
 
@@ -355,12 +385,17 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 	}
 
-	generateThumbnailsForItems(list);
+	if (!list.empty()) {
+		generateThumbnailsForItems(list);
+	}
 }
 
 
 void ThumbnailView::generateThumbnailsForItems(const KFileItemList& list) {
-	d->mThumbnailViewHelper->generateThumbnailsForItems(list, ThumbnailSize::Large);
+	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	kDebug() << this << "size: " << d->mThumbnailSize;
+	kDebug() << this << "group:" << (size == ThumbnailSize::Large ? "large": "normal");
+	d->mThumbnailViewHelper->generateThumbnailsForItems(list, size);
 }
 
 
