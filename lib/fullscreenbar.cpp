@@ -22,15 +22,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "fullscreenbar.moc"
 
 // Qt
+#include <QAction>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QBitmap>
 #include <QEvent>
 #include <QTimeLine>
 #include <QTimer>
+#include <QToolButton>
 
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local
 
@@ -153,7 +156,7 @@ void FullScreenBar::slideIn() {
 }
 
 
-bool FullScreenBar::eventFilter(QObject*, QEvent* event) {
+bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		QApplication::restoreOverrideCursor();
 		if (y() == 0) {
@@ -164,6 +167,23 @@ bool FullScreenBar::eventFilter(QObject*, QEvent* event) {
 			slideIn();
 		}
 		return false;
+	}
+
+	// Filtering message on tooltip text for CJK to remove accelerators.
+	// Quoting ktoolbar.cpp:
+	// """
+	// CJK languages use more verbose accelerator marker: they add a Latin
+	// letter in parenthesis, and put accelerator on that. Hence, the default
+	// removal of ampersand only may not be enough there, instead the whole
+	// parenthesis construct should be removed. Provide these filtering i18n
+	// messages so that translators can use Transcript for custom removal.
+	// """
+	if (event->type() == QEvent::Show || event->type() == QEvent::Paint) {
+		QToolButton* button = qobject_cast<QToolButton*>(object);
+		if (button && !button->actions().isEmpty()) {
+			QAction* action = button->actions().first();
+			button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", action->toolTip()));
+		}
 	}
 
 	return false;

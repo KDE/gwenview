@@ -22,9 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <statusbartoolbutton.moc>
 
 // Qt
+#include <QAction>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
 #include <QToolButton>
+
+// KDE
+#include <klocale.h>
 
 namespace Gwenview {
 
@@ -96,6 +100,20 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event) {
 
 	// Text
 	painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
+
+	// Filtering message on tooltip text for CJK to remove accelerators.
+	// Quoting ktoolbar.cpp:
+	// """
+	// CJK languages use more verbose accelerator marker: they add a Latin
+	// letter in parenthesis, and put accelerator on that. Hence, the default
+	// removal of ampersand only may not be enough there, instead the whole
+	// parenthesis construct should be removed. Provide these filtering i18n
+	// messages so that translators can use Transcript for custom removal.
+	// """
+	if (!actions().isEmpty()) {
+		QAction* action = actions().first();
+		setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", action->toolTip()));
+	}
 }
 
 
