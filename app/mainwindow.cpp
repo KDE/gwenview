@@ -1080,6 +1080,9 @@ void MainWindow::toggleSlideShow() {
 	if (d->mSlideShow->isRunning()) {
 		d->mSlideShow->stop();
 	} else {
+		if (!d->mFullScreenAction->isChecked()) {
+			d->mFullScreenAction->trigger();
+		}
 		QList<KUrl> list;
 		for (int pos=0; pos < d->mDirModel->rowCount(); ++pos) {
 			QModelIndex index = d->mDirModel->index(pos, 0);
