@@ -171,7 +171,6 @@ void ThumbnailView::setThumbnailSize(int value) {
 	if (d->mThumbnailSize == value) {
 		return;
 	}
-	kDebug() << this << value;
 	d->mThumbnailSize = value;
 
 	// mWaitingThumbnail
@@ -397,8 +396,6 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		return;
 	}
 	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
-	kDebug() << this << "size: " << d->mThumbnailSize;
-	kDebug() << this << "group:" << (group == ThumbnailGroup::Large ? "large": "normal");
 	KFileItemList list;
 	QRect viewportRect = viewport()->rect();
 	for (int row=0; row < model()->rowCount(); ++row) {
