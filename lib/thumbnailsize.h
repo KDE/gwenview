@@ -35,7 +35,7 @@ namespace ThumbnailSize {
 		Large
 	};
 
-	int pixelSize(Enum value) {
+	inline int pixelSize(Enum value) {
 		if (value == Normal) {
 			return 128;
 		} else {
@@ -43,7 +43,7 @@ namespace ThumbnailSize {
 		}
 	}
 
-	Enum fromPixelSize(int value) {
+	inline Enum fromPixelSize(int value) {
 		if (value <= 128) {
 			return Normal;
 		} else {
