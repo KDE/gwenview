@@ -46,12 +46,6 @@ public:
 	AbstractThumbnailViewHelper(QObject* parent);
 	virtual ~AbstractThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const KFileItemList& list, ThumbnailGroup::Enum) = 0;
-
-	virtual void abortThumbnailGenerationForItems(const KFileItemList& list) = 0;
-
-	virtual void abortThumbnailGeneration() = 0;
-
 	virtual void showContextMenu(QWidget* parent) = 0;
 
 	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;
@@ -60,8 +54,7 @@ public:
 
 	virtual bool isDocumentModified(const KUrl& url) = 0;
 
-Q_SIGNALS:
-	void thumbnailLoaded(const KFileItem&, const QPixmap&);
+	virtual QPixmap thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum) const = 0;
 };
 
 } // namespace

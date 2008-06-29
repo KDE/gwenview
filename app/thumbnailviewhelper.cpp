@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QCursor>
-#include <QPointer>
 
 // KDE
 #include <kdebug.h>
@@ -39,15 +38,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "fileopscontextmanageritem.h"
 #include <lib/document/documentfactory.h>
-#include <lib/mimetypeutils.h>
-#include <lib/thumbnailloadjob.h>
 
 namespace Gwenview {
 
 
 struct ThumbnailViewHelperPrivate {
 	FileOpsContextManagerItem* mFileOpsContextManagerItem;
-	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
 	KUrl mCurrentDirUrl;
 };
 
@@ -63,57 +59,24 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list, ThumbnailGroup::Enum thumbnailGroup) {
-	KFileItemList filteredList;
+QPixmap ThumbnailViewHelper::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group) const {
 	DocumentFactory* factory = DocumentFactory::instance();
-	const int pixelSize = ThumbnailGroup::pixelSize(thumbnailGroup);
-	Q_FOREACH(const KFileItem& item, list) {
-		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
-		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
-			continue;
-		}
+	const int pixelSize = ThumbnailGroup::pixelSize(group);
 
-		if (factory->hasUrl(item.url())) {
-			Document::Ptr doc = factory->load(item.url());
-			if (doc->loadingState() == Document::Loaded && doc->isModified()) {
-				QImage image = doc->image();
-				if (image.width() > pixelSize || image.height() > pixelSize) {
-					image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
-				}
-				thumbnailLoaded(item, QPixmap::fromImage(image));
-				continue;
-			}
-		}
-
-		filteredList << item;
+	if (!factory->hasUrl(url)) {
+		return QPixmap();
 	}
-	if (filteredList.size() > 0) {
-		if (!d->mThumbnailLoadJob) {
-			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, thumbnailGroup);
-			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
-				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
-			d->mThumbnailLoadJob->start();
-		} else {
-			d->mThumbnailLoadJob->setThumbnailGroup(thumbnailGroup);
-			Q_FOREACH(const KFileItem& item, filteredList) {
-				d->mThumbnailLoadJob->appendItem(item);
-			}
-		}
+
+	Document::Ptr doc = factory->load(url);
+	if (!doc->loadingState() == Document::Loaded) {
+		return QPixmap();
 	}
-}
 
-
-void ThumbnailViewHelper::abortThumbnailGenerationForItems(const KFileItemList& list) {
-	if (d->mThumbnailLoadJob) {
-		d->mThumbnailLoadJob->removeItems(list);
+	QImage image = doc->image();
+	if (image.width() > pixelSize || image.height() > pixelSize) {
+		image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 	}
-}
-
-
-void ThumbnailViewHelper::abortThumbnailGeneration() {
-	if (d->mThumbnailLoadJob) {
-		d->mThumbnailLoadJob->removeItems(d->mThumbnailLoadJob->pendingItems());
-	}
+	return QPixmap::fromImage(image);
 }
 
 

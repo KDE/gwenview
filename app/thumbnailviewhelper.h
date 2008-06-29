@@ -39,12 +39,6 @@ public:
 	ThumbnailViewHelper(QObject* parent);
 	~ThumbnailViewHelper();
 
-	virtual void generateThumbnailsForItems(const KFileItemList& list, ThumbnailGroup::Enum);
-
-	virtual void abortThumbnailGenerationForItems(const KFileItemList& list);
-
-	virtual void abortThumbnailGeneration();
-
 	virtual void showContextMenu(QWidget* parent);
 
 	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
@@ -52,6 +46,8 @@ public:
 	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
 
 	virtual bool isDocumentModified(const KUrl& url);
+
+	virtual QPixmap thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum) const;
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 

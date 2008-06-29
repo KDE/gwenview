@@ -64,9 +64,9 @@ public:
 	bool isModified(const QModelIndex&) const;
 
 	/**
-	 * Generate thumbnails for items from @a list.
+	 * Generate thumbnail for @a index.
 	 */
-	void generateThumbnailsForItems(const KFileItemList& list);
+	void generateThumbnailForIndex(const QModelIndex& index);
 
 Q_SIGNALS:
 	/**
@@ -118,6 +118,7 @@ private Q_SLOTS:
 	void generateThumbnailsForVisibleItems();
 
 private:
+	friend class ThumbnailViewPrivate;
 	ThumbnailViewPrivate * const d;
 };
 

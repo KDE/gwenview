@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QPainter>
+#include <QPointer>
 #include <QTimer>
 
 // KDE
@@ -35,8 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kglobalsettings.h>
 
 // Local
-#include "archiveutils.h"
 #include "abstractthumbnailviewhelper.h"
+#include "archiveutils.h"
+#include "mimetypeutils.h"
+#include "thumbnailloadjob.h"
 
 namespace Gwenview {
 
@@ -71,20 +74,44 @@ struct Thumbnail {
 typedef QMap<QUrl, Thumbnail> ThumbnailForUrlMap;
 
 struct ThumbnailViewPrivate {
+	ThumbnailView* that;
 	int mThumbnailSize;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 	ThumbnailForUrlMap mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
 	QPixmap mWaitingThumbnail;
+	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
 
 	void scheduleThumbnailGenerationForVisibleItems() {
-		if (!mThumbnailViewHelper) {
-			// Not initialized yet
-			return;
+		if (mThumbnailLoadJob) {
+			mThumbnailLoadJob->removeItems(mThumbnailLoadJob->pendingItems());
 		}
-		mThumbnailViewHelper->abortThumbnailGeneration();
 		mScheduledThumbnailGenerationTimer.start();
+	}
+
+	void updateThumbnailForModifiedDocument(const QModelIndex& index) {
+		KFileItem item = fileItemForIndex(index);
+		KUrl url = item.url();
+		ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
+		QPixmap pix = mThumbnailViewHelper->thumbnailForDocument(url, group);
+		mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
+		that->setThumbnail(item, pix);
+	}
+
+	void generateThumbnailsForItems(const KFileItemList& list) {
+		ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
+		if (!mThumbnailLoadJob) {
+			mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
+			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
+				that, SLOT(setThumbnail(const KFileItem&, const QPixmap&)));
+			mThumbnailLoadJob->start();
+		} else {
+			mThumbnailLoadJob->setThumbnailGroup(group);
+			Q_FOREACH(const KFileItem& item, list) {
+				mThumbnailLoadJob->appendItem(item);
+			}
+		}
 	}
 };
 
@@ -92,6 +119,7 @@ struct ThumbnailViewPrivate {
 ThumbnailView::ThumbnailView(QWidget* parent)
 : QListView(parent)
 , d(new ThumbnailViewPrivate) {
+	d->that = this;
 	d->mThumbnailViewHelper = 0;
 
 	setFrameShape(QFrame::NoFrame);
@@ -177,8 +205,6 @@ int ThumbnailView::thumbnailSize() const {
 
 void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper) {
 	d->mThumbnailViewHelper = helper;
-	connect(helper, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)),
-		SLOT(setThumbnail(const KFileItem&, const QPixmap&)) );
 }
 
 AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
@@ -209,8 +235,9 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 		itemList.append(item);
 	}
 
-	Q_ASSERT(d->mThumbnailViewHelper);
-	d->mThumbnailViewHelper->abortThumbnailGenerationForItems(itemList);
+	if (d->mThumbnailLoadJob) {
+		d->mThumbnailLoadJob->removeItems(itemList);
+	}
 }
 
 
@@ -364,16 +391,29 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 	KFileItemList list;
 	QRect viewportRect = viewport()->rect();
 	for (int row=0; row < model()->rowCount(); ++row) {
-		// Filter out invisible items
 		QModelIndex index = model()->index(row, 0);
+		KFileItem item = fileItemForIndex(index);
+		QUrl url = item.url();
+
+		// Filter out invisible items
 		QRect rect = visualRect(index);
 		if (!viewportRect.intersects(rect)) {
 			continue;
 		}
 
+		// Filter out non documents
+		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
+		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
+			continue;
+		}
+
+		// Immediatly update modified items
+		if (d->mThumbnailViewHelper->isDocumentModified(url)) {
+			d->updateThumbnailForModifiedDocument(index);
+			continue;
+		}
+
 		// Filter out items which already have a thumbnail
-		KFileItem item = fileItemForIndex(index);
-		QUrl url = item.url();
 		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
 		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForGroup(group).isNull()) {
 			continue;
@@ -386,16 +426,21 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 	}
 
 	if (!list.empty()) {
-		generateThumbnailsForItems(list);
+		d->generateThumbnailsForItems(list);
 	}
 }
 
 
-void ThumbnailView::generateThumbnailsForItems(const KFileItemList& list) {
-	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
-	kDebug() << this << "size: " << d->mThumbnailSize;
-	kDebug() << this << "group:" << (group == ThumbnailGroup::Large ? "large": "normal");
-	d->mThumbnailViewHelper->generateThumbnailsForItems(list, group);
+void ThumbnailView::generateThumbnailForIndex(const QModelIndex& index) {
+	KFileItem item = fileItemForIndex(index);
+	KUrl url = item.url();
+	if (d->mThumbnailViewHelper->isDocumentModified(url)) {
+		d->updateThumbnailForModifiedDocument(index);
+	} else {
+		KFileItemList list;
+		list << item;
+		d->generateThumbnailsForItems(list);
+	}
 }
 
 

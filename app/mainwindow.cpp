@@ -1112,15 +1112,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 	if (!index.isValid()) {
 		return;
 	}
-
-	KFileItem item = d->mDirModel->itemForIndex(index);
-	if (item.isNull()) {
-		return;
-	}
-
-	KFileItemList list;
-	list << item;
-	d->mThumbnailView->generateThumbnailsForItems(list);
+	d->mThumbnailView->generateThumbnailForIndex(index);
 }
 
 
