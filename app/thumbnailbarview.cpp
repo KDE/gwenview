@@ -130,10 +130,6 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 
 void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
-	QSize thumbnailSize = d->mView->gridSize() - QSize(ITEM_MARGIN * 2, ITEM_MARGIN * 2);
-	if (thumbnailPix.width() > thumbnailSize.width() || thumbnailPix.height() > thumbnailSize.height()) {
-		thumbnailPix = thumbnailPix.scaled(thumbnailSize, Qt::KeepAspectRatio);
-	}
 	QRect rect = option.rect;
 
 	QStyleOptionViewItemV4 opt = option;
@@ -270,8 +266,9 @@ void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
 	ThumbnailView::resizeEvent(event);
 
-	int size = height() - (horizontalScrollBar()->sizeHint().height() + 2 * frameWidth());
-	setGridSize(QSize(size, size));
+	int gridSize = height() - (horizontalScrollBar()->sizeHint().height() + 2 * frameWidth());
+	setGridSize(QSize(gridSize, gridSize));
+	setThumbnailSize(gridSize - ITEM_MARGIN * 2);
 }
 
 
