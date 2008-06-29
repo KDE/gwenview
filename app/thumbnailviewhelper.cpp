@@ -59,24 +59,29 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-QPixmap ThumbnailViewHelper::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group) const {
+void ThumbnailViewHelper::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const {
+	Q_ASSERT(outPix);
+	Q_ASSERT(outFullSize);
+	*outPix = QPixmap();
+	*outFullSize = QSize();
 	DocumentFactory* factory = DocumentFactory::instance();
 	const int pixelSize = ThumbnailGroup::pixelSize(group);
 
 	if (!factory->hasUrl(url)) {
-		return QPixmap();
+		return;
 	}
 
 	Document::Ptr doc = factory->load(url);
 	if (!doc->loadingState() == Document::Loaded) {
-		return QPixmap();
+		return;
 	}
 
 	QImage image = doc->image();
 	if (image.width() > pixelSize || image.height() > pixelSize) {
 		image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 	}
-	return QPixmap::fromImage(image);
+	*outPix = QPixmap::fromImage(image);
+	*outFullSize = doc->size();
 }
 
 

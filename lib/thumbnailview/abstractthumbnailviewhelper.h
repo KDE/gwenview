@@ -54,7 +54,7 @@ public:
 
 	virtual bool isDocumentModified(const KUrl& url) = 0;
 
-	virtual QPixmap thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum) const = 0;
+	virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
 };
 
 } // namespace

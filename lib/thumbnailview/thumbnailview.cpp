@@ -62,6 +62,8 @@ static KUrl urlForIndex(const QModelIndex& index) {
 struct Thumbnail {
 	QPixmap normalPix;
 	QPixmap largePix;
+	QSize fullSize;
+
 	inline const QPixmap& pixmapForGroup(ThumbnailGroup::Enum group) const {
 		return group == ThumbnailGroup::Large ? largePix : normalPix;
 	}
@@ -94,9 +96,11 @@ struct ThumbnailViewPrivate {
 		KFileItem item = fileItemForIndex(index);
 		KUrl url = item.url();
 		ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
-		QPixmap pix = mThumbnailViewHelper->thumbnailForDocument(url, group);
+		QPixmap pix;
+		QSize fullSize;
+		mThumbnailViewHelper->thumbnailForDocument(url, group, &pix, &fullSize);
 		mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
-		that->setThumbnail(item, pix);
+		that->setThumbnail(item, pix, fullSize);
 	}
 
 	void generateThumbnailsForItems(const KFileItemList& list) {
@@ -104,7 +108,7 @@ struct ThumbnailViewPrivate {
 		if (!mThumbnailLoadJob) {
 			mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
 			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
-				that, SLOT(setThumbnail(const KFileItem&, const QPixmap&)));
+				that, SLOT(setThumbnail(const KFileItem&, const QPixmap&, const QSize&)));
 			mThumbnailLoadJob->start();
 		} else {
 			mThumbnailLoadJob->setThumbnailGroup(group);
@@ -258,7 +262,7 @@ void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index) {
 }
 
 
-void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
+void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size) {
 	QUrl url = item.url();
 	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl[url];
 	if (!persistentIndex.isValid()) {
@@ -266,7 +270,9 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 	}
 
 	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
-	d->mThumbnailForUrl[url].pixmapForGroup(group) = pixmap;
+	Thumbnail& thumbnail = d->mThumbnailForUrl[url];
+	thumbnail.pixmapForGroup(group) = pixmap;
+	thumbnail.fullSize = size;
 
 	QRect rect = visualRect(persistentIndex);
 	update(rect);
@@ -284,17 +290,20 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.end()) {
-		pix = it.value().pixmapForGroup(group);
-		if (pix.isNull()) {
-			if (group == ThumbnailGroup::Large && !it.value().normalPix.isNull()) {
+		Thumbnail& thumbnail = it.value();
+		pix = thumbnail.pixmapForGroup(group);
+		if (pix.isNull() && thumbnail.fullSize.isValid()) {
+			int maxFullSize = qMax(thumbnail.fullSize.width(), thumbnail.fullSize.height());
+			if (group == ThumbnailGroup::Large && !thumbnail.normalPix.isNull()) {
 				// Use an up-sampled version of the normal size thumbnail
-				pix = it.value().normalPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
-			} else if (group == ThumbnailGroup::Normal && !it.value().largePix.isNull()) {
+				int thumbnailSize = qMin(d->mThumbnailSize, maxFullSize);
+				pix = thumbnail.normalPix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
+			} else if (group == ThumbnailGroup::Normal && !thumbnail.largePix.isNull()) {
 				// Generate the normal version from the large version and use
 				// it
-				int normalPixelSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Normal);
-				pix = it.value().largePix.scaled(normalPixelSize, normalPixelSize, Qt::KeepAspectRatio);
-				it.value().normalPix = pix;
+				int thumbnailSize = qMin(ThumbnailGroup::pixelSize(ThumbnailGroup::Normal), maxFullSize);
+				pix = thumbnail.largePix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
+				thumbnail.normalPix = pix;
 			}
 		}
 	}
@@ -307,6 +316,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 			Thumbnail& thumbnail = d->mThumbnailForUrl[url];
 			thumbnail.normalPix = pix;
 			thumbnail.largePix = pix;
+			thumbnail.fullSize = QSize(128, 128);
 		} else {
 			pix = d->mWaitingThumbnail;
 		}

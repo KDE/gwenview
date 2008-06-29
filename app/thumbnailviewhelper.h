@@ -47,7 +47,7 @@ public:
 
 	virtual bool isDocumentModified(const KUrl& url);
 
-	virtual QPixmap thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum) const;
+	void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
 
 	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
