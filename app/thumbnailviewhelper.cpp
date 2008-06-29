@@ -63,10 +63,10 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list, ThumbnailSize::Enum thumbnailSize) {
+void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list, ThumbnailGroup::Enum thumbnailGroup) {
 	KFileItemList filteredList;
 	DocumentFactory* factory = DocumentFactory::instance();
-	const int pixelSize = ThumbnailSize::pixelSize(thumbnailSize);
+	const int pixelSize = ThumbnailGroup::pixelSize(thumbnailGroup);
 	Q_FOREACH(const KFileItem& item, list) {
 		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
 		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
@@ -89,12 +89,12 @@ void ThumbnailViewHelper::generateThumbnailsForItems(const KFileItemList& list, 
 	}
 	if (filteredList.size() > 0) {
 		if (!d->mThumbnailLoadJob) {
-			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, thumbnailSize);
+			d->mThumbnailLoadJob = new ThumbnailLoadJob(filteredList, thumbnailGroup);
 			connect(d->mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
 				SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&)));
 			d->mThumbnailLoadJob->start();
 		} else {
-			d->mThumbnailLoadJob->setThumbnailSize(thumbnailSize);
+			d->mThumbnailLoadJob->setThumbnailGroup(thumbnailGroup);
 			Q_FOREACH(const KFileItem& item, filteredList) {
 				d->mThumbnailLoadJob->appendItem(item);
 			}

@@ -38,7 +38,7 @@
 #include <kfileitem.h>
 
 // Local
-#include <lib/thumbnailsize.h>
+#include <lib/thumbnailgroup.h>
 
 namespace Gwenview {
 class ThumbnailThread : public QThread {
@@ -53,7 +53,7 @@ public:
 		const QString& originalMimeType,
 		const QString& pixPath,
 		const QString& thumbnailPath,
-		ThumbnailSize::Enum size);
+		ThumbnailGroup::Enum group);
 
 	void cancel();
 
@@ -79,7 +79,7 @@ private:
 	int mOriginalHeight;
 	QMutex mMutex;
 	QWaitCondition mCond;
-	ThumbnailSize::Enum mThumbnailSize;
+	ThumbnailGroup::Enum mThumbnailGroup;
 	bool mCancel;
 };
 
@@ -92,7 +92,7 @@ public:
 	/**
 	 * Create a job for determining the pixmaps of the images in the @p itemList
 	 */
-	ThumbnailLoadJob(const KFileItemList& itemList, ThumbnailSize::Enum size);
+	ThumbnailLoadJob(const KFileItemList& itemList, ThumbnailGroup::Enum);
 	virtual ~ThumbnailLoadJob();
 
 	/**
@@ -118,7 +118,7 @@ public:
 	/**
 	 * Defines size of thumbnails to generate
 	 */
-	void setThumbnailSize(ThumbnailSize::Enum size);
+	void setThumbnailGroup(ThumbnailGroup::Enum);
 
 	/**
 	 * Returns the thumbnail base dir, independent of the thumbnail size
@@ -131,9 +131,9 @@ public:
 	static void setThumbnailBaseDir(const QString&);
 
 	/**
-	 * Returns the thumbnail base dir, for the @p size
+	 * Returns the thumbnail base dir, for the @p group
 	 */
-	static QString thumbnailBaseDir(ThumbnailSize::Enum size);
+	static QString thumbnailBaseDir(ThumbnailGroup::Enum group);
 
 
 	/**
@@ -177,8 +177,8 @@ private:
 	// The temporary path for remote urls
 	QString mTempPath;
 
-	// Thumbnail size
-	ThumbnailSize::Enum mThumbnailSize;
+	// Thumbnail group
+	ThumbnailGroup::Enum mThumbnailGroup;
 
 	QPixmap mBrokenPixmap;
 

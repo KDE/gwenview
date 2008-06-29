@@ -59,12 +59,12 @@ static KUrl urlForIndex(const QModelIndex& index) {
 struct Thumbnail {
 	QPixmap normalPix;
 	QPixmap largePix;
-	inline const QPixmap& pixmapForSize(ThumbnailSize::Enum size) const {
-		return size == ThumbnailSize::Large ? largePix : normalPix;
+	inline const QPixmap& pixmapForGroup(ThumbnailGroup::Enum group) const {
+		return group == ThumbnailGroup::Large ? largePix : normalPix;
 	}
 
-	inline QPixmap& pixmapForSize(ThumbnailSize::Enum size) {
-		return size == ThumbnailSize::Large ? largePix : normalPix;
+	inline QPixmap& pixmapForGroup(ThumbnailGroup::Enum group) {
+		return group == ThumbnailGroup::Large ? largePix : normalPix;
 	}
 };
 
@@ -239,8 +239,8 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap) {
 		return;
 	}
 
-	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
-	d->mThumbnailForUrl[url].pixmapForSize(size) = pixmap;
+	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
+	d->mThumbnailForUrl[url].pixmapForGroup(group) = pixmap;
 
 	QRect rect = visualRect(persistentIndex);
 	update(rect);
@@ -255,11 +255,11 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 
 	QPixmap pix;
 
-	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
 	if (it != d->mThumbnailForUrl.constEnd()) {
-		pix = it.value().pixmapForSize(size);
-		if (pix.isNull() && size == ThumbnailSize::Large && !it.value().normalPix.isNull()) {
+		pix = it.value().pixmapForGroup(group);
+		if (pix.isNull() && group == ThumbnailGroup::Large && !it.value().normalPix.isNull()) {
 			// Use an up-sampled version of the normal size thumbnail
 			pix = it.value().normalPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
 		}
@@ -358,9 +358,9 @@ void ThumbnailView::scrollContentsBy(int dx, int dy) {
 
 
 void ThumbnailView::generateThumbnailsForVisibleItems() {
-	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	kDebug() << this << "size: " << d->mThumbnailSize;
-	kDebug() << this << "group:" << (size == ThumbnailSize::Large ? "large": "normal");
+	kDebug() << this << "group:" << (group == ThumbnailGroup::Large ? "large": "normal");
 	KFileItemList list;
 	QRect viewportRect = viewport()->rect();
 	for (int row=0; row < model()->rowCount(); ++row) {
@@ -375,7 +375,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		KFileItem item = fileItemForIndex(index);
 		QUrl url = item.url();
 		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
-		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForSize(size).isNull()) {
+		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForGroup(group).isNull()) {
 			continue;
 		}
 
@@ -392,10 +392,10 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 
 
 void ThumbnailView::generateThumbnailsForItems(const KFileItemList& list) {
-	ThumbnailSize::Enum size = ThumbnailSize::fromPixelSize(d->mThumbnailSize);
+	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	kDebug() << this << "size: " << d->mThumbnailSize;
-	kDebug() << this << "group:" << (size == ThumbnailSize::Large ? "large": "normal");
-	d->mThumbnailViewHelper->generateThumbnailsForItems(list, size);
+	kDebug() << this << "group:" << (group == ThumbnailGroup::Large ? "large": "normal");
+	d->mThumbnailViewHelper->generateThumbnailsForItems(list, group);
 }
 
 

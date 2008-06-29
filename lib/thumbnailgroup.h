@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILSIZE_H
-#define THUMBNAILSIZE_H
+#ifndef THUMBNAILGROUP_H
+#define THUMBNAILGROUP_H
 
 // Qt
 
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-namespace ThumbnailSize {
+namespace ThumbnailGroup {
 	enum Enum {
 		Normal,
 		Large
@@ -50,8 +50,8 @@ namespace ThumbnailSize {
 			return Large;
 		}
 	}
-} // namespace ThumbnailSize
+} // namespace ThumbnailGroup
 
 } // namespace Gwenview
 
-#endif /* THUMBNAILSIZE_H */
+#endif /* THUMBNAILGROUP_H */

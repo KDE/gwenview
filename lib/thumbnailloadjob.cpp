@@ -82,9 +82,9 @@ static QString generateOriginalUri(const KUrl& url_) {
 }
 
 
-static QString generateThumbnailPath(const QString& uri, ThumbnailSize::Enum size) {
+static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum group) {
 	KMD5 md5( QFile::encodeName(uri) );
-	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir(size);
+	QString baseDir=ThumbnailLoadJob::thumbnailBaseDir(group);
 	return baseDir + QString(QFile::encodeName( md5.hexDigest())) + ".png";
 }
 
@@ -100,7 +100,7 @@ void ThumbnailThread::load(
 	const QString& originalUri, time_t originalTime, int originalSize, const QString& originalMimeType,
 	const QString& pixPath,
 	const QString& thumbnailPath,
-	ThumbnailSize::Enum size)
+	ThumbnailGroup::Enum group)
 {
 	QMutexLocker lock( &mMutex );
 	assert( mPixPath.isNull());
@@ -111,7 +111,7 @@ void ThumbnailThread::load(
 	mOriginalMimeType = originalMimeType;
 	mPixPath = pixPath;
 	mThumbnailPath = thumbnailPath;
-	mThumbnailSize = size;
+	mThumbnailGroup = group;
 	if(!isRunning()) start();
 	mCond.wakeOne();
 }
@@ -167,7 +167,7 @@ void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
 	bool loaded=false;
 	bool needCaching=true;
-	int pixelSize = ThumbnailSize::pixelSize(mThumbnailSize);
+	int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
 
 	// If it's a Jpeg, try to load a small image directly from the file
 	if (isJpeg()) {
@@ -220,7 +220,7 @@ void ThumbnailThread::loadThumbnail() {
 		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
 		mImage.setText("Software", 0, "Gwenview");
 
-		QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailSize);
+		QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
 		KStandardDirs::makeDir(thumbnailDir, 0700);
 
 		KTemporaryFile tmp;
@@ -281,7 +281,7 @@ bool ThumbnailThread::loadJpeg() {
 	jpeg_read_header(&cinfo, true);
 
 	// Get image size and check if we need a thumbnail
-	int size = ThumbnailSize::pixelSize(mThumbnailSize);
+	int size = ThumbnailGroup::pixelSize(mThumbnailGroup);
 	int imgSize = qMax(cinfo.image_width, cinfo.image_height);
 
 	if (imgSize<=size) {
@@ -370,13 +370,13 @@ void ThumbnailLoadJob::setThumbnailBaseDir(const QString& dir) {
 }
 
 
-QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailSize::Enum size) {
+QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Enum group) {
 	QString dir = thumbnailBaseDir();
-	switch (size) {
-	case ThumbnailSize::Normal:
+	switch (group) {
+	case ThumbnailGroup::Normal:
 		dir += "normal/";
 		break;
-	case ThumbnailSize::Large:
+	case ThumbnailGroup::Large:
 		dir += "large/";
 		break;
 	}
@@ -386,8 +386,8 @@ QString ThumbnailLoadJob::thumbnailBaseDir(ThumbnailSize::Enum size) {
 
 void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 	QString uri=generateOriginalUri(url);
-	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::Normal));
-	QFile::remove(generateThumbnailPath(uri, ThumbnailSize::Large));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Normal));
+	QFile::remove(generateThumbnailPath(uri, ThumbnailGroup::Large));
 }
 
 
@@ -396,10 +396,10 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 // ThumbnailLoadJob implementation
 //
 //------------------------------------------------------------------------
-ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailSize::Enum size)
+ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::Enum group)
 : KIO::Job()
 , mState( STATE_NEXTTHUMB )
-, mThumbnailSize(size)
+, mThumbnailGroup(group)
 {
 	LOG((int)this);
 
@@ -447,8 +447,8 @@ const KFileItemList& ThumbnailLoadJob::pendingItems() const {
 }
 
 
-void ThumbnailLoadJob::setThumbnailSize(ThumbnailSize::Enum size) {
-	mThumbnailSize = size;
+void ThumbnailLoadJob::setThumbnailGroup(ThumbnailGroup::Enum group) {
+	mThumbnailGroup = group;
 }
 
 
@@ -599,7 +599,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	QSize imagesize;
 
 	mOriginalUri=generateOriginalUri(mCurrentUrl);
-	mThumbnailPath=generateThumbnailPath(mOriginalUri, mThumbnailSize);
+	mThumbnailPath=generateThumbnailPath(mOriginalUri, mThumbnailGroup);
 
 	LOG("Stat thumb" << mThumbnailPath);
 
@@ -669,7 +669,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 		mState=STATE_PREVIEWJOB;
 		KFileItemList list;
 		list.append(mCurrentItem);
-		KIO::Job* job=KIO::filePreview(list, ThumbnailSize::pixelSize(mThumbnailSize));
+		KIO::Job* job=KIO::filePreview(list, ThumbnailGroup::pixelSize(mThumbnailGroup));
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			this, SLOT(slotGotPreview(const KFileItem&, const QPixmap&)) );
@@ -682,7 +682,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 void ThumbnailLoadJob::startCreatingThumbnail(const QString& pixPath) {
 	LOG("Creating thumbnail from" << pixPath);
 	mThumbnailThread.load( mOriginalUri, mOriginalTime, mCurrentItem.size(),
-		mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailSize);
+		mCurrentItem.mimetype(), pixPath, mThumbnailPath, mThumbnailGroup);
 }
 
 
