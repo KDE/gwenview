@@ -385,6 +385,9 @@ void ThumbnailView::scrollContentsBy(int dx, int dy) {
 
 
 void ThumbnailView::generateThumbnailsForVisibleItems() {
+	if (!isVisible()) {
+		return;
+	}
 	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	kDebug() << this << "size: " << d->mThumbnailSize;
 	kDebug() << this << "group:" << (group == ThumbnailGroup::Large ? "large": "normal");
