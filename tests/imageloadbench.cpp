@@ -36,16 +36,25 @@ static void bench(QIODevice* device, const QString& outputName) {
 
 int main(int argc, char** argv) {
 	QCoreApplication app(argc, argv);
+	if (argc != 2) {
+		qDebug() << "Usage: imageloadbench <file.jpg>";
+		return 1;
+	}
 
 	QString fileName = QString::fromUtf8(argv[1]);
 
 	QFile file(fileName);
-	Q_ASSERT(file.open(QIODevice::ReadOnly));
+	if (!file.open(QIODevice::ReadOnly)) {
+		qDebug() << QString("Could not open '%1'").arg(fileName);
+		return 2;
+	}
 	QByteArray data = file.readAll();
 	QBuffer buffer(&data);
 
+	qDebug() << "Using Qt loader";
 	bench(&buffer, "qt.png");
 	Gwenview::ImageFormats::registerPlugins();
+	qDebug() << "Using Gwenview loader";
 	bench(&buffer, "gv.png");
 
 	return 0;
