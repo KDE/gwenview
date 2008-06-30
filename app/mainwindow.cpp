@@ -108,6 +108,7 @@ static const char* MAINWINDOW_SETTINGS = "MainWindow";
 struct MainWindowState {
 	QAction* mActiveViewModeAction;
 	bool mSideBarVisible;
+	bool mToolBarVisible;
 	Qt::WindowStates mWindowState;
 };
 
@@ -995,6 +996,7 @@ void MainWindow::toggleFullScreen() {
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
 		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
+		d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
 
 		d->mViewAction->trigger();
@@ -1017,7 +1019,7 @@ void MainWindow::toggleFullScreen() {
 		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
-		toolBar()->show();
+		toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 	}
 	setUpdatesEnabled(true);
 }
