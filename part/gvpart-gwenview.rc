@@ -11,11 +11,5 @@
 		<Action name="view_zoom_out"/>
 	</Menu>
 </MenuBar>
-<ToolBar name="mainToolBar"><text>Main Toolbar</text>
-	<Action name="view_actual_size"/>
-	<Action name="view_zoom_to_fit"/>
-	<Action name="view_zoom_in"/>
-	<Action name="view_zoom_out"/>
-</ToolBar>
 </kpartgui>
 

@@ -14,4 +14,5 @@ target_link_libraries(gvpart ${KDE4_KPARTS_LIBS} gwenviewlib)
 
 install(TARGETS gvpart DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES gvpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES gvpart.rc DESTINATION ${DATA_INSTALL_DIR}/gvpart)
+install(FILES gvpart.rc gvpart-gwenview.rc
+	DESTINATION ${DATA_INSTALL_DIR}/gvpart)

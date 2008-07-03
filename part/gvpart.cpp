@@ -87,6 +87,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 , mZoomUpdatedBySlider(false)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
+	mStatusBarExtension = 0;
+	mStatusBarWidgetContainer = 0;
 
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
@@ -128,13 +130,16 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 		addPartSpecificActions();
 	}
 
-	createStatusBarWidget();
 	createErrorLabel();
 
-	mStatusBarExtension = new KParts::StatusBarExtension(this);
-	QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
-
-	setXMLFile("gvpart/gvpart.rc");
+	if (mGwenviewHost) {
+		createStatusBarWidget();
+		mStatusBarExtension = new KParts::StatusBarExtension(this);
+		QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
+		setXMLFile("gvpart/gvpart-gwenview.rc");
+	} else {
+		setXMLFile("gvpart/gvpart.rc");
+	}
 
 	loadConfig();
 }
@@ -148,7 +153,9 @@ qreal GVPart::computeMinimumZoom() const {
 
 void GVPart::updateZoomSnapValues() {
 	qreal min = computeMinimumZoom();
-	mZoomSlider->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
+	if (mStatusBarWidgetContainer) {
+		mZoomSlider->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
+	}
 
 	mZoomSnapValues.clear();
 	for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
@@ -277,7 +284,7 @@ bool GVPart::openUrl(const KUrl& url) {
 	}
 	setUrl(url);
 	mErrorWidget->hide();
-	if (mStatusBarWidgetContainer->parent()) {
+	if (mStatusBarWidgetContainer && mStatusBarWidgetContainer->parent()) {
 		// Don't show mStatusBarWidgetContainer until it has been embedded in
 		// the statusbar by GVPart::initStatusBarExtension()
 		mStatusBarWidgetContainer->show();
@@ -310,7 +317,9 @@ void GVPart::slotLoadingFailed() {
 	mErrorWidget->adjustSize();
 	mErrorWidget->show();
 
-	mStatusBarWidgetContainer->hide();
+	if (mStatusBarWidgetContainer) {
+		mStatusBarWidgetContainer->hide();
+	}
 }
 
 
@@ -384,14 +393,18 @@ void GVPart::updateCaption() {
 
 
 void GVPart::slotZoomChanged() {
-	int intZoom = int(mView->zoom() * 100);
-	mZoomLabel->setText(QString("%1%").arg(intZoom));
+	if (mStatusBarWidgetContainer) {
+		int intZoom = int(mView->zoom() * 100);
+		mZoomLabel->setText(QString("%1%").arg(intZoom));
 
-	// Update slider, but only if the change does not come from it.
-	if (!mZoomUpdatedBySlider) {
-		SignalBlocker blocker(mZoomSlider);
-		int value = sliderValueForZoom(mView->zoom());
-		mZoomSlider->setValue(value);
+		// Update slider, but only if the change does not come from it.
+		if (!mZoomUpdatedBySlider) {
+			SignalBlocker blocker(mZoomSlider);
+			int value = sliderValueForZoom(mView->zoom());
+			mZoomSlider->setValue(value);
+		}
+	} else {
+		updateCaption();
 	}
 }
 
@@ -516,11 +529,6 @@ bool GVPart::eventFilter(QObject*, QEvent* event) {
 		}
 	} else if (event->type() == QEvent::Resize) {
 		updateZoomSnapValues();
-	} else if (event->type() == QEvent::Hide) {
-		// See bug #161443
-		mStatusBarWidgetContainer->hide();
-	} else if (event->type() == QEvent::Show) {
-		mStatusBarWidgetContainer->show();
 	}
 
 	return false;
