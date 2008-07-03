@@ -1009,7 +1009,8 @@ void MainWindow::toggleFullScreen() {
 		d->mSaveBar->setFullScreenMode(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
-		d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
+                if ( d->mStateBeforeFullScreen.mActiveViewModeAction )
+                    d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
