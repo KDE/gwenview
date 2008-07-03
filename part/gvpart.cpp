@@ -388,6 +388,15 @@ KAboutData* GVPart::createAboutData() {
 
 void GVPart::updateCaption() {
 	QString caption = url().fileName();
+	QSize size = mDocument->size();
+	if (size.isValid()) {
+		int intZoom = int(mView->zoom() * 100);
+		caption +=
+			QString(" - %1x%2 - %3%")
+				.arg(size.width())
+				.arg(size.height())
+				.arg(intZoom);
+	}
 	emit setWindowCaption(caption);
 }
 
