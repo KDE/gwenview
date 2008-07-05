@@ -575,6 +575,25 @@ struct MainWindow::Private {
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
 	}
+
+	/**
+	 * Sometimes we can get in handleResizeRequest() before geometry() has been
+	 * correctly initialized. In this case the difference between geometry
+	 */
+	void ensureGeometryIsValid() {
+		// Wait until height difference between frameGeometry and geometry is less than maxDelta
+		// But don't wait for more than timeout (avoid infinite loop)
+		const int timeout = 1000;
+		const int maxDelta = 100;
+		QTime chrono;
+		chrono.start();
+		while (mWindow->frameGeometry().height() - mWindow->geometry().height() > maxDelta
+			&& chrono.elapsed() < timeout)
+		{
+			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+		}
+	}
+
 };
 
 
@@ -1267,6 +1286,8 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 	if (isMaximized() || isMinimized() || d->mFullScreenAction->isChecked()) {
 		return;
 	}
+
+	d->ensureGeometryIsValid();
 
 	QSize size = _size;
 
