@@ -1311,6 +1311,20 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 		windowRect.moveBottom(availableRect.bottom() - bottomFrameMargin);
 	}
 
+	// This should not be necessary, but sometimes frameGeometry top left
+	// corner is outside of availableRect
+	int leftFrameMargin = geometry().left() - frameGeometry().left();
+	if (windowRect.left() - leftFrameMargin < availableRect.left()) {
+		kWarning() << "Window is too much on the left, adjusting";
+		windowRect.moveLeft(availableRect.left() + leftFrameMargin);
+	}
+
+	int topFrameMargin = geometry().top() - frameGeometry().top();
+	if (windowRect.top() - topFrameMargin < availableRect.top()) {
+		kWarning() << "Window is too high, adjusting";
+		windowRect.moveTop(availableRect.top() + topFrameMargin);
+	}
+
 	// Define geometry
 	setGeometry(windowRect);
 }
