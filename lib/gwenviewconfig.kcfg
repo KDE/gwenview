@@ -31,6 +31,9 @@
 			load. This is useful to exclude raw files which are recognized as
 			TIFF or JPEG.</whatsthis>
 		</entry>
+		<entry name="SideBarIsVisible" type="Bool">
+			<default>true</default>
+		</entry>
 	</group>
 
 	<group name="FullScreen">

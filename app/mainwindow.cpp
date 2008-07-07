@@ -704,13 +704,13 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		d->mSideBarContainer->hide();
 		// Resize the window once image is loaded
 		connect(d->mDocumentView, SIGNAL(resizeRequested(const QSize&)),
 			d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 		openDocumentUrl(url);
 	}
 	d->updateContextDependentComponents();
+	d->mSideBarContainer->setVisible(GwenviewConfig::sideBarIsVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -824,6 +824,8 @@ void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
 		d->mBrowseAction->setChecked(false);
 	}
 	d->mBrowseAction->trigger();
+	d->mSideBarContainer->setVisible(GwenviewConfig::sideBarIsVisible());
+	d->updateToggleSideBarAction();
 }
 
 
@@ -1261,6 +1263,7 @@ void MainWindow::loadConfig() {
 
 void MainWindow::saveConfig() {
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
+	GwenviewConfig::setSideBarIsVisible(d->mSideBarContainer->isVisible());
 }
 
 
