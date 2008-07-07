@@ -1291,7 +1291,9 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 
 	QSize size = _size;
 
-	int sideBarWidth = d->mSideBar->isVisible() ? d->mSideBar->width() : 0;
+	int sideBarWidth = d->mSideBar->isVisible()
+		? (d->mSideBar->width() + d->mCentralSplitter->handleWidth())
+		: 0;
 	// innerMargin is the margin around the view, not including the window
 	// frame
 	QSize innerMargin = QSize(
