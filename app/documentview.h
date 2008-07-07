@@ -107,7 +107,7 @@ Q_SIGNALS:
 	void enterFullScreenRequested();
 
 private Q_SLOTS:
-	void saveSplitterSizes(int, int);
+	void setThumbnailBarVisibility(bool visible);
 
 private:
 	DocumentViewPrivate* const d;

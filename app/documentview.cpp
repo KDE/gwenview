@@ -252,8 +252,6 @@ struct DocumentViewPrivate {
 		mThumbnailSplitter->addWidget(mPartContainer);
 		mThumbnailSplitter->addWidget(mThumbnailBar);
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
-		QObject::connect(mThumbnailSplitter, SIGNAL(splitterMoved(int,int)),
-			mView, SLOT(saveSplitterSizes(int, int)));
 	}
 
 	void setPartWidget(QWidget* partWidget) {
@@ -278,6 +276,12 @@ struct DocumentViewPrivate {
 		partPalette.setBrush(mPart->widget()->backgroundRole(), palette.base());
 		partPalette.setBrush(mPart->widget()->foregroundRole(), palette.text());
 		mPart->widget()->setPalette(partPalette);
+	}
+
+	void saveSplitterConfig() {
+		if (mThumbnailBar->isVisible()) {
+			GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
+		}
 	}
 };
 
@@ -317,7 +321,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
 	d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
 	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
-		d->mThumbnailBar, SLOT(setVisible(bool)));
+		this, SLOT(setThumbnailBarVisibility(bool)) );
 	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
 }
 
@@ -328,7 +332,14 @@ DocumentView::~DocumentView() {
 
 
 void DocumentView::saveConfig() {
+	d->saveSplitterConfig();
 	GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
+}
+
+
+void DocumentView::setThumbnailBarVisibility(bool visible) {
+	d->saveSplitterConfig();
+	d->mThumbnailBar->setVisible(visible);
 }
 
 
@@ -499,9 +510,5 @@ void DocumentView::setNormalPalette(const QPalette& palette) {
 	d->applyPalette();
 }
 
-
-void DocumentView::saveSplitterSizes(int /*pos*/, int /*index*/) {
-	GwenviewConfig::setThumbnailSplitterSizes(d->mThumbnailSplitter->sizes());
-}
 
 } // namespace
