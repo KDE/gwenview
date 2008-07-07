@@ -198,7 +198,7 @@ struct DocumentViewPrivate {
 		mThumbnailBar = new ThumbnailBarView(mPartContainer);
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
 		mThumbnailBar->setItemDelegate(delegate);
-		mThumbnailBar->hide();
+		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
 
 		QColor bgColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Window);
 		QColor bgSelColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Highlight);
@@ -315,6 +315,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
 	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
 	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
+	d->mToggleThumbnailBarAction->setChecked(GwenviewConfig::thumbnailBarIsVisible());
 	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
 		d->mThumbnailBar, SLOT(setVisible(bool)));
 	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
@@ -323,6 +324,11 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 
 DocumentView::~DocumentView() {
 	delete d;
+}
+
+
+void DocumentView::saveConfig() {
+	GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
 }
 
 

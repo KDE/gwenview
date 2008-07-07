@@ -1262,6 +1262,7 @@ void MainWindow::loadConfig() {
 
 
 void MainWindow::saveConfig() {
+	d->mDocumentView->saveConfig();
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
 	GwenviewConfig::setSideBarIsVisible(d->mSideBarContainer->isVisible());
 }

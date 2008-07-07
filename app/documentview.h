@@ -49,6 +49,8 @@ public:
 
 	ThumbnailBarView* thumbnailBar() const;
 
+	void saveConfig();
+
 	/**
 	 * Reset the view
 	 */

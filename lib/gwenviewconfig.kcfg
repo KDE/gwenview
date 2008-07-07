@@ -34,6 +34,9 @@
 		<entry name="SideBarIsVisible" type="Bool">
 			<default>true</default>
 		</entry>
+		<entry name="ThumbnailBarIsVisible" type="Bool">
+			<default>false</default>
+		</entry>
 	</group>
 
 	<group name="FullScreen">
