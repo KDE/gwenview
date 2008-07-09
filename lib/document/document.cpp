@@ -40,6 +40,11 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	bool mKeepRawData;
+
+	/**
+	 * @defgroup imagedata should be reset in reload()
+	 * @{
+	 */
 	QSize mSize;
 	QImage mImage;
 	QMap<int, QImage> mDownSampledImageMap;
@@ -47,6 +52,7 @@ struct DocumentPrivate {
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
 	QUndoStack mUndoStack;
+	/** @} */
 
 	void scheduleImageLoading(int invertedZoom) {
 		LoadingDocumentImpl* impl = qobject_cast<LoadingDocumentImpl*>(mImpl);
@@ -82,9 +88,15 @@ Document::~Document() {
 
 
 void Document::reload() {
-	d->mUndoStack.clear();
+	d->mSize = QSize();
+	d->mImage = QImage();
+	d->mDownSampledImageMap.clear();
+	d->mExiv2Image.reset();
+	d->mFormat = QByteArray();
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
+	d->mUndoStack.clear();
+
 	switchToImpl(new LoadingDocumentImpl(this));
 }
 
