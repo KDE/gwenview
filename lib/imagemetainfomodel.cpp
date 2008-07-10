@@ -76,7 +76,7 @@ public:
 		// end of the existing one.
 		Entry* entry = getEntryForKey(key);
 		if (entry) {
-			entry->mValue += ", " + value;
+			entry->mValue += "\n" + value;
 		} else {
 			entry = new Entry;
 			entry->mKey = key;
