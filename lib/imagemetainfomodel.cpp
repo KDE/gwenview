@@ -67,21 +67,28 @@ public:
 
 
 	void addEntry(const QString& key, const QString& label, const QString& value) {
-		Entry* entry = new Entry;
-		entry->mKey = key;
-		entry->mLabel = label;
-		entry->mValue = value;
-		mList << entry;
+		// key aren't always unique (for example, "Iptc.Application2.Keywords"
+		// may appear multiple times). In this case, append the value at the
+		// end of the existing one.
+		Entry* entry = getEntryForKey(key);
+		if (entry) {
+			entry->mValue += ", " + value;
+		} else {
+			entry = new Entry;
+			entry->mKey = key;
+			entry->mLabel = label;
+			entry->mValue = value;
+			mList << entry;
+			mRowForKey[key] = mList.size() - 1;
+		}
 	}
 
 
 	void getInfoForKey(const QString& key, QString* label, QString* value) const {
-		Q_FOREACH(Entry* entry, mList) {
-			if (entry->mKey == key) {
-				*label = entry->mLabel;
-				*value = entry->mValue;
-				return;
-			}
+		Entry* entry = getEntryForKey(key);
+		if (entry) {
+			*label = entry->mLabel;
+			*value = entry->mValue;
 		}
 	}
 
@@ -111,14 +118,7 @@ public:
 
 
 	int getKeyRow(const QString& key) const {
-		int row = 0;
-		Q_FOREACH(Entry* entry, mList) {
-			if (entry->mKey == key) {
-				return row;
-			}
-			++row;
-		}
-		return -1;
+		return mRowForKey.value(key, -1);
 	}
 
 
@@ -136,7 +136,16 @@ public:
 	}
 
 private:
+	Entry* getEntryForKey(const QString& key) const {
+		int row = mRowForKey.value(key, -1);
+		if (row != -1) {
+			return mList[row];
+		}
+		return 0;
+	}
+
 	QList<Entry*> mList;
+	QHash<QString, int> mRowForKey;
 	QString mLabel;
 };
 
