@@ -93,6 +93,8 @@ public:
 		if (entry) {
 			*label = entry->mLabel;
 			*value = entry->mValue;
+		} else {
+			kWarning() << "No entry for key" << key;
 		}
 	}
 
@@ -143,7 +145,6 @@ private:
 	Entry* getEntryForKey(const QString& key) const {
 		int row = getRowForKey(key);
 		if (row == InvalidRow) {
-			kWarning() << "No entry for key" << key;
 			return 0;
 		}
 		return mList[row];
