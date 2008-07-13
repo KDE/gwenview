@@ -271,6 +271,30 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
+	void drawText(QPainter* painter, const QRect& rect, const QColor& fgColor, const QString& fullText) const {
+		QFontMetrics fm = mView->fontMetrics();
+
+		// Elide text
+		QString text;
+		QMap<QString, QString>::const_iterator it = mElidedTextMap.find(fullText);
+		if (it == mElidedTextMap.constEnd()) {
+			text = fm.elidedText(fullText, Qt::ElideRight, rect.width() - 2*ITEM_MARGIN);
+			mElidedTextMap[fullText] = text;
+		} else {
+			text = it.value();
+		}
+
+		int textWidth = fm.width(text);
+
+		// Draw text
+		painter->setPen(fgColor);
+		painter->drawText(
+			rect.left() + (rect.width() - textWidth) / 2,
+			rect.top() + ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN + fm.ascent(),
+			text);
+	}
+
+
 	/**
 	 * Show a tooltip only if the item has been elided.
 	 * This function places the tooltip over the item text.
@@ -431,19 +455,6 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	painter->drawRect(rect);
 #endif
 
-	// Crop text
-	QString fullText = index.data(Qt::DisplayRole).toString();
-	QString text;
-	QMap<QString, QString>::const_iterator it = d->mElidedTextMap.find(fullText);
-	if (it == d->mElidedTextMap.constEnd()) {
-		text = elidedText(option.fontMetrics, rect.width() - 2*ITEM_MARGIN, Qt::ElideRight, fullText);
-		d->mElidedTextMap[fullText] = text;
-	} else {
-		text = it.value();
-	}
-
-	int textWidth = option.fontMetrics.width(text);
-
 	// Select color group
 	QPalette::ColorGroup cg;
 
@@ -518,13 +529,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		}
 	}
 
-	// Draw text
-	painter->setPen(fgColor);
-
-	painter->drawText(
-		rect.left() + (rect.width() - textWidth) / 2,
-		rect.top() + ITEM_MARGIN + thumbnailSize + ITEM_MARGIN + option.fontMetrics.ascent(),
-		text);
+	d->drawText(painter, rect, fgColor, index.data(Qt::DisplayRole).toString());
 
 #ifndef GWENVIEW_METADATA_BACKEND_NONE
 	// Draw rating
