@@ -172,6 +172,8 @@ struct PreviewItemDelegatePrivate {
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
 
+	QPoint mToolTipOffset;
+
 
 	void initSaveButtonFramePixmap() {
 		// Necessary otherwise we won't see the save button itself
@@ -187,6 +189,26 @@ struct PreviewItemDelegatePrivate {
 		mSaveButtonFramePixmap = QPixmap(mSaveButtonFrame->size());
 		mSaveButtonFramePixmap.fill(Qt::transparent);
 		mSaveButtonFrame->render(&mSaveButtonFramePixmap, QPoint(), QRegion(), QWidget::DrawChildren);
+	}
+
+
+	/*
+	 * mToolTipOffset is here to compensate QToolTip offset so that the text
+	 * inside the tooltip appears exactly over the thumbnail text.
+	 * The offset values have been copied from QTipLabel code in qtooltip.cpp.
+	 * Let's hope they do not change.
+	 */
+	void initToolTipOffset() {
+		mToolTipOffset = QPoint(2,
+			#ifdef Q_WS_WIN
+				21
+			#else
+				16
+			#endif
+			);
+
+		const int margin = 1 + mView->style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth);
+		mToolTipOffset += QPoint(margin, margin);
 	}
 
 
@@ -284,12 +306,20 @@ struct PreviewItemDelegatePrivate {
 			text = it.value();
 		}
 
-		int textWidth = fm.width(text);
+		// Compute x pos
+		int posX;
+		if (text.length() == fullText.length()) {
+			// Not elided, center text
+			posX = (rect.width() - fm.width(text)) / 2;
+		} else {
+			// Elided, left align
+			posX = ITEM_MARGIN;
+		}
 
 		// Draw text
 		painter->setPen(fgColor);
 		painter->drawText(
-			rect.left() + (rect.width() - textWidth) / 2,
+			rect.left() + posX,
 			rect.top() + ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN + fm.ascent(),
 			text);
 	}
@@ -313,11 +343,26 @@ struct PreviewItemDelegatePrivate {
 		QString elidedText = it.value();
 		if (elidedText.length() == fullText.length()) {
 			// text and tooltip are the same, don't show tooltip
-			fullText = QString();
+			return;
 		}
+
+		// Compute tip position
 		QRect rect = mView->visualRect(index);
-		QPoint pos(rect.left() + ITEM_MARGIN, rect.top() + mThumbnailSize + ITEM_MARGIN);
-		QToolTip::showText(mView->mapToGlobal(pos), fullText, mView);
+		const int textX = ITEM_MARGIN;
+		const int textY = ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN;
+		const QPoint tipPosition = rect.topLeft() + QPoint(textX, textY) - mToolTipOffset;
+
+		// Compute visibility rect
+		// We do not include the text line to avoid flicker:
+		// When the mouse is over the tooltip, it's hidden, but the view then
+		// receives a QHelpEvent which causes the tooltip to show again...
+		QRect visibilityRect = rect;
+		visibilityRect.setHeight(textY);
+
+		// Show tip
+		if (visibilityRect.contains(helpEvent->pos())) {
+			QToolTip::showText(mView->mapToGlobal(tipPosition), fullText, mView, visibilityRect);
+		}
 	}
 
 	int itemWidth() const {
@@ -416,6 +461,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	layout->addWidget(saveButton);
 
 	d->initSaveButtonFramePixmap();
+	d->initToolTipOffset();
 }
 
 
