@@ -395,7 +395,7 @@ void DocumentView::reset() {
 	d->setPartWidget(0);
 	partChanged(0);
 	delete d->mPart;
-	d->mPartLibrary = QString();
+	d->mPartLibrary.clear();
 	d->mPart=0;
 }
 

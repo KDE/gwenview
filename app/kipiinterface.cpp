@@ -67,17 +67,17 @@ public:
 
 	QString title() {
 		QString txt=_url.fileName();
-		txt.replace("_", " ");
-		txt.replace(sExtensionRE, "");
+		txt.replace('_', ' ');
+		txt.remove(sExtensionRE);
 		return txt;
 	}
 
 	QString description() {
-		if (!_url.isLocalFile()) return QString::null;
+		if (!_url.isLocalFile()) return QString();
 
 		JpegContent content;
 		bool ok=content.load(_url.path());
-		if (!ok) return QString::null;
+		if (!ok) return QString();
 
 		return content.comment();
 	}

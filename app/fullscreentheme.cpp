@@ -50,7 +50,7 @@ struct FullScreenThemePrivate {
 FullScreenTheme::FullScreenTheme(const QString& themeName)
 : d(new FullScreenThemePrivate) {
 	// Get theme dir
-	d->mThemeDir = KStandardDirs::locate("appdata", THEME_BASE_DIR + themeName + "/");
+	d->mThemeDir = KStandardDirs::locate("appdata", THEME_BASE_DIR + themeName + '/');
 	if (d->mThemeDir.isEmpty()) {
 		kWarning() << "Couldn't find fullscreen theme" << themeName;
 		return;

@@ -147,7 +147,7 @@ void ThumbnailThread::run() {
 			Q_ASSERT(!mPixPath.isNull());
 			LOG("Loading" << mPixPath);
 			loadThumbnail();
-			mPixPath = QString(); // done, ready for next
+			mPixPath.clear(); // done, ready for next
 		}
 		if(testCancel()) {
 			return;
@@ -556,7 +556,7 @@ void ThumbnailLoadJob::slotResult(KJob * job) {
 			emitThumbnailLoadingFailed();
 			LOG("Delete temp file" << mTempPath);
 			QFile::remove(mTempPath);
-			mTempPath = QString();
+			mTempPath.clear();
 			determineNextIcon();
 		} else {
 			startCreatingThumbnail(mTempPath);
@@ -581,7 +581,7 @@ void ThumbnailLoadJob::thumbnailReady( const QImage& _img, const QSize& _size) {
 	if( !mTempPath.isEmpty()) {
 		LOG("Delete temp file" << mTempPath);
 		QFile::remove(mTempPath);
-		mTempPath = QString();
+		mTempPath.clear();
 	}
 	determineNextIcon();
 }
