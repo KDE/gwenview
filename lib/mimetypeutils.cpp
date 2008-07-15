@@ -19,14 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include "mimetypeutils.h"
+#include "mimetypeutils_p.moc"
 
 // Qt
-#include <qstringlist.h>
+#include <QApplication>
+#include <QStringList>
 
 // KDE
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kio/job.h>
+#include <kio/jobclasses.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kurl.h>
@@ -96,6 +100,20 @@ QString urlMimeType(const KUrl& url) {
 }
 
 
+QString urlMimeTypeByContent(const KUrl& url) {
+	const int HEADER_SIZE = 30;
+	if (url.isLocalFile()) {
+		return KMimeType::findByFileContent(url.path())->name();
+	}
+
+	KIO::TransferJob* job = KIO::get(url);
+	DataAccumulator accumulator(job);
+	while (!accumulator.finished() && accumulator.data().size() < HEADER_SIZE) {
+		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
+	return KMimeType::findByContent(accumulator.data())->name();
+}
+
 Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith("inode/directory")) {
 		return KIND_DIR;
@@ -119,6 +137,28 @@ Kind fileItemKind(const KFileItem& item) {
 Kind urlKind(const KUrl& url) {
 	return mimeTypeKind(urlMimeType(url));
 }
+
+
+DataAccumulator::DataAccumulator(KIO::TransferJob* job)
+: QObject()
+, mFinished(false)
+{
+	connect(job, SIGNAL(data(KIO::Job*, const QByteArray&)),
+		SLOT(slotDataReceived(KIO::Job*, const QByteArray&)) );
+	connect(job, SIGNAL(result(KJob*)),
+		SLOT(slotFinished()) );
+}
+
+
+void DataAccumulator::slotDataReceived(KIO::Job*, const QByteArray& data) {
+	mData += data;
+}
+
+
+void DataAccumulator::slotFinished() {
+	mFinished = true;
+}
+
 
 } // namespace MimeTypeUtils
 } // namespace Gwenview

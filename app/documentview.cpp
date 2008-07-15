@@ -402,6 +402,13 @@ void DocumentView::reset() {
 
 void DocumentView::createPartForUrl(const KUrl& url) {
 	QString mimeType = MimeTypeUtils::urlMimeType(url);
+	LOG("mimeType:" << mimeType);
+	if (!url.isLocalFile() && mimeType == "text/html") {
+		// Try harder, some webservers do not really know the mimetype of the
+		// content they serve (KDE Bugzilla for example)
+		mimeType = MimeTypeUtils::urlMimeTypeByContent(url);
+		LOG("mimeType after downloading content:" << mimeType);
+	}
 
 	QString library;
 	QVariantList partArgs;
