@@ -45,6 +45,10 @@ enum GroupRow { NoGroup = -1, GeneralGroup, ExifGroup, IptcGroup };
 
 class MetaInfoGroup {
 public:
+	enum {
+		InvalidRow = -1
+	};
+
 	struct Entry {
 		QString mKey;
 		QString mLabel;
@@ -111,14 +115,14 @@ public:
 	}
 
 
-	QString setValueForKeyAt(int row, const QString& value) {
+	void setValueForKeyAt(int row, const QString& value) {
 		Q_ASSERT(row < mList.size());
-		return mList[row]->mValue = value;
+		mList[row]->mValue = value;
 	}
 
 
-	int getKeyRow(const QString& key) const {
-		return mRowForKey.value(key, -1);
+	int getRowForKey(const QString& key) const {
+		return mRowForKey.value(key, InvalidRow);
 	}
 
 
@@ -137,11 +141,12 @@ public:
 
 private:
 	Entry* getEntryForKey(const QString& key) const {
-		int row = mRowForKey.value(key, -1);
-		if (row != -1) {
-			return mList[row];
+		int row = getRowForKey(key);
+		if (row == InvalidRow) {
+			kWarning() << "No entry for key" << key;
+			return 0;
 		}
-		return 0;
+		return mList[row];
 	}
 
 	QList<Entry*> mList;
@@ -175,7 +180,11 @@ struct ImageMetaInfoModelPrivate {
 
 	void setGroupEntryValue(GroupRow groupRow, const QString& key, const QString& value) {
 		MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
-		int entryRow = group->getKeyRow(key);
+		int entryRow = group->getRowForKey(key);
+		if (entryRow == MetaInfoGroup::InvalidRow) {
+			kWarning() << "No row for key" << key;
+			return;
+		}
 		group->setValueForKeyAt(entryRow, value);
 		QModelIndex groupIndex = mModel->index(groupRow, 0);
 		QModelIndex entryIndex = mModel->index(entryRow, 1, groupIndex);
