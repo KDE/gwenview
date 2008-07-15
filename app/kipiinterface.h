@@ -71,7 +71,7 @@ public:
     , mImages(images) {}
 
 	QString name()           { return mName; }
-	QString comment()        { return QString::null; }
+	QString comment()        { return QString(); }
 	KUrl::List images()      { return mImages; }
 	KUrl uploadRoot()        { return KUrl("/"); }
 	KUrl uploadPath()        { return mDirURL; }

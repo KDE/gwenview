@@ -210,7 +210,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 		if (first) {
 			description = indexDescription;
 		} else if (description != indexDescription) {
-			description = QString();
+			description.clear();
 		}
 
 		// Fill tagHash, incrementing the tag count if it's already there
