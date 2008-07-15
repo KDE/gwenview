@@ -425,7 +425,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 			continue;
 		}
 
-		// Immediatly update modified items
+		// Immediately update modified items
 		if (d->mThumbnailViewHelper->isDocumentModified(url)) {
 			d->updateThumbnailForModifiedDocument(index);
 			continue;
