@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef FULLSCREENWIDGET_H
-#define FULLSCREENWIDGET_H
+#ifndef FULLSCREENCONTENT_H
+#define FULLSCREENCONTENT_H
 
 // Qt
 #include <QWidget>
@@ -74,4 +74,4 @@ private:
 
 } // namespace
 
-#endif /* FULLSCREENWIDGET_H */
+#endif /* FULLSCREENCONTENT_H */
