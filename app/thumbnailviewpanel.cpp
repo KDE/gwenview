@@ -38,8 +38,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/metadata/abstractmetadatabackend.h>
-#include <lib/metadata/tagmodel.h>
-
 #include <lib/metadata/sorteddirmodel.h>
 #include <lib/metadata/tagmodel.h>
 #include <lib/archiveutils.h>
