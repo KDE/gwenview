@@ -93,8 +93,6 @@ public:
 		if (entry) {
 			*label = entry->mLabel;
 			*value = entry->mValue;
-		} else {
-			kWarning() << "No entry for key" << key;
 		}
 	}
 
