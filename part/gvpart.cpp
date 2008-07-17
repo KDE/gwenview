@@ -412,9 +412,8 @@ void GVPart::slotZoomChanged() {
 			int value = sliderValueForZoom(mView->zoom());
 			mZoomSlider->setValue(value);
 		}
-	} else {
-		updateCaption();
 	}
+	updateCaption();
 }
 
 
