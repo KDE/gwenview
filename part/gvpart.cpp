@@ -390,7 +390,7 @@ void GVPart::updateCaption() {
 	QString caption = url().fileName();
 	QSize size = mDocument->size();
 	if (size.isValid()) {
-		int intZoom = int(mView->zoom() * 100);
+		int intZoom = qRound(mView->zoom() * 100);
 		caption +=
 			QString(" - %1x%2 - %3%")
 				.arg(size.width())
@@ -403,7 +403,7 @@ void GVPart::updateCaption() {
 
 void GVPart::slotZoomChanged() {
 	if (mStatusBarWidgetContainer) {
-		int intZoom = int(mView->zoom() * 100);
+		int intZoom = qRound(mView->zoom() * 100);
 		mZoomLabel->setText(QString("%1%").arg(intZoom));
 
 		// Update slider, but only if the change does not come from it.
