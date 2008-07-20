@@ -67,6 +67,7 @@ public:
 	void clear() {
 		qDeleteAll(mList);
 		mList.clear();
+		mRowForKey.clear();
 	}
 
 
