@@ -210,7 +210,7 @@ void GVPart::createStatusBarWidget() {
 
 	mZoomSlider = new QSlider;
 	mZoomSlider->setOrientation(Qt::Horizontal);
-	mZoomSlider->setMinimumWidth(200);
+	mZoomSlider->setMinimumWidth(150);
 	mZoomSlider->setSingleStep(int(PRECISION));
 	mZoomSlider->setPageStep(3 * mZoomSlider->singleStep());
 	connect(mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
