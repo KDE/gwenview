@@ -332,16 +332,16 @@ void GVPart::slotLoaded() {
 	// We don't want to emit completed() again if we receive another
 	// downSampledImageReady() or loaded() signal from the current document.
 	disconnect(mDocument.data(), 0, this, SLOT(slotLoaded()) );
+
+	updateZoomSnapValues();
 }
 
 
 void GVPart::slotZoomSliderRangeChanged() {
-	// If the range minimum gets higher than the current slider value, apply the zoom
-	// slider value.
-	// The range change is caused by a resize of the window, if zoom-to-fit is
-	// set, resizing the window automatically adjusts zoom, thus there is no
-	// need to apply slider value in this case.
-	if (!mView->zoomToFit()) {
+	if (mView->zoomToFit()) {
+		SignalBlocker blocker(mZoomSlider);
+		mZoomSlider->setValue(mZoomSlider->minimum());
+	} else {
 		applyZoomSliderValue();
 	}
 }
