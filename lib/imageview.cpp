@@ -232,6 +232,7 @@ void ImageView::setDocument(Document::Ptr document) {
 	}
 	d->mDocument = document;
 	if (!document) {
+		d->mViewport->update();
 		return;
 	}
 
@@ -310,18 +311,20 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 
 
 void ImageView::paintEvent(QPaintEvent* event) {
+	QPainter painter(d->mViewport);
+	QColor bgColor = palette().color(backgroundRole());
+
 	if (!d->mDocument) {
+		painter.fillRect(rect(), bgColor);
 		return;
 	}
 
-	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
 	QPoint offset = imageOffset();
 
 	// Erase pixels around the image
 	QRect imageRect(offset, d->mCurrentBuffer.size());
 	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
-	QColor bgColor = palette().color(backgroundRole());
 	Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
 		painter.fillRect(rect, bgColor);
 	}
