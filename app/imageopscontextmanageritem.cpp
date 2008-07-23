@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "sidebar.h"
 #include <lib/cropsidebar.h>
+#include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageviewpart.h>
@@ -104,7 +105,7 @@ struct ImageOpsContextManagerItem::Private {
 		mCropAction = actionCollection->addAction("crop");
 		mCropAction->setText(i18n("Crop"));
 		connect(mCropAction, SIGNAL(triggered()),
-			that, SLOT(crop()) );
+			that, SLOT(showCropSideBar()) );
 
 		mActionList
 			<< mRotateLeftAction
@@ -256,7 +257,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 }
 
 
-void ImageOpsContextManagerItem::crop() {
+void ImageOpsContextManagerItem::showCropSideBar() {
 	ImageViewPart* imageViewPart = d->mMainWindow->documentView()->imageViewPart();
 	if (!imageViewPart) {
 		kError() << "No ImageViewPart available!";
@@ -266,8 +267,16 @@ void ImageOpsContextManagerItem::crop() {
 	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageViewPart->imageView(), doc);
 	connect(cropSideBar, SIGNAL(done()),
 		d->mMainWindow, SLOT(hideTemporarySideBar()) );
+	connect(cropSideBar, SIGNAL(cropRequested(const QRect&)),
+		SLOT(crop(const QRect&)) );
 
 	d->mMainWindow->showTemporarySideBar(cropSideBar);
+}
+
+
+void ImageOpsContextManagerItem::crop(const QRect& rect) {
+	CropImageOperation* op = new CropImageOperation(rect);
+	d->applyImageOperation(op);
 }
 
 

@@ -46,6 +46,7 @@ public:
 
 Q_SIGNALS:
 	void done();
+	void cropRequested(const QRect&);
 
 private Q_SLOTS:
 	void slotPositionChanged();
@@ -53,7 +54,7 @@ private Q_SLOTS:
 	void slotHeightChanged();
 	void setCropRect(const QRect& rect);
 
-	void crop();
+	void slotAccepted();
 	void applyRatioConstraint();
 	void setRatioConstraintFromComboBox();
 
