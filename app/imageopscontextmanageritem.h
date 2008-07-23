@@ -29,6 +29,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "abstractcontextmanageritem.h"
 
 
+class QRect;
+
+
 namespace Gwenview {
 
 
@@ -51,7 +54,8 @@ private Q_SLOTS:
 	void mirror();
 	void flip();
 	void resizeImage();
-	void crop();
+	void showCropSideBar();
+	void crop(const QRect&);
 
 private:
 	class Private;

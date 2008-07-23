@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "klocale.h"
 
 // Local
-#include "cropimageoperation.h"
 #include "croptool.h"
 #include "imageview.h"
 #include "ui_cropsidebar.h"
@@ -136,7 +135,7 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 		SLOT(slotHeightChanged()) );
 
 	connect(d->buttonBox, SIGNAL(accepted()),
-		SLOT(crop()) );
+		SLOT(slotAccepted()) );
 	
 	connect(d->buttonBox, SIGNAL(rejected()),
 		SIGNAL(done()) );
@@ -220,10 +219,8 @@ void CropSideBar::slotHeightChanged() {
 }
 
 
-void CropSideBar::crop() {
-	CropImageOperation* op = new CropImageOperation(cropRect());
-	op->setDocument(d->mDocument);
-	d->mDocument->undoStack()->push(op);
+void CropSideBar::slotAccepted() {
+	emit cropRequested(cropRect());
 	emit done();
 }
 
