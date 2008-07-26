@@ -33,7 +33,7 @@ namespace KParts { class Part; }
 
 namespace Gwenview {
 
-class DocumentViewPrivate;
+class DocumentPanelPrivate;
 class ImageViewPart;
 class ThumbnailBarView;
 
@@ -41,11 +41,11 @@ class ThumbnailBarView;
  * Holds the active document view, or show a message if there is no active
  * document
  */
-class DocumentView : public QStackedWidget {
+class DocumentPanel : public QStackedWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget* parent, KActionCollection*);
-	~DocumentView();
+	DocumentPanel(QWidget* parent, KActionCollection*);
+	~DocumentPanel();
 
 	ThumbnailBarView* thumbnailBar() const;
 
@@ -110,7 +110,7 @@ private Q_SLOTS:
 	void setThumbnailBarVisibility(bool visible);
 
 private:
-	DocumentViewPrivate* const d;
+	DocumentPanelPrivate* const d;
 
 	void createPartForUrl(const KUrl& url);
 };

@@ -152,8 +152,8 @@ protected:
  * |+-------------------------------------------------+|
  * +---------------------------------------------------+
  */
-struct DocumentViewPrivate {
-	DocumentView* mView;
+struct DocumentPanelPrivate {
+	DocumentPanel* mView;
 	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mPartContainer;
@@ -286,9 +286,9 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
+DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollection)
 : QStackedWidget(parent)
-, d(new DocumentViewPrivate)
+, d(new DocumentPanelPrivate)
 {
 	d->mView = this;
 	d->mPart = 0;
@@ -326,34 +326,34 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 }
 
 
-DocumentView::~DocumentView() {
+DocumentPanel::~DocumentPanel() {
 	delete d;
 }
 
 
-void DocumentView::saveConfig() {
+void DocumentPanel::saveConfig() {
 	d->saveSplitterConfig();
 	GwenviewConfig::setThumbnailBarIsVisible(d->mToggleThumbnailBarAction->isChecked());
 }
 
 
-void DocumentView::setThumbnailBarVisibility(bool visible) {
+void DocumentPanel::setThumbnailBarVisibility(bool visible) {
 	d->saveSplitterConfig();
 	d->mThumbnailBar->setVisible(visible);
 }
 
 
-KStatusBar* DocumentView::statusBar() const {
+KStatusBar* DocumentPanel::statusBar() const {
 	return d->mStatusBar;
 }
 
 
-void DocumentView::setStatusBarHeight(int height) {
+void DocumentPanel::setStatusBarHeight(int height) {
 	d->mStatusBarContainer->setFixedHeight(height);
 }
 
 
-void DocumentView::setFullScreenMode(bool fullScreenMode) {
+void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBarContainer->setVisible(!fullScreenMode);
 	d->applyPalette();
@@ -369,17 +369,17 @@ void DocumentView::setFullScreenMode(bool fullScreenMode) {
 }
 
 
-ThumbnailBarView* DocumentView::thumbnailBar() const {
+ThumbnailBarView* DocumentPanel::thumbnailBar() const {
 	return d->mThumbnailBar;
 }
 
 
-QSize DocumentView::sizeHint() const {
+QSize DocumentPanel::sizeHint() const {
 	return QSize(400, 300);
 }
 
 
-KUrl DocumentView::url() const {
+KUrl DocumentPanel::url() const {
 	if (!d->mPart) {
 		return KUrl();
 	}
@@ -388,7 +388,7 @@ KUrl DocumentView::url() const {
 }
 
 
-void DocumentView::reset() {
+void DocumentPanel::reset() {
 	if (!d->mPart) {
 		return;
 	}
@@ -400,7 +400,7 @@ void DocumentView::reset() {
 }
 
 
-void DocumentView::createPartForUrl(const KUrl& url) {
+void DocumentPanel::createPartForUrl(const KUrl& url) {
 	QString mimeType = MimeTypeUtils::urlMimeType(url);
 	LOG("mimeType:" << mimeType);
 	if (!url.isLocalFile() && mimeType == "text/html") {
@@ -484,7 +484,7 @@ void DocumentView::createPartForUrl(const KUrl& url) {
 }
 
 
-bool DocumentView::openUrl(const KUrl& url) {
+bool DocumentPanel::openUrl(const KUrl& url) {
 	createPartForUrl(url);
 	if (!d->mPart) {
 		return false;
@@ -494,7 +494,7 @@ bool DocumentView::openUrl(const KUrl& url) {
 }
 
 
-bool DocumentView::currentDocumentIsRasterImage() const {
+bool DocumentPanel::currentDocumentIsRasterImage() const {
 	// If the document view is visible, we assume we have a raster
 	// image if and only if we are using the ImageViewPart. This avoids
 	// having to determine the mimetype a second time.
@@ -502,17 +502,17 @@ bool DocumentView::currentDocumentIsRasterImage() const {
 }
 
 
-bool DocumentView::isEmpty() const {
+bool DocumentPanel::isEmpty() const {
 	return !d->mPart;
 }
 
 
-ImageViewPart* DocumentView::imageViewPart() const {
+ImageViewPart* DocumentPanel::imageViewPart() const {
 	return dynamic_cast<ImageViewPart*>(d->mPart);
 }
 
 
-void DocumentView::setNormalPalette(const QPalette& palette) {
+void DocumentPanel::setNormalPalette(const QPalette& palette) {
 	d->mNormalPalette = palette;
 	d->applyPalette();
 }

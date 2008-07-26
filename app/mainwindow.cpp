@@ -117,7 +117,7 @@ struct MainWindow::Private {
 	GvCore* mGvCore;
 	MainWindow* mWindow;
 	QSplitter* mCentralSplitter;
-	DocumentView* mDocumentView;
+	DocumentPanel* mDocumentPanel;
 	KUrlNavigator* mUrlNavigator;
 	ThumbnailView* mThumbnailView;
 	ThumbnailViewHelper* mThumbnailViewHelper;
@@ -173,11 +173,11 @@ struct MainWindow::Private {
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
 
 		setupThumbnailView(mViewStackedWidget);
-		setupDocumentView(mViewStackedWidget);
+		setupDocumentPanel(mViewStackedWidget);
 		setupStatusBars();
 		setupStartPage(mViewStackedWidget);
 		mViewStackedWidget->addWidget(mThumbnailViewPanel);
-		mViewStackedWidget->addWidget(mDocumentView);
+		mViewStackedWidget->addWidget(mDocumentPanel);
 		mViewStackedWidget->addWidget(mStartPage);
 		mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
 
@@ -232,20 +232,20 @@ struct MainWindow::Private {
 			mWindow, SLOT(openDirUrl(const KUrl&)) );
 	}
 
-	void setupDocumentView(QWidget* parent) {
-		mDocumentView = new DocumentView(parent, mWindow->actionCollection());
-		connect(mDocumentView, SIGNAL(completed()),
+	void setupDocumentPanel(QWidget* parent) {
+		mDocumentPanel = new DocumentPanel(parent, mWindow->actionCollection());
+		connect(mDocumentPanel, SIGNAL(completed()),
 			mWindow, SLOT(slotPartCompleted()) );
-		connect(mDocumentView, SIGNAL(partChanged(KParts::Part*)),
+		connect(mDocumentPanel, SIGNAL(partChanged(KParts::Part*)),
 			mWindow, SLOT(createGUI(KParts::Part*)) );
-		connect(mDocumentView, SIGNAL(previousImageRequested()),
+		connect(mDocumentPanel, SIGNAL(previousImageRequested()),
 			mWindow, SLOT(goToPrevious()) );
-		connect(mDocumentView, SIGNAL(nextImageRequested()),
+		connect(mDocumentPanel, SIGNAL(nextImageRequested()),
 			mWindow, SLOT(goToNext()) );
-		connect(mDocumentView, SIGNAL(enterFullScreenRequested()),
+		connect(mDocumentPanel, SIGNAL(enterFullScreenRequested()),
 			mWindow, SLOT(enterFullScreen()) );
 
-		ThumbnailBarView* bar = mDocumentView->thumbnailBar();
+		ThumbnailBarView* bar = mDocumentPanel->thumbnailBar();
 		bar->setModel(mDirModel);
 		bar->setThumbnailViewHelper(mThumbnailViewHelper);
 		bar->setSelectionModel(mThumbnailView->selectionModel());
@@ -255,7 +255,7 @@ struct MainWindow::Private {
 		const int frameWidth = mWindow->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, mWindow);
 		const int height = mWindow->fontMetrics().height() + 4 * frameWidth;
 		mThumbnailViewPanel->setStatusBarHeight(height);
-		mDocumentView->setStatusBarHeight(height);
+		mDocumentPanel->setStatusBarHeight(height);
 	}
 
 
@@ -472,7 +472,7 @@ struct MainWindow::Private {
 	}
 
 	void setupFullScreenBar() {
-		mFullScreenBar = new FullScreenBar(mDocumentView);
+		mFullScreenBar = new FullScreenBar(mDocumentPanel);
 		mFullScreenContent = new FullScreenContent(
 			mFullScreenBar, mWindow->actionCollection(), mSlideShow);
 
@@ -487,7 +487,7 @@ struct MainWindow::Private {
 
 	void updateActions() {
 		bool canSave = mWindow->currentDocumentIsRasterImage();
-		if (!mDocumentView->isVisible()) {
+		if (!mDocumentPanel->isVisible()) {
 			// Saving only makes sense if exactly one image is selected
 			QItemSelection selection = mThumbnailView->selectionModel()->selection();
 			QModelIndexList indexList = selection.indexes();
@@ -502,8 +502,8 @@ struct MainWindow::Private {
 	}
 
 	KUrl currentUrl() const {
-		if (mDocumentView->isVisible() && !mDocumentView->isEmpty()) {
-			return mDocumentView->url();
+		if (mDocumentPanel->isVisible() && !mDocumentPanel->isEmpty()) {
+			return mDocumentPanel->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
 			if (!index.isValid()) {
@@ -639,14 +639,14 @@ ContextManager* MainWindow::contextManager() const {
 	return d->mContextManager;
 }
 
-DocumentView* MainWindow::documentView() const {
-	return d->mDocumentView;
+DocumentPanel* MainWindow::documentPanel() const {
+	return d->mDocumentPanel;
 }
 
 
 bool MainWindow::currentDocumentIsRasterImage() const {
-	if (d->mDocumentView->isVisible()) {
-		return d->mDocumentView->currentDocumentIsRasterImage();
+	if (d->mDocumentPanel->isVisible()) {
+		return d->mDocumentPanel->currentDocumentIsRasterImage();
 	} else {
 		QModelIndex index = d->mThumbnailView->currentIndex();
 		if (!index.isValid()) {
@@ -705,7 +705,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 	} else {
 		d->mViewAction->trigger();
 		// Resize the window once image is loaded
-		connect(d->mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+		connect(d->mDocumentPanel, SIGNAL(resizeRequested(const QSize&)),
 			d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 		openDocumentUrl(url);
 	}
@@ -728,22 +728,22 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		// Switching to view mode
 		QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
 		d->mDirModel->setMimeExcludeFilter(mimeFilter);
-		d->mViewStackedWidget->setCurrentWidget(d->mDocumentView);
-		if (d->mDocumentView->isEmpty()) {
+		d->mViewStackedWidget->setCurrentWidget(d->mDocumentPanel);
+		if (d->mDocumentPanel->isEmpty()) {
 			openSelectedDocument();
 		}
 	} else {
 		// Switching to browse mode
 		d->mViewStackedWidget->setCurrentWidget(d->mThumbnailViewPanel);
-		if (!d->mDocumentView->isEmpty()
-			&& KProtocolManager::supportsListing(d->mDocumentView->url()))
+		if (!d->mDocumentPanel->isEmpty()
+			&& KProtocolManager::supportsListing(d->mDocumentPanel->url()))
 		{
 			// Reset the view to spare resources, but don't do it if we can't
 			// browse the url, otherwise if the user starts Gwenview this way:
 			// gwenview http://example.com/example.png
 			// and switch to browse mode, switching back to view mode won't bring
 			// his image back.
-			d->mDocumentView->reset();
+			d->mDocumentPanel->reset();
 		}
 		d->mDirModel->setMimeExcludeFilter(QStringList());
 	}
@@ -775,7 +775,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 
 
 void MainWindow::openSelectedDocument() {
-	if (!d->mDocumentView->isVisible()) {
+	if (!d->mDocumentPanel->isVisible()) {
 		return;
 	}
 
@@ -850,15 +850,15 @@ void MainWindow::openDirUrl(const KUrl& url) {
 	}
 	d->mDirModel->dirLister()->openUrl(url);
 	d->spreadCurrentDirUrl(url);
-	d->mDocumentView->reset();
+	d->mDocumentPanel->reset();
 }
 
 
 void MainWindow::openDocumentUrl(const KUrl& url) {
-	if (d->mDocumentView->url() == url) {
+	if (d->mDocumentPanel->url() == url) {
 		return;
 	}
-	if (!d->mDocumentView->openUrl(url)) {
+	if (!d->mDocumentPanel->openUrl(url)) {
 		return;
 	}
 
@@ -875,7 +875,7 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 
 
 void MainWindow::slotSetStatusBarText(const QString& message) {
-	d->mDocumentView->statusBar()->showMessage(message);
+	d->mDocumentPanel->statusBar()->showMessage(message);
 }
 
 void MainWindow::toggleSideBar() {
@@ -885,9 +885,9 @@ void MainWindow::toggleSideBar() {
 
 
 void MainWindow::slotPartCompleted() {
-	Q_ASSERT(!d->mDocumentView->isEmpty());
+	Q_ASSERT(!d->mDocumentPanel->isEmpty());
 	d->updateActions();
-	KUrl url = d->mDocumentView->url();
+	KUrl url = d->mDocumentPanel->url();
 	if (!KProtocolManager::supportsListing(url)) {
 		return;
 	}
@@ -907,7 +907,7 @@ void MainWindow::slotPartCompleted() {
 
 
 void MainWindow::slotSelectionChanged() {
-	if (d->mDocumentView->isVisible()) {
+	if (d->mDocumentPanel->isVisible()) {
 		// The user selected a new file in the thumbnail view, since the
 		// document view is visible, let's show it
 		openSelectedDocument();
@@ -959,7 +959,7 @@ void MainWindow::slotDirListerCompleted() {
 		d->mStartSlideShowWhenDirListerCompleted = false;
 		QTimer::singleShot(0, d->mToggleSlideShowAction, SLOT(trigger()));
 	}
-	if (!d->mDocumentView->isEmpty()) {
+	if (!d->mDocumentPanel->isEmpty()) {
 		return;
 	}
 	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
@@ -982,7 +982,7 @@ void MainWindow::goToNext() {
 
 
 void MainWindow::goToUrl(const KUrl& url) {
-	if (d->mDocumentView->isVisible()) {
+	if (d->mDocumentPanel->isVisible()) {
 		openDocumentUrl(url);
 		// No need to change thumbnail view, slotPartCompleted will do the work
 		// for us
@@ -1042,7 +1042,7 @@ void MainWindow::toggleFullScreen() {
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
-		d->mDocumentView->setFullScreenMode(true);
+		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
@@ -1051,7 +1051,7 @@ void MainWindow::toggleFullScreen() {
 		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
-		d->mDocumentView->setFullScreenMode(false);
+		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
 		d->mSaveBar->setFullScreenMode(false);
 		d->mFullScreenBar->setActivated(false);
@@ -1201,7 +1201,7 @@ bool MainWindow::queryClose() {
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
 	connect(&dialog, SIGNAL(settingsChanged(const QString&)), SLOT(loadConfig()));
-	ImageViewPart* part = d->mDocumentView->imageViewPart();
+	ImageViewPart* part = d->mDocumentPanel->imageViewPart();
 	if (part) {
 		connect(&dialog, SIGNAL(settingsChanged(const QString&)),
 			part, SLOT(loadConfig()));
@@ -1250,7 +1250,7 @@ void MainWindow::loadConfig() {
 
 	d->mStartPage->applyPalette(palette);
 
-	d->mDocumentView->setNormalPalette(palette);
+	d->mDocumentPanel->setNormalPalette(palette);
 
 	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
 	// If GwenviewConfig::thumbnailSize() returns the current value of
@@ -1263,7 +1263,7 @@ void MainWindow::loadConfig() {
 
 
 void MainWindow::saveConfig() {
-	d->mDocumentView->saveConfig();
+	d->mDocumentPanel->saveConfig();
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
 	GwenviewConfig::setSideBarIsVisible(d->mSideBarContainer->isVisible());
 }
@@ -1282,7 +1282,7 @@ void MainWindow::print() {
 
 void MainWindow::handleResizeRequest(const QSize& _size) {
 	// Disconnect ourself to avoid resizing again when we load another image
-	disconnect(d->mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+	disconnect(d->mDocumentPanel, SIGNAL(resizeRequested(const QSize&)),
 		d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 
 	if (!d->mViewAction->isChecked()) {
@@ -1303,7 +1303,7 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 	// frame
 	QSize innerMargin = QSize(
 		sideBarWidth,
-		menuBar()->height() + toolBar()->height() + d->mDocumentView->statusBar()->height());
+		menuBar()->height() + toolBar()->height() + d->mDocumentPanel->statusBar()->height());
 	// frameMargin is the size of the frame around the window
 	QSize frameMargin = frameGeometry().size() - geometry().size();
 

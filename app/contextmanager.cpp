@@ -114,8 +114,8 @@ KUrl ContextManager::currentUrl() const {
 
 QString ContextManager::currentUrlMimeType() const {
 	/*
-	if (d->mDocumentView->isVisible() && !d->mDocumentView->isEmpty()) {
-		return MimeTypeUtils::urlMimeType(d->mDocumentView->url());
+	if (d->mDocumentPanel->isVisible() && !d->mDocumentPanel->isEmpty()) {
+		return MimeTypeUtils::urlMimeType(d->mDocumentPanel->url());
 	} else {
 		QModelIndex index = d->mThumbnailView->currentIndex();
 		if (!index.isValid()) {

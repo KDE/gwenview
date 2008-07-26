@@ -34,7 +34,7 @@ namespace KParts { class ReadOnlyPart; }
 
 namespace Gwenview {
 
-class DocumentView;
+class DocumentPanel;
 class ContextManager;
 
 class MainWindow : public KParts::MainWindow {
@@ -49,7 +49,7 @@ public:
 
 	void startSlideShow();
 
-	DocumentView* documentView() const;
+	DocumentPanel* documentPanel() const;
 
 	ContextManager* contextManager() const;
 

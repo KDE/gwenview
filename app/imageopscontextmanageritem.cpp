@@ -143,7 +143,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 		SLOT(updateActions()) );
 	connect(mainWindow, SIGNAL(viewModeChanged()),
 		SLOT(updateActions()) );
-	connect(mainWindow->documentView(), SIGNAL(completed()),
+	connect(mainWindow->documentPanel(), SIGNAL(completed()),
 		SLOT(updateActions()) );
 }
 
@@ -186,8 +186,8 @@ void ImageOpsContextManagerItem::updateSideBarContent() {
 
 void ImageOpsContextManagerItem::updateActions() {
 	bool canModify = d->mMainWindow->currentDocumentIsRasterImage();
-	bool documentViewIsVisible = d->mMainWindow->documentView()->isVisible();
-	if (!documentViewIsVisible) {
+	bool documentPanelIsVisible = d->mMainWindow->documentPanel()->isVisible();
+	if (!documentPanelIsVisible) {
 		// Since we only support image operations on one image for now,
 		// disable actions if several images are selected and the document
 		// view is not visible.
@@ -201,7 +201,7 @@ void ImageOpsContextManagerItem::updateActions() {
 	d->mMirrorAction->setEnabled(canModify);
 	d->mFlipAction->setEnabled(canModify);
 	d->mResizeAction->setEnabled(canModify);
-	d->mCropAction->setEnabled(canModify && documentViewIsVisible);
+	d->mCropAction->setEnabled(canModify && documentPanelIsVisible);
 
 	if (d->mSideBar) {
 		updateSideBarContent();
@@ -258,7 +258,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 
 
 void ImageOpsContextManagerItem::showCropSideBar() {
-	ImageViewPart* imageViewPart = d->mMainWindow->documentView()->imageViewPart();
+	ImageViewPart* imageViewPart = d->mMainWindow->documentPanel()->imageViewPart();
 	if (!imageViewPart) {
 		kError() << "No ImageViewPart available!";
 		return;
