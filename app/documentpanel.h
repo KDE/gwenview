@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef DOCUMENTVIEW_H
-#define DOCUMENTVIEW_H
+#ifndef DOCUMENTPANEL_H
+#define DOCUMENTPANEL_H
 
 // Qt
 #include <QStackedWidget>
@@ -117,4 +117,4 @@ private:
 
 } // namespace
 
-#endif /* DOCUMENTVIEW_H */
+#endif /* DOCUMENTPANEL_H */

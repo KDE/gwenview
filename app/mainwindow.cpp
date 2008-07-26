@@ -56,7 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "configdialog.h"
 #include "contextmanager.h"
-#include "documentview.h"
+#include "documentpanel.h"
 #include "fileopscontextmanageritem.h"
 #include "fullscreencontent.h"
 #include "gvcore.h"

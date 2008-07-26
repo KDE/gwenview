@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
-#include "documentview.h"
+#include "documentpanel.h"
 #include "mainwindow.h"
 #include "sidebar.h"
 #include <lib/cropsidebar.h>
