@@ -104,6 +104,7 @@ struct ImageOpsContextManagerItem::Private {
 
 		mCropAction = actionCollection->addAction("crop");
 		mCropAction->setText(i18n("Crop"));
+		mCropAction->setIcon(KIcon("transform-crop-and-resize"));
 		connect(mCropAction, SIGNAL(triggered()),
 			that, SLOT(showCropSideBar()) );
 
