@@ -5,18 +5,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
-    <height>311</height>
+    <width>376</width>
+    <height>326</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="0" colspan="2" >
     <widget class="QLabel" name="label_3" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">General&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+      <string>General</string>
      </property>
     </widget>
    </item>
@@ -75,12 +78,17 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="3" column="0" colspan="2" >
     <widget class="QLabel" name="label_4" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text" >
-      <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Image View&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+      <string>Image View</string>
+     </property>
+     <property name="textFormat" >
+      <enum>Qt::PlainText</enum>
      </property>
     </widget>
    </item>
@@ -198,7 +206,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QRadioButton" name="mouseWheelScrollRadioButton" >
        <property name="text" >
-        <string>Scroll</string>
+        <string comment="@option:radio action on mouse wheel" >Scroll</string>
        </property>
        <property name="checked" >
         <bool>true</bool>
@@ -225,7 +233,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QRadioButton" name="mouseWheelBrowseRadioButton" >
        <property name="text" >
-        <string>Browse</string>
+        <string comment="@option:radio action on mouse wheel" >Browse</string>
        </property>
       </widget>
      </item>
