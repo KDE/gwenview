@@ -68,7 +68,6 @@ static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 : ImageViewPart(parent)
-, mZoomUpdatedBySlider(false)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
 	mStatusBarExtension = 0;
@@ -287,12 +286,7 @@ void GVPart::slotLoaded() {
 
 void GVPart::slotZoomSliderChanged(qreal zoom) {
 	disableZoomToFit();
-
-	// Set this flag to prevent slotZoomChanged() from changing the slider
-	// value
-	mZoomUpdatedBySlider = true;
 	setZoom(zoom);
-	mZoomUpdatedBySlider = false;
 }
 
 
@@ -332,11 +326,7 @@ void GVPart::slotZoomChanged() {
 	if (mStatusBarWidgetContainer) {
 		int intZoom = qRound(mView->zoom() * 100);
 		mZoomWidget->label()->setText(QString("%1%").arg(intZoom));
-
-		// Update slider, but only if the change does not come from it.
-		if (!mZoomUpdatedBySlider) {
-			mZoomWidget->setZoom(mView->zoom());
-		}
+		mZoomWidget->setZoom(mView->zoom());
 	}
 	updateCaption();
 }

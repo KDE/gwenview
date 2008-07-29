@@ -80,7 +80,6 @@ private:
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
 	bool mGwenviewHost;
-	bool mZoomUpdatedBySlider;
 	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
 	KParts::StatusBarExtension* mStatusBarExtension;

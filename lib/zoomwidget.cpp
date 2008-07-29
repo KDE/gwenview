@@ -65,12 +65,16 @@ struct ZoomWidgetPrivate {
 	QAction* mZoomToFitAction;
 	QAction* mActualSizeAction;
 
+	bool mZoomUpdatedBySlider;
+
 	void emitZoomChanged() {
 		// Use QSlider::sliderPosition(), not QSlider::value() because when we are
 		// called from slotZoomSliderActionTriggered(), QSlider::value() has not
 		// been updated yet.
 		qreal zoom = zoomForSliderValue(mZoomSlider->sliderPosition());
+		mZoomUpdatedBySlider = true;
 		emit that->zoomChanged(zoom);
+		mZoomUpdatedBySlider = false;
 	}
 };
 
@@ -79,6 +83,7 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 : QFrame(parent)
 , d(new ZoomWidgetPrivate) {
 	d->that = this;
+	d->mZoomUpdatedBySlider = false;
 
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
@@ -158,9 +163,13 @@ void ZoomWidget::slotZoomSliderActionTriggered() {
 
 
 void ZoomWidget::setZoom(qreal zoom) {
-	SignalBlocker blocker(d->mZoomSlider);
-	int value = sliderValueForZoom(zoom);
-	d->mZoomSlider->setValue(value);
+	// Don't change slider value if we come here because the slider change,
+	// avoids choppy sliding scroll.
+	if (!d->mZoomUpdatedBySlider) {
+		SignalBlocker blocker(d->mZoomSlider);
+		int value = sliderValueForZoom(zoom);
+		d->mZoomSlider->setValue(value);
+	}
 }
 
 
