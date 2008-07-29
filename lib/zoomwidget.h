@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 
 class QLabel;
-class QSlider;
 
 class QAction;
 
@@ -49,8 +48,6 @@ public:
 	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction);
 
 	QLabel* label() const;
-
-	QSlider* slider() const;
 
 	void setZoom(qreal zoom);
 

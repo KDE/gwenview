@@ -135,11 +135,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction)
 }
 
 
-QSlider* ZoomWidget::slider() const {
-	return d->mZoomSlider;
-}
-
-
 QLabel* ZoomWidget::label() const {
 	return d->mZoomLabel;
 }
