@@ -19,9 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "gvpart.moc"
 
-// stdc++
-#include <cmath>
-
 // Qt
 #include <QApplication>
 #include <QHBoxLayout>
@@ -65,19 +62,8 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
-// FIXME: ZoomWidget
 static const qreal REAL_DELTA = 0.001;
-
 static const qreal MAXIMUM_ZOOM_VALUE = 16.;
-
-
-static const qreal MAGIC_K = 1.04;
-static const qreal MAGIC_OFFSET = 16.;
-static const qreal PRECISION = 100.;
-inline int sliderValueForZoom(qreal zoom) {
-	return int( PRECISION * (log(zoom) / log(MAGIC_K) + MAGIC_OFFSET) );
-}
-// /FIXME: ZoomWidget
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
@@ -152,7 +138,7 @@ qreal GVPart::computeMinimumZoom() const {
 void GVPart::updateZoomSnapValues() {
 	qreal min = computeMinimumZoom();
 	if (mStatusBarWidgetContainer) {
-		mZoomWidget->slider()->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
+		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
 	}
 
 	mZoomSnapValues.clear();

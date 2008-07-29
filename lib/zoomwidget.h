@@ -54,6 +54,8 @@ public:
 
 	void setZoom(qreal zoom);
 
+	void setZoomRange(qreal minZoom, qreal maxZoom);
+
 Q_SIGNALS:
 	void zoomChanged(qreal);
 
