@@ -105,10 +105,8 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 	d->mZoomSlider = new QSlider;
 	d->mZoomSlider->setOrientation(Qt::Horizontal);
 	d->mZoomSlider->setMinimumWidth(150);
-	/* FIXME: Port
 	d->mZoomSlider->setSingleStep(int(PRECISION));
 	d->mZoomSlider->setPageStep(3 * d->mZoomSlider->singleStep());
-	*/
 	connect(d->mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
 	connect(d->mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 

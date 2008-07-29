@@ -189,9 +189,6 @@ void GVPart::createStatusBarWidget() {
 	layout->addStretch();
 	layout->addWidget(mZoomWidget);
 
-	QSlider* slider = mZoomWidget->slider();
-	slider->setSingleStep(int(PRECISION));
-	slider->setPageStep(3 * slider->singleStep());
 	connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
 		SLOT(slotZoomSliderChanged(qreal)) );
 
