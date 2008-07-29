@@ -324,8 +324,6 @@ void GVPart::updateCaption() {
 
 void GVPart::slotZoomChanged() {
 	if (mStatusBarWidgetContainer) {
-		int intZoom = qRound(mView->zoom() * 100);
-		mZoomWidget->label()->setText(QString("%1%").arg(intZoom));
 		mZoomWidget->setZoom(mView->zoom());
 	}
 	updateCaption();

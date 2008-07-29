@@ -163,6 +163,9 @@ void ZoomWidget::slotZoomSliderActionTriggered() {
 
 
 void ZoomWidget::setZoom(qreal zoom) {
+	int intZoom = qRound(zoom * 100);
+	d->mZoomLabel->setText(QString("%1%").arg(intZoom));
+
 	// Don't change slider value if we come here because the slider change,
 	// avoids choppy sliding scroll.
 	if (!d->mZoomUpdatedBySlider) {
