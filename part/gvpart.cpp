@@ -55,6 +55,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
+#include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
 
@@ -154,7 +155,7 @@ qreal GVPart::computeMinimumZoom() const {
 void GVPart::updateZoomSnapValues() {
 	qreal min = computeMinimumZoom();
 	if (mStatusBarWidgetContainer) {
-		mZoomSlider->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
+		mZoomWidget->slider()->setRange(sliderValueForZoom(min), sliderValueForZoom(MAXIMUM_ZOOM_VALUE));
 	}
 
 	mZoomSnapValues.clear();
@@ -179,56 +180,23 @@ void GVPart::addPartSpecificActions() {
 
 
 void GVPart::createStatusBarWidget() {
-	mStatusBarWidgetContainer = new QWidget;
+	mZoomWidget = new ZoomWidget;
+	mZoomWidget->setActions(
+		actionCollection()->action("view_zoom_to_fit"),
+		actionCollection()->action("view_actual_size"));
 
-	QWidget* container = new QFrame;
-	container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-	container->setObjectName("zoomStatusBarWidget");
+	mStatusBarWidgetContainer = new QWidget;
 	QHBoxLayout* layout = new QHBoxLayout(mStatusBarWidgetContainer);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	layout->addStretch();
-	layout->addWidget(container);
+	layout->addWidget(mZoomWidget);
 
-	StatusBarToolButton* zoomToFitButton = new StatusBarToolButton;
-	zoomToFitButton->setDefaultAction(actionCollection()->action("view_zoom_to_fit"));
-
-	StatusBarToolButton* actualSizeButton = new StatusBarToolButton;
-	actualSizeButton->setDefaultAction(actionCollection()->action("view_actual_size"));
-
-	if (QApplication::isLeftToRight()) {
-		zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupLeft);
-		actualSizeButton->setGroupPosition(StatusBarToolButton::GroupRight);
-	} else {
-		actualSizeButton->setGroupPosition(StatusBarToolButton::GroupLeft);
-		zoomToFitButton->setGroupPosition(StatusBarToolButton::GroupRight);
-	}
-
-	mZoomLabel = new QLabel;
-	mZoomLabel->setFixedWidth(mZoomLabel->fontMetrics().width(" 1000% "));
-	mZoomLabel->setAlignment(Qt::AlignCenter);
-
-	mZoomSlider = new QSlider;
-	mZoomSlider->setOrientation(Qt::Horizontal);
-	mZoomSlider->setMinimumWidth(150);
-	mZoomSlider->setSingleStep(int(PRECISION));
-	mZoomSlider->setPageStep(3 * mZoomSlider->singleStep());
-	connect(mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
-	connect(mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
-
-	// Adjust sizes
-	int width = qMax(zoomToFitButton->sizeHint().width(), actualSizeButton->sizeHint().width());
-	zoomToFitButton->setFixedWidth(width);
-	actualSizeButton->setFixedWidth(width);
-
-	// Layout
-	layout = new QHBoxLayout(container);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addWidget(zoomToFitButton);
-	layout->addWidget(actualSizeButton);
-	layout->addWidget(mZoomSlider);
-	layout->addWidget(mZoomLabel);
+	QSlider* slider = mZoomWidget->slider();
+	slider->setSingleStep(int(PRECISION));
+	slider->setPageStep(3 * slider->singleStep());
+	connect(slider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
+	connect(slider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	updateZoomSnapValues();
 }
@@ -339,8 +307,8 @@ void GVPart::slotLoaded() {
 
 void GVPart::slotZoomSliderRangeChanged() {
 	if (mView->zoomToFit()) {
-		SignalBlocker blocker(mZoomSlider);
-		mZoomSlider->setValue(mZoomSlider->minimum());
+		SignalBlocker blocker(mZoomWidget->slider());
+		mZoomWidget->slider()->setValue(mZoomWidget->slider()->minimum());
 	} else {
 		applyZoomSliderValue();
 	}
@@ -359,7 +327,7 @@ void GVPart::applyZoomSliderValue() {
 	// Use QSlider::sliderPosition(), not QSlider::value() because when we are
 	// called from slotZoomSliderActionTriggered(), QSlider::value() has not
 	// been updated yet.
-	qreal zoom = zoomForSliderValue(mZoomSlider->sliderPosition());
+	qreal zoom = zoomForSliderValue(mZoomWidget->slider()->sliderPosition());
 
 	// Set this flag to prevent slotZoomChanged() from changing the slider
 	// value
@@ -404,13 +372,13 @@ void GVPart::updateCaption() {
 void GVPart::slotZoomChanged() {
 	if (mStatusBarWidgetContainer) {
 		int intZoom = qRound(mView->zoom() * 100);
-		mZoomLabel->setText(QString("%1%").arg(intZoom));
+		mZoomWidget->label()->setText(QString("%1%").arg(intZoom));
 
 		// Update slider, but only if the change does not come from it.
 		if (!mZoomUpdatedBySlider) {
-			SignalBlocker blocker(mZoomSlider);
+			SignalBlocker blocker(mZoomWidget->slider());
 			int value = sliderValueForZoom(mView->zoom());
-			mZoomSlider->setValue(value);
+			mZoomWidget->slider()->setValue(value);
 		}
 	}
 	updateCaption();

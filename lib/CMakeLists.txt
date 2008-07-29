@@ -58,6 +58,7 @@ set(gwenviewlib_SRCS
 	urlutils.cpp
 	libjpeg/transupp.c
 	widgetfloater.cpp
+	zoomwidget.cpp
 	)
 
 if (NOT GWENVIEW_METADATA_BACKEND_NONE)

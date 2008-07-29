@@ -30,7 +30,6 @@ class KAboutData;
 class KAction;
 
 class QLabel;
-class QSlider;
 
 namespace KParts {
 class StatusBarExtension;
@@ -40,6 +39,7 @@ namespace Gwenview {
 
 class ImageView;
 class ScrollTool;
+class ZoomWidget;
 
 class GVPart : public ImageViewPart {
 	Q_OBJECT
@@ -88,8 +88,7 @@ private:
 	KParts::StatusBarExtension* mStatusBarExtension;
 
 	QWidget* mStatusBarWidgetContainer;
-	QLabel* mZoomLabel;
-	QSlider* mZoomSlider;
+	ZoomWidget* mZoomWidget;
 
 	QWidget* mErrorWidget;
 	QLabel* mErrorLabel;
