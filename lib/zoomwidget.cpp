@@ -140,11 +140,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction)
 }
 
 
-QLabel* ZoomWidget::label() const {
-	return d->mZoomLabel;
-}
-
-
 void ZoomWidget::slotZoomSliderRangeChanged() {
 	if (d->mZoomToFitAction->isChecked()) {
 		SignalBlocker blocker(d->mZoomSlider);

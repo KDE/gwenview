@@ -47,8 +47,6 @@ public:
 
 	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction);
 
-	QLabel* label() const;
-
 	void setZoom(qreal zoom);
 
 	void setZoomRange(qreal minZoom, qreal maxZoom);
