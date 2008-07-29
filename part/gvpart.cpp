@@ -352,9 +352,7 @@ void GVPart::slotZoomChanged() {
 
 		// Update slider, but only if the change does not come from it.
 		if (!mZoomUpdatedBySlider) {
-			SignalBlocker blocker(mZoomWidget->slider());
-			int value = sliderValueForZoom(mView->zoom());
-			mZoomWidget->slider()->setValue(value);
+			mZoomWidget->setZoom(mView->zoom());
 		}
 	}
 	updateCaption();

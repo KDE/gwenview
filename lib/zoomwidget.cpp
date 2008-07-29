@@ -169,4 +169,11 @@ void ZoomWidget::slotZoomSliderActionTriggered() {
 }
 
 
+void ZoomWidget::setZoom(qreal zoom) {
+	SignalBlocker blocker(d->mZoomSlider);
+	int value = sliderValueForZoom(zoom);
+	d->mZoomSlider->setValue(value);
+}
+
+
 } // namespace

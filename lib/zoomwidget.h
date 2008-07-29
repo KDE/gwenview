@@ -52,6 +52,8 @@ public:
 
 	QSlider* slider() const;
 
+	void setZoom(qreal zoom);
+
 Q_SIGNALS:
 	void zoomChanged(qreal);
 
