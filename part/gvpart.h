@@ -70,9 +70,7 @@ private Q_SLOTS:
 	void saveAs();
 	void showJobError(KJob*);
 	void initStatusBarExtension();
-	void slotZoomSliderActionTriggered();
-	void slotZoomSliderRangeChanged();
-	void applyZoomSliderValue();
+	void slotZoomSliderChanged(qreal);
 	void slotZoomChanged();
 	void slotLoaded();
 	void slotLoadingFailed();

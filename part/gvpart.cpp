@@ -65,6 +65,7 @@ K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
 
+// FIXME: ZoomWidget
 static const qreal REAL_DELTA = 0.001;
 
 static const qreal MAXIMUM_ZOOM_VALUE = 16.;
@@ -76,11 +77,7 @@ static const qreal PRECISION = 100.;
 inline int sliderValueForZoom(qreal zoom) {
 	return int( PRECISION * (log(zoom) / log(MAGIC_K) + MAGIC_OFFSET) );
 }
-
-
-inline qreal zoomForSliderValue(int sliderValue) {
-	return pow(MAGIC_K, sliderValue / PRECISION - MAGIC_OFFSET);
-}
+// /FIXME: ZoomWidget
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
@@ -195,8 +192,8 @@ void GVPart::createStatusBarWidget() {
 	QSlider* slider = mZoomWidget->slider();
 	slider->setSingleStep(int(PRECISION));
 	slider->setPageStep(3 * slider->singleStep());
-	connect(slider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
-	connect(slider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
+	connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
+		SLOT(slotZoomSliderChanged(qreal)) );
 
 	updateZoomSnapValues();
 }
@@ -305,29 +302,8 @@ void GVPart::slotLoaded() {
 }
 
 
-void GVPart::slotZoomSliderRangeChanged() {
-	if (mView->zoomToFit()) {
-		SignalBlocker blocker(mZoomWidget->slider());
-		mZoomWidget->slider()->setValue(mZoomWidget->slider()->minimum());
-	} else {
-		applyZoomSliderValue();
-	}
-}
-
-
-void GVPart::slotZoomSliderActionTriggered() {
-	// The slider value changed because of the user (not because of range
-	// changes). In this case disable zoom and apply slider value.
+void GVPart::slotZoomSliderChanged(qreal zoom) {
 	disableZoomToFit();
-	applyZoomSliderValue();
-}
-
-
-void GVPart::applyZoomSliderValue() {
-	// Use QSlider::sliderPosition(), not QSlider::value() because when we are
-	// called from slotZoomSliderActionTriggered(), QSlider::value() has not
-	// been updated yet.
-	qreal zoom = zoomForSliderValue(mZoomWidget->slider()->sliderPosition());
 
 	// Set this flag to prevent slotZoomChanged() from changing the slider
 	// value

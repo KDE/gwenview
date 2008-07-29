@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "zoomwidget.moc"
 
+// stdc++
+#include <cmath>
+
 // Qt
 #include <QAction>
 #include <QApplication>
@@ -31,24 +34,57 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include "signalblocker.h"
 #include "statusbartoolbutton.h"
 
 namespace Gwenview {
 
 
+static const qreal REAL_DELTA = 0.001;
+
+static const qreal MAXIMUM_ZOOM_VALUE = 16.;
+
+
+static const qreal MAGIC_K = 1.04;
+static const qreal MAGIC_OFFSET = 16.;
+static const qreal PRECISION = 100.;
+inline int sliderValueForZoom(qreal zoom) {
+	return int( PRECISION * (log(zoom) / log(MAGIC_K) + MAGIC_OFFSET) );
+}
+
+
+inline qreal zoomForSliderValue(int sliderValue) {
+	return pow(MAGIC_K, sliderValue / PRECISION - MAGIC_OFFSET);
+}
+
+
+
+
 struct ZoomWidgetPrivate {
+	ZoomWidget* that;
+
 	StatusBarToolButton* mZoomToFitButton;
 	StatusBarToolButton* mActualSizeButton;
 	QLabel* mZoomLabel;
 	QSlider* mZoomSlider;
 	QAction* mZoomToFitAction;
 	QAction* mActualSizeAction;
+
+	void emitZoomChanged() {
+		// Use QSlider::sliderPosition(), not QSlider::value() because when we are
+		// called from slotZoomSliderActionTriggered(), QSlider::value() has not
+		// been updated yet.
+		qreal zoom = zoomForSliderValue(mZoomSlider->sliderPosition());
+		emit that->zoomChanged(zoom);
+	}
 };
 
 
 ZoomWidget::ZoomWidget(QWidget* parent)
 : QFrame(parent)
 , d(new ZoomWidgetPrivate) {
+	d->that = this;
+
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 
 	d->mZoomToFitButton = new StatusBarToolButton;
@@ -72,9 +108,9 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 	/* FIXME: Port
 	d->mZoomSlider->setSingleStep(int(PRECISION));
 	d->mZoomSlider->setPageStep(3 * d->mZoomSlider->singleStep());
+	*/
 	connect(d->mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
 	connect(d->mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
-	*/
 
 	// Layout
 	QHBoxLayout* layout = new QHBoxLayout(this);
@@ -113,6 +149,23 @@ QSlider* ZoomWidget::slider() const {
 
 QLabel* ZoomWidget::label() const {
 	return d->mZoomLabel;
+}
+
+
+void ZoomWidget::slotZoomSliderRangeChanged() {
+	if (d->mZoomToFitAction->isChecked()) {
+		SignalBlocker blocker(d->mZoomSlider);
+		d->mZoomSlider->setValue(d->mZoomSlider->minimum());
+	} else {
+		d->emitZoomChanged();
+	}
+}
+
+
+void ZoomWidget::slotZoomSliderActionTriggered() {
+	// The slider value changed because of the user (not because of range
+	// changes). In this case disable zoom and apply slider value.
+	d->emitZoomChanged();
 }
 
 
