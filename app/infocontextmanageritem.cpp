@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 #include <QPainter>
 #include <QPair>
+#include <QPointer>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -40,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
-#include <lib/imageviewpart.h>
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 
