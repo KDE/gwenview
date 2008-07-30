@@ -70,7 +70,6 @@ endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
 kde4_add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
-	${KDE4_KPARTS_LIBS}
 	${KDE4_KFILE_LIBS}
 	${KIPI_LIBRARIES}
 	gwenviewlib

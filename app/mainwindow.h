@@ -24,20 +24,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QAction>
 
 // KDE
-#include <kparts/mainwindow.h>
+#include <kxmlguiwindow.h>
 
 class QModelIndex;
 
 class KUrl;
-
-namespace KParts { class ReadOnlyPart; }
 
 namespace Gwenview {
 
 class DocumentPanel;
 class ContextManager;
 
-class MainWindow : public KParts::MainWindow {
+class MainWindow : public KXmlGuiWindow {
 Q_OBJECT
 public:
 	MainWindow();

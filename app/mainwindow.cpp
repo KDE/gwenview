@@ -237,8 +237,6 @@ struct MainWindow::Private {
 			mWindow, SLOT(setCaption(const QString&)) );
 		connect(mDocumentPanel, SIGNAL(completed()),
 			mWindow, SLOT(slotPartCompleted()) );
-		connect(mDocumentPanel, SIGNAL(partChanged(KParts::Part*)),
-			mWindow, SLOT(createGUI(KParts::Part*)) );
 		connect(mDocumentPanel, SIGNAL(previousImageRequested()),
 			mWindow, SLOT(goToPrevious()) );
 		connect(mDocumentPanel, SIGNAL(nextImageRequested()),
@@ -599,7 +597,7 @@ struct MainWindow::Private {
 
 
 MainWindow::MainWindow()
-: KParts::MainWindow(),
+: KXmlGuiWindow(),
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
@@ -617,7 +615,7 @@ d(new MainWindow::Private)
 	d->mSaveBar->initActionDependentWidgets();
 	d->mThumbnailViewPanel->initActionDependentWidgets();
 
-	createShellGUI();
+	createGUI();
 	loadConfig();
 	loadMainWindowConfig();
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
@@ -682,12 +680,12 @@ void MainWindow::showTemporarySideBar(QWidget* sideBar) {
 void MainWindow::setCaption(const QString& caption) {
 	// Keep a trace of caption to use it in updateModifiedFlag()
 	d->mCaption = caption;
-	KParts::MainWindow::setCaption(caption);
+	KXmlGuiWindow::setCaption(caption);
 }
 
 void MainWindow::setCaption(const QString& caption, bool modified) {
 	d->mCaption = caption;
-	KParts::MainWindow::setCaption(caption, modified);
+	KXmlGuiWindow::setCaption(caption, modified);
 }
 
 
@@ -1411,7 +1409,7 @@ void MainWindow::showEvent(QShowEvent *event) {
 	// We need to delay initializing the action state until the menu bar has
 	// been initialized, that's why it's done only in the showEvent()
 	d->mShowMenuBarAction->setChecked(menuBar()->isVisible());
-	KParts::MainWindow::showEvent(event);
+	KXmlGuiWindow::showEvent(event);
 }
 
 
