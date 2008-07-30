@@ -87,6 +87,21 @@ qreal ImageViewAdapter::zoom() const {
 }
 
 
+void ImageViewAdapter::setZoomToFit(bool on) {
+	d->mView->setZoomToFit(on);
+}
+
+
+bool ImageViewAdapter::zoomToFit() const {
+	return d->mView->zoomToFit();
+}
+
+
+void ImageViewAdapter::setZoom(qreal zoom, const QPoint& center) {
+	d->mView->setZoom(zoom, center);
+}
+
+
 Document::Ptr ImageViewAdapter::document() const {
 	return d->mView->document();
 }

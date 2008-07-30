@@ -30,7 +30,10 @@
 		<Action name="fullscreen" />
 		<Action name="toggle_slideshow" />
 		<Separator/>
-		<Merge/>
+		<Action name="view_actual_size"/>
+		<Action name="view_zoom_to_fit"/>
+		<Action name="view_zoom_in"/>
+		<Action name="view_zoom_out"/>
 		<Separator/>
 		<Action name="toggle_sidebar" />
 	</Menu>

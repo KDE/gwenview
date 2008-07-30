@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QObject>
+#include <QPoint>
 
 // KDE
 
@@ -56,9 +57,20 @@ public:
 
 	virtual ImageView* imageView() const { return 0; }
 
+	/**
+	 * @defgroup zooming functions
+	 * @{
+	 */
 	virtual bool canZoom() const { return false; }
 
+	virtual void setZoomToFit(bool) {}
+
+	virtual bool zoomToFit() const { return false; }
+
 	virtual qreal zoom() const { return 0; }
+
+	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1)) {}
+	/** @} */
 
 	virtual Document::Ptr document() const = 0;
 	// FIXME: Replace with "document" property

@@ -105,6 +105,13 @@ private Q_SLOTS:
 	void setThumbnailBarVisibility(bool visible);
 	void slotCompleted();
 
+	void setZoomToFit(bool);
+
+	void zoomActualSize();
+
+	void zoomIn(const QPoint& center = QPoint(-1,-1));
+	void zoomOut(const QPoint& center = QPoint(-1,-1));
+
 private:
 	friend class DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;

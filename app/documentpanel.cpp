@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/signalblocker.h>
 #include <lib/statusbartoolbutton.h>
 
 
@@ -163,6 +164,7 @@ struct DocumentPanelPrivate {
 	KStatusBar* mStatusBar;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
+	KAction* mZoomToFitAction;
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
@@ -254,6 +256,24 @@ struct DocumentPanelPrivate {
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 	}
 
+	void setupZoomActions(KActionCollection* actionCollection) {
+		mZoomToFitAction = new KAction(actionCollection);
+		mZoomToFitAction->setCheckable(true);
+		mZoomToFitAction->setChecked(true);
+		mZoomToFitAction->setText(i18n("Zoom to Fit"));
+		mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
+		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
+		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
+			that, SLOT(setZoomToFit(bool)) );
+		actionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
+
+		KAction* action = KStandardAction::actualSize(that, SLOT(zoomActualSize()), actionCollection);
+		action->setIcon(KIcon("zoom-original"));
+		action->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
+		KStandardAction::zoomIn(that, SLOT(zoomIn()), actionCollection);
+		KStandardAction::zoomOut(that, SLOT(zoomOut()), actionCollection);
+	}
+
 	void setAdapterWidget(QWidget* partWidget) {
 		if (partWidget) {
 			// Insert the widget above the status bar
@@ -307,6 +327,43 @@ struct DocumentPanelPrivate {
 		}
 		emit that->captionUpdateRequested(caption);
 	}
+
+
+	void disableZoomToFit() {
+		// We can't disable zoom to fit by calling
+		// mZoomToFitAction->setChecked(false) directly because it would trigger
+		// the action slot, which would set zoom to 100%.
+		// If zoomToFit is on and the image is at 33%, pressing zoom in should
+		// show the image at 66%, not 200%.
+		if (!mAdapter->zoomToFit()) {
+			return;
+		}
+		mAdapter->setZoomToFit(false);
+		SignalBlocker blocker(mZoomToFitAction);
+		mZoomToFitAction->setChecked(false);
+	}
+
+
+	void setZoom(qreal zoom, const QPoint& _center) {
+		disableZoomToFit();
+		QPoint center;
+		if (_center == QPoint(-1, -1)) {
+			const QWidget* widget = mAdapter->widget();
+			center = QPoint(widget->width() / 2, widget->height() / 2);
+			/* FIXME: PORT
+			center = QPoint(mView->viewport()->width() / 2, mView->viewport()->height() / 2);
+			*/
+		} else {
+			center = _center;
+		}
+		/* FIXME: PORT
+		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
+		*/
+
+		mAdapter->setZoom(zoom, center);
+	}
+
+
 };
 
 
@@ -335,6 +392,8 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	d->setupThumbnailBar();
 
 	d->setupSplitter();
+
+	d->setupZoomActions(actionCollection);
 
 	addWidget(d->mNoDocumentLabel);
 	addWidget(d->mThumbnailSplitter);
@@ -521,6 +580,53 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 void DocumentPanel::slotCompleted() {
 	d->updateCaption();
 	emit completed();
+}
+
+
+void DocumentPanel::setZoomToFit(bool on) {
+	d->mAdapter->setZoomToFit(on);
+	if (!on) {
+		d->mAdapter->setZoom(1.);
+	}
+}
+
+
+void DocumentPanel::zoomActualSize() {
+	d->disableZoomToFit();
+	d->mAdapter->setZoom(1.);
+}
+
+
+void DocumentPanel::zoomIn(const QPoint& center) {
+	qreal currentZoom = d->mAdapter->zoom();
+
+	d->setZoom(currentZoom * 2, center);
+	/* FIXME: PORT
+	Q_FOREACH(qreal zoom, mZoomSnapValues) {
+		if (zoom > currentZoom + REAL_DELTA) {
+			setZoom(zoom, center);
+			return;
+		}
+	}
+	*/
+}
+
+
+void DocumentPanel::zoomOut(const QPoint& center) {
+	qreal currentZoom = d->mAdapter->zoom();
+
+	d->setZoom(currentZoom / 2, center);
+	/* FIXME: PORT
+	QListIterator<qreal> it(mZoomSnapValues);
+	it.toBack();
+	while (it.hasPrevious()) {
+		qreal zoom = it.previous();
+		if (zoom < currentZoom - REAL_DELTA) {
+			setZoom(zoom, center);
+			return;
+		}
+	}
+	*/
 }
 
 
