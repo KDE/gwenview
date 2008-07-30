@@ -99,10 +99,14 @@ Q_SIGNALS:
 
 	void enterFullScreenRequested();
 
+	void captionUpdateRequested(const QString&);
+
 private Q_SLOTS:
 	void setThumbnailBarVisibility(bool visible);
+	void slotCompleted();
 
 private:
+	friend class DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;
 
 	void createAdapterForUrl(const KUrl& url);

@@ -43,6 +43,12 @@ public:
 	virtual KUrl url() const;
 	virtual void openUrl(const KUrl&);
 
+	virtual bool canZoom() const { return true; }
+
+	virtual qreal zoom() const;
+
+	virtual Document::Ptr document() const;
+
 	virtual QWidget* widget() const;
 
 	virtual ImageView* imageView() const;

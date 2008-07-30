@@ -233,6 +233,8 @@ struct MainWindow::Private {
 
 	void setupDocumentPanel(QWidget* parent) {
 		mDocumentPanel = new DocumentPanel(parent, mWindow->actionCollection());
+		connect(mDocumentPanel, SIGNAL(captionUpdateRequested(const QString&)),
+			mWindow, SLOT(setCaption(const QString&)) );
 		connect(mDocumentPanel, SIGNAL(completed()),
 			mWindow, SLOT(slotPartCompleted()) );
 		connect(mDocumentPanel, SIGNAL(partChanged(KParts::Part*)),

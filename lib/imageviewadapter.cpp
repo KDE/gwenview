@@ -34,6 +34,7 @@ namespace Gwenview {
 
 
 struct ImageViewAdapterPrivate {
+	ImageViewAdapter* that;
 	ImageView* mView;
 };
 
@@ -78,6 +79,16 @@ void ImageViewAdapter::openUrl(const KUrl& url) {
 	} else if (doc->loadingState() == Document::LoadingFailed) {
 		slotLoadingFailed();
 	}
+}
+
+
+qreal ImageViewAdapter::zoom() const {
+	return d->mView->zoom();
+}
+
+
+Document::Ptr ImageViewAdapter::document() const {
+	return d->mView->document();
 }
 
 

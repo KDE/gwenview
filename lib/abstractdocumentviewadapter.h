@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include <lib/document/document.h>
 
 class QSize;
 class QWidget;
@@ -55,6 +56,11 @@ public:
 
 	virtual ImageView* imageView() const { return 0; }
 
+	virtual bool canZoom() const { return false; }
+
+	virtual qreal zoom() const { return 0; }
+
+	virtual Document::Ptr document() const = 0;
 	// FIXME: Replace with "document" property
 	virtual KUrl url() const = 0;
 	virtual void openUrl(const KUrl&) = 0;

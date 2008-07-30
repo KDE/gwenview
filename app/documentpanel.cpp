@@ -283,6 +283,30 @@ struct DocumentPanelPrivate {
 			GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
 		}
 	}
+
+	void updateCaption() {
+		QString caption;
+		if (!mAdapter) {
+			emit that->captionUpdateRequested(caption);
+			return;
+		}
+
+		Document::Ptr doc = mAdapter->document();
+		caption = doc->url().fileName();
+		QSize size = doc->size();
+		if (size.isValid()) {
+			caption +=
+				QString(" - %1x%2")
+					.arg(size.width())
+					.arg(size.height());
+			if (mAdapter->canZoom()) {
+				int intZoom = qRound(mAdapter->zoom() * 100);
+				caption += QString(" - %3%")
+					.arg(intZoom);
+			}
+		}
+		emit that->captionUpdateRequested(caption);
+	}
 };
 
 
@@ -440,7 +464,7 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	}
 
 	connect(adapter, SIGNAL(completed()),
-		this, SIGNAL(completed()) );
+		this, SLOT(slotCompleted()) );
 	connect(adapter, SIGNAL(resizeRequested(const QSize&)),
 		this, SIGNAL(resizeRequested(const QSize&)) );
 	connect(adapter, SIGNAL(previousImageRequested()),
@@ -490,6 +514,12 @@ ImageView* DocumentPanel::imageView() const {
 void DocumentPanel::setNormalPalette(const QPalette& palette) {
 	d->mNormalPalette = palette;
 	d->applyPalette();
+}
+
+
+void DocumentPanel::slotCompleted() {
+	d->updateCaption();
+	emit completed();
 }
 
 
