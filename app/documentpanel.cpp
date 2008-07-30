@@ -153,7 +153,7 @@ protected:
  * +---------------------------------------------------+
  */
 struct DocumentPanelPrivate {
-	DocumentPanel* mView;
+	DocumentPanel* that;
 	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
@@ -172,7 +172,7 @@ struct DocumentPanelPrivate {
 	QString mAdapterLibrary;
 
 	void setupNoDocumentLabel() {
-		mNoDocumentLabel = new QLabel(mView);
+		mNoDocumentLabel = new QLabel(that);
 		mNoDocumentLabel->setText(i18n("No document selected"));
 		mNoDocumentLabel->setAlignment(Qt::AlignCenter);
 		mNoDocumentLabel->setAutoFillBackground(true);
@@ -248,7 +248,7 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupSplitter() {
-		mThumbnailSplitter = new Splitter(Qt::Vertical, mView);
+		mThumbnailSplitter = new Splitter(Qt::Vertical, that);
 		mThumbnailSplitter->addWidget(mAdapterContainer);
 		mThumbnailSplitter->addWidget(mThumbnailBar);
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
@@ -258,15 +258,15 @@ struct DocumentPanelPrivate {
 		if (partWidget) {
 			// Insert the widget above the status bar
 			mAdapterContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
-			mView->setCurrentWidget(mThumbnailSplitter);
+			that->setCurrentWidget(mThumbnailSplitter);
 		} else {
-			mView->setCurrentWidget(mNoDocumentLabel);
+			that->setCurrentWidget(mNoDocumentLabel);
 		}
 	}
 
 	void applyPalette() {
 		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
-		mView->setPalette(palette);
+		that->setPalette(palette);
 
 		if (!mAdapter) {
 			return;
@@ -290,7 +290,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 : QStackedWidget(parent)
 , d(new DocumentPanelPrivate)
 {
-	d->mView = this;
+	d->that = this;
 	d->mAdapter = 0;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
@@ -298,7 +298,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
-	QShortcut* enterFullScreenShortcut = new QShortcut(d->mView);
+	QShortcut* enterFullScreenShortcut = new QShortcut(this);
 	enterFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(enterFullScreenShortcut, SIGNAL(activated()), SIGNAL(enterFullScreenRequested()) );
 
@@ -440,13 +440,13 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	}
 
 	connect(adapter, SIGNAL(completed()),
-		d->mView, SIGNAL(completed()) );
+		this, SIGNAL(completed()) );
 	connect(adapter, SIGNAL(resizeRequested(const QSize&)),
-		d->mView, SIGNAL(resizeRequested(const QSize&)) );
+		this, SIGNAL(resizeRequested(const QSize&)) );
 	connect(adapter, SIGNAL(previousImageRequested()),
-		d->mView, SIGNAL(previousImageRequested()) );
+		this, SIGNAL(previousImageRequested()) );
 	connect(adapter, SIGNAL(nextImageRequested()),
-		d->mView, SIGNAL(nextImageRequested()) );
+		this, SIGNAL(nextImageRequested()) );
 
 	d->setAdapterWidget(adapter->widget());
 
