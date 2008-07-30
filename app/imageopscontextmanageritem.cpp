@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/imageviewpart.h>
+#include <lib/imageview.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/transformimageoperation.h>
 
@@ -259,13 +259,13 @@ void ImageOpsContextManagerItem::resizeImage() {
 
 
 void ImageOpsContextManagerItem::showCropSideBar() {
-	ImageViewPart* imageViewPart = d->mMainWindow->documentPanel()->imageViewPart();
-	if (!imageViewPart) {
-		kError() << "No ImageViewPart available!";
+	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	if (!imageView) {
+		kError() << "No ImageView available!";
 		return;
 	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
-	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageViewPart->imageView(), doc);
+	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageView, doc);
 	connect(cropSideBar, SIGNAL(done()),
 		d->mMainWindow, SLOT(hideTemporarySideBar()) );
 	connect(cropSideBar, SIGNAL(cropRequested(const QRect&)),

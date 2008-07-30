@@ -18,6 +18,7 @@ set(gwenviewlib_SRCS
 	document/emptydocumentimpl.cpp
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
+	abstractdocumentviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	archiveutils.cpp
@@ -34,7 +35,7 @@ set(gwenviewlib_SRCS
 	imagescaler.cpp
 	imageutils.cpp
 	imageview.cpp
-	imageviewpart.cpp
+	imageviewadapter.cpp
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp

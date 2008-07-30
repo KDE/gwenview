@@ -23,8 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QPoint>
 
+// KDE
+#include <kparts/part.h>
+
 // Local
-#include "../lib/imageviewpart.h"
+#include <lib/document/document.h>
 
 class KAboutData;
 class KAction;
@@ -41,7 +44,7 @@ class ImageView;
 class ScrollTool;
 class ZoomWidget;
 
-class GVPart : public ImageViewPart {
+class GVPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
 public:
 	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);

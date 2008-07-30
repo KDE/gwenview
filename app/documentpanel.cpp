@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "thumbnailbarview.h"
 #include <lib/imageview.h>
-#include <lib/imageviewpart.h>
+#include <lib/imageviewadapter.h>
 #include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
@@ -131,7 +131,7 @@ protected:
  * Layout of mThumbnailSplitter is:
  *
  * +-mThumbnailSplitter--------------------------------+
- * |+-mPartContainer----------------------------------+|
+ * |+-mAdapterContainer----------------------------------+|
  * ||..part widget....................................||
  * ||.                                               .||
  * ||.                                               .||
@@ -156,8 +156,8 @@ struct DocumentPanelPrivate {
 	DocumentPanel* mView;
 	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
-	QWidget* mPartContainer;
-	QVBoxLayout* mPartContainerLayout;
+	QWidget* mAdapterContainer;
+	QVBoxLayout* mAdapterContainerLayout;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	KStatusBar* mStatusBar;
@@ -168,8 +168,8 @@ struct DocumentPanelPrivate {
 	QPalette mFullScreenPalette;
 	bool mThumbnailBarVisibleBeforeFullScreen;
 
-	KParts::ReadOnlyPart* mPart;
-	QString mPartLibrary;
+	AbstractDocumentViewAdapter* mAdapter;
+	QString mAdapterLibrary;
 
 	void setupNoDocumentLabel() {
 		mNoDocumentLabel = new QLabel(mView);
@@ -195,7 +195,7 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupThumbnailBar() {
-		mThumbnailBar = new ThumbnailBarView(mPartContainer);
+		mThumbnailBar = new ThumbnailBarView(mAdapterContainer);
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
 		mThumbnailBar->setItemDelegate(delegate);
 		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
@@ -239,25 +239,25 @@ struct DocumentPanelPrivate {
 		mThumbnailBar->setStyleSheet(viewCss + itemCss + itemSelCss);
 	}
 
-	void setupPartContainer() {
-		mPartContainer = new QWidget;
-		mPartContainerLayout = new QVBoxLayout(mPartContainer);
-		mPartContainerLayout->addWidget(mStatusBarContainer);
-		mPartContainerLayout->setMargin(0);
-		mPartContainerLayout->setSpacing(0);
+	void setupAdapterContainer() {
+		mAdapterContainer = new QWidget;
+		mAdapterContainerLayout = new QVBoxLayout(mAdapterContainer);
+		mAdapterContainerLayout->addWidget(mStatusBarContainer);
+		mAdapterContainerLayout->setMargin(0);
+		mAdapterContainerLayout->setSpacing(0);
 	}
 
 	void setupSplitter() {
 		mThumbnailSplitter = new Splitter(Qt::Vertical, mView);
-		mThumbnailSplitter->addWidget(mPartContainer);
+		mThumbnailSplitter->addWidget(mAdapterContainer);
 		mThumbnailSplitter->addWidget(mThumbnailBar);
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 	}
 
-	void setPartWidget(QWidget* partWidget) {
+	void setAdapterWidget(QWidget* partWidget) {
 		if (partWidget) {
 			// Insert the widget above the status bar
-			mPartContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
+			mAdapterContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
 			mView->setCurrentWidget(mThumbnailSplitter);
 		} else {
 			mView->setCurrentWidget(mNoDocumentLabel);
@@ -268,14 +268,14 @@ struct DocumentPanelPrivate {
 		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
 		mView->setPalette(palette);
 
-		if (!mPart) {
+		if (!mAdapter) {
 			return;
 		}
 
-		QPalette partPalette = mPart->widget()->palette();
-		partPalette.setBrush(mPart->widget()->backgroundRole(), palette.base());
-		partPalette.setBrush(mPart->widget()->foregroundRole(), palette.text());
-		mPart->widget()->setPalette(partPalette);
+		QPalette partPalette = mAdapter->widget()->palette();
+		partPalette.setBrush(mAdapter->widget()->backgroundRole(), palette.base());
+		partPalette.setBrush(mAdapter->widget()->foregroundRole(), palette.text());
+		mAdapter->widget()->setPalette(partPalette);
 	}
 
 	void saveSplitterConfig() {
@@ -291,7 +291,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 , d(new DocumentPanelPrivate)
 {
 	d->mView = this;
-	d->mPart = 0;
+	d->mAdapter = 0;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
 	d->mFullScreenPalette = QPalette(palette());
@@ -306,7 +306,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupStatusBar();
 
-	d->setupPartContainer();
+	d->setupAdapterContainer();
 
 	d->setupThumbnailBar();
 
@@ -328,6 +328,14 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 DocumentPanel::~DocumentPanel() {
 	delete d;
+}
+
+
+void DocumentPanel::loadConfig() {
+	// FIXME: Not symetric with saveConfig(). Check if it matters.
+	if (d->mAdapter) {
+		d->mAdapter->loadConfig();
+	}
 }
 
 
@@ -380,27 +388,26 @@ QSize DocumentPanel::sizeHint() const {
 
 
 KUrl DocumentPanel::url() const {
-	if (!d->mPart) {
+	if (!d->mAdapter) {
 		return KUrl();
 	}
 
-	return d->mPart->url();
+	return d->mAdapter->url();
 }
 
 
 void DocumentPanel::reset() {
-	if (!d->mPart) {
+	if (!d->mAdapter) {
 		return;
 	}
-	d->setPartWidget(0);
-	partChanged(0);
-	delete d->mPart;
-	d->mPartLibrary.clear();
-	d->mPart=0;
+	d->setAdapterWidget(0);
+	delete d->mAdapter;
+	d->mAdapterLibrary.clear();
+	d->mAdapter=0;
 }
 
 
-void DocumentPanel::createPartForUrl(const KUrl& url) {
+void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	QString mimeType = MimeTypeUtils::urlMimeType(url);
 	LOG("mimeType:" << mimeType);
 	if (!url.isLocalFile() && mimeType == "text/html") {
@@ -411,104 +418,72 @@ void DocumentPanel::createPartForUrl(const KUrl& url) {
 	}
 
 	QString library;
-	QVariantList partArgs;
 	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
-		LOG("Enforcing use of Gwenview part");
-		library = "gvpart";
-		partArgs << QVariant("gwenviewHost");
+		library = "ImageViewAdapter";
 	} else {
-		LOG("Query system for available parts for" << mimeType);
-		// Get a list of possible parts
-		const KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("KParts/ReadOnlyPart"));
-		if (offers.isEmpty()) {
-			kWarning() << "Couldn't find a KPart for " << mimeType ;
-			reset();
-			return;
-		}
-
-		// Check if we are already using it
-		KService::Ptr service = offers.first();
-		library=service->library();
+		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
+		return;
 	}
 	Q_ASSERT(!library.isNull());
-	if (library == d->mPartLibrary) {
-		LOG("Reusing current part");
+	if (library == d->mAdapterLibrary) {
+		LOG("Reusing current adapter");
 		return;
 	}
 
 	// Load new part
-	LOG("Loading part from library" << library);
-	KPluginFactory* factory = KPluginLoader(library).factory();
-	if (!factory) {
-		kWarning() << "Failed to load library" << library;
-		return;
-	}
-	LOG("Loading part from library" << library);
-	KParts::ReadOnlyPart* part = factory->create<KParts::ReadOnlyPart>(d->mPartContainer, partArgs);
-	if (!part) {
-		kWarning() << "Failed to instantiate KPart from library" << library ;
+	AbstractDocumentViewAdapter* adapter;
+	if (library == "ImageViewAdapter") {
+		adapter = new ImageViewAdapter(d->mAdapterContainer);
+	} else {
+		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
 		return;
 	}
 
-	ImageViewPart* ivPart = dynamic_cast<ImageViewPart*>(part);
-	if (ivPart) {
-		connect(ivPart, SIGNAL(resizeRequested(const QSize&)),
-			d->mView, SIGNAL(resizeRequested(const QSize&)) );
-		connect(ivPart, SIGNAL(previousImageRequested()),
-			d->mView, SIGNAL(previousImageRequested()) );
-		connect(ivPart, SIGNAL(nextImageRequested()),
-			d->mView, SIGNAL(nextImageRequested()) );
-	}
+	connect(adapter, SIGNAL(completed()),
+		d->mView, SIGNAL(completed()) );
+	connect(adapter, SIGNAL(resizeRequested(const QSize&)),
+		d->mView, SIGNAL(resizeRequested(const QSize&)) );
+	connect(adapter, SIGNAL(previousImageRequested()),
+		d->mView, SIGNAL(previousImageRequested()) );
+	connect(adapter, SIGNAL(nextImageRequested()),
+		d->mView, SIGNAL(nextImageRequested()) );
 
-	// Handle statusbar extension otherwise a statusbar will get created in
-	// the main window.
-	KParts::StatusBarExtension* extension = KParts::StatusBarExtension::childObject(part);
-	if (extension) {
-		extension->setStatusBar(statusBar());
-	}
+	d->setAdapterWidget(adapter->widget());
 
-	d->setPartWidget(part->widget());
-	partChanged(part);
-
-	connect(part, SIGNAL(completed()), SIGNAL(completed()) );
-
-	// Delete the old part, don't do it before mMainWindow->createGUI(),
-	// otherwise some UI elements from the old part won't be properly
-	// removed. 
-	delete d->mPart;
-	d->mPart = part;
+	delete d->mAdapter;
+	d->mAdapter = adapter;
 
 	d->applyPalette();
 
-	d->mPartLibrary = library;
+	d->mAdapterLibrary = library;
 }
 
 
 bool DocumentPanel::openUrl(const KUrl& url) {
-	createPartForUrl(url);
-	if (!d->mPart) {
+	createAdapterForUrl(url);
+	if (!d->mAdapter) {
 		return false;
 	}
-	d->mPart->openUrl(url);
+	d->mAdapter->openUrl(url);
 	return true;
 }
 
 
 bool DocumentPanel::currentDocumentIsRasterImage() const {
-	// If the document view is visible, we assume we have a raster
-	// image if and only if we are using the ImageViewPart. This avoids
-	// having to determine the mimetype a second time.
-	return dynamic_cast<ImageViewPart*>(d->mPart) != 0;
+	// If the document view is visible, we assume we have a raster image if and
+	// only if we have an ImageView. This avoids having to determine the
+	// mimetype a second time.
+	return imageView() != 0;
 }
 
 
 bool DocumentPanel::isEmpty() const {
-	return !d->mPart;
+	return !d->mAdapter;
 }
 
 
-ImageViewPart* DocumentPanel::imageViewPart() const {
-	return dynamic_cast<ImageViewPart*>(d->mPart);
+ImageView* DocumentPanel::imageView() const {
+	return d->mAdapter->imageView();
 }
 
 

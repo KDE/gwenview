@@ -67,7 +67,7 @@ static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
-: ImageViewPart(parent)
+: KParts::ReadOnlyPart(parent)
 {
 	mGwenviewHost = args.contains("gwenviewHost");
 	mStatusBarExtension = 0;
@@ -272,9 +272,6 @@ void GVPart::slotLoadingFailed() {
 
 void GVPart::slotLoaded() {
 	emit completed();
-	if (mView->zoomToFit()) {
-		resizeRequested(mDocument->size());
-	}
 
 	// We don't want to emit completed() again if we receive another
 	// downSampledImageReady() or loaded() signal from the current document.

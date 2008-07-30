@@ -29,17 +29,14 @@ class KActionCollection;
 class KStatusBar;
 class KUrl;
 
-namespace KParts { class Part; }
-
 namespace Gwenview {
 
 class DocumentPanelPrivate;
-class ImageViewPart;
+class ImageView;
 class ThumbnailBarView;
 
 /**
- * Holds the active document view, or show a message if there is no active
- * document
+ * Holds the active document view and associated widgetry.
  */
 class DocumentPanel : public QStackedWidget {
 	Q_OBJECT
@@ -48,6 +45,8 @@ public:
 	~DocumentPanel();
 
 	ThumbnailBarView* thumbnailBar() const;
+
+	void loadConfig();
 
 	void saveConfig();
 
@@ -81,17 +80,11 @@ public:
 	bool isEmpty() const;
 
 	/**
-	 * Returns the image view part, if the current part really is an
-	 * ImageViewPart.
+	 * Returns the image view, if the current adapter has one.
 	 */
-	ImageViewPart* imageViewPart() const;
+	ImageView* imageView() const;
 
 Q_SIGNALS:
-	/**
-	 * Emitted whenever the part changes. Main window should call createGui on
-	 * it.
-	 */
-	void partChanged(KParts::Part*);
 
 	/**
 	 * Emitted when the part has finished loading
@@ -112,7 +105,7 @@ private Q_SLOTS:
 private:
 	DocumentPanelPrivate* const d;
 
-	void createPartForUrl(const KUrl& url);
+	void createAdapterForUrl(const KUrl& url);
 };
 
 } // namespace

@@ -79,7 +79,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/imageviewpart.h>
 #include <lib/mimetypeutils.h>
 #include <lib/print/printhelper.h>
 #include <lib/slideshow.h>
@@ -1202,11 +1201,6 @@ bool MainWindow::queryClose() {
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
 	connect(&dialog, SIGNAL(settingsChanged(const QString&)), SLOT(loadConfig()));
-	ImageViewPart* part = d->mDocumentPanel->imageViewPart();
-	if (part) {
-		connect(&dialog, SIGNAL(settingsChanged(const QString&)),
-			part, SLOT(loadConfig()));
-	}
 	dialog.exec();
 }
 
@@ -1260,6 +1254,8 @@ void MainWindow::loadConfig() {
 	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
 
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
+
+	d->mDocumentPanel->loadConfig();
 }
 
 
