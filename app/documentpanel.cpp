@@ -489,6 +489,7 @@ bool DocumentPanel::openUrl(const KUrl& url) {
 		return false;
 	}
 	d->mAdapter->openUrl(url);
+	d->updateCaption();
 	return true;
 }
 
