@@ -40,7 +40,6 @@ public:
 	ImageViewAdapter(QWidget*);
 	~ImageViewAdapter();
 
-	virtual KUrl url() const;
 	virtual void openUrl(const KUrl&);
 
 	virtual bool canZoom() const { return true; }

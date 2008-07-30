@@ -61,11 +61,6 @@ ImageView* ImageViewAdapter::imageView() const {
 }
 
 
-KUrl ImageViewAdapter::url() const {
-	return d->mView->document()->url();
-}
-
-
 void ImageViewAdapter::openUrl(const KUrl& url) {
 	// FIXME: Port GVPart::openUrl()
 	Document::Ptr doc = DocumentFactory::instance()->load(url);

@@ -475,7 +475,12 @@ KUrl DocumentPanel::url() const {
 		return KUrl();
 	}
 
-	return d->mAdapter->url();
+	if (!d->mAdapter->document()) {
+		kWarning() << "!d->mAdapter->document()";
+		return KUrl();
+	}
+
+	return d->mAdapter->document()->url();
 }
 
 
