@@ -51,9 +51,9 @@ class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject {
 	Q_OBJECT
 public:
 	AbstractDocumentViewAdapter(QWidget*);
-	virtual ~AbstractDocumentViewAdapter() {}
+	virtual ~AbstractDocumentViewAdapter();
 
-	virtual QWidget* widget() const = 0;
+	QWidget* widget() const { return mWidget; }
 
 	virtual ImageView* imageView() const { return 0; }
 
@@ -78,11 +78,17 @@ public:
 
 	virtual void loadConfig() {}
 
+protected:
+	void setWidget(QWidget* widget) { mWidget = widget; }
+
 Q_SIGNALS:
 	void resizeRequested(const QSize&);
 	void previousImageRequested();
 	void nextImageRequested();
 	void completed();
+
+private:
+	QWidget* mWidget;
 };
 
 

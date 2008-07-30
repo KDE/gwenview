@@ -32,7 +32,14 @@ namespace Gwenview {
 
 
 AbstractDocumentViewAdapter::AbstractDocumentViewAdapter(QWidget* parent)
-: QObject(parent) {
+: QObject(parent)
+, mWidget(0) {
+}
+
+
+AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter()
+{
+	delete mWidget;
 }
 
 

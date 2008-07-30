@@ -43,16 +43,12 @@ ImageViewAdapter::ImageViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new ImageViewAdapterPrivate) {
 	d->mView = new ImageView(parent);
+	setWidget(d->mView);
 }
 
 
 ImageViewAdapter::~ImageViewAdapter() {
 	delete d;
-}
-
-
-QWidget* ImageViewAdapter::widget() const {
-	return d->mView;
 }
 
 

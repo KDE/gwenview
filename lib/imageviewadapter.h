@@ -54,8 +54,6 @@ public:
 
 	virtual Document::Ptr document() const;
 
-	virtual QWidget* widget() const;
-
 	virtual ImageView* imageView() const;
 
 private Q_SLOTS:
