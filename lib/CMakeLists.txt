@@ -50,6 +50,7 @@ set(gwenviewlib_SRCS
 	slideshow.cpp
 	scrolltool.cpp
 	statusbartoolbutton.cpp
+	svgviewadapter.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp

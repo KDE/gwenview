@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/gwenviewconfig.h>
 #include <lib/signalblocker.h>
 #include <lib/statusbartoolbutton.h>
+#include <lib/svgviewadapter.h>
 
 
 namespace Gwenview {
@@ -505,9 +506,13 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 		LOG("mimeType after downloading content:" << mimeType);
 	}
 
+	// FIXME: Keep this "library" thing?
 	QString library;
 	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
 		library = "ImageViewAdapter";
+	} else if (MimeTypeUtils::imageMimeTypes().contains(mimeType)) {
+		// FIXME: This is not the best way to find out if this is svg
+		library = "SvgViewAdapter";
 	} else {
 		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
 		return;
@@ -522,6 +527,8 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	AbstractDocumentViewAdapter* adapter;
 	if (library == "ImageViewAdapter") {
 		adapter = new ImageViewAdapter(d->mAdapterContainer);
+	} else if (library == "SvgViewAdapter") {
+		adapter = new SvgViewAdapter(d->mAdapterContainer);
 	} else {
 		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
 		return;
