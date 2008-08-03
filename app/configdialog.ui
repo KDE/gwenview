@@ -15,11 +15,10 @@
      <property name="font" >
       <font>
        <weight>75</weight>
-       <bold>true</bold>
       </font>
      </property>
      <property name="text" >
-      <string>General</string>
+      <string>&lt;b>General&lt;/b></string>
      </property>
     </widget>
    </item>
@@ -81,14 +80,10 @@
      <property name="font" >
       <font>
        <weight>75</weight>
-       <bold>true</bold>
       </font>
      </property>
      <property name="text" >
-      <string>Image View</string>
-     </property>
-     <property name="textFormat" >
-      <enum>Qt::PlainText</enum>
+      <string>&lt;b>Image View&lt;/b></string>
      </property>
     </widget>
    </item>
