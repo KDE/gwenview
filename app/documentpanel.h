@@ -100,6 +100,9 @@ Q_SIGNALS:
 
 	void captionUpdateRequested(const QString&);
 
+protected:
+	virtual bool eventFilter(QObject*, QEvent* event);
+
 private Q_SLOTS:
 	void setThumbnailBarVisibility(bool visible);
 	void slotCompleted();

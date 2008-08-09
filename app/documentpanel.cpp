@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
+#include <QMouseEvent>
 #include <QShortcut>
 #include <QSplitter>
 #include <QStylePainter>
@@ -60,6 +61,10 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
+
+
+static const qreal REAL_DELTA = 0.001;
+static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
 static QString rgba(const QColor &color) {
@@ -173,6 +178,7 @@ struct DocumentPanelPrivate {
 
 	AbstractDocumentViewAdapter* mAdapter;
 	QString mAdapterLibrary;
+	QList<qreal> mZoomSnapValues;
 
 	void setupNoDocumentLabel() {
 		mNoDocumentLabel = new QLabel(that);
@@ -370,6 +376,29 @@ struct DocumentPanelPrivate {
 	}
 
 
+	qreal computeMinimumZoom() const {
+		// There is no point zooming out less than zoomToFit, but make sure it does
+		// not get too small either
+		return qMax(0.001, qMin(mAdapter->computeZoomToFit(), 1.));
+	}
+
+
+	void updateZoomSnapValues() {
+		qreal min = computeMinimumZoom();
+		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
+
+		mZoomSnapValues.clear();
+		for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
+			mZoomSnapValues << 1/zoom;
+		}
+		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 0.5) {
+			mZoomSnapValues << zoom;
+		}
+		mZoomSnapValues
+			<< mAdapter->computeZoomToFitWidth()
+			<< mAdapter->computeZoomToFitHeight();
+		qSort(mZoomSnapValues);
+	}
 };
 
 
@@ -549,16 +578,17 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 		this, SIGNAL(nextImageRequested()) );
 
 	d->setAdapterWidget(adapter->widget());
-	if (adapter->canZoom()) {
-		connect(adapter, SIGNAL(zoomChanged(qreal)),
+	delete d->mAdapter;
+	d->mAdapter = adapter;
+
+	if (d->mAdapter->canZoom()) {
+		connect(d->mAdapter, SIGNAL(zoomChanged(qreal)),
 			SLOT(slotZoomChanged(qreal)) );
+		d->updateZoomSnapValues();
 		d->mZoomWidget->show();
 	} else {
 		d->mZoomWidget->hide();
 	}
-
-	delete d->mAdapter;
-	d->mAdapter = adapter;
 
 	d->applyPalette();
 
@@ -603,6 +633,7 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 
 void DocumentPanel::slotCompleted() {
 	d->updateCaption();
+	d->updateZoomSnapValues();
 	emit completed();
 }
 
@@ -665,6 +696,23 @@ void DocumentPanel::slotZoomChanged(qreal zoom) {
 void DocumentPanel::slotZoomWidgetChanged(qreal zoom) {
 	d->disableZoomToFit();
 	d->setZoom(zoom);
+}
+
+
+bool DocumentPanel::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		// FIXME: PORT: need to apply on viewport
+		// Middle click => toggle zoom to fit
+		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+		if (mouseEvent->button() == Qt::MidButton) {
+			d->mZoomToFitAction->trigger();
+			return true;
+		}
+	} else if (event->type() == QEvent::Resize) {
+		d->updateZoomSnapValues();
+	}
+
+	return false;
 }
 
 
