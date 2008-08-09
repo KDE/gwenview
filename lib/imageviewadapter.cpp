@@ -95,6 +95,21 @@ void ImageViewAdapter::setZoom(qreal zoom, const QPoint& center) {
 }
 
 
+qreal ImageViewAdapter::computeZoomToFit() const {
+	return d->mView->computeZoomToFit();
+}
+
+
+qreal ImageViewAdapter::computeZoomToFitWidth() const {
+	return d->mView->computeZoomToFitWidth();
+}
+
+
+qreal ImageViewAdapter::computeZoomToFitHeight() const {
+	return d->mView->computeZoomToFitHeight();
+}
+
+
 Document::Ptr ImageViewAdapter::document() const {
 	return d->mView->document();
 }
@@ -109,9 +124,6 @@ void ImageViewAdapter::slotLoaded() {
 	// We don't want to emit completed() again if we receive another
 	// downSampledImageReady() or loaded() signal from the current document.
 	disconnect(d->mView->document().data(), 0, this, SLOT(slotLoaded()) );
-
-	// FIXME: Move this to DocumentPanel
-	//updateZoomSnapValues();
 }
 
 

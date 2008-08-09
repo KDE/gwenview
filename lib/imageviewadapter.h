@@ -52,6 +52,12 @@ public:
 
 	virtual void setZoom(qreal zoom, const QPoint& center);
 
+	virtual qreal computeZoomToFit() const;
+
+	virtual qreal computeZoomToFitWidth() const;
+
+	virtual qreal computeZoomToFitHeight() const;
+
 	virtual Document::Ptr document() const;
 
 	virtual ImageView* imageView() const;
