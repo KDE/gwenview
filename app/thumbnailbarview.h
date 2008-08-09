@@ -59,7 +59,7 @@ private:
 class ThumbnailBarView : public ThumbnailView {
 	Q_OBJECT
 public:
-	ThumbnailBarView(QWidget *);
+	ThumbnailBarView(QWidget* = 0);
 	~ThumbnailBarView();
 
 protected:
