@@ -357,20 +357,9 @@ struct DocumentPanelPrivate {
 	}
 
 
-	void setZoom(qreal zoom, const QPoint& _center = QPoint(-1, -1)) {
+	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
 		disableZoomToFit();
-		QPoint center;
-		if (_center == QPoint(-1, -1)) {
-			const QWidget* widget = mAdapter->widget();
-			center = QPoint(widget->width() / 2, widget->height() / 2);
-			/* FIXME: PORT
-			center = QPoint(mView->viewport()->width() / 2, mView->viewport()->height() / 2);
-			*/
-		} else {
-			center = _center;
-		}
 		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
-
 		mAdapter->setZoom(zoom, center);
 	}
 
