@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentview.moc"
 
 // Qt
+#include <QApplication>
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
@@ -80,6 +81,7 @@ struct DocumentViewPrivate {
 	AbstractDocumentViewAdapter* mAdapter;
 	AdapterCreator mAdapterCreator;
 	QList<qreal> mZoomSnapValues;
+	Document::Ptr mDocument;
 
 
 	void createAdapter(AdapterCreator creator) {
@@ -252,26 +254,17 @@ ZoomWidget* DocumentView::zoomWidget() const {
 	return d->mZoomWidget;
 }
 
-
-void DocumentView::createAdapterForUrl(const KUrl& url) {
-	// Find adapter class
-	QString mimeType = MimeTypeUtils::urlMimeType(url);
-	LOG("mimeType:" << mimeType);
-	if (!url.isLocalFile() && mimeType == "text/html") {
-		// Try harder, some webservers do not really know the mimetype of the
-		// content they serve (KDE Bugzilla for example)
-		mimeType = MimeTypeUtils::urlMimeTypeByContent(url);
-		LOG("mimeType after downloading content:" << mimeType);
-	}
-
+void DocumentView::createAdapterForDocument() {
 	AdapterCreator creator = 0;
-	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
+	switch (d->mDocument->kind()) {
+	case MimeTypeUtils::KIND_RASTER_IMAGE:
 		creator = createImageViewAdapter;
-	} else if (MimeTypeUtils::imageMimeTypes().contains(mimeType)) {
-		// FIXME: This is not the best way to find out if this is svg
+		break;
+	case MimeTypeUtils::KIND_SVG_IMAGE:
 		creator = createSvgViewAdapter;
-	} else {
-		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
+		break;
+	default:
+		kWarning() << "FIXME: Implement adapter for kind" << d->mDocument->kind();
 		return;
 	}
 	Q_ASSERT(creator);
@@ -281,13 +274,24 @@ void DocumentView::createAdapterForUrl(const KUrl& url) {
 
 
 bool DocumentView::openUrl(const KUrl& url) {
-	createAdapterForUrl(url);
+	d->mDocument = DocumentFactory::instance()->load(url);
+
+	while (d->mDocument->loadingState() < Document::KindDetermined) {
+		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
+
+	if (d->mDocument->loadingState() == Document::LoadingFailed) {
+		kWarning() << "FIXME: Show error message";
+		return false;
+	}
+
+	createAdapterForDocument();
 	if (!d->mAdapter) {
 		return false;
 	}
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	d->mAdapter->setDocument(doc);
+	d->mAdapter->setDocument(d->mDocument);
 	d->updateCaption();
+
 	return true;
 }
 

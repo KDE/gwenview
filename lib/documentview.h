@@ -97,7 +97,7 @@ private:
 	friend class DocumentViewPrivate;
 	DocumentViewPrivate* const d;
 
-	void createAdapterForUrl(const KUrl&);
+	void createAdapterForDocument();
 };
 
 
