@@ -263,7 +263,6 @@ void DocumentView::createAdapterForUrl(const KUrl& url) {
 		LOG("mimeType after downloading content:" << mimeType);
 	}
 
-	//QString className;
 	AdapterCreator creator = 0;
 	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
 		creator = createImageViewAdapter;
