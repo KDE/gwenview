@@ -160,6 +160,7 @@ protected:
  */
 struct DocumentPanelPrivate {
 	DocumentPanel* that;
+	KActionCollection* mActionCollection;
 	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
@@ -266,8 +267,8 @@ struct DocumentPanelPrivate {
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 	}
 
-	void setupZoomActions(KActionCollection* actionCollection) {
-		mZoomToFitAction = new KAction(actionCollection);
+	void setupZoomActions() {
+		mZoomToFitAction = new KAction(mActionCollection);
 		mZoomToFitAction->setCheckable(true);
 		mZoomToFitAction->setChecked(true);
 		mZoomToFitAction->setText(i18n("Zoom to Fit"));
@@ -275,13 +276,13 @@ struct DocumentPanelPrivate {
 		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
 			that, SLOT(setZoomToFit(bool)) );
-		actionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
+		mActionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
 
-		KAction* actualSizeAction = KStandardAction::actualSize(that, SLOT(zoomActualSize()), actionCollection);
+		KAction* actualSizeAction = KStandardAction::actualSize(that, SLOT(zoomActualSize()), mActionCollection);
 		actualSizeAction->setIcon(KIcon("zoom-original"));
 		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-		KStandardAction::zoomIn(that, SLOT(zoomIn()), actionCollection);
-		KStandardAction::zoomOut(that, SLOT(zoomOut()), actionCollection);
+		KStandardAction::zoomIn(that, SLOT(zoomIn()), mActionCollection);
+		KStandardAction::zoomOut(that, SLOT(zoomOut()), mActionCollection);
 
 		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
 	}
@@ -396,6 +397,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 {
 	d->that = this;
 	d->mAdapter = 0;
+	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
 	d->mFullScreenPalette = QPalette(palette());
@@ -416,7 +418,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupSplitter();
 
-	d->setupZoomActions(actionCollection);
+	d->setupZoomActions();
 
 	addWidget(d->mNoDocumentLabel);
 	addWidget(d->mThumbnailSplitter);
