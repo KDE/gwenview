@@ -117,6 +117,8 @@ private Q_SLOTS:
 	void slotZoomChanged(qreal);
 	void slotZoomWidgetChanged(qreal);
 
+	void showContextMenu();
+
 private:
 	friend class DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;

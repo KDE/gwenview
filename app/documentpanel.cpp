@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmenu.h>
 #include <kmimetype.h>
 #include <kparts/componentfactory.h>
 #include <kparts/statusbarextension.h>
@@ -296,6 +297,11 @@ struct DocumentPanelPrivate {
 		// Insert the widget above the status bar
 		mAdapterContainerLayout->insertWidget(0 /* position */, widget, 1 /* stretch */);
 		that->setCurrentWidget(mThumbnailSplitter);
+
+		// Connect context menu
+		widget->setContextMenuPolicy(Qt::CustomContextMenu);
+		QObject::connect(widget, SIGNAL(customContextMenuRequested(const QPoint&)),
+			that, SLOT(showContextMenu()) );
 	}
 
 	void applyPalette() {
@@ -487,6 +493,27 @@ void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
 
 ThumbnailBarView* DocumentPanel::thumbnailBar() const {
 	return d->mThumbnailBar;
+}
+
+
+inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, const char* name) {
+	QAction* action = actionCollection->action(name);
+	if (action) {
+		menu->addAction(action);
+	}
+}
+
+
+void DocumentPanel::showContextMenu() {
+	if (!d->mAdapter->canZoom()) {
+		return;
+	}
+	KMenu menu(d->mAdapter->widget());
+	addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
+	addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
+	addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
+	addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
+	menu.exec(QCursor::pos());
 }
 
 
