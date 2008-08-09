@@ -655,33 +655,27 @@ void DocumentPanel::zoomActualSize() {
 void DocumentPanel::zoomIn(const QPoint& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
-	d->setZoom(currentZoom * 2, center);
-	/* FIXME: PORT
-	Q_FOREACH(qreal zoom, mZoomSnapValues) {
+	Q_FOREACH(qreal zoom, d->mZoomSnapValues) {
 		if (zoom > currentZoom + REAL_DELTA) {
-			setZoom(zoom, center);
+			d->setZoom(zoom, center);
 			return;
 		}
 	}
-	*/
 }
 
 
 void DocumentPanel::zoomOut(const QPoint& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
-	d->setZoom(currentZoom / 2, center);
-	/* FIXME: PORT
-	QListIterator<qreal> it(mZoomSnapValues);
+	QListIterator<qreal> it(d->mZoomSnapValues);
 	it.toBack();
 	while (it.hasPrevious()) {
 		qreal zoom = it.previous();
 		if (zoom < currentZoom - REAL_DELTA) {
-			setZoom(zoom, center);
+			d->setZoom(zoom, center);
 			return;
 		}
 	}
-	*/
 }
 
 
