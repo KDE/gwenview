@@ -276,7 +276,7 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 	QListView::selectionChanged(selected, deselected);
 
 	QModelIndexList list = selected.indexes();
-	if (list.count() == 1) {
+	if (list.count() == 1 && isVisible()) {
 		smoothScrollTo(list.first());
 	}
 }
