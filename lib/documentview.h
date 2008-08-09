@@ -58,6 +58,8 @@ public:
 
 	void reset();
 
+	bool isEmpty() const;
+
 Q_SIGNALS:
 	/**
 	 * Emitted when the part has finished loading

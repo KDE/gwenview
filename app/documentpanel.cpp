@@ -451,7 +451,7 @@ bool DocumentPanel::currentDocumentIsRasterImage() const {
 
 
 bool DocumentPanel::isEmpty() const {
-	return !d->mDocumentView->adapter();
+	return d->mDocumentView->isEmpty();
 }
 
 

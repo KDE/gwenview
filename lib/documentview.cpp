@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/document/document.h>
+#include <lib/emptyviewadapter.h>
 #include <lib/imageviewadapter.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
@@ -60,11 +61,13 @@ typedef AbstractDocumentViewAdapter* (*AdapterCreator)(QWidget* parent);
 // AdapterCreator
 #define DECLARE_ADAPTOR(className) \
 static AbstractDocumentViewAdapter* create##className(QWidget* parent) { \
+	LOG(""); \
 	return new className(parent); \
 }
 
 DECLARE_ADAPTOR(ImageViewAdapter)
 DECLARE_ADAPTOR(SvgViewAdapter)
+DECLARE_ADAPTOR(EmptyViewAdapter)
 
 
 struct DocumentViewPrivate {
@@ -78,10 +81,15 @@ struct DocumentViewPrivate {
 	QList<qreal> mZoomSnapValues;
 
 
-	void createAdapter(AdapterCreator creator, QWidget* parent) {
+	void createAdapter(AdapterCreator creator) {
+		if (mAdapterCreator == creator) {
+			LOG("Reusing current adapter");
+			return;
+		}
+
 		delete mAdapter;
 		mAdapterCreator = creator;
-		mAdapter = mAdapterCreator(parent);
+		mAdapter = mAdapterCreator(that);
 
 		QObject::connect(mAdapter, SIGNAL(completed()),
 			that, SLOT(slotCompleted()) );
@@ -92,7 +100,7 @@ struct DocumentViewPrivate {
 		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
 
-		setAdapterWidget(mAdapter->widget());
+		that->layout()->addWidget(mAdapter->widget());
 
 		if (mAdapter->canZoom()) {
 			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
@@ -132,16 +140,6 @@ struct DocumentViewPrivate {
 		KStandardAction::zoomOut(that, SLOT(zoomOut()), mActionCollection);
 
 		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
-	}
-
-	void setAdapterWidget(QWidget* widget) {
-		if (!widget) {
-			// FIXME: REFACTOR mNoDocumentLabel
-			//that->setCurrentWidget(mNoDocumentLabel);
-			return;
-		}
-
-		that->layout()->addWidget(widget);
 	}
 
 
@@ -234,6 +232,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mAdapterCreator = 0;
 	d->setupZoomWidget();
 	d->setupZoomActions();
+	d->createAdapter(createEmptyViewAdapter);
 }
 
 
@@ -275,12 +274,7 @@ void DocumentView::createAdapterForUrl(const KUrl& url) {
 	}
 	Q_ASSERT(creator);
 
-	if (creator == d->mAdapterCreator) {
-		LOG("Reusing current adapter");
-		return;
-	}
-
-	d->createAdapter(creator, this);
+	d->createAdapter(creator);
 }
 
 
@@ -296,13 +290,14 @@ bool DocumentView::openUrl(const KUrl& url) {
 
 
 void DocumentView::reset() {
-	if (!d->mAdapter) {
-		return;
-	}
-	d->setAdapterWidget(0);
-	delete d->mAdapter;
-	d->mAdapter = 0;
-	d->mAdapterCreator = 0;
+	d->createAdapter(createEmptyViewAdapter);
+}
+
+
+bool DocumentView::isEmpty() const {
+	//FIXME: Introduce an AbstractDocumentViewAdapter::isEmpty() method
+	//instead?
+	return d->mAdapterCreator == createEmptyViewAdapter;
 }
 
 
