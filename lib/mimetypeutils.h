@@ -35,6 +35,7 @@ namespace MimeTypeUtils {
 
 GWENVIEWLIB_EXPORT const QStringList& dirMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& rasterImageMimeTypes();
+GWENVIEWLIB_EXPORT const QStringList& svgImageMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& imageMimeTypes();
 GWENVIEWLIB_EXPORT const QStringList& videoMimeTypes();
 
@@ -45,7 +46,7 @@ GWENVIEWLIB_EXPORT QString urlMimeType(const KUrl&);
  */
 GWENVIEWLIB_EXPORT QString urlMimeTypeByContent(const KUrl&);
 
-enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE };
+enum Kind { KIND_UNKNOWN, KIND_DIR, KIND_ARCHIVE, KIND_FILE, KIND_RASTER_IMAGE, KIND_SVG_IMAGE };
 GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem&);
 GWENVIEWLIB_EXPORT Kind urlKind(const KUrl&);
 GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);

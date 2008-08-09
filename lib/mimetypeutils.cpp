@@ -65,11 +65,21 @@ const QStringList& rasterImageMimeTypes() {
 }
 
 
+const QStringList& svgImageMimeTypes() {
+	static QStringList list;
+	if (list.isEmpty()) {
+		list.append("image/svg+xml");
+		// FIXME svgz
+	}
+	return list;
+}
+
+
 const QStringList& imageMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
 		list = rasterImageMimeTypes();
-		list.append("image/svg+xml");
+		list += svgImageMimeTypes();
 	}
 
 	return list;
@@ -123,6 +133,9 @@ Kind mimeTypeKind(const QString& mimeType) {
 	}
 	if (rasterImageMimeTypes().contains(mimeType)) {
 		return KIND_RASTER_IMAGE;
+	}
+	if (svgImageMimeTypes().contains(mimeType)) {
+		return KIND_SVG_IMAGE;
 	}
 
 	return KIND_FILE;
