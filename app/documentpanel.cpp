@@ -286,14 +286,15 @@ struct DocumentPanelPrivate {
 		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
 	}
 
-	void setAdapterWidget(QWidget* partWidget) {
-		if (partWidget) {
-			// Insert the widget above the status bar
-			mAdapterContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
-			that->setCurrentWidget(mThumbnailSplitter);
-		} else {
+	void setAdapterWidget(QWidget* widget) {
+		if (!widget) {
 			that->setCurrentWidget(mNoDocumentLabel);
+			return;
 		}
+
+		// Insert the widget above the status bar
+		mAdapterContainerLayout->insertWidget(0 /* position */, widget, 1 /* stretch */);
+		that->setCurrentWidget(mThumbnailSplitter);
 	}
 
 	void applyPalette() {
