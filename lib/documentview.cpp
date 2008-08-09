@@ -153,6 +153,11 @@ struct DocumentViewPrivate {
 		}
 
 		Document::Ptr doc = mAdapter->document();
+		if (!doc) {
+			emit that->captionUpdateRequested(caption);
+			return;
+		}
+
 		caption = doc->url().fileName();
 		QSize size = doc->size();
 		if (size.isValid()) {
