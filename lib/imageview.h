@@ -57,15 +57,13 @@ public:
 
 	Document::Ptr document() const;
 
-	void setZoom(qreal zoom);
-
 	/**
 	 * Change zoom level, making sure the point at @p center stays at the
 	 * same position after zooming, if possible.
 	 * @param zoom the zoom level
 	 * @param center the center point, in viewport coordinates
 	 */
-	void setZoom(qreal zoom, const QPoint& center);
+	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1));
 
 	qreal zoom() const;
 

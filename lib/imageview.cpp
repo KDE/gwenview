@@ -356,13 +356,8 @@ QPoint ImageView::imageOffset() const {
 	return QPoint(left, top);
 }
 
-void ImageView::setZoom(qreal zoom) {
-	QPoint center = QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2);
-	setZoom(zoom, center);
-}
 
-
-void ImageView::setZoom(qreal zoom, const QPoint& center) {
+void ImageView::setZoom(qreal zoom, const QPoint& _center) {
 	if (!d->mDocument) {
 		return;
 	}
@@ -372,6 +367,13 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 		return;
 	}
 	d->mZoom = zoom;
+
+	QPoint center;
+	if (_center == QPoint(-1, -1)) {
+		center = QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2);
+	} else {
+		center = _center;
+	}
 
 	// If we zoom more than twice, then assume the user wants to see the real
 	// pixels, for example to fine tune a crop operation
