@@ -84,7 +84,7 @@ struct DocumentViewPrivate {
 	Document::Ptr mDocument;
 
 
-	void createAdapter(AdapterCreator creator) {
+	void createAdapter(AdapterCreator creator, AbstractDocumentViewAdapter* adapter = 0) {
 		if (mAdapterCreator == creator) {
 			LOG("Reusing current adapter");
 			return;
@@ -92,7 +92,7 @@ struct DocumentViewPrivate {
 
 		delete mAdapter;
 		mAdapterCreator = creator;
-		mAdapter = mAdapterCreator(that);
+		mAdapter = !adapter ? mAdapterCreator(that) : adapter;
 
 		QObject::connect(mAdapter, SIGNAL(resizeRequested(const QSize&)),
 			that, SIGNAL(resizeRequested(const QSize&)) );
@@ -220,12 +220,6 @@ struct DocumentViewPrivate {
 			<< mAdapter->computeZoomToFitHeight();
 		qSort(mZoomSnapValues);
 	}
-
-
-	void showError() {
-		kWarning() << "FIXME: Show error message";
-		createAdapter(createEmptyViewAdapter);
-	}
 };
 
 
@@ -260,6 +254,7 @@ ZoomWidget* DocumentView::zoomWidget() const {
 
 void DocumentView::createAdapterForDocument() {
 	AdapterCreator creator = 0;
+	AbstractDocumentViewAdapter* adapter = 0;
 	switch (d->mDocument->kind()) {
 	case MimeTypeUtils::KIND_RASTER_IMAGE:
 		creator = createImageViewAdapter;
@@ -268,12 +263,14 @@ void DocumentView::createAdapterForDocument() {
 		creator = createSvgViewAdapter;
 		break;
 	default:
-		kWarning() << "FIXME: Implement adapter for kind" << d->mDocument->kind();
-		return;
+		creator = createEmptyViewAdapter;
+		adapter = creator(this);
+		static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 	}
 	Q_ASSERT(creator);
 
-	d->createAdapter(creator);
+	d->createAdapter(creator, adapter);
+	Q_ASSERT(d->mAdapter);
 }
 
 
@@ -285,13 +282,10 @@ void DocumentView::openUrl(const KUrl& url) {
 	}
 
 	if (d->mDocument->loadingState() == Document::LoadingFailed) {
-		d->showError();
-	}
-	createAdapterForDocument();
-	if (!d->mAdapter) {
-		kWarning() << "!d->mAdapter. This should not happen";
+		slotLoadingFailed();
 		return;
 	}
+	createAdapterForDocument();
 
 	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded()) );
@@ -322,7 +316,11 @@ void DocumentView::slotLoaded() {
 
 
 void DocumentView::slotLoadingFailed() {
-	d->showError();
+	AbstractDocumentViewAdapter* adapter = createEmptyViewAdapter(this);
+	// FIXME: Get error message from document
+	QString message = i18n("Could not load this document");
+	static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(message);
+	d->createAdapter(createEmptyViewAdapter, adapter);
 	emit completed();
 }
 

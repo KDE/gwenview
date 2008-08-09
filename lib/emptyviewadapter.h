@@ -43,6 +43,8 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+	void setErrorMessage(const QString&);
+
 private:
 	EmptyViewAdapterPrivate* const d;
 };

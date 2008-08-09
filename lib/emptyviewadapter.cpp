@@ -57,6 +57,11 @@ EmptyViewAdapter::~EmptyViewAdapter() {
 }
 
 
+void EmptyViewAdapter::setErrorMessage(const QString& message) {
+	d->mNoDocumentLabel->setText(message);
+}
+
+
 void EmptyViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
 	widget()->installEventFilter(object);
 }
