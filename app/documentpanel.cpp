@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentpanel.moc"
 
 // Qt
-#include <QLabel>
 #include <QShortcut>
 #include <QSplitter>
 #include <QStylePainter>
@@ -156,7 +155,6 @@ protected:
 struct DocumentPanelPrivate {
 	DocumentPanel* that;
 	KActionCollection* mActionCollection;
-	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
 	DocumentView* mDocumentView;
@@ -169,15 +167,6 @@ struct DocumentPanelPrivate {
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
 	bool mThumbnailBarVisibleBeforeFullScreen;
-
-	void setupNoDocumentLabel() {
-		mNoDocumentLabel = new QLabel(that);
-		mNoDocumentLabel->setText(i18n("No document selected"));
-		mNoDocumentLabel->setAlignment(Qt::AlignCenter);
-		mNoDocumentLabel->setAutoFillBackground(true);
-		mNoDocumentLabel->setBackgroundRole(QPalette::Base);
-		mNoDocumentLabel->setForegroundRole(QPalette::Text);
-	}
 
 	void setupThumbnailBar() {
 		mThumbnailBar = new ThumbnailBarView;
@@ -319,8 +308,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	enterFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(enterFullScreenShortcut, SIGNAL(activated()), SIGNAL(enterFullScreenRequested()) );
 
-	d->setupNoDocumentLabel();
-
 	d->setupDocumentView();
 
 	d->setupStatusBar();
@@ -331,8 +318,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupSplitter();
 
-	// FIXME: REFACTOR mNoDocumentLabel
-	//addWidget(d->mNoDocumentLabel);
 	addWidget(d->mThumbnailSplitter);
 
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
