@@ -43,6 +43,13 @@ QTEST_KDEMAIN( DocumentTest, GUI )
 using namespace Gwenview;
 
 
+static void waitUntilMetaDataLoaded(Document::Ptr doc) {
+	while (doc->loadingState() < Document::MetaDataLoaded) {
+		QTest::qWait(100);
+	}
+}
+
+
 void DocumentTest::initTestCase() {
 	qRegisterMetaType<KUrl>("KUrl");
 }
@@ -83,7 +90,7 @@ void DocumentTest::testLoadTwoPasses() {
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->waitUntilMetaDataLoaded();
+	waitUntilMetaDataLoaded(doc);
 	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
 	QCOMPARE(doc->format().data(), "png");
 	doc->loadFullImage();
@@ -340,7 +347,7 @@ void DocumentTest::testMetaDataBmp() {
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
-	doc->waitUntilMetaDataLoaded();
+	waitUntilMetaDataLoaded(doc);
 
 	Q_ASSERT(metaDataUpdatedSpy.count() >= 1);
 

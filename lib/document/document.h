@@ -141,8 +141,6 @@ public:
 
 	QByteArray format() const;
 
-	void waitUntilMetaDataLoaded() const;
-
 	void waitUntilLoaded() const;
 
 	QSize size() const;

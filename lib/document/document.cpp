@@ -199,13 +199,6 @@ void Document::setKeepRawData(bool value) {
 }
 
 
-void Document::waitUntilMetaDataLoaded() const {
-	while (loadingState() == Loading) {
-		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-	}
-}
-
-
 void Document::waitUntilLoaded() const {
 	while (true) {
 		LoadingState state = loadingState();
