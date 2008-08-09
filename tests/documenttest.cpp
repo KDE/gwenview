@@ -63,25 +63,37 @@ void DocumentTest::init() {
 void DocumentTest::testLoad() {
 	QFETCH(QString, fileName);
 	QFETCH(QByteArray, expectedFormat);
+	QFETCH(int, expectedKindInt);
 	QFETCH(QImage, expectedImage);
+	MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
+
 	KUrl url = urlForTestFile(fileName);
 	QVERIFY2(!expectedImage.isNull(), "Could not load test image");
+
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
-	QCOMPARE(expectedImage, doc->image());
-	QCOMPARE(expectedFormat, doc->format());
+	QCOMPARE(doc->loadingState(), Document::Loaded);
+
+	QCOMPARE(expectedKind, doc->kind());
+	if (doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE) {
+		QCOMPARE(expectedImage, doc->image());
+		QCOMPARE(expectedFormat, doc->format());
+	}
 }
 
-#define NEW_ROW(fileName, format) QTest::newRow(fileName) << fileName << QByteArray(format) << QImage(pathForTestFile(fileName))
+#define NEW_ROW(fileName, format, kind) QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << QImage(pathForTestFile(fileName))
 void DocumentTest::testLoad_data() {
 	QTest::addColumn<QString>("fileName");
 	QTest::addColumn<QByteArray>("expectedFormat");
+	QTest::addColumn<int>("expectedKindInt");
 	QTest::addColumn<QImage>("expectedImage");
 
-	NEW_ROW("test.png", "png");
-	NEW_ROW("160216_no_size_before_decoding.eps", "eps");
-	NEW_ROW("160382_corrupted.jpeg", "jpeg");
+	NEW_ROW("test.png", "png", MimeTypeUtils::KIND_RASTER_IMAGE);
+	NEW_ROW("160216_no_size_before_decoding.eps", "eps", MimeTypeUtils::KIND_RASTER_IMAGE);
+	NEW_ROW("160382_corrupted.jpeg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
+	NEW_ROW("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);
+	// FIXME: Test svgz
 }
 
 void DocumentTest::testLoadTwoPasses() {
