@@ -46,6 +46,20 @@ public:
 
 	virtual Document::Ptr document() const;
 
+	virtual bool canZoom() const { return true; }
+
+	virtual void setZoomToFit(bool);
+
+	virtual bool zoomToFit() const;
+
+	virtual qreal zoom() const;
+
+	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1));
+
+	virtual qreal computeZoomToFit() const;
+	virtual qreal computeZoomToFitWidth() const;
+	virtual qreal computeZoomToFitHeight() const;
+
 private:
 	SvgViewAdapterPrivate* const d;
 };

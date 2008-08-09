@@ -87,4 +87,43 @@ Document::Ptr SvgViewAdapter::document() const {
 }
 
 
+void SvgViewAdapter::setZoomToFit(bool) {
+}
+
+
+bool SvgViewAdapter::zoomToFit() const {
+	return false;
+}
+
+
+qreal SvgViewAdapter::zoom() const {
+	return d->mView->matrix().m11();
+}
+
+
+void SvgViewAdapter::setZoom(qreal zoom, const QPoint& /*center*/) {
+	QMatrix matrix;
+	matrix.scale(zoom, zoom);
+	d->mView->setMatrix(matrix);
+	emit zoomChanged(zoom);
+}
+
+
+qreal SvgViewAdapter::computeZoomToFit() const {
+	return qMin(computeZoomToFitWidth(), computeZoomToFitHeight());
+}
+
+
+qreal SvgViewAdapter::computeZoomToFitWidth() const {
+	int width = d->mScene->width();
+	return width != 0 ? (qreal(d->mView->viewport()->width()) / width) : 1;
+}
+
+
+qreal SvgViewAdapter::computeZoomToFitHeight() const {
+	int height = d->mScene->height();
+	return height != 0 ? (qreal(d->mView->viewport()->height()) / height) : 1;
+}
+
+
 } // namespace
