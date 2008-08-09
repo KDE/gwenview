@@ -435,8 +435,8 @@ void DocumentPanel::setThumbnailBarVisibility(bool visible) {
 }
 
 
-KStatusBar* DocumentPanel::statusBar() const {
-	return d->mStatusBar;
+int DocumentPanel::statusBarHeight() const {
+	return d->mStatusBarContainer->height();
 }
 
 

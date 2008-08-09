@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QPalette;
 
 class KActionCollection;
-class KStatusBar;
 class KUrl;
 
 namespace Gwenview {
@@ -61,7 +60,7 @@ public:
 
 	void setStatusBarHeight(int);
 
-	KStatusBar* statusBar() const;
+	int statusBarHeight() const;
 
 	virtual QSize sizeHint() const;
 

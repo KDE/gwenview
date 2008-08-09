@@ -69,7 +69,6 @@ public Q_SLOTS:
 	void hideTemporarySideBar();
 
 protected:
-	virtual void slotSetStatusBarText(const QString&);
 	virtual bool queryClose();
 	virtual QSize sizeHint() const;
 	virtual void showEvent(QShowEvent*);

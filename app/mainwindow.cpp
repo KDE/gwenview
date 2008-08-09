@@ -873,10 +873,6 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 }
 
 
-void MainWindow::slotSetStatusBarText(const QString& message) {
-	d->mDocumentPanel->statusBar()->showMessage(message);
-}
-
 void MainWindow::toggleSideBar() {
 	d->mSideBarContainer->setVisible(!d->mSideBarContainer->isVisible());
 	d->updateToggleSideBarAction();
@@ -1300,7 +1296,7 @@ void MainWindow::handleResizeRequest(const QSize& _size) {
 	// frame
 	QSize innerMargin = QSize(
 		sideBarWidth,
-		menuBar()->height() + toolBar()->height() + d->mDocumentPanel->statusBar()->height());
+		menuBar()->height() + toolBar()->height() + d->mDocumentPanel->statusBarHeight());
 	// frameMargin is the size of the frame around the window
 	QSize frameMargin = frameGeometry().size() - geometry().size();
 
