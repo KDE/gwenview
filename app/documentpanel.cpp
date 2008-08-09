@@ -188,6 +188,8 @@ struct DocumentPanelPrivate {
 		mToggleThumbnailBarButton = new StatusBarToolButton;
 
 		mZoomWidget = new ZoomWidget;
+		QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
+			that, SLOT(slotZoomWidgetChanged(qreal)) );
 
 		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
@@ -348,7 +350,7 @@ struct DocumentPanelPrivate {
 	}
 
 
-	void setZoom(qreal zoom, const QPoint& _center) {
+	void setZoom(qreal zoom, const QPoint& _center = QPoint(-1, -1)) {
 		disableZoomToFit();
 		QPoint center;
 		if (_center == QPoint(-1, -1)) {
@@ -547,7 +549,13 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 		this, SIGNAL(nextImageRequested()) );
 
 	d->setAdapterWidget(adapter->widget());
-	d->mZoomWidget->setVisible(adapter->canZoom());
+	if (adapter->canZoom()) {
+		connect(adapter, SIGNAL(zoomChanged(qreal)),
+			SLOT(slotZoomChanged(qreal)) );
+		d->mZoomWidget->show();
+	} else {
+		d->mZoomWidget->hide();
+	}
 
 	delete d->mAdapter;
 	d->mAdapter = adapter;
@@ -643,6 +651,20 @@ void DocumentPanel::zoomOut(const QPoint& center) {
 		}
 	}
 	*/
+}
+
+
+void DocumentPanel::slotZoomChanged(qreal zoom) {
+	d->mZoomWidget->setZoom(zoom);
+	d->updateCaption();
+}
+
+
+
+
+void DocumentPanel::slotZoomWidgetChanged(qreal zoom) {
+	d->disableZoomToFit();
+	d->setZoom(zoom);
 }
 
 

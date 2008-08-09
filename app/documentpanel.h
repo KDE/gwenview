@@ -111,6 +111,9 @@ private Q_SLOTS:
 	void zoomIn(const QPoint& center = QPoint(-1,-1));
 	void zoomOut(const QPoint& center = QPoint(-1,-1));
 
+	void slotZoomChanged(qreal);
+	void slotZoomWidgetChanged(qreal);
+
 private:
 	friend class DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;
