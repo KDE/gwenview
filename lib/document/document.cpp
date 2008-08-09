@@ -49,6 +49,7 @@ struct DocumentPrivate {
 	QImage mImage;
 	QMap<int, QImage> mDownSampledImageMap;
 	Exiv2::Image::AutoPtr mExiv2Image;
+	MimeTypeUtils::Kind mKind;
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
 	QUndoStack mUndoStack;
@@ -73,6 +74,7 @@ Document::Document(const KUrl& url)
 	d->mImpl = 0;
 	d->mUrl = url;
 	d->mKeepRawData = false;
+	d->mKind = MimeTypeUtils::KIND_UNKNOWN;
 
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -92,6 +94,7 @@ void Document::reload() {
 	d->mImage = QImage();
 	d->mDownSampledImageMap.clear();
 	d->mExiv2Image.reset();
+	d->mKind = MimeTypeUtils::KIND_UNKNOWN;
 	d->mFormat = QByteArray();
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
@@ -232,6 +235,17 @@ void Document::setFormat(const QByteArray& format) {
 }
 
 
+MimeTypeUtils::Kind Document::kind() const {
+	return d->mKind;
+}
+
+
+void Document::setKind(MimeTypeUtils::Kind kind) {
+	d->mKind = kind;
+	emit kindDetermined(d->mUrl);
+}
+
+
 QSize Document::size() const {
 	return d->mSize;
 }
@@ -294,17 +308,14 @@ ImageMetaInfoModel* Document::metaInfo() const {
 
 
 void Document::loadFullImage() {
-	switch (loadingState()) {
-	case Loading:
-	case MetaDataLoaded:
+	LoadingState state = loadingState();
+	if (state <= MetaDataLoaded) {
 		// Schedule full image loading
 		d->scheduleImageLoading(1);
-		break;
-	case Loaded:
-		break;
-	case LoadingFailed:
+	} else if (state == Loaded) {
+		return;
+	} else if (state == LoadingFailed) {
 		kWarning() << "Can't load full image: loading has already failed";
-		break;
 	}
 }
 

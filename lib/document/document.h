@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ksharedptr.h>
 
 // Local
+#include <lib/mimetypeutils.h>
 #include <lib/orientation.h>
 
 class QImage;
@@ -85,6 +86,7 @@ public:
 
 	enum LoadingState {
 		Loading,        ///< Image is loading
+		KindDetermined, ///< Image is still loading, but kind has been determined
 		MetaDataLoaded, ///< Image is still loading, but meta data has been loaded
 		Loaded,         ///< Full image has been loaded
 		LoadingFailed   ///< Image loading has failed
@@ -108,6 +110,8 @@ public:
 	bool prepareDownSampledImageForZoom(qreal zoom);
 
 	LoadingState loadingState() const;
+
+	MimeTypeUtils::Kind kind() const;
 
 	bool isModified() const;
 
@@ -173,6 +177,7 @@ public:
 Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);
+	void kindDetermined(const KUrl&);
 	void metaDataLoaded(const KUrl&);
 	void loaded(const KUrl&);
 	void loadingFailed(const KUrl&);
@@ -191,6 +196,7 @@ private:
 	friend class AbstractDocumentImpl;
 
 	void setImageInternal(const QImage&);
+	void setKind(MimeTypeUtils::Kind);
 	void setFormat(const QByteArray&);
 	void setSize(const QSize&);
 	void setExiv2Image(Exiv2::Image::AutoPtr);
