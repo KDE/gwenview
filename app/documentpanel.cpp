@@ -451,8 +451,8 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 }
 
 
-bool DocumentPanel::openUrl(const KUrl& url) {
-	return d->mDocumentView->openUrl(url);
+void DocumentPanel::openUrl(const KUrl& url) {
+	d->mDocumentView->openUrl(url);
 }
 
 

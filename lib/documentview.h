@@ -54,7 +54,7 @@ public:
 
 	ZoomWidget* zoomWidget() const;
 
-	bool openUrl(const KUrl&);
+	void openUrl(const KUrl&);
 
 	void reset();
 

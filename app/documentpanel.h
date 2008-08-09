@@ -69,10 +69,7 @@ public:
 	 */
 	KUrl url() const;
 
-	/**
-	 * Opens url. Returns true on success
-	 */
-	bool openUrl(const KUrl& url);
+	void openUrl(const KUrl& url);
 
 	bool currentDocumentIsRasterImage() const;
 

@@ -857,9 +857,7 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	if (d->mDocumentPanel->url() == url) {
 		return;
 	}
-	if (!d->mDocumentPanel->openUrl(url)) {
-		return;
-	}
+	d->mDocumentPanel->openUrl(url);
 
 	d->mFullScreenContent->setCurrentUrl(url);
 

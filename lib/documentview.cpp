@@ -277,7 +277,7 @@ void DocumentView::createAdapterForDocument() {
 }
 
 
-bool DocumentView::openUrl(const KUrl& url) {
+void DocumentView::openUrl(const KUrl& url) {
 	d->mDocument = DocumentFactory::instance()->load(url);
 
 	while (d->mDocument->loadingState() < Document::KindDetermined) {
@@ -286,22 +286,19 @@ bool DocumentView::openUrl(const KUrl& url) {
 
 	if (d->mDocument->loadingState() == Document::LoadingFailed) {
 		d->showError();
-		return false;
 	}
 	createAdapterForDocument();
 	if (!d->mAdapter) {
-		d->showError();
-		return false;
+		kWarning() << "!d->mAdapter. This should not happen";
+		return;
 	}
 
-	connect(d->mDocument.data(), SIGNAL(loaded()),
+	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded()) );
-	connect(d->mDocument.data(), SIGNAL(loadingFailed()),
+	connect(d->mDocument.data(), SIGNAL(loadingFailed(const KUrl&)),
 		SLOT(slotLoadingFailed()) );
 	d->mAdapter->setDocument(d->mDocument);
 	d->updateCaption();
-
-	return true;
 }
 
 
