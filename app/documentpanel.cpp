@@ -368,9 +368,7 @@ struct DocumentPanelPrivate {
 		} else {
 			center = _center;
 		}
-		/* FIXME: PORT
 		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
-		*/
 
 		mAdapter->setZoom(zoom, center);
 	}
