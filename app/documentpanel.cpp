@@ -411,14 +411,18 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void DocumentPanel::showContextMenu() {
-	if (!d->mDocumentView->adapter()->canZoom()) {
-		return;
+	KMenu menu(this);
+	addActionToMenu(&menu, d->mActionCollection, "fullscreen");
+	menu.addSeparator();
+	addActionToMenu(&menu, d->mActionCollection, "go_previous");
+	addActionToMenu(&menu, d->mActionCollection, "go_next");
+	if (d->mDocumentView->adapter()->canZoom()) {
+		menu.addSeparator();
+		addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
+		addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
+		addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
+		addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
 	}
-	KMenu menu(d->mDocumentView->adapter()->widget());
-	addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
-	addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
-	addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
-	addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
 	menu.exec(QCursor::pos());
 }
 
