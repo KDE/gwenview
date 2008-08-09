@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/imageview.h>
+#include <lib/scrolltool.h>
 #include <lib/document/documentfactory.h>
 
 namespace Gwenview {
@@ -36,14 +37,30 @@ namespace Gwenview {
 struct ImageViewAdapterPrivate {
 	ImageViewAdapter* that;
 	ImageView* mView;
+	ScrollTool* mScrollTool;
+
+	void setupScrollTool() {
+		mScrollTool = new ScrollTool(mView);
+		mView->setCurrentTool(mScrollTool);
+		QObject::connect(mScrollTool, SIGNAL(previousImageRequested()),
+			that, SIGNAL(previousImageRequested()) );
+		QObject::connect(mScrollTool, SIGNAL(nextImageRequested()),
+			that, SIGNAL(nextImageRequested()) );
+		QObject::connect(mScrollTool, SIGNAL(zoomInRequested(const QPoint&)),
+			that, SIGNAL(zoomInRequested(const QPoint&)) );
+		QObject::connect(mScrollTool, SIGNAL(zoomOutRequested(const QPoint&)),
+			that, SIGNAL(zoomOutRequested(const QPoint&)) );
+	}
 };
 
 
 ImageViewAdapter::ImageViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new ImageViewAdapterPrivate) {
+	d->that = this;
 	d->mView = new ImageView(parent);
 	setWidget(d->mView);
+	d->setupScrollTool();
 
 	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
 }

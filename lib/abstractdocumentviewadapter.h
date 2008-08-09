@@ -98,6 +98,18 @@ Q_SIGNALS:
 	 * @{
 	 */
 	void zoomChanged(qreal);
+
+	/**
+	 * Emitted when the ui would like to zoom in at a particular point.
+	 * @param center the zoom point in widget coordinates
+	 */
+	void zoomInRequested(const QPoint& center);
+
+	/**
+	 * Emitted when the ui would like to zoom out from a particular point.
+	 * @param center the zoom point in widget coordinates
+	 */
+	void zoomOutRequested(const QPoint& center);
 	/** @} */
 
 private:

@@ -99,6 +99,10 @@ struct DocumentViewPrivate {
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
+		QObject::connect(mAdapter, SIGNAL(zoomInRequested(const QPoint&)),
+			that, SLOT(zoomIn(const QPoint&)) );
+		QObject::connect(mAdapter, SIGNAL(zoomOutRequested(const QPoint&)),
+			that, SLOT(zoomOut(const QPoint&)) );
 
 		that->layout()->addWidget(mAdapter->widget());
 
