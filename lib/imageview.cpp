@@ -434,7 +434,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& center) {
 
 	d->mScaler->setZoom(d->mZoom);
 	d->setScalerRegionToVisibleRect();
-	emit zoomChanged();
+	emit zoomChanged(d->mZoom);
 }
 
 qreal ImageView::zoom() const {

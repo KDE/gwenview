@@ -84,7 +84,7 @@ public:
 	qreal computeZoomToFitHeight() const;
 
 Q_SIGNALS:
-	void zoomChanged();
+	void zoomChanged(qreal);
 
 public Q_SLOTS:
 	void setZoomToFit(bool on);

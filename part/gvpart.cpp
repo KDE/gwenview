@@ -91,7 +91,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	mView->viewport()->installEventFilter(this);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
-	connect(mView, SIGNAL(zoomChanged()), SLOT(slotZoomChanged()) );
+	connect(mView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomChanged()) );
 
 	mZoomToFitAction = new KAction(actionCollection());
 	mZoomToFitAction->setCheckable(true);
