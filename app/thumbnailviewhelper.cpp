@@ -144,7 +144,7 @@ void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl
 		KIcon("edit-copy"),
 		i18n("Copy Here"));
 	QAction* linkAction = menu.addAction(
-		/*KIcon("insert-link"),*/ // FIXME: Uncomment when insert-link icon exists
+		KIcon("edit-link"),
 		i18n("Link Here"));
 	menu.addSeparator();
 	menu.addAction(
