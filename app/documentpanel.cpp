@@ -582,7 +582,6 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	if (d->mAdapter->canZoom()) {
 		connect(d->mAdapter, SIGNAL(zoomChanged(qreal)),
 			SLOT(slotZoomChanged(qreal)) );
-		d->updateZoomSnapValues();
 		d->mZoomWidget->show();
 	} else {
 		d->mZoomWidget->hide();
