@@ -100,22 +100,8 @@ Q_SIGNALS:
 
 	void captionUpdateRequested(const QString&);
 
-protected:
-	virtual bool eventFilter(QObject*, QEvent* event);
-
 private Q_SLOTS:
 	void setThumbnailBarVisibility(bool visible);
-	void slotCompleted();
-
-	void setZoomToFit(bool);
-
-	void zoomActualSize();
-
-	void zoomIn(const QPoint& center = QPoint(-1,-1));
-	void zoomOut(const QPoint& center = QPoint(-1,-1));
-
-	void slotZoomChanged(qreal);
-	void slotZoomWidgetChanged(qreal);
 
 	void showContextMenu();
 

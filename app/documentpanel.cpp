@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QLabel>
-#include <QMouseEvent>
 #include <QShortcut>
 #include <QSplitter>
 #include <QStylePainter>
@@ -41,14 +40,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "thumbnailbarview.h"
+#include <lib/abstractdocumentviewadapter.h>
+#include <lib/documentview.h>
 #include <lib/imageview.h>
-#include <lib/imageviewadapter.h>
-#include <lib/mimetypeutils.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/signalblocker.h>
 #include <lib/statusbartoolbutton.h>
-#include <lib/svgviewadapter.h>
 #include <lib/zoomwidget.h>
 
 
@@ -62,10 +60,6 @@ namespace Gwenview {
 #else
 #define LOG(x) ;
 #endif
-
-
-static const qreal REAL_DELTA = 0.001;
-static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
 static QString rgba(const QColor &color) {
@@ -141,13 +135,13 @@ protected:
  *
  * +-mThumbnailSplitter--------------------------------+
  * |+-mAdapterContainer-------------------------------+|
- * ||..Adapter widget.................................||
- * ||.                                               .||
- * ||.                                               .||
- * ||.                                               .||
- * ||.                                               .||
- * ||.                                               .||
- * ||.................................................||
+ * ||+-mDocumentView---------------------------------+||
+ * |||                                               |||
+ * |||                                               |||
+ * |||                                               |||
+ * |||                                               |||
+ * |||                                               |||
+ * ||+-----------------------------------------------+||
  * ||+-mStatusBarContainer---------------------------+||
  * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
  * ||+-----------------------------------------------+||
@@ -165,22 +159,16 @@ struct DocumentPanelPrivate {
 	QLabel* mNoDocumentLabel;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
-	QVBoxLayout* mAdapterContainerLayout;
+	DocumentView* mDocumentView;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
-	KAction* mZoomToFitAction;
-	ZoomWidget* mZoomWidget;
 
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
 	bool mThumbnailBarVisibleBeforeFullScreen;
-
-	AbstractDocumentViewAdapter* mAdapter;
-	QString mAdapterLibrary;
-	QList<qreal> mZoomSnapValues;
 
 	void setupNoDocumentLabel() {
 		mNoDocumentLabel = new QLabel(that);
@@ -191,25 +179,8 @@ struct DocumentPanelPrivate {
 		mNoDocumentLabel->setForegroundRole(QPalette::Text);
 	}
 
-	void setupStatusBar() {
-		mStatusBarContainer = new QWidget;
-		mToggleThumbnailBarButton = new StatusBarToolButton;
-
-		mZoomWidget = new ZoomWidget;
-		QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
-			that, SLOT(slotZoomWidgetChanged(qreal)) );
-
-		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		layout->addWidget(mToggleThumbnailBarButton);
-		layout->addStretch();
-		layout->addWidget(mZoomWidget);
-		mZoomWidget->hide();
-	}
-
 	void setupThumbnailBar() {
-		mThumbnailBar = new ThumbnailBarView(mAdapterContainer);
+		mThumbnailBar = new ThumbnailBarView;
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
 		mThumbnailBar->setItemDelegate(delegate);
 		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
@@ -255,10 +226,47 @@ struct DocumentPanelPrivate {
 
 	void setupAdapterContainer() {
 		mAdapterContainer = new QWidget;
-		mAdapterContainerLayout = new QVBoxLayout(mAdapterContainer);
-		mAdapterContainerLayout->addWidget(mStatusBarContainer);
-		mAdapterContainerLayout->setMargin(0);
-		mAdapterContainerLayout->setSpacing(0);
+
+		QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(mDocumentView);
+		layout->addWidget(mStatusBarContainer);
+	}
+
+	void setupDocumentView() {
+		mDocumentView = new DocumentView(0, mActionCollection);
+
+		// Connect context menu
+		mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
+		QObject::connect(mDocumentView, SIGNAL(customContextMenuRequested(const QPoint&)),
+			that, SLOT(showContextMenu()) );
+
+		QObject::connect(mDocumentView, SIGNAL(completed()),
+			that, SIGNAL(completed()) );
+		QObject::connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
+			that, SIGNAL(resizeRequested(const QSize&)) );
+		QObject::connect(mDocumentView, SIGNAL(previousImageRequested()),
+			that, SIGNAL(previousImageRequested()) );
+		QObject::connect(mDocumentView, SIGNAL(nextImageRequested()),
+			that, SIGNAL(nextImageRequested()) );
+		QObject::connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
+			that, SIGNAL(captionUpdateRequested(const QString&)) );
+		QObject::connect(mDocumentView, SIGNAL(completed()),
+			that, SIGNAL(completed()) );
+	}
+
+	void setupStatusBar() {
+		mStatusBarContainer = new QWidget;
+		mToggleThumbnailBarButton = new StatusBarToolButton;
+
+		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(mToggleThumbnailBarButton);
+		layout->addStretch();
+		layout->addWidget(mDocumentView->zoomWidget());
+		mDocumentView->zoomWidget()->hide();
 	}
 
 	void setupSplitter() {
@@ -268,54 +276,22 @@ struct DocumentPanelPrivate {
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
 	}
 
-	void setupZoomActions() {
-		mZoomToFitAction = new KAction(mActionCollection);
-		mZoomToFitAction->setCheckable(true);
-		mZoomToFitAction->setChecked(true);
-		mZoomToFitAction->setText(i18n("Zoom to Fit"));
-		mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
-		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
-		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
-			that, SLOT(setZoomToFit(bool)) );
-		mActionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
-
-		KAction* actualSizeAction = KStandardAction::actualSize(that, SLOT(zoomActualSize()), mActionCollection);
-		actualSizeAction->setIcon(KIcon("zoom-original"));
-		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-		KStandardAction::zoomIn(that, SLOT(zoomIn()), mActionCollection);
-		KStandardAction::zoomOut(that, SLOT(zoomOut()), mActionCollection);
-
-		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
-	}
-
-	void setAdapterWidget(QWidget* widget) {
-		if (!widget) {
-			that->setCurrentWidget(mNoDocumentLabel);
-			return;
-		}
-
-		// Insert the widget above the status bar
-		mAdapterContainerLayout->insertWidget(0 /* position */, widget, 1 /* stretch */);
-		that->setCurrentWidget(mThumbnailSplitter);
-
-		// Connect context menu
-		widget->setContextMenuPolicy(Qt::CustomContextMenu);
-		QObject::connect(widget, SIGNAL(customContextMenuRequested(const QPoint&)),
-			that, SLOT(showContextMenu()) );
-	}
-
 	void applyPalette() {
 		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
 		that->setPalette(palette);
 
-		if (!mAdapter) {
+		if (!mDocumentView->adapter()) {
+			return;
+		}
+		QWidget* widget = mDocumentView->adapter()->widget();
+		if (!widget) {
 			return;
 		}
 
-		QPalette partPalette = mAdapter->widget()->palette();
-		partPalette.setBrush(mAdapter->widget()->backgroundRole(), palette.base());
-		partPalette.setBrush(mAdapter->widget()->foregroundRole(), palette.text());
-		mAdapter->widget()->setPalette(partPalette);
+		QPalette partPalette = widget->palette();
+		partPalette.setBrush(widget->backgroundRole(), palette.base());
+		partPalette.setBrush(widget->foregroundRole(), palette.text());
+		widget->setPalette(partPalette);
 	}
 
 	void saveSplitterConfig() {
@@ -324,76 +300,6 @@ struct DocumentPanelPrivate {
 		}
 	}
 
-	void updateCaption() {
-		QString caption;
-		if (!mAdapter) {
-			emit that->captionUpdateRequested(caption);
-			return;
-		}
-
-		Document::Ptr doc = mAdapter->document();
-		caption = doc->url().fileName();
-		QSize size = doc->size();
-		if (size.isValid()) {
-			caption +=
-				QString(" - %1x%2")
-					.arg(size.width())
-					.arg(size.height());
-			if (mAdapter->canZoom()) {
-				int intZoom = qRound(mAdapter->zoom() * 100);
-				caption += QString(" - %1%")
-					.arg(intZoom);
-			}
-		}
-		emit that->captionUpdateRequested(caption);
-	}
-
-
-	void disableZoomToFit() {
-		// We can't disable zoom to fit by calling
-		// mZoomToFitAction->setChecked(false) directly because it would trigger
-		// the action slot, which would set zoom to 100%.
-		// If zoomToFit is on and the image is at 33%, pressing zoom in should
-		// show the image at 66%, not 200%.
-		if (!mAdapter->zoomToFit()) {
-			return;
-		}
-		mAdapter->setZoomToFit(false);
-		SignalBlocker blocker(mZoomToFitAction);
-		mZoomToFitAction->setChecked(false);
-	}
-
-
-	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
-		disableZoomToFit();
-		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
-		mAdapter->setZoom(zoom, center);
-	}
-
-
-	qreal computeMinimumZoom() const {
-		// There is no point zooming out less than zoomToFit, but make sure it does
-		// not get too small either
-		return qMax(0.001, qMin(mAdapter->computeZoomToFit(), 1.));
-	}
-
-
-	void updateZoomSnapValues() {
-		qreal min = computeMinimumZoom();
-		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
-
-		mZoomSnapValues.clear();
-		for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
-			mZoomSnapValues << 1/zoom;
-		}
-		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 0.5) {
-			mZoomSnapValues << zoom;
-		}
-		mZoomSnapValues
-			<< mAdapter->computeZoomToFitWidth()
-			<< mAdapter->computeZoomToFitHeight();
-		qSort(mZoomSnapValues);
-	}
 };
 
 
@@ -402,7 +308,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 , d(new DocumentPanelPrivate)
 {
 	d->that = this;
-	d->mAdapter = 0;
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
@@ -416,6 +321,8 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupNoDocumentLabel();
 
+	d->setupDocumentView();
+
 	d->setupStatusBar();
 
 	d->setupAdapterContainer();
@@ -424,9 +331,8 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupSplitter();
 
-	d->setupZoomActions();
-
-	addWidget(d->mNoDocumentLabel);
+	// FIXME: REFACTOR mNoDocumentLabel
+	//addWidget(d->mNoDocumentLabel);
 	addWidget(d->mThumbnailSplitter);
 
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
@@ -447,8 +353,8 @@ DocumentPanel::~DocumentPanel() {
 
 void DocumentPanel::loadConfig() {
 	// FIXME: Not symetric with saveConfig(). Check if it matters.
-	if (d->mAdapter) {
-		d->mAdapter->loadConfig();
+	if (d->mDocumentView->adapter()) {
+		d->mDocumentView->adapter()->loadConfig();
 	}
 }
 
@@ -505,10 +411,10 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void DocumentPanel::showContextMenu() {
-	if (!d->mAdapter->canZoom()) {
+	if (!d->mDocumentView->adapter()->canZoom()) {
 		return;
 	}
-	KMenu menu(d->mAdapter->widget());
+	KMenu menu(d->mDocumentView->adapter()->widget());
 	addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
 	addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
 	addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
@@ -523,104 +429,16 @@ QSize DocumentPanel::sizeHint() const {
 
 
 KUrl DocumentPanel::url() const {
-	if (!d->mAdapter) {
+	if (!d->mDocumentView->adapter()) {
 		return KUrl();
 	}
 
-	if (!d->mAdapter->document()) {
-		kWarning() << "!d->mAdapter->document()";
+	if (!d->mDocumentView->adapter()->document()) {
+		kWarning() << "!d->mDocumentView->adapter()->document()";
 		return KUrl();
 	}
 
-	return d->mAdapter->document()->url();
-}
-
-
-void DocumentPanel::reset() {
-	if (!d->mAdapter) {
-		return;
-	}
-	d->setAdapterWidget(0);
-	delete d->mAdapter;
-	d->mAdapterLibrary.clear();
-	d->mAdapter=0;
-}
-
-
-void DocumentPanel::createAdapterForUrl(const KUrl& url) {
-	QString mimeType = MimeTypeUtils::urlMimeType(url);
-	LOG("mimeType:" << mimeType);
-	if (!url.isLocalFile() && mimeType == "text/html") {
-		// Try harder, some webservers do not really know the mimetype of the
-		// content they serve (KDE Bugzilla for example)
-		mimeType = MimeTypeUtils::urlMimeTypeByContent(url);
-		LOG("mimeType after downloading content:" << mimeType);
-	}
-
-	// FIXME: Keep this "library" thing?
-	QString library;
-	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
-		library = "ImageViewAdapter";
-	} else if (MimeTypeUtils::imageMimeTypes().contains(mimeType)) {
-		// FIXME: This is not the best way to find out if this is svg
-		library = "SvgViewAdapter";
-	} else {
-		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
-		return;
-	}
-	Q_ASSERT(!library.isNull());
-	if (library == d->mAdapterLibrary) {
-		LOG("Reusing current adapter");
-		return;
-	}
-
-	// Load new part
-	AbstractDocumentViewAdapter* adapter;
-	if (library == "ImageViewAdapter") {
-		adapter = new ImageViewAdapter(d->mAdapterContainer);
-	} else if (library == "SvgViewAdapter") {
-		adapter = new SvgViewAdapter(d->mAdapterContainer);
-	} else {
-		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
-		return;
-	}
-
-	connect(adapter, SIGNAL(completed()),
-		this, SLOT(slotCompleted()) );
-	connect(adapter, SIGNAL(resizeRequested(const QSize&)),
-		this, SIGNAL(resizeRequested(const QSize&)) );
-	connect(adapter, SIGNAL(previousImageRequested()),
-		this, SIGNAL(previousImageRequested()) );
-	connect(adapter, SIGNAL(nextImageRequested()),
-		this, SIGNAL(nextImageRequested()) );
-
-	d->setAdapterWidget(adapter->widget());
-	delete d->mAdapter;
-	d->mAdapter = adapter;
-
-	if (d->mAdapter->canZoom()) {
-		connect(d->mAdapter, SIGNAL(zoomChanged(qreal)),
-			SLOT(slotZoomChanged(qreal)) );
-		d->mZoomWidget->show();
-	} else {
-		d->mZoomWidget->hide();
-	}
-	d->mAdapter->installEventFilterOnViewWidgets(this);
-
-	d->applyPalette();
-
-	d->mAdapterLibrary = library;
-}
-
-
-bool DocumentPanel::openUrl(const KUrl& url) {
-	createAdapterForUrl(url);
-	if (!d->mAdapter) {
-		return false;
-	}
-	d->mAdapter->openUrl(url);
-	d->updateCaption();
-	return true;
+	return d->mDocumentView->adapter()->document()->url();
 }
 
 
@@ -633,12 +451,12 @@ bool DocumentPanel::currentDocumentIsRasterImage() const {
 
 
 bool DocumentPanel::isEmpty() const {
-	return !d->mAdapter;
+	return !d->mDocumentView->adapter();
 }
 
 
 ImageView* DocumentPanel::imageView() const {
-	return d->mAdapter->imageView();
+	return d->mDocumentView->adapter()->imageView();
 }
 
 
@@ -648,81 +466,13 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 }
 
 
-void DocumentPanel::slotCompleted() {
-	d->updateCaption();
-	d->updateZoomSnapValues();
-	emit completed();
+bool DocumentPanel::openUrl(const KUrl& url) {
+	return d->mDocumentView->openUrl(url);
 }
 
 
-void DocumentPanel::setZoomToFit(bool on) {
-	d->mAdapter->setZoomToFit(on);
-	if (!on) {
-		d->mAdapter->setZoom(1.);
-	}
-}
-
-
-void DocumentPanel::zoomActualSize() {
-	d->disableZoomToFit();
-	d->mAdapter->setZoom(1.);
-}
-
-
-void DocumentPanel::zoomIn(const QPoint& center) {
-	qreal currentZoom = d->mAdapter->zoom();
-
-	Q_FOREACH(qreal zoom, d->mZoomSnapValues) {
-		if (zoom > currentZoom + REAL_DELTA) {
-			d->setZoom(zoom, center);
-			return;
-		}
-	}
-}
-
-
-void DocumentPanel::zoomOut(const QPoint& center) {
-	qreal currentZoom = d->mAdapter->zoom();
-
-	QListIterator<qreal> it(d->mZoomSnapValues);
-	it.toBack();
-	while (it.hasPrevious()) {
-		qreal zoom = it.previous();
-		if (zoom < currentZoom - REAL_DELTA) {
-			d->setZoom(zoom, center);
-			return;
-		}
-	}
-}
-
-
-void DocumentPanel::slotZoomChanged(qreal zoom) {
-	d->mZoomWidget->setZoom(zoom);
-	d->updateCaption();
-}
-
-
-
-
-void DocumentPanel::slotZoomWidgetChanged(qreal zoom) {
-	d->disableZoomToFit();
-	d->setZoom(zoom);
-}
-
-
-bool DocumentPanel::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::MouseButtonPress) {
-		// Middle click => toggle zoom to fit
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		if (mouseEvent->button() == Qt::MidButton) {
-			d->mZoomToFitAction->trigger();
-			return true;
-		}
-	} else if (event->type() == QEvent::Resize) {
-		d->updateZoomSnapValues();
-	}
-
-	return false;
+void DocumentPanel::reset() {
+	d->mDocumentView->reset();
 }
 
 

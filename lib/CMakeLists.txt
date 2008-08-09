@@ -25,6 +25,7 @@ set(gwenviewlib_SRCS
 	cropsidebar.cpp
 	cropimageoperation.cpp
 	croptool.cpp
+	documentview.cpp
 	expandbutton.cpp
 	exiv2imageloader.cpp
 	fullscreenbar.cpp
