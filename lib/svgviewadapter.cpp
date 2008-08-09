@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <ksvgrenderer.h>
-#include <kurl.h>
 
 // Local
 #include "document/documentfactory.h"
@@ -73,7 +72,7 @@ SvgViewAdapter::~SvgViewAdapter() {
 void SvgViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
 
-	if (!d->mRenderer->load(d->mDocument->url().path())) {
+	if (!d->mRenderer->load(d->mDocument->rawData())) {
 		return;
 	}
 	delete d->mItem;
