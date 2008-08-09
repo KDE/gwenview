@@ -54,6 +54,19 @@ static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
+typedef AbstractDocumentViewAdapter* (*AdapterCreator)(QWidget* parent);
+
+// This macro makes it easy to declare a function whose prototype is
+// AdapterCreator
+#define DECLARE_ADAPTOR(className) \
+static AbstractDocumentViewAdapter* create##className(QWidget* parent) { \
+	return new className(parent); \
+}
+
+DECLARE_ADAPTOR(ImageViewAdapter)
+DECLARE_ADAPTOR(SvgViewAdapter)
+
+
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
@@ -61,8 +74,38 @@ struct DocumentViewPrivate {
 	KAction* mZoomToFitAction;
 
 	AbstractDocumentViewAdapter* mAdapter;
-	QString mAdapterLibrary;
+	AdapterCreator mAdapterCreator;
 	QList<qreal> mZoomSnapValues;
+
+
+	void createAdapter(AdapterCreator creator, QWidget* parent) {
+		delete mAdapter;
+		mAdapterCreator = creator;
+		mAdapter = mAdapterCreator(parent);
+
+		QObject::connect(mAdapter, SIGNAL(completed()),
+			that, SLOT(slotCompleted()) );
+		QObject::connect(mAdapter, SIGNAL(resizeRequested(const QSize&)),
+			that, SIGNAL(resizeRequested(const QSize&)) );
+		QObject::connect(mAdapter, SIGNAL(previousImageRequested()),
+			that, SIGNAL(previousImageRequested()) );
+		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),
+			that, SIGNAL(nextImageRequested()) );
+
+		setAdapterWidget(mAdapter->widget());
+
+		if (mAdapter->canZoom()) {
+			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
+				that, SLOT(slotZoomChanged(qreal)) );
+			mZoomWidget->show();
+		} else {
+			mZoomWidget->hide();
+		}
+		mAdapter->installEventFilterOnViewWidgets(that);
+
+		// FIXME: REFACTOR
+		//applyPalette();
+	}
 
 
 	void setupZoomWidget() {
@@ -183,6 +226,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
+	d->mAdapterCreator = 0;
 	d->setupZoomWidget();
 	d->setupZoomActions();
 }
@@ -204,6 +248,7 @@ ZoomWidget* DocumentView::zoomWidget() const {
 
 
 void DocumentView::createAdapterForUrl(const KUrl& url) {
+	// Find adapter class
 	QString mimeType = MimeTypeUtils::urlMimeType(url);
 	LOG("mimeType:" << mimeType);
 	if (!url.isLocalFile() && mimeType == "text/html") {
@@ -213,60 +258,25 @@ void DocumentView::createAdapterForUrl(const KUrl& url) {
 		LOG("mimeType after downloading content:" << mimeType);
 	}
 
-	// FIXME: Keep this "library" thing?
-	QString library;
+	//QString className;
+	AdapterCreator creator = 0;
 	if (MimeTypeUtils::rasterImageMimeTypes().contains(mimeType)) {
-		library = "ImageViewAdapter";
+		creator = createImageViewAdapter;
 	} else if (MimeTypeUtils::imageMimeTypes().contains(mimeType)) {
 		// FIXME: This is not the best way to find out if this is svg
-		library = "SvgViewAdapter";
+		creator = createSvgViewAdapter;
 	} else {
 		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
 		return;
 	}
-	Q_ASSERT(!library.isNull());
-	if (library == d->mAdapterLibrary) {
+	Q_ASSERT(creator);
+
+	if (creator == d->mAdapterCreator) {
 		LOG("Reusing current adapter");
 		return;
 	}
 
-	// Load new part
-	AbstractDocumentViewAdapter* adapter;
-	if (library == "ImageViewAdapter") {
-		adapter = new ImageViewAdapter(this);
-	} else if (library == "SvgViewAdapter") {
-		adapter = new SvgViewAdapter(this);
-	} else {
-		kWarning() << "FIXME: Implement adapter for mimeType" << mimeType;
-		return;
-	}
-
-	connect(adapter, SIGNAL(completed()),
-		this, SLOT(slotCompleted()) );
-	connect(adapter, SIGNAL(resizeRequested(const QSize&)),
-		this, SIGNAL(resizeRequested(const QSize&)) );
-	connect(adapter, SIGNAL(previousImageRequested()),
-		this, SIGNAL(previousImageRequested()) );
-	connect(adapter, SIGNAL(nextImageRequested()),
-		this, SIGNAL(nextImageRequested()) );
-
-	d->setAdapterWidget(adapter->widget());
-	delete d->mAdapter;
-	d->mAdapter = adapter;
-
-	if (d->mAdapter->canZoom()) {
-		connect(d->mAdapter, SIGNAL(zoomChanged(qreal)),
-			SLOT(slotZoomChanged(qreal)) );
-		d->mZoomWidget->show();
-	} else {
-		d->mZoomWidget->hide();
-	}
-	d->mAdapter->installEventFilterOnViewWidgets(this);
-
-	// FIXME: REFACTOR
-	//d->applyPalette();
-
-	d->mAdapterLibrary = library;
+	d->createAdapter(creator, this);
 }
 
 
@@ -287,8 +297,8 @@ void DocumentView::reset() {
 	}
 	d->setAdapterWidget(0);
 	delete d->mAdapter;
-	d->mAdapterLibrary.clear();
-	d->mAdapter=0;
+	d->mAdapter = 0;
+	d->mAdapterCreator = 0;
 }
 
 
