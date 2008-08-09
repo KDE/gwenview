@@ -71,9 +71,7 @@ public:
 	void addRow(const QString& key, const QString& value) {
 		QString keyString = i18nc(
 				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-				"%1: ", key);
-		// FIXME: Call "trimmed()" to avoid breaking string freeze
-		keyString = keyString.trimmed();
+				"%1:", key);
 
 		QLabel* keyLabel = new QLabel;
 		keyLabel->setText(keyString);
