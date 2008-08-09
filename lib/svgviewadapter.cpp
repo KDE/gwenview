@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "svgviewadapter.moc"
 
 // Qt
+#include <QEvent>
 #include <QGraphicsScene>
 #include <QGraphicsSvgItem>
 #include <QGraphicsView>
@@ -42,6 +43,7 @@ struct SvgViewAdapterPrivate {
 
 	Document::Ptr mDocument;
 	QGraphicsSvgItem* mItem;
+	bool mZoomToFit;
 };
 
 
@@ -53,7 +55,10 @@ SvgViewAdapter::SvgViewAdapter(QWidget* parent)
 	d->mView = new QGraphicsView(d->mScene, parent);
 	d->mView->setFrameStyle(QFrame::NoFrame);
 	d->mView->setDragMode(QGraphicsView::ScrollHandDrag);
+	d->mView->viewport()->installEventFilter(this);
+
 	d->mItem = 0;
+	d->mZoomToFit = true;
 
 	setWidget(d->mView);
 }
@@ -79,6 +84,10 @@ void SvgViewAdapter::setDocument(Document::Ptr doc) {
 	d->mItem = new QGraphicsSvgItem();
 	d->mItem->setSharedRenderer(d->mRenderer);
 	d->mScene->addItem(d->mItem);
+
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 
@@ -87,12 +96,19 @@ Document::Ptr SvgViewAdapter::document() const {
 }
 
 
-void SvgViewAdapter::setZoomToFit(bool) {
+void SvgViewAdapter::setZoomToFit(bool on) {
+	if (d->mZoomToFit == on) {
+		return;
+	}
+	d->mZoomToFit = on;
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 
 bool SvgViewAdapter::zoomToFit() const {
-	return false;
+	return d->mZoomToFit;
 }
 
 
@@ -123,6 +139,16 @@ qreal SvgViewAdapter::computeZoomToFitWidth() const {
 qreal SvgViewAdapter::computeZoomToFitHeight() const {
 	int height = d->mScene->height();
 	return height != 0 ? (qreal(d->mView->viewport()->height()) / height) : 1;
+}
+
+
+bool SvgViewAdapter::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::Resize) {
+		if (d->mZoomToFit) {
+			setZoom(computeZoomToFit());
+		}
+	}
+	return false;
 }
 
 

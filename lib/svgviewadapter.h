@@ -60,6 +60,9 @@ public:
 	virtual qreal computeZoomToFitWidth() const;
 	virtual qreal computeZoomToFitHeight() const;
 
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
+
 private:
 	SvgViewAdapterPrivate* const d;
 };
