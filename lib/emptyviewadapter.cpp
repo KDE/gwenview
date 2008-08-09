@@ -67,7 +67,7 @@ Document::Ptr EmptyViewAdapter::document() const {
 }
 
 
-void EmptyViewAdapter::openUrl(const KUrl&) {
+void EmptyViewAdapter::setDocument(Document::Ptr) {
 }
 
 

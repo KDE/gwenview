@@ -41,7 +41,7 @@ public:
 
 	virtual Document::Ptr document() const;
 
-	virtual void openUrl(const KUrl&);
+	virtual void setDocument(Document::Ptr);
 
 private:
 	EmptyViewAdapterPrivate* const d;

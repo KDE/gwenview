@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/document/document.h>
+#include <lib/document/documentfactory.h>
 #include <lib/emptyviewadapter.h>
 #include <lib/imageviewadapter.h>
 #include <lib/mimetypeutils.h>
@@ -287,7 +288,8 @@ bool DocumentView::openUrl(const KUrl& url) {
 	if (!d->mAdapter) {
 		return false;
 	}
-	d->mAdapter->openUrl(url);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	d->mAdapter->setDocument(doc);
 	d->updateCaption();
 	return true;
 }

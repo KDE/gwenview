@@ -79,8 +79,7 @@ public:
 	/** @} */
 
 	virtual Document::Ptr document() const = 0;
-	// FIXME: Replace with "document" property
-	virtual void openUrl(const KUrl&) = 0;
+	virtual void setDocument(Document::Ptr) = 0;
 
 	virtual void loadConfig() {}
 

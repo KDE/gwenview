@@ -40,8 +40,6 @@ public:
 	ImageViewAdapter(QWidget*);
 	~ImageViewAdapter();
 
-	virtual void openUrl(const KUrl&);
-
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
 	virtual bool canZoom() const { return true; }
@@ -61,6 +59,8 @@ public:
 	virtual qreal computeZoomToFitHeight() const;
 
 	virtual Document::Ptr document() const;
+
+	virtual void setDocument(Document::Ptr);
 
 	virtual ImageView* imageView() const;
 

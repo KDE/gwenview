@@ -70,8 +70,8 @@ SvgViewAdapter::~SvgViewAdapter() {
 }
 
 
-void SvgViewAdapter::openUrl(const KUrl& url) {
-	d->mDocument = DocumentFactory::instance()->load(url);
+void SvgViewAdapter::setDocument(Document::Ptr doc) {
+	d->mDocument = doc;
 
 	if (!d->mRenderer->load(d->mDocument->url().path())) {
 		return;

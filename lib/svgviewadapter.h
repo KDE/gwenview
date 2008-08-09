@@ -42,7 +42,7 @@ public:
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
-	virtual void openUrl(const KUrl&);
+	virtual void setDocument(Document::Ptr);
 
 	virtual Document::Ptr document() const;
 

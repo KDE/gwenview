@@ -81,9 +81,7 @@ ImageView* ImageViewAdapter::imageView() const {
 }
 
 
-void ImageViewAdapter::openUrl(const KUrl& url) {
-	// FIXME: Port GVPart::openUrl()
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+void ImageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mView->setDocument(doc);
 
 	connect(doc.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
