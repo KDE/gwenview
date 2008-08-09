@@ -115,9 +115,6 @@ struct DocumentViewPrivate {
 			mZoomWidget->hide();
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
-
-		// FIXME: REFACTOR
-		//applyPalette();
 	}
 
 
