@@ -31,20 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kmimetype.h>
-#include <kparts/componentfactory.h>
-#include <kparts/statusbarextension.h>
-#include <kstatusbar.h>
 #include <ktoggleaction.h>
 
 // Local
 #include "thumbnailbarview.h"
 #include <lib/abstractdocumentviewadapter.h>
 #include <lib/documentview.h>
-#include <lib/imageview.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/signalblocker.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/zoomwidget.h>
 
