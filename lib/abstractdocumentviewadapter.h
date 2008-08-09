@@ -87,6 +87,13 @@ Q_SIGNALS:
 	void nextImageRequested();
 	void completed();
 
+	/**
+	 * @addgroup zooming functions
+	 * @{
+	 */
+	void zoomChanged(qreal);
+	/** @} */
+
 private:
 	QWidget* mWidget;
 };

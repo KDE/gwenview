@@ -44,6 +44,8 @@ ImageViewAdapter::ImageViewAdapter(QWidget* parent)
 , d(new ImageViewAdapterPrivate) {
 	d->mView = new ImageView(parent);
 	setWidget(d->mView);
+
+	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
 }
 
 
