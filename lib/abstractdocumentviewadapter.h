@@ -57,6 +57,8 @@ public:
 
 	virtual ImageView* imageView() const { return 0; }
 
+	virtual void installEventFilterOnViewWidgets(QObject*) = 0;
+
 	/**
 	 * @defgroup zooming functions
 	 * @{

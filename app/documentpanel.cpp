@@ -290,7 +290,6 @@ struct DocumentPanelPrivate {
 		if (partWidget) {
 			// Insert the widget above the status bar
 			mAdapterContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
-			partWidget->installEventFilter(that);
 			that->setCurrentWidget(mThumbnailSplitter);
 		} else {
 			that->setCurrentWidget(mNoDocumentLabel);
@@ -576,6 +575,7 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 	} else {
 		d->mZoomWidget->hide();
 	}
+	d->mAdapter->installEventFilterOnViewWidgets(this);
 
 	d->applyPalette();
 
@@ -682,7 +682,6 @@ void DocumentPanel::slotZoomWidgetChanged(qreal zoom) {
 
 bool DocumentPanel::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
-		// FIXME: PORT: need to apply on viewport
 		// Middle click => toggle zoom to fit
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 		if (mouseEvent->button() == Qt::MidButton) {

@@ -40,6 +40,8 @@ public:
 	SvgViewAdapter(QWidget*);
 	~SvgViewAdapter();
 
+	virtual void installEventFilterOnViewWidgets(QObject*);
+
 	virtual void openUrl(const KUrl&);
 
 	virtual Document::Ptr document() const;

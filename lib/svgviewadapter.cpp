@@ -60,6 +60,11 @@ SvgViewAdapter::SvgViewAdapter(QWidget* parent)
 }
 
 
+void SvgViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
+	d->mView->viewport()->installEventFilter(object);
+}
+
+
 SvgViewAdapter::~SvgViewAdapter() {
 	delete d;
 }

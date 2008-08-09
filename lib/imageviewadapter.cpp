@@ -49,6 +49,11 @@ ImageViewAdapter::ImageViewAdapter(QWidget* parent)
 }
 
 
+void ImageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
+	d->mView->viewport()->installEventFilter(object);
+}
+
+
 ImageViewAdapter::~ImageViewAdapter() {
 	delete d;
 }

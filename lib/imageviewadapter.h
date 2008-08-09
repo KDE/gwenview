@@ -42,6 +42,8 @@ public:
 
 	virtual void openUrl(const KUrl&);
 
+	virtual void installEventFilterOnViewWidgets(QObject*);
+
 	virtual bool canZoom() const { return true; }
 
 	virtual void setZoomToFit(bool);
