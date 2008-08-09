@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/signalblocker.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/svgviewadapter.h>
+#include <lib/zoomwidget.h>
 
 
 namespace Gwenview {
@@ -133,8 +134,8 @@ protected:
  * Layout of mThumbnailSplitter is:
  *
  * +-mThumbnailSplitter--------------------------------+
- * |+-mAdapterContainer----------------------------------+|
- * ||..part widget....................................||
+ * |+-mAdapterContainer-------------------------------+|
+ * ||..Adapter widget.................................||
  * ||.                                               .||
  * ||.                                               .||
  * ||.                                               .||
@@ -142,9 +143,7 @@ protected:
  * ||.                                               .||
  * ||.................................................||
  * ||+-mStatusBarContainer---------------------------+||
- * |||+---------------------------++-mStatusBar-----+|||
- * ||||[mToggleThumbnailBarButton]||                ||||
- * |||+---------------------------++----------------+|||
+ * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
  * ||+-----------------------------------------------+||
  * |+-------------------------------------------------+|
  * |===================================================|
@@ -162,10 +161,11 @@ struct DocumentPanelPrivate {
 	QVBoxLayout* mAdapterContainerLayout;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
-	KStatusBar* mStatusBar;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
 	KAction* mZoomToFitAction;
+	ZoomWidget* mZoomWidget;
+
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
@@ -185,16 +185,16 @@ struct DocumentPanelPrivate {
 
 	void setupStatusBar() {
 		mStatusBarContainer = new QWidget;
-		mStatusBar = new KStatusBar;
-		KStatusBar* toggleThumbnailBarButtonStatusBar = new KStatusBar;
 		mToggleThumbnailBarButton = new StatusBarToolButton;
-		toggleThumbnailBarButtonStatusBar->addPermanentWidget(mToggleThumbnailBarButton);
+
+		mZoomWidget = new ZoomWidget;
 
 		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(toggleThumbnailBarButtonStatusBar);
-		layout->addWidget(mStatusBar, 1);
+		layout->addWidget(mToggleThumbnailBarButton);
+		layout->addStretch();
+		layout->addWidget(mZoomWidget);
 	}
 
 	void setupThumbnailBar() {
