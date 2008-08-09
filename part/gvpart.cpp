@@ -39,7 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
-#include <kparts/statusbarextension.h>
 
 // Local
 #include "../lib/gwenviewconfig.h"
@@ -52,7 +51,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
-#include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
 
@@ -66,13 +64,9 @@ static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
+GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-	mGwenviewHost = args.contains("gwenviewHost");
-	mStatusBarExtension = 0;
-	mStatusBarWidgetContainer = 0;
-
 	mView = new ImageView(parentWidget);
 	setWidget(mView);
 
@@ -108,21 +102,12 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& args)
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
 
-	if (!mGwenviewHost) {
-		Gwenview::ImageFormats::registerPlugins();
-		addPartSpecificActions();
-	}
+	Gwenview::ImageFormats::registerPlugins();
+	addPartSpecificActions();
 
 	createErrorLabel();
 
-	if (mGwenviewHost) {
-		createStatusBarWidget();
-		mStatusBarExtension = new KParts::StatusBarExtension(this);
-		QTimer::singleShot(0, this, SLOT(initStatusBarExtension()) );
-		setXMLFile("gvpart/gvpart-gwenview.rc");
-	} else {
-		setXMLFile("gvpart/gvpart.rc");
-	}
+	setXMLFile("gvpart/gvpart.rc");
 
 	loadConfig();
 }
@@ -136,9 +121,6 @@ qreal GVPart::computeMinimumZoom() const {
 
 void GVPart::updateZoomSnapValues() {
 	qreal min = computeMinimumZoom();
-	if (mStatusBarWidgetContainer) {
-		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
-	}
 
 	mZoomSnapValues.clear();
 	for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
@@ -158,26 +140,6 @@ void GVPart::addPartSpecificActions() {
 	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
 	new GVBrowserExtension(this);
-}
-
-
-void GVPart::createStatusBarWidget() {
-	mZoomWidget = new ZoomWidget;
-	mZoomWidget->setActions(
-		actionCollection()->action("view_zoom_to_fit"),
-		actionCollection()->action("view_actual_size"));
-
-	mStatusBarWidgetContainer = new QWidget;
-	QHBoxLayout* layout = new QHBoxLayout(mStatusBarWidgetContainer);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addStretch();
-	layout->addWidget(mZoomWidget);
-
-	connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
-		SLOT(slotZoomSliderChanged(qreal)) );
-
-	updateZoomSnapValues();
 }
 
 
@@ -213,13 +175,6 @@ void GVPart::createErrorLabel() {
 }
 
 
-void GVPart::initStatusBarExtension() {
-	if (!mDocument || mDocument->loadingState() != Document::LoadingFailed) {
-		mStatusBarExtension->addStatusBarItem(mStatusBarWidgetContainer, 1, true);
-	}
-}
-
-
 bool GVPart::openFile() {
 	return false;
 }
@@ -231,13 +186,8 @@ bool GVPart::openUrl(const KUrl& url) {
 	}
 	setUrl(url);
 	mErrorWidget->hide();
-	if (mStatusBarWidgetContainer && mStatusBarWidgetContainer->parent()) {
-		// Don't show mStatusBarWidgetContainer until it has been embedded in
-		// the statusbar by GVPart::initStatusBarExtension()
-		mStatusBarWidgetContainer->show();
-	}
 	mDocument = DocumentFactory::instance()->load(url);
-	if (!mGwenviewHost && !UrlUtils::urlIsFastLocalFile(url)) {
+	if (!UrlUtils::urlIsFastLocalFile(url)) {
 		// Keep raw data of remote files to avoid downloading them again in
 		// saveAs()
 		mDocument->setKeepRawData(true);
@@ -263,10 +213,6 @@ void GVPart::slotLoadingFailed() {
 	mErrorLabel->setText(msg);
 	mErrorWidget->adjustSize();
 	mErrorWidget->show();
-
-	if (mStatusBarWidgetContainer) {
-		mStatusBarWidgetContainer->hide();
-	}
 }
 
 
@@ -278,12 +224,6 @@ void GVPart::slotLoaded() {
 	disconnect(mDocument.data(), 0, this, SLOT(slotLoaded()) );
 
 	updateZoomSnapValues();
-}
-
-
-void GVPart::slotZoomSliderChanged(qreal zoom) {
-	disableZoomToFit();
-	setZoom(zoom);
 }
 
 
@@ -320,9 +260,6 @@ void GVPart::updateCaption() {
 
 
 void GVPart::slotZoomChanged() {
-	if (mStatusBarWidgetContainer) {
-		mZoomWidget->setZoom(mView->zoom());
-	}
 	updateCaption();
 }
 
@@ -397,16 +334,6 @@ void GVPart::disableZoomToFit() {
 }
 
 
-Document::Ptr GVPart::document() {
-	return mDocument;
-}
-
-
-ImageView* GVPart::imageView() const {
-	return mView;
-}
-
-
 void GVPart::loadConfig() {
 	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
@@ -425,10 +352,8 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 void GVPart::showContextMenu() {
 	KMenu menu(mView);
-	if (!mGwenviewHost) {
-		addActionToMenu(&menu, actionCollection(), "file_save_as");
-		menu.addSeparator();
-	}
+	addActionToMenu(&menu, actionCollection(), "file_save_as");
+	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_in");

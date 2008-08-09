@@ -42,7 +42,6 @@ namespace Gwenview {
 
 class ImageView;
 class ScrollTool;
-class ZoomWidget;
 
 class GVPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
@@ -50,10 +49,6 @@ public:
 	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
 
 	static KAboutData* createAboutData();
-
-	virtual Document::Ptr document();
-
-	virtual ImageView* imageView() const;
 
 public Q_SLOTS:
 	virtual void loadConfig();
@@ -72,8 +67,6 @@ private Q_SLOTS:
 	void showContextMenu();
 	void saveAs();
 	void showJobError(KJob*);
-	void initStatusBarExtension();
-	void slotZoomSliderChanged(qreal);
 	void slotZoomChanged();
 	void slotLoaded();
 	void slotLoadingFailed();
@@ -82,13 +75,8 @@ private:
 	ImageView* mView;
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
-	bool mGwenviewHost;
 	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
-	KParts::StatusBarExtension* mStatusBarExtension;
-
-	QWidget* mStatusBarWidgetContainer;
-	ZoomWidget* mZoomWidget;
 
 	QWidget* mErrorWidget;
 	QLabel* mErrorLabel;
@@ -98,7 +86,6 @@ private:
 	void setZoom(qreal, const QPoint& center = QPoint(-1, -1));
 
 	void updateZoomSnapValues();
-	void createStatusBarWidget();
 	void createErrorLabel();
 
 	qreal computeMinimumZoom() const;
