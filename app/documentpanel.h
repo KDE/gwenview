@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENTPANEL_H
 
 // Qt
-#include <QStackedWidget>
+#include <QWidget>
 
 class QPalette;
 
@@ -37,7 +37,7 @@ class ThumbnailBarView;
 /**
  * Holds the active document view and associated widgetry.
  */
-class DocumentPanel : public QStackedWidget {
+class DocumentPanel : public QWidget {
 	Q_OBJECT
 public:
 	DocumentPanel(QWidget* parent, KActionCollection*);

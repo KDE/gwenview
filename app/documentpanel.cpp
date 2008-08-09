@@ -263,6 +263,10 @@ struct DocumentPanelPrivate {
 		mThumbnailSplitter->addWidget(mAdapterContainer);
 		mThumbnailSplitter->addWidget(mThumbnailBar);
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
+
+		QVBoxLayout* layout = new QVBoxLayout(that);
+		layout->setMargin(0);
+		layout->addWidget(mThumbnailSplitter);
 	}
 
 	void applyPalette() {
@@ -293,7 +297,7 @@ struct DocumentPanelPrivate {
 
 
 DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollection)
-: QStackedWidget(parent)
+: QWidget(parent)
 , d(new DocumentPanelPrivate)
 {
 	d->that = this;
@@ -317,8 +321,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	d->setupThumbnailBar();
 
 	d->setupSplitter();
-
-	addWidget(d->mThumbnailSplitter);
 
 	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
