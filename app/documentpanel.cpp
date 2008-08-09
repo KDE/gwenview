@@ -290,6 +290,7 @@ struct DocumentPanelPrivate {
 		if (partWidget) {
 			// Insert the widget above the status bar
 			mAdapterContainerLayout->insertWidget(0 /* position */, partWidget, 1 /* stretch */);
+			partWidget->installEventFilter(that);
 			that->setCurrentWidget(mThumbnailSplitter);
 		} else {
 			that->setCurrentWidget(mNoDocumentLabel);
