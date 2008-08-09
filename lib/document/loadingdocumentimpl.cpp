@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <kmimetype.h>
 #include <kurl.h>
 
 // Local
@@ -47,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "jpegcontent.h"
 #include "jpegdocumentloadedimpl.h"
 #include "orientation.h"
+#include "svgdocumentloadedimpl.h"
 #include "urlutils.h"
 
 namespace Gwenview {
@@ -83,8 +85,25 @@ struct LoadingDocumentImplPrivate {
 
 	void startLoading() {
 		Q_ASSERT(!mMetaDataLoaded);
-		mMetaDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaData);
-		mMetaDataFutureWatcher.setFuture(mMetaDataFuture);
+		QString mimeType = KMimeType::findByContent(mData)->name();
+		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
+		mImpl->setDocumentKind(kind);
+
+		switch (kind) {
+		case MimeTypeUtils::KIND_RASTER_IMAGE:
+			mMetaDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaData);
+			mMetaDataFutureWatcher.setFuture(mMetaDataFuture);
+			break;
+
+		case MimeTypeUtils::KIND_SVG_IMAGE:
+			emit mImpl->loaded();
+			mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
+			break;
+
+		default:
+			kWarning() << "Don't know how to handle documents of kind" << kind;
+			break;
+		}
 	}
 
 	void startImageDataLoading() {

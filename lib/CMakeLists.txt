@@ -18,6 +18,7 @@ set(gwenviewlib_SRCS
 	document/emptydocumentimpl.cpp
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
+	document/svgdocumentloadedimpl.cpp
 	abstractdocumentviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
