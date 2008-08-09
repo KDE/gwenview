@@ -195,6 +195,7 @@ struct DocumentPanelPrivate {
 		layout->addWidget(mToggleThumbnailBarButton);
 		layout->addStretch();
 		layout->addWidget(mZoomWidget);
+		mZoomWidget->hide();
 	}
 
 	void setupThumbnailBar() {
@@ -544,6 +545,7 @@ void DocumentPanel::createAdapterForUrl(const KUrl& url) {
 		this, SIGNAL(nextImageRequested()) );
 
 	d->setAdapterWidget(adapter->widget());
+	d->mZoomWidget->setVisible(adapter->canZoom());
 
 	delete d->mAdapter;
 	d->mAdapter = adapter;
