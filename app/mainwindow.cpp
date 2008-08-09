@@ -880,7 +880,6 @@ void MainWindow::toggleSideBar() {
 
 
 void MainWindow::slotPartCompleted() {
-	Q_ASSERT(!d->mDocumentPanel->isEmpty());
 	d->updateActions();
 	KUrl url = d->mDocumentPanel->url();
 	if (!KProtocolManager::supportsListing(url)) {
