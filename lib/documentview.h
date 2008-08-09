@@ -80,7 +80,8 @@ protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
 private Q_SLOTS:
-	void slotCompleted();
+	void slotLoaded();
+	void slotLoadingFailed();
 
 	void setZoomToFit(bool);
 

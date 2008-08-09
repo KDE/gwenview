@@ -94,8 +94,6 @@ struct DocumentViewPrivate {
 		mAdapterCreator = creator;
 		mAdapter = mAdapterCreator(that);
 
-		QObject::connect(mAdapter, SIGNAL(completed()),
-			that, SLOT(slotCompleted()) );
 		QObject::connect(mAdapter, SIGNAL(resizeRequested(const QSize&)),
 			that, SIGNAL(resizeRequested(const QSize&)) );
 		QObject::connect(mAdapter, SIGNAL(previousImageRequested()),
@@ -222,6 +220,12 @@ struct DocumentViewPrivate {
 			<< mAdapter->computeZoomToFitHeight();
 		qSort(mZoomSnapValues);
 	}
+
+
+	void showError() {
+		kWarning() << "FIXME: Show error message";
+		createAdapter(createEmptyViewAdapter);
+	}
 };
 
 
@@ -281,14 +285,19 @@ bool DocumentView::openUrl(const KUrl& url) {
 	}
 
 	if (d->mDocument->loadingState() == Document::LoadingFailed) {
-		kWarning() << "FIXME: Show error message";
+		d->showError();
+		return false;
+	}
+	createAdapterForDocument();
+	if (!d->mAdapter) {
+		d->showError();
 		return false;
 	}
 
-	createAdapterForDocument();
-	if (!d->mAdapter) {
-		return false;
-	}
+	connect(d->mDocument.data(), SIGNAL(loaded()),
+		SLOT(slotLoaded()) );
+	connect(d->mDocument.data(), SIGNAL(loadingFailed()),
+		SLOT(slotLoadingFailed()) );
 	d->mAdapter->setDocument(d->mDocument);
 	d->updateCaption();
 
@@ -308,9 +317,15 @@ bool DocumentView::isEmpty() const {
 }
 
 
-void DocumentView::slotCompleted() {
+void DocumentView::slotLoaded() {
 	d->updateCaption();
 	d->updateZoomSnapValues();
+	emit completed();
+}
+
+
+void DocumentView::slotLoadingFailed() {
+	d->showError();
 	emit completed();
 }
 
@@ -360,8 +375,6 @@ void DocumentView::slotZoomChanged(qreal zoom) {
 	d->mZoomWidget->setZoom(zoom);
 	d->updateCaption();
 }
-
-
 
 
 void DocumentView::slotZoomWidgetChanged(qreal zoom) {

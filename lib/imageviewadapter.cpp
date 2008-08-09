@@ -136,12 +136,11 @@ Document::Ptr ImageViewAdapter::document() const {
 
 
 void ImageViewAdapter::slotLoaded() {
-	emit completed();
 	if (d->mView->zoomToFit()) {
 		emit resizeRequested(d->mView->document()->size());
 	}
 
-	// We don't want to emit completed() again if we receive another
+	// We don't want to emit resizeRequested() again if we receive another
 	// downSampledImageReady() or loaded() signal from the current document.
 	disconnect(d->mView->document().data(), 0, this, SLOT(slotLoaded()) );
 }
@@ -149,7 +148,6 @@ void ImageViewAdapter::slotLoaded() {
 
 void ImageViewAdapter::slotLoadingFailed() {
 	d->mView->setDocument(Document::Ptr());
-	emit completed();
 	// FIXME: Move this to DocumentPanel
 	#if 0
 	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());

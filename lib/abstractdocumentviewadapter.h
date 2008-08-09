@@ -90,7 +90,6 @@ Q_SIGNALS:
 	void resizeRequested(const QSize&);
 	void previousImageRequested();
 	void nextImageRequested();
-	void completed();
 
 	/**
 	 * @addgroup zooming functions
