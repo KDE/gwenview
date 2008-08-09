@@ -87,6 +87,8 @@ struct LoadingDocumentImplPrivate {
 		Q_ASSERT(!mMetaDataLoaded);
 		QString mimeType = KMimeType::findByContent(mData)->name();
 		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
+		LOG("mimeType:" << mimeType);
+		LOG("kind:" << kind);
 		mImpl->setDocumentKind(kind);
 
 		switch (kind) {
@@ -102,6 +104,7 @@ struct LoadingDocumentImplPrivate {
 
 		default:
 			kWarning() << "Don't know how to handle documents of kind" << kind;
+			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
 			break;
 		}
 	}
