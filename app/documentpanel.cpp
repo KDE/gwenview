@@ -334,7 +334,7 @@ struct DocumentPanelPrivate {
 					.arg(size.height());
 			if (mAdapter->canZoom()) {
 				int intZoom = qRound(mAdapter->zoom() * 100);
-				caption += QString(" - %3%")
+				caption += QString(" - %1%")
 					.arg(intZoom);
 			}
 		}
