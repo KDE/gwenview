@@ -269,11 +269,13 @@ struct DocumentPanelPrivate {
 			that, SLOT(setZoomToFit(bool)) );
 		actionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
 
-		KAction* action = KStandardAction::actualSize(that, SLOT(zoomActualSize()), actionCollection);
-		action->setIcon(KIcon("zoom-original"));
-		action->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
+		KAction* actualSizeAction = KStandardAction::actualSize(that, SLOT(zoomActualSize()), actionCollection);
+		actualSizeAction->setIcon(KIcon("zoom-original"));
+		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 		KStandardAction::zoomIn(that, SLOT(zoomIn()), actionCollection);
 		KStandardAction::zoomOut(that, SLOT(zoomOut()), actionCollection);
+
+		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
 	}
 
 	void setAdapterWidget(QWidget* partWidget) {
