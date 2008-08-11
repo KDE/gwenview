@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurl.h>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
 #include <lib/scrolltool.h>
 #include <lib/document/documentfactory.h>
@@ -159,6 +160,14 @@ void ImageViewAdapter::slotLoadingFailed() {
 		mStatusBarWidgetContainer->hide();
 	}
 	#endif
+}
+
+
+void ImageViewAdapter::loadConfig() {
+	d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
+	d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
+	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
+	d->mScrollTool->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
 }
 
 

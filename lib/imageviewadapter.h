@@ -66,6 +66,8 @@ public:
 
 	virtual ImageView* imageView() const;
 
+	virtual void loadConfig();
+
 private Q_SLOTS:
 	void slotLoadingFailed();
 	void slotLoaded();
