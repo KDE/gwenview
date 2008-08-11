@@ -43,13 +43,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
 /** How many pixels between items */
 const int SPACING = 11;
 
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
-		kWarning() << "Invalid index";
+		LOG("Invalid index");
 		return KFileItem();
 	}
 	QVariant data = index.data(KDirModel::FileItemRole);
@@ -282,7 +291,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
 	if (item.isNull()) {
-		kWarning() << "Invalid item";
+		LOG("Invalid item");
 		return QPixmap();
 	}
 	KUrl url = item.url();
