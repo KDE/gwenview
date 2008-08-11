@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "emptyviewadapter.h"
+#include "messageviewadapter.h"
 
 // Qt
 #include <QLabel>
@@ -34,13 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct EmptyViewAdapterPrivate : Ui_MessageView {
+struct MessageViewAdapterPrivate : Ui_MessageView {
 };
 
 
-EmptyViewAdapter::EmptyViewAdapter(QWidget* parent)
+MessageViewAdapter::MessageViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
-, d(new EmptyViewAdapterPrivate) {
+, d(new MessageViewAdapterPrivate) {
 	QWidget* widget = new QWidget(parent);
 	d->setupUi(widget);
 
@@ -54,12 +54,12 @@ EmptyViewAdapter::EmptyViewAdapter(QWidget* parent)
 }
 
 
-EmptyViewAdapter::~EmptyViewAdapter() {
+MessageViewAdapter::~MessageViewAdapter() {
 	delete d;
 }
 
 
-void EmptyViewAdapter::setErrorMessage(const QString& message) {
+void MessageViewAdapter::setErrorMessage(const QString& message) {
 	QPixmap pix = KIconLoader::global()->loadIcon(
 		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
 	d->mIconLabel->setPixmap(pix);
@@ -77,23 +77,23 @@ void EmptyViewAdapter::setErrorMessage(const QString& message) {
 }
 
 
-void EmptyViewAdapter::setInfoMessage(const QString& message) {
+void MessageViewAdapter::setInfoMessage(const QString& message) {
 	d->mIconLabel->hide();
 	d->mTextLabel->setText(message);
 }
 
 
-void EmptyViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
+void MessageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
 	widget()->installEventFilter(object);
 }
 
 
-Document::Ptr EmptyViewAdapter::document() const {
+Document::Ptr MessageViewAdapter::document() const {
 	return Document::Ptr();
 }
 
 
-void EmptyViewAdapter::setDocument(Document::Ptr) {
+void MessageViewAdapter::setDocument(Document::Ptr) {
 }
 
 

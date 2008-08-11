@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef EMPTYVIEWADAPTER_H
-#define EMPTYVIEWADAPTER_H
+#ifndef MESSAGEVIEWADAPTER_H
+#define MESSAGEVIEWADAPTER_H
 
 // Qt
 
@@ -31,11 +31,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class EmptyViewAdapterPrivate;
-class EmptyViewAdapter : public AbstractDocumentViewAdapter {
+class MessageViewAdapterPrivate;
+class MessageViewAdapter : public AbstractDocumentViewAdapter {
 public:
-	EmptyViewAdapter(QWidget* parent);
-	~EmptyViewAdapter();
+	MessageViewAdapter(QWidget* parent);
+	~MessageViewAdapter();
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
@@ -50,10 +50,10 @@ public:
 	void setErrorMessage(const QString&);
 
 private:
-	EmptyViewAdapterPrivate* const d;
+	MessageViewAdapterPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* EMPTYVIEWADAPTER_H */
+#endif /* MESSAGEVIEWADAPTER_H */

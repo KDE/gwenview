@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
-#include <lib/emptyviewadapter.h>
+#include <lib/messageviewadapter.h>
 #include <lib/imageviewadapter.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
@@ -214,7 +214,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mAdapter = 0;
 	d->setupZoomWidget();
 	d->setupZoomActions();
-	d->setCurrentAdapter(new EmptyViewAdapter(this));
+	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
 
@@ -249,12 +249,12 @@ void DocumentView::createAdapterForDocument() {
 		adapter = new SvgViewAdapter(this);
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
-		adapter = new EmptyViewAdapter(this);
-		static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
+		adapter = new MessageViewAdapter(this);
+		static_cast<MessageViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 		break;
 	default:
 		kWarning() << "should not be called for documentKind=" << documentKind;
-		adapter = new EmptyViewAdapter(this);
+		adapter = new MessageViewAdapter(this);
 		break;
 	}
 
@@ -285,7 +285,7 @@ void DocumentView::openUrl(const KUrl& url) {
 
 
 void DocumentView::reset() {
-	d->setCurrentAdapter(new EmptyViewAdapter(this));
+	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
 
@@ -302,7 +302,7 @@ void DocumentView::slotLoaded() {
 
 
 void DocumentView::slotLoadingFailed() {
-	EmptyViewAdapter* adapter = new EmptyViewAdapter(this);
+	MessageViewAdapter* adapter = new MessageViewAdapter(this);
 	// FIXME: Get error message from document
 	QString message = i18n("Could not load <filename>%1</filename>", d->mDocument->url().fileName());
 	adapter->setErrorMessage(message);
