@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		"gwenview",        /* appname */
 		0,                 /* catalogName */
 		ki18n("Gwenview"), /* programName */
-		"2.1");            /* version */
+		"2.1.1");          /* version */
 	aboutData.setShortDescription(ki18n("An Image Viewer"));
 	aboutData.setLicense(KAboutData::License_GPL);
 	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
