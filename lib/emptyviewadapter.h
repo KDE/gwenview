@@ -39,6 +39,8 @@ public:
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
+	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
+
 	virtual Document::Ptr document() const;
 
 	virtual void setDocument(Document::Ptr);

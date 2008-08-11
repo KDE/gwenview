@@ -57,21 +57,6 @@ static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
-typedef AbstractDocumentViewAdapter* (*AdapterCreator)(QWidget* parent);
-
-// This macro makes it easy to declare a function whose prototype is
-// AdapterCreator
-#define DECLARE_ADAPTOR(className) \
-static AbstractDocumentViewAdapter* create##className(QWidget* parent) { \
-	LOG(""); \
-	return new className(parent); \
-}
-
-DECLARE_ADAPTOR(ImageViewAdapter)
-DECLARE_ADAPTOR(SvgViewAdapter)
-DECLARE_ADAPTOR(EmptyViewAdapter)
-
-
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
@@ -79,20 +64,14 @@ struct DocumentViewPrivate {
 	KAction* mZoomToFitAction;
 
 	AbstractDocumentViewAdapter* mAdapter;
-	AdapterCreator mAdapterCreator;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
 
 
-	void createAdapter(AdapterCreator creator, AbstractDocumentViewAdapter* adapter = 0) {
-		if (mAdapterCreator == creator) {
-			LOG("Reusing current adapter");
-			return;
-		}
-
+	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
+		Q_ASSERT(adapter);
 		delete mAdapter;
-		mAdapterCreator = creator;
-		mAdapter = !adapter ? mAdapterCreator(that) : adapter;
+		mAdapter = adapter;
 
 		QObject::connect(mAdapter, SIGNAL(resizeRequested(const QSize&)),
 			that, SIGNAL(resizeRequested(const QSize&)) );
@@ -231,10 +210,9 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
-	d->mAdapterCreator = 0;
 	d->setupZoomWidget();
 	d->setupZoomActions();
-	d->createAdapter(createEmptyViewAdapter);
+	d->setCurrentAdapter(new EmptyViewAdapter(this));
 }
 
 
@@ -253,24 +231,32 @@ ZoomWidget* DocumentView::zoomWidget() const {
 }
 
 void DocumentView::createAdapterForDocument() {
-	AdapterCreator creator = 0;
+	Q_ASSERT(d->mAdapter);
+	const MimeTypeUtils::Kind documentKind = d->mDocument->kind();
+	if (documentKind != MimeTypeUtils::KIND_UNKNOWN && documentKind == d->mAdapter->kind()) {
+		// Do not reuse for KIND_UNKNOWN: we may need to change the message
+		LOG("Reusing current adapter");
+		return;
+	}
 	AbstractDocumentViewAdapter* adapter = 0;
-	switch (d->mDocument->kind()) {
+	switch (documentKind) {
 	case MimeTypeUtils::KIND_RASTER_IMAGE:
-		creator = createImageViewAdapter;
+		adapter = new ImageViewAdapter(this);
 		break;
 	case MimeTypeUtils::KIND_SVG_IMAGE:
-		creator = createSvgViewAdapter;
+		adapter = new SvgViewAdapter(this);
+		break;
+	case MimeTypeUtils::KIND_UNKNOWN:
+		adapter = new EmptyViewAdapter(this);
+		static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 		break;
 	default:
-		creator = createEmptyViewAdapter;
-		adapter = creator(this);
-		static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
+		kWarning() << "should not be called for documentKind=" << documentKind;
+		adapter = new EmptyViewAdapter(this);
+		break;
 	}
-	Q_ASSERT(creator);
 
-	d->createAdapter(creator, adapter);
-	Q_ASSERT(d->mAdapter);
+	d->setCurrentAdapter(adapter);
 }
 
 
@@ -297,14 +283,12 @@ void DocumentView::openUrl(const KUrl& url) {
 
 
 void DocumentView::reset() {
-	d->createAdapter(createEmptyViewAdapter);
+	d->setCurrentAdapter(new EmptyViewAdapter(this));
 }
 
 
 bool DocumentView::isEmpty() const {
-	//FIXME: Introduce an AbstractDocumentViewAdapter::isEmpty() method
-	//instead?
-	return d->mAdapterCreator == createEmptyViewAdapter;
+	return d->mAdapter->kind() == MimeTypeUtils::KIND_UNKNOWN;
 }
 
 
@@ -316,11 +300,11 @@ void DocumentView::slotLoaded() {
 
 
 void DocumentView::slotLoadingFailed() {
-	AbstractDocumentViewAdapter* adapter = createEmptyViewAdapter(this);
+	EmptyViewAdapter* adapter = new EmptyViewAdapter(this);
 	// FIXME: Get error message from document
 	QString message = i18n("Could not load this document");
-	static_cast<EmptyViewAdapter*>(adapter)->setErrorMessage(message);
-	d->createAdapter(createEmptyViewAdapter, adapter);
+	adapter->setErrorMessage(message);
+	d->setCurrentAdapter(adapter);
 	emit completed();
 }
 

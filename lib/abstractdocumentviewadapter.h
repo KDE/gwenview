@@ -55,6 +55,8 @@ public:
 
 	QWidget* widget() const { return mWidget; }
 
+	virtual MimeTypeUtils::Kind kind() const = 0;
+
 	virtual ImageView* imageView() const { return 0; }
 
 	virtual void installEventFilterOnViewWidgets(QObject*) = 0;
