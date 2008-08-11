@@ -29,26 +29,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/document/document.h>
+#include <lib/ui_messageview.h>
 
 namespace Gwenview {
 
 
-struct EmptyViewAdapterPrivate {
-	QLabel* mNoDocumentLabel;
+struct EmptyViewAdapterPrivate : Ui_MessageView {
 };
 
 
 EmptyViewAdapter::EmptyViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new EmptyViewAdapterPrivate) {
-	d->mNoDocumentLabel = new QLabel(parent);
-	d->mNoDocumentLabel->setText(i18n("No document selected"));
-	d->mNoDocumentLabel->setAlignment(Qt::AlignCenter);
-	d->mNoDocumentLabel->setAutoFillBackground(true);
-	d->mNoDocumentLabel->setBackgroundRole(QPalette::Base);
-	d->mNoDocumentLabel->setForegroundRole(QPalette::Text);
+	QWidget* widget = new QWidget(parent);
+	d->setupUi(widget);
 
-	setWidget(d->mNoDocumentLabel);
+	setInfoMessage(i18n("No document selected"));
+
+	widget->setAutoFillBackground(true);
+	widget->setBackgroundRole(QPalette::Base);
+	widget->setForegroundRole(QPalette::Text);
+
+	setWidget(widget);
 }
 
 
@@ -58,7 +60,26 @@ EmptyViewAdapter::~EmptyViewAdapter() {
 
 
 void EmptyViewAdapter::setErrorMessage(const QString& message) {
-	d->mNoDocumentLabel->setText(message);
+	QPixmap pix = KIconLoader::global()->loadIcon(
+		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
+	d->mIconLabel->setPixmap(pix);
+	d->mIconLabel->show();
+
+	d->mFrame->setStyleSheet(
+		"#mFrame {"
+		"	background-color: palette(window);"
+		"	border: 1px solid palette(dark);"
+		"	padding: 6px;"
+		"}"
+		);
+
+	d->mTextLabel->setText(message);
+}
+
+
+void EmptyViewAdapter::setInfoMessage(const QString& message) {
+	d->mIconLabel->hide();
+	d->mTextLabel->setText(message);
 }
 
 

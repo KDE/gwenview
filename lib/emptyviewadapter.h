@@ -45,6 +45,8 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+	void setInfoMessage(const QString&);
+
 	void setErrorMessage(const QString&);
 
 private:

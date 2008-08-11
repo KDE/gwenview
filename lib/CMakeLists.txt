@@ -98,6 +98,7 @@ set_source_files_properties(
 
 kde4_add_ui_files(gwenviewlib_SRCS
 	cropsidebar.ui
+	messageview.ui
 	print/printoptionspage.ui
 	)
 
