@@ -48,7 +48,10 @@ const int SPACING = 11;
 
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
-	Q_ASSERT(index.isValid());
+	if (!index.isValid()) {
+		kWarning() << "Invalid index";
+		return KFileItem();
+	}
 	QVariant data = index.data(KDirModel::FileItemRole);
 	return qvariant_cast<KFileItem>(data);
 }
@@ -56,7 +59,7 @@ static KFileItem fileItemForIndex(const QModelIndex& index) {
 
 static KUrl urlForIndex(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
-	return item.url();
+	return item.isNull() ? KUrl() : item.url();
 }
 
 struct Thumbnail {
@@ -281,9 +284,12 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 
 
 QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
-	QVariant data = index.data(KDirModel::FileItemRole);
-	KFileItem item = qvariant_cast<KFileItem>(data);
-	QUrl url = item.url();
+	KFileItem item = fileItemForIndex(index);
+	if (item.isNull()) {
+		kWarning() << "Invalid item";
+		return QPixmap();
+	}
+	KUrl url = item.url();
 
 	QPixmap pix;
 
