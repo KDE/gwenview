@@ -149,17 +149,6 @@ void ImageViewAdapter::slotLoaded() {
 
 void ImageViewAdapter::slotLoadingFailed() {
 	d->mView->setDocument(Document::Ptr());
-	// FIXME: Move this to DocumentPanel
-	#if 0
-	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());
-	mErrorLabel->setText(msg);
-	mErrorWidget->adjustSize();
-	mErrorWidget->show();
-
-	if (mStatusBarWidgetContainer) {
-		mStatusBarWidgetContainer->hide();
-	}
-	#endif
 }
 
 
