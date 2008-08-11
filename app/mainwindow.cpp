@@ -305,15 +305,22 @@ struct MainWindow::Private {
 		connect(reduceLevelOfDetailsShortcut, SIGNAL(activated()),
 			mWindow, SLOT(reduceLevelOfDetails()) );
 
-		mGoToPreviousAction = KStandardAction::prior(mWindow, SLOT(goToPrevious()), actionCollection);
+		mGoToPreviousAction = actionCollection->addAction("go_previous");
+		mGoToPreviousAction->setIcon(KIcon("media-seek-backward"));
 		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
 		mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
+		connect(mGoToPreviousAction, SIGNAL(triggered()),
+			mWindow, SLOT(goToPrevious()) );
 
-		mGoToNextAction = KStandardAction::next(mWindow, SLOT(goToNext()), actionCollection);
+		mGoToNextAction = actionCollection->addAction("go_next");
+		mGoToNextAction->setIcon(KIcon("media-seek-forward"));
 		mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
 		mGoToNextAction->setToolTip(i18n("Go to Next Image"));
 		mGoToNextAction->setShortcut(Qt::Key_Space);
+		connect(mGoToNextAction, SIGNAL(triggered()),
+			mWindow, SLOT(goToNext()) );
+
 
 		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
 
