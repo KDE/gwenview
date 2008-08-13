@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurlnavigator.h>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include <lib/metadata/abstractmetadatabackend.h>
 #include <lib/metadata/sorteddirmodel.h>
 #include <lib/metadata/tagmodel.h>
@@ -128,6 +129,16 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		}
 		return count;
 	}
+
+	void loadConfig() {
+		mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
+		mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
+	}
+
+	void saveConfig() {
+		GwenviewConfig::setUrlNavigatorIsEditable(mUrlNavigator->isUrlEditable());
+		GwenviewConfig::setUrlNavigatorShowFullPath(mUrlNavigator->showFullPath());
+	}
 };
 
 
@@ -141,10 +152,12 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->setupWidgets();
 	d->setupActions(actionCollection);
 	d->setupDocumentCountConnections();
+	d->loadConfig();
 }
 
 
 ThumbnailViewPanel::~ThumbnailViewPanel() {
+	d->saveConfig();
 	delete d;
 }
 
