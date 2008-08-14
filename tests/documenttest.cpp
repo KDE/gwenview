@@ -97,6 +97,7 @@ void DocumentTest::testLoad_data() {
 	NEW_ROW("1x10k.png", "png", MimeTypeUtils::KIND_RASTER_IMAGE);
 	NEW_ROW("1x10k.jpg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
 }
+#undef NEW_ROW
 
 void DocumentTest::testLoadTwoPasses() {
 	KUrl url = urlForTestFile("test.png");
@@ -123,12 +124,14 @@ void DocumentTest::testLoadEmpty() {
 	QCOMPARE(loadingFailedSpy.count(), 1);
 }
 
+#define NEW_ROW(fileName) QTest::newRow(fileName) << fileName
 void DocumentTest::testLoadDownSampled_data() {
 	QTest::addColumn<QString>("fileName");
 
-	QTest::newRow("fileName") << "orient6.jpg";
-	QTest::newRow("fileName") << "1x10k.jpg";
+	NEW_ROW("orient6.jpg");
+	NEW_ROW("1x10k.jpg");
 }
+#undef NEW_ROW
 
 void DocumentTest::testLoadDownSampled() {
 	// Note: for now we only support down sampling on jpeg, do not use test.png
@@ -137,7 +140,7 @@ void DocumentTest::testLoadDownSampled() {
 	KUrl url = urlForTestFile(fileName);
 	QImage image;
 	bool ok = image.load(url.path());
-	QVERIFY2(ok, "Could not load 'test.png'");
+	QVERIFY2(ok, "Could not load test image");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
