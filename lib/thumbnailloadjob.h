@@ -65,8 +65,6 @@ Q_SIGNALS:
 
 private:
 	bool testCancel();
-	bool isJpeg();
-	bool loadJpeg();
 	void loadThumbnail();
 	QImage mImage;
 	QString mPixPath;

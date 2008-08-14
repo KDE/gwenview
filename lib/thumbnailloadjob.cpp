@@ -49,13 +49,6 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 
-// libjpeg
-#include <setjmp.h>
-#define XMD_H
-extern "C" {
-#include <jpeglib.h>
-}
-
 // Local
 #include "mimetypeutils.h"
 #include "jpegcontent.h"
@@ -168,14 +161,17 @@ void ThumbnailThread::loadThumbnail() {
 	bool loaded=false;
 	bool needCaching=true;
 	int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+	Orientation orientation = NORMAL;
 
-	// If it's a Jpeg, try to load a small image directly from the file
-	if (isJpeg()) {
+	QImageReader reader(mPixPath);
+	// If it's a Jpeg, try to load an embedded thumbnail, if available
+	if (reader.format() == "jpeg") {
 		JpegContent content;
 		content.load(mPixPath);
 		mOriginalWidth = content.size().width();
 		mOriginalHeight = content.size().height();
 		mImage = content.thumbnail();
+		orientation = content.orientation();
 
 		if( !mImage.isNull()
 			&& ( mImage.width() >= pixelSize // don't use small thumbnails
@@ -183,23 +179,25 @@ void ThumbnailThread::loadThumbnail() {
 			loaded = true;
 			needCaching = false;
 		}
-		if(!loaded) {
-			loaded = loadJpeg();
-		}
-		if (loaded) {
-			// Rotate if necessary
-			Orientation orientation = content.orientation();
-			QMatrix matrix = ImageUtils::transformMatrix(orientation);
-			mImage = mImage.transformed(matrix);
-		}
 	}
 
-	// File is not a Jpeg, or Jpeg optimized load failed, load file using Qt
+	// Generate thumbnail from full image
 	if (!loaded) {
+		const QSize originalSize = reader.size();
+		if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
+			int scale;
+			const int maxSize = qMax(originalSize.width(), originalSize.height());
+			for (scale=1; pixelSize*scale*2 <= maxSize && scale <= 8; scale *= 2) {}
+			const QSize scaledSize = originalSize / scale;
+			if (!scaledSize.isEmpty()) {
+				reader.setScaledSize(scaledSize);
+			}
+		}
+
 		QImage originalImage;
-		if (originalImage.load(mPixPath)) {
-			mOriginalWidth=originalImage.width();
-			mOriginalHeight=originalImage.height();
+		if (reader.read(&originalImage)) {
+			mOriginalWidth = originalSize.width();
+			mOriginalHeight = originalSize.height();
 
 			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize ) {
 				mImage=originalImage;
@@ -209,6 +207,12 @@ void ThumbnailThread::loadThumbnail() {
 			}
 			loaded = true;
 		}
+	}
+
+	// Rotate if necessary
+	if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
+		QMatrix matrix = ImageUtils::transformMatrix(orientation);
+		mImage = mImage.transformed(matrix);
 	}
 
 	if (needCaching) {
@@ -238,116 +242,6 @@ void ThumbnailThread::loadThumbnail() {
 
 		KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
 	}
-}
-
-
-bool ThumbnailThread::isJpeg() {
-	QString format = QImageReader::imageFormat(mPixPath);
-	return format == "jpeg";
-}
-
-
-
-struct JpegFatalError : public jpeg_error_mgr {
-	jmp_buf mJmpBuffer;
-
-	static void handler(j_common_ptr cinfo) {
-		JpegFatalError* error=static_cast<JpegFatalError*>(cinfo->err);
-		(error->output_message)(cinfo);
-		longjmp(error->mJmpBuffer,1);
-	}
-};
-
-bool ThumbnailThread::loadJpeg() {
-	struct jpeg_decompress_struct cinfo;
-
-	// Open file
-	FILE* inputFile = KDE_fopen(QFile::encodeName( mPixPath ).data(), "rb");
-	if(!inputFile) return false;
-
-	// Error handling
-	struct JpegFatalError jerr;
-	cinfo.err = jpeg_std_error(&jerr);
-	cinfo.err->error_exit = JpegFatalError::handler;
-	if (setjmp(jerr.mJmpBuffer)) {
-		jpeg_destroy_decompress(&cinfo);
-		fclose(inputFile);
-		return false;
-	}
-
-	// Init decompression
-	jpeg_create_decompress(&cinfo);
-	jpeg_stdio_src(&cinfo, inputFile);
-	jpeg_read_header(&cinfo, true);
-
-	// Get image size and check if we need a thumbnail
-	int size = ThumbnailGroup::pixelSize(mThumbnailGroup);
-	int imgSize = qMax(cinfo.image_width, cinfo.image_height);
-
-	if (imgSize<=size) {
-		fclose(inputFile);
-		return mImage.load(mPixPath);
-	}
-
-	// Compute scale value
-	int scale=1;
-	while(size*scale*2<=imgSize) {
-		scale*=2;
-	}
-	if(scale>8) scale=8;
-
-	cinfo.scale_num=1;
-	cinfo.scale_denom=scale;
-
-	// Create QImage
-	jpeg_start_decompress(&cinfo);
-
-	switch(cinfo.output_components) {
-	case 3:
-	case 4:
-		mImage = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_RGB32);
-		break;
-	case 1: // B&W image
-		mImage = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
-		mImage.setNumColors(256);
-		for (int i=0; i<256; i++) {
-			mImage.setColor(i, qRgba(i, i, i, 255));
-		}
-		break;
-	default:
-		jpeg_destroy_decompress(&cinfo);
-		fclose(inputFile);
-		return false;
-	}
-
-	while (cinfo.output_scanline < cinfo.output_height) {
-		uchar *line = mImage.scanLine(cinfo.output_scanline);
-		jpeg_read_scanlines(&cinfo, &line, 1);
-	}
-	jpeg_finish_decompress(&cinfo);
-
-// Expand 24->32 bpp
-	if ( cinfo.output_components == 3 ) {
-		for (uint j=0; j<cinfo.output_height; j++) {
-			uchar *in = mImage.scanLine(j) + (cinfo.output_width - 1)*3;
-			QRgb *out = (QRgb*)( mImage.scanLine(j) ) + cinfo.output_width - 1;
-
-			for (int i=cinfo.output_width - 1; i>=0; --i, --out, in -= 3) {
-				*out = qRgb(in[0], in[1], in[2]);
-			}
-		}
-	}
-
-	int newMax = qMax(cinfo.output_width, cinfo.output_height);
-	int newx = size*cinfo.output_width / newMax;
-	int newy = size*cinfo.output_height / newMax;
-
-	mImage = mImage.scaled(newx, newy, Qt::KeepAspectRatio);
-
-	jpeg_destroy_decompress(&cinfo);
-	fclose(inputFile);
-
-	return true;
 }
 
 
