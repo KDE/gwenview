@@ -19,15 +19,17 @@ set(gwenviewlib_SRCS
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
 	document/svgdocumentloadedimpl.cpp
-	abstractdocumentviewadapter.cpp
+	documentview/abstractdocumentviewadapter.cpp
+	documentview/documentview.cpp
+	documentview/messageviewadapter.cpp
+	documentview/imageviewadapter.cpp
+	documentview/svgviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	archiveutils.cpp
 	cropsidebar.cpp
 	cropimageoperation.cpp
 	croptool.cpp
-	documentview.cpp
-	messageviewadapter.cpp
 	expandbutton.cpp
 	exiv2imageloader.cpp
 	fullscreenbar.cpp
@@ -38,7 +40,6 @@ set(gwenviewlib_SRCS
 	imagescaler.cpp
 	imageutils.cpp
 	imageview.cpp
-	imageviewadapter.cpp
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
@@ -53,7 +54,6 @@ set(gwenviewlib_SRCS
 	slideshow.cpp
 	scrolltool.cpp
 	statusbartoolbutton.cpp
-	svgviewadapter.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
@@ -98,7 +98,7 @@ set_source_files_properties(
 
 kde4_add_ui_files(gwenviewlib_SRCS
 	cropsidebar.ui
-	messageview.ui
+	documentview/messageview.ui
 	print/printoptionspage.ui
 	)
 

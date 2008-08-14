@@ -35,11 +35,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
-#include <lib/messageviewadapter.h>
-#include <lib/imageviewadapter.h>
+#include <lib/documentview/messageviewadapter.h>
+#include <lib/documentview/imageviewadapter.h>
+#include <lib/documentview/svgviewadapter.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
-#include <lib/svgviewadapter.h>
 #include <lib/zoomwidget.h>
 
 namespace Gwenview {
