@@ -79,6 +79,20 @@ static void expand24to32bpp(QImage* image) {
 }
 
 
+static void convertCmykToRgb(QImage* image) {
+	for (int j = 0; j < image->height(); ++j) {
+		uchar *in = image->scanLine(j) + image->width() * 4;
+		QRgb *out = (QRgb*)image->scanLine(j);
+
+		for (int i = image->width() - 1; i>=0; --i) {
+			in-=4;
+			int k = in[3];
+			out[i] = qRgb(k * in[0] / 255, k * in[1] / 255, k * in[2] / 255);
+		}
+	}
+}
+
+
 static QSize getJpegSize(QIODevice* ioDevice) {
 	struct jpeg_decompress_struct cinfo;
 	QSize size;
@@ -168,7 +182,18 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 
 	jpeg_finish_decompress(&cinfo);
 
-	// Expand 24->32 bpp
+	switch (cinfo.out_color_space) {
+	case JCS_CMYK:
+		convertCmykToRgb(image);
+		break;
+	case JCS_RGB:
+	case JCS_GRAYSCALE:
+		break;
+	default:
+		kWarning() << "Unhandled JPEG colorspace" << cinfo.out_color_space;
+		break;
+	}
+
 	if ( cinfo.output_components == 3 ) {
 		expand24to32bpp(image);
 	}
