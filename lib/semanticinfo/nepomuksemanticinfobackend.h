@@ -18,32 +18,32 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef FAKEMETADATABACKEND_H
-#define FAKEMETADATABACKEND_H
+#ifndef NEPOMUKSEMANTICINFOBACKEND_H
+#define NEPOMUKSEMANTICINFOBACKEND_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QHash>
 
 // KDE
-#include <kurl.h>
 
 // Local
-#include "abstractmetadatabackend.h"
+#include "abstractsemanticinfobackend.h"
 
 namespace Gwenview {
 
 
+class NepomukMetaDataBackEndPrivate;
+
+
 /**
- * A fake metadata backend, useful to test the ui layer.
- * It provides fake rating values based on the image url.
+ * A real metadata backend using Nepomuk to store and retrieve metadata.
  */
-class GWENVIEWLIB_EXPORT FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
+class GWENVIEWLIB_EXPORT NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
 	Q_OBJECT
 public:
-	enum InitializeMode { InitializeEmpty, InitializeRandom };
-	FakeMetaDataBackEnd(QObject* parent, InitializeMode initializeMode);
+	NepomukMetaDataBackEnd(QObject* parent);
+	~NepomukMetaDataBackEnd();
 
 	virtual TagSet allTags() const;
 
@@ -55,18 +55,13 @@ public:
 
 	virtual MetaDataTag tagForLabel(const QString&) const;
 
-Q_SIGNALS:
-	void allTagsUpdated();
+	void emitMetaDataRetrieved(const KUrl&, const MetaData&);
 
 private:
-	void mergeTagsWithAllTags(const TagSet&);
-
-	QHash<KUrl, MetaData> mMetaDataForUrl;
-	InitializeMode mInitializeMode;
-	TagSet mAllTags;
+	NepomukMetaDataBackEndPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* FAKEMETADATABACKEND_H */
+#endif /* NEPOMUKSEMANTICINFOBACKEND_H */

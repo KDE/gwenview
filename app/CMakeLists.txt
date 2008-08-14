@@ -37,12 +37,12 @@ set(gwenview_SRCS
 	thumbnailbarview.cpp
 	)
 
-if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	set (gwenview_SRCS
 		${gwenview_SRCS}
 		nepomukcontextmanageritem.cpp
 		)
-endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 if (KIPI_FOUND)
 	set (gwenview_SRCS
@@ -56,16 +56,16 @@ endif (KIPI_FOUND)
 kde4_add_ui_files(gwenview_SRCS
 	configdialog.ui
 	fullscreenconfigdialog.ui
-	metadatadialog.ui
+	semanticinfodialog.ui
 	startpage.ui
 	thumbnailviewpanel.ui
 	)
 
-if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 kde4_add_ui_files(gwenview_SRCS
 	nepomuksidebaritem.ui
 	)
-endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 kde4_add_executable(gwenview ${gwenview_SRCS})
 
@@ -75,9 +75,9 @@ target_link_libraries(gwenview
 	gwenviewlib
 	)
 
-if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	target_link_libraries(gwenview ${NEPOMUK_LIBRARIES})
-endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 install(TARGETS gwenview
 	${INSTALL_TARGETS_DEFAULT_ARGS})

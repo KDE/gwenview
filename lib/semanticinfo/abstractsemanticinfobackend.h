@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef ABSTRACTMETADATABACKEND_H
-#define ABSTRACTMETADATABACKEND_H
+#ifndef ABSTRACTSEMANTICINFOBACKEND_H
+#define ABSTRACTSEMANTICINFOBACKEND_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -91,4 +91,4 @@ Q_SIGNALS:
 
 } // namespace
 
-#endif /* ABSTRACTMETADATABACKEND_H */
+#endif /* ABSTRACTSEMANTICINFOBACKEND_H */

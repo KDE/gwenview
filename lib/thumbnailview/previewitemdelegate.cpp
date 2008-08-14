@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
 #include <kurl.h>
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <nepomuk/kratingpainter.h>
 #endif
 
@@ -44,8 +44,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "archiveutils.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
-#include "../metadata/metadatadirmodel.h"
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+#include "../semanticinfo/semanticinfodirmodel.h"
 #endif
 
 namespace Gwenview {
@@ -577,7 +577,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 	d->drawText(painter, rect, fgColor, index.data(Qt::DisplayRole).toString());
 
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	// Draw rating
 	QVariant value = index.data(MetaDataDirModel::RatingRole);
 	if (value.isValid()) {

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "nepomukmetadatabackend.h"
+#include "nepomuksemanticinfobackend.h"
 
 // Qt
 #include <QMutex>
@@ -200,7 +200,7 @@ void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaDa
 
 QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
 	Nepomuk::Tag tag(uri);
-	Q_ASSERT(tag.exists());
+	//Q_ASSERT(tag.exists());
 	return tag.label();
 }
 

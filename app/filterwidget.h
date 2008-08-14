@@ -68,7 +68,7 @@ private:
 	NameFilterControllerPrivate* const d;
 };
 
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 class RatingControllerPrivate;
 class RatingController : public AbstractFilterController {
 	Q_OBJECT

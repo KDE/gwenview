@@ -153,7 +153,7 @@ void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
 
 	d->mMultipleFilesLabel = new QLabel();
 
-	d->mGroup = sideBar->createGroup(i18nc("@title:group", "Information"));
+	d->mGroup = sideBar->createGroup(i18nc("@title:group", "Meta Information"));
 	d->mGroup->addWidget(d->mOneFileWidget);
 	d->mGroup->addWidget(d->mMultipleFilesLabel);
 

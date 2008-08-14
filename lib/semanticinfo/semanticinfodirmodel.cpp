@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "metadatadirmodel.moc"
+#include "semanticinfodirmodel.moc"
 #include <config-gwenview.h>
 
 // Qt
@@ -29,14 +29,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 
 // Local
-#include "abstractmetadatabackend.h"
+#include "abstractsemanticinfobackend.h"
 #include "../archiveutils.h"
 
-#ifdef GWENVIEW_METADATA_BACKEND_FAKE
-#include "fakemetadatabackend.h"
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
+#include "fakesemanticinfobackend.h"
 
-#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
-#include "nepomukmetadatabackend.h"
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
+#include "nepomuksemanticinfobackend.h"
 
 #else
 #ifdef __GNUC__
@@ -57,9 +57,9 @@ struct MetaDataDirModelPrivate {
 MetaDataDirModel::MetaDataDirModel(QObject* parent)
 : KDirModel(parent)
 , d(new MetaDataDirModelPrivate) {
-#ifdef GWENVIEW_METADATA_BACKEND_FAKE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
 	d->mBackEnd = new FakeMetaDataBackEnd(this, FakeMetaDataBackEnd::InitializeRandom);
-#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 	d->mBackEnd = new NepomukMetaDataBackEnd(this);
 #endif
 

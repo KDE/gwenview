@@ -27,18 +27,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 
 // Local
-#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kdirmodel.h>
 #else
-#include "abstractmetadatabackend.h"
-#include "metadatadirmodel.h"
+#include "abstractsemanticinfobackend.h"
+#include "semanticinfodirmodel.h"
 #endif
 
 namespace Gwenview {
 
 
 struct SortedDirModelPrivate {
-#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	KDirModel* mSourceModel;
 #else
 	MetaDataDirModel* mSourceModel;
@@ -54,7 +54,7 @@ SortedDirModel::SortedDirModel(QObject* parent)
 : KDirSortFilterProxyModel(parent)
 , d(new SortedDirModelPrivate)
 {
-#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mSourceModel = new KDirModel(this);
 #else
 	d->mSourceModel = new MetaDataDirModel(this);
@@ -137,7 +137,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 			return false;
 		}
 	}
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
 		// Make sure we have metadata, otherwise retrieve it and return false,
 		// we will be called again later when metadata is there.
@@ -167,7 +167,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 
 
 AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
-#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	return 0;
 #else
 	return d->mSourceModel->metaDataBackEnd();
@@ -176,7 +176,7 @@ AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
 
 
 void SortedDirModel::setTagSetFilter(const TagSet& tagSet) {
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	kDebug() << tagSet;
 	d->mTagSet = tagSet;
 	invalidateFilter();

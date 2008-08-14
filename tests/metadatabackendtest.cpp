@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Local
-#include "metadatabackendtest.moc"
+#include "semanticinfobackendtest.moc"
 
 // Qt
 #include <QSignalSpy>
@@ -33,11 +33,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "testutils.h"
 #include <config-gwenview.h>
 
-#ifdef GWENVIEW_METADATA_BACKEND_FAKE
-#include <lib/metadata/fakemetadatabackend.h>
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
+#include <lib/semanticinfo/fakesemanticinfobackend.h>
 
-#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
-#include <lib/metadata/nepomukmetadatabackend.h>
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
+#include <lib/semanticinfo/nepomuksemanticinfobackend.h>
 
 #else
 #ifdef __GNUC__
@@ -68,9 +68,9 @@ void MetaDataBackEndTest::initTestCase() {
 
 
 void MetaDataBackEndTest::init() {
-#ifdef GWENVIEW_METADATA_BACKEND_FAKE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
 	mBackEnd.reset(new FakeMetaDataBackEnd(0, FakeMetaDataBackEnd::InitializeEmpty));
-#elif defined(GWENVIEW_METADATA_BACKEND_NEPOMUK)
+#elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 	mBackEnd.reset(new NepomukMetaDataBackEnd(0));
 #endif
 }

@@ -38,10 +38,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "ui_nepomuksidebaritem.h"
-#include "ui_metadatadialog.h"
-#include <lib/metadata/abstractmetadatabackend.h>
-#include <lib/metadata/metadatadirmodel.h>
-#include <lib/metadata/sorteddirmodel.h>
+#include "ui_semanticinfodialog.h"
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
+#include <lib/semanticinfo/semanticinfodirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
 
@@ -145,7 +145,7 @@ void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
 
-	d->mGroup = sideBar->createGroup(i18n("Meta Information"));
+	d->mGroup = sideBar->createGroup(i18n("Semantic Information"));
 
 	QWidget* container = new QWidget;
 	d->setupUi(container);

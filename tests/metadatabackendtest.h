@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
-#ifndef METADATABACKENDTEST_H
-#define METADATABACKENDTEST_H
+#ifndef SEMANTICINFOBACKENDTEST_H
+#define SEMANTICINFOBACKENDTEST_H
 
 // STL
 #include <memory>
@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 // Local
-#include <lib/metadata/abstractmetadatabackend.h>
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
 
 namespace Gwenview {
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace
 
-#endif // METADATABACKENDTEST_H
+#endif // SEMANTICINFOBACKENDTEST_H

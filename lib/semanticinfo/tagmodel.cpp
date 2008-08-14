@@ -18,50 +18,50 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef NEPOMUKMETADATABACKEND_H
-#define NEPOMUKMETADATABACKEND_H
-
-#include <lib/gwenviewlib_export.h>
+// Self
+#include "tagmodel.moc"
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractmetadatabackend.h"
+#include "abstractsemanticinfobackend.h"
 
 namespace Gwenview {
 
 
-class NepomukMetaDataBackEndPrivate;
-
-
-/**
- * A real metadata backend using Nepomuk to store and retrieve metadata.
- */
-class GWENVIEWLIB_EXPORT NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
-	Q_OBJECT
-public:
-	NepomukMetaDataBackEnd(QObject* parent);
-	~NepomukMetaDataBackEnd();
-
-	virtual TagSet allTags() const;
-
-	virtual void storeMetaData(const KUrl&, const MetaData&);
-
-	virtual void retrieveMetaData(const KUrl&);
-
-	virtual QString labelForTag(const MetaDataTag&) const;
-
-	virtual MetaDataTag tagForLabel(const QString&) const;
-
-	void emitMetaDataRetrieved(const KUrl&, const MetaData&);
-
-private:
-	NepomukMetaDataBackEndPrivate* const d;
+struct TagModelPrivate {
+	AbstractMetaDataBackEnd* mBackEnd;
 };
 
 
-} // namespace
+TagModel::TagModel(QObject* parent, AbstractMetaDataBackEnd* backEnd)
+: QStandardItemModel(parent)
+, d(new TagModelPrivate) {
+	d->mBackEnd = backEnd;
+	refresh();
+	connect(backEnd, SIGNAL(allTagsUpdated()), SLOT(refresh()) );
+}
 
-#endif /* NEPOMUKMETADATABACKEND_H */
+
+void TagModel::refresh() {
+	TagSet set = d->mBackEnd->allTags();
+
+	clear();
+	Q_FOREACH(const MetaDataTag& tag, set) {
+		QString label = d->mBackEnd->labelForTag(tag);
+		QStandardItem* item = new QStandardItem(label);
+		item->setData(tag, TagRole);
+		appendRow(item);
+	}
+	sort(0);
+}
+
+
+TagModel::~TagModel() {
+	delete d;
+}
+
+
+} // namespace

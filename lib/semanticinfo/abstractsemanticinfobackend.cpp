@@ -19,48 +19,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "tagmodel.moc"
+#include "abstractsemanticinfobackend.moc"
 
 // Qt
+#include <QStringList>
+#include <QVariant>
 
 // KDE
 
 // Local
-#include "abstractmetadatabackend.h"
 
 namespace Gwenview {
 
 
-struct TagModelPrivate {
-	AbstractMetaDataBackEnd* mBackEnd;
-};
+TagSet::TagSet()
+: QSet<MetaDataTag>() {}
+
+TagSet::TagSet(const QSet<MetaDataTag>& set)
+: QSet<QString>(set) {}
 
 
-TagModel::TagModel(QObject* parent, AbstractMetaDataBackEnd* backEnd)
-: QStandardItemModel(parent)
-, d(new TagModelPrivate) {
-	d->mBackEnd = backEnd;
-	refresh();
-	connect(backEnd, SIGNAL(allTagsUpdated()), SLOT(refresh()) );
+QVariant TagSet::toVariant() const {
+	QStringList lst = toList();
+	return QVariant(lst);
 }
 
 
-void TagModel::refresh() {
-	TagSet set = d->mBackEnd->allTags();
-
-	clear();
-	Q_FOREACH(const MetaDataTag& tag, set) {
-		QString label = d->mBackEnd->labelForTag(tag);
-		QStandardItem* item = new QStandardItem(label);
-		item->setData(tag, TagRole);
-		appendRow(item);
-	}
-	sort(0);
+TagSet TagSet::fromVariant(const QVariant& variant) {
+	QStringList lst = variant.toStringList();
+	return TagSet::fromList(lst);
 }
 
 
-TagModel::~TagModel() {
-	delete d;
+AbstractMetaDataBackEnd::AbstractMetaDataBackEnd(QObject* parent)
+: QObject(parent) {
+	qRegisterMetaType<MetaData>("MetaData");
 }
 
 

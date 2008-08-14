@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef METADATADIRMODEL_H
-#define METADATADIRMODEL_H
+#ifndef SEMANTICINFODIRMODEL_H
+#define SEMANTICINFODIRMODEL_H
 
 // Qt
 
@@ -77,4 +77,4 @@ private Q_SLOTS:
 
 } // namespace
 
-#endif /* METADATADIRMODEL_H */
+#endif /* SEMANTICINFODIRMODEL_H */

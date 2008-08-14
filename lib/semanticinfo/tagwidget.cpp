@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klineedit.h>
 
 // Local
-#include <lib/metadata/tagmodel.h>
+#include <lib/semanticinfo/tagmodel.h>
 
 namespace Gwenview {
 

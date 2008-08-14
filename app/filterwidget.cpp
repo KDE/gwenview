@@ -36,9 +36,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 
 // KDE
-#include <lib/metadata/sorteddirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 
-#ifdef GWENVIEW_METADATA_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // Qt
 #include <QLabel>
 
@@ -48,9 +48,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <nepomuk/kratingwidget.h>
 
 // Local
-#include <lib/metadata/abstractmetadatabackend.h>
-#include <lib/metadata/tagmodel.h>
-#endif // GWENVIEW_METADATA_BACKEND_NONE
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
+#include <lib/semanticinfo/tagmodel.h>
+#endif // GWENVIEW_SEMANTICINFO_BACKEND_NONE
 
 namespace Gwenview {
 
@@ -112,7 +112,7 @@ void NameFilterController::applyNameFilter() {
 }
 
 
-#ifndef GWENVIEW_METADATA_BACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 //// RatingController ////
 struct RatingControllerPrivate {
 	KRatingWidget* mRatingWidget;
@@ -219,7 +219,7 @@ void TagController::updateTagSetFilter() {
 	d->mLineEdit->setText(labels.join(", "));
 }
 
-#endif // GWENVIEW_METADATA_BACKEND_NONE
+#endif // GWENVIEW_SEMANTICINFO_BACKEND_NONE
 
 
 //// FilterWidget ////
@@ -234,7 +234,7 @@ struct FilterWidgetPrivate {
 	void setupWidgets() {
 		// Combo box
 		mComboBox = new QComboBox;
-		#ifdef GWENVIEW_METADATA_BACKEND_NONE
+		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		mComboBox->hide();
 		QLabel* label = new QLabel(i18n("Filter by Name:"));
 		#endif
@@ -246,7 +246,7 @@ struct FilterWidgetPrivate {
 		QHBoxLayout* layout = new QHBoxLayout(that);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		#ifdef GWENVIEW_METADATA_BACKEND_NONE
+		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		layout->addWidget(label);
 		#endif
 		layout->addWidget(mComboBox);
@@ -263,7 +263,7 @@ struct FilterWidgetPrivate {
 	void setupControllers() {
 		mCurrentController = 0;
 		addController(i18n("Filter by Name:"), FilterByName, new NameFilterController(that));
-		#ifndef GWENVIEW_METADATA_BACKEND_NONE
+		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		addController(i18n("Filter by Tag:"), FilterByTag, new TagController(that));
 		addController(i18n("Filter by Rating:"), FilterByRating, new RatingController(that));
 		#endif

@@ -38,9 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <lib/gwenviewconfig.h>
-#include <lib/metadata/abstractmetadatabackend.h>
-#include <lib/metadata/sorteddirmodel.h>
-#include <lib/metadata/tagmodel.h>
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/semanticinfo/tagmodel.h>
 #include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>

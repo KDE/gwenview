@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "abstractcontextmanageritem.h"
-#include <lib/metadata/abstractmetadatabackend.h>
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
 
 class KActionCollection;
 

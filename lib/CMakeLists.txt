@@ -43,7 +43,7 @@ set(gwenviewlib_SRCS
 	invisiblebuttongroup.cpp
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
-	metadata/sorteddirmodel.cpp
+	semanticinfo/sorteddirmodel.cpp
 	memoryutils.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
@@ -66,29 +66,29 @@ set(gwenviewlib_SRCS
 	zoomwidget.cpp
 	)
 
-if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	set(gwenviewlib_SRCS
 		${gwenviewlib_SRCS}
-		metadata/abstractmetadatabackend.cpp
-		metadata/metadatadirmodel.cpp
-		metadata/tagmodel.cpp
-		metadata/tagwidget.cpp
+		semanticinfo/abstractsemanticinfobackend.cpp
+		semanticinfo/semanticinfodirmodel.cpp
+		semanticinfo/tagmodel.cpp
+		semanticinfo/tagwidget.cpp
 		)
-endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
-if (GWENVIEW_METADATA_BACKEND_FAKE)
+if (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
 	set(gwenviewlib_SRCS
 		${gwenviewlib_SRCS}
-		metadata/fakemetadatabackend.cpp
+		semanticinfo/fakesemanticinfobackend.cpp
 		)
-endif (GWENVIEW_METADATA_BACKEND_FAKE)
+endif (GWENVIEW_SEMANTICINFO_BACKEND_FAKE)
 
-if (GWENVIEW_METADATA_BACKEND_NEPOMUK)
+if (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 	set(gwenviewlib_SRCS
 		${gwenviewlib_SRCS}
-		metadata/nepomukmetadatabackend.cpp
+		semanticinfo/nepomuksemanticinfobackend.cpp
 		)
-endif (GWENVIEW_METADATA_BACKEND_NEPOMUK)
+endif (GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
 
 set_source_files_properties(
 	exiv2imageloader.cpp
@@ -118,11 +118,11 @@ if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )
 endif( WIN32 )
 
-if (NOT GWENVIEW_METADATA_BACKEND_NONE)
+if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	target_link_libraries(gwenviewlib
 		${NEPOMUK_LIBRARIES}
 		${SOPRANO_LIBRARIES}
 		)
-endif (NOT GWENVIEW_METADATA_BACKEND_NONE)
+endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 install(TARGETS gwenviewlib ${INSTALL_TARGETS_DEFAULT_ARGS})

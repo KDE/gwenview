@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "sidebar.h"
 #include "abstractcontextmanageritem.h"
-#include <lib/metadata/sorteddirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
 

@@ -59,7 +59,7 @@
   <customwidget>
    <class>Gwenview::TagWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >lib/metadata/tagwidget.h</header>
+   <header location="global" >lib/semanticinfo/tagwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

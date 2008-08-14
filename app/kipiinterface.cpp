@@ -47,7 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
 #include <lib/jpegcontent.h>
-#include <lib/metadata/sorteddirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
 #undef ENABLE_LOG
