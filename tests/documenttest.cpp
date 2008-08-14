@@ -94,6 +94,8 @@ void DocumentTest::testLoad_data() {
 	NEW_ROW("160382_corrupted.jpeg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
 	NEW_ROW("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);
 	// FIXME: Test svgz
+	NEW_ROW("1x10k.png", "png", MimeTypeUtils::KIND_RASTER_IMAGE);
+	NEW_ROW("1x10k.jpg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
 }
 
 void DocumentTest::testLoadTwoPasses() {
@@ -121,26 +123,36 @@ void DocumentTest::testLoadEmpty() {
 	QCOMPARE(loadingFailedSpy.count(), 1);
 }
 
+void DocumentTest::testLoadDownSampled_data() {
+	QTest::addColumn<QString>("fileName");
+
+	QTest::newRow("fileName") << "orient6.jpg";
+	QTest::newRow("fileName") << "1x10k.jpg";
+}
+
 void DocumentTest::testLoadDownSampled() {
 	// Note: for now we only support down sampling on jpeg, do not use test.png
 	// here
-	KUrl url = urlForTestFile("orient6.jpg");
+	QFETCH(QString, fileName);
+	KUrl url = urlForTestFile(fileName);
 	QImage image;
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
-	bool ready = doc->prepareDownSampledImageForZoom(0.4);
+	QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(const KUrl&)));
+	QSignalSpy loadedSpy(doc.data(), SIGNAL(loaded(const KUrl&)));
+	bool ready = doc->prepareDownSampledImageForZoom(0.2);
 	QVERIFY2(!ready, "There should not be a down sampled image at this point");
 
-	while (downSampledImageReadySpy.count() == 0) {
+	while (downSampledImageReadySpy.count() == 0 && loadingFailedSpy.count() == 0 && loadedSpy.count() == 0) {
 		QTest::qWait(100);
 	}
-	QImage downSampledImage = doc->downSampledImageForZoom(0.4);
+	QImage downSampledImage = doc->downSampledImageForZoom(0.2);
 	QVERIFY2(!downSampledImage.isNull(), "Down sampled image should not be null");
 
-	QCOMPARE(downSampledImage.size(), doc->size() / 2);
+	QCOMPARE(downSampledImage.size(), doc->size() / 4);
 }
 
 void DocumentTest::testLoadRemote() {

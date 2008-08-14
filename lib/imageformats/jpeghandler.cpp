@@ -122,7 +122,10 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 
 	// Compute scale value
 	cinfo.scale_num=1;
-	if (scaledSize.isValid()) {
+	if (!scaledSize.isEmpty()) {
+		// Use !scaledSize.isEmpty(), not scaledSize.isValid() because
+		// isValid() returns true if both the width and height is equal to or
+		// greater than 0, so it is possible to get a division by 0.
 		cinfo.scale_denom = qMin(cinfo.image_width / scaledSize.width(),
 								 cinfo.image_height / scaledSize.height());
 		if (cinfo.scale_denom < 2) {

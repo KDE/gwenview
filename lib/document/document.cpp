@@ -334,6 +334,11 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom) {
 	if (loadingState() == Loaded) {
 		// Resample image from the full one
 		d->mDownSampledImageMap[invertedZoom] = d->mImage.scaled(d->mImage.size() / invertedZoom, Qt::KeepAspectRatio, Qt::FastTransformation);
+		if (d->mDownSampledImageMap[invertedZoom].size().isEmpty()) {
+			d->mDownSampledImageMap[invertedZoom] = d->mImage;
+			return true;
+		}
+
 		return true;
 	}
 

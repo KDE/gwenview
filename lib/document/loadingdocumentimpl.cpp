@@ -165,7 +165,9 @@ struct LoadingDocumentImplPrivate {
 			// image size
 			QSize size = reader.size() / mImageDataInvertedZoom;
 			LOG("Setting scaled size to" << size);
-			reader.setScaledSize(size);
+			if (!size.isEmpty()) {
+				reader.setScaledSize(size);
+			}
 		}
 
 		bool ok = reader.read(&mImage);
