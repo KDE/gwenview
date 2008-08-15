@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "nepomuksemanticinfobackend.h"
+#include "nepomuksemanticinfobackend.moc"
 
 // Qt
 #include <QMutex>
