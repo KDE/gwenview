@@ -33,9 +33,9 @@ namespace Gwenview {
 
 
 TagSet::TagSet()
-: QSet<MetaDataTag>() {}
+: QSet<SemanticInfoTag>() {}
 
-TagSet::TagSet(const QSet<MetaDataTag>& set)
+TagSet::TagSet(const QSet<SemanticInfoTag>& set)
 : QSet<QString>(set) {}
 
 
@@ -51,9 +51,9 @@ TagSet TagSet::fromVariant(const QVariant& variant) {
 }
 
 
-AbstractMetaDataBackEnd::AbstractMetaDataBackEnd(QObject* parent)
+AbstractSemanticInfoBackEnd::AbstractSemanticInfoBackEnd(QObject* parent)
 : QObject(parent) {
-	qRegisterMetaType<MetaData>("MetaData");
+	qRegisterMetaType<SemanticInfo>("SemanticInfo");
 }
 
 

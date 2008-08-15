@@ -46,25 +46,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QHash<KUrl, MetaData> MetaDataCache;
+typedef QHash<KUrl, SemanticInfo> SemanticInfoCache;
 
-struct MetaDataDirModelPrivate {
-	MetaDataCache mMetaDataCache;
-	AbstractMetaDataBackEnd* mBackEnd;
+struct SemanticInfoDirModelPrivate {
+	SemanticInfoCache mSemanticInfoCache;
+	AbstractSemanticInfoBackEnd* mBackEnd;
 };
 
 
-MetaDataDirModel::MetaDataDirModel(QObject* parent)
+SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
 : KDirModel(parent)
-, d(new MetaDataDirModelPrivate) {
+, d(new SemanticInfoDirModelPrivate) {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
-	d->mBackEnd = new FakeMetaDataBackEnd(this, FakeMetaDataBackEnd::InitializeRandom);
+	d->mBackEnd = new FakeSemanticInfoBackEnd(this, FakeSemanticInfoBackEnd::InitializeRandom);
 #elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-	d->mBackEnd = new NepomukMetaDataBackEnd(this);
+	d->mBackEnd = new NepomukSemanticInfoBackEnd(this);
 #endif
 
-	connect(d->mBackEnd, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
-		SLOT(storeRetrievedMetaData(const KUrl&, const MetaData&)),
+	connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
+		SLOT(storeRetrievedSemanticInfo(const KUrl&, const SemanticInfo&)),
 		Qt::QueuedConnection);
 
 	connect(this, SIGNAL(modelAboutToBeReset()),
@@ -75,12 +75,12 @@ MetaDataDirModel::MetaDataDirModel(QObject* parent)
 }
 
 
-MetaDataDirModel::~MetaDataDirModel() {
+SemanticInfoDirModel::~SemanticInfoDirModel() {
 	delete d;
 }
 
 
-bool MetaDataDirModel::metaDataAvailableForIndex(const QModelIndex& index) const {
+bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& index) const {
 	if (!index.isValid()) {
 		return false;
 	}
@@ -89,11 +89,11 @@ bool MetaDataDirModel::metaDataAvailableForIndex(const QModelIndex& index) const
 		return false;
 	}
 	KUrl url = item.url();
-	return d->mMetaDataCache.contains(url);
+	return d->mSemanticInfoCache.contains(url);
 }
 
 
-void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
+void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
 		return;
 	}
@@ -106,19 +106,19 @@ void MetaDataDirModel::retrieveMetaDataForIndex(const QModelIndex& index) {
 		return;
 	}
 	KUrl url = item.url();
-	d->mBackEnd->retrieveMetaData(url);
+	d->mBackEnd->retrieveSemanticInfo(url);
 }
 
 
-QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
+QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const {
 	if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
 			return QVariant();
 		}
 		KUrl url = item.url();
-		MetaDataCache::ConstIterator it = d->mMetaDataCache.find(url);
-		if (it != d->mMetaDataCache.end()) {
+		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.find(url);
+		if (it != d->mSemanticInfoCache.end()) {
 			if (role == RatingRole) {
 				return it.value().mRating;
 			} else if (role == DescriptionRole) {
@@ -131,7 +131,7 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 				return QVariant();
 			}
 		} else {
-			const_cast<MetaDataDirModel*>(this)->retrieveMetaDataForIndex(index);
+			const_cast<SemanticInfoDirModel*>(this)->retrieveSemanticInfoForIndex(index);
 			return QVariant();
 		}
 	} else {
@@ -140,7 +140,7 @@ QVariant MetaDataDirModel::data(const QModelIndex& index, int role) const {
 }
 
 
-bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
+bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& data, int role) {
 	if (role == RatingRole || role == DescriptionRole || role == TagsRole) {
 		KFileItem item = itemForIndex(index);
 		if (item.isNull()) {
@@ -148,21 +148,21 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 			return false;
 		}
 		KUrl url = item.url();
-		MetaData metaData = d->mMetaDataCache[url];
+		SemanticInfo semanticInfo = d->mSemanticInfoCache[url];
 		if (role == RatingRole) {
-			metaData.mRating = data.toInt();
+			semanticInfo.mRating = data.toInt();
 		} else if (role == DescriptionRole) {
-			metaData.mDescription = data.toString();
+			semanticInfo.mDescription = data.toString();
 		} else if (role == TagsRole) {
-			metaData.mTags = TagSet::fromVariant(data);
+			semanticInfo.mTags = TagSet::fromVariant(data);
 		} else {
 			// We should never reach this part
 			Q_ASSERT(0);
 		}
-		d->mMetaDataCache[url] = metaData;
+		d->mSemanticInfoCache[url] = semanticInfo;
 		emit dataChanged(index, index);
 
-		d->mBackEnd->storeMetaData(url, metaData);
+		d->mBackEnd->storeSemanticInfo(url, semanticInfo);
 		return true;
 	} else {
 		return KDirModel::setData(index, data, role);
@@ -170,16 +170,16 @@ bool MetaDataDirModel::setData(const QModelIndex& index, const QVariant& data, i
 }
 
 
-void MetaDataDirModel::storeRetrievedMetaData(const KUrl& url, const MetaData& metaData) {
+void SemanticInfoDirModel::storeRetrievedSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
 	QModelIndex index = indexForUrl(url);
 	if (index.isValid()) {
-		d->mMetaDataCache[url] = metaData;
+		d->mSemanticInfoCache[url] = semanticInfo;
 		emit dataChanged(index, index);
 	}
 }
 
 
-void MetaDataDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
+void SemanticInfoDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
 	for (int pos = start; pos <= end; ++pos) {
 		QModelIndex idx = index(pos, 0, parent);
 		KFileItem item = itemForIndex(idx);
@@ -187,17 +187,17 @@ void MetaDataDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int s
 			continue;
 		}
 		KUrl url = item.url();
-		d->mMetaDataCache.remove(url);
+		d->mSemanticInfoCache.remove(url);
 	}
 }
 
 
-void MetaDataDirModel::slotModelAboutToBeReset() {
-	d->mMetaDataCache.clear();
+void SemanticInfoDirModel::slotModelAboutToBeReset() {
+	d->mSemanticInfoCache.clear();
 }
 
 
-AbstractMetaDataBackEnd* MetaDataDirModel::metaDataBackEnd() const {
+AbstractSemanticInfoBackEnd* SemanticInfoDirModel::semanticInfoBackEnd() const {
 	return d->mBackEnd;
 }
 

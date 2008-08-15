@@ -33,14 +33,14 @@ class KUrl;
 namespace Gwenview {
 
 
-class AbstractMetaDataBackEnd;
-class MetaData;
-class MetaDataDirModelPrivate;
+class AbstractSemanticInfoBackEnd;
+class SemanticInfo;
+class SemanticInfoDirModelPrivate;
 /**
  * Extends KDirModel by providing read/write access to image metadata such as
  * rating, tags and descriptions.
  */
-class MetaDataDirModel : public KDirModel {
+class SemanticInfoDirModel : public KDirModel {
 	Q_OBJECT
 public:
 	enum {
@@ -48,27 +48,27 @@ public:
 		DescriptionRole = 0x26FB33FA,
 		TagsRole = 0x0462F0A8
 	};
-	MetaDataDirModel(QObject* parent);
-	~MetaDataDirModel();
+	SemanticInfoDirModel(QObject* parent);
+	~SemanticInfoDirModel();
 
-	bool metaDataAvailableForIndex(const QModelIndex&) const;
+	bool semanticInfoAvailableForIndex(const QModelIndex&) const;
 
-	void retrieveMetaDataForIndex(const QModelIndex&);
+	void retrieveSemanticInfoForIndex(const QModelIndex&);
 
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);
 
-	AbstractMetaDataBackEnd* metaDataBackEnd() const;
+	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 Q_SIGNALS:
-	void metaDataRetrieved(const KUrl&, const MetaData&);
+	void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
 private:
-	MetaDataDirModelPrivate* const d;
+	SemanticInfoDirModelPrivate* const d;
 
 private Q_SLOTS:
-	void storeRetrievedMetaData(const KUrl& url, const MetaData&);
+	void storeRetrievedSemanticInfo(const KUrl& url, const SemanticInfo&);
 
 	void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
 	void slotModelAboutToBeReset();

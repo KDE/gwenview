@@ -37,27 +37,27 @@ namespace Gwenview {
 
 /**
  * Helper class which gathers the metadata retrieved when
- * AbstractMetaDataBackEnd::retrieveMetaData() is called.
+ * AbstractSemanticInfoBackEnd::retrieveSemanticInfo() is called.
  */
-class MetaDataBackEndClient : public QObject {
+class SemanticInfoBackEndClient : public QObject {
 	Q_OBJECT
 public:
-	MetaDataBackEndClient(AbstractMetaDataBackEnd*);
+	SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd*);
 
-	MetaData metaDataForUrl(const KUrl& url) const {
-		return mMetaDataForUrl.value(url);
+	SemanticInfo semanticInfoForUrl(const KUrl& url) const {
+		return mSemanticInfoForUrl.value(url);
 	}
 
 private Q_SLOTS:
-	void slotMetaDataRetrieved(const KUrl&, const MetaData&);
+	void slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
 private:
-	QHash<KUrl, MetaData> mMetaDataForUrl;
-	AbstractMetaDataBackEnd* mBackEnd;
+	QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
+	AbstractSemanticInfoBackEnd* mBackEnd;
 };
 
 
-class MetaDataBackEndTest : public QObject {
+class SemanticInfoBackEndTest : public QObject {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -67,7 +67,7 @@ private Q_SLOTS:
 	void testTagForLabel();
 
 private:
-	std::auto_ptr<AbstractMetaDataBackEnd> mBackEnd;
+	std::auto_ptr<AbstractSemanticInfoBackEnd> mBackEnd;
 };
 
 } // namespace

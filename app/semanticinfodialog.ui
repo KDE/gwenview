@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>MetaDataDialog</class>
- <widget class="QWidget" name="MetaDataDialog" >
+ <class>SemanticInfoDialog</class>
+ <widget class="QWidget" name="SemanticInfoDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -68,7 +68,7 @@
   <connection>
    <sender>kdialogbuttonbox</sender>
    <signal>rejected()</signal>
-   <receiver>MetaDataDialog</receiver>
+   <receiver>SemanticInfoDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

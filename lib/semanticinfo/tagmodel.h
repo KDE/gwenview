@@ -32,14 +32,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-class AbstractMetaDataBackEnd;
+class AbstractSemanticInfoBackEnd;
 
 
 class TagModelPrivate;
 class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel {
 	Q_OBJECT
 public:
-	TagModel(QObject*, AbstractMetaDataBackEnd*);
+	TagModel(QObject*, AbstractSemanticInfoBackEnd*);
 	~TagModel();
 
 	enum {

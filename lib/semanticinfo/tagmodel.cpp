@@ -32,11 +32,11 @@ namespace Gwenview {
 
 
 struct TagModelPrivate {
-	AbstractMetaDataBackEnd* mBackEnd;
+	AbstractSemanticInfoBackEnd* mBackEnd;
 };
 
 
-TagModel::TagModel(QObject* parent, AbstractMetaDataBackEnd* backEnd)
+TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 : QStandardItemModel(parent)
 , d(new TagModelPrivate) {
 	d->mBackEnd = backEnd;
@@ -49,7 +49,7 @@ void TagModel::refresh() {
 	TagSet set = d->mBackEnd->allTags();
 
 	clear();
-	Q_FOREACH(const MetaDataTag& tag, set) {
+	Q_FOREACH(const SemanticInfoTag& tag, set) {
 		QString label = d->mBackEnd->labelForTag(tag);
 		QStandardItem* item = new QStandardItem(label);
 		item->setData(tag, TagRole);

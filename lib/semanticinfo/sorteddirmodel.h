@@ -33,7 +33,7 @@ class KUrl;
 
 namespace Gwenview {
 
-class AbstractMetaDataBackEnd;
+class AbstractSemanticInfoBackEnd;
 class SortedDirModelPrivate;
 class TagSet;
 
@@ -61,7 +61,7 @@ public:
 
 	void setTagSetFilter(const TagSet& tagSet);
 
-	AbstractMetaDataBackEnd* metaDataBackEnd() const;
+	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 public Q_SLOTS:
 	void setMinimumRating(int);

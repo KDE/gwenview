@@ -53,55 +53,55 @@ struct Task {
 
 
 struct RetrieveTask : public Task {
-	RetrieveTask(NepomukMetaDataBackEnd* backEnd, const KUrl& url)
+	RetrieveTask(NepomukSemanticInfoBackEnd* backEnd, const KUrl& url)
 	: Task(url), mBackEnd(backEnd) {}
 
 	virtual void execute() {
 		QString urlString = mUrl.url();
 		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
 
-		MetaData metaData;
-		metaData.mRating = resource.rating();
-		metaData.mDescription = resource.description();
+		SemanticInfo semanticInfo;
+		semanticInfo.mRating = resource.rating();
+		semanticInfo.mDescription = resource.description();
 		Q_FOREACH(const Nepomuk::Tag& tag, resource.tags()) {
-			metaData.mTags << tag.resourceUri().toString();
+			semanticInfo.mTags << tag.resourceUri().toString();
 		}
-		mBackEnd->emitMetaDataRetrieved(mUrl, metaData);
+		mBackEnd->emitSemanticInfoRetrieved(mUrl, semanticInfo);
 	}
 
-	NepomukMetaDataBackEnd* mBackEnd;
+	NepomukSemanticInfoBackEnd* mBackEnd;
 };
 
 
 struct StoreTask : public Task {
-	StoreTask(const KUrl& url, const MetaData& metaData)
-	: Task(url), mMetaData(metaData) {}
+	StoreTask(const KUrl& url, const SemanticInfo& semanticInfo)
+	: Task(url), mSemanticInfo(semanticInfo) {}
 
 	virtual void execute() {
 		QString urlString = mUrl.url();
 		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
-		resource.setRating(mMetaData.mRating);
-		resource.setDescription(mMetaData.mDescription);
+		resource.setRating(mSemanticInfo.mRating);
+		resource.setDescription(mSemanticInfo.mDescription);
 		QList<Nepomuk::Tag> tags;
-		Q_FOREACH(const MetaDataTag& uri, mMetaData.mTags) {
+		Q_FOREACH(const SemanticInfoTag& uri, mSemanticInfo.mTags) {
 			tags << Nepomuk::Tag(uri);
 		}
 		resource.setTags(tags);
 	}
 
-	MetaData mMetaData;
+	SemanticInfo mSemanticInfo;
 };
 
 
 typedef QQueue<Task*> TaskQueue;
 
-class MetaDataThread : public QThread {
+class SemanticInfoThread : public QThread {
 public:
-	MetaDataThread()
+	SemanticInfoThread()
 	: mDeleting(false)
 	{}
 
-	~MetaDataThread() {
+	~SemanticInfoThread() {
 		{
 			QMutexLocker locker(&mMutex);
 			mDeleting = true;
@@ -152,24 +152,24 @@ private:
 };
 
 
-struct NepomukMetaDataBackEndPrivate {
-	MetaDataThread mThread;
+struct NepomukSemanticInfoBackEndPrivate {
+	SemanticInfoThread mThread;
 };
 
 
-NepomukMetaDataBackEnd::NepomukMetaDataBackEnd(QObject* parent)
-: AbstractMetaDataBackEnd(parent)
-, d(new NepomukMetaDataBackEndPrivate) {
+NepomukSemanticInfoBackEnd::NepomukSemanticInfoBackEnd(QObject* parent)
+: AbstractSemanticInfoBackEnd(parent)
+, d(new NepomukSemanticInfoBackEndPrivate) {
 	d->mThread.start();
 }
 
 
-NepomukMetaDataBackEnd::~NepomukMetaDataBackEnd() {
+NepomukSemanticInfoBackEnd::~NepomukSemanticInfoBackEnd() {
 	delete d;
 }
 
 
-TagSet NepomukMetaDataBackEnd::allTags() const {
+TagSet NepomukSemanticInfoBackEnd::allTags() const {
 	QList<Nepomuk::Tag> list = Nepomuk::Tag::allTags();
 
 	TagSet set;
@@ -181,31 +181,31 @@ TagSet NepomukMetaDataBackEnd::allTags() const {
 }
 
 
-void NepomukMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
-	StoreTask* task = new StoreTask(url, metaData);
+void NepomukSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
+	StoreTask* task = new StoreTask(url, semanticInfo);
 	d->mThread.enqueueTask(task);
 }
 
 
-void NepomukMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
+void NepomukSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url) {
 	RetrieveTask* task = new RetrieveTask(this, url);
 	d->mThread.enqueueTask(task);
 }
 
 
-void NepomukMetaDataBackEnd::emitMetaDataRetrieved(const KUrl& url, const MetaData& metaData) {
-	emit metaDataRetrieved(url, metaData);
+void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo) {
+	emit semanticInfoRetrieved(url, semanticInfo);
 }
 
 
-QString NepomukMetaDataBackEnd::labelForTag(const MetaDataTag& uri) const {
+QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uri) const {
 	Nepomuk::Tag tag(uri);
 	//Q_ASSERT(tag.exists());
 	return tag.label();
 }
 
 
-MetaDataTag NepomukMetaDataBackEnd::tagForLabel(const QString& label) const {
+SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label) const {
 	Nepomuk::Tag tag(label);
 	if (!tag.exists()) {
 		// Not found, create the tag

@@ -177,7 +177,7 @@ void TagController::init(QWidget* parentWidget) {
 	d->mListView->setWrapping(true);
 	d->mListView->setSelectionMode(QAbstractItemView::MultiSelection);
 
-	AbstractMetaDataBackEnd* backEnd = mDirModel->metaDataBackEnd();
+	AbstractSemanticInfoBackEnd* backEnd = mDirModel->semanticInfoBackEnd();
 	TagModel* tagModel = new TagModel(d->mListView, backEnd);
 	d->mListView->setModel(tagModel);
 
@@ -211,7 +211,7 @@ void TagController::updateTagSetFilter() {
 	TagSet tagSet;
 
 	Q_FOREACH(const QModelIndex& index, d->mListView->selectionModel()->selectedIndexes()) {
-		MetaDataTag tag = index.data(TagModel::TagRole).toString();
+		SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
 		tagSet << tag;
 		labels << index.data(Qt::DisplayRole).toString();
 	}

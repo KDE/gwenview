@@ -33,32 +33,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class NepomukMetaDataBackEndPrivate;
+class NepomukSemanticInfoBackEndPrivate;
 
 
 /**
  * A real metadata backend using Nepomuk to store and retrieve metadata.
  */
-class GWENVIEWLIB_EXPORT NepomukMetaDataBackEnd : public AbstractMetaDataBackEnd {
+class GWENVIEWLIB_EXPORT NepomukSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd {
 	Q_OBJECT
 public:
-	NepomukMetaDataBackEnd(QObject* parent);
-	~NepomukMetaDataBackEnd();
+	NepomukSemanticInfoBackEnd(QObject* parent);
+	~NepomukSemanticInfoBackEnd();
 
 	virtual TagSet allTags() const;
 
-	virtual void storeMetaData(const KUrl&, const MetaData&);
+	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
 
-	virtual void retrieveMetaData(const KUrl&);
+	virtual void retrieveSemanticInfo(const KUrl&);
 
-	virtual QString labelForTag(const MetaDataTag&) const;
+	virtual QString labelForTag(const SemanticInfoTag&) const;
 
-	virtual MetaDataTag tagForLabel(const QString&) const;
+	virtual SemanticInfoTag tagForLabel(const QString&) const;
 
-	void emitMetaDataRetrieved(const KUrl&, const MetaData&);
+	void emitSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
 private:
-	NepomukMetaDataBackEndPrivate* const d;
+	NepomukSemanticInfoBackEndPrivate* const d;
 };
 
 

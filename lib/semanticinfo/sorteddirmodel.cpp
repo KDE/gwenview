@@ -41,7 +41,7 @@ struct SortedDirModelPrivate {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	KDirModel* mSourceModel;
 #else
-	MetaDataDirModel* mSourceModel;
+	SemanticInfoDirModel* mSourceModel;
 	TagSet mTagSet;
 #endif
 	QStringList mBlackListedExtensions;
@@ -57,7 +57,7 @@ SortedDirModel::SortedDirModel(QObject* parent)
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mSourceModel = new KDirModel(this);
 #else
-	d->mSourceModel = new MetaDataDirModel(this);
+	d->mSourceModel = new SemanticInfoDirModel(this);
 #endif
 	d->mMinimumRating = 0;
 	setSourceModel(d->mSourceModel);
@@ -141,21 +141,21 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 	if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
 		// Make sure we have metadata, otherwise retrieve it and return false,
 		// we will be called again later when metadata is there.
-		if (!d->mSourceModel->metaDataAvailableForIndex(index)) {
-			d->mSourceModel->retrieveMetaDataForIndex(index);
+		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
+			d->mSourceModel->retrieveSemanticInfoForIndex(index);
 			return false;
 		}
 	}
 
 	if (d->mMinimumRating > 0) {
-		int rating = d->mSourceModel->data(index, MetaDataDirModel::RatingRole).toInt();
+		int rating = d->mSourceModel->data(index, SemanticInfoDirModel::RatingRole).toInt();
 		if (rating < d->mMinimumRating) {
 			return false;
 		}
 	}
 
 	if (!d->mTagSet.isEmpty()) {
-		TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, MetaDataDirModel::TagsRole));
+		TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, SemanticInfoDirModel::TagsRole));
 		TagSet commonSet = indexTagSet & d->mTagSet;
 		if (commonSet.size() < d->mTagSet.size()) {
 			return false;
@@ -166,11 +166,11 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 }
 
 
-AbstractMetaDataBackEnd* SortedDirModel::metaDataBackEnd() const {
+AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	return 0;
 #else
-	return d->mSourceModel->metaDataBackEnd();
+	return d->mSourceModel->semanticInfoBackEnd();
 #endif
 }
 

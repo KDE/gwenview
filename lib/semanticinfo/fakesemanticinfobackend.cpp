@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-FakeMetaDataBackEnd::FakeMetaDataBackEnd(QObject* parent, InitializeMode mode)
-: AbstractMetaDataBackEnd(parent)
+FakeSemanticInfoBackEnd::FakeSemanticInfoBackEnd(QObject* parent, InitializeMode mode)
+: AbstractSemanticInfoBackEnd(parent)
 , mInitializeMode(mode) {
 	mAllTags
 		<< tagForLabel("beach")
@@ -43,13 +43,13 @@ FakeMetaDataBackEnd::FakeMetaDataBackEnd(QObject* parent, InitializeMode mode)
 }
 
 
-void FakeMetaDataBackEnd::storeMetaData(const KUrl& url, const MetaData& metaData) {
-	mMetaDataForUrl[url] = metaData;
-	mergeTagsWithAllTags(metaData.mTags);
+void FakeSemanticInfoBackEnd::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
+	mSemanticInfoForUrl[url] = semanticInfo;
+	mergeTagsWithAllTags(semanticInfo.mTags);
 }
 
 
-void FakeMetaDataBackEnd::mergeTagsWithAllTags(const TagSet& set) {
+void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet& set) {
 	int size = mAllTags.size();
 	mAllTags |= set;
 	if (mAllTags.size() > size) {
@@ -58,42 +58,42 @@ void FakeMetaDataBackEnd::mergeTagsWithAllTags(const TagSet& set) {
 }
 
 
-TagSet FakeMetaDataBackEnd::allTags() const {
+TagSet FakeSemanticInfoBackEnd::allTags() const {
 	return mAllTags;
 }
 
 
-void FakeMetaDataBackEnd::retrieveMetaData(const KUrl& url) {
-	if (!mMetaDataForUrl.contains(url)) {
+void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url) {
+	if (!mSemanticInfoForUrl.contains(url)) {
 		QString urlString = url.url();
-		MetaData metaData;
+		SemanticInfo semanticInfo;
 		if (mInitializeMode == InitializeRandom) {
-			metaData.mRating = int(urlString.length()) % 6;
-			metaData.mDescription = url.fileName();
+			semanticInfo.mRating = int(urlString.length()) % 6;
+			semanticInfo.mDescription = url.fileName();
 			QStringList lst = url.path().split("/");
 			Q_FOREACH(const QString& token, lst) {
 				if (!token.isEmpty()) {
-					metaData.mTags << '#' + token.toLower();
+					semanticInfo.mTags << '#' + token.toLower();
 				}
 			}
-			metaData.mTags << QString("#length-%1").arg(url.fileName().length());
+			semanticInfo.mTags << QString("#length-%1").arg(url.fileName().length());
 
-			mergeTagsWithAllTags(metaData.mTags);
+			mergeTagsWithAllTags(semanticInfo.mTags);
 		} else {
-			metaData.mRating = 0;
+			semanticInfo.mRating = 0;
 		}
-		mMetaDataForUrl[url] = metaData;
+		mSemanticInfoForUrl[url] = semanticInfo;
 	}
-	emit metaDataRetrieved(url, mMetaDataForUrl.value(url));
+	emit semanticInfoRetrieved(url, mSemanticInfoForUrl.value(url));
 }
 
 
-QString FakeMetaDataBackEnd::labelForTag(const MetaDataTag& tag) const {
+QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& tag) const {
 	return tag[1].toUpper() + tag.mid(2);
 }
 
 
-MetaDataTag FakeMetaDataBackEnd::tagForLabel(const QString& label) const {
+SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label) const {
 	return '#' + label.toLower();
 }
 

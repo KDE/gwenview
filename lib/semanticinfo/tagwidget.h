@@ -36,7 +36,7 @@ class QListWidgetItem;
 
 namespace Gwenview {
 
-typedef QMap<MetaDataTag, bool> TagInfo;
+typedef QMap<SemanticInfoTag, bool> TagInfo;
 
 class TagWidgetPrivate;
 class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
@@ -45,11 +45,11 @@ public:
 	TagWidget(QWidget* parent = 0);
 	~TagWidget();
 	void setTagInfo(const TagInfo&);
-	void setMetaDataBackEnd(AbstractMetaDataBackEnd*);
+	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
 
 Q_SIGNALS:
-	void tagAssigned(const MetaDataTag&);
-	void tagRemoved(const MetaDataTag&);
+	void tagAssigned(const SemanticInfoTag&);
+	void tagRemoved(const SemanticInfoTag&);
 
 private Q_SLOTS:
 	void assignTag();

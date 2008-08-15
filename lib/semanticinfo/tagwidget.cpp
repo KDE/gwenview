@@ -82,7 +82,7 @@ public:
 	}
 
 
-	void setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
+	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
 		setSourceModel(new TagModel(this, backEnd));
 	}
 
@@ -90,7 +90,7 @@ public:
 protected:
 	virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
 		QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-		MetaDataTag tag = sourceIndex.data(TagModel::TagRole).toString();
+		SemanticInfoTag tag = sourceIndex.data(TagModel::TagRole).toString();
 		return !mExcludedTagSet.contains(tag);
 	}
 
@@ -105,7 +105,7 @@ struct TagWidgetPrivate {
 	TagInfo mTagInfo;
 	QListWidget* mTreeWidget;
 	KLineEdit* mLineEdit;
-	AbstractMetaDataBackEnd* mBackEnd;
+	AbstractSemanticInfoBackEnd* mBackEnd;
 	TagCompleterModel* mTagCompleterModel;
 
 
@@ -139,7 +139,7 @@ struct TagWidgetPrivate {
 			it = mTagInfo.begin(),
 			end = mTagInfo.end();
 		for(; it!=end; ++it) {
-			MetaDataTag tag = it.key();
+			SemanticInfoTag tag = it.key();
 			QString label = mBackEnd->labelForTag(tag);
 			QListWidgetItem* item = new QListWidgetItem(label, mTreeWidget);
 			item->setData(TagModel::TagRole, QVariant(tag));
@@ -175,9 +175,9 @@ TagWidget::~TagWidget() {
 }
 
 
-void TagWidget::setMetaDataBackEnd(AbstractMetaDataBackEnd* backEnd) {
+void TagWidget::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
 	d->mBackEnd = backEnd;
-	d->mTagCompleterModel->setMetaDataBackEnd(backEnd);
+	d->mTagCompleterModel->setSemanticInfoBackEnd(backEnd);
 }
 
 
@@ -190,7 +190,7 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 void TagWidget::assignTag() {
 	Q_ASSERT(d->mBackEnd);
 	QString label = d->mLineEdit->text();
-	MetaDataTag tag = d->mBackEnd->tagForLabel(label);
+	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
 	d->fillTreeWidget();
 	d->mLineEdit->clear();
@@ -203,7 +203,7 @@ void TagWidget::slotItemClicked(QListWidgetItem* item) {
 	if (!item) {
 		return;
 	}
-	MetaDataTag tag = item->data(TagModel::TagRole).toString();
+	SemanticInfoTag tag = item->data(TagModel::TagRole).toString();
 	d->mTagInfo.remove(tag);
 	d->fillTreeWidget();
 

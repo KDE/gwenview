@@ -579,7 +579,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	// Draw rating
-	QVariant value = index.data(MetaDataDirModel::RatingRole);
+	QVariant value = index.data(SemanticInfoDirModel::RatingRole);
 	if (value.isValid()) {
 		int rating = value.toInt() * 2;
 		QRect ratingRect(rect);

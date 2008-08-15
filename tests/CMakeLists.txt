@@ -50,16 +50,16 @@ kde4_add_unit_test(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
 
 target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
 
-# MetaDataBackEndTest
-set(metadatabackendtest_SRCS
-	metadatabackendtest.cpp
+# SemanticInfoBackEndTest
+set(semanticinfobackendtest_SRCS
+	semanticinfobackendtest.cpp
 	)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
-kde4_add_unit_test(metadatabackendtest ${metadatabackendtest_SRCS})
+kde4_add_unit_test(semanticinfobackendtest ${semanticinfobackendtest_SRCS})
 
-target_link_libraries(metadatabackendtest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(semanticinfobackendtest gwenviewlib ${QT_QTTEST_LIBRARY})
 
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 

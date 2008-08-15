@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Local
-#include "metadatabackendtest.moc"
+#include "semanticinfobackendtest.moc"
 
 // Qt
 #include <QSignalSpy>
@@ -45,33 +45,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 #endif
 
-QTEST_KDEMAIN( Gwenview::MetaDataBackEndTest, GUI )
+QTEST_KDEMAIN( Gwenview::SemanticInfoBackEndTest, GUI )
 
 namespace Gwenview {
 
 
-MetaDataBackEndClient::MetaDataBackEndClient(AbstractMetaDataBackEnd* backEnd)
+SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd* backEnd)
 : mBackEnd(backEnd) {
-	connect(backEnd, SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)),
-		SLOT(slotMetaDataRetrieved(const KUrl&, const MetaData&)) );
+	connect(backEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
+		SLOT(slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
 }
 
 
-void MetaDataBackEndClient::slotMetaDataRetrieved(const KUrl& url, const MetaData& metaData) {
-	mMetaDataForUrl[url] = metaData;
+void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo) {
+	mSemanticInfoForUrl[url] = semanticInfo;
 }
 
 
-void MetaDataBackEndTest::initTestCase() {
+void SemanticInfoBackEndTest::initTestCase() {
 	qRegisterMetaType<KUrl>("KUrl");
 }
 
 
-void MetaDataBackEndTest::init() {
+void SemanticInfoBackEndTest::init() {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
-	mBackEnd.reset(new FakeMetaDataBackEnd(0, FakeMetaDataBackEnd::InitializeEmpty));
+	mBackEnd.reset(new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty));
 #elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-	mBackEnd.reset(new NepomukMetaDataBackEnd(0));
+	mBackEnd.reset(new NepomukSemanticInfoBackEnd(0));
 #endif
 }
 
@@ -79,7 +79,7 @@ void MetaDataBackEndTest::init() {
 /**
  * Get and set the rating of a temp file
  */
-void MetaDataBackEndTest::testRating() {
+void SemanticInfoBackEndTest::testRating() {
 	KTemporaryFile temp;
 	temp.setSuffix(".metadatabackendtest");
 	QVERIFY(temp.open());
@@ -87,25 +87,25 @@ void MetaDataBackEndTest::testRating() {
 	KUrl url;
 	url.setPath(temp.fileName());
 
-	MetaDataBackEndClient client(mBackEnd.get());
-	QSignalSpy spy(mBackEnd.get(), SIGNAL(metaDataRetrieved(const KUrl&, const MetaData&)) );
-	mBackEnd->retrieveMetaData(url);
+	SemanticInfoBackEndClient client(mBackEnd.get());
+	QSignalSpy spy(mBackEnd.get(), SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
+	mBackEnd->retrieveSemanticInfo(url);
 	QVERIFY(waitForSignal(spy));
 
-	MetaData metaData = client.metaDataForUrl(url);
-	QCOMPARE(metaData.mRating, 0);
+	SemanticInfo semanticInfo = client.semanticInfoForUrl(url);
+	QCOMPARE(semanticInfo.mRating, 0);
 
-	metaData.mRating = 5;
-	mBackEnd->storeMetaData(url, metaData);
+	semanticInfo.mRating = 5;
+	mBackEnd->storeSemanticInfo(url, semanticInfo);
 }
 
 
-void MetaDataBackEndTest::testTagForLabel() {
+void SemanticInfoBackEndTest::testTagForLabel() {
 	QString label = "testTagForLabel-" + KRandom::randomString(5);
-	MetaDataTag tag1 = mBackEnd->tagForLabel(label);
+	SemanticInfoTag tag1 = mBackEnd->tagForLabel(label);
 	QVERIFY(!tag1.isEmpty());
 
-	MetaDataTag tag2 = mBackEnd->tagForLabel(label);
+	SemanticInfoTag tag2 = mBackEnd->tagForLabel(label);
 	QCOMPARE(tag1, tag2);
 
 	QString label2 = mBackEnd->labelForTag(tag2);

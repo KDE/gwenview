@@ -36,19 +36,19 @@ class KUrl;
 namespace Gwenview {
 
 
-typedef QString MetaDataTag;
+typedef QString SemanticInfoTag;
 
 
 /**
  * This class represents the set of tags associated to an url.
  *
  * It provides convenience methods to convert to and from QVariant, which are
- * useful to communicate with MetaDataDirModel.
+ * useful to communicate with SemanticInfoDirModel.
  */
-class GWENVIEWLIB_EXPORT TagSet : public QSet<MetaDataTag> {
+class GWENVIEWLIB_EXPORT TagSet : public QSet<SemanticInfoTag> {
 public:
 	TagSet();
-	TagSet(const QSet<MetaDataTag>&);
+	TagSet(const QSet<SemanticInfoTag>&);
 
 	QVariant toVariant() const;
 	static TagSet fromVariant(const QVariant&);
@@ -56,10 +56,10 @@ public:
 
 
 /**
- * A POD struct used by AbstractMetaDataBackEnd to store the metadata
+ * A POD struct used by AbstractSemanticInfoBackEnd to store the metadata
  * associated to an url.
  */
-struct MetaData {
+struct SemanticInfo {
 	int mRating;
 	QString mDescription;
 	TagSet mTags;
@@ -67,25 +67,25 @@ struct MetaData {
 
 
 /**
- * An abstract class, used by MetaDataDirModel to store and retrieve metadata.
+ * An abstract class, used by SemanticInfoDirModel to store and retrieve metadata.
  */
-class AbstractMetaDataBackEnd : public QObject {
+class AbstractSemanticInfoBackEnd : public QObject {
 	Q_OBJECT
 public:
-	AbstractMetaDataBackEnd(QObject* parent);
+	AbstractSemanticInfoBackEnd(QObject* parent);
 
 	virtual TagSet allTags() const = 0;
 
-	virtual void storeMetaData(const KUrl&, const MetaData&) = 0;
+	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&) = 0;
 
-	virtual void retrieveMetaData(const KUrl&) = 0;
+	virtual void retrieveSemanticInfo(const KUrl&) = 0;
 
-	virtual QString labelForTag(const MetaDataTag&) const = 0;
+	virtual QString labelForTag(const SemanticInfoTag&) const = 0;
 
-	virtual MetaDataTag tagForLabel(const QString&) const = 0;
+	virtual SemanticInfoTag tagForLabel(const QString&) const = 0;
 
 Q_SIGNALS:
-	void metaDataRetrieved(const KUrl&, const MetaData&);
+	void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 };
 
 

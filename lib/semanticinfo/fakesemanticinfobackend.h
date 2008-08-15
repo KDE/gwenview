@@ -39,21 +39,21 @@ namespace Gwenview {
  * A fake metadata backend, useful to test the ui layer.
  * It provides fake rating values based on the image url.
  */
-class GWENVIEWLIB_EXPORT FakeMetaDataBackEnd : public AbstractMetaDataBackEnd {
+class GWENVIEWLIB_EXPORT FakeSemanticInfoBackEnd : public AbstractSemanticInfoBackEnd {
 	Q_OBJECT
 public:
 	enum InitializeMode { InitializeEmpty, InitializeRandom };
-	FakeMetaDataBackEnd(QObject* parent, InitializeMode initializeMode);
+	FakeSemanticInfoBackEnd(QObject* parent, InitializeMode initializeMode);
 
 	virtual TagSet allTags() const;
 
-	virtual void storeMetaData(const KUrl&, const MetaData&);
+	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
 
-	virtual void retrieveMetaData(const KUrl&);
+	virtual void retrieveSemanticInfo(const KUrl&);
 
-	virtual QString labelForTag(const MetaDataTag&) const;
+	virtual QString labelForTag(const SemanticInfoTag&) const;
 
-	virtual MetaDataTag tagForLabel(const QString&) const;
+	virtual SemanticInfoTag tagForLabel(const QString&) const;
 
 Q_SIGNALS:
 	void allTagsUpdated();
@@ -61,7 +61,7 @@ Q_SIGNALS:
 private:
 	void mergeTagsWithAllTags(const TagSet&);
 
-	QHash<KUrl, MetaData> mMetaDataForUrl;
+	QHash<KUrl, SemanticInfo> mSemanticInfoForUrl;
 	InitializeMode mInitializeMode;
 	TagSet mAllTags;
 };

@@ -47,9 +47,9 @@ private Q_SLOTS:
 	void updateSideBarContent();
 	void slotRatingChanged(int rating);
 	void storeDescription();
-	void assignTag(const MetaDataTag&);
-	void removeTag(const MetaDataTag&);
-	void showMetaDataDialog();
+	void assignTag(const SemanticInfoTag&);
+	void removeTag(const SemanticInfoTag&);
+	void showSemanticInfoDialog();
 
 private:
 	NepomukContextManagerItemPrivate* const d;

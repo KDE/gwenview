@@ -46,8 +46,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct MetaDataDialog : public QDialog, public Ui_MetaDataDialog {
-	MetaDataDialog(QWidget* parent)
+struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
+	SemanticInfoDialog(QWidget* parent)
 	: QDialog(parent) {
 		setupUi(this);
 	}
@@ -59,7 +59,7 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 	KActionCollection* mActionCollection;
-	QPointer<MetaDataDialog> mMetaDataDialog;
+	QPointer<SemanticInfoDialog> mSemanticInfoDialog;
 	TagInfo mTagInfo;
 	QAction* mEditTagsAction;
 
@@ -83,14 +83,14 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 			return;
 		}
 
-		AbstractMetaDataBackEnd* backEnd = that->contextManager()->dirModel()->metaDataBackEnd();
+		AbstractSemanticInfoBackEnd* backEnd = that->contextManager()->dirModel()->semanticInfoBackEnd();
 
 		TagInfo::ConstIterator
 			it = mTagInfo.constBegin(),
 			end = mTagInfo.constEnd();
 		QStringList labels;
 		for (; it!=end; ++it) {
-			MetaDataTag tag = it.key();
+			SemanticInfoTag tag = it.key();
 			QString label = backEnd->labelForTag(tag);
 			if (!it.value()) {
 				// Tag is not present for all urls
@@ -105,9 +105,9 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 	}
 
 
-	void updateMetaDataDialog() {
-		mMetaDataDialog->mTagWidget->setEnabled(!that->contextManager()->selection().isEmpty());
-		mMetaDataDialog->mTagWidget->setTagInfo(mTagInfo);
+	void updateSemanticInfoDialog() {
+		mSemanticInfoDialog->mTagWidget->setEnabled(!that->contextManager()->selection().isEmpty());
+		mSemanticInfoDialog->mTagWidget->setTagInfo(mTagInfo);
 	}
 };
 
@@ -124,7 +124,7 @@ NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager, KA
 	d->mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
 	d->mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
 	connect(d->mEditTagsAction, SIGNAL(triggered()),
-		SLOT(showMetaDataDialog()) );
+		SLOT(showSemanticInfoDialog()) );
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
@@ -198,7 +198,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
 
-		QVariant value = dirModel->data(index, MetaDataDirModel::RatingRole);
+		QVariant value = dirModel->data(index, SemanticInfoDirModel::RatingRole);
 		if (first) {
 			rating = ratingForVariant(value);
 		} else if (rating != ratingForVariant(value)) {
@@ -206,7 +206,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 			rating = 0;
 		}
 
-		QString indexDescription = index.data(MetaDataDirModel::DescriptionRole).toString();
+		QString indexDescription = index.data(SemanticInfoDirModel::DescriptionRole).toString();
 		if (first) {
 			description = indexDescription;
 		} else if (description != indexDescription) {
@@ -214,7 +214,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 		}
 
 		// Fill tagHash, incrementing the tag count if it's already there
-		TagSet tagSet = TagSet::fromVariant(index.data(MetaDataDirModel::TagsRole));
+		TagSet tagSet = TagSet::fromVariant(index.data(SemanticInfoDirModel::TagsRole));
 		Q_FOREACH(const QString& tag, tagSet) {
 			TagHash::Iterator it = tagHash.find(tag);
 			if (it == tagHash.end()) {
@@ -243,8 +243,8 @@ void NepomukContextManagerItem::updateSideBarContent() {
 
 	d->mEditTagsAction->setEnabled(!contextManager()->selection().isEmpty());
 	d->updateTagLabel();
-	if (d->mMetaDataDialog) {
-		d->updateMetaDataDialog();
+	if (d->mSemanticInfoDialog) {
+		d->updateSemanticInfoDialog();
 	}
 }
 
@@ -255,7 +255,7 @@ void NepomukContextManagerItem::slotRatingChanged(int rating) {
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
-		dirModel->setData(index, rating, MetaDataDirModel::RatingRole);
+		dirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
 	}
 }
 
@@ -267,60 +267,60 @@ void NepomukContextManagerItem::storeDescription() {
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
-		dirModel->setData(index, description, MetaDataDirModel::DescriptionRole);
+		dirModel->setData(index, description, SemanticInfoDirModel::DescriptionRole);
 	}
 }
 
 
-void NepomukContextManagerItem::assignTag(const MetaDataTag& tag) {
+void NepomukContextManagerItem::assignTag(const SemanticInfoTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
-		TagSet tags = TagSet::fromVariant( dirModel->data(index, MetaDataDirModel::TagsRole) );
+		TagSet tags = TagSet::fromVariant( dirModel->data(index, SemanticInfoDirModel::TagsRole) );
 		if (!tags.contains(tag)) {
 			tags << tag;
-			dirModel->setData(index, tags.toVariant(), MetaDataDirModel::TagsRole);
+			dirModel->setData(index, tags.toVariant(), SemanticInfoDirModel::TagsRole);
 		}
 	}
 }
 
 
-void NepomukContextManagerItem::removeTag(const MetaDataTag& tag) {
+void NepomukContextManagerItem::removeTag(const SemanticInfoTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
 		QModelIndex index = dirModel->indexForItem(item);
-		TagSet tags = TagSet::fromVariant( dirModel->data(index, MetaDataDirModel::TagsRole) );
+		TagSet tags = TagSet::fromVariant( dirModel->data(index, SemanticInfoDirModel::TagsRole) );
 		if (tags.contains(tag)) {
 			tags.remove(tag);
-			dirModel->setData(index, tags.toVariant(), MetaDataDirModel::TagsRole);
+			dirModel->setData(index, tags.toVariant(), SemanticInfoDirModel::TagsRole);
 		}
 	}
 }
 
 
-void NepomukContextManagerItem::showMetaDataDialog() {
-	if (!d->mMetaDataDialog) {
-		d->mMetaDataDialog = new MetaDataDialog(d->mSideBar);
-		d->mMetaDataDialog->setAttribute(Qt::WA_DeleteOnClose, true);
+void NepomukContextManagerItem::showSemanticInfoDialog() {
+	if (!d->mSemanticInfoDialog) {
+		d->mSemanticInfoDialog = new SemanticInfoDialog(d->mSideBar);
+		d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
-		connect(d->mMetaDataDialog->mPreviousButton, SIGNAL(clicked()),
+		connect(d->mSemanticInfoDialog->mPreviousButton, SIGNAL(clicked()),
 			d->mActionCollection->action("go_previous"), SLOT(trigger()) );
-		connect(d->mMetaDataDialog->mNextButton, SIGNAL(clicked()),
+		connect(d->mSemanticInfoDialog->mNextButton, SIGNAL(clicked()),
 			d->mActionCollection->action("go_next"), SLOT(trigger()) );
 
-		AbstractMetaDataBackEnd* backEnd = contextManager()->dirModel()->metaDataBackEnd();
-		d->mMetaDataDialog->mTagWidget->setMetaDataBackEnd(backEnd);
-		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagAssigned(const MetaDataTag&)),
-			SLOT(assignTag(const MetaDataTag&)) );
-		connect(d->mMetaDataDialog->mTagWidget, SIGNAL(tagRemoved(const MetaDataTag&)),
-			SLOT(removeTag(const MetaDataTag&)) );
+		AbstractSemanticInfoBackEnd* backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
+		d->mSemanticInfoDialog->mTagWidget->setSemanticInfoBackEnd(backEnd);
+		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagAssigned(const SemanticInfoTag&)),
+			SLOT(assignTag(const SemanticInfoTag&)) );
+		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagRemoved(const SemanticInfoTag&)),
+			SLOT(removeTag(const SemanticInfoTag&)) );
 	}
-	d->updateMetaDataDialog();
-	d->mMetaDataDialog->show();
+	d->updateSemanticInfoDialog();
+	d->mSemanticInfoDialog->show();
 }
 
 
