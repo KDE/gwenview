@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kurl.h>
 
 // Local
+#include "animateddocumentloadedimpl.h"
 #include "document.h"
 #include "documentloadedimpl.h"
 #include "emptydocumentimpl.h"
@@ -76,6 +77,7 @@ struct LoadingDocumentImplPrivate {
 	int mImageDataInvertedZoom;
 
 	bool mMetaInfoLoaded;
+	bool mAnimated;
 	QByteArray mData;
 	QByteArray mFormat;
 	QSize mImageSize;
@@ -180,6 +182,11 @@ struct LoadingDocumentImplPrivate {
 			QMatrix matrix = ImageUtils::transformMatrix(orientation);
 			mImage = mImage.transformed(matrix);
 		}
+
+		if (reader.currentImageNumber() != -1) {
+			LOG("This is an animated image");
+			mAnimated = true;
+		}
 	}
 };
 
@@ -189,6 +196,7 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 , d(new LoadingDocumentImplPrivate) {
 	d->mImpl = this;
 	d->mMetaInfoLoaded = false;
+	d->mAnimated = false;
 	d->mJpegContent = 0;
 	d->mImageDataInvertedZoom = 0;
 
@@ -316,6 +324,22 @@ void LoadingDocumentImpl::slotImageLoaded() {
 		kWarning() << document()->url() << "Loading image failed";
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
+		return;
+	}
+
+	if (d->mAnimated) {
+		if (d->mImage.size() == d->mImageSize) {
+			// We already decoded the first frame at the right size, let's show
+			// it
+			setDocumentImage(d->mImage);
+			emit imageRectUpdated(d->mImage.rect());
+			emit loaded();
+		}
+
+		switchToImpl(new AnimatedDocumentLoadedImpl(
+			document(),
+			d->mData));
+
 		return;
 	}
 

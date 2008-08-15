@@ -12,6 +12,7 @@ include_directories(
 
 set(gwenviewlib_SRCS
 	document/abstractdocumentimpl.cpp
+	document/animateddocumentloadedimpl.cpp
 	document/document.cpp
 	document/documentfactory.cpp
 	document/documentloadedimpl.cpp
