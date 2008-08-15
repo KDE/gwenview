@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>NepomukSideBarItem</class>
- <widget class="QWidget" name="NepomukSideBarItem" >
+ <class>SemanticInfoSideBarItem</class>
+ <widget class="QWidget" name="SemanticInfoSideBarItem" >
   <property name="geometry" >
    <rect>
     <x>0</x>

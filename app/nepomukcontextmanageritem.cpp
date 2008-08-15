@@ -54,8 +54,8 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
 };
 
 
-struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
-	NepomukContextManagerItem* that;
+struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem {
+	SemanticInfoContextManagerItem* that;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 	KActionCollection* mActionCollection;
@@ -112,9 +112,9 @@ struct NepomukContextManagerItemPrivate : public Ui_NepomukSideBarItem {
 };
 
 
-NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
 : AbstractContextManagerItem(manager)
-, d(new NepomukContextManagerItemPrivate) {
+, d(new SemanticInfoContextManagerItemPrivate) {
 	d->that = this;
 	d->mSideBar = 0;
 	d->mGroup = 0;
@@ -135,12 +135,12 @@ NepomukContextManagerItem::NepomukContextManagerItem(ContextManager* manager, KA
 }
 
 
-NepomukContextManagerItem::~NepomukContextManagerItem() {
+SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem() {
 	delete d;
 }
 
 
-void NepomukContextManagerItem::setSideBar(SideBar* sideBar) {
+void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mSideBar = sideBar;
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
@@ -177,7 +177,7 @@ inline int ratingForVariant(const QVariant& variant) {
 }
 
 
-void NepomukContextManagerItem::updateSideBarContent() {
+void SemanticInfoContextManagerItem::updateSideBarContent() {
 	if (!d->mSideBar->isVisible()) {
 		return;
 	}
@@ -249,7 +249,7 @@ void NepomukContextManagerItem::updateSideBarContent() {
 }
 
 
-void NepomukContextManagerItem::slotRatingChanged(int rating) {
+void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -260,7 +260,7 @@ void NepomukContextManagerItem::slotRatingChanged(int rating) {
 }
 
 
-void NepomukContextManagerItem::storeDescription() {
+void SemanticInfoContextManagerItem::storeDescription() {
 	QString description = d->mDescriptionLineEdit->text();
 	KFileItemList itemList = contextManager()->selection();
 
@@ -272,7 +272,7 @@ void NepomukContextManagerItem::storeDescription() {
 }
 
 
-void NepomukContextManagerItem::assignTag(const SemanticInfoTag& tag) {
+void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -287,7 +287,7 @@ void NepomukContextManagerItem::assignTag(const SemanticInfoTag& tag) {
 }
 
 
-void NepomukContextManagerItem::removeTag(const SemanticInfoTag& tag) {
+void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag& tag) {
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -302,7 +302,7 @@ void NepomukContextManagerItem::removeTag(const SemanticInfoTag& tag) {
 }
 
 
-void NepomukContextManagerItem::showSemanticInfoDialog() {
+void SemanticInfoContextManagerItem::showSemanticInfoDialog() {
 	if (!d->mSemanticInfoDialog) {
 		d->mSemanticInfoDialog = new SemanticInfoDialog(d->mSideBar);
 		d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);

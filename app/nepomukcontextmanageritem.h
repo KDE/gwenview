@@ -34,12 +34,12 @@ class KActionCollection;
 namespace Gwenview {
 
 
-class NepomukContextManagerItemPrivate;
-class NepomukContextManagerItem : public AbstractContextManagerItem {
+class SemanticInfoContextManagerItemPrivate;
+class SemanticInfoContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	NepomukContextManagerItem(ContextManager*, KActionCollection*);
-	~NepomukContextManagerItem();
+	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*);
+	~SemanticInfoContextManagerItem();
 
 	virtual void setSideBar(SideBar*);
 
@@ -52,7 +52,7 @@ private Q_SLOTS:
 	void showSemanticInfoDialog();
 
 private:
-	NepomukContextManagerItemPrivate* const d;
+	SemanticInfoContextManagerItemPrivate* const d;
 };
 
 
