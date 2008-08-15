@@ -236,8 +236,8 @@ void ImageView::setDocument(Document::Ptr document) {
 		return;
 	}
 
-	connect(d->mDocument.data(), SIGNAL(metaDataLoaded(const KUrl&)),
-		SLOT(slotDocumentMetaDataLoaded()) );
+	connect(d->mDocument.data(), SIGNAL(metaInfoLoaded(const KUrl&)),
+		SLOT(slotDocumentMetaInfoLoaded()) );
 
 	if (d->mDocument->size().isValid()) {
 		finishSetDocument();
@@ -245,11 +245,11 @@ void ImageView::setDocument(Document::Ptr document) {
 }
 
 
-void ImageView::slotDocumentMetaDataLoaded() {
+void ImageView::slotDocumentMetaInfoLoaded() {
 	if (d->mDocument->size().isValid()) {
 		finishSetDocument();
 	} else {
-		// Could not retrieve image size from meta data, we need to load the
+		// Could not retrieve image size from meta info, we need to load the
 		// full image now.
 		connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
 			SLOT(finishSetDocument()) );

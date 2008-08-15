@@ -42,7 +42,7 @@ public:
 	~LoadingDocumentImpl();
 
 	virtual void init();
-	virtual bool isMetaDataLoaded() const;
+	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
 	virtual void setImage(const QImage&);
@@ -50,7 +50,7 @@ public:
 	void loadImage(int invertedZoom);
 
 private Q_SLOTS:
-	void slotMetaDataLoaded();
+	void slotMetaInfoLoaded();
 	void slotImageLoaded();
 	void slotDataReceived(KIO::Job*, const QByteArray&);
 	void slotTransferFinished(KJob*);

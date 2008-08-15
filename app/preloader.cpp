@@ -65,7 +65,7 @@ void Preloader::preload(const KUrl& url, const QSize& size) {
 
 	d->mDocument = DocumentFactory::instance()->load(url);
 	d->mSize = size;
-	connect(d->mDocument.data(), SIGNAL(metaDataUpdated()),
+	connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
 		SLOT(doPreload()) );
 
 	if (d->mDocument->size().isValid()) {

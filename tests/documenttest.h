@@ -42,8 +42,8 @@ private Q_SLOTS:
 	void testLosslessSave();
 	void testLosslessRotate();
 	void testModify();
-	void testMetaDataJpeg();
-	void testMetaDataBmp();
+	void testMetaInfoJpeg();
+	void testMetaInfoBmp();
 
 	void initTestCase();
 	void init();

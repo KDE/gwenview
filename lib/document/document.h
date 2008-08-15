@@ -87,7 +87,7 @@ public:
 	enum LoadingState {
 		Loading,        ///< Image is loading
 		KindDetermined, ///< Image is still loading, but kind has been determined
-		MetaDataLoaded, ///< Image is still loading, but meta data has been loaded
+		MetaInfoLoaded, ///< Image is still loading, but meta info has been loaded
 		Loaded,         ///< Full image has been loaded
 		LoadingFailed   ///< Image loading has failed
 	};
@@ -178,15 +178,15 @@ Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);
 	void kindDetermined(const KUrl&);
-	void metaDataLoaded(const KUrl&);
+	void metaInfoLoaded(const KUrl&);
 	void loaded(const KUrl&);
 	void loadingFailed(const KUrl&);
 	void saved(const KUrl&);
 	void modified(const KUrl&);
-	void metaDataUpdated();
+	void metaInfoUpdated();
 
 private Q_SLOTS:
-	void emitMetaDataLoaded();
+	void emitMetaInfoLoaded();
 	void emitLoaded();
 	void emitLoadingFailed();
 	void slotUndoIndexChanged();

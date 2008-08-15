@@ -41,7 +41,7 @@ EmptyDocumentImpl::~EmptyDocumentImpl()
 void EmptyDocumentImpl::init() {
 }
 
-bool EmptyDocumentImpl::isMetaDataLoaded() const {
+bool EmptyDocumentImpl::isMetaInfoLoaded() const {
 	return false;
 }
 

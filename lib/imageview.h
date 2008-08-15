@@ -102,7 +102,7 @@ protected:
 	virtual void keyReleaseEvent(QKeyEvent*);
 
 private Q_SLOTS:
-	void slotDocumentMetaDataLoaded();
+	void slotDocumentMetaInfoLoaded();
 
 	/**
 	 * This method performs the necessary adjustments to get the view ready to

@@ -65,7 +65,7 @@ void DocumentLoadedImpl::init() {
 }
 
 
-bool DocumentLoadedImpl::isMetaDataLoaded() const {
+bool DocumentLoadedImpl::isMetaInfoLoaded() const {
 	return true;
 }
 

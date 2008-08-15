@@ -50,7 +50,7 @@ public:
 	 */
 	virtual void init() = 0;
 
-	virtual bool isMetaDataLoaded() const = 0;
+	virtual bool isMetaInfoLoaded() const = 0;
 
 	virtual Document::LoadingState loadingState() const = 0;
 
@@ -64,7 +64,7 @@ public:
 
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
-	void metaDataLoaded();
+	void metaInfoLoaded();
 	void loaded();
 	void loadingFailed();
 

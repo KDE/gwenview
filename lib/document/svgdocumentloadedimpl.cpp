@@ -52,7 +52,7 @@ void SvgDocumentLoadedImpl::init() {
 }
 
 
-bool SvgDocumentLoadedImpl::isMetaDataLoaded() const {
+bool SvgDocumentLoadedImpl::isMetaInfoLoaded() const {
 	return false;
 }
 

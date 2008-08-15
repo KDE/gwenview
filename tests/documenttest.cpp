@@ -43,8 +43,8 @@ QTEST_KDEMAIN( DocumentTest, GUI )
 using namespace Gwenview;
 
 
-static void waitUntilMetaDataLoaded(Document::Ptr doc) {
-	while (doc->loadingState() < Document::MetaDataLoaded) {
+static void waitUntilMetaInfoLoaded(Document::Ptr doc) {
+	while (doc->loadingState() < Document::MetaInfoLoaded) {
 		QTest::qWait(100);
 	}
 }
@@ -105,7 +105,7 @@ void DocumentTest::testLoadTwoPasses() {
 	bool ok = image.load(url.path());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	waitUntilMetaDataLoaded(doc);
+	waitUntilMetaInfoLoaded(doc);
 	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
 	QCOMPARE(doc->format().data(), "png");
 	doc->loadFullImage();
@@ -345,16 +345,16 @@ void DocumentTest::testModify() {
 	QVERIFY(!doc->isModified());
 }
 
-void DocumentTest::testMetaDataJpeg() {
+void DocumentTest::testMetaInfoJpeg() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	// We cleared the cache, so the document should not be loaded
 	Q_ASSERT(doc->loadingState() == Document::Loading);
 
-	// Wait until we receive the metaDataUpdated() signal
-	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
-	while (metaDataUpdatedSpy.count() == 0) {
+	// Wait until we receive the metaInfoUpdated() signal
+	QSignalSpy metaInfoUpdatedSpy(doc.data(), SIGNAL(metaInfoUpdated()));
+	while (metaInfoUpdatedSpy.count() == 0) {
 		QTest::qWait(100);
 	}
 
@@ -364,7 +364,7 @@ void DocumentTest::testMetaDataJpeg() {
 }
 
 
-void DocumentTest::testMetaDataBmp() {
+void DocumentTest::testMetaInfoBmp() {
 	KUrl url = urlForTestOutputFile("metadata.bmp");
 	const int width = 200;
 	const int height = 100;
@@ -373,10 +373,10 @@ void DocumentTest::testMetaDataBmp() {
 	image.save(url.path(), "BMP");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy metaDataUpdatedSpy(doc.data(), SIGNAL(metaDataUpdated()));
-	waitUntilMetaDataLoaded(doc);
+	QSignalSpy metaInfoUpdatedSpy(doc.data(), SIGNAL(metaInfoUpdated()));
+	waitUntilMetaInfoLoaded(doc);
 
-	Q_ASSERT(metaDataUpdatedSpy.count() >= 1);
+	Q_ASSERT(metaInfoUpdatedSpy.count() >= 1);
 
 	QString value = doc->metaInfo()->getValueForKey("General.ImageSize");
 	QString expectedValue = QString("%1x%2").arg(width).arg(height);

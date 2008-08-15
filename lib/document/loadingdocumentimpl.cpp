@@ -66,8 +66,8 @@ namespace Gwenview {
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
 	QPointer<KIO::TransferJob> mTransferJob;
-	QFuture<bool> mMetaDataFuture;
-	QFutureWatcher<bool> mMetaDataFutureWatcher;
+	QFuture<bool> mMetaInfoFuture;
+	QFutureWatcher<bool> mMetaInfoFutureWatcher;
 	QFuture<void> mImageDataFuture;
 	QFutureWatcher<void> mImageDataFutureWatcher;
 
@@ -75,7 +75,7 @@ struct LoadingDocumentImplPrivate {
 	// 1/mImageDataInvertedZoom
 	int mImageDataInvertedZoom;
 
-	bool mMetaDataLoaded;
+	bool mMetaInfoLoaded;
 	QByteArray mData;
 	QByteArray mFormat;
 	QSize mImageSize;
@@ -84,7 +84,7 @@ struct LoadingDocumentImplPrivate {
 	QImage mImage;
 
 	void startLoading() {
-		Q_ASSERT(!mMetaDataLoaded);
+		Q_ASSERT(!mMetaInfoLoaded);
 		QString mimeType = KMimeType::findByContent(mData)->name();
 		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
 		LOG("mimeType:" << mimeType);
@@ -93,8 +93,8 @@ struct LoadingDocumentImplPrivate {
 
 		switch (kind) {
 		case MimeTypeUtils::KIND_RASTER_IMAGE:
-			mMetaDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaData);
-			mMetaDataFutureWatcher.setFuture(mMetaDataFuture);
+			mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
+			mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
 			break;
 
 		case MimeTypeUtils::KIND_SVG_IMAGE:
@@ -111,14 +111,14 @@ struct LoadingDocumentImplPrivate {
 
 	void startImageDataLoading() {
 		LOG("");
-		Q_ASSERT(mMetaDataLoaded);
+		Q_ASSERT(mMetaInfoLoaded);
 		Q_ASSERT(mImageDataInvertedZoom != 0);
 		Q_ASSERT(!mImageDataFuture.isRunning());
 		mImageDataFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadImageData);
 		mImageDataFutureWatcher.setFuture(mImageDataFuture);
 	}
 
-	bool loadMetaData() {
+	bool loadMetaInfo() {
 		QBuffer buffer;
 		buffer.setBuffer(&mData);
 		buffer.open(QIODevice::ReadOnly);
@@ -188,12 +188,12 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 : AbstractDocumentImpl(document)
 , d(new LoadingDocumentImplPrivate) {
 	d->mImpl = this;
-	d->mMetaDataLoaded = false;
+	d->mMetaInfoLoaded = false;
 	d->mJpegContent = 0;
 	d->mImageDataInvertedZoom = 0;
 
-	connect(&d->mMetaDataFutureWatcher, SIGNAL(finished()),
-		SLOT(slotMetaDataLoaded()) );
+	connect(&d->mMetaInfoFutureWatcher, SIGNAL(finished()),
+		SLOT(slotMetaInfoLoaded()) );
 
 	connect(&d->mImageDataFutureWatcher, SIGNAL(finished()),
 		SLOT(slotImageLoaded()) );
@@ -203,10 +203,10 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 LoadingDocumentImpl::~LoadingDocumentImpl() {
 	LOG("");
 	// Disconnect watchers to make sure they do not trigger further work
-	d->mMetaDataFutureWatcher.disconnect();
+	d->mMetaInfoFutureWatcher.disconnect();
 	d->mImageDataFutureWatcher.disconnect();
 
-	d->mMetaDataFutureWatcher.waitForFinished();
+	d->mMetaInfoFutureWatcher.waitForFinished();
 	d->mImageDataFutureWatcher.waitForFinished();
 
 	if (d->mTransferJob) {
@@ -248,8 +248,8 @@ void LoadingDocumentImpl::loadImage(int invertedZoom) {
 	d->mImageDataFutureWatcher.waitForFinished();
 	d->mImageDataInvertedZoom = invertedZoom;
 
-	if (d->mMetaDataLoaded) {
-		// Do not test on mMetaDataFuture.isRunning() here: it might not have
+	if (d->mMetaInfoLoaded) {
+		// Do not test on mMetaInfoFuture.isRunning() here: it might not have
 		// started if we are downloading the image from a remote url
 		d->startImageDataLoading();
 	}
@@ -272,24 +272,24 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 }
 
 
-bool LoadingDocumentImpl::isMetaDataLoaded() const {
-	return d->mMetaDataLoaded;
+bool LoadingDocumentImpl::isMetaInfoLoaded() const {
+	return d->mMetaInfoLoaded;
 }
 
 
 Document::LoadingState LoadingDocumentImpl::loadingState() const {
-	if (d->mMetaDataLoaded) {
-		return Document::MetaDataLoaded;
+	if (d->mMetaInfoLoaded) {
+		return Document::MetaInfoLoaded;
 	} else {
 		return Document::Loading;
 	}
 }
 
 
-void LoadingDocumentImpl::slotMetaDataLoaded() {
-	Q_ASSERT(!d->mMetaDataFuture.isRunning());
-	if (!d->mMetaDataFuture.result()) {
-		kWarning() << document()->url() << "Loading metadata failed";
+void LoadingDocumentImpl::slotMetaInfoLoaded() {
+	Q_ASSERT(!d->mMetaInfoFuture.isRunning());
+	if (!d->mMetaInfoFuture.result()) {
+		kWarning() << document()->url() << "Loading metainfo failed";
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
@@ -299,12 +299,12 @@ void LoadingDocumentImpl::slotMetaDataLoaded() {
 	setDocumentImageSize(d->mImageSize);
 	setDocumentExiv2Image(d->mExiv2Image);
 
-	d->mMetaDataLoaded = true;
-	emit metaDataLoaded();
+	d->mMetaInfoLoaded = true;
+	emit metaInfoLoaded();
 
 	// Start image loading if necessary
 	// We test if mImageDataFuture is not already running because code connected to
-	// metaDataLoaded() signal could have called loadImage()
+	// metaInfoLoaded() signal could have called loadImage()
 	if (!d->mImageDataFuture.isRunning() && d->mImageDataInvertedZoom != 0) {
 		d->startImageDataLoading();
 	}

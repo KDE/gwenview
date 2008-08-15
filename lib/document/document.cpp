@@ -150,8 +150,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 	}
 	d->mImpl=impl;
 
-	connect(d->mImpl, SIGNAL(metaDataLoaded()),
-		this, SLOT(emitMetaDataLoaded()) );
+	connect(d->mImpl, SIGNAL(metaInfoLoaded()),
+		this, SLOT(emitMetaInfoLoaded()) );
 	connect(d->mImpl, SIGNAL(loaded()),
 		this, SLOT(emitLoaded()) );
 	connect(d->mImpl, SIGNAL(loadingFailed()),
@@ -231,7 +231,7 @@ QByteArray Document::format() const {
 
 void Document::setFormat(const QByteArray& format) {
 	d->mFormat = format;
-	emit metaDataUpdated();
+	emit metaInfoUpdated();
 }
 
 
@@ -274,7 +274,7 @@ void Document::setSize(const QSize& size) {
 	}
 	d->mSize = size;
 	d->mImageMetaInfoModel.setImageSize(size);
-	emit metaDataUpdated();
+	emit metaInfoUpdated();
 }
 
 
@@ -291,7 +291,7 @@ void Document::applyTransformation(Orientation orientation) {
 void Document::setExiv2Image(Exiv2::Image::AutoPtr image) {
 	d->mExiv2Image = image;
 	d->mImageMetaInfoModel.setExiv2Image(d->mExiv2Image.get());
-	emit metaDataUpdated();
+	emit metaInfoUpdated();
 }
 
 
@@ -309,7 +309,7 @@ ImageMetaInfoModel* Document::metaInfo() const {
 
 void Document::loadFullImage() {
 	LoadingState state = loadingState();
-	if (state <= MetaDataLoaded) {
+	if (state <= MetaInfoLoaded) {
 		// Schedule full image loading
 		d->scheduleImageLoading(1);
 	} else if (state == Loaded) {
@@ -349,8 +349,8 @@ bool Document::prepareDownSampledImageForZoom(qreal zoom) {
 }
 
 
-void Document::emitMetaDataLoaded() {
-	emit metaDataLoaded(d->mUrl);
+void Document::emitMetaInfoLoaded() {
+	emit metaInfoLoaded(d->mUrl);
 }
 
 

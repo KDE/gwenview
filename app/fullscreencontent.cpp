@@ -208,9 +208,9 @@ ThumbnailBarView* FullScreenContent::thumbnailBar() const {
 
 void FullScreenContent::setCurrentUrl(const KUrl& url) {
 	d->mCurrentDocument = DocumentFactory::instance()->load(url);
-	connect(d->mCurrentDocument.data(),SIGNAL(metaDataUpdated()),
+	connect(d->mCurrentDocument.data(),SIGNAL(metaInfoUpdated()),
 		SLOT(updateInformationLabel()) );
-	connect(d->mCurrentDocument.data(),SIGNAL(metaDataUpdated()),
+	connect(d->mCurrentDocument.data(),SIGNAL(metaInfoUpdated()),
 		SLOT(updateMetaInfoDialog()) );
 	updateInformationLabel();
 	updateMetaInfoDialog();
