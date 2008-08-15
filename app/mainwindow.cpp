@@ -66,7 +66,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "kipiinterface.h"
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-#include "nepomukcontextmanageritem.h"
+#include "semanticinfocontextmanageritem.h"
 #endif
 #include "preloader.h"
 #include "savebar.h"

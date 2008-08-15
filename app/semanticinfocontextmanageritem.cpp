@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "nepomukcontextmanageritem.moc"
+#include "semanticinfocontextmanageritem.moc"
 
 // Qt
 #include <QShortcut>
@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "contextmanager.h"
 #include "sidebar.h"
-#include "ui_nepomuksidebaritem.h"
+#include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>

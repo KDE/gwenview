@@ -40,7 +40,7 @@ set(gwenview_SRCS
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	set (gwenview_SRCS
 		${gwenview_SRCS}
-		nepomukcontextmanageritem.cpp
+		semanticinfocontextmanageritem.cpp
 		)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
@@ -63,7 +63,7 @@ kde4_add_ui_files(gwenview_SRCS
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 kde4_add_ui_files(gwenview_SRCS
-	nepomuksidebaritem.ui
+	semanticinfosidebaritem.ui
 	)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
