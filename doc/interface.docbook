@@ -150,7 +150,7 @@ thumbnails in Browse Mode, by pressing the <guiicon>Full Screen</guiicon>
 button on the taskbar, or by 
   <menuchoice>
     <shortcut>
-<keycombo action="simul">&Ctrl;<keycap>Shift</keycap><keycap>F</keycap></keycombo>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>
     </shortcut>
     <guimenu>View</guimenu>
     <guimenuitem>Full Screen Mode</guimenuitem>
