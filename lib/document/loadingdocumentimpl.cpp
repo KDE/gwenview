@@ -183,7 +183,7 @@ struct LoadingDocumentImplPrivate {
 			mImage = mImage.transformed(matrix);
 		}
 
-		if (reader.currentImageNumber() != -1) {
+		if (reader.supportsAnimation() && reader.currentImageNumber() != -1) {
 			LOG("This is an animated image");
 			mAnimated = true;
 		}
