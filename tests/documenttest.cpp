@@ -208,6 +208,11 @@ void DocumentTest::testLoadAnimated() {
 	// Test we do not receive imageRectUpdated() anymore
 	QTest::qWait(1000);
 	QCOMPARE(count, spy.count());
+
+	// Start again, we should receive imageRectUpdated() again
+	doc->startAnimation();
+	QTest::qWait(1000);
+	QVERIFY2(spy.count() > count, "No imageRectUpdated() signal received after restarting");
 }
 
 void DocumentTest::testSaveRemote() {
