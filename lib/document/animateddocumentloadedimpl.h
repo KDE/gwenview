@@ -45,6 +45,9 @@ public:
 	virtual void setImage(const QImage&);
 	virtual void applyTransformation(Orientation orientation);
 	virtual QByteArray rawData() const;
+	virtual bool isAnimated() const;
+	virtual void startAnimation();
+	virtual void stopAnimation();
 
 private Q_SLOTS:
 	void slotFrameChanged(int frameNumber);

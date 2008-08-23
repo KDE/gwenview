@@ -61,7 +61,6 @@ AnimatedDocumentLoadedImpl::~AnimatedDocumentLoadedImpl() {
 
 
 void AnimatedDocumentLoadedImpl::init() {
-	d->mMovie.start();
 }
 
 
@@ -100,6 +99,21 @@ void AnimatedDocumentLoadedImpl::slotFrameChanged(int /*frameNumber*/) {
 	QImage image = d->mMovie.currentImage();
 	setDocumentImage(image);
 	emit imageRectUpdated(image.rect());
+}
+
+
+bool AnimatedDocumentLoadedImpl::isAnimated() const {
+	return true;
+}
+
+
+void AnimatedDocumentLoadedImpl::startAnimation() {
+	d->mMovie.start();
+}
+
+
+void AnimatedDocumentLoadedImpl::stopAnimation() {
+	d->mMovie.stop();
 }
 
 
