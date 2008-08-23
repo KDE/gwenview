@@ -111,7 +111,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	d->mDelAction = actionCollection->addAction("file_delete");
 	d->mDelAction->setText(i18n("Delete"));
 	d->mDelAction->setIcon(KIcon("edit-delete"));
-	d->mDelAction->setShortcut(Qt::ShiftModifier | Qt::Key_Delete);
+	d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
 	connect(d->mDelAction, SIGNAL(triggered()),
 		SLOT(del()) );
 
