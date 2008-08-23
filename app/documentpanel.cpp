@@ -237,6 +237,8 @@ struct DocumentPanelPrivate {
 			that, SIGNAL(captionUpdateRequested(const QString&)) );
 		QObject::connect(mDocumentView, SIGNAL(completed()),
 			that, SIGNAL(completed()) );
+		QObject::connect(mDocumentView, SIGNAL(toggleFullScreenRequested()),
+			that, SIGNAL(toggleFullScreenRequested()) );
 	}
 
 	void setupStatusBar() {
@@ -302,9 +304,9 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
-	QShortcut* enterFullScreenShortcut = new QShortcut(this);
-	enterFullScreenShortcut->setKey(Qt::Key_Return);
-	connect(enterFullScreenShortcut, SIGNAL(activated()), SIGNAL(enterFullScreenRequested()) );
+	QShortcut* toggleFullScreenShortcut = new QShortcut(this);
+	toggleFullScreenShortcut->setKey(Qt::Key_Return);
+	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
 	d->setupDocumentView();
 

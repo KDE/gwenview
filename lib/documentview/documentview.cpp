@@ -374,6 +374,8 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 		}
 	} else if (event->type() == QEvent::Resize) {
 		d->updateZoomSnapValues();
+	} else if (event->type() == QEvent::MouseButtonDblClick) {
+		emit toggleFullScreenRequested();
 	}
 
 	return false;

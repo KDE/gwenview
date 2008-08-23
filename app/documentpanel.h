@@ -93,7 +93,7 @@ Q_SIGNALS:
 
 	void nextImageRequested();
 
-	void enterFullScreenRequested();
+	void toggleFullScreenRequested();
 
 	void captionUpdateRequested(const QString&);
 

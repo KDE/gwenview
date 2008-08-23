@@ -98,7 +98,6 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-
 static const int PRELOAD_DELAY = 1000;
 
 static const char* MAINWINDOW_SETTINGS = "MainWindow";
@@ -241,8 +240,6 @@ struct MainWindow::Private {
 			mWindow, SLOT(goToPrevious()) );
 		connect(mDocumentPanel, SIGNAL(nextImageRequested()),
 			mWindow, SLOT(goToNext()) );
-		connect(mDocumentPanel, SIGNAL(enterFullScreenRequested()),
-			mWindow, SLOT(enterFullScreen()) );
 
 		ThumbnailBarView* bar = mDocumentPanel->thumbnailBar();
 		bar->setModel(mDirModel);
@@ -282,12 +279,12 @@ struct MainWindow::Private {
 			mWindow, SLOT(reload()) );
 
 		mBrowseAction = actionCollection->addAction("browse");
-		mBrowseAction->setText(i18n("Browse"));
+		mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
 		mBrowseAction->setCheckable(true);
 		mBrowseAction->setIcon(KIcon("view-list-icons"));
 
 		mViewAction = actionCollection->addAction("view");
-		mViewAction->setText(i18n("View"));
+		mViewAction->setText(i18nc("@action Switch to image view", "View"));
 		mViewAction->setIcon(KIcon("view-preview"));
 		mViewAction->setCheckable(true);
 
@@ -298,7 +295,10 @@ struct MainWindow::Private {
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
 
-		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen()), mWindow, actionCollection);
+		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen(bool)), mWindow, actionCollection);
+		connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
+			mFullScreenAction, SLOT(trigger()) );
+
 
 		QShortcut* reduceLevelOfDetailsShortcut = new QShortcut(mWindow);
 		reduceLevelOfDetailsShortcut->setKey(Qt::Key_Escape);
@@ -1006,13 +1006,6 @@ void MainWindow::updatePreviousNextActions() {
 }
 
 
-void MainWindow::enterFullScreen() {
-	if (!d->mFullScreenAction->isChecked()) {
-		d->mFullScreenAction->trigger();
-	}
-}
-
-
 void MainWindow::reduceLevelOfDetails() {
 	if (d->mFullScreenAction->isChecked()) {
 		d->mFullScreenAction->trigger();
@@ -1022,9 +1015,9 @@ void MainWindow::reduceLevelOfDetails() {
 }
 
 
-void MainWindow::toggleFullScreen() {
+void MainWindow::toggleFullScreen(bool checked) {
 	setUpdatesEnabled(false);
-	if (d->mFullScreenAction->isChecked()) {
+	if (checked) {
 		// Save MainWindow config now, this way if we quit while in
 		// fullscreen, we are sure latest MainWindow changes are remembered.
 		saveMainWindowConfig();

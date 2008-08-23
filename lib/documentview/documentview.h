@@ -72,9 +72,9 @@ Q_SIGNALS:
 
 	void nextImageRequested();
 
-	void enterFullScreenRequested();
-
 	void captionUpdateRequested(const QString&);
+
+	void toggleFullScreenRequested();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
