@@ -94,6 +94,9 @@ protected:
 
 	virtual void scrollContentsBy(int dx, int dy);
 
+	virtual void showEvent(QShowEvent*);
+	virtual void hideEvent(QHideEvent*);
+
 	virtual void mousePressEvent(QMouseEvent*);
 	virtual void mouseMoveEvent(QMouseEvent*);
 	virtual void mouseReleaseEvent(QMouseEvent*);

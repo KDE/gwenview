@@ -228,6 +228,7 @@ void ImageView::setEnlargeSmallerImages(bool value) {
 
 void ImageView::setDocument(Document::Ptr document) {
 	if (d->mDocument) {
+		d->mDocument->stopAnimation();
 		disconnect(d->mDocument.data(), 0, this, 0);
 	}
 	d->mDocument = document;
@@ -280,6 +281,8 @@ void ImageView::finishSetDocument() {
 		updateImageRect(rect);
 		updateScrollBars();
 	}
+
+	d->mDocument->startAnimation();
 	d->mViewport->update();
 }
 
@@ -635,6 +638,22 @@ qreal ImageView::computeZoomToFitHeight() const {
 		return 1.;
 	}
 	return qreal(d->mViewport->height()) / d->mDocument->height();
+}
+
+
+void ImageView::showEvent(QShowEvent* event) {
+	QAbstractScrollArea::showEvent(event);
+	if (d->mDocument) {
+		d->mDocument->startAnimation();
+	}
+}
+
+
+void ImageView::hideEvent(QHideEvent* event) {
+	QAbstractScrollArea::hideEvent(event);
+	if (d->mDocument) {
+		d->mDocument->stopAnimation();
+	}
 }
 
 
