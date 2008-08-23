@@ -62,6 +62,12 @@ public:
 
 	virtual QByteArray rawData() const { return QByteArray(); }
 
+	virtual bool isAnimated() const { return false; }
+
+	virtual void startAnimation() {}
+
+	virtual void stopAnimation() {}
+
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void metaInfoLoaded();

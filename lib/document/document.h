@@ -174,6 +174,21 @@ public:
 	 */
 	QByteArray rawData() const;
 
+	/**
+	 * Returns true if the image is animated (eg: gif or mng format)
+	 */
+	bool isAnimated() const;
+
+	/**
+	 * Starts animation. Only sensible if isAnimated() returns true.
+	 */
+	void startAnimation();
+
+	/**
+	 * Stops animation. Only sensible if isAnimated() returns true.
+	 */
+	void stopAnimation();
+
 Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);

@@ -64,6 +64,7 @@ void DocumentTest::testLoad() {
 	QFETCH(QString, fileName);
 	QFETCH(QByteArray, expectedFormat);
 	QFETCH(int, expectedKindInt);
+	QFETCH(bool, expectedIsAnimated);
 	QFETCH(QImage, expectedImage);
 	MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
 
@@ -76,26 +77,36 @@ void DocumentTest::testLoad() {
 	QCOMPARE(doc->loadingState(), Document::Loaded);
 
 	QCOMPARE(expectedKind, doc->kind());
+	QCOMPARE(expectedIsAnimated, doc->isAnimated());
 	if (doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE) {
 		QCOMPARE(expectedImage, doc->image());
 		QCOMPARE(expectedFormat, doc->format());
 	}
 }
 
-#define NEW_ROW(fileName, format, kind) QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << QImage(pathForTestFile(fileName))
+#define NEW_ROW(fileName, format, kind, isAnimated) QTest::newRow(fileName) << fileName << QByteArray(format) << int(kind) << isAnimated << QImage(pathForTestFile(fileName))
 void DocumentTest::testLoad_data() {
 	QTest::addColumn<QString>("fileName");
 	QTest::addColumn<QByteArray>("expectedFormat");
 	QTest::addColumn<int>("expectedKindInt");
+	QTest::addColumn<bool>("expectedIsAnimated");
 	QTest::addColumn<QImage>("expectedImage");
 
-	NEW_ROW("test.png", "png", MimeTypeUtils::KIND_RASTER_IMAGE);
-	NEW_ROW("160216_no_size_before_decoding.eps", "eps", MimeTypeUtils::KIND_RASTER_IMAGE);
-	NEW_ROW("160382_corrupted.jpeg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
-	NEW_ROW("test.svg", "", MimeTypeUtils::KIND_SVG_IMAGE);
+	NEW_ROW("test.png",
+	        "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("160216_no_size_before_decoding.eps",
+	        "eps", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("160382_corrupted.jpeg",
+	        "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("test.svg",
+	        "", MimeTypeUtils::KIND_SVG_IMAGE, false);
 	// FIXME: Test svgz
-	NEW_ROW("1x10k.png", "png", MimeTypeUtils::KIND_RASTER_IMAGE);
-	NEW_ROW("1x10k.jpg", "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE);
+	NEW_ROW("1x10k.png",
+	        "png", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("1x10k.jpg",
+	        "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("4frames.gif",
+	        "gif", MimeTypeUtils::KIND_RASTER_IMAGE, true);
 }
 #undef NEW_ROW
 
@@ -172,6 +183,31 @@ void DocumentTest::testLoadRemote() {
 	QImage image = doc->image();
 	QCOMPARE(image.width(), 300);
 	QCOMPARE(image.height(), 200);
+}
+
+void DocumentTest::testLoadAnimated() {
+	KUrl srcUrl = urlForTestFile("4frames.gif");
+	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
+	QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(const QRect&)));
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
+	QVERIFY(doc->isAnimated());
+
+	// Test we receive only one imageRectUpdated() until animation is started
+	// (the imageRectUpdated() is triggered by the loading of the first image)
+	QTest::qWait(1000);
+	QCOMPARE(spy.count(), 1);
+
+	// Test we now receive some imageRectUpdated()
+	doc->startAnimation();
+	QTest::qWait(1000);
+	int count = spy.count();
+	doc->stopAnimation();
+	QVERIFY2(count > 0, "No imageRectUpdated() signal received");
+
+	// Test we do not receive imageRectUpdated() anymore
+	QTest::qWait(1000);
+	QCOMPARE(count, spy.count());
 }
 
 void DocumentTest::testSaveRemote() {

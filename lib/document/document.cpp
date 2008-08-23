@@ -379,4 +379,19 @@ void Document::slotUndoIndexChanged() {
 }
 
 
+bool Document::isAnimated() const {
+	return d->mImpl->isAnimated();
+}
+
+
+void Document::startAnimation() {
+	return d->mImpl->startAnimation();
+}
+
+
+void Document::stopAnimation() {
+	return d->mImpl->stopAnimation();
+}
+
+
 } // namespace
