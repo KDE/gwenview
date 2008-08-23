@@ -199,6 +199,7 @@ Q_SIGNALS:
 	void saved(const KUrl&);
 	void modified(const KUrl&);
 	void metaInfoUpdated();
+	void isAnimatedUpdated();
 
 private Q_SLOTS:
 	void emitMetaInfoLoaded();

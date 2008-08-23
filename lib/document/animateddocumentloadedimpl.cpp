@@ -61,6 +61,7 @@ AnimatedDocumentLoadedImpl::~AnimatedDocumentLoadedImpl() {
 
 
 void AnimatedDocumentLoadedImpl::init() {
+	emit isAnimatedUpdated();
 }
 
 

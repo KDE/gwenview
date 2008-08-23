@@ -73,6 +73,7 @@ Q_SIGNALS:
 	void metaInfoLoaded();
 	void loaded();
 	void loadingFailed();
+	void isAnimatedUpdated();
 
 protected:
 	Document* document() const;

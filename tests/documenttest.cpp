@@ -72,12 +72,14 @@ void DocumentTest::testLoad() {
 	QVERIFY2(!expectedImage.isNull(), "Could not load test image");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	QSignalSpy spy(doc.data(), SIGNAL(isAnimatedUpdated()));
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(doc->loadingState(), Document::Loaded);
 
 	QCOMPARE(expectedKind, doc->kind());
 	QCOMPARE(expectedIsAnimated, doc->isAnimated());
+	QCOMPARE(spy.count(), doc->isAnimated() ? 1 : 0);
 	if (doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE) {
 		QCOMPARE(expectedImage, doc->image());
 		QCOMPARE(expectedFormat, doc->format());

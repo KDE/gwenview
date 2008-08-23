@@ -106,6 +106,7 @@ protected:
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();
+	void slotDocumentIsAnimatedUpdated();
 
 	/**
 	 * This method performs the necessary adjustments to get the view ready to

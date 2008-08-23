@@ -158,6 +158,8 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 		this, SLOT(emitLoadingFailed()) );
 	connect(d->mImpl, SIGNAL(imageRectUpdated(const QRect&)),
 		this, SIGNAL(imageRectUpdated(const QRect&)) );
+	connect(d->mImpl, SIGNAL(isAnimatedUpdated()),
+		this, SIGNAL(isAnimatedUpdated()) );
 	d->mImpl->init();
 }
 

@@ -167,6 +167,13 @@ struct ImageViewPrivate {
 	}
 
 
+	void startAnimationIfNecessary() {
+		if (mDocument && mView->isVisible()) {
+			mDocument->startAnimation();
+		}
+	}
+
+
 	// At least gcc 3.4.6 on FreeBSD requires a default constructor.
 	ImageViewPrivate() { }
 };
@@ -239,6 +246,8 @@ void ImageView::setDocument(Document::Ptr document) {
 
 	connect(d->mDocument.data(), SIGNAL(metaInfoLoaded(const KUrl&)),
 		SLOT(slotDocumentMetaInfoLoaded()) );
+	connect(d->mDocument.data(), SIGNAL(isAnimatedUpdated()),
+		SLOT(slotDocumentIsAnimatedUpdated()) );
 
 	if (d->mDocument->size().isValid()) {
 		finishSetDocument();
@@ -282,13 +291,18 @@ void ImageView::finishSetDocument() {
 		updateScrollBars();
 	}
 
-	d->mDocument->startAnimation();
+	d->startAnimationIfNecessary();
 	d->mViewport->update();
 }
 
 
 Document::Ptr ImageView::document() const {
 	return d->mDocument;
+}
+
+
+void ImageView::slotDocumentIsAnimatedUpdated() {
+	d->startAnimationIfNecessary();
 }
 
 
@@ -643,9 +657,7 @@ qreal ImageView::computeZoomToFitHeight() const {
 
 void ImageView::showEvent(QShowEvent* event) {
 	QAbstractScrollArea::showEvent(event);
-	if (d->mDocument) {
-		d->mDocument->startAnimation();
-	}
+	d->startAnimationIfNecessary();
 }
 
 
