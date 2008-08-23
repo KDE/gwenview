@@ -188,7 +188,7 @@ void DocumentTest::testLoadRemote() {
 }
 
 void DocumentTest::testLoadAnimated() {
-	KUrl srcUrl = urlForTestFile("4frames.gif");
+	KUrl srcUrl = urlForTestFile("40frames.gif");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
 	QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(const QRect&)));
 	doc->loadFullImage();

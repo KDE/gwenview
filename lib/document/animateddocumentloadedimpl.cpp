@@ -110,6 +110,12 @@ bool AnimatedDocumentLoadedImpl::isAnimated() const {
 
 void AnimatedDocumentLoadedImpl::startAnimation() {
 	d->mMovie.start();
+	if (d->mMovie.state() == QMovie::NotRunning) {
+		// This is true with qt-copy as of 2008.08.23
+		kDebug() << "QMovie didn't start. This can happen in some cases when starting for the second time.";
+		kDebug() << "Trying to start again, it usually fixes the bug.";
+		d->mMovie.start();
+	}
 }
 
 
