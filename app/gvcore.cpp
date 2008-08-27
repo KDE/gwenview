@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "gvcore.h"
 
 // Qt
+#include <QApplication>
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QList>
@@ -195,6 +196,9 @@ void GvCore::saveAs(const KUrl& url) {
 
 
 void GvCore::rotateLeft(const KUrl& url) {
+	if (!ensureDocumentIsEditable(url)) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_270);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
@@ -205,12 +209,29 @@ void GvCore::rotateLeft(const KUrl& url) {
 
 
 void GvCore::rotateRight(const KUrl& url) {
+	if (!ensureDocumentIsEditable(url)) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
+}
+
+
+bool GvCore::ensureDocumentIsEditable(const KUrl& url) {
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	if (doc->isEditable()) {
+		return true;
+	}
+
+	KMessageBox::sorry(
+		QApplication::activeWindow(),
+		i18nc("@info", "Gwenview cannot edit this kind of image.")
+		);
+	return false;
 }
 
 

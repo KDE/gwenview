@@ -49,6 +49,13 @@ public Q_SLOTS:
 	void rotateLeft(const KUrl&);
 	void rotateRight(const KUrl&);
 
+	/**
+	 * Checks if the document referenced by url is editable, shows a sorry
+	 * dialog if it's not.
+	 * @return true if editable, false if not
+	 */
+	static bool ensureDocumentIsEditable(const KUrl& url);
+
 private:
 	GvCorePrivate* const d;
 };

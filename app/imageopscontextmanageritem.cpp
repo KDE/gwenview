@@ -28,11 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <kinputdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kactioncollection.h>
 
 // Local
 #include "contextmanager.h"
 #include "documentpanel.h"
+#include "gvcore.h"
 #include "mainwindow.h"
 #include "sidebar.h"
 #include <lib/cropsidebar.h>
@@ -128,6 +130,12 @@ struct ImageOpsContextManagerItem::Private {
 		op->setDocument(doc);
 		doc->undoStack()->push(op);
 	}
+
+
+	bool ensureEditable() {
+		KUrl url = that->contextManager()->currentUrl();
+		return GvCore::ensureDocumentIsEditable(url);
+	}
 };
 
 
@@ -211,30 +219,45 @@ void ImageOpsContextManagerItem::updateActions() {
 
 
 void ImageOpsContextManagerItem::rotateLeft() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_270);
 	d->applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::rotateRight() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	d->applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::mirror() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(HFLIP);
 	d->applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::flip() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	TransformImageOperation* op = new TransformImageOperation(VFLIP);
 	d->applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::resizeImage() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
@@ -259,6 +282,9 @@ void ImageOpsContextManagerItem::resizeImage() {
 
 
 void ImageOpsContextManagerItem::showCropSideBar() {
+	if (!d->ensureEditable()) {
+		return;
+	}
 	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
 	if (!imageView) {
 		kError() << "No ImageView available!";
