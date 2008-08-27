@@ -62,6 +62,8 @@ public:
 
 	virtual QByteArray rawData() const { return QByteArray(); }
 
+	virtual bool isEditable() const { return false; }
+
 	virtual bool isAnimated() const { return false; }
 
 	virtual void startAnimation() {}

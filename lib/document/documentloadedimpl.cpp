@@ -65,6 +65,11 @@ void DocumentLoadedImpl::init() {
 }
 
 
+bool DocumentLoadedImpl::isEditable() const {
+	return true;
+}
+
+
 bool DocumentLoadedImpl::isMetaInfoLoaded() const {
 	return true;
 }

@@ -78,6 +78,7 @@ struct LoadingDocumentImplPrivate {
 
 	bool mMetaInfoLoaded;
 	bool mAnimated;
+	bool mDownSampledImageLoaded;
 	QByteArray mData;
 	QByteArray mFormat;
 	QSize mImageSize;
@@ -197,6 +198,7 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 	d->mImpl = this;
 	d->mMetaInfoLoaded = false;
 	d->mAnimated = false;
+	d->mDownSampledImageLoaded = false;
 	d->mJpegContent = 0;
 	d->mImageDataInvertedZoom = 0;
 
@@ -285,6 +287,11 @@ bool LoadingDocumentImpl::isMetaInfoLoaded() const {
 }
 
 
+bool LoadingDocumentImpl::isEditable() const {
+	return d->mDownSampledImageLoaded;
+}
+
+
 Document::LoadingState LoadingDocumentImpl::loadingState() const {
 	if (d->mMetaInfoLoaded) {
 		return Document::MetaInfoLoaded;
@@ -344,6 +351,7 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	}
 
 	if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
+		d->mDownSampledImageLoaded = true;
 		// We loaded a down sampled image
 		setDocumentDownSampledImage(d->mImage, d->mImageDataInvertedZoom);
 		return;

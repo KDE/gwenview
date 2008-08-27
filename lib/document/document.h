@@ -175,6 +175,12 @@ public:
 	QByteArray rawData() const;
 
 	/**
+	 * Returns true if the image can be edited.
+	 * You must ensure it has been fully loaded with loadFullImage() first.
+	 */
+	bool isEditable() const;
+
+	/**
 	 * Returns true if the image is animated (eg: gif or mng format)
 	 */
 	bool isAnimated() const;

@@ -381,6 +381,11 @@ void Document::slotUndoIndexChanged() {
 }
 
 
+bool Document::isEditable() const {
+	return d->mImpl->isEditable();
+}
+
+
 bool Document::isAnimated() const {
 	return d->mImpl->isAnimated();
 }
