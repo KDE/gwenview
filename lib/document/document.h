@@ -53,7 +53,7 @@ class ImageMetaInfoModel;
 
 
 /**
- * This class represents a raster image.
+ * This class represents an image.
  *
  * It handles loading and saving the image, applying operations and maintaining
  * the document undo stack.
