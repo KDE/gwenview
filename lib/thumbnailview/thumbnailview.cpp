@@ -395,6 +395,12 @@ void ThumbnailView::resizeEvent(QResizeEvent* event) {
 }
 
 
+void ThumbnailView::showEvent(QShowEvent* event) {
+	QListView::showEvent(event);
+	d->scheduleThumbnailGenerationForVisibleItems();
+}
+
+
 void ThumbnailView::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
 	QListView::selectionChanged(selected, deselected);
 	emit selectionChangedSignal(selected, deselected);
