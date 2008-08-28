@@ -105,6 +105,8 @@ protected:
 
 	virtual void scrollContentsBy(int dx, int dy);
 
+	virtual void showEvent(QShowEvent*);
+
 protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
