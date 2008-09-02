@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Local
+#include <lib/document/abstractdocumenteditor.h>
 #include <lib/document/abstractdocumentimpl.h>
 
 class QIODevice;
@@ -34,22 +35,28 @@ namespace Gwenview {
 
 
 class DocumentLoadedImplPrivate;
-class DocumentLoadedImpl : public AbstractDocumentImpl {
+class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
 public:
 	DocumentLoadedImpl(Document*, const QByteArray&);
 	~DocumentLoadedImpl();
 
+	// AbstractDocumentImpl
 	virtual void init();
 	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
-	virtual void setImage(const QImage&);
-	virtual void applyTransformation(Orientation orientation);
+	virtual AbstractDocumentEditor* editor();
 	virtual QByteArray rawData() const;
 	virtual bool isEditable() const;
+	//
 
 protected:
 	virtual bool saveInternal(QIODevice* device, const QByteArray& format);
+
+	// AbstractDocumentEditor
+	virtual void setImage(const QImage&);
+	virtual void applyTransformation(Orientation orientation);
+	//
 
 private:
 	DocumentLoadedImplPrivate* const d;

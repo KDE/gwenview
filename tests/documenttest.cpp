@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/abstractimageoperation.h"
+#include "../lib/document/abstractdocumenteditor.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
@@ -338,7 +339,8 @@ void DocumentTest::testLosslessRotate() {
 	doc->waitUntilLoaded();
 
 	// Rotate one time
-	doc->applyTransformation(ROT_90);
+	QVERIFY(doc->editor());
+	doc->editor()->applyTransformation(ROT_90);
 
 	// Save it
 	KUrl url2 = urlForTestOutputFile("lossless2.jpg");
@@ -350,7 +352,8 @@ void DocumentTest::testLosslessRotate() {
 	doc->waitUntilLoaded();
 
 	// Rotate the other way
-	doc->applyTransformation(ROT_270);
+	QVERIFY(doc->editor());
+	doc->editor()->applyTransformation(ROT_270);
 	doc->save(url2, "jpeg");
 
 	// Compare the saved images
@@ -367,7 +370,7 @@ void DocumentTest::testModify() {
 		void redo() {
 			QImage image(10, 10, QImage::Format_ARGB32);
 			image.fill(QColor(Qt::white).rgb());
-			document()->setImage(image);
+			document()->editor()->setImage(image);
 		}
 	};
 
@@ -377,6 +380,7 @@ void DocumentTest::testModify() {
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
 
+	QVERIFY(doc->editor());
 	TestOperation* op = new TestOperation;
 	op->setDocument(doc);
 	doc->undoStack()->push(op);

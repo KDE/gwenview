@@ -24,9 +24,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local
+#include "document/abstractdocumenteditor.h"
 
 namespace Gwenview {
 
@@ -67,7 +69,11 @@ TransformImageOperation::~TransformImageOperation() {
 
 
 void TransformImageOperation::redo() {
-	document()->applyTransformation(d->mOrientation);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->applyTransformation(d->mOrientation);
 }
 
 
@@ -84,7 +90,11 @@ void TransformImageOperation::undo() {
 		orientation = d->mOrientation;
 		break;
 	}
-	document()->applyTransformation(orientation);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->applyTransformation(orientation);
 }
 
 

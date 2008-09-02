@@ -26,10 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPainter>
 
 // KDE
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local
 #include "document/document.h"
+#include "document/abstractdocumenteditor.h"
 
 namespace Gwenview {
 
@@ -60,12 +62,20 @@ void CropImageOperation::redo() {
 	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	painter.drawImage(QPoint(0, 0), src, d->mRect);
 	painter.end();
-	document()->setImage(dst);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->setImage(dst);
 }
 
 
 void CropImageOperation::undo() {
-	document()->setImage(d->mOriginalImage);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->setImage(d->mOriginalImage);
 }
 
 

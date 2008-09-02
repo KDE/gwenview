@@ -35,7 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/mimetypeutils.h>
-#include <lib/orientation.h>
 
 class QImage;
 class QRect;
@@ -46,6 +45,7 @@ class KUrl;
 
 namespace Gwenview {
 
+class AbstractDocumentEditor;
 class AbstractDocumentImpl;
 class DocumentFactory;
 class DocumentPrivate;
@@ -120,24 +120,10 @@ public:
 	const QImage& downSampledImageForZoom(qreal zoom) const;
 
 	/**
-	 * Replaces the current image with image.
-	 * Calling this while the document is loaded won't do anything.
-	 *
-	 * This method should only be called from a subclass of
-	 * AbstractImageOperation and applied through Document::undoStack().
+	 * Returns an implementation of AbstractDocumentEditor if this document can
+	 * be edited.
 	 */
-	void setImage(const QImage& image);
-
-	/**
-	 * Apply a transformation to the document image.
-	 *
-	 * Transformations are handled by the Document class because it can be
-	 * done in a lossless way by some Document implementations.
-	 *
-	 * This method should only be called from a subclass of
-	 * AbstractImageOperation and applied through Document::undoStack().
-	 */
-	void applyTransformation(Orientation);
+	AbstractDocumentEditor* editor();
 
 	KUrl url() const;
 

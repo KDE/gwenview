@@ -136,6 +136,11 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 }
 
 
+AbstractDocumentEditor* DocumentLoadedImpl::editor() {
+	return this;
+}
+
+
 void DocumentLoadedImpl::setImage(const QImage& image) {
 	setDocumentImage(image);
 	imageRectUpdated(image.rect());

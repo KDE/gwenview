@@ -164,16 +164,6 @@ void Document::switchToImpl(AbstractDocumentImpl* impl) {
 }
 
 
-void Document::setImage(const QImage& image) {
-	// Don't init mImage directly, because:
-	// - This should not be called until document has finished loading.
-	// - Some impl will want to do special stuff (ex: jpegloaded implementation will
-	// switch to loaded implementation since it won't hold valid raw data
-	// anymore)
-	d->mImpl->setImage(image);
-}
-
-
 void Document::setImageInternal(const QImage& image) {
 	d->mImage = image;
 	d->mDownSampledImageMap.clear();
@@ -285,8 +275,8 @@ bool Document::isModified() const {
 }
 
 
-void Document::applyTransformation(Orientation orientation) {
-	d->mImpl->applyTransformation(orientation);
+AbstractDocumentEditor* Document::editor() {
+	return d->mImpl->editor();
 }
 
 

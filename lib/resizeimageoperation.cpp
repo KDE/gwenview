@@ -25,9 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QImage>
 
 // KDE
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local
+#include "document/abstractdocumenteditor.h"
 #include "document/document.h"
 
 namespace Gwenview {
@@ -55,12 +57,20 @@ void ResizeImageOperation::redo() {
 	QImage image = document()->image();
 	d->mOriginalImage = image;
 	image = image.scaled(d->mSize, d->mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	document()->setImage(image);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->setImage(image);
 }
 
 
 void ResizeImageOperation::undo() {
-	document()->setImage(d->mOriginalImage);
+	if (!document()->editor()) {
+		kWarning() << "!document->editor()";
+		return;
+	}
+	document()->editor()->setImage(d->mOriginalImage);
 }
 
 

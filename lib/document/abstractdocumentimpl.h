@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include <lib/document/document.h>
+#include <lib/orientation.h>
 
 class QImage;
 class QRect;
@@ -36,6 +37,7 @@ class QRect;
 namespace Gwenview {
 
 class Document;
+class AbstractDocumentEditor;
 
 class AbstractDocumentImplPrivate;
 class AbstractDocumentImpl : public QObject {
@@ -55,6 +57,8 @@ public:
 	virtual Document::LoadingState loadingState() const = 0;
 
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format) = 0;
+
+	virtual AbstractDocumentEditor* editor() { return 0; }
 
 	virtual void setImage(const QImage&) = 0;
 
@@ -76,6 +80,7 @@ Q_SIGNALS:
 	void loaded();
 	void loadingFailed();
 	void isAnimatedUpdated();
+	void editorUpdated();
 
 protected:
 	Document* document() const;
