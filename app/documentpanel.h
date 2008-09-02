@@ -76,8 +76,6 @@ public:
 
 	Document::Ptr currentDocument() const;
 
-	bool currentDocumentIsRasterImage() const;
-
 	bool isEmpty() const;
 
 	/**

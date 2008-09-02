@@ -429,14 +429,6 @@ KUrl DocumentPanel::url() const {
 }
 
 
-bool DocumentPanel::currentDocumentIsRasterImage() const {
-	// If the document view is visible, we assume we have a raster image if and
-	// only if we have an ImageView. This avoids having to determine the
-	// mimetype a second time.
-	return imageView() != 0;
-}
-
-
 Document::Ptr DocumentPanel::currentDocument() const {
 	if (!d->mDocumentView->adapter()) {
 		return Document::Ptr();
