@@ -261,7 +261,7 @@ bool JPEGContent::loadFromData(const QByteArray& data) {
 	try {
 		image = Exiv2::ImageFactory::open((unsigned char*)data.data(), data.size());
 		image->readMetadata();
-	} catch (Exiv2::Error&) {
+	} catch (...) {
 		kdError() << "Could not load image with Exiv2\n";
 		return false;
 	}
