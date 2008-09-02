@@ -437,6 +437,15 @@ bool DocumentPanel::currentDocumentIsRasterImage() const {
 }
 
 
+Document::Ptr DocumentPanel::currentDocument() const {
+	if (!d->mDocumentView->adapter()) {
+		return Document::Ptr();
+	}
+
+	return d->mDocumentView->adapter()->document();
+}
+
+
 bool DocumentPanel::isEmpty() const {
 	return d->mDocumentView->isEmpty();
 }

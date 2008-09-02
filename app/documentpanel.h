@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QWidget>
 
+// Local
+#include <lib/document/document.h>
+
 class QPalette;
 
 class KActionCollection;
@@ -70,6 +73,8 @@ public:
 	KUrl url() const;
 
 	void openUrl(const KUrl& url);
+
+	Document::Ptr currentDocument() const;
 
 	bool currentDocumentIsRasterImage() const;
 

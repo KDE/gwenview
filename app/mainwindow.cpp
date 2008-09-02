@@ -652,7 +652,11 @@ DocumentPanel* MainWindow::documentPanel() const {
 
 bool MainWindow::currentDocumentIsRasterImage() const {
 	if (d->mDocumentPanel->isVisible()) {
-		return d->mDocumentPanel->currentDocumentIsRasterImage();
+		Document::Ptr doc = d->mDocumentPanel->currentDocument();
+		if (!doc) {
+			return false;
+		}
+		return doc->kind() == MimeTypeUtils::KIND_RASTER_IMAGE;
 	} else {
 		QModelIndex index = d->mThumbnailView->currentIndex();
 		if (!index.isValid()) {
