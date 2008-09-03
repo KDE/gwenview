@@ -130,12 +130,10 @@ void DocumentTest::testLoadTwoPasses() {
 void DocumentTest::testLoadEmpty() {
 	KUrl url = urlForTestFile("empty.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(const KUrl&)));
 	while (doc->loadingState() == Document::Loading) {
 		QTest::qWait(100);
 	}
 	QCOMPARE(doc->loadingState(), Document::LoadingFailed);
-	QCOMPARE(loadingFailedSpy.count(), 1);
 }
 
 #define NEW_ROW(fileName) QTest::newRow(fileName) << fileName
