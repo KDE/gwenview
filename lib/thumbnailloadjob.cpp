@@ -397,19 +397,20 @@ void ThumbnailLoadJob::determineNextIcon() {
 
 	// First, stat the orig file
 	mState = STATE_STATORIG;
-	mOriginalTime = 0;
 	mCurrentUrl = mCurrentItem.url();
 	mCurrentUrl.cleanPath();
 
 	// Do direct stat instead of using KIO if the file is local (faster)
+	bool directStatOk = false;
 	if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
 		KDE_struct_stat buff;
 		if ( KDE_stat( QFile::encodeName(mCurrentUrl.path()), &buff ) == 0 )  {
+			directStatOk = true;
 			mOriginalTime = buff.st_mtime;
 			QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
 		}
 	}
-	if( mOriginalTime == 0 ) { // KIO must be used
+	if (!directStatOk) {
 		KIO::Job* job = KIO::stat(mCurrentUrl, KIO::HideProgressInfo);
 		job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		LOG( "KIO::stat orig" << mCurrentUrl.url() );
