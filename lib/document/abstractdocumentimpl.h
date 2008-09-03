@@ -60,10 +60,6 @@ public:
 
 	virtual AbstractDocumentEditor* editor() { return 0; }
 
-	virtual void setImage(const QImage&) = 0;
-
-	virtual void applyTransformation(Orientation) {}
-
 	virtual QByteArray rawData() const { return QByteArray(); }
 
 	virtual bool isEditable() const { return false; }

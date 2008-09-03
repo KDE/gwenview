@@ -45,7 +45,6 @@ public:
 	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
-	virtual void setImage(const QImage&);
 	virtual bool isEditable() const;
 
 	void loadImage(int invertedZoom);

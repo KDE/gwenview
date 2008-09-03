@@ -378,8 +378,5 @@ Document::SaveResult LoadingDocumentImpl::save(const KUrl&, const QByteArray&) {
 	return Document::SR_OtherError;
 }
 
-void LoadingDocumentImpl::setImage(const QImage&) {
-	kWarning() << " should not be called\n";
-}
 
 } // namespace
