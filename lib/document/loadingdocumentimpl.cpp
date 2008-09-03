@@ -108,7 +108,7 @@ struct LoadingDocumentImplPrivate {
 
 		default:
 			mImpl->setDocumentErrorString(
-				i18nc("@info", "Gwenview cannot display documents of type %1", mimeType)
+				i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
 				);
 			emit mImpl->loadingFailed();
 			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
@@ -236,7 +236,7 @@ void LoadingDocumentImpl::init() {
 		// Load file content directly
 		QFile file(url.path());
 		if (!file.open(QIODevice::ReadOnly)) {
-			setDocumentErrorString("Could not open file");
+			setDocumentErrorString("Could not open file.");
 			emit loadingFailed();
 			switchToImpl(new EmptyDocumentImpl(document()));
 			return;
@@ -310,7 +310,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded() {
 	Q_ASSERT(!d->mMetaInfoFuture.isRunning());
 	if (!d->mMetaInfoFuture.result()) {
 		setDocumentErrorString(
-			i18nc("@info", "Loading metainfo failed")
+			i18nc("@info", "Loading meta information failed.")
 			);
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
@@ -336,7 +336,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded() {
 void LoadingDocumentImpl::slotImageLoaded() {
 	if (d->mImage.isNull()) {
 		setDocumentErrorString(
-			i18nc("@info", "Loading image failed")
+			i18nc("@info", "Loading image failed.")
 			);
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
