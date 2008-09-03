@@ -236,7 +236,8 @@ void LoadingDocumentImpl::init() {
 		// Load file content directly
 		QFile file(url.path());
 		if (!file.open(QIODevice::ReadOnly)) {
-			kWarning() << "Couldn't open" << url;
+			setDocumentErrorString("Could not open file");
+			emit loadingFailed();
 			switchToImpl(new EmptyDocumentImpl(document()));
 			return;
 		}
@@ -277,8 +278,8 @@ void LoadingDocumentImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
 
 void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 	if (job->error()) {
-		//FIXME: Better error handling
-		kWarning() << job->errorString();
+		setDocumentErrorString(job->errorString());
+		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
 	}
