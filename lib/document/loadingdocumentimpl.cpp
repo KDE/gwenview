@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
+#include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
 
@@ -106,7 +107,10 @@ struct LoadingDocumentImplPrivate {
 			break;
 
 		default:
-			kWarning() << "Don't know how to handle documents of kind" << kind;
+			mImpl->setDocumentErrorString(
+				i18nc("@info", "Gwenview cannot display documents of type %1", mimeType)
+				);
+			emit mImpl->loadingFailed();
 			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
 			break;
 		}
@@ -304,7 +308,9 @@ Document::LoadingState LoadingDocumentImpl::loadingState() const {
 void LoadingDocumentImpl::slotMetaInfoLoaded() {
 	Q_ASSERT(!d->mMetaInfoFuture.isRunning());
 	if (!d->mMetaInfoFuture.result()) {
-		kWarning() << document()->url() << "Loading metainfo failed";
+		setDocumentErrorString(
+			i18nc("@info", "Loading metainfo failed")
+			);
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;
@@ -328,7 +334,9 @@ void LoadingDocumentImpl::slotMetaInfoLoaded() {
 
 void LoadingDocumentImpl::slotImageLoaded() {
 	if (d->mImage.isNull()) {
-		kWarning() << document()->url() << "Loading image failed";
+		setDocumentErrorString(
+			i18nc("@info", "Loading image failed")
+			);
 		emit loadingFailed();
 		switchToImpl(new EmptyDocumentImpl(document()));
 		return;

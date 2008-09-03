@@ -303,9 +303,8 @@ void DocumentView::slotLoaded() {
 
 void DocumentView::slotLoadingFailed() {
 	MessageViewAdapter* adapter = new MessageViewAdapter(this);
-	// FIXME: Get error message from document
 	QString message = i18n("Could not load <filename>%1</filename>", d->mDocument->url().fileName());
-	adapter->setErrorMessage(message);
+	adapter->setErrorMessage(message, d->mDocument->errorString());
 	d->setCurrentAdapter(adapter);
 	emit completed();
 }

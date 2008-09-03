@@ -59,7 +59,7 @@ MessageViewAdapter::~MessageViewAdapter() {
 }
 
 
-void MessageViewAdapter::setErrorMessage(const QString& message) {
+void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail) {
 	QPixmap pix = KIconLoader::global()->loadIcon(
 		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
 	d->mIconLabel->setPixmap(pix);
@@ -73,6 +73,12 @@ void MessageViewAdapter::setErrorMessage(const QString& message) {
 		"}"
 		);
 
+	QString message;
+	if (detail.isEmpty()) {
+		message = main;
+	} else {
+		message = QString("<b>%1</b><br>%2").arg(main).arg(detail);
+	}
 	d->mTextLabel->setText(message);
 }
 

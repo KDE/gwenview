@@ -86,4 +86,9 @@ void AbstractDocumentImpl::setDocumentDownSampledImage(const QImage& image, int 
 }
 
 
+void AbstractDocumentImpl::setDocumentErrorString(const QString& string) {
+	d->mDocument->setErrorString(string);
+}
+
+
 } // namespace

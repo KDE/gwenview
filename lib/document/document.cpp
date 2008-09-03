@@ -53,6 +53,7 @@ struct DocumentPrivate {
 	QByteArray mFormat;
 	ImageMetaInfoModel mImageMetaInfoModel;
 	QUndoStack mUndoStack;
+	QString mErrorString;
 	/** @} */
 
 	void scheduleImageLoading(int invertedZoom) {
@@ -99,6 +100,7 @@ void Document::reload() {
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
 	d->mUndoStack.clear();
+	d->mErrorString.clear();
 
 	switchToImpl(new LoadingDocumentImpl(this));
 }
@@ -291,6 +293,16 @@ void Document::setDownSampledImage(const QImage& image, int invertedZoom) {
 	Q_ASSERT(!d->mDownSampledImageMap.contains(invertedZoom));
 	d->mDownSampledImageMap[invertedZoom] = image;
 	emit downSampledImageReady();
+}
+
+
+QString Document::errorString() const {
+	return d->mErrorString;
+}
+
+
+void Document::setErrorString(const QString& string) {
+	d->mErrorString = string;
 }
 
 

@@ -95,6 +95,11 @@ public:
 	typedef KSharedPtr<Document> Ptr;
 	~Document();
 
+	/**
+	 * Returns a message for the last error which happened
+	 */
+	QString errorString() const;
+
 	void reload();
 
 	void loadFullImage();
@@ -210,6 +215,7 @@ private:
 	void setExiv2Image(Exiv2::Image::AutoPtr);
 	void setDownSampledImage(const QImage&, int invertedZoom);
 	void switchToImpl(AbstractDocumentImpl* impl);
+	void setErrorString(const QString&);
 
 	Document(const KUrl&);
 	DocumentPrivate * const d;

@@ -47,7 +47,7 @@ public:
 
 	void setInfoMessage(const QString&);
 
-	void setErrorMessage(const QString&);
+	void setErrorMessage(const QString& main, const QString& detail = QString());
 
 private:
 	MessageViewAdapterPrivate* const d;
