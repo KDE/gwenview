@@ -75,12 +75,6 @@ Document::LoadingState AnimatedDocumentLoadedImpl::loadingState() const {
 }
 
 
-Document::SaveResult AnimatedDocumentLoadedImpl::save(const KUrl&, const QByteArray& /*format*/) {
-	kWarning() << "This should not be called, we do not know how to save animated documents";
-	return Document::SR_OtherError;
-}
-
-
 void AnimatedDocumentLoadedImpl::setImage(const QImage&) {
 	kWarning() << "This should not be called, we can't modify animated documents";
 }

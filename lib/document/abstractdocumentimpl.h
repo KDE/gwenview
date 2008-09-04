@@ -56,7 +56,7 @@ public:
 
 	virtual Document::LoadingState loadingState() const = 0;
 
-	virtual Document::SaveResult save(const KUrl&, const QByteArray& format) = 0;
+	virtual bool save(const KUrl&, const QByteArray& /*format*/) { return false; }
 
 	virtual AbstractDocumentEditor* editor() { return 0; }
 

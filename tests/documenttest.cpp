@@ -225,8 +225,7 @@ void DocumentTest::testSaveRemote() {
 	KUrl dstUrl;
 	dstUrl.setProtocol("trash");
 	dstUrl.setPath("/test.png");
-	Document::SaveResult result = doc->save(dstUrl, "png");
-	QCOMPARE(result, Document::SR_UploadFailed);
+	QVERIFY(!doc->save(dstUrl, "png"));
 
 	if (qgetenv("REMOTE_SFTP_TEST").isEmpty()) {
 		kWarning() << "*** Define the environment variable REMOTE_SFTP_TEST to try saving an image to sftp://localhost/tmp/test.png";
@@ -234,8 +233,7 @@ void DocumentTest::testSaveRemote() {
 		dstUrl.setProtocol("sftp");
 		dstUrl.setHost("localhost");
 		dstUrl.setPath("/tmp/test.png");
-		result = doc->save(dstUrl, "png");
-		QCOMPARE(result, Document::SR_OK);
+		QVERIFY(doc->save(dstUrl, "png"));
 	}
 }
 
@@ -287,8 +285,7 @@ void DocumentTest::testSave() {
 	doc->loadFullImage();
 
 	KUrl destUrl = urlForTestOutputFile("result.png");
-	Document::SaveResult result = doc->save(destUrl, "png");
-	QCOMPARE(result, Document::SR_OK);
+	QVERIFY(doc->save(destUrl, "png"));
 	QCOMPARE(doc->format().data(), "png");
 
 	QVERIFY2(doc->loadingState() == Document::Loaded,
@@ -305,8 +302,7 @@ void DocumentTest::testLosslessSave() {
 	doc->loadFullImage();
 
 	KUrl url2 = urlForTestOutputFile("orient1.jpg");
-	Document::SaveResult result = doc->save(url2, "jpeg");
-	QCOMPARE(result, Document::SR_OK);
+	QVERIFY(doc->save(url2, "jpeg"));
 
 	QImage image1;
 	QVERIFY(image1.load(url1.path()));
@@ -385,7 +381,7 @@ void DocumentTest::testModify() {
 	QVERIFY(doc->isModified());
 
 	KUrl destUrl = urlForTestOutputFile("modify.png");
-	QCOMPARE(doc->save(destUrl, "png"), Document::SR_OK);
+	QVERIFY(doc->save(destUrl, "png"));
 
 	QVERIFY(!doc->isModified());
 }

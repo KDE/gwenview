@@ -44,7 +44,7 @@ public:
 	virtual void init();
 	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
-	virtual Document::SaveResult save(const KUrl&, const QByteArray& format);
+	virtual bool save(const KUrl&, const QByteArray& format);
 	virtual AbstractDocumentEditor* editor();
 	virtual QByteArray rawData() const;
 	virtual bool isEditable() const;

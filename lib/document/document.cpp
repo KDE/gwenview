@@ -207,15 +207,15 @@ void Document::waitUntilLoaded() const {
 }
 
 
-Document::SaveResult Document::save(const KUrl& url, const QByteArray& format) {
+bool Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
-	Document::SaveResult result = d->mImpl->save(url, format);
-	if (result == SR_OK) {
+	bool ok = d->mImpl->save(url, format);
+	if (ok) {
 		d->mUndoStack.setClean();
 		saved(url);
 	}
 
-	return result;
+	return ok;
 }
 
 QByteArray Document::format() const {

@@ -62,12 +62,6 @@ Document::LoadingState SvgDocumentLoadedImpl::loadingState() const {
 }
 
 
-Document::SaveResult SvgDocumentLoadedImpl::save(const KUrl&, const QByteArray& /*format*/) {
-	kWarning() << "Should not be called";
-	return Document::SR_OtherError;
-}
-
-
 void SvgDocumentLoadedImpl::setImage(const QImage&) {
 	kWarning() << "Should not be called";
 }

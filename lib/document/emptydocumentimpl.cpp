@@ -49,8 +49,5 @@ Document::LoadingState EmptyDocumentImpl::loadingState() const {
 	return Document::LoadingFailed;
 }
 
-Document::SaveResult EmptyDocumentImpl::save(const KUrl&, const QByteArray&) {
-	return Document::SR_OtherError;
-}
 
 } // namespace

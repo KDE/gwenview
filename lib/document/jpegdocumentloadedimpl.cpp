@@ -60,7 +60,11 @@ bool JpegDocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& f
 			d->mJpegContent->setThumbnail(thumbnail);
 		}
 
-		return d->mJpegContent->save(device);
+		bool ok = d->mJpegContent->save(device);
+		if (!ok) {
+			setDocumentErrorString(d->mJpegContent->errorString());
+		}
+		return ok;
 	} else {
 		return DocumentLoadedImpl::saveInternal(device, format);
 	}

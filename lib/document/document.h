@@ -77,13 +77,6 @@ public:
 	 */
 	static qreal maxDownSampledZoom();
 
-	enum SaveResult {
-		SR_OK,
-		SR_ReadOnly,
-		SR_UploadFailed,
-		SR_OtherError
-	};
-
 	enum LoadingState {
 		Loading,        ///< Image is loading
 		KindDetermined, ///< Image is still loading, but kind has been determined
@@ -132,7 +125,7 @@ public:
 
 	KUrl url() const;
 
-	SaveResult save(const KUrl& url, const QByteArray& format);
+	bool save(const KUrl& url, const QByteArray& format);
 
 	QByteArray format() const;
 

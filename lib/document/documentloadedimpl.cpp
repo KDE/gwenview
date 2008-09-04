@@ -27,11 +27,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QByteArray>
 #include <QImage>
+#include <QImageWriter>
 #include <QMatrix>
 
 // KDE
 #include <kdebug.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 #include <ksavefile.h>
 #include <ktemporaryfile.h>
 #include <kurl.h>
@@ -81,15 +83,18 @@ Document::LoadingState DocumentLoadedImpl::loadingState() const {
 
 
 bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& format) {
-	bool ok = document()->image().save(device, format);
+	QImageWriter writer(device, format);
+	bool ok = writer.write(document()->image());
 	if (ok) {
 		setDocumentFormat(format);
+	} else {
+		setDocumentErrorString(writer.errorString());
 	}
 	return ok;
 }
 
 
-Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
+bool DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
 	QString fileName;
 
 	// This tmp is used to save to remote urls.
@@ -110,29 +115,30 @@ Document::SaveResult DocumentLoadedImpl::save(const KUrl& url, const QByteArray&
 	KSaveFile file(fileName);
 
 	if (!file.open()) {
-		kWarning() << "Couldn't open" << url.pathOrUrl() << "for writing, probably read only";
-		return Document::SR_ReadOnly;
+		KUrl dirUrl = url;
+		dirUrl.setFileName(QString());
+		setDocumentErrorString(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
+		return false;
 	}
 
 	if (!saveInternal(&file, format)) {
-		kWarning() << "Saving" << url.pathOrUrl() << "failed";
 		file.abort();
-		return Document::SR_OtherError;
+		return false;
 	}
 
 	if (!file.finalize()) {
-		kWarning() << "Couldn't replace" << url.pathOrUrl() << "with new file";
-		return Document::SR_OtherError;
+		setDocumentErrorString(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", url.pathOrUrl()));
+		return false;
 	}
 
 	if (!url.isLocalFile()) {
 		if (!KIO::NetAccess::upload(fileName, url, 0)) {
-			kWarning() << "Couldn't upload to" << url.pathOrUrl();
-			return Document::SR_UploadFailed;
+			setDocumentErrorString(i18nc("@info", "Could not upload file."));
+			return false;
 		}
 	}
 
-	return Document::SR_OK;
+	return true;
 }
 
 
