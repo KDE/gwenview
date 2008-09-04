@@ -67,6 +67,8 @@ public:
 
 	QByteArray rawData() const;
 
+	QString errorString() const;
+
 private:
 	struct Private;
 	Private *d;

@@ -39,6 +39,7 @@ extern "C" {
 
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 
 // Exiv2
 #include <exiv2/exif.hpp>
@@ -108,6 +109,7 @@ struct JpegContent::Private {
 	bool mPendingTransformation;
 	QMatrix mTransformMatrix;
 	Exiv2::ExifData mExifData;
+	QString mErrorString;
 
 	Private() {
 		mPendingTransformation = false;
@@ -529,7 +531,7 @@ void JpegContent::setThumbnail(const QImage& thumbnail) {
 bool JpegContent::save(const QString& path) {
 	QFile file(path);
 	if (!file.open(QIODevice::WriteOnly)) {
-		kError() << "Could not open '" << path << "' for writing\n";
+		d->mErrorString = i18nc("@info", "Could not open file for writing.");
 		return false;
 	}
 
@@ -539,7 +541,7 @@ bool JpegContent::save(const QString& path) {
 
 bool JpegContent::save(QIODevice* device) {
 	if (d->mRawData.size()==0) {
-		kError() << "No data to store\n";
+		d->mErrorString = i18nc("@info", "No data to store.");
 		return false;
 	}
 
@@ -566,6 +568,11 @@ bool JpegContent::save(QIODevice* device) {
 	// Make sure we are up to date
 	loadFromData(d->mRawData);
 	return true;
+}
+
+
+QString JpegContent::errorString() const {
+	return d->mErrorString;
 }
 
 
