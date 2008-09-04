@@ -96,6 +96,7 @@ void GvCore::addUrlToRecentFolders(const KUrl& _url) {
 static void saveDocument(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(url, doc->format());
+	// FIXME Report error
 }
 
 
@@ -134,8 +135,12 @@ void GvCore::save(const KUrl& url) {
 	QByteArray format = doc->format();
 	QStringList availableTypes = KImageIO::types(KImageIO::Writing);
 	if (availableTypes.contains(QString(format))) {
-		doc->save(url, format);
-		// FIXME: check return code of Document::save()
+		if (!doc->save(url, format)) {
+			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
+			QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+				name, doc->errorString());
+			KMessageBox::sorry(d->mParent, msg);
+		}
 		return;
 	}
 
