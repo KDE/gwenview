@@ -158,7 +158,6 @@ void ThumbnailThread::run() {
 
 void ThumbnailThread::loadThumbnail() {
 	mImage = QImage();
-	bool loaded=false;
 	bool needCaching=true;
 	int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
 	Orientation orientation = NORMAL;
@@ -170,19 +169,17 @@ void ThumbnailThread::loadThumbnail() {
 		content.load(mPixPath);
 		mOriginalWidth = content.size().width();
 		mOriginalHeight = content.size().height();
-		mImage = content.thumbnail();
+		QImage thumbnail = content.thumbnail();
 		orientation = content.orientation();
 
-		if( !mImage.isNull()
-			&& ( mImage.width() >= pixelSize // don't use small thumbnails
-			|| mImage.height() >= pixelSize )) {
-			loaded = true;
+		if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
+			mImage = thumbnail;
 			needCaching = false;
 		}
 	}
 
 	// Generate thumbnail from full image
-	if (!loaded) {
+	if (mImage.isNull()) {
 		const QSize originalSize = reader.size();
 		if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
 			int scale;
@@ -205,8 +202,12 @@ void ThumbnailThread::loadThumbnail() {
 			} else {
 				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 			}
-			loaded = true;
 		}
+	}
+
+	if (mImage.isNull()) {
+		kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
+		return;
 	}
 
 	// Rotate if necessary
