@@ -41,8 +41,6 @@ public:
 	virtual void init();
 	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
-	virtual void setImage(const QImage&);
-	virtual void applyTransformation(Orientation orientation);
 	virtual QByteArray rawData() const;
 	virtual bool isAnimated() const;
 	virtual void startAnimation();

@@ -75,16 +75,6 @@ Document::LoadingState AnimatedDocumentLoadedImpl::loadingState() const {
 }
 
 
-void AnimatedDocumentLoadedImpl::setImage(const QImage&) {
-	kWarning() << "This should not be called, we can't modify animated documents";
-}
-
-
-void AnimatedDocumentLoadedImpl::applyTransformation(Orientation) {
-	kWarning() << "This should not be called, we can't modify animated documents";
-}
-
-
 QByteArray AnimatedDocumentLoadedImpl::rawData() const {
 	return d->mRawData;
 }
