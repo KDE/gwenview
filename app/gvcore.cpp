@@ -234,8 +234,6 @@ static void applyTransform(const KUrl& url, Orientation orientation) {
 	}
 	TransformImageOperation* op = new TransformImageOperation(orientation);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
-	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
 }
@@ -253,6 +251,8 @@ void GvCore::rotateRight(const KUrl& url) {
 
 bool GvCore::ensureDocumentIsEditable(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
 	if (doc->isEditable()) {
 		return true;
 	}
