@@ -92,15 +92,25 @@ void GvCore::addUrlToRecentFolders(const KUrl& _url) {
 	GwenviewConfig::setRecentFolders(list);
 }
 
-
+/*
 static void saveDocument(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->save(url, doc->format());
 	// FIXME Report error
 }
+*/
 
+class SaveAllHelper {
+public:
+	void operator()(const KUrl& url) {
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
+		doc->save(url, doc->format());
+	}
+};
 
 void GvCore::saveAll() {
+	SaveAllHelper helper;
+
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
 	QProgressDialog progress(d->mParent);
@@ -110,7 +120,7 @@ void GvCore::saveAll() {
 	progress.setMaximum(lst.size());
 	progress.setWindowModality(Qt::WindowModal);
 
-	QFuture<void> future = QtConcurrent::map(lst, saveDocument);
+	QFuture<void> future = QtConcurrent::map(lst, helper);
 
 	QFutureWatcher<void> watcher;
 	watcher.setFuture(future);
