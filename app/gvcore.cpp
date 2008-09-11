@@ -92,24 +92,27 @@ void GvCore::addUrlToRecentFolders(const KUrl& _url) {
 	GwenviewConfig::setRecentFolders(list);
 }
 
-/*
-static void saveDocument(const KUrl& url) {
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(url, doc->format());
-	// FIXME Report error
-}
-*/
 
-class SaveAllHelper {
-public:
+struct SaveAllHelper {
+	typedef QPair<KUrl, QString> ErrorListItem;
+	typedef QList<ErrorListItem> ErrorList;
+
+	SaveAllHelper(ErrorList* errorList)
+	: mErrorList(errorList) {}
+
 	void operator()(const KUrl& url) {
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		doc->save(url, doc->format());
+		if (!doc->save(url, doc->format())) {
+			*mErrorList << qMakePair(url, doc->errorString());
+		}
 	}
+
+	ErrorList* mErrorList;
 };
 
 void GvCore::saveAll() {
-	SaveAllHelper helper;
+	SaveAllHelper::ErrorList errorList;
+	SaveAllHelper helper(&errorList);
 
 	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
 
@@ -135,6 +138,21 @@ void GvCore::saveAll() {
 
 	progress.exec();
 	watcher.waitForFinished();
+
+	if (errorList.count() > 0) {
+		QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", errorList.count());
+		msg += "<ul>";
+		Q_FOREACH(const SaveAllHelper::ErrorListItem& item, errorList) {
+			const KUrl& url = item.first;
+			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
+			msg += "<li>"
+				+ i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
+					"<filename>%1</filename>: %2", name, item.second)
+				+ "</li>";
+		}
+		msg += "</ul>";
+		KMessageBox::sorry(d->mParent, msg);
+	}
 }
 
 
