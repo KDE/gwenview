@@ -55,11 +55,14 @@ private Q_SLOTS:
 	void moveBar(qreal);
 	void slotTimeLineFinished();
 	void delayedInstallEventFilter();
+	void updateBarIndicatorOpacity(qreal);
+	void hideBarIndicator();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
 
 private:
+	friend class FullScreenBarPrivate;
 	FullScreenBarPrivate* const d;
 };
 
