@@ -228,11 +228,11 @@ void GvCore::saveAs(const KUrl& url) {
 }
 
 
-void GvCore::rotateLeft(const KUrl& url) {
-	if (!ensureDocumentIsEditable(url)) {
+static void applyTransform(const KUrl& url, Orientation orientation) {
+	if (!GvCore::ensureDocumentIsEditable(url)) {
 		return;
 	}
-	TransformImageOperation* op = new TransformImageOperation(ROT_270);
+	TransformImageOperation* op = new TransformImageOperation(orientation);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
@@ -241,16 +241,13 @@ void GvCore::rotateLeft(const KUrl& url) {
 }
 
 
+void GvCore::rotateLeft(const KUrl& url) {
+	applyTransform(url, ROT_270);
+}
+
+
 void GvCore::rotateRight(const KUrl& url) {
-	if (!ensureDocumentIsEditable(url)) {
-		return;
-	}
-	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
-	doc->waitUntilLoaded();
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	applyTransform(url, ROT_90);
 }
 
 
