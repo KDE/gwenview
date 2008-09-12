@@ -44,6 +44,8 @@ public:
 
 	void setActivated(bool);
 
+	void setAutoHidingEnabled(bool);
+
 	virtual QSize sizeHint() const;
 
 public Q_SLOTS:

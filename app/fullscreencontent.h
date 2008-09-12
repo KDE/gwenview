@@ -35,6 +35,7 @@ class KUrl;
 
 namespace Gwenview {
 
+class FullScreenBar;
 class SlideShow;
 
 class ThumbnailBarView;
@@ -47,7 +48,7 @@ class FullScreenContentPrivate;
 class FullScreenContent : public QObject {
 	Q_OBJECT
 public:
-	FullScreenContent(QWidget* parent, KActionCollection*, SlideShow*);
+	FullScreenContent(FullScreenBar* parent, KActionCollection*, SlideShow*);
 	~FullScreenContent();
 
 	ThumbnailBarView* thumbnailBar() const;
@@ -66,6 +67,7 @@ private Q_SLOTS:
 	void updateSlideShowIntervalLabel();
 	void setCurrentFullScreenTheme(const QString& themeName);
 	void setFullScreenBarHeight(int value);
+	void enableAutoHiding();
 
 private:
 	FullScreenContentPrivate* const d;

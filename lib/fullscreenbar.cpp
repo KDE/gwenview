@@ -51,6 +51,7 @@ struct FullScreenBarPrivate {
 	FullScreenBar* that;
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideTimer;
+	bool mAutoHidingEnabled;
 
 	void startTimeLine() {
 		if (mTimeLine->state() != QTimeLine::Running) {
@@ -67,6 +68,11 @@ struct FullScreenBarPrivate {
 
 	bool shouldHide() const {
 		Q_ASSERT(that->parentWidget());
+
+		if (!mAutoHidingEnabled) {
+			return false;
+		}
+
 		// Do not use QCursor::pos() directly, as it won't work in Xinerama because
 		// rect().topLeft() is not always (0,0)
 		QPoint pos = that->parentWidget()->mapFromGlobal(QCursor::pos());
@@ -86,6 +92,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 : QFrame(parent)
 , d(new FullScreenBarPrivate) {
 	d->that = this;
+	d->mAutoHidingEnabled = true;
 	setObjectName("fullScreenBar");
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
@@ -204,6 +211,11 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	}
 
 	return false;
+}
+
+
+void FullScreenBar::setAutoHidingEnabled(bool value) {
+	d->mAutoHidingEnabled = value;
 }
 
 

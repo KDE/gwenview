@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "ui_fullscreenconfigdialog.h"
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
+#include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
 #include <lib/slideshow.h>
@@ -91,7 +92,7 @@ public:
 
 struct FullScreenContentPrivate {
 	FullScreenContent* that;
-	QWidget* mWidget;
+	FullScreenBar* mFullScreenBar;
 	SlideShow* mSlideShow;
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
@@ -120,26 +121,26 @@ struct FullScreenContentPrivate {
 
 	void applyCurrentFullScreenTheme() {
 		FullScreenTheme theme(FullScreenTheme::currentThemeName());
-		mWidget->setStyleSheet(theme.styleSheet());
+		mFullScreenBar->setStyleSheet(theme.styleSheet());
 	}
 };
 
 
-FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionCollection, SlideShow* slideShow)
-: QObject(parent)
+FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* actionCollection, SlideShow* slideShow)
+: QObject(bar)
 , d(new FullScreenContentPrivate) {
 	d->that = this;
-	d->mWidget = parent;
+	d->mFullScreenBar = bar;
 	d->mSlideShow = slideShow;
-	parent->installEventFilter(this);
+	bar->installEventFilter(this);
 
 	// Hardcode base style. This is necessary because some styles like
 	// to paint stuff with an event filter rather than overloading QStyle
 	// methods, overwriting the stylesheet rendering.
 	// Oxygen is one of those styles.
 	QStyle* style = new QWindowsStyle;
-	d->mWidget->setStyle(style);
-	style->setParent(d->mWidget);
+	d->mFullScreenBar->setStyle(style);
+	style->setParent(d->mFullScreenBar);
 
 	// Apply theme
 	d->applyCurrentFullScreenTheme();
@@ -170,7 +171,7 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	buttonBarLayout->addWidget(d->mOptionsButton);
 
 	// Thumbnail bar
-	d->mThumbnailBar = new ThumbnailBarView(parent);
+	d->mThumbnailBar = new ThumbnailBarView(bar);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
 
@@ -185,14 +186,14 @@ FullScreenContent::FullScreenContent(QWidget* parent, KActionCollection* actionC
 	------------------| mThumbnailBar
 	mInformationLabel |
 	*/
-	QGridLayout* layout = new QGridLayout(parent);
+	QGridLayout* layout = new QGridLayout(bar);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 	layout->addWidget(buttonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 	layout->addWidget(d->mInformationLabel, 1, 0);
 	layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
 
-	d->mWidget->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+	d->mFullScreenBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
 }
 
 
@@ -263,10 +264,13 @@ void FullScreenContent::configureInformationLabel() {
 		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
+		connect(d->mImageMetaInfoDialog, SIGNAL(destroyed()),
+			SLOT(enableAutoHiding()) );
 	}
 	if (d->mCurrentDocument) {
 		d->mImageMetaInfoDialog->setMetaInfo(d->mCurrentDocument->metaInfo(), GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
 	}
+	d->mFullScreenBar->setAutoHidingEnabled(false);
 	d->mImageMetaInfoDialog->show();
 }
 
@@ -301,7 +305,7 @@ void FullScreenContent::updateSlideShowIntervalLabel() {
 
 
 void FullScreenContent::setFullScreenBarHeight(int value) {
-	d->mWidget->setFixedHeight(value);
+	d->mFullScreenBar->setFixedHeight(value);
 	GwenviewConfig::setFullScreenBarHeight(value);
 }
 
@@ -345,7 +349,7 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	d->setupThemeListWidget(dialog->mThemeListWidget);
 
 	// Height slider
-	dialog->mHeightSlider->setValue(d->mWidget->height());
+	dialog->mHeightSlider->setValue(d->mFullScreenBar->height());
 	connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
 		this, SLOT(setFullScreenBarHeight(int)) );
 
@@ -361,6 +365,11 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	pos = d->mOptionsButton->mapToGlobal(pos);
 	dialog->move(pos);
 	dialog->show();
+}
+
+
+void FullScreenContent::enableAutoHiding() {
+	d->mFullScreenBar->setAutoHidingEnabled(true);
 }
 
 
