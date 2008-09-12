@@ -27,15 +27,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDesktopWidget>
 #include <QBitmap>
 #include <QEvent>
-#include <QMouseEvent>
-#include <QPainter>
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolButton>
 
 // KDE
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
 
 // Local
@@ -43,52 +40,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-class BarIndicator : public QWidget {
-public:
-	BarIndicator(QWidget* parent)
-	: QWidget(parent)
-	, mOpacity(1.)
-	, mPixmap(DesktopIcon("arrow-down"))
-	{}
-
-	qreal opacity() const {
-		return mOpacity;
-	}
-
-	void setOpacity(qreal opacity) {
-		mOpacity = opacity;
-		update();
-	}
-
-	virtual QSize sizeHint() const {
-		return mPixmap.size();
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent*) {
-		QPainter painter(this);
-		painter.setOpacity(mOpacity);
-		painter.drawPixmap(0, 0, mPixmap);
-	}
-
-private:
-	qreal mOpacity;
-	QPixmap mPixmap;
-};
-
-
 static const int SLIDE_DURATION = 150;
 static const int AUTO_HIDE_TIMEOUT = 3000;
 
 
 struct FullScreenBarPrivate {
-	FullScreenBar* that;
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideTimer;
-
-	BarIndicator* mBarIndicator;
-	QTimer* mAutoHideBarIndicatorTimer;
-	QTimeLine* mBarIndicatorTimeLine;
 
 	void startTimeLine() {
 		if (mTimeLine->state() != QTimeLine::Running) {
@@ -102,54 +60,12 @@ struct FullScreenBarPrivate {
 		QCursor blankCursor(empty, empty);
 		QApplication::setOverrideCursor(blankCursor);
 	}
-
-	void setupBarIndicator() {
-		mBarIndicator = new BarIndicator(that->parentWidget());
-
-		const int screenWidth = that->sizeHint().width();
-		const int indicatorWidth = mBarIndicator->sizeHint().width() * 2;
-		const int indicatorHeight = mBarIndicator->sizeHint().height();
-		mBarIndicator->setGeometry(
-			(screenWidth - indicatorWidth) / 2, 0,
-			indicatorWidth, indicatorHeight
-			);
-
-		that->updateBarIndicatorOpacity(0);
-
-		mAutoHideBarIndicatorTimer = new QTimer(that);
-		mAutoHideBarIndicatorTimer->setInterval(1500);
-		mAutoHideBarIndicatorTimer->setSingleShot(true);
-		QObject::connect(mAutoHideBarIndicatorTimer, SIGNAL(timeout()),
-			that, SLOT(hideBarIndicator()) );
-
-		mBarIndicatorTimeLine = new QTimeLine(500);
-		QObject::connect(mBarIndicatorTimeLine, SIGNAL(valueChanged(qreal)),
-			that, SLOT(updateBarIndicatorOpacity(qreal)) );
-	}
-
-	void showBarIndicator() {
-		mAutoHideBarIndicatorTimer->start();
-		if (mBarIndicatorTimeLine->state() == QTimeLine::Running && mBarIndicatorTimeLine->direction() == QTimeLine::Forward) {
-			return;
-		}
-		if (mBarIndicatorTimeLine->currentValue() == 1.0) {
-			return;
-		}
-
-		mBarIndicator->raise();
-
-		mBarIndicatorTimeLine->setDirection(QTimeLine::Forward);
-		if (mBarIndicatorTimeLine->state() != QTimeLine::Running) {
-			mBarIndicatorTimeLine->start();
-		}
-	}
 };
 
 
 FullScreenBar::FullScreenBar(QWidget* parent)
 : QFrame(parent)
 , d(new FullScreenBarPrivate) {
-	d->that = this;
 	setObjectName("fullScreenBar");
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
@@ -160,8 +76,6 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 	d->mAutoHideTimer->setInterval(AUTO_HIDE_TIMEOUT);
 	d->mAutoHideTimer->setSingleShot(true);
 	connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(autoHide()) );
-
-	d->setupBarIndicator();
 
 	hide();
 }
@@ -183,20 +97,6 @@ void FullScreenBar::moveBar(qreal value) {
 	// start a slideshow, the bar might end up below the view. Calling raise()
 	// here fixes it.
 	raise();
-}
-
-
-void FullScreenBar::updateBarIndicatorOpacity(qreal value) {
-	d->mBarIndicator->setOpacity(value);
-	raise();
-}
-
-
-void FullScreenBar::hideBarIndicator() {
-	d->mBarIndicatorTimeLine->setDirection(QTimeLine::Backward);
-	if (d->mBarIndicatorTimeLine->state() != QTimeLine::Running) {
-		d->mBarIndicatorTimeLine->start();
-	}
 }
 
 
@@ -263,16 +163,8 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 			// The bar is fully visible, restart timer
 			d->mAutoHideTimer->start();
 		} else {
-			QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-			if (mouseEvent->y() < height()) {
-				// Mouse is not far from bar, show it
-				//d->mBarIndicator->hide();
-				slideIn();
-			} else if (geometry().bottom() <= 0) {
-				// Bar is totally invisible and mouse is far from it. Show bar
-				// indicator
-				d->showBarIndicator();
-			}
+			// The bar is not fully visible, bring it in
+			slideIn();
 		}
 		return false;
 	}
