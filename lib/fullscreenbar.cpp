@@ -41,10 +41,14 @@ namespace Gwenview {
 
 
 static const int SLIDE_DURATION = 150;
-static const int AUTO_HIDE_TIMEOUT = 3000;
+static const int AUTO_HIDE_TIMEOUT = 1000;
+
+// How long before the bar slide out after switching to fullscreen
+static const int INITIAL_HIDE_TIMEOUT = 2000;
 
 
 struct FullScreenBarPrivate {
+	FullScreenBar* that;
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideTimer;
 
@@ -60,17 +64,32 @@ struct FullScreenBarPrivate {
 		QCursor blankCursor(empty, empty);
 		QApplication::setOverrideCursor(blankCursor);
 	}
+
+	bool shouldHide() const {
+		Q_ASSERT(that->parentWidget());
+		// Do not use QCursor::pos() directly, as it won't work in Xinerama because
+		// rect().topLeft() is not always (0,0)
+		QPoint pos = that->parentWidget()->mapFromGlobal(QCursor::pos());
+		if (pos.x() >= 0 && pos.x() < that->width() && pos.y() < that->height()) {
+			// Do not hide if the cursor is over the bar
+			return false;
+		}
+		if (qApp->activePopupWidget()) {
+			return false;
+		}
+		return true;
+	}
 };
 
 
 FullScreenBar::FullScreenBar(QWidget* parent)
 : QFrame(parent)
 , d(new FullScreenBarPrivate) {
+	d->that = this;
 	setObjectName("fullScreenBar");
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );
-	connect(d->mTimeLine, SIGNAL(finished()), SLOT(slotTimeLineFinished()) );
 
 	d->mAutoHideTimer = new QTimer(this);
 	d->mAutoHideTimer->setInterval(AUTO_HIDE_TIMEOUT);
@@ -107,11 +126,10 @@ void FullScreenBar::setActivated(bool activated) {
 		// mouse events, which cause the bar to slide in.
 		QTimer::singleShot(500, this, SLOT(delayedInstallEventFilter()));
 
-		// Make sure the widget is not partially visible on start
-		move(0, -150);
+		// Make sure the widget is visible on start
+		move(0, 0);
 		raise();
 		show();
-		d->hideCursor();
 	} else {
 		qApp->removeEventFilter(this);
 		hide();
@@ -123,22 +141,19 @@ void FullScreenBar::setActivated(bool activated) {
 
 void FullScreenBar::delayedInstallEventFilter() {
 	qApp->installEventFilter(this);
+	if (d->shouldHide()) {
+		QTimer::singleShot(INITIAL_HIDE_TIMEOUT, this, SLOT(slideOut()));
+		d->hideCursor();
+	}
 }
 
 
 void FullScreenBar::autoHide() {
-	Q_ASSERT(parentWidget());
-	// Do not use QCursor::pos() directly, as it won't work in Xinerama because
-	// rect().topLeft() is not always (0,0)
-	QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
-
-	if (rect().contains(pos) || qApp->activePopupWidget()) {
-		// Do nothing if the cursor is over the bar
+	if (d->shouldHide()) {
+		d->hideCursor();
+	} else {
 		d->mAutoHideTimer->start();
-		return;
 	}
-	d->hideCursor();
-	slideOut();
 }
 
 
@@ -149,8 +164,6 @@ void FullScreenBar::slideOut() {
 
 
 void FullScreenBar::slideIn() {
-	// Make sure auto hide timer does not kick in while we are sliding in
-	d->mAutoHideTimer->stop();
 	d->mTimeLine->setDirection(QTimeLine::Forward);
 	d->startTimeLine();
 }
@@ -159,12 +172,16 @@ void FullScreenBar::slideIn() {
 bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		QApplication::restoreOverrideCursor();
+		d->mAutoHideTimer->start();
+		QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
 		if (y() == 0) {
-			// The bar is fully visible, restart timer
-			d->mAutoHideTimer->start();
+			if (d->shouldHide()) {
+				slideOut();
+			}
 		} else {
-			// The bar is not fully visible, bring it in
-			slideIn();
+			if (pos.y() < height()) {
+				slideIn();
+			}
 		}
 		return false;
 	}
@@ -187,13 +204,6 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	}
 
 	return false;
-}
-
-
-void FullScreenBar::slotTimeLineFinished() {
-	if (d->mTimeLine->direction() == QTimeLine::Forward) {
-		d->mAutoHideTimer->start();
-	}
 }
 
 
