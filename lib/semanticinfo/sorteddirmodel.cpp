@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdirlister.h>
 
 // Local
+#include <lib/archiveutils.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kdirmodel.h>
 #else
@@ -138,27 +139,29 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 		}
 	}
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
-		// Make sure we have metadata, otherwise retrieve it and return false,
-		// we will be called again later when metadata is there.
-		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
-			d->mSourceModel->retrieveSemanticInfoForIndex(index);
-			return false;
+	if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
+		if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
+			// Make sure we have metadata, otherwise retrieve it and return false,
+			// we will be called again later when metadata is there.
+			if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
+				d->mSourceModel->retrieveSemanticInfoForIndex(index);
+				return false;
+			}
 		}
-	}
 
-	if (d->mMinimumRating > 0) {
-		int rating = d->mSourceModel->data(index, SemanticInfoDirModel::RatingRole).toInt();
-		if (rating < d->mMinimumRating) {
-			return false;
+		if (d->mMinimumRating > 0) {
+			int rating = d->mSourceModel->data(index, SemanticInfoDirModel::RatingRole).toInt();
+			if (rating < d->mMinimumRating) {
+				return false;
+			}
 		}
-	}
 
-	if (!d->mTagSet.isEmpty()) {
-		TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, SemanticInfoDirModel::TagsRole));
-		TagSet commonSet = indexTagSet & d->mTagSet;
-		if (commonSet.size() < d->mTagSet.size()) {
-			return false;
+		if (!d->mTagSet.isEmpty()) {
+			TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, SemanticInfoDirModel::TagsRole));
+			TagSet commonSet = indexTagSet & d->mTagSet;
+			if (commonSet.size() < d->mTagSet.size()) {
+				return false;
+			}
 		}
 	}
 #endif
