@@ -41,7 +41,7 @@ namespace Gwenview {
 
 
 static const int SLIDE_DURATION = 150;
-static const int AUTO_HIDE_TIMEOUT = 1000;
+static const int AUTO_HIDE_CURSOR_TIMEOUT = 1000;
 
 // How long before the bar slide out after switching to fullscreen
 static const int INITIAL_HIDE_TIMEOUT = 2000;
@@ -50,7 +50,7 @@ static const int INITIAL_HIDE_TIMEOUT = 2000;
 struct FullScreenBarPrivate {
 	FullScreenBar* that;
 	QTimeLine* mTimeLine;
-	QTimer* mAutoHideTimer;
+	QTimer* mAutoHideCursorTimer;
 	bool mAutoHidingEnabled;
 
 	void startTimeLine() {
@@ -98,10 +98,10 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );
 
-	d->mAutoHideTimer = new QTimer(this);
-	d->mAutoHideTimer->setInterval(AUTO_HIDE_TIMEOUT);
-	d->mAutoHideTimer->setSingleShot(true);
-	connect(d->mAutoHideTimer, SIGNAL(timeout()), SLOT(autoHide()) );
+	d->mAutoHideCursorTimer = new QTimer(this);
+	d->mAutoHideCursorTimer->setInterval(AUTO_HIDE_CURSOR_TIMEOUT);
+	d->mAutoHideCursorTimer->setSingleShot(true);
+	connect(d->mAutoHideCursorTimer, SIGNAL(timeout()), SLOT(slotAutoHideCursorTimeout()) );
 
 	hide();
 }
@@ -140,7 +140,7 @@ void FullScreenBar::setActivated(bool activated) {
 	} else {
 		qApp->removeEventFilter(this);
 		hide();
-		d->mAutoHideTimer->stop();
+		d->mAutoHideCursorTimer->stop();
 		QApplication::restoreOverrideCursor();
 	}
 }
@@ -155,11 +155,11 @@ void FullScreenBar::delayedInstallEventFilter() {
 }
 
 
-void FullScreenBar::autoHide() {
+void FullScreenBar::slotAutoHideCursorTimeout() {
 	if (d->shouldHide()) {
 		d->hideCursor();
 	} else {
-		d->mAutoHideTimer->start();
+		d->mAutoHideCursorTimer->start();
 	}
 }
 
@@ -179,7 +179,7 @@ void FullScreenBar::slideIn() {
 bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		QApplication::restoreOverrideCursor();
-		d->mAutoHideTimer->start();
+		d->mAutoHideCursorTimer->start();
 		QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
 		if (y() == 0) {
 			if (d->shouldHide()) {

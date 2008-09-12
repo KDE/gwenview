@@ -53,7 +53,7 @@ public Q_SLOTS:
 	void slideOut();
 
 private Q_SLOTS:
-	void autoHide();
+	void slotAutoHideCursorTimeout();
 	void moveBar(qreal);
 	void delayedInstallEventFilter();
 
