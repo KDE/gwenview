@@ -255,7 +255,7 @@ bool FullScreenContent::eventFilter(QObject*, QEvent* event) {
 }
 
 
-void FullScreenContent::configureInformationLabel() {
+void FullScreenContent::showImageMetaInfoDialog() {
 	if (!d->mImageMetaInfoDialog) {
 		d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mInformationLabel);
 		// Do not let the fullscreen theme propagate to this dialog for now,
@@ -344,7 +344,7 @@ void FullScreenContent::showFullScreenConfigDialog() {
 
 	// Config button
 	connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
-		SLOT(configureInformationLabel()) );
+		SLOT(showImageMetaInfoDialog()) );
 
 	d->setupThemeListWidget(dialog->mThemeListWidget);
 

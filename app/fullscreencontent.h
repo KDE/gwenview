@@ -61,7 +61,7 @@ protected:
 private Q_SLOTS:
 	void updateInformationLabel();
 	void updateMetaInfoDialog();
-	void configureInformationLabel();
+	void showImageMetaInfoDialog();
 	void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
 	void showFullScreenConfigDialog();
 	void updateSlideShowIntervalLabel();
