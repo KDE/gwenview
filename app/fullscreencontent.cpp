@@ -264,8 +264,9 @@ void FullScreenContent::configureInformationLabel() {
 		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
 			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
 	}
-        if ( d->mCurrentDocument )
-            d->mImageMetaInfoDialog->setMetaInfo(d->mCurrentDocument->metaInfo(), GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
+	if (d->mCurrentDocument) {
+		d->mImageMetaInfoDialog->setMetaInfo(d->mCurrentDocument->metaInfo(), GwenviewConfig::fullScreenPreferredMetaInfoKeyList());
+	}
 	d->mImageMetaInfoDialog->show();
 }
 
