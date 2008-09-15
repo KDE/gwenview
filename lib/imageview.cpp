@@ -697,11 +697,6 @@ qreal ImageView::computeZoomToFitHeight() const {
 }
 
 
-const QPixmap& ImageView::buffer() const {
-	return d->mCurrentBuffer;
-}
-
-
 void ImageView::showEvent(QShowEvent* event) {
 	QAbstractScrollArea::showEvent(event);
 	d->startAnimationIfNecessary();
