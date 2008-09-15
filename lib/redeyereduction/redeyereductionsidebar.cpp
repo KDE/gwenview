@@ -85,15 +85,8 @@ RedEyeReductionSideBar::~RedEyeReductionSideBar() {
 }
 
 
-QRect RedEyeReductionSideBar::redEyeReductionRect() const {
-	QRect rect;
-	// FIXME
-	return rect;
-}
-
-
 void RedEyeReductionSideBar::slotAccepted() {
-	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(redEyeReductionRect());
+	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(d->mRedEyeReductionTool->rect());
 	emit imageOperationRequested(op);
 	emit done();
 }

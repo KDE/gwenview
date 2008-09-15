@@ -44,6 +44,8 @@ public:
 	virtual void redo();
 	virtual void undo();
 
+	static void apply(QImage* img, const QRect& rect);
+
 private:
 	RedEyeReductionImageOperationPrivate* const d;
 };

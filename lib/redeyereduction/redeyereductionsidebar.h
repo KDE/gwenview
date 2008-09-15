@@ -43,8 +43,6 @@ public:
 	RedEyeReductionSideBar(QWidget* parent, ImageView*, Document::Ptr);
 	~RedEyeReductionSideBar();
 
-	QRect redEyeReductionRect() const;
-
 Q_SIGNALS:
 	void done();
 	void imageOperationRequested(AbstractImageOperation*);

@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "redeyereductionimageoperation.h"
 
+// Stdc
+#include <math.h>
+
 // Qt
 #include <QImage>
 #include <QPainter>
@@ -55,18 +58,14 @@ RedEyeReductionImageOperation::~RedEyeReductionImageOperation() {
 
 
 void RedEyeReductionImageOperation::redo() {
-	QImage src = document()->image();
-	d->mOriginalImage = src;
-	QImage dst(d->mRect.size(), src.format());
-	QPainter painter(&dst);
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
-	painter.drawImage(QPoint(0, 0), src, d->mRect);
-	painter.end();
+	QImage img = document()->image();
+	d->mOriginalImage = img.copy(d->mRect);
+	apply(&img, d->mRect);
 	if (!document()->editor()) {
 		kWarning() << "!document->editor()";
 		return;
 	}
-	document()->editor()->setImage(dst);
+	document()->editor()->setImage(img);
 }
 
 
@@ -75,7 +74,48 @@ void RedEyeReductionImageOperation::undo() {
 		kWarning() << "!document->editor()";
 		return;
 	}
-	document()->editor()->setImage(d->mOriginalImage);
+	QImage img = document()->image();
+	{
+		QPainter painter(&img);
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
+		painter.drawImage(d->mRect.topLeft(), d->mOriginalImage);
+	}
+	document()->editor()->setImage(img);
+}
+
+
+void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
+	const qreal radius = rect.width() / 2;
+	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
+	const qreal shadeRadius = radius * 0.8;
+	const int width = rect.width();
+	const int height = rect.height();
+	for (int y = 0; y < height; ++y, line += img->bytesPerLine()) {
+		QRgb* ptr = (QRgb*)line;
+		for (int x = 0; x < width; ++x, ++ptr) {
+			const qreal currentRadius = sqrt(pow(y - radius, 2) + pow(x - radius, 2));
+			if (currentRadius > radius) {
+				continue;
+			}
+			QColor color(*ptr);
+			int h, s1, v1, a;
+			color.getHsv(&h, &s1, &v1, &a);
+			if (s1 < 60) {
+				continue;
+			}
+			int s2, v2;
+			s2 = 60;
+			v2 = v1 / 2;
+
+			if (currentRadius > shadeRadius) {
+				const qreal k = (currentRadius - shadeRadius) / (radius - shadeRadius);
+				s2 = int(s2 * (1. - k) + s1 * k);
+				v2 = int(v2 * (1. - k) + v1 * k);
+			}
+			color = QColor::fromHsv(h, s2, v2, a);
+			*ptr = color.rgba();
+		}
+	}
 }
 
 

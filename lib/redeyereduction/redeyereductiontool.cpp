@@ -21,9 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "redeyereductiontool.moc"
 
-// Stdc
-#include <math.h>
-
 // Qt
 #include <QMouseEvent>
 #include <QPainter>
@@ -34,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "imageview.h"
+#include "redeyereductionimageoperation.h"
 
 static const int UNINITIALIZED_X = -1;
 
@@ -84,39 +82,7 @@ void RedEyeReductionTool::paint(QPainter* painter) {
 	const QRect viewRect = imageView()->mapToViewport(rect());
 	QImage img = imageView()->buffer().copy(viewRect).toImage();
 
-	{
-		const qreal viewRadius = viewRect.width() / 2;
-		uchar* line = img.bits();
-		const qreal shadeViewRadius = viewRadius * 0.8;
-		const int width = img.width();
-		const int height = img.height();
-		for (int y = 0; y < height; ++y, line += img.bytesPerLine()) {
-			QRgb* ptr = (QRgb*)line;
-			for (int x = 0; x < width; ++x, ++ptr) {
-				const qreal currentRadius = sqrt(pow(y - viewRadius, 2) + pow(x - viewRadius, 2));
-				if (currentRadius > viewRadius) {
-					continue;
-				}
-				QColor color(*ptr);
-				int h, s1, v1, a;
-				int s2, v2;
-				color.getHsv(&h, &s1, &v1, &a);
-				if (s1 < 60) {
-					continue;
-				}
-				s2 = 60;
-				v2 = v1 / 2;
-
-				if (currentRadius > shadeViewRadius) {
-					const qreal k = (currentRadius - shadeViewRadius) / (viewRadius - shadeViewRadius);
-					s2 = int(s2 * (1. - k) + s1 * k);
-					v2 = int(v2 * (1. - k) + v1 * k);
-				}
-				color = QColor::fromHsv(h, s2, v2, a);
-				*ptr = color.rgba();
-			}
-		}
-	}
+	RedEyeReductionImageOperation::apply(&img, img.rect());
 	painter->drawImage(viewRect.topLeft(), img);
 }
 
