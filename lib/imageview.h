@@ -77,6 +77,12 @@ public:
 	QRect mapToViewport(const QRect& src);
 	QRect mapToImage(const QRect& src);
 
+	QPointF mapToViewportF(const QPointF& src);
+	QPointF mapToImageF(const QPointF& src);
+
+	QRectF mapToViewportF(const QRectF& src);
+	QRectF mapToImageF(const QRectF& src);
+
 	qreal computeZoomToFit() const;
 	qreal computeZoomToFitWidth() const;
 	qreal computeZoomToFitHeight() const;

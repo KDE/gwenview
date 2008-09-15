@@ -598,10 +598,31 @@ QPoint ImageView::mapToViewport(const QPoint& src) {
 }
 
 
+QPointF ImageView::mapToViewportF(const QPointF& src) {
+	QPointF dst(src.x() * d->mZoom, src.y() * d->mZoom);
+
+	dst += imageOffset();
+
+	dst.rx() -= d->hScroll();
+	dst.ry() -= d->vScroll();
+
+	return dst;
+}
+
+
 QRect ImageView::mapToViewport(const QRect& src) {
 	QRect dst(
 		mapToViewport(src.topLeft()),
 		mapToViewport(src.bottomRight())
+	);
+	return dst;
+}
+
+
+QRectF ImageView::mapToViewportF(const QRectF& src) {
+	QRectF dst(
+		mapToViewportF(src.topLeft()),
+		mapToViewportF(src.bottomRight())
 	);
 	return dst;
 }
@@ -619,10 +640,31 @@ QPoint ImageView::mapToImage(const QPoint& src) {
 }
 
 
+QPointF ImageView::mapToImageF(const QPointF& src) {
+	QPointF dst = src;
+
+	dst.rx() += d->hScroll();
+	dst.ry() += d->vScroll();
+
+	dst -= imageOffset();
+
+	return dst / d->mZoom;
+}
+
+
 QRect ImageView::mapToImage(const QRect& src) {
 	QRect dst(
 		mapToImage(src.topLeft()),
 		mapToImage(src.bottomRight())
+	);
+	return dst;
+}
+
+
+QRectF ImageView::mapToImageF(const QRectF& src) {
+	QRectF dst(
+		mapToImageF(src.topLeft()),
+		mapToImageF(src.bottomRight())
 	);
 	return dst;
 }
