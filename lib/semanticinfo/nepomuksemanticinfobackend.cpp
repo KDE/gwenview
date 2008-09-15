@@ -200,7 +200,10 @@ void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, cons
 
 QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uri) const {
 	Nepomuk::Tag tag(uri);
-	//Q_ASSERT(tag.exists());
+	if (!tag.exists()) {
+		kError() << "No tag for uri" << uri << ". This should not happen!";
+		return QString();
+	}
 	return tag.label();
 }
 
