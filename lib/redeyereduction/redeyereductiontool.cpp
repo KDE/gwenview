@@ -79,11 +79,12 @@ void RedEyeReductionTool::paint(QPainter* painter) {
 	if (d->mCenter.x() == UNINITIALIZED_X) {
 		return;
 	}
-	const QRect viewRect = imageView()->mapToViewport(rect());
-	QImage img = imageView()->buffer().copy(viewRect).toImage();
+	QRect docRect = rect();
+	QImage img = imageView()->document()->image().copy(docRect);
+	const QRectF viewRectF = imageView()->mapToViewportF(docRect);
 
 	RedEyeReductionImageOperation::apply(&img, img.rect());
-	painter->drawImage(viewRect.topLeft(), img);
+	painter->drawImage(viewRectF, img);
 }
 
 
