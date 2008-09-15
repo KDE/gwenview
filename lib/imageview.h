@@ -81,6 +81,11 @@ public:
 	qreal computeZoomToFitWidth() const;
 	qreal computeZoomToFitHeight() const;
 
+	/**
+	 * Returns the buffer which stores the visible part of the image
+	 */
+	const QPixmap& buffer() const;
+
 Q_SIGNALS:
 	void zoomChanged(qreal);
 
