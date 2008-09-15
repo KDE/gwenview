@@ -275,6 +275,8 @@ void DocumentView::openUrl(const KUrl& url) {
 	}
 	createAdapterForDocument();
 
+	connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
+		SLOT(slotLoaded()) );
 	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded()) );
 	connect(d->mDocument.data(), SIGNAL(loadingFailed(const KUrl&)),
