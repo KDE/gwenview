@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
+#include <lib/redeyereduction/redeyereductionsidebar.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/transformimageoperation.h>
 
@@ -67,6 +68,7 @@ struct ImageOpsContextManagerItem::Private {
 	QAction* mFlipAction;
 	QAction* mResizeAction;
 	QAction* mCropAction;
+	QAction* mRedEyeReductionAction;
 	QList<QAction*> mActionList;
 
 	void setupActions() {
@@ -109,13 +111,21 @@ struct ImageOpsContextManagerItem::Private {
 		connect(mCropAction, SIGNAL(triggered()),
 			that, SLOT(showCropSideBar()) );
 
+		mRedEyeReductionAction = actionCollection->addAction("red_eye_reduction");
+		mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
+		//mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
+		connect(mRedEyeReductionAction, SIGNAL(triggered()),
+			that, SLOT(showRedEyeReductionSideBar()) );
+
 		mActionList
 			<< mRotateLeftAction
 			<< mRotateRightAction
 			<< mMirrorAction
 			<< mFlipAction
 			<< mResizeAction
-			<< mCropAction;
+			<< mCropAction
+			<< mRedEyeReductionAction
+			;
 	}
 
 
@@ -198,6 +208,7 @@ void ImageOpsContextManagerItem::updateActions() {
 	d->mFlipAction->setEnabled(canModify);
 	d->mResizeAction->setEnabled(canModify);
 	d->mCropAction->setEnabled(canModify && documentPanelIsVisible);
+	d->mRedEyeReductionAction->setEnabled(canModify && documentPanelIsVisible);
 
 	if (d->mSideBar) {
 		updateSideBarContent();
@@ -285,6 +296,26 @@ void ImageOpsContextManagerItem::showCropSideBar() {
 		SLOT(applyImageOperation(AbstractImageOperation*)) );
 
 	d->mMainWindow->showTemporarySideBar(cropSideBar);
+}
+
+
+void ImageOpsContextManagerItem::showRedEyeReductionSideBar() {
+	if (!d->ensureEditable()) {
+		return;
+	}
+	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	if (!imageView) {
+		kError() << "No ImageView available!";
+		return;
+	}
+	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
+	RedEyeReductionSideBar* redEyeReductionSideBar = new RedEyeReductionSideBar(d->mMainWindow, imageView, doc);
+	connect(redEyeReductionSideBar, SIGNAL(done()),
+		d->mMainWindow, SLOT(hideTemporarySideBar()) );
+	connect(redEyeReductionSideBar, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
+		SLOT(applyImageOperation(AbstractImageOperation*)) );
+
+	d->mMainWindow->showTemporarySideBar(redEyeReductionSideBar);
 }
 
 

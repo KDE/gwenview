@@ -18,53 +18,45 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEOPSCONTEXTMANAGERITEM_H
-#define IMAGEOPSCONTEXTMANAGERITEM_H
+#ifndef REDEYEREDUCTIONSIDEBAR_H
+#define REDEYEREDUCTIONSIDEBAR_H
+
+#include <lib/gwenviewlib_export.h>
 
 // Qt
+#include <QWidget>
 
 // KDE
 
 // Local
-#include "abstractcontextmanageritem.h"
-
-
-class QRect;
-
+#include <lib/document/document.h>
 
 namespace Gwenview {
 
-
 class AbstractImageOperation;
-class MainWindow;
+class ImageView;
 
-
-class ImageOpsContextManagerItem : public AbstractContextManagerItem {
+class RedEyeReductionSideBarPrivate;
+class GWENVIEWLIB_EXPORT RedEyeReductionSideBar : public QWidget {
 	Q_OBJECT
 public:
-	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
-	~ImageOpsContextManagerItem();
+	RedEyeReductionSideBar(QWidget* parent, ImageView*, Document::Ptr);
+	~RedEyeReductionSideBar();
 
-	virtual void setSideBar(SideBar* sideBar);
+	QRect redEyeReductionRect() const;
+
+Q_SIGNALS:
+	void done();
+	void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
-	void updateActions();
-	void updateSideBarContent();
-	void rotateLeft();
-	void rotateRight();
-	void mirror();
-	void flip();
-	void resizeImage();
-	void showCropSideBar();
-	void showRedEyeReductionSideBar();
-	void applyImageOperation(AbstractImageOperation*);
+	void slotAccepted();
 
 private:
-	class Private;
-	Private* const d;
+	RedEyeReductionSideBarPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* IMAGEOPSCONTEXTMANAGERITEM_H */
+#endif /* REDEYEREDUCTIONSIDEBAR_H */

@@ -18,53 +18,37 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEOPSCONTEXTMANAGERITEM_H
-#define IMAGEOPSCONTEXTMANAGERITEM_H
+#ifndef REDEYEREDUCTIONIMAGEOPERATION_H
+#define REDEYEREDUCTIONIMAGEOPERATION_H
+
+#include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractcontextmanageritem.h"
-
+#include <lib/abstractimageoperation.h>
 
 class QRect;
-
 
 namespace Gwenview {
 
 
-class AbstractImageOperation;
-class MainWindow;
-
-
-class ImageOpsContextManagerItem : public AbstractContextManagerItem {
-	Q_OBJECT
+class RedEyeReductionImageOperationPrivate;
+class GWENVIEWLIB_EXPORT RedEyeReductionImageOperation : public AbstractImageOperation {
 public:
-	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
-	~ImageOpsContextManagerItem();
+	RedEyeReductionImageOperation(const QRect&);
+	~RedEyeReductionImageOperation();
 
-	virtual void setSideBar(SideBar* sideBar);
-
-private Q_SLOTS:
-	void updateActions();
-	void updateSideBarContent();
-	void rotateLeft();
-	void rotateRight();
-	void mirror();
-	void flip();
-	void resizeImage();
-	void showCropSideBar();
-	void showRedEyeReductionSideBar();
-	void applyImageOperation(AbstractImageOperation*);
+	virtual void redo();
+	virtual void undo();
 
 private:
-	class Private;
-	Private* const d;
+	RedEyeReductionImageOperationPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* IMAGEOPSCONTEXTMANAGERITEM_H */
+#endif /* REDEYEREDUCTIONIMAGEOPERATION_H */

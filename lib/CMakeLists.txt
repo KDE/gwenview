@@ -55,6 +55,9 @@ set(gwenviewlib_SRCS
 	slideshow.cpp
 	scrolltool.cpp
 	statusbartoolbutton.cpp
+	redeyereduction/redeyereductionsidebar.cpp
+	redeyereduction/redeyereductionimageoperation.cpp
+	redeyereduction/redeyereductiontool.cpp
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
@@ -101,6 +104,7 @@ kde4_add_ui_files(gwenviewlib_SRCS
 	cropsidebar.ui
 	documentview/messageview.ui
 	print/printoptionspage.ui
+	redeyereduction/redeyereductionsidebar.ui
 	)
 
 kde4_add_kcfg_files(gwenviewlib_SRCS

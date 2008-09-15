@@ -18,53 +18,48 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef IMAGEOPSCONTEXTMANAGERITEM_H
-#define IMAGEOPSCONTEXTMANAGERITEM_H
+#ifndef REDEYEREDUCTIONTOOL_H
+#define REDEYEREDUCTIONTOOL_H
 
 // Qt
 
 // KDE
 
 // Local
-#include "abstractcontextmanageritem.h"
-
+#include <lib/abstractimageviewtool.h>
 
 class QRect;
 
-
 namespace Gwenview {
 
+class ImageView;
 
-class AbstractImageOperation;
-class MainWindow;
-
-
-class ImageOpsContextManagerItem : public AbstractContextManagerItem {
+class RedEyeReductionToolPrivate;
+class RedEyeReductionTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
-	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
-	~ImageOpsContextManagerItem();
+	RedEyeReductionTool(ImageView* parent);
+	~RedEyeReductionTool();
 
-	virtual void setSideBar(SideBar* sideBar);
+	QRect rect() const;
 
-private Q_SLOTS:
-	void updateActions();
-	void updateSideBarContent();
-	void rotateLeft();
-	void rotateRight();
-	void mirror();
-	void flip();
-	void resizeImage();
-	void showCropSideBar();
-	void showRedEyeReductionSideBar();
-	void applyImageOperation(AbstractImageOperation*);
+	virtual void paint(QPainter*);
+
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+
+	virtual void toolActivated();
+
+	int radius() const;
+
+public Q_SLOTS:
+	void setRadius(int);
 
 private:
-	class Private;
-	Private* const d;
+	RedEyeReductionToolPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* IMAGEOPSCONTEXTMANAGERITEM_H */
+#endif /* REDEYEREDUCTIONTOOL_H */
