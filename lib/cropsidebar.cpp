@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "klocale.h"
 
 // Local
+#include "cropimageoperation.h"
 #include "croptool.h"
 #include "imageview.h"
 #include "ui_cropsidebar.h"
@@ -220,7 +221,8 @@ void CropSideBar::slotHeightChanged() {
 
 
 void CropSideBar::slotAccepted() {
-	emit cropRequested(cropRect());
+	CropImageOperation* op = new CropImageOperation(cropRect());
+	emit imageOperationRequested(op);
 	emit done();
 }
 

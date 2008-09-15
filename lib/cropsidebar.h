@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview {
 
+class AbstractImageOperation;
 class ImageView;
 
 class CropSideBarPrivate;
@@ -46,7 +47,7 @@ public:
 
 Q_SIGNALS:
 	void done();
-	void cropRequested(const QRect&);
+	void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
 	void slotPositionChanged();

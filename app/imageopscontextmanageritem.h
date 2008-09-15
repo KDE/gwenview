@@ -35,6 +35,7 @@ class QRect;
 namespace Gwenview {
 
 
+class AbstractImageOperation;
 class MainWindow;
 
 
@@ -55,7 +56,7 @@ private Q_SLOTS:
 	void flip();
 	void resizeImage();
 	void showCropSideBar();
-	void crop(const QRect&);
+	void applyImageOperation(AbstractImageOperation*);
 
 private:
 	class Private;

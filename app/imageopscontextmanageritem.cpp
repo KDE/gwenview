@@ -38,7 +38,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "sidebar.h"
 #include <lib/cropsidebar.h>
-#include <lib/cropimageoperation.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
@@ -117,18 +116,6 @@ struct ImageOpsContextManagerItem::Private {
 			<< mFlipAction
 			<< mResizeAction
 			<< mCropAction;
-	}
-
-
-	void applyImageOperation(AbstractImageOperation* op) {
-		// For now, we only support operations on one image
-		KUrl url = that->contextManager()->currentUrl();
-
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		doc->loadFullImage();
-		doc->waitUntilLoaded();
-		op->setDocument(doc);
-		doc->undoStack()->push(op);
 	}
 
 
@@ -223,7 +210,7 @@ void ImageOpsContextManagerItem::rotateLeft() {
 		return;
 	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_270);
-	d->applyImageOperation(op);
+	applyImageOperation(op);
 }
 
 
@@ -232,7 +219,7 @@ void ImageOpsContextManagerItem::rotateRight() {
 		return;
 	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	d->applyImageOperation(op);
+	applyImageOperation(op);
 }
 
 
@@ -241,7 +228,7 @@ void ImageOpsContextManagerItem::mirror() {
 		return;
 	}
 	TransformImageOperation* op = new TransformImageOperation(HFLIP);
-	d->applyImageOperation(op);
+	applyImageOperation(op);
 }
 
 
@@ -250,7 +237,7 @@ void ImageOpsContextManagerItem::flip() {
 		return;
 	}
 	TransformImageOperation* op = new TransformImageOperation(VFLIP);
-	d->applyImageOperation(op);
+	applyImageOperation(op);
 }
 
 
@@ -277,7 +264,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 	}
 	GwenviewConfig::setImageResizeLastSize(size);
 	ResizeImageOperation* op = new ResizeImageOperation(size);
-	d->applyImageOperation(op);
+	applyImageOperation(op);
 }
 
 
@@ -294,16 +281,22 @@ void ImageOpsContextManagerItem::showCropSideBar() {
 	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageView, doc);
 	connect(cropSideBar, SIGNAL(done()),
 		d->mMainWindow, SLOT(hideTemporarySideBar()) );
-	connect(cropSideBar, SIGNAL(cropRequested(const QRect&)),
-		SLOT(crop(const QRect&)) );
+	connect(cropSideBar, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
+		SLOT(applyImageOperation(AbstractImageOperation*)) );
 
 	d->mMainWindow->showTemporarySideBar(cropSideBar);
 }
 
 
-void ImageOpsContextManagerItem::crop(const QRect& rect) {
-	CropImageOperation* op = new CropImageOperation(rect);
-	d->applyImageOperation(op);
+void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op) {
+	// For now, we only support operations on one image
+	KUrl url = contextManager()->currentUrl();
+
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
 }
 
 
