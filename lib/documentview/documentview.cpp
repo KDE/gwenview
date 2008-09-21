@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kaction.h>
+#include <kactioncategory.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -106,7 +107,9 @@ struct DocumentViewPrivate {
 	}
 
 	void setupZoomActions() {
-		mZoomToFitAction = new KAction(mActionCollection);
+		KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), mActionCollection);
+
+		mZoomToFitAction = view->addAction("view_zoom_to_fit");
 		mZoomToFitAction->setCheckable(true);
 		mZoomToFitAction->setChecked(true);
 		mZoomToFitAction->setText(i18n("Zoom to Fit"));
@@ -114,13 +117,12 @@ struct DocumentViewPrivate {
 		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
 		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
 			that, SLOT(setZoomToFit(bool)) );
-		mActionCollection->addAction("view_zoom_to_fit", mZoomToFitAction);
 
-		KAction* actualSizeAction = KStandardAction::actualSize(that, SLOT(zoomActualSize()), mActionCollection);
+		KAction* actualSizeAction = view->addAction(KStandardAction::ActualSize,that, SLOT(zoomActualSize()));
 		actualSizeAction->setIcon(KIcon("zoom-original"));
 		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-		KStandardAction::zoomIn(that, SLOT(zoomIn()), mActionCollection);
-		KStandardAction::zoomOut(that, SLOT(zoomOut()), mActionCollection);
+		view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
+		view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
 
 		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
 	}

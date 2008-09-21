@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kactioncollection.h>
+#include <kactioncategory.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -318,7 +319,9 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupSplitter();
 
-	d->mToggleThumbnailBarAction = actionCollection->add<KToggleAction>("toggle_thumbnailbar");
+        KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
+
+	d->mToggleThumbnailBarAction = static_cast<KToggleAction*>(view->addAction("toggle_thumbnailbar"));
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
 	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
 	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);

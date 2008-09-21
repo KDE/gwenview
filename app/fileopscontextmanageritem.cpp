@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kactioncategory.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <klocale.h>
@@ -86,48 +87,36 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateActions()) );
 
-	d->mCopyToAction = actionCollection->addAction("file_copy_to");
+	KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+
+	d->mCopyToAction = file->addAction("file_copy_to",this,SLOT(copyTo()));
 	d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
-	connect(d->mCopyToAction, SIGNAL(triggered()),
-		SLOT(copyTo()) );
 
-	d->mMoveToAction = actionCollection->addAction("file_move_to");
+	d->mMoveToAction = file->addAction("file_move_to",this,SLOT(moveTo()));
 	d->mMoveToAction->setText(i18nc("Verb", "Move To..."));
-	connect(d->mMoveToAction, SIGNAL(triggered()),
-		SLOT(moveTo()) );
 
-	d->mLinkToAction = actionCollection->addAction("file_link_to");
-	d->mLinkToAction->setText(i18nc("Verb", "Link To..."));
-	connect(d->mLinkToAction, SIGNAL(triggered()),
-		SLOT(linkTo()) );
+	d->mLinkToAction = file->addAction("file_link_to",this,SLOT(linkTo()));
+	d->mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
 
-	d->mTrashAction = actionCollection->addAction("file_trash");
+	d->mTrashAction = file->addAction("file_trash",this,SLOT(trash()));
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
 	d->mTrashAction->setIcon(KIcon("user-trash"));
 	d->mTrashAction->setShortcut(Qt::Key_Delete);
-	connect(d->mTrashAction, SIGNAL(triggered()),
-		SLOT(trash()) );
 
-	d->mDelAction = actionCollection->addAction("file_delete");
+	d->mDelAction = file->addAction("file_delete",this,SLOT(del()));
 	d->mDelAction->setText(i18n("Delete"));
 	d->mDelAction->setIcon(KIcon("edit-delete"));
 	d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
-	connect(d->mDelAction, SIGNAL(triggered()),
-		SLOT(del()) );
 
-	d->mShowPropertiesAction = actionCollection->addAction("file_show_properties");
+	d->mShowPropertiesAction = file->addAction("file_show_properties",this,SLOT(showProperties()));
 	d->mShowPropertiesAction->setText(i18n("Properties"));
 	d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
-	connect(d->mShowPropertiesAction, SIGNAL(triggered()),
-		SLOT(showProperties()) );
 
-	d->mCreateFolderAction = actionCollection->addAction("file_create_folder");
+	d->mCreateFolderAction = file->addAction("file_create_folder",this,SLOT(createFolder()));
 	d->mCreateFolderAction->setText(i18n("Create Folder..."));
 	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
-	connect(d->mCreateFolderAction, SIGNAL(triggered()),
-		SLOT(createFolder()) );
 
-	d->mOpenWithAction = actionCollection->addAction("file_open_with");
+	d->mOpenWithAction = file->addAction("file_open_with");
 	d->mOpenWithAction->setText(i18n("Open With..."));
 	QMenu* menu = new QMenu;
 	d->mOpenWithAction->setMenu(menu);
@@ -285,7 +274,7 @@ void FileOpsContextManagerItem::populateOpenMenu() {
 	}
 
 	Q_FOREACH(const KService::Ptr &service, d->mServiceForName) {
-		QString text = service->name().replace( "&", "&&" );
+		QString text = service->name().replace( '&', "&&" );
 		QAction* action = openMenu->addAction(text);
 		action->setIcon(KIcon(service->icon()));
 		action->setData(service->name());

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
+#include <kactioncategory.h>
 
 // Local
 #include "contextmanager.h"
@@ -62,60 +63,47 @@ struct ImageOpsContextManagerItem::Private {
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
-	QAction* mRotateLeftAction;
-	QAction* mRotateRightAction;
-	QAction* mMirrorAction;
-	QAction* mFlipAction;
-	QAction* mResizeAction;
-	QAction* mCropAction;
-	QAction* mRedEyeReductionAction;
-	QList<QAction*> mActionList;
+	KAction* mRotateLeftAction;
+	KAction* mRotateRightAction;
+	KAction* mMirrorAction;
+	KAction* mFlipAction;
+	KAction* mResizeAction;
+	KAction* mCropAction;
+	KAction* mRedEyeReductionAction;
+	QList<KAction*> mActionList;
 
 	void setupActions() {
 		KActionCollection* actionCollection = mMainWindow->actionCollection();
-		mRotateLeftAction = actionCollection->addAction("rotate_left");
+		KActionCategory* edit=new KActionCategory(i18nc("@title actions category - means actions changing image","Edit"), actionCollection);
+		mRotateLeftAction = edit->addAction("rotate_left",that, SLOT(rotateLeft()));
 		mRotateLeftAction->setText(i18n("Rotate Left"));
 		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
 		mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
-		connect(mRotateLeftAction, SIGNAL(triggered()),
-			that, SLOT(rotateLeft()) );
 
-		mRotateRightAction = actionCollection->addAction("rotate_right");
+		mRotateRightAction = edit->addAction("rotate_right",that, SLOT(rotateRight()));
 		mRotateRightAction->setText(i18n("Rotate Right"));
 		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
 		mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
-		connect(mRotateRightAction, SIGNAL(triggered()),
-			that, SLOT(rotateRight()) );
 
-		mMirrorAction = actionCollection->addAction("mirror");
+		mMirrorAction = edit->addAction("mirror",that, SLOT(mirror()));
 		mMirrorAction->setText(i18n("Mirror"));
 		mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
-		connect(mMirrorAction, SIGNAL(triggered()),
-			that, SLOT(mirror()) );
 
-		mFlipAction = actionCollection->addAction("flip");
+		mFlipAction = edit->addAction("flip",that, SLOT(flip()));
 		mFlipAction->setText(i18n("Flip"));
 		mFlipAction->setIcon(KIcon("object-flip-vertical"));
-		connect(mFlipAction, SIGNAL(triggered()),
-			that, SLOT(flip()) );
 
-		mResizeAction = actionCollection->addAction("resize");
+		mResizeAction = edit->addAction("resize",that, SLOT(resizeImage()) );
 		mResizeAction->setText(i18n("Resize"));
 		mResizeAction->setIcon(KIcon("transform-scale"));
-		connect(mResizeAction, SIGNAL(triggered()),
-			that, SLOT(resizeImage()) );
 
-		mCropAction = actionCollection->addAction("crop");
+		mCropAction = edit->addAction("crop",that, SLOT(showCropSideBar()));
 		mCropAction->setText(i18n("Crop"));
 		mCropAction->setIcon(KIcon("transform-crop-and-resize"));
-		connect(mCropAction, SIGNAL(triggered()),
-			that, SLOT(showCropSideBar()) );
 
-		mRedEyeReductionAction = actionCollection->addAction("red_eye_reduction");
+		mRedEyeReductionAction = edit->addAction("red_eye_reduction",that, SLOT(showRedEyeReductionSideBar()) );
 		mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
 		//mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
-		connect(mRedEyeReductionAction, SIGNAL(triggered()),
-			that, SLOT(showRedEyeReductionSideBar()) );
 
 		mActionList
 			<< mRotateLeftAction
@@ -175,7 +163,7 @@ void ImageOpsContextManagerItem::updateSideBarContent() {
 
 	d->mGroup->clear();
 	bool notEmpty = false;
-	Q_FOREACH(QAction* action, d->mActionList) {
+	Q_FOREACH(KAction* action, d->mActionList) {
 		if (action->isEnabled()) {
 			d->mGroup->addAction(action);
 			notEmpty = true;

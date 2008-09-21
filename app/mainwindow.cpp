@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstatusbar.h>
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
+#include <kactioncategory.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <kurl.h>
@@ -137,14 +138,14 @@ struct MainWindow::Private {
 #endif
 
 	QActionGroup* mViewModeActionGroup;
-	QAction* mBrowseAction;
-	QAction* mViewAction;
-	QAction* mGoUpAction;
-	QAction* mGoToPreviousAction;
-	QAction* mGoToNextAction;
-	QAction* mToggleSideBarAction;
+	KAction* mBrowseAction;
+	KAction* mViewAction;
+	KAction* mGoUpAction;
+	KAction* mGoToPreviousAction;
+	KAction* mGoToNextAction;
+	KAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
-	QAction* mToggleSlideShowAction;
+	KAction* mToggleSlideShowAction;
 	KToggleAction* mShowMenuBarAction;
 
 	SortedDirModel* mDirModel;
@@ -264,26 +265,28 @@ struct MainWindow::Private {
 
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
+		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+                KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
+		KActionCategory* edit=new KActionCategory(i18nc("@title actions category - means actions changing image","Edit"), actionCollection);
 
-		KStandardAction::save(mWindow, SLOT(saveCurrent()), actionCollection);
-		KStandardAction::saveAs(mWindow, SLOT(saveCurrentAs()), actionCollection);
-		KStandardAction::open(mWindow, SLOT(openFile()), actionCollection);
-		KStandardAction::print(mWindow, SLOT(print()), actionCollection);
-		KStandardAction::quit(KApplication::kApplication(), SLOT(closeAllWindows()), actionCollection);
+		file->addAction(KStandardAction::Save,mWindow, SLOT(saveCurrent()));
+		file->addAction(KStandardAction::SaveAs,mWindow, SLOT(saveCurrentAs()));
+		file->addAction(KStandardAction::Open,mWindow, SLOT(openFile()));
+		file->addAction(KStandardAction::Print,mWindow, SLOT(print()));
+		file->addAction(KStandardAction::Quit,KApplication::kApplication(), SLOT(closeAllWindows()));
 
-		QAction* action = actionCollection->addAction("reload");
+		KAction* action = file->addAction("reload",mWindow,SLOT(reload()));
 		action->setText(i18nc("@action reload the currently viewed image", "Reload"));
 		action->setIcon(KIcon("view-refresh"));
 		action->setShortcut(Qt::Key_F5);
-		connect(action, SIGNAL(triggered()),
-			mWindow, SLOT(reload()) );
 
-		mBrowseAction = actionCollection->addAction("browse");
+
+		mBrowseAction = view->addAction("browse");
 		mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
 		mBrowseAction->setCheckable(true);
 		mBrowseAction->setIcon(KIcon("view-list-icons"));
 
-		mViewAction = actionCollection->addAction("view");
+		mViewAction = view->addAction("view");
 		mViewAction->setText(i18nc("@action Switch to image view", "View"));
 		mViewAction->setIcon(KIcon("view-preview"));
 		mViewAction->setCheckable(true);
@@ -295,7 +298,7 @@ struct MainWindow::Private {
 		connect(mViewModeActionGroup, SIGNAL(triggered(QAction*)),
 			mWindow, SLOT(setActiveViewModeAction(QAction*)) );
 
-		mFullScreenAction = KStandardAction::fullScreen(mWindow, SLOT(toggleFullScreen(bool)), mWindow, actionCollection);
+		mFullScreenAction = static_cast<KToggleFullScreenAction*>(view->addAction(KStandardAction::FullScreen,mWindow, SLOT(toggleFullScreen(bool))));
 		connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
 			mFullScreenAction, SLOT(trigger()) );
 
@@ -305,54 +308,44 @@ struct MainWindow::Private {
 		connect(reduceLevelOfDetailsShortcut, SIGNAL(activated()),
 			mWindow, SLOT(reduceLevelOfDetails()) );
 
-		mGoToPreviousAction = actionCollection->addAction("go_previous");
+		mGoToPreviousAction = view->addAction("go_previous",mWindow, SLOT(goToPrevious()));
 		mGoToPreviousAction->setIcon(KIcon("media-seek-backward"));
 		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
 		mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
-		connect(mGoToPreviousAction, SIGNAL(triggered()),
-			mWindow, SLOT(goToPrevious()) );
 
-		mGoToNextAction = actionCollection->addAction("go_next");
+		mGoToNextAction = view->addAction("go_next",mWindow, SLOT(goToNext()));
 		mGoToNextAction->setIcon(KIcon("media-seek-forward"));
 		mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
 		mGoToNextAction->setToolTip(i18n("Go to Next Image"));
 		mGoToNextAction->setShortcut(Qt::Key_Space);
-		connect(mGoToNextAction, SIGNAL(triggered()),
-			mWindow, SLOT(goToNext()) );
 
 
-		mGoUpAction = KStandardAction::up(mWindow, SLOT(goUp()), actionCollection);
+		mGoUpAction = view->addAction(KStandardAction::Up,mWindow, SLOT(goUp()));
 
-		action = actionCollection->addAction("go_start_page");
+		action = view->addAction("go_start_page",mWindow, SLOT(showStartPage()));
 		action->setIcon(KIcon("go-home"));
 		action->setText(i18nc("@action", "Start Page"));
-		connect(action, SIGNAL(triggered()),
-			mWindow, SLOT(showStartPage()) );
 
-		mToggleSideBarAction = actionCollection->addAction("toggle_sidebar");
+		mToggleSideBarAction = view->addAction("toggle_sidebar",mWindow, SLOT(toggleSideBar()));
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		mToggleSideBarAction->setShortcut(Qt::Key_F11);
-		connect(mToggleSideBarAction, SIGNAL(triggered()),
-			mWindow, SLOT(toggleSideBar()) );
 
-		mToggleSlideShowAction = actionCollection->addAction("toggle_slideshow");
+		mToggleSlideShowAction = view->addAction("toggle_slideshow",mWindow, SLOT(toggleSlideShow()));
 		mWindow->updateSlideShowAction();
-		connect(mToggleSlideShowAction, SIGNAL(triggered()),
-			mWindow, SLOT(toggleSlideShow()) );
 		connect(mSlideShow, SIGNAL(stateChanged(bool)),
 			mWindow, SLOT(updateSlideShowAction()) );
 
-		mShowMenuBarAction = KStandardAction::showMenubar(mWindow, SLOT(toggleMenuBar()), actionCollection);
+		mShowMenuBarAction = static_cast<KToggleAction*>(view->addAction(KStandardAction::ShowMenubar,mWindow, SLOT(toggleMenuBar())));
 
-		KStandardAction::keyBindings(mWindow->guiFactory(),
-			SLOT(configureShortcuts()), actionCollection);
+		view->addAction(KStandardAction::KeyBindings,mWindow->guiFactory(),
+			SLOT(configureShortcuts()));
 
-		KStandardAction::preferences(mWindow,
-			SLOT(showConfigDialog()), actionCollection);
+		view->addAction(KStandardAction::Preferences,mWindow,
+			SLOT(showConfigDialog()));
 
-		KStandardAction::configureToolbars(mWindow,
-			SLOT(configureToolbars()), actionCollection);
+		view->addAction(KStandardAction::ConfigureToolbars,mWindow,
+			SLOT(configureToolbars()));
 	}
 
 	void setupUndoActions() {
@@ -361,20 +354,21 @@ struct MainWindow::Private {
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 		QAction* action;
 		KActionCollection* actionCollection =  mWindow->actionCollection();
+		KActionCategory* edit=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","Edit"), actionCollection);
 
 		action = undoGroup->createRedoAction(actionCollection);
 		action->setObjectName(KStandardAction::name(KStandardAction::Redo));
 		action->setIcon(KIcon("edit-redo"));
 		action->setIconText(i18n("Redo"));
 		action->setShortcuts(KStandardShortcut::redo());
-		actionCollection->addAction(action->objectName(), action);
+		edit->addAction(action->objectName(), action);
 
 		action = undoGroup->createUndoAction(actionCollection);
 		action->setObjectName(KStandardAction::name(KStandardAction::Undo));
 		action->setIcon(KIcon("edit-undo"));
 		action->setIconText(i18n("Undo"));
 		action->setShortcuts(KStandardShortcut::undo());
-		actionCollection->addAction(action->objectName(), action);
+		edit->addAction(action->objectName(), action);
 	}
 
 
@@ -1170,13 +1164,12 @@ bool MainWindow::queryClose() {
 
 	KGuiItem yes(i18n("Save All Changes"), "document-save");
 	KGuiItem no(i18n("Discard Changes"));
-    QString msg =
-        i18np("One image has been modified.", "%1 images have been modified.", list.size())
-		+ '\n'
-        + i18n("If you quit now, your changes will be lost.");
+	QString msg = i18np("One image has been modified.", "%1 images have been modified.", list.size())
+			+ '\n'
+			+ i18n("If you quit now, your changes will be lost.");
 	int answer = KMessageBox::warningYesNoCancel(
 		this,
-        msg,
+		msg,
 		QString() /* caption */,
 		yes,
 		no);

@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kactioncollection.h>
+#include <kactioncategory.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
@@ -89,16 +90,14 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
-		KAction* editLocationAction = actionCollection->addAction("edit_location");
+		KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
+		KAction* editLocationAction = view->addAction("edit_location",that, SLOT(editLocation()));
 		editLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
 		editLocationAction->setShortcut(Qt::Key_F6);
-		QObject::connect(editLocationAction, SIGNAL(triggered()),
-			that, SLOT(editLocation()));
 
-		KAction* action = actionCollection->addAction("add_folder_to_places");
+		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+		KAction* action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
 		action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
-		QObject::connect(action, SIGNAL(triggered()),
-			that, SLOT(addFolderToPlaces()));
 	}
 
 	void updateDocumentCountLabel() {
