@@ -87,32 +87,28 @@ void RedEyeReductionImageOperation::undo() {
 void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
 	const qreal radius = rect.width() / 2;
 	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
-	const qreal shadeRadius = radius * 0.8;
+	const qreal shadeRadius = qMin(radius * 0.8, radius - 1);
 	const int width = rect.width();
 	const int height = rect.height();
 	for (int y = 0; y < height; ++y, line += img->bytesPerLine()) {
 		QRgb* ptr = (QRgb*)line;
 		for (int x = 0; x < width; ++x, ++ptr) {
 			const qreal currentRadius = sqrt(pow(y - radius, 2) + pow(x - radius, 2));
+			qreal k;
 			if (currentRadius > radius) {
 				continue;
 			}
-			QColor color(*ptr);
-			int h, s1, v1, a;
-			color.getHsv(&h, &s1, &v1, &a);
-			if (s1 < 60) {
-				continue;
-			}
-			int s2, v2;
-			s2 = 60;
-			v2 = v1 / 2;
-
 			if (currentRadius > shadeRadius) {
-				const qreal k = (currentRadius - shadeRadius) / (radius - shadeRadius);
-				s2 = int(s2 * (1. - k) + s1 * k);
-				v2 = int(v2 * (1. - k) + v1 * k);
+				k = (currentRadius - shadeRadius) / (radius - shadeRadius);
+			} else {
+				k = 0;
 			}
-			color = QColor::fromHsv(h, s2, v2, a);
+
+			QColor color(*ptr);
+			const int red1 = color.red();
+			int red2 = ( color.green() + color.blue() ) / 2;
+			red2 = int(red2 * (1. - k) + red1 * k);
+			color.setRed(red2);
 			*ptr = color.rgba();
 		}
 	}
