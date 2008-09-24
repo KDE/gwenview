@@ -99,15 +99,15 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
 				continue;
 			}
 			if (currentRadius > shadeRadius) {
-				k = (currentRadius - shadeRadius) / (radius - shadeRadius);
+				k = (radius - currentRadius) / (radius - shadeRadius);
 			} else {
-				k = 0;
+				k = 1;
 			}
 
 			QColor color(*ptr);
 			const int red1 = color.red();
 			int red2 = ( color.green() + color.blue() ) / 2;
-			red2 = int(red2 * (1. - k) + red1 * k);
+			red2 = int((1 - k) * red1 + k * red2);
 			color.setRed(red2);
 			*ptr = color.rgba();
 		}
