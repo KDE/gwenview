@@ -44,8 +44,20 @@ public:
 	ImageView(QWidget* parent);
 	~ImageView();
 
-	void setCurrentTool(AbstractImageViewTool*);
+	/**
+	 * Defines the tool to display on the view. if @p tool is 0, fallback to
+	 * the default tool.
+	 * @see setDefaultTool
+	 */
+	void setCurrentTool(AbstractImageViewTool* tool);
 	AbstractImageViewTool* currentTool() const;
+
+	/**
+	 * This is the tool which the view will fallback to if one calls
+	 * setCurrentTool(0)
+	 */
+	void setDefaultTool(AbstractImageViewTool*);
+	AbstractImageViewTool* defaultTool() const;
 
 	void setAlphaBackgroundMode(AlphaBackgroundMode mode);
 

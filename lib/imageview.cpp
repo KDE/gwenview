@@ -50,6 +50,7 @@ struct ImageViewPrivate {
 	QPixmap mAlternateBuffer;
 	ImageScaler* mScaler;
 	QPointer<AbstractImageViewTool> mTool;
+	QPointer<AbstractImageViewTool> mDefaultTool;
 	bool mInsideSetZoom;
 
 
@@ -573,7 +574,7 @@ void ImageView::setCurrentTool(AbstractImageViewTool* tool) {
 	if (d->mTool) {
 		d->mTool->toolDeactivated();
 	}
-	d->mTool = tool;
+	d->mTool = tool ? QPointer<AbstractImageViewTool>(tool) : d->mDefaultTool;
 	if (d->mTool) {
 		d->mTool->toolActivated();
 	}
@@ -583,6 +584,19 @@ void ImageView::setCurrentTool(AbstractImageViewTool* tool) {
 
 AbstractImageViewTool* ImageView::currentTool() const {
 	return d->mTool;
+}
+
+
+void ImageView::setDefaultTool(AbstractImageViewTool* tool) {
+	d->mDefaultTool = tool;
+	if (!d->mTool && tool) {
+		setCurrentTool(tool);
+	}
+}
+
+
+AbstractImageViewTool* ImageView::defaultTool() const {
+	return d->mDefaultTool;
 }
 
 
