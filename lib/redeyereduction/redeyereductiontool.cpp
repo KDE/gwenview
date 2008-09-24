@@ -40,8 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview {
 
-static const int CIRCLE_HUD_SPACING = 20;
-
 class HudWidget : public QFrame {
 public:
 	HudWidget(QWidget* parent = 0)
