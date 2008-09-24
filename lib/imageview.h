@@ -71,17 +71,17 @@ public:
 
 	QPoint imageOffset() const;
 
-	QPoint mapToViewport(const QPoint& src);
-	QPoint mapToImage(const QPoint& src);
+	QPoint mapToViewport(const QPoint& src) const;
+	QPoint mapToImage(const QPoint& src) const;
 
-	QRect mapToViewport(const QRect& src);
-	QRect mapToImage(const QRect& src);
+	QRect mapToViewport(const QRect& src) const;
+	QRect mapToImage(const QRect& src) const;
 
-	QPointF mapToViewportF(const QPointF& src);
-	QPointF mapToImageF(const QPointF& src);
+	QPointF mapToViewportF(const QPointF& src) const;
+	QPointF mapToImageF(const QPointF& src) const;
 
-	QRectF mapToViewportF(const QRectF& src);
-	QRectF mapToImageF(const QRectF& src);
+	QRectF mapToViewportF(const QRectF& src) const;
+	QRectF mapToImageF(const QRectF& src) const;
 
 	qreal computeZoomToFit() const;
 	qreal computeZoomToFitWidth() const;

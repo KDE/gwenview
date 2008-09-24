@@ -586,7 +586,7 @@ AbstractImageViewTool* ImageView::currentTool() const {
 }
 
 
-QPoint ImageView::mapToViewport(const QPoint& src) {
+QPoint ImageView::mapToViewport(const QPoint& src) const {
 	QPoint dst(int(src.x() * d->mZoom), int(src.y() * d->mZoom));
 
 	dst += imageOffset();
@@ -598,7 +598,7 @@ QPoint ImageView::mapToViewport(const QPoint& src) {
 }
 
 
-QPointF ImageView::mapToViewportF(const QPointF& src) {
+QPointF ImageView::mapToViewportF(const QPointF& src) const {
 	QPointF dst(src.x() * d->mZoom, src.y() * d->mZoom);
 
 	dst += imageOffset();
@@ -610,7 +610,7 @@ QPointF ImageView::mapToViewportF(const QPointF& src) {
 }
 
 
-QRect ImageView::mapToViewport(const QRect& src) {
+QRect ImageView::mapToViewport(const QRect& src) const {
 	QRect dst(
 		mapToViewport(src.topLeft()),
 		mapToViewport(src.bottomRight())
@@ -619,7 +619,7 @@ QRect ImageView::mapToViewport(const QRect& src) {
 }
 
 
-QRectF ImageView::mapToViewportF(const QRectF& src) {
+QRectF ImageView::mapToViewportF(const QRectF& src) const {
 	QRectF dst(
 		mapToViewportF(src.topLeft()),
 		mapToViewportF(src.bottomRight())
@@ -628,7 +628,7 @@ QRectF ImageView::mapToViewportF(const QRectF& src) {
 }
 
 
-QPoint ImageView::mapToImage(const QPoint& src) {
+QPoint ImageView::mapToImage(const QPoint& src) const {
 	QPoint dst = src;
 	
 	dst.rx() += d->hScroll();
@@ -640,7 +640,7 @@ QPoint ImageView::mapToImage(const QPoint& src) {
 }
 
 
-QPointF ImageView::mapToImageF(const QPointF& src) {
+QPointF ImageView::mapToImageF(const QPointF& src) const {
 	QPointF dst = src;
 
 	dst.rx() += d->hScroll();
@@ -652,7 +652,7 @@ QPointF ImageView::mapToImageF(const QPointF& src) {
 }
 
 
-QRect ImageView::mapToImage(const QRect& src) {
+QRect ImageView::mapToImage(const QRect& src) const {
 	QRect dst(
 		mapToImage(src.topLeft()),
 		mapToImage(src.bottomRight())
@@ -661,7 +661,7 @@ QRect ImageView::mapToImage(const QRect& src) {
 }
 
 
-QRectF ImageView::mapToImageF(const QRectF& src) {
+QRectF ImageView::mapToImageF(const QRectF& src) const {
 	QRectF dst(
 		mapToImageF(src.topLeft()),
 		mapToImageF(src.bottomRight())
