@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPushButton>
+#include <QToolButton>
 #include <QRect>
 
 // KDE
@@ -46,7 +46,8 @@ class HudWidget : public QFrame {
 public:
 	HudWidget(QWidget* parent = 0)
 	: QFrame(parent) {
-		mCloseButton = new QPushButton(this);
+		mCloseButton = new QToolButton(this);
+		mCloseButton->setAutoRaise(true);
 		mCloseButton->setIcon(SmallIcon("window-close"));
 	}
 
@@ -74,7 +75,7 @@ public:
 		layout->addWidget(mCloseButton);
 	}
 
-	QPushButton* closeButton() const {
+	QToolButton* closeButton() const {
 		return mCloseButton;
 	}
 
@@ -84,7 +85,7 @@ public:
 
 private:
 	QWidget* mMainWidget;
-	QPushButton* mCloseButton;
+	QToolButton* mCloseButton;
 };
 
 
