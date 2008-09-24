@@ -100,7 +100,7 @@ struct RedEyeReductionToolPrivate {
 
 
 	void showNotSetHudWidget() {
-		delete mHud;
+		mHud->deleteLater();
 		mHud = 0;
 		QLabel* label = new QLabel(i18n("Click on the red eye you want to fix."));
 		label->show();
@@ -123,7 +123,7 @@ struct RedEyeReductionToolPrivate {
 
 
 	void createHudWidgetForWidget(QWidget* widget) {
-		delete mHudWidget;
+		mHudWidget->deleteLater();
 		mHudWidget = new HudWidget();
 		mHudWidget->setMainWidget(widget);
 		mHudWidget->adjustSize();
@@ -216,7 +216,7 @@ void RedEyeReductionTool::toolActivated() {
 
 
 void RedEyeReductionTool::toolDeactivated() {
-	delete d->mHudWidget;
+	d->mHudWidget->deleteLater();
 }
 
 

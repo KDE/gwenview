@@ -124,7 +124,7 @@ void SideBarGroup::addWidget(QWidget* widget) {
 
 
 void SideBarGroup::clear() {
-	delete d->mContainer;
+	d->mContainer->deleteLater();
 
 	d->mContainer = new QFrame(this);
 	d->mContainer->setBackgroundRole(QPalette::Base);
