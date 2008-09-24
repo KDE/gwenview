@@ -38,6 +38,11 @@ class RedEyeReductionToolPrivate;
 class RedEyeReductionTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
+	enum Status {
+		NotSet,
+		Adjusting
+	};
+
 	RedEyeReductionTool(ImageView* parent);
 	~RedEyeReductionTool();
 

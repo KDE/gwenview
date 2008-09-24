@@ -33,13 +33,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageview.h"
 #include "redeyereductionimageoperation.h"
 
-static const int UNINITIALIZED_X = -1;
-
 namespace Gwenview {
 
 
 struct RedEyeReductionToolPrivate {
 	RedEyeReductionTool* mRedEyeReductionTool;
+	RedEyeReductionTool::Status mStatus;
 	QPoint mCenter;
 	int mRadius;
 };
@@ -49,8 +48,8 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new RedEyeReductionToolPrivate) {
 	d->mRedEyeReductionTool = this;
-	d->mCenter.setX(UNINITIALIZED_X);
 	d->mRadius = 12;
+	d->mStatus = NotSet;
 }
 
 
@@ -71,7 +70,7 @@ void RedEyeReductionTool::setRadius(int radius) {
 
 
 QRect RedEyeReductionTool::rect() const {
-	if (d->mCenter.x() == UNINITIALIZED_X) {
+	if (d->mStatus == NotSet) {
 		return QRect();
 	}
 	return QRect(d->mCenter.x() - d->mRadius, d->mCenter.y() - d->mRadius, d->mRadius * 2, d->mRadius * 2);
@@ -79,7 +78,7 @@ QRect RedEyeReductionTool::rect() const {
 
 
 void RedEyeReductionTool::paint(QPainter* painter) {
-	if (d->mCenter.x() == UNINITIALIZED_X) {
+	if (d->mStatus == NotSet) {
 		return;
 	}
 	QRect docRect = rect();
@@ -93,6 +92,7 @@ void RedEyeReductionTool::paint(QPainter* painter) {
 
 void RedEyeReductionTool::mousePressEvent(QMouseEvent* event) {
 	d->mCenter = imageView()->mapToImage(event->pos());
+	d->mStatus = Adjusting;
 	imageView()->viewport()->update();
 }
 
