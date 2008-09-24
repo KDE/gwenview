@@ -104,7 +104,6 @@ struct RedEyeReductionToolPrivate {
 	RedEyeReductionHud* mHud;
 	HudWidget* mHudWidget;
 	WidgetFloater* mFloater;
-	QPushButton* mApplyButton;
 
 
 	void showNotSetHudWidget() {
