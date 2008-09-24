@@ -24,10 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPushButton>
 #include <QRect>
 
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local
 #include "imageview.h"
@@ -41,6 +43,20 @@ struct RedEyeReductionToolPrivate {
 	RedEyeReductionTool::Status mStatus;
 	QPoint mCenter;
 	int mRadius;
+	QPushButton* mApplyButton;
+
+	void updateHud() {
+		if (mStatus != RedEyeReductionTool::Adjusting) {
+			mApplyButton->hide();
+			return;
+		}
+		const ImageView* view = mRedEyeReductionTool->imageView();
+		QPoint pos = view->mapToViewport(mCenter);
+		pos.ry() += mRadius * view->zoom() + 5;
+		mApplyButton->move(pos);
+		mApplyButton->adjustSize();
+		mApplyButton->show();
+	}
 };
 
 
@@ -50,6 +66,10 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 	d->mRedEyeReductionTool = this;
 	d->mRadius = 12;
 	d->mStatus = NotSet;
+	d->mApplyButton = new QPushButton(view->viewport());
+	d->mApplyButton->setText(i18n("Apply"));
+	d->mApplyButton->hide();
+	connect(d->mApplyButton, SIGNAL(clicked()), SLOT(slotApplyClicked()));
 }
 
 
@@ -65,6 +85,7 @@ int RedEyeReductionTool::radius() const {
 
 void RedEyeReductionTool::setRadius(int radius) {
 	d->mRadius = radius;
+	d->updateHud();
 	imageView()->viewport()->update();
 }
 
@@ -93,6 +114,8 @@ void RedEyeReductionTool::paint(QPainter* painter) {
 void RedEyeReductionTool::mousePressEvent(QMouseEvent* event) {
 	d->mCenter = imageView()->mapToImage(event->pos());
 	d->mStatus = Adjusting;
+
+	d->updateHud();
 	imageView()->viewport()->update();
 }
 
@@ -101,6 +124,7 @@ void RedEyeReductionTool::mouseMoveEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::NoButton) {
 		return;
 	}
+	d->updateHud();
 	d->mCenter = imageView()->mapToImage(event->pos());
 	imageView()->viewport()->update();
 }
@@ -108,6 +132,13 @@ void RedEyeReductionTool::mouseMoveEvent(QMouseEvent* event) {
 
 void RedEyeReductionTool::toolActivated() {
 	imageView()->viewport()->setCursor(Qt::CrossCursor);
+}
+
+
+void RedEyeReductionTool::slotApplyClicked() {
+	emit applyClicked();
+	d->mStatus = NotSet;
+	d->updateHud();
 }
 
 

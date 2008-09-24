@@ -63,10 +63,7 @@ RedEyeReductionSideBar::RedEyeReductionSideBar(QWidget* parent, ImageView* image
 	connect(d->radiusSpinBox, SIGNAL(valueChanged(int)),
 		d->mRedEyeReductionTool, SLOT(setRadius(int)) );
 
-	QPushButton* btn = d->buttonBox->button(QDialogButtonBox::Apply);
-	Q_ASSERT(btn);
-	connect(btn, SIGNAL(clicked()),
-		SLOT(apply()) );
+	connect(d->mRedEyeReductionTool, SIGNAL(applyClicked()), SLOT(apply()) );
 
 	connect(d->buttonBox, SIGNAL(rejected()),
 		SIGNAL(done()) );

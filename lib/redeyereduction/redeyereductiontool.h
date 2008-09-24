@@ -57,8 +57,14 @@ public:
 
 	int radius() const;
 
+Q_SIGNALS:
+	void applyClicked();
+
 public Q_SLOTS:
 	void setRadius(int);
+
+private Q_SLOTS:
+	void slotApplyClicked();
 
 private:
 	RedEyeReductionToolPrivate* const d;
