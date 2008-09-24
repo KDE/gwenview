@@ -1,6 +1,14 @@
 <ui version="4.0" >
  <class>RedEyeReductionHud</class>
  <widget class="QWidget" name="RedEyeReductionHud" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>253</width>
+    <height>37</height>
+   </rect>
+  </property>
   <property name="windowTitle" >
    <string/>
   </property>
@@ -33,9 +41,12 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="applyButton" >
+    <widget class="QToolButton" name="applyButton" >
      <property name="text" >
       <string>Apply</string>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>

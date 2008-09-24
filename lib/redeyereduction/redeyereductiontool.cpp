@@ -62,7 +62,7 @@ public:
 			"	border: 1px solid rgba(0, 0, 0, 80%);"
 			"	border-radius: 8px;"
 			"}"
-			"QLabel {"
+			"QLabel, QToolButton {"
 			"	color: white;"
 			"}"
 			);
