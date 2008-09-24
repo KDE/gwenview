@@ -23,9 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
+#include <QPointer>
 #include <QWidget>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 
@@ -35,7 +37,7 @@ const int MARGIN = 12;
 
 struct WidgetFloaterPrivate {
 	QWidget* mParent;
-	QWidget* mChild;
+	QPointer<QWidget> mChild;
 	Qt::Alignment mAlignment;
 
 
@@ -98,6 +100,8 @@ void WidgetFloater::setChildWidget(QWidget* child) {
 	d->mChild->setParent(d->mParent);
 	d->mChild->installEventFilter(this);
 	d->updateChildGeometry();
+	d->mChild->raise();
+	d->mChild->show();
 }
 
 
