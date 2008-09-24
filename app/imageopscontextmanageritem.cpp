@@ -328,7 +328,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool() {
 
 	AbstractImageViewTool* tool = imageView->currentTool();
 	imageView->setCurrentTool(0);
-	delete tool;
+	tool->deleteLater();
 }
 
 
