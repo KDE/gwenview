@@ -71,6 +71,9 @@ void RedEyeReductionTool::setRadius(int radius) {
 
 
 QRect RedEyeReductionTool::rect() const {
+	if (d->mCenter.x() == UNINITIALIZED_X) {
+		return QRect();
+	}
 	return QRect(d->mCenter.x() - d->mRadius, d->mCenter.y() - d->mRadius, d->mRadius * 2, d->mRadius * 2);
 }
 

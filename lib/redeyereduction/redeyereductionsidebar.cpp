@@ -86,7 +86,11 @@ RedEyeReductionSideBar::~RedEyeReductionSideBar() {
 
 
 void RedEyeReductionSideBar::slotAccepted() {
-	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(d->mRedEyeReductionTool->rect());
+	QRect rect = d->mRedEyeReductionTool->rect();
+	if (!rect.isValid()) {
+		return;
+	}
+	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(rect);
 	emit imageOperationRequested(op);
 	emit done();
 }
