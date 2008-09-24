@@ -93,7 +93,7 @@ struct RedEyeReductionToolPrivate {
 	RedEyeReductionTool* mRedEyeReductionTool;
 	RedEyeReductionTool::Status mStatus;
 	QPointF mCenter;
-	int mRadius;
+	int mDiameter;
 	RedEyeReductionHud* mHud;
 	HudWidget* mHudWidget;
 	WidgetFloater* mFloater;
@@ -112,11 +112,11 @@ struct RedEyeReductionToolPrivate {
 	void showAdjustingHudWidget() {
 		mHud = new RedEyeReductionHud();
 
-		mHud->radiusSpinBox->setValue(mRadius);
+		mHud->diameterSpinBox->setValue(mDiameter);
 		QObject::connect(mHud->applyButton, SIGNAL(clicked()),
 			mRedEyeReductionTool, SLOT(slotApplyClicked()));
-		QObject::connect(mHud->radiusSpinBox, SIGNAL(valueChanged(int)),
-			mRedEyeReductionTool, SLOT(setRadius(int)));
+		QObject::connect(mHud->diameterSpinBox, SIGNAL(valueChanged(int)),
+			mRedEyeReductionTool, SLOT(setDiameter(int)));
 
 		createHudWidgetForWidget(mHud);
 	}
@@ -142,7 +142,7 @@ struct RedEyeReductionToolPrivate {
 		if (mStatus == RedEyeReductionTool::NotSet) {
 			return QRectF();
 		}
-		return QRectF(mCenter.x() - mRadius, mCenter.y() - mRadius, mRadius * 2, mRadius * 2);
+		return QRectF(mCenter.x() - mDiameter / 2, mCenter.y() - mDiameter / 2, mDiameter, mDiameter);
 	}
 };
 
@@ -151,7 +151,7 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new RedEyeReductionToolPrivate) {
 	d->mRedEyeReductionTool = this;
-	d->mRadius = 12;
+	d->mDiameter = 24;
 	d->mStatus = NotSet;
 	d->mHud = 0;
 	d->mHudWidget = 0;
@@ -234,8 +234,8 @@ void RedEyeReductionTool::slotApplyClicked() {
 }
 
 
-void RedEyeReductionTool::setRadius(int radius) {
-	d->mRadius = radius;
+void RedEyeReductionTool::setDiameter(int value) {
+	d->mDiameter = value;
 	imageView()->viewport()->update();
 }
 

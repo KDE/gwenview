@@ -16,12 +16,12 @@
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Radius</string>
+      <string>Size</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QSlider" name="radiusSlider" >
+    <widget class="QSlider" name="diameterSlider" >
      <property name="minimum" >
       <number>2</number>
      </property>
@@ -34,7 +34,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="radiusSpinBox" >
+    <widget class="QSpinBox" name="diameterSpinBox" >
      <property name="minimum" >
       <number>2</number>
      </property>
@@ -55,9 +55,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>radiusSlider</sender>
+   <sender>diameterSlider</sender>
    <signal>sliderMoved(int)</signal>
-   <receiver>radiusSpinBox</receiver>
+   <receiver>diameterSpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -71,9 +71,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>radiusSpinBox</sender>
+   <sender>diameterSpinBox</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>radiusSlider</receiver>
+   <receiver>diameterSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >

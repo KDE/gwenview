@@ -60,7 +60,7 @@ Q_SIGNALS:
 	void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
-	void setRadius(int);
+	void setDiameter(int);
 	void slotApplyClicked();
 
 private:
