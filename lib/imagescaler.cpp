@@ -19,8 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "imagescaler.moc"
 
-#include <math.h>
-
 // Qt
 #include <QImage>
 #include <QRegion>
@@ -30,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/document/document.h>
+#include <lib/paintutils.h>
 
 #undef ENABLE_LOG
 #undef LOG
@@ -93,18 +92,9 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 }
 
 
+	// FIXME: Remove this method
 QRect ImageScaler::containingRect(const QRectF& rectF) {
-	return QRect(
-		QPoint(
-			qRound(floor(rectF.left())),
-			qRound(floor(rectF.top()))
-			),
-		QPoint(
-			qRound(ceil(rectF.right() - 1.)),
-			qRound(ceil(rectF.bottom() - 1.))
-			)
-		);
-	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
+	return PaintUtils::containingRect(rectF);
 }
 
 

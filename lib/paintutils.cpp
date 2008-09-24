@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "paintutils.h"
 
+#include <math.h>
+
 // Qt
 #include <QPainter>
 #include <QPainterPath>
@@ -129,6 +131,19 @@ QColor alphaAdjustedF(const QColor& color, qreal alphaF) {
 	return tmp;
 }
 
+QRect containingRect(const QRectF& rectF) {
+	return QRect(
+		QPoint(
+			qRound(floor(rectF.left())),
+			qRound(floor(rectF.top()))
+			),
+		QPoint(
+			qRound(ceil(rectF.right() - 1.)),
+			qRound(ceil(rectF.bottom() - 1.))
+			)
+		);
+	// Note: QRect::right = left + width - 1, while QRectF::right = left + width
+}
 
 } // namespace
 } // namespace

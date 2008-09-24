@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class QColor;
 class QPainterPath;
 class QPixmap;
+class QRect;
 class QRectF;
 class QSize;
 
@@ -59,6 +60,11 @@ GWENVIEWLIB_EXPORT QColor adjustedHsv(const QColor& color, int deltaH, int delta
  * alphaF.
  */
 GWENVIEWLIB_EXPORT QColor alphaAdjustedF(const QColor& color, qreal alphaF);
+
+/**
+ * Returns the smallest QRect which contains @p rectF
+ */
+GWENVIEWLIB_EXPORT QRect containingRect(const QRectF& rectF);
 
 } // namespace
 
