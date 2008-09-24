@@ -108,7 +108,7 @@ struct RedEyeReductionToolPrivate {
 	void showNotSetHudWidget() {
 		delete mHud;
 		mHud = 0;
-		QLabel* label = new QLabel(i18n("Click on the red eye"));
+		QLabel* label = new QLabel(i18n("Click on the red eye you want to fix."));
 		label->show();
 		label->adjustSize();
 		createHudWidgetForWidget(label);
