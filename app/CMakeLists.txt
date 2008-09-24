@@ -21,7 +21,6 @@ set(gwenview_SRCS
 	fileoperations.cpp
 	filterwidget.cpp
 	fullscreencontent.cpp
-	fullscreentheme.cpp
 	infocontextmanageritem.cpp
 	imagemetainfodialog.cpp
 	imageopscontextmanageritem.cpp

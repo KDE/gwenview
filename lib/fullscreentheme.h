@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FULLSCREENTHEME_H
 #define FULLSCREENTHEME_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -34,7 +36,7 @@ namespace Gwenview {
 
 
 class FullScreenThemePrivate;
-class FullScreenTheme {
+class GWENVIEWLIB_EXPORT FullScreenTheme {
 public:
 	FullScreenTheme(const QString& themeName);
 	QString styleSheet() const;

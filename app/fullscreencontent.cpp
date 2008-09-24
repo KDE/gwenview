@@ -39,13 +39,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 
 // Local
-#include "fullscreentheme.h"
 #include "imagemetainfodialog.h"
 #include "thumbnailbarview.h"
 #include "ui_fullscreenconfigdialog.h"
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
+#include <lib/fullscreentheme.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
 #include <lib/slideshow.h>

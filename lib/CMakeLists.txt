@@ -34,6 +34,7 @@ set(gwenviewlib_SRCS
 	expandbutton.cpp
 	exiv2imageloader.cpp
 	fullscreenbar.cpp
+	fullscreentheme.cpp
 	imageformats/imageformats.cpp
 	imageformats/jpegplugin.cpp
 	imageformats/jpeghandler.cpp
