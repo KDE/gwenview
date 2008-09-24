@@ -63,7 +63,6 @@ struct ImageOpsContextManagerItem::Private {
 	MainWindow* mMainWindow;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
-	QPointer<AbstractImageViewTool> mDefaultTool;
 
 	KAction* mRotateLeftAction;
 	KAction* mRotateRightAction;
@@ -298,7 +297,6 @@ void ImageOpsContextManagerItem::startRedEyeReduction() {
 		kError() << "No ImageView available!";
 		return;
 	}
-	d->mDefaultTool = imageView->currentTool();
 	RedEyeReductionTool* tool = new RedEyeReductionTool(imageView);
 	connect(tool, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
 		SLOT(applyImageOperation(AbstractImageOperation*)) );
@@ -329,7 +327,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool() {
 	}
 
 	AbstractImageViewTool* tool = imageView->currentTool();
-	imageView->setCurrentTool(d->mDefaultTool);
+	imageView->setCurrentTool(0);
 	delete tool;
 }
 

@@ -40,7 +40,6 @@ namespace Gwenview {
 struct CropSideBarPrivate : public Ui_CropSideBar {
 	Document::Ptr mDocument;
 	QWidget* mWidget;
-	AbstractImageViewTool* mPreviousTool;
 	QPointer<CropTool> mCropTool;
 	bool mUpdatingFromCropTool;
 
@@ -108,7 +107,6 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 	d->mDocument = document;
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = new CropTool(imageView);
-	d->mPreviousTool = imageView->currentTool();
 	imageView->setCurrentTool(d->mCropTool);
 	d->mWidget = new QWidget(this);
 	d->setupUi(d->mWidget);
@@ -161,7 +159,7 @@ CropSideBar::~CropSideBar() {
 	// The crop tool is owned by the image view, so it may already have been
 	// deleted, for example if we quit while the dialog is still opened.
 	if (d->mCropTool) {
-		d->mCropTool->imageView()->setCurrentTool(d->mPreviousTool);
+		d->mCropTool->imageView()->setCurrentTool(0);
 	}
 	delete d;
 }
