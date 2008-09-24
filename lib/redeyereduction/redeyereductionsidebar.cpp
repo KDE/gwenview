@@ -59,16 +59,14 @@ RedEyeReductionSideBar::RedEyeReductionSideBar(QWidget* parent, ImageView* image
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(d->mWidget);
 
-	QPushButton* ok = d->buttonBox->button(QDialogButtonBox::Ok);
-	Q_ASSERT(ok);
-	ok->setText(i18n("Apply"));
-
 	d->radiusSpinBox->setValue(d->mRedEyeReductionTool->radius());
 	connect(d->radiusSpinBox, SIGNAL(valueChanged(int)),
 		d->mRedEyeReductionTool, SLOT(setRadius(int)) );
 
-	connect(d->buttonBox, SIGNAL(accepted()),
-		SLOT(slotAccepted()) );
+	QPushButton* btn = d->buttonBox->button(QDialogButtonBox::Apply);
+	Q_ASSERT(btn);
+	connect(btn, SIGNAL(clicked()),
+		SLOT(apply()) );
 
 	connect(d->buttonBox, SIGNAL(rejected()),
 		SIGNAL(done()) );
@@ -85,14 +83,13 @@ RedEyeReductionSideBar::~RedEyeReductionSideBar() {
 }
 
 
-void RedEyeReductionSideBar::slotAccepted() {
+void RedEyeReductionSideBar::apply() {
 	QRect rect = d->mRedEyeReductionTool->rect();
 	if (!rect.isValid()) {
 		return;
 	}
 	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(rect);
 	emit imageOperationRequested(op);
-	emit done();
 }
 
 

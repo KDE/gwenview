@@ -48,7 +48,7 @@ Q_SIGNALS:
 	void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
-	void slotAccepted();
+	void apply();
 
 private:
 	RedEyeReductionSideBarPrivate* const d;
