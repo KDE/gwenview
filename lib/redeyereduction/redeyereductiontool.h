@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef REDEYEREDUCTIONTOOL_H
 #define REDEYEREDUCTIONTOOL_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -28,14 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/abstractimageviewtool.h>
 
-class QRect;
-
 namespace Gwenview {
 
+class AbstractImageOperation;
 class ImageView;
 
 class RedEyeReductionToolPrivate;
-class RedEyeReductionTool : public AbstractImageViewTool {
+class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
 	enum Status {
@@ -46,24 +47,20 @@ public:
 	RedEyeReductionTool(ImageView* parent);
 	~RedEyeReductionTool();
 
-	QRect rect() const;
-
 	virtual void paint(QPainter*);
 
 	virtual void mousePressEvent(QMouseEvent*);
 	virtual void mouseMoveEvent(QMouseEvent*);
 
 	virtual void toolActivated();
-
-	int radius() const;
+	virtual void toolDeactivated();
 
 Q_SIGNALS:
-	void applyClicked();
-
-public Q_SLOTS:
-	void setRadius(int);
+	void done();
+	void imageOperationRequested(AbstractImageOperation*);
 
 private Q_SLOTS:
+	void setRadius(int);
 	void slotApplyClicked();
 
 private:

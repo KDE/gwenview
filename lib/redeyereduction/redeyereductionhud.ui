@@ -1,0 +1,79 @@
+<ui version="4.0" >
+ <class>RedEyeReductionHud</class>
+ <widget class="QWidget" name="RedEyeReductionHud" >
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" >
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="radiusSlider" >
+     <property name="minimum" >
+      <number>2</number>
+     </property>
+     <property name="maximum" >
+      <number>40</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="radiusSpinBox" >
+     <property name="minimum" >
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="applyButton" >
+     <property name="text" >
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>radiusSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>radiusSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>120</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>175</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radiusSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>radiusSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>153</x>
+     <y>7</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>124</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

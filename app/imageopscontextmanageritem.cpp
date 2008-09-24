@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageopscontextmanageritem.moc"
 
 // Qt
+#include <QPointer>
 
 // KDE
 #include <kaction.h>
@@ -42,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
-#include <lib/redeyereduction/redeyereductionsidebar.h>
+#include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/transformimageoperation.h>
 
@@ -62,6 +63,7 @@ struct ImageOpsContextManagerItem::Private {
 	MainWindow* mMainWindow;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
+	QPointer<AbstractImageViewTool> mDefaultTool;
 
 	KAction* mRotateLeftAction;
 	KAction* mRotateRightAction;
@@ -101,7 +103,7 @@ struct ImageOpsContextManagerItem::Private {
 		mCropAction->setText(i18n("Crop"));
 		mCropAction->setIcon(KIcon("transform-crop-and-resize"));
 
-		mRedEyeReductionAction = edit->addAction("red_eye_reduction",that, SLOT(showRedEyeReductionSideBar()) );
+		mRedEyeReductionAction = edit->addAction("red_eye_reduction",that, SLOT(startRedEyeReduction()) );
 		mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
 		//mRedEyeReductionAction->setIcon(KIcon("transform-crop-and-resize"));
 
@@ -287,7 +289,7 @@ void ImageOpsContextManagerItem::showCropSideBar() {
 }
 
 
-void ImageOpsContextManagerItem::showRedEyeReductionSideBar() {
+void ImageOpsContextManagerItem::startRedEyeReduction() {
 	if (!d->ensureEditable()) {
 		return;
 	}
@@ -296,14 +298,14 @@ void ImageOpsContextManagerItem::showRedEyeReductionSideBar() {
 		kError() << "No ImageView available!";
 		return;
 	}
-	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
-	RedEyeReductionSideBar* redEyeReductionSideBar = new RedEyeReductionSideBar(d->mMainWindow, imageView, doc);
-	connect(redEyeReductionSideBar, SIGNAL(done()),
-		d->mMainWindow, SLOT(hideTemporarySideBar()) );
-	connect(redEyeReductionSideBar, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
+	d->mDefaultTool = imageView->currentTool();
+	RedEyeReductionTool* tool = new RedEyeReductionTool(imageView);
+	connect(tool, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
 		SLOT(applyImageOperation(AbstractImageOperation*)) );
+	connect(tool, SIGNAL(done()),
+		SLOT(restoreDefaultImageViewTool()) );
 
-	d->mMainWindow->showTemporarySideBar(redEyeReductionSideBar);
+	imageView->setCurrentTool(tool);
 }
 
 
@@ -316,6 +318,19 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
+}
+
+
+void ImageOpsContextManagerItem::restoreDefaultImageViewTool() {
+	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	if (!imageView) {
+		kError() << "No ImageView available!";
+		return;
+	}
+
+	AbstractImageViewTool* tool = imageView->currentTool();
+	imageView->setCurrentTool(d->mDefaultTool);
+	delete tool;
 }
 
 
