@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "imageview.h"
+#include "paintutils.h"
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionhud.h"
 #include "widgetfloater.h"
@@ -91,7 +92,7 @@ struct RedEyeReductionHud : public QWidget, public Ui_RedEyeReductionHud {
 struct RedEyeReductionToolPrivate {
 	RedEyeReductionTool* mRedEyeReductionTool;
 	RedEyeReductionTool::Status mStatus;
-	QPoint mCenter;
+	QPointF mCenter;
 	int mRadius;
 	RedEyeReductionHud* mHud;
 	HudWidget* mHudWidget;
@@ -137,11 +138,11 @@ struct RedEyeReductionToolPrivate {
 	}
 
 
-	QRect rect() const {
+	QRectF rectF() const {
 		if (mStatus == RedEyeReductionTool::NotSet) {
-			return QRect();
+			return QRectF();
 		}
-		return QRect(mCenter.x() - mRadius, mCenter.y() - mRadius, mRadius * 2, mRadius * 2);
+		return QRectF(mCenter.x() - mRadius, mCenter.y() - mRadius, mRadius * 2, mRadius * 2);
 	}
 };
 
@@ -172,13 +173,21 @@ void RedEyeReductionTool::paint(QPainter* painter) {
 	if (d->mStatus == NotSet) {
 		return;
 	}
-	QRect docRect = d->rect();
+	QRectF docRectF = d->rectF();
 	imageView()->document()->waitUntilLoaded();
-	QImage img = imageView()->document()->image().copy(docRect);
-	const QRectF viewRectF = imageView()->mapToViewportF(docRect);
 
-	RedEyeReductionImageOperation::apply(&img, img.rect());
-	painter->drawImage(viewRectF, img);
+	QRect docRect = PaintUtils::containingRect(docRectF);
+	QImage img = imageView()->document()->image().copy(docRect);
+	QRectF imgRectF(
+		docRectF.left() - docRect.left(),
+		docRectF.top()  - docRect.top(),
+		docRectF.width(),
+		docRectF.height()
+		);
+	RedEyeReductionImageOperation::apply(&img, imgRectF);
+
+	const QRectF viewRectF = imageView()->mapToViewportF(docRectF);
+	painter->drawImage(viewRectF, img, imgRectF);
 }
 
 
@@ -187,7 +196,7 @@ void RedEyeReductionTool::mousePressEvent(QMouseEvent* event) {
 		d->showAdjustingHudWidget();
 		d->mStatus = Adjusting;
 	}
-	d->mCenter = imageView()->mapToImage(event->pos());
+	d->mCenter = imageView()->mapToImageF(event->pos());
 	imageView()->viewport()->update();
 }
 
@@ -196,7 +205,7 @@ void RedEyeReductionTool::mouseMoveEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::NoButton) {
 		return;
 	}
-	d->mCenter = imageView()->mapToImage(event->pos());
+	d->mCenter = imageView()->mapToImageF(event->pos());
 	imageView()->viewport()->update();
 }
 
@@ -212,12 +221,12 @@ void RedEyeReductionTool::toolDeactivated() {
 
 
 void RedEyeReductionTool::slotApplyClicked() {
-	QRect docRect = d->rect();
-	if (!docRect.isValid()) {
+	QRectF docRectF = d->rectF();
+	if (!docRectF.isValid()) {
 		kWarning() << "invalid rect";
 		return;
 	}
-	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRect);
+	RedEyeReductionImageOperation* op = new RedEyeReductionImageOperation(docRectF);
 	emit imageOperationRequested(op);
 
 	d->mStatus = NotSet;

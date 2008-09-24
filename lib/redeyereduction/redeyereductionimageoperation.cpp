@@ -35,19 +35,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "document/document.h"
 #include "document/abstractdocumenteditor.h"
+#include "paintutils.h"
 
 namespace Gwenview {
 
 
 struct RedEyeReductionImageOperationPrivate {
-	QRect mRect;
+	QRectF mRectF;
 	QImage mOriginalImage;
 };
 
 
-RedEyeReductionImageOperation::RedEyeReductionImageOperation(const QRect& rect)
+RedEyeReductionImageOperation::RedEyeReductionImageOperation(const QRectF& rectF)
 : d(new RedEyeReductionImageOperationPrivate) {
-	d->mRect = rect;
+	d->mRectF = rectF;
 	setText(i18n("RedEyeReduction"));
 }
 
@@ -59,8 +60,10 @@ RedEyeReductionImageOperation::~RedEyeReductionImageOperation() {
 
 void RedEyeReductionImageOperation::redo() {
 	QImage img = document()->image();
-	d->mOriginalImage = img.copy(d->mRect);
-	apply(&img, d->mRect);
+
+	QRect rect = PaintUtils::containingRect(d->mRectF);
+	d->mOriginalImage = img.copy(rect);
+	apply(&img, d->mRectF);
 	if (!document()->editor()) {
 		kWarning() << "!document->editor()";
 		return;
@@ -78,22 +81,26 @@ void RedEyeReductionImageOperation::undo() {
 	{
 		QPainter painter(&img);
 		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		painter.drawImage(d->mRect.topLeft(), d->mOriginalImage);
+		QRect rect = PaintUtils::containingRect(d->mRectF);
+		painter.drawImage(rect.topLeft(), d->mOriginalImage);
 	}
 	document()->editor()->setImage(img);
 }
 
 
-void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
-	const qreal radius = rect.width() / 2;
+void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
+	const qreal radius = rectF.width() / 2;
+	const qreal centerX = rectF.x() + radius;
+	const qreal centerY = rectF.y() + radius;
+
+	QRect rect = PaintUtils::containingRect(rectF);
 	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
 	const qreal shadeRadius = qMin(radius * 0.7, radius - 1);
-	const int width = rect.width();
-	const int height = rect.height();
-	for (int y = 0; y < height; ++y, line += img->bytesPerLine()) {
+
+	for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
 		QRgb* ptr = (QRgb*)line;
-		for (int x = 0; x < width; ++x, ++ptr) {
-			const qreal currentRadius = sqrt(pow(y - radius, 2) + pow(x - radius, 2));
+		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
+			const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));
 			qreal k;
 			if (currentRadius > radius) {
 				continue;

@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/abstractimageoperation.h>
 
-class QRect;
+class QRectF;
 
 namespace Gwenview {
 
@@ -38,13 +38,13 @@ namespace Gwenview {
 class RedEyeReductionImageOperationPrivate;
 class GWENVIEWLIB_EXPORT RedEyeReductionImageOperation : public AbstractImageOperation {
 public:
-	RedEyeReductionImageOperation(const QRect&);
+	RedEyeReductionImageOperation(const QRectF&);
 	~RedEyeReductionImageOperation();
 
 	virtual void redo();
 	virtual void undo();
 
-	static void apply(QImage* img, const QRect& rect);
+	static void apply(QImage* img, const QRectF& rectF);
 
 private:
 	RedEyeReductionImageOperationPrivate* const d;
