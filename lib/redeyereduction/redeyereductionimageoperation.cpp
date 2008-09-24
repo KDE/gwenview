@@ -87,7 +87,7 @@ void RedEyeReductionImageOperation::undo() {
 void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
 	const qreal radius = rect.width() / 2;
 	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
-	const qreal shadeRadius = qMin(radius * 0.8, radius - 1);
+	const qreal shadeRadius = qMin(radius * 0.7, radius - 1);
 	const int width = rect.width();
 	const int height = rect.height();
 	for (int y = 0; y < height; ++y, line += img->bytesPerLine()) {
