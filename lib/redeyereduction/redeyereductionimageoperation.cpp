@@ -104,12 +104,18 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRect& rect) {
 				k = 1;
 			}
 
-			QColor color(*ptr);
-			const int red1 = color.red();
-			int red2 = ( color.green() + color.blue() ) / 2;
-			red2 = int((1 - k) * red1 + k * red2);
-			color.setRed(red2);
-			*ptr = color.rgba();
+			QColor src(*ptr);
+			QColor dst = src;
+			dst.setRed(( src.green() + src.blue() ) / 2);
+			int h, s, v, a;
+			dst.getHsv(&h, &s, &v, &a);
+			dst.setHsv(h, 0, v, a);
+
+			dst.setRed(int((1 -k) * src.red() + k * dst.red()));
+			dst.setGreen(int((1 -k) * src.green() + k * dst.green()));
+			dst.setBlue(int((1 -k) * src.blue() + k * dst.blue()));
+
+			*ptr = dst.rgba();
 		}
 	}
 }
