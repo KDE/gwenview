@@ -27,6 +27,14 @@ QToolButton:pressed {
 }
 
 /* Containers */
+.QFrame {
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 rgba(4, 4, 4, 80%), stop: 0.6 rgba(0, 0, 0, 80%), stop:1 rgba(0, 0, 0, 80%));
+	border: 1px solid gray;
+	border-radius: 8px;
+}
+
 #fullScreenBar {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -41,6 +49,7 @@ QToolButton:pressed {
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
 		stop:0 #444, stop: 0.6 black, stop:1 black);
 	border: 1px solid gray;
+	border-radius: 0px;
 }
 
 /* QCheckBox */

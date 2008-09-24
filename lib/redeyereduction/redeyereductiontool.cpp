@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionhud.h"
 #include "widgetfloater.h"
+#include "fullscreentheme.h"
 
 
 namespace Gwenview {
@@ -56,16 +57,8 @@ public:
 			mMainWidget->layout()->setMargin(0);
 		}
 
-		setStyleSheet(
-			".QFrame {"
-			"	background-color: rgba(10, 10, 10, 80%);"
-			"	border: 1px solid rgba(0, 0, 0, 80%);"
-			"	border-radius: 8px;"
-			"}"
-			"QLabel, QToolButton {"
-			"	color: white;"
-			"}"
-			);
+		FullScreenTheme theme(FullScreenTheme::currentThemeName());
+		setStyleSheet(theme.styleSheet());
 
 		QHBoxLayout* layout = new QHBoxLayout(this);
 		layout->setMargin(4);
