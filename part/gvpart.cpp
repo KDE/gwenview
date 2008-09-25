@@ -20,12 +20,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvpart.moc"
 
 // Qt
-#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QSlider>
-#include <QTimer>
 
 // KDE
 #include <kaction.h>
