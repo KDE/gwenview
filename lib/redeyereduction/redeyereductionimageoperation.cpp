@@ -89,6 +89,7 @@ void RedEyeReductionImageOperation::undo() {
 
 
 void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
+	#if 0
 	const qreal radius = rectF.width() / 2;
 	const qreal centerX = rectF.x() + radius;
 	const qreal centerY = rectF.y() + radius;
@@ -121,6 +122,93 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 			dst.setRed(int((1 -k) * src.red() + k * dst.red()));
 			dst.setGreen(int((1 -k) * src.green() + k * dst.green()));
 			dst.setBlue(int((1 -k) * src.blue() + k * dst.blue()));
+
+			*ptr = dst.rgba();
+		}
+	}
+	#endif
+
+	QRect rect = PaintUtils::containingRect(rectF);
+
+	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
+	for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
+		QRgb* ptr = (QRgb*)line;
+
+		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
+			QColor src(*ptr);
+
+			// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
+			int Amount1x = -10;
+			int Amount2x = 2;
+
+			double ai = (double)src.alphaF();
+
+			int hue, sat, value;
+			src.getHsv(&hue, &sat, &value);
+
+			hue += Amount2x;
+			if (hue > 360) {
+				hue -= 360;
+			}
+			if (hue < 0) {
+				hue += 360;
+			}
+
+			// STEPS OF PROCESS:
+			// Take a copy of src surface,
+			// "Cut out" the eye-red color using alpha channel,
+			// Replace red channel values with green,
+			// Blend the result with original
+
+			// Create alpha multiplier from Hue (alpha multipliers will act as our scissors):
+			// 1.0 for hue above 270; 0 for hue below 260; gradual 10 steps between hue 260 - 270
+			double axh = 1.0;
+			if(hue > 259 && hue < 270) {
+				axh = (hue - 259.0) / 10.0;
+			}
+
+
+			// Create alpha multiplier from Saturation:
+			// if hue > 259 then it is 1.0 for saturation above 45; 0 for saturation below 40; gradual 5 steps between 40 and 45
+			// if hue < 260 then it is more complex "curve", based on combination of hue and saturation
+
+			double axs = 1.0;
+			if (hue > 259) {
+				if (sat < Amount1x + 40) {
+					axs = 0;
+				}
+				if (sat > Amount1x + 39 && sat < Amount1x + 45) {
+					axs = (sat - ((double)Amount1x + 39.0)) / 5.0;
+				}
+			}
+
+			if (hue < 260) {
+				if (sat < hue * 2 + Amount1x + 40) {
+					axs = 0;
+				}
+				if (sat > hue * 2 + Amount1x + 39 && sat < hue * 2 + Amount1x + 50) {
+					axs = (sat - ((double)hue * 2.0 + (double)Amount1x + 39.0)) / 10.0;
+				}
+			}
+
+			// Merge the alpha multipliers:
+			// Calculate final alpha based on original and multipliers:
+			ai *= axs * axh;
+			if (ai > 1.) {
+				ai = 1.;
+			}
+			if (ai < 0) {
+				ai = 0;
+			}
+
+			// replace red channel with green and apply new alpha:
+			int r = src.red();
+			int g = src.green();
+			int b = src.blue();
+			QColor dst;
+			dst.setRed  (int((1 - ai) * r + ai * g));
+			dst.setGreen(int((1 - ai) * g + ai * g));
+			dst.setBlue (int((1 - ai) * b + ai * b));
 
 			*ptr = dst.rgba();
 		}
