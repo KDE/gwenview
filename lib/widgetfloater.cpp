@@ -28,18 +28,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kdialog.h>
 
 // Local
 
 namespace Gwenview {
-
-const int MARGIN = 12;
 
 struct WidgetFloaterPrivate {
 	QWidget* mParent;
 	QPointer<QWidget> mChild;
 	Qt::Alignment mAlignment;
 
+	int mHorizontalMargin;
+	int mVerticalMargin;
 
 	void updateChildGeometry() {
 		if (!mChild) {
@@ -56,19 +57,19 @@ struct WidgetFloaterPrivate {
 		parentHeight = mParent->height();
 
 		if (mAlignment & Qt::AlignLeft) {
-			posX = MARGIN;
+			posX = mHorizontalMargin;
 		} else if (mAlignment & Qt::AlignHCenter) {
 			posX = (parentWidth - childWidth) / 2;
 		} else {
-			posX = parentWidth - childWidth - MARGIN;
+			posX = parentWidth - childWidth - mHorizontalMargin;
 		}
 
 		if (mAlignment & Qt::AlignTop) {
-			posY = MARGIN;
+			posY = mVerticalMargin;
 		} else if (mAlignment & Qt::AlignVCenter) {
 			posY = (parentHeight - childHeight) / 2;
 		} else {
-			posY = parentHeight - childHeight - MARGIN;
+			posY = parentHeight - childHeight - mVerticalMargin;
 		}
 
 		mChild->move(posX, posY);
@@ -84,6 +85,8 @@ WidgetFloater::WidgetFloater(QWidget* parent)
 	d->mParent->installEventFilter(this);
 	d->mChild = 0;
 	d->mAlignment = Qt::AlignCenter;
+	d->mHorizontalMargin = KDialog::marginHint();
+	d->mVerticalMargin = KDialog::marginHint();
 }
 
 
@@ -121,6 +124,28 @@ bool WidgetFloater::eventFilter(QObject*, QEvent* event) {
 		break;
 	}
 	return false;
+}
+
+
+void WidgetFloater::setHorizontalMargin(int value) {
+	d->mHorizontalMargin = value;
+	d->updateChildGeometry();
+}
+
+
+int WidgetFloater::horizontalMargin() const {
+	return d->mHorizontalMargin;
+}
+
+
+void WidgetFloater::setVerticalMargin(int value) {
+	d->mVerticalMargin = value;
+	d->updateChildGeometry();
+}
+
+
+int WidgetFloater::verticalMargin() const {
+	return d->mVerticalMargin;
 }
 
 

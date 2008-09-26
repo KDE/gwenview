@@ -50,6 +50,12 @@ public:
 
 	void setAlignment(Qt::Alignment);
 
+	void setHorizontalMargin(int);
+	int horizontalMargin() const;
+
+	void setVerticalMargin(int);
+	int verticalMargin() const;
+
 protected:
 	bool eventFilter(QObject*, QEvent*);
 
