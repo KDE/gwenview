@@ -129,8 +129,6 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	const int Amount1x = -10;
 	const int Amount2x = 2;
 
-	qreal ai = (qreal)src.alphaF();
-
 	int hue, sat, value;
 	src.getHsv(&hue, &sat, &value);
 
@@ -156,9 +154,7 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	if (hue > 259) {
 		static const Ramp ramp(Amount1x + 40, Amount1x + 45, 0., 1.);
 		axs = ramp(sat);
-	}
-
-	if (hue < 260) {
+	} else {
 		if (sat < hue * 2 + Amount1x + 40) {
 			axs = 0;
 		}
@@ -167,9 +163,8 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 		}
 	}
 
-	// Merge the alpha multipliers:
-	// Calculate final alpha based on original and multipliers:
-	return qBound(0., ai * axs, 1.);
+	// Merge alphas
+	return qBound(0., src.alphaF() * axs, 1.);
 }
 
 
