@@ -25,13 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
-#include <kguiitem.h>
 #include <kinputdialog.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 namespace Gwenview {
 
@@ -45,64 +44,11 @@ enum Operation { TRASH, DEL, COPY, MOVE, LINK, EMPTYTRASH, STAT, MKDIR, RESTORE,
 enum ConfirmationType { DEFAULT_CONFIRMATION, SKIP_CONFIRMATION, FORCE_CONFIRMATION };
 static bool askDeleteConfirmation( const KUrl::List & selectedUrls, Operation operation, ConfirmationType confirmation, QWidget* widget )
 {
-	if ( confirmation == SKIP_CONFIRMATION ) {
-		return true;
-	}
-
-	QString keyName;
-	if ( confirmation == DEFAULT_CONFIRMATION ) {
-		KConfig config( "konquerorrc", KConfig::NoGlobals );
-		keyName = ( operation == DEL ? "ConfirmDelete" : "ConfirmTrash" );
-		bool ask = config.group("Trash").readEntry( keyName, true );
-		if (!ask) {
-			return true;
-		}
-	}
-
-	KUrl::List::ConstIterator it = selectedUrls.begin();
-	QStringList prettyList;
-	for ( ; it != selectedUrls.end(); ++it ) {
-		if ( (*it).protocol() == "trash" ) {
-			QString path = (*it).path();
-			// HACK (#98983): remove "0-foo". Note that it works better than
-			// displaying KFileItem::name(), for files under a subdir.
-			prettyList.append( path.remove(QRegExp("^/[0-9]*-")) );
-		} else
-			prettyList.append( (*it).pathOrUrl() );
-	}
-
-	int result;
-	if (operation == DEL) {
-		result = KMessageBox::warningContinueCancelList(
-			widget,
-			i18np( "Do you really want to delete this item?", "Do you really want to delete these %1 items?", prettyList.count()),
-			prettyList,
-			i18n( "Delete Files" ),
-			KStandardGuiItem::del(),
-			KStandardGuiItem::cancel(),
-			keyName, KMessageBox::Notify | KMessageBox::Dangerous);
-	} else {
-		result = KMessageBox::warningContinueCancelList(
-			widget,
-			i18np( "Do you really want to move this item to the trash?", "Do you really want to move these %1 items to the trash?", prettyList.count()),
-			prettyList,
-			i18n( "Move to Trash" ),
-			KGuiItem( i18nc( "Verb", "&Trash" ), "user-trash"),
-			KStandardGuiItem::cancel(),
-			keyName, KMessageBox::Notify | KMessageBox::Dangerous);
-	}
-	if (!keyName.isEmpty()) {
-		// Check kmessagebox setting... erase & copy to konquerorrc.
-		KSharedConfig::Ptr config = KGlobal::config();
-		KConfigGroup saver(config, "Notification Messages");
-		if (!saver.readEntry(keyName, QVariant(true)).toBool()) {
-			saver.writeEntry(keyName, true);
-			saver.sync();
-			KConfig konq_config("konquerorrc", KConfig::NoGlobals);
-			konq_config.group("Trash").writeEntry( keyName, false );
-		}
-	}
-	return (result == KMessageBox::Continue);
+	KIO::JobUiDelegate::DeletionType deletionType = operation == DEL ? KIO::JobUiDelegate::Delete : KIO::JobUiDelegate::Trash;
+	KIO::JobUiDelegate::ConfirmationType confirmationType = confirmation == FORCE_CONFIRMATION ? KIO::JobUiDelegate::ForceConfirmation : KIO::JobUiDelegate::DefaultConfirmation;
+	KIO::JobUiDelegate uiDelegate;
+	uiDelegate.setWindow(widget);
+	return uiDelegate.askDeleteConfirmation(selectedUrls, deletionType, confirmationType);
 }
 
 
