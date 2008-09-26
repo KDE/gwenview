@@ -88,10 +88,46 @@ void RedEyeReductionImageOperation::undo() {
 }
 
 
+/**
+ * This helper class maps values on a linear ramp.
+ * It's useful to do mappings like this:
+ *
+ * x | -oo       x1               x2     +oo
+ * --+--------------------------------------
+ * y |  y1       y1 (linear ramp) y2      y2
+ *
+ * Note that y1 can be greater than y2 if necessary
+ */
+class Ramp {
+public:
+	Ramp(qreal x1, qreal x2, qreal y1, qreal y2)
+	: mX1(x1)
+	, mX2(x2)
+	, mY1(y1)
+	, mY2(y2)
+	{
+		mK = (y2 - y1) / (x2 - x1);
+	}
+
+	qreal operator()(qreal x) const {
+		if (x < mX1) {
+			return mY1;
+		}
+		if (x > mX2) {
+			return mY2;
+		}
+		return mY1 + (x - mX1) * mK;
+	}
+
+private:
+	qreal mX1, mX2, mY1, mY2, mK;
+};
+
+
 inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
-	int Amount1x = -10;
-	int Amount2x = 2;
+	const int Amount1x = -10;
+	const int Amount2x = 2;
 
 	qreal ai = (qreal)src.alphaF();
 
@@ -118,12 +154,8 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 
 	qreal axs = 1.0;
 	if (hue > 259) {
-		if (sat < Amount1x + 40) {
-			axs = 0;
-		}
-		if (sat > Amount1x + 39 && sat < Amount1x + 45) {
-			axs = (sat - ((qreal)Amount1x + 39.0)) / 5.0;
-		}
+		static const Ramp ramp(Amount1x + 40, Amount1x + 45, 0., 1.);
+		axs = ramp(sat);
 	}
 
 	if (hue < 260) {
@@ -146,7 +178,7 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 	const qreal radius = rectF.width() / 2;
 	const qreal centerX = rectF.x() + radius;
 	const qreal centerY = rectF.y() + radius;
-	const qreal shadeRadius = qMin(radius * 0.7, radius - 1);
+	const Ramp radiusRamp(qMin(radius * 0.7, radius - 1), radius, 1., 0.);
 
 	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
 	for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
@@ -156,14 +188,9 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 			QColor src(*ptr);
 
 			const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));
-			qreal alpha;
-			if (currentRadius > radius) {
+			qreal alpha = radiusRamp(currentRadius);
+			if (qFuzzyCompare(alpha, 0)) {
 				continue;
-			}
-			if (currentRadius > shadeRadius) {
-				alpha = (radius - currentRadius) / (radius - shadeRadius);
-			} else {
-				alpha = 1;
 			}
 
 			alpha *= computeRedEyeAlpha(src);
