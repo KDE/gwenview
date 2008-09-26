@@ -21,6 +21,17 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 #
 #target_link_libraries(imagescalertest gwenviewlib ${QT_QTTEST_LIBRARY})
 
+
+# PaintUtils
+set(paintutilstest_SRCS
+	paintutilstest.cpp
+	)
+
+kde4_add_unit_test(paintutilstest ${paintutilstest_SRCS})
+
+target_link_libraries(paintutilstest gwenviewlib ${QT_QTTEST_LIBRARY})
+
+
 # Document
 set(documenttest_SRCS
 	documenttest.cpp
