@@ -157,14 +157,13 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 		QRgb* ptr = (QRgb*)line;
 
 		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
-			QColor src(*ptr);
-
 			const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));
 			qreal alpha = radiusRamp(currentRadius);
 			if (qFuzzyCompare(alpha, 0)) {
 				continue;
 			}
 
+			const QColor src(*ptr);
 			alpha *= computeRedEyeAlpha(src);
 			int r = src.red();
 			int g = src.green();
