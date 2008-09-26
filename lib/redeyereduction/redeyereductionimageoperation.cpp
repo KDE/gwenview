@@ -93,7 +93,7 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	int Amount1x = -10;
 	int Amount2x = 2;
 
-	double ai = (double)src.alphaF();
+	qreal ai = (qreal)src.alphaF();
 
 	int hue, sat, value;
 	src.getHsv(&hue, &sat, &value);
@@ -116,13 +116,13 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	// if hue > 259 then it is 1.0 for saturation above 45; 0 for saturation below 40; gradual 5 steps between 40 and 45
 	// if hue < 260 then it is more complex "curve", based on combination of hue and saturation
 
-	double axs = 1.0;
+	qreal axs = 1.0;
 	if (hue > 259) {
 		if (sat < Amount1x + 40) {
 			axs = 0;
 		}
 		if (sat > Amount1x + 39 && sat < Amount1x + 45) {
-			axs = (sat - ((double)Amount1x + 39.0)) / 5.0;
+			axs = (sat - ((qreal)Amount1x + 39.0)) / 5.0;
 		}
 	}
 
@@ -131,7 +131,7 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 			axs = 0;
 		}
 		if (sat > hue * 2 + Amount1x + 39 && sat < hue * 2 + Amount1x + 50) {
-			axs = (sat - ((double)hue * 2.0 + (double)Amount1x + 39.0)) / 10.0;
+			axs = (sat - ((qreal)hue * 2.0 + (qreal)Amount1x + 39.0)) / 10.0;
 		}
 	}
 
