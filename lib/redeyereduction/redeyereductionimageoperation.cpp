@@ -112,14 +112,6 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Replace red channel values with green,
 	// Blend the result with original
 
-	// Create alpha multiplier from Hue (alpha multipliers will act as our scissors):
-	// 1.0 for hue above 270; 0 for hue below 260; gradual 10 steps between hue 260 - 270
-	double axh = 1.0;
-	if(hue > 259 && hue < 270) {
-		axh = (hue - 259.0) / 10.0;
-	}
-
-
 	// Create alpha multiplier from Saturation:
 	// if hue > 259 then it is 1.0 for saturation above 45; 0 for saturation below 40; gradual 5 steps between 40 and 45
 	// if hue < 260 then it is more complex "curve", based on combination of hue and saturation
@@ -145,50 +137,11 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 
 	// Merge the alpha multipliers:
 	// Calculate final alpha based on original and multipliers:
-	return qBound(0., ai * axs * axh, 1.);
+	return qBound(0., ai * axs, 1.);
 }
 
 
 void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
-	#if 0
-	const qreal radius = rectF.width() / 2;
-	const qreal centerX = rectF.x() + radius;
-	const qreal centerY = rectF.y() + radius;
-
-	QRect rect = PaintUtils::containingRect(rectF);
-	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
-	const qreal shadeRadius = qMin(radius * 0.7, radius - 1);
-
-	for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
-		QRgb* ptr = (QRgb*)line;
-		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
-			const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));
-			qreal k;
-			if (currentRadius > radius) {
-				continue;
-			}
-			if (currentRadius > shadeRadius) {
-				k = (radius - currentRadius) / (radius - shadeRadius);
-			} else {
-				k = 1;
-			}
-
-			QColor src(*ptr);
-			QColor dst = src;
-			dst.setRed(( src.green() + src.blue() ) / 2);
-			int h, s, v, a;
-			dst.getHsv(&h, &s, &v, &a);
-			dst.setHsv(h, 0, v, a);
-
-			dst.setRed(int((1 -k) * src.red() + k * dst.red()));
-			dst.setGreen(int((1 -k) * src.green() + k * dst.green()));
-			dst.setBlue(int((1 -k) * src.blue() + k * dst.blue()));
-
-			*ptr = dst.rgba();
-		}
-	}
-	#endif
-
 	const QRect rect = PaintUtils::containingRect(rectF);
 	const qreal radius = rectF.width() / 2;
 	const qreal centerX = rectF.x() + radius;
