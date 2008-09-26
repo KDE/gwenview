@@ -132,13 +132,6 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	int hue, sat, value;
 	src.getHsv(&hue, &sat, &value);
 
-	// STEPS OF PROCESS:
-	// Take a copy of src surface,
-	// "Cut out" the eye-red color using alpha channel,
-	// Replace red channel values with green,
-	// Blend the result with original
-
-	// Create alpha multiplier from saturation
 	qreal axs = 1.0;
 	if (hue > 259) {
 		static const Ramp ramp(30, 35, 0., 1.);
@@ -148,7 +141,6 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 		axs = ramp(sat);
 	}
 
-	// Merge alphas
 	return qBound(0., src.alphaF() * axs, 1.);
 }
 
@@ -178,6 +170,7 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 			int g = src.green();
 			int b = src.blue();
 			QColor dst;
+			// Replace red with green, and blend according to alpha
 			dst.setRed  (int((1 - alpha) * r + alpha * g));
 			dst.setGreen(int((1 - alpha) * g + alpha * g));
 			dst.setBlue (int((1 - alpha) * b + alpha * b));
