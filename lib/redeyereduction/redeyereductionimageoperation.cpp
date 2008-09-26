@@ -155,14 +155,8 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 		static const Ramp ramp(Amount1x + 40, Amount1x + 45, 0., 1.);
 		axs = ramp(sat);
 	} else {
-		const int minHue = hue * 2 + Amount1x + 39;
-		const int maxHue = hue * 2 + Amount1x + 50;
-		if (sat <= minHue) {
-			axs = 0;
-		}
-		if (sat > minHue && sat < maxHue) {
-			axs = (sat - minHue) / 10.0;
-		}
+		static const Ramp ramp(hue * 2 + Amount1x + 39, hue * 2 + Amount1x + 50, 0., 1.);
+		axs = ramp(sat);
 	}
 
 	// Merge alphas
