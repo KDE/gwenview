@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 #include <QMouseEvent>
 #include <QPainter>
+#include <QStyle>
 #include <QToolButton>
 #include <QRect>
 
@@ -159,6 +160,10 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 
 	d->mFloater = new WidgetFloater(imageView());
 	d->mFloater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+	d->mFloater->setVerticalMargin(
+		KDialog::marginHint()
+		+ imageView()->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
+		);
 	d->showNotSetHudWidget();
 
 	view->document()->loadFullImage();
