@@ -88,7 +88,7 @@ void RedEyeReductionImageOperation::undo() {
 }
 
 
-inline QColor reduceRedEye(const QColor& src) {
+inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
 	int Amount1x = -10;
 	int Amount2x = 2;
@@ -145,17 +145,7 @@ inline QColor reduceRedEye(const QColor& src) {
 
 	// Merge the alpha multipliers:
 	// Calculate final alpha based on original and multipliers:
-	ai = qBound(0., ai * axs * axh, 1.);
-
-	// replace red channel with green and apply new alpha:
-	int r = src.red();
-	int g = src.green();
-	int b = src.blue();
-	QColor dst;
-	dst.setRed  (int((1 - ai) * r + ai * g));
-	dst.setGreen(int((1 - ai) * g + ai * g));
-	dst.setBlue (int((1 - ai) * b + ai * b));
-	return dst;
+	return qBound(0., ai * axs * axh, 1.);
 }
 
 
@@ -207,7 +197,14 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 
 		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
 			QColor src(*ptr);
-			QColor dst = reduceRedEye(src);
+			qreal alpha = computeRedEyeAlpha(src);
+			int r = src.red();
+			int g = src.green();
+			int b = src.blue();
+			QColor dst;
+			dst.setRed  (int((1 - alpha) * r + alpha * g));
+			dst.setGreen(int((1 - alpha) * g + alpha * g));
+			dst.setBlue (int((1 - alpha) * b + alpha * b));
 			*ptr = dst.rgba();
 		}
 	}
