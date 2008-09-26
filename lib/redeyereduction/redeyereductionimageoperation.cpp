@@ -129,19 +129,8 @@ private:
  * http://paintdotnet.forumer.com/viewtopic.php?f=27&t=26193&p=205954&hilit=red+eye#p205954
  */
 inline qreal computeRedEyeAlpha(const QColor& src) {
-	// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
-	const int Amount2x = 2;
-
 	int hue, sat, value;
 	src.getHsv(&hue, &sat, &value);
-
-	hue += Amount2x;
-	if (hue > 360) {
-		hue -= 360;
-	}
-	if (hue < 0) {
-		hue += 360;
-	}
 
 	// STEPS OF PROCESS:
 	// Take a copy of src surface,
