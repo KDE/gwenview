@@ -144,7 +144,7 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 		static const Ramp ramp(30, 35, 0., 1.);
 		axs = ramp(sat);
 	} else {
-		static const Ramp ramp(hue * 2 + 29, hue * 2 + 40, 0., 1.);
+		const Ramp ramp(hue * 2 + 29, hue * 2 + 40, 0., 1.);
 		axs = ramp(sat);
 	}
 
