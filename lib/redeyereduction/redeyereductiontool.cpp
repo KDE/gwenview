@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include "gwenviewconfig.h"
 #include "imageview.h"
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
@@ -151,7 +152,7 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new RedEyeReductionToolPrivate) {
 	d->mRedEyeReductionTool = this;
-	d->mDiameter = 24;
+	d->mDiameter = GwenviewConfig::redEyeReductionDiameter();
 	d->mStatus = NotSet;
 	d->mHud = 0;
 	d->mHudWidget = 0;
@@ -165,6 +166,7 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 
 
 RedEyeReductionTool::~RedEyeReductionTool() {
+	GwenviewConfig::setRedEyeReductionDiameter(d->mDiameter);
 	delete d;
 }
 

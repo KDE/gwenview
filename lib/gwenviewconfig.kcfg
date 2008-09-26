@@ -166,5 +166,12 @@
 			<default>-1</default>
 		</entry>
 	</group>
+
+	<group name="RedEyeReduction">
+		<entry name="RedEyeReductionDiameter" type="Int">
+			<default>24</default>
+		</entry>
+	</group>
+
 </kcfg>
 
