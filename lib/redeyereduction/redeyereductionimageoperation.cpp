@@ -130,7 +130,6 @@ private:
  */
 inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
-	const int Amount1x = -10;
 	const int Amount2x = 2;
 
 	int hue, sat, value;
@@ -150,16 +149,13 @@ inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Replace red channel values with green,
 	// Blend the result with original
 
-	// Create alpha multiplier from Saturation:
-	// if hue > 259 then it is 1.0 for saturation above 45; 0 for saturation below 40; gradual 5 steps between 40 and 45
-	// if hue < 260 then it is more complex "curve", based on combination of hue and saturation
-
+	// Create alpha multiplier from saturation
 	qreal axs = 1.0;
 	if (hue > 259) {
-		static const Ramp ramp(Amount1x + 40, Amount1x + 45, 0., 1.);
+		static const Ramp ramp(30, 35, 0., 1.);
 		axs = ramp(sat);
 	} else {
-		static const Ramp ramp(hue * 2 + Amount1x + 39, hue * 2 + Amount1x + 50, 0., 1.);
+		static const Ramp ramp(hue * 2 + 29, hue * 2 + 40, 0., 1.);
 		axs = ramp(sat);
 	}
 
