@@ -189,7 +189,11 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 	}
 	#endif
 
-	QRect rect = PaintUtils::containingRect(rectF);
+	const QRect rect = PaintUtils::containingRect(rectF);
+	const qreal radius = rectF.width() / 2;
+	const qreal centerX = rectF.x() + radius;
+	const qreal centerY = rectF.y() + radius;
+	const qreal shadeRadius = qMin(radius * 0.7, radius - 1);
 
 	uchar* line = img->scanLine(rect.top()) + rect.left() * 4;
 	for (int y = rect.top(); y < rect.bottom(); ++y, line += img->bytesPerLine()) {
@@ -197,7 +201,19 @@ void RedEyeReductionImageOperation::apply(QImage* img, const QRectF& rectF) {
 
 		for (int x = rect.left(); x < rect.right(); ++x, ++ptr) {
 			QColor src(*ptr);
-			qreal alpha = computeRedEyeAlpha(src);
+
+			const qreal currentRadius = sqrt(pow(y - centerY, 2) + pow(x - centerX, 2));
+			qreal alpha;
+			if (currentRadius > radius) {
+				continue;
+			}
+			if (currentRadius > shadeRadius) {
+				alpha = (radius - currentRadius) / (radius - shadeRadius);
+			} else {
+				alpha = 1;
+			}
+
+			alpha *= computeRedEyeAlpha(src);
 			int r = src.red();
 			int g = src.green();
 			int b = src.blue();
