@@ -49,8 +49,6 @@ public:
 
 	void setTransformationMode(Qt::TransformationMode);
 
-	static QRect containingRect(const QRectF& rectF);
-
 Q_SIGNALS:
 	void scaledRect(int left, int top, const QImage&);
 

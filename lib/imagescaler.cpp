@@ -92,12 +92,6 @@ void ImageScaler::setDestinationRegion(const QRegion& region) {
 }
 
 
-	// FIXME: Remove this method
-QRect ImageScaler::containingRect(const QRectF& rectF) {
-	return PaintUtils::containingRect(rectF);
-}
-
-
 void ImageScaler::doScale() {
 	if (d->mZoom < Document::maxDownSampledZoom()) {
 		if (!d->mDocument->prepareDownSampledImageForZoom(d->mZoom)) {
@@ -147,7 +141,7 @@ void ImageScaler::scaleRect(const QRect& rect) {
 		rect.height() / zoom);
 
 	sourceRectF = sourceRectF.intersected(image.rect());
-	QRect sourceRect = containingRect(sourceRectF);
+	QRect sourceRect = PaintUtils::containingRect(sourceRectF);
 	if (sourceRect.isEmpty()) {
 		return;
 	}
@@ -183,7 +177,7 @@ void ImageScaler::scaleRect(const QRect& rect) {
 		sourceRect.width() * zoom,
 		sourceRect.height() * zoom
 		);
-	QRect destRect = containingRect(destRectF);
+	QRect destRect = PaintUtils::containingRect(destRectF);
 
 	QImage tmp;
 	tmp = image.copy(sourceRect);
