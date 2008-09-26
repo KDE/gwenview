@@ -124,6 +124,10 @@ private:
 };
 
 
+/**
+ * This code is inspired from code found in a Paint.net plugin:
+ * http://paintdotnet.forumer.com/viewtopic.php?f=27&t=26193&p=205954&hilit=red+eye#p205954
+ */
 inline qreal computeRedEyeAlpha(const QColor& src) {
 	// Fine-tune input parameters, we may drop this block in the future by writing the "good" values directly into the formulas
 	const int Amount1x = -10;
