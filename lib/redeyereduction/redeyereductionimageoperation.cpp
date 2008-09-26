@@ -145,13 +145,7 @@ inline QColor reduceRedEye(const QColor& src) {
 
 	// Merge the alpha multipliers:
 	// Calculate final alpha based on original and multipliers:
-	ai *= axs * axh;
-	if (ai > 1.) {
-		ai = 1.;
-	}
-	if (ai < 0) {
-		ai = 0;
-	}
+	ai = qBound(0., ai * axs * axh, 1.);
 
 	// replace red channel with green and apply new alpha:
 	int r = src.red();
