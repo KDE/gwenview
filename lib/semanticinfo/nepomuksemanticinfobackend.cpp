@@ -140,6 +140,7 @@ public:
 				task = mTaskQueue.dequeue();
 			}
 			task->execute();
+			delete task;
 		}
 	}
 
