@@ -21,6 +21,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "loadingdocumentimpl.moc"
 
+// STL
+#include <memory>
+
 // Qt
 #include <QBuffer>
 #include <QByteArray>
@@ -84,7 +87,7 @@ struct LoadingDocumentImplPrivate {
 	QByteArray mFormat;
 	QSize mImageSize;
 	Exiv2::Image::AutoPtr mExiv2Image;
-	JpegContent* mJpegContent;
+	std::auto_ptr<JpegContent> mJpegContent;
 	QImage mImage;
 
 	void startLoading() {
@@ -141,7 +144,7 @@ struct LoadingDocumentImplPrivate {
 		}
 
 		if (mFormat == "jpeg" && mExiv2Image.get()) {
-			mJpegContent = new JpegContent();
+			mJpegContent.reset(new JpegContent());
 			if (!mJpegContent->loadFromData(mData, mExiv2Image.get())) {
 				return false;
 			}
@@ -182,7 +185,7 @@ struct LoadingDocumentImplPrivate {
 			return;
 		}
 
-		if (mJpegContent) {
+		if (mJpegContent.get()) {
 			Gwenview::Orientation orientation = mJpegContent->orientation();
 			QMatrix matrix = ImageUtils::transformMatrix(orientation);
 			mImage = mImage.transformed(matrix);
@@ -203,7 +206,6 @@ LoadingDocumentImpl::LoadingDocumentImpl(Document* document)
 	d->mMetaInfoLoaded = false;
 	d->mAnimated = false;
 	d->mDownSampledImageLoaded = false;
-	d->mJpegContent = 0;
 	d->mImageDataInvertedZoom = 0;
 
 	connect(&d->mMetaInfoFutureWatcher, SIGNAL(finished()),
@@ -370,10 +372,10 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	emit imageRectUpdated(d->mImage.rect());
 	emit loaded();
 	DocumentLoadedImpl* impl;
-	if (d->mJpegContent) {
+	if (d->mJpegContent.get()) {
 		impl = new JpegDocumentLoadedImpl(
 			document(),
-			d->mJpegContent);
+			d->mJpegContent.release());
 	} else {
 		impl = new DocumentLoadedImpl(
 			document(),
