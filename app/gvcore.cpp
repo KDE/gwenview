@@ -191,18 +191,40 @@ void GvCore::save(const KUrl& url) {
 void GvCore::saveAs(const KUrl& url) {
 	KFileDialog dialog(url, QString(), d->mParent);
 	dialog.setOperationMode(KFileDialog::Saving);
-
-	// Init mime filter
-	QString mimeType = MimeTypeUtils::urlMimeType(url);
-	QStringList availableMimeTypes = KImageIO::mimeTypes(KImageIO::Writing);
-	dialog.setMimeFilter(availableMimeTypes, mimeType);
+	dialog.setMimeFilter(
+		KImageIO::mimeTypes(KImageIO::Writing), // List
+		MimeTypeUtils::urlMimeType(url)         // Default
+		);
 
 	// Show dialog
-	if (!dialog.exec()) {
-		return;
-	}
+	QByteArray format;
+	do {
+		if (!dialog.exec()) {
+			return;
+		}
 
-	KUrl saveAsUrl = dialog.selectedUrl();
+		const QString mimeType = dialog.currentMimeFilter();
+		if (mimeType.isEmpty()) {
+			KMessageBox::sorry(
+				d->mParent,
+				i18nc("@info",
+					"No image format selected.")
+				);
+			continue;
+		}
+
+		const QStringList typeList = KImageIO::typeForMime(mimeType);
+		if (typeList.count() > 0) {
+			format = typeList[0].toAscii();
+			break;
+		}
+		KMessageBox::sorry(
+			d->mParent,
+			i18nc("@info",
+				"Gwenview cannot save images as %1.", mimeType)
+			);
+	} while (true);
+	const KUrl saveAsUrl = dialog.selectedUrl();
 
 	// Check for overwrite
 	if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mParent)) {
@@ -220,11 +242,8 @@ void GvCore::saveAs(const KUrl& url) {
 	}
 
 	// Start save
-	mimeType = dialog.currentMimeFilter();
-	QStringList typeList = KImageIO::typeForMime(mimeType);
-	Q_ASSERT(typeList.count() > 0);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(saveAsUrl, typeList[0].toAscii());
+	doc->save(saveAsUrl, format.data());
 }
 
 
