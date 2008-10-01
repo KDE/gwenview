@@ -44,6 +44,7 @@
 		<entry name="UrlNavigatorShowFullPath" type="Bool">
 			<default>false</default>
 		</entry>
+
 	</group>
 
 	<group name="FullScreen">
@@ -91,6 +92,10 @@
 	<group name="ThumbnailView">
 		<entry name="ThumbnailSize" type="Int">
 			<default>128</default>
+		</entry>
+
+		<entry name="DeleteThumbnailCacheOnExit" type="Bool">
+			<default>false</default>
 		</entry>
 	</group>
 

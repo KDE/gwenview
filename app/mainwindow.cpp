@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
+#include <kio/netaccess.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kapplication.h>
@@ -86,6 +87,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailview/thumbnailview.h>
+#include <lib/thumbnailloadjob.h>
 #include <lib/urlutils.h>
 
 namespace Gwenview {
@@ -1182,6 +1184,17 @@ bool MainWindow::queryClose() {
 	default: // cancel
 		return false;
 	}
+}
+
+
+bool MainWindow::queryExit() {
+	if (GwenviewConfig::deleteThumbnailCacheOnExit()) {
+		const QString dir = ThumbnailLoadJob::thumbnailBaseDir();
+		if (QFile::exists(dir)) {
+			KIO::NetAccess::del(KUrl::fromPath(dir), this);
+		}
+	}
+	return true;
 }
 
 
