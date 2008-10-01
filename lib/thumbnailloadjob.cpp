@@ -217,32 +217,37 @@ void ThumbnailThread::loadThumbnail() {
 	}
 
 	if (needCaching) {
-		mImage.setText("Thumb::Uri", 0, mOriginalUri);
-		mImage.setText("Thumb::MTime", 0, QString::number(mOriginalTime));
-		mImage.setText("Thumb::Size", 0, QString::number(mOriginalSize));
-		mImage.setText("Thumb::Mimetype", 0, mOriginalMimeType);
-		mImage.setText("Thumb::Image::Width", 0, QString::number(mOriginalWidth));
-		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
-		mImage.setText("Software", 0, "Gwenview");
-
-		QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
-		KStandardDirs::makeDir(thumbnailDir, 0700);
-
-		KTemporaryFile tmp;
-		tmp.setPrefix(thumbnailDir + "/gwenview");
-		tmp.setSuffix(".png");
-		if (!tmp.open()) {
-			kWarning() << "Could not create a temporary file.";
-			return;
-		}
-
-		if (!mImage.save(tmp.fileName(), "png")) {
-			kWarning() << "Could not save thumbnail for file" << mOriginalUri;
-			return;
-		}
-
-		KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
+		storeThumbnailInCache();
 	}
+}
+
+
+void ThumbnailThread::storeThumbnailInCache() {
+	mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
+	mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
+	mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
+	mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
+	mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
+	mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
+	mImage.setText("Software"            , 0, "Gwenview");
+
+	QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
+	KStandardDirs::makeDir(thumbnailDir, 0700);
+
+	KTemporaryFile tmp;
+	tmp.setPrefix(thumbnailDir + "/gwenview");
+	tmp.setSuffix(".png");
+	if (!tmp.open()) {
+		kWarning() << "Could not create a temporary file.";
+		return;
+	}
+
+	if (!mImage.save(tmp.fileName(), "png")) {
+		kWarning() << "Could not save thumbnail for file" << mOriginalUri;
+		return;
+	}
+
+	KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
 }
 
 

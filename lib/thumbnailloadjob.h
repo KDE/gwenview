@@ -66,6 +66,7 @@ Q_SIGNALS:
 private:
 	bool testCancel();
 	void loadThumbnail();
+	void storeThumbnailInCache();
 	QImage mImage;
 	QString mPixPath;
 	QString mThumbnailPath;
