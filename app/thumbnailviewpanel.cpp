@@ -184,11 +184,6 @@ ThumbnailView* ThumbnailViewPanel::thumbnailView() const {
 }
 
 
-QSlider* ThumbnailViewPanel::thumbnailSlider() const {
-	return d->mThumbnailSlider;
-}
-
-
 KUrlNavigator* ThumbnailViewPanel::urlNavigator() const {
 	return d->mUrlNavigator;
 }

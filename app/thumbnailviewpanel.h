@@ -53,7 +53,6 @@ public:
 	void initActionDependentWidgets();
 
 	ThumbnailView* thumbnailView() const;
-	QSlider* thumbnailSlider() const;
 	KUrlNavigator* urlNavigator() const;
 
 	void setStatusBarHeight(int);

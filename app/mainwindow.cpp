@@ -120,7 +120,6 @@ struct MainWindow::Private {
 	KUrlNavigator* mUrlNavigator;
 	ThumbnailView* mThumbnailView;
 	ThumbnailViewHelper* mThumbnailViewHelper;
-	QSlider* mThumbnailSlider;
 	ThumbnailViewPanel* mThumbnailViewPanel;
 	StartPage* mStartPage;
 	SideBar* mSideBar;
@@ -203,7 +202,6 @@ struct MainWindow::Private {
 		mThumbnailViewPanel = new ThumbnailViewPanel(parent, mDirModel, mWindow->actionCollection());
 
 		mThumbnailView = mThumbnailViewPanel->thumbnailView();
-		mThumbnailSlider = mThumbnailViewPanel->thumbnailSlider();
 		mUrlNavigator = mThumbnailViewPanel->urlNavigator();
 
 		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel);
