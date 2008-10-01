@@ -27,7 +27,7 @@ class ThumbnailLoadJobTest : public QObject {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void init();
 	void testLoadLocal();
 	void testLoadRemote();
 };

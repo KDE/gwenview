@@ -54,12 +54,8 @@ void createTestImage(const QString& name, int width, int height, const QColor& c
 }
 
 
-void ThumbnailLoadJobTest::initTestCase() {
+void ThumbnailLoadJobTest::init() {
 	ThumbnailLoadJob::setThumbnailBaseDir(sandBoxPath() + "/thumbnails/");
-}
-
-
-static void resetSandBox() {
 	QDir dir(sandBoxPath());
 	if (dir.exists()) {
 		KUrl sandBoxUrl("file://" + sandBoxPath());
@@ -74,7 +70,6 @@ static void resetSandBox() {
 
 
 void ThumbnailLoadJobTest::testLoadLocal() {
-	resetSandBox();
 	QDir dir(sandBoxPath());
 
 	KFileItemList list;
@@ -101,8 +96,6 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 
 
 void ThumbnailLoadJobTest::testLoadRemote() {
-	resetSandBox();
-
 	QString testTarGzPath = pathForTestFile("test.tar.gz");
 	KUrl url;
 	url.setProtocol("tar");
