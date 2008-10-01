@@ -1237,21 +1237,17 @@ void MainWindow::loadConfig() {
 
 	d->mDocumentPanel->setNormalPalette(palette);
 
-	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
-	// If GwenviewConfig::thumbnailSize() returns the current value of
-	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
-	// won't be updated. That's why we do it ourself.
-	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
 
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
 
 	d->mDocumentPanel->loadConfig();
+	d->mThumbnailViewPanel->loadConfig();
 }
 
 
 void MainWindow::saveConfig() {
 	d->mDocumentPanel->saveConfig();
-	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
+	d->mThumbnailViewPanel->saveConfig();
 	GwenviewConfig::setSideBarIsVisible(d->mSideBarContainer->isVisible());
 }
 

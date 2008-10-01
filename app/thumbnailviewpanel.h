@@ -58,6 +58,9 @@ public:
 
 	void setStatusBarHeight(int);
 
+	void loadConfig();
+	void saveConfig() const;
+
 private Q_SLOTS:
 	void editLocation();
 	void addFolderToPlaces();

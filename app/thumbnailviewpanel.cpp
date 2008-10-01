@@ -128,16 +128,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		}
 		return count;
 	}
-
-	void loadConfig() {
-		mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
-		mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
-	}
-
-	void saveConfig() {
-		GwenviewConfig::setUrlNavigatorIsEditable(mUrlNavigator->isUrlEditable());
-		GwenviewConfig::setUrlNavigatorShowFullPath(mUrlNavigator->showFullPath());
-	}
 };
 
 
@@ -151,13 +141,31 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->setupWidgets();
 	d->setupActions(actionCollection);
 	d->setupDocumentCountConnections();
-	d->loadConfig();
+	loadConfig();
 }
 
 
 ThumbnailViewPanel::~ThumbnailViewPanel() {
-	d->saveConfig();
 	delete d;
+}
+
+
+void ThumbnailViewPanel::loadConfig() {
+	d->mUrlNavigator->setUrlEditable(GwenviewConfig::urlNavigatorIsEditable());
+	d->mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
+
+	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
+	// If GwenviewConfig::thumbnailSize() returns the current value of
+	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
+	// won't be updated. That's why we do it ourself.
+	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
+}
+
+
+void ThumbnailViewPanel::saveConfig() const {
+	GwenviewConfig::setUrlNavigatorIsEditable(d->mUrlNavigator->isUrlEditable());
+	GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
+	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
 }
 
 
