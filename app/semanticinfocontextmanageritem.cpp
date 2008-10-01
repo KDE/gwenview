@@ -120,7 +120,6 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 	d->mGroup = 0;
 	d->mActionCollection = actionCollection;
 	d->mEditTagsAction = d->mActionCollection->addAction("edit_tags");
-	Q_ASSERT(d->mEditTagsAction);
 	d->mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
 	d->mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
 	connect(d->mEditTagsAction, SIGNAL(triggered()),

@@ -263,9 +263,8 @@ struct MainWindow::Private {
 
 	void setupActions() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
-		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
-                KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
-		KActionCategory* edit=new KActionCategory(i18nc("@title actions category - means actions changing image","Edit"), actionCollection);
+		KActionCategory* file = new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+		KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 
 		file->addAction(KStandardAction::Save,mWindow, SLOT(saveCurrent()));
 		file->addAction(KStandardAction::SaveAs,mWindow, SLOT(saveCurrentAs()));
@@ -352,7 +351,7 @@ struct MainWindow::Private {
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 		QAction* action;
 		KActionCollection* actionCollection =  mWindow->actionCollection();
-		KActionCategory* edit=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","Edit"), actionCollection);
+		KActionCategory* edit = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","Edit"), actionCollection);
 
 		action = undoGroup->createRedoAction(actionCollection);
 		action->setObjectName(KStandardAction::name(KStandardAction::Redo));
