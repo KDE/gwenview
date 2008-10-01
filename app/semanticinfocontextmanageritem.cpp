@@ -61,7 +61,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	KActionCollection* mActionCollection;
 	QPointer<SemanticInfoDialog> mSemanticInfoDialog;
 	TagInfo mTagInfo;
-	QAction* mEditTagsAction;
+	KAction* mEditTagsAction;
 
 	void setupShortcuts() {
 		Q_ASSERT(mSideBar);

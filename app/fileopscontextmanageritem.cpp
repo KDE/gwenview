@@ -49,14 +49,14 @@ struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	SideBar* mSideBar;
 	SideBarGroup* mGroup;
-	QAction* mCopyToAction;
-	QAction* mMoveToAction;
-	QAction* mLinkToAction;
-	QAction* mTrashAction;
-	QAction* mDelAction;
-	QAction* mShowPropertiesAction;
-	QAction* mCreateFolderAction;
-	QAction* mOpenWithAction;
+	KAction* mCopyToAction;
+	KAction* mMoveToAction;
+	KAction* mLinkToAction;
+	KAction* mTrashAction;
+	KAction* mDelAction;
+	KAction* mShowPropertiesAction;
+	KAction* mCreateFolderAction;
+	KAction* mOpenWithAction;
 	QMap<QString, KService::Ptr> mServiceForName;
 
 	KUrl::List urlList() const {
