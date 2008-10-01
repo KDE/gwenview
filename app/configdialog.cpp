@@ -26,7 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Local
-#include "ui_configdialog.h"
+#include "ui_generalconfigpage.h"
+#include "ui_imageviewconfigpage.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
 #include <lib/scrolltool.h>
@@ -34,33 +35,50 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-struct ConfigDialogPrivate : public Ui_ConfigDialog {
+struct ConfigDialogPrivate {
 	InvisibleButtonGroup* mAlphaBackgroundModeGroup;
 	InvisibleButtonGroup* mWheelBehaviorGroup;
+	Ui_GeneralConfigPage mGeneralConfigPage;
+	Ui_ImageViewConfigPage mImageViewConfigPage;
 };
 
+template <class Ui>
+QWidget* setupPage(Ui& ui) {
+	QWidget* widget = new QWidget;
+	ui.setupUi(widget);
+	widget->layout()->setMargin(0);
+	return widget;
+}
 
 ConfigDialog::ConfigDialog(QWidget* parent)
 : KConfigDialog(parent, "Settings", GwenviewConfig::self())
 , d(new ConfigDialogPrivate) {
-	setFaceType(KPageDialog::Plain);
+	setFaceType(KPageDialog::List);
 	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::Default);
 	showButtonSeparator(true);
-	QWidget* widget = new QWidget(this);
-	d->setupUi(widget);
-	widget->layout()->setMargin(0);
+
+	QWidget* widget;
+	KPageWidgetItem* pageItem;
+
+	// General
+	widget = setupPage(d->mGeneralConfigPage);
+	pageItem = addPage(widget, i18n("General"));
+	pageItem->setIcon(KIcon("gwenview"));
+
+	// Image View
+	widget = setupPage(d->mImageViewConfigPage);
 
 	d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
 	d->mAlphaBackgroundModeGroup->setObjectName("kcfg_AlphaBackgroundMode");
-	d->mAlphaBackgroundModeGroup->addButton(d->checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
-	d->mAlphaBackgroundModeGroup->addButton(d->solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
+	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
+	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
 
 	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
 	d->mWheelBehaviorGroup->setObjectName("kcfg_MouseWheelBehavior");
-	d->mWheelBehaviorGroup->addButton(d->mouseWheelScrollRadioButton, int(ScrollTool::MouseWheelScroll));
-	d->mWheelBehaviorGroup->addButton(d->mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
-
-	addPage(widget, "");
+	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(ScrollTool::MouseWheelScroll));
+	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
+	pageItem = addPage(widget, i18n("Image View"));
+	pageItem->setIcon(KIcon("view-preview"));
 }
 
 

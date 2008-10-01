@@ -53,8 +53,9 @@ if (KIPI_FOUND)
 endif (KIPI_FOUND)
 
 kde4_add_ui_files(gwenview_SRCS
-	configdialog.ui
 	fullscreenconfigdialog.ui
+	generalconfigpage.ui
+	imageviewconfigpage.ui
 	semanticinfodialog.ui
 	startpage.ui
 	thumbnailviewpanel.ui

@@ -1,93 +1,19 @@
 <ui version="4.0" >
- <class>ConfigDialog</class>
- <widget class="QWidget" name="ConfigDialog" >
+ <class>ImageViewConfigPage</class>
+ <widget class="QWidget" name="ImageViewConfigPage" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
-    <height>326</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="label_3" >
-     <property name="font" >
-      <font>
-       <weight>75</weight>
-      </font>
-     </property>
-     <property name="text" >
-      <string>&lt;b>General&lt;/b></string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>&amp;View background color:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy" >
-      <cstring>kcfg_ViewBackgroundColor</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <widget class="KColorButton" name="kcfg_ViewBackgroundColor" >
-       <property name="text" >
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QLabel" name="label_4" >
-     <property name="font" >
-      <font>
-       <weight>75</weight>
-      </font>
-     </property>
-     <property name="text" >
-      <string>&lt;b>Image View&lt;/b></string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" >
+   <item row="0" column="0" >
     <widget class="QLabel" name="label_7" >
      <property name="text" >
       <string>Transparent background:</string>
@@ -97,7 +23,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
+   <item row="0" column="1" >
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>
@@ -130,8 +56,8 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="1" >
-    <layout class="QHBoxLayout" >
+   <item row="1" column="1" >
+    <layout class="QHBoxLayout" name="_2" >
      <property name="spacing" >
       <number>6</number>
      </property>
@@ -170,7 +96,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="1" >
+   <item row="2" column="1" >
     <spacer name="verticalSpacer_2" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -180,13 +106,13 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>210</width>
-       <height>20</height>
+       <width>207</width>
+       <height>17</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="7" column="0" >
+   <item row="3" column="0" >
     <widget class="QLabel" name="label_8" >
      <property name="text" >
       <string>Mouse wheel behavior:</string>
@@ -196,7 +122,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1" >
+   <item row="3" column="1" >
     <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
       <widget class="QRadioButton" name="mouseWheelScrollRadioButton" >
@@ -223,7 +149,7 @@
      </item>
     </layout>
    </item>
-   <item row="8" column="1" >
+   <item row="4" column="1" >
     <layout class="QHBoxLayout" name="horizontalLayout_2" >
      <item>
       <widget class="QRadioButton" name="mouseWheelBrowseRadioButton" >
@@ -247,7 +173,7 @@
      </item>
     </layout>
    </item>
-   <item row="9" column="1" >
+   <item row="5" column="1" >
     <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -257,13 +183,13 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>20</width>
-       <height>20</height>
+       <width>207</width>
+       <height>17</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="10" column="1" >
+   <item row="6" column="1" >
     <layout class="QHBoxLayout" name="horizontalLayout_3" >
      <item>
       <widget class="QCheckBox" name="kcfg_EnlargeSmallerImages" >
@@ -287,6 +213,19 @@
      </item>
     </layout>
    </item>
+   <item row="7" column="1" >
+    <spacer name="verticalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>62</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -305,12 +244,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>85</x>
-     <y>141</y>
+     <x>195</x>
+     <y>49</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>132</x>
-     <y>140</y>
+     <x>292</x>
+     <y>56</y>
     </hint>
    </hints>
   </connection>
