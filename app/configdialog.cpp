@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "ui_generalconfigpage.h"
 #include "ui_imageviewconfigpage.h"
+#include "ui_performanceconfigpage.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
 #include <lib/scrolltool.h>
@@ -40,6 +41,7 @@ struct ConfigDialogPrivate {
 	InvisibleButtonGroup* mWheelBehaviorGroup;
 	Ui_GeneralConfigPage mGeneralConfigPage;
 	Ui_ImageViewConfigPage mImageViewConfigPage;
+	Ui_PerformanceConfigPage mPerformanceConfigPage;
 };
 
 template <class Ui>
@@ -79,6 +81,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
 	pageItem = addPage(widget, i18n("Image View"));
 	pageItem->setIcon(KIcon("view-preview"));
+
+	// Performance
+	widget = setupPage(d->mPerformanceConfigPage);
+	pageItem = addPage(widget, i18n("Performance"));
+	pageItem->setIcon(KIcon("preferences-system-performance"));
 }
 
 
