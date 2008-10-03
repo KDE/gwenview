@@ -169,6 +169,8 @@ struct PreviewItemDelegatePrivate {
 	GlossyFrame* mButtonFrame;
 	GlossyFrame* mSaveButtonFrame;
 	QPixmap mSaveButtonFramePixmap;
+	KRatingPainter mRatingPainter;
+
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
 
@@ -261,11 +263,7 @@ struct PreviewItemDelegatePrivate {
 			rect.width(),
 			ratingRowHeight());
 
-		KRatingPainter rp;
-		rp.setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-		rp.setLayoutDirection(mView->layoutDirection());
-
-		int hoverRating = rp.ratingFromPosition(ratingRect, event->pos());
+		int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, event->pos());
 		if (hoverRating == -1) {
 			return false;
 		}
@@ -364,14 +362,10 @@ struct PreviewItemDelegatePrivate {
 			rect.width(),
 			ratingRowHeight());
 
-		KRatingPainter rp;
-		rp.setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-		rp.setLayoutDirection(painter->layoutDirection());
-
 		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
-		int hoverRating = rp.ratingFromPosition(ratingRect, pos);
+		int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, pos);
 		hoverRating = hoverRating & 1 ? hoverRating + 1 : hoverRating;
-		rp.paint(painter, ratingRect, rating, hoverRating);
+		mRatingPainter.paint(painter, ratingRect, rating, hoverRating);
 	#endif
 	}
 
@@ -449,6 +443,9 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
+
+	d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+	d->mRatingPainter.setLayoutDirection(view->layoutDirection());
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
