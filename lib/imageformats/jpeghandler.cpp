@@ -68,7 +68,7 @@ struct JpegFatalError : public jpeg_error_mgr {
 
 
 static void expand24to32bpp(QImage* image) {
-	for (int j=0; j<image->height(); j++) {
+	for (int j = 0; j < image->height(); ++j) {
 		uchar *in = image->scanLine(j) + (image->width() - 1)*3;
 		QRgb *out = (QRgb*)( image->scanLine(j) ) + image->width() - 1;
 
@@ -166,7 +166,7 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 	case 1: // B&W image
 		*image = QImage(cinfo.output_width, cinfo.output_height, QImage::Format_Indexed8);
 		image->setNumColors(256);
-		for (int i=0; i<256; i++) {
+		for (int i=0; i<256; ++i) {
 			image->setColor(i, qRgba(i, i, i, 255));
 		}
 		break;

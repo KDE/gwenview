@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef NEPOMUKCONTEXTMANAGERITEM_H
-#define NEPOMUKCONTEXTMANAGERITEM_H
+#ifndef SEMANTICINFOCONTEXTMANAGERITEM_H
+#define SEMANTICINFOCONTEXTMANAGERITEM_H
 
 // Qt
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace
 
-#endif /* NEPOMUKCONTEXTMANAGERITEM_H */
+#endif /* SEMANTICINFOCONTEXTMANAGERITEM_H */

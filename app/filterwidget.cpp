@@ -24,13 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <config-gwenview.h>
 
 // Qt
-#include <QComboBox>
 #include <QHBoxLayout>
 #include <QListView>
 #include <QStackedWidget>
 #include <QTimer>
 
 // KDE
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -225,7 +225,7 @@ void TagController::updateTagSetFilter() {
 //// FilterWidget ////
 struct FilterWidgetPrivate {
 	FilterWidget* that;
-	QComboBox* mComboBox;
+	KComboBox* mComboBox;
 	QStackedWidget* mStackedWidget;
 
 	QMap<FilterType, AbstractFilterController*> mControllers;
@@ -233,7 +233,7 @@ struct FilterWidgetPrivate {
 
 	void setupWidgets() {
 		// Combo box
-		mComboBox = new QComboBox;
+		mComboBox = new KComboBox;
 		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		mComboBox->hide();
 		QLabel* label = new QLabel(i18n("Filter by Name:"));
