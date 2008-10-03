@@ -225,6 +225,8 @@ struct MainWindow::Private {
 			mGvCore, SLOT(rotateRight(const KUrl&)) );
 		connect(delegate, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
 			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
+		connect(delegate, SIGNAL(setDocumentRatingRequested(const KUrl&, int)),
+			mGvCore, SLOT(setRating(const KUrl&, int)) );
 
 		// Connect url navigator
 		connect(mUrlNavigator, SIGNAL(urlChanged(const KUrl&)),
@@ -601,8 +603,8 @@ MainWindow::MainWindow()
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
-	d->mGvCore = new GvCore(this);
 	d->mDirModel = new SortedDirModel(this);
+	d->mGvCore = new GvCore(this, d->mDirModel);
 	d->mPreloader = new Preloader(this);
 	d->initDirModel();
 	d->setupWidgets();

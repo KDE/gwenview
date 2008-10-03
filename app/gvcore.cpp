@@ -42,6 +42,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
+#include <lib/semanticinfo/semanticinfodirmodel.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/transformimageoperation.h>
 
 static const int MAX_RECENT_FOLDER = 20;
@@ -51,13 +53,15 @@ namespace Gwenview {
 
 struct GvCorePrivate {
 	QWidget* mParent;
+	SortedDirModel* mDirModel;
 };
 
 
-GvCore::GvCore(QWidget* parent)
+GvCore::GvCore(QWidget* parent, SortedDirModel* dirModel)
 : QObject(parent)
 , d(new GvCorePrivate) {
 	d->mParent = parent;
+	d->mDirModel = dirModel;
 }
 
 
@@ -265,6 +269,16 @@ void GvCore::rotateLeft(const KUrl& url) {
 
 void GvCore::rotateRight(const KUrl& url) {
 	applyTransform(url, ROT_90);
+}
+
+
+void GvCore::setRating(const KUrl& url, int rating) {
+	QModelIndex index = d->mDirModel->indexForUrl(url);
+	if (!index.isValid()) {
+		kWarning() << "invalid index!";
+		return;
+	}
+	d->mDirModel->setData(index, rating, SemanticInfoDirModel::RatingRole);
 }
 
 

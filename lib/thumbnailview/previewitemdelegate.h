@@ -58,6 +58,7 @@ Q_SIGNALS:
 	void rotateDocumentLeftRequested(const KUrl&);
 	void rotateDocumentRightRequested(const KUrl&);
 	void showDocumentInFullScreenRequested(const KUrl&);
+	void setDocumentRatingRequested(const KUrl&, int rating);
 
 private Q_SLOTS:
 	void setThumbnailSize(int);

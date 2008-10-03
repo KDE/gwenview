@@ -32,12 +32,13 @@ class KUrl;
 
 namespace Gwenview {
 
+class SortedDirModel;
 
 class GvCorePrivate;
 class GvCore : public QObject {
 	Q_OBJECT
 public:
-	GvCore(QWidget* mainWindow);
+	GvCore(QWidget* mainWindow, SortedDirModel*);
 	~GvCore();
 
 	void addUrlToRecentFolders(const KUrl&);
@@ -48,6 +49,7 @@ public Q_SLOTS:
 	void saveAs(const KUrl&);
 	void rotateLeft(const KUrl&);
 	void rotateRight(const KUrl&);
+	void setRating(const KUrl&, int);
 
 	/**
 	 * Checks if the document referenced by url is editable, shows a sorry

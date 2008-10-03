@@ -282,7 +282,7 @@ struct PreviewItemDelegatePrivate {
 		if (rating == -1) {
 			return false;
 		}
-		kDebug() << "Set rating to:" << rating;
+		mDelegate->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating / 2);
 		return true;
 	#else
 		return false;
