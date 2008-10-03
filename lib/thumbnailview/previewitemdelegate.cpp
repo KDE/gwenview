@@ -169,7 +169,9 @@ struct PreviewItemDelegatePrivate {
 	GlossyFrame* mButtonFrame;
 	GlossyFrame* mSaveButtonFrame;
 	QPixmap mSaveButtonFramePixmap;
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	KRatingPainter mRatingPainter;
+#endif
 
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
@@ -261,6 +263,7 @@ struct PreviewItemDelegatePrivate {
 			ratingRowHeight());
 	}
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	int ratingFromCursorPosition(const QRect& ratingRect) const {
 		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
 		const int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, pos);
@@ -270,6 +273,7 @@ struct PreviewItemDelegatePrivate {
 
 		return hoverRating & 1 ? hoverRating + 1 : hoverRating;
 	}
+#endif
 
 	bool mouseReleaseEventFilter(QMouseEvent* event) {
 	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -446,8 +450,10 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 	d->mRatingPainter.setLayoutDirection(view->layoutDirection());
+#endif
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
@@ -642,7 +648,9 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	d->drawText(painter, rect, fgColor, index.data(Qt::DisplayRole).toString());
 
 	if (!isDirOrArchive) {
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		d->drawRating(painter, rect, index.data(SemanticInfoDirModel::RatingRole));
+#endif
 	}
 }
 
