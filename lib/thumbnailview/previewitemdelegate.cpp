@@ -253,22 +253,32 @@ struct PreviewItemDelegatePrivate {
 		return false;
 	}
 
-
-	bool mouseReleaseEventFilter(QMouseEvent* event) {
-	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		const QRect rect = mView->visualRect(mIndexUnderCursor);
-		const QRect ratingRect(
+	QRect ratingRectFromIndexRect(const QRect& rect) const {
+		return QRect(
 			rect.left(),
 			rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
 			rect.width(),
 			ratingRowHeight());
+	}
 
-		int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, event->pos());
+	int ratingFromCursorPosition(const QRect& ratingRect) const {
+		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
+		const int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, pos);
 		if (hoverRating == -1) {
+			return -1;
+		}
+
+		return hoverRating & 1 ? hoverRating + 1 : hoverRating;
+	}
+
+	bool mouseReleaseEventFilter(QMouseEvent* event) {
+	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		const QRect rect = ratingRectFromIndexRect(mView->visualRect(mIndexUnderCursor));
+		const int rating = ratingFromCursorPosition(rect);
+		if (rating == -1) {
 			return false;
 		}
-		hoverRating = hoverRating & 1 ? hoverRating + 1 : hoverRating;
-		kDebug() << "Set rating to:" << hoverRating;
+		kDebug() << "Set rating to:" << rating;
 		return true;
 	#else
 		return false;
@@ -354,17 +364,9 @@ struct PreviewItemDelegatePrivate {
 
 	void drawRating(QPainter* painter, const QRect& rect, const QVariant& value) {
 	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		// Draw rating
 		const int rating = value.toInt() * 2;
-		const QRect ratingRect(
-			rect.left(),
-			rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
-			rect.width(),
-			ratingRowHeight());
-
-		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
-		int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, pos);
-		hoverRating = hoverRating & 1 ? hoverRating + 1 : hoverRating;
+		const QRect ratingRect = ratingRectFromIndexRect(rect);
+		const int hoverRating = ratingFromCursorPosition(ratingRect);
 		mRatingPainter.paint(painter, ratingRect, rating, hoverRating);
 	#endif
 	}
