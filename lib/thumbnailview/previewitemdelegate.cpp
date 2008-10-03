@@ -369,10 +369,19 @@ struct PreviewItemDelegatePrivate {
 		return mThumbnailSize + 2 * ITEM_MARGIN;
 	}
 
-	int itemHeight() const {
-		return mThumbnailSize + mView->fontMetrics().height() + 3*ITEM_MARGIN;
+	int ratingRowHeight() const {
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		return mView->fontMetrics().height();
+#endif
+		return 0;
 	}
 
+	int itemHeight() const {
+		return mThumbnailSize
+			+ mView->fontMetrics().height()
+			+ ratingRowHeight()
+			+ 3*ITEM_MARGIN;
+	}
 
 	void selectIndexUnderCursorIfNoMultiSelection() {
 		if (mView->selectionModel()->selectedIndexes().size() <= 1) {
@@ -582,11 +591,13 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	QVariant value = index.data(SemanticInfoDirModel::RatingRole);
 	if (value.isValid()) {
 		int rating = value.toInt() * 2;
-		QRect ratingRect(rect);
-		ratingRect.setWidth(ratingRect.width() / 2);
-		ratingRect.setHeight(ITEM_MARGIN + thumbnailSize);
+		QRect ratingRect(
+			rect.left(),
+			rect.bottom() - d->ratingRowHeight() - ITEM_MARGIN,
+			rect.width(),
+			d->ratingRowHeight());
 		KRatingPainter::paintRating(painter, ratingRect,
-			Qt::AlignLeft | Qt::AlignBottom, rating);
+			Qt::AlignHCenter | Qt::AlignBottom, rating);
 	}
 #endif
 }
