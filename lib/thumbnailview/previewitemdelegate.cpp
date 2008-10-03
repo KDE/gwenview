@@ -252,6 +252,32 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
+	bool mouseReleaseEventFilter(QMouseEvent* event) {
+	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		const QRect rect = mView->visualRect(mIndexUnderCursor);
+		const QRect ratingRect(
+			rect.left(),
+			rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
+			rect.width(),
+			ratingRowHeight());
+
+		KRatingPainter rp;
+		rp.setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+		rp.setLayoutDirection(mView->layoutDirection());
+
+		int hoverRating = rp.ratingFromPosition(ratingRect, event->pos());
+		if (hoverRating == -1) {
+			return false;
+		}
+		hoverRating = hoverRating & 1 ? hoverRating + 1 : hoverRating;
+		kDebug() << "Set rating to:" << hoverRating;
+		return true;
+	#else
+		return false;
+	#endif
+	}
+
+
 	QPoint saveButtonFramePosition(const QRect& itemRect) const {
 		QSize frameSize = mSaveButtonFrame->sizeHint();
 		int textHeight = mView->fontMetrics().height();
@@ -510,16 +536,20 @@ QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, co
 
 
 bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::ToolTip) {
-		QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-		d->showToolTip(helpEvent);
+	switch (event->type()) {
+	case QEvent::ToolTip:
+		d->showToolTip(static_cast<QHelpEvent*>(event));
 		return true;
 
-	} else if (event->type() == QEvent::HoverMove) {
-		QHoverEvent* hoverEvent = static_cast<QHoverEvent*>(event);
-		return d->hoverEventFilter(hoverEvent);
+	case QEvent::HoverMove:
+		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
+
+	case QEvent::MouseButtonRelease:
+		return d->mouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
+
+	default:
+		return false;
 	}
-	return false;
 }
 
 
