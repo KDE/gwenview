@@ -214,6 +214,9 @@ struct PreviewItemDelegatePrivate {
 
 	bool hoverEventFilter(QHoverEvent* event) {
 		QModelIndex index = mView->indexAt(event->pos());
+		if (mIndexUnderCursor.isValid()) {
+			mView->update(mIndexUnderCursor);
+		}
 		if (index == mIndexUnderCursor) {
 			// Same index, nothing to do
 			return false;
@@ -322,6 +325,28 @@ struct PreviewItemDelegatePrivate {
 			rect.left() + posX,
 			rect.top() + ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN + fm.ascent(),
 			text);
+	}
+
+
+	void drawRating(QPainter* painter, const QRect& rect, const QVariant& value) {
+	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		// Draw rating
+		const int rating = value.toInt() * 2;
+		const QRect ratingRect(
+			rect.left(),
+			rect.bottom() - ratingRowHeight() - ITEM_MARGIN,
+			rect.width(),
+			ratingRowHeight());
+
+		KRatingPainter rp;
+		rp.setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+		rp.setLayoutDirection(painter->layoutDirection());
+
+		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
+		int hoverRating = rp.ratingFromPosition(ratingRect, pos);
+		hoverRating = hoverRating & 1 ? hoverRating + 1 : hoverRating;
+		rp.paint(painter, ratingRect, rating, hoverRating);
+	#endif
 	}
 
 
@@ -502,6 +527,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	int thumbnailSize = d->mThumbnailSize;
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
+	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItemForIndex(index));
 	QRect rect = option.rect;
 
 #ifdef DEBUG_RECT
@@ -586,20 +612,9 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 	d->drawText(painter, rect, fgColor, index.data(Qt::DisplayRole).toString());
 
-#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	// Draw rating
-	QVariant value = index.data(SemanticInfoDirModel::RatingRole);
-	if (value.isValid()) {
-		int rating = value.toInt() * 2;
-		QRect ratingRect(
-			rect.left(),
-			rect.bottom() - d->ratingRowHeight() - ITEM_MARGIN,
-			rect.width(),
-			d->ratingRowHeight());
-		KRatingPainter::paintRating(painter, ratingRect,
-			Qt::AlignHCenter | Qt::AlignBottom, rating);
+	if (!isDirOrArchive) {
+		d->drawRating(painter, rect, index.data(SemanticInfoDirModel::RatingRole));
 	}
-#endif
 }
 
 
