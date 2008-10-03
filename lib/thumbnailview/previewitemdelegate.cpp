@@ -418,7 +418,7 @@ struct PreviewItemDelegatePrivate {
 
 	int ratingRowHeight() const {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		return mView->fontMetrics().height();
+		return mView->fontMetrics().ascent();
 #endif
 		return 0;
 	}
