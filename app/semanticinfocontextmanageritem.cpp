@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kaction.h>
+#include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -63,14 +64,20 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	TagInfo mTagInfo;
 	KAction* mEditTagsAction;
 
-	void setupShortcuts() {
+	void setupActions() {
 		Q_ASSERT(mSideBar);
+		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
 		QSignalMapper* mapper = new QSignalMapper(that);
 		for (int rating=0; rating <= 5; ++rating) {
-			QShortcut* shortcut = new QShortcut(mSideBar);
-			shortcut->setKey(Qt::Key_0 + rating);
-			QObject::connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()) );
-			mapper->setMapping(shortcut, rating * 2);
+			KAction* action = edit->addAction(QString("rate_%1").arg(rating));
+			if (rating == 0) {
+				action->setText(i18nc("@action Rating value of zero", "Zero"));
+			} else {
+				action->setText(QString(rating, QChar(0x22C6))); /* 0x22C6 is the 'star' character */
+			}
+			action->setShortcut(Qt::Key_0 + rating);
+			QObject::connect(action, SIGNAL(triggered()), mapper, SLOT(map()) );
+			mapper->setMapping(action, rating * 2);
 		}
 		QObject::connect(mapper, SIGNAL(mapped(int)), mRatingWidget, SLOT(setRating(int)) );
 		QObject::connect(mapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
@@ -163,7 +170,7 @@ void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	connect(d->mTagLabel, SIGNAL(linkActivated(const QString&)),
 		d->mEditTagsAction, SLOT(trigger()) );
 
-	d->setupShortcuts();
+	d->setupActions();
 }
 
 
