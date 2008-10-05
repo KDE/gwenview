@@ -67,6 +67,13 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
 	void setupActions() {
 		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
+
+		mEditTagsAction = edit->addAction("edit_tags");
+		mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
+		mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
+		QObject::connect(mEditTagsAction, SIGNAL(triggered()),
+			that, SLOT(showSemanticInfoDialog()) );
+
 		mRatingMapper = new QSignalMapper(that);
 		for (int rating=0; rating <= 5; ++rating) {
 			KAction* action = edit->addAction(QString("rate_%1").arg(rating));
@@ -125,11 +132,6 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 	d->mSideBar = 0;
 	d->mGroup = 0;
 	d->mActionCollection = actionCollection;
-	d->mEditTagsAction = d->mActionCollection->addAction("edit_tags");
-	d->mEditTagsAction->setText(i18nc("@action", "Edit Tags"));
-	d->mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
-	connect(d->mEditTagsAction, SIGNAL(triggered()),
-		SLOT(showSemanticInfoDialog()) );
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
