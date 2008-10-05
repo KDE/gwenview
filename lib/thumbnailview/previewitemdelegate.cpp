@@ -266,12 +266,7 @@ struct PreviewItemDelegatePrivate {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	int ratingFromCursorPosition(const QRect& ratingRect) const {
 		const QPoint pos = mView->viewport()->mapFromGlobal(QCursor::pos());
-		const int hoverRating = mRatingPainter.ratingFromPosition(ratingRect, pos);
-		if (hoverRating == -1) {
-			return -1;
-		}
-
-		return hoverRating & 1 ? hoverRating + 1 : hoverRating;
+		return mRatingPainter.ratingFromPosition(ratingRect, pos);
 	}
 #endif
 
@@ -282,7 +277,7 @@ struct PreviewItemDelegatePrivate {
 		if (rating == -1) {
 			return false;
 		}
-		mDelegate->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating / 2);
+		mDelegate->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
 		return true;
 	#else
 		return false;
@@ -368,7 +363,7 @@ struct PreviewItemDelegatePrivate {
 
 	void drawRating(QPainter* painter, const QRect& rect, const QVariant& value) {
 	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		const int rating = value.toInt() * 2;
+		const int rating = value.toInt();
 		const QRect ratingRect = ratingRectFromIndexRect(rect);
 		const int hoverRating = ratingFromCursorPosition(ratingRect);
 		mRatingPainter.paint(painter, ratingRect, rating, hoverRating);
@@ -453,6 +448,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 	d->mRatingPainter.setLayoutDirection(view->layoutDirection());
+	d->mRatingPainter.setMaxRating(10);
 #endif
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),

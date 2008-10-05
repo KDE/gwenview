@@ -70,7 +70,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 			QShortcut* shortcut = new QShortcut(mSideBar);
 			shortcut->setKey(Qt::Key_0 + rating);
 			QObject::connect(shortcut, SIGNAL(activated()), mapper, SLOT(map()) );
-			mapper->setMapping(shortcut, rating);
+			mapper->setMapping(shortcut, rating * 2);
 		}
 		QObject::connect(mapper, SIGNAL(mapped(int)), mRatingWidget, SLOT(setRating(int)) );
 		QObject::connect(mapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
@@ -152,8 +152,8 @@ void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mGroup->addWidget(container);
 
 	d->mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	d->mRatingWidget->setHalfStepsEnabled(false);
-	d->mRatingWidget->setMaxRating(5);
+	d->mRatingWidget->setHalfStepsEnabled(true);
+	d->mRatingWidget->setMaxRating(10);
 	connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
 
