@@ -63,11 +63,11 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	QPointer<SemanticInfoDialog> mSemanticInfoDialog;
 	TagInfo mTagInfo;
 	KAction* mEditTagsAction;
+	QSignalMapper* mRatingMapper;
 
 	void setupActions() {
-		Q_ASSERT(mSideBar);
 		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
-		QSignalMapper* mapper = new QSignalMapper(that);
+		mRatingMapper = new QSignalMapper(that);
 		for (int rating=0; rating <= 5; ++rating) {
 			KAction* action = edit->addAction(QString("rate_%1").arg(rating));
 			if (rating == 0) {
@@ -76,11 +76,10 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 				action->setText(QString(rating, QChar(0x22C6))); /* 0x22C6 is the 'star' character */
 			}
 			action->setShortcut(Qt::Key_0 + rating);
-			QObject::connect(action, SIGNAL(triggered()), mapper, SLOT(map()) );
-			mapper->setMapping(action, rating * 2);
+			QObject::connect(action, SIGNAL(triggered()), mRatingMapper, SLOT(map()) );
+			mRatingMapper->setMapping(action, rating * 2);
 		}
-		QObject::connect(mapper, SIGNAL(mapped(int)), mRatingWidget, SLOT(setRating(int)) );
-		QObject::connect(mapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
+		QObject::connect(mRatingMapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
 	}
 
 
@@ -138,6 +137,8 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 		SLOT(updateSideBarContent()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateSideBarContent()) );
+
+	d->setupActions();
 }
 
 
@@ -163,14 +164,14 @@ void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mRatingWidget->setMaxRating(10);
 	connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
+	connect(d->mRatingMapper, SIGNAL(mapped(int)),
+		d->mRatingWidget, SLOT(setRating(int)) );
 
 	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
 		SLOT(storeDescription()));
 
 	connect(d->mTagLabel, SIGNAL(linkActivated(const QString&)),
 		d->mEditTagsAction, SLOT(trigger()) );
-
-	d->setupActions();
 }
 
 
