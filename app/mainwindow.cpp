@@ -1066,23 +1066,12 @@ void MainWindow::saveCurrentAs() {
 
 
 void MainWindow::reload() {
-	KUrl url = d->currentUrl();
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	if (doc->isModified()) {
-		KGuiItem cont = KStandardGuiItem::cont();
-		cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
-		int answer = KMessageBox::warningContinueCancel(this,
-			i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
-			QString() /* caption */,
-			cont);
-		if (answer != KMessageBox::Continue) {
-			return;
-		}
+	if (d->mDocumentPanel->isVisible()) {
+		d->mDocumentPanel->reload();
+	} else {
+		d->mDirModel->reload();
 	}
-	doc->reload();
 }
-
-
 
 
 void MainWindow::openFile() {
