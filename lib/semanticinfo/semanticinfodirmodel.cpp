@@ -80,6 +80,11 @@ SemanticInfoDirModel::~SemanticInfoDirModel() {
 }
 
 
+void SemanticInfoDirModel::clearSemanticInfoCache() {
+	d->mSemanticInfoCache.clear();
+}
+
+
 bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& index) const {
 	if (!index.isValid()) {
 		return false;

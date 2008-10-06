@@ -51,6 +51,8 @@ public:
 	SemanticInfoDirModel(QObject* parent);
 	~SemanticInfoDirModel();
 
+	void clearSemanticInfoCache();
+
 	bool semanticInfoAvailableForIndex(const QModelIndex&) const;
 
 	void retrieveSemanticInfoForIndex(const QModelIndex&);

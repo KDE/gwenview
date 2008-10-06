@@ -61,6 +61,8 @@ public:
 
 	void setTagSetFilter(const TagSet& tagSet);
 
+	void reload();
+
 	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 public Q_SLOTS:

@@ -75,6 +75,14 @@ KDirLister* SortedDirModel::dirLister() {
 }
 
 
+void SortedDirModel::reload() {
+	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+	d->mSourceModel->clearSemanticInfoCache();
+	#endif
+	dirLister()->updateDirectory(dirLister()->url());
+}
+
+
 void SortedDirModel::setBlackListedExtensions(const QStringList& list) {
 	d->mBlackListedExtensions = list;
 }
