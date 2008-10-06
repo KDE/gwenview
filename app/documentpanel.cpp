@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kmessagebox.h>
 #include <ktoggleaction.h>
 
 // Local
@@ -459,6 +460,30 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 
 void DocumentPanel::openUrl(const KUrl& url) {
 	d->mDocumentView->openUrl(url);
+}
+
+
+void DocumentPanel::reload() {
+	if (!d->mDocumentView->adapter()) {
+		return;
+	}
+	Document::Ptr doc = d->mDocumentView->adapter()->document();
+	if (!doc) {
+		kWarning() << "!doc";
+		return;
+	}
+	if (doc->isModified()) {
+		KGuiItem cont = KStandardGuiItem::cont();
+		cont.setText(i18nc("@action:button", "Discard Changes and Reload"));
+		int answer = KMessageBox::warningContinueCancel(this,
+			i18nc("@info", "This image has been modified. Reloading it will discard all your changes."),
+			QString() /* caption */,
+			cont);
+		if (answer != KMessageBox::Continue) {
+			return;
+		}
+	}
+	doc->reload();
 }
 
 

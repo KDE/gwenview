@@ -74,6 +74,8 @@ public:
 
 	void openUrl(const KUrl& url);
 
+	void reload();
+
 	Document::Ptr currentDocument() const;
 
 	bool isEmpty() const;
