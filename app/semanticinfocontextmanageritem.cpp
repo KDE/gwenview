@@ -300,7 +300,8 @@ void SemanticInfoContextManagerItem::updateSideBarContent() {
 void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	KFileItemList itemList = contextManager()->selection();
 
-	if (d->mRatingIndicator->parentWidget()->isVisible()) {
+	// Show rating indicator in view mode, and only if sidebar is not visible
+	if (d->mRatingIndicator->parentWidget()->isVisible() && !d->mRatingWidget->isVisible()) {
 		d->mRatingIndicator->show(rating);
 	}
 
