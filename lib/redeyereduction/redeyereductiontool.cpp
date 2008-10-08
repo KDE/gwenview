@@ -33,54 +33,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include <lib/hudwidget.h>
 #include "gwenviewconfig.h"
 #include "imageview.h"
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionhud.h"
 #include "widgetfloater.h"
-#include "fullscreentheme.h"
 
 
 namespace Gwenview {
-
-class HudWidget : public QFrame {
-public:
-	HudWidget(QWidget* parent = 0)
-	: QFrame(parent) {
-		mCloseButton = new QToolButton(this);
-		mCloseButton->setAutoRaise(true);
-		mCloseButton->setIcon(SmallIcon("window-close"));
-	}
-
-	void setMainWidget(QWidget* widget) {
-		mMainWidget = widget;
-		mMainWidget->setParent(this);
-		if (mMainWidget->layout()) {
-			mMainWidget->layout()->setMargin(0);
-		}
-
-		FullScreenTheme theme(FullScreenTheme::currentThemeName());
-		setStyleSheet(theme.styleSheet());
-
-		QHBoxLayout* layout = new QHBoxLayout(this);
-		layout->setMargin(4);
-		layout->addWidget(mMainWidget);
-		layout->addWidget(mCloseButton);
-	}
-
-	QToolButton* closeButton() const {
-		return mCloseButton;
-	}
-
-	QWidget* mainWidget() const {
-		return mMainWidget;
-	}
-
-private:
-	QWidget* mMainWidget;
-	QToolButton* mCloseButton;
-};
 
 
 struct RedEyeReductionHud : public QWidget, public Ui_RedEyeReductionHud {
@@ -127,7 +89,7 @@ struct RedEyeReductionToolPrivate {
 	void createHudWidgetForWidget(QWidget* widget) {
 		mHudWidget->deleteLater();
 		mHudWidget = new HudWidget();
-		mHudWidget->setMainWidget(widget);
+		mHudWidget->init(widget, HudWidget::OptionCloseButton);
 		mHudWidget->adjustSize();
 		QObject::connect(mHudWidget->closeButton(), SIGNAL(clicked()),
 			mRedEyeReductionTool, SIGNAL(done()) );

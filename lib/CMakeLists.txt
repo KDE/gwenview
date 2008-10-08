@@ -35,6 +35,7 @@ set(gwenviewlib_SRCS
 	exiv2imageloader.cpp
 	fullscreenbar.cpp
 	fullscreentheme.cpp
+	hudwidget.cpp
 	imageformats/imageformats.cpp
 	imageformats/jpegplugin.cpp
 	imageformats/jpeghandler.cpp
