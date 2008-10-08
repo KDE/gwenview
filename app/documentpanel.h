@@ -34,6 +34,7 @@ class KUrl;
 namespace Gwenview {
 
 class DocumentPanelPrivate;
+class DocumentView;
 class ImageView;
 class ThumbnailBarView;
 
@@ -84,6 +85,11 @@ public:
 	 * Returns the image view, if the current adapter has one.
 	 */
 	ImageView* imageView() const;
+
+	/**
+	 * Returns the document view
+	 */
+	DocumentView* documentView() const;
 
 Q_SIGNALS:
 

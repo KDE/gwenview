@@ -452,6 +452,11 @@ ImageView* DocumentPanel::imageView() const {
 }
 
 
+DocumentView* DocumentPanel::documentView() const {
+	return d->mDocumentView;
+}
+
+
 void DocumentPanel::setNormalPalette(const QPalette& palette) {
 	d->mNormalPalette = palette;
 	d->applyPalette();
