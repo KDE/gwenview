@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef HUDWIDGET_H
 #define HUDWIDGET_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QFrame>
 
@@ -34,7 +36,7 @@ namespace Gwenview {
 
 
 class HudWidgetPrivate;
-class HudWidget : public QFrame {
+class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
 	Q_OBJECT
 public:
 	enum Options {
