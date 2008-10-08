@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QShortcut>
 #include <QSignalMapper>
+#include <QStyle>
 #include <QTimer>
 
 // KDE
@@ -62,7 +63,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
 
 class RatingIndicator : public HudWidget {
 public:
-	RatingIndicator(QWidget* parent = 0)
+	RatingIndicator(QWidget* parent)
 	: HudWidget(parent)
 	, mRatingWidget(new KRatingWidget)
 	, mHideTimer(new QTimer)
@@ -70,6 +71,10 @@ public:
 		init(mRatingWidget, OptionNone);
 		WidgetFloater* floater = new WidgetFloater(parent);
 		floater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+		floater->setVerticalMargin(
+			KDialog::marginHint()
+			+ parent->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
+			);
 		floater->setChildWidget(this);
 
 		mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
