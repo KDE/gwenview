@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QShortcut>
 #include <QSignalMapper>
+#include <QTimer>
 
 // KDE
 #include <kaction.h>
@@ -40,11 +41,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "sidebar.h"
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
+#include <lib/hudwidget.h>
+#include <lib/widgetfloater.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
+
+static const int RATING_INDICATOR_HIDE_DELAY = 3000;
 
 
 struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
@@ -52,6 +57,36 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
 	: QDialog(parent) {
 		setupUi(this);
 	}
+};
+
+
+class RatingIndicator : public HudWidget {
+public:
+	RatingIndicator(QWidget* parent = 0)
+	: HudWidget(parent)
+	, mRatingWidget(new KRatingWidget)
+	, mHideTimer(new QTimer)
+	{
+		init(mRatingWidget, OptionNone);
+		WidgetFloater* floater = new WidgetFloater(parent);
+		floater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+		floater->setChildWidget(this);
+
+		mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
+		mHideTimer->setSingleShot(true);
+		connect(mHideTimer, SIGNAL(timeout()), SLOT(hide()));
+		hide();
+	}
+
+	void show(int rating) {
+		mRatingWidget->setRating(rating);
+		HudWidget::show();
+		mHideTimer->start();
+	}
+
+private:
+	KRatingWidget* mRatingWidget;
+	QTimer* mHideTimer;
 };
 
 
@@ -64,6 +99,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	TagInfo mTagInfo;
 	KAction* mEditTagsAction;
 	QSignalMapper* mRatingMapper;
+	RatingIndicator* mRatingIndicator;
 
 	void setupActions() {
 		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
@@ -150,6 +186,8 @@ SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem() {
 
 
 void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
+	d->mRatingIndicator = new RatingIndicator(sideBar->window());
+
 	d->mSideBar = sideBar;
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
@@ -260,6 +298,8 @@ void SemanticInfoContextManagerItem::updateSideBarContent() {
 
 void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	KFileItemList itemList = contextManager()->selection();
+
+	d->mRatingIndicator->show(rating);
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
