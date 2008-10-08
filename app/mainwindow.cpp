@@ -383,7 +383,7 @@ struct MainWindow::Private {
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		mContextManager->addItem(new SemanticInfoContextManagerItem(mContextManager, actionCollection));
+		mContextManager->addItem(new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel));
 		#endif
 
 		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, mWindow));

@@ -38,7 +38,7 @@ class SemanticInfoContextManagerItemPrivate;
 class SemanticInfoContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*);
+	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, QWidget* documentPanel);
 	~SemanticInfoContextManagerItem();
 
 	virtual void setSideBar(SideBar*);

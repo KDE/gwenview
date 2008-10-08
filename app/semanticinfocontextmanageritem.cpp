@@ -81,6 +81,7 @@ public:
 	void show(int rating) {
 		mRatingWidget->setRating(rating);
 		HudWidget::show();
+		raise();
 		mHideTimer->start();
 	}
 
@@ -161,13 +162,15 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 };
 
 
-SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, QWidget* documentPanel)
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate) {
 	d->that = this;
 	d->mSideBar = 0;
 	d->mGroup = 0;
 	d->mActionCollection = actionCollection;
+
+	d->mRatingIndicator = new RatingIndicator(documentPanel);
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
@@ -186,8 +189,6 @@ SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem() {
 
 
 void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mRatingIndicator = new RatingIndicator(sideBar->window());
-
 	d->mSideBar = sideBar;
 	connect(sideBar, SIGNAL(aboutToShow()),
 		SLOT(updateSideBarContent()) );
@@ -299,7 +300,9 @@ void SemanticInfoContextManagerItem::updateSideBarContent() {
 void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	KFileItemList itemList = contextManager()->selection();
 
-	d->mRatingIndicator->show(rating);
+	if (d->mRatingIndicator->parentWidget()->isVisible()) {
+		d->mRatingIndicator->show(rating);
+	}
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
