@@ -41,6 +41,8 @@ TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 , d(new TagModelPrivate) {
 	d->mBackEnd = backEnd;
 	refresh();
+	connect(d->mBackEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
+		SLOT(slotTagAdded(const SemanticInfoTag&, const QString&)));
 }
 
 
@@ -56,6 +58,21 @@ void TagModel::refresh() {
 		appendRow(item);
 	}
 	sort(0);
+}
+
+
+void TagModel::slotTagAdded(const SemanticInfoTag& tag, const QString& label) {
+	int row;
+	// This is not optimal, implement dichotomic search if necessary
+	for (row=0; row < rowCount(); ++row) {
+		const QModelIndex idx = index(row, 0);
+		if (idx.data().toString().compare(label) > 0) {
+			break;
+		}
+	}
+	QStandardItem* item = new QStandardItem(label);
+	item->setData(tag, TagRole);
+	insertRow(row, item);
 }
 
 

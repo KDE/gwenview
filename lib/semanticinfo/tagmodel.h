@@ -32,6 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+typedef QString SemanticInfoTag;
+
 class AbstractSemanticInfoBackEnd;
 
 
@@ -48,6 +50,7 @@ public:
 
 private Q_SLOTS:
 	void refresh();
+	void slotTagAdded(const SemanticInfoTag& tag, const QString& label);
 
 private:
 	TagModelPrivate* const d;
