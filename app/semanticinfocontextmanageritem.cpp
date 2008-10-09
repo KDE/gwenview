@@ -143,7 +143,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		TagInfo::ConstIterator
 			it = mTagInfo.constBegin(),
 			end = mTagInfo.constEnd();
-		QStringList labels;
+		QMap<QString, QString> labelMap;
 		for (; it!=end; ++it) {
 			SemanticInfoTag tag = it.key();
 			QString label = backEnd->labelForTag(tag);
@@ -151,8 +151,9 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 				// Tag is not present for all urls
 				label += '*';
 			}
-			labels << label;
+			labelMap[label.toLower()] = label;
 		}
+		QStringList labels(labelMap.values());
 
 		QString editLink = i18n("Edit");
 		QString text = labels.join(", ") + QString(" <a href='edit'>%1</a>").arg(editLink);
