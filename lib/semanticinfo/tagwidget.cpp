@@ -83,7 +83,7 @@ public:
 
 
 	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
-		setSourceModel(new TagModel(this, backEnd));
+		setSourceModel(TagModel::createAllTagsModel(this, backEnd));
 	}
 
 

@@ -178,11 +178,8 @@ void TagController::init(QWidget* parentWidget) {
 	d->mListView->setSelectionMode(QAbstractItemView::MultiSelection);
 
 	AbstractSemanticInfoBackEnd* backEnd = mDirModel->semanticInfoBackEnd();
-	TagModel* tagModel = new TagModel(d->mListView, backEnd);
 	backEnd->refreshAllTags();
-	tagModel->setTagSet(backEnd->allTags());
-	connect(backEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
-		tagModel, SLOT(addTag(const SemanticInfoTag&, const QString&)));
+	TagModel* tagModel = TagModel::createAllTagsModel(d->mListView, backEnd);
 	d->mListView->setModel(tagModel);
 
 	connect(d->mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),

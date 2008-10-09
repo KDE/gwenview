@@ -42,7 +42,7 @@ class TagModelPrivate;
 class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel {
 	Q_OBJECT
 public:
-	TagModel(QObject*, AbstractSemanticInfoBackEnd*);
+	TagModel(QObject*);
 	~TagModel();
 
 	enum {
@@ -50,7 +50,14 @@ public:
 		SortRole
 	};
 
+	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
 	void setTagSet(const TagSet& set);
+
+	/**
+	 * Convenience method to create a TagModel showing all tags available in
+	 * AbstractSemanticInfoBackEnd
+	 */
+	static TagModel* createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd*);
 
 public Q_SLOTS:
 	/**

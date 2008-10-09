@@ -44,16 +44,21 @@ static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& labe
 }
 
 
-TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
+TagModel::TagModel(QObject* parent)
 : QStandardItemModel(parent)
 , d(new TagModelPrivate) {
-	d->mBackEnd = backEnd;
+	d->mBackEnd = 0;
 	setSortRole(SortRole);
 }
 
 
 TagModel::~TagModel() {
 	delete d;
+}
+
+
+void TagModel::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
+	d->mBackEnd = backEnd;
 }
 
 
@@ -80,6 +85,16 @@ void TagModel::addTag(const SemanticInfoTag& tag, const QString& label) {
 	}
 	QStandardItem* item = createItem(tag, label);
 	insertRow(row, item);
+}
+
+
+TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd) {
+	TagModel* tagModel = new TagModel(parent);
+	tagModel->setSemanticInfoBackEnd(backEnd);
+	tagModel->setTagSet(backEnd->allTags());
+	connect(backEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
+		tagModel, SLOT(addTag(const SemanticInfoTag&, const QString&)));
+	return tagModel;
 }
 
 
