@@ -53,7 +53,7 @@ void FakeSemanticInfoBackEnd::mergeTagsWithAllTags(const TagSet& set) {
 	int size = mAllTags.size();
 	mAllTags |= set;
 	if (mAllTags.size() > size) {
-		emit allTagsUpdated();
+		//emit allTagsUpdated();
 	}
 }
 

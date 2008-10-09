@@ -41,7 +41,6 @@ TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 , d(new TagModelPrivate) {
 	d->mBackEnd = backEnd;
 	refresh();
-	connect(backEnd, SIGNAL(allTagsUpdated()), SLOT(refresh()) );
 }
 
 
