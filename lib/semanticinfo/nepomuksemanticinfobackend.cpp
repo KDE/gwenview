@@ -214,13 +214,19 @@ QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uri) cons
 }
 
 
-SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label) const {
+SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label) {
 	Nepomuk::Tag tag(label);
-	if (!tag.exists()) {
+	SemanticInfoTag uri;
+	if (tag.exists()) {
+		uri = tag.resourceUri().toString();
+	} else {
 		// Not found, create the tag
 		tag.setLabel(label);
+		uri = tag.resourceUri().toString();
+		d->mAllTags << uri;
+		emit tagAdded(uri, label);
 	}
-	return tag.resourceUri().toString();
+	return uri;
 }
 
 

@@ -97,7 +97,7 @@ QString FakeSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& tag) const {
 }
 
 
-SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label) const {
+SemanticInfoTag FakeSemanticInfoBackEnd::tagForLabel(const QString& label) {
 	return '#' + label.toLower();
 }
 

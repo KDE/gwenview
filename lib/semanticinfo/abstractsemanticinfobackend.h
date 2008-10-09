@@ -84,10 +84,19 @@ public:
 
 	virtual QString labelForTag(const SemanticInfoTag&) const = 0;
 
-	virtual SemanticInfoTag tagForLabel(const QString&) const = 0;
+	/**
+	 * Return a tag for a label. Will emit tagAdded() if the tag had to be
+	 * created.
+	 */
+	virtual SemanticInfoTag tagForLabel(const QString&) = 0;
 
 Q_SIGNALS:
 	void semanticInfoRetrieved(const KUrl&, const SemanticInfo&);
+
+	/**
+	 * Emitted whenever a new tag is added to allTags()
+	 */
+	void tagAdded(const SemanticInfoTag&, const QString& label);
 };
 
 

@@ -64,6 +64,7 @@ void SemanticInfoBackEndClient::slotSemanticInfoRetrieved(const KUrl& url, const
 
 void SemanticInfoBackEndTest::initTestCase() {
 	qRegisterMetaType<KUrl>("KUrl");
+	qRegisterMetaType<QString>("SemanticInfoTag");
 }
 
 
@@ -101,12 +102,22 @@ void SemanticInfoBackEndTest::testRating() {
 
 
 void SemanticInfoBackEndTest::testTagForLabel() {
+	QSignalSpy spy(mBackEnd.get(), SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)) );
+
+	TagSet oldAllTags = mBackEnd->allTags();
 	QString label = "testTagForLabel-" + KRandom::randomString(5);
 	SemanticInfoTag tag1 = mBackEnd->tagForLabel(label);
 	QVERIFY(!tag1.isEmpty());
+	QVERIFY(!oldAllTags.contains(tag1));
+	QVERIFY(mBackEnd->allTags().contains(tag1));
+
+	// This is a new tag, we should receive a signal
+	QCOMPARE(spy.count(), 1);
 
 	SemanticInfoTag tag2 = mBackEnd->tagForLabel(label);
 	QCOMPARE(tag1, tag2);
+	// This is not a new tag, we should not receive a signal
+	QCOMPARE(spy.count(), 1);
 
 	QString label2 = mBackEnd->labelForTag(tag2);
 	QCOMPARE(label, label2);

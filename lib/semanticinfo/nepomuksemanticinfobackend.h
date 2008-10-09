@@ -55,7 +55,7 @@ public:
 
 	virtual QString labelForTag(const SemanticInfoTag&) const;
 
-	virtual SemanticInfoTag tagForLabel(const QString&) const;
+	virtual SemanticInfoTag tagForLabel(const QString&);
 
 	void emitSemanticInfoRetrieved(const KUrl&, const SemanticInfo&);
 
