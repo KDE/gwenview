@@ -36,10 +36,19 @@ struct TagModelPrivate {
 };
 
 
+static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label) {
+	QStandardItem* item = new QStandardItem(label);
+	item->setData(tag, TagModel::TagRole);
+	item->setData(label.toLower(), TagModel::SortRole);
+	return item;
+}
+
+
 TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 : QStandardItemModel(parent)
 , d(new TagModelPrivate) {
 	d->mBackEnd = backEnd;
+	setSortRole(SortRole);
 	refresh();
 	connect(d->mBackEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
 		SLOT(slotTagAdded(const SemanticInfoTag&, const QString&)));
@@ -53,8 +62,7 @@ void TagModel::refresh() {
 	clear();
 	Q_FOREACH(const SemanticInfoTag& tag, set) {
 		QString label = d->mBackEnd->labelForTag(tag);
-		QStandardItem* item = new QStandardItem(label);
-		item->setData(tag, TagRole);
+		QStandardItem* item = createItem(tag, label);
 		appendRow(item);
 	}
 	sort(0);
@@ -63,15 +71,15 @@ void TagModel::refresh() {
 
 void TagModel::slotTagAdded(const SemanticInfoTag& tag, const QString& label) {
 	int row;
+	const QString sortLabel = label.toLower();
 	// This is not optimal, implement dichotomic search if necessary
 	for (row=0; row < rowCount(); ++row) {
 		const QModelIndex idx = index(row, 0);
-		if (idx.data().toString().compare(label) > 0) {
+		if (idx.data(SortRole).toString().compare(sortLabel) > 0) {
 			break;
 		}
 	}
-	QStandardItem* item = new QStandardItem(label);
-	item->setData(tag, TagRole);
+	QStandardItem* item = createItem(tag, label);
 	insertRow(row, item);
 }
 

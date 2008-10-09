@@ -45,7 +45,8 @@ public:
 	~TagModel();
 
 	enum {
-		TagRole = Qt::UserRole
+		TagRole = Qt::UserRole,
+		SortRole
 	};
 
 private Q_SLOTS:
