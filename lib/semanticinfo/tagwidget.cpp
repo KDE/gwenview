@@ -113,6 +113,7 @@ struct TagWidgetPrivate {
 	void setupWidgets() {
 		mListView = new QListView;
 		mListView->setItemDelegate(new TagItemDelegate(mListView));
+		mListView->setSelectionMode(QListView::NoSelection);
 		mListView->setModel(mTagModel);
 
 		mLineEdit = new KLineEdit;
@@ -202,12 +203,9 @@ void TagWidget::assignTag() {
 
 
 void TagWidget::slotTagClicked(const QModelIndex& index) {
-	if (!index.isValid()) {
-		return;
-	}
 	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
 	d->mTagInfo.remove(tag);
-	d->fillTagModel();
+	d->mTagModel->removeTag(tag);
 	d->updateCompleterModel();
 
 	emit tagRemoved(tag);
