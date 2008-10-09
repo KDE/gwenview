@@ -63,6 +63,10 @@ TagSet FakeSemanticInfoBackEnd::allTags() const {
 }
 
 
+void FakeSemanticInfoBackEnd::refreshAllTags() {
+}
+
+
 void FakeSemanticInfoBackEnd::retrieveSemanticInfo(const KUrl& url) {
 	if (!mSemanticInfoForUrl.contains(url)) {
 		QString urlString = url.url();

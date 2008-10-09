@@ -155,6 +155,7 @@ private:
 
 struct NepomukSemanticInfoBackEndPrivate {
 	SemanticInfoThread mThread;
+	TagSet mAllTags;
 };
 
 
@@ -171,14 +172,18 @@ NepomukSemanticInfoBackEnd::~NepomukSemanticInfoBackEnd() {
 
 
 TagSet NepomukSemanticInfoBackEnd::allTags() const {
-	QList<Nepomuk::Tag> list = Nepomuk::Tag::allTags();
-
-	TagSet set;
-	Q_FOREACH(const Nepomuk::Tag& tag, list) {
-		set << tag.resourceUri().toString();
+	if (d->mAllTags.empty()) {
+		const_cast<NepomukSemanticInfoBackEnd*>(this)->refreshAllTags();
 	}
+	return d->mAllTags;
+}
 
-	return set;
+
+void NepomukSemanticInfoBackEnd::refreshAllTags() {
+	d->mAllTags.clear();
+	Q_FOREACH(const Nepomuk::Tag& tag, Nepomuk::Tag::allTags()) {
+		d->mAllTags << tag.resourceUri().toString();
+	}
 }
 
 

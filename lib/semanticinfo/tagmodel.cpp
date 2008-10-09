@@ -45,6 +45,7 @@ TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 
 
 void TagModel::refresh() {
+	d->mBackEnd->refreshAllTags();
 	TagSet set = d->mBackEnd->allTags();
 
 	clear();

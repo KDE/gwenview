@@ -47,6 +47,8 @@ public:
 
 	virtual TagSet allTags() const;
 
+	virtual void refreshAllTags();
+
 	virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
 
 	virtual void retrieveSemanticInfo(const KUrl&);
