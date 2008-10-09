@@ -65,6 +65,8 @@ public Q_SLOTS:
 	 */
 	void addTag(const SemanticInfoTag& tag, const QString& label = QString());
 
+	void removeTag(const SemanticInfoTag& tag);
+
 private:
 	TagModelPrivate* const d;
 };

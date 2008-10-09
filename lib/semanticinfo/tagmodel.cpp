@@ -88,6 +88,17 @@ void TagModel::addTag(const SemanticInfoTag& tag, const QString& label) {
 }
 
 
+void TagModel::removeTag(const SemanticInfoTag& tag) {
+	// This is not optimal, implement dichotomic search if necessary
+	for (int row=0; row < rowCount(); ++row) {
+		if (index(row, 0).data(TagRole).toString() == tag) {
+			removeRow(row);
+			return;
+		}
+	}
+}
+
+
 TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd) {
 	TagModel* tagModel = new TagModel(parent);
 	tagModel->setSemanticInfoBackEnd(backEnd);
