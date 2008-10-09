@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 
 class QListWidgetItem;
+class QModelIndex;
 
 namespace Gwenview {
 
@@ -53,7 +54,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void assignTag();
-	void slotItemClicked(QListWidgetItem* item);
+	void slotTagClicked(const QModelIndex&);
 
 private:
 	TagWidgetPrivate* const d;

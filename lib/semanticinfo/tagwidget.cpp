@@ -103,15 +103,17 @@ private:
 struct TagWidgetPrivate {
 	TagWidget* that;
 	TagInfo mTagInfo;
-	QListWidget* mTreeWidget;
+	QListView* mListView;
 	KLineEdit* mLineEdit;
 	AbstractSemanticInfoBackEnd* mBackEnd;
 	TagCompleterModel* mTagCompleterModel;
+	TagModel* mTagModel;
 
 
 	void setupWidgets() {
-		mTreeWidget = new QListWidget;
-		mTreeWidget->setItemDelegate(new TagItemDelegate(mTreeWidget));
+		mListView = new QListView;
+		mListView->setItemDelegate(new TagItemDelegate(mListView));
+		mListView->setModel(mTagModel);
 
 		mLineEdit = new KLineEdit;
 		mLineEdit->setTrapReturnKey(true);
@@ -124,28 +126,24 @@ struct TagWidgetPrivate {
 
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
-		layout->addWidget(mTreeWidget);
+		layout->addWidget(mListView);
 		layout->addWidget(mLineEdit);
 
-		that->setTabOrder(mLineEdit, mTreeWidget);
+		that->setTabOrder(mLineEdit, mListView);
 	}
 
 
-	void fillTreeWidget() {
+	void fillTagModel() {
 		Q_ASSERT(mBackEnd);
-		mTreeWidget->clear();
 
+		TagSet tagSet;
 		TagInfo::ConstIterator
 			it = mTagInfo.begin(),
 			end = mTagInfo.end();
 		for(; it!=end; ++it) {
-			SemanticInfoTag tag = it.key();
-			QString label = mBackEnd->labelForTag(tag);
-			QListWidgetItem* item = new QListWidgetItem(label, mTreeWidget);
-			item->setData(TagModel::TagRole, QVariant(tag));
+			tagSet << it.key();
 		}
-
-		updateCompleterModel();
+		mTagModel->setTagSet(tagSet);
 	}
 
 
@@ -160,10 +158,11 @@ TagWidget::TagWidget(QWidget* parent)
 , d(new TagWidgetPrivate) {
 	d->that = this;
 	d->mBackEnd = 0;
+	d->mTagModel = new TagModel(this);
 	d->setupWidgets();
 
-	connect(d->mTreeWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-		SLOT(slotItemClicked(QListWidgetItem*)) );
+	connect(d->mListView, SIGNAL(clicked(const QModelIndex&)),
+		SLOT(slotTagClicked(const QModelIndex&)));
 
 	connect(d->mLineEdit, SIGNAL(returnPressed()),
 		SLOT(assignTag()) );
@@ -177,13 +176,15 @@ TagWidget::~TagWidget() {
 
 void TagWidget::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
 	d->mBackEnd = backEnd;
+	d->mTagModel->setSemanticInfoBackEnd(backEnd);
 	d->mTagCompleterModel->setSemanticInfoBackEnd(backEnd);
 }
 
 
 void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 	d->mTagInfo = tagInfo;
-	d->fillTreeWidget();
+	d->fillTagModel();
+	d->updateCompleterModel();
 }
 
 
@@ -192,20 +193,22 @@ void TagWidget::assignTag() {
 	QString label = d->mLineEdit->text();
 	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
-	d->fillTreeWidget();
 	d->mLineEdit->clear();
+	d->mTagModel->addTag(tag, label);
+	d->updateCompleterModel();
 
 	emit tagAssigned(tag);
 }
 
 
-void TagWidget::slotItemClicked(QListWidgetItem* item) {
-	if (!item) {
+void TagWidget::slotTagClicked(const QModelIndex& index) {
+	if (!index.isValid()) {
 		return;
 	}
-	SemanticInfoTag tag = item->data(TagModel::TagRole).toString();
+	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
 	d->mTagInfo.remove(tag);
-	d->fillTreeWidget();
+	d->fillTagModel();
+	d->updateCompleterModel();
 
 	emit tagRemoved(tag);
 }
