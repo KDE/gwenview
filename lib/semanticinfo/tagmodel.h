@@ -35,6 +35,7 @@ namespace Gwenview {
 typedef QString SemanticInfoTag;
 
 class AbstractSemanticInfoBackEnd;
+class TagSet;
 
 
 class TagModelPrivate;
@@ -49,9 +50,13 @@ public:
 		SortRole
 	};
 
-private Q_SLOTS:
-	void refresh();
-	void slotTagAdded(const SemanticInfoTag& tag, const QString& label);
+	void setTagSet(const TagSet& set);
+
+public Q_SLOTS:
+	/**
+	 * Add a new tag. If label is empty, backend will be queried for it
+	 */
+	void addTag(const SemanticInfoTag& tag, const QString& label = QString());
 
 private:
 	TagModelPrivate* const d;

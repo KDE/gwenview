@@ -179,6 +179,10 @@ void TagController::init(QWidget* parentWidget) {
 
 	AbstractSemanticInfoBackEnd* backEnd = mDirModel->semanticInfoBackEnd();
 	TagModel* tagModel = new TagModel(d->mListView, backEnd);
+	backEnd->refreshAllTags();
+	tagModel->setTagSet(backEnd->allTags());
+	connect(backEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
+		tagModel, SLOT(addTag(const SemanticInfoTag&, const QString&)));
 	d->mListView->setModel(tagModel);
 
 	connect(d->mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),

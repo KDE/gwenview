@@ -49,16 +49,15 @@ TagModel::TagModel(QObject* parent, AbstractSemanticInfoBackEnd* backEnd)
 , d(new TagModelPrivate) {
 	d->mBackEnd = backEnd;
 	setSortRole(SortRole);
-	refresh();
-	connect(d->mBackEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
-		SLOT(slotTagAdded(const SemanticInfoTag&, const QString&)));
 }
 
 
-void TagModel::refresh() {
-	d->mBackEnd->refreshAllTags();
-	TagSet set = d->mBackEnd->allTags();
+TagModel::~TagModel() {
+	delete d;
+}
 
+
+void TagModel::setTagSet(const TagSet& set) {
 	clear();
 	Q_FOREACH(const SemanticInfoTag& tag, set) {
 		QString label = d->mBackEnd->labelForTag(tag);
@@ -69,7 +68,7 @@ void TagModel::refresh() {
 }
 
 
-void TagModel::slotTagAdded(const SemanticInfoTag& tag, const QString& label) {
+void TagModel::addTag(const SemanticInfoTag& tag, const QString& label) {
 	int row;
 	const QString sortLabel = label.toLower();
 	// This is not optimal, implement dichotomic search if necessary
@@ -81,11 +80,6 @@ void TagModel::slotTagAdded(const SemanticInfoTag& tag, const QString& label) {
 	}
 	QStandardItem* item = createItem(tag, label);
 	insertRow(row, item);
-}
-
-
-TagModel::~TagModel() {
-	delete d;
 }
 
 
