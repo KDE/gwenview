@@ -211,8 +211,7 @@ void TagController::updateTagSetFilter() {
 	TagSet tagSet;
 
 	Q_FOREACH(const QModelIndex& index, d->mListView->selectionModel()->selectedIndexes()) {
-		SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
-		tagSet << tag;
+		tagSet << index.data(TagModel::TagRole).toString();
 		labels << index.data(Qt::DisplayRole).toString();
 	}
 	mDirModel->setTagSetFilter(tagSet);
