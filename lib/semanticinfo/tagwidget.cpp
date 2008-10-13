@@ -192,6 +192,9 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 void TagWidget::assignTag() {
 	Q_ASSERT(d->mBackEnd);
 	QString label = d->mLineEdit->text();
+	if (label.isEmpty()) {
+		return;
+	}
 	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
 	d->mLineEdit->clear();
