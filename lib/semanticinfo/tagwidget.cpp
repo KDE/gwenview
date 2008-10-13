@@ -117,7 +117,6 @@ struct TagWidgetPrivate {
 		mListView->setModel(mAssignedTagModel);
 
 		mLineEdit = new KLineEdit;
-		mLineEdit->setTrapReturnKey(true);
 
 		mTagCompleterModel = new TagCompleterModel(that);
 		QCompleter* completer = new QCompleter(that);
