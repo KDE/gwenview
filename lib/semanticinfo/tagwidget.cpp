@@ -23,41 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QCompleter>
-#include <QItemDelegate>
-#include <QListWidget>
-#include <QPainter>
+#include <QListView>
 #include <QSortFilterProxyModel>
 #include <QVBoxLayout>
 
 // KDE
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 
 // Local
+#include <lib/semanticinfo/tagitemdelegate.h>
 #include <lib/semanticinfo/tagmodel.h>
 
 namespace Gwenview {
-
-
-class TagItemDelegate : public QItemDelegate {
-public:
-	TagItemDelegate(QObject* parent = 0)
-	: QItemDelegate(parent)
-	, mRemovePixmap(SmallIcon("list-remove"))
-	{}
-
-protected:
-	void drawDisplay(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text) const {
-		QItemDelegate::drawDisplay(painter, option, rect, text);
-		int left = rect.right() - mRemovePixmap.width();
-		int top = rect.top() + (rect.height() - mRemovePixmap.height() ) / 2;
-		painter->drawPixmap(left, top, mRemovePixmap);
-	}
-
-private:
-	QPixmap mRemovePixmap;
-};
 
 
 class TagCompleterModel : public QSortFilterProxyModel {
@@ -112,8 +90,10 @@ struct TagWidgetPrivate {
 
 	void setupWidgets() {
 		mListView = new QListView;
-		mListView->setItemDelegate(new TagItemDelegate(mListView));
-		mListView->setSelectionMode(QListView::NoSelection);
+		TagItemDelegate* delegate = new TagItemDelegate(mListView);
+		QObject::connect(delegate, SIGNAL(removeTagRequested(const SemanticInfoTag&)),
+			that, SLOT(removeTag(const SemanticInfoTag&)));
+		mListView->setItemDelegate(delegate);
 		mListView->setModel(mAssignedTagModel);
 
 		mLineEdit = new KLineEdit;
@@ -161,9 +141,6 @@ TagWidget::TagWidget(QWidget* parent)
 	d->mAssignedTagModel = new TagModel(this);
 	d->setupWidgets();
 
-	connect(d->mListView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotTagClicked(const QModelIndex&)));
-
 	connect(d->mLineEdit, SIGNAL(returnPressed()),
 		SLOT(assignTag()) );
 }
@@ -204,8 +181,7 @@ void TagWidget::assignTag() {
 }
 
 
-void TagWidget::slotTagClicked(const QModelIndex& index) {
-	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
+void TagWidget::removeTag(const SemanticInfoTag& tag) {
 	d->mTagInfo.remove(tag);
 	d->mAssignedTagModel->removeTag(tag);
 	d->updateCompleterModel();

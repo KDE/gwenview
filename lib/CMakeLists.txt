@@ -47,6 +47,7 @@ set(gwenviewlib_SRCS
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
 	semanticinfo/sorteddirmodel.cpp
+	semanticinfo/tagitemdelegate.cpp
 	memoryutils.cpp
 	mimetypeutils.cpp
 	paintutils.cpp

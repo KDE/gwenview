@@ -18,49 +18,46 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef TAGWIDGET_H
-#define TAGWIDGET_H
-
-#include <lib/gwenviewlib_export.h>
-
-// Qt
-#include <QMap>
-#include <QWidget>
+#ifndef TAGITEMDELEGATE_H
+#define TAGITEMDELEGATE_H
 
 // KDE
-
-// Local
-#include <lib/semanticinfo/abstractsemanticinfobackend.h>
-
-class QListWidgetItem;
-class QModelIndex;
+#include <kwidgetitemdelegate.h>
 
 namespace Gwenview {
 
-typedef QMap<SemanticInfoTag, bool> TagInfo;
+typedef QString SemanticInfoTag;
 
-class TagWidgetPrivate;
-class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
+class TagItemDelegate : public KWidgetItemDelegate {
 	Q_OBJECT
 public:
-	TagWidget(QWidget* parent = 0);
-	~TagWidget();
-	void setTagInfo(const TagInfo&);
-	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
+	TagItemDelegate(QAbstractItemView* view);
+
+protected:
+	virtual QList<QWidget*> createItemWidgets() const;
+
+	virtual void updateItemWidgets(const QList<QWidget*> widgets,
+		const QStyleOptionViewItem& option,
+		const QPersistentModelIndex& /*index*/) const;
+
+	virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+		const QModelIndex &index) const;
+
+	virtual QSize sizeHint(const QStyleOptionViewItem &/*option*/,
+		const QModelIndex &/*index*/) const;
 
 Q_SIGNALS:
-	void tagAssigned(const SemanticInfoTag&);
-	void tagRemoved(const SemanticInfoTag&);
+	void removeTagRequested(const SemanticInfoTag& tag);
 
 private Q_SLOTS:
-	void assignTag();
-	void removeTag(const SemanticInfoTag&);
+	void slotRemoveButtonClicked();
 
 private:
-	TagWidgetPrivate* const d;
+	int mButtonSize;
+	int mMargin;
+	int mSpacing;
 };
-
 
 } // namespace
 
-#endif /* TAGWIDGET_H */
+#endif /* TAGITEMDELEGATE_H */
