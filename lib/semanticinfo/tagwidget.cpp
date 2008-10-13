@@ -107,14 +107,14 @@ struct TagWidgetPrivate {
 	KLineEdit* mLineEdit;
 	AbstractSemanticInfoBackEnd* mBackEnd;
 	TagCompleterModel* mTagCompleterModel;
-	TagModel* mTagModel;
+	TagModel* mAssignedTagModel;
 
 
 	void setupWidgets() {
 		mListView = new QListView;
 		mListView->setItemDelegate(new TagItemDelegate(mListView));
 		mListView->setSelectionMode(QListView::NoSelection);
-		mListView->setModel(mTagModel);
+		mListView->setModel(mAssignedTagModel);
 
 		mLineEdit = new KLineEdit;
 		mLineEdit->setTrapReturnKey(true);
@@ -144,7 +144,7 @@ struct TagWidgetPrivate {
 		for(; it!=end; ++it) {
 			tagSet << it.key();
 		}
-		mTagModel->setTagSet(tagSet);
+		mAssignedTagModel->setTagSet(tagSet);
 	}
 
 
@@ -159,7 +159,7 @@ TagWidget::TagWidget(QWidget* parent)
 , d(new TagWidgetPrivate) {
 	d->that = this;
 	d->mBackEnd = 0;
-	d->mTagModel = new TagModel(this);
+	d->mAssignedTagModel = new TagModel(this);
 	d->setupWidgets();
 
 	connect(d->mListView, SIGNAL(clicked(const QModelIndex&)),
@@ -177,7 +177,7 @@ TagWidget::~TagWidget() {
 
 void TagWidget::setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd* backEnd) {
 	d->mBackEnd = backEnd;
-	d->mTagModel->setSemanticInfoBackEnd(backEnd);
+	d->mAssignedTagModel->setSemanticInfoBackEnd(backEnd);
 	d->mTagCompleterModel->setSemanticInfoBackEnd(backEnd);
 }
 
@@ -195,7 +195,7 @@ void TagWidget::assignTag() {
 	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
 	d->mLineEdit->clear();
-	d->mTagModel->addTag(tag, label);
+	d->mAssignedTagModel->addTag(tag, label);
 	d->updateCompleterModel();
 
 	emit tagAssigned(tag);
@@ -205,7 +205,7 @@ void TagWidget::assignTag() {
 void TagWidget::slotTagClicked(const QModelIndex& index) {
 	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
 	d->mTagInfo.remove(tag);
-	d->mTagModel->removeTag(tag);
+	d->mAssignedTagModel->removeTag(tag);
 	d->updateCompleterModel();
 
 	emit tagRemoved(tag);
