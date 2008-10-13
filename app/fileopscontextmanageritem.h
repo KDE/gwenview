@@ -44,14 +44,6 @@ public:
 
 	virtual void setSideBar(SideBar* sideBar);
 
-	QAction* copyToAction() const;
-	QAction* moveToAction() const;
-	QAction* linkToAction() const;
-	QAction* trashAction() const;
-	QAction* delAction() const;
-	QAction* showPropertiesAction() const;
-	QAction* createFolderAction() const;
-
 private Q_SLOTS:
 	void updateActions();
 	void updateSideBarContent();

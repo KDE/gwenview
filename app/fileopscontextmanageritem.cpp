@@ -143,41 +143,6 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 }
 
 
-QAction* FileOpsContextManagerItem::copyToAction() const {
-	return d->mCopyToAction;
-}
-
-
-QAction* FileOpsContextManagerItem::moveToAction() const {
-	return d->mMoveToAction;
-}
-
-
-QAction* FileOpsContextManagerItem::linkToAction() const {
-	return d->mLinkToAction;
-}
-
-
-QAction* FileOpsContextManagerItem::trashAction() const {
-	return d->mTrashAction;
-}
-
-
-QAction* FileOpsContextManagerItem::delAction() const {
-	return d->mDelAction;
-}
-
-
-QAction* FileOpsContextManagerItem::showPropertiesAction() const {
-	return d->mShowPropertiesAction;
-}
-
-
-QAction* FileOpsContextManagerItem::createFolderAction() const {
-	return d->mCreateFolderAction;
-}
-
-
 void FileOpsContextManagerItem::updateActions() {
 	KFileItemList list = contextManager()->selection();
 	bool selectionNotEmpty = list.count() > 0;
