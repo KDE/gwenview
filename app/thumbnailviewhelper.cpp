@@ -30,14 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kdirlister.h>
-#include <kdirmodel.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <kio/copyjob.h>
-#include <kio/previewjob.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kpropertiesdialog.h>
 
 // Local
 #include <lib/document/documentfactory.h>
