@@ -21,10 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "thumbnailviewhelper.moc"
 
+#include <config-gwenview.h>
+
 // Qt
+#include <QAction>
 #include <QCursor>
 
 // KDE
+#include <kactioncollection.h>
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kdirmodel.h>
@@ -36,21 +40,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kpropertiesdialog.h>
 
 // Local
-#include "fileopscontextmanageritem.h"
 #include <lib/document/documentfactory.h>
 
 namespace Gwenview {
 
 
 struct ThumbnailViewHelperPrivate {
-	FileOpsContextManagerItem* mFileOpsContextManagerItem;
+	KActionCollection* mActionCollection;
 	KUrl mCurrentDirUrl;
+
+	void addActionToMenu(KMenu& popup, const char* name) {
+		QAction* action = mActionCollection->action(name);
+		if (!action) {
+			kWarning() << "Unknown action" << name;
+			return;
+		}
+		if (action->isEnabled()) {
+			popup.addAction(action);
+		}
+	}
 };
 
 
-ThumbnailViewHelper::ThumbnailViewHelper(QObject* parent)
+ThumbnailViewHelper::ThumbnailViewHelper(QObject* parent, KActionCollection* actionCollection)
 : AbstractThumbnailViewHelper(parent)
 , d(new ThumbnailViewHelperPrivate) {
+	d->mActionCollection = actionCollection;
 }
 
 
@@ -90,30 +105,22 @@ void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url) {
 }
 
 
-void ThumbnailViewHelper::setFileOpsContextManagerItem(FileOpsContextManagerItem* item) {
-	d->mFileOpsContextManagerItem = item;
-}
-
-
-inline void addIfEnabled(KMenu& popup, QAction* action) {
-	if (action->isEnabled()) {
-		popup.addAction(action);
-	}
-}
-
-
 void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	KMenu popup(parent);
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->createFolderAction());
+	d->addActionToMenu(popup, "file_create_folder");
 	popup.addSeparator();
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->copyToAction());
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->moveToAction());
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->linkToAction());
+	d->addActionToMenu(popup, "file_copy_to");
+	d->addActionToMenu(popup, "file_move_to");
+	d->addActionToMenu(popup, "file_link_to");
 	popup.addSeparator();
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->trashAction());
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->delAction());
+	d->addActionToMenu(popup, "file_trash");
+	d->addActionToMenu(popup, "file_delete");
 	popup.addSeparator();
-	addIfEnabled(popup, d->mFileOpsContextManagerItem->showPropertiesAction());
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+	d->addActionToMenu(popup, "edit_tags");
+	popup.addSeparator();
+#endif
+	d->addActionToMenu(popup, "file_show_properties");
 	popup.exec(QCursor::pos());
 }
 

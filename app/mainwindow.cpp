@@ -207,7 +207,7 @@ struct MainWindow::Private {
 		mThumbnailView = mThumbnailViewPanel->thumbnailView();
 		mUrlNavigator = mThumbnailViewPanel->urlNavigator();
 
-		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel);
+		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, mWindow->actionCollection());
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
 		// Connect thumbnail view
@@ -391,7 +391,6 @@ struct MainWindow::Private {
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, actionCollection);
 		mContextManager->addItem(fileOpsItem);
-		mThumbnailViewHelper->setFileOpsContextManagerItem(fileOpsItem);
 	}
 
 

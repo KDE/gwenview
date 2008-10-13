@@ -28,15 +28,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 
-namespace Gwenview {
+class KActionCollection;
 
-class FileOpsContextManagerItem;
+namespace Gwenview {
 
 class ThumbnailViewHelperPrivate;
 class ThumbnailViewHelper : public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:
-	ThumbnailViewHelper(QObject* parent);
+	ThumbnailViewHelper(QObject* parent, KActionCollection*);
 	~ThumbnailViewHelper();
 
 	virtual void showContextMenu(QWidget* parent);
@@ -48,8 +48,6 @@ public:
 	virtual bool isDocumentModified(const KUrl& url);
 
 	void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
-
-	void setFileOpsContextManagerItem(FileOpsContextManagerItem* item);
 
 	void setCurrentDirUrl(const KUrl&);
 
