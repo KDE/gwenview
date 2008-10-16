@@ -232,10 +232,6 @@ inline int ratingForVariant(const QVariant& variant) {
 
 
 void SemanticInfoContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar->isVisible()) {
-		return;
-	}
-
 	KFileItemList itemList = contextManager()->selection();
 
 	bool first = true;
