@@ -36,10 +36,11 @@ struct TagModelPrivate {
 };
 
 
-static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label) {
+static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& label, TagModel::AssignmentStatus status) {
 	QStandardItem* item = new QStandardItem(label);
 	item->setData(tag, TagModel::TagRole);
 	item->setData(label.toLower(), TagModel::SortRole);
+	item->setData(status, TagModel::AssignmentStatusRole);
 	return item;
 }
 
@@ -66,15 +67,17 @@ void TagModel::setTagSet(const TagSet& set) {
 	clear();
 	Q_FOREACH(const SemanticInfoTag& tag, set) {
 		QString label = d->mBackEnd->labelForTag(tag);
-		QStandardItem* item = createItem(tag, label);
+		QStandardItem* item = createItem(tag, label, TagModel::FullyAssigned);
 		appendRow(item);
 	}
 	sort(0);
 }
 
 
-void TagModel::addTag(const SemanticInfoTag& tag, const QString& label) {
+void TagModel::addTag(const SemanticInfoTag& tag, const QString& _label, TagModel::AssignmentStatus status) {
 	int row;
+	QString label = _label.isEmpty() ? d->mBackEnd->labelForTag(tag) : _label;
+
 	const QString sortLabel = label.toLower();
 	// This is not optimal, implement dichotomic search if necessary
 	for (row=0; row < rowCount(); ++row) {
@@ -83,7 +86,7 @@ void TagModel::addTag(const SemanticInfoTag& tag, const QString& label) {
 			break;
 		}
 	}
-	QStandardItem* item = createItem(tag, label);
+	QStandardItem* item = createItem(tag, label, status);
 	insertRow(row, item);
 }
 

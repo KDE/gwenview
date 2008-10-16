@@ -47,7 +47,13 @@ public:
 
 	enum {
 		TagRole = Qt::UserRole,
-		SortRole
+		SortRole,
+		AssignmentStatusRole
+	};
+
+	enum AssignmentStatus {
+		PartiallyAssigned,
+		FullyAssigned
 	};
 
 	void setSemanticInfoBackEnd(AbstractSemanticInfoBackEnd*);
@@ -63,7 +69,7 @@ public Q_SLOTS:
 	/**
 	 * Add a new tag. If label is empty, backend will be queried for it
 	 */
-	void addTag(const SemanticInfoTag& tag, const QString& label = QString());
+	void addTag(const SemanticInfoTag& tag, const QString& label = QString(), AssignmentStatus status = FullyAssigned);
 
 	void removeTag(const SemanticInfoTag& tag);
 

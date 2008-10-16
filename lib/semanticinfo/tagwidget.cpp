@@ -116,14 +116,16 @@ struct TagWidgetPrivate {
 	void fillTagModel() {
 		Q_ASSERT(mBackEnd);
 
-		TagSet tagSet;
+		mAssignedTagModel->clear();
 		TagInfo::ConstIterator
 			it = mTagInfo.begin(),
 			end = mTagInfo.end();
 		for(; it!=end; ++it) {
-			tagSet << it.key();
+			mAssignedTagModel->addTag(
+				it.key(),
+				QString(),
+				it.value() ? TagModel::FullyAssigned : TagModel::PartiallyAssigned);
 		}
-		mAssignedTagModel->setTagSet(tagSet);
 	}
 
 
@@ -174,7 +176,7 @@ void TagWidget::assignTag() {
 	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
 	d->mTagInfo[tag] = true;
 	d->mLineEdit->clear();
-	d->mAssignedTagModel->addTag(tag, label);
+	d->mAssignedTagModel->addTag(tag, label, TagModel::FullyAssigned);
 	d->updateCompleterModel();
 
 	emit tagAssigned(tag);
