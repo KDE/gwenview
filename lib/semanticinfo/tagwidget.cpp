@@ -144,7 +144,7 @@ TagWidget::TagWidget(QWidget* parent)
 	d->setupWidgets();
 
 	connect(d->mLineEdit, SIGNAL(returnPressed()),
-		SLOT(assignTag()) );
+		SLOT(slotReturnPressed()) );
 }
 
 
@@ -167,16 +167,20 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 }
 
 
-void TagWidget::assignTag() {
+void TagWidget::slotReturnPressed() {
 	Q_ASSERT(d->mBackEnd);
 	QString label = d->mLineEdit->text();
 	if (label.isEmpty()) {
 		return;
 	}
-	SemanticInfoTag tag = d->mBackEnd->tagForLabel(label);
+	assignTag(d->mBackEnd->tagForLabel(label));
+}
+
+
+void TagWidget::assignTag(const SemanticInfoTag& tag) {
 	d->mTagInfo[tag] = true;
 	d->mLineEdit->clear();
-	d->mAssignedTagModel->addTag(tag, label, TagModel::FullyAssigned);
+	d->mAssignedTagModel->addTag(tag);
 	d->updateCompleterModel();
 
 	emit tagAssigned(tag);

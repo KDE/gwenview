@@ -53,7 +53,8 @@ Q_SIGNALS:
 	void tagRemoved(const SemanticInfoTag&);
 
 private Q_SLOTS:
-	void assignTag();
+	void slotReturnPressed();
+	void assignTag(const SemanticInfoTag& tag);
 	void removeTag(const SemanticInfoTag&);
 
 private:
