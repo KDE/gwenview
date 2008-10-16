@@ -1152,7 +1152,7 @@ bool MainWindow::queryClose() {
 		return true;
 	}
 
-	KGuiItem yes(i18n("Save All Changes"), "document-save");
+	KGuiItem yes(i18n("Save All Changes"), "document-save-all");
 	KGuiItem no(i18n("Discard Changes"));
 	QString msg = i18np("One image has been modified.", "%1 images have been modified.", list.size())
 			+ '\n'
