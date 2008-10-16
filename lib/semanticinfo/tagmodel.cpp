@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "abstractsemanticinfobackend.h"
@@ -86,8 +87,18 @@ void TagModel::addTag(const SemanticInfoTag& tag, const QString& _label, TagMode
 			break;
 		}
 	}
-	QStandardItem* item = createItem(tag, label, status);
-	insertRow(row, item);
+	if (row > 0) {
+		QStandardItem* _item = item(row - 1);
+		Q_ASSERT(_item);
+		if (_item->data(TagRole).toString() == tag) {
+			// Update, do not add
+			_item->setData(label.toLower(), SortRole);
+			_item->setData(status, AssignmentStatusRole);
+			return;
+		}
+	}
+	QStandardItem* _item = createItem(tag, label, status);
+	insertRow(row, _item);
 }
 
 
