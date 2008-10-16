@@ -93,6 +93,8 @@ struct TagWidgetPrivate {
 		TagItemDelegate* delegate = new TagItemDelegate(mListView);
 		QObject::connect(delegate, SIGNAL(removeTagRequested(const SemanticInfoTag&)),
 			that, SLOT(removeTag(const SemanticInfoTag&)));
+		QObject::connect(delegate, SIGNAL(assignTagToAllRequested(const SemanticInfoTag&)),
+			that, SLOT(assignTag(const SemanticInfoTag&)));
 		mListView->setItemDelegate(delegate);
 		mListView->setModel(mAssignedTagModel);
 
