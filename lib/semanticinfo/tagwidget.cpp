@@ -175,13 +175,13 @@ void TagWidget::slotReturnPressed() {
 	if (label.isEmpty()) {
 		return;
 	}
+	d->mLineEdit->clear();
 	assignTag(d->mBackEnd->tagForLabel(label));
 }
 
 
 void TagWidget::assignTag(const SemanticInfoTag& tag) {
 	d->mTagInfo[tag] = true;
-	d->mLineEdit->clear();
 	d->mAssignedTagModel->addTag(tag);
 	d->updateCompleterModel();
 
