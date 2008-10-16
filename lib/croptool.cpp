@@ -189,8 +189,6 @@ void CropTool::paint(QPainter* painter) {
 
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
-	Q_ASSERT(d->mMovingHandle == CH_None);
-
 	if (d->mRect.x() == UNINITIALIZED_X) {
 		// Nothing selected, user is creating the crop rect
 		QPoint pos = imageView()->mapToImage(event->pos());
