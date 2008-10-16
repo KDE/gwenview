@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 // Local
 #include <lib/semanticinfo/tagmodel.h>
@@ -61,6 +62,7 @@ QList<QWidget*> TagItemDelegate::createItemWidgets() const {
 	QToolButton* assignToAllButton = new QToolButton;
 	initButton(assignToAllButton);
 	assignToAllButton->setIcon(KIcon("fill-color")); /* FIXME: Probably not the appropriate icon */
+	assignToAllButton->setToolTip(i18n("Assign this tag to all selected images"));
 	connect(assignToAllButton, SIGNAL(clicked()), SLOT(slotAssignToAllButtonClicked()));
 
 	QToolButton* removeButton = new QToolButton;
