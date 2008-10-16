@@ -176,7 +176,7 @@ void TagWidget::slotReturnPressed() {
 		return;
 	}
 	d->mLineEdit->clear();
-	assignTag(d->mBackEnd->tagForLabel(label));
+	assignTag(d->mBackEnd->tagForLabel(label.trimmed()));
 }
 
 
