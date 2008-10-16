@@ -48,9 +48,11 @@ protected:
 
 Q_SIGNALS:
 	void removeTagRequested(const SemanticInfoTag& tag);
+	void assignTagToAllRequested(const SemanticInfoTag& tag);
 
 private Q_SLOTS:
 	void slotRemoveButtonClicked();
+	void slotAssignToAllButtonClicked();
 
 private:
 	int mButtonSize;

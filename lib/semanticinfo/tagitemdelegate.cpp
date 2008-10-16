@@ -50,22 +50,48 @@ TagItemDelegate::TagItemDelegate(QAbstractItemView* view)
 
 
 QList<QWidget*> TagItemDelegate::createItemWidgets() const {
+
+	#define initButton(x) \
+		(x)->setAutoRaise(true); \
+		setBlockedEventTypes((x), QList<QEvent::Type>() \
+			<< QEvent::MouseButtonPress \
+			<< QEvent::MouseButtonRelease \
+			<< QEvent::MouseButtonDblClick);
+
+	QToolButton* assignToAllButton = new QToolButton;
+	initButton(assignToAllButton);
+	assignToAllButton->setIcon(KIcon("fill-color")); /* FIXME: Probably not the appropriate icon */
+	connect(assignToAllButton, SIGNAL(clicked()), SLOT(slotAssignToAllButtonClicked()));
+
 	QToolButton* removeButton = new QToolButton;
+	initButton(removeButton);
 	removeButton->setIcon(KIcon("list-remove"));
-	removeButton->setAutoRaise(true);
 	connect(removeButton, SIGNAL(clicked()), SLOT(slotRemoveButtonClicked()));
-	setBlockedEventTypes(removeButton, QList<QEvent::Type>()
-		<< QEvent::MouseButtonPress
-		<< QEvent::MouseButtonRelease
-		<< QEvent::MouseButtonDblClick);
-	return QList<QWidget*>() << removeButton;
+
+	#undef initButton
+
+	return QList<QWidget*>() << removeButton << assignToAllButton;
 }
 
 
-void TagItemDelegate::updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& /*index*/) const {
+void TagItemDelegate::updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const {
+	const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
+
 	QToolButton* removeButton = static_cast<QToolButton*>(widgets[0]);
-	removeButton->resize(mButtonSize, option.rect.height() - 2 * mMargin);
+	QToolButton* assignToAllButton = static_cast<QToolButton*>(widgets[1]);
+
+	QSize buttonSize(mButtonSize, option.rect.height() - 2 * mMargin);
+
+	removeButton->resize(buttonSize);
+	assignToAllButton->resize(buttonSize);
+
 	removeButton->move(option.rect.width() - mButtonSize - mMargin, mMargin);
+
+	if (fullyAssigned) {
+		assignToAllButton->hide();
+	} else {
+		assignToAllButton->move(removeButton->x() - mButtonSize - mSpacing, mMargin);
+	}
 }
 
 
@@ -73,14 +99,20 @@ void TagItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
 	if (!index.isValid()) {
 		return;
 	}
+	const bool selected = option.state & QStyle::State_Selected;
+	const bool fullyAssigned = index.data(TagModel::AssignmentStatusRole).toInt() == int(TagModel::FullyAssigned);
 
 	itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, 0);
 
 	QRect textRect = option.rect;
 	textRect.setLeft(textRect.left() + mMargin);
 	textRect.setWidth(textRect.width() - mButtonSize - mMargin - mSpacing);
+	if (!fullyAssigned) {
+		textRect.setWidth(textRect.width() - mButtonSize - mSpacing);
+	}
+
 	painter->setPen(option.palette.color(QPalette::Normal,
-		option.state & QStyle::State_Selected
+		selected
 		? QPalette::HighlightedText
 		: QPalette::Text));
 	painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, index.data().toString());
@@ -101,6 +133,16 @@ void TagItemDelegate::slotRemoveButtonClicked() {
 		return;
 	}
 	emit removeTagRequested(index.data(TagModel::TagRole).toString());
+}
+
+
+void TagItemDelegate::slotAssignToAllButtonClicked() {
+	const QModelIndex index = focusedIndex();
+	if (!index.isValid()) {
+		kWarning() << "!index.isValid()";
+		return;
+	}
+	emit assignTagToAllRequested(index.data(TagModel::TagRole).toString());
 }
 
 
