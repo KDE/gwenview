@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QCompleter>
+#include <QKeyEvent>
 #include <QListView>
 #include <QSortFilterProxyModel>
 #include <QVBoxLayout>
@@ -77,6 +78,34 @@ private:
 	TagSet mExcludedTagSet;
 };
 
+
+/**
+ * A simple class to eat return keys. We use it to avoid propagating the return
+ * key from our KLineEdit to a dialog using TagWidget.
+ * We can't use KLineEdit::setTrapReturnKey() because it does not play well
+ * with QCompleter, it only deals with KCompletion.
+ */
+class ReturnKeyEater : public QObject {
+public:
+	ReturnKeyEater(QObject* parent = 0)
+	: QObject(parent)
+	{}
+
+protected:
+	virtual bool eventFilter(QObject*, QEvent* event) {
+		if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			switch (keyEvent->key()) {
+			case Qt::Key_Return:
+			case Qt::Key_Enter:
+				return true;
+			default:
+				return false;
+			}
+		}
+		return false;
+	}
+};
 
 struct TagWidgetPrivate {
 	TagWidget* that;
@@ -144,6 +173,7 @@ TagWidget::TagWidget(QWidget* parent)
 	d->mBackEnd = 0;
 	d->mAssignedTagModel = new TagModel(this);
 	d->setupWidgets();
+	installEventFilter(new ReturnKeyEater(this));
 
 	connect(d->mLineEdit, SIGNAL(returnPressed()),
 		SLOT(slotReturnPressed()) );
