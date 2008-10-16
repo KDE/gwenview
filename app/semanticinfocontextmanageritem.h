@@ -44,7 +44,7 @@ public:
 	virtual void setSideBar(SideBar*);
 
 private Q_SLOTS:
-	void updateSideBarContent();
+	void update();
 	void slotRatingChanged(int rating);
 	void storeDescription();
 	void assignTag(const SemanticInfoTag&);

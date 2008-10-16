@@ -179,11 +179,11 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 	d->mRatingIndicator = new RatingIndicator(documentPanel);
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(update()) );
 	connect(contextManager(), SIGNAL(selectionDataChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(update()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(update()) );
 
 	d->setupActions();
 }
@@ -197,7 +197,7 @@ SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem() {
 void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
 	d->mSideBar = sideBar;
 	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(updateSideBarContent()) );
+		SLOT(update()) );
 
 	d->mGroup = sideBar->createGroup(i18n("Semantic Information"));
 
@@ -231,7 +231,7 @@ inline int ratingForVariant(const QVariant& variant) {
 }
 
 
-void SemanticInfoContextManagerItem::updateSideBarContent() {
+void SemanticInfoContextManagerItem::update() {
 	KFileItemList itemList = contextManager()->selection();
 
 	bool first = true;
