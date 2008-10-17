@@ -184,6 +184,9 @@ bool GVPart::openUrl(const KUrl& url) {
 	setUrl(url);
 	mErrorWidget->hide();
 	mDocument = DocumentFactory::instance()->load(url);
+	if (arguments().reload()) {
+		mDocument->reload();
+	}
 	if (!UrlUtils::urlIsFastLocalFile(url)) {
 		// Keep raw data of remote files to avoid downloading them again in
 		// saveAs()
