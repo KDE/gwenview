@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kparts/genericfactory.h>
+#include <kpropertiesdialog.h>
 
 // Local
 #include "../lib/gwenviewconfig.h"
@@ -98,6 +99,11 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	action->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
+
+	action = new KAction(actionCollection());
+	action->setText(i18nc("@action", "Properties"));
+	connect(action, SIGNAL(triggered()), SLOT(showProperties()));
+	actionCollection()->addAction("file_show_properties", action);
 
 	Gwenview::ImageFormats::registerPlugins();
 	addPartSpecificActions();
@@ -169,6 +175,11 @@ void GVPart::createErrorLabel() {
 	floater->setChildWidget(mErrorWidget);
 
 	mErrorWidget->hide();
+}
+
+
+void GVPart::showProperties() {
+	KPropertiesDialog::showDialog(url(), mView);
 }
 
 
@@ -358,6 +369,8 @@ void GVPart::showContextMenu() {
 	addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_in");
 	addActionToMenu(&menu, actionCollection(), "view_zoom_out");
+	menu.addSeparator();
+	addActionToMenu(&menu, actionCollection(), "file_show_properties");
 	menu.exec(QCursor::pos());
 }
 

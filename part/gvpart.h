@@ -65,6 +65,7 @@ private Q_SLOTS:
 	void zoomOut(const QPoint& center = QPoint(-1,-1));
 	void updateCaption();
 	void showContextMenu();
+	void showProperties();
 	void saveAs();
 	void showJobError(KJob*);
 	void slotZoomChanged();
