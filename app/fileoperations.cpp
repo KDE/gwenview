@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kinputdialog.h>
+#include <kpushbutton.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/job.h>
@@ -59,20 +60,23 @@ static void copyMoveOrLink(Operation operation, const KUrl::List& urlList, QWidg
 		KUrl("kfiledialog:///<copyMoveOrLink>"),
 		QString() /* filter */,
 		parent);
+	dialog.setOperationMode(KFileDialog::Saving);
 	switch (operation) {
 	case COPY:
 		dialog.setCaption(i18n("Copy To"));
+		dialog.okButton()->setText(i18nc("@action:button", "Copy"));
 		break;
 	case MOVE:
 		dialog.setCaption(i18n("Move To"));
+		dialog.okButton()->setText(i18nc("@action:button", "Move"));
 		break;
 	case LINK:
 		dialog.setCaption(i18n("Link To"));
+		dialog.okButton()->setText(i18nc("@action:button", "Link"));
 		break;
 	default:
 		Q_ASSERT(0);
 	}
-	dialog.setOperationMode(KFileDialog::Saving);
 	if (urlList.count() == 1) {
 		dialog.setMode(KFile::File);
 		dialog.setSelection(urlList[0].fileName());
