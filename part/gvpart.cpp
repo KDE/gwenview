@@ -290,6 +290,9 @@ bool GVPart::openUrl(const KUrl& url) {
 		mStatusBarWidgetContainer->show();
 	}
 	mDocument = DocumentFactory::instance()->load(url);
+ 	if (arguments().reload()) {
+ 		mDocument->reload();
+ 	}
 	if (!mGwenviewHost && !UrlUtils::urlIsFastLocalFile(url)) {
 		// Keep raw data of remote files to avoid downloading them again in
 		// saveAs()
