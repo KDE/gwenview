@@ -221,6 +221,7 @@ AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
 void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end) {
 	QListView::rowsAboutToBeRemoved(parent, start, end);
 
+	// Remove references to removed items
 	KFileItemList itemList;
 	for (int pos=start; pos<=end; ++pos) {
 		QModelIndex index = model()->index(pos, 0, parent);
@@ -243,6 +244,18 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 
 	if (d->mThumbnailLoadJob) {
 		d->mThumbnailLoadJob->removeItems(itemList);
+	}
+
+	// Update current index if it is among the deleted rows
+	const int row = currentIndex().row();
+	if (start <= row && row <= end) {
+		QModelIndex index;
+		if (end < model()->rowCount() - 1) {
+			index = model()->index(end + 1, 0);
+		} else if (start > 0) {
+			index = model()->index(start - 1, 0);
+		}
+		setCurrentIndex(index);
 	}
 }
 
