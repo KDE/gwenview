@@ -57,6 +57,9 @@
 		<entry name="FullScreenBarHeight" type="Int">
 			<default>75</default>
 		</entry>
+		<entry name="ShowFullScreenThumbnails" type="Bool">
+			<default>true</default>
+		</entry>
 	</group>
 
 	<group name="ImageView">

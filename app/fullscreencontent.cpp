@@ -124,6 +124,34 @@ struct FullScreenContentPrivate {
 		FullScreenTheme theme(FullScreenTheme::currentThemeName());
 		mFullScreenBar->setStyleSheet(theme.styleSheet());
 	}
+
+	void createLayout() {
+		mThumbnailBar->setVisible(GwenviewConfig::showFullScreenThumbnails());
+		if (GwenviewConfig::showFullScreenThumbnails()) {
+			/*
+			Layout looks like this:
+			mButtonBar        |
+			------------------| mThumbnailBar
+			mInformationLabel |
+			*/
+			mInformationLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+			QGridLayout* layout = new QGridLayout(mFullScreenBar);
+			layout->setMargin(0);
+			layout->setSpacing(0);
+			layout->addWidget(mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
+			layout->addWidget(mInformationLabel, 1, 0);
+			layout->addWidget(mThumbnailBar, 0, 1, 2, 1);
+			mFullScreenBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+		} else {
+			mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+			QHBoxLayout* layout = new QHBoxLayout(mFullScreenBar);
+			layout->setMargin(0);
+			layout->setSpacing(0);
+			layout->addWidget(mButtonBar);
+			layout->addWidget(mInformationLabel);
+			mFullScreenBar->setFixedHeight(mFullScreenBar->minimumSizeHint().height());
+		}
+	}
 };
 
 
@@ -181,20 +209,7 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	d->mInformationLabel->setWordWrap(true);
 	d->mInformationLabel->setAlignment(Qt::AlignCenter);
 
-	/*
-	Layout looks like this:
-	mButtonBar        |
-	------------------| mThumbnailBar
-	mInformationLabel |
-	*/
-	QGridLayout* layout = new QGridLayout(bar);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addWidget(d->mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
-	layout->addWidget(d->mInformationLabel, 1, 0);
-	layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
-
-	d->mFullScreenBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
+	d->createLayout();
 }
 
 
@@ -349,6 +364,11 @@ void FullScreenContent::showFullScreenConfigDialog() {
 
 	d->setupThemeListWidget(dialog->mThemeListWidget);
 
+	// Thumbnails check box
+	dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());
+	connect(dialog->mShowThumbnailsCheckBox, SIGNAL(toggled(bool)),
+		SLOT(slotShowThumbnailsToggled(bool)));
+
 	// Height slider
 	dialog->mHeightSlider->setValue(d->mFullScreenBar->height());
 	connect(dialog->mHeightSlider, SIGNAL(valueChanged(int)),
@@ -371,6 +391,14 @@ void FullScreenContent::showFullScreenConfigDialog() {
 
 void FullScreenContent::enableAutoHiding() {
 	d->mFullScreenBar->setAutoHidingEnabled(true);
+}
+
+
+void FullScreenContent::slotShowThumbnailsToggled(bool value) {
+	GwenviewConfig::setShowFullScreenThumbnails(value);
+	GwenviewConfig::self()->writeConfig();
+	delete d->mFullScreenBar->layout();
+	d->createLayout();
 }
 
 

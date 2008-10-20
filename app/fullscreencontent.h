@@ -68,6 +68,7 @@ private Q_SLOTS:
 	void setCurrentFullScreenTheme(const QString& themeName);
 	void setFullScreenBarHeight(int value);
 	void enableAutoHiding();
+	void slotShowThumbnailsToggled(bool value);
 
 private:
 	FullScreenContentPrivate* const d;
