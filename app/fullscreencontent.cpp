@@ -94,6 +94,7 @@ struct FullScreenContentPrivate {
 	FullScreenContent* that;
 	FullScreenBar* mFullScreenBar;
 	SlideShow* mSlideShow;
+	QWidget* mButtonBar;
 	ThumbnailBarView* mThumbnailBar;
 	QLabel* mInformationLabel;
 	Document::Ptr mCurrentDocument;
@@ -146,9 +147,9 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	d->applyCurrentFullScreenTheme();
 
 	// Button bar
-	QWidget* buttonBar = new QWidget;
-	buttonBar->setObjectName("buttonBar");
-	QHBoxLayout* buttonBarLayout = new QHBoxLayout(buttonBar);
+	d->mButtonBar = new QWidget;
+	d->mButtonBar->setObjectName("buttonBar");
+	QHBoxLayout* buttonBarLayout = new QHBoxLayout(d->mButtonBar);
 	buttonBarLayout->setMargin(0);
 	buttonBarLayout->setSpacing(0);
 	QStringList actionNameList;
@@ -182,14 +183,14 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 
 	/*
 	Layout looks like this:
-	buttonBar         |
+	mButtonBar        |
 	------------------| mThumbnailBar
 	mInformationLabel |
 	*/
 	QGridLayout* layout = new QGridLayout(bar);
 	layout->setMargin(0);
 	layout->setSpacing(0);
-	layout->addWidget(buttonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
+	layout->addWidget(d->mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 	layout->addWidget(d->mInformationLabel, 1, 0);
 	layout->addWidget(d->mThumbnailBar, 0, 1, 2, 1);
 
