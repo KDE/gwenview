@@ -101,6 +101,10 @@ kde4_add_kcfg_files(gwenviewlib_SRCS
 
 kde4_add_library(gwenviewlib SHARED ${gwenviewlib_SRCS})
 set_target_properties(gwenviewlib PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+if( WIN32 )
+set_target_properties(gwenviewlib PROPERTIES COMPILE_FLAGS -DJPEG_STATIC )
+endif( WIN32 )
+
 target_link_libraries(gwenviewlib
 	${KDE4_KPARTS_LIBS}
 	${KDE4_KFILE_LIBS}

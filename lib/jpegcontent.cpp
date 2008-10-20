@@ -500,10 +500,12 @@ void JpegContent::applyPendingTransformation() {
 
 QImage JpegContent::thumbnail() const {
 	QImage image;
+#ifndef Q_OS_WIN32    
 	if (!d->mExifData.empty()) {
 		Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
 		image.loadFromData(thumbnail.pData_, thumbnail.size_);
 	}
+#endif
 	return image;
 }
 
@@ -521,8 +523,9 @@ void JpegContent::setThumbnail(const QImage& thumbnail) {
 		kError() << "Could not write thumbnail\n";
 		return;
 	}
-	
+#ifndef Q_OS_WIN32	
 	d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
+#endif
 }
 
 
