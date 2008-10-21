@@ -44,6 +44,12 @@ Gwenview--HudWidget {
 	padding: 0px;
 }
 
+#fullScreenBar[fullWidth=false] {
+	padding-right: 6px;
+	border-right: 1px solid gray;
+	border-bottom-right-radius: 7px;
+}
+
 #configDialog {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,

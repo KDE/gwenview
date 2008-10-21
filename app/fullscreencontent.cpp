@@ -123,6 +123,8 @@ struct FullScreenContentPrivate {
 	void applyCurrentFullScreenTheme() {
 		FullScreenTheme theme(FullScreenTheme::currentThemeName());
 		mFullScreenBar->setStyleSheet(theme.styleSheet());
+		const bool fullWidth = GwenviewConfig::showFullScreenThumbnails();
+		mFullScreenBar->setProperty("fullWidth", fullWidth);
 	}
 
 	void createLayout() {
@@ -141,16 +143,28 @@ struct FullScreenContentPrivate {
 			layout->addWidget(mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 			layout->addWidget(mInformationLabel, 1, 0);
 			layout->addWidget(mThumbnailBar, 0, 1, 2, 1);
+			mFullScreenBar->setFixedWidth(mFullScreenBar->sizeHint().width());
 			mFullScreenBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
 		} else {
-			mInformationLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+			mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 			QHBoxLayout* layout = new QHBoxLayout(mFullScreenBar);
 			layout->setMargin(0);
-			layout->setSpacing(0);
+			layout->setSpacing(2);
 			layout->addWidget(mButtonBar);
 			layout->addWidget(mInformationLabel);
 			mFullScreenBar->setFixedHeight(mFullScreenBar->minimumSizeHint().height());
+
+			adjustBarWidth();
 		}
+		applyCurrentFullScreenTheme();
+	}
+
+
+	void adjustBarWidth() {
+		if (GwenviewConfig::showFullScreenThumbnails()) {
+			return;
+		}
+		mFullScreenBar->setFixedWidth(mFullScreenBar->minimumSizeHint().width());
 	}
 };
 
@@ -253,6 +267,8 @@ void FullScreenContent::updateInformationLabel() {
 	QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
 
 	d->mInformationLabel->setText(text);
+
+	d->adjustBarWidth();
 }
 
 
