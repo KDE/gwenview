@@ -184,13 +184,12 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		QApplication::restoreOverrideCursor();
 		d->mAutoHideCursorTimer->start();
-		QPoint pos = parentWidget()->mapFromGlobal(QCursor::pos());
 		if (y() == 0) {
 			if (d->shouldHide()) {
 				slideOut();
 			}
 		} else {
-			if (pos.y() < height()) {
+			if (d->barRect().contains(QCursor::pos())) {
 				slideIn();
 			}
 		}
