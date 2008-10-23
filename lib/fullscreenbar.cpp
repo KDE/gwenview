@@ -72,7 +72,7 @@ struct FullScreenBarPrivate {
 	 */
 	QRect slideInTriggerRect() const {
 		const QRect screen = QApplication::desktop()->screenGeometry();
-		return QRect(screen.topLeft(), that->size());
+		return QRect(screen.topLeft(), QSize(screen.width(), that->height()));
 	}
 
 	bool shouldHide() const {
