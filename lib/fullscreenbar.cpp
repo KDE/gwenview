@@ -67,10 +67,10 @@ struct FullScreenBarPrivate {
 	}
 
 	/**
-	 * Returns the rectangle the bar should occupy when its fully visible
-	 * The rectangle is in global coords
+	 * Returns the rectangle in which the mouse must enter to trigger bar
+	 * sliding. The rectangle is in global coords.
 	 */
-	QRect barRect() const {
+	QRect slideInTriggerRect() const {
 		const QRect screen = QApplication::desktop()->screenGeometry();
 		return QRect(screen.topLeft(), that->size());
 	}
@@ -81,7 +81,7 @@ struct FullScreenBarPrivate {
 		if (!mAutoHidingEnabled) {
 			return false;
 		}
-		if (barRect().contains(QCursor::pos())) {
+		if (slideInTriggerRect().contains(QCursor::pos())) {
 			return false;
 		}
 		if (qApp->activePopupWidget()) {
@@ -189,7 +189,7 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 				slideOut();
 			}
 		} else {
-			if (d->barRect().contains(QCursor::pos())) {
+			if (d->slideInTriggerRect().contains(QCursor::pos())) {
 				slideIn();
 			}
 		}
