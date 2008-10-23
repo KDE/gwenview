@@ -66,18 +66,22 @@ struct FullScreenBarPrivate {
 		QApplication::setOverrideCursor(blankCursor);
 	}
 
+	/**
+	 * Returns the rectangle the bar should occupy when its fully visible
+	 * The rectangle is in global coords
+	 */
+	QRect barRect() const {
+		const QRect screen = QApplication::desktop()->screenGeometry();
+		return QRect(screen.topLeft(), that->size());
+	}
+
 	bool shouldHide() const {
 		Q_ASSERT(that->parentWidget());
 
 		if (!mAutoHidingEnabled) {
 			return false;
 		}
-
-		// Do not use QCursor::pos() directly, as it won't work in Xinerama because
-		// rect().topLeft() is not always (0,0)
-		QPoint pos = that->parentWidget()->mapFromGlobal(QCursor::pos());
-		if (pos.x() >= 0 && pos.x() < that->width() && pos.y() < that->height()) {
-			// Do not hide if the cursor is over the bar
+		if (barRect().contains(QCursor::pos())) {
 			return false;
 		}
 		if (qApp->activePopupWidget()) {
