@@ -71,8 +71,13 @@ struct FullScreenBarPrivate {
 	 * sliding. The rectangle is in global coords.
 	 */
 	QRect slideInTriggerRect() const {
-		const QRect screen = QApplication::desktop()->screenGeometry();
-		return QRect(screen.topLeft(), QSize(screen.width(), that->height()));
+		QRect rect = QApplication::desktop()->screenGeometry();
+		// Take parent widget position into account because it may not be at
+		// the top of the screen, for example when the save bar warning is
+		// shown.
+		const QPoint topLeft = that->parentWidget()->mapToGlobal(QPoint(0, 0));
+		rect.setHeight(topLeft.y() + that->height());
+		return rect;
 	}
 
 	bool shouldHide() const {
