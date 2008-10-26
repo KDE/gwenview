@@ -688,7 +688,7 @@ qreal ImageView::computeZoomToFit() const {
 	qreal zoom = qMin(computeZoomToFitWidth(), computeZoomToFitHeight());
 
 	if (!d->mEnlargeSmallerImages) {
-		zoom = qMin(zoom, 1.0);
+		zoom = qMin(zoom, qreal(1.0));
 	}
 
 	return zoom;
