@@ -183,9 +183,11 @@ void ThumbnailThread::loadThumbnail() {
 			loaded = true;
 			needCaching = false;
 		}
+#ifndef Q_OS_WIN32
 		if(!loaded) {
 			loaded = loadJpeg();
 		}
+#endif
 		if (loaded) {
 			// Rotate if necessary
 			Orientation orientation = content.orientation();

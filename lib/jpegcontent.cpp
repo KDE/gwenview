@@ -500,12 +500,15 @@ void JpegContent::applyPendingTransformation() {
 
 QImage JpegContent::thumbnail() const {
 	QImage image;
-#ifndef Q_OS_WIN32    
 	if (!d->mExifData.empty()) {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumbC thumb(d->mExifData);
+        Exiv2::DataBuf thumbnail = thumb.copy();
+#else
 		Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
+#endif
 		image.loadFromData(thumbnail.pData_, thumbnail.size_);
 	}
-#endif
 	return image;
 }
 
@@ -523,7 +526,10 @@ void JpegContent::setThumbnail(const QImage& thumbnail) {
 		kError() << "Could not write thumbnail\n";
 		return;
 	}
-#ifndef Q_OS_WIN32	
+#if (EXIV2_TEST_VERSION(0,17,91))
+    Exiv2::ExifThumb thumb(d->mExifData);
+    thumb.setJpegThumbnail((unsigned char*)array.data(), array.size());
+#else
 	d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
 #endif
 }
