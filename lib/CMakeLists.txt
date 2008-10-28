@@ -47,7 +47,6 @@ set(gwenviewlib_SRCS
 	iodevicejpegsourcemanager.cpp
 	jpegcontent.cpp
 	semanticinfo/sorteddirmodel.cpp
-	semanticinfo/tagitemdelegate.cpp
 	memoryutils.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
@@ -77,6 +76,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 		${gwenviewlib_SRCS}
 		semanticinfo/abstractsemanticinfobackend.cpp
 		semanticinfo/semanticinfodirmodel.cpp
+		semanticinfo/tagitemdelegate.cpp
 		semanticinfo/tagmodel.cpp
 		semanticinfo/tagwidget.cpp
 		)
