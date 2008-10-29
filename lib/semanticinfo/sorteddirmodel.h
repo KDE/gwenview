@@ -54,7 +54,11 @@ public:
 	SortedDirModel* model() const { return mModel; }
 
 	virtual bool needsSemanticInfo() const = 0;
-	virtual bool acceptsIndex(const QModelIndex&) const = 0;
+	/**
+	 * Returns true if index should be accepted.
+	 * Warning: index is a source index of SortedDirModel
+	 */
+	virtual bool acceptsIndex(const QModelIndex& index) const = 0;
 
 private:
 	QPointer<SortedDirModel> mModel;
@@ -93,7 +97,9 @@ public:
 
 // FIXME: Shouldn't semanticInfoBackEnd() be in the #ifndef too?
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
+	// FIXME: Having to pass sourceIndex is quite surprising, but that's what
+	// the filter receives
+	SemanticInfo semanticInfoForIndex(const QModelIndex& sourceIndex) const;
 #endif
 
 	// Make invalidateFilter public
