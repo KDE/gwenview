@@ -105,9 +105,6 @@ public:
 	// Make invalidateFilter public
     void invalidateFilter() { QSortFilterProxyModel::invalidateFilter(); }
 
-public Q_SLOTS:
-	void setMinimumRating(int);
-
 protected:
 	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
 

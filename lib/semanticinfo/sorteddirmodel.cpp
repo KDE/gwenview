@@ -63,7 +63,6 @@ struct SortedDirModelPrivate {
 #endif
 	QStringList mBlackListedExtensions;
 	QStringList mMimeExcludeFilter;
-	int mMinimumRating;
 	QList<AbstractSortedDirModelFilter*> mFilters;
 };
 
@@ -77,7 +76,6 @@ SortedDirModel::SortedDirModel(QObject* parent)
 #else
 	d->mSourceModel = new SemanticInfoDirModel(this);
 #endif
-	d->mMinimumRating = 0;
 	setSourceModel(d->mSourceModel);
 }
 
@@ -112,12 +110,6 @@ void SortedDirModel::reload() {
 
 void SortedDirModel::setBlackListedExtensions(const QStringList& list) {
 	d->mBlackListedExtensions = list;
-}
-
-
-void SortedDirModel::setMinimumRating(int rating) {
-	d->mMinimumRating = rating;
-	invalidateFilter();
 }
 
 
@@ -195,23 +187,13 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 		}
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
+		if (!d->mTagSet.isEmpty()) {
 			// Make sure we have metadata, otherwise retrieve it and return false,
 			// we will be called again later when metadata is there.
 			if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
 				d->mSourceModel->retrieveSemanticInfoForIndex(index);
 				return false;
 			}
-		}
-
-		if (d->mMinimumRating > 0) {
-			int rating = d->mSourceModel->data(index, SemanticInfoDirModel::RatingRole).toInt();
-			if (rating < d->mMinimumRating) {
-				return false;
-			}
-		}
-
-		if (!d->mTagSet.isEmpty()) {
 			TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, SemanticInfoDirModel::TagsRole));
 			TagSet commonSet = indexTagSet & d->mTagSet;
 			if (commonSet.size() < d->mTagSet.size()) {
