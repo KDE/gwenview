@@ -158,15 +158,13 @@ RatingController::RatingController(QObject* parent)
 
 
 RatingController::~RatingController() {
-	if (d->mRatingFilter) {
-		delete d->mRatingFilter;
-	}
+	delete d->mRatingFilter;
 	delete d;
 }
 
 
 void RatingController::reset() {
-	d->mRatingFilter->setMinimumRating(0);
+	delete d->mRatingFilter;
 }
 
 
