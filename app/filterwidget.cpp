@@ -148,8 +148,8 @@ RatingController::RatingController(QObject* parent)
 : AbstractFilterController(parent)
 , d(new RatingControllerPrivate) {
 	d->mRatingWidget = new KRatingWidget;
-	d->mRatingWidget->setHalfStepsEnabled(false);
-	d->mRatingWidget->setMaxRating(5);
+	d->mRatingWidget->setHalfStepsEnabled(true);
+	d->mRatingWidget->setMaxRating(10);
 	d->mRatingFilter = 0;
 
 	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
