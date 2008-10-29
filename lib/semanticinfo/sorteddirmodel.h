@@ -85,8 +85,6 @@ public:
 
 	virtual void setMimeExcludeFilter(const QStringList &mimeList);
 
-	void setTagSetFilter(const TagSet& tagSet);
-
 	void addFilter(AbstractSortedDirModelFilter*);
 
 	void removeFilter(AbstractSortedDirModelFilter*);

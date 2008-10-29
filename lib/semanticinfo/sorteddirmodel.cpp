@@ -59,7 +59,6 @@ struct SortedDirModelPrivate {
 	KDirModel* mSourceModel;
 #else
 	SemanticInfoDirModel* mSourceModel;
-	TagSet mTagSet;
 #endif
 	QStringList mBlackListedExtensions;
 	QStringList mMimeExcludeFilter;
@@ -185,22 +184,6 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 				return false;
 			}
 		}
-
-#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		if (!d->mTagSet.isEmpty()) {
-			// Make sure we have metadata, otherwise retrieve it and return false,
-			// we will be called again later when metadata is there.
-			if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
-				d->mSourceModel->retrieveSemanticInfoForIndex(index);
-				return false;
-			}
-			TagSet indexTagSet = TagSet::fromVariant(d->mSourceModel->data(index, SemanticInfoDirModel::TagsRole));
-			TagSet commonSet = indexTagSet & d->mTagSet;
-			if (commonSet.size() < d->mTagSet.size()) {
-				return false;
-			}
-		}
-#endif
 	}
 	return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
@@ -214,14 +197,6 @@ AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const {
 #endif
 }
 
-
-void SortedDirModel::setTagSetFilter(const TagSet& tagSet) {
-#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	kDebug() << tagSet;
-	d->mTagSet = tagSet;
-	invalidateFilter();
-#endif
-}
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 SemanticInfo SortedDirModel::semanticInfoForIndex(const QModelIndex& index) const {

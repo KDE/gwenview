@@ -187,9 +187,35 @@ void RatingController::slotRatingChanged(int value) {
 
 
 //// TagController ////
+class TagFilter : public AbstractSortedDirModelFilter {
+public:
+	TagFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	{}
+
+	virtual bool needsSemanticInfo() const {
+		return true;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		SemanticInfo info = model()->semanticInfoForIndex(index);
+		TagSet commonSet = info.mTags & mTagSet;
+		return commonSet.size() == mTagSet.size();
+	}
+
+	void setTagSet(const TagSet& tagSet) {
+		mTagSet = tagSet;
+		model()->invalidateFilter();
+	}
+
+private:
+	TagSet mTagSet;
+};
+
 struct TagControllerPrivate {
 	QPointer<QListView> mListView;
 	KLineEdit* mLineEdit;
+	QPointer<TagFilter> mFilter;
 };
 
 TagController::TagController(QObject* parent)
@@ -203,6 +229,7 @@ TagController::TagController(QObject* parent)
 
 TagController::~TagController() {
 	d->mListView->deleteLater();
+	delete d->mFilter;
 	delete d;
 }
 
@@ -233,7 +260,7 @@ void TagController::init(QWidget* parentWidget) {
 
 void TagController::reset() {
 	d->mListView->deleteLater();
-	mDirModel->setTagSetFilter(TagSet());
+	delete d->mFilter;
 }
 
 
@@ -252,7 +279,10 @@ void TagController::updateTagSetFilter() {
 		tagSet << index.data(TagModel::TagRole).toString();
 		labels << index.data(Qt::DisplayRole).toString();
 	}
-	mDirModel->setTagSetFilter(tagSet);
+	if (!d->mFilter) {
+		d->mFilter = new TagFilter(mDirModel);
+	}
+	d->mFilter->setTagSet(tagSet);
 	d->mLineEdit->setText(labels.join(", "));
 }
 
