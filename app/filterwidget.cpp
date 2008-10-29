@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QHBoxLayout>
 #include <QListView>
+#include <QPointer>
 #include <QStackedWidget>
 #include <QTimer>
 
@@ -114,8 +115,33 @@ void NameFilterController::applyNameFilter() {
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 //// RatingController ////
+class RatingFilter : public AbstractSortedDirModelFilter {
+public:
+	RatingFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	, mMinimumRating(0) {}
+
+	virtual bool needsSemanticInfo() const {
+		return true;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		SemanticInfo info = model()->semanticInfoForIndex(index);
+		return info.mRating >= mMinimumRating;
+	}
+
+	void setMinimumRating(int value) {
+		mMinimumRating = value;
+		model()->invalidateFilter();
+	}
+
+private:
+	int mMinimumRating;
+};
+
 struct RatingControllerPrivate {
 	KRatingWidget* mRatingWidget;
+	QPointer<RatingFilter> mRatingFilter;
 };
 
 RatingController::RatingController(QObject* parent)
@@ -124,28 +150,41 @@ RatingController::RatingController(QObject* parent)
 	d->mRatingWidget = new KRatingWidget;
 	d->mRatingWidget->setHalfStepsEnabled(false);
 	d->mRatingWidget->setMaxRating(5);
+	d->mRatingFilter = 0;
+
+	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
+		SLOT(slotRatingChanged(int)));
 }
 
 
 RatingController::~RatingController() {
+	if (d->mRatingFilter) {
+		delete d->mRatingFilter;
+	}
 	delete d;
 }
 
 
-void RatingController::setDirModel(SortedDirModel* model) {
-	AbstractFilterController::setDirModel(model);
-	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
-		model, SLOT(setMinimumRating(int)));
-}
-
-
 void RatingController::reset() {
-	mDirModel->setMinimumRating(0);
+	d->mRatingFilter->setMinimumRating(0);
 }
 
 
 QWidget* RatingController::widget() const {
 	return d->mRatingWidget;
+}
+
+
+void RatingController::slotRatingChanged(int value) {
+	if (value == 0) {
+		delete d->mRatingFilter;
+		d->mRatingFilter = 0;
+	} else {
+		if (!d->mRatingFilter) {
+			d->mRatingFilter = new RatingFilter(mDirModel);
+		}
+		d->mRatingFilter->setMinimumRating(value);
+	}
 }
 
 

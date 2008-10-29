@@ -98,6 +98,20 @@ bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& inde
 }
 
 
+SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex& index) const {
+	if (!index.isValid()) {
+		kWarning() << "invalid index";
+		return SemanticInfo();
+	}
+	KFileItem item = itemForIndex(index);
+	if (item.isNull()) {
+		kWarning() << "no item for index";
+		return SemanticInfo();
+	}
+	return d->mSemanticInfoCache.value(item.url());
+}
+
+
 void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
 		return;

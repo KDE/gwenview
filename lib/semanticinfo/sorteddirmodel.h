@@ -20,6 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SORTEDDIRMODEL_H
 #define SORTEDDIRMODEL_H
 
+#include <config-gwenview.h>
+
+// Qt
+#include <QPointer>
+
 // KDE
 #include <kdirsortfilterproxymodel.h>
 
@@ -37,6 +42,23 @@ class AbstractSemanticInfoBackEnd;
 class SortedDirModelPrivate;
 class TagSet;
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+class SemanticInfo;
+#endif
+
+class SortedDirModel;
+class GWENVIEWLIB_EXPORT AbstractSortedDirModelFilter : public QObject {
+public:
+	AbstractSortedDirModelFilter(SortedDirModel* model);
+	~AbstractSortedDirModelFilter();
+	SortedDirModel* model() const { return mModel; }
+
+	virtual bool needsSemanticInfo() const = 0;
+	virtual bool acceptsIndex(const QModelIndex&) const = 0;
+
+private:
+	QPointer<SortedDirModel> mModel;
+};
 
 /**
  * This model makes it possible to show all images in a folder.
@@ -61,9 +83,21 @@ public:
 
 	void setTagSetFilter(const TagSet& tagSet);
 
+	void addFilter(AbstractSortedDirModelFilter*);
+
+	void removeFilter(AbstractSortedDirModelFilter*);
+
 	void reload();
 
 	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
+
+// FIXME: Shouldn't semanticInfoBackEnd() be in the #ifndef too?
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+	SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
+#endif
+
+	// Make invalidateFilter public
+    void invalidateFilter() { QSortFilterProxyModel::invalidateFilter(); }
 
 public Q_SLOTS:
 	void setMinimumRating(int);

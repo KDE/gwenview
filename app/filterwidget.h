@@ -76,9 +76,11 @@ public:
 	RatingController(QObject*);
 	~RatingController();
 
-	virtual void setDirModel(SortedDirModel* model);
 	virtual void reset();
 	virtual QWidget* widget() const;
+
+private Q_SLOTS:
+	void slotRatingChanged(int value);
 
 private:
 	RatingControllerPrivate* const d;

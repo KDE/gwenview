@@ -57,6 +57,8 @@ public:
 
 	void retrieveSemanticInfoForIndex(const QModelIndex&);
 
+	SemanticInfo semanticInfoForIndex(const QModelIndex&) const;
+
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 	bool setData(const QModelIndex& index, const QVariant& data, int role = Qt::EditRole);

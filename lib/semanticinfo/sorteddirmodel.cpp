@@ -37,6 +37,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+AbstractSortedDirModelFilter::AbstractSortedDirModelFilter(SortedDirModel* model)
+: QObject(model)
+, mModel(model)
+{
+	if (mModel) {
+		mModel->addFilter(this);
+	}
+}
+
+AbstractSortedDirModelFilter::~AbstractSortedDirModelFilter()
+{
+	if (mModel) {
+		mModel->removeFilter(this);
+	}
+}
+
 
 struct SortedDirModelPrivate {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -48,6 +64,7 @@ struct SortedDirModelPrivate {
 	QStringList mBlackListedExtensions;
 	QStringList mMimeExcludeFilter;
 	int mMinimumRating;
+	QList<AbstractSortedDirModelFilter*> mFilters;
 };
 
 
@@ -67,6 +84,16 @@ SortedDirModel::SortedDirModel(QObject* parent)
 
 SortedDirModel::~SortedDirModel() {
 	delete d;
+}
+
+
+void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter) {
+	d->mFilters << filter;
+}
+
+
+void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter) {
+	d->mFilters.removeAll(filter);
 }
 
 
@@ -146,8 +173,28 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 			return false;
 		}
 	}
-#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
+			Q_FOREACH(const AbstractSortedDirModelFilter* filter, d->mFilters) {
+				// Make sure we have semanticinfo, otherwise retrieve it and
+				// return false, we will be called again later when it is
+				// there.
+				if (filter->needsSemanticInfo()) {
+					d->mSourceModel->retrieveSemanticInfoForIndex(index);
+					return false;
+				}
+			}
+		}
+#endif
+
+		Q_FOREACH(const AbstractSortedDirModelFilter* filter, d->mFilters) {
+			if (!filter->acceptsIndex(index)) {
+				return false;
+			}
+		}
+
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		if (d->mMinimumRating > 0 || !d->mTagSet.isEmpty()) {
 			// Make sure we have metadata, otherwise retrieve it and return false,
 			// we will be called again later when metadata is there.
@@ -171,8 +218,8 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 				return false;
 			}
 		}
-	}
 #endif
+	}
 	return KDirSortFilterProxyModel::filterAcceptsRow(row, parent);
 }
 
@@ -194,5 +241,10 @@ void SortedDirModel::setTagSetFilter(const TagSet& tagSet) {
 #endif
 }
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+SemanticInfo SortedDirModel::semanticInfoForIndex(const QModelIndex& index) const {
+	return d->mSourceModel->semanticInfoForIndex(index);
+}
+#endif
 
 } //namespace
