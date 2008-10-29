@@ -132,7 +132,7 @@ public:
 
 	void setMinimumRating(int value) {
 		mMinimumRating = value;
-		model()->invalidateFilter();
+		model()->applyFilters();
 	}
 
 private:
@@ -205,7 +205,7 @@ public:
 
 	void setTagSet(const TagSet& tagSet) {
 		mTagSet = tagSet;
-		model()->invalidateFilter();
+		model()->applyFilters();
 	}
 
 private:

@@ -100,11 +100,14 @@ public:
 	SemanticInfo semanticInfoForIndex(const QModelIndex& sourceIndex) const;
 #endif
 
-	// Make invalidateFilter public
-    void invalidateFilter() { QSortFilterProxyModel::invalidateFilter(); }
+public Q_SLOTS:
+    void applyFilters();
 
 protected:
 	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
+
+private Q_SLOTS:
+	void doApplyFilters();
 
 private:
 	friend class SortedDirModelPrivate;

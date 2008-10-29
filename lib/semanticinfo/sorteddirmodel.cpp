@@ -63,6 +63,7 @@ struct SortedDirModelPrivate {
 	QStringList mBlackListedExtensions;
 	QStringList mMimeExcludeFilter;
 	QList<AbstractSortedDirModelFilter*> mFilters;
+	QTimer mDelayedApplyFiltersTimer;
 };
 
 
@@ -76,6 +77,9 @@ SortedDirModel::SortedDirModel(QObject* parent)
 	d->mSourceModel = new SemanticInfoDirModel(this);
 #endif
 	setSourceModel(d->mSourceModel);
+	d->mDelayedApplyFiltersTimer.setInterval(0);
+	d->mDelayedApplyFiltersTimer.setSingleShot(true);
+	connect(&d->mDelayedApplyFiltersTimer, SIGNAL(timeout()), SLOT(doApplyFilters()));
 }
 
 
@@ -86,11 +90,13 @@ SortedDirModel::~SortedDirModel() {
 
 void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter) {
 	d->mFilters << filter;
+	applyFilters();
 }
 
 
 void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter) {
 	d->mFilters.removeAll(filter);
+	applyFilters();
 }
 
 
@@ -146,7 +152,7 @@ void SortedDirModel::setMimeExcludeFilter(const QStringList &mimeList) {
 		return;
 	}
 	d->mMimeExcludeFilter = mimeList;
-	invalidateFilter();
+	applyFilters();
 }
 
 
@@ -203,5 +209,16 @@ SemanticInfo SortedDirModel::semanticInfoForIndex(const QModelIndex& index) cons
 	return d->mSourceModel->semanticInfoForIndex(index);
 }
 #endif
+
+
+void SortedDirModel::applyFilters() {
+	d->mDelayedApplyFiltersTimer.start();
+}
+
+
+void SortedDirModel::doApplyFilters() {
+	QSortFilterProxyModel::invalidateFilter();
+}
+
 
 } //namespace
