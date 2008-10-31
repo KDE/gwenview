@@ -162,7 +162,6 @@ RatingFilterWidget::~RatingFilterWidget() {
 void RatingFilterWidget::slotRatingChanged(int value) {
 	d->mFilter->setMinimumRating(value);
 }
-#endif
 
 
 //// TagFilter ////
@@ -228,6 +227,7 @@ void TagFilterWidget::updateTagSetFilter() {
 	tagSet << index.data(TagModel::TagRole).toString();
 	d->mFilter->setTagSet(tagSet);
 }
+#endif
 
 
 //// FilterWidgetContainer ////
@@ -280,8 +280,10 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 	new FlowLayout(d->mFrame);
 
 	d->addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
 	d->addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));
+#endif
 }
 
 
@@ -300,6 +302,7 @@ void FilterController::addFilterByName() {
 }
 
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 void FilterController::addFilterByRating() {
 	d->addFilter(new RatingFilterWidget(d->mDirModel));
 }
@@ -308,6 +311,7 @@ void FilterController::addFilterByRating() {
 void FilterController::addFilterByTag() {
 	d->addFilter(new TagFilterWidget(d->mDirModel));
 }
+#endif
 
 
 } // namespace

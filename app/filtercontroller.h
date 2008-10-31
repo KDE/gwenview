@@ -102,8 +102,10 @@ public:
 
 private Q_SLOTS:
 	void addFilterByName();
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	void addFilterByRating();
 	void addFilterByTag();
+#endif
 
 private:
 	FilterControllerPrivate* const d;
