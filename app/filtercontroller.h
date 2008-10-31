@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QList>
 #include <QObject>
+#include <QWidget>
 
 // KDE
 
@@ -37,8 +38,21 @@ namespace Gwenview {
 class SortedDirModel;
 
 
-class FilterControllerPrivate;
+struct NameFilterWidgetPrivate;
+class NameFilterWidget : public QWidget {
+	Q_OBJECT
+public:
+	NameFilterWidget(SortedDirModel*);
+	~NameFilterWidget();
 
+private Q_SLOTS:
+	void applyNameFilter();
+
+private:
+	NameFilterWidgetPrivate* const d;
+};
+
+class FilterControllerPrivate;
 /**
  * This class manages the filter widgets in the filter frame and assign the
  * corresponding filters to the SortedDirModel

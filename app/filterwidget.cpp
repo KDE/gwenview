@@ -71,74 +71,6 @@ void AbstractFilterController::setDirModel(SortedDirModel* model) {
 	mDirModel = model;
 }
 
-//// NameFilterController ////
-class NameFilter : public AbstractSortedDirModelFilter {
-public:
-	NameFilter(SortedDirModel* model)
-	: AbstractSortedDirModelFilter(model)
-	, mText(0) {}
-
-	virtual bool needsSemanticInfo() const {
-		return false;
-	}
-
-	virtual bool acceptsIndex(const QModelIndex& index) const {
-		return index.data().toString().contains(mText);
-	}
-
-	void setText(const QString& text) {
-		mText = text;
-		model()->applyFilters();
-	}
-
-private:
-	QString mText;
-};
-
-
-struct NameFilterControllerPrivate {
-	KLineEdit* mLineEdit;
-	QPointer<NameFilter> mFilter;
-};
-
-NameFilterController::NameFilterController(QObject* parent)
-: AbstractFilterController(parent)
-, d(new NameFilterControllerPrivate) {
-	d->mLineEdit = new KLineEdit;
-	d->mLineEdit->setClearButtonShown(true);
-
-	QTimer* timer = new QTimer(this);
-	timer->setInterval(350);
-	timer->setSingleShot(true);
-	QObject::connect(timer, SIGNAL(timeout()),
-		this, SLOT(applyNameFilter()));
-
-	QObject::connect(d->mLineEdit, SIGNAL(textChanged(const QString &)),
-		timer, SLOT(start()));
-}
-
-
-NameFilterController::~NameFilterController() {
-	delete d->mFilter;
-	delete d;
-}
-
-
-void NameFilterController::reset() {
-	delete d->mFilter;
-}
-
-
-QWidget* NameFilterController::widget() const {
-	return d->mLineEdit;
-}
-
-
-void NameFilterController::applyNameFilter() {
-	d->mFilter->setText(d->mLineEdit->text());
-}
-
-
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 //// RatingController ////
 class RatingFilter : public AbstractSortedDirModelFilter {
@@ -271,7 +203,6 @@ void TagController::init(QWidget* parentWidget) {
 	backEnd->refreshAllTags();
 	TagModel* tagModel = TagModel::createAllTagsModel(d->mListView, backEnd);
 	d->mListView->setModel(tagModel);
-
 	connect(d->mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 		this, SLOT(updateTagSetFilter()) );
 
@@ -355,7 +286,6 @@ struct FilterWidgetPrivate {
 
 	void setupControllers() {
 		mCurrentController = 0;
-		addController(i18n("Filter by Name:"), FilterByName, new NameFilterController(that));
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		addController(i18n("Filter by Tag:"), FilterByTag, new TagController(that));
 		addController(i18n("Filter by Rating:"), FilterByRating, new RatingController(that));
@@ -391,6 +321,7 @@ void FilterWidget::setDirModel(SortedDirModel* dirModel) {
 
 
 void FilterWidget::activateSelectedController(int index) {
+	/*
 	if (d->mCurrentController) {
 		d->mCurrentController->reset();
 	}
@@ -400,6 +331,7 @@ void FilterWidget::activateSelectedController(int index) {
 
 	d->mStackedWidget->setCurrentWidget(d->mCurrentController->widget());
 	d->mCurrentController->init(this);
+	*/
 }
 
 

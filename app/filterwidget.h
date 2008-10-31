@@ -51,23 +51,6 @@ protected:
 };
 
 
-class NameFilterControllerPrivate;
-class NameFilterController : public AbstractFilterController {
-	Q_OBJECT
-public:
-	NameFilterController(QObject*);
-	~NameFilterController();
-
-	void reset();
-	QWidget* widget() const;
-
-private Q_SLOTS:
-	void applyNameFilter();
-
-private:
-	NameFilterControllerPrivate* const d;
-};
-
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 class RatingControllerPrivate;
 class RatingController : public AbstractFilterController {

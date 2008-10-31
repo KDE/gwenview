@@ -24,10 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAction>
 #include <QLineEdit>
+#include <QTimer>
 #include <QToolButton>
 
 // KDE
 #include <kicon.h>
+#include <klineedit.h>
 #include <klocale.h>
 
 // Local
@@ -36,7 +38,63 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+//// NameFilter ////
+class NameFilter : public AbstractSortedDirModelFilter {
+public:
+	NameFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	, mText(0) {}
 
+	virtual bool needsSemanticInfo() const {
+		return false;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		return index.data().toString().contains(mText);
+	}
+
+	void setText(const QString& text) {
+		mText = text;
+		model()->applyFilters();
+	}
+
+private:
+	QString mText;
+};
+
+struct NameFilterWidgetPrivate {
+	QPointer<NameFilter> mFilter;
+	KLineEdit* mLineEdit;
+};
+
+NameFilterWidget::NameFilterWidget(SortedDirModel* model)
+: d(new NameFilterWidgetPrivate)
+{
+	d->mFilter = new NameFilter(model);
+	d->mLineEdit = new KLineEdit;
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->addWidget(d->mLineEdit);
+
+	QTimer* timer = new QTimer(this);
+	timer->setInterval(350);
+	timer->setSingleShot(true);
+	connect(timer, SIGNAL(timeout()), SLOT(applyNameFilter()));
+
+	QObject::connect(d->mLineEdit, SIGNAL(textChanged(const QString &)),
+		timer, SLOT(start()));
+}
+
+NameFilterWidget::~NameFilterWidget()
+{
+	delete d->mFilter;
+	delete d;
+}
+
+void NameFilterWidget::applyNameFilter() {
+	d->mFilter->setText(d->mLineEdit->text());
+}
+
+//// FilterWidgetContainer ////
 class FilterWidgetContainer : public QWidget {
 public:
 	void setFilterWidget(QWidget* widget) {
@@ -52,7 +110,6 @@ public:
 };
 
 typedef QLineEdit TagFilter;
-typedef QLineEdit NameFilter;
 typedef QLineEdit RatingFilter;
 
 
@@ -106,7 +163,7 @@ QList<QAction*> FilterController::actionList() const {
 
 
 void FilterController::addFilterByName() {
-	d->addFilter(new NameFilter);
+	d->addFilter(new NameFilterWidget(d->mDirModel));
 }
 
 
