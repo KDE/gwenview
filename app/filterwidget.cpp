@@ -72,8 +72,33 @@ void AbstractFilterController::setDirModel(SortedDirModel* model) {
 }
 
 //// NameFilterController ////
+class NameFilter : public AbstractSortedDirModelFilter {
+public:
+	NameFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	, mText(0) {}
+
+	virtual bool needsSemanticInfo() const {
+		return false;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		return index.data().toString().contains(mText);
+	}
+
+	void setText(const QString& text) {
+		mText = text;
+		model()->applyFilters();
+	}
+
+private:
+	QString mText;
+};
+
+
 struct NameFilterControllerPrivate {
 	KLineEdit* mLineEdit;
+	QPointer<NameFilter> mFilter;
 };
 
 NameFilterController::NameFilterController(QObject* parent)
@@ -94,12 +119,13 @@ NameFilterController::NameFilterController(QObject* parent)
 
 
 NameFilterController::~NameFilterController() {
+	delete d->mFilter;
 	delete d;
 }
 
 
 void NameFilterController::reset() {
-	mDirModel->setFilterRegExp(QString());
+	delete d->mFilter;
 }
 
 
@@ -109,7 +135,7 @@ QWidget* NameFilterController::widget() const {
 
 
 void NameFilterController::applyNameFilter() {
-	mDirModel->setFilterRegExp(d->mLineEdit->text());
+	d->mFilter->setText(d->mLineEdit->text());
 }
 
 
