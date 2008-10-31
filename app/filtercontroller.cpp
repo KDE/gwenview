@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "filtercontroller.h"
 
+#include <config-gwenview.h>
+
 // Qt
 #include <QAction>
 #include <QLineEdit>
@@ -35,6 +37,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/flowlayout.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+// KDE
+#include <nepomuk/kratingwidget.h>
+
+// Local
+#include <lib/semanticinfo/abstractsemanticinfobackend.h>
+#include <lib/semanticinfo/tagmodel.h>
+#endif
 
 namespace Gwenview {
 
@@ -94,6 +105,64 @@ void NameFilterWidget::applyNameFilter() {
 	d->mFilter->setText(d->mLineEdit->text());
 }
 
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+//// RatingFilter ////
+class RatingFilter : public AbstractSortedDirModelFilter {
+public:
+	RatingFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	, mMinimumRating(0) {}
+
+	virtual bool needsSemanticInfo() const {
+		return true;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		SemanticInfo info = model()->semanticInfoForIndex(index);
+		return info.mRating >= mMinimumRating;
+	}
+
+	void setMinimumRating(int value) {
+		mMinimumRating = value;
+		model()->applyFilters();
+	}
+
+private:
+	int mMinimumRating;
+};
+
+struct RatingWidgetPrivate {
+	KRatingWidget* mRatingWidget;
+	QPointer<RatingFilter> mFilter;
+};
+
+RatingFilterWidget::RatingFilterWidget(SortedDirModel* model)
+: d(new RatingWidgetPrivate) {
+	d->mRatingWidget = new KRatingWidget;
+	d->mRatingWidget->setHalfStepsEnabled(true);
+	d->mRatingWidget->setMaxRating(10);
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->addWidget(d->mRatingWidget);
+
+	d->mFilter = new RatingFilter(model);
+
+	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
+		SLOT(slotRatingChanged(int)));
+}
+
+
+RatingFilterWidget::~RatingFilterWidget() {
+	delete d->mFilter;
+	delete d;
+}
+
+
+void RatingFilterWidget::slotRatingChanged(int value) {
+	d->mFilter->setMinimumRating(value);
+}
+#endif
+
+
 //// FilterWidgetContainer ////
 class FilterWidgetContainer : public QWidget {
 public:
@@ -110,7 +179,6 @@ public:
 };
 
 typedef QLineEdit TagFilter;
-typedef QLineEdit RatingFilter;
 
 
 struct FilterControllerPrivate {
@@ -168,7 +236,7 @@ void FilterController::addFilterByName() {
 
 
 void FilterController::addFilterByRating() {
-	d->addFilter(new RatingFilter);
+	d->addFilter(new RatingFilterWidget(d->mDirModel));
 }
 
 

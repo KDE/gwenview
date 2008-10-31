@@ -72,78 +72,6 @@ void AbstractFilterController::setDirModel(SortedDirModel* model) {
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-//// RatingController ////
-class RatingFilter : public AbstractSortedDirModelFilter {
-public:
-	RatingFilter(SortedDirModel* model)
-	: AbstractSortedDirModelFilter(model)
-	, mMinimumRating(0) {}
-
-	virtual bool needsSemanticInfo() const {
-		return true;
-	}
-
-	virtual bool acceptsIndex(const QModelIndex& index) const {
-		SemanticInfo info = model()->semanticInfoForIndex(index);
-		return info.mRating >= mMinimumRating;
-	}
-
-	void setMinimumRating(int value) {
-		mMinimumRating = value;
-		model()->applyFilters();
-	}
-
-private:
-	int mMinimumRating;
-};
-
-struct RatingControllerPrivate {
-	KRatingWidget* mRatingWidget;
-	QPointer<RatingFilter> mRatingFilter;
-};
-
-RatingController::RatingController(QObject* parent)
-: AbstractFilterController(parent)
-, d(new RatingControllerPrivate) {
-	d->mRatingWidget = new KRatingWidget;
-	d->mRatingWidget->setHalfStepsEnabled(true);
-	d->mRatingWidget->setMaxRating(10);
-	d->mRatingFilter = 0;
-
-	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
-		SLOT(slotRatingChanged(int)));
-}
-
-
-RatingController::~RatingController() {
-	delete d->mRatingFilter;
-	delete d;
-}
-
-
-void RatingController::reset() {
-	delete d->mRatingFilter;
-}
-
-
-QWidget* RatingController::widget() const {
-	return d->mRatingWidget;
-}
-
-
-void RatingController::slotRatingChanged(int value) {
-	if (value == 0) {
-		delete d->mRatingFilter;
-		d->mRatingFilter = 0;
-	} else {
-		if (!d->mRatingFilter) {
-			d->mRatingFilter = new RatingFilter(mDirModel);
-		}
-		d->mRatingFilter->setMinimumRating(value);
-	}
-}
-
-
 //// TagController ////
 class TagFilter : public AbstractSortedDirModelFilter {
 public:
@@ -288,7 +216,6 @@ struct FilterWidgetPrivate {
 		mCurrentController = 0;
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		addController(i18n("Filter by Tag:"), FilterByTag, new TagController(that));
-		addController(i18n("Filter by Rating:"), FilterByRating, new RatingController(that));
 		#endif
 
 		QObject::connect(mComboBox, SIGNAL(currentIndexChanged(int)),

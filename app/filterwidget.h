@@ -52,24 +52,6 @@ protected:
 
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-class RatingControllerPrivate;
-class RatingController : public AbstractFilterController {
-	Q_OBJECT
-public:
-	RatingController(QObject*);
-	~RatingController();
-
-	virtual void reset();
-	virtual QWidget* widget() const;
-
-private Q_SLOTS:
-	void slotRatingChanged(int value);
-
-private:
-	RatingControllerPrivate* const d;
-};
-
-
 class TagControllerPrivate;
 class TagController : public AbstractFilterController {
 	Q_OBJECT

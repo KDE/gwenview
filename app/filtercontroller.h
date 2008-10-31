@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef FILTERCONTROLLER_H
 #define FILTERCONTROLLER_H
 
+#include <config-gwenview.h>
+
 // Qt
 #include <QList>
 #include <QObject>
@@ -51,6 +53,25 @@ private Q_SLOTS:
 private:
 	NameFilterWidgetPrivate* const d;
 };
+
+
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+class RatingWidgetPrivate;
+class RatingFilterWidget : public QWidget {
+	Q_OBJECT
+public:
+	RatingFilterWidget(SortedDirModel*);
+	~RatingFilterWidget();
+
+private Q_SLOTS:
+	void slotRatingChanged(int value);
+
+private:
+	RatingWidgetPrivate* const d;
+};
+#endif
+
+
 
 class FilterControllerPrivate;
 /**
