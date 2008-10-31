@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurlnavigator.h>
 
 // Local
-#include <lib/flowlayout.h>
+#include <filtercontroller.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -50,28 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <ui_thumbnailviewpanel.h>
 
 
-#include <QLineEdit>
-
 namespace Gwenview {
-
-class FilterWidgetContainer : public QWidget {
-public:
-	void setFilterWidget(QWidget* widget) {
-		QToolButton* closeButton = new QToolButton;
-		closeButton->setIcon(KIcon("window-close"));
-		closeButton->setAutoRaise(true);
-		connect(closeButton, SIGNAL(clicked()), SLOT(deleteLater()));
-		QHBoxLayout* layout = new QHBoxLayout(this);
-		layout->setMargin(0);
-		layout->addWidget(widget);
-		layout->addWidget(closeButton);
-	}
-};
-
-typedef QLineEdit TagFilter;
-typedef QLineEdit NameFilter;
-typedef QLineEdit RatingFilter;
-
 
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	ThumbnailViewPanel* that;
@@ -80,6 +59,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	SortedDirModel* mDirModel;
 	int mDocumentCount;
 	KActionCollection* mActionCollection;
+	FilterController* mFilterController;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -110,15 +90,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 
 		// Filter widget
 		mFilterWidget->setDirModel(mDirModel);
-
-		QMenu* menu = new QMenu;
-		menu->addAction(i18nc("@action:inmenu", "Filter by Name"), that, SLOT(addFilterByName()));
-		menu->addAction(i18nc("@action:inmenu", "Filter by Rating"), that, SLOT(addFilterByRating()));
-		menu->addAction(i18nc("@action:inmenu", "Filter by Tag"), that, SLOT(addFilterByTag()));
-		mAddFilterButton->setMenu(menu);
-
-		mFilterFrame->hide();
-		new FlowLayout(mFilterFrame);
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
@@ -130,6 +101,15 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
 		KAction* action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
 		action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
+	}
+
+	void setupFilterController() {
+		QMenu* menu = new QMenu;
+		mFilterController = new FilterController(mFilterFrame, mDirModel);
+		Q_FOREACH(QAction* action, mFilterController->actionList()) {
+			menu->addAction(action);
+		}
+		mAddFilterButton->setMenu(menu);
 	}
 
 	void updateDocumentCountLabel() {
@@ -160,15 +140,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		}
 		return count;
 	}
-
-	void addFilter(QWidget* widget) {
-		if (mFilterFrame->isHidden()) {
-			mFilterFrame->show();
-		}
-		FilterWidgetContainer* container = new FilterWidgetContainer;
-		container->setFilterWidget(widget);
-		mFilterFrame->layout()->addWidget(container);
-	}
 };
 
 
@@ -181,6 +152,7 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->mActionCollection = actionCollection;
 	d->setupWidgets();
 	d->setupActions(actionCollection);
+	d->setupFilterController();
 	d->setupDocumentCountConnections();
 	loadConfig();
 }
@@ -267,21 +239,6 @@ void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& par
 void ThumbnailViewPanel::slotDirModelReset() {
 	d->mDocumentCount = 0;
 	d->updateDocumentCountLabel();
-}
-
-
-void ThumbnailViewPanel::addFilterByName() {
-	d->addFilter(new NameFilter);
-}
-
-
-void ThumbnailViewPanel::addFilterByRating() {
-	d->addFilter(new RatingFilter);
-}
-
-
-void ThumbnailViewPanel::addFilterByTag() {
-	d->addFilter(new TagFilter);
 }
 
 
