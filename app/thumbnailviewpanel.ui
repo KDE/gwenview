@@ -29,6 +29,13 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1" >
+    <widget class="Line" name="line" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="2" >
     <widget class="QWidget" native="1" name="mUrlNavigatorContainer" >
      <property name="sizePolicy" >
@@ -49,8 +56,34 @@
     <widget class="Gwenview::ThumbnailView" name="mThumbnailView" />
    </item>
    <item row="2" column="0" colspan="3" >
+    <widget class="QFrame" name="mFilterFrame" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3" >
     <widget class="QWidget" native="1" name="mStatusBarContainer" >
      <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <widget class="QToolButton" name="mAddFilterButton" >
+        <property name="text" >
+         <string>Add Filter</string>
+        </property>
+        <property name="popupMode" >
+         <enum>QToolButton::InstantPopup</enum>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="Gwenview::FilterWidget" native="1" name="mFilterWidget" />
       </item>
@@ -99,13 +132,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="Line" name="line" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
     </widget>
    </item>
   </layout>

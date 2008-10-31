@@ -33,6 +33,7 @@ set(gwenviewlib_SRCS
 	croptool.cpp
 	expandbutton.cpp
 	exiv2imageloader.cpp
+	flowlayout.cpp
 	fullscreenbar.cpp
 	fullscreentheme.cpp
 	hudwidget.cpp

@@ -68,6 +68,10 @@ private Q_SLOTS:
 	void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	void slotDirModelReset();
 
+	void addFilterByName();
+	void addFilterByRating();
+	void addFilterByTag();
+
 private:
 	ThumbnailViewPanelPrivate* const d;
 };

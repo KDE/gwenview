@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailviewpanel.moc"
 
 // Qt
+#include <QMenu>
 #include <QSlider>
 #include <QVBoxLayout>
 
@@ -38,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurlnavigator.h>
 
 // Local
+#include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -47,7 +49,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/thumbnailview.h>
 #include <ui_thumbnailviewpanel.h>
 
+
+#include <QLineEdit>
+
 namespace Gwenview {
+
+typedef QLineEdit TagFilter;
+typedef QLineEdit NameFilter;
+typedef QLineEdit RatingFilter;
 
 
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
@@ -87,6 +96,15 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 
 		// Filter widget
 		mFilterWidget->setDirModel(mDirModel);
+
+		QMenu* menu = new QMenu;
+		menu->addAction(i18nc("@action:inmenu", "Filter by Name"), that, SLOT(addFilterByName()));
+		menu->addAction(i18nc("@action:inmenu", "Filter by Rating"), that, SLOT(addFilterByRating()));
+		menu->addAction(i18nc("@action:inmenu", "Filter by Tag"), that, SLOT(addFilterByTag()));
+		mAddFilterButton->setMenu(menu);
+
+		mFilterFrame->hide();
+		new FlowLayout(mFilterFrame);
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
@@ -127,6 +145,13 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 			}
 		}
 		return count;
+	}
+
+	void addFilter(QWidget* widget) {
+		if (mFilterFrame->isHidden()) {
+			mFilterFrame->show();
+		}
+		mFilterFrame->layout()->addWidget(widget);
 	}
 };
 
@@ -226,6 +251,21 @@ void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& par
 void ThumbnailViewPanel::slotDirModelReset() {
 	d->mDocumentCount = 0;
 	d->updateDocumentCountLabel();
+}
+
+
+void ThumbnailViewPanel::addFilterByName() {
+	d->addFilter(new NameFilter);
+}
+
+
+void ThumbnailViewPanel::addFilterByRating() {
+	d->addFilter(new RatingFilter);
+}
+
+
+void ThumbnailViewPanel::addFilterByTag() {
+	d->addFilter(new TagFilter);
 }
 
 
