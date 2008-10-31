@@ -85,9 +85,6 @@
        </widget>
       </item>
       <item>
-       <widget class="Gwenview::FilterWidget" native="1" name="mFilterWidget" />
-      </item>
-      <item>
        <widget class="QLabel" name="mDocumentCountLabel" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
@@ -141,12 +138,6 @@
    <class>Gwenview::ThumbnailView</class>
    <extends>QListView</extends>
    <header location="global" >lib/thumbnailview/thumbnailview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Gwenview::FilterWidget</class>
-   <extends>QWidget</extends>
-   <header>filterwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -20,7 +20,6 @@ set(gwenview_SRCS
 	documentpanel.cpp
 	fileoperations.cpp
 	filtercontroller.cpp
-	filterwidget.cpp
 	fullscreencontent.cpp
 	infocontextmanageritem.cpp
 	imagemetainfodialog.cpp

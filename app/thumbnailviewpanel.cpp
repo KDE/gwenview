@@ -87,9 +87,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)) );
-
-		// Filter widget
-		mFilterWidget->setDirModel(mDirModel);
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
