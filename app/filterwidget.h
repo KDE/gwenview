@@ -52,23 +52,6 @@ protected:
 
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-class TagControllerPrivate;
-class TagController : public AbstractFilterController {
-	Q_OBJECT
-public:
-	TagController(QObject*);
-	~TagController();
-
-	virtual void init(QWidget*);
-	virtual void reset();
-	virtual QWidget* widget() const;
-
-private Q_SLOTS:
-	void updateTagSetFilter();
-
-private:
-	TagControllerPrivate* const d;
-};
 #endif
 
 

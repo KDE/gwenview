@@ -72,105 +72,6 @@ void AbstractFilterController::setDirModel(SortedDirModel* model) {
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-//// TagController ////
-class TagFilter : public AbstractSortedDirModelFilter {
-public:
-	TagFilter(SortedDirModel* model)
-	: AbstractSortedDirModelFilter(model)
-	{}
-
-	virtual bool needsSemanticInfo() const {
-		return true;
-	}
-
-	virtual bool acceptsIndex(const QModelIndex& index) const {
-		SemanticInfo info = model()->semanticInfoForIndex(index);
-		TagSet commonSet = info.mTags & mTagSet;
-		return commonSet.size() == mTagSet.size();
-	}
-
-	void setTagSet(const TagSet& tagSet) {
-		mTagSet = tagSet;
-		model()->applyFilters();
-	}
-
-private:
-	TagSet mTagSet;
-};
-
-struct TagControllerPrivate {
-	QPointer<QListView> mListView;
-	KLineEdit* mLineEdit;
-	QPointer<TagFilter> mFilter;
-};
-
-TagController::TagController(QObject* parent)
-: AbstractFilterController(parent)
-, d(new TagControllerPrivate) {
-	d->mLineEdit = new KLineEdit;
-	d->mLineEdit->setClearButtonShown(true);
-	d->mLineEdit->setReadOnly(true);
-}
-
-
-TagController::~TagController() {
-	d->mListView->deleteLater();
-	delete d->mFilter;
-	delete d;
-}
-
-
-void TagController::init(QWidget* parentWidget) {
-	Q_ASSERT(!d->mListView);
-	d->mListView = new QListView(parentWidget->window());
-	d->mListView->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
-	d->mListView->setWrapping(true);
-	d->mListView->setSelectionMode(QAbstractItemView::MultiSelection);
-
-	AbstractSemanticInfoBackEnd* backEnd = mDirModel->semanticInfoBackEnd();
-	backEnd->refreshAllTags();
-	TagModel* tagModel = TagModel::createAllTagsModel(d->mListView, backEnd);
-	d->mListView->setModel(tagModel);
-	connect(d->mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-		this, SLOT(updateTagSetFilter()) );
-
-	// FIXME
-	d->mListView->resize(500, 120);
-
-	QPoint pos = d->mLineEdit->mapToGlobal(QPoint(0, 0));
-	d->mListView->move(pos.x(), pos.y() - d->mListView->height() - 10);
-	d->mListView->show();
-}
-
-
-void TagController::reset() {
-	d->mListView->deleteLater();
-	delete d->mFilter;
-}
-
-
-QWidget* TagController::widget() const {
-	return d->mLineEdit;
-}
-
-
-void TagController::updateTagSetFilter() {
-	Q_ASSERT(d->mListView);
-
-	QStringList labels;
-	TagSet tagSet;
-
-	Q_FOREACH(const QModelIndex& index, d->mListView->selectionModel()->selectedIndexes()) {
-		tagSet << index.data(TagModel::TagRole).toString();
-		labels << index.data(Qt::DisplayRole).toString();
-	}
-	if (!d->mFilter) {
-		d->mFilter = new TagFilter(mDirModel);
-	}
-	d->mFilter->setTagSet(tagSet);
-	d->mLineEdit->setText(labels.join(", "));
-}
-
 #endif // GWENVIEW_SEMANTICINFO_BACKEND_NONE
 
 
@@ -215,7 +116,6 @@ struct FilterWidgetPrivate {
 	void setupControllers() {
 		mCurrentController = 0;
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		addController(i18n("Filter by Tag:"), FilterByTag, new TagController(that));
 		#endif
 
 		QObject::connect(mComboBox, SIGNAL(currentIndexChanged(int)),

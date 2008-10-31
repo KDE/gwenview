@@ -69,8 +69,22 @@ private Q_SLOTS:
 private:
 	RatingWidgetPrivate* const d;
 };
-#endif
 
+
+class TagFilterWidgetPrivate;
+class TagFilterWidget : public QWidget {
+	Q_OBJECT
+public:
+	TagFilterWidget(SortedDirModel*);
+	~TagFilterWidget();
+
+private Q_SLOTS:
+	void updateTagSetFilter();
+
+private:
+	TagFilterWidgetPrivate* const d;
+};
+#endif
 
 
 class FilterControllerPrivate;

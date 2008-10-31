@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
+#include <kcombobox.h>
+#include <kdebug.h>
 #include <kicon.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -163,6 +165,71 @@ void RatingFilterWidget::slotRatingChanged(int value) {
 #endif
 
 
+//// TagFilter ////
+class TagFilter : public AbstractSortedDirModelFilter {
+public:
+	TagFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	{}
+
+	virtual bool needsSemanticInfo() const {
+		return true;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		SemanticInfo info = model()->semanticInfoForIndex(index);
+		TagSet commonSet = info.mTags & mTagSet;
+		return commonSet.size() == mTagSet.size();
+	}
+
+	void setTagSet(const TagSet& tagSet) {
+		mTagSet = tagSet;
+		model()->applyFilters();
+	}
+
+private:
+	TagSet mTagSet;
+};
+
+struct TagFilterWidgetPrivate {
+	KComboBox* mComboBox;
+	QPointer<TagFilter> mFilter;
+};
+
+TagFilterWidget::TagFilterWidget(SortedDirModel* model)
+: d(new TagFilterWidgetPrivate) {
+	d->mFilter = new TagFilter(model);
+	d->mComboBox = new KComboBox;
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->addWidget(d->mComboBox);
+
+	AbstractSemanticInfoBackEnd* backEnd = model->semanticInfoBackEnd();
+	backEnd->refreshAllTags();
+	TagModel* tagModel = TagModel::createAllTagsModel(this, backEnd);
+	d->mComboBox->setModel(tagModel);
+	d->mComboBox->setCurrentIndex(-1);
+	connect(d->mComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
+}
+
+TagFilterWidget::~TagFilterWidget() {
+	delete d->mFilter;
+	delete d;
+}
+
+
+void TagFilterWidget::updateTagSetFilter() {
+	QModelIndex index = d->mComboBox->model()->index(d->mComboBox->currentIndex(), 0);
+	if (!index.isValid()) {
+		kWarning() << "Invalid index";
+		return;
+	}
+	TagSet tagSet;
+	tagSet << index.data(TagModel::TagRole).toString();
+	d->mFilter->setTagSet(tagSet);
+}
+
+
 //// FilterWidgetContainer ////
 class FilterWidgetContainer : public QWidget {
 public:
@@ -177,8 +244,6 @@ public:
 		layout->addWidget(closeButton);
 	}
 };
-
-typedef QLineEdit TagFilter;
 
 
 struct FilterControllerPrivate {
@@ -241,7 +306,7 @@ void FilterController::addFilterByRating() {
 
 
 void FilterController::addFilterByTag() {
-	d->addFilter(new TagFilter);
+	d->addFilter(new TagFilterWidget(d->mDirModel));
 }
 
 
