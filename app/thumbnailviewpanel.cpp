@@ -54,6 +54,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class FilterWidgetContainer : public QWidget {
+public:
+	void setFilterWidget(QWidget* widget) {
+		QToolButton* closeButton = new QToolButton;
+		closeButton->setIcon(KIcon("window-close"));
+		closeButton->setAutoRaise(true);
+		connect(closeButton, SIGNAL(clicked()), SLOT(deleteLater()));
+		QHBoxLayout* layout = new QHBoxLayout(this);
+		layout->setMargin(0);
+		layout->addWidget(widget);
+		layout->addWidget(closeButton);
+	}
+};
+
 typedef QLineEdit TagFilter;
 typedef QLineEdit NameFilter;
 typedef QLineEdit RatingFilter;
@@ -151,7 +165,9 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		if (mFilterFrame->isHidden()) {
 			mFilterFrame->show();
 		}
-		mFilterFrame->layout()->addWidget(widget);
+		FilterWidgetContainer* container = new FilterWidgetContainer;
+		container->setFilterWidget(widget);
+		mFilterFrame->layout()->addWidget(container);
 	}
 };
 
