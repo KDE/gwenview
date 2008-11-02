@@ -320,7 +320,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
 	d->setupSplitter();
 
-        KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
+	KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 
 	d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
