@@ -33,9 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-static bool sInvisibleButtonGroupInitialized = false;
-
-
 struct InvisibleButtonGroupPrivate {
 	QButtonGroup* mGroup;
 };
@@ -48,10 +45,10 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
 	d->mGroup = new QButtonGroup(this);
 	d->mGroup->setExclusive(true);
 	connect(d->mGroup, SIGNAL(buttonClicked(int)), SIGNAL(selectionChanged(int)) );
-	if (!sInvisibleButtonGroupInitialized) {
-		KConfigDialogManager::propertyMap()->insert(metaObject()->className(), "current");
-		KConfigDialogManager::changedMap()->insert(metaObject()->className(), SIGNAL(selectionChanged(int)));
-		sInvisibleButtonGroupInitialized = true;
+	const QString name = metaObject()->className();
+	if (!KConfigDialogManager::propertyMap()->contains(name)) {
+		KConfigDialogManager::propertyMap()->insert(name, "current");
+		KConfigDialogManager::changedMap()->insert(name, SIGNAL(selectionChanged(int)));
 	}
 }
 
