@@ -322,7 +322,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 
         KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 
-	d->mToggleThumbnailBarAction = static_cast<KToggleAction*>(view->addAction("toggle_thumbnailbar"));
+	d->mToggleThumbnailBarAction = view->add<KToggleAction>(QString("toggle_thumbnailbar"));
 	d->mToggleThumbnailBarAction->setText(i18n("Thumbnail Bar"));
 	d->mToggleThumbnailBarAction->setIcon(KIcon("folder-image"));
 	d->mToggleThumbnailBarAction->setShortcut(Qt::CTRL | Qt::Key_B);
