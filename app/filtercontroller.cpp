@@ -260,6 +260,8 @@ struct FilterControllerPrivate {
 	SortedDirModel* mDirModel;
 	QList<QAction*> mActionList;
 
+	int mFilterWidgetCount; /** How many filter widgets are in mFrame */
+
 	void addAction(const QString& text, const char* slot) {
 		QAction* action = new QAction(text, that);
 		QObject::connect(action, SIGNAL(triggered()), that, slot);
@@ -273,6 +275,9 @@ struct FilterControllerPrivate {
 		FilterWidgetContainer* container = new FilterWidgetContainer;
 		container->setFilterWidget(widget);
 		mFrame->layout()->addWidget(container);
+
+		mFilterWidgetCount++;
+		QObject::connect(container, SIGNAL(destroyed()), that, SLOT(slotFilterWidgetClosed()));
 	}
 };
 
@@ -283,6 +288,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 	d->that = this;
 	d->mFrame = frame;
 	d->mDirModel = dirModel;
+	d->mFilterWidgetCount = 0;
 
 	d->mFrame->hide();
 	new FlowLayout(d->mFrame);
@@ -320,6 +326,14 @@ void FilterController::addFilterByTag() {
 	d->addFilter(new TagFilterWidget(d->mDirModel));
 }
 #endif
+
+
+void FilterController::slotFilterWidgetClosed() {
+	d->mFilterWidgetCount--;
+	if (d->mFilterWidgetCount == 0) {
+		d->mFrame->hide();
+	}
+}
 
 
 } // namespace

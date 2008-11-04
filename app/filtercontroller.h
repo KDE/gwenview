@@ -106,6 +106,7 @@ private Q_SLOTS:
 	void addFilterByRating();
 	void addFilterByTag();
 #endif
+	void slotFilterWidgetClosed();
 
 private:
 	FilterControllerPrivate* const d;
