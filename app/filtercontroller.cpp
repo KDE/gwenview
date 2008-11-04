@@ -117,9 +117,16 @@ void NameFilterWidget::applyNameFilter() {
  */
 class RatingFilter : public AbstractSortedDirModelFilter {
 public:
+	enum Mode {
+		GreaterOrEqual,
+		Equal,
+		LessOrEqual
+	};
+
 	RatingFilter(SortedDirModel* model)
 	: AbstractSortedDirModelFilter(model)
-	, mMinimumRating(0) {}
+	, mRating(0)
+	, mMode(GreaterOrEqual) {}
 
 	virtual bool needsSemanticInfo() const {
 		return true;
@@ -127,36 +134,62 @@ public:
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
 		SemanticInfo info = model()->semanticInfoForIndex(index);
-		return info.mRating >= mMinimumRating;
+		switch (mMode) {
+		case GreaterOrEqual:
+			return info.mRating >= mRating;
+		case Equal:
+			return info.mRating == mRating;
+		default: /* LessOrEqual */
+			return info.mRating <= mRating;
+		}
 	}
 
-	void setMinimumRating(int value) {
-		mMinimumRating = value;
+	void setRating(int value) {
+		mRating = value;
+		model()->applyFilters();
+	}
+
+	void setMode(Mode mode) {
+		mMode = mode;
 		model()->applyFilters();
 	}
 
 private:
-	int mMinimumRating;
+	int mRating;
+	Mode mMode;
 };
 
 struct RatingWidgetPrivate {
+	KComboBox* mModeComboBox;
 	KRatingWidget* mRatingWidget;
 	QPointer<RatingFilter> mFilter;
 };
 
 RatingFilterWidget::RatingFilterWidget(SortedDirModel* model)
 : d(new RatingWidgetPrivate) {
+	d->mModeComboBox = new KComboBox;
+	d->mModeComboBox->addItem(i18n("Rating >="), RatingFilter::GreaterOrEqual);
+	d->mModeComboBox->addItem(i18n("Rating =") , RatingFilter::Equal);
+	d->mModeComboBox->addItem(i18n("Rating <="), RatingFilter::LessOrEqual);
+
 	d->mRatingWidget = new KRatingWidget;
 	d->mRatingWidget->setHalfStepsEnabled(true);
 	d->mRatingWidget->setMaxRating(10);
+
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
+	layout->addWidget(d->mModeComboBox);
 	layout->addWidget(d->mRatingWidget);
 
 	d->mFilter = new RatingFilter(model);
 
+	QObject::connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
+		SLOT(updateFilterMode()));
+
 	QObject::connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
 		SLOT(slotRatingChanged(int)));
+
+	updateFilterMode();
 }
 
 
@@ -167,7 +200,13 @@ RatingFilterWidget::~RatingFilterWidget() {
 
 
 void RatingFilterWidget::slotRatingChanged(int value) {
-	d->mFilter->setMinimumRating(value);
+	d->mFilter->setRating(value);
+}
+
+
+void RatingFilterWidget::updateFilterMode() {
+	QVariant data = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex());
+	d->mFilter->setMode(RatingFilter::Mode(data.toInt()));
 }
 
 

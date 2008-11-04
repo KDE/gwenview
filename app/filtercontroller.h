@@ -65,6 +65,7 @@ public:
 
 private Q_SLOTS:
 	void slotRatingChanged(int value);
+	void updateFilterMode();
 
 private:
 	RatingWidgetPrivate* const d;
