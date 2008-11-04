@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 
@@ -88,6 +89,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 	d->mFilter = new NameFilter(model);
 	d->mLineEdit = new KLineEdit;
 	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setMargin(0);
 	layout->addWidget(d->mLineEdit);
 
 	QTimer* timer = new QTimer(this);
@@ -148,6 +150,7 @@ RatingFilterWidget::RatingFilterWidget(SortedDirModel* model)
 	d->mRatingWidget->setHalfStepsEnabled(true);
 	d->mRatingWidget->setMaxRating(10);
 	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setMargin(0);
 	layout->addWidget(d->mRatingWidget);
 
 	d->mFilter = new RatingFilter(model);
@@ -207,6 +210,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 	d->mComboBox = new KComboBox;
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setMargin(0);
 	layout->addWidget(d->mComboBox);
 
 	AbstractSemanticInfoBackEnd* backEnd = model->semanticInfoBackEnd();
@@ -245,9 +249,12 @@ public:
 		QToolButton* closeButton = new QToolButton;
 		closeButton->setIcon(KIcon("window-close"));
 		closeButton->setAutoRaise(true);
+		int size = IconSize(KIconLoader::Small);
+		closeButton->setIconSize(QSize(size, size));
 		connect(closeButton, SIGNAL(clicked()), SLOT(deleteLater()));
 		QHBoxLayout* layout = new QHBoxLayout(this);
 		layout->setMargin(0);
+		layout->setSpacing(2);
 		layout->addWidget(widget);
 		layout->addWidget(closeButton);
 	}
