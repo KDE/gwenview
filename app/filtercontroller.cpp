@@ -51,7 +51,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-//// NameFilter ////
+/**
+ * An AbstractSortedDirModelFilter which filters on the file names
+ */
 class NameFilter : public AbstractSortedDirModelFilter {
 public:
 	NameFilter(SortedDirModel* model)
@@ -108,7 +110,9 @@ void NameFilterWidget::applyNameFilter() {
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-//// RatingFilter ////
+/**
+ * An AbstractSortedDirModelFilter which filters on file ratings
+ */
 class RatingFilter : public AbstractSortedDirModelFilter {
 public:
 	RatingFilter(SortedDirModel* model)
@@ -164,7 +168,9 @@ void RatingFilterWidget::slotRatingChanged(int value) {
 }
 
 
-//// TagFilter ////
+/**
+ * An AbstractSortedDirModelFilter which filters on associated tags
+ */
 class TagFilter : public AbstractSortedDirModelFilter {
 public:
 	TagFilter(SortedDirModel* model)
@@ -230,7 +236,9 @@ void TagFilterWidget::updateTagSetFilter() {
 #endif
 
 
-//// FilterWidgetContainer ////
+/**
+ * A container for all filter widgets. It features a close button on the right.
+ */
 class FilterWidgetContainer : public QWidget {
 public:
 	void setFilterWidget(QWidget* widget) {
