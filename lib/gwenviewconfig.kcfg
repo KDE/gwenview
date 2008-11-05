@@ -2,7 +2,7 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
-	<include>kdirmodel.h</include>
+	<include>lib/sorting.h</include>
 	<include>lib/imageview.h</include>
 	<include>lib/scrolltool.h</include>
 	<include>lib/print/printoptionspage.h</include>
@@ -102,13 +102,13 @@
 			<default>false</default>
 		</entry>
 
-		<entry name="SortingColumn" type="Enum">
-			<choices name="KDirModel::ModelColumns">
-				<choice name="KDirModel::Name"/>
-				<choice name="KDirModel::Size"/>
-				<choice name="KDirModel::ModifiedTime"/>
+		<entry name="Sorting" type="Enum">
+			<choices name="Gwenview::Sorting::Enum">
+				<choice name="Sorting::Name"/>
+				<choice name="Sorting::Size"/>
+				<choice name="Sorting::Date"/>
 			</choices>
-			<default>KDirModel::Name</default>
+			<default>Sorting::Name</default>
 		</entry>
 	</group>
 

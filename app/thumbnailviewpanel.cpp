@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kactioncollection.h>
 #include <kactioncategory.h>
 #include <kdebug.h>
-#include <kdirmodel.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <klineedit.h>
@@ -46,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/semanticinfo/tagmodel.h>
+#include <lib/sorting.h>
 #include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailview.h>
@@ -54,9 +54,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-inline KDirModel::ModelColumns columnFromSortAction(const QAction* action) {
+inline Sorting::Enum sortingFromSortAction(const QAction* action) {
 	Q_ASSERT(action);
-	return KDirModel::ModelColumns(action->data().toInt());
+	return Sorting::Enum(action->data().toInt());
 }
 
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
@@ -106,11 +106,11 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		mSortAction = view->add<KSelectAction>("sort_order");
 		mSortAction->setText(i18nc("@action:inmenu", "Sort By"));
 		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Name"));
-		action->setData(QVariant(KDirModel::Name));
+		action->setData(QVariant(Sorting::Name));
 		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Date"));
-		action->setData(QVariant(KDirModel::ModifiedTime));
+		action->setData(QVariant(Sorting::Date));
 		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Size"));
-		action->setData(QVariant(KDirModel::Size));
+		action->setData(QVariant(Sorting::Size));
 		QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
 			that, SLOT(updateSortOrder()));
 
@@ -191,7 +191,7 @@ void ThumbnailViewPanel::loadConfig() {
 	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
 
 	Q_FOREACH(QAction* action, d->mSortAction->actions()) {
-		if (columnFromSortAction(action) == GwenviewConfig::sortingColumn()) {
+		if (sortingFromSortAction(action) == GwenviewConfig::sorting()) {
 			d->mSortAction->setCurrentAction(action);
 			break;
 		}
@@ -203,7 +203,7 @@ void ThumbnailViewPanel::saveConfig() const {
 	GwenviewConfig::setUrlNavigatorIsEditable(d->mUrlNavigator->isUrlEditable());
 	GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
-	GwenviewConfig::setSortingColumn(columnFromSortAction(d->mSortAction->currentAction()));
+	GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->currentAction()));
 }
 
 
@@ -274,7 +274,8 @@ void ThumbnailViewPanel::updateSortOrder() {
 		return;
 	}
 
-	d->mDirModel->sort(columnFromSortAction(action), Qt::AscendingOrder);
+	// This works because for now Sorting::Enum maps to KDirModel::ModelColumns
+	d->mDirModel->sort(sortingFromSortAction(action), Qt::AscendingOrder);
 }
 
 
