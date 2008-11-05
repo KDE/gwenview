@@ -30,10 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kactioncollection.h>
 #include <kactioncategory.h>
 #include <kdebug.h>
+#include <kdirmodel.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kselectaction.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kurlnavigator.h>
@@ -60,6 +62,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	int mDocumentCount;
 	KActionCollection* mActionCollection;
 	FilterController* mFilterController;
+	KSelectAction* mSortAction;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -94,6 +97,18 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		KAction* action = view->addAction("edit_location",that, SLOT(editLocation()));
 		action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
 		action->setShortcut(Qt::Key_F6);
+
+		mSortAction = view->add<KSelectAction>("sort_order");
+		mSortAction->setText(i18nc("@action:inmenu", "Sort Order"));
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Name"));
+		action->setData(QVariant(KDirModel::Name));
+		mSortAction->setCurrentAction(action);
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Date"));
+		action->setData(QVariant(KDirModel::ModifiedTime));
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Size"));
+		action->setData(QVariant(KDirModel::Size));
+		QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
+			that, SLOT(updateSortOrder()));
 
 		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
 		action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
@@ -236,6 +251,18 @@ void ThumbnailViewPanel::slotDirModelRowsAboutToBeRemoved(const QModelIndex& par
 void ThumbnailViewPanel::slotDirModelReset() {
 	d->mDocumentCount = 0;
 	d->updateDocumentCountLabel();
+}
+
+
+void ThumbnailViewPanel::updateSortOrder() {
+	const QAction* action = d->mSortAction->currentAction();
+	if (!action) {
+		kWarning() << "!action, this should not happen!";
+		return;
+	}
+
+	const KDirModel::ModelColumns column = KDirModel::ModelColumns(action->data().toInt());
+	d->mDirModel->sort(column, Qt::AscendingOrder);
 }
 
 
