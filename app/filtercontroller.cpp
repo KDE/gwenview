@@ -217,6 +217,7 @@ class TagFilter : public AbstractSortedDirModelFilter {
 public:
 	TagFilter(SortedDirModel* model)
 	: AbstractSortedDirModelFilter(model)
+	, mWantMatchingTag(true)
 	{}
 
 	virtual bool needsSemanticInfo() const {
@@ -225,7 +226,11 @@ public:
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
 		SemanticInfo info = model()->semanticInfoForIndex(index);
-		return info.mTags.contains(mTag);
+		if (mWantMatchingTag) {
+			return info.mTags.contains(mTag);
+		} else {
+			return !info.mTags.contains(mTag);
+		}
 	}
 
 	void setTag(const SemanticInfoTag& tag) {
@@ -233,30 +238,45 @@ public:
 		model()->applyFilters();
 	}
 
+	void setWantMatchingTag(bool value) {
+		mWantMatchingTag = value;
+		model()->applyFilters();
+	}
+
 private:
 	SemanticInfoTag mTag;
+	bool mWantMatchingTag;
 };
 
 struct TagFilterWidgetPrivate {
-	KComboBox* mComboBox;
+	KComboBox* mModeComboBox;
+	KComboBox* mTagComboBox;
 	QPointer<TagFilter> mFilter;
 };
 
 TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 : d(new TagFilterWidgetPrivate) {
 	d->mFilter = new TagFilter(model);
-	d->mComboBox = new KComboBox;
+
+	d->mModeComboBox = new KComboBox;
+	d->mModeComboBox->addItem(i18n("Tagged"), QVariant(true));
+	d->mModeComboBox->addItem(i18n("Not Tagged"), QVariant(false));
+
+	d->mTagComboBox = new KComboBox;
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
-	layout->addWidget(d->mComboBox);
+	layout->addWidget(d->mModeComboBox);
+	layout->addWidget(d->mTagComboBox);
 
 	AbstractSemanticInfoBackEnd* backEnd = model->semanticInfoBackEnd();
 	backEnd->refreshAllTags();
 	TagModel* tagModel = TagModel::createAllTagsModel(this, backEnd);
-	d->mComboBox->setModel(tagModel);
-	d->mComboBox->setCurrentIndex(-1);
-	connect(d->mComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
+	d->mTagComboBox->setModel(tagModel);
+	d->mTagComboBox->setCurrentIndex(-1);
+	connect(d->mTagComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
+
+	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
 }
 
 TagFilterWidget::~TagFilterWidget() {
@@ -266,13 +286,16 @@ TagFilterWidget::~TagFilterWidget() {
 
 
 void TagFilterWidget::updateTagSetFilter() {
-	QModelIndex index = d->mComboBox->model()->index(d->mComboBox->currentIndex(), 0);
+	QModelIndex index = d->mTagComboBox->model()->index(d->mTagComboBox->currentIndex(), 0);
 	if (!index.isValid()) {
 		kWarning() << "Invalid index";
 		return;
 	}
 	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
 	d->mFilter->setTag(tag);
+
+	bool wantMatchingTag = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex()).toBool();
+	d->mFilter->setWantMatchingTag(wantMatchingTag);
 }
 #endif
 
