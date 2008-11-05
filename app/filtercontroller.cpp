@@ -225,17 +225,16 @@ public:
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
 		SemanticInfo info = model()->semanticInfoForIndex(index);
-		TagSet commonSet = info.mTags & mTagSet;
-		return commonSet.size() == mTagSet.size();
+		return info.mTags.contains(mTag);
 	}
 
-	void setTagSet(const TagSet& tagSet) {
-		mTagSet = tagSet;
+	void setTag(const SemanticInfoTag& tag) {
+		mTag = tag;
 		model()->applyFilters();
 	}
 
 private:
-	TagSet mTagSet;
+	SemanticInfoTag mTag;
 };
 
 struct TagFilterWidgetPrivate {
@@ -272,9 +271,8 @@ void TagFilterWidget::updateTagSetFilter() {
 		kWarning() << "Invalid index";
 		return;
 	}
-	TagSet tagSet;
-	tagSet << index.data(TagModel::TagRole).toString();
-	d->mFilter->setTagSet(tagSet);
+	SemanticInfoTag tag = index.data(TagModel::TagRole).toString();
+	d->mFilter->setTag(tag);
 }
 #endif
 
