@@ -54,6 +54,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+inline KDirModel::ModelColumns columnFromSortAction(const QAction* action) {
+	Q_ASSERT(action);
+	return KDirModel::ModelColumns(action->data().toInt());
+}
+
 struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	ThumbnailViewPanel* that;
 	KFilePlacesModel* mFilePlacesModel;
@@ -99,13 +104,12 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		action->setShortcut(Qt::Key_F6);
 
 		mSortAction = view->add<KSelectAction>("sort_order");
-		mSortAction->setText(i18nc("@action:inmenu", "Sort Order"));
-		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Name"));
+		mSortAction->setText(i18nc("@action:inmenu", "Sort By"));
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Name"));
 		action->setData(QVariant(KDirModel::Name));
-		mSortAction->setCurrentAction(action);
-		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Date"));
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Date"));
 		action->setData(QVariant(KDirModel::ModifiedTime));
-		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Sort by Size"));
+		action = mSortAction->addAction(i18nc("@addAction:inmenu", "Size"));
 		action->setData(QVariant(KDirModel::Size));
 		QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
 			that, SLOT(updateSortOrder()));
@@ -167,6 +171,7 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->setupFilterController();
 	d->setupDocumentCountConnections();
 	loadConfig();
+	updateSortOrder();
 }
 
 
@@ -184,6 +189,13 @@ void ThumbnailViewPanel::loadConfig() {
 	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
 	// won't be updated. That's why we do it ourself.
 	d->mThumbnailView->setThumbnailSize(GwenviewConfig::thumbnailSize());
+
+	Q_FOREACH(QAction* action, d->mSortAction->actions()) {
+		if (columnFromSortAction(action) == GwenviewConfig::sortingColumn()) {
+			d->mSortAction->setCurrentAction(action);
+			break;
+		}
+	}
 }
 
 
@@ -191,6 +203,7 @@ void ThumbnailViewPanel::saveConfig() const {
 	GwenviewConfig::setUrlNavigatorIsEditable(d->mUrlNavigator->isUrlEditable());
 	GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
+	GwenviewConfig::setSortingColumn(columnFromSortAction(d->mSortAction->currentAction()));
 }
 
 
@@ -261,8 +274,7 @@ void ThumbnailViewPanel::updateSortOrder() {
 		return;
 	}
 
-	const KDirModel::ModelColumns column = KDirModel::ModelColumns(action->data().toInt());
-	d->mDirModel->sort(column, Qt::AscendingOrder);
+	d->mDirModel->sort(columnFromSortAction(action), Qt::AscendingOrder);
 }
 
 

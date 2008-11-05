@@ -2,6 +2,7 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
 	<kcfgfile name="gwenviewrc"/>
+	<include>kdirmodel.h</include>
 	<include>lib/imageview.h</include>
 	<include>lib/scrolltool.h</include>
 	<include>lib/print/printoptionspage.h</include>
@@ -99,6 +100,15 @@
 
 		<entry name="DeleteThumbnailCacheOnExit" type="Bool">
 			<default>false</default>
+		</entry>
+
+		<entry name="SortingColumn" type="Enum">
+			<choices name="KDirModel::ModelColumns">
+				<choice name="KDirModel::Name"/>
+				<choice name="KDirModel::Size"/>
+				<choice name="KDirModel::ModifiedTime"/>
+			</choices>
+			<default>KDirModel::Name</default>
 		</entry>
 	</group>
 
