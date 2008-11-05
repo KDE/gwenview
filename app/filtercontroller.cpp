@@ -57,16 +57,27 @@ namespace Gwenview {
  */
 class NameFilter : public AbstractSortedDirModelFilter {
 public:
+	enum Mode {
+		Contains,
+		DoesNotContain
+	};
 	NameFilter(SortedDirModel* model)
 	: AbstractSortedDirModelFilter(model)
-	, mText(0) {}
+	, mText(0)
+	, mMode(Contains)
+	{}
 
 	virtual bool needsSemanticInfo() const {
 		return false;
 	}
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
-		return index.data().toString().contains(mText);
+		switch (mMode) {
+		case Contains:
+			return index.data().toString().contains(mText);
+		default: /*DoesNotContain:*/
+			return !index.data().toString().contains(mText);
+		}
 	}
 
 	void setText(const QString& text) {
@@ -74,12 +85,19 @@ public:
 		model()->applyFilters();
 	}
 
+	void setMode(Mode mode) {
+		mMode = mode;
+		model()->applyFilters();
+	}
+
 private:
 	QString mText;
+	Mode mMode;
 };
 
 struct NameFilterWidgetPrivate {
 	QPointer<NameFilter> mFilter;
+	KComboBox* mModeComboBox;
 	KLineEdit* mLineEdit;
 };
 
@@ -87,9 +105,16 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 : d(new NameFilterWidgetPrivate)
 {
 	d->mFilter = new NameFilter(model);
+
+	d->mModeComboBox = new KComboBox;
+	d->mModeComboBox->addItem(i18n("Contains"), QVariant(NameFilter::Contains));
+	d->mModeComboBox->addItem(i18n("Does not contain"), QVariant(NameFilter::DoesNotContain));
+
 	d->mLineEdit = new KLineEdit;
+
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
+	layout->addWidget(d->mModeComboBox);
 	layout->addWidget(d->mLineEdit);
 
 	QTimer* timer = new QTimer(this);
@@ -97,8 +122,11 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 	timer->setSingleShot(true);
 	connect(timer, SIGNAL(timeout()), SLOT(applyNameFilter()));
 
-	QObject::connect(d->mLineEdit, SIGNAL(textChanged(const QString &)),
+	connect(d->mLineEdit, SIGNAL(textChanged(const QString &)),
 		timer, SLOT(start()));
+
+	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
+		SLOT(applyNameFilter()));
 }
 
 NameFilterWidget::~NameFilterWidget()
@@ -108,6 +136,8 @@ NameFilterWidget::~NameFilterWidget()
 }
 
 void NameFilterWidget::applyNameFilter() {
+	QVariant data = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex());
+	d->mFilter->setMode(NameFilter::Mode(data.toInt()));
 	d->mFilter->setText(d->mLineEdit->text());
 }
 
