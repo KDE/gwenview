@@ -91,12 +91,12 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 
 	void setupActions(KActionCollection* actionCollection) {
 		KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
-		KAction* editLocationAction = view->addAction("edit_location",that, SLOT(editLocation()));
-		editLocationAction->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
-		editLocationAction->setShortcut(Qt::Key_F6);
+		KAction* action = view->addAction("edit_location",that, SLOT(editLocation()));
+		action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
+		action->setShortcut(Qt::Key_F6);
 
 		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
-		KAction* action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
+		action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
 		action->setText(i18nc("@action:inmenu", "Add Folder to Places"));
 	}
 
