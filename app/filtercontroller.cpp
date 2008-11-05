@@ -72,6 +72,9 @@ public:
 	}
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
+		if (mText.isEmpty()) {
+			return true;
+		}
 		switch (mMode) {
 		case Contains:
 			return index.data().toString().contains(mText);
