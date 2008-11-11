@@ -462,7 +462,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		}
 
 		// Filter out items which already have a thumbnail
-		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.find(url);
+		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.constFind(url);
 		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForGroup(group).isNull()) {
 			continue;
 		}

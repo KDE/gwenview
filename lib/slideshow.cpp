@@ -67,8 +67,8 @@ struct SlideShowPrivate {
 
 
 	KUrl findNextOrderedUrl() {
-		QVector<KUrl>::ConstIterator it = qFind(mUrls.begin(), mUrls.end(), mCurrentUrl);
-		if (it == mUrls.end()) {
+		QVector<KUrl>::ConstIterator it = qFind(mUrls.constBegin(), mUrls.constEnd(), mCurrentUrl);
+		if (it == mUrls.constEnd()) {
 			kWarning() << "Current url not found in list. This should not happen.\n";
 			return KUrl();
 		}
@@ -76,18 +76,18 @@ struct SlideShowPrivate {
 		++it;
 		if (GwenviewConfig::loop()) {
 			// Looping, if we reach the end, start again
-			if (it == mUrls.end()) {
-				it = mUrls.begin();
+			if (it == mUrls.constEnd()) {
+				it = mUrls.constBegin();
 			}
 		} else {
 			// Not looping, have we reached the end?
 			// FIXME: stopAtEnd
 			if (/*(it==mUrls.end() && GwenviewConfig::stopAtEnd()) ||*/ it == mStartIt) {
-				it = mUrls.end();
+				it = mUrls.constEnd();
 			}
 		}
 
-		if (it != mUrls.end()) {
+		if (it != mUrls.constEnd()) {
 			return *it;
 		} else {
 			return KUrl();
@@ -170,8 +170,8 @@ void SlideShow::start(const QList<KUrl>& urls) {
 	d->mUrls.resize(urls.size());
 	qCopy(urls.begin(), urls.end(), d->mUrls.begin());
 
-	d->mStartIt=qFind(d->mUrls.begin(), d->mUrls.end(), d->mCurrentUrl);
-	if (d->mStartIt==d->mUrls.end()) {
+	d->mStartIt=qFind(d->mUrls.constBegin(), d->mUrls.constEnd(), d->mCurrentUrl);
+	if (d->mStartIt==d->mUrls.constEnd()) {
 		kWarning() << "Current url not found in list, aborting.\n";
 		return;
 	}

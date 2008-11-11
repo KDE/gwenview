@@ -334,7 +334,7 @@ struct PreviewItemDelegatePrivate {
 
 		// Elide text
 		QString text;
-		QMap<QString, QString>::const_iterator it = mElidedTextMap.find(fullText);
+		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
 		if (it == mElidedTextMap.constEnd()) {
 			text = fm.elidedText(fullText, Qt::ElideRight, rect.width() - 2*ITEM_MARGIN);
 			mElidedTextMap[fullText] = text;
@@ -382,7 +382,7 @@ struct PreviewItemDelegatePrivate {
 		}
 
 		QString fullText = index.data().toString();
-		QMap<QString, QString>::const_iterator it = mElidedTextMap.find(fullText);
+		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
 		if (it == mElidedTextMap.constEnd()) {
 			return;
 		}
