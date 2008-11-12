@@ -72,9 +72,12 @@ kde4_add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
 	${KDE4_KFILE_LIBS}
-	${KIPI_LIBRARIES}
 	gwenviewlib
 	)
+
+if (KIPI_FOUND)
+  target_link_libraries(gwenview ${KIPI_LIBRARIES})
+endif (KIPI_FOUND)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	target_link_libraries(gwenview ${NEPOMUK_LIBRARIES})
