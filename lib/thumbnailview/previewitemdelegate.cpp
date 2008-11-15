@@ -682,6 +682,13 @@ void PreviewItemDelegate::updateButtonFrameOpacity() {
 
 void PreviewItemDelegate::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
+
+	const int width = d->itemWidth();
+	const int buttonWidth = d->mRotateRightButton->sizeHint().width();
+	d->mRotateLeftButton->setVisible(width >= 3 * buttonWidth);
+	d->mRotateRightButton->setVisible(width >= 4 * buttonWidth);
+	d->mButtonFrame->adjustSize();
+
 	d->mElidedTextMap.clear();
 }
 
