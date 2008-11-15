@@ -169,6 +169,11 @@ struct PreviewItemDelegatePrivate {
 	GlossyFrame* mButtonFrame;
 	GlossyFrame* mSaveButtonFrame;
 	QPixmap mSaveButtonFramePixmap;
+
+	QToolButton* mToggleSelectionButton;
+	QToolButton* mFullScreenButton;
+	QToolButton* mRotateLeftButton;
+	QToolButton* mRotateRightButton;
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	KRatingPainter mRatingPainter;
 #endif
@@ -227,19 +232,17 @@ struct PreviewItemDelegatePrivate {
 		}
 		mIndexUnderCursor = index;
 
-		bool showButtonFrames = false;
 		if (mIndexUnderCursor.isValid()) {
-			KFileItem item = fileItemForIndex(mIndexUnderCursor);
-			showButtonFrames = !ArchiveUtils::fileItemIsDirOrArchive(item);
-		}
-
-		if (showButtonFrames) {
-			QRect rect = mView->visualRect(mIndexUnderCursor);
-			mButtonFrame->adjustSize();
 			mDelegate->updateButtonFrameOpacity();
+			updateToggleSelectionButton();
+			updateImageButtons();
+
+			mButtonFrame->adjustSize();
+			QRect rect = mView->visualRect(mIndexUnderCursor);
 			int posX = rect.x() + (rect.width() - mButtonFrame->width()) / 2;
 			int posY = rect.y() + GADGET_MARGIN;
 			mButtonFrame->move(posX, posY);
+
 			mButtonFrame->show();
 
 			if (mView->isModified(mIndexUnderCursor)) {
@@ -434,6 +437,20 @@ struct PreviewItemDelegatePrivate {
 			mView->setCurrentIndex(mIndexUnderCursor);
 		}
 	}
+
+	void updateToggleSelectionButton() {
+		mToggleSelectionButton->setIcon(SmallIcon(
+			mView->selectionModel()->isSelected(mIndexUnderCursor) ? "list-remove" : "list-add"
+			));
+	}
+
+	void updateImageButtons() {
+		const KFileItem item = fileItemForIndex(mIndexUnderCursor);
+		const bool isImage = !ArchiveUtils::fileItemIsDirOrArchive(item);
+		mFullScreenButton->setEnabled(isImage);
+		mRotateLeftButton->setEnabled(isImage);
+		mRotateRightButton->setEnabled(isImage);
+	}
 };
 
 
@@ -487,24 +504,29 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mButtonFrame->setBackgroundColor(bgColor);
 	d->mButtonFrame->hide();
 
-	QToolButton* fullScreenButton = createFrameButton(d->mButtonFrame, "view-fullscreen");
-	connect(fullScreenButton, SIGNAL(clicked()),
+	d->mToggleSelectionButton = createFrameButton(d->mButtonFrame, "list-add");
+	connect(d->mToggleSelectionButton, SIGNAL(clicked()),
+		SLOT(slotToggleSelectionClicked()));
+
+	d->mFullScreenButton = createFrameButton(d->mButtonFrame, "view-fullscreen");
+	connect(d->mFullScreenButton, SIGNAL(clicked()),
 		SLOT(slotFullScreenClicked()) );
 
-	QToolButton* rotateLeftButton = createFrameButton(d->mButtonFrame, "object-rotate-left");
-	connect(rotateLeftButton, SIGNAL(clicked()),
+	d->mRotateLeftButton = createFrameButton(d->mButtonFrame, "object-rotate-left");
+	connect(d->mRotateLeftButton, SIGNAL(clicked()),
 		SLOT(slotRotateLeftClicked()) );
 
-	QToolButton* rotateRightButton = createFrameButton(d->mButtonFrame, "object-rotate-right");
-	connect(rotateRightButton, SIGNAL(clicked()),
+	d->mRotateRightButton = createFrameButton(d->mButtonFrame, "object-rotate-right");
+	connect(d->mRotateRightButton, SIGNAL(clicked()),
 		SLOT(slotRotateRightClicked()) );
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mButtonFrame);
 	layout->setMargin(0);
 	layout->setSpacing(0);
-	layout->addWidget(fullScreenButton);
-	layout->addWidget(rotateLeftButton);
-	layout->addWidget(rotateRightButton);
+	layout->addWidget(d->mToggleSelectionButton);
+	layout->addWidget(d->mFullScreenButton);
+	layout->addWidget(d->mRotateLeftButton);
+	layout->addWidget(d->mRotateRightButton);
 
 	// Save button frame
 	d->mSaveButtonFrame = new GlossyFrame(d->mView->viewport());
@@ -683,6 +705,12 @@ void PreviewItemDelegate::slotRotateRightClicked() {
 
 void PreviewItemDelegate::slotFullScreenClicked() {
 	showDocumentInFullScreenRequested(urlForIndex(d->mIndexUnderCursor));
+}
+
+
+void PreviewItemDelegate::slotToggleSelectionClicked() {
+	d->mView->selectionModel()->select(d->mIndexUnderCursor, QItemSelectionModel::Toggle);
+	d->updateToggleSelectionButton();
 }
 
 

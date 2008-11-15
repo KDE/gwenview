@@ -68,6 +68,7 @@ private Q_SLOTS:
 	void slotRotateLeftClicked();
 	void slotRotateRightClicked();
 	void slotFullScreenClicked();
+	void slotToggleSelectionClicked();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
