@@ -55,6 +55,21 @@ private:
 };
 
 
+struct DateFilterWidgetPrivate;
+class DateFilterWidget : public QWidget {
+	Q_OBJECT
+public:
+	DateFilterWidget(SortedDirModel*);
+	~DateFilterWidget();
+
+private Q_SLOTS:
+	void applyDateFilter();
+
+private:
+	DateFilterWidgetPrivate* const d;
+};
+
+
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 class RatingWidgetPrivate;
 class RatingFilterWidget : public QWidget {
@@ -103,6 +118,7 @@ public:
 
 private Q_SLOTS:
 	void addFilterByName();
+	void addFilterByDate();
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	void addFilterByRating();
 	void addFilterByTag();

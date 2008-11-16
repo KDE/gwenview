@@ -25,13 +25,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QDate>
 #include <QLineEdit>
 #include <QTimer>
 #include <QToolButton>
 
 // KDE
 #include <kcombobox.h>
+#include <kdatewidget.h>
 #include <kdebug.h>
+#include <kfileitem.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klineedit.h>
@@ -142,6 +145,96 @@ void NameFilterWidget::applyNameFilter() {
 	QVariant data = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex());
 	d->mFilter->setMode(NameFilter::Mode(data.toInt()));
 	d->mFilter->setText(d->mLineEdit->text());
+}
+
+/**
+ * An AbstractSortedDirModelFilter which filters on the file dates
+ */
+class DateFilter : public AbstractSortedDirModelFilter {
+public:
+	enum Mode {
+		GreaterOrEqual,
+		Equal,
+		LessOrEqual
+	};
+	DateFilter(SortedDirModel* model)
+	: AbstractSortedDirModelFilter(model)
+	, mMode(GreaterOrEqual)
+	{}
+
+	virtual bool needsSemanticInfo() const {
+		return false;
+	}
+
+	virtual bool acceptsIndex(const QModelIndex& index) const {
+		if (!mDate.isValid()) {
+			return true;
+		}
+		QDate date = model()->dateTimeForSourceIndex(index).date();
+		switch (mMode) {
+		case GreaterOrEqual:
+			return date >= mDate;
+		case Equal:
+			return date == mDate;
+		default: /* LessOrEqual */
+			return date <= mDate;
+		}
+	}
+
+	void setDate(const QDate& date) {
+		mDate = date;
+		model()->applyFilters();
+	}
+
+	void setMode(Mode mode) {
+		mMode = mode;
+		model()->applyFilters();
+	}
+
+private:
+	QDate mDate;
+	Mode mMode;
+};
+
+struct DateFilterWidgetPrivate {
+	QPointer<DateFilter> mFilter;
+	KComboBox* mModeComboBox;
+	KDateWidget* mDateWidget;
+};
+
+DateFilterWidget::DateFilterWidget(SortedDirModel* model)
+: d(new DateFilterWidgetPrivate)
+{
+	d->mFilter = new DateFilter(model);
+
+	d->mModeComboBox = new KComboBox;
+	d->mModeComboBox->addItem(i18n("Date >="), DateFilter::GreaterOrEqual);
+	d->mModeComboBox->addItem(i18n("Date ="),  DateFilter::Equal);
+	d->mModeComboBox->addItem(i18n("Date <="), DateFilter::LessOrEqual);
+
+	d->mDateWidget = new KDateWidget;
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setMargin(0);
+	layout->addWidget(d->mModeComboBox);
+	layout->addWidget(d->mDateWidget);
+
+	connect(d->mDateWidget, SIGNAL(changed(const QDate&)),
+		SLOT(applyDateFilter()));
+	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
+		SLOT(applyDateFilter()));
+}
+
+DateFilterWidget::~DateFilterWidget()
+{
+	delete d->mFilter;
+	delete d;
+}
+
+void DateFilterWidget::applyDateFilter() {
+	QVariant data = d->mModeComboBox->itemData(d->mModeComboBox->currentIndex());
+	d->mFilter->setMode(DateFilter::Mode(data.toInt()));
+	d->mFilter->setDate(d->mDateWidget->date());
 }
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -394,6 +487,7 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 	new FlowLayout(d->mFrame);
 
 	d->addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
+	d->addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->addAction(i18nc("@action:inmenu", "Filter by Rating"), SLOT(addFilterByRating()));
 	d->addAction(i18nc("@action:inmenu", "Filter by Tag"), SLOT(addFilterByTag()));
@@ -413,6 +507,11 @@ QList<QAction*> FilterController::actionList() const {
 
 void FilterController::addFilterByName() {
 	d->addFilter(new NameFilterWidget(d->mDirModel));
+}
+
+
+void FilterController::addFilterByDate() {
+	d->addFilter(new DateFilterWidget(d->mDirModel));
 }
 
 
