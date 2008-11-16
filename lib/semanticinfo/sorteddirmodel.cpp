@@ -128,6 +128,16 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
 }
 
 
+KDateTime SortedDirModel::dateTimeForSourceIndex(const QModelIndex& sourceIndex) const {
+	if (!sourceIndex.isValid()) {
+		return KDateTime();
+	}
+
+	// FIXME: Extract shooting date when available
+	return d->mSourceModel->itemForIndex(sourceIndex).time(KFileItem::ModificationTime);
+}
+
+
 QModelIndex SortedDirModel::indexForItem(const KFileItem& item) const {
 	if (item.isNull()) {
 		return QModelIndex();
