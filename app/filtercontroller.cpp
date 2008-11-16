@@ -110,8 +110,8 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 	d->mFilter = new NameFilter(model);
 
 	d->mModeComboBox = new KComboBox;
-	d->mModeComboBox->addItem(i18n("Contains"), QVariant(NameFilter::Contains));
-	d->mModeComboBox->addItem(i18n("Does not contain"), QVariant(NameFilter::DoesNotContain));
+	d->mModeComboBox->addItem(i18n("Name contains"), QVariant(NameFilter::Contains));
+	d->mModeComboBox->addItem(i18n("Name does not contain"), QVariant(NameFilter::DoesNotContain));
 
 	d->mLineEdit = new KLineEdit;
 
