@@ -24,7 +24,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <kdatetime.h>
 #include <kdirlister.h>
+#include <kfilemetainfo.h>
+#include <kfilemetainfoitem.h>
 
 // Local
 #include <lib/archiveutils.h>
@@ -133,8 +136,16 @@ KDateTime SortedDirModel::dateTimeForSourceIndex(const QModelIndex& sourceIndex)
 		return KDateTime();
 	}
 
-	// FIXME: Extract shooting date when available
-	return d->mSourceModel->itemForIndex(sourceIndex).time(KFileItem::ModificationTime);
+	const KFileItem item = d->mSourceModel->itemForIndex(sourceIndex);
+	const KFileMetaInfo info = item.metaInfo();
+	if (info.isValid()) {
+		const KFileMetaInfoItem& mii = info.item("http://freedesktop.org/standards/xesam/1.0/core#contentCreated");
+		KDateTime dt(mii.value().toDateTime(), KDateTime::LocalZone);
+		if (dt.isValid()) {
+			return dt;
+		}
+	}
+	return item.time(KFileItem::ModificationTime);
 }
 
 
