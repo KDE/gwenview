@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
 
-#ifndef GWENVIEW_SEMANTICINFOBACKEND_NONE
+#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <lib/semanticinfo/tagmodel.h>
 #endif
 
@@ -68,7 +68,7 @@ struct StartPagePrivate : public Ui_StartPage{
 	}
 
 	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
-	#ifdef GWENVIEW_SEMANTICINFOBACKEND_NONE
+	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		mTagLabel->setText(i18n(
 			"Sorry, browsing by tag is not available. Make sure Nepomuk is properly installed on your computer."
 			));
