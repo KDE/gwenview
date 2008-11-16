@@ -223,6 +223,8 @@ DateFilterWidget::DateFilterWidget(SortedDirModel* model)
 		SLOT(applyDateFilter()));
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
 		SLOT(applyDateFilter()));
+
+	applyDateFilter();
 }
 
 DateFilterWidget::~DateFilterWidget()
