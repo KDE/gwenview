@@ -260,7 +260,7 @@ struct MainWindow::Private {
 
 
 	void setupStartPage(QWidget* parent) {
-		mStartPage = new StartPage(parent);
+		mStartPage = new StartPage(parent, mDirModel->semanticInfoBackEnd());
 		connect(mStartPage, SIGNAL(urlSelected(const KUrl&)),
 			mWindow, SLOT(slotStartPageUrlSelected(const KUrl&)) );
 	}

@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "startpage.moc"
 
+#include "config-gwenview.h"
+
 // Qt
 #include <QListView>
 #include <QStandardItemModel>
@@ -32,12 +34,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <ui_startpage.h>
+#include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
+
+#ifndef GWENVIEW_SEMANTICINFOBACKEND_NONE
+#include <lib/semanticinfo/tagmodel.h>
+#endif
 
 namespace Gwenview {
 
-
 struct StartPagePrivate : public Ui_StartPage{
+	StartPage* that;
 	KFilePlacesModel* mBookmarksModel;
 	QStandardItemModel* mRecentFoldersModel;
 
@@ -59,12 +66,27 @@ struct StartPagePrivate : public Ui_StartPage{
 			mRecentFoldersModel->appendRow(item);
 		}
 	}
+
+	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
+	#ifdef GWENVIEW_SEMANTICINFOBACKEND_NONE
+		mTagLabel->setText(i18n(
+			"Sorry, browsing by tag is not available. Make sure Nepomuk is properly installed on your computer."
+			));
+		mTagView->hide();
+		mTagLabel->show();
+	#else
+		mTagView->setModel(TagModel::createAllTagsModel(0, backEnd));
+		mTagView->show();
+		mTagLabel->hide();
+	#endif
+	}
 };
 
 
-StartPage::StartPage(QWidget* parent)
+StartPage::StartPage(QWidget* parent, AbstractSemanticInfoBackEnd* backEnd)
 : QFrame(parent)
 , d(new StartPagePrivate) {
+	d->that = this;
 	d->setupUi(this);
 
 	d->mBookmarksModel = new KFilePlacesModel(this);
@@ -79,11 +101,28 @@ StartPage::StartPage(QWidget* parent)
 
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
+
+	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
+		SLOT(slotTagViewClicked(const QModelIndex&)));
+
+	d->setupSearchUi(backEnd);
 }
 
 
 StartPage::~StartPage() {
 	delete d;
+}
+
+
+void StartPage::slotTagViewClicked(const QModelIndex& index) {
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+	if (!index.isValid()) {
+		return;
+	}
+	// FIXME: Check label encoding
+	KUrl url("nepomuksearch:/hasTag:" + index.data().toString());
+	emit urlSelected(url);
+#endif
 }
 
 
@@ -99,7 +138,7 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 		"	color: %1;"
 		"}"
 
-		"#StartPage > QLabel {"
+		"#StartPage > QLabel[title=true] {"
 		"	font-weight: bold;"
 		"	border-bottom: 1px solid %1;"
 		"}"

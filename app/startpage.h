@@ -37,12 +37,13 @@ class KUrl;
 
 namespace Gwenview {
 
+class AbstractSemanticInfoBackEnd;
 
 class StartPagePrivate;
 class StartPage : public QFrame {
 	Q_OBJECT
 public:
-	StartPage(QWidget* parent);
+	StartPage(QWidget* parent, AbstractSemanticInfoBackEnd*);
 	~StartPage();
 
 	void applyPalette(const QPalette&);
@@ -55,6 +56,7 @@ protected:
 
 private Q_SLOTS:
 	void slotListViewClicked(const QModelIndex& index);
+	void slotTagViewClicked(const QModelIndex& index);
 
 private:
 	StartPagePrivate* const d;
