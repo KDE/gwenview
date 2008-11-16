@@ -242,4 +242,16 @@ void SortedDirModel::doApplyFilters() {
 }
 
 
+bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
+	if (sortRole() != KDirModel::ModifiedTime) {
+		return KDirSortFilterProxyModel::lessThan(left, right);
+	}
+
+	const KDateTime leftDate = dateTimeForSourceIndex(left);
+	const KDateTime rightDate = dateTimeForSourceIndex(right);
+
+	return leftDate < rightDate;
+}
+
+
 } //namespace

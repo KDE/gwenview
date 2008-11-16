@@ -104,6 +104,7 @@ public Q_SLOTS:
 
 protected:
 	bool filterAcceptsRow(int row, const QModelIndex& parent) const;
+	bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
 
 private Q_SLOTS:
 	void doApplyFilters();
