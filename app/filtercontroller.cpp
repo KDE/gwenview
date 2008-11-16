@@ -261,7 +261,7 @@ public:
 	}
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
-		SemanticInfo info = model()->semanticInfoForIndex(index);
+		SemanticInfo info = model()->semanticInfoForSourceIndex(index);
 		switch (mMode) {
 		case GreaterOrEqual:
 			return info.mRating >= mRating;
@@ -353,7 +353,7 @@ public:
 	}
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
-		SemanticInfo info = model()->semanticInfoForIndex(index);
+		SemanticInfo info = model()->semanticInfoForSourceIndex(index);
 		if (mWantMatchingTag) {
 			return info.mTags.contains(mTag);
 		} else {

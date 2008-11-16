@@ -215,8 +215,8 @@ AbstractSemanticInfoBackEnd* SortedDirModel::semanticInfoBackEnd() const {
 
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-SemanticInfo SortedDirModel::semanticInfoForIndex(const QModelIndex& index) const {
-	return d->mSourceModel->semanticInfoForIndex(index);
+SemanticInfo SortedDirModel::semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const {
+	return d->mSourceModel->semanticInfoForIndex(sourceIndex);
 }
 #endif
 
