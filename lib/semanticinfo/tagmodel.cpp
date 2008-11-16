@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kicon.h>
 
 // Local
 #include "abstractsemanticinfobackend.h"
@@ -42,6 +43,7 @@ static QStandardItem* createItem(const SemanticInfoTag& tag, const QString& labe
 	item->setData(tag, TagModel::TagRole);
 	item->setData(label.toLower(), TagModel::SortRole);
 	item->setData(status, TagModel::AssignmentStatusRole);
+	item->setData(KIcon("mail-tagged.png"), Qt::DecorationRole);
 	return item;
 }
 
