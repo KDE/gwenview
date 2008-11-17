@@ -274,7 +274,7 @@ struct PreviewItemDelegatePrivate {
 	}
 #endif
 
-	bool mouseReleaseEventFilter(QMouseEvent* event) {
+	bool mouseReleaseEventFilter() {
 	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		const QRect rect = ratingRectFromIndexRect(mView->visualRect(mIndexUnderCursor));
 		const int rating = ratingFromCursorPosition(rect);
@@ -570,7 +570,7 @@ bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
 	case QEvent::MouseButtonRelease:
-		return d->mouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
+		return d->mouseReleaseEventFilter();
 
 	default:
 		return false;
