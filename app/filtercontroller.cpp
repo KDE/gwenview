@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/flowlayout.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/timeutils.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 // KDE
@@ -170,7 +171,8 @@ public:
 		if (!mDate.isValid()) {
 			return true;
 		}
-		QDate date = model()->dateTimeForSourceIndex(index).date();
+		KFileItem fileItem = model()->itemForSourceIndex(index);
+		QDate date = TimeUtils::dateTimeForFileItem(fileItem).date();
 		switch (mMode) {
 		case GreaterOrEqual:
 			return date >= mDate;

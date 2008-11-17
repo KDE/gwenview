@@ -26,11 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kdebug.h>
 #include <kdatetime.h>
 #include <kdirlister.h>
-#include <kfilemetainfo.h>
-#include <kfilemetainfoitem.h>
 
 // Local
 #include <lib/archiveutils.h>
+#include <lib/timeutils.h>
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <kdirmodel.h>
 #else
@@ -131,21 +130,11 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
 }
 
 
-KDateTime SortedDirModel::dateTimeForSourceIndex(const QModelIndex& sourceIndex) const {
+KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const {
 	if (!sourceIndex.isValid()) {
-		return KDateTime();
+		return KFileItem();
 	}
-
-	const KFileItem item = d->mSourceModel->itemForIndex(sourceIndex);
-	const KFileMetaInfo info = item.metaInfo();
-	if (info.isValid()) {
-		const KFileMetaInfoItem& mii = info.item("http://freedesktop.org/standards/xesam/1.0/core#contentCreated");
-		KDateTime dt(mii.value().toDateTime(), KDateTime::LocalZone);
-		if (dt.isValid()) {
-			return dt;
-		}
-	}
-	return item.time(KFileItem::ModificationTime);
+	return d->mSourceModel->itemForIndex(sourceIndex);
 }
 
 
@@ -247,8 +236,8 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 		return KDirSortFilterProxyModel::lessThan(left, right);
 	}
 
-	const KDateTime leftDate = dateTimeForSourceIndex(left);
-	const KDateTime rightDate = dateTimeForSourceIndex(right);
+	const KDateTime leftDate = TimeUtils::dateTimeForFileItem(itemForSourceIndex(left));
+	const KDateTime rightDate = TimeUtils::dateTimeForFileItem(itemForSourceIndex(right));
 
 	return leftDate < rightDate;
 }
