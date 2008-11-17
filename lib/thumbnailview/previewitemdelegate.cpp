@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
+#include <klocale.h>
 #include <kurl.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <nepomuk/kratingpainter.h>
@@ -683,8 +684,8 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	}
 
 	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
-		QString text = TimeUtils::dateTimeForFileItem(fileItem).toString();
-		d->drawText(painter, textRect, fgColor, text);
+		const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+		d->drawText(painter, textRect, fgColor, KGlobal::locale()->formatDateTime(dt));
 	}
 
 	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::RatingDetail)) {
