@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "archiveutils.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
+#include "timeutils.h"
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "../semanticinfo/semanticinfodirmodel.h"
 #endif
@@ -340,7 +341,7 @@ struct PreviewItemDelegatePrivate {
 		QString text;
 		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
 		if (it == mElidedTextMap.constEnd()) {
-			text = fm.elidedText(fullText, Qt::ElideRight, rect.width() - 2*ITEM_MARGIN);
+			text = fm.elidedText(fullText, Qt::ElideRight, rect.width());
 			mElidedTextMap[fullText] = text;
 		} else {
 			text = it.value();
@@ -353,15 +354,12 @@ struct PreviewItemDelegatePrivate {
 			posX = (rect.width() - fm.width(text)) / 2;
 		} else {
 			// Elided, left align
-			posX = ITEM_MARGIN;
+			posX = 0;
 		}
 
 		// Draw text
 		painter->setPen(fgColor);
-		painter->drawText(
-			rect.left() + posX,
-			rect.top() + ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN + fm.ascent(),
-			text);
+		painter->drawText(rect.left() + posX, rect.top() + fm.ascent(), text);
 	}
 
 
@@ -427,10 +425,18 @@ struct PreviewItemDelegatePrivate {
 	}
 
 	int itemHeight() const {
-		return mThumbnailSize
-			+ mView->fontMetrics().height()
-			+ ratingRowHeight()
-			+ 3*ITEM_MARGIN;
+		const int lineHeight = mView->fontMetrics().height();
+		int textHeight = 0;
+		if (mDetails & PreviewItemDelegate::FileNameDetail) {
+			textHeight += lineHeight;
+		}
+		if (mDetails & PreviewItemDelegate::DateDetail) {
+			textHeight += lineHeight;
+		}
+		if (mDetails & PreviewItemDelegate::RatingDetail) {
+			textHeight += ratingRowHeight();
+		}
+		return mThumbnailSize + textHeight + 3*ITEM_MARGIN;
 	}
 
 	void selectIndexUnderCursorIfNoMultiSelection() {
@@ -581,6 +587,7 @@ bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	int thumbnailSize = d->mThumbnailSize;
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+	const KFileItem fileItem = fileItemForIndex(index);
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
 	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItemForIndex(index));
 	QRect rect = option.rect;
@@ -665,9 +672,22 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		}
 	}
 
-	d->drawText(painter, rect, fgColor, index.data(Qt::DisplayRole).toString());
+	QRect textRect(
+		rect.left() + ITEM_MARGIN,
+		rect.top() + 2 * ITEM_MARGIN + thumbnailSize,
+		rect.width() - 2 * ITEM_MARGIN,
+		d->mView->fontMetrics().height());
+	if (isDirOrArchive || (d->mDetails & PreviewItemDelegate::FileNameDetail)) {
+		d->drawText(painter, textRect, fgColor, index.data().toString());
+		textRect.moveTop(textRect.bottom());
+	}
 
-	if (!isDirOrArchive) {
+	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
+		QString text = TimeUtils::dateTimeForFileItem(fileItem).toString();
+		d->drawText(painter, textRect, fgColor, text);
+	}
+
+	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::RatingDetail)) {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		d->drawRating(painter, rect, index.data(SemanticInfoDirModel::RatingRole));
 #endif
