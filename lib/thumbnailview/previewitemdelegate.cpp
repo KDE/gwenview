@@ -180,6 +180,7 @@ struct PreviewItemDelegatePrivate {
 
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
+	PreviewItemDelegate::ThumbnailDetails mDetails;
 
 	QPoint mToolTipOffset;
 
@@ -461,6 +462,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
+	d->mDetails = FileNameDetail;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -718,6 +720,16 @@ void PreviewItemDelegate::slotFullScreenClicked() {
 void PreviewItemDelegate::slotToggleSelectionClicked() {
 	d->mView->selectionModel()->select(d->mIndexUnderCursor, QItemSelectionModel::Toggle);
 	d->updateToggleSelectionButton();
+}
+
+
+PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() const {
+	return d->mDetails;
+}
+
+
+void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDetails details) {
+	d->mDetails = details;
 }
 
 

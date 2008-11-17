@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="45">
+<kpartgui name="gwenview" version="46">
 
 <MenuBar>
 	<Menu name="file" >
@@ -36,6 +36,7 @@
 		<Action name="view_zoom_out"/>
 		<Separator/>
 		<Action name="sort_order"/>
+		<Action name="thumbnail_details"/>
 		<Separator/>
 		<Action name="toggle_sidebar" />
 	</Menu>

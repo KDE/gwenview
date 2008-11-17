@@ -110,6 +110,11 @@
 			</choices>
 			<default>Sorting::Name</default>
 		</entry>
+
+		<entry name="ThumbnailDetails" type="Int">
+			<default>1</default>
+			<!-- 1 == PreviewItemDelegate::FileNameDetail -->
+		</entry>
 	</group>
 
 	<group name="Print">

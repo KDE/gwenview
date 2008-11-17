@@ -50,6 +50,23 @@ public:
 	PreviewItemDelegate(ThumbnailView*);
 	~PreviewItemDelegate();
 
+	enum ThumbnailDetail {
+		FileNameDetail = 1,
+		DateDetail     = 2,
+		RatingDetail   = 4
+	};
+	// FIXME: Find out why this cause problems with Qt::Alignment in
+	// PreviewItemDelegate!
+	//Q_DECLARE_FLAGS(ThumbnailDetails, ThumbnailDetail);
+	typedef int ThumbnailDetails;
+
+	/**
+	 * Returns which thumbnail details are shown
+	 */
+	ThumbnailDetails thumbnailDetails() const;
+
+	void setThumbnailDetails(ThumbnailDetails);
+
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
 
@@ -77,6 +94,9 @@ private:
 	PreviewItemDelegatePrivate* const d;
 	friend class PreviewItemDelegatePrivate;
 };
+
+// See upper
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::ThumbnailView::ThumbnailDetails)
 
 
 } // namespace

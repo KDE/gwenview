@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kactioncollection.h>
 #include <kactioncategory.h>
+#include <kactionmenu.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kfileplacesmodel.h>
@@ -68,6 +69,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KActionCollection* mActionCollection;
 	FilterController* mFilterController;
 	KSelectAction* mSortAction;
+	QActionGroup* mThumbnailDetailsActionGroup;
+	PreviewItemDelegate* mDelegate;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -76,8 +79,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		// mThumbnailView
 		mThumbnailView->setModel(mDirModel);
 
-		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
-		mThumbnailView->setItemDelegate(delegate);
+		mDelegate = new PreviewItemDelegate(mThumbnailView);
+		mThumbnailView->setItemDelegate(mDelegate);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 		// mUrlNavigator (use stupid layouting code because KUrlNavigator ctor
@@ -113,6 +116,27 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		action->setData(QVariant(Sorting::Size));
 		QObject::connect(mSortAction, SIGNAL(triggered(QAction*)),
 			that, SLOT(updateSortOrder()));
+
+		mThumbnailDetailsActionGroup = new QActionGroup(that);
+		mThumbnailDetailsActionGroup->setExclusive(false);
+		KActionMenu* thumbnailDetailsAction = view->add<KActionMenu>("thumbnail_details");
+		thumbnailDetailsAction->setText(i18nc("@action:inmenu", "Thumbnail Details"));
+		#define addAction(text, detail) \
+			action = new KAction(that); \
+			thumbnailDetailsAction->addAction(action); \
+			action->setText(text); \
+			action->setCheckable(true); \
+			action->setChecked(GwenviewConfig::thumbnailDetails() & detail); \
+			action->setData(QVariant(detail)); \
+			mThumbnailDetailsActionGroup->addAction(action); \
+			QObject::connect(action, SIGNAL(triggered(bool)), \
+				that, SLOT(updateThumbnailDetails()));
+		addAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail);
+		addAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail);
+		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		addAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail);
+		#endif
+		#undef addAction
 
 		KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
 		action = file->addAction("add_folder_to_places",that, SLOT(addFolderToPlaces()));
@@ -172,6 +196,7 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	d->setupDocumentCountConnections();
 	loadConfig();
 	updateSortOrder();
+	updateThumbnailDetails();
 }
 
 
@@ -204,6 +229,7 @@ void ThumbnailViewPanel::saveConfig() const {
 	GwenviewConfig::setUrlNavigatorShowFullPath(d->mUrlNavigator->showFullPath());
 	GwenviewConfig::setThumbnailSize(d->mThumbnailSlider->value());
 	GwenviewConfig::setSorting(sortingFromSortAction(d->mSortAction->currentAction()));
+	GwenviewConfig::setThumbnailDetails(d->mDelegate->thumbnailDetails());
 }
 
 
@@ -276,6 +302,17 @@ void ThumbnailViewPanel::updateSortOrder() {
 
 	// This works because for now Sorting::Enum maps to KDirModel::ModelColumns
 	d->mDirModel->sort(sortingFromSortAction(action), Qt::AscendingOrder);
+}
+
+
+void ThumbnailViewPanel::updateThumbnailDetails() {
+	PreviewItemDelegate::ThumbnailDetails details = 0;
+	Q_FOREACH(const QAction* action, d->mThumbnailDetailsActionGroup->actions()) {
+		if (action->isChecked()) {
+			details |= PreviewItemDelegate::ThumbnailDetail(action->data().toInt());
+		}
+	}
+	d->mDelegate->setThumbnailDetails(details);
 }
 
 

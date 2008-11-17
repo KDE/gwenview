@@ -68,6 +68,7 @@ private Q_SLOTS:
 	void slotDirModelRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	void slotDirModelReset();
 	void updateSortOrder();
+	void updateThumbnailDetails();
 
 private:
 	ThumbnailViewPanelPrivate* const d;
