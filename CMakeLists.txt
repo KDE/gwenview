@@ -24,8 +24,8 @@ endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 # TODO: Move other Gwenview specific macro_optional_find_package lines here
 
-subdirs(app)
 subdirs(lib)
+subdirs(app)
 subdirs(part)
 subdirs(tests)
 subdirs(icons)
