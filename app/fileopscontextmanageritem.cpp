@@ -117,7 +117,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	d->mCreateFolderAction->setIcon(KIcon("folder-new"));
 
 	d->mOpenWithAction = file->addAction("file_open_with");
-	d->mOpenWithAction->setText(i18n("Open With..."));
+	d->mOpenWithAction->setText(i18n("Open With"));
 	QMenu* menu = new QMenu;
 	d->mOpenWithAction->setMenu(menu);
 	connect(menu, SIGNAL(aboutToShow()),

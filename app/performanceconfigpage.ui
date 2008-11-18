@@ -13,7 +13,7 @@
    <item>
     <widget class="QCheckBox" name="kcfg_DeleteThumbnailCacheOnExit" >
      <property name="text" >
-      <string>Delete  thumbnail cache folder on exit</string>
+      <string>Delete thumbnail cache folder on exit</string>
      </property>
     </widget>
    </item>

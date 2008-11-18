@@ -95,7 +95,7 @@
      <item>
       <widget class="QPushButton" name="mConfigureDisplayedInformationButton" >
        <property name="text" >
-        <string>Configure Displayed Metadata</string>
+        <string>Configure Displayed Metadata...</string>
        </property>
       </widget>
      </item>
@@ -140,7 +140,7 @@
    <item row="8" column="1" >
     <widget class="QCheckBox" name="mShowThumbnailsCheckBox" >
      <property name="text" >
-      <string>Show Thumbnails</string>
+      <string>Show thumbnails</string>
      </property>
      <property name="checked" >
       <bool>true</bool>
