@@ -127,7 +127,6 @@ void SideBarGroup::clear() {
 	d->mContainer->deleteLater();
 
 	d->mContainer = new QFrame(this);
-	d->mContainer->setBackgroundRole(QPalette::Base);
 	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
 	containerLayout->setMargin(0);
 	containerLayout->setSpacing(0);
@@ -176,6 +175,9 @@ SideBar::SideBar(QWidget* parent)
 	setWidget(d->mWidget);
 	setWidgetResizable(true);
 	setFont(KGlobalSettings::toolBarFont());
+
+	viewport()->setAutoFillBackground( false );
+	d->mWidget->setAutoFillBackground( false );
 }
 
 
