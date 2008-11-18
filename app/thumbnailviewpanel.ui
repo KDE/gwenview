@@ -1,14 +1,6 @@
 <ui version="4.0" >
  <class>ThumbnailViewPanel</class>
  <widget class="QWidget" name="ThumbnailViewPanel" >
-  <property name="geometry" >
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>520</width>
-    <height>433</height>
-   </rect>
-  </property>
   <layout class="QGridLayout" name="gridLayout" >
    <property name="spacing" >
     <number>0</number>
@@ -75,7 +67,7 @@
     <widget class="QWidget" native="1" name="mStatusBarContainer" >
      <layout class="QHBoxLayout" name="horizontalLayout" >
       <item>
-       <widget class="QToolButton" name="mAddFilterButton" >
+       <widget class="Gwenview::StatusBarToolButton" name="mAddFilterButton" >
         <property name="text" >
          <string>Add Filter</string>
         </property>
@@ -138,6 +130,11 @@
    <class>Gwenview::ThumbnailView</class>
    <extends>QListView</extends>
    <header location="global" >lib/thumbnailview/thumbnailview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GwenView::StatusBarToolButton</class>
+   <extends>QToolButton</extends>
+   <header>statusbartoolbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
