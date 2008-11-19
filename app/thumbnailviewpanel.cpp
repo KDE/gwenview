@@ -234,11 +234,6 @@ void ThumbnailViewPanel::initActionDependentWidgets() {
 }
 
 
-void ThumbnailViewPanel::setStatusBarHeight(int height) {
-	d->mStatusBarContainer->setFixedHeight(height);
-}
-
-
 ThumbnailView* ThumbnailViewPanel::thumbnailView() const {
 	return d->mThumbnailView;
 }

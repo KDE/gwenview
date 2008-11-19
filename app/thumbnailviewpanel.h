@@ -55,8 +55,6 @@ public:
 	ThumbnailView* thumbnailView() const;
 	KUrlNavigator* urlNavigator() const;
 
-	void setStatusBarHeight(int);
-
 	void loadConfig();
 	void saveConfig() const;
 

@@ -363,11 +363,6 @@ int DocumentPanel::statusBarHeight() const {
 }
 
 
-void DocumentPanel::setStatusBarHeight(int height) {
-	d->mStatusBarContainer->setFixedHeight(height);
-}
-
-
 void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBarContainer->setVisible(!fullScreenMode);
