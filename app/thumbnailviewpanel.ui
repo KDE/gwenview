@@ -132,9 +132,9 @@
    <header location="global" >lib/thumbnailview/thumbnailview.h</header>
   </customwidget>
   <customwidget>
-   <class>GwenView::StatusBarToolButton</class>
+   <class>Gwenview::StatusBarToolButton</class>
    <extends>QToolButton</extends>
-   <header location="global">lib/statusbartoolbutton.h</header>
+   <header location="global" >lib/statusbartoolbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
