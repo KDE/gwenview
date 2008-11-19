@@ -1,7 +1,6 @@
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${EXIV2_INCLUDE_DIR}
-    ${gwenviewlib_SOURCE_DIR}
 	)
 
 if (KIPI_FOUND)

@@ -134,7 +134,7 @@
   <customwidget>
    <class>GwenView::StatusBarToolButton</class>
    <extends>QToolButton</extends>
-   <header>statusbartoolbutton.h</header>
+   <header location="global">lib/statusbartoolbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
