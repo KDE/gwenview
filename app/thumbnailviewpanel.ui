@@ -66,6 +66,12 @@
    <item row="3" column="0" colspan="3" >
     <widget class="QWidget" native="1" name="mStatusBarContainer" >
      <layout class="QHBoxLayout" name="horizontalLayout" >
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
+      </property>
       <item>
        <widget class="Gwenview::StatusBarToolButton" name="mAddFilterButton" >
         <property name="text" >
