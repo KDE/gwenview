@@ -262,7 +262,10 @@ void FullScreenContent::updateInformationLabel() {
 
 	QStringList valueList;
 	Q_FOREACH(const QString& key, GwenviewConfig::fullScreenPreferredMetaInfoKeyList()) {
-		valueList << model->getValueForKey(key);
+		const QString value = model->getValueForKey(key);
+		if (value.length() > 0) {
+			valueList << value;
+		}
 	}
 	QString text = valueList.join(i18nc("@item:intext fullscreen meta info separator", ", "));
 
