@@ -371,7 +371,6 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 			it = d->mThumbnailForUrl.insert(url, thumbnail);
 			d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 		} else {
-			generateThumbnailForIndex(index);
 			return d->mWaitingThumbnail;
 		}
 	}
