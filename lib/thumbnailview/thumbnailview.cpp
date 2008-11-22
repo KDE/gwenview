@@ -369,6 +369,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 			thumbnail.groupPix = pix;
 			thumbnail.fullSize = QSize(128, 128);
 			it = d->mThumbnailForUrl.insert(url, thumbnail);
+			d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 		} else {
 			generateThumbnailForIndex(index);
 			return d->mWaitingThumbnail;
@@ -541,7 +542,11 @@ void ThumbnailView::smoothNextThumbnail() {
 	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
-	viewport()->update(visualRect(persistentIndex));
+	if (persistentIndex.isValid()) {
+		viewport()->update(visualRect(persistentIndex));
+	} else {
+		kWarning() << "index for" << url << "is invalid. This should not happen!";
+	}
 
 	if (!d->mSmoothThumbnailQueue.isEmpty()) {
 		d->mSmoothThumbnailTimer.start(0);
