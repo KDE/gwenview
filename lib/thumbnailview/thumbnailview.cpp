@@ -314,6 +314,10 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 		}
 		setCurrentIndex(index);
 	}
+
+	// Removing rows might make new images visible, make sure their thumbnail
+	// is generated
+	d->mScheduledThumbnailGenerationTimer.start();
 }
 
 
