@@ -82,12 +82,6 @@ struct Thumbnail {
 	/// Size of the full image
 	QSize fullSize;
 
-	/// True if adjustedPix has been scaled with FastTransform instead of
-	//Smooth
-	bool rough;
-
-	Thumbnail() : rough(true) {}
-
 	bool isGroupPixAdaptedForSize(int size) const {
 		if (groupPix.isNull()) {
 			return false;
@@ -160,10 +154,8 @@ struct ThumbnailViewPrivate {
 		const int fullSize = qMax(thumbnail->fullSize.width(), thumbnail->fullSize.height());
 		if (fullSize == groupSize && groupSize <= mThumbnailSize) {
 			thumbnail->adjustedPix = groupPix;
-			thumbnail->rough = false;
 		} else {
 			thumbnail->adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
-			thumbnail->rough = true;
 			if (!mSmoothThumbnailQueue.contains(url)) {
 				mSmoothThumbnailQueue.enqueue(url);
 				if (!mSmoothThumbnailTimer.isActive()) {
@@ -549,7 +541,6 @@ void ThumbnailView::smoothNextThumbnail() {
 
 	Thumbnail& thumbnail = it.value();
 	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	thumbnail.rough = false;
 
 	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
 	viewport()->update(visualRect(persistentIndex));
