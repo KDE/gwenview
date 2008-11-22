@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDropEvent>
 #include <QPainter>
 #include <QPointer>
+#include <QQueue>
 #include <QTimer>
 
 // KDE
@@ -79,6 +80,12 @@ struct Thumbnail {
 	/// Size of the full image
 	QSize fullSize;
 
+	/// True if adjustedPix has been scaled with FastTransform instead of
+	//Smooth
+	bool rough;
+
+	Thumbnail() : rough(true) {}
+
 	bool isGroupPixAdaptedForSize(int size) const {
 		if (groupPix.isNull()) {
 			return false;
@@ -95,6 +102,7 @@ struct Thumbnail {
 };
 
 typedef QMap<QUrl, Thumbnail> ThumbnailForUrlMap;
+typedef QQueue<KUrl> UrlQueue;
 
 struct ThumbnailViewPrivate {
 	ThumbnailView* that;
@@ -103,6 +111,10 @@ struct ThumbnailViewPrivate {
 	ThumbnailForUrlMap mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
+
+	UrlQueue mSmoothThumbnailQueue;
+	QTimer mSmoothThumbnailTimer;;
+
 	QPixmap mWaitingThumbnail;
 	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
 
@@ -110,6 +122,7 @@ struct ThumbnailViewPrivate {
 		if (mThumbnailLoadJob) {
 			mThumbnailLoadJob->removeItems(mThumbnailLoadJob->pendingItems());
 		}
+		mSmoothThumbnailQueue.clear();
 		mScheduledThumbnailGenerationTimer.start();
 	}
 
@@ -139,24 +152,20 @@ struct ThumbnailViewPrivate {
 		}
 	}
 
-	void roughAdjustThumbnailForUrl(const KUrl& url) {
-		ThumbnailForUrlMap::Iterator it = mThumbnailForUrl.find(url);
-		if (it == mThumbnailForUrl.end()) {
-			kWarning() << url << "not in mThumbnailForUrl, this should not happen!";
-			return;
-		}
-
-		Thumbnail& thumbnail = it.value();
-		const QPixmap& groupPix = thumbnail.groupPix;
+	void roughAdjustThumbnail(Thumbnail* thumbnail, const KUrl& url) {
+		const QPixmap& groupPix = thumbnail->groupPix;
 		const int groupSize = qMax(groupPix.width(), groupPix.height());
-		const int fullSize = qMax(thumbnail.fullSize.width(), thumbnail.fullSize.height());
+		const int fullSize = qMax(thumbnail->fullSize.width(), thumbnail->fullSize.height());
 		if (fullSize == groupSize && groupSize <= mThumbnailSize) {
-			thumbnail.adjustedPix = groupPix;
-			//rough = false
+			thumbnail->adjustedPix = groupPix;
+			thumbnail->rough = false;
 		} else {
-			thumbnail.adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
-			//rough = true
-			//scheduleSmoothThumbnailAdjustForUrl(url)
+			thumbnail->adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
+			thumbnail->rough = true;
+			if (!mSmoothThumbnailQueue.contains(url)) {
+				mSmoothThumbnailQueue.enqueue(url);
+				mSmoothThumbnailTimer.start();
+			}
 		}
 	}
 };
@@ -194,6 +203,11 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	connect(&d->mScheduledThumbnailGenerationTimer, SIGNAL(timeout()),
 		SLOT(generateThumbnailsForVisibleItems()) );
 
+	d->mSmoothThumbnailTimer.setSingleShot(true);
+	d->mSmoothThumbnailTimer.setInterval(1000);
+	connect(&d->mSmoothThumbnailTimer, SIGNAL(timeout()),
+		SLOT(smoothNextThumbnail()) );
+
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
@@ -218,6 +232,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 		return;
 	}
 	d->mThumbnailSize = value;
+	kDebug() << value;
 
 	// mWaitingThumbnail
 	int waitingThumbnailSize;
@@ -236,6 +251,10 @@ void ThumbnailView::setThumbnailSize(int value) {
 		painter.end();
 		d->mWaitingThumbnail = pix;
 	}
+
+	// Stop smoothing
+	d->mSmoothThumbnailTimer.stop();
+	d->mSmoothThumbnailQueue.clear();
 
 	// Clear adjustedPixes
 	ThumbnailForUrlMap::iterator
@@ -281,6 +300,7 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 		QUrl url = item.url();
 		d->mThumbnailForUrl.remove(url);
 		d->mPersistentIndexForUrl.remove(url);
+		d->mSmoothThumbnailQueue.removeAll(url);
 
 		itemList.append(item);
 	}
@@ -355,7 +375,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 			Thumbnail& thumbnail = d->mThumbnailForUrl[url];
 			thumbnail.groupPix = pix;
 			thumbnail.fullSize = QSize(128, 128);
-			d->roughAdjustThumbnailForUrl(url);
+			d->roughAdjustThumbnail(&thumbnail, url);
 			return pix;
 		} else {
 			generateThumbnailForIndex(index);
@@ -365,7 +385,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 
 	Thumbnail& thumbnail = it.value();
 	if (thumbnail.adjustedPix.isNull()) {
-		d->roughAdjustThumbnailForUrl(url);
+		d->roughAdjustThumbnail(&thumbnail, url);
 	}
 	return thumbnail.adjustedPix;
 }
@@ -503,6 +523,38 @@ void ThumbnailView::generateThumbnailForIndex(const QModelIndex& index) {
 		KFileItemList list;
 		list << item;
 		d->generateThumbnailsForItems(list);
+	}
+}
+
+
+void ThumbnailView::smoothNextThumbnail() {
+	if (d->mSmoothThumbnailQueue.isEmpty()) {
+		return;
+	}
+
+	if (d->mThumbnailLoadJob) {
+		// give mThumbnailLoadJob priority over smoothing
+		d->mSmoothThumbnailTimer.start();
+		return;
+	}
+
+	KUrl url = d->mSmoothThumbnailQueue.dequeue();
+	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
+	if (it == d->mThumbnailForUrl.end()) {
+		kWarning() <<  url << " not in mThumbnailForUrl. This should not happen!";
+		return;
+	}
+
+	Thumbnail& thumbnail = it.value();
+	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	thumbnail.rough = false;
+
+	kDebug() << "Smoothed" << url;
+	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
+	viewport()->update(visualRect(persistentIndex));
+
+	if (!d->mSmoothThumbnailQueue.isEmpty()) {
+		d->mSmoothThumbnailTimer.start(0);
 	}
 }
 

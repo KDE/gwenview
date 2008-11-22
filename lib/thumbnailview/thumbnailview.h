@@ -118,6 +118,7 @@ private Q_SLOTS:
 	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
 
 	void generateThumbnailsForVisibleItems();
+	void smoothNextThumbnail();
 
 private:
 	friend class ThumbnailViewPrivate;
