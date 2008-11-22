@@ -361,16 +361,14 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	}
 	KUrl url = item.url();
 
-
 	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			QPixmap pix = item.pixmap(128);
-			Thumbnail& thumbnail = d->mThumbnailForUrl[url];
+			Thumbnail thumbnail;
 			thumbnail.groupPix = pix;
 			thumbnail.fullSize = QSize(128, 128);
-			d->roughAdjustThumbnail(&thumbnail, url);
-			return pix;
+			it = d->mThumbnailForUrl.insert(url, thumbnail);
 		} else {
 			generateThumbnailForIndex(index);
 			return d->mWaitingThumbnail;
