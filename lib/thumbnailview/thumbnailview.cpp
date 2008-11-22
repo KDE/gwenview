@@ -56,6 +56,8 @@ namespace Gwenview {
 /** How many pixels between items */
 const int SPACING = 11;
 
+/** How many msec to wait before starting to smooth thumbnails */
+const int SMOOTH_DELAY = 500;
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
@@ -164,7 +166,9 @@ struct ThumbnailViewPrivate {
 			thumbnail->rough = true;
 			if (!mSmoothThumbnailQueue.contains(url)) {
 				mSmoothThumbnailQueue.enqueue(url);
-				mSmoothThumbnailTimer.start();
+				if (!mSmoothThumbnailTimer.isActive()) {
+					mSmoothThumbnailTimer.start(SMOOTH_DELAY);
+				}
 			}
 		}
 	}
@@ -204,7 +208,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 		SLOT(generateThumbnailsForVisibleItems()) );
 
 	d->mSmoothThumbnailTimer.setSingleShot(true);
-	d->mSmoothThumbnailTimer.setInterval(1000);
 	connect(&d->mSmoothThumbnailTimer, SIGNAL(timeout()),
 		SLOT(smoothNextThumbnail()) );
 
@@ -232,7 +235,6 @@ void ThumbnailView::setThumbnailSize(int value) {
 		return;
 	}
 	d->mThumbnailSize = value;
-	kDebug() << value;
 
 	// mWaitingThumbnail
 	int waitingThumbnailSize;
@@ -534,7 +536,7 @@ void ThumbnailView::smoothNextThumbnail() {
 
 	if (d->mThumbnailLoadJob) {
 		// give mThumbnailLoadJob priority over smoothing
-		d->mSmoothThumbnailTimer.start();
+		d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
 		return;
 	}
 
@@ -549,7 +551,6 @@ void ThumbnailView::smoothNextThumbnail() {
 	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	thumbnail.rough = false;
 
-	kDebug() << "Smoothed" << url;
 	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
 	viewport()->update(visualRect(persistentIndex));
 
