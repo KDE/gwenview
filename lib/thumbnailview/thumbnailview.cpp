@@ -115,7 +115,7 @@ struct ThumbnailViewPrivate {
 	QTimer mScheduledThumbnailGenerationTimer;
 
 	UrlQueue mSmoothThumbnailQueue;
-	QTimer mSmoothThumbnailTimer;;
+	QTimer mSmoothThumbnailTimer;
 
 	QPixmap mWaitingThumbnail;
 	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
