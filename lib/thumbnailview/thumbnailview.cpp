@@ -72,16 +72,25 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 struct Thumbnail {
-	QPixmap normalPix;
-	QPixmap largePix;
+	/// The pix loaded from .thumbnails/{large,normal}
+	QPixmap groupPix;
+	/// Scaled version of groupPix, adjusted to ThumbnailView::thumbnailSize
+	QPixmap adjustedPix;
+	/// Size of the full image
 	QSize fullSize;
 
-	inline const QPixmap& pixmapForGroup(ThumbnailGroup::Enum group) const {
-		return group == ThumbnailGroup::Large ? largePix : normalPix;
-	}
+	bool isGroupPixAdaptedForSize(int size) const {
+		if (groupPix.isNull()) {
+			return false;
+		}
+		const int groupSize = qMax(groupPix.width(), groupPix.height());
+		if (groupSize >= size) {
+			return true;
+		}
 
-	inline QPixmap& pixmapForGroup(ThumbnailGroup::Enum group) {
-		return group == ThumbnailGroup::Large ? largePix : normalPix;
+		// groupSize is less than size, but this may be because the full image
+		// is the same size as groupSize
+		return groupSize == qMax(fullSize.width(), fullSize.height());
 	}
 };
 
@@ -127,6 +136,27 @@ struct ThumbnailViewPrivate {
 			Q_FOREACH(const KFileItem& item, list) {
 				mThumbnailLoadJob->appendItem(item);
 			}
+		}
+	}
+
+	void roughAdjustThumbnailForUrl(const KUrl& url) {
+		ThumbnailForUrlMap::Iterator it = mThumbnailForUrl.find(url);
+		if (it == mThumbnailForUrl.end()) {
+			kWarning() << url << "not in mThumbnailForUrl, this should not happen!";
+			return;
+		}
+
+		Thumbnail& thumbnail = it.value();
+		const QPixmap& groupPix = thumbnail.groupPix;
+		const int groupSize = qMax(groupPix.width(), groupPix.height());
+		const int fullSize = qMax(thumbnail.fullSize.width(), thumbnail.fullSize.height());
+		if (fullSize == groupSize && groupSize <= mThumbnailSize) {
+			thumbnail.adjustedPix = groupPix;
+			//rough = false
+		} else {
+			thumbnail.adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
+			//rough = true
+			//scheduleSmoothThumbnailAdjustForUrl(url)
 		}
 	}
 };
@@ -205,6 +235,14 @@ void ThumbnailView::setThumbnailSize(int value) {
 		painter.drawPixmap(0, 0, icon);
 		painter.end();
 		d->mWaitingThumbnail = pix;
+	}
+
+	// Clear adjustedPixes
+	ThumbnailForUrlMap::iterator
+		it = d->mThumbnailForUrl.begin(),
+		end = d->mThumbnailForUrl.end();
+	for (; it!=end; ++it) {
+		it.value().adjustedPix = QPixmap();
 	}
 
 	thumbnailSizeChanged(value);
@@ -290,9 +328,9 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 		return;
 	}
 
-	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	Thumbnail& thumbnail = d->mThumbnailForUrl[url];
-	thumbnail.pixmapForGroup(group) = pixmap;
+	thumbnail.groupPix = pixmap;
+	thumbnail.adjustedPix = QPixmap();
 	thumbnail.fullSize = size;
 
 	QRect rect = visualRect(persistentIndex);
@@ -309,49 +347,27 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	}
 	KUrl url = item.url();
 
-	QPixmap pix;
 
-	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
-	if (it != d->mThumbnailForUrl.end()) {
-		Thumbnail& thumbnail = it.value();
-		pix = thumbnail.pixmapForGroup(group);
-		if (pix.isNull() && thumbnail.fullSize.isValid()) {
-			int maxFullSize = qMax(thumbnail.fullSize.width(), thumbnail.fullSize.height());
-			if (group == ThumbnailGroup::Large && !thumbnail.normalPix.isNull()) {
-				// Use an up-sampled version of the normal size thumbnail
-				int thumbnailSize = qMin(d->mThumbnailSize, maxFullSize);
-				pix = thumbnail.normalPix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
-			} else if (group == ThumbnailGroup::Normal && !thumbnail.largePix.isNull()) {
-				// Generate the normal version from the large version and use
-				// it
-				int thumbnailSize = qMin(ThumbnailGroup::pixelSize(ThumbnailGroup::Normal), maxFullSize);
-				pix = thumbnail.largePix.scaled(thumbnailSize, thumbnailSize, Qt::KeepAspectRatio);
-				thumbnail.normalPix = pix;
-			}
-		}
-	}
-
-	if (pix.isNull()) {
+	if (it == d->mThumbnailForUrl.end()) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-			pix = item.pixmap(128);
-			// Fill both sizes, because we don't want to show an up-sampled
-			// version of the normal icons.
+			QPixmap pix = item.pixmap(128);
 			Thumbnail& thumbnail = d->mThumbnailForUrl[url];
-			thumbnail.normalPix = pix;
-			thumbnail.largePix = pix;
+			thumbnail.groupPix = pix;
 			thumbnail.fullSize = QSize(128, 128);
+			d->roughAdjustThumbnailForUrl(url);
+			return pix;
 		} else {
-			pix = d->mWaitingThumbnail;
+			generateThumbnailForIndex(index);
+			return d->mWaitingThumbnail;
 		}
 	}
 
-	int maxSize = qMax(pix.width(), pix.height());
-	if (maxSize > d->mThumbnailSize) {
-		return pix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio);
-	} else {
-		return pix;
+	Thumbnail& thumbnail = it.value();
+	if (thumbnail.adjustedPix.isNull()) {
+		d->roughAdjustThumbnailForUrl(url);
 	}
+	return thumbnail.adjustedPix;
 }
 
 
@@ -435,7 +451,6 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 	if (!isVisible()) {
 		return;
 	}
-	ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(d->mThumbnailSize);
 	KFileItemList list;
 	QRect viewportRect = viewport()->rect();
 	for (int row=0; row < model()->rowCount(); ++row) {
@@ -463,7 +478,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 
 		// Filter out items which already have a thumbnail
 		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.constFind(url);
-		if (it != d->mThumbnailForUrl.constEnd() && !it.value().pixmapForGroup(group).isNull()) {
+		if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize)) {
 			continue;
 		}
 
