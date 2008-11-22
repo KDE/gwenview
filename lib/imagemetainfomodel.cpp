@@ -49,7 +49,26 @@ public:
 		InvalidRow = -1
 	};
 
-	struct Entry {
+	class Entry {
+	public:
+		Entry(const QString& key, const QString& label)
+		: mKey(key), mLabel(label.trimmed())
+		{}
+
+		QString key() const { return mKey; }
+		QString label() const { return mLabel; }
+
+		QString value() const { return mValue; }
+		void setValue(const QString& value) { mValue = value.trimmed(); }
+
+		void appendValue(const QString& value) {
+			if (mValue.length() > 0) {
+				mValue += '\n';
+			}
+			mValue += value.trimmed();
+		}
+
+	private:
 		QString mKey;
 		QString mLabel;
 		QString mValue;
@@ -77,12 +96,10 @@ public:
 		// end of the existing one.
 		Entry* entry = getEntryForKey(key);
 		if (entry) {
-			entry->mValue += '\n' + value;
+			entry->appendValue(value);
 		} else {
-			entry = new Entry;
-			entry->mKey = key;
-			entry->mLabel = label;
-			entry->mValue = value;
+			entry = new Entry(key, label);
+			entry->setValue(value);
 			mList << entry;
 			mRowForKey[key] = mList.size() - 1;
 		}
@@ -92,33 +109,33 @@ public:
 	void getInfoForKey(const QString& key, QString* label, QString* value) const {
 		Entry* entry = getEntryForKey(key);
 		if (entry) {
-			*label = entry->mLabel;
-			*value = entry->mValue;
+			*label = entry->label();
+			*value = entry->value();
 		}
 	}
 
 
 	QString getKeyAt(int row) const {
 		Q_ASSERT(row < mList.size());
-		return mList[row]->mKey;
+		return mList[row]->key();
 	}
 
 
 	QString getLabelForKeyAt(int row) const {
 		Q_ASSERT(row < mList.size());
-		return mList[row]->mLabel;
+		return mList[row]->label();
 	}
 
 
 	QString getValueForKeyAt(int row) const {
 		Q_ASSERT(row < mList.size());
-		return mList[row]->mValue;
+		return mList[row]->value();
 	}
 
 
 	void setValueForKeyAt(int row, const QString& value) {
 		Q_ASSERT(row < mList.size());
-		mList[row]->mValue = value;
+		mList[row]->setValue(value);
 	}
 
 
