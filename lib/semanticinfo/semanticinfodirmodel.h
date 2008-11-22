@@ -72,7 +72,7 @@ private:
 	SemanticInfoDirModelPrivate* const d;
 
 private Q_SLOTS:
-	void storeRetrievedSemanticInfo(const KUrl& url, const SemanticInfo&);
+	void slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo&);
 
 	void slotRowsAboutToBeRemoved(const QModelIndex&, int, int);
 	void slotModelAboutToBeReset();

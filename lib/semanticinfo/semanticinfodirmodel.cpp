@@ -46,7 +46,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QHash<KUrl, SemanticInfo> SemanticInfoCache;
+struct SemanticInfoCacheItem {
+	SemanticInfoCacheItem()
+	: mValid(false) {}
+	QModelIndex mIndex;
+	bool mValid;
+	SemanticInfo mInfo;
+};
+
+
+typedef QHash<KUrl, SemanticInfoCacheItem> SemanticInfoCache;
 
 struct SemanticInfoDirModelPrivate {
 	SemanticInfoCache mSemanticInfoCache;
@@ -64,7 +73,7 @@ SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
 #endif
 
 	connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
-		SLOT(storeRetrievedSemanticInfo(const KUrl&, const SemanticInfo&)),
+		SLOT(slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
 		Qt::QueuedConnection);
 
 	connect(this, SIGNAL(modelAboutToBeReset()),
@@ -93,8 +102,11 @@ bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& inde
 	if (item.isNull()) {
 		return false;
 	}
-	KUrl url = item.url();
-	return d->mSemanticInfoCache.contains(url);
+	SemanticInfoCache::const_iterator it = d->mSemanticInfoCache.constFind(item.targetUrl());
+	if (it == d->mSemanticInfoCache.end()) {
+		return false;
+	}
+	return it.value().mValid;
 }
 
 
@@ -108,7 +120,7 @@ SemanticInfo SemanticInfoDirModel::semanticInfoForIndex(const QModelIndex& index
 		kWarning() << "no item for index";
 		return SemanticInfo();
 	}
-	return d->mSemanticInfoCache.value(item.url());
+	return d->mSemanticInfoCache.value(item.targetUrl()).mInfo;
 }
 
 
@@ -124,8 +136,10 @@ void SemanticInfoDirModel::retrieveSemanticInfoForIndex(const QModelIndex& index
 	if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		return;
 	}
-	KUrl url = item.url();
-	d->mBackEnd->retrieveSemanticInfo(url);
+	SemanticInfoCacheItem cacheItem;
+	cacheItem.mIndex = QPersistentModelIndex(index);
+	d->mSemanticInfoCache[item.targetUrl()] = cacheItem;
+	d->mBackEnd->retrieveSemanticInfo(item.targetUrl());
 }
 
 
@@ -135,15 +149,15 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const {
 		if (item.isNull()) {
 			return QVariant();
 		}
-		KUrl url = item.url();
-		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.find(url);
+		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.find(item.targetUrl());
 		if (it != d->mSemanticInfoCache.end()) {
+			const SemanticInfo& info = it.value().mInfo;
 			if (role == RatingRole) {
-				return it.value().mRating;
+				return info.mRating;
 			} else if (role == DescriptionRole) {
-				return it.value().mDescription;
+				return info.mDescription;
 			} else if (role == TagsRole) {
-				return it.value().mTags.toVariant();
+				return info.mTags.toVariant();
 			} else {
 				// We should never reach this part
 				Q_ASSERT(0);
@@ -166,8 +180,17 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
 			kWarning() << "no item found for this index";
 			return false;
 		}
-		KUrl url = item.url();
-		SemanticInfo semanticInfo = d->mSemanticInfoCache[url];
+		KUrl url = item.targetUrl();
+		SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
+		if (it == d->mSemanticInfoCache.end()) {
+			kWarning() << "No index for" << url;
+			return false;
+		}
+		if (!it.value().mValid) {
+			kWarning() << "Semantic info cache for" << url << "is invalid";
+			return false;
+		}
+		SemanticInfo& semanticInfo = it.value().mInfo;
 		if (role == RatingRole) {
 			semanticInfo.mRating = data.toInt();
 		} else if (role == DescriptionRole) {
@@ -178,7 +201,6 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
 			// We should never reach this part
 			Q_ASSERT(0);
 		}
-		d->mSemanticInfoCache[url] = semanticInfo;
 		emit dataChanged(index, index);
 
 		d->mBackEnd->storeSemanticInfo(url, semanticInfo);
@@ -189,12 +211,16 @@ bool SemanticInfoDirModel::setData(const QModelIndex& index, const QVariant& dat
 }
 
 
-void SemanticInfoDirModel::storeRetrievedSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo) {
-	QModelIndex index = indexForUrl(url);
-	if (index.isValid()) {
-		d->mSemanticInfoCache[url] = semanticInfo;
-		emit dataChanged(index, index);
+void SemanticInfoDirModel::slotSemanticInfoRetrieved(const KUrl& url, const SemanticInfo& semanticInfo) {
+	SemanticInfoCache::iterator it = d->mSemanticInfoCache.find(url);
+	if (it == d->mSemanticInfoCache.end()) {
+		kWarning() << "No index for" << url;
+		return;
 	}
+	SemanticInfoCacheItem& cacheItem = it.value();
+	cacheItem.mInfo = semanticInfo;
+	cacheItem.mValid = true;
+	emit dataChanged(cacheItem.mIndex, cacheItem.mIndex);
 }
 
 
@@ -205,8 +231,7 @@ void SemanticInfoDirModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, i
 		if (item.isNull()) {
 			continue;
 		}
-		KUrl url = item.url();
-		d->mSemanticInfoCache.remove(url);
+		d->mSemanticInfoCache.remove(item.targetUrl());
 	}
 }
 
