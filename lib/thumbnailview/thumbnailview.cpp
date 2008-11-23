@@ -82,6 +82,10 @@ struct Thumbnail {
 	/// Size of the full image
 	QSize fullSize;
 
+	Thumbnail() : rough(true) {}
+
+	bool rough;
+
 	bool isGroupPixAdaptedForSize(int size) const {
 		if (groupPix.isNull()) {
 			return false;
@@ -148,20 +152,16 @@ struct ThumbnailViewPrivate {
 		}
 	}
 
-	void roughAdjustThumbnail(Thumbnail* thumbnail, const KUrl& url) {
+	void roughAdjustThumbnail(Thumbnail* thumbnail) {
 		const QPixmap& groupPix = thumbnail->groupPix;
 		const int groupSize = qMax(groupPix.width(), groupPix.height());
 		const int fullSize = qMax(thumbnail->fullSize.width(), thumbnail->fullSize.height());
 		if (fullSize == groupSize && groupSize <= mThumbnailSize) {
 			thumbnail->adjustedPix = groupPix;
+			thumbnail->rough = false;
 		} else {
 			thumbnail->adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
-			if (!mSmoothThumbnailQueue.contains(url)) {
-				mSmoothThumbnailQueue.enqueue(url);
-				if (!mSmoothThumbnailTimer.isActive()) {
-					mSmoothThumbnailTimer.start(SMOOTH_DELAY);
-				}
-			}
+			thumbnail->rough = true;
 		}
 	}
 };
@@ -379,9 +379,16 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 		}
 	}
 
+	// Adjust thumbnail
 	Thumbnail& thumbnail = it.value();
 	if (thumbnail.adjustedPix.isNull()) {
-		d->roughAdjustThumbnail(&thumbnail, url);
+		d->roughAdjustThumbnail(&thumbnail);
+	}
+	if (thumbnail.rough && !d->mSmoothThumbnailQueue.contains(url)) {
+		d->mSmoothThumbnailQueue.enqueue(url);
+		if (!d->mSmoothThumbnailTimer.isActive()) {
+			d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
+		}
 	}
 	return thumbnail.adjustedPix;
 }
@@ -543,6 +550,7 @@ void ThumbnailView::smoothNextThumbnail() {
 
 	Thumbnail& thumbnail = it.value();
 	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	thumbnail.rough = false;
 
 	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
 	if (persistentIndex.isValid()) {
