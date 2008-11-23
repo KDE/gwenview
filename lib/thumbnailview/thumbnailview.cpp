@@ -75,12 +75,17 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 struct Thumbnail {
+	QPersistentModelIndex index;
 	/// The pix loaded from .thumbnails/{large,normal}
 	QPixmap groupPix;
 	/// Scaled version of groupPix, adjusted to ThumbnailView::thumbnailSize
 	QPixmap adjustedPix;
 	/// Size of the full image
 	QSize fullSize;
+
+	Thumbnail(const QPersistentModelIndex& index_)
+	: index(index_)
+	, rough(true) {}
 
 	Thumbnail() : rough(true) {}
 
@@ -109,7 +114,6 @@ struct ThumbnailViewPrivate {
 	int mThumbnailSize;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 	ThumbnailForUrl mThumbnailForUrl;
-	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
 
 	UrlQueue mSmoothThumbnailQueue;
@@ -133,7 +137,7 @@ struct ThumbnailViewPrivate {
 		QPixmap pix;
 		QSize fullSize;
 		mThumbnailViewHelper->thumbnailForDocument(url, group, &pix, &fullSize);
-		mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
+		mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index));
 		that->setThumbnail(item, pix, fullSize);
 	}
 
@@ -293,7 +297,6 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 
 		QUrl url = item.url();
 		d->mThumbnailForUrl.remove(url);
-		d->mPersistentIndexForUrl.remove(url);
 		d->mSmoothThumbnailQueue.removeAll(url);
 
 		itemList.append(item);
@@ -340,18 +343,16 @@ void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index) {
 
 
 void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, const QSize& size) {
-	QUrl url = item.url();
-	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl[url];
-	if (!persistentIndex.isValid()) {
+	ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
+	if (it == d->mThumbnailForUrl.end()) {
 		return;
 	}
-
-	Thumbnail& thumbnail = d->mThumbnailForUrl[url];
+	Thumbnail& thumbnail = it.value();
 	thumbnail.groupPix = pixmap;
 	thumbnail.adjustedPix = QPixmap();
 	thumbnail.fullSize = size;
 
-	QRect rect = visualRect(persistentIndex);
+	QRect rect = visualRect(thumbnail.index);
 	update(rect);
 	viewport()->update(rect);
 }
@@ -369,11 +370,10 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	if (it == d->mThumbnailForUrl.end()) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			QPixmap pix = item.pixmap(128);
-			Thumbnail thumbnail;
+			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
 			thumbnail.groupPix = pix;
 			thumbnail.fullSize = QSize(128, 128);
 			it = d->mThumbnailForUrl.insert(url, thumbnail);
-			d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
 		} else {
 			return d->mWaitingThumbnail;
 		}
@@ -505,10 +505,10 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 			continue;
 		}
 
-		// Add the item to our list and to mPersistentIndexForUrl, so that
+		// Add the item to our list and to mThumbnailForUrl, so that
 		// setThumbnail() can find the item to update
 		list << item;
-		d->mPersistentIndexForUrl[url] = QPersistentModelIndex(index);
+		d->mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index));
 	}
 
 	if (!list.empty()) {
@@ -552,9 +552,8 @@ void ThumbnailView::smoothNextThumbnail() {
 	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	thumbnail.rough = false;
 
-	QPersistentModelIndex persistentIndex = d->mPersistentIndexForUrl.value(url);
-	if (persistentIndex.isValid()) {
-		viewport()->update(visualRect(persistentIndex));
+	if (thumbnail.index.isValid()) {
+		viewport()->update(visualRect(thumbnail.index));
 	} else {
 		kWarning() << "index for" << url << "is invalid. This should not happen!";
 	}
