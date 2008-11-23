@@ -101,14 +101,14 @@ struct Thumbnail {
 	}
 };
 
-typedef QMap<QUrl, Thumbnail> ThumbnailForUrlMap;
+typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
 typedef QQueue<KUrl> UrlQueue;
 
 struct ThumbnailViewPrivate {
 	ThumbnailView* that;
 	int mThumbnailSize;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
-	ThumbnailForUrlMap mThumbnailForUrl;
+	ThumbnailForUrl mThumbnailForUrl;
 	QMap<QUrl, QPersistentModelIndex> mPersistentIndexForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
 
@@ -251,7 +251,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	d->mSmoothThumbnailQueue.clear();
 
 	// Clear adjustedPixes
-	ThumbnailForUrlMap::iterator
+	ThumbnailForUrl::iterator
 		it = d->mThumbnailForUrl.begin(),
 		end = d->mThumbnailForUrl.end();
 	for (; it!=end; ++it) {
@@ -365,7 +365,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	}
 	KUrl url = item.url();
 
-	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
+	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			QPixmap pix = item.pixmap(128);
@@ -500,7 +500,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		}
 
 		// Filter out items which already have a thumbnail
-		ThumbnailForUrlMap::ConstIterator it = d->mThumbnailForUrl.constFind(url);
+		ThumbnailForUrl::ConstIterator it = d->mThumbnailForUrl.constFind(url);
 		if (it != d->mThumbnailForUrl.constEnd() && it.value().isGroupPixAdaptedForSize(d->mThumbnailSize)) {
 			continue;
 		}
@@ -542,7 +542,7 @@ void ThumbnailView::smoothNextThumbnail() {
 	}
 
 	KUrl url = d->mSmoothThumbnailQueue.dequeue();
-	ThumbnailForUrlMap::Iterator it = d->mThumbnailForUrl.find(url);
+	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
 		kWarning() <<  url << " not in mThumbnailForUrl. This should not happen!";
 		return;
