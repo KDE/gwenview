@@ -118,31 +118,52 @@ void GvCore::saveAll() {
 	SaveAllHelper::ErrorList errorList;
 	SaveAllHelper helper(&errorList);
 
-	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+	// Separate local and remote urls because saving to remote urls uses KIO
+	// methods, which are not thread-safe.
+	KUrl::List localUrls;
+	KUrl::List remoteUrls;
+	Q_FOREACH(const KUrl& url, DocumentFactory::instance()->modifiedDocumentList()) {
+		if (url.isLocalFile()) {
+			localUrls << url;
+		} else {
+			remoteUrls << url;
+		}
+	}
 
 	QProgressDialog progress(d->mParent);
 	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
-	progress.setMaximum(lst.size());
+	progress.setMaximum(localUrls.size() + remoteUrls.size());
 	progress.setWindowModality(Qt::WindowModal);
+	progress.show();
 
-	QFuture<void> future = QtConcurrent::map(lst, helper);
+	// Save local urls
+	QFuture<void> future = QtConcurrent::map(localUrls, helper);
 
 	QFutureWatcher<void> watcher;
 	watcher.setFuture(future);
 	connect(&watcher, SIGNAL(progressValueChanged(int)),
 		&progress, SLOT(setValue(int)) );
 
-	connect(&watcher, SIGNAL(finished()),
-		&progress, SLOT(close()) );
-
 	connect(&progress, SIGNAL(canceled()),
 		&watcher, SLOT(cancel()) );
 
-	progress.exec();
 	watcher.waitForFinished();
 
+	// Save remote urls
+	Q_FOREACH(const KUrl& url, remoteUrls) {
+		if (progress.wasCanceled()) {
+			break;
+		}
+		helper(url);
+		progress.setValue(progress.value() + 1);
+		qApp->processEvents();
+	}
+
+	progress.close();
+
+	// Done, show message if necessary
 	if (errorList.count() > 0) {
 		QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", errorList.count());
 		msg += "<ul>";
