@@ -152,27 +152,16 @@ bool GVPart::openUrl(const KUrl& url) {
 		return false;
 	}
 	setUrl(url);
-	mDocumentView->openUrl(url);
-
-	mErrorWidget->hide();
-	mDocument = DocumentFactory::instance()->load(url);
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	if (arguments().reload()) {
-		mDocument->reload();
+		doc->reload();
 	}
 	if (!UrlUtils::urlIsFastLocalFile(url)) {
 		// Keep raw data of remote files to avoid downloading them again in
 		// saveAs()
-		mDocument->setKeepRawData(true);
+		doc->setKeepRawData(true);
 	}
-	mView->setDocument(mDocument);
-	connect(mDocument.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
-	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()) );
-	connect(mDocument.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
-	if (mDocument->loadingState() == Document::Loaded) {
-		slotLoaded();
-	} else if (mDocument->loadingState() == Document::LoadingFailed) {
-		slotLoadingFailed();
-	}
+	mDocumentView->openUrl(url);
 	return true;
 }
 
@@ -189,10 +178,6 @@ void GVPart::slotLoadingFailed() {
 
 void GVPart::slotLoaded() {
 	emit completed();
-
-	// We don't want to emit completed() again if we receive another
-	// downSampledImageReady() or loaded() signal from the current document.
-	disconnect(mDocument.data(), 0, this, SLOT(slotLoaded()) );
 }
 
 
@@ -250,7 +235,8 @@ void GVPart::saveAs() {
 	}
 
 	KIO::Job* job;
-	QByteArray rawData = mDocument->rawData();
+	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
+	QByteArray rawData = doc->rawData();
 	if (rawData.length() > 0) {
 		job = KIO::storedPut(rawData, dstUrl, -1);
 	} else {

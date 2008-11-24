@@ -68,7 +68,6 @@ private Q_SLOTS:
 private:
     DocumentView* mDocumentView;
 	ImageView* mView;
-	Document::Ptr mDocument;
 
 	QWidget* mErrorWidget;
 	QLabel* mErrorLabel;
