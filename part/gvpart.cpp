@@ -40,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "../lib/gwenviewconfig.h"
-#include "../lib/imageview.h"
 #include "../lib/signalblocker.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
@@ -66,14 +65,9 @@ static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-	QWidget* box = new QWidget(parentWidget);
-	mView = new ImageView(box);
-	mDocumentView = new DocumentView(box, actionCollection());
+	mDocumentView = new DocumentView(parentWidget, actionCollection());
 	mDocumentView->setZoomWidgetVisible(false);
-	QVBoxLayout* layout = new QVBoxLayout(box);
-	layout->addWidget(mView);
-	layout->addWidget(mDocumentView);
-	setWidget(box);
+	setWidget(mDocumentView);
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
 		SIGNAL(setWindowCaption(const QString&)));
@@ -93,8 +87,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	addPartSpecificActions();
 
 	setXMLFile("gvpart/gvpart.rc");
-
-	loadConfig();
 }
 
 
@@ -148,13 +140,6 @@ KAboutData* GVPart::createAboutData() {
 		ki18n("Main developer"),
 		"aurelien.gateau@free.fr");
 	return aboutData;
-}
-
-
-void GVPart::loadConfig() {
-	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
-	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
-	mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
 

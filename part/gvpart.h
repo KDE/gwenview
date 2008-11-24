@@ -41,7 +41,6 @@ class StatusBarExtension;
 namespace Gwenview {
 
 class DocumentView;
-class ImageView;
 
 class GVPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
@@ -49,9 +48,6 @@ public:
 	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
 
 	static KAboutData* createAboutData();
-
-public Q_SLOTS:
-	virtual void loadConfig();
 
 protected:
 	virtual bool openFile();
@@ -64,8 +60,7 @@ private Q_SLOTS:
 	void showJobError(KJob*);
 
 private:
-    DocumentView* mDocumentView;
-	ImageView* mView;
+	DocumentView* mDocumentView;
 
 	void addPartSpecificActions();
 };
