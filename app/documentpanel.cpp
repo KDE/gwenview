@@ -237,8 +237,6 @@ struct DocumentPanelPrivate {
 			that, SIGNAL(nextImageRequested()) );
 		QObject::connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
 			that, SIGNAL(captionUpdateRequested(const QString&)) );
-		QObject::connect(mDocumentView, SIGNAL(completed()),
-			that, SIGNAL(completed()) );
 		QObject::connect(mDocumentView, SIGNAL(toggleFullScreenRequested()),
 			that, SIGNAL(toggleFullScreenRequested()) );
 	}
