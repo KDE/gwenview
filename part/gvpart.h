@@ -42,7 +42,6 @@ namespace Gwenview {
 
 class DocumentView;
 class ImageView;
-class ScrollTool;
 
 class GVPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
@@ -76,7 +75,6 @@ private:
 	ImageView* mView;
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
-	ScrollTool* mScrollTool;
 	QList<qreal> mZoomSnapValues;
 
 	QWidget* mErrorWidget;

@@ -41,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/gwenviewconfig.h"
 #include "../lib/imageview.h"
-#include "../lib/scrolltool.h"
 #include "../lib/signalblocker.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
@@ -73,9 +72,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	layout->addWidget(mView);
 	layout->addWidget(mDocumentView);
 	setWidget(box);
-
-	mScrollTool = new ScrollTool(mView);
-	mView->setCurrentTool(mScrollTool);
 
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	mView->viewport()->installEventFilter(this);
@@ -317,7 +313,6 @@ void GVPart::loadConfig() {
 	mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
 	mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
-	mScrollTool->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
 }
 
 
