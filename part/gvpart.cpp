@@ -76,10 +76,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 
 	mScrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(mScrollTool);
-	connect(mScrollTool, SIGNAL(previousImageRequested()),
-		SIGNAL(previousImageRequested()) );
-	connect(mScrollTool, SIGNAL(nextImageRequested()),
-		SIGNAL(nextImageRequested()) );
 	connect(mScrollTool, SIGNAL(zoomInRequested(const QPoint&)),
 		SLOT(zoomIn(const QPoint&)) );
 	connect(mScrollTool, SIGNAL(zoomOutRequested(const QPoint&)),
