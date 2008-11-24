@@ -50,6 +50,8 @@ public:
 	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
 
+	void setZoomWidgetVisible(bool);
+
 	AbstractDocumentViewAdapter* adapter() const;
 
 	ZoomWidget* zoomWidget() const;

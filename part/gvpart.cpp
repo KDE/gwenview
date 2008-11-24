@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
 #include "../lib/widgetfloater.h"
+#include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
 
@@ -68,6 +69,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	QWidget* box = new QWidget(parentWidget);
 	mView = new ImageView(box);
 	mDocumentView = new DocumentView(box, actionCollection());
+	mDocumentView->setZoomWidgetVisible(false);
 	QVBoxLayout* layout = new QVBoxLayout(box);
 	layout->addWidget(mView);
 	layout->addWidget(mDocumentView);

@@ -64,6 +64,7 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
+	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
@@ -92,7 +93,9 @@ struct DocumentViewPrivate {
 		if (mAdapter->canZoom()) {
 			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
 				that, SLOT(slotZoomChanged(qreal)) );
-			mZoomWidget->show();
+			if (mZoomWidgetVisible) {
+				mZoomWidget->show();
+			}
 		} else {
 			mZoomWidget->hide();
 		}
@@ -214,6 +217,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
+	d->mZoomWidgetVisible = true;
 	d->setupZoomWidget();
 	d->setupZoomActions();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
@@ -222,6 +226,14 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 
 DocumentView::~DocumentView() {
 	delete d;
+}
+
+
+void DocumentView::setZoomWidgetVisible(bool visible) {
+	d->mZoomWidgetVisible = visible;
+	if (!visible) {
+		d->mZoomWidget->hide();
+	}
 }
 
 
