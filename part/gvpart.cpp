@@ -76,7 +76,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	setWidget(box);
 
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
-	mView->viewport()->installEventFilter(this);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomChanged()) );
@@ -94,29 +93,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	setXMLFile("gvpart/gvpart.rc");
 
 	loadConfig();
-}
-
-
-qreal GVPart::computeMinimumZoom() const {
-	// There is no point zooming out less than zoomToFit, but make sure it does
-	// not get too small either
-	return qMax(0.001, qMin(mView->computeZoomToFit(), 1.));
-}
-
-void GVPart::updateZoomSnapValues() {
-	qreal min = computeMinimumZoom();
-
-	mZoomSnapValues.clear();
-	for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
-		mZoomSnapValues << 1/zoom;
-	}
-	for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 0.5) {
-		mZoomSnapValues << zoom;
-	}
-	mZoomSnapValues
-		<< mView->computeZoomToFitWidth()
-		<< mView->computeZoomToFitHeight();
-	qSort(mZoomSnapValues);
 }
 
 
@@ -216,8 +192,6 @@ void GVPart::slotLoaded() {
 	// We don't want to emit completed() again if we receive another
 	// downSampledImageReady() or loaded() signal from the current document.
 	disconnect(mDocument.data(), 0, this, SLOT(slotLoaded()) );
-
-	updateZoomSnapValues();
 }
 
 
@@ -284,22 +258,6 @@ void GVPart::showContextMenu() {
 	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "file_show_properties");
 	menu.exec(QCursor::pos());
-}
-
-
-bool GVPart::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::MouseButtonPress) {
-		// Middle click => toggle zoom to fit
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		if (mouseEvent->button() == Qt::MidButton) {
-			mZoomToFitAction->trigger();
-			return true;
-		}
-	} else if (event->type() == QEvent::Resize) {
-		updateZoomSnapValues();
-	}
-
-	return false;
 }
 
 

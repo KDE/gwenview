@@ -56,7 +56,6 @@ public Q_SLOTS:
 protected:
 	virtual bool openFile();
 	virtual bool openUrl(const KUrl&);
-	virtual bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
 	void updateCaption();
@@ -72,17 +71,13 @@ private:
     DocumentView* mDocumentView;
 	ImageView* mView;
 	Document::Ptr mDocument;
-	QList<qreal> mZoomSnapValues;
 
 	QWidget* mErrorWidget;
 	QLabel* mErrorLabel;
 
 	void addPartSpecificActions();
 
-	void updateZoomSnapValues();
 	void createErrorLabel();
-
-	qreal computeMinimumZoom() const;
 };
 
 } // namespace
