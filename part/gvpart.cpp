@@ -77,6 +77,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
 		SIGNAL(setWindowCaption(const QString&)));
+	connect(mDocumentView, SIGNAL(completed()),
+		SIGNAL(completed()));
 
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -163,21 +165,6 @@ bool GVPart::openUrl(const KUrl& url) {
 	}
 	mDocumentView->openUrl(url);
 	return true;
-}
-
-
-void GVPart::slotLoadingFailed() {
-	mView->setDocument(Document::Ptr());
-	emit completed();
-	QString msg = i18n("Could not load <filename>%1</filename>.", url().fileName());
-	mErrorLabel->setText(msg);
-	mErrorWidget->adjustSize();
-	mErrorWidget->show();
-}
-
-
-void GVPart::slotLoaded() {
-	emit completed();
 }
 
 

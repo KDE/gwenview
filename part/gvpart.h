@@ -62,8 +62,6 @@ private Q_SLOTS:
 	void showProperties();
 	void saveAs();
 	void showJobError(KJob*);
-	void slotLoaded();
-	void slotLoadingFailed();
 
 private:
     DocumentView* mDocumentView;
