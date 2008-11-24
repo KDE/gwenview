@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QDir>
+#include <QSignalSpy>
+#include <QTest>
 
 // KDE
 #include <kurl.h>
