@@ -80,8 +80,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	connect(mDocumentView, SIGNAL(completed()),
 		SIGNAL(completed()));
 
-	mView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
+	mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(mDocumentView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
 
 	KAction* action = new KAction(actionCollection());
@@ -140,7 +140,7 @@ void GVPart::createErrorLabel() {
 
 
 void GVPart::showProperties() {
-	KPropertiesDialog::showDialog(url(), mView);
+	KPropertiesDialog::showDialog(url(), mDocumentView);
 }
 
 
@@ -201,7 +201,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void GVPart::showContextMenu() {
-	KMenu menu(mView);
+	KMenu menu(mDocumentView);
 	addActionToMenu(&menu, actionCollection(), "file_save_as");
 	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");
