@@ -67,12 +67,7 @@ private:
     DocumentView* mDocumentView;
 	ImageView* mView;
 
-	QWidget* mErrorWidget;
-	QLabel* mErrorLabel;
-
 	void addPartSpecificActions();
-
-	void createErrorLabel();
 };
 
 } // namespace

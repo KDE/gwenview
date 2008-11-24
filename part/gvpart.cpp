@@ -92,8 +92,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	Gwenview::ImageFormats::registerPlugins();
 	addPartSpecificActions();
 
-	createErrorLabel();
-
 	setXMLFile("gvpart/gvpart.rc");
 
 	loadConfig();
@@ -104,38 +102,6 @@ void GVPart::addPartSpecificActions() {
 	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
 	new GVBrowserExtension(this);
-}
-
-
-void GVPart::createErrorLabel() {
-	QPixmap pix = KIconLoader::global()->loadIcon(
-		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
-	QLabel* pixLabel = new QLabel;
-	pixLabel->setPixmap(pix);
-
-	mErrorLabel = new QLabel;
-
-	mErrorWidget = new QFrame;
-	mErrorWidget->setObjectName("errorWidget");
-	mErrorWidget->setStyleSheet(
-		"#errorWidget {"
-		"	background-color: palette(window);"
-		"	border: 1px solid palette(dark);"
-		"	padding: 6px;"
-		"}"
-		);
-
-
-	QHBoxLayout* layout = new QHBoxLayout(mErrorWidget);
-	layout->setMargin(0);
-	layout->addWidget(pixLabel);
-	layout->addWidget(mErrorLabel);
-
-	WidgetFloater* floater = new WidgetFloater(mView);
-	floater->setAlignment(Qt::AlignCenter);
-	floater->setChildWidget(mErrorWidget);
-
-	mErrorWidget->hide();
 }
 
 
