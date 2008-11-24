@@ -20,9 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "gvpart.moc"
 
 // Qt
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QMouseEvent>
 
 // KDE
 #include <kaction.h>
@@ -39,15 +36,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kpropertiesdialog.h>
 
 // Local
-#include "../lib/gwenviewconfig.h"
-#include "../lib/signalblocker.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
 #include "../lib/imageformats/imageformats.h"
-#include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
-#include "../lib/widgetfloater.h"
 #include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
@@ -57,9 +50,6 @@ typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
 K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
 
 namespace Gwenview {
-
-static const qreal REAL_DELTA = 0.001;
-static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
