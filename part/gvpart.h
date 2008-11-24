@@ -59,8 +59,6 @@ protected:
 	virtual bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
-	void setZoomToFit(bool);
-	void zoomActualSize();
 	void updateCaption();
 	void showContextMenu();
 	void showProperties();
@@ -74,15 +72,12 @@ private:
     DocumentView* mDocumentView;
 	ImageView* mView;
 	Document::Ptr mDocument;
-	KAction* mZoomToFitAction;
 	QList<qreal> mZoomSnapValues;
 
 	QWidget* mErrorWidget;
 	QLabel* mErrorLabel;
 
-	void disableZoomToFit();
 	void addPartSpecificActions();
-	void setZoom(qreal, const QPoint& center = QPoint(-1, -1));
 
 	void updateZoomSnapValues();
 	void createErrorLabel();

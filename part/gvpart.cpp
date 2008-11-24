@@ -81,15 +81,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 		SLOT(showContextMenu()) );
 	connect(mView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomChanged()) );
 
-	mZoomToFitAction = new KAction(actionCollection());
-	mZoomToFitAction->setCheckable(true);
-	mZoomToFitAction->setChecked(mView->zoomToFit());
-	mZoomToFitAction->setText(i18n("Zoom to Fit"));
-	mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
-	mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
-	connect(mZoomToFitAction, SIGNAL(toggled(bool)), SLOT(setZoomToFit(bool)) );
-	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
-
 	KAction* action = new KAction(actionCollection());
 	action->setText(i18nc("@action", "Properties"));
 	connect(action, SIGNAL(triggered()), SLOT(showProperties()));
@@ -264,50 +255,6 @@ void GVPart::updateCaption() {
 
 void GVPart::slotZoomChanged() {
 	updateCaption();
-}
-
-
-void GVPart::setZoomToFit(bool on) {
-	mView->setZoomToFit(on);
-	if (!on) {
-		mView->setZoom(1.);
-	}
-}
-
-
-void GVPart::zoomActualSize() {
-	disableZoomToFit();
-	mView->setZoom(1.);
-}
-
-
-void GVPart::setZoom(qreal zoom, const QPoint& _center) {
-	disableZoomToFit();
-	QPoint center;
-	if (_center == QPoint(-1, -1)) {
-		center = QPoint(mView->viewport()->width() / 2, mView->viewport()->height() / 2);
-	} else {
-		center = _center;
-	}
-	zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
-
-	mView->setZoom(zoom, center);
-}
-
-
-void GVPart::disableZoomToFit() {
-	// We can't disable zoom to fit by calling
-	// mZoomToFitAction->setChecked(false) directly because it would trigger
-	// the action slot, which would set zoom to 100%.
-	// If zoomToFit is on and the image is at 33%, pressing zoom in should
-	// show the image at 66%, not 200%.
-	if (!mView->zoomToFit()) {
-		return;
-	}
-	mView->setZoomToFit(false);
-	mZoomToFitAction->blockSignals(true);
-	mZoomToFitAction->setChecked(false);
-	mZoomToFitAction->blockSignals(false);
 }
 
 
