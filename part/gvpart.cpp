@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/signalblocker.h"
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
+#include "../lib/documentview/documentview.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/statusbartoolbutton.h"
 #include "../lib/urlutils.h"
@@ -65,8 +66,13 @@ static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-	mView = new ImageView(parentWidget);
-	setWidget(mView);
+	QWidget* box = new QWidget(parentWidget);
+	mView = new ImageView(box);
+	mDocumentView = new DocumentView(box, actionCollection());
+	QVBoxLayout* layout = new QVBoxLayout(box);
+	layout->addWidget(mView);
+	layout->addWidget(mDocumentView);
+	setWidget(box);
 
 	mScrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(mScrollTool);

@@ -40,6 +40,7 @@ class StatusBarExtension;
 
 namespace Gwenview {
 
+class DocumentView;
 class ImageView;
 class ScrollTool;
 
@@ -73,6 +74,7 @@ private Q_SLOTS:
 	void slotLoadingFailed();
 
 private:
+    DocumentView* mDocumentView;
 	ImageView* mView;
 	Document::Ptr mDocument;
 	KAction* mZoomToFitAction;
