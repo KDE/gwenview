@@ -195,6 +195,8 @@ bool GVPart::openUrl(const KUrl& url) {
 		return false;
 	}
 	setUrl(url);
+	mDocumentView->openUrl(url);
+
 	mErrorWidget->hide();
 	mDocument = DocumentFactory::instance()->load(url);
 	if (arguments().reload()) {
