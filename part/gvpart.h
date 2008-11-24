@@ -59,8 +59,6 @@ private Q_SLOTS:
 
 private:
 	DocumentView* mDocumentView;
-
-	void addPartSpecificActions();
 };
 
 } // namespace

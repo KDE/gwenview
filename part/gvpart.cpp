@@ -73,17 +73,12 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	connect(action, SIGNAL(triggered()), SLOT(showProperties()));
 	actionCollection()->addAction("file_show_properties", action);
 
-	Gwenview::ImageFormats::registerPlugins();
-	addPartSpecificActions();
-
-	setXMLFile("gvpart/gvpart.rc");
-}
-
-
-void GVPart::addPartSpecificActions() {
 	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
 
+	Gwenview::ImageFormats::registerPlugins();
 	new GVBrowserExtension(this);
+
+	setXMLFile("gvpart/gvpart.rc");
 }
 
 
