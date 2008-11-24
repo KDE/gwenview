@@ -72,6 +72,15 @@ target_link_libraries(semanticinfobackendtest gwenviewlib ${QT_QTTEST_LIBRARY})
 
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
+# TimeUtilsTest
+set(timeutilstest_SRCS
+	timeutilstest.cpp
+	)
+
+kde4_add_unit_test(timeutilstest ${timeutilstest_SRCS})
+
+target_link_libraries(timeutilstest gwenviewlib ${QT_QTTEST_LIBRARY})
+
 # SlideContainer
 set(slidecontainertest_SRCS
 	slidecontainertest.cpp
