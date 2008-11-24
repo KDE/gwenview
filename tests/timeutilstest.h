@@ -29,6 +29,7 @@ class TimeUtilsTest : public QObject {
 private Q_SLOTS:
 	void testPng();
 	void testJpeg();
+	void testCache();
 };
 
 #endif /* TIMEUTILSTEST_H */

@@ -33,6 +33,12 @@ QTEST_KDEMAIN( TimeUtilsTest, GUI )
 
 using namespace Gwenview;
 
+static void touchFile(const QString& path) {
+	QFile file(path);
+	file.open(QIODevice::Append);
+	file.putChar(0);
+}
+
 void TimeUtilsTest::testPng() {
 	KUrl url = urlForTestFile("test.png");
 	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
@@ -48,4 +54,22 @@ void TimeUtilsTest::testJpeg() {
 
 	const KDateTime orient6DateTime = KDateTime::fromString("2003-03-25T02:02:21");
 	QCOMPARE(dateTime, orient6DateTime);
+}
+
+
+void TimeUtilsTest::testCache() {
+	KUrl url = urlForTestFile("test.png");
+	KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
+	KDateTime dateTime1 = TimeUtils::dateTimeForFileItem(item1);
+	QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));
+
+	QTest::qWait(1200);
+	touchFile(url.path());
+
+	KFileItem item2(KFileItem::Unknown, KFileItem::Unknown, url);
+	KDateTime dateTime2 = TimeUtils::dateTimeForFileItem(item2);
+
+	QVERIFY(dateTime1 != dateTime2);
+
+	QCOMPARE(dateTime2, item2.time(KFileItem::ModificationTime));
 }
