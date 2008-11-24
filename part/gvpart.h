@@ -62,8 +62,6 @@ protected:
 private Q_SLOTS:
 	void setZoomToFit(bool);
 	void zoomActualSize();
-	void zoomIn(const QPoint& center = QPoint(-1,-1));
-	void zoomOut(const QPoint& center = QPoint(-1,-1));
 	void updateCaption();
 	void showContextMenu();
 	void showProperties();

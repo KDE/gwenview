@@ -76,10 +76,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 
 	mScrollTool = new ScrollTool(mView);
 	mView->setCurrentTool(mScrollTool);
-	connect(mScrollTool, SIGNAL(zoomInRequested(const QPoint&)),
-		SLOT(zoomIn(const QPoint&)) );
-	connect(mScrollTool, SIGNAL(zoomOutRequested(const QPoint&)),
-		SLOT(zoomOut(const QPoint&)) );
 
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	mView->viewport()->installEventFilter(this);
@@ -96,13 +92,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	connect(mZoomToFitAction, SIGNAL(toggled(bool)), SLOT(setZoomToFit(bool)) );
 	actionCollection()->addAction("view_zoom_to_fit", mZoomToFitAction);
 
-	KAction* action = KStandardAction::actualSize(this, SLOT(zoomActualSize()), actionCollection());
-	action->setIcon(KIcon("zoom-original"));
-	action->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-	KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
-	KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
-
-	action = new KAction(actionCollection());
+	KAction* action = new KAction(actionCollection());
 	action->setText(i18nc("@action", "Properties"));
 	connect(action, SIGNAL(triggered()), SLOT(showProperties()));
 	actionCollection()->addAction("file_show_properties", action);
@@ -290,32 +280,6 @@ void GVPart::setZoomToFit(bool on) {
 void GVPart::zoomActualSize() {
 	disableZoomToFit();
 	mView->setZoom(1.);
-}
-
-
-void GVPart::zoomIn(const QPoint& center) {
-	qreal currentZoom = mView->zoom();
-	Q_FOREACH(qreal zoom, mZoomSnapValues) {
-		if (zoom > currentZoom + REAL_DELTA) {
-			setZoom(zoom, center);
-			return;
-		}
-	}
-}
-
-
-void GVPart::zoomOut(const QPoint& center) {
-	qreal currentZoom = mView->zoom();
-
-	QListIterator<qreal> it(mZoomSnapValues);
-	it.toBack();
-	while (it.hasPrevious()) {
-		qreal zoom = it.previous();
-		if (zoom < currentZoom - REAL_DELTA) {
-			setZoom(zoom, center);
-			return;
-		}
-	}
 }
 
 
