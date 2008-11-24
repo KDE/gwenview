@@ -75,10 +75,12 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 	layout->addWidget(mDocumentView);
 	setWidget(box);
 
+	connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
+		SIGNAL(setWindowCaption(const QString&)));
+
 	mView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showContextMenu()) );
-	connect(mView, SIGNAL(zoomChanged(qreal)), SLOT(slotZoomChanged()) );
 
 	KAction* action = new KAction(actionCollection());
 	action->setText(i18nc("@action", "Properties"));
@@ -163,7 +165,6 @@ bool GVPart::openUrl(const KUrl& url) {
 		mDocument->setKeepRawData(true);
 	}
 	mView->setDocument(mDocument);
-	updateCaption();
 	connect(mDocument.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
 	connect(mDocument.data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()) );
 	connect(mDocument.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
@@ -209,26 +210,6 @@ KAboutData* GVPart::createAboutData() {
 		ki18n("Main developer"),
 		"aurelien.gateau@free.fr");
 	return aboutData;
-}
-
-
-void GVPart::updateCaption() {
-	QString caption = url().fileName();
-	QSize size = mDocument->size();
-	if (size.isValid()) {
-		int intZoom = qRound(mView->zoom() * 100);
-		caption +=
-			QString(" - %1x%2 - %3%")
-				.arg(size.width())
-				.arg(size.height())
-				.arg(intZoom);
-	}
-	emit setWindowCaption(caption);
-}
-
-
-void GVPart::slotZoomChanged() {
-	updateCaption();
 }
 
 

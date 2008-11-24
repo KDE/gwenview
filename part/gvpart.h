@@ -58,12 +58,10 @@ protected:
 	virtual bool openUrl(const KUrl&);
 
 private Q_SLOTS:
-	void updateCaption();
 	void showContextMenu();
 	void showProperties();
 	void saveAs();
 	void showJobError(KJob*);
-	void slotZoomChanged();
 	void slotLoaded();
 	void slotLoadingFailed();
 
