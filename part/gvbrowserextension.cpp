@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kparts/part.h>
+#include <kiconloader.h>
 
 // Local
 #include "../lib/document/documentfactory.h"
@@ -43,6 +44,8 @@ GVBrowserExtension::GVBrowserExtension(KParts::ReadOnlyPart* part)
 , d(new GVBrowserExtensionPrivate) {
 	d->mPart = part;
 	emit enableAction("print", true);
+	QString iconPath = KIconLoader::global()->iconPath("image-x-generic", KIconLoader::SizeSmall);
+	emit setIconUrl(KUrl::fromPath(iconPath));
 }
 
 
