@@ -578,6 +578,9 @@ QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, co
 
 bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
+	case QEvent::ToolTip:
+		return true;
+
 	case QEvent::HoverMove:
 		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
