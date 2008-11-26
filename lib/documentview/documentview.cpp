@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QApplication>
 #include <QMouseEvent>
+#include <QShortcut>
 #include <QVBoxLayout>
 
 // KDE
@@ -131,6 +132,12 @@ struct DocumentViewPrivate {
 	}
 
 
+	void setupShortcuts() {
+		new QShortcut(Qt::Key_PageUp,   that, SIGNAL(previousImageRequested()));
+		new QShortcut(Qt::Key_PageDown, that, SIGNAL(nextImageRequested()));
+	}
+
+
 	void updateCaption() {
 		QString caption;
 		if (!mAdapter) {
@@ -220,6 +227,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->mZoomWidgetVisible = true;
 	d->setupZoomWidget();
 	d->setupZoomActions();
+	d->setupShortcuts();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
