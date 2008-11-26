@@ -437,6 +437,10 @@ struct PreviewItemDelegatePrivate {
 		if (mDetails & PreviewItemDelegate::RatingDetail) {
 			textHeight += ratingRowHeight();
 		}
+		if (textHeight == 0) {
+			// Keep at least one row of text, so that we can show folder names
+			textHeight = lineHeight;
+		}
 		return mThumbnailSize + textHeight + 3*ITEM_MARGIN;
 	}
 
