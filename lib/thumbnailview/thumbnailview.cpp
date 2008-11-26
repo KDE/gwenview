@@ -91,6 +91,14 @@ struct Thumbnail {
 
 	bool mRough;
 
+	/**
+	 * Init the thumbnail based on a 128x128 icon
+	 */
+	void initAsIcon(const QPixmap& pix) {
+		mGroupPix = pix;
+		mFullSize = QSize(128, 128);
+	}
+
 	bool isGroupPixAdaptedForSize(int size) const {
 		if (mGroupPix.isNull()) {
 			return false;
@@ -369,10 +377,8 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-			QPixmap pix = item.pixmap(128);
 			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
-			thumbnail.mGroupPix = pix;
-			thumbnail.mFullSize = QSize(128, 128);
+			thumbnail.initAsIcon(item.pixmap(128));
 			it = d->mThumbnailForUrl.insert(url, thumbnail);
 		} else {
 			return d->mWaitingThumbnail;
