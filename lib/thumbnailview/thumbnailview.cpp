@@ -363,9 +363,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 	thumbnail.mAdjustedPix = QPixmap();
 	thumbnail.mFullSize = size;
 
-	QRect rect = visualRect(thumbnail.mIndex);
-	update(rect);
-	viewport()->update(rect);
+	update(thumbnail.mIndex);
 }
 
 
@@ -376,7 +374,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
 	}
 	Thumbnail& thumbnail = it.value();
 	thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
-	viewport()->update(visualRect(thumbnail.mIndex));
+	update(thumbnail.mIndex);
 }
 
 
@@ -577,7 +575,7 @@ void ThumbnailView::smoothNextThumbnail() {
 	thumbnail.mRough = false;
 
 	if (thumbnail.mIndex.isValid()) {
-		viewport()->update(visualRect(thumbnail.mIndex));
+		update(thumbnail.mIndex);
 	} else {
 		kWarning() << "index for" << url << "is invalid. This should not happen!";
 	}
