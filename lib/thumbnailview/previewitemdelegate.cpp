@@ -751,6 +751,7 @@ PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() co
 
 void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDetails details) {
 	d->mDetails = details;
+	d->mView->scheduleDelayedItemsLayout();
 }
 
 

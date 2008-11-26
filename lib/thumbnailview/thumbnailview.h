@@ -68,6 +68,11 @@ public:
 	 */
 	void generateThumbnailForIndex(const QModelIndex& index);
 
+	/**
+	 * Publish this method so that delegates can call it.
+	 */
+	using QListView::scheduleDelayedItemsLayout;
+
 Q_SIGNALS:
 	/**
 	 * It seems we can't use the 'activated()' signal for now because it does
