@@ -366,21 +366,45 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
+	bool isTextElided(const QString& text) const {
+		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(text);
+		if (it == mElidedTextMap.constEnd()) {
+			return false;
+		}
+		return it.value().length() < text.length();
+	}
+
+
 	/**
 	 * Show a tooltip only if the item has been elided.
 	 * This function places the tooltip over the item text.
 	 */
 	void showToolTip(const QModelIndex& index) {
-		QString fullText = index.data().toString();
-		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
-		if (it == mElidedTextMap.constEnd()) {
+		if (mDetails == 0 || mDetails == PreviewItemDelegate::RatingDetail) {
+			// No text to display
 			return;
 		}
-		QString elidedText = it.value();
-		if (elidedText.length() == fullText.length()) {
-			// text and tooltip are the same, don't show tooltip
+
+		// Gather tip text
+		QStringList textList;
+		bool elided = false;
+		if (mDetails & PreviewItemDelegate::FileNameDetail) {
+			const QString text = index.data().toString();
+			elided |= isTextElided(text);
+			textList << text;
+		}
+		if (mDetails & PreviewItemDelegate::DateDetail) {
+			// FIXME: Duplicated from drawText
+			const KFileItem fileItem = fileItemForIndex(index);
+			const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+			const QString text = KGlobal::locale()->formatDateTime(dt);
+			elided |= isTextElided(text);
+			textList << text;
+		}
+		if (!elided) {
 			return;
 		}
+		mTipLabel->setText(textList.join("\n"));
 
 		// Compute tip position
 		QRect rect = mView->visualRect(index);
@@ -389,7 +413,7 @@ struct PreviewItemDelegatePrivate {
 		const int margin = mTipLabel->frameWidth();
 		const QPoint tipPosition = rect.topLeft() + QPoint(textX - margin, textY - margin);
 
-		mTipLabel->setText(fullText);
+		// Show tip
 		mTipLabel->adjustSize();
 		mTipLabel->move(tipPosition);
 		mTipLabel->show();
