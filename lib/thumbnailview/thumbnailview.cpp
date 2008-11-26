@@ -75,34 +75,34 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 struct Thumbnail {
-	QPersistentModelIndex index;
+	QPersistentModelIndex mIndex;
 	/// The pix loaded from .thumbnails/{large,normal}
-	QPixmap groupPix;
-	/// Scaled version of groupPix, adjusted to ThumbnailView::thumbnailSize
-	QPixmap adjustedPix;
+	QPixmap mGroupPix;
+	/// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
+	QPixmap mAdjustedPix;
 	/// Size of the full image
-	QSize fullSize;
+	QSize mFullSize;
 
 	Thumbnail(const QPersistentModelIndex& index_)
-	: index(index_)
-	, rough(true) {}
+	: mIndex(index_)
+	, mRough(true) {}
 
-	Thumbnail() : rough(true) {}
+	Thumbnail() : mRough(true) {}
 
-	bool rough;
+	bool mRough;
 
 	bool isGroupPixAdaptedForSize(int size) const {
-		if (groupPix.isNull()) {
+		if (mGroupPix.isNull()) {
 			return false;
 		}
-		const int groupSize = qMax(groupPix.width(), groupPix.height());
+		const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
 		if (groupSize >= size) {
 			return true;
 		}
 
 		// groupSize is less than size, but this may be because the full image
 		// is the same size as groupSize
-		return groupSize == qMax(fullSize.width(), fullSize.height());
+		return groupSize == qMax(mFullSize.width(), mFullSize.height());
 	}
 };
 
@@ -157,15 +157,15 @@ struct ThumbnailViewPrivate {
 	}
 
 	void roughAdjustThumbnail(Thumbnail* thumbnail) {
-		const QPixmap& groupPix = thumbnail->groupPix;
-		const int groupSize = qMax(groupPix.width(), groupPix.height());
-		const int fullSize = qMax(thumbnail->fullSize.width(), thumbnail->fullSize.height());
+		const QPixmap& mGroupPix = thumbnail->mGroupPix;
+		const int groupSize = qMax(mGroupPix.width(), mGroupPix.height());
+		const int fullSize = qMax(thumbnail->mFullSize.width(), thumbnail->mFullSize.height());
 		if (fullSize == groupSize && groupSize <= mThumbnailSize) {
-			thumbnail->adjustedPix = groupPix;
-			thumbnail->rough = false;
+			thumbnail->mAdjustedPix = mGroupPix;
+			thumbnail->mRough = false;
 		} else {
-			thumbnail->adjustedPix = groupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
-			thumbnail->rough = true;
+			thumbnail->mAdjustedPix = mGroupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
+			thumbnail->mRough = true;
 		}
 	}
 };
@@ -259,7 +259,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 		it = d->mThumbnailForUrl.begin(),
 		end = d->mThumbnailForUrl.end();
 	for (; it!=end; ++it) {
-		it.value().adjustedPix = QPixmap();
+		it.value().mAdjustedPix = QPixmap();
 	}
 
 	thumbnailSizeChanged(value);
@@ -348,11 +348,11 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 		return;
 	}
 	Thumbnail& thumbnail = it.value();
-	thumbnail.groupPix = pixmap;
-	thumbnail.adjustedPix = QPixmap();
-	thumbnail.fullSize = size;
+	thumbnail.mGroupPix = pixmap;
+	thumbnail.mAdjustedPix = QPixmap();
+	thumbnail.mFullSize = size;
 
-	QRect rect = visualRect(thumbnail.index);
+	QRect rect = visualRect(thumbnail.mIndex);
 	update(rect);
 	viewport()->update(rect);
 }
@@ -371,8 +371,8 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
 			QPixmap pix = item.pixmap(128);
 			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
-			thumbnail.groupPix = pix;
-			thumbnail.fullSize = QSize(128, 128);
+			thumbnail.mGroupPix = pix;
+			thumbnail.mFullSize = QSize(128, 128);
 			it = d->mThumbnailForUrl.insert(url, thumbnail);
 		} else {
 			return d->mWaitingThumbnail;
@@ -381,16 +381,16 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 
 	// Adjust thumbnail
 	Thumbnail& thumbnail = it.value();
-	if (thumbnail.adjustedPix.isNull()) {
+	if (thumbnail.mAdjustedPix.isNull()) {
 		d->roughAdjustThumbnail(&thumbnail);
 	}
-	if (thumbnail.rough && !d->mSmoothThumbnailQueue.contains(url)) {
+	if (thumbnail.mRough && !d->mSmoothThumbnailQueue.contains(url)) {
 		d->mSmoothThumbnailQueue.enqueue(url);
 		if (!d->mSmoothThumbnailTimer.isActive()) {
 			d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
 		}
 	}
-	return thumbnail.adjustedPix;
+	return thumbnail.mAdjustedPix;
 }
 
 
@@ -549,11 +549,11 @@ void ThumbnailView::smoothNextThumbnail() {
 	}
 
 	Thumbnail& thumbnail = it.value();
-	thumbnail.adjustedPix = thumbnail.groupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	thumbnail.rough = false;
+	thumbnail.mAdjustedPix = thumbnail.mGroupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	thumbnail.mRough = false;
 
-	if (thumbnail.index.isValid()) {
-		viewport()->update(visualRect(thumbnail.index));
+	if (thumbnail.mIndex.isValid()) {
+		viewport()->update(visualRect(thumbnail.mIndex));
 	} else {
 		kWarning() << "index for" << url << "is invalid. This should not happen!";
 	}
