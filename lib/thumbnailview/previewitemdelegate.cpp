@@ -167,7 +167,7 @@ struct PreviewItemDelegatePrivate {
 	typedef QMap<int, QPixmap> ShadowCache;
 	mutable ShadowCache mShadowCache;
 
-	PreviewItemDelegate* mDelegate;
+	PreviewItemDelegate* that;
 	ThumbnailView* mView;
 	GlossyFrame* mButtonFrame;
 	GlossyFrame* mSaveButtonFrame;
@@ -225,7 +225,7 @@ struct PreviewItemDelegatePrivate {
 		mIndexUnderCursor = index;
 
 		if (mIndexUnderCursor.isValid()) {
-			mDelegate->updateButtonFrameOpacity();
+			that->updateButtonFrameOpacity();
 			updateToggleSelectionButton();
 			updateImageButtons();
 
@@ -275,7 +275,7 @@ struct PreviewItemDelegatePrivate {
 		if (rating == -1) {
 			return false;
 		}
-		mDelegate->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
+		that->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
 		return true;
 	#else
 		return false;
@@ -450,7 +450,7 @@ struct PreviewItemDelegatePrivate {
 PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 : QAbstractItemDelegate(view)
 , d(new PreviewItemDelegatePrivate) {
-	d->mDelegate = this;
+	d->that = this;
 	d->mView = view;
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
