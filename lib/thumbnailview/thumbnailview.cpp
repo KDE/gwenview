@@ -75,21 +75,11 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 struct Thumbnail {
-	QPersistentModelIndex mIndex;
-	/// The pix loaded from .thumbnails/{large,normal}
-	QPixmap mGroupPix;
-	/// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
-	QPixmap mAdjustedPix;
-	/// Size of the full image
-	QSize mFullSize;
-
 	Thumbnail(const QPersistentModelIndex& index_)
 	: mIndex(index_)
 	, mRough(true) {}
 
 	Thumbnail() : mRough(true) {}
-
-	bool mRough;
 
 	/**
 	 * Init the thumbnail based on a 128x128 icon
@@ -112,6 +102,17 @@ struct Thumbnail {
 		// is the same size as groupSize
 		return groupSize == qMax(mFullSize.width(), mFullSize.height());
 	}
+
+	QPersistentModelIndex mIndex;
+	/// The pix loaded from .thumbnails/{large,normal}
+	QPixmap mGroupPix;
+	/// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
+	QPixmap mAdjustedPix;
+	/// Size of the full image
+	QSize mFullSize;
+	/// Whether mAdjustedPix represents has been scaled using fast or smooth
+	//transformation
+	bool mRough;
 };
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
