@@ -82,11 +82,11 @@ struct Thumbnail {
 	Thumbnail() : mRough(true) {}
 
 	/**
-	 * Init the thumbnail based on a 128x128 icon
+	 * Init the thumbnail based on a icon
 	 */
 	void initAsIcon(const QPixmap& pix) {
 		mGroupPix = pix;
-		mFullSize = QSize(128, 128);
+		mFullSize = pix.size();
 	}
 
 	bool isGroupPixAdaptedForSize(int size) const {
@@ -156,6 +156,8 @@ struct ThumbnailViewPrivate {
 			mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
 			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
 				that, SLOT(setThumbnail(const KFileItem&, const QPixmap&, const QSize&)));
+			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(const KFileItem&)),
+				that, SLOT(setBrokenThumbnail(const KFileItem&)));
 			mThumbnailLoadJob->start();
 		} else {
 			mThumbnailLoadJob->setThumbnailGroup(group);
@@ -364,6 +366,17 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 	QRect rect = visualRect(thumbnail.mIndex);
 	update(rect);
 	viewport()->update(rect);
+}
+
+
+void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
+	ThumbnailForUrl::iterator it = d->mThumbnailForUrl.find(item.url());
+	if (it == d->mThumbnailForUrl.end()) {
+		return;
+	}
+	Thumbnail& thumbnail = it.value();
+	thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
+	viewport()->update(visualRect(thumbnail.mIndex));
 }
 
 

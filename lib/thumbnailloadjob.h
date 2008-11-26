@@ -146,6 +146,8 @@ Q_SIGNALS:
 	 */
 	void thumbnailLoaded(const KFileItem& item, const QPixmap&, const QSize&);
 
+	void thumbnailLoadingFailed(const KFileItem& item);
+
 protected:
 	virtual void slotResult( KJob *job );
 
@@ -178,8 +180,6 @@ private:
 
 	// Thumbnail group
 	ThumbnailGroup::Enum mThumbnailGroup;
-
-	QPixmap mBrokenPixmap;
 
 	ThumbnailThread mThumbnailThread;
 

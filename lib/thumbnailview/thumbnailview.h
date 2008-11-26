@@ -116,6 +116,7 @@ private Q_SLOTS:
 	void showContextMenu();
 	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
 	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
+	void setBrokenThumbnail(const KFileItem&);
 
 	void generateThumbnailsForVisibleItems();
 	void smoothNextThumbnail();

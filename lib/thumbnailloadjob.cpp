@@ -43,7 +43,6 @@
 #include <kdebug.h>
 #include <kde_file.h>
 #include <kfileitem.h>
-#include <kiconloader.h>
 #include <kio/jobuidelegate.h>
 #include <kio/previewjob.h>
 #include <kstandarddirs.h>
@@ -302,9 +301,6 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 , mThumbnailGroup(group)
 {
 	LOG((int)this);
-
-	mBrokenPixmap = KIconLoader::global()->loadIcon("image-missing",
-		KIconLoader::NoGroup, 48);
 
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items.empty());
@@ -603,8 +599,7 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 
 void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 	LOG(mCurrentItem.url());
-	QSize size;
-	emit thumbnailLoaded(mCurrentItem, mBrokenPixmap, size);
+	emit thumbnailLoadingFailed(mCurrentItem);
 }
 
 
