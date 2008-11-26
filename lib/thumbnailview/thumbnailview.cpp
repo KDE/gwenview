@@ -379,8 +379,12 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 		}
 	}
 
-	// Adjust thumbnail
 	Thumbnail& thumbnail = it.value();
+	if (thumbnail.mGroupPix.isNull()) {
+		return d->mWaitingThumbnail;
+	}
+
+	// Adjust thumbnail
 	if (thumbnail.mAdjustedPix.isNull()) {
 		d->roughAdjustThumbnail(&thumbnail);
 	}
