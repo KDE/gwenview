@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QHBoxLayout>
 #include <QHelpEvent>
+#include <QLabel>
 #include <QMap>
 #include <QPainter>
 #include <QPainterPath>
@@ -184,8 +185,7 @@ struct PreviewItemDelegatePrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate::ThumbnailDetails mDetails;
 
-	QPoint mToolTipOffset;
-
+	QLabel* mTipLabel;
 
 	void initSaveButtonFramePixmap() {
 		// Necessary otherwise we won't see the save button itself
@@ -204,23 +204,12 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
-	/*
-	 * mToolTipOffset is here to compensate QToolTip offset so that the text
-	 * inside the tooltip appears exactly over the thumbnail text.
-	 * The offset values have been copied from QTipLabel code in qtooltip.cpp.
-	 * Let's hope they do not change.
-	 */
-	void initToolTipOffset() {
-		mToolTipOffset = QPoint(2,
-			#ifdef Q_WS_WIN
-				21
-			#else
-				16
-			#endif
-			);
-
-		const int margin = 1 + mView->style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth);
-		mToolTipOffset += QPoint(margin, margin);
+	void initTipLabel() {
+		mTipLabel = new QLabel(mView);
+		mTipLabel->setAutoFillBackground(true);
+		mTipLabel->setFrameStyle(QFrame::Box | QFrame::Plain);
+		mTipLabel->setPalette(QToolTip::palette());
+		mTipLabel->hide();
 	}
 
 
@@ -254,9 +243,12 @@ struct PreviewItemDelegatePrivate {
 				mSaveButtonFrame->hide();
 			}
 
+			showToolTip(index);
+
 		} else {
 			mButtonFrame->hide();
 			mSaveButtonFrame->hide();
+			mTipLabel->hide();
 		}
 		return false;
 	}
@@ -378,12 +370,7 @@ struct PreviewItemDelegatePrivate {
 	 * Show a tooltip only if the item has been elided.
 	 * This function places the tooltip over the item text.
 	 */
-	void showToolTip(QHelpEvent* helpEvent) {
-		QModelIndex index = mView->indexAt(helpEvent->pos());
-		if (!index.isValid()) {
-			return;
-		}
-
+	void showToolTip(const QModelIndex& index) {
 		QString fullText = index.data().toString();
 		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
 		if (it == mElidedTextMap.constEnd()) {
@@ -399,19 +386,13 @@ struct PreviewItemDelegatePrivate {
 		QRect rect = mView->visualRect(index);
 		const int textX = ITEM_MARGIN;
 		const int textY = ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN;
-		const QPoint tipPosition = rect.topLeft() + QPoint(textX, textY) - mToolTipOffset;
+		const int margin = mTipLabel->frameWidth();
+		const QPoint tipPosition = rect.topLeft() + QPoint(textX - margin, textY - margin);
 
-		// Compute visibility rect
-		// We do not include the text line to avoid flicker:
-		// When the mouse is over the tooltip, it's hidden, but the view then
-		// receives a QHelpEvent which causes the tooltip to show again...
-		QRect visibilityRect = rect;
-		visibilityRect.setHeight(textY);
-
-		// Show tip
-		if (visibilityRect.contains(helpEvent->pos())) {
-			QToolTip::showText(mView->mapToGlobal(tipPosition), fullText, mView, visibilityRect);
-		}
+		mTipLabel->setText(fullText);
+		mTipLabel->adjustSize();
+		mTipLabel->move(tipPosition);
+		mTipLabel->show();
 	}
 
 	int itemWidth() const {
@@ -557,7 +538,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	layout->addWidget(saveButton);
 
 	d->initSaveButtonFramePixmap();
-	d->initToolTipOffset();
+	d->initTipLabel();
 }
 
 
@@ -573,10 +554,6 @@ QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, co
 
 bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
-	case QEvent::ToolTip:
-		d->showToolTip(static_cast<QHelpEvent*>(event));
-		return true;
-
 	case QEvent::HoverMove:
 		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
