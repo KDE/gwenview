@@ -179,7 +179,7 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 	d->mRatingIndicator = new RatingIndicator(documentPanel);
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
-		SLOT(update()) );
+		SLOT(slotSelectionChanged()) );
 	connect(contextManager(), SIGNAL(selectionDataChanged()),
 		SLOT(update()) );
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
@@ -230,6 +230,11 @@ inline int ratingForVariant(const QVariant& variant) {
 	}
 }
 
+
+void SemanticInfoContextManagerItem::slotSelectionChanged() {
+	d->mRatingIndicator->hide();
+	update();
+}
 
 void SemanticInfoContextManagerItem::update() {
 	KFileItemList itemList = contextManager()->selection();
