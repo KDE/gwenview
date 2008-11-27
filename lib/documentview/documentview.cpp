@@ -101,6 +101,8 @@ struct DocumentViewPrivate {
 			mZoomWidget->hide();
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
+
+		updateActions();
 	}
 
 
@@ -129,6 +131,24 @@ struct DocumentViewPrivate {
 		view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
 
 		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
+	}
+
+
+	inline void setActionEnabled(const char* name, bool enabled) {
+		QAction* action = mActionCollection->action(name);
+		if (action) {
+			action->setEnabled(enabled);
+		} else {
+			kWarning() << "Action" << name << "not found";
+		}
+	}
+
+	void updateActions() {
+		const bool enabled = that->isVisible() && mAdapter->canZoom();
+		mZoomToFitAction->setEnabled(enabled);
+		setActionEnabled("view_actual_size", enabled);
+		setActionEnabled("view_zoom_in", enabled);
+		setActionEnabled("view_zoom_out", enabled);
 	}
 
 
@@ -406,6 +426,16 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	}
 
 	return false;
+}
+
+
+void DocumentView::showEvent(QShowEvent*) {
+	d->updateActions();
+}
+
+
+void DocumentView::hideEvent(QHideEvent*) {
+	d->updateActions();
 }
 
 
