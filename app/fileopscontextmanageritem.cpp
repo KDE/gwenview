@@ -156,7 +156,7 @@ void FileOpsContextManagerItem::updateActions() {
 
 	d->mOpenWithAction->setEnabled(urlIsValid);
 	d->mCreateFolderAction->setEnabled(dirUrlIsValid);
-	d->mShowPropertiesAction->setEnabled(dirUrlIsValid);
+	d->mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
 
 	updateSideBarContent();
 }
