@@ -106,6 +106,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	KAction* mEditTagsAction;
 	QSignalMapper* mRatingMapper;
 	RatingIndicator* mRatingIndicator;
+	/** A list of all actions, so that we can disable them when necessary */
+	QList<KAction*> mActions;
 
 	void setupActions() {
 		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
@@ -115,6 +117,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		mEditTagsAction->setShortcut(Qt::CTRL | Qt::Key_T);
 		QObject::connect(mEditTagsAction, SIGNAL(triggered()),
 			that, SLOT(showSemanticInfoDialog()) );
+		mActions << mEditTagsAction;
 
 		mRatingMapper = new QSignalMapper(that);
 		for (int rating=0; rating <= 5; ++rating) {
@@ -127,6 +130,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 			action->setShortcut(Qt::Key_0 + rating);
 			QObject::connect(action, SIGNAL(triggered()), mRatingMapper, SLOT(map()) );
 			mRatingMapper->setMapping(action, rating * 2);
+			mActions << action;
 		}
 		QObject::connect(mRatingMapper, SIGNAL(mapped(int)), that, SLOT(slotRatingChanged(int)) );
 	}
@@ -296,7 +300,10 @@ void SemanticInfoContextManagerItem::update() {
 		d->mTagInfo[tag] = count == itemCount;
 	}
 
-	d->mEditTagsAction->setEnabled(!contextManager()->selection().isEmpty());
+	bool enabled = !contextManager()->selection().isEmpty();
+	Q_FOREACH(KAction* action, d->mActions) {
+		action->setEnabled(enabled);
+	}
 	d->updateTagLabel();
 	if (d->mSemanticInfoDialog) {
 		d->updateSemanticInfoDialog();
