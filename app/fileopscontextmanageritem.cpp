@@ -144,8 +144,9 @@ void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
 
 
 void FileOpsContextManagerItem::updateActions() {
-	KFileItemList list = contextManager()->selection();
-	bool selectionNotEmpty = list.count() > 0;
+	bool selectionNotEmpty = contextManager()->selection().count() > 0;
+	const bool urlIsValid = contextManager()->currentUrl().isValid();
+	const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
 	d->mMoveToAction->setEnabled(selectionNotEmpty);
@@ -153,8 +154,9 @@ void FileOpsContextManagerItem::updateActions() {
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 
-	KUrl url = contextManager()->currentUrl();
-	d->mOpenWithAction->setEnabled(url.isValid());
+	d->mOpenWithAction->setEnabled(urlIsValid);
+	d->mCreateFolderAction->setEnabled(dirUrlIsValid);
+	d->mShowPropertiesAction->setEnabled(dirUrlIsValid);
 
 	updateSideBarContent();
 }
