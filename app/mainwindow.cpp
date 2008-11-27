@@ -494,6 +494,9 @@ struct MainWindow::Private {
 	}
 
 	KUrl currentUrl() const {
+		if (mStartPage->isVisible()) {
+			return KUrl();
+		}
 		if (mDocumentPanel->isVisible() && !mDocumentPanel->isEmpty()) {
 			return mDocumentPanel->url();
 		} else {
@@ -802,6 +805,7 @@ void MainWindow::showStartPage() {
 
 	d->mSideBarContainer->hide();
 	d->updateToggleSideBarAction();
+	d->updateContextDependentComponents();
 
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 }
