@@ -415,6 +415,9 @@ struct MainWindow::Private {
 
 	QModelIndex getRelativeIndex(int offset) {
 		KUrl url = currentUrl();
+		if (!url.isValid()) {
+			return QModelIndex();
+		}
 		QModelIndex index = mDirModel->indexForUrl(url);
 		int row = index.row() + offset;
 		index = mDirModel->index(row, 0);
@@ -458,9 +461,13 @@ struct MainWindow::Private {
 	void spreadCurrentDirUrl(const KUrl& url) {
 		mContextManager->setCurrentDirUrl(url);
 		mThumbnailViewHelper->setCurrentDirUrl(url);
-		mUrlNavigator->setUrl(url);
-		mGoUpAction->setEnabled(url.path() != "/");
-		mGvCore->addUrlToRecentFolders(url);
+		if (url.isValid()) {
+			mUrlNavigator->setUrl(url);
+			mGoUpAction->setEnabled(url.path() != "/");
+			mGvCore->addUrlToRecentFolders(url);
+		} else {
+			mGoUpAction->setEnabled(false);
+		}
 	}
 
 	void setupFullScreenBar() {
@@ -490,7 +497,6 @@ struct MainWindow::Private {
 	void setActionsDisabledOnStartPageEnabled(bool enabled) {
 		mBrowseAction->setEnabled(enabled);
 		mViewAction->setEnabled(enabled);
-		mGoUpAction->setEnabled(enabled);
 		mToggleSideBarAction->setEnabled(enabled);
 		mFullScreenAction->setEnabled(enabled);
 		mToggleSlideShowAction->setEnabled(enabled);
@@ -502,14 +508,19 @@ struct MainWindow::Private {
 
 
 	void updateActions() {
-		const bool isRasterImage = mWindow->currentDocumentIsRasterImage();
-		bool canSave = isRasterImage;
-		if (!mDocumentPanel->isVisible()) {
-			// Saving only makes sense if exactly one image is selected
-			QItemSelection selection = mThumbnailView->selectionModel()->selection();
-			QModelIndexList indexList = selection.indexes();
-			if (indexList.count() != 1) {
-				canSave = false;
+		bool isRasterImage = false;
+		bool canSave = false;
+
+		if (currentUrl().isValid()) {
+			isRasterImage = mWindow->currentDocumentIsRasterImage();
+			canSave = isRasterImage;
+			if (!mDocumentPanel->isVisible()) {
+				// Saving only makes sense if exactly one image is selected
+				QItemSelection selection = mThumbnailView->selectionModel()->selection();
+				QModelIndexList indexList = selection.indexes();
+				if (indexList.count() != 1) {
+					canSave = false;
+				}
 			}
 		}
 
@@ -825,36 +836,38 @@ void MainWindow::goUp() {
 
 void MainWindow::showStartPage() {
 	d->setActionsDisabledOnStartPageEnabled(false);
+	d->spreadCurrentDirUrl(KUrl());
 
 	d->mSideBarContainer->hide();
 	d->updateToggleSideBarAction();
-	d->updateContextDependentComponents();
-
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
+
+	d->updateActions();
+	updatePreviousNextActions();
+	d->updateContextDependentComponents();
 }
 
 
 void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
 	d->setActionsDisabledOnStartPageEnabled(true);
-	openDirUrl(url);
 
 	if (d->mBrowseAction->isChecked()) {
-		// Silently uncheck the action so that trigger() does the right thing
+		// Silently uncheck the action so that setInitialUrl() does the right thing
 		SignalBlocker blocker(d->mBrowseAction);
 		d->mBrowseAction->setChecked(false);
 	}
-	d->mBrowseAction->trigger();
-	d->mSideBarContainer->setVisible(GwenviewConfig::sideBarIsVisible());
-	d->updateToggleSideBarAction();
+
+	setInitialUrl(url);
 }
 
 
 void MainWindow::openDirUrl(const KUrl& url) {
-	if (url.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
+	const KUrl currentUrl = d->mContextManager->currentDirUrl();//d->mDirModel->dirLister()->url();
+
+	if (url.equals(currentUrl, KUrl::CompareWithoutTrailingSlash)) {
 		return;
 	}
 
-	KUrl currentUrl = d->mDirModel->dirLister()->url();
 	if (url.isParentOf(currentUrl)) {
 		// Keep first child between url and currentUrl selected
 		// If currentPath is      "/home/user/photos/2008/event"
