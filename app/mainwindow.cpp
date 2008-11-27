@@ -477,8 +477,33 @@ struct MainWindow::Private {
 	}
 
 
+	inline void setActionEnabled(const char* name, bool enabled) {
+		QAction* action = mWindow->actionCollection()->action(name);
+		if (action) {
+			action->setEnabled(enabled);
+		} else {
+			kWarning() << "Action" << name << "not found";
+		}
+	}
+
+
+	void setActionsDisabledOnStartPageEnabled(bool enabled) {
+		mBrowseAction->setEnabled(enabled);
+		mViewAction->setEnabled(enabled);
+		mGoUpAction->setEnabled(enabled);
+		mToggleSideBarAction->setEnabled(enabled);
+		mFullScreenAction->setEnabled(enabled);
+		mToggleSlideShowAction->setEnabled(enabled);
+
+		setActionEnabled("reload", enabled);
+		setActionEnabled("go_start_page", enabled);
+		setActionEnabled("add_folder_to_places", enabled);
+	}
+
+
 	void updateActions() {
-		bool canSave = mWindow->currentDocumentIsRasterImage();
+		const bool isRasterImage = mWindow->currentDocumentIsRasterImage();
+		bool canSave = isRasterImage;
 		if (!mDocumentPanel->isVisible()) {
 			// Saving only makes sense if exactly one image is selected
 			QItemSelection selection = mThumbnailView->selectionModel()->selection();
@@ -491,6 +516,7 @@ struct MainWindow::Private {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 		actionCollection->action("file_save")->setEnabled(canSave);
 		actionCollection->action("file_save_as")->setEnabled(canSave);
+		actionCollection->action("file_print")->setEnabled(isRasterImage);
 	}
 
 	KUrl currentUrl() const {
@@ -798,10 +824,7 @@ void MainWindow::goUp() {
 
 
 void MainWindow::showStartPage() {
-	d->mBrowseAction->setEnabled(false);
-	d->mViewAction->setEnabled(false);
-	d->mFullScreenAction->setEnabled(false);
-	d->mToggleSideBarAction->setEnabled(false);
+	d->setActionsDisabledOnStartPageEnabled(false);
 
 	d->mSideBarContainer->hide();
 	d->updateToggleSideBarAction();
@@ -812,10 +835,7 @@ void MainWindow::showStartPage() {
 
 
 void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
-	d->mBrowseAction->setEnabled(true);
-	d->mViewAction->setEnabled(true);
-	d->mFullScreenAction->setEnabled(true);
-	d->mToggleSideBarAction->setEnabled(true);
+	d->setActionsDisabledOnStartPageEnabled(true);
 	openDirUrl(url);
 
 	if (d->mBrowseAction->isChecked()) {
