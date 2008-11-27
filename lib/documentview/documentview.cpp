@@ -188,8 +188,8 @@ struct DocumentViewPrivate {
 	}
 
 
-	void disableZoomToFit() {
-		// We can't disable zoom to fit by calling
+	void uncheckZoomToFit() {
+		// We can't uncheck zoom to fit by calling
 		// mZoomToFitAction->setChecked(false) directly because it would trigger
 		// the action slot, which would set zoom to 100%.
 		// If zoomToFit is on and the image is at 33%, pressing zoom in should
@@ -204,7 +204,7 @@ struct DocumentViewPrivate {
 
 
 	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
-		disableZoomToFit();
+		uncheckZoomToFit();
 		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
 	}
@@ -363,7 +363,7 @@ void DocumentView::setZoomToFit(bool on) {
 
 
 void DocumentView::zoomActualSize() {
-	d->disableZoomToFit();
+	d->uncheckZoomToFit();
 	d->mAdapter->setZoom(1.);
 }
 
@@ -402,7 +402,7 @@ void DocumentView::slotZoomChanged(qreal zoom) {
 
 
 void DocumentView::slotZoomWidgetChanged(qreal zoom) {
-	d->disableZoomToFit();
+	d->uncheckZoomToFit();
 	d->setZoom(zoom);
 }
 
