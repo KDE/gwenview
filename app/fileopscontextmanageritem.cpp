@@ -124,7 +124,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 		SLOT(populateOpenMenu()) );
 	connect(menu, SIGNAL(triggered(QAction*)),
 		SLOT(openWith(QAction*)) );
-        updateActions();
+	updateActions();
 }
 
 
