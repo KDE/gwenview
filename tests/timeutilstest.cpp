@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "timeutilstest.moc"
 
+// libc
+#include <utime.h>
+
 // KDE
 #include <kfileitem.h>
 #include <qtest_kde.h>
@@ -34,9 +37,7 @@ QTEST_KDEMAIN( TimeUtilsTest, GUI )
 using namespace Gwenview;
 
 static void touchFile(const QString& path) {
-	QFile file(path);
-	file.open(QIODevice::Append);
-	file.putChar(0);
+	utime(QFile::encodeName(path).data(), 0);
 }
 
 void TimeUtilsTest::testPng() {
