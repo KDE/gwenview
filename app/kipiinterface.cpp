@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "kipiimagecollectionselector.h"
 #include "kipiuploadwidget.h"
 #include <lib/jpegcontent.h>
+#include <lib/mimetypeutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
@@ -224,11 +225,15 @@ void KIPIInterface::init() {
 
 KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	LOG("");
-	KUrl url = d->mMainWindow->contextManager()->currentDirUrl();
+	const ContextManager* contextManager = d->mMainWindow->contextManager();
+	const KUrl url = contextManager->currentDirUrl();
 
-	KFileItemList fileList =
-				d->mMainWindow->contextManager()->dirModel()->dirLister()->itemsForDir(url);
-	KUrl::List list = fileList.urlList();
+	KUrl::List list;
+	Q_FOREACH(const KFileItem& item, contextManager->dirModel()->dirLister()->itemsForDir(url)) {
+		if (MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE) {
+			list << item.targetUrl();
+		}
+	}
 
 	return KIPI::ImageCollection(new ImageCollection(url, url.fileName(), list));
 }
