@@ -75,6 +75,10 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event) {
 	case GroupLeft:
 		panelRect.setWidth(panelRect.width() * 2);
 		break;
+	case GroupCenter:
+		panelRect.setLeft(panelRect.left() - panelRect.width());
+		panelRect.setWidth(panelRect.width() * 3);
+		break;
 	case GroupRight:
 		panelRect.setLeft(panelRect.left() - panelRect.width());
 		break;
