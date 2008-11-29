@@ -33,6 +33,7 @@ set(gwenviewlib_SRCS
 	cropsidebar.cpp
 	cropimageoperation.cpp
 	croptool.cpp
+	datewidget.cpp
 	expandbutton.cpp
 	exiv2imageloader.cpp
 	flowlayout.cpp

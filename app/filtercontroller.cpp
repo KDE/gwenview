@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kcombobox.h>
-#include <kdatewidget.h>
 #include <kdebug.h>
 #include <kfileitem.h>
 #include <kicon.h>
@@ -41,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 
 // Local
+#include <lib/datewidget.h>
 #include <lib/flowlayout.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/timeutils.h>
@@ -201,7 +201,7 @@ private:
 struct DateFilterWidgetPrivate {
 	QPointer<DateFilter> mFilter;
 	KComboBox* mModeComboBox;
-	KDateWidget* mDateWidget;
+	DateWidget* mDateWidget;
 };
 
 DateFilterWidget::DateFilterWidget(SortedDirModel* model)
@@ -214,14 +214,14 @@ DateFilterWidget::DateFilterWidget(SortedDirModel* model)
 	d->mModeComboBox->addItem(i18n("Date ="),  DateFilter::Equal);
 	d->mModeComboBox->addItem(i18n("Date <="), DateFilter::LessOrEqual);
 
-	d->mDateWidget = new KDateWidget;
+	d->mDateWidget = new DateWidget;
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
 	layout->addWidget(d->mModeComboBox);
 	layout->addWidget(d->mDateWidget);
 
-	connect(d->mDateWidget, SIGNAL(changed(const QDate&)),
+	connect(d->mDateWidget, SIGNAL(dateChanged(const QDate&)),
 		SLOT(applyDateFilter()));
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
 		SLOT(applyDateFilter()));
