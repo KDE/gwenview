@@ -180,8 +180,8 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	addIfEnabled(d->mGroup, d->mLinkToAction);
 	addIfEnabled(d->mGroup, d->mTrashAction);
 	addIfEnabled(d->mGroup, d->mDelAction);
-	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
 	addIfEnabled(d->mGroup, d->mOpenWithAction);
+	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
 }
 
 
