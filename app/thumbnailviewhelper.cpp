@@ -112,10 +112,11 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	d->addActionToMenu(popup, "file_trash");
 	d->addActionToMenu(popup, "file_delete");
 	popup.addSeparator();
+	d->addActionToMenu(popup, "file_open_with");
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->addActionToMenu(popup, "edit_tags");
-	popup.addSeparator();
 #endif
+	popup.addSeparator();
 	d->addActionToMenu(popup, "file_show_properties");
 	popup.exec(QCursor::pos());
 }
