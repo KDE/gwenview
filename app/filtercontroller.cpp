@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAction>
+#include <QCompleter>
 #include <QDate>
 #include <QLineEdit>
 #include <QTimer>
@@ -380,7 +381,7 @@ private:
 
 struct TagFilterWidgetPrivate {
 	KComboBox* mModeComboBox;
-	KComboBox* mTagComboBox;
+	QComboBox* mTagComboBox;
 	QPointer<TagFilter> mFilter;
 };
 
@@ -392,7 +393,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 	d->mModeComboBox->addItem(i18n("Tagged"), QVariant(true));
 	d->mModeComboBox->addItem(i18n("Not Tagged"), QVariant(false));
 
-	d->mTagComboBox = new KComboBox;
+	d->mTagComboBox = new QComboBox;
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
@@ -402,8 +403,15 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 	AbstractSemanticInfoBackEnd* backEnd = model->semanticInfoBackEnd();
 	backEnd->refreshAllTags();
 	TagModel* tagModel = TagModel::createAllTagsModel(this, backEnd);
+
+	QCompleter* completer = new QCompleter(d->mTagComboBox);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	completer->setModel(tagModel);
+	d->mTagComboBox->setCompleter(completer);
+	d->mTagComboBox->setEditable(true);
 	d->mTagComboBox->setModel(tagModel);
 	d->mTagComboBox->setCurrentIndex(-1);
+
 	connect(d->mTagComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
 
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );

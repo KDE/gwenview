@@ -22,15 +22,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tagwidget.moc"
 
 // Qt
+#include <QComboBox>
 #include <QCompleter>
 #include <QKeyEvent>
+#include <QLineEdit>
 #include <QListView>
 #include <QSortFilterProxyModel>
 #include <QVBoxLayout>
 
 // KDE
 #include <kdebug.h>
-#include <klineedit.h>
 
 // Local
 #include <lib/semanticinfo/tagitemdelegate.h>
@@ -111,7 +112,7 @@ struct TagWidgetPrivate {
 	TagWidget* that;
 	TagInfo mTagInfo;
 	QListView* mListView;
-	KLineEdit* mLineEdit;
+	QComboBox* mComboBox;
 	AbstractSemanticInfoBackEnd* mBackEnd;
 	TagCompleterModel* mTagCompleterModel;
 	TagModel* mAssignedTagModel;
@@ -127,20 +128,23 @@ struct TagWidgetPrivate {
 		mListView->setItemDelegate(delegate);
 		mListView->setModel(mAssignedTagModel);
 
-		mLineEdit = new KLineEdit;
+		mComboBox = new QComboBox;
+		mComboBox->setEditable(true);
 
 		mTagCompleterModel = new TagCompleterModel(that);
 		QCompleter* completer = new QCompleter(that);
 		completer->setCaseSensitivity(Qt::CaseInsensitive);
 		completer->setModel(mTagCompleterModel);
-		mLineEdit->setCompleter(completer);
+		mComboBox->setCompleter(completer);
+
+		mComboBox->setModel(mTagCompleterModel);
 
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
 		layout->addWidget(mListView);
-		layout->addWidget(mLineEdit);
+		layout->addWidget(mComboBox);
 
-		that->setTabOrder(mLineEdit, mListView);
+		that->setTabOrder(mComboBox, mListView);
 	}
 
 
@@ -175,7 +179,7 @@ TagWidget::TagWidget(QWidget* parent)
 	d->setupWidgets();
 	installEventFilter(new ReturnKeyEater(this));
 
-	connect(d->mLineEdit, SIGNAL(returnPressed()),
+	connect(d->mComboBox->lineEdit(), SIGNAL(returnPressed()),
 		SLOT(slotReturnPressed()) );
 }
 
@@ -201,11 +205,11 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 
 void TagWidget::slotReturnPressed() {
 	Q_ASSERT(d->mBackEnd);
-	QString label = d->mLineEdit->text();
+	QString label = d->mComboBox->currentText();
 	if (label.isEmpty()) {
 		return;
 	}
-	d->mLineEdit->clear();
+	d->mComboBox->clearEditText();
 	assignTag(d->mBackEnd->tagForLabel(label.trimmed()));
 }
 
