@@ -57,6 +57,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
 	SemanticInfoDialog(QWidget* parent)
 	: QDialog(parent) {
 		setupUi(this);
+		layout()->setMargin(KDialog::marginHint());
 	}
 };
 
