@@ -356,6 +356,9 @@ public:
 	}
 
 	virtual bool acceptsIndex(const QModelIndex& index) const {
+		if (mTag.isEmpty()) {
+			return true;
+		}
 		SemanticInfo info = model()->semanticInfoForSourceIndex(index);
 		if (mWantMatchingTag) {
 			return info.mTags.contains(mTag);
