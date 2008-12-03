@@ -62,6 +62,7 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog {
 		setMainWidget(mainWidget);
 		setupUi(mainWidget);
 		mainWidget->layout()->setMargin(0);
+		setWindowTitle(mainWidget->windowTitle());
 
 		restoreDialogSize(configGroup());
 	}
