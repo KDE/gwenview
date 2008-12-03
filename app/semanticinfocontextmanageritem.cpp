@@ -395,6 +395,8 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog() {
 			d->mActionCollection->action("go_previous"), SLOT(trigger()) );
 		connect(d->mSemanticInfoDialog->mNextButton, SIGNAL(clicked()),
 			d->mActionCollection->action("go_next"), SLOT(trigger()) );
+		connect(d->mSemanticInfoDialog->mButtonBox, SIGNAL(rejected()),
+			d->mSemanticInfoDialog, SLOT(close()));
 
 		AbstractSemanticInfoBackEnd* backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
 		d->mSemanticInfoDialog->mTagWidget->setSemanticInfoBackEnd(backEnd);

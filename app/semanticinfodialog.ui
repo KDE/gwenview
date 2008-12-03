@@ -40,7 +40,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KDialogButtonBox" name="kdialogbuttonbox" >
+      <widget class="KDialogButtonBox" name="mButtonBox" >
        <property name="standardButtons" >
         <set>QDialogButtonBox::Close</set>
        </property>
@@ -64,22 +64,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>kdialogbuttonbox</sender>
-   <signal>rejected()</signal>
-   <receiver>SemanticInfoDialog</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>299</x>
-     <y>331</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>317</x>
-     <y>336</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
