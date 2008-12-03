@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 // Nepomuk
@@ -53,11 +54,14 @@ namespace Gwenview {
 static const int RATING_INDICATOR_HIDE_DELAY = 3000;
 
 
-struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
+struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog {
 	SemanticInfoDialog(QWidget* parent)
-	: QDialog(parent) {
-		setupUi(this);
-		layout()->setMargin(KDialog::marginHint());
+	: KDialog(parent) {
+		setButtons(None);
+		QWidget* mainWidget = new QWidget;
+		setMainWidget(mainWidget);
+		setupUi(mainWidget);
+		mainWidget->layout()->setMargin(0);
 	}
 };
 
