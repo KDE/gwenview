@@ -62,6 +62,18 @@ struct SemanticInfoDialog : public KDialog, public Ui_SemanticInfoDialog {
 		setMainWidget(mainWidget);
 		setupUi(mainWidget);
 		mainWidget->layout()->setMargin(0);
+
+		restoreDialogSize(configGroup());
+	}
+
+	~SemanticInfoDialog() {
+		KConfigGroup group = configGroup();
+		saveDialogSize(group);
+	}
+
+	KConfigGroup configGroup() const {
+		KSharedConfigPtr config = KGlobal::config();
+		return KConfigGroup(config, "SemanticInfoDialog");
 	}
 };
 
