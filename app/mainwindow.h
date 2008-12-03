@@ -85,7 +85,7 @@ private Q_SLOTS:
 	void goToUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar();
-	void updateModifiedFlag();
+	void slotModifiedDocumentListChanged();
 
 	/**
 	 * Init all the file list stuff. This should only be necessary when

@@ -510,10 +510,13 @@ struct MainWindow::Private {
 	void updateActions() {
 		bool isRasterImage = false;
 		bool canSave = false;
+		bool isModified = false;
+		const KUrl url = currentUrl();
 
-		if (currentUrl().isValid()) {
+		if (url.isValid()) {
 			isRasterImage = mWindow->currentDocumentIsRasterImage();
 			canSave = isRasterImage;
+			isModified = DocumentFactory::instance()->load(url)->isModified();
 			if (!mDocumentPanel->isVisible()) {
 				// Saving only makes sense if exactly one image is selected
 				QItemSelection selection = mThumbnailView->selectionModel()->selection();
@@ -525,7 +528,7 @@ struct MainWindow::Private {
 		}
 
 		KActionCollection* actionCollection = mWindow->actionCollection();
-		actionCollection->action("file_save")->setEnabled(canSave);
+		actionCollection->action("file_save")->setEnabled(canSave && isModified);
 		actionCollection->action("file_save_as")->setEnabled(canSave);
 		actionCollection->action("file_print")->setEnabled(isRasterImage);
 	}
@@ -655,7 +658,7 @@ d(new MainWindow::Private)
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
-		SLOT(updateModifiedFlag()) );
+		SLOT(slotModifiedDocumentListChanged()) );
 
 #ifdef KIPI_FOUND
 	d->mKIPIInterface = new KIPIInterface(this);
@@ -715,7 +718,7 @@ void MainWindow::showTemporarySideBar(QWidget* sideBar) {
 
 
 void MainWindow::setCaption(const QString& caption) {
-	// Keep a trace of caption to use it in updateModifiedFlag()
+	// Keep a trace of caption to use it in slotModifiedDocumentListChanged()
 	d->mCaption = caption;
 	KXmlGuiWindow::setCaption(caption);
 }
@@ -726,7 +729,10 @@ void MainWindow::setCaption(const QString& caption, bool modified) {
 }
 
 
-void MainWindow::updateModifiedFlag() {
+void MainWindow::slotModifiedDocumentListChanged() {
+	d->updateActions();
+
+	// Update caption
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	bool modified = list.count() > 0;
 	setCaption(d->mCaption, modified);
