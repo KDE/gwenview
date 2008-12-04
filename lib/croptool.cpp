@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "croptool.h"
 
 // Qt
+#include <QFlags>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
@@ -39,7 +40,7 @@ static const int UNINITIALIZED_X = -1;
 namespace Gwenview {
 
 
-enum CropHandle {
+enum CropHandleFlag {
 	CH_None,
 	CH_Top = 1,
 	CH_Left = 2,
@@ -51,6 +52,10 @@ enum CropHandle {
 	CH_BottomRight = CH_Bottom | CH_Right,
 	CH_Content = 16
 };
+
+
+Q_DECLARE_FLAGS(CropHandle, CropHandleFlag);
+Q_DECLARE_OPERATORS_FOR_FLAGS(CropHandle);
 
 
 struct CropToolPrivate {
