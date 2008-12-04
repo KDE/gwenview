@@ -250,17 +250,28 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 		return;
 	}
 
+	// Adjust edge
 	if (d->mMovingHandle & CH_Top) {
-		d->mRect.setTop( qMin(posY, d->mRect.bottom()) );
+		d->mRect.setTop(posY);
 	} else if (d->mMovingHandle & CH_Bottom) {
-		d->mRect.setBottom( qMax(posY, d->mRect.top()) );
+		d->mRect.setBottom(posY);
 	}
 	if (d->mMovingHandle & CH_Left) {
-		d->mRect.setLeft( qMin(posX, d->mRect.right()) );
+		d->mRect.setLeft(posX);
 	} else if (d->mMovingHandle & CH_Right) {
-		d->mRect.setRight( qMax(posX, d->mRect.left()) );
+		d->mRect.setRight(posX);
 	}
 
+	// Normalize rect and handles
+	if (d->mRect.height() < 0) {
+		d->mMovingHandle = d->mMovingHandle ^ (CH_Top | CH_Bottom);
+	}
+	if (d->mRect.width() < 0) {
+		d->mMovingHandle = d->mMovingHandle ^ (CH_Left | CH_Right);
+	}
+	d->mRect = d->mRect.normalized();
+
+	// Enforce ratio
 	if (d->mCropRatio > 0.) {
 		if (d->mMovingHandle == CH_Top || d->mMovingHandle == CH_Bottom) {
 			// Top or bottom
