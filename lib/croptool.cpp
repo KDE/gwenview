@@ -54,8 +54,8 @@ enum CropHandleFlag {
 };
 
 
-Q_DECLARE_FLAGS(CropHandle, CropHandleFlag);
-Q_DECLARE_OPERATORS_FOR_FLAGS(CropHandle);
+Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(CropHandle)
 
 
 struct CropToolPrivate {
