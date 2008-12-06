@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 // Local
 
@@ -207,14 +208,15 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 	// CJK languages use more verbose accelerator marker: they add a Latin
 	// letter in parenthesis, and put accelerator on that. Hence, the default
 	// removal of ampersand only may not be enough there, instead the whole
-	// parenthesis construct should be removed. Provide these filtering i18n
-	// messages so that translators can use Transcript for custom removal.
+	// parenthesis construct should be removed. Use KLocale's method to do this.
 	// """
 	if (event->type() == QEvent::Show || event->type() == QEvent::Paint) {
 		QToolButton* button = qobject_cast<QToolButton*>(object);
 		if (button && !button->actions().isEmpty()) {
 			QAction* action = button->actions().first();
-			button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", action->toolTip()));
+			QString toolTip = KGlobal::locale()->removeAcceleratorMarker(action->toolTip());
+			// Filtering message requested by translators (scripting).
+			button->setToolTip(i18nc("@info:tooltip of custom toolbar button", "%1", toolTip));
 		}
 	}
 
