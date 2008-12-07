@@ -497,7 +497,15 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		return;
 	}
 	KFileItemList list;
-	QRect viewportRect = viewport()->rect();
+	QRect visibleRect = viewport()->rect();
+	// Adjust visibleRect so that next invisible rows of thumbnails
+	// get generated too
+	if (isWrapping()) {
+		visibleRect.adjust(0, 0, 0, d->mThumbnailSize * 2);
+	} else {
+		visibleRect.adjust(0, 0, visibleRect.width() / 2, 0);
+	}
+
 	for (int row=0; row < model()->rowCount(); ++row) {
 		QModelIndex index = model()->index(row, 0);
 		KFileItem item = fileItemForIndex(index);
@@ -505,7 +513,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 
 		// Filter out invisible items
 		QRect rect = visualRect(index);
-		if (!viewportRect.intersects(rect)) {
+		if (!visibleRect.intersects(rect)) {
 			continue;
 		}
 
