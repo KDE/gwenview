@@ -1016,15 +1016,15 @@ void MainWindow::goToNext() {
 void MainWindow::goToUrl(const KUrl& url) {
 	if (d->mDocumentPanel->isVisible()) {
 		openDocumentUrl(url);
-		// No need to change thumbnail view, slotPartCompleted will do the work
-		// for us
-	} else {
-		KUrl dirUrl = url;
-		dirUrl.setFileName("");
-		openDirUrl(dirUrl);
-		d->mUrlToSelect = url;
-		d->selectUrlToSelect();
 	}
+	KUrl dirUrl = url;
+	dirUrl.setFileName("");
+	if (!dirUrl.equals(d->mContextManager->currentDirUrl(), KUrl::CompareWithoutTrailingSlash)) {
+		d->mDirModel->dirLister()->openUrl(dirUrl);
+		d->spreadCurrentDirUrl(dirUrl);
+	}
+	d->mUrlToSelect = url;
+	d->selectUrlToSelect();
 }
 
 
