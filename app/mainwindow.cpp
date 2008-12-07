@@ -868,7 +868,7 @@ void MainWindow::slotStartPageUrlSelected(const KUrl& url) {
 
 
 void MainWindow::openDirUrl(const KUrl& url) {
-	const KUrl currentUrl = d->mContextManager->currentDirUrl();//d->mDirModel->dirLister()->url();
+	const KUrl currentUrl = d->mContextManager->currentDirUrl();
 
 	if (url.equals(currentUrl, KUrl::CompareWithoutTrailingSlash)) {
 		return;
