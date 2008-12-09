@@ -136,6 +136,27 @@ struct CropToolPrivate {
 		}
 		mCropTool->imageView()->viewport()->setCursor(shape);
 	}
+
+	void keepRectInsideImage() {
+		const QSize imageSize = mCropTool->imageView()->document()->size();
+		if (mRect.width() > imageSize.width() || mRect.height() > imageSize.height()) {
+			// This can happen when the crop ratio changes
+			QSize rectSize = mRect.size();
+			rectSize.scale(imageSize, Qt::KeepAspectRatio);
+			mRect.setSize(rectSize);
+		}
+
+		if (mRect.right() >= imageSize.width()) {
+			mRect.moveRight(imageSize.width() - 1);
+		} else if (mRect.left() < 0) {
+			mRect.moveLeft(0);
+		}
+		if (mRect.bottom() >= imageSize.height()) {
+			mRect.moveBottom(imageSize.height() - 1);
+		} else if (mRect.top() < 0) {
+			mRect.moveTop(0);
+		}
+	}
 };
 
 
@@ -162,6 +183,10 @@ void CropTool::setCropRatio(double ratio) {
 
 void CropTool::setRect(const QRect& rect) {
 	d->mRect = rect;
+	d->keepRectInsideImage();
+	if (d->mRect != rect) {
+		rectUpdated(d->mRect);
+	}
 	imageView()->viewport()->update();
 }
 
@@ -220,8 +245,11 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 		return;
 	}
 
+	const QSize imageSize = imageView()->document()->size();
+
 	QPoint point = imageView()->mapToImage(event->pos());
-	int posX = point.x(), posY = point.y();
+	int posX = qBound(0, point.x(), imageSize.width() - 1);
+	int posY = qBound(0, point.y(), imageSize.height() - 1);
 
 	if (d->mRect.x() != UNINITIALIZED_X && d->mRect.size() == QSize(0, 0)) {
 		// User is creating rect, thus d->mMovingHandle has not been set yet,
@@ -298,6 +326,8 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
 		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
+
+	d->keepRectInsideImage();
 
 	imageView()->viewport()->update();
 	rectUpdated(d->mRect);

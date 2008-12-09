@@ -187,6 +187,10 @@ void CropSideBar::setCropRect(const QRect& rect) {
 
 
 void CropSideBar::slotPositionChanged() {
+	const QSize size = d->mDocument->size();
+	d->widthSpinBox->setMaximum(size.width() - d->leftSpinBox->value());
+	d->heightSpinBox->setMaximum(size.height() - d->topSpinBox->value());
+
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
@@ -195,6 +199,8 @@ void CropSideBar::slotPositionChanged() {
 
 
 void CropSideBar::slotWidthChanged() {
+	d->leftSpinBox->setMaximum(d->mDocument->width() - d->widthSpinBox->value());
+
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
@@ -207,6 +213,8 @@ void CropSideBar::slotWidthChanged() {
 
 
 void CropSideBar::slotHeightChanged() {
+	d->topSpinBox->setMaximum(d->mDocument->height() - d->heightSpinBox->value());
+
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
@@ -234,7 +242,9 @@ void CropSideBar::applyRatioConstraint() {
 	double ratio = d->cropRatio();
 	d->mCropTool->setCropRatio(ratio);
 
-	d->heightSpinBox->setValue(int(d->widthSpinBox->value() * ratio));
+	QRect rect = cropRect();
+	rect.setHeight(int(rect.width() * d->cropRatio()));
+	d->mCropTool->setRect(rect);
 }
 
 
