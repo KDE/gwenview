@@ -262,7 +262,8 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 		d->mRect.setRight(posX);
 	}
 
-	// Normalize rect and handles
+	// Normalize rect and handles (this is useful when user drag the right side
+	// of the crop rect to the left of the left side)
 	if (d->mRect.height() < 0) {
 		d->mMovingHandle = d->mMovingHandle ^ (CH_Top | CH_Bottom);
 	}
