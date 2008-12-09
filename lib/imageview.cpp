@@ -250,8 +250,9 @@ void ImageView::setDocument(Document::Ptr document) {
 	connect(d->mDocument.data(), SIGNAL(isAnimatedUpdated()),
 		SLOT(slotDocumentIsAnimatedUpdated()) );
 
-	if (d->mDocument->size().isValid()) {
-		finishSetDocument();
+	const Document::LoadingState state = d->mDocument->loadingState();
+	if (state == Document::MetaInfoLoaded || state == Document::Loaded) {
+		slotDocumentMetaInfoLoaded();
 	}
 }
 
