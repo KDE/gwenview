@@ -92,7 +92,7 @@ struct LoadingDocumentImplPrivate {
 
 	void startLoading() {
 		Q_ASSERT(!mMetaInfoLoaded);
-		QString mimeType = KMimeType::findByContent(mData)->name();
+		QString mimeType = KMimeType::findByNameAndContent(mImpl->document()->url().fileName(), mData)->name();
 		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
 		LOG("mimeType:" << mimeType);
 		LOG("kind:" << kind);
