@@ -48,14 +48,14 @@
       <item>
        <widget class="QLabel" name="mIconLabel" >
         <property name="text" >
-         <string>TextLabel</string>
+         <string comment="KDE::DoNotExtract" >TextLabel</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="mTextLabel" >
         <property name="text" >
-         <string>TextLabel</string>
+         <string comment="KDE::DoNotExtract" >TextLabel</string>
         </property>
        </widget>
       </item>
