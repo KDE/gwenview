@@ -155,6 +155,7 @@ struct LoadingDocumentImplPrivate {
 		} else {
 			mImageSize = reader.size();
 		}
+		LOG("mImageSize" << mImageSize);
 
 		return true;
 	}
@@ -309,6 +310,7 @@ Document::LoadingState LoadingDocumentImpl::loadingState() const {
 
 
 void LoadingDocumentImpl::slotMetaInfoLoaded() {
+	LOG("");
 	Q_ASSERT(!d->mMetaInfoFuture.isRunning());
 	if (!d->mMetaInfoFuture.result()) {
 		setDocumentErrorString(
