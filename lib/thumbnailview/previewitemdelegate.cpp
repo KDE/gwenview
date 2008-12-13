@@ -228,6 +228,15 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
+	void showContextBar(const QRect& rect, const QPixmap& thumbnailPix) {
+		mContextBar->adjustSize();
+		const int posX = (rect.width() - mContextBar->width()) / 2;
+		const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize - thumbnailPix.height() - mContextBar->height());
+		mContextBar->move(rect.topLeft() + QPoint(posX, posY));
+		mContextBar->show();
+	}
+
+
 	void initTipLabel() {
 		mTipLabel = new QLabel(mView);
 		mTipLabel->setAutoFillBackground(true);
@@ -254,14 +263,9 @@ struct PreviewItemDelegatePrivate {
 			updateToggleSelectionButton();
 			updateImageButtons();
 
-			mContextBar->adjustSize();
-			QRect rect = mView->visualRect(mIndexUnderCursor);
-			int posX = rect.x() + (rect.width() - mContextBar->width()) / 2;
-			int posY = rect.y() + CONTEXTBAR_MARGIN;
-			mContextBar->move(posX, posY);
-
-			mContextBar->show();
-
+			const QRect rect = mView->visualRect(mIndexUnderCursor);
+			const QPixmap thumbnailPix = mView->thumbnailForIndex(index);
+			showContextBar(rect, thumbnailPix);
 			if (mView->isModified(mIndexUnderCursor)) {
 				showSaveButton(rect);
 			} else {
@@ -696,6 +700,14 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	}
 
 	if (index == d->mIndexUnderCursor) {
+		// Show bar again: if the thumbnail has changed, we may need to update
+		// its position. Don't do it if we are over rotate buttons, though: it
+		// would not be nice to move the button now, the user may want to
+		// rotate the image one more time.
+		// The button will get moved when the mouse leaves.
+		if (!d->mRotateLeftButton->underMouse() && !d->mRotateRightButton->underMouse()) {
+			d->showContextBar(rect, thumbnailPix);
+		}
 		if (isModified) {
 			// If we just rotated the image with the buttons from the
 			// button frame, we need to show the save button frame right now.
