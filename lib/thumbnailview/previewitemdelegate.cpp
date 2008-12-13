@@ -51,6 +51,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "../semanticinfo/semanticinfodirmodel.h"
 #endif
 
+// Define this to be able to fine tune the rendering of the selection
+// background through a config file
+//#define FINETUNE_SELECTION_BACKGROUND
+#ifdef FINETUNE_SELECTION_BACKGROUND
+#include <QDir>
+#include <QSettings>
+#endif
+
 namespace Gwenview {
 
 /**
@@ -63,13 +71,13 @@ const int ITEM_MARGIN = 5;
 const int SELECTION_BORDER_DARKNESS = 140;
 
 /** Radius of the selection rounded corners, in pixels */
-const int SELECTION_RADIUS = 10;
+const int SELECTION_RADIUS = 5;
 
 /** Border around gadget icons */
-const int GADGET_MARGIN = 2;
+const int GADGET_MARGIN = 1;
 
 /** Radius of the gadget frame, in pixels */
-const int GADGET_RADIUS = 6;
+const int GADGET_RADIUS = 12;
 
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
@@ -300,13 +308,43 @@ struct PreviewItemDelegatePrivate {
 
 
 	void drawBackground(QPainter* painter, const QRect& rect, const QColor& bgColor, const QColor& borderColor) const {
+		int bgH, bgS, bgV;
+		int borderH, borderS, borderV, borderMargin;
+	#ifdef FINETUNE_SELECTION_BACKGROUND
+		QSettings settings(QDir::homePath() + "/colors.ini", QSettings::IniFormat);
+		bgH = settings.value("bg/h").toInt();
+		bgS = settings.value("bg/s").toInt();
+		bgV = settings.value("bg/v").toInt();
+		borderH = settings.value("border/h").toInt();
+		borderS = settings.value("border/s").toInt();
+		borderV = settings.value("border/v").toInt();
+		borderMargin = settings.value("border/margin").toInt();
+	#else
+		bgH = 0;
+		bgS = -20;
+		bgV = 43;
+		borderH = 0;
+		borderS = -100;
+		borderV = 60;
+		borderMargin = 1;
+	#endif
 		painter->setRenderHint(QPainter::Antialiasing);
 
 		QRectF rectF = QRectF(rect).adjusted(0.5, 0.5, -0.5, -0.5);
 
 		QPainterPath path = PaintUtils::roundedRectangle(rectF, SELECTION_RADIUS);
-		painter->fillPath(path, bgColor);
+
+		QLinearGradient gradient(rectF.topLeft(), rectF.bottomLeft());
+		gradient.setColorAt(0, PaintUtils::adjustedHsv(bgColor, bgH, bgS, bgV));
+		gradient.setColorAt(1, bgColor);
+		painter->fillPath(path, gradient);
+
 		painter->setPen(borderColor);
+		painter->drawPath(path);
+
+		painter->setPen(PaintUtils::adjustedHsv(borderColor, borderH, borderS, borderV));
+		rectF = rectF.adjusted(borderMargin, borderMargin, -borderMargin, -borderMargin);
+		path = PaintUtils::roundedRectangle(rectF, SELECTION_RADIUS);
 		painter->drawPath(path);
 	}
 
@@ -636,18 +674,20 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		}
 	}
 
+	// Compute thumbnailRect
+	QRect thumbnailRect = QRect(
+		rect.left() + (rect.width() - thumbnailPix.width())/2,
+		rect.top() + (thumbnailSize - thumbnailPix.height()) + ITEM_MARGIN,
+		thumbnailPix.width(),
+		thumbnailPix.height());
+
 	// Draw background
 	if (option.state & QStyle::State_Selected) {
-		d->drawBackground(painter, rect, bgColor, borderColor);
+		d->drawBackground(painter, thumbnailRect.adjusted(-SELECTION_RADIUS, -SELECTION_RADIUS, SELECTION_RADIUS, SELECTION_RADIUS), bgColor, borderColor);
 	}
 
 	// Draw thumbnail
 	if (!thumbnailPix.isNull()) {
-		QRect thumbnailRect = QRect(
-			rect.left() + (rect.width() - thumbnailPix.width())/2,
-			rect.top() + (thumbnailSize - thumbnailPix.height())/2 + ITEM_MARGIN,
-			thumbnailPix.width(),
-			thumbnailPix.height());
 
 		if (!(option.state & QStyle::State_Selected) && opaque) {
 			d->drawShadow(painter, thumbnailRect);
