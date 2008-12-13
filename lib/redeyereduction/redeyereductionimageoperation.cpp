@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include "ramp.h"
 #include "document/document.h"
 #include "document/abstractdocumenteditor.h"
 #include "paintutils.h"
@@ -86,42 +87,6 @@ void RedEyeReductionImageOperation::undo() {
 	}
 	document()->editor()->setImage(img);
 }
-
-
-/**
- * This helper class maps values on a linear ramp.
- * It's useful to do mappings like this:
- *
- * x | -oo       x1               x2     +oo
- * --+--------------------------------------
- * y |  y1       y1 (linear ramp) y2      y2
- *
- * Note that y1 can be greater than y2 if necessary
- */
-class Ramp {
-public:
-	Ramp(qreal x1, qreal x2, qreal y1, qreal y2)
-	: mX1(x1)
-	, mX2(x2)
-	, mY1(y1)
-	, mY2(y2)
-	{
-		mK = (y2 - y1) / (x2 - x1);
-	}
-
-	qreal operator()(qreal x) const {
-		if (x < mX1) {
-			return mY1;
-		}
-		if (x > mX2) {
-			return mY2;
-		}
-		return mY1 + (x - mX1) * mK;
-	}
-
-private:
-	qreal mX1, mX2, mY1, mY2, mK;
-};
 
 
 /**
