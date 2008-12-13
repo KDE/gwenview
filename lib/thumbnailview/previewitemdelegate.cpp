@@ -81,10 +81,13 @@ const int CONTEXTBAR_MARGIN = 1;
 const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
 
 /** How darker is the background of context bar buttons */
-const int CONTEXTBAR_BACKGROUND_DARKNESS = 140;
+const int CONTEXTBAR_BACKGROUND_DARKNESS = 170;
 
-/** How are context bar buttons when under mouse*/
+/** How lighter are context bar buttons when under mouse */
 const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 115;
+
+/** Radius of ContextBarButtons */
+const int CONTEXTBAR_RADIUS = 5;
 
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
@@ -135,7 +138,7 @@ protected:
 		}
 
 		const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
-		const QPainterPath path = PaintUtils::roundedRectangle(rectF, 3);
+		const QPainterPath path = PaintUtils::roundedRectangle(rectF, CONTEXTBAR_RADIUS);
 
 		// Background
 		painter.fillPath(path, color);
