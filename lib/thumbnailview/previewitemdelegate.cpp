@@ -74,14 +74,17 @@ const int SELECTION_BORDER_DARKNESS = 140;
 /** Radius of the selection rounded corners, in pixels */
 const int SELECTION_RADIUS = 5;
 
-/** Border around gadget icons */
-const int GADGET_MARGIN = 1;
+/** Space between the item outer rect and the context bar */
+const int CONTEXTBAR_MARGIN = 1;
 
-/** Radius of the gadget frame, in pixels */
-const int GADGET_RADIUS = 12;
+/** How lighter is the border of context bar buttons */
+const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
 
-/** How lighter is the border line around gadgets */
-const int GADGET_BORDER_LIGHTNESS = 140;
+/** How darker is the background of context bar buttons */
+const int CONTEXTBAR_BACKGROUND_DARKNESS = 140;
+
+/** How are context bar buttons when under mouse*/
+const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 115;
 
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
@@ -117,12 +120,12 @@ protected:
 
 		const QWidget* viewport = parentWidget()->parentWidget();
 		const QColor bgColor = viewport->palette().color(viewport->backgroundRole());
-		QColor color = bgColor.dark(GADGET_BORDER_LIGHTNESS);
-		QColor borderColor = bgColor.light(GADGET_BORDER_LIGHTNESS);
+		QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
+		QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
 
-		if (opt.state & QStyle::State_MouseOver) {
-			color = color.light(110);
-			borderColor = borderColor.light(110);
+		if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
+			color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+			borderColor = borderColor.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
 		}
 
 		const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
@@ -175,7 +178,7 @@ public:
 protected:
 	virtual void paintEvent(QPaintEvent* /*event*/) {
 		QColor color = palette().color(backgroundRole());
-		QColor borderColor = color.light(GADGET_BORDER_LIGHTNESS);
+		QColor borderColor = color.light(CONTEXTBAR_BORDER_LIGHTNESS);
 		QRectF rectF = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
 		QPainterPath path = PaintUtils::roundedRectangle(rectF, height() / 2);
 
@@ -276,14 +279,13 @@ struct PreviewItemDelegatePrivate {
 		mView->update(oldIndex);
 
 		if (mIndexUnderCursor.isValid()) {
-			that->updateButtonFrameOpacity();
 			updateToggleSelectionButton();
 			updateImageButtons();
 
 			mContextBar->adjustSize();
 			QRect rect = mView->visualRect(mIndexUnderCursor);
 			int posX = rect.x() + (rect.width() - mContextBar->width()) / 2;
-			int posY = rect.y() + GADGET_MARGIN;
+			int posY = rect.y() + CONTEXTBAR_MARGIN;
 			mContextBar->move(posX, posY);
 
 			mContextBar->show();
@@ -338,8 +340,8 @@ struct PreviewItemDelegatePrivate {
 	QPoint saveButtonFramePosition(const QRect& itemRect) const {
 		QSize frameSize = mSaveButtonFrame->sizeHint();
 		int textHeight = mView->fontMetrics().height();
-		int posX = itemRect.right() - GADGET_MARGIN - frameSize.width();
-		int posY = itemRect.bottom() - GADGET_MARGIN - textHeight - frameSize.height();
+		int posX = itemRect.right() - CONTEXTBAR_MARGIN - frameSize.width();
+		int posY = itemRect.bottom() - CONTEXTBAR_MARGIN - textHeight - frameSize.height();
 
 		return QPoint(posX, posY);
 	}
@@ -570,8 +572,6 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
-	connect(view, SIGNAL(selectionChangedSignal(const QItemSelection&, const QItemSelection&)),
-		SLOT(updateButtonFrameOpacity()) );
 
 	QColor bgColor = d->mView->palette().highlight().color();
 	QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
@@ -788,11 +788,6 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		d->drawRating(painter, rect, index.data(SemanticInfoDirModel::RatingRole));
 #endif
 	}
-}
-
-
-void PreviewItemDelegate::updateButtonFrameOpacity() {
-	//bool isSelected = d->mView->selectionModel()->isSelected(d->mIndexUnderCursor);
 }
 
 

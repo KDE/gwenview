@@ -79,7 +79,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void setThumbnailSize(int);
-	void updateButtonFrameOpacity();
 
 	void slotSaveClicked();
 	void slotRotateLeftClicked();
