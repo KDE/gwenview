@@ -38,10 +38,10 @@ class GWENVIEWLIB_EXPORT StatusBarToolButton : public QToolButton {
 	Q_OBJECT
 public:
 	enum GroupPosition {
-		GroupLeft,
-		GroupCenter,
-		GroupRight,
-		NotGrouped
+		NotGrouped = 0,
+		GroupLeft = 1,
+		GroupRight = 2,
+		GroupCenter = 3
 	};
 
 	StatusBarToolButton(QWidget* parent=0);

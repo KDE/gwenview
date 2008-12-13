@@ -88,19 +88,18 @@ void StatusBarToolButton::paintEvent(QPaintEvent* event) {
 	painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
 
 	// Separator
-	int x;
-	QColor color;
-	if (mGroupPosition == GroupRight) {
-		color = opt.palette.color(QPalette::Light);
-		x = opt.rect.left();
-	} else {
-		color = opt.palette.color(QPalette::Mid);
-		x = opt.rect.right();
+	const int y1 = opt.rect.top() + 6;
+	const int y2 = opt.rect.bottom() - 6;
+	if (mGroupPosition & GroupRight) {
+		const int x = opt.rect.left();
+		painter.setPen(opt.palette.color(QPalette::Light));
+		painter.drawLine(x, y1, x, y2);
 	}
-	painter.setPen(color);
-	int y1 = opt.rect.top() + 6;
-	int y2 = opt.rect.bottom() - 6;
-	painter.drawLine(x, y1, x, y2);
+	if (mGroupPosition & GroupLeft) {
+		const int x = opt.rect.right();
+		painter.setPen(opt.palette.color(QPalette::Mid));
+		painter.drawLine(x, y1, x, y2);
+	}
 
 	// Text
 	painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
