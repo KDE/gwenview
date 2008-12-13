@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
+#include <QStylePainter>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -79,6 +80,9 @@ const int GADGET_MARGIN = 1;
 /** Radius of the gadget frame, in pixels */
 const int GADGET_RADIUS = 12;
 
+/** How lighter is the border line around gadgets */
+const int GADGET_BORDER_LIGHTNESS = 300;
+
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
 
@@ -99,6 +103,33 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 
+class RoundButton : public QToolButton {
+public:
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		QStylePainter painter(this);
+		painter.setRenderHint(QPainter::Antialiasing);
+		QStyleOptionToolButton opt;
+		initStyleOption(&opt);
+		if (opt.state & QStyle::State_MouseOver && parentWidget()) {
+			QColor color = parentWidget()->palette().color(parentWidget()->backgroundRole());
+			QColor borderColor = color.light(GADGET_BORDER_LIGHTNESS);
+
+			const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
+			const QPainterPath path = PaintUtils::roundedRectangle(rectF, height() / 2);
+
+			if (opt.state & QStyle::State_Sunken) {
+				painter.fillPath(path, color);
+			}
+
+			painter.setPen(borderColor);
+			painter.drawPath(path);
+		}
+		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
+	}
+};
+
+
 /**
  * A frame with a rounded semi-opaque background. Since it's not possible (yet)
  * to define non-opaque colors in Qt stylesheets, we do it the old way: by
@@ -109,15 +140,7 @@ class GlossyFrame : public QFrame {
 public:
 	GlossyFrame(QWidget* parent = 0)
 	: QFrame(parent)
-	, mOpaque(false)
 	{}
-
-	void setOpaque(bool value) {
-		if (value != mOpaque) {
-			mOpaque = value;
-			update();
-		}
-	}
 
 	void setBackgroundColor(const QColor& color) {
 		QPalette pal = palette();
@@ -128,23 +151,15 @@ public:
 protected:
 	virtual void paintEvent(QPaintEvent* /*event*/) {
 		QColor color = palette().color(backgroundRole());
-		QColor borderColor;
+		QColor borderColor = color.light(GADGET_BORDER_LIGHTNESS);
 		QRectF rectF = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
-		QPainterPath path = PaintUtils::roundedRectangle(rectF, GADGET_RADIUS);
+		QPainterPath path = PaintUtils::roundedRectangle(rectF, height() / 2);
 
 		QPainter painter(this);
 		painter.setRenderHint(QPainter::Antialiasing);
 
-		if (mOpaque) {
-			painter.fillPath(path, color);
-			borderColor = color;
-		} else {
-			QLinearGradient gradient(rect().topLeft(), rect().bottomLeft());
-			gradient.setColorAt(0, PaintUtils::alphaAdjustedF(color, 0.9));
-			gradient.setColorAt(1, PaintUtils::alphaAdjustedF(color, 0.7));
-			painter.fillPath(path, gradient);
-			borderColor = color.dark(SELECTION_BORDER_DARKNESS);
-		}
+		painter.fillPath(path, PaintUtils::alphaAdjustedF(color, 0.8));
+
 		painter.setPen(borderColor);
 		painter.drawPath(path);
 	}
@@ -156,7 +171,7 @@ private:
 
 static QToolButton* createFrameButton(const char* iconName) {
 	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-	QToolButton* button = new QToolButton;
+	QToolButton* button = new RoundButton;
 	button->setIcon(SmallIcon(iconName));
 	button->setIconSize(QSize(size, size));
 	button->setAutoRaise(true);
@@ -556,8 +571,9 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 
 	// Button frame
 	d->mButtonFrame = new GlossyFrame(d->mView->viewport());
-	d->mButtonFrame->setStyleSheet(styleSheet);
-	d->mButtonFrame->setBackgroundColor(bgColor);
+	//d->mButtonFrame->setStyleSheet(styleSheet);
+	//d->mButtonFrame->setBackgroundColor(bgColor);
+	d->mButtonFrame->setBackgroundColor(QColor(20, 20, 20));
 	d->mButtonFrame->hide();
 
 	d->mToggleSelectionButton = createFrameButton("list-add");
@@ -577,8 +593,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 		SLOT(slotRotateRightClicked()) );
 
 	QHBoxLayout* layout = new QHBoxLayout(d->mButtonFrame);
-	layout->setMargin(0);
-	layout->setSpacing(0);
+	layout->setMargin(2);
+	layout->setSpacing(2);
 	layout->addWidget(d->mToggleSelectionButton);
 	layout->addWidget(d->mFullScreenButton);
 	layout->addWidget(d->mRotateLeftButton);
@@ -745,9 +761,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 
 void PreviewItemDelegate::updateButtonFrameOpacity() {
-	bool isSelected = d->mView->selectionModel()->isSelected(d->mIndexUnderCursor);
-	d->mButtonFrame->setOpaque(isSelected);
-	d->mSaveButtonFrame->setOpaque(isSelected);
+	//bool isSelected = d->mView->selectionModel()->isSelected(d->mIndexUnderCursor);
 }
 
 
