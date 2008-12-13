@@ -146,9 +146,9 @@ private:
 };
 
 
-static QToolButton* createFrameButton(QWidget* parent, const char* iconName) {
+static QToolButton* createFrameButton(const char* iconName) {
 	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-	QToolButton* button = new QToolButton(parent);
+	QToolButton* button = new QToolButton;
 	button->setIcon(SmallIcon(iconName));
 	button->setIconSize(QSize(size, size));
 	button->setAutoRaise(true);
@@ -522,19 +522,19 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mButtonFrame->setBackgroundColor(bgColor);
 	d->mButtonFrame->hide();
 
-	d->mToggleSelectionButton = createFrameButton(d->mButtonFrame, "list-add");
+	d->mToggleSelectionButton = createFrameButton("list-add");
 	connect(d->mToggleSelectionButton, SIGNAL(clicked()),
 		SLOT(slotToggleSelectionClicked()));
 
-	d->mFullScreenButton = createFrameButton(d->mButtonFrame, "view-fullscreen");
+	d->mFullScreenButton = createFrameButton("view-fullscreen");
 	connect(d->mFullScreenButton, SIGNAL(clicked()),
 		SLOT(slotFullScreenClicked()) );
 
-	d->mRotateLeftButton = createFrameButton(d->mButtonFrame, "object-rotate-left");
+	d->mRotateLeftButton = createFrameButton("object-rotate-left");
 	connect(d->mRotateLeftButton, SIGNAL(clicked()),
 		SLOT(slotRotateLeftClicked()) );
 
-	d->mRotateRightButton = createFrameButton(d->mButtonFrame, "object-rotate-right");
+	d->mRotateRightButton = createFrameButton("object-rotate-right");
 	connect(d->mRotateRightButton, SIGNAL(clicked()),
 		SLOT(slotRotateRightClicked()) );
 
@@ -552,7 +552,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mSaveButtonFrame->setBackgroundColor(bgColor);
 	d->mSaveButtonFrame->hide();
 
-	QToolButton* saveButton = createFrameButton(d->mSaveButtonFrame, "document-save");
+	QToolButton* saveButton = createFrameButton("document-save");
 	connect(saveButton, SIGNAL(clicked()),
 		SLOT(slotSaveClicked()) );
 
