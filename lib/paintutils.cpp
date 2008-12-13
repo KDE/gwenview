@@ -121,7 +121,11 @@ QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius) {
 QColor adjustedHsv(const QColor& color, int deltaH, int deltaS, int deltaV) {
 	int hue, saturation, value;
 	color.getHsv(&hue, &saturation, &value);
-	return QColor::fromHsv(hue + deltaH, saturation + deltaS, value + deltaV);
+	return QColor::fromHsv(
+		qBound(0, hue + deltaH, 359),
+		qBound(0, saturation + deltaS, 255),
+		qBound(0, value + deltaV, 255)
+		);
 }
 
 
