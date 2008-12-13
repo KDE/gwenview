@@ -245,7 +245,9 @@ struct PreviewItemDelegatePrivate {
 			// Same index, nothing to do
 			return false;
 		}
+		QModelIndex oldIndex = mIndexUnderCursor;
 		mIndexUnderCursor = index;
+		mView->update(oldIndex);
 
 		if (mIndexUnderCursor.isValid()) {
 			that->updateButtonFrameOpacity();
@@ -267,6 +269,7 @@ struct PreviewItemDelegatePrivate {
 			}
 
 			showToolTip(index);
+			mView->update(mIndexUnderCursor);
 
 		} else {
 			mButtonFrame->hide();
@@ -654,6 +657,8 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
 	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItemForIndex(index));
 	QRect rect = option.rect;
+	const bool selected = option.state & QStyle::State_Selected;
+	const bool underMouse = option.state & QStyle::State_MouseOver;
 
 #ifdef DEBUG_RECT
 	painter->setPen(Qt::red);
@@ -674,7 +679,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 	// Select colors
 	QColor bgColor, borderColor, fgColor;
-	if (option.state & QStyle::State_Selected) {
+	if (selected || underMouse) {
 		bgColor = option.palette.color(cg, QPalette::Highlight);
 		borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 		fgColor = option.palette.color(cg, QPalette::HighlightedText);
@@ -698,14 +703,21 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		thumbnailPix.height());
 
 	// Draw background
-	if (option.state & QStyle::State_Selected) {
-		const int radius = ITEM_MARGIN;
-		d->drawBackground(painter, thumbnailRect.adjusted(-radius, -radius, radius, radius), bgColor, borderColor);
+	bool drawShadow = opaque;
+	const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN, -ITEM_MARGIN, ITEM_MARGIN, ITEM_MARGIN);
+	if (selected) {
+		drawShadow = false;
+		d->drawBackground(painter, backgroundRect, bgColor, borderColor);
+	} else if (underMouse) {
+		drawShadow = false;
+		painter->setOpacity(0.33);
+		d->drawBackground(painter, backgroundRect, bgColor, borderColor);
+		painter->setOpacity(1.);
 	}
 
 	// Draw thumbnail
 	if (!thumbnailPix.isNull()) {
-		if (!(option.state & QStyle::State_Selected) && opaque) {
+		if (drawShadow) {
 			d->drawShadow(painter, thumbnailRect);
 		}
 
