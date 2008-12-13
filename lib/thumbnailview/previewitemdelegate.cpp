@@ -683,12 +683,12 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 	// Draw background
 	if (option.state & QStyle::State_Selected) {
-		d->drawBackground(painter, thumbnailRect.adjusted(-SELECTION_RADIUS, -SELECTION_RADIUS, SELECTION_RADIUS, SELECTION_RADIUS), bgColor, borderColor);
+		const int radius = ITEM_MARGIN;
+		d->drawBackground(painter, thumbnailRect.adjusted(-radius, -radius, radius, radius), bgColor, borderColor);
 	}
 
 	// Draw thumbnail
 	if (!thumbnailPix.isNull()) {
-
 		if (!(option.state & QStyle::State_Selected) && opaque) {
 			d->drawShadow(painter, thumbnailRect);
 		}
