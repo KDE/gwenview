@@ -108,18 +108,24 @@ static KUrl urlForIndex(const QModelIndex& index) {
 
 class ContextBarButton : public QToolButton {
 public:
-	ContextBarButton(const QColor& bgColor)
-	: mBgColor(bgColor) {}
+	ContextBarButton() : mViewport(0) {}
+
+	/**
+	 * The viewport is used to pick the right colors
+	 */
+	void setViewport(QWidget* viewPort) {
+		mViewport = viewPort;
+	}
 
 protected:
 	virtual void paintEvent(QPaintEvent*) {
+		Q_ASSERT(mViewport);
 		QStylePainter painter(this);
 		painter.setRenderHint(QPainter::Antialiasing);
 		QStyleOptionToolButton opt;
 		initStyleOption(&opt);
 
-		const QWidget* viewport = parentWidget()->parentWidget();
-		const QColor bgColor = viewport->palette().color(viewport->backgroundRole());
+		const QColor bgColor = mViewport->palette().color(mViewport->backgroundRole());
 		QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
 		QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
 
@@ -152,47 +158,8 @@ protected:
 		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
 	}
 
-	private:
-		QColor mBgColor;
-};
-
-
-/**
- * A frame with a rounded semi-opaque background. Since it's not possible (yet)
- * to define non-opaque colors in Qt stylesheets, we do it the old way: by
- * reimplementing paintEvent().
- * FIXME: Found out it is possible in fact, code should be updated.
- */
-class GlossyFrame : public QFrame {
-public:
-	GlossyFrame(QWidget* parent = 0)
-	: QFrame(parent)
-	{}
-
-	void setBackgroundColor(const QColor& color) {
-		QPalette pal = palette();
-		pal.setColor(backgroundRole(), color);
-		setPalette(pal);
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent* /*event*/) {
-		QColor color = palette().color(backgroundRole());
-		QColor borderColor = color.light(CONTEXTBAR_BORDER_LIGHTNESS);
-		QRectF rectF = QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5);
-		QPainterPath path = PaintUtils::roundedRectangle(rectF, height() / 2);
-
-		QPainter painter(this);
-		painter.setRenderHint(QPainter::Antialiasing);
-
-		painter.fillPath(path, PaintUtils::alphaAdjustedF(color, 0.8));
-
-		painter.setPen(borderColor);
-		painter.drawPath(path);
-	}
-
 private:
-	bool mOpaque;
+	QWidget* mViewport;
 };
 
 
@@ -209,8 +176,8 @@ struct PreviewItemDelegatePrivate {
 	PreviewItemDelegate* that;
 	ThumbnailView* mView;
 	QWidget* mContextBar;
-	GlossyFrame* mSaveButtonFrame;
-	QPixmap mSaveButtonFramePixmap;
+	QToolButton* mSaveButton;
+	QPixmap mSaveButtonPixmap;
 
 	QToolButton* mToggleSelectionButton;
 	QToolButton* mFullScreenButton;
@@ -229,30 +196,32 @@ struct PreviewItemDelegatePrivate {
 
 	QToolButton* createContextBarButton(const char* iconName) {
 		const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-		const QWidget* viewport = mView->viewport();
-		const QColor bgColor = viewport->palette().color(viewport->backgroundRole());
 
-		ContextBarButton* button = new ContextBarButton(bgColor);
+		ContextBarButton* button = new ContextBarButton();
+		button->setViewport(mView->viewport());
 		button->setIcon(SmallIcon(iconName));
 		button->setIconSize(QSize(size, size));
 		button->setAutoRaise(true);
 		return button;
 	}
 
-	void initSaveButtonFramePixmap() {
+	void initSaveButtonPixmap() {
+		if (!mSaveButtonPixmap.isNull()) {
+			return;
+		}
 		// Necessary otherwise we won't see the save button itself
-		mSaveButtonFrame->adjustSize();
+		mSaveButton->adjustSize();
 
 		// This is hackish.
-		// Show/hide the frame to make sure mSaveButtonFrame->render produces
+		// Show/hide the frame to make sure mSaveButton->render produces
 		// something coherent.
-		mSaveButtonFrame->show();
-		mSaveButtonFrame->repaint();
-		mSaveButtonFrame->hide();
+		mSaveButton->show();
+		mSaveButton->repaint();
+		mSaveButton->hide();
 
-		mSaveButtonFramePixmap = QPixmap(mSaveButtonFrame->size());
-		mSaveButtonFramePixmap.fill(Qt::transparent);
-		mSaveButtonFrame->render(&mSaveButtonFramePixmap, QPoint(), QRegion(), QWidget::DrawChildren);
+		mSaveButtonPixmap = QPixmap(mSaveButton->sizeHint());
+		mSaveButtonPixmap.fill(Qt::transparent);
+		mSaveButton->render(&mSaveButtonPixmap, QPoint(), QRegion(), QWidget::DrawChildren);
 	}
 
 
@@ -291,9 +260,9 @@ struct PreviewItemDelegatePrivate {
 			mContextBar->show();
 
 			if (mView->isModified(mIndexUnderCursor)) {
-				showSaveButtonFrame(rect);
+				showSaveButton(rect);
 			} else {
-				mSaveButtonFrame->hide();
+				mSaveButton->hide();
 			}
 
 			showToolTip(index);
@@ -301,7 +270,7 @@ struct PreviewItemDelegatePrivate {
 
 		} else {
 			mContextBar->hide();
-			mSaveButtonFrame->hide();
+			mSaveButton->hide();
 			mTipLabel->hide();
 		}
 		return false;
@@ -337,8 +306,8 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
-	QPoint saveButtonFramePosition(const QRect& itemRect) const {
-		QSize frameSize = mSaveButtonFrame->sizeHint();
+	QPoint saveButtonPosition(const QRect& itemRect) const {
+		QSize frameSize = mSaveButton->sizeHint();
 		int textHeight = mView->fontMetrics().height();
 		int posX = itemRect.right() - CONTEXTBAR_MARGIN - frameSize.width();
 		int posY = itemRect.bottom() - CONTEXTBAR_MARGIN - textHeight - frameSize.height();
@@ -347,9 +316,9 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
-	void showSaveButtonFrame(const QRect& itemRect) const {
-		mSaveButtonFrame->move(saveButtonFramePosition(itemRect));
-		mSaveButtonFrame->show();
+	void showSaveButton(const QRect& itemRect) const {
+		mSaveButton->move(saveButtonPosition(itemRect));
+		mSaveButton->show();
 	}
 
 
@@ -573,36 +542,8 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	connect(view, SIGNAL(thumbnailSizeChanged(int)),
 		SLOT(setThumbnailSize(int)) );
 
-	QColor bgColor = d->mView->palette().highlight().color();
-	QColor borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
-
-	QString styleSheet =
-		"QFrame {"
-		"	padding: 1px;"
-		"}"
-
-		"QToolButton {"
-		"	padding: 2px;"
-		"	border-radius: 4px;"
-		"}"
-
-		"QToolButton:hover {"
-		"	border: 1px solid %2;"
-		"}"
-
-		"QToolButton:pressed {"
-		"	background-color:"
-		"		qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"		stop:0 %2, stop:1 %1);"
-		"	border: 1px solid %2;"
-		"}";
-	styleSheet = styleSheet.arg(bgColor.name()).arg(borderColor.name());
-
 	// Button frame
 	d->mContextBar = new QWidget(d->mView->viewport());
-	//d->mContextBar->setStyleSheet(styleSheet);
-	//d->mContextBar->setBackgroundColor(bgColor);
-	//d->mContextBar->setBackgroundColor(QColor::fromHsvF(0, 0, 0.25));
 	d->mContextBar->hide();
 
 	d->mToggleSelectionButton = d->createContextBarButton("list-add");
@@ -629,22 +570,14 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	layout->addWidget(d->mRotateLeftButton);
 	layout->addWidget(d->mRotateRightButton);
 
-	// Save button frame
-	d->mSaveButtonFrame = new GlossyFrame(d->mView->viewport());
-	d->mSaveButtonFrame->setStyleSheet(styleSheet);
-	d->mSaveButtonFrame->setBackgroundColor(bgColor);
-	d->mSaveButtonFrame->hide();
-
-	QToolButton* saveButton = d->createContextBarButton("document-save");
-	connect(saveButton, SIGNAL(clicked()),
+	// Save button
+	d->mSaveButton = d->createContextBarButton("document-save");
+	d->mSaveButton->adjustSize();
+	d->mSaveButton->setParent(d->mView->viewport());
+	d->mSaveButton->hide();
+	connect(d->mSaveButton, SIGNAL(clicked()),
 		SLOT(slotSaveClicked()) );
 
-	layout = new QHBoxLayout(d->mSaveButtonFrame);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addWidget(saveButton);
-
-	d->initSaveButtonFramePixmap();
 	d->initTipLabel();
 }
 
@@ -754,17 +687,18 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	if (isModified) {
 		// Draws a pixmap of the save button frame, as an indicator that
 		// the image has been modified
-		QPoint framePosition = d->saveButtonFramePosition(rect);
-		painter->drawPixmap(framePosition, d->mSaveButtonFramePixmap);
+		QPoint framePosition = d->saveButtonPosition(rect);
+		d->initSaveButtonPixmap();
+		painter->drawPixmap(framePosition, d->mSaveButtonPixmap);
 	}
 
 	if (index == d->mIndexUnderCursor) {
 		if (isModified) {
 			// If we just rotated the image with the buttons from the
 			// button frame, we need to show the save button frame right now.
-			d->showSaveButtonFrame(rect);
+			d->showSaveButton(rect);
 		} else {
-			d->mSaveButtonFrame->hide();
+			d->mSaveButton->hide();
 		}
 	}
 
