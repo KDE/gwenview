@@ -23,10 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <config-gwenview.h>
 
 // Qt
+#include <QHash>
 #include <QHBoxLayout>
 #include <QHelpEvent>
 #include <QLabel>
-#include <QMap>
 #include <QPainter>
 #include <QPainterPath>
 #include <QToolButton>
@@ -161,10 +161,10 @@ struct PreviewItemDelegatePrivate {
 	/**
 	 * Maps full text to elided text.
 	 */
-	mutable QMap<QString, QString> mElidedTextMap;
+	mutable QHash<QString, QString> mElidedTextCache;
 
 	// Key is height * 1000 + width
-	typedef QMap<int, QPixmap> ShadowCache;
+	typedef QHash<int, QPixmap> ShadowCache;
 	mutable ShadowCache mShadowCache;
 
 	PreviewItemDelegate* that;
@@ -332,10 +332,10 @@ struct PreviewItemDelegatePrivate {
 
 		// Elide text
 		QString text;
-		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(fullText);
-		if (it == mElidedTextMap.constEnd()) {
+		QHash<QString, QString>::const_iterator it = mElidedTextCache.constFind(fullText);
+		if (it == mElidedTextCache.constEnd()) {
 			text = fm.elidedText(fullText, Qt::ElideRight, rect.width());
-			mElidedTextMap[fullText] = text;
+			mElidedTextCache[fullText] = text;
 		} else {
 			text = it.value();
 		}
@@ -367,8 +367,8 @@ struct PreviewItemDelegatePrivate {
 
 
 	bool isTextElided(const QString& text) const {
-		QMap<QString, QString>::const_iterator it = mElidedTextMap.constFind(text);
-		if (it == mElidedTextMap.constEnd()) {
+		QHash<QString, QString>::const_iterator it = mElidedTextCache.constFind(text);
+		if (it == mElidedTextCache.constEnd()) {
 			return false;
 		}
 		return it.value().length() < text.length();
@@ -720,7 +720,7 @@ void PreviewItemDelegate::setThumbnailSize(int value) {
 	d->mRotateRightButton->setVisible(width >= 4 * buttonWidth);
 	d->mButtonFrame->adjustSize();
 
-	d->mElidedTextMap.clear();
+	d->mElidedTextCache.clear();
 }
 
 
