@@ -625,6 +625,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	QRect rect = option.rect;
 	const bool selected = option.state & QStyle::State_Selected;
 	const bool underMouse = option.state & QStyle::State_MouseOver;
+	const QWidget* viewport = d->mView->viewport();
 
 #ifdef DEBUG_RECT
 	painter->setPen(Qt::red);
@@ -648,11 +649,8 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	if (selected || underMouse) {
 		bgColor = option.palette.color(cg, QPalette::Highlight);
 		borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
-		fgColor = option.palette.color(cg, QPalette::HighlightedText);
 	} else {
-		QWidget* viewport = d->mView->viewport();
 		bgColor = viewport->palette().color(viewport->backgroundRole());
-		fgColor = viewport->palette().color(viewport->foregroundRole());
 
 		if (bgColor.value() < 128) {
 			borderColor = bgColor.dark(200);
@@ -660,6 +658,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 			borderColor = bgColor.light(200);
 		}
 	}
+	fgColor = viewport->palette().color(viewport->foregroundRole());
 
 	// Compute thumbnailRect
 	QRect thumbnailRect = QRect(
