@@ -81,7 +81,7 @@ const int GADGET_MARGIN = 1;
 const int GADGET_RADIUS = 12;
 
 /** How lighter is the border line around gadgets */
-const int GADGET_BORDER_LIGHTNESS = 300;
+const int GADGET_BORDER_LIGHTNESS = 140;
 
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
@@ -103,30 +103,54 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 
-class RoundButton : public QToolButton {
+class ContextBarButton : public QToolButton {
 public:
+	ContextBarButton(const QColor& bgColor)
+	: mBgColor(bgColor) {}
+
 protected:
 	virtual void paintEvent(QPaintEvent*) {
 		QStylePainter painter(this);
 		painter.setRenderHint(QPainter::Antialiasing);
 		QStyleOptionToolButton opt;
 		initStyleOption(&opt);
-		if (opt.state & QStyle::State_MouseOver && parentWidget()) {
-			QColor color = parentWidget()->palette().color(parentWidget()->backgroundRole());
-			QColor borderColor = color.light(GADGET_BORDER_LIGHTNESS);
 
-			const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
-			const QPainterPath path = PaintUtils::roundedRectangle(rectF, height() / 2);
+		const QWidget* viewport = parentWidget()->parentWidget();
+		const QColor bgColor = viewport->palette().color(viewport->backgroundRole());
+		QColor color = bgColor.dark(GADGET_BORDER_LIGHTNESS);
+		QColor borderColor = bgColor.light(GADGET_BORDER_LIGHTNESS);
 
-			if (opt.state & QStyle::State_Sunken) {
-				painter.fillPath(path, color);
-			}
-
-			painter.setPen(borderColor);
-			painter.drawPath(path);
+		if (opt.state & QStyle::State_MouseOver) {
+			color = color.light(110);
+			borderColor = borderColor.light(110);
 		}
+
+		const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
+		const QPainterPath path = PaintUtils::roundedRectangle(rectF, 3);
+
+		// Background
+		painter.fillPath(path, color);
+
+		// Top shadow
+		QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
+		gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
+		gradient.setColorAt(1, Qt::transparent);
+		painter.fillPath(path, gradient);
+
+		// Left shadow
+		gradient.setFinalStop(rectF.topLeft() + QPoint(5, 0));
+		painter.fillPath(path, gradient);
+
+		// Border
+		painter.setPen(borderColor);
+		painter.drawPath(path);
+
+		// Content
 		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
 	}
+
+	private:
+		QColor mBgColor;
 };
 
 
@@ -169,17 +193,6 @@ private:
 };
 
 
-static QToolButton* createFrameButton(const char* iconName) {
-	int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-	QToolButton* button = new RoundButton;
-	button->setIcon(SmallIcon(iconName));
-	button->setIconSize(QSize(size, size));
-	button->setAutoRaise(true);
-
-	return button;
-}
-
-
 struct PreviewItemDelegatePrivate {
 	/**
 	 * Maps full text to elided text.
@@ -192,7 +205,7 @@ struct PreviewItemDelegatePrivate {
 
 	PreviewItemDelegate* that;
 	ThumbnailView* mView;
-	GlossyFrame* mButtonFrame;
+	QWidget* mContextBar;
 	GlossyFrame* mSaveButtonFrame;
 	QPixmap mSaveButtonFramePixmap;
 
@@ -209,6 +222,19 @@ struct PreviewItemDelegatePrivate {
 	PreviewItemDelegate::ThumbnailDetails mDetails;
 
 	QLabel* mTipLabel;
+
+
+	QToolButton* createContextBarButton(const char* iconName) {
+		const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+		const QWidget* viewport = mView->viewport();
+		const QColor bgColor = viewport->palette().color(viewport->backgroundRole());
+
+		ContextBarButton* button = new ContextBarButton(bgColor);
+		button->setIcon(SmallIcon(iconName));
+		button->setIconSize(QSize(size, size));
+		button->setAutoRaise(true);
+		return button;
+	}
 
 	void initSaveButtonFramePixmap() {
 		// Necessary otherwise we won't see the save button itself
@@ -254,13 +280,13 @@ struct PreviewItemDelegatePrivate {
 			updateToggleSelectionButton();
 			updateImageButtons();
 
-			mButtonFrame->adjustSize();
+			mContextBar->adjustSize();
 			QRect rect = mView->visualRect(mIndexUnderCursor);
-			int posX = rect.x() + (rect.width() - mButtonFrame->width()) / 2;
+			int posX = rect.x() + (rect.width() - mContextBar->width()) / 2;
 			int posY = rect.y() + GADGET_MARGIN;
-			mButtonFrame->move(posX, posY);
+			mContextBar->move(posX, posY);
 
-			mButtonFrame->show();
+			mContextBar->show();
 
 			if (mView->isModified(mIndexUnderCursor)) {
 				showSaveButtonFrame(rect);
@@ -272,7 +298,7 @@ struct PreviewItemDelegatePrivate {
 			mView->update(mIndexUnderCursor);
 
 		} else {
-			mButtonFrame->hide();
+			mContextBar->hide();
 			mSaveButtonFrame->hide();
 			mTipLabel->hide();
 		}
@@ -573,29 +599,29 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	styleSheet = styleSheet.arg(bgColor.name()).arg(borderColor.name());
 
 	// Button frame
-	d->mButtonFrame = new GlossyFrame(d->mView->viewport());
-	//d->mButtonFrame->setStyleSheet(styleSheet);
-	//d->mButtonFrame->setBackgroundColor(bgColor);
-	d->mButtonFrame->setBackgroundColor(QColor(20, 20, 20));
-	d->mButtonFrame->hide();
+	d->mContextBar = new QWidget(d->mView->viewport());
+	//d->mContextBar->setStyleSheet(styleSheet);
+	//d->mContextBar->setBackgroundColor(bgColor);
+	//d->mContextBar->setBackgroundColor(QColor::fromHsvF(0, 0, 0.25));
+	d->mContextBar->hide();
 
-	d->mToggleSelectionButton = createFrameButton("list-add");
+	d->mToggleSelectionButton = d->createContextBarButton("list-add");
 	connect(d->mToggleSelectionButton, SIGNAL(clicked()),
 		SLOT(slotToggleSelectionClicked()));
 
-	d->mFullScreenButton = createFrameButton("view-fullscreen");
+	d->mFullScreenButton = d->createContextBarButton("view-fullscreen");
 	connect(d->mFullScreenButton, SIGNAL(clicked()),
 		SLOT(slotFullScreenClicked()) );
 
-	d->mRotateLeftButton = createFrameButton("object-rotate-left");
+	d->mRotateLeftButton = d->createContextBarButton("object-rotate-left");
 	connect(d->mRotateLeftButton, SIGNAL(clicked()),
 		SLOT(slotRotateLeftClicked()) );
 
-	d->mRotateRightButton = createFrameButton("object-rotate-right");
+	d->mRotateRightButton = d->createContextBarButton("object-rotate-right");
 	connect(d->mRotateRightButton, SIGNAL(clicked()),
 		SLOT(slotRotateRightClicked()) );
 
-	QHBoxLayout* layout = new QHBoxLayout(d->mButtonFrame);
+	QHBoxLayout* layout = new QHBoxLayout(d->mContextBar);
 	layout->setMargin(2);
 	layout->setSpacing(2);
 	layout->addWidget(d->mToggleSelectionButton);
@@ -609,7 +635,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mSaveButtonFrame->setBackgroundColor(bgColor);
 	d->mSaveButtonFrame->hide();
 
-	QToolButton* saveButton = createFrameButton("document-save");
+	QToolButton* saveButton = d->createContextBarButton("document-save");
 	connect(saveButton, SIGNAL(clicked()),
 		SLOT(slotSaveClicked()) );
 
@@ -703,32 +729,25 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		thumbnailPix.height());
 
 	// Draw background
-	bool drawShadow = opaque;
 	const QRect backgroundRect = thumbnailRect.adjusted(-ITEM_MARGIN, -ITEM_MARGIN, ITEM_MARGIN, ITEM_MARGIN);
 	if (selected) {
-		drawShadow = false;
 		d->drawBackground(painter, backgroundRect, bgColor, borderColor);
 	} else if (underMouse) {
-		drawShadow = false;
-		painter->setOpacity(0.33);
+		painter->setOpacity(0.2);
 		d->drawBackground(painter, backgroundRect, bgColor, borderColor);
 		painter->setOpacity(1.);
+	} else if (opaque) {
+		d->drawShadow(painter, thumbnailRect);
 	}
 
 	// Draw thumbnail
-	if (!thumbnailPix.isNull()) {
-		if (drawShadow) {
-			d->drawShadow(painter, thumbnailRect);
-		}
-
-		if (opaque) {
-			painter->setPen(borderColor);
-			painter->setRenderHint(QPainter::Antialiasing, false);
-			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
-			painter->drawRect(borderRect);
-		}
-		painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnailPix);
+	if (opaque) {
+		painter->setPen(borderColor);
+		painter->setRenderHint(QPainter::Antialiasing, false);
+		QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
+		painter->drawRect(borderRect);
 	}
+	painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnailPix);
 
 	// Draw modified indicator
 	bool isModified = d->mView->isModified(index);
@@ -784,7 +803,7 @@ void PreviewItemDelegate::setThumbnailSize(int value) {
 	const int buttonWidth = d->mRotateRightButton->sizeHint().width();
 	d->mRotateLeftButton->setVisible(width >= 3 * buttonWidth);
 	d->mRotateRightButton->setVisible(width >= 4 * buttonWidth);
-	d->mButtonFrame->adjustSize();
+	d->mContextBar->adjustSize();
 
 	d->mElidedTextCache.clear();
 }
