@@ -517,7 +517,7 @@ struct MainWindow::Private {
 			isRasterImage = mWindow->currentDocumentIsRasterImage();
 			canSave = isRasterImage;
 			isModified = DocumentFactory::instance()->load(url)->isModified();
-			if (!mDocumentPanel->isVisible()) {
+			if (!mViewAction->isChecked()) {
 				// Saving only makes sense if exactly one image is selected
 				QItemSelection selection = mThumbnailView->selectionModel()->selection();
 				QModelIndexList indexList = selection.indexes();
@@ -537,7 +537,7 @@ struct MainWindow::Private {
 		if (mStartPage->isVisible()) {
 			return KUrl();
 		}
-		if (mDocumentPanel->isVisible() && !mDocumentPanel->isEmpty()) {
+		if (mViewAction->isChecked() && !mDocumentPanel->isEmpty()) {
 			return mDocumentPanel->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
@@ -680,7 +680,7 @@ DocumentPanel* MainWindow::documentPanel() const {
 
 
 bool MainWindow::currentDocumentIsRasterImage() const {
-	if (d->mDocumentPanel->isVisible()) {
+	if (d->mViewAction->isChecked()) {
 		Document::Ptr doc = d->mDocumentPanel->currentDocument();
 		if (!doc) {
 			return false;
@@ -817,7 +817,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 
 
 void MainWindow::openSelectedDocument() {
-	if (!d->mDocumentPanel->isVisible()) {
+	if (!d->mViewAction->isChecked()) {
 		return;
 	}
 
@@ -939,7 +939,7 @@ void MainWindow::slotPartCompleted() {
 
 
 void MainWindow::slotSelectionChanged() {
-	if (d->mDocumentPanel->isVisible()) {
+	if (d->mViewAction->isChecked()) {
 		// The user selected a new file in the thumbnail view, since the
 		// document view is visible, let's show it
 		openSelectedDocument();
@@ -1014,7 +1014,7 @@ void MainWindow::goToNext() {
 
 
 void MainWindow::goToUrl(const KUrl& url) {
-	if (d->mDocumentPanel->isVisible()) {
+	if (d->mViewAction->isChecked()) {
 		openDocumentUrl(url);
 	}
 	KUrl dirUrl = url;
@@ -1100,7 +1100,7 @@ void MainWindow::saveCurrentAs() {
 
 
 void MainWindow::reload() {
-	if (d->mDocumentPanel->isVisible()) {
+	if (d->mViewAction->isChecked()) {
 		d->mDocumentPanel->reload();
 	} else {
 		d->mDirModel->reload();
