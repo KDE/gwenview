@@ -591,16 +591,18 @@ struct MainWindow::Private {
 
 	void updateContextDependentComponents() {
 		// Gather info
-		KUrl url = currentUrl();
 		KFileItemList selectedItemList;
-		if (KProtocolManager::supportsListing(url)) {
-			QItemSelection selection = mThumbnailView->selectionModel()->selection();
-			QModelIndexList indexList = selection.indexes();
+		QItemSelection selection = mThumbnailView->selectionModel()->selection();
 
-			Q_FOREACH(const QModelIndex& index, indexList) {
-				selectedItemList << mDirModel->itemForIndex(index);
-			}
-		} else if (url.isValid()) {
+		Q_FOREACH(const QModelIndex& index, selection.indexes()) {
+			selectedItemList << mDirModel->itemForIndex(index);
+		}
+
+		// At least add current url if it's valid (it may not be in
+		// selectedItemList if we are viewing a non-browsable url, for example
+		// using http protocol)
+		const KUrl url = currentUrl();
+		if (selectedItemList.isEmpty() && url.isValid()) {
 			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 			selectedItemList << item;
 		}
