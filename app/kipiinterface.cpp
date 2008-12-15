@@ -227,9 +227,13 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 	LOG("");
 	const ContextManager* contextManager = d->mMainWindow->contextManager();
 	const KUrl url = contextManager->currentDirUrl();
+	const SortedDirModel* model = contextManager->dirModel();
 
 	KUrl::List list;
-	Q_FOREACH(const KFileItem& item, contextManager->dirModel()->dirLister()->itemsForDir(url)) {
+	const int count = model->rowCount();
+	for (int row = 0; row < count; ++row) {
+		const QModelIndex& index = model->index(row, 0);
+		const KFileItem item = model->itemForIndex(index);
 		if (MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_RASTER_IMAGE) {
 			list << item.targetUrl();
 		}
