@@ -73,7 +73,11 @@ kde4_add_executable(gwenview ${gwenview_SRCS})
 target_link_libraries(gwenview
 	${KDE4_KFILE_LIBS}
 	gwenviewlib
+	${KDE4_KIO_LIBS}
+	${QT_QTCORE_LIBRARY}
 	)
+
+target_link_libraries(gwenview LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY})
 
 if (KIPI_FOUND)
   target_link_libraries(gwenview ${KIPI_LIBRARIES})
