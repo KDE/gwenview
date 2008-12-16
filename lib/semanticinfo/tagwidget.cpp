@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLineEdit>
 #include <QListView>
 #include <QSortFilterProxyModel>
+#include <QTimer>
 #include <QVBoxLayout>
 
 // KDE
@@ -210,8 +211,12 @@ void TagWidget::slotReturnPressed() {
 	if (label.isEmpty()) {
 		return;
 	}
-	d->mComboBox->clearEditText();
 	assignTag(d->mBackEnd->tagForLabel(label.trimmed()));
+
+	// Use a QTimer because if the tag is new, it will be inserted in the model
+	// and QComboBox will sometimes select it. At least it does so when the
+	// model is empty.
+	QTimer::singleShot(0, d->mComboBox, SLOT(clearEditText()));
 }
 
 
