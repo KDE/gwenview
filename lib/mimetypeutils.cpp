@@ -124,6 +124,24 @@ QString urlMimeTypeByContent(const KUrl& url) {
 	return KMimeType::findByContent(accumulator.data())->name();
 }
 
+
+QString mimeTypeByContent(const QByteArray& data) {
+	QString mimeType = KMimeType::findByContent(data)->name();
+	if (mimeType != "application/octet-stream") {
+		return mimeType;
+	}
+	if (data.startsWith("gimp xcf")) {
+		// KMimeType::findByContent can't find .xcf :(
+		return "image/x-xcf";
+	}
+	/*if (data.sta) {
+		return "image/x-eps";
+	}*/
+	// No luck
+	return mimeType;
+}
+
+
 Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith("inode/directory")) {
 		return KIND_DIR;
