@@ -411,6 +411,7 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 	completer->setCaseSensitivity(Qt::CaseInsensitive);
 	completer->setModel(tagModel);
 	d->mTagComboBox->setCompleter(completer);
+	d->mTagComboBox->setInsertPolicy(QComboBox::NoInsert);
 	d->mTagComboBox->setEditable(true);
 	d->mTagComboBox->setModel(tagModel);
 	d->mTagComboBox->setCurrentIndex(-1);

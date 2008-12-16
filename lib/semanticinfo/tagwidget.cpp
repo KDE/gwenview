@@ -130,6 +130,7 @@ struct TagWidgetPrivate {
 
 		mComboBox = new QComboBox;
 		mComboBox->setEditable(true);
+		mComboBox->setInsertPolicy(QComboBox::NoInsert);
 
 		mTagCompleterModel = new TagCompleterModel(that);
 		QCompleter* completer = new QCompleter(that);
