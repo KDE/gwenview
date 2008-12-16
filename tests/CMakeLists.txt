@@ -17,7 +17,7 @@ set(imagescalertest_SRCS
 
 kde4_add_unit_test(imagescalertest ${imagescalertest_SRCS})
 
-target_link_libraries(imagescalertest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(imagescalertest gwenviewlib ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 
 # PaintUtils
@@ -27,7 +27,7 @@ set(paintutilstest_SRCS
 
 kde4_add_unit_test(paintutilstest ${paintutilstest_SRCS})
 
-target_link_libraries(paintutilstest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(paintutilstest gwenviewlib ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 
 # Document
@@ -38,7 +38,7 @@ set(documenttest_SRCS
 
 kde4_add_unit_test(documenttest ${documenttest_SRCS})
 
-target_link_libraries(documenttest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(documenttest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
 # JPEGContent
 set(jpegcontenttest_SRCS
@@ -48,7 +48,7 @@ set(jpegcontenttest_SRCS
 
 kde4_add_unit_test(jpegcontenttest ${jpegcontenttest_SRCS})
 
-target_link_libraries(jpegcontenttest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(jpegcontenttest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
 # ThumbnailLoadJob
 set(thumbnailloadjobtest_SRCS
@@ -57,7 +57,7 @@ set(thumbnailloadjobtest_SRCS
 
 kde4_add_unit_test(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})
 
-target_link_libraries(thumbnailloadjobtest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(thumbnailloadjobtest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
 # SemanticInfoBackEndTest
 set(semanticinfobackendtest_SRCS
@@ -79,7 +79,7 @@ set(timeutilstest_SRCS
 
 kde4_add_unit_test(timeutilstest ${timeutilstest_SRCS})
 
-target_link_libraries(timeutilstest gwenviewlib ${QT_QTTEST_LIBRARY})
+target_link_libraries(timeutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
 # SlideContainer
 set(slidecontainertest_SRCS
@@ -88,7 +88,7 @@ set(slidecontainertest_SRCS
 
 kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
 
-target_link_libraries(slidecontainertest gwenviewlib)
+target_link_libraries(slidecontainertest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
 
 # imageloadbench
 set(imageloadbench_SRCS
@@ -97,4 +97,4 @@ set(imageloadbench_SRCS
 
 kde4_add_executable(imageloadbench TEST ${imageloadbench_SRCS})
 
-target_link_libraries(imageloadbench gwenviewlib)
+target_link_libraries(imageloadbench ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
