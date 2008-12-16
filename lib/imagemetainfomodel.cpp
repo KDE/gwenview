@@ -290,10 +290,10 @@ static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
 	iterator it = begin;
 	for (;it != end; ++it) {
 		QString key = QString::fromUtf8(it->key().c_str());
-		QString label = QString::fromUtf8(it->tagLabel().c_str());
+		QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
 		std::ostringstream stream;
 		stream << *it;
-		QString value = QString::fromUtf8(stream.str().c_str());
+		QString value = QString::fromLocal8Bit(stream.str().c_str());
 		group->addEntry(key, label, value);
 	}
 }
