@@ -56,6 +56,7 @@ struct FullScreenBarPrivate {
 	QTimeLine* mTimeLine;
 	QTimer* mAutoHideCursorTimer;
 	bool mAutoHidingEnabled;
+	QTimer* mInitialHideTimer;
 
 	void startTimeLine() {
 		if (mTimeLine->state() != QTimeLine::Running) {
@@ -121,6 +122,11 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 	d->mAutoHideCursorTimer->setSingleShot(true);
 	connect(d->mAutoHideCursorTimer, SIGNAL(timeout()), SLOT(slotAutoHideCursorTimeout()) );
 
+	d->mInitialHideTimer = new QTimer(this);
+	d->mInitialHideTimer->setInterval(INITIAL_HIDE_TIMEOUT);
+	d->mInitialHideTimer->setSingleShot(true);
+	connect(d->mInitialHideTimer, SIGNAL(timeout()), SLOT(slideOut()));
+
 	hide();
 }
 
@@ -167,7 +173,7 @@ void FullScreenBar::setActivated(bool activated) {
 void FullScreenBar::delayedInstallEventFilter() {
 	qApp->installEventFilter(this);
 	if (d->shouldHide()) {
-		QTimer::singleShot(INITIAL_HIDE_TIMEOUT, this, SLOT(slideOut()));
+		d->mInitialHideTimer->start();
 		d->hideCursor();
 	}
 }
@@ -183,12 +189,14 @@ void FullScreenBar::slotAutoHideCursorTimeout() {
 
 
 void FullScreenBar::slideOut() {
+	d->mInitialHideTimer->stop();
 	d->mTimeLine->setDirection(QTimeLine::Backward);
 	d->startTimeLine();
 }
 
 
 void FullScreenBar::slideIn() {
+	d->mInitialHideTimer->stop();
 	d->mTimeLine->setDirection(QTimeLine::Forward);
 	d->startTimeLine();
 }
