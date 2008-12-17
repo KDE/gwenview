@@ -82,9 +82,9 @@ public:
 		}
 		switch (mMode) {
 		case Contains:
-			return index.data().toString().contains(mText);
+			return index.data().toString().contains(mText, Qt::CaseInsensitive);
 		default: /*DoesNotContain:*/
-			return !index.data().toString().contains(mText);
+			return !index.data().toString().contains(mText, Qt::CaseInsensitive);
 		}
 	}
 
