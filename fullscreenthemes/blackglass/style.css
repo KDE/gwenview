@@ -178,7 +178,7 @@ QLabel[isTitle=true] {
 
 #thumbnailBarView QScrollBar:horizontal {
 	background-color: transparent;
-	height: 8px;
+	height: 10px;
 	padding: 0 2px 0px 2px;
 	margin: 0 10px 0px 10px;
 }

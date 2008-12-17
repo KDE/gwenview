@@ -47,6 +47,9 @@ static const int AUTO_HIDE_CURSOR_TIMEOUT = 1000;
 // How long before the bar slide out after switching to fullscreen
 static const int INITIAL_HIDE_TIMEOUT = 2000;
 
+// Do not slide bar out if mouse is less than this amount of pixels below bar, to
+// prevent accidental slide outs
+static const int EXTRA_BAR_HEIGHT = 20;
 
 struct FullScreenBarPrivate {
 	FullScreenBar* that;
@@ -77,7 +80,7 @@ struct FullScreenBarPrivate {
 		// the top of the screen, for example when the save bar warning is
 		// shown.
 		const QPoint topLeft = that->parentWidget()->mapToGlobal(QPoint(0, 0));
-		rect.setHeight(topLeft.y() + that->height());
+		rect.setHeight(topLeft.y() + that->height() + EXTRA_BAR_HEIGHT);
 		return rect;
 	}
 
