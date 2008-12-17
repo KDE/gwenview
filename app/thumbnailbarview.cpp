@@ -215,6 +215,15 @@ public:
 		mBaseStyle->unpolish(application);
 	}
 
+	int pixelMetric(PixelMetric pm, const QStyleOption* opt, const QWidget* widget) const {
+		switch (pm) {
+		case PM_MaximumDragDistance:
+			return -1;
+		default:
+			return QWindowsStyle::pixelMetric(pm, opt, widget);
+		}
+	}
+
 private:
 	QStyle* mBaseStyle;
 };
