@@ -93,6 +93,11 @@ struct FullScreenBarPrivate {
 		if (QApplication::activePopupWidget()) {
 			return false;
 		}
+		// Do not hide if a button is down, which can happen when we are
+		// using a scroll bar.
+		if (QApplication::mouseButtons() != Qt::NoButton) {
+			return false;
+		}
 		return true;
 	}
 };
@@ -198,6 +203,15 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 			if (d->slideInTriggerRect().contains(QCursor::pos())) {
 				slideIn();
 			}
+		}
+		return false;
+	}
+
+	if (event->type() == QEvent::MouseButtonRelease) {
+		// This can happen if user released the mouse after using a scrollbar
+		// in the content (the bar does not hide while a button is down)
+		if (y() == 0 && d->shouldHide()) {
+			slideOut();
 		}
 		return false;
 	}
