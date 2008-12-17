@@ -90,7 +90,7 @@ struct FullScreenBarPrivate {
 		if (slideInTriggerRect().contains(QCursor::pos())) {
 			return false;
 		}
-		if (qApp->activePopupWidget()) {
+		if (QApplication::activePopupWidget()) {
 			return false;
 		}
 		return true;
