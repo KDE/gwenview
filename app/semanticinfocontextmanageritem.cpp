@@ -310,8 +310,8 @@ void SemanticInfoContextManagerItem::update() {
 	d->mTagInfo.clear();
 	int itemCount = itemList.count();
 	TagHash::ConstIterator
-		it = tagHash.begin(),
-		end = tagHash.end();
+		it = tagHash.constBegin(),
+		end = tagHash.constEnd();
 	for (; it!=end; ++it) {
 		QString tag = it.key();
 		int count = it.value();

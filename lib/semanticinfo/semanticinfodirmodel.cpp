@@ -103,7 +103,7 @@ bool SemanticInfoDirModel::semanticInfoAvailableForIndex(const QModelIndex& inde
 		return false;
 	}
 	SemanticInfoCache::const_iterator it = d->mSemanticInfoCache.constFind(item.targetUrl());
-	if (it == d->mSemanticInfoCache.end()) {
+	if (it == d->mSemanticInfoCache.constEnd()) {
 		return false;
 	}
 	return it.value().mValid;
@@ -149,8 +149,8 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const {
 		if (item.isNull()) {
 			return QVariant();
 		}
-		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.find(item.targetUrl());
-		if (it != d->mSemanticInfoCache.end()) {
+		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.constFind(item.targetUrl());
+		if (it != d->mSemanticInfoCache.constEnd()) {
 			const SemanticInfo& info = it.value().mInfo;
 			if (role == RatingRole) {
 				return info.mRating;

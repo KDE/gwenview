@@ -155,8 +155,8 @@ struct TagWidgetPrivate {
 
 		mAssignedTagModel->clear();
 		TagInfo::ConstIterator
-			it = mTagInfo.begin(),
-			end = mTagInfo.end();
+			it = mTagInfo.constBegin(),
+			end = mTagInfo.constEnd();
 		for(; it!=end; ++it) {
 			mAssignedTagModel->addTag(
 				it.key(),
