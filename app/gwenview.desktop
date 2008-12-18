@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Gwenview
+Name[ar]=جوِينفيو
 Name[hi]=ग्वेन-व्यू
 Name[ne]=जीवेनभ्यू
 Name[pa]=ਜੀਵੀਨ-ਵਿਊ
 Name[x-test]=xxGwenviewxx
 GenericName=Image Viewer
 GenericName[af]=Beeld Aansig
+GenericName[ar]=عارض الصّور
 GenericName[be]=Праглядчык відарысаў
 GenericName[br]=Gweler ar skeudennoù
 GenericName[ca]=Visor d'imatges
@@ -63,6 +65,7 @@ GenericName[zh_CN]=图像查看器
 GenericName[zh_HK]=圖像檢視器
 GenericName[zh_TW]=影像檢視程式
 Comment=A simple image viewer
+Comment[ar]=عارض صور بسيط
 Comment[ca]=Un visualitzador d'imatges senzill
 Comment[cs]=Jednoduchý prohlížeč obrázků
 Comment[da]=Simpel billedfremviser

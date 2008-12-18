@@ -5,6 +5,7 @@ Actions=slideshow;
 
 [Desktop Action slideshow]
 Name=Start a Slideshow
+Name[ar]=أبدء عرض الشرائح
 Name[ca]=Inicia una presentació amb diapositives
 Name[cs]=Spustit promítání
 Name[da]=Start et diasshow
