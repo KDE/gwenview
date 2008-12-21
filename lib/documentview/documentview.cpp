@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QLabel>
 #include <QMouseEvent>
 #include <QShortcut>
 #include <QVBoxLayout>
@@ -31,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kaction.h>
 #include <kactioncategory.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kurl.h>
 
@@ -40,8 +42,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
+#include <lib/imagesequence.h>
+#include <lib/imagesequencecontroller.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
+#include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
 
 namespace Gwenview {
@@ -65,10 +70,14 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
+	ImageSequence mLoadingImageSequence;
+	ImageSequenceController mLoadingImageSequenceController;
+
 	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
+	QLabel* mLoadingIndicator;
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
@@ -158,6 +167,22 @@ struct DocumentViewPrivate {
 	}
 
 
+	void setupLoadingIndicator() {
+		mLoadingIndicator = new QLabel;
+
+		const QString path = KIconLoader::global()->iconPath("process-working", -22);
+		mLoadingImageSequence.load(path);
+		mLoadingIndicator->setFixedSize(mLoadingImageSequence.frameSize());
+		mLoadingImageSequenceController.setImageSequence(&mLoadingImageSequence);
+		mLoadingImageSequenceController.setInterval(100);
+		QObject::connect(&mLoadingImageSequenceController, SIGNAL(frameChanged(const QPixmap&)),
+			mLoadingIndicator, SLOT(setPixmap(const QPixmap&)));
+
+		WidgetFloater* floater = new WidgetFloater(that);
+		floater->setChildWidget(mLoadingIndicator);
+	}
+
+
 	void updateCaption() {
 		QString caption;
 		if (!mAdapter) {
@@ -233,6 +258,19 @@ struct DocumentViewPrivate {
 			<< mAdapter->computeZoomToFitHeight();
 		qSort(mZoomSnapValues);
 	}
+
+
+	void showLoadingIndicator() {
+		mLoadingImageSequenceController.start();
+		mLoadingIndicator->show();
+		mLoadingIndicator->raise();
+	}
+
+
+	void hideLoadingIndicator() {
+		mLoadingImageSequenceController.stop();
+		mLoadingIndicator->hide();
+	}
 };
 
 
@@ -248,6 +286,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->setupZoomWidget();
 	d->setupZoomActions();
 	d->setupShortcuts();
+	d->setupLoadingIndicator();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
@@ -311,6 +350,11 @@ void DocumentView::openUrl(const KUrl& url) {
 	d->mDocument = DocumentFactory::instance()->load(url);
 
 	if (d->mDocument->loadingState() < Document::KindDetermined) {
+		MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter);
+		if (messageViewAdapter) {
+			messageViewAdapter->setInfoMessage(QString());
+		}
+		d->showLoadingIndicator();
 		connect(d->mDocument.data(), SIGNAL(kindDetermined(const KUrl&)),
 			SLOT(finishOpenUrl()));
 	} else {
@@ -345,6 +389,7 @@ void DocumentView::finishOpenUrl() {
 
 
 void DocumentView::reset() {
+	d->hideLoadingIndicator();
 	if (d->mDocument) {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
@@ -359,6 +404,7 @@ bool DocumentView::isEmpty() const {
 
 
 void DocumentView::slotLoaded() {
+	d->hideLoadingIndicator();
 	d->updateCaption();
 	d->updateZoomSnapValues();
 	emit completed();
@@ -366,6 +412,7 @@ void DocumentView::slotLoaded() {
 
 
 void DocumentView::slotLoadingFailed() {
+	d->hideLoadingIndicator();
 	MessageViewAdapter* adapter = new MessageViewAdapter(this);
 	QString message = i18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
 	adapter->setErrorMessage(message, d->mDocument->errorString());
