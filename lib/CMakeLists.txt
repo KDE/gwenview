@@ -29,6 +29,8 @@ set(gwenviewlib_SRCS
 	documentview/svgviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
+	imagesequence.cpp
+	imagesequencecontroller.cpp
 	archiveutils.cpp
 	cropsidebar.cpp
 	cropimageoperation.cpp
