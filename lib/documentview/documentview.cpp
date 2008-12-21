@@ -305,10 +305,26 @@ void DocumentView::createAdapterForDocument() {
 
 
 void DocumentView::openUrl(const KUrl& url) {
+	if (d->mDocument) {
+		disconnect(d->mDocument.data(), 0, this, 0);
+	}
 	d->mDocument = DocumentFactory::instance()->load(url);
 
-	while (d->mDocument->loadingState() < Document::KindDetermined) {
-		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	if (d->mDocument->loadingState() < Document::KindDetermined) {
+		connect(d->mDocument.data(), SIGNAL(kindDetermined(const KUrl&)),
+			SLOT(finishOpenUrl()));
+	} else {
+		finishOpenUrl();
+	}
+}
+
+
+void DocumentView::finishOpenUrl() {
+	disconnect(d->mDocument.data(), SIGNAL(kindDetermined(const KUrl&)),
+		this, SLOT(finishOpenUrl()));
+	if (d->mDocument->loadingState() < Document::KindDetermined) {
+		kWarning() << "d->mDocument->loadingState() < Document::KindDetermined, this should not happen!";
+		return;
 	}
 
 	if (d->mDocument->loadingState() == Document::LoadingFailed) {

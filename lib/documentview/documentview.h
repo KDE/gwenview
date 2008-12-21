@@ -84,6 +84,7 @@ protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
 private Q_SLOTS:
+	void finishOpenUrl();
 	void slotLoaded();
 	void slotLoadingFailed();
 
