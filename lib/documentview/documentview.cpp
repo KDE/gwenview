@@ -345,6 +345,10 @@ void DocumentView::finishOpenUrl() {
 
 
 void DocumentView::reset() {
+	if (d->mDocument) {
+		disconnect(d->mDocument.data(), 0, this, 0);
+		d->mDocument = 0;
+	}
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
