@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kio/jobclasses.h>
 #include <klocale.h>
 #include <kmimetype.h>
+#include <kprotocolinfo.h>
 #include <kurl.h>
 
 // Local
@@ -92,7 +93,13 @@ struct LoadingDocumentImplPrivate {
 
 	void startLoading() {
 		Q_ASSERT(!mMetaInfoLoaded);
-		QString mimeType = MimeTypeUtils::mimeTypeByContent(mData);
+		QString mimeType;
+		const KUrl& url = mImpl->document()->url();
+		if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
+			mimeType = KMimeType::findByNameAndContent(url.fileName(), mData)->name();
+		} else {
+			mimeType = KMimeType::findByContent(mData)->name();
+		}
 		MimeTypeUtils::Kind kind = MimeTypeUtils::mimeTypeKind(mimeType);
 		LOG("mimeType:" << mimeType);
 		LOG("kind:" << kind);
