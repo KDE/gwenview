@@ -33,6 +33,7 @@ namespace Gwenview {
 
 class MessageViewAdapterPrivate;
 class MessageViewAdapter : public AbstractDocumentViewAdapter {
+	Q_OBJECT
 public:
 	MessageViewAdapter(QWidget* parent);
 	~MessageViewAdapter();
