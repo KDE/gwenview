@@ -605,6 +605,7 @@ bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 		return true;
 
 	case QEvent::HoverMove:
+	case QEvent::HoverLeave:
 		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
 	case QEvent::MouseButtonRelease:
