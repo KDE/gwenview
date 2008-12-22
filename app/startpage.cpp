@@ -73,7 +73,7 @@ struct StartPagePrivate : public Ui_StartPage{
 	}
 
 	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
-	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 		if (Nepomuk::ResourceManager::instance()->init() == 0) {
 			mTagView->setModel(TagModel::createAllTagsModel(0, backEnd));
 			mTagView->show();
