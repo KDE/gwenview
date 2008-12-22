@@ -88,6 +88,7 @@ StartPage::StartPage(QWidget* parent, AbstractSemanticInfoBackEnd* backEnd)
 , d(new StartPagePrivate) {
 	d->that = this;
 	d->setupUi(this);
+	setFrameStyle(QFrame::NoFrame);
 
 	d->mBookmarksModel = new KFilePlacesModel(this);
 	d->mRecentFoldersModel = new QStandardItemModel(this);
