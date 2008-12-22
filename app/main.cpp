@@ -30,10 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmessagebox.h>
 #include <kurl.h>
 
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-#include <nepomuk/resourcemanager.h>
-#endif
-
 // Local
 #include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
@@ -78,12 +74,6 @@ int main(int argc, char *argv[]) {
 	KApplication app;
 
 	Gwenview::ImageFormats::registerPlugins();
-
-#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
-	if (Nepomuk::ResourceManager::instance()->init() != 0) {
-		kWarning() << "Nepomuk init failed";
-	}
-#endif
 
 	Gwenview::MainWindow* window = new Gwenview::MainWindow();
 	if (url.isValid()) {

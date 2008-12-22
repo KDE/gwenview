@@ -41,6 +41,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/tagmodel.h>
 #endif
 
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+#include <nepomuk/resourcemanager.h>
+#endif
+
+
 namespace Gwenview {
 
 struct StartPagePrivate : public Ui_StartPage{
@@ -68,16 +73,21 @@ struct StartPagePrivate : public Ui_StartPage{
 	}
 
 	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
-	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		mTagLabel->setText(i18n(
-			"Sorry, browsing by tag is not available. Make sure Nepomuk is properly installed on your computer."
-			));
-		mTagView->hide();
-		mTagLabel->show();
+	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+		if (Nepomuk::ResourceManager::instance()->init() == 0) {
+			mTagView->setModel(TagModel::createAllTagsModel(0, backEnd));
+			mTagView->show();
+			mTagLabel->hide();
+		} else {
+			mTagLabel->setText(i18n(
+				"Sorry, browsing by tag is not available. Make sure Nepomuk is properly installed on your computer."
+				));
+			mTagView->hide();
+			mTagLabel->show();
+		}
 	#else
-		mTagView->setModel(TagModel::createAllTagsModel(0, backEnd));
-		mTagView->show();
-		mTagLabel->hide();
+		mTagView->hide();
+		mTagTitleLabel->hide();
 	#endif
 	}
 };

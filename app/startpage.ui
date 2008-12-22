@@ -94,7 +94,7 @@
     </spacer>
    </item>
    <item row="3" column="0" >
-    <widget class="QLabel" name="label_3" >
+    <widget class="QLabel" name="mTagTitleLabel" >
      <property name="text" >
       <string>Tags</string>
      </property>
