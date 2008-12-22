@@ -129,14 +129,7 @@ private Q_SLOTS:
 	void loadConfig();
 	void print();
 
-	void handleResizeRequest(const QSize&);
-
 	void preloadNextUrl();
-
-	void configureToolbars();
-
-	void saveMainWindowConfig();
-	void loadMainWindowConfig();
 
 	void toggleMenuBar();
 

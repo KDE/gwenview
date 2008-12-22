@@ -104,9 +104,6 @@ namespace Gwenview {
 
 static const int PRELOAD_DELAY = 1000;
 
-static const char* MAINWINDOW_SETTINGS = "MainWindow";
-
-
 struct MainWindowState {
 	QAction* mActiveViewModeAction;
 	bool mSideBarVisible;
@@ -567,28 +564,6 @@ struct MainWindow::Private {
 		}
 	}
 
-	/**
-	 * Compute a width which ensures the "next" button is always visible
-	 */
-	int computeMinimumWidth() {
-		QWidget* widget = mWindow->toolBar()->widgetForAction(mGoToNextAction);
-		int width;
-		if (widget) {
-			QPoint pos = widget->rect().topRight();
-			pos = widget->mapTo(mWindow, pos);
-			width = pos.x();
-			width += mWindow->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
-
-			// Add a few more pixels to prevent the "next" button from going
-			// in the toolbar extent.
-			width += 10;
-		} else {
-			width = mWindow->menuBar()->width();
-		}
-		return width;
-	}
-
-
 	void updateContextDependentComponents() {
 		// Gather info
 		KFileItemList selectedItemList;
@@ -612,25 +587,6 @@ struct MainWindow::Private {
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
 	}
-
-	/**
-	 * Sometimes we can get in handleResizeRequest() before geometry() has been
-	 * correctly initialized. In this case the difference between geometry
-	 */
-	void ensureGeometryIsValid() {
-		// Wait until height difference between frameGeometry and geometry is less than maxDelta
-		// But don't wait for more than timeout (avoid infinite loop)
-		const int timeout = 1000;
-		const int maxDelta = 100;
-		QTime chrono;
-		chrono.start();
-		while (mWindow->frameGeometry().height() - mWindow->geometry().height() > maxDelta
-			&& chrono.elapsed() < timeout)
-		{
-			qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-		}
-	}
-
 };
 
 
@@ -655,7 +611,6 @@ d(new MainWindow::Private)
 
 	createGUI();
 	loadConfig();
-	loadMainWindowConfig();
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
@@ -665,6 +620,7 @@ d(new MainWindow::Private)
 #ifdef KIPI_FOUND
 	d->mKIPIInterface = new KIPIInterface(this);
 #endif
+	setAutoSaveSettings();
 }
 
 
@@ -748,9 +704,6 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		// Resize the window once image is loaded
-		connect(d->mDocumentPanel, SIGNAL(resizeRequested(const QSize&)),
-			d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
 		openDocumentUrl(url);
 	}
 	d->updateContextDependentComponents();
@@ -1056,7 +1009,8 @@ void MainWindow::toggleFullScreen(bool checked) {
 	if (checked) {
 		// Save MainWindow config now, this way if we quit while in
 		// fullscreen, we are sure latest MainWindow changes are remembered.
-		saveMainWindowConfig();
+		saveMainWindowSettings(autoSaveConfigGroup());
+		resetAutoSaveSettings();
 
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
@@ -1074,6 +1028,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		d->mSaveBar->setFullScreenMode(true);
 		d->mFullScreenBar->setActivated(true);
 	} else {
+		setAutoSaveSettings();
 		if (d->mStateBeforeFullScreen.mActiveViewModeAction) {
 			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		}
@@ -1179,11 +1134,6 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 bool MainWindow::queryClose() {
 	saveConfig();
-	if (!d->mFullScreenAction->isChecked()) {
-		// Do not save config in fullscreen, we don't want to restart without
-		// menu bar or toolbars...
-		saveMainWindowConfig();
-	}
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
 		return true;
@@ -1233,27 +1183,6 @@ void MainWindow::showConfigDialog() {
 }
 
 
-void MainWindow::configureToolbars() {
-	saveMainWindowConfig();
-	KEditToolBar dlg(factory(), this);
-	connect(&dlg, SIGNAL(newToolBarConfig()), SLOT(loadMainWindowConfig()));
-	dlg.exec();
-}
-
-
-void MainWindow::loadMainWindowConfig() {
-	KConfigGroup cg = KGlobal::config()->group(MAINWINDOW_SETTINGS);
-	applyMainWindowSettings(cg);
-}
-
-
-void MainWindow::saveMainWindowConfig() {
-	KConfigGroup cg = KGlobal::config()->group(MAINWINDOW_SETTINGS);
-	saveMainWindowSettings(cg);
-	KGlobal::config()->sync();
-}
-
-
 void MainWindow::toggleMenuBar() {
 	if (!d->mFullScreenAction->isChecked()) {
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
@@ -1298,84 +1227,6 @@ void MainWindow::print() {
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
 	PrintHelper printHelper(this);
 	printHelper.print(doc);
-}
-
-
-void MainWindow::handleResizeRequest(const QSize& _size) {
-	// Disconnect ourself to avoid resizing again when we load another image
-	disconnect(d->mDocumentPanel, SIGNAL(resizeRequested(const QSize&)),
-		d->mWindow, SLOT(handleResizeRequest(const QSize&)) );
-
-	if (!d->mViewAction->isChecked()) {
-		return;
-	}
-	if (isMaximized() || isMinimized() || d->mFullScreenAction->isChecked()) {
-		return;
-	}
-
-	d->ensureGeometryIsValid();
-
-	QSize size = _size;
-
-	int sideBarWidth = d->mSideBar->isVisible()
-		? (d->mSideBar->width() + d->mCentralSplitter->handleWidth())
-		: 0;
-	// innerMargin is the margin around the view, not including the window
-	// frame
-	QSize innerMargin = QSize(
-		sideBarWidth,
-		menuBar()->height() + toolBar()->height() + d->mDocumentPanel->statusBarHeight());
-	// frameMargin is the size of the frame around the window
-	QSize frameMargin = frameGeometry().size() - geometry().size();
-
-	// Adjust size
-	QRect availableRect;
-	#ifdef Q_WS_X11
-	availableRect = KWindowSystem::workArea();
-	#else
-	availableRect = QApplication::desktop()->availableGeometry();
-	#endif
-	QSize maxSize = availableRect.size() - innerMargin - frameMargin;
-
-	if (size.width() > maxSize.width() || size.height() > maxSize.height()) {
-		size.scale(maxSize, Qt::KeepAspectRatio);
-	}
-
-	int minWidth = d->computeMinimumWidth();
-	if (size.width() < minWidth) {
-		size.setWidth(minWidth);
-	}
-
-	QRect windowRect = geometry();
-	windowRect.setSize(size + innerMargin);
-
-	// Move the window if it does not fit in the screen
-	int rightFrameMargin = frameGeometry().right() - geometry().right();
-	if (windowRect.right() + rightFrameMargin > availableRect.right()) {
-		windowRect.moveRight(availableRect.right() - rightFrameMargin);
-	}
-
-	int bottomFrameMargin = frameGeometry().bottom() - geometry().bottom();
-	if (windowRect.bottom() + bottomFrameMargin > availableRect.bottom()) {
-		windowRect.moveBottom(availableRect.bottom() - bottomFrameMargin);
-	}
-
-	// This should not be necessary, but sometimes frameGeometry top left
-	// corner is outside of availableRect
-	int leftFrameMargin = geometry().left() - frameGeometry().left();
-	if (windowRect.left() - leftFrameMargin < availableRect.left()) {
-		kWarning() << "Window is too much on the left, adjusting";
-		windowRect.moveLeft(availableRect.left() + leftFrameMargin);
-	}
-
-	int topFrameMargin = geometry().top() - frameGeometry().top();
-	if (windowRect.top() - topFrameMargin < availableRect.top()) {
-		kWarning() << "Window is too high, adjusting";
-		windowRect.moveTop(availableRect.top() + topFrameMargin);
-	}
-
-	// Define geometry
-	setGeometry(windowRect);
 }
 
 
