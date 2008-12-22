@@ -790,6 +790,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 			d->mDocumentPanel->reset();
 		}
 		d->mDirModel->setMimeExcludeFilter(QStringList());
+		setCaption(QString());
 	}
 
 	emit viewModeChanged();
