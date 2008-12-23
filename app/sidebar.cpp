@@ -124,7 +124,9 @@ void SideBarGroup::addWidget(QWidget* widget) {
 
 
 void SideBarGroup::clear() {
-	d->mContainer->deleteLater();
+	if (d->mContainer) {
+		d->mContainer->deleteLater();
+	}
 
 	d->mContainer = new QFrame(this);
 	QVBoxLayout* containerLayout = new QVBoxLayout(d->mContainer);
