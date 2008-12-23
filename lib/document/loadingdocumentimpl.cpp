@@ -190,6 +190,7 @@ struct LoadingDocumentImplPrivate {
 
 		bool ok = reader.read(&mImage);
 		if (!ok) {
+			LOG("QImageReader::read() failed");
 			return;
 		}
 
@@ -347,6 +348,7 @@ void LoadingDocumentImpl::slotMetaInfoLoaded() {
 
 
 void LoadingDocumentImpl::slotImageLoaded() {
+	LOG("");
 	if (d->mImage.isNull()) {
 		setDocumentErrorString(
 			i18nc("@info", "Loading image failed.")
@@ -373,12 +375,14 @@ void LoadingDocumentImpl::slotImageLoaded() {
 	}
 
 	if (d->mImageDataInvertedZoom != 1 && d->mImage.size() != d->mImageSize) {
+		LOG("Loaded a down sampled image");
 		d->mDownSampledImageLoaded = true;
 		// We loaded a down sampled image
 		setDocumentDownSampledImage(d->mImage, d->mImageDataInvertedZoom);
 		return;
 	}
 
+	LOG("Loaded a full image");
 	setDocumentImage(d->mImage);
 	emit imageRectUpdated(d->mImage.rect());
 	emit loaded();

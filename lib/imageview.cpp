@@ -35,6 +35,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 namespace Gwenview {
 
+#undef ENABLE_LOG
+#undef LOG
+//#define ENABLE_LOG
+#ifdef ENABLE_LOG
+#define LOG(x) kDebug() << x
+#else
+#define LOG(x) ;
+#endif
+
 
 struct ImageViewPrivate {
 	ImageView* mView;
@@ -309,6 +318,7 @@ void ImageView::slotDocumentIsAnimatedUpdated() {
 
 
 void ImageView::updateImageRect(const QRect& imageRect) {
+	LOG("imageRect" << imageRect);
 	QRect viewportRect = mapToViewport(imageRect);
 	viewportRect = viewportRect.intersected(d->mViewport->rect());
 	if (viewportRect.isEmpty()) {
@@ -317,6 +327,7 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 
 	QSize bufferSize = d->requiredBufferSize();
 	if (bufferSize != d->mCurrentBuffer.size()) {
+		LOG("Need a new buffer");
 		// Since the required buffer size is not the same as our current buffer
 		// size, the image must have been resized. Call setDocument(), it will
 		// take care of resizing the buffer and repainting the whole image.
@@ -540,6 +551,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 
 void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
+	LOG("");
 	int viewportLeft = zoomedImageLeft - d->hScroll();
 	int viewportTop = zoomedImageTop - d->vScroll();
 
