@@ -414,11 +414,12 @@ QSize DocumentPanel::sizeHint() const {
 
 KUrl DocumentPanel::url() const {
 	if (!d->mDocumentView->adapter()) {
+		LOG("!d->mDocumentView->adapter()");
 		return KUrl();
 	}
 
 	if (!d->mDocumentView->adapter()->document()) {
-		kWarning() << "!d->mDocumentView->adapter()->document()";
+		LOG("!d->mDocumentView->adapter()->document()");
 		return KUrl();
 	}
 
