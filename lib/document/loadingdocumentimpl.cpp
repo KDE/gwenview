@@ -309,7 +309,9 @@ bool LoadingDocumentImpl::isEditable() const {
 
 
 Document::LoadingState LoadingDocumentImpl::loadingState() const {
-	if (d->mMetaInfoLoaded) {
+	if (!document()->image().isNull()) {
+		return Document::Loaded;
+	} else if (d->mMetaInfoLoaded) {
 		return Document::MetaInfoLoaded;
 	} else if (document()->kind() != MimeTypeUtils::KIND_UNKNOWN) {
 		return Document::KindDetermined;
