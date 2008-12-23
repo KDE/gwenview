@@ -23,6 +23,31 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QObject>
 
+// Local
+#include "../lib/document/document.h"
+
+class LoadingStateSpy : public QObject {
+	Q_OBJECT
+public:
+	LoadingStateSpy(const Gwenview::Document::Ptr& doc)
+	: mDocument(doc)
+	, mCallCount(0)
+	{
+	}
+
+public Q_SLOTS:
+	void readState() {
+		mCallCount++;
+		mState = mDocument->loadingState();
+	}
+
+public:
+	Gwenview::Document::Ptr mDocument;
+	int mCallCount;
+	Gwenview::Document::LoadingState mState;
+};
+
+
 class DocumentTest : public QObject {
 	Q_OBJECT
 
@@ -33,6 +58,7 @@ private Q_SLOTS:
 	void testLoadEmpty();
 	void testLoadDownSampled();
 	void testLoadDownSampled_data();
+	void testLoadDownSampledPng();
 	void testLoadRemote();
 	void testLoadAnimated();
 	void testDeleteWhileLoading();

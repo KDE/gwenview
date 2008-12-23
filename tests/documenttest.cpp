@@ -172,6 +172,29 @@ void DocumentTest::testLoadDownSampled() {
 	QCOMPARE(downSampledImage.size(), doc->size() / 4);
 }
 
+/**
+ * Down sampling is not supported on png. We should get a complete image
+ * instead.
+ */
+void DocumentTest::testLoadDownSampledPng() {
+	KUrl url = urlForTestFile("test.png");
+	QImage image;
+	bool ok = image.load(url.path());
+	QVERIFY2(ok, "Could not load test image");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+
+	LoadingStateSpy stateSpy(doc);
+	connect(doc.data(), SIGNAL(loaded(const KUrl&)), &stateSpy, SLOT(readState()));
+
+	bool ready = doc->prepareDownSampledImageForZoom(0.2);
+	QVERIFY2(!ready, "There should not be a down sampled image at this point");
+
+	doc->waitUntilLoaded();
+
+	QCOMPARE(stateSpy.mCallCount, 1);
+	QCOMPARE(stateSpy.mState, Document::Loaded);
+}
+
 void DocumentTest::testLoadRemote() {
 	QString testTarGzPath = pathForTestFile("test.tar.gz");
 	KUrl url;
