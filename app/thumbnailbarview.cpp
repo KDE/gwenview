@@ -292,7 +292,7 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 
 
 void ThumbnailBarView::showEvent(QShowEvent* event) {
-	QListView::showEvent(event);
+	ThumbnailView::showEvent(event);
 	if (!selectionModel()) {
 		// selectionModel() is 0 on startup
 		return;
