@@ -132,7 +132,7 @@ void DocumentTest::testLoadTwoPasses() {
 void DocumentTest::testLoadEmpty() {
 	KUrl url = urlForTestFile("empty.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	while (doc->loadingState() == Document::Loading) {
+	while (doc->loadingState() <= Document::KindDetermined) {
 		QTest::qWait(100);
 	}
 	QCOMPARE(doc->loadingState(), Document::LoadingFailed);
@@ -416,7 +416,7 @@ void DocumentTest::testMetaInfoJpeg() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	// We cleared the cache, so the document should not be loaded
-	Q_ASSERT(doc->loadingState() == Document::Loading);
+	Q_ASSERT(doc->loadingState() <= Document::KindDetermined);
 
 	// Wait until we receive the metaInfoUpdated() signal
 	QSignalSpy metaInfoUpdatedSpy(doc.data(), SIGNAL(metaInfoUpdated()));
