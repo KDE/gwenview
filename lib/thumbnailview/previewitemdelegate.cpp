@@ -259,6 +259,10 @@ struct PreviewItemDelegatePrivate {
 		mIndexUnderCursor = index;
 		mView->update(oldIndex);
 
+		if (KGlobalSettings::singleClick() && KGlobalSettings::changeCursorOverIcon()) {
+			mView->setCursor(mIndexUnderCursor.isValid() ? Qt::PointingHandCursor : Qt::ArrowCursor);
+		}
+
 		if (mIndexUnderCursor.isValid()) {
 			updateToggleSelectionButton();
 			updateImageButtons();
