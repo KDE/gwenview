@@ -135,6 +135,8 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
 		SLOT(applyNameFilter()));
+
+	QTimer::singleShot(0, d->mLineEdit, SLOT(setFocus()));
 }
 
 NameFilterWidget::~NameFilterWidget()
@@ -419,6 +421,8 @@ TagFilterWidget::TagFilterWidget(SortedDirModel* model)
 	connect(d->mTagComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
 
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateTagSetFilter()) );
+
+	QTimer::singleShot(0, d->mTagComboBox, SLOT(setFocus()));
 }
 
 TagFilterWidget::~TagFilterWidget() {
