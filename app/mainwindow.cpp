@@ -1194,16 +1194,13 @@ void MainWindow::loadConfig() {
 	QColor bgColor = GwenviewConfig::viewBackgroundColor();
 	QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
 
-	QWidget* widget = d->mThumbnailView->viewport();
-	QPalette palette = widget->palette();
-	palette.setColor(QPalette::Base, bgColor);
-	palette.setColor(QPalette::Text, fgColor);
-	widget->setPalette(palette);
+	QPalette pal = palette();
+	pal.setColor(QPalette::Base, bgColor);
+	pal.setColor(QPalette::Text, fgColor);
 
-	d->mStartPage->applyPalette(palette);
-
-	d->mDocumentPanel->setNormalPalette(palette);
-
+	d->mThumbnailViewPanel->applyPalette(pal);
+	d->mStartPage->applyPalette(pal);
+	d->mDocumentPanel->setNormalPalette(pal);
 
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
 

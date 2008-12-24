@@ -307,4 +307,9 @@ void ThumbnailViewPanel::updateThumbnailDetails() {
 }
 
 
+void ThumbnailViewPanel::applyPalette(const QPalette& palette) {
+	d->mThumbnailView->setPalette(palette);
+}
+
+
 } // namespace

@@ -50,6 +50,7 @@ public:
 	ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
 	~ThumbnailViewPanel();
 
+	void applyPalette(const QPalette&);
 	void initActionDependentWidgets();
 
 	ThumbnailView* thumbnailView() const;
