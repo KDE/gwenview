@@ -182,9 +182,11 @@ struct LoadingDocumentImplPrivate {
 			// Do not use mImageSize here: QImageReader needs a non-transposed
 			// image size
 			QSize size = reader.size() / mImageDataInvertedZoom;
-			LOG("Setting scaled size to" << size);
 			if (!size.isEmpty()) {
+				LOG("Setting scaled size to" << size);
 				reader.setScaledSize(size);
+			} else {
+				LOG("Not setting scaled size as it is empty" << size);
 			}
 		}
 
