@@ -133,6 +133,14 @@ const QImage& Document::downSampledImageForZoom(qreal zoom) const {
 	}
 
 	if (!d->mDownSampledImageMap.contains(invertedZoom)) {
+		if (!d->mImage.isNull()) {
+			// Special case: if we have the full image and the down sampled
+			// image would be too small, return the original image.
+			const QSize downSampledSize = d->mImage.size() / invertedZoom;
+			if (downSampledSize.isEmpty()) {
+				return d->mImage;
+			}
+		}
 		return sNullImage;
 	}
 
