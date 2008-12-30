@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QCompleter>
 #include <QDate>
 #include <QLineEdit>
+#include <QPainter>
+#include <QPainterPath>
 #include <QTimer>
 #include <QToolButton>
 
@@ -43,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/datewidget.h>
 #include <lib/flowlayout.h>
+#include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/timeutils.h>
 
@@ -122,6 +125,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
+	layout->setSpacing(2);
 	layout->addWidget(d->mModeComboBox);
 	layout->addWidget(d->mLineEdit);
 
@@ -449,20 +453,39 @@ void TagFilterWidget::updateTagSetFilter() {
 /**
  * A container for all filter widgets. It features a close button on the right.
  */
-class FilterWidgetContainer : public QWidget {
+class FilterWidgetContainer : public QFrame {
 public:
+	FilterWidgetContainer() {
+		QPalette pal = palette();
+		pal.setColor(QPalette::Window, pal.color(QPalette::Highlight));
+		setPalette(pal);
+	}
+
 	void setFilterWidget(QWidget* widget) {
 		QToolButton* closeButton = new QToolButton;
 		closeButton->setIcon(KIcon("window-close"));
 		closeButton->setAutoRaise(true);
+		closeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 		int size = IconSize(KIconLoader::Small);
 		closeButton->setIconSize(QSize(size, size));
 		connect(closeButton, SIGNAL(clicked()), SLOT(deleteLater()));
 		QHBoxLayout* layout = new QHBoxLayout(this);
-		layout->setMargin(0);
+		layout->setMargin(2);
 		layout->setSpacing(2);
 		layout->addWidget(widget);
 		layout->addWidget(closeButton);
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		QPainter painter(this);
+		painter.setRenderHint(QPainter::Antialiasing);
+		QPainterPath path = PaintUtils::roundedRectangle(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 6);
+
+		QColor color = palette().color(QPalette::Highlight);
+		painter.fillPath(path, PaintUtils::alphaAdjustedF(color, 0.5));
+		painter.setPen(color);
+		painter.drawPath(path);
 	}
 };
 
@@ -504,7 +527,8 @@ FilterController::FilterController(QFrame* frame, SortedDirModel* dirModel)
 	d->mFilterWidgetCount = 0;
 
 	d->mFrame->hide();
-	new FlowLayout(d->mFrame);
+	FlowLayout* layout = new FlowLayout(d->mFrame);
+	layout->setSpacing(2);
 
 	d->addAction(i18nc("@action:inmenu", "Filter by Name"), SLOT(addFilterByName()));
 	d->addAction(i18nc("@action:inmenu", "Filter by Date"), SLOT(addFilterByDate()));
