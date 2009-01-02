@@ -35,7 +35,7 @@ class KActionCollection;
 namespace Gwenview {
 
 
-class FileOpsContextManagerItemPrivate;
+struct FileOpsContextManagerItemPrivate;
 class FileOpsContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:

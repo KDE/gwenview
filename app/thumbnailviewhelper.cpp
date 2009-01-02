@@ -83,7 +83,7 @@ void ThumbnailViewHelper::thumbnailForDocument(const KUrl& url, ThumbnailGroup::
 	}
 
 	Document::Ptr doc = factory->load(url);
-	if (!doc->loadingState() == Document::Loaded) {
+	if (doc->loadingState() != Document::Loaded) {
 		return;
 	}
 

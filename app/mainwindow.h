@@ -134,7 +134,7 @@ private Q_SLOTS:
 	void toggleMenuBar();
 
 private:
-	class Private;
+	struct Private;
 	MainWindow::Private* const d;
 
 	void openSelectedDocument();

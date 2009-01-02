@@ -35,7 +35,7 @@ class QTimeLine;
 namespace Gwenview {
 
 
-class ThumbnailBarItemDelegatePrivate;
+struct ThumbnailBarItemDelegatePrivate;
 
 class ThumbnailBarItemDelegate : public QAbstractItemDelegate {
 	Q_OBJECT
@@ -52,7 +52,7 @@ protected:
 
 private:
 	ThumbnailBarItemDelegatePrivate* const d;
-	friend class ThumbnailBarItemDelegatePrivate;
+	friend struct ThumbnailBarItemDelegatePrivate;
 };
 
 

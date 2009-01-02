@@ -33,7 +33,7 @@ class KUrl;
 
 namespace Gwenview {
 
-class DocumentPanelPrivate;
+struct DocumentPanelPrivate;
 class DocumentView;
 class ImageView;
 class ThumbnailBarView;
@@ -112,7 +112,7 @@ private Q_SLOTS:
 	void showContextMenu();
 
 private:
-	friend class DocumentPanelPrivate;
+	friend struct DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;
 
 	void createAdapterForUrl(const KUrl& url);

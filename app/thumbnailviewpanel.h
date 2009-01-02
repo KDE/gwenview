@@ -39,7 +39,7 @@ namespace Gwenview {
 class SortedDirModel;
 class ThumbnailView;
 
-class ThumbnailViewPanelPrivate;
+struct ThumbnailViewPanelPrivate;
 /**
  * This class contains all the necessary widgets displayed in browse mode:
  * the thumbnail view, the url navigator, the bottom bar.

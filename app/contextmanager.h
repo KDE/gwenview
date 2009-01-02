@@ -36,7 +36,7 @@ class SortedDirModel;
 
 class AbstractContextManagerItem;
 
-class ContextManagerPrivate;
+struct ContextManagerPrivate;
 
 /**
  * Manage the update of the contextual parts of the applications, 

@@ -41,7 +41,7 @@ class SlideShow;
 class ThumbnailBarView;
 
 
-class FullScreenContentPrivate;
+struct FullScreenContentPrivate;
 /**
  * The content of the fullscreen bar
  */

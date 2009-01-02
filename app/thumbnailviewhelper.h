@@ -32,7 +32,7 @@ class KActionCollection;
 
 namespace Gwenview {
 
-class ThumbnailViewHelperPrivate;
+struct ThumbnailViewHelperPrivate;
 class ThumbnailViewHelper : public AbstractThumbnailViewHelper {
 	Q_OBJECT
 public:

@@ -34,7 +34,7 @@ class KActionCollection;
 namespace Gwenview {
 
 
-class SemanticInfoContextManagerItemPrivate;
+struct SemanticInfoContextManagerItemPrivate;
 class SemanticInfoContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:

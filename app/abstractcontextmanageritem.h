@@ -30,7 +30,7 @@ namespace Gwenview {
 class ContextManager;
 class SideBar;
 
-class AbstractContextManagerItemPrivate;
+struct AbstractContextManagerItemPrivate;
 class AbstractContextManagerItem : public QObject {
 	Q_OBJECT
 public:

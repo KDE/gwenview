@@ -61,7 +61,7 @@ private Q_SLOTS:
 	void restoreDefaultImageViewTool();
 
 private:
-	class Private;
+	struct Private;
 	Private* const d;
 };
 

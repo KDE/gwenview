@@ -31,7 +31,7 @@ class KFileItemList;
 
 namespace Gwenview {
 
-class InfoContextManagerItemPrivate;
+struct InfoContextManagerItemPrivate;
 
 class InfoContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
