@@ -299,13 +299,13 @@ struct MainWindow::Private {
 			mWindow, SLOT(reduceLevelOfDetails()) );
 
 		mGoToPreviousAction = view->addAction("go_previous",mWindow, SLOT(goToPrevious()));
-		mGoToPreviousAction->setIcon(KIcon("media-seek-backward"));
+		mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
 		mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
 		mGoToPreviousAction->setToolTip(i18n("Go to Previous Image"));
 		mGoToPreviousAction->setShortcut(Qt::Key_Backspace);
 
 		mGoToNextAction = view->addAction("go_next",mWindow, SLOT(goToNext()));
-		mGoToNextAction->setIcon(KIcon("media-seek-forward"));
+		mGoToNextAction->setIcon(KIcon("media-skip-forward"));
 		mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
 		mGoToNextAction->setToolTip(i18n("Go to Next Image"));
 		mGoToNextAction->setShortcut(Qt::Key_Space);
