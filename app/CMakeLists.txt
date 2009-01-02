@@ -68,6 +68,8 @@ kde4_add_ui_files(gwenview_SRCS
 	)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
+kde4_add_app_icon(gwenview_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview.png")
+
 kde4_add_executable(gwenview ${gwenview_SRCS})
 
 target_link_libraries(gwenview
