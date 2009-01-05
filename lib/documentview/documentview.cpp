@@ -238,7 +238,7 @@ struct DocumentViewPrivate {
 	qreal computeMinimumZoom() const {
 		// There is no point zooming out less than zoomToFit, but make sure it does
 		// not get too small either
-		return qMax(0.001, qMin(mAdapter->computeZoomToFit(), 1.));
+		return qMax(0.001, qMin(double(mAdapter->computeZoomToFit()), 1.));
 	}
 
 
