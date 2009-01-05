@@ -302,14 +302,16 @@ struct PreviewItemDelegatePrivate {
 	}
 #endif
 
-	bool mouseReleaseEventFilter() {
+	bool mouseButtonEventFilter(QEvent::Type type) {
 	#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		const QRect rect = ratingRectFromIndexRect(mView->visualRect(mIndexUnderCursor));
 		const int rating = ratingFromCursorPosition(rect);
 		if (rating == -1) {
 			return false;
 		}
-		that->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
+		if (type == QEvent::MouseButtonRelease) {
+			that->setDocumentRatingRequested(urlForIndex(mIndexUnderCursor) , rating);
+		}
 		return true;
 	#else
 		return false;
@@ -612,8 +614,9 @@ bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 	case QEvent::HoverLeave:
 		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
+	case QEvent::MouseButtonPress:
 	case QEvent::MouseButtonRelease:
-		return d->mouseReleaseEventFilter();
+		return d->mouseButtonEventFilter(event->type());
 
 	default:
 		return false;
