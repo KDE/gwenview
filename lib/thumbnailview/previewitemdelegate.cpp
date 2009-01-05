@@ -249,6 +249,7 @@ struct PreviewItemDelegatePrivate {
 	bool hoverEventFilter(QHoverEvent* event) {
 		QModelIndex index = mView->indexAt(event->pos());
 		if (mIndexUnderCursor.isValid()) {
+			// Always repaint in case we are over the rating row
 			mView->update(mIndexUnderCursor);
 		}
 		if (index == mIndexUnderCursor) {
