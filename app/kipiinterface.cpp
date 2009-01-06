@@ -86,6 +86,46 @@ public:
 
 	void setDescription(const QString&) {}
 
+	int angle() {
+		loadMetaInfo();
+
+		if (!mMetaInfo.isValid()) {
+			return 0;
+		}
+
+		const KFileMetaInfoItem& mii = mMetaInfo.item("http://freedesktop.org/standards/xesam/1.0/core#orientation");
+		bool ok = false;
+		const Orientation orientation = (Orientation)mii.value().toInt(&ok);
+		if (!ok) {
+			return 0;
+		}
+
+		switch(orientation) {
+		case NOT_AVAILABLE:
+		case NORMAL:
+			return 0;
+
+		case ROT_90:
+			return 90;
+
+		case ROT_180:
+			return 180;
+
+		case ROT_270:
+			return 270;
+
+		case HFLIP:
+		case VFLIP:
+		case TRANSPOSE:
+		case TRANSVERSE:
+			kWarning() << "Can't represent an orientation value of" << orientation << "as an angle (" << _url << ')';
+			return 0;
+		}
+
+		kWarning() << "Don't know how to handle an orientation value of" << orientation << '(' << _url << ')';
+		return 0;
+	}
+
 	QMap<QString,QVariant> attributes() {
 		return QMap<QString,QVariant>();
 	}
@@ -95,6 +135,15 @@ public:
 	void clearAttributes() {}
 
 	void addAttributes(const QMap<QString, QVariant>&) {}
+
+private:
+	KFileMetaInfo mMetaInfo;
+
+	void loadMetaInfo() {
+		if (!mMetaInfo.isValid()) {
+			mMetaInfo = KFileMetaInfo(_url);
+		}
+	}
 };
 
 const QRegExp KIPIImageInfo::sExtensionRE("\\.[a-z0-9]+$", Qt::CaseInsensitive );
