@@ -72,6 +72,39 @@ struct FileOpsContextManagerItemPrivate {
 		}
 		return urlList;
 	}
+
+
+	void updateServiceForName() {
+		// This code is inspired from
+		// kdebase/apps/lib/konq/konq_menuactions.cpp
+
+		// Get list of all distinct mimetypes in selection
+		QStringList mimeTypes;
+		Q_FOREACH(const KFileItem& item, mContextManagerItem->contextManager()->selection()) {
+			const QString mimeType = item.mimetype();
+			if (!mimeTypes.contains(mimeType)) {
+				mimeTypes << mimeType;
+			}
+		}
+
+		// Query trader
+		const QString firstMimeType = mimeTypes.takeFirst();
+		const QString constraintTemplate = "'%1' in ServiceTypes";
+		QStringList constraints;
+		Q_FOREACH(const QString& mimeType, mimeTypes) {
+			constraints << constraintTemplate.arg(mimeType);
+		}
+
+		KService::List services = KMimeTypeTrader::self()->query(
+			firstMimeType, "Application",
+			constraints.join(" and "));
+
+		// Update map
+		mServiceForName.clear();
+		Q_FOREACH(const KService::Ptr &service, services) {
+			mServiceForName[service->name()] = service;
+		}
+	}
 };
 
 
@@ -153,8 +186,8 @@ void FileOpsContextManagerItem::updateActions() {
 	d->mLinkToAction->setEnabled(selectionNotEmpty);
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
+	d->mOpenWithAction->setEnabled(selectionNotEmpty);
 
-	d->mOpenWithAction->setEnabled(urlIsValid);
 	d->mCreateFolderAction->setEnabled(dirUrlIsValid);
 	d->mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
 
@@ -229,16 +262,9 @@ void FileOpsContextManagerItem::createFolder() {
 
 void FileOpsContextManagerItem::populateOpenMenu() {
 	QMenu* openMenu = d->mOpenWithAction->menu();
-	QList<QAction*> currentActions = openMenu->actions();
-	qDeleteAll(currentActions);
+	qDeleteAll(openMenu->actions());
 
-	QString mimeType = contextManager()->currentUrlMimeType();
-	KService::List services = KMimeTypeTrader::self()->query(mimeType);
-
-	d->mServiceForName.clear();
-	Q_FOREACH(const KService::Ptr &service, services) {
-		d->mServiceForName[service->name()] = service;
-	}
+	d->updateServiceForName();
 
 	Q_FOREACH(const KService::Ptr &service, d->mServiceForName) {
 		QString text = service->name().replace( '&', "&&" );
