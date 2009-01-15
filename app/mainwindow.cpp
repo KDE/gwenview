@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QDateTime>
 #include <QDesktopWidget>
 #include <QTimer>
 #include <QShortcut>
@@ -155,6 +156,8 @@ struct MainWindow::Private {
 	KUrl mUrlToSelect;
 
 	QString mCaption;
+
+	QDateTime mFullScreenLeftAt;
 
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
@@ -1042,6 +1045,9 @@ void MainWindow::toggleFullScreen(bool checked) {
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
+
+		// See resizeEvent
+		d->mFullScreenLeftAt = QDateTime::currentDateTime();
 	}
 	setUpdatesEnabled(true);
 }
@@ -1282,6 +1288,19 @@ void MainWindow::showEvent(QShowEvent *event) {
 	// been initialized, that's why it's done only in the showEvent()
 	d->mShowMenuBarAction->setChecked(menuBar()->isVisible());
 	KXmlGuiWindow::showEvent(event);
+}
+
+
+void MainWindow::resizeEvent(QResizeEvent* event) {
+	KXmlGuiWindow::resizeEvent(event);
+	// This is a small hack to execute code after leaving fullscreen, and after
+	// the window has been resized back to its former size.
+	if (d->mFullScreenLeftAt.isValid() && d->mFullScreenLeftAt.secsTo(QDateTime::currentDateTime()) < 2) {
+		if (d->mBrowseAction->isChecked()) {
+			d->mThumbnailView->scrollToSelectedIndex();
+		}
+		d->mFullScreenLeftAt = QDateTime();
+	}
 }
 
 

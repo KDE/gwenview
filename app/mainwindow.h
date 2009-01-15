@@ -73,6 +73,7 @@ protected:
 	virtual bool queryExit();
 	virtual QSize sizeHint() const;
 	virtual void showEvent(QShowEvent*);
+	virtual void resizeEvent(QResizeEvent*);
 
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
