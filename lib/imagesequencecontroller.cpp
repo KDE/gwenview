@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTimer>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include <lib/imagesequence.h>
@@ -80,6 +81,14 @@ void ImageSequenceController::setInterval(int interval) {
 
 
 void ImageSequenceController::start() {
+	if (!d->mImageSequence) {
+		kWarning() << "No ImageSequence!";
+		return;
+	}
+	if (d->mImageSequence->frameCount() == 0) {
+		kWarning() << "Empty ImageSequence!";
+		return;
+	}
 	d->mIndex = 0;
 	d->mTimer.start();
 	d->emitFrameChanged();
