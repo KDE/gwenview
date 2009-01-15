@@ -97,6 +97,8 @@ public Q_SLOTS:
 	 */
 	void setThumbnailSize(int pixel);
 
+	void scrollToSelectedIndex();
+
 protected:
 	virtual void dragEnterEvent(QDragEnterEvent*);
 

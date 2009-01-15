@@ -477,6 +477,15 @@ void ThumbnailView::resizeEvent(QResizeEvent* event) {
 void ThumbnailView::showEvent(QShowEvent* event) {
 	QListView::showEvent(event);
 	d->scheduleThumbnailGenerationForVisibleItems();
+	QTimer::singleShot(0, this, SLOT(scrollToSelectedIndex()));
+}
+
+
+void ThumbnailView::scrollToSelectedIndex() {
+	QModelIndexList list = selectedIndexes();
+	if (list.count() >= 1) {
+		scrollTo(list.first(), PositionAtCenter);
+	}
 }
 
 

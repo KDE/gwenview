@@ -291,19 +291,6 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 }
 
 
-void ThumbnailBarView::showEvent(QShowEvent* event) {
-	ThumbnailView::showEvent(event);
-	if (!selectionModel()) {
-		// selectionModel() is 0 on startup
-		return;
-	}
-	QModelIndexList list = selectionModel()->selectedIndexes();
-	if (list.count() == 1) {
-		scrollTo(list.first(), PositionAtCenter);
-	}
-}
-
-
 int ThumbnailBarView::horizontalScrollToValue(const QRect& rect) {
 	// This code is a much simplified version of
 	// QListViewPrivate::horizontalScrollToValue()
