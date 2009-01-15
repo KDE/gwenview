@@ -723,7 +723,7 @@ void MainWindow::startSlideShow() {
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (action == d->mViewAction) {
 		// Switching to view mode
-		QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
+		const QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
 		d->mDirModel->setMimeExcludeFilter(mimeFilter);
 		d->mViewStackedWidget->setCurrentWidget(d->mDocumentPanel);
 		if (d->mDocumentPanel->isEmpty()) {
@@ -1071,7 +1071,7 @@ void MainWindow::openFile() {
 
 	KFileDialog dialog(dirUrl, QString(), this);
 	dialog.setCaption(i18nc("@title:window", "Open Image"));
-	QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
+	const QStringList mimeFilter = MimeTypeUtils::imageMimeTypes();
 	dialog.setMimeFilter(mimeFilter);
 	dialog.setOperationMode(KFileDialog::Opening);
 	if (!dialog.exec()) {

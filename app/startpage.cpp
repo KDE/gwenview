@@ -54,7 +54,7 @@ struct StartPagePrivate : public Ui_StartPage{
 	QStandardItemModel* mRecentFoldersModel;
 
 	void updateRecentFoldersModel() {
-		QStringList list = GwenviewConfig::recentFolders();
+		const QStringList list = GwenviewConfig::recentFolders();
 
 		mRecentFoldersModel->clear();
 		Q_FOREACH(const QString& urlString, list) {

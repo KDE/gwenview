@@ -103,7 +103,7 @@ static bool themeNameLessThan(const QString& s1, const QString& s2) {
 
 QStringList FullScreenTheme::themeNameList() {
 	QStringList list;
-	QStringList themeBaseDirs =
+	const QStringList themeBaseDirs =
 		KGlobal::mainComponent().dirs()
 		->findDirs("appdata", THEME_BASE_DIR);
 	Q_FOREACH(const QString& themeBaseDir, themeBaseDirs) {

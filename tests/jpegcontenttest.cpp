@@ -84,10 +84,10 @@ typedef QMap<QString,QString> MetaInfoMap;
 MetaInfoMap getMetaInfo(const QString& path) {
 	KFileMetaInfo fmi(path);
 	QStringList list=fmi.supportedKeys();
-	QStringList::ConstIterator it=list.begin();
+	QStringList::ConstIterator it=list.constBegin();
 	MetaInfoMap map;
 	
-	for ( ; it!=list.end(); ++it) {
+	for ( ; it!=list.constEnd(); ++it) {
 		KFileMetaInfoItem item=fmi.item(*it);
 		map[*it]=item.value().toString();
 	}

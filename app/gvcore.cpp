@@ -186,7 +186,7 @@ void GvCore::save(const KUrl& url) {
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QByteArray format = doc->format();
-	QStringList availableTypes = KImageIO::types(KImageIO::Writing);
+	const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
 	if (availableTypes.contains(QString(format))) {
 		if (!doc->save(url, format)) {
 			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
