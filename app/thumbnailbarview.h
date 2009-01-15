@@ -64,7 +64,6 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent*);
-	virtual void showEvent(QShowEvent* event);
 
 	virtual void resizeEvent(QResizeEvent * event);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
