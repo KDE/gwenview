@@ -525,7 +525,7 @@ struct MainWindow::Private {
 			isRasterImage = mWindow->currentDocumentIsRasterImage();
 			canSave = isRasterImage;
 			isModified = DocumentFactory::instance()->load(url)->isModified();
-			if (!mViewAction->isChecked()) {
+			if (mCurrentPageId != ViewPageId) {
 				// Saving only makes sense if exactly one image is selected
 				QItemSelection selection = mThumbnailView->selectionModel()->selection();
 				QModelIndexList indexList = selection.indexes();
@@ -545,7 +545,7 @@ struct MainWindow::Private {
 		if (mCurrentPageId == StartPageId) {
 			return KUrl();
 		}
-		if (mViewAction->isChecked() && !mDocumentPanel->isEmpty()) {
+		if (mCurrentPageId == ViewPageId && !mDocumentPanel->isEmpty()) {
 			return mDocumentPanel->url();
 		} else {
 			QModelIndex index = mThumbnailView->currentIndex();
@@ -653,7 +653,7 @@ DocumentPanel* MainWindow::documentPanel() const {
 
 
 bool MainWindow::currentDocumentIsRasterImage() const {
-	if (d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId == ViewPageId) {
 		Document::Ptr doc = d->mDocumentPanel->currentDocument();
 		if (!doc) {
 			return false;
@@ -790,7 +790,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 
 
 void MainWindow::openSelectedDocument() {
-	if (!d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId != ViewPageId) {
 		return;
 	}
 
@@ -913,7 +913,7 @@ void MainWindow::slotPartCompleted() {
 
 
 void MainWindow::slotSelectionChanged() {
-	if (d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId == ViewPageId) {
 		// The user selected a new file in the thumbnail view, since the
 		// document view is visible, let's show it
 		openSelectedDocument();
@@ -988,7 +988,7 @@ void MainWindow::goToNext() {
 
 
 void MainWindow::goToUrl(const KUrl& url) {
-	if (d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId == ViewPageId) {
 		openDocumentUrl(url);
 	}
 	KUrl dirUrl = url;
@@ -1016,7 +1016,7 @@ void MainWindow::updatePreviousNextActions() {
 void MainWindow::reduceLevelOfDetails() {
 	if (d->mFullScreenAction->isChecked()) {
 		d->mFullScreenAction->trigger();
-	} else if (d->mViewAction->isChecked()) {
+	} else if (d->mCurrentPageId == ViewPageId) {
 		d->mBrowseAction->trigger();
 	}
 }
@@ -1079,7 +1079,7 @@ void MainWindow::saveCurrentAs() {
 
 
 void MainWindow::reload() {
-	if (d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId == ViewPageId) {
 		d->mDocumentPanel->reload();
 	} else {
 		d->mDirModel->reload();
@@ -1273,7 +1273,7 @@ void MainWindow::preloadNextUrl() {
 		return;
 	}
 
-	if (d->mViewAction->isChecked()) {
+	if (d->mCurrentPageId == ViewPageId) {
 		// If we are in view mode, preload the next url, otherwise preload the
 		// selected one
 		index = d->mDirModel->sibling(index.row() + 1, index.column(), index);
@@ -1311,7 +1311,7 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
 	// This is a small hack to execute code after leaving fullscreen, and after
 	// the window has been resized back to its former size.
 	if (d->mFullScreenLeftAt.isValid() && d->mFullScreenLeftAt.secsTo(QDateTime::currentDateTime()) < 2) {
-		if (d->mBrowseAction->isChecked()) {
+		if (d->mCurrentPageId == BrowsePageId) {
 			d->mThumbnailView->scrollToSelectedIndex();
 		}
 		d->mFullScreenLeftAt = QDateTime();
