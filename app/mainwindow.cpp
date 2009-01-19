@@ -105,6 +105,12 @@ namespace Gwenview {
 
 static const int PRELOAD_DELAY = 1000;
 
+enum PageId {
+	StartPageId,
+	BrowsePageId,
+	ViewPageId
+};
+
 struct MainWindowState {
 	QAction* mActiveViewModeAction;
 	bool mSideBarVisible;
@@ -156,6 +162,8 @@ struct MainWindow::Private {
 	KUrl mUrlToSelect;
 
 	QString mCaption;
+
+	PageId mCurrentPageId;
 
 	QDateTime mFullScreenLeftAt;
 
@@ -534,7 +542,7 @@ struct MainWindow::Private {
 	}
 
 	KUrl currentUrl() const {
-		if (mStartPage->isVisible()) {
+		if (mCurrentPageId == StartPageId) {
 			return KUrl();
 		}
 		if (mViewAction->isChecked() && !mDocumentPanel->isEmpty()) {
@@ -570,19 +578,22 @@ struct MainWindow::Private {
 	void updateContextDependentComponents() {
 		// Gather info
 		KFileItemList selectedItemList;
-		QItemSelection selection = mThumbnailView->selectionModel()->selection();
+		KUrl url;
+		if (mCurrentPageId != StartPageId) {
+			QItemSelection selection = mThumbnailView->selectionModel()->selection();
 
-		Q_FOREACH(const QModelIndex& index, selection.indexes()) {
-			selectedItemList << mDirModel->itemForIndex(index);
-		}
+			Q_FOREACH(const QModelIndex& index, selection.indexes()) {
+				selectedItemList << mDirModel->itemForIndex(index);
+			}
 
-		// At least add current url if it's valid (it may not be in
-		// selectedItemList if we are viewing a non-browsable url, for example
-		// using http protocol)
-		const KUrl url = currentUrl();
-		if (selectedItemList.isEmpty() && url.isValid()) {
-			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-			selectedItemList << item;
+			// At least add current url if it's valid (it may not be in
+			// selectedItemList if we are viewing a non-browsable url, for example
+			// using http protocol)
+			url = currentUrl();
+			if (selectedItemList.isEmpty() && url.isValid()) {
+				KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
+				selectedItemList << item;
+			}
 		}
 
 		// Update
@@ -598,6 +609,7 @@ MainWindow::MainWindow()
 d(new MainWindow::Private)
 {
 	d->mWindow = this;
+	d->mCurrentPageId = StartPageId;
 	d->mDirModel = new SortedDirModel(this);
 	d->mGvCore = new GvCore(this, d->mDirModel);
 	d->mPreloader = new Preloader(this);
@@ -725,6 +737,7 @@ void MainWindow::startSlideShow() {
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (action == d->mViewAction) {
+		d->mCurrentPageId = ViewPageId;
 		// Switching to view mode
 		QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
 		d->mDirModel->setMimeExcludeFilter(mimeFilter);
@@ -733,6 +746,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 			openSelectedDocument();
 		}
 	} else {
+		d->mCurrentPageId = BrowsePageId;
 		// Switching to browse mode
 		d->mViewStackedWidget->setCurrentWidget(d->mThumbnailViewPanel);
 		if (!d->mDocumentPanel->isEmpty()
@@ -800,6 +814,7 @@ void MainWindow::goUp() {
 
 
 void MainWindow::showStartPage() {
+	d->mCurrentPageId = StartPageId;
 	d->setActionsDisabledOnStartPageEnabled(false);
 	d->spreadCurrentDirUrl(KUrl());
 
