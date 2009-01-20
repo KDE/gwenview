@@ -59,7 +59,7 @@ qulonglong getTotalMemory() {
         QString entry = readStream.readLine();
         if ( entry.isNull() ) break;
         if ( entry.startsWith( "MemTotal:" ) )
-            return (cachedValue = (1024 * entry.section( ' ', -2, -2 ).toInt()));
+            return (cachedValue = (Q_UINT64_C(1024) * entry.section( ' ', -2, -2 ).toULongLong()));
     }
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
@@ -98,15 +98,15 @@ qulonglong getFreeMemory() {
                 entry.startsWith( "Buffers:" ) ||
                 entry.startsWith( "Cached:" ) ||
                 entry.startsWith( "SwapFree:" ) )
-            memoryFree += entry.section( ' ', -2, -2 ).toInt();
+            memoryFree += entry.section( ' ', -2, -2 ).toULongLong();
         if ( entry.startsWith( "SwapTotal:" ) )
-            memoryFree -= entry.section( ' ', -2, -2 ).toInt();
+            memoryFree -= entry.section( ' ', -2, -2 ).toULongLong();
     }
     memFile.close();
 
     lastUpdate = QTime::currentTime();
 
-    return ( cachedValue = (1024 * memoryFree) );
+    return ( cachedValue = (Q_UINT64_C(1024) * memoryFree) );
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
 
