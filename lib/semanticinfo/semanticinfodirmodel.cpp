@@ -49,7 +49,7 @@ namespace Gwenview {
 struct SemanticInfoCacheItem {
 	SemanticInfoCacheItem()
 	: mValid(false) {}
-	QModelIndex mIndex;
+	QPersistentModelIndex mIndex;
 	bool mValid;
 	SemanticInfo mInfo;
 };
@@ -218,6 +218,10 @@ void SemanticInfoDirModel::slotSemanticInfoRetrieved(const KUrl& url, const Sema
 		return;
 	}
 	SemanticInfoCacheItem& cacheItem = it.value();
+	if (!cacheItem.mIndex.isValid()) {
+		kWarning() << "Index for" << url << "is invalid";
+		return;
+	}
 	cacheItem.mInfo = semanticInfo;
 	cacheItem.mValid = true;
 	emit dataChanged(cacheItem.mIndex, cacheItem.mIndex);
