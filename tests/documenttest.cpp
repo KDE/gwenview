@@ -110,6 +110,8 @@ void DocumentTest::testLoad_data() {
 	        "jpeg", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 	NEW_ROW("4frames.gif",
 	        "gif", MimeTypeUtils::KIND_RASTER_IMAGE, true);
+	NEW_ROW("1frame.gif",
+	        "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 	NEW_ROW("test.xcf",
 	        "xcf", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 }
