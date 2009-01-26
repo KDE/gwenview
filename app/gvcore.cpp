@@ -54,6 +54,46 @@ namespace Gwenview {
 struct GvCorePrivate {
 	QWidget* mParent;
 	SortedDirModel* mDirModel;
+
+	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
+		KFileDialog dialog(url, QString(), mParent);
+		dialog.setOperationMode(KFileDialog::Saving);
+		dialog.setMimeFilter(
+			KImageIO::mimeTypes(KImageIO::Writing), // List
+			MimeTypeUtils::urlMimeType(url)         // Default
+			);
+
+		// Show dialog
+		do {
+			if (!dialog.exec()) {
+				return false;
+			}
+
+			const QString mimeType = dialog.currentMimeFilter();
+			if (mimeType.isEmpty()) {
+				KMessageBox::sorry(
+					mParent,
+					i18nc("@info",
+						"No image format selected.")
+					);
+				continue;
+			}
+
+			const QStringList typeList = KImageIO::typeForMime(mimeType);
+			if (typeList.count() > 0) {
+				*format = typeList[0].toAscii();
+				break;
+			}
+			KMessageBox::sorry(
+				mParent,
+				i18nc("@info",
+					"Gwenview cannot save images as %1.", mimeType)
+				);
+		} while (true);
+
+		*outUrl = dialog.selectedUrl();
+		return true;
+	}
 };
 
 
@@ -214,42 +254,11 @@ void GvCore::save(const KUrl& url) {
 
 
 void GvCore::saveAs(const KUrl& url) {
-	KFileDialog dialog(url, QString(), d->mParent);
-	dialog.setOperationMode(KFileDialog::Saving);
-	dialog.setMimeFilter(
-		KImageIO::mimeTypes(KImageIO::Writing), // List
-		MimeTypeUtils::urlMimeType(url)         // Default
-		);
-
-	// Show dialog
 	QByteArray format;
-	do {
-		if (!dialog.exec()) {
-			return;
-		}
-
-		const QString mimeType = dialog.currentMimeFilter();
-		if (mimeType.isEmpty()) {
-			KMessageBox::sorry(
-				d->mParent,
-				i18nc("@info",
-					"No image format selected.")
-				);
-			continue;
-		}
-
-		const QStringList typeList = KImageIO::typeForMime(mimeType);
-		if (typeList.count() > 0) {
-			format = typeList[0].toAscii();
-			break;
-		}
-		KMessageBox::sorry(
-			d->mParent,
-			i18nc("@info",
-				"Gwenview cannot save images as %1.", mimeType)
-			);
-	} while (true);
-	const KUrl saveAsUrl = dialog.selectedUrl();
+	KUrl saveAsUrl;
+	if (!d->showSaveAsDialog(url, &saveAsUrl, &format)) {
+		return;
+	}
 
 	// Check for overwrite
 	if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mParent)) {
