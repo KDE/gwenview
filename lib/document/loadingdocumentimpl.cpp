@@ -202,7 +202,9 @@ struct LoadingDocumentImplPrivate {
 			mImage = mImage.transformed(matrix);
 		}
 
-		if (reader.supportsAnimation() && reader.currentImageNumber() != -1) {
+		if (reader.supportsAnimation()
+			&& reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
+		) {
 			LOG("This is an animated image");
 			mAnimated = true;
 		}
