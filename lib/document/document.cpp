@@ -204,7 +204,8 @@ void Document::setKeepRawData(bool value) {
 }
 
 
-void Document::waitUntilLoaded() const {
+void Document::waitUntilLoaded() {
+	loadFullImage();
 	while (true) {
 		LoadingState state = loadingState();
 		if (state == Loaded || state == LoadingFailed) {
