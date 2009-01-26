@@ -129,7 +129,7 @@ public:
 
 	QByteArray format() const;
 
-	void waitUntilLoaded() const;
+	void waitUntilLoaded();
 
 	QSize size() const;
 
