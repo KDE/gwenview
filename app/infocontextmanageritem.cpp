@@ -215,11 +215,12 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 	}
 
 	if (folderCount == 0) {
-		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 files selected", fileCount));
+		d->mMultipleFilesLabel->setText(i18ncp("@label", "%1 file selected", "%1 files selected", fileCount));
 	} else if (fileCount == 0) {
-		d->mMultipleFilesLabel->setText(i18ncp("@label", "One folder selected", "%1 folders selected", folderCount));
+		d->mMultipleFilesLabel->setText(i18ncp("@label", "%1 folder selected", "%1 folders selected", folderCount));
 	} else {
-		d->mMultipleFilesLabel->setText(i18nc("@label", "%1 folders and %2 files selected", folderCount, fileCount));
+		d->mMultipleFilesLabel->setText(i18nc("@label. The two parameters are strings like '2 folders' and '1 file'.",
+			"%1 and %2 selected", i18np("%1 folder", "%1 folders", folderCount), i18np("%1 file", "%1 files", fileCount)));
 	}
 	d->mOneFileWidget->hide();
 	d->mMultipleFilesLabel->show();
