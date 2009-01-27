@@ -44,6 +44,11 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+// Defines how the createBuffer() method should behave
+enum PreviousBufferContentPolicy {
+	ClearBufferIfSizeIsDifferent,
+	KeepPreviousBufferContent
+};
 
 struct ImageViewPrivate {
 	ImageView* mView;
@@ -107,31 +112,39 @@ struct ImageViewPrivate {
 		}
 	}
 
-	void createBuffer() {
-		mAlternateBuffer = QPixmap();
-		QSize size = requiredBufferSize();
-		if (!size.isValid()) {
-			mCurrentBuffer = QPixmap();
-			return;
-		}
-		mCurrentBuffer = QPixmap(size);
-		if (mDocument->hasAlphaChannel()) {
-			QPainter painter(&mCurrentBuffer);
-			drawAlphaBackground(&painter, mCurrentBuffer.rect(), QPoint(hScroll(), vScroll()));
-		}
-	}
-
-
-	void resizeBuffer() {
+	void createBuffer(PreviousBufferContentPolicy policy) {
 		QSize size = requiredBufferSize();
 		if (size == mCurrentBuffer.size()) {
 			return;
 		}
+		mAlternateBuffer = QPixmap();
+		if (!size.isValid()) {
+			mCurrentBuffer = QPixmap();
+			return;
+		}
 		QPixmap oldBuffer = mCurrentBuffer;
-		createBuffer();
-		{
-			QPainter painter(&mCurrentBuffer);
-			painter.drawPixmap(0, 0, oldBuffer);
+		mCurrentBuffer = QPixmap(size);
+
+		QPainter painter(&mCurrentBuffer);
+
+		if (policy == ClearBufferIfSizeIsDifferent) {
+			painter.fillRect(mCurrentBuffer.rect(), Qt::black);
+			return;
+		}
+		painter.drawPixmap(0, 0, oldBuffer);
+
+		const QRegion emptyRegion = QRegion(QRect(QPoint(0, 0), size)) - QRegion(oldBuffer.rect());
+		if (!emptyRegion.isEmpty()) {
+			if (mDocument->hasAlphaChannel()) {
+				const QPoint offset = QPoint(hScroll(), vScroll());
+				Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
+					drawAlphaBackground(&painter, rect, offset);
+				}
+			} else {
+				Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
+					painter.fillRect(rect, Qt::black);
+				}
+			}
 		}
 	}
 
@@ -172,7 +185,8 @@ struct ImageViewPrivate {
 
 
 	void forceBufferRecreation() {
-		createBuffer();
+		mCurrentBuffer = QPixmap();
+		createBuffer(ClearBufferIfSizeIsDifferent);
 		setScalerRegionToVisibleRect();
 	}
 
@@ -285,7 +299,7 @@ void ImageView::finishSetDocument() {
 		return;
 	}
 
-	d->createBuffer();
+	d->createBuffer(ClearBufferIfSizeIsDifferent);
 	d->mScaler->setDocument(d->mDocument);
 
 	connect(d->mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)),
@@ -373,7 +387,7 @@ void ImageView::resizeEvent(QResizeEvent*) {
 		horizontalScrollBar()->setRange(0, 0);
 		verticalScrollBar()->setRange(0, 0);
 	} else {
-		d->resizeBuffer();
+		d->createBuffer(KeepPreviousBufferContent);
 		updateScrollBars();
 		d->setScalerRegionToVisibleRect();
 	}
@@ -415,7 +429,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& _center) {
 
 	// Get offset *before* resizing the buffer, otherwise we get the new offset
 	QPoint oldOffset = imageOffset();
-	d->createBuffer();
+	d->createBuffer(ClearBufferIfSizeIsDifferent);
 	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
 		// Trigger an update to erase borders
 		d->mViewport->update();
