@@ -114,7 +114,9 @@ Terminal=false
 Icon=gwenview
 Type=Application
 Categories=Qt;KDE;Graphics;Viewer;Photography;
-# TODO: what is image/x-krl? Please register this mimetype at freedesktop.org if you need it
-MimeType=image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-ico;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;
+MimeType=inode/directory;image/gif;image/jpeg;image/png;image/bmp;image/x-eps;image/x-ico;image/x-portable-bitmap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;
 X-DocPath=gwenview/index.html
-InitialPreference=12
+# InitialPreference should be greater than Okular so that Gwenview is the
+# primary application associated with images, but less than Konqueror or Dolphin
+# so that Gwenview is not the primary applications for folders.
+InitialPreference=8
