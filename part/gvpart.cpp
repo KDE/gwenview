@@ -123,7 +123,7 @@ KAboutData* GVPart::createAboutData() {
 	aboutData->addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
-		"aurelien.gateau@free.fr");
+		"agateau@kde.org");
 	return aboutData;
 }
 

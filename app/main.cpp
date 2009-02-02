@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 	aboutData.addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
-		"aurelien.gateau@free.fr");
+		"agateau@kde.org");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 
