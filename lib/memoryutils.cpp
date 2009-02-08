@@ -63,7 +63,7 @@ qulonglong getTotalMemory() {
     }
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
-
+    stat.dwLength = sizeof(stat);
     GlobalMemoryStatusEx (&stat);
 
     return ( cachedValue = stat.ullTotalPhys );
@@ -109,7 +109,7 @@ qulonglong getFreeMemory() {
     return ( cachedValue = (Q_UINT64_C(1024) * memoryFree) );
 #elif defined(Q_OS_WIN)
     MEMORYSTATUSEX stat;
-
+    stat.dwLength = sizeof(stat);
     GlobalMemoryStatusEx (&stat);
 
     lastUpdate = QTime::currentTime();
