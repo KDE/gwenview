@@ -140,7 +140,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	}
 
 	void setupFilterController() {
-		QMenu* menu = new QMenu;
+		QMenu* menu = new QMenu(mAddFilterButton);
 		mFilterController = new FilterController(mFilterFrame, mDirModel);
 		Q_FOREACH(QAction* action, mFilterController->actionList()) {
 			menu->addAction(action);
