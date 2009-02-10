@@ -70,7 +70,9 @@ void DocumentTest::testLoad() {
 	MimeTypeUtils::Kind expectedKind = MimeTypeUtils::Kind(expectedKindInt);
 
 	KUrl url = urlForTestFile(fileName);
-	QVERIFY2(!expectedImage.isNull(), "Could not load test image");
+	if (expectedKind != MimeTypeUtils::KIND_SVG_IMAGE) {
+		QVERIFY2(!expectedImage.isNull(), "Could not load test image");
+	}
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy spy(doc.data(), SIGNAL(isAnimatedUpdated()));
