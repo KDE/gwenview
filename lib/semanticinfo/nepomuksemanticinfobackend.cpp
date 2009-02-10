@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Nepomuk
 #include <nepomuk/global.h>
 #include <nepomuk/resource.h>
+#include <nepomuk/resourcemanager.h>
 #include <nepomuk/tag.h>
 
 #include <Soprano/Vocabulary/Xesam>
@@ -162,6 +163,8 @@ struct NepomukSemanticInfoBackEndPrivate {
 NepomukSemanticInfoBackEnd::NepomukSemanticInfoBackEnd(QObject* parent)
 : AbstractSemanticInfoBackEnd(parent)
 , d(new NepomukSemanticInfoBackEndPrivate) {
+	// FIXME: Check it returns 0
+	Nepomuk::ResourceManager::instance()->init();
 	d->mThread.start();
 }
 
