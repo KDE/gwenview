@@ -23,9 +23,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QHBoxLayout>
+#include <QMouseEvent>
+#include <QStyleOption>
+#include <QStylePainter>
 #include <QToolButton>
 
 // KDE
+#include <kdebug.h>
 #include <kiconloader.h>
 
 // Local
@@ -34,7 +38,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+class DragHandle : public QWidget {
+public:
+	DragHandle(QWidget* parent)
+	: QWidget(parent) {
+		setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+		setCursor(Qt::SizeAllCursor);
+	}
+
+	QSize sizeHint() const {
+		const int width = style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+		return QSize(width, 30);
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		QStylePainter painter(this);
+		QStyleOption option;
+		option.palette = parentWidget()->palette();
+		option.rect = rect();
+		option.state = QStyle::State_Active | QStyle::State_Horizontal;
+		painter.drawPrimitive(QStyle::PE_IndicatorToolBarHandle, option);
+	}
+
+	virtual void mousePressEvent(QMouseEvent* event) {
+		mDragStartPos = event->pos();
+	}
+
+	virtual void mouseMoveEvent(QMouseEvent* event) {
+		const QPoint delta = event->pos() - mDragStartPos;
+		parentWidget()->move(parentWidget()->pos() + delta);
+	}
+
+private:
+	QPoint mDragStartPos;
+};
+
+
 struct HudWidgetPrivate {
+	DragHandle* mDragHandle;
 	QWidget* mMainWidget;
 	QToolButton* mCloseButton;
 };
@@ -43,6 +85,7 @@ struct HudWidgetPrivate {
 HudWidget::HudWidget(QWidget* parent)
 : QFrame(parent)
 , d(new HudWidgetPrivate) {
+	d->mDragHandle = 0;
 	d->mMainWidget = 0;
 	d->mCloseButton = 0;
 }
@@ -65,9 +108,14 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(4);
+
+	if (options & OptionDragHandle) {
+		d->mDragHandle = new DragHandle(this);
+		layout->addWidget(d->mDragHandle);
+	}
 	layout->addWidget(d->mMainWidget);
 
-	if (options == OptionCloseButton) {
+	if (options & OptionCloseButton) {
 		d->mCloseButton = new QToolButton(this);
 		d->mCloseButton->setAutoRaise(true);
 		d->mCloseButton->setIcon(SmallIcon("window-close"));

@@ -39,10 +39,12 @@ class HudWidgetPrivate;
 class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
 	Q_OBJECT
 public:
-	enum Options {
+	enum Option {
 		OptionNone,
-		OptionCloseButton
+		OptionCloseButton,
+		OptionDragHandle
 	};
+	Q_DECLARE_FLAGS(Options, Option);
 
 	HudWidget(QWidget* parent = 0);
 	~HudWidget();
@@ -59,5 +61,7 @@ private:
 
 
 } // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options);
 
 #endif /* HUDWIDGET_H */
