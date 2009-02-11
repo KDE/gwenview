@@ -38,11 +38,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "gvcore.h"
 #include "mainwindow.h"
 #include "sidebar.h"
-#include <lib/cropsidebar.h>
+#include <lib/crop/cropsidebar.h>
 #include <lib/document/documentfactory.h>
+#include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
-#include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/resizeimageoperation.h>
 #include <lib/transformimageoperation.h>
 

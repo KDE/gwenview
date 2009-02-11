@@ -13,6 +13,9 @@ include_directories(
 	)
 
 set(gwenviewlib_SRCS
+	crop/cropsidebar.cpp
+	crop/cropimageoperation.cpp
+	crop/croptool.cpp
 	document/abstractdocumentimpl.cpp
 	document/animateddocumentloadedimpl.cpp
 	document/document.cpp
@@ -32,9 +35,6 @@ set(gwenviewlib_SRCS
 	imagesequence.cpp
 	imagesequencecontroller.cpp
 	archiveutils.cpp
-	cropsidebar.cpp
-	cropimageoperation.cpp
-	croptool.cpp
 	datewidget.cpp
 	expandbutton.cpp
 	exiv2imageloader.cpp
@@ -110,7 +110,7 @@ set_source_files_properties(
 	)
 
 kde4_add_ui_files(gwenviewlib_SRCS
-	cropsidebar.ui
+	crop/cropsidebar.ui
 	documentview/messageview.ui
 	print/printoptionspage.ui
 	redeyereduction/redeyereductionhud.ui
