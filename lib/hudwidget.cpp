@@ -83,6 +83,11 @@ struct HudWidgetPrivate {
 
 	void keepFullyVisible() {
 		const QRect outerRect = that->parentWidget()->rect();
+
+		if (outerRect.contains(that->geometry())) {
+			return;
+		}
+
 		QPoint pos = that->pos();
 		if (pos.x() < 0) {
 			pos.setX(0);
@@ -102,6 +107,9 @@ struct HudWidgetPrivate {
 HudWidget::HudWidget(QWidget* parent)
 : QFrame(parent)
 , d(new HudWidgetPrivate) {
+	if (parent) {
+		parent->installEventFilter(this);
+	}
 	d->that = this;
 	d->mDragHandle = 0;
 	d->mMainWidget = 0;
@@ -156,12 +164,15 @@ void HudWidget::moveEvent(QMoveEvent*) {
 	if (!parentWidget()) {
 		return;
 	}
+	d->keepFullyVisible();
+}
 
-	const QRect outerRect = parentWidget()->rect();
 
-	if (!outerRect.contains(geometry())) {
+bool HudWidget::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::Resize) {
 		d->keepFullyVisible();
 	}
+	return false;
 }
 
 

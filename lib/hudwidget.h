@@ -57,6 +57,7 @@ public:
 
 protected:
 	virtual void moveEvent(QMoveEvent*);
+	virtual bool eventFilter(QObject*, QEvent* event);
 
 private:
 	HudWidgetPrivate* const d;
