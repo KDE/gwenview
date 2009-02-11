@@ -39,7 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
 #include "ui_redeyereductionhud.h"
-#include "widgetfloater.h"
 
 
 namespace Gwenview {
@@ -60,7 +59,6 @@ struct RedEyeReductionToolPrivate {
 	int mDiameter;
 	RedEyeReductionHud* mHud;
 	HudWidget* mHudWidget;
-	WidgetFloater* mFloater;
 
 
 	void showNotSetHudWidget() {
@@ -87,13 +85,20 @@ struct RedEyeReductionToolPrivate {
 
 
 	void createHudWidgetForWidget(QWidget* widget) {
-		mHudWidget->deleteLater();
-		mHudWidget = new HudWidget();
-		mHudWidget->init(widget, HudWidget::OptionCloseButton);
+		QPoint pos;
+		if (mHudWidget) {
+			pos = mHudWidget->pos();
+			mHudWidget->deleteLater();
+		} else {
+			pos = QPoint(KDialog::marginHint(), KDialog::marginHint());
+		}
+		mHudWidget = new HudWidget(mRedEyeReductionTool->imageView());
+		mHudWidget->init(widget, HudWidget::OptionCloseButton | HudWidget::OptionDragHandle);
 		mHudWidget->adjustSize();
 		QObject::connect(mHudWidget->closeButton(), SIGNAL(clicked()),
 			mRedEyeReductionTool, SIGNAL(done()) );
-		mFloater->setChildWidget(mHudWidget);
+		mHudWidget->move(pos);
+		mHudWidget->show();
 	}
 
 
@@ -120,12 +125,6 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 	d->mHud = 0;
 	d->mHudWidget = 0;
 
-	d->mFloater = new WidgetFloater(imageView());
-	d->mFloater->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-	d->mFloater->setVerticalMargin(
-		KDialog::marginHint()
-		+ imageView()->style()->pixelMetric(QStyle::PM_ScrollBarExtent)
-		);
 	d->showNotSetHudWidget();
 
 	view->document()->loadFullImage();
