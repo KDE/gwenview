@@ -55,6 +55,9 @@ public:
 
 	QToolButton* closeButton() const;
 
+protected:
+	virtual void moveEvent(QMoveEvent*);
+
 private:
 	HudWidgetPrivate* const d;
 };

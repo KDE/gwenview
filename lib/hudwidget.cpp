@@ -76,15 +76,33 @@ private:
 
 
 struct HudWidgetPrivate {
+	HudWidget* that;
 	DragHandle* mDragHandle;
 	QWidget* mMainWidget;
 	QToolButton* mCloseButton;
+
+	void keepFullyVisible() {
+		const QRect outerRect = that->parentWidget()->rect();
+		QPoint pos = that->pos();
+		if (pos.x() < 0) {
+			pos.setX(0);
+		} else if (pos.x() + that->width() > outerRect.width()) {
+			pos.setX(outerRect.width() - that->width());
+		}
+		if (pos.y() < 0) {
+			pos.setY(0);
+		} else if (pos.y() + that->height() > outerRect.height()) {
+			pos.setY(outerRect.height() - that->height());
+		}
+		that->move(pos);
+	}
 };
 
 
 HudWidget::HudWidget(QWidget* parent)
 : QFrame(parent)
 , d(new HudWidgetPrivate) {
+	d->that = this;
 	d->mDragHandle = 0;
 	d->mMainWidget = 0;
 	d->mCloseButton = 0;
@@ -131,6 +149,19 @@ QWidget* HudWidget::mainWidget() const {
 
 QToolButton* HudWidget::closeButton() const {
 	return d->mCloseButton;
+}
+
+
+void HudWidget::moveEvent(QMoveEvent*) {
+	if (!parentWidget()) {
+		return;
+	}
+
+	const QRect outerRect = parentWidget()->rect();
+
+	if (!outerRect.contains(geometry())) {
+		d->keepFullyVisible();
+	}
 }
 
 
