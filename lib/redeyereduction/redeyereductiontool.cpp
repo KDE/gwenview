@@ -92,7 +92,7 @@ struct RedEyeReductionToolPrivate {
 		} else {
 			pos = QPoint(KDialog::marginHint(), KDialog::marginHint());
 		}
-		mHudWidget = new HudWidget(mRedEyeReductionTool->imageView());
+		mHudWidget = new HudWidget(mRedEyeReductionTool->imageView()->viewport());
 		mHudWidget->init(widget, HudWidget::OptionCloseButton | HudWidget::OptionDragHandle);
 		mHudWidget->adjustSize();
 		QObject::connect(mHudWidget->closeButton(), SIGNAL(clicked()),
