@@ -58,6 +58,7 @@ struct GvCorePrivate {
 	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
 		KFileDialog dialog(url, QString(), mParent);
 		dialog.setOperationMode(KFileDialog::Saving);
+		dialog.setSelection(url.fileName());
 		dialog.setMimeFilter(
 			KImageIO::mimeTypes(KImageIO::Writing), // List
 			MimeTypeUtils::urlMimeType(url)         // Default
