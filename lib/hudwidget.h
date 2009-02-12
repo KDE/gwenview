@@ -44,7 +44,7 @@ public:
 		OptionCloseButton,
 		OptionDragHandle
 	};
-	Q_DECLARE_FLAGS(Options, Option);
+	Q_DECLARE_FLAGS(Options, Option)
 
 	HudWidget(QWidget* parent = 0);
 	~HudWidget();
@@ -66,6 +66,6 @@ private:
 
 } // namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options)
 
 #endif /* HUDWIDGET_H */
