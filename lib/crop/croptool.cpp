@@ -53,10 +53,13 @@ enum CropHandleFlag {
 	CH_Content = 16
 };
 
-
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
-Q_DECLARE_OPERATORS_FOR_FLAGS(CropHandle)
 
+} // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
+
+namespace Gwenview {
 
 struct CropToolPrivate {
 	CropTool* mCropTool;
