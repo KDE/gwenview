@@ -37,7 +37,6 @@ namespace Gwenview {
 
 struct CropWidgetPrivate : public Ui_CropWidget {
 	Document::Ptr mDocument;
-	QWidget* mWidget;
 	CropTool* mCropTool;
 	bool mUpdatingFromCropTool;
 
@@ -105,16 +104,12 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	d->mDocument = imageView->document();
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = cropTool;
-	d->mWidget = new QWidget(this);
-	d->setupUi(d->mWidget);
-	d->mWidget->layout()->setMargin(0);
+	d->setupUi(this);
+	layout()->setMargin(0);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->addWidget(d->mWidget);
-
-	QPushButton* ok = d->buttonBox->button(QDialogButtonBox::Ok);
-	Q_ASSERT(ok);
-	ok->setText(i18n("Crop"));
+	connect(d->advancedCheckBox, SIGNAL(toggled(bool)),
+		SLOT(slotToggleAdvancedWidget(bool)));
+	d->advancedWidget->setVisible(false);
 
 	d->initRatioComboBox();
 
@@ -130,7 +125,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotHeightChanged()) );
 
-	connect(d->buttonBox, SIGNAL(accepted()),
+	connect(d->cropButton, SIGNAL(clicked()),
 		SIGNAL(cropRequested()) );
 	
 	connect(d->constrainRatioCheckBox, SIGNAL(toggled(bool)),
@@ -241,6 +236,13 @@ void CropWidget::setRatioConstraintFromComboBox() {
 	d->ratioWidthSpinBox->setValue(size.width());
 	d->ratioWidthSpinBox->blockSignals(false);
 	d->ratioHeightSpinBox->setValue(size.height());
+}
+
+
+void CropWidget::slotToggleAdvancedWidget(bool visible) {
+	const QSize delta = parentWidget()->size() - size();
+	d->advancedWidget->setVisible(visible);
+	parentWidget()->resize(minimumSizeHint() + delta);
 }
 
 

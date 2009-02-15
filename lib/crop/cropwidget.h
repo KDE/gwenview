@@ -50,6 +50,7 @@ Q_SIGNALS:
 	void cropRequested();
 
 private Q_SLOTS:
+	void slotToggleAdvancedWidget(bool);
 	void slotPositionChanged();
 	void slotWidthChanged();
 	void slotHeightChanged();
