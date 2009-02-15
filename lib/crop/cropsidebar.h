@@ -34,20 +34,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 class AbstractImageOperation;
+class CropTool;
 class ImageView;
 
 class CropSideBarPrivate;
 class GWENVIEWLIB_EXPORT CropSideBar : public QWidget {
 	Q_OBJECT
 public:
-	CropSideBar(QWidget* parent, ImageView*, Document::Ptr);
+	CropSideBar(QWidget* parent, ImageView*, CropTool*);
 	~CropSideBar();
 
 	QRect cropRect() const;
 
 Q_SIGNALS:
-	void done();
-	void imageOperationRequested(AbstractImageOperation*);
+	void cropRequested();
 
 private Q_SLOTS:
 	void slotPositionChanged();
@@ -55,7 +55,6 @@ private Q_SLOTS:
 	void slotHeightChanged();
 	void setCropRect(const QRect& rect);
 
-	void slotAccepted();
 	void applyRatioConstraint();
 	void setRatioConstraintFromComboBox();
 

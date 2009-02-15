@@ -25,12 +25,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QFlags>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPointer>
 #include <QRect>
+#include <QToolButton>
 
 // KDE
 #include <kdebug.h>
+#include <kdialog.h>
 
 // Local
+#include "cropimageoperation.h"
+#include "cropsidebar.h"
+#include "hudwidget.h"
 #include "imageview.h"
 
 static const int HANDLE_RADIUS = 5;
@@ -68,6 +74,7 @@ struct CropToolPrivate {
 	CropHandle mMovingHandle;
 	QPoint mLastMouseMovePos;
 	double mCropRatio;
+	QPointer<HudWidget> mHud;
 
 	QRect handleViewportRect(CropHandle handle) {
 		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
@@ -160,6 +167,21 @@ struct CropToolPrivate {
 			mRect.moveTop(0);
 		}
 	}
+
+
+	void setupHudWidget() {
+		ImageView* view = mCropTool->imageView();
+		CropSideBar* widget = new CropSideBar(0, view, mCropTool);
+		QObject::connect(widget, SIGNAL(cropRequested()),
+			mCropTool, SLOT(slotCropRequested()));
+
+		mHud = new HudWidget(view->viewport());
+		mHud->init(widget, HudWidget::OptionCloseButton | HudWidget::OptionDragHandle);
+		mHud->move(KDialog::marginHint(), KDialog::marginHint());
+		mHud->show();
+		QObject::connect(mHud->closeButton(), SIGNAL(clicked()),
+			mCropTool, SIGNAL(done()));
+	}
 };
 
 
@@ -171,10 +193,15 @@ CropTool::CropTool(ImageView* view)
 	d->mMovingHandle = CH_None;
 	d->mRect.setX(UNINITIALIZED_X);
 	d->mCropRatio = 0.;
+
+	d->setupHudWidget();
 }
 
 
 CropTool::~CropTool() {
+	if (d->mHud) {
+		delete d->mHud;
+	}
 	delete d;
 }
 
@@ -345,6 +372,13 @@ void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 
 void CropTool::toolActivated() {
 	imageView()->viewport()->setCursor(Qt::CrossCursor);
+}
+
+
+void CropTool::slotCropRequested() {
+	CropImageOperation* op = new CropImageOperation(d->mRect);
+	emit imageOperationRequested(op);
+	emit done();
 }
 
 

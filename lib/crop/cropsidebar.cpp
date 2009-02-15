@@ -22,14 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "cropsidebar.moc"
 
 // Qt
-#include <QPointer>
 #include <QPushButton>
 
 // KDE
 #include "klocale.h"
 
 // Local
-#include "cropimageoperation.h"
 #include "croptool.h"
 #include "imageview.h"
 #include "ui_cropsidebar.h"
@@ -40,7 +38,7 @@ namespace Gwenview {
 struct CropSideBarPrivate : public Ui_CropSideBar {
 	Document::Ptr mDocument;
 	QWidget* mWidget;
-	QPointer<CropTool> mCropTool;
+	CropTool* mCropTool;
 	bool mUpdatingFromCropTool;
 
 
@@ -101,13 +99,12 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 };
 
 
-CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr document)
+CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, CropTool* cropTool)
 : QWidget(parent)
 , d(new CropSideBarPrivate) {
-	d->mDocument = document;
+	d->mDocument = imageView->document();
 	d->mUpdatingFromCropTool = false;
-	d->mCropTool = new CropTool(imageView);
-	imageView->setCurrentTool(d->mCropTool);
+	d->mCropTool = cropTool;
 	d->mWidget = new QWidget(this);
 	d->setupUi(d->mWidget);
 	d->mWidget->layout()->setMargin(0);
@@ -134,11 +131,8 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 		SLOT(slotHeightChanged()) );
 
 	connect(d->buttonBox, SIGNAL(accepted()),
-		SLOT(slotAccepted()) );
+		SIGNAL(cropRequested()) );
 	
-	connect(d->buttonBox, SIGNAL(rejected()),
-		SIGNAL(done()) );
-
 	connect(d->constrainRatioCheckBox, SIGNAL(toggled(bool)),
 		SLOT(applyRatioConstraint()) );
 	connect(d->ratioWidthSpinBox, SIGNAL(valueChanged(int)),
@@ -156,11 +150,6 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, Document::Ptr do
 
 
 CropSideBar::~CropSideBar() {
-	// The crop tool is owned by the image view, so it may already have been
-	// deleted, for example if we quit while the dialog is still opened.
-	if (d->mCropTool) {
-		d->mCropTool->imageView()->setCurrentTool(0);
-	}
 	delete d;
 }
 
@@ -223,13 +212,6 @@ void CropSideBar::slotHeightChanged() {
 		d->widthSpinBox->setValue(width);
 	}
 	d->mCropTool->setRect(cropRect());
-}
-
-
-void CropSideBar::slotAccepted() {
-	CropImageOperation* op = new CropImageOperation(cropRect());
-	emit imageOperationRequested(op);
-	emit done();
 }
 
 

@@ -34,6 +34,7 @@ class QRect;
 
 namespace Gwenview {
 
+class AbstractImageOperation;
 class ImageView;
 
 class CropToolPrivate;
@@ -57,6 +58,11 @@ public:
 
 Q_SIGNALS:
 	void rectUpdated(const QRect&);
+	void done();
+	void imageOperationRequested(AbstractImageOperation*);
+
+private Q_SLOTS:
+	void slotCropRequested();
 
 private:
 	CropToolPrivate* const d;
