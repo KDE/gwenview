@@ -13,7 +13,7 @@ include_directories(
 	)
 
 set(gwenviewlib_SRCS
-	crop/cropsidebar.cpp
+	crop/cropwidget.cpp
 	crop/cropimageoperation.cpp
 	crop/croptool.cpp
 	document/abstractdocumentimpl.cpp
@@ -110,7 +110,7 @@ set_source_files_properties(
 	)
 
 kde4_add_ui_files(gwenviewlib_SRCS
-	crop/cropsidebar.ui
+	crop/cropwidget.ui
 	documentview/messageview.ui
 	print/printoptionspage.ui
 	redeyereduction/redeyereductionhud.ui

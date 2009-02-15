@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "cropimageoperation.h"
-#include "cropsidebar.h"
+#include "cropwidget.h"
 #include "hudwidget.h"
 #include "imageview.h"
 
@@ -171,7 +171,7 @@ struct CropToolPrivate {
 
 	void setupHudWidget() {
 		ImageView* view = mCropTool->imageView();
-		CropSideBar* widget = new CropSideBar(0, view, mCropTool);
+		CropWidget* widget = new CropWidget(0, view, mCropTool);
 		QObject::connect(widget, SIGNAL(cropRequested()),
 			mCropTool, SLOT(slotCropRequested()));
 

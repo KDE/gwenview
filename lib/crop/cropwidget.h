@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
-#ifndef CROPSIDEBAR_H
-#define CROPSIDEBAR_H
+#ifndef CROPWIDGET_H
+#define CROPWIDGET_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -37,12 +37,12 @@ class AbstractImageOperation;
 class CropTool;
 class ImageView;
 
-class CropSideBarPrivate;
-class GWENVIEWLIB_EXPORT CropSideBar : public QWidget {
+class CropWidgetPrivate;
+class GWENVIEWLIB_EXPORT CropWidget : public QWidget {
 	Q_OBJECT
 public:
-	CropSideBar(QWidget* parent, ImageView*, CropTool*);
-	~CropSideBar();
+	CropWidget(QWidget* parent, ImageView*, CropTool*);
+	~CropWidget();
 
 	QRect cropRect() const;
 
@@ -59,10 +59,10 @@ private Q_SLOTS:
 	void setRatioConstraintFromComboBox();
 
 private:
-	CropSideBarPrivate* const d;
+	CropWidgetPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* CROPSIDEBAR_H */
+#endif /* CROPWIDGET_H */

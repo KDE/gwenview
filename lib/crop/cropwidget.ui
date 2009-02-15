@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>CropSideBar</class>
- <widget class="QWidget" name="CropSideBar" >
+ <class>CropWidget</class>
+ <widget class="QWidget" name="CropWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

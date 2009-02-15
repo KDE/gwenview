@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 */
 // Self
-#include "cropsidebar.moc"
+#include "cropwidget.moc"
 
 // Qt
 #include <QPushButton>
@@ -30,12 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "croptool.h"
 #include "imageview.h"
-#include "ui_cropsidebar.h"
+#include "ui_cropwidget.h"
 
 namespace Gwenview {
 
 
-struct CropSideBarPrivate : public Ui_CropSideBar {
+struct CropWidgetPrivate : public Ui_CropWidget {
 	Document::Ptr mDocument;
 	QWidget* mWidget;
 	CropTool* mCropTool;
@@ -99,9 +99,9 @@ struct CropSideBarPrivate : public Ui_CropSideBar {
 };
 
 
-CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, CropTool* cropTool)
+CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool)
 : QWidget(parent)
-, d(new CropSideBarPrivate) {
+, d(new CropWidgetPrivate) {
 	d->mDocument = imageView->document();
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = cropTool;
@@ -149,12 +149,12 @@ CropSideBar::CropSideBar(QWidget* parent, ImageView* imageView, CropTool* cropTo
 }
 
 
-CropSideBar::~CropSideBar() {
+CropWidget::~CropWidget() {
 	delete d;
 }
 
 
-QRect CropSideBar::cropRect() const {
+QRect CropWidget::cropRect() const {
 	QRect rect(
 		d->leftSpinBox->value(),
 		d->topSpinBox->value(),
@@ -165,7 +165,7 @@ QRect CropSideBar::cropRect() const {
 }
 
 
-void CropSideBar::setCropRect(const QRect& rect) {
+void CropWidget::setCropRect(const QRect& rect) {
 	d->mUpdatingFromCropTool = true;
 	d->leftSpinBox->setValue(rect.left());
 	d->topSpinBox->setValue(rect.top());
@@ -175,7 +175,7 @@ void CropSideBar::setCropRect(const QRect& rect) {
 }
 
 
-void CropSideBar::slotPositionChanged() {
+void CropWidget::slotPositionChanged() {
 	const QSize size = d->mDocument->size();
 	d->widthSpinBox->setMaximum(size.width() - d->leftSpinBox->value());
 	d->heightSpinBox->setMaximum(size.height() - d->topSpinBox->value());
@@ -187,7 +187,7 @@ void CropSideBar::slotPositionChanged() {
 }
 
 
-void CropSideBar::slotWidthChanged() {
+void CropWidget::slotWidthChanged() {
 	d->leftSpinBox->setMaximum(d->mDocument->width() - d->widthSpinBox->value());
 
 	if (d->mUpdatingFromCropTool) {
@@ -201,7 +201,7 @@ void CropSideBar::slotWidthChanged() {
 }
 
 
-void CropSideBar::slotHeightChanged() {
+void CropWidget::slotHeightChanged() {
 	d->topSpinBox->setMaximum(d->mDocument->height() - d->heightSpinBox->value());
 
 	if (d->mUpdatingFromCropTool) {
@@ -215,7 +215,7 @@ void CropSideBar::slotHeightChanged() {
 }
 
 
-void CropSideBar::applyRatioConstraint() {
+void CropWidget::applyRatioConstraint() {
 	if (!d->constrainRatioCheckBox->isChecked()) {
 		d->mCropTool->setCropRatio(0);
 		return;
@@ -230,7 +230,7 @@ void CropSideBar::applyRatioConstraint() {
 }
 
 
-void CropSideBar::setRatioConstraintFromComboBox() {
+void CropWidget::setRatioConstraintFromComboBox() {
 	QVariant data = d->ratioComboBox->itemData(d->ratioComboBox->currentIndex());
 	if (!data.isValid()) {
 		return;
