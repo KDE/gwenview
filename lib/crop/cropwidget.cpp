@@ -88,6 +88,17 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	}
 
 
+	QRect cropRect() const {
+		QRect rect(
+			leftSpinBox->value(),
+			topSpinBox->value(),
+			widthSpinBox->value(),
+			heightSpinBox->value()
+			);
+		return rect;
+	}
+
+
 	void initSpinBoxes() {
 		QSize size = mDocument->size();
 		leftSpinBox->setMaximum(size.width());
@@ -149,17 +160,6 @@ CropWidget::~CropWidget() {
 }
 
 
-QRect CropWidget::cropRect() const {
-	QRect rect(
-		d->leftSpinBox->value(),
-		d->topSpinBox->value(),
-		d->widthSpinBox->value(),
-		d->heightSpinBox->value()
-		);
-	return rect;
-}
-
-
 void CropWidget::setCropRect(const QRect& rect) {
 	d->mUpdatingFromCropTool = true;
 	d->leftSpinBox->setValue(rect.left());
@@ -178,7 +178,7 @@ void CropWidget::slotPositionChanged() {
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
-	d->mCropTool->setRect(cropRect());
+	d->mCropTool->setRect(d->cropRect());
 }
 
 
@@ -192,7 +192,7 @@ void CropWidget::slotWidthChanged() {
 		int height = int(d->widthSpinBox->value() * d->cropRatio());
 		d->heightSpinBox->setValue(height);
 	}
-	d->mCropTool->setRect(cropRect());
+	d->mCropTool->setRect(d->cropRect());
 }
 
 
@@ -206,7 +206,7 @@ void CropWidget::slotHeightChanged() {
 		int width = int(d->heightSpinBox->value() / d->cropRatio());
 		d->widthSpinBox->setValue(width);
 	}
-	d->mCropTool->setRect(cropRect());
+	d->mCropTool->setRect(d->cropRect());
 }
 
 
@@ -219,7 +219,7 @@ void CropWidget::applyRatioConstraint() {
 	double ratio = d->cropRatio();
 	d->mCropTool->setCropRatio(ratio);
 
-	QRect rect = cropRect();
+	QRect rect = d->cropRect();
 	rect.setHeight(int(rect.width() * d->cropRatio()));
 	d->mCropTool->setRect(rect);
 }

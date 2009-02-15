@@ -44,8 +44,6 @@ public:
 	CropWidget(QWidget* parent, ImageView*, CropTool*);
 	~CropWidget();
 
-	QRect cropRect() const;
-
 Q_SIGNALS:
 	void cropRequested();
 
