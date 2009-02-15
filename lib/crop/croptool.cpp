@@ -141,7 +141,7 @@ struct CropToolPrivate {
 			break;
 
 		default:
-			shape = Qt::ForbiddenCursor;
+			shape = Qt::ArrowCursor;
 			break;
 		}
 		mCropTool->imageView()->viewport()->setCursor(shape);
