@@ -55,7 +55,7 @@ private Q_SLOTS:
 	void mirror();
 	void flip();
 	void resizeImage();
-	void showCropSideBar();
+	void crop();
 	void startRedEyeReduction();
 	void applyImageOperation(AbstractImageOperation*);
 	void restoreDefaultImageViewTool();

@@ -38,7 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "gvcore.h"
 #include "mainwindow.h"
 #include "sidebar.h"
-#include <lib/crop/cropsidebar.h>
+#include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
 #include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/gwenviewconfig.h>
@@ -97,7 +97,7 @@ struct ImageOpsContextManagerItem::Private {
 		mResizeAction->setText(i18n("Resize"));
 		mResizeAction->setIcon(KIcon("transform-scale"));
 
-		mCropAction = edit->addAction("crop",that, SLOT(showCropSideBar()));
+		mCropAction = edit->addAction("crop",that, SLOT(crop()));
 		mCropAction->setText(i18n("Crop"));
 		mCropAction->setIcon(KIcon("transform-crop-and-resize"));
 
@@ -267,7 +267,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 }
 
 
-void ImageOpsContextManagerItem::showCropSideBar() {
+void ImageOpsContextManagerItem::crop() {
 	if (!d->ensureEditable()) {
 		return;
 	}
@@ -276,14 +276,13 @@ void ImageOpsContextManagerItem::showCropSideBar() {
 		kError() << "No ImageView available!";
 		return;
 	}
-	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
-	CropSideBar* cropSideBar = new CropSideBar(d->mMainWindow, imageView, doc);
-	connect(cropSideBar, SIGNAL(done()),
-		d->mMainWindow, SLOT(hideTemporarySideBar()) );
-	connect(cropSideBar, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
+	CropTool* tool = new CropTool(imageView);
+	connect(tool, SIGNAL(imageOperationRequested(AbstractImageOperation*)),
 		SLOT(applyImageOperation(AbstractImageOperation*)) );
+	connect(tool, SIGNAL(done()),
+		SLOT(restoreDefaultImageViewTool()) );
 
-	d->mMainWindow->showTemporarySideBar(cropSideBar);
+	imageView->setCurrentTool(tool);
 }
 
 

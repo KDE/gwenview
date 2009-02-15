@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #ifndef CROPTOOL_H
 #define CROPTOOL_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -35,7 +37,7 @@ namespace Gwenview {
 class ImageView;
 
 class CropToolPrivate;
-class CropTool : public AbstractImageViewTool {
+class GWENVIEWLIB_EXPORT CropTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
 	CropTool(ImageView* parent);
