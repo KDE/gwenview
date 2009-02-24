@@ -135,6 +135,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->advancedCheckBox, SIGNAL(toggled(bool)),
 		d->advancedWidget, SLOT(setVisible(bool)));
 	d->advancedWidget->setVisible(false);
+	d->advancedWidget->layout()->setMargin(0);
 
 	d->initRatioComboBox();
 
