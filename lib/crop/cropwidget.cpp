@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "croptool.h"
 #include "imageview.h"
+#include "signalblocker.h"
 #include "ui_cropwidget.h"
 
 namespace Gwenview {
@@ -236,10 +237,13 @@ void CropWidget::setRatioConstraintFromComboBox() {
 	}
 
 	QSize size = data.toSize();
-	d->ratioWidthSpinBox->blockSignals(true);
-	d->ratioWidthSpinBox->setValue(size.width());
-	d->ratioWidthSpinBox->blockSignals(false);
-	d->ratioHeightSpinBox->setValue(size.height());
+	{
+		SignalBlocker blockerW(d->ratioWidthSpinBox);
+		SignalBlocker blockerH(d->ratioHeightSpinBox);
+		d->ratioWidthSpinBox->setValue(size.width());
+		d->ratioHeightSpinBox->setValue(size.height());
+	}
+	applyRatioConstraint();
 }
 
 
