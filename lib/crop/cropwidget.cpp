@@ -44,7 +44,15 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	bool mUpdatingFromCropTool;
 
 
+	bool ratioIsConstrained() const {
+		return ratioWidthSpinBox->value() > 0 && ratioHeightSpinBox->value() > 0;
+	}
+
+
 	double cropRatio() const {
+		if (!ratioIsConstrained()) {
+			return 0;
+		}
 		int width = ratioWidthSpinBox->value();
 		int height = ratioHeightSpinBox->value();
 		return height / double(width);
@@ -75,8 +83,9 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 			<< QSize(7, 5)
 			<< QSize(10, 8);
 
-		addRatioToComboBox(QSize(1, 1), i18n("Square"));
+		addRatioToComboBox(QSize(0, 0), i18nc("Crop tool won't apply any ratio constraint", "No Constraint"));
 		addSeparatorToComboBox();
+		addRatioToComboBox(QSize(1, 1), i18n("Square"));
 
 		Q_FOREACH(const QSize& size, ratioList) {
 			addRatioToComboBox(size);
@@ -144,8 +153,6 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->cropButton, SIGNAL(clicked()),
 		SIGNAL(cropRequested()) );
 	
-	connect(d->constrainRatioCheckBox, SIGNAL(toggled(bool)),
-		SLOT(applyRatioConstraint()) );
 	connect(d->ratioWidthSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(applyRatioConstraint()) );
 	connect(d->ratioHeightSpinBox, SIGNAL(valueChanged(int)),
@@ -193,7 +200,7 @@ void CropWidget::slotWidthChanged() {
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
-	if (d->constrainRatioCheckBox->isChecked()) {
+	if (d->ratioIsConstrained()) {
 		int height = int(d->widthSpinBox->value() * d->cropRatio());
 		d->heightSpinBox->setValue(height);
 	}
@@ -207,7 +214,7 @@ void CropWidget::slotHeightChanged() {
 	if (d->mUpdatingFromCropTool) {
 		return;
 	}
-	if (d->constrainRatioCheckBox->isChecked()) {
+	if (d->ratioIsConstrained()) {
 		int width = int(d->heightSpinBox->value() / d->cropRatio());
 		d->widthSpinBox->setValue(width);
 	}
@@ -216,16 +223,14 @@ void CropWidget::slotHeightChanged() {
 
 
 void CropWidget::applyRatioConstraint() {
-	if (!d->constrainRatioCheckBox->isChecked()) {
-		d->mCropTool->setCropRatio(0);
-		return;
-	}
-
 	double ratio = d->cropRatio();
 	d->mCropTool->setCropRatio(ratio);
 
+	if (!d->ratioIsConstrained()) {
+		return;
+	}
 	QRect rect = d->cropRect();
-	rect.setHeight(int(rect.width() * d->cropRatio()));
+	rect.setHeight(int(rect.width() * ratio));
 	d->mCropTool->setRect(rect);
 }
 
