@@ -197,10 +197,6 @@ CropTool::CropTool(ImageView* view)
 
 
 CropTool::~CropTool() {
-	if (d->mCropWidget) {
-		disconnect(d->mCropWidget, 0, this, 0);
-		delete d->mCropWidget;
-	}
 	delete d;
 }
 
@@ -373,6 +369,14 @@ void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 
 void CropTool::toolActivated() {
 	imageView()->viewport()->setCursor(Qt::CrossCursor);
+}
+
+
+void CropTool::toolDeactivated() {
+	if (d->mCropWidget) {
+		disconnect(d->mCropWidget, 0, this, 0);
+		delete d->mCropWidget;
+	}
 }
 
 
