@@ -25,7 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QPushButton>
 
 // KDE
-#include "klocale.h"
+#include <kdebug.h>
+#include <kdialog.h>
+#include <klocale.h>
 
 // Local
 #include "croptool.h"
@@ -112,14 +114,16 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool)
 : QWidget(parent)
 , d(new CropWidgetPrivate) {
+	setWindowFlags(Qt::Tool);
 	d->mDocument = imageView->document();
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = cropTool;
 	d->setupUi(this);
-	layout()->setMargin(0);
+	layout()->setMargin(KDialog::marginHint());
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
 
 	connect(d->advancedCheckBox, SIGNAL(toggled(bool)),
-		SLOT(slotToggleAdvancedWidget(bool)));
+		d->advancedWidget, SLOT(setVisible(bool)));
 	d->advancedWidget->setVisible(false);
 
 	d->initRatioComboBox();
@@ -236,13 +240,6 @@ void CropWidget::setRatioConstraintFromComboBox() {
 	d->ratioWidthSpinBox->setValue(size.width());
 	d->ratioWidthSpinBox->blockSignals(false);
 	d->ratioHeightSpinBox->setValue(size.height());
-}
-
-
-void CropWidget::slotToggleAdvancedWidget(bool visible) {
-	const QSize delta = parentWidget()->size() - size();
-	d->advancedWidget->setVisible(visible);
-	parentWidget()->resize(minimumSizeHint() + delta);
 }
 
 
