@@ -248,6 +248,7 @@ void CropTool::paint(QPainter* painter) {
 
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
+	d->mCropWidget->setWindowOpacity(0.4);
 	if (d->mRect.x() == UNINITIALIZED_X) {
 		// Nothing selected, user is creating the crop rect
 		QPoint pos = imageView()->mapToImage(event->pos());
@@ -366,6 +367,7 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 	d->mMovingHandle = CH_None;
 	d->updateCursor(d->handleAt(event->pos()), false);
+	d->mCropWidget->setWindowOpacity(1.);
 }
 
 
