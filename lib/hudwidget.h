@@ -39,12 +39,10 @@ class HudWidgetPrivate;
 class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
 	Q_OBJECT
 public:
-	enum Option {
+	enum Options {
 		OptionNone,
-		OptionCloseButton,
-		OptionDragHandle
+		OptionCloseButton
 	};
-	Q_DECLARE_FLAGS(Options, Option)
 
 	HudWidget(QWidget* parent = 0);
 	~HudWidget();
@@ -55,17 +53,11 @@ public:
 
 	QToolButton* closeButton() const;
 
-protected:
-	virtual void moveEvent(QMoveEvent*);
-	virtual bool eventFilter(QObject*, QEvent* event);
-
 private:
 	HudWidgetPrivate* const d;
 };
 
 
 } // namespace
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options)
 
 #endif /* HUDWIDGET_H */
