@@ -10,6 +10,9 @@
     <height>190</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>Crop</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QCheckBox" name="advancedCheckBox">
