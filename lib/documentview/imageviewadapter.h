@@ -70,7 +70,6 @@ public:
 
 private Q_SLOTS:
 	void slotLoadingFailed();
-	void slotLoaded();
 
 private:
 	ImageViewAdapterPrivate* const d;

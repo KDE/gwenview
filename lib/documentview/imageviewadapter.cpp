@@ -85,12 +85,8 @@ ImageView* ImageViewAdapter::imageView() const {
 void ImageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mView->setDocument(doc);
 
-	connect(doc.data(), SIGNAL(downSampledImageReady()), SLOT(slotLoaded()) );
-	connect(doc.data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()) );
 	connect(doc.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
-	if (doc->loadingState() == Document::Loaded) {
-		slotLoaded();
-	} else if (doc->loadingState() == Document::LoadingFailed) {
+	if (doc->loadingState() == Document::LoadingFailed) {
 		slotLoadingFailed();
 	}
 }
@@ -133,17 +129,6 @@ qreal ImageViewAdapter::computeZoomToFitHeight() const {
 
 Document::Ptr ImageViewAdapter::document() const {
 	return d->mView->document();
-}
-
-
-void ImageViewAdapter::slotLoaded() {
-	if (d->mView->zoomToFit()) {
-		emit resizeRequested(d->mView->document()->size());
-	}
-
-	// We don't want to emit resizeRequested() again if we receive another
-	// downSampledImageReady() or loaded() signal from the current document.
-	disconnect(d->mView->document().data(), 0, this, SLOT(slotLoaded()) );
 }
 
 

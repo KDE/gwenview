@@ -96,8 +96,6 @@ Q_SIGNALS:
 	 */
 	void completed();
 
-	void resizeRequested(const QSize&);
-
 	void previousImageRequested();
 
 	void nextImageRequested();

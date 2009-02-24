@@ -87,8 +87,6 @@ struct DocumentViewPrivate {
 
 		mAdapter->loadConfig();
 
-		QObject::connect(mAdapter, SIGNAL(resizeRequested(const QSize&)),
-			that, SIGNAL(resizeRequested(const QSize&)) );
 		QObject::connect(mAdapter, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),

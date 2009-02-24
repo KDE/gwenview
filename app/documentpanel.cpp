@@ -229,8 +229,6 @@ struct DocumentPanelPrivate {
 
 		QObject::connect(mDocumentView, SIGNAL(completed()),
 			that, SIGNAL(completed()) );
-		QObject::connect(mDocumentView, SIGNAL(resizeRequested(const QSize&)),
-			that, SIGNAL(resizeRequested(const QSize&)) );
 		QObject::connect(mDocumentView, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mDocumentView, SIGNAL(nextImageRequested()),

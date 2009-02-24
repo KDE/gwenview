@@ -89,7 +89,6 @@ protected:
 	void setWidget(QWidget* widget) { mWidget = widget; }
 
 Q_SIGNALS:
-	void resizeRequested(const QSize&);
 	void previousImageRequested();
 	void nextImageRequested();
 
