@@ -45,12 +45,27 @@ namespace Gwenview {
 
 namespace MimeTypeUtils {
 
+static inline QString resolveAlias(const QString& name) {
+	KMimeType::Ptr ptr = KMimeType::mimeType(name, KMimeType::ResolveAliases);
+	//kDebug() << name << ptr->name();
+	return ptr->name();
+}
+
+static void resolveAliasInList(QStringList* list) {
+	QStringList::Iterator
+		it = list->begin(),
+		end = list->end();
+	for (; it != end; ++it) {
+		*it = resolveAlias(*it);
+	}
+}
 
 const QStringList& dirMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
 		list << "inode/directory";
 		list += ArchiveUtils::mimeTypes();
+		resolveAliasInList(&list);
 	}
 	return list;
 }
@@ -59,7 +74,8 @@ const QStringList& dirMimeTypes() {
 const QStringList& rasterImageMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
-		list=KImageIO::mimeTypes(KImageIO::Reading);
+		list = KImageIO::mimeTypes(KImageIO::Reading);
+		resolveAliasInList(&list);
 	}
 	return list;
 }
@@ -70,6 +86,7 @@ const QStringList& svgImageMimeTypes() {
 	if (list.isEmpty()) {
 		list.append("image/svg+xml");
 		// FIXME svgz
+		resolveAliasInList(&list);
 	}
 	return list;
 }
@@ -92,6 +109,7 @@ const QStringList& videoMimeTypes() {
 #ifdef __GNUC__
 	#warning implement MimeTypeUtils::videoMimeTypes()
 #endif
+		resolveAliasInList(&list);
 	}
 
 	return list;
