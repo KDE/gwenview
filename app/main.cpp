@@ -1,6 +1,6 @@
 /*
 Gwenview: an image viewer
-Copyright 2007-2008 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2007-2009 Aurélien Gâteau <aurelien.gateau@free.fr>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,14 +39,14 @@ int main(int argc, char *argv[]) {
 		"gwenview",        /* appname */
 		0,                 /* catalogName */
 		ki18n("Gwenview"), /* programName */
-		"2.2.0");          /* version */
+		"2.2.2");          /* version */
 	aboutData.setShortDescription(ki18n("An Image Viewer"));
 	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
+	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
 	aboutData.addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
-		"aurelien.gateau@free.fr");
+		"agateau@kde.org");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 
