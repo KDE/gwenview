@@ -54,7 +54,6 @@ private Q_SLOTS:
 	void setCropRect(const QRect& rect);
 
 	void applyRatioConstraint();
-	void setRatioConstraintFromComboBox();
 
 private:
 	CropWidgetPrivate* const d;

@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kdialog.h>
+#include <klineedit.h>
 #include <klocale.h>
 
 // Local
@@ -45,24 +46,34 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 
 
 	bool ratioIsConstrained() const {
-		return ratioWidthSpinBox->value() > 0 && ratioHeightSpinBox->value() > 0;
+		return cropRatio() > 0;
 	}
 
 
 	double cropRatio() const {
-		if (!ratioIsConstrained()) {
+		const QStringList lst = ratioComboBox->currentText().split(":");
+		if (lst.size() != 2) {
 			return 0;
 		}
-		int width = ratioWidthSpinBox->value();
-		int height = ratioHeightSpinBox->value();
-		return height / double(width);
+
+		bool ok;
+		const double width = lst[0].toDouble(&ok);
+		if (!ok) {
+			return 0;
+		}
+		const double height = lst[1].toDouble(&ok);
+		if (!ok) {
+			return 0;
+		}
+
+		return height / width;
 	}
 
 
 	void addRatioToComboBox(const QSize& size, const QString& _label = QString()) {
 		QString label = _label;
 		if (label.isEmpty()) {
-			label = QString("%1 x %2").arg(size.width()).arg(size.height());
+			label = QString("%1:%2").arg(size.width()).arg(size.height());
 		}
 		ratioComboBox->addItem(label, QVariant(size));
 	}
@@ -83,9 +94,8 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 			<< QSize(7, 5)
 			<< QSize(10, 8);
 
-		addRatioToComboBox(QSize(0, 0), i18nc("Crop tool won't apply any ratio constraint", "No Constraint"));
-		addSeparatorToComboBox();
 		addRatioToComboBox(QSize(1, 1), i18n("Square"));
+		addSeparatorToComboBox();
 
 		Q_FOREACH(const QSize& size, ratioList) {
 			addRatioToComboBox(size);
@@ -97,6 +107,11 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 		}
 
 		ratioComboBox->setMaxVisibleItems(ratioComboBox->count());
+		ratioComboBox->setEditText(QString());
+
+		KLineEdit* edit = qobject_cast<KLineEdit*>(ratioComboBox->lineEdit());
+		Q_ASSERT(edit);
+		edit->setClickMessage(i18n("Width:Height"));
 	}
 
 
@@ -154,13 +169,10 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->cropButton, SIGNAL(clicked()),
 		SIGNAL(cropRequested()) );
 	
-	connect(d->ratioWidthSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(applyRatioConstraint()) );
-	connect(d->ratioHeightSpinBox, SIGNAL(valueChanged(int)),
-		SLOT(applyRatioConstraint()) );
-
 	connect(d->ratioComboBox, SIGNAL(activated(int)),
-		SLOT(setRatioConstraintFromComboBox()) );
+		SLOT(applyRatioConstraint()) );
+	connect(d->ratioComboBox, SIGNAL(editTextChanged(const QString&)),
+		SLOT(applyRatioConstraint()) );
 
 	// Don't do this before signals are connected, otherwise the tool won't get
 	// initialized
@@ -233,23 +245,6 @@ void CropWidget::applyRatioConstraint() {
 	QRect rect = d->cropRect();
 	rect.setHeight(int(rect.width() * ratio));
 	d->mCropTool->setRect(rect);
-}
-
-
-void CropWidget::setRatioConstraintFromComboBox() {
-	QVariant data = d->ratioComboBox->itemData(d->ratioComboBox->currentIndex());
-	if (!data.isValid()) {
-		return;
-	}
-
-	QSize size = data.toSize();
-	{
-		SignalBlocker blockerW(d->ratioWidthSpinBox);
-		SignalBlocker blockerH(d->ratioHeightSpinBox);
-		d->ratioWidthSpinBox->setValue(size.width());
-		d->ratioHeightSpinBox->setValue(size.height());
-	}
-	applyRatioConstraint();
 }
 
 
