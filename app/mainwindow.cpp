@@ -808,9 +808,13 @@ void MainWindow::openSelectedDocument() {
 
 
 void MainWindow::goUp() {
-	KUrl url = d->mDirModel->dirLister()->url();
-	url = url.upUrl();
-	openDirUrl(url);
+	if (d->mCurrentPageId == BrowsePageId) {
+		KUrl url = d->mDirModel->dirLister()->url();
+		url = url.upUrl();
+		openDirUrl(url);
+	} else {
+		d->mBrowseAction->trigger();
+	}
 }
 
 
