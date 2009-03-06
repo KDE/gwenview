@@ -66,23 +66,29 @@ struct CropToolPrivate {
 	QPoint mLastMouseMovePos;
 	double mCropRatio;
 
+
+	QRect viewportCropRect() const {
+		return mCropTool->imageView()->mapToViewport(mRect.adjusted(0, 0, 1, 1));
+	}
+
+
 	QRect handleViewportRect(CropHandle handle) {
-		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
+		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
-			top = viewportCropRect.top() - HANDLE_RADIUS;
+			top = rect.top() - HANDLE_RADIUS;
 		} else if (handle & CH_Bottom) {
-			top = viewportCropRect.bottom() - HANDLE_RADIUS;
+			top = rect.bottom() - HANDLE_RADIUS;
 		} else {
-			top = viewportCropRect.top() + viewportCropRect.height() / 2 - HANDLE_RADIUS;
+			top = rect.top() + rect.height() / 2 - HANDLE_RADIUS;
 		}
 
 		if (handle & CH_Left) {
-			left = viewportCropRect.left() - HANDLE_RADIUS;
+			left = rect.left() - HANDLE_RADIUS;
 		} else if (handle & CH_Right) {
-			left = viewportCropRect.right() - HANDLE_RADIUS;
+			left = rect.right() - HANDLE_RADIUS;
 		} else {
-			left = viewportCropRect.left() + viewportCropRect.width() / 2 - HANDLE_RADIUS;
+			left = rect.left() + rect.width() / 2 - HANDLE_RADIUS;
 		}
 
 		return QRect(left, top, HANDLE_RADIUS * 2 + 1, HANDLE_RADIUS * 2 + 1);
@@ -96,8 +102,8 @@ struct CropToolPrivate {
 				return handle;
 			}
 		}
-		QRect viewportCropRect = mCropTool->imageView()->mapToViewport(mRect);
-		if (viewportCropRect.contains(pos)) {
+		QRect rect = viewportCropRect();
+		if (rect.contains(pos)) {
 			return CH_Content;
 		}
 		return CH_None;
@@ -195,7 +201,7 @@ void CropTool::paint(QPainter* painter) {
 	if (d->mRect.x() == UNINITIALIZED_X) {
 		return;
 	}
-	QRect rect = imageView()->mapToViewport(d->mRect);
+	QRect rect = d->viewportCropRect();
 
 	QRect imageRect = imageView()->rect();
 
