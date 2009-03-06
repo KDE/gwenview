@@ -47,8 +47,7 @@ namespace MimeTypeUtils {
 
 static inline QString resolveAlias(const QString& name) {
 	KMimeType::Ptr ptr = KMimeType::mimeType(name, KMimeType::ResolveAliases);
-	//kDebug() << name << ptr->name();
-	return ptr->name();
+	return ptr.isNull() ? name : ptr->name();
 }
 
 static void resolveAliasInList(QStringList* list) {
