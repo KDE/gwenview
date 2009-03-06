@@ -111,7 +111,9 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 
 		KLineEdit* edit = qobject_cast<KLineEdit*>(ratioComboBox->lineEdit());
 		Q_ASSERT(edit);
-		edit->setClickMessage(i18n("Width:Height"));
+		// Do not use i18n("%1:%2") because ':' should not be translated, it is
+		// used to parse the ratio string.
+		edit->setClickMessage(QString("%1:%2").arg(i18n("Width")).arg(i18n("Height")));
 	}
 
 
