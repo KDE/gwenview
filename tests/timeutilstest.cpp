@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kfileitem.h>
+#include <ktemporaryfile.h>
 #include <qtest_kde.h>
 
 // Local
@@ -59,7 +60,9 @@ void TimeUtilsTest::testJpeg() {
 
 
 void TimeUtilsTest::testCache() {
-	KUrl url = urlForTestFile("test.png");
+	KTemporaryFile tempFile;
+	QVERIFY(tempFile.open());
+	KUrl url = KUrl::fromLocalFile(tempFile.fileName());
 	KFileItem item1(KFileItem::Unknown, KFileItem::Unknown, url);
 	KDateTime dateTime1 = TimeUtils::dateTimeForFileItem(item1);
 	QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));
