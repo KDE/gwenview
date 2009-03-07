@@ -70,12 +70,12 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	}
 
 
-	void addRatioToComboBox(const QSize& size, const QString& _label = QString()) {
-		QString label = _label;
-		if (label.isEmpty()) {
-			label = QString("%1:%2").arg(size.width()).arg(size.height());
+	void addRatioToComboBox(const QSize& size, const QString& label = QString()) {
+		QString text = QString("%1:%2").arg(size.width()).arg(size.height());
+		if (!label.isEmpty()) {
+			text += QString(" (%1)").arg(label);
 		}
-		ratioComboBox->addItem(label, QVariant(size));
+		ratioComboBox->addItem(text, QVariant(size));
 	}
 
 
@@ -171,10 +171,10 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->cropButton, SIGNAL(clicked()),
 		SIGNAL(cropRequested()) );
 	
-	connect(d->ratioComboBox, SIGNAL(activated(int)),
-		SLOT(applyRatioConstraint()) );
 	connect(d->ratioComboBox, SIGNAL(editTextChanged(const QString&)),
-		SLOT(applyRatioConstraint()) );
+		SLOT(slotRatioComboBoxEditTextChanged()) );
+	connect(d->ratioComboBox, SIGNAL(activated(int)),
+		SLOT(slotRatioComboBoxActivated()) );
 
 	// Don't do this before signals are connected, otherwise the tool won't get
 	// initialized
@@ -247,6 +247,23 @@ void CropWidget::applyRatioConstraint() {
 	QRect rect = d->cropRect();
 	rect.setHeight(int(rect.width() * ratio));
 	d->mCropTool->setRect(rect);
+}
+
+
+void CropWidget::slotRatioComboBoxEditTextChanged() {
+	applyRatioConstraint();
+}
+
+
+void CropWidget::slotRatioComboBoxActivated() {
+	// If the ratioComboBox contains text like this: "w:h (foo bar)", change it
+	// to "w:h" only, so that it's easier to edit for the user.
+	QStringList lst = d->ratioComboBox->currentText().split(" ");
+	if (lst.size() > 1) {
+		SignalBlocker blocker(d->ratioComboBox);
+		d->ratioComboBox->setEditText(lst[0]);
+		applyRatioConstraint();
+	}
 }
 
 

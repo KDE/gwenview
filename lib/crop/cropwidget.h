@@ -53,6 +53,8 @@ private Q_SLOTS:
 	void slotHeightChanged();
 	void setCropRect(const QRect& rect);
 
+	void slotRatioComboBoxEditTextChanged();
+	void slotRatioComboBoxActivated();
 	void applyRatioConstraint();
 
 private:
