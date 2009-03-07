@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "cropwidget.moc"
 
 // Qt
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QPushButton>
 
 // KDE
@@ -37,6 +39,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "ui_cropwidget.h"
 
 namespace Gwenview {
+
+
+// Euclidean algorithm to compute the greatest common divisor of two integers.
+// Found at:
+// http://en.wikipedia.org/wiki/Euclidean_algorithm
+static int gcd(int a, int b) {
+	return b == 0 ? a : gcd(b, a % b);
+}
+
+
+static QSize screenRatio() {
+	const QRect rect = QApplication::desktop()->screenGeometry();
+	const int width = rect.width();
+	const int height = rect.height();
+	const int divisor = gcd(width, height);
+	return QSize(width / divisor, height / divisor);
+}
 
 
 struct CropWidgetPrivate : public Ui_CropWidget {
@@ -95,6 +114,7 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 			<< QSize(10, 8);
 
 		addRatioToComboBox(QSize(1, 1), i18n("Square"));
+		addRatioToComboBox(screenRatio(), i18n("This Screen"));
 		addSeparatorToComboBox();
 
 		Q_FOREACH(const QSize& size, ratioList) {
