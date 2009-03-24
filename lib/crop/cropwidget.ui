@@ -6,24 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>335</width>
-    <height>216</height>
+    <width>235</width>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Crop</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Click and drag on the image to select the area you want to keep.</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -34,9 +24,15 @@
       </widget>
      </item>
      <item>
-      <widget class="KDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <widget class="QToolButton" name="cropButton">
+       <property name="text">
+        <string>Crop</string>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -45,14 +41,7 @@
    <item>
     <widget class="QWidget" name="advancedWidget" native="true">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="3">
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" rowspan="2">
+      <item row="0" column="0" rowspan="2">
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Ratio:</string>
@@ -62,7 +51,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item row="1" column="1" colspan="2">
        <widget class="KComboBox" name="ratioComboBox">
         <property name="editable">
          <bool>true</bool>
@@ -72,14 +61,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="3">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -98,7 +80,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="2" column="1">
        <widget class="QSpinBox" name="leftSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -108,7 +90,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
+      <item row="2" column="2">
        <widget class="QSpinBox" name="topSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -118,7 +100,7 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Size:</string>
@@ -131,7 +113,7 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item row="3" column="1">
        <widget class="QSpinBox" name="widthSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -141,7 +123,7 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
+      <item row="3" column="2">
        <widget class="QSpinBox" name="heightSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -158,11 +140,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDialogButtonBox</class>
-   <extends>QDialogButtonBox</extends>
-   <header>kdialogbuttonbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -170,7 +147,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>advancedCheckBox</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>ratioComboBox</tabstop>
   <tabstop>leftSpinBox</tabstop>
   <tabstop>topSpinBox</tabstop>
@@ -178,22 +154,5 @@
   <tabstop>heightSpinBox</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>CropWidget</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>290</x>
-     <y>53</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>330</x>
-     <y>33</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

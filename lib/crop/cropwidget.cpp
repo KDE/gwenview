@@ -159,17 +159,10 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 	}
 
 
-	void initButtonBox() {
-		QPushButton* button = buttonBox->button(QDialogButtonBox::Ok);
-		button->setText(i18n("Crop"));
-		button->setIcon(KIcon("transform-crop-and-resize"));
+	void initCropButton() {
+		cropButton->setIcon(KIcon("transform-crop-and-resize"));
 
-		// FIXME: For some reason the buttonBox does not pick up the Oxygen
-		// icon. Should investigate/report bug on QDialogButtonBox.
-		button = buttonBox->button(QDialogButtonBox::Cancel);
-		button->setIcon(KIcon("dialog-cancel"));
-
-		QObject::connect(buttonBox, SIGNAL(accepted()),
+		QObject::connect(cropButton, SIGNAL(clicked()),
 			that, SIGNAL(cropRequested()) );
 	}
 };
@@ -206,7 +199,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotHeightChanged()) );
 
-	d->initButtonBox();
+	d->initCropButton();
 	
 	connect(d->ratioComboBox, SIGNAL(editTextChanged(const QString&)),
 		SLOT(slotRatioComboBoxEditTextChanged()) );

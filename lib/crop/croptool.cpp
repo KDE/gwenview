@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "cropimageoperation.h"
 #include "cropwidget.h"
 #include "imageview.h"
+#include "hudwidget.h"
 
 static const int HANDLE_RADIUS = 5;
 
@@ -71,6 +72,7 @@ struct CropToolPrivate {
 	CropHandle mMovingHandle;
 	QPoint mLastMouseMovePos;
 	double mCropRatio;
+	HudWidget* mHudWidget;
 	QPointer<CropWidget> mCropWidget;
 
 
@@ -174,15 +176,39 @@ struct CropToolPrivate {
 
 	void setupHudWidget() {
 		ImageView* view = mCropTool->imageView();
-		mCropWidget = new CropWidget(view, view, mCropTool);
+		mHudWidget = new HudWidget(view->viewport());
+		mCropWidget = new CropWidget(0, view, mCropTool);
 		mCropWidget->setAttribute(Qt::WA_DeleteOnClose);
 
 		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
 			mCropTool, SLOT(slotCropRequested()));
 		QObject::connect(mCropWidget, SIGNAL(destroyed()),
 			mCropTool, SIGNAL(done()));
+		QObject::connect(mCropWidget, SIGNAL(destroyed()),
+			mHudWidget, SLOT(deleteLater()));
 
-		mCropWidget->show();
+		mHudWidget->init(mCropWidget, HudWidget::OptionCloseButton);
+		mHudWidget->setCursor(Qt::ArrowCursor);
+		mHudWidget->show();
+
+		mHudWidget->installEventFilter(mCropTool);
+	}
+
+
+	void updateHudWidgetPosition() {
+		const ImageView* view = mCropTool->imageView();
+		const QRect rect = view->mapToViewport(mRect);
+		const int margin = 2 * HANDLE_RADIUS;
+
+		int left = rect.left();
+		int top = rect.bottom() + margin;
+		if (top + mHudWidget->height() > view->viewport()->height()) {
+			// Hud does not fit below crop rect, place it inside it
+			top = rect.bottom() - margin - mHudWidget->height();
+			left += margin;
+		}
+
+		mHudWidget->move(left, top);
 	}
 };
 
@@ -199,6 +225,7 @@ CropTool::CropTool(ImageView* view)
 	d->mCropRatio = 0.;
 
 	d->setupHudWidget();
+	d->updateHudWidgetPosition();
 }
 
 
@@ -247,7 +274,8 @@ void CropTool::paint(QPainter* painter) {
 
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
-	d->mCropWidget->setWindowOpacity(0.4);
+	// FIXME: Fade out?
+	d->mHudWidget->hide();
 	d->mMovingHandle = d->handleAt(event->pos());
 	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
 
@@ -328,13 +356,15 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 
 	imageView()->viewport()->update();
 	rectUpdated(d->mRect);
+	d->updateHudWidgetPosition();
 }
 
 
 void CropTool::mouseReleaseEvent(QMouseEvent* event) {
+	// FIXME: Fade in?
+	d->mHudWidget->show();
 	d->mMovingHandle = CH_None;
 	d->updateCursor(d->handleAt(event->pos()), false);
-	d->mCropWidget->setWindowOpacity(1.);
 }
 
 
@@ -355,6 +385,14 @@ void CropTool::slotCropRequested() {
 	CropImageOperation* op = new CropImageOperation(d->mRect);
 	emit imageOperationRequested(op);
 	emit done();
+}
+
+
+bool CropTool::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::Resize) {
+		d->updateHudWidgetPosition();
+	}
+	return false;
 }
 
 

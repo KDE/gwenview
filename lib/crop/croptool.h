@@ -62,6 +62,9 @@ Q_SIGNALS:
 	void done();
 	void imageOperationRequested(AbstractImageOperation*);
 
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
+
 private Q_SLOTS:
 	void slotCropRequested();
 
