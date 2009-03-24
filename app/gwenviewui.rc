@@ -128,8 +128,6 @@
 	<Action name="rotate_left" />
 	<Action name="rotate_right" />
 	<Separator/>
-	<Merge/>
-	<Separator/>
 	<Action name="toggle_sidebar" />
 </ToolBar>
 
