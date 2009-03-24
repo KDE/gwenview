@@ -21,11 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "croptool.moc"
 
+#include <math.h>
+
 // Qt
 #include <QFlags>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
+#include <QTimer>
 #include <QToolButton>
 
 // KDE
@@ -56,6 +59,17 @@ enum CropHandleFlag {
 	CH_Content = 16
 };
 
+enum HudSide {
+	HS_Top = 1,
+	HS_Bottom = 2,
+	HS_Inside = 4,
+	HS_TopInside = HS_Top | HS_Inside,
+	HS_BottomInside = HS_Bottom | HS_Inside
+};
+
+static const int HUD_TIMER_MAX_PIXELS_PER_UPDATE = 20;
+static const int HUD_TIMER_ANIMATION_INTERVAL = 20;
+
 Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
 } // namespace
@@ -66,6 +80,7 @@ namespace Gwenview {
 
 struct CropToolPrivate {
 	CropTool* mCropTool;
+	HudSide mHudSide;
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
@@ -73,6 +88,9 @@ struct CropToolPrivate {
 	double mCropRatio;
 	HudWidget* mHudWidget;
 	CropWidget* mCropWidget;
+
+	QTimer* mHudTimer;
+	QPoint mHudEndPos;
 
 
 	QRect viewportCropRect() const {
@@ -188,23 +206,61 @@ struct CropToolPrivate {
 		mHudWidget->show();
 
 		mHudWidget->installEventFilter(mCropTool);
+
+		mHudTimer = new QTimer(mCropTool);
+		mHudTimer->setInterval(HUD_TIMER_ANIMATION_INTERVAL);
+		QObject::connect(mHudTimer, SIGNAL(timeout()),
+			mCropTool, SLOT(moveHudWidget()));
+	}
+
+	typedef QPair<QPoint, HudSide> OptimalPosition;
+
+	OptimalPosition computeOptimalHudWidgetPosition() {
+		const ImageView* view = mCropTool->imageView();
+		const QRect rect = view->mapToViewport(mRect);
+		const int margin = 2 * HANDLE_RADIUS;
+		const int hudHeight = mHudWidget->height();
+		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, 0, -hudHeight);
+
+		OptimalPosition preferred = OptimalPosition(
+			QPoint(rect.left(), rect.top() - margin - hudHeight),
+			HS_Top);
+		OptimalPosition fallback = OptimalPosition(
+			QPoint(rect.left(), rect.bottom() + margin),
+			HS_Bottom);
+
+		// Check if a position outside rect fits, staying on the same side if
+		// possible
+		if (mHudSide & HS_Bottom) {
+			qSwap(preferred, fallback);
+		}
+		if (hudMaxRect.contains(preferred.first)) return preferred;
+		if (hudMaxRect.contains(fallback.first)) return fallback;
+
+		// Does not fit, use a position inside rect
+		QPoint pos;
+		if (mHudSide & HS_Bottom) {
+			pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
+		} else {
+			pos = QPoint(rect.left() + margin, rect.top() + margin);
+		}
+		return OptimalPosition(pos, HudSide(mHudSide | HS_Inside));
 	}
 
 
 	void updateHudWidgetPosition() {
-		const ImageView* view = mCropTool->imageView();
-		const QRect rect = view->mapToViewport(mRect);
-		const int margin = 2 * HANDLE_RADIUS;
-
-		int left = rect.left();
-		int top = rect.bottom() + margin;
-		if (top + mHudWidget->height() > view->viewport()->height()) {
-			// Hud does not fit below crop rect, place it inside it
-			top = rect.bottom() - margin - mHudWidget->height();
-			left += margin;
+		OptimalPosition result = computeOptimalHudWidgetPosition();
+		if (mHudSide == result.second && !mHudTimer->isActive()) {
+			// Not changing side and not in an animation, move directly the hud
+			// to the final position to avoid lagging effect
+			mHudWidget->move(result.first);
+		} else {
+			mHudEndPos = result.first;
+			mHudSide = result.second;
+			if (!mHudTimer->isActive()) {
+				mHudTimer->start();
+			}
 		}
-
-		mHudWidget->move(left, top);
 	}
 };
 
@@ -214,6 +270,7 @@ CropTool::CropTool(ImageView* view)
 , d(new CropToolPrivate) {
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
+	d->mHudSide = HS_Bottom;
 	d->mMovingHandle = CH_None;
 	const QRect imageRect = QRect(QPoint(0, 0), view->document()->size());
 	const QRect viewportRect = view->mapToImage(view->viewport()->rect());
@@ -271,7 +328,7 @@ void CropTool::paint(QPainter* painter) {
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
 	// FIXME: Fade out?
-	d->mHudWidget->hide();
+	//d->mHudWidget->hide();
 	d->mMovingHandle = d->handleAt(event->pos());
 	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
 
@@ -358,7 +415,7 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 
 void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 	// FIXME: Fade in?
-	d->mHudWidget->show();
+	//d->mHudWidget->show();
 	d->mMovingHandle = CH_None;
 	d->updateCursor(d->handleAt(event->pos()), false);
 }
@@ -386,6 +443,22 @@ bool CropTool::eventFilter(QObject*, QEvent* event) {
 		d->updateHudWidgetPosition();
 	}
 	return false;
+}
+
+
+void CropTool::moveHudWidget() {
+	const QPoint delta = d->mHudEndPos - d->mHudWidget->pos();
+
+	const double distance = sqrt(delta.x() * delta.x() + delta.y() * delta.y());
+	QPoint pos;
+	if (distance > double(HUD_TIMER_MAX_PIXELS_PER_UPDATE)) {
+		pos = d->mHudWidget->pos() + delta * double(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
+	} else {
+		pos = d->mHudEndPos;
+		d->mHudTimer->stop();
+	}
+
+	d->mHudWidget->move(pos);
 }
 
 

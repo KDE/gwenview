@@ -67,6 +67,7 @@ protected:
 
 private Q_SLOTS:
 	void slotCropRequested();
+	void moveHudWidget();
 
 private:
 	CropToolPrivate* const d;
