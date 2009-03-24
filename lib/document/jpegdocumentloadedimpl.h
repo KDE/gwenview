@@ -36,6 +36,7 @@ class JpegContent;
 
 class JpegDocumentLoadedImplPrivate;
 class JpegDocumentLoadedImpl : public DocumentLoadedImpl {
+	Q_OBJECT
 public:
 	JpegDocumentLoadedImpl(Document*, JpegContent*);
 	~JpegDocumentLoadedImpl();
