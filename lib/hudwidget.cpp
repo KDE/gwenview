@@ -72,7 +72,7 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 		d->mCloseButton = new QToolButton(this);
 		d->mCloseButton->setAutoRaise(true);
 		d->mCloseButton->setIcon(SmallIcon("window-close"));
-		layout->addWidget(d->mCloseButton);
+		layout->addWidget(d->mCloseButton, 0, Qt::AlignTop | Qt::AlignHCenter);
 	}
 }
 
