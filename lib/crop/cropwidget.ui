@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>335</width>
-    <height>208</height>
+    <height>216</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Click and drag in the image to create a crop rectangle.</string>
+      <string>Click and drag on the image to select the area you want to keep.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
