@@ -6,11 +6,11 @@
 
 /* Default borders, normal and hover */
 QCheckBox::indicator, #configDialog QPushButton, QSlider::groove, QSlider::handle {
-	border: 1px solid rgba(100, 100, 100, 50%);
+	border: 1px solid #666;
 }
 
 QCheckBox::indicator:hover, QToolButton::hover, #configDialog QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
-	border: 1px solid rgba(192, 192, 192, 50%);
+	border: 1px solid #ccc;
 }
 
 /* QToolButton */
@@ -31,8 +31,8 @@ QToolButton:pressed {
 Gwenview--HudWidget {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 rgba(4, 4, 4, 50%), stop: 0.6 rgba(0, 0, 0, 50%), stop:1 rgba(0, 0, 0, 50%));
-	border: 1px solid rgba(100, 100, 100, 50%);
+		stop:0 rgba(4, 4, 4, 66%), stop: 0.6 rgba(0, 0, 0, 66%), stop:1 rgba(0, 0, 0, 66%));
+	border: 1px solid rgba(100, 100, 100, 66%);
 	border-radius: 8px;
 }
 
