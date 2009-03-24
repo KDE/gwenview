@@ -24,14 +24,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
+#include <kurl.h>
 
 // Local
+#include "document/documentfactory.h"
 
 namespace Gwenview {
 
 
 struct AbstractImageOperationPrivate {
-	Document::Ptr mDocument;
+	KUrl mUrl;
 };
 
 
@@ -47,12 +49,15 @@ AbstractImageOperation::~AbstractImageOperation() {
 
 
 void AbstractImageOperation::setDocument(Document::Ptr doc) {
-	d->mDocument = doc;
+	d->mUrl = doc->url();
 }
 
 
 Document::Ptr AbstractImageOperation::document() const {
-	return d->mDocument;
+	Document::Ptr doc = DocumentFactory::instance()->load(d->mUrl);
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
+	return doc;
 }
 
 
