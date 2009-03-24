@@ -40,8 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 static const int HANDLE_RADIUS = 5;
 
-static const int UNINITIALIZED_X = -1;
-
 namespace Gwenview {
 
 
@@ -195,7 +193,9 @@ CropTool::CropTool(ImageView* view)
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 	d->mMovingHandle = CH_None;
-	d->mRect.setX(UNINITIALIZED_X);
+	const QRect imageRect = QRect(QPoint(0, 0), view->document()->size());
+	const QRect viewportRect = view->mapToImage(view->viewport()->rect());
+	d->mRect = imageRect & viewportRect;
 	d->mCropRatio = 0.;
 
 	d->setupHudWidget();
@@ -223,9 +223,6 @@ void CropTool::setRect(const QRect& rect) {
 
 
 void CropTool::paint(QPainter* painter) {
-	if (d->mRect.x() == UNINITIALIZED_X) {
-		return;
-	}
 	QRect rect = d->viewportCropRect();
 
 	QRect imageRect = imageView()->rect();
@@ -251,15 +248,6 @@ void CropTool::paint(QPainter* painter) {
 
 void CropTool::mousePressEvent(QMouseEvent* event) {
 	d->mCropWidget->setWindowOpacity(0.4);
-	if (d->mRect.x() == UNINITIALIZED_X) {
-		// Nothing selected, user is creating the crop rect
-		QPoint pos = imageView()->mapToImage(event->pos());
-		d->mRect = QRect(pos, QSize(0, 0));
-
-		imageView()->viewport()->update();
-		rectUpdated(d->mRect);
-		return;
-	}
 	d->mMovingHandle = d->handleAt(event->pos());
 	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
 
@@ -270,7 +258,7 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 
 
 void CropTool::mouseMoveEvent(QMouseEvent* event) {
-	if (event->buttons() == Qt::NoButton && d->mRect.x() != UNINITIALIZED_X) {
+	if (event->buttons() == Qt::NoButton) {
 		// Make sure cursor is updated when moving over handles
 		CropHandle handle = d->handleAt(event->pos());
 		d->updateCursor(handle, false/* buttonDown*/);
@@ -282,29 +270,6 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	QPoint point = imageView()->mapToImage(event->pos());
 	int posX = qBound(0, point.x(), imageSize.width() - 1);
 	int posY = qBound(0, point.y(), imageSize.height() - 1);
-
-	if (d->mRect.x() != UNINITIALIZED_X && d->mRect.size() == QSize(0, 0)) {
-		// User is creating rect, thus d->mMovingHandle has not been set yet,
-		// figure it out now
-		if (posX == d->mRect.x() || posY == d->mRect.y()) {
-			// We can't figure the handle yet
-			return;
-		}
-		if (posX < d->mRect.x()) {
-			d->mMovingHandle = CH_Left;
-		} else {
-			d->mMovingHandle = CH_Right;
-		}
-
-		if (posY < d->mRect.y()) {
-			d->mMovingHandle = CropHandle(d->mMovingHandle | CH_Top);
-		} else {
-			d->mMovingHandle = CropHandle(d->mMovingHandle | CH_Bottom);
-		}
-
-		// Now that we have d->mMovingHandle, we can set the matching cursor shape
-		d->updateCursor(d->mMovingHandle, true /*buttonDown*/);
-	}
 
 	if (d->mMovingHandle == CH_None) {
 		return;
