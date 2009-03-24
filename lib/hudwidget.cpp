@@ -66,6 +66,7 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(4);
 	layout->addWidget(d->mMainWidget);
+	layout->setSizeConstraint(QLayout::SetFixedSize);
 
 	if (options == OptionCloseButton) {
 		d->mCloseButton = new QToolButton(this);
