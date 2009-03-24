@@ -164,6 +164,11 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 		button->setText(i18n("Crop"));
 		button->setIcon(KIcon("transform-crop-and-resize"));
 
+		// FIXME: For some reason the buttonBox does not pick up the Oxygen
+		// icon. Should investigate/report bug on QDialogButtonBox.
+		button = buttonBox->button(QDialogButtonBox::Cancel);
+		button->setIcon(KIcon("dialog-cancel"));
+
 		QObject::connect(buttonBox, SIGNAL(accepted()),
 			that, SIGNAL(cropRequested()) );
 	}
