@@ -36,6 +36,7 @@ namespace Gwenview {
 
 class DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
+	Q_OBJECT
 public:
 	DocumentLoadedImpl(Document*, const QByteArray&);
 	~DocumentLoadedImpl();
