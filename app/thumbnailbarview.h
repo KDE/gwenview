@@ -56,6 +56,7 @@ private:
 };
 
 
+struct ThumbnailBarViewPrivate;
 class ThumbnailBarView : public ThumbnailView {
 	Q_OBJECT
 public:
@@ -69,12 +70,9 @@ protected:
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
-	QStyle* mStyle;
-	QTimeLine* mTimeLine;
-
-	void smoothScrollTo(const QModelIndex& index);
-	int horizontalScrollToValue(const QRect& rect);
+	ThumbnailBarViewPrivate* const d;
 };
+
 
 } // namespace
 

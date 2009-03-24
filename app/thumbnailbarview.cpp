@@ -229,10 +229,53 @@ private:
 };
 
 
+
+struct ThumbnailBarViewPrivate {
+	ThumbnailBarView* q;
+	QStyle* mStyle;
+	QTimeLine* mTimeLine;
+
+
+	void smoothScrollTo(const QModelIndex& index) {
+		if (!index.isValid()) {
+			return;
+		}
+
+		const QRect rect = q->visualRect(index);
+
+		int oldValue = q->horizontalScrollBar()->value();
+		int newValue = horizontalScrollToValue(rect);
+		if (mTimeLine->state() == QTimeLine::Running) {
+			mTimeLine->stop();
+		}
+		mTimeLine->setFrameRange(oldValue, newValue);
+		mTimeLine->start();
+	}
+
+
+	int horizontalScrollToValue(const QRect& rect) {
+		// This code is a much simplified version of
+		// QListViewPrivate::horizontalScrollToValue()
+		const QRect area = q->viewport()->rect();
+		int horizontalValue = q->horizontalScrollBar()->value();
+
+		if (q->isRightToLeft()) {
+			horizontalValue += ((area.width() - rect.width()) / 2) - rect.left();
+		} else {
+			horizontalValue += rect.left() - ((area.width()- rect.width()) / 2);
+		}
+		return horizontalValue;
+	}
+};
+
+
+
 ThumbnailBarView::ThumbnailBarView(QWidget* parent)
-: ThumbnailView(parent) {
-	mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
-	connect(mTimeLine, SIGNAL(frameChanged(int)),
+: ThumbnailView(parent)
+, d(new ThumbnailBarViewPrivate) {
+	d->q = this;
+	d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
+	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
 		horizontalScrollBar(), SLOT(setValue(int)) );
 
 	setObjectName("thumbnailBarView");
@@ -242,13 +285,13 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	setWrapping(false);
 	setMaximumHeight(256);
 
-	mStyle = new ProxyStyle(style());
-	setStyle(mStyle);
+	d->mStyle = new ProxyStyle(style());
+	setStyle(d->mStyle);
 }
 
 
 ThumbnailBarView::~ThumbnailBarView() {
-	delete mStyle;
+	delete d->mStyle;
 }
 
 
@@ -286,40 +329,8 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 
 	QModelIndexList list = selected.indexes();
 	if (list.count() == 1 && isVisible()) {
-		smoothScrollTo(list.first());
+		d->smoothScrollTo(list.first());
 	}
-}
-
-
-int ThumbnailBarView::horizontalScrollToValue(const QRect& rect) {
-	// This code is a much simplified version of
-	// QListViewPrivate::horizontalScrollToValue()
-	const QRect area = viewport()->rect();
-	int horizontalValue = horizontalScrollBar()->value();
-
-	if (isRightToLeft()) {
-		horizontalValue += ((area.width() - rect.width()) / 2) - rect.left();
-	} else {
-		horizontalValue += rect.left() - ((area.width()- rect.width()) / 2);
-	}
-	return horizontalValue;
-}
-
-
-void ThumbnailBarView::smoothScrollTo(const QModelIndex& index) {
-	if (!index.isValid()) {
-		return;
-	}
-
-	const QRect rect = visualRect(index);
-
-	int oldValue = horizontalScrollBar()->value();
-	int newValue = horizontalScrollToValue(rect);
-	if (mTimeLine->state() == QTimeLine::Running) {
-		mTimeLine->stop();
-	}
-	mTimeLine->setFrameRange(oldValue, newValue);
-	mTimeLine->start();
 }
 
 
