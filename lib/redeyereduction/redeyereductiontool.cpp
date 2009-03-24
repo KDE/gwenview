@@ -91,7 +91,7 @@ struct RedEyeReductionToolPrivate {
 		mHudWidget = new HudWidget();
 		mHudWidget->init(widget, HudWidget::OptionCloseButton);
 		mHudWidget->adjustSize();
-		QObject::connect(mHudWidget->closeButton(), SIGNAL(clicked()),
+		QObject::connect(mHudWidget, SIGNAL(closed()),
 			mRedEyeReductionTool, SIGNAL(done()) );
 		mFloater->setChildWidget(mHudWidget);
 	}

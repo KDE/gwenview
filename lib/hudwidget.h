@@ -51,7 +51,11 @@ public:
 
 	QWidget* mainWidget() const;
 
-	QToolButton* closeButton() const;
+Q_SIGNALS:
+	void closed();
+
+private Q_SLOTS:
+	void slotCloseButtonClicked();
 
 private:
 	HudWidgetPrivate* const d;

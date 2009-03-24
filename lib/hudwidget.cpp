@@ -73,6 +73,8 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 		d->mCloseButton->setAutoRaise(true);
 		d->mCloseButton->setIcon(SmallIcon("window-close"));
 		layout->addWidget(d->mCloseButton, 0, Qt::AlignTop | Qt::AlignHCenter);
+
+		connect(d->mCloseButton, SIGNAL(clicked()), SLOT(slotCloseButtonClicked()));
 	}
 }
 
@@ -82,8 +84,9 @@ QWidget* HudWidget::mainWidget() const {
 }
 
 
-QToolButton* HudWidget::closeButton() const {
-	return d->mCloseButton;
+void HudWidget::slotCloseButtonClicked() {
+	close();
+	closed();
 }
 
 
