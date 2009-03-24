@@ -85,6 +85,10 @@ Document::Document(const KUrl& url)
 
 
 Document::~Document() {
+	// We do not want undo stack to emit signals, forcing us to emit signals
+	// ourself while we are being destroyed.
+	disconnect(&d->mUndoStack, 0, this, 0);
+
 	delete d->mImpl;
 	delete d;
 }
