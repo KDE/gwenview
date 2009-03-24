@@ -94,6 +94,10 @@ struct DocumentFactoryPrivate {
 			delete it.value();
 			map.erase(it);
 		}
+
+		#ifdef ENABLE_LOG
+		logDocumentMap(map);
+		#endif
 	}
 
 	void logDocumentMap(const DocumentMap& map) {
@@ -159,9 +163,6 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 	d->mDocumentMap[url] = info;
 
 	d->garbageCollect(d->mDocumentMap);
-	#ifdef ENABLE_LOG
-	d->logDocumentMap(d->mDocumentMap);
-	#endif
 
 	return docPtr;
 }
@@ -194,6 +195,7 @@ void DocumentFactory::slotLoaded(const KUrl& url) {
 
 void DocumentFactory::slotSaved(const KUrl& url) {
 	d->mModifiedDocumentList.removeAll(url);
+	d->garbageCollect(d->mDocumentMap);
 	emit modifiedDocumentListChanged();
 	emit documentChanged(url);
 }
