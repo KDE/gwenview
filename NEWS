@@ -4,3 +4,6 @@
 - Fix memory leak when rotating images
 - Fix crash when switching to parent directory when in View mode (bug #186187)
 - Fix crop rect (bug #184876)
+
+## Improvements
+- Give back memory as soon as modified images have been saved
