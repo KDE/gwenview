@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QFlags>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPointer>
 #include <QRect>
 #include <QToolButton>
 
@@ -73,7 +72,7 @@ struct CropToolPrivate {
 	QPoint mLastMouseMovePos;
 	double mCropRatio;
 	HudWidget* mHudWidget;
-	QPointer<CropWidget> mCropWidget;
+	CropWidget* mCropWidget;
 
 
 	QRect viewportCropRect() const {
@@ -177,15 +176,12 @@ struct CropToolPrivate {
 	void setupHudWidget() {
 		ImageView* view = mCropTool->imageView();
 		mHudWidget = new HudWidget(view->viewport());
-		mCropWidget = new CropWidget(0, view, mCropTool);
-		mCropWidget->setAttribute(Qt::WA_DeleteOnClose);
+		QObject::connect(mHudWidget, SIGNAL(closed()),
+			mCropTool, SIGNAL(done()));
 
+		mCropWidget = new CropWidget(0, view, mCropTool);
 		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
 			mCropTool, SLOT(slotCropRequested()));
-		QObject::connect(mCropWidget, SIGNAL(destroyed()),
-			mCropTool, SIGNAL(done()));
-		QObject::connect(mCropWidget, SIGNAL(destroyed()),
-			mHudWidget, SLOT(deleteLater()));
 
 		mHudWidget->init(mCropWidget, HudWidget::OptionCloseButton);
 		mHudWidget->setCursor(Qt::ArrowCursor);
@@ -374,10 +370,7 @@ void CropTool::toolActivated() {
 
 
 void CropTool::toolDeactivated() {
-	if (d->mCropWidget) {
-		disconnect(d->mCropWidget, 0, this, 0);
-		delete d->mCropWidget;
-	}
+	delete d->mHudWidget;
 }
 
 
