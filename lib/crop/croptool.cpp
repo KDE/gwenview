@@ -60,6 +60,7 @@ enum CropHandleFlag {
 };
 
 enum HudSide {
+	HS_None = 0, // Special value used to avoid initial animation
 	HS_Top = 1,
 	HS_Bottom = 2,
 	HS_Inside = 4,
@@ -192,6 +193,8 @@ struct CropToolPrivate {
 
 
 	void setupHudWidget() {
+		mHudSide = HS_None;
+
 		ImageView* view = mCropTool->imageView();
 		mHudWidget = new HudWidget(view->viewport());
 		QObject::connect(mHudWidget, SIGNAL(closed()),
@@ -223,15 +226,15 @@ struct CropToolPrivate {
 		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, 0, -hudHeight);
 
 		OptimalPosition preferred = OptimalPosition(
-			QPoint(rect.left(), rect.top() - margin - hudHeight),
-			HS_Top);
-		OptimalPosition fallback = OptimalPosition(
 			QPoint(rect.left(), rect.bottom() + margin),
 			HS_Bottom);
+		OptimalPosition fallback = OptimalPosition(
+			QPoint(rect.left(), rect.top() - margin - hudHeight),
+			HS_Top);
 
 		// Check if a position outside rect fits, staying on the same side if
 		// possible
-		if (mHudSide & HS_Bottom) {
+		if (mHudSide & HS_Top) {
 			qSwap(preferred, fallback);
 		}
 		if (hudMaxRect.contains(preferred.first)) return preferred;
@@ -239,10 +242,10 @@ struct CropToolPrivate {
 
 		// Does not fit, use a position inside rect
 		QPoint pos;
-		if (mHudSide & HS_Bottom) {
-			pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
-		} else {
+		if (mHudSide & HS_Top) {
 			pos = QPoint(rect.left() + margin, rect.top() + margin);
+		} else {
+			pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
 		}
 		return OptimalPosition(pos, HudSide(mHudSide | HS_Inside));
 	}
@@ -250,6 +253,9 @@ struct CropToolPrivate {
 
 	void updateHudWidgetPosition() {
 		OptimalPosition result = computeOptimalHudWidgetPosition();
+		if (mHudSide == HS_None) {
+			mHudSide = result.second;
+		}
 		if (mHudSide == result.second && !mHudTimer->isActive()) {
 			// Not changing side and not in an animation, move directly the hud
 			// to the final position to avoid lagging effect
