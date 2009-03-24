@@ -59,6 +59,8 @@ static QSize screenRatio() {
 
 
 struct CropWidgetPrivate : public Ui_CropWidget {
+	CropWidget* that;
+
 	Document::Ptr mDocument;
 	CropTool* mCropTool;
 	bool mUpdatingFromCropTool;
@@ -155,6 +157,16 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 		topSpinBox->setMaximum(size.height());
 		heightSpinBox->setMaximum(size.height());
 	}
+
+
+	void initButtonBox() {
+		QPushButton* button = buttonBox->button(QDialogButtonBox::Ok);
+		button->setText(i18n("Crop"));
+		button->setIcon(KIcon("transform-crop-and-resize"));
+
+		QObject::connect(buttonBox, SIGNAL(accepted()),
+			that, SIGNAL(cropRequested()) );
+	}
 };
 
 
@@ -162,6 +174,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 : QWidget(parent)
 , d(new CropWidgetPrivate) {
 	setWindowFlags(Qt::Tool);
+	d->that = this;
 	d->mDocument = imageView->document();
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = cropTool;
@@ -188,8 +201,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	connect(d->heightSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotHeightChanged()) );
 
-	connect(d->cropButton, SIGNAL(clicked()),
-		SIGNAL(cropRequested()) );
+	d->initButtonBox();
 	
 	connect(d->ratioComboBox, SIGNAL(editTextChanged(const QString&)),
 		SLOT(slotRatioComboBoxEditTextChanged()) );
