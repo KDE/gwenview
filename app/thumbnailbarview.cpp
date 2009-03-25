@@ -118,7 +118,7 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 		return true;
 
 	} else if (event->type() == QEvent::Wheel) {
-		QScrollBar* hsb = d->mView->horizontalScrollBar();
+		QScrollBar* hsb = d->mView->verticalScrollBar();
 		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
 		hsb->setValue(hsb->value() - wheelEvent->delta());
 		return true;
@@ -243,7 +243,7 @@ struct ThumbnailBarViewPrivate {
 
 		const QRect rect = q->visualRect(index);
 
-		int oldValue = q->horizontalScrollBar()->value();
+		int oldValue = q->verticalScrollBar()->value();
 		int newValue = horizontalScrollToValue(rect);
 		if (mTimeLine->state() == QTimeLine::Running) {
 			mTimeLine->stop();
@@ -257,7 +257,7 @@ struct ThumbnailBarViewPrivate {
 		// This code is a much simplified version of
 		// QListViewPrivate::horizontalScrollToValue()
 		const QRect area = q->viewport()->rect();
-		int horizontalValue = q->horizontalScrollBar()->value();
+		int horizontalValue = q->verticalScrollBar()->value();
 
 		if (q->isRightToLeft()) {
 			horizontalValue += ((area.width() - rect.width()) / 2) - rect.left();
@@ -276,14 +276,13 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	d->q = this;
 	d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
-		horizontalScrollBar(), SLOT(setValue(int)) );
+		verticalScrollBar(), SLOT(setValue(int)) );
 
 	setObjectName("thumbnailBarView");
 	setUniformItemSizes(true);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	setWrapping(false);
-	setMaximumHeight(256);
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+	setMaximumWidth(256);
 
 	d->mStyle = new ProxyStyle(style());
 	setStyle(d->mStyle);
@@ -299,7 +298,7 @@ ThumbnailBarView::~ThumbnailBarView() {
 void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 	ThumbnailView::paintEvent(event);
 
-	if (!horizontalScrollBar()->maximum()) {
+	if (!verticalScrollBar()->maximum()) {
 		// Thumbnails doesn't fully cover viewport, draw a shadow after last item.
 		QPainter painter(viewport());
 		QLinearGradient linearGradient;
@@ -318,7 +317,7 @@ void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
 	ThumbnailView::resizeEvent(event);
 
-	int gridSize = height() - (horizontalScrollBar()->sizeHint().height() + 2 * frameWidth());
+	int gridSize = width() - (verticalScrollBar()->sizeHint().width() + 2 * frameWidth());
 	setGridSize(QSize(gridSize, gridSize));
 	setThumbnailSize(gridSize - ITEM_MARGIN * 2);
 }
