@@ -298,24 +298,15 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 : ThumbnailView(parent)
 , d(new ThumbnailBarViewPrivate) {
 	d->q = this;
-	d->mOrientation = Qt::Vertical;
 	d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
-		d->scrollBar(), SLOT(setValue(int)) );
+		SLOT(slotFrameChanged(int)));
+
+	setOrientation(Qt::Horizontal);
 
 	setObjectName("thumbnailBarView");
 	setUniformItemSizes(true);
 	setWrapping(false);
-	if (d->mOrientation == Qt::Vertical) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		setMaximumWidth(256);
-		setFlow(TopToBottom);
-	} else {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setMaximumHeight(256);
-	}
 
 	d->mStyle = new ProxyStyle(style());
 	setStyle(d->mStyle);
@@ -326,6 +317,27 @@ ThumbnailBarView::~ThumbnailBarView() {
 	delete d->mStyle;
 }
 
+
+void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
+	d->mOrientation = orientation;
+
+	if (d->mOrientation == Qt::Vertical) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setMaximumSize(256, QWIDGETSIZE_MAX);
+		setFlow(TopToBottom);
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setMaximumSize(QWIDGETSIZE_MAX, 256);
+		setFlow(LeftToRight);
+	}
+}
+
+
+void ThumbnailBarView::slotFrameChanged(int value) {
+	d->scrollBar()->setValue(value);
+}
 
 
 void ThumbnailBarView::paintEvent(QPaintEvent* event) {

@@ -63,11 +63,16 @@ public:
 	ThumbnailBarView(QWidget* = 0);
 	~ThumbnailBarView();
 
+	void setOrientation(Qt::Orientation);
+
 protected:
 	void paintEvent(QPaintEvent*);
 
 	virtual void resizeEvent(QResizeEvent * event);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
+private Q_SLOTS:
+	void slotFrameChanged(int);
 
 private:
 	ThumbnailBarViewPrivate* const d;
