@@ -39,6 +39,19 @@
 			<default>false</default>
 		</entry>
 
+		<entry name="ThumbnailBarOrientation" type="Enum">
+			<choices name="Qt::Orientation">
+				<!-- Enum entries do not support enums with arbitrary values.
+				Since Qt::Horizontal is 1 and Qt::Vertical is 2, we need to
+				introduce a Dummy value here.
+				-->
+				<choice name="Dummy"/>
+				<choice name="Horizontal"/>
+				<choice name="Vertical"/>
+			</choices>
+			<default>Horizontal</default>
+		</entry>
+
 		<entry name="UrlNavigatorIsEditable" type="Bool">
 			<default>false</default>
 		</entry>

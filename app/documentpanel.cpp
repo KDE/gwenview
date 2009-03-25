@@ -253,7 +253,9 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupSplitter() {
-		mThumbnailSplitter = new Splitter(Qt::Horizontal, that);
+		Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
+		mThumbnailSplitter = new Splitter(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal, that);
+		mThumbnailBar->setOrientation(orientation);
 		mThumbnailSplitter->addWidget(mAdapterContainer);
 		mThumbnailSplitter->addWidget(mThumbnailBar);
 		mThumbnailSplitter->setSizes(GwenviewConfig::thumbnailSplitterSizes());
