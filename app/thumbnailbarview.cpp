@@ -118,6 +118,7 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 		return true;
 
 	} else if (event->type() == QEvent::Wheel) {
+		// FIXME
 		QScrollBar* hsb = d->mView->verticalScrollBar();
 		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
 		hsb->setValue(hsb->value() - wheelEvent->delta());
@@ -230,10 +231,29 @@ private:
 
 
 
+typedef int (QSize::*QSizeDimension)() const;
+
 struct ThumbnailBarViewPrivate {
 	ThumbnailBarView* q;
 	QStyle* mStyle;
 	QTimeLine* mTimeLine;
+
+	Qt::Orientation mOrientation;
+
+
+	QScrollBar* scrollBar() const {
+		return mOrientation == Qt::Horizontal ? q->horizontalScrollBar() : q->verticalScrollBar();
+	}
+
+
+	QSizeDimension mainDimension() const {
+		return mOrientation == Qt::Horizontal ? &QSize::width : &QSize::height;
+	}
+
+
+	QSizeDimension oppositeDimension() const {
+		return mOrientation == Qt::Horizontal ? &QSize::height : &QSize::width;
+	}
 
 
 	void smoothScrollTo(const QModelIndex& index) {
@@ -243,8 +263,8 @@ struct ThumbnailBarViewPrivate {
 
 		const QRect rect = q->visualRect(index);
 
-		int oldValue = q->verticalScrollBar()->value();
-		int newValue = horizontalScrollToValue(rect);
+		int oldValue = scrollBar()->value();
+		int newValue = scrollToValue(rect);
 		if (mTimeLine->state() == QTimeLine::Running) {
 			mTimeLine->stop();
 		}
@@ -253,18 +273,22 @@ struct ThumbnailBarViewPrivate {
 	}
 
 
-	int horizontalScrollToValue(const QRect& rect) {
+	int scrollToValue(const QRect& rect) {
 		// This code is a much simplified version of
 		// QListViewPrivate::horizontalScrollToValue()
 		const QRect area = q->viewport()->rect();
-		int horizontalValue = q->verticalScrollBar()->value();
+		int value = scrollBar()->value();
 
-		if (q->isRightToLeft()) {
-			horizontalValue += ((area.width() - rect.width()) / 2) - rect.left();
+		if (mOrientation == Qt::Horizontal) {
+			if (q->isRightToLeft()) {
+				value += (area.width() - rect.width()) / 2 - rect.left();
+			} else {
+				value += rect.left() - (area.width()- rect.width()) / 2;
+			}
 		} else {
-			horizontalValue += rect.left() - ((area.width()- rect.width()) / 2);
+			value += rect.top() - (area.height() - rect.height()) / 2;
 		}
-		return horizontalValue;
+		return value;
 	}
 };
 
@@ -274,15 +298,24 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 : ThumbnailView(parent)
 , d(new ThumbnailBarViewPrivate) {
 	d->q = this;
+	d->mOrientation = Qt::Vertical;
 	d->mTimeLine = new QTimeLine(SMOOTH_SCROLL_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
-		verticalScrollBar(), SLOT(setValue(int)) );
+		d->scrollBar(), SLOT(setValue(int)) );
 
 	setObjectName("thumbnailBarView");
 	setUniformItemSizes(true);
-	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	setMaximumWidth(256);
+	setWrapping(false);
+	if (d->mOrientation == Qt::Vertical) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setMaximumWidth(256);
+		setFlow(TopToBottom);
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setMaximumHeight(256);
+	}
 
 	d->mStyle = new ProxyStyle(style());
 	setStyle(d->mStyle);
@@ -298,7 +331,7 @@ ThumbnailBarView::~ThumbnailBarView() {
 void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 	ThumbnailView::paintEvent(event);
 
-	if (!verticalScrollBar()->maximum()) {
+	if (!d->scrollBar()->maximum()) {
 		// Thumbnails doesn't fully cover viewport, draw a shadow after last item.
 		QPainter painter(viewport());
 		QLinearGradient linearGradient;
@@ -307,17 +340,24 @@ void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 
 		QModelIndex index = model()->index(model()->rowCount() - 1, 0);
 		QRect rect = rectForIndex(index);
-		linearGradient.setStart(rect.topRight());
-		linearGradient.setFinalStop(rect.topRight() + QPoint(5, 0));
-		painter.fillRect(rect.topRight().x(), 0, 5, rect.height(), linearGradient);
+		const int gradientExtent = 5;
+		linearGradient.setStart(rect.bottomRight());
+		if (d->mOrientation == Qt::Horizontal) {
+			linearGradient.setFinalStop(rect.bottomRight() + QPoint(gradientExtent, 0));
+			painter.fillRect(rect.right(), 0, gradientExtent, rect.height(), linearGradient);
+		} else {
+			linearGradient.setFinalStop(rect.bottomRight() + QPoint(0, gradientExtent));
+			painter.fillRect(0, rect.bottom(), rect.width(), gradientExtent, linearGradient);
+		}
 	}
 }
 
 
 void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
 	ThumbnailView::resizeEvent(event);
+	QSizeDimension dimension = d->oppositeDimension();
 
-	int gridSize = width() - (verticalScrollBar()->sizeHint().width() + 2 * frameWidth());
+	int gridSize = (size().*dimension)() - ((d->scrollBar()->sizeHint().*dimension)() + 2 * frameWidth());
 	setGridSize(QSize(gridSize, gridSize));
 	setThumbnailSize(gridSize - ITEM_MARGIN * 2);
 }
