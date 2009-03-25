@@ -116,13 +116,6 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 		QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
 		d->showToolTip(helpEvent);
 		return true;
-
-	} else if (event->type() == QEvent::Wheel) {
-		// FIXME
-		QScrollBar* hsb = d->mView->verticalScrollBar();
-		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
-		hsb->setValue(hsb->value() - wheelEvent->delta());
-		return true;
 	}
 
 	return false;
@@ -382,6 +375,11 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 	if (list.count() == 1 && isVisible()) {
 		d->smoothScrollTo(list.first());
 	}
+}
+
+
+void ThumbnailBarView::wheelEvent(QWheelEvent* event) {
+	d->scrollBar()->setValue(d->scrollBar()->value() - event->delta());
 }
 
 
