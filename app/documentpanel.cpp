@@ -341,6 +341,10 @@ void DocumentPanel::loadConfig() {
 	if (d->mDocumentView->adapter()) {
 		d->mDocumentView->adapter()->loadConfig();
 	}
+
+	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
+	d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
+	d->mThumbnailBar->setOrientation(orientation);
 }
 
 
