@@ -39,6 +39,7 @@ namespace Gwenview {
 struct ConfigDialogPrivate {
 	InvisibleButtonGroup* mAlphaBackgroundModeGroup;
 	InvisibleButtonGroup* mWheelBehaviorGroup;
+	InvisibleButtonGroup* mThumbnailBarOrientationGroup;
 	Ui_GeneralConfigPage mGeneralConfigPage;
 	Ui_ImageViewConfigPage mImageViewConfigPage;
 	Ui_PerformanceConfigPage mPerformanceConfigPage;
@@ -79,6 +80,12 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	d->mWheelBehaviorGroup->setObjectName("kcfg_MouseWheelBehavior");
 	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(ScrollTool::MouseWheelScroll));
 	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
+
+	d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
+	d->mThumbnailBarOrientationGroup->setObjectName("kcfg_ThumbnailBarOrientation");
+	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
+	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
+
 	pageItem = addPage(widget, i18n("Image View"));
 	pageItem->setIcon(KIcon("view-preview"));
 
