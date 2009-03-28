@@ -295,6 +295,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
 		SLOT(slotFrameChanged(int)));
 
+	d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
 	setOrientation(Qt::Horizontal);
 
 	setObjectName("thumbnailBarView");
@@ -312,6 +313,9 @@ ThumbnailBarView::~ThumbnailBarView() {
 
 
 void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
+	if (d->mOrientation == orientation) {
+		return;
+	}
 	d->mOrientation = orientation;
 
 	if (d->mOrientation == Qt::Vertical) {
