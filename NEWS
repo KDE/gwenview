@@ -1,13 +1,15 @@
 # 2.3.0
 ## Improvements
-- New crop interface
+- New crop interface: less intrusive and with the ability to crop to screen
+  ratio.
+- The thumbnail bar can now be shown vertically.
 
 # 2.2.2
 ## Fixes
-- Fix display of JPEG2000 images
-- Fix memory leak when rotating images
-- Fix crash when switching to parent directory when in View mode (bug #186187)
-- Fix crop rect (bug #184876)
+- Fix display of JPEG2000 images.
+- Fix memory leak when rotating images.
+- Fix crash when switching to parent directory when in View mode (bug #186187).
+- Fix crop rect (bug #184876).
 
 ## Improvements
-- Give back memory as soon as modified images have been saved
+- Give back memory as soon as modified images have been saved.
