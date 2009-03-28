@@ -93,12 +93,20 @@ protected:
 		QStyleOption lineOpt = opt;
 		const int lineSize = style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this);
 		const int margin = 4 * lineSize;
-		lineOpt.rect = QRect(-margin, height() - lineSize, width() + 2*margin, height());
+
+		if (orientation() == Qt::Horizontal) {
+			lineOpt.rect = QRect(width() - lineSize, -margin, height(), height() + 2*margin);
+			opt.state = QStyle::State_Horizontal;
+			opt.rect.adjust(0, 0, -lineSize, 0);
+		} else {
+			lineOpt.rect = QRect(-margin, height() - lineSize, width() + 2*margin, height());
+			opt.state = QStyle::State_None;
+			opt.rect.adjust(0, 0, 0, -lineSize);
+		}
 		lineOpt.state |= QStyle::State_Sunken;
 		painter.drawPrimitive(QStyle::PE_Frame, lineOpt);
 
 		// Draw the normal splitter handle
-		opt.rect.adjust(0, 0, 0, -lineSize);
 		painter.drawControl(QStyle::CE_Splitter, opt);
 	}
 };
