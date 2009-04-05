@@ -61,6 +61,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.h"
 #include "documentpanel.h"
 #include "fileopscontextmanageritem.h"
+#include "folderviewcontextmanageritem.h"
 #include "fullscreencontent.h"
 #include "gvcore.h"
 #include "imageopscontextmanageritem.h"
@@ -378,6 +379,11 @@ struct MainWindow::Private {
 		mContextManager = new ContextManager(mWindow);
 		mContextManager->setSideBar(mSideBar);
 		mContextManager->setDirModel(mDirModel);
+
+		FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
+		mContextManager->addItem(folderViewItem);
+		connect(folderViewItem, SIGNAL(urlChanged(const KUrl&)),
+			mWindow, SLOT(openDirUrl(const KUrl&)));
 
 		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
 
