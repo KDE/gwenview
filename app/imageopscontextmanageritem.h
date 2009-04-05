@@ -45,8 +45,6 @@ public:
 	ImageOpsContextManagerItem(ContextManager*, MainWindow*);
 	~ImageOpsContextManagerItem();
 
-	virtual void setSideBar(SideBar* sideBar);
-
 private Q_SLOTS:
 	void updateActions();
 	void updateSideBarContent();

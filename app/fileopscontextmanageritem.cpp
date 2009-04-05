@@ -47,7 +47,6 @@ namespace Gwenview {
 
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
-	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 	KAction* mCopyToAction;
 	KAction* mMoveToAction;
@@ -112,8 +111,9 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	d->mContextManagerItem = this;
-	d->mSideBar = 0;
-	d->mGroup = 0;
+	d->mGroup = new SideBarGroup(i18n("File Operations"));
+	setWidget(d->mGroup);
+	new AboutToShowHelper(d->mGroup, this, SLOT(updateSideBarContent()));
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateActions()) );
@@ -167,15 +167,6 @@ FileOpsContextManagerItem::~FileOpsContextManagerItem() {
 }
 
 
-void FileOpsContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(updateSideBarContent()) );
-
-	d->mGroup = sideBar->createGroup(i18n("File Operations"));
-}
-
-
 void FileOpsContextManagerItem::updateActions() {
 	bool selectionNotEmpty = contextManager()->selection().count() > 0;
 	const bool urlIsValid = contextManager()->currentUrl().isValid();
@@ -202,7 +193,7 @@ inline void addIfEnabled(SideBarGroup* group, QAction* action) {
 }
 
 void FileOpsContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar ||  !d->mSideBar->isVisible()) {
+	if (!d->mGroup->isVisible()) {
 		return;
 	}
 
@@ -221,42 +212,42 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 void FileOpsContextManagerItem::showProperties() {
 	KFileItemList list = contextManager()->selection();
 	if (list.count() > 0) {
-		KPropertiesDialog::showDialog(list, d->mSideBar);
+		KPropertiesDialog::showDialog(list, d->mGroup);
 	} else {
 		KUrl url = contextManager()->currentDirUrl();
-		KPropertiesDialog::showDialog(url, d->mSideBar);
+		KPropertiesDialog::showDialog(url, d->mGroup);
 	}
 }
 
 
 void FileOpsContextManagerItem::trash() {
-	FileOperations::trash(d->urlList(), d->mSideBar);
+	FileOperations::trash(d->urlList(), d->mGroup);
 }
 
 
 void FileOpsContextManagerItem::del() {
-	FileOperations::del(d->urlList(), d->mSideBar);
+	FileOperations::del(d->urlList(), d->mGroup);
 }
 
 
 void FileOpsContextManagerItem::copyTo() {
-	FileOperations::copyTo(d->urlList(), d->mSideBar);
+	FileOperations::copyTo(d->urlList(), d->mGroup);
 }
 
 
 void FileOpsContextManagerItem::moveTo() {
-	FileOperations::moveTo(d->urlList(), d->mSideBar);
+	FileOperations::moveTo(d->urlList(), d->mGroup);
 }
 
 
 void FileOpsContextManagerItem::linkTo() {
-	FileOperations::linkTo(d->urlList(), d->mSideBar);
+	FileOperations::linkTo(d->urlList(), d->mGroup);
 }
 
 
 void FileOpsContextManagerItem::createFolder() {
 	KUrl url = contextManager()->currentDirUrl();
-	FileOperations::createFolder(url, d->mSideBar);
+	FileOperations::createFolder(url, d->mGroup);
 }
 
 
@@ -286,7 +277,7 @@ void FileOpsContextManagerItem::openWith(QAction* action) {
 	QString name = action->data().toString();
 	if (name.isEmpty()) {
 		// Other Application...
-		KOpenWithDialog dlg(list, d->mSideBar);
+		KOpenWithDialog dlg(list, d->mGroup);
 		if (!dlg.exec()) {
 			return;
 		}
@@ -295,7 +286,7 @@ void FileOpsContextManagerItem::openWith(QAction* action) {
 		if (!service) {
 			// User entered a custom command
 			Q_ASSERT(!dlg.text().isEmpty());
-			KRun::run(dlg.text(), list, d->mSideBar);
+			KRun::run(dlg.text(), list, d->mGroup);
 			return;
 		}
 	} else {
@@ -303,7 +294,7 @@ void FileOpsContextManagerItem::openWith(QAction* action) {
 	}
 
 	Q_ASSERT(service);
-	KRun::run(*service, list, d->mSideBar);
+	KRun::run(*service, list, d->mGroup);
 }
 
 

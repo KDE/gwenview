@@ -42,16 +42,15 @@ public:
 	FolderViewContextManagerItem(ContextManager*);
 	~FolderViewContextManagerItem();
 
-	virtual void setSideBar(SideBar* sideBar);
-
 Q_SIGNALS:
 	void urlChanged(const KUrl&);
 
 private Q_SLOTS:
-	void updateSideBarContent();
+	void updateContent();
 	void slotActivated(const QModelIndex&);
 
 private:
+	friend class FolderViewContextManagerItemPrivate;
 	FolderViewContextManagerItemPrivate* const d;
 };
 

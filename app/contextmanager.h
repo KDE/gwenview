@@ -31,7 +31,6 @@ class QModelIndex;
 
 namespace Gwenview {
 
-class SideBar;
 class SortedDirModel;
 
 class AbstractContextManagerItem;
@@ -62,8 +61,6 @@ public:
 	void setContext(const KUrl& currentUrl, const KFileItemList& selection);
 
 	KFileItemList selection() const;
-
-	void setSideBar(SideBar*);
 
 	void setDirModel(SortedDirModel*);
 

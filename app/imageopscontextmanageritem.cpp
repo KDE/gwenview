@@ -60,7 +60,6 @@ namespace Gwenview {
 struct ImageOpsContextManagerItem::Private {
 	ImageOpsContextManagerItem* that;
 	MainWindow* mMainWindow;
-	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 
 	KAction* mRotateLeftAction;
@@ -129,8 +128,9 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 , d(new Private) {
 	d->that = this;
 	d->mMainWindow = mainWindow;
-	d->mSideBar = 0;
-	d->mGroup = 0;
+	d->mGroup = new SideBarGroup(i18n("Image Operations"));
+	setWidget(d->mGroup);
+	new AboutToShowHelper(d->mGroup, this, SLOT(updateSideBarContent()));
 	d->setupActions();
 	updateActions();
 	connect(contextManager(), SIGNAL(selectionChanged()),
@@ -147,33 +147,16 @@ ImageOpsContextManagerItem::~ImageOpsContextManagerItem() {
 }
 
 
-void ImageOpsContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(updateSideBarContent()) );
-
-	d->mGroup = sideBar->createGroup(i18n("Image Operations"));
-}
-
-
 void ImageOpsContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar->isVisible()) {
+	if (!d->mGroup->isVisible()) {
 		return;
 	}
 
 	d->mGroup->clear();
-	bool notEmpty = false;
 	Q_FOREACH(KAction* action, d->mActionList) {
 		if (action->isEnabled()) {
 			d->mGroup->addAction(action);
-			notEmpty = true;
 		}
-	}
-
-	if (notEmpty) {
-		d->mGroup->show();
-	} else {
-		d->mGroup->hide();
 	}
 }
 
@@ -198,9 +181,7 @@ void ImageOpsContextManagerItem::updateActions() {
 	d->mCropAction->setEnabled(canModify && documentPanelIsVisible);
 	d->mRedEyeReductionAction->setEnabled(canModify && documentPanelIsVisible);
 
-	if (d->mSideBar) {
-		updateSideBarContent();
-	}
+	updateSideBarContent();
 }
 
 

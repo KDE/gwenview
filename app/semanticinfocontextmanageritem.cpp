@@ -116,7 +116,6 @@ private:
 
 struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem {
 	SemanticInfoContextManagerItem* that;
-	SideBar* mSideBar;
 	SideBarGroup* mGroup;
 	KActionCollection* mActionCollection;
 	QPointer<SemanticInfoDialog> mSemanticInfoDialog;
@@ -126,6 +125,33 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	RatingIndicator* mRatingIndicator;
 	/** A list of all actions, so that we can disable them when necessary */
 	QList<KAction*> mActions;
+
+
+	void setupGroup() {
+		mGroup = new SideBarGroup(i18n("Semantic Information"));
+		that->setWidget(mGroup);
+		new AboutToShowHelper(mGroup, that, SLOT(update()));
+
+		QWidget* container = new QWidget;
+		setupUi(container);
+		container->layout()->setMargin(0);
+		mGroup->addWidget(container);
+
+		mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+		mRatingWidget->setHalfStepsEnabled(true);
+		mRatingWidget->setMaxRating(10);
+		QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
+			that, SLOT(slotRatingChanged(int)));
+		QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
+			mRatingWidget, SLOT(setRating(int)) );
+
+		QObject::connect(mDescriptionLineEdit, SIGNAL(editingFinished()),
+			that, SLOT(storeDescription()));
+
+		QObject::connect(mTagLabel, SIGNAL(linkActivated(const QString&)),
+			mEditTagsAction, SLOT(trigger()) );
+	}
+
 
 	void setupActions() {
 		KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), mActionCollection);
@@ -194,8 +220,6 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate) {
 	d->that = this;
-	d->mSideBar = 0;
-	d->mGroup = 0;
 	d->mActionCollection = actionCollection;
 
 	d->mRatingIndicator = new RatingIndicator(documentPanel);
@@ -208,39 +232,12 @@ SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* m
 		SLOT(update()) );
 
 	d->setupActions();
+	d->setupGroup();
 }
 
 
 SemanticInfoContextManagerItem::~SemanticInfoContextManagerItem() {
 	delete d;
-}
-
-
-void SemanticInfoContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(update()) );
-
-	d->mGroup = sideBar->createGroup(i18n("Semantic Information"));
-
-	QWidget* container = new QWidget;
-	d->setupUi(container);
-	container->layout()->setMargin(0);
-	d->mGroup->addWidget(container);
-
-	d->mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	d->mRatingWidget->setHalfStepsEnabled(true);
-	d->mRatingWidget->setMaxRating(10);
-	connect(d->mRatingWidget, SIGNAL(ratingChanged(int)),
-		SLOT(slotRatingChanged(int)));
-	connect(d->mRatingMapper, SIGNAL(mapped(int)),
-		d->mRatingWidget, SLOT(setRating(int)) );
-
-	connect(d->mDescriptionLineEdit, SIGNAL(editingFinished()),
-		SLOT(storeDescription()));
-
-	connect(d->mTagLabel, SIGNAL(linkActivated(const QString&)),
-		d->mEditTagsAction, SLOT(trigger()) );
 }
 
 
@@ -389,7 +386,7 @@ void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag& tag) {
 
 void SemanticInfoContextManagerItem::showSemanticInfoDialog() {
 	if (!d->mSemanticInfoDialog) {
-		d->mSemanticInfoDialog = new SemanticInfoDialog(d->mSideBar);
+		d->mSemanticInfoDialog = new SemanticInfoDialog(d->mGroup);
 		d->mSemanticInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
 
 		connect(d->mSemanticInfoDialog->mPreviousButton, SIGNAL(clicked()),

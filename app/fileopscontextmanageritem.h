@@ -42,8 +42,6 @@ public:
 	FileOpsContextManagerItem(ContextManager*, KActionCollection*);
 	~FileOpsContextManagerItem();
 
-	virtual void setSideBar(SideBar* sideBar);
-
 private Q_SLOTS:
 	void updateActions();
 	void updateSideBarContent();

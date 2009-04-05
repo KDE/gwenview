@@ -41,8 +41,6 @@ public:
 	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, QWidget* documentPanel);
 	~SemanticInfoContextManagerItem();
 
-	virtual void setSideBar(SideBar*);
-
 private Q_SLOTS:
 	void slotSelectionChanged();
 	void update();
@@ -53,6 +51,7 @@ private Q_SLOTS:
 	void showSemanticInfoDialog();
 
 private:
+	friend class SemanticInfoContextManagerItemPrivate;
 	SemanticInfoContextManagerItemPrivate* const d;
 };
 

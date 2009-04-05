@@ -22,7 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QFrame>
-#include <QScrollArea>
+#include <QTabWidget>
+
+class KIcon;
 
 namespace Gwenview {
 
@@ -31,8 +33,8 @@ class SideBar;
 class SideBarGroupPrivate;
 class SideBarGroup : public QFrame {
 	Q_OBJECT
-	friend class SideBar;
 public:
+	SideBarGroup(const QString& title);
 	~SideBarGroup();
 
 	void addWidget(QWidget*);
@@ -43,29 +45,35 @@ protected:
 	virtual void paintEvent(QPaintEvent*);
 
 private:
-	SideBarGroup(QWidget*, const QString& title);
 	SideBarGroupPrivate* const d;
 };
 
 
+class SideBarPagePrivate;
+class SideBarPage : public QWidget {
+	Q_OBJECT
+public:
+	SideBarPage(const QString& title, const QString& iconName);
+	void addWidget(QWidget*);
+
+	const QString& title() const;
+	const KIcon& icon() const;
+
+private:
+	SideBarPagePrivate* const d;
+};
+
+
 class SideBarPrivate;
-class SideBar : public QScrollArea {
+class SideBar : public QTabWidget {
 	Q_OBJECT
 public:
 	SideBar(QWidget* parent);
 	~SideBar();
 
-	void clear();
-
-	SideBarGroup* createGroup(const QString& title);
+	void addPage(SideBarPage*);
 
 	virtual QSize sizeHint() const;
-
-Q_SIGNALS:
-	void aboutToShow();
-
-protected:
-	virtual void showEvent(QShowEvent*);
 
 private:
 	SideBarPrivate* const d;

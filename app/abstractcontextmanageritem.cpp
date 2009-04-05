@@ -26,12 +26,14 @@ namespace Gwenview {
 
 struct AbstractContextManagerItemPrivate {
 	ContextManager* mContextManager;
+	QWidget* mWidget;
 };
 
 AbstractContextManagerItem::AbstractContextManagerItem(ContextManager* manager)
 : QObject(manager)
 , d(new AbstractContextManagerItemPrivate) {
 	d->mContextManager = manager;
+	d->mWidget = 0;
 }
 
 
@@ -43,5 +45,16 @@ AbstractContextManagerItem::~AbstractContextManagerItem() {
 ContextManager* AbstractContextManagerItem::contextManager() const {
 	return d->mContextManager;
 }
+
+
+QWidget* AbstractContextManagerItem::widget() const {
+	return d->mWidget;
+}
+
+
+void AbstractContextManagerItem::setWidget(QWidget* widget) {
+	d->mWidget = widget;
+}
+
 
 } // namespace

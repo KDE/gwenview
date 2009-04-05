@@ -377,24 +377,47 @@ struct MainWindow::Private {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 
 		mContextManager = new ContextManager(mWindow);
-		mContextManager->setSideBar(mSideBar);
 		mContextManager->setDirModel(mDirModel);
 
+		// Create context manager items
 		FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
 		mContextManager->addItem(folderViewItem);
 		connect(folderViewItem, SIGNAL(urlChanged(const KUrl&)),
 			mWindow, SLOT(openDirUrl(const KUrl&)));
 
-		mContextManager->addItem(new InfoContextManagerItem(mContextManager));
+		InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
+		mContextManager->addItem(infoItem);
 
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		mContextManager->addItem(new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel->documentView()));
+		SemanticInfoContextManagerItem* semanticInfoItem =
+			new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel->documentView());
+		mContextManager->addItem(semanticInfoItem);
 		#endif
 
-		mContextManager->addItem(new ImageOpsContextManagerItem(mContextManager, mWindow));
+		ImageOpsContextManagerItem* imageOpsItem =
+			new ImageOpsContextManagerItem(mContextManager, mWindow);
+		mContextManager->addItem(imageOpsItem);
 
 		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, actionCollection);
 		mContextManager->addItem(fileOpsItem);
+
+		// Fill sidebar
+		SideBarPage* page;
+		page = new SideBarPage(i18n("Folders"), "folder");
+		page->addWidget(folderViewItem->widget());
+		mSideBar->addPage(page);
+
+		page = new SideBarPage(i18n("Info"), "dialog-information");
+		page->addWidget(infoItem->widget());
+		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		page->addWidget(semanticInfoItem->widget());
+		#endif
+		mSideBar->addPage(page);
+
+		page = new SideBarPage(i18n("Ops"), "system-run");
+		page->addWidget(imageOpsItem->widget());
+		page->addWidget(fileOpsItem->widget());
+		mSideBar->addPage(page);
 	}
 
 

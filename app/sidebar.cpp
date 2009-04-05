@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QVBoxLayout>
 
 // KDE
+#include <kicon.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 
@@ -72,14 +73,15 @@ private:
 };
 
 
+//- SideBarGroup ---------------------------------------------------------------
 struct SideBarGroupPrivate {
 	QFrame* mContainer;
 	ExpandButton* mTitleButton;
 };
 
 
-SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
-: QFrame(parent)
+SideBarGroup::SideBarGroup(const QString& title)
+: QFrame()
 , d(new SideBarGroupPrivate) {
 	d->mContainer = 0;
 	d->mTitleButton = new ExpandButton(this);
@@ -94,6 +96,7 @@ SideBarGroup::SideBarGroup(QWidget* parent, const QString& title)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	layout->setSpacing(0);
+
 	layout->addWidget(d->mTitleButton);
 
 	clear();
@@ -156,30 +159,48 @@ void SideBarGroup::addAction(QAction* action) {
 }
 
 
+//- SideBarPage ----------------------------------------------------------------
+struct SideBarPagePrivate {
+	QString mTitle;
+	KIcon mIcon;
+};
+
+
+SideBarPage::SideBarPage(const QString& title, const QString& iconName)
+: QWidget()
+, d(new SideBarPagePrivate)
+{
+	d->mTitle = title;
+	d->mIcon = KIcon(iconName);
+
+	new QVBoxLayout(this);
+}
+
+
+const QString& SideBarPage::title() const {
+	return d->mTitle;
+}
+
+
+const KIcon& SideBarPage::icon() const {
+	return d->mIcon;
+}
+
+
+void SideBarPage::addWidget(QWidget* widget) {
+	layout()->addWidget(widget);
+}
+
+
+//- SideBar --------------------------------------------------------------------
 struct SideBarPrivate {
-	QVBoxLayout* mLayout;
-	QList<SideBarGroup*> mGroupList;
-	QWidget* mWidget;
 };
 
 
 SideBar::SideBar(QWidget* parent)
-: QScrollArea(parent)
+: QTabWidget(parent)
 , d(new SideBarPrivate) {
-	d->mWidget = new QWidget(this);
-
-	d->mLayout = new QVBoxLayout(d->mWidget);
-	d->mLayout->setMargin(0);
-	d->mLayout->setSpacing(0);
-	d->mLayout->addStretch();
-
-	setFrameStyle(QFrame::NoFrame);
-	setWidget(d->mWidget);
-	setWidgetResizable(true);
 	setFont(KGlobalSettings::toolBarFont());
-
-	viewport()->setAutoFillBackground( false );
-	d->mWidget->setAutoFillBackground( false );
 }
 
 
@@ -188,29 +209,13 @@ SideBar::~SideBar() {
 }
 
 
-void SideBar::clear() {
-	Q_FOREACH(QWidget* widget, d->mGroupList) {
-		delete widget;
-	}
-	d->mGroupList.clear();
-}
-
-SideBarGroup* SideBar::createGroup(const QString& title) {
-	SideBarGroup* group = new SideBarGroup(d->mWidget, title);
-	d->mLayout->insertWidget(d->mLayout->count() - 1, group);
-
-	d->mGroupList << group;
-	return group;
-}
-
 QSize SideBar::sizeHint() const {
 	return QSize(200, 200);
 }
 
 
-void SideBar::showEvent(QShowEvent* event) {
-	aboutToShow();
-	QScrollArea::showEvent(event);
+void SideBar::addPage(SideBarPage* page) {
+	addTab(page, page->icon(), page->title());
 }
 
 

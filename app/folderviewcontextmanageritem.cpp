@@ -40,8 +40,6 @@ namespace Gwenview {
 
 struct FolderViewContextManagerItemPrivate {
 	FolderViewContextManagerItem* q;
-	SideBar* mSideBar;
-	SideBarGroup* mGroup;
 	KDirModel* mModel;
 	QTreeView* mView;
 
@@ -50,15 +48,16 @@ struct FolderViewContextManagerItemPrivate {
 		KDirLister* lister = mModel->dirLister();
 		lister->setDirOnlyMode(true);
 		lister->openUrl(QDir::homePath());
+		mView->setModel(mModel);
 	}
 
 	void setupView() {
 		mView = new QTreeView;
-		mView->setModel(mModel);
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-		mGroup->addWidget(mView);
+		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
 			q, SLOT(slotActivated(const QModelIndex&)));
+		new AboutToShowHelper(mView, q, SLOT(updateContent()));
 	}
 };
 
@@ -67,13 +66,12 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 : AbstractContextManagerItem(manager)
 , d(new FolderViewContextManagerItemPrivate) {
 	d->q = this;
-	d->mSideBar = 0;
-	d->mGroup = 0;
 	d->mModel = 0;
-	d->mView = 0;
+
+	d->setupView();
 
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-		SLOT(updateSideBarContent()) );
+		SLOT(updateContent()) );
 }
 
 
@@ -82,23 +80,13 @@ FolderViewContextManagerItem::~FolderViewContextManagerItem() {
 }
 
 
-void FolderViewContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(updateSideBarContent()) );
-
-	d->mGroup = sideBar->createGroup(i18n("Folders"));
-}
-
-
-void FolderViewContextManagerItem::updateSideBarContent() {
-	if (!d->mSideBar || !d->mSideBar->isVisible()) {
+void FolderViewContextManagerItem::updateContent() {
+	if (!d->mView->isVisible()) {
 		return;
 	}
 
 	if (!d->mModel) {
 		d->setupModel();
-		d->setupView();
 	}
 
 	/* FIXME: Expand to url

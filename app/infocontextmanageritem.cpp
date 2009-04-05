@@ -94,7 +94,7 @@ private:
 
 
 struct InfoContextManagerItemPrivate {
-	SideBar* mSideBar;
+	InfoContextManagerItem* q;
 	SideBarGroup* mGroup;
 
 	// One selection fields
@@ -115,13 +115,43 @@ struct InfoContextManagerItemPrivate {
 		ImageMetaInfoModel* model = mDocument ? mDocument->metaInfo() : 0;
 		mImageMetaInfoDialog->setMetaInfo(model, GwenviewConfig::preferredMetaInfoKeyList());
 	}
+
+
+	void setupGroup() {
+		mOneFileWidget = new QWidget();
+
+		mKeyValueWidget = new KeyValueWidget(mOneFileWidget);
+
+		QLabel* moreLabel = new QLabel(mOneFileWidget);
+		moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
+		moreLabel->setAlignment(Qt::AlignRight);
+
+		QVBoxLayout* layout = new QVBoxLayout(mOneFileWidget);
+		layout->setMargin(2);
+		layout->setSpacing(2);
+		layout->addWidget(mKeyValueWidget);
+		layout->addWidget(moreLabel);
+
+		mMultipleFilesLabel = new QLabel();
+
+		mGroup = new SideBarGroup(i18nc("@title:group", "Meta Information"));
+		q->setWidget(mGroup);
+		mGroup->addWidget(mOneFileWidget);
+		mGroup->addWidget(mMultipleFilesLabel);
+
+		new AboutToShowHelper(mGroup, q, SLOT(updateSideBarContent()));
+
+		QObject::connect(moreLabel, SIGNAL(linkActivated(const QString&)),
+			q, SLOT(showMetaInfoDialog()) );
+	}
 };
 
 
 InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 : AbstractContextManagerItem(manager)
 , d(new InfoContextManagerItemPrivate) {
-	d->mSideBar = 0;
+	d->q = this;
+	d->setupGroup();
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
 }
@@ -131,39 +161,9 @@ InfoContextManagerItem::~InfoContextManagerItem() {
 }
 
 
-void InfoContextManagerItem::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-	connect(sideBar, SIGNAL(aboutToShow()),
-		SLOT(updateSideBarContent()) );
-	d->mOneFileWidget = new QWidget();
-
-	d->mKeyValueWidget = new KeyValueWidget(d->mOneFileWidget);
-
-	QLabel* moreLabel = new QLabel(d->mOneFileWidget);
-	moreLabel->setText(QString("<a href='#'>%1</a>").arg(i18nc("@action show more image meta info", "More...")));
-	moreLabel->setAlignment(Qt::AlignRight);
-
-	QVBoxLayout* layout = new QVBoxLayout(d->mOneFileWidget);
-	layout->setMargin(2);
-	layout->setSpacing(2);
-	layout->addWidget(d->mKeyValueWidget);
-	layout->addWidget(moreLabel);
-
-	d->mMultipleFilesLabel = new QLabel();
-
-	d->mGroup = sideBar->createGroup(i18nc("@title:group", "Meta Information"));
-	d->mGroup->addWidget(d->mOneFileWidget);
-	d->mGroup->addWidget(d->mMultipleFilesLabel);
-
-	d->mGroup->hide();
-
-	connect(moreLabel, SIGNAL(linkActivated(const QString&)), SLOT(showMetaInfoDialog()) );
-}
-
-
 void InfoContextManagerItem::updateSideBarContent() {
 	LOG("updateSideBarContent");
-	if (!d->mSideBar->isVisible()) {
+	if (!d->mGroup->isVisible()) {
 		LOG("updateSideBarContent: not visible, not updating");
 		return;
 	}
@@ -171,14 +171,12 @@ void InfoContextManagerItem::updateSideBarContent() {
 
 	KFileItemList itemList = contextManager()->selection();
 	if (itemList.count() == 0) {
-		d->mGroup->hide();
 		// "Garbage collect" document
 		d->mDocument = 0;
 		d->updateMetaInfoDialog();
 		return;
 	}
 
-	d->mGroup->show();
 	KFileItem item = itemList.first();
 	if (itemList.count() == 1 && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
 		fillOneFileGroup(item);
@@ -228,11 +226,6 @@ void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemLis
 
 
 void InfoContextManagerItem::updateOneFileInfo() {
-	if (!d->mSideBar) {
-		// Not initialized yet
-		return;
-	}
-
 	if (!d->mDocument) {
 		return;
 	}

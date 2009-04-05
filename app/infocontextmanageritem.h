@@ -39,8 +39,6 @@ public:
 	InfoContextManagerItem(ContextManager*);
 	~InfoContextManagerItem();
 
-	virtual void setSideBar(SideBar* sideBar);
-
 private Q_SLOTS:
 	void updateSideBarContent();
 	void updateOneFileInfo();
@@ -52,7 +50,8 @@ private:
 
 	void fillMultipleItemsGroup(const KFileItemList& itemList);
 
-	InfoContextManagerItemPrivate * const d;
+	friend class InfoContextManagerItemPrivate;
+	InfoContextManagerItemPrivate* const d;
 };
 
 } // namespace

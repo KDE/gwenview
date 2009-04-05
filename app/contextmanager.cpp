@@ -35,7 +35,6 @@ namespace Gwenview {
 struct ContextManagerPrivate {
 	QList<AbstractContextManagerItem*> mList;
 	KFileItemList mSelection;
-	SideBar* mSideBar;
 	SortedDirModel* mDirModel;
 	KUrl mCurrentDirUrl;
 	KUrl mCurrentUrl;
@@ -58,7 +57,6 @@ ContextManager::ContextManager(QObject* parent)
 	connect(d->mSelectionDataChangedTimer, SIGNAL(timeout()),
 		SIGNAL(selectionDataChanged()) );
 
-	d->mSideBar = 0;
 	d->mDirModel = 0;
 }
 
@@ -69,15 +67,8 @@ ContextManager::~ContextManager() {
 }
 
 
-void ContextManager::setSideBar(SideBar* sideBar) {
-	d->mSideBar = sideBar;
-}
-
-
 void ContextManager::addItem(AbstractContextManagerItem* item) {
-	Q_ASSERT(d->mSideBar);
 	d->mList << item;
-	item->setSideBar(d->mSideBar);
 }
 
 
