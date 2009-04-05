@@ -53,8 +53,6 @@ public:
 
 	bool currentDocumentIsRasterImage() const;
 
-	void showTemporarySideBar(QWidget* sideBar);
-
 public Q_SLOTS:
 	void showStartPage();
 
@@ -65,8 +63,6 @@ public Q_SLOTS:
 	virtual void setCaption(const QString&);
 
 	virtual void setCaption(const QString&, bool modified);
-
-	void hideTemporarySideBar();
 
 protected:
 	virtual bool queryClose();

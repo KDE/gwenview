@@ -132,7 +132,6 @@ struct MainWindow::Private {
 	SideBar* mSideBar;
 	QStackedWidget* mViewStackedWidget;
 	QStackedWidget* mSideBarContainer;
-	bool mSideBarWasVisibleBeforeTemporarySideBar;
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
 	SaveBar* mSaveBar;
@@ -672,25 +671,6 @@ bool MainWindow::currentDocumentIsRasterImage() const {
 }
 
 
-void MainWindow::showTemporarySideBar(QWidget* sideBar) {
-	d->mSideBarWasVisibleBeforeTemporarySideBar = d->mSideBarContainer->isVisible();
-	// Move the sideBar inside a widget so that we can add a stretch below
-	// it.
-	QWidget* widget = new QWidget(d->mSideBarContainer);
-	sideBar->setParent(widget);
-
-	QVBoxLayout* layout = new QVBoxLayout(widget);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-	layout->addWidget(sideBar);
-	layout->addStretch();
-
-	d->mSideBarContainer->addWidget(widget);
-	d->mSideBarContainer->setCurrentWidget(widget);
-	d->mSideBarContainer->show();
-}
-
-
 void MainWindow::setCaption(const QString& caption) {
 	// Keep a trace of caption to use it in slotModifiedDocumentListChanged()
 	d->mCaption = caption;
@@ -942,7 +922,6 @@ void MainWindow::slotSelectionChanged() {
 	}
 
 	// Update UI
-	hideTemporarySideBar();
 	d->updateActions();
 	updatePreviousNextActions();
 	d->updateContextDependentComponents();
@@ -1250,20 +1229,6 @@ void MainWindow::print() {
 	Document::Ptr doc = DocumentFactory::instance()->load(d->currentUrl());
 	PrintHelper printHelper(this);
 	printHelper.print(doc);
-}
-
-
-void MainWindow::hideTemporarySideBar() {
-	QWidget* temporarySideBar = d->mSideBarContainer->currentWidget();
-	if (temporarySideBar == d->mSideBar) {
-		return;
-	}
-	temporarySideBar->deleteLater();
-
-	if (!d->mSideBarWasVisibleBeforeTemporarySideBar) {
-		d->mSideBarContainer->hide();
-	}
-	d->mSideBarContainer->setCurrentWidget(d->mSideBar);
 }
 
 
