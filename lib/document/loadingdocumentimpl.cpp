@@ -56,6 +56,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "orientation.h"
 #include "svgdocumentloadedimpl.h"
 #include "urlutils.h"
+#include "videodocumentloadedimpl.h"
 
 namespace Gwenview {
 
@@ -114,6 +115,11 @@ struct LoadingDocumentImplPrivate {
 		case MimeTypeUtils::KIND_SVG_IMAGE:
 			emit mImpl->loaded();
 			mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
+			break;
+
+		case MimeTypeUtils::KIND_VIDEO:
+			emit mImpl->loaded();
+			mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
 			break;
 
 		default:

@@ -25,11 +25,13 @@ set(gwenviewlib_SRCS
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
 	document/svgdocumentloadedimpl.cpp
+	document/videodocumentloadedimpl.cpp
 	documentview/abstractdocumentviewadapter.cpp
 	documentview/documentview.cpp
 	documentview/messageviewadapter.cpp
 	documentview/imageviewadapter.cpp
 	documentview/svgviewadapter.cpp
+	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
 	imagesequence.cpp
@@ -127,6 +129,7 @@ endif(WIN32)
 target_link_libraries(gwenviewlib
 	${KDE4_KFILE_LIBS}
 	${KDE4_KIO_LIBS}
+	${KDE4_PHONON_LIBS}
 	${JPEG_LIBRARY}
 	${EXIV2_LIBRARIES}
 	)

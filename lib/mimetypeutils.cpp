@@ -108,6 +108,7 @@ const QStringList& videoMimeTypes() {
 #ifdef __GNUC__
 	#warning implement MimeTypeUtils::videoMimeTypes()
 #endif
+		list << "video/x-msvideo" << "video/x-ms-wmv" << "video/quicktime";
 		resolveAliasInList(&list);
 	}
 
@@ -154,6 +155,9 @@ Kind mimeTypeKind(const QString& mimeType) {
 	}
 	if (svgImageMimeTypes().contains(mimeType)) {
 		return KIND_SVG_IMAGE;
+	}
+	if (videoMimeTypes().contains(mimeType)) {
+		return KIND_VIDEO;
 	}
 
 	return KIND_FILE;

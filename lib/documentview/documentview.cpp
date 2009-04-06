@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/messageviewadapter.h>
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
+#include <lib/documentview/videoviewadapter.h>
 #include <lib/imagesequence.h>
 #include <lib/imagesequencecontroller.h>
 #include <lib/mimetypeutils.h>
@@ -326,6 +327,9 @@ void DocumentView::createAdapterForDocument() {
 		break;
 	case MimeTypeUtils::KIND_SVG_IMAGE:
 		adapter = new SvgViewAdapter(this);
+		break;
+	case MimeTypeUtils::KIND_VIDEO:
+		adapter = new VideoViewAdapter(this);
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
 		adapter = new MessageViewAdapter(this);
