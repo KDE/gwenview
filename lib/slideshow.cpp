@@ -215,6 +215,11 @@ void SlideShow::slotTimeout() {
 
 void SlideShow::setCurrentUrl(const KUrl& url) {
 	d->mCurrentUrl = url;
+	// Restart timer to avoid showing new url for the remaining time of the old
+	// url
+	if (d->mStarted) {
+		d->mTimer->start();
+	}
 }
 
 

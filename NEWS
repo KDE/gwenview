@@ -4,6 +4,9 @@
   ratio.
 - The thumbnail bar can now be shown vertically.
 
+## Fixes
+- Restart slideshow timer when user changes current image (bug #186411).
+
 # 2.2.2
 ## Fixes
 - Fix display of JPEG2000 images.
