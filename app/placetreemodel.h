@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef FOLDERMODEL_H
-#define FOLDERMODEL_H
+#ifndef PLACETREEMODEL_H
+#define PLACETREEMODEL_H
 
 // Qt
 #include <QAbstractItemModel>
@@ -67,4 +67,4 @@ private:
 
 } // namespace
 
-#endif /* FOLDERMODEL_H */
+#endif /* PLACETREEMODEL_H */
