@@ -319,7 +319,9 @@ void PlaceTreeModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int s
 void PlaceTreeModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, int end) {
 	beginRemoveRows(QModelIndex(), start, end);
 	for (int row=end; row>=start; --row) {
-		delete d->mDirModels.takeAt(row);
+		SortedDirModel* dirModel = d->mDirModels.takeAt(row);
+		delete d->mNodes.take(dirModel);
+		delete dirModel;
 	}
 	endRemoveRows();
 }
