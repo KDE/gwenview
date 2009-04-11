@@ -33,6 +33,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+/**
+ * Here is how the mapping work:
+ *
+ * Place1     Node(dirModel1, KUrl())
+ *   Photos   Node(dirModel1, place1Url)
+ *     2008   Node(dirModel1, place1Url/Photos)
+ *     2009   Node(dirModel1, place1Url/Photos)
+ *
+ * Place2     Node(dirModel2, KUrl())
+ * ...
+ *
+ */
 
 struct Node {
 	Node()
