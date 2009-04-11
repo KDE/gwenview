@@ -22,14 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "folderviewcontextmanageritem.h"
 
 // Qt
-#include <QDir>
 #include <QTreeView>
 
 // KDE
 #include <kdebug.h>
-#include <kfileitem.h>
-#include <kdirlister.h>
-#include <kdirmodel.h>
 #include <klocale.h>
 
 // Local
@@ -45,12 +41,6 @@ struct FolderViewContextManagerItemPrivate {
 	QTreeView* mView;
 
 	void setupModel() {
-		/*
-		mModel = new KDirModel(q);
-		KDirLister* lister = mModel->dirLister();
-		lister->setDirOnlyMode(true);
-		lister->openUrl(QDir::homePath());
-		*/
 		mModel = new FolderModel(q);
 		mView->setModel(mModel);
 	}
