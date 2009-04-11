@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QPainter>
+#include <QTabBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -208,6 +209,9 @@ SideBar::SideBar(QWidget* parent)
 : QTabWidget(parent)
 , d(new SideBarPrivate) {
 	setFont(KGlobalSettings::toolBarFont());
+	tabBar()->setDocumentMode(true);
+	tabBar()->setElideMode(Qt::ElideRight);
+	tabBar()->setUsesScrollButtons(false);
 }
 
 
