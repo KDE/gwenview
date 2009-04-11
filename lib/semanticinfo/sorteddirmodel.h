@@ -76,6 +76,7 @@ public:
 	~SortedDirModel();
 	KDirLister* dirLister();
 	KFileItem itemForIndex(const QModelIndex& index) const;
+	KUrl urlForIndex(const QModelIndex& index) const;
 	KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;

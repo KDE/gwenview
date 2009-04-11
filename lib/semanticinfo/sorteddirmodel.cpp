@@ -130,6 +130,12 @@ KFileItem SortedDirModel::itemForIndex(const QModelIndex& index) const {
 }
 
 
+KUrl SortedDirModel::urlForIndex(const QModelIndex& index) const {
+    KFileItem item = itemForIndex(index);
+    return item.isNull() ? KUrl() : item.url();
+}
+
+
 KFileItem SortedDirModel::itemForSourceIndex(const QModelIndex& sourceIndex) const {
 	if (!sourceIndex.isValid()) {
 		return KFileItem();
