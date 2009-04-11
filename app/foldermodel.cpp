@@ -209,7 +209,7 @@ void FolderModel::fetchMore(const QModelIndex& parent) {
 }
 
 
-void FolderModel::slotPlacesRowsInserted(const QModelIndex& parent, int start, int end) {
+void FolderModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int start, int end) {
 	beginInsertRows(QModelIndex(), start, end);
 	for (int row=start; row<=end; ++row) {
 		KDirModel* dirModel = new KDirModel(this);
