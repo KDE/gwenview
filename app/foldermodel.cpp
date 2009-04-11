@@ -26,31 +26,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 #include <kdirlister.h>
-#include <kdirmodel.h>
 #include <kfileplacesmodel.h>
 
 // Local
+#include <lib/semanticinfo/sorteddirmodel.h>
 
-/*
- * Home          0
- *   photos      KDirModel*
- *     2008      KDirModel*
- *     2009
- *   documents
- *   music
- *
- *
- *
- */
 
 namespace Gwenview {
 
-typedef QPair<KDirModel*, QPersistentModelIndex> DirModelIndexPair;
+
+typedef QPair<SortedDirModel*, QPersistentModelIndex> DirModelIndexPair;
 
 struct FolderModelPrivate {
 	FolderModel* q;
 	KFilePlacesModel* mPlacesModel;
-	QList<KDirModel*> mDirModels;
+	QList<SortedDirModel*> mDirModels;
 
 	mutable QSet<DirModelIndexPair*> mPairs;
 
@@ -66,14 +56,15 @@ struct FolderModelPrivate {
 	}
 
 
-	QModelIndex createIndexForDirModelAndIndex(KDirModel* dirModel, const QModelIndex& dirIndex) const {
+	QModelIndex createIndexForDirModelAndIndex(SortedDirModel* dirModel, const QModelIndex& dirIndex) const {
 		if (!dirIndex.isValid()) {
 			// Root index of dirModel == place node
-			int row = mDirModels.indexOf(const_cast<KDirModel*>(dirModel));
+			int row = mDirModels.indexOf(const_cast<SortedDirModel*>(dirModel));
 			return row != -1 ? q->createIndex(row, 0) : QModelIndex();
 		}
 		DirModelIndexPair* pair = 0;
 		// FIXME: Inefficient
+		KUrl url = dirModel->itemForIndex(dirIndex).url();
 		Q_FOREACH(DirModelIndexPair* tmp, mPairs) {
 			if (tmp->first == dirModel && tmp->second == dirIndex) {
 				pair = tmp;
@@ -144,7 +135,7 @@ QModelIndex FolderModel::index(int row, int column, const QModelIndex& parent) c
 	}
 
 	DirModelIndexPair pair = d->pairForIndex(parent);
-	KDirModel* dirModel = pair.first;
+	SortedDirModel* dirModel = pair.first;
 	const QModelIndex dirIndex = dirModel->index(row, column, pair.second);
 	return d->createIndexForDirModelAndIndex(dirModel, dirIndex);
 }
@@ -164,7 +155,7 @@ QModelIndex FolderModel::parent(const QModelIndex& index) const {
 			return d->createIndexForDirModelAndIndex(pair.first, parentDirIndex);
 		} else {
 			// index is a direct child of a place
-			int row = d->mDirModels.indexOf(const_cast<KDirModel*>(pair.first));
+			int row = d->mDirModels.indexOf(const_cast<SortedDirModel*>(pair.first));
 			return row != -1 ? createIndex(row, 0) : QModelIndex();
 		}
 	}
@@ -225,7 +216,7 @@ void FolderModel::fetchMore(const QModelIndex& parent) {
 void FolderModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int start, int end) {
 	beginInsertRows(QModelIndex(), start, end);
 	for (int row=start; row<=end; ++row) {
-		KDirModel* dirModel = new KDirModel(this);
+		SortedDirModel* dirModel = new SortedDirModel(this);
 		connect(dirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
 			SLOT(slotDirRowsInserted(const QModelIndex&, int, int)));
 		connect(dirModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
@@ -249,14 +240,14 @@ void FolderModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, 
 
 
 void FolderModel::slotDirRowsInserted(const QModelIndex& parentDirIndex, int start, int end) {
-	KDirModel* model = static_cast<KDirModel*>(sender());
+	SortedDirModel* model = static_cast<SortedDirModel*>(sender());
 	beginInsertRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
 	endInsertRows();
 }
 
 
 void FolderModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex, int start, int end) {
-	KDirModel* model = static_cast<KDirModel*>(sender());
+	SortedDirModel* model = static_cast<SortedDirModel*>(sender());
 	beginRemoveRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
 	endRemoveRows();
 }
