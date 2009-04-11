@@ -63,12 +63,14 @@ struct Node {
 	bool isPlace;
 };
 
+typedef QHash<KUrl, Node*> NodeHash;
+typedef QMap<SortedDirModel*, NodeHash*> NodeHashMap;
+
 struct FolderModelPrivate {
 	FolderModel* q;
 	KFilePlacesModel* mPlacesModel;
 	QList<SortedDirModel*> mDirModels;
-
-	mutable QSet<Node*> mNodes;
+	mutable NodeHashMap mNodes;
 
 	Node nodeForIndex(const QModelIndex& index) const {
 		Q_ASSERT(index.isValid());
@@ -78,15 +80,17 @@ struct FolderModelPrivate {
 
 
 	Node* createNode(SortedDirModel* dirModel, const KUrl& parentUrl, bool isPlace) const {
-		// FIXME: Inefficient
-		Q_FOREACH(Node* node, mNodes) {
-			if (node->model == dirModel && node->parentUrl == parentUrl) {
-				return node;
-			}
+		NodeHashMap::iterator nhmIt = mNodes.find(dirModel);
+		if (nhmIt == mNodes.end()) {
+			nhmIt = mNodes.insert(dirModel, new NodeHash);
 		}
-		Node* node = new Node(dirModel, parentUrl, isPlace);
-		mNodes.insert(node);
-		return node;
+		NodeHash* nodeHash = nhmIt.value();
+
+		NodeHash::iterator nhIt = nodeHash->find(parentUrl);
+		if (nhIt == nodeHash->end()) {
+			nhIt = nodeHash->insert(parentUrl, new Node(dirModel, parentUrl, isPlace));
+		}
+		return nhIt.value();
 	}
 
 
@@ -146,6 +150,9 @@ FolderModel::FolderModel(QObject* parent)
 
 
 FolderModel::~FolderModel() {
+	Q_FOREACH(NodeHash* nodeHash, d->mNodes) {
+		qDeleteAll(*nodeHash);
+	}
 	qDeleteAll(d->mNodes);
 	delete d;
 }
