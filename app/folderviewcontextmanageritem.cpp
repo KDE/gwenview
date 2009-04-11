@@ -37,11 +37,11 @@ namespace Gwenview {
 
 struct FolderViewContextManagerItemPrivate {
 	FolderViewContextManagerItem* q;
-	FolderModel* mModel;
+	PlaceTreeModel* mModel;
 	QTreeView* mView;
 
 	void setupModel() {
-		mModel = new FolderModel(q);
+		mModel = new PlaceTreeModel(q);
 		mView->setModel(mModel);
 	}
 

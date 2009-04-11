@@ -33,12 +33,12 @@ class KUrl;
 namespace Gwenview {
 
 
-class FolderModelPrivate;
-class FolderModel : public QAbstractItemModel {
+class PlaceTreeModelPrivate;
+class PlaceTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
-	FolderModel(QObject*);
-	~FolderModel();
+	PlaceTreeModel(QObject*);
+	~PlaceTreeModel();
 
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -60,8 +60,8 @@ private Q_SLOTS:
 	void slotDirRowsRemoved(const QModelIndex&, int start, int end);
 
 private:
-	friend class FolderModelPrivate;
-	FolderModelPrivate* const d;
+	friend class PlaceTreeModelPrivate;
+	PlaceTreeModelPrivate* const d;
 };
 
 
