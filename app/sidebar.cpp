@@ -163,6 +163,7 @@ void SideBarGroup::addAction(QAction* action) {
 struct SideBarPagePrivate {
 	QString mTitle;
 	KIcon mIcon;
+	QVBoxLayout* mLayout;
 };
 
 
@@ -173,7 +174,8 @@ SideBarPage::SideBarPage(const QString& title, const QString& iconName)
 	d->mTitle = title;
 	d->mIcon = KIcon(iconName);
 
-	new QVBoxLayout(this);
+	d->mLayout = new QVBoxLayout(this);
+	d->mLayout->setMargin(0);
 }
 
 
@@ -188,7 +190,12 @@ const KIcon& SideBarPage::icon() const {
 
 
 void SideBarPage::addWidget(QWidget* widget) {
-	layout()->addWidget(widget);
+	d->mLayout->addWidget(widget);
+}
+
+
+void SideBarPage::addStretch() {
+	d->mLayout->addStretch();
 }
 
 

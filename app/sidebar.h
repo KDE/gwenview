@@ -55,6 +55,7 @@ class SideBarPage : public QWidget {
 public:
 	SideBarPage(const QString& title, const QString& iconName);
 	void addWidget(QWidget*);
+	void addStretch();
 
 	const QString& title() const;
 	const KIcon& icon() const;

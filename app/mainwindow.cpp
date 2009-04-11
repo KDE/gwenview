@@ -409,11 +409,13 @@ struct MainWindow::Private {
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		page->addWidget(semanticInfoItem->widget());
 		#endif
+		page->addStretch();
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Ops"), "system-run");
 		page->addWidget(imageOpsItem->widget());
 		page->addWidget(fileOpsItem->widget());
+		page->addStretch();
 		mSideBar->addPage(page);
 	}
 
