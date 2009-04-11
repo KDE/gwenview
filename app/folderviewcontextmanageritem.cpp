@@ -34,20 +34,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
+#include "foldermodel.h"
 #include "sidebar.h"
 
 namespace Gwenview {
 
 struct FolderViewContextManagerItemPrivate {
 	FolderViewContextManagerItem* q;
-	KDirModel* mModel;
+	FolderModel* mModel;
 	QTreeView* mView;
 
 	void setupModel() {
+		/*
 		mModel = new KDirModel(q);
 		KDirLister* lister = mModel->dirLister();
 		lister->setDirOnlyMode(true);
 		lister->openUrl(QDir::homePath());
+		*/
+		mModel = new FolderModel(q);
 		mView->setModel(mModel);
 	}
 
@@ -103,8 +107,8 @@ void FolderViewContextManagerItem::slotActivated(const QModelIndex& index) {
 		return;
 	}
 
-	KFileItem item = d->mModel->itemForIndex(index);
-	emit urlChanged(item.url());
+	KUrl url = d->mModel->urlForIndex(index);
+	emit urlChanged(url);
 }
 
 

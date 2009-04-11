@@ -21,6 +21,7 @@ set(gwenview_SRCS
 	fileoperations.cpp
 	filtercontroller.cpp
 	folderviewcontextmanageritem.cpp
+	foldermodel.cpp
 	fullscreencontent.cpp
 	infocontextmanageritem.cpp
 	imagemetainfodialog.cpp
