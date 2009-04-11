@@ -179,6 +179,10 @@ struct MainWindow::Private {
 		layout->setMargin(0);
 		layout->setSpacing(0);
 
+		mSideBarContainer = new QStackedWidget(mCentralSplitter);
+		mSideBar = new SideBar(mSideBarContainer);
+		mSideBarContainer->addWidget(mSideBar);
+
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
 
 		setupThumbnailView(mViewStackedWidget);
@@ -189,12 +193,8 @@ struct MainWindow::Private {
 		mViewStackedWidget->addWidget(mStartPage);
 		mViewStackedWidget->setCurrentWidget(mThumbnailViewPanel);
 
-		mSideBarContainer = new QStackedWidget(mCentralSplitter);
-		mSideBar = new SideBar(mSideBarContainer);
-		mSideBarContainer->addWidget(mSideBar);
-
-		mCentralSplitter->setStretchFactor(0, 1);
-		mCentralSplitter->setStretchFactor(1, 0);
+		mCentralSplitter->setStretchFactor(0, 0);
+		mCentralSplitter->setStretchFactor(1, 1);
 
 		mStartSlideShowWhenDirListerCompleted = false;
 		mSlideShow = new SlideShow(mWindow);
