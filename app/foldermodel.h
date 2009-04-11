@@ -54,8 +54,10 @@ public:
 private Q_SLOTS:
 	void slotPlacesRowsInserted(const QModelIndex&, int start, int end);
 	void slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
+	void slotDirRowsAboutToBeInserted(const QModelIndex&, int start, int end);
 	void slotDirRowsInserted(const QModelIndex&, int start, int end);
 	void slotDirRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
+	void slotDirRowsRemoved(const QModelIndex&, int start, int end);
 
 private:
 	friend class FolderModelPrivate;
