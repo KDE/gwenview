@@ -58,6 +58,7 @@ struct FolderViewContextManagerItemPrivate {
 	void setupView() {
 		mView = new QTreeView;
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+		mView->setHeaderHidden(true);
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
 			q, SLOT(slotActivated(const QModelIndex&)));
