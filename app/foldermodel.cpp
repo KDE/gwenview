@@ -39,13 +39,13 @@ struct Node {
 	Node()
 	: model(0) {}
 
-	Node(SortedDirModel* _model, const QPersistentModelIndex& _index)
+	Node(SortedDirModel* _model, const KUrl& _url)
 	: model(_model)
-	, index(_index)
+	, url(_url)
 	{}
 
 	SortedDirModel* model;
-	QPersistentModelIndex index;
+	KUrl url;
 };
 
 struct FolderModelPrivate {
@@ -59,7 +59,7 @@ struct FolderModelPrivate {
 		Q_ASSERT(index.isValid());
 		if (!index.internalPointer()) {
 			// Place node
-			return Node(mDirModels[index.row()], QModelIndex());
+			return Node(mDirModels[index.row()], KUrl());
 		}
 
 		Node* node = static_cast<Node*>(index.internalPointer());
@@ -67,25 +67,25 @@ struct FolderModelPrivate {
 	}
 
 
-	QModelIndex createIndexForDirModelAndIndex(SortedDirModel* dirModel, const QModelIndex& dirIndex) const {
-		if (!dirIndex.isValid()) {
+	QModelIndex createIndex(SortedDirModel* dirModel, const KUrl& url) const {
+		if (!url.isValid()) {
 			// Root index of dirModel == place node
 			int row = mDirModels.indexOf(const_cast<SortedDirModel*>(dirModel));
 			return row != -1 ? q->createIndex(row, 0) : QModelIndex();
 		}
 		Node* node = 0;
 		// FIXME: Inefficient
-		KUrl url = dirModel->itemForIndex(dirIndex).url();
 		Q_FOREACH(Node* tmp, mNodes) {
-			if (tmp->model == dirModel && tmp->index == dirIndex) {
+			if (tmp->model == dirModel && tmp->url == url) {
 				node = tmp;
 				break;
 			}
 		}
 		if (!node) {
-			node = new Node(dirModel, dirIndex);
+			node = new Node(dirModel, url);
 			mNodes.insert(node);
 		}
+		QModelIndex dirIndex = dirModel->indexForUrl(url);
 		return q->createIndex(dirIndex.row(), dirIndex.column(), node);
 	}
 };
@@ -127,7 +127,8 @@ QVariant FolderModel::data(const QModelIndex& index, int role) const {
 		return d->mPlacesModel->data(placesIndex, role);
 	} else {
 		const Node node = d->nodeForIndex(index);
-		return node.model->data(node.index, role);
+		const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+		return node.model->data(dirIndex, role);
 	}
 }
 
@@ -145,10 +146,12 @@ QModelIndex FolderModel::index(int row, int column, const QModelIndex& parent) c
 		}
 	}
 
-	Node node = d->nodeForIndex(parent);
-	SortedDirModel* dirModel = node.model;
-	const QModelIndex dirIndex = dirModel->index(row, column, node.index);
-	return d->createIndexForDirModelAndIndex(dirModel, dirIndex);
+	Node parentNode = d->nodeForIndex(parent);
+	SortedDirModel* dirModel = parentNode.model;
+	QModelIndex parentDirIndex = dirModel->indexForUrl(parentNode.url);
+	QModelIndex dirIndex = dirModel->index(row, column, parentDirIndex);
+	KUrl url = dirModel->urlForIndex(dirIndex);
+	return d->createIndex(dirModel, url);
 }
 
 
@@ -157,18 +160,19 @@ QModelIndex FolderModel::parent(const QModelIndex& index) const {
 		return QModelIndex();
 	}
 	if (!index.internalPointer()) {
-		// index is a place
+		// index is a place => parent is invisible root item
 		return QModelIndex();
+	}
+	const Node node = d->nodeForIndex(index);
+	// FIXME: Use KUrl::parent()?
+	const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+	const QModelIndex parentDirIndex = node.model->parent(dirIndex);
+	if (parentDirIndex.isValid()) {
+		return d->createIndex(node.model, node.model->urlForIndex(parentDirIndex));
 	} else {
-		const Node node = d->nodeForIndex(index);
-		const QModelIndex parentDirIndex = node.model->parent(node.index);
-		if (parentDirIndex.isValid()) {
-			return d->createIndexForDirModelAndIndex(node.model, parentDirIndex);
-		} else {
-			// index is a direct child of a place
-			int row = d->mDirModels.indexOf(const_cast<SortedDirModel*>(node.model));
-			return row != -1 ? createIndex(row, 0) : QModelIndex();
-		}
+		// index is a direct child of a place
+		int row = d->mDirModels.indexOf(const_cast<SortedDirModel*>(node.model));
+		return row != -1 ? createIndex(row, 0) : QModelIndex();
 	}
 }
 
@@ -181,7 +185,8 @@ int FolderModel::rowCount(const QModelIndex& parent) const {
 
 	// parent is a place or a dir
 	const Node node = d->nodeForIndex(parent);
-	return node.model->rowCount(node.index);
+	const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+	return node.model->rowCount(dirIndex);
 }
 
 
@@ -190,11 +195,12 @@ bool FolderModel::hasChildren(const QModelIndex& parent) const {
 		return true;
 	}
 	if (!parent.internalPointer()) {
-		// parent is a place node always allow expanding
+		// parent is a place node => always allow expanding
 		return true;
 	}
 	const Node node = d->nodeForIndex(parent);
-	return node.model->hasChildren(node.index);
+	const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+	return node.model->hasChildren(dirIndex);
 }
 
 
@@ -203,11 +209,12 @@ bool FolderModel::canFetchMore(const QModelIndex& parent) const {
 		return d->mPlacesModel->canFetchMore(QModelIndex());
 	}
 	const Node node = d->nodeForIndex(parent);
-	if (!node.index.isValid() && !node.model->dirLister()->url().isValid()) {
+	if (!node.url.isValid() && !node.model->dirLister()->url().isValid()) {
 		// Special case to avoid calling openUrl on all places at startup
 		return true;
 	}
-	return node.model->canFetchMore(node.index);
+	const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+	return node.model->canFetchMore(dirIndex);
 }
 
 
@@ -216,11 +223,12 @@ void FolderModel::fetchMore(const QModelIndex& parent) {
 		d->mPlacesModel->fetchMore(QModelIndex());
 	}
 	const Node node = d->nodeForIndex(parent);
-	if (!node.index.isValid() && !node.model->dirLister()->url().isValid()) {
+	if (!node.url.isValid() && !node.model->dirLister()->url().isValid()) {
 		KUrl url = d->mPlacesModel->url(d->mPlacesModel->index(parent.row(), 0));
 		node.model->dirLister()->openUrl(url);
 	}
-	node.model->fetchMore(node.index);
+	const QModelIndex dirIndex = node.model->indexForUrl(node.url);
+	node.model->fetchMore(dirIndex);
 }
 
 
@@ -252,14 +260,16 @@ void FolderModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, 
 
 void FolderModel::slotDirRowsInserted(const QModelIndex& parentDirIndex, int start, int end) {
 	SortedDirModel* model = static_cast<SortedDirModel*>(sender());
-	beginInsertRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
+	KUrl url = model->urlForIndex(parentDirIndex);
+	beginInsertRows(d->createIndex(model, url), start, end);
 	endInsertRows();
 }
 
 
 void FolderModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex, int start, int end) {
 	SortedDirModel* model = static_cast<SortedDirModel*>(sender());
-	beginRemoveRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
+	KUrl url = model->urlForIndex(parentDirIndex);
+	beginRemoveRows(d->createIndex(model, url), start, end);
 	endRemoveRows();
 }
 
@@ -269,8 +279,7 @@ KUrl FolderModel::urlForIndex(const QModelIndex& index) const {
 		return d->mPlacesModel->url(d->mPlacesModel->index(index.row(), 0));
 	} else {
 		const Node node = d->nodeForIndex(index);
-		KFileItem item = node.model->itemForIndex(node.index);
-		return item.isNull() ? KUrl() : item.url();
+		return node.url;
 	}
 }
 
