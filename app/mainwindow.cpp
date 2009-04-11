@@ -132,7 +132,6 @@ struct MainWindow::Private {
 	StartPage* mStartPage;
 	SideBar* mSideBar;
 	QStackedWidget* mViewStackedWidget;
-	QStackedWidget* mSideBarContainer;
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
 	SaveBar* mSaveBar;
@@ -179,9 +178,7 @@ struct MainWindow::Private {
 		layout->setMargin(0);
 		layout->setSpacing(0);
 
-		mSideBarContainer = new QStackedWidget(mCentralSplitter);
-		mSideBar = new SideBar(mSideBarContainer);
-		mSideBarContainer->addWidget(mSideBar);
+		mSideBar = new SideBar(mCentralSplitter);
 
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
 
@@ -442,7 +439,7 @@ struct MainWindow::Private {
 	}
 
 	void updateToggleSideBarAction() {
-		if (mSideBarContainer->isVisibleTo(mSideBarContainer->parentWidget())) {
+		if (mSideBar->isVisibleTo(mSideBar->parentWidget())) {
 			mToggleSideBarAction->setText(i18n("Hide Sidebar"));
 		} else {
 			mToggleSideBarAction->setText(i18n("Show Sidebar"));
@@ -732,7 +729,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDocumentUrl(url);
 	}
 	d->updateContextDependentComponents();
-	d->mSideBarContainer->setVisible(GwenviewConfig::sideBarIsVisible());
+	d->mSideBar->setVisible(GwenviewConfig::sideBarIsVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -832,7 +829,7 @@ void MainWindow::showStartPage() {
 	d->setActionsDisabledOnStartPageEnabled(false);
 	d->spreadCurrentDirUrl(KUrl());
 
-	d->mSideBarContainer->hide();
+	d->mSideBar->hide();
 	d->updateToggleSideBarAction();
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 
@@ -900,7 +897,7 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 
 
 void MainWindow::toggleSideBar() {
-	d->mSideBarContainer->setVisible(!d->mSideBarContainer->isVisible());
+	d->mSideBar->setVisible(!d->mSideBar->isVisible());
 	d->updateToggleSideBarAction();
 }
 
@@ -1045,12 +1042,12 @@ void MainWindow::toggleFullScreen(bool checked) {
 
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
-		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBarContainer->isVisible();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
 		d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
 
 		d->mViewAction->trigger();
-		d->mSideBarContainer->hide();
+		d->mSideBar->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
@@ -1063,7 +1060,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		if (d->mStateBeforeFullScreen.mActiveViewModeAction) {
 			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		}
-		d->mSideBarContainer->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		// Back to normal
 		d->mDocumentPanel->setFullScreenMode(false);
@@ -1246,7 +1243,7 @@ void MainWindow::loadConfig() {
 void MainWindow::saveConfig() {
 	d->mDocumentPanel->saveConfig();
 	d->mThumbnailViewPanel->saveConfig();
-	GwenviewConfig::setSideBarIsVisible(d->mSideBarContainer->isVisible());
+	GwenviewConfig::setSideBarIsVisible(d->mSideBar->isVisible());
 }
 
 
