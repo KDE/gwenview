@@ -67,6 +67,11 @@ struct FolderModelPrivate {
 
 
 	QModelIndex createIndexForDirModelAndIndex(KDirModel* dirModel, const QModelIndex& dirIndex) const {
+		if (!dirIndex.isValid()) {
+			// Root index of dirModel == place node
+			int row = mDirModels.indexOf(const_cast<KDirModel*>(dirModel));
+			return row != -1 ? q->createIndex(row, 0) : QModelIndex();
+		}
 		DirModelIndexPair* pair = 0;
 		// FIXME: Inefficient
 		Q_FOREACH(DirModelIndexPair* tmp, mPairs) {
@@ -196,6 +201,10 @@ bool FolderModel::canFetchMore(const QModelIndex& parent) const {
 		return d->mPlacesModel->canFetchMore(QModelIndex());
 	}
 	const DirModelIndexPair pair = d->pairForIndex(parent);
+	if (!pair.second.isValid() && !pair.first->dirLister()->url().isValid()) {
+		// Special case to avoid calling openUrl on all places at startup
+		return true;
+	}
 	return pair.first->canFetchMore(pair.second);
 }
 
@@ -205,6 +214,10 @@ void FolderModel::fetchMore(const QModelIndex& parent) {
 		d->mPlacesModel->fetchMore(QModelIndex());
 	}
 	const DirModelIndexPair pair = d->pairForIndex(parent);
+	if (!pair.second.isValid() && !pair.first->dirLister()->url().isValid()) {
+		KUrl url = d->mPlacesModel->url(d->mPlacesModel->index(parent.row(), 0));
+		pair.first->dirLister()->openUrl(url);
+	}
 	pair.first->fetchMore(pair.second);
 }
 
@@ -221,8 +234,6 @@ void FolderModel::slotPlacesRowsInserted(const QModelIndex& /*parent*/, int star
 		d->mDirModels.insert(row, dirModel);
 		KDirLister* lister = dirModel->dirLister();
 		lister->setDirOnlyMode(true);
-		KUrl url = d->mPlacesModel->url(d->mPlacesModel->index(row, 0, parent));
-		lister->openUrl(url);
 	}
 	endInsertRows();
 }
