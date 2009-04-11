@@ -47,12 +47,15 @@ public:
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 	virtual bool hasChildren(const QModelIndex& parent) const;
 	virtual bool canFetchMore(const QModelIndex& parent) const;
+	virtual void fetchMore(const QModelIndex& parent);
 
 	KUrl urlForIndex(const QModelIndex&) const;
 
 private Q_SLOTS:
 	void slotPlacesRowsInserted(const QModelIndex&, int start, int end);
 	void slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
+	void slotDirRowsInserted(const QModelIndex&, int start, int end);
+	void slotDirRowsAboutToBeRemoved(const QModelIndex&, int start, int end);
 
 private:
 	friend class FolderModelPrivate;

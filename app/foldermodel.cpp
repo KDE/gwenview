@@ -179,8 +179,6 @@ int FolderModel::rowCount(const QModelIndex& parent) const {
 
 
 bool FolderModel::hasChildren(const QModelIndex& parent) const {
-	return QAbstractItemModel::hasChildren(parent);
-	/*
 	if (!parent.isValid()) {
 		return true;
 	}
@@ -190,17 +188,24 @@ bool FolderModel::hasChildren(const QModelIndex& parent) const {
 	}
 	const DirModelIndexPair pair = d->pairForIndex(parent);
 	return pair.first->hasChildren(pair.second);
-	*/
 }
 
 
 bool FolderModel::canFetchMore(const QModelIndex& parent) const {
-	return QAbstractItemModel::canFetchMore(parent);
-	/*
 	if (!parent.isValid()) {
-		return d->mPlacesModel->canFetchMore();
+		return d->mPlacesModel->canFetchMore(QModelIndex());
 	}
-	*/
+	const DirModelIndexPair pair = d->pairForIndex(parent);
+	return pair.first->canFetchMore(pair.second);
+}
+
+
+void FolderModel::fetchMore(const QModelIndex& parent) {
+	if (!parent.isValid()) {
+		d->mPlacesModel->fetchMore(QModelIndex());
+	}
+	const DirModelIndexPair pair = d->pairForIndex(parent);
+	pair.first->fetchMore(pair.second);
 }
 
 
@@ -208,6 +213,11 @@ void FolderModel::slotPlacesRowsInserted(const QModelIndex& parent, int start, i
 	beginInsertRows(QModelIndex(), start, end);
 	for (int row=start; row<=end; ++row) {
 		KDirModel* dirModel = new KDirModel(this);
+		connect(dirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			SLOT(slotDirRowsInserted(const QModelIndex&, int, int)));
+		connect(dirModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
+			SLOT(slotDirRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+
 		d->mDirModels.insert(row, dirModel);
 		KDirLister* lister = dirModel->dirLister();
 		lister->setDirOnlyMode(true);
@@ -223,6 +233,20 @@ void FolderModel::slotPlacesRowsAboutToBeRemoved(const QModelIndex&, int start, 
 	for (int row=end; row>=start; --row) {
 		delete d->mDirModels.takeAt(row);
 	}
+	endRemoveRows();
+}
+
+
+void FolderModel::slotDirRowsInserted(const QModelIndex& parentDirIndex, int start, int end) {
+	KDirModel* model = static_cast<KDirModel*>(sender());
+	beginInsertRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
+	endInsertRows();
+}
+
+
+void FolderModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex, int start, int end) {
+	KDirModel* model = static_cast<KDirModel*>(sender());
+	beginRemoveRows(d->createIndexForDirModelAndIndex(model, parentDirIndex), start, end);
 	endRemoveRows();
 }
 
