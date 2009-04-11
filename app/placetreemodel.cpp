@@ -57,18 +57,19 @@ namespace Gwenview {
 struct Node {
 	Node()
 	: model(0)
-	, isPlace(false)
 	{}
 
-	Node(SortedDirModel* _model, const KUrl& _parentUrl, bool _isPlace)
+	Node(SortedDirModel* _model, const KUrl& _parentUrl)
 	: model(_model)
 	, parentUrl(_parentUrl)
-	, isPlace(_isPlace)
 	{}
 
 	SortedDirModel* model;
 	KUrl parentUrl;
-	bool isPlace;
+
+	bool isPlace() const {
+		return !parentUrl.isValid();
+	}
 };
 
 typedef QHash<KUrl, Node*> NodeHash;
@@ -87,7 +88,7 @@ struct PlaceTreeModelPrivate {
 	}
 
 
-	Node* createNode(SortedDirModel* dirModel, const KUrl& parentUrl, bool isPlace) const {
+	Node* createNode(SortedDirModel* dirModel, const KUrl& parentUrl) const {
 		NodeHashMap::iterator nhmIt = mNodes.find(dirModel);
 		if (nhmIt == mNodes.end()) {
 			nhmIt = mNodes.insert(dirModel, new NodeHash);
@@ -96,7 +97,7 @@ struct PlaceTreeModelPrivate {
 
 		NodeHash::iterator nhIt = nodeHash->find(parentUrl);
 		if (nhIt == nodeHash->end()) {
-			nhIt = nodeHash->insert(parentUrl, new Node(dirModel, parentUrl, isPlace));
+			nhIt = nodeHash->insert(parentUrl, new Node(dirModel, parentUrl));
 		}
 		return nhIt.value();
 	}
@@ -117,7 +118,7 @@ struct PlaceTreeModelPrivate {
 
 	QModelIndex createIndexForDirChild(SortedDirModel* dirModel, const KUrl& parentUrl, int row, int column) const {
 		Q_ASSERT(parentUrl.isValid());
-		Node* node = createNode(dirModel, parentUrl, false);
+		Node* node = createNode(dirModel, parentUrl);
 		return q->createIndex(row, column, node);
 	}
 
@@ -125,13 +126,13 @@ struct PlaceTreeModelPrivate {
 	QModelIndex createIndexForPlace(SortedDirModel* dirModel) const {
 		int row = mDirModels.indexOf(dirModel);
 		Q_ASSERT(row != -1);
-		Node* node = createNode(dirModel, KUrl(), true);
+		Node* node = createNode(dirModel, KUrl());
 		return q->createIndex(row, 0, node);
 	}
 
 
 	QModelIndex dirIndexForNode(const Node& node, const QModelIndex& index) const {
-		if (node.isPlace) {
+		if (node.isPlace()) {
 			return QModelIndex();
 		}
 		Q_ASSERT(node.parentUrl.isValid());
@@ -177,7 +178,7 @@ QVariant PlaceTreeModel::data(const QModelIndex& index, int role) const {
 	}
 	QVariant value;
 	const Node node = d->nodeForIndex(index);
-	if (node.isPlace) {
+	if (node.isPlace()) {
 		const QModelIndex placesIndex = d->mPlacesModel->index(index.row(), index.column());
 		value = d->mPlacesModel->data(placesIndex, role);
 	} else {
@@ -226,7 +227,7 @@ QModelIndex PlaceTreeModel::parent(const QModelIndex& index) const {
 		return QModelIndex();
 	}
 	const Node node = d->nodeForIndex(index);
-	if (node.isPlace) {
+	if (node.isPlace()) {
 		return QModelIndex();
 	}
 	if (node.parentUrl == node.model->dirLister()->url()) {
@@ -255,7 +256,7 @@ bool PlaceTreeModel::hasChildren(const QModelIndex& index) const {
 		return true;
 	}
 	const Node node = d->nodeForIndex(index);
-	if (node.isPlace) {
+	if (node.isPlace()) {
 		return true;
 	}
 	const QModelIndex dirIndex = d->dirIndexForNode(node, index);
