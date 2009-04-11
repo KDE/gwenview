@@ -45,13 +45,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-typedef QPair<const KDirModel*, QModelIndex> DirModelIndexPair;
+typedef QPair<KDirModel*, QPersistentModelIndex> DirModelIndexPair;
 
 struct FolderModelPrivate {
 	FolderModel* q;
 	KFilePlacesModel* mPlacesModel;
 	QList<KDirModel*> mDirModels;
 
+	mutable QSet<DirModelIndexPair*> mPairs;
 
 	DirModelIndexPair pairForIndex(const QModelIndex& index) const {
 		Q_ASSERT(index.isValid());
@@ -65,9 +66,19 @@ struct FolderModelPrivate {
 	}
 
 
-	QModelIndex createIndexForDirModelAndIndex(const KDirModel* dirModel, const QModelIndex& dirIndex) const {
-		// FIXME: LEAK!
-		DirModelIndexPair* pair = new DirModelIndexPair(dirModel, dirIndex);
+	QModelIndex createIndexForDirModelAndIndex(KDirModel* dirModel, const QModelIndex& dirIndex) const {
+		DirModelIndexPair* pair = 0;
+		// FIXME: Inefficient
+		Q_FOREACH(DirModelIndexPair* tmp, mPairs) {
+			if (tmp->first == dirModel && tmp->second == dirIndex) {
+				pair = tmp;
+				break;
+			}
+		}
+		if (!pair) {
+			pair = new DirModelIndexPair(dirModel, dirIndex);
+			mPairs.insert(pair);
+		}
 		return q->createIndex(dirIndex.row(), dirIndex.column(), pair);
 	}
 };
@@ -90,6 +101,7 @@ FolderModel::FolderModel(QObject* parent)
 
 
 FolderModel::~FolderModel() {
+	qDeleteAll(d->mPairs);
 	delete d;
 }
 
@@ -127,7 +139,7 @@ QModelIndex FolderModel::index(int row, int column, const QModelIndex& parent) c
 	}
 
 	DirModelIndexPair pair = d->pairForIndex(parent);
-	const KDirModel* dirModel = pair.first;
+	KDirModel* dirModel = pair.first;
 	const QModelIndex dirIndex = dirModel->index(row, column, pair.second);
 	return d->createIndexForDirModelAndIndex(dirModel, dirIndex);
 }
