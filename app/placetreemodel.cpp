@@ -43,7 +43,15 @@ namespace Gwenview {
  *
  * Place2     Node(dirModel2, KUrl())
  * ...
+ * Node contains the parent url, not the url of the node itself, because
+ * for some unknown reason when accessing rows from a slot connected to
+ * rowsInserted(), the rows are unsorted, they appear in KDirModel natural
+ * order. Further access to the rows are correctly sorted! This confuses
+ * QTreeView a lot (symptoms are mixed tooltips, filled nodes appearing
+ * empty on first expand)
  *
+ * I could not determine whether it's a bug or not, and if it's in my model
+ * code, in QSortFilterProxyModel or somewhere else.
  */
 
 struct Node {
