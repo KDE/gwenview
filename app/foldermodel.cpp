@@ -93,7 +93,6 @@ struct FolderModelPrivate {
 
 	QModelIndex createIndexForDirChild(SortedDirModel* dirModel, const KUrl& parentUrl, int row, int column) const {
 		Q_ASSERT(parentUrl.isValid());
-		kDebug() << parentUrl << row << column;
 		Node* node = createNode(dirModel, parentUrl, false);
 		return q->createIndex(row, column, node);
 	}
@@ -311,7 +310,7 @@ void FolderModel::slotDirRowsAboutToBeInserted(const QModelIndex& parentDirIndex
 }
 
 
-void FolderModel::slotDirRowsInserted(const QModelIndex& parentDirIndex, int start, int end) {
+void FolderModel::slotDirRowsInserted(const QModelIndex&, int, int) {
 	endInsertRows();
 }
 
@@ -329,7 +328,7 @@ void FolderModel::slotDirRowsAboutToBeRemoved(const QModelIndex& parentDirIndex,
 }
 
 
-void FolderModel::slotDirRowsRemoved(const QModelIndex& parentDirIndex, int start, int end) {
+void FolderModel::slotDirRowsRemoved(const QModelIndex&, int, int) {
 	endRemoveRows();
 }
 
