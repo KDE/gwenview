@@ -35,24 +35,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-typedef QPair<SortedDirModel*, QPersistentModelIndex> DirModelIndexPair;
+struct Node {
+	Node()
+	: model(0) {}
+
+	Node(SortedDirModel* _model, const QPersistentModelIndex& _index)
+	: model(_model)
+	, index(_index)
+	{}
+
+	SortedDirModel* model;
+	QPersistentModelIndex index;
+};
 
 struct FolderModelPrivate {
 	FolderModel* q;
 	KFilePlacesModel* mPlacesModel;
 	QList<SortedDirModel*> mDirModels;
 
-	mutable QSet<DirModelIndexPair*> mPairs;
+	mutable QSet<Node*> mNodes;
 
-	DirModelIndexPair pairForIndex(const QModelIndex& index) const {
+	Node nodeForIndex(const QModelIndex& index) const {
 		Q_ASSERT(index.isValid());
 		if (!index.internalPointer()) {
 			// Place node
-			return DirModelIndexPair(mDirModels[index.row()], QModelIndex());
+			return Node(mDirModels[index.row()], QModelIndex());
 		}
 
-		DirModelIndexPair* pair = static_cast<DirModelIndexPair*>(index.internalPointer());
-		return *pair;
+		Node* node = static_cast<Node*>(index.internalPointer());
+		return *node;
 	}
 
 
@@ -62,20 +73,20 @@ struct FolderModelPrivate {
 			int row = mDirModels.indexOf(const_cast<SortedDirModel*>(dirModel));
 			return row != -1 ? q->createIndex(row, 0) : QModelIndex();
 		}
-		DirModelIndexPair* pair = 0;
+		Node* node = 0;
 		// FIXME: Inefficient
 		KUrl url = dirModel->itemForIndex(dirIndex).url();
-		Q_FOREACH(DirModelIndexPair* tmp, mPairs) {
-			if (tmp->first == dirModel && tmp->second == dirIndex) {
-				pair = tmp;
+		Q_FOREACH(Node* tmp, mNodes) {
+			if (tmp->model == dirModel && tmp->index == dirIndex) {
+				node = tmp;
 				break;
 			}
 		}
-		if (!pair) {
-			pair = new DirModelIndexPair(dirModel, dirIndex);
-			mPairs.insert(pair);
+		if (!node) {
+			node = new Node(dirModel, dirIndex);
+			mNodes.insert(node);
 		}
-		return q->createIndex(dirIndex.row(), dirIndex.column(), pair);
+		return q->createIndex(dirIndex.row(), dirIndex.column(), node);
 	}
 };
 
@@ -97,7 +108,7 @@ FolderModel::FolderModel(QObject* parent)
 
 
 FolderModel::~FolderModel() {
-	qDeleteAll(d->mPairs);
+	qDeleteAll(d->mNodes);
 	delete d;
 }
 
@@ -115,8 +126,8 @@ QVariant FolderModel::data(const QModelIndex& index, int role) const {
 		const QModelIndex placesIndex = d->mPlacesModel->index(index.row(), index.column());
 		return d->mPlacesModel->data(placesIndex, role);
 	} else {
-		const DirModelIndexPair pair = d->pairForIndex(index);
-		return pair.first->data(pair.second, role);
+		const Node node = d->nodeForIndex(index);
+		return node.model->data(node.index, role);
 	}
 }
 
@@ -134,9 +145,9 @@ QModelIndex FolderModel::index(int row, int column, const QModelIndex& parent) c
 		}
 	}
 
-	DirModelIndexPair pair = d->pairForIndex(parent);
-	SortedDirModel* dirModel = pair.first;
-	const QModelIndex dirIndex = dirModel->index(row, column, pair.second);
+	Node node = d->nodeForIndex(parent);
+	SortedDirModel* dirModel = node.model;
+	const QModelIndex dirIndex = dirModel->index(row, column, node.index);
 	return d->createIndexForDirModelAndIndex(dirModel, dirIndex);
 }
 
@@ -149,13 +160,13 @@ QModelIndex FolderModel::parent(const QModelIndex& index) const {
 		// index is a place
 		return QModelIndex();
 	} else {
-		const DirModelIndexPair pair = d->pairForIndex(index);
-		const QModelIndex parentDirIndex = pair.first->parent(pair.second);
+		const Node node = d->nodeForIndex(index);
+		const QModelIndex parentDirIndex = node.model->parent(node.index);
 		if (parentDirIndex.isValid()) {
-			return d->createIndexForDirModelAndIndex(pair.first, parentDirIndex);
+			return d->createIndexForDirModelAndIndex(node.model, parentDirIndex);
 		} else {
 			// index is a direct child of a place
-			int row = d->mDirModels.indexOf(const_cast<SortedDirModel*>(pair.first));
+			int row = d->mDirModels.indexOf(const_cast<SortedDirModel*>(node.model));
 			return row != -1 ? createIndex(row, 0) : QModelIndex();
 		}
 	}
@@ -169,8 +180,8 @@ int FolderModel::rowCount(const QModelIndex& parent) const {
 	}
 
 	// parent is a place or a dir
-	const DirModelIndexPair pair = d->pairForIndex(parent);
-	return pair.first->rowCount(pair.second);
+	const Node node = d->nodeForIndex(parent);
+	return node.model->rowCount(node.index);
 }
 
 
@@ -182,8 +193,8 @@ bool FolderModel::hasChildren(const QModelIndex& parent) const {
 		// parent is a place node always allow expanding
 		return true;
 	}
-	const DirModelIndexPair pair = d->pairForIndex(parent);
-	return pair.first->hasChildren(pair.second);
+	const Node node = d->nodeForIndex(parent);
+	return node.model->hasChildren(node.index);
 }
 
 
@@ -191,12 +202,12 @@ bool FolderModel::canFetchMore(const QModelIndex& parent) const {
 	if (!parent.isValid()) {
 		return d->mPlacesModel->canFetchMore(QModelIndex());
 	}
-	const DirModelIndexPair pair = d->pairForIndex(parent);
-	if (!pair.second.isValid() && !pair.first->dirLister()->url().isValid()) {
+	const Node node = d->nodeForIndex(parent);
+	if (!node.index.isValid() && !node.model->dirLister()->url().isValid()) {
 		// Special case to avoid calling openUrl on all places at startup
 		return true;
 	}
-	return pair.first->canFetchMore(pair.second);
+	return node.model->canFetchMore(node.index);
 }
 
 
@@ -204,12 +215,12 @@ void FolderModel::fetchMore(const QModelIndex& parent) {
 	if (!parent.isValid()) {
 		d->mPlacesModel->fetchMore(QModelIndex());
 	}
-	const DirModelIndexPair pair = d->pairForIndex(parent);
-	if (!pair.second.isValid() && !pair.first->dirLister()->url().isValid()) {
+	const Node node = d->nodeForIndex(parent);
+	if (!node.index.isValid() && !node.model->dirLister()->url().isValid()) {
 		KUrl url = d->mPlacesModel->url(d->mPlacesModel->index(parent.row(), 0));
-		pair.first->dirLister()->openUrl(url);
+		node.model->dirLister()->openUrl(url);
 	}
-	pair.first->fetchMore(pair.second);
+	node.model->fetchMore(node.index);
 }
 
 
@@ -257,8 +268,8 @@ KUrl FolderModel::urlForIndex(const QModelIndex& index) const {
 	if (!index.internalPointer()) {
 		return d->mPlacesModel->url(d->mPlacesModel->index(index.row(), 0));
 	} else {
-		const DirModelIndexPair pair = d->pairForIndex(index);
-		KFileItem item = pair.first->itemForIndex(pair.second);
+		const Node node = d->nodeForIndex(index);
+		KFileItem item = node.model->itemForIndex(node.index);
 		return item.isNull() ? KUrl() : item.url();
 	}
 }
