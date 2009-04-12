@@ -185,9 +185,6 @@ QVariant PlaceTreeModel::data(const QModelIndex& index, int role) const {
 		const QModelIndex dirIndex = d->dirIndexForNode(node, index);
 		value = node.model->data(dirIndex, role);
 	}
-	if (role == Qt::ToolTipRole) {
-		kDebug() << index << value.toString() << node.parentUrl;
-	}
 	return value;
 }
 
