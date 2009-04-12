@@ -102,20 +102,6 @@ const QStringList& imageMimeTypes() {
 }
 
 
-const QStringList& videoMimeTypes() {
-	static QStringList list;
-	if (list.isEmpty()) {
-#ifdef __GNUC__
-	#warning implement MimeTypeUtils::videoMimeTypes()
-#endif
-		list << "video/x-msvideo" << "video/x-ms-wmv" << "video/quicktime";
-		resolveAliasInList(&list);
-	}
-
-	return list;
-}
-
-
 QString urlMimeType(const KUrl& url) {
 	// Try a simple guess, using extension for remote urls
 	QString mimeType = KMimeType::findByUrl(url)->name();
@@ -156,7 +142,7 @@ Kind mimeTypeKind(const QString& mimeType) {
 	if (svgImageMimeTypes().contains(mimeType)) {
 		return KIND_SVG_IMAGE;
 	}
-	if (videoMimeTypes().contains(mimeType)) {
+	if (mimeType.startsWith("video/")) {
 		return KIND_VIDEO;
 	}
 
