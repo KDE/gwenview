@@ -47,14 +47,16 @@ GWENVIEWLIB_EXPORT QString urlMimeType(const KUrl&);
 GWENVIEWLIB_EXPORT QString urlMimeTypeByContent(const KUrl&);
 
 enum Kind {
-	KIND_UNKNOWN,
-	KIND_DIR,
-	KIND_ARCHIVE,
-	KIND_FILE,
-	KIND_RASTER_IMAGE,
-	KIND_SVG_IMAGE,
-	KIND_VIDEO
+	KIND_UNKNOWN      = 0,
+	KIND_DIR          = 1,
+	KIND_ARCHIVE      = 1 << 2,
+	KIND_FILE         = 1 << 3,
+	KIND_RASTER_IMAGE = 1 << 4,
+	KIND_SVG_IMAGE    = 1 << 5,
+	KIND_VIDEO        = 1 << 6
 };
+Q_DECLARE_FLAGS(Kinds, Kind)
+
 GWENVIEWLIB_EXPORT Kind fileItemKind(const KFileItem&);
 GWENVIEWLIB_EXPORT Kind urlKind(const KUrl&);
 GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
@@ -62,5 +64,7 @@ GWENVIEWLIB_EXPORT Kind mimeTypeKind(const QString& mimeType);
 } // namespace MimeTypeUtils
 
 } // namespace Gwenview
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::MimeTypeUtils::Kinds)
 
 #endif /* MIMETYPEUTILS_H */
