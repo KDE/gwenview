@@ -421,12 +421,7 @@ struct MainWindow::Private {
 
 
 	void initDirModel() {
-		KDirLister* dirLister = mDirModel->dirLister();
-		QStringList mimeTypes;
-		mimeTypes += MimeTypeUtils::dirMimeTypes();
-		mimeTypes += MimeTypeUtils::imageMimeTypes();
-		mimeTypes += MimeTypeUtils::videoMimeTypes();
-		dirLister->setMimeFilter(mimeTypes);
+		setDirModelShowDirs(true);
 
 		connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
 			mWindow, SLOT(slotDirModelNewItems()) );
@@ -436,8 +431,19 @@ struct MainWindow::Private {
 		connect(mDirModel, SIGNAL(modelReset()),
 			mWindow, SLOT(updatePreviousNextActions()) );
 
-		connect(dirLister, SIGNAL(completed()),
+		connect(mDirModel->dirLister(), SIGNAL(completed()),
 			mWindow, SLOT(slotDirListerCompleted()) );
+	}
+
+	void setDirModelShowDirs(bool showDirs) {
+		MimeTypeUtils::Kinds kinds =
+			MimeTypeUtils::KIND_RASTER_IMAGE
+			| MimeTypeUtils::KIND_SVG_IMAGE
+			| MimeTypeUtils::KIND_VIDEO;
+		if (showDirs) {
+			kinds |= MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE;
+		}
+		mDirModel->setKindFilter(kinds);
 	}
 
 	void updateToggleSideBarAction() {
@@ -748,8 +754,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (action == d->mViewAction) {
 		d->mCurrentPageId = ViewPageId;
 		// Switching to view mode
-		const QStringList mimeFilter = MimeTypeUtils::dirMimeTypes() + ArchiveUtils::mimeTypes();
-		d->mDirModel->setMimeExcludeFilter(mimeFilter);
+		d->setDirModelShowDirs(false);
 		d->mViewStackedWidget->setCurrentWidget(d->mDocumentPanel);
 		if (d->mDocumentPanel->isEmpty()) {
 			openSelectedDocument();
@@ -768,7 +773,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 			// his image back.
 			d->mDocumentPanel->reset();
 		}
-		d->mDirModel->setMimeExcludeFilter(QStringList());
+		d->setDirModelShowDirs(true);
 		setCaption(QString());
 	}
 

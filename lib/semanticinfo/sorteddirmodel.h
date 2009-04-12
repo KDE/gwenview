@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/gwenviewlib_export.h>
+#include <lib/mimetypeutils.h>
 
 
 class KDateTime;
@@ -74,19 +75,20 @@ class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel {
 public:
 	SortedDirModel(QObject* parent);
 	~SortedDirModel();
-	KDirLister* dirLister();
+	KDirLister* dirLister() const;
 	KFileItem itemForIndex(const QModelIndex& index) const;
 	KUrl urlForIndex(const QModelIndex& index) const;
 	KFileItem itemForSourceIndex(const QModelIndex& sourceIndex) const;
 	QModelIndex indexForItem(const KFileItem& item) const;
 	QModelIndex indexForUrl(const KUrl& url) const;
 
+	void setKindFilter(MimeTypeUtils::Kinds);
+	MimeTypeUtils::Kinds kindFilter() const;
+
 	/**
 	 * A list of file extensions we should skip
 	 */
 	void setBlackListedExtensions(const QStringList& list);
-
-	virtual void setMimeExcludeFilter(const QStringList &mimeList);
 
 	void addFilter(AbstractSortedDirModelFilter*);
 

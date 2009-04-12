@@ -63,9 +63,9 @@ struct SortedDirModelPrivate {
 	SemanticInfoDirModel* mSourceModel;
 #endif
 	QStringList mBlackListedExtensions;
-	QStringList mMimeExcludeFilter;
 	QList<AbstractSortedDirModelFilter*> mFilters;
 	QTimer mDelayedApplyFiltersTimer;
+	MimeTypeUtils::Kinds mKindFilter;
 };
 
 
@@ -90,6 +90,20 @@ SortedDirModel::~SortedDirModel() {
 }
 
 
+MimeTypeUtils::Kinds SortedDirModel::kindFilter() const {
+	return d->mKindFilter;
+}
+
+
+void SortedDirModel::setKindFilter(const MimeTypeUtils::Kinds kindFilter) {
+	if (d->mKindFilter == kindFilter) {
+		return;
+	}
+	d->mKindFilter = kindFilter;
+	applyFilters();
+}
+
+
 void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter) {
 	d->mFilters << filter;
 	applyFilters();
@@ -102,7 +116,7 @@ void SortedDirModel::removeFilter(AbstractSortedDirModelFilter* filter) {
 }
 
 
-KDirLister* SortedDirModel::dirLister() {
+KDirLister* SortedDirModel::dirLister() const {
 	return d->mSourceModel->dirLister();
 }
 
@@ -163,15 +177,6 @@ QModelIndex SortedDirModel::indexForUrl(const KUrl& url) const {
 }
 
 
-void SortedDirModel::setMimeExcludeFilter(const QStringList &mimeList) {
-	if (d->mMimeExcludeFilter == mimeList) {
-		return;
-	}
-	d->mMimeExcludeFilter = mimeList;
-	applyFilters();
-}
-
-
 bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const {
 	QModelIndex index = d->mSourceModel->index(row, 0, parent);
 	KFileItem fileItem = d->mSourceModel->itemForIndex(index);
@@ -181,11 +186,11 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 		return false;
 	}
 
-	if (!d->mMimeExcludeFilter.isEmpty()) {
-		if (d->mMimeExcludeFilter.contains(fileItem.mimetype())) {
-			return false;
-		}
+	MimeTypeUtils::Kinds kind = MimeTypeUtils::fileItemKind(fileItem);
+	if (d->mKindFilter != MimeTypeUtils::Kinds() && !(d->mKindFilter & kind)) {
+		return false;
 	}
+
 	if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
