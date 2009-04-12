@@ -69,6 +69,7 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+const int HEADER_SIZE = 256;
 
 struct LoadingDocumentImplPrivate {
 	LoadingDocumentImpl* mImpl;
@@ -92,8 +93,13 @@ struct LoadingDocumentImplPrivate {
 	std::auto_ptr<JpegContent> mJpegContent;
 	QImage mImage;
 
-	void startLoading() {
-		Q_ASSERT(!mMetaInfoLoaded);
+
+	/**
+	 * Determine kind of document and switch to an implementation if it is not
+	 * necessary to download more data.
+	 * @return true if switched to another implementation.
+	 */
+	bool determineKind() {
 		QString mimeType;
 		const KUrl& url = mImpl->document()->url();
 		if (KProtocolInfo::determineMimetypeFromExtension(url.protocol())) {
@@ -108,6 +114,30 @@ struct LoadingDocumentImplPrivate {
 
 		switch (kind) {
 		case MimeTypeUtils::KIND_RASTER_IMAGE:
+		case MimeTypeUtils::KIND_SVG_IMAGE:
+			return false;
+
+		case MimeTypeUtils::KIND_VIDEO:
+			emit mImpl->loaded();
+			mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
+			return true;
+
+		default:
+			mImpl->setDocumentErrorString(
+				i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
+				);
+			emit mImpl->loadingFailed();
+			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
+			return true;
+		}
+	}
+
+
+	void startLoading() {
+		Q_ASSERT(!mMetaInfoLoaded);
+
+		switch (mImpl->document()->kind()) {
+		case MimeTypeUtils::KIND_RASTER_IMAGE:
 			mMetaInfoFuture = QtConcurrent::run(this, &LoadingDocumentImplPrivate::loadMetaInfo);
 			mMetaInfoFutureWatcher.setFuture(mMetaInfoFuture);
 			break;
@@ -118,16 +148,10 @@ struct LoadingDocumentImplPrivate {
 			break;
 
 		case MimeTypeUtils::KIND_VIDEO:
-			emit mImpl->loaded();
-			mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
 			break;
 
 		default:
-			mImpl->setDocumentErrorString(
-				i18nc("@info", "Gwenview cannot display documents of type %1.", mimeType)
-				);
-			emit mImpl->loadingFailed();
-			mImpl->switchToImpl(new EmptyDocumentImpl(mImpl->document()));
+			kWarning() << "We should not reach this point!";
 			break;
 		}
 	}
@@ -262,7 +286,11 @@ void LoadingDocumentImpl::init() {
 			switchToImpl(new EmptyDocumentImpl(document()));
 			return;
 		}
-		d->mData = file.readAll();
+		d->mData = file.read(HEADER_SIZE);
+		if (d->determineKind()) {
+			return;
+		}
+		d->mData += file.readAll();
 		d->startLoading();
 	} else {
 		// Transfer file via KIO
@@ -292,8 +320,14 @@ void LoadingDocumentImpl::loadImage(int invertedZoom) {
 }
 
 
-void LoadingDocumentImpl::slotDataReceived(KIO::Job*, const QByteArray& chunk) {
+void LoadingDocumentImpl::slotDataReceived(KIO::Job* job, const QByteArray& chunk) {
 	d->mData.append(chunk);
+	if (document()->kind() == MimeTypeUtils::KIND_UNKNOWN && d->mData.length() >= HEADER_SIZE) {
+		if (d->determineKind()) {
+			job->kill();
+			return;
+		}
+	}
 }
 
 
