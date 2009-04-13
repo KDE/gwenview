@@ -534,8 +534,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	}
 
 	// Thumbnail not found or not valid
-	if ( MimeTypeUtils::rasterImageMimeTypes().contains(mCurrentItem.mimetype()) ) {
-		// This is a raster image
+	if (MimeTypeUtils::fileItemKind(mCurrentItem) == MimeTypeUtils::KIND_RASTER_IMAGE) {
 		if (mCurrentUrl.isLocalFile()) {
 			// Original is a local file, create the thumbnail
 			startCreatingThumbnail(mCurrentUrl.path());
