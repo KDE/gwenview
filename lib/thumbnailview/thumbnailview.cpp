@@ -373,7 +373,14 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
 		return;
 	}
 	Thumbnail& thumbnail = it.value();
-	thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
+	if (MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_VIDEO) {
+		// Special case for videos because our kde install may come without
+		// support for video thumbnails so we show the mimetype icon instead of
+		// a broken image icon
+		thumbnail.initAsIcon(item.pixmap(128));
+	} else {
+		thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
+	}
 	update(thumbnail.mIndex);
 }
 
