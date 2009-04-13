@@ -362,8 +362,14 @@ void PlaceTreeModel::slotDirRowsRemoved(const QModelIndex&, int, int) {
 
 KUrl PlaceTreeModel::urlForIndex(const QModelIndex& index) const {
 	const Node node = d->nodeForIndex(index);
+	if (node.isPlace()) {
+		QModelIndex placeIndex = d->mPlacesModel->index(index.row(), 0);
+		return d->mPlacesModel->url(placeIndex);
+	}
+
 	const QModelIndex parentDirIndex = node.model->indexForUrl(node.parentUrl);
-	return node.model->urlForIndex(parentDirIndex.child(index.row(), index.column()));
+	const QModelIndex dirIndex = node.model->index(index.row(), index.column(), parentDirIndex);
+	return node.model->urlForIndex(dirIndex);
 }
 
 
