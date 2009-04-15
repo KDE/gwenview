@@ -415,6 +415,12 @@ void DocumentPanel::showContextMenu() {
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
 	}
+	menu.addSeparator();
+	addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
+	addActionToMenu(&menu, d->mActionCollection, "file_move_to");
+	addActionToMenu(&menu, d->mActionCollection, "file_link_to");
+	menu.addSeparator();
+	addActionToMenu(&menu, d->mActionCollection, "file_open_with");
 	menu.exec(QCursor::pos());
 }
 
