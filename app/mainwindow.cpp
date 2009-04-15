@@ -404,7 +404,7 @@ struct MainWindow::Private {
 		page->addWidget(folderViewItem->widget());
 		mSideBar->addPage(page);
 
-		page = new SideBarPage(i18n("Info"), "dialog-information");
+		page = new SideBarPage(i18n("Information"), "dialog-information");
 		page->addWidget(infoItem->widget());
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		page->addWidget(semanticInfoItem->widget());
@@ -412,7 +412,7 @@ struct MainWindow::Private {
 		page->addStretch();
 		mSideBar->addPage(page);
 
-		page = new SideBarPage(i18n("Ops"), "system-run");
+		page = new SideBarPage(i18n("Operations"), "system-run");
 		page->addWidget(imageOpsItem->widget());
 		page->addWidget(fileOpsItem->widget());
 		page->addStretch();
