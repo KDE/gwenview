@@ -3,9 +3,16 @@
 - New crop interface: less intrusive and with the ability to crop to screen
   ratio.
 - The thumbnail bar can now be shown vertically.
+- Added file operations and "open with" menu to image view context menu. Patch
+  by Marian Kyral (bug #187819).
 
 ## Fixes
 - Restart slideshow timer when user changes current image (bug #186411).
+
+# 2.2.3
+## Fixes
+- Handle gif files containing one frame and a graphic control extension as
+  non-animated gif (bug #185523).
 
 # 2.2.2
 ## Fixes
