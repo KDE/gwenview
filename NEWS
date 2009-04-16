@@ -1,3 +1,8 @@
+# 2.2.3
+## Fixes
+- Handle gif files containing one frame and a graphic control extension as
+  non-animated gif (bug #185523).
+
 # 2.2.2
 ## Fixes
 - Fix display of JPEG2000 images
