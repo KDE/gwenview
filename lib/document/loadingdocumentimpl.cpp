@@ -235,8 +235,25 @@ struct LoadingDocumentImplPrivate {
 		if (reader.supportsAnimation()
 			&& reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
 		) {
-			LOG("This is an animated image");
-			mAnimated = true;
+			/*
+			 * QImageReader is not really helpful to detect animated gif:
+			 * - QImageReader::imageCount() returns 0
+			 * - QImageReader::nextImageDelay() may return something > 0 if the
+			 *   image consists of only one frame but includes a "Graphic
+			 *   Control Extension" (usually only present if we have an
+			 *   animation) (Bug #185523)
+			 *
+			 * Decoding the next frame is the only reliable way I found to
+			 * detect an animated gif
+			 */
+			LOG("May be an animated image. delay:" << reader.nextImageDelay());
+			QImage nextImage;
+			if (reader.read(&nextImage)) {
+				LOG("Really an animated image (more than one frame)");
+				mAnimated = true;
+			} else {
+				kWarning() << mImpl->document()->url() << "is not really an animated image (only one frame)";
+			}
 		}
 	}
 };
