@@ -124,12 +124,15 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 
 	d->mCopyToAction = file->addAction("file_copy_to",this,SLOT(copyTo()));
 	d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
+	d->mCopyToAction->setShortcut(Qt::Key_F7);
 
 	d->mMoveToAction = file->addAction("file_move_to",this,SLOT(moveTo()));
 	d->mMoveToAction->setText(i18nc("Verb", "Move To..."));
+	d->mMoveToAction->setShortcut(Qt::Key_F8);
 
 	d->mLinkToAction = file->addAction("file_link_to",this,SLOT(linkTo()));
 	d->mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
+	d->mLinkToAction->setShortcut(Qt::Key_F9);
 
 	d->mTrashAction = file->addAction("file_trash",this,SLOT(trash()));
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
