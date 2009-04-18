@@ -22,28 +22,97 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "historymodel.moc"
 
 // Qt
+#include <QDateTime>
+#include <QDir>
 
 // KDE
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kfileplacesmodel.h>
 #include <kmimetype.h>
+#include <kstandarddirs.h>
+#include <ktemporaryfile.h>
+#include <kurl.h>
 
 // Local
-#include <lib/gwenviewconfig.h>
 
 namespace Gwenview {
 
-static const int MAX_RECENT_FOLDER = 20;
+//static const int MAX_RECENT_FOLDER = 20;
+
+
+struct HistoryItem {
+	HistoryItem() {}
+	HistoryItem(const KUrl& _url, const QDateTime& _dateTime)
+	: url(_url)
+	, dateTime(_dateTime)
+	{
+		url.cleanPath();
+		url.adjustPath(KUrl::RemoveTrailingSlash);
+	}
+
+	KUrl url;
+	QDateTime dateTime;
+
+	bool save(const QString& storageDir) const {
+		if (!KStandardDirs::makeDir(storageDir, 0600)) {
+			kError() << "Could not create history dir" << storageDir;
+			return false;
+		}
+		KTemporaryFile file;
+		file.setAutoRemove(false);
+		file.setPrefix(storageDir);
+		file.setSuffix("rc");
+		if (!file.open()) {
+			kError() << "Could not create history file";
+			return false;
+		}
+
+		KConfig config(file.fileName(), KConfig::SimpleConfig);
+		KConfigGroup group(&config, "general");
+		group.writeEntry("url", url);
+		group.writeEntry("dateTime", dateTime.toString(Qt::ISODate));
+		config.sync();
+		return true;
+	}
+
+	static HistoryItem* load(const QString& fileName) {
+		KConfig config(fileName, KConfig::SimpleConfig);
+		KConfigGroup group(&config, "general");
+
+		KUrl url(group.readEntry("url"));
+		if (!url.isValid()) {
+			kError() << "Invalid url" << url;
+			return 0;
+		}
+		QDateTime dateTime = QDateTime::fromString(group.readEntry("dateTime"), Qt::ISODate);
+		if (!dateTime.isValid()) {
+			kError() << "Invalid dateTime" << dateTime;
+			return 0;
+		}
+
+		return new HistoryItem(url, dateTime);
+	}
+};
+
+
+bool operator<(const HistoryItem& item1, const HistoryItem& item2) {
+	return item1.dateTime > item2.dateTime;
+}
 
 
 struct HistoryModelPrivate {
 	HistoryModel* q;
+	QString mStorageDir;
 
-	void updateRecentFoldersModel() {
-		const QStringList list = GwenviewConfig::recentFolders();
+	QList<HistoryItem*> mHistoryItemList;
 
+	void updateModelItems() {
+		// FIXME: optimize
 		q->clear();
-		Q_FOREACH(const QString& urlString, list) {
-			KUrl url(urlString);
+		Q_FOREACH(const HistoryItem* historyItem, mHistoryItemList) {
+			KUrl url(historyItem->url);
 
 			QStandardItem* item = new QStandardItem;
 			item->setText(url.pathOrUrl());
@@ -56,6 +125,21 @@ struct HistoryModelPrivate {
 			q->appendRow(item);
 		}
 	}
+
+	void load() {
+		QDir dir(mStorageDir);
+		if (!dir.exists()) {
+			return;
+		}
+		Q_FOREACH(const QString& name, dir.entryList(QStringList() << "*rc")) {
+			HistoryItem* item = HistoryItem::load(dir.filePath(name));
+			if (item) {
+				mHistoryItemList << item;
+			}
+		}
+		qSort(mHistoryItemList.begin(), mHistoryItemList.end());
+		updateModelItems();
+	}
 };
 
 
@@ -63,40 +147,28 @@ HistoryModel::HistoryModel(QObject* parent, const QString& storageDir)
 : QStandardItemModel(parent)
 , d(new HistoryModelPrivate) {
 	d->q = this;
-	d->updateRecentFoldersModel();
+	d->mStorageDir = storageDir;
+	d->load();
 }
 
 
 HistoryModel::~HistoryModel() {
+	qDeleteAll(d->mHistoryItemList);
 	delete d;
 }
 
 
-void HistoryModel::addUrl(const KUrl& _url) {
-	KUrl url(_url);
-	url.cleanPath();
-	url.adjustPath(KUrl::RemoveTrailingSlash);
-	QString urlString = url.url();
-
-	QStringList list = GwenviewConfig::recentFolders();
-	int index = list.indexOf(urlString);
-
-	if (index == 0) {
-		// Nothing to do, it's already the first recent folder.
+void HistoryModel::addUrl(const KUrl& url) {
+	HistoryItem* historyItem = new HistoryItem(url, QDateTime::currentDateTime());
+	if (!historyItem->save(d->mStorageDir)) {
+		kError() << "Could not save history for url" << url;
+		delete historyItem;
 		return;
-	} else if (index != -1) {
-		// Remove it from the list. This way it will get inserted at the
-		// beginning.
-		list.removeAt(index);
 	}
-
-	list.insert(0, urlString);
-	while (list.size() > MAX_RECENT_FOLDER) {
-		list.removeLast();
-	}
-
-	GwenviewConfig::setRecentFolders(list);
-	d->updateRecentFoldersModel();
+	d->mHistoryItemList << historyItem;
+	// FIXME: garbageCollect
+	qSort(d->mHistoryItemList.begin(), d->mHistoryItemList.end());
+	d->updateModelItems();
 }
 
 
