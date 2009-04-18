@@ -49,6 +49,15 @@ struct FolderViewContextManagerItemPrivate {
 		mView = new QTreeView;
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 		mView->setHeaderHidden(true);
+		mView->setFrameStyle(QFrame::NoFrame);
+
+		QPalette p = mView->palette();
+		p.setColor(QPalette::Active,   QPalette::Text, p.color(QPalette::Active,   QPalette::WindowText));
+		p.setColor(QPalette::Inactive, QPalette::Text, p.color(QPalette::Inactive, QPalette::WindowText));
+		p.setColor(QPalette::Disabled, QPalette::Text, p.color(QPalette::Disabled, QPalette::WindowText));
+		mView->setPalette(p);
+		mView->viewport()->setAutoFillBackground(false);
+
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
 			q, SLOT(slotActivated(const QModelIndex&)));
