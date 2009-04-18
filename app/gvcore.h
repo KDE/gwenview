@@ -30,9 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class KUrl;
 
+class QAbstractItemModel;
+
 namespace Gwenview {
 
 class SortedDirModel;
+class AbstractSemanticInfoBackEnd;
 
 class GvCorePrivate;
 class GvCore : public QObject {
@@ -40,6 +43,9 @@ class GvCore : public QObject {
 public:
 	GvCore(QWidget* mainWindow, SortedDirModel*);
 	~GvCore();
+
+	QAbstractItemModel* recentFoldersModel() const;
+	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 	void addUrlToRecentFolders(const KUrl&);
 

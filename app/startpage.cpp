@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QListView>
-#include <QStandardItemModel>
 
 // KDE
 #include <kfileplacesmodel.h>
@@ -33,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kmimetype.h>
 
 // Local
+#include <gvcore.h>
 #include <ui_startpage.h>
 #include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
@@ -50,27 +50,8 @@ namespace Gwenview {
 
 struct StartPagePrivate : public Ui_StartPage{
 	StartPage* that;
+	GvCore* mGvCore;
 	KFilePlacesModel* mBookmarksModel;
-	QStandardItemModel* mRecentFoldersModel;
-
-	void updateRecentFoldersModel() {
-		const QStringList list = GwenviewConfig::recentFolders();
-
-		mRecentFoldersModel->clear();
-		Q_FOREACH(const QString& urlString, list) {
-			KUrl url(urlString);
-
-			QStandardItem* item = new QStandardItem;
-			item->setText(url.pathOrUrl());
-
-			QString iconName = KMimeType::iconNameForUrl(url);
-			item->setIcon(KIcon(iconName));
-
-			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
-
-			mRecentFoldersModel->appendRow(item);
-		}
-	}
 
 	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
 	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
@@ -93,19 +74,18 @@ struct StartPagePrivate : public Ui_StartPage{
 };
 
 
-StartPage::StartPage(QWidget* parent, AbstractSemanticInfoBackEnd* backEnd)
+StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
 , d(new StartPagePrivate) {
 	d->that = this;
+	d->mGvCore = gvCore;
 	d->setupUi(this);
 	setFrameStyle(QFrame::NoFrame);
 
 	d->mBookmarksModel = new KFilePlacesModel(this);
-	d->mRecentFoldersModel = new QStandardItemModel(this);
 
 	d->mBookmarksView->setModel(d->mBookmarksModel);
 	d->mBookmarksView->setAutoResizeItemsEnabled(false);
-	d->mRecentFoldersView->setModel(d->mRecentFoldersModel);
 
 	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
 		SIGNAL(urlSelected(const KUrl&)) );
@@ -116,7 +96,7 @@ StartPage::StartPage(QWidget* parent, AbstractSemanticInfoBackEnd* backEnd)
 	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotTagViewClicked(const QModelIndex&)));
 
-	d->setupSearchUi(backEnd);
+	d->setupSearchUi(gvCore->semanticInfoBackEnd());
 }
 
 
@@ -180,7 +160,9 @@ void StartPage::slotListViewClicked(const QModelIndex& index) {
 
 
 void StartPage::showEvent(QShowEvent* event) {
-	d->updateRecentFoldersModel();
+	if (!d->mRecentFoldersView->model()) {
+		d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
+	}
 	QFrame::showEvent(event);
 }
 

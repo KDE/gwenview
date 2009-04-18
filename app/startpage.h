@@ -37,13 +37,13 @@ class KUrl;
 
 namespace Gwenview {
 
-class AbstractSemanticInfoBackEnd;
+class GvCore;
 
 class StartPagePrivate;
 class StartPage : public QFrame {
 	Q_OBJECT
 public:
-	StartPage(QWidget* parent, AbstractSemanticInfoBackEnd*);
+	StartPage(QWidget* parent, GvCore*);
 	~StartPage();
 
 	void applyPalette(const QPalette&);

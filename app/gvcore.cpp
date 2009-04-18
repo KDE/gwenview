@@ -27,10 +27,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QFutureWatcher>
 #include <QList>
 #include <QProgressDialog>
+#include <QStandardItemModel>
 #include <QtConcurrentMap>
 #include <QWidget>
 
 // KDE
+#include <kfileplacesmodel.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
@@ -52,8 +54,10 @@ namespace Gwenview {
 
 
 struct GvCorePrivate {
+	GvCore* q;
 	QWidget* mParent;
 	SortedDirModel* mDirModel;
+	QStandardItemModel* mRecentFoldersModel;
 
 	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
 		KFileDialog dialog(url, QString(), mParent);
@@ -95,19 +99,58 @@ struct GvCorePrivate {
 		*outUrl = dialog.selectedUrl();
 		return true;
 	}
+
+
+	void updateRecentFoldersModel() {
+		if (!mRecentFoldersModel) {
+			mRecentFoldersModel = new QStandardItemModel(q);
+		}
+		const QStringList list = GwenviewConfig::recentFolders();
+
+		mRecentFoldersModel->clear();
+		Q_FOREACH(const QString& urlString, list) {
+			KUrl url(urlString);
+
+			QStandardItem* item = new QStandardItem;
+			item->setText(url.pathOrUrl());
+
+			QString iconName = KMimeType::iconNameForUrl(url);
+			item->setIcon(KIcon(iconName));
+
+			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
+
+			mRecentFoldersModel->appendRow(item);
+		}
+	}
+
 };
 
 
 GvCore::GvCore(QWidget* parent, SortedDirModel* dirModel)
 : QObject(parent)
 , d(new GvCorePrivate) {
+	d->q = this;
 	d->mParent = parent;
 	d->mDirModel = dirModel;
+	d->mRecentFoldersModel = 0;
 }
 
 
 GvCore::~GvCore() {
 	delete d;
+}
+
+
+QAbstractItemModel* GvCore::recentFoldersModel() const {
+	if (!d->mRecentFoldersModel) {
+		d->updateRecentFoldersModel();
+	}
+	return d->mRecentFoldersModel;
+}
+
+
+AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const {
+	return d->mDirModel->semanticInfoBackEnd();
 }
 
 
@@ -135,6 +178,7 @@ void GvCore::addUrlToRecentFolders(const KUrl& _url) {
 	}
 
 	GwenviewConfig::setRecentFolders(list);
+	d->updateRecentFoldersModel();
 }
 
 
