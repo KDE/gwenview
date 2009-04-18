@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kfileitem.h>
 #include <klocale.h>
-#include <ksqueezedtextlabel.h>
 #include <kwordwrap.h>
 
 // Local
@@ -72,12 +71,13 @@ public:
 				"%1:", key);
 
 		QLabel* keyLabel = new QLabel;
+		keyLabel->setWordWrap(true);
 		keyLabel->setText(keyString);
+		keyLabel->setAlignment(Qt::AlignRight);
 
-		KSqueezedTextLabel* valueLabel = new KSqueezedTextLabel;
-		valueLabel->setTextElideMode(Qt::ElideRight);
+		QLabel* valueLabel = new QLabel;
+		valueLabel->setWordWrap(true);
 		valueLabel->setText(value);
-		valueLabel->setFocusPolicy(Qt::NoFocus);
 
 		mLayout->addRow(keyLabel, valueLabel);
 	}
