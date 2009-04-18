@@ -32,23 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWidget>
 
 // KDE
-#include <kfileplacesmodel.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 // Local
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/historymodel.h>
 #include <lib/mimetypeutils.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/transformimageoperation.h>
-
-static const int MAX_RECENT_FOLDER = 20;
 
 namespace Gwenview {
 
@@ -57,7 +56,7 @@ struct GvCorePrivate {
 	GvCore* q;
 	QWidget* mParent;
 	SortedDirModel* mDirModel;
-	QStandardItemModel* mRecentFoldersModel;
+	HistoryModel* mRecentFoldersModel;
 
 	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
 		KFileDialog dialog(url, QString(), mParent);
@@ -99,30 +98,6 @@ struct GvCorePrivate {
 		*outUrl = dialog.selectedUrl();
 		return true;
 	}
-
-
-	void updateRecentFoldersModel() {
-		if (!mRecentFoldersModel) {
-			mRecentFoldersModel = new QStandardItemModel(q);
-		}
-		const QStringList list = GwenviewConfig::recentFolders();
-
-		mRecentFoldersModel->clear();
-		Q_FOREACH(const QString& urlString, list) {
-			KUrl url(urlString);
-
-			QStandardItem* item = new QStandardItem;
-			item->setText(url.pathOrUrl());
-
-			QString iconName = KMimeType::iconNameForUrl(url);
-			item->setIcon(KIcon(iconName));
-
-			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
-
-			mRecentFoldersModel->appendRow(item);
-		}
-	}
-
 };
 
 
@@ -143,7 +118,7 @@ GvCore::~GvCore() {
 
 QAbstractItemModel* GvCore::recentFoldersModel() const {
 	if (!d->mRecentFoldersModel) {
-		d->updateRecentFoldersModel();
+		d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("data", "recentfolders/"));
 	}
 	return d->mRecentFoldersModel;
 }
@@ -154,31 +129,9 @@ AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const {
 }
 
 
-void GvCore::addUrlToRecentFolders(const KUrl& _url) {
-	KUrl url(_url);
-	url.cleanPath();
-	url.adjustPath(KUrl::RemoveTrailingSlash);
-	QString urlString = url.url();
-
-	QStringList list = GwenviewConfig::recentFolders();
-	int index = list.indexOf(urlString);
-
-	if (index == 0) {
-		// Nothing to do, it's already the first recent folder.
-		return;
-	} else if (index != -1) {
-		// Remove it from the list. This way it will get inserted at the
-		// beginning.
-		list.removeAt(index);
-	}
-
-	list.insert(0, urlString);
-	while (list.size() > MAX_RECENT_FOLDER) {
-		list.removeLast();
-	}
-
-	GwenviewConfig::setRecentFolders(list);
-	d->updateRecentFoldersModel();
+void GvCore::addUrlToRecentFolders(const KUrl& url) {
+	recentFoldersModel();
+	d->mRecentFoldersModel->addUrl(url);
 }
 
 
