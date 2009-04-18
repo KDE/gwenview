@@ -40,7 +40,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-enum GroupRow { NoGroup = -1, GeneralGroup, ExifGroup, IptcGroup };
+enum GroupRow {
+	NoGroupSpace= -2,
+	NoGroup = -1,
+	GeneralGroup,
+	ExifGroup,
+	IptcGroup
+};
 
 
 class MetaInfoGroup {
@@ -51,8 +57,8 @@ public:
 
 	class Entry {
 	public:
-		Entry(const QString& key, const QString& label)
-		: mKey(key), mLabel(label.trimmed())
+		Entry(const QString& key, const QString& label, const QString& value)
+		: mKey(key), mLabel(label.trimmed()), mValue(value.trimmed())
 		{}
 
 		QString key() const { return mKey; }
@@ -91,18 +97,13 @@ public:
 
 
 	void addEntry(const QString& key, const QString& label, const QString& value) {
-		// key aren't always unique (for example, "Iptc.Application2.Keywords"
-		// may appear multiple times). In this case, append the value at the
-		// end of the existing one.
-		Entry* entry = getEntryForKey(key);
-		if (entry) {
-			entry->appendValue(value);
-		} else {
-			entry = new Entry(key, label);
-			entry->setValue(value);
-			mList << entry;
-			mRowForKey[key] = mList.size() - 1;
-		}
+		addEntry(new Entry(key, label, value));
+	}
+
+
+	void addEntry(Entry* entry) {
+		mList << entry;
+		mRowForKey[entry->key()] = mList.size() - 1;
 	}
 
 
@@ -186,15 +187,6 @@ struct ImageMetaInfoModelPrivate {
 	}
 
 
-	void notifyGroupFilled(MetaInfoGroup* group, const QModelIndex& parent) {
-		if (group->size() == 0) {
-			return;
-		}
-		mModel->beginInsertRows(parent, 0, group->size() - 1);
-		mModel->endInsertRows();
-	}
-
-
 	void setGroupEntryValue(GroupRow groupRow, const QString& key, const QString& value) {
 		MetaInfoGroup* group = mMetaInfoGroupVector[groupRow];
 		int entryRow = group->getRowForKey(key);
@@ -211,11 +203,15 @@ struct ImageMetaInfoModelPrivate {
 
 	QVariant displayData(const QModelIndex& index) const {
 		if (index.internalId() == NoGroup) {
-			if (index.column() > 0) {
+			if (index.column() != 0) {
 				return QVariant();
 			}
 			QString label = mMetaInfoGroupVector[index.row()]->label();
 			return QVariant(label);
+		}
+
+		if (index.internalId() == NoGroupSpace) {
+			return QVariant(QString());
 		}
 
 		MetaInfoGroup* group = mMetaInfoGroupVector[index.internalId()];
@@ -233,6 +229,46 @@ struct ImageMetaInfoModelPrivate {
 		group->addEntry("General.Size", i18nc("@item:intable", "File Size"), QString());
 		group->addEntry("General.Time", i18nc("@item:intable", "File Time"), QString());
 		group->addEntry("General.ImageSize", i18nc("@item:intable", "Image Size"), QString());
+	}
+
+
+	template <class Container, class Iterator>
+	void fillExivGroup(const QModelIndex& parent, MetaInfoGroup* group, const Container& container) {
+		// key aren't always unique (for example, "Iptc.Application2.Keywords"
+		// may appear multiple times) so we can't know how many rows we will
+		// insert before going through them. That's why we create a hash
+		// before.
+		typedef QHash<QString, MetaInfoGroup::Entry*> EntryHash;
+		EntryHash hash;
+
+		Iterator
+			it = container.begin(),
+			end = container.end();
+
+		if (it == end) {
+			return;
+		}
+
+		for (;it != end; ++it) {
+			QString key = QString::fromUtf8(it->key().c_str());
+			QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
+			std::ostringstream stream;
+			stream << *it;
+			QString value = QString::fromLocal8Bit(stream.str().c_str());
+
+			EntryHash::iterator hashIt = hash.find(key);
+			if (hashIt != hash.end()) {
+				hashIt.value()->appendValue(value);
+			} else {
+				hash.insert(key, new MetaInfoGroup::Entry(key, label, value));
+			}
+		}
+
+		mModel->beginInsertRows(parent, 0, hash.size() - 1);
+		Q_FOREACH(MetaInfoGroup::Entry* entry, hash) {
+			group->addEntry(entry);
+		}
+		mModel->endInsertRows();
 	}
 };
 
@@ -285,20 +321,6 @@ void ImageMetaInfoModel::setImageSize(const QSize& size) {
 }
 
 
-template <class iterator>
-static void fillExivGroup(MetaInfoGroup* group, iterator begin, iterator end) {
-	iterator it = begin;
-	for (;it != end; ++it) {
-		QString key = QString::fromUtf8(it->key().c_str());
-		QString label = QString::fromLocal8Bit(it->tagLabel().c_str());
-		std::ostringstream stream;
-		stream << *it;
-		QString value = QString::fromLocal8Bit(stream.str().c_str());
-		group->addEntry(key, label, value);
-	}
-}
-
-
 void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 	MetaInfoGroup* exifGroup = d->mMetaInfoGroupVector[ExifGroup];
 	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
@@ -314,25 +336,13 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 	if (image->supportsMetadata(Exiv2::mdExif)) {
 		const Exiv2::ExifData& exifData = image->exifData();
 
-		fillExivGroup(
-			exifGroup,
-			exifData.begin(),
-			exifData.end()
-			);
-
-		d->notifyGroupFilled(exifGroup, exifIndex);
+		d->fillExivGroup<Exiv2::ExifData, Exiv2::ExifData::const_iterator>(exifIndex, exifGroup, exifData);
 	}
 
 	if (image->supportsMetadata(Exiv2::mdIptc)) {
 		const Exiv2::IptcData& iptcData = image->iptcData();
 
-		fillExivGroup(
-			iptcGroup,
-			iptcData.begin(),
-			iptcData.end()
-			);
-
-		d->notifyGroupFilled(iptcGroup, iptcIndex);
+		d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData);
 	}
 }
 
@@ -370,22 +380,19 @@ QString ImageMetaInfoModel::keyForIndex(const QModelIndex& index) const {
 
 
 QModelIndex ImageMetaInfoModel::index(int row, int col, const QModelIndex& parent) const {
+	if (col < 0 || col > 1) {
+		return QModelIndex();
+	}
 	if (!parent.isValid()) {
 		// This is a group
-		if (col > 0) {
+		if (row < 0 || row >= d->mMetaInfoGroupVector.size()) {
 			return QModelIndex();
 		}
-		if (row >= d->mMetaInfoGroupVector.size()) {
-			return QModelIndex();
-		}
-		return createIndex(row, col, NoGroup);
+		return createIndex(row, col, col == 0 ? NoGroup : NoGroupSpace);
 	} else {
 		// This is an entry
-		if (col > 1) {
-			return QModelIndex();
-		}
 		int group = parent.row();
-		if (row >= d->mMetaInfoGroupVector[group]->size()) {
+		if (row < 0 || row >= d->mMetaInfoGroupVector[group]->size()) {
 			return QModelIndex();
 		}
 		return createIndex(row, col, group);
@@ -397,7 +404,7 @@ QModelIndex ImageMetaInfoModel::parent(const QModelIndex& index) const {
 	if (!index.isValid()) {
 		return QModelIndex();
 	}
-	if (index.internalId() == NoGroup) {
+	if (index.internalId() == NoGroup || index.internalId() == NoGroupSpace) {
 		return QModelIndex();
 	} else {
 		return createIndex(index.internalId(), 0, NoGroup);
