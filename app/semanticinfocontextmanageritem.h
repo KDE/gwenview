@@ -41,6 +41,9 @@ public:
 	SemanticInfoContextManagerItem(ContextManager*, KActionCollection*, QWidget* documentPanel);
 	~SemanticInfoContextManagerItem();
 
+protected:
+	virtual bool eventFilter(QObject*, QEvent*);
+
 private Q_SLOTS:
 	void slotSelectionChanged();
 	void update();

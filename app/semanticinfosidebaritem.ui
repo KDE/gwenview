@@ -1,74 +1,79 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>SemanticInfoSideBarItem</class>
- <widget class="QWidget" name="SemanticInfoSideBarItem" >
-  <property name="geometry" >
+ <widget class="QWidget" name="SemanticInfoSideBarItem">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>231</width>
-    <height>112</height>
+    <height>183</height>
    </rect>
   </property>
-  <layout class="QFormLayout" name="formLayout" >
-   <property name="labelAlignment" >
+  <layout class="QFormLayout" name="formLayout">
+   <property name="labelAlignment">
     <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Rating:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KRatingWidget" native="1" name="mRatingWidget" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+   <item row="0" column="1">
+    <widget class="KRatingWidget" name="mRatingWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>Description:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="buddy" >
-      <cstring>mDescriptionLineEdit</cstring>
+     <property name="buddy">
+      <cstring>mDescriptionTextEdit</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KLineEdit" name="mDescriptionLineEdit" />
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>Tags:</string>
+   <item row="2" column="1">
+    <widget class="KTextEdit" name="mDescriptionTextEdit">
+     <property name="acceptRichText">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QLabel" name="mTagLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+   <item row="1" column="1">
+    <widget class="QLabel" name="mTagLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text" >
+     <property name="text">
       <string/>
      </property>
-     <property name="wordWrap" >
+     <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Tags:</string>
      </property>
     </widget>
    </item>
@@ -76,9 +81,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
   </customwidget>
   <customwidget>
    <class>KRatingWidget</class>

@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "semanticinfocontextmanageritem.moc"
 
 // Qt
+#include <QEvent>
 #include <QShortcut>
 #include <QSignalMapper>
 #include <QStyle>
@@ -145,8 +146,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
 			mRatingWidget, SLOT(setRating(int)) );
 
-		QObject::connect(mDescriptionLineEdit, SIGNAL(editingFinished()),
-			that, SLOT(storeDescription()));
+		mDescriptionTextEdit->installEventFilter(that);
 
 		QObject::connect(mTagLabel, SIGNAL(linkActivated(const QString&)),
 			mEditTagsAction, SLOT(trigger()) );
@@ -301,7 +301,7 @@ void SemanticInfoContextManagerItem::update() {
 		first = false;
 	}
 	d->mRatingWidget->setRating(rating);
-	d->mDescriptionLineEdit->setText(description);
+	d->mDescriptionTextEdit->setText(description);
 
 	// Init tagInfo from tagHash
 	d->mTagInfo.clear();
@@ -343,7 +343,11 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 
 
 void SemanticInfoContextManagerItem::storeDescription() {
-	QString description = d->mDescriptionLineEdit->text();
+	if (!d->mDescriptionTextEdit->document()->isModified()) {
+		return;
+	}
+	d->mDescriptionTextEdit->document()->setModified(false);
+	QString description = d->mDescriptionTextEdit->toPlainText();
 	KFileItemList itemList = contextManager()->selection();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
@@ -405,6 +409,14 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog() {
 	}
 	d->updateSemanticInfoDialog();
 	d->mSemanticInfoDialog->show();
+}
+
+
+bool SemanticInfoContextManagerItem::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::FocusOut) {
+		storeDescription();
+	}
+	return false;
 }
 
 
