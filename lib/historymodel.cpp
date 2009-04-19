@@ -31,6 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kfileplacesmodel.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
@@ -149,6 +151,9 @@ struct HistoryModelPrivate {
 			item->setIcon(KIcon(iconName));
 
 			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
+
+			QString date = KGlobal::locale()->formatDateTime(historyItem->dateTime(), KLocale::FancyLongDate);
+			item->setData(QVariant(i18n("Last visited: %1", date)), Qt::ToolTipRole);
 
 			q->appendRow(item);
 		}
