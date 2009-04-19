@@ -45,15 +45,12 @@ namespace Gwenview {
 struct HistoryItem {
 	HistoryItem() {}
 	HistoryItem(const KUrl& _url, const QDateTime& _dateTime)
-	: url(_url)
-	, dateTime(_dateTime)
+	: mUrl(_url)
+	, mDateTime(_dateTime)
 	{
-		url.cleanPath();
-		url.adjustPath(KUrl::RemoveTrailingSlash);
+		mUrl.cleanPath();
+		mUrl.adjustPath(KUrl::RemoveTrailingSlash);
 	}
-
-	KUrl url;
-	QDateTime dateTime;
 
 	bool save(const QString& storageDir) const {
 		if (!KStandardDirs::makeDir(storageDir, 0600)) {
@@ -71,8 +68,8 @@ struct HistoryItem {
 
 		KConfig config(file.fileName(), KConfig::SimpleConfig);
 		KConfigGroup group(&config, "general");
-		group.writeEntry("url", url);
-		group.writeEntry("dateTime", dateTime.toString(Qt::ISODate));
+		group.writeEntry("url", mUrl);
+		group.writeEntry("dateTime", mDateTime.toString(Qt::ISODate));
 		config.sync();
 		return true;
 	}
@@ -94,11 +91,27 @@ struct HistoryItem {
 
 		return new HistoryItem(url, dateTime);
 	}
+
+	KUrl url() const {
+		return mUrl;
+	}
+
+	QDateTime dateTime() const {
+		return mDateTime;
+	}
+
+	void setDateTime(const QDateTime& dateTime) {
+		mDateTime = dateTime;
+	}
+
+private:
+	KUrl mUrl;
+	QDateTime mDateTime;
 };
 
 
-bool operator<(const HistoryItem& item1, const HistoryItem& item2) {
-	return item1.dateTime > item2.dateTime;
+bool historyItemLessThan(const HistoryItem* item1, const HistoryItem* item2) {
+	return item1->dateTime() > item2->dateTime();
 }
 
 
@@ -112,7 +125,7 @@ struct HistoryModelPrivate {
 		// FIXME: optimize
 		q->clear();
 		Q_FOREACH(const HistoryItem* historyItem, mHistoryItemList) {
-			KUrl url(historyItem->url);
+			KUrl url(historyItem->url());
 
 			QStandardItem* item = new QStandardItem;
 			item->setText(url.pathOrUrl());
@@ -137,8 +150,12 @@ struct HistoryModelPrivate {
 				mHistoryItemList << item;
 			}
 		}
-		qSort(mHistoryItemList.begin(), mHistoryItemList.end());
+		sortList();
 		updateModelItems();
+	}
+
+	void sortList() {
+		qSort(mHistoryItemList.begin(), mHistoryItemList.end(), historyItemLessThan);
 	}
 };
 
@@ -167,7 +184,7 @@ void HistoryModel::addUrl(const KUrl& url) {
 	}
 	d->mHistoryItemList << historyItem;
 	// FIXME: garbageCollect
-	qSort(d->mHistoryItemList.begin(), d->mHistoryItemList.end());
+	d->sortList();
 	d->updateModelItems();
 }
 
