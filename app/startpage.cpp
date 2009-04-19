@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QListView>
+#include <QMenu>
 
 // KDE
 #include <kfileplacesmodel.h>
@@ -92,6 +93,9 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
+
+	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotTagViewClicked(const QModelIndex&)));
@@ -164,6 +168,30 @@ void StartPage::showEvent(QShowEvent* event) {
 		d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
 	}
 	QFrame::showEvent(event);
+}
+
+
+void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
+	QModelIndex index = d->mRecentFoldersView->indexAt(pos);
+	if (!index.isValid()) {
+		return;
+	}
+	QVariant data = index.data(KFilePlacesModel::UrlRole);
+	KUrl url = data.toUrl();
+
+	QMenu menu(this);
+	QAction* addToPlacesAction = menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
+	QAction* removeAction = menu.addAction(KIcon("edit-delete"), i18n("Forget this Folder"));
+	QAction* action = menu.exec(d->mRecentFoldersView->mapToGlobal(pos));
+	if (action == addToPlacesAction) {
+		QString text = url.fileName();
+		if (text.isEmpty()) {
+			text = url.pathOrUrl();
+		}
+		d->mBookmarksModel->addPlace(text, url);
+	} else if (action == removeAction) {
+		//d->mGvCore->recentFoldersModel()->removeUrl(url);
+	}
 }
 
 
