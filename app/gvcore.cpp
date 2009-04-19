@@ -118,7 +118,7 @@ GvCore::~GvCore() {
 
 QAbstractItemModel* GvCore::recentFoldersModel() const {
 	if (!d->mRecentFoldersModel) {
-		d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("data", "recentfolders/"));
+		d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recentfolders/"));
 	}
 	return d->mRecentFoldersModel;
 }
