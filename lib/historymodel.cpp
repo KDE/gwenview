@@ -236,4 +236,17 @@ void HistoryModel::addUrl(const KUrl& url) {
 }
 
 
+bool HistoryModel::removeRows(int start, int count, const QModelIndex& parent) {
+	Q_ASSERT(!parent.isValid());
+	for (int row=start; row < start + count; ++row) {
+		HistoryItem* historyItem = d->mHistoryItemList.takeAt(row);
+		Q_ASSERT(historyItem);
+		d->mHistoryItemForUrl.remove(historyItem->url());
+		historyItem->unlink();
+		delete historyItem;
+	}
+	return QStandardItemModel::removeRows(start, count, parent);
+}
+
+
 } // namespace

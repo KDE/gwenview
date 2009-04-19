@@ -190,7 +190,7 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 		}
 		d->mBookmarksModel->addPlace(text, url);
 	} else if (action == removeAction) {
-		//d->mGvCore->recentFoldersModel()->removeUrl(url);
+		d->mGvCore->recentFoldersModel()->removeRow(index.row());
 	}
 }
 

@@ -48,6 +48,8 @@ public:
 
 	void addUrl(const KUrl&);
 
+	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+
 private:
 	HistoryModelPrivate* const d;
 };
