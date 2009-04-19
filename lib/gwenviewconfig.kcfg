@@ -16,9 +16,6 @@
 		<entry name="ViewBackgroundColor" type="Color">
 			<default>#666666</default>
 		</entry>
-		<entry name="RecentFolders" type="StringList">
-			<default></default>
-		</entry>
 
 		<entry name="PercentageOfMemoryUsageWarning" type="Double">
 			<default>0.5</default>
