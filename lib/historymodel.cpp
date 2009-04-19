@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 
 // KDE
 #include <kconfig.h>
@@ -39,23 +40,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-//static const int MAX_RECENT_FOLDER = 20;
+static const int MAX_HISTORY_SIZE = 20;
 
 
 struct HistoryItem {
-	HistoryItem() {}
-	HistoryItem(const KUrl& _url, const QDateTime& _dateTime)
-	: mUrl(_url)
-	, mDateTime(_dateTime)
-	{
-		mUrl.cleanPath();
-		mUrl.adjustPath(KUrl::RemoveTrailingSlash);
+	void save() const {
+		KConfig config(mConfigPath, KConfig::SimpleConfig);
+		KConfigGroup group(&config, "general");
+		group.writeEntry("url", mUrl);
+		group.writeEntry("dateTime", mDateTime.toString(Qt::ISODate));
+		config.sync();
 	}
 
-	bool save(const QString& storageDir) const {
+	static HistoryItem* create(const KUrl& url, const QDateTime& dateTime, const QString& storageDir) {
 		if (!KStandardDirs::makeDir(storageDir, 0600)) {
 			kError() << "Could not create history dir" << storageDir;
-			return false;
+			return 0;
 		}
 		KTemporaryFile file;
 		file.setAutoRemove(false);
@@ -63,15 +63,12 @@ struct HistoryItem {
 		file.setSuffix("rc");
 		if (!file.open()) {
 			kError() << "Could not create history file";
-			return false;
+			return 0;
 		}
 
-		KConfig config(file.fileName(), KConfig::SimpleConfig);
-		KConfigGroup group(&config, "general");
-		group.writeEntry("url", mUrl);
-		group.writeEntry("dateTime", mDateTime.toString(Qt::ISODate));
-		config.sync();
-		return true;
+		HistoryItem* item = new HistoryItem(url, dateTime, file.fileName());
+		item->save();
+		return item;
 	}
 
 	static HistoryItem* load(const QString& fileName) {
@@ -89,7 +86,7 @@ struct HistoryItem {
 			return 0;
 		}
 
-		return new HistoryItem(url, dateTime);
+		return new HistoryItem(url, dateTime, fileName);
 	}
 
 	KUrl url() const {
@@ -101,12 +98,29 @@ struct HistoryItem {
 	}
 
 	void setDateTime(const QDateTime& dateTime) {
-		mDateTime = dateTime;
+		if (mDateTime != dateTime) {
+			mDateTime = dateTime;
+			save();
+		}
+	}
+
+	void unlink() {
+		QFile::remove(mConfigPath);
 	}
 
 private:
 	KUrl mUrl;
 	QDateTime mDateTime;
+	QString mConfigPath;
+
+	HistoryItem(const KUrl& url, const QDateTime& dateTime, const QString& configPath)
+	: mUrl(url)
+	, mDateTime(dateTime)
+	, mConfigPath(configPath)
+	{
+		mUrl.cleanPath();
+		mUrl.adjustPath(KUrl::RemoveTrailingSlash);
+	}
 };
 
 
@@ -120,6 +134,7 @@ struct HistoryModelPrivate {
 	QString mStorageDir;
 
 	QList<HistoryItem*> mHistoryItemList;
+	QMap<KUrl, HistoryItem*> mHistoryItemForUrl;
 
 	void updateModelItems() {
 		// FIXME: optimize
@@ -146,8 +161,21 @@ struct HistoryModelPrivate {
 		}
 		Q_FOREACH(const QString& name, dir.entryList(QStringList() << "*rc")) {
 			HistoryItem* item = HistoryItem::load(dir.filePath(name));
-			if (item) {
+			if (!item) {
+				continue;
+			}
+			HistoryItem* existingItem = mHistoryItemForUrl.value(item->url());
+			if (existingItem) {
+				// We already know this url(!) update existing item dateTime
+				// and get rid of duplicate
+				if (existingItem->dateTime() < item->dateTime()) {
+					existingItem->setDateTime(item->dateTime());
+				}
+				item->unlink();
+				delete item;
+			} else {
 				mHistoryItemList << item;
+				mHistoryItemForUrl.insert(item->url(), item);
 			}
 		}
 		sortList();
@@ -156,6 +184,15 @@ struct HistoryModelPrivate {
 
 	void sortList() {
 		qSort(mHistoryItemList.begin(), mHistoryItemList.end(), historyItemLessThan);
+	}
+
+	void garbageCollect() {
+		while (mHistoryItemList.count() > MAX_HISTORY_SIZE) {
+			HistoryItem* item = mHistoryItemList.takeLast();
+			mHistoryItemForUrl.remove(item->url());
+			item->unlink();
+			delete item;
+		}
 	}
 };
 
@@ -176,15 +213,20 @@ HistoryModel::~HistoryModel() {
 
 
 void HistoryModel::addUrl(const KUrl& url) {
-	HistoryItem* historyItem = new HistoryItem(url, QDateTime::currentDateTime());
-	if (!historyItem->save(d->mStorageDir)) {
-		kError() << "Could not save history for url" << url;
-		delete historyItem;
-		return;
+	HistoryItem* historyItem = d->mHistoryItemForUrl.value(url);
+	if (historyItem) {
+		historyItem->setDateTime(QDateTime::currentDateTime());
+		d->sortList();
+	} else {
+		historyItem = HistoryItem::create(url, QDateTime::currentDateTime(), d->mStorageDir);
+		if (!historyItem) {
+			kError() << "Could not save history for url" << url;
+			return;
+		}
+		d->mHistoryItemList << historyItem;
+		d->sortList();
+		d->garbageCollect();
 	}
-	d->mHistoryItemList << historyItem;
-	// FIXME: garbageCollect
-	d->sortList();
 	d->updateModelItems();
 }
 
