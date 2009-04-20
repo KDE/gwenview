@@ -238,7 +238,7 @@ void HistoryModel::addUrl(const KUrl& url) {
 
 bool HistoryModel::removeRows(int start, int count, const QModelIndex& parent) {
 	Q_ASSERT(!parent.isValid());
-	for (int row=start; row < start + count; ++row) {
+	for (int row=start + count - 1; row >= start ; --row) {
 		HistoryItem* historyItem = d->mHistoryItemList.takeAt(row);
 		Q_ASSERT(historyItem);
 		d->mHistoryItemForUrl.remove(historyItem->url());
