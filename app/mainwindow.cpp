@@ -729,6 +729,9 @@ void MainWindow::slotModifiedDocumentListChanged() {
 
 void MainWindow::setInitialUrl(const KUrl& url) {
 	Q_ASSERT(url.isValid());
+    if (url.protocol() == "http" || url.protocol() == "https") {
+        d->mGvCore->addUrlToUrlBag(url);
+    }
 	if (UrlUtils::urlIsDirectory(url)) {
 		d->mBrowseAction->trigger();
 		openDirUrl(url);

@@ -45,9 +45,11 @@ public:
 	~GvCore();
 
 	QAbstractItemModel* recentFoldersModel() const;
+	QAbstractItemModel* urlBagModel() const;
 	AbstractSemanticInfoBackEnd* semanticInfoBackEnd() const;
 
 	void addUrlToRecentFolders(const KUrl&);
+	void addUrlToUrlBag(const KUrl& url);
 
 public Q_SLOTS:
 	void saveAll();

@@ -116,6 +116,7 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 	d->setupUi(this);
 	setFrameStyle(QFrame::NoFrame);
 
+	// Bookmark view
 	d->mBookmarksModel = new KFilePlacesModel(this);
 
 	d->mBookmarksView->setModel(d->mBookmarksModel);
@@ -124,6 +125,11 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
 		SIGNAL(urlSelected(const KUrl&)) );
 
+	// Tag view
+	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
+		SLOT(slotTagViewClicked(const QModelIndex&)));
+
+	// Recent folder view
 	d->mRecentFoldersView->setItemDelegate(new HistoryViewDelegate(d->mRecentFoldersView));
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
@@ -131,8 +137,13 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
-	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotTagViewClicked(const QModelIndex&)));
+	// Url bag view
+	d->mUrlBagView->setItemDelegate(new HistoryViewDelegate(d->mUrlBagView));
+	connect(d->mUrlBagView, SIGNAL(clicked(const QModelIndex&)),
+		SLOT(slotListViewClicked(const QModelIndex&)) );
+
+	connect(d->mUrlBagView, SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	d->setupSearchUi(gvCore->semanticInfoBackEnd());
 }
@@ -167,6 +178,7 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 	initViewPalette(d->mBookmarksView, fgColor);
 	initViewPalette(d->mTagView, fgColor);
 	initViewPalette(d->mRecentFoldersView, fgColor);
+	initViewPalette(d->mUrlBagView, fgColor);
 
 	QString css = QString::fromUtf8(
 		"font-weight: bold;"
@@ -205,22 +217,33 @@ void StartPage::showEvent(QShowEvent* event) {
 	if (!d->mRecentFoldersView->model()) {
 		d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
 	}
+	if (!d->mUrlBagView->model()) {
+		d->mUrlBagView->setModel(d->mGvCore->urlBagModel());
+	}
 	QFrame::showEvent(event);
 }
 
 
 void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
-	QModelIndex index = d->mRecentFoldersView->indexAt(pos);
+	QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
+	QModelIndex index = view->indexAt(pos);
 	if (!index.isValid()) {
 		return;
 	}
 	QVariant data = index.data(KFilePlacesModel::UrlRole);
 	KUrl url = data.toUrl();
 
+	// Create menu
 	QMenu menu(this);
-	QAction* addToPlacesAction = menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-	QAction* removeAction = menu.addAction(KIcon("edit-delete"), i18n("Forget this Folder"));
-	QAction* action = menu.exec(d->mRecentFoldersView->mapToGlobal(pos));
+	bool fromUrlBag = view == d->mUrlBagView;
+	QAction* addToPlacesAction = fromUrlBag ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
+	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromUrlBag ? i18n("Forget this Url") : i18n("Forget this Folder"));
+
+	// Handle menu
+	QAction* action = menu.exec(view->mapToGlobal(pos));
+	if (!action) {
+		return;
+	}
 	if (action == addToPlacesAction) {
 		QString text = url.fileName();
 		if (text.isEmpty()) {
@@ -228,7 +251,7 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 		}
 		d->mBookmarksModel->addPlace(text, url);
 	} else if (action == removeAction) {
-		d->mGvCore->recentFoldersModel()->removeRow(index.row());
+		view->model()->removeRow(index.row());
 	}
 }
 
