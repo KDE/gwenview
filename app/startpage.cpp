@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QListView>
 #include <QMenu>
+#include <QStyledItemDelegate>
 
 // KDE
 #include <kfileplacesmodel.h>
@@ -48,6 +49,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 
 namespace Gwenview {
+
+/**
+ * Inherit from QStyledItemDelegate to match KFilePlacesViewDelegate sizeHint
+ * height.
+ */
+class HistoryViewDelegate : public QStyledItemDelegate {
+public:
+	HistoryViewDelegate(QObject* parent = 0)
+	: QStyledItemDelegate(parent) {}
+
+	virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+		QSize sh = QStyledItemDelegate::sizeHint(option, index);
+		int iconSize = static_cast<QAbstractItemView*>(parent())->iconSize().height();
+		// Copied from KFilePlacesViewDelegate::sizeHint()
+		int height = option.fontMetrics.height() / 2 + qMax(iconSize, option.fontMetrics.height());
+		sh.setHeight(qMax(sh.height(), height));
+		return sh;
+	}
+};
+
 
 struct StartPagePrivate : public Ui_StartPage{
 	StartPage* that;
@@ -74,6 +95,18 @@ struct StartPagePrivate : public Ui_StartPage{
 	}
 };
 
+static void initViewPalette(QAbstractItemView* view, const QColor& fgColor) {
+	QWidget* viewport = view->viewport();
+	QPalette palette = viewport->palette();
+	palette.setColor(viewport->backgroundRole(), Qt::transparent);
+	palette.setColor(QPalette::WindowText, fgColor);
+	palette.setColor(QPalette::Text, fgColor);
+
+	// QListView uses QStyledItemDelegate, which uses the view palette for
+	// foreground color, while KFilePlacesView uses the viewport palette.
+	viewport->setPalette(palette);
+	view->setPalette(palette);
+}
 
 StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 : QFrame(parent)
@@ -91,6 +124,7 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
 		SIGNAL(urlSelected(const KUrl&)) );
 
+	d->mRecentFoldersView->setItemDelegate(new HistoryViewDelegate(d->mRecentFoldersView));
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
 
@@ -126,24 +160,28 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 
 	QPalette pal = palette();
 	pal.setBrush(backgroundRole(), newPalette.base());
+	pal.setBrush(QPalette::Button, newPalette.base());
+	pal.setBrush(QPalette::WindowText, fgColor);
 	setPalette(pal);
 
+	initViewPalette(d->mBookmarksView, fgColor);
+	initViewPalette(d->mTagView, fgColor);
+	initViewPalette(d->mRecentFoldersView, fgColor);
+
 	QString css = QString::fromUtf8(
-		"#StartPage > QLabel, #StartPage > QListView {"
-		"	color: %1;"
-		"}"
-
-		"#StartPage > QLabel[title=true] {"
-		"	font-weight: bold;"
-		"	border-bottom: 1px solid %1;"
-		"}"
-
-		"#StartPage > QListView {"
-		"	background-color: transparent;"
-		"}"
+		"font-weight: bold;"
+		"color: %1;"
+		"border: 1px solid transparent;"
+		"border-bottom-color: %1;"
 		)
 		.arg(fgColor.name());
-	setStyleSheet(css);
+	Q_FOREACH(QLabel* label, findChildren<QLabel*>()) {
+		// Set css by hand on each label because when a css is applied to the
+		// whole widget, it does not use native tabs anymore.
+		if (label->property("title").isValid()) {
+			label->setStyleSheet(css);
+		}
+	}
 }
 
 
