@@ -496,7 +496,7 @@ struct FilterControllerPrivate {
 	SortedDirModel* mDirModel;
 	QList<QAction*> mActionList;
 
-	int mFilterWidgetCount; /** How many filter widgets are in mFrame */
+	int mFilterWidgetCount; /**< How many filter widgets are in mFrame */
 
 	void addAction(const QString& text, const char* slot) {
 		QAction* action = new QAction(text, that);
