@@ -238,6 +238,8 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 	bool fromUrlBag = view == d->mUrlBagView;
 	QAction* addToPlacesAction = fromUrlBag ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
 	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromUrlBag ? i18n("Forget this Url") : i18n("Forget this Folder"));
+	menu.addSeparator();
+	QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
 
 	// Handle menu
 	QAction* action = menu.exec(view->mapToGlobal(pos));
@@ -252,6 +254,8 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 		d->mBookmarksModel->addPlace(text, url);
 	} else if (action == removeAction) {
 		view->model()->removeRow(index.row());
+	} else if (action == clearAction) {
+		view->model()->removeRows(0, view->model()->rowCount());
 	}
 }
 
