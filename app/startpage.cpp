@@ -226,12 +226,12 @@ void StartPage::showEvent(QShowEvent* event) {
 
 void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 	QAbstractItemView* view = qobject_cast<QAbstractItemView*>(sender());
+	KUrl url;
 	QModelIndex index = view->indexAt(pos);
-	if (!index.isValid()) {
-		return;
+	if (index.isValid()) {
+		QVariant data = index.data(KFilePlacesModel::UrlRole);
+		url = data.toUrl();
 	}
-	QVariant data = index.data(KFilePlacesModel::UrlRole);
-	KUrl url = data.toUrl();
 
 	// Create menu
 	QMenu menu(this);
@@ -240,6 +240,13 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromUrlBag ? i18n("Forget this Url") : i18n("Forget this Folder"));
 	menu.addSeparator();
 	QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
+
+	if (!index.isValid()) {
+		if (addToPlacesAction) {
+			addToPlacesAction->setEnabled(false);
+		}
+		removeAction->setEnabled(false);
+	}
 
 	// Handle menu
 	QAction* action = menu.exec(view->mapToGlobal(pos));
