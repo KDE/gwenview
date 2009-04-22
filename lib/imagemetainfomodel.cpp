@@ -349,11 +349,11 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 
 void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QString* value) const {
 	MetaInfoGroup* group;
-	if (key.startsWith("General")) {
+	if (key.startsWith(QLatin1String("General"))) {
 		group = d->mMetaInfoGroupVector[GeneralGroup];
-	} else if (key.startsWith("Exif")) {
+	} else if (key.startsWith(QLatin1String("Exif"))) {
 		group = d->mMetaInfoGroupVector[ExifGroup];
-	} else if (key.startsWith("Iptc")) {
+	} else if (key.startsWith(QLatin1String("Iptc"))) {
 		group = d->mMetaInfoGroupVector[IptcGroup];
 	} else {
 		kWarning() << "Unknown metainfo key" << key;

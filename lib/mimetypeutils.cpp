@@ -130,7 +130,7 @@ QString urlMimeTypeByContent(const KUrl& url) {
 
 
 Kind mimeTypeKind(const QString& mimeType) {
-	if (mimeType.startsWith("inode/directory")) {
+	if (mimeType.startsWith(QLatin1String("inode/directory"))) {
 		return KIND_DIR;
 	}
 	if (ArchiveUtils::mimeTypes().contains(mimeType)) {
@@ -142,7 +142,7 @@ Kind mimeTypeKind(const QString& mimeType) {
 	if (svgImageMimeTypes().contains(mimeType)) {
 		return KIND_SVG_IMAGE;
 	}
-	if (mimeType.startsWith("video/")) {
+	if (mimeType.startsWith(QLatin1String("video/"))) {
 		return KIND_VIDEO;
 	}
 

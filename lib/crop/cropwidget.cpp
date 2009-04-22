@@ -72,7 +72,7 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 
 
 	double cropRatio() const {
-		const QStringList lst = ratioComboBox->currentText().split(":");
+		const QStringList lst = ratioComboBox->currentText().split(':');
 		if (lst.size() != 2) {
 			return 0;
 		}
@@ -288,7 +288,7 @@ void CropWidget::slotRatioComboBoxEditTextChanged() {
 void CropWidget::slotRatioComboBoxActivated() {
 	// If the ratioComboBox contains text like this: "w:h (foo bar)", change it
 	// to "w:h" only, so that it's easier to edit for the user.
-	QStringList lst = d->ratioComboBox->currentText().split(" ");
+	QStringList lst = d->ratioComboBox->currentText().split(' ');
 	if (lst.size() > 1) {
 		SignalBlocker blocker(d->ratioComboBox);
 		d->ratioComboBox->setEditText(lst[0]);
