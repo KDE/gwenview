@@ -173,6 +173,8 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 	pal.setBrush(backgroundRole(), newPalette.base());
 	pal.setBrush(QPalette::Button, newPalette.base());
 	pal.setBrush(QPalette::WindowText, fgColor);
+	pal.setBrush(QPalette::ButtonText, fgColor);
+	pal.setBrush(QPalette::Text, fgColor);
 	setPalette(pal);
 
 	initViewPalette(d->mBookmarksView, fgColor);
