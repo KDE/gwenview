@@ -155,7 +155,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>URL Bag</string>
+          <string>Recent URLs</string>
          </property>
          <property name="title" stdset="0">
           <bool>true</bool>
@@ -195,7 +195,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QListView" name="mUrlBagView">
+        <widget class="QListView" name="mRecentUrlsView">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>

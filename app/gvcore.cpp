@@ -57,7 +57,7 @@ struct GvCorePrivate {
 	QWidget* mParent;
 	SortedDirModel* mDirModel;
 	HistoryModel* mRecentFoldersModel;
-	HistoryModel* mUrlBagModel;
+	HistoryModel* mRecentUrlsModel;
 
 	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
 		KFileDialog dialog(url, QString(), mParent);
@@ -109,7 +109,7 @@ GvCore::GvCore(QWidget* parent, SortedDirModel* dirModel)
 	d->mParent = parent;
 	d->mDirModel = dirModel;
 	d->mRecentFoldersModel = 0;
-	d->mUrlBagModel = 0;
+	d->mRecentUrlsModel = 0;
 }
 
 
@@ -126,11 +126,11 @@ QAbstractItemModel* GvCore::recentFoldersModel() const {
 }
 
 
-QAbstractItemModel* GvCore::urlBagModel() const {
-	if (!d->mUrlBagModel) {
-		d->mUrlBagModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "urlbag/"));
+QAbstractItemModel* GvCore::recentUrlsModel() const {
+	if (!d->mRecentUrlsModel) {
+		d->mRecentUrlsModel = new HistoryModel(const_cast<GvCore*>(this), KStandardDirs::locateLocal("appdata", "recenturls/"));
 	}
-	return d->mUrlBagModel;
+	return d->mRecentUrlsModel;
 }
 
 
@@ -145,9 +145,9 @@ void GvCore::addUrlToRecentFolders(const KUrl& url) {
 }
 
 
-void GvCore::addUrlToUrlBag(const KUrl& url) {
-	urlBagModel();
-	d->mUrlBagModel->addUrl(url);
+void GvCore::addUrlToRecentUrls(const KUrl& url) {
+	recentUrlsModel();
+	d->mRecentUrlsModel->addUrl(url);
 }
 
 

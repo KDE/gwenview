@@ -138,11 +138,11 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	// Url bag view
-	d->mUrlBagView->setItemDelegate(new HistoryViewDelegate(d->mUrlBagView));
-	connect(d->mUrlBagView, SIGNAL(clicked(const QModelIndex&)),
+	d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
+	connect(d->mRecentUrlsView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
 
-	connect(d->mUrlBagView, SIGNAL(customContextMenuRequested(const QPoint&)),
+	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	d->setupSearchUi(gvCore->semanticInfoBackEnd());
@@ -178,7 +178,7 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 	initViewPalette(d->mBookmarksView, fgColor);
 	initViewPalette(d->mTagView, fgColor);
 	initViewPalette(d->mRecentFoldersView, fgColor);
-	initViewPalette(d->mUrlBagView, fgColor);
+	initViewPalette(d->mRecentUrlsView, fgColor);
 
 	QString css = QString::fromUtf8(
 		"font-weight: bold;"
@@ -217,8 +217,8 @@ void StartPage::showEvent(QShowEvent* event) {
 	if (!d->mRecentFoldersView->model()) {
 		d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
 	}
-	if (!d->mUrlBagView->model()) {
-		d->mUrlBagView->setModel(d->mGvCore->urlBagModel());
+	if (!d->mRecentUrlsView->model()) {
+		d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
 	}
 	QFrame::showEvent(event);
 }
@@ -235,9 +235,9 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 
 	// Create menu
 	QMenu menu(this);
-	bool fromUrlBag = view == d->mUrlBagView;
-	QAction* addToPlacesAction = fromUrlBag ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromUrlBag ? i18n("Forget this Url") : i18n("Forget this Folder"));
+	bool fromRecentUrls = view == d->mRecentUrlsView;
+	QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
+	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this Url") : i18n("Forget this Folder"));
 	menu.addSeparator();
 	QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
 
