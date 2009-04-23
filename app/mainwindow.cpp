@@ -300,11 +300,10 @@ struct MainWindow::Private {
 		connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
 			mFullScreenAction, SLOT(trigger()) );
 
-
-		QShortcut* reduceLevelOfDetailsShortcut = new QShortcut(mWindow);
-		reduceLevelOfDetailsShortcut->setKey(Qt::Key_Escape);
-		connect(reduceLevelOfDetailsShortcut, SIGNAL(activated()),
-			mWindow, SLOT(reduceLevelOfDetails()) );
+		QAction* reduceLodAction = view->addAction("reduce_lod", mWindow, SLOT(reduceLevelOfDetails()));
+		// FIXME Find a better text for this action
+		reduceLodAction->setText(i18nc("@action Go back to a more general page (start page <- list <- image)", "Back"));
+		reduceLodAction->setShortcut(Qt::Key_Escape);
 
 		mGoToPreviousAction = view->addAction("go_previous",mWindow, SLOT(goToPrevious()));
 		mGoToPreviousAction->setIcon(KIcon("media-skip-backward"));
@@ -1038,6 +1037,8 @@ void MainWindow::reduceLevelOfDetails() {
 		d->mFullScreenAction->trigger();
 	} else if (d->mCurrentPageId == ViewPageId) {
 		d->mBrowseAction->trigger();
+	} else {
+		showStartPage();
 	}
 }
 
