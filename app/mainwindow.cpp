@@ -148,7 +148,7 @@ struct MainWindow::Private {
 	KAction* mGoUpAction;
 	KAction* mGoToPreviousAction;
 	KAction* mGoToNextAction;
-	KAction* mToggleSideBarAction;
+	KToggleAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	KAction* mToggleSlideShowAction;
 	KToggleAction* mShowMenuBarAction;
@@ -324,9 +324,12 @@ struct MainWindow::Private {
 		action->setIcon(KIcon("go-home"));
 		action->setText(i18nc("@action", "Start Page"));
 
-		mToggleSideBarAction = view->addAction("toggle_sidebar",mWindow, SLOT(toggleSideBar()));
+		mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
+		connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
+			mWindow, SLOT(toggleSideBar(bool)));
 		mToggleSideBarAction->setIcon(KIcon("view-sidetree"));
 		mToggleSideBarAction->setShortcut(Qt::Key_F11);
+		mToggleSideBarAction->setText(i18nc("@action", "Sidebar"));
 
 		mToggleSlideShowAction = view->addAction("toggle_slideshow",mWindow, SLOT(toggleSlideShow()));
 		mWindow->updateSlideShowAction();
@@ -443,14 +446,6 @@ struct MainWindow::Private {
 			kinds |= MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE;
 		}
 		mDirModel->setKindFilter(kinds);
-	}
-
-	void updateToggleSideBarAction() {
-		if (mSideBar->isVisibleTo(mSideBar->parentWidget())) {
-			mToggleSideBarAction->setText(i18n("Hide Sidebar"));
-		} else {
-			mToggleSideBarAction->setText(i18n("Show Sidebar"));
-		}
 	}
 
 	QModelIndex getRelativeIndex(int offset) {
@@ -739,8 +734,7 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDocumentUrl(url);
 	}
 	d->updateContextDependentComponents();
-	d->mSideBar->setVisible(GwenviewConfig::sideBarIsVisible());
-	d->updateToggleSideBarAction();
+	d->mToggleSideBarAction->setChecked(GwenviewConfig::sideBarIsVisible());
 }
 
 
@@ -839,7 +833,6 @@ void MainWindow::showStartPage() {
 	d->spreadCurrentDirUrl(KUrl());
 
 	d->mSideBar->hide();
-	d->updateToggleSideBarAction();
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 
 	d->updateActions();
@@ -905,9 +898,8 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 }
 
 
-void MainWindow::toggleSideBar() {
-	d->mSideBar->setVisible(!d->mSideBar->isVisible());
-	d->updateToggleSideBarAction();
+void MainWindow::toggleSideBar(bool on) {
+	d->mSideBar->setVisible(on);
 }
 
 

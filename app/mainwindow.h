@@ -81,7 +81,7 @@ private Q_SLOTS:
 	void openDocumentUrl(const KUrl&);
 	void goToUrl(const KUrl&);
 	void goUp();
-	void toggleSideBar();
+	void toggleSideBar(bool visible);
 	void slotModifiedDocumentListChanged();
 
 	/**
