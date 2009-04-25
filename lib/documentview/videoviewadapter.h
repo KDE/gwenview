@@ -48,10 +48,15 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+protected:
+	bool eventFilter(QObject*, QEvent*);
+
 private Q_SLOTS:
 	void slotPlayPauseClicked();
+	void updatePlayPauseButton();
 
 private:
+	friend class VideoViewAdapterPrivate;
 	VideoViewAdapterPrivate* const d;
 };
 

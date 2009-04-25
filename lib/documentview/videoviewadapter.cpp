@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/VideoWidget>
 #include <Phonon/VolumeSlider>
 #include <QHBoxLayout>
+#include <QMouseEvent>
 #include <QToolButton>
 
 // KDE
@@ -45,27 +46,32 @@ namespace Gwenview {
 
 struct VideoViewAdapterPrivate {
 	VideoViewAdapter* q;
-	Document::Ptr mDocument;
 	Phonon::MediaObject* mMediaObject;
 	Phonon::VideoWidget* mVideoWidget;
 	Phonon::AudioOutput* mAudioOutput;
 	QFrame* mHud;
+	WidgetFloater* mFloater;
 	QToolButton* mPlayPauseButton;
 
-	void setupHud(QWidget* parent) {
-		WidgetFloater* floater = new WidgetFloater(parent);
+	Document::Ptr mDocument;
+	bool mDocumentHasNeverBeenStarted;
 
+	void setupHud(QWidget* parent) {
+		// Create hud
 		mHud = new QFrame(parent);
 		mHud->setAutoFillBackground(true);
 		QHBoxLayout* layout = new QHBoxLayout(mHud);
 
 		mPlayPauseButton = new QToolButton;
 		mPlayPauseButton->setAutoRaise(true);
-		mPlayPauseButton->setIcon(KIcon("media-playback-start"));
+		q->updatePlayPauseButton();
 		QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
 			q, SLOT(slotPlayPauseClicked()));
+		QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+			q, SLOT(updatePlayPauseButton()));
 
 		Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;
+		seekSlider->setTracking(false);
 		seekSlider->setMediaObject(mMediaObject);
 
 		Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
@@ -77,8 +83,38 @@ struct VideoViewAdapterPrivate {
 		layout->addWidget(volumeSlider, 1 /* stretch */);
 		mHud->adjustSize();
 
-		floater->setChildWidget(mHud);
-		floater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
+		// Init floater
+		mFloater = new WidgetFloater(parent);
+		mFloater->setChildWidget(mHud);
+		mFloater->setAlignment(Qt::AlignJustify | Qt::AlignBottom);
+
+		mVideoWidget->installEventFilter(q);
+	}
+
+
+	bool isPlaying() const {
+		switch (mMediaObject->state()) {
+		case Phonon::StoppedState:
+		case Phonon::PausedState:
+			return false;
+		default:
+			return true;
+		}
+	}
+
+
+	void updateHudVisibility(int yPos) {
+		// Keep hud visible until document has been started at least once
+		if (mDocumentHasNeverBeenStarted) {
+			return;
+		}
+
+		const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->sizeHint().height() * 3 / 2;
+		if (mHud->isVisible() && yPos < floaterY) {
+			mHud->hide();
+		} else if (!mHud->isVisible() && yPos >= floaterY) {
+			mHud->show();
+		}
 	}
 };
 
@@ -91,6 +127,8 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 
 	d->mVideoWidget = new Phonon::VideoWidget(parent);
 	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	d->mVideoWidget->setAttribute(Qt::WA_Hover);
+
 	Phonon::createPath(d->mMediaObject, d->mVideoWidget);
 
 	d->mAudioOutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
@@ -113,6 +151,8 @@ VideoViewAdapter::~VideoViewAdapter() {
 
 
 void VideoViewAdapter::setDocument(Document::Ptr doc) {
+	d->mDocumentHasNeverBeenStarted = true;
+	d->mHud->show();
 	d->mDocument = doc;
 	d->mMediaObject->setCurrentSource(d->mDocument->url());
 }
@@ -124,14 +164,27 @@ Document::Ptr VideoViewAdapter::document() const {
 
 
 void VideoViewAdapter::slotPlayPauseClicked() {
-	switch (d->mMediaObject->state()) {
-	case Phonon::StoppedState:
-	case Phonon::PausedState:
-		d->mMediaObject->play();
-		d->mPlayPauseButton->setIcon(KIcon("media-playback-pause"));
-		break;
-	default:
+	if (d->isPlaying()) {
 		d->mMediaObject->pause();
+	} else {
+		d->mDocumentHasNeverBeenStarted = false;
+		d->mMediaObject->play();
+	}
+}
+
+
+bool VideoViewAdapter::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::MouseMove) {
+		d->updateHudVisibility(static_cast<QMouseEvent*>(event)->y());
+	}
+	return false;
+}
+
+
+void VideoViewAdapter::updatePlayPauseButton() {
+	if (d->isPlaying()) {
+		d->mPlayPauseButton->setIcon(KIcon("media-playback-pause"));
+	} else {
 		d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
 	}
 }
