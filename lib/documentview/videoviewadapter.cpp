@@ -49,6 +49,7 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 	d->mMediaObject = new Phonon::MediaObject(this);
 
 	d->mVideoWidget = new Phonon::VideoWidget(parent);
+	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	Phonon::createPath(d->mMediaObject, d->mVideoWidget);
 
 	Phonon::AudioOutput* audioOutput =
