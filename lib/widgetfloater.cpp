@@ -41,11 +41,17 @@ struct WidgetFloaterPrivate {
 
 	int mHorizontalMargin;
 	int mVerticalMargin;
+	bool mInsideUpdateChildGeometry;
 
 	void updateChildGeometry() {
 		if (!mChild) {
 			return;
 		}
+		if (mInsideUpdateChildGeometry) {
+			return;
+		}
+		mInsideUpdateChildGeometry = true;
+
 		int posX, posY;
 		int childWidth, childHeight;
 		int parentWidth, parentHeight;
@@ -60,6 +66,12 @@ struct WidgetFloaterPrivate {
 			posX = mHorizontalMargin;
 		} else if (mAlignment & Qt::AlignHCenter) {
 			posX = (parentWidth - childWidth) / 2;
+		} else if (mAlignment & Qt::AlignJustify) {
+			posX = mHorizontalMargin;
+			childWidth = parentWidth - 2 * mHorizontalMargin;
+			QRect childGeometry = mChild->geometry();
+			childGeometry.setWidth(childWidth);
+			mChild->setGeometry(childGeometry);
 		} else {
 			posX = parentWidth - childWidth - mHorizontalMargin;
 		}
@@ -73,6 +85,8 @@ struct WidgetFloaterPrivate {
 		}
 
 		mChild->move(posX, posY);
+
+		mInsideUpdateChildGeometry = false;
 	}
 };
 
@@ -87,6 +101,7 @@ WidgetFloater::WidgetFloater(QWidget* parent)
 	d->mAlignment = Qt::AlignCenter;
 	d->mHorizontalMargin = KDialog::marginHint();
 	d->mVerticalMargin = KDialog::marginHint();
+	d->mInsideUpdateChildGeometry = false;
 }
 
 
