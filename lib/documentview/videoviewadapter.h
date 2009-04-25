@@ -48,6 +48,9 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+private Q_SLOTS:
+	void slotPlayPauseClicked();
+
 private:
 	VideoViewAdapterPrivate* const d;
 };
