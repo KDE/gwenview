@@ -110,6 +110,9 @@ GvCore::GvCore(QWidget* parent, SortedDirModel* dirModel)
 	d->mDirModel = dirModel;
 	d->mRecentFoldersModel = 0;
 	d->mRecentUrlsModel = 0;
+
+	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
+		SLOT(slotConfigChanged()));
 }
 
 
@@ -140,12 +143,18 @@ AbstractSemanticInfoBackEnd* GvCore::semanticInfoBackEnd() const {
 
 
 void GvCore::addUrlToRecentFolders(const KUrl& url) {
+	if (!GwenviewConfig::historyEnabled()) {
+		return;
+	}
 	recentFoldersModel();
 	d->mRecentFoldersModel->addUrl(url);
 }
 
 
 void GvCore::addUrlToRecentUrls(const KUrl& url) {
+	if (!GwenviewConfig::historyEnabled()) {
+		return;
+	}
 	recentUrlsModel();
 	d->mRecentUrlsModel->addUrl(url);
 }
@@ -339,6 +348,18 @@ bool GvCore::ensureDocumentIsEditable(const KUrl& url) {
 		i18nc("@info", "Gwenview cannot edit this kind of image.")
 		);
 	return false;
+}
+
+
+static void clearModel(QAbstractItemModel* model) {
+	model->removeRows(0, model->rowCount());
+}
+
+void GvCore::slotConfigChanged() {
+	if (!GwenviewConfig::historyEnabled()) {
+		clearModel(recentFoldersModel());
+		clearModel(recentUrlsModel());
+	}
 }
 
 

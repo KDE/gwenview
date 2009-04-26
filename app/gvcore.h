@@ -66,6 +66,8 @@ public Q_SLOTS:
 	void rotateRight(const KUrl&);
 	void setRating(const KUrl&, int);
 
+private Q_SLOTS:
+	void slotConfigChanged();
 
 private:
 	GvCorePrivate* const d;

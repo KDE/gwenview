@@ -93,6 +93,11 @@ struct StartPagePrivate : public Ui_StartPage{
 		mTagTitleLabel->hide();
 	#endif
 	}
+
+	void updateHistoryTab() {
+		mHistoryWidget->setVisible(GwenviewConfig::historyEnabled());
+		mHistoryDisabledLabel->setVisible(!GwenviewConfig::historyEnabled());
+	}
 };
 
 static void initViewPalette(QAbstractItemView* view, const QColor& fgColor) {
@@ -146,6 +151,10 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	d->setupSearchUi(gvCore->semanticInfoBackEnd());
+
+	d->updateHistoryTab();
+	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
+		SLOT(slotConfigChanged()));
 }
 
 
@@ -216,11 +225,13 @@ void StartPage::slotListViewClicked(const QModelIndex& index) {
 
 
 void StartPage::showEvent(QShowEvent* event) {
-	if (!d->mRecentFoldersView->model()) {
-		d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
-	}
-	if (!d->mRecentUrlsView->model()) {
-		d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
+	if (GwenviewConfig::historyEnabled()) {
+		if (!d->mRecentFoldersView->model()) {
+			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
+		}
+		if (!d->mRecentUrlsView->model()) {
+			d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
+		}
 	}
 	QFrame::showEvent(event);
 }
@@ -266,6 +277,11 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 	} else if (action == clearAction) {
 		view->model()->removeRows(0, view->model()->rowCount());
 	}
+}
+
+
+void StartPage::slotConfigChanged() {
+	d->updateHistoryTab();
 }
 
 

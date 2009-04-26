@@ -20,6 +20,10 @@
 			<default>#666666</default>
 		</entry>
 
+		<entry name="HistoryEnabled" type="Bool">
+			<default>true</default>
+		</entry>
+
 		<entry name="PercentageOfMemoryUsageWarning" type="Double">
 			<default>0.5</default>
 			<whatsthis>The percentage of memory used by Gwenview before it

@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Qt
 
 // KDE
+#include <kglobalsettings.h>
 
 // Local
 #include "ui_generalconfigpage.h"
@@ -93,6 +94,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	widget = setupPage(d->mPerformanceConfigPage);
 	pageItem = addPage(widget, i18n("Performance"));
 	pageItem->setIcon(KIcon("preferences-system-performance"));
+	d->mPerformanceConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
 }
 
 
