@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "ui_generalconfigpage.h"
 #include "ui_imageviewconfigpage.h"
-#include "ui_performanceconfigpage.h"
+#include "ui_advancedconfigpage.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
 #include <lib/scrolltool.h>
@@ -43,7 +43,7 @@ struct ConfigDialogPrivate {
 	InvisibleButtonGroup* mThumbnailBarOrientationGroup;
 	Ui_GeneralConfigPage mGeneralConfigPage;
 	Ui_ImageViewConfigPage mImageViewConfigPage;
-	Ui_PerformanceConfigPage mPerformanceConfigPage;
+	Ui_AdvancedConfigPage mAdvancedConfigPage;
 };
 
 template <class Ui>
@@ -90,11 +90,11 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	pageItem = addPage(widget, i18n("Image View"));
 	pageItem->setIcon(KIcon("view-preview"));
 
-	// Performance
-	widget = setupPage(d->mPerformanceConfigPage);
-	pageItem = addPage(widget, i18n("Performance"));
-	pageItem->setIcon(KIcon("preferences-system-performance"));
-	d->mPerformanceConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
+	// Advanced
+	widget = setupPage(d->mAdvancedConfigPage);
+	pageItem = addPage(widget, i18n("Advanced"));
+	pageItem->setIcon(KIcon("preferences-other"));
+	d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
 }
 
 
