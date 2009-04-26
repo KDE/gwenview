@@ -3,6 +3,8 @@
 - New crop interface: less intrusive and with the ability to crop to screen
   ratio.
 - The thumbnail bar can now be shown vertically.
+- Gwenview now remembers visited urls.
+- History can now be disabled.
 - Added file operations and "open with" menu to image view context menu. Patch
   by Marian Kyral (bug #187819).
 
