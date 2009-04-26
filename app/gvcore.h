@@ -51,6 +51,13 @@ public:
 	void addUrlToRecentFolders(const KUrl&);
 	void addUrlToRecentUrls(const KUrl& url);
 
+	/**
+	 * Checks if the document referenced by url is editable, shows a sorry
+	 * dialog if it's not.
+	 * @return true if editable, false if not
+	 */
+	static bool ensureDocumentIsEditable(const KUrl& url);
+
 public Q_SLOTS:
 	void saveAll();
 	void save(const KUrl&);
@@ -59,12 +66,6 @@ public Q_SLOTS:
 	void rotateRight(const KUrl&);
 	void setRating(const KUrl&, int);
 
-	/**
-	 * Checks if the document referenced by url is editable, shows a sorry
-	 * dialog if it's not.
-	 * @return true if editable, false if not
-	 */
-	static bool ensureDocumentIsEditable(const KUrl& url);
 
 private:
 	GvCorePrivate* const d;
