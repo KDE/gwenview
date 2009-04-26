@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "folderviewcontextmanageritem.h"
 
 // Qt
+#include <QHeaderView>
 #include <QTreeView>
 
 // KDE
@@ -50,6 +51,15 @@ struct FolderViewContextManagerItemPrivate {
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 		mView->setHeaderHidden(true);
 		mView->setFrameStyle(QFrame::NoFrame);
+
+		// This is tricky: QTreeView header has stretchLastSection set to true.
+		// In this configuration, the header gets quite wide and cause an
+		// horizontal scrollbar to appear.
+		// To avoid this, set stretchLastSection to false and resizeMode to
+		// Stretch (we still want the column to take the full width of the
+		// widget).
+		mView->header()->setStretchLastSection(false);
+		mView->header()->setResizeMode(QHeaderView::Stretch);
 
 		QPalette p = mView->palette();
 		p.setColor(QPalette::Active,   QPalette::Text, p.color(QPalette::Active,   QPalette::WindowText));
