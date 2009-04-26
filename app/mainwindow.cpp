@@ -300,7 +300,7 @@ struct MainWindow::Private {
 		connect(mDocumentPanel, SIGNAL(toggleFullScreenRequested()),
 			mFullScreenAction, SLOT(trigger()) );
 
-		QAction* reduceLodAction = view->addAction("reduce_lod", mWindow, SLOT(reduceLevelOfDetails()));
+		KAction* reduceLodAction = view->addAction("reduce_lod", mWindow, SLOT(reduceLevelOfDetails()));
 		// FIXME Find a better text for this action
 		reduceLodAction->setText(i18nc("@action Go back to a more general page (start page <- list <- image)", "Back"));
 		reduceLodAction->setShortcut(Qt::Key_Escape);
