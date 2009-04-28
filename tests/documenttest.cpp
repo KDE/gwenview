@@ -118,6 +118,8 @@ void DocumentTest::testLoad_data() {
 	        "gif", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 	NEW_ROW("test.xcf",
 	        "xcf", MimeTypeUtils::KIND_RASTER_IMAGE, false);
+	NEW_ROW("188191_does_not_load.tga",
+	        "tga", MimeTypeUtils::KIND_RASTER_IMAGE, false);
 }
 #undef NEW_ROW
 
