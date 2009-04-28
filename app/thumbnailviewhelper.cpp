@@ -30,13 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <kicon.h>
-#include <kio/copyjob.h>
 #include <klocale.h>
 #include <kmenu.h>
 
 // Local
 #include <lib/document/documentfactory.h>
+#include "fileoperations.h"
 
 namespace Gwenview {
 
@@ -140,30 +139,7 @@ void ThumbnailViewHelper::showMenuForUrlDroppedOnViewport(QWidget* parent, const
 
 
 void ThumbnailViewHelper::showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
-	KMenu menu(parent);
-	QAction* moveAction = menu.addAction(
-		KIcon("go-jump"),
-		i18n("Move Here"));
-	QAction* copyAction = menu.addAction(
-		KIcon("edit-copy"),
-		i18n("Copy Here"));
-	QAction* linkAction = menu.addAction(
-		KIcon("edit-link"),
-		i18n("Link Here"));
-	menu.addSeparator();
-	menu.addAction(
-		KIcon("process-stop"),
-		i18n("Cancel"));
-
-	QAction* action = menu.exec(QCursor::pos());
-
-	if (action == moveAction) {
-		KIO::move(urlList, destUrl);
-	} else if (action == copyAction) {
-		KIO::copy(urlList, destUrl);
-	} else if (action == linkAction) {
-		KIO::link(urlList, destUrl);
-	}
+	FileOperations::showMenuForDroppedUrls(parent, urlList, destUrl);
 }
 
 

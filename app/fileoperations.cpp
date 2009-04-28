@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
+#include <kmenu.h>
 #include <kinputdialog.h>
 #include <kpushbutton.h>
 #include <kio/copyjob.h>
@@ -171,6 +172,44 @@ void createFolder(const KUrl& parentUrl, QWidget* parent) {
 	url.addPath(name);
 
 	KIO::mkdir(url);
+}
+
+
+void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
+	if (urlList.isEmpty()) {
+		kWarning() << "urlList is empty!";
+		return;
+	}
+
+	if (!destUrl.isValid()) {
+		kWarning() << "destUrl is not valid!";
+		return;
+	}
+
+	KMenu menu(parent);
+	QAction* moveAction = menu.addAction(
+		KIcon("go-jump"),
+		i18n("Move Here"));
+	QAction* copyAction = menu.addAction(
+		KIcon("edit-copy"),
+		i18n("Copy Here"));
+	QAction* linkAction = menu.addAction(
+		KIcon("edit-link"),
+		i18n("Link Here"));
+	menu.addSeparator();
+	menu.addAction(
+		KIcon("process-stop"),
+		i18n("Cancel"));
+
+	QAction* action = menu.exec(QCursor::pos());
+
+	if (action == moveAction) {
+		KIO::move(urlList, destUrl);
+	} else if (action == copyAction) {
+		KIO::copy(urlList, destUrl);
+	} else if (action == linkAction) {
+		KIO::link(urlList, destUrl);
+	}
 }
 
 

@@ -37,6 +37,8 @@ void del(const KUrl::List& urlList, QWidget* parent);
 
 void createFolder(const KUrl& parentUrl, QWidget* parent);
 
+void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl);
+
 } // namespace
 
 } // namespace
