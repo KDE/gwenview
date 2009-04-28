@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "folderviewcontextmanageritem.h"
 
 // Qt
+#include <QDragEnterEvent>
 #include <QHeaderView>
 #include <QTreeView>
 
@@ -47,6 +48,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview {
 
+
+/**
+ * This treeview accepts url drops
+ */
+class UrlDropTreeView : public QTreeView {
+public:
+	UrlDropTreeView(QWidget* parent = 0)
+	: QTreeView(parent) {}
+
+protected:
+	void dragEnterEvent(QDragEnterEvent* event) {
+		if (event->mimeData()->hasUrls()) {
+			event->acceptProposedAction();
+		}
+	}
+
+
+	void dragMoveEvent(QDragMoveEvent* event) {
+		if (indexAt(event->pos()).isValid()) {
+			event->acceptProposedAction();
+		} else {
+			event->ignore();
+		}
+	}
+
+
+	void dropEvent(QDropEvent* event) {
+		const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+		const QModelIndex index = indexAt(event->pos());
+		if (!index.isValid()) {
+			kWarning() << "Invalid index!";
+			return;
+		}
+		const KUrl destUrl = static_cast<MODEL_CLASS*>(model())->urlForIndex(index);
+		FileOperations::showMenuForDroppedUrls(this, urlList, destUrl);
+	}
+};
+
+
 struct FolderViewContextManagerItemPrivate {
 	FolderViewContextManagerItem* q;
 	MODEL_CLASS* mModel;
@@ -64,8 +104,11 @@ struct FolderViewContextManagerItemPrivate {
 	}
 
 	void setupView() {
-		mView = new QTreeView;
+		mView = new UrlDropTreeView;
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+		mView->setAcceptDrops(true);
+		mView->setDropIndicatorShown(true);
+
 		mView->setHeaderHidden(true);
 		mView->setFrameStyle(QFrame::NoFrame);
 
