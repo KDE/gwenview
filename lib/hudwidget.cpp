@@ -66,9 +66,13 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(4);
 	layout->addWidget(d->mMainWidget);
-	layout->setSizeConstraint(QLayout::SetFixedSize);
+	if (options & OptionDoNotFollowChildSize) {
+		adjustSize();
+	} else {
+		layout->setSizeConstraint(QLayout::SetFixedSize);
+	}
 
-	if (options == OptionCloseButton) {
+	if (options & OptionCloseButton) {
 		d->mCloseButton = new QToolButton(this);
 		d->mCloseButton->setAutoRaise(true);
 		d->mCloseButton->setIcon(SmallIcon("window-close"));

@@ -39,10 +39,13 @@ class HudWidgetPrivate;
 class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
 	Q_OBJECT
 public:
-	enum Options {
-		OptionNone,
-		OptionCloseButton
+	enum Option {
+		OptionNone = 0,
+		OptionCloseButton = 1 << 1,
+		// FIXME: Ugly
+		OptionDoNotFollowChildSize = 1 << 2 /// Make it possible to resize the hudwidget independently of child size
 	};
+	Q_DECLARE_FLAGS(Options, Option)
 
 	HudWidget(QWidget* parent = 0);
 	~HudWidget();
@@ -63,5 +66,7 @@ private:
 
 
 } // namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::HudWidget::Options)
 
 #endif /* HUDWIDGET_H */
