@@ -38,8 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "document/documentfactory.h"
-#include "widgetfloater.h"
 #include "hudwidget.h"
+#include "widgetfloater.h"
 
 namespace Gwenview {
 
@@ -49,7 +49,7 @@ struct VideoViewAdapterPrivate {
 	Phonon::MediaObject* mMediaObject;
 	Phonon::VideoWidget* mVideoWidget;
 	Phonon::AudioOutput* mAudioOutput;
-	QFrame* mHud;
+	HudWidget* mHud;
 	WidgetFloater* mFloater;
 	QToolButton* mPlayPauseButton;
 
@@ -57,10 +57,9 @@ struct VideoViewAdapterPrivate {
 	bool mDocumentHasNeverBeenStarted;
 
 	void setupHud(QWidget* parent) {
-		// Create hud
-		mHud = new QFrame(parent);
-		mHud->setAutoFillBackground(true);
-		QHBoxLayout* layout = new QHBoxLayout(mHud);
+		// Create hud content
+		QWidget* widget = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(widget);
 
 		mPlayPauseButton = new QToolButton;
 		mPlayPauseButton->setAutoRaise(true);
@@ -81,7 +80,12 @@ struct VideoViewAdapterPrivate {
 		layout->addWidget(mPlayPauseButton);
 		layout->addWidget(seekSlider, 5 /* stretch */);
 		layout->addWidget(volumeSlider, 1 /* stretch */);
-		mHud->adjustSize();
+		widget->adjustSize();
+
+		// Create hud
+		mHud = new HudWidget;
+		mHud->setAutoFillBackground(true);
+		mHud->init(widget, HudWidget::OptionDoNotFollowChildSize);
 
 		// Init floater
 		mFloater = new WidgetFloater(parent);
