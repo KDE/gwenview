@@ -31,19 +31,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "contextmanager.h"
-#include "placetreemodel.h"
 #include "sidebar.h"
+#include "fileoperations.h"
+
+#define USE_PLACETREE
+#ifdef USE_PLACETREE
+#include "placetreemodel.h"
+#define MODEL_CLASS PlaceTreeModel
+#else
+#include <kdirlister.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
+#define MODEL_CLASS SortedDirModel
+#endif
+
 
 namespace Gwenview {
 
 struct FolderViewContextManagerItemPrivate {
 	FolderViewContextManagerItem* q;
-	PlaceTreeModel* mModel;
+	MODEL_CLASS* mModel;
 	QTreeView* mView;
 
 	void setupModel() {
-		mModel = new PlaceTreeModel(q);
+		mModel = new MODEL_CLASS(q);
 		mView->setModel(mModel);
+		#ifndef USE_PLACETREE
+		for (int col = 1; col <= mModel->columnCount(); ++col) {
+			mView->header()->setSectionHidden(col, true);
+		}
+		mModel->dirLister()->openUrl(KUrl("/"));
+		#endif
 	}
 
 	void setupView() {
