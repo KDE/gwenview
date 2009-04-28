@@ -40,10 +40,11 @@ class GWENVIEWLIB_EXPORT HudWidget : public QFrame {
 	Q_OBJECT
 public:
 	enum Option {
-		OptionNone = 0,
-		OptionCloseButton = 1 << 1,
+		OptionNone                 = 0,
+		OptionCloseButton          = 1 << 1,
 		// FIXME: Ugly
-		OptionDoNotFollowChildSize = 1 << 2 /// Make it possible to resize the hudwidget independently of child size
+		OptionDoNotFollowChildSize = 1 << 2, /// Make it possible to resize the hudwidget independently of child size
+		OptionOpaque               = 1 << 3
 	};
 	Q_DECLARE_FLAGS(Options, Option)
 

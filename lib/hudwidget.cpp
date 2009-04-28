@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QVariant>
 
 // KDE
 #include <kiconloader.h>
@@ -58,6 +59,10 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 	d->mMainWidget->setParent(this);
 	if (d->mMainWidget->layout()) {
 		d->mMainWidget->layout()->setMargin(0);
+	}
+
+	if (options & OptionOpaque) {
+		setProperty("opaque", QVariant(true));
 	}
 
 	FullScreenTheme theme(FullScreenTheme::currentThemeName());

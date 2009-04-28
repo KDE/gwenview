@@ -85,7 +85,7 @@ struct VideoViewAdapterPrivate {
 		// Create hud
 		mHud = new HudWidget;
 		mHud->setAutoFillBackground(true);
-		mHud->init(widget, HudWidget::OptionDoNotFollowChildSize);
+		mHud->init(widget, HudWidget::OptionDoNotFollowChildSize | HudWidget::OptionOpaque);
 
 		// Init floater
 		mFloater = new WidgetFloater(parent);

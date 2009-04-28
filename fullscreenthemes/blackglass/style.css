@@ -36,6 +36,13 @@ Gwenview--HudWidget {
 	border-radius: 8px;
 }
 
+Gwenview--HudWidget[opaque=true] {
+	border-radius: 0;
+	background-color:
+		qlineargradient(x1:0, y1:0, x2:0, y2:1,
+		stop:0 hsv(0, 0, 20%), stop: 0.6 rgb(0, 0, 0), stop:1 rgb(0, 0, 0));
+}
+
 #fullScreenBar {
 	background-color:
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
