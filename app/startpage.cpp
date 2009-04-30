@@ -250,7 +250,7 @@ void StartPage::showRecentFoldersViewContextMenu(const QPoint& pos) {
 	QMenu menu(this);
 	bool fromRecentUrls = view == d->mRecentUrlsView;
 	QAction* addToPlacesAction = fromRecentUrls ? 0 : menu.addAction(KIcon("bookmark-new"), i18n("Add to Places"));
-	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this Url") : i18n("Forget this Folder"));
+	QAction* removeAction = menu.addAction(KIcon("edit-delete"), fromRecentUrls ? i18n("Forget this URL") : i18n("Forget this Folder"));
 	menu.addSeparator();
 	QAction* clearAction = menu.addAction(KIcon("edit-delete-all"), i18n("Forget All"));
 
