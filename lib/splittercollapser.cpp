@@ -77,7 +77,7 @@ struct SplitterCollapserPrivate {
 
 		if (!isVertical()) {
 			// FIXME: Make this configurable
-			y = 2;
+			y = 30;
 			if (mDirection == LTR) {
 				if (mWidget->isVisible()) {
 					x = widgetRect.right() + handleWidth + 1;
