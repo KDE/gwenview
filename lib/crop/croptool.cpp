@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <math.h>
 
 // Qt
+#include <QApplication>
 #include <QFlags>
 #include <QMouseEvent>
 #include <QPainter>
@@ -41,7 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imageview.h"
 #include "hudwidget.h"
 
-static const int HANDLE_RADIUS = 5;
+static const int HANDLE_SIZE = 15;
 
 namespace Gwenview {
 
@@ -103,22 +104,22 @@ struct CropToolPrivate {
 		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
-			top = rect.top() - HANDLE_RADIUS;
+			top = rect.top();
 		} else if (handle & CH_Bottom) {
-			top = rect.bottom() - HANDLE_RADIUS;
+			top = rect.bottom() - HANDLE_SIZE;
 		} else {
-			top = rect.top() + rect.height() / 2 - HANDLE_RADIUS;
+			top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
 		}
 
 		if (handle & CH_Left) {
-			left = rect.left() - HANDLE_RADIUS;
+			left = rect.left();
 		} else if (handle & CH_Right) {
-			left = rect.right() - HANDLE_RADIUS;
+			left = rect.right() - HANDLE_SIZE;
 		} else {
-			left = rect.left() + rect.width() / 2 - HANDLE_RADIUS;
+			left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
 		}
 
-		return QRect(left, top, HANDLE_RADIUS * 2 + 1, HANDLE_RADIUS * 2 + 1);
+		return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
 	}
 
 
@@ -221,7 +222,7 @@ struct CropToolPrivate {
 	OptimalPosition computeOptimalHudWidgetPosition() {
 		const ImageView* view = mCropTool->imageView();
 		const QRect rect = view->mapToViewport(mRect);
-		const int margin = 2 * HANDLE_RADIUS;
+		const int margin = HANDLE_SIZE;
 		const int hudHeight = mHudWidget->height();
 		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, 0, -hudHeight);
 
@@ -313,21 +314,27 @@ void CropTool::paint(QPainter* painter) {
 
 	QRect imageRect = imageView()->rect();
 
+	static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
+	static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
+	static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
+
 	QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
 	Q_FOREACH(const QRect& outerRect, outerRegion.rects()) {
-		painter->fillRect(outerRect, QColor(0, 0, 0, 128));
+		painter->fillRect(outerRect, outerColor);
 	}
 
-	painter->setPen(QPen(Qt::black));
+	painter->setPen(borderColor);
 
 	rect.adjust(0, 0, -1, -1);
 	painter->drawRect(rect);
 
-	painter->setBrush(Qt::gray);
-	painter->setRenderHint(QPainter::Antialiasing);
-	Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
-		rect = d->handleViewportRect(handle);
-		painter->drawEllipse(rect);
+	if (QApplication::mouseButtons() == Qt::NoButton) {
+		// Only draw handles when user is not resizing
+		painter->setBrush(fillColor);
+		Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
+			rect = d->handleViewportRect(handle);
+			painter->drawRect(rect);
+		}
 	}
 }
 
@@ -341,6 +348,9 @@ void CropTool::mousePressEvent(QMouseEvent* event) {
 	if (d->mMovingHandle == CH_Content) {
 		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
+
+	// Update to hide handles
+	imageView()->viewport()->update();
 }
 
 
@@ -424,6 +434,9 @@ void CropTool::mouseReleaseEvent(QMouseEvent* event) {
 	//d->mHudWidget->show();
 	d->mMovingHandle = CH_None;
 	d->updateCursor(d->handleAt(event->pos()), false);
+
+	// Update to show handles
+	imageView()->viewport()->update();
 }
 
 
