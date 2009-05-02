@@ -1230,6 +1230,12 @@ void MainWindow::toggleMenuBar() {
 
 
 void MainWindow::loadConfig() {
+	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
+
+	d->mDocumentPanel->loadConfig();
+	d->mThumbnailViewPanel->loadConfig();
+
+	// Colors
 	QColor bgColor = GwenviewConfig::viewBackgroundColor();
 	QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
 
@@ -1237,14 +1243,42 @@ void MainWindow::loadConfig() {
 	pal.setColor(QPalette::Base, bgColor);
 	pal.setColor(QPalette::Text, fgColor);
 
+	// Sidebar colors
+	QColor sideBarBgColor = bgColor.value() > 128 ? bgColor.dark(200) : bgColor.light(200);
+	QColor sideBarFgColor = sideBarBgColor.value() > 128 ? Qt::black : Qt::white;
+
+	QPalette sideBarPal = d->mSideBar->palette();
+	sideBarPal.setColor(QPalette::Window, sideBarBgColor);
+	sideBarPal.setColor(QPalette::Button, sideBarBgColor);
+	sideBarPal.setColor(QPalette::Text, sideBarFgColor);
+	sideBarPal.setColor(QPalette::ButtonText, sideBarFgColor);
+
+	// Apply to widgets
 	d->mThumbnailViewPanel->applyPalette(pal);
 	d->mStartPage->applyPalette(pal);
 	d->mDocumentPanel->setNormalPalette(pal);
 
-	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
+	d->mSideBar->setAutoFillBackground(true);
+	d->mSideBar->setPalette(sideBarPal);
 
-	d->mDocumentPanel->loadConfig();
-	d->mThumbnailViewPanel->loadConfig();
+	// FIXME: Should we avoid CSS here to get a more native look?
+	d->mCentralSplitter->setStyleSheet(
+		QString(
+		"QSplitter::handle {"
+		"	background-color: %1;"
+		"	border-right: 1px solid palette(mid);"
+		"}"
+		).arg(sideBarBgColor.name())
+		);
+
+	d->mSideBarCollapser->setAutoFillBackground(true);
+	d->mSideBarCollapser->setStyleSheet(
+		QString(
+		"	background-color: %1;"
+		"	border: 1px solid palette(mid);"
+		"	border-radius: 5px;"
+		).arg(sideBarBgColor.name())
+		);
 }
 
 
