@@ -51,7 +51,6 @@ public:
 	~ThumbnailViewPanel();
 
 	void applyPalette(const QPalette&);
-	void initActionDependentWidgets();
 
 	ThumbnailView* thumbnailView() const;
 	KUrlNavigator* urlNavigator() const;

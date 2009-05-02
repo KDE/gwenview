@@ -653,7 +653,6 @@ d(new MainWindow::Private)
 	d->updateActions();
 	updatePreviousNextActions();
 	d->mSaveBar->initActionDependentWidgets();
-	d->mThumbnailViewPanel->initActionDependentWidgets();
 
 	createGUI();
 	loadConfig();

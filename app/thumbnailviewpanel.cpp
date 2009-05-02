@@ -229,11 +229,6 @@ void ThumbnailViewPanel::saveConfig() const {
 }
 
 
-void ThumbnailViewPanel::initActionDependentWidgets() {
-	d->mStartPageButton->setDefaultAction(d->mActionCollection->action("go_start_page"));
-}
-
-
 ThumbnailView* ThumbnailViewPanel::thumbnailView() const {
 	return d->mThumbnailView;
 }
