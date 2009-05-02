@@ -64,6 +64,10 @@ struct SplitterCollapserPrivate {
 	QWidget* mWidget;
 	Direction mDirection;
 
+	bool isVertical() const {
+		return mDirection & Vertical;
+	}
+
 	void updatePosition() {
 		int x, y;
 		QRect widgetRect = mWidget->geometry();
@@ -71,7 +75,7 @@ struct SplitterCollapserPrivate {
 		int handleWidth = mSplitter->handleWidth();
 		int width = q->width();
 
-		if (!(mDirection & Vertical)) {
+		if (!isVertical()) {
 			y = (mSplitter->height() - q->height()) / 2;
 			if (mDirection == LTR) {
 				if (mWidget->isVisible()) {
@@ -164,8 +168,9 @@ bool SplitterCollapser::eventFilter(QObject*, QEvent* event) {
 
 
 QSize SplitterCollapser::sizeHint() const {
-	QSize sh(20, 30);
-	if (d->mDirection >= TTB) {
+	int extent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+	QSize sh(extent, extent * 3 / 2);
+	if (d->isVertical()) {
 		sh.transpose();
 	}
 	return sh;
