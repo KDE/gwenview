@@ -89,6 +89,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/slideshow.h>
 #include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/splittercollapser.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/thumbnailloadjob.h>
 #include <lib/urlutils.h>
@@ -181,6 +182,8 @@ struct MainWindow::Private {
 		mSideBar = new SideBar(mCentralSplitter);
 
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
+
+		new SplitterCollapser(mCentralSplitter, mSideBar);
 
 		setupThumbnailView(mViewStackedWidget);
 		setupDocumentPanel(mViewStackedWidget);

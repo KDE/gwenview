@@ -34,6 +34,7 @@ set(gwenviewlib_SRCS
 	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
+	splittercollapser.cpp
 	historymodel.cpp
 	imagesequence.cpp
 	imagesequencecontroller.cpp
