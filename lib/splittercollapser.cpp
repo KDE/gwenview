@@ -80,7 +80,7 @@ struct SplitterCollapserPrivate {
 			y = 30;
 			if (mDirection == LTR) {
 				if (mWidget->isVisible()) {
-					x = widgetRect.right() + handleWidth + 1;
+					x = widgetRect.right() + handleWidth;
 				} else {
 					x = 0;
 				}
