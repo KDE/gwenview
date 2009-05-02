@@ -186,8 +186,6 @@ void SplitterCollapser::slotClicked() {
 void SplitterCollapser::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
 
-	painter.setOpacity(0.3);
-
 	QStyleOptionToolButton opt;
 	initStyleOption(&opt);
 	if (d->mDirection == LTR) {
