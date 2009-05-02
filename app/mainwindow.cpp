@@ -132,6 +132,7 @@ struct MainWindow::Private {
 	ThumbnailViewPanel* mThumbnailViewPanel;
 	StartPage* mStartPage;
 	SideBar* mSideBar;
+	SplitterCollapser* mSideBarCollapser;
 	QStackedWidget* mViewStackedWidget;
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
@@ -183,7 +184,7 @@ struct MainWindow::Private {
 
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
 
-		new SplitterCollapser(mCentralSplitter, mSideBar);
+		mSideBarCollapser = new SplitterCollapser(mCentralSplitter, mSideBar);
 
 		setupThumbnailView(mViewStackedWidget);
 		setupDocumentPanel(mViewStackedWidget);
@@ -1053,6 +1054,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 
 		d->mViewAction->trigger();
 		d->mSideBar->hide();
+		d->mSideBarCollapser->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
@@ -1066,6 +1068,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		}
 		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mSideBarCollapser->show();
 
 		// Back to normal
 		d->mDocumentPanel->setFullScreenMode(false);
