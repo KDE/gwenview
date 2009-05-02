@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kdialog.h>
+#include <kglobalsettings.h>
 #include <klineedit.h>
 #include <klocale.h>
 
@@ -177,6 +178,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	d->mUpdatingFromCropTool = false;
 	d->mCropTool = cropTool;
 	d->setupUi(this);
+	setFont(KGlobalSettings::smallestReadableFont());
 	layout()->setMargin(KDialog::marginHint());
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
 
