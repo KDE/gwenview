@@ -170,7 +170,7 @@ bool SplitterCollapser::eventFilter(QObject*, QEvent* event) {
 
 QSize SplitterCollapser::sizeHint() const {
 	int extent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-	QSize sh(extent * 3 / 4, extent * 16 / 10);
+	QSize sh(extent * 3 / 4, extent * 240 / 100);
 	if (d->isVertical()) {
 		sh.transpose();
 	}
