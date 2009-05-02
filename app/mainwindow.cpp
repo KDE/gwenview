@@ -214,6 +214,10 @@ struct MainWindow::Private {
 
 		mThumbnailView = mThumbnailViewPanel->thumbnailView();
 		mUrlNavigator = mThumbnailViewPanel->urlNavigator();
+		QPalette pal = mUrlNavigator->palette();
+		pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
+		mUrlNavigator->setAutoFillBackground(true);
+		mUrlNavigator->setPalette(pal);
 
 		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, mWindow->actionCollection());
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
