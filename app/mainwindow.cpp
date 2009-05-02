@@ -75,6 +75,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "preloader.h"
 #include "savebar.h"
 #include "sidebar.h"
+#include "splitter.h"
 #include "startpage.h"
 #include "thumbnailbarview.h"
 #include "thumbnailviewhelper.h"
@@ -173,7 +174,7 @@ struct MainWindow::Private {
 		mWindow->setCentralWidget(centralWidget);
 		mSaveBar = new SaveBar(centralWidget, mWindow->actionCollection());
 
-		mCentralSplitter = new QSplitter(Qt::Horizontal, centralWidget);
+		mCentralSplitter = new Splitter(Qt::Horizontal, centralWidget);
 		QVBoxLayout* layout = new QVBoxLayout(centralWidget);
 		layout->addWidget(mSaveBar);
 		layout->addWidget(mCentralSplitter);
@@ -1266,22 +1267,11 @@ void MainWindow::loadConfig() {
 	d->mSideBar->setPalette(sideBarPal);
 
 	// FIXME: Should we avoid CSS here to get a more native look?
-	d->mCentralSplitter->setStyleSheet(
-		QString(
-		"QSplitter::handle {"
-		"	background-color: %1;"
-		"	border-right: 1px solid palette(mid);"
-		"}"
-		).arg(sideBarBgColor.name())
-		);
-
 	d->mSideBarCollapser->setAutoFillBackground(true);
 	d->mSideBarCollapser->setStyleSheet(
-		QString(
-		"	background-color: %1;"
+		"	background-color: palette(window);"
 		"	border: 1px solid palette(mid);"
 		"	border-radius: 5px;"
-		).arg(sideBarBgColor.name())
 		);
 }
 
