@@ -1249,8 +1249,8 @@ void MainWindow::loadConfig() {
 	pal.setColor(QPalette::Text, fgColor);
 
 	// Sidebar colors
-	QColor sideBarBgColor = bgColor.value() > 128 ? bgColor.dark(200) : bgColor.light(200);
-	QColor sideBarFgColor = sideBarBgColor.value() > 128 ? Qt::black : Qt::white;
+	QColor sideBarBgColor = palette().color(QPalette::AlternateBase);
+	QColor sideBarFgColor = palette().color(QPalette::Text);
 
 	QPalette sideBarPal = d->mSideBar->palette();
 	sideBarPal.setColor(QPalette::Window, sideBarBgColor);
