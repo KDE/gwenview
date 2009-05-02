@@ -755,6 +755,9 @@ void MainWindow::startSlideShow() {
 
 
 void MainWindow::setActiveViewModeAction(QAction* action) {
+	if (d->mCurrentPageId == StartPageId) {
+		d->mSideBarCollapser->show();
+	}
 	if (action == d->mViewAction) {
 		d->mCurrentPageId = ViewPageId;
 		// Switching to view mode
@@ -841,6 +844,7 @@ void MainWindow::showStartPage() {
 	d->spreadCurrentDirUrl(KUrl());
 
 	d->mSideBar->hide();
+	d->mSideBarCollapser->hide();
 	d->mViewStackedWidget->setCurrentWidget(d->mStartPage);
 
 	d->updateActions();
