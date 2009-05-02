@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWindowsStyle>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "lib/fullscreentheme.h"
@@ -232,6 +233,7 @@ struct ThumbnailBarViewPrivate {
 	QTimeLine* mTimeLine;
 
 	Qt::Orientation mOrientation;
+	int mRowCount;
 
 
 	QScrollBar* scrollBar() const {
@@ -283,6 +285,34 @@ struct ThumbnailBarViewPrivate {
 		}
 		return value;
 	}
+
+
+	void updateMaximumSize() {
+		QSize size(QWIDGETSIZE_MAX, mRowCount * 256);
+		if (mOrientation == Qt::Vertical) {
+			size.transpose();
+		}
+		q->setMaximumSize(size);
+	}
+
+
+	void updateThumbnailSize() {
+		QSizeDimension dimension = oppositeDimension();
+		int scrollBarSize = (scrollBar()->sizeHint().*dimension)();
+		int widgetSize = (q->size().*dimension)();
+
+		if (mRowCount > 1) {
+			// FIXME: Hack to work around QListView bug
+			// It seems scrollBar is deduced two times...
+			// (Qt 4.5.0)
+			widgetSize -= scrollBarSize + 1;
+		}
+
+		int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
+
+		q->setGridSize(QSize(gridSize, gridSize));
+		q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
+	}
 };
 
 
@@ -295,12 +325,13 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	connect(d->mTimeLine, SIGNAL(frameChanged(int)),
 		SLOT(slotFrameChanged(int)));
 
+	d->mRowCount = 1;
 	d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
 	setOrientation(Qt::Horizontal);
 
 	setObjectName("thumbnailBarView");
 	setUniformItemSizes(true);
-	setWrapping(false);
+	setWrapping(true);
 
 	d->mStyle = new ProxyStyle(style());
 	setStyle(d->mStyle);
@@ -321,14 +352,14 @@ void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
 	if (d->mOrientation == Qt::Vertical) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		setMaximumSize(256, QWIDGETSIZE_MAX);
-		setFlow(TopToBottom);
+		setFlow(LeftToRight);
 	} else {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setMaximumSize(QWIDGETSIZE_MAX, 256);
-		setFlow(LeftToRight);
+		setFlow(TopToBottom);
 	}
+
+	d->updateMaximumSize();
 }
 
 
@@ -364,11 +395,7 @@ void ThumbnailBarView::paintEvent(QPaintEvent* event) {
 
 void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
 	ThumbnailView::resizeEvent(event);
-	QSizeDimension dimension = d->oppositeDimension();
-
-	int gridSize = (size().*dimension)() - ((d->scrollBar()->sizeHint().*dimension)() + 2 * frameWidth());
-	setGridSize(QSize(gridSize, gridSize));
-	setThumbnailSize(gridSize - ITEM_MARGIN * 2);
+	d->updateThumbnailSize();
 }
 
 
@@ -384,6 +411,14 @@ void ThumbnailBarView::selectionChanged(const QItemSelection& selected, const QI
 
 void ThumbnailBarView::wheelEvent(QWheelEvent* event) {
 	d->scrollBar()->setValue(d->scrollBar()->value() - event->delta());
+}
+
+
+void ThumbnailBarView::setRowCount(int rowCount) {
+	Q_ASSERT(rowCount > 0);
+	d->mRowCount = rowCount;
+	d->updateMaximumSize();
+	d->updateThumbnailSize();
 }
 
 

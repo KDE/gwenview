@@ -65,6 +65,8 @@ public:
 
 	void setOrientation(Qt::Orientation);
 
+	void setRowCount(int);
+
 protected:
 	void paintEvent(QPaintEvent*);
 
