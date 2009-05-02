@@ -76,7 +76,8 @@ struct SplitterCollapserPrivate {
 		int width = q->width();
 
 		if (!isVertical()) {
-			y = (mSplitter->height() - q->height()) / 2;
+			// FIXME: Make this configurable
+			y = 2;
 			if (mDirection == LTR) {
 				if (mWidget->isVisible()) {
 					x = widgetRect.right() + handleWidth + 1;
@@ -169,7 +170,7 @@ bool SplitterCollapser::eventFilter(QObject*, QEvent* event) {
 
 QSize SplitterCollapser::sizeHint() const {
 	int extent = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
-	QSize sh(extent, extent * 3 / 2);
+	QSize sh(extent * 3 / 4, extent * 16 / 10);
 	if (d->isVertical()) {
 		sh.transpose();
 	}
