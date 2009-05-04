@@ -92,6 +92,9 @@ struct FolderViewContextManagerItemPrivate {
 	MODEL_CLASS* mModel;
 	QTreeView* mView;
 
+	KUrl mUrlToSelect;
+	QPersistentModelIndex mExpandingIndex;
+
 	void setupModel() {
 		mModel = new MODEL_CLASS(q);
 		mView->setModel(mModel);
@@ -101,6 +104,8 @@ struct FolderViewContextManagerItemPrivate {
 		}
 		mModel->dirLister()->openUrl(KUrl("/"));
 		#endif
+		QObject::connect(mModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			q, SLOT(slotRowsInserted(const QModelIndex&, int, int)));
 	}
 
 	void setupView() {
@@ -131,7 +136,58 @@ struct FolderViewContextManagerItemPrivate {
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
 			q, SLOT(slotActivated(const QModelIndex&)));
-		new AboutToShowHelper(mView, q, SLOT(updateContent()));
+		new AboutToShowHelper(mView, q, SLOT(expandToSelectedUrl()));
+	}
+
+	QModelIndex findClosestIndex(const QModelIndex& parent, const KUrl& wantedUrl) {
+		Q_ASSERT(mModel);
+		QModelIndex index = parent;
+		if (!index.isValid()) {
+			index = findRootIndex(wantedUrl);
+			if (!index.isValid()) {
+				return QModelIndex();
+			}
+		}
+
+		bool isParent;
+		KUrl url = mModel->urlForIndex(index);
+		QString relativePath = KUrl::relativePath(url.path(), wantedUrl.path(), &isParent);
+		if (!isParent) {
+			kWarning() << url << "is not a parent of" << wantedUrl << "!";
+			return QModelIndex();
+		}
+
+		QModelIndex lastFoundIndex = index;
+		Q_FOREACH(const QString& pathPart, relativePath.mid(1).split('/', QString::SkipEmptyParts)) {
+			bool found = false;
+			for (int row = 0; row < mModel->rowCount(lastFoundIndex); ++row) {
+				QModelIndex index = mModel->index(row, 0, lastFoundIndex);
+				if (index.data().toString() == pathPart) {
+					// FIXME: Check encoding
+					found = true;
+					lastFoundIndex = index;
+					break;
+				}
+			}
+			if (!found) {
+				break;
+			}
+		}
+		return lastFoundIndex;
+	}
+
+
+	QModelIndex findRootIndex(const KUrl& wantedUrl) {
+		for (int row = 0; row < mModel->rowCount(); ++row) {
+			QModelIndex index = mModel->index(row, 0);
+			KUrl url = mModel->urlForIndex(index);
+			if (url.isParentOf(wantedUrl)) {
+				// FIXME: Use closest match
+				return index;
+			}
+		}
+		kWarning() << "Found no root index for" << wantedUrl;
+		return QModelIndex();
 	}
 };
 
@@ -143,9 +199,10 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 	d->mModel = 0;
 
 	d->setupView();
+	new AboutToShowHelper(d->mView, this, SLOT(expandToSelectedUrl()));
 
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
-		SLOT(updateContent()) );
+		SLOT(slotCurrentDirUrlChanged()) );
 }
 
 
@@ -154,21 +211,54 @@ FolderViewContextManagerItem::~FolderViewContextManagerItem() {
 }
 
 
-void FolderViewContextManagerItem::updateContent() {
+void FolderViewContextManagerItem::slotCurrentDirUrlChanged() {
+	KUrl url = contextManager()->currentDirUrl();
+	if (url.isValid() && d->mUrlToSelect != url) {
+		d->mUrlToSelect = url;
+		d->mUrlToSelect.cleanPath();
+		d->mUrlToSelect.adjustPath(KUrl::RemoveTrailingSlash);
+		d->mExpandingIndex = QModelIndex();
+	}
 	if (!d->mView->isVisible()) {
 		return;
 	}
 
+	expandToSelectedUrl();
+}
+
+
+void FolderViewContextManagerItem::expandToSelectedUrl() {
 	if (!d->mModel) {
 		d->setupModel();
 	}
 
-	/* FIXME: Expand to url
-	KUrl url = contextManager()->currentDirUrl();
-	if (url.isValid()) {
-		d->mModel->dirLister()->openUrl(url);
+	QModelIndex index = d->findClosestIndex(d->mExpandingIndex, d->mUrlToSelect);
+	if (!index.isValid()) {
+		return;
 	}
-	*/
+	d->mExpandingIndex = index;
+
+	KUrl url = d->mModel->urlForIndex(d->mExpandingIndex);
+	if (d->mUrlToSelect == url) {
+		// We found our url
+		QItemSelectionModel* selModel = d->mView->selectionModel();
+		selModel->setCurrentIndex(d->mExpandingIndex, QItemSelectionModel::ClearAndSelect);
+		d->mView->scrollTo(d->mExpandingIndex);
+		d->mUrlToSelect = KUrl();
+		d->mExpandingIndex = QModelIndex();
+	} else {
+		// We found a parent of our url
+		d->mView->setExpanded(d->mExpandingIndex, true);
+	}
+}
+
+
+void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& index, int /*start*/, int /*end*/) {
+	if (d->mModel->urlForIndex(index).isParentOf(d->mUrlToSelect)) {
+		d->mExpandingIndex = index;
+		// Hack because otherwise indexes are not in correct order!
+		QMetaObject::invokeMethod(this, "expandToSelectedUrl", Qt::QueuedConnection);
+	}
 }
 
 
