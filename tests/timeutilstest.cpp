@@ -68,7 +68,7 @@ void TimeUtilsTest::testCache() {
 	QCOMPARE(dateTime1, item1.time(KFileItem::ModificationTime));
 
 	QTest::qWait(1200);
-	touchFile(url.path());
+	touchFile(url.toLocalFile());
 
 	KFileItem item2(KFileItem::Unknown, KFileItem::Unknown, url);
 	KDateTime dateTime2 = TimeUtils::dateTimeForFileItem(item2);

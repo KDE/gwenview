@@ -104,7 +104,7 @@ bool DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
 	std::auto_ptr<KTemporaryFile> tmp;
 
 	if (url.isLocalFile()) {
-		fileName = url.path();
+		fileName = url.toLocalFile();
 	} else {
 		tmp.reset(new KTemporaryFile);
 		tmp->setAutoRemove(true);

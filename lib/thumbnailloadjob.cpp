@@ -488,7 +488,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	if (mCurrentUrl.isLocalFile()
 		&& mCurrentUrl.directory().startsWith(thumbnailBaseDir()) )
 	{
-		QImage image(mCurrentUrl.path());
+		QImage image(mCurrentUrl.toLocalFile());
 		emitThumbnailLoaded(image, image.size());
 		determineNextIcon();
 		return;
@@ -537,7 +537,7 @@ void ThumbnailLoadJob::checkThumbnail() {
 	if (MimeTypeUtils::fileItemKind(mCurrentItem) == MimeTypeUtils::KIND_RASTER_IMAGE) {
 		if (mCurrentUrl.isLocalFile()) {
 			// Original is a local file, create the thumbnail
-			startCreatingThumbnail(mCurrentUrl.path());
+			startCreatingThumbnail(mCurrentUrl.toLocalFile());
 		} else {
 			// Original is remote, download it
 			mState=STATE_DOWNLOADORIG;

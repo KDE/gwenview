@@ -78,7 +78,7 @@ public:
 		if (!_url.isLocalFile()) return QString();
 
 		JpegContent content;
-		bool ok=content.load(_url.path());
+		bool ok=content.load(_url.toLocalFile());
 		if (!ok) return QString();
 
 		return content.comment();

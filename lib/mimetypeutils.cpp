@@ -117,7 +117,7 @@ QString urlMimeType(const KUrl& url) {
 QString urlMimeTypeByContent(const KUrl& url) {
 	const int HEADER_SIZE = 30;
 	if (url.isLocalFile()) {
-		return KMimeType::findByFileContent(url.path())->name();
+		return KMimeType::findByFileContent(url.toLocalFile())->name();
 	}
 
 	KIO::TransferJob* job = KIO::get(url);

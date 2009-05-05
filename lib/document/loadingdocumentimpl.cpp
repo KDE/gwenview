@@ -296,7 +296,7 @@ void LoadingDocumentImpl::init() {
 
 	if (UrlUtils::urlIsFastLocalFile(url)) {
 		// Load file content directly
-		QFile file(url.path());
+		QFile file(url.toLocalFile());
 		if (!file.open(QIODevice::ReadOnly)) {
 			setDocumentErrorString("Could not open file.");
 			emit loadingFailed();

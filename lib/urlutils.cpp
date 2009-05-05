@@ -62,7 +62,7 @@ bool urlIsDirectory(const KUrl& url) {
 	// Do direct stat instead of using KIO if the file is local (faster)
 	if (UrlUtils::urlIsFastLocalFile(url)) {
 		KDE_struct_stat buff;
-		if ( KDE_stat( QFile::encodeName(url.path()), &buff ) == 0 )  {
+		if ( KDE_stat( QFile::encodeName(url.toLocalFile()), &buff ) == 0 )  {
 			return S_ISDIR( buff.st_mode );
 		}
 	}

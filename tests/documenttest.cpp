@@ -126,7 +126,7 @@ void DocumentTest::testLoad_data() {
 void DocumentTest::testLoadTwoPasses() {
 	KUrl url = urlForTestFile("test.png");
 	QImage image;
-	bool ok = image.load(url.path());
+	bool ok = image.load(url.toLocalFile());
 	QVERIFY2(ok, "Could not load 'test.png'");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	waitUntilMetaInfoLoaded(doc);
@@ -161,7 +161,7 @@ void DocumentTest::testLoadDownSampled() {
 	QFETCH(QString, fileName);
 	KUrl url = urlForTestFile(fileName);
 	QImage image;
-	bool ok = image.load(url.path());
+	bool ok = image.load(url.toLocalFile());
 	QVERIFY2(ok, "Could not load test image");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
@@ -191,7 +191,7 @@ void DocumentTest::testLoadDownSampled() {
 void DocumentTest::testLoadDownSampledPng() {
 	KUrl url = urlForTestFile("test.png");
 	QImage image;
-	bool ok = image.load(url.path());
+	bool ok = image.load(url.toLocalFile());
 	QVERIFY2(ok, "Could not load test image");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
@@ -281,7 +281,7 @@ void DocumentTest::testDeleteWhileLoading() {
 	{
 		KUrl url = urlForTestFile("test.png");
 		QImage image;
-		bool ok = image.load(url.path());
+		bool ok = image.load(url.toLocalFile());
 		QVERIFY2(ok, "Could not load 'test.png'");
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 	}
@@ -293,7 +293,7 @@ void DocumentTest::testDeleteWhileLoading() {
 void DocumentTest::testLoadRotated() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	QImage image;
-	bool ok = image.load(url.path());
+	bool ok = image.load(url.toLocalFile());
 	QVERIFY2(ok, "Could not load 'orient6.jpg'");
 	QMatrix matrix = ImageUtils::transformMatrix(ROT_90);
 	image = image.transformed(matrix);
@@ -342,10 +342,10 @@ void DocumentTest::testLosslessSave() {
 	QVERIFY(doc->save(url2, "jpeg"));
 
 	QImage image1;
-	QVERIFY(image1.load(url1.path()));
+	QVERIFY(image1.load(url1.toLocalFile()));
 
 	QImage image2;
-	QVERIFY(image2.load(url2.path()));
+	QVERIFY(image2.load(url2.toLocalFile()));
 
 	QCOMPARE(image1, image2);
 }
@@ -362,7 +362,7 @@ void DocumentTest::testLosslessRotate() {
 	}
 
 	KUrl url1 = urlForTestOutputFile("lossless1.jpg");
-	QVERIFY(image1.save(url1.path(), "jpeg"));
+	QVERIFY(image1.save(url1.toLocalFile(), "jpeg"));
 
 	// Load it as a Gwenview document
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
@@ -388,9 +388,9 @@ void DocumentTest::testLosslessRotate() {
 	doc->save(url2, "jpeg");
 
 	// Compare the saved images
-	QVERIFY(image1.load(url1.path()));
+	QVERIFY(image1.load(url1.toLocalFile()));
 	QImage image2;
-	QVERIFY(image2.load(url2.path()));
+	QVERIFY(image2.load(url2.toLocalFile()));
 
 	QCOMPARE(image1, image2);
 }
@@ -448,7 +448,7 @@ void DocumentTest::testMetaInfoBmp() {
 	const int height = 100;
 	QImage image(width, height, QImage::Format_ARGB32);
 	image.fill(Qt::black);
-	image.save(url.path(), "BMP");
+	image.save(url.toLocalFile(), "BMP");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy metaInfoUpdatedSpy(doc.data(), SIGNAL(metaInfoUpdated()));
