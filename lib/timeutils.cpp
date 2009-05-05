@@ -48,7 +48,7 @@ struct CacheItem {
 		fileMTime = time;
 		const KFileMetaInfo info = fileItem.metaInfo();
 		if (info.isValid()) {
-			const KFileMetaInfoItem& mii = info.item("http://freedesktop.org/standards/xesam/1.0/core#contentCreated");
+			const KFileMetaInfoItem& mii = info.item("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#contentCreated");
 			KDateTime dt(mii.value().toDateTime(), KDateTime::LocalZone);
 			if (dt.isValid()) {
 				realTime = dt;
