@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QObject>
+#include <QStringList>
 
 // KDE
 #include <ktempdir.h>
@@ -33,10 +34,11 @@ class PlaceTreeModelTest : public QObject {
 private Q_SLOTS:
 	void initTestCase();
 	void testListPlaces();
-	void testListHome();
+	void testListUrl1();
 
 private:
 	KUrl mUrl1, mUrl2;
+	QStringList mUrl1Dirs;
 	KTempDir mTempDir;
 };
 

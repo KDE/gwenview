@@ -24,11 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QFile>
 
 // KDE
+#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <qtest_kde.h>
 
 // Local
 #include "../lib/placetreemodel.h"
+
+#define KEEP_TEMP_DIR
 
 QTEST_KDEMAIN(PlaceTreeModelTest, GUI)
 
@@ -71,8 +74,14 @@ void PlaceTreeModelTest::initTestCase() {
 
 	Q_ASSERT(dir.mkdir("url1"));
 	mUrl1 = KUrl::fromPath(dir.filePath("url1"));
+
 	Q_ASSERT(dir.mkdir("url2"));
 	mUrl2 = KUrl::fromPath(dir.filePath("url2"));
+
+	mUrl1Dirs << "aaa" << "zzz" << "bbb";
+	Q_FOREACH(const QString& dirName, mUrl1Dirs) {
+		dir.mkdir("url1/" + dirName);
+	}
 
 	QFile bookmark(KStandardDirs::locateLocal("data", "kfileplaces/bookmarks.xml"));
 	Q_ASSERT(bookmark.open(QIODevice::WriteOnly));
@@ -82,6 +91,11 @@ void PlaceTreeModelTest::initTestCase() {
 		.arg(mUrl2.toLocalFile())
 		;
 	bookmark.write(xml.toUtf8());
+
+#ifdef KEEP_TEMP_DIR
+	mTempDir.setAutoRemove(false);
+	kDebug() << "mTempDir:" << mTempDir.name();
+#endif
 }
 
 
@@ -97,5 +111,30 @@ void PlaceTreeModelTest::testListPlaces() {
 }
 
 
-void PlaceTreeModelTest::testListHome() {
+void PlaceTreeModelTest::testListUrl1() {
+	PlaceTreeModel model(0);
+
+	QModelIndex index = model.index(0, 0);
+	QCOMPARE(model.urlForIndex(index), mUrl1);
+
+	// We should not have fetched content yet
+	QCOMPARE(model.rowCount(index), 0);
+	QVERIFY(model.canFetchMore(index));
+
+	while (model.canFetchMore(index)) {
+		model.fetchMore(index);
+	}
+	QTest::qWait(1000);
+	QCOMPARE(model.rowCount(index), mUrl1Dirs.length());
+
+	QStringList dirs = mUrl1Dirs;
+	dirs.sort();
+
+	for (int row = 0; row < dirs.count(); ++row) {
+		QModelIndex subIndex = model.index(row, 0, index);
+		QVERIFY(subIndex.isValid());
+
+		QString dirName = model.data(subIndex).toString();
+		QCOMPARE(dirName, dirs.value(row));
+	}
 }
