@@ -81,6 +81,16 @@ kde4_add_unit_test(timeutilstest ${timeutilstest_SRCS})
 
 target_link_libraries(timeutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
+# PlaceTreeModelTest
+set(placetreemodeltest_SRCS
+	placetreemodeltest.cpp
+	)
+
+kde4_add_unit_test(placetreemodeltest ${placetreemodeltest_SRCS})
+
+target_link_libraries(placetreemodeltest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
+
+
 # SlideContainer
 set(slidecontainertest_SRCS
 	slidecontainertest.cpp
