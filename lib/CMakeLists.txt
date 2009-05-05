@@ -60,6 +60,7 @@ set(gwenviewlib_SRCS
 	memoryutils.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
+	placetreemodel.cpp
 	preferredimagemetainfomodel.cpp
 	print/printhelper.cpp
 	print/printoptionspage.cpp

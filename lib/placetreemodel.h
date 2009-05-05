@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef PLACETREEMODEL_H
 #define PLACETREEMODEL_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QAbstractItemModel>
 
@@ -34,7 +36,7 @@ namespace Gwenview {
 
 
 class PlaceTreeModelPrivate;
-class PlaceTreeModel : public QAbstractItemModel {
+class GWENVIEWLIB_EXPORT PlaceTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
 	PlaceTreeModel(QObject*);

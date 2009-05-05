@@ -37,7 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 #define USE_PLACETREE
 #ifdef USE_PLACETREE
-#include "placetreemodel.h"
+#include <lib/placetreemodel.h>
 #define MODEL_CLASS PlaceTreeModel
 #else
 #include <kdirlister.h>
