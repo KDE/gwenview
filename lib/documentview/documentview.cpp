@@ -260,6 +260,9 @@ struct DocumentViewPrivate {
 
 
 	void showLoadingIndicator() {
+		if (!mLoadingIndicator) {
+			setupLoadingIndicator();
+		}
 		mLoadingImageSequenceController.start();
 		mLoadingIndicator->show();
 		mLoadingIndicator->raise();
@@ -267,6 +270,9 @@ struct DocumentViewPrivate {
 
 
 	void hideLoadingIndicator() {
+		if (!mLoadingIndicator) {
+			return;
+		}
 		mLoadingImageSequenceController.stop();
 		mLoadingIndicator->hide();
 	}
@@ -278,6 +284,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 , d(new DocumentViewPrivate) {
 	d->that = this;
 	d->mActionCollection = actionCollection;
+	d->mLoadingIndicator = 0;
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
@@ -285,7 +292,6 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->setupZoomWidget();
 	d->setupZoomActions();
 	d->setupShortcuts();
-	d->setupLoadingIndicator();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
