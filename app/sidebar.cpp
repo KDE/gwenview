@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QAction>
 #include <QApplication>
+#include <QLabel>
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionTabV3>
@@ -38,7 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kwordwrap.h>
 
 // Local
-#include "lib/expandbutton.h"
 
 namespace Gwenview {
 
@@ -83,7 +83,7 @@ private:
 //- SideBarGroup ---------------------------------------------------------------
 struct SideBarGroupPrivate {
 	QFrame* mContainer;
-	ExpandButton* mTitleButton;
+	QLabel* mTitleLabel;
 };
 
 
@@ -91,20 +91,19 @@ SideBarGroup::SideBarGroup(const QString& title)
 : QFrame()
 , d(new SideBarGroupPrivate) {
 	d->mContainer = 0;
-	d->mTitleButton = new ExpandButton(this);
-	d->mTitleButton->setChecked(true);
-	d->mTitleButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	d->mTitleButton->setFixedHeight(d->mTitleButton->sizeHint().height() * 3 / 2);
-	QFont font(d->mTitleButton->font());
+	d->mTitleLabel = new QLabel(this);
+	d->mTitleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	d->mTitleLabel->setFixedHeight(d->mTitleLabel->sizeHint().height() * 3 / 2);
+	QFont font(d->mTitleLabel->font());
 	font.setBold(true);
-	d->mTitleButton->setFont(font);
-	d->mTitleButton->setText(title);
+	d->mTitleLabel->setFont(font);
+	d->mTitleLabel->setText(title);
 
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 
-	layout->addWidget(d->mTitleButton);
+	layout->addWidget(d->mTitleLabel);
 
 	clear();
 }
@@ -144,9 +143,6 @@ void SideBarGroup::clear() {
 	containerLayout->setSpacing(0);
 
 	layout()->addWidget(d->mContainer);
-
-	connect(d->mTitleButton, SIGNAL(toggled(bool)),
-		d->mContainer, SLOT(setVisible(bool)) );
 }
 
 

@@ -40,7 +40,6 @@ set(gwenviewlib_SRCS
 	imagesequencecontroller.cpp
 	archiveutils.cpp
 	datewidget.cpp
-	expandbutton.cpp
 	exiv2imageloader.cpp
 	flowlayout.cpp
 	fullscreenbar.cpp
