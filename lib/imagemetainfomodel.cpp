@@ -333,15 +333,13 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 		return;
 	}
 
-	if (image->supportsMetadata(Exiv2::mdExif)) {
+	if (image->checkMode(Exiv2::mdExif) & Exiv2::amRead) {
 		const Exiv2::ExifData& exifData = image->exifData();
-
 		d->fillExivGroup<Exiv2::ExifData, Exiv2::ExifData::const_iterator>(exifIndex, exifGroup, exifData);
 	}
 
-	if (image->supportsMetadata(Exiv2::mdIptc)) {
+	if (image->checkMode(Exiv2::mdIptc) & Exiv2::amRead) {
 		const Exiv2::IptcData& iptcData = image->iptcData();
-
 		d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData);
 	}
 }
