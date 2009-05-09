@@ -1086,6 +1086,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		// fullscreen, we are sure latest MainWindow changes are remembered.
 		saveMainWindowSettings(autoSaveConfigGroup());
 		resetAutoSaveSettings();
+		d->saveSideBarConfig();
 
 		// Go full screen
 		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
@@ -1214,6 +1215,9 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 bool MainWindow::queryClose() {
 	saveConfig();
+	if (!d->mFullScreenAction->isChecked()) {
+		d->saveSideBarConfig();
+	}
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
 		return true;
@@ -1315,7 +1319,6 @@ void MainWindow::loadConfig() {
 void MainWindow::saveConfig() {
 	d->mDocumentPanel->saveConfig();
 	d->mThumbnailViewPanel->saveConfig();
-	d->saveSideBarConfig();
 }
 
 
