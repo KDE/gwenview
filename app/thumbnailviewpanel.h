@@ -67,6 +67,7 @@ private Q_SLOTS:
 	void slotDirModelReset();
 	void updateSortOrder();
 	void updateThumbnailDetails();
+	void updateSliderToolTip(int sliderAction);
 
 private:
 	ThumbnailViewPanelPrivate* const d;
