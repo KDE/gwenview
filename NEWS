@@ -1,4 +1,7 @@
 # 2.3.0
+## New features
+- Gwenview can now play videos (bug #174522).
+
 ## Improvements
 - New crop interface: less intrusive and with the ability to crop to screen
   ratio.
