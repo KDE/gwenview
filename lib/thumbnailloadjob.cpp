@@ -1,6 +1,6 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*	Gwenview - A simple image viewer for KDE
-	Copyright 2000-2007 Aurélien Gâteau <aurelien.gateau@free.fr>
+	Copyright 2000-2007 Aurélien Gâteau <agateau@kde.org>
 	This class is based on the ImagePreviewJob class from Konqueror.
 */
 /*	This file is part of the KDE project

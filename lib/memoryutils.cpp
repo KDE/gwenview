@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2008 Aurélien Gâteau <aurelien.gateau@free.fr>
+Copyright 2008 Aurélien Gâteau <agateau@kde.org>
 Copyright (C) 2004-2005 by Enrico Ros <eros.kde@email.it>
 Copyright (C) 2004-2007 by Albert Astals Cid <aacid@kde.org>
 
