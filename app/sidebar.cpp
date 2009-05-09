@@ -398,4 +398,18 @@ void SideBar::addPage(SideBarPage* page) {
 }
 
 
+QString SideBar::currentPage() const {
+	return currentWidget()->objectName();
+}
+
+
+void SideBar::setCurrentPage(const QString& name) {
+	for (int index = 0; index < count(); ++index) {
+		if (widget(index)->objectName() == name) {
+			setCurrentIndex(index);
+		}
+	}
+}
+
+
 } // namespace

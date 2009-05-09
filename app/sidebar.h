@@ -74,6 +74,9 @@ public:
 
 	void addPage(SideBarPage*);
 
+	QString currentPage() const;
+	void setCurrentPage(const QString& name);
+
 	virtual QSize sizeHint() const;
 
 private:

@@ -108,6 +108,11 @@ namespace Gwenview {
 
 static const int PRELOAD_DELAY = 1000;
 
+static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
+static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
+static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
+static const char* SIDE_BAR_CURRENT_PAGE_KEY = "CurrentPage";
+
 enum PageId {
 	StartPageId,
 	BrowsePageId,
@@ -412,10 +417,12 @@ struct MainWindow::Private {
 		// Fill sidebar
 		SideBarPage* page;
 		page = new SideBarPage(i18n("Folders"), "folder");
+		page->setObjectName("folders");
 		page->addWidget(folderViewItem->widget());
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Information"), "dialog-information");
+		page->setObjectName("information");
 		page->addWidget(infoItem->widget());
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		page->addWidget(semanticInfoItem->widget());
@@ -424,6 +431,7 @@ struct MainWindow::Private {
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Operations"), "system-run");
+		page->setObjectName("operations");
 		page->addWidget(imageOpsItem->widget());
 		page->addWidget(fileOpsItem->widget());
 		page->addStretch();
@@ -638,6 +646,28 @@ struct MainWindow::Private {
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
 	}
+
+	KConfigGroup sideBarConfigGroup() const {
+		return KConfigGroup(KGlobal::config(),
+			mCurrentPageId == ViewPageId
+			? BROWSE_MODE_SIDE_BAR_GROUP
+			: VIEW_MODE_SIDE_BAR_GROUP);
+	}
+
+	void loadSideBarConfig() {
+		KConfigGroup group = sideBarConfigGroup();
+		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, true));
+
+		QString defaultPage = mCurrentPageId == ViewPageId
+			? "information" : "folders";
+		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage));
+	}
+
+	void saveSideBarConfig() const {
+		KConfigGroup group = sideBarConfigGroup();
+		group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
+		group.writeEntry(SIDE_BAR_CURRENT_PAGE_KEY, mSideBar->currentPage());
+	}
 };
 
 
@@ -742,7 +772,6 @@ void MainWindow::setInitialUrl(const KUrl& url) {
 		openDocumentUrl(url);
 	}
 	d->updateContextDependentComponents();
-	d->mToggleSideBarAction->setChecked(GwenviewConfig::sideBarIsVisible());
 }
 
 
@@ -757,6 +786,8 @@ void MainWindow::startSlideShow() {
 void MainWindow::setActiveViewModeAction(QAction* action) {
 	if (d->mCurrentPageId == StartPageId) {
 		d->mSideBarCollapser->show();
+	} else {
+		d->saveSideBarConfig();
 	}
 	if (action == d->mViewAction) {
 		d->mCurrentPageId = ViewPageId;
@@ -783,6 +814,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->setDirModelShowDirs(true);
 		setCaption(QString());
 	}
+	d->loadSideBarConfig();
 
 	emit viewModeChanged();
 }
@@ -1283,7 +1315,7 @@ void MainWindow::loadConfig() {
 void MainWindow::saveConfig() {
 	d->mDocumentPanel->saveConfig();
 	d->mThumbnailViewPanel->saveConfig();
-	GwenviewConfig::setSideBarIsVisible(d->mSideBar->isVisible());
+	d->saveSideBarConfig();
 }
 
 
