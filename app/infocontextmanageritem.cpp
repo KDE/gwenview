@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imagemetainfodialog.h"
 #include "sidebar.h"
 #include <lib/archiveutils.h>
+#include <lib/eventwatcher.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/preferredimagemetainfomodel.h>
 #include <lib/document/document.h>
@@ -139,7 +140,7 @@ struct InfoContextManagerItemPrivate {
 		mGroup->addWidget(mOneFileWidget);
 		mGroup->addWidget(mMultipleFilesLabel);
 
-		new AboutToShowHelper(mGroup, q, SLOT(updateSideBarContent()));
+		EventWatcher::install(mGroup, QEvent::Show, q, SLOT(updateSideBarContent()));
 
 		QObject::connect(moreLabel, SIGNAL(linkActivated(const QString&)),
 			q, SLOT(showMetaInfoDialog()) );

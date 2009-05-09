@@ -22,35 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define ABSTRACTCONTEXTMANAGERITEM_H
 
 // Qt
-#include <QEvent>
-#include <QObject>
 #include <QWidget>
 
 
 namespace Gwenview {
-
-class AboutToShowHelper : public QObject {
-	Q_OBJECT
-public:
-	AboutToShowHelper(QWidget* watched, QObject* receiver, const char* slot)
-	: QObject(receiver) {
-		Q_ASSERT(watched);
-		watched->installEventFilter(this);
-		connect(this, SIGNAL(aboutToShow()), receiver, slot);
-	}
-
-Q_SIGNALS:
-	void aboutToShow();
-
-protected:
-	virtual bool eventFilter(QObject*, QEvent* event) {
-		if (event->type() == QEvent::Show) {
-			aboutToShow();
-		}
-		return false;
-	}
-};
-
 
 class ContextManager;
 

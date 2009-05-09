@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include <lib/eventwatcher.h>
 #include "contextmanager.h"
 #include "sidebar.h"
 #include "fileoperations.h"
@@ -136,7 +137,7 @@ struct FolderViewContextManagerItemPrivate {
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
 			q, SLOT(slotActivated(const QModelIndex&)));
-		new AboutToShowHelper(mView, q, SLOT(expandToSelectedUrl()));
+		EventWatcher::install(mView, QEvent::Show, q, SLOT(expandToSelectedUrl()));
 	}
 
 	QModelIndex findClosestIndex(const QModelIndex& parent, const KUrl& wantedUrl) {
@@ -199,7 +200,7 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 	d->mModel = 0;
 
 	d->setupView();
-	new AboutToShowHelper(d->mView, this, SLOT(expandToSelectedUrl()));
+	EventWatcher::install(d->mView, QEvent::Show, this, SLOT(expandToSelectedUrl()));
 
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(slotCurrentDirUrlChanged()) );

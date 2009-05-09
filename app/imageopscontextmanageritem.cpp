@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "sidebar.h"
 #include <lib/crop/croptool.h>
 #include <lib/document/documentfactory.h>
+#include <lib/eventwatcher.h>
 #include <lib/redeyereduction/redeyereductiontool.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
@@ -130,7 +131,7 @@ ImageOpsContextManagerItem::ImageOpsContextManagerItem(ContextManager* manager, 
 	d->mMainWindow = mainWindow;
 	d->mGroup = new SideBarGroup(i18n("Image Operations"));
 	setWidget(d->mGroup);
-	new AboutToShowHelper(d->mGroup, this, SLOT(updateSideBarContent()));
+	EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
 	d->setupActions();
 	updateActions();
 	connect(contextManager(), SIGNAL(selectionChanged()),

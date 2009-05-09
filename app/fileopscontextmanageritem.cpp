@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kservice.h>
 
 // Local
+#include <lib/eventwatcher.h>
 #include "contextmanager.h"
 #include "fileoperations.h"
 #include "sidebar.h"
@@ -113,7 +114,7 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	d->mContextManagerItem = this;
 	d->mGroup = new SideBarGroup(i18n("File Operations"));
 	setWidget(d->mGroup);
-	new AboutToShowHelper(d->mGroup, this, SLOT(updateSideBarContent()));
+	EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateActions()) );

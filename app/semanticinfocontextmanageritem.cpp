@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "sidebar.h"
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
+#include <lib/eventwatcher.h>
 #include <lib/hudwidget.h>
 #include <lib/widgetfloater.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
@@ -131,7 +132,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	void setupGroup() {
 		mGroup = new SideBarGroup(i18n("Semantic Information"));
 		that->setWidget(mGroup);
-		new AboutToShowHelper(mGroup, that, SLOT(update()));
+		EventWatcher::install(mGroup, QEvent::Show, that, SLOT(update()));
 
 		QWidget* container = new QWidget;
 		setupUi(container);
