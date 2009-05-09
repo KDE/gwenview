@@ -82,6 +82,7 @@ private Q_SLOTS:
 	void goToUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar(bool visible);
+	void updateToggleSideBarAction();
 	void slotModifiedDocumentListChanged();
 
 	/**

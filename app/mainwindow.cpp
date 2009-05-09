@@ -83,6 +83,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/documentview.h>
+#include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
@@ -187,6 +188,8 @@ struct MainWindow::Private {
 		layout->setSpacing(0);
 
 		mSideBar = new SideBar(mCentralSplitter);
+		EventWatcher::install(mSideBar, QList<QEvent::Type>() << QEvent::Show << QEvent::Hide,
+			mWindow, SLOT(updateToggleSideBarAction()));
 
 		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
 
@@ -944,6 +947,12 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 
 void MainWindow::toggleSideBar(bool on) {
 	d->mSideBar->setVisible(on);
+}
+
+
+void MainWindow::updateToggleSideBarAction() {
+	SignalBlocker blocker(d->mToggleSideBarAction);
+	d->mToggleSideBarAction->setChecked(d->mSideBar->isVisible());
 }
 
 
