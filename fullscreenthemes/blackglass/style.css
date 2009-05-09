@@ -1,16 +1,22 @@
 /* Default text color for most widgets, but not tooltips (hence the '.' before
  * QLabel */
-.QLabel, #configDialog QPushButton, QToolButton, QCheckBox {
+.QLabel, #configDialog QPushButton, QToolButton, QCheckBox, QComboBox, QSpinBox, QListView {
 	color: #ccc;
 }
 
 /* Default borders, normal and hover */
-QCheckBox::indicator, #configDialog QPushButton, QSlider::groove, QSlider::handle {
+QCheckBox::indicator, #configDialog QPushButton, QSlider::groove, QSlider::handle, QListView {
 	border: 1px solid #666;
 }
 
 QCheckBox::indicator:hover, QToolButton::hover, #configDialog QPushButton:hover, QSlider::groove:hover, QSlider::handle:hover {
 	border: 1px solid #ccc;
+}
+
+/* Selections */
+QComboBox, QLineEdit, QSpinBox, QTextEdit, QListView {
+	selection-color: #333;
+	selection-background-color: #ccc;
 }
 
 /* QToolButton */
@@ -25,6 +31,11 @@ QToolButton:pressed {
 		qlineargradient(x1:0, y1:0, x2:0, y2:1,
 		stop:0 #222, stop: 0.6 black, stop:1 black);
 	border: 1px solid #444;
+}
+
+/* Text editable widgets */
+QComboBox:editable, QSpinBox, QLineEdit, QTextEdit, QListView {
+	background-color: #333;
 }
 
 /* Containers */
@@ -79,25 +90,9 @@ QCheckBox::indicator:checked {
 	image:url($themeDir/checked.png);
 }
 
-/* Config dialog list */
-#configDialog QListView {
-	background-color: #333;
-	border: 1px solid #666;
-}
-
-#configDialog QListView:focus {
-	border: 1px solid #ccc;
-}
-
-#configDialog QListView::item {
-	color: #aaa;
-}
-
-#configDialog QListView::item:selected {
-	background-color:
-		qlineargradient(x1:0, y1:0, x2:0, y2:1,
-		stop:0 #888, stop:1 #444);
-	color: #ccc;
+/* QListView */
+QListView {
+	padding: 2px;
 }
 
 /* QPushButton */
