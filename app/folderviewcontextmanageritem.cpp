@@ -179,16 +179,21 @@ struct FolderViewContextManagerItemPrivate {
 
 
 	QModelIndex findRootIndex(const KUrl& wantedUrl) {
+		QModelIndex matchIndex;
+		int matchUrlLength = 0;
 		for (int row = 0; row < mModel->rowCount(); ++row) {
 			QModelIndex index = mModel->index(row, 0);
 			KUrl url = mModel->urlForIndex(index);
-			if (url.isParentOf(wantedUrl)) {
-				// FIXME: Use closest match
-				return index;
+			int urlLength = url.url().length();
+			if (url.isParentOf(wantedUrl) && urlLength > matchUrlLength) {
+				matchIndex = index;
+				matchUrlLength = urlLength;
 			}
 		}
-		kWarning() << "Found no root index for" << wantedUrl;
-		return QModelIndex();
+		if (!matchIndex.isValid()) {
+			kWarning() << "Found no root index for" << wantedUrl;
+		}
+		return matchIndex;
 	}
 };
 
