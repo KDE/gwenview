@@ -660,12 +660,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		borderColor = bgColor.dark(SELECTION_BORDER_DARKNESS);
 	} else {
 		bgColor = viewport->palette().color(viewport->backgroundRole());
-
-		if (bgColor.value() < 128) {
-			borderColor = bgColor.dark(200);
-		} else {
-			borderColor = bgColor.light(200);
-		}
+		borderColor = bgColor.light(200);
 	}
 	fgColor = viewport->palette().color(viewport->foregroundRole());
 
