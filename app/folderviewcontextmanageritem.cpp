@@ -233,6 +233,10 @@ void FolderViewContextManagerItem::slotCurrentDirUrlChanged() {
 
 
 void FolderViewContextManagerItem::expandToSelectedUrl() {
+	if (!d->mUrlToSelect.isValid()) {
+		return;
+	}
+
 	if (!d->mModel) {
 		d->setupModel();
 	}
