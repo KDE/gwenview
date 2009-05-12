@@ -114,6 +114,8 @@ struct FolderViewContextManagerItemPrivate {
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 		mView->setAcceptDrops(true);
 		mView->setDropIndicatorShown(true);
+		mView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+		mView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
 		mView->setHeaderHidden(true);
 		mView->setFrameStyle(QFrame::NoFrame);
