@@ -262,9 +262,13 @@ void FolderViewContextManagerItem::expandToSelectedUrl() {
 }
 
 
-void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& index, int /*start*/, int /*end*/) {
-	if (d->mModel->urlForIndex(index).isParentOf(d->mUrlToSelect)) {
-		d->mExpandingIndex = index;
+void FolderViewContextManagerItem::slotRowsInserted(const QModelIndex& parentIndex, int /*start*/, int /*end*/) {
+	// Can't trigger the case where parentIndex is invalid, but it most
+	// probably happen when root items are created. In this case we trigger
+	// expandToSelectedUrl without checking the url.
+	// See bug #191771
+	if (!parentIndex.isValid() || d->mModel->urlForIndex(parentIndex).isParentOf(d->mUrlToSelect)) {
+		d->mExpandingIndex = parentIndex;
 		// Hack because otherwise indexes are not in correct order!
 		QMetaObject::invokeMethod(this, "expandToSelectedUrl", Qt::QueuedConnection);
 	}
