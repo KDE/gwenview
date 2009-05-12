@@ -205,7 +205,6 @@ FolderViewContextManagerItem::FolderViewContextManagerItem(ContextManager* manag
 	d->mModel = 0;
 
 	d->setupView();
-	EventWatcher::install(d->mView, QEvent::Show, this, SLOT(expandToSelectedUrl()));
 
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(slotCurrentDirUrlChanged()) );
