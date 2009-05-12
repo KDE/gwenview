@@ -430,6 +430,7 @@ bool ThumbnailView::isModified(const QModelIndex& index) const {
 
 
 void ThumbnailView::dragEnterEvent(QDragEnterEvent* event) {
+	QAbstractItemView::dragEnterEvent(event);
 	if (event->mimeData()->hasUrls()) {
 		event->acceptProposedAction();
 	}
@@ -438,6 +439,7 @@ void ThumbnailView::dragEnterEvent(QDragEnterEvent* event) {
 
 void ThumbnailView::dragMoveEvent(QDragMoveEvent* event) {
 	// Necessary, otherwise we don't reach dropEvent()
+	QAbstractItemView::dragMoveEvent(event);
 	event->acceptProposedAction();
 }
 

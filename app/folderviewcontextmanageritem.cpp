@@ -60,6 +60,7 @@ public:
 
 protected:
 	void dragEnterEvent(QDragEnterEvent* event) {
+		QAbstractItemView::dragEnterEvent(event);
 		if (event->mimeData()->hasUrls()) {
 			event->acceptProposedAction();
 		}
@@ -67,6 +68,7 @@ protected:
 
 
 	void dragMoveEvent(QDragMoveEvent* event) {
+		QAbstractItemView::dragMoveEvent(event);
 		if (indexAt(event->pos()).isValid()) {
 			event->acceptProposedAction();
 		} else {
