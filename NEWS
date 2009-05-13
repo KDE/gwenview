@@ -11,6 +11,7 @@
 - History can now be disabled.
 - Added file operations and "open with" menu to image view context menu. Patch
   by Marian Kyral (bug #187819).
+- Show XMP image information.
 
 ## Fixes
 - Restart slideshow timer when user changes current image (bug #186411).
