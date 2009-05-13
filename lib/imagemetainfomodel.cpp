@@ -45,7 +45,8 @@ enum GroupRow {
 	NoGroup = -1,
 	GeneralGroup,
 	ExifGroup,
-	IptcGroup
+	IptcGroup,
+	XmpGroup
 };
 
 
@@ -276,10 +277,11 @@ struct ImageMetaInfoModelPrivate {
 ImageMetaInfoModel::ImageMetaInfoModel()
 : d(new ImageMetaInfoModelPrivate) {
 	d->mModel = this;
-	d->mMetaInfoGroupVector.resize(3);
+	d->mMetaInfoGroupVector.resize(4);
 	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
 	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18nc("@title:group", "Exif"));
 	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18nc("@title:group", "Iptc"));
+	d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup(i18nc("@title:group", "Xmp"));
 	d->initGeneralGroup();
 }
 
@@ -324,10 +326,13 @@ void ImageMetaInfoModel::setImageSize(const QSize& size) {
 void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 	MetaInfoGroup* exifGroup = d->mMetaInfoGroupVector[ExifGroup];
 	MetaInfoGroup* iptcGroup = d->mMetaInfoGroupVector[IptcGroup];
+	MetaInfoGroup* xmpGroup  = d->mMetaInfoGroupVector[XmpGroup];
 	QModelIndex exifIndex = index(ExifGroup, 0);
 	QModelIndex iptcIndex = index(IptcGroup, 0);
+	QModelIndex xmpIndex  = index(XmpGroup, 0);
 	d->clearGroup(exifGroup, exifIndex);
 	d->clearGroup(iptcGroup, iptcIndex);
+	d->clearGroup(xmpGroup,  xmpIndex);
 
 	if (!image) {
 		return;
@@ -342,6 +347,11 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 		const Exiv2::IptcData& iptcData = image->iptcData();
 		d->fillExivGroup<Exiv2::IptcData, Exiv2::IptcData::const_iterator>(iptcIndex, iptcGroup, iptcData);
 	}
+
+	if (image->checkMode(Exiv2::mdXmp) & Exiv2::amRead) {
+		const Exiv2::XmpData& xmpData = image->xmpData();
+		d->fillExivGroup<Exiv2::XmpData, Exiv2::XmpData::const_iterator>(xmpIndex, xmpGroup, xmpData);
+	}
 }
 
 
@@ -353,6 +363,8 @@ void ImageMetaInfoModel::getInfoForKey(const QString& key, QString* label, QStri
 		group = d->mMetaInfoGroupVector[ExifGroup];
 	} else if (key.startsWith(QLatin1String("Iptc"))) {
 		group = d->mMetaInfoGroupVector[IptcGroup];
+	} else if (key.startsWith(QLatin1String("Xmp"))) {
+		group = d->mMetaInfoGroupVector[XmpGroup];
 	} else {
 		kWarning() << "Unknown metainfo key" << key;
 		return;
