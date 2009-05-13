@@ -279,9 +279,9 @@ ImageMetaInfoModel::ImageMetaInfoModel()
 	d->mModel = this;
 	d->mMetaInfoGroupVector.resize(4);
 	d->mMetaInfoGroupVector[GeneralGroup] = new MetaInfoGroup(i18nc("@title:group General info about the image", "General"));
-	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup(i18nc("@title:group", "Exif"));
-	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup(i18nc("@title:group", "Iptc"));
-	d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup(i18nc("@title:group", "Xmp"));
+	d->mMetaInfoGroupVector[ExifGroup] = new MetaInfoGroup("EXIF");
+	d->mMetaInfoGroupVector[IptcGroup] = new MetaInfoGroup("IPTC");
+	d->mMetaInfoGroupVector[XmpGroup]  = new MetaInfoGroup("XMP");
 	d->initGeneralGroup();
 }
 
