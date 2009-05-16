@@ -116,7 +116,7 @@ SideBarGroup::~SideBarGroup() {
 
 void SideBarGroup::paintEvent(QPaintEvent* event) {
 	QFrame::paintEvent(event);
-	if (y() != 0) {
+	if (parentWidget()->layout()->indexOf(this) != 0) {
 		// Draw a separator, but only if we are not the first group
 		QPainter painter(this);
 		QPen pen(palette().mid().color());
