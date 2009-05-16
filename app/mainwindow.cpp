@@ -422,6 +422,7 @@ struct MainWindow::Private {
 		page = new SideBarPage(i18n("Folders"), "folder");
 		page->setObjectName("folders");
 		page->addWidget(folderViewItem->widget());
+		page->layout()->setMargin(0);
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Information"), "dialog-information");

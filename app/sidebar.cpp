@@ -178,7 +178,6 @@ SideBarPage::SideBarPage(const QString& title, const QString& iconName)
 	d->mIcon = KIcon(iconName);
 
 	d->mLayout = new QVBoxLayout(this);
-	d->mLayout->setMargin(0);
 }
 
 
