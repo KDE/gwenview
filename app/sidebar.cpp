@@ -380,9 +380,11 @@ SideBar::SideBar(QWidget* parent)
 : QTabWidget(parent)
 , d(new SideBarPrivate) {
 	setFont(KGlobalSettings::smallestReadableFont());
-	setTabBar(new ThinTabBar);
+	//setTabBar(new ThinTabBar);
 	tabBar()->setDocumentMode(true);
 	tabBar()->setUsesScrollButtons(false);
+	setTabPosition(QTabWidget::South);
+	setElideMode(Qt::ElideRight);
 }
 
 
@@ -397,7 +399,7 @@ QSize SideBar::sizeHint() const {
 
 
 void SideBar::addPage(SideBarPage* page) {
-	addTab(page, page->icon(), page->title());
+	addTab(page, /*page->icon(),*/ page->title());
 }
 
 
