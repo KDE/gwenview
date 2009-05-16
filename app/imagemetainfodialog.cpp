@@ -22,8 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "imagemetainfodialog.moc"
 
 // Qt
-#include <QTreeView>
 #include <QHeaderView>
+#include <QPainter>
+#include <QStyledItemDelegate>
+#include <QTreeView>
 
 // KDE
 #include <kdebug.h>
@@ -38,6 +40,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
+class MetaInfoDelegate : public QStyledItemDelegate {
+public:
+	MetaInfoDelegate(QObject* parent)
+	: QStyledItemDelegate(parent)
+	{}
+
+protected:
+	virtual void paint(QPainter* painter, const QStyleOptionViewItem& _option, const QModelIndex& index) const {
+		QStyleOptionViewItemV4 option = _option;
+		if (!index.parent().isValid()) {
+			option.displayAlignment = Qt::AlignCenter | Qt::AlignBottom;
+			option.font.setBold(true);
+		}
+		QStyledItemDelegate::paint(painter, option, index);
+		if (!index.parent().isValid()) {
+			painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
+		}
+	}
+
+	virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+		QSize sh = QStyledItemDelegate::sizeHint(option, index);
+		if (!index.parent().isValid()) {
+			sh.setHeight(sh.height() * 3 / 2);
+		}
+		return sh;
+	}
+};
+
 /**
  * A tree view which is always fully expanded
  */
@@ -49,12 +79,24 @@ public:
 protected:
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end) {
 		QTreeView::rowsInserted(parent, start, end);
-		expand(parent);
+		if (!parent.isValid()) {
+			for (int row = start; row <= end; ++row) {
+				setUpRootIndex(row);
+			}
+		}
 	}
 
 	virtual void reset() {
 		QTreeView::reset();
-		expandAll();
+		for (int row = 0; row < model()->rowCount(); ++row) {
+			setUpRootIndex(row);
+		}
+	}
+
+private:
+	void setUpRootIndex(int row) {
+		expand(model()->index(row, 0));
+		setFirstColumnSpanned(row, QModelIndex(), true);
 	}
 };
 
@@ -71,6 +113,7 @@ ImageMetaInfoDialog::ImageMetaInfoDialog(QWidget* parent)
 	d->mTreeView = new ExpandedTreeView(this);
 	d->mTreeView->setRootIsDecorated(false);
 	d->mTreeView->setIndentation(0);
+	d->mTreeView->setItemDelegate(new MetaInfoDelegate(d->mTreeView));
 	setMainWidget(d->mTreeView);
 	setCaption(i18n("Meta Information"));
 	setButtons(KDialog::Close);
