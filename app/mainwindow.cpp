@@ -419,13 +419,13 @@ struct MainWindow::Private {
 
 		// Fill sidebar
 		SideBarPage* page;
-		page = new SideBarPage(i18n("Folders"), "folder");
+		page = new SideBarPage(i18n("Folders"));
 		page->setObjectName("folders");
 		page->addWidget(folderViewItem->widget());
 		page->layout()->setMargin(0);
 		mSideBar->addPage(page);
 
-		page = new SideBarPage(i18n("Information"), "dialog-information");
+		page = new SideBarPage(i18n("Information"));
 		page->setObjectName("information");
 		page->addWidget(infoItem->widget());
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -434,7 +434,7 @@ struct MainWindow::Private {
 		page->addStretch();
 		mSideBar->addPage(page);
 
-		page = new SideBarPage(i18n("Operations"), "system-run");
+		page = new SideBarPage(i18n("Operations"));
 		page->setObjectName("operations");
 		page->addWidget(imageOpsItem->widget());
 		page->addWidget(fileOpsItem->widget());

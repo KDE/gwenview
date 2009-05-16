@@ -53,12 +53,11 @@ class SideBarPagePrivate;
 class SideBarPage : public QWidget {
 	Q_OBJECT
 public:
-	SideBarPage(const QString& title, const QString& iconName);
+	SideBarPage(const QString& title);
 	void addWidget(QWidget*);
 	void addStretch();
 
 	const QString& title() const;
-	const KIcon& icon() const;
 
 private:
 	SideBarPagePrivate* const d;
