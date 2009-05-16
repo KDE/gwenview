@@ -120,7 +120,6 @@ struct FolderViewContextManagerItemPrivate {
 		mView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
 		mView->setHeaderHidden(true);
-		mView->setFrameStyle(QFrame::NoFrame);
 
 		// This is tricky: QTreeView header has stretchLastSection set to true.
 		// In this configuration, the header gets quite wide and cause an
@@ -130,13 +129,6 @@ struct FolderViewContextManagerItemPrivate {
 		// widget).
 		mView->header()->setStretchLastSection(false);
 		mView->header()->setResizeMode(QHeaderView::Stretch);
-
-		QPalette p = mView->palette();
-		p.setColor(QPalette::Active,   QPalette::Text, p.color(QPalette::Active,   QPalette::WindowText));
-		p.setColor(QPalette::Inactive, QPalette::Text, p.color(QPalette::Inactive, QPalette::WindowText));
-		p.setColor(QPalette::Disabled, QPalette::Text, p.color(QPalette::Disabled, QPalette::WindowText));
-		mView->setPalette(p);
-		mView->viewport()->setAutoFillBackground(false);
 
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
