@@ -43,7 +43,7 @@ protected:
 			painter.drawLine(rect().topLeft(), rect().topRight());
 			painter.drawLine(rect().bottomLeft(), rect().bottomRight());
 		} else {
-			painter.drawLine(rect().topLeft(), rect().bottomLeft());
+			//painter.drawLine(rect().topLeft(), rect().bottomLeft());
 			painter.drawLine(rect().topRight(), rect().bottomRight());
 		}
 	}
