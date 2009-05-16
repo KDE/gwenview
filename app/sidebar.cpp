@@ -325,6 +325,13 @@ private:
 			mTabWidths[index] = shrunkTabWidth;
 			setTabToolTip(index, tabText(index));
 		}
+
+		// Make sure we do not leave a few pixels on the right
+		totalWidth = 0;
+		for (int index = 0; index < count(); ++index) {
+			totalWidth += mTabWidths[index];
+		}
+		mTabWidths[count() - 1] += parentWidth - totalWidth;
 	}
 
 	QVector<int> mTabWidths;
