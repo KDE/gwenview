@@ -1297,23 +1297,10 @@ void MainWindow::loadConfig() {
 	pal.setColor(QPalette::Base, bgColor);
 	pal.setColor(QPalette::Text, fgColor);
 
-	// Sidebar colors
-	QColor sideBarBgColor = palette().color(QPalette::AlternateBase);
-	QColor sideBarFgColor = palette().color(QPalette::Text);
-
-	QPalette sideBarPal = d->mSideBar->palette();
-	sideBarPal.setColor(QPalette::Window, sideBarBgColor);
-	sideBarPal.setColor(QPalette::Button, sideBarBgColor);
-	sideBarPal.setColor(QPalette::Text, sideBarFgColor);
-	sideBarPal.setColor(QPalette::ButtonText, sideBarFgColor);
-
 	// Apply to widgets
 	d->mThumbnailViewPanel->applyPalette(pal);
 	d->mStartPage->applyPalette(pal);
 	d->mDocumentPanel->setNormalPalette(pal);
-
-	d->mSideBar->setAutoFillBackground(true);
-	d->mSideBar->setPalette(sideBarPal);
 
 	// FIXME: Should we avoid CSS here to get a more native look?
 	d->mSideBarCollapser->setAutoFillBackground(true);
