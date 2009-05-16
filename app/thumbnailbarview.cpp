@@ -137,8 +137,8 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 		QRect thumbnailRect = QRect(
 			rect.left() + (rect.width() - thumbnailPix.width())/2,
 			rect.top() + (rect.height() - thumbnailPix.height())/2 - 1,
-		    thumbnailPix.width(),
-		    thumbnailPix.height());
+			thumbnailPix.width(),
+			thumbnailPix.height());
 
 		if (!thumbnailPix.hasAlphaChannel()) {
 			d->drawShadow(painter, thumbnailRect);
