@@ -101,8 +101,8 @@ void compareMetaInfo(const QString& path1, const QString& path2, const QStringLi
 
 	QCOMPARE(mim1.keys(),mim2.keys());
 	QList<QString> keys=mim1.keys();
-	QList<QString>::ConstIterator it=keys.begin();
-	for ( ; it!=keys.end(); ++it) {
+	QList<QString>::ConstIterator it=keys.constBegin();
+	for ( ; it!=keys.constEnd(); ++it) {
 		QString key=*it;
 		if (ignoredKeys.contains(key)) continue;
 
