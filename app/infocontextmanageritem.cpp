@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kfileitem.h>
 #include <klocale.h>
-#include <kwordwrap.h>
+#include <ksqueezedtextlabel.h>
 
 // Local
 #include "contextmanager.h"
@@ -62,7 +62,6 @@ public:
 	KeyValueWidget(QWidget* parent)
 	: QWidget(parent)
 	, mLayout(new QFormLayout(this)) {
-		mLayout->setLabelAlignment(Qt::AlignRight);
 		setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	}
 
@@ -71,13 +70,11 @@ public:
 				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
 				"%1:", key);
 
-		QLabel* keyLabel = new QLabel;
-		keyLabel->setWordWrap(true);
+		KSqueezedTextLabel* keyLabel = new KSqueezedTextLabel;
+		keyLabel->setTextElideMode(Qt::ElideMiddle);
 		keyLabel->setText(keyString);
-		keyLabel->setAlignment(Qt::AlignRight);
 
 		QLabel* valueLabel = new QLabel;
-		valueLabel->setWordWrap(true);
 		valueLabel->setText(value);
 
 		mLayout->addRow(keyLabel, valueLabel);
