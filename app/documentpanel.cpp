@@ -302,12 +302,12 @@ void DocumentPanel::loadConfig() {
 	int newRowCount = GwenviewConfig::thumbnailBarRowCount();
 	if (oldRowCount != newRowCount) {
 		d->mThumbnailBar->setUpdatesEnabled(false);
-		int thumbnailSize = d->mThumbnailBar->thumbnailSize();
+		int gridSize = d->mThumbnailBar->gridSize().width();
 
 		d->mThumbnailBar->setRowCount(newRowCount);
 
 		// Adjust splitter to ensure thumbnail size remains the same
-		int delta = (newRowCount - oldRowCount) * thumbnailSize;
+		int delta = (newRowCount - oldRowCount) * gridSize;
 		QList<int> sizes = d->mThumbnailSplitter->sizes();
 		Q_ASSERT(sizes.count() == 2);
 		sizes[0] -= delta;
