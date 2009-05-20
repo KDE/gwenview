@@ -22,12 +22,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "splittercollapser.h"
 
 // Qt
+#include <QApplication>
 #include <QEvent>
+#include <QMouseEvent>
 #include <QSplitter>
 #include <QStyleOptionToolButton>
 #include <QStylePainter>
+#include <QTimeLine>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 
@@ -42,6 +46,7 @@ enum Direction {
 	BTT      = Vertical + (1 << 1)
 };
 
+const int TIMELINE_DURATION = 500;
 
 struct ArrowTypes {
 	ArrowTypes() {}
@@ -63,6 +68,7 @@ struct SplitterCollapserPrivate {
 	QSplitter* mSplitter;
 	QWidget* mWidget;
 	Direction mDirection;
+	QTimeLine* mOpacityTimeLine;
 
 	bool isVertical() const {
 		return mDirection & Vertical;
@@ -110,6 +116,48 @@ struct SplitterCollapserPrivate {
 		}
 		q->setArrowType(arrowForDirection[mDirection].get(mWidget->isVisible()));
 	}
+
+
+	void widgetEventFilter(QEvent* event) {
+		switch (event->type()) {
+		case QEvent::Resize:
+			updatePosition();
+			updateOpacity();
+			break;
+
+		case QEvent::Show:
+		case QEvent::Hide:
+			updatePosition();
+			updateOpacity();
+			updateArrow();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+
+	void updateOpacity() {
+		QPoint pos = q->parentWidget()->mapFromGlobal(QCursor::pos());
+		QRect showRect = q->geometry() | mWidget->geometry();
+		bool showCollapser = showRect.contains(pos);
+		qreal opacity = mOpacityTimeLine->currentValue();
+		if (showCollapser && qFuzzyCompare(opacity, 0)) {
+			mOpacityTimeLine->setDirection(QTimeLine::Forward);
+			startTimeLine();
+		} else if (!showCollapser && qFuzzyCompare(opacity, 1)) {
+			mOpacityTimeLine->setDirection(QTimeLine::Backward);
+			startTimeLine();
+		}
+	}
+
+
+	void startTimeLine() {
+		if (mOpacityTimeLine->state() != QTimeLine::Running) {
+			mOpacityTimeLine->start();
+		}
+	}
 };
 
 
@@ -122,8 +170,14 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 	// splitter!
 	setAttribute(Qt::WA_NoChildEventsForParent);
 
+	d->mOpacityTimeLine = new QTimeLine(TIMELINE_DURATION, this);
+	connect(d->mOpacityTimeLine, SIGNAL(valueChanged(qreal)),
+		SLOT(update()));
+
 	d->mWidget = widget;
 	d->mWidget->installEventFilter(this);
+
+	qApp->installEventFilter(this);
 
 	d->mSplitter = splitter;
 	setParent(d->mSplitter);
@@ -149,20 +203,13 @@ SplitterCollapser::~SplitterCollapser() {
 }
 
 
-bool SplitterCollapser::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Resize:
-		d->updatePosition();
-		break;
-
-	case QEvent::Show:
-	case QEvent::Hide:
-		d->updatePosition();
-		d->updateArrow();
-		break;
-
-	default:
-		break;
+bool SplitterCollapser::eventFilter(QObject* object, QEvent* event) {
+	if (object == d->mWidget) {
+		d->widgetEventFilter(event);
+	} else { /* app */
+		if (event->type() == QEvent::MouseMove) {
+			d->updateOpacity();
+		}
 	}
 	return false;
 }
@@ -185,6 +232,7 @@ void SplitterCollapser::slotClicked() {
 
 void SplitterCollapser::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
+	painter.setOpacity(d->mOpacityTimeLine->currentValue());
 
 	QStyleOptionToolButton opt;
 	initStyleOption(&opt);
