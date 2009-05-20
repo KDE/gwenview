@@ -297,7 +297,25 @@ void DocumentPanel::loadConfig() {
 	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
 	d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
 	d->mThumbnailBar->setOrientation(orientation);
-	d->mThumbnailBar->setRowCount(GwenviewConfig::thumbnailBarRowCount());
+
+	int oldRowCount = d->mThumbnailBar->rowCount();
+	int newRowCount = GwenviewConfig::thumbnailBarRowCount();
+	if (oldRowCount != newRowCount) {
+		d->mThumbnailBar->setUpdatesEnabled(false);
+		int thumbnailSize = d->mThumbnailBar->thumbnailSize();
+
+		d->mThumbnailBar->setRowCount(newRowCount);
+
+		// Adjust splitter to ensure thumbnail size remains the same
+		int delta = (newRowCount - oldRowCount) * thumbnailSize;
+		QList<int> sizes = d->mThumbnailSplitter->sizes();
+		Q_ASSERT(sizes.count() == 2);
+		sizes[0] -= delta;
+		sizes[1] += delta;
+		d->mThumbnailSplitter->setSizes(sizes);
+
+		d->mThumbnailBar->setUpdatesEnabled(true);
+	}
 }
 
 

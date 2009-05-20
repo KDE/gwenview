@@ -287,12 +287,17 @@ struct ThumbnailBarViewPrivate {
 	}
 
 
-	void updateMaximumSize() {
-		QSize size(QWIDGETSIZE_MAX, mRowCount * 256);
+	void updateMinMaxSizes() {
+		QSizeDimension dimension = oppositeDimension();
+		int scrollBarSize = (scrollBar()->sizeHint().*dimension)();
+		QSize minSize(0, mRowCount * 48 + scrollBarSize);
+		QSize maxSize(QWIDGETSIZE_MAX, mRowCount * 256 + scrollBarSize);
 		if (mOrientation == Qt::Vertical) {
-			size.transpose();
+			minSize.transpose();
+			maxSize.transpose();
 		}
-		q->setMaximumSize(size);
+		q->setMinimumSize(minSize);
+		q->setMaximumSize(maxSize);
 	}
 
 
@@ -359,7 +364,7 @@ void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
 		setFlow(TopToBottom);
 	}
 
-	d->updateMaximumSize();
+	d->updateMinMaxSizes();
 }
 
 
@@ -414,10 +419,15 @@ void ThumbnailBarView::wheelEvent(QWheelEvent* event) {
 }
 
 
+int ThumbnailBarView::rowCount() const {
+	return d->mRowCount;
+}
+
+
 void ThumbnailBarView::setRowCount(int rowCount) {
 	Q_ASSERT(rowCount > 0);
 	d->mRowCount = rowCount;
-	d->updateMaximumSize();
+	d->updateMinMaxSizes();
 	d->updateThumbnailSize();
 }
 

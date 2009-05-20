@@ -65,6 +65,7 @@ public:
 
 	void setOrientation(Qt::Orientation);
 
+	int rowCount() const;
 	void setRowCount(int);
 
 protected:
