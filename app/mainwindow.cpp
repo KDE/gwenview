@@ -875,7 +875,10 @@ void MainWindow::goUp() {
 
 
 void MainWindow::showStartPage() {
-	d->mCurrentPageId = StartPageId;
+	if (d->mCurrentPageId != StartPageId) {
+		d->saveSideBarConfig();
+		d->mCurrentPageId = StartPageId;
+	}
 	d->setActionsDisabledOnStartPageEnabled(false);
 	d->spreadCurrentDirUrl(KUrl());
 
