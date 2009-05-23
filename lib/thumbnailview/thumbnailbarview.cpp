@@ -373,31 +373,6 @@ void ThumbnailBarView::slotFrameChanged(int value) {
 }
 
 
-void ThumbnailBarView::paintEvent(QPaintEvent* event) {
-	ThumbnailView::paintEvent(event);
-
-	if (!d->scrollBar()->maximum()) {
-		// Thumbnails doesn't fully cover viewport, draw a shadow after last item.
-		QPainter painter(viewport());
-		QLinearGradient linearGradient;
-		linearGradient.setColorAt(0, QColor(0, 0, 0, 127));
-		linearGradient.setColorAt(1, QColor(0, 0, 0, 0));
-
-		QModelIndex index = model()->index(model()->rowCount() - 1, 0);
-		QRect rect = rectForIndex(index);
-		const int gradientExtent = 5;
-		linearGradient.setStart(rect.bottomRight());
-		if (d->mOrientation == Qt::Horizontal) {
-			linearGradient.setFinalStop(rect.bottomRight() + QPoint(gradientExtent, 0));
-			painter.fillRect(rect.right(), 0, gradientExtent, rect.height(), linearGradient);
-		} else {
-			linearGradient.setFinalStop(rect.bottomRight() + QPoint(0, gradientExtent));
-			painter.fillRect(0, rect.bottom(), rect.width(), gradientExtent, linearGradient);
-		}
-	}
-}
-
-
 void ThumbnailBarView::resizeEvent(QResizeEvent *event) {
 	ThumbnailView::resizeEvent(event);
 	d->updateThumbnailSize();

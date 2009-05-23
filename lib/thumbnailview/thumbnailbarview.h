@@ -71,8 +71,6 @@ public:
 	void setRowCount(int);
 
 protected:
-	void paintEvent(QPaintEvent*);
-
 	virtual void resizeEvent(QResizeEvent * event);
 	virtual void wheelEvent(QWheelEvent* event);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
