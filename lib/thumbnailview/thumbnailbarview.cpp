@@ -307,10 +307,10 @@ struct ThumbnailBarViewPrivate {
 		int widgetSize = (q->size().*dimension)();
 
 		if (mRowCount > 1) {
-			// FIXME: Hack to work around QListView bug
-			// It seems scrollBar is deduced two times...
-			// (Qt 4.5.0)
-			widgetSize -= scrollBarSize + 1;
+			// Decrease widgetSize because otherwise the view sometimes wraps at
+			// mRowCount-1 instead of mRowCount. Probably because gridSize *
+			// mRowCount is too close to widgetSize.
+			--widgetSize;
 		}
 
 		int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
