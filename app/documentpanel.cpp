@@ -65,14 +65,24 @@ static QString rgba(const QColor &color) {
 }
 
 
-static QString gradient(const QColor &color, int value) {
+static QString gradient(Qt::Orientation orientation, const QColor &color, int value) {
+	int x2, y2;
+	if (orientation == Qt::Horizontal) {
+		x2 = 0;
+		y2 = 1;
+	} else {
+		x2 = 1;
+		y2 = 0;
+	}
 	QString grad =
-		"qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		"stop:0 %1, stop: 1 %2)";
-	return grad.arg(
-		rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))),
-		rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2)))
-		);
+		"qlineargradient(x1:0, y1:0, x2:%1, y2:%2,"
+		"stop:0 %3, stop: 1 %4)";
+	return grad
+		.arg(x2)
+		.arg(y2)
+		.arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, qMin(255 - color.value(), value/2))))
+		.arg(rgba(PaintUtils::adjustedHsv(color, 0, 0, -qMin(color.value(), value/2))))
+		;
 }
 
 
@@ -120,9 +130,12 @@ struct DocumentPanelPrivate {
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
 		mThumbnailBar->setItemDelegate(delegate);
 		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+	}
 
-		QColor bgColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Window);
-		QColor bgSelColor = mThumbnailBar->palette().color(QPalette::Normal, QPalette::Highlight);
+	void setupThumbnailBarStyleSheet() {
+		Qt::Orientation orientation = mThumbnailBar->orientation();
+		QColor bgColor = mNormalPalette.color(QPalette::Normal, QPalette::Window);
+		QColor bgSelColor = mNormalPalette.color(QPalette::Normal, QPalette::Highlight);
 
 		// Avoid dark and bright colors
 		bgColor.setHsv(bgColor.hue(), bgColor.saturation(), (127 + 3 * bgColor.value()) / 4);
@@ -143,9 +156,9 @@ struct DocumentPanelPrivate {
 			"	border-right: 1px solid %3;"
 			"}";
 		itemCss = itemCss.arg(
-			gradient(bgColor, 46),
-			gradient(leftBorderColor, 36),
-			gradient(rightBorderColor, 26));
+			gradient(orientation, bgColor, 46),
+			gradient(orientation, leftBorderColor, 36),
+			gradient(orientation, rightBorderColor, 26));
 
 		QString itemSelCss =
 			"QListView::item:selected {"
@@ -154,10 +167,15 @@ struct DocumentPanelPrivate {
 			"	border-right: 1px solid %2;"
 			"}";
 		itemSelCss = itemSelCss.arg(
-			gradient(bgSelColor, 56),
+			gradient(orientation, bgSelColor, 56),
 			rgba(borderSelColor));
 
-		mThumbnailBar->setStyleSheet(viewCss + itemCss + itemSelCss);
+		QString css = viewCss + itemCss + itemSelCss;
+		if (orientation == Qt::Vertical) {
+			css.replace("left", "top").replace("right", "bottom");
+		}
+
+		mThumbnailBar->setStyleSheet(css);
 	}
 
 	void setupAdapterContainer() {
@@ -297,6 +315,7 @@ void DocumentPanel::loadConfig() {
 	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
 	d->mThumbnailSplitter->setOrientation(orientation == Qt::Horizontal ? Qt::Vertical : Qt::Horizontal);
 	d->mThumbnailBar->setOrientation(orientation);
+	d->setupThumbnailBarStyleSheet();
 
 	int oldRowCount = d->mThumbnailBar->rowCount();
 	int newRowCount = GwenviewConfig::thumbnailBarRowCount();
@@ -435,6 +454,7 @@ DocumentView* DocumentPanel::documentView() const {
 void DocumentPanel::setNormalPalette(const QPalette& palette) {
 	d->mNormalPalette = palette;
 	d->applyPalette();
+	d->setupThumbnailBarStyleSheet();
 }
 
 
