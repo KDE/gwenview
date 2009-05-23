@@ -57,8 +57,7 @@ public:
 	};
 	// FIXME: Find out why this cause problems with Qt::Alignment in
 	// PreviewItemDelegate!
-	//Q_DECLARE_FLAGS(ThumbnailDetails, ThumbnailDetail);
-	typedef int ThumbnailDetails;
+	Q_DECLARE_FLAGS(ThumbnailDetails, ThumbnailDetail)
 
 	/**
 	 * Returns which thumbnail details are shown
@@ -94,10 +93,10 @@ private:
 	friend class PreviewItemDelegatePrivate;
 };
 
-// See upper
-//Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::ThumbnailView::ThumbnailDetails)
-
 
 } // namespace
+
+// See upper
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::PreviewItemDelegate::ThumbnailDetails)
 
 #endif /* PREVIEWITEMDELEGATE_H */
