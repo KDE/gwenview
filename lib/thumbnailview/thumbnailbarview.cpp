@@ -348,6 +348,11 @@ ThumbnailBarView::~ThumbnailBarView() {
 }
 
 
+Qt::Orientation ThumbnailBarView::orientation() const {
+	return d->mOrientation;
+}
+
+
 void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
 	if (d->mOrientation == orientation) {
 		return;

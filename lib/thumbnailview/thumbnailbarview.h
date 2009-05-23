@@ -65,6 +65,7 @@ public:
 	ThumbnailBarView(QWidget* = 0);
 	~ThumbnailBarView();
 
+	Qt::Orientation orientation() const;
 	void setOrientation(Qt::Orientation);
 
 	int rowCount() const;
