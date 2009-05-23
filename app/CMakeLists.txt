@@ -34,7 +34,6 @@ set(gwenview_SRCS
 	startpage.cpp
 	thumbnailviewhelper.cpp
 	thumbnailviewpanel.cpp
-	thumbnailbarview.cpp
 	)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)

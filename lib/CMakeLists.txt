@@ -74,6 +74,7 @@ set(gwenviewlib_SRCS
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
 	thumbnailview/previewitemdelegate.cpp
+	thumbnailview/thumbnailbarview.cpp
 	thumbnailview/thumbnailview.cpp
 	timeutils.cpp
 	transformimageoperation.cpp

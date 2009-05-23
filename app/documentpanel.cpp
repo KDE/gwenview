@@ -35,12 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "splitter.h"
-#include "thumbnailbarview.h"
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/statusbartoolbutton.h>
+#include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/zoomwidget.h>
 
 

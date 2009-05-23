@@ -77,7 +77,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "sidebar.h"
 #include "splitter.h"
 #include "startpage.h"
-#include "thumbnailbarview.h"
 #include "thumbnailviewhelper.h"
 #include "thumbnailviewpanel.h"
 #include <lib/archiveutils.h>
@@ -92,6 +91,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/signalblocker.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/splittercollapser.h>
+#include <lib/thumbnailview/thumbnailbarview.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <lib/thumbnailloadjob.h>
 #include <lib/urlutils.h>

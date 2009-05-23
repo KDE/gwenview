@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef THUMBNAILBARVIEW_H
 #define THUMBNAILBARVIEW_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 #include <QAbstractItemDelegate>
 
@@ -37,7 +39,7 @@ namespace Gwenview {
 
 struct ThumbnailBarItemDelegatePrivate;
 
-class ThumbnailBarItemDelegate : public QAbstractItemDelegate {
+class GWENVIEWLIB_EXPORT ThumbnailBarItemDelegate : public QAbstractItemDelegate {
 	Q_OBJECT
 public:
 	ThumbnailBarItemDelegate(ThumbnailView*);
@@ -57,7 +59,7 @@ private:
 
 
 struct ThumbnailBarViewPrivate;
-class ThumbnailBarView : public ThumbnailView {
+class GWENVIEWLIB_EXPORT ThumbnailBarView : public ThumbnailView {
 	Q_OBJECT
 public:
 	ThumbnailBarView(QWidget* = 0);
