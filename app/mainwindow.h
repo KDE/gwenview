@@ -53,6 +53,8 @@ public:
 
 	bool currentDocumentIsRasterImage() const;
 
+	void setDistractionFreeMode(bool);
+
 public Q_SLOTS:
 	void showStartPage();
 

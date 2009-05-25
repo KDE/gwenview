@@ -264,6 +264,7 @@ void ImageOpsContextManagerItem::crop() {
 	connect(tool, SIGNAL(done()),
 		SLOT(restoreDefaultImageViewTool()) );
 
+	d->mMainWindow->setDistractionFreeMode(true);
 	imageView->setCurrentTool(tool);
 }
 
@@ -283,6 +284,7 @@ void ImageOpsContextManagerItem::startRedEyeReduction() {
 	connect(tool, SIGNAL(done()),
 		SLOT(restoreDefaultImageViewTool()) );
 
+	d->mMainWindow->setDistractionFreeMode(true);
 	imageView->setCurrentTool(tool);
 }
 
@@ -309,6 +311,7 @@ void ImageOpsContextManagerItem::restoreDefaultImageViewTool() {
 	AbstractImageViewTool* tool = imageView->currentTool();
 	imageView->setCurrentTool(0);
 	tool->deleteLater();
+	d->mMainWindow->setDistractionFreeMode(false);
 }
 
 

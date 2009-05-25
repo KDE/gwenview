@@ -165,6 +165,7 @@ struct MainWindow::Private {
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
 
+	bool mDistractionFreeMode;
 	MainWindowState mStateBeforeFullScreen;
 
 	KUrl mUrlToSelect;
@@ -562,6 +563,11 @@ struct MainWindow::Private {
 		setActionEnabled("add_folder_to_places", enabled);
 	}
 
+	void updateDistractionsState() {
+		const bool isFullScreen = mFullScreenAction->isChecked();
+		mSideBarCollapser->setVisible(!mDistractionFreeMode && !isFullScreen);
+		mFullScreenBar->setActivated(!mDistractionFreeMode && isFullScreen);
+	}
 
 	void updateActions() {
 		bool isRasterImage = false;
@@ -681,6 +687,7 @@ d(new MainWindow::Private)
 {
 	d->mWindow = this;
 	d->mCurrentPageId = StartPageId;
+	d->mDistractionFreeMode = false;
 	d->mDirModel = new SortedDirModel(this);
 	d->mGvCore = new GvCore(this, d->mDirModel);
 	d->mPreloader = new Preloader(this);
@@ -1109,30 +1116,30 @@ void MainWindow::toggleFullScreen(bool checked) {
 
 		d->mViewAction->trigger();
 		d->mSideBar->hide();
-		d->mSideBarCollapser->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
-		d->mFullScreenBar->setActivated(true);
+		d->updateDistractionsState();
 	} else {
 		setAutoSaveSettings();
 		if (d->mStateBeforeFullScreen.mActiveViewModeAction) {
 			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
 		}
-		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
-		d->mSideBarCollapser->show();
 
 		// Back to normal
+		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+
 		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
 		d->mSaveBar->setFullScreenMode(false);
-		d->mFullScreenBar->setActivated(false);
 		setWindowState(d->mStateBeforeFullScreen.mWindowState);
 		menuBar()->setVisible(d->mShowMenuBarAction->isChecked());
 		toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
+
+		d->updateDistractionsState();
 
 		// See resizeEvent
 		d->mFullScreenLeftAt = QDateTime::currentDateTime();
@@ -1387,6 +1394,12 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
 		}
 		d->mFullScreenLeftAt = QDateTime();
 	}
+}
+
+
+void MainWindow::setDistractionFreeMode(bool value) {
+	d->mDistractionFreeMode = value;
+	d->updateDistractionsState();
 }
 
 
