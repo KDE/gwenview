@@ -48,6 +48,8 @@ enum Direction {
 
 const int TIMELINE_DURATION = 500;
 
+const qreal MINIMUM_OPACITY = 0.3;
+
 struct ArrowTypes {
 	ArrowTypes() {}
 
@@ -140,13 +142,13 @@ struct SplitterCollapserPrivate {
 
 	void updateOpacity() {
 		QPoint pos = q->parentWidget()->mapFromGlobal(QCursor::pos());
-		QRect showRect = q->geometry() | mWidget->geometry();
-		bool showCollapser = showRect.contains(pos);
-		qreal opacity = mOpacityTimeLine->currentValue();
-		if (showCollapser && qFuzzyCompare(opacity, 0)) {
+		QRect opaqueRect = q->geometry();
+		bool opaqueCollapser = opaqueRect.contains(pos);
+		int frame = mOpacityTimeLine->currentFrame();
+		if (opaqueCollapser && frame == mOpacityTimeLine->startFrame()) {
 			mOpacityTimeLine->setDirection(QTimeLine::Forward);
 			startTimeLine();
-		} else if (!showCollapser && qFuzzyCompare(opacity, 1)) {
+		} else if (!opaqueCollapser && frame == mOpacityTimeLine->endFrame()) {
 			mOpacityTimeLine->setDirection(QTimeLine::Backward);
 			startTimeLine();
 		}
@@ -171,6 +173,7 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 	setAttribute(Qt::WA_NoChildEventsForParent);
 
 	d->mOpacityTimeLine = new QTimeLine(TIMELINE_DURATION, this);
+	d->mOpacityTimeLine->setFrameRange(int(MINIMUM_OPACITY * 1000), 1000);
 	connect(d->mOpacityTimeLine, SIGNAL(valueChanged(qreal)),
 		SLOT(update()));
 
@@ -232,7 +235,8 @@ void SplitterCollapser::slotClicked() {
 
 void SplitterCollapser::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
-	painter.setOpacity(d->mOpacityTimeLine->currentValue());
+	qreal opacity = d->mOpacityTimeLine->currentFrame() / 1000.;
+	painter.setOpacity(opacity);
 
 	QStyleOptionToolButton opt;
 	initStyleOption(&opt);
