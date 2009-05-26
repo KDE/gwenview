@@ -71,6 +71,7 @@ set(gwenviewlib_SRCS
 	redeyereduction/redeyereductionimageoperation.cpp
 	redeyereduction/redeyereductiontool.cpp
 	resizeimageoperation.cpp
+	textedit.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
 	thumbnailview/previewitemdelegate.cpp
