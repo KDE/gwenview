@@ -147,8 +147,8 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
 			mRatingWidget, SLOT(setRating(int)) );
 
-		QString clickLabel = i18n("Description");
-		// mDescriptionTextEdit->setClickLabel(clickLabel);
+		QString clickMessage = i18n("Description");
+		mDescriptionTextEdit->setClickMessage(clickMessage);
 		mDescriptionTextEdit->setCheckSpellingEnabled(true);
 		mDescriptionTextEdit->installEventFilter(that);
 
