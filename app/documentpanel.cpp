@@ -371,6 +371,11 @@ void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
 }
 
 
+bool DocumentPanel::isFullScreenMode() const {
+	return d->mFullScreenMode;
+}
+
+
 ThumbnailBarView* DocumentPanel::thumbnailBar() const {
 	return d->mThumbnailBar;
 }

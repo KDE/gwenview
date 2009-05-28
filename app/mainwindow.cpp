@@ -111,6 +111,7 @@ static const int PRELOAD_DELAY = 1000;
 
 static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
 static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
+static const char* FULLSCREEN_MODE_SIDE_BAR_GROUP = "SideBar-FullScreenMode";
 static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
 static const char* SIDE_BAR_CURRENT_PAGE_KEY = "CurrentPage";
 
@@ -121,8 +122,7 @@ enum PageId {
 };
 
 struct MainWindowState {
-	QAction* mActiveViewModeAction;
-	bool mSideBarVisible;
+	PageId mPageId;
 	bool mToolBarVisible;
 	Qt::WindowStates mWindowState;
 };
@@ -657,24 +657,45 @@ struct MainWindow::Private {
 		mSlideShow->setCurrentUrl(url);
 	}
 
-	KConfigGroup sideBarConfigGroup() const {
-		return KConfigGroup(KGlobal::config(),
-			mCurrentPageId == ViewPageId
-			? BROWSE_MODE_SIDE_BAR_GROUP
-			: VIEW_MODE_SIDE_BAR_GROUP);
+	const char* sideBarConfigGroupName() const {
+		const char* name = 0;
+		switch (mCurrentPageId) {
+		case StartPageId:
+			kWarning() << "Should not happen!";
+			// Fall through
+		case BrowsePageId:
+			name = BROWSE_MODE_SIDE_BAR_GROUP;
+			break;
+		case ViewPageId:
+			name = mDocumentPanel->isFullScreenMode()
+				? FULLSCREEN_MODE_SIDE_BAR_GROUP
+				: VIEW_MODE_SIDE_BAR_GROUP;
+			break;
+		}
+		return name;
 	}
 
 	void loadSideBarConfig() {
-		KConfigGroup group = sideBarConfigGroup();
-		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, true));
+		static QMap<const char*, bool> defaultVisibility;
+		static QMap<const char*, QString> defaultPage;
+		if (defaultVisibility.isEmpty()) {
+			defaultVisibility[BROWSE_MODE_SIDE_BAR_GROUP]     = true;
+			defaultVisibility[VIEW_MODE_SIDE_BAR_GROUP]       = true;
+			defaultVisibility[FULLSCREEN_MODE_SIDE_BAR_GROUP] = false;
 
-		QString defaultPage = mCurrentPageId == ViewPageId
-			? "information" : "folders";
-		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage));
+			defaultPage[BROWSE_MODE_SIDE_BAR_GROUP]           = "folders";
+			defaultPage[VIEW_MODE_SIDE_BAR_GROUP]             = "information";
+			defaultPage[FULLSCREEN_MODE_SIDE_BAR_GROUP]       = "information";
+		}
+
+		const char* name = sideBarConfigGroupName();
+		KConfigGroup group(KGlobal::config(), name);
+		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
+		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage[name]));
 	}
 
 	void saveSideBarConfig() const {
-		KConfigGroup group = sideBarConfigGroup();
+		KConfigGroup group(KGlobal::config(), sideBarConfigGroupName());
 		group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
 		group.writeEntry(SIDE_BAR_CURRENT_PAGE_KEY, mSideBar->currentPage());
 	}
@@ -1101,21 +1122,20 @@ void MainWindow::reduceLevelOfDetails() {
 
 void MainWindow::toggleFullScreen(bool checked) {
 	setUpdatesEnabled(false);
+	d->saveSideBarConfig();
 	if (checked) {
 		// Save MainWindow config now, this way if we quit while in
 		// fullscreen, we are sure latest MainWindow changes are remembered.
 		saveMainWindowSettings(autoSaveConfigGroup());
 		resetAutoSaveSettings();
-		d->saveSideBarConfig();
 
-		// Go full screen
-		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
-		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
+		// Save state
+		d->mStateBeforeFullScreen.mPageId = d->mCurrentPageId;
 		d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
 
+		// Go full screen
 		d->mViewAction->trigger();
-		d->mSideBar->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
@@ -1123,14 +1143,19 @@ void MainWindow::toggleFullScreen(bool checked) {
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
 		d->updateDistractionsState();
+
+		// HACK: Only load sidebar config now, because it looks at
+		// DocumentPanel fullScreenMode property to determine the sidebar
+		// config group.
+		d->loadSideBarConfig();
 	} else {
 		setAutoSaveSettings();
-		if (d->mStateBeforeFullScreen.mActiveViewModeAction) {
-			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
-		}
 
 		// Back to normal
-		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
+		d->mCurrentPageId = d->mStateBeforeFullScreen.mPageId;
+		if (d->mCurrentPageId == BrowsePageId) {
+			d->mBrowseAction->trigger();
+		}
 
 		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
@@ -1140,6 +1165,10 @@ void MainWindow::toggleFullScreen(bool checked) {
 		toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
 		d->updateDistractionsState();
+
+		// Keep this after mDocumentPanel->setFullScreenMode(false).
+		// See call to loadSideBarConfig() above.
+		d->loadSideBarConfig();
 
 		// See resizeEvent
 		d->mFullScreenLeftAt = QDateTime::currentDateTime();
@@ -1235,9 +1264,7 @@ void MainWindow::generateThumbnailForUrl(const KUrl& url) {
 
 bool MainWindow::queryClose() {
 	saveConfig();
-	if (!d->mFullScreenAction->isChecked()) {
-		d->saveSideBarConfig();
-	}
+	d->saveSideBarConfig();
 	QList<KUrl> list = DocumentFactory::instance()->modifiedDocumentList();
 	if (list.size() == 0) {
 		return true;

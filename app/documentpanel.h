@@ -60,6 +60,8 @@ public:
 
 	void setFullScreenMode(bool fullScreen);
 
+	bool isFullScreenMode() const;
+
 	void setNormalPalette(const QPalette&);
 
 	int statusBarHeight() const;
