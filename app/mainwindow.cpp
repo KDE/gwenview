@@ -111,19 +111,18 @@ static const int PRELOAD_DELAY = 1000;
 
 static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
 static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
-static const char* FULLSCREEN_MODE_SIDE_BAR_GROUP = "SideBar-FullScreenMode";
 static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
 static const char* SIDE_BAR_CURRENT_PAGE_KEY = "CurrentPage";
 
 enum PageId {
 	StartPageId,
 	BrowsePageId,
-	ViewPageId,
-	FullScreenPageId
+	ViewPageId
 };
 
 struct MainWindowState {
-	PageId mPageId;
+	QAction* mActiveViewModeAction;
+	bool mSideBarVisible;
 	bool mToolBarVisible;
 	Qt::WindowStates mWindowState;
 };
@@ -658,46 +657,24 @@ struct MainWindow::Private {
 		mSlideShow->setCurrentUrl(url);
 	}
 
-	const char* sideBarConfigGroupName() const {
-		const char* name = 0;
-		switch (mCurrentPageId) {
-		case StartPageId:
-			kWarning() << "Should not happen!";
-			// Fall through
-		case BrowsePageId:
-			name = BROWSE_MODE_SIDE_BAR_GROUP;
-			break;
-		case ViewPageId:
-			name = VIEW_MODE_SIDE_BAR_GROUP;
-			break;
-		case FullScreenPageId:
-			name = FULLSCREEN_MODE_SIDE_BAR_GROUP;
-			break;
-		}
-		return name;
+	KConfigGroup sideBarConfigGroup() const {
+		return KConfigGroup(KGlobal::config(),
+			mCurrentPageId == ViewPageId
+			? BROWSE_MODE_SIDE_BAR_GROUP
+			: VIEW_MODE_SIDE_BAR_GROUP);
 	}
 
 	void loadSideBarConfig() {
-		static QMap<const char*, bool> defaultVisibility;
-		static QMap<const char*, QString> defaultPage;
-		if (defaultVisibility.isEmpty()) {
-			defaultVisibility[BROWSE_MODE_SIDE_BAR_GROUP]     = true;
-			defaultVisibility[VIEW_MODE_SIDE_BAR_GROUP]       = true;
-			defaultVisibility[FULLSCREEN_MODE_SIDE_BAR_GROUP] = false;
+		KConfigGroup group = sideBarConfigGroup();
+		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, true));
 
-			defaultPage[BROWSE_MODE_SIDE_BAR_GROUP]           = "folders";
-			defaultPage[VIEW_MODE_SIDE_BAR_GROUP]             = "information";
-			defaultPage[FULLSCREEN_MODE_SIDE_BAR_GROUP]       = "information";
-		}
-
-		const char* name = sideBarConfigGroupName();
-		KConfigGroup group(KGlobal::config(), name);
-		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
-		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage[name]));
+		QString defaultPage = mCurrentPageId == ViewPageId
+			? "information" : "folders";
+		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage));
 	}
 
 	void saveSideBarConfig() const {
-		KConfigGroup group(KGlobal::config(), sideBarConfigGroupName());
+		KConfigGroup group = sideBarConfigGroup();
 		group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
 		group.writeEntry(SIDE_BAR_CURRENT_PAGE_KEY, mSideBar->currentPage());
 	}
@@ -1124,22 +1101,21 @@ void MainWindow::reduceLevelOfDetails() {
 
 void MainWindow::toggleFullScreen(bool checked) {
 	setUpdatesEnabled(false);
-	d->saveSideBarConfig();
 	if (checked) {
 		// Save MainWindow config now, this way if we quit while in
 		// fullscreen, we are sure latest MainWindow changes are remembered.
 		saveMainWindowSettings(autoSaveConfigGroup());
 		resetAutoSaveSettings();
+		d->saveSideBarConfig();
 
-		// Save state
-		d->mStateBeforeFullScreen.mPageId = d->mCurrentPageId;
+		// Go full screen
+		d->mStateBeforeFullScreen.mActiveViewModeAction = d->mViewModeActionGroup->checkedAction();
+		d->mStateBeforeFullScreen.mSideBarVisible = d->mSideBar->isVisible();
 		d->mStateBeforeFullScreen.mToolBarVisible = toolBar()->isVisible();
 		d->mStateBeforeFullScreen.mWindowState = windowState();
 
-		// Go full screen
-		d->mCurrentPageId = FullScreenPageId;
 		d->mViewAction->trigger();
-		d->loadSideBarConfig();
+		d->mSideBar->hide();
 
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
@@ -1149,13 +1125,12 @@ void MainWindow::toggleFullScreen(bool checked) {
 		d->updateDistractionsState();
 	} else {
 		setAutoSaveSettings();
+		if (d->mStateBeforeFullScreen.mActiveViewModeAction) {
+			d->mStateBeforeFullScreen.mActiveViewModeAction->trigger();
+		}
 
 		// Back to normal
-		d->mCurrentPageId = d->mStateBeforeFullScreen.mPageId;
-		if (d->mCurrentPageId == BrowsePageId) {
-			d->mBrowseAction->trigger();
-		}
-		d->loadSideBarConfig();
+		d->mSideBar->setVisible(d->mStateBeforeFullScreen.mSideBarVisible);
 
 		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
