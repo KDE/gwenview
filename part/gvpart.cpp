@@ -55,7 +55,7 @@ namespace Gwenview {
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-	mDocumentView = new DocumentView(parentWidget, actionCollection());
+	mDocumentView = new DocumentView(parentWidget, 0 /* slideShow */, actionCollection());
 	mDocumentView->setZoomWidgetVisible(false);
 	setWidget(mDocumentView);
 

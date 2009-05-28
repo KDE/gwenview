@@ -122,6 +122,7 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 , d(new VideoViewAdapterPrivate) {
 	d->q = this;
 	d->mMediaObject = new Phonon::MediaObject(this);
+	connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
 	d->mVideoWidget = new Phonon::VideoWidget(parent);
 	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

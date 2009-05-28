@@ -188,8 +188,8 @@ struct DocumentPanelPrivate {
 		layout->addWidget(mStatusBarContainer);
 	}
 
-	void setupDocumentView() {
-		mDocumentView = new DocumentView(0, mActionCollection);
+	void setupDocumentView(SlideShow* slideShow) {
+		mDocumentView = new DocumentView(0, slideShow, mActionCollection);
 
 		// Connect context menu
 		mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -262,7 +262,7 @@ struct DocumentPanelPrivate {
 };
 
 
-DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollection)
+DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
 : QWidget(parent)
 , d(new DocumentPanelPrivate)
 {
@@ -278,7 +278,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, KActionCollection* actionCollectio
 	toggleFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
-	d->setupDocumentView();
+	d->setupDocumentView(slideShow);
 
 	d->setupStatusBar();
 

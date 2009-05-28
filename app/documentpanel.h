@@ -33,10 +33,12 @@ class KUrl;
 
 namespace Gwenview {
 
-struct DocumentPanelPrivate;
 class DocumentView;
 class ImageView;
+class SlideShow;
 class ThumbnailBarView;
+
+struct DocumentPanelPrivate;
 
 /**
  * Holds the active document view and associated widgetry.
@@ -44,7 +46,7 @@ class ThumbnailBarView;
 class DocumentPanel : public QWidget {
 	Q_OBJECT
 public:
-	DocumentPanel(QWidget* parent, KActionCollection*);
+	DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
 	~DocumentPanel();
 
 	ThumbnailBarView* thumbnailBar() const;

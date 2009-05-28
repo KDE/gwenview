@@ -46,9 +46,15 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+enum State {
+	Stopped,
+	Started,
+	WaitForEndOfUrl
+};
+
 struct SlideShowPrivate {
 	QTimer* mTimer;
-	bool mStarted;
+	State mState;
 	QVector<KUrl> mUrls;
 	QVector<KUrl> mShuffledUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
@@ -120,6 +126,20 @@ struct SlideShowPrivate {
 	void updateTimerInterval() {
 		mTimer->setInterval(int(GwenviewConfig::interval() * 1000));
 	}
+
+
+	void doStart() {
+		if (MimeTypeUtils::urlKind(mCurrentUrl) == MimeTypeUtils::KIND_VIDEO) {
+			LOG("mState = WaitForEndOfUrl");
+			// Just in case
+			mTimer->stop();
+			mState = WaitForEndOfUrl;
+		} else {
+			LOG("mState = Started");
+			mTimer->start();
+			mState = Started;
+		}
+	}
 };
 
 
@@ -128,11 +148,11 @@ struct SlideShowPrivate {
 SlideShow::SlideShow(QObject* parent)
 : QObject(parent)
 , d(new SlideShowPrivate) {
-	d->mStarted = false;
+	d->mState = Stopped;
 
 	d->mTimer = new QTimer(this);
 	connect(d->mTimer, SIGNAL(timeout()),
-			this, SLOT(slotTimeout()) );
+			this, SLOT(goToNextUrl()) );
 
 	d->mLoopAction = new QAction(this);
 	d->mLoopAction->setText(i18nc("@item:inmenu toggle loop in slideshow", "Loop"));
@@ -182,8 +202,7 @@ void SlideShow::start(const QList<KUrl>& urls) {
 	
 	d->updateTimerInterval();
 	d->mTimer->setSingleShot(false);
-	d->mTimer->start();
-	d->mStarted=true;
+	d->doStart();
 	stateChanged(true);
 }
 
@@ -195,13 +214,22 @@ void SlideShow::setInterval(int intervalInSeconds) {
 
 
 void SlideShow::stop() {
+	LOG("Stopping timer");
 	d->mTimer->stop();
-	d->mStarted=false;
+	d->mState = Stopped;
 	stateChanged(false);
 }
 
 
-void SlideShow::slotTimeout() {
+void SlideShow::resumeAndGoToNextUrl() {
+	LOG("");
+	if (d->mState == WaitForEndOfUrl) {
+		goToNextUrl();
+	}
+}
+
+
+void SlideShow::goToNextUrl() {
 	LOG("");
 	KUrl url = d->findNextUrl();
 	LOG("url:" << url);
@@ -214,17 +242,21 @@ void SlideShow::slotTimeout() {
 
 
 void SlideShow::setCurrentUrl(const KUrl& url) {
+	LOG(url);
+	if (d->mCurrentUrl == url) {
+		return;
+	}
 	d->mCurrentUrl = url;
 	// Restart timer to avoid showing new url for the remaining time of the old
 	// url
-	if (d->mStarted) {
-		d->mTimer->start();
+	if (d->mState != Stopped) {
+		d->doStart();
 	}
 }
 
 
 bool SlideShow::isRunning() const {
-	return d->mStarted;
+	return d->mState != Stopped;
 }
 
 
@@ -235,7 +267,7 @@ void SlideShow::updateConfig() {
 
 
 void SlideShow::slotRandomActionToggled(bool on) {
-	if (on && d->mStarted) {
+	if (on && d->mState != Stopped) {
 		d->initShuffledUrls();
 	}
 }

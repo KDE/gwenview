@@ -196,6 +196,9 @@ struct MainWindow::Private {
 
 		mSideBarCollapser = new SplitterCollapser(mCentralSplitter, mSideBar);
 
+		mStartSlideShowWhenDirListerCompleted = false;
+		mSlideShow = new SlideShow(mWindow);
+
 		setupThumbnailView(mViewStackedWidget);
 		setupDocumentPanel(mViewStackedWidget);
 		setupStartPage(mViewStackedWidget);
@@ -206,9 +209,6 @@ struct MainWindow::Private {
 
 		mCentralSplitter->setStretchFactor(0, 0);
 		mCentralSplitter->setStretchFactor(1, 1);
-
-		mStartSlideShowWhenDirListerCompleted = false;
-		mSlideShow = new SlideShow(mWindow);
 
 		connect(mSaveBar, SIGNAL(requestSaveAll()),
 			mGvCore, SLOT(saveAll()) );
@@ -257,7 +257,7 @@ struct MainWindow::Private {
 	}
 
 	void setupDocumentPanel(QWidget* parent) {
-		mDocumentPanel = new DocumentPanel(parent, mWindow->actionCollection());
+		mDocumentPanel = new DocumentPanel(parent, mSlideShow, mWindow->actionCollection());
 		connect(mDocumentPanel, SIGNAL(captionUpdateRequested(const QString&)),
 			mWindow, SLOT(setCaption(const QString&)) );
 		connect(mDocumentPanel, SIGNAL(completed()),
@@ -1231,8 +1231,14 @@ void MainWindow::toggleSlideShow() {
 			QModelIndex index = d->mDirModel->index(pos, 0);
 			KFileItem item = d->mDirModel->itemForIndex(index);
 			MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
-			if (kind == MimeTypeUtils::KIND_FILE || kind == MimeTypeUtils::KIND_RASTER_IMAGE) {
+			switch (kind) {
+			case MimeTypeUtils::KIND_SVG_IMAGE:
+			case MimeTypeUtils::KIND_RASTER_IMAGE:
+			case MimeTypeUtils::KIND_VIDEO:
 				list << item.url();
+				break;
+			default:
+				break;
 			}
 		}
 		d->mSlideShow->start(list);

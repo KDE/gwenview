@@ -48,6 +48,9 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+Q_SIGNALS:
+	void videoFinished();
+
 protected:
 	bool eventFilter(QObject*, QEvent*);
 

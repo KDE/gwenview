@@ -36,6 +36,7 @@ class KUrl;
 namespace Gwenview {
 
 class AbstractDocumentViewAdapter;
+class SlideShow;
 class ZoomWidget;
 
 class DocumentViewPrivate;
@@ -47,7 +48,7 @@ class DocumentViewPrivate;
 class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget* parent, KActionCollection*);
+	DocumentView(QWidget* parent, SlideShow*, KActionCollection*);
 	~DocumentView();
 
 	void setZoomWidgetVisible(bool);

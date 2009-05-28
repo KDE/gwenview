@@ -54,6 +54,11 @@ public:
 public Q_SLOTS:
 	void setInterval(int);
 
+	/**
+	 * Resume slideshow and go to next url.
+	 */
+	void resumeAndGoToNextUrl();
+
 Q_SIGNALS:
 	void goToUrl( const KUrl& );
 	/**
@@ -62,7 +67,7 @@ Q_SIGNALS:
 	void stateChanged(bool running);
 
 private Q_SLOTS:
-	void slotTimeout();
+	void goToNextUrl();
 	void updateConfig();
 	void slotRandomActionToggled(bool on);
 
