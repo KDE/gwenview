@@ -54,7 +54,6 @@ struct VideoViewAdapterPrivate {
 	QToolButton* mPlayPauseButton;
 
 	Document::Ptr mDocument;
-	bool mDocumentHasNeverBeenStarted;
 
 	void setupHud(QWidget* parent) {
 		// Create hud content
@@ -108,11 +107,6 @@ struct VideoViewAdapterPrivate {
 
 
 	void updateHudVisibility(int yPos) {
-		// Keep hud visible until document has been started at least once
-		if (mDocumentHasNeverBeenStarted) {
-			return;
-		}
-
 		const int floaterY = mVideoWidget->height() - mFloater->verticalMargin() - mHud->sizeHint().height() * 3 / 2;
 		if (mHud->isVisible() && yPos < floaterY) {
 			mHud->hide();
@@ -155,10 +149,10 @@ VideoViewAdapter::~VideoViewAdapter() {
 
 
 void VideoViewAdapter::setDocument(Document::Ptr doc) {
-	d->mDocumentHasNeverBeenStarted = true;
 	d->mHud->show();
 	d->mDocument = doc;
 	d->mMediaObject->setCurrentSource(d->mDocument->url());
+	d->mMediaObject->play();
 }
 
 
@@ -171,7 +165,6 @@ void VideoViewAdapter::slotPlayPauseClicked() {
 	if (d->isPlaying()) {
 		d->mMediaObject->pause();
 	} else {
-		d->mDocumentHasNeverBeenStarted = false;
 		d->mMediaObject->play();
 	}
 }
