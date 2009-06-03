@@ -1,3 +1,7 @@
+# 2.2.4
+## Improvements
+- Show compressed SVG files.
+
 # 2.2.3
 ## Fixes
 - Handle gif files containing one frame and a graphic control extension as
