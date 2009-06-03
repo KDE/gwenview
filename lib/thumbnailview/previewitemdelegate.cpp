@@ -215,13 +215,6 @@ struct PreviewItemDelegatePrivate {
 		// Necessary otherwise we won't see the save button itself
 		mSaveButton->adjustSize();
 
-		// This is hackish.
-		// Show/hide the frame to make sure mSaveButton->render produces
-		// something coherent.
-		mSaveButton->show();
-		mSaveButton->repaint();
-		mSaveButton->hide();
-
 		mSaveButtonPixmap = QPixmap(mSaveButton->sizeHint());
 		mSaveButtonPixmap.fill(Qt::transparent);
 		mSaveButton->render(&mSaveButtonPixmap, QPoint(), QRegion(), QWidget::DrawChildren);
