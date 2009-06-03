@@ -83,8 +83,7 @@ const QStringList& rasterImageMimeTypes() {
 const QStringList& svgImageMimeTypes() {
 	static QStringList list;
 	if (list.isEmpty()) {
-		list.append("image/svg+xml");
-		// FIXME svgz
+		list << "image/svg+xml" << "image/svg+xml-compressed";
 		resolveAliasInList(&list);
 	}
 	return list;
