@@ -18,9 +18,12 @@
 - Scroll when dragging files to the top or bottom of the thumbnail view (bug
   #189510).
 
-# 2.2.4
+# 2.2.5
 ## Improvements
 - Show compressed SVG files.
+
+## Fixes
+- Do not crash when clicking a rotate button from the thumbnail view speedbar.
 
 # 2.2.3
 ## Fixes
