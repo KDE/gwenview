@@ -159,6 +159,7 @@ QLabel[isTitle=true] {
 	background-color: black;
 	border: 1px solid black;
 	border-radius: 2px;
+	padding: 0px;
 }
 
 #thumbnailBarView::item {
