@@ -241,14 +241,18 @@ struct PreviewItemDelegatePrivate {
 
 	bool hoverEventFilter(QHoverEvent* event) {
 		QModelIndex index = mView->indexAt(event->pos());
-		if (mIndexUnderCursor.isValid()) {
-			// Always repaint in case we are over the rating row
+		if (index != mIndexUnderCursor) {
+			updateHoverUi(index);
+		} else {
+			// Same index, nothing to do, but repaint anyway in case we are
+			// over the rating row
 			mView->update(mIndexUnderCursor);
 		}
-		if (index == mIndexUnderCursor) {
-			// Same index, nothing to do
-			return false;
-		}
+		return false;
+	}
+
+
+	void updateHoverUi(const QModelIndex& index) {
 		QModelIndex oldIndex = mIndexUnderCursor;
 		mIndexUnderCursor = index;
 		mView->update(oldIndex);
@@ -278,7 +282,6 @@ struct PreviewItemDelegatePrivate {
 			mSaveButton->hide();
 			mTipLabel->hide();
 		}
-		return false;
 	}
 
 	QRect ratingRectFromIndexRect(const QRect& rect) const {
@@ -462,6 +465,7 @@ struct PreviewItemDelegatePrivate {
 			textList << text;
 		}
 		if (!elided) {
+			mTipLabel->hide();
 			return;
 		}
 		mTipLabel->setText(textList.join("\n"));
@@ -539,6 +543,11 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
 	d->mDetails = FileNameDetail;
+
+	connect(view, SIGNAL(rowsRemovedSignal(const QModelIndex&, int, int)),
+		SLOT(slotRowsChanged()));
+	connect(view, SIGNAL(rowsInsertedSignal(const QModelIndex&, int, int)),
+		SLOT(slotRowsChanged()));
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	d->mRatingPainter.setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
@@ -785,6 +794,15 @@ PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() co
 void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDetails details) {
 	d->mDetails = details;
 	d->mView->scheduleDelayedItemsLayout();
+}
+
+
+void PreviewItemDelegate::slotRowsChanged() {
+	// We need to update hover ui because the current index may have
+	// disappeared: for example if the current image is removed with "del".
+	QPoint pos = d->mView->viewport()->mapFromGlobal(QCursor::pos());
+	QModelIndex index = d->mView->indexAt(pos);
+	d->updateHoverUi(index);
 }
 
 

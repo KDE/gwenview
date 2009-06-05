@@ -68,6 +68,8 @@ public:
 	 */
 	void generateThumbnailForIndex(const QModelIndex& index);
 
+	virtual void setModel(QAbstractItemModel* model);
+
 	/**
 	 * Publish this method so that delegates can call it.
 	 */
@@ -90,6 +92,14 @@ Q_SIGNALS:
 	 * QAbstractItemView::selectionChanged() is a slot.
 	 */
 	void selectionChangedSignal(const QItemSelection&, const QItemSelection&);
+
+	/**
+	 * Forward some signals from model, so that the delegate can use them
+	 */
+	void rowsRemovedSignal(const QModelIndex& parent, int start, int end);
+
+	void rowsInsertedSignal(const QModelIndex& parent, int start, int end);
+
 
 public Q_SLOTS:
 	/**

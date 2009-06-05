@@ -237,6 +237,16 @@ ThumbnailView::~ThumbnailView() {
 }
 
 
+void ThumbnailView::setModel(QAbstractItemModel* newModel) {
+	if (model()) {
+		disconnect(model(), 0, this, 0);
+	}
+	QListView::setModel(newModel);
+	connect(model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+		SIGNAL(rowsRemovedSignal(const QModelIndex&, int, int)));
+}
+
+
 void ThumbnailView::setThumbnailSize(int value) {
 	if (d->mThumbnailSize == value) {
 		return;
@@ -338,6 +348,7 @@ void ThumbnailView::rowsAboutToBeRemoved(const QModelIndex& parent, int start, i
 void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) {
 	QListView::rowsInserted(parent, start, end);
 	d->mScheduledThumbnailGenerationTimer.start();
+	rowsInsertedSignal(parent, start, end);
 }
 
 
