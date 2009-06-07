@@ -17,6 +17,7 @@
 - Restart slideshow timer when user changes current image (bug #186411).
 - Scroll when dragging files to the top or bottom of the thumbnail view (bug
   #189510).
+- Correctly refresh view when reloading an SVG document (bug #189525).
 
 # 2.2.5
 ## Improvements
