@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsView>
 
 // KDE
+#include <kdebug.h>
 #include <ksvgrenderer.h>
 
 // Local
@@ -76,11 +77,20 @@ SvgViewAdapter::~SvgViewAdapter() {
 
 void SvgViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
+	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
+		SLOT(loadFromDocument()));
+	loadFromDocument();
+}
+
+
+void SvgViewAdapter::loadFromDocument() {
+	delete d->mItem;
+	d->mItem = 0;
 
 	if (!d->mRenderer->load(d->mDocument->rawData())) {
+		kWarning() << "Decoding SVG failed";
 		return;
 	}
-	delete d->mItem;
 	d->mItem = new QGraphicsSvgItem();
 	d->mItem->setSharedRenderer(d->mRenderer);
 	d->mScene->addItem(d->mItem);

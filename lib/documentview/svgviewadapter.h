@@ -65,6 +65,9 @@ public:
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
 
+private Q_SLOTS:
+	void loadFromDocument();
+
 private:
 	SvgViewAdapterPrivate* const d;
 };
