@@ -118,7 +118,6 @@ struct LoadingDocumentImplPrivate {
 			return false;
 
 		case MimeTypeUtils::KIND_VIDEO:
-			emit mImpl->loaded();
 			mImpl->switchToImpl(new VideoDocumentLoadedImpl(mImpl->document()));
 			return true;
 
@@ -143,7 +142,6 @@ struct LoadingDocumentImplPrivate {
 			break;
 
 		case MimeTypeUtils::KIND_SVG_IMAGE:
-			emit mImpl->loaded();
 			mImpl->switchToImpl(new SvgDocumentLoadedImpl(mImpl->document(), mData));
 			break;
 
@@ -426,8 +424,6 @@ void LoadingDocumentImpl::slotImageLoaded() {
 			// We already decoded the first frame at the right size, let's show
 			// it
 			setDocumentImage(d->mImage);
-			emit imageRectUpdated(d->mImage.rect());
-			emit loaded();
 		}
 
 		switchToImpl(new AnimatedDocumentLoadedImpl(
@@ -447,8 +443,6 @@ void LoadingDocumentImpl::slotImageLoaded() {
 
 	LOG("Loaded a full image");
 	setDocumentImage(d->mImage);
-	emit imageRectUpdated(d->mImage.rect());
-	emit loaded();
 	DocumentLoadedImpl* impl;
 	if (d->mJpegContent.get()) {
 		impl = new JpegDocumentLoadedImpl(

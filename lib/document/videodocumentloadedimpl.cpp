@@ -47,6 +47,7 @@ VideoDocumentLoadedImpl::~VideoDocumentLoadedImpl() {
 
 
 void VideoDocumentLoadedImpl::init() {
+	emit loaded();
 }
 
 

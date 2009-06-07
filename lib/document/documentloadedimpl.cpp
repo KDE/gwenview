@@ -64,6 +64,8 @@ DocumentLoadedImpl::~DocumentLoadedImpl() {
 
 
 void DocumentLoadedImpl::init() {
+	emit imageRectUpdated(document()->image().rect());
+	emit loaded();
 }
 
 

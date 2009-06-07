@@ -49,6 +49,7 @@ SvgDocumentLoadedImpl::~SvgDocumentLoadedImpl() {
 
 
 void SvgDocumentLoadedImpl::init() {
+	emit loaded();
 }
 
 
