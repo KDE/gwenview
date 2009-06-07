@@ -1,69 +1,37 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PrintOptionsPage</class>
- <widget class="QWidget" name="PrintOptionsPage" >
-  <property name="geometry" >
+ <widget class="QWidget" name="PrintOptionsPage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>398</height>
+    <height>252</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Image Settings</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
-   <item>
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
       <string>Image Position</string>
      </property>
-     <property name="flat" >
-      <bool>true</bool>
-     </property>
-     <layout class="QHBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QFrame" name="mPositionFrame" />
+       <widget class="QFrame" name="mPositionFrame"/>
       </item>
       <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
        </spacer>
@@ -71,76 +39,49 @@
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Scaling</string>
      </property>
-     <property name="flat" >
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QRadioButton" name="mNoScale" >
-        <property name="text" >
+       <widget class="QRadioButton" name="mNoScale">
+        <property name="text">
          <string>&amp;No scaling</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="mScaleToPage" >
-        <property name="text" >
+       <widget class="QRadioButton" name="mScaleToPage">
+        <property name="text">
          <string>&amp;Fit image to page</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
+       <layout class="QHBoxLayout">
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Fixed</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>20</height>
@@ -149,26 +90,26 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="kcfg_PrintEnlargeSmallerImages" >
-          <property name="enabled" >
+         <widget class="QCheckBox" name="kcfg_PrintEnlargeSmallerImages">
+          <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Enlarge smaller images</string>
           </property>
          </widget>
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>240</width>
+            <width>24</width>
             <height>21</height>
            </size>
           </property>
@@ -177,38 +118,23 @@
        </layout>
       </item>
       <item>
-       <widget class="QRadioButton" name="mScaleTo" >
-        <property name="text" >
+       <widget class="QRadioButton" name="mScaleTo">
+        <property name="text">
          <string>&amp;Scale to:</string>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Fixed</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>20</height>
@@ -216,103 +142,120 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="kcfg_PrintWidth" >
-          <property name="enabled" >
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="kcfg_PrintWidth">
+          <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="value" >
+          <property name="value">
            <double>15.000000000000000</double>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="textLabel2" >
-          <property name="text" >
-           <string comment="Dimension separator, as in: '15 x 10 centimeters'" >x</string>
+        <item row="0" column="2">
+         <widget class="QLabel" name="textLabel2">
+          <property name="text">
+           <string comment="Dimension separator, as in: '15 x 10 centimeters'">x</string>
           </property>
-          <property name="wordWrap" >
+          <property name="wordWrap">
            <bool>false</bool>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="kcfg_PrintHeight" >
-          <property name="enabled" >
+        <item row="0" column="3">
+         <widget class="QDoubleSpinBox" name="kcfg_PrintHeight">
+          <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="value" >
+          <property name="value">
            <double>10.000000000000000</double>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="KComboBox" name="kcfg_PrintUnit" >
-          <property name="enabled" >
+        <item row="0" column="4">
+         <widget class="KComboBox" name="kcfg_PrintUnit">
+          <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="currentIndex" >
+          <property name="currentIndex">
            <number>1</number>
           </property>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Millimeters</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Centimeters</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Inches</string>
            </property>
           </item>
          </widget>
         </item>
-        <item>
-         <widget class="QCheckBox" name="kcfg_PrintKeepRatio" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-          <property name="text" >
-           <string>Keep ratio</string>
-          </property>
-          <property name="checked" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
+        <item row="0" column="5">
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>16</width>
+            <width>24</width>
             <height>20</height>
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="1" column="1" colspan="5">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QCheckBox" name="kcfg_PrintKeepRatio">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Keep ratio</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" colspan="2">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
-       <width>493</width>
+       <width>20</width>
        <height>16</height>
       </size>
      </property>
@@ -320,7 +263,7 @@
    </item>
   </layout>
  </widget>
-  <customwidgets>
+ <customwidgets>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
@@ -328,10 +271,10 @@
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >kcombobox.h</include>
-  <include location="local" >knuminput.h</include>
-  <include location="local" >knuminput.h</include>
-  <include location="local" >kcombobox.h</include>
+  <include location="local">kcombobox.h</include>
+  <include location="local">knuminput.h</include>
+  <include location="local">knuminput.h</include>
+  <include location="local">kcombobox.h</include>
  </includes>
  <resources/>
  <connections>
@@ -341,11 +284,11 @@
    <receiver>kcfg_PrintUnit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
@@ -357,11 +300,11 @@
    <receiver>kcfg_PrintKeepRatio</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
@@ -373,11 +316,11 @@
    <receiver>kcfg_PrintEnlargeSmallerImages</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
@@ -389,11 +332,11 @@
    <receiver>kcfg_PrintWidth</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
@@ -405,11 +348,11 @@
    <receiver>kcfg_PrintHeight</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>
