@@ -224,8 +224,8 @@ bool Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
 	bool ok = d->mImpl->save(url, format);
 	if (ok) {
+		// No need to emit saved(), slotCleanChanged() will do it for us
 		d->mUndoStack.setClean();
-		saved(url);
 	}
 
 	return ok;
@@ -388,7 +388,9 @@ QUndoStack* Document::undoStack() const {
 
 void Document::slotCleanChanged(bool clean) {
 	if (clean) {
-		// This does not really correspond to a save
+		// If user just undid all his changes this does not really correspond
+		// to a save, but it's similar enough as far as Document users are
+		// concerned
 		saved(d->mUrl);
 	} else {
 		modified(d->mUrl);
