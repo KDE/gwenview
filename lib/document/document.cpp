@@ -224,8 +224,12 @@ bool Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
 	bool ok = d->mImpl->save(url, format);
 	if (ok) {
-		// No need to emit saved(), slotCleanChanged() will do it for us
-		d->mUndoStack.setClean();
+		// Call QUndoStack::setClean() with a QueuedConnection to ensure we are
+		// (more or less :/) thread-safe.
+		// FIXME: This method should be turned into an asynchronous call to
+		// reduce thread-safe potential issues.
+		// No need to emit saved(), slotCleanChanged() will do it for us.
+		QMetaObject::invokeMethod(&d->mUndoStack, "setClean", Qt::QueuedConnection);
 	}
 
 	return ok;

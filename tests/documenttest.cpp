@@ -420,6 +420,9 @@ void DocumentTest::testModify() {
 	KUrl destUrl = urlForTestOutputFile("modify.png");
 	QVERIFY(doc->save(destUrl, "png"));
 
+	// Wait a bit because save() will clear the undo stack when back to the
+	// event loop
+	QTest::qWait(100);
 	QVERIFY(!doc->isModified());
 }
 
