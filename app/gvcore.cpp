@@ -167,8 +167,8 @@ struct SaveAllHelper {
 	SaveAllHelper(ErrorList* errorList)
 	: mErrorList(errorList) {}
 
-	void operator()(const KUrl& url) {
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
+	void operator()(Document::Ptr doc) {
+		KUrl url = doc->url();
 		if (!doc->save(url, doc->format())) {
 			*mErrorList << qMakePair(url, doc->errorString());
 		}
@@ -183,13 +183,17 @@ void GvCore::saveAll() {
 
 	// Separate local and remote urls because saving to remote urls uses KIO
 	// methods, which are not thread-safe.
-	KUrl::List localUrls;
-	KUrl::List remoteUrls;
+	// We do not use a KUrl::List because DocumentFactory::load() is not
+	// thread-safe.
+	QList<Document::Ptr> localDocs;
+	QList<Document::Ptr> remoteDocs;
+
 	Q_FOREACH(const KUrl& url, DocumentFactory::instance()->modifiedDocumentList()) {
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		if (url.isLocalFile()) {
-			localUrls << url;
+			localDocs << doc;
 		} else {
-			remoteUrls << url;
+			remoteDocs << doc;
 		}
 	}
 
@@ -197,12 +201,12 @@ void GvCore::saveAll() {
 	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
-	progress.setMaximum(localUrls.size() + remoteUrls.size());
+	progress.setMaximum(localDocs.size() + remoteDocs.size());
 	progress.setWindowModality(Qt::WindowModal);
 	progress.show();
 
 	// Save local urls
-	QFuture<void> future = QtConcurrent::map(localUrls, helper);
+	QFuture<void> future = QtConcurrent::map(localDocs, helper);
 
 	QFutureWatcher<void> watcher;
 	watcher.setFuture(future);
@@ -215,11 +219,11 @@ void GvCore::saveAll() {
 	watcher.waitForFinished();
 
 	// Save remote urls
-	Q_FOREACH(const KUrl& url, remoteUrls) {
+	Q_FOREACH(Document::Ptr doc, remoteDocs) {
 		if (progress.wasCanceled()) {
 			break;
 		}
-		helper(url);
+		helper(doc);
 		progress.setValue(progress.value() + 1);
 		qApp->processEvents();
 	}
