@@ -18,6 +18,7 @@
 - Scroll when dragging files to the top or bottom of the thumbnail view (bug
   #189510).
 - Correctly refresh view when reloading an SVG document (bug #189525).
+- Fix crash when saving multiple modified images with "Save All" (bug #189992).
 
 # 2.2.5
 ## Improvements
