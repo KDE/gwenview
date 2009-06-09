@@ -12,6 +12,7 @@
 - Added file operations and "open with" menu to image view context menu. Patch
   by Marian Kyral (bug #187819).
 - Show XMP image information.
+- Show compressed SVG files.
 
 ## Fixes
 - Restart slideshow timer when user changes current image (bug #186411).
@@ -19,12 +20,6 @@
   #189510).
 - Correctly refresh view when reloading an SVG document (bug #189525).
 - Fix crash when saving multiple modified images with "Save All" (bug #189992).
-
-# 2.2.5
-## Improvements
-- Show compressed SVG files.
-
-## Fixes
 - Do not crash when clicking a rotate button from the thumbnail view speedbar.
 
 # 2.2.3
