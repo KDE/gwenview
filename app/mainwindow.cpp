@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knotificationrestrictions.h>
 #include <kprotocolmanager.h>
 #include <kstatusbar.h>
 #include <kstandardguiitem.h>
@@ -175,6 +176,7 @@ struct MainWindow::Private {
 	PageId mCurrentPageId;
 
 	QDateTime mFullScreenLeftAt;
+	KNotificationRestrictions* mNotificationRestrictions;
 
 	void setupWidgets() {
 		QWidget* centralWidget = new QWidget(mWindow);
@@ -699,6 +701,14 @@ struct MainWindow::Private {
 		group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
 		group.writeEntry(SIDE_BAR_CURRENT_PAGE_KEY, mSideBar->currentPage());
 	}
+
+	void setScreenSaverEnabled(bool enabled) {
+		// Always delete mNotificationRestrictions, it does not hurt
+		delete mNotificationRestrictions;
+		if (!enabled) {
+			mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, mWindow);
+		}
+	}
 };
 
 
@@ -712,6 +722,7 @@ d(new MainWindow::Private)
 	d->mDirModel = new SortedDirModel(this);
 	d->mGvCore = new GvCore(this, d->mDirModel);
 	d->mPreloader = new Preloader(this);
+	d->mNotificationRestrictions = 0;
 	d->initDirModel();
 	d->setupWidgets();
 	d->setupActions();
@@ -1143,6 +1154,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
 		d->updateDistractionsState();
+		d->setScreenSaverEnabled(false);
 
 		// HACK: Only load sidebar config now, because it looks at
 		// DocumentPanel fullScreenMode property to determine the sidebar
@@ -1165,6 +1177,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 
 		d->updateDistractionsState();
+		d->setScreenSaverEnabled(true);
 
 		// Keep this after mDocumentPanel->setFullScreenMode(false).
 		// See call to loadSideBarConfig() above.

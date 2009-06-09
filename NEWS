@@ -21,6 +21,7 @@
 - Correctly refresh view when reloading an SVG document (bug #189525).
 - Fix crash when saving multiple modified images with "Save All" (bug #189992).
 - Do not crash when clicking a rotate button from the thumbnail view speedbar.
+- Disable screensaver in fullscreen mode (bug #185916).
 
 # 2.2.3
 ## Fixes
