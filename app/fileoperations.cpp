@@ -34,6 +34,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/jobuidelegate.h>
 #include <klocale.h>
 
+// Local
+#include <lib/document/documentfactory.h>
+
 namespace Gwenview {
 
 namespace FileOperations {
@@ -125,8 +128,12 @@ static void delOrTrash(Operation operation, const KUrl::List& urlList, QWidget* 
 		break;
 
 	default:
-		kWarning() << "Unknown operation " << operation ;
-		break;
+		kWarning() << "Unknown operation" << operation;
+		return;
+	}
+
+	Q_FOREACH(const KUrl& url, urlList) {
+		DocumentFactory::instance()->forget(url);
 	}
 }
 
