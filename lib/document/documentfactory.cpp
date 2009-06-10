@@ -215,4 +215,18 @@ QUndoGroup* DocumentFactory::undoGroup() {
 }
 
 
+void DocumentFactory::forget(const KUrl& url) {
+	DocumentInfo* info = d->mDocumentMap.take(url);
+	if (!info) {
+		return;
+	}
+	delete info;
+
+	if (d->mModifiedDocumentList.contains(url)) {
+		d->mModifiedDocumentList.removeAll(url);
+		emit modifiedDocumentListChanged();
+	}
+}
+
+
 } // namespace

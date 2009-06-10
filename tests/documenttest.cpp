@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/documentfactory.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
+#include "../lib/transformimageoperation.h"
 #include "testutils.h"
 
 #include <exiv2/exif.hpp>
@@ -462,4 +463,47 @@ void DocumentTest::testMetaInfoBmp() {
 	QString value = doc->metaInfo()->getValueForKey("General.ImageSize");
 	QString expectedValue = QString("%1x%2").arg(width).arg(height);
 	QCOMPARE(value, expectedValue);
+}
+
+
+void DocumentTest::testForgetModifiedDocument() {
+	QSignalSpy spy(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()));
+	DocumentFactory::instance()->forget(KUrl("file://does/not/exist.png"));
+	QCOMPARE(spy.count(), 0);
+
+	// Generate test image
+	QImage image1(200, 96, QImage::Format_RGB32);
+	{
+		QPainter painter(&image1);
+		QConicalGradient gradient(QPointF(100, 48), 100);
+		gradient.setColorAt(0, Qt::white);
+		gradient.setColorAt(1, Qt::blue);
+		painter.fillRect(image1.rect(), gradient);
+	}
+
+	KUrl url = urlForTestOutputFile("testForgetModifiedDocument.png");
+	QVERIFY(image1.save(url.toLocalFile(), "png"));
+
+	// Load it as a Gwenview document
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
+
+	// Modify it
+	TransformImageOperation* op = new TransformImageOperation(ROT_90);
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
+
+	QCOMPARE(spy.count(), 1);
+
+	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+	QCOMPARE(lst.length(), 1);
+	QCOMPARE(lst.first(), url);
+
+	// Forget it
+	DocumentFactory::instance()->forget(url);
+
+	QCOMPARE(spy.count(), 2);
+	lst = DocumentFactory::instance()->modifiedDocumentList();
+	QVERIFY(lst.isEmpty());
 }

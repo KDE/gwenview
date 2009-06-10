@@ -49,6 +49,12 @@ public:
 
 	QUndoGroup* undoGroup();
 
+	/**
+	 * Do not keep document whose url is @url in cache even if it has been
+	 * modified
+	 */
+	void forget(const KUrl& url);
+
 Q_SIGNALS:
 	void modifiedDocumentListChanged();
 	void documentChanged(const KUrl&);
