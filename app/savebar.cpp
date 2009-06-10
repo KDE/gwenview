@@ -124,7 +124,7 @@ struct SaveBarPrivate {
 		QColor borderColor = PaintUtils::adjustedHsv(color, 0, 150, 0);
 
 		QString css =
-			".QWidget {"
+			"#saveBarWidget {"
 			"	background-color: %1;"
 			"	border-top: 1px solid %2;"
 			"	border-bottom: 1px solid %2;"
@@ -140,7 +140,7 @@ struct SaveBarPrivate {
 
 	void applyFullScreenStyleSheet() {
 		QString css =
-			".QWidget {"
+			"#saveBarWidget {"
 			"	background-color: #333;"
 			"}";
 		mSaveBarWidget->setStyleSheet(css);
@@ -226,6 +226,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mFullScreenMode = false;
 	d->mActionCollection = actionCollection;
 	d->mSaveBarWidget = new QWidget();
+	d->mSaveBarWidget->setObjectName("saveBarWidget");
 	d->applyNormalStyleSheet();
 
 	d->mMessageLabel = new QLabel;
