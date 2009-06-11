@@ -243,6 +243,16 @@ void SortedDirModel::doApplyFilters() {
 
 
 bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
+	const KFileItem leftItem = itemForSourceIndex(left);
+	const KFileItem rightItem = itemForSourceIndex(right);
+
+	const bool leftIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(leftItem);
+	const bool rightIsDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(rightItem);
+
+	if (leftIsDirOrArchive != rightIsDirOrArchive) {
+		return leftIsDirOrArchive;
+	}
+
 	if (sortRole() != KDirModel::ModifiedTime) {
 		return KDirSortFilterProxyModel::lessThan(left, right);
 	}
