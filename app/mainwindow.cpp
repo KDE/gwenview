@@ -707,6 +707,8 @@ struct MainWindow::Private {
 		delete mNotificationRestrictions;
 		if (!enabled) {
 			mNotificationRestrictions = new KNotificationRestrictions(KNotificationRestrictions::ScreenSaver, mWindow);
+		} else {
+			mNotificationRestrictions = 0;
 		}
 	}
 };
