@@ -195,7 +195,7 @@ private Q_SLOTS:
 	void emitMetaInfoLoaded();
 	void emitLoaded();
 	void emitLoadingFailed();
-	void slotCleanChanged(bool);
+	void slotUndoIndexChanged();
 
 private:
 	friend class DocumentFactory;

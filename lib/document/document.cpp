@@ -77,7 +77,7 @@ Document::Document(const KUrl& url)
 	d->mKeepRawData = false;
 	d->mKind = MimeTypeUtils::KIND_UNKNOWN;
 
-	connect(&d->mUndoStack, SIGNAL(cleanChanged(bool)), SLOT(slotCleanChanged(bool)) );
+	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
 	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
 	d->mImageMetaInfoModel.setFileItem(fileItem);
 	switchToImpl(new LoadingDocumentImpl(this));
@@ -390,8 +390,8 @@ QUndoStack* Document::undoStack() const {
 }
 
 
-void Document::slotCleanChanged(bool clean) {
-	if (clean) {
+void Document::slotUndoIndexChanged() {
+	if (d->mUndoStack.isClean()) {
 		// If user just undid all his changes this does not really correspond
 		// to a save, but it's similar enough as far as Document users are
 		// concerned
