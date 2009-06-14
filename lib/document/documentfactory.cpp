@@ -181,6 +181,7 @@ bool DocumentFactory::hasUrl(const KUrl& url) const {
 void DocumentFactory::clearCache() {
 	qDeleteAll(d->mDocumentMap);
 	d->mDocumentMap.clear();
+	d->mModifiedDocumentList.clear();
 }
 
 
