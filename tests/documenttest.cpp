@@ -507,3 +507,34 @@ void DocumentTest::testForgetModifiedDocument() {
 	lst = DocumentFactory::instance()->modifiedDocumentList();
 	QVERIFY(lst.isEmpty());
 }
+
+
+void DocumentTest::testModifiedAndSavedSignals() {
+	TransformImageOperation* op;
+
+	KUrl url = urlForTestFile("orient6.jpg");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(const KUrl&)));
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&)));
+	doc->loadFullImage();
+	doc->waitUntilLoaded();
+
+	QCOMPARE(modifiedSpy.count(), 0);
+	QCOMPARE(savedSpy.count(), 0);
+
+	op = new TransformImageOperation(ROT_90);
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
+	QCOMPARE(modifiedSpy.count(), 1);
+
+	op = new TransformImageOperation(ROT_90);
+	op->setDocument(doc);
+	doc->undoStack()->push(op);
+	QCOMPARE(modifiedSpy.count(), 2);
+
+	doc->undoStack()->undo();
+	QCOMPARE(modifiedSpy.count(), 3);
+
+	doc->undoStack()->undo();
+	QCOMPARE(savedSpy.count(), 1);
+}

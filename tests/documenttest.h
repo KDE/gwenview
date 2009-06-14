@@ -72,6 +72,7 @@ private Q_SLOTS:
 	void testMetaInfoJpeg();
 	void testMetaInfoBmp();
 	void testForgetModifiedDocument();
+	void testModifiedAndSavedSignals();
 
 	void initTestCase();
 	void init();
