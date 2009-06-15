@@ -61,6 +61,7 @@ public:
 protected:
 	void dragEnterEvent(QDragEnterEvent* event) {
 		QAbstractItemView::dragEnterEvent(event);
+		setDirtyRegion(mDropRect);
 		if (event->mimeData()->hasUrls()) {
 			event->acceptProposedAction();
 		}
@@ -69,7 +70,16 @@ protected:
 
 	void dragMoveEvent(QDragMoveEvent* event) {
 		QAbstractItemView::dragMoveEvent(event);
-		if (indexAt(event->pos()).isValid()) {
+
+		QModelIndex index = indexAt(event->pos());
+
+		// This code has been copied from Dolphin
+		// (panels/folders/paneltreeview.cpp)
+		setDirtyRegion(mDropRect);
+		mDropRect = visualRect(index);
+		setDirtyRegion(mDropRect);
+
+		if (index.isValid()) {
 			event->acceptProposedAction();
 		} else {
 			event->ignore();
@@ -87,6 +97,9 @@ protected:
 		const KUrl destUrl = static_cast<MODEL_CLASS*>(model())->urlForIndex(index);
 		FileOperations::showMenuForDroppedUrls(this, urlList, destUrl);
 	}
+
+private:
+	QRect mDropRect;
 };
 
 
@@ -115,9 +128,11 @@ struct FolderViewContextManagerItemPrivate {
 		mView = new UrlDropTreeView;
 		mView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 		mView->setAcceptDrops(true);
-		mView->setDropIndicatorShown(true);
 		mView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 		mView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+		// Necessary to get the drop target highlighted
+		mView->viewport()->setAttribute(Qt::WA_Hover);
 
 		mView->setHeaderHidden(true);
 
