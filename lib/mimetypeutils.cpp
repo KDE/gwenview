@@ -59,16 +59,6 @@ static void resolveAliasInList(QStringList* list) {
 	}
 }
 
-const QStringList& dirMimeTypes() {
-	static QStringList list;
-	if (list.isEmpty()) {
-		list << "inode/directory";
-		list += ArchiveUtils::mimeTypes();
-		resolveAliasInList(&list);
-	}
-	return list;
-}
-
 
 const QStringList& rasterImageMimeTypes() {
 	static QStringList list;
