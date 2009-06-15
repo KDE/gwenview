@@ -24,77 +24,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kprotocolmanager.h>
 
 namespace Gwenview {
 
 
 namespace ArchiveUtils {
 
-typedef QMap<QString,QString> ArchiveProtocolForMimeTypes;
-
-static const ArchiveProtocolForMimeTypes& archiveProtocolForMimeTypes() {
-	static ArchiveProtocolForMimeTypes map;
-	static bool initialized = false;
-	if (!initialized) {
-		// FIXME: This code used to work in KDE3. For now stick with an
-		// hardcoded list of mimetypes, stolen from Dolphin code
-		#if 0
-		static const char* KDE_PROTOCOL = "X-KDE-LocalProtocol";
-		KMimeType::List list = KMimeType::allMimeTypes();
-		KMimeType::List::Iterator it=list.begin(), end=list.end();
-		for (; it!=end; ++it) {
-			if ( (*it)->propertyNames().indexOf(KDE_PROTOCOL)!= -1 ) {
-				QString protocol = (*it)->property(KDE_PROTOCOL).toString();
-				map[(*it)->name()] = protocol;
-			}
-		}
-		#endif
-		map["application/zip"] = "zip";
-		map["application/x-tar"] = "tar";
-		map["application/x-tarz"] = "tar";
-		map["application/x-bzip-compressed-tar"] = "tar";
-		map["application/x-compressed-tar"] = "tar";
-		map["application/x-tzo"] = "tar";
-		initialized = true;
-		if (map.empty()) {
-			kWarning() << "No archive protocol found.";
-		}
-	}
-	return map;
-}
-
-// We do not use QMap::operator[] because we need to compare using
-// KMimeType::is()
-static ArchiveProtocolForMimeTypes::ConstIterator findProtocol(const KMimeType::Ptr mimeType) {
-	ArchiveProtocolForMimeTypes::ConstIterator
-		it = archiveProtocolForMimeTypes().constBegin(),
-		end = archiveProtocolForMimeTypes().constEnd();
-	for (; it!=end; ++it) {
-		if (mimeType->is(it.key())) {
-			return it;
-		}
-	}
-	return end;
-}
-
 bool fileItemIsArchive(const KFileItem& item) {
 	KMimeType::Ptr mimeType = item.determineMimeType();
-	ArchiveProtocolForMimeTypes::ConstIterator it = findProtocol(mimeType);
-	return it != archiveProtocolForMimeTypes().end();
+	return !KProtocolManager::protocolForArchiveMimetype(mimeType->name()).isEmpty();
 }
 
 bool fileItemIsDirOrArchive(const KFileItem& item) {
 	return item.isDir() || fileItemIsArchive(item);
-}
-
-QStringList mimeTypes() {
-	return archiveProtocolForMimeTypes().keys();
-}
-
-QString protocolForMimeType(const QString& mimeTypeName) {
-	KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(mimeTypeName);
-	ArchiveProtocolForMimeTypes::ConstIterator it = findProtocol(mimeTypePtr);
-	return it.value();
 }
 
 } // namespace ArchiveUtils

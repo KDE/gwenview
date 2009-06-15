@@ -45,17 +45,6 @@ GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem& item);
  */
 GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem& item);
 
-/**
- * Returns a list of known archive mime types
- */
-GWENVIEWLIB_EXPORT QStringList mimeTypes();
-
-/**
- * Returns the protocol associated with @p mimeType.
- * For example, returns "tar" for application/x-tar
- */
-GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString& mimeType);
-
 } // namespace ArchiveUtils
 
 } // namespace Gwenview

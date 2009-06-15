@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
 #include <kactioncategory.h>
+#include <kprotocolmanager.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <kurl.h>
@@ -875,15 +876,17 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 	if (item.isDir()) {
 		// Item is a dir, open it
 		openDirUrl(item.url());
-	} else if (ArchiveUtils::fileItemIsArchive(item)) {
-		// Item is an archive, tweak url then open it
-		KUrl url = item.url();
-		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
-		url.setProtocol(protocol);
-		openDirUrl(url);
 	} else {
-		// Item is a document, switch to view mode
-		d->mViewAction->trigger();
+		QString protocol = KProtocolManager::protocolForArchiveMimetype(item.mimetype());
+		if (!protocol.isEmpty()) {
+			// Item is an archive, tweak url then open it
+			KUrl url = item.url();
+			url.setProtocol(protocol);
+			openDirUrl(url);
+		} else {
+			// Item is a document, switch to view mode
+			d->mViewAction->trigger();
+		}
 	}
 }
 
