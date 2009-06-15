@@ -877,7 +877,7 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 		// Item is a dir, open it
 		openDirUrl(item.url());
 	} else {
-		QString protocol = KProtocolManager::protocolForArchiveMimetype(item.mimetype());
+		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
 		if (!protocol.isEmpty()) {
 			// Item is an archive, tweak url then open it
 			KUrl url = item.url();

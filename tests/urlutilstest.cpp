@@ -49,4 +49,6 @@ void UrlUtilsTest::testFixUserEnteredUrl_data() {
 	NEW_ROW("http://example.com", "http://example.com");
 	NEW_ROW("example.zip", "zip://" + pwd + "/example.zip");
 	NEW_ROW("file://" + pwd + "/example.zip", "zip://" + pwd + "/example.zip");
+	NEW_ROW("file://" + pwd + "/example.cbz", "zip://" + pwd + "/example.cbz");
+	NEW_ROW("file://" + pwd + "/example.jpg", "file://" + pwd + "/example.jpg");
 }

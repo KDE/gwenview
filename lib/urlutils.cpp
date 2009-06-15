@@ -31,10 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kde_file.h>
 #include <kio/netaccess.h>
 #include <kmountpoint.h>
-#include <kprotocolmanager.h>
 #include <kurl.h>
 
 // Local
+#include <archiveutils.h>
 #include <mimetypeutils.h>
 
 namespace Gwenview {
@@ -97,7 +97,7 @@ KUrl fixUserEnteredUrl(const KUrl& in) {
 	KUrl out = KUrl::fromPath(path);
 	QString mimeType = MimeTypeUtils::urlMimeType(out);
 
-	const QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
+	const QString protocol = ArchiveUtils::protocolForMimeType(mimeType);
 	if (!protocol.isEmpty()) {
 		out.setProtocol(protocol);
 	}

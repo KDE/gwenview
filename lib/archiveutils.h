@@ -45,6 +45,13 @@ GWENVIEWLIB_EXPORT bool fileItemIsArchive(const KFileItem& item);
  */
 GWENVIEWLIB_EXPORT bool fileItemIsDirOrArchive(const KFileItem& item);
 
+/**
+ * Returns the protocol for an archive mime type. Similar to
+ * KProtocolManager::protocolForArchiveMimetype(), except it tries parent
+ * mimetypes if it can't find anything (useful for .cbz and co)
+ */
+GWENVIEWLIB_EXPORT QString protocolForMimeType(const QString& mimeType);
+
 } // namespace ArchiveUtils
 
 } // namespace Gwenview

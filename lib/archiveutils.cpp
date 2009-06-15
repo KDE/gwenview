@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kmimetype.h>
 #include <kprotocolmanager.h>
 
 namespace Gwenview {
@@ -33,11 +34,29 @@ namespace ArchiveUtils {
 
 bool fileItemIsArchive(const KFileItem& item) {
 	KMimeType::Ptr mimeType = item.determineMimeType();
-	return !KProtocolManager::protocolForArchiveMimetype(mimeType->name()).isEmpty();
+	return !ArchiveUtils::protocolForMimeType(mimeType->name()).isEmpty();
 }
 
 bool fileItemIsDirOrArchive(const KFileItem& item) {
 	return item.isDir() || fileItemIsArchive(item);
+}
+
+QString protocolForMimeType(const QString& mimeType) {
+	QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
+	if (!protocol.isEmpty()) {
+		return protocol;
+	}
+
+	// No protocol, try with mimeType parents. This is useful for .cbz for
+	// example
+	KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
+	Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
+		protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
+		if (!protocol.isEmpty()) {
+			return protocol;
+		}
+	}
+	return QString();
 }
 
 } // namespace ArchiveUtils
