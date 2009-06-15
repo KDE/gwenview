@@ -804,8 +804,9 @@ void MainWindow::slotModifiedDocumentListChanged() {
 }
 
 
-void MainWindow::setInitialUrl(const KUrl& url) {
-	Q_ASSERT(url.isValid());
+void MainWindow::setInitialUrl(const KUrl& _url) {
+	Q_ASSERT(_url.isValid());
+	KUrl url = UrlUtils::fixUserEnteredUrl(_url);
 	if (url.protocol() == "http" || url.protocol() == "https") {
 		d->mGvCore->addUrlToRecentUrls(url);
 	}
