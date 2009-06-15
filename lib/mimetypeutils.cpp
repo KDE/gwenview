@@ -33,12 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kio/jobclasses.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
+#include <kprotocolmanager.h>
 #include <kurl.h>
 
 #include <kimageio.h>
-
-// Local
-#include "archiveutils.h"
 
 
 namespace Gwenview {
@@ -122,7 +120,7 @@ Kind mimeTypeKind(const QString& mimeType) {
 	if (mimeType.startsWith(QLatin1String("inode/directory"))) {
 		return KIND_DIR;
 	}
-	if (ArchiveUtils::mimeTypes().contains(mimeType)) {
+	if (!KProtocolManager::protocolForArchiveMimetype(mimeType).isEmpty()) {
 		return KIND_ARCHIVE;
 	}
 	if (rasterImageMimeTypes().contains(mimeType)) {
