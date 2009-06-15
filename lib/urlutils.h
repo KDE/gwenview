@@ -46,6 +46,11 @@ GWENVIEWLIB_EXPORT bool urlIsFastLocalFile(const KUrl& url);
  */
 GWENVIEWLIB_EXPORT bool urlIsDirectory(const KUrl& url);
 
+/**
+ * Returns a fixed version of a user entered url
+ */
+GWENVIEWLIB_EXPORT KUrl fixUserEnteredUrl(const KUrl& url);
+
 } // namespace
 
 } // namespace

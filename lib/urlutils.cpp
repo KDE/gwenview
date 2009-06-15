@@ -24,14 +24,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QApplication>
 #include <QFile>
+#include <QFileInfo>
 
 // KDE
+#include <kdebug.h>
 #include <kde_file.h>
 #include <kio/netaccess.h>
 #include <kmountpoint.h>
+#include <kprotocolmanager.h>
 #include <kurl.h>
 
 // Local
+#include <mimetypeutils.h>
 
 namespace Gwenview {
 
@@ -79,6 +83,25 @@ bool urlIsDirectory(const KUrl& url) {
 		return entry.isDir();
 	}
 	return false;
+}
+
+
+KUrl fixUserEnteredUrl(const KUrl& in) {
+	if (!in.isRelative() && !in.isLocalFile()) {
+		return in;
+	}
+
+	QFileInfo info(in.toLocalFile());
+	QString path = info.absoluteFilePath();
+
+	KUrl out = KUrl::fromPath(path);
+	QString mimeType = MimeTypeUtils::urlMimeType(out);
+
+	const QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
+	if (!protocol.isEmpty()) {
+		out.setProtocol(protocol);
+	}
+	return out;
 }
 
 

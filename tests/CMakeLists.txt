@@ -90,6 +90,14 @@ kde4_add_unit_test(placetreemodeltest ${placetreemodeltest_SRCS})
 
 target_link_libraries(placetreemodeltest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
+# UrlUtilsTest
+set(urlutilstest_SRCS
+	urlutilstest.cpp
+	)
+
+kde4_add_unit_test(urlutilstest ${urlutilstest_SRCS})
+
+target_link_libraries(urlutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
 # SlideContainer
 set(slidecontainertest_SRCS
