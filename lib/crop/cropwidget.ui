@@ -84,7 +84,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QSpinBox" name="leftSpinBox">
+       <widget class="KIntSpinBox" name="leftSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -94,7 +94,7 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QSpinBox" name="topSpinBox">
+       <widget class="KIntSpinBox" name="topSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -117,7 +117,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QSpinBox" name="widthSpinBox">
+       <widget class="KIntSpinBox" name="widthSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -127,7 +127,7 @@
        </widget>
       </item>
       <item row="3" column="2">
-       <widget class="QSpinBox" name="heightSpinBox">
+       <widget class="KIntSpinBox" name="heightSpinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>1</horstretch>
@@ -146,6 +146,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

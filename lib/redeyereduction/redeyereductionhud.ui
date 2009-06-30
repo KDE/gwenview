@@ -31,7 +31,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="diameterSpinBox" >
+    <widget class="KIntSpinBox" name="diameterSpinBox" >
      <property name="minimum" >
       <number>2</number>
      </property>
@@ -49,6 +49,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
