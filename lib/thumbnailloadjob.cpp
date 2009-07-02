@@ -198,9 +198,9 @@ void ThumbnailThread::loadThumbnail() {
 			mOriginalWidth = originalSize.width();
 			mOriginalHeight = originalSize.height();
 
-			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize ) {
+			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize) {
 				mImage=originalImage;
-				needCaching = false;
+				needCaching = reader.format() != "png";
 			} else {
 				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 			}
