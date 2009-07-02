@@ -23,6 +23,7 @@
 - Do not crash when clicking a rotate button from the thumbnail view speedbar.
 - Disable screensaver in fullscreen mode (bug #185916).
 - Forget modified documents if they are deleted or trashed.
+- Fix date sorting.
 
 # 2.2.3
 ## Fixes
