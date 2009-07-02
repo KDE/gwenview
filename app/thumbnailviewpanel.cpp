@@ -291,7 +291,7 @@ void ThumbnailViewPanel::updateSortOrder() {
 	}
 
 	// This works because for now Sorting::Enum maps to KDirModel::ModelColumns
-	d->mDirModel->sort(sortingFromSortAction(action), Qt::AscendingOrder);
+	d->mDirModel->setSortRole(sortingFromSortAction(action));
 }
 
 
