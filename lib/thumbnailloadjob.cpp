@@ -179,7 +179,7 @@ void ThumbnailThread::loadThumbnail() {
 
 	// Generate thumbnail from full image
 	if (mImage.isNull()) {
-		const QSize originalSize = reader.size();
+		QSize originalSize = reader.size();
 		if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
 			int scale;
 			const int maxSize = qMax(originalSize.width(), originalSize.height());
@@ -192,6 +192,9 @@ void ThumbnailThread::loadThumbnail() {
 
 		QImage originalImage;
 		if (reader.read(&originalImage)) {
+			if (!originalSize.isValid()) {
+				originalSize = originalImage.size();
+			}
 			mOriginalWidth = originalSize.width();
 			mOriginalHeight = originalSize.height();
 
