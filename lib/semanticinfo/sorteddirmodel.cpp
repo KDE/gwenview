@@ -257,8 +257,8 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 		return KDirSortFilterProxyModel::lessThan(left, right);
 	}
 
-	const KDateTime leftDate = TimeUtils::dateTimeForFileItem(itemForSourceIndex(left));
-	const KDateTime rightDate = TimeUtils::dateTimeForFileItem(itemForSourceIndex(right));
+	const KDateTime leftDate = TimeUtils::dateTimeForFileItem(leftItem);
+	const KDateTime rightDate = TimeUtils::dateTimeForFileItem(rightItem);
 
 	return leftDate < rightDate;
 }
