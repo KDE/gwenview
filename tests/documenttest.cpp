@@ -405,18 +405,24 @@ void DocumentTest::testModify() {
 			document()->editor()->setImage(image);
 		}
 	};
+	QSignalSpy spy(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()));
 
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
+	QCOMPARE(spy.count(), 0);
 
 	QVERIFY(doc->editor());
 	TestOperation* op = new TestOperation;
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
 	QVERIFY(doc->isModified());
+	QCOMPARE(spy.count(), 1);
+	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+	QCOMPARE(lst.count(), 1);
+	QCOMPARE(lst.first(), url);
 
 	KUrl destUrl = urlForTestOutputFile("modify.png");
 	QVERIFY(doc->save(destUrl, "png"));
@@ -425,6 +431,8 @@ void DocumentTest::testModify() {
 	// event loop
 	QTest::qWait(100);
 	QVERIFY(!doc->isModified());
+	QCOMPARE(spy.count(), 2);
+	QVERIFY(DocumentFactory::instance()->modifiedDocumentList().isEmpty());
 }
 
 void DocumentTest::testMetaInfoJpeg() {
