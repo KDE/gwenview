@@ -191,6 +191,8 @@ void ThumbnailThread::loadThumbnail() {
 		}
 
 		QImage originalImage;
+		// format() is empty after QImageReader::read() is called
+		QByteArray format = reader.format();
 		if (reader.read(&originalImage)) {
 			if (!originalSize.isValid()) {
 				originalSize = originalImage.size();
@@ -200,7 +202,7 @@ void ThumbnailThread::loadThumbnail() {
 
 			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize) {
 				mImage=originalImage;
-				needCaching = reader.format() != "png";
+				needCaching = format != "png";
 			} else {
 				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 			}
