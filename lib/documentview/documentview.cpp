@@ -162,12 +162,6 @@ struct DocumentViewPrivate {
 	}
 
 
-	void setupShortcuts() {
-		new QShortcut(Qt::Key_PageUp,   that, SIGNAL(previousImageRequested()));
-		new QShortcut(Qt::Key_PageDown, that, SIGNAL(nextImageRequested()));
-	}
-
-
 	void setupLoadingIndicator() {
 		mLoadingIndicator = new QLabel;
 
@@ -294,7 +288,6 @@ DocumentView::DocumentView(QWidget* parent, SlideShow* slideShow, KActionCollect
 	d->mZoomWidgetVisible = true;
 	d->setupZoomWidget();
 	d->setupZoomActions();
-	d->setupShortcuts();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
