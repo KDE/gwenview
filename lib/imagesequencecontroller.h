@@ -30,14 +30,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 class QPixmap;
 
-namespace Gwenview {
+class KPixmapSequence;
 
-class ImageSequence;
+namespace Gwenview {
 
 class ImageSequenceControllerPrivate;
 
 /**
- * This class uses an instance of ImageSequence and emits the frameChanged()
+ * This class uses an instance of KPixmapSequence and emits the frameChanged()
  * periodically
  */
 class ImageSequenceController : public QObject {
@@ -46,7 +46,7 @@ public:
 	ImageSequenceController(QObject* parent = 0);
 	~ImageSequenceController();
 
-	void setImageSequence(ImageSequence*);
+	void setPixmapSequence(const KPixmapSequence&);
 
 	void setInterval(int);
 

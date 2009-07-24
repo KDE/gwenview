@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
-#include <lib/imagesequence.h>
+#include <lib/kpixmapsequence.h>
 #include <lib/imagesequencecontroller.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
@@ -73,7 +73,7 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
-	ImageSequence mLoadingImageSequence;
+	KPixmapSequence mLoadingPixmapSequence;
 	ImageSequenceController mLoadingImageSequenceController;
 
 	bool mZoomWidgetVisible;
@@ -166,9 +166,9 @@ struct DocumentViewPrivate {
 		mLoadingIndicator = new QLabel;
 
 		const QString path = KIconLoader::global()->iconPath("process-working", -22);
-		mLoadingImageSequence.load(path);
-		mLoadingIndicator->setFixedSize(mLoadingImageSequence.frameSize());
-		mLoadingImageSequenceController.setImageSequence(&mLoadingImageSequence);
+		mLoadingPixmapSequence.load(path);
+		mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
+		mLoadingImageSequenceController.setPixmapSequence(mLoadingPixmapSequence);
 		mLoadingImageSequenceController.setInterval(100);
 		QObject::connect(&mLoadingImageSequenceController, SIGNAL(frameChanged(const QPixmap&)),
 			mLoadingIndicator, SLOT(setPixmap(const QPixmap&)));

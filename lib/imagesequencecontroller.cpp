@@ -30,26 +30,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 
 // Local
-#include <lib/imagesequence.h>
+#include <lib/kpixmapsequence.h>
 
 namespace Gwenview {
 
 
 struct ImageSequenceControllerPrivate {
 	ImageSequenceController* that;
-	QPointer<ImageSequence> mImageSequence;
+	KPixmapSequence mSequence;
 	int mIndex;
 	QTimer mTimer;
 
 	void slotTimerTimeout() {
-		Q_ASSERT(mImageSequence);
-		mIndex = (mIndex + 1) % mImageSequence->frameCount();
+		mIndex = (mIndex + 1) % mSequence.frameCount();
 		emitFrameChanged();
 	}
 
 	void emitFrameChanged() {
-		Q_ASSERT(mImageSequence);
-		that->frameChanged(mImageSequence->frameAt(mIndex));
+		that->frameChanged(mSequence.frameAt(mIndex));
 	}
 };
 
@@ -70,8 +68,8 @@ ImageSequenceController::~ImageSequenceController() {
 }
 
 
-void ImageSequenceController::setImageSequence(ImageSequence* imagesequence) {
-	d->mImageSequence = imagesequence;
+void ImageSequenceController::setPixmapSequence(const KPixmapSequence& sequence) {
+	d->mSequence = sequence;
 }
 
 
@@ -81,12 +79,8 @@ void ImageSequenceController::setInterval(int interval) {
 
 
 void ImageSequenceController::start() {
-	if (!d->mImageSequence) {
-		kWarning() << "No ImageSequence!";
-		return;
-	}
-	if (d->mImageSequence->frameCount() == 0) {
-		kWarning() << "Empty ImageSequence!";
+	if (d->mSequence.frameCount() == 0) {
+		kWarning() << "Empty KPixmapSequence!";
 		return;
 	}
 	d->mIndex = 0;
