@@ -38,7 +38,7 @@ set(gwenviewlib_SRCS
 	kpixmapsequence.cpp
 	splittercollapser.cpp
 	historymodel.cpp
-	imagesequencecontroller.cpp
+	pixmapsequencecontroller.cpp
 	archiveutils.cpp
 	datewidget.cpp
 	exiv2imageloader.cpp

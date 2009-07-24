@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef IMAGESEQUENCECONTROLLER_H
-#define IMAGESEQUENCECONTROLLER_H
+#ifndef PIXMAPSEQUENCECONTROLLER_H
+#define PIXMAPSEQUENCECONTROLLER_H
 
 // Qt
 #include <QObject>
@@ -34,17 +34,17 @@ class KPixmapSequence;
 
 namespace Gwenview {
 
-class ImageSequenceControllerPrivate;
+class PixmapSequenceControllerPrivate;
 
 /**
  * This class uses an instance of KPixmapSequence and emits the frameChanged()
  * periodically
  */
-class ImageSequenceController : public QObject {
+class PixmapSequenceController : public QObject {
 	Q_OBJECT
 public:
-	ImageSequenceController(QObject* parent = 0);
-	~ImageSequenceController();
+	PixmapSequenceController(QObject* parent = 0);
+	~PixmapSequenceController();
 
 	void setPixmapSequence(const KPixmapSequence&);
 
@@ -58,8 +58,8 @@ Q_SIGNALS:
 	void frameChanged(const QPixmap&);
 
 private:
-	friend class ImageSequenceControllerPrivate;
-	ImageSequenceControllerPrivate* const d;
+	friend class PixmapSequenceControllerPrivate;
+	PixmapSequenceControllerPrivate* const d;
 
 	Q_PRIVATE_SLOT(d, void slotTimerTimeout())
 };
@@ -67,4 +67,4 @@ private:
 
 } // namespace
 
-#endif /* IMAGESEQUENCECONTROLLER_H */
+#endif /* PIXMAPSEQUENCECONTROLLER_H */

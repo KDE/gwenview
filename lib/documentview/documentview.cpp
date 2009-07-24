@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/kpixmapsequence.h>
-#include <lib/imagesequencecontroller.h>
+#include <lib/pixmapsequencecontroller.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/slideshow.h>
@@ -74,7 +74,7 @@ struct DocumentViewPrivate {
 	KAction* mZoomToFitAction;
 
 	KPixmapSequence mLoadingPixmapSequence;
-	ImageSequenceController mLoadingImageSequenceController;
+	PixmapSequenceController mLoadingPixmapSequenceController;
 
 	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
@@ -168,9 +168,9 @@ struct DocumentViewPrivate {
 		const QString path = KIconLoader::global()->iconPath("process-working", -22);
 		mLoadingPixmapSequence.load(path);
 		mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
-		mLoadingImageSequenceController.setPixmapSequence(mLoadingPixmapSequence);
-		mLoadingImageSequenceController.setInterval(100);
-		QObject::connect(&mLoadingImageSequenceController, SIGNAL(frameChanged(const QPixmap&)),
+		mLoadingPixmapSequenceController.setPixmapSequence(mLoadingPixmapSequence);
+		mLoadingPixmapSequenceController.setInterval(100);
+		QObject::connect(&mLoadingPixmapSequenceController, SIGNAL(frameChanged(const QPixmap&)),
 			mLoadingIndicator, SLOT(setPixmap(const QPixmap&)));
 
 		WidgetFloater* floater = new WidgetFloater(that);
@@ -259,7 +259,7 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			setupLoadingIndicator();
 		}
-		mLoadingImageSequenceController.start();
+		mLoadingPixmapSequenceController.start();
 		mLoadingIndicator->show();
 		mLoadingIndicator->raise();
 	}
@@ -269,7 +269,7 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			return;
 		}
-		mLoadingImageSequenceController.stop();
+		mLoadingPixmapSequenceController.stop();
 		mLoadingIndicator->hide();
 	}
 };

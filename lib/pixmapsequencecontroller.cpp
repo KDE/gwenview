@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "imagesequencecontroller.h"
+#include "pixmapsequencecontroller.h"
 
 // Qt
 #include <QPixmap>
@@ -35,8 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct ImageSequenceControllerPrivate {
-	ImageSequenceController* that;
+struct PixmapSequenceControllerPrivate {
+	PixmapSequenceController* that;
 	KPixmapSequence mSequence;
 	int mIndex;
 	QTimer mTimer;
@@ -52,9 +52,9 @@ struct ImageSequenceControllerPrivate {
 };
 
 
-ImageSequenceController::ImageSequenceController(QObject* parent)
+PixmapSequenceController::PixmapSequenceController(QObject* parent)
 : QObject(parent)
-, d(new ImageSequenceControllerPrivate) {
+, d(new PixmapSequenceControllerPrivate) {
 	d->that = this;
 	d->mIndex = 0;
 	d->mTimer.setInterval(200);
@@ -63,22 +63,22 @@ ImageSequenceController::ImageSequenceController(QObject* parent)
 }
 
 
-ImageSequenceController::~ImageSequenceController() {
+PixmapSequenceController::~PixmapSequenceController() {
 	delete d;
 }
 
 
-void ImageSequenceController::setPixmapSequence(const KPixmapSequence& sequence) {
+void PixmapSequenceController::setPixmapSequence(const KPixmapSequence& sequence) {
 	d->mSequence = sequence;
 }
 
 
-void ImageSequenceController::setInterval(int interval) {
+void PixmapSequenceController::setInterval(int interval) {
 	d->mTimer.setInterval(interval);
 }
 
 
-void ImageSequenceController::start() {
+void PixmapSequenceController::start() {
 	if (d->mSequence.frameCount() == 0) {
 		kWarning() << "Empty KPixmapSequence!";
 		return;
@@ -89,11 +89,11 @@ void ImageSequenceController::start() {
 }
 
 
-void ImageSequenceController::stop() {
+void PixmapSequenceController::stop() {
 	d->mTimer.stop();
 }
 
 
 } // namespace
 
-#include "imagesequencecontroller.moc"
+#include "pixmapsequencecontroller.moc"
