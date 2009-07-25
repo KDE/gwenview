@@ -46,11 +46,11 @@ void SlideContainer::setContent(QWidget* content) {
 	mContent = content;
 	mContent->setParent(this);
 	mContent->hide();
-	mContent->adjustSize();
 }
 
 
 void SlideContainer::slideIn() {
+	mContent->adjustSize();
 	if (mTimeLine->direction() == QTimeLine::Backward) {
 		mTimeLine->setDirection(QTimeLine::Forward);
 	}
