@@ -74,11 +74,12 @@ struct StartPagePrivate : public Ui_StartPage{
 	StartPage* that;
 	GvCore* mGvCore;
 	KFilePlacesModel* mBookmarksModel;
+	bool mSearchUiInitialized;
 
-	void setupSearchUi(AbstractSemanticInfoBackEnd* backEnd) {
+	void setupSearchUi() {
 	#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 		if (Nepomuk::ResourceManager::instance()->init() == 0) {
-			mTagView->setModel(TagModel::createAllTagsModel(mTagView, backEnd));
+			mTagView->setModel(TagModel::createAllTagsModel(mTagView, mGvCore->semanticInfoBackEnd()));
 			mTagView->show();
 			mTagLabel->hide();
 		} else {
@@ -118,6 +119,7 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 , d(new StartPagePrivate) {
 	d->that = this;
 	d->mGvCore = gvCore;
+	d->mSearchUiInitialized = false;
 	d->setupUi(this);
 	setFrameStyle(QFrame::NoFrame);
 
@@ -149,8 +151,6 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 
 	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
-
-	d->setupSearchUi(gvCore->semanticInfoBackEnd());
 
 	d->updateHistoryTab();
 	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
@@ -232,6 +232,10 @@ void StartPage::showEvent(QShowEvent* event) {
 		if (!d->mRecentUrlsView->model()) {
 			d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
 		}
+	}
+	if (!d->mSearchUiInitialized) {
+		d->mSearchUiInitialized = true;
+		d->setupSearchUi();
 	}
 	QFrame::showEvent(event);
 }
