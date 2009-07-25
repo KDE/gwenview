@@ -118,12 +118,6 @@ QString urlMimeTypeByContent(const KUrl& url) {
 
 
 Kind mimeTypeKind(const QString& mimeType) {
-	if (mimeType.startsWith(QLatin1String("inode/directory"))) {
-		return KIND_DIR;
-	}
-	if (!ArchiveUtils::protocolForMimeType(mimeType).isEmpty()) {
-		return KIND_ARCHIVE;
-	}
 	if (rasterImageMimeTypes().contains(mimeType)) {
 		return KIND_RASTER_IMAGE;
 	}
@@ -132,6 +126,12 @@ Kind mimeTypeKind(const QString& mimeType) {
 	}
 	if (mimeType.startsWith(QLatin1String("video/"))) {
 		return KIND_VIDEO;
+	}
+	if (mimeType.startsWith(QLatin1String("inode/directory"))) {
+		return KIND_DIR;
+	}
+	if (!ArchiveUtils::protocolForMimeType(mimeType).isEmpty()) {
+		return KIND_ARCHIVE;
 	}
 
 	return KIND_FILE;
