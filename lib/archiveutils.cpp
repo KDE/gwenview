@@ -42,21 +42,27 @@ bool fileItemIsDirOrArchive(const KFileItem& item) {
 }
 
 QString protocolForMimeType(const QString& mimeType) {
-	QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
-	if (!protocol.isEmpty()) {
-		return protocol;
+	static QHash<QString, QString> cache;
+	QHash<QString, QString>::ConstIterator it = cache.find(mimeType);
+	if (it != cache.constEnd()) {
+		return it.value();
 	}
 
-	// No protocol, try with mimeType parents. This is useful for .cbz for
-	// example
-	KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
-	Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
-		protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
-		if (!protocol.isEmpty()) {
-			return protocol;
+	QString protocol = KProtocolManager::protocolForArchiveMimetype(mimeType);
+	if (protocol.isEmpty()) {
+		// No protocol, try with mimeType parents. This is useful for .cbz for
+		// example
+		KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
+		Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
+			protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
+			if (!protocol.isEmpty()) {
+				break;
+			}
 		}
 	}
-	return QString();
+
+	cache.insert(mimeType, protocol);
+	return protocol;
 }
 
 } // namespace ArchiveUtils
