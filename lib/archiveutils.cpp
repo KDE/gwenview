@@ -43,7 +43,7 @@ bool fileItemIsDirOrArchive(const KFileItem& item) {
 
 QString protocolForMimeType(const QString& mimeType) {
 	static QHash<QString, QString> cache;
-	QHash<QString, QString>::ConstIterator it = cache.find(mimeType);
+	QHash<QString, QString>::ConstIterator it = cache.constFind(mimeType);
 	if (it != cache.constEnd()) {
 		return it.value();
 	}
