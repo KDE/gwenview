@@ -53,10 +53,12 @@ QString protocolForMimeType(const QString& mimeType) {
 		// No protocol, try with mimeType parents. This is useful for .cbz for
 		// example
 		KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
-		Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
-			protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
-			if (!protocol.isEmpty()) {
-				break;
+		if (ptr) {
+			Q_FOREACH(const QString& parentMimeType, ptr->allParentMimeTypes()) {
+				protocol = KProtocolManager::protocolForArchiveMimetype(parentMimeType);
+				if (!protocol.isEmpty()) {
+					break;
+				}
 			}
 		}
 	}
