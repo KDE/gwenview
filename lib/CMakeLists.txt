@@ -36,9 +36,10 @@ set(gwenviewlib_SRCS
 	abstractimageviewtool.cpp
 	eventwatcher.cpp
 	kpixmapsequence.cpp
+	kpixmapsequenceoverlaypainter.cpp
+	kpixmapsequencewidget.cpp
 	splittercollapser.cpp
 	historymodel.cpp
-	pixmapsequencecontroller.cpp
 	archiveutils.cpp
 	datewidget.cpp
 	exiv2imageloader.cpp

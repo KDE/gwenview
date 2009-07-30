@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/kpixmapsequence.h>
-#include <lib/pixmapsequencecontroller.h>
+#include <lib/kpixmapsequencewidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/slideshow.h>
@@ -73,14 +73,12 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
-	KPixmapSequence mLoadingPixmapSequence;
-	PixmapSequenceController mLoadingPixmapSequenceController;
+	KPixmapSequenceWidget* mLoadingIndicator;
 
 	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
-	QLabel* mLoadingIndicator;
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
@@ -163,15 +161,13 @@ struct DocumentViewPrivate {
 
 
 	void setupLoadingIndicator() {
-		mLoadingIndicator = new QLabel;
-
 		const QString path = KIconLoader::global()->iconPath("process-working", -22);
-		mLoadingPixmapSequence.load(path);
-		mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
-		mLoadingPixmapSequenceController.setPixmapSequence(mLoadingPixmapSequence);
-		mLoadingPixmapSequenceController.setInterval(100);
-		QObject::connect(&mLoadingPixmapSequenceController, SIGNAL(frameChanged(const QPixmap&)),
-			mLoadingIndicator, SLOT(setPixmap(const QPixmap&)));
+		KPixmapSequence sequence;
+		sequence.load(path);
+		mLoadingIndicator = new KPixmapSequenceWidget;
+		mLoadingIndicator->setSequence(sequence);
+		//mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
+		mLoadingIndicator->setInterval(100);
 
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
@@ -259,7 +255,7 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			setupLoadingIndicator();
 		}
-		mLoadingPixmapSequenceController.start();
+		mLoadingIndicator->start();
 		mLoadingIndicator->show();
 		mLoadingIndicator->raise();
 	}
@@ -269,7 +265,7 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			return;
 		}
-		mLoadingPixmapSequenceController.stop();
+		mLoadingIndicator->stop();
 		mLoadingIndicator->hide();
 	}
 };
