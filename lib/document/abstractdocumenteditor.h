@@ -35,7 +35,6 @@ class QImage;
 namespace Gwenview {
 
 
-class AbstractDocumentEditorPrivate;
 
 
 /**

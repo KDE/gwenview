@@ -29,7 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 class KFileItem;
-class KFileItemList;
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDropEvent;

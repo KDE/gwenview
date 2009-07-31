@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/mimetypeutils.h>
 
 
-class KDateTime;
 class KDirLister;
 class KFileItem;
 class KUrl;
@@ -42,7 +41,6 @@ namespace Gwenview {
 
 class AbstractSemanticInfoBackEnd;
 class SortedDirModelPrivate;
-class TagSet;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 class SemanticInfo;

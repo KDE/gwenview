@@ -30,11 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/document/document.h>
 
 class KAboutData;
-class KAction;
 
-namespace KParts {
-class StatusBarExtension;
-}
 
 namespace Gwenview {
 

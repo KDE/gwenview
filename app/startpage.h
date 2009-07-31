@@ -32,7 +32,6 @@ class QModelIndex;
 class QPalette;
 class QShowEvent;
 
-class KFilePlacesModel;
 class KUrl;
 
 namespace Gwenview {
