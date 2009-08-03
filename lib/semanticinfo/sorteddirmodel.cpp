@@ -95,7 +95,7 @@ MimeTypeUtils::Kinds SortedDirModel::kindFilter() const {
 }
 
 
-void SortedDirModel::setKindFilter(const MimeTypeUtils::Kinds kindFilter) {
+void SortedDirModel::setKindFilter(MimeTypeUtils::Kinds kindFilter) {
 	if (d->mKindFilter == kindFilter) {
 		return;
 	}
