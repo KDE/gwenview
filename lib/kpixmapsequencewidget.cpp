@@ -62,7 +62,9 @@ void KPixmapSequenceWidget::setSequence( const KPixmapSequence& seq )
 {
     setFixedSize(seq.frameSize());
     d->m_painter.setSequence( seq );
-    d->m_painter.start();
+    if (isVisible()) {
+        d->m_painter.start();
+    }
 }
 
 
@@ -72,15 +74,19 @@ void KPixmapSequenceWidget::setInterval( int msecs )
 }
 
 
-void KPixmapSequenceWidget::start()
+void KPixmapSequenceWidget::showEvent( QShowEvent* event )
 {
     d->m_painter.start();
+    QWidget::showEvent( event );
 }
 
 
-void KPixmapSequenceWidget::stop()
+void KPixmapSequenceWidget::hideEvent( QHideEvent* event )
 {
     d->m_painter.stop();
+    QWidget::hideEvent( event );
 }
+
+void hideEvent( QHideEvent* );
 
 #include "kpixmapsequencewidget.moc"

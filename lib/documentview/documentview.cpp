@@ -255,7 +255,6 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			setupLoadingIndicator();
 		}
-		mLoadingIndicator->start();
 		mLoadingIndicator->show();
 		mLoadingIndicator->raise();
 	}
@@ -265,7 +264,6 @@ struct DocumentViewPrivate {
 		if (!mLoadingIndicator) {
 			return;
 		}
-		mLoadingIndicator->stop();
 		mLoadingIndicator->hide();
 	}
 };

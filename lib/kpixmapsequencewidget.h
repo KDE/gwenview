@@ -81,16 +81,10 @@ public Q_SLOTS:
      */
     void setInterval( int msecs );
 
-    /**
-     * Start drawing the sequence.
-     *
-     */
-    void start();
+protected:
+    virtual void showEvent( QShowEvent* );
 
-    /**
-     * Stop drawing the sequence.
-     */
-    void stop();
+    virtual void hideEvent( QHideEvent* );
 
 private:
     class Private;
