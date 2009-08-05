@@ -352,8 +352,7 @@ void KIPIInterface::slotSelectionChanged() {
 
 
 void KIPIInterface::slotDirectoryChanged() {
-// TODO check if getting it from selected
-	emit currentAlbumChanged(d->mMainWindow->contextManager()->selection().count() >0);
+	emit currentAlbumChanged(true);
 }
 
 } //namespace
