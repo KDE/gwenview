@@ -1,3 +1,7 @@
+# 2.3.1
+## Fixes
+- Ensure "Advanced Slideshow" plugin is always enabled.
+
 # 2.3.0
 ## New features
 - Gwenview can now play videos (bug #174522).
