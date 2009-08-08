@@ -22,7 +22,7 @@
 
 #include <QtGui/QWidget>
 
-#include "kdeui_export.h"
+#include "gwenviewlib_export.h"
 
 class KPixmapSequence;
 
@@ -40,7 +40,7 @@ class KPixmapSequence;
  *
  * \since 4.4
  */
-class KDEUI_EXPORT KPixmapSequenceWidget : public QWidget
+class GWENVIEWLIB_EXPORT KPixmapSequenceWidget : public QWidget
 {
     Q_OBJECT
 

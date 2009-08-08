@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
 
-#include "kdeui_export.h"
+#include "gwenviewlib_export.h"
 
 class KPixmapSequence;
 class QWidget;
@@ -40,7 +40,7 @@ class QEvent;
  *
  * \author Sebastian Trueg <trueg@kde.org>
  */
-class KDEUI_EXPORT KPixmapSequenceOverlayPainter : public QObject
+class GWENVIEWLIB_EXPORT KPixmapSequenceOverlayPainter : public QObject
 {
     Q_OBJECT
 

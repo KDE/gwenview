@@ -23,7 +23,7 @@
 
 #include <QtCore/QSharedDataPointer>
 
-#include "kdeui_export.h"
+#include "gwenviewlib_export.h"
 
 class QPixmap;
 class QSize;
@@ -41,7 +41,7 @@ class QSize;
  *
  * \author Aurélien Gâteau <agateau@kde.org><br/>Sebastian Trueg <trueg@kde.org>
  */
-class KDEUI_EXPORT KPixmapSequence
+class GWENVIEWLIB_EXPORT KPixmapSequence
 {
 public:
     /**
