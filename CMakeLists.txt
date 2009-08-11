@@ -27,6 +27,7 @@ endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 subdirs(lib)
 subdirs(app)
+subdirs(importer)
 subdirs(part)
 subdirs(tests)
 subdirs(icons)
