@@ -61,11 +61,18 @@ ImportDialog::ImportDialog()
 		SLOT(slotImportFinished()));
 
 	d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
+
+	setAutoSaveSettings();
 }
 
 
 ImportDialog::~ImportDialog() {
 	delete d;
+}
+
+
+QSize ImportDialog::sizeHint() const {
+	return QSize(700, 500);
 }
 
 

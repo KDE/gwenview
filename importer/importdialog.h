@@ -42,6 +42,9 @@ public:
 public Q_SLOTS:
 	void setSourceUrl(const KUrl&);
 
+protected:
+	virtual QSize sizeHint() const;
+
 private Q_SLOTS:
 	void startImport();
 	void slotImportFinished();
