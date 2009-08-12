@@ -56,9 +56,11 @@ Q_SIGNALS:
 private Q_SLOTS:
 	void slotImportSelected();
 	void slotImportAll();
-	void updateImportSelectedButton();
+	void updateImportButtons();
+	void updateDstLabel();
 
 private:
+	friend class ThumbnailPagePrivate;
 	ThumbnailPagePrivate* const d;
 };
 

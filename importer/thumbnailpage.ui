@@ -60,7 +60,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="mEventComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -73,7 +73,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="mDstLabel">
        <property name="text">
         <string>Pictures will be imported in /tmp/photo/(year)/event &lt;a href=&quot;#&quot;&gt;Customize&lt;/a&gt;</string>
        </property>

@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.h"
 
 // Qt
+#include <QDate>
+#include <QDir>
 #include <QPushButton>
 
 // KDE
@@ -65,8 +67,17 @@ public:
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	ThumbnailPage* q;
 	SortedDirModel* mDirModel;
-	QPushButton* mImportButton;
+	QPushButton* mImportSelectedButton;
+	QPushButton* mImportAllButton;
 	KUrl::List mUrlList;
+	KUrl mDstBaseUrl;
+
+	void setupDstBaseUrl() {
+		// FIXME: Use xdg, and make this configurable
+		mDstBaseUrl = KUrl::fromPath(QDir::home().absoluteFilePath("photos"));
+		int year = QDate::currentDate().year();
+		mDstBaseUrl.addPath(QString::number(year));
+	}
 
 	void setupThumbnailView() {
 		mThumbnailView->setModel(mDirModel);
@@ -75,22 +86,42 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	}
 
 	void setupButtonBox() {
-		mImportButton = mButtonBox->addButton(
+		mImportSelectedButton = mButtonBox->addButton(
 			i18n("Import Selected"), QDialogButtonBox::AcceptRole,
 			q, SLOT(slotImportSelected()));
-		mImportButton->setEnabled(false);
 
-		mButtonBox->addButton(
+		mImportAllButton = mButtonBox->addButton(
 			i18n("Import All"), QDialogButtonBox::AcceptRole,
 			q, SLOT(slotImportAll()));
 
 		QObject::connect(
 			mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-			q, SLOT(updateImportSelectedButton()));
+			q, SLOT(updateImportButtons()));
+		QObject::connect(
+			mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			q, SLOT(updateImportButtons()));
+		QObject::connect(
+			mDirModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+			q, SLOT(updateImportButtons()));
+		QObject::connect(
+			mDirModel, SIGNAL(modelReset()),
+			q, SLOT(updateImportButtons()));
 
 		QObject::connect(
 			mButtonBox, SIGNAL(rejected()),
 			q, SIGNAL(rejected()));
+
+		q->updateImportButtons();
+	}
+
+	void setupEventComboBox() {
+		QObject::connect(
+			mEventComboBox, SIGNAL(editTextChanged(const QString&)),
+			q, SLOT(updateDstLabel()));
+		QObject::connect(
+			mEventComboBox, SIGNAL(editTextChanged(const QString&)),
+			q, SLOT(updateImportButtons()));
+		q->updateDstLabel();
 	}
 };
 
@@ -101,8 +132,10 @@ ThumbnailPage::ThumbnailPage()
 	d->setupUi(this);
 	d->mDirModel = new SortedDirModel(this);
 
+	d->setupDstBaseUrl();
 	d->setupThumbnailView();
 	d->setupButtonBox();
+	d->setupEventComboBox();
 }
 
 
@@ -122,7 +155,9 @@ KUrl::List ThumbnailPage::urlList() const {
 
 
 KUrl ThumbnailPage::destinationUrl() const {
-	return KUrl();
+	KUrl url = d->mDstBaseUrl;
+	url.addPath(d->mEventComboBox->currentText());
+	return url;
 }
 
 
@@ -146,8 +181,24 @@ void ThumbnailPage::slotImportAll() {
 }
 
 
-void ThumbnailPage::updateImportSelectedButton() {
-	d->mImportButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
+void ThumbnailPage::updateImportButtons() {
+	bool hasEvent = !d->mEventComboBox->currentText().isEmpty();
+	d->mImportSelectedButton->setEnabled(hasEvent && d->mThumbnailView->selectionModel()->hasSelection());
+	d->mImportAllButton->setEnabled(hasEvent && d->mDirModel->hasChildren());
+}
+
+
+void ThumbnailPage::updateDstLabel() {
+	if (d->mEventComboBox->currentText().isEmpty()) {
+		// FIXME: Use KDE error color instead of 'red'
+		d->mDstLabel->setText("<font color='red'>Enter an event name</font>");
+	} else {
+		QString text = i18n(
+			"Pictures will be imported in: <filename>%1</filename>",
+			destinationUrl().pathOrUrl()
+			);
+		d->mDstLabel->setText(text);
+	}
 }
 
 
