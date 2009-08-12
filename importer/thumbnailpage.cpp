@@ -25,20 +25,53 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kdirlister.h>
 
 // Local
+#include <lib/semanticinfo/sorteddirmodel.h>
+#include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview {
 
 
+class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper {
+public:
+	ImporterThumbnailViewHelper(QObject* parent)
+	: AbstractThumbnailViewHelper(parent)
+	{}
+
+	void showContextMenu(QWidget*)
+	{}
+
+	void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&)
+	{}
+
+	void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
+	{}
+
+	bool isDocumentModified(const KUrl&) {
+		return false;
+	}
+
+	void thumbnailForDocument(const KUrl&, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const {
+		*outPix = QPixmap();
+		*outFullSize = QSize();
+	}
+};
+
+
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
+	SortedDirModel* mDirModel;
 };
 
 
 ThumbnailPage::ThumbnailPage()
 : d(new ThumbnailPagePrivate) {
 	d->setupUi(this);
+	d->mDirModel = new SortedDirModel(this);
+	d->mThumbnailView->setModel(d->mDirModel);
+	d->mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(this));
 }
 
 
@@ -48,7 +81,7 @@ ThumbnailPage::~ThumbnailPage() {
 
 
 void ThumbnailPage::setSourceUrl(const KUrl& url) {
-	kDebug() << url;
+	d->mDirModel->dirLister()->openUrl(url);
 }
 
 

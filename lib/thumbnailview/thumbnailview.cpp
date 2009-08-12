@@ -522,7 +522,7 @@ void ThumbnailView::scrollContentsBy(int dx, int dy) {
 
 
 void ThumbnailView::generateThumbnailsForVisibleItems() {
-	if (!isVisible()) {
+	if (!isVisible() || !model()) {
 		return;
 	}
 	KFileItemList list;

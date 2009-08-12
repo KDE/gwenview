@@ -12,7 +12,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListView" name="listView"/>
+    <widget class="Gwenview::ThumbnailView" name="mThumbnailView"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -107,6 +107,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Gwenview::ThumbnailView</class>
+   <extends>QListView</extends>
+   <header location="global">lib/thumbnailview/thumbnailview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
