@@ -87,6 +87,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		QObject::connect(
 			mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			q, SLOT(updateImportSelectedButton()));
+
+		QObject::connect(
+			mButtonBox, SIGNAL(rejected()),
+			q, SIGNAL(rejected()));
 	}
 };
 

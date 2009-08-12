@@ -51,6 +51,7 @@ public:
 
 Q_SIGNALS:
 	void importRequested();
+	void rejected();
 
 private Q_SLOTS:
 	void slotImportSelected();

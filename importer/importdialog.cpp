@@ -57,6 +57,8 @@ ImportDialog::ImportDialog()
 
 	connect(d->mThumbnailPage, SIGNAL(importRequested()),
 		SLOT(startImport()));
+	connect(d->mThumbnailPage, SIGNAL(rejected()),
+		SLOT(close()));
 	connect(d->mProgressPage, SIGNAL(importFinished()),
 		SLOT(slotImportFinished()));
 
