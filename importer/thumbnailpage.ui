@@ -99,15 +99,20 @@
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="KDialogButtonBox" name="mButtonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save|QDialogButtonBox::SaveAll</set>
+      <set>QDialogButtonBox::Cancel</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>kdialogbuttonbox.h</header>
+  </customwidget>
   <customwidget>
    <class>Gwenview::ThumbnailView</class>
    <extends>QListView</extends>

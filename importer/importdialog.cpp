@@ -55,7 +55,7 @@ ImportDialog::ImportDialog()
 	d->mCentralWidget->addWidget(d->mThumbnailPage);
 	d->mCentralWidget->addWidget(d->mProgressPage);
 
-	connect(d->mThumbnailPage, SIGNAL(importClicked()),
+	connect(d->mThumbnailPage, SIGNAL(importRequested()),
 		SLOT(startImport()));
 	connect(d->mProgressPage, SIGNAL(importFinished()),
 		SLOT(slotImportFinished()));

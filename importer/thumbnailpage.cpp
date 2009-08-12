@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.h"
 
 // Qt
+#include <QPushButton>
 
 // KDE
 #include <kdebug.h>
@@ -62,16 +63,36 @@ public:
 
 
 struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
+	ThumbnailPage* q;
 	SortedDirModel* mDirModel;
+	QPushButton* mImportButton;
+	KUrl::List mUrlList;
+
+	void setupButtonBox() {
+		mImportButton = mButtonBox->addButton(
+			i18n("Import Selected"), QDialogButtonBox::AcceptRole,
+			q, SLOT(slotImportSelected()));
+		mImportButton->setEnabled(false);
+
+		mButtonBox->addButton(
+			i18n("Import All"), QDialogButtonBox::AcceptRole,
+			q, SLOT(slotImportAll()));
+	}
 };
 
 
 ThumbnailPage::ThumbnailPage()
 : d(new ThumbnailPagePrivate) {
+	d->q = this;
 	d->setupUi(this);
 	d->mDirModel = new SortedDirModel(this);
 	d->mThumbnailView->setModel(d->mDirModel);
+	d->mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	connect(d->mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+		SLOT(updateImportSelectedButton()));
 	d->mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(this));
+
+	d->setupButtonBox();
 }
 
 
@@ -86,12 +107,37 @@ void ThumbnailPage::setSourceUrl(const KUrl& url) {
 
 
 KUrl::List ThumbnailPage::urlList() const {
-	return KUrl::List();
+	return d->mUrlList;
 }
 
 
 KUrl ThumbnailPage::destinationUrl() const {
 	return KUrl();
+}
+
+
+void ThumbnailPage::slotImportSelected() {
+	d->mUrlList.clear();
+	QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
+	Q_FOREACH(const QModelIndex& index, list) {
+		d->mUrlList << d->mDirModel->urlForIndex(index);
+	}
+	emit importRequested();
+}
+
+
+void ThumbnailPage::slotImportAll() {
+	d->mUrlList.clear();
+	for (int row = d->mDirModel->rowCount() - 1; row >= 0; --row) {
+		QModelIndex index = d->mDirModel->index(row, 0);
+		d->mUrlList << d->mDirModel->urlForIndex(index);
+	}
+	emit importRequested();
+}
+
+
+void ThumbnailPage::updateImportSelectedButton() {
+	d->mImportButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
 }
 
 

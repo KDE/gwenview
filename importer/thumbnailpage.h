@@ -39,6 +39,10 @@ public:
 	ThumbnailPage();
 	~ThumbnailPage();
 
+	/**
+	 * Returns the list of urls to import
+	 * Only valid after importRequested() has been emitted
+	 */
 	KUrl::List urlList() const;
 
 	KUrl destinationUrl() const;
@@ -46,7 +50,12 @@ public:
 	void setSourceUrl(const KUrl&);
 
 Q_SIGNALS:
-	void importClicked();
+	void importRequested();
+
+private Q_SLOTS:
+	void slotImportSelected();
+	void slotImportAll();
+	void updateImportSelectedButton();
 
 private:
 	ThumbnailPagePrivate* const d;
