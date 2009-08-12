@@ -68,6 +68,12 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	QPushButton* mImportButton;
 	KUrl::List mUrlList;
 
+	void setupThumbnailView() {
+		mThumbnailView->setModel(mDirModel);
+		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+		mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
+	}
+
 	void setupButtonBox() {
 		mImportButton = mButtonBox->addButton(
 			i18n("Import Selected"), QDialogButtonBox::AcceptRole,
@@ -77,6 +83,10 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mButtonBox->addButton(
 			i18n("Import All"), QDialogButtonBox::AcceptRole,
 			q, SLOT(slotImportAll()));
+
+		QObject::connect(
+			mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+			q, SLOT(updateImportSelectedButton()));
 	}
 };
 
@@ -86,12 +96,8 @@ ThumbnailPage::ThumbnailPage()
 	d->q = this;
 	d->setupUi(this);
 	d->mDirModel = new SortedDirModel(this);
-	d->mThumbnailView->setModel(d->mDirModel);
-	d->mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	connect(d->mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-		SLOT(updateImportSelectedButton()));
-	d->mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(this));
 
+	d->setupThumbnailView();
 	d->setupButtonBox();
 }
 
