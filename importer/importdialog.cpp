@@ -85,7 +85,9 @@ void ImportDialog::setSourceUrl(const KUrl& url) {
 
 void ImportDialog::startImport() {
 	d->mCentralWidget->setCurrentWidget(d->mProgressPage);
-	d->mProgressPage->start(d->mThumbnailPage->urlList());
+	d->mProgressPage->start(
+		d->mThumbnailPage->urlList(),
+		d->mThumbnailPage->destinationUrl());
 }
 
 

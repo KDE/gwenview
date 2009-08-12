@@ -24,18 +24,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
+#include <kurl.h>
 
 // Local
+#include <ui_progresspage.h>
 
 namespace Gwenview {
 
 
-struct ProgressPagePrivate {
+struct ProgressPagePrivate : public Ui_ProgressPage {
+	KUrl::List mUrlList;
+	KUrl mDestUrl;
 };
 
 
 ProgressPage::ProgressPage()
 : d(new ProgressPagePrivate) {
+	d->setupUi(this);
 }
 
 
@@ -44,7 +49,9 @@ ProgressPage::~ProgressPage() {
 }
 
 
-void ProgressPage::start(const KUrl::List&) {
+void ProgressPage::start(const KUrl::List& list, const KUrl& destination) {
+	d->mUrlList = list;
+	d->mDestUrl = destination;
 }
 
 

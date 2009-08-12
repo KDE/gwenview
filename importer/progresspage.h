@@ -39,7 +39,7 @@ public:
 	ProgressPage();
 	~ProgressPage();
 
-	void start(const KUrl::List&);
+	void start(const KUrl::List&, const KUrl& destination);
 
 Q_SIGNALS:
 	void importFinished();
