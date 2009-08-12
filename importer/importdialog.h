@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define IMPORTDIALOG_H
 
 // Qt
-#include <QDialog>
 
 // KDE
 #include <kurl.h>
+#include <kmainwindow.h>
 
 // Local
 
@@ -33,7 +33,7 @@ namespace Gwenview {
 
 
 class ImportDialogPrivate;
-class ImportDialog : public QDialog {
+class ImportDialog : public KMainWindow {
 	Q_OBJECT
 public:
 	ImportDialog();

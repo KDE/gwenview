@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
-#include <QStackedLayout>
+#include <QStackedWidget>
 
 // KDE
 #include <kdebug.h>
@@ -39,7 +39,7 @@ namespace Gwenview {
 
 class ImportDialogPrivate {
 public:
-	QStackedLayout* mLayout;
+	QStackedWidget* mCentralWidget;
 	ThumbnailPage* mThumbnailPage;
 	ProgressPage* mProgressPage;
 };
@@ -50,16 +50,17 @@ ImportDialog::ImportDialog()
 	d->mThumbnailPage = new ThumbnailPage;
 	d->mProgressPage = new ProgressPage;
 
-	d->mLayout = new QStackedLayout(this);
-	d->mLayout->addWidget(d->mThumbnailPage);
-	d->mLayout->addWidget(d->mProgressPage);
+	d->mCentralWidget = new QStackedWidget;
+	setCentralWidget(d->mCentralWidget);
+	d->mCentralWidget->addWidget(d->mThumbnailPage);
+	d->mCentralWidget->addWidget(d->mProgressPage);
 
 	connect(d->mThumbnailPage, SIGNAL(importClicked()),
 		SLOT(startImport()));
 	connect(d->mProgressPage, SIGNAL(importFinished()),
 		SLOT(slotImportFinished()));
 
-	d->mLayout->setCurrentWidget(d->mThumbnailPage);
+	d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 }
 
 
@@ -74,7 +75,7 @@ void ImportDialog::setSourceUrl(const KUrl& url) {
 
 
 void ImportDialog::startImport() {
-	d->mLayout->setCurrentWidget(d->mProgressPage);
+	d->mCentralWidget->setCurrentWidget(d->mProgressPage);
 	d->mProgressPage->start(d->mThumbnailPage->urlList());
 }
 
