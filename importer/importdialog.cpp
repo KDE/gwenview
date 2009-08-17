@@ -94,9 +94,9 @@ void ImportDialog::startImport() {
 void ImportDialog::slotImportFinished() {
 	KService::Ptr service = KService::serviceByDesktopName("gwenview");
 	if (!service) {
-		KRun::run(*service, KUrl::List() << d->mThumbnailPage->destinationUrl(), 0 /* window */);
-	} else {
 		kError() << "Could not find gwenview";
+	} else {
+		KRun::run(*service, KUrl::List() << d->mThumbnailPage->destinationUrl(), 0 /* window */);
 	}
 	qApp->quit();
 }
