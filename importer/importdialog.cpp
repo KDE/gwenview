@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kservice.h>
 
 // Local
+#include "importer.h"
 #include "progresspage.h"
 #include "thumbnailpage.h"
 
@@ -42,13 +43,15 @@ public:
 	QStackedWidget* mCentralWidget;
 	ThumbnailPage* mThumbnailPage;
 	ProgressPage* mProgressPage;
+	Importer* mImporter;
 };
 
 
 ImportDialog::ImportDialog()
 : d(new ImportDialogPrivate) {
+	d->mImporter = new Importer(this);
 	d->mThumbnailPage = new ThumbnailPage;
-	d->mProgressPage = new ProgressPage;
+	d->mProgressPage = new ProgressPage(d->mImporter);
 
 	d->mCentralWidget = new QStackedWidget;
 	setCentralWidget(d->mCentralWidget);
@@ -59,7 +62,7 @@ ImportDialog::ImportDialog()
 		SLOT(startImport()));
 	connect(d->mThumbnailPage, SIGNAL(rejected()),
 		SLOT(close()));
-	connect(d->mProgressPage, SIGNAL(importFinished()),
+	connect(d->mImporter, SIGNAL(importFinished()),
 		SLOT(slotImportFinished()));
 
 	d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
@@ -85,7 +88,7 @@ void ImportDialog::setSourceUrl(const KUrl& url) {
 
 void ImportDialog::startImport() {
 	d->mCentralWidget->setCurrentWidget(d->mProgressPage);
-	d->mProgressPage->start(
+	d->mImporter->start(
 		d->mThumbnailPage->urlList(),
 		d->mThumbnailPage->destinationUrl());
 }
@@ -103,4 +106,3 @@ void ImportDialog::slotImportFinished() {
 
 
 } // namespace
-

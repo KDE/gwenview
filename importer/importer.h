@@ -18,33 +18,48 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef PROGRESSPAGE_H
-#define PROGRESSPAGE_H
+#ifndef IMPORTER_H
+#define IMPORTER_H
 
 // Qt
-#include <QWidget>
+#include <QObject>
 
 // KDE
 #include <kurl.h>
 
 // Local
 
+class KJob;
+
 namespace Gwenview {
 
-class Importer;
-
-class ProgressPagePrivate;
-class ProgressPage : public QWidget {
+class ImporterPrivate;
+class Importer : public QObject {
 	Q_OBJECT
 public:
-	ProgressPage(Importer*);
-	~ProgressPage();
+	Importer(QWidget* authWindow);
+	~Importer();
+
+	void start(const KUrl::List& list, const KUrl& destUrl);
+
+Q_SIGNALS:
+	void importFinished();
+
+	void progressChanged(int);
+
+	void maximumChanged(int);
+
+private Q_SLOTS:
+	void slotResult(KJob*);
 
 private:
-	ProgressPagePrivate* const d;
+	friend class ImporterPrivate;
+	ImporterPrivate* const d;
+	void advance();
+	void finalizeImport();
 };
 
 
 } // namespace
 
-#endif /* PROGRESSPAGE_H */
+#endif /* IMPORTER_H */

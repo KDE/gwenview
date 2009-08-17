@@ -6,6 +6,7 @@ include_directories(
 set(importer_SRCS
 	main.cpp
 	importdialog.cpp
+	importer.cpp
 	progresspage.cpp
 	thumbnailpage.cpp
 	)
