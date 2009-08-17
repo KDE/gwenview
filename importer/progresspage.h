@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class KJob;
+
 namespace Gwenview {
 
 
@@ -44,8 +46,13 @@ public:
 Q_SIGNALS:
 	void importFinished();
 
+private Q_SLOTS:
+	void slotResult(KJob*);
+
 private:
+	friend class ProgressPagePrivate;
 	ProgressPagePrivate* const d;
+	void finalizeImport();
 };
 
 

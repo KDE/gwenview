@@ -25,9 +25,9 @@
     </spacer>
    </item>
    <item>
-    <widget class="QProgressBar" name="progressBar">
+    <widget class="QProgressBar" name="mProgressBar">
      <property name="value">
-      <number>24</number>
+      <number>0</number>
      </property>
     </widget>
    </item>
@@ -45,7 +45,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="mButtonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel</set>
      </property>
