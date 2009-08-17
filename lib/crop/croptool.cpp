@@ -468,7 +468,7 @@ bool CropTool::eventFilter(QObject*, QEvent* event) {
 void CropTool::moveHudWidget() {
 	const QPoint delta = d->mHudEndPos - d->mHudWidget->pos();
 
-	const double distance = sqrt(pow(delta.x(), 2) + pow(delta.y(), 2));
+	const double distance = sqrt(pow(double(delta.x()), 2) + pow(double(delta.y()), 2));
 	QPoint pos;
 	if (distance > double(HUD_TIMER_MAX_PIXELS_PER_UPDATE)) {
 		pos = d->mHudWidget->pos() + delta * double(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
