@@ -50,6 +50,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/sorting.h>
 #include <lib/archiveutils.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
+#include <lib/thumbnailview/thumbnailslidercontroller.h>
 #include <lib/thumbnailview/thumbnailview.h>
 #include <ui_thumbnailviewpanel.h>
 
@@ -72,6 +73,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KSelectAction* mSortAction;
 	QActionGroup* mThumbnailDetailsActionGroup;
 	PreviewItemDelegate* mDelegate;
+	ThumbnailSliderController* mThumbnailSliderController;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -93,10 +95,7 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		layout->addWidget(mUrlNavigator);
 
 		// Thumbnail slider
-		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
-			mThumbnailView, SLOT(setThumbnailSize(int)) );
-		QObject::connect(mThumbnailSlider, SIGNAL(actionTriggered(int)),
-			that, SLOT(updateSliderToolTip(int)) );
+		mThumbnailSliderController = new ThumbnailSliderController(mThumbnailView, mThumbnailSlider);
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
@@ -209,7 +208,7 @@ void ThumbnailViewPanel::loadConfig() {
 	d->mUrlNavigator->setShowFullPath(GwenviewConfig::urlNavigatorShowFullPath());
 
 	d->mThumbnailSlider->setValue(GwenviewConfig::thumbnailSize());
-	updateSliderToolTip(QAbstractSlider::SliderNoAction);
+	d->mThumbnailSliderController->updateToolTip();
 	// If GwenviewConfig::thumbnailSize() returns the current value of
 	// mThumbnailSlider, it won't emit valueChanged() and the thumbnail view
 	// won't be updated. That's why we do it ourself.
@@ -308,21 +307,6 @@ void ThumbnailViewPanel::updateThumbnailDetails() {
 
 void ThumbnailViewPanel::applyPalette(const QPalette& palette) {
 	d->mThumbnailView->setPalette(palette);
-}
-
-
-void ThumbnailViewPanel::updateSliderToolTip(int actionTriggered) {
-	// FIXME: i18n?
-	const int size = d->mThumbnailSlider->sliderPosition();
-	const QString text = QString("%1 x %2").arg(size).arg(size);
-	d->mThumbnailSlider->setToolTip(text);
-
-	if (actionTriggered != QAbstractSlider::SliderNoAction) {
-		// If we are updating because of a direct action on the slider, show
-		// the tooltip immediatly.
-		const QPoint pos = d->mThumbnailSlider->mapToGlobal(QPoint(0, d->mThumbnailSlider->height() / 2));
-		QToolTip::showText(pos, text, d->mThumbnailSlider);
-	}
 }
 
 
