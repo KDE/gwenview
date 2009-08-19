@@ -39,11 +39,10 @@ public:
 	ImportDialog();
 	~ImportDialog();
 
+	virtual QSize sizeHint() const;
+
 public Q_SLOTS:
 	void setSourceUrl(const KUrl&);
-
-protected:
-	virtual QSize sizeHint() const;
 
 private Q_SLOTS:
 	void startImport();
