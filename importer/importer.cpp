@@ -68,13 +68,14 @@ struct ImporterPrivate {
 	}
 
 	void importNext() {
-		kDebug() << mUrlList;
 		if (mUrlList.empty()) {
 			q->finalizeImport();
 			return;
 		}
-		KUrl url = mUrlList.takeFirst();
-		KIO::Job* job = KIO::copy(url, KUrl(mDestImportDir->name()), KIO::HideProgressInfo);
+		KUrl src = mUrlList.takeFirst();
+		KUrl dst = KUrl(mDestImportDir->name());
+		dst.addPath(src.fileName());
+		KIO::Job* job = KIO::copy(src, dst, KIO::HideProgressInfo);
 		if (job->ui()) {
 			job->ui()->setWindow(mAuthWindow);
 		}
@@ -82,21 +83,22 @@ struct ImporterPrivate {
 			q, SLOT(slotResult(KJob*)));
 	}
 
-	void renameImportedUrl(const KUrl& url) {
-		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url, true /* delayedMimeTypes */);
+	void renameImportedUrl(const KUrl& src) {
+		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
 		KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-		KUrl newUrl = url;
-		newUrl.cd("..");
-		QFileInfo info(url.fileName());
-		newUrl.setFileName(dateTime.toString("%yyyy-%MM-%dd_%hh-%mm-%ss")
+		KUrl dst = src;
+		dst.cd("..");
+		QFileInfo info(src.fileName());
+		dst.setFileName(dateTime.toString("%Y-%m-%d_%H-%M-%S")
 			+ '.' + info.completeSuffix());
 
-		KIO::Job* job = KIO::rename(url, newUrl, KIO::HideProgressInfo);
+		KIO::Job* job = KIO::rename(src, dst, KIO::HideProgressInfo);
 		if (!KIO::NetAccess::synchronousRun(job, mAuthWindow)) {
-			kWarning() << "Renaming of" << url << "to" << newUrl << "failed";
+			kWarning() << "FIXME: Renaming of" << src << "to" << dst << "failed";
 			mAtLeastOneRenameFailure = true;
 		}
 		q->advance();
+		importNext();
 	}
 };
 
@@ -113,7 +115,6 @@ Importer::~Importer() {
 }
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {
-	kDebug();
 	d->mProgress = 0;
 	d->mUrlList = list;
 	d->mAtLeastOneRenameFailure = false;
@@ -129,11 +130,10 @@ void Importer::start(const KUrl::List& list, const KUrl& destination) {
 }
 
 void Importer::slotResult(KJob* _job) {
-	kDebug();
 	KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
-	KUrl url = job->srcUrls().first();
-	if (!job->error()) {
-		// FIXME: What do we do with failed urls?
+	KUrl url = job->destUrl();
+	if (job->error()) {
+		kWarning() << "FIXME: What do we do with failed urls?";
 		advance();
 		d->importNext();
 		return;
@@ -143,7 +143,6 @@ void Importer::slotResult(KJob* _job) {
 }
 
 void Importer::finalizeImport() {
-	kDebug();
 	if (d->mAtLeastOneRenameFailure) {
 		kWarning() << "FIXME: Handle rename failures";
 	} else {
