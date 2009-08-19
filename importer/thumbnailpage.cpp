@@ -31,8 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdirlister.h>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
+#include <lib/thumbnailview/previewitemdelegate.h>
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview {
@@ -72,6 +74,15 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	KUrl::List mUrlList;
 	KUrl mDstBaseUrl;
 
+	void setupDirModel() {
+		mDirModel = new SortedDirModel(q);
+		mDirModel->setKindFilter(
+			MimeTypeUtils::KIND_RASTER_IMAGE
+			| MimeTypeUtils::KIND_SVG_IMAGE
+			| MimeTypeUtils::KIND_VIDEO
+			);
+	}
+
 	void setupDstBaseUrl() {
 		// FIXME: Use xdg, and make this configurable
 		mDstBaseUrl = KUrl::fromPath(QDir::home().absoluteFilePath("photos"));
@@ -83,6 +94,20 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mThumbnailView->setModel(mDirModel);
 		mThumbnailView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 		mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
+
+		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
+		delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail | PreviewItemDelegate::DateDetail);
+		mThumbnailView->setItemDelegate(delegate);
+
+		// Colors
+		QColor bgColor = GwenviewConfig::viewBackgroundColor();
+		QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
+
+		QPalette pal = mThumbnailView->palette();
+		pal.setColor(QPalette::Base, bgColor);
+		pal.setColor(QPalette::Text, fgColor);
+
+		mThumbnailView->setPalette(pal);
 	}
 
 	void setupButtonBox() {
@@ -130,8 +155,7 @@ ThumbnailPage::ThumbnailPage()
 : d(new ThumbnailPagePrivate) {
 	d->q = this;
 	d->setupUi(this);
-	d->mDirModel = new SortedDirModel(this);
-
+	d->setupDirModel();
 	d->setupDstBaseUrl();
 	d->setupThumbnailView();
 	d->setupButtonBox();
