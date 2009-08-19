@@ -40,6 +40,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+static const int DEFAULT_THUMBNAIL_SIZE = 128;
+
 
 class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper {
 public:
@@ -110,7 +112,11 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
 		mThumbnailView->setPalette(pal);
 
-		new ThumbnailSliderController(mThumbnailView, mSlider);
+		ThumbnailSliderController* sliderController = new ThumbnailSliderController(mThumbnailView, mSlider);
+		int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
+		mSlider->setValue(thumbnailSize);
+		sliderController->updateToolTip();
+		mThumbnailView->setThumbnailSize(thumbnailSize);
 	}
 
 	void setupButtonBox() {
