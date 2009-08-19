@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
+#include <lib/thumbnailview/thumbnailslidercontroller.h>
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview {
@@ -108,6 +109,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		pal.setColor(QPalette::Text, fgColor);
 
 		mThumbnailView->setPalette(pal);
+
+		new ThumbnailSliderController(mThumbnailView, mSlider);
 	}
 
 	void setupButtonBox() {

@@ -30,7 +30,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QSlider" name="horizontalSlider">
+      <widget class="QSlider" name="mSlider">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -42,6 +42,12 @@
          <width>150</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="minimum">
+        <number>48</number>
+       </property>
+       <property name="maximum">
+        <number>256</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
