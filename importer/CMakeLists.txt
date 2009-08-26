@@ -34,3 +34,6 @@ target_link_libraries(gwenview_importer
 
 install(TARGETS gwenview_importer
 	${INSTALL_TARGETS_DEFAULT_ARGS})
+
+install(FILES gwenview_importer.desktop
+	DESTINATION ${DATA_INSTALL_DIR}/solid/actions/)
