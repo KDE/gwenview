@@ -99,7 +99,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mThumbnailView->setThumbnailViewHelper(new ImporterThumbnailViewHelper(q));
 
 		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
-		delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail | PreviewItemDelegate::DateDetail);
+		delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
 		mThumbnailView->setItemDelegate(delegate);
 
 		// Colors
