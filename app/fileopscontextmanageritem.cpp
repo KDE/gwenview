@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kactioncategory.h>
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kio/paste.h>
 #include <klocale.h>
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
@@ -48,6 +49,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "sidebar.h"
 
 namespace Gwenview {
+
+// copied from libkonq (konqmimedata.cpp)
+static const char* CUT_SELECTION_DATA = "application/x-kde-cutselection";
+
+static void addCutSelection(QMimeData* mimeData) {
+	mimeData->setData(CUT_SELECTION_DATA, "1");
+}
+
+static bool decodeIsCutSelection(const QMimeData* mimeData) {
+	QByteArray data = mimeData->data(CUT_SELECTION_DATA);
+	return data.isEmpty() ? false : data.at(0) == '1';
+}
+// /copied
 
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
@@ -244,6 +258,9 @@ void FileOpsContextManagerItem::showProperties() {
 
 
 void FileOpsContextManagerItem::cut() {
+	QMimeData* mimeData = d->selectionMimeData();
+	addCutSelection(mimeData);
+	QApplication::clipboard()->setMimeData(mimeData);
 }
 
 
@@ -254,6 +271,19 @@ void FileOpsContextManagerItem::copy() {
 
 
 void FileOpsContextManagerItem::paste() {
+	const bool move = decodeIsCutSelection(QApplication::clipboard()->mimeData());
+
+	// If only one folder is selected, paste inside it, otherwise paste in
+	// current
+	KUrl url;
+	KFileItemList list = contextManager()->selection();
+	if (list.count() == 1 && list.first().isDir()) {
+		url = list.first().url();
+	} else {
+		url = contextManager()->currentDirUrl();
+	}
+
+	KIO::pasteClipboard(url, d->mGroup, move);
 }
 
 
