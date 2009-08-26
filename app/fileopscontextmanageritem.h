@@ -46,6 +46,9 @@ private Q_SLOTS:
 	void updateActions();
 	void updateSideBarContent();
 
+	void cut();
+	void copy();
+	void paste();
 	void copyTo();
 	void moveTo();
 	void linkTo();

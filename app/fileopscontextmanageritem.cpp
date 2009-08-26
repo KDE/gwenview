@@ -23,7 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QAction>
+#include <QApplication>
+#include <QClipboard>
 #include <QMenu>
+#include <QMimeData>
 
 // KDE
 #include <kaction.h>
@@ -49,6 +52,9 @@ namespace Gwenview {
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	SideBarGroup* mGroup;
+	KAction* mCutAction;
+	KAction* mCopyAction;
+	KAction* mPasteAction;
 	KAction* mCopyToAction;
 	KAction* mMoveToAction;
 	KAction* mLinkToAction;
@@ -105,6 +111,14 @@ struct FileOpsContextManagerItemPrivate {
 			mServiceForName[service->name()] = service;
 		}
 	}
+
+
+	QMimeData* selectionMimeData() {
+		QMimeData* mimeData = new QMimeData;
+		KFileItemList list = mContextManagerItem->contextManager()->selection();
+		list.urlList().populateMimeData(mimeData);
+		return mimeData;
+	}
 };
 
 
@@ -121,7 +135,12 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	connect(contextManager(), SIGNAL(currentDirUrlChanged()),
 		SLOT(updateActions()) );
 
-	KActionCategory* file=new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+	KActionCategory* file = new KActionCategory(i18nc("@title actions category","File"), actionCollection);
+	KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), actionCollection);
+
+	d->mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
+	d->mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
+	d->mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
 
 	d->mCopyToAction = file->addAction("file_copy_to",this,SLOT(copyTo()));
 	d->mCopyToAction->setText(i18nc("Verb", "Copy To..."));
@@ -221,6 +240,20 @@ void FileOpsContextManagerItem::showProperties() {
 		KUrl url = contextManager()->currentDirUrl();
 		KPropertiesDialog::showDialog(url, d->mGroup);
 	}
+}
+
+
+void FileOpsContextManagerItem::cut() {
+}
+
+
+void FileOpsContextManagerItem::copy() {
+	QMimeData* mimeData = d->selectionMimeData();
+	QApplication::clipboard()->setMimeData(mimeData);
+}
+
+
+void FileOpsContextManagerItem::paste() {
 }
 
 
