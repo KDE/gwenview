@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kactioncategory.h>
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kfileitemlistproperties.h>
 #include <kio/paste.h>
 #include <klocale.h>
 #include <kmimetypetrader.h>
@@ -60,6 +61,37 @@ static void addCutSelection(QMimeData* mimeData) {
 static bool decodeIsCutSelection(const QMimeData* mimeData) {
 	QByteArray data = mimeData->data(CUT_SELECTION_DATA);
 	return data.isEmpty() ? false : data.at(0) == '1';
+}
+
+// copied from libkonq (konq_operations.cpp)
+static QPair<bool, QString> pasteInfo(const KUrl& targetUrl) {
+    QPair<bool, QString> ret;
+    QClipboard* clipboard = QApplication::clipboard();
+    const QMimeData* mimeData = clipboard->mimeData();
+
+    const bool canPasteData = KIO::canPasteMimeSource(mimeData);
+    KUrl::List urls = KUrl::List::fromMimeData(mimeData);
+    if (!urls.isEmpty() || canPasteData) {
+        // disable the paste action if no writing is supported
+        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, targetUrl);
+        ret.first = KFileItemListProperties(KFileItemList() << item).supportsWriting();
+
+        if (urls.count() == 1) {
+            const KFileItem item(KFileItem::Unknown, KFileItem::Unknown, urls.first(), true);
+            ret.second = item.isDir() ? i18nc("@action:inmenu", "Paste One Folder") :
+                                        i18nc("@action:inmenu", "Paste One File");
+
+        } else if (!urls.isEmpty()) {
+            ret.second = i18ncp("@action:inmenu", "Paste One Item", "Paste %1 Items", urls.count());
+        } else {
+            ret.second = i18nc("@action:inmenu", "Paste Clipboard Contents...");
+        }
+    } else {
+        ret.first = false;
+        ret.second = i18nc("@action:inmenu", "Paste");
+    }
+
+    return ret;
 }
 // /copied
 
@@ -133,6 +165,18 @@ struct FileOpsContextManagerItemPrivate {
 		list.urlList().populateMimeData(mimeData);
 		return mimeData;
 	}
+
+
+	KUrl pasteTargetUrl() const {
+		// If only one folder is selected, paste inside it, otherwise paste in
+		// current
+		KFileItemList list = mContextManagerItem->contextManager()->selection();
+		if (list.count() == 1 && list.first().isDir()) {
+			return list.first().url();
+		} else {
+			return mContextManagerItem->contextManager()->currentDirUrl();
+		}
+	}
 };
 
 
@@ -195,6 +239,10 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	connect(menu, SIGNAL(triggered(QAction*)),
 		SLOT(openWith(QAction*)) );
 	updateActions();
+
+	connect(QApplication::clipboard(), SIGNAL(dataChanged()),
+		SLOT(updatePasteAction()));
+	updatePasteAction();
 }
 
 
@@ -209,6 +257,8 @@ void FileOpsContextManagerItem::updateActions() {
 	const bool urlIsValid = contextManager()->currentUrl().isValid();
 	const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
+	d->mCutAction->setEnabled(selectionNotEmpty);
+	d->mCopyAction->setEnabled(selectionNotEmpty);
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
 	d->mMoveToAction->setEnabled(selectionNotEmpty);
 	d->mLinkToAction->setEnabled(selectionNotEmpty);
@@ -220,6 +270,13 @@ void FileOpsContextManagerItem::updateActions() {
 	d->mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
 
 	updateSideBarContent();
+}
+
+
+void FileOpsContextManagerItem::updatePasteAction() {
+	QPair<bool, QString> info = pasteInfo(d->pasteTargetUrl());
+	d->mPasteAction->setEnabled(info.first);
+	d->mPasteAction->setText(info.second);
 }
 
 
@@ -272,18 +329,7 @@ void FileOpsContextManagerItem::copy() {
 
 void FileOpsContextManagerItem::paste() {
 	const bool move = decodeIsCutSelection(QApplication::clipboard()->mimeData());
-
-	// If only one folder is selected, paste inside it, otherwise paste in
-	// current
-	KUrl url;
-	KFileItemList list = contextManager()->selection();
-	if (list.count() == 1 && list.first().isDir()) {
-		url = list.first().url();
-	} else {
-		url = contextManager()->currentDirUrl();
-	}
-
-	KIO::pasteClipboard(url, d->mGroup, move);
+	KIO::pasteClipboard(d->pasteTargetUrl(), d->mGroup, move);
 }
 
 

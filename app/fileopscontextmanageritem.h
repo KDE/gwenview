@@ -44,6 +44,7 @@ public:
 
 private Q_SLOTS:
 	void updateActions();
+	void updatePasteAction();
 	void updateSideBarContent();
 
 	void cut();
