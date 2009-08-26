@@ -1310,7 +1310,10 @@ bool MainWindow::queryClose() {
 	switch (answer) {
 	case KMessageBox::Yes:
 		d->mGvCore->saveAll();
-		return DocumentFactory::instance()->modifiedDocumentList().size() == 0;
+		// We need to wait a bit because the DocumentFactory is notified about
+		// saved documents through a queued connection.
+		qApp->processEvents();
+		return DocumentFactory::instance()->modifiedDocumentList().isEmpty();
 
 	case KMessageBox::No:
 		return true;
