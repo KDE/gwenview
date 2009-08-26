@@ -88,10 +88,11 @@ protected:
 
 	virtual void reset() {
 		QTreeView::reset();
-		if ( model() )
+		if (model()) {
 			for (int row = 0; row < model()->rowCount(); ++row) {
 				setUpRootIndex(row);
 			}
+		}
 	}
 
 private:
