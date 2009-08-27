@@ -1,6 +1,8 @@
 # 2.3.1
 ## Fixes
 - Ensure "Advanced Slideshow" plugin is always enabled.
+- When trying to quit Gwenview with unsaved changes, really quit when all
+  images have been saved.
 
 # 2.3.0
 ## New features
