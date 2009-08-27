@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <ktempdir.h>
 #include <kurl.h>
 #include <kio/copyjob.h>
+#include <kio/deletejob.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -48,6 +49,8 @@ namespace Gwenview {
 struct ImporterPrivate {
 	Importer* q;
 	KUrl::List mUrlList;
+	KUrl mCurrentUrl;
+	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
 	std::auto_ptr<KTempDir> mDestImportDir;
 	bool mAtLeastOneRenameFailure;
@@ -72,10 +75,10 @@ struct ImporterPrivate {
 			q->finalizeImport();
 			return;
 		}
-		KUrl src = mUrlList.takeFirst();
+		mCurrentUrl = mUrlList.takeFirst();
 		KUrl dst = KUrl(mDestImportDir->name());
-		dst.addPath(src.fileName());
-		KIO::Job* job = KIO::copy(src, dst, KIO::HideProgressInfo);
+		dst.addPath(mCurrentUrl.fileName());
+		KIO::Job* job = KIO::copy(mCurrentUrl, dst, KIO::HideProgressInfo);
 		if (job->ui()) {
 			job->ui()->setWindow(mAuthWindow);
 		}
@@ -97,6 +100,7 @@ struct ImporterPrivate {
 			kWarning() << "FIXME: Renaming of" << src << "to" << dst << "failed";
 			mAtLeastOneRenameFailure = true;
 		}
+		mImportedUrlList << mCurrentUrl;
 		q->advance();
 		importNext();
 	}
@@ -154,6 +158,17 @@ void Importer::finalizeImport() {
 void Importer::advance() {
 	++d->mProgress;
 	progressChanged(d->mProgress);
+}
+
+void Importer::deleteImportedUrls() {
+	KIO::Job* job = KIO::del(d->mImportedUrlList);
+	if (!KIO::NetAccess::synchronousRun(job, d->mAuthWindow)) {
+		kWarning() << "FIXME: Handle deleteImportedUrls failures";
+	}
+}
+
+int Importer::importedUrlCount() const {
+	return d->mImportedUrlList.count();
 }
 
 } // namespace

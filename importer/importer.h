@@ -42,6 +42,10 @@ public:
 
 	void start(const KUrl::List& list, const KUrl& destUrl);
 
+	void deleteImportedUrls();
+
+	int importedUrlCount() const;
+
 Q_SIGNALS:
 	void importFinished();
 

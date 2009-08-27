@@ -27,8 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <krun.h>
 #include <kservice.h>
+#include <kstandardguiitem.h>
 
 // Local
 #include "importer.h"
@@ -44,6 +47,38 @@ public:
 	ThumbnailPage* mThumbnailPage;
 	ProgressPage* mProgressPage;
 	Importer* mImporter;
+
+	void deleteImportedUrls() {
+		int count = mImporter->importedUrlCount();
+		if (count == 0) {
+			return;
+		}
+		int answer = KMessageBox::questionYesNo(mCentralWidget,
+			i18np(
+				"One document has been successfully imported.\nDelete it from the device?",
+				"%1 documents has been successfully imported.\nDelete them from the device?",
+				count),
+			/*
+			i18np("Delete original document from device?",
+				"Delete original documents from device?",
+				count)*/QString(),
+			KStandardGuiItem::del(),
+			KGuiItem(i18n("Keep"))
+			);
+		if (answer != KMessageBox::Yes) {
+			return;
+		}
+		mImporter->deleteImportedUrls();
+	}
+
+	void startGwenview() {
+		KService::Ptr service = KService::serviceByDesktopName("gwenview");
+		if (!service) {
+			kError() << "Could not find gwenview";
+		} else {
+			KRun::run(*service, KUrl::List() << mThumbnailPage->destinationUrl(), 0 /* window */);
+		}
+	}
 };
 
 
@@ -95,12 +130,8 @@ void ImportDialog::startImport() {
 
 
 void ImportDialog::slotImportFinished() {
-	KService::Ptr service = KService::serviceByDesktopName("gwenview");
-	if (!service) {
-		kError() << "Could not find gwenview";
-	} else {
-		KRun::run(*service, KUrl::List() << d->mThumbnailPage->destinationUrl(), 0 /* window */);
-	}
+	d->deleteImportedUrls();
+	d->startGwenview();
 	qApp->quit();
 }
 
