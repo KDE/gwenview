@@ -18,59 +18,60 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILPAGE_H
-#define THUMBNAILPAGE_H
+#ifndef DOCUMENTDIRFINDER_H
+#define DOCUMENTDIRFINDER_H
 
 // Qt
-#include <QModelIndex>
-#include <QWidget>
+#include <QObject>
 
 // KDE
-#include <kurl.h>
+#include <kfileitem.h>
 
 // Local
-#include "documentdirfinder.h"
 
 namespace Gwenview {
 
 
-class ThumbnailPagePrivate;
-class ThumbnailPage : public QWidget {
+class DocumentDirFinderPrivate;
+
+/**
+ * This class is a worker which tries to find the document dir given a root
+ * url. This is useful for digital camera cards, which often have a dir
+ * hierarchy like this:
+ * /DCIM
+ *   /FOOBAR
+ *     /PICT0001.JPG
+ *     /PICT0002.JPG
+ *     ...
+ *     /PICTnnnn.JPG
+ */
+class DocumentDirFinder : public QObject {
 	Q_OBJECT
 public:
-	ThumbnailPage();
-	~ThumbnailPage();
+	enum Status {
+		NoDocumentFound,
+		DocumentDirFound,
+		MultipleDirsFound
+	};
 
-	/**
-	 * Returns the list of urls to import
-	 * Only valid after importRequested() has been emitted
-	 */
-	KUrl::List urlList() const;
+	DocumentDirFinder(const KUrl& rootUrl);
+	~DocumentDirFinder();
 
-	KUrl destinationUrl() const;
-
-	void setSourceUrl(const KUrl&);
+	void start();
 
 Q_SIGNALS:
-	void importRequested();
-	void rejected();
+	void done(const KUrl&, DocumentDirFinder::Status);
 
 private Q_SLOTS:
-	void slotImportSelected();
-	void slotImportAll();
-	void updateImportButtons();
-	void updateDstLabel();
-	void slotThumbnailViewIndexActivated(const QModelIndex&);
-	void openUrl(const KUrl&);
-	void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
+	void slotItemsAdded(const KUrl&, const KFileItemList&);
+	void slotCompleted();
 
 private:
-	friend class ThumbnailPagePrivate;
-	ThumbnailPagePrivate* const d;
-	void importList(const QModelIndexList&);
+	DocumentDirFinderPrivate* const d;
+	void finish(const KUrl&, Status);
 };
 
 
 } // namespace
 
-#endif /* THUMBNAILPAGE_H */
+#endif /* DOCUMENTDIRFINDER_H */

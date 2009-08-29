@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailslidercontroller.h>
+#include "documentdirfinder.h"
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview {
@@ -198,6 +199,16 @@ ThumbnailPage::~ThumbnailPage() {
 
 
 void ThumbnailPage::setSourceUrl(const KUrl& url) {
+	DocumentDirFinder* finder = new DocumentDirFinder(url);
+	connect(finder, SIGNAL(done(const KUrl&, DocumentDirFinder::Status)),
+		SLOT(slotDocumentDirFinderDone(const KUrl&, DocumentDirFinder::Status)));
+	finder->start();
+}
+
+
+void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status) {
+	kDebug() << url << "status:" << status;
+	kDebug() << "FIXME: Handle different status";
 	openUrl(url);
 }
 

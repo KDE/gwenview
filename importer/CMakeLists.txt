@@ -4,6 +4,7 @@ include_directories(
 	)
 
 set(importer_SRCS
+	documentdirfinder.cpp
 	main.cpp
 	importdialog.cpp
 	importer.cpp
