@@ -258,7 +258,11 @@ void ThumbnailPage::slotImportAll() {
 void ThumbnailPage::importList(const QModelIndexList& list) {
 	d->mUrlList.clear();
 	Q_FOREACH(const QModelIndex& index, list) {
-		d->mUrlList << d->mDirModel->urlForIndex(index);
+		KFileItem item = d->mDirModel->itemForIndex(index);
+		if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			d->mUrlList << item.url();
+		}
+		// FIXME: Handle dirs (do we want to import recursively?)
 	}
 	emit importRequested();
 }
