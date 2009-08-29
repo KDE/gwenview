@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QModelIndex;
+
 namespace Gwenview {
 
 
@@ -58,6 +60,8 @@ private Q_SLOTS:
 	void slotImportAll();
 	void updateImportButtons();
 	void updateDstLabel();
+	void slotThumbnailViewIndexActivated(const QModelIndex&);
+	void openUrl(const KUrl&);
 
 private:
 	friend class ThumbnailPagePrivate;
