@@ -242,19 +242,22 @@ void ThumbnailPage::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 
 
 void ThumbnailPage::slotImportSelected() {
-	d->mUrlList.clear();
-	QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
-	Q_FOREACH(const QModelIndex& index, list) {
-		d->mUrlList << d->mDirModel->urlForIndex(index);
-	}
-	emit importRequested();
+	importList(d->mThumbnailView->selectionModel()->selectedIndexes());
 }
 
 
 void ThumbnailPage::slotImportAll() {
-	d->mUrlList.clear();
+	QModelIndexList list;
 	for (int row = d->mDirModel->rowCount() - 1; row >= 0; --row) {
-		QModelIndex index = d->mDirModel->index(row, 0);
+		list << d->mDirModel->index(row, 0);
+	}
+	importList(list);
+}
+
+
+void ThumbnailPage::importList(const QModelIndexList& list) {
+	d->mUrlList.clear();
+	Q_FOREACH(const QModelIndex& index, list) {
 		d->mUrlList << d->mDirModel->urlForIndex(index);
 	}
 	emit importRequested();

@@ -22,14 +22,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define THUMBNAILPAGE_H
 
 // Qt
+#include <QModelIndex>
 #include <QWidget>
 
 // KDE
 #include <kurl.h>
 
 // Local
-
-class QModelIndex;
 
 namespace Gwenview {
 
@@ -66,6 +65,7 @@ private Q_SLOTS:
 private:
 	friend class ThumbnailPagePrivate;
 	ThumbnailPagePrivate* const d;
+	void importList(const QModelIndexList&);
 };
 
 
