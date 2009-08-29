@@ -58,10 +58,7 @@ public:
 				"One document has been successfully imported.\nDelete it from the device?",
 				"%1 documents has been successfully imported.\nDelete them from the device?",
 				count),
-			/*
-			i18np("Delete original document from device?",
-				"Delete original documents from device?",
-				count)*/QString(),
+			QString(),
 			KStandardGuiItem::del(),
 			KGuiItem(i18n("Keep"))
 			);
