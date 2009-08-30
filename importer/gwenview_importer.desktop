@@ -8,6 +8,7 @@ Actions=open;
 Exec=gwenview_importer %f
 Icon=gwenview
 Name=Download Photos with Gwenview
+Name[nb]=Last ned fotografier med Gwenview
 Name[nds]=Fotos mit Gwenview daalladen
 Name[pt]=Obter as Fotografias com o Gwenview
 Name[pt_BR]=Baixar as fotos com o Gwenview
