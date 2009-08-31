@@ -289,7 +289,7 @@ void ThumbnailPage::updateImportButtons() {
 void ThumbnailPage::updateDstLabel() {
 	if (d->mEventComboBox->currentText().isEmpty()) {
 		// FIXME: Use KDE error color instead of 'red'
-		d->mDstLabel->setText("<font color='red'>Enter an event name</font>");
+		d->mDstLabel->setText(i18n("<font color='red'>Enter an event name</font>"));
 	} else {
 		QString text = i18n(
 			"Pictures will be imported in: <filename>%1</filename>",
