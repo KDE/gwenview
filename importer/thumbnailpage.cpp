@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 #include <kdirlister.h>
+#include <kglobalsettings.h>
 #include <kurlnavigator.h>
 
 // Local
@@ -93,8 +94,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	}
 
 	void setupDstBaseUrl() {
-		// FIXME: Use xdg, and make this configurable
-		mDstBaseUrl = KUrl::fromPath(QDir::home().absoluteFilePath("photos"));
+		// FIXME: Make this configurable
+		mDstBaseUrl = KUrl::fromPath(KGlobalSettings::picturesPath());
 		int year = QDate::currentDate().year();
 		mDstBaseUrl.addPath(QString::number(year));
 	}
