@@ -191,7 +191,7 @@ bool SortedDirModel::filterAcceptsRow(int row, const QModelIndex& parent) const 
 		return false;
 	}
 
-	if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
+	if (kind != MimeTypeUtils::KIND_DIR && kind != MimeTypeUtils::KIND_ARCHIVE) {
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		if (!d->mSourceModel->semanticInfoAvailableForIndex(index)) {
 			Q_FOREACH(const AbstractSortedDirModelFilter* filter, d->mFilters) {
