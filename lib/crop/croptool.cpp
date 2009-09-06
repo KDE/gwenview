@@ -226,6 +226,10 @@ struct CropToolPrivate {
 		const int hudHeight = mHudWidget->height();
 		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, 0, -hudHeight);
 
+		OptimalPosition ret;
+
+		// Compute preferred and fallback positions. Preferred is outside rect
+		// on the same side, fallback is outside on the other side.
 		OptimalPosition preferred = OptimalPosition(
 			QPoint(rect.left(), rect.bottom() + margin),
 			HS_Bottom);
@@ -233,22 +237,29 @@ struct CropToolPrivate {
 			QPoint(rect.left(), rect.top() - margin - hudHeight),
 			HS_Top);
 
-		// Check if a position outside rect fits, staying on the same side if
-		// possible
 		if (mHudSide & HS_Top) {
 			qSwap(preferred, fallback);
 		}
-		if (hudMaxRect.contains(preferred.first)) return preferred;
-		if (hudMaxRect.contains(fallback.first)) return fallback;
 
-		// Does not fit, use a position inside rect
-		QPoint pos;
-		if (mHudSide & HS_Top) {
-			pos = QPoint(rect.left() + margin, rect.top() + margin);
+		// Check if a position outside rect fits
+		if (hudMaxRect.contains(preferred.first)) {
+			ret = preferred;
+		} else if (hudMaxRect.contains(fallback.first)) {
+			ret= fallback;
 		} else {
-			pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
+			// Does not fit outside, use a position inside rect
+			QPoint pos;
+			if (mHudSide & HS_Top) {
+				pos = QPoint(rect.left() + margin, rect.top() + margin);
+			} else {
+				pos = QPoint(rect.left() + margin, rect.bottom() - margin - hudHeight);
+			}
+			ret = OptimalPosition(pos, HudSide(mHudSide | HS_Inside));
 		}
-		return OptimalPosition(pos, HudSide(mHudSide | HS_Inside));
+
+		// Ensure it's always fully visible
+		ret.first.rx() = qMin(ret.first.rx(), hudMaxRect.width() - mHudWidget->width());
+		return ret;
 	}
 
 
