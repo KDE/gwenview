@@ -1,6 +1,7 @@
 # 2.3.2
 ## Fixes
 - Ensure crop widget is always visible (bug #201098).
+- Ensure operations always apply to the current url (bug #185769).
 
 # 2.3.1
 ## Fixes
