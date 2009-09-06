@@ -1,3 +1,7 @@
+# 2.3.2
+## Fixes
+- Ensure crop widget is always visible (bug #201098).
+
 # 2.3.1
 ## Fixes
 - Ensure "Advanced Slideshow" plugin is always enabled.
