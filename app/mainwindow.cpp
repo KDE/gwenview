@@ -602,23 +602,34 @@ struct MainWindow::Private {
 		if (mCurrentPageId == StartPageId) {
 			return KUrl();
 		}
+
+		// mThumbnailViewPanel and mDocumentPanel urls are almost always synced, but
+		// mThumbnailViewPanel can be more up-to-date because mDocumentPanel
+		// url is only updated when the DocumentView starts to load the
+		// document.
+		// This is why we only thrust mDocumentPanel url if it shows an url
+		// which can't be listed: in this case mThumbnailViewPanel url is
+		// empty.
 		if (mCurrentPageId == ViewPageId && !mDocumentPanel->isEmpty()) {
-			return mDocumentPanel->url();
-		} else {
-			QModelIndex index = mThumbnailView->currentIndex();
-			if (!index.isValid()) {
-				return KUrl();
+			KUrl url = mDocumentPanel->url();
+			if (!KProtocolManager::supportsListing(url)) {
+				return url;
 			}
-			// Ignore the current index if it's not part of the selection. This
-			// situation can happen when you select an image, then click on the
-			// background of the view.
-			if (!mThumbnailView->selectionModel()->isSelected(index)) {
-				return KUrl();
-			}
-			KFileItem item = mDirModel->itemForIndex(index);
-			Q_ASSERT(!item.isNull());
-			return item.url();
 		}
+
+		QModelIndex index = mThumbnailView->currentIndex();
+		if (!index.isValid()) {
+			return KUrl();
+		}
+		// Ignore the current index if it's not part of the selection. This
+		// situation can happen when you select an image, then click on the
+		// background of the view.
+		if (!mThumbnailView->selectionModel()->isSelected(index)) {
+			return KUrl();
+		}
+		KFileItem item = mDirModel->itemForIndex(index);
+		Q_ASSERT(!item.isNull());
+		return item.url();
 	}
 
 	void selectUrlToSelect() {
