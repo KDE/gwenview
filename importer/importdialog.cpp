@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kstandardguiitem.h>
 
 // Local
+#include "dialogpage.h"
 #include "importer.h"
 #include "importerconfig.h"
 #include "progresspage.h"
@@ -49,6 +50,7 @@ public:
 	QStackedWidget* mCentralWidget;
 	ThumbnailPage* mThumbnailPage;
 	ProgressPage* mProgressPage;
+	DialogPage* mDialogPage;
 	Importer* mImporter;
 
 	void deleteImportedUrls() {
@@ -79,6 +81,25 @@ public:
 			KRun::run(*service, KUrl::List() << mThumbnailPage->destinationUrl(), 0 /* window */);
 		}
 	}
+
+	void showWhatNext() {
+		mCentralWidget->setCurrentWidget(mDialogPage);
+		mDialogPage->setText(i18n("What do you want to do now?"));
+		mDialogPage->removeButtons();
+		int gwenview = mDialogPage->addButton(KGuiItem(i18n("View Imported Documents with Gwenview"), "gwenview"));
+		int importMore = mDialogPage->addButton(KGuiItem(i18n("Import more Documents")));
+		mDialogPage->addButton(KGuiItem(i18n("Quit"), "dialog-cancel"));
+
+		int answer = mDialogPage->exec();
+		if (answer == gwenview) {
+			startGwenview();
+			qApp->quit();
+		} else if (answer == importMore) {
+			mCentralWidget->setCurrentWidget(mThumbnailPage);
+		} else { /* quit */
+			qApp->quit();
+		}
+	}
 };
 
 
@@ -97,10 +118,13 @@ ImportDialog::ImportDialog()
 
 	d->mProgressPage = new ProgressPage(d->mImporter);
 
+	d->mDialogPage = new DialogPage;
+
 	d->mCentralWidget = new QStackedWidget;
 	setCentralWidget(d->mCentralWidget);
 	d->mCentralWidget->addWidget(d->mThumbnailPage);
 	d->mCentralWidget->addWidget(d->mProgressPage);
+	d->mCentralWidget->addWidget(d->mDialogPage);
 
 	connect(d->mThumbnailPage, SIGNAL(importRequested()),
 		SLOT(startImport()));
@@ -142,8 +166,7 @@ void ImportDialog::startImport() {
 
 void ImportDialog::slotImportFinished() {
 	d->deleteImportedUrls();
-	d->startGwenview();
-	qApp->quit();
+	d->showWhatNext();
 }
 
 
