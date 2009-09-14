@@ -48,6 +48,7 @@ public:
 	KUrl::List urlList() const;
 
 	KUrl destinationUrl() const;
+	void setDestinationUrl(const KUrl&);
 
 	void setSourceUrl(const KUrl&);
 

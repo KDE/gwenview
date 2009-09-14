@@ -23,10 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QDate>
 #include <QStackedWidget>
 
 // KDE
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <krun.h>
@@ -35,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "importer.h"
+#include "importerconfig.h"
 #include "progresspage.h"
 #include "thumbnailpage.h"
 
@@ -83,6 +86,15 @@ ImportDialog::ImportDialog()
 : d(new ImportDialogPrivate) {
 	d->mImporter = new Importer(this);
 	d->mThumbnailPage = new ThumbnailPage;
+
+	KUrl url = ImporterConfig::destinationUrl();
+	if (!url.isValid()) {
+		url = KUrl::fromPath(KGlobalSettings::picturesPath());
+		int year = QDate::currentDate().year();
+		url.addPath(QString::number(year));
+	}
+	d->mThumbnailPage->setDestinationUrl(url);
+
 	d->mProgressPage = new ProgressPage(d->mImporter);
 
 	d->mCentralWidget = new QStackedWidget;
@@ -119,10 +131,12 @@ void ImportDialog::setSourceUrl(const KUrl& url) {
 
 
 void ImportDialog::startImport() {
+	KUrl url = d->mThumbnailPage->destinationUrl();
+	ImporterConfig::setDestinationUrl(url);
+	ImporterConfig::self()->writeConfig();
+
 	d->mCentralWidget->setCurrentWidget(d->mProgressPage);
-	d->mImporter->start(
-		d->mThumbnailPage->urlList(),
-		d->mThumbnailPage->destinationUrl());
+	d->mImporter->start(d->mThumbnailPage->urlList(), url);
 }
 
 

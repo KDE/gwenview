@@ -22,14 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailpage.moc"
 
 // Qt
-#include <QDate>
-#include <QDir>
 #include <QPushButton>
 
 // KDE
 #include <kdebug.h>
 #include <kdirlister.h>
-#include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kurlnavigator.h>
 
@@ -101,12 +98,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	}
 
 	void setupDstUrlRequester() {
-		// FIXME: Remember last destination
-		KUrl url = KUrl::fromPath(KGlobalSettings::picturesPath());
-		int year = QDate::currentDate().year();
-		url.addPath(QString::number(year));
-		mDstUrlRequester->setUrl(url);
-
 		mDstUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
 	}
 
@@ -222,6 +213,12 @@ void ThumbnailPage::openUrl(const KUrl& url) {
 
 KUrl::List ThumbnailPage::urlList() const {
 	return d->mUrlList;
+}
+
+
+
+void ThumbnailPage::setDestinationUrl(const KUrl& url) {
+	d->mDstUrlRequester->setUrl(url);
 }
 
 

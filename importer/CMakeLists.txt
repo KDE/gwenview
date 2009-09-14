@@ -19,6 +19,10 @@ kde4_add_ui_files(importer_SRCS
 
 kde4_add_app_icon(importer_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hi*-apps-gwenview-importer.png")
 
+kde4_add_kcfg_files(importer_SRCS
+	importerconfig.kcfgc
+	)
+
 kde4_add_executable(gwenview_importer ${importer_SRCS})
 
 target_link_libraries(gwenview_importer

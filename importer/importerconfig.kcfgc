@@ -1,0 +1,6 @@
+File=importerconfig.kcfg
+ClassName=ImporterConfig
+NameSpace=Gwenview
+Singleton=true
+Mutators=true
+UseEnumTypes=true
