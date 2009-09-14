@@ -25,6 +25,13 @@
     </spacer>
    </item>
    <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Importing documents...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QProgressBar" name="mProgressBar">
      <property name="value">
       <number>0</number>
