@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kdirlister.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <kurlnavigator.h>
 
 // Local
@@ -80,7 +81,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	QPushButton* mImportSelectedButton;
 	QPushButton* mImportAllButton;
 	KUrl::List mUrlList;
-	KUrl mDstBaseUrl;
 
 	void setupDirModel() {
 		mDirModel = new SortedDirModel(q);
@@ -93,11 +93,21 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 			);
 	}
 
-	void setupDstBaseUrl() {
-		// FIXME: Make this configurable
-		mDstBaseUrl = KUrl::fromPath(KGlobalSettings::picturesPath());
+	void setupIcons() {
+		const KIconLoader::Group group = KIconLoader::NoGroup;
+		const int size = KIconLoader::SizeHuge;
+		mSrcIconLabel->setPixmap(KIconLoader::global()->loadIcon("camera-photo", group, size));
+		mDstIconLabel->setPixmap(KIconLoader::global()->loadIcon("computer", group, size));
+	}
+
+	void setupDstUrlRequester() {
+		// FIXME: Remember last destination
+		KUrl url = KUrl::fromPath(KGlobalSettings::picturesPath());
 		int year = QDate::currentDate().year();
-		mDstBaseUrl.addPath(QString::number(year));
+		url.addPath(QString::number(year));
+		mDstUrlRequester->setUrl(url);
+
+		mDstUrlRequester->setMode(KFile::Directory | KFile::LocalOnly);
 	}
 
 	void setupUrlNavigator() {
@@ -168,16 +178,6 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
 		q->updateImportButtons();
 	}
-
-	void setupEventComboBox() {
-		QObject::connect(
-			mEventComboBox, SIGNAL(editTextChanged(const QString&)),
-			q, SLOT(updateDstLabel()));
-		QObject::connect(
-			mEventComboBox, SIGNAL(editTextChanged(const QString&)),
-			q, SLOT(updateImportButtons()));
-		q->updateDstLabel();
-	}
 };
 
 
@@ -185,12 +185,12 @@ ThumbnailPage::ThumbnailPage()
 : d(new ThumbnailPagePrivate) {
 	d->q = this;
 	d->setupUi(this);
+	d->setupIcons();
 	d->setupDirModel();
-	d->setupDstBaseUrl();
+	d->setupDstUrlRequester();
 	d->setupUrlNavigator();
 	d->setupThumbnailView();
 	d->setupButtonBox();
-	d->setupEventComboBox();
 }
 
 
@@ -226,9 +226,7 @@ KUrl::List ThumbnailPage::urlList() const {
 
 
 KUrl ThumbnailPage::destinationUrl() const {
-	KUrl url = d->mDstBaseUrl;
-	url.addPath(d->mEventComboBox->currentText());
-	return url;
+	return d->mDstUrlRequester->url();
 }
 
 
@@ -281,23 +279,8 @@ void ThumbnailPage::importList(const QModelIndexList& list) {
 
 
 void ThumbnailPage::updateImportButtons() {
-	bool hasEvent = !d->mEventComboBox->currentText().isEmpty();
-	d->mImportSelectedButton->setEnabled(hasEvent && d->mThumbnailView->selectionModel()->hasSelection());
-	d->mImportAllButton->setEnabled(hasEvent && d->mDirModel->hasChildren());
-}
-
-
-void ThumbnailPage::updateDstLabel() {
-	if (d->mEventComboBox->currentText().isEmpty()) {
-		// FIXME: Use KDE error color instead of 'red'
-		d->mDstLabel->setText(i18n("<font color='red'>Enter an event name</font>"));
-	} else {
-		QString text = i18n(
-			"Pictures will be imported in: <filename>%1</filename>",
-			destinationUrl().pathOrUrl()
-			);
-		d->mDstLabel->setText(text);
-	}
+	d->mImportSelectedButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
+	d->mImportAllButton->setEnabled(d->mDirModel->hasChildren());
 }
 
 

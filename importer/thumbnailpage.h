@@ -59,7 +59,6 @@ private Q_SLOTS:
 	void slotImportSelected();
 	void slotImportAll();
 	void updateImportButtons();
-	void updateDstLabel();
 	void slotThumbnailViewIndexActivated(const QModelIndex&);
 	void openUrl(const KUrl&);
 	void slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder::Status status);
