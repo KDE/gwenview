@@ -119,6 +119,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
 		PreviewItemDelegate* delegate = new PreviewItemDelegate(mThumbnailView);
 		delegate->setThumbnailDetails(PreviewItemDelegate::FileNameDetail);
+		delegate->setContextBarMode(PreviewItemDelegate::SelectionOnlyContextBar);
 		mThumbnailView->setItemDelegate(delegate);
 
 		// Colors
