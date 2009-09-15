@@ -193,6 +193,7 @@ struct PreviewItemDelegatePrivate {
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
 	PreviewItemDelegate::ThumbnailDetails mDetails;
+	PreviewItemDelegate::ContextBarMode mContextBarMode;
 
 	QLabel* mTipLabel;
 
@@ -223,7 +224,11 @@ struct PreviewItemDelegatePrivate {
 
 	void showContextBar(const QRect& rect, const QPixmap& thumbnailPix) {
 		mContextBar->adjustSize();
-		const int posX = (rect.width() - mContextBar->width()) / 2;
+		// Center bar in FullContextBar mode, left align in
+		// SelectionOnlyContextBar mode
+		const int posX = mContextBarMode == PreviewItemDelegate::FullContextBar
+			? (rect.width() - mContextBar->width()) / 2
+			: 0;
 		const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize - thumbnailPix.height() - mContextBar->height());
 		mContextBar->move(rect.topLeft() + QPoint(posX, posY));
 		mContextBar->show();
@@ -532,6 +537,16 @@ struct PreviewItemDelegatePrivate {
 		mRotateLeftButton->setEnabled(isImage);
 		mRotateRightButton->setEnabled(isImage);
 	}
+
+	void updateContextBar() {
+		const int width = itemWidth();
+		const int buttonWidth = mRotateRightButton->sizeHint().width();
+		bool full = mContextBarMode == PreviewItemDelegate::FullContextBar;
+		mFullScreenButton->setVisible(full);
+		mRotateLeftButton->setVisible(full && width >= 3 * buttonWidth);
+		mRotateRightButton->setVisible(full && width >= 4 * buttonWidth);
+		mContextBar->adjustSize();
+	}
 };
 
 
@@ -543,6 +558,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
 	d->mDetails = FileNameDetail;
+	d->mContextBarMode = FullContextBar;
 
 	connect(view, SIGNAL(rowsRemovedSignal(const QModelIndex&, int, int)),
 		SLOT(slotRowsChanged()));
@@ -747,13 +763,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 void PreviewItemDelegate::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
-
-	const int width = d->itemWidth();
-	const int buttonWidth = d->mRotateRightButton->sizeHint().width();
-	d->mRotateLeftButton->setVisible(width >= 3 * buttonWidth);
-	d->mRotateRightButton->setVisible(width >= 4 * buttonWidth);
-	d->mContextBar->adjustSize();
-
+	d->updateContextBar();
 	d->mElidedTextCache.clear();
 }
 
@@ -794,6 +804,17 @@ PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() co
 void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDetails details) {
 	d->mDetails = details;
 	d->mView->scheduleDelayedItemsLayout();
+}
+
+
+PreviewItemDelegate::ContextBarMode PreviewItemDelegate::contextBarMode() const {
+	return d->mContextBarMode;
+}
+
+
+void PreviewItemDelegate::setContextBarMode(PreviewItemDelegate::ContextBarMode mode) {
+	d->mContextBarMode = mode;
+	d->updateContextBar();
 }
 
 

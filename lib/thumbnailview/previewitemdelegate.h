@@ -50,6 +50,11 @@ public:
 	PreviewItemDelegate(ThumbnailView*);
 	~PreviewItemDelegate();
 
+	enum ContextBarMode {
+		SelectionOnlyContextBar, /** Only show the +/- button */
+		FullContextBar           /** Show all buttons, provided there is enough room */
+	};
+
 	enum ThumbnailDetail {
 		FileNameDetail = 1,
 		DateDetail     = 2,
@@ -65,6 +70,10 @@ public:
 	ThumbnailDetails thumbnailDetails() const;
 
 	void setThumbnailDetails(ThumbnailDetails);
+
+	ContextBarMode contextBarMode() const;
+
+	void setContextBarMode(ContextBarMode);
 
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
