@@ -2,21 +2,21 @@
 /*
 Gwenview - A simple image viewer for KDE
 Copyright 2000-2004 Aurélien Gâteau
- 
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
 */
 // System
 #include <math.h>
@@ -172,7 +172,7 @@ struct JPEGContent::Private {
 		src->mInput=&mRawData;
 	}
 
-	
+
 	void setupInmemDestination(j_compress_ptr cinfo, QByteArray* outputData) {
 		Q_ASSERT(!cinfo->dest);
 		inmem_dest_mgr* dest = (inmem_dest_mgr*)
@@ -189,8 +189,8 @@ struct JPEGContent::Private {
 	bool readSize() {
 		struct jpeg_decompress_struct srcinfo;
 		jpeg_saved_marker_ptr mark;
-		
-		// Init JPEG structs 
+
+		// Init JPEG structs
 		JPEGErrorManager errorManager;
 
 		// Initialize the JPEG decompression object
@@ -213,7 +213,7 @@ struct JPEGContent::Private {
 			return false;
 		}
 		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
-		
+
 		jpeg_destroy_decompress(&srcinfo);
 		return true;
 	}
@@ -329,17 +329,17 @@ int JPEGContent::dotsPerMeter(const QString& keyName) const {
 	//         2 = inches
 	//         3 = centimeters
 	//         Other = reserved
-	const double INCHESPERMETER = (100. / 2.54); 
+	const double INCHESPERMETER = (100. / 2.54);
 	Exiv2::Rational r = it->toRational();
 	if (r.second == 0) {
 		// a rational with 0 as second will make hang toLong() conversion
 		r.second = 1;
 	}
 	switch (res) {
-	case 3:  // dots per cm 
-		return int(double(r.first) * 100 / double(r.second)); 
-	default:  // dots per inch 
-		return int(double(r.first) * INCHESPERMETER / double(r.second)); 
+	case 3:  // dots per cm
+		return int(double(r.first) * 100 / double(r.second));
+	default:  // dots per inch
+		return int(double(r.first) * INCHESPERMETER / double(r.second));
 	}
 
 	return 0;
@@ -368,7 +368,7 @@ QString JPEGContent::comment() const {
 
 QString JPEGContent::getExifInformation(const QString exifkey) const {
 	QString ret;
-	
+
 	Exiv2::ExifKey key(exifkey.latin1());
 	Exiv2::ExifData::iterator it = d->mExifData.findKey(key);
 
@@ -512,7 +512,7 @@ void JPEGContent::applyPendingTransformation() {
 
 	// The following code is inspired by jpegtran.c from the libjpeg
 
-	// Init JPEG structs 
+	// Init JPEG structs
 	struct jpeg_decompress_struct srcinfo;
 	struct jpeg_compress_struct dstinfo;
 	jvirt_barray_ptr * src_coef_arrays;
@@ -571,7 +571,7 @@ void JPEGContent::applyPendingTransformation() {
 
 	/* Start compressor (note no image data is actually written here) */
 	jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-	
+
 	/* Copy to the output file any extra markers that we want to preserve */
 	jcopy_markers_execute(&srcinfo, &dstinfo, JCOPYOPT_ALL);
 
@@ -586,7 +586,7 @@ void JPEGContent::applyPendingTransformation() {
 	(void) jpeg_finish_decompress(&srcinfo);
 	jpeg_destroy_decompress(&srcinfo);
 
-	// Set rawData to our new JPEG 
+	// Set rawData to our new JPEG
 	d->mRawData = output;
 }
 
@@ -594,7 +594,12 @@ void JPEGContent::applyPendingTransformation() {
 QImage JPEGContent::thumbnail() const {
 	QImage image;
 	if (!d->mExifData.empty()) {
-		Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
+#if(EXIV2_TEST_VERSION(0,17,91))
+                Exiv2::ExifThumbC thumb(d->mExifData);
+                Exiv2::DataBuf thumbnail = thumb.copy();
+#else
+                Exiv2::DataBuf thumbnail = d->mExifData.copyThumbnail();
+#endif
 		image.loadFromData(thumbnail.pData_, thumbnail.size_);
 	}
 	return image;
@@ -605,7 +610,7 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 	if (d->mExifData.empty()) {
 		return;
 	}
-	
+
 	QByteArray array;
 	QBuffer buffer(array);
 	buffer.open(IO_WriteOnly);
@@ -615,8 +620,14 @@ void JPEGContent::setThumbnail(const QImage& thumbnail) {
 		kdError() << "Could not write thumbnail\n";
 		return;
 	}
-	
-	d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size());
+
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumb thumb(d->mExifData);
+        thumb.setJpegThumbnail((unsigned char*)array.data(), array.size());
+#else
+        d->mExifData.setJpegThumbnail((unsigned char*)array.data(), array.size()
+);
+#endif
 }
 
 
@@ -648,12 +659,12 @@ bool JPEGContent::save(QFile* file) {
 	image->setExifData(d->mExifData);
 	image->setComment(d->mComment.utf8().data());
 	image->writeMetadata();
-	
+
 	// Update mRawData
 	Exiv2::BasicIo& io = image->io();
 	d->mRawData.resize(io.size());
 	io.read((unsigned char*)d->mRawData.data(), io.size());
-	
+
 	QDataStream stream(file);
 	stream.writeRawBytes(d->mRawData.data(), d->mRawData.size());
 
