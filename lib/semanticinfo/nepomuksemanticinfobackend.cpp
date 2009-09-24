@@ -38,8 +38,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <nepomuk/resourcemanager.h>
 #include <nepomuk/tag.h>
 
-#include <Soprano/Vocabulary/Xesam>
-
 // Local
 
 namespace Gwenview {
@@ -58,8 +56,7 @@ struct RetrieveTask : public Task {
 	: Task(url), mBackEnd(backEnd) {}
 
 	virtual void execute() {
-		QString urlString = mUrl.url();
-		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+		Nepomuk::Resource resource(mUrl);
 
 		SemanticInfo semanticInfo;
 		semanticInfo.mRating = resource.rating();
@@ -79,8 +76,7 @@ struct StoreTask : public Task {
 	: Task(url), mSemanticInfo(semanticInfo) {}
 
 	virtual void execute() {
-		QString urlString = mUrl.url();
-		Nepomuk::Resource resource(urlString, Soprano::Vocabulary::Xesam::File());
+		Nepomuk::Resource resource(mUrl);
 		resource.setRating(mSemanticInfo.mRating);
 		resource.setDescription(mSemanticInfo.mDescription);
 		QList<Nepomuk::Tag> tags;
