@@ -473,29 +473,24 @@ struct MainWindow::Private {
 		mDirModel->setKindFilter(kinds);
 	}
 
-	QModelIndex getRelativeIndex(int offset) {
+	QModelIndex currentIndex() const {
 		KUrl url = currentUrl();
-		if (!url.isValid()) {
-			return QModelIndex();
-		}
-		QModelIndex index = mDirModel->indexForUrl(url);
-		int row = index.row() + offset;
-		index = mDirModel->index(row, 0);
-		if (!index.isValid()) {
-			return QModelIndex();
-		}
+		return url.isValid() ? mDirModel->indexForUrl(url) : QModelIndex();
+	}
 
+	bool indexIsDirOrArchive(const QModelIndex& index) const {
+		Q_ASSERT(index.isValid());
 		KFileItem item = mDirModel->itemForIndex(index);
-		if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
-			return index;
-		} else {
-			return QModelIndex();
-		}
+		return ArchiveUtils::fileItemIsDirOrArchive(item);
 	}
 
 	void goTo(int offset) {
-		QModelIndex index = getRelativeIndex(offset);
-		if (index.isValid()) {
+		QModelIndex index = currentIndex();
+		index = mDirModel->index(index.row() + offset, 0);
+		if (!index.isValid()) {
+			return;
+		}
+		if (!indexIsDirOrArchive(index)) {
 			mThumbnailView->setCurrentIndex(index);
 			mThumbnailView->scrollTo(index);
 		}
@@ -509,8 +504,7 @@ struct MainWindow::Private {
 				return;
 			}
 
-			KFileItem item = mDirModel->itemForIndex(index);
-			if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			if (!indexIsDirOrArchive(index)) {
 				break;
 			}
 		}
@@ -1121,13 +1115,13 @@ void MainWindow::goToUrl(const KUrl& url) {
 
 
 void MainWindow::updatePreviousNextActions() {
-	QModelIndex index;
+	QModelIndex index = d->currentIndex();
 
-	index = d->getRelativeIndex(-1);
-	d->mGoToPreviousAction->setEnabled(index.isValid());
+	QModelIndex prevIndex = d->mDirModel->index(index.row() - 1, 0);
+	d->mGoToPreviousAction->setEnabled(prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
 
-	index = d->getRelativeIndex(1);
-	d->mGoToNextAction->setEnabled(index.isValid());
+	QModelIndex nextIndex = d->mDirModel->index(index.row() + 1, 0);
+	d->mGoToNextAction->setEnabled(nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
 }
 
 
