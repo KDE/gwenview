@@ -623,8 +623,8 @@ struct MainWindow::Private {
 		}
 		// Ignore the current index if it's not part of the selection. This
 		// situation can happen when you select an image, then click on the
-		// background of the view.
-		if (!mThumbnailView->selectionModel()->isSelected(index)) {
+		// background of the thumbnail view.
+		if (mCurrentPageId == BrowsePageId && !mThumbnailView->selectionModel()->isSelected(index)) {
 			return KUrl();
 		}
 		KFileItem item = mDirModel->itemForIndex(index);
