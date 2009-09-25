@@ -1072,15 +1072,13 @@ void MainWindow::slotSelectionChanged() {
 
 
 void MainWindow::slotDirModelNewItems() {
-	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
-	if (selection.size() > 0) {
+	if (d->mThumbnailView->selectionModel()->hasSelection()) {
 		updatePreviousNextActions();
-		return;
+	} else {
+		// Nothing selected in the view yet, check if there was an url waiting to
+		// be selected
+		d->selectUrlToSelect();
 	}
-
-	// Nothing selected in the view yet, check if there was an url waiting to
-	// be selected
-	d->selectUrlToSelect();
 }
 
 
