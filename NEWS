@@ -2,6 +2,8 @@
 ## Fixes
 - Ensure crop widget is always visible (bug #201098).
 - Ensure operations always apply to the current url (bug #185769).
+- Make sure setting the crop ratio does not resize the crop rect to 0x0
+  (bug #199946).
 
 # 2.3.1
 ## Fixes
