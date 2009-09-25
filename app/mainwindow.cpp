@@ -1089,15 +1089,11 @@ void MainWindow::slotDirListerCompleted() {
 		d->mStartSlideShowWhenDirListerCompleted = false;
 		QTimer::singleShot(0, d->mToggleSlideShowAction, SLOT(trigger()));
 	}
-	if (!d->mDocumentPanel->isEmpty()) {
-		return;
+	if (d->mThumbnailView->selectionModel()->hasSelection()) {
+		updatePreviousNextActions();
+	} else {
+		d->goToFirstDocument();
 	}
-	QItemSelection selection = d->mThumbnailView->selectionModel()->selection();
-	if (selection.indexes().count() > 0) {
-		return;
-	}
-
-	d->goToFirstDocument();
 }
 
 
