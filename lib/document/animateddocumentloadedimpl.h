@@ -39,7 +39,6 @@ public:
 	~AnimatedDocumentLoadedImpl();
 
 	virtual void init();
-	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual QByteArray rawData() const;
 	virtual bool isAnimated() const;

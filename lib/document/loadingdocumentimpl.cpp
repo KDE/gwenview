@@ -357,11 +357,6 @@ void LoadingDocumentImpl::slotTransferFinished(KJob* job) {
 }
 
 
-bool LoadingDocumentImpl::isMetaInfoLoaded() const {
-	return d->mMetaInfoLoaded;
-}
-
-
 bool LoadingDocumentImpl::isEditable() const {
 	return d->mDownSampledImageLoaded;
 }

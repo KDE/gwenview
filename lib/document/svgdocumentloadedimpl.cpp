@@ -53,11 +53,6 @@ void SvgDocumentLoadedImpl::init() {
 }
 
 
-bool SvgDocumentLoadedImpl::isMetaInfoLoaded() const {
-	return false;
-}
-
-
 Document::LoadingState SvgDocumentLoadedImpl::loadingState() const {
 	return Document::Loaded;
 }

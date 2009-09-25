@@ -42,7 +42,6 @@ public:
 	~LoadingDocumentImpl();
 
 	virtual void init();
-	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual bool isEditable() const;
 

@@ -41,9 +41,6 @@ EmptyDocumentImpl::~EmptyDocumentImpl()
 void EmptyDocumentImpl::init() {
 }
 
-bool EmptyDocumentImpl::isMetaInfoLoaded() const {
-	return false;
-}
 
 Document::LoadingState EmptyDocumentImpl::loadingState() const {
 	return Document::LoadingFailed;

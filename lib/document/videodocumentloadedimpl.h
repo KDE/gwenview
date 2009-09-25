@@ -40,8 +40,6 @@ public:
 
 	virtual void init();
 
-	virtual bool isMetaInfoLoaded() const;
-
 	virtual Document::LoadingState loadingState() const;
 
 	virtual void setImage(const QImage&);

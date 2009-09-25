@@ -43,7 +43,6 @@ public:
 
 	// AbstractDocumentImpl
 	virtual void init();
-	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 	virtual bool save(const KUrl&, const QByteArray& format);
 	virtual AbstractDocumentEditor* editor();

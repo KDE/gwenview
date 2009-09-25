@@ -51,11 +51,6 @@ void VideoDocumentLoadedImpl::init() {
 }
 
 
-bool VideoDocumentLoadedImpl::isMetaInfoLoaded() const {
-	return false;
-}
-
-
 Document::LoadingState VideoDocumentLoadedImpl::loadingState() const {
 	return Document::Loaded;
 }

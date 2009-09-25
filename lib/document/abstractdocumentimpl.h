@@ -52,8 +52,6 @@ public:
 	 */
 	virtual void init() = 0;
 
-	virtual bool isMetaInfoLoaded() const = 0;
-
 	virtual Document::LoadingState loadingState() const = 0;
 
 	virtual bool save(const KUrl&, const QByteArray& /*format*/) { return false; }

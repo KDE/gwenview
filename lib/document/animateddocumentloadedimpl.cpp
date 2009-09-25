@@ -71,11 +71,6 @@ void AnimatedDocumentLoadedImpl::init() {
 }
 
 
-bool AnimatedDocumentLoadedImpl::isMetaInfoLoaded() const {
-	return true;
-}
-
-
 Document::LoadingState AnimatedDocumentLoadedImpl::loadingState() const {
 	return Document::Loaded;
 }

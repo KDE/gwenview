@@ -36,7 +36,6 @@ public:
 	~EmptyDocumentImpl();
 
 	virtual void init();
-	virtual bool isMetaInfoLoaded() const;
 	virtual Document::LoadingState loadingState() const;
 };
 

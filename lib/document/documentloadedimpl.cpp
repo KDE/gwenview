@@ -74,11 +74,6 @@ bool DocumentLoadedImpl::isEditable() const {
 }
 
 
-bool DocumentLoadedImpl::isMetaInfoLoaded() const {
-	return true;
-}
-
-
 Document::LoadingState DocumentLoadedImpl::loadingState() const {
 	return Document::Loaded;
 }
