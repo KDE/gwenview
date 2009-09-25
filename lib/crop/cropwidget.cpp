@@ -211,6 +211,8 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 	// Don't do this before signals are connected, otherwise the tool won't get
 	// initialized
 	d->initSpinBoxes();
+
+	setCropRect(d->mCropTool->rect());
 }
 
 
