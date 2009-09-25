@@ -62,7 +62,7 @@
     </layout>
    </item>
    <item>
-    <widget class="Gwenview::TextEdit" name="mDescriptionTextEdit">
+    <widget class="KTextEdit" name="mDescriptionTextEdit">
      <property name="acceptRichText">
       <bool>false</bool>
      </property>
@@ -72,15 +72,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>KRatingWidget</class>
    <extends>QWidget</extends>
    <header>nepomuk/kratingwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Gwenview::TextEdit</class>
-   <extends>QTextEdit</extends>
-   <header location="global">lib/textedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
