@@ -75,12 +75,9 @@ Document::Document(const KUrl& url)
 	d->mImpl = 0;
 	d->mUrl = url;
 	d->mKeepRawData = false;
-	d->mKind = MimeTypeUtils::KIND_UNKNOWN;
-
 	connect(&d->mUndoStack, SIGNAL(indexChanged(int)), SLOT(slotUndoIndexChanged()) );
-	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-	d->mImageMetaInfoModel.setFileItem(fileItem);
-	switchToImpl(new LoadingDocumentImpl(this));
+
+	reload();
 }
 
 
