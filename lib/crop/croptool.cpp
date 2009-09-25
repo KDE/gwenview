@@ -320,6 +320,11 @@ void CropTool::setRect(const QRect& rect) {
 }
 
 
+QRect CropTool::rect() const {
+	return d->mRect;
+}
+
+
 void CropTool::paint(QPainter* painter) {
 	QRect rect = d->viewportCropRect();
 

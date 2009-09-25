@@ -47,6 +47,7 @@ public:
 	void setCropRatio(double ratio);
 
 	void setRect(const QRect&);
+	QRect rect() const;
 
 	virtual void paint(QPainter*);
 
