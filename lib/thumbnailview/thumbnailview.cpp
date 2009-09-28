@@ -353,6 +353,12 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 }
 
 
+void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
+	QListView::dataChanged(topLeft, bottomRight);
+	d->mScheduledThumbnailGenerationTimer.start();
+}
+
+
 void ThumbnailView::showContextMenu() {
 	d->mThumbnailViewHelper->showContextMenu(this);
 }

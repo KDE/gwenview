@@ -127,6 +127,7 @@ protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
 	virtual void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+	virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private Q_SLOTS:
 	void showContextMenu();
