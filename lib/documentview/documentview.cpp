@@ -72,7 +72,7 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
-	GvPixmapSequenceWidget* mLoadingIndicator;
+	KPixmapSequenceWidget* mLoadingIndicator;
 
 	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
