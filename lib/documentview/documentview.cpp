@@ -32,8 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kaction.h>
 #include <kactioncategory.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klocale.h>
+#include <kpixmapsequence.h>
+#include <kpixmapsequencewidget.h>
 #include <kurl.h>
 
 // Local
@@ -43,8 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
-#include <lib/kpixmapsequence.h>
-#include <lib/kpixmapsequencewidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/slideshow.h>
@@ -161,12 +160,9 @@ struct DocumentViewPrivate {
 
 
 	void setupLoadingIndicator() {
-		const QString path = KIconLoader::global()->iconPath("process-working", -22);
-		GvPixmapSequence sequence;
-		sequence.load(path);
-		mLoadingIndicator = new GvPixmapSequenceWidget;
+		KPixmapSequence sequence("process-working", 22);
+		mLoadingIndicator = new KPixmapSequenceWidget;
 		mLoadingIndicator->setSequence(sequence);
-		//mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
 		mLoadingIndicator->setInterval(100);
 
 		WidgetFloater* floater = new WidgetFloater(that);
