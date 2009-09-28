@@ -68,10 +68,7 @@ KDateTime dateTimeForFileItem(const KFileItem& fileItem) {
 
 	Cache::iterator it = cache.find(url);
 	if (it == cache.end()) {
-		CacheItem cacheItem;
-		cacheItem.update(fileItem);
-		cache.insert(url, cacheItem);
-		return cacheItem.realTime;
+		it = cache.insert(url, CacheItem());
 	}
 
 	it.value().update(fileItem);
