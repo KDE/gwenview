@@ -27,50 +27,50 @@
 #include <kdebug.h>
 
 
-class KPixmapSequence::Private : public QSharedData
+class GvPixmapSequence::Private : public QSharedData
 {
 public:
 	QVector<QPixmap> mFrames;
 };
 
 
-KPixmapSequence::KPixmapSequence()
+GvPixmapSequence::GvPixmapSequence()
     : d(new Private)
 {
 }
 
 
-KPixmapSequence::KPixmapSequence( const KPixmapSequence& other )
+GvPixmapSequence::GvPixmapSequence( const GvPixmapSequence& other )
 {
     d = other.d;
 }
 
 
-KPixmapSequence::~KPixmapSequence()
+GvPixmapSequence::~GvPixmapSequence()
 {
 }
 
 
-KPixmapSequence& KPixmapSequence::operator=( const KPixmapSequence& other )
+GvPixmapSequence& GvPixmapSequence::operator=( const GvPixmapSequence& other )
 {
     d = other.d;
     return *this;
 }
 
 
-bool KPixmapSequence::isValid() const
+bool GvPixmapSequence::isValid() const
 {
     return !isEmpty();
 }
 
 
-bool KPixmapSequence::isEmpty() const
+bool GvPixmapSequence::isEmpty() const
 {
     return d->mFrames.isEmpty();
 }
 
 
-bool KPixmapSequence::load(const QString& path)
+bool GvPixmapSequence::load(const QString& path)
 {
 	QPixmap bigPixmap;
 	if (!bigPixmap.load(path)) {
@@ -83,7 +83,7 @@ bool KPixmapSequence::load(const QString& path)
 }
 
 
-bool KPixmapSequence::load(const QPixmap& bigPixmap)
+bool GvPixmapSequence::load(const QPixmap& bigPixmap)
 {
 	d->mFrames.resize(bigPixmap.height() / bigPixmap.width());
 	const int size = bigPixmap.width();
@@ -99,7 +99,7 @@ bool KPixmapSequence::load(const QPixmap& bigPixmap)
 }
 
 
-QSize KPixmapSequence::frameSize() const
+QSize GvPixmapSequence::frameSize() const
 {
 	if (d->mFrames.size() == 0) {
 		kWarning() << "No frame loaded";
@@ -109,29 +109,29 @@ QSize KPixmapSequence::frameSize() const
 }
 
 
-int KPixmapSequence::frameCount() const
+int GvPixmapSequence::frameCount() const
 {
 	return d->mFrames.size();
 }
 
 
-QPixmap KPixmapSequence::frameAt(int index) const
+QPixmap GvPixmapSequence::frameAt(int index) const
 {
 	return d->mFrames.at( index % frameCount() );
 }
 
 
-KPixmapSequence KPixmapSequence::loadFromPath( const QString& path )
+GvPixmapSequence GvPixmapSequence::loadFromPath( const QString& path )
 {
-    KPixmapSequence s;
+    GvPixmapSequence s;
     s.load( path );
     return s;
 }
 
 
-KPixmapSequence KPixmapSequence::loadFromPixmap( const QPixmap& pix )
+GvPixmapSequence GvPixmapSequence::loadFromPixmap( const QPixmap& pix )
 {
-    KPixmapSequence s;
+    GvPixmapSequence s;
     s.load( pix );
     return s;
 }

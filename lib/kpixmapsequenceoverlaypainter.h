@@ -25,22 +25,22 @@
 
 #include "gwenviewlib_export.h"
 
-class KPixmapSequence;
+class GvPixmapSequence;
 class QWidget;
 class QEvent;
 
 /**
- * \class KPixmapSequenceOverlayPainter kpixmapsequenceoverlaypainter.h KPixmapSequenceOverlayPainter
+ * \class GvPixmapSequenceOverlayPainter kpixmapsequenceoverlaypainter.h GvPixmapSequenceOverlayPainter
  *
- * \brief Paints a KPixmapSequence on top of any widget at any position.
+ * \brief Paints a GvPixmapSequence on top of any widget at any position.
  *
- * The KPixmapSequenceOverlayPainter paints an overlay on top of an arbitrary QWidget
- * using a KPixmapSequence. This is typically used for spinners indicating that a process
+ * The GvPixmapSequenceOverlayPainter paints an overlay on top of an arbitrary QWidget
+ * using a GvPixmapSequence. This is typically used for spinners indicating that a process
  * is not finished yet.
  *
  * \author Sebastian Trueg <trueg@kde.org>
  */
-class GWENVIEWLIB_EXPORT KPixmapSequenceOverlayPainter : public QObject
+class GWENVIEWLIB_EXPORT GvPixmapSequenceOverlayPainter : public QObject
 {
     Q_OBJECT
 
@@ -48,19 +48,19 @@ public:
     /**
      * Constructor
      */
-    KPixmapSequenceOverlayPainter( QObject* parent = 0 );
+    GvPixmapSequenceOverlayPainter( QObject* parent = 0 );
 
     /**
      * Destructor
      */
-    ~KPixmapSequenceOverlayPainter();
+    ~GvPixmapSequenceOverlayPainter();
 
     /**
      * The sequenece used to draw the overlay.
      *
      * \sa setSequence
      */
-    KPixmapSequence sequence() const;
+    GvPixmapSequence sequence() const;
 
     /**
      * The interval between frames.
@@ -73,7 +73,7 @@ public Q_SLOTS:
     /**
      * Set the sequence to be used. By default the KDE busy sequence is used.
      */
-    void setSequence( const KPixmapSequence& seq );
+    void setSequence( const GvPixmapSequence& seq );
 
     /**
      * Set the interval between frames. The default is 200.

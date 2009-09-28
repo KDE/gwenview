@@ -24,23 +24,23 @@
 
 #include "gwenviewlib_export.h"
 
-class KPixmapSequence;
+class GvPixmapSequence;
 
 /**
- * \class KPixmapSequenceWidget kpixmapsequencewidget.h KPixmapSequenceWidget
+ * \class GvPixmapSequenceWidget kpixmapsequencewidget.h GvPixmapSequenceWidget
  *
  * \brief A simple widget showing a fixed size pixmap sequence.
  *
- * The KPixmapSequenceWidget uses the KPixmapSequenceOverlayPainter to show a
+ * The GvPixmapSequenceWidget uses the GvPixmapSequenceOverlayPainter to show a
  * sequence of pixmaps. It is intended as a simple wrapper around the
- * KPixmapSequenceOverlayPainter in case a widget is more appropriate than
+ * GvPixmapSequenceOverlayPainter in case a widget is more appropriate than
  * an event filter.
  *
  * \author Sebastian Trueg <trueg@kde.org>
  *
  * \since 4.4
  */
-class GWENVIEWLIB_EXPORT KPixmapSequenceWidget : public QWidget
+class GWENVIEWLIB_EXPORT GvPixmapSequenceWidget : public QWidget
 {
     Q_OBJECT
 
@@ -48,24 +48,24 @@ public:
     /**
      * Constructor
      */
-    KPixmapSequenceWidget( QWidget* parent = 0 );
+    GvPixmapSequenceWidget( QWidget* parent = 0 );
 
     /**
      * Destructor
      */
-    ~KPixmapSequenceWidget();
+    ~GvPixmapSequenceWidget();
 
     /**
      * The sequenece used to draw the overlay.
      *
      * \sa setSequence
      */
-    KPixmapSequence sequence() const;
+    GvPixmapSequence sequence() const;
 
     /**
      * The interval between frames.
      *
-     * \sa setInterval, KPixmapSequenceOverlayPainter::interval
+     * \sa setInterval, GvPixmapSequenceOverlayPainter::interval
      */
     int interval() const;
 
@@ -73,11 +73,11 @@ public Q_SLOTS:
     /**
      * Set the sequence to be used. By default the KDE busy sequence is used.
      */
-    void setSequence( const KPixmapSequence& seq );
+    void setSequence( const GvPixmapSequence& seq );
 
     /**
      * Set the interval between frames. The default is 200.
-     * \sa interval, KPixmapSequenceOverlayPainter::setInterval
+     * \sa interval, GvPixmapSequenceOverlayPainter::setInterval
      */
     void setInterval( int msecs );
 

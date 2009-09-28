@@ -24,14 +24,14 @@
 #include <KDebug>
 
 
-class KPixmapSequenceWidget::Private
+class GvPixmapSequenceWidget::Private
 {
 public:
-    KPixmapSequenceOverlayPainter m_painter;
+    GvPixmapSequenceOverlayPainter m_painter;
 };
 
 
-KPixmapSequenceWidget::KPixmapSequenceWidget( QWidget* parent )
+GvPixmapSequenceWidget::GvPixmapSequenceWidget( QWidget* parent )
     : QWidget( parent ),
       d( new Private )
 {
@@ -40,25 +40,25 @@ KPixmapSequenceWidget::KPixmapSequenceWidget( QWidget* parent )
 }
 
 
-KPixmapSequenceWidget::~KPixmapSequenceWidget()
+GvPixmapSequenceWidget::~GvPixmapSequenceWidget()
 {
     delete d;
 }
 
 
-KPixmapSequence KPixmapSequenceWidget::sequence() const
+GvPixmapSequence GvPixmapSequenceWidget::sequence() const
 {
     return d->m_painter.sequence();
 }
 
 
-int KPixmapSequenceWidget::interval() const
+int GvPixmapSequenceWidget::interval() const
 {
     return d->m_painter.interval();
 }
 
 
-void KPixmapSequenceWidget::setSequence( const KPixmapSequence& seq )
+void GvPixmapSequenceWidget::setSequence( const GvPixmapSequence& seq )
 {
     setFixedSize(seq.frameSize());
     d->m_painter.setSequence( seq );
@@ -68,20 +68,20 @@ void KPixmapSequenceWidget::setSequence( const KPixmapSequence& seq )
 }
 
 
-void KPixmapSequenceWidget::setInterval( int msecs )
+void GvPixmapSequenceWidget::setInterval( int msecs )
 {
     d->m_painter.setInterval( msecs );
 }
 
 
-void KPixmapSequenceWidget::showEvent( QShowEvent* event )
+void GvPixmapSequenceWidget::showEvent( QShowEvent* event )
 {
     d->m_painter.start();
     QWidget::showEvent( event );
 }
 
 
-void KPixmapSequenceWidget::hideEvent( QHideEvent* event )
+void GvPixmapSequenceWidget::hideEvent( QHideEvent* event )
 {
     d->m_painter.stop();
     QWidget::hideEvent( event );

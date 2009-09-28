@@ -29,40 +29,40 @@ class QPixmap;
 class QSize;
 
 /**
- * \class KPixmapSequence kpixmapsequence.h KPixmapSequence
+ * \class GvPixmapSequence kpixmapsequence.h GvPixmapSequence
  *
  * \brief Loads and gives access to the frames of a typical multi-row pixmap
  * as often used for spinners.
  *
- * KPixmapSequence is implicitly shared. Copying is fast.
+ * GvPixmapSequence is implicitly shared. Copying is fast.
  *
  * Once typically uses the static methods loadFromPath and loadFromPixmap
- * to create an instance of KPixmapSequence.
+ * to create an instance of GvPixmapSequence.
  *
  * \author Aurélien Gâteau <agateau@kde.org><br/>Sebastian Trueg <trueg@kde.org>
  */
-class GWENVIEWLIB_EXPORT KPixmapSequence
+class GWENVIEWLIB_EXPORT GvPixmapSequence
 {
 public:
     /**
      * Create an empty sequence
      */
-	KPixmapSequence();
+	GvPixmapSequence();
 
     /**
      * Copy constructor
      */
-	KPixmapSequence( const KPixmapSequence& other );
+	GvPixmapSequence( const GvPixmapSequence& other );
 
     /**
      * Destructor
      */
-	~KPixmapSequence();
+	~GvPixmapSequence();
 
     /**
      * Create a copy of \p other. The data is implicitly shared.
      */
-    KPixmapSequence& operator=( const KPixmapSequence& other );
+    GvPixmapSequence& operator=( const GvPixmapSequence& other );
 
     /**
      * \return \p true if a sequence was loaded successfully.
@@ -113,8 +113,8 @@ public:
      */
 	QPixmap frameAt( int index ) const;
 
-    static KPixmapSequence loadFromPath( const QString& path );
-    static KPixmapSequence loadFromPixmap( const QPixmap& path );
+    static GvPixmapSequence loadFromPath( const QString& path );
+    static GvPixmapSequence loadFromPixmap( const QPixmap& path );
 
 private:
     class Private;

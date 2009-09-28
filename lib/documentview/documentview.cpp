@@ -73,7 +73,7 @@ struct DocumentViewPrivate {
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 
-	KPixmapSequenceWidget* mLoadingIndicator;
+	GvPixmapSequenceWidget* mLoadingIndicator;
 
 	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
@@ -162,9 +162,9 @@ struct DocumentViewPrivate {
 
 	void setupLoadingIndicator() {
 		const QString path = KIconLoader::global()->iconPath("process-working", -22);
-		KPixmapSequence sequence;
+		GvPixmapSequence sequence;
 		sequence.load(path);
-		mLoadingIndicator = new KPixmapSequenceWidget;
+		mLoadingIndicator = new GvPixmapSequenceWidget;
 		mLoadingIndicator->setSequence(sequence);
 		//mLoadingIndicator->setFixedSize(mLoadingPixmapSequence.frameSize());
 		mLoadingIndicator->setInterval(100);

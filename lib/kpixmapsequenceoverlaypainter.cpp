@@ -32,13 +32,13 @@
 #include <KDebug>
 
 
-class KPixmapSequenceOverlayPainter::Private
+class GvPixmapSequenceOverlayPainter::Private
 {
 public:
     void _k_timeout();
     void paintFrame();
 
-    KPixmapSequence m_sequence;
+    GvPixmapSequence m_sequence;
     QPointer<QWidget> m_widget;
     Qt::Alignment m_alignment;
     QPoint m_offset;
@@ -46,11 +46,11 @@ public:
     QTimer m_timer;
     int m_counter;
 
-    KPixmapSequenceOverlayPainter* q;
+    GvPixmapSequenceOverlayPainter* q;
 };
 
 
-void KPixmapSequenceOverlayPainter::Private::_k_timeout()
+void GvPixmapSequenceOverlayPainter::Private::_k_timeout()
 {
     ++m_counter;
     m_counter %= m_sequence.frameCount();
@@ -58,7 +58,7 @@ void KPixmapSequenceOverlayPainter::Private::_k_timeout()
 }
 
 
-void KPixmapSequenceOverlayPainter::Private::paintFrame()
+void GvPixmapSequenceOverlayPainter::Private::paintFrame()
 {
     QPainter p( m_widget );
 
@@ -79,7 +79,7 @@ void KPixmapSequenceOverlayPainter::Private::paintFrame()
 }
 
 
-KPixmapSequenceOverlayPainter::KPixmapSequenceOverlayPainter( QObject* parent )
+GvPixmapSequenceOverlayPainter::GvPixmapSequenceOverlayPainter( QObject* parent )
     : QObject( parent ),
       d( new Private )
 {
@@ -92,52 +92,52 @@ KPixmapSequenceOverlayPainter::KPixmapSequenceOverlayPainter( QObject* parent )
 }
 
 
-KPixmapSequenceOverlayPainter::~KPixmapSequenceOverlayPainter()
+GvPixmapSequenceOverlayPainter::~GvPixmapSequenceOverlayPainter()
 {
     stop();
     delete d;
 }
 
 
-KPixmapSequence KPixmapSequenceOverlayPainter::sequence() const
+GvPixmapSequence GvPixmapSequenceOverlayPainter::sequence() const
 {
     return d->m_sequence;
 }
 
 
-int KPixmapSequenceOverlayPainter::interval() const
+int GvPixmapSequenceOverlayPainter::interval() const
 {
     return d->m_timer.interval();
 }
 
 
-void KPixmapSequenceOverlayPainter::setSequence( const KPixmapSequence& seq )
+void GvPixmapSequenceOverlayPainter::setSequence( const GvPixmapSequence& seq )
 {
     d->m_sequence = seq;
 }
 
 
-void KPixmapSequenceOverlayPainter::setInterval( int msecs )
+void GvPixmapSequenceOverlayPainter::setInterval( int msecs )
 {
     d->m_timer.setInterval( msecs );
 }
 
 
-void KPixmapSequenceOverlayPainter::setWidget( QWidget* w )
+void GvPixmapSequenceOverlayPainter::setWidget( QWidget* w )
 {
     stop();
     d->m_widget = w;
 }
 
 
-void KPixmapSequenceOverlayPainter::setPosition( Qt::Alignment align, const QPoint& offset )
+void GvPixmapSequenceOverlayPainter::setPosition( Qt::Alignment align, const QPoint& offset )
 {
     d->m_alignment = align;
     d->m_offset = offset;
 }
 
 
-void KPixmapSequenceOverlayPainter::start()
+void GvPixmapSequenceOverlayPainter::start()
 {
     if ( d->m_widget ) {
         stop();
@@ -150,7 +150,7 @@ void KPixmapSequenceOverlayPainter::start()
 }
 
 
-void KPixmapSequenceOverlayPainter::stop()
+void GvPixmapSequenceOverlayPainter::stop()
 {
     d->m_timer.stop();
     if ( d->m_widget ) {
@@ -160,7 +160,7 @@ void KPixmapSequenceOverlayPainter::stop()
 }
 
 
-bool KPixmapSequenceOverlayPainter::eventFilter( QObject* obj, QEvent* event )
+bool GvPixmapSequenceOverlayPainter::eventFilter( QObject* obj, QEvent* event )
 {
     if ( obj == d->m_widget && event->type() == QEvent::Paint ) {
         // make sure we paint after everyone else including other event filters
