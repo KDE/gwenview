@@ -195,6 +195,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setDragEnabled(true);
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);
+	setUniformItemSizes(true);
 
 	viewport()->setMouseTracking(true);
 	// Set this attribute, otherwise the item delegate won't get the
