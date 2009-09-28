@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/deletejob.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <kio/netaccess.h>
 #include <klocale.h>
 
 // Local
@@ -217,6 +218,31 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
 	} else if (action == linkAction) {
 		KIO::link(urlList, destUrl);
 	}
+}
+
+
+void rename(const KUrl& oldUrl, QWidget* parent) {
+	QString name = KInputDialog::getText(
+		i18n("Rename") /* caption */,
+		i18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
+		oldUrl.fileName() /* value */,
+		0 /* ok */,
+		parent
+		);
+	if (name.isEmpty() || name == oldUrl.fileName()) {
+		return;
+	}
+
+	KUrl newUrl = oldUrl;
+	newUrl.setFileName(name);
+	KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
+	QWidget* authWindow = parent ? parent->window() : 0;
+	if (!KIO::NetAccess::synchronousRun(job, authWindow)) {
+		job->ui()->setWindow(authWindow);
+		job->ui()->showErrorMessage();
+		return;
+	}
+	//DocumentFactory::instance()->updateAfterMoved(oldUrl, newUrl);
 }
 
 

@@ -104,6 +104,7 @@ struct FileOpsContextManagerItemPrivate {
 	KAction* mCopyToAction;
 	KAction* mMoveToAction;
 	KAction* mLinkToAction;
+	KAction* mRenameAction;
 	KAction* mTrashAction;
 	KAction* mDelAction;
 	KAction* mShowPropertiesAction;
@@ -212,6 +213,10 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	d->mLinkToAction->setText(i18nc("Verb: create link to the file where user wants", "Link To..."));
 	d->mLinkToAction->setShortcut(Qt::Key_F9);
 
+	d->mRenameAction = file->addAction("file_rename",this,SLOT(rename()));
+	d->mRenameAction->setText(i18nc("Verb", "Rename..."));
+	d->mRenameAction->setShortcut(Qt::Key_F2);
+
 	d->mTrashAction = file->addAction("file_trash",this,SLOT(trash()));
 	d->mTrashAction->setText(i18nc("Verb", "Trash"));
 	d->mTrashAction->setIcon(KIcon("user-trash"));
@@ -253,7 +258,8 @@ FileOpsContextManagerItem::~FileOpsContextManagerItem() {
 
 
 void FileOpsContextManagerItem::updateActions() {
-	bool selectionNotEmpty = contextManager()->selection().count() > 0;
+	const int count = contextManager()->selection().count();
+	const bool selectionNotEmpty = count > 0;
 	const bool urlIsValid = contextManager()->currentUrl().isValid();
 	const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
@@ -265,6 +271,7 @@ void FileOpsContextManagerItem::updateActions() {
 	d->mTrashAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 	d->mOpenWithAction->setEnabled(selectionNotEmpty);
+	d->mRenameAction->setEnabled(count == 1);
 
 	d->mCreateFolderAction->setEnabled(dirUrlIsValid);
 	d->mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
@@ -292,14 +299,15 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 	}
 
 	d->mGroup->clear();
-	addIfEnabled(d->mGroup, d->mCreateFolderAction);
+	addIfEnabled(d->mGroup, d->mRenameAction);
+	addIfEnabled(d->mGroup, d->mTrashAction);
+	addIfEnabled(d->mGroup, d->mDelAction);
 	addIfEnabled(d->mGroup, d->mCopyToAction);
 	addIfEnabled(d->mGroup, d->mMoveToAction);
 	addIfEnabled(d->mGroup, d->mLinkToAction);
-	addIfEnabled(d->mGroup, d->mTrashAction);
-	addIfEnabled(d->mGroup, d->mDelAction);
-	addIfEnabled(d->mGroup, d->mOpenWithAction);
 	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
+	addIfEnabled(d->mGroup, d->mCreateFolderAction);
+	addIfEnabled(d->mGroup, d->mOpenWithAction);
 }
 
 
@@ -355,6 +363,11 @@ void FileOpsContextManagerItem::moveTo() {
 
 void FileOpsContextManagerItem::linkTo() {
 	FileOperations::linkTo(d->urlList(), d->mGroup);
+}
+
+
+void FileOpsContextManagerItem::rename() {
+	FileOperations::rename(d->urlList().first(), d->mGroup);
 }
 
 

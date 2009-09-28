@@ -50,6 +50,7 @@ private Q_SLOTS:
 	void cut();
 	void copy();
 	void paste();
+	void rename();
 	void copyTo();
 	void moveTo();
 	void linkTo();
