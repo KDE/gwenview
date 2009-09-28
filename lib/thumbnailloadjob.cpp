@@ -295,6 +295,21 @@ void ThumbnailLoadJob::deleteImageThumbnail(const KUrl& url) {
 }
 
 
+static void moveThumbnailHelper(const QString& oldUri, const QString& newUri, ThumbnailGroup::Enum group) {
+	QString oldPath = generateThumbnailPath(oldUri, group);
+	QString newPath = generateThumbnailPath(newUri, group);
+	QFile::remove(newPath);
+	QFile::rename(oldPath, newPath);
+}
+
+void ThumbnailLoadJob::moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl) {
+	QString oldUri = generateOriginalUri(oldUrl);
+	QString newUri = generateOriginalUri(newUrl);
+	moveThumbnailHelper(oldUri, newUri, ThumbnailGroup::Normal);
+	moveThumbnailHelper(oldUri, newUri, ThumbnailGroup::Large);
+}
+
+
 //------------------------------------------------------------------------
 //
 // ThumbnailLoadJob implementation

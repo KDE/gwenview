@@ -140,6 +140,11 @@ public:
 	 */
 	static void deleteImageThumbnail(const KUrl& url);
 
+	/**
+	 * Move a thumbnail to match a file move
+	 */
+	static void moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl);
+
 Q_SIGNALS:
 	/**
 	 * Emitted when the thumbnail for the @p item has been loaded
