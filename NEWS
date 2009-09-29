@@ -6,6 +6,7 @@
   (bug #199946).
 - Correctly enable or disable next and previous buttons when starting Gwenview
   with an image as parameter (bug #205468).
+- Do not crash if started with a comma as parameter (bug #197563).
 
 # 2.3.1
 ## Fixes
