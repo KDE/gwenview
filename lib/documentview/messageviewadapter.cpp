@@ -34,6 +34,7 @@ namespace Gwenview {
 
 
 struct MessageViewAdapterPrivate : Ui_MessageView {
+	Document::Ptr mDocument;
 };
 
 
@@ -94,11 +95,12 @@ void MessageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
 
 
 Document::Ptr MessageViewAdapter::document() const {
-	return Document::Ptr();
+	return d->mDocument;
 }
 
 
-void MessageViewAdapter::setDocument(Document::Ptr) {
+void MessageViewAdapter::setDocument(Document::Ptr doc) {
+	d->mDocument = doc;
 }
 
 

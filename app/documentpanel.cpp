@@ -489,6 +489,9 @@ void DocumentPanel::reload() {
 		}
 	}
 	doc->reload();
+	// Call openUrl again because DocumentView may need to switch to a new
+	// adapter (for example because document was broken and it is not anymore)
+	d->mDocumentView->openUrl(doc->url());
 }
 
 
