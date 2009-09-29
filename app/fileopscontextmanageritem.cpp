@@ -198,6 +198,14 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KA
 	KActionCategory* edit = new KActionCategory(i18nc("@title actions category","Edit"), actionCollection);
 
 	d->mCutAction = edit->addAction(KStandardAction::Cut, this, SLOT(cut()));
+
+	// Copied from Dolphin:
+    // need to remove shift+del from cut action, else the shortcut for deletejob
+    // doesn't work
+	KShortcut cutShortcut = d->mCutAction->shortcut();
+	cutShortcut.remove(Qt::SHIFT + Qt::Key_Delete, KShortcut::KeepEmpty);
+	d->mCutAction->setShortcut(cutShortcut);
+
 	d->mCopyAction = edit->addAction(KStandardAction::Copy, this, SLOT(copy()));
 	d->mPasteAction = edit->addAction(KStandardAction::Paste, this, SLOT(paste()));
 
