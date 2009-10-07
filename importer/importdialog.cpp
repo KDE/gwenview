@@ -106,6 +106,8 @@ public:
 ImportDialog::ImportDialog()
 : d(new ImportDialogPrivate) {
 	d->mImporter = new Importer(this);
+	connect(d->mImporter, SIGNAL(error(const QString&)),
+		SLOT(showImportError(const QString&)));
 	d->mThumbnailPage = new ThumbnailPage;
 
 	KUrl url = ImporterConfig::destinationUrl();
@@ -167,6 +169,12 @@ void ImportDialog::startImport() {
 void ImportDialog::slotImportFinished() {
 	d->deleteImportedUrls();
 	d->showWhatNext();
+}
+
+
+void ImportDialog::showImportError(const QString& message) {
+	KMessageBox::sorry(this, message);
+	d->mCentralWidget->setCurrentWidget(d->mThumbnailPage);
 }
 
 

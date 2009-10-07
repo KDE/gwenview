@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdatetime.h>
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <klocale.h>
 #include <ktempdir.h>
 #include <kurl.h>
 #include <kio/copyjob.h>
@@ -57,18 +58,26 @@ struct ImporterPrivate {
 	int mProgress;
 	int mJobProgress;
 
+	void emitError(const QString& message) {
+		QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
+	}
+
 	bool createImportDir(const KUrl url) {
-		if (!url.isLocalFile()) {
-			kWarning() << "FIXME: Support remote urls";
-			return false;
-		}
+		Q_ASSERT(url.isLocalFile());
+		// FIXME: Support remote urls
+
 		if (!KStandardDirs::makeDir(url.toLocalFile())) {
-			kWarning() << "FIXME: Handle destination dir creation failure";
+			emitError(i18n("Could not create destination folder."));
 			return false;
 		}
 		mDestImportDir.reset(new KTempDir(url.toLocalFile() + "/.gwenview_importer-"));
 		mDestImportDir->setAutoRemove(false);
-		return mDestImportDir->status() == 0;
+		if (mDestImportDir->status() != 0) {
+			const QString message = QString::fromLocal8Bit(::strerror(mDestImportDir->status()));
+			emitError(i18n("Could not create temporary upload folder:\n%1", message));
+			return false;
+		}
+		return true;
 	}
 
 	void importNext() {
@@ -131,7 +140,7 @@ void Importer::start(const KUrl::List& list, const KUrl& destination) {
 	maximumChanged(d->mUrlList.count() * 100);
 
 	if (!d->createImportDir(destination)) {
-		kWarning() << "FIXME: Handle failure in import dir creation";
+		kWarning() << "Could not create import dir";
 		return;
 	}
 	d->importNext();

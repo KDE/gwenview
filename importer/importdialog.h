@@ -47,6 +47,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void startImport();
 	void slotImportFinished();
+	void showImportError(const QString&);
 
 private:
 	ImportDialogPrivate* const d;

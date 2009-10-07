@@ -53,6 +53,12 @@ Q_SIGNALS:
 
 	void maximumChanged(int);
 
+	/**
+	 * An error has occured and caused the whole process to stop without
+	 * importing anything
+	 */
+	void error(const QString& message);
+
 private Q_SLOTS:
 	void slotResult(KJob*);
 	void slotPercent(KJob*, unsigned long);
