@@ -9,6 +9,7 @@ Exec=gwenview_importer %f
 Icon=gwenview
 Name=Download Photos with Gwenview
 Name[bg]=Изтегляне на снимки с Gwenview
+Name[de]=Fotos mit Gwenview herunterladen
 Name[es]=Descargar fotos con Gwenview
 Name[et]=Fotode allalaadimine Gwenview'ga
 Name[is]=Hala niður myndum með Gwenview
