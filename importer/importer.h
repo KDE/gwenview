@@ -55,6 +55,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotResult(KJob*);
+	void slotPercent(KJob*, unsigned long);
+	void emitProgressChanged();
 
 private:
 	friend class ImporterPrivate;

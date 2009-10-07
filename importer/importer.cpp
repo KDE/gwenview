@@ -55,6 +55,7 @@ struct ImporterPrivate {
 	std::auto_ptr<KTempDir> mDestImportDir;
 	bool mAtLeastOneRenameFailure;
 	int mProgress;
+	int mJobProgress;
 
 	bool createImportDir(const KUrl url) {
 		if (!url.isLocalFile()) {
@@ -84,6 +85,8 @@ struct ImporterPrivate {
 		}
 		QObject::connect(job, SIGNAL(result(KJob*)),
 			q, SLOT(slotResult(KJob*)));
+		QObject::connect(job, SIGNAL(percent(KJob*, unsigned long)),
+			q, SLOT(slotPercent(KJob*, unsigned long)));
 	}
 
 	void renameImportedUrl(const KUrl& src) {
@@ -120,11 +123,12 @@ Importer::~Importer() {
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {
 	d->mProgress = 0;
+	d->mJobProgress = 0;
 	d->mUrlList = list;
 	d->mAtLeastOneRenameFailure = false;
 
-	progressChanged(0);
-	maximumChanged(d->mUrlList.count());
+	emitProgressChanged();
+	maximumChanged(d->mUrlList.count() * 100);
 
 	if (!d->createImportDir(destination)) {
 		kWarning() << "FIXME: Handle failure in import dir creation";
@@ -157,7 +161,17 @@ void Importer::finalizeImport() {
 
 void Importer::advance() {
 	++d->mProgress;
-	progressChanged(d->mProgress);
+	d->mJobProgress = 0;
+	emitProgressChanged();
+}
+
+void Importer::slotPercent(KJob*, unsigned long percent) {
+	d->mJobProgress = percent;
+	emitProgressChanged();
+}
+
+void Importer::emitProgressChanged() {
+	progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
 void Importer::deleteImportedUrls() {
