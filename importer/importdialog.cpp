@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kio/deletejob.h>
+#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <krun.h>
@@ -47,6 +49,7 @@ namespace Gwenview {
 
 class ImportDialogPrivate {
 public:
+	ImportDialog* q;
 	QStackedWidget* mCentralWidget;
 	ThumbnailPage* mThumbnailPage;
 	ProgressPage* mProgressPage;
@@ -54,15 +57,15 @@ public:
 	Importer* mImporter;
 
 	void deleteImportedUrls() {
-		int count = mImporter->importedUrlCount();
-		if (count == 0) {
+		KUrl::List urls = mImporter->importedUrlList();
+		if (urls.count() == 0) {
 			return;
 		}
 		int answer = KMessageBox::questionYesNo(mCentralWidget,
 			i18np(
 				"One document has been successfully imported.\nDelete it from the device?",
 				"%1 documents has been successfully imported.\nDelete them from the device?",
-				count),
+				urls.count()),
 			QString(),
 			KStandardGuiItem::del(),
 			KGuiItem(i18n("Keep"))
@@ -70,7 +73,25 @@ public:
 		if (answer != KMessageBox::Yes) {
 			return;
 		}
-		mImporter->deleteImportedUrls();
+		while (true) {
+			KIO::Job* job = KIO::del(urls);
+			if (KIO::NetAccess::synchronousRun(job, q)) {
+				break;
+			}
+			// Deleting failed
+			int answer = KMessageBox::warningYesNo(mCentralWidget,
+				i18np("Failed to delete the document:\n%2",
+					"Failed to delete documents:\n%2",
+					urls.count(), job->errorString()),
+				QString(),
+				KGuiItem(i18n("Retry")),
+				KGuiItem(i18n("Ignore"))
+				);
+			if (answer != KMessageBox::Yes) {
+				// Ignore
+				break;
+			}
+		}
 	}
 
 	void startGwenview() {
@@ -105,6 +126,7 @@ public:
 
 ImportDialog::ImportDialog()
 : d(new ImportDialogPrivate) {
+	d->q = this;
 	d->mImporter = new Importer(this);
 	connect(d->mImporter, SIGNAL(error(const QString&)),
 		SLOT(showImportError(const QString&)));

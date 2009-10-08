@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <ktempdir.h>
 #include <kurl.h>
 #include <kio/copyjob.h>
-#include <kio/deletejob.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
@@ -183,15 +182,8 @@ void Importer::emitProgressChanged() {
 	progressChanged(d->mProgress * 100 + d->mJobProgress);
 }
 
-void Importer::deleteImportedUrls() {
-	KIO::Job* job = KIO::del(d->mImportedUrlList);
-	if (!KIO::NetAccess::synchronousRun(job, d->mAuthWindow)) {
-		kWarning() << "FIXME: Handle deleteImportedUrls failures";
-	}
-}
-
-int Importer::importedUrlCount() const {
-	return d->mImportedUrlList.count();
+KUrl::List Importer::importedUrlList() const {
+	return d->mImportedUrlList;
 }
 
 } // namespace
