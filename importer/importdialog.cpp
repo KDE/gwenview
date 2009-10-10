@@ -64,7 +64,7 @@ public:
 		int answer = KMessageBox::questionYesNo(mCentralWidget,
 			i18np(
 				"One document has been successfully imported.\nDelete it from the device?",
-				"%1 documents has been successfully imported.\nDelete them from the device?",
+				"%1 documents have been successfully imported.\nDelete them from the device?",
 				urls.count()),
 			QString(),
 			KStandardGuiItem::del(),
