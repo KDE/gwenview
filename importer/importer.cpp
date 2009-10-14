@@ -45,6 +45,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class Renamer : public AbstractRenamer {
+public:
+	QString operator()(const KUrl& src) {
+		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
+		KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
+		QFileInfo info(src.fileName());
+		return dateTime.toString("%Y-%m-%d_%H-%M-%S") + '.' + info.completeSuffix();
+	}
+};
 
 struct ImporterPrivate {
 	Importer* q;
@@ -52,6 +61,7 @@ struct ImporterPrivate {
 	KUrl mCurrentUrl;
 	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
+	AbstractRenamer* mRenamer;
 	std::auto_ptr<KTempDir> mDestImportDir;
 	bool mAtLeastOneRenameFailure;
 	int mProgress;
@@ -98,13 +108,9 @@ struct ImporterPrivate {
 	}
 
 	void renameImportedUrl(const KUrl& src) {
-		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
-		KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
 		KUrl dst = src;
 		dst.cd("..");
-		QFileInfo info(src.fileName());
-		dst.setFileName(dateTime.toString("%Y-%m-%d_%H-%M-%S")
-			+ '.' + info.completeSuffix());
+		dst.setFileName((*mRenamer)(src));
 
 		KIO::Job* job = KIO::rename(src, dst, KIO::HideProgressInfo);
 		if (!KIO::NetAccess::synchronousRun(job, mAuthWindow)) {
@@ -127,6 +133,11 @@ Importer::Importer(QWidget* parent)
 
 Importer::~Importer() {
 	delete d;
+}
+
+void Importer::setRenamer(AbstractRenamer* renamer) {
+	Q_ASSERT(renamer);
+	d->mRenamer = renamer;
 }
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {

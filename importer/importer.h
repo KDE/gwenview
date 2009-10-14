@@ -33,12 +33,21 @@ class KJob;
 
 namespace Gwenview {
 
+class AbstractRenamer {
+public:
+	virtual ~AbstractRenamer() {}
+
+	virtual QString operator()(const KUrl&) = 0;
+};
+
 class ImporterPrivate;
 class Importer : public QObject {
 	Q_OBJECT
 public:
 	Importer(QWidget* authWindow);
 	~Importer();
+
+	void setRenamer(AbstractRenamer* renamer);
 
 	void start(const KUrl::List& list, const KUrl& destUrl);
 

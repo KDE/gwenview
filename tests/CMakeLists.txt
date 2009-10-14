@@ -99,6 +99,16 @@ kde4_add_unit_test(urlutilstest ${urlutilstest_SRCS})
 
 target_link_libraries(urlutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
+# ImporterTest
+set(importertest_SRCS
+	importertest.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../importer/importer.cpp
+	)
+
+kde4_add_unit_test(importertest ${importertest_SRCS})
+
+target_link_libraries(importertest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
+
 # SlideContainer
 set(slidecontainertest_SRCS
 	slidecontainertest.cpp
