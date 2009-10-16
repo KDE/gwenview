@@ -60,9 +60,10 @@ void ImporterTest::testContentsAreIdentical() {
 	QVERIFY(FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[0]));
 
 	KUrl url1 = mDocumentList[0];
-	KUrl url2 = urlForTestFile("foo");
+	KUrl url2 = urlForTestOutputFile("foo");
 
 	// Test on a copy of a file
+	QFile::remove(url2.toLocalFile());
 	QFile::copy(url1.toLocalFile(), url2.toLocalFile());
 
 	QVERIFY(FileUtils::contentsAreIdentical(url1, url2));
