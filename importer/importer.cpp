@@ -61,7 +61,7 @@ struct ImporterPrivate {
 	KUrl mCurrentUrl;
 	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
-	AbstractRenamer* mRenamer;
+	std::auto_ptr<AbstractRenamer> mRenamer;
 	std::auto_ptr<KTempDir> mDestImportDir;
 	bool mAtLeastOneRenameFailure;
 	int mProgress;
@@ -129,6 +129,7 @@ Importer::Importer(QWidget* parent)
 , d(new ImporterPrivate) {
 	d->q = this;
 	d->mAuthWindow = parent;
+	d->mRenamer.reset(new Renamer);
 }
 
 Importer::~Importer() {
@@ -137,7 +138,7 @@ Importer::~Importer() {
 
 void Importer::setRenamer(AbstractRenamer* renamer) {
 	Q_ASSERT(renamer);
-	d->mRenamer = renamer;
+	d->mRenamer.reset(renamer);
 }
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {

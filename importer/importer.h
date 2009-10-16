@@ -47,6 +47,10 @@ public:
 	Importer(QWidget* authWindow);
 	~Importer();
 
+	/**
+	 * Defines the renamer used to create the document final name
+	 * Takes ownership of the renamer
+	 */
 	void setRenamer(AbstractRenamer* renamer);
 
 	void start(const KUrl::List& list, const KUrl& destUrl);
