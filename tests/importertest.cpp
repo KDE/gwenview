@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <qtest_kde.h>
 
 // Local
+#include "../importer/fileutils.h"
 #include "../importer/importer.h"
 #include "testutils.h"
 
@@ -54,18 +55,37 @@ void ImporterTest::init() {
 	mTempDir.reset(new KTempDir());
 }
 
-// FIXME
-#include <QProcess>
-static bool sameUrls(const KUrl& url1, const KUrl& url2) {
-	return QProcess::execute("cmp", QStringList() << url1.path() << url2.path()) == 0;
+void ImporterTest::testContentsAreIdentical() {
+	QVERIFY(!FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[1]));
+	QVERIFY(FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[0]));
+
+	KUrl url1 = mDocumentList[0];
+	KUrl url2 = urlForTestFile("foo");
+
+	// Test on a copy of a file
+	QFile::copy(url1.toLocalFile(), url2.toLocalFile());
+
+	QVERIFY(FileUtils::contentsAreIdentical(url1, url2));
+
+	// Alter one byte of the copy and test again
+	QFile file(url2.toLocalFile());
+	QVERIFY(file.open(QIODevice::ReadOnly));
+	QByteArray data = file.readAll();
+	file.close();
+	data[data.size() / 2] = 255 - data[data.size() / 2];
+
+	file.open(QIODevice::WriteOnly);
+	file.write(data);
+	file.close();
+
+	QVERIFY(!FileUtils::contentsAreIdentical(url1, url2));
 }
 
 void ImporterTest::testSuccessfulImport() {
 	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
 
 	Importer importer(0);
-	VoidRenamer renamer;
-	importer.setRenamer(&renamer);
+	importer.setRenamer(new VoidRenamer);
 	QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
 	QSignalSpy errorSpy(&importer, SIGNAL(error(const QString&)));
 
@@ -86,7 +106,7 @@ void ImporterTest::testSuccessfulImport() {
 	Q_FOREACH(const KUrl& src, list) {
 		KUrl dst = destUrl;
 		dst.addPath(src.fileName());
-		QVERIFY(sameUrls(src, dst));
+		QVERIFY(FileUtils::contentsAreIdentical(src, dst));
 	}
 }
 

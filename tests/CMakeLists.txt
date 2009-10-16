@@ -103,7 +103,9 @@ target_link_libraries(urlutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBR
 set(importertest_SRCS
 	importertest.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../importer/importer.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../importer/fileutils.cpp
 	)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../importer)
 
 kde4_add_unit_test(importertest ${importertest_SRCS})
 

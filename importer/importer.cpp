@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <memory>
 
 // Local
+#include <fileutils.h>
 #include <lib/timeutils.h>
 
 namespace Gwenview {
@@ -63,7 +64,7 @@ struct ImporterPrivate {
 	QWidget* mAuthWindow;
 	std::auto_ptr<AbstractRenamer> mRenamer;
 	std::auto_ptr<KTempDir> mDestImportDir;
-	bool mAtLeastOneRenameFailure;
+	QMap<KUrl, FileUtils::RenameResult> mRenameWarnings;
 	int mProgress;
 	int mJobProgress;
 
@@ -112,12 +113,13 @@ struct ImporterPrivate {
 		dst.cd("..");
 		dst.setFileName((*mRenamer)(src));
 
-		KIO::Job* job = KIO::rename(src, dst, KIO::HideProgressInfo);
-		if (!KIO::NetAccess::synchronousRun(job, mAuthWindow)) {
-			kWarning() << "FIXME: Renaming of" << src << "to" << dst << "failed";
-			mAtLeastOneRenameFailure = true;
+		FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
+		if (result != FileUtils::RenamedOK) {
+			mRenameWarnings.insert(mCurrentUrl, result);
 		}
-		mImportedUrlList << mCurrentUrl;
+		if (result != FileUtils::RenameFailed) {
+			mImportedUrlList << mCurrentUrl;
+		}
 		q->advance();
 		importNext();
 	}
@@ -145,7 +147,8 @@ void Importer::start(const KUrl::List& list, const KUrl& destination) {
 	d->mProgress = 0;
 	d->mJobProgress = 0;
 	d->mUrlList = list;
-	d->mAtLeastOneRenameFailure = false;
+	d->mImportedUrlList.clear();
+	d->mRenameWarnings.clear();
 
 	emitProgressChanged();
 	maximumChanged(d->mUrlList.count() * 100);
@@ -171,8 +174,8 @@ void Importer::slotResult(KJob* _job) {
 }
 
 void Importer::finalizeImport() {
-	if (d->mAtLeastOneRenameFailure) {
-		kWarning() << "FIXME: Handle rename failures";
+	if (!d->mRenameWarnings.isEmpty()) {
+		kWarning() << "FIXME: Handle rename failures:" << d->mRenameWarnings;
 	} else {
 		d->mDestImportDir->unlink();
 	}

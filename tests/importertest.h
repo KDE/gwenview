@@ -35,6 +35,7 @@ class ImporterTest : public QObject {
 
 private Q_SLOTS:
 	void init();
+	void testContentsAreIdentical();
 	void testSuccessfulImport();
 	void testReadOnlyDestination();
 
