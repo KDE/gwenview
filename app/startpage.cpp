@@ -83,9 +83,6 @@ struct StartPagePrivate : public Ui_StartPage{
 			mTagView->show();
 			mTagLabel->hide();
 		} else {
-			mTagLabel->setText(i18n(
-				"Sorry, browsing by tag is not available. Make sure Nepomuk is properly installed on your computer."
-				));
 			mTagView->hide();
 			mTagLabel->show();
 		}
