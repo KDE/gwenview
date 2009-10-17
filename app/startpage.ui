@@ -138,7 +138,7 @@
        <item>
         <widget class="QLabel" name="mTagLabel">
          <property name="text">
-          <string>Sorry, browsing by tags is not available. Make sure Nepomuk is properly installed on your computer.</string>
+          <string>Browsing by tags is not available. Make sure Nepomuk is properly installed on your computer.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
