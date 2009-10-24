@@ -184,6 +184,10 @@ void ImportDialog::startImport() {
 	ImporterConfig::self()->writeConfig();
 
 	d->mCentralWidget->setCurrentWidget(d->mProgressPage);
+	d->mImporter->setAutoRenameFormat(
+		ImporterConfig::autoRename()
+		? ImporterConfig::autoRenameFormat()
+		: QString());
 	d->mImporter->start(d->mThumbnailPage->urlList(), url);
 }
 

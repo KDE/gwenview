@@ -33,13 +33,6 @@ class KJob;
 
 namespace Gwenview {
 
-class AbstractRenamer {
-public:
-	virtual ~AbstractRenamer() {}
-
-	virtual QString operator()(const KUrl&) = 0;
-};
-
 class ImporterPrivate;
 class Importer : public QObject {
 	Q_OBJECT
@@ -48,10 +41,10 @@ public:
 	~Importer();
 
 	/**
-	 * Defines the renamer used to create the document final name
-	 * Takes ownership of the renamer
+	 * Defines the auto-rename format applied to imported documents
+	 * Set to QString() to reset
 	 */
-	void setRenamer(AbstractRenamer* renamer);
+	void setAutoRenameFormat(const QString&);
 
 	void start(const KUrl::List& list, const KUrl& destUrl);
 

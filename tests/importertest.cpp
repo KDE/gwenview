@@ -38,13 +38,6 @@ QTEST_KDEMAIN(ImporterTest, GUI)
 
 using namespace Gwenview;
 
-class VoidRenamer : public AbstractRenamer {
-public:
-	QString operator()(const KUrl& src) {
-		return src.fileName();
-	}
-};
-
 void ImporterTest::init() {
 	mDocumentList = KUrl::List()
 		<< urlForTestFile("import/pict0001.jpg")
@@ -86,7 +79,6 @@ void ImporterTest::testSuccessfulImport() {
 	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
 
 	Importer importer(0);
-	importer.setRenamer(new VoidRenamer);
 	QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
 	QSignalSpy errorSpy(&importer, SIGNAL(error(const QString&)));
 
@@ -107,6 +99,35 @@ void ImporterTest::testSuccessfulImport() {
 	Q_FOREACH(const KUrl& src, list) {
 		KUrl dst = destUrl;
 		dst.addPath(src.fileName());
+		QVERIFY(FileUtils::contentsAreIdentical(src, dst));
+	}
+}
+
+void ImporterTest::testAutoRenameFormat() {
+	QStringList dates = QStringList()
+		<< "1979-02-23_10-20-00"
+		<< "2006-04-01_11-30-15"
+		<< "2009-10-01_21-15-27";
+	QCOMPARE(dates.count(), mDocumentList.count());
+
+	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "foo");
+
+	Importer importer(0);
+	importer.setAutoRenameFormat("%Y-%m-%d_%H-%M-%S");
+	KUrl::List list = mDocumentList;
+
+	QEventLoop loop;
+	connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+	importer.start(list, destUrl);
+	loop.exec();
+
+	QCOMPARE(importer.importedUrlList().count(), list.count());
+	QCOMPARE(importer.importedUrlList(), list);
+
+	for (int pos=0; pos < dates.count(); ++pos) {
+		KUrl src = list[pos];
+		KUrl dst = destUrl;
+		dst.addPath(dates[pos] + ".jpg");
 		QVERIFY(FileUtils::contentsAreIdentical(src, dst));
 	}
 }

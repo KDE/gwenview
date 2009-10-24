@@ -46,23 +46,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-class Renamer : public AbstractRenamer {
-public:
-	QString operator()(const KUrl& src) {
-		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
-		KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-		QFileInfo info(src.fileName());
-		return dateTime.toString("%Y-%m-%d_%H-%M-%S") + '.' + info.completeSuffix();
-	}
-};
-
 struct ImporterPrivate {
 	Importer* q;
 	KUrl::List mUrlList;
 	KUrl mCurrentUrl;
 	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
-	std::auto_ptr<AbstractRenamer> mRenamer;
+	QString mAutoRenameFormat;
 	std::auto_ptr<KTempDir> mDestImportDir;
 	QMap<KUrl, FileUtils::RenameResult> mRenameWarnings;
 	int mProgress;
@@ -111,7 +101,11 @@ struct ImporterPrivate {
 	void renameImportedUrl(const KUrl& src) {
 		KUrl dst = src;
 		dst.cd("..");
-		dst.setFileName((*mRenamer)(src));
+		if (mAutoRenameFormat.isEmpty()) {
+			dst.setFileName(src.fileName());
+		} else {
+			dst.setFileName(applyAutoRename(src));
+		}
 
 		FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
 		if (result != FileUtils::RenamedOK) {
@@ -123,6 +117,13 @@ struct ImporterPrivate {
 		q->advance();
 		importNext();
 	}
+
+	QString applyAutoRename(const KUrl& src) {
+		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
+		KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
+		QFileInfo info(src.fileName());
+		return dateTime.toString(mAutoRenameFormat) + '.' + info.completeSuffix();
+	}
 };
 
 
@@ -131,16 +132,14 @@ Importer::Importer(QWidget* parent)
 , d(new ImporterPrivate) {
 	d->q = this;
 	d->mAuthWindow = parent;
-	d->mRenamer.reset(new Renamer);
 }
 
 Importer::~Importer() {
 	delete d;
 }
 
-void Importer::setRenamer(AbstractRenamer* renamer) {
-	Q_ASSERT(renamer);
-	d->mRenamer.reset(renamer);
+void Importer::setAutoRenameFormat(const QString& format) {
+	d->mAutoRenameFormat = format;
 }
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {

@@ -37,6 +37,7 @@ private Q_SLOTS:
 	void init();
 	void testContentsAreIdentical();
 	void testSuccessfulImport();
+	void testAutoRenameFormat();
 	void testReadOnlyDestination();
 
 private:

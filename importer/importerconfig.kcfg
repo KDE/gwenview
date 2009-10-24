@@ -8,5 +8,12 @@
 	<group name="General">
 		<entry name="DestinationUrl" type="Url">
 		</entry>
+
+		<entry name="AutoRename" type="Bool">
+			<default>true</default>
+		</entry>
+		<entry name="AutoRenameFormat" type="String">
+			<default>%Y-%m-%d_%H-%M-%S</default>
+		</entry>
 	</group>
 </kcfg>
