@@ -224,8 +224,9 @@ bool Document::save(const KUrl& url, const QByteArray& format) {
 		// Use QueuedConnection to ensure we are (more or less :/) thread-safe.
 		// FIXME: This method should be turned into an asynchronous call to
 		// reduce thread-safe potential issues.
-		QMetaObject::invokeMethod(this, "saved", Qt::QueuedConnection, Q_ARG(KUrl, d->mUrl));
+		QMetaObject::invokeMethod(this, "saved", Qt::QueuedConnection, Q_ARG(KUrl, d->mUrl), Q_ARG(KUrl, url));
 		QMetaObject::invokeMethod(&d->mUndoStack, "setClean", Qt::QueuedConnection);
+		d->mUrl = url;
 	}
 
 	return ok;
@@ -391,7 +392,7 @@ void Document::slotUndoIndexChanged() {
 		// If user just undid all his changes this does not really correspond
 		// to a save, but it's similar enough as far as Document users are
 		// concerned
-		saved(d->mUrl);
+		saved(d->mUrl, d->mUrl);
 	} else {
 		modified(d->mUrl);
 	}

@@ -148,8 +148,8 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 	Document* doc = new Document(url);
 	connect(doc, SIGNAL(loaded(const KUrl&)),
 		SLOT(slotLoaded(const KUrl&)) );
-	connect(doc, SIGNAL(saved(const KUrl&)),
-		SLOT(slotSaved(const KUrl&)) );
+	connect(doc, SIGNAL(saved(const KUrl&, const KUrl&)),
+		SLOT(slotSaved(const KUrl&, const KUrl&)) );
 	connect(doc, SIGNAL(modified(const KUrl&)),
 		SLOT(slotModified(const KUrl&)) );
 
@@ -194,11 +194,25 @@ void DocumentFactory::slotLoaded(const KUrl& url) {
 }
 
 
-void DocumentFactory::slotSaved(const KUrl& url) {
-	d->mModifiedDocumentList.removeAll(url);
+void DocumentFactory::slotSaved(const KUrl& oldUrl, const KUrl& newUrl) {
+	bool oldIsNew = oldUrl == newUrl;
+	bool oldUrlWasModified = d->mModifiedDocumentList.removeOne(oldUrl);
+	bool newUrlWasModified = false;
+	if (!oldIsNew) {
+		newUrlWasModified = d->mModifiedDocumentList.removeOne(newUrl);
+		DocumentInfo* info = d->mDocumentMap.take(oldUrl);
+		d->mDocumentMap.insert(newUrl, info);
+	}
 	d->garbageCollect(d->mDocumentMap);
-	emit modifiedDocumentListChanged();
-	emit documentChanged(url);
+	if (oldUrlWasModified || newUrlWasModified) {
+		emit modifiedDocumentListChanged();
+	}
+	if (oldUrlWasModified) {
+		emit documentChanged(oldUrl);
+	}
+	if (!oldIsNew) {
+		emit documentChanged(newUrl);
+	}
 }
 
 

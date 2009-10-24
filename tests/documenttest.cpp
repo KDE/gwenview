@@ -317,21 +317,41 @@ void DocumentTest::testMultipleLoads() {
 	QCOMPARE(doc1.data(), doc2.data());
 }
 
-void DocumentTest::testSave() {
+void DocumentTest::testSaveAs() {
 	KUrl url = urlForTestFile("orient6.jpg");
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	DocumentFactory* factory = DocumentFactory::instance();
+	Document::Ptr doc = factory->load(url);
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
+	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
+	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
 	doc->loadFullImage();
 
 	KUrl destUrl = urlForTestOutputFile("result.png");
 	QVERIFY(doc->save(destUrl, "png"));
 	QCOMPARE(doc->format().data(), "png");
+	QCOMPARE(doc->url(), destUrl);
 
 	QVERIFY2(doc->loadingState() == Document::Loaded,
 		"Document is supposed to finish loading before saving"
 		);
 	
+	QTest::qWait(100); // saved() is emitted asynchronously
+	QCOMPARE(savedSpy.count(), 1);
+	QVariantList args = savedSpy.takeFirst();
+	QCOMPARE(args.at(0).value<KUrl>(), url);
+	QCOMPARE(args.at(1).value<KUrl>(), destUrl);
+
 	QImage image("result.png", "png");
 	QCOMPARE(doc->image(), image);
+
+	QVERIFY(!DocumentFactory::instance()->hasUrl(url));
+	QVERIFY(DocumentFactory::instance()->hasUrl(destUrl));
+
+	QCOMPARE(modifiedDocumentListChangedSpy.count(), 0); // No changes were made
+
+	QCOMPARE(documentChangedSpy.count(), 1);
+	args = documentChangedSpy.takeFirst();
+	QCOMPARE(args.at(0).value<KUrl>(), destUrl);
 }
 
 void DocumentTest::testLosslessSave() {
@@ -396,7 +416,8 @@ void DocumentTest::testLosslessRotate() {
 	QCOMPARE(image1, image2);
 }
 
-void DocumentTest::testModify() {
+void DocumentTest::testModifyAndSaveAs() {
+	QVariantList args;
 	class TestOperation : public AbstractImageOperation {
 	public:
 		void redo() {
@@ -405,25 +426,35 @@ void DocumentTest::testModify() {
 			document()->editor()->setImage(image);
 		}
 	};
-	QSignalSpy spy(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()));
-
 	KUrl url = urlForTestFile("orient6.jpg");
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	DocumentFactory* factory = DocumentFactory::instance();
+	Document::Ptr doc = factory->load(url);
+
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
+	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
+	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
+
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
-	QCOMPARE(spy.count(), 0);
+	QCOMPARE(modifiedDocumentListChangedSpy.count(), 0);
 
+	// Modify image
 	QVERIFY(doc->editor());
 	TestOperation* op = new TestOperation;
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
 	QVERIFY(doc->isModified());
-	QCOMPARE(spy.count(), 1);
-	QList<KUrl> lst = DocumentFactory::instance()->modifiedDocumentList();
+	QCOMPARE(modifiedDocumentListChangedSpy.count(), 1);
+	modifiedDocumentListChangedSpy.clear();
+	QList<KUrl> lst = factory->modifiedDocumentList();
 	QCOMPARE(lst.count(), 1);
 	QCOMPARE(lst.first(), url);
+	QCOMPARE(documentChangedSpy.count(), 1);
+	args = documentChangedSpy.takeFirst();
+	QCOMPARE(args.at(0).value<KUrl>(), url);
 
+	// Save it under a new name
 	KUrl destUrl = urlForTestOutputFile("modify.png");
 	QVERIFY(doc->save(destUrl, "png"));
 
@@ -431,8 +462,16 @@ void DocumentTest::testModify() {
 	// event loop
 	QTest::qWait(100);
 	QVERIFY(!doc->isModified());
-	QCOMPARE(spy.count(), 2);
+
+	QVERIFY(!factory->hasUrl(url));
+	QVERIFY(factory->hasUrl(destUrl));
+	QCOMPARE(modifiedDocumentListChangedSpy.count(), 1);
 	QVERIFY(DocumentFactory::instance()->modifiedDocumentList().isEmpty());
+
+	QCOMPARE(documentChangedSpy.count(), 2);
+	KUrl::List modifiedUrls = KUrl::List() << url << destUrl;
+	QVERIFY(modifiedUrls.contains(url));
+	QVERIFY(modifiedUrls.contains(destUrl));
 }
 
 void DocumentTest::testMetaInfoJpeg() {

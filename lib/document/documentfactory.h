@@ -61,7 +61,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotLoaded(const KUrl&);
-	void slotSaved(const KUrl&);
+	void slotSaved(const KUrl&, const KUrl&);
 	void slotModified(const KUrl&);
 
 private:

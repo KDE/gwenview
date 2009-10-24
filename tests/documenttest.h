@@ -64,11 +64,11 @@ private Q_SLOTS:
 	void testDeleteWhileLoading();
 	void testLoadRotated();
 	void testMultipleLoads();
-	void testSave();
+	void testSaveAs();
 	void testSaveRemote();
 	void testLosslessSave();
 	void testLosslessRotate();
-	void testModify();
+	void testModifyAndSaveAs();
 	void testMetaInfoJpeg();
 	void testMetaInfoBmp();
 	void testForgetModifiedDocument();

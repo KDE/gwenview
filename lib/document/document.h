@@ -186,7 +186,7 @@ Q_SIGNALS:
 	void metaInfoLoaded(const KUrl&);
 	void loaded(const KUrl&);
 	void loadingFailed(const KUrl&);
-	void saved(const KUrl&);
+	void saved(const KUrl& oldUrl, const KUrl& newUrl);
 	void modified(const KUrl&);
 	void metaInfoUpdated();
 	void isAnimatedUpdated();
