@@ -88,7 +88,7 @@ struct StartPagePrivate : public Ui_StartPage{
 		}
 	#else
 		mTagView->hide();
-		mTagTitleLabel->hide();
+		mTagLabel->hide();
 	#endif
 	}
 
