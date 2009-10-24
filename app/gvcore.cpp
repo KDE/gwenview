@@ -48,19 +48,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/transformimageoperation.h>
+#include <mainwindow.h>
 
 namespace Gwenview {
 
 
 struct GvCorePrivate {
 	GvCore* q;
-	QWidget* mParent;
+	MainWindow* mMainWindow;
 	SortedDirModel* mDirModel;
 	HistoryModel* mRecentFoldersModel;
 	HistoryModel* mRecentUrlsModel;
 
 	bool showSaveAsDialog(const KUrl& url, KUrl* outUrl, QByteArray* format) {
-		KFileDialog dialog(url, QString(), mParent);
+		KFileDialog dialog(url, QString(), mMainWindow);
 		dialog.setOperationMode(KFileDialog::Saving);
 		dialog.setSelection(url.fileName());
 		dialog.setMimeFilter(
@@ -77,7 +78,7 @@ struct GvCorePrivate {
 			const QString mimeType = dialog.currentMimeFilter();
 			if (mimeType.isEmpty()) {
 				KMessageBox::sorry(
-					mParent,
+					mMainWindow,
 					i18nc("@info",
 						"No image format selected.")
 					);
@@ -90,7 +91,7 @@ struct GvCorePrivate {
 				break;
 			}
 			KMessageBox::sorry(
-				mParent,
+				mMainWindow,
 				i18nc("@info",
 					"Gwenview cannot save images as %1.", mimeType)
 				);
@@ -102,11 +103,11 @@ struct GvCorePrivate {
 };
 
 
-GvCore::GvCore(QWidget* parent, SortedDirModel* dirModel)
-: QObject(parent)
+GvCore::GvCore(MainWindow* mainWindow, SortedDirModel* dirModel)
+: QObject(mainWindow)
 , d(new GvCorePrivate) {
 	d->q = this;
-	d->mParent = parent;
+	d->mMainWindow = mainWindow;
 	d->mDirModel = dirModel;
 	d->mRecentFoldersModel = 0;
 	d->mRecentUrlsModel = 0;
@@ -197,7 +198,7 @@ void GvCore::saveAll() {
 		}
 	}
 
-	QProgressDialog progress(d->mParent);
+	QProgressDialog progress(d->mMainWindow);
 	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
 	progress.setCancelButtonText(i18n("&Stop"));
 	progress.setMinimum(0);
@@ -243,7 +244,7 @@ void GvCore::saveAll() {
 				+ "</li>";
 		}
 		msg += "</ul>";
-		KMessageBox::sorry(d->mParent, msg);
+		KMessageBox::sorry(d->mMainWindow, msg);
 	}
 }
 
@@ -259,7 +260,7 @@ void GvCore::save(const KUrl& url) {
 			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
 			QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
 				name, doc->errorString());
-			KMessageBox::sorry(d->mParent, msg);
+			KMessageBox::sorry(d->mMainWindow, msg);
 		}
 		return;
 	}
@@ -269,7 +270,7 @@ void GvCore::save(const KUrl& url) {
 	KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
 	saveUsingAnotherFormat.setText(i18n("Save using another format"));
 	int result = KMessageBox::warningContinueCancel(
-		d->mParent,
+		d->mMainWindow,
 		i18n("Gwenview cannot save images in '%1' format.", QString(format)),
 		QString() /* caption */,
 		saveUsingAnotherFormat
@@ -288,9 +289,9 @@ void GvCore::saveAs(const KUrl& url) {
 	}
 
 	// Check for overwrite
-	if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mParent)) {
+	if (KIO::NetAccess::exists(saveAsUrl, KIO::NetAccess::DestinationSide, d->mMainWindow)) {
 		int answer = KMessageBox::warningContinueCancel(
-			d->mParent,
+			d->mMainWindow,
 			i18nc("@info",
 				"A file named <filename>%1</filename> already exists.\n"
 				"Are you sure you want to overwrite it?",

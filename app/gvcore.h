@@ -34,14 +34,15 @@ class QAbstractItemModel;
 
 namespace Gwenview {
 
-class SortedDirModel;
 class AbstractSemanticInfoBackEnd;
+class MainWindow;
+class SortedDirModel;
 
 class GvCorePrivate;
 class GvCore : public QObject {
 	Q_OBJECT
 public:
-	GvCore(QWidget* mainWindow, SortedDirModel*);
+	GvCore(MainWindow* mainWindow, SortedDirModel*);
 	~GvCore();
 
 	QAbstractItemModel* recentFoldersModel() const;
