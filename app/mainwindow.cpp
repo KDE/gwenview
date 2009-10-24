@@ -982,9 +982,6 @@ void MainWindow::openDirUrl(const KUrl& url) {
 
 
 void MainWindow::openDocumentUrl(const KUrl& url) {
-	if (d->mDocumentPanel->url() == url) {
-		return;
-	}
 	d->mDocumentPanel->openUrl(url);
 
 	d->mFullScreenContent->setCurrentUrl(url);

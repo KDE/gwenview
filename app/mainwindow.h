@@ -58,6 +58,11 @@ public:
 public Q_SLOTS:
 	void showStartPage();
 
+	/**
+	 * Go to url, without changing current mode
+	 */
+	void goToUrl(const KUrl&);
+
 Q_SIGNALS:
 	void viewModeChanged();
 
@@ -81,7 +86,6 @@ private Q_SLOTS:
 	void slotStartPageUrlSelected(const KUrl&);
 
 	void openDocumentUrl(const KUrl&);
-	void goToUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar(bool visible);
 	void updateToggleSideBarAction();

@@ -305,7 +305,9 @@ void GvCore::saveAs(const KUrl& url) {
 
 	// Start save
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->save(saveAsUrl, format.data());
+	if (doc->save(saveAsUrl, format.data()) && url != saveAsUrl) {
+		d->mMainWindow->goToUrl(saveAsUrl);
+	}
 }
 
 
