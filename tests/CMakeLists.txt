@@ -104,6 +104,7 @@ set(importertest_SRCS
 	importertest.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../importer/importer.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../importer/fileutils.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/../importer/renamer.cpp
 	)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../importer)
 
