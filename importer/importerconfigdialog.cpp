@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QTextDocument>
 
 // KDE
+#include <kdatetime.h>
 
 // Local
 #include "filenameformater.h"
@@ -33,36 +34,47 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+static const QString PREVIEW_FILENAME = "PICT0012.JPG";
+static const KDateTime PREVIEW_DATETIME = KDateTime(QDate(2009, 10, 25), QTime(17, 51, 18));
 
 struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
+	ImporterConfigDialog* q;
+
+	void setupHelpText() {
+		QString helpText = "<ul>";
+		FileNameFormater::HelpMap map = FileNameFormater::helpMap();
+		FileNameFormater::HelpMap::ConstIterator
+			it = map.begin(),
+			end = map.end();
+		for (;it != end; ++it) {
+			QString keyword = '{' + it.key() + '}';
+			QString explanation = Qt::escape(it.value());
+			QString link = QString("<a href='%1'>%1</a>").arg(keyword);
+			helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
+		}
+		helpText += "</ul>";
+		mRenameFormatHelpLabel->setText(helpText);
+
+		QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(const QString&)),
+			q, SLOT(slotHelpLinkActivated(const QString&)));
+	}
 };
 
 
 ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
 : KConfigDialog(parent, "Importer Settings", ImporterConfig::self())
 , d(new ImporterConfigDialogPrivate) {
+	d->q = this;
 	QWidget* widget = new QWidget;
 	d->setupUi(widget);
 	setFaceType(KPageDialog::Plain);
 	addPage(widget, QString());
 
-	// Fill help text
-	QString helpText = "<ul>";
-	FileNameFormater::HelpMap map = FileNameFormater::helpMap();
-	FileNameFormater::HelpMap::ConstIterator
-		it = map.begin(),
-		end = map.end();
-	for (;it != end; ++it) {
-		QString keyword = '{' + it.key() + '}';
-		QString explanation = Qt::escape(it.value());
-		QString link = QString("<a href='%1'>%1</a>").arg(keyword).arg(keyword);
-		helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
-	}
-	helpText += "</ul>";
-	d->mRenameFormatHelpLabel->setText(helpText);
+	connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(const QString&)),
+		SLOT(updatePreview()));
 
-	connect(d->mRenameFormatHelpLabel, SIGNAL(linkActivated(const QString&)),
-		SLOT(slotHelpLinkActivated(const QString&)));
+	d->setupHelpText();
+	updatePreview();
 }
 
 
@@ -73,6 +85,12 @@ ImporterConfigDialog::~ImporterConfigDialog() {
 
 void ImporterConfigDialog::slotHelpLinkActivated(const QString& keyword) {
 	d->kcfg_AutoRenameFormat->insert(keyword);
+}
+
+
+void ImporterConfigDialog::updatePreview() {
+	FileNameFormater formater(d->kcfg_AutoRenameFormat->text());
+	d->mPreviewOutputLabel->setText(formater.format(KUrl::fromPath("/" + PREVIEW_FILENAME), PREVIEW_DATETIME));
 }
 
 

@@ -40,6 +40,7 @@ public:
 
 private Q_SLOTS:
 	void slotHelpLinkActivated(const QString& keyword);
+	void updatePreview();
 
 private:
 	ImporterConfigDialogPrivate* const d;
