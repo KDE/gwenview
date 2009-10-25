@@ -78,18 +78,13 @@ QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime) {
 			}
 			int end = d->mFormat.indexOf('}', pos + 1);
 			if (end == -1) {
-				// No '}' found!
-				continue;
+				// No '}' found, stop here
+				return name;
 			}
+			// Replace keyword with its value
 			QString keyword = d->mFormat.mid(pos + 1, end - pos - 1);
-			Dict::ConstIterator it = dict.find(keyword);
-			if (it == dict.constEnd()) {
-				// No matching keyword, echo as is
-				name += '{';
-			} else {
-				name += it.value();
-				pos = end;
-			}
+			name += dict.value(keyword);
+			pos = end;
 		} else {
 			name += ch;
 		}

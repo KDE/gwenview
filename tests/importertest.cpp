@@ -128,7 +128,8 @@ void ImporterTest::testFileNameFormater_data() {
 	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name}.{ext}", "PICT0001.JPG");
 	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name:lower}.{ext:lower}", "pict0001.jpg");
 	NEW_ROW("iLikeCurlies", "20091024T225049", "{{{name}}", "{iLikeCurlies}");
-	NEW_ROW("UnknownKeyword", "20091024T225049", "{unknown}", "{unknown}");
+	NEW_ROW("UnknownKeyword", "20091024T225049", "foo{unknown}bar", "foobar");
+	NEW_ROW("MissingClosingCurly", "20091024T225049", "foo{date", "foo");
 }
 
 void ImporterTest::testAutoRenameFormat() {
