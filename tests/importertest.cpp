@@ -26,12 +26,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QSignalSpy>
 
 // KDE
+#include <kdatetime.h>
 #include <kdebug.h>
 #include <qtest_kde.h>
 
 // Local
 #include "../importer/fileutils.h"
 #include "../importer/importer.h"
+#include "../importer/renamer.h"
 #include "testutils.h"
 
 QTEST_KDEMAIN(ImporterTest, GUI)
@@ -103,6 +105,32 @@ void ImporterTest::testSuccessfulImport() {
 	}
 }
 
+void ImporterTest::testRenamer() {
+	QFETCH(QString, fileName);
+	QFETCH(QString, dateTime);
+	QFETCH(QString, format);
+	QFETCH(QString, expected);
+
+	KUrl url = "file://foo/bar/" + fileName;
+	Renamer renamer(format);
+	QCOMPARE(renamer.rename(url, KDateTime::fromString(dateTime)), expected);
+}
+
+#define NEW_ROW(fileName, dateTime, format, expected) QTest::newRow(fileName) << fileName << dateTime << format << expected
+void ImporterTest::testRenamer_data() {
+	QTest::addColumn<QString>("fileName");
+	QTest::addColumn<QString>("dateTime");
+	QTest::addColumn<QString>("format");
+	QTest::addColumn<QString>("expected");
+
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext:lower}", "2009-10-24_22-50-49.jpg");
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name}.{ext}", "PICT0001.JPG");
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name:lower}.{ext:lower}", "pict0001.jpg");
+	NEW_ROW("iLikeCurlies", "20091024T225049", "{{{name}}", "{iLikeCurlies}");
+	NEW_ROW("UnknownKeyword", "20091024T225049", "{unknown}", "{unknown}");
+}
+
 void ImporterTest::testAutoRenameFormat() {
 	QStringList dates = QStringList()
 		<< "1979-02-23_10-20-00"
@@ -113,7 +141,7 @@ void ImporterTest::testAutoRenameFormat() {
 	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "foo");
 
 	Importer importer(0);
-	importer.setAutoRenameFormat("%Y-%m-%d_%H-%M-%S");
+	importer.setAutoRenameFormat("{date}_{time}.{ext}");
 	KUrl::List list = mDocumentList;
 
 	QEventLoop loop;

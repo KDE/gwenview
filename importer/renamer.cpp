@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+typedef QHash<QString, QString> Dict;
 
 struct RenamerPrivate {
 	QString mFormat;
@@ -51,7 +52,49 @@ Renamer::~Renamer() {
 
 QString Renamer::rename(const KUrl& url, const KDateTime& dateTime) {
 	QFileInfo info(url.fileName());
-	return dateTime.toString(d->mFormat) + '.' + info.completeSuffix();
+
+	Dict dict;
+	dict["date"]       = dateTime.toString("%Y-%m-%d");
+	dict["time"]       = dateTime.toString("%H-%M-%S");
+	dict["ext"]        = info.completeSuffix();
+	dict["ext:lower"]  = info.completeSuffix().toLower();
+	dict["name"]       = info.baseName();
+	dict["name:lower"] = info.baseName().toLower();
+
+	QString name;
+	int length = d->mFormat.length();
+	for (int pos=0; pos < length; ++pos) {
+		QChar ch = d->mFormat[pos];
+		if (ch == '{') {
+			if (pos == length - 1) {
+				// We are at the end, ignore this
+				break;
+			}
+			if (d->mFormat[pos + 1] == '{') {
+				// This is an escaped '{', skip one
+				name += '{';
+				++pos;
+				continue;
+			}
+			int end = d->mFormat.indexOf('}', pos + 1);
+			if (end == -1) {
+				// No '}' found!
+				continue;
+			}
+			QString keyword = d->mFormat.mid(pos + 1, end - pos - 1);
+			Dict::ConstIterator it = dict.find(keyword);
+			if (it == dict.constEnd()) {
+				// No matching keyword, echo as is
+				name += '{';
+			} else {
+				name += it.value();
+				pos = end;
+			}
+		} else {
+			name += ch;
+		}
+	}
+	return name;
 }
 
 
