@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef RENAMER_H
-#define RENAMER_H
+#ifndef FILENAMEFORMATER_H
+#define FILENAMEFORMATER_H
 
 // Qt
 
@@ -35,23 +35,23 @@ class KUrl;
 namespace Gwenview {
 
 
-class RenamerPrivate;
-class Renamer {
+class FileNameFormaterPrivate;
+class FileNameFormater {
 public:
-	Renamer(const QString& format);
-	~Renamer();
+	FileNameFormater(const QString& format);
+	~FileNameFormater();
 
 	/**
 	 * Given an url and its dateTime, returns a filename according to the
 	 * format passed to the constructor
 	 */
-	QString rename(const KUrl& url, const KDateTime& dateTime);
+	QString format(const KUrl& url, const KDateTime& dateTime);
 
 private:
-	RenamerPrivate* const d;
+	FileNameFormaterPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* RENAMER_H */
+#endif /* FILENAMEFORMATER_H */

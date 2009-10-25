@@ -39,8 +39,8 @@ private Q_SLOTS:
 	void testSuccessfulImport();
 	void testAutoRenameFormat();
 	void testReadOnlyDestination();
-	void testRenamer();
-	void testRenamer_data();
+	void testFileNameFormater();
+	void testFileNameFormater_data();
 
 private:
 	std::auto_ptr<KTempDir> mTempDir;

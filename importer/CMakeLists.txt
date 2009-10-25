@@ -11,7 +11,7 @@ set(importer_SRCS
 	importdialog.cpp
 	importer.cpp
 	progresspage.cpp
-	renamer.cpp
+	filenameformater.cpp
 	thumbnailpage.cpp
 	)
 

@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <fileutils.h>
-#include <renamer.h>
+#include <filenameformater.h>
 #include <lib/timeutils.h>
 
 namespace Gwenview {
@@ -52,7 +52,7 @@ struct ImporterPrivate {
 	KUrl mCurrentUrl;
 	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
-	std::auto_ptr<Renamer> mRenamer;
+	std::auto_ptr<FileNameFormater> mFileNameFormater;
 	std::auto_ptr<KTempDir> mDestImportDir;
 	QMap<KUrl, FileUtils::RenameResult> mRenameWarnings;
 	int mProgress;
@@ -102,10 +102,10 @@ struct ImporterPrivate {
 		KUrl dst = src;
 		dst.cd("..");
 		QString fileName;
-		if (mRenamer.get()) {
+		if (mFileNameFormater.get()) {
 			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, src, true /* delayedMimeTypes */);
 			KDateTime dateTime = TimeUtils::dateTimeForFileItem(item);
-			fileName = mRenamer->rename(src, dateTime);
+			fileName = mFileNameFormater->format(src, dateTime);
 		} else {
 			fileName = src.fileName();
 		}
@@ -137,9 +137,9 @@ Importer::~Importer() {
 
 void Importer::setAutoRenameFormat(const QString& format) {
 	if (format.isEmpty()) {
-		d->mRenamer.reset(0);
+		d->mFileNameFormater.reset(0);
 	} else {
-		d->mRenamer.reset(new Renamer(format));
+		d->mFileNameFormater.reset(new FileNameFormater(format));
 	}
 }
 

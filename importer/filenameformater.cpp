@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "renamer.h"
+#include "filenameformater.h"
 
 // Qt
 #include <QFileInfo>
@@ -34,23 +34,23 @@ namespace Gwenview {
 
 typedef QHash<QString, QString> Dict;
 
-struct RenamerPrivate {
+struct FileNameFormaterPrivate {
 	QString mFormat;
 };
 
 
-Renamer::Renamer(const QString& format)
-: d(new RenamerPrivate) {
+FileNameFormater::FileNameFormater(const QString& format)
+: d(new FileNameFormaterPrivate) {
 	d->mFormat = format;
 }
 
 
-Renamer::~Renamer() {
+FileNameFormater::~FileNameFormater() {
 	delete d;
 }
 
 
-QString Renamer::rename(const KUrl& url, const KDateTime& dateTime) {
+QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime) {
 	QFileInfo info(url.fileName());
 
 	Dict dict;

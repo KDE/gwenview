@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../importer/fileutils.h"
 #include "../importer/importer.h"
-#include "../importer/renamer.h"
+#include "../importer/filenameformater.h"
 #include "testutils.h"
 
 QTEST_KDEMAIN(ImporterTest, GUI)
@@ -105,19 +105,19 @@ void ImporterTest::testSuccessfulImport() {
 	}
 }
 
-void ImporterTest::testRenamer() {
+void ImporterTest::testFileNameFormater() {
 	QFETCH(QString, fileName);
 	QFETCH(QString, dateTime);
 	QFETCH(QString, format);
 	QFETCH(QString, expected);
 
 	KUrl url = "file://foo/bar/" + fileName;
-	Renamer renamer(format);
-	QCOMPARE(renamer.rename(url, KDateTime::fromString(dateTime)), expected);
+	FileNameFormater fileNameFormater(format);
+	QCOMPARE(fileNameFormater.format(url, KDateTime::fromString(dateTime)), expected);
 }
 
 #define NEW_ROW(fileName, dateTime, format, expected) QTest::newRow(fileName) << fileName << dateTime << format << expected
-void ImporterTest::testRenamer_data() {
+void ImporterTest::testFileNameFormater_data() {
 	QTest::addColumn<QString>("fileName");
 	QTest::addColumn<QString>("dateTime");
 	QTest::addColumn<QString>("format");
