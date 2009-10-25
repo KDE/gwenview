@@ -49,7 +49,7 @@
          <bool>true</bool>
         </property>
         <property name="textInteractionFlags">
-         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+         <set>Qt::LinksAccessibleByMouse</set>
         </property>
        </widget>
       </item>

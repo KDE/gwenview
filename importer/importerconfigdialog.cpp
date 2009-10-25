@@ -19,13 +19,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "importerconfigdialog.h"
+#include "importerconfigdialog.moc"
 
 // Qt
+#include <QTextDocument>
 
 // KDE
 
 // Local
+#include "filenameformater.h"
 #include "importerconfig.h"
 #include "ui_importerconfigdialog.h"
 
@@ -43,6 +45,24 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
 	d->setupUi(widget);
 	setFaceType(KPageDialog::Plain);
 	addPage(widget, QString());
+
+	// Fill help text
+	QString helpText = "<ul>";
+	FileNameFormater::HelpMap map = FileNameFormater::helpMap();
+	FileNameFormater::HelpMap::ConstIterator
+		it = map.begin(),
+		end = map.end();
+	for (;it != end; ++it) {
+		QString keyword = '{' + it.key() + '}';
+		QString explanation = Qt::escape(it.value());
+		QString link = QString("<a href='%1'>%1</a>").arg(keyword).arg(keyword);
+		helpText += "<li>" + i18nc("%1 is the importer keyword, %2 is keyword explanation", "%1: %2", link, explanation) + "</li>";
+	}
+	helpText += "</ul>";
+	d->mRenameFormatHelpLabel->setText(helpText);
+
+	connect(d->mRenameFormatHelpLabel, SIGNAL(linkActivated(const QString&)),
+		SLOT(slotHelpLinkActivated(const QString&)));
 }
 
 
@@ -51,7 +71,9 @@ ImporterConfigDialog::~ImporterConfigDialog() {
 }
 
 
-HelpMap
+void ImporterConfigDialog::slotHelpLinkActivated(const QString& keyword) {
+	d->kcfg_AutoRenameFormat->insert(keyword);
+}
 
 
 } // namespace

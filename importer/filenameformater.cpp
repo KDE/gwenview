@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdatetime.h>
+#include <klocale.h>
 #include <kurl.h>
 
 // Local
@@ -53,6 +54,7 @@ FileNameFormater::~FileNameFormater() {
 QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime) {
 	QFileInfo info(url.fileName());
 
+	// Keep in sync with helpMap()
 	Dict dict;
 	dict["date"]       = dateTime.toString("%Y-%m-%d");
 	dict["time"]       = dateTime.toString("%H-%M-%S");
@@ -90,6 +92,21 @@ QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime) {
 		}
 	}
 	return name;
+}
+
+
+FileNameFormater::HelpMap FileNameFormater::helpMap() {
+	// Keep in sync with dict in format()
+	static HelpMap map;
+	if (map.isEmpty()) {
+		map["date"]       = i18n("Shooting date, <year>-<month>-<day>");
+		map["time"]       = i18n("Shooting time, <hour>-<minute>-<second>");
+		map["ext"]        = i18n("Original extension");
+		map["ext:lower"]  = i18n("Original extension, in lower case");
+		map["name"]       = i18n("Original filename");
+		map["name:lower"] = i18n("Original filename, in lower case");
+	}
+	return map;
 }
 
 

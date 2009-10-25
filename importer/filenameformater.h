@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define FILENAMEFORMATER_H
 
 // Qt
+#include <QMap>
 
 // KDE
 
@@ -38,6 +39,8 @@ namespace Gwenview {
 class FileNameFormaterPrivate;
 class FileNameFormater {
 public:
+	typedef QMap<QString, QString> HelpMap;
+
 	FileNameFormater(const QString& format);
 	~FileNameFormater();
 
@@ -46,6 +49,12 @@ public:
 	 * format passed to the constructor
 	 */
 	QString format(const KUrl& url, const KDateTime& dateTime);
+
+	/**
+	 * Returns a map whose keys are the available keywords and values are the
+	 * keyword help
+	 */
+	static HelpMap helpMap();
 
 private:
 	FileNameFormaterPrivate* const d;

@@ -33,9 +33,13 @@ namespace Gwenview {
 
 class ImporterConfigDialogPrivate;
 class ImporterConfigDialog : public KConfigDialog {
+	Q_OBJECT
 public:
 	ImporterConfigDialog(QWidget*);
 	~ImporterConfigDialog();
+
+private Q_SLOTS:
+	void slotHelpLinkActivated(const QString& keyword);
 
 private:
 	ImporterConfigDialogPrivate* const d;
