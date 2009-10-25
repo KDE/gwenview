@@ -4,6 +4,7 @@ include_directories(
 	)
 
 set(importer_SRCS
+	importerconfigdialog.cpp
 	dialogpage.cpp
 	documentdirfinder.cpp
 	fileutils.cpp
@@ -17,6 +18,7 @@ set(importer_SRCS
 
 kde4_add_ui_files(importer_SRCS
 	dialogpage.ui
+	importerconfigdialog.ui
 	progresspage.ui
 	thumbnailpage.ui
 	)

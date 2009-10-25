@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/thumbnailview/previewitemdelegate.h>
 #include <lib/thumbnailview/thumbnailslidercontroller.h>
 #include "documentdirfinder.h"
+#include "importerconfigdialog.h"
 #include <ui_thumbnailpage.h>
 
 namespace Gwenview {
@@ -143,6 +144,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 	}
 
 	void setupButtonBox() {
+		QObject::connect(mConfigureButton, SIGNAL(clicked()),
+			q, SLOT(showConfigDialog()));
+
 		mImportSelectedButton = mButtonBox->addButton(
 			i18n("Import Selected"), QDialogButtonBox::AcceptRole,
 			q, SLOT(slotImportSelected()));
@@ -279,6 +283,12 @@ void ThumbnailPage::importList(const QModelIndexList& list) {
 void ThumbnailPage::updateImportButtons() {
 	d->mImportSelectedButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
 	d->mImportAllButton->setEnabled(d->mDirModel->hasChildren());
+}
+
+
+void ThumbnailPage::showConfigDialog() {
+	ImporterConfigDialog dialog(this);
+	dialog.exec();
 }
 
 
