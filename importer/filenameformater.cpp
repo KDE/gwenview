@@ -99,8 +99,8 @@ FileNameFormater::HelpMap FileNameFormater::helpMap() {
 	// Keep in sync with dict in format()
 	static HelpMap map;
 	if (map.isEmpty()) {
-		map["date"]       = i18n("Shooting date, <year>-<month>-<day>");
-		map["time"]       = i18n("Shooting time, <hour>-<minute>-<second>");
+		map["date"]       = i18n("Shooting date");
+		map["time"]       = i18n("Shooting time");
 		map["ext"]        = i18n("Original extension");
 		map["ext:lower"]  = i18n("Original extension, in lower case");
 		map["name"]       = i18n("Original filename");
