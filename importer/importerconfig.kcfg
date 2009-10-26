@@ -13,7 +13,7 @@
 			<default>true</default>
 		</entry>
 		<entry name="AutoRenameFormat" type="String">
-			<default>{date}_{time}.{ext:lower}</default>
+			<default>{date}_{time}.{ext.lower}</default>
 		</entry>
 	</group>
 </kcfg>

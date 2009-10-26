@@ -124,9 +124,9 @@ void ImporterTest::testFileNameFormater_data() {
 	QTest::addColumn<QString>("expected");
 
 	NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
-	NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext:lower}", "2009-10-24_22-50-49.jpg");
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
 	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name}.{ext}", "PICT0001.JPG");
-	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name:lower}.{ext:lower}", "pict0001.jpg");
+	NEW_ROW("PICT0001.JPG", "20091024T225049", "{name.lower}.{ext.lower}", "pict0001.jpg");
 	NEW_ROW("iLikeCurlies", "20091024T225049", "{{{name}}", "{iLikeCurlies}");
 	NEW_ROW("UnknownKeyword", "20091024T225049", "foo{unknown}bar", "foobar");
 	NEW_ROW("MissingClosingCurly", "20091024T225049", "foo{date", "foo");

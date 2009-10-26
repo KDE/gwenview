@@ -59,9 +59,9 @@ QString FileNameFormater::format(const KUrl& url, const KDateTime& dateTime) {
 	dict["date"]       = dateTime.toString("%Y-%m-%d");
 	dict["time"]       = dateTime.toString("%H-%M-%S");
 	dict["ext"]        = info.completeSuffix();
-	dict["ext:lower"]  = info.completeSuffix().toLower();
+	dict["ext.lower"]  = info.completeSuffix().toLower();
 	dict["name"]       = info.baseName();
-	dict["name:lower"] = info.baseName().toLower();
+	dict["name.lower"] = info.baseName().toLower();
 
 	QString name;
 	int length = d->mFormat.length();
@@ -102,9 +102,9 @@ FileNameFormater::HelpMap FileNameFormater::helpMap() {
 		map["date"]       = i18n("Shooting date");
 		map["time"]       = i18n("Shooting time");
 		map["ext"]        = i18n("Original extension");
-		map["ext:lower"]  = i18n("Original extension, in lower case");
+		map["ext.lower"]  = i18n("Original extension, in lower case");
 		map["name"]       = i18n("Original filename");
-		map["name:lower"] = i18n("Original filename, in lower case");
+		map["name.lower"] = i18n("Original filename, in lower case");
 	}
 	return map;
 }
