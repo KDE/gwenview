@@ -44,8 +44,8 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
 		QString helpText = "<ul>";
 		FileNameFormater::HelpMap map = FileNameFormater::helpMap();
 		FileNameFormater::HelpMap::ConstIterator
-			it = map.begin(),
-			end = map.end();
+			it = map.constBegin(),
+			end = map.constEnd();
 		for (;it != end; ++it) {
 			QString keyword = '{' + it.key() + '}';
 			QString explanation = Qt::escape(it.value());
