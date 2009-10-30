@@ -562,7 +562,7 @@ void DocumentTest::testModifiedAndSavedSignals() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(const KUrl&)));
-	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&)));
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
 	doc->loadFullImage();
 	doc->waitUntilLoaded();
 
