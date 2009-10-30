@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include "zoomslider.h"
 #include "signalblocker.h"
 #include "statusbartoolbutton.h"
 
@@ -61,7 +62,7 @@ struct ZoomWidgetPrivate {
 	StatusBarToolButton* mZoomToFitButton;
 	StatusBarToolButton* mActualSizeButton;
 	QLabel* mZoomLabel;
-	QSlider* mZoomSlider;
+	ZoomSlider* mZoomSlider;
 	QAction* mZoomToFitAction;
 	QAction* mActualSizeAction;
 
@@ -71,7 +72,7 @@ struct ZoomWidgetPrivate {
 		// Use QSlider::sliderPosition(), not QSlider::value() because when we are
 		// called from slotZoomSliderActionTriggered(), QSlider::value() has not
 		// been updated yet.
-		qreal zoom = zoomForSliderValue(mZoomSlider->sliderPosition());
+		qreal zoom = zoomForSliderValue(mZoomSlider->slider()->sliderPosition());
 		mZoomUpdatedBySlider = true;
 		emit that->zoomChanged(zoom);
 		mZoomUpdatedBySlider = false;
@@ -102,13 +103,12 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 	d->mZoomLabel->setFixedWidth(d->mZoomLabel->fontMetrics().width(" 1000% "));
 	d->mZoomLabel->setAlignment(Qt::AlignCenter);
 
-	d->mZoomSlider = new QSlider;
-	d->mZoomSlider->setOrientation(Qt::Horizontal);
+	d->mZoomSlider = new ZoomSlider;
 	d->mZoomSlider->setMinimumWidth(150);
-	d->mZoomSlider->setSingleStep(int(PRECISION));
-	d->mZoomSlider->setPageStep(3 * d->mZoomSlider->singleStep());
-	connect(d->mZoomSlider, SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
-	connect(d->mZoomSlider, SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
+	d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
+	d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
+	connect(d->mZoomSlider->slider(), SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
+	connect(d->mZoomSlider->slider(), SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	// Layout
 	QHBoxLayout* layout = new QHBoxLayout(this);
@@ -142,8 +142,9 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction)
 
 void ZoomWidget::slotZoomSliderRangeChanged() {
 	if (d->mZoomToFitAction->isChecked()) {
-		SignalBlocker blocker(d->mZoomSlider);
-		d->mZoomSlider->setValue(d->mZoomSlider->minimum());
+		QSlider* slider = d->mZoomSlider->slider();
+		SignalBlocker blocker(slider);
+		d->mZoomSlider->setValue(slider->minimum());
 	} else {
 		d->emitZoomChanged();
 	}
@@ -164,15 +165,16 @@ void ZoomWidget::setZoom(qreal zoom) {
 	// Don't change slider value if we come here because the slider change,
 	// avoids choppy sliding scroll.
 	if (!d->mZoomUpdatedBySlider) {
-		SignalBlocker blocker(d->mZoomSlider);
+		QSlider* slider = d->mZoomSlider->slider();
+		SignalBlocker blocker(slider);
 		int value = sliderValueForZoom(zoom);
-		d->mZoomSlider->setValue(value);
+		slider->setValue(value);
 	}
 }
 
 
 void ZoomWidget::setZoomRange(qreal minZoom, qreal maxZoom) {
-	d->mZoomSlider->setRange(
+	d->mZoomSlider->slider()->setRange(
 		sliderValueForZoom(minZoom),
 		sliderValueForZoom(maxZoom));
 }
