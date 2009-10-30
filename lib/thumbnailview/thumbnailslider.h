@@ -53,6 +53,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotActionTriggered(int actionTriggered);
+	void zoomOut();
+	void zoomIn();
 
 private:
 	ThumbnailSliderPrivate* const d;
