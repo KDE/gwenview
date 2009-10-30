@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILSLIDER_H
-#define THUMBNAILSLIDER_H
+#ifndef ZOOMSLIDER_H
+#define ZOOMSLIDER_H
 
 #include <lib/gwenviewlib_export.h>
 
@@ -34,16 +34,19 @@ class QSlider;
 
 namespace Gwenview {
 
-class ThumbnailSliderPrivate;
-class GWENVIEWLIB_EXPORT ThumbnailSlider : public QWidget {
+class ZoomSliderPrivate;
+/**
+ * A widget featuring an horizontal slider and zoom in/out buttons
+ */
+class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget {
 	Q_OBJECT
 public:
-	ThumbnailSlider(QWidget* parent=0);
-	~ThumbnailSlider();
-
-	void updateToolTip();
+	ZoomSlider(QWidget* parent=0);
+	~ZoomSlider();
 
 	int value() const;
+
+	QSlider* slider() const;
 
 public Q_SLOTS:
 	void setValue(int);
@@ -57,10 +60,10 @@ private Q_SLOTS:
 	void zoomIn();
 
 private:
-	ThumbnailSliderPrivate* const d;
+	ZoomSliderPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* THUMBNAILSLIDER_H */
+#endif /* ZOOMSLIDER_H */

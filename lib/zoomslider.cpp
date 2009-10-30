@@ -19,24 +19,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailslider.moc"
+#include "zoomslider.moc"
 
 // Qt
 #include <QHBoxLayout>
 #include <QSlider>
 #include <QToolButton>
-#include <QToolTip>
 
 // KDE
 #include <kicon.h>
 
 // Local
-#include <lib/thumbnailview/thumbnailview.h>
 
 namespace Gwenview {
 
 
-struct ThumbnailSliderPrivate {
+struct ZoomSliderPrivate {
 	QToolButton* mZoomOutButton;
 	QToolButton* mZoomInButton;
 	QSlider* mSlider;
@@ -55,15 +53,14 @@ static QToolButton* createZoomButton(const char* iconName) {
 	return button;
 }
 
-ThumbnailSlider::ThumbnailSlider(QWidget* parent)
+ZoomSlider::ZoomSlider(QWidget* parent)
 : QWidget(parent)
-, d(new ThumbnailSliderPrivate) {
+, d(new ZoomSliderPrivate) {
 	d->mZoomInButton = createZoomButton("zoom-in");
 	d->mZoomOutButton = createZoomButton("zoom-out");
 
 	d->mSlider = new QSlider;
 	d->mSlider->setOrientation(Qt::Horizontal);
-	d->mSlider->setRange(48, 256);
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(0);
@@ -84,50 +81,39 @@ ThumbnailSlider::ThumbnailSlider(QWidget* parent)
 }
 
 
-ThumbnailSlider::~ThumbnailSlider() {
+ZoomSlider::~ZoomSlider() {
 	delete d;
 }
 
 
-int ThumbnailSlider::value() const {
+int ZoomSlider::value() const {
 	return d->mSlider->value();
 }
 
 
-void ThumbnailSlider::setValue(int value) {
+void ZoomSlider::setValue(int value) {
 	d->mSlider->setValue(value);
 	d->updateButtons();
 }
 
 
-void ThumbnailSlider::updateToolTip() {
-	// FIXME: i18n?
-	const int size = d->mSlider->sliderPosition();
-	const QString text = QString("%1 x %2").arg(size).arg(size);
-	d->mSlider->setToolTip(text);
-}
-
-void ThumbnailSlider::slotActionTriggered(int actionTriggered) {
-	updateToolTip();
-
-	if (actionTriggered != QAbstractSlider::SliderNoAction) {
-		// If we are updating because of a direct action on the slider, show
-		// the tooltip immediatly.
-		const QPoint pos = d->mSlider->mapToGlobal(QPoint(0, d->mSlider->height() / 2));
-		QToolTip::showText(pos, d->mSlider->toolTip(), d->mSlider);
-	}
-
+void ZoomSlider::slotActionTriggered(int actionTriggered) {
 	d->updateButtons();
 }
 
 
-void ThumbnailSlider::zoomOut() {
+void ZoomSlider::zoomOut() {
 	d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
 }
 
 
-void ThumbnailSlider::zoomIn() {
+void ZoomSlider::zoomIn() {
 	d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
+}
+
+
+QSlider* ZoomSlider::slider() const {
+	return d->mSlider;
 }
 
 

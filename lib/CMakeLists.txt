@@ -80,6 +80,7 @@ set(gwenviewlib_SRCS
 	urlutils.cpp
 	libjpeg/transupp.c
 	widgetfloater.cpp
+	zoomslider.cpp
 	zoomwidget.cpp
 	)
 
