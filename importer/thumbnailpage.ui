@@ -119,7 +119,7 @@ QLabel[isIcon=true] {
          </spacer>
         </item>
         <item>
-         <widget class="QSlider" name="mSlider">
+         <widget class="Gwenview::ThumbnailSlider" name="mSlider">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -131,15 +131,6 @@ QLabel[isIcon=true] {
             <width>150</width>
             <height>0</height>
            </size>
-          </property>
-          <property name="minimum">
-           <number>48</number>
-          </property>
-          <property name="maximum">
-           <number>256</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
@@ -199,6 +190,11 @@ QLabel[isIcon=true] {
    <class>Gwenview::ThumbnailView</class>
    <extends>QListView</extends>
    <header location="global">lib/thumbnailview/thumbnailview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Gwenview::ThumbnailSlider</class>
+   <extends>QWidget</extends>
+   <header location="global">lib/thumbnailview/thumbnailslider.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

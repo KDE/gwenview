@@ -18,13 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILSLIDERCONTROLLER_H
-#define THUMBNAILSLIDERCONTROLLER_H
+#ifndef THUMBNAILSLIDER_H
+#define THUMBNAILSLIDER_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QObject>
+#include <QWidget>
 
 // KDE
 
@@ -34,23 +34,31 @@ class QSlider;
 
 namespace Gwenview {
 
-class ThumbnailSliderControllerPrivate;
-class GWENVIEWLIB_EXPORT ThumbnailSliderController : public QObject {
+class ThumbnailSliderPrivate;
+class GWENVIEWLIB_EXPORT ThumbnailSlider : public QWidget {
 	Q_OBJECT
 public:
-	ThumbnailSliderController(QSlider* slider);
-	~ThumbnailSliderController();
+	ThumbnailSlider(QWidget* parent=0);
+	~ThumbnailSlider();
 
 	void updateToolTip();
+
+	int value() const;
+
+public Q_SLOTS:
+	void setValue(int);
+
+Q_SIGNALS:
+	int valueChanged(int);
 
 private Q_SLOTS:
 	void slotActionTriggered(int actionTriggered);
 
 private:
-	ThumbnailSliderControllerPrivate* const d;
+	ThumbnailSliderPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* THUMBNAILSLIDERCONTROLLER_H */
+#endif /* THUMBNAILSLIDER_H */

@@ -85,7 +85,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="mThumbnailSlider">
+       <widget class="Gwenview::ThumbnailSlider" name="mThumbnailSlider">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -97,18 +97,6 @@
           <width>120</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="minimum">
-         <number>48</number>
-        </property>
-        <property name="maximum">
-         <number>256</number>
-        </property>
-        <property name="value">
-         <number>128</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
@@ -127,6 +115,11 @@
    <class>Gwenview::StatusBarToolButton</class>
    <extends>QToolButton</extends>
    <header location="global">lib/statusbartoolbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Gwenview::ThumbnailSlider</class>
+   <extends>QWidget</extends>
+   <header location="global">lib/thumbnailview/thumbnailslider.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -36,7 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/thumbnailview/abstractthumbnailviewhelper.h>
 #include <lib/thumbnailview/previewitemdelegate.h>
-#include <lib/thumbnailview/thumbnailslidercontroller.h>
 #include "documentdirfinder.h"
 #include "importerconfigdialog.h"
 #include <ui_thumbnailpage.h>
@@ -133,12 +132,11 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
 		mThumbnailView->setPalette(pal);
 
-		ThumbnailSliderController* sliderController = new ThumbnailSliderController(mSlider);
 		QObject::connect(mSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)));
 		int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
 		mSlider->setValue(thumbnailSize);
-		sliderController->updateToolTip();
+		mSlider->updateToolTip();
 		mThumbnailView->setThumbnailSize(thumbnailSize);
 
 		QObject::connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),

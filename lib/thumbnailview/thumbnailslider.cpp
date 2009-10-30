@@ -19,9 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "thumbnailslidercontroller.h"
+#include "thumbnailslider.moc"
 
 // Qt
+#include <QHBoxLayout>
 #include <QSlider>
 #include <QToolTip>
 
@@ -33,33 +34,53 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct ThumbnailSliderControllerPrivate {
+struct ThumbnailSliderPrivate {
 	QSlider* mSlider;
 };
 
 
-ThumbnailSliderController::ThumbnailSliderController(QSlider* slider)
-: QObject(slider)
-, d(new ThumbnailSliderControllerPrivate) {
-	d->mSlider = slider;
-	connect(slider, SIGNAL(actionTriggered(int)),
+ThumbnailSlider::ThumbnailSlider(QWidget* parent)
+: QWidget(parent)
+, d(new ThumbnailSliderPrivate) {
+	d->mSlider = new QSlider;
+	d->mSlider->setOrientation(Qt::Horizontal);
+	d->mSlider->setRange(48, 256);
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setMargin(0);
+	layout->setSpacing(0);
+	layout->addWidget(d->mSlider);
+
+	connect(d->mSlider, SIGNAL(actionTriggered(int)),
 		SLOT(slotActionTriggered(int)) );
+	connect(d->mSlider, SIGNAL(valueChanged(int)),
+		SIGNAL(valueChanged(int)));
 }
 
 
-ThumbnailSliderController::~ThumbnailSliderController() {
+ThumbnailSlider::~ThumbnailSlider() {
 	delete d;
 }
 
 
-void ThumbnailSliderController::updateToolTip() {
+int ThumbnailSlider::value() const {
+	return d->mSlider->value();
+}
+
+
+void ThumbnailSlider::setValue(int value) {
+	d->mSlider->setValue(value);
+}
+
+
+void ThumbnailSlider::updateToolTip() {
 	// FIXME: i18n?
 	const int size = d->mSlider->sliderPosition();
 	const QString text = QString("%1 x %2").arg(size).arg(size);
 	d->mSlider->setToolTip(text);
 }
 
-void ThumbnailSliderController::slotActionTriggered(int actionTriggered) {
+void ThumbnailSlider::slotActionTriggered(int actionTriggered) {
 	updateToolTip();
 
 	if (actionTriggered != QAbstractSlider::SliderNoAction) {
