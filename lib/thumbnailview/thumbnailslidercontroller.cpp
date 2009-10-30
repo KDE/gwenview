@@ -38,12 +38,10 @@ struct ThumbnailSliderControllerPrivate {
 };
 
 
-ThumbnailSliderController::ThumbnailSliderController(ThumbnailView* view, QSlider* slider)
-: QObject(view)
+ThumbnailSliderController::ThumbnailSliderController(QSlider* slider)
+: QObject(slider)
 , d(new ThumbnailSliderControllerPrivate) {
 	d->mSlider = slider;
-	connect(slider, SIGNAL(valueChanged(int)),
-		view, SLOT(setThumbnailSize(int)) );
 	connect(slider, SIGNAL(actionTriggered(int)),
 		SLOT(slotActionTriggered(int)) );
 }

@@ -34,13 +34,11 @@ class QSlider;
 
 namespace Gwenview {
 
-class ThumbnailView;
-
 class ThumbnailSliderControllerPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailSliderController : public QObject {
 	Q_OBJECT
 public:
-	ThumbnailSliderController(ThumbnailView* view, QSlider* slider);
+	ThumbnailSliderController(QSlider* slider);
 	~ThumbnailSliderController();
 
 	void updateToolTip();

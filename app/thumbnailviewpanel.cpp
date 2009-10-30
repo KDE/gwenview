@@ -95,7 +95,9 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		layout->addWidget(mUrlNavigator);
 
 		// Thumbnail slider
-		mThumbnailSliderController = new ThumbnailSliderController(mThumbnailView, mThumbnailSlider);
+		mThumbnailSliderController = new ThumbnailSliderController(mThumbnailSlider);
+		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
+			mThumbnailView, SLOT(setThumbnailSize(int)));
 	}
 
 	void setupActions(KActionCollection* actionCollection) {

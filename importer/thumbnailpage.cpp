@@ -133,7 +133,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
 		mThumbnailView->setPalette(pal);
 
-		ThumbnailSliderController* sliderController = new ThumbnailSliderController(mThumbnailView, mSlider);
+		ThumbnailSliderController* sliderController = new ThumbnailSliderController(mSlider);
+		QObject::connect(mSlider, SIGNAL(valueChanged(int)),
+			mThumbnailView, SLOT(setThumbnailSize(int)));
 		int thumbnailSize = DEFAULT_THUMBNAIL_SIZE;
 		mSlider->setValue(thumbnailSize);
 		sliderController->updateToolTip();
