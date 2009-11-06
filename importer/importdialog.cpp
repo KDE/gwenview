@@ -57,22 +57,65 @@ public:
 	Importer* mImporter;
 
 	void deleteImportedUrls() {
-		KUrl::List urls = mImporter->importedUrlList();
-		if (urls.count() == 0) {
+		KUrl::List importedUrls = mImporter->importedUrlList();
+		KUrl::List skippedUrls = mImporter->skippedUrlList();
+		int importedCount = importedUrls.count();
+		int skippedCount = skippedUrls.count();
+
+		if (importedCount == 0 && skippedCount == 0) {
 			return;
 		}
+
+		QStringList message;
+		message << i18np(
+			"One document has been imported.",
+			"%1 documents have been imported.",
+			importedCount);
+		if (skippedCount > 0) {
+			message << i18np(
+				"One document has been skipped because it had already been imported.",
+				"%1 documents have been skipped because they had already been imported.",
+				skippedCount);
+		}
+
+		if (mImporter->renamedCount() > 0) {
+			message[0].append("*");
+			message << "<small>* " + i18np(
+				"One of them has been renamed because another document with the same name had already been imported.",
+				"%1 of them have been renamed because other documents with the same name had already been imported.",
+				mImporter->renamedCount())
+				+ "</small>";
+		}
+
+		message << QString();
+		if (skippedCount == 0) {
+			message << i18np(
+				"Delete the imported document from the device?",
+				"Delete the %1 imported documents from the device?",
+				importedCount);
+		} else if (importedCount == 0) {
+			message << i18np(
+				"Delete the skipped document from the device?",
+				"Delete the %1 skipped documents from the device?",
+				skippedCount);
+		} else {
+			message << i18ncp(
+				"This sentence is only used if there is at least one imported and one skipped document",
+				"Delete the %1 imported and skipped documents from the device?",
+				"Delete the %1 imported and skipped documents from the device?",
+				importedCount + skippedCount);
+		}
+
 		int answer = KMessageBox::questionYesNo(mCentralWidget,
-			i18np(
-				"One document has been successfully imported.\nDelete it from the device?",
-				"%1 documents have been successfully imported.\nDelete them from the device?",
-				urls.count()),
-			QString(),
+			"<qt>" + message.join("<br/>") + "</qt>",
+			i18n("Import Finished"),
 			KStandardGuiItem::del(),
 			KGuiItem(i18n("Keep"))
 			);
 		if (answer != KMessageBox::Yes) {
 			return;
 		}
+		KUrl::List urls = importedUrls + skippedUrls;
 		while (true) {
 			KIO::Job* job = KIO::del(urls);
 			if (KIO::NetAccess::synchronousRun(job, q)) {
