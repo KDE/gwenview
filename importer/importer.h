@@ -64,7 +64,7 @@ Q_SIGNALS:
 	void error(const QString& message);
 
 private Q_SLOTS:
-	void slotResult(KJob*);
+	void slotCopyDone(KJob*);
 	void slotPercent(KJob*, unsigned long);
 	void emitProgressChanged();
 

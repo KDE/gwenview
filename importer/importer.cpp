@@ -93,7 +93,7 @@ struct ImporterPrivate {
 			job->ui()->setWindow(mAuthWindow);
 		}
 		QObject::connect(job, SIGNAL(result(KJob*)),
-			q, SLOT(slotResult(KJob*)));
+			q, SLOT(slotCopyDone(KJob*)));
 		QObject::connect(job, SIGNAL(percent(KJob*, unsigned long)),
 			q, SLOT(slotPercent(KJob*, unsigned long)));
 	}
@@ -160,7 +160,7 @@ void Importer::start(const KUrl::List& list, const KUrl& destination) {
 	d->importNext();
 }
 
-void Importer::slotResult(KJob* _job) {
+void Importer::slotCopyDone(KJob* _job) {
 	KIO::CopyJob* job = static_cast<KIO::CopyJob*>(_job);
 	KUrl url = job->destUrl();
 	if (job->error()) {
