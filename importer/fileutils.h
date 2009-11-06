@@ -30,9 +30,9 @@ namespace FileUtils {
 
 enum RenameResult {
 	RenamedOK,           /** Renamed without problem */
-	Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
 	RenamedUnderNewName, /** Destination already existed, so rename() added a suffix to make the name unique */
-	RenameFailed         /** Renamed failed */
+	Skipped,             /** Destination already existed and contained the same data as source, so rename() just removed the source */
+	RenameFailed         /** Rename failed */
 };
 
 /**
