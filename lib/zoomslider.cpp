@@ -97,7 +97,7 @@ void ZoomSlider::setValue(int value) {
 }
 
 
-void ZoomSlider::slotActionTriggered(int actionTriggered) {
+void ZoomSlider::slotActionTriggered(int) {
 	d->updateButtons();
 }
 
