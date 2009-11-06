@@ -50,6 +50,16 @@ public:
 
 	KUrl::List importedUrlList() const;
 
+	/**
+	 * Documents which have been skipped during import
+	 */
+	KUrl::List skippedUrlList() const;
+
+	/**
+	 * How many documents have been renamed during import
+	 */
+	int renamedCount() const;
+
 Q_SIGNALS:
 	void importFinished();
 

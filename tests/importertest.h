@@ -41,6 +41,8 @@ private Q_SLOTS:
 	void testReadOnlyDestination();
 	void testFileNameFormater();
 	void testFileNameFormater_data();
+	void testSkippedUrlList();
+	void testRenamedCount();
 
 private:
 	std::auto_ptr<KTempDir> mTempDir;

@@ -48,15 +48,21 @@ namespace Gwenview {
 
 struct ImporterPrivate {
 	Importer* q;
-	KUrl::List mUrlList;
-	KUrl mCurrentUrl;
-	KUrl::List mImportedUrlList;
 	QWidget* mAuthWindow;
 	std::auto_ptr<FileNameFormater> mFileNameFormater;
 	std::auto_ptr<KTempDir> mDestImportDir;
-	QMap<KUrl, FileUtils::RenameResult> mRenameWarnings;
+
+	/* @defgroup reset Should be reset in start()
+	 * @{ */
+	KUrl::List mUrlList;
+	KUrl::List mImportedUrlList;
+	KUrl::List mSkippedUrlList;
+	int mRenamedCount;
 	int mProgress;
 	int mJobProgress;
+	/* @} */
+
+	KUrl mCurrentUrl;
 
 	void emitError(const QString& message) {
 		QMetaObject::invokeMethod(q, "error", Q_ARG(QString, message));
@@ -112,11 +118,19 @@ struct ImporterPrivate {
 		dst.setFileName(fileName);
 
 		FileUtils::RenameResult result = FileUtils::rename(src, dst, mAuthWindow);
-		if (result != FileUtils::RenamedOK) {
-			mRenameWarnings.insert(mCurrentUrl, result);
-		}
-		if (result != FileUtils::RenameFailed) {
+		switch (result) {
+		case FileUtils::RenamedOK:
 			mImportedUrlList << mCurrentUrl;
+			break;
+		case FileUtils::RenamedUnderNewName:
+			mRenamedCount++;
+			mImportedUrlList << mCurrentUrl;
+			break;
+		case FileUtils::Skipped:
+			mSkippedUrlList << mCurrentUrl;
+			break;
+		case FileUtils::RenameFailed:
+			kWarning() << "Rename failed for" << mCurrentUrl;
 		}
 		q->advance();
 		importNext();
@@ -144,11 +158,12 @@ void Importer::setAutoRenameFormat(const QString& format) {
 }
 
 void Importer::start(const KUrl::List& list, const KUrl& destination) {
-	d->mProgress = 0;
-	d->mJobProgress = 0;
 	d->mUrlList = list;
 	d->mImportedUrlList.clear();
-	d->mRenameWarnings.clear();
+	d->mSkippedUrlList.clear();
+	d->mRenamedCount = 0;
+	d->mProgress = 0;
+	d->mJobProgress = 0;
 
 	emitProgressChanged();
 	maximumChanged(d->mUrlList.count() * 100);
@@ -174,11 +189,7 @@ void Importer::slotCopyDone(KJob* _job) {
 }
 
 void Importer::finalizeImport() {
-	if (!d->mRenameWarnings.isEmpty()) {
-		kWarning() << "FIXME: Handle rename failures:" << d->mRenameWarnings;
-	} else {
-		d->mDestImportDir->unlink();
-	}
+	d->mDestImportDir->unlink();
 	importFinished();
 }
 
@@ -199,6 +210,14 @@ void Importer::emitProgressChanged() {
 
 KUrl::List Importer::importedUrlList() const {
 	return d->mImportedUrlList;
+}
+
+KUrl::List Importer::skippedUrlList() const {
+	return d->mSkippedUrlList;
+}
+
+int Importer::renamedCount() const {
+	return d->mRenamedCount;
 }
 
 } // namespace

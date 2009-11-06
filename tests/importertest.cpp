@@ -97,12 +97,76 @@ void ImporterTest::testSuccessfulImport() {
 
 	QCOMPARE(importer.importedUrlList().count(), list.count());
 	QCOMPARE(importer.importedUrlList(), list);
+	QCOMPARE(importer.skippedUrlList().count(), 0);
+	QCOMPARE(importer.renamedCount(), 0);
 
 	Q_FOREACH(const KUrl& src, list) {
 		KUrl dst = destUrl;
 		dst.addPath(src.fileName());
 		QVERIFY(FileUtils::contentsAreIdentical(src, dst));
 	}
+}
+
+void ImporterTest::testSkippedUrlList() {
+	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+
+	Importer importer(0);
+
+	KUrl::List list = mDocumentList.mid(0, 1);
+
+	QEventLoop loop;
+	connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+	importer.start(list, destUrl);
+	loop.exec();
+
+	QCOMPARE(importer.importedUrlList().count(), 1);
+	QCOMPARE(importer.importedUrlList(), list);
+
+	list = mDocumentList;
+	KUrl::List expectedImportedList = mDocumentList.mid(1);
+	KUrl::List expectedSkippedList = mDocumentList.mid(0, 1);
+	importer.start(list, destUrl);
+	loop.exec();
+
+	QCOMPARE(importer.importedUrlList().count(), 2);
+	QCOMPARE(importer.importedUrlList(), expectedImportedList);
+	QCOMPARE(importer.skippedUrlList(), expectedSkippedList);
+	QCOMPARE(importer.renamedCount(), 0);
+}
+
+void ImporterTest::testRenamedCount() {
+	KUrl destUrl = KUrl::fromPath(mTempDir->name() + "/foo");
+
+	Importer importer(0);
+
+	KUrl::List list;
+	list << mDocumentList.first();
+
+	QEventLoop loop;
+	connect(&importer, SIGNAL(importFinished()), &loop, SLOT(quit()));
+	importer.start(list, destUrl);
+	loop.exec();
+
+	QCOMPARE(importer.importedUrlList().count(), 1);
+	QCOMPARE(importer.importedUrlList(), list);
+
+	// Modify imported document so that next import does not skip it
+	{
+		KUrl url = destUrl;
+		url.addPath(mDocumentList.first().fileName());
+		QFile file(url.toLocalFile());
+		QVERIFY(file.open(QIODevice::Append));
+		file.write("foo");
+	}
+
+	list = mDocumentList;
+	importer.start(list, destUrl);
+	loop.exec();
+
+	QCOMPARE(importer.importedUrlList().count(), 3);
+	QCOMPARE(importer.importedUrlList(), mDocumentList);
+	QCOMPARE(importer.skippedUrlList().count(), 0);
+	QCOMPARE(importer.renamedCount(), 1);
 }
 
 void ImporterTest::testFileNameFormater() {
