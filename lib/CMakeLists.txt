@@ -34,6 +34,7 @@ set(gwenviewlib_SRCS
 	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
+	binder.cpp
 	eventwatcher.cpp
 	splittercollapser.cpp
 	historymodel.cpp
@@ -56,6 +57,7 @@ set(gwenviewlib_SRCS
 	jpegcontent.cpp
 	semanticinfo/sorteddirmodel.cpp
 	memoryutils.cpp
+	messagebubble.cpp
 	mimetypeutils.cpp
 	paintutils.cpp
 	placetreemodel.cpp

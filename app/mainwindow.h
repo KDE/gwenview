@@ -34,6 +34,7 @@ namespace Gwenview {
 
 class DocumentPanel;
 class ContextManager;
+class MessageBubble;
 
 class MainWindow : public KXmlGuiWindow {
 Q_OBJECT
@@ -54,6 +55,8 @@ public:
 	bool currentDocumentIsRasterImage() const;
 
 	void setDistractionFreeMode(bool);
+
+	void showMessageBubble(MessageBubble*);
 
 public Q_SLOTS:
 	void showStartPage();

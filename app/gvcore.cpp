@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QProgressDialog>
 #include <QStandardItemModel>
 #include <QtConcurrentMap>
+#include <QToolButton>
 #include <QWidget>
 
 // KDE
@@ -41,9 +42,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurl.h>
 
 // Local
+#include <lib/binder.h>
 #include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/historymodel.h>
+#include <lib/messagebubble.h>
 #include <lib/mimetypeutils.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -307,6 +310,19 @@ void GvCore::saveAs(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	if (doc->save(saveAsUrl, format.data()) && url != saveAsUrl) {
 		d->mMainWindow->goToUrl(saveAsUrl);
+
+		MessageBubble* bubble = new MessageBubble();
+		bubble->setText(i18n("You are now viewing the new document."));
+		KGuiItem item = KStandardGuiItem::back();
+		item.setText(i18n("Go back to the original"));
+		QToolButton* button = bubble->addButton(item);
+
+		connect(button, SIGNAL(clicked()),
+			CREATE_BINDER(bubble, MainWindow, KUrl, d->mMainWindow, goToUrl, url), SLOT(run()));
+		connect(button, SIGNAL(clicked()),
+			bubble, SLOT(deleteLater()));
+
+		d->mMainWindow->showMessageBubble(bubble);
 	}
 }
 
