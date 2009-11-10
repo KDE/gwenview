@@ -77,9 +77,12 @@ static KUrl urlForIndex(const QModelIndex& index) {
 struct Thumbnail {
 	Thumbnail(const QPersistentModelIndex& index_)
 	: mIndex(index_)
-	, mRough(true) {}
+	, mRough(true)
+	, mWaitingForThumbnail(true) {}
 
-	Thumbnail() : mRough(true) {}
+	Thumbnail()
+	: mRough(true)
+	, mWaitingForThumbnail(true) {}
 
 	/**
 	 * Init the thumbnail based on a icon
@@ -90,6 +93,9 @@ struct Thumbnail {
 	}
 
 	bool isGroupPixAdaptedForSize(int size) const {
+		if (mWaitingForThumbnail) {
+			return false;
+		}
 		if (mGroupPix.isNull()) {
 			return false;
 		}
@@ -113,6 +119,8 @@ struct Thumbnail {
 	/// Whether mAdjustedPix represents has been scaled using fast or smooth
 	//transformation
 	bool mRough;
+	/// Set to true if mGroupPix should be replaced with a real thumbnail
+	bool mWaitingForThumbnail;
 };
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
@@ -391,11 +399,17 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
 		return;
 	}
 	Thumbnail& thumbnail = it.value();
-	if (MimeTypeUtils::fileItemKind(item) == MimeTypeUtils::KIND_VIDEO) {
+	MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
+	if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_VIDEO) {
 		// Special case for videos because our kde install may come without
 		// support for video thumbnails so we show the mimetype icon instead of
 		// a broken image icon
-		thumbnail.initAsIcon(item.pixmap(128));
+		thumbnail.initAsIcon(item.pixmap(256 /*d->mThumbnailSize*/));
+	} else if (kind == MimeTypeUtils::KIND_DIR) {
+		// Special case for folders because ThumbnailLoadJob does not return a
+		// thumbnail if there is no images
+		thumbnail.mWaitingForThumbnail = false;
+		return;
 	} else {
 		thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
 	}
@@ -413,17 +427,24 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 
 	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
-		if (ArchiveUtils::fileItemIsDirOrArchive(item)) {
-			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
-			thumbnail.initAsIcon(item.pixmap(128));
-			it = d->mThumbnailForUrl.insert(url, thumbnail);
-		} else {
-			return d->mWaitingThumbnail;
+		// Create thumbnail and init it with mime icons if relevant
+		Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
+
+		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
+		if (kind == MimeTypeUtils::KIND_ARCHIVE || kind == MimeTypeUtils::KIND_DIR) {
+			QPixmap pix = item.pixmap(ThumbnailGroup::pixelSize(ThumbnailGroup::Large));
+			thumbnail.initAsIcon(pix);
+			if (kind == MimeTypeUtils::KIND_ARCHIVE) {
+				// No thumbnails for archives
+				thumbnail.mWaitingForThumbnail = false;
+			}
 		}
+
+		it = d->mThumbnailForUrl.insert(url, thumbnail);
 	}
 
 	Thumbnail& thumbnail = it.value();
-	if (thumbnail.mGroupPix.isNull()) {
+	if (it.value().mGroupPix.isNull()) {
 		return d->mWaitingThumbnail;
 	}
 
@@ -553,9 +574,9 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 			continue;
 		}
 
-		// Filter out non documents
+		// Filter out archives
 		MimeTypeUtils::Kind kind = MimeTypeUtils::fileItemKind(item);
-		if (kind == MimeTypeUtils::KIND_DIR || kind == MimeTypeUtils::KIND_ARCHIVE) {
+		if (kind == MimeTypeUtils::KIND_ARCHIVE) {
 			continue;
 		}
 
@@ -571,10 +592,15 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 			continue;
 		}
 
-		// Add the item to our list and to mThumbnailForUrl, so that
-		// setThumbnail() can find the item to update
+		// Add the item to our list
 		list << item;
-		d->mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index));
+
+		// Insert the thumbnail in mThumbnailForUrl, so that
+		// setThumbnail() can find the item to update
+		if (it == d->mThumbnailForUrl.constEnd()) {
+			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
+			d->mThumbnailForUrl.insert(url, thumbnail);
+		}
 	}
 
 	if (!list.empty()) {
