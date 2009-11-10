@@ -648,7 +648,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
 	const KFileItem fileItem = fileItemForIndex(index);
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
-	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItemForIndex(index));
+	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
 	QRect rect = option.rect;
 	const bool selected = option.state & QStyle::State_Selected;
 	const bool underMouse = option.state & QStyle::State_MouseOver;
