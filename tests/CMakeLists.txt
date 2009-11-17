@@ -99,6 +99,15 @@ kde4_add_unit_test(urlutilstest ${urlutilstest_SRCS})
 
 target_link_libraries(urlutilstest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
+# HistoryModelTest
+set(historymodeltest_SRCS
+	historymodeltest.cpp
+	)
+
+kde4_add_unit_test(historymodeltest ${historymodeltest_SRCS})
+
+target_link_libraries(historymodeltest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
+
 # ImporterTest
 set(importertest_SRCS
 	importertest.cpp
