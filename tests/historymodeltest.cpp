@@ -68,7 +68,7 @@ void HistoryModelTest::testAddUrl() {
 	testModel(model, u2, u1);
 
 	// Make u1 the most recent
-	QDateTime d3 = QDateTime::fromString("20090324T22:42:15", Qt::ISODate);
+	QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
 	model.addUrl(u1, d3);
 	testModel(model, u1, u2);
 }
