@@ -38,6 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <ui_startpage.h>
 #include <lib/flowlayout.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/thumbnailview/abstractthumbnailviewhelper.h>
+#include <lib/thumbnailview/previewitemdelegate.h>
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include <lib/semanticinfo/tagmodel.h>
@@ -49,6 +51,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 
 namespace Gwenview {
+
+class HistoryThumbnailViewHelper : public AbstractThumbnailViewHelper {
+public:
+	HistoryThumbnailViewHelper(QObject* parent)
+	: AbstractThumbnailViewHelper(parent)
+	{}
+
+	virtual void showContextMenu(QWidget*) {
+	}
+
+	virtual void showMenuForUrlDroppedOnViewport(QWidget*, const KUrl::List&) {
+	}
+
+	virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&) {
+	}
+
+	virtual bool isDocumentModified(const KUrl&) {
+		return false;
+	}
+
+	virtual void thumbnailForDocument(const KUrl&, ThumbnailGroup::Enum, QPixmap*, QSize*) const {
+	}
+};
 
 /**
  * Inherit from QStyledItemDelegate to match KFilePlacesViewDelegate sizeHint
@@ -134,7 +159,6 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 		SLOT(slotTagViewClicked(const QModelIndex&)));
 
 	// Recent folder view
-	d->mRecentFoldersView->setItemDelegate(new HistoryViewDelegate(d->mRecentFoldersView));
 	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
 		SLOT(slotListViewClicked(const QModelIndex&)) );
 
@@ -224,7 +248,10 @@ void StartPage::slotListViewClicked(const QModelIndex& index) {
 void StartPage::showEvent(QShowEvent* event) {
 	if (GwenviewConfig::historyEnabled()) {
 		if (!d->mRecentFoldersView->model()) {
+			d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
 			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
+			d->mRecentFoldersView->setItemDelegate(new PreviewItemDelegate(d->mRecentFoldersView));
+			d->mRecentFoldersView->setThumbnailSize(128);
 		}
 		if (!d->mRecentUrlsView->model()) {
 			d->mRecentUrlsView->setModel(d->mGvCore->recentUrlsModel());
