@@ -45,7 +45,7 @@ namespace Gwenview {
 static const int MAX_HISTORY_SIZE = 20;
 
 
-struct HistoryItem {
+struct HistoryItem : public QStandardItem {
 	void save() const {
 		KConfig config(mConfigPath, KConfig::SimpleConfig);
 		KConfigGroup group(&config, "general");
@@ -122,42 +122,28 @@ private:
 	{
 		mUrl.cleanPath();
 		mUrl.adjustPath(KUrl::RemoveTrailingSlash);
+		setText(mUrl.pathOrUrl());
+
+		QString iconName = KMimeType::iconNameForUrl(mUrl);
+		setIcon(KIcon(iconName));
+
+		setData(QVariant(mUrl), KFilePlacesModel::UrlRole);
+
+		QString date = KGlobal::locale()->formatDateTime(mDateTime, KLocale::FancyLongDate);
+		setData(QVariant(i18n("Last visited: %1", date)), Qt::ToolTipRole);
+	}
+
+	bool operator<(const QStandardItem& other) const {
+		return mDateTime > static_cast<const HistoryItem*>(&other)->mDateTime;
 	}
 };
-
-
-bool historyItemLessThan(const HistoryItem* item1, const HistoryItem* item2) {
-	return item1->dateTime() > item2->dateTime();
-}
 
 
 struct HistoryModelPrivate {
 	HistoryModel* q;
 	QString mStorageDir;
 
-	QList<HistoryItem*> mHistoryItemList;
 	QMap<KUrl, HistoryItem*> mHistoryItemForUrl;
-
-	void updateModelItems() {
-		// FIXME: optimize
-		q->clear();
-		Q_FOREACH(const HistoryItem* historyItem, mHistoryItemList) {
-			KUrl url(historyItem->url());
-
-			QStandardItem* item = new QStandardItem;
-			item->setText(url.pathOrUrl());
-
-			QString iconName = KMimeType::iconNameForUrl(url);
-			item->setIcon(KIcon(iconName));
-
-			item->setData(QVariant(url), KFilePlacesModel::UrlRole);
-
-			QString date = KGlobal::locale()->formatDateTime(historyItem->dateTime(), KLocale::FancyLongDate);
-			item->setData(QVariant(i18n("Last visited: %1", date)), Qt::ToolTipRole);
-
-			q->appendRow(item);
-		}
-	}
 
 	void load() {
 		QDir dir(mStorageDir);
@@ -179,21 +165,16 @@ struct HistoryModelPrivate {
 				item->unlink();
 				delete item;
 			} else {
-				mHistoryItemList << item;
 				mHistoryItemForUrl.insert(item->url(), item);
+				q->appendRow(item);
 			}
 		}
-		sortList();
-		updateModelItems();
-	}
-
-	void sortList() {
-		qSort(mHistoryItemList.begin(), mHistoryItemList.end(), historyItemLessThan);
+		q->sort(0);
 	}
 
 	void garbageCollect() {
-		while (mHistoryItemList.count() > MAX_HISTORY_SIZE) {
-			HistoryItem* item = mHistoryItemList.takeLast();
+		while (q->rowCount() > MAX_HISTORY_SIZE) {
+			HistoryItem* item = static_cast<HistoryItem*>(q->takeRow(q->rowCount() - 1).at(0));
 			mHistoryItemForUrl.remove(item->url());
 			item->unlink();
 			delete item;
@@ -212,7 +193,6 @@ HistoryModel::HistoryModel(QObject* parent, const QString& storageDir)
 
 
 HistoryModel::~HistoryModel() {
-	qDeleteAll(d->mHistoryItemList);
 	delete d;
 }
 
@@ -222,29 +202,27 @@ void HistoryModel::addUrl(const KUrl& url, const QDateTime& _dateTime) {
 	HistoryItem* historyItem = d->mHistoryItemForUrl.value(url);
 	if (historyItem) {
 		historyItem->setDateTime(dateTime);
-		d->sortList();
+		sort(0);
 	} else {
 		historyItem = HistoryItem::create(url, dateTime, d->mStorageDir);
 		if (!historyItem) {
 			kError() << "Could not save history for url" << url;
 			return;
 		}
-		d->mHistoryItemList << historyItem;
-		d->sortList();
+		appendRow(historyItem);
+		sort(0);
 		d->garbageCollect();
 	}
-	d->updateModelItems();
 }
 
 
 bool HistoryModel::removeRows(int start, int count, const QModelIndex& parent) {
 	Q_ASSERT(!parent.isValid());
 	for (int row=start + count - 1; row >= start ; --row) {
-		HistoryItem* historyItem = d->mHistoryItemList.takeAt(row);
+		HistoryItem* historyItem = static_cast<HistoryItem*>(item(row, 0));
 		Q_ASSERT(historyItem);
 		d->mHistoryItemForUrl.remove(historyItem->url());
 		historyItem->unlink();
-		delete historyItem;
 	}
 	return QStandardItemModel::removeRows(start, count, parent);
 }
