@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define HISTORYMODEL_H
 
 // Qt
+#include <QDateTime>
 #include <QStandardItemModel>
 
 // KDE
@@ -46,7 +47,7 @@ public:
 	HistoryModel(QObject* parent, const QString& storageDir);
 	~HistoryModel();
 
-	void addUrl(const KUrl&);
+	void addUrl(const KUrl&, const QDateTime& dateTime = QDateTime());
 
 	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
 

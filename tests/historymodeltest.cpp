@@ -53,17 +53,22 @@ void testModel(const HistoryModel& model, const KUrl& u1, const KUrl& u2) {
 
 void HistoryModelTest::testAddUrl() {
 	KUrl u1 = KUrl::fromPath("/home");
+	QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
 	KUrl u2 = KUrl::fromPath("/root");
+	QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
 	KTempDir dir;
 	{
 		HistoryModel model(0, dir.name());
-		model.addUrl(u1);
-		QTest::qWait(2000);
-		model.addUrl(u2);
+		model.addUrl(u1, d1);
+		model.addUrl(u2, d2);
 		testModel(model, u2, u1);
 	}
 
-	kDebug() << "loading";
 	HistoryModel model(0, dir.name());
 	testModel(model, u2, u1);
+
+	// Make u1 the most recent
+	QDateTime d3 = QDateTime::fromString("20090324T22:42:15", Qt::ISODate);
+	model.addUrl(u1, d3);
+	testModel(model, u1, u2);
 }

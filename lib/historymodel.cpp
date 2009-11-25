@@ -217,13 +217,14 @@ HistoryModel::~HistoryModel() {
 }
 
 
-void HistoryModel::addUrl(const KUrl& url) {
+void HistoryModel::addUrl(const KUrl& url, const QDateTime& _dateTime) {
+	QDateTime dateTime = _dateTime.isValid() ? _dateTime : QDateTime::currentDateTime();
 	HistoryItem* historyItem = d->mHistoryItemForUrl.value(url);
 	if (historyItem) {
-		historyItem->setDateTime(QDateTime::currentDateTime());
+		historyItem->setDateTime(dateTime);
 		d->sortList();
 	} else {
-		historyItem = HistoryItem::create(url, QDateTime::currentDateTime(), d->mStorageDir);
+		historyItem = HistoryItem::create(url, dateTime, d->mStorageDir);
 		if (!historyItem) {
 			kError() << "Could not save history for url" << url;
 			return;
