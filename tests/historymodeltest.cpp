@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "historymodeltest.moc"
 
 // Qt
+#include <QDir>
 
 // KDE
 #include <kdebug.h>
@@ -95,4 +96,20 @@ void HistoryModelTest::testGarbageCollect() {
 	// testModel()
 	HistoryModel model(0, dir.name(), 10);
 	testModel(model, u3, u2);
+}
+
+void HistoryModelTest::testRemoveRows() {
+	KUrl u1 = KUrl::fromPath("/home");
+	QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
+	KUrl u2 = KUrl::fromPath("/root");
+	QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
+
+	KTempDir dir;
+	HistoryModel model(0, dir.name(), 2);
+	model.addUrl(u1, d1);
+	model.addUrl(u2, d2);
+	model.removeRows(0, 1);
+	QCOMPARE(model.rowCount(), 1);
+	QDir qDir(dir.name());
+	QCOMPARE(qDir.entryList(QDir::Files | QDir::NoDotAndDotDot).count(), 1);
 }
