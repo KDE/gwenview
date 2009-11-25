@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <kdirmodel.h>
+#include <kfileitem.h>
 #include <kfileplacesmodel.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -125,6 +127,9 @@ private:
 		setIcon(KIcon(iconName));
 
 		setData(QVariant(mUrl), KFilePlacesModel::UrlRole);
+
+		KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, mUrl);
+		setData(QVariant(fileItem), KDirModel::FileItemRole);
 
 		QString date = KGlobal::locale()->formatDateTime(mDateTime, KLocale::FancyLongDate);
 		setData(QVariant(i18n("Last visited: %1", date)), Qt::ToolTipRole);
