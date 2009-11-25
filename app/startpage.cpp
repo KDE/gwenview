@@ -250,7 +250,9 @@ void StartPage::showEvent(QShowEvent* event) {
 		if (!d->mRecentFoldersView->model()) {
 			d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
 			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
-			d->mRecentFoldersView->setItemDelegate(new PreviewItemDelegate(d->mRecentFoldersView));
+			PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
+			delegate->setContextBarMode(PreviewItemDelegate::NoContextBar);
+			d->mRecentFoldersView->setItemDelegate(delegate);
 			d->mRecentFoldersView->setThumbnailSize(128);
 		}
 		if (!d->mRecentUrlsView->model()) {

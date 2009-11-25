@@ -223,6 +223,9 @@ struct PreviewItemDelegatePrivate {
 
 
 	void showContextBar(const QRect& rect, const QPixmap& thumbnailPix) {
+		if (mContextBarMode == PreviewItemDelegate::NoContextBar) {
+			return;
+		}
 		mContextBar->adjustSize();
 		// Center bar in FullContextBar mode, left align in
 		// SelectionOnlyContextBar mode
@@ -539,6 +542,10 @@ struct PreviewItemDelegatePrivate {
 	}
 
 	void updateContextBar() {
+		if (mContextBarMode == PreviewItemDelegate::NoContextBar) {
+			mContextBar->hide();
+			return;
+		}
 		const int width = itemWidth();
 		const int buttonWidth = mRotateRightButton->sizeHint().width();
 		bool full = mContextBarMode == PreviewItemDelegate::FullContextBar;

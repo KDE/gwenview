@@ -51,6 +51,7 @@ public:
 	~PreviewItemDelegate();
 
 	enum ContextBarMode {
+		NoContextBar,            /** Do not show context bar at all */
 		SelectionOnlyContextBar, /** Only show the +/- button */
 		FullContextBar           /** Show all buttons, provided there is enough room */
 	};
