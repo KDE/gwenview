@@ -44,7 +44,7 @@ class HistoryModelPrivate;
 class GWENVIEWLIB_EXPORT HistoryModel : public QStandardItemModel {
 	Q_OBJECT
 public:
-	HistoryModel(QObject* parent, const QString& storageDir);
+	HistoryModel(QObject* parent, const QString& storageDir, int maxCount = 20);
 	~HistoryModel();
 
 	void addUrl(const KUrl&, const QDateTime& dateTime = QDateTime());

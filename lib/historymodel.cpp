@@ -42,9 +42,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-static const int MAX_HISTORY_SIZE = 20;
-
-
 struct HistoryItem : public QStandardItem {
 	void save() const {
 		KConfig config(mConfigPath, KConfig::SimpleConfig);
@@ -142,6 +139,7 @@ private:
 struct HistoryModelPrivate {
 	HistoryModel* q;
 	QString mStorageDir;
+	int mMaxCount;
 
 	QMap<KUrl, HistoryItem*> mHistoryItemForUrl;
 
@@ -173,7 +171,7 @@ struct HistoryModelPrivate {
 	}
 
 	void garbageCollect() {
-		while (q->rowCount() > MAX_HISTORY_SIZE) {
+		while (q->rowCount() > mMaxCount) {
 			HistoryItem* item = static_cast<HistoryItem*>(q->takeRow(q->rowCount() - 1).at(0));
 			mHistoryItemForUrl.remove(item->url());
 			item->unlink();
@@ -183,11 +181,12 @@ struct HistoryModelPrivate {
 };
 
 
-HistoryModel::HistoryModel(QObject* parent, const QString& storageDir)
+HistoryModel::HistoryModel(QObject* parent, const QString& storageDir, int maxCount)
 : QStandardItemModel(parent)
 , d(new HistoryModelPrivate) {
 	d->q = this;
 	d->mStorageDir = storageDir;
+	d->mMaxCount = maxCount;
 	d->load();
 }
 
