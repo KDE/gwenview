@@ -72,3 +72,27 @@ void HistoryModelTest::testAddUrl() {
 	model.addUrl(u1, d3);
 	testModel(model, u1, u2);
 }
+
+void HistoryModelTest::testGarbageCollect() {
+	KUrl u1 = KUrl::fromPath("/home");
+	QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
+	KUrl u2 = KUrl::fromPath("/root");
+	QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
+	KUrl u3 = KUrl::fromPath("/usr");
+	QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
+
+	KTempDir dir;
+	{
+		HistoryModel model(0, dir.name(), 2);
+		model.addUrl(u1, d1);
+		model.addUrl(u2, d2);
+		testModel(model, u2, u1);
+		model.addUrl(u3, d3);
+	}
+
+	// Create a model with a larger history so that if garbage collecting fails
+	// to remove the collected url, the size of the model won't pass
+	// testModel()
+	HistoryModel model(0, dir.name(), 10);
+	testModel(model, u3, u2);
+}

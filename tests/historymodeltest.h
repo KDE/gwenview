@@ -28,6 +28,8 @@ class HistoryModelTest : public QObject {
 
 private Q_SLOTS:
 	void testAddUrl();
+
+	void testGarbageCollect();
 };
 
 #endif /* HISTORYMODELTEST_H */
