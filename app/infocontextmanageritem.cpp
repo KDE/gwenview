@@ -20,8 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "infocontextmanageritem.moc"
 
 // Qt
-#include <QFormLayout>
 #include <QLabel>
+#include <QPainter>
 #include <QPointer>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -60,34 +60,58 @@ namespace Gwenview {
 class KeyValueWidget : public QWidget {
 public:
 	KeyValueWidget(QWidget* parent)
-	: QWidget(parent)
-	, mLayout(new QFormLayout(this)) {
+	: QWidget(parent) {
 		setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	}
 
 	void addRow(const QString& key, const QString& value) {
 		QString keyString = i18nc(
-				"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-				"%1:", key);
-
-		KSqueezedTextLabel* keyLabel = new KSqueezedTextLabel;
-		keyLabel->setTextElideMode(Qt::ElideMiddle);
-		keyLabel->setText(keyString);
-
-		QLabel* valueLabel = new QLabel;
-		valueLabel->setText(value);
-
-		mLayout->addRow(keyLabel, valueLabel);
+			"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
+			"%1:", key);
+		mRows.append(Row(keyString, value));
+		updateGeometry();
 	}
 
 	void clear() {
-		Q_FOREACH(QWidget* child, findChildren<QWidget*>()) {
-			child->deleteLater();
+		mRows.clear();
+		updateGeometry();
+	}
+
+	virtual QSize sizeHint() const {
+		int height = fontMetrics().height() * mRows.count();
+		return QSize(150, height);
+	}
+
+protected:
+	virtual void paintEvent(QPaintEvent*) {
+		// Compute max width
+		int valuePosX = 0;
+		int maxValuePosX = width() / 2;
+		Q_FOREACH(const Row& row, mRows) {
+			int keyWidth = fontMetrics().width(row.first);
+			if (keyWidth > maxValuePosX) {
+				valuePosX = maxValuePosX;
+				break;
+			}
+			valuePosX = qMax(valuePosX, keyWidth);
+		}
+
+		// Draw
+		QPainter painter(this);
+		int posY = 0;
+		int height = fontMetrics().height();
+		Q_FOREACH(const Row& row, mRows) {
+			QString key = row.first;
+			QString value = row.second;
+			painter.drawText(0, posY, valuePosX, height, Qt::AlignRight, key);
+			painter.drawText(valuePosX, posY, width() - valuePosX, height, Qt::AlignLeft, ' ' + value);
+			posY += height;
 		}
 	}
 
 private:
-	QFormLayout* mLayout;
+	typedef QPair<QString, QString> Row;
+	QList<Row> mRows;
 };
 
 
