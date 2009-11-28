@@ -58,22 +58,41 @@ namespace Gwenview {
  * This widget is capable of showing multiple lines of key/value pairs.
  */
 class KeyValueWidget : public QWidget {
+	struct Row {
+		Row()
+		: keyWidth(0)
+		, valueWidth(0)
+		{}
+
+		QString key;
+		QString value;
+		int keyWidth;
+		int valueWidth;
+	};
 public:
 	KeyValueWidget(QWidget* parent)
-	: QWidget(parent) {
+	: QWidget(parent)
+	, mKeyColumnWidth(0)
+	{
 		setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	}
 
 	void addRow(const QString& key, const QString& value) {
-		QString keyString = i18nc(
+		Row row;
+		row.key = i18nc(
 			"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
 			"%1:", key);
-		mRows.append(Row(keyString, value));
+		row.value = ' ' + value;
+		row.keyWidth = fontMetrics().width(row.key);
+		row.valueWidth = fontMetrics().width(row.value);
+		mRows.append(row);
+		mKeyColumnWidth = 0;
 		updateGeometry();
 	}
 
 	void clear() {
 		mRows.clear();
+		mKeyColumnWidth = 0;
 		updateGeometry();
 	}
 
@@ -83,35 +102,52 @@ public:
 	}
 
 protected:
+	virtual void resizeEvent(QResizeEvent* event) {
+		QWidget::resizeEvent(event);
+		mKeyColumnWidth = 0;
+	}
+
 	virtual void paintEvent(QPaintEvent*) {
-		// Compute max width
-		int valuePosX = 0;
-		int maxValuePosX = width() / 2;
-		Q_FOREACH(const Row& row, mRows) {
-			int keyWidth = fontMetrics().width(row.first);
-			if (keyWidth > maxValuePosX) {
-				valuePosX = maxValuePosX;
-				break;
+		// Update mKeyColumnWidth
+		if (mKeyColumnWidth == 0) {
+			int maxKeyWidth = width() / 2;
+			Q_FOREACH(const Row& row, mRows) {
+				int keyWidth = qMin(row.keyWidth, maxKeyWidth);
+				mKeyColumnWidth = qMax(mKeyColumnWidth, keyWidth);
 			}
-			valuePosX = qMax(valuePosX, keyWidth);
 		}
+
+		// Init gradients
+		int gradientWidth = fontMetrics().averageCharWidth() * 4;
+		QLinearGradient keyGradient(0, 0, gradientWidth, 0);
+		keyGradient.setColorAt(0, palette().color(backgroundRole()));
+		keyGradient.setColorAt(1, Qt::transparent);
+		QLinearGradient valueGradient(width() - gradientWidth, 0, width(), 0);
+		valueGradient.setColorAt(0, Qt::transparent);
+		valueGradient.setColorAt(1, palette().color(backgroundRole()));
 
 		// Draw
 		QPainter painter(this);
 		int posY = 0;
 		int height = fontMetrics().height();
 		Q_FOREACH(const Row& row, mRows) {
-			QString key = row.first;
-			QString value = row.second;
-			painter.drawText(0, posY, valuePosX, height, Qt::AlignRight, key);
-			painter.drawText(valuePosX, posY, width() - valuePosX, height, Qt::AlignLeft, ' ' + value);
+			QRect rect(0, posY, mKeyColumnWidth, height);
+			painter.drawText(rect, Qt::AlignRight, row.key);
+			if (row.keyWidth > rect.width()) {
+				painter.fillRect(rect, keyGradient);
+			}
+			rect = QRect(mKeyColumnWidth, posY, width() - mKeyColumnWidth, height);
+			painter.drawText(rect, Qt::AlignLeft, row.value);
+			if (row.valueWidth > rect.width()) {
+				painter.fillRect(rect, valueGradient);
+			}
 			posY += height;
 		}
 	}
 
 private:
-	typedef QPair<QString, QString> Row;
 	QList<Row> mRows;
+	int mKeyColumnWidth;
 };
 
 
