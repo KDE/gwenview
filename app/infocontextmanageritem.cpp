@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "infocontextmanageritem.moc"
 
 // Qt
+#include <QApplication>
 #include <QLabel>
 #include <QPainter>
 #include <QPointer>
@@ -117,31 +118,43 @@ protected:
 			}
 		}
 
+		bool isRightToLeft = QApplication::isRightToLeft();
+
 		// Init gradients
 		int gradientWidth = fontMetrics().averageCharWidth() * 4;
-		QLinearGradient keyGradient(0, 0, gradientWidth, 0);
-		keyGradient.setColorAt(0, palette().color(backgroundRole()));
-		keyGradient.setColorAt(1, Qt::transparent);
-		QLinearGradient valueGradient(width() - gradientWidth, 0, width(), 0);
-		valueGradient.setColorAt(0, Qt::transparent);
-		valueGradient.setColorAt(1, palette().color(backgroundRole()));
+		QLinearGradient leftGradient(0, 0, gradientWidth, 0);
+		leftGradient.setColorAt(0, palette().color(backgroundRole()));
+		leftGradient.setColorAt(1, Qt::transparent);
+		QLinearGradient rightGradient(width() - gradientWidth, 0, width(), 0);
+		rightGradient.setColorAt(0, Qt::transparent);
+		rightGradient.setColorAt(1, palette().color(backgroundRole()));
+
+		const QGradient& keyGradient = isRightToLeft ? rightGradient : leftGradient;
+		const QGradient& valueGradient = isRightToLeft ? leftGradient : rightGradient;
 
 		// Draw
 		QPainter painter(this);
-		int posY = 0;
 		int height = fontMetrics().height();
+		QRect keyRect, valueRect;
+		if (isRightToLeft) {
+			keyRect = QRect(width() - mKeyColumnWidth, 0, mKeyColumnWidth, height);
+			valueRect = QRect(0, 0, width() - mKeyColumnWidth, height);
+		} else {
+			keyRect = QRect(0, 0, mKeyColumnWidth, height);
+			valueRect = QRect(mKeyColumnWidth, 0, width() - mKeyColumnWidth, height);
+		}
+
 		Q_FOREACH(const Row& row, mRows) {
-			QRect rect(0, posY, mKeyColumnWidth, height);
-			painter.drawText(rect, Qt::AlignRight, row.key);
-			if (row.keyWidth > rect.width()) {
-				painter.fillRect(rect, keyGradient);
+			painter.drawText(keyRect, Qt::AlignRight, row.key);
+			if (row.keyWidth > keyRect.width()) {
+				painter.fillRect(keyRect, keyGradient);
 			}
-			rect = QRect(mKeyColumnWidth, posY, width() - mKeyColumnWidth, height);
-			painter.drawText(rect, Qt::AlignLeft, row.value);
-			if (row.valueWidth > rect.width()) {
-				painter.fillRect(rect, valueGradient);
+			painter.drawText(valueRect, Qt::AlignLeft, row.value);
+			if (row.valueWidth > valueRect.width()) {
+				painter.fillRect(valueRect, valueGradient);
 			}
-			posY += height;
+			keyRect.translate(0, height);
+			valueRect.translate(0, height);
 		}
 	}
 
