@@ -331,7 +331,9 @@ void CropTool::paint(QPainter* painter) {
 	QRect imageRect = imageView()->rect();
 
 	static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
-	static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
+	// For some reason nothing gets drawn if borderColor is not fully opaque!
+	//static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0, 0.66);
+	static const QColor borderColor = QColor::fromHsvF(0, 0, 1.0);
 	static const QColor fillColor   = QColor::fromHsvF(0, 0, 0.75, 0.66);
 
 	QRegion outerRegion = QRegion(imageRect) - QRegion(rect);
