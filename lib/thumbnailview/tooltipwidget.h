@@ -46,6 +46,8 @@ public:
 	qreal opacity() const;
 	void setOpacity(qreal);
 
+	virtual QSize sizeHint() const;
+
 protected:
 	virtual void paintEvent(QPaintEvent*);
 

@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QPainter>
+#include <QPainterPath>
 #include <QToolTip>
 
 // KDE
@@ -30,6 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kcolorscheme.h>
 
 // Local
+#include <lib/paintutils.h>
+
+static const int RADIUS = 5;
+static const int HMARGIN = 2;
 
 namespace Gwenview {
 
@@ -44,26 +49,6 @@ ToolTipWidget::ToolTipWidget(QWidget* parent)
 , d(new ToolTipWidgetPrivate) {
 	d->mOpacity = 1.;
 	setAutoFillBackground(true);
-	setPalette(QToolTip::palette());
-	/*
-	QPalette pal = QToolTip::palette();
-	pal.setCurrentColorGroup(QPalette::Inactive);
-	QColor fgColor = pal.color(QPalette::ToolTipText);
-	QColor bg2Color = pal.brush(QPalette::ToolTipBase).color();
-	QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
-
-	setStyleSheet(QString(
-		"background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-		" stop: 0 %1, stop: 1 %2);"
-		"border-radius: 5px;"
-		"color: %3;"
-		"padding: 0 2px;")
-		.arg(bg1Color.name())
-		.arg(bg2Color.name())
-		.arg(fgColor.name())
-		);
-	kDebug() << styleSheet();
-	*/
 }
 
 
@@ -83,12 +68,27 @@ void ToolTipWidget::setOpacity(qreal opacity) {
 }
 
 
+QSize ToolTipWidget::sizeHint() const {
+	QSize sh = QLabel::sizeHint();
+	return QSize(sh.width() + 2 * HMARGIN, sh.height());
+}
+
+
 void ToolTipWidget::paintEvent(QPaintEvent*) {
+	QColor bg2Color = QToolTip::palette().color(QPalette::ToolTipBase);
+	QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
+
+	QLinearGradient gradient(QPointF(0.0, 0.0), QPointF(0.0, height()));
+	gradient.setColorAt(0.0, bg1Color);
+	gradient.setColorAt(1.0, bg2Color);
+
 	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setOpacity(d->mOpacity);
-	painter.fillRect(rect(), palette().brush(QPalette::ToolTipBase));
+	QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
+	painter.fillPath(path, gradient);
 	painter.setPen(palette().color(QPalette::ToolTipText));
-	painter.drawText(rect(), text());
+	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), text());
 }
 
 
