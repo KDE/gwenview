@@ -469,10 +469,12 @@ struct PreviewItemDelegatePrivate {
 		if (mDetails & PreviewItemDelegate::DateDetail) {
 			// FIXME: Duplicated from drawText
 			const KFileItem fileItem = fileItemForIndex(index);
-			const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
-			const QString text = KGlobal::locale()->formatDateTime(dt);
-			elided |= isTextElided(text);
-			textList << text;
+			if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
+				const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
+				const QString text = KGlobal::locale()->formatDateTime(dt);
+				elided |= isTextElided(text);
+				textList << text;
+			}
 		}
 		if (!elided) {
 			hideToolTip();
