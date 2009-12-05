@@ -40,12 +40,13 @@ namespace Gwenview {
 
 
 struct ToolTipWidgetPrivate {
+	QString mText;
 	qreal mOpacity;
 };
 
 
 ToolTipWidget::ToolTipWidget(QWidget* parent)
-: QLabel(parent)
+: QWidget(parent)
 , d(new ToolTipWidgetPrivate) {
 	d->mOpacity = 1.;
 	setAutoFillBackground(true);
@@ -68,8 +69,19 @@ void ToolTipWidget::setOpacity(qreal opacity) {
 }
 
 
+QString ToolTipWidget::text() const {
+	return d->mText;
+}
+
+
+void ToolTipWidget::setText(const QString& text) {
+	d->mText = text;
+	update();
+}
+
+
 QSize ToolTipWidget::sizeHint() const {
-	QSize sh = QLabel::sizeHint();
+	QSize sh = fontMetrics().size(0 /* flags */, d->mText);
 	return QSize(sh.width() + 2 * HMARGIN, sh.height());
 }
 
@@ -88,7 +100,7 @@ void ToolTipWidget::paintEvent(QPaintEvent*) {
 	QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
 	painter.fillPath(path, gradient);
 	painter.setPen(palette().color(QPalette::ToolTipText));
-	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), text());
+	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), d->mText);
 }
 
 

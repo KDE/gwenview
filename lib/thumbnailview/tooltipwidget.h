@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define TOOLTIPWIDGET_H
 
 // Qt
-#include <QLabel>
+#include <QWidget>
 
 // KDE
 
@@ -36,7 +36,7 @@ class ToolTipWidgetPrivate;
 /**
  * A label which uses tooltip colors and can be faded
  */
-class ToolTipWidget : public QLabel {
+class ToolTipWidget : public QWidget {
 	Q_OBJECT
 	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
@@ -45,6 +45,9 @@ public:
 
 	qreal opacity() const;
 	void setOpacity(qreal);
+
+	QString text() const;
+	void setText(const QString& text);
 
 	virtual QSize sizeHint() const;
 
