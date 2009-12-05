@@ -199,7 +199,7 @@ struct PreviewItemDelegatePrivate {
 	PreviewItemDelegate::ThumbnailDetails mDetails;
 	PreviewItemDelegate::ContextBarMode mContextBarMode;
 
-	QPointer<QLabel> mToolTip;
+	QPointer<ToolTipWidget> mToolTip;
 	QScopedPointer<QAbstractAnimation> mToolTipAnimation;
 
 	QToolButton* createContextBarButton(const char* iconName) {
@@ -244,6 +244,7 @@ struct PreviewItemDelegatePrivate {
 
 	void initToolTip() {
 		mToolTip = new ToolTipWidget(mView->viewport());
+		mToolTip->setOpacity(0);
 		mToolTip->show();
 	}
 
@@ -483,32 +484,35 @@ struct PreviewItemDelegatePrivate {
 			initToolTip();
 		}
 		mToolTip->setText(textList.join("\n"));
-		mToolTip->adjustSize();
+		QSize tipSize = mToolTip->sizeHint();
 
 		// Compute tip position
 		QRect rect = mView->visualRect(index);
 		const int textY = ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN;
 		const int spacing = 1;
-		QPoint tipPosition = rect.topLeft() + QPoint((rect.width() - mToolTip->width()) / 2, textY + spacing);
-		if (tipPosition.x() < 0) {
-			tipPosition.setX(0);
-		} else if (tipPosition.x() + mToolTip->width() > mView->viewport()->width()) {
-			tipPosition.setX(mView->viewport()->width() - mToolTip->width());
+		QRect geometry(
+			QPoint(rect.topLeft() + QPoint((rect.width() - tipSize.width()) / 2, textY + spacing)),
+			tipSize
+			);
+		if (geometry.left() < 0) {
+			geometry.moveLeft(0);
+		} else if (geometry.right() > mView->viewport()->width()) {
+			geometry.moveRight(mView->viewport()->width());
 		}
 
 		// Show tip
 		QParallelAnimationGroup* anim = new QParallelAnimationGroup();
-		QPropertyAnimation* fadeIn = new QPropertyAnimation(mToolTip, "windowOpacity");
-		fadeIn->setStartValue(mToolTip->windowOpacity());
+		QPropertyAnimation* fadeIn = new QPropertyAnimation(mToolTip, "opacity");
+		fadeIn->setStartValue(mToolTip->opacity());
 		fadeIn->setEndValue(1.);
 		anim->addAnimation(fadeIn);
 
 		if (newTipLabel) {
-			mToolTip->move(tipPosition);
+			mToolTip->setGeometry(geometry);
 		} else {
 			QPropertyAnimation* move = new QPropertyAnimation(mToolTip, "geometry");
 			move->setStartValue(mToolTip->geometry());
-			move->setEndValue(QRect(tipPosition, mToolTip->size()));
+			move->setEndValue(geometry);
 			anim->addAnimation(move);
 		}
 
@@ -522,8 +526,8 @@ struct PreviewItemDelegatePrivate {
 		}
 		QSequentialAnimationGroup* anim = new QSequentialAnimationGroup();
 		anim->addPause(500);
-		QPropertyAnimation* fadeOut = new QPropertyAnimation(mToolTip, "windowOpacity");
-		fadeOut->setStartValue(mToolTip->windowOpacity());
+		QPropertyAnimation* fadeOut = new QPropertyAnimation(mToolTip, "opacity");
+		fadeOut->setStartValue(mToolTip->opacity());
 		fadeOut->setEndValue(0.);
 		anim->addAnimation(fadeOut);
 		mToolTipAnimation.reset(anim);

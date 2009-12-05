@@ -38,12 +38,16 @@ class ToolTipWidgetPrivate;
  */
 class ToolTipWidget : public QLabel {
 	Q_OBJECT
+	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
 	ToolTipWidget(QWidget* parent = 0);
 	~ToolTipWidget();
 
+	qreal opacity() const;
+	void setOpacity(qreal);
+
 protected:
-	//virtual void paintEvent(QPaintEvent*);
+	virtual void paintEvent(QPaintEvent*);
 
 private:
 	ToolTipWidgetPrivate* const d;

@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "tooltipwidget.moc"
 
 // Qt
+#include <QPainter>
 #include <QToolTip>
 
 // KDE
@@ -34,13 +35,17 @@ namespace Gwenview {
 
 
 struct ToolTipWidgetPrivate {
+	qreal mOpacity;
 };
 
 
 ToolTipWidget::ToolTipWidget(QWidget* parent)
 : QLabel(parent)
 , d(new ToolTipWidgetPrivate) {
+	d->mOpacity = 1.;
 	setAutoFillBackground(true);
+	setPalette(QToolTip::palette());
+	/*
 	QPalette pal = QToolTip::palette();
 	pal.setCurrentColorGroup(QPalette::Inactive);
 	QColor fgColor = pal.color(QPalette::ToolTipText);
@@ -58,11 +63,32 @@ ToolTipWidget::ToolTipWidget(QWidget* parent)
 		.arg(fgColor.name())
 		);
 	kDebug() << styleSheet();
+	*/
 }
 
 
 ToolTipWidget::~ToolTipWidget() {
 	delete d;
+}
+
+
+qreal ToolTipWidget::opacity() const {
+	return d->mOpacity;
+}
+
+
+void ToolTipWidget::setOpacity(qreal opacity) {
+	d->mOpacity = opacity;
+	update();
+}
+
+
+void ToolTipWidget::paintEvent(QPaintEvent*) {
+	QPainter painter(this);
+	painter.setOpacity(d->mOpacity);
+	painter.fillRect(rect(), palette().brush(QPalette::ToolTipBase));
+	painter.setPen(palette().color(QPalette::ToolTipText));
+	painter.drawText(rect(), text());
 }
 
 
