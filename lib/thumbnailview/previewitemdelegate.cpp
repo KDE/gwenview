@@ -35,10 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSequentialAnimationGroup>
 #include <QStylePainter>
 #include <QToolButton>
-#include <QToolTip>
 
 // KDE
-#include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
@@ -53,6 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "paintutils.h"
 #include "thumbnailview.h"
 #include "timeutils.h"
+#include "tooltipwidget.h"
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "../semanticinfo/semanticinfodirmodel.h"
 #endif
@@ -200,8 +199,8 @@ struct PreviewItemDelegatePrivate {
 	PreviewItemDelegate::ThumbnailDetails mDetails;
 	PreviewItemDelegate::ContextBarMode mContextBarMode;
 
-	QPointer<QLabel> mTipLabel;
-	QScopedPointer<QAbstractAnimation> mTipLabelAnimation;
+	QPointer<QLabel> mToolTip;
+	QScopedPointer<QAbstractAnimation> mToolTipAnimation;
 
 	QToolButton* createContextBarButton(const char* iconName) {
 		const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
@@ -243,29 +242,9 @@ struct PreviewItemDelegatePrivate {
 	}
 
 
-	void initTipLabel() {
-		QWidget* viewport = mView->viewport();
-
-		mTipLabel = new QLabel(viewport);
-		mTipLabel->setAutoFillBackground(true);
-		QPalette pal = QToolTip::palette();
-		pal.setCurrentColorGroup(QPalette::Inactive);
-		QColor fgColor = pal.color(QPalette::ToolTipText);
-		QColor bg2Color = pal.brush(QPalette::ToolTipBase).color();
-		QColor bg1Color = KColorScheme::shade(bg2Color, KColorScheme::LightShade, 0.2);
-
-		mTipLabel->setStyleSheet(QString(
-			"background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-			" stop: 0 %1, stop: 1 %2);"
-			"border-radius: 5px;"
-			"color: %3;"
-			"padding: 0 2px;")
-			.arg(bg1Color.name())
-			.arg(bg2Color.name())
-			.arg(fgColor.name())
-			);
-		kDebug() << mTipLabel->styleSheet();
-		mTipLabel->show();
+	void initToolTip() {
+		mToolTip = new ToolTipWidget(mView->viewport());
+		mToolTip->show();
 	}
 
 
@@ -499,57 +478,57 @@ struct PreviewItemDelegatePrivate {
 			return;
 		}
 
-		bool newTipLabel = !mTipLabel;
-		if (!mTipLabel) {
-			initTipLabel();
+		bool newTipLabel = !mToolTip;
+		if (!mToolTip) {
+			initToolTip();
 		}
-		mTipLabel->setText(textList.join("\n"));
-		mTipLabel->adjustSize();
+		mToolTip->setText(textList.join("\n"));
+		mToolTip->adjustSize();
 
 		// Compute tip position
 		QRect rect = mView->visualRect(index);
 		const int textY = ITEM_MARGIN + mThumbnailSize + ITEM_MARGIN;
 		const int spacing = 1;
-		QPoint tipPosition = rect.topLeft() + QPoint((rect.width() - mTipLabel->width()) / 2, textY + spacing);
+		QPoint tipPosition = rect.topLeft() + QPoint((rect.width() - mToolTip->width()) / 2, textY + spacing);
 		if (tipPosition.x() < 0) {
 			tipPosition.setX(0);
-		} else if (tipPosition.x() + mTipLabel->width() > mView->viewport()->width()) {
-			tipPosition.setX(mView->viewport()->width() - mTipLabel->width());
+		} else if (tipPosition.x() + mToolTip->width() > mView->viewport()->width()) {
+			tipPosition.setX(mView->viewport()->width() - mToolTip->width());
 		}
 
 		// Show tip
 		QParallelAnimationGroup* anim = new QParallelAnimationGroup();
-		QPropertyAnimation* fadeIn = new QPropertyAnimation(mTipLabel, "windowOpacity");
-		fadeIn->setStartValue(mTipLabel->windowOpacity());
+		QPropertyAnimation* fadeIn = new QPropertyAnimation(mToolTip, "windowOpacity");
+		fadeIn->setStartValue(mToolTip->windowOpacity());
 		fadeIn->setEndValue(1.);
 		anim->addAnimation(fadeIn);
 
 		if (newTipLabel) {
-			mTipLabel->move(tipPosition);
+			mToolTip->move(tipPosition);
 		} else {
-			QPropertyAnimation* move = new QPropertyAnimation(mTipLabel, "geometry");
-			move->setStartValue(mTipLabel->geometry());
-			move->setEndValue(QRect(tipPosition, mTipLabel->size()));
+			QPropertyAnimation* move = new QPropertyAnimation(mToolTip, "geometry");
+			move->setStartValue(mToolTip->geometry());
+			move->setEndValue(QRect(tipPosition, mToolTip->size()));
 			anim->addAnimation(move);
 		}
 
-		mTipLabelAnimation.reset(anim);
-		mTipLabelAnimation->start();
+		mToolTipAnimation.reset(anim);
+		mToolTipAnimation->start();
 	}
 
 	void hideToolTip() {
-		if (!mTipLabel) {
+		if (!mToolTip) {
 			return;
 		}
 		QSequentialAnimationGroup* anim = new QSequentialAnimationGroup();
 		anim->addPause(500);
-		QPropertyAnimation* fadeOut = new QPropertyAnimation(mTipLabel, "windowOpacity");
-		fadeOut->setStartValue(mTipLabel->windowOpacity());
+		QPropertyAnimation* fadeOut = new QPropertyAnimation(mToolTip, "windowOpacity");
+		fadeOut->setStartValue(mToolTip->windowOpacity());
 		fadeOut->setEndValue(0.);
 		anim->addAnimation(fadeOut);
-		mTipLabelAnimation.reset(anim);
-		mTipLabelAnimation->start();
-		QObject::connect(anim, SIGNAL(finished()), mTipLabel, SLOT(deleteLater()));
+		mToolTipAnimation.reset(anim);
+		mToolTipAnimation->start();
+		QObject::connect(anim, SIGNAL(finished()), mToolTip, SLOT(deleteLater()));
 	}
 
 	int itemWidth() const {
