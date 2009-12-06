@@ -134,10 +134,11 @@ struct DocumentViewPrivate {
 		KAction* actualSizeAction = view->addAction(KStandardAction::ActualSize,that, SLOT(zoomActualSize()));
 		actualSizeAction->setIcon(KIcon("zoom-original"));
 		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-		view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
-		view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
 
-		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction);
+		KAction* zoomInAction = view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
+		KAction* zoomOutAction = view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
+
+		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction, zoomInAction, zoomOutAction);
 	}
 
 
@@ -234,16 +235,18 @@ struct DocumentViewPrivate {
 		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
 
 		mZoomSnapValues.clear();
-		for (qreal zoom = 1/min; zoom > 1. ; zoom -= 1.) {
-			mZoomSnapValues << 1/zoom;
+		if (min < 1.) {
+			mZoomSnapValues << min;
+			for (qreal invZoom = 16.; invZoom > 1.; invZoom /= 2.) {
+				qreal zoom = 1. / invZoom;
+				if (zoom > min) {
+					mZoomSnapValues << zoom;
+				}
+			}
 		}
-		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 0.5) {
+		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 1.) {
 			mZoomSnapValues << zoom;
 		}
-		mZoomSnapValues
-			<< mAdapter->computeZoomToFitWidth()
-			<< mAdapter->computeZoomToFitHeight();
-		qSort(mZoomSnapValues);
 	}
 
 

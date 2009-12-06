@@ -126,12 +126,15 @@ ZoomWidget::~ZoomWidget() {
 }
 
 
-void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction) {
+void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction) {
 	d->mZoomToFitAction = zoomToFitAction;
 	d->mActualSizeAction = actualSizeAction;
 
 	d->mZoomToFitButton->setDefaultAction(zoomToFitAction);
 	d->mActualSizeButton->setDefaultAction(actualSizeAction);
+
+	d->mZoomSlider->setZoomInAction(zoomInAction);
+	d->mZoomSlider->setZoomOutAction(zoomOutAction);
 
 	// Adjust sizes
 	int width = qMax(d->mZoomToFitButton->sizeHint().width(), d->mActualSizeButton->sizeHint().width());
@@ -168,7 +171,7 @@ void ZoomWidget::setZoom(qreal zoom) {
 		QSlider* slider = d->mZoomSlider->slider();
 		SignalBlocker blocker(slider);
 		int value = sliderValueForZoom(zoom);
-		slider->setValue(value);
+		d->mZoomSlider->setValue(value);
 	}
 }
 

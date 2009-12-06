@@ -44,7 +44,7 @@ public:
 	ZoomWidget(QWidget* parent = 0);
 	~ZoomWidget();
 
-	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction);
+	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
 
 	void setZoom(qreal zoom);
 
