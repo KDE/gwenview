@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "thumbnailviewpanel.moc"
 
 // Qt
+#include <QDropEvent>
 #include <QMenu>
 #include <QSlider>
 #include <QToolTip>
@@ -43,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <filtercontroller.h>
+#include <fileoperations.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -91,6 +93,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
 		layout->setMargin(0);
 		layout->addWidget(mUrlNavigator);
+		QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(const KUrl&, QDropEvent*)),
+			that, SLOT(slotUrlsDropped(const KUrl&, QDropEvent*)));
 
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
@@ -306,6 +310,25 @@ void ThumbnailViewPanel::updateThumbnailDetails() {
 
 void ThumbnailViewPanel::applyPalette(const QPalette& palette) {
 	d->mThumbnailView->setPalette(palette);
+}
+
+
+void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event) {
+	const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
+	if (urlList.isEmpty()) {
+		return;
+	}
+	event->acceptProposedAction();
+
+	// We can't call FileOperations::showMenuForDroppedUrls() directly because
+	// we need the slot to return so that the drop event is accepted. Otherwise
+	// the drop cursor is still visible when the menu is shown.
+	QMetaObject::invokeMethod(this, "showMenuForDroppedUrls", Qt::QueuedConnection, Q_ARG(KUrl::List, urlList), Q_ARG(KUrl, destUrl));
+}
+
+
+void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl) {
+	FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }
 
 

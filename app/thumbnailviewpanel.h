@@ -25,9 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QWidget>
 
 // KDE
+#include <kurl.h>
 
 // Local
 
+class QDropEvent;
 class QModelIndex;
 
 class KActionCollection;
@@ -66,6 +68,8 @@ private Q_SLOTS:
 	void slotDirModelReset();
 	void updateSortOrder();
 	void updateThumbnailDetails();
+	void slotUrlsDropped(const KUrl& destUrl, QDropEvent*);
+	void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
 
 private:
 	ThumbnailViewPanelPrivate* const d;
