@@ -52,7 +52,11 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="Gwenview::ThumbnailView" name="mRecentFoldersView"/>
+          <widget class="Gwenview::ThumbnailView" name="mRecentFoldersView">
+           <property name="cursor" stdset="0">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -63,6 +67,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QListView" name="mRecentUrlsView">
+           <property name="cursor" stdset="0">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
            </property>
@@ -104,6 +111,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="KFilePlacesView" name="mBookmarksView">
+         <property name="cursor" stdset="0">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -137,6 +147,9 @@
        </item>
        <item>
         <widget class="QListView" name="mTagView">
+         <property name="cursor" stdset="0">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
