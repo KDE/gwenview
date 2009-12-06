@@ -30,13 +30,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QAction;
 class QSlider;
 
 namespace Gwenview {
 
 class ZoomSliderPrivate;
 /**
- * A widget featuring an horizontal slider and zoom in/out buttons
+ * A widget featuring an horizontal slider and zoom in/out buttons.
+ * By default zoom in/out buttons will trigger SliderPageStep{Add,Sub}.
+ * Their behavior can be changed with setZoomInAction() and
+ * setZoomOutAction().
  */
 class GWENVIEWLIB_EXPORT ZoomSlider : public QWidget {
 	Q_OBJECT
@@ -47,6 +51,10 @@ public:
 	int value() const;
 
 	QSlider* slider() const;
+
+	void setZoomInAction(QAction*);
+
+	void setZoomOutAction(QAction*);
 
 public Q_SLOTS:
 	void setValue(int);

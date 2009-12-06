@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "zoomslider.moc"
 
 // Qt
+#include <QAction>
 #include <QHBoxLayout>
 #include <QSlider>
 #include <QToolButton>
@@ -38,6 +39,8 @@ struct ZoomSliderPrivate {
 	QToolButton* mZoomOutButton;
 	QToolButton* mZoomInButton;
 	QSlider* mSlider;
+	QAction* mZoomInAction;
+	QAction* mZoomOutAction;
 
 	void updateButtons() {
 		mZoomOutButton->setEnabled(mSlider->value() > mSlider->minimum());
@@ -97,18 +100,36 @@ void ZoomSlider::setValue(int value) {
 }
 
 
+void ZoomSlider::setZoomInAction(QAction* action) {
+	d->mZoomInAction = action;
+}
+
+
+void ZoomSlider::setZoomOutAction(QAction* action) {
+	d->mZoomOutAction = action;
+}
+
+
 void ZoomSlider::slotActionTriggered(int) {
 	d->updateButtons();
 }
 
 
 void ZoomSlider::zoomOut() {
-	d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
+	if (d->mZoomOutAction) {
+		d->mZoomOutAction->trigger();
+	} else {
+		d->mSlider->triggerAction(QAbstractSlider::SliderPageStepSub);
+	}
 }
 
 
 void ZoomSlider::zoomIn() {
-	d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
+	if (d->mZoomInAction) {
+		d->mZoomInAction->trigger();
+	} else {
+		d->mSlider->triggerAction(QAbstractSlider::SliderPageStepAdd);
+	}
 }
 
 
