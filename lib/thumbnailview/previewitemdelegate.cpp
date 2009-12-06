@@ -198,6 +198,7 @@ struct PreviewItemDelegatePrivate {
 	int mThumbnailSize;
 	PreviewItemDelegate::ThumbnailDetails mDetails;
 	PreviewItemDelegate::ContextBarMode mContextBarMode;
+	Qt::TextElideMode mTextElideMode;
 
 	QPointer<ToolTipWidget> mToolTip;
 	QScopedPointer<QAbstractAnimation> mToolTipAnimation;
@@ -407,7 +408,7 @@ struct PreviewItemDelegatePrivate {
 		QString text;
 		QHash<QString, QString>::const_iterator it = mElidedTextCache.constFind(fullText);
 		if (it == mElidedTextCache.constEnd()) {
-			text = fm.elidedText(fullText, Qt::ElideRight, rect.width());
+			text = fm.elidedText(fullText, mTextElideMode, rect.width());
 			mElidedTextCache[fullText] = text;
 		} else {
 			text = it.value();
@@ -612,6 +613,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mThumbnailSize = view->thumbnailSize();
 	d->mDetails = FileNameDetail;
 	d->mContextBarMode = FullContextBar;
+	d->mTextElideMode = Qt::ElideRight;
 
 	connect(view, SIGNAL(rowsRemovedSignal(const QModelIndex&, int, int)),
 		SLOT(slotRowsChanged()));
@@ -866,6 +868,21 @@ PreviewItemDelegate::ContextBarMode PreviewItemDelegate::contextBarMode() const 
 void PreviewItemDelegate::setContextBarMode(PreviewItemDelegate::ContextBarMode mode) {
 	d->mContextBarMode = mode;
 	d->updateContextBar();
+}
+
+
+Qt::TextElideMode PreviewItemDelegate::textElideMode() const {
+	return d->mTextElideMode;
+}
+
+
+void PreviewItemDelegate::setTextElideMode(Qt::TextElideMode mode) {
+	if (d->mTextElideMode == mode) {
+		return;
+	}
+	d->mTextElideMode = mode;
+	d->mElidedTextCache.clear();
+	d->mView->viewport()->update();
 }
 
 
