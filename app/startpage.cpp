@@ -252,6 +252,7 @@ void StartPage::showEvent(QShowEvent* event) {
 			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
 			PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
 			delegate->setContextBarMode(PreviewItemDelegate::NoContextBar);
+			delegate->setTextElideMode(Qt::ElideLeft);
 			d->mRecentFoldersView->setItemDelegate(delegate);
 			d->mRecentFoldersView->setThumbnailSize(128);
 		}
