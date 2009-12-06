@@ -100,8 +100,8 @@ public:
 				skippedCount);
 		} else {
 			message << i18ncp(
-				"This sentence is only used if there is at least one imported and one skipped document",
-				"Delete the %1 imported and skipped documents from the device?",
+				"Singular sentence is actually never used.",
+				"Delete the imported or skipped document from the device?",
 				"Delete the %1 imported and skipped documents from the device?",
 				importedCount + skippedCount);
 		}
