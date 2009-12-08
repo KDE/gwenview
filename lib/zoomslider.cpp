@@ -61,6 +61,8 @@ ZoomSlider::ZoomSlider(QWidget* parent)
 , d(new ZoomSliderPrivate) {
 	d->mZoomInButton = createZoomButton("zoom-in");
 	d->mZoomOutButton = createZoomButton("zoom-out");
+	d->mZoomInAction = 0;
+	d->mZoomOutAction = 0;
 
 	d->mSlider = new QSlider;
 	d->mSlider->setOrientation(Qt::Horizontal);
