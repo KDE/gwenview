@@ -417,6 +417,7 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
 		return;
 	} else {
 		thumbnail.initAsIcon(DesktopIcon("image-missing", 48));
+		thumbnail.mFullSize = thumbnail.mGroupPix.size();
 	}
 	update(thumbnail.mIndex);
 }
