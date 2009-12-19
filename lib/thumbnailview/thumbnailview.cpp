@@ -388,6 +388,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 	thumbnail.mGroupPix = pixmap;
 	thumbnail.mAdjustedPix = QPixmap();
 	thumbnail.mFullSize = size;
+	thumbnail.mWaitingForThumbnail = false;
 
 	update(thumbnail.mIndex);
 }
