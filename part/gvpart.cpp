@@ -116,10 +116,10 @@ KAboutData* GVPart::createAboutData() {
 		"gvpart",                /* appname */
 		"gwenview",              /* catalogName */
 		ki18n("Gwenview KPart"), /* programName */
-		"2.1");                  /* version */
+		"2.4.0");                /* version */
 	aboutData->setShortDescription(ki18n("An Image Viewer"));
 	aboutData->setLicense(KAboutData::License_GPL);
-	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2008 Aurélien Gâteau"));
+	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
 	aboutData->addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
