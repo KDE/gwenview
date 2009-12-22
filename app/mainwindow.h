@@ -80,6 +80,8 @@ protected:
 	virtual QSize sizeHint() const;
 	virtual void showEvent(QShowEvent*);
 	virtual void resizeEvent(QResizeEvent*);
+	virtual void saveProperties(KConfigGroup&);
+	virtual void readProperties(const KConfigGroup&);
 
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);

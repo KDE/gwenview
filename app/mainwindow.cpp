@@ -120,6 +120,9 @@ static const char* FULLSCREEN_MODE_SIDE_BAR_GROUP = "SideBar-FullScreenMode";
 static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
 static const char* SIDE_BAR_CURRENT_PAGE_KEY = "CurrentPage";
 
+static const char* SESSION_CURRENT_PAGE_KEY = "Page";
+static const char* SESSION_URL_KEY = "Url";
+
 enum PageId {
 	StartPageId,
 	BrowsePageId,
@@ -1463,6 +1466,31 @@ void MainWindow::showMessageBubble(MessageBubble* bubble) {
 	floater->setChildWidget(bubble);
 	floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 	bubble->show();
+}
+
+
+void MainWindow::saveProperties(KConfigGroup& group) {
+	group.writeEntry(SESSION_CURRENT_PAGE_KEY, int(d->mCurrentPageId));
+	group.writeEntry(SESSION_URL_KEY, d->currentUrl());
+}
+
+
+void MainWindow::readProperties(const KConfigGroup& group) {
+	PageId pageId = PageId(group.readEntry(SESSION_CURRENT_PAGE_KEY, int(StartPageId)));
+	if (pageId == StartPageId) {
+		d->mCurrentPageId = StartPageId;
+		showStartPage();
+	} else if (pageId == BrowsePageId) {
+		d->mBrowseAction->trigger();
+	} else {
+		d->mViewAction->trigger();
+	}
+	KUrl url = group.readEntry(SESSION_URL_KEY, KUrl());
+	if (!url.isValid()) {
+		kWarning() << "Invalid url!";
+		return;
+	}
+	goToUrl(url);
 }
 
 

@@ -34,28 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
 
-int main(int argc, char *argv[]) {
-	KAboutData aboutData(
-		"gwenview",        /* appname */
-		0,                 /* catalogName */
-		ki18n("Gwenview"), /* programName */
-		"2.3.0");          /* version */
-	aboutData.setShortDescription(ki18n("An Image Viewer"));
-	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
-	aboutData.addAuthor(
-		ki18n("Aurélien Gâteau"),
-		ki18n("Main developer"),
-		"agateau@kde.org");
-
-	KCmdLineArgs::init( argc, argv, &aboutData );
-
-	KCmdLineOptions options;
-	options.add("f", ki18n("Start in fullscreen mode"));
-	options.add("s", ki18n("Start in slideshow mode"));
-	options.add("+[file or folder]", ki18n("A starting file or folder"));
-	KCmdLineArgs::addCmdLineOptions( options );
-
+static void startNewInstance() {
 	KUrl url;
 	bool startInFullScreen = false;
 	bool startSlideShow = false;
@@ -70,10 +49,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	args->clear();
-
-	KApplication app;
-
-	Gwenview::ImageFormats::registerPlugins();
 
 	Gwenview::MainWindow* window = new Gwenview::MainWindow();
 	if (url.isValid()) {
@@ -91,6 +66,37 @@ int main(int argc, char *argv[]) {
 
 	if (startSlideShow) {
 		window->startSlideShow();
+	}
+}
+
+int main(int argc, char *argv[]) {
+	KAboutData aboutData(
+		"gwenview",        /* appname */
+		0,                 /* catalogName */
+		ki18n("Gwenview"), /* programName */
+		"2.4.0");          /* version */
+	aboutData.setShortDescription(ki18n("An Image Viewer"));
+	aboutData.setLicense(KAboutData::License_GPL);
+	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
+	aboutData.addAuthor(
+		ki18n("Aurélien Gâteau"),
+		ki18n("Main developer"),
+		"agateau@kde.org");
+
+	KCmdLineArgs::init( argc, argv, &aboutData );
+
+	KCmdLineOptions options;
+	options.add("f", ki18n("Start in fullscreen mode"));
+	options.add("s", ki18n("Start in slideshow mode"));
+	options.add("+[file or folder]", ki18n("A starting file or folder"));
+	KCmdLineArgs::addCmdLineOptions( options );
+
+	KApplication app;
+	Gwenview::ImageFormats::registerPlugins();
+	if (app.isSessionRestored()) {
+		kRestoreMainWindows<Gwenview::MainWindow>();
+	} else {
+		startNewInstance();
 	}
 	return app.exec();
 }
