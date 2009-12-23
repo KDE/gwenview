@@ -62,7 +62,7 @@ struct RetrieveTask : public Task {
 		semanticInfo.mRating = resource.rating();
 		semanticInfo.mDescription = resource.description();
 		Q_FOREACH(const Nepomuk::Tag& tag, resource.tags()) {
-			semanticInfo.mTags << tag.resourceUri().toString();
+			semanticInfo.mTags << KUrl(tag.resourceUri()).url();
 		}
 		mBackEnd->emitSemanticInfoRetrieved(mUrl, semanticInfo);
 	}
@@ -81,7 +81,7 @@ struct StoreTask : public Task {
 		resource.setDescription(mSemanticInfo.mDescription);
 		QList<Nepomuk::Tag> tags;
 		Q_FOREACH(const SemanticInfoTag& uri, mSemanticInfo.mTags) {
-			tags << Nepomuk::Tag(uri);
+			tags << Nepomuk::Tag(KUrl(uri));
 		}
 		resource.setTags(tags);
 	}
@@ -181,7 +181,7 @@ TagSet NepomukSemanticInfoBackEnd::allTags() const {
 void NepomukSemanticInfoBackEnd::refreshAllTags() {
 	d->mAllTags.clear();
 	Q_FOREACH(const Nepomuk::Tag& tag, Nepomuk::Tag::allTags()) {
-		d->mAllTags << tag.resourceUri().toString();
+		d->mAllTags << KUrl(tag.resourceUri()).url();
 	}
 }
 
@@ -203,7 +203,8 @@ void NepomukSemanticInfoBackEnd::emitSemanticInfoRetrieved(const KUrl& url, cons
 }
 
 
-QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uri) const {
+QString NepomukSemanticInfoBackEnd::labelForTag(const SemanticInfoTag& uriString) const {
+    KUrl uri(uriString);
 	Nepomuk::Tag tag(uri);
 	if (!tag.exists()) {
 		kError() << "No tag for uri" << uri << ". This should not happen!";
@@ -217,11 +218,11 @@ SemanticInfoTag NepomukSemanticInfoBackEnd::tagForLabel(const QString& label) {
 	Nepomuk::Tag tag(label);
 	SemanticInfoTag uri;
 	if (tag.exists()) {
-		uri = tag.resourceUri().toString();
+		uri = KUrl(tag.resourceUri()).url();
 	} else {
 		// Not found, create the tag
 		tag.setLabel(label);
-		uri = tag.resourceUri().toString();
+		uri = KUrl(tag.resourceUri()).url();
 		d->mAllTags << uri;
 		emit tagAdded(uri, label);
 	}
