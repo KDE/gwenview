@@ -244,6 +244,8 @@ struct MainWindow::Private {
 		// Connect thumbnail view
 		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
 			mWindow, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)) );
+		connect(mThumbnailView->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+			mWindow, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
@@ -1065,6 +1067,32 @@ void MainWindow::slotSelectionChanged() {
 
 	// Start preloading
 	QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()) );
+}
+
+
+void MainWindow::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
+	QModelIndexList selectionList = d->mThumbnailView->selectionModel()->selectedIndexes();
+	if (selectionList.isEmpty()) {
+		return;
+	}
+
+	QModelIndexList changedList;
+	const QAbstractItemModel* model = topLeft.model();
+	for (int row=topLeft.row(); row <= bottomRight.row(); ++row) {
+		changedList << model->index(row, 0);
+	}
+
+	QModelIndexList& shortList = selectionList;
+	QModelIndexList& longList = changedList;
+	if (shortList.length() > longList.length()) {
+		qSwap(shortList, longList);
+	}
+	Q_FOREACH(const QModelIndex& index, shortList) {
+		if (longList.contains(index)) {
+			d->updateContextDependentComponents();
+			return;
+		}
+	}
 }
 
 

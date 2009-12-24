@@ -117,6 +117,12 @@ private Q_SLOTS:
 
 	void slotSelectionChanged();
 
+	/**
+	 * Check if a selected index is among the changed indexes, if so, update
+	 * context
+	 */
+	void slotDataChanged(const QModelIndex&, const QModelIndex&);
+
 	void goToPrevious();
 	void goToNext();
 	void updatePreviousNextActions();
