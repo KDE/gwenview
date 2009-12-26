@@ -187,20 +187,9 @@ KIPIInterface::~KIPIInterface() {
 }
 
 
-void KIPIInterface::loadPlugins() {
-	// Already done
-	if (d->mPluginLoader) {
-		return;
-	}
 
-	d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
-	connect(d->mPluginLoader, SIGNAL(replug()), SLOT( slotReplug()) );
-	d->mPluginLoader->loadPlugins();
-}
-
-
-// Helper class for slotReplug(), gcc does not want to instantiate templates
-// with local classes, so this is declared outside of slotReplug()
+// Helper class for loadPlugins(), gcc does not want to instantiate templates
+// with local classes, so this is declared outside of loadPlugins()
 struct MenuInfo {
 	QString mName;
 	QList<QAction*> mActions;
@@ -208,7 +197,14 @@ struct MenuInfo {
 	MenuInfo(const QString& name) : mName(name) {}
 };
 
-void KIPIInterface::slotReplug() {
+void KIPIInterface::loadPlugins() {
+	// Already done
+	if (d->mPluginLoader) {
+		return;
+	}
+
+	d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
+
 	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
 	CategoryMap categoryMap;
 	categoryMap[KIPI::ImagesPlugin]=MenuInfo("image_actions");

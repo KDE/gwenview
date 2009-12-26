@@ -56,7 +56,6 @@ private Q_SLOTS:
 	void init();
 
 	void loadPlugins();
-	void slotReplug();
 
 private:
 	KIPIInterfacePrivate* const d;
