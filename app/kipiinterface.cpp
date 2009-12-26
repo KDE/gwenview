@@ -207,13 +207,13 @@ void KIPIInterface::loadPlugins() {
 
 	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
 	CategoryMap categoryMap;
-	categoryMap[KIPI::ImagesPlugin]=MenuInfo("image_actions");
-	categoryMap[KIPI::EffectsPlugin]=MenuInfo("effect_actions");
-	categoryMap[KIPI::ToolsPlugin]=MenuInfo("tool_actions");
-	categoryMap[KIPI::ImportPlugin]=MenuInfo("import_actions");
-	categoryMap[KIPI::ExportPlugin]=MenuInfo("export_actions");
-	categoryMap[KIPI::BatchPlugin]=MenuInfo("batch_actions");
-	categoryMap[KIPI::CollectionsPlugin]=MenuInfo("collection_actions");
+	categoryMap[KIPI::ImagesPlugin]      = MenuInfo("Images");
+	categoryMap[KIPI::EffectsPlugin]     = MenuInfo("Effects");
+	categoryMap[KIPI::ToolsPlugin]       = MenuInfo("Tools");
+	categoryMap[KIPI::ImportPlugin]      = MenuInfo("Import");
+	categoryMap[KIPI::ExportPlugin]      = MenuInfo("Export");
+	categoryMap[KIPI::BatchPlugin]       = MenuInfo("Batch Processing");
+	categoryMap[KIPI::CollectionsPlugin] = MenuInfo("Collections");
 
 	// Fill the mActions
 	KIPI::PluginLoader::PluginList pluginList = d->mPluginLoader->pluginList();
@@ -243,22 +243,26 @@ void KIPIInterface::loadPlugins() {
 		//plugin->actionCollection()->readShortcutSettings();
 	}
 
-	// Create a dummy "no plugin" action list
-	KAction* noPluginAction = d->mMainWindow->actionCollection()->add<KAction>("no_plugin");
-	noPluginAction->setText(i18n("No Plugin"));
-	noPluginAction->setShortcutConfigurable(false);
-	noPluginAction->setEnabled(false);
-	QList<QAction*> noPluginList;
-	noPluginList << noPluginAction;
-
 	// Fill the menu
+	QMenu* pluginMenu = static_cast<QMenu*>(d->mMainWindow->guiFactory()->container("plugins", d->mMainWindow));
+	if (!pluginMenu) {
+		kWarning() << "No plugin menu found!";
+		return;
+	}
 	Q_FOREACH(const MenuInfo& info, categoryMap) {
-		d->mMainWindow->unplugActionList(info.mName);
-		if (info.mActions.count()>0) {
-			d->mMainWindow->plugActionList(info.mName, info.mActions);
-		} else {
-			d->mMainWindow->plugActionList(info.mName, noPluginList);
+		if (!info.mActions.isEmpty()) {
+			QMenu* menu = pluginMenu->addMenu(info.mName);
+			Q_FOREACH(QAction* action, info.mActions) {
+				menu->addAction(action);
+			}
 		}
+	}
+	if (pluginMenu->actions().isEmpty()) {
+		KAction* noPluginAction = d->mMainWindow->actionCollection()->add<KAction>("no_plugin");
+		noPluginAction->setText(i18n("No Plugin"));
+		noPluginAction->setShortcutConfigurable(false);
+		noPluginAction->setEnabled(false);
+		pluginMenu->addAction(noPluginAction);
 	}
 }
 
