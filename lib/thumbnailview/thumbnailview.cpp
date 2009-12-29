@@ -30,10 +30,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPointer>
 #include <QQueue>
 #include <QTimer>
+#include <QToolTip>
 
 // KDE
 #include <kdebug.h>
 #include <kdirmodel.h>
+#include <kicon.h>
+#include <kiconloader.h>
 #include <kglobalsettings.h>
 
 // Local
@@ -58,6 +61,9 @@ const int SPACING = 11;
 
 /** How many msec to wait before starting to smooth thumbnails */
 const int SMOOTH_DELAY = 500;
+
+const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
+const int DRAG_THUMB_SPACING = 4;
 
 static KFileItem fileItemForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
@@ -187,6 +193,68 @@ struct ThumbnailViewPrivate {
 			thumbnail->mAdjustedPix = mGroupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
 			thumbnail->mRough = true;
 		}
+	}
+
+	QPixmap dragPixmapForIndex(const QModelIndex& index) const {
+		KUrl url = urlForIndex(index);
+		QPixmap pix = mThumbnailForUrl.value(url).mAdjustedPix;
+		if (qMax(pix.width(), pix.height()) > DRAG_THUMB_SIZE) {
+			return pix.scaled(DRAG_THUMB_SIZE, DRAG_THUMB_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		} else {
+			return pix;
+		}
+	}
+
+	QPixmap createDragPixmap(const QModelIndexList& indexes) {
+		const int MAX_THUMBS = 3;
+
+		int thumbCount;
+		bool more;
+		if (indexes.count() > MAX_THUMBS) {
+			thumbCount = MAX_THUMBS;
+			more = true;
+		} else {
+			thumbCount = indexes.count();
+			more = false;
+		}
+		QList<QPixmap> thumbs;
+		int width = 0;
+		int height = 0;
+		for (int row=0; row<thumbCount; ++row) {
+			QModelIndex index;
+			if (row == thumbCount-1 && more) {
+				QString text = "(...)";
+				QPixmap pix(that->fontMetrics().boundingRect(text).size());
+				pix.fill(Qt::transparent);
+				{
+					QPainter painter(&pix);
+					painter.drawText(pix.rect(), Qt::AlignHCenter | Qt::AlignBottom, text);
+				}
+				index = indexes.last();
+				width += pix.width();
+				thumbs << pix;
+			} else {
+				index = indexes[row];
+			}
+			QPixmap thumb = dragPixmapForIndex(index);
+			height = qMax(height, thumb.height());
+			width += thumb.width();
+			thumbs << thumb;
+		}
+
+		QPixmap pix(
+			width + (thumbs.count() + 1) * DRAG_THUMB_SPACING,
+			height + 2 * DRAG_THUMB_SPACING
+			);
+		pix.fill(QToolTip::palette().color(QPalette::Inactive, QPalette::ToolTipBase));
+		QPainter painter(&pix);
+
+		int x = DRAG_THUMB_SPACING;
+		Q_FOREACH(const QPixmap& thumb, thumbs) {
+			painter.drawPixmap(x, (pix.height() - thumb.height()) / 2, thumb);
+			x += thumb.width() + DRAG_THUMB_SPACING;
+		}
+		return pix;
 	}
 };
 
@@ -479,6 +547,19 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 bool ThumbnailView::isModified(const QModelIndex& index) const {
 	KUrl url = urlForIndex(index);
 	return d->mThumbnailViewHelper->isDocumentModified(url);
+}
+
+
+void ThumbnailView::startDrag(Qt::DropActions supportedActions) {
+	QModelIndexList indexes = selectionModel()->selectedIndexes();
+	if (indexes.isEmpty()) {
+		return;
+	}
+	QDrag* drag = new QDrag(this);
+	drag->setMimeData(model()->mimeData(indexes));
+	QPixmap pix = d->createDragPixmap(indexes);
+	drag->setPixmap(pix);
+	drag->exec(supportedActions, Qt::CopyAction);
 }
 
 

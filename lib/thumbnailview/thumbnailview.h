@@ -123,6 +123,8 @@ protected:
 
 	virtual void showEvent(QShowEvent*);
 
+	virtual void startDrag(Qt::DropActions);
+
 protected Q_SLOTS:
 	virtual void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
 	virtual void rowsInserted(const QModelIndex& parent, int start, int end);
