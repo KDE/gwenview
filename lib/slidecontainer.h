@@ -49,6 +49,9 @@ public:
 	 */
 	void setContent(QWidget* content);
 
+	virtual QSize sizeHint() const;
+
+	virtual QSize minimumSizeHint() const;
 
 public Q_SLOTS:
 	/**
@@ -64,8 +67,6 @@ public Q_SLOTS:
 	void slideOut();
 
 protected:
-	QSize sizeHint() const;
-	QSize minimumSizeHint() const;
 	void resizeEvent(QResizeEvent*);
 
 private Q_SLOTS:
