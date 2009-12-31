@@ -68,6 +68,7 @@ public Q_SLOTS:
 
 protected:
 	void resizeEvent(QResizeEvent*);
+	bool eventFilter(QObject*, QEvent*);
 
 private Q_SLOTS:
 	void slotTimeLineChanged(qreal value);

@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Self
 #include "slidecontainer.moc"
 
+// Qt
+#include <QEvent>
 
 namespace Gwenview {
 
@@ -46,6 +48,7 @@ void SlideContainer::setContent(QWidget* content) {
 	mContent = content;
 	mContent->setParent(this);
 	mContent->hide();
+	mContent->installEventFilter(this);
 }
 
 
@@ -108,5 +111,14 @@ void SlideContainer::resizeEvent(QResizeEvent*) {
 		mContent->resize(size());
 	}
 }
+
+
+bool SlideContainer::eventFilter(QObject*, QEvent* event) {
+	if (event->type() == QEvent::Resize) {
+		mContent->resize(width(), mContent->height());
+	}
+	return false;
+}
+
 
 } // namespace
