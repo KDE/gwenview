@@ -73,6 +73,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "kipiinterface.h"
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+#include <nepomuk/resourcemanager.h>
+#endif
 #include "semanticinfocontextmanageritem.h"
 #endif
 #include "preloader.h"
@@ -416,11 +419,22 @@ struct MainWindow::Private {
 		InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 		mContextManager->addItem(infoItem);
 
+		SemanticInfoContextManagerItem* semanticInfoItem = 0;
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		SemanticInfoContextManagerItem* semanticInfoItem =
-			new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel->documentView());
-		mContextManager->addItem(semanticInfoItem);
+		// When using Nepomuk, create a SemanticInfoContextManagerItem instance
+		// only if Nepomuk is available
+		// When using Fake backend always create it
+		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+		if (Nepomuk::ResourceManager::instance()->init() == 0) {
 		#endif
+			semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel->documentView());
+		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
+		}
+		#endif
+		#endif
+		if (semanticInfoItem) {
+			mContextManager->addItem(semanticInfoItem);
+		}
 
 		ImageOpsContextManagerItem* imageOpsItem =
 			new ImageOpsContextManagerItem(mContextManager, mWindow);
@@ -440,9 +454,9 @@ struct MainWindow::Private {
 		page = new SideBarPage(i18n("Information"));
 		page->setObjectName("information");
 		page->addWidget(infoItem->widget());
-		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-		page->addWidget(semanticInfoItem->widget());
-		#endif
+		if (semanticInfoItem) {
+			page->addWidget(semanticInfoItem->widget());
+		}
 		page->addStretch();
 		mSideBar->addPage(page);
 
