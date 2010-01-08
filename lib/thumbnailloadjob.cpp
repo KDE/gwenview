@@ -431,7 +431,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 	bool directStatOk = false;
 	if (UrlUtils::urlIsFastLocalFile(mCurrentUrl)) {
 		KDE_struct_stat buff;
-		if ( KDE_stat( QFile::encodeName(mCurrentUrl.path()), &buff ) == 0 )  {
+		if ( KDE::stat( mCurrentUrl.toLocalFile(), &buff ) == 0 )  {
 			directStatOk = true;
 			mOriginalTime = buff.st_mtime;
 			QTimer::singleShot( 0, this, SLOT( checkThumbnail()));

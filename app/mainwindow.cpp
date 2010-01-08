@@ -989,8 +989,8 @@ void MainWindow::openDirUrl(const KUrl& url) {
 		// If currentPath is      "/home/user/photos/2008/event"
 		// and wantedPath is      "/home/user/photos"
 		// pathToSelect should be "/home/user/photos/2008"
-		const QString currentPath = QDir::cleanPath(currentUrl.path(KUrl::RemoveTrailingSlash));
-		const QString wantedPath  = QDir::cleanPath(url.path(KUrl::RemoveTrailingSlash));
+		const QString currentPath = QDir::cleanPath(currentUrl.toLocalFile(KUrl::RemoveTrailingSlash));
+		const QString wantedPath  = QDir::cleanPath(url.toLocalFile(KUrl::RemoveTrailingSlash));
 		const QChar separator('/');
 		const int slashCount = wantedPath.count(separator);
 		const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);

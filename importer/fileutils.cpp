@@ -40,14 +40,14 @@ namespace FileUtils {
 
 bool contentsAreIdentical(const KUrl& url1, const KUrl& url2, QWidget* authWindow) {
 	// FIXME: Support remote urls
-	QFile file1(KIO::NetAccess::mostLocalUrl(url1, authWindow).path());
+	QFile file1(KIO::NetAccess::mostLocalUrl(url1, authWindow).toLocalFile());
 	if (!file1.open(QIODevice::ReadOnly)) {
 		// Can't read url1, assume it's different from url2
 		kWarning() << "Can't read" << url1;
 		return false;
 	}
 
-	QFile file2(KIO::NetAccess::mostLocalUrl(url2, authWindow).path());
+	QFile file2(KIO::NetAccess::mostLocalUrl(url2, authWindow).toLocalFile());
 	if (!file2.open(QIODevice::ReadOnly)) {
 		// Can't read url2, assume it's different from url1
 		kWarning() << "Can't read" << url2;
