@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class SvgViewAdapterPrivate;
+struct SvgViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:

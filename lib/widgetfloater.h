@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class WidgetFloaterPrivate;
+struct WidgetFloaterPrivate;
 
 /**
  * This helper object makes it possible to place a widget (the child) over

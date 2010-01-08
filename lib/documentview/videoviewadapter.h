@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class VideoViewAdapterPrivate;
+struct VideoViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
@@ -59,7 +59,7 @@ private Q_SLOTS:
 	void updatePlayPauseButton();
 
 private:
-	friend class VideoViewAdapterPrivate;
+	friend struct VideoViewAdapterPrivate;
 	VideoViewAdapterPrivate* const d;
 };
 

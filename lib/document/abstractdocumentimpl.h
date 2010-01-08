@@ -39,7 +39,7 @@ namespace Gwenview {
 class Document;
 class AbstractDocumentEditor;
 
-class AbstractDocumentImplPrivate;
+struct AbstractDocumentImplPrivate;
 class AbstractDocumentImpl : public QObject {
 	Q_OBJECT
 public:

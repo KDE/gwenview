@@ -32,7 +32,7 @@ namespace Gwenview {
 
 class AbstractImageViewTool;
 
-class ImageViewPrivate;
+struct ImageViewPrivate;
 class GWENVIEWLIB_EXPORT ImageView : public QAbstractScrollArea {
 	Q_OBJECT
 public:

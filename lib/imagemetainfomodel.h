@@ -37,7 +37,7 @@ namespace Exiv2 { class Image; }
 namespace Gwenview {
 
 
-class ImageMetaInfoModelPrivate;
+struct ImageMetaInfoModelPrivate;
 class GWENVIEWLIB_EXPORT ImageMetaInfoModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
@@ -61,7 +61,7 @@ public:
 
 private:
 	ImageMetaInfoModelPrivate* const d;
-	friend class ImageMetaInfoModelPrivate;
+	friend struct ImageMetaInfoModelPrivate;
 };
 
 

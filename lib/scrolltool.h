@@ -35,7 +35,7 @@ class QPoint;
 namespace Gwenview {
 
 
-class ScrollToolPrivate;
+struct ScrollToolPrivate;
 class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:

@@ -35,7 +35,7 @@ class KUrl;
 namespace Gwenview {
 
 
-class HistoryModelPrivate;
+struct HistoryModelPrivate;
 /**
  * A model which maintains a list of urls in the dir specified by the
  * storageDir parameter of its ctor.

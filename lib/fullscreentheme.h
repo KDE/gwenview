@@ -35,7 +35,7 @@ class QStringList;
 namespace Gwenview {
 
 
-class FullScreenThemePrivate;
+struct FullScreenThemePrivate;
 class GWENVIEWLIB_EXPORT FullScreenTheme {
 public:
 	FullScreenTheme(const QString& themeName);

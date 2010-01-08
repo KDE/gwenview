@@ -36,7 +36,7 @@ namespace Gwenview {
 
 class Document;
 
-class ImageScalerPrivate;
+struct ImageScalerPrivate;
 class GWENVIEWLIB_EXPORT ImageScaler : public QObject {
 	Q_OBJECT
 public:

@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class ThumbnailSliderPrivate;
+struct ThumbnailSliderPrivate;
 /**
  * A zoom slider which shows the thumbnail size as a tooltip when it is
  * adjusted

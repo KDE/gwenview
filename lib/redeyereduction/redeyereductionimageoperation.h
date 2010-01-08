@@ -35,7 +35,7 @@ class QRectF;
 namespace Gwenview {
 
 
-class RedEyeReductionImageOperationPrivate;
+struct RedEyeReductionImageOperationPrivate;
 class GWENVIEWLIB_EXPORT RedEyeReductionImageOperation : public AbstractImageOperation {
 public:
 	RedEyeReductionImageOperation(const QRectF&);

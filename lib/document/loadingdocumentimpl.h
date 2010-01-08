@@ -34,7 +34,7 @@ namespace KIO { class Job; }
 namespace Gwenview {
 
 
-class LoadingDocumentImplPrivate;
+struct LoadingDocumentImplPrivate;
 class LoadingDocumentImpl : public AbstractDocumentImpl {
 	Q_OBJECT
 public:
@@ -55,7 +55,7 @@ private Q_SLOTS:
 
 private:
 	LoadingDocumentImplPrivate* const d;
-	friend class LoadingDocumentImplPrivate;
+	friend struct LoadingDocumentImplPrivate;
 };
 
 

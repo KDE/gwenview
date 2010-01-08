@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class ToolTipWidgetPrivate;
+struct ToolTipWidgetPrivate;
 
 /**
  * A label which uses tooltip colors and can be faded

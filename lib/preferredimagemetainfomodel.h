@@ -36,7 +36,7 @@ namespace Gwenview {
  * This model uses an instance of ImageMetaInfoModel to make it possible to
  * select your preferred image metainfo keys by checking them.
  */
-class PreferredImageMetaInfoModelPrivate;
+struct PreferredImageMetaInfoModelPrivate;
 class GWENVIEWLIB_EXPORT PreferredImageMetaInfoModel : public QSortFilterProxyModel {
 	Q_OBJECT
 public:
@@ -52,7 +52,7 @@ Q_SIGNALS:
 
 private:
 	PreferredImageMetaInfoModelPrivate* const d;
-	friend class PreferredImageMetaInfoModelPrivate;
+	friend struct PreferredImageMetaInfoModelPrivate;
 };
 
 

@@ -39,7 +39,7 @@ namespace Gwenview {
 
 class ImageView;
 
-class AbstractImageViewToolPrivate;
+struct AbstractImageViewToolPrivate;
 class GWENVIEWLIB_EXPORT AbstractImageViewTool : public QObject {
 public:
 	AbstractImageViewTool(ImageView* view);

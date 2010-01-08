@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 
-class ResizeImageOperationPrivate;
+struct ResizeImageOperationPrivate;
 class GWENVIEWLIB_EXPORT ResizeImageOperation : public AbstractImageOperation {
 public:
 	ResizeImageOperation(int size);

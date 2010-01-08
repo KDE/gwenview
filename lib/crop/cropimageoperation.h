@@ -35,7 +35,7 @@ class QRect;
 namespace Gwenview {
 
 
-class CropImageOperationPrivate;
+struct CropImageOperationPrivate;
 class GWENVIEWLIB_EXPORT CropImageOperation : public AbstractImageOperation {
 public:
 	CropImageOperation(const QRect&);

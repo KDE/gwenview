@@ -47,7 +47,7 @@ bool urlIsFastLocalFile(const KUrl& url) {
 	}
 
 	KMountPoint::List list = KMountPoint::currentMountPoints();
-	KMountPoint::Ptr mountPoint = list.findByPath(url.path());
+	KMountPoint::Ptr mountPoint = list.findByPath(url.toLocalFile());
 	if (!mountPoint) {
 		// We couldn't find a mount point for the url. We are probably in a
 		// chroot. Assume everything is fast then.

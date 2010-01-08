@@ -34,8 +34,8 @@ namespace Gwenview {
 
 
 class AbstractSemanticInfoBackEnd;
-class SemanticInfo;
-class SemanticInfoDirModelPrivate;
+struct SemanticInfo;
+struct SemanticInfoDirModelPrivate;
 /**
  * Extends KDirModel by providing read/write access to image metadata such as
  * rating, tags and descriptions.

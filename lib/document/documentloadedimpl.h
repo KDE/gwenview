@@ -34,7 +34,7 @@ class QIODevice;
 namespace Gwenview {
 
 
-class DocumentLoadedImplPrivate;
+struct DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
 	Q_OBJECT
 public:

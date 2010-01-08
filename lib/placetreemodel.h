@@ -35,7 +35,7 @@ class KUrl;
 namespace Gwenview {
 
 
-class PlaceTreeModelPrivate;
+struct PlaceTreeModelPrivate;
 class GWENVIEWLIB_EXPORT PlaceTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 public:
@@ -62,7 +62,7 @@ private Q_SLOTS:
 	void slotDirRowsRemoved(const QModelIndex&, int start, int end);
 
 private:
-	friend class PlaceTreeModelPrivate;
+	friend struct PlaceTreeModelPrivate;
 	PlaceTreeModelPrivate* const d;
 };
 

@@ -35,7 +35,7 @@ namespace Gwenview {
 class AbstractImageOperation;
 class ImageView;
 
-class RedEyeReductionToolPrivate;
+struct RedEyeReductionToolPrivate;
 class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:

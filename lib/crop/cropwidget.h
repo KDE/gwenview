@@ -36,7 +36,7 @@ namespace Gwenview {
 class CropTool;
 class ImageView;
 
-class CropWidgetPrivate;
+struct CropWidgetPrivate;
 class GWENVIEWLIB_EXPORT CropWidget : public QWidget {
 	Q_OBJECT
 public:

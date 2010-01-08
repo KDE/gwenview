@@ -38,7 +38,7 @@ class AbstractSemanticInfoBackEnd;
 class TagSet;
 
 
-class TagModelPrivate;
+struct TagModelPrivate;
 class GWENVIEWLIB_EXPORT TagModel : public QStandardItemModel {
 	Q_OBJECT
 public:

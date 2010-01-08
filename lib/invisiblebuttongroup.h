@@ -35,7 +35,7 @@ class QAbstractButton;
 namespace Gwenview {
 
 
-class InvisibleButtonGroupPrivate;
+struct InvisibleButtonGroupPrivate;
 class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget {
 	Q_OBJECT
 	Q_PROPERTY(int current READ selected WRITE setSelected)

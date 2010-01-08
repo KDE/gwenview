@@ -35,7 +35,7 @@ class QSlider;
 
 namespace Gwenview {
 
-class ZoomSliderPrivate;
+struct ZoomSliderPrivate;
 /**
  * A widget featuring an horizontal slider and zoom in/out buttons.
  * By default zoom in/out buttons will trigger SliderPageStep{Add,Sub}.

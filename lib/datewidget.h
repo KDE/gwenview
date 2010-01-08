@@ -35,7 +35,7 @@ class QDate;
 namespace Gwenview {
 
 
-class DateWidgetPrivate;
+struct DateWidgetPrivate;
 class GWENVIEWLIB_EXPORT DateWidget : public QWidget {
 	Q_OBJECT
 public:
@@ -54,7 +54,7 @@ private Q_SLOTS:
 	void goToNext();
 
 private:
-	friend class DateWidgetPrivate;
+	friend struct DateWidgetPrivate;
 	DateWidgetPrivate* const d;
 };
 

@@ -35,7 +35,7 @@ class QWidget;
 namespace Gwenview {
 
 
-class PrintHelperPrivate;
+struct PrintHelperPrivate;
 class GWENVIEWLIB_EXPORT PrintHelper {
 public:
 	PrintHelper(QWidget* parent);

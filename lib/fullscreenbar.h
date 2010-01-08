@@ -35,7 +35,7 @@ class QEvent;
 namespace Gwenview {
 
 
-class FullScreenBarPrivate;
+struct FullScreenBarPrivate;
 class GWENVIEWLIB_EXPORT FullScreenBar : public QFrame {
 	Q_OBJECT
 public:

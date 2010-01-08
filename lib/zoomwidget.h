@@ -37,7 +37,7 @@ class QAction;
 namespace Gwenview {
 
 
-class ZoomWidgetPrivate;
+struct ZoomWidgetPrivate;
 class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame {
 	Q_OBJECT
 public:
@@ -58,7 +58,7 @@ private Q_SLOTS:
 	void slotZoomSliderActionTriggered();
 
 private:
-	friend class ZoomWidgetPrivate;
+	friend struct ZoomWidgetPrivate;
 	ZoomWidgetPrivate* const d;
 };
 

@@ -37,7 +37,7 @@ class QString;
 namespace Gwenview {
 
 
-class Exiv2ImageLoaderPrivate;
+struct Exiv2ImageLoaderPrivate;
 
 /**
  * This helper class loads image using libexiv2, and takes care of exception

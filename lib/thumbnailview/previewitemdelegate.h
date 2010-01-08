@@ -38,7 +38,7 @@ namespace Gwenview {
 class ThumbnailView;
 
 
-class PreviewItemDelegatePrivate;
+struct PreviewItemDelegatePrivate;
 
 /**
  * An ItemDelegate which generates thumbnails for images. It also makes sure
@@ -105,7 +105,7 @@ protected:
 
 private:
 	PreviewItemDelegatePrivate* const d;
-	friend class PreviewItemDelegatePrivate;
+	friend struct PreviewItemDelegatePrivate;
 };
 
 

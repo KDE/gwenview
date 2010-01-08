@@ -34,7 +34,7 @@ namespace Gwenview {
 
 class JpegContent;
 
-class JpegDocumentLoadedImplPrivate;
+struct JpegDocumentLoadedImplPrivate;
 class JpegDocumentLoadedImpl : public DocumentLoadedImpl {
 	Q_OBJECT
 public:

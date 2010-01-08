@@ -38,7 +38,7 @@ namespace Gwenview {
 
 class AbstractThumbnailViewHelper;
 
-class ThumbnailViewPrivate;
+struct ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
 	Q_OBJECT
 public:
@@ -141,7 +141,7 @@ private Q_SLOTS:
 	void smoothNextThumbnail();
 
 private:
-	friend class ThumbnailViewPrivate;
+	friend struct ThumbnailViewPrivate;
 	ThumbnailViewPrivate * const d;
 };
 

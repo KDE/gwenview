@@ -31,7 +31,7 @@ class KUrl;
 
 namespace Gwenview {
 
-class DocumentFactoryPrivate;
+struct DocumentFactoryPrivate;
 
 class GWENVIEWLIB_EXPORT DocumentFactory : public QObject {
 	Q_OBJECT

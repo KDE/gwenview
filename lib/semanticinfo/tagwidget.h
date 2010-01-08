@@ -37,7 +37,7 @@ namespace Gwenview {
 
 typedef QMap<SemanticInfoTag, bool> TagInfo;
 
-class TagWidgetPrivate;
+struct TagWidgetPrivate;
 class GWENVIEWLIB_EXPORT TagWidget : public QWidget {
 	Q_OBJECT
 public:

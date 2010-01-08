@@ -37,7 +37,7 @@ class KGuiItem;
 namespace Gwenview {
 
 
-class MessageBubblePrivate;
+struct MessageBubblePrivate;
 /**
  * Shows a bubble with a QLabel and optional buttons.
  * Automatically goes away after a while.

@@ -40,10 +40,10 @@ class KUrl;
 namespace Gwenview {
 
 class AbstractSemanticInfoBackEnd;
-class SortedDirModelPrivate;
+struct SortedDirModelPrivate;
 
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-class SemanticInfo;
+struct SemanticInfo;
 #endif
 
 class SortedDirModel;
@@ -111,7 +111,7 @@ private Q_SLOTS:
 	void doApplyFilters();
 
 private:
-	friend class SortedDirModelPrivate;
+	friend struct SortedDirModelPrivate;
 	SortedDirModelPrivate * const d;
 };
 

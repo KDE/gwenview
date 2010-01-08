@@ -39,7 +39,7 @@ class AbstractDocumentViewAdapter;
 class SlideShow;
 class ZoomWidget;
 
-class DocumentViewPrivate;
+struct DocumentViewPrivate;
 
 /**
  * This widget can display various documents, using an instance of
@@ -99,7 +99,7 @@ private Q_SLOTS:
 
 
 private:
-	friend class DocumentViewPrivate;
+	friend struct DocumentViewPrivate;
 	DocumentViewPrivate* const d;
 
 	void createAdapterForDocument();

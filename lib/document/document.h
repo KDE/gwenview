@@ -48,7 +48,7 @@ namespace Gwenview {
 class AbstractDocumentEditor;
 class AbstractDocumentImpl;
 class DocumentFactory;
-class DocumentPrivate;
+struct DocumentPrivate;
 class ImageMetaInfoModel;
 
 
