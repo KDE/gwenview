@@ -172,6 +172,10 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 	// splitter!
 	setAttribute(Qt::WA_NoChildEventsForParent);
 
+	// We do not want to get the focused, otherwise user might trigger
+	// it while pressing space to browse through images
+	setFocusPolicy(Qt::NoFocus);
+
 	d->mOpacityTimeLine = new QTimeLine(TIMELINE_DURATION, this);
 	d->mOpacityTimeLine->setFrameRange(int(MINIMUM_OPACITY * 1000), 1000);
 	connect(d->mOpacityTimeLine, SIGNAL(valueChanged(qreal)),
