@@ -324,6 +324,10 @@ void LoadingDocumentImpl::loadImage(int invertedZoom) {
 		LOG("Already loading an image at invertedZoom=" << invertedZoom);
 		return;
 	}
+	if (d->mImageDataInvertedZoom == 1) {
+		LOG("Ignoring request: we are loading a full image");
+		return;
+	}
 	d->mImageDataFutureWatcher.waitForFinished();
 	d->mImageDataInvertedZoom = invertedZoom;
 
