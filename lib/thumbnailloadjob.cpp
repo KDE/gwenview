@@ -82,6 +82,72 @@ static QString generateThumbnailPath(const QString& uri, ThumbnailGroup::Enum gr
 
 //------------------------------------------------------------------------
 //
+// ThumbnailCache
+//
+//------------------------------------------------------------------------
+K_GLOBAL_STATIC(ThumbnailCache, sThumbnailCache)
+
+
+static void storeThumbnailToDiskCache(const QString& path, const QImage& image) {
+	LOG(path);
+	KTemporaryFile tmp;
+	tmp.setPrefix(path + ".gwenview.tmp");
+	tmp.setSuffix(".png");
+	if (!tmp.open()) {
+		kWarning() << "Could not create a temporary file.";
+		return;
+	}
+
+	if (!image.save(tmp.fileName(), "png")) {
+		kWarning() << "Could not save thumbnail";
+		return;
+	}
+
+	KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(path));
+}
+
+
+void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image) {
+	LOG(path);
+	QMutexLocker locker(&mMutex);
+	mCache.insert(path, image);
+}
+
+void ThumbnailCache::run() {
+	QTime chrono;
+	chrono.start();
+	QMutexLocker locker(&mMutex);
+	while (true) {
+		Cache::ConstIterator it = mCache.constBegin();
+		if (it == mCache.constEnd()) {
+			break;
+		}
+		const QString path = it.key();
+		const QImage image = it.value();
+
+		// This part of the thread is the most time consuming but it does not
+		// depend on mCache so we can unlock here. This way other thumbnails
+		// can be added or queried
+		locker.unlock();
+		storeThumbnailToDiskCache(path, image);
+		locker.relock();
+
+		mCache.remove(path);
+		if (mCache.isEmpty()) {
+			break;
+		}
+	}
+	kDebug() << chrono.elapsed();
+}
+
+QImage ThumbnailCache::value(const QString& path) const {
+	QMutexLocker locker(&mMutex);
+	return mCache.value(path);
+}
+
+
+//------------------------------------------------------------------------
+//
 // ThumbnailThread
 //
 //------------------------------------------------------------------------
@@ -220,37 +286,16 @@ void ThumbnailThread::loadThumbnail() {
 	}
 
 	if (needCaching) {
-		storeThumbnailInCache();
+		mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
+		mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
+		mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
+		mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
+		mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
+		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
+		mImage.setText("Software"            , 0, "Gwenview");
+
+		emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 	}
-}
-
-
-void ThumbnailThread::storeThumbnailInCache() {
-	mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
-	mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
-	mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
-	mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
-	mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
-	mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
-	mImage.setText("Software"            , 0, "Gwenview");
-
-	QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
-	KStandardDirs::makeDir(thumbnailDir, 0700);
-
-	KTemporaryFile tmp;
-	tmp.setPrefix(thumbnailDir + "/gwenview");
-	tmp.setSuffix(".png");
-	if (!tmp.open()) {
-		kWarning() << "Could not create a temporary file.";
-		return;
-	}
-
-	if (!mImage.save(tmp.fileName(), "png")) {
-		kWarning() << "Could not save thumbnail for file" << mOriginalUri;
-		return;
-	}
-
-	KDE_rename(QFile::encodeName(tmp.fileName()), QFile::encodeName(mThumbnailPath));
 }
 
 
@@ -326,6 +371,10 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 {
 	LOG((int)this);
 
+	// Make sure we have a place to store our thumbnails
+	QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
+	KStandardDirs::makeDir(thumbnailDir, 0700);
+
 	// Look for images and store the items in our todo list
 	Q_ASSERT(!items.empty());
 	mItems = items;
@@ -333,6 +382,10 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 
 	connect(&mThumbnailThread, SIGNAL(done(const QImage&, const QSize&)),
 		SLOT(thumbnailReady(const QImage&, const QSize&)),
+		Qt::QueuedConnection);
+
+	connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(const QString&, const QImage&)),
+		sThumbnailCache, SLOT(queueThumbnail(const QString&, const QImage&)),
 		Qt::QueuedConnection);
 }
 
@@ -347,6 +400,9 @@ ThumbnailLoadJob::~ThumbnailLoadJob() {
 	}
 	mThumbnailThread.cancel();
 	mThumbnailThread.wait();
+	if (!sThumbnailCache->isRunning()) {
+		sThumbnailCache->start();
+	}
 }
 
 
@@ -507,6 +563,14 @@ void ThumbnailLoadJob::thumbnailReady( const QImage& _img, const QSize& _size) {
 	determineNextIcon();
 }
 
+QImage ThumbnailLoadJob::loadThumbnailFromCache() const {
+	QImage image = sThumbnailCache->value(mThumbnailPath);
+	if (!image.isNull()) {
+		return image;
+	}
+	return QImage(mThumbnailPath);
+}
+
 void ThumbnailLoadJob::checkThumbnail() {
 	// If we are in the thumbnail dir, just load the file
 	if (mCurrentUrl.isLocalFile()
@@ -524,8 +588,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 
 	LOG("Stat thumb" << mThumbnailPath);
 
-	QImage thumb;
-	if ( thumb.load(mThumbnailPath) ) {
+	QImage thumb = loadThumbnailFromCache();
+	if (!thumb.isNull()) {
 		if (thumb.text("Thumb::Uri", 0) == mOriginalUri &&
 			thumb.text("Thumb::MTime", 0).toInt() == mOriginalTime )
 		{
