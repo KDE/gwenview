@@ -173,7 +173,6 @@ void ThumbnailThread::loadThumbnail() {
 
 		if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
 			mImage = thumbnail;
-			needCaching = false;
 		}
 	}
 
