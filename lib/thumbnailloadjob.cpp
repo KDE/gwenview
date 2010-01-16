@@ -114,8 +114,6 @@ void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image) {
 }
 
 void ThumbnailCache::run() {
-	QTime chrono;
-	chrono.start();
 	QMutexLocker locker(&mMutex);
 	while (true) {
 		Cache::ConstIterator it = mCache.constBegin();
@@ -137,7 +135,6 @@ void ThumbnailCache::run() {
 			break;
 		}
 	}
-	kDebug() << chrono.elapsed();
 }
 
 QImage ThumbnailCache::value(const QString& path) const {
