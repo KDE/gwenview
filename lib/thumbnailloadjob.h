@@ -62,11 +62,11 @@ protected:
 
 Q_SIGNALS:
 	void done( const QImage&, const QSize&);
+	void thumbnailReadyToBeCached(const QString& thumbnailPath, const QImage&);
 
 private:
 	bool testCancel();
 	void loadThumbnail();
-	void storeThumbnailInCache();
 	QImage mImage;
 	QString mPixPath;
 	QString mThumbnailPath;
@@ -80,6 +80,27 @@ private:
 	QWaitCondition mCond;
 	ThumbnailGroup::Enum mThumbnailGroup;
 	bool mCancel;
+};
+
+/**
+ * Store thumbnails to disk when done generating them
+ */
+class ThumbnailCache : public QThread {
+Q_OBJECT
+public:
+	// Return thumbnail if it has still not been stored
+	QImage value(const QString&) const;
+
+public Q_SLOTS:
+	void queueThumbnail(const QString&, const QImage&);
+
+protected:
+	void run();
+
+private:
+	typedef QHash<QString, QImage> Cache;
+	Cache mCache;
+	mutable QMutex mMutex;
 };
 
 /**
@@ -192,6 +213,8 @@ private:
 	void startCreatingThumbnail(const QString& path);
 
 	void emitThumbnailLoaded(const QImage& img, const QSize& size);
+
+	QImage loadThumbnailFromCache() const;
 };
 
 } // namespace
