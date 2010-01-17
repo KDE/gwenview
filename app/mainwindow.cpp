@@ -1128,7 +1128,7 @@ void MainWindow::slotDirListerCompleted() {
 	}
 	if (d->mThumbnailView->selectionModel()->hasSelection()) {
 		updatePreviousNextActions();
-	} else {
+	} else if (!d->mUrlToSelect.isValid()) {
 		d->goToFirstDocument();
 	}
 }
