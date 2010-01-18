@@ -201,6 +201,8 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 
 	connect(this, SIGNAL(clicked()), SLOT(slotClicked()));
 
+	d->updatePosition();
+
 	show();
 }
 
