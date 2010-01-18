@@ -189,22 +189,25 @@ struct MainWindow::Private {
 	KNotificationRestrictions* mNotificationRestrictions;
 
 	void setupWidgets() {
-		QWidget* centralWidget = new QWidget(mWindow);
-		mWindow->setCentralWidget(centralWidget);
-		mSaveBar = new SaveBar(centralWidget, mWindow->actionCollection());
+		mCentralSplitter = new Splitter(Qt::Horizontal, mWindow);
+		mWindow->setCentralWidget(mCentralSplitter);
 
-		mCentralSplitter = new Splitter(Qt::Horizontal, centralWidget);
-		QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-		layout->addWidget(mSaveBar);
-		layout->addWidget(mCentralSplitter);
-		layout->setMargin(0);
-		layout->setSpacing(0);
-
+		// Left side of splitter
 		mSideBar = new SideBar(mCentralSplitter);
 		EventWatcher::install(mSideBar, QList<QEvent::Type>() << QEvent::Show << QEvent::Hide,
 			mWindow, SLOT(updateToggleSideBarAction()));
 
-		mViewStackedWidget = new QStackedWidget(mCentralSplitter);
+		// Right side of splitter
+		QWidget* contentWidget = new QWidget(mCentralSplitter);
+
+		mSaveBar = new SaveBar(contentWidget, mWindow->actionCollection());
+		mViewStackedWidget = new QStackedWidget(contentWidget);
+		QVBoxLayout* layout = new QVBoxLayout(contentWidget);
+		layout->addWidget(mSaveBar);
+		layout->addWidget(mViewStackedWidget);
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		////
 
 		mSideBarCollapser = new SplitterCollapser(mCentralSplitter, mSideBar);
 
