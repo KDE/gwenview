@@ -422,8 +422,8 @@ struct MainWindow::Private {
 		InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 		mContextManager->addItem(infoItem);
 
-		SemanticInfoContextManagerItem* semanticInfoItem = 0;
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
+		SemanticInfoContextManagerItem* semanticInfoItem = 0;
 		// When using Nepomuk, create a SemanticInfoContextManagerItem instance
 		// only if Nepomuk is available
 		// When using Fake backend always create it
@@ -434,10 +434,10 @@ struct MainWindow::Private {
 		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 		}
 		#endif
-		#endif
 		if (semanticInfoItem) {
 			mContextManager->addItem(semanticInfoItem);
 		}
+		#endif
 
 		ImageOpsContextManagerItem* imageOpsItem =
 			new ImageOpsContextManagerItem(mContextManager, mWindow);
@@ -457,9 +457,11 @@ struct MainWindow::Private {
 		page = new SideBarPage(i18n("Information"));
 		page->setObjectName("information");
 		page->addWidget(infoItem->widget());
+		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		if (semanticInfoItem) {
 			page->addWidget(semanticInfoItem->widget());
 		}
+		#endif
 		page->addStretch();
 		mSideBar->addPage(page);
 
