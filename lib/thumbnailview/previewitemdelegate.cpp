@@ -601,6 +601,10 @@ struct PreviewItemDelegatePrivate {
 		mRotateRightButton->setVisible(full && width >= 4 * buttonWidth);
 		mContextBar->adjustSize();
 	}
+
+	void updateViewGridSize() {
+		mView->setGridSize(QSize(itemWidth(), itemHeight()));
+	}
 };
 
 
@@ -673,7 +677,7 @@ PreviewItemDelegate::~PreviewItemDelegate() {
 
 
 QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const {
-	return QSize( d->itemWidth(), d->itemHeight() );
+	return d->mView->gridSize();
 }
 
 
@@ -816,6 +820,7 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 
 void PreviewItemDelegate::setThumbnailSize(int value) {
 	d->mThumbnailSize = value;
+	d->updateViewGridSize();
 	d->updateContextBar();
 	d->mElidedTextCache.clear();
 }
@@ -856,6 +861,7 @@ PreviewItemDelegate::ThumbnailDetails PreviewItemDelegate::thumbnailDetails() co
 
 void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDetails details) {
 	d->mDetails = details;
+	d->updateViewGridSize();
 	d->mView->scheduleDelayedItemsLayout();
 }
 

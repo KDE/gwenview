@@ -56,9 +56,6 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-/** How many pixels between items */
-const int SPACING = 11;
-
 /** How many msec to wait before starting to smooth thumbnails */
 const int SMOOTH_DELAY = 500;
 
@@ -268,7 +265,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setFrameShape(QFrame::NoFrame);
 	setViewMode(QListView::IconMode);
 	setResizeMode(QListView::Adjust);
-	setSpacing(SPACING);
 	setDragEnabled(true);
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);
@@ -362,7 +358,6 @@ void ThumbnailView::setThumbnailSize(int value) {
 	}
 
 	thumbnailSizeChanged(value);
-	setSpacing(SPACING);
 	d->scheduleThumbnailGenerationForVisibleItems();
 }
 
