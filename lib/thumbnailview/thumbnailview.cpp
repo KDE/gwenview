@@ -261,6 +261,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 , d(new ThumbnailViewPrivate) {
 	d->that = this;
 	d->mThumbnailViewHelper = 0;
+	// Init to some stupid value so that the first call to setThumbnailSize()
+	// is not ignored (do not use 0 in case someone try to divide by
+	// mThumbnailSize...)
+	d->mThumbnailSize = 1;
 
 	setFrameShape(QFrame::NoFrame);
 	setViewMode(QListView::IconMode);
@@ -277,11 +281,6 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 	setVerticalScrollMode(ScrollPerPixel);
 	setHorizontalScrollMode(ScrollPerPixel);
-
-	// Make sure mThumbnailSize is initialized before calling setThumbnailSize,
-	// since it will compare the new size with the old one
-	d->mThumbnailSize = 0;
-	setThumbnailSize(128);
 
 	d->mScheduledThumbnailGenerationTimer.setSingleShot(true);
 	d->mScheduledThumbnailGenerationTimer.setInterval(500);
