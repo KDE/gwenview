@@ -328,10 +328,9 @@ struct PreviewItemDelegatePrivate {
 
 
 	QPoint saveButtonPosition(const QRect& itemRect) const {
-		QSize frameSize = mSaveButton->sizeHint();
-		int textHeight = mView->fontMetrics().height();
-		int posX = itemRect.right() - CONTEXTBAR_MARGIN - frameSize.width();
-		int posY = itemRect.bottom() - CONTEXTBAR_MARGIN - textHeight - frameSize.height();
+		QSize buttonSize = mSaveButton->sizeHint();
+		int posX = itemRect.right() - buttonSize.width();
+		int posY = itemRect.top() + mThumbnailSize + 2 * ITEM_MARGIN - buttonSize.height();
 
 		return QPoint(posX, posY);
 	}
