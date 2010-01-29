@@ -466,9 +466,11 @@ struct PreviewItemDelegatePrivate {
 			elided |= isTextElided(text);
 			textList << text;
 		}
+
+		// FIXME: Duplicated from drawText
+		const KFileItem fileItem = fileItemForIndex(index);
+		const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
 		if (mDetails & PreviewItemDelegate::DateDetail) {
-			// FIXME: Duplicated from drawText
-			const KFileItem fileItem = fileItemForIndex(index);
 			if (!ArchiveUtils::fileItemIsDirOrArchive(fileItem)) {
 				const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
 				const QString text = KGlobal::locale()->formatDateTime(dt);
@@ -476,6 +478,26 @@ struct PreviewItemDelegatePrivate {
 				textList << text;
 			}
 		}
+
+		if (!isDirOrArchive && (mDetails & PreviewItemDelegate::ImageSizeDetail)) {
+			QSize fullSize;
+			QPixmap thumbnailPix = mView->thumbnailForIndex(index, &fullSize);
+			if (fullSize.isValid()) {
+				const QString text = QString("%1x%2").arg(fullSize.width()).arg(fullSize.height());
+				elided |= isTextElided(text);
+				textList << text;
+			}
+		}
+
+		if (!isDirOrArchive && (mDetails & PreviewItemDelegate::FileSizeDetail)) {
+			const KIO::filesize_t size = fileItem.size();
+			if (size > 0) {
+				const QString text = KIO::convertSize(size);
+				elided |= isTextElided(text);
+				textList << text;
+			}
+		}
+
 		if (!elided) {
 			hideToolTip();
 			return;
@@ -555,6 +577,12 @@ struct PreviewItemDelegatePrivate {
 			textHeight += lineHeight;
 		}
 		if (mDetails & PreviewItemDelegate::DateDetail) {
+			textHeight += lineHeight;
+		}
+		if (mDetails & PreviewItemDelegate::ImageSizeDetail) {
+			textHeight += lineHeight;
+		}
+		if (mDetails & PreviewItemDelegate::FileSizeDetail) {
 			textHeight += lineHeight;
 		}
 		if (mDetails & PreviewItemDelegate::RatingDetail) {
@@ -701,7 +729,8 @@ bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
 
 void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
 	int thumbnailSize = d->mThumbnailSize;
-	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+	QSize fullSize;
+	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index, &fullSize);
 	const KFileItem fileItem = fileItemForIndex(index);
 	const bool opaque = !thumbnailPix.hasAlphaChannel();
 	const bool isDirOrArchive = ArchiveUtils::fileItemIsDirOrArchive(fileItem);
@@ -807,6 +836,24 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::DateDetail)) {
 		const KDateTime dt = TimeUtils::dateTimeForFileItem(fileItem);
 		d->drawText(painter, textRect, fgColor, KGlobal::locale()->formatDateTime(dt));
+		textRect.moveTop(textRect.bottom());
+	}
+
+	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::ImageSizeDetail)) {
+		if (fullSize.isValid()) {
+			const QString text = QString("%1x%2").arg(fullSize.width()).arg(fullSize.height());
+			d->drawText(painter, textRect, fgColor, text);
+			textRect.moveTop(textRect.bottom());
+		}
+	}
+
+	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::FileSizeDetail)) {
+		const KIO::filesize_t size = fileItem.size();
+		if (size > 0) {
+			const QString st = KIO::convertSize(size);
+			d->drawText(painter, textRect, fgColor, st);
+			textRect.moveTop(textRect.bottom());
+		}
 	}
 
 	if (!isDirOrArchive && (d->mDetails & PreviewItemDelegate::RatingDetail)) {

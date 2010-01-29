@@ -57,9 +57,11 @@ public:
 	};
 
 	enum ThumbnailDetail {
-		FileNameDetail = 1,
-		DateDetail     = 2,
-		RatingDetail   = 4
+		FileNameDetail  = 1,
+		DateDetail      = 2,
+		RatingDetail    = 4,
+		ImageSizeDetail = 8,
+		FileSizeDetail  = 16
 	};
 	// FIXME: Find out why this cause problems with Qt::Alignment in
 	// PreviewItemDelegate!

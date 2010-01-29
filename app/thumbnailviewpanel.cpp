@@ -134,6 +134,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 				that, SLOT(updateThumbnailDetails()));
 		addAction(i18nc("@action:inmenu", "Filename"), PreviewItemDelegate::FileNameDetail);
 		addAction(i18nc("@action:inmenu", "Date"), PreviewItemDelegate::DateDetail);
+		addAction(i18nc("@action:inmenu", "Image Size"), PreviewItemDelegate::ImageSizeDetail);
+		addAction(i18nc("@action:inmenu", "File Size"), PreviewItemDelegate::FileSizeDetail);
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		addAction(i18nc("@action:inmenu", "Rating"), PreviewItemDelegate::RatingDetail);
 		#endif

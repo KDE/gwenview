@@ -120,6 +120,9 @@ struct Thumbnail {
 	QPixmap mAdjustedPix;
 	/// Size of the full image
 	QSize mFullSize;
+	/// Real size of the full image, invalid unless the thumbnail
+	/// represents a raster image (not an icon)
+	QSize mRealFullSize;
 	/// Whether mAdjustedPix represents has been scaled using fast or smooth
 	//transformation
 	bool mRough;
@@ -452,6 +455,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 	thumbnail.mAdjustedPix = QPixmap();
 	int largeGroupSize = ThumbnailGroup::pixelSize(ThumbnailGroup::Large);
 	thumbnail.mFullSize = size.isValid() ? size : QSize(largeGroupSize, largeGroupSize);
+	thumbnail.mRealFullSize = size;
 	thumbnail.mWaitingForThumbnail = false;
 
 	update(thumbnail.mIndex);
@@ -485,10 +489,13 @@ void ThumbnailView::setBrokenThumbnail(const KFileItem& item) {
 }
 
 
-QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
+QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSize) {
 	KFileItem item = fileItemForIndex(index);
 	if (item.isNull()) {
 		LOG("Invalid item");
+		if (fullSize) {
+			*fullSize = QSize();
+		}
 		return QPixmap();
 	}
 	KUrl url = item.url();
@@ -521,6 +528,9 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 	}
 
 	if (thumbnail.mGroupPix.isNull()) {
+		if (fullSize) {
+			*fullSize = QSize();
+		}
 		return d->mWaitingThumbnail;
 	}
 
@@ -533,6 +543,9 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index) {
 		if (!d->mSmoothThumbnailTimer.isActive()) {
 			d->mSmoothThumbnailTimer.start(SMOOTH_DELAY);
 		}
+	}
+	if (fullSize) {
+		*fullSize = thumbnail.mRealFullSize;
 	}
 	return thumbnail.mAdjustedPix;
 }

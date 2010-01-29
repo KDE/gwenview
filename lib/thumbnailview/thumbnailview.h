@@ -54,7 +54,7 @@ public:
 	 */
 	int thumbnailSize() const;
 
-	QPixmap thumbnailForIndex(const QModelIndex&);
+	QPixmap thumbnailForIndex(const QModelIndex&, QSize* fullSize = 0);
 
 	/**
 	 * Returns true if the document pointed by the index has been modified
