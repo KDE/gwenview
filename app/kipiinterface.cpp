@@ -207,13 +207,13 @@ void KIPIInterface::loadPlugins() {
 
 	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
 	CategoryMap categoryMap;
-	categoryMap[KIPI::ImagesPlugin]      = MenuInfo("Images");
-	categoryMap[KIPI::EffectsPlugin]     = MenuInfo("Effects");
-	categoryMap[KIPI::ToolsPlugin]       = MenuInfo("Tools");
-	categoryMap[KIPI::ImportPlugin]      = MenuInfo("Import");
-	categoryMap[KIPI::ExportPlugin]      = MenuInfo("Export");
-	categoryMap[KIPI::BatchPlugin]       = MenuInfo("Batch Processing");
-	categoryMap[KIPI::CollectionsPlugin] = MenuInfo("Collections");
+	categoryMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
+	categoryMap[KIPI::EffectsPlugin]     = MenuInfo(i18nc("@title:menu", "Effects"));
+	categoryMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
+	categoryMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"));
+	categoryMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"));
+	categoryMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
+	categoryMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
 	// Fill the mActions
 	KIPI::PluginLoader::PluginList pluginList = d->mPluginLoader->pluginList();
