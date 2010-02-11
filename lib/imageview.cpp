@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imageview.moc"
 
 // Qt
+#include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPointer>
