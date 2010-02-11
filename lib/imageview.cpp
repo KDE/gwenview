@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imageview.moc"
 
 // Qt
+#include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPointer>
@@ -224,6 +225,12 @@ ImageView::ImageView(QWidget* parent)
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
 	d->mInsideSetZoom = false;
+
+	if (QApplication::isRightToLeft()) {
+		// Ensure we don't get weird behavior in RightToleft mode
+		// See bug #210058
+		horizontalScrollBar()->setLayoutDirection(Qt::LeftToRight);
+	}
 	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
