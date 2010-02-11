@@ -224,6 +224,12 @@ ImageView::ImageView(QWidget* parent)
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
 	d->mInsideSetZoom = false;
+
+	if (QApplication::isRightToLeft()) {
+		// Ensure we don't get weird behavior in RightToleft mode
+		// See bug #210058
+		horizontalScrollBar()->setLayoutDirection(Qt::LeftToRight);
+	}
 	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
 		SLOT(updateFromScaler(int, int, const QImage&)) );
 }
