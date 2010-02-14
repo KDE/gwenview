@@ -143,6 +143,7 @@ struct MainWindow::Private {
 	GvCore* mGvCore;
 	MainWindow* mWindow;
 	QSplitter* mCentralSplitter;
+	QWidget* mContentWidget;
 	DocumentPanel* mDocumentPanel;
 	KUrlNavigator* mUrlNavigator;
 	ThumbnailView* mThumbnailView;
@@ -198,11 +199,11 @@ struct MainWindow::Private {
 			mWindow, SLOT(updateToggleSideBarAction()));
 
 		// Right side of splitter
-		QWidget* contentWidget = new QWidget(mCentralSplitter);
+		mContentWidget = new QWidget(mCentralSplitter);
 
-		mSaveBar = new SaveBar(contentWidget, mWindow->actionCollection());
-		mViewStackedWidget = new QStackedWidget(contentWidget);
-		QVBoxLayout* layout = new QVBoxLayout(contentWidget);
+		mSaveBar = new SaveBar(mContentWidget, mWindow->actionCollection());
+		mViewStackedWidget = new QStackedWidget(mContentWidget);
+		QVBoxLayout* layout = new QVBoxLayout(mContentWidget);
 		layout->addWidget(mSaveBar);
 		layout->addWidget(mViewStackedWidget);
 		layout->setMargin(0);
@@ -1509,7 +1510,7 @@ void MainWindow::setDistractionFreeMode(bool value) {
 
 
 void MainWindow::showMessageBubble(MessageBubble* bubble) {
-	WidgetFloater* floater = new WidgetFloater(centralWidget());
+	WidgetFloater* floater = new WidgetFloater(d->mContentWidget);
 	floater->setChildWidget(bubble);
 	floater->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 	bubble->show();
