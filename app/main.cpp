@@ -18,6 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 #include <config-gwenview.h>
+// STL
+#include <memory>
+
 // Qt
 
 // KDE
@@ -26,48 +29,79 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
+#include <kio/copyjob.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktempdir.h>
 #include <kurl.h>
 
 // Local
 #include <lib/imageformats/imageformats.h>
 #include "mainwindow.h"
 
-static void startNewInstance() {
-	KUrl url;
-	bool startInFullScreen = false;
-	bool startSlideShow = false;
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if (args->count() > 0) {
-		url = args->url(0);
-		if (url.isValid() && (args->isSet("f") || args->isSet("s"))) {
-			startInFullScreen = true;
+class StartHelper {
+public:
+	StartHelper()
+	: mFullScreen(false)
+	, mSlideShow(false)
+	{
+		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+		if (args->count() > 0) {
+			parseArgs(args);
+		}
+		args->clear();
+	}
+
+	void parseArgs(KCmdLineArgs* args) {
+		if (args->count() > 1) {
+			// Createa a temp dir containing links to url args
+			mMultipleUrlsDir.reset(new KTempDir);
+			mUrl = KUrl::fromPath(mMultipleUrlsDir->name());
+			KUrl::List list;
+			for (int pos = 0; pos < args->count(); ++pos) {
+				list << args->url(pos);
+			}
+			KIO::CopyJob* job = KIO::link(list, mUrl);
+			job->exec();
+		} else {
+			mUrl = args->url(0);
+		}
+
+		if (mUrl.isValid() && (args->isSet("f") || args->isSet("s"))) {
+			mFullScreen = true;
 			if (args->isSet("s")) {
-				startSlideShow = true;
+				mSlideShow = true;
 			}
 		}
 	}
-	args->clear();
 
-	Gwenview::MainWindow* window = new Gwenview::MainWindow();
-	if (url.isValid()) {
-		window->setInitialUrl(url);
-	} else {
-		window->showStartPage();
-	}
+	void createMainWindow() {
+		Gwenview::MainWindow* window = new Gwenview::MainWindow();
+		if (mUrl.isValid()) {
+			window->setInitialUrl(mUrl);
+		} else {
+			window->showStartPage();
+		}
 
-	window->show();
-	if (startInFullScreen) {
-		window->actionCollection()->action("fullscreen")->trigger();
-	} else {
 		window->show();
+		if (mFullScreen) {
+			window->actionCollection()->action("fullscreen")->trigger();
+		} else {
+			window->show();
+		}
+
+		if (mSlideShow) {
+			window->startSlideShow();
+		}
 	}
 
-	if (startSlideShow) {
-		window->startSlideShow();
-	}
-}
+private:
+	KUrl mUrl;
+	bool mFullScreen;
+	bool mSlideShow;
+	std::auto_ptr<KTempDir> mMultipleUrlsDir;
+	std::auto_ptr<Gwenview::MainWindow> mMainWindow;
+};
 
 int main(int argc, char *argv[]) {
 	KAboutData aboutData(
@@ -93,10 +127,13 @@ int main(int argc, char *argv[]) {
 
 	KApplication app;
 	Gwenview::ImageFormats::registerPlugins();
+
+	// startHelper must live for the whole live of the application
+	StartHelper startHelper;
 	if (app.isSessionRestored()) {
 		kRestoreMainWindows<Gwenview::MainWindow>();
 	} else {
-		startNewInstance();
+		startHelper.createMainWindow();
 	}
 	return app.exec();
 }
