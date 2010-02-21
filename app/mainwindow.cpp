@@ -1278,8 +1278,11 @@ void MainWindow::openFile() {
 		return;
 	}
 
+	d->setActionsDisabledOnStartPageEnabled(true);
 	KUrl url = dialog.selectedUrl();
-	goToUrl(url);
+	d->mViewAction->trigger();
+	openDocumentUrl(url);
+	d->updateContextDependentComponents();
 }
 
 
