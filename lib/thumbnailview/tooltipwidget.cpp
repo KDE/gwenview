@@ -100,7 +100,7 @@ void ToolTipWidget::paintEvent(QPaintEvent*) {
 	QPainterPath path = PaintUtils::roundedRectangle(rect(), RADIUS);
 	painter.fillPath(path, gradient);
 	painter.setPen(palette().color(QPalette::ToolTipText));
-	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), d->mText);
+	painter.drawText(rect().adjusted(HMARGIN, 0, -HMARGIN, 0), 0 /* flags */, d->mText);
 }
 
 
