@@ -1,7 +1,19 @@
 project(gwenviewlib)
 
+# Extract version of libjpeg so that we can use the appropriate dir
+# See bug #227313
+file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
+string(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
+message(STATUS "libjpeg version: ${jpeglib_version}")
+
+if ("${jpeglib_version}" LESS 80)
+	set(GV_JPEG_DIR libjpeg-62)
+else ("${jpeglib_version}" LESS 80)
+	set(GV_JPEG_DIR libjpeg-80)
+endif ("${jpeglib_version}" LESS 80)
+
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/libjpeg
+	${CMAKE_CURRENT_SOURCE_DIR}/${GV_JPEG_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${CMAKE_CURRENT_BINARY_DIR}
 	${EXIV2_INCLUDE_DIR}
@@ -81,10 +93,10 @@ set(gwenviewlib_SRCS
 	timeutils.cpp
 	transformimageoperation.cpp
 	urlutils.cpp
-	libjpeg/transupp.c
 	widgetfloater.cpp
 	zoomslider.cpp
 	zoomwidget.cpp
+	${GV_JPEG_DIR}/transupp.c
 	)
 
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
