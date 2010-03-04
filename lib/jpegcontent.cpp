@@ -455,9 +455,8 @@ void JpegContent::applyPendingTransformation() {
 
 	// Init transformation
 	jpeg_transform_info transformoption;
+	memset(&transformoption, 0, sizeof(jpeg_transform_info));
 	transformoption.transform = findJxform(d->mTransformMatrix);
-	transformoption.force_grayscale = false;
-	transformoption.trim = false;
 	jtransform_request_workspace(&srcinfo, &transformoption);
 
 	/* Read source file as DCT coefficients */
