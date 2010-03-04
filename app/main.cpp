@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/imageformats/imageformats.h>
+#include <lib/version.h>
 #include "mainwindow.h"
 
 class StartHelper {
@@ -108,10 +109,10 @@ int main(int argc, char *argv[]) {
 		"gwenview",        /* appname */
 		0,                 /* catalogName */
 		ki18n("Gwenview"), /* programName */
-		"2.4.0");          /* version */
+		GWENVIEW_VERSION); /* version */
 	aboutData.setShortDescription(ki18n("An Image Viewer"));
 	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
+	aboutData.setCopyrightStatement(ki18n("Copyright 2000-2010 Aurélien Gâteau"));
 	aboutData.addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),

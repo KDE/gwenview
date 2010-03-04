@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/documentview/documentview.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
+#include "../lib/version.h"
 #include "../lib/zoomwidget.h"
 #include "gvbrowserextension.h"
 
@@ -116,10 +117,10 @@ KAboutData* GVPart::createAboutData() {
 		"gvpart",                /* appname */
 		"gwenview",              /* catalogName */
 		ki18n("Gwenview KPart"), /* programName */
-		"2.4.0");                /* version */
+		GWENVIEW_VERSION);       /* version */
 	aboutData->setShortDescription(ki18n("An Image Viewer"));
 	aboutData->setLicense(KAboutData::License_GPL);
-	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2009 Aurélien Gâteau"));
+	aboutData->setCopyrightStatement(ki18n("Copyright 2000-2010 Aurélien Gâteau"));
 	aboutData->addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
