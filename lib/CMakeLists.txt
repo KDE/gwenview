@@ -5,6 +5,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${CMAKE_CURRENT_BINARY_DIR}
 	${EXIV2_INCLUDE_DIR}
+	${JPEG_INCLUDE_DIR}
 	)
 
 # For config-gwenview.h
