@@ -1,9 +1,59 @@
+# 2.4.2
+## Improvements
+- Improved browsing picture folders by caching EXIF thumbnails to disk.
+
+## Fixes
+- Fixed lossless rotation when built with libjpeg-8 (bug #227313).
+
+# 2.4.1
+## Fixes
+- Fixed behavior of image view scroll bar in RTL mode (bug #210058).
+- Fixed wrong position of "save as" bubble.
+- Fixed "File > Open" action (bug #227934).
+- Prevent word-wrap in thumbnail tooltip.
+
+# 2.4.0
+## New features
+- Added an importer tool to make it easy to get images from memory cards.
+- Added renaming support (bug #190216).
+- Added support for session restoring (bug #199669).
+- Added support for clipboard operations (Cut/Copy/Paste) (bug #191084).
+
+## Improvements
+- Reworked start page to give quick access to history and bookmarks.
+- Show thumbnails over folder icons in thumbnail view and start page.
+- Nicer thumbnail tooltips.
+- Added support for drag'n'drop on location bar (bug #153381).
+- Added buttons to the thumbnail view zoom slider (bug #196110).
+- Hide empty plugin menu entries (bug #168915).
+- Show thumbnails for dragged documents.
+- "Save As" behavior has been improved: it now takes you to the new document,
+  with a link to go back to the original one.
+- Do not show the save bar above the side bar (bug #209683).
+- Improved speed of thumbnail generation when entering a folder for the first time.
+
+## Fixes
+- Reloading a truncated document works now (bug #207056).
+- Do not show semantic info in sidebar if Nepomuk is not enabled (bug #196019).
+- Really quit when all images have been saved (bug #199531).
+- Reloading a truncated document works now (bug #207056).
+- Prevent the sidebar from getting larger when image information is too wide.
+- Fix broken width of save bar.
+
+# 2.3.5
+## Fixes
+- Make crop handles fully opaque, as they do not show for some reason
+  otherwise.
+
 # 2.3.2
 ## Fixes
 - Ensure crop widget is always visible (bug #201098).
 - Ensure operations always apply to the current url (bug #185769).
 - Make sure setting the crop ratio does not resize the crop rect to 0x0
   (bug #199946).
+- Correctly enable or disable next and previous buttons when starting Gwenview
+  with an image as parameter (bug #205468).
+- Do not crash if started with a comma as parameter (bug #197563).
 
 # 2.3.1
 ## Fixes
@@ -26,6 +76,7 @@
   by Marian Kyral (bug #187819).
 - Show XMP image information.
 - Show compressed SVG files.
+- Do not crash if image info is not available (bug #200494).
 
 ## Fixes
 - Restart slideshow timer when user changes current image (bug #186411).
@@ -37,6 +88,7 @@
 - Disable screensaver in fullscreen mode (bug #185916).
 - Forget modified documents if they are deleted or trashed.
 - Fix date sorting.
+- Make PageUp and PageDown scroll, not browse (bug #187774).
 
 # 2.2.3
 ## Fixes
