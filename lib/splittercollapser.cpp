@@ -120,24 +120,6 @@ struct SplitterCollapserPrivate {
 	}
 
 
-	void widgetEventFilter(QEvent* event) {
-		switch (event->type()) {
-		case QEvent::Resize:
-			updatePosition();
-			break;
-
-		case QEvent::Show:
-		case QEvent::Hide:
-			updatePosition();
-			updateArrow();
-			break;
-
-		default:
-			break;
-		}
-	}
-
-
 	void fadeIn() {
 		mOpacityTimeLine->setDirection(QTimeLine::Forward);
 		startTimeLine();
@@ -208,9 +190,20 @@ SplitterCollapser::~SplitterCollapser() {
 }
 
 
-bool SplitterCollapser::eventFilter(QObject* object, QEvent* event) {
-	if (object == d->mWidget) {
-		d->widgetEventFilter(event);
+bool SplitterCollapser::eventFilter(QObject*, QEvent* event) {
+	switch (event->type()) {
+	case QEvent::Resize:
+		d->updatePosition();
+		break;
+
+	case QEvent::Show:
+	case QEvent::Hide:
+		d->updatePosition();
+		d->updateArrow();
+		break;
+
+	default:
+		break;
 	}
 	return false;
 }
@@ -231,7 +224,7 @@ void SplitterCollapser::slotClicked() {
 }
 
 
-bool SplitterCollapser::event(QEvent *event) {
+bool SplitterCollapser::event(QEvent* event) {
 	switch (event->type()) {
 	case QEvent::HoverEnter:
 		d->fadeIn();
