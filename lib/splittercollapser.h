@@ -52,6 +52,7 @@ protected:
 
 	virtual bool event(QEvent *event);
 	virtual void paintEvent(QPaintEvent*);
+	virtual void showEvent(QShowEvent*);
 
 private:
 	SplitterCollapserPrivate* const d;

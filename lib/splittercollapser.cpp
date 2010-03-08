@@ -266,4 +266,9 @@ void SplitterCollapser::paintEvent(QPaintEvent*) {
 }
 
 
+void SplitterCollapser::showEvent(QShowEvent*) {
+	d->updateArrow();
+}
+
+
 } // namespace
