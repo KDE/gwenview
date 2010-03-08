@@ -50,6 +50,7 @@ public:
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
 
+	virtual bool event(QEvent *event);
 	virtual void paintEvent(QPaintEvent*);
 
 private:

@@ -124,13 +124,11 @@ struct SplitterCollapserPrivate {
 		switch (event->type()) {
 		case QEvent::Resize:
 			updatePosition();
-			updateOpacity();
 			break;
 
 		case QEvent::Show:
 		case QEvent::Hide:
 			updatePosition();
-			updateOpacity();
 			updateArrow();
 			break;
 
@@ -140,18 +138,15 @@ struct SplitterCollapserPrivate {
 	}
 
 
-	void updateOpacity() {
-		QPoint pos = q->parentWidget()->mapFromGlobal(QCursor::pos());
-		QRect opaqueRect = q->geometry();
-		bool opaqueCollapser = opaqueRect.contains(pos);
-		int frame = mOpacityTimeLine->currentFrame();
-		if (opaqueCollapser && frame == mOpacityTimeLine->startFrame()) {
-			mOpacityTimeLine->setDirection(QTimeLine::Forward);
-			startTimeLine();
-		} else if (!opaqueCollapser && frame == mOpacityTimeLine->endFrame()) {
-			mOpacityTimeLine->setDirection(QTimeLine::Backward);
-			startTimeLine();
-		}
+	void fadeIn() {
+		mOpacityTimeLine->setDirection(QTimeLine::Forward);
+		startTimeLine();
+	}
+
+
+	void fadeOut() {
+		mOpacityTimeLine->setDirection(QTimeLine::Backward);
+		startTimeLine();
 	}
 
 
@@ -172,6 +167,9 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 	// splitter!
 	setAttribute(Qt::WA_NoChildEventsForParent);
 
+	// Get QHoverEvents
+	setAttribute(Qt::WA_Hover);
+
 	// We do not want to get the focused, otherwise user might trigger
 	// it while pressing space to browse through images
 	setFocusPolicy(Qt::NoFocus);
@@ -183,8 +181,6 @@ SplitterCollapser::SplitterCollapser(QSplitter* splitter, QWidget* widget)
 
 	d->mWidget = widget;
 	d->mWidget->installEventFilter(this);
-
-	qApp->installEventFilter(this);
 
 	d->mSplitter = splitter;
 	setParent(d->mSplitter);
@@ -215,10 +211,6 @@ SplitterCollapser::~SplitterCollapser() {
 bool SplitterCollapser::eventFilter(QObject* object, QEvent* event) {
 	if (object == d->mWidget) {
 		d->widgetEventFilter(event);
-	} else { /* app */
-		if (event->type() == QEvent::MouseMove) {
-			d->updateOpacity();
-		}
 	}
 	return false;
 }
@@ -236,6 +228,21 @@ QSize SplitterCollapser::sizeHint() const {
 
 void SplitterCollapser::slotClicked() {
 	d->mWidget->setVisible(!d->mWidget->isVisible());
+}
+
+
+bool SplitterCollapser::event(QEvent *event) {
+	switch (event->type()) {
+	case QEvent::HoverEnter:
+		d->fadeIn();
+		break;
+	case QEvent::HoverLeave:
+		d->fadeOut();
+		break;
+	default:
+		break;
+	}
+	return QToolButton::event(event);
 }
 
 
