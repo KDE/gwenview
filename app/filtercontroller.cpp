@@ -74,7 +74,7 @@ public:
 	};
 	NameFilter(SortedDirModel* model)
 	: AbstractSortedDirModelFilter(model)
-	, mText(0)
+	, mText()
 	, mMode(Contains)
 	{}
 
