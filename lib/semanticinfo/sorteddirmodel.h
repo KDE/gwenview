@@ -83,6 +83,8 @@ public:
 	void setKindFilter(MimeTypeUtils::Kinds);
 	MimeTypeUtils::Kinds kindFilter() const;
 
+	void adjustKindFilter(MimeTypeUtils::Kinds, bool set);
+
 	/**
 	 * A list of file extensions we should skip
 	 */

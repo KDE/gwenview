@@ -104,6 +104,17 @@ void SortedDirModel::setKindFilter(MimeTypeUtils::Kinds kindFilter) {
 }
 
 
+void SortedDirModel::adjustKindFilter(MimeTypeUtils::Kinds kinds, bool set) {
+	MimeTypeUtils::Kinds kindFilter = d->mKindFilter;
+	if (set) {
+		kindFilter |= kinds;
+	} else {
+		kindFilter &= ~kinds;
+	}
+	setKindFilter(kindFilter);
+}
+
+
 void SortedDirModel::addFilter(AbstractSortedDirModelFilter* filter) {
 	d->mFilters << filter;
 	applyFilters();

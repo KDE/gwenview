@@ -133,6 +133,10 @@
 			<default>1</default>
 			<!-- 1 == PreviewItemDelegate::FileNameDetail -->
 		</entry>
+
+		<entry name="ListVideos" type="Bool">
+			<default>true</default>
+		</entry>
 	</group>
 
 	<group name="Print">

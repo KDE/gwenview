@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>GeneralConfigPage</class>
- <widget class="QWidget" name="GeneralConfigPage" >
-  <property name="geometry" >
+ <widget class="QWidget" name="GeneralConfigPage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,35 +10,32 @@
     <height>338</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>&amp;View background color:</string>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Background color:</string>
      </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>kcfg_ViewBackgroundColor</cstring>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <layout class="QHBoxLayout" >
+   <item row="2" column="1">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="KColorButton" name="kcfg_ViewBackgroundColor" >
-       <property name="text" >
+      <widget class="KColorButton" name="kcfg_ViewBackgroundColor">
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -47,15 +45,29 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <spacer>
-     <property name="orientation" >
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Videos:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="kcfg_ListVideos">
+     <property name="text">
+      <string>Show videos</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Expanding</enum>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>20</height>

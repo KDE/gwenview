@@ -476,6 +476,10 @@ struct MainWindow::Private {
 
 
 	void initDirModel() {
+		mDirModel->setKindFilter(
+			MimeTypeUtils::KIND_RASTER_IMAGE
+			| MimeTypeUtils::KIND_SVG_IMAGE
+			| MimeTypeUtils::KIND_VIDEO);
 		setDirModelShowDirs(true);
 
 		connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
@@ -491,14 +495,7 @@ struct MainWindow::Private {
 	}
 
 	void setDirModelShowDirs(bool showDirs) {
-		MimeTypeUtils::Kinds kinds =
-			MimeTypeUtils::KIND_RASTER_IMAGE
-			| MimeTypeUtils::KIND_SVG_IMAGE
-			| MimeTypeUtils::KIND_VIDEO;
-		if (showDirs) {
-			kinds |= MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE;
-		}
-		mDirModel->setKindFilter(kinds);
+		mDirModel->adjustKindFilter(MimeTypeUtils::KIND_DIR | MimeTypeUtils::KIND_ARCHIVE, showDirs);
 	}
 
 	QModelIndex currentIndex() const {
@@ -1405,6 +1402,9 @@ void MainWindow::toggleMenuBar() {
 
 void MainWindow::loadConfig() {
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
+	MimeTypeUtils::Kinds kind = d->mDirModel->kindFilter();
+	kDebug() << "videos:" << GwenviewConfig::listVideos();
+	d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
 	d->mDocumentPanel->loadConfig();
 	d->mThumbnailViewPanel->loadConfig();
