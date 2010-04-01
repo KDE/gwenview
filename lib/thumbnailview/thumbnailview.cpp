@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPainter>
 #include <QPointer>
 #include <QQueue>
+#include <QScrollBar>
 #include <QTimer>
 #include <QToolTip>
 
@@ -615,6 +616,17 @@ void ThumbnailView::showEvent(QShowEvent* event) {
 	QListView::showEvent(event);
 	d->scheduleThumbnailGenerationForVisibleItems();
 	QTimer::singleShot(0, this, SLOT(scrollToSelectedIndex()));
+}
+
+
+void ThumbnailView::wheelEvent(QWheelEvent* event) {
+	// If we don't adjust the single step, the wheel scroll exactly one item up
+	// and down, giving the impression that the items do not move but only
+	// their label changes.
+	// For some reason it is necessary to set the step here: setting it in
+	// setThumbnailSize() does not work
+	//verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
+	QListView::wheelEvent(event);
 }
 
 

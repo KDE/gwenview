@@ -123,6 +123,8 @@ protected:
 
 	virtual void showEvent(QShowEvent*);
 
+	virtual void wheelEvent(QWheelEvent*);
+
 	virtual void startDrag(Qt::DropActions);
 
 protected Q_SLOTS:
