@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 #include <nepomuk/resourcemanager.h>
+#include <nepomuk/tag.h>
 #endif
 
 
@@ -190,7 +191,8 @@ void StartPage::slotTagViewClicked(const QModelIndex& index) {
 		return;
 	}
 	// FIXME: Check label encoding
-	KUrl url("nepomuksearch:/hasTag:" + index.data().toString());
+	Nepomuk::Tag tagr(index.data().toString());
+	KUrl url = KUrl(tagr.resourceUri()).url();
 	emit urlSelected(url);
 #endif
 }
