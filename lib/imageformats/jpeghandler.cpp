@@ -180,8 +180,6 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 		jpeg_read_scanlines(&cinfo, &line, 1);
 	}
 
-	jpeg_finish_decompress(&cinfo);
-
 	switch (cinfo.out_color_space) {
 	case JCS_CMYK:
 		convertCmykToRgb(image);
@@ -202,6 +200,7 @@ static bool loadJpeg(QImage* image, QIODevice* ioDevice, QSize scaledSize) {
 		*image = image->scaled(scaledSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	}
 
+	jpeg_finish_decompress(&cinfo);
 	jpeg_destroy_decompress(&cinfo);
 
 	return true;
