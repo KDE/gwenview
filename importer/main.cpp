@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		"gwenview_importer",        /* appname */
 		"gwenview",                          /* catalogName */
 		ki18n("Gwenview Importer"), /* programName */
-		"2.3.0");                   /* version */
+		"2.4.3");                   /* version */
 	aboutData.setShortDescription(ki18n("Photo Importer"));
 	aboutData.setLicense(KAboutData::License_GPL);
 	aboutData.setCopyrightStatement(ki18n("Copyright 2009 Aurélien Gâteau"));
