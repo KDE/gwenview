@@ -2,6 +2,8 @@
 ## Improvements
 - Gwenview can now be started with multiple images.
 - Added an option to disable video support (bug #135585).
+- Wrap around when scrolling images with dragging (bug #225811), original patch
+  by Ismael Barros.
 
 # 2.4.2
 ## Improvements

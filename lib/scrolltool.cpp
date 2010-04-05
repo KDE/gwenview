@@ -104,17 +104,40 @@ void ScrollTool::mouseMoveEvent(QMouseEvent* event) {
 		return;
 	}
 
-	int deltaX,deltaY;
+	QScrollBar* hScrollBar = imageView()->horizontalScrollBar();
+	QScrollBar* vScrollBar = imageView()->verticalScrollBar();
+	int width = imageView()->width();
+	int height = imageView()->height();
 
-	deltaX = d->mScrollStartX - event->x();
-	deltaY = d->mScrollStartY - event->y();
+	QPoint mousePos = event->pos();
 
-	d->mScrollStartX = event->x();
-	d->mScrollStartY = event->y();
-	imageView()->horizontalScrollBar()->setValue(
-		imageView()->horizontalScrollBar()->value() + deltaX);
-	imageView()->verticalScrollBar()->setValue(
-		imageView()->verticalScrollBar()->value() + deltaY);
+	int deltaX = d->mScrollStartX - mousePos.x();
+	int deltaY = d->mScrollStartY - mousePos.y();
+
+	if (mousePos.y() <= 4 && vScrollBar->value() < vScrollBar->maximum() - 10) {
+		// wrap mouse from top to bottom
+		mousePos.setY(height - 5);
+	} else if (mousePos.y() >= height - 4 && vScrollBar->value() > 10) {
+		// wrap mouse from bottom to top
+		mousePos.setY(5);
+	}
+
+	if (mousePos.x() <= 4 && hScrollBar->value() < hScrollBar->maximum() - 10) {
+		// wrap mouse from left to right
+		mousePos.setX(width - 5);
+	} else if (mousePos.x() >= width - 4 && hScrollBar->value() > 10) {
+		// wrap mouse from right to left
+		mousePos.setX(5);
+	}
+
+	if (mousePos != event->pos()) {
+		QCursor::setPos(imageView()->mapToGlobal(mousePos));
+	}
+
+	d->mScrollStartX = mousePos.x();
+	d->mScrollStartY = mousePos.y();
+	hScrollBar->setValue(hScrollBar->value() + deltaX);
+	vScrollBar->setValue(vScrollBar->value() + deltaY);
 }
 
 
