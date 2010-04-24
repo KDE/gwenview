@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include <lib/imageformats/imageformats.h>
+#include <lib/version.h>
 #include "importdialog.h"
 
 int main(int argc, char *argv[]) {
@@ -36,10 +37,10 @@ int main(int argc, char *argv[]) {
 		"gwenview_importer",        /* appname */
 		"gwenview",                          /* catalogName */
 		ki18n("Gwenview Importer"), /* programName */
-		"2.3.0");                   /* version */
+		GWENVIEW_VERSION);          /* version */
 	aboutData.setShortDescription(ki18n("Photo Importer"));
 	aboutData.setLicense(KAboutData::License_GPL);
-	aboutData.setCopyrightStatement(ki18n("Copyright 2009 Aurélien Gâteau"));
+	aboutData.setCopyrightStatement(ki18n("Copyright 2009-2010 Aurélien Gâteau"));
 	aboutData.addAuthor(
 		ki18n("Aurélien Gâteau"),
 		ki18n("Main developer"),
