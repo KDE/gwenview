@@ -61,6 +61,7 @@ struct SaveBarPrivate {
 	QToolButton* mUndoButton;
 	QToolButton* mRedoButton;
 	QToolButton* mSaveCurrentUrlButton;
+	QToolButton* mSaveAsButton;
 	QToolButton* mSaveAllButton;
 	QToolButton* mSaveAllFullScreenButton;
 	QLabel* mMessageLabel;
@@ -197,6 +198,7 @@ struct SaveBarPrivate {
 		}
 
 		mSaveCurrentUrlButton->setVisible(lst.contains(mCurrentUrl));
+		mSaveAsButton->setVisible(lst.contains(mCurrentUrl));
 		mSaveAllButton->setVisible(lst.size() >= 1);
 
 		mMessageLabel->setText(message);
@@ -235,6 +237,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mUndoButton = createToolButton();
 	d->mRedoButton = createToolButton();
 	d->mSaveCurrentUrlButton = createToolButton();
+	d->mSaveAsButton = createToolButton();
 	d->mSaveAllButton = createToolButton();
 
 	d->mActionsLabel = new QLabel;
@@ -251,6 +254,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	rowLayout->addWidget(d->mRedoButton);
 	rowLayout->addWidget(d->mActionsLabel);
 	rowLayout->addWidget(d->mSaveCurrentUrlButton);
+	rowLayout->addWidget(d->mSaveAsButton);
 	rowLayout->addWidget(d->mSaveAllButton);
 	rowLayout->setMargin(0);
 
@@ -288,6 +292,7 @@ void SaveBar::initActionDependentWidgets() {
 	d->mUndoButton->setDefaultAction(d->mActionCollection->action("edit_undo"));
 	d->mRedoButton->setDefaultAction(d->mActionCollection->action("edit_redo"));
 	d->mSaveCurrentUrlButton->setDefaultAction(d->mActionCollection->action("file_save"));
+	d->mSaveAsButton->setDefaultAction(d->mActionCollection->action("file_save_as"));
 
 	// FIXME: Not using an action for now
 	d->mSaveAllButton->setText(i18n("Save All"));
