@@ -53,6 +53,13 @@ static void waitUntilMetaInfoLoaded(Document::Ptr doc) {
 }
 
 
+static bool waitUntilJobIsDone(DocumentJob* job) {
+	JobWatcher watcher(job);
+	watcher.wait();
+	return watcher.error() == KJob::NoError;
+}
+
+
 void DocumentTest::initTestCase() {
 	qRegisterMetaType<KUrl>("KUrl");
 }
@@ -264,7 +271,7 @@ void DocumentTest::testSaveRemote() {
 	KUrl dstUrl;
 	dstUrl.setProtocol("trash");
 	dstUrl.setPath("/test.png");
-	QVERIFY(!doc->save(dstUrl, "png"));
+	QVERIFY(!waitUntilJobIsDone(doc->save(dstUrl, "png")));
 
 	if (qgetenv("REMOTE_SFTP_TEST").isEmpty()) {
 		kWarning() << "*** Define the environment variable REMOTE_SFTP_TEST to try saving an image to sftp://localhost/tmp/test.png";
@@ -272,7 +279,7 @@ void DocumentTest::testSaveRemote() {
 		dstUrl.setProtocol("sftp");
 		dstUrl.setHost("localhost");
 		dstUrl.setPath("/tmp/test.png");
-		QVERIFY(doc->save(dstUrl, "png"));
+		QVERIFY(waitUntilJobIsDone(doc->save(dstUrl, "png")));
 	}
 }
 
@@ -328,7 +335,7 @@ void DocumentTest::testSaveAs() {
 	doc->loadFullImage();
 
 	KUrl destUrl = urlForTestOutputFile("result.png");
-	QVERIFY(doc->save(destUrl, "png"));
+	QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
 	QCOMPARE(doc->format().data(), "png");
 	QCOMPARE(doc->url(), destUrl);
 
@@ -361,7 +368,7 @@ void DocumentTest::testLosslessSave() {
 	doc->loadFullImage();
 
 	KUrl url2 = urlForTestOutputFile("orient1.jpg");
-	QVERIFY(doc->save(url2, "jpeg"));
+	QVERIFY(waitUntilJobIsDone(doc->save(url2, "jpeg")));
 
 	QImage image1;
 	QVERIFY(image1.load(url1.toLocalFile()));
@@ -397,7 +404,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Save it
 	KUrl url2 = urlForTestOutputFile("lossless2.jpg");
-	doc->save(url2, "jpeg");
+	waitUntilJobIsDone(doc->save(url2, "jpeg"));
 
 	// Load the saved image
 	doc = DocumentFactory::instance()->load(url2);
@@ -407,7 +414,7 @@ void DocumentTest::testLosslessRotate() {
 	// Rotate the other way
 	QVERIFY(doc->editor());
 	doc->editor()->applyTransformation(ROT_270);
-	doc->save(url2, "jpeg");
+	waitUntilJobIsDone(doc->save(url2, "jpeg"));
 
 	// Compare the saved images
 	QVERIFY(image1.load(url1.toLocalFile()));
@@ -457,7 +464,7 @@ void DocumentTest::testModifyAndSaveAs() {
 
 	// Save it under a new name
 	KUrl destUrl = urlForTestOutputFile("modify.png");
-	QVERIFY(doc->save(destUrl, "png"));
+	QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
 
 	// Wait a bit because save() will clear the undo stack when back to the
 	// event loop

@@ -21,14 +21,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "documentloadedimpl.h"
 
-// STL
-#include <memory>
-
 // Qt
 #include <QByteArray>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QImage>
 #include <QImageWriter>
 #include <QMatrix>
+#include <QScopedPointer>
+#include <QtConcurrentRun>
 
 // KDE
 #include <kapplication.h>
@@ -93,80 +94,79 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
 	return ok;
 }
 
-class SaveJob : public DocumentJob {
-public:
-	SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format)
-	: DocumentJob()
-	, mImpl(impl)
-	, mUrl(url)
-	, mFormat(format)
-	{}
+SaveJob::SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format)
+: DocumentJob()
+, mImpl(impl)
+, mUrl(url)
+, mFormat(format)
+{}
 
-protected:
-	void doStart() {
-		QString fileName;
+SaveJob::~SaveJob() {
+}
 
-		if (mUrl.isLocalFile()) {
-			fileName = mUrl.toLocalFile();
-		} else {
-			mTemporaryFile.reset(new KTemporaryFile);
-			mTemporaryFile->setAutoRemove(true);
-			mTemporaryFile->open();
-			fileName = mTemporaryFile->fileName();
-		}
-
-		KSaveFile file(fileName);
-
-		if (!file.open()) {
-			KUrl dirUrl = mUrl;
-			dirUrl.setFileName(QString());
-			setError(UserDefinedError + 1);
-			setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
-			emitResult();
-			return;
-		}
-
-		if (!mImpl->saveInternal(&file, mFormat)) {
-			file.abort();
-			setError(UserDefinedError + 2);
-			emitResult();
-			return;
-		}
-
-		if (!file.finalize()) {
-			setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", mUrl.pathOrUrl()));
-			setError(UserDefinedError + 3);
-			emitResult();
-			return;
-		}
-
-		if (mUrl.isLocalFile()) {
-			emitResult();
-		} else {
-			KIO::Job* job = KIO::copy(KUrl::fromPath(fileName), mUrl);
-			job->ui()->setWindow(KApplication::kApplication()->activeWindow());
-			addSubjob(job);
-		}
+void SaveJob::saveInternal() {
+	if (!mImpl->saveInternal(mSaveFile.data(), mFormat)) {
+		mSaveFile->abort();
+		setError(UserDefinedError + 2);
+		return;
 	}
 
-	void slotResult(KJob* job) {
-		DocumentJob::slotResult(job);
-		if (!error()) {
-			emitResult();
-		}
+	if (!mSaveFile->finalize()) {
+		setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", mUrl.pathOrUrl()));
+		setError(UserDefinedError + 3);
+	}
+}
+
+void SaveJob::doStart() {
+	QString fileName;
+
+	if (mUrl.isLocalFile()) {
+		fileName = mUrl.toLocalFile();
+	} else {
+		mTemporaryFile.reset(new KTemporaryFile);
+		mTemporaryFile->setAutoRemove(true);
+		mTemporaryFile->open();
+		fileName = mTemporaryFile->fileName();
 	}
 
-private:
-	DocumentLoadedImpl* mImpl;
-	KUrl mUrl;
-	QByteArray mFormat;
+	mSaveFile.reset(new KSaveFile(fileName));
 
-	// This tmp is used to save to remote urls.
-	// It's an auto_ptr, this way it's not instantiated for local urls, but
-	// for remote urls we are sure it will remove its file when we leave the
-	// function.
-	std::auto_ptr<KTemporaryFile> mTemporaryFile;
-};
+	if (!mSaveFile->open()) {
+		KUrl dirUrl = mUrl;
+		dirUrl.setFileName(QString());
+		setError(UserDefinedError + 1);
+		setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
+		emitResult();
+		return;
+	}
+
+	QFuture<void> future = QtConcurrent::run(this, &SaveJob::saveInternal);
+	QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+	watcher->setFuture(future);
+	connect(watcher, SIGNAL(finished()), SLOT(finishSave()));
+}
+
+void SaveJob::finishSave() {
+	if (error()) {
+		emitResult();
+		return;
+	}
+
+	if (mUrl.isLocalFile()) {
+		emitResult();
+	} else {
+		KIO::Job* job = KIO::copy(KUrl::fromPath(mTemporaryFile->fileName()), mUrl);
+		job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+		addSubjob(job);
+	}
+}
+
+void SaveJob::slotResult(KJob* job) {
+	DocumentJob::slotResult(job);
+	if (!error()) {
+		emitResult();
+	}
+}
 
 
 DocumentJob* DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {

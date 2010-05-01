@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/binder.h>
 #include <lib/document/documentfactory.h>
+#include <lib/document/documentjob.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/historymodel.h>
 #include <lib/messagebubble.h>
@@ -164,91 +165,61 @@ void GvCore::addUrlToRecentUrls(const KUrl& url) {
 }
 
 
-struct SaveAllHelper {
-	typedef QPair<KUrl, QString> ErrorListItem;
-	typedef QList<ErrorListItem> ErrorList;
+SaveAllHelper::SaveAllHelper(QWidget* parent)
+: mParent(parent)
+, mProgressDialog(new QProgressDialog(parent)) {
+	connect(mProgressDialog, SIGNAL(canceled()), SLOT(slotCanceled()));
+	mProgressDialog->setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
+	mProgressDialog->setCancelButtonText(i18n("&Stop"));
+	mProgressDialog->setMinimum(0);
+	mProgressDialog->setWindowModality(Qt::WindowModal);
+}
 
-	SaveAllHelper(ErrorList* errorList)
-	: mErrorList(errorList) {}
-
-	void operator()(Document::Ptr doc) {
-		KUrl url = doc->url();
-		if (!doc->save(url, doc->format())) {
-			*mErrorList << qMakePair(url, doc->errorString());
-		}
-	}
-
-	ErrorList* mErrorList;
-};
-
-void GvCore::saveAll() {
-	SaveAllHelper::ErrorList errorList;
-	SaveAllHelper helper(&errorList);
-
-	// Separate local and remote urls because saving to remote urls uses KIO
-	// methods, which are not thread-safe.
-	// We do not use a KUrl::List because DocumentFactory::load() is not
-	// thread-safe.
-	QList<Document::Ptr> localDocs;
-	QList<Document::Ptr> remoteDocs;
-
-	Q_FOREACH(const KUrl& url, DocumentFactory::instance()->modifiedDocumentList()) {
+void SaveAllHelper::save() {
+	KUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
+	mProgressDialog->setMaximum(list.size());
+	Q_FOREACH(const KUrl& url, list) {
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		if (url.isLocalFile()) {
-			localDocs << doc;
-		} else {
-			remoteDocs << doc;
-		}
+		DocumentJob* job = doc->save(url, doc->format());
+		connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
+		mJobSet << job;
 	}
 
-	QProgressDialog progress(d->mMainWindow);
-	progress.setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
-	progress.setCancelButtonText(i18n("&Stop"));
-	progress.setMinimum(0);
-	progress.setMaximum(localDocs.size() + remoteDocs.size());
-	progress.setWindowModality(Qt::WindowModal);
-	progress.show();
-
-	// Save local urls
-	QFuture<void> future = QtConcurrent::map(localDocs, helper);
-
-	QFutureWatcher<void> watcher;
-	watcher.setFuture(future);
-	connect(&watcher, SIGNAL(progressValueChanged(int)),
-		&progress, SLOT(setValue(int)) );
-
-	connect(&progress, SIGNAL(canceled()),
-		&watcher, SLOT(cancel()) );
-
-	watcher.waitForFinished();
-
-	// Save remote urls
-	Q_FOREACH(Document::Ptr doc, remoteDocs) {
-		if (progress.wasCanceled()) {
-			break;
-		}
-		helper(doc);
-		progress.setValue(progress.value() + 1);
-		qApp->processEvents();
-	}
-
-	progress.close();
+	mProgressDialog->show();
 
 	// Done, show message if necessary
-	if (errorList.count() > 0) {
-		QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", errorList.count());
+	if (mErrorList.count() > 0) {
+		QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", mErrorList.count());
 		msg += "<ul>";
-		Q_FOREACH(const SaveAllHelper::ErrorListItem& item, errorList) {
-			const KUrl& url = item.first;
-			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
-			msg += "<li>"
-				+ i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
-					"<filename>%1</filename>: %2", name, item.second)
-				+ "</li>";
+		Q_FOREACH(const QString& item, mErrorList) {
+			msg += "<li>" + item + "</li>";
 		}
 		msg += "</ul>";
-		KMessageBox::sorry(d->mMainWindow, msg);
+		KMessageBox::sorry(mParent, msg);
 	}
+}
+
+void SaveAllHelper::slotCanceled() {
+	Q_FOREACH(DocumentJob* job, mJobSet) {
+		job->kill();
+	}
+}
+
+void SaveAllHelper::slotResult(DocumentJob* job) {
+	if (job->error()) {
+		KUrl url = job->document()->url();
+		QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
+		mErrorList << i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
+			"<filename>%1</filename>: %2", name, job->errorString());
+	}
+	mJobSet.remove(job);
+	mProgressDialog->setValue(mProgressDialog->value() + 1);
+}
+
+
+void GvCore::saveAll() {
+	SaveAllHelper helper(d->mMainWindow);
+	helper.save();
 }
 
 
@@ -259,27 +230,22 @@ void GvCore::save(const KUrl& url) {
 	QByteArray format = doc->format();
 	const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
 	if (availableTypes.contains(QString(format))) {
-		if (!doc->save(url, format)) {
-			QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
-			QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
-				name, doc->errorString());
-			KMessageBox::sorry(d->mMainWindow, msg);
+		DocumentJob* job = doc->save(url, format);
+		connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
+	} else {
+		// We don't know how to save in 'format', ask the user for a format we can
+		// write to.
+		KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
+		saveUsingAnotherFormat.setText(i18n("Save using another format"));
+		int result = KMessageBox::warningContinueCancel(
+			d->mMainWindow,
+			i18n("Gwenview cannot save images in '%1' format.", QString(format)),
+			QString() /* caption */,
+			saveUsingAnotherFormat
+			);
+		if (result == KMessageBox::Continue) {
+			saveAs(url);
 		}
-		return;
-	}
-
-	// We don't know how to save in 'format', ask the user for a format we can
-	// write to.
-	KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
-	saveUsingAnotherFormat.setText(i18n("Save using another format"));
-	int result = KMessageBox::warningContinueCancel(
-		d->mMainWindow,
-		i18n("Gwenview cannot save images in '%1' format.", QString(format)),
-		QString() /* caption */,
-		saveUsingAnotherFormat
-		);
-	if (result == KMessageBox::Continue) {
-		saveAs(url);
 	}
 }
 
@@ -308,22 +274,8 @@ void GvCore::saveAs(const KUrl& url) {
 
 	// Start save
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	if (doc->save(saveAsUrl, format.data()) && url != saveAsUrl) {
-		d->mMainWindow->goToUrl(saveAsUrl);
-
-		MessageBubble* bubble = new MessageBubble();
-		bubble->setText(i18n("You are now viewing the new document."));
-		KGuiItem item = KStandardGuiItem::back();
-		item.setText(i18n("Go back to the original"));
-		QToolButton* button = bubble->addButton(item);
-
-		connect(button, SIGNAL(clicked()),
-			CREATE_BINDER(bubble, MainWindow, KUrl, d->mMainWindow, goToUrl, url), SLOT(run()));
-		connect(button, SIGNAL(clicked()),
-			bubble, SLOT(deleteLater()));
-
-		d->mMainWindow->showMessageBubble(bubble);
-	}
+	KJob* job = doc->save(saveAsUrl, format.data());
+	connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
 }
 
 
@@ -335,6 +287,47 @@ static void applyTransform(const KUrl& url, Orientation orientation) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
+}
+
+
+void GvCore::slotSaveResult(KJob* job) {
+	// FIXME: That code relies on Document::save() behavior: we need a public
+	// SaveJob instead, with oldUrl() and newUrl() methods.
+	KUrl oldUrl = job->property("oldUrl").value<KUrl>();
+	KUrl newUrl = job->property("newUrl").value<KUrl>();
+
+	if (job->error()) {
+		QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();
+		QString msg = i18nc("@info", "<b>Saving <filename>%1</filename> failed:</b><br>%2",
+			name, job->errorString());
+
+		int result = KMessageBox::warningContinueCancel(
+			d->mMainWindow, msg,
+			QString() /* caption */,
+			KStandardGuiItem::saveAs());
+
+		if (result == KMessageBox::Continue) {
+			saveAs(newUrl);
+		}
+		return;
+	}
+
+	if (oldUrl != newUrl) {
+		d->mMainWindow->goToUrl(newUrl);
+
+		MessageBubble* bubble = new MessageBubble();
+		bubble->setText(i18n("You are now viewing the new document."));
+		KGuiItem item = KStandardGuiItem::back();
+		item.setText(i18n("Go back to the original"));
+		QToolButton* button = bubble->addButton(item);
+
+		connect(button, SIGNAL(clicked()),
+			CREATE_BINDER(bubble, MainWindow, KUrl, d->mMainWindow, goToUrl, oldUrl), SLOT(run()));
+		connect(button, SIGNAL(clicked()),
+			bubble, SLOT(deleteLater()));
+
+		d->mMainWindow->showMessageBubble(bubble);
+	}
 }
 
 

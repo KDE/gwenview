@@ -22,18 +22,47 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #define DOCUMENTLOADEDIMPL_H
 
 // Qt
+#include <QScopedPointer>
 
 // KDE
+#include <kurl.h>
 
 // Local
 #include <lib/document/abstractdocumenteditor.h>
 #include <lib/document/abstractdocumentimpl.h>
+#include <lib/document/documentjob.h>
 
+class QByteArray;
 class QIODevice;
+
+class KSaveFile;
+class KTemporaryFile;
 
 namespace Gwenview {
 
-class SaveJob;
+class DocumentLoadedImpl;
+
+class SaveJob : public DocumentJob {
+	Q_OBJECT
+public:
+	SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format);
+	~SaveJob();
+	void saveInternal();
+
+protected Q_SLOTS:
+	virtual void doStart();
+	virtual void slotResult(KJob*);
+
+private Q_SLOTS:
+	void finishSave();
+
+private:
+	DocumentLoadedImpl* mImpl;
+	KUrl mUrl;
+	QByteArray mFormat;
+	QScopedPointer<KTemporaryFile> mTemporaryFile;
+	QScopedPointer<KSaveFile> mSaveFile;
+};
 
 struct DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {

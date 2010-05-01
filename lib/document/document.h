@@ -127,7 +127,7 @@ public:
 
 	KUrl url() const;
 
-	bool save(const KUrl& url, const QByteArray& format);
+	DocumentJob* save(const KUrl& url, const QByteArray& format);
 
 	QByteArray format() const;
 

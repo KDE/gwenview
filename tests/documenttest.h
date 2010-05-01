@@ -21,7 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENTTEST_H
 
 // Qt
+#include <QEventLoop>
 #include <QObject>
+
+// KDE
+#include <kjob.h>
 
 // Local
 #include "../lib/document/document.h"
@@ -45,6 +49,39 @@ public:
 	Gwenview::Document::Ptr mDocument;
 	int mCallCount;
 	Gwenview::Document::LoadingState mState;
+};
+
+
+class JobWatcher : public QObject {
+	Q_OBJECT
+public:
+	JobWatcher(KJob* job)
+	: mJob(job)
+	, mLoop(new QEventLoop(this))
+	, mError(0)
+	{
+		connect(job, SIGNAL(result(KJob*)),
+			SLOT(slotResult(KJob*)));
+	}
+
+	void wait() {
+		mLoop->exec();
+	}
+
+	int error() const {
+		return mError;
+	}
+
+private Q_SLOTS:
+	void slotResult(KJob* job) {
+		mError = job->error();
+		mLoop->exit();
+	}
+
+private:
+	KJob* mJob;
+	QEventLoop* mLoop;
+	int mError;
 };
 
 
