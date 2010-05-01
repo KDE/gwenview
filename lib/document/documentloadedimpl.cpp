@@ -143,7 +143,6 @@ protected:
 		if (mUrl.isLocalFile()) {
 			emitResult();
 		} else {
-			kDebug();
 			KIO::Job* job = KIO::copy(KUrl::fromPath(fileName), mUrl);
 			job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 			addSubjob(job);
