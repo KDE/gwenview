@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 */
 // Self
-#include "abstractdocumenttask.h"
+#include "documentjob.h"
 
 // Qt
 
@@ -30,36 +30,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-struct AbstractDocumentTaskPrivate {
+struct DocumentJobPrivate {
 	Document::Ptr mDoc;
 };
 
 
-AbstractDocumentTask::AbstractDocumentTask()
-: d(new AbstractDocumentTaskPrivate) {
+DocumentJob::DocumentJob()
+: KJob(0)
+, d(new DocumentJobPrivate) {
 }
 
 
-AbstractDocumentTask::~AbstractDocumentTask() {
+DocumentJob::~DocumentJob() {
 	delete d;
 }
 
 
-Document::Ptr AbstractDocumentTask::document() const {
+Document::Ptr DocumentJob::document() const {
 	return d->mDoc;
 }
 
 
-void AbstractDocumentTask::setDocument(const Document::Ptr& doc) {
+void DocumentJob::setDocument(const Document::Ptr& doc) {
 	d->mDoc = doc;
 }
 
 
-void AbstractDocumentTask::emitDone() {
-	done(this);
+void DocumentJob::start() {
+	QMetaObject::invokeMethod(this, "doStart", Qt::QueuedConnection);
 }
 
 
 } // namespace
 
-#include <abstractdocumenttask.moc>
+#include <documentjob.moc>

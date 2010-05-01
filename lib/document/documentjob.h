@@ -18,15 +18,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef ABSTRACTDOCUMENTTASK_H
-#define ABSTRACTDOCUMENTTASK_H
+#ifndef DOCUMENTJOB_H
+#define DOCUMENTJOB_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QObject>
 
 // KDE
+#include <kjob.h>
 
 // Local
 #include <lib/document/document.h>
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-class AbstractDocumentTaskPrivate;
+class DocumentJobPrivate;
 
 /**
  * Represent an asynchronous task to be executed on a document
@@ -47,17 +47,15 @@ class AbstractDocumentTaskPrivate;
  * You can of course use threading inside your task implementation to speed it
  * up.
  */
-class GWENVIEWLIB_EXPORT AbstractDocumentTask : public QObject {
+class GWENVIEWLIB_EXPORT DocumentJob : public KJob {
 	Q_OBJECT
 public:
-	AbstractDocumentTask();
-	~AbstractDocumentTask();
+	DocumentJob();
+	~DocumentJob();
 
-Q_SIGNALS:
-	void done(AbstractDocumentTask*);
-
-protected:
 	Document::Ptr document() const;
+
+	virtual void start();
 
 protected Q_SLOTS:
 	/**
@@ -67,14 +65,19 @@ protected Q_SLOTS:
 	 * If you are not emitting it from the GUI thread, then use a queued
 	 * connection to emit it.
 	 */
-	virtual void run() = 0;
+	virtual void doStart() = 0;
 
-	void emitDone();
+	/**
+	 * slot-ification of emitResult()
+	 */
+	void emitResult() {
+		KJob::emitResult();
+	}
 
 private:
 	void setDocument(const Document::Ptr&);
 
-	AbstractDocumentTaskPrivate* const d;
+	DocumentJobPrivate* const d;
 
 	friend class Document;
 };
@@ -82,4 +85,4 @@ private:
 
 } // namespace
 
-#endif /* ABSTRACTDOCUMENTTASK_H */
+#endif /* DOCUMENTJOB_H */

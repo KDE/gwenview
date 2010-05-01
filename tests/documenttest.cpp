@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/abstractimageoperation.h"
 #include "../lib/document/abstractdocumenteditor.h"
-#include "../lib/document/abstractdocumenttask.h"
+#include "../lib/document/documentjob.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
@@ -587,17 +587,17 @@ void DocumentTest::testModifiedAndSavedSignals() {
 	QCOMPARE(savedSpy.count(), 1);
 }
 
-class TestTask : public AbstractDocumentTask {
+class TestJob : public DocumentJob {
 public:
-	TestTask(QString* str, char ch)
+	TestJob(QString* str, char ch)
 	: mStr(str)
 	, mCh(ch)
 	{}
 
 protected:
-	virtual void run() {
+	virtual void doStart() {
 		*mStr += mCh;
-		done(this);
+		emitResult();
 	}
 
 private:
@@ -611,9 +611,9 @@ void DocumentTest::testTaskQueue() {
 	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(bool)));
 
 	QString str;
-	doc->enqueueTask(new TestTask(&str, 'a'));
-	doc->enqueueTask(new TestTask(&str, 'b'));
-	doc->enqueueTask(new TestTask(&str, 'c'));
+	doc->enqueueTask(new TestJob(&str, 'a'));
+	doc->enqueueTask(new TestJob(&str, 'b'));
+	doc->enqueueTask(new TestJob(&str, 'c'));
 	QVERIFY(doc->isBusy());
 	QEventLoop loop;
 	connect(doc.data(), SIGNAL(allTasksDone()),

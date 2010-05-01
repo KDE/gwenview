@@ -41,13 +41,14 @@ class QRect;
 class QSize;
 class QUndoStack;
 
+class KJob;
 class KUrl;
 
 namespace Gwenview {
 
 class AbstractDocumentEditor;
 class AbstractDocumentImpl;
-class AbstractDocumentTask;
+class DocumentJob;
 class DocumentFactory;
 struct DocumentPrivate;
 class ImageMetaInfoModel;
@@ -180,7 +181,7 @@ public:
 	 */
 	void stopAnimation();
 
-	void enqueueTask(AbstractDocumentTask*);
+	void enqueueTask(DocumentJob*);
 
 	/**
 	 * Returns true if there are queued tasks for this document.
@@ -206,7 +207,7 @@ private Q_SLOTS:
 	void emitLoaded();
 	void emitLoadingFailed();
 	void slotUndoIndexChanged();
-	void slotTaskDone(AbstractDocumentTask*);
+	void slotResult(KJob*);
 
 private:
 	friend class DocumentFactory;

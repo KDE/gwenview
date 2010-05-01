@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 // Local
-#include "abstractdocumenttask.h"
+#include "documentjob.h"
 #include "emptydocumentimpl.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
@@ -42,7 +42,7 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	bool mKeepRawData;
-	QQueue<AbstractDocumentTask*> mTaskQueue;
+	QQueue<DocumentJob*> mTaskQueue;
 
 	/**
 	 * @defgroup imagedata should be reset in reload()
@@ -421,18 +421,19 @@ void Document::stopAnimation() {
 	return d->mImpl->stopAnimation();
 }
 
-void Document::enqueueTask(AbstractDocumentTask* task) {
+void Document::enqueueTask(DocumentJob* task) {
 	d->mTaskQueue.enqueue(task);
 	task->setDocument(Ptr(this));
-	connect(task, SIGNAL(done(AbstractDocumentTask*)),
-		SLOT(slotTaskDone(AbstractDocumentTask*)));
+	connect(task, SIGNAL(result(KJob*)),
+		SLOT(slotResult(KJob*)));
 	if (d->mTaskQueue.size() == 1) {
-		QMetaObject::invokeMethod(task, "run", Qt::QueuedConnection);
+		task->start();
 		busyChanged(true);
 	}
 }
 
-void Document::slotTaskDone(AbstractDocumentTask* task) {
+void Document::slotResult(KJob* job) {
+	DocumentJob* task = static_cast<DocumentJob*>(job);
 	Q_ASSERT(!d->mTaskQueue.isEmpty());
 	Q_ASSERT(d->mTaskQueue.head() == task);
 	d->mTaskQueue.dequeue();
@@ -440,7 +441,7 @@ void Document::slotTaskDone(AbstractDocumentTask* task) {
 		busyChanged(false);
 		allTasksDone();
 	} else {
-		QMetaObject::invokeMethod(d->mTaskQueue.head(), "run", Qt::QueuedConnection);
+		d->mTaskQueue.head()->start();
 	}
 	task->deleteLater();
 }

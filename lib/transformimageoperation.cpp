@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "document/abstractdocumenteditor.h"
-#include "document/abstractdocumenttask.h"
+#include "document/documentjob.h"
 
 namespace Gwenview {
 
@@ -42,26 +42,28 @@ struct TransformImageOperationPrivate {
 };
 
 
-class TransformTask : public AbstractDocumentTask {
+class TransformJob : public DocumentJob {
 public:
-	TransformTask(Orientation orientation)
+	TransformJob(Orientation orientation)
 	: mOrientation(orientation)
 	{}
 
-	void doRun() {
+	void threadedStart() {
 		if (document()->editor()) {
 			document()->editor()->applyTransformation(mOrientation);
+			setError(0);
 		} else {
-			kWarning() << "!document->editor()";
+			setError(1);
+			setErrorText("!document->editor()");
 		}
 	}
 
 protected:
-	virtual void run() {
-		QFuture<void> future = QtConcurrent::run(this, &TransformTask::doRun);
+	virtual void doStart() {
+		QFuture<void> future = QtConcurrent::run(this, &TransformJob::threadedStart);
 		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
 		watcher->setFuture(future);
-		connect(watcher, SIGNAL(finished()), SLOT(emitDone()));
+		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
 	}
 
 private:
@@ -100,7 +102,7 @@ TransformImageOperation::~TransformImageOperation() {
 
 
 void TransformImageOperation::redo() {
-	document()->enqueueTask(new TransformTask(d->mOrientation));
+	document()->enqueueTask(new TransformJob(d->mOrientation));
 }
 
 
@@ -117,7 +119,7 @@ void TransformImageOperation::undo() {
 		orientation = d->mOrientation;
 		break;
 	}
-	document()->enqueueTask(new TransformTask(orientation));
+	document()->enqueueTask(new TransformJob(orientation));
 }
 
 
