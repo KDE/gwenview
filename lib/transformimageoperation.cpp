@@ -29,11 +29,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "document/abstractdocumenteditor.h"
+#include "document/abstractdocumenttask.h"
 
 namespace Gwenview {
 
 
 struct TransformImageOperationPrivate {
+	Orientation mOrientation;
+};
+
+
+class TransformTask : public AbstractDocumentTask {
+public:
+	TransformTask(Orientation orientation)
+	: mOrientation(orientation)
+	{}
+
+protected:
+	virtual void run() {
+		if (document()->editor()) {
+			document()->editor()->applyTransformation(mOrientation);
+		} else {
+			kWarning() << "!document->editor()";
+		}
+		done(this);
+	}
+
+private:
 	Orientation mOrientation;
 };
 
@@ -69,11 +91,7 @@ TransformImageOperation::~TransformImageOperation() {
 
 
 void TransformImageOperation::redo() {
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->applyTransformation(d->mOrientation);
+	document()->enqueueTask(new TransformTask(d->mOrientation));
 }
 
 
@@ -90,11 +108,7 @@ void TransformImageOperation::undo() {
 		orientation = d->mOrientation;
 		break;
 	}
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->applyTransformation(orientation);
+	document()->enqueueTask(new TransformTask(orientation));
 }
 
 

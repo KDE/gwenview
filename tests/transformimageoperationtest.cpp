@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 // Qt
+#include <QEventLoop>
 #include <QImage>
 
 // KDE
@@ -62,7 +63,10 @@ void TransformImageOperationTest::testRotate90() {
 
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	op->setDocument(doc);
+	QEventLoop loop;
+	connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
 	doc->undoStack()->push(op);
+	loop.exec();
 
 	QCOMPARE(image, doc->image());
 }
