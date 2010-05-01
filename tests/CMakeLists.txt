@@ -40,6 +40,17 @@ kde4_add_unit_test(documenttest ${documenttest_SRCS})
 
 target_link_libraries(documenttest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
 
+
+# TransformImageOperation
+set(transformimageoperationtest_SRCS
+	transformimageoperationtest.cpp
+	)
+
+kde4_add_unit_test(transformimageoperationtest ${transformimageoperationtest_SRCS})
+
+target_link_libraries(transformimageoperationtest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_LIBRARY})
+
+
 # JPEGContent
 set(jpegcontenttest_SRCS
 	jpegcontenttest.cpp
