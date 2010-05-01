@@ -22,6 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "transformimageoperation.h"
 
 // Qt
+#include <QFuture>
+#include <QFutureWatcher>
+#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -45,14 +48,20 @@ public:
 	: mOrientation(orientation)
 	{}
 
-protected:
-	virtual void run() {
+	void doRun() {
 		if (document()->editor()) {
 			document()->editor()->applyTransformation(mOrientation);
 		} else {
 			kWarning() << "!document->editor()";
 		}
-		done(this);
+	}
+
+protected:
+	virtual void run() {
+		QFuture<void> future = QtConcurrent::run(this, &TransformTask::doRun);
+		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+		watcher->setFuture(future);
+		connect(watcher, SIGNAL(finished()), SLOT(emitDone()));
 	}
 
 private:
