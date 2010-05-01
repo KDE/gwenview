@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QApplication>
 #include <QImage>
+#include <QQueue>
 #include <QUndoStack>
 
 // KDE
@@ -30,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 // Local
+#include "abstractdocumenttask.h"
 #include "emptydocumentimpl.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
@@ -40,6 +42,7 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	bool mKeepRawData;
+	QQueue<AbstractDocumentTask*> mTaskQueue;
 
 	/**
 	 * @defgroup imagedata should be reset in reload()
@@ -418,5 +421,32 @@ void Document::stopAnimation() {
 	return d->mImpl->stopAnimation();
 }
 
+void Document::enqueueTask(AbstractDocumentTask* task) {
+	d->mTaskQueue.enqueue(task);
+	task->setDocument(Ptr(this));
+	connect(task, SIGNAL(done(AbstractDocumentTask*)),
+		SLOT(slotTaskDone(AbstractDocumentTask*)));
+	if (d->mTaskQueue.size() == 1) {
+		QMetaObject::invokeMethod(task, "run", Qt::QueuedConnection);
+		busyChanged(true);
+	}
+}
+
+void Document::slotTaskDone(AbstractDocumentTask* task) {
+	Q_ASSERT(!d->mTaskQueue.isEmpty());
+	Q_ASSERT(d->mTaskQueue.head() == task);
+	d->mTaskQueue.dequeue();
+	if (d->mTaskQueue.isEmpty()) {
+		busyChanged(false);
+		allTasksDone();
+	} else {
+		QMetaObject::invokeMethod(d->mTaskQueue.head(), "run", Qt::QueuedConnection);
+	}
+	task->deleteLater();
+}
+
+bool Document::isBusy() const {
+	return !d->mTaskQueue.isEmpty();
+}
 
 } // namespace

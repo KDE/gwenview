@@ -31,6 +31,7 @@ set(gwenviewlib_SRCS
 	crop/cropimageoperation.cpp
 	crop/croptool.cpp
 	document/abstractdocumentimpl.cpp
+	document/abstractdocumenttask.cpp
 	document/animateddocumentloadedimpl.cpp
 	document/document.cpp
 	document/documentfactory.cpp

@@ -47,6 +47,7 @@ namespace Gwenview {
 
 class AbstractDocumentEditor;
 class AbstractDocumentImpl;
+class AbstractDocumentTask;
 class DocumentFactory;
 struct DocumentPrivate;
 class ImageMetaInfoModel;
@@ -179,6 +180,13 @@ public:
 	 */
 	void stopAnimation();
 
+	void enqueueTask(AbstractDocumentTask*);
+
+	/**
+	 * Returns true if there are queued tasks for this document.
+	 */
+	bool isBusy() const;
+
 Q_SIGNALS:
 	void downSampledImageReady();
 	void imageRectUpdated(const QRect&);
@@ -190,12 +198,15 @@ Q_SIGNALS:
 	void modified(const KUrl&);
 	void metaInfoUpdated();
 	void isAnimatedUpdated();
+	void busyChanged(bool);
+	void allTasksDone();
 
 private Q_SLOTS:
 	void emitMetaInfoLoaded();
 	void emitLoaded();
 	void emitLoadingFailed();
 	void slotUndoIndexChanged();
+	void slotTaskDone(AbstractDocumentTask*);
 
 private:
 	friend class DocumentFactory;

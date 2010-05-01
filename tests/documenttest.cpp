@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "../lib/abstractimageoperation.h"
 #include "../lib/document/abstractdocumenteditor.h"
+#include "../lib/document/abstractdocumenttask.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/imagemetainfomodel.h"
 #include "../lib/imageutils.h"
@@ -584,4 +585,43 @@ void DocumentTest::testModifiedAndSavedSignals() {
 
 	doc->undoStack()->undo();
 	QCOMPARE(savedSpy.count(), 1);
+}
+
+class TestTask : public AbstractDocumentTask {
+public:
+	TestTask(QString* str, char ch)
+	: mStr(str)
+	, mCh(ch)
+	{}
+
+protected:
+	virtual void run() {
+		*mStr += mCh;
+		done(this);
+	}
+
+private:
+	QString* mStr;
+	char mCh;
+};
+
+void DocumentTest::testTaskQueue() {
+	KUrl url = urlForTestFile("orient6.jpg");
+	Document::Ptr doc = DocumentFactory::instance()->load(url);
+	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(bool)));
+
+	QString str;
+	doc->enqueueTask(new TestTask(&str, 'a'));
+	doc->enqueueTask(new TestTask(&str, 'b'));
+	doc->enqueueTask(new TestTask(&str, 'c'));
+	QVERIFY(doc->isBusy());
+	QEventLoop loop;
+	connect(doc.data(), SIGNAL(allTasksDone()),
+		&loop, SLOT(quit()));
+	loop.exec();
+	QVERIFY(!doc->isBusy());
+	QCOMPARE(spy.count(), 2);
+	QCOMPARE(spy.takeFirst().at(0).toBool(), true);
+	QCOMPARE(spy.takeFirst().at(0).toBool(), false);
+	QCOMPARE(str, QString("abc"));
 }
