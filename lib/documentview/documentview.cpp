@@ -349,6 +349,7 @@ void DocumentView::openUrl(const KUrl& url) {
 		disconnect(d->mDocument.data(), 0, this, 0);
 	}
 	d->mDocument = DocumentFactory::instance()->load(url);
+	connect(d->mDocument.data(), SIGNAL(busyChanged(bool)), SLOT(setBusyIndicatorVisibility(bool)));
 
 	if (d->mDocument->loadingState() < Document::KindDetermined) {
 		MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter);
@@ -505,6 +506,15 @@ void DocumentView::showEvent(QShowEvent*) {
 
 void DocumentView::hideEvent(QHideEvent*) {
 	d->updateActions();
+}
+
+
+void DocumentView::setBusyIndicatorVisibility(bool visible) {
+	if (visible) {
+		d->showLoadingIndicator();
+	} else {
+		d->hideLoadingIndicator();
+	}
 }
 
 
