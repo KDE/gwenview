@@ -37,6 +37,7 @@ class QRect;
 namespace Gwenview {
 
 class Document;
+class DocumentJob;
 class AbstractDocumentEditor;
 
 struct AbstractDocumentImplPrivate;
@@ -54,7 +55,7 @@ public:
 
 	virtual Document::LoadingState loadingState() const = 0;
 
-	virtual bool save(const KUrl&, const QByteArray& /*format*/) { return false; }
+	virtual DocumentJob* save(const KUrl&, const QByteArray& /*format*/) { return 0; }
 
 	virtual AbstractDocumentEditor* editor() { return 0; }
 

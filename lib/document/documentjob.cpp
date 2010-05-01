@@ -36,7 +36,7 @@ struct DocumentJobPrivate {
 
 
 DocumentJob::DocumentJob()
-: KJob(0)
+: KCompositeJob(0)
 , d(new DocumentJobPrivate) {
 }
 

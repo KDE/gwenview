@@ -207,7 +207,8 @@ private Q_SLOTS:
 	void emitLoaded();
 	void emitLoadingFailed();
 	void slotUndoIndexChanged();
-	void slotResult(KJob*);
+	void slotSaveResult(KJob*);
+	void slotQueueResult(KJob*);
 
 private:
 	friend class DocumentFactory;

@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 
 // KDE
-#include <kjob.h>
+#include <kcompositejob.h>
 
 // Local
 #include <lib/document/document.h>
@@ -47,7 +47,7 @@ class DocumentJobPrivate;
  * You can of course use threading inside your task implementation to speed it
  * up.
  */
-class GWENVIEWLIB_EXPORT DocumentJob : public KJob {
+class GWENVIEWLIB_EXPORT DocumentJob : public KCompositeJob {
 	Q_OBJECT
 public:
 	DocumentJob();

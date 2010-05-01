@@ -33,6 +33,7 @@ class QIODevice;
 
 namespace Gwenview {
 
+class SaveJob;
 
 struct DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
@@ -44,7 +45,7 @@ public:
 	// AbstractDocumentImpl
 	virtual void init();
 	virtual Document::LoadingState loadingState() const;
-	virtual bool save(const KUrl&, const QByteArray& format);
+	virtual DocumentJob* save(const KUrl&, const QByteArray& format);
 	virtual AbstractDocumentEditor* editor();
 	virtual QByteArray rawData() const;
 	virtual bool isEditable() const;
@@ -60,6 +61,8 @@ protected:
 
 private:
 	DocumentLoadedImplPrivate* const d;
+
+	friend class SaveJob;
 };
 
 

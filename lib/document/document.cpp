@@ -222,18 +222,28 @@ void Document::waitUntilLoaded() {
 
 bool Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
-	bool ok = d->mImpl->save(url, format);
-	if (ok) {
-		// Use QueuedConnection to ensure we are (more or less :/) thread-safe.
-		// FIXME: This method should be turned into an asynchronous call to
-		// reduce thread-safe potential issues.
-		QMetaObject::invokeMethod(this, "saved", Qt::QueuedConnection, Q_ARG(KUrl, d->mUrl), Q_ARG(KUrl, url));
-		QMetaObject::invokeMethod(&d->mUndoStack, "setClean", Qt::QueuedConnection);
-		d->mUrl = url;
+	DocumentJob* job = d->mImpl->save(url, format);
+	job->setProperty("newUrl", url);
+	if (!job) {
+		kWarning() << "Implementation does not support saving!";
+		return false;
 	}
-
-	return ok;
+	connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
+	return job->exec();
 }
+
+
+void Document::slotSaveResult(KJob* job) {
+	if (job->error()) {
+		setErrorString(job->errorString());
+	} else {
+		d->mUndoStack.setClean();
+		KUrl oldUrl = d->mUrl;
+		d->mUrl = job->property("newUrl").value<KUrl>();
+		saved(oldUrl, d->mUrl);
+	}
+}
+
 
 QByteArray Document::format() const {
 	return d->mFormat;
@@ -425,14 +435,14 @@ void Document::enqueueTask(DocumentJob* task) {
 	d->mTaskQueue.enqueue(task);
 	task->setDocument(Ptr(this));
 	connect(task, SIGNAL(result(KJob*)),
-		SLOT(slotResult(KJob*)));
+		SLOT(slotQueueResult(KJob*)));
 	if (d->mTaskQueue.size() == 1) {
 		task->start();
 		busyChanged(true);
 	}
 }
 
-void Document::slotResult(KJob* job) {
+void Document::slotQueueResult(KJob* job) {
 	DocumentJob* task = static_cast<DocumentJob*>(job);
 	Q_ASSERT(!d->mTaskQueue.isEmpty());
 	Q_ASSERT(d->mTaskQueue.head() == task);

@@ -31,14 +31,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMatrix>
 
 // KDE
+#include <kapplication.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
+#include <kio/copyjob.h>
+#include <kio/jobuidelegate.h>
 #include <klocale.h>
 #include <ksavefile.h>
 #include <ktemporaryfile.h>
 #include <kurl.h>
 
 // Local
+#include "documentjob.h"
 #include "imageutils.h"
 
 namespace Gwenview {
@@ -90,52 +93,85 @@ bool DocumentLoadedImpl::saveInternal(QIODevice* device, const QByteArray& forma
 	return ok;
 }
 
+class SaveJob : public DocumentJob {
+public:
+	SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format)
+	: DocumentJob()
+	, mImpl(impl)
+	, mUrl(url)
+	, mFormat(format)
+	{}
 
-bool DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
-	QString fileName;
+protected:
+	void doStart() {
+		QString fileName;
+
+		if (mUrl.isLocalFile()) {
+			fileName = mUrl.toLocalFile();
+		} else {
+			mTemporaryFile.reset(new KTemporaryFile);
+			mTemporaryFile->setAutoRemove(true);
+			mTemporaryFile->open();
+			fileName = mTemporaryFile->fileName();
+		}
+
+		KSaveFile file(fileName);
+
+		if (!file.open()) {
+			KUrl dirUrl = mUrl;
+			dirUrl.setFileName(QString());
+			setError(UserDefinedError + 1);
+			setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
+			emitResult();
+			return;
+		}
+
+		if (!mImpl->saveInternal(&file, mFormat)) {
+			file.abort();
+			setError(UserDefinedError + 2);
+			emitResult();
+			return;
+		}
+
+		if (!file.finalize()) {
+			setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", mUrl.pathOrUrl()));
+			setError(UserDefinedError + 3);
+			emitResult();
+			return;
+		}
+
+		if (mUrl.isLocalFile()) {
+			emitResult();
+		} else {
+			kDebug();
+			KIO::Job* job = KIO::copy(KUrl::fromPath(fileName), mUrl);
+			job->ui()->setWindow(KApplication::kApplication()->activeWindow());
+			addSubjob(job);
+		}
+	}
+
+	void slotResult(KJob* job) {
+		DocumentJob::slotResult(job);
+		if (!error()) {
+			emitResult();
+		}
+	}
+
+private:
+	DocumentLoadedImpl* mImpl;
+	KUrl mUrl;
+	QByteArray mFormat;
 
 	// This tmp is used to save to remote urls.
 	// It's an auto_ptr, this way it's not instantiated for local urls, but
 	// for remote urls we are sure it will remove its file when we leave the
 	// function.
-	std::auto_ptr<KTemporaryFile> tmp;
+	std::auto_ptr<KTemporaryFile> mTemporaryFile;
+};
 
-	if (url.isLocalFile()) {
-		fileName = url.toLocalFile();
-	} else {
-		tmp.reset(new KTemporaryFile);
-		tmp->setAutoRemove(true);
-		tmp->open();
-		fileName = tmp->fileName();
-	}
 
-	KSaveFile file(fileName);
-
-	if (!file.open()) {
-		KUrl dirUrl = url;
-		dirUrl.setFileName(QString());
-		setDocumentErrorString(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
-		return false;
-	}
-
-	if (!saveInternal(&file, format)) {
-		file.abort();
-		return false;
-	}
-
-	if (!file.finalize()) {
-		setDocumentErrorString(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", url.pathOrUrl()));
-		return false;
-	}
-
-	if (!url.isLocalFile()) {
-		if (!KIO::NetAccess::upload(fileName, url, 0)) {
-			setDocumentErrorString(i18nc("@info", "Could not upload file."));
-			return false;
-		}
-	}
-
-	return true;
+DocumentJob* DocumentLoadedImpl::save(const KUrl& url, const QByteArray& format) {
+	return new SaveJob(this, url, format);
 }
 
 
