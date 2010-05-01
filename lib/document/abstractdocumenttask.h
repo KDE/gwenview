@@ -69,6 +69,8 @@ protected Q_SLOTS:
 	 */
 	virtual void run() = 0;
 
+	void emitDone();
+
 private:
 	void setDocument(const Document::Ptr&);
 

@@ -55,6 +55,11 @@ void AbstractDocumentTask::setDocument(const Document::Ptr& doc) {
 }
 
 
+void AbstractDocumentTask::emitDone() {
+	done(this);
+}
+
+
 } // namespace
 
 #include <abstractdocumenttask.moc>
