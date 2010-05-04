@@ -44,7 +44,8 @@ namespace Gwenview {
 
 struct SaveJobPrivate {
 	DocumentLoadedImpl* mImpl;
-	KUrl mUrl;
+	KUrl mOldUrl;
+	KUrl mNewUrl;
 	QByteArray mFormat;
 	QScopedPointer<KTemporaryFile> mTemporaryFile;
 	QScopedPointer<KSaveFile> mSaveFile;
@@ -54,7 +55,8 @@ struct SaveJobPrivate {
 SaveJob::SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format)
 : d(new SaveJobPrivate) {
 	d->mImpl = impl;
-	d->mUrl = url;
+	d->mOldUrl = impl->document()->url();
+	d->mNewUrl = url;
 	d->mFormat = format;
 }
 
@@ -72,7 +74,7 @@ void SaveJob::saveInternal() {
 	}
 
 	if (!d->mSaveFile->finalize()) {
-		setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mUrl.pathOrUrl()));
+		setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.pathOrUrl()));
 		setError(UserDefinedError + 3);
 	}
 }
@@ -81,8 +83,8 @@ void SaveJob::saveInternal() {
 void SaveJob::doStart() {
 	QString fileName;
 
-	if (d->mUrl.isLocalFile()) {
-		fileName = d->mUrl.toLocalFile();
+	if (d->mNewUrl.isLocalFile()) {
+		fileName = d->mNewUrl.toLocalFile();
 	} else {
 		d->mTemporaryFile.reset(new KTemporaryFile);
 		d->mTemporaryFile->setAutoRemove(true);
@@ -93,7 +95,7 @@ void SaveJob::doStart() {
 	d->mSaveFile.reset(new KSaveFile(fileName));
 
 	if (!d->mSaveFile->open()) {
-		KUrl dirUrl = d->mUrl;
+		KUrl dirUrl = d->mNewUrl;
 		dirUrl.setFileName(QString());
 		setError(UserDefinedError + 1);
 		setErrorText(i18nc("@info", "Could not open file for writing, check that you have the necessary rights in <filename>%1</filename>.", dirUrl.pathOrUrl()));
@@ -114,10 +116,10 @@ void SaveJob::finishSave() {
 		return;
 	}
 
-	if (d->mUrl.isLocalFile()) {
+	if (d->mNewUrl.isLocalFile()) {
 		emitResult();
 	} else {
-		KIO::Job* job = KIO::copy(KUrl::fromPath(d->mTemporaryFile->fileName()), d->mUrl);
+		KIO::Job* job = KIO::copy(KUrl::fromPath(d->mTemporaryFile->fileName()), d->mNewUrl);
 		job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		addSubjob(job);
 	}
@@ -129,6 +131,16 @@ void SaveJob::slotResult(KJob* job) {
 	if (!error()) {
 		emitResult();
 	}
+}
+
+
+KUrl SaveJob::oldUrl() const {
+	return d->mOldUrl;
+}
+
+
+KUrl SaveJob::newUrl() const {
+	return d->mNewUrl;
 }
 
 

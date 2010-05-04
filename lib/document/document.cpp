@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "emptydocumentimpl.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
+#include "savejob.h"
 
 namespace Gwenview {
 
@@ -240,9 +241,9 @@ void Document::slotSaveResult(KJob* job) {
 		setErrorString(job->errorString());
 	} else {
 		d->mUndoStack.setClean();
-		KUrl oldUrl = d->mUrl;
-		d->mUrl = job->property("newUrl").value<KUrl>();
-		saved(oldUrl, d->mUrl);
+		SaveJob* saveJob = static_cast<SaveJob*>(job);
+		d->mUrl = saveJob->newUrl();
+		saved(saveJob->oldUrl(), d->mUrl);
 	}
 }
 

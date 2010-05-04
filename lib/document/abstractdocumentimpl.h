@@ -69,6 +69,8 @@ public:
 
 	virtual void stopAnimation() {}
 
+	Document* document() const;
+
 Q_SIGNALS:
 	void imageRectUpdated(const QRect&);
 	void metaInfoLoaded();
@@ -78,7 +80,6 @@ Q_SIGNALS:
 	void editorUpdated();
 
 protected:
-	Document* document() const;
 	void setDocumentImage(const QImage& image);
 	void setDocumentImageSize(const QSize& size);
 	void setDocumentKind(MimeTypeUtils::Kind);

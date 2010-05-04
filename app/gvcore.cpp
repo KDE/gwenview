@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QList>
 #include <QProgressDialog>
 #include <QStandardItemModel>
-#include <QtConcurrentMap>
 #include <QToolButton>
 #include <QWidget>
 
@@ -45,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/binder.h>
 #include <lib/document/documentfactory.h>
 #include <lib/document/documentjob.h>
+#include <lib/document/savejob.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/historymodel.h>
 #include <lib/messagebubble.h>
@@ -290,11 +290,10 @@ static void applyTransform(const KUrl& url, Orientation orientation) {
 }
 
 
-void GvCore::slotSaveResult(KJob* job) {
-	// FIXME: That code relies on Document::save() behavior: we need a public
-	// SaveJob instead, with oldUrl() and newUrl() methods.
-	KUrl oldUrl = job->property("oldUrl").value<KUrl>();
-	KUrl newUrl = job->property("newUrl").value<KUrl>();
+void GvCore::slotSaveResult(KJob* _job) {
+	SaveJob* job = static_cast<SaveJob*>(_job);
+	KUrl oldUrl = job->oldUrl();
+	KUrl newUrl = job->newUrl();
 
 	if (job->error()) {
 		QString name = newUrl.fileName().isEmpty() ? newUrl.pathOrUrl() : newUrl.fileName();

@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef SAVEJOB_H
 #define SAVEJOB_H
 
+#include <lib/gwenviewlib_export.h>
+
 // Qt
 
 // KDE
@@ -36,12 +38,15 @@ namespace Gwenview {
 class DocumentLoadedImpl;
 
 class SaveJobPrivate;
-class SaveJob : public DocumentJob {
+class GWENVIEWLIB_EXPORT SaveJob : public DocumentJob {
 	Q_OBJECT
 public:
 	SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& format);
 	~SaveJob();
 	void saveInternal();
+
+	KUrl oldUrl() const;
+	KUrl newUrl() const;
 
 protected Q_SLOTS:
 	virtual void doStart();
