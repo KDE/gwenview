@@ -53,7 +53,7 @@ public:
 
 private Q_SLOTS:
 	void slotCanceled();
-	void slotResult(DocumentJob*);
+	void slotResult(KJob*);
 
 private:
 	QWidget* mParent;

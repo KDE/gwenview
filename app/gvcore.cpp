@@ -177,7 +177,7 @@ SaveAllHelper::SaveAllHelper(QWidget* parent)
 
 void SaveAllHelper::save() {
 	KUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
-	mProgressDialog->setMaximum(list.size());
+	mProgressDialog->setMaximum(list.size() - 1);
 	Q_FOREACH(const KUrl& url, list) {
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		DocumentJob* job = doc->save(url, doc->format());
@@ -185,7 +185,7 @@ void SaveAllHelper::save() {
 		mJobSet << job;
 	}
 
-	mProgressDialog->show();
+	mProgressDialog->exec();
 
 	// Done, show message if necessary
 	if (mErrorList.count() > 0) {
@@ -205,7 +205,8 @@ void SaveAllHelper::slotCanceled() {
 	}
 }
 
-void SaveAllHelper::slotResult(DocumentJob* job) {
+void SaveAllHelper::slotResult(KJob* _job) {
+	DocumentJob* job = static_cast<DocumentJob*>(_job);
 	if (job->error()) {
 		KUrl url = job->document()->url();
 		QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
