@@ -42,15 +42,17 @@ namespace Gwenview {
 
 struct DocumentLoadedImplPrivate {
 	QByteArray mRawData;
+	bool mQuietInit;
 };
 
 
-DocumentLoadedImpl::DocumentLoadedImpl(Document* document, const QByteArray& rawData)
+DocumentLoadedImpl::DocumentLoadedImpl(Document* document, const QByteArray& rawData, bool quietInit)
 : AbstractDocumentImpl(document)
 , d(new DocumentLoadedImplPrivate) {
 	if (document->keepRawData()) {
 		d->mRawData = rawData;
 	}
+	d->mQuietInit = quietInit;
 }
 
 
@@ -60,8 +62,10 @@ DocumentLoadedImpl::~DocumentLoadedImpl() {
 
 
 void DocumentLoadedImpl::init() {
-	emit imageRectUpdated(document()->image().rect());
-	emit loaded();
+	if (!d->mQuietInit) {
+		emit imageRectUpdated(document()->image().rect());
+		emit loaded();
+	}
 }
 
 

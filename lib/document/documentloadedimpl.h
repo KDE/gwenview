@@ -40,7 +40,10 @@ struct DocumentLoadedImplPrivate;
 class DocumentLoadedImpl : public AbstractDocumentImpl, protected AbstractDocumentEditor {
 	Q_OBJECT
 public:
-	DocumentLoadedImpl(Document*, const QByteArray&);
+	/**
+	 * @param quietInit set to true if init() should not emit any signal
+	 */
+	DocumentLoadedImpl(Document*, const QByteArray&, bool quietInit = false);
 	~DocumentLoadedImpl();
 
 	// AbstractDocumentImpl

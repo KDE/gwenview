@@ -75,7 +75,7 @@ void JpegDocumentLoadedImpl::setImage(const QImage& image) {
 	DocumentLoadedImpl::setImage(image);
 	// mJpegContent is no longer relevant, so we'd better switch to a normal
 	// loaded impl
-	switchToImpl(new DocumentLoadedImpl(document(), QByteArray() /* rawData */));
+	switchToImpl(new DocumentLoadedImpl(document(), QByteArray() /* rawData */, true /* quietInit */));
 }
 
 
