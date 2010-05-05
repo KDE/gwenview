@@ -437,18 +437,22 @@ void Document::stopAnimation() {
 void Document::enqueueTask(DocumentJob* task) {
 	d->mTaskQueue.enqueue(task);
 	task->setDocument(Ptr(this));
-	connect(task, SIGNAL(result(KJob*)),
-		SLOT(slotQueueResult(KJob*)));
+	connect(task, SIGNAL(destroyed(QObject*)),
+		SLOT(slotJobDestroyed(QObject*)));
 	if (d->mTaskQueue.size() == 1) {
 		task->start();
 		busyChanged(true);
 	}
 }
 
-void Document::slotQueueResult(KJob* job) {
-	DocumentJob* task = static_cast<DocumentJob*>(job);
+void Document::slotJobDestroyed(QObject* job) {
 	Q_ASSERT(!d->mTaskQueue.isEmpty());
-	Q_ASSERT(d->mTaskQueue.head() == task);
+	if (d->mTaskQueue.head() != job) {
+		// Job was killed before it even got started, just remove it from the
+		// queue and move along
+		d->mTaskQueue.removeAll(static_cast<DocumentJob*>(job));
+		return;
+	}
 	d->mTaskQueue.dequeue();
 	if (d->mTaskQueue.isEmpty()) {
 		busyChanged(false);
@@ -456,7 +460,6 @@ void Document::slotQueueResult(KJob* job) {
 	} else {
 		d->mTaskQueue.head()->start();
 	}
-	task->deleteLater();
 }
 
 bool Document::isBusy() const {
