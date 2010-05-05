@@ -51,9 +51,9 @@ public:
 	void threadedStart() {
 		if (document()->editor()) {
 			document()->editor()->applyTransformation(mOrientation);
-			setError(0);
+			setError(NoError);
 		} else {
-			setError(1);
+			setError(UserDefinedError + 1);
 			setErrorText("!document->editor()");
 		}
 	}

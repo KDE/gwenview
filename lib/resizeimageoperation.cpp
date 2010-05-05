@@ -22,7 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "resizeimageoperation.h"
 
 // Qt
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QImage>
+#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -31,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "document/abstractdocumenteditor.h"
 #include "document/document.h"
+#include "document/documentjob.h"
 
 namespace Gwenview {
 
@@ -38,6 +42,37 @@ namespace Gwenview {
 struct ResizeImageOperationPrivate {
 	int mSize;
 	QImage mOriginalImage;
+};
+
+
+class ResizeJob : public DocumentJob {
+public:
+	ResizeJob(int size)
+	: mSize(size)
+	{}
+
+	void threadedStart() {
+		if (!document()->editor()) {
+			setError(UserDefinedError + 1);
+			setErrorText("!document->editor()");
+			return;
+		}
+		QImage image = document()->image();
+		image = image.scaled(mSize, mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		document()->editor()->setImage(image);
+		setError(NoError);
+	}
+
+protected:
+	virtual void doStart() {
+		QFuture<void> future = QtConcurrent::run(this, &ResizeJob::threadedStart);
+		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+		watcher->setFuture(future);
+		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+	}
+
+private:
+	int mSize;
 };
 
 
@@ -54,14 +89,8 @@ ResizeImageOperation::~ResizeImageOperation() {
 
 
 void ResizeImageOperation::redo() {
-	QImage image = document()->image();
-	d->mOriginalImage = image;
-	image = image.scaled(d->mSize, d->mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->setImage(image);
+	d->mOriginalImage = document()->image();
+	document()->enqueueTask(new ResizeJob(d->mSize));
 }
 
 
