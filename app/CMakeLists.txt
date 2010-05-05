@@ -29,6 +29,7 @@ set(gwenview_SRCS
 	main.cpp
 	mainwindow.cpp
 	preloader.cpp
+	saveallhelper.cpp
 	savebar.cpp
 	sidebar.cpp
 	startpage.cpp

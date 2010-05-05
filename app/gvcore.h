@@ -23,8 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QObject>
-#include <QSet>
-#include <QStringList>
 
 // KDE
 
@@ -35,32 +33,11 @@ class KUrl;
 
 class QAbstractItemModel;
 
-class QProgressDialog;
-class QWidget;
-
 namespace Gwenview {
 
 class AbstractSemanticInfoBackEnd;
-class DocumentJob;
 class MainWindow;
 class SortedDirModel;
-
-class SaveAllHelper : public QObject {
-	Q_OBJECT
-public:
-	SaveAllHelper(QWidget* parent);
-	void save();
-
-private Q_SLOTS:
-	void slotCanceled();
-	void slotResult(KJob*);
-
-private:
-	QWidget* mParent;
-	QProgressDialog* mProgressDialog;
-	QSet<DocumentJob*> mJobSet;
-	QStringList mErrorList;
-};
 
 class GvCorePrivate;
 class GvCore : public QObject {

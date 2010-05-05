@@ -23,13 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QList>
-#include <QProgressDialog>
 #include <QStandardItemModel>
 #include <QToolButton>
-#include <QWidget>
 
 // KDE
 #include <kfiledialog.h>
@@ -53,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/transformimageoperation.h>
 #include <mainwindow.h>
+#include <saveallhelper.h>
 
 namespace Gwenview {
 
@@ -162,59 +158,6 @@ void GvCore::addUrlToRecentUrls(const KUrl& url) {
 	}
 	recentUrlsModel();
 	d->mRecentUrlsModel->addUrl(url);
-}
-
-
-SaveAllHelper::SaveAllHelper(QWidget* parent)
-: mParent(parent)
-, mProgressDialog(new QProgressDialog(parent)) {
-	connect(mProgressDialog, SIGNAL(canceled()), SLOT(slotCanceled()));
-	mProgressDialog->setLabelText(i18nc("@info:progress saving all image changes", "Saving..."));
-	mProgressDialog->setCancelButtonText(i18n("&Stop"));
-	mProgressDialog->setMinimum(0);
-	mProgressDialog->setWindowModality(Qt::WindowModal);
-}
-
-void SaveAllHelper::save() {
-	KUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
-	mProgressDialog->setMaximum(list.size() - 1);
-	Q_FOREACH(const KUrl& url, list) {
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		DocumentJob* job = doc->save(url, doc->format());
-		connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
-		mJobSet << job;
-	}
-
-	mProgressDialog->exec();
-
-	// Done, show message if necessary
-	if (mErrorList.count() > 0) {
-		QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", mErrorList.count());
-		msg += "<ul>";
-		Q_FOREACH(const QString& item, mErrorList) {
-			msg += "<li>" + item + "</li>";
-		}
-		msg += "</ul>";
-		KMessageBox::sorry(mParent, msg);
-	}
-}
-
-void SaveAllHelper::slotCanceled() {
-	Q_FOREACH(DocumentJob* job, mJobSet) {
-		job->kill();
-	}
-}
-
-void SaveAllHelper::slotResult(KJob* _job) {
-	DocumentJob* job = static_cast<DocumentJob*>(_job);
-	if (job->error()) {
-		KUrl url = job->document()->url();
-		QString name = url.fileName().isEmpty() ? url.pathOrUrl() : url.fileName();
-		mErrorList << i18nc("@info %1 is the name of the document which failed to save, %2 is the reason for the failure",
-			"<filename>%1</filename>: %2", name, job->errorString());
-	}
-	mJobSet.remove(job);
-	mProgressDialog->setValue(mProgressDialog->value() + 1);
 }
 
 
