@@ -49,6 +49,9 @@ struct SaveJobPrivate {
 	QByteArray mFormat;
 	QScopedPointer<KTemporaryFile> mTemporaryFile;
 	QScopedPointer<KSaveFile> mSaveFile;
+	QScopedPointer<QFutureWatcher<void> > mInternalSaveWatcher;
+
+	bool mKillReceived;
 };
 
 
@@ -58,6 +61,8 @@ SaveJob::SaveJob(DocumentLoadedImpl* impl, const KUrl& url, const QByteArray& fo
 	d->mOldUrl = impl->document()->url();
 	d->mNewUrl = url;
 	d->mFormat = format;
+	d->mKillReceived = false;
+	setCapabilities(Killable);
 }
 
 
@@ -70,17 +75,15 @@ void SaveJob::saveInternal() {
 	if (!d->mImpl->saveInternal(d->mSaveFile.data(), d->mFormat)) {
 		d->mSaveFile->abort();
 		setError(UserDefinedError + 2);
-		return;
-	}
-
-	if (!d->mSaveFile->finalize()) {
-		setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.pathOrUrl()));
-		setError(UserDefinedError + 3);
+		setErrorText(d->mImpl->document()->errorString());
 	}
 }
 
 
 void SaveJob::doStart() {
+	if (d->mKillReceived) {
+		return;
+	}
 	QString fileName;
 
 	if (d->mNewUrl.isLocalFile()) {
@@ -104,15 +107,26 @@ void SaveJob::doStart() {
 	}
 
 	QFuture<void> future = QtConcurrent::run(this, &SaveJob::saveInternal);
-	QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-	watcher->setFuture(future);
-	connect(watcher, SIGNAL(finished()), SLOT(finishSave()));
+	d->mInternalSaveWatcher.reset(new QFutureWatcher<void>(this));
+	d->mInternalSaveWatcher->setFuture(future);
+	connect(d->mInternalSaveWatcher.data(), SIGNAL(finished()), SLOT(finishSave()));
 }
 
 
 void SaveJob::finishSave() {
+	d->mInternalSaveWatcher.reset(0);
+	if (d->mKillReceived) {
+		return;
+	}
+
 	if (error()) {
 		emitResult();
+		return;
+	}
+
+	if (!d->mSaveFile->finalize()) {
+		setErrorText(i18nc("@info", "Could not overwrite file, check that you have the necessary rights to write in <filename>%1</filename>.", d->mNewUrl.pathOrUrl()));
+		setError(UserDefinedError + 3);
 		return;
 	}
 
@@ -141,6 +155,15 @@ KUrl SaveJob::oldUrl() const {
 
 KUrl SaveJob::newUrl() const {
 	return d->mNewUrl;
+}
+
+
+bool SaveJob::doKill() {
+	d->mKillReceived = true;
+	if (d->mInternalSaveWatcher) {
+		d->mInternalSaveWatcher->waitForFinished();
+	}
+	return true;
 }
 
 

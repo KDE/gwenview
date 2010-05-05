@@ -52,6 +52,9 @@ protected Q_SLOTS:
 	virtual void doStart();
 	virtual void slotResult(KJob*);
 
+protected:
+	virtual bool doKill();
+
 private Q_SLOTS:
 	void finishSave();
 
