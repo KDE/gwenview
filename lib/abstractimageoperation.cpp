@@ -56,7 +56,6 @@ void AbstractImageOperation::setDocument(Document::Ptr doc) {
 Document::Ptr AbstractImageOperation::document() const {
 	Document::Ptr doc = DocumentFactory::instance()->load(d->mUrl);
 	doc->loadFullImage();
-	doc->waitUntilLoaded();
 	return doc;
 }
 

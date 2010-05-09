@@ -228,7 +228,6 @@ void ImageOpsContextManagerItem::resizeImage() {
 	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
 	doc->loadFullImage();
-	doc->waitUntilLoaded();
 	int size = GwenviewConfig::imageResizeLastSize();
 	if (size == -1) {
 		size = qMax(doc->width(), doc->height());
@@ -295,7 +294,6 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
-	doc->waitUntilLoaded();
 	op->setDocument(doc);
 	doc->undoStack()->push(op);
 }
