@@ -22,9 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "transformimageoperation.h"
 
 // Qt
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -42,28 +39,18 @@ struct TransformImageOperationPrivate {
 };
 
 
-class TransformJob : public DocumentJob {
+class TransformJob : public ThreadedDocumentJob {
 public:
 	TransformJob(Orientation orientation)
 	: mOrientation(orientation)
 	{}
 
-	void threadedStart() {
-		if (document()->editor()) {
-			document()->editor()->applyTransformation(mOrientation);
-			setError(NoError);
-		} else {
-			setError(UserDefinedError + 1);
-			setErrorText("!document->editor()");
+	virtual void threadedStart() {
+		if (!checkDocumentEditor()) {
+			return;
 		}
-	}
-
-protected:
-	virtual void doStart() {
-		QFuture<void> future = QtConcurrent::run(this, &TransformJob::threadedStart);
-		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-		watcher->setFuture(future);
-		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+		document()->editor()->applyTransformation(mOrientation);
+		setError(NoError);
 	}
 
 private:

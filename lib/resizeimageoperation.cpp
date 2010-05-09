@@ -22,10 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "resizeimageoperation.h"
 
 // Qt
-#include <QFuture>
-#include <QFutureWatcher>
 #include <QImage>
-#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -45,30 +42,20 @@ struct ResizeImageOperationPrivate {
 };
 
 
-class ResizeJob : public DocumentJob {
+class ResizeJob : public ThreadedDocumentJob {
 public:
 	ResizeJob(int size)
 	: mSize(size)
 	{}
 
-	void threadedStart() {
-		if (!document()->editor()) {
-			setError(UserDefinedError + 1);
-			setErrorText("!document->editor()");
+	virtual void threadedStart() {
+		if (!checkDocumentEditor()) {
 			return;
 		}
 		QImage image = document()->image();
 		image = image.scaled(mSize, mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 		document()->editor()->setImage(image);
 		setError(NoError);
-	}
-
-protected:
-	virtual void doStart() {
-		QFuture<void> future = QtConcurrent::run(this, &ResizeJob::threadedStart);
-		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-		watcher->setFuture(future);
-		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
 	}
 
 private:
