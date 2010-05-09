@@ -102,7 +102,7 @@ TransformImageOperation::~TransformImageOperation() {
 
 
 void TransformImageOperation::redo() {
-	document()->enqueueTask(new TransformJob(d->mOrientation));
+	document()->enqueueJob(new TransformJob(d->mOrientation));
 }
 
 
@@ -119,7 +119,7 @@ void TransformImageOperation::undo() {
 		orientation = d->mOrientation;
 		break;
 	}
-	document()->enqueueTask(new TransformJob(orientation));
+	document()->enqueueJob(new TransformJob(orientation));
 }
 
 

@@ -612,15 +612,15 @@ private:
 	char mCh;
 };
 
-void DocumentTest::testTaskQueue() {
+void DocumentTest::testJobQueue() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(bool)));
 
 	QString str;
-	doc->enqueueTask(new TestJob(&str, 'a'));
-	doc->enqueueTask(new TestJob(&str, 'b'));
-	doc->enqueueTask(new TestJob(&str, 'c'));
+	doc->enqueueJob(new TestJob(&str, 'a'));
+	doc->enqueueJob(new TestJob(&str, 'b'));
+	doc->enqueueJob(new TestJob(&str, 'c'));
 	QVERIFY(doc->isBusy());
 	QEventLoop loop;
 	connect(doc.data(), SIGNAL(allTasksDone()),

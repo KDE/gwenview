@@ -43,7 +43,7 @@ struct DocumentPrivate {
 	AbstractDocumentImpl* mImpl;
 	KUrl mUrl;
 	bool mKeepRawData;
-	QQueue<DocumentJob*> mTaskQueue;
+	QQueue<DocumentJob*> mJobQueue;
 
 	/**
 	 * @defgroup imagedata should be reset in reload()
@@ -231,7 +231,7 @@ DocumentJob* Document::save(const KUrl& url, const QByteArray& format) {
 		return false;
 	}
 	connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
-	enqueueTask(job);
+	enqueueJob(job);
 	return job;
 }
 
@@ -434,36 +434,36 @@ void Document::stopAnimation() {
 	return d->mImpl->stopAnimation();
 }
 
-void Document::enqueueTask(DocumentJob* task) {
-	d->mTaskQueue.enqueue(task);
+void Document::enqueueJob(DocumentJob* task) {
+	d->mJobQueue.enqueue(task);
 	task->setDocument(Ptr(this));
 	connect(task, SIGNAL(destroyed(QObject*)),
 		SLOT(slotJobDestroyed(QObject*)));
-	if (d->mTaskQueue.size() == 1) {
+	if (d->mJobQueue.size() == 1) {
 		task->start();
 		busyChanged(true);
 	}
 }
 
 void Document::slotJobDestroyed(QObject* job) {
-	Q_ASSERT(!d->mTaskQueue.isEmpty());
-	if (d->mTaskQueue.head() != job) {
+	Q_ASSERT(!d->mJobQueue.isEmpty());
+	if (d->mJobQueue.head() != job) {
 		// Job was killed before it even got started, just remove it from the
 		// queue and move along
-		d->mTaskQueue.removeAll(static_cast<DocumentJob*>(job));
+		d->mJobQueue.removeAll(static_cast<DocumentJob*>(job));
 		return;
 	}
-	d->mTaskQueue.dequeue();
-	if (d->mTaskQueue.isEmpty()) {
+	d->mJobQueue.dequeue();
+	if (d->mJobQueue.isEmpty()) {
 		busyChanged(false);
 		allTasksDone();
 	} else {
-		d->mTaskQueue.head()->start();
+		d->mJobQueue.head()->start();
 	}
 }
 
 bool Document::isBusy() const {
-	return !d->mTaskQueue.isEmpty();
+	return !d->mJobQueue.isEmpty();
 }
 
 } // namespace

@@ -39,7 +39,7 @@ class DocumentJobPrivate;
 /**
  * Represent an asynchronous task to be executed on a document
  * The task must be created on the heap and passed to an instance of Document
- * via Document::enqueueTask()
+ * via Document::enqueueJob()
  *
  * The task behavior must be implemented in run()
  *

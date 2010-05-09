@@ -181,7 +181,7 @@ public:
 	 */
 	void stopAnimation();
 
-	void enqueueTask(DocumentJob*);
+	void enqueueJob(DocumentJob*);
 
 	/**
 	 * Returns true if there are queued tasks for this document.

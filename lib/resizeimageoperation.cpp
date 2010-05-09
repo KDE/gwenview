@@ -90,7 +90,7 @@ ResizeImageOperation::~ResizeImageOperation() {
 
 void ResizeImageOperation::redo() {
 	d->mOriginalImage = document()->image();
-	document()->enqueueTask(new ResizeJob(d->mSize));
+	document()->enqueueJob(new ResizeJob(d->mSize));
 }
 
 

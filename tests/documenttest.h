@@ -110,7 +110,7 @@ private Q_SLOTS:
 	void testMetaInfoBmp();
 	void testForgetModifiedDocument();
 	void testModifiedAndSavedSignals();
-	void testTaskQueue();
+	void testJobQueue();
 
 	void initTestCase();
 	void init();
