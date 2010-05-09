@@ -254,7 +254,7 @@ void ThumbnailViewPanel::editLocation() {
 
 
 void ThumbnailViewPanel::addFolderToPlaces() {
-	KUrl url = d->mUrlNavigator->url();
+	KUrl url = d->mUrlNavigator->locationUrl();
 	QString text = url.fileName();
 	if (text.isEmpty()) {
 		text = url.pathOrUrl();

@@ -211,7 +211,7 @@ void ThumbnailPage::slotDocumentDirFinderDone(const KUrl& url, DocumentDirFinder
 
 
 void ThumbnailPage::openUrl(const KUrl& url) {
-	d->mUrlNavigator->setUrl(url);
+	d->mUrlNavigator->setLocationUrl(url);
 	d->mDirModel->dirLister()->openUrl(url);
 }
 

@@ -541,7 +541,7 @@ struct MainWindow::Private {
 		mContextManager->setCurrentDirUrl(url);
 		mThumbnailViewHelper->setCurrentDirUrl(url);
 		if (url.isValid()) {
-			mUrlNavigator->setUrl(url);
+			mUrlNavigator->setLocationUrl(url);
 			mGoUpAction->setEnabled(url.path() != "/");
 			mGvCore->addUrlToRecentFolders(url);
 		} else {
