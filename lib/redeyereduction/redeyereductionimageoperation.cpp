@@ -35,10 +35,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include "ramp.h"
 #include "document/document.h"
+#include "document/documentjob.h"
 #include "document/abstractdocumenteditor.h"
 #include "paintutils.h"
 
 namespace Gwenview {
+
+
+class RedEyeReductionJob : public ThreadedDocumentJob {
+public:
+	RedEyeReductionJob(const QRectF& rectF)
+	: mRectF(rectF)
+	{}
+
+	void threadedStart() {
+		if (!checkDocumentEditor()) {
+			return;
+		}
+		QImage img = document()->image();
+		RedEyeReductionImageOperation::apply(&img, mRectF);
+		document()->editor()->setImage(img);
+		setError(NoError);
+	}
+
+private:
+	QRectF mRectF;
+};
 
 
 struct RedEyeReductionImageOperationPrivate {
@@ -61,15 +83,9 @@ RedEyeReductionImageOperation::~RedEyeReductionImageOperation() {
 
 void RedEyeReductionImageOperation::redo() {
 	QImage img = document()->image();
-
 	QRect rect = PaintUtils::containingRect(d->mRectF);
 	d->mOriginalImage = img.copy(rect);
-	apply(&img, d->mRectF);
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->setImage(img);
+	document()->enqueueJob(new RedEyeReductionJob(d->mRectF));
 }
 
 
