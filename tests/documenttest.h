@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define DOCUMENTTEST_H
 
 // Qt
-#include <QEventLoop>
 #include <QObject>
 
 // KDE
@@ -57,15 +56,19 @@ class JobWatcher : public QObject {
 public:
 	JobWatcher(KJob* job)
 	: mJob(job)
-	, mLoop(new QEventLoop(this))
+	, mDone(false)
 	, mError(0)
 	{
 		connect(job, SIGNAL(result(KJob*)),
 			SLOT(slotResult(KJob*)));
+		connect(job, SIGNAL(destroyed(QObject*)),
+			SLOT(slotDestroyed()));
 	}
 
 	void wait() {
-		mLoop->exec();
+		while (!mDone) {
+			QApplication::processEvents();
+		}
 	}
 
 	int error() const {
@@ -75,12 +78,18 @@ public:
 private Q_SLOTS:
 	void slotResult(KJob* job) {
 		mError = job->error();
-		mLoop->exit();
+		mDone = true;
+	}
+
+	void slotDestroyed() {
+		kWarning() << "Destroyed";
+		mError = -1;
+		mDone = true;
 	}
 
 private:
 	KJob* mJob;
-	QEventLoop* mLoop;
+	bool mDone;
 	int mError;
 };
 
