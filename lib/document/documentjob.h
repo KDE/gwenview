@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2009 Aurélien Gâteau <agateau@kde.org>
+Copyright 2010 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -50,6 +50,9 @@ class DocumentJobPrivate;
 class GWENVIEWLIB_EXPORT DocumentJob : public KCompositeJob {
 	Q_OBJECT
 public:
+	enum {
+		NoDocumentEditorError = UserDefinedError + 1
+	};
 	DocumentJob();
 	~DocumentJob();
 
@@ -74,6 +77,14 @@ protected Q_SLOTS:
 		KJob::emitResult();
 	}
 
+protected:
+	/**
+	 * Convenience method which checks document()->editor() is valid
+	 * and set the job error properties if it's not.
+	 * @return true if the editor is valid.
+	 */
+	bool checkDocumentEditor();
+
 private:
 	void setDocument(const Document::Ptr&);
 
@@ -81,6 +92,23 @@ private:
 
 	friend class Document;
 };
+
+
+/**
+ * A document job whose action is started in a separate thread
+ */
+class ThreadedDocumentJob : public DocumentJob {
+public:
+	/**
+	 * Must be reimplemented to apply the action to the document.
+	 * This method is never called from the GUI thread.
+	 */
+	virtual void threadedStart() = 0;
+
+protected:
+	virtual void doStart();
+};
+
 
 
 } // namespace

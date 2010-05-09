@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2009 Aurélien Gâteau <agateau@kde.org>
+Copyright 2010 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,6 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentjob.h"
 
 // Qt
+#include <QFuture>
+#include <QFutureWatcher>
+#include <QtConcurrentRun>
 
 // KDE
 
@@ -60,6 +63,23 @@ void DocumentJob::start() {
 	QMetaObject::invokeMethod(this, "doStart", Qt::QueuedConnection);
 }
 
+
+bool DocumentJob::checkDocumentEditor() {
+	if (!document()->editor()) {
+		setError(NoDocumentEditorError);
+		setErrorText("!document->editor()");
+		return false;
+	}
+	return true;
+}
+
+
+void ThreadedDocumentJob::doStart() {
+	QFuture<void> future = QtConcurrent::run(this, &ThreadedDocumentJob::threadedStart);
+	QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+	watcher->setFuture(future);
+	connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+}
 
 } // namespace
 

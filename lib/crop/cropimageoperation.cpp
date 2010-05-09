@@ -22,11 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "cropimageoperation.h"
 
 // Qt
-#include <QFuture>
-#include <QFutureWatcher>
 #include <QImage>
 #include <QPainter>
-#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -39,16 +36,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 namespace Gwenview {
 
-class CropJob : public DocumentJob {
+class CropJob : public ThreadedDocumentJob {
 public:
 	CropJob(const QRect& rect)
 	: mRect(rect)
 	{}
 
-	void threadedStart() {
-		if (!document()->editor()) {
-			setError(UserDefinedError + 1);
-			setErrorText("!document->editor()");
+	virtual void threadedStart() {
+		if (!checkDocumentEditor()) {
 			return;
 		}
 		QImage src = document()->image();
@@ -59,14 +54,6 @@ public:
 		painter.end();
 		document()->editor()->setImage(dst);
 		setError(NoError);
-	}
-
-protected:
-	virtual void doStart() {
-		QFuture<void> future = QtConcurrent::run(this, &CropJob::threadedStart);
-		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
-		watcher->setFuture(future);
-		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
 	}
 
 private:
