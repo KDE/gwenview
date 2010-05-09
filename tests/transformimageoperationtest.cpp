@@ -59,7 +59,6 @@ void TransformImageOperationTest::testRotate90() {
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->loadFullImage();
-	doc->waitUntilLoaded();
 
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	op->setDocument(doc);
