@@ -39,6 +39,7 @@ set(gwenviewlib_SRCS
 	document/emptydocumentimpl.cpp
 	document/jpegdocumentloadedimpl.cpp
 	document/loadingdocumentimpl.cpp
+	document/loadingjob.cpp
 	document/savejob.cpp
 	document/svgdocumentloadedimpl.cpp
 	document/videodocumentloadedimpl.cpp

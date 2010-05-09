@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "emptydocumentimpl.h"
 #include "imagemetainfomodel.h"
 #include "loadingdocumentimpl.h"
+#include "loadingjob.h"
 #include "savejob.h"
 
 namespace Gwenview {
@@ -345,6 +346,7 @@ void Document::loadFullImage() {
 	LoadingState state = loadingState();
 	if (state <= MetaInfoLoaded) {
 		// Schedule full image loading
+		enqueueJob(new LoadingJob);
 		d->scheduleImageLoading(1);
 	} else if (state == Loaded) {
 		return;
