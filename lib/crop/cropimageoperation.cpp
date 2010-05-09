@@ -22,8 +22,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "cropimageoperation.h"
 
 // Qt
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QImage>
 #include <QPainter>
+#include <QtConcurrentRun>
 
 // KDE
 #include <kdebug.h>
@@ -31,9 +34,44 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "document/document.h"
+#include "document/documentjob.h"
 #include "document/abstractdocumenteditor.h"
 
 namespace Gwenview {
+
+class CropJob : public DocumentJob {
+public:
+	CropJob(const QRect& rect)
+	: mRect(rect)
+	{}
+
+	void threadedStart() {
+		if (!document()->editor()) {
+			setError(UserDefinedError + 1);
+			setErrorText("!document->editor()");
+			return;
+		}
+		QImage src = document()->image();
+		QImage dst(mRect.size(), src.format());
+		QPainter painter(&dst);
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
+		painter.drawImage(QPoint(0, 0), src, mRect);
+		painter.end();
+		document()->editor()->setImage(dst);
+		setError(NoError);
+	}
+
+protected:
+	virtual void doStart() {
+		QFuture<void> future = QtConcurrent::run(this, &CropJob::threadedStart);
+		QFutureWatcher<void>* watcher = new QFutureWatcher<void>(this);
+		watcher->setFuture(future);
+		connect(watcher, SIGNAL(finished()), SLOT(emitResult()));
+	}
+
+private:
+	QRect mRect;
+};
 
 
 struct CropImageOperationPrivate {
@@ -55,18 +93,8 @@ CropImageOperation::~CropImageOperation() {
 
 
 void CropImageOperation::redo() {
-	QImage src = document()->image();
-	d->mOriginalImage = src;
-	QImage dst(d->mRect.size(), src.format());
-	QPainter painter(&dst);
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
-	painter.drawImage(QPoint(0, 0), src, d->mRect);
-	painter.end();
-	if (!document()->editor()) {
-		kWarning() << "!document->editor()";
-		return;
-	}
-	document()->editor()->setImage(dst);
+	d->mOriginalImage = document()->image();
+	document()->enqueueJob(new CropJob(d->mRect));
 }
 
 
