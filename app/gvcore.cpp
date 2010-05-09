@@ -169,8 +169,6 @@ void GvCore::saveAll() {
 
 void GvCore::save(const KUrl& url) {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
-	doc->waitUntilLoaded();
 	QByteArray format = doc->format();
 	const QStringList availableTypes = KImageIO::types(KImageIO::Writing);
 	if (availableTypes.contains(QString(format))) {
