@@ -120,6 +120,7 @@ private Q_SLOTS:
 	void testForgetModifiedDocument();
 	void testModifiedAndSavedSignals();
 	void testJobQueue();
+	void testCheckDocumentEditor();
 
 	void initTestCase();
 	void init();

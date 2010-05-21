@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KDE
 #include <kdebug.h>
+#include <kjobuidelegate.h>
 #include <kio/netaccess.h>
 #include <qtest_kde.h>
 
@@ -631,4 +632,74 @@ void DocumentTest::testJobQueue() {
 	QCOMPARE(spy.takeFirst().at(0).toBool(), true);
 	QCOMPARE(spy.takeFirst().at(0).toBool(), false);
 	QCOMPARE(str, QString("abc"));
+}
+
+
+class TestCheckDocumentEditorJob : public DocumentJob {
+public:
+	TestCheckDocumentEditorJob(int* hasEditor)
+	: mHasEditor(hasEditor)
+	{
+		*mHasEditor = -1;
+	}
+
+protected:
+	virtual void doStart() {
+		document()->waitUntilLoaded();
+		*mHasEditor = checkDocumentEditor() ? 1 : 0;
+		emitResult();
+	}
+
+private:
+	int* mHasEditor;
+};
+
+class TestUiDelegate : public KJobUiDelegate {
+public:
+	TestUiDelegate(bool* showErrorMessageCalled)
+	: mShowErrorMessageCalled(showErrorMessageCalled)
+	{
+		setAutoErrorHandlingEnabled(true);
+		*mShowErrorMessageCalled = false;
+	}
+
+	virtual void showErrorMessage() {
+		kDebug();
+		*mShowErrorMessageCalled = true;
+	}
+
+private:
+	bool* mShowErrorMessageCalled;
+};
+
+/**
+ * Test that an error is reported when a DocumentJob fails because there is no
+ * document editor available
+ */
+void DocumentTest::testCheckDocumentEditor() {
+	int hasEditor;
+	bool showErrorMessageCalled;
+	QEventLoop loop;
+	Document::Ptr doc;
+	TestCheckDocumentEditorJob* job;
+
+	doc = DocumentFactory::instance()->load(urlForTestFile("orient6.jpg"));
+
+	job = new TestCheckDocumentEditorJob(&hasEditor);
+	job->setUiDelegate(new TestUiDelegate(&showErrorMessageCalled));
+	doc->enqueueJob(job);
+	connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+	loop.exec();
+	QVERIFY(!showErrorMessageCalled);
+	QCOMPARE(hasEditor, 1);
+
+	doc = DocumentFactory::instance()->load(urlForTestFile("test.svg"));
+
+	job = new TestCheckDocumentEditorJob(&hasEditor);
+	job->setUiDelegate(new TestUiDelegate(&showErrorMessageCalled));
+	doc->enqueueJob(job);
+	connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
+	loop.exec();
+	QVERIFY(showErrorMessageCalled);
+	QCOMPARE(hasEditor, 0);
 }
