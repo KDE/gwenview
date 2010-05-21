@@ -27,6 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QtConcurrentRun>
 
 // KDE
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kdialogjobuidelegate.h>
 #include <klocale.h>
 
 // Local
@@ -42,6 +45,10 @@ struct DocumentJobPrivate {
 DocumentJob::DocumentJob()
 : KCompositeJob(0)
 , d(new DocumentJobPrivate) {
+	KDialogJobUiDelegate* delegate = new KDialogJobUiDelegate;
+	delegate->setWindow(KApplication::kApplication()->activeWindow());
+	delegate->setAutoErrorHandlingEnabled(true);
+	setUiDelegate(delegate);
 }
 
 
