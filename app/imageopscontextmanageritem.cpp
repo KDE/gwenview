@@ -187,36 +187,24 @@ void ImageOpsContextManagerItem::updateActions() {
 
 
 void ImageOpsContextManagerItem::rotateLeft() {
-	if (!d->ensureEditable()) {
-		return;
-	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_270);
 	applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::rotateRight() {
-	if (!d->ensureEditable()) {
-		return;
-	}
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::mirror() {
-	if (!d->ensureEditable()) {
-		return;
-	}
 	TransformImageOperation* op = new TransformImageOperation(HFLIP);
 	applyImageOperation(op);
 }
 
 
 void ImageOpsContextManagerItem::flip() {
-	if (!d->ensureEditable()) {
-		return;
-	}
 	TransformImageOperation* op = new TransformImageOperation(VFLIP);
 	applyImageOperation(op);
 }

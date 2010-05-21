@@ -222,9 +222,6 @@ void GvCore::saveAs(const KUrl& url) {
 
 
 static void applyTransform(const KUrl& url, Orientation orientation) {
-	if (!GvCore::ensureDocumentIsEditable(url)) {
-		return;
-	}
 	TransformImageOperation* op = new TransformImageOperation(orientation);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	op->setDocument(doc);
