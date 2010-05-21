@@ -224,8 +224,7 @@ void GvCore::saveAs(const KUrl& url) {
 static void applyTransform(const KUrl& url, Orientation orientation) {
 	TransformImageOperation* op = new TransformImageOperation(orientation);
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 }
 
 

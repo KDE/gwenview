@@ -451,8 +451,7 @@ void DocumentTest::testModifyAndSaveAs() {
 	// Modify image
 	QVERIFY(doc->editor());
 	TestOperation* op = new TestOperation;
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 	QVERIFY(doc->isModified());
 	QCOMPARE(modifiedDocumentListChangedSpy.count(), 1);
 	modifiedDocumentListChangedSpy.clear();
@@ -547,8 +546,7 @@ void DocumentTest::testForgetModifiedDocument() {
 
 	// Modify it
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 
 	QCOMPARE(spy.count(), 1);
 
@@ -579,13 +577,11 @@ void DocumentTest::testModifiedAndSavedSignals() {
 	QCOMPARE(savedSpy.count(), 0);
 
 	op = new TransformImageOperation(ROT_90);
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 	QCOMPARE(modifiedSpy.count(), 1);
 
 	op = new TransformImageOperation(ROT_90);
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 	QCOMPARE(modifiedSpy.count(), 2);
 
 	doc->undoStack()->undo();

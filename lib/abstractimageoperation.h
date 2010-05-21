@@ -35,12 +35,12 @@ namespace Gwenview {
 
 
 struct AbstractImageOperationPrivate;
-class GWENVIEWLIB_EXPORT AbstractImageOperation : public QUndoCommand {
+class GWENVIEWLIB_EXPORT AbstractImageOperation : protected QUndoCommand {
 public:
 	AbstractImageOperation();
 	virtual ~AbstractImageOperation();
 
-	void setDocument(Document::Ptr);
+	void applyToDocument(Document::Ptr);
 	Document::Ptr document() const;
 
 private:

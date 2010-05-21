@@ -281,8 +281,7 @@ void ImageOpsContextManagerItem::applyImageOperation(AbstractImageOperation* op)
 	KUrl url = contextManager()->currentUrl();
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	op->setDocument(doc);
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 }
 
 

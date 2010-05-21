@@ -48,8 +48,9 @@ AbstractImageOperation::~AbstractImageOperation() {
 }
 
 
-void AbstractImageOperation::setDocument(Document::Ptr doc) {
+void AbstractImageOperation::applyToDocument(Document::Ptr doc) {
 	d->mUrl = doc->url();
+	doc->undoStack()->push(this);
 }
 
 

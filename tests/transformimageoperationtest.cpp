@@ -60,10 +60,9 @@ void TransformImageOperationTest::testRotate90() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
-	op->setDocument(doc);
 	QEventLoop loop;
 	connect(doc.data(), SIGNAL(allTasksDone()), &loop, SLOT(quit()));
-	doc->undoStack()->push(op);
+	op->applyToDocument(doc);
 	loop.exec();
 
 	QCOMPARE(image, doc->image());
