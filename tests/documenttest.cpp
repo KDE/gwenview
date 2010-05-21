@@ -433,6 +433,7 @@ void DocumentTest::testModifyAndSaveAs() {
 			QImage image(10, 10, QImage::Format_ARGB32);
 			image.fill(QColor(Qt::white).rgb());
 			document()->editor()->setImage(image);
+			finish(true);
 		}
 	};
 	KUrl url = urlForTestFile("orient6.jpg");
@@ -547,6 +548,7 @@ void DocumentTest::testForgetModifiedDocument() {
 	// Modify it
 	TransformImageOperation* op = new TransformImageOperation(ROT_90);
 	op->applyToDocument(doc);
+	QTest::qWait(100);
 
 	QCOMPARE(spy.count(), 1);
 
@@ -578,10 +580,12 @@ void DocumentTest::testModifiedAndSavedSignals() {
 
 	op = new TransformImageOperation(ROT_90);
 	op->applyToDocument(doc);
+	QTest::qWait(100);
 	QCOMPARE(modifiedSpy.count(), 1);
 
 	op = new TransformImageOperation(ROT_90);
 	op->applyToDocument(doc);
+	QTest::qWait(100);
 	QCOMPARE(modifiedSpy.count(), 2);
 
 	doc->undoStack()->undo();
@@ -698,4 +702,43 @@ void DocumentTest::testCheckDocumentEditor() {
 	loop.exec();
 	QVERIFY(showErrorMessageCalled);
 	QCOMPARE(hasEditor, 0);
+}
+
+
+/**
+ * An operation should only pushed to the document undo stack if it succeed
+ */
+void DocumentTest::testUndoStackPush() {
+	class SuccessOperation : public AbstractImageOperation {
+	protected:
+		virtual void redo() {
+			QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, true));
+		}
+	};
+
+	class FailureOperation : public AbstractImageOperation {
+	protected:
+		virtual void redo() {
+			QMetaObject::invokeMethod(this, "finish", Qt::QueuedConnection, Q_ARG(bool, false));
+		}
+	};
+
+	AbstractImageOperation* op;
+	Document::Ptr doc = DocumentFactory::instance()->load(urlForTestFile("orient6.jpg"));
+
+	// A successful operation should be added to the undo stack
+	op = new SuccessOperation;
+	op->applyToDocument(doc);
+	QTest::qWait(100);
+	QVERIFY(!doc->undoStack()->isClean());
+
+	// Reset
+	doc->undoStack()->undo();
+	QVERIFY(doc->undoStack()->isClean());
+
+	// A failed operation should not be added to the undo stack
+	op = new FailureOperation;
+	op->applyToDocument(doc);
+	QTest::qWait(100);
+	QVERIFY(doc->undoStack()->isClean());
 }

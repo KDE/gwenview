@@ -77,7 +77,7 @@ ResizeImageOperation::~ResizeImageOperation() {
 
 void ResizeImageOperation::redo() {
 	d->mOriginalImage = document()->image();
-	document()->enqueueJob(new ResizeJob(d->mSize));
+	redoAsDocumentJob(new ResizeJob(d->mSize));
 }
 
 

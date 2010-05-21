@@ -85,7 +85,7 @@ void RedEyeReductionImageOperation::redo() {
 	QImage img = document()->image();
 	QRect rect = PaintUtils::containingRect(d->mRectF);
 	d->mOriginalImage = img.copy(rect);
-	document()->enqueueJob(new RedEyeReductionJob(d->mRectF));
+	redoAsDocumentJob(new RedEyeReductionJob(d->mRectF));
 }
 
 

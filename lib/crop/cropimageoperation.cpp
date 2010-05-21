@@ -81,7 +81,7 @@ CropImageOperation::~CropImageOperation() {
 
 void CropImageOperation::redo() {
 	d->mOriginalImage = document()->image();
-	document()->enqueueJob(new CropJob(d->mRect));
+	redoAsDocumentJob(new CropJob(d->mRect));
 }
 
 

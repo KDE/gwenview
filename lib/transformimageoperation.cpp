@@ -89,7 +89,7 @@ TransformImageOperation::~TransformImageOperation() {
 
 
 void TransformImageOperation::redo() {
-	document()->enqueueJob(new TransformJob(d->mOrientation));
+	redoAsDocumentJob(new TransformJob(d->mOrientation));
 }
 
 

@@ -121,6 +121,7 @@ private Q_SLOTS:
 	void testModifiedAndSavedSignals();
 	void testJobQueue();
 	void testCheckDocumentEditor();
+	void testUndoStackPush();
 
 	void initTestCase();
 	void init();
