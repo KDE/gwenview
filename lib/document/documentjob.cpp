@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QtConcurrentRun>
 
 // KDE
+#include <klocale.h>
 
 // Local
 
@@ -67,7 +68,7 @@ void DocumentJob::start() {
 bool DocumentJob::checkDocumentEditor() {
 	if (!document()->editor()) {
 		setError(NoDocumentEditorError);
-		setErrorText("!document->editor()");
+		setErrorText(i18nc("@info", "Gwenview cannot edit this kind of image."));
 		return false;
 	}
 	return true;
