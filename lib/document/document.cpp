@@ -443,7 +443,7 @@ void Document::enqueueJob(DocumentJob* task) {
 		SLOT(slotJobDestroyed(QObject*)));
 	if (d->mJobQueue.size() == 1) {
 		task->start();
-		busyChanged(true);
+		busyChanged(true, d->mUrl);
 	}
 }
 
@@ -457,7 +457,7 @@ void Document::slotJobDestroyed(QObject* job) {
 	}
 	d->mJobQueue.dequeue();
 	if (d->mJobQueue.isEmpty()) {
-		busyChanged(false);
+		busyChanged(false, d->mUrl);
 		allTasksDone();
 	} else {
 		d->mJobQueue.head()->start();

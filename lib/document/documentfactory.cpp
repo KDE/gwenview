@@ -152,6 +152,8 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 		SLOT(slotSaved(const KUrl&, const KUrl&)) );
 	connect(doc, SIGNAL(modified(const KUrl&)),
 		SLOT(slotModified(const KUrl&)) );
+	connect(doc, SIGNAL(busyChanged(bool, const KUrl&)),
+		SLOT(slotBusyChanged(bool, const KUrl&)) );
 
 	// Create DocumentInfo instance
 	info = new DocumentInfo;
@@ -222,6 +224,11 @@ void DocumentFactory::slotModified(const KUrl& url) {
 		emit modifiedDocumentListChanged();
 	}
 	emit documentChanged(url);
+}
+
+
+void DocumentFactory::slotBusyChanged(bool busy, const KUrl& url) {
+	emit documentBusyStateChanged(url, busy);
 }
 
 

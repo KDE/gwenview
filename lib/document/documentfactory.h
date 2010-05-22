@@ -58,11 +58,13 @@ public:
 Q_SIGNALS:
 	void modifiedDocumentListChanged();
 	void documentChanged(const KUrl&);
+	void documentBusyStateChanged(const KUrl&, bool);
 
 private Q_SLOTS:
 	void slotLoaded(const KUrl&);
 	void slotSaved(const KUrl&, const KUrl&);
 	void slotModified(const KUrl&);
+	void slotBusyChanged(bool, const KUrl&);
 
 private:
 	DocumentFactory();
