@@ -768,8 +768,6 @@ d(new MainWindow::Private)
 
 	createGUI();
 	loadConfig();
-	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
-		SLOT(generateThumbnailForUrl(const KUrl&)) );
 
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(slotModifiedDocumentListChanged()) );
@@ -1325,16 +1323,6 @@ void MainWindow::updateSlideShowAction() {
 		d->mToggleSlideShowAction->setText(i18n("Start Slideshow"));
 		d->mToggleSlideShowAction->setIcon(KIcon("media-playback-start"));
 	}
-}
-
-
-
-void MainWindow::generateThumbnailForUrl(const KUrl& url) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		return;
-	}
-	d->mThumbnailView->generateThumbnailForIndex(index);
 }
 
 

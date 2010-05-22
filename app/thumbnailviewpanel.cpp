@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <filtercontroller.h>
 #include <fileoperations.h>
+#include <lib/document/documentfactory.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
@@ -200,6 +201,9 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	loadConfig();
 	updateSortOrder();
 	updateThumbnailDetails();
+
+	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
+		SLOT(generateThumbnailForUrl(const KUrl&)) );
 }
 
 
@@ -331,6 +335,15 @@ void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
 
 void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl) {
 	FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
+}
+
+
+void ThumbnailViewPanel::generateThumbnailForUrl(const KUrl& url) {
+	QModelIndex index = d->mDirModel->indexForUrl(url);
+	if (!index.isValid()) {
+		return;
+	}
+	d->mThumbnailView->generateThumbnailForIndex(index);
 }
 
 

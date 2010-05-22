@@ -139,7 +139,6 @@ private Q_SLOTS:
 
 	void showDocumentInFullScreen(const KUrl&);
 
-	void generateThumbnailForUrl(const KUrl&);
 	void showConfigDialog();
 	void loadConfig();
 	void print();
