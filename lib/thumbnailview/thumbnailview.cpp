@@ -156,7 +156,7 @@ struct ThumbnailViewPrivate {
 
 	void setupBusyAnimation() {
 		mBusySequence = KPixmapSequence("process-working", 22);
-		mBusyAnimationTimeLine = new QTimeLine(200 * mBusySequence.frameCount(), that);
+		mBusyAnimationTimeLine = new QTimeLine(100 * mBusySequence.frameCount(), that);
 		mBusyAnimationTimeLine->setCurveShape(QTimeLine::LinearCurve);
 		mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);
 		mBusyAnimationTimeLine->setLoopCount(0);
