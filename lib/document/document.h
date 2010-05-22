@@ -199,7 +199,7 @@ Q_SIGNALS:
 	void modified(const KUrl&);
 	void metaInfoUpdated();
 	void isAnimatedUpdated();
-	void busyChanged(bool, const KUrl&);
+	void busyChanged(const KUrl&, bool);
 	void allTasksDone();
 
 private Q_SLOTS:

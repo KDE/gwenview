@@ -64,7 +64,7 @@ private Q_SLOTS:
 	void slotLoaded(const KUrl&);
 	void slotSaved(const KUrl&, const KUrl&);
 	void slotModified(const KUrl&);
-	void slotBusyChanged(bool, const KUrl&);
+	void slotBusyChanged(const KUrl&, bool);
 
 private:
 	DocumentFactory();

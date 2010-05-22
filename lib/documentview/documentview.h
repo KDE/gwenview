@@ -97,7 +97,7 @@ private Q_SLOTS:
 	void slotZoomChanged(qreal);
 	void slotZoomWidgetChanged(qreal);
 
-	void setBusyIndicatorVisibility(bool);
+	void slotBusyChanged(const KUrl&, bool);
 
 private:
 	friend struct DocumentViewPrivate;
