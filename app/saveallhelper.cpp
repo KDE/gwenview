@@ -67,7 +67,8 @@ SaveAllHelper::~SaveAllHelper() {
 
 void SaveAllHelper::save() {
 	KUrl::List list = DocumentFactory::instance()->modifiedDocumentList();
-	d->mProgressDialog->progressBar()->setMaximum(list.size() - 1);
+	d->mProgressDialog->progressBar()->setRange(0, list.size());
+	d->mProgressDialog->progressBar()->setValue(0);
 	Q_FOREACH(const KUrl& url, list) {
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		DocumentJob* job = doc->save(url, doc->format());
