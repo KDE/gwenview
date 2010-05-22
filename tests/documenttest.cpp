@@ -616,7 +616,7 @@ private:
 void DocumentTest::testJobQueue() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(bool)));
+	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(const KUrl&, bool)));
 
 	QString str;
 	doc->enqueueJob(new TestJob(&str, 'a'));
@@ -629,8 +629,12 @@ void DocumentTest::testJobQueue() {
 	loop.exec();
 	QVERIFY(!doc->isBusy());
 	QCOMPARE(spy.count(), 2);
-	QCOMPARE(spy.takeFirst().at(0).toBool(), true);
-	QCOMPARE(spy.takeFirst().at(0).toBool(), false);
+	QVariantList row = spy.takeFirst();
+	QCOMPARE(row.at(0).value<KUrl>(), url);
+	QVERIFY(row.at(1).toBool());
+	row = spy.takeFirst();
+	QCOMPARE(row.at(0).value<KUrl>(), url);
+	QVERIFY(!row.at(1).toBool());
 	QCOMPARE(str, QString("abc"));
 }
 
