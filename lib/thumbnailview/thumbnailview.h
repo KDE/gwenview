@@ -63,9 +63,20 @@ public:
 	bool isModified(const QModelIndex&) const;
 
 	/**
+	 * Returns true if the document pointed by the index is currently busy
+	 * (loading, saving, rotating...)
+	 */
+	bool isBusy(const QModelIndex& index) const;
+
+	/**
 	 * Generate thumbnail for @a index.
 	 */
 	void generateThumbnailForIndex(const QModelIndex& index);
+
+	/**
+	 * Tells the view the busy state of the document pointed by the index has changed.
+	 */
+	void updateThumbnailBusyState(const QModelIndex& index, bool);
 
 	virtual void setModel(QAbstractItemModel* model);
 
@@ -73,6 +84,11 @@ public:
 	 * Publish this method so that delegates can call it.
 	 */
 	using QListView::scheduleDelayedItemsLayout;
+
+	/**
+	 * Returns the current pixmap to paint when drawing a busy index.
+	 */
+	QPixmap busySequenceCurrentPixmap() const;
 
 Q_SIGNALS:
 	/**
@@ -138,6 +154,11 @@ private Q_SLOTS:
 	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
 	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
 	void setBrokenThumbnail(const KFileItem&);
+
+	/*
+	 * Cause a repaint of all busy indexes
+	 */
+	void updateBusyIndexes();
 
 	void generateThumbnailsForVisibleItems();
 	void smoothNextThumbnail();

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QPointer>
 #include <QQueue>
 #include <QScrollBar>
+#include <QTimeLine>
 #include <QTimer>
 #include <QToolTip>
 
@@ -39,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
+#include <kpixmapsequence.h>
 
 // Local
 #include "abstractthumbnailviewhelper.h"
@@ -133,6 +135,7 @@ struct Thumbnail {
 
 typedef QHash<QUrl, Thumbnail> ThumbnailForUrl;
 typedef QQueue<KUrl> UrlQueue;
+typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 
 struct ThumbnailViewPrivate {
 	ThumbnailView* that;
@@ -146,6 +149,20 @@ struct ThumbnailViewPrivate {
 
 	QPixmap mWaitingThumbnail;
 	QPointer<ThumbnailLoadJob> mThumbnailLoadJob;
+
+	PersistentModelIndexSet mBusyIndexSet;
+	KPixmapSequence mBusySequence;
+	QTimeLine* mBusyAnimationTimeLine;
+
+	void setupBusyAnimation() {
+		mBusySequence = KPixmapSequence("process-working", 22);
+		mBusyAnimationTimeLine = new QTimeLine(200 * mBusySequence.frameCount(), that);
+		mBusyAnimationTimeLine->setCurveShape(QTimeLine::LinearCurve);
+		mBusyAnimationTimeLine->setEndFrame(mBusySequence.frameCount() - 1);
+		mBusyAnimationTimeLine->setLoopCount(0);
+		QObject::connect(mBusyAnimationTimeLine, SIGNAL(frameChanged(int)),
+			that, SLOT(updateBusyIndexes()));
+	}
 
 	void scheduleThumbnailGenerationForVisibleItems() {
 		if (mThumbnailLoadJob) {
@@ -277,6 +294,8 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);
 	setUniformItemSizes(true);
+
+	d->setupBusyAnimation();
 
 	viewport()->setMouseTracking(true);
 	// Set this attribute, otherwise the item delegate won't get the
@@ -558,6 +577,12 @@ bool ThumbnailView::isModified(const QModelIndex& index) const {
 }
 
 
+
+bool ThumbnailView::isBusy(const QModelIndex& index) const {
+	return d->mBusyIndexSet.contains(index);
+}
+
+
 void ThumbnailView::startDrag(Qt::DropActions supportedActions) {
 	QModelIndexList indexes = selectionModel()->selectedIndexes();
 	if (indexes.isEmpty()) {
@@ -733,6 +758,35 @@ void ThumbnailView::generateThumbnailForIndex(const QModelIndex& index) {
 		list << item;
 		d->generateThumbnailsForItems(list);
 	}
+}
+
+
+void ThumbnailView::updateThumbnailBusyState(const QModelIndex& _index, bool busy) {
+	QPersistentModelIndex index(_index);
+	if (busy && !d->mBusyIndexSet.contains(index)) {
+		d->mBusyIndexSet << index;
+		update(index);
+		if (d->mBusyAnimationTimeLine->state() != QTimeLine::Running) {
+			d->mBusyAnimationTimeLine->start();
+		}
+	} else if (!busy && d->mBusyIndexSet.remove(index)) {
+		update(index);
+		if (d->mBusyIndexSet.isEmpty()) {
+			d->mBusyAnimationTimeLine->stop();
+		}
+	}
+}
+
+
+void ThumbnailView::updateBusyIndexes() {
+	Q_FOREACH(const QPersistentModelIndex& index, d->mBusyIndexSet) {
+		update(index);
+	}
+}
+
+
+QPixmap ThumbnailView::busySequenceCurrentPixmap() const {
+	return d->mBusySequence.frameAt(d->mBusyAnimationTimeLine->currentFrame());
 }
 
 

@@ -805,6 +805,15 @@ void PreviewItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem 
 		painter->drawPixmap(framePosition, d->mSaveButtonPixmap);
 	}
 
+	// Draw busy indicator
+	if (d->mView->isBusy(index)) {
+		QPixmap pix = d->mView->busySequenceCurrentPixmap();
+		painter->drawPixmap(
+			thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
+			thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
+			pix);
+	}
+
 	if (index == d->mIndexUnderCursor) {
 		// Show bar again: if the thumbnail has changed, we may need to update
 		// its position. Don't do it if we are over rotate buttons, though: it
