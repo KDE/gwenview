@@ -100,7 +100,7 @@ void ImageScaler::doScale() {
 		}
 	} else if (d->mDocument->image().isNull()) {
 		LOG("Asked for the full image");
-		d->mDocument->loadFullImage();
+		d->mDocument->startLoadingFullImage();
 		return;
 	}
 

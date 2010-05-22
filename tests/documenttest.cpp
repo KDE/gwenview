@@ -86,7 +86,7 @@ void DocumentTest::testLoad() {
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy spy(doc.data(), SIGNAL(isAnimatedUpdated()));
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(doc->loadingState(), Document::Loaded);
 
@@ -142,7 +142,7 @@ void DocumentTest::testLoadTwoPasses() {
 	waitUntilMetaInfoLoaded(doc);
 	QVERIFY2(doc->image().isNull(), "Image shouldn't have been loaded at this time");
 	QCOMPARE(doc->format().data(), "png");
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 }
@@ -226,7 +226,7 @@ void DocumentTest::testLoadRemote() {
 	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test archive not found");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QImage image = doc->image();
 	QCOMPARE(image.width(), 300);
@@ -237,7 +237,7 @@ void DocumentTest::testLoadAnimated() {
 	KUrl srcUrl = urlForTestFile("40frames.gif");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
 	QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(const QRect&)));
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(doc->isAnimated());
 
@@ -266,7 +266,7 @@ void DocumentTest::testLoadAnimated() {
 void DocumentTest::testSaveRemote() {
 	KUrl srcUrl = urlForTestFile("test.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	KUrl dstUrl;
@@ -309,7 +309,7 @@ void DocumentTest::testLoadRotated() {
 	image = image.transformed(matrix);
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QCOMPARE(image, doc->image());
 }
@@ -333,7 +333,7 @@ void DocumentTest::testSaveAs() {
 	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
 	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
 	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 
 	KUrl destUrl = urlForTestOutputFile("result.png");
 	QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
@@ -366,7 +366,7 @@ void DocumentTest::testSaveAs() {
 void DocumentTest::testLosslessSave() {
 	KUrl url1 = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 
 	KUrl url2 = urlForTestOutputFile("orient1.jpg");
 	QVERIFY(waitUntilJobIsDone(doc->save(url2, "jpeg")));
@@ -396,7 +396,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load it as a Gwenview document
 	Document::Ptr doc = DocumentFactory::instance()->load(url1);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	// Rotate one time
@@ -409,7 +409,7 @@ void DocumentTest::testLosslessRotate() {
 
 	// Load the saved image
 	doc = DocumentFactory::instance()->load(url2);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	// Rotate the other way
@@ -444,7 +444,7 @@ void DocumentTest::testModifyAndSaveAs() {
 	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
 	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
 
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(!doc->isModified());
 	QCOMPARE(modifiedDocumentListChangedSpy.count(), 0);
@@ -542,7 +542,7 @@ void DocumentTest::testForgetModifiedDocument() {
 
 	// Load it as a Gwenview document
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	// Modify it
@@ -572,7 +572,7 @@ void DocumentTest::testModifiedAndSavedSignals() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(const KUrl&)));
 	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	QCOMPARE(modifiedSpy.count(), 0);

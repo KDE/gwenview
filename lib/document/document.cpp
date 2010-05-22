@@ -211,7 +211,7 @@ void Document::setKeepRawData(bool value) {
 
 
 void Document::waitUntilLoaded() {
-	loadFullImage();
+	startLoadingFullImage();
 	while (true) {
 		LoadingState state = loadingState();
 		if (state == Loaded || state == LoadingFailed) {
@@ -342,7 +342,7 @@ ImageMetaInfoModel* Document::metaInfo() const {
 }
 
 
-void Document::loadFullImage() {
+void Document::startLoadingFullImage() {
 	LoadingState state = loadingState();
 	if (state <= MetaInfoLoaded) {
 		// Schedule full image loading

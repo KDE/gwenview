@@ -114,7 +114,7 @@ PrintHelper::~PrintHelper() {
 
 
 void PrintHelper::print(Document::Ptr doc) {
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QPrinter printer;
 

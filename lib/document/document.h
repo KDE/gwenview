@@ -63,7 +63,7 @@ class ImageMetaInfoModel;
  * It is capable of loading down sampled versions of an image using
  * prepareDownSampledImageForZoom() and downSampledImageForZoom(). Down sampled
  * images load much faster than the full image but you need to load the full
- * image to manipulate it( use loadFullImage() to do so).
+ * image to manipulate it( use startLoadingFullImage() to do so).
  *
  * To get a Document instance for url, ask for one with
  * DocumentFactory::instance()->load(url);
@@ -97,7 +97,7 @@ public:
 
 	void reload();
 
-	void loadFullImage();
+	void startLoadingFullImage();
 
 	/**
 	 * Prepare a version of the image down sampled to be a bit bigger than
@@ -162,7 +162,7 @@ public:
 
 	/**
 	 * Returns true if the image can be edited.
-	 * You must ensure it has been fully loaded with loadFullImage() first.
+	 * You must ensure it has been fully loaded with startLoadingFullImage() first.
 	 */
 	bool isEditable() const;
 

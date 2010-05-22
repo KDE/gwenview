@@ -292,7 +292,7 @@ bool GvCore::ensureDocumentIsEditable(const KUrl& url) {
 	// FIXME: Replace with a CheckEditableJob?
 	// This way we can factorize the error message
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	if (doc->isEditable()) {
 		return true;

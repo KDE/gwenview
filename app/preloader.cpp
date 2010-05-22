@@ -91,7 +91,7 @@ void Preloader::doPreload() {
 		d->mDocument->prepareDownSampledImageForZoom(zoom);
 	} else {
 		LOG("preloading full image");
-		d->mDocument->loadFullImage();
+		d->mDocument->startLoadingFullImage();
 	}
 
 	// Forget about the document. Keeping a reference to it would prevent it

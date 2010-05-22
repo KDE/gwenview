@@ -53,7 +53,7 @@ void ImageScalerTest::testScaleFullImage() {
 
 	// FIXME: Load full image for now, because ImageScalerClient does not wait
 	// when ImageScaler request a full image to be loaded asynchronously.
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
 	scaler.setDestinationRegion(QRect(QPoint(0,0), doc->size() * zoom));

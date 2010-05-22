@@ -128,7 +128,7 @@ RedEyeReductionTool::RedEyeReductionTool(ImageView* view)
 		);
 	d->showNotSetHudWidget();
 
-	view->document()->loadFullImage();
+	view->document()->startLoadingFullImage();
 }
 
 

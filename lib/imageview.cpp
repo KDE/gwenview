@@ -295,7 +295,7 @@ void ImageView::slotDocumentMetaInfoLoaded() {
 		// full image now.
 		connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
 			SLOT(finishSetDocument()) );
-		d->mDocument->loadFullImage();
+		d->mDocument->startLoadingFullImage();
 	}
 }
 

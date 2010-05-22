@@ -215,7 +215,7 @@ void ImageOpsContextManagerItem::resizeImage() {
 		return;
 	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
-	doc->loadFullImage();
+	doc->startLoadingFullImage();
 	int size = GwenviewConfig::imageResizeLastSize();
 	if (size == -1) {
 		size = qMax(doc->width(), doc->height());
