@@ -1,9 +1,12 @@
 # 2.5.0
 ## Improvements
+- Gwenview no longer blocks the UI when modifying or saving images.
+- Wrap around when panning images (bug #225811), original patch by
+  Ismael Barros.
+- It is now possible to show image size and file size below thumbnails,
+  original patch by Aaron Seigo.
 - Gwenview can now be started with multiple images.
 - Added an option to disable video support (bug #135585).
-- Wrap around when scrolling images with dragging (bug #225811), original patch
-  by Ismael Barros.
 
 # 2.4.2
 ## Improvements
