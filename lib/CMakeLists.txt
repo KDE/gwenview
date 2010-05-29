@@ -90,6 +90,7 @@ set(gwenviewlib_SRCS
 	resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
+	thumbnailview/abstractdocumentinfoprovider.cpp
 	thumbnailview/previewitemdelegate.cpp
 	thumbnailview/thumbnailbarview.cpp
 	thumbnailview/thumbnailslider.cpp

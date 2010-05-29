@@ -29,10 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 
 // Local
-#include <lib/thumbnailgroup.h>
-
-class KFileItem;
-class QPixmap;
 
 namespace Gwenview {
 
@@ -50,10 +46,6 @@ public:
 	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&) = 0;
 
 	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&) = 0;
-
-	virtual bool isDocumentModified(const KUrl& url) = 0;
-
-	virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const = 0;
 };
 
 } // namespace

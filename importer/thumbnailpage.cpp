@@ -59,15 +59,6 @@ public:
 
 	void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&)
 	{}
-
-	bool isDocumentModified(const KUrl&) {
-		return false;
-	}
-
-	void thumbnailForDocument(const KUrl&, ThumbnailGroup::Enum, QPixmap* outPix, QSize* outFullSize) const {
-		*outPix = QPixmap();
-		*outFullSize = QSize();
-	}
 };
 
 

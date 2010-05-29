@@ -148,6 +148,15 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 			painter->drawRect(borderRect);
 		}
 		painter->drawPixmap(thumbnailRect.left(), thumbnailRect.top(), thumbnailPix);
+
+		// Draw busy indicator
+		if (d->mView->isBusy(index)) {
+			QPixmap pix = d->mView->busySequenceCurrentPixmap();
+			painter->drawPixmap(
+				thumbnailRect.left() + (thumbnailRect.width() - pix.width()) / 2,
+				thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
+				pix);
+		}
 	}
 }
 

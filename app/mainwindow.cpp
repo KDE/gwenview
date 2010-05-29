@@ -62,6 +62,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "configdialog.h"
 #include "contextmanager.h"
+#include "documentinfoprovider.h"
 #include "documentpanel.h"
 #include "fileopscontextmanageritem.h"
 #include "folderviewcontextmanageritem.h"
@@ -147,6 +148,7 @@ struct MainWindow::Private {
 	DocumentPanel* mDocumentPanel;
 	KUrlNavigator* mUrlNavigator;
 	ThumbnailView* mThumbnailView;
+	DocumentInfoProvider* mDocumentInfoProvider;
 	ThumbnailViewHelper* mThumbnailViewHelper;
 	ThumbnailViewPanel* mThumbnailViewPanel;
 	StartPage* mStartPage;
@@ -245,6 +247,9 @@ struct MainWindow::Private {
 		mUrlNavigator->setAutoFillBackground(true);
 		mUrlNavigator->setPalette(pal);
 
+		mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
+		mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
+
 		mThumbnailViewHelper = new ThumbnailViewHelper(mDirModel, mWindow->actionCollection());
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
@@ -285,8 +290,9 @@ struct MainWindow::Private {
 		connect(mDocumentPanel, SIGNAL(nextImageRequested()),
 			mWindow, SLOT(goToNext()) );
 
-		ThumbnailBarView* bar = mDocumentPanel->thumbnailBar();
+		ThumbnailView* bar = mDocumentPanel->thumbnailBar();
 		bar->setModel(mDirModel);
+		bar->setDocumentInfoProvider(mDocumentInfoProvider);
 		bar->setThumbnailViewHelper(mThumbnailViewHelper);
 		bar->setSelectionModel(mThumbnailView->selectionModel());
 	}
@@ -556,6 +562,7 @@ struct MainWindow::Private {
 
 		ThumbnailBarView* view = mFullScreenContent->thumbnailBar();
 		view->setModel(mDirModel);
+		view->setDocumentInfoProvider(mDocumentInfoProvider);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
 		view->setSelectionModel(mThumbnailView->selectionModel());
 

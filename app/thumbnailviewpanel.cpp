@@ -204,8 +204,6 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 
 	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
 		SLOT(generateThumbnailForUrl(const KUrl&)) );
-	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(const KUrl&, bool)),
-		SLOT(updateThumbnailBusyState(const KUrl&, bool)) );
 }
 
 
@@ -346,15 +344,6 @@ void ThumbnailViewPanel::generateThumbnailForUrl(const KUrl& url) {
 		return;
 	}
 	d->mThumbnailView->generateThumbnailForIndex(index);
-}
-
-
-void ThumbnailViewPanel::updateThumbnailBusyState(const KUrl& url, bool busy) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		return;
-	}
-	d->mThumbnailView->updateThumbnailBusyState(index, busy);
 }
 
 

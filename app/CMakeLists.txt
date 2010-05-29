@@ -17,6 +17,7 @@ set(gwenview_SRCS
 	configdialog.cpp
 	contextmanager.cpp
 	gvcore.cpp
+	documentinfoprovider.cpp
 	documentpanel.cpp
 	fileoperations.cpp
 	filtercontroller.cpp

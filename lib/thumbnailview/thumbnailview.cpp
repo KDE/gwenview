@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kpixmapsequence.h>
 
 // Local
+#include "abstractdocumentinfoprovider.h"
 #include "abstractthumbnailviewhelper.h"
 #include "archiveutils.h"
 #include "mimetypeutils.h"
@@ -140,6 +141,7 @@ typedef QSet<QPersistentModelIndex> PersistentModelIndexSet;
 struct ThumbnailViewPrivate {
 	ThumbnailView* that;
 	int mThumbnailSize;
+	AbstractDocumentInfoProvider* mDocumentInfoProvider;
 	AbstractThumbnailViewHelper* mThumbnailViewHelper;
 	ThumbnailForUrl mThumbnailForUrl;
 	QTimer mScheduledThumbnailGenerationTimer;
@@ -173,12 +175,13 @@ struct ThumbnailViewPrivate {
 	}
 
 	void updateThumbnailForModifiedDocument(const QModelIndex& index) {
+		Q_ASSERT(mDocumentInfoProvider);
 		KFileItem item = fileItemForIndex(index);
 		KUrl url = item.url();
 		ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
 		QPixmap pix;
 		QSize fullSize;
-		mThumbnailViewHelper->thumbnailForDocument(url, group, &pix, &fullSize);
+		mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
 		mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index));
 		that->setThumbnail(item, pix, fullSize);
 	}
@@ -282,6 +285,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 , d(new ThumbnailViewPrivate) {
 	d->that = this;
 	d->mThumbnailViewHelper = 0;
+	d->mDocumentInfoProvider = 0;
 	// Init to some stupid value so that the first call to setThumbnailSize()
 	// is not ignored (do not use 0 in case someone try to divide by
 	// mThumbnailSize...)
@@ -395,6 +399,19 @@ void ThumbnailView::setThumbnailViewHelper(AbstractThumbnailViewHelper* helper) 
 
 AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
 	return d->mThumbnailViewHelper;
+}
+
+
+void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provider) {
+	d->mDocumentInfoProvider = provider;
+	if (provider) {
+		connect(provider, SIGNAL(busyStateChanged(const QModelIndex&, bool)),
+			SLOT(updateThumbnailBusyState(const QModelIndex&, bool)));
+	}
+}
+
+AbstractDocumentInfoProvider* ThumbnailView::documentInfoProvider() const {
+	return d->mDocumentInfoProvider;
 }
 
 
@@ -572,14 +589,20 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
 
 
 bool ThumbnailView::isModified(const QModelIndex& index) const {
+	if (!d->mDocumentInfoProvider) {
+		return false;
+	}
 	KUrl url = urlForIndex(index);
-	return d->mThumbnailViewHelper->isDocumentModified(url);
+	return d->mDocumentInfoProvider->isModified(url);
 }
 
 
-
 bool ThumbnailView::isBusy(const QModelIndex& index) const {
-	return d->mBusyIndexSet.contains(index);
+	if (!d->mDocumentInfoProvider) {
+		return false;
+	}
+	KUrl url = urlForIndex(index);
+	return d->mDocumentInfoProvider->isBusy(url);
 }
 
 
@@ -720,7 +743,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		}
 
 		// Immediately update modified items
-		if (d->mThumbnailViewHelper->isDocumentModified(url)) {
+		if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
 			d->updateThumbnailForModifiedDocument(index);
 			continue;
 		}
@@ -751,7 +774,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 void ThumbnailView::generateThumbnailForIndex(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
 	KUrl url = item.url();
-	if (d->mThumbnailViewHelper->isDocumentModified(url)) {
+	if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {
 		d->updateThumbnailForModifiedDocument(index);
 	} else {
 		KFileItemList list;

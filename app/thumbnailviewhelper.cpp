@@ -69,32 +69,6 @@ ThumbnailViewHelper::~ThumbnailViewHelper() {
 }
 
 
-void ThumbnailViewHelper::thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const {
-	Q_ASSERT(outPix);
-	Q_ASSERT(outFullSize);
-	*outPix = QPixmap();
-	*outFullSize = QSize();
-	DocumentFactory* factory = DocumentFactory::instance();
-	const int pixelSize = ThumbnailGroup::pixelSize(group);
-
-	if (!factory->hasUrl(url)) {
-		return;
-	}
-
-	Document::Ptr doc = factory->load(url);
-	if (doc->loadingState() != Document::Loaded) {
-		return;
-	}
-
-	QImage image = doc->image();
-	if (image.width() > pixelSize || image.height() > pixelSize) {
-		image = image.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
-	}
-	*outPix = QPixmap::fromImage(image);
-	*outFullSize = doc->size();
-}
-
-
 void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url) {
 	d->mCurrentDirUrl = url;
 }
@@ -119,18 +93,6 @@ void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	popup.addSeparator();
 	d->addActionToMenu(popup, "file_show_properties");
 	popup.exec(QCursor::pos());
-}
-
-
-bool ThumbnailViewHelper::isDocumentModified(const KUrl& url) {
-	DocumentFactory* factory = DocumentFactory::instance();
-
-	if (factory->hasUrl(url)) {
-		Document::Ptr doc = factory->load(url);
-		return doc->loadingState() == Document::Loaded && doc->isModified();
-	} else {
-		return false;
-	}
 }
 
 

@@ -67,13 +67,6 @@ public:
 
 	virtual void showMenuForUrlDroppedOnDir(QWidget*, const KUrl::List&, const KUrl&) {
 	}
-
-	virtual bool isDocumentModified(const KUrl&) {
-		return false;
-	}
-
-	virtual void thumbnailForDocument(const KUrl&, ThumbnailGroup::Enum, QPixmap*, QSize*) const {
-	}
 };
 
 /**

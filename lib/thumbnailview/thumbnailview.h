@@ -36,6 +36,7 @@ class QPixmap;
 
 namespace Gwenview {
 
+class AbstractDocumentInfoProvider;
 class AbstractThumbnailViewHelper;
 
 struct ThumbnailViewPrivate;
@@ -48,6 +49,10 @@ public:
 	void setThumbnailViewHelper(AbstractThumbnailViewHelper* helper);
 
 	AbstractThumbnailViewHelper* thumbnailViewHelper() const;
+
+	void setDocumentInfoProvider(AbstractDocumentInfoProvider* provider);
+
+	AbstractDocumentInfoProvider* documentInfoProvider() const;
 
 	/**
 	 * Returns the thumbnail size.
@@ -72,11 +77,6 @@ public:
 	 * Generate thumbnail for @a index.
 	 */
 	void generateThumbnailForIndex(const QModelIndex& index);
-
-	/**
-	 * Tells the view the busy state of the document pointed by the index has changed.
-	 */
-	void updateThumbnailBusyState(const QModelIndex& index, bool);
 
 	virtual void setModel(QAbstractItemModel* model);
 
@@ -154,6 +154,11 @@ private Q_SLOTS:
 	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
 	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
 	void setBrokenThumbnail(const KFileItem&);
+
+	/**
+	 * Tells the view the busy state of the document pointed by the index has changed.
+	 */
+	void updateThumbnailBusyState(const QModelIndex& index, bool);
 
 	/*
 	 * Cause a repaint of all busy indexes

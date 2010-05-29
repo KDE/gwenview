@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau <agateau@kde.org>
+Copyright 2010 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -15,45 +15,44 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef THUMBNAILVIEWHELPER_H
-#define THUMBNAILVIEWHELPER_H
+#ifndef DOCUMENTINFOPROVIDER_H
+#define DOCUMENTINFOPROVIDER_H
 
 // Qt
 
 // KDE
 
 // Local
-#include <lib/thumbnailview/abstractthumbnailviewhelper.h>
-
-class KActionCollection;
+#include <lib/thumbnailview/abstractdocumentinfoprovider.h>
 
 namespace Gwenview {
 
 class SortedDirModel;
 
-struct ThumbnailViewHelperPrivate;
-class ThumbnailViewHelper : public AbstractThumbnailViewHelper {
+class DocumentInfoProviderPrivate;
+class DocumentInfoProvider : public AbstractDocumentInfoProvider {
 	Q_OBJECT
 public:
-	ThumbnailViewHelper(QObject* parent, KActionCollection*);
-	~ThumbnailViewHelper();
+	DocumentInfoProvider(SortedDirModel* model);
+	~DocumentInfoProvider();
 
-	virtual void showContextMenu(QWidget* parent);
+	virtual bool isBusy(const KUrl& url);
 
-	virtual void showMenuForUrlDroppedOnViewport(QWidget* parent, const KUrl::List&);
+	virtual bool isModified(const KUrl& url);
 
-	virtual void showMenuForUrlDroppedOnDir(QWidget* parent, const KUrl::List&, const KUrl&);
+	virtual void thumbnailForDocument(const KUrl& url, ThumbnailGroup::Enum group, QPixmap* outPix, QSize* outFullSize) const;
 
-	void setCurrentDirUrl(const KUrl&);
+private Q_SLOTS:
+	void emitBusyStateChanged(const KUrl&, bool);
 
 private:
-	ThumbnailViewHelperPrivate* const d;
+	DocumentInfoProviderPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* THUMBNAILVIEWHELPER_H */
+#endif /* DOCUMENTINFOPROVIDER_H */
