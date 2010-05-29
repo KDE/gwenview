@@ -70,7 +70,6 @@ private Q_SLOTS:
 	void updateThumbnailDetails();
 	void slotUrlsDropped(const KUrl& destUrl, QDropEvent*);
 	void showMenuForDroppedUrls(const KUrl::List&, const KUrl& destUrl);
-	void generateThumbnailForUrl(const KUrl&);
 
 private:
 	ThumbnailViewPanelPrivate* const d;

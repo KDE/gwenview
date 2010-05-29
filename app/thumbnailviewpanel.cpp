@@ -201,9 +201,6 @@ ThumbnailViewPanel::ThumbnailViewPanel(QWidget* parent, SortedDirModel* dirModel
 	loadConfig();
 	updateSortOrder();
 	updateThumbnailDetails();
-
-	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
-		SLOT(generateThumbnailForUrl(const KUrl&)) );
 }
 
 
@@ -335,15 +332,6 @@ void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event)
 
 void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const KUrl& destUrl) {
 	FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
-}
-
-
-void ThumbnailViewPanel::generateThumbnailForUrl(const KUrl& url) {
-	QModelIndex index = d->mDirModel->indexForUrl(url);
-	if (!index.isValid()) {
-		return;
-	}
-	d->mThumbnailView->generateThumbnailForIndex(index);
 }
 
 

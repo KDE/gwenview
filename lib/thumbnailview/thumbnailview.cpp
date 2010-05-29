@@ -407,6 +407,8 @@ void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provid
 	if (provider) {
 		connect(provider, SIGNAL(busyStateChanged(const QModelIndex&, bool)),
 			SLOT(updateThumbnailBusyState(const QModelIndex&, bool)));
+		connect(provider, SIGNAL(documentChanged(const QModelIndex&, bool)),
+			SLOT(updateThumbnail(const QModelIndex&, bool)));
 	}
 }
 
@@ -771,7 +773,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 }
 
 
-void ThumbnailView::generateThumbnailForIndex(const QModelIndex& index) {
+void ThumbnailView::updateThumbnail(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
 	KUrl url = item.url();
 	if (d->mDocumentInfoProvider && d->mDocumentInfoProvider->isModified(url)) {

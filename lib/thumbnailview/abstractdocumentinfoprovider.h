@@ -57,6 +57,7 @@ public:
 
 Q_SIGNALS:
 	void busyStateChanged(const QModelIndex&, bool);
+	void documentChanged(const QModelIndex&);
 };
 
 

@@ -43,6 +43,9 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 	d->mDirModel = model;
 	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(const KUrl&, bool)),
 		SLOT(emitBusyStateChanged(const KUrl&, bool)) );
+
+	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
+		SLOT(emitDocumentChanged(const KUrl&)) );
 }
 
 
@@ -107,6 +110,15 @@ void DocumentInfoProvider::emitBusyStateChanged(const KUrl& url, bool busy) {
 		return;
 	}
 	busyStateChanged(index, busy);
+}
+
+
+void DocumentInfoProvider::emitDocumentChanged(const KUrl& url) {
+	QModelIndex index = d->mDirModel->indexForUrl(url);
+	if (!index.isValid()) {
+		return;
+	}
+	documentChanged(index);
 }
 
 

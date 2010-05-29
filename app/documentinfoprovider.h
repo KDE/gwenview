@@ -47,6 +47,7 @@ public:
 
 private Q_SLOTS:
 	void emitBusyStateChanged(const KUrl&, bool);
+	void emitDocumentChanged(const KUrl&);
 
 private:
 	DocumentInfoProviderPrivate* const d;
