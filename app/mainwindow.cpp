@@ -1146,7 +1146,6 @@ void MainWindow::goToNext() {
 
 
 void MainWindow::goToUrl(const KUrl& url) {
-	kDebug() << url;
 	if (d->mCurrentPageId == ViewPageId) {
 		openDocumentUrl(url);
 	}
@@ -1391,7 +1390,6 @@ void MainWindow::toggleMenuBar() {
 void MainWindow::loadConfig() {
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
 	MimeTypeUtils::Kinds kind = d->mDirModel->kindFilter();
-	kDebug() << "videos:" << GwenviewConfig::listVideos();
 	d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
 	d->mDocumentPanel->loadConfig();
