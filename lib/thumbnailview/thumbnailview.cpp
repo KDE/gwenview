@@ -407,8 +407,8 @@ void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provid
 	if (provider) {
 		connect(provider, SIGNAL(busyStateChanged(const QModelIndex&, bool)),
 			SLOT(updateThumbnailBusyState(const QModelIndex&, bool)));
-		connect(provider, SIGNAL(documentChanged(const QModelIndex&, bool)),
-			SLOT(updateThumbnail(const QModelIndex&, bool)));
+		connect(provider, SIGNAL(documentChanged(const QModelIndex&)),
+			SLOT(updateThumbnail(const QModelIndex&)));
 	}
 }
 
