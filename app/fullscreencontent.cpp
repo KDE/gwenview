@@ -143,7 +143,7 @@ struct FullScreenContentPrivate {
 			layout->addWidget(mButtonBar, 0, 0, Qt::AlignTop | Qt::AlignLeft);
 			layout->addWidget(mInformationLabel, 1, 0);
 			layout->addWidget(mThumbnailBar, 0, 1, 2, 1);
-			mFullScreenBar->setFixedWidth(mFullScreenBar->sizeHint().width());
+			mFullScreenBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 			mFullScreenBar->setFixedHeight(GwenviewConfig::fullScreenBarHeight());
 		} else {
 			mInformationLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -152,10 +152,10 @@ struct FullScreenContentPrivate {
 			layout->setSpacing(2);
 			layout->addWidget(mButtonBar);
 			layout->addWidget(mInformationLabel);
-			mFullScreenBar->setFixedHeight(mFullScreenBar->minimumSizeHint().height());
-
-			adjustBarWidth();
+			mFullScreenBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+			mFullScreenBar->setFixedHeight(layout->minimumSize().height());
 		}
+		mFullScreenBar->adjustSize();
 		applyCurrentFullScreenTheme();
 	}
 
@@ -164,7 +164,7 @@ struct FullScreenContentPrivate {
 		if (GwenviewConfig::showFullScreenThumbnails()) {
 			return;
 		}
-		mFullScreenBar->setFixedWidth(mFullScreenBar->minimumSizeHint().width());
+		mFullScreenBar->adjustSize();
 	}
 };
 

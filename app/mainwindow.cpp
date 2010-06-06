@@ -565,8 +565,6 @@ struct MainWindow::Private {
 		view->setDocumentInfoProvider(mDocumentInfoProvider);
 		view->setThumbnailViewHelper(mThumbnailViewHelper);
 		view->setSelectionModel(mThumbnailView->selectionModel());
-
-		mFullScreenBar->adjustSize();
 	}
 
 

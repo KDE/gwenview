@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDesktopWidget>
 #include <QBitmap>
 #include <QEvent>
+#include <QLayout>
 #include <QTimeLine>
 #include <QTimer>
 #include <QToolButton>
@@ -136,8 +137,16 @@ FullScreenBar::~FullScreenBar() {
 }
 
 QSize FullScreenBar::sizeHint() const {
-	int width = QApplication::desktop()->screenGeometry(this).width();
-	return QSize(width, QFrame::sizeHint().height());
+	QSize sh = QFrame::sizeHint();
+	if (!layout()) {
+		return sh;
+	}
+
+	if (layout()->expandingDirections() & Qt::Horizontal) {
+		int width = QApplication::desktop()->screenGeometry(window()).width();
+		sh.setWidth(width);
+	}
+	return sh;
 }
 
 void FullScreenBar::moveBar(qreal value) {
@@ -156,6 +165,8 @@ void FullScreenBar::setActivated(bool activated) {
 		// cause a few window adjustments, which seems to generate unwanted
 		// mouse events, which cause the bar to slide in.
 		QTimer::singleShot(500, this, SLOT(delayedInstallEventFilter()));
+
+		adjustSize();
 
 		// Make sure the widget is visible on start
 		move(0, 0);
