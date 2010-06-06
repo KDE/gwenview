@@ -81,8 +81,7 @@ struct FullScreenBarPrivate {
 		// Take parent widget position into account because it may not be at
 		// the top of the screen, for example when the save bar warning is
 		// shown.
-		const QPoint topLeft = that->parentWidget()->mapToGlobal(QPoint(0, 0));
-		rect.setHeight(topLeft.y() + that->height() + EXTRA_BAR_HEIGHT);
+		rect.setHeight(that->parentWidget()->y() + that->height() + EXTRA_BAR_HEIGHT);
 		return rect;
 	}
 
