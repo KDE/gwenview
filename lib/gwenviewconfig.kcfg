@@ -31,10 +31,11 @@
 		</entry>
 
 		<entry name="BlackListedExtensions" type="StringList">
-			<default>nef,cr2</default>
+			<default>nef,cr2,new</default>
 			<whatsthis>A list of filename extensions Gwenview should not try to
 			load. This is useful to exclude raw files which are recognized as
-			TIFF or JPEG.</whatsthis>
+			TIFF or JPEG. We exclude *.new as well because this is the extension
+			used for temporary files by KSaveFile.</whatsthis>
 		</entry>
 		<entry name="ThumbnailBarIsVisible" type="Bool">
 			<default>false</default>
