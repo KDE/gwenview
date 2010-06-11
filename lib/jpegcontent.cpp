@@ -131,8 +131,8 @@ struct JpegContent::Private {
 	}
 	bool readSize() {
 		struct jpeg_decompress_struct srcinfo;
-		
-		// Init JPEG structs 
+
+		// Init JPEG structs
 		JPEGErrorManager errorManager;
 
 		// Initialize the JPEG decompression object
@@ -157,7 +157,7 @@ struct JpegContent::Private {
 			return false;
 		}
 		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
-		
+
 		jpeg_destroy_decompress(&srcinfo);
 		return true;
 	}
@@ -276,7 +276,7 @@ int JpegContent::dotsPerMeter(const QString& keyName) const {
 	//         2 = inches
 	//         3 = centimeters
 	//         Other = reserved
-	const float INCHESPERMETER = (100. / 2.54); 
+	const float INCHESPERMETER = (100. / 2.54);
 	switch (res) {
 	case 3:  // dots per cm
 		return int(it->toLong() * 100);
@@ -419,7 +419,7 @@ void JpegContent::applyPendingTransformation() {
 
 	// The following code is inspired by jpegtran.c from the libjpeg
 
-	// Init JPEG structs 
+	// Init JPEG structs
 	struct jpeg_decompress_struct srcinfo;
 	struct jpeg_compress_struct dstinfo;
 	jvirt_barray_ptr * src_coef_arrays;
@@ -455,6 +455,7 @@ void JpegContent::applyPendingTransformation() {
 
 	// Init transformation
 	jpeg_transform_info transformoption;
+	memset(&transformoption, 0, sizeof(jpeg_transform_info));
 	transformoption.transform = findJxform(d->mTransformMatrix);
 	transformoption.force_grayscale = false;
 	transformoption.trim = false;
@@ -480,7 +481,7 @@ void JpegContent::applyPendingTransformation() {
 
 	/* Start compressor (note no image data is actually written here) */
 	jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
-	
+
 	/* Copy to the output file any extra markers that we want to preserve */
 	jcopy_markers_execute(&srcinfo, &dstinfo, JCOPYOPT_ALL);
 
@@ -495,7 +496,7 @@ void JpegContent::applyPendingTransformation() {
 	(void) jpeg_finish_decompress(&srcinfo);
 	jpeg_destroy_decompress(&srcinfo);
 
-	// Set rawData to our new JPEG 
+	// Set rawData to our new JPEG
 	d->mRawData = output;
 }
 
@@ -519,7 +520,7 @@ void JpegContent::setThumbnail(const QImage& thumbnail) {
 	if (d->mExifData.empty()) {
 		return;
 	}
-	
+
 	QByteArray array;
 	QBuffer buffer(&array);
 	buffer.open(QIODevice::WriteOnly);
@@ -528,7 +529,7 @@ void JpegContent::setThumbnail(const QImage& thumbnail) {
 		kError() << "Could not write thumbnail\n";
 		return;
 	}
-	
+
 #if (EXIV2_TEST_VERSION(0,17,91))
     Exiv2::ExifThumb thumb(d->mExifData);
     thumb.setJpegThumbnail((unsigned char*)array.data(), array.size());
@@ -566,12 +567,12 @@ bool JpegContent::save(QIODevice* device) {
 	image->setExifData(d->mExifData);
 	image->setComment(d->mComment.toUtf8().data());
 	image->writeMetadata();
-	
+
 	// Update mRawData
 	Exiv2::BasicIo& io = image->io();
 	d->mRawData.resize(io.size());
 	io.read((unsigned char*)d->mRawData.data(), io.size());
-	
+
 	QDataStream stream(device);
 	stream.writeRawData(d->mRawData.data(), d->mRawData.size());
 
