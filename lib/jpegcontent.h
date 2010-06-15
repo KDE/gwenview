@@ -56,6 +56,10 @@ public:
 	QImage thumbnail() const;
 	void setThumbnail(const QImage&);
 
+	// Recreate raw data to represent image
+	// Note: thumbnail must be updated separately
+	void setImage(const QImage& image);
+
 	bool load(const QString& file);
 	bool loadFromData(const QByteArray& rawData);
 	/**

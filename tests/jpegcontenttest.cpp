@@ -273,3 +273,26 @@ void JpegContentTest::testRawData() {
 
 	QCOMPARE(content.rawData(), fileData);
 }
+
+void JpegContentTest::testSetImage() {
+	Gwenview::JpegContent content;
+	bool result=content.load(pathForTestFile(ORIENT6_FILE));
+	QVERIFY(result);
+
+	QImage image = QImage(400, 300, QImage::Format_RGB32);
+	image.fill(Qt::red);
+
+	content.setImage(image);
+
+	result = content.save(TMP_FILE);
+	QVERIFY(result);
+
+	result = content.load(TMP_FILE);
+	QVERIFY(result);
+
+	QCOMPARE(content.size(), image.size());
+
+	QStringList ignoredKeys;
+	ignoredKeys << "Orientation";
+	compareMetaInfo(pathForTestFile(ORIENT6_FILE), pathForTestFile(TMP_FILE), ignoredKeys);
+}

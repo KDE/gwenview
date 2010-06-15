@@ -585,4 +585,24 @@ QString JpegContent::errorString() const {
 }
 
 
+void JpegContent::setImage(const QImage& image) {
+	QBuffer buffer;
+	QImageWriter writer(&buffer, "jpeg");
+	bool ok = writer.write(image);
+	if (!ok) {
+		kError() << writer.errorString();
+		d->mErrorString = writer.errorString();
+		return;
+	}
+	d->mRawData = buffer.data();
+	d->mSize = image.size();
+	d->mExifData["Exif.Photo.PixelXDimension"] = image.width();
+	d->mExifData["Exif.Photo.PixelYDimension"] = image.height();
+	resetOrientation();
+
+	d->mPendingTransformation = false;
+	d->mTransformMatrix = QMatrix();
+}
+
+
 } // namespace
