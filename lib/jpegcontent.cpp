@@ -103,6 +103,11 @@ void inmem_term_destination(j_compress_ptr cinfo) {
 //
 //---------------------
 struct JpegContent::Private {
+	// JpegContent usually stores the image pixels as compressed JPEG data in
+	// mRawData. However if the image is set with setImage() because the user
+	// performed a lossy image manipulation, mRawData is cleared and the image
+	// pixels are kept in mImage until updateRawDataFromImage() is called.
+	QImage mImage;
 	QByteArray mRawData;
 	QSize mSize;
 	QString mComment;
@@ -159,6 +164,19 @@ struct JpegContent::Private {
 		mSize=QSize(srcinfo.image_width, srcinfo.image_height);
 		
 		jpeg_destroy_decompress(&srcinfo);
+		return true;
+	}
+
+
+	bool updateRawDataFromImage() {
+		QBuffer buffer;
+		QImageWriter writer(&buffer, "jpeg");
+		if (!writer.write(mImage)) {
+			mErrorString = writer.errorString();
+			return false;
+		}
+		mRawData = buffer.data();
+		mImage = QImage();
 		return true;
 	}
 };
@@ -549,6 +567,12 @@ bool JpegContent::save(const QString& path) {
 
 
 bool JpegContent::save(QIODevice* device) {
+	if (!d->mImage.isNull()) {
+		if (!d->updateRawDataFromImage()) {
+			return false;
+		}
+	}
+
 	if (d->mRawData.size()==0) {
 		d->mErrorString = i18nc("@info", "No data to store.");
 		return false;
@@ -586,15 +610,8 @@ QString JpegContent::errorString() const {
 
 
 void JpegContent::setImage(const QImage& image) {
-	QBuffer buffer;
-	QImageWriter writer(&buffer, "jpeg");
-	bool ok = writer.write(image);
-	if (!ok) {
-		kError() << writer.errorString();
-		d->mErrorString = writer.errorString();
-		return;
-	}
-	d->mRawData = buffer.data();
+	d->mRawData.clear();
+	d->mImage = image;
 	d->mSize = image.size();
 	d->mExifData["Exif.Photo.PixelXDimension"] = image.width();
 	d->mExifData["Exif.Photo.PixelYDimension"] = image.height();
