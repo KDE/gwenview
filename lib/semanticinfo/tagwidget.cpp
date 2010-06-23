@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QComboBox>
 #include <QCompleter>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QListView>
@@ -33,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kpushbutton.h>
 
 // Local
 #include <lib/semanticinfo/tagitemdelegate.h>
@@ -114,6 +116,7 @@ struct TagWidgetPrivate {
 	TagInfo mTagInfo;
 	QListView* mListView;
 	QComboBox* mComboBox;
+	KPushButton* mAddButton;
 	AbstractSemanticInfoBackEnd* mBackEnd;
 	TagCompleterModel* mTagCompleterModel;
 	TagModel* mAssignedTagModel;
@@ -141,10 +144,20 @@ struct TagWidgetPrivate {
 
 		mComboBox->setModel(mTagCompleterModel);
 
+		mAddButton = new KPushButton;
+		mAddButton->setIcon(KIcon("list-add"));
+		mAddButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+		QObject::connect(mAddButton, SIGNAL(clicked()),
+			that, SLOT(addTagFromComboBox()));
+
 		QVBoxLayout* layout = new QVBoxLayout(that);
 		layout->setMargin(0);
 		layout->addWidget(mListView);
-		layout->addWidget(mComboBox);
+
+		QHBoxLayout* hLayout = new QHBoxLayout;
+		hLayout->addWidget(mComboBox);
+		hLayout->addWidget(mAddButton);
+		layout->addLayout(hLayout);
 
 		that->setTabOrder(mComboBox, mListView);
 	}
@@ -182,7 +195,7 @@ TagWidget::TagWidget(QWidget* parent)
 	installEventFilter(new ReturnKeyEater(this));
 
 	connect(d->mComboBox->lineEdit(), SIGNAL(returnPressed()),
-		SLOT(slotReturnPressed()) );
+		SLOT(addTagFromComboBox()) );
 }
 
 
@@ -205,7 +218,7 @@ void TagWidget::setTagInfo(const TagInfo& tagInfo) {
 }
 
 
-void TagWidget::slotReturnPressed() {
+void TagWidget::addTagFromComboBox() {
 	Q_ASSERT(d->mBackEnd);
 	QString label = d->mComboBox->currentText();
 	if (label.isEmpty()) {
