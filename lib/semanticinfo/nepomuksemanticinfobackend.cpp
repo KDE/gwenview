@@ -116,6 +116,9 @@ public:
 			QMutexLocker locker(&mMutex);
 			mTaskQueue.enqueue(task);
 		}
+		if (!isRunning()) {
+			start();
+		}
 		mQueueNotEmpty.wakeAll();
 	}
 
@@ -161,7 +164,6 @@ NepomukSemanticInfoBackEnd::NepomukSemanticInfoBackEnd(QObject* parent)
 , d(new NepomukSemanticInfoBackEndPrivate) {
 	// FIXME: Check it returns 0
 	Nepomuk::ResourceManager::instance()->init();
-	d->mThread.start();
 }
 
 
