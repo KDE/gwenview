@@ -662,7 +662,9 @@ struct MainWindow::Private {
 		}
 		QModelIndex index = mDirModel->indexForUrl(mUrlToSelect);
 		if (index.isValid()) {
-			mThumbnailView->setCurrentIndex(index);
+			if (index != mThumbnailView->currentIndex()) { // Avoid infinite recursion. Bug #243091
+				mThumbnailView->setCurrentIndex(index);
+			}
 			mThumbnailView->scrollTo(index, QAbstractItemView::PositionAtCenter);
 			mUrlToSelect = KUrl();
 		}
