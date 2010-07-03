@@ -201,7 +201,11 @@ void ThumbnailThread::run() {
 			QMutexLocker lock(&mMutex);
 			Q_ASSERT(!mPixPath.isNull());
 			LOG("Loading" << mPixPath);
-			loadThumbnail();
+			bool needCaching;
+			bool ok = loadThumbnail(&needCaching);
+			if (ok && needCaching) {
+				cacheThumbnail();
+			}
 			mPixPath.clear(); // done, ready for next
 		}
 		if(testCancel()) {
@@ -218,9 +222,9 @@ void ThumbnailThread::run() {
 	LOG("Ending thread");
 }
 
-void ThumbnailThread::loadThumbnail() {
+bool ThumbnailThread::loadThumbnail(bool* needCaching) {
 	mImage = QImage();
-	bool needCaching=true;
+	*needCaching = true;
 	int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
 	Orientation orientation = NORMAL;
 
@@ -240,74 +244,72 @@ void ThumbnailThread::loadThumbnail() {
 			}
 			mOriginalWidth = content.size().width();
 			mOriginalHeight = content.size().height();
+			return true;
 		}
 	}
 
 	// Generate thumbnail from full image
-	if (mImage.isNull()) {
-		QSize originalSize = reader.size();
-		if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
-			int scale;
-			const int maxSize = qMax(originalSize.width(), originalSize.height());
-			for (scale=1; pixelSize*scale*2 <= maxSize && scale <= 8; scale *= 2) {}
-			const QSize scaledSize = originalSize / scale;
-			if (!scaledSize.isEmpty()) {
-				reader.setScaledSize(scaledSize);
-			}
-		}
-
-		QImage originalImage;
-		// format() is empty after QImageReader::read() is called
-		QByteArray format = reader.format();
-		if (reader.read(&originalImage)) {
-			if (!originalSize.isValid()) {
-				originalSize = originalImage.size();
-			}
-			mOriginalWidth = originalSize.width();
-			mOriginalHeight = originalSize.height();
-
-			if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize) {
-				mImage=originalImage;
-				needCaching = format != "png";
-			} else {
-				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
-			}
-
-			// Rotate if necessary
-			if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
-				QMatrix matrix = ImageUtils::transformMatrix(orientation);
-				mImage = mImage.transformed(matrix);
-
-				switch (orientation) {
-				case TRANSPOSE:
-				case ROT_90:
-				case TRANSVERSE:
-				case ROT_270:
-					qSwap(mOriginalWidth, mOriginalHeight);
-					break;
-				default:
-					break;
-				}
-			}
+	QSize originalSize = reader.size();
+	if (originalSize.isValid() && reader.supportsOption(QImageIOHandler::ScaledSize)) {
+		int scale;
+		const int maxSize = qMax(originalSize.width(), originalSize.height());
+		for (scale=1; pixelSize*scale*2 <= maxSize && scale <= 8; scale *= 2) {}
+		const QSize scaledSize = originalSize / scale;
+		if (!scaledSize.isEmpty()) {
+			reader.setScaledSize(scaledSize);
 		}
 	}
 
-	if (mImage.isNull()) {
+	QImage originalImage;
+	// format() is empty after QImageReader::read() is called
+	QByteArray format = reader.format();
+	if (!reader.read(&originalImage)) {
 		kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
-		return;
+		return false;
+	}
+	if (!originalSize.isValid()) {
+		originalSize = originalImage.size();
+	}
+	mOriginalWidth = originalSize.width();
+	mOriginalHeight = originalSize.height();
+
+	if (qMax(mOriginalWidth, mOriginalHeight)<=pixelSize) {
+		mImage = originalImage;
+		*needCaching = format != "png";
+	} else {
+		mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 	}
 
-	if (needCaching) {
-		mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
-		mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
-		mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
-		mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
-		mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
-		mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
-		mImage.setText("Software"            , 0, "Gwenview");
+	// Rotate if necessary
+	if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
+		QMatrix matrix = ImageUtils::transformMatrix(orientation);
+		mImage = mImage.transformed(matrix);
 
-		emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
+		switch (orientation) {
+		case TRANSPOSE:
+		case ROT_90:
+		case TRANSVERSE:
+		case ROT_270:
+			qSwap(mOriginalWidth, mOriginalHeight);
+			break;
+		default:
+			break;
+		}
 	}
+	return true;
+}
+
+
+void ThumbnailThread::cacheThumbnail() {
+	mImage.setText("Thumb::Uri"          , 0, mOriginalUri);
+	mImage.setText("Thumb::MTime"        , 0, QString::number(mOriginalTime));
+	mImage.setText("Thumb::Size"         , 0, QString::number(mOriginalSize));
+	mImage.setText("Thumb::Mimetype"     , 0, mOriginalMimeType);
+	mImage.setText("Thumb::Image::Width" , 0, QString::number(mOriginalWidth));
+	mImage.setText("Thumb::Image::Height", 0, QString::number(mOriginalHeight));
+	mImage.setText("Software"            , 0, "Gwenview");
+
+	emit thumbnailReadyToBeCached(mThumbnailPath, mImage);
 }
 
 
