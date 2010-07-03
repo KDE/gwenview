@@ -208,8 +208,8 @@ void ThumbnailThread::run() {
 			return;
 		}
 		{
-			LOG("emitting done signal");
 			QSize size(mOriginalWidth, mOriginalHeight);
+			LOG("emitting done signal, size=" << size);
 			QMutexLocker lock(&mMutex);
 			done(mImage, size);
 			LOG("Done");
@@ -229,13 +229,17 @@ void ThumbnailThread::loadThumbnail() {
 	if (reader.format() == "jpeg") {
 		JpegContent content;
 		content.load(mPixPath);
-		mOriginalWidth = content.size().width();
-		mOriginalHeight = content.size().height();
 		QImage thumbnail = content.thumbnail();
 		orientation = content.orientation();
 
 		if (qMax(thumbnail.width(), thumbnail.height()) >= pixelSize) {
 			mImage = thumbnail;
+			if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
+				QMatrix matrix = ImageUtils::transformMatrix(orientation);
+				mImage = mImage.transformed(matrix);
+			}
+			mOriginalWidth = content.size().width();
+			mOriginalHeight = content.size().height();
 		}
 	}
 
@@ -268,18 +272,29 @@ void ThumbnailThread::loadThumbnail() {
 			} else {
 				mImage = originalImage.scaled(pixelSize, pixelSize, Qt::KeepAspectRatio);
 			}
+
+			// Rotate if necessary
+			if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
+				QMatrix matrix = ImageUtils::transformMatrix(orientation);
+				mImage = mImage.transformed(matrix);
+
+				switch (orientation) {
+				case TRANSPOSE:
+				case ROT_90:
+				case TRANSVERSE:
+				case ROT_270:
+					qSwap(mOriginalWidth, mOriginalHeight);
+					break;
+				default:
+					break;
+				}
+			}
 		}
 	}
 
 	if (mImage.isNull()) {
 		kWarning() << "Could not generate thumbnail for file" << mOriginalUri;
 		return;
-	}
-
-	// Rotate if necessary
-	if (orientation != NORMAL && orientation != NOT_AVAILABLE) {
-		QMatrix matrix = ImageUtils::transformMatrix(orientation);
-		mImage = mImage.transformed(matrix);
 	}
 
 	if (needCaching) {
