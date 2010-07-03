@@ -40,25 +40,15 @@ using namespace Gwenview;
 QTEST_KDEMAIN(ThumbnailLoadJobTest, GUI)
 
 
-QString sandBoxPath() {
-	return QDir::currentPath() + "/sandbox";
-}
+SandBox::SandBox()
+: mPath(QDir::currentPath() + "/sandbox")
+{}
 
 
-void createTestImage(const QString& name, int width, int height, const QColor& color) {
-	QImage image(width, height, QImage::Format_RGB32);
-	QPainter painter(&image);
-	painter.fillRect(image.rect(), color);
-	painter.end();
-	image.save(sandBoxPath() + '/' + name, "png");
-}
-
-
-void ThumbnailLoadJobTest::init() {
-	ThumbnailLoadJob::setThumbnailBaseDir(sandBoxPath() + "/thumbnails/");
-	QDir dir(sandBoxPath());
+void SandBox::create() {
+	QDir dir(mPath);
 	if (dir.exists()) {
-		KUrl sandBoxUrl("file://" + sandBoxPath());
+		KUrl sandBoxUrl("file://" + mPath);
 		KIO::Job* job = KIO::del(sandBoxUrl);
 		QVERIFY2(job->exec(), "Couldn't delete sandbox");
 	}
@@ -69,16 +59,34 @@ void ThumbnailLoadJobTest::init() {
 }
 
 
+void SandBox::createTestImage(const QString& name, int width, int height, const QColor& color) {
+	QImage image(width, height, QImage::Format_RGB32);
+	QPainter painter(&image);
+	painter.fillRect(image.rect(), color);
+	painter.end();
+	image.save(mPath + '/' + name, "png");
+	mSizeHash.insert(name, QSize(width, height));
+}
+
+
+void ThumbnailLoadJobTest::init() {
+	ThumbnailLoadJob::setThumbnailBaseDir(mSandBox.mPath + "/thumbnails/");
+	mSandBox.create();
+}
+
+
 void ThumbnailLoadJobTest::testLoadLocal() {
-	QDir dir(sandBoxPath());
+	QDir dir(mSandBox.mPath);
+	qRegisterMetaType<KFileItem>("KFileItem");
 
 	KFileItemList list;
-	Q_FOREACH(const QFileInfo& info, dir.entryInfoList()) {
+	Q_FOREACH(const QFileInfo& info, dir.entryInfoList(QDir::Files)) {
 		KUrl url("file://" + info.absoluteFilePath());
 		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 		list << item;
 	}
 	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+	QSignalSpy spy(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)));
 	// FIXME: job->exec() causes a double free(), so wait for the job to be
 	// deleted instead
 	//job->exec();
@@ -88,10 +96,22 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 	}
 
 	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
-	// There should be 2 files, because small.png is too small to have a
-	// thumbnail
+	// There should be one file less because small.png is a png and is too
+	// small to have a thumbnail
 	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
-	QCOMPARE(entryList.count(), 2);
+	QCOMPARE(entryList.count(), mSandBox.mSizeHash.size() - 1);
+
+	// Check what was in the thumbnailLoaded() signals
+	QCOMPARE(spy.count(), mSandBox.mSizeHash.size());
+	QSignalSpy::ConstIterator it = spy.begin(),
+		end = spy.end();
+	for (;it != end; ++it) {
+		QVariantList args = *it;
+		KFileItem item = qvariant_cast<KFileItem>(args.at(0));
+		QSize size = args.at(2).toSize();
+		QSize expectedSize = mSandBox.mSizeHash.value(item.url().fileName());
+		QCOMPARE(size, expectedSize);
+	}
 }
 
 
