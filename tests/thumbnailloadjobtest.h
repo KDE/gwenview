@@ -46,6 +46,7 @@ private Q_SLOTS:
 	void initTestCase();
 	void testLoadLocal();
 	void testLoadRemote();
+	void testUseEmbeddedOrNot();
 
 private:
 	SandBox mSandBox;
