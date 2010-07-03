@@ -143,6 +143,50 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 }
 
 
+void ThumbnailLoadJobTest::testUseEmbeddedOrNot() {
+	QImage expectedThumbnail;
+	QPointer<ThumbnailLoadJob> job;
+	QPixmap thumbnailPix;
+	SandBox sandBox;
+	sandBox.initDir();
+	// This image is red and 256x128 but contains a white 128x64 thumbnail
+	sandBox.copyTestImage("embedded-thumbnail.jpg", 256, 128);
+
+	KFileItemList list;
+	KUrl url("file://" + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
+	list << KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
+
+	// Loading a normal thumbnail should bring the white one
+	job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
+	QSignalSpy spy1(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)));
+	// FIXME: job->exec() causes a double free(), so wait for the job to be
+	// deleted instead
+	//job->exec();
+	job->start();
+	while (job) {
+		QTest::qWait(100);
+	}
+
+	QCOMPARE(spy1.count(), 1);
+	expectedThumbnail = createColoredImage(128, 64, Qt::white);
+	thumbnailPix = qvariant_cast<QPixmap>(spy1.at(0).at(1));
+	fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage());
+
+	// Loading a large thumbnail should bring the red one
+	job = new ThumbnailLoadJob(list, ThumbnailGroup::Large);
+	QSignalSpy spy2(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)));
+	job->start();
+	while (job) {
+		QTest::qWait(100);
+	}
+
+	QCOMPARE(spy2.count(), 1);
+	expectedThumbnail = createColoredImage(256, 128, Qt::red);
+	thumbnailPix = qvariant_cast<QPixmap>(spy2.at(0).at(1));
+	fuzzyImageCompare(expectedThumbnail, thumbnailPix.toImage());
+}
+
+
 void ThumbnailLoadJobTest::testLoadRemote() {
 	QString testTarGzPath = pathForTestFile("test.tar.gz");
 	KUrl url;

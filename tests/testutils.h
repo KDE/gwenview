@@ -22,10 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QDir>
+#include <QImage>
 #include <QSignalSpy>
 #include <QTest>
 
 // KDE
+#include <kdebug.h>
 #include <kurl.h>
 
 
@@ -61,6 +63,27 @@ bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
 		QTest::qWait(1000);
 	}
 	return false;
+}
+
+bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
+	if (img1.size() != img2.size()) {
+		kWarning() << "Different sizes" << img1.size() << img2.size();
+		return false;
+	}
+	if (img1.format() != img2.format()) {
+		kWarning() << "Different formats" << img1.format() << img2.format();
+		return false;
+	}
+
+	for(int posY = 0; posY < img1.height(); ++posY) {
+		for (int posX = 0; posX < img2.width(); ++posX) {
+			if (!abs(img1.pixel(posX, posY) - img2.pixel(posX, posY)) > 2) {
+				kWarning() << "Different at" << QPoint(posX, posY);
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 #endif /* TESTUTILS_H */
