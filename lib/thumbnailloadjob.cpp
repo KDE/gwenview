@@ -60,7 +60,7 @@ namespace Gwenview {
 #undef LOG
 //#define ENABLE_LOG
 #ifdef ENABLE_LOG
-#define LOG(x) kDebug() << x << endl
+#define LOG(x) kDebug() << x
 #else
 #define LOG(x) ;
 #endif
@@ -366,7 +366,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 , mState( STATE_NEXTTHUMB )
 , mThumbnailGroup(group)
 {
-	LOG((int)this);
+	LOG(this);
 
 	// Make sure we have a place to store our thumbnails
 	QString thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(mThumbnailGroup);
@@ -388,7 +388,7 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 
 
 ThumbnailLoadJob::~ThumbnailLoadJob() {
-	LOG((int)this);
+	LOG(this);
 	if (hasSubjobs()) {
 		LOG("Killing subjob");
 		KJob* job = subjobs().first();
@@ -458,7 +458,7 @@ void ThumbnailLoadJob::removeItems(const KFileItemList& itemList) {
 
 
 void ThumbnailLoadJob::determineNextIcon() {
-	LOG((int)this);
+	LOG(this);
 	mState = STATE_NEXTTHUMB;
 
 	// No more items ?
@@ -495,7 +495,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		LOG( "KIO::stat orig" << mCurrentUrl.url() );
 		addSubjob(job);
 	}
-	LOG("/determineNextIcon" << (int)this);
+	LOG("/determineNextIcon" << this);
 }
 
 
