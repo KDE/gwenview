@@ -21,7 +21,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define THUMBNAILLOADJOBTEST_H
 
 // Qt
+#include <QColor>
+#include <QHash>
 #include <QObject>
+#include <QSize>
+
+class SandBox {
+public:
+	SandBox();
+	void create();
+	void createTestImage(const QString& name, int width, int height, const QColor& color);
+
+	QHash<QString, QSize> mSizeHash;
+	QString mPath;
+};
 
 class ThumbnailLoadJobTest : public QObject {
 	Q_OBJECT
@@ -30,6 +43,9 @@ private Q_SLOTS:
 	void init();
 	void testLoadLocal();
 	void testLoadRemote();
+
+private:
+	SandBox mSandBox;
 };
 
 #endif // THUMBNAILLOADJOBTEST_H
