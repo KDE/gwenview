@@ -27,9 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <qtest_kde.h>
 #include <kdebug.h>
+#include <kio/copyjob.h>
 #include <kio/deletejob.h>
 
 // Local
+#include "../lib/imageformats/imageformats.h"
 #include "../lib/thumbnailloadjob.h"
 #include "testutils.h"
 
@@ -45,39 +47,65 @@ SandBox::SandBox()
 {}
 
 
-void SandBox::create() {
+void SandBox::initDir() {
+	KIO::Job* job;
 	QDir dir(mPath);
 	if (dir.exists()) {
 		KUrl sandBoxUrl("file://" + mPath);
-		KIO::Job* job = KIO::del(sandBoxUrl);
+		job = KIO::del(sandBoxUrl);
 		QVERIFY2(job->exec(), "Couldn't delete sandbox");
 	}
 	dir.mkpath(".");
+}
+
+
+void SandBox::fill() {
+	initDir();
 	createTestImage("red.png", 300, 200, Qt::red);
 	createTestImage("blue.png", 200, 300, Qt::blue);
 	createTestImage("small.png", 50, 50, Qt::green);
+
+	copyTestImage("orient6.jpg", 128, 256);
+	copyTestImage("orient6-small.jpg", 32, 64);
+}
+
+
+void SandBox::copyTestImage(const QString& testFileName, int width, int height) {
+	KIO::Job* job = KIO::copy(pathForTestFile(testFileName), mPath + '/' + testFileName);
+	QVERIFY2(job->exec(), "Couldn't copy test image");
+	mSizeHash.insert(testFileName, QSize(width, height));
+}
+
+
+static QImage createColoredImage(int width, int height, const QColor& color) {
+	QImage image(width, height, QImage::Format_RGB32);
+	QPainter painter(&image);
+	painter.fillRect(image.rect(), color);
+	return image;
 }
 
 
 void SandBox::createTestImage(const QString& name, int width, int height, const QColor& color) {
-	QImage image(width, height, QImage::Format_RGB32);
-	QPainter painter(&image);
-	painter.fillRect(image.rect(), color);
-	painter.end();
+	QImage image = createColoredImage(width, height, color);
 	image.save(mPath + '/' + name, "png");
 	mSizeHash.insert(name, QSize(width, height));
 }
 
 
+void ThumbnailLoadJobTest::initTestCase() {
+	qRegisterMetaType<KFileItem>("KFileItem");
+	Gwenview::ImageFormats::registerPlugins();
+}
+
+
 void ThumbnailLoadJobTest::init() {
 	ThumbnailLoadJob::setThumbnailBaseDir(mSandBox.mPath + "/thumbnails/");
-	mSandBox.create();
+	mSandBox.fill();
 }
 
 
 void ThumbnailLoadJobTest::testLoadLocal() {
 	QDir dir(mSandBox.mPath);
-	qRegisterMetaType<KFileItem>("KFileItem");
 
 	KFileItemList list;
 	Q_FOREACH(const QFileInfo& info, dir.entryInfoList(QDir::Files)) {
