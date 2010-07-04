@@ -143,7 +143,7 @@ struct FolderViewContextManagerItemPrivate {
 		// Stretch (we still want the column to take the full width of the
 		// widget).
 		mView->header()->setStretchLastSection(false);
-		mView->header()->setResizeMode(QHeaderView::Stretch);
+		mView->header()->setResizeMode(QHeaderView::ResizeToContents);
 
 		q->setWidget(mView);
 		QObject::connect(mView, SIGNAL(activated(const QModelIndex&)),
