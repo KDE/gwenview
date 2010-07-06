@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
+#include <QListView>
 #include <QMenu>
 #include <QMimeData>
 
@@ -97,6 +98,7 @@ static QPair<bool, QString> pasteInfo(const KUrl& targetUrl) {
 
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
+	QListView* mThumbnailView;
 	SideBarGroup* mGroup;
 	KAction* mCutAction;
 	KAction* mCopyAction;
@@ -181,10 +183,11 @@ struct FileOpsContextManagerItemPrivate {
 };
 
 
-FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, KActionCollection* actionCollection)
+FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection)
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	d->mContextManagerItem = this;
+	d->mThumbnailView = thumbnailView;
 	d->mGroup = new SideBarGroup(i18n("File Operations"));
 	setWidget(d->mGroup);
 	EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
@@ -375,7 +378,12 @@ void FileOpsContextManagerItem::linkTo() {
 
 
 void FileOpsContextManagerItem::rename() {
-	FileOperations::rename(d->urlList().first(), d->mGroup);
+	if (d->mThumbnailView->isVisible()) {
+		QModelIndex index = d->mThumbnailView->currentIndex();
+		d->mThumbnailView->edit(index);
+	} else {
+		FileOperations::rename(d->urlList().first(), d->mGroup);
+	}
 }
 
 

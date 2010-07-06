@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 #include <kdirmodel.h>
 #include <kglobalsettings.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kurl.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -636,7 +637,7 @@ struct PreviewItemDelegatePrivate {
 
 
 PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
-: QAbstractItemDelegate(view)
+: QItemDelegate(view)
 , d(new PreviewItemDelegatePrivate) {
 	d->that = this;
 	d->mView = view;
@@ -708,21 +709,27 @@ QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, co
 }
 
 
-bool PreviewItemDelegate::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::ToolTip:
-		return true;
+bool PreviewItemDelegate::eventFilter(QObject* object, QEvent* event) {
+	if (object == d->mView->viewport()) {
+		switch (event->type()) {
+		case QEvent::ToolTip:
+			return true;
 
-	case QEvent::HoverMove:
-	case QEvent::HoverLeave:
-		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
+		case QEvent::HoverMove:
+		case QEvent::HoverLeave:
+			return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
 
-	case QEvent::MouseButtonPress:
-	case QEvent::MouseButtonRelease:
-		return d->mouseButtonEventFilter(event->type());
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+			return d->mouseButtonEventFilter(event->type());
 
-	default:
-		return false;
+		default:
+			return false;
+		}
+	} else {
+		// Necessary for the item editor to work correctly (especially closing
+		// the editor with the Escape key)
+		return QItemDelegate::eventFilter(object, event);
 	}
 }
 
@@ -955,5 +962,47 @@ void PreviewItemDelegate::slotRowsChanged() {
 	d->updateHoverUi(index);
 }
 
+
+QWidget * PreviewItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const {
+	KLineEdit* edit = new KLineEdit(parent);
+	return edit;
+}
+
+
+void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& index) const {
+	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	if (!edit) {
+		return;
+	}
+	edit->setText(index.data().toString());
+}
+
+
+void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOptionViewItem& option, const QModelIndex& index) const {
+	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	if (!edit) {
+		return;
+	}
+	QString text = index.data().toString();
+	int textWidth = edit->fontMetrics().width("  " + text + "  ");
+	QRect textRect(
+		option.rect.left() + (option.rect.width() - textWidth) / 2,
+		option.rect.top() + 2 * ITEM_MARGIN + d->mThumbnailSize,
+		textWidth,
+		edit->sizeHint().height());
+
+	edit->setGeometry(textRect);
+}
+
+
+void PreviewItemDelegate::setModelData(QWidget* widget, QAbstractItemModel* model, const QModelIndex& index) const {
+	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	if (!edit) {
+		return;
+	}
+	if (index.data().toString() != edit->text()) {
+		model->setData(index, edit->text(), Qt::EditRole);
+	}
+}
 
 } // namespace

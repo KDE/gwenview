@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "abstractcontextmanageritem.h"
 
 class QAction;
+class QListView;
 class KAction;
 class KActionCollection;
 
@@ -39,7 +40,7 @@ struct FileOpsContextManagerItemPrivate;
 class FileOpsContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	FileOpsContextManagerItem(ContextManager*, KActionCollection*);
+	FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection);
 	~FileOpsContextManagerItem();
 
 private Q_SLOTS:

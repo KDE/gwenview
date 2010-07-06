@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QAbstractItemDelegate>
+#include <QItemDelegate>
 
 // KDE
 
@@ -44,7 +44,7 @@ struct PreviewItemDelegatePrivate;
  * An ItemDelegate which generates thumbnails for images. It also makes sure
  * all items are of the same size.
  */
-class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QAbstractItemDelegate {
+class GWENVIEWLIB_EXPORT PreviewItemDelegate : public QItemDelegate {
 	Q_OBJECT
 public:
 	PreviewItemDelegate(ThumbnailView*);
@@ -81,6 +81,11 @@ public:
 	Qt::TextElideMode textElideMode() const;
 
 	void setTextElideMode(Qt::TextElideMode);
+
+	virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+	virtual void setEditorData(QWidget* editor, const QModelIndex& index) const;
+	virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+	virtual void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
