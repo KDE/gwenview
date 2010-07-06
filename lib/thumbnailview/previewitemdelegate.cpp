@@ -49,6 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "archiveutils.h"
+#include "itemeditor.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
 #include "timeutils.h"
@@ -964,13 +965,12 @@ void PreviewItemDelegate::slotRowsChanged() {
 
 
 QWidget * PreviewItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const {
-	KLineEdit* edit = new KLineEdit(parent);
-	return edit;
+	return new ItemEditor(parent);
 }
 
 
 void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& index) const {
-	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
 	if (!edit) {
 		return;
 	}
@@ -979,7 +979,7 @@ void PreviewItemDelegate::setEditorData(QWidget* widget, const QModelIndex& inde
 
 
 void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOptionViewItem& option, const QModelIndex& index) const {
-	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
 	if (!edit) {
 		return;
 	}
@@ -996,7 +996,7 @@ void PreviewItemDelegate::updateEditorGeometry(QWidget* widget, const QStyleOpti
 
 
 void PreviewItemDelegate::setModelData(QWidget* widget, QAbstractItemModel* model, const QModelIndex& index) const {
-	KLineEdit* edit = qobject_cast<KLineEdit*>(widget);
+	ItemEditor* edit = qobject_cast<ItemEditor*>(widget);
 	if (!edit) {
 		return;
 	}
