@@ -42,6 +42,7 @@ ItemEditor::ItemEditor(QWidget* parent)
 : KLineEdit(parent)
 , d(new ItemEditorPrivate) {
 	connect(this, SIGNAL(textChanged(QString)), SLOT(resizeToContents()));
+	setTrapReturnKey(true);
 }
 
 
