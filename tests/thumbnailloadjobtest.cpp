@@ -131,13 +131,13 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 
 	// Check what was in the thumbnailLoaded() signals
 	QCOMPARE(spy.count(), mSandBox.mSizeHash.size());
-	QSignalSpy::ConstIterator it = spy.begin(),
-		end = spy.end();
+	QSignalSpy::ConstIterator it = spy.constBegin(),
+		end = spy.constEnd();
 	for (;it != end; ++it) {
-		QVariantList args = *it;
-		KFileItem item = qvariant_cast<KFileItem>(args.at(0));
-		QSize size = args.at(2).toSize();
-		QSize expectedSize = mSandBox.mSizeHash.value(item.url().fileName());
+		const QVariantList args = *it;
+		const KFileItem item = qvariant_cast<KFileItem>(args.at(0));
+		const QSize size = args.at(2).toSize();
+		const QSize expectedSize = mSandBox.mSizeHash.value(item.url().fileName());
 		QCOMPARE(size, expectedSize);
 	}
 }
