@@ -79,7 +79,7 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 kde4_add_unit_test(semanticinfobackendtest ${semanticinfobackendtest_SRCS})
 
-target_link_libraries(semanticinfobackendtest gwenviewlib ${NEPOMUK_LIBRARIES} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(semanticinfobackendtest gwenviewlib ${KDE4_NEPOMUK_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
