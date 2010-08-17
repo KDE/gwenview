@@ -1,3 +1,8 @@
+# 2.6.0
+## Improvements
+- New shortcuts to go to first and last image (bug #174619), original patch by
+  Ivan Wagner.
+
 # 2.5.0
 ## Improvements
 - Gwenview no longer blocks the UI when modifying or saving images.

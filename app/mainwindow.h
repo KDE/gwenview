@@ -125,6 +125,8 @@ private Q_SLOTS:
 
 	void goToPrevious();
 	void goToNext();
+	void goToFirst();
+	void goToLast();
 	void updatePreviousNextActions();
 
 	void reduceLevelOfDetails();

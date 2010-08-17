@@ -171,6 +171,8 @@ struct MainWindow::Private {
 	KAction* mGoUpAction;
 	KAction* mGoToPreviousAction;
 	KAction* mGoToNextAction;
+	KAction* mGoToFirstAction;
+	KAction* mGoToLastAction;
 	KToggleAction* mToggleSideBarAction;
 	KToggleFullScreenAction* mFullScreenAction;
 	KAction* mToggleSlideShowAction;
@@ -359,6 +361,15 @@ struct MainWindow::Private {
 		mGoToNextAction->setToolTip(i18n("Go to Next Image"));
 		mGoToNextAction->setShortcut(Qt::Key_Space);
 
+		mGoToFirstAction = view->addAction("go_first",mWindow, SLOT(goToFirst()));
+		mGoToFirstAction->setText(i18nc("@action Go to first image", "First"));
+		mGoToFirstAction->setToolTip(i18n("Go to First Image"));
+		mGoToFirstAction->setShortcut(Qt::Key_Home);
+
+		mGoToLastAction = view->addAction("go_last",mWindow, SLOT(goToLast()));
+		mGoToLastAction->setText(i18nc("@action Go to last image", "Last"));
+		mGoToLastAction->setToolTip(i18n("Go to Last Image"));
+		mGoToLastAction->setShortcut(Qt::Key_End);
 
 		mGoUpAction = view->addAction(KStandardAction::Up,mWindow, SLOT(goUp()));
 
@@ -515,6 +526,15 @@ struct MainWindow::Private {
 		return ArchiveUtils::fileItemIsDirOrArchive(item);
 	}
 
+	void goTo(const QModelIndex& index) {
+		if (!index.isValid()) {
+			return;
+		}
+		mThumbnailView->setCurrentIndex(index);
+		mThumbnailView->scrollTo(index);
+	}
+
+
 	void goTo(int offset) {
 		QModelIndex index = currentIndex();
 		index = mDirModel->index(index.row() + offset, 0);
@@ -522,8 +542,7 @@ struct MainWindow::Private {
 			return;
 		}
 		if (!indexIsDirOrArchive(index)) {
-			mThumbnailView->setCurrentIndex(index);
-			mThumbnailView->scrollTo(index);
+			goTo(index);
 		}
 	}
 
@@ -539,8 +558,12 @@ struct MainWindow::Private {
 				break;
 			}
 		}
-		Q_ASSERT(index.isValid());
-		mThumbnailView->setCurrentIndex(index);
+		goTo(index);
+	}
+
+	void goToLastDocument() {
+		QModelIndex index = mDirModel->index(mDirModel->rowCount() - 1, 0);
+		goTo(index);
 	}
 
 	void spreadCurrentDirUrl(const KUrl& url) {
@@ -1151,6 +1174,13 @@ void MainWindow::goToNext() {
 	d->goTo(1);
 }
 
+void MainWindow::goToFirst() {
+	d->goToFirstDocument();
+}
+
+void MainWindow::goToLast() {
+	d->goToLastDocument();
+}
 
 void MainWindow::goToUrl(const KUrl& url) {
 	if (d->mCurrentPageId == ViewPageId) {
@@ -1172,9 +1202,11 @@ void MainWindow::updatePreviousNextActions() {
 
 	QModelIndex prevIndex = d->mDirModel->index(index.row() - 1, 0);
 	d->mGoToPreviousAction->setEnabled(prevIndex.isValid() && !d->indexIsDirOrArchive(prevIndex));
+	d->mGoToFirstAction->setEnabled(d->mGoToPreviousAction->isEnabled());
 
 	QModelIndex nextIndex = d->mDirModel->index(index.row() + 1, 0);
 	d->mGoToNextAction->setEnabled(nextIndex.isValid() && !d->indexIsDirOrArchive(nextIndex));
+	d->mGoToLastAction->setEnabled(d->mGoToNextAction->isEnabled());
 }
 
 

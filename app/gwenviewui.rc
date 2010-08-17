@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="50">
+<kpartgui name="gwenview" version="51">
 
 <MenuBar>
 	<Menu name="file" >
@@ -72,8 +72,10 @@
 		<Action name="red_eye_reduction" />
 	</Menu>
 	<Menu name="go" >
+		<Action name="go_first"/>
 		<Action name="go_previous"/>
 		<Action name="go_next"/>
+		<Action name="go_last"/>
 		<Separator/>
 		<Action name="go_up"/>
 		<Separator/>
