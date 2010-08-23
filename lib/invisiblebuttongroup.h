@@ -36,6 +36,45 @@ namespace Gwenview {
 
 
 struct InvisibleButtonGroupPrivate;
+/**
+ * This class makes it possible to create radio buttons without having to put
+ * them in a dedicated QGroupBox or KButtonGroup. This is useful when you do not
+ * want to add visual frames to create a set of radio buttons.
+ *
+ * It is a QWidget so that it can support KConfigXT: it is completely
+ * invisible and does not require the radio buttons to be its children.
+ * The most common way to use it is to create your dialog with Designer,
+ * including the radio buttons, and to instantiate an instance of
+ * InvisibleButtonGroup from your code.
+ *
+ * Example:
+ *
+ * We assume "config" is a KConfigSkeleton object which contains a
+ * "ViewMode" key. This key is an int where 1 means "list" and 2 means
+ * "detail".
+ * We also assume "ui" has been created with Designer and contains two
+ * QRadioButton named "listRadioButton" and "detailRadioButton".
+ *
+ * @code
+ * // Prepare the config dialog
+ * KConfigDialog* dialog(parent, "Settings", config);
+ *
+ * // Create a widget in the dialog
+ * QWidget* pageWidget = new QWidget;
+ * ui->setupUi(pageWidget);
+ * dialog->addPage(pageWidget, i18n("Page Title"));
+ * @endcode
+ *
+ * Now we can setup an InvisibleButtonGroup to handle both radio
+ * buttons and ensure they follow the "ViewMode" config key.
+ *
+ * @code
+ * InvisibleButtonGroup* group = new InvisibleButtonGroup(pageWidget);
+ * group->setObjectName("kcfg_ViewMode");
+ * group->addButton(ui->listRadioButton, 1);
+ * group->addButton(ui->detailRadioButton, 2);
+ * @endcode
+ */
 class GWENVIEWLIB_EXPORT InvisibleButtonGroup : public QWidget {
 	Q_OBJECT
 	Q_PROPERTY(int current READ selected WRITE setSelected)
