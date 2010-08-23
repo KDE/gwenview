@@ -121,20 +121,23 @@ struct SaveBarPrivate {
 	}
 
 	void applyNormalStyleSheet() {
-		QColor color = QToolTip::palette().base().color();
-		QColor borderColor = PaintUtils::adjustedHsv(color, 0, 150, 0);
+		QColor bgColor = QToolTip::palette().base().color();
+		QColor borderColor = PaintUtils::adjustedHsv(bgColor, 0, 150, 0);
+		QColor fgColor = QToolTip::palette().text().color();
 
 		QString css =
 			"#saveBarWidget {"
 			"	background-color: %1;"
 			"	border-top: 1px solid %2;"
 			"	border-bottom: 1px solid %2;"
+			"	color: %3;"
 			"}"
 			;
 
 		css = css
-			.arg(color.name())
+			.arg(bgColor.name())
 			.arg(borderColor.name())
+			.arg(fgColor.name())
 			;
 		mSaveBarWidget->setStyleSheet(css);
 	}
