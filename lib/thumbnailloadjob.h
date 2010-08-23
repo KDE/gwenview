@@ -92,6 +92,8 @@ public:
 	// Return thumbnail if it has still not been stored
 	QImage value(const QString&) const;
 
+	bool isEmpty() const;
+
 public Q_SLOTS:
 	void queueThumbnail(const QString&, const QImage&);
 
@@ -166,6 +168,12 @@ public:
 	 * Move a thumbnail to match a file move
 	 */
 	static void moveThumbnail(const KUrl& oldUrl, const KUrl& newUrl);
+
+	/**
+	 * Returns true if all thumbnails have been written to disk. Useful for
+	 * unit-testing.
+	 */
+	static bool isPendingThumbnailCacheEmpty();
 
 Q_SIGNALS:
 	/**

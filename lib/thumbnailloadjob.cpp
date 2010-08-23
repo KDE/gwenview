@@ -142,6 +142,11 @@ QImage ThumbnailCache::value(const QString& path) const {
 	return mCache.value(path);
 }
 
+bool ThumbnailCache::isEmpty() const {
+	QMutexLocker locker(&mMutex);
+	return mCache.isEmpty();
+}
+
 
 //------------------------------------------------------------------------
 //
@@ -701,6 +706,11 @@ void ThumbnailLoadJob::emitThumbnailLoaded(const QImage& img, const QSize& size)
 void ThumbnailLoadJob::emitThumbnailLoadingFailed() {
 	LOG(mCurrentItem.url());
 	emit thumbnailLoadingFailed(mCurrentItem);
+}
+
+
+bool ThumbnailLoadJob::isPendingThumbnailCacheEmpty() {
+	return sThumbnailCache->isEmpty();
 }
 
 

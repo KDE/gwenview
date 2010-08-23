@@ -107,12 +107,15 @@ void ThumbnailLoadJobTest::init() {
 void ThumbnailLoadJobTest::testLoadLocal() {
 	QDir dir(mSandBox.mPath);
 
+    // Create a list of items which will be thumbnailed
 	KFileItemList list;
 	Q_FOREACH(const QFileInfo& info, dir.entryInfoList(QDir::Files)) {
 		KUrl url("file://" + info.absoluteFilePath());
 		KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 		list << item;
 	}
+
+    // Generate the thumbnails
 	QPointer<ThumbnailLoadJob> job = new ThumbnailLoadJob(list, ThumbnailGroup::Normal);
 	QSignalSpy spy(job, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)));
 	// FIXME: job->exec() causes a double free(), so wait for the job to be
@@ -123,6 +126,11 @@ void ThumbnailLoadJobTest::testLoadLocal() {
 		QTest::qWait(100);
 	}
 
+	while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
+		QTest::qWait(100);
+	}
+
+    // Check we generated the correct number of thumbnails
 	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
 	// There should be one file less because small.png is a png and is too
 	// small to have a thumbnail
