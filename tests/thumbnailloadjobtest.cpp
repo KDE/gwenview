@@ -213,6 +213,9 @@ void ThumbnailLoadJobTest::testLoadRemote() {
 	while (job) {
 		QTest::qWait(100);
 	}
+	while (!ThumbnailLoadJob::isPendingThumbnailCacheEmpty()) {
+		QTest::qWait(100);
+	}
 
 	QDir thumbnailDir = ThumbnailLoadJob::thumbnailBaseDir(ThumbnailGroup::Normal);
 	QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
