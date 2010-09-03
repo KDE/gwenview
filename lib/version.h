@@ -21,6 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef VERSION_H
 #define VERSION_H
 
-#define GWENVIEW_VERSION "2.5.0"
+#define GWENVIEW_VERSION "2.5.2"
 
 #endif /* VERSION_H */

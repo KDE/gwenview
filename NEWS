@@ -1,3 +1,7 @@
+# 2.5.2
+## Fixes
+- Apply black-list extension filter to documents only (bug #249878).
+
 # 2.5.0
 ## Improvements
 - Gwenview no longer blocks the UI when modifying or saving images.
