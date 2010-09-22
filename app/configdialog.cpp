@@ -73,17 +73,17 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	widget = setupPage(d->mImageViewConfigPage);
 
 	d->mAlphaBackgroundModeGroup = new InvisibleButtonGroup(widget);
-	d->mAlphaBackgroundModeGroup->setObjectName("kcfg_AlphaBackgroundMode");
+	d->mAlphaBackgroundModeGroup->setObjectName( QLatin1String("kcfg_AlphaBackgroundMode" ));
 	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.checkBoardRadioButton, int(ImageView::AlphaBackgroundCheckBoard));
 	d->mAlphaBackgroundModeGroup->addButton(d->mImageViewConfigPage.solidColorRadioButton, int(ImageView::AlphaBackgroundSolid));
 
 	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
-	d->mWheelBehaviorGroup->setObjectName("kcfg_MouseWheelBehavior");
+	d->mWheelBehaviorGroup->setObjectName( QLatin1String("kcfg_MouseWheelBehavior" ));
 	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(ScrollTool::MouseWheelScroll));
 	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
 
 	d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
-	d->mThumbnailBarOrientationGroup->setObjectName("kcfg_ThumbnailBarOrientation");
+	d->mThumbnailBarOrientationGroup->setObjectName( QLatin1String("kcfg_ThumbnailBarOrientation" ));
 	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.horizontalRadioButton, int(Qt::Horizontal));
 	d->mThumbnailBarOrientationGroup->addButton(d->mImageViewConfigPage.verticalRadioButton, int(Qt::Vertical));
 

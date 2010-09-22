@@ -467,13 +467,13 @@ struct MainWindow::Private {
 		// Fill sidebar
 		SideBarPage* page;
 		page = new SideBarPage(i18n("Folders"));
-		page->setObjectName("folders");
+		page->setObjectName( QLatin1String("folders" ));
 		page->addWidget(folderViewItem->widget());
 		page->layout()->setMargin(0);
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Information"));
-		page->setObjectName("information");
+		page->setObjectName( QLatin1String("information" ));
 		page->addWidget(infoItem->widget());
 		#ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 		if (semanticInfoItem) {
@@ -484,7 +484,7 @@ struct MainWindow::Private {
 		mSideBar->addPage(page);
 
 		page = new SideBarPage(i18n("Operations"));
-		page->setObjectName("operations");
+		page->setObjectName( QLatin1String("operations" ));
 		page->addWidget(imageOpsItem->widget());
 		page->addWidget(fileOpsItem->widget());
 		page->addStretch();

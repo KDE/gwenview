@@ -190,7 +190,7 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 
 	// Button bar
 	d->mButtonBar = new QWidget;
-	d->mButtonBar->setObjectName("buttonBar");
+	d->mButtonBar->setObjectName( QLatin1String("buttonBar" ));
 	QHBoxLayout* buttonBarLayout = new QHBoxLayout(d->mButtonBar);
 	buttonBarLayout->setMargin(0);
 	buttonBarLayout->setSpacing(0);
@@ -358,7 +358,7 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	FullScreenConfigDialog* dialog = new FullScreenConfigDialog(d->mOptionsButton);
 	d->mFullScreenConfigDialog = dialog;
 	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-	dialog->setObjectName("configDialog");
+	dialog->setObjectName( QLatin1String("configDialog" ));
 
 	// Checkboxes
 	setupCheckBox(dialog->mSlideShowLoopCheckBox, d->mSlideShow->loopAction());

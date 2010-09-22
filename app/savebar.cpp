@@ -231,7 +231,7 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	d->mFullScreenMode = false;
 	d->mActionCollection = actionCollection;
 	d->mSaveBarWidget = new QWidget();
-	d->mSaveBarWidget->setObjectName("saveBarWidget");
+	d->mSaveBarWidget->setObjectName( QLatin1String("saveBarWidget" ));
 	d->applyNormalStyleSheet();
 
 	d->mMessageLabel = new QLabel;

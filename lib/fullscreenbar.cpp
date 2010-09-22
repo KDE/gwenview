@@ -112,7 +112,7 @@ FullScreenBar::FullScreenBar(QWidget* parent)
 , d(new FullScreenBarPrivate) {
 	d->that = this;
 	d->mAutoHidingEnabled = true;
-	setObjectName("fullScreenBar");
+	setObjectName( QLatin1String("fullScreenBar" ));
 
 	d->mTimeLine = new QTimeLine(SLIDE_DURATION, this);
 	connect(d->mTimeLine, SIGNAL(valueChanged(qreal)), SLOT(moveBar(qreal)) );

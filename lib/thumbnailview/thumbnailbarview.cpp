@@ -343,7 +343,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	d->mOrientation = Qt::Vertical; // To pass value-has-changed check in setOrientation()
 	setOrientation(Qt::Horizontal);
 
-	setObjectName("thumbnailBarView");
+	setObjectName( QLatin1String("thumbnailBarView" ));
 	setUniformItemSizes(true);
 	setWrapping(true);
 

@@ -70,7 +70,7 @@ struct InvisibleButtonGroupPrivate;
  *
  * @code
  * InvisibleButtonGroup* group = new InvisibleButtonGroup(pageWidget);
- * group->setObjectName("kcfg_ViewMode");
+ * group->setObjectName( QLatin1String("kcfg_ViewMode" ));
  * group->addButton(ui->listRadioButton, 1);
  * group->addButton(ui->detailRadioButton, 2);
  * @endcode
