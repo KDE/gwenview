@@ -87,7 +87,7 @@ set(gwenviewlib_SRCS
 	statusbartoolbutton.cpp
 	redeyereduction/redeyereductionimageoperation.cpp
 	redeyereduction/redeyereductiontool.cpp
-	resizeimageoperation.cpp
+	resize/resizeimageoperation.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
 	thumbnailview/abstractdocumentinfoprovider.cpp
