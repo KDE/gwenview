@@ -37,14 +37,14 @@ namespace Gwenview {
 
 
 struct ResizeImageOperationPrivate {
-	int mSize;
+	QSize mSize;
 	QImage mOriginalImage;
 };
 
 
 class ResizeJob : public ThreadedDocumentJob {
 public:
-	ResizeJob(int size)
+	ResizeJob(const QSize& size)
 	: mSize(size)
 	{}
 
@@ -53,17 +53,17 @@ public:
 			return;
 		}
 		QImage image = document()->image();
-		image = image.scaled(mSize, mSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		image = image.scaled(mSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 		document()->editor()->setImage(image);
 		setError(NoError);
 	}
 
 private:
-	int mSize;
+	QSize mSize;
 };
 
 
-ResizeImageOperation::ResizeImageOperation(int size)
+ResizeImageOperation::ResizeImageOperation(const QSize& size)
 : d(new ResizeImageOperationPrivate) {
 	d->mSize = size;
 	setText(i18n("Resize"));

@@ -88,6 +88,7 @@ set(gwenviewlib_SRCS
 	redeyereduction/redeyereductionimageoperation.cpp
 	redeyereduction/redeyereductiontool.cpp
 	resize/resizeimageoperation.cpp
+	resize/resizeimagedialog.cpp
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
 	thumbnailview/abstractdocumentinfoprovider.cpp
@@ -142,6 +143,7 @@ kde4_add_ui_files(gwenviewlib_SRCS
 	documentview/messageview.ui
 	print/printoptionspage.ui
 	redeyereduction/redeyereductionhud.ui
+	resize/resizeimagewidget.ui
 	)
 
 kde4_add_kcfg_files(gwenviewlib_SRCS

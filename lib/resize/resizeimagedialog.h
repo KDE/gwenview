@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2007 Aurélien Gâteau <agateau@kde.org>
+Copyright 2010 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -15,38 +15,43 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef RESIZEIMAGEOPERATION_H
-#define RESIZEIMAGEOPERATION_H
+#ifndef RESIZEIMAGEDIALOG_H
+#define RESIZEIMAGEDIALOG_H
 
 #include <lib/gwenviewlib_export.h>
 
 // Qt
 
 // KDE
+#include <kdialog.h>
 
 // Local
-#include <lib/abstractimageoperation.h>
 
 namespace Gwenview {
 
 
-struct ResizeImageOperationPrivate;
-class GWENVIEWLIB_EXPORT ResizeImageOperation : public AbstractImageOperation {
+class ResizeImageDialogPrivate;
+class GWENVIEWLIB_EXPORT ResizeImageDialog : public KDialog {
+	Q_OBJECT
 public:
-	ResizeImageOperation(const QSize& size);
-	~ResizeImageOperation();
+	ResizeImageDialog(QWidget *parent);
+	~ResizeImageDialog();
 
-	virtual void redo();
-	virtual void undo();
+	void setOriginalSize(const QSize&);
+	QSize size() const;
+
+private Q_SLOTS:
+	void slotWidthChanged(int);
+	void slotHeightChanged(int);
 
 private:
-	ResizeImageOperationPrivate* const d;
+	ResizeImageDialogPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* RESIZEIMAGEOPERATION_H */
+#endif /* RESIZEIMAGEDIALOG_H */

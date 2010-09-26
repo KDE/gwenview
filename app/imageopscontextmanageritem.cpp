@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <lib/gwenviewconfig.h>
 #include <lib/imageview.h>
 #include <lib/resize/resizeimageoperation.h>
+#include <lib/resize/resizeimagedialog.h>
 #include <lib/transformimageoperation.h>
 
 namespace Gwenview {
@@ -218,22 +219,12 @@ void ImageOpsContextManagerItem::resizeImage() {
 	}
 	Document::Ptr doc = DocumentFactory::instance()->load(contextManager()->currentUrl());
 	doc->startLoadingFullImage();
-	int size = GwenviewConfig::imageResizeLastSize();
-	if (size == -1) {
-		size = qMax(doc->width(), doc->height());
-	}
-	bool ok = false;
-	size = KInputDialog::getInteger(
-		i18n("Image Resizing"),
-		i18n("Enter the new size of the image:"),
-		size, 0, 100000, 10 /* step */,
-		&ok,
-		d->mMainWindow);
-	if (!ok) {
-		return;
-	}
-	GwenviewConfig::setImageResizeLastSize(size);
-	ResizeImageOperation* op = new ResizeImageOperation(size);
+    ResizeImageDialog dialog(d->mMainWindow);
+    dialog.setOriginalSize(doc->size());
+    if (!dialog.exec()) {
+        return;
+    }
+	ResizeImageOperation* op = new ResizeImageOperation(dialog.size());
 	applyImageOperation(op);
 }
 
