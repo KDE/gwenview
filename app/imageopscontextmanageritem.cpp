@@ -96,10 +96,12 @@ struct ImageOpsContextManagerItem::Private {
 		mResizeAction = edit->addAction("resize",that, SLOT(resizeImage()) );
 		mResizeAction->setText(i18n("Resize"));
 		mResizeAction->setIcon(KIcon("transform-scale"));
+		mResizeAction->setShortcut(Qt::SHIFT + Qt::Key_R);
 
 		mCropAction = edit->addAction("crop",that, SLOT(crop()));
 		mCropAction->setText(i18n("Crop"));
 		mCropAction->setIcon(KIcon("transform-crop-and-resize"));
+		mCropAction->setShortcut(Qt::SHIFT + Qt::Key_C);
 
 		mRedEyeReductionAction = edit->addAction("red_eye_reduction",that, SLOT(startRedEyeReduction()) );
 		mRedEyeReductionAction->setText(i18n("Red Eye Reduction"));
