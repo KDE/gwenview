@@ -206,13 +206,6 @@
 		</entry>
 	</group>
 
-	<group name="ImageResize">
-		<entry name="ImageResizeLastSize" type="Int">
-			<!-- Last size used to resize image, -1 if none -->
-			<default>-1</default>
-		</entry>
-	</group>
-
 	<group name="RedEyeReduction">
 		<entry name="RedEyeReductionDiameter" type="Int">
 			<default>24</default>
