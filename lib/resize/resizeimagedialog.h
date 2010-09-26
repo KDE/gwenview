@@ -46,6 +46,7 @@ public:
 private Q_SLOTS:
 	void slotWidthChanged(int);
 	void slotHeightChanged(int);
+	void slotKeepAspectChanged(bool);
 
 private:
 	ResizeImageDialogPrivate* const d;

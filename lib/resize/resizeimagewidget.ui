@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>295</width>
-    <height>58</height>
+    <height>83</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,9 +83,6 @@
      <property name="maximum">
       <number>100000</number>
      </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
     </widget>
    </item>
    <item row="1" column="2">
@@ -96,8 +93,15 @@
      <property name="maximum">
       <number>100000</number>
      </property>
-     <property name="singleStep">
-      <number>10</number>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QCheckBox" name="mKeepAspectCheckBox">
+     <property name="text">
+      <string>Keep aspect ratio</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

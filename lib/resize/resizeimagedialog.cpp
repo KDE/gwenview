@@ -53,6 +53,7 @@ ResizeImageDialog::ResizeImageDialog(QWidget* parent)
 
 	connect(d->mWidthSpinBox, SIGNAL(valueChanged(int)), SLOT(slotWidthChanged(int)));
 	connect(d->mHeightSpinBox, SIGNAL(valueChanged(int)), SLOT(slotHeightChanged(int)));
+	connect(d->mKeepAspectCheckBox, SIGNAL(toggled(bool)), SLOT(slotKeepAspectChanged(bool)));
 }
 
 
@@ -79,6 +80,9 @@ QSize ResizeImageDialog::size() const {
 
 
 void ResizeImageDialog::slotWidthChanged(int width) {
+	if (!d->mKeepAspectCheckBox->isChecked()) {
+		return;
+	}
 	if (d->mUpdateFromRatio) {
 		return;
 	}
@@ -89,12 +93,22 @@ void ResizeImageDialog::slotWidthChanged(int width) {
 
 
 void ResizeImageDialog::slotHeightChanged(int height) {
+	if (!d->mKeepAspectCheckBox->isChecked()) {
+		return;
+	}
 	if (d->mUpdateFromRatio) {
 		return;
 	}
 	d->mUpdateFromRatio = true;
 	d->mWidthSpinBox->setValue(d->mOriginalSize.width() * height / d->mOriginalSize.height());
 	d->mUpdateFromRatio = false;
+}
+
+
+void ResizeImageDialog::slotKeepAspectChanged(bool value) {
+	if (value) {
+		slotWidthChanged(d->mWidthSpinBox->value());
+	}
 }
 
 } // namespace
