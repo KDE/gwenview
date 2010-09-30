@@ -196,10 +196,11 @@ void ThumbnailLoadJobTest::testUseEmbeddedOrNot() {
 
 
 void ThumbnailLoadJobTest::testLoadRemote() {
-	QString testTarGzPath = pathForTestFile("test.tar.gz");
-	KUrl url;
-	url.setProtocol("tar");
-	url.setPath(testTarGzPath + "/test.png");
+	KUrl url = setUpRemoteTestDir("test.png");
+	if (!url.isValid()) {
+		return;
+	}
+	url.addPath("test.png");
 
 	KFileItemList list;
 	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);

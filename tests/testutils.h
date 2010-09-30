@@ -55,7 +55,7 @@ inline KUrl urlForTestOutputFile(const QString& name) {
 	return url;
 }
 
-bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
+inline bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
 	for (int x = 0; x < timeout; ++x) {
 		if (spy.count() > 0) {
 			return true;
@@ -65,7 +65,7 @@ bool waitForSignal(const QSignalSpy& spy, int timeout = 5) {
 	return false;
 }
 
-bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
+inline bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
 	if (img1.size() != img2.size()) {
 		kWarning() << "Different sizes" << img1.size() << img2.size();
 		return false;
@@ -85,5 +85,12 @@ bool fuzzyImageCompare(const QImage& img1, const QImage& img2) {
 	}
 	return true;
 }
+
+/**
+ * Returns the url of the remote url dir if remote test dir was successfully
+ * set up.
+ * If testFile is valid, it is copied into the test dir.
+ */
+KUrl setUpRemoteTestDir(const QString& testFile = QString());
 
 #endif /* TESTUTILS_H */

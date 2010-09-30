@@ -33,6 +33,7 @@ target_link_libraries(paintutilstest gwenviewlib ${KDE4_KDECORE_LIBS} ${QT_QTGUI
 # Document
 set(documenttest_SRCS
 	documenttest.cpp
+	testutils.cpp
 	)
 
 
@@ -64,6 +65,7 @@ target_link_libraries(jpegcontenttest gwenviewlib ${KDE4_KIO_LIBS} ${QT_QTTEST_L
 # ThumbnailLoadJob
 set(thumbnailloadjobtest_SRCS
 	thumbnailloadjobtest.cpp
+	testutils.cpp
 	)
 
 kde4_add_unit_test(thumbnailloadjobtest ${thumbnailloadjobtest_SRCS})

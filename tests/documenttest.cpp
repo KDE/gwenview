@@ -218,19 +218,20 @@ void DocumentTest::testLoadDownSampledPng() {
 }
 
 void DocumentTest::testLoadRemote() {
-	QString testTarGzPath = pathForTestFile("test.tar.gz");
-	KUrl url;
-	url.setProtocol("tar");
-	url.setPath(testTarGzPath + "/test.png");
+	KUrl url = setUpRemoteTestDir("test.png");
+	if (!url.isValid()) {
+		return;
+	}
+	url.addPath("test.png");
 
-	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test archive not found");
+	QVERIFY2(KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0), "test url not found");
 
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QImage image = doc->image();
-	QCOMPARE(image.width(), 300);
-	QCOMPARE(image.height(), 200);
+	QCOMPARE(image.width(), 150);
+	QCOMPARE(image.height(), 100);
 }
 
 void DocumentTest::testLoadAnimated() {
@@ -264,24 +265,18 @@ void DocumentTest::testLoadAnimated() {
 }
 
 void DocumentTest::testSaveRemote() {
+	KUrl dstUrl = setUpRemoteTestDir();
+	if (!dstUrl.isValid()) {
+		return;
+	}
+
 	KUrl srcUrl = urlForTestFile("test.png");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
 	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
-	KUrl dstUrl;
-	dstUrl.setProtocol("trash");
-	dstUrl.setPath("/test.png");
-	QVERIFY(!waitUntilJobIsDone(doc->save(dstUrl, "png")));
-
-	if (qgetenv("REMOTE_SFTP_TEST").isEmpty()) {
-		kWarning() << "*** Define the environment variable REMOTE_SFTP_TEST to try saving an image to sftp://localhost/tmp/test.png";
-	} else {
-		dstUrl.setProtocol("sftp");
-		dstUrl.setHost("localhost");
-		dstUrl.setPath("/tmp/test.png");
-		QVERIFY(waitUntilJobIsDone(doc->save(dstUrl, "png")));
-	}
+	dstUrl.addPath("testSaveRemote.png");
+	QVERIFY(waitUntilJobIsDone(doc->save(dstUrl, "png")));
 }
 
 /**
