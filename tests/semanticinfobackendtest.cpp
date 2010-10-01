@@ -76,10 +76,15 @@ void SemanticInfoBackEndTest::initTestCase() {
 
 void SemanticInfoBackEndTest::init() {
 #ifdef GWENVIEW_SEMANTICINFO_BACKEND_FAKE
-	mBackEnd.reset(new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty));
+	mBackEnd = new FakeSemanticInfoBackEnd(0, FakeSemanticInfoBackEnd::InitializeEmpty);
 #elif defined(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK)
-	mBackEnd.reset(new NepomukSemanticInfoBackEnd(0));
+	mBackEnd = new NepomukSemanticInfoBackEnd(0);
 #endif
+}
+
+void SemanticInfoBackEndTest::cleanup() {
+	delete mBackEnd;
+	mBackEnd = 0;
 }
 
 
@@ -94,8 +99,8 @@ void SemanticInfoBackEndTest::testRating() {
 	KUrl url;
 	url.setPath(temp.fileName());
 
-	SemanticInfoBackEndClient client(mBackEnd.get());
-	QSignalSpy spy(mBackEnd.get(), SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
+	SemanticInfoBackEndClient client(mBackEnd);
+	QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
 	mBackEnd->retrieveSemanticInfo(url);
 	QVERIFY(waitForSignal(spy));
 
@@ -108,7 +113,7 @@ void SemanticInfoBackEndTest::testRating() {
 
 
 void SemanticInfoBackEndTest::testTagForLabel() {
-	QSignalSpy spy(mBackEnd.get(), SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)) );
+	QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)) );
 
 	TagSet oldAllTags = mBackEnd->allTags();
 	QString label = "testTagForLabel-" + KRandom::randomString(5);

@@ -20,9 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef SEMANTICINFOBACKENDTEST_H
 #define SEMANTICINFOBACKENDTEST_H
 
-// STL
-#include <memory>
-
 // Qt
 #include <QHash>
 #include <QObject>
@@ -63,11 +60,12 @@ class SemanticInfoBackEndTest : public QObject {
 private Q_SLOTS:
 	void initTestCase();
 	void init();
+	void cleanup();
 	void testRating();
 	void testTagForLabel();
 
 private:
-	std::auto_ptr<AbstractSemanticInfoBackEnd> mBackEnd;
+	AbstractSemanticInfoBackEnd* mBackEnd;
 };
 
 } // namespace
