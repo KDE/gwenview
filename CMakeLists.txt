@@ -23,6 +23,8 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	find_package(Nepomuk REQUIRED)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
+add_definitions(-DDISABLE_NEPOMUK_LEGACY)
+
 # TODO: Move other Gwenview specific macro_optional_find_package lines here
 
 subdirs(lib)
