@@ -97,7 +97,7 @@ install(TARGETS gwenview
 install(FILES gwenviewui.rc
 	DESTINATION ${DATA_INSTALL_DIR}/gwenview)
 
-install(FILES gwenview.desktop
+install(PROGRAMS gwenview.desktop
 	DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES slideshow.desktop
 	DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus )
