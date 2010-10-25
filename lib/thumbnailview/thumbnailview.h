@@ -43,6 +43,10 @@ struct ThumbnailViewPrivate;
 class GWENVIEWLIB_EXPORT ThumbnailView : public QListView {
 	Q_OBJECT
 public:
+	enum {
+		MinThumbnailSize = 48,
+		MaxThumbnailSize = 256
+	};
 	ThumbnailView(QWidget* parent);
 	~ThumbnailView();
 

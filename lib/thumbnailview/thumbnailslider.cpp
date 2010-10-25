@@ -21,13 +21,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "thumbnailslider.moc"
 
+// Local
+#include <thumbnailview/thumbnailview.h>
+
 // Qt
 #include <QSlider>
 #include <QToolTip>
 
 // KDE
-
-// Local
 
 namespace Gwenview {
 
@@ -41,7 +42,7 @@ ThumbnailSlider::ThumbnailSlider(QWidget* parent)
 , d(new ThumbnailSliderPrivate) {
 	connect(slider(), SIGNAL(actionTriggered(int)),
 		SLOT(slotActionTriggered(int)) );
-	slider()->setRange(48, 256);
+	slider()->setRange(ThumbnailView::MinThumbnailSize, ThumbnailView::MaxThumbnailSize);
 }
 
 

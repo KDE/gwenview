@@ -66,6 +66,8 @@ const int SMOOTH_DELAY = 500;
 const int DRAG_THUMB_SIZE = KIconLoader::SizeHuge;
 const int DRAG_THUMB_SPACING = 4;
 
+const int WHEEL_ZOOM_MULTIPLIER = 4;
+
 static KFileItem fileItemForIndex(const QModelIndex& index) {
 	if (!index.isValid()) {
 		LOG("Invalid index");
@@ -689,7 +691,13 @@ void ThumbnailView::wheelEvent(QWheelEvent* event) {
 	// For some reason it is necessary to set the step here: setting it in
 	// setThumbnailSize() does not work
 	//verticalScrollBar()->setSingleStep(d->mThumbnailSize / 5);
-	QListView::wheelEvent(event);
+	if (event->modifiers() == Qt::ControlModifier) {
+		int size = d->mThumbnailSize + (event->delta() > 0 ? 1 : -1) * WHEEL_ZOOM_MULTIPLIER;
+		size = qMax(int(MinThumbnailSize), qMin(size, int(MaxThumbnailSize)));
+		setThumbnailSize(size);
+	} else {
+		QListView::wheelEvent(event);
+	}
 }
 
 

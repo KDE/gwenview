@@ -100,6 +100,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
 			mThumbnailView, SLOT(setThumbnailSize(int)));
+		QObject::connect(mThumbnailView, SIGNAL(thumbnailSizeChanged(int)),
+			mThumbnailSlider, SLOT(setValue(int)));
 	}
 
 	void setupActions(KActionCollection* actionCollection) {
