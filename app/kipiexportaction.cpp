@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kmenu.h>
 #include <klocale.h>
 
 // Local
@@ -38,23 +39,24 @@ namespace Gwenview {
 struct KIPIExportActionPrivate {
 	KIPIExportAction* q;
 	KIPIInterface* mKIPIInterface;
-	QString mDefaultActionText;
+	KMenu* mMenu;
 	QAction* mDefaultAction;
+	QList<QAction*> mExportActionList;
 
-	void initFromStoredDefaultAction() {
-		mDefaultActionText = GwenviewConfig::defaultExportPluginText();
-		if (!mDefaultActionText.isEmpty()) {
-			q->setText(mDefaultActionText);
-			q->setIcon(KIcon(GwenviewConfig::defaultExportPluginIconName()));
+	void updateMenu() {
+		mMenu->clear();
+
+		if (mDefaultAction) {
+			mMenu->addTitle(i18n("Last Used Plugin"));
+			mMenu->addAction(mDefaultAction);
+			mMenu->addTitle(i18n("Other Plugins"));
 		}
-		mDefaultAction = 0;
-		updateButtonBehavior();
-	}
-
-	void updateButtonBehavior() {
-		bool splitButton = !mDefaultActionText.isEmpty() || mDefaultAction != 0;
-		q->setDelayed(splitButton);
-		q->setStickyMenu(splitButton);
+		Q_FOREACH(QAction* action, mExportActionList) {
+			action->setIconVisibleInMenu(true);
+			if (action != mDefaultAction) {
+				mMenu->addAction(action);
+			}
+		}
 	}
 };
 
@@ -64,18 +66,22 @@ struct KIPIExportActionPrivate {
  * When an action in the menu is triggered, it is set as the default action
  */
 KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(KIcon("document-export"), i18n("Export"), parent)
+: KToolBarPopupAction(KIcon("document-export"), i18n("Share"), parent)
 , d(new KIPIExportActionPrivate) {
 	d->q = this;
 	d->mKIPIInterface = 0;
-	d->initFromStoredDefaultAction();
+	d->mMenu = new KMenu;
+	d->mDefaultAction = 0;
 
-	connect(this, SIGNAL(triggered(bool)), SLOT(triggerDefaultAction()));
-	connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
+	setDelayed(false);
+	setMenu(d->mMenu);
+	connect(d->mMenu, SIGNAL(aboutToShow()), SLOT(init()));
+	connect(d->mMenu, SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
 }
 
 
 KIPIExportAction::~KIPIExportAction() {
+	delete d->mMenu;
 	delete d;
 }
 
@@ -85,40 +91,34 @@ void KIPIExportAction::setKIPIInterface(KIPIInterface* interface) {
 }
 
 
-void KIPIExportAction::triggerDefaultAction() {
-	init();
-	if (!d->mDefaultAction) {
-		kWarning() << "No default action, this should not happen!";
-		return;
-	}
-	d->mDefaultAction->trigger();
-}
-
-
 void KIPIExportAction::init() {
-	if (!menu()->isEmpty()) {
+	if (!d->mMenu->isEmpty()) {
 		return;
 	}
-	// Fill the menu and init mDefaultAction if we find it
 	d->mKIPIInterface->loadPlugins();
-	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
-	Q_FOREACH(QAction* action, d->mKIPIInterface->pluginActions(KIPI::ExportPlugin)) {
-		menu()->addAction(action);
-		if (action->text() == d->mDefaultActionText) {
-			d->mDefaultAction = action;
-			d->updateButtonBehavior();
+	d->mExportActionList = d->mKIPIInterface->pluginActions(KIPI::ExportPlugin);
+
+	// Look for default action
+	QString defaultActionText = GwenviewConfig::defaultExportPluginText();
+	Q_FOREACH(QAction* action, d->mExportActionList) {
+		if (action->text() == defaultActionText) {
+			setDefaultAction(action);
+			break;
 		}
 	}
+
+	d->updateMenu();
 }
 
 
 void KIPIExportAction::setDefaultAction(QAction* action) {
+	if (action == d->mDefaultAction) {
+		return;
+	}
 	d->mDefaultAction = action;
-	setIcon(action->icon());
-	setText(action->text());
 
 	GwenviewConfig::setDefaultExportPluginText(action->text());
-	GwenviewConfig::setDefaultExportPluginIconName(action->icon().name());
+	d->updateMenu();
 }
 
 

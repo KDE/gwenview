@@ -67,8 +67,6 @@
 
 		<entry name="DefaultExportPluginText" type="String">
 		</entry>
-		<entry name="DefaultExportPluginIconName" type="String">
-		</entry>
 	</group>
 
 	<group name="FullScreen">

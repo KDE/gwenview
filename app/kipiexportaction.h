@@ -42,7 +42,6 @@ public:
 	void setKIPIInterface(KIPIInterface*);
 
 private Q_SLOTS:
-	void triggerDefaultAction();
 	void init();
 	void setDefaultAction(QAction*);
 
