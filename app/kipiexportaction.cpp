@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 
 // Local
+#include <lib/gwenviewconfig.h>
 #include "kipiinterface.h"
 
 namespace Gwenview {
@@ -37,17 +38,21 @@ namespace Gwenview {
 struct KIPIExportActionPrivate {
 	KIPIExportAction* q;
 	KIPIInterface* mKIPIInterface;
-	QAction* mDefaultAction;
 	QString mDefaultActionText;
+	QAction* mDefaultAction;
 
 	void initFromStoredDefaultAction() {
-		// FIXME: Init mDefaultActionText, q->text() and q->icon() from config
+		mDefaultActionText = GwenviewConfig::defaultExportPluginText();
+		if (!mDefaultActionText.isEmpty()) {
+			q->setText(mDefaultActionText);
+			q->setIcon(KIcon(GwenviewConfig::defaultExportPluginIconName()));
+		}
 		mDefaultAction = 0;
 		updateButtonBehavior();
 	}
 
 	void updateButtonBehavior() {
-		bool splitButton = mDefaultAction != 0;
+		bool splitButton = !mDefaultActionText.isEmpty() || mDefaultAction != 0;
 		q->setDelayed(splitButton);
 		q->setStickyMenu(splitButton);
 	}
@@ -111,7 +116,9 @@ void KIPIExportAction::setDefaultAction(QAction* action) {
 	d->mDefaultAction = action;
 	setIcon(action->icon());
 	setText(action->text());
-	// FIXME: Store action->text() and action->icon().name() in config
+
+	GwenviewConfig::setDefaultExportPluginText(action->text());
+	GwenviewConfig::setDefaultExportPluginIconName(action->icon().name());
 }
 
 
