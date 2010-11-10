@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="51">
+<kpartgui name="gwenview" version="52">
 
 <MenuBar>
 	<Menu name="file" >
@@ -109,6 +109,8 @@
 	<Separator/>
 	<Action name="rotate_left" />
 	<Action name="rotate_right" />
+	<Separator/>
+	<Action name="kipi_export" />
 </ToolBar>
 
 </kpartgui>

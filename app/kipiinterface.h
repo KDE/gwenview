@@ -22,8 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifndef KIPIINTERFACE_H
 #define KIPIINTERFACE_H
 
+// KIPI
 #include <libkipi/interface.h>
 #include <libkipi/imagecollectionshared.h>
+#include <libkipi/plugin.h>
+
+class QAction;
 
 namespace Gwenview {
 
@@ -50,12 +54,15 @@ public:
 	virtual KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget *parent);
 	virtual KIPI::UploadWidget* uploadWidget(QWidget *parent);
 
+	QList<QAction*> pluginActions(KIPI::Category) const;
+
+public Q_SLOTS:
+	void loadPlugins();
+
 private Q_SLOTS:
 	void slotSelectionChanged();
 	void slotDirectoryChanged();
 	void init();
-
-	void loadPlugins();
 
 private:
 	KIPIInterfacePrivate* const d;

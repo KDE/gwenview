@@ -149,10 +149,20 @@ private:
 const QRegExp KIPIImageInfo::sExtensionRE("\\.[a-z0-9]+$", Qt::CaseInsensitive );
 
 
+struct MenuInfo {
+	QString mName;
+	QList<QAction*> mActions;
+	MenuInfo() {}
+	MenuInfo(const QString& name) : mName(name) {}
+};
+typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
+
+
 struct KIPIInterfacePrivate {
 	KIPIInterface* that;
 	MainWindow* mMainWindow;
 	KIPI::PluginLoader* mPluginLoader;
+	MenuInfoMap mMenuInfoMap;
 
 	void setupPluginsMenu() {
 		QMenu* menu = static_cast<QMenu*>(
@@ -187,33 +197,21 @@ KIPIInterface::~KIPIInterface() {
 }
 
 
-
-// Helper class for loadPlugins(), gcc does not want to instantiate templates
-// with local classes, so this is declared outside of loadPlugins()
-struct MenuInfo {
-	QString mName;
-	QList<QAction*> mActions;
-	MenuInfo() {}
-	MenuInfo(const QString& name) : mName(name) {}
-};
-
 void KIPIInterface::loadPlugins() {
 	// Already done
 	if (d->mPluginLoader) {
 		return;
 	}
 
-	d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
+	d->mMenuInfoMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
+	d->mMenuInfoMap[KIPI::EffectsPlugin]     = MenuInfo(i18nc("@title:menu", "Effects"));
+	d->mMenuInfoMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
+	d->mMenuInfoMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"));
+	d->mMenuInfoMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"));
+	d->mMenuInfoMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
+	d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
-	typedef QMap<KIPI::Category, MenuInfo> CategoryMap;
-	CategoryMap categoryMap;
-	categoryMap[KIPI::ImagesPlugin]      = MenuInfo(i18nc("@title:menu", "Images"));
-	categoryMap[KIPI::EffectsPlugin]     = MenuInfo(i18nc("@title:menu", "Effects"));
-	categoryMap[KIPI::ToolsPlugin]       = MenuInfo(i18nc("@title:menu", "Tools"));
-	categoryMap[KIPI::ImportPlugin]      = MenuInfo(i18nc("@title:menu", "Import"));
-	categoryMap[KIPI::ExportPlugin]      = MenuInfo(i18nc("@title:menu", "Export"));
-	categoryMap[KIPI::BatchPlugin]       = MenuInfo(i18nc("@title:menu", "Batch Processing"));
-	categoryMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
+	d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
 
 	// Fill the mActions
 	KIPI::PluginLoader::PluginList pluginList = d->mPluginLoader->pluginList();
@@ -232,12 +230,12 @@ void KIPIInterface::loadPlugins() {
 		Q_FOREACH(KAction* action, actions) {
 			KIPI::Category category = plugin->category(action);
 
-			if (!categoryMap.contains(category)) {
+			if (!d->mMenuInfoMap.contains(category)) {
 				kWarning() << "Unknown category '" << category;
 				continue;
 			}
 
-			categoryMap[category].mActions << action;
+			d->mMenuInfoMap[category].mActions << action;
 		}
 		// FIXME: Port
 		//plugin->actionCollection()->readShortcutSettings();
@@ -249,7 +247,7 @@ void KIPIInterface::loadPlugins() {
 		kWarning() << "No plugin menu found!";
 		return;
 	}
-	Q_FOREACH(const MenuInfo& info, categoryMap) {
+	Q_FOREACH(const MenuInfo& info, d->mMenuInfoMap) {
 		if (!info.mActions.isEmpty()) {
 			QMenu* menu = pluginMenu->addMenu(info.mName);
 			Q_FOREACH(QAction* action, info.mActions) {
@@ -264,6 +262,12 @@ void KIPIInterface::loadPlugins() {
 		noPluginAction->setEnabled(false);
 		pluginMenu->addAction(noPluginAction);
 	}
+}
+
+
+QList<QAction*> KIPIInterface::pluginActions(KIPI::Category category) const {
+	const_cast<KIPIInterface*>(this)->loadPlugins();
+	return d->mMenuInfoMap.value(category).mActions;
 }
 
 

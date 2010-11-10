@@ -71,6 +71,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "imageopscontextmanageritem.h"
 #include "infocontextmanageritem.h"
 #ifdef KIPI_FOUND
+#include "kipiexportaction.h"
 #include "kipiinterface.h"
 #endif
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
@@ -177,6 +178,9 @@ struct MainWindow::Private {
 	KToggleFullScreenAction* mFullScreenAction;
 	KAction* mToggleSlideShowAction;
 	KToggleAction* mShowMenuBarAction;
+#ifdef KIPI_FOUND
+	KIPIExportAction* mKIPIExportAction;
+#endif
 
 	SortedDirModel* mDirModel;
 	ContextManager* mContextManager;
@@ -399,6 +403,11 @@ struct MainWindow::Private {
 
 		view->addAction(KStandardAction::ConfigureToolbars,mWindow,
 			SLOT(configureToolbars()));
+
+#ifdef KIPI_FOUND
+		mKIPIExportAction = new KIPIExportAction(mWindow);
+		actionCollection->addAction("kipi_export", mKIPIExportAction);
+#endif
 	}
 
 	void setupUndoActions() {
@@ -804,6 +813,7 @@ d(new MainWindow::Private)
 
 #ifdef KIPI_FOUND
 	d->mKIPIInterface = new KIPIInterface(this);
+	d->mKIPIExportAction->setKIPIInterface(d->mKIPIInterface);
 #endif
 	setAutoSaveSettings();
 }

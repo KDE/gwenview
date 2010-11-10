@@ -49,6 +49,7 @@ endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 if (KIPI_FOUND)
 	set (gwenview_SRCS
 		${gwenview_SRCS}
+		kipiexportaction.cpp
 		kipiimagecollectionselector.cpp
 		kipiinterface.cpp
 		kipiuploadwidget.cpp
