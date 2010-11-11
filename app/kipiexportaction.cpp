@@ -57,6 +57,12 @@ struct KIPIExportActionPrivate {
 				mMenu->addAction(action);
 			}
 		}
+		if (mMenu->isEmpty()) {
+			QAction* action = new QAction(mMenu);
+			action->setText(i18n("No Plugin Found"));
+			action->setEnabled(false);
+			mMenu->addAction(action);
+		}
 	}
 };
 
