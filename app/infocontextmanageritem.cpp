@@ -215,6 +215,14 @@ struct InfoContextManagerItemPrivate {
 		QObject::connect(moreLabel, SIGNAL(linkActivated(const QString&)),
 			q, SLOT(showMetaInfoDialog()) );
 	}
+
+	void forgetCurrentDocument() {
+		if (mDocument) {
+			QObject::disconnect(mDocument.data(), 0, q, 0);
+			// "Garbage collect" document
+			mDocument = 0;
+		}
+	}
 };
 
 
@@ -242,8 +250,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 
 	KFileItemList itemList = contextManager()->selection();
 	if (itemList.count() == 0) {
-		// "Garbage collect" document
-		d->mDocument = 0;
+		d->forgetCurrentDocument();
 		d->updateMetaInfoDialog();
 		return;
 	}
@@ -262,6 +269,7 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
+	d->forgetCurrentDocument();
 	d->mDocument = DocumentFactory::instance()->load(item.url());
 	connect(d->mDocument.data(), SIGNAL(metaInfoUpdated()),
 		SLOT(updateOneFileInfo()) );
@@ -271,8 +279,7 @@ void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
 }
 
 void InfoContextManagerItem::fillMultipleItemsGroup(const KFileItemList& itemList) {
-	// "Garbage collect" document
-	d->mDocument = 0;
+	d->forgetCurrentDocument();
 
 	int folderCount = 0, fileCount = 0;
 	Q_FOREACH(const KFileItem& item, itemList) {
