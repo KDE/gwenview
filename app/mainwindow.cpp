@@ -659,6 +659,12 @@ struct MainWindow::Private {
 			return KUrl();
 		}
 
+		if (mUrlToSelect.isValid()) {
+			// We are supposed to select this url whenever it appears in the
+			// dir model. For everyone it is as if it was already the current one
+			return mUrlToSelect;
+		}
+
 		// mThumbnailViewPanel and mDocumentPanel urls are almost always synced, but
 		// mThumbnailViewPanel can be more up-to-date because mDocumentPanel
 		// url is only updated when the DocumentView starts to load the
@@ -688,10 +694,17 @@ struct MainWindow::Private {
 		return item.url();
 	}
 
-	void selectUrlToSelect() {
-		if (!mUrlToSelect.isValid()) {
+	void setUrlToSelect(const KUrl& url) {
+		if (!url.isValid()) {
+			kWarning() << "called with an invalid url, this should not happen!";
 			return;
 		}
+		mUrlToSelect = url;
+		updateContextDependentComponents();
+		selectUrlToSelect();
+	}
+
+	void selectUrlToSelect() {
 		QModelIndex index = mDirModel->indexForUrl(mUrlToSelect);
 		if (index.isValid()) {
 			if (index != mThumbnailView->currentIndex()) { // Avoid infinite recursion. Bug #243091
@@ -1035,8 +1048,9 @@ void MainWindow::openDirUrl(const KUrl& url) {
 		const QChar separator('/');
 		const int slashCount = wantedPath.count(separator);
 		const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
-		d->mUrlToSelect = url;
-		d->mUrlToSelect.setPath(pathToSelect);
+		KUrl urlToSelect = url;
+		urlToSelect.setPath(pathToSelect);
+		d->setUrlToSelect(urlToSelect);
 	}
 	d->mDirModel->dirLister()->openUrl(url);
 	d->spreadCurrentDirUrl(url);
@@ -1054,8 +1068,7 @@ void MainWindow::openDocumentUrl(const KUrl& url) {
 	undoGroup->addStack(doc->undoStack());
 	undoGroup->setActiveStack(doc->undoStack());
 
-	d->mUrlToSelect = url;
-	d->selectUrlToSelect();
+	d->setUrlToSelect(url);
 }
 
 
@@ -1152,12 +1165,11 @@ void MainWindow::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& 
 
 
 void MainWindow::slotDirModelNewItems() {
+	if (d->mUrlToSelect.isValid()) {
+		d->selectUrlToSelect();
+	}
 	if (d->mThumbnailView->selectionModel()->hasSelection()) {
 		updatePreviousNextActions();
-	} else {
-		// Nothing selected in the view yet, check if there was an url waiting to
-		// be selected
-		d->selectUrlToSelect();
 	}
 }
 
@@ -1202,8 +1214,7 @@ void MainWindow::goToUrl(const KUrl& url) {
 		d->mDirModel->dirLister()->openUrl(dirUrl);
 		d->spreadCurrentDirUrl(dirUrl);
 	}
-	d->mUrlToSelect = url;
-	d->selectUrlToSelect();
+	d->setUrlToSelect(url);
 }
 
 
