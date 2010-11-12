@@ -2,6 +2,18 @@
 ## Improvements
 - New shortcuts to go to first and last image (bug #174619), original patch by
   Ivan Wagner.
+- Image resize dialog now allows to set width and height (bug #225506)
+- A new "Share" button has been added to the toolbar to make it easier to
+  export images to various systems.
+
+# 2.5.4
+## Fixes
+- Make sure operations done after "save as" are applied to the new image
+  (bug #236577).
+
+# 2.5.2
+## Fixes
+- Apply black-list extension filter to documents only (bug #249878).
 
 # 2.5.0
 ## Improvements
