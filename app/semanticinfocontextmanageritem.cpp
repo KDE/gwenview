@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "ui_semanticinfodialog.h"
 #include <lib/eventwatcher.h>
 #include <lib/hudwidget.h>
+#include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
 #include <lib/semanticinfo/abstractsemanticinfobackend.h>
 #include <lib/semanticinfo/semanticinfodirmodel.h>
@@ -304,7 +305,10 @@ void SemanticInfoContextManagerItem::update() {
 
 		first = false;
 	}
-	d->mRatingWidget->setRating(rating);
+	{
+		SignalBlocker blocker(d->mRatingWidget);
+		d->mRatingWidget->setRating(rating);
+	}
 	d->mDescriptionTextEdit->setText(description);
 
 	// Init tagInfo from tagHash
