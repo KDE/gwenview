@@ -292,7 +292,8 @@ ImageMetaInfoModel::~ImageMetaInfoModel() {
 }
 
 
-void ImageMetaInfoModel::setFileItem(const KFileItem& item) {
+void ImageMetaInfoModel::setUrl(const KUrl& url) {
+	KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 	QString sizeString = KGlobal::locale()->formatByteSize(item.size());
 
 	d->setGroupEntryValue(GeneralGroup, "General.Name", item.name());

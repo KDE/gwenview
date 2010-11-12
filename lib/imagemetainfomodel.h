@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 
-class KFileItem;
+class KUrl;
 
 namespace Exiv2 { class Image; }
 
@@ -44,7 +44,7 @@ public:
 	ImageMetaInfoModel();
 	~ImageMetaInfoModel();
 
-	void setFileItem(const KFileItem&);
+	void setUrl(const KUrl&);
 	void setImageSize(const QSize&);
 	void setExiv2Image(const Exiv2::Image*);
 

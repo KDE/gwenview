@@ -103,8 +103,7 @@ void Document::reload() {
 	d->mExiv2Image.reset();
 	d->mKind = MimeTypeUtils::KIND_UNKNOWN;
 	d->mFormat = QByteArray();
-	KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, d->mUrl);
-	d->mImageMetaInfoModel.setFileItem(fileItem);
+	d->mImageMetaInfoModel.setUrl(d->mUrl);
 	d->mUndoStack.clear();
 	d->mErrorString.clear();
 
@@ -244,6 +243,7 @@ void Document::slotSaveResult(KJob* job) {
 		d->mUndoStack.setClean();
 		SaveJob* saveJob = static_cast<SaveJob*>(job);
 		d->mUrl = saveJob->newUrl();
+		d->mImageMetaInfoModel.setUrl(d->mUrl);
 		saved(saveJob->oldUrl(), d->mUrl);
 	}
 }

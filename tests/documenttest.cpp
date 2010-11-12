@@ -334,6 +334,7 @@ void DocumentTest::testSaveAs() {
 	QVERIFY(waitUntilJobIsDone(doc->save(destUrl, "png")));
 	QCOMPARE(doc->format().data(), "png");
 	QCOMPARE(doc->url(), destUrl);
+	QCOMPARE(doc->metaInfo()->getValueForKey("General.Name"), destUrl.fileName());
 
 	QVERIFY2(doc->loadingState() == Document::Loaded,
 		"Document is supposed to finish loading before saving"
