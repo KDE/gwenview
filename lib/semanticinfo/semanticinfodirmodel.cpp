@@ -151,6 +151,9 @@ QVariant SemanticInfoDirModel::data(const QModelIndex& index, int role) const {
 		}
 		SemanticInfoCache::ConstIterator it = d->mSemanticInfoCache.constFind(item.targetUrl());
 		if (it != d->mSemanticInfoCache.constEnd()) {
+			if (!it.value().mValid) {
+				return QVariant();
+			}
 			const SemanticInfo& info = it.value().mInfo;
 			if (role == RatingRole) {
 				return info.mRating;
