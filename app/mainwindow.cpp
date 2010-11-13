@@ -262,8 +262,6 @@ struct MainWindow::Private {
 		// Connect thumbnail view
 		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
 			mWindow, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)) );
-		connect(mThumbnailView->model(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-			mWindow, SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
@@ -437,8 +435,7 @@ struct MainWindow::Private {
 	void setupContextManager() {
 		KActionCollection* actionCollection = mWindow->actionCollection();
 
-		mContextManager = new ContextManager(mWindow);
-		mContextManager->setDirModel(mDirModel);
+		mContextManager = new ContextManager(mDirModel, mThumbnailView->selectionModel(), mWindow);
 
 		// Create context manager items
 		FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
@@ -716,28 +713,8 @@ struct MainWindow::Private {
 	}
 
 	void updateContextDependentComponents() {
-		// Gather info
-		KFileItemList selectedItemList;
-		KUrl url;
-		if (mCurrentPageId != StartPageId) {
-			QItemSelection selection = mThumbnailView->selectionModel()->selection();
-
-			Q_FOREACH(const QModelIndex& index, selection.indexes()) {
-				selectedItemList << mDirModel->itemForIndex(index);
-			}
-
-			// At least add current url if it's valid (it may not be in
-			// selectedItemList if we are viewing a non-browsable url, for example
-			// using http protocol)
-			url = currentUrl();
-			if (selectedItemList.isEmpty() && url.isValid()) {
-				KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
-				selectedItemList << item;
-			}
-		}
-
-		// Update
-		mContextManager->setContext(url, selectedItemList);
+		KUrl url = currentUrl();
+		mContextManager->setCurrentUrl(url);
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
 	}
@@ -1135,32 +1112,6 @@ void MainWindow::slotSelectionChanged() {
 
 	// Start preloading
 	QTimer::singleShot(PRELOAD_DELAY, this, SLOT(preloadNextUrl()) );
-}
-
-
-void MainWindow::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
-	QModelIndexList selectionList = d->mThumbnailView->selectionModel()->selectedIndexes();
-	if (selectionList.isEmpty()) {
-		return;
-	}
-
-	QModelIndexList changedList;
-	const QAbstractItemModel* model = topLeft.model();
-	for (int row=topLeft.row(); row <= bottomRight.row(); ++row) {
-		changedList << model->index(row, 0);
-	}
-
-	QModelIndexList& shortList = selectionList;
-	QModelIndexList& longList = changedList;
-	if (shortList.length() > longList.length()) {
-		qSwap(shortList, longList);
-	}
-	Q_FOREACH(const QModelIndex& index, shortList) {
-		if (longList.contains(index)) {
-			d->updateContextDependentComponents();
-			return;
-		}
-	}
 }
 
 

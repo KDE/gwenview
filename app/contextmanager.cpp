@@ -20,9 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "contextmanager.moc"
 
 // Qt
+#include <QItemSelectionModel>
 #include <QTimer>
 
 // KDE
+#include <kdebug.h>
 #include <kfileitem.h>
 
 // Local
@@ -34,30 +36,64 @@ namespace Gwenview {
 
 struct ContextManagerPrivate {
 	QList<AbstractContextManagerItem*> mList;
-	KFileItemList mSelection;
 	SortedDirModel* mDirModel;
+	QItemSelectionModel* mSelectionModel;
 	KUrl mCurrentDirUrl;
 	KUrl mCurrentUrl;
 
-	QTimer* mSelectionDataChangedTimer;
+	bool mSelectedFileItemListNeedsUpdate;
+	QSet<QByteArray> mQueuedSignals;
+	KFileItemList mSelectedFileItemList;
 
-	void scheduleEmittingSelectionDataChanged() {
-		mSelectionDataChangedTimer->start();
+	QTimer* mQueuedSignalsTimer;
+
+	void queueSignal(const QByteArray& signal) {
+		mQueuedSignals << signal;
+		mQueuedSignalsTimer->start();
+	}
+
+	void updateSelectedFileItemList() {
+		if (!mSelectedFileItemListNeedsUpdate) {
+			return;
+		}
+		mSelectedFileItemList.clear();
+		QItemSelection selection = mSelectionModel->selection();
+		Q_FOREACH(const QModelIndex& index, selection.indexes()) {
+			mSelectedFileItemList << mDirModel->itemForIndex(index);
+		}
+
+		// At least add current url if it's valid (it may not be in
+		// the list if we are viewing a non-browsable url, for example
+		// using http protocol)
+		if (mSelectedFileItemList.isEmpty() && mCurrentUrl.isValid()) {
+			KFileItem item(KFileItem::Unknown, KFileItem::Unknown, mCurrentUrl);
+			mSelectedFileItemList << item;
+		}
+
+		mSelectedFileItemListNeedsUpdate = false;
 	}
 };
 
 
-ContextManager::ContextManager(QObject* parent)
+ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* selectionModel, QObject* parent)
 : QObject(parent)
 , d(new ContextManagerPrivate)
 {
-	d->mSelectionDataChangedTimer = new QTimer(this);
-	d->mSelectionDataChangedTimer->setInterval(500);
-	d->mSelectionDataChangedTimer->setSingleShot(true);
-	connect(d->mSelectionDataChangedTimer, SIGNAL(timeout()),
-		SIGNAL(selectionDataChanged()) );
+	d->mQueuedSignalsTimer = new QTimer(this);
+	d->mQueuedSignalsTimer->setInterval(100);
+	d->mQueuedSignalsTimer->setSingleShot(true);
+	connect(d->mQueuedSignalsTimer, SIGNAL(timeout()),
+		SLOT(emitQueuedSignals()) );
 
-	d->mDirModel = 0;
+	d->mDirModel = dirModel;
+	connect(d->mDirModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+		SLOT(slotDirModelDataChanged(const QModelIndex&, const QModelIndex&)) );
+
+	d->mSelectionModel = selectionModel;
+	connect(d->mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+		SLOT(slotSelectionChanged()) );
+
+	d->mSelectedFileItemListNeedsUpdate = false;
 }
 
 
@@ -72,15 +108,17 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 }
 
 
-void ContextManager::setContext(const KUrl& currentUrl, const KFileItemList& selection) {
-	d->mCurrentUrl = currentUrl;
-	d->mSelection = selection;
-	selectionChanged();
+void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
+	if (d->mCurrentUrl != currentUrl) {
+		d->mCurrentUrl = currentUrl;
+		selectionChanged();
+	}
 }
 
 
 KFileItemList ContextManager::selection() const {
-	return d->mSelection;
+	d->updateSelectedFileItemList();
+	return d->mSelectedFileItemList;
 }
 
 
@@ -108,26 +146,51 @@ SortedDirModel* ContextManager::dirModel() const {
 }
 
 
-void ContextManager::setDirModel(SortedDirModel* dirModel) {
-	d->mDirModel = dirModel;
-
-	connect(d->mDirModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-		SLOT(slotDirModelDataChanged(const QModelIndex&, const QModelIndex&)) );
-}
-
-
 void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
-	// Look if a selected item has changed, if there is one, schedule emission
-	// of a selectionDataChanged() signal. Don't emit it directly to avoid
-	// spamming the context items in case of a mass change.
+	// Data change can happen in the following cases:
+	// - items have been renamed
+	// - item bytes have been modified
+	// - item meta info has been retrieved or modified
+	//
+	// If a selected item is affected, schedule emission of a
+	// selectionDataChanged() signal. Don't emit it directly to avoid spamming
+	// the context items in case of a mass change.
+	QModelIndexList selectionList = d->mSelectionModel->selectedIndexes();
+	if (selectionList.isEmpty()) {
+		return;
+	}
+
+	QModelIndexList changedList;
 	for (int row=topLeft.row(); row <= bottomRight.row(); ++row) {
-		const QModelIndex index = d->mDirModel->index(row, 0);
-		const KFileItem item = d->mDirModel->itemForIndex(index);
-		if (d->mSelection.contains(item)) {
-			d->scheduleEmittingSelectionDataChanged();
+		changedList << d->mDirModel->index(row, 0);
+	}
+
+	QModelIndexList& shortList = selectionList;
+	QModelIndexList& longList = changedList;
+	if (shortList.length() > longList.length()) {
+		qSwap(shortList, longList);
+	}
+	Q_FOREACH(const QModelIndex& index, shortList) {
+		if (longList.contains(index)) {
+			d->mSelectedFileItemListNeedsUpdate = true;
+			d->queueSignal("selectionDataChanged");
 			return;
 		}
 	}
+}
+
+
+void ContextManager::slotSelectionChanged() {
+	d->mSelectedFileItemListNeedsUpdate = true;
+	d->queueSignal("selectionChanged");
+}
+
+
+void ContextManager::emitQueuedSignals() {
+	Q_FOREACH(const QByteArray& signal, d->mQueuedSignals) {
+		QMetaObject::invokeMethod(this, signal.data());
+	}
+	d->mQueuedSignals.clear();
 }
 
 

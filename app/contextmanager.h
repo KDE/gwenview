@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kurl.h>
 #include <kfileitem.h>
 
+class QItemSelectionModel;
 class QModelIndex;
 
 namespace Gwenview {
@@ -44,7 +45,7 @@ struct ContextManagerPrivate;
 class ContextManager : public QObject {
 	Q_OBJECT
 public:
-	ContextManager(QObject* parent);
+	ContextManager(SortedDirModel*, QItemSelectionModel*, QObject* parent);
 
 	~ContextManager();
 
@@ -56,11 +57,9 @@ public:
 
 	KUrl currentDirUrl() const;
 
-	void setContext(const KUrl& currentUrl, const KFileItemList& selection);
+	void setCurrentUrl(const KUrl& currentUrl);
 
 	KFileItemList selection() const;
-
-	void setDirModel(SortedDirModel*);
 
 	SortedDirModel* dirModel() const;
 
@@ -71,6 +70,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+	void slotSelectionChanged();
+	void emitQueuedSignals();
 
 private:
 	ContextManagerPrivate* const d;

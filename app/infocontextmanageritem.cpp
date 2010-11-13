@@ -233,6 +233,8 @@ InfoContextManagerItem::InfoContextManagerItem(ContextManager* manager)
 	d->setupGroup();
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateSideBarContent()) );
+	connect(contextManager(), SIGNAL(selectionDataChanged()),
+		SLOT(updateSideBarContent()) );
 }
 
 InfoContextManagerItem::~InfoContextManagerItem() {
