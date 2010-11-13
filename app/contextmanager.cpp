@@ -116,7 +116,7 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
 }
 
 
-KFileItemList ContextManager::selection() const {
+KFileItemList ContextManager::selectedFileItemList() const {
 	d->updateSelectedFileItemList();
 	return d->mSelectedFileItemList;
 }

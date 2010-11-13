@@ -249,7 +249,7 @@ void InfoContextManagerItem::updateSideBarContent() {
 	}
 	LOG("updateSideBarContent: really updating");
 
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 	if (itemList.count() == 0) {
 		d->forgetCurrentDocument();
 		d->mOneFileWidget->hide();

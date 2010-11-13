@@ -299,7 +299,7 @@ KIPI::ImageCollection KIPIInterface::currentAlbum() {
 KIPI::ImageCollection KIPIInterface::currentSelection() {
 	LOG("");
 
-	KFileItemList fileList = d->mMainWindow->contextManager()->selection();
+	KFileItemList fileList = d->mMainWindow->contextManager()->selectedFileItemList();
 	KUrl::List list = fileList.urlList();
 	KUrl url = d->mMainWindow->contextManager()->currentUrl();
 	
@@ -351,7 +351,7 @@ KIPI::UploadWidget* KIPIInterface::uploadWidget(QWidget *parent) {
 }
 
 void KIPIInterface::slotSelectionChanged() {
-	emit selectionChanged(d->mMainWindow->contextManager()->selection().count() >0);
+	emit selectionChanged(!d->mMainWindow->contextManager()->selectedFileItemList().isEmpty());
 }
 
 

@@ -189,7 +189,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
 
 	void updateTagLabel() {
-		if (that->contextManager()->selection().isEmpty()) {
+		if (that->contextManager()->selectedFileItemList().isEmpty()) {
 			mTagLabel->clear();
 			return;
 		}
@@ -218,7 +218,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
 
 	void updateSemanticInfoDialog() {
-		mSemanticInfoDialog->mTagWidget->setEnabled(!that->contextManager()->selection().isEmpty());
+		mSemanticInfoDialog->mTagWidget->setEnabled(!that->contextManager()->selectedFileItemList().isEmpty());
 		mSemanticInfoDialog->mTagWidget->setTagInfo(mTagInfo);
 	}
 };
@@ -265,7 +265,7 @@ void SemanticInfoContextManagerItem::slotSelectionChanged() {
 
 
 void SemanticInfoContextManagerItem::update() {
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	bool first = true;
 	int rating = 0;
@@ -327,7 +327,7 @@ void SemanticInfoContextManagerItem::update() {
 		d->mTagInfo[tag] = count == itemCount;
 	}
 
-	bool enabled = !contextManager()->selection().isEmpty();
+	bool enabled = !contextManager()->selectedFileItemList().isEmpty();
 	Q_FOREACH(KAction* action, d->mActions) {
 		action->setEnabled(enabled);
 	}
@@ -339,7 +339,7 @@ void SemanticInfoContextManagerItem::update() {
 
 
 void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	// Show rating indicator in view mode, and only if sidebar is not visible
 	if (d->mRatingIndicator->parentWidget()->isVisible() && !d->mRatingWidget->isVisible()) {
@@ -361,7 +361,7 @@ void SemanticInfoContextManagerItem::storeDescription() {
 	}
 	d->mDescriptionTextEdit->document()->setModified(false);
 	QString description = d->mDescriptionTextEdit->toPlainText();
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
@@ -372,7 +372,7 @@ void SemanticInfoContextManagerItem::storeDescription() {
 
 
 void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag) {
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {
@@ -387,7 +387,7 @@ void SemanticInfoContextManagerItem::assignTag(const SemanticInfoTag& tag) {
 
 
 void SemanticInfoContextManagerItem::removeTag(const SemanticInfoTag& tag) {
-	KFileItemList itemList = contextManager()->selection();
+	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
 	Q_FOREACH(const KFileItem& item, itemList) {

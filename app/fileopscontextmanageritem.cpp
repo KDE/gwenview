@@ -117,7 +117,7 @@ struct FileOpsContextManagerItemPrivate {
 	KUrl::List urlList() const {
 		KUrl::List urlList;
 
-		KFileItemList list = mContextManagerItem->contextManager()->selection();
+		KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
 		if (list.count() > 0) {
 			urlList = list.urlList();
 		} else {
@@ -135,7 +135,7 @@ struct FileOpsContextManagerItemPrivate {
 
 		// Get list of all distinct mimetypes in selection
 		QStringList mimeTypes;
-		Q_FOREACH(const KFileItem& item, mContextManagerItem->contextManager()->selection()) {
+		Q_FOREACH(const KFileItem& item, mContextManagerItem->contextManager()->selectedFileItemList()) {
 			const QString mimeType = item.mimetype();
 			if (!mimeTypes.contains(mimeType)) {
 				mimeTypes << mimeType;
@@ -164,7 +164,7 @@ struct FileOpsContextManagerItemPrivate {
 
 	QMimeData* selectionMimeData() {
 		QMimeData* mimeData = new QMimeData;
-		KFileItemList list = mContextManagerItem->contextManager()->selection();
+		KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
 		list.urlList().populateMimeData(mimeData);
 		return mimeData;
 	}
@@ -173,7 +173,7 @@ struct FileOpsContextManagerItemPrivate {
 	KUrl pasteTargetUrl() const {
 		// If only one folder is selected, paste inside it, otherwise paste in
 		// current
-		KFileItemList list = mContextManagerItem->contextManager()->selection();
+		KFileItemList list = mContextManagerItem->contextManager()->selectedFileItemList();
 		if (list.count() == 1 && list.first().isDir()) {
 			return list.first().url();
 		} else {
@@ -269,7 +269,7 @@ FileOpsContextManagerItem::~FileOpsContextManagerItem() {
 
 
 void FileOpsContextManagerItem::updateActions() {
-	const int count = contextManager()->selection().count();
+	const int count = contextManager()->selectedFileItemList().count();
 	const bool selectionNotEmpty = count > 0;
 	const bool urlIsValid = contextManager()->currentUrl().isValid();
 	const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
@@ -323,7 +323,7 @@ void FileOpsContextManagerItem::updateSideBarContent() {
 
 
 void FileOpsContextManagerItem::showProperties() {
-	KFileItemList list = contextManager()->selection();
+	KFileItemList list = contextManager()->selectedFileItemList();
 	if (list.count() > 0) {
 		KPropertiesDialog::showDialog(list, d->mGroup);
 	} else {

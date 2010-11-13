@@ -59,7 +59,7 @@ public:
 
 	void setCurrentUrl(const KUrl& currentUrl);
 
-	KFileItemList selection() const;
+	KFileItemList selectedFileItemList() const;
 
 	SortedDirModel* dirModel() const;
 

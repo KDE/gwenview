@@ -172,7 +172,7 @@ void ImageOpsContextManagerItem::updateActions() {
 		// Since we only support image operations on one image for now,
 		// disable actions if several images are selected and the document
 		// view is not visible.
-		if (contextManager()->selection().count() != 1) {
+		if (contextManager()->selectedFileItemList().count() != 1) {
 			canModify = false;
 		}
 	}
