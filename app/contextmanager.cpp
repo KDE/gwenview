@@ -103,30 +103,6 @@ KUrl ContextManager::currentUrl() const {
 }
 
 
-QString ContextManager::currentUrlMimeType() const {
-	/*
-	if (d->mDocumentPanel->isVisible() && !d->mDocumentPanel->isEmpty()) {
-		return MimeTypeUtils::urlMimeType(d->mDocumentPanel->url());
-	} else {
-		QModelIndex index = d->mThumbnailView->currentIndex();
-		if (!index.isValid()) {
-			return QString();
-		}
-		KFileItem item = d->mDirModel->itemForIndex(index);
-		Q_ASSERT(!item.isNull());
-		return item.mimetype();
-	}
-	*/
-	// FIXME
-	Q_FOREACH(const KFileItem& item, d->mSelection) {
-		if (item.url() == d->mCurrentUrl) {
-			return item.mimetype();
-		}
-	}
-	return QString();
-}
-
-
 SortedDirModel* ContextManager::dirModel() const {
 	return d->mDirModel;
 }
