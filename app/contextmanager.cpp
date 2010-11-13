@@ -111,7 +111,7 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
 	if (d->mCurrentUrl != currentUrl) {
 		d->mCurrentUrl = currentUrl;
-		selectionChanged();
+		d->queueSignal("selectionChanged");
 	}
 }
 
