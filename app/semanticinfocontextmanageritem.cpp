@@ -87,7 +87,7 @@ public:
 	RatingIndicator(QWidget* parent)
 	: HudWidget(parent)
 	, mRatingWidget(new KRatingWidget)
-	, mHideTimer(new QTimer)
+	, mHideTimer(new QTimer(this))
 	{
 		init(mRatingWidget, OptionNone);
 		WidgetFloater* floater = new WidgetFloater(parent);
