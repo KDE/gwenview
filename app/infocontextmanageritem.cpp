@@ -251,6 +251,8 @@ void InfoContextManagerItem::updateSideBarContent() {
 	KFileItemList itemList = contextManager()->selection();
 	if (itemList.count() == 0) {
 		d->forgetCurrentDocument();
+		d->mOneFileWidget->hide();
+		d->mMultipleFilesLabel->hide();
 		d->updateMetaInfoDialog();
 		return;
 	}
