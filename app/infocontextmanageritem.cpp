@@ -171,7 +171,6 @@ struct InfoContextManagerItemPrivate {
 	// One selection fields
 	QWidget* mOneFileWidget;
 	KeyValueWidget* mKeyValueWidget;
-	KFileItem mFileItem;
 	Document::Ptr mDocument;
 
 	// Multiple selection fields
@@ -269,7 +268,6 @@ void InfoContextManagerItem::updateSideBarContent() {
 }
 
 void InfoContextManagerItem::fillOneFileGroup(const KFileItem& item) {
-	d->mFileItem = item;
 	d->mOneFileWidget->show();
 	d->mMultipleFilesLabel->hide();
 
