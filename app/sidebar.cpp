@@ -205,6 +205,7 @@ SideBar::SideBar(QWidget* parent)
 	setFont(KGlobalSettings::smallestReadableFont());
 	tabBar()->setDocumentMode(true);
 	tabBar()->setUsesScrollButtons(false);
+	tabBar()->setFocusPolicy(Qt::NoFocus);
 	setTabPosition(QTabWidget::South);
 	setElideMode(Qt::ElideRight);
 }
