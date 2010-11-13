@@ -104,8 +104,11 @@ public:
 		hide();
 	}
 
-	void show(int rating) {
+	void setRating(int rating) {
 		mRatingWidget->setRating(rating);
+	}
+
+	void show() {
 		HudWidget::show();
 		raise();
 		mHideTimer->start();
@@ -260,6 +263,7 @@ void SemanticInfoContextManagerItem::slotSelectionChanged() {
 	update();
 }
 
+
 void SemanticInfoContextManagerItem::update() {
 	KFileItemList itemList = contextManager()->selection();
 
@@ -339,7 +343,8 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 
 	// Show rating indicator in view mode, and only if sidebar is not visible
 	if (d->mRatingIndicator->parentWidget()->isVisible() && !d->mRatingWidget->isVisible()) {
-		d->mRatingIndicator->show(rating);
+		d->mRatingIndicator->setRating(rating);
+		d->mRatingIndicator->show();
 	}
 
 	SortedDirModel* dirModel = contextManager()->dirModel();
