@@ -53,6 +53,7 @@ class SideBarPage : public QWidget {
 	Q_OBJECT
 public:
 	SideBarPage(const QString& title);
+	~SideBarPage();
 	void addWidget(QWidget*);
 	void addStretch();
 

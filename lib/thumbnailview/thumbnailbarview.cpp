@@ -354,6 +354,7 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 
 ThumbnailBarView::~ThumbnailBarView() {
 	delete d->mStyle;
+	delete d;
 }
 
 

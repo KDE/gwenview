@@ -39,29 +39,29 @@ namespace Gwenview {
 struct KIPIExportActionPrivate {
 	KIPIExportAction* q;
 	KIPIInterface* mKIPIInterface;
-	KMenu* mMenu;
 	QAction* mDefaultAction;
 	QList<QAction*> mExportActionList;
 
 	void updateMenu() {
-		mMenu->clear();
+		KMenu* menu = static_cast<KMenu*>(q->menu());
+		menu->clear();
 
 		if (mDefaultAction) {
-			mMenu->addTitle(i18n("Last Used Plugin"));
-			mMenu->addAction(mDefaultAction);
-			mMenu->addTitle(i18n("Other Plugins"));
+			menu->addTitle(i18n("Last Used Plugin"));
+			menu->addAction(mDefaultAction);
+			menu->addTitle(i18n("Other Plugins"));
 		}
 		Q_FOREACH(QAction* action, mExportActionList) {
 			action->setIconVisibleInMenu(true);
 			if (action != mDefaultAction) {
-				mMenu->addAction(action);
+				menu->addAction(action);
 			}
 		}
-		if (mMenu->isEmpty()) {
-			QAction* action = new QAction(mMenu);
+		if (menu->isEmpty()) {
+			QAction* action = new QAction(menu);
 			action->setText(i18n("No Plugin Found"));
 			action->setEnabled(false);
-			mMenu->addAction(action);
+			menu->addAction(action);
 		}
 	}
 };
@@ -76,18 +76,15 @@ KIPIExportAction::KIPIExportAction(QObject* parent)
 , d(new KIPIExportActionPrivate) {
 	d->q = this;
 	d->mKIPIInterface = 0;
-	d->mMenu = new KMenu;
 	d->mDefaultAction = 0;
 
 	setDelayed(false);
-	setMenu(d->mMenu);
-	connect(d->mMenu, SIGNAL(aboutToShow()), SLOT(init()));
-	connect(d->mMenu, SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
+	connect(menu(), SIGNAL(aboutToShow()), SLOT(init()));
+	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(setDefaultAction(QAction*)));
 }
 
 
 KIPIExportAction::~KIPIExportAction() {
-	delete d->mMenu;
 	delete d;
 }
 
@@ -98,7 +95,7 @@ void KIPIExportAction::setKIPIInterface(KIPIInterface* interface) {
 
 
 void KIPIExportAction::init() {
-	if (!d->mMenu->isEmpty()) {
+	if (!menu()->isEmpty()) {
 		return;
 	}
 	d->mKIPIInterface->loadPlugins();

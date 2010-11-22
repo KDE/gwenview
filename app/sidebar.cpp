@@ -179,6 +179,11 @@ SideBarPage::SideBarPage(const QString& title)
 }
 
 
+SideBarPage::~SideBarPage() {
+	delete d;
+}
+
+
 const QString& SideBarPage::title() const {
 	return d->mTitle;
 }
