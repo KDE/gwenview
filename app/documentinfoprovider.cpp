@@ -39,7 +39,8 @@ struct DocumentInfoProviderPrivate {
 
 
 DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
-: d(new DocumentInfoProviderPrivate) {
+: AbstractDocumentInfoProvider(model)
+, d(new DocumentInfoProviderPrivate) {
 	d->mDirModel = model;
 	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(const KUrl&, bool)),
 		SLOT(emitBusyStateChanged(const KUrl&, bool)) );
