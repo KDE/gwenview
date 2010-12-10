@@ -1478,7 +1478,7 @@ void MainWindow::preloadNextUrl() {
 
 
 QSize MainWindow::sizeHint() const {
-	return QSize(750, 500);
+	return KXmlGuiWindow::sizeHint().expandedTo(QSize(750, 500));
 }
 
 
