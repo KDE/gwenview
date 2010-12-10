@@ -115,11 +115,8 @@ void ThumbnailCache::queueThumbnail(const QString& path, const QImage& image) {
 
 void ThumbnailCache::run() {
 	QMutexLocker locker(&mMutex);
-	while (true) {
+	while (!mCache.isEmpty()) {
 		Cache::ConstIterator it = mCache.constBegin();
-		if (it == mCache.constEnd()) {
-			break;
-		}
 		const QString path = it.key();
 		const QImage image = it.value();
 
@@ -131,9 +128,6 @@ void ThumbnailCache::run() {
 		locker.relock();
 
 		mCache.remove(path);
-		if (mCache.isEmpty()) {
-			break;
-		}
 	}
 }
 
