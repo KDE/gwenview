@@ -387,6 +387,10 @@ void DocumentView::finishOpenUrl() {
 		SLOT(slotLoadingFailed()) );
 	d->mAdapter->setDocument(d->mDocument);
 	d->updateCaption();
+
+	if (d->mDocument->loadingState() == Document::Loaded) {
+		slotLoaded();
+	}
 }
 
 
