@@ -1068,7 +1068,7 @@ void MainWindow::slotPartCompleted() {
 	}
 
 	KUrl dirUrl = url;
-	dirUrl.setFileName("");
+	dirUrl.setFileName(QString());
 	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
 		QModelIndex index = d->mDirModel->indexForUrl(url);
 		if (index.isValid()) {
