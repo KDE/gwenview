@@ -43,4 +43,15 @@ AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter()
 }
 
 
+QCursor AbstractDocumentViewAdapter::cursor() const {
+	return mWidget ? mWidget->cursor() : QCursor();
+}
+
+
+void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor) {
+	if (mWidget) {
+		mWidget->setCursor(cursor);
+	}
+}
+
 } // namespace

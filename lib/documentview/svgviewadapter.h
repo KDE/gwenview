@@ -42,6 +42,10 @@ public:
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
+	virtual QCursor cursor() const;
+
+	virtual void setCursor(const QCursor&);
+
 	virtual void setDocument(Document::Ptr);
 
 	virtual Document::Ptr document() const;

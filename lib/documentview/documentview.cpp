@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <klocale.h>
 #include <kpixmapsequence.h>
 #include <kpixmapsequencewidget.h>
+#include <kstandarddirs.h>
 #include <kurl.h>
 
 // Local
@@ -72,6 +73,8 @@ struct DocumentViewPrivate {
 	KActionCollection* mActionCollection;
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
+	QCursor mZoomCursor;
+	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
@@ -118,6 +121,26 @@ struct DocumentViewPrivate {
 		mZoomWidget = new ZoomWidget;
 		QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
 			that, SLOT(slotZoomWidgetChanged(qreal)) );
+	}
+
+	void setupZoomCursor() {
+		QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
+		QPixmap cursorPixmap = QPixmap(path);
+		mZoomCursor = QCursor(cursorPixmap);
+	}
+
+	void setZoomCursor() {
+		mAdapter->widget()->grabKeyboard();
+		QCursor currentCursor = mAdapter->cursor();
+		if (currentCursor.pixmap().cacheKey() != mZoomCursor.pixmap().cacheKey()) {
+			mPreviousCursor = currentCursor;
+		}
+		mAdapter->setCursor(mZoomCursor);
+	}
+
+	void restoreCursor() {
+		mAdapter->widget()->releaseKeyboard();
+		mAdapter->setCursor(mPreviousCursor);
 	}
 
 	void setupZoomActions() {
@@ -269,22 +292,34 @@ struct DocumentViewPrivate {
 
 
 	bool adapterMousePressEventFilter(QMouseEvent* event) {
-		if (event->modifiers() == Qt::ControlModifier) {
-			// Ctrl + Left or right button => zoom in or out
-			if (event->button() == Qt::LeftButton) {
-				that->zoomIn(event->pos());
-			} else if (event->button() == Qt::RightButton) {
-				that->zoomOut(event->pos());
+		if (mAdapter->canZoom()) {
+			if (event->modifiers() == Qt::ControlModifier) {
+				// Ctrl + Left or right button => zoom in or out
+				setZoomCursor();
+				if (event->button() == Qt::LeftButton) {
+					that->zoomIn(event->pos());
+				} else if (event->button() == Qt::RightButton) {
+					that->zoomOut(event->pos());
+				}
+				return true;
+			} else if (event->button() == Qt::MidButton) {
+				// Middle click => toggle zoom to fit
+				mZoomToFitAction->trigger();
+				return true;
 			}
-			return true;
-		} else if (event->button() == Qt::MidButton) {
-			// Middle click => toggle zoom to fit
-			mZoomToFitAction->trigger();
-			return true;
 		}
 		return false;
 	}
 
+	bool adapterMouseReleaseEventFilter(QMouseEvent* event) {
+		if (mAdapter->canZoom() && event->modifiers() == Qt::ControlModifier) {
+			// Eat the mouse release so that the svg view does not restore its
+			// drag cursor on release: we want the zoom cursor to stay as long
+			// as Control is held down.
+			return true;
+		}
+		return false;
+	}
 
 	bool adapterMouseDoubleClickEventFilter(QMouseEvent* event) {
 		if (event->modifiers() == Qt::NoModifier) {
@@ -296,8 +331,9 @@ struct DocumentViewPrivate {
 
 
 	bool adapterWheelEventFilter(QWheelEvent* event) {
-		if (event->modifiers() & Qt::ControlModifier) {
+		if (mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
 			// Ctrl + wheel => zoom in or out
+			setZoomCursor();
 			if (event->delta() > 0) {
 				that->zoomIn(event->pos());
 			} else {
@@ -328,6 +364,20 @@ struct DocumentViewPrivate {
 		}
 		return false;
 	}
+
+	bool adapterKeyPressEventFilter(QKeyEvent* event) {
+		if (mAdapter->canZoom() && event->modifiers() == Qt::ControlModifier) {
+			setZoomCursor();
+		}
+		return false;
+	}
+
+	bool adapterKeyReleaseEventFilter(QKeyEvent* event) {
+		if (mAdapter->canZoom() && event->modifiers() != Qt::ControlModifier) {
+			restoreCursor();
+		}
+		return false;
+	}
 };
 
 
@@ -344,6 +394,7 @@ DocumentView::DocumentView(QWidget* parent, SlideShow* slideShow, KActionCollect
 	d->mZoomWidgetVisible = true;
 	d->setupZoomWidget();
 	d->setupZoomActions();
+	d->setupZoomCursor();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
@@ -547,6 +598,8 @@ void DocumentView::slotZoomWidgetChanged(qreal zoom) {
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
+	} else if (event->type() == QEvent::MouseButtonRelease) {
+		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::Resize) {
 		d->updateZoomSnapValues();
 	} else if (event->type() == QEvent::MouseButtonDblClick) {
@@ -555,6 +608,10 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
 	} else if (event->type() == QEvent::ContextMenu) {
 		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
+	} else if (event->type() == QEvent::KeyPress) {
+		return d->adapterKeyPressEventFilter(static_cast<QKeyEvent*>(event));
+	} else if (event->type() == QEvent::KeyRelease) {
+		return d->adapterKeyReleaseEventFilter(static_cast<QKeyEvent*>(event));
 	}
 
 	return false;

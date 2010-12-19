@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 
+class QCursor;
 class QWidget;
 
 
@@ -58,6 +59,10 @@ public:
 	virtual ImageView* imageView() const { return 0; }
 
 	virtual void installEventFilterOnViewWidgets(QObject*) = 0;
+
+	virtual QCursor cursor() const;
+
+	virtual void setCursor(const QCursor&);
 
 	/**
 	 * @defgroup zooming functions

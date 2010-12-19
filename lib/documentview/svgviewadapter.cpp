@@ -67,11 +67,23 @@ SvgViewAdapter::SvgViewAdapter(QWidget* parent)
 
 void SvgViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
 	d->mView->viewport()->installEventFilter(object);
+	// Necessary to receive key{Press,Release} events
+	d->mView->installEventFilter(object);
 }
 
 
 SvgViewAdapter::~SvgViewAdapter() {
 	delete d;
+}
+
+
+QCursor SvgViewAdapter::cursor() const {
+	return d->mView->viewport()->cursor();
+}
+
+
+void SvgViewAdapter::setCursor(const QCursor& cursor) {
+	d->mView->viewport()->setCursor(cursor);
 }
 
 

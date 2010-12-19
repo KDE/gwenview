@@ -42,6 +42,10 @@ public:
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
 
+	virtual QCursor cursor() const;
+
+	virtual void setCursor(const QCursor&);
+
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_RASTER_IMAGE; }
 
 	virtual bool canZoom() const { return true; }

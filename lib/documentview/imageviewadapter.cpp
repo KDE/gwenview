@@ -69,6 +69,8 @@ ImageViewAdapter::ImageViewAdapter(QWidget* parent)
 
 void ImageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
 	d->mView->viewport()->installEventFilter(object);
+	// Necessary to receive key{Press,Release} events
+	d->mView->installEventFilter(object);
 }
 
 
@@ -79,6 +81,16 @@ ImageViewAdapter::~ImageViewAdapter() {
 
 ImageView* ImageViewAdapter::imageView() const {
 	return d->mView;
+}
+
+
+QCursor ImageViewAdapter::cursor() const {
+	return d->mView->viewport()->cursor();
+}
+
+
+void ImageViewAdapter::setCursor(const QCursor& cursor) {
+	d->mView->viewport()->setCursor(cursor);
 }
 
 

@@ -51,8 +51,6 @@ public:
 	virtual void mouseMoveEvent(QMouseEvent*);
 	virtual void mouseReleaseEvent(QMouseEvent*);
 	virtual void wheelEvent(QWheelEvent*);
-	virtual void keyPressEvent(QKeyEvent*);
-	virtual void keyReleaseEvent(QKeyEvent*);
 
 	virtual void toolActivated();
 	virtual void toolDeactivated();
