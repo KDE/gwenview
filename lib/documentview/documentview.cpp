@@ -486,7 +486,15 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		// Middle click => toggle zoom to fit
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		if (mouseEvent->button() == Qt::MidButton) {
+		if (mouseEvent->modifiers() == Qt::ControlModifier) {
+			// Ctrl + Left or right button => zoom in or out
+			if (mouseEvent->button() == Qt::LeftButton) {
+				zoomIn(mouseEvent->pos());
+			} else if (mouseEvent->button() == Qt::RightButton) {
+				zoomOut(mouseEvent->pos());
+			}
+			return true;
+		} else if (mouseEvent->button() == Qt::MidButton) {
 			d->mZoomToFitAction->trigger();
 			return true;
 		}
@@ -498,18 +506,33 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 			emit toggleFullScreenRequested();
 			return true;
 		}
-	} else if (event->type() == QEvent::Wheel
-		&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
-		) {
+	} else if (event->type() == QEvent::Wheel) {
 		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
-		if (wheelEvent->modifiers() == Qt::NoModifier) {
-			// Browse with mouse wheel (only if no modifiers because ctrl+wheel ==
-			// zoom)
+		if (wheelEvent->modifiers() & Qt::ControlModifier) {
+			// Ctrl + wheel => zoom in or out
+			if (wheelEvent->delta() > 0) {
+				zoomIn(wheelEvent->pos());
+			} else {
+				zoomOut(wheelEvent->pos());
+			}
+			return true;
+		}
+		if (wheelEvent->modifiers() == Qt::NoModifier
+			&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+			) {
+			// Browse with mouse wheel
 			if (wheelEvent->delta() > 0) {
 				emit previousImageRequested();
 			} else {
 				emit nextImageRequested();
 			}
+			return true;
+		}
+	} else if (event->type() == QEvent::ContextMenu) {
+		// Filter out context menu if Ctrl is down to avoid showing it when
+		// zooming out with Ctrl + Right button
+		QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
+		if (contextMenuEvent->modifiers() == Qt::ControlModifier) {
 			return true;
 		}
 	}

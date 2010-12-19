@@ -63,9 +63,6 @@ Q_SIGNALS:
 	void previousImageRequested();
 	void nextImageRequested();
 
-protected:
-	virtual bool eventFilter(QObject*, QEvent*);
-
 private:
 	ScrollToolPrivate* const d;
 };
