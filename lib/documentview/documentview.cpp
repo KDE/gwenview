@@ -44,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
+#include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/slideshow.h>
@@ -495,6 +496,20 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
 		if (mouseEvent->modifiers() == Qt::NoModifier) {
 			emit toggleFullScreenRequested();
+			return true;
+		}
+	} else if (event->type() == QEvent::Wheel
+		&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+		) {
+		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
+		if (wheelEvent->modifiers() == Qt::NoModifier) {
+			// Browse with mouse wheel (only if no modifiers because ctrl+wheel ==
+			// zoom)
+			if (wheelEvent->delta() > 0) {
+				emit previousImageRequested();
+			} else {
+				emit nextImageRequested();
+			}
 			return true;
 		}
 	}

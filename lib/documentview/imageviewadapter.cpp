@@ -141,7 +141,6 @@ void ImageViewAdapter::loadConfig() {
 	d->mView->setAlphaBackgroundMode(GwenviewConfig::alphaBackgroundMode());
 	d->mView->setAlphaBackgroundColor(GwenviewConfig::alphaBackgroundColor());
 	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
-	d->mScrollTool->setMouseWheelBehavior(GwenviewConfig::mouseWheelBehavior());
 }
 
 

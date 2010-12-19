@@ -57,9 +57,6 @@ public:
 	virtual void toolActivated();
 	virtual void toolDeactivated();
 
-	void setMouseWheelBehavior(MouseWheelBehavior);
-	MouseWheelBehavior mouseWheelBehavior() const;
-
 Q_SIGNALS:
 	void zoomInRequested(const QPoint&);
 	void zoomOutRequested(const QPoint&);

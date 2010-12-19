@@ -38,7 +38,6 @@ namespace Gwenview {
 enum State { StateNone, StateZooming, StateDragging };
 
 struct ScrollToolPrivate {
-	ScrollTool::MouseWheelBehavior mMouseWheelBehavior;
 	int mScrollStartX;
 	int mScrollStartY;
 	State mState;
@@ -50,7 +49,6 @@ ScrollTool::ScrollTool(ImageView* view)
 : AbstractImageViewTool(view)
 , d(new ScrollToolPrivate) {
 	d->mState = StateNone;
-	d->mMouseWheelBehavior = MouseWheelScroll;
 
 	QString path = KStandardDirs::locate("appdata", "cursors/zoom.png");
 	QPixmap cursorPixmap = QPixmap(path);
@@ -60,16 +58,6 @@ ScrollTool::ScrollTool(ImageView* view)
 
 ScrollTool::~ScrollTool() {
 	delete d;
-}
-
-
-void ScrollTool::setMouseWheelBehavior(ScrollTool::MouseWheelBehavior behavior) {
-	d->mMouseWheelBehavior = behavior;
-}
-
-
-ScrollTool::MouseWheelBehavior ScrollTool::mouseWheelBehavior() const {
-	return d->mMouseWheelBehavior;
 }
 
 
@@ -162,21 +150,12 @@ void ScrollTool::wheelEvent(QWheelEvent* event) {
 		return;
 	}
 
-	if (d->mMouseWheelBehavior == MouseWheelScroll) {
-		// Forward events to the scrollbars, like
-		// QAbstractScrollArea::wheelEvent() do.
-		if (event->orientation() == Qt::Horizontal) {
-			QApplication::sendEvent(imageView()->horizontalScrollBar(), event);
-		} else {
-			QApplication::sendEvent(imageView()->verticalScrollBar(), event);
-		}
+	// Forward events to the scrollbars, like QAbstractScrollArea::wheelEvent()
+	// does.
+	if (event->orientation() == Qt::Horizontal) {
+		QApplication::sendEvent(imageView()->horizontalScrollBar(), event);
 	} else {
-		// Browse
-		if (event->delta() > 0) {
-			emit previousImageRequested();
-		} else {
-			emit nextImageRequested();
-		}
+		QApplication::sendEvent(imageView()->verticalScrollBar(), event);
 	}
 }
 

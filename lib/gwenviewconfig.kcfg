@@ -6,8 +6,8 @@
 	                    http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
 	<kcfgfile name="gwenviewrc"/>
 	<include>lib/sorting.h</include>
+	<include>lib/mousewheelbehavior.h</include>
 	<include>lib/imageview.h</include>
-	<include>lib/scrolltool.h</include>
 	<include>lib/print/printoptionspage.h</include>
 	<group name="SideBar">
 		<entry name="PreferredMetaInfoKeyList" type="StringList">
@@ -97,11 +97,11 @@
 		</entry>
 
 		<entry name="MouseWheelBehavior" type="Enum">
-			<choices name="Gwenview::ScrollTool::MouseWheelBehavior">
-				<choice name="ScrollTool::MouseWheelScroll"/>
-				<choice name="ScrollTool::MouseWheelBrowse"/>
+			<choices name="Gwenview::MouseWheelBehavior::Enum">
+				<choice name="MouseWheelBehavior::Scroll"/>
+				<choice name="MouseWheelBehavior::Browse"/>
 			</choices>
-			<default>ScrollTool::MouseWheelScroll</default>
+			<default>MouseWheelBehavior::Scroll</default>
 		</entry>
 
 		<entry name="EnlargeSmallerImages" type="Bool">
