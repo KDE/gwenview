@@ -266,6 +266,68 @@ struct DocumentViewPrivate {
 		}
 		mLoadingIndicator->hide();
 	}
+
+
+	bool adapterMousePressEventFilter(QMouseEvent* event) {
+		if (event->modifiers() == Qt::ControlModifier) {
+			// Ctrl + Left or right button => zoom in or out
+			if (event->button() == Qt::LeftButton) {
+				that->zoomIn(event->pos());
+			} else if (event->button() == Qt::RightButton) {
+				that->zoomOut(event->pos());
+			}
+			return true;
+		} else if (event->button() == Qt::MidButton) {
+			// Middle click => toggle zoom to fit
+			mZoomToFitAction->trigger();
+			return true;
+		}
+		return false;
+	}
+
+
+	bool adapterMouseDoubleClickEventFilter(QMouseEvent* event) {
+		if (event->modifiers() == Qt::NoModifier) {
+			that->toggleFullScreenRequested();
+			return true;
+		}
+		return false;
+	}
+
+
+	bool adapterWheelEventFilter(QWheelEvent* event) {
+		if (event->modifiers() & Qt::ControlModifier) {
+			// Ctrl + wheel => zoom in or out
+			if (event->delta() > 0) {
+				that->zoomIn(event->pos());
+			} else {
+				that->zoomOut(event->pos());
+			}
+			return true;
+		}
+		if (event->modifiers() == Qt::NoModifier
+			&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+			) {
+			// Browse with mouse wheel
+			if (event->delta() > 0) {
+				that->previousImageRequested();
+			} else {
+				that->nextImageRequested();
+			}
+			return true;
+		}
+		return false;
+	}
+
+
+	bool adapterContextMenuEventFilter(QContextMenuEvent* event) {
+		// Filter out context menu if Ctrl is down to avoid showing it when
+		// zooming out with Ctrl + Right button
+		if (event->modifiers() == Qt::ControlModifier) {
+			return true;
+		}
+		return false;
+	}
 };
 
 
@@ -484,57 +546,15 @@ void DocumentView::slotZoomWidgetChanged(qreal zoom) {
 
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
-		// Middle click => toggle zoom to fit
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		if (mouseEvent->modifiers() == Qt::ControlModifier) {
-			// Ctrl + Left or right button => zoom in or out
-			if (mouseEvent->button() == Qt::LeftButton) {
-				zoomIn(mouseEvent->pos());
-			} else if (mouseEvent->button() == Qt::RightButton) {
-				zoomOut(mouseEvent->pos());
-			}
-			return true;
-		} else if (mouseEvent->button() == Qt::MidButton) {
-			d->mZoomToFitAction->trigger();
-			return true;
-		}
+		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::Resize) {
 		d->updateZoomSnapValues();
 	} else if (event->type() == QEvent::MouseButtonDblClick) {
-		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-		if (mouseEvent->modifiers() == Qt::NoModifier) {
-			emit toggleFullScreenRequested();
-			return true;
-		}
+		return d->adapterMouseDoubleClickEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::Wheel) {
-		QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
-		if (wheelEvent->modifiers() & Qt::ControlModifier) {
-			// Ctrl + wheel => zoom in or out
-			if (wheelEvent->delta() > 0) {
-				zoomIn(wheelEvent->pos());
-			} else {
-				zoomOut(wheelEvent->pos());
-			}
-			return true;
-		}
-		if (wheelEvent->modifiers() == Qt::NoModifier
-			&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
-			) {
-			// Browse with mouse wheel
-			if (wheelEvent->delta() > 0) {
-				emit previousImageRequested();
-			} else {
-				emit nextImageRequested();
-			}
-			return true;
-		}
+		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
 	} else if (event->type() == QEvent::ContextMenu) {
-		// Filter out context menu if Ctrl is down to avoid showing it when
-		// zooming out with Ctrl + Right button
-		QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
-		if (contextMenuEvent->modifiers() == Qt::ControlModifier) {
-			return true;
-		}
+		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
 	}
 
 	return false;
