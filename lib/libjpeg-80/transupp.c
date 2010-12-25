@@ -22,6 +22,8 @@
 #include "transupp.h"		/* My own external interface */
 #include <ctype.h>		/* to declare isdigit() */
 
+#undef EXTERN
+#define EXTERN(type) type
 
 #if TRANSFORMS_SUPPORTED
 
@@ -75,7 +77,7 @@
  */
 
 
-LOCAL(void)
+EXTERN(void)
 do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	 jvirt_barray_ptr *src_coef_arrays,
@@ -113,7 +115,7 @@ do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_flip_h_no_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 		   JDIMENSION x_crop_offset,
 		   jvirt_barray_ptr *src_coef_arrays)
@@ -180,7 +182,7 @@ do_flip_h_no_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	   jvirt_barray_ptr *src_coef_arrays,
@@ -242,7 +244,7 @@ do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	   jvirt_barray_ptr *src_coef_arrays,
@@ -322,7 +324,7 @@ do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_transpose (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	      JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	      jvirt_barray_ptr *src_coef_arrays,
@@ -370,7 +372,7 @@ do_transpose (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	   JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	   jvirt_barray_ptr *src_coef_arrays,
@@ -451,7 +453,7 @@ do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_rot_270 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	    JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	    jvirt_barray_ptr *src_coef_arrays,
@@ -522,7 +524,7 @@ do_rot_270 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	    JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	    jvirt_barray_ptr *src_coef_arrays,
@@ -630,7 +632,7 @@ do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 }
 
 
-LOCAL(void)
+EXTERN(void)
 do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	       JDIMENSION x_crop_offset, JDIMENSION y_crop_offset,
 	       jvirt_barray_ptr *src_coef_arrays,
@@ -750,7 +752,7 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
  * *strptr is advanced over the digit string, and *result is set to its value.
  */
 
-LOCAL(boolean)
+EXTERN(boolean)
 jt_read_integer (const char ** strptr, JDIMENSION * result)
 {
   const char * ptr = *strptr;
@@ -780,7 +782,7 @@ jt_read_integer (const char ** strptr, JDIMENSION * result)
  * This code is loosely based on XParseGeometry from the X11 distribution.
  */
 
-GLOBAL(boolean)
+EXTERN(boolean)
 jtransform_parse_crop_spec (jpeg_transform_info *info, const char *spec)
 {
   info->crop = FALSE;
@@ -826,7 +828,7 @@ jtransform_parse_crop_spec (jpeg_transform_info *info, const char *spec)
 
 /* Trim off any partial iMCUs on the indicated destination edge */
 
-LOCAL(void)
+EXTERN(void)
 trim_right_edge (jpeg_transform_info *info, JDIMENSION full_width)
 {
   JDIMENSION MCU_cols;
@@ -837,7 +839,7 @@ trim_right_edge (jpeg_transform_info *info, JDIMENSION full_width)
     info->output_width = MCU_cols * info->iMCU_sample_width;
 }
 
-LOCAL(void)
+EXTERN(void)
 trim_bottom_edge (jpeg_transform_info *info, JDIMENSION full_height)
 {
   JDIMENSION MCU_rows;
@@ -866,7 +868,7 @@ trim_bottom_edge (jpeg_transform_info *info, JDIMENSION full_height)
  * and transformation is not perfect.  Otherwise returns TRUE.
  */
 
-GLOBAL(boolean)
+EXTERN(boolean)
 jtransform_request_workspace (j_decompress_ptr srcinfo,
 			      jpeg_transform_info *info)
 {
@@ -1097,7 +1099,7 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
 
 /* Transpose destination image parameters */
 
-LOCAL(void)
+EXTERN(void)
 transpose_critical_parameters (j_compress_ptr dstinfo)
 {
   int tblno, i, j, ci, itemp;
@@ -1143,7 +1145,7 @@ transpose_critical_parameters (j_compress_ptr dstinfo)
  * We try to adjust the Tags ExifImageWidth and ExifImageHeight if possible.
  */
 
-LOCAL(void)
+EXTERN(void)
 adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
 			JDIMENSION new_width, JDIMENSION new_height)
 {
@@ -1305,7 +1307,7 @@ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
  * to jpeg_write_coefficients().
  */
 
-GLOBAL(jvirt_barray_ptr *)
+EXTERN(jvirt_barray_ptr *)
 jtransform_adjust_parameters (j_decompress_ptr srcinfo,
 			      j_compress_ptr dstinfo,
 			      jvirt_barray_ptr *src_coef_arrays,
@@ -1400,7 +1402,7 @@ jtransform_adjust_parameters (j_decompress_ptr srcinfo,
  * Note that some transformations will modify the source data arrays!
  */
 
-GLOBAL(void)
+EXTERN(void)
 jtransform_execute_transform (j_decompress_ptr srcinfo,
 			      j_compress_ptr dstinfo,
 			      jvirt_barray_ptr *src_coef_arrays,
@@ -1473,7 +1475,7 @@ jtransform_execute_transform (j_decompress_ptr srcinfo,
  *           (may use custom action then)
  */
 
-GLOBAL(boolean)
+EXTERN(boolean)
 jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
 			     int MCU_width, int MCU_height,
 			     JXFORM_CODE transform)
@@ -1512,7 +1514,7 @@ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
  * This must be called before jpeg_read_header() to have the desired effect.
  */
 
-GLOBAL(void)
+EXTERN(void)
 jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
 {
 #ifdef SAVE_MARKERS_SUPPORTED
@@ -1537,7 +1539,7 @@ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
  * JFIF APP0 or Adobe APP14 markers if selected.
  */
 
-GLOBAL(void)
+EXTERN(void)
 jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 		       JCOPY_OPTION option)
 {
