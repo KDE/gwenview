@@ -206,21 +206,6 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 	initViewPalette(d->mTagView, fgColor);
 	initViewPalette(d->mRecentFoldersView, fgColor);
 	initViewPalette(d->mRecentUrlsView, fgColor);
-
-	QString css = QString::fromUtf8(
-		"font-weight: bold;"
-		"color: %1;"
-		"border: 1px solid transparent;"
-		"border-bottom-color: %1;"
-		)
-		.arg(fgColor.name());
-	Q_FOREACH(QLabel* label, findChildren<QLabel*>()) {
-		// Set css by hand on each label because when a css is applied to the
-		// whole widget, it does not use native tabs anymore.
-		if (label->property("title").isValid()) {
-			label->setStyleSheet(css);
-		}
-	}
 }
 
 
