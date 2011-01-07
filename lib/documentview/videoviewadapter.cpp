@@ -70,6 +70,7 @@ struct VideoViewAdapterPrivate {
 
 		Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;
 		seekSlider->setTracking(false);
+		seekSlider->setIconVisible(false);
 		seekSlider->setMediaObject(mMediaObject);
 
 		Phonon::VolumeSlider* volumeSlider = new Phonon::VolumeSlider;
