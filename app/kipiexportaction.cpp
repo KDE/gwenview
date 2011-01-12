@@ -72,7 +72,7 @@ struct KIPIExportActionPrivate {
  * When an action in the menu is triggered, it is set as the default action
  */
 KIPIExportAction::KIPIExportAction(QObject* parent)
-: KToolBarPopupAction(KIcon("document-export"), i18n("Share"), parent)
+: KToolBarPopupAction(KIcon("document-share"), i18n("Share"), parent)
 , d(new KIPIExportActionPrivate) {
 	d->q = this;
 	d->mKIPIInterface = 0;
