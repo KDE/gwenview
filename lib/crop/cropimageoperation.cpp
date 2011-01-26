@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Qt
 #include <QImage>
-#include <QPainter>
 
 // KDE
 #include <kdebug.h>
@@ -46,12 +45,8 @@ public:
 		if (!checkDocumentEditor()) {
 			return;
 		}
-		QImage src = document()->image();
-		QImage dst(mRect.size(), src.format());
-		QPainter painter(&dst);
-		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		painter.drawImage(QPoint(0, 0), src, mRect);
-		painter.end();
+		const QImage src = document()->image();
+		const QImage dst = src.copy(mRect);
 		document()->editor()->setImage(dst);
 		setError(NoError);
 	}
