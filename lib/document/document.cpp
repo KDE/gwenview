@@ -224,12 +224,12 @@ void Document::waitUntilLoaded() {
 DocumentJob* Document::save(const KUrl& url, const QByteArray& format) {
 	waitUntilLoaded();
 	DocumentJob* job = d->mImpl->save(url, format);
-	job->setProperty("oldUrl", d->mUrl);
-	job->setProperty("newUrl", url);
 	if (!job) {
 		kWarning() << "Implementation does not support saving!";
 		return false;
 	}
+	job->setProperty("oldUrl", d->mUrl);
+	job->setProperty("newUrl", url);
 	connect(job, SIGNAL(result(KJob*)), SLOT(slotSaveResult(KJob*)));
 	enqueueJob(job);
 	return job;
