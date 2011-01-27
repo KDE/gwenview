@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <klocale.h>
 #include <kurl.h>
 
 // Local
@@ -226,6 +227,7 @@ DocumentJob* Document::save(const KUrl& url, const QByteArray& format) {
 	DocumentJob* job = d->mImpl->save(url, format);
 	if (!job) {
 		kWarning() << "Implementation does not support saving!";
+		setErrorString(i18nc("@info", "Gwenview cannot save this kind of documents."));
 		return false;
 	}
 	job->setProperty("oldUrl", d->mUrl);
