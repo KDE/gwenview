@@ -197,6 +197,13 @@ KIPIInterface::~KIPIInterface() {
 }
 
 
+static bool actionLessThan(QAction* a1, QAction* a2) {
+	QString a1Text = a1->text().replace("&", "");
+	QString a2Text = a2->text().replace("&", "");
+	return QString::compare(a1Text, a2Text, Qt::CaseInsensitive) < 0;
+}
+
+
 void KIPIInterface::loadPlugins() {
 	// Already done
 	if (d->mPluginLoader) {
@@ -247,9 +254,15 @@ void KIPIInterface::loadPlugins() {
 		kWarning() << "No plugin menu found!";
 		return;
 	}
-	Q_FOREACH(const MenuInfo& info, d->mMenuInfoMap) {
+
+	MenuInfoMap::Iterator
+		it = d->mMenuInfoMap.begin(),
+		end = d->mMenuInfoMap.end();
+	for (; it != end; ++it) {
+		MenuInfo& info = it.value();
 		if (!info.mActions.isEmpty()) {
 			QMenu* menu = pluginMenu->addMenu(info.mName);
+			qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
 			Q_FOREACH(QAction* action, info.mActions) {
 				menu->addAction(action);
 			}
