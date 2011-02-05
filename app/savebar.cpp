@@ -153,8 +153,8 @@ struct SaveBarPrivate {
 
 	void updateTooManyChangesFrame(const QList<KUrl>& list) {
 		qreal maxPercentageOfMemoryUsage = GwenviewConfig::percentageOfMemoryUsageWarning();
-		int maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
-		int memoryUsage = 0;
+		qulonglong maxMemoryUsage = MemoryUtils::getTotalMemory() * maxPercentageOfMemoryUsage;
+		qulonglong memoryUsage = 0;
 		Q_FOREACH(const KUrl& url, list) {
 			Document::Ptr doc = DocumentFactory::instance()->load(url);
 			memoryUsage += doc->memoryUsage();
