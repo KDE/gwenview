@@ -46,6 +46,7 @@ set(gwenviewlib_SRCS
 	document/videodocumentloadedimpl.cpp
 	documentview/abstractdocumentviewadapter.cpp
 	documentview/documentview.cpp
+	documentview/documentviewcontroller.cpp
 	documentview/messageviewadapter.cpp
 	documentview/imageviewadapter.cpp
 	documentview/svgviewadapter.cpp

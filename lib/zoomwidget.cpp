@@ -40,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-
 static const qreal MAGIC_K = 1.04;
 static const qreal MAGIC_OFFSET = 16.;
 static const qreal PRECISION = 100.;
@@ -176,10 +175,13 @@ void ZoomWidget::setZoom(qreal zoom) {
 }
 
 
-void ZoomWidget::setZoomRange(qreal minZoom, qreal maxZoom) {
-	d->mZoomSlider->slider()->setRange(
-		sliderValueForZoom(minZoom),
-		sliderValueForZoom(maxZoom));
+void ZoomWidget::setMinimumZoom(qreal zoom) {
+	d->mZoomSlider->slider()->setMinimum(sliderValueForZoom(zoom));
+}
+
+
+void ZoomWidget::setMaximumZoom(qreal zoom) {
+	d->mZoomSlider->slider()->setMaximum(sliderValueForZoom(zoom));
 }
 
 

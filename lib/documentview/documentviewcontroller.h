@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2008 Aurélien Gâteau <agateau@kde.org>
+Copyright 2011 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,53 +18,50 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef ZOOMWIDGET_H
-#define ZOOMWIDGET_H
+#ifndef DOCUMENTVIEWCONTROLLER_H
+#define DOCUMENTVIEWCONTROLLER_H
 
 #include <lib/gwenviewlib_export.h>
 
-// Qt
-#include <QFrame>
+// Local
 
 // KDE
 
-// Local
+// Qt
+#include <QObject>
 
-
-
-class QAction;
+class KActionCollection;
 
 namespace Gwenview {
 
+class DocumentView;
+class ZoomWidget;
 
-struct ZoomWidgetPrivate;
-class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame {
+class DocumentViewControllerPrivate;
+
+/**
+ * Handles all DocumentView specific actions like zooming. Calls the
+ * corresponding code on its view, if any.
+ */
+class GWENVIEWLIB_EXPORT DocumentViewController : public QObject {
 	Q_OBJECT
 public:
-	ZoomWidget(QWidget* parent = 0);
-	~ZoomWidget();
+	DocumentViewController(KActionCollection*, QObject* parent=0);
+	~DocumentViewController();
 
-	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
+	ZoomWidget* zoomWidget() const;
 
-public Q_SLOTS:
-	void setZoom(qreal zoom);
-
-	void setMinimumZoom(qreal zoom);
-	void setMaximumZoom(qreal zoom);
-
-Q_SIGNALS:
-	void zoomChanged(qreal);
+	void setView(DocumentView*);
+	void setZoomWidget(ZoomWidget* widget);
 
 private Q_SLOTS:
-	void slotZoomSliderRangeChanged();
-	void slotZoomSliderActionTriggered();
+	void updateZoomWidgetVisibility();
 
 private:
-	friend struct ZoomWidgetPrivate;
-	ZoomWidgetPrivate* const d;
+	DocumentViewControllerPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* ZOOMWIDGET_H */
+#endif /* DOCUMENTVIEWCONTROLLER_H */

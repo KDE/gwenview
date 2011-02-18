@@ -49,7 +49,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
-#include <lib/zoomwidget.h>
 
 namespace Gwenview {
 
@@ -63,20 +62,18 @@ namespace Gwenview {
 #endif
 
 static const qreal REAL_DELTA = 0.001;
-static const qreal MAXIMUM_ZOOM_VALUE = 16.;
+static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
-	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
-	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
@@ -103,22 +100,11 @@ struct DocumentViewPrivate {
 		if (mAdapter->canZoom()) {
 			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
 				that, SLOT(slotZoomChanged(qreal)) );
-			if (mZoomWidgetVisible) {
-				mZoomWidget->show();
-			}
-		} else {
-			mZoomWidget->hide();
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
 
 		updateActions();
-	}
-
-
-	void setupZoomWidget() {
-		mZoomWidget = new ZoomWidget;
-		QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
-			that, SLOT(slotZoomWidgetChanged(qreal)) );
+		that->adapterChanged();
 	}
 
 	void setupZoomCursor() {
@@ -157,10 +143,8 @@ struct DocumentViewPrivate {
 		actualSizeAction->setIcon(KIcon("zoom-original"));
 		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
 
-		KAction* zoomInAction = view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
-		KAction* zoomOutAction = view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
-
-		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction, zoomInAction, zoomOutAction);
+		view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
+		view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
 	}
 
 
@@ -240,21 +224,13 @@ struct DocumentViewPrivate {
 
 	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
 		uncheckZoomToFit();
-		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
+		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
 	}
 
 
-	qreal computeMinimumZoom() const {
-		// There is no point zooming out less than zoomToFit, but make sure it does
-		// not get too small either
-		return qMax(0.001, qMin(double(mAdapter->computeZoomToFit()), 1.));
-	}
-
-
 	void updateZoomSnapValues() {
-		qreal min = computeMinimumZoom();
-		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
+		qreal min = that->minimumZoom();
 
 		mZoomSnapValues.clear();
 		if (min < 1.) {
@@ -269,6 +245,8 @@ struct DocumentViewPrivate {
 		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 1.) {
 			mZoomSnapValues << zoom;
 		}
+
+		that->minimumZoomChanged(min);
 	}
 
 
@@ -388,8 +366,6 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
-	d->mZoomWidgetVisible = true;
-	d->setupZoomWidget();
 	d->setupZoomActions();
 	d->setupZoomCursor();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
@@ -401,22 +377,10 @@ DocumentView::~DocumentView() {
 }
 
 
-void DocumentView::setZoomWidgetVisible(bool visible) {
-	d->mZoomWidgetVisible = visible;
-	if (!visible) {
-		d->mZoomWidget->hide();
-	}
-}
-
-
 AbstractDocumentViewAdapter* DocumentView::adapter() const {
 	return d->mAdapter;
 }
 
-
-ZoomWidget* DocumentView::zoomWidget() const {
-	return d->mZoomWidget;
-}
 
 void DocumentView::createAdapterForDocument() {
 	Q_ASSERT(d->mAdapter);
@@ -579,12 +543,12 @@ void DocumentView::zoomOut(const QPoint& center) {
 
 
 void DocumentView::slotZoomChanged(qreal zoom) {
-	d->mZoomWidget->setZoom(zoom);
 	d->updateCaption();
+	zoomChanged(zoom);
 }
 
 
-void DocumentView::slotZoomWidgetChanged(qreal zoom) {
+void DocumentView::setZoom(qreal zoom) {
 	d->uncheckZoomToFit();
 	d->setZoom(zoom);
 }
@@ -629,6 +593,13 @@ void DocumentView::slotBusyChanged(const KUrl&, bool busy) {
 	} else {
 		d->hideLoadingIndicator();
 	}
+}
+
+
+qreal DocumentView::minimumZoom() const {
+	// There is no point zooming out less than zoomToFit, but make sure it does
+	// not get too small either
+	return qMax(0.001, qMin(double(d->mAdapter->computeZoomToFit()), 1.));
 }
 
 

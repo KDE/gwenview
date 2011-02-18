@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "splitter.h"
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
+#include <lib/documentview/documentviewcontroller.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/slideshow.h>
@@ -115,6 +116,7 @@ struct DocumentPanelPrivate {
 	KActionCollection* mActionCollection;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
+	DocumentViewController* mDocumentViewController;
 	DocumentView* mDocumentView;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
@@ -190,7 +192,12 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupDocumentView(SlideShow* slideShow) {
+		mDocumentViewController = new DocumentViewController(mActionCollection, that);
 		mDocumentView = new DocumentView(0, mActionCollection);
+		mDocumentViewController->setView(mDocumentView);
+
+		ZoomWidget* zoomWidget = new ZoomWidget(that);
+		mDocumentViewController->setZoomWidget(zoomWidget);
 
 		// Connect context menu
 		mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -221,8 +228,7 @@ struct DocumentPanelPrivate {
 		layout->setSpacing(0);
 		layout->addWidget(mToggleThumbnailBarButton);
 		layout->addStretch();
-		layout->addWidget(mDocumentView->zoomWidget());
-		mDocumentView->zoomWidget()->hide();
+		layout->addWidget(mDocumentViewController->zoomWidget());
 	}
 
 	void setupSplitter() {

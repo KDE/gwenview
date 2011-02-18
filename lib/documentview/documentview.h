@@ -48,20 +48,26 @@ struct DocumentViewPrivate;
 class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_OBJECT
 public:
+	enum {
+		MaximumZoom = 16
+	};
 	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
 
-	void setZoomWidgetVisible(bool);
-
 	AbstractDocumentViewAdapter* adapter() const;
-
-	ZoomWidget* zoomWidget() const;
 
 	void openUrl(const KUrl&);
 
 	void reset();
 
 	bool isEmpty() const;
+
+	qreal minimumZoom() const;
+
+	qreal zoom() const;
+
+public Q_SLOTS:
+	void setZoom(qreal);
 
 Q_SIGNALS:
 	/**
@@ -78,6 +84,12 @@ Q_SIGNALS:
 	void toggleFullScreenRequested();
 
 	void videoFinished();
+
+	void minimumZoomChanged(qreal);
+
+	void zoomChanged(qreal);
+
+	void adapterChanged();
 
 protected:
 	virtual void showEvent(QShowEvent* event);
@@ -97,7 +109,6 @@ private Q_SLOTS:
 	void zoomOut(const QPoint& center = QPoint(-1,-1));
 
 	void slotZoomChanged(qreal);
-	void slotZoomWidgetChanged(qreal);
 
 	void slotBusyChanged(const KUrl&, bool);
 

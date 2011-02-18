@@ -58,7 +58,6 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args
 {
         KGlobal::locale()->insertCatalog("gwenview");
 	mDocumentView = new DocumentView(parentWidget, actionCollection());
-	mDocumentView->setZoomWidgetVisible(false);
 	setWidget(mDocumentView);
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
