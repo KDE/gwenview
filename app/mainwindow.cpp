@@ -717,6 +717,7 @@ struct MainWindow::Private {
 		mContextManager->setCurrentUrl(url);
 		mSaveBar->setCurrentUrl(url);
 		mSlideShow->setCurrentUrl(url);
+		mFullScreenContent->setCurrentUrl(url);
 	}
 
 	const char* sideBarConfigGroupName() const {
@@ -874,7 +875,8 @@ void MainWindow::setInitialUrl(const KUrl& _url) {
 		openDirUrl(url);
 	} else {
 		d->mViewAction->trigger();
-		openDocumentUrl(url);
+		d->mDocumentPanel->openUrl(url);
+		d->setUrlToSelect(url);
 	}
 	d->updateContextDependentComponents();
 }
@@ -900,7 +902,7 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->setDirModelShowDirs(false);
 		d->mViewStackedWidget->setCurrentWidget(d->mDocumentPanel);
 		if (d->mDocumentPanel->isEmpty()) {
-			openSelectedDocument();
+			openSelectedDocuments();
 		}
 	} else {
 		d->mCurrentPageId = BrowsePageId;
@@ -949,20 +951,36 @@ void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
 }
 
 
-void MainWindow::openSelectedDocument() {
+void MainWindow::openSelectedDocuments() {
 	if (d->mCurrentPageId != ViewPageId) {
 		return;
 	}
 
-	QModelIndex index = d->mThumbnailView->currentIndex();
-	if (!index.isValid()) {
+	QModelIndex currentIndex = d->mThumbnailView->currentIndex();
+	if (!currentIndex.isValid()) {
 		return;
 	}
 
-	KFileItem item = d->mDirModel->itemForIndex(index);
-	if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
-		openDocumentUrl(item.url());
+	int count = 0;
+
+	KUrl::List urls;
+	KUrl currentUrl;
+	Q_FOREACH(const QModelIndex& index, d->mThumbnailView->selectionModel()->selectedIndexes()) {
+		KFileItem item = d->mDirModel->itemForIndex(index);
+		if (!item.isNull() && !ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			KUrl url = item.url();
+			urls << url;
+			if (index == currentIndex) {
+				currentUrl = url;
+			}
+			++count;
+			if (count == DocumentPanel::MaxViewCount) {
+				break;
+			}
+		}
 	}
+
+	d->mDocumentPanel->openUrls(urls, currentUrl);
 }
 
 
@@ -1035,20 +1053,6 @@ void MainWindow::openDirUrl(const KUrl& url) {
 }
 
 
-void MainWindow::openDocumentUrl(const KUrl& url) {
-	d->mDocumentPanel->openUrl(url);
-
-	d->mFullScreenContent->setCurrentUrl(url);
-
-	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-	undoGroup->addStack(doc->undoStack());
-	undoGroup->setActiveStack(doc->undoStack());
-
-	d->setUrlToSelect(url);
-}
-
-
 void MainWindow::toggleSideBar(bool on) {
 	d->mSideBar->setVisible(on);
 }
@@ -1071,8 +1075,9 @@ void MainWindow::slotPartCompleted() {
 	dirUrl.setFileName(QString());
 	if (dirUrl.equals(d->mDirModel->dirLister()->url(), KUrl::CompareWithoutTrailingSlash)) {
 		QModelIndex index = d->mDirModel->indexForUrl(url);
-		if (index.isValid()) {
-			d->mThumbnailView->selectionModel()->select(index, QItemSelectionModel::SelectCurrent);
+		QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
+		if (index.isValid() && !selectionModel->isSelected(index)) {
+			selectionModel->select(index, QItemSelectionModel::SelectCurrent);
 		}
 	} else {
 		d->mDirModel->dirLister()->openUrl(dirUrl);
@@ -1085,7 +1090,7 @@ void MainWindow::slotSelectionChanged() {
 	if (d->mCurrentPageId == ViewPageId) {
 		// The user selected a new file in the thumbnail view, since the
 		// document view is visible, let's show it
-		openSelectedDocument();
+		openSelectedDocuments();
 	} else {
 		// No document view, we need to load the document to set the undo group
 		// of document factory to the correct QUndoStack
@@ -1157,7 +1162,7 @@ void MainWindow::goToLast() {
 
 void MainWindow::goToUrl(const KUrl& url) {
 	if (d->mCurrentPageId == ViewPageId) {
-		openDocumentUrl(url);
+		d->mDocumentPanel->openUrl(url);
 	}
 	KUrl dirUrl = url;
 	dirUrl.setFileName("");
@@ -1286,13 +1291,15 @@ void MainWindow::openFile() {
 	d->setActionsDisabledOnStartPageEnabled(true);
 	KUrl url = dialog.selectedUrl();
 	d->mViewAction->trigger();
-	openDocumentUrl(url);
+	d->mDocumentPanel->openUrl(url);
+	d->setUrlToSelect(url);
 	d->updateContextDependentComponents();
 }
 
 
 void MainWindow::showDocumentInFullScreen(const KUrl& url) {
-	openDocumentUrl(url);
+	d->mDocumentPanel->openUrl(url);
+	d->setUrlToSelect(url);
 	d->mFullScreenAction->trigger();
 }
 

@@ -217,6 +217,7 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	d->mThumbnailBar = new ThumbnailBarView(bar);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
+	d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	// mInformationLabel
 	d->mInformationLabel = new QLabel;

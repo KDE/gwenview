@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QShortcut>
 #include <QToolButton>
+#include <QUndoGroup>
 #include <QVBoxLayout>
 
 // KDE
@@ -35,6 +36,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Local
 #include "splitter.h"
+#include <lib/document/document.h>
+#include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
 #include <lib/documentview/documentviewcontroller.h>
@@ -93,13 +96,18 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  *
  * +-mThumbnailSplitter--------------------------------+
  * |+-mAdapterContainer-------------------------------+|
- * ||+-mDocumentView---------------------------------+||
- * |||                                               |||
- * |||                                               |||
- * |||                                               |||
- * |||                                               |||
- * |||                                               |||
- * ||+-----------------------------------------------+||
+ * ||+-mDocumentViews-------++-----------------------+||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * ||+----------------------++-----------------------+||
+ * ||+----------------------++-----------------------+||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * ||+----------------------++-----------------------+||
  * ||+-mStatusBarContainer---------------------------+||
  * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
  * ||+-----------------------------------------------+||
@@ -117,7 +125,7 @@ struct DocumentPanelPrivate {
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
-	DocumentView* mDocumentView;
+	QList<DocumentView*> mDocumentViews;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
@@ -133,6 +141,7 @@ struct DocumentPanelPrivate {
 		ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(mThumbnailBar);
 		mThumbnailBar->setItemDelegate(delegate);
 		mThumbnailBar->setVisible(GwenviewConfig::thumbnailBarIsVisible());
+		mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	}
 
 	void setupThumbnailBarStyleSheet() {
@@ -184,39 +193,47 @@ struct DocumentPanelPrivate {
 	void setupAdapterContainer() {
 		mAdapterContainer = new QWidget;
 
-		QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
+		QGridLayout* layout = new QGridLayout(mAdapterContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(mDocumentView);
-		layout->addWidget(mStatusBarContainer);
+		int idx=0;
+		layout->addWidget(mDocumentViews[idx++], 0, 0);
+		layout->addWidget(mDocumentViews[idx++], 0, 1);
+		layout->addWidget(mDocumentViews[idx++], 1, 0);
+		layout->addWidget(mDocumentViews[idx++], 1, 1);
+		layout->addWidget(mStatusBarContainer, 2, 0, 1, 2);
 	}
 
 	void setupDocumentView(SlideShow* slideShow) {
 		mDocumentViewController = new DocumentViewController(mActionCollection, that);
-		mDocumentView = new DocumentView(0, mActionCollection);
-		mDocumentViewController->setView(mDocumentView);
 
 		ZoomWidget* zoomWidget = new ZoomWidget(that);
 		mDocumentViewController->setZoomWidget(zoomWidget);
 
-		// Connect context menu
-		mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
-		QObject::connect(mDocumentView, SIGNAL(customContextMenuRequested(const QPoint&)),
-			that, SLOT(showContextMenu()) );
+		for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
+			DocumentView* view = new DocumentView(0, mActionCollection);
 
-		QObject::connect(mDocumentView, SIGNAL(completed()),
-			that, SIGNAL(completed()) );
-		QObject::connect(mDocumentView, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(mDocumentView, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
-			that, SIGNAL(captionUpdateRequested(const QString&)) );
-		QObject::connect(mDocumentView, SIGNAL(toggleFullScreenRequested()),
-			that, SIGNAL(toggleFullScreenRequested()) );
+			// Connect context menu
+			view->setContextMenuPolicy(Qt::CustomContextMenu);
+			QObject::connect(view, SIGNAL(customContextMenuRequested(const QPoint&)),
+				that, SLOT(showContextMenu()) );
 
-		QObject::connect(mDocumentView, SIGNAL(videoFinished()),
-			slideShow, SLOT(resumeAndGoToNextUrl()));
+			QObject::connect(view, SIGNAL(completed()),
+				that, SIGNAL(completed()) );
+			QObject::connect(view, SIGNAL(previousImageRequested()),
+				that, SIGNAL(previousImageRequested()) );
+			QObject::connect(view, SIGNAL(nextImageRequested()),
+				that, SIGNAL(nextImageRequested()) );
+			QObject::connect(view, SIGNAL(captionUpdateRequested(const QString&)),
+				that, SIGNAL(captionUpdateRequested(const QString&)) );
+			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
+				that, SIGNAL(toggleFullScreenRequested()) );
+
+			QObject::connect(view, SIGNAL(videoFinished()),
+				slideShow, SLOT(resumeAndGoToNextUrl()));
+
+			mDocumentViews << view;
+		}
 	}
 
 	void setupStatusBar() {
@@ -249,18 +266,20 @@ struct DocumentPanelPrivate {
 		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
 		that->setPalette(palette);
 
-		if (!mDocumentView->adapter()) {
-			return;
-		}
-		QWidget* widget = mDocumentView->adapter()->widget();
-		if (!widget) {
-			return;
-		}
+		Q_FOREACH(DocumentView* view, mDocumentViews) {
+			if (!view->adapter()) {
+				continue;
+			}
+			QWidget* widget = view->adapter()->widget();
+			if (!widget) {
+				continue;
+			}
 
-		QPalette partPalette = widget->palette();
-		partPalette.setBrush(widget->backgroundRole(), palette.base());
-		partPalette.setBrush(widget->foregroundRole(), palette.text());
-		widget->setPalette(partPalette);
+			QPalette partPalette = widget->palette();
+			partPalette.setBrush(widget->backgroundRole(), palette.base());
+			partPalette.setBrush(widget->foregroundRole(), palette.text());
+			widget->setPalette(partPalette);
+		}
 	}
 
 	void saveSplitterConfig() {
@@ -318,8 +337,10 @@ DocumentPanel::~DocumentPanel() {
 
 void DocumentPanel::loadConfig() {
 	// FIXME: Not symetric with saveConfig(). Check if it matters.
-	if (d->mDocumentView->adapter()) {
-		d->mDocumentView->adapter()->loadConfig();
+	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
+		if (view->adapter()) {
+			view->adapter()->loadConfig();
+		}
 	}
 
 	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
@@ -405,7 +426,7 @@ void DocumentPanel::showContextMenu() {
 	menu.addSeparator();
 	addActionToMenu(&menu, d->mActionCollection, "go_previous");
 	addActionToMenu(&menu, d->mActionCollection, "go_next");
-	if (d->mDocumentView->adapter()->canZoom()) {
+	if (d->mDocumentViews[0]->adapter()->canZoom()) {
 		menu.addSeparator();
 		addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
@@ -428,41 +449,41 @@ QSize DocumentPanel::sizeHint() const {
 
 
 KUrl DocumentPanel::url() const {
-	if (!d->mDocumentView->adapter()) {
+	if (!d->mDocumentViews[0]->adapter()) {
 		LOG("!d->mDocumentView->adapter()");
 		return KUrl();
 	}
 
-	if (!d->mDocumentView->adapter()->document()) {
+	if (!d->mDocumentViews[0]->adapter()->document()) {
 		LOG("!d->mDocumentView->adapter()->document()");
 		return KUrl();
 	}
 
-	return d->mDocumentView->adapter()->document()->url();
+	return d->mDocumentViews[0]->adapter()->document()->url();
 }
 
 
 Document::Ptr DocumentPanel::currentDocument() const {
-	if (!d->mDocumentView->adapter()) {
+	if (!d->mDocumentViews[0]->adapter()) {
 		return Document::Ptr();
 	}
 
-	return d->mDocumentView->adapter()->document();
+	return d->mDocumentViews[0]->adapter()->document();
 }
 
 
 bool DocumentPanel::isEmpty() const {
-	return d->mDocumentView->isEmpty();
+	return d->mDocumentViews[0]->isEmpty();
 }
 
 
 ImageView* DocumentPanel::imageView() const {
-	return d->mDocumentView->adapter()->imageView();
+	return d->mDocumentViews[0]->adapter()->imageView();
 }
 
 
 DocumentView* DocumentPanel::documentView() const {
-	return d->mDocumentView;
+	return d->mDocumentViews[0];
 }
 
 
@@ -474,15 +495,40 @@ void DocumentPanel::setNormalPalette(const QPalette& palette) {
 
 
 void DocumentPanel::openUrl(const KUrl& url) {
-	d->mDocumentView->openUrl(url);
+	openUrls(KUrl::List() << url, url);
+}
+
+
+void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
+	KUrl::List::ConstIterator it = urls.begin();
+	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
+		if (it != urls.end()) {
+			view->openUrl(*it);
+			if (*it == currentUrl) {
+				d->mDocumentViewController->setView(view);
+				Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
+				QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+				undoGroup->addStack(doc->undoStack());
+				undoGroup->setActiveStack(doc->undoStack());
+			}
+			view->show();
+			++it;
+		} else {
+			view->reset();
+			view->hide();
+		}
+	}
+	if (it != urls.end()) {
+		kWarning() << "No room to load" << *it << ". This should not happen";
+	}
 }
 
 
 void DocumentPanel::reload() {
-	if (!d->mDocumentView->adapter()) {
+	if (!d->mDocumentViews[0]->adapter()) {
 		return;
 	}
-	Document::Ptr doc = d->mDocumentView->adapter()->document();
+	Document::Ptr doc = d->mDocumentViews[0]->adapter()->document();
 	if (!doc) {
 		kWarning() << "!doc";
 		return;
@@ -501,12 +547,19 @@ void DocumentPanel::reload() {
 	doc->reload();
 	// Call openUrl again because DocumentView may need to switch to a new
 	// adapter (for example because document was broken and it is not anymore)
-	d->mDocumentView->openUrl(doc->url());
+	d->mDocumentViews[0]->openUrl(doc->url());
 }
 
 
 void DocumentPanel::reset() {
-	d->mDocumentView->reset();
+	int idx = 0;
+	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
+		view->reset();
+		if (idx > 0) {
+			view->hide();
+		}
+		++idx;
+	}
 }
 
 

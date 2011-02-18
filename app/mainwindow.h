@@ -90,7 +90,6 @@ private Q_SLOTS:
 
 	void slotStartPageUrlSelected(const KUrl&);
 
-	void openDocumentUrl(const KUrl&);
 	void goUp();
 	void toggleSideBar(bool visible);
 	void updateToggleSideBarAction();
@@ -147,7 +146,7 @@ private:
 	struct Private;
 	MainWindow::Private* const d;
 
-	void openSelectedDocument();
+	void openSelectedDocuments();
 	void saveConfig();
 };
 
