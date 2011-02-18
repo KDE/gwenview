@@ -48,7 +48,7 @@ struct DocumentViewPrivate;
 class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_OBJECT
 public:
-	DocumentView(QWidget* parent, SlideShow*, KActionCollection*);
+	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
 
 	void setZoomWidgetVisible(bool);
@@ -76,6 +76,8 @@ Q_SIGNALS:
 	void captionUpdateRequested(const QString&);
 
 	void toggleFullScreenRequested();
+
+	void videoFinished();
 
 protected:
 	virtual void showEvent(QShowEvent* event);

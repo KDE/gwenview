@@ -48,7 +48,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
-#include <lib/slideshow.h>
 #include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
 
@@ -69,7 +68,6 @@ static const qreal MAXIMUM_ZOOM_VALUE = 16.;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
-	SlideShow* mSlideShow;
 	KActionCollection* mActionCollection;
 	ZoomWidget* mZoomWidget;
 	KAction* mZoomToFitAction;
@@ -381,11 +379,10 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
+DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 : QWidget(parent)
 , d(new DocumentViewPrivate) {
 	d->that = this;
-	d->mSlideShow = slideShow;
 	d->mActionCollection = actionCollection;
 	d->mLoadingIndicator = 0;
 	QVBoxLayout* layout = new QVBoxLayout(this);
@@ -439,10 +436,8 @@ void DocumentView::createAdapterForDocument() {
 		break;
 	case MimeTypeUtils::KIND_VIDEO:
 		adapter = new VideoViewAdapter(this);
-		if (d->mSlideShow) {
-			connect(adapter, SIGNAL(videoFinished()),
-				d->mSlideShow, SLOT(resumeAndGoToNextUrl()));
-		}
+		connect(adapter, SIGNAL(videoFinished()),
+			SIGNAL(videoFinished()));
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
 		adapter = new MessageViewAdapter(this);
