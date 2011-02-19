@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kaction.h>
-#include <kactioncategory.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpixmapsequence.h>
@@ -68,7 +67,7 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
-	KAction* mZoomToFitAction;
+	QAction* mZoomToFitAction;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 
@@ -103,7 +102,6 @@ struct DocumentViewPrivate {
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
 
-		updateActions();
 		that->adapterChanged();
 	}
 
@@ -128,41 +126,16 @@ struct DocumentViewPrivate {
 	}
 
 	void setupZoomActions() {
-		KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), mActionCollection);
-
-		mZoomToFitAction = view->addAction("view_zoom_to_fit");
-		mZoomToFitAction->setCheckable(true);
-		mZoomToFitAction->setChecked(true);
-		mZoomToFitAction->setText(i18n("Zoom to Fit"));
-		mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
-		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
+		mZoomToFitAction = mActionCollection->action("view_zoom_to_fit");
 		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
 			that, SLOT(setZoomToFit(bool)) );
 
-		KAction* actualSizeAction = view->addAction(KStandardAction::ActualSize,that, SLOT(zoomActualSize()));
-		actualSizeAction->setIcon(KIcon("zoom-original"));
-		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-
-		view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
-		view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
-	}
-
-
-	inline void setActionEnabled(const char* name, bool enabled) {
-		QAction* action = mActionCollection->action(name);
-		if (action) {
-			action->setEnabled(enabled);
-		} else {
-			kWarning() << "Action" << name << "not found";
-		}
-	}
-
-	void updateActions() {
-		const bool enabled = that->isVisible() && mAdapter->canZoom();
-		mZoomToFitAction->setEnabled(enabled);
-		setActionEnabled("view_actual_size", enabled);
-		setActionEnabled("view_zoom_in", enabled);
-		setActionEnabled("view_zoom_out", enabled);
+		#define connectAction(name, slot) \
+			QObject::connect(mActionCollection->action(name), SIGNAL(triggered()), that, SLOT(slot()));
+		connectAction("view_actual_size", zoomActualSize);
+		connectAction("view_zoom_in", zoomIn);
+		connectAction("view_zoom_out", zoomOut);
+		#undef connectAction
 	}
 
 
@@ -574,16 +547,6 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	}
 
 	return false;
-}
-
-
-void DocumentView::showEvent(QShowEvent*) {
-	d->updateActions();
-}
-
-
-void DocumentView::hideEvent(QHideEvent*) {
-	d->updateActions();
 }
 
 

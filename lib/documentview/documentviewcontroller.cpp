@@ -27,8 +27,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/zoomwidget.h>
 
 // KDE
+#include <kaction.h>
+#include <kactioncategory.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 // Qt
+#include <QAction>
+#include <QEvent>
 
 namespace Gwenview {
 
@@ -39,7 +45,30 @@ struct DocumentViewControllerPrivate {
 	DocumentView* mView;
 	ZoomWidget* mZoomWidget;
 
+	KAction* mZoomToFitAction;
+	KAction* mActualSizeAction;
+	KAction* mZoomInAction;
+	KAction* mZoomOutAction;
+	QList<KAction*> mActions;
+
 	void setupActions() {
+		KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), mActionCollection);
+
+		mZoomToFitAction = view->addAction("view_zoom_to_fit");
+		mZoomToFitAction->setCheckable(true);
+		mZoomToFitAction->setChecked(true);
+		mZoomToFitAction->setText(i18n("Zoom to Fit"));
+		mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
+		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
+
+		mActualSizeAction = view->addAction(KStandardAction::ActualSize);
+		mActualSizeAction->setIcon(KIcon("zoom-original"));
+		mActualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
+
+		mZoomInAction = view->addAction(KStandardAction::ZoomIn);
+		mZoomOutAction = view->addAction(KStandardAction::ZoomOut);
+
+		mActions << mZoomToFitAction << mActualSizeAction << mZoomInAction << mZoomOutAction;
 	}
 
 	void connectZoomWidget() {
@@ -56,9 +85,18 @@ struct DocumentViewControllerPrivate {
 			mZoomWidget, SLOT(setZoom(qreal)));
 	}
 
-	void connectView() {
-		QObject::connect(mView, SIGNAL(adapterChanged()),
-			q, SLOT(updateZoomWidgetVisibility()));
+	void updateZoomWidgetVisibility() {
+		if (!mZoomWidget) {
+			return;
+		}
+		mZoomWidget->setVisible(mView && mView->adapter()->canZoom());
+	}
+
+	void updateActions() {
+		const bool enabled = mView && mView->isVisible() && mView->adapter()->canZoom();
+		Q_FOREACH(QAction* action, mActions) {
+			action->setEnabled(enabled);
+		}
 	}
 };
 
@@ -81,28 +119,39 @@ DocumentViewController::~DocumentViewController() {
 
 
 void DocumentViewController::setView(DocumentView* view) {
+	Q_ASSERT(view);
+	// Forget old view
+	if (d->mView) {
+		d->mView->removeEventFilter(this);
+		disconnect(d->mView, 0, this, 0);
+	}
+
+	// Connect new view
 	d->mView = view;
-	d->connectView();
+	d->mView->installEventFilter(this);
+	connect(d->mView, SIGNAL(adapterChanged()),
+		SLOT(slotAdapterChanged()));
+
+	// Sync zoom widget
 	d->connectZoomWidget();
-	updateZoomWidgetVisibility();
+	d->updateZoomWidgetVisibility();
 }
 
 
 void DocumentViewController::setZoomWidget(ZoomWidget* widget) {
 	d->mZoomWidget = widget;
 
-	#define getAction(x) d->mActionCollection->action(x)
 	d->mZoomWidget->setActions(
-		getAction("view_zoom_to_fit"),
-		getAction("view_actual_size"),
-		getAction("view_zoom_in"),
-		getAction("view_zoom_out"));
-	#undef getAction
+		d->mZoomToFitAction,
+		d->mActualSizeAction,
+		d->mZoomInAction,
+		d->mZoomOutAction
+		);
 
 	d->mZoomWidget->setMaximumZoom(qreal(DocumentView::MaximumZoom));
 
 	d->connectZoomWidget();
-	updateZoomWidgetVisibility();
+	d->updateZoomWidgetVisibility();
 }
 
 
@@ -111,11 +160,22 @@ ZoomWidget* DocumentViewController::zoomWidget() const {
 }
 
 
-void DocumentViewController::updateZoomWidgetVisibility() {
-	if (!d->mZoomWidget) {
-		return;
+void DocumentViewController::slotAdapterChanged() {
+	d->updateActions();
+	d->updateZoomWidgetVisibility();
+}
+
+
+bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
+	switch (event->type()) {
+	case QEvent::Show:
+	case QEvent::Hide:
+		d->updateActions();
+		break;
+	default:
+		break;
 	}
-	d->mZoomWidget->setVisible(d->mView && d->mView->adapter()->canZoom());
+	return false;
 }
 
 

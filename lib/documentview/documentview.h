@@ -92,8 +92,6 @@ Q_SIGNALS:
 	void adapterChanged();
 
 protected:
-	virtual void showEvent(QShowEvent* event);
-	virtual void hideEvent(QHideEvent* event);
 	virtual bool eventFilter(QObject*, QEvent* event);
 
 private Q_SLOTS:
