@@ -59,6 +59,10 @@ public:
 public Q_SLOTS:
 	void setValue(int);
 
+	void setMinimum(int);
+
+	void setMaximum(int);
+
 Q_SIGNALS:
 	int valueChanged(int);
 

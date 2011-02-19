@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSlider>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "zoomslider.h"
@@ -158,18 +159,24 @@ void ZoomWidget::setZoom(qreal zoom) {
 		QSlider* slider = d->mZoomSlider->slider();
 		SignalBlocker blocker(slider);
 		int value = sliderValueForZoom(zoom);
+
+		if (value < slider->minimum()) {
+			// It is possible that we are called *before* setMinimumZoom() as
+			// been called. In this case, define the minimum ourself.
+			d->mZoomSlider->setMinimum(value);
+		}
 		d->mZoomSlider->setValue(value);
 	}
 }
 
 
-void ZoomWidget::setMinimumZoom(qreal zoom) {
-	d->mZoomSlider->slider()->setMinimum(sliderValueForZoom(zoom));
+void ZoomWidget::setMinimumZoom(qreal minimumZoom) {
+	d->mZoomSlider->setMinimum(sliderValueForZoom(minimumZoom));
 }
 
 
 void ZoomWidget::setMaximumZoom(qreal zoom) {
-	d->mZoomSlider->slider()->setMaximum(sliderValueForZoom(zoom));
+	d->mZoomSlider->setMaximum(sliderValueForZoom(zoom));
 }
 
 

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QToolButton>
 
 // KDE
+#include <kdebug.h>
 #include <kicon.h>
 
 // Local
@@ -98,6 +99,18 @@ int ZoomSlider::value() const {
 
 void ZoomSlider::setValue(int value) {
 	d->mSlider->setValue(value);
+	d->updateButtons();
+}
+
+
+void ZoomSlider::setMinimum(int value) {
+	d->mSlider->setMinimum(value);
+	d->updateButtons();
+}
+
+
+void ZoomSlider::setMaximum(int value) {
+	d->mSlider->setMaximum(value);
 	d->updateButtons();
 }
 
