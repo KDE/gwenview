@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include "abstractdocumentviewadapter.h"
 #include "documentview.h"
+#include <lib/signalblocker.h>
 #include <lib/zoomwidget.h>
 
 // KDE
@@ -124,6 +125,10 @@ void DocumentViewController::setView(DocumentView* view) {
 	if (d->mView) {
 		d->mView->removeEventFilter(this);
 		disconnect(d->mView, 0, this, 0);
+		disconnect(d->mView->adapter(), 0, this, 0);
+		Q_FOREACH(QAction* action, d->mActions) {
+			disconnect(action, 0, d->mView, 0);
+		}
 	}
 
 	// Connect new view
@@ -131,6 +136,18 @@ void DocumentViewController::setView(DocumentView* view) {
 	d->mView->installEventFilter(this);
 	connect(d->mView, SIGNAL(adapterChanged()),
 		SLOT(slotAdapterChanged()));
+
+	connect(d->mView->adapter(), SIGNAL(zoomToFitChanged(bool)),
+		SLOT(updateZoomToFitActionFromAdapter()));
+
+	connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
+		d->mView, SLOT(setZoomToFit(bool)));
+	connect(d->mActualSizeAction, SIGNAL(triggered()),
+		d->mView, SLOT(zoomActualSize()));
+	connect(d->mZoomInAction, SIGNAL(triggered()),
+		d->mView, SLOT(zoomIn()));
+	connect(d->mZoomOutAction, SIGNAL(triggered()),
+		d->mView, SLOT(zoomOut()));
 
 	// Sync zoom widget
 	d->connectZoomWidget();
@@ -161,6 +178,9 @@ ZoomWidget* DocumentViewController::zoomWidget() const {
 
 
 void DocumentViewController::slotAdapterChanged() {
+	connect(d->mView->adapter(), SIGNAL(zoomToFitChanged(bool)),
+		SLOT(updateZoomToFitActionFromAdapter()));
+	updateZoomToFitActionFromAdapter();
 	d->updateActions();
 	d->updateZoomWidgetVisibility();
 }
@@ -176,6 +196,12 @@ bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
 		break;
 	}
 	return false;
+}
+
+
+void DocumentViewController::updateZoomToFitActionFromAdapter() {
+	SignalBlocker blocker(d->mZoomToFitAction);
+	d->mZoomToFitAction->setChecked(d->mView->adapter()->zoomToFit());
 }
 
 

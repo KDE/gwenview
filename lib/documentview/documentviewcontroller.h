@@ -59,6 +59,7 @@ protected:
 
 private Q_SLOTS:
 	void slotAdapterChanged();
+	void updateZoomToFitActionFromAdapter();
 
 private:
 	DocumentViewControllerPrivate* const d;

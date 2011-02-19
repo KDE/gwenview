@@ -67,7 +67,6 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
-	QAction* mZoomToFitAction;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 
@@ -125,20 +124,6 @@ struct DocumentViewPrivate {
 		mAdapter->setCursor(mPreviousCursor);
 	}
 
-	void setupZoomActions() {
-		mZoomToFitAction = mActionCollection->action("view_zoom_to_fit");
-		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
-			that, SLOT(setZoomToFit(bool)) );
-
-		#define connectAction(name, slot) \
-			QObject::connect(mActionCollection->action(name), SIGNAL(triggered()), that, SLOT(slot()));
-		connectAction("view_actual_size", zoomActualSize);
-		connectAction("view_zoom_in", zoomIn);
-		connectAction("view_zoom_out", zoomOut);
-		#undef connectAction
-	}
-
-
 	void setupLoadingIndicator() {
 		KPixmapSequence sequence("process-working", 22);
 		mLoadingIndicator = new KPixmapSequenceWidget;
@@ -181,17 +166,9 @@ struct DocumentViewPrivate {
 
 
 	void uncheckZoomToFit() {
-		// We can't uncheck zoom to fit by calling
-		// mZoomToFitAction->setChecked(false) directly because it would trigger
-		// the action slot, which would set zoom to 100%.
-		// If zoomToFit is on and the image is at 33%, pressing zoom in should
-		// show the image at 66%, not 200%.
-		if (!mAdapter->zoomToFit()) {
-			return;
+		if (mAdapter->zoomToFit()) {
+			mAdapter->setZoomToFit(false);
 		}
-		mAdapter->setZoomToFit(false);
-		SignalBlocker blocker(mZoomToFitAction);
-		mZoomToFitAction->setChecked(false);
 	}
 
 
@@ -253,7 +230,7 @@ struct DocumentViewPrivate {
 				return true;
 			} else if (event->button() == Qt::MidButton) {
 				// Middle click => toggle zoom to fit
-				mZoomToFitAction->trigger();
+				that->setZoomToFit(!mAdapter->zoomToFit());
 				return true;
 			}
 		}
@@ -339,7 +316,6 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
-	d->setupZoomActions();
 	d->setupZoomCursor();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
@@ -522,7 +498,6 @@ void DocumentView::slotZoomChanged(qreal zoom) {
 
 
 void DocumentView::setZoom(qreal zoom) {
-	d->uncheckZoomToFit();
 	d->setZoom(zoom);
 }
 

@@ -126,6 +126,7 @@ void SvgViewAdapter::setZoomToFit(bool on) {
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	}
+	zoomToFitChanged(on);
 }
 
 

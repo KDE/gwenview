@@ -56,7 +56,6 @@ Q_SIGNALS:
 	void zoomChanged(qreal);
 
 private Q_SLOTS:
-	void slotZoomSliderRangeChanged();
 	void slotZoomSliderActionTriggered();
 
 private:

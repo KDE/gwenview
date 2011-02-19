@@ -106,7 +106,6 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 	d->mZoomSlider->setMinimumWidth(150);
 	d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
 	d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
-	connect(d->mZoomSlider->slider(), SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
 	connect(d->mZoomSlider->slider(), SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	// Layout
@@ -139,17 +138,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
 	int width = qMax(d->mZoomToFitButton->sizeHint().width(), d->mActualSizeButton->sizeHint().width());
 	d->mZoomToFitButton->setFixedWidth(width);
 	d->mActualSizeButton->setFixedWidth(width);
-}
-
-
-void ZoomWidget::slotZoomSliderRangeChanged() {
-	if (d->mZoomToFitAction->isChecked()) {
-		QSlider* slider = d->mZoomSlider->slider();
-		SignalBlocker blocker(slider);
-		d->mZoomSlider->setValue(slider->minimum());
-	} else {
-		d->emitZoomChanged();
-	}
 }
 
 
