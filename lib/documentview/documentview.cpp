@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -71,7 +72,7 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
-	QWidget* mCurrentIndicator;
+	HudWidget* mCurrentIndicator;
 
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
@@ -136,9 +137,8 @@ struct DocumentViewPrivate {
 	}
 
 	void setupCurrentIndicator() {
-		mCurrentIndicator = new QLabel("X");
-		mCurrentIndicator->setAutoFillBackground(true);
-		mCurrentIndicator->setFixedSize(mCurrentIndicator->sizeHint());
+		mCurrentIndicator = new HudWidget;
+		mCurrentIndicator->init(0 /* widget */, HudWidget::OptionCloseButton);
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mCurrentIndicator);
 		floater->setAlignment(Qt::AlignTop | Qt::AlignRight);
