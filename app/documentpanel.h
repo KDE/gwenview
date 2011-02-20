@@ -123,6 +123,8 @@ private Q_SLOTS:
 
 	void showContextMenu();
 
+	void slotViewClicked(DocumentView*);
+
 private:
 	friend struct DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;

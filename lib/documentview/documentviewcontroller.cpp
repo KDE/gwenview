@@ -84,6 +84,9 @@ struct DocumentViewControllerPrivate {
 			mZoomWidget, SLOT(setMinimumZoom(qreal)));
 		QObject::connect(mView, SIGNAL(zoomChanged(qreal)),
 			mZoomWidget, SLOT(setZoom(qreal)));
+
+		mZoomWidget->setMinimumZoom(mView->minimumZoom());
+		mZoomWidget->setZoom(mView->zoom());
 	}
 
 	void updateZoomWidgetVisibility() {
@@ -149,11 +152,16 @@ void DocumentViewController::setView(DocumentView* view) {
 	connect(d->mZoomOutAction, SIGNAL(triggered()),
 		d->mView, SLOT(zoomOut()));
 
+	updateZoomToFitActionFromAdapter();
+
 	// Sync zoom widget
 	d->connectZoomWidget();
 	d->updateZoomWidgetVisibility();
 }
 
+DocumentView* DocumentViewController::view() const {
+	return d->mView;
+}
 
 void DocumentViewController::setZoomWidget(ZoomWidget* widget) {
 	d->mZoomWidget = widget;

@@ -228,6 +228,8 @@ struct DocumentPanelPrivate {
 				that, SIGNAL(captionUpdateRequested(const QString&)) );
 			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
 				that, SIGNAL(toggleFullScreenRequested()) );
+			QObject::connect(view, SIGNAL(clicked(DocumentView*)),
+				that, SLOT(slotViewClicked(DocumentView*)) );
 
 			QObject::connect(view, SIGNAL(videoFinished()),
 				slideShow, SLOT(resumeAndGoToNextUrl()));
@@ -504,12 +506,17 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		if (it != urls.end()) {
 			view->openUrl(*it);
+			view->setCurrentIndicatorVisible(false);
 			if (*it == currentUrl) {
 				d->mDocumentViewController->setView(view);
 				Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
 				QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 				undoGroup->addStack(doc->undoStack());
 				undoGroup->setActiveStack(doc->undoStack());
+
+				if (urls.count() > 1) {
+					view->setCurrentIndicatorVisible(true);
+				}
 			}
 			view->show();
 			++it;
@@ -560,6 +567,19 @@ void DocumentPanel::reset() {
 		}
 		++idx;
 	}
+}
+
+void DocumentPanel::slotViewClicked(DocumentView* view) {
+	DocumentView* oldView = d->mDocumentViewController->view();
+	if (view == oldView) {
+		return;
+	}
+
+	if (oldView) {
+		oldView->setCurrentIndicatorVisible(false);
+	}
+	view->setCurrentIndicatorVisible(true);
+	d->mDocumentViewController->setView(view);
 }
 
 

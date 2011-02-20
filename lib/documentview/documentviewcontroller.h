@@ -49,6 +49,7 @@ public:
 	DocumentViewController(KActionCollection*, QObject* parent=0);
 	~DocumentViewController();
 
+	DocumentView* view() const;
 	ZoomWidget* zoomWidget() const;
 
 	void setView(DocumentView*);

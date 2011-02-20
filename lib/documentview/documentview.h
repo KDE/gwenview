@@ -66,6 +66,8 @@ public:
 
 	qreal zoom() const;
 
+	void setCurrentIndicatorVisible(bool);
+
 public Q_SLOTS:
 	void setZoom(qreal);
 
@@ -90,6 +92,8 @@ Q_SIGNALS:
 	void zoomChanged(qreal);
 
 	void adapterChanged();
+
+	void clicked(DocumentView*);
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);

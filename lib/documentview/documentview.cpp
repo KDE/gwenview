@@ -71,6 +71,7 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
+	QWidget* mCurrentIndicator;
 
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
@@ -134,6 +135,14 @@ struct DocumentViewPrivate {
 		floater->setChildWidget(mLoadingIndicator);
 	}
 
+	void setupCurrentIndicator() {
+		mCurrentIndicator = new QLabel("X");
+		mCurrentIndicator->setAutoFillBackground(true);
+		mCurrentIndicator->setFixedSize(mCurrentIndicator->sizeHint());
+		WidgetFloater* floater = new WidgetFloater(that);
+		floater->setChildWidget(mCurrentIndicator);
+		floater->setAlignment(Qt::AlignTop | Qt::AlignRight);
+	}
 
 	void updateCaption() {
 		QString caption;
@@ -317,6 +326,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	layout->setMargin(0);
 	d->mAdapter = 0;
 	d->setupZoomCursor();
+	d->setupCurrentIndicator();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 }
 
@@ -417,6 +427,7 @@ void DocumentView::finishOpenUrl() {
 
 
 void DocumentView::reset() {
+	setCurrentIndicatorVisible(false);
 	d->hideLoadingIndicator();
 	if (d->mDocument) {
 		disconnect(d->mDocument.data(), 0, this, 0);
@@ -511,6 +522,7 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::MouseButtonRelease) {
+		clicked(this);
 		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::Resize) {
 		d->updateZoomSnapValues();
@@ -543,6 +555,14 @@ qreal DocumentView::minimumZoom() const {
 	// There is no point zooming out less than zoomToFit, but make sure it does
 	// not get too small either
 	return qMax(0.001, qMin(double(d->mAdapter->computeZoomToFit()), 1.));
+}
+
+
+void DocumentView::setCurrentIndicatorVisible(bool visible) {
+	d->mCurrentIndicator->setVisible(visible);
+	if (visible) {
+		d->mCurrentIndicator->raise();
+	}
 }
 
 
