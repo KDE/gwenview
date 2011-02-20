@@ -56,9 +56,11 @@ HudWidget::~HudWidget() {
 
 void HudWidget::init(QWidget* mainWidget, Options options) {
 	d->mMainWidget = mainWidget;
-	d->mMainWidget->setParent(this);
-	if (d->mMainWidget->layout()) {
-		d->mMainWidget->layout()->setMargin(0);
+	if (d->mMainWidget) {
+		d->mMainWidget->setParent(this);
+		if (d->mMainWidget->layout()) {
+			d->mMainWidget->layout()->setMargin(0);
+		}
 	}
 
 	if (options & OptionOpaque) {
@@ -70,7 +72,9 @@ void HudWidget::init(QWidget* mainWidget, Options options) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setMargin(4);
-	layout->addWidget(d->mMainWidget);
+	if (d->mMainWidget) {
+		layout->addWidget(d->mMainWidget);
+	}
 	if (options & OptionDoNotFollowChildSize) {
 		adjustSize();
 	} else {
