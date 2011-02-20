@@ -7,13 +7,18 @@ include(MacroOptionalAddSubdirectory)
 
 KDE4_NO_ENABLE_FINAL(gwenview)
 
+find_package(JPEG REQUIRED)
+# Preview acess was added in Exiv2 0.18
+# IMPORTANT : Several fixes done in 0.19. Set as default version when KDE
+# 4.4 will be released
+set(EXIV2_MIN_VERSION "0.18")
+find_package(Exiv2 REQUIRED)
+
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK OFF)
 
 set(GWENVIEW_SEMANTICINFO_BACKEND "Nepomuk" CACHE STRING "Semantic info backend for Gwenview (Nepomuk/Fake/None)")
-
-find_package(JPEG REQUIRED)
 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
 if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
