@@ -1,4 +1,10 @@
 project(gwenview)
+
+find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
+include(MacroLibrary)
+include(MacroOptionalAddSubdirectory)
+
 KDE4_NO_ENABLE_FINAL(gwenview)
 
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
@@ -6,6 +12,8 @@ set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK OFF)
 
 set(GWENVIEW_SEMANTICINFO_BACKEND "Nepomuk" CACHE STRING "Semantic info backend for Gwenview (Nepomuk/Fake/None)")
+
+find_package(JPEG REQUIRED)
 
 # Init GWENVIEW_SEMANTICINFO_BACKEND_* vars
 if (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
@@ -24,6 +32,9 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 add_definitions(-DDISABLE_NEPOMUK_LEGACY)
+
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 # TODO: Move other Gwenview specific macro_optional_find_package lines here
 
