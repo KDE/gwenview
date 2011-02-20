@@ -588,26 +588,6 @@ void DocumentPanel::slotViewClicked(DocumentView* view) {
 
 
 void DocumentPanel::slotViewClosed(DocumentView* view) {
-	DocumentView* newCurrentView = 0;
-	int idx = -1;
-	QList<DocumentView*> visibleViews;
-	Q_FOREACH(DocumentView* aView, d->mDocumentViews) {
-		if (aView->isVisible()) {
-			visibleViews << aView;
-			if (aView == view) {
-				idx = visibleViews.length() - 1;
-			}
-		}
-	}
-	Q_ASSERT(idx != -1);
-	if (idx == visibleViews.length() - 1) {
-		// Closing the last view
-		Q_ASSERT(idx != 0);
-		newCurrentView = visibleViews.at(idx - 1);
-	} else {
-		newCurrentView = visibleViews.at(idx + 1);
-	}
-
 	Document::Ptr doc = view->adapter()->document();
 	Q_ASSERT(doc);
 
@@ -617,11 +597,6 @@ void DocumentPanel::slotViewClosed(DocumentView* view) {
 	Q_ASSERT(index.isValid());
 
 	d->mThumbnailBar->selectionModel()->select(index, QItemSelectionModel::Deselect);
-
-	Q_ASSERT(newCurrentView);
-	d->mDocumentViewController->setView(newCurrentView);
-	// We test with > 2 because visibleViews still contains the view we just closed
-	newCurrentView->setCurrentIndicatorVisible(visibleViews.length() > 2);
 }
 
 
