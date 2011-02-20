@@ -14,6 +14,12 @@ find_package(JPEG REQUIRED)
 set(EXIV2_MIN_VERSION "0.18")
 find_package(Exiv2 REQUIRED)
 
+macro_optional_find_package(Kipi)
+macro_log_feature(KIPI_FOUND "KIPI" "A library for adding kipi support" "http://www.kipi-plugins.org" FALSE "" "Required to build gwenview with kipi support.")
+
+add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK OFF)
@@ -37,11 +43,6 @@ if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
 add_definitions(-DDISABLE_NEPOMUK_LEGACY)
-
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
-
-# TODO: Move other Gwenview specific macro_optional_find_package lines here
 
 subdirs(lib)
 subdirs(app)
