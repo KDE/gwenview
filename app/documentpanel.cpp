@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentpanel.moc"
 
 // Qt
+#include <QItemSelectionModel>
 #include <QShortcut>
 #include <QToolButton>
 #include <QUndoGroup>
@@ -43,6 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
@@ -230,6 +232,8 @@ struct DocumentPanelPrivate {
 				that, SIGNAL(toggleFullScreenRequested()) );
 			QObject::connect(view, SIGNAL(clicked(DocumentView*)),
 				that, SLOT(slotViewClicked(DocumentView*)) );
+			QObject::connect(view, SIGNAL(closed(DocumentView*)),
+				that, SLOT(slotViewClosed(DocumentView*)) );
 
 			QObject::connect(view, SIGNAL(videoFinished()),
 				slideShow, SLOT(resumeAndGoToNextUrl()));
@@ -580,6 +584,44 @@ void DocumentPanel::slotViewClicked(DocumentView* view) {
 	}
 	view->setCurrentIndicatorVisible(true);
 	d->mDocumentViewController->setView(view);
+}
+
+
+void DocumentPanel::slotViewClosed(DocumentView* view) {
+	DocumentView* newCurrentView = 0;
+	int idx = -1;
+	QList<DocumentView*> visibleViews;
+	Q_FOREACH(DocumentView* aView, d->mDocumentViews) {
+		if (aView->isVisible()) {
+			visibleViews << aView;
+			if (aView == view) {
+				idx = visibleViews.length() - 1;
+			}
+		}
+	}
+	Q_ASSERT(idx != -1);
+	if (idx == visibleViews.length() - 1) {
+		// Closing the last view
+		Q_ASSERT(idx != 0);
+		newCurrentView = visibleViews.at(idx - 1);
+	} else {
+		newCurrentView = visibleViews.at(idx + 1);
+	}
+
+	Document::Ptr doc = view->adapter()->document();
+	Q_ASSERT(doc);
+
+	// FIXME: Ugly coupling!
+	SortedDirModel* model = static_cast<SortedDirModel*>(d->mThumbnailBar->model());
+	QModelIndex index = model->indexForUrl(doc->url());
+	Q_ASSERT(index.isValid());
+
+	d->mThumbnailBar->selectionModel()->select(index, QItemSelectionModel::Deselect);
+
+	Q_ASSERT(newCurrentView);
+	d->mDocumentViewController->setView(newCurrentView);
+	// We test with > 2 because visibleViews still contains the view we just closed
+	newCurrentView->setCurrentIndicatorVisible(visibleViews.length() > 2);
 }
 
 

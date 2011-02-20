@@ -95,6 +95,8 @@ Q_SIGNALS:
 
 	void clicked(DocumentView*);
 
+	void closed(DocumentView*);
+
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
@@ -113,6 +115,8 @@ private Q_SLOTS:
 	void slotZoomChanged(qreal);
 
 	void slotBusyChanged(const KUrl&, bool);
+
+	void slotCurrentIndicatorClosed();
 
 private:
 	friend struct DocumentViewPrivate;

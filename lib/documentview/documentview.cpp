@@ -142,6 +142,9 @@ struct DocumentViewPrivate {
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mCurrentIndicator);
 		floater->setAlignment(Qt::AlignTop | Qt::AlignRight);
+
+		QObject::connect(mCurrentIndicator, SIGNAL(closed()),
+			that, SLOT(slotCurrentIndicatorClosed()));
 	}
 
 	void updateCaption() {
@@ -563,6 +566,11 @@ void DocumentView::setCurrentIndicatorVisible(bool visible) {
 	if (visible) {
 		d->mCurrentIndicator->raise();
 	}
+}
+
+
+void DocumentView::slotCurrentIndicatorClosed() {
+	closed(this);
 }
 
 
