@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QLabel>
 #include <QMouseEvent>
 #include <QShortcut>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE
@@ -138,14 +139,16 @@ struct DocumentViewPrivate {
 	}
 
 	void setupDeselectButton() {
+		QToolButton* button = new QToolButton;
+		button->setIcon(SmallIcon("list-remove"));
+		QObject::connect(button, SIGNAL(clicked()),
+			that, SLOT(slotDeselected()));
+
 		mDeselectWidget = new HudWidget;
-		mDeselectWidget->init(0 /* widget */, HudWidget::OptionCloseButton);
+		mDeselectWidget->init(button, HudWidget::OptionNone);
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mDeselectWidget);
 		floater->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
-		QObject::connect(mDeselectWidget, SIGNAL(closed()),
-			that, SLOT(slotDeselected()));
 	}
 
 	void updateCaption() {
