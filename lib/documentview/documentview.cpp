@@ -502,6 +502,11 @@ void DocumentView::setZoom(qreal zoom) {
 }
 
 
+qreal DocumentView::zoom() const {
+	return d->mAdapter->zoom();
+}
+
+
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
