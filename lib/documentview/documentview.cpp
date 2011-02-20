@@ -72,11 +72,12 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
-	HudWidget* mCurrentIndicator;
+	HudWidget* mDeselectWidget;
 
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
+	bool mCurrent;
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
@@ -136,15 +137,15 @@ struct DocumentViewPrivate {
 		floater->setChildWidget(mLoadingIndicator);
 	}
 
-	void setupCurrentIndicator() {
-		mCurrentIndicator = new HudWidget;
-		mCurrentIndicator->init(0 /* widget */, HudWidget::OptionCloseButton);
+	void setupDeselectButton() {
+		mDeselectWidget = new HudWidget;
+		mDeselectWidget->init(0 /* widget */, HudWidget::OptionCloseButton);
 		WidgetFloater* floater = new WidgetFloater(that);
-		floater->setChildWidget(mCurrentIndicator);
-		floater->setAlignment(Qt::AlignTop | Qt::AlignRight);
+		floater->setChildWidget(mDeselectWidget);
+		floater->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-		QObject::connect(mCurrentIndicator, SIGNAL(closed()),
-			that, SLOT(slotCurrentIndicatorClosed()));
+		QObject::connect(mDeselectWidget, SIGNAL(closed()),
+			that, SLOT(slotDeselected()));
 	}
 
 	void updateCaption() {
@@ -320,7 +321,7 @@ struct DocumentViewPrivate {
 
 
 DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
-: QWidget(parent)
+: QFrame(parent)
 , d(new DocumentViewPrivate) {
 	d->that = this;
 	d->mActionCollection = actionCollection;
@@ -329,8 +330,9 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	layout->setMargin(0);
 	d->mAdapter = 0;
 	d->setupZoomCursor();
-	d->setupCurrentIndicator();
+	d->setupDeselectButton();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
+	d->mCurrent = false;
 }
 
 
@@ -430,7 +432,6 @@ void DocumentView::finishOpenUrl() {
 
 
 void DocumentView::reset() {
-	setCurrentIndicatorVisible(false);
 	d->hideLoadingIndicator();
 	if (d->mDocument) {
 		disconnect(d->mDocument.data(), 0, this, 0);
@@ -561,16 +562,32 @@ qreal DocumentView::minimumZoom() const {
 }
 
 
-void DocumentView::setCurrentIndicatorVisible(bool visible) {
-	d->mCurrentIndicator->setVisible(visible);
-	if (visible) {
-		d->mCurrentIndicator->raise();
+void DocumentView::setCompareMode(bool compare) {
+	setLineWidth(compare ? 2 : 0);
+	d->mDeselectWidget->setVisible(compare);
+	if (compare) {
+		d->mDeselectWidget->raise();
 	}
 }
 
 
-void DocumentView::slotCurrentIndicatorClosed() {
-	closed(this);
+void DocumentView::setCurrent(bool value) {
+	d->mCurrent = value;
+	if (value) {
+		setFrameStyle(QFrame::Panel | QFrame::Sunken);
+	} else {
+		setFrameStyle(QFrame::Box | QFrame::Plain);
+	}
+}
+
+
+bool DocumentView::isCurrent() const {
+	return d->mCurrent;
+}
+
+
+void DocumentView::slotDeselected() {
+	deselected(this);
 }
 
 

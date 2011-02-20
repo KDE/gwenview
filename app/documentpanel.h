@@ -125,7 +125,7 @@ private Q_SLOTS:
 
 	void slotViewClicked(DocumentView*);
 
-	void slotViewClosed(DocumentView*);
+	void slotViewDeselected(DocumentView*);
 
 private:
 	friend struct DocumentPanelPrivate;

@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QWidget>
+#include <QFrame>
 
 // KDE
 #include <kactioncollection.h>
@@ -45,7 +45,7 @@ struct DocumentViewPrivate;
  * This widget can display various documents, using an instance of
  * AbstractDocumentViewAdapter
  */
-class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
+class GWENVIEWLIB_EXPORT DocumentView : public QFrame {
 	Q_OBJECT
 public:
 	enum {
@@ -66,7 +66,11 @@ public:
 
 	qreal zoom() const;
 
-	void setCurrentIndicatorVisible(bool);
+	bool isCurrent() const;
+
+	void setCurrent(bool);
+
+	void setCompareMode(bool);
 
 public Q_SLOTS:
 	void setZoom(qreal);
@@ -95,7 +99,7 @@ Q_SIGNALS:
 
 	void clicked(DocumentView*);
 
-	void closed(DocumentView*);
+	void deselected(DocumentView*);
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
@@ -116,7 +120,7 @@ private Q_SLOTS:
 
 	void slotBusyChanged(const KUrl&, bool);
 
-	void slotCurrentIndicatorClosed();
+	void slotDeselected();
 
 private:
 	friend struct DocumentViewPrivate;
