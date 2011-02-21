@@ -32,6 +32,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #ifdef Q_OS_WIN
 #define _WIN32_WINNT 0x0500
 #include <windows.h>
+#elif defined(Q_OS_FREEBSD)
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <vm/vm_param.h>
 #endif
 
 namespace Gwenview {
