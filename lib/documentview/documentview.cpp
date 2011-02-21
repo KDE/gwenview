@@ -22,10 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentview.moc"
 
 // Qt
-#include <QApplication>
-#include <QLabel>
 #include <QMouseEvent>
-#include <QShortcut>
+#include <QPainter>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -324,7 +322,7 @@ struct DocumentViewPrivate {
 
 
 DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
-: QFrame(parent)
+: QWidget(parent)
 , d(new DocumentViewPrivate) {
 	d->that = this;
 	d->mActionCollection = actionCollection;
@@ -549,6 +547,23 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 }
 
 
+void DocumentView::paintEvent(QPaintEvent* event) {
+	QWidget::paintEvent(event);
+	if (layout()->margin() == 0) {
+		return;
+	}
+	QPainter painter(this);
+	QBrush brush;
+	if (d->mCurrent) {
+		brush = palette().highlight();
+	} else {
+		QWidget* widget = d->mAdapter->widget();
+		brush = widget->palette().color(widget->backgroundRole());
+	}
+	painter.fillRect(rect(), brush);
+}
+
+
 void DocumentView::slotBusyChanged(const KUrl&, bool busy) {
 	if (busy) {
 		d->showLoadingIndicator();
@@ -566,7 +581,7 @@ qreal DocumentView::minimumZoom() const {
 
 
 void DocumentView::setCompareMode(bool compare) {
-	setLineWidth(compare ? 2 : 0);
+	layout()->setMargin(compare ? 2 : 0);
 	d->mDeselectWidget->setVisible(compare);
 	if (compare) {
 		d->mDeselectWidget->raise();
@@ -576,11 +591,7 @@ void DocumentView::setCompareMode(bool compare) {
 
 void DocumentView::setCurrent(bool value) {
 	d->mCurrent = value;
-	if (value) {
-		setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	} else {
-		setFrameStyle(QFrame::Box | QFrame::Plain);
-	}
+	update();
 }
 
 
