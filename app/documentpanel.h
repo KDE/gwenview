@@ -49,7 +49,7 @@ class DocumentPanel : public QWidget {
 	Q_OBJECT
 public:
 	enum {
-		MaxViewCount = 4
+		MaxViewCount = 2
 	};
 	DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
 	~DocumentPanel();
@@ -125,7 +125,9 @@ private Q_SLOTS:
 
 	void slotViewClicked(DocumentView*);
 
-	void slotViewDeselected(DocumentView*);
+	void goToPreviousCandidate();
+	void goToNextCandidate();
+	void setAsBest();
 
 private:
 	friend struct DocumentPanelPrivate;

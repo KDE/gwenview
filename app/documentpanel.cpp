@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QItemSelectionModel>
+#include <QLabel>
 #include <QShortcut>
 #include <QToolButton>
 #include <QUndoGroup>
@@ -42,12 +43,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
 #include <lib/documentview/documentviewcontroller.h>
-#include <lib/paintutils.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hudwidget.h>
+#include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
+#include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
 
 
@@ -128,6 +131,8 @@ struct DocumentPanelPrivate {
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
+	HudWidget* mBestViewHud;
+	HudWidget* mCandidateViewHud;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
@@ -198,12 +203,9 @@ struct DocumentPanelPrivate {
 		QGridLayout* layout = new QGridLayout(mAdapterContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		int idx=0;
-		layout->addWidget(mDocumentViews[idx++], 0, 0);
-		layout->addWidget(mDocumentViews[idx++], 0, 1);
-		layout->addWidget(mDocumentViews[idx++], 1, 0);
-		layout->addWidget(mDocumentViews[idx++], 1, 1);
-		layout->addWidget(mStatusBarContainer, 2, 0, 1, 2);
+		layout->addWidget(mDocumentViews[0], 0, 0);
+		layout->addWidget(mDocumentViews[1], 0, 1);
+		layout->addWidget(mStatusBarContainer, 1, 0, 1, 2);
 	}
 
 	void setupDocumentView(SlideShow* slideShow) {
@@ -232,14 +234,84 @@ struct DocumentPanelPrivate {
 				that, SIGNAL(toggleFullScreenRequested()) );
 			QObject::connect(view, SIGNAL(clicked(DocumentView*)),
 				that, SLOT(slotViewClicked(DocumentView*)) );
-			QObject::connect(view, SIGNAL(deselected(DocumentView*)),
-				that, SLOT(slotViewDeselected(DocumentView*)) );
 
 			QObject::connect(view, SIGNAL(videoFinished()),
 				slideShow, SLOT(resumeAndGoToNextUrl()));
 
 			mDocumentViews << view;
 		}
+	}
+
+	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
+		QToolButton* button = new QToolButton;
+		if (showText) {
+			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+			button->setText(text);
+		} else {
+			button->setToolTip(text);
+		}
+		button->setIcon(SmallIcon(iconName));
+		return button;
+	}
+
+	void setupBestViewHud() {
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		layout->setMargin(0);
+		QLabel* iconLabel = new QLabel;
+		iconLabel->setPixmap(SmallIcon("favorites"));
+		layout->addWidget(iconLabel);
+		layout->addWidget(new QLabel(i18n("Best")));
+
+		mBestViewHud = new HudWidget;
+		mBestViewHud->init(content, HudWidget::OptionNone);
+		WidgetFloater* floater = new WidgetFloater(mDocumentViews[0]);
+		floater->setChildWidget(mBestViewHud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+	}
+
+	void setupCandidateViewHud() {
+		QToolButton* previousCandidateButton = createHudButton(i18n("Previous"), "go-previous", false);
+		previousCandidateButton->setProperty("segment-left", true);
+		QToolButton* nextCandidateButton = createHudButton(i18n("Next"), "go-next", false);
+		nextCandidateButton->setProperty("segment-right", true);
+		QToolButton* bestButton = createHudButton(i18n("Set as Best"), "favorites", true);
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		const int space = 4;
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(new QLabel(i18n("Candidate")));
+		layout->addSpacing(space);
+		layout->addWidget(previousCandidateButton);
+		layout->addWidget(nextCandidateButton);
+		layout->addSpacing(space);
+		layout->addWidget(bestButton);
+		layout->addSpacing(space);
+		layout->addWidget(trashButton);
+		layout->addSpacing(space);
+
+		mCandidateViewHud = new HudWidget;
+		mCandidateViewHud->init(content, HudWidget::OptionCloseButton);
+		WidgetFloater* floater = new WidgetFloater(mDocumentViews[1]);
+		floater->setChildWidget(mCandidateViewHud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		QObject::connect(previousCandidateButton, SIGNAL(clicked()), that, SLOT(goToPreviousCandidate()));
+		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
+		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
+	}
+
+	void setupHuds() {
+		setupBestViewHud();
+		setupCandidateViewHud();
+		QWidget* w1 = mBestViewHud->mainWidget();
+		QWidget* w2 = mCandidateViewHud->mainWidget();
+		int height = qMax(w1->sizeHint().height(), w2->sizeHint().height());
+		w1->setFixedHeight(height);
+		w2->setFixedHeight(height);
 	}
 
 	void setupStatusBar() {
@@ -294,6 +366,35 @@ struct DocumentPanelPrivate {
 		}
 	}
 
+	QModelIndex indexForView(DocumentView* view) const {
+		Document::Ptr doc = view->adapter()->document();
+		Q_ASSERT(doc);
+		if (!doc) {
+			kWarning() << "No document!";
+			return QModelIndex();
+		}
+
+		// FIXME: Ugly coupling!
+		SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
+		return model->indexForUrl(doc->url());
+	}
+
+	void goTo(int delta) {
+		QModelIndex candidateIndex = indexForView(mDocumentViews[1]);
+		QModelIndex newIndex = candidateIndex.sibling(candidateIndex.row() + delta, 0);
+		if (!newIndex.isValid()) {
+			return;
+		}
+
+		QModelIndex bestIndex = indexForView(mDocumentViews[0]);
+		if (newIndex == bestIndex) {
+			goTo(delta * 2);
+		} else {
+			QItemSelectionModel* selectionModel = mThumbnailBar->selectionModel();
+			selectionModel->select(candidateIndex, QItemSelectionModel::Deselect);
+			selectionModel->select(newIndex, QItemSelectionModel::Select);
+		}
+	}
 };
 
 
@@ -314,6 +415,8 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
 	d->setupDocumentView(slideShow);
+
+	d->setupHuds();
 
 	d->setupStatusBar();
 
@@ -532,6 +635,12 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	if (it != urls.end()) {
 		kWarning() << "No room to load" << *it << ". This should not happen";
 	}
+	d->mBestViewHud->setVisible(compareMode);
+	d->mCandidateViewHud->setVisible(compareMode);
+	if (compareMode) {
+		d->mBestViewHud->raise();
+		d->mCandidateViewHud->raise();
+	}
 }
 
 
@@ -587,16 +696,28 @@ void DocumentPanel::slotViewClicked(DocumentView* view) {
 }
 
 
-void DocumentPanel::slotViewDeselected(DocumentView* view) {
-	Document::Ptr doc = view->adapter()->document();
-	Q_ASSERT(doc);
+void DocumentPanel::goToNextCandidate() {
+	d->goTo(1);
+}
 
-	// FIXME: Ugly coupling!
-	SortedDirModel* model = static_cast<SortedDirModel*>(d->mThumbnailBar->model());
-	QModelIndex index = model->indexForUrl(doc->url());
-	Q_ASSERT(index.isValid());
 
-	d->mThumbnailBar->selectionModel()->select(index, QItemSelectionModel::Deselect);
+void DocumentPanel::goToPreviousCandidate() {
+	d->goTo(-1);
+}
+
+
+void DocumentPanel::setAsBest() {
+	QModelIndex candidateIndex = d->indexForView(d->mDocumentViews[1]);
+
+	QModelIndex newBestIndex = candidateIndex;
+	QModelIndex newCandidateIndex = candidateIndex.sibling(candidateIndex.row() + 1, 0);
+	if (!newCandidateIndex.isValid()) {
+		newCandidateIndex = candidateIndex.sibling(candidateIndex.row() - 1, 0);
+	}
+
+	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
+	selectionModel->select(newBestIndex, QItemSelectionModel::ClearAndSelect);
+	selectionModel->select(newCandidateIndex, QItemSelectionModel::Select);
 }
 
 

@@ -44,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -71,7 +70,6 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
-	HudWidget* mDeselectWidget;
 
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
@@ -134,19 +132,6 @@ struct DocumentViewPrivate {
 
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
-	}
-
-	void setupDeselectButton() {
-		QToolButton* button = new QToolButton;
-		button->setIcon(SmallIcon("list-remove"));
-		QObject::connect(button, SIGNAL(clicked()),
-			that, SLOT(slotDeselected()));
-
-		mDeselectWidget = new HudWidget;
-		mDeselectWidget->init(button, HudWidget::OptionNone);
-		WidgetFloater* floater = new WidgetFloater(that);
-		floater->setChildWidget(mDeselectWidget);
-		floater->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 	}
 
 	void updateCaption() {
@@ -331,7 +316,6 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	layout->setMargin(0);
 	d->mAdapter = 0;
 	d->setupZoomCursor();
-	d->setupDeselectButton();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 	d->mCurrent = false;
 }
@@ -582,10 +566,6 @@ qreal DocumentView::minimumZoom() const {
 
 void DocumentView::setCompareMode(bool compare) {
 	layout()->setMargin(compare ? 2 : 0);
-	d->mDeselectWidget->setVisible(compare);
-	if (compare) {
-		d->mDeselectWidget->raise();
-	}
 }
 
 
@@ -597,11 +577,6 @@ void DocumentView::setCurrent(bool value) {
 
 bool DocumentView::isCurrent() const {
 	return d->mCurrent;
-}
-
-
-void DocumentView::slotDeselected() {
-	deselected(this);
 }
 
 
