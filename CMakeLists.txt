@@ -52,5 +52,6 @@ subdirs(tests)
 subdirs(icons)
 subdirs(cursors)
 subdirs(fullscreenthemes)
+add_subdirectory( doc )
 
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
