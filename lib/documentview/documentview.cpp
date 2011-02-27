@@ -537,14 +537,15 @@ void DocumentView::paintEvent(QPaintEvent* event) {
 		return;
 	}
 	QPainter painter(this);
-	QBrush brush;
+	QWidget* widget = d->mAdapter->widget();
+	painter.fillRect(rect(), widget->palette().color(widget->backgroundRole()));
 	if (d->mCurrent) {
-		brush = palette().highlight();
-	} else {
-		QWidget* widget = d->mAdapter->widget();
-		brush = widget->palette().color(widget->backgroundRole());
+		painter.setBrush(Qt::NoBrush);
+		painter.setPen(QPen(palette().highlight().color(), 2));
+		painter.setRenderHint(QPainter::Antialiasing);
+		QRectF selectionRect = QRectF(rect()).adjusted(2, 2, -2, -2);
+		painter.drawRoundedRect(selectionRect, 3, 3);
 	}
-	painter.fillRect(rect(), brush);
 }
 
 
@@ -565,7 +566,7 @@ qreal DocumentView::minimumZoom() const {
 
 
 void DocumentView::setCompareMode(bool compare) {
-	layout()->setMargin(compare ? 2 : 0);
+	layout()->setMargin(compare ? 4 : 0);
 }
 
 
