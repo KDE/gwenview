@@ -296,7 +296,7 @@ void LoadingDocumentImpl::init() {
 		// Load file content directly
 		QFile file(url.toLocalFile());
 		if (!file.open(QIODevice::ReadOnly)) {
-			setDocumentErrorString("Could not open file.");
+			setDocumentErrorString(i18nc("@info", "Could not open file %1", url.toLocalFile()));
 			emit loadingFailed();
 			switchToImpl(new EmptyDocumentImpl(document()));
 			return;
