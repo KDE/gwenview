@@ -302,6 +302,7 @@ struct DocumentPanelPrivate {
 		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
 		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
 		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
+		QObject::connect(mCandidateViewHud, SIGNAL(closed()), that, SLOT(deselectCandidate()));
 	}
 
 	void setupHuds() {
@@ -736,6 +737,13 @@ void DocumentPanel::trashCandidate() {
 	KUrl url = d->urlForView(d->mDocumentViews[1]);
 	goToNextCandidate();
 	FileOperations::trash(KUrl::List() << url, this);
+}
+
+
+void DocumentPanel::deselectCandidate() {
+	QModelIndex index = d->indexForView(d->mDocumentViews[1]);
+	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
+	selectionModel->select(index, QItemSelectionModel::Deselect);
 }
 
 
