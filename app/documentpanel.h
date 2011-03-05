@@ -128,6 +128,7 @@ private Q_SLOTS:
 	void goToPreviousCandidate();
 	void goToNextCandidate();
 	void setAsBest();
+	void trash();
 
 private:
 	friend struct DocumentPanelPrivate;

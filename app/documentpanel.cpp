@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <ktoggleaction.h>
 
 // Local
+#include "fileoperations.h"
 #include "splitter.h"
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
@@ -302,6 +303,7 @@ struct DocumentPanelPrivate {
 		QObject::connect(previousCandidateButton, SIGNAL(clicked()), that, SLOT(goToPreviousCandidate()));
 		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
 		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trash()));
 	}
 
 	void setupHuds() {
@@ -364,6 +366,16 @@ struct DocumentPanelPrivate {
 		if (mThumbnailBar->isVisible()) {
 			GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
 		}
+	}
+
+	KUrl urlForView(DocumentView* view) const {
+		Document::Ptr doc = view->adapter()->document();
+		Q_ASSERT(doc);
+		if (!doc) {
+			kWarning() << "No document!";
+			return KUrl();
+		}
+		return doc->url();
 	}
 
 	QModelIndex indexForView(DocumentView* view) const {
@@ -718,6 +730,13 @@ void DocumentPanel::setAsBest() {
 	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
 	selectionModel->select(newBestIndex, QItemSelectionModel::ClearAndSelect);
 	selectionModel->select(newCandidateIndex, QItemSelectionModel::Select);
+}
+
+
+void DocumentPanel::trash() {
+	KUrl url = d->urlForView(d->mDocumentViews[1]);
+	goToNextCandidate();
+	FileOperations::trash(KUrl::List() << url, this);
 }
 
 
