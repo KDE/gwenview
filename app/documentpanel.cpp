@@ -301,7 +301,7 @@ struct DocumentPanelPrivate {
 		QObject::connect(previousCandidateButton, SIGNAL(clicked()), that, SLOT(goToPreviousCandidate()));
 		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
 		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
-		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trash()));
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
 	}
 
 	void setupHuds() {
@@ -731,7 +731,7 @@ void DocumentPanel::setAsBest() {
 }
 
 
-void DocumentPanel::trash() {
+void DocumentPanel::trashCandidate() {
 	KUrl url = d->urlForView(d->mDocumentViews[1]);
 	goToNextCandidate();
 	FileOperations::trash(KUrl::List() << url, this);
