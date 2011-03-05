@@ -12,6 +12,7 @@ else ("${jpeglib_version}" LESS 80)
 	set(GV_JPEG_DIR libjpeg-80)
 endif ("${jpeglib_version}" LESS 80)
 
+add_definitions(-Dlibjpeg_EXPORTS)
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/${GV_JPEG_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/..
