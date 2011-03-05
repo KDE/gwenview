@@ -619,6 +619,7 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
+	Q_ASSERT(currentUrl.isValid());
 	KUrl::List::ConstIterator it = urls.begin();
 	bool compareMode = urls.count() > 1;
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
