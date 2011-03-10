@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentpanel.moc"
 
 // Qt
+#include <QCheckBox>
 #include <QItemSelectionModel>
 #include <QLabel>
 #include <QShortcut>
@@ -44,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
 #include <lib/documentview/documentviewcontroller.h>
+#include <lib/documentview/documentviewsynchronizer.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/hudwidget.h>
 #include <lib/paintutils.h>
@@ -130,12 +132,14 @@ struct DocumentPanelPrivate {
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
+	DocumentViewSynchronizer* mSynchronizer;
 	HudWidget* mBestViewHud;
 	HudWidget* mCandidateViewHud;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
+    QCheckBox* mSynchronizeCheckBox;
 
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
@@ -239,6 +243,8 @@ struct DocumentPanelPrivate {
 
 			mDocumentViews << view;
 		}
+
+		mSynchronizer = new DocumentViewSynchronizer(mDocumentViews[0], mDocumentViews[1], that);
 	}
 
 	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
@@ -318,13 +324,19 @@ struct DocumentPanelPrivate {
 	void setupStatusBar() {
 		mStatusBarContainer = new QWidget;
 		mToggleThumbnailBarButton = new StatusBarToolButton;
+		mSynchronizeCheckBox = new QCheckBox(i18n("Synchronize"));
+		mSynchronizeCheckBox->hide();
 
 		QHBoxLayout* layout = new QHBoxLayout(mStatusBarContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
 		layout->addWidget(mToggleThumbnailBarButton);
 		layout->addStretch();
+		layout->addWidget(mSynchronizeCheckBox);
+		layout->addStretch();
 		layout->addWidget(mDocumentViewController->zoomWidget());
+
+		QObject::connect(mSynchronizeCheckBox, SIGNAL(toggled(bool)), mSynchronizer, SLOT(setActive(bool)));
 	}
 
 	void setupSplitter() {
@@ -649,6 +661,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	}
 	d->mBestViewHud->setVisible(compareMode);
 	d->mCandidateViewHud->setVisible(compareMode);
+	d->mSynchronizeCheckBox->setVisible(compareMode);
 	if (compareMode) {
 		d->mBestViewHud->raise();
 		d->mCandidateViewHud->raise();
