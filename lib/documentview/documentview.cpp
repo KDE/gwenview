@@ -167,6 +167,7 @@ struct DocumentViewPrivate {
 	void uncheckZoomToFit() {
 		if (mAdapter->zoomToFit()) {
 			mAdapter->setZoomToFit(false);
+			that->zoomToFitChanged(false);
 		}
 	}
 
