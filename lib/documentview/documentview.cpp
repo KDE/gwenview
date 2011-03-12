@@ -22,8 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentview.moc"
 
 // Qt
+#include <QAbstractScrollArea>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QScrollBar>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -100,6 +102,14 @@ struct DocumentViewPrivate {
 				that, SLOT(slotZoomChanged(qreal)) );
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
+
+		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(mAdapter->widget());
+		if (area) {
+			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+				that, SIGNAL(positionChanged()));
+			QObject::connect(area->verticalScrollBar(), SIGNAL(valueChanged(int)),
+				that, SIGNAL(positionChanged()));
+		}
 
 		that->adapterChanged();
 	}
@@ -588,6 +598,28 @@ void DocumentView::setCurrent(bool value) {
 
 bool DocumentView::isCurrent() const {
 	return d->mCurrent;
+}
+
+
+QPoint DocumentView::position() const {
+	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
+	if (!area) {
+		return QPoint();
+	}
+	return QPoint(
+		area->horizontalScrollBar()->value(),
+		area->verticalScrollBar()->value()
+		);
+}
+
+
+void DocumentView::setPosition(const QPoint& pos) {
+	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
+	if (!area) {
+		return;
+	}
+	area->horizontalScrollBar()->setValue(pos.x());
+	area->verticalScrollBar()->setValue(pos.y());
 }
 
 

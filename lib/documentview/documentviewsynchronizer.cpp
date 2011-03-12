@@ -72,6 +72,7 @@ void DocumentViewSynchronizer::setActive(bool active) {
 	}
 	d->addBinder("zoomToFit");
 	d->addBinder("zoom");
+	d->addBinder("position");
 }
 
 

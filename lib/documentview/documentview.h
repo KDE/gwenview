@@ -49,6 +49,7 @@ class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_OBJECT
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
+	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
 	enum {
 		MaximumZoom = 16
@@ -76,10 +77,14 @@ public:
 
 	bool zoomToFit() const;
 
+	QPoint position() const;
+
 public Q_SLOTS:
 	void setZoom(qreal);
 
 	void setZoomToFit(bool);
+
+	void setPosition(const QPoint&);
 
 Q_SIGNALS:
 	/**
@@ -106,6 +111,8 @@ Q_SIGNALS:
 	void clicked(DocumentView*);
 
 	void zoomToFitChanged(bool);
+
+	void positionChanged();
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
