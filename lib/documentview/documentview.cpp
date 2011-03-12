@@ -114,6 +114,10 @@ struct DocumentViewPrivate {
 		}
 
 		that->adapterChanged();
+		that->positionChanged();
+		if (mAdapter->canZoom()) {
+			that->zoomToFitChanged(mAdapter->zoomToFit());
+		}
 	}
 
 	void setupZoomCursor() {
