@@ -44,6 +44,7 @@ public:
 	DocumentViewSynchronizer(DocumentView* view1, DocumentView* view2, QObject* parent=0);
 	~DocumentViewSynchronizer();
 
+public Q_SLOTS:
 	void setActive(bool);
 
 private:
