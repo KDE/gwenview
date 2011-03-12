@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentviewsynchronizer.moc"
 
 // Local
+#include <documentview/documentview.h>
+#include <propertybinder.h>
 
 // KDE
 
@@ -33,6 +35,19 @@ namespace Gwenview {
 struct DocumentViewSynchronizerPrivate {
 	DocumentView* mView1;
 	DocumentView* mView2;
+	QList<PropertyBinder*> mPropertyBinders;
+
+	void addBinder(const char* name) {
+		PropertyBinder* binder = new PropertyBinder;
+		binder->bind(mView1, name, mView2, name);
+		mView2->setProperty(name, mView1->property(name));
+		mPropertyBinders << binder;
+	}
+
+	void deletePropertyBinders() {
+		qDeleteAll(mPropertyBinders);
+		mPropertyBinders.clear();
+	}
 };
 
 
@@ -45,11 +60,18 @@ DocumentViewSynchronizer::DocumentViewSynchronizer(DocumentView* view1, Document
 
 
 DocumentViewSynchronizer::~DocumentViewSynchronizer() {
+	d->deletePropertyBinders();
 	delete d;
 }
 
 
-void DocumentViewSynchronizer::setActive(bool) {
+void DocumentViewSynchronizer::setActive(bool active) {
+	if (!active) {
+		d->deletePropertyBinders();
+		return;
+	}
+	d->addBinder("zoomToFit");
+	d->addBinder("zoom");
 }
 
 

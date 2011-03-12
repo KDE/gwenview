@@ -451,10 +451,19 @@ void DocumentView::slotLoadingFailed() {
 
 
 void DocumentView::setZoomToFit(bool on) {
+	if (on == d->mAdapter->zoomToFit()) {
+		return;
+	}
 	d->mAdapter->setZoomToFit(on);
 	if (!on) {
 		d->mAdapter->setZoom(1.);
 	}
+	zoomToFitChanged(on);
+}
+
+
+bool DocumentView::zoomToFit() const {
+	return d->mAdapter->zoomToFit();
 }
 
 

@@ -209,7 +209,7 @@ bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
 
 void DocumentViewController::updateZoomToFitActionFromAdapter() {
 	SignalBlocker blocker(d->mZoomToFitAction);
-	d->mZoomToFitAction->setChecked(d->mView->adapter()->zoomToFit());
+	d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
 
 
