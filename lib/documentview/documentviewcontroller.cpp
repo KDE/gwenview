@@ -140,8 +140,8 @@ void DocumentViewController::setView(DocumentView* view) {
 	connect(d->mView, SIGNAL(adapterChanged()),
 		SLOT(slotAdapterChanged()));
 
-	connect(d->mView->adapter(), SIGNAL(zoomToFitChanged(bool)),
-		SLOT(updateZoomToFitActionFromAdapter()));
+	connect(d->mView, SIGNAL(zoomToFitChanged(bool)),
+		SLOT(updateZoomToFitActionFromView()));
 
 	connect(d->mZoomToFitAction, SIGNAL(toggled(bool)),
 		d->mView, SLOT(setZoomToFit(bool)));
@@ -152,7 +152,7 @@ void DocumentViewController::setView(DocumentView* view) {
 	connect(d->mZoomOutAction, SIGNAL(triggered()),
 		d->mView, SLOT(zoomOut()));
 
-	updateZoomToFitActionFromAdapter();
+	updateZoomToFitActionFromView();
 
 	// Sync zoom widget
 	d->connectZoomWidget();
@@ -186,9 +186,6 @@ ZoomWidget* DocumentViewController::zoomWidget() const {
 
 
 void DocumentViewController::slotAdapterChanged() {
-	connect(d->mView->adapter(), SIGNAL(zoomToFitChanged(bool)),
-		SLOT(updateZoomToFitActionFromAdapter()));
-	updateZoomToFitActionFromAdapter();
 	d->updateActions();
 	d->updateZoomWidgetVisibility();
 }
@@ -207,7 +204,7 @@ bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
 }
 
 
-void DocumentViewController::updateZoomToFitActionFromAdapter() {
+void DocumentViewController::updateZoomToFitActionFromView() {
 	SignalBlocker blocker(d->mZoomToFitAction);
 	d->mZoomToFitAction->setChecked(d->mView->zoomToFit());
 }
