@@ -665,6 +665,9 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	if (compareMode) {
 		d->mBestViewHud->raise();
 		d->mCandidateViewHud->raise();
+		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
+	} else {
+		d->mSynchronizer->setActive(false);
 	}
 }
 
