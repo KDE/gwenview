@@ -100,6 +100,8 @@ struct DocumentViewPrivate {
 		if (mAdapter->canZoom()) {
 			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
 				that, SLOT(slotZoomChanged(qreal)) );
+			QObject::connect(mAdapter, SIGNAL(zoomToFitChanged(bool)),
+				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
 
@@ -177,7 +179,6 @@ struct DocumentViewPrivate {
 	void uncheckZoomToFit() {
 		if (mAdapter->zoomToFit()) {
 			mAdapter->setZoomToFit(false);
-			that->zoomToFitChanged(false);
 		}
 	}
 
@@ -469,7 +470,6 @@ void DocumentView::setZoomToFit(bool on) {
 	if (!on) {
 		d->mAdapter->setZoom(1.);
 	}
-	zoomToFitChanged(on);
 }
 
 
