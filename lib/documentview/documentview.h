@@ -99,6 +99,8 @@ private Q_SLOTS:
 
 	void slotBusyChanged(const KUrl&, bool);
 
+	void slotKeyPressed(Qt::Key key, bool pressed);
+
 private:
 	friend struct DocumentViewPrivate;
 	DocumentViewPrivate* const d;
