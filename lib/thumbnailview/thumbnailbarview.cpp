@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QItemSelectionModel>
 #include <QHelpEvent>
 #include <QScrollBar>
 #include <QPainter>
@@ -157,6 +158,14 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 				thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
 				pix);
 		}
+
+		/* Enable to draw a red border around the current item
+		QItemSelectionModel* selectionModel = d->mView->selectionModel();
+		if (selectionModel->currentIndex() == index) {
+			painter->setPen(Qt::red);
+			painter->drawRect(thumbnailRect);
+		}
+		*/
 	}
 }
 

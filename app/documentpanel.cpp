@@ -140,6 +140,7 @@ struct DocumentPanelPrivate {
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
     QCheckBox* mSynchronizeCheckBox;
+	bool mUpdatingSelection;
 
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
@@ -379,6 +380,14 @@ struct DocumentPanelPrivate {
 		}
 	}
 
+	void initCurrentView(DocumentView* view, const KUrl& url) {
+		mDocumentViewController->setView(view);
+		Document::Ptr doc = DocumentFactory::instance()->load(url);
+		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+		undoGroup->addStack(doc->undoStack());
+		undoGroup->setActiveStack(doc->undoStack());
+	}
+
 	KUrl urlForView(DocumentView* view) const {
 		Document::Ptr doc = view->adapter()->document();
 		Q_ASSERT(doc);
@@ -413,9 +422,15 @@ struct DocumentPanelPrivate {
 		if (newIndex == bestIndex) {
 			goTo(delta * 2);
 		} else {
+			SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
+			KUrl url = model->urlForIndex(newIndex);
+			mDocumentViews[1]->openUrl(url);
+			initCurrentView(mDocumentViews[1], url);
+			mUpdatingSelection = true;
 			QItemSelectionModel* selectionModel = mThumbnailBar->selectionModel();
+			selectionModel->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 			selectionModel->select(candidateIndex, QItemSelectionModel::Deselect);
-			selectionModel->select(newIndex, QItemSelectionModel::Select);
+			mUpdatingSelection = false;
 		}
 	}
 };
@@ -429,6 +444,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
+	d->mUpdatingSelection = false;
 	d->mFullScreenPalette = QPalette(palette());
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
@@ -632,7 +648,10 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
-	Q_ASSERT(currentUrl.isValid());
+	if (d->mUpdatingSelection) {
+		kDebug() << "openUrls skipped: mUpdatingSelection == true";
+		return;
+	}
 	KUrl::List::ConstIterator it = urls.begin();
 	bool compareMode = urls.count() > 1;
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
@@ -641,11 +660,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 			view->setCompareMode(compareMode);
 			if (*it == currentUrl) {
 				view->setCurrent(true);
-				d->mDocumentViewController->setView(view);
-				Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
-				QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-				undoGroup->addStack(doc->undoStack());
-				undoGroup->setActiveStack(doc->undoStack());
+				d->initCurrentView(view, currentUrl);
 			} else {
 				view->setCurrent(false);
 			}

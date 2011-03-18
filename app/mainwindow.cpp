@@ -774,6 +774,7 @@ struct MainWindow::Private {
 	}
 
 	void fixCurrentIndex() {
+		return;
 		QItemSelectionModel* selectionModel = mThumbnailView->selectionModel();
 		if (!selectionModel->hasSelection()) {
 			return;
