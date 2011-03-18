@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmodifierkeyinfo.h>
 #include <kpixmapsequence.h>
 #include <kpixmapsequencewidget.h>
 #include <kstandarddirs.h>
@@ -68,6 +69,7 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 struct DocumentViewPrivate {
 	DocumentView* that;
 	KActionCollection* mActionCollection;
+	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 
@@ -127,16 +129,15 @@ struct DocumentViewPrivate {
 	}
 
 	void setZoomCursor() {
-		mAdapter->widget()->grabKeyboard();
 		QCursor currentCursor = mAdapter->cursor();
-		if (currentCursor.pixmap().cacheKey() != mZoomCursor.pixmap().cacheKey()) {
-			mPreviousCursor = currentCursor;
+		if (currentCursor.pixmap().cacheKey() == mZoomCursor.pixmap().cacheKey()) {
+			return;
 		}
+		mPreviousCursor = currentCursor;
 		mAdapter->setCursor(mZoomCursor);
 	}
 
 	void restoreCursor() {
-		mAdapter->widget()->releaseKeyboard();
 		mAdapter->setCursor(mPreviousCursor);
 	}
 
@@ -236,7 +237,6 @@ struct DocumentViewPrivate {
 		if (mAdapter->canZoom()) {
 			if (event->modifiers() == Qt::ControlModifier) {
 				// Ctrl + Left or right button => zoom in or out
-				setZoomCursor();
 				if (event->button() == Qt::LeftButton) {
 					that->zoomIn(event->pos());
 				} else if (event->button() == Qt::RightButton) {
@@ -274,7 +274,6 @@ struct DocumentViewPrivate {
 	bool adapterWheelEventFilter(QWheelEvent* event) {
 		if (mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
 			// Ctrl + wheel => zoom in or out
-			setZoomCursor();
 			if (event->delta() > 0) {
 				that->zoomIn(event->pos());
 			} else {
@@ -305,20 +304,6 @@ struct DocumentViewPrivate {
 		}
 		return false;
 	}
-
-	bool adapterKeyPressEventFilter(QKeyEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() == Qt::ControlModifier) {
-			setZoomCursor();
-		}
-		return false;
-	}
-
-	bool adapterKeyReleaseEventFilter(QKeyEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() != Qt::ControlModifier) {
-			restoreCursor();
-		}
-		return false;
-	}
 };
 
 
@@ -327,6 +312,8 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 , d(new DocumentViewPrivate) {
 	d->that = this;
 	d->mActionCollection = actionCollection;
+	d->mModifierKeyInfo = new KModifierKeyInfo(this);
+	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(slotKeyPressed(Qt::Key, bool)));
 	d->mLoadingIndicator = 0;
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
@@ -545,10 +532,6 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
 	} else if (event->type() == QEvent::ContextMenu) {
 		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
-	} else if (event->type() == QEvent::KeyPress) {
-		return d->adapterKeyPressEventFilter(static_cast<QKeyEvent*>(event));
-	} else if (event->type() == QEvent::KeyRelease) {
-		return d->adapterKeyReleaseEventFilter(static_cast<QKeyEvent*>(event));
 	}
 
 	return false;
@@ -624,6 +607,18 @@ void DocumentView::setPosition(const QPoint& pos) {
 	}
 	area->horizontalScrollBar()->setValue(pos.x());
 	area->verticalScrollBar()->setValue(pos.y());
+}
+
+
+void DocumentView::slotKeyPressed(Qt::Key key, bool pressed)
+{
+	if (key == Qt::Key_Control) {
+		if (pressed) {
+			d->setZoomCursor();
+		} else {
+			d->restoreCursor();
+		}
+	}
 }
 
 
