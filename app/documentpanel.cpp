@@ -143,6 +143,7 @@ struct DocumentPanelPrivate {
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
+	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
 	HudWidget* mBestViewHud;
 	HudWidget* mCandidateViewHud;
@@ -287,6 +288,8 @@ struct DocumentPanelPrivate {
 		WidgetFloater* floater = new WidgetFloater(mDocumentViews[0]);
 		floater->setChildWidget(mBestViewHud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		mHuds.append(mBestViewHud);
 	}
 
 	void setupCandidateViewHud() {
@@ -323,16 +326,47 @@ struct DocumentPanelPrivate {
 		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
 		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
 		Binder<DocumentPanel, DocumentView*>::bind(mCandidateViewHud, SIGNAL(closed()), that, &DocumentPanel::deselectView, mDocumentViews[1]);
+
+		mHuds.append(mCandidateViewHud);
+	}
+
+	void setupViewHud(DocumentView* view) {
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		const int space = 4;
+		layout->setMargin(0);
+		layout->setSpacing(0);
+		layout->addWidget(trashButton);
+		layout->addSpacing(space);
+
+		HudWidget* hud = new HudWidget;
+		hud->init(content, HudWidget::OptionCloseButton);
+		WidgetFloater* floater = new WidgetFloater(view);
+		floater->setChildWidget(hud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
+		Binder<DocumentPanel, DocumentView*>::bind(hud, SIGNAL(closed()), that, &DocumentPanel::deselectView, view);
+
+		mHuds.append(hud);
 	}
 
 	void setupHuds() {
-		setupBestViewHud();
-		setupCandidateViewHud();
-		QWidget* w1 = mBestViewHud->mainWidget();
-		QWidget* w2 = mCandidateViewHud->mainWidget();
-		int height = qMax(w1->sizeHint().height(), w2->sizeHint().height());
-		w1->setFixedHeight(height);
-		w2->setFixedHeight(height);
+		if (DocumentPanel::MaxViewCount == 2) {
+			setupBestViewHud();
+			setupCandidateViewHud();
+			QWidget* w1 = mBestViewHud->mainWidget();
+			QWidget* w2 = mCandidateViewHud->mainWidget();
+			int height = qMax(w1->sizeHint().height(), w2->sizeHint().height());
+			w1->setFixedHeight(height);
+			w2->setFixedHeight(height);
+		} else {
+			Q_FOREACH(DocumentView* view, mDocumentViews) {
+				setupViewHud(view);
+			}
+		}
 	}
 
 	void setupStatusBar() {
@@ -668,6 +702,13 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		KUrl url = view->url();
 		if (notDisplayedUrls.contains(url)) {
 			notDisplayedUrls.remove(url);
+			view->setCompareMode(compareMode);
+			if (url == currentUrl) {
+				view->setCurrent(true);
+				d->initCurrentView(view, currentUrl);
+			} else {
+				view->setCurrent(false);
+			}
 		} else {
 			view->reset();
 			view->hide();
@@ -693,16 +734,14 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		view->show();
 	}
 
-	d->mBestViewHud->setVisible(compareMode);
-	d->mCandidateViewHud->setVisible(compareMode);
-	d->mSynchronizeCheckBox->setVisible(compareMode);
-	if (compareMode) {
-		d->mBestViewHud->raise();
-		d->mCandidateViewHud->raise();
-		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
-	} else {
-		d->mSynchronizer->setActive(false);
+	Q_FOREACH(HudWidget* hud, d->mHuds) {
+		hud->setVisible(compareMode);
+		if (compareMode) {
+			hud->raise();
+		}
 	}
+	d->mSynchronizeCheckBox->setVisible(compareMode);
+	d->mSynchronizer->setActive(compareMode && d->mSynchronizeCheckBox->isChecked());
 }
 
 
