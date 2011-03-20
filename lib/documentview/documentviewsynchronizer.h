@@ -41,8 +41,12 @@ class DocumentViewSynchronizerPrivate;
 class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject {
 	Q_OBJECT
 public:
-	DocumentViewSynchronizer(DocumentView* view1, DocumentView* view2, QObject* parent=0);
+	DocumentViewSynchronizer(QObject* parent=0);
 	~DocumentViewSynchronizer();
+
+	void setDocumentViews(QList<DocumentView*> views);
+
+	void setCurrentView(DocumentView* view);
 
 public Q_SLOTS:
 	void setActive(bool);

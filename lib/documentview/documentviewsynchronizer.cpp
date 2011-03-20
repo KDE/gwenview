@@ -32,47 +32,70 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
+typedef QList<DocumentView*> ViewList;
+
 struct DocumentViewSynchronizerPrivate {
-	DocumentView* mView1;
-	DocumentView* mView2;
+	ViewList mViews;
+	DocumentView* mCurrentView;
 	QList<PropertyBinder*> mPropertyBinders;
+	bool mActive;
 
 	void addBinder(const char* name) {
 		PropertyBinder* binder = new PropertyBinder;
-		binder->bind(mView1, name, mView2, name);
-		mView2->setProperty(name, mView1->property(name));
+		Q_FOREACH(DocumentView* view, mViews) {
+			if (view == mCurrentView) {
+				continue;
+			}
+			binder->bind(mCurrentView, name, view, name);
+			view->setProperty(name, mCurrentView->property(name));
+		}
 		mPropertyBinders << binder;
 	}
 
-	void deletePropertyBinders() {
+	void deleteBinders() {
 		qDeleteAll(mPropertyBinders);
 		mPropertyBinders.clear();
+	}
+
+	void updateBinders() {
+		deleteBinders();
+		if (!mCurrentView || !mActive) {
+			return;
+		}
+		addBinder("zoomToFit");
+		addBinder("zoom");
+		addBinder("position");
 	}
 };
 
 
-DocumentViewSynchronizer::DocumentViewSynchronizer(DocumentView* view1, DocumentView* view2, QObject* parent)
+DocumentViewSynchronizer::DocumentViewSynchronizer(QObject* parent)
 : QObject(parent)
 , d(new DocumentViewSynchronizerPrivate) {
-	d->mView1 = view1;
-	d->mView2 = view2;
+	d->mCurrentView = 0;
+	d->mActive = false;
 }
 
 
 DocumentViewSynchronizer::~DocumentViewSynchronizer() {
-	d->deletePropertyBinders();
+	d->deleteBinders();
 	delete d;
 }
 
 
+void DocumentViewSynchronizer::setDocumentViews(QList< DocumentView* > views) {
+	d->mViews = views;
+	d->updateBinders();
+}
+
+void DocumentViewSynchronizer::setCurrentView(DocumentView* view) {
+	d->mCurrentView = view;
+	d->updateBinders();
+}
+
 void DocumentViewSynchronizer::setActive(bool active) {
-	if (!active) {
-		d->deletePropertyBinders();
-		return;
-	}
-	d->addBinder("zoomToFit");
-	d->addBinder("zoom");
-	d->addBinder("position");
+	d->mActive = active;
+	d->updateBinders();
 }
 
 

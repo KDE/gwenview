@@ -259,7 +259,7 @@ struct DocumentPanelPrivate {
 			mDocumentViews << view;
 		}
 
-		mSynchronizer = new DocumentViewSynchronizer(mDocumentViews[0], mDocumentViews[1], that);
+		mSynchronizer = new DocumentViewSynchronizer(that);
 	}
 
 	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
@@ -429,6 +429,7 @@ struct DocumentPanelPrivate {
 
 	void initCurrentView(DocumentView* view, const KUrl& url) {
 		mDocumentViewController->setView(view);
+		mSynchronizer->setCurrentView(view);
 		Document::Ptr doc = DocumentFactory::instance()->load(url);
 		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 		undoGroup->addStack(doc->undoStack());
@@ -684,6 +685,7 @@ void DocumentPanel::openUrl(const KUrl& url) {
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	KUrl::List::ConstIterator it = urls.begin();
 	bool compareMode = urls.count() > 1;
+	QList<DocumentView*> visibleViews;
 
 	// Get a list of available views and urls we are not already displaying
 	QSet<KUrl> notDisplayedUrls = urls.toSet();
@@ -699,6 +701,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 			} else {
 				view->setCurrent(false);
 			}
+			visibleViews.append(view);
 		} else {
 			view->reset();
 			view->hide();
@@ -721,6 +724,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		} else {
 			view->setCurrent(false);
 		}
+		visibleViews.append(view);
 		view->show();
 	}
 
@@ -731,7 +735,12 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		}
 	}
 	d->mSynchronizeCheckBox->setVisible(compareMode);
-	d->mSynchronizer->setActive(compareMode && d->mSynchronizeCheckBox->isChecked());
+	if (compareMode) {
+		d->mSynchronizer->setDocumentViews(visibleViews);
+		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
+	} else {
+		d->mSynchronizer->setActive(false);
+	}
 }
 
 
@@ -784,6 +793,7 @@ void DocumentPanel::slotViewClicked(DocumentView* view) {
 	}
 	view->setCurrent(true);
 	d->mDocumentViewController->setView(view);
+	d->mSynchronizer->setCurrentView(view);
 }
 
 
