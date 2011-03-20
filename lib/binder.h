@@ -44,8 +44,9 @@ protected Q_SLOTS:
 };
 
 /**
- * Makes it possible to "connect" a parameter-less signal with a slot
- * which accepts one argument.  The argument must be known at connection time.
+ * The Binder and BinderRef classes make it possible to "connect" a
+ * parameter-less signal with a slot which accepts one argument. The
+ * argument must be known at connection time.
  *
  * Example:
  *
@@ -53,21 +54,24 @@ protected Q_SLOTS:
  *
  * class Receiver {
  * public:
- *   void doSomething(const Param& p);
+ *   void doSomething(Param* p);
  * };
  *
  * This code:
  *
- * Binder<Receiver, Param>::bind(emitter, SIGNAL(somethingHappened()), receiver, &Receiver::doSomething, p)
+ * Binder<Receiver, Param*>::bind(emitter, SIGNAL(somethingHappened()), receiver, &Receiver::doSomething, p)
  *
- * Will result in receiver->doSomething(p) being called when emitter emits the
- * somethingHappened() signal.
+ * Will result in receiver->doSomething(p) being called when emitter emits
+ * the somethingHappened() signal.
  *
  * Just like a regular QObject connection, the connection will last until
  * either emitter or receiver are deleted.
  *
- * Using this system avoids the need of creating an helper slot and adding a
- * member to the Receiver class to store the argument of the method to call.
+ * Using this system avoids creating an helper slot and adding a member to
+ * the Receiver class to store the argument of the method to call.
+ *
+ * To call a method which accept a pointer or a value argument, use Binder.
+ * To call a method which accept a const reference argument, use BinderRef.
  *
  * Note: the method does not need to be a slot.
  */
