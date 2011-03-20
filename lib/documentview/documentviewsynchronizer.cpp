@@ -63,6 +63,8 @@ struct DocumentViewSynchronizerPrivate {
 			if (view == mCurrentView) {
 				continue;
 			}
+			view->setZoom(mCurrentView->zoom());
+			view->setZoomToFit(mCurrentView->zoomToFit());
 		}
 	}
 
