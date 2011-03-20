@@ -23,23 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-BinderQObject::BinderQObject(QObject* parent, AbstractBinder* binder)
+BinderInternal::BinderInternal(QObject* parent)
 : QObject(parent)
-, mBinder(binder)
-{}
-
-
-BinderQObject::~BinderQObject() {
-	delete mBinder;
+{
 }
 
-void BinderQObject::run() {
-	mBinder->run();
+BinderInternal::~BinderInternal() {
 }
-
-
-AbstractBinder::AbstractBinder(QObject* parent)
-: qObject(new BinderQObject(parent, this))
-{}
 
 } // namespace
