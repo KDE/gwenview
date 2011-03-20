@@ -265,7 +265,7 @@ void GvCore::slotSaveResult(KJob* _job) {
 		item.setText(i18n("Go back to the original"));
 		QToolButton* button = bubble->addButton(item);
 
-		Binder<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
+		BinderRef<MainWindow, KUrl>::bind(button, SIGNAL(clicked()), d->mMainWindow, &MainWindow::goToUrl, oldUrl);
 		connect(button, SIGNAL(clicked()),
 			bubble, SLOT(deleteLater()));
 

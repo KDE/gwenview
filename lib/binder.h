@@ -72,10 +72,39 @@ protected Q_SLOTS:
  * Note: the method does not need to be a slot.
  */
 template <class Receiver, class Arg>
-class GWENVIEWLIB_EXPORT Binder : public BinderInternal
+class GWENVIEWLIB_EXPORT BinderRef : public BinderInternal
 {
 public:
 	typedef void (Receiver::*Method)(const Arg&);
+	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, Arg arg) {
+		BinderRef<Receiver, Arg>* binder = new BinderRef<Receiver, Arg>(emitter);
+		binder->mReceiver = receiver;
+		binder->mMethod = method;
+		binder->mArg = arg;
+		QObject::connect(emitter, signal, binder, SLOT(callMethod()));
+		QObject::connect(receiver, SIGNAL(destroyed(QObject*)), binder, SLOT(deleteLater()));
+	}
+
+protected:
+	void callMethod() {
+		(mReceiver->*mMethod)(mArg);
+	}
+
+private:
+	BinderRef(QObject* emitter)
+	: BinderInternal(emitter)
+	{}
+
+	Receiver* mReceiver;
+	Method mMethod;
+	Arg mArg;
+};
+
+template <class Receiver, class Arg>
+class GWENVIEWLIB_EXPORT Binder : public BinderInternal
+{
+public:
+	typedef void (Receiver::*Method)(Arg);
 	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, Arg arg) {
 		Binder<Receiver, Arg>* binder = new Binder<Receiver, Arg>(emitter);
 		binder->mReceiver = receiver;
