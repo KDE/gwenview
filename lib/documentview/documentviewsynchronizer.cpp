@@ -102,6 +102,7 @@ void DocumentViewSynchronizer::setCurrentView(DocumentView* view) {
 
 void DocumentViewSynchronizer::setActive(bool active) {
 	d->mActive = active;
+	d->updateOldPosition();
 	d->updateBinders();
 }
 
