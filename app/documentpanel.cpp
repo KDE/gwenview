@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "fileoperations.h"
 #include "splitter.h"
+#include <lib/binder.h>
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
@@ -321,7 +322,7 @@ struct DocumentPanelPrivate {
 		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
 		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
 		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
-		QObject::connect(mCandidateViewHud, SIGNAL(closed()), that, SLOT(deselectCandidate()));
+		Binder<DocumentPanel, DocumentView*>::bind(mCandidateViewHud, SIGNAL(closed()), that, &DocumentPanel::deselectView, mDocumentViews[1]);
 	}
 
 	void setupHuds() {
