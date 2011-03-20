@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 
+class QPoint;
+
 namespace Gwenview {
 
 class DocumentView;
@@ -50,6 +52,11 @@ public:
 
 public Q_SLOTS:
 	void setActive(bool);
+
+private Q_SLOTS:
+	void setZoom(qreal zoom);
+	void setZoomToFit(bool);
+	void updatePosition();
 
 private:
 	DocumentViewSynchronizerPrivate* const d;

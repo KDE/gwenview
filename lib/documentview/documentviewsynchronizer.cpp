@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include <documentview/documentview.h>
-#include <propertybinder.h>
 
 // KDE
 
@@ -35,26 +34,16 @@ namespace Gwenview {
 typedef QList<DocumentView*> ViewList;
 
 struct DocumentViewSynchronizerPrivate {
+	DocumentViewSynchronizer* q;
 	ViewList mViews;
 	DocumentView* mCurrentView;
-	QList<PropertyBinder*> mPropertyBinders;
 	bool mActive;
-
-	void addBinder(const char* name) {
-		PropertyBinder* binder = new PropertyBinder;
-		Q_FOREACH(DocumentView* view, mViews) {
-			if (view == mCurrentView) {
-				continue;
-			}
-			binder->bind(mCurrentView, name, view, name);
-			view->setProperty(name, mCurrentView->property(name));
-		}
-		mPropertyBinders << binder;
-	}
+	QPoint mOldPosition;
 
 	void deleteBinders() {
-		qDeleteAll(mPropertyBinders);
-		mPropertyBinders.clear();
+		Q_FOREACH(DocumentView* view, mViews) {
+			QObject::disconnect(view, 0, q, 0);
+		}
 	}
 
 	void updateBinders() {
@@ -62,9 +51,22 @@ struct DocumentViewSynchronizerPrivate {
 		if (!mCurrentView || !mActive) {
 			return;
 		}
-		addBinder("zoomToFit");
-		addBinder("zoom");
-		addBinder("position");
+
+		Q_FOREACH(DocumentView* view, mViews) {
+			if (view == mCurrentView) {
+				continue;
+			}
+			QObject::connect(mCurrentView, SIGNAL(zoomChanged(qreal)),
+				q, SLOT(setZoom(qreal)));
+			QObject::connect(mCurrentView, SIGNAL(zoomToFitChanged(bool)),
+				q, SLOT(setZoomToFit(bool)));
+			QObject::connect(mCurrentView, SIGNAL(positionChanged()),
+				q, SLOT(updatePosition()));
+		}
+	}
+
+	void updateOldPosition() {
+		mOldPosition = mCurrentView->position();
 	}
 };
 
@@ -72,6 +74,7 @@ struct DocumentViewSynchronizerPrivate {
 DocumentViewSynchronizer::DocumentViewSynchronizer(QObject* parent)
 : QObject(parent)
 , d(new DocumentViewSynchronizerPrivate) {
+	d->q = this;
 	d->mCurrentView = 0;
 	d->mActive = false;
 }
@@ -90,6 +93,7 @@ void DocumentViewSynchronizer::setDocumentViews(QList< DocumentView* > views) {
 
 void DocumentViewSynchronizer::setCurrentView(DocumentView* view) {
 	d->mCurrentView = view;
+	d->updateOldPosition();
 	d->updateBinders();
 }
 
@@ -98,5 +102,36 @@ void DocumentViewSynchronizer::setActive(bool active) {
 	d->updateBinders();
 }
 
+void DocumentViewSynchronizer::setZoom(qreal zoom) {
+	Q_FOREACH(DocumentView* view, d->mViews) {
+		if (view == d->mCurrentView) {
+			continue;
+		}
+		view->setZoom(zoom);
+	}
+	d->updateOldPosition();
+}
+
+void DocumentViewSynchronizer::setZoomToFit(bool fit) {
+	Q_FOREACH(DocumentView* view, d->mViews) {
+		if (view == d->mCurrentView) {
+			continue;
+		}
+		view->setZoomToFit(fit);
+	}
+	d->updateOldPosition();
+}
+
+void DocumentViewSynchronizer::updatePosition() {
+	QPoint pos = d->mCurrentView->position();
+	QPoint delta = pos - d->mOldPosition;
+	d->mOldPosition = pos;
+	Q_FOREACH(DocumentView* view, d->mViews) {
+		if (view == d->mCurrentView) {
+			continue;
+		}
+		view->setPosition(view->position() + delta);
+	}
+}
 
 } // namespace
