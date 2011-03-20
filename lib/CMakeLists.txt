@@ -84,7 +84,6 @@ set(gwenviewlib_SRCS
 	preferredimagemetainfomodel.cpp
 	print/printhelper.cpp
 	print/printoptionspage.cpp
-	propertybinder.cpp
 	slidecontainer.cpp
 	slideshow.cpp
 	scrolltool.cpp
