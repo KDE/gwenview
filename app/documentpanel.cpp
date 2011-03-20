@@ -789,8 +789,8 @@ void DocumentPanel::trashCandidate() {
 }
 
 
-void DocumentPanel::deselectCandidate() {
-	QModelIndex index = d->indexForView(d->mDocumentViews[1]);
+void DocumentPanel::deselectView(DocumentView* view) {
+	QModelIndex index = d->indexForView(view);
 	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
 	selectionModel->select(index, QItemSelectionModel::Deselect);
 }
