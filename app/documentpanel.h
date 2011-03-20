@@ -48,9 +48,8 @@ struct DocumentPanelPrivate;
 class DocumentPanel : public QWidget {
 	Q_OBJECT
 public:
-	enum {
-		MaxViewCount = 2
-	};
+	static const int MaxViewCount;
+
 	DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
 	~DocumentPanel();
 

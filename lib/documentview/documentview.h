@@ -59,6 +59,8 @@ public:
 
 	AbstractDocumentViewAdapter* adapter() const;
 
+	KUrl url() const;
+
 	void openUrl(const KUrl&);
 
 	void reset();

@@ -772,19 +772,6 @@ struct MainWindow::Private {
 			mNotificationRestrictions = 0;
 		}
 	}
-
-	void fixCurrentIndex() {
-		return;
-		QItemSelectionModel* selectionModel = mThumbnailView->selectionModel();
-		if (!selectionModel->hasSelection()) {
-			return;
-		}
-		QModelIndex currentIndex = selectionModel->currentIndex();
-		if (!selectionModel->isSelected(currentIndex)) {
-			kDebug() << "Fixing current index";
-			selectionModel->select(selectionModel->selectedIndexes().first(), QItemSelectionModel::SelectCurrent);
-		}
-	}
 };
 
 
@@ -1100,7 +1087,6 @@ void MainWindow::slotPartCompleted() {
 
 
 void MainWindow::slotSelectionChanged() {
-	d->fixCurrentIndex();
 	if (d->mCurrentPageId == ViewPageId) {
 		// The user selected a new file in the thumbnail view, since the
 		// document view is visible, let's show it

@@ -69,6 +69,16 @@ namespace Gwenview {
 #endif
 
 
+static int getenvInt(const char* name, int defaultValue) {
+	QByteArray strValue = qgetenv(name);
+	bool ok;
+	int value = strValue.toInt(&ok);
+	return ok ? value : defaultValue;
+}
+
+const int DocumentPanel::MaxViewCount = getenvInt("MAX_VIEW_COUNT", 2);
+
+
 static QString rgba(const QColor &color) {
 	return QString::fromAscii("rgba(%1, %2, %3, %4)")
 		.arg(color.red())
@@ -140,7 +150,6 @@ struct DocumentPanelPrivate {
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
     QCheckBox* mSynchronizeCheckBox;
-	bool mUpdatingSelection;
 
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
@@ -207,9 +216,12 @@ struct DocumentPanelPrivate {
 		QGridLayout* layout = new QGridLayout(mAdapterContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		layout->addWidget(mDocumentViews[0], 0, 0);
-		layout->addWidget(mDocumentViews[1], 0, 1);
-		layout->addWidget(mStatusBarContainer, 1, 0, 1, 2);
+		int col = 0;
+		Q_FOREACH(DocumentView* view, mDocumentViews) {
+			layout->addWidget(view, 0, col);
+			++col;
+		}
+		layout->addWidget(mStatusBarContainer, 1, 0, 1, DocumentPanel::MaxViewCount);
 	}
 
 	void setupDocumentView(SlideShow* slideShow) {
@@ -426,11 +438,9 @@ struct DocumentPanelPrivate {
 			KUrl url = model->urlForIndex(newIndex);
 			mDocumentViews[1]->openUrl(url);
 			initCurrentView(mDocumentViews[1], url);
-			mUpdatingSelection = true;
 			QItemSelectionModel* selectionModel = mThumbnailBar->selectionModel();
 			selectionModel->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 			selectionModel->select(candidateIndex, QItemSelectionModel::Deselect);
-			mUpdatingSelection = false;
 		}
 	}
 };
@@ -444,7 +454,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
-	d->mUpdatingSelection = false;
 	d->mFullScreenPalette = QPalette(palette());
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
 	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
@@ -648,32 +657,41 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
-	if (d->mUpdatingSelection) {
-		kDebug() << "openUrls skipped: mUpdatingSelection == true";
-		return;
-	}
 	KUrl::List::ConstIterator it = urls.begin();
 	bool compareMode = urls.count() > 1;
+
+	// Get a list of available views and urls we are not already displaying
+	QSet<KUrl> notDisplayedUrls = urls.toSet();
+	QList<DocumentView*> availableViews;
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		if (it != urls.end()) {
-			view->openUrl(*it);
-			view->setCompareMode(compareMode);
-			if (*it == currentUrl) {
-				view->setCurrent(true);
-				d->initCurrentView(view, currentUrl);
-			} else {
-				view->setCurrent(false);
-			}
-			view->show();
-			++it;
+		KUrl url = view->url();
+		if (notDisplayedUrls.contains(url)) {
+			notDisplayedUrls.remove(url);
 		} else {
 			view->reset();
 			view->hide();
+			availableViews.append(view);
 		}
 	}
-	if (it != urls.end()) {
-		kWarning() << "No room to load" << *it << ". This should not happen";
+
+	// Show urls to display in available views
+	Q_FOREACH(const KUrl& url, notDisplayedUrls) {
+		if (availableViews.isEmpty()) {
+			kWarning() << "No room to load" << *it << ". This should not happen";
+			break;
+		}
+		DocumentView* view = availableViews.takeFirst();
+		view->openUrl(url);
+		view->setCompareMode(compareMode);
+		if (url == currentUrl) {
+			view->setCurrent(true);
+			d->initCurrentView(view, currentUrl);
+		} else {
+			view->setCurrent(false);
+		}
+		view->show();
 	}
+
 	d->mBestViewHud->setVisible(compareMode);
 	d->mCandidateViewHud->setVisible(compareMode);
 	d->mSynchronizeCheckBox->setVisible(compareMode);
