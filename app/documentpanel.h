@@ -128,6 +128,7 @@ private Q_SLOTS:
 	void goToNextCandidate();
 	void setAsBest();
 	void trashCandidate();
+	void trashView(DocumentView*);
 	void deselectView(DocumentView*);
 
 private:

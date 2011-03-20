@@ -347,7 +347,7 @@ struct DocumentPanelPrivate {
 		floater->setChildWidget(hud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
-		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
+		Binder<DocumentPanel, DocumentView*>::bind(trashButton, SIGNAL(clicked()), that, &DocumentPanel::trashView, view);
 		Binder<DocumentPanel, DocumentView*>::bind(hud, SIGNAL(closed()), that, &DocumentPanel::deselectView, view);
 
 		mHuds.append(hud);
@@ -815,6 +815,13 @@ void DocumentPanel::setAsBest() {
 void DocumentPanel::trashCandidate() {
 	KUrl url = d->mDocumentViews[1]->url();
 	goToNextCandidate();
+	FileOperations::trash(KUrl::List() << url, this);
+}
+
+
+void DocumentPanel::trashView(DocumentView* view) {
+	KUrl url = view->url();
+	deselectView(view);
 	FileOperations::trash(KUrl::List() << url, this);
 }
 
