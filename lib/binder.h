@@ -76,7 +76,7 @@ class GWENVIEWLIB_EXPORT BinderRef : public BinderInternal
 {
 public:
 	typedef void (Receiver::*Method)(const Arg&);
-	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, Arg arg) {
+	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, const Arg& arg) {
 		BinderRef<Receiver, Arg>* binder = new BinderRef<Receiver, Arg>(emitter);
 		binder->mReceiver = receiver;
 		binder->mMethod = method;
