@@ -435,16 +435,6 @@ struct DocumentPanelPrivate {
 		undoGroup->setActiveStack(doc->undoStack());
 	}
 
-	KUrl urlForView(DocumentView* view) const {
-		Document::Ptr doc = view->adapter()->document();
-		Q_ASSERT(doc);
-		if (!doc) {
-			kWarning() << "No document!";
-			return KUrl();
-		}
-		return doc->url();
-	}
-
 	QModelIndex indexForView(DocumentView* view) const {
 		Document::Ptr doc = view->adapter()->document();
 		Q_ASSERT(doc);
@@ -823,7 +813,7 @@ void DocumentPanel::setAsBest() {
 
 
 void DocumentPanel::trashCandidate() {
-	KUrl url = d->urlForView(d->mDocumentViews[1]);
+	KUrl url = d->mDocumentViews[1]->url();
 	goToNextCandidate();
 	FileOperations::trash(KUrl::List() << url, this);
 }

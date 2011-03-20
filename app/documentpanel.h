@@ -133,8 +133,6 @@ private Q_SLOTS:
 private:
 	friend struct DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;
-
-	void createAdapterForUrl(const KUrl& url);
 };
 
 } // namespace
