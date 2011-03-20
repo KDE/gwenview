@@ -52,16 +52,17 @@ struct DocumentViewSynchronizerPrivate {
 			return;
 		}
 
+		QObject::connect(mCurrentView, SIGNAL(zoomChanged(qreal)),
+			q, SLOT(setZoom(qreal)));
+		QObject::connect(mCurrentView, SIGNAL(zoomToFitChanged(bool)),
+			q, SLOT(setZoomToFit(bool)));
+		QObject::connect(mCurrentView, SIGNAL(positionChanged()),
+			q, SLOT(updatePosition()));
+
 		Q_FOREACH(DocumentView* view, mViews) {
 			if (view == mCurrentView) {
 				continue;
 			}
-			QObject::connect(mCurrentView, SIGNAL(zoomChanged(qreal)),
-				q, SLOT(setZoom(qreal)));
-			QObject::connect(mCurrentView, SIGNAL(zoomToFitChanged(bool)),
-				q, SLOT(setZoomToFit(bool)));
-			QObject::connect(mCurrentView, SIGNAL(positionChanged()),
-				q, SLOT(updatePosition()));
 		}
 	}
 
