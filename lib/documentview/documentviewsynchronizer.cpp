@@ -40,14 +40,11 @@ struct DocumentViewSynchronizerPrivate {
 	bool mActive;
 	QPoint mOldPosition;
 
-	void deleteBinders() {
+	void updateConnections() {
 		Q_FOREACH(DocumentView* view, mViews) {
 			QObject::disconnect(view, 0, q, 0);
 		}
-	}
 
-	void updateBinders() {
-		deleteBinders();
 		if (!mCurrentView || !mActive) {
 			return;
 		}
@@ -87,26 +84,25 @@ DocumentViewSynchronizer::DocumentViewSynchronizer(QObject* parent)
 
 
 DocumentViewSynchronizer::~DocumentViewSynchronizer() {
-	d->deleteBinders();
 	delete d;
 }
 
 
 void DocumentViewSynchronizer::setDocumentViews(QList< DocumentView* > views) {
 	d->mViews = views;
-	d->updateBinders();
+	d->updateConnections();
 }
 
 void DocumentViewSynchronizer::setCurrentView(DocumentView* view) {
 	d->mCurrentView = view;
 	d->updateOldPosition();
-	d->updateBinders();
+	d->updateConnections();
 }
 
 void DocumentViewSynchronizer::setActive(bool active) {
 	d->mActive = active;
 	d->updateOldPosition();
-	d->updateBinders();
+	d->updateConnections();
 }
 
 void DocumentViewSynchronizer::setZoom(qreal zoom) {
