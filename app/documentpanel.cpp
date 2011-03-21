@@ -70,14 +70,7 @@ namespace Gwenview {
 #endif
 
 
-static int getenvInt(const char* name, int defaultValue) {
-	QByteArray strValue = qgetenv(name);
-	bool ok;
-	int value = strValue.toInt(&ok);
-	return ok ? value : defaultValue;
-}
-
-const int DocumentPanel::MaxViewCount = getenvInt("MAX_VIEW_COUNT", 2);
+const int DocumentPanel::MaxViewCount = 6;
 
 
 static QString rgba(const QColor &color) {
@@ -145,8 +138,6 @@ struct DocumentPanelPrivate {
 	QList<DocumentView*> mDocumentViews;
 	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
-	HudWidget* mBestViewHud;
-	HudWidget* mCandidateViewHud;
 	QToolButton* mToggleThumbnailBarButton;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
@@ -274,62 +265,6 @@ struct DocumentPanelPrivate {
 		return button;
 	}
 
-	void setupBestViewHud() {
-		QWidget* content = new QWidget;
-		QHBoxLayout* layout = new QHBoxLayout(content);
-		layout->setMargin(0);
-		QLabel* iconLabel = new QLabel;
-		iconLabel->setPixmap(SmallIcon("favorites"));
-		layout->addWidget(iconLabel);
-		layout->addWidget(new QLabel(i18n("Best")));
-
-		mBestViewHud = new HudWidget;
-		mBestViewHud->init(content, HudWidget::OptionNone);
-		WidgetFloater* floater = new WidgetFloater(mDocumentViews[0]);
-		floater->setChildWidget(mBestViewHud);
-		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-
-		mHuds.append(mBestViewHud);
-	}
-
-	void setupCandidateViewHud() {
-		QToolButton* previousCandidateButton = createHudButton(i18n("Previous"), "go-previous", false);
-		previousCandidateButton->setProperty("segment-left", true);
-		QToolButton* nextCandidateButton = createHudButton(i18n("Next"), "go-next", false);
-		nextCandidateButton->setProperty("segment-right", true);
-		QToolButton* bestButton = createHudButton(i18n("Set as Best"), "favorites", true);
-		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", true);
-
-		QWidget* content = new QWidget;
-		QHBoxLayout* layout = new QHBoxLayout(content);
-		const int space = 4;
-		layout->setMargin(0);
-		layout->setSpacing(0);
-		layout->addWidget(new QLabel(i18n("Candidate")));
-		layout->addSpacing(space);
-		layout->addWidget(previousCandidateButton);
-		layout->addWidget(nextCandidateButton);
-		layout->addSpacing(space);
-		layout->addWidget(bestButton);
-		layout->addSpacing(space);
-		layout->addWidget(trashButton);
-		layout->addSpacing(space);
-
-		mCandidateViewHud = new HudWidget;
-		mCandidateViewHud->init(content, HudWidget::OptionCloseButton);
-		WidgetFloater* floater = new WidgetFloater(mDocumentViews[1]);
-		floater->setChildWidget(mCandidateViewHud);
-		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-
-		QObject::connect(previousCandidateButton, SIGNAL(clicked()), that, SLOT(goToPreviousCandidate()));
-		QObject::connect(nextCandidateButton, SIGNAL(clicked()), that, SLOT(goToNextCandidate()));
-		QObject::connect(bestButton, SIGNAL(clicked()), that, SLOT(setAsBest()));
-		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(trashCandidate()));
-		Binder<DocumentPanel, DocumentView*>::bind(mCandidateViewHud, SIGNAL(closed()), that, &DocumentPanel::deselectView, mDocumentViews[1]);
-
-		mHuds.append(mCandidateViewHud);
-	}
-
 	void setupViewHud(DocumentView* view) {
 		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", true);
 
@@ -354,18 +289,8 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupHuds() {
-		if (DocumentPanel::MaxViewCount == 2) {
-			setupBestViewHud();
-			setupCandidateViewHud();
-			QWidget* w1 = mBestViewHud->mainWidget();
-			QWidget* w2 = mCandidateViewHud->mainWidget();
-			int height = qMax(w1->sizeHint().height(), w2->sizeHint().height());
-			w1->setFixedHeight(height);
-			w2->setFixedHeight(height);
-		} else {
-			Q_FOREACH(DocumentView* view, mDocumentViews) {
-				setupViewHud(view);
-			}
+		Q_FOREACH(DocumentView* view, mDocumentViews) {
+			setupViewHud(view);
 		}
 	}
 
@@ -447,27 +372,6 @@ struct DocumentPanelPrivate {
 		// FIXME: Ugly coupling!
 		SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
 		return model->indexForUrl(doc->url());
-	}
-
-	void goTo(int delta) {
-		QModelIndex candidateIndex = indexForView(mDocumentViews[1]);
-		QModelIndex newIndex = candidateIndex.sibling(candidateIndex.row() + delta, 0);
-		if (!newIndex.isValid()) {
-			return;
-		}
-
-		QModelIndex bestIndex = indexForView(mDocumentViews[0]);
-		if (newIndex == bestIndex) {
-			goTo(delta * 2);
-		} else {
-			SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
-			KUrl url = model->urlForIndex(newIndex);
-			mDocumentViews[1]->openUrl(url);
-			initCurrentView(mDocumentViews[1], url);
-			QItemSelectionModel* selectionModel = mThumbnailBar->selectionModel();
-			selectionModel->setCurrentIndex(newIndex, QItemSelectionModel::Select);
-			selectionModel->select(candidateIndex, QItemSelectionModel::Deselect);
-		}
 	}
 };
 
@@ -794,38 +698,6 @@ void DocumentPanel::slotViewClicked(DocumentView* view) {
 	view->setCurrent(true);
 	d->mDocumentViewController->setView(view);
 	d->mSynchronizer->setCurrentView(view);
-}
-
-
-void DocumentPanel::goToNextCandidate() {
-	d->goTo(1);
-}
-
-
-void DocumentPanel::goToPreviousCandidate() {
-	d->goTo(-1);
-}
-
-
-void DocumentPanel::setAsBest() {
-	QModelIndex candidateIndex = d->indexForView(d->mDocumentViews[1]);
-
-	QModelIndex newBestIndex = candidateIndex;
-	QModelIndex newCandidateIndex = candidateIndex.sibling(candidateIndex.row() + 1, 0);
-	if (!newCandidateIndex.isValid()) {
-		newCandidateIndex = candidateIndex.sibling(candidateIndex.row() - 1, 0);
-	}
-
-	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
-	selectionModel->select(newBestIndex, QItemSelectionModel::ClearAndSelect);
-	selectionModel->select(newCandidateIndex, QItemSelectionModel::Select);
-}
-
-
-void DocumentPanel::trashCandidate() {
-	KUrl url = d->mDocumentViews[1]->url();
-	goToNextCandidate();
-	FileOperations::trash(KUrl::List() << url, this);
 }
 
 

@@ -124,11 +124,7 @@ private Q_SLOTS:
 
 	void slotViewClicked(DocumentView*);
 
-	void goToPreviousCandidate();
-	void goToNextCandidate();
-	void setAsBest();
-	void trashCandidate();
-	void trashView(DocumentView*);
+	void trashView(Gwenview::DocumentView*);
 	void deselectView(DocumentView*);
 
 private:
