@@ -69,6 +69,9 @@ struct DocumentViewSynchronizerPrivate {
 	}
 
 	void updateOldPosition() {
+		if (!mCurrentView || !mActive) {
+			return;
+		}
 		mOldPosition = mCurrentView->position();
 	}
 };
