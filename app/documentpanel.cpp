@@ -350,8 +350,12 @@ struct DocumentPanelPrivate {
 		}
 	}
 
+	DocumentView* currentView() const {
+		return mDocumentViewController->view();
+	}
+
 	void setCurrentView(DocumentView* view) {
-		DocumentView* oldView = mDocumentViewController->view();
+		DocumentView* oldView = currentView();
 		if (view == oldView) {
 			return;
 		}
@@ -705,9 +709,24 @@ void DocumentPanel::trashView(DocumentView* view) {
 
 
 void DocumentPanel::deselectView(DocumentView* view) {
+	DocumentView* newCurrentView = 0;
+	if (view == d->currentView()) {
+		int idx = d->mDocumentViews.indexOf(view);
+		if (idx < d->mDocumentViews.count() - 1 && d->mDocumentViews.at(idx + 1)->isVisible()) {
+			++idx;
+		} else {
+			--idx;
+		}
+		newCurrentView = d->mDocumentViews.at(idx);
+	}
+
 	QModelIndex index = d->indexForView(view);
 	QItemSelectionModel* selectionModel = d->mThumbnailBar->selectionModel();
 	selectionModel->select(index, QItemSelectionModel::Deselect);
+
+	if (newCurrentView) {
+		d->setCurrentView(newCurrentView);
+	}
 }
 
 
