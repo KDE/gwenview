@@ -589,7 +589,6 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
-	KUrl::List::ConstIterator it = urls.begin();
 	bool compareMode = urls.count() > 1;
 	QList<DocumentView*> visibleViews;
 
@@ -617,7 +616,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	// Show urls to display in available views
 	Q_FOREACH(const KUrl& url, notDisplayedUrls) {
 		if (availableViews.isEmpty()) {
-			kWarning() << "No room to load" << *it << ". This should not happen";
+			kWarning() << "No room to load" << url << ". This should not happen";
 			break;
 		}
 		DocumentView* view = availableViews.takeFirst();
