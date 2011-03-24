@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLabel>
 #include <QShortcut>
 #include <QToolButton>
-#include <QUndoGroup>
 #include <QVBoxLayout>
 
 // KDE
@@ -42,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "splitter.h"
 #include <lib/binder.h>
 #include <lib/document/document.h>
-#include <lib/document/documentfactory.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
 #include <lib/documentview/documentviewcontroller.h>
@@ -352,13 +350,17 @@ struct DocumentPanelPrivate {
 		}
 	}
 
-	void initCurrentView(DocumentView* view, const KUrl& url) {
+	void setCurrentView(DocumentView* view) {
+		DocumentView* oldView = mDocumentViewController->view();
+		if (view == oldView) {
+			return;
+		}
+		if (oldView) {
+			oldView->setCurrent(false);
+		}
+		view->setCurrent(true);
 		mDocumentViewController->setView(view);
 		mSynchronizer->setCurrentView(view);
-		Document::Ptr doc = DocumentFactory::instance()->load(url);
-		QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
-		undoGroup->addStack(doc->undoStack());
-		undoGroup->setActiveStack(doc->undoStack());
 	}
 
 	QModelIndex indexForView(DocumentView* view) const {
@@ -600,8 +602,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 			notDisplayedUrls.remove(url);
 			view->setCompareMode(compareMode);
 			if (url == currentUrl) {
-				view->setCurrent(true);
-				d->initCurrentView(view, currentUrl);
+				d->setCurrentView(view);
 			} else {
 				view->setCurrent(false);
 			}
@@ -623,8 +624,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		view->openUrl(url);
 		view->setCompareMode(compareMode);
 		if (url == currentUrl) {
-			view->setCurrent(true);
-			d->initCurrentView(view, currentUrl);
+			d->setCurrentView(view);
 		} else {
 			view->setCurrent(false);
 		}
@@ -687,17 +687,7 @@ void DocumentPanel::reset() {
 }
 
 void DocumentPanel::slotViewClicked(DocumentView* view) {
-	DocumentView* oldView = d->mDocumentViewController->view();
-	if (view == oldView) {
-		return;
-	}
-
-	if (oldView) {
-		oldView->setCurrent(false);
-	}
-	view->setCurrent(true);
-	d->mDocumentViewController->setView(view);
-	d->mSynchronizer->setCurrentView(view);
+	d->setCurrentView(view);
 }
 
 

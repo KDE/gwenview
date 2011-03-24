@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QItemSelectionModel>
 #include <QTimer>
+#include <QUndoGroup>
 
 // KDE
 #include <kdebug.h>
@@ -30,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "sidebar.h"
 #include "abstractcontextmanageritem.h"
+#include <lib/document/documentfactory.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
@@ -113,10 +115,17 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 
 
 void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
-	if (d->mCurrentUrl != currentUrl) {
-		d->mCurrentUrl = currentUrl;
-		d->queueSignal("selectionChanged");
+	if (d->mCurrentUrl == currentUrl) {
+		return;
 	}
+
+	d->mCurrentUrl = currentUrl;
+	Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
+	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+	undoGroup->addStack(doc->undoStack());
+	undoGroup->setActiveStack(doc->undoStack());
+
+	d->queueSignal("selectionChanged");
 }
 
 
