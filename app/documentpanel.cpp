@@ -526,7 +526,7 @@ void DocumentPanel::showContextMenu() {
 	menu.addSeparator();
 	addActionToMenu(&menu, d->mActionCollection, "go_previous");
 	addActionToMenu(&menu, d->mActionCollection, "go_next");
-	if (d->mDocumentViews[0]->adapter()->canZoom()) {
+	if (d->currentView()->adapter()->canZoom()) {
 		menu.addSeparator();
 		addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
@@ -549,41 +549,44 @@ QSize DocumentPanel::sizeHint() const {
 
 
 KUrl DocumentPanel::url() const {
-	if (!d->mDocumentViews[0]->adapter()) {
-		LOG("!d->mDocumentView->adapter()");
+	if (!d->currentView()) {
+		LOG("!d->documentView()");
 		return KUrl();
 	}
 
-	if (!d->mDocumentViews[0]->adapter()->document()) {
-		LOG("!d->mDocumentView->adapter()->document()");
+	if (!d->currentView()->adapter()->document()) {
+		LOG("!d->documentView()->adapter()->document()");
 		return KUrl();
 	}
 
-	return d->mDocumentViews[0]->adapter()->document()->url();
+	return d->currentView()->adapter()->document()->url();
 }
 
 
 Document::Ptr DocumentPanel::currentDocument() const {
-	if (!d->mDocumentViews[0]->adapter()) {
+	if (!d->currentView()) {
 		return Document::Ptr();
 	}
 
-	return d->mDocumentViews[0]->adapter()->document();
+	return d->currentView()->adapter()->document();
 }
 
 
 bool DocumentPanel::isEmpty() const {
-	return d->mDocumentViews[0]->isEmpty();
+	if (!d->currentView()) {
+		return true;
+	}
+	return d->currentView()->isEmpty();
 }
 
 
 ImageView* DocumentPanel::imageView() const {
-	return d->mDocumentViews[0]->adapter()->imageView();
+	return d->currentView()->adapter()->imageView();
 }
 
 
 DocumentView* DocumentPanel::documentView() const {
-	return d->mDocumentViews[0];
+	return d->currentView();
 }
 
 
@@ -659,10 +662,10 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 
 
 void DocumentPanel::reload() {
-	if (!d->mDocumentViews[0]->adapter()) {
+	if (!d->currentView()->adapter()) {
 		return;
 	}
-	Document::Ptr doc = d->mDocumentViews[0]->adapter()->document();
+	Document::Ptr doc = d->currentView()->adapter()->document();
 	if (!doc) {
 		kWarning() << "!doc";
 		return;
@@ -681,7 +684,7 @@ void DocumentPanel::reload() {
 	doc->reload();
 	// Call openUrl again because DocumentView may need to switch to a new
 	// adapter (for example because document was broken and it is not anymore)
-	d->mDocumentViews[0]->openUrl(doc->url());
+	d->currentView()->openUrl(doc->url());
 }
 
 

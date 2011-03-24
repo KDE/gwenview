@@ -89,7 +89,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "thumbnailviewpanel.h"
 #include <lib/archiveutils.h>
 #include <lib/document/documentfactory.h>
-#include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
 #include <lib/fullscreenbar.h>
 #include <lib/gwenviewconfig.h>
@@ -454,7 +453,7 @@ struct MainWindow::Private {
 		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 		if (Nepomuk::ResourceManager::instance()->init() == 0) {
 		#endif
-			semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel->documentView());
+			semanticInfoItem = new SemanticInfoContextManagerItem(mContextManager, actionCollection, mDocumentPanel);
 		#ifdef GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK
 		}
 		#endif
