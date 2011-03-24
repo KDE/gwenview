@@ -361,6 +361,13 @@ struct DocumentPanelPrivate {
 		view->setCurrent(true);
 		mDocumentViewController->setView(view);
 		mSynchronizer->setCurrentView(view);
+
+		QModelIndex index = indexForView(view);
+		if (!index.isValid()) {
+			kWarning() << "No index found for current view";
+			return;
+		}
+		mThumbnailBar->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Current);
 	}
 
 	QModelIndex indexForView(DocumentView* view) const {
