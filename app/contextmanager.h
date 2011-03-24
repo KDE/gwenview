@@ -77,6 +77,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 	void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 	void slotSelectionChanged();
+	void slotCurrentChanged(const QModelIndex&);
 	void emitQueuedSignals();
 
 private:

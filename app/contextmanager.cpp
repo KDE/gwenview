@@ -97,6 +97,8 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* se
 	d->mSelectionModel = selectionModel;
 	connect(d->mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 		SLOT(slotSelectionChanged()) );
+	connect(d->mSelectionModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+		SLOT(slotCurrentChanged(const QModelIndex&)) );
 
 	d->mSelectedFileItemListNeedsUpdate = false;
 	d->mOnlyCurrentUrl = false;
@@ -124,6 +126,10 @@ void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
 	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
 	undoGroup->addStack(doc->undoStack());
 	undoGroup->setActiveStack(doc->undoStack());
+
+	if (d->mOnlyCurrentUrl) {
+		d->mSelectedFileItemListNeedsUpdate = true;
+	}
 
 	d->queueSignal("selectionChanged");
 }
@@ -196,6 +202,12 @@ void ContextManager::slotDirModelDataChanged(const QModelIndex& topLeft, const Q
 void ContextManager::slotSelectionChanged() {
 	d->mSelectedFileItemListNeedsUpdate = true;
 	d->queueSignal("selectionChanged");
+}
+
+
+void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index) {
+	KUrl url = d->mDirModel->urlForIndex(index);
+	setCurrentUrl(url);
 }
 
 
