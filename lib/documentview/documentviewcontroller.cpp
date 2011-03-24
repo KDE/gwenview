@@ -152,6 +152,7 @@ void DocumentViewController::setView(DocumentView* view) {
 	connect(d->mZoomOutAction, SIGNAL(triggered()),
 		d->mView, SLOT(zoomOut()));
 
+	d->updateActions();
 	updateZoomToFitActionFromView();
 
 	// Sync zoom widget
