@@ -137,6 +137,7 @@ struct DocumentPanelPrivate {
 	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
 	QToolButton* mToggleThumbnailBarButton;
+	QWidget* mDocumentViewContainer;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
@@ -204,15 +205,20 @@ struct DocumentPanelPrivate {
 	void setupAdapterContainer() {
 		mAdapterContainer = new QWidget;
 
-		QGridLayout* layout = new QGridLayout(mAdapterContainer);
+		QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		int col = 0;
+		mDocumentViewContainer = new QWidget;
+		mDocumentViewContainer->setAutoFillBackground(true);
+		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
+		QHBoxLayout* viewLayout = new QHBoxLayout(mDocumentViewContainer);
+		viewLayout->setMargin(0);
+		viewLayout->setSpacing(0);
 		Q_FOREACH(DocumentView* view, mDocumentViews) {
-			layout->addWidget(view, 0, col);
-			++col;
+			viewLayout->addWidget(view);
 		}
-		layout->addWidget(mStatusBarContainer, 1, 0, 1, DocumentPanel::MaxViewCount);
+		layout->addWidget(mDocumentViewContainer);
+		layout->addWidget(mStatusBarContainer);
 	}
 
 	void setupDocumentView(SlideShow* slideShow) {
@@ -326,22 +332,7 @@ struct DocumentPanelPrivate {
 
 	void applyPalette() {
 		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
-		that->setPalette(palette);
-
-		Q_FOREACH(DocumentView* view, mDocumentViews) {
-			if (!view->adapter()) {
-				continue;
-			}
-			QWidget* widget = view->adapter()->widget();
-			if (!widget) {
-				continue;
-			}
-
-			QPalette partPalette = widget->palette();
-			partPalette.setBrush(widget->backgroundRole(), palette.base());
-			partPalette.setBrush(widget->foregroundRole(), palette.text());
-			widget->setPalette(partPalette);
-		}
+		mDocumentViewContainer->setPalette(palette);
 	}
 
 	void saveSplitterConfig() {

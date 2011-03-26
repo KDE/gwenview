@@ -544,8 +544,6 @@ void DocumentView::paintEvent(QPaintEvent* event) {
 		return;
 	}
 	QPainter painter(this);
-	QWidget* widget = d->mAdapter->widget();
-	painter.fillRect(rect(), widget->palette().color(widget->backgroundRole()));
 	if (d->mCurrent) {
 		painter.setBrush(Qt::NoBrush);
 		painter.setPen(QPen(palette().highlight().color(), 2));
