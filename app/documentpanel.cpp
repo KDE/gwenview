@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
+#include <lib/documentview/documentviewcontainer.h>
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
 #include <lib/gwenviewconfig.h>
@@ -137,7 +138,7 @@ struct DocumentPanelPrivate {
 	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
 	QToolButton* mToggleThumbnailBarButton;
-	QWidget* mDocumentViewContainer;
+	DocumentViewContainer* mDocumentViewContainer;
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
@@ -208,14 +209,11 @@ struct DocumentPanelPrivate {
 		QVBoxLayout* layout = new QVBoxLayout(mAdapterContainer);
 		layout->setMargin(0);
 		layout->setSpacing(0);
-		mDocumentViewContainer = new QWidget;
+		mDocumentViewContainer = new DocumentViewContainer;
 		mDocumentViewContainer->setAutoFillBackground(true);
 		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
-		QHBoxLayout* viewLayout = new QHBoxLayout(mDocumentViewContainer);
-		viewLayout->setMargin(0);
-		viewLayout->setSpacing(0);
 		Q_FOREACH(DocumentView* view, mDocumentViews) {
-			viewLayout->addWidget(view);
+			mDocumentViewContainer->addView(view);
 		}
 		layout->addWidget(mDocumentViewContainer);
 		layout->addWidget(mStatusBarContainer);

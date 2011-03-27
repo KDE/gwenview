@@ -54,6 +54,7 @@ set(gwenviewlib_SRCS
 	documentview/videoviewadapter.cpp
 	abstractimageoperation.cpp
 	abstractimageviewtool.cpp
+	documentview/documentviewcontainer.cpp
 	binder.cpp
 	eventwatcher.cpp
 	splittercollapser.cpp
