@@ -713,13 +713,27 @@ void DocumentPanel::trashView(DocumentView* view) {
 void DocumentPanel::deselectView(DocumentView* view) {
 	DocumentView* newCurrentView = 0;
 	if (view == d->currentView()) {
+		// We need to find a new view to set as current
 		int idx = d->mDocumentViews.indexOf(view);
-		if (idx < d->mDocumentViews.count() - 1 && d->mDocumentViews.at(idx + 1)->isVisible()) {
-			++idx;
-		} else {
-			--idx;
+		// Look for the next visible view after the current one
+		for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
+			if (d->mDocumentViews.at(newIdx)->isVisible()) {
+				newCurrentView = d->mDocumentViews.at(newIdx);
+				break;
+			}
 		}
-		newCurrentView = d->mDocumentViews.at(idx);
+		if (!newCurrentView) {
+			// No visible view found after the current one, look before
+			for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
+				if (d->mDocumentViews.at(newIdx)->isVisible()) {
+					newCurrentView = d->mDocumentViews.at(newIdx);
+					break;
+				}
+			}
+		}
+		if (!newCurrentView) {
+			kWarning() << "No view found to set as current, this should not happen!";
+		}
 	}
 
 	QModelIndex index = d->indexForView(view);
