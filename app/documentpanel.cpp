@@ -524,6 +524,14 @@ void DocumentPanel::showContextMenu() {
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
 	}
+	if (d->mCompareMode) {
+		menu.addSeparator();
+		QAction* action = menu.addAction(d->mSynchronizeCheckBox->text());
+		action->setCheckable(true);
+		action->setChecked(d->mSynchronizeCheckBox->isChecked());
+		connect(action, SIGNAL(toggled(bool)), d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
+	}
+
 	menu.addSeparator();
 	addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
 	addActionToMenu(&menu, d->mActionCollection, "file_move_to");
