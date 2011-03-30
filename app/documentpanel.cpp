@@ -147,6 +147,7 @@ struct DocumentPanelPrivate {
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
 	QPalette mFullScreenPalette;
+	bool mCompareMode;
 	bool mThumbnailBarVisibleBeforeFullScreen;
 
 	void setupThumbnailBar() {
@@ -385,6 +386,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->that = this;
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
+	d->mCompareMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
 	d->mFullScreenPalette = QPalette(palette());
 	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
@@ -592,7 +594,7 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
-	bool compareMode = urls.count() > 1;
+	d->mCompareMode = urls.count() > 1;
 	QList<DocumentView*> visibleViews;
 
 	// Get a list of available views and urls we are not already displaying
@@ -602,7 +604,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		KUrl url = view->url();
 		if (notDisplayedUrls.contains(url)) {
 			notDisplayedUrls.remove(url);
-			view->setCompareMode(compareMode);
+			view->setCompareMode(d->mCompareMode);
 			if (url == currentUrl) {
 				d->setCurrentView(view);
 			} else {
@@ -624,7 +626,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		}
 		DocumentView* view = availableViews.takeFirst();
 		view->openUrl(url);
-		view->setCompareMode(compareMode);
+		view->setCompareMode(d->mCompareMode);
 		if (url == currentUrl) {
 			d->setCurrentView(view);
 		} else {
@@ -635,13 +637,13 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	}
 
 	Q_FOREACH(HudWidget* hud, d->mHuds) {
-		hud->setVisible(compareMode);
-		if (compareMode) {
+		hud->setVisible(d->mCompareMode);
+		if (d->mCompareMode) {
 			hud->raise();
 		}
 	}
-	d->mSynchronizeCheckBox->setVisible(compareMode);
-	if (compareMode) {
+	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
+	if (d->mCompareMode) {
 		d->mSynchronizer->setDocumentViews(visibleViews);
 		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
 	} else {
