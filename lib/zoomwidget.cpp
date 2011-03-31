@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QSlider>
 
 // KDE
+#include <kdebug.h>
 
 // Local
 #include "zoomslider.h"
@@ -39,7 +40,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "statusbartoolbutton.h"
 
 namespace Gwenview {
-
 
 static const qreal MAGIC_K = 1.04;
 static const qreal MAGIC_OFFSET = 16.;
@@ -107,7 +107,6 @@ ZoomWidget::ZoomWidget(QWidget* parent)
 	d->mZoomSlider->setMinimumWidth(150);
 	d->mZoomSlider->slider()->setSingleStep(int(PRECISION));
 	d->mZoomSlider->slider()->setPageStep(3 * int(PRECISION));
-	connect(d->mZoomSlider->slider(), SIGNAL(rangeChanged(int, int)), SLOT(slotZoomSliderRangeChanged()) );
 	connect(d->mZoomSlider->slider(), SIGNAL(actionTriggered(int)), SLOT(slotZoomSliderActionTriggered()) );
 
 	// Layout
@@ -143,17 +142,6 @@ void ZoomWidget::setActions(QAction* zoomToFitAction, QAction* actualSizeAction,
 }
 
 
-void ZoomWidget::slotZoomSliderRangeChanged() {
-	if (d->mZoomToFitAction->isChecked()) {
-		QSlider* slider = d->mZoomSlider->slider();
-		SignalBlocker blocker(slider);
-		d->mZoomSlider->setValue(slider->minimum());
-	} else {
-		d->emitZoomChanged();
-	}
-}
-
-
 void ZoomWidget::slotZoomSliderActionTriggered() {
 	// The slider value changed because of the user (not because of range
 	// changes). In this case disable zoom and apply slider value.
@@ -171,15 +159,24 @@ void ZoomWidget::setZoom(qreal zoom) {
 		QSlider* slider = d->mZoomSlider->slider();
 		SignalBlocker blocker(slider);
 		int value = sliderValueForZoom(zoom);
+
+		if (value < slider->minimum()) {
+			// It is possible that we are called *before* setMinimumZoom() as
+			// been called. In this case, define the minimum ourself.
+			d->mZoomSlider->setMinimum(value);
+		}
 		d->mZoomSlider->setValue(value);
 	}
 }
 
 
-void ZoomWidget::setZoomRange(qreal minZoom, qreal maxZoom) {
-	d->mZoomSlider->slider()->setRange(
-		sliderValueForZoom(minZoom),
-		sliderValueForZoom(maxZoom));
+void ZoomWidget::setMinimumZoom(qreal minimumZoom) {
+	d->mZoomSlider->setMinimum(sliderValueForZoom(minimumZoom));
+}
+
+
+void ZoomWidget::setMaximumZoom(qreal zoom) {
+	d->mZoomSlider->setMaximum(sliderValueForZoom(zoom));
 }
 
 

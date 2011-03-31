@@ -20,16 +20,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef DOCUMENTPANEL_H
 #define DOCUMENTPANEL_H
 
-// Qt
-#include <QWidget>
-
 // Local
 #include <lib/document/document.h>
+
+// KDE
+#include <kurl.h>
+
+// Qt
+#include <QWidget>
 
 class QPalette;
 
 class KActionCollection;
-class KUrl;
 
 namespace Gwenview {
 
@@ -46,6 +48,8 @@ struct DocumentPanelPrivate;
 class DocumentPanel : public QWidget {
 	Q_OBJECT
 public:
+	static const int MaxViewCount;
+
 	DocumentPanel(QWidget* parent, SlideShow*, KActionCollection*);
 	~DocumentPanel();
 
@@ -76,6 +80,11 @@ public:
 	KUrl url() const;
 
 	void openUrl(const KUrl& url);
+
+	/**
+	 * Opens up to MaxViewCount urls, and set currentUrl as the current one
+	 */
+	void openUrls(const KUrl::List& urls, const KUrl& currentUrl);
 
 	void reload();
 
@@ -113,11 +122,14 @@ private Q_SLOTS:
 
 	void showContextMenu();
 
+	void slotViewClicked(DocumentView*);
+
+	void trashView(Gwenview::DocumentView*);
+	void deselectView(DocumentView*);
+
 private:
 	friend struct DocumentPanelPrivate;
 	DocumentPanelPrivate* const d;
-
-	void createAdapterForUrl(const KUrl& url);
 };
 
 } // namespace

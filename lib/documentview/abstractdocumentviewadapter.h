@@ -70,6 +70,7 @@ public:
 	 */
 	virtual bool canZoom() const { return false; }
 
+	// Implementation must emit zoomToFitChanged()
 	virtual void setZoomToFit(bool) {}
 
 	virtual bool zoomToFit() const { return false; }
@@ -100,6 +101,8 @@ Q_SIGNALS:
 	 * @{
 	 */
 	void zoomChanged(qreal);
+
+	void zoomToFitChanged(bool);
 
 	/**
 	 * Emitted when the ui would like to zoom in at a particular point.

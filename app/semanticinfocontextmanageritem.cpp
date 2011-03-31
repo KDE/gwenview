@@ -41,9 +41,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "contextmanager.h"
+#include "documentpanel.h"
 #include "sidebar.h"
 #include "ui_semanticinfosidebaritem.h"
 #include "ui_semanticinfodialog.h"
+#include <lib/documentview/documentview.h>
 #include <lib/eventwatcher.h>
 #include <lib/hudwidget.h>
 #include <lib/signalblocker.h>
@@ -100,7 +102,7 @@ public:
 
 		mHideTimer->setInterval(RATING_INDICATOR_HIDE_DELAY);
 		mHideTimer->setSingleShot(true);
-		connect(mHideTimer, SIGNAL(timeout()), SLOT(hide()));
+		connect(mHideTimer, SIGNAL(timeout()), SLOT(deleteLater()));
 		hide();
 	}
 
@@ -124,14 +126,14 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 	SemanticInfoContextManagerItem* that;
 	SideBarGroup* mGroup;
 	KActionCollection* mActionCollection;
+	DocumentPanel* mDocumentPanel;
 	QPointer<SemanticInfoDialog> mSemanticInfoDialog;
 	TagInfo mTagInfo;
 	KAction* mEditTagsAction;
 	QSignalMapper* mRatingMapper;
-	RatingIndicator* mRatingIndicator;
 	/** A list of all actions, so that we can disable them when necessary */
 	QList<KAction*> mActions;
-
+	QPointer<RatingIndicator> mRatingIndicator;
 
 	void setupGroup() {
 		mGroup = new SideBarGroup(i18n("Semantic Information"));
@@ -224,13 +226,12 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 };
 
 
-SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, QWidget* documentPanel)
+SemanticInfoContextManagerItem::SemanticInfoContextManagerItem(ContextManager* manager, KActionCollection* actionCollection, DocumentPanel* documentPanel)
 : AbstractContextManagerItem(manager)
 , d(new SemanticInfoContextManagerItemPrivate) {
 	d->that = this;
 	d->mActionCollection = actionCollection;
-
-	d->mRatingIndicator = new RatingIndicator(documentPanel);
+	d->mDocumentPanel = documentPanel;
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(slotSelectionChanged()) );
@@ -259,7 +260,9 @@ inline int ratingForVariant(const QVariant& variant) {
 
 
 void SemanticInfoContextManagerItem::slotSelectionChanged() {
-	d->mRatingIndicator->hide();
+	if (d->mRatingIndicator) {
+		d->mRatingIndicator->deleteLater();
+	}
 	update();
 }
 
@@ -342,7 +345,9 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	KFileItemList itemList = contextManager()->selectedFileItemList();
 
 	// Show rating indicator in view mode, and only if sidebar is not visible
-	if (d->mRatingIndicator->parentWidget()->isVisible() && !d->mRatingWidget->isVisible()) {
+	if (d->mDocumentPanel->isVisible() && !d->mRatingWidget->isVisible()) {
+		delete d->mRatingIndicator.data();
+		d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel->documentView());
 		d->mRatingIndicator->setRating(rating);
 		d->mRatingIndicator->show();
 	}

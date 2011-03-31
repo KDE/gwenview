@@ -47,21 +47,46 @@ struct DocumentViewPrivate;
  */
 class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_OBJECT
+	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
+	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
+	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
 public:
-	DocumentView(QWidget* parent, SlideShow*, KActionCollection*);
+	enum {
+		MaximumZoom = 16
+	};
+	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
-
-	void setZoomWidgetVisible(bool);
 
 	AbstractDocumentViewAdapter* adapter() const;
 
-	ZoomWidget* zoomWidget() const;
+	KUrl url() const;
 
 	void openUrl(const KUrl&);
 
 	void reset();
 
 	bool isEmpty() const;
+
+	qreal minimumZoom() const;
+
+	qreal zoom() const;
+
+	bool isCurrent() const;
+
+	void setCurrent(bool);
+
+	void setCompareMode(bool);
+
+	bool zoomToFit() const;
+
+	QPoint position() const;
+
+public Q_SLOTS:
+	void setZoom(qreal);
+
+	void setZoomToFit(bool);
+
+	void setPosition(const QPoint&);
 
 Q_SIGNALS:
 	/**
@@ -77,17 +102,29 @@ Q_SIGNALS:
 
 	void toggleFullScreenRequested();
 
+	void videoFinished();
+
+	void minimumZoomChanged(qreal);
+
+	void zoomChanged(qreal);
+
+	void adapterChanged();
+
+	void clicked(DocumentView*);
+
+	void zoomToFitChanged(bool);
+
+	void positionChanged();
+
 protected:
-	virtual void showEvent(QShowEvent* event);
-	virtual void hideEvent(QHideEvent* event);
 	virtual bool eventFilter(QObject*, QEvent* event);
+
+	virtual void paintEvent(QPaintEvent*);
 
 private Q_SLOTS:
 	void finishOpenUrl();
 	void slotLoaded();
 	void slotLoadingFailed();
-
-	void setZoomToFit(bool);
 
 	void zoomActualSize();
 
@@ -95,7 +132,6 @@ private Q_SLOTS:
 	void zoomOut(const QPoint& center = QPoint(-1,-1));
 
 	void slotZoomChanged(qreal);
-	void slotZoomWidgetChanged(qreal);
 
 	void slotBusyChanged(const KUrl&, bool);
 

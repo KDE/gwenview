@@ -110,7 +110,10 @@ qreal ImageViewAdapter::zoom() const {
 
 
 void ImageViewAdapter::setZoomToFit(bool on) {
-	d->mView->setZoomToFit(on);
+	if (d->mView->zoomToFit() != on) {
+		d->mView->setZoomToFit(on);
+		zoomToFitChanged(on);
+	}
 }
 
 

@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 #include <QItemSelectionModel>
 #include <QTimer>
+#include <QUndoGroup>
 
 // KDE
 #include <kdebug.h>
@@ -30,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "sidebar.h"
 #include "abstractcontextmanageritem.h"
+#include <lib/document/documentfactory.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 
 namespace Gwenview {
@@ -41,6 +43,7 @@ struct ContextManagerPrivate {
 	KUrl mCurrentDirUrl;
 	KUrl mCurrentUrl;
 
+	bool mOnlyCurrentUrl;
 	bool mSelectedFileItemListNeedsUpdate;
 	QSet<QByteArray> mQueuedSignals;
 	KFileItemList mSelectedFileItemList;
@@ -57,9 +60,11 @@ struct ContextManagerPrivate {
 			return;
 		}
 		mSelectedFileItemList.clear();
-		QItemSelection selection = mSelectionModel->selection();
-		Q_FOREACH(const QModelIndex& index, selection.indexes()) {
-			mSelectedFileItemList << mDirModel->itemForIndex(index);
+		if (!mOnlyCurrentUrl) {
+			QItemSelection selection = mSelectionModel->selection();
+			Q_FOREACH(const QModelIndex& index, selection.indexes()) {
+				mSelectedFileItemList << mDirModel->itemForIndex(index);
+			}
 		}
 
 		// At least add current url if it's valid (it may not be in
@@ -92,8 +97,11 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* se
 	d->mSelectionModel = selectionModel;
 	connect(d->mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 		SLOT(slotSelectionChanged()) );
+	connect(d->mSelectionModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+		SLOT(slotCurrentChanged(const QModelIndex&)) );
 
 	d->mSelectedFileItemListNeedsUpdate = false;
+	d->mOnlyCurrentUrl = false;
 }
 
 
@@ -109,10 +117,21 @@ void ContextManager::addItem(AbstractContextManagerItem* item) {
 
 
 void ContextManager::setCurrentUrl(const KUrl& currentUrl) {
-	if (d->mCurrentUrl != currentUrl) {
-		d->mCurrentUrl = currentUrl;
-		d->queueSignal("selectionChanged");
+	if (d->mCurrentUrl == currentUrl) {
+		return;
 	}
+
+	d->mCurrentUrl = currentUrl;
+	Document::Ptr doc = DocumentFactory::instance()->load(currentUrl);
+	QUndoGroup* undoGroup = DocumentFactory::instance()->undoGroup();
+	undoGroup->addStack(doc->undoStack());
+	undoGroup->setActiveStack(doc->undoStack());
+
+	if (d->mOnlyCurrentUrl) {
+		d->mSelectedFileItemListNeedsUpdate = true;
+	}
+
+	d->queueSignal("selectionChanged");
 }
 
 
@@ -186,11 +205,26 @@ void ContextManager::slotSelectionChanged() {
 }
 
 
+void Gwenview::ContextManager::slotCurrentChanged(const QModelIndex& index) {
+	KUrl url = d->mDirModel->urlForIndex(index);
+	setCurrentUrl(url);
+}
+
+
 void ContextManager::emitQueuedSignals() {
 	Q_FOREACH(const QByteArray& signal, d->mQueuedSignals) {
 		QMetaObject::invokeMethod(this, signal.data());
 	}
 	d->mQueuedSignals.clear();
+}
+
+
+void ContextManager::setOnlyCurrentUrl(bool onlyCurrentUrl) {
+	if (d->mOnlyCurrentUrl != onlyCurrentUrl) {
+		d->mOnlyCurrentUrl = onlyCurrentUrl;
+		d->mSelectedFileItemListNeedsUpdate = true;
+		d->queueSignal("selectionChanged");
+	}
 }
 
 

@@ -1,7 +1,7 @@
 // vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /*
 Gwenview: an image viewer
-Copyright 2008 Aurélien Gâteau <agateau@kde.org>
+Copyright 2011 Aurélien Gâteau <agateau@kde.org>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,52 +18,51 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA.
 
 */
-#ifndef ZOOMWIDGET_H
-#define ZOOMWIDGET_H
+#ifndef DOCUMENTVIEWSYNCHRONIZER_H
+#define DOCUMENTVIEWSYNCHRONIZER_H
 
 #include <lib/gwenviewlib_export.h>
 
-// Qt
-#include <QFrame>
+// Local
 
 // KDE
 
-// Local
+// Qt
+#include <QObject>
 
-
-
-class QAction;
+class QPoint;
 
 namespace Gwenview {
 
+class DocumentView;
 
-struct ZoomWidgetPrivate;
-class GWENVIEWLIB_EXPORT ZoomWidget : public QFrame {
+class DocumentViewSynchronizerPrivate;
+/**
+ * A class to synchronize zoom and scroll of two DocumentView
+ */
+class GWENVIEWLIB_EXPORT DocumentViewSynchronizer : public QObject {
 	Q_OBJECT
 public:
-	ZoomWidget(QWidget* parent = 0);
-	~ZoomWidget();
+	DocumentViewSynchronizer(QObject* parent=0);
+	~DocumentViewSynchronizer();
 
-	void setActions(QAction* zoomToFitAction, QAction* actualSizeAction, QAction* zoomInAction, QAction* zoomOutAction);
+	void setDocumentViews(QList<DocumentView*> views);
+
+	void setCurrentView(DocumentView* view);
 
 public Q_SLOTS:
-	void setZoom(qreal zoom);
-
-	void setMinimumZoom(qreal zoom);
-	void setMaximumZoom(qreal zoom);
-
-Q_SIGNALS:
-	void zoomChanged(qreal);
+	void setActive(bool);
 
 private Q_SLOTS:
-	void slotZoomSliderActionTriggered();
+	void setZoom(qreal zoom);
+	void setZoomToFit(bool);
+	void updatePosition();
 
 private:
-	friend struct ZoomWidgetPrivate;
-	ZoomWidgetPrivate* const d;
+	DocumentViewSynchronizerPrivate* const d;
 };
 
 
 } // namespace
 
-#endif /* ZOOMWIDGET_H */
+#endif /* DOCUMENTVIEWSYNCHRONIZER_H */

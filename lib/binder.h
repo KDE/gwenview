@@ -29,9 +29,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 /**
- * Makes it possible to "connect" a parameter-less signal with a member
- * function which accepts one argument.  The argument must be known at
- * connection time.
+ * @internal
+ *
+ * Necessary helper class because a QObject class cannot be a template
+ */
+class GWENVIEWLIB_EXPORT BinderInternal : public QObject {
+	Q_OBJECT
+public:
+	explicit BinderInternal(QObject* parent);
+	~BinderInternal();
+
+protected Q_SLOTS:
+	virtual void callMethod() {}
+};
+
+/**
+ * The Binder and BinderRef classes make it possible to "connect" a
+ * parameter-less signal with a slot which accepts one argument. The
+ * argument must be known at connection time.
  *
  * Example:
  *
@@ -39,81 +54,61 @@ namespace Gwenview {
  *
  * class Receiver {
  * public:
- *   void doSomething(const Param& p);
+ *   void doSomething(Param* p);
  * };
  *
  * This code:
  *
- * connect(emitter, SIGNAL(somethingHappened()),
- *   CREATE_BINDER(parent, Receiver, Param, receiver, doSomething, p),
- *   SLOT(run())
- *   );
+ * Binder<Receiver, Param*>::bind(emitter, SIGNAL(somethingHappened()), receiver, &Receiver::doSomething, p)
  *
- * Will result in receiver->doSomething(p) being called when emitter emits the
- * somethingHappened() signal.
+ * Will result in receiver->doSomething(p) being called when emitter emits
+ * the somethingHappened() signal.
  *
- * parent must inherit from QObject: the connection will last until parent is
- * deleted.
+ * Just like a regular QObject connection, the connection will last until
+ * either emitter or receiver are deleted.
  *
- * Using this system avoids the need of creating an helper slot and adding a
- * member to the Receiver class to store the argument of the method to call.
+ * Using this system avoids creating an helper slot and adding a member to
+ * the Receiver class to store the argument of the method to call.
+ *
+ * To call a method which accept a pointer or a value argument, use Binder.
+ * To call a method which accept a const reference argument, use BinderRef.
+ *
+ * Note: the method does not need to be a slot.
  */
-#define CREATE_BINDER(parent, ReceiverClass, ArgClass, receiver, method, arg) \
-	(new Binder<ReceiverClass, ArgClass>(parent, receiver, &ReceiverClass::method, arg))->qObject
-
-
-class BinderQObject;
-
-
-class GWENVIEWLIB_EXPORT AbstractBinder {
+template <class Receiver, class Arg, typename MethodArg>
+class GWENVIEWLIB_EXPORT BaseBinder : public BinderInternal
+{
 public:
-	AbstractBinder(QObject* parent);
-	virtual ~AbstractBinder() {}
-
-	BinderQObject* qObject;
+	typedef void (Receiver::*Method)(MethodArg);
+	static void bind(QObject* emitter, const char* signal, Receiver* receiver, Method method, MethodArg arg) {
+		BaseBinder<Receiver, Arg, MethodArg>* binder = new BaseBinder<Receiver, Arg, MethodArg>(emitter);
+		binder->mReceiver = receiver;
+		binder->mMethod = method;
+		binder->mArg = arg;
+		QObject::connect(emitter, signal, binder, SLOT(callMethod()));
+		QObject::connect(receiver, SIGNAL(destroyed(QObject*)), binder, SLOT(deleteLater()));
+	}
 
 protected:
-	virtual void run() = 0;
-
-	friend class BinderQObject;
-};
-
-
-template <class Receiver, class Arg>
-class Binder : public AbstractBinder {
-public:
-	typedef void (Receiver::*Method)(const Arg&);
-	Binder(QObject* parent, Receiver* receiver, Method method, Arg arg)
-	: AbstractBinder(parent)
-	, mReceiver(receiver)
-	, mMethod(method)
-	, mArg(arg)
-	{}
-
-protected:
-	virtual void run() {
+	void callMethod() {
 		(mReceiver->*mMethod)(mArg);
 	}
 
 private:
+	BaseBinder(QObject* emitter)
+	: BinderInternal(emitter)
+	{}
+
 	Receiver* mReceiver;
 	Method mMethod;
 	Arg mArg;
 };
 
+template <class Receiver, class Arg>
+class Binder : public BaseBinder<Receiver, Arg, Arg> {};
 
-class GWENVIEWLIB_EXPORT BinderQObject : public QObject {
-	Q_OBJECT
-public:
-	BinderQObject(QObject* parent, AbstractBinder* binder);
-	~BinderQObject();
-
-public Q_SLOTS:
-	void run();
-
-private:
-	AbstractBinder* mBinder;
-};
+template <class Receiver, class Arg>
+class BinderRef : public BaseBinder<Receiver, Arg, const Arg&> {};
 
 } // namespace
 

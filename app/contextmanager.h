@@ -63,6 +63,12 @@ public:
 
 	SortedDirModel* dirModel() const;
 
+	/**
+	 * If true, selectedFileItemList() will only return current url
+	 * (useful in view mode)
+	 */
+	void setOnlyCurrentUrl(bool onlyCurrentUrl);
+
 Q_SIGNALS:
 	void selectionChanged();
 	void selectionDataChanged();
@@ -71,6 +77,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 	void slotDirModelDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 	void slotSelectionChanged();
+	void slotCurrentChanged(const QModelIndex&);
 	void emitQueuedSignals();
 
 private:

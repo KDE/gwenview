@@ -22,15 +22,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "documentview.moc"
 
 // Qt
-#include <QApplication>
-#include <QLabel>
+#include <QAbstractScrollArea>
 #include <QMouseEvent>
-#include <QShortcut>
+#include <QPainter>
+#include <QScrollBar>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE
 #include <kaction.h>
-#include <kactioncategory.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmodifierkeyinfo.h>
@@ -49,9 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewconfig.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
-#include <lib/slideshow.h>
 #include <lib/widgetfloater.h>
-#include <lib/zoomwidget.h>
 
 namespace Gwenview {
 
@@ -65,25 +63,22 @@ namespace Gwenview {
 #endif
 
 static const qreal REAL_DELTA = 0.001;
-static const qreal MAXIMUM_ZOOM_VALUE = 16.;
+static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 
 struct DocumentViewPrivate {
 	DocumentView* that;
-	SlideShow* mSlideShow;
 	KActionCollection* mActionCollection;
-	ZoomWidget* mZoomWidget;
-	KAction* mZoomToFitAction;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
-	bool mZoomWidgetVisible;
 	AbstractDocumentViewAdapter* mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
+	bool mCurrent;
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
@@ -107,22 +102,24 @@ struct DocumentViewPrivate {
 		if (mAdapter->canZoom()) {
 			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
 				that, SLOT(slotZoomChanged(qreal)) );
-			if (mZoomWidgetVisible) {
-				mZoomWidget->show();
-			}
-		} else {
-			mZoomWidget->hide();
+			QObject::connect(mAdapter, SIGNAL(zoomToFitChanged(bool)),
+				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
 		mAdapter->installEventFilterOnViewWidgets(that);
 
-		updateActions();
-	}
+		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(mAdapter->widget());
+		if (area) {
+			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+				that, SIGNAL(positionChanged()));
+			QObject::connect(area->verticalScrollBar(), SIGNAL(valueChanged(int)),
+				that, SIGNAL(positionChanged()));
+		}
 
-
-	void setupZoomWidget() {
-		mZoomWidget = new ZoomWidget;
-		QObject::connect(mZoomWidget, SIGNAL(zoomChanged(qreal)),
-			that, SLOT(slotZoomWidgetChanged(qreal)) );
+		that->adapterChanged();
+		that->positionChanged();
+		if (mAdapter->canZoom()) {
+			that->zoomToFitChanged(mAdapter->zoomToFit());
+		}
 	}
 
 	void setupZoomCursor() {
@@ -144,47 +141,6 @@ struct DocumentViewPrivate {
 		mAdapter->setCursor(mPreviousCursor);
 	}
 
-	void setupZoomActions() {
-		KActionCategory* view=new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), mActionCollection);
-
-		mZoomToFitAction = view->addAction("view_zoom_to_fit");
-		mZoomToFitAction->setCheckable(true);
-		mZoomToFitAction->setChecked(true);
-		mZoomToFitAction->setText(i18n("Zoom to Fit"));
-		mZoomToFitAction->setIcon(KIcon("zoom-fit-best"));
-		mZoomToFitAction->setIconText(i18nc("@action:button Zoom to fit, shown in status bar, keep it short please", "Fit"));
-		QObject::connect(mZoomToFitAction, SIGNAL(toggled(bool)),
-			that, SLOT(setZoomToFit(bool)) );
-
-		KAction* actualSizeAction = view->addAction(KStandardAction::ActualSize,that, SLOT(zoomActualSize()));
-		actualSizeAction->setIcon(KIcon("zoom-original"));
-		actualSizeAction->setIconText(i18nc("@action:button Zoom to original size, shown in status bar, keep it short please", "100%"));
-
-		KAction* zoomInAction = view->addAction(KStandardAction::ZoomIn,that, SLOT(zoomIn()));
-		KAction* zoomOutAction = view->addAction(KStandardAction::ZoomOut,that, SLOT(zoomOut()));
-
-		mZoomWidget->setActions(mZoomToFitAction, actualSizeAction, zoomInAction, zoomOutAction);
-	}
-
-
-	inline void setActionEnabled(const char* name, bool enabled) {
-		QAction* action = mActionCollection->action(name);
-		if (action) {
-			action->setEnabled(enabled);
-		} else {
-			kWarning() << "Action" << name << "not found";
-		}
-	}
-
-	void updateActions() {
-		const bool enabled = that->isVisible() && mAdapter->canZoom();
-		mZoomToFitAction->setEnabled(enabled);
-		setActionEnabled("view_actual_size", enabled);
-		setActionEnabled("view_zoom_in", enabled);
-		setActionEnabled("view_zoom_out", enabled);
-	}
-
-
 	void setupLoadingIndicator() {
 		KPixmapSequence sequence("process-working", 22);
 		mLoadingIndicator = new KPixmapSequenceWidget;
@@ -194,7 +150,6 @@ struct DocumentViewPrivate {
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
 	}
-
 
 	void updateCaption() {
 		QString caption;
@@ -227,37 +182,21 @@ struct DocumentViewPrivate {
 
 
 	void uncheckZoomToFit() {
-		// We can't uncheck zoom to fit by calling
-		// mZoomToFitAction->setChecked(false) directly because it would trigger
-		// the action slot, which would set zoom to 100%.
-		// If zoomToFit is on and the image is at 33%, pressing zoom in should
-		// show the image at 66%, not 200%.
-		if (!mAdapter->zoomToFit()) {
-			return;
+		if (mAdapter->zoomToFit()) {
+			mAdapter->setZoomToFit(false);
 		}
-		mAdapter->setZoomToFit(false);
-		SignalBlocker blocker(mZoomToFitAction);
-		mZoomToFitAction->setChecked(false);
 	}
 
 
 	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
 		uncheckZoomToFit();
-		zoom = qBound(computeMinimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
+		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
 	}
 
 
-	qreal computeMinimumZoom() const {
-		// There is no point zooming out less than zoomToFit, but make sure it does
-		// not get too small either
-		return qMax(0.001, qMin(double(mAdapter->computeZoomToFit()), 1.));
-	}
-
-
 	void updateZoomSnapValues() {
-		qreal min = computeMinimumZoom();
-		mZoomWidget->setZoomRange(min, MAXIMUM_ZOOM_VALUE);
+		qreal min = that->minimumZoom();
 
 		mZoomSnapValues.clear();
 		if (min < 1.) {
@@ -272,6 +211,8 @@ struct DocumentViewPrivate {
 		for (qreal zoom = 1; zoom <= MAXIMUM_ZOOM_VALUE ; zoom += 1.) {
 			mZoomSnapValues << zoom;
 		}
+
+		that->minimumZoomChanged(min);
 	}
 
 
@@ -304,7 +245,7 @@ struct DocumentViewPrivate {
 				return true;
 			} else if (event->button() == Qt::MidButton) {
 				// Middle click => toggle zoom to fit
-				mZoomToFitAction->trigger();
+				that->setZoomToFit(!mAdapter->zoomToFit());
 				return true;
 			}
 		}
@@ -366,11 +307,10 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent, SlideShow* slideShow, KActionCollection* actionCollection)
+DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 : QWidget(parent)
 , d(new DocumentViewPrivate) {
 	d->that = this;
-	d->mSlideShow = slideShow;
 	d->mActionCollection = actionCollection;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(slotKeyPressed(Qt::Key, bool)));
@@ -378,11 +318,9 @@ DocumentView::DocumentView(QWidget* parent, SlideShow* slideShow, KActionCollect
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->mAdapter = 0;
-	d->mZoomWidgetVisible = true;
-	d->setupZoomWidget();
-	d->setupZoomActions();
 	d->setupZoomCursor();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
+	d->mCurrent = false;
 }
 
 
@@ -391,22 +329,10 @@ DocumentView::~DocumentView() {
 }
 
 
-void DocumentView::setZoomWidgetVisible(bool visible) {
-	d->mZoomWidgetVisible = visible;
-	if (!visible) {
-		d->mZoomWidget->hide();
-	}
-}
-
-
 AbstractDocumentViewAdapter* DocumentView::adapter() const {
 	return d->mAdapter;
 }
 
-
-ZoomWidget* DocumentView::zoomWidget() const {
-	return d->mZoomWidget;
-}
 
 void DocumentView::createAdapterForDocument() {
 	Q_ASSERT(d->mAdapter);
@@ -426,10 +352,8 @@ void DocumentView::createAdapterForDocument() {
 		break;
 	case MimeTypeUtils::KIND_VIDEO:
 		adapter = new VideoViewAdapter(this);
-		if (d->mSlideShow) {
-			connect(adapter, SIGNAL(videoFinished()),
-				d->mSlideShow, SLOT(resumeAndGoToNextUrl()));
-		}
+		connect(adapter, SIGNAL(videoFinished()),
+			SIGNAL(videoFinished()));
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
 		adapter = new MessageViewAdapter(this);
@@ -530,10 +454,18 @@ void DocumentView::slotLoadingFailed() {
 
 
 void DocumentView::setZoomToFit(bool on) {
+	if (on == d->mAdapter->zoomToFit()) {
+		return;
+	}
 	d->mAdapter->setZoomToFit(on);
 	if (!on) {
 		d->mAdapter->setZoom(1.);
 	}
+}
+
+
+bool DocumentView::zoomToFit() const {
+	return d->mAdapter->zoomToFit();
 }
 
 
@@ -571,14 +503,18 @@ void DocumentView::zoomOut(const QPoint& center) {
 
 
 void DocumentView::slotZoomChanged(qreal zoom) {
-	d->mZoomWidget->setZoom(zoom);
 	d->updateCaption();
+	zoomChanged(zoom);
 }
 
 
-void DocumentView::slotZoomWidgetChanged(qreal zoom) {
-	d->uncheckZoomToFit();
+void DocumentView::setZoom(qreal zoom) {
 	d->setZoom(zoom);
+}
+
+
+qreal DocumentView::zoom() const {
+	return d->mAdapter->zoom();
 }
 
 
@@ -586,6 +522,7 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::MouseButtonPress) {
 		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::MouseButtonRelease) {
+		clicked(this);
 		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
 	} else if (event->type() == QEvent::Resize) {
 		d->updateZoomSnapValues();
@@ -601,13 +538,19 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 }
 
 
-void DocumentView::showEvent(QShowEvent*) {
-	d->updateActions();
-}
-
-
-void DocumentView::hideEvent(QHideEvent*) {
-	d->updateActions();
+void DocumentView::paintEvent(QPaintEvent* event) {
+	QWidget::paintEvent(event);
+	if (layout()->margin() == 0) {
+		return;
+	}
+	QPainter painter(this);
+	if (d->mCurrent) {
+		painter.setBrush(Qt::NoBrush);
+		painter.setPen(QPen(palette().highlight().color(), 2));
+		painter.setRenderHint(QPainter::Antialiasing);
+		QRectF selectionRect = QRectF(rect()).adjusted(2, 2, -2, -2);
+		painter.drawRoundedRect(selectionRect, 3, 3);
+	}
 }
 
 
@@ -620,6 +563,51 @@ void DocumentView::slotBusyChanged(const KUrl&, bool busy) {
 }
 
 
+qreal DocumentView::minimumZoom() const {
+	// There is no point zooming out less than zoomToFit, but make sure it does
+	// not get too small either
+	return qMax(0.001, qMin(double(d->mAdapter->computeZoomToFit()), 1.));
+}
+
+
+void DocumentView::setCompareMode(bool compare) {
+	layout()->setMargin(compare ? 4 : 0);
+}
+
+
+void DocumentView::setCurrent(bool value) {
+	d->mCurrent = value;
+	update();
+}
+
+
+bool DocumentView::isCurrent() const {
+	return d->mCurrent;
+}
+
+
+QPoint DocumentView::position() const {
+	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
+	if (!area) {
+		return QPoint();
+	}
+	return QPoint(
+		area->horizontalScrollBar()->value(),
+		area->verticalScrollBar()->value()
+		);
+}
+
+
+void DocumentView::setPosition(const QPoint& pos) {
+	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
+	if (!area) {
+		return;
+	}
+	area->horizontalScrollBar()->setValue(pos.x());
+	area->verticalScrollBar()->setValue(pos.y());
+}
+
+
 void DocumentView::slotKeyPressed(Qt::Key key, bool pressed)
 {
 	if (key == Qt::Key_Control) {
@@ -629,6 +617,12 @@ void DocumentView::slotKeyPressed(Qt::Key key, bool pressed)
 			d->restoreCursor();
 		}
 	}
+}
+
+
+KUrl DocumentView::url() const {
+	Document::Ptr doc = d->mAdapter->document();
+	return doc ? doc->url() : KUrl();
 }
 
 

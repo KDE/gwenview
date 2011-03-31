@@ -220,7 +220,6 @@ ImageView::ImageView(QWidget* parent)
 	d->mViewport = new QWidget();
 	setViewport(d->mViewport);
 	d->mViewport->setMouseTracking(true);
-	d->mViewport->setAttribute(Qt::WA_OpaquePaintEvent, true);
 	horizontalScrollBar()->setSingleStep(16);
 	verticalScrollBar()->setSingleStep(16);
 	d->mScaler = new ImageScaler(this);
@@ -363,25 +362,12 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
-	QColor bgColor = palette().color(backgroundRole());
-
-	if (!d->mDocument) {
-		painter.fillRect(rect(), bgColor);
-		return;
-	}
-
 	painter.setClipRect(event->rect());
-	QPoint offset = imageOffset();
 
-	// Erase pixels around the image
-	QRect imageRect(offset, d->mCurrentBuffer.size());
-	QRegion emptyRegion = QRegion(event->rect()) - QRegion(imageRect);
-	Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
-		painter.fillRect(rect, bgColor);
-	}
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.drawPixmap(imageOffset(), d->mCurrentBuffer);
 
-	painter.drawPixmap(offset, d->mCurrentBuffer);
-
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 	if (d->mTool) {
 		d->mTool->paint(&painter);
 	}

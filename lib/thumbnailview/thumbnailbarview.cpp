@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QItemSelectionModel>
 #include <QHelpEvent>
 #include <QScrollBar>
 #include <QPainter>
@@ -124,13 +125,21 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 
 
 void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+	bool isSelected = option.state & QStyle::State_Selected;
+	bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
 	QRect rect = option.rect;
 
 	QStyleOptionViewItemV4 opt = option;
 	const QWidget* widget = opt.widget;
 	QStyle* style = widget ? widget->style() : QApplication::style();
+	if (isSelected && !isCurrent) {
+		// Draw selected but not current item backgrounds with some transparency
+		// so that the current item stands out.
+		painter->setOpacity(.33);
+	}
 	style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
+	painter->setOpacity(1);
 
 	// Draw thumbnail
 	if (!thumbnailPix.isNull()) {
