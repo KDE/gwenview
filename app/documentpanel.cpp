@@ -269,24 +269,24 @@ struct DocumentPanelPrivate {
 	}
 
 	void setupViewHud(DocumentView* view) {
-		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", true);
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
 
 		QWidget* content = new QWidget;
 		QHBoxLayout* layout = new QHBoxLayout(content);
-		const int space = 4;
 		layout->setMargin(0);
-		layout->setSpacing(0);
+		layout->setSpacing(4);
 		layout->addWidget(trashButton);
-		layout->addSpacing(space);
+		layout->addWidget(deselectButton);
 
 		HudWidget* hud = new HudWidget;
-		hud->init(content, HudWidget::OptionCloseButton);
+		hud->init(content, HudWidget::OptionNone);
 		WidgetFloater* floater = new WidgetFloater(view);
 		floater->setChildWidget(hud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
 		Binder<DocumentPanel, DocumentView*>::bind(trashButton, SIGNAL(clicked()), that, &DocumentPanel::trashView, view);
-		Binder<DocumentPanel, DocumentView*>::bind(hud, SIGNAL(closed()), that, &DocumentPanel::deselectView, view);
+		Binder<DocumentPanel, DocumentView*>::bind(deselectButton, SIGNAL(clicked()), that, &DocumentPanel::deselectView, view);
 
 		mHuds.append(hud);
 	}
