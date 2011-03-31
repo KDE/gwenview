@@ -125,13 +125,21 @@ bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
 
 
 void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+	bool isSelected = option.state & QStyle::State_Selected;
+	bool isCurrent = d->mView->selectionModel()->currentIndex() == index;
 	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
 	QRect rect = option.rect;
 
 	QStyleOptionViewItemV4 opt = option;
 	const QWidget* widget = opt.widget;
 	QStyle* style = widget ? widget->style() : QApplication::style();
+	if (isSelected && !isCurrent) {
+		// Draw selected but not current item backgrounds with some transparency
+		// so that the current item stands out.
+		painter->setOpacity(.33);
+	}
 	style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
+	painter->setOpacity(1);
 
 	// Draw thumbnail
 	if (!thumbnailPix.isNull()) {
@@ -158,14 +166,6 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 				thumbnailRect.top() + (thumbnailRect.height() - pix.height()) / 2,
 				pix);
 		}
-
-		/* Enable to draw a red border around the current item
-		QItemSelectionModel* selectionModel = d->mView->selectionModel();
-		if (selectionModel->currentIndex() == index) {
-			painter->setPen(Qt::red);
-			painter->drawRect(thumbnailRect);
-		}
-		*/
 	}
 }
 
