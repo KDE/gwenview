@@ -47,9 +47,11 @@ public:
 	virtual void paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 	virtual QSize sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const;
 
-
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
+
+private Q_SLOTS:
+	void toggleSelection();
 
 private:
 	ThumbnailBarItemDelegatePrivate* const d;

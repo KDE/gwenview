@@ -34,11 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kiconloader.h>
 
 // Local
 #include "lib/fullscreentheme.h"
 #include "lib/paintutils.h"
 #include "lib/thumbnailview/abstractthumbnailviewhelper.h"
+#include "lib/thumbnailview/contextbarbutton.h"
 
 namespace Gwenview {
 
@@ -67,7 +69,16 @@ struct ThumbnailBarItemDelegatePrivate {
 
 	ThumbnailBarItemDelegate* mDelegate;
 	ThumbnailView* mView;
+	ContextBarButton* mToggleSelectionButton;
+
 	QColor borderColor;
+	QModelIndex mIndexUnderCursor;
+
+	void setupToggleSelectionButton() {
+		mToggleSelectionButton = new ContextBarButton("list-add", mView->viewport());
+		mToggleSelectionButton->hide();
+		QObject::connect(mToggleSelectionButton, SIGNAL(clicked(bool)), mDelegate, SLOT(toggleSelection()));
+	}
 
 	void showToolTip(QHelpEvent* helpEvent) {
 		QModelIndex index = mView->indexAt(helpEvent->pos());
@@ -94,6 +105,34 @@ struct ThumbnailBarItemDelegatePrivate {
 		}
 		painter->drawPixmap(rect.topLeft() + shadowOffset, it.value());
 	}
+
+	bool hoverEventFilter(QHoverEvent* event) {
+		QModelIndex index = mView->indexAt(event->pos());
+		if (index != mIndexUnderCursor) {
+			updateHoverUi(index);
+		}
+		return false;
+	}
+
+	void updateHoverUi(const QModelIndex& index) {
+		QModelIndex oldIndex = mIndexUnderCursor;
+		mIndexUnderCursor = index;
+
+		if (mIndexUnderCursor.isValid()) {
+			updateToggleSelectionButton();
+
+			const QRect rect = mView->visualRect(mIndexUnderCursor);
+			mToggleSelectionButton->move(rect.topLeft() + QPoint(2, 2));
+			mToggleSelectionButton->show();
+		} else {
+			mToggleSelectionButton->hide();
+		}
+	}
+
+	void updateToggleSelectionButton() {
+		bool isSelected = mView->selectionModel()->isSelected(mIndexUnderCursor);
+		mToggleSelectionButton->setIcon(SmallIcon(isSelected ? "list-remove" : "list-add"));
+	}
 };
 
 
@@ -102,6 +141,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 , d(new ThumbnailBarItemDelegatePrivate) {
 	d->mDelegate = this;
 	d->mView = view;
+	d->setupToggleSelectionButton();
 	view->viewport()->installEventFilter(this);
 
 	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
@@ -114,10 +154,15 @@ QSize ThumbnailBarItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*
 
 
 bool ThumbnailBarItemDelegate::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::ToolTip) {
-		QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-		d->showToolTip(helpEvent);
+	switch (event->type()) {
+	case QEvent::ToolTip:
+		d->showToolTip(static_cast<QHelpEvent*>(event));
 		return true;
+	case QEvent::HoverMove:
+	case QEvent::HoverLeave:
+		return d->hoverEventFilter(static_cast<QHoverEvent*>(event));
+	default:
+		break;
 	}
 
 	return false;
@@ -167,6 +212,12 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 				pix);
 		}
 	}
+}
+
+
+void ThumbnailBarItemDelegate::toggleSelection() {
+	d->mView->selectionModel()->select(d->mIndexUnderCursor, QItemSelectionModel::Toggle);
+	d->updateToggleSelectionButton();
 }
 
 
