@@ -33,8 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPointer>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
-#include <QStylePainter>
-#include <QToolButton>
 
 // KDE
 #include <kdebug.h>
@@ -49,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "archiveutils.h"
+#include "contextbarbutton.h"
 #include "itemeditor.h"
 #include "paintutils.h"
 #include "thumbnailview.h"
@@ -83,18 +82,6 @@ const int SELECTION_RADIUS = 5;
 /** Space between the item outer rect and the context bar */
 const int CONTEXTBAR_MARGIN = 1;
 
-/** How lighter is the border of context bar buttons */
-const int CONTEXTBAR_BORDER_LIGHTNESS = 140;
-
-/** How darker is the background of context bar buttons */
-const int CONTEXTBAR_BACKGROUND_DARKNESS = 170;
-
-/** How lighter are context bar buttons when under mouse */
-const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 115;
-
-/** Radius of ContextBarButtons */
-const int CONTEXTBAR_RADIUS = 5;
-
 /** How dark is the shadow, 0 is invisible, 255 is as dark as possible */
 const int SHADOW_STRENGTH = 128;
 
@@ -113,63 +100,6 @@ static KUrl urlForIndex(const QModelIndex& index) {
 	KFileItem item = fileItemForIndex(index);
 	return item.url();
 }
-
-
-class ContextBarButton : public QToolButton {
-public:
-	ContextBarButton() : mViewport(0) {}
-
-	/**
-	 * The viewport is used to pick the right colors
-	 */
-	void setViewport(QWidget* viewPort) {
-		mViewport = viewPort;
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent*) {
-		Q_ASSERT(mViewport);
-		QStylePainter painter(this);
-		painter.setRenderHint(QPainter::Antialiasing);
-		QStyleOptionToolButton opt;
-		initStyleOption(&opt);
-
-		const QColor bgColor = mViewport->palette().color(mViewport->backgroundRole());
-		QColor color = bgColor.dark(CONTEXTBAR_BACKGROUND_DARKNESS);
-		QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
-
-		if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
-			color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-			borderColor = borderColor.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-		}
-
-		const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
-		const QPainterPath path = PaintUtils::roundedRectangle(rectF, CONTEXTBAR_RADIUS);
-
-		// Background
-		painter.fillPath(path, color);
-
-		// Top shadow
-		QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
-		gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));
-		gradient.setColorAt(1, Qt::transparent);
-		painter.fillPath(path, gradient);
-
-		// Left shadow
-		gradient.setFinalStop(rectF.topLeft() + QPoint(5, 0));
-		painter.fillPath(path, gradient);
-
-		// Border
-		painter.setPen(borderColor);
-		painter.drawPath(path);
-
-		// Content
-		painter.drawControl(QStyle::CE_ToolButtonLabel, opt);
-	}
-
-private:
-	QWidget* mViewport;
-};
 
 
 struct PreviewItemDelegatePrivate {
@@ -205,16 +135,6 @@ struct PreviewItemDelegatePrivate {
 	QPointer<ToolTipWidget> mToolTip;
 	QScopedPointer<QAbstractAnimation> mToolTipAnimation;
 
-	QToolButton* createContextBarButton(const char* iconName) {
-		const int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-
-		ContextBarButton* button = new ContextBarButton();
-		button->setViewport(mView->viewport());
-		button->setIcon(SmallIcon(iconName));
-		button->setIconSize(QSize(size, size));
-		button->setAutoRaise(true);
-		return button;
-	}
 
 	void initSaveButtonPixmap() {
 		if (!mSaveButtonPixmap.isNull()) {
@@ -666,19 +586,19 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	d->mContextBar = new QWidget(d->mView->viewport());
 	d->mContextBar->hide();
 
-	d->mToggleSelectionButton = d->createContextBarButton("list-add");
+	d->mToggleSelectionButton = new ContextBarButton("list-add");
 	connect(d->mToggleSelectionButton, SIGNAL(clicked()),
 		SLOT(slotToggleSelectionClicked()));
 
-	d->mFullScreenButton = d->createContextBarButton("view-fullscreen");
+	d->mFullScreenButton = new ContextBarButton("view-fullscreen");
 	connect(d->mFullScreenButton, SIGNAL(clicked()),
 		SLOT(slotFullScreenClicked()) );
 
-	d->mRotateLeftButton = d->createContextBarButton("object-rotate-left");
+	d->mRotateLeftButton = new ContextBarButton("object-rotate-left");
 	connect(d->mRotateLeftButton, SIGNAL(clicked()),
 		SLOT(slotRotateLeftClicked()) );
 
-	d->mRotateRightButton = d->createContextBarButton("object-rotate-right");
+	d->mRotateRightButton = new ContextBarButton("object-rotate-right");
 	connect(d->mRotateRightButton, SIGNAL(clicked()),
 		SLOT(slotRotateRightClicked()) );
 
@@ -691,9 +611,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	layout->addWidget(d->mRotateRightButton);
 
 	// Save button
-	d->mSaveButton = d->createContextBarButton("document-save");
-	d->mSaveButton->adjustSize();
-	d->mSaveButton->setParent(d->mView->viewport());
+	d->mSaveButton = new ContextBarButton("document-save", d->mView->viewport());
 	d->mSaveButton->hide();
 	connect(d->mSaveButton, SIGNAL(clicked()),
 		SLOT(slotSaveClicked()) );

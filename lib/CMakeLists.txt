@@ -96,6 +96,7 @@ set(gwenviewlib_SRCS
 	thumbnailloadjob.cpp
 	thumbnailview/abstractthumbnailviewhelper.cpp
 	thumbnailview/abstractdocumentinfoprovider.cpp
+	thumbnailview/contextbarbutton.cpp
 	thumbnailview/itemeditor.cpp
 	thumbnailview/previewitemdelegate.cpp
 	thumbnailview/thumbnailbarview.cpp
