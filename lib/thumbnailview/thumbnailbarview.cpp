@@ -71,7 +71,7 @@ struct ThumbnailBarItemDelegatePrivate {
 	ThumbnailView* mView;
 	ContextBarButton* mToggleSelectionButton;
 
-	QColor borderColor;
+	QColor mBorderColor;
 	QModelIndex mIndexUnderCursor;
 
 	void setupToggleSelectionButton() {
@@ -144,7 +144,7 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 	d->setupToggleSelectionButton();
 	view->viewport()->installEventFilter(this);
 
-	d->borderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
+	d->mBorderColor = PaintUtils::alphaAdjustedF(QColor(Qt::white), 0.65);
 }
 
 
@@ -196,7 +196,7 @@ void ThumbnailBarItemDelegate::paint( QPainter * painter, const QStyleOptionView
 
 		if (!thumbnailPix.hasAlphaChannel()) {
 			d->drawShadow(painter, thumbnailRect);
-			painter->setPen(d->borderColor);
+			painter->setPen(d->mBorderColor);
 			painter->setRenderHint(QPainter::Antialiasing, false);
 			QRect borderRect = thumbnailRect.adjusted(-1, -1, 0, 0);
 			painter->drawRect(borderRect);
