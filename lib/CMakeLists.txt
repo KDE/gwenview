@@ -3,14 +3,28 @@ project(gwenviewlib)
 # Extract version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 file(READ "${JPEG_INCLUDE_DIR}/jpeglib.h" jpeglib_h_content)
-string(REGEX REPLACE ".*#define +JPEG_LIB_VERSION +([0-9]+).*" "\\1" jpeglib_version "${jpeglib_h_content}")
-message(STATUS "libjpeg version: ${jpeglib_version}")
+string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jpeglib_h_content}")
+set(jpeglib_version ${CMAKE_MATCH_1})
+if ("${jpeglib_version}" STREQUAL "")
+	# libjpeg-turbo keeps JPEG_LIB_VERSION in jconfig.h, not jpeglib.h :/
+	file(READ "${JPEG_INCLUDE_DIR}/jconfig.h" jconfig_h_content)
+	string(REGEX MATCH "#define +JPEG_LIB_VERSION +([0-9]+)" "\\1" jpeglib_version "${jconfig_h_content}")
+	set(jpeglib_version ${CMAKE_MATCH_1})
+endif ("${jpeglib_version}" STREQUAL "")
 
 if ("${jpeglib_version}" LESS 80)
 	set(GV_JPEG_DIR libjpeg-62)
-else ("${jpeglib_version}" LESS 80)
-	set(GV_JPEG_DIR libjpeg-80)
 endif ("${jpeglib_version}" LESS 80)
+
+if ("${jpeglib_version}" EQUAL 80)
+	set(GV_JPEG_DIR libjpeg-80)
+endif ("${jpeglib_version}" EQUAL 80)
+
+if ("${GV_JPEG_DIR}" STREQUAL "")
+	message(FATAL_ERROR "Unknown libjpeg version: ${jpeglib_version}")
+endif ("${GV_JPEG_DIR}" STREQUAL "")
+
+message(STATUS "libjpeg version: ${jpeglib_version}")
 
 add_definitions(-Dlibjpeg_EXPORTS)
 include_directories(
