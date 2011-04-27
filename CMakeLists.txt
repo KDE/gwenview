@@ -7,15 +7,17 @@ include(MacroOptionalAddSubdirectory)
 
 KDE4_NO_ENABLE_FINAL(gwenview)
 
-find_package(JPEG REQUIRED)
+find_package(JPEG)
+macro_log_feature(JPEG_FOUND "libjpeg" "Required to build ksaneplugin" "http://libjpeg.sourceforge.net/" TRUE "" "")
 # Preview acess was added in Exiv2 0.18
 # IMPORTANT : Several fixes done in 0.19. Set as default version when KDE
 # 4.4 will be released
 set(EXIV2_MIN_VERSION "0.18")
-find_package(Exiv2 REQUIRED)
+find_package(Exiv2)
+macro_log_feature(Exiv2_FOUND "Exiv2" "Required to build ksaneplugin" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
 
 macro_optional_find_package(Kipi)
-macro_log_feature(KIPI_FOUND "KIPI" "A library for adding kipi support" "http://www.kipi-plugins.org" FALSE "" "Required to build gwenview with kipi support.")
+macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
