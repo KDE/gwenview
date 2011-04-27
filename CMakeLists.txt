@@ -14,7 +14,7 @@ macro_log_feature(JPEG_FOUND "libjpeg" "Required to build ksaneplugin" "http://l
 # 4.4 will be released
 set(EXIV2_MIN_VERSION "0.18")
 find_package(Exiv2)
-macro_log_feature(Exiv2_FOUND "Exiv2" "Required to build ksaneplugin" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
+macro_log_feature(EXIV2_FOUND "Exiv2" "Required to build ksaneplugin" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
 
 macro_optional_find_package(Kipi)
 macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
