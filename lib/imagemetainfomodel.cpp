@@ -313,7 +313,7 @@ void ImageMetaInfoModel::setImageSize(const QSize& size) {
 		if (megaPixels > 0.1) {
 			QString megaPixelsString = QString::number(megaPixels, 'f', 1);
 			imageSize += ' ';
-			imageSize + i18nc(
+			imageSize += i18nc(
 				"@item:intable %1 is number of millions of pixels in image",
 				"(%1MP)", megaPixelsString);
 		}
