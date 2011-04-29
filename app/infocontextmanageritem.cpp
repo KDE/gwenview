@@ -21,10 +21,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QApplication>
+#include <QGridLayout>
+#include <QHelpEvent>
 #include <QLabel>
 #include <QPainter>
 #include <QPointer>
 #include <QPushButton>
+#include <QToolTip>
 #include <QVBoxLayout>
 
 // KDE
@@ -54,6 +57,65 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
+/**
+ * A label which fades out if its content does not fit. If the content is
+ * cropped, a tooltip is shown when the mouse hovers the widget.
+ */
+class FadingLabel : public QLabel {
+public:
+	explicit FadingLabel(QWidget* parent = 0)
+	: QLabel(parent)
+	{
+		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	}
+
+	QSize minimumSizeHint() const {
+		return QSize();
+	}
+
+protected:
+	void paintEvent(QPaintEvent* event) {
+		QLabel::paintEvent(event);
+		if (!isCropped()) {
+			return;
+		}
+
+		QLinearGradient gradient;
+		int gradientWidth = fontMetrics().averageCharWidth() * 4;
+		if (alignment() & Qt::AlignLeft) {
+			gradient.setStart(width() - gradientWidth, 0);
+			gradient.setFinalStop(width(), 0);
+			gradient.setColorAt(0, Qt::transparent);
+			gradient.setColorAt(1, palette().color(backgroundRole()));
+		} else {
+			gradient.setStart(0, 0);
+			gradient.setFinalStop(gradientWidth, 0);
+			gradient.setColorAt(0, palette().color(backgroundRole()));
+			gradient.setColorAt(1, Qt::transparent);
+		}
+		QPainter painter(this);
+		painter.fillRect(rect(), gradient);
+	}
+
+	bool event(QEvent* event) {
+		if (event->type() == QEvent::ToolTip) {
+			// Show tooltip if cropped
+			QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+			if (isCropped()) {
+				QToolTip::showText(helpEvent->globalPos(), text());
+			} else {
+				QToolTip::hideText();
+				event->ignore();
+			}
+			return true;
+		}
+		return QLabel::event(event);
+	}
+
+	inline bool isCropped() const {
+		return sizeHint().width() > width();
+	}
+};
 
 /**
  * This widget is capable of showing multiple lines of key/value pairs.
@@ -61,108 +123,88 @@ namespace Gwenview {
 class KeyValueWidget : public QWidget {
 	struct Row {
 		Row()
-		: keyWidth(0)
-		, valueWidth(0)
-		{}
+		: keyLabel(new FadingLabel)
+		, valueLabel(new FadingLabel)
+		{
+			if (QApplication::isLeftToRight()) {
+				keyLabel->setAlignment(Qt::AlignRight);
+			} else {
+				valueLabel->setAlignment(Qt::AlignRight);
+			}
+		}
 
-		QString key;
-		QString value;
-		int keyWidth;
-		int valueWidth;
+		~Row() {
+			delete keyLabel;
+			delete valueLabel;
+		}
+
+		FadingLabel* keyLabel;
+		FadingLabel* valueLabel;
 	};
 public:
 	KeyValueWidget(QWidget* parent)
 	: QWidget(parent)
-	, mKeyColumnWidth(0)
+	, mLayout(new QGridLayout(this))
 	{
+		mLayout->setMargin(0);
+		mLayout->setVerticalSpacing(0);
+		mLayout->setHorizontalSpacing(4);
 		setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	}
 
-	void addRow(const QString& key, const QString& value) {
-		Row row;
-		row.key = i18nc(
-			"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
-			"%1:", key);
-		row.value = ' ' + value;
-		row.keyWidth = fontMetrics().width(row.key);
-		row.valueWidth = fontMetrics().width(row.value);
-		mRows.append(row);
-		mKeyColumnWidth = 0;
-		updateGeometry();
-	}
-
-	void clear() {
-		mRows.clear();
-		mKeyColumnWidth = 0;
-		updateGeometry();
-	}
-
-	virtual QSize sizeHint() const {
+	QSize sizeHint() const {
 		int height = fontMetrics().height() * mRows.count();
 		return QSize(150, height);
 	}
 
-protected:
-	virtual void resizeEvent(QResizeEvent* event) {
-		QWidget::resizeEvent(event);
-		mKeyColumnWidth = 0;
+	void addRow(const QString& key, const QString& value) {
+		Row* row = new Row;
+		row->keyLabel->setText(i18nc(
+			"@item:intext %1 is a key, we append a colon to it. A value is displayed after",
+			"%1:", key));
+		row->valueLabel->setText(value);
+		mRows.append(row);
+
+		int rowCount = mLayout->rowCount();
+		mLayout->addWidget(row->keyLabel, rowCount, 0);
+		mLayout->addWidget(row->valueLabel, rowCount, 1);
+		updateKeyColumnWidth();
+		updateGeometry();
 	}
 
-	virtual void paintEvent(QPaintEvent*) {
-		// Update mKeyColumnWidth
-		if (mKeyColumnWidth == 0) {
-			int maxKeyWidth = width() / 2;
-			Q_FOREACH(const Row& row, mRows) {
-				int keyWidth = qMin(row.keyWidth, maxKeyWidth);
-				mKeyColumnWidth = qMax(mKeyColumnWidth, keyWidth);
-			}
-		}
+	void clear() {
+		qDeleteAll(mRows);
+		mRows.clear();
+		updateGeometry();
+	}
 
-		bool isRightToLeft = QApplication::isRightToLeft();
-
-		// Init gradients
-		int gradientWidth = fontMetrics().averageCharWidth() * 4;
-		QLinearGradient leftGradient(0, 0, gradientWidth, 0);
-		leftGradient.setColorAt(0, palette().color(backgroundRole()));
-		leftGradient.setColorAt(1, Qt::transparent);
-		QLinearGradient rightGradient(width() - gradientWidth, 0, width(), 0);
-		rightGradient.setColorAt(0, Qt::transparent);
-		rightGradient.setColorAt(1, palette().color(backgroundRole()));
-
-		const QGradient& keyGradient = isRightToLeft ? rightGradient : leftGradient;
-		const QGradient& valueGradient = isRightToLeft ? leftGradient : rightGradient;
-
-		// Draw
-		QPainter painter(this);
-		int height = fontMetrics().height();
-		QRect keyRect, valueRect;
-		if (isRightToLeft) {
-			keyRect = QRect(width() - mKeyColumnWidth, 0, mKeyColumnWidth, height);
-			valueRect = QRect(0, 0, width() - mKeyColumnWidth, height);
-		} else {
-			keyRect = QRect(0, 0, mKeyColumnWidth, height);
-			valueRect = QRect(mKeyColumnWidth, 0, width() - mKeyColumnWidth, height);
-		}
-
-		Q_FOREACH(const Row& row, mRows) {
-			painter.drawText(keyRect, Qt::AlignRight, row.key);
-			if (row.keyWidth > keyRect.width()) {
-				painter.fillRect(keyRect, keyGradient);
-			}
-			painter.drawText(valueRect, Qt::AlignLeft, row.value);
-			if (row.valueWidth > valueRect.width()) {
-				painter.fillRect(valueRect, valueGradient);
-			}
-			keyRect.translate(0, height);
-			valueRect.translate(0, height);
-		}
+protected:
+	void resizeEvent(QResizeEvent* event) {
+		QWidget::resizeEvent(event);
+		updateKeyColumnWidth();
+		updateGeometry();
 	}
 
 private:
-	QList<Row> mRows;
-	int mKeyColumnWidth;
-};
+	QList<Row*> mRows;
+	QGridLayout* mLayout;
 
+	void updateKeyColumnWidth() {
+		const int maxWidth = width() / 2;
+		int keyWidth = 0;
+		Q_FOREACH(Row* row, mRows) {
+			int wantedWidth = row->keyLabel->sizeHint().width();
+			if (wantedWidth > keyWidth) {
+				keyWidth = qMin(wantedWidth, maxWidth);
+			}
+		}
+		int valueWidth = width() - keyWidth;
+		Q_FOREACH(Row* row, mRows) {
+			row->keyLabel->setMaximumWidth(keyWidth);
+			row->valueLabel->setMaximumWidth(valueWidth);
+		}
+	}
+};
 
 struct InfoContextManagerItemPrivate {
 	InfoContextManagerItem* q;
