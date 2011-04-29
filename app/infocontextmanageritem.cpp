@@ -198,10 +198,8 @@ private:
 				keyWidth = qMin(wantedWidth, maxWidth);
 			}
 		}
-		int valueWidth = width() - keyWidth;
 		Q_FOREACH(Row* row, mRows) {
-			row->keyLabel->setMaximumWidth(keyWidth);
-			row->valueLabel->setMaximumWidth(valueWidth);
+			row->keyLabel->setFixedWidth(keyWidth);
 		}
 	}
 };
