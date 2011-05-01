@@ -300,6 +300,7 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);
 	setUniformItemSizes(true);
+	setEditTriggers(QAbstractItemView::EditKeyPressed);
 
 	d->setupBusyAnimation();
 
