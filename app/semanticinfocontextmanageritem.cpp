@@ -143,9 +143,6 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		container->layout()->setMargin(0);
 		mGroup->addWidget(container);
 
-		mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-		mRatingWidget->setHalfStepsEnabled(true);
-		mRatingWidget->setMaxRating(10);
 		QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
 			that, SLOT(slotRatingChanged(int)));
 		QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
