@@ -69,6 +69,12 @@
      <property name="acceptRichText">
       <bool>false</bool>
      </property>
+     <property name="clickMessage">
+      <string>Description</string>
+     </property>
+     <property name="checkSpellingEnabled">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>
