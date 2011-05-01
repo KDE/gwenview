@@ -66,6 +66,9 @@
    </item>
    <item>
     <widget class="KTextEdit" name="mDescriptionTextEdit">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="acceptRichText">
       <bool>false</bool>
      </property>
