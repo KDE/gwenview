@@ -43,6 +43,8 @@ MessageViewAdapter::MessageViewAdapter(QWidget* parent)
 , d(new MessageViewAdapterPrivate) {
 	QWidget* widget = new QWidget(parent);
 	d->setupUi(widget);
+	d->mMessageWidget->setCloseButtonVisible(false);
+	d->mMessageWidget->setWordWrap(true);
 
 	setInfoMessage(i18n("No document selected"));
 
@@ -60,32 +62,20 @@ MessageViewAdapter::~MessageViewAdapter() {
 
 
 void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail) {
-	QPixmap pix = KIconLoader::global()->loadIcon(
-		"dialog-error", KIconLoader::Dialog, KIconLoader::SizeMedium);
-	d->mIconLabel->setPixmap(pix);
-	d->mIconLabel->show();
-
-	d->mFrame->setStyleSheet(
-		"#mFrame {"
-		"	background-color: palette(window);"
-		"	border: 1px solid palette(dark);"
-		"	padding: 6px;"
-		"}"
-		);
-
+	d->mMessageWidget->setMessageType(KMessageWidget::ErrorMessageType);
 	QString message;
 	if (detail.isEmpty()) {
 		message = main;
 	} else {
 		message = QString("<b>%1</b><br>%2").arg(main).arg(detail);
 	}
-	d->mTextLabel->setText(message);
+	d->mMessageWidget->setText(message);
 }
 
 
 void MessageViewAdapter::setInfoMessage(const QString& message) {
-	d->mIconLabel->hide();
-	d->mTextLabel->setText(message);
+	d->mMessageWidget->setMessageType(KMessageWidget::InformationMessageType);
+	d->mMessageWidget->setText(message);
 }
 
 
