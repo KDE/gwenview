@@ -176,6 +176,7 @@ SideBarPage::SideBarPage(const QString& title)
 	d->mTitle = title;
 
 	d->mLayout = new QVBoxLayout(this);
+	d->mLayout->setMargin(0);
 }
 
 
