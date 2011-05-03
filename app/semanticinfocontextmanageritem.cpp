@@ -145,17 +145,11 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 		container->layout()->setMargin(0);
 		mGroup->addWidget(container);
 
-		mRatingWidget->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-		mRatingWidget->setHalfStepsEnabled(true);
-		mRatingWidget->setMaxRating(10);
 		QObject::connect(mRatingWidget, SIGNAL(ratingChanged(int)),
 			that, SLOT(slotRatingChanged(int)));
 		QObject::connect(mRatingMapper, SIGNAL(mapped(int)),
 			mRatingWidget, SLOT(setRating(int)) );
 
-		QString clickMessage = i18n("Description");
-		mDescriptionTextEdit->setClickMessage(clickMessage);
-		mDescriptionTextEdit->setCheckSpellingEnabled(true);
 		mDescriptionTextEdit->installEventFilter(that);
 
 		QObject::connect(mTagLabel, SIGNAL(linkActivated(const QString&)),
