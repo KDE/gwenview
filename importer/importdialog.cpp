@@ -108,7 +108,7 @@ public:
 
 		int answer = KMessageBox::questionYesNo(mCentralWidget,
 			"<qt>" + message.join("<br/>") + "</qt>",
-			i18n("Import Finished"),
+			i18nc("@title:window", "Import Finished"),
 			KStandardGuiItem::del(),
 			KGuiItem(i18n("Keep"))
 			);

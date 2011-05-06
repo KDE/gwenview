@@ -69,15 +69,15 @@ static void copyMoveOrLink(Operation operation, const KUrl::List& urlList, QWidg
 	dialog.setOperationMode(KFileDialog::Saving);
 	switch (operation) {
 	case COPY:
-		dialog.setCaption(i18n("Copy To"));
+		dialog.setCaption(i18nc("@title:window", "Copy To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Copy"));
 		break;
 	case MOVE:
-		dialog.setCaption(i18n("Move To"));
+		dialog.setCaption(i18nc("@title:window", "Move To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Move"));
 		break;
 	case LINK:
-		dialog.setCaption(i18n("Link To"));
+		dialog.setCaption(i18nc("@title:window", "Link To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Link"));
 		break;
 	default:
@@ -167,7 +167,7 @@ void del(const KUrl::List& urlList, QWidget* parent) {
 void createFolder(const KUrl& parentUrl, QWidget* parent) {
 	bool ok;
 	QString name = KInputDialog::getText(
-		i18n("Create Folder"),
+		i18nc("@title:window", "Create Folder"),
 		i18n("Enter the name of the folder to create:"),
 		QString(),
 		&ok,
@@ -224,7 +224,7 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
 
 void rename(const KUrl& oldUrl, QWidget* parent) {
 	QString name = KInputDialog::getText(
-		i18n("Rename") /* caption */,
+		i18nc("@title:window", "Rename") /* caption */,
 		i18n("Rename <filename>%1</filename> to:", oldUrl.fileName()) /* label */,
 		oldUrl.fileName() /* value */,
 		0 /* ok */,
