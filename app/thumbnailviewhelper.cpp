@@ -76,22 +76,29 @@ void ThumbnailViewHelper::setCurrentDirUrl(const KUrl& url) {
 
 void ThumbnailViewHelper::showContextMenu(QWidget* parent) {
 	KMenu popup(parent);
-	d->addActionToMenu(popup, "file_create_folder");
-	popup.addSeparator();
-	d->addActionToMenu(popup, "file_rename");
-	d->addActionToMenu(popup, "file_trash");
-	d->addActionToMenu(popup, "file_delete");
-	popup.addSeparator();
-	d->addActionToMenu(popup, "file_copy_to");
-	d->addActionToMenu(popup, "file_move_to");
-	d->addActionToMenu(popup, "file_link_to");
-	popup.addSeparator();
-	d->addActionToMenu(popup, "file_open_with");
+	if (d->mCurrentDirUrl.protocol() == "trash") {
+		d->addActionToMenu(popup, "file_restore");
+		d->addActionToMenu(popup, "file_delete");
+		popup.addSeparator();
+		d->addActionToMenu(popup, "file_show_properties");
+	} else {
+		d->addActionToMenu(popup, "file_create_folder");
+		popup.addSeparator();
+		d->addActionToMenu(popup, "file_rename");
+		d->addActionToMenu(popup, "file_trash");
+		d->addActionToMenu(popup, "file_delete");
+		popup.addSeparator();
+		d->addActionToMenu(popup, "file_copy_to");
+		d->addActionToMenu(popup, "file_move_to");
+		d->addActionToMenu(popup, "file_link_to");
+		popup.addSeparator();
+		d->addActionToMenu(popup, "file_open_with");
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-	d->addActionToMenu(popup, "edit_tags");
+		d->addActionToMenu(popup, "edit_tags");
 #endif
-	popup.addSeparator();
-	d->addActionToMenu(popup, "file_show_properties");
+		popup.addSeparator();
+		d->addActionToMenu(popup, "file_show_properties");
+	}
 	popup.exec(QCursor::pos());
 }
 

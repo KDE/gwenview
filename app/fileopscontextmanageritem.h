@@ -57,6 +57,7 @@ private Q_SLOTS:
 	void linkTo();
 	void trash();
 	void del();
+	void restore();
 	void showProperties();
 	void createFolder();
 	void populateOpenMenu();
