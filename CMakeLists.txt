@@ -7,19 +7,7 @@ include(MacroOptionalAddSubdirectory)
 
 KDE4_NO_ENABLE_FINAL(gwenview)
 
-find_package(JPEG)
-macro_log_feature(JPEG_FOUND "libjpeg" "Provides JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE "" "")
-
-set(EXIV2_MIN_VERSION "0.19")
-find_package(Exiv2)
-macro_log_feature(EXIV2_FOUND "Exiv2" "Provides image metadata support" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
-
-macro_optional_find_package(Kipi)
-macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
-
-add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
-
+## CMake options
 set(GWENVIEW_SEMANTICINFO_BACKEND_NONE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_FAKE OFF)
 set(GWENVIEW_SEMANTICINFO_BACKEND_NEPOMUK OFF)
@@ -37,14 +25,42 @@ else (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 	endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "Fake")
 endif (GWENVIEW_SEMANTICINFO_BACKEND STREQUAL "None")
 
+## Dependencies
+find_package(JPEG)
+macro_log_feature(JPEG_FOUND "libjpeg" "Provides JPEG image manipulation support" "http://libjpeg.sourceforge.net/" TRUE "" "")
+
+set(EXIV2_MIN_VERSION "0.19")
+find_package(Exiv2)
+macro_log_feature(EXIV2_FOUND "Exiv2" "Provides image metadata support" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
+
+macro_optional_find_package(Kipi)
+macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
+
 if (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 	# We need Nepomuk widgets for all backends but "None"
 	find_package(Nepomuk)
 	macro_log_feature(Nepomuk_FOUND "Nepomuk" "Provides desktop-wide semantic information support" "http://www.kde.org" TRUE "" "")
 endif (NOT GWENVIEW_SEMANTICINFO_BACKEND_NONE)
 
+## Global settings
+
+# Avoid some build-time warnings in Nepomuk
 add_definitions(-DDISABLE_NEPOMUK_LEGACY)
 
+add_definitions(
+	${QT_DEFINITIONS}
+	${QT_QTDBUS_DEFINITIONS}
+	${KDE4_DEFINITIONS}
+	)
+
+include_directories(
+	${QDBUS_INCLUDE_DIRS}
+	${CMAKE_SOURCE_DIR}
+	${CMAKE_BINARY_DIR}
+	${KDE4_INCLUDES}
+	)
+
+## dirs to build
 add_subdirectory(lib)
 add_subdirectory(app)
 add_subdirectory(importer)
