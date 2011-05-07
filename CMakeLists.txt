@@ -19,6 +19,9 @@ macro_log_feature(EXIV2_FOUND "Exiv2" "Required to build ksaneplugin" "http://ww
 macro_optional_find_package(Kipi)
 macro_log_feature(KIPI_FOUND "KIPI Plugins" "Provides various image manipulation and export features" "http://www.kipi-plugins.org" FALSE "" "")
 
+find_package(LibKonq)
+macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "http://www.kde.org" TRUE "" "")
+
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 

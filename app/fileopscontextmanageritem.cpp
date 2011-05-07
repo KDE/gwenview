@@ -44,6 +44,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <krun.h>
 #include <kservice.h>
 
+// libkonq
+#include <konq_operations.h>
+
 // Local
 #include <lib/eventwatcher.h>
 #include "contextmanager.h"
@@ -367,7 +370,7 @@ void FileOpsContextManagerItem::del() {
 
 
 void FileOpsContextManagerItem::restore() {
-
+	KonqOperations::restoreTrashedItems(d->urlList(), d->mGroup);
 }
 
 

@@ -2,6 +2,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	${SOPRANO_INCLUDE_DIR}
 	${EXIV2_INCLUDE_DIR}
+	${LIBKONQ_INCLUDE_DIR}
 	)
 
 if (KIPI_FOUND)
@@ -80,6 +81,7 @@ target_link_libraries(gwenview
 	${KDE4_KFILE_LIBS}
 	gwenviewlib
 	${KDE4_KIO_LIBS}
+	${LIBKONQ_LIBRARY}
 	${SOPRANO_LIBRARIES}
 	${QT_QTCORE_LIBRARY}
 	)
