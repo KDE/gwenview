@@ -9,10 +9,8 @@ KDE4_NO_ENABLE_FINAL(gwenview)
 
 find_package(JPEG)
 macro_log_feature(JPEG_FOUND "libjpeg" "Required to build ksaneplugin" "http://libjpeg.sourceforge.net/" TRUE "" "")
-# Preview acess was added in Exiv2 0.18
-# IMPORTANT : Several fixes done in 0.19. Set as default version when KDE
-# 4.4 will be released
-set(EXIV2_MIN_VERSION "0.18")
+
+set(EXIV2_MIN_VERSION "0.19")
 find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Required to build ksaneplugin" "http://www.exiv2.org" TRUE ${EXIV2_MIN_VERSION} "")
 
