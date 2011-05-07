@@ -1,6 +1,6 @@
 project(gwenview)
 
-find_package(KDE4 REQUIRED)
+find_package(KDE4 4.6.41 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 include(MacroOptionalAddSubdirectory)
