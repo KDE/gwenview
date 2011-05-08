@@ -86,7 +86,6 @@ struct ThumbnailBarItemDelegatePrivate {
 			return;
 		}
 		QString fullText = index.data().toString();
-		QRect rect = mView->visualRect(index);
 		QPoint pos = QCursor::pos();
 		QToolTip::showText(pos, fullText, mView);
 	}
