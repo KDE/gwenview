@@ -327,10 +327,10 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 
 	if (KGlobalSettings::singleClick()) {
 		connect(this, SIGNAL(clicked(const QModelIndex&)),
-			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
+			SLOT(emitIndexesActivatedIfNoModifiers(const QModelIndex&)) );
 	} else {
 		connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
+			SLOT(emitIndexesActivatedIfNoModifiers(const QModelIndex&)) );
 	}
 }
 
@@ -480,9 +480,11 @@ void ThumbnailView::showContextMenu() {
 }
 
 
-void ThumbnailView::emitIndexActivatedIfNoModifiers(const QModelIndex& index) {
+void ThumbnailView::emitIndexesActivatedIfNoModifiers(const QModelIndex& index) {
 	if (QApplication::keyboardModifiers() == Qt::NoModifier) {
-		emit indexActivated(index);
+		QModelIndexList lst;
+		lst << index;
+		emit indexesActivated(lst);
 	}
 }
 
@@ -664,9 +666,12 @@ void ThumbnailView::dropEvent(QDropEvent* event) {
 void ThumbnailView::keyPressEvent(QKeyEvent* event) {
 	QListView::keyPressEvent(event);
 	if (event->key() == Qt::Key_Return) {
-		const QModelIndex index = selectionModel()->currentIndex();
-		if (index.isValid() && selectionModel()->selectedIndexes().count() == 1) {
-			emit indexActivated(index);
+		QModelIndexList lst = selectionModel()->selectedIndexes();
+		if (lst.isEmpty()) {
+			lst << selectionModel()->currentIndex();
+		}
+		if (!lst.isEmpty()) {
+			emit indexesActivated(lst);
 		}
 	}
 }

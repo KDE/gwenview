@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QAction>
+#include <QAbstractItemModel>
 
 // KDE
 #include <kxmlguiwindow.h>
@@ -86,7 +87,7 @@ protected:
 private Q_SLOTS:
 	void setActiveViewModeAction(QAction* action);
 	void openDirUrl(const KUrl&);
-	void slotThumbnailViewIndexActivated(const QModelIndex&);
+	void slotThumbnailViewIndexesActivated(const QModelIndexList&);
 
 	void slotStartPageUrlSelected(const KUrl&);
 

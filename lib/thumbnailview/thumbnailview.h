@@ -91,11 +91,10 @@ public:
 
 Q_SIGNALS:
 	/**
-	 * It seems we can't use the 'activated()' signal for now because it does
-	 * not know about KDE single vs doubleclick settings. The indexActivated()
-	 * signal replaces it.
+	 * Emitted when user clicks or doubleclick (depending on KDE settings) and
+	 * when Enter key is pressed.
 	 */
-	void indexActivated(const QModelIndex&);
+	void indexesActivated(const QModelIndexList&);
 	void urlListDropped(const KUrl::List& lst, const KUrl& destination);
 
 	void thumbnailSizeChanged(int);
@@ -150,7 +149,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
 	void showContextMenu();
-	void emitIndexActivatedIfNoModifiers(const QModelIndex&);
+	void emitIndexesActivatedIfNoModifiers(const QModelIndex&);
 	void setThumbnail(const KFileItem&, const QPixmap&, const QSize&);
 	void setBrokenThumbnail(const KFileItem&);
 

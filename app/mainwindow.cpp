@@ -259,8 +259,8 @@ struct MainWindow::Private {
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
 		// Connect thumbnail view
-		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
-			mWindow, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)) );
+		connect(mThumbnailView, SIGNAL(indexesActivated(const QModelIndexList&)),
+			mWindow, SLOT(slotThumbnailViewIndexesActivated(const QModelIndexList&)) );
 		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
@@ -928,27 +928,30 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 }
 
 
-void MainWindow::slotThumbnailViewIndexActivated(const QModelIndex& index) {
-	if (!index.isValid()) {
-		return;
-	}
-
-	KFileItem item = d->mDirModel->itemForIndex(index);
-	if (item.isDir()) {
-		// Item is a dir, open it
-		openDirUrl(item.url());
-	} else {
-		QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
-		if (!protocol.isEmpty()) {
-			// Item is an archive, tweak url then open it
-			KUrl url = item.url();
-			url.setProtocol(protocol);
-			openDirUrl(url);
+void MainWindow::slotThumbnailViewIndexesActivated(const QModelIndexList& lst) {
+	if (lst.size() == 1) {
+		// Check if user wants to open a dir
+		QModelIndex index = lst.first();
+		KFileItem item = d->mDirModel->itemForIndex(index);
+		KUrl dirUrl;
+		if (item.isDir()) {
+			dirUrl = item.url();
 		} else {
-			// Item is a document, switch to view mode
-			d->mViewAction->trigger();
+			QString protocol = ArchiveUtils::protocolForMimeType(item.mimetype());
+			if (!protocol.isEmpty()) {
+				// Item is an archive, tweak url then open it
+				dirUrl = item.url();
+				dirUrl.setProtocol(protocol);
+			}
+		}
+		if (dirUrl.isValid()) {
+			openDirUrl(dirUrl);
+			return;
 		}
 	}
+
+	// We only come here if lst was not a single dir
+	d->mViewAction->trigger();
 }
 
 

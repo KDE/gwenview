@@ -130,8 +130,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mSlider->updateToolTip();
 		mThumbnailView->setThumbnailSize(thumbnailSize);
 
-		QObject::connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
-			q, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)));
+		QObject::connect(mThumbnailView, SIGNAL(indexesActivated(const QModelIndexList&)),
+			q, SLOT(slotThumbnailViewIndexesActivated(const QModelIndexList&)));
 	}
 
 	void setupButtonBox() {
@@ -223,10 +223,12 @@ KUrl ThumbnailPage::destinationUrl() const {
 }
 
 
-void ThumbnailPage::slotThumbnailViewIndexActivated(const QModelIndex& index) {
-	if (!index.isValid()) {
+void ThumbnailPage::slotThumbnailViewIndexesActivated(const QModelIndexList& lst) {
+	if (lst.size() != 1) {
 		return;
 	}
+
+	QModelIndex index = lst.first();
 
 	KFileItem item = d->mDirModel->itemForIndex(index);
 	if (item.isDir()) {
