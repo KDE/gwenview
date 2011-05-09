@@ -44,6 +44,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <krun.h>
 #include <kservice.h>
 
+// libkonq
+#include <konq_operations.h>
+
 // Local
 #include <lib/eventwatcher.h>
 #include "contextmanager.h"
@@ -109,6 +112,7 @@ struct FileOpsContextManagerItemPrivate {
 	KAction* mRenameAction;
 	KAction* mTrashAction;
 	KAction* mDelAction;
+	KAction* mRestoreAction;
 	KAction* mShowPropertiesAction;
 	KAction* mCreateFolderAction;
 	KAction* mOpenWithAction;
@@ -238,6 +242,9 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 	d->mDelAction->setIcon(KIcon("edit-delete"));
 	d->mDelAction->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_Delete));
 
+	d->mRestoreAction = file->addAction("file_restore", this, SLOT(restore()));
+	d->mRestoreAction->setText(i18n("Restore"));
+
 	d->mShowPropertiesAction = file->addAction("file_show_properties",this,SLOT(showProperties()));
 	d->mShowPropertiesAction->setText(i18n("Properties"));
 	d->mShowPropertiesAction->setIcon(KIcon("document-properties"));
@@ -359,6 +366,11 @@ void FileOpsContextManagerItem::trash() {
 
 void FileOpsContextManagerItem::del() {
 	FileOperations::del(d->urlList(), d->mGroup);
+}
+
+
+void FileOpsContextManagerItem::restore() {
+	KonqOperations::restoreTrashedItems(d->urlList(), d->mGroup);
 }
 
 
