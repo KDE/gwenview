@@ -63,21 +63,21 @@ TransformImageOperation::TransformImageOperation(Orientation orientation)
 	d->mOrientation = orientation;
 	switch (d->mOrientation) {
 	case ROT_90:
-		setText(i18n("Rotate Right"));
+		setText(i18nc("@action:undo", "Rotate Right"));
 		break;
 	case ROT_270:
-		setText(i18n("Rotate Left"));
+		setText(i18nc("@action:undo", "Rotate Left"));
 		break;
 	case HFLIP:
-		setText(i18n("Mirror"));
+		setText(i18nc("@action:undo", "Mirror"));
 		break;
 	case VFLIP:
-		setText(i18n("Flip"));
+		setText(i18nc("@action:undo", "Flip"));
 		break;
 	default:
 		// We should not get there because the transformations listed above are
 		// the only one available from the UI. Define a default text nevertheless.
-		setText(i18n("Transform"));
+		setText(i18nc("@action:undo", "Transform"));
 		break;
 	}
 }
