@@ -66,7 +66,7 @@ private:
 ResizeImageOperation::ResizeImageOperation(const QSize& size)
 : d(new ResizeImageOperationPrivate) {
 	d->mSize = size;
-	setText(i18nc("@action:undo", "Resize"));
+	setText(i18nc("(qtundo-format)", "Resize"));
 }
 
 
