@@ -62,7 +62,7 @@ MessageViewAdapter::~MessageViewAdapter() {
 
 
 void MessageViewAdapter::setErrorMessage(const QString& main, const QString& detail) {
-	d->mMessageWidget->setMessageType(KMessageWidget::ErrorMessageType);
+	d->mMessageWidget->setMessageType(KMessageWidget::Error);
 	QString message;
 	if (detail.isEmpty()) {
 		message = main;
@@ -74,7 +74,7 @@ void MessageViewAdapter::setErrorMessage(const QString& main, const QString& det
 
 
 void MessageViewAdapter::setInfoMessage(const QString& message) {
-	d->mMessageWidget->setMessageType(KMessageWidget::InformationMessageType);
+	d->mMessageWidget->setMessageType(KMessageWidget::Information);
 	d->mMessageWidget->setText(message);
 }
 
