@@ -438,13 +438,13 @@ void Document::stopAnimation() {
 	return d->mImpl->stopAnimation();
 }
 
-void Document::enqueueJob(DocumentJob* task) {
-	d->mJobQueue.enqueue(task);
-	task->setDocument(Ptr(this));
-	connect(task, SIGNAL(destroyed(QObject*)),
+void Document::enqueueJob(DocumentJob* job) {
+	d->mJobQueue.enqueue(job);
+	job->setDocument(Ptr(this));
+	connect(job, SIGNAL(destroyed(QObject*)),
 		SLOT(slotJobDestroyed(QObject*)));
 	if (d->mJobQueue.size() == 1) {
-		task->start();
+		job->start();
 		busyChanged(d->mUrl, true);
 	}
 }
