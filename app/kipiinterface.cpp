@@ -161,14 +161,23 @@ typedef QMap<KIPI::Category, MenuInfo> MenuInfoMap;
 struct KIPIInterfacePrivate {
 	KIPIInterface* that;
 	MainWindow* mMainWindow;
+	QMenu* mPluginMenu;
 	KIPI::PluginLoader* mPluginLoader;
 	MenuInfoMap mMenuInfoMap;
 
 	void setupPluginsMenu() {
-		QMenu* menu = static_cast<QMenu*>(
+		mPluginMenu = static_cast<QMenu*>(
 			mMainWindow->factory()->container("plugins", mMainWindow));
-		QObject::connect(menu, SIGNAL(aboutToShow()),
+		QObject::connect(mPluginMenu, SIGNAL(aboutToShow()),
 			that, SLOT(loadPlugins()) );
+	}
+
+	void createDummyPluginAction(const QString& text) {
+		KAction* action = mMainWindow->actionCollection()->add<KAction>("dummy_plugin");
+		action->setText(text);
+		action->setShortcutConfigurable(false);
+		action->setEnabled(false);
+		mPluginMenu->addAction(action);
 	}
 };
 
@@ -249,31 +258,21 @@ void KIPIInterface::loadPlugins() {
 	}
 
 	// Fill the menu
-	QMenu* pluginMenu = static_cast<QMenu*>(d->mMainWindow->guiFactory()->container("plugins", d->mMainWindow));
-	if (!pluginMenu) {
-		kWarning() << "No plugin menu found!";
-		return;
-	}
-
 	MenuInfoMap::Iterator
 		it = d->mMenuInfoMap.begin(),
 		end = d->mMenuInfoMap.end();
 	for (; it != end; ++it) {
 		MenuInfo& info = it.value();
 		if (!info.mActions.isEmpty()) {
-			QMenu* menu = pluginMenu->addMenu(info.mName);
+			QMenu* menu = d->mPluginMenu->addMenu(info.mName);
 			qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
 			Q_FOREACH(QAction* action, info.mActions) {
 				menu->addAction(action);
 			}
 		}
 	}
-	if (pluginMenu->actions().isEmpty()) {
-		KAction* noPluginAction = d->mMainWindow->actionCollection()->add<KAction>("no_plugin");
-		noPluginAction->setText(i18n("No Plugin"));
-		noPluginAction->setShortcutConfigurable(false);
-		noPluginAction->setEnabled(false);
-		pluginMenu->addAction(noPluginAction);
+	if (d->mPluginMenu->actions().isEmpty()) {
+		d->createDummyPluginAction(i18n("No Plugin"));
 	}
 }
 
