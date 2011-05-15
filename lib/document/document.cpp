@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KDE
 #include <kdebug.h>
 #include <kfileitem.h>
+#include <kjobuidelegate.h>
 #include <klocale.h>
 #include <kurl.h>
 
@@ -348,7 +349,10 @@ void Document::startLoadingFullImage() {
 	LoadingState state = loadingState();
 	if (state <= MetaInfoLoaded) {
 		// Schedule full image loading
-		enqueueJob(new LoadingJob);
+		LoadingJob* job = new LoadingJob;
+		job->uiDelegate()->setAutoWarningHandlingEnabled(false);
+		job->uiDelegate()->setAutoErrorHandlingEnabled(false);
+		enqueueJob(job);
 		d->scheduleImageLoading(1);
 	} else if (state == Loaded) {
 		return;
