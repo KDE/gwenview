@@ -63,6 +63,7 @@ private Q_SLOTS:
 	void slotSelectionChanged();
 	void slotDirectoryChanged();
 	void init();
+	void loadOnePlugin();
 
 private:
 	KIPIInterfacePrivate* const d;

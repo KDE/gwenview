@@ -163,6 +163,7 @@ struct KIPIInterfacePrivate {
 	MainWindow* mMainWindow;
 	QMenu* mPluginMenu;
 	KIPI::PluginLoader* mPluginLoader;
+	KIPI::PluginLoader::PluginList mPluginQueue;
 	MenuInfoMap mMenuInfoMap;
 
 	void setupPluginsMenu() {
@@ -228,13 +229,18 @@ void KIPIInterface::loadPlugins() {
 	d->mMenuInfoMap[KIPI::CollectionsPlugin] = MenuInfo(i18nc("@title:menu", "Collections"));
 
 	d->mPluginLoader = new KIPI::PluginLoader(QStringList(), this);
+	d->mPluginQueue = d->mPluginLoader->pluginList();
+	d->createDummyPluginAction(i18n("Loading..."));
+	loadOnePlugin();
+}
 
-	// Fill the mActions
-	KIPI::PluginLoader::PluginList pluginList = d->mPluginLoader->pluginList();
-	Q_FOREACH(KIPI::PluginLoader::Info* pluginInfo, pluginList) {
+void KIPIInterface::loadOnePlugin() {
+	while (!d->mPluginQueue.isEmpty()) {
+		KIPI::PluginLoader::Info* pluginInfo = d->mPluginQueue.takeFirst();
 		if (!pluginInfo->shouldLoad()) {
 			continue;
 		}
+
 		KIPI::Plugin* plugin = pluginInfo->plugin();
 		if (!plugin) {
 			kWarning() << "Plugin from library" << pluginInfo->library() << "failed to load";
@@ -255,9 +261,17 @@ void KIPIInterface::loadPlugins() {
 		}
 		// FIXME: Port
 		//plugin->actionCollection()->readShortcutSettings();
+
+		// If we reach this point, we just loaded one plugin. Go back to the
+		// event loop. We will come back to load the remaining plugins or create
+		// the menu later
+		QMetaObject::invokeMethod(this, "loadOnePlugin", Qt::QueuedConnection);
+		return;
 	}
 
-	// Fill the menu
+	// If we reach this point, all plugins have been loaded. We can fill the
+	// menu
+	bool atLeastOnePluginLoaded = false;
 	MenuInfoMap::Iterator
 		it = d->mMenuInfoMap.begin(),
 		end = d->mMenuInfoMap.end();
@@ -267,12 +281,15 @@ void KIPIInterface::loadPlugins() {
 			QMenu* menu = d->mPluginMenu->addMenu(info.mName);
 			qSort(info.mActions.begin(), info.mActions.end(), actionLessThan);
 			Q_FOREACH(QAction* action, info.mActions) {
+				atLeastOnePluginLoaded = true;
 				menu->addAction(action);
 			}
 		}
 	}
-	if (d->mPluginMenu->actions().isEmpty()) {
-		d->createDummyPluginAction(i18n("No Plugin"));
+
+	delete d->mMainWindow->actionCollection()->action("dummy_plugin");
+	if (!atLeastOnePluginLoaded) {
+		d->createDummyPluginAction(i18n("No Plugin Found"));
 	}
 }
 
