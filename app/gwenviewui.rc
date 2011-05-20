@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="53">
+<kpartgui name="gwenview" version="54">
 
 <MenuBar>
 	<Menu name="file" >
@@ -8,7 +8,6 @@
 		<Action name="file_save_as"/>
 		<Separator/>
 		<Action name="reload"/>
-		<Separator/>
 		<Action name="file_print"/>
 		<Separator/>
 		<ActionList name="file_action_list"/>
