@@ -466,7 +466,7 @@ struct MainWindow::Private {
 			new ImageOpsContextManagerItem(mContextManager, mWindow);
 		mContextManager->addItem(imageOpsItem);
 
-		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection);
+		FileOpsContextManagerItem* fileOpsItem = new FileOpsContextManagerItem(mContextManager, mThumbnailView, actionCollection, mWindow);
 		mContextManager->addItem(fileOpsItem);
 
 		// Fill sidebar

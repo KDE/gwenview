@@ -32,6 +32,7 @@ class QAction;
 class QListView;
 class KAction;
 class KActionCollection;
+class KXMLGUIClient;
 
 namespace Gwenview {
 
@@ -40,7 +41,7 @@ struct FileOpsContextManagerItemPrivate;
 class FileOpsContextManagerItem : public AbstractContextManagerItem {
 	Q_OBJECT
 public:
-	FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection);
+	FileOpsContextManagerItem(Gwenview::ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client);
 	~FileOpsContextManagerItem();
 
 private Q_SLOTS:

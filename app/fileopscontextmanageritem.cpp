@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kpropertiesdialog.h>
 #include <krun.h>
 #include <kservice.h>
+#include <kxmlguiclient.h>
 
 // libkonq
 #include <konq_operations.h>
@@ -102,6 +103,7 @@ static QPair<bool, QString> pasteInfo(const KUrl& targetUrl) {
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	QListView* mThumbnailView;
+	KXMLGUIClient* mXMLGUIClient;
 	SideBarGroup* mGroup;
 	KAction* mCutAction;
 	KAction* mCopyAction;
@@ -116,7 +118,10 @@ struct FileOpsContextManagerItemPrivate {
 	KAction* mShowPropertiesAction;
 	KAction* mCreateFolderAction;
 	KAction* mOpenWithAction;
+	QList<QAction*> mRegularFileActionList;
+	QList<QAction*> mTrashFileActionList;
 	QMap<QString, KService::Ptr> mServiceForName;
+	bool mInTrash;
 
 	KUrl::List urlList() const {
 		KUrl::List urlList;
@@ -187,14 +192,24 @@ struct FileOpsContextManagerItemPrivate {
 };
 
 
-FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection)
+static QAction* createSeparator(QObject* parent) {
+	QAction* action = new KAction(parent);
+	action->setSeparator(true);
+	return action;
+}
+
+
+FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QListView* thumbnailView, KActionCollection* actionCollection, KXMLGUIClient* client)
 : AbstractContextManagerItem(manager)
 , d(new FileOpsContextManagerItemPrivate) {
 	d->mContextManagerItem = this;
 	d->mThumbnailView = thumbnailView;
+	d->mXMLGUIClient = client;
 	d->mGroup = new SideBarGroup(i18n("File Operations"));
 	setWidget(d->mGroup);
 	EventWatcher::install(d->mGroup, QEvent::Show, this, SLOT(updateSideBarContent()));
+
+	d->mInTrash = false;
 
 	connect(contextManager(), SIGNAL(selectionChanged()),
 		SLOT(updateActions()) );
@@ -261,11 +276,37 @@ FileOpsContextManagerItem::FileOpsContextManagerItem(ContextManager* manager, QL
 		SLOT(populateOpenMenu()) );
 	connect(menu, SIGNAL(triggered(QAction*)),
 		SLOT(openWith(QAction*)) );
-	updateActions();
+
+	d->mRegularFileActionList
+		<< d->mRenameAction
+		<< d->mTrashAction
+		<< d->mDelAction
+		<< createSeparator(this)
+		<< d->mCopyToAction
+		<< d->mMoveToAction
+		<< d->mLinkToAction
+		<< createSeparator(this)
+		<< d->mOpenWithAction
+		<< d->mShowPropertiesAction
+		<< createSeparator(this)
+		<< d->mCreateFolderAction
+		;
+
+	d->mTrashFileActionList
+		<< d->mRestoreAction
+		<< d->mDelAction
+		<< createSeparator(this)
+		<< d->mShowPropertiesAction
+		;
 
 	connect(QApplication::clipboard(), SIGNAL(dataChanged()),
 		SLOT(updatePasteAction()));
 	updatePasteAction();
+
+	// Delay action update because it must happen *after* main window has called
+	// createGUI(), otherwise calling d->mXMLGUIClient->plugActionList() will
+	// fail.
+	QMetaObject::invokeMethod(this, "updateActions", Qt::QueuedConnection);
 }
 
 
@@ -281,18 +322,25 @@ void FileOpsContextManagerItem::updateActions() {
 	const bool urlIsValid = contextManager()->currentUrl().isValid();
 	const bool dirUrlIsValid = contextManager()->currentDirUrl().isValid();
 
+	d->mInTrash = contextManager()->currentDirUrl().protocol() == "trash";
+
 	d->mCutAction->setEnabled(selectionNotEmpty);
 	d->mCopyAction->setEnabled(selectionNotEmpty);
 	d->mCopyToAction->setEnabled(selectionNotEmpty);
 	d->mMoveToAction->setEnabled(selectionNotEmpty);
 	d->mLinkToAction->setEnabled(selectionNotEmpty);
 	d->mTrashAction->setEnabled(selectionNotEmpty);
+	d->mRestoreAction->setEnabled(selectionNotEmpty);
 	d->mDelAction->setEnabled(selectionNotEmpty);
 	d->mOpenWithAction->setEnabled(selectionNotEmpty);
 	d->mRenameAction->setEnabled(count == 1);
 
 	d->mCreateFolderAction->setEnabled(dirUrlIsValid);
 	d->mShowPropertiesAction->setEnabled(dirUrlIsValid || urlIsValid);
+
+	d->mXMLGUIClient->unplugActionList("file_action_list");
+	QList<QAction*>& list = d->mInTrash ? d->mTrashFileActionList : d->mRegularFileActionList;
+	d->mXMLGUIClient->plugActionList("file_action_list", list);
 
 	updateSideBarContent();
 }
@@ -305,27 +353,18 @@ void FileOpsContextManagerItem::updatePasteAction() {
 }
 
 
-inline void addIfEnabled(SideBarGroup* group, QAction* action) {
-	if (action->isEnabled()) {
-		group->addAction(action);
-	}
-}
-
 void FileOpsContextManagerItem::updateSideBarContent() {
 	if (!d->mGroup->isVisible()) {
 		return;
 	}
 
 	d->mGroup->clear();
-	addIfEnabled(d->mGroup, d->mRenameAction);
-	addIfEnabled(d->mGroup, d->mTrashAction);
-	addIfEnabled(d->mGroup, d->mDelAction);
-	addIfEnabled(d->mGroup, d->mCopyToAction);
-	addIfEnabled(d->mGroup, d->mMoveToAction);
-	addIfEnabled(d->mGroup, d->mLinkToAction);
-	addIfEnabled(d->mGroup, d->mShowPropertiesAction);
-	addIfEnabled(d->mGroup, d->mCreateFolderAction);
-	addIfEnabled(d->mGroup, d->mOpenWithAction);
+	QList<QAction*>& list = d->mInTrash ? d->mTrashFileActionList : d->mRegularFileActionList;
+	Q_FOREACH(QAction* action, list) {
+		if (action->isEnabled() && !action->isSeparator()) {
+			d->mGroup->addAction(action);
+		}
+	}
 }
 
 

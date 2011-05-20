@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="52">
+<kpartgui name="gwenview" version="53">
 
 <MenuBar>
 	<Menu name="file" >
@@ -11,17 +11,7 @@
 		<Separator/>
 		<Action name="file_print"/>
 		<Separator/>
-		<Action name="file_rename"/>
-		<Action name="file_trash"/>
-		<Action name="file_delete"/>
-		<Separator/>
-		<Action name="file_copy_to"/>
-		<Action name="file_move_to"/>
-		<Action name="file_link_to"/>
-		<Separator/>
-		<Action name="file_show_properties"/>
-		<Action name="file_create_folder"/>
-		<Action name="file_open_with"/>
+		<ActionList name="file_action_list"/>
 		<Separator/>
 		<Action name="add_folder_to_places"/>
 		<Separator/>
