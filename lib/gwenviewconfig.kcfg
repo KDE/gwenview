@@ -16,8 +16,8 @@
 	</group>
 
 	<group name="General">
-		<entry name="ViewBackgroundColor" type="Color">
-			<default>#666666</default>
+		<entry name="ViewBackgroundValue" type="Int">
+			<default>100</default>
 		</entry>
 
 		<entry name="HistoryEnabled" type="Bool">

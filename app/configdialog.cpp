@@ -68,6 +68,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	widget = setupPage(d->mGeneralConfigPage);
 	pageItem = addPage(widget, i18n("General"));
 	pageItem->setIcon(KIcon("gwenview"));
+	connect(d->mGeneralConfigPage.kcfg_ViewBackgroundValue, SIGNAL(valueChanged(int)), SLOT(updateViewBackgroundFrame()));
 
 	// Image View
 	widget = setupPage(d->mImageViewConfigPage);
@@ -95,11 +96,28 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 	pageItem = addPage(widget, i18n("Advanced"));
 	pageItem->setIcon(KIcon("preferences-other"));
 	d->mAdvancedConfigPage.cacheHelpLabel->setFont(KGlobalSettings::smallestReadableFont());
+
+	updateViewBackgroundFrame();
 }
 
 
 ConfigDialog::~ConfigDialog() {
 	delete d;
+}
+
+
+void ConfigDialog::updateViewBackgroundFrame() {
+	QColor color = QColor::fromHsv(0, 0, d->mGeneralConfigPage.kcfg_ViewBackgroundValue->value());
+	QString css =
+		QString(
+		"background-color: %1;"
+		"border-radius: 5px;"
+		"border: 1px solid %1;")
+		.arg(color.name());
+	// When using Oxygen, setting the background color via palette causes the
+	// pixels outside the frame to be painted with the new background color as
+	// well. Using CSS works more like expected.
+	d->mGeneralConfigPage.backgroundValueFrame->setStyleSheet(css);
 }
 
 

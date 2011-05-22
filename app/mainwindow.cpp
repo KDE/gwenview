@@ -1409,8 +1409,9 @@ void MainWindow::loadConfig() {
 	d->mThumbnailViewPanel->loadConfig();
 
 	// Colors
-	QColor bgColor = GwenviewConfig::viewBackgroundColor();
-	QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
+	int value = GwenviewConfig::viewBackgroundValue();
+	QColor bgColor = QColor::fromHsv(0, 0, value);
+	QColor fgColor = value > 128 ? Qt::black : Qt::white;
 
 	QPalette pal = palette();
 	pal.setColor(QPalette::Base, bgColor);

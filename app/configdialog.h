@@ -33,9 +33,13 @@ namespace Gwenview {
 
 struct ConfigDialogPrivate;
 class ConfigDialog : public KConfigDialog {
+	Q_OBJECT
 public:
 	ConfigDialog(QWidget* parent);
 	~ConfigDialog();
+
+private Q_SLOTS:
+	void updateViewBackgroundFrame();
 
 private:
 	ConfigDialogPrivate* const d;

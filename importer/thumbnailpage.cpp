@@ -114,8 +114,9 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mThumbnailView->setItemDelegate(delegate);
 
 		// Colors
-		QColor bgColor = GwenviewConfig::viewBackgroundColor();
-		QColor fgColor = bgColor.value() > 128 ? Qt::black : Qt::white;
+		int value = GwenviewConfig::viewBackgroundValue();
+		QColor bgColor = QColor::fromHsv(0, 0, value);
+		QColor fgColor = value > 128 ? Qt::black : Qt::white;
 
 		QPalette pal = mThumbnailView->palette();
 		pal.setColor(QPalette::Base, bgColor);
