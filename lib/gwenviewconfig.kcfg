@@ -67,6 +67,10 @@
 
 		<entry name="DefaultExportPluginText" type="String">
 		</entry>
+
+		<entry name="SideBarPage" type="String">
+			<default>information</default>
+		</entry>
 	</group>
 
 	<group name="FullScreen">

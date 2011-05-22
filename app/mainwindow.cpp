@@ -122,7 +122,6 @@ static const char* BROWSE_MODE_SIDE_BAR_GROUP = "SideBar-BrowseMode";
 static const char* VIEW_MODE_SIDE_BAR_GROUP = "SideBar-ViewMode";
 static const char* FULLSCREEN_MODE_SIDE_BAR_GROUP = "SideBar-FullScreenMode";
 static const char* SIDE_BAR_IS_VISIBLE_KEY = "IsVisible";
-static const char* SIDE_BAR_CURRENT_PAGE_KEY = "CurrentPage";
 
 static const char* SESSION_CURRENT_PAGE_KEY = "Page";
 static const char* SESSION_URL_KEY = "Url";
@@ -739,27 +738,22 @@ struct MainWindow::Private {
 
 	void loadSideBarConfig() {
 		static QMap<const char*, bool> defaultVisibility;
-		static QMap<const char*, QString> defaultPage;
 		if (defaultVisibility.isEmpty()) {
 			defaultVisibility[BROWSE_MODE_SIDE_BAR_GROUP]     = true;
 			defaultVisibility[VIEW_MODE_SIDE_BAR_GROUP]       = true;
 			defaultVisibility[FULLSCREEN_MODE_SIDE_BAR_GROUP] = false;
-
-			defaultPage[BROWSE_MODE_SIDE_BAR_GROUP]           = "folders";
-			defaultPage[VIEW_MODE_SIDE_BAR_GROUP]             = "information";
-			defaultPage[FULLSCREEN_MODE_SIDE_BAR_GROUP]       = "information";
 		}
 
 		const char* name = sideBarConfigGroupName();
 		KConfigGroup group(KGlobal::config(), name);
 		mSideBar->setVisible(group.readEntry(SIDE_BAR_IS_VISIBLE_KEY, defaultVisibility[name]));
-		mSideBar->setCurrentPage(group.readEntry(SIDE_BAR_CURRENT_PAGE_KEY, defaultPage[name]));
+		mSideBar->setCurrentPage(GwenviewConfig::sideBarPage());
 	}
 
 	void saveSideBarConfig() const {
 		KConfigGroup group(KGlobal::config(), sideBarConfigGroupName());
 		group.writeEntry(SIDE_BAR_IS_VISIBLE_KEY, mSideBar->isVisible());
-		group.writeEntry(SIDE_BAR_CURRENT_PAGE_KEY, mSideBar->currentPage());
+		GwenviewConfig::setSideBarPage(mSideBar->currentPage());
 	}
 
 	void setScreenSaverEnabled(bool enabled) {
