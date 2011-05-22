@@ -49,7 +49,7 @@ macro_log_feature(LIBKONQ_FOUND "libkonq" "Provides file management features" "h
 
 # Avoid some build-time warnings in Nepomuk
 add_definitions(-DDISABLE_NEPOMUK_LEGACY)
-
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(
 	${QT_DEFINITIONS}
 	${QT_QTDBUS_DEFINITIONS}
