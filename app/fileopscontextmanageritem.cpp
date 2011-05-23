@@ -440,7 +440,7 @@ void FileOpsContextManagerItem::rename() {
 
 void FileOpsContextManagerItem::createFolder() {
 	KUrl url = contextManager()->currentDirUrl();
-	FileOperations::createFolder(url, d->mGroup);
+	KonqOperations::newDir(d->mGroup, url);
 }
 
 

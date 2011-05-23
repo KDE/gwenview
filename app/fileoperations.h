@@ -36,8 +36,6 @@ void trash(const KUrl::List& urlList, QWidget* parent);
 void del(const KUrl::List& urlList, QWidget* parent);
 void rename(const KUrl& url, QWidget* parent);
 
-void createFolder(const KUrl& parentUrl, QWidget* parent);
-
 void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl);
 
 } // namespace

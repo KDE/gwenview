@@ -139,26 +139,6 @@ void del(const KUrl::List& urlList, QWidget* parent) {
 }
 
 
-void createFolder(const KUrl& parentUrl, QWidget* parent) {
-	bool ok;
-	QString name = KInputDialog::getText(
-		i18nc("@title:window", "Create Folder"),
-		i18n("Enter the name of the folder to create:"),
-		QString(),
-		&ok,
-		parent);
-
-	if (!ok) {
-		return;
-	}
-
-	KUrl url = parentUrl;
-	url.addPath(name);
-
-	KIO::mkdir(url);
-}
-
-
 void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KUrl& destUrl) {
 	if (urlList.isEmpty()) {
 		kWarning() << "urlList is empty!";
