@@ -90,23 +90,26 @@ static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& ur
 		return;
 	}
 
+	KIO::Job* job = 0;
 	// KonqOperations::delOrTrash() handles the confirmation and does not provide
 	// a way to know if the deletion has been accepted.
 	// We need to know about the confirmation so that DocumentFactory can forget
 	// about the deleted urls. That's why we can't use KonqOperations::delOrTrash()
 	switch (operation) {
 	case KonqOperations::TRASH:
-		KIO::trash(urlList);
+		job = KIO::trash(urlList);
 		break;
 
 	case KonqOperations::DEL:
-		KIO::del(urlList);
+		job = KIO::del(urlList);
 		break;
 
 	default:
 		kWarning() << "Unknown operation" << operation;
 		return;
 	}
+	Q_ASSERT(job);
+	job->ui()->setWindow(parent);
 
 	Q_FOREACH(const KUrl& url, urlList) {
 		DocumentFactory::instance()->forget(url);
@@ -167,13 +170,16 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
 
 	QAction* action = menu.exec(QCursor::pos());
 
+	KIO::Job* job = 0;
 	if (action == moveAction) {
-		KIO::move(urlList, destUrl);
+		job = KIO::move(urlList, destUrl);
 	} else if (action == copyAction) {
-		KIO::copy(urlList, destUrl);
+		job = KIO::copy(urlList, destUrl);
 	} else if (action == linkAction) {
-		KIO::link(urlList, destUrl);
+		job = KIO::link(urlList, destUrl);
 	}
+	Q_ASSERT(job);
+	job->ui()->setWindow(parent);
 }
 
 
@@ -192,9 +198,7 @@ void rename(const KUrl& oldUrl, QWidget* parent) {
 	KUrl newUrl = oldUrl;
 	newUrl.setFileName(name);
 	KIO::SimpleJob* job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
-	QWidget* authWindow = parent ? parent->window() : 0;
-	if (!KIO::NetAccess::synchronousRun(job, authWindow)) {
-		job->ui()->setWindow(authWindow);
+	if (!KIO::NetAccess::synchronousRun(job, parent)) {
 		job->ui()->showErrorMessage();
 		return;
 	}
