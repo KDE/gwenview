@@ -68,38 +68,6 @@ static bool decodeIsCutSelection(const QMimeData* mimeData) {
 	return data.isEmpty() ? false : data.at(0) == '1';
 }
 
-// copied from libkonq (konq_operations.cpp)
-static QPair<bool, QString> pasteInfo(const KUrl& targetUrl) {
-    QPair<bool, QString> ret;
-    QClipboard* clipboard = QApplication::clipboard();
-    const QMimeData* mimeData = clipboard->mimeData();
-
-    const bool canPasteData = KIO::canPasteMimeSource(mimeData);
-    KUrl::List urls = KUrl::List::fromMimeData(mimeData);
-    if (!urls.isEmpty() || canPasteData) {
-        // disable the paste action if no writing is supported
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, targetUrl);
-        ret.first = KFileItemListProperties(KFileItemList() << item).supportsWriting();
-
-        if (urls.count() == 1) {
-            const KFileItem item(KFileItem::Unknown, KFileItem::Unknown, urls.first(), true);
-            ret.second = item.isDir() ? i18nc("@action:inmenu", "Paste One Folder") :
-                                        i18nc("@action:inmenu", "Paste One File");
-
-        } else if (!urls.isEmpty()) {
-            ret.second = i18ncp("@action:inmenu", "Paste One Item", "Paste %1 Items", urls.count());
-        } else {
-            ret.second = i18nc("@action:inmenu", "Paste Clipboard Contents...");
-        }
-    } else {
-        ret.first = false;
-        ret.second = i18nc("@action:inmenu", "Paste");
-    }
-
-    return ret;
-}
-// /copied
-
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
 	QListView* mThumbnailView;
@@ -347,7 +315,7 @@ void FileOpsContextManagerItem::updateActions() {
 
 
 void FileOpsContextManagerItem::updatePasteAction() {
-	QPair<bool, QString> info = pasteInfo(d->pasteTargetUrl());
+	QPair<bool, QString> info = KonqOperations::pasteInfo(d->pasteTargetUrl());
 	d->mPasteAction->setEnabled(info.first);
 	d->mPasteAction->setText(info.second);
 }
