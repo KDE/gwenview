@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kxmlguiclient.h>
 
 // libkonq
+#include <konqmimedata.h>
 #include <konq_operations.h>
 
 // Local
@@ -55,18 +56,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "sidebar.h"
 
 namespace Gwenview {
-
-// copied from libkonq (konqmimedata.cpp)
-static const char* CUT_SELECTION_DATA = "application/x-kde-cutselection";
-
-static void addCutSelection(QMimeData* mimeData) {
-	mimeData->setData(CUT_SELECTION_DATA, "1");
-}
-
-static bool decodeIsCutSelection(const QMimeData* mimeData) {
-	QByteArray data = mimeData->data(CUT_SELECTION_DATA);
-	return data.isEmpty() ? false : data.at(0) == '1';
-}
 
 struct FileOpsContextManagerItemPrivate {
 	FileOpsContextManagerItem* mContextManagerItem;
@@ -349,19 +338,20 @@ void FileOpsContextManagerItem::showProperties() {
 
 void FileOpsContextManagerItem::cut() {
 	QMimeData* mimeData = d->selectionMimeData();
-	addCutSelection(mimeData);
+	KonqMimeData::addIsCutSelection(mimeData, true);
 	QApplication::clipboard()->setMimeData(mimeData);
 }
 
 
 void FileOpsContextManagerItem::copy() {
 	QMimeData* mimeData = d->selectionMimeData();
+	KonqMimeData::addIsCutSelection(mimeData, false);
 	QApplication::clipboard()->setMimeData(mimeData);
 }
 
 
 void FileOpsContextManagerItem::paste() {
-	const bool move = decodeIsCutSelection(QApplication::clipboard()->mimeData());
+	const bool move = KonqMimeData::decodeIsCutSelection(QApplication::clipboard()->mimeData());
 	KIO::pasteClipboard(d->pasteTargetUrl(), d->mGroup, move);
 }
 
