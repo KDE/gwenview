@@ -175,7 +175,7 @@ void ImporterTest::testFileNameFormater() {
 	QFETCH(QString, format);
 	QFETCH(QString, expected);
 
-	KUrl url = "file://foo/bar/" + fileName;
+	KUrl url = KUrl("file://foo/bar/" + fileName);
 	FileNameFormater fileNameFormater(format);
 	QCOMPARE(fileNameFormater.format(url, KDateTime::fromString(dateTime)), expected);
 }
