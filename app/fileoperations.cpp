@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
+#include <konq_operations.h>
 
 // Local
 #include <lib/document/documentfactory.h>
@@ -43,23 +44,7 @@ namespace Gwenview {
 
 namespace FileOperations {
 
-
-// Taken from KonqOperations::askDeleteConfirmation
-// Forked because KonqOperations is in kdebase/apps/lib/konq, and kdegraphics
-// can't depend on kdebase.
-enum Operation { TRASH, DEL, COPY, MOVE, LINK, EMPTYTRASH, STAT, MKDIR, RESTORE, UNKNOWN };
-enum ConfirmationType { DEFAULT_CONFIRMATION, SKIP_CONFIRMATION, FORCE_CONFIRMATION };
-static bool askDeleteConfirmation( const KUrl::List & selectedUrls, Operation operation, ConfirmationType confirmation, QWidget* widget )
-{
-	KIO::JobUiDelegate::DeletionType deletionType = operation == DEL ? KIO::JobUiDelegate::Delete : KIO::JobUiDelegate::Trash;
-	KIO::JobUiDelegate::ConfirmationType confirmationType = confirmation == FORCE_CONFIRMATION ? KIO::JobUiDelegate::ForceConfirmation : KIO::JobUiDelegate::DefaultConfirmation;
-	KIO::JobUiDelegate uiDelegate;
-	uiDelegate.setWindow(widget);
-	return uiDelegate.askDeleteConfirmation(selectedUrls, deletionType, confirmationType);
-}
-
-
-static void copyMoveOrLink(Operation operation, const KUrl::List& urlList, QWidget* parent) {
+static void copyMoveOrLink(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent) {
 	Q_ASSERT(urlList.count() > 0);
 
 	KFileDialog dialog(
@@ -68,15 +53,15 @@ static void copyMoveOrLink(Operation operation, const KUrl::List& urlList, QWidg
 		parent);
 	dialog.setOperationMode(KFileDialog::Saving);
 	switch (operation) {
-	case COPY:
+	case KonqOperations::COPY:
 		dialog.setCaption(i18nc("@title:window", "Copy To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Copy"));
 		break;
-	case MOVE:
+	case KonqOperations::MOVE:
 		dialog.setCaption(i18nc("@title:window", "Move To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Move"));
 		break;
-	case LINK:
+	case KonqOperations::LINK:
 		dialog.setCaption(i18nc("@title:window", "Link To"));
 		dialog.okButton()->setText(i18nc("@action:button", "Link"));
 		break;
@@ -94,38 +79,27 @@ static void copyMoveOrLink(Operation operation, const KUrl::List& urlList, QWidg
 	}
 
 	KUrl destUrl = dialog.selectedUrl();
-	switch (operation) {
-	case COPY:
-		KIO::copy(urlList, destUrl);
-		break;
-
-	case MOVE:
-		KIO::move(urlList, destUrl);
-		break;
-
-	case LINK:
-		KIO::link(urlList, destUrl);
-		break;
-
-	default:
-		Q_ASSERT(0);
-	}
+	KonqOperations::copy(parent, operation, urlList, destUrl);
 }
 
 
-static void delOrTrash(Operation operation, const KUrl::List& urlList, QWidget* parent) {
+static void delOrTrash(KonqOperations::Operation operation, const KUrl::List& urlList, QWidget* parent) {
 	Q_ASSERT(urlList.count() > 0);
 
-	if (!askDeleteConfirmation(urlList, operation, DEFAULT_CONFIRMATION, parent)) {
+	if (!KonqOperations::askDeleteConfirmation(urlList, operation, KonqOperations::DEFAULT_CONFIRMATION, parent)) {
 		return;
 	}
 
+	// KonqOperations::delOrTrash() handles the confirmation and does not provide
+	// a way to know if the deletion has been accepted.
+	// We need to know about the confirmation so that DocumentFactory can forget
+	// about the deleted urls. That's why we can't use KonqOperations::delOrTrash()
 	switch (operation) {
-	case TRASH:
+	case KonqOperations::TRASH:
 		KIO::trash(urlList);
 		break;
 
-	case DEL:
+	case KonqOperations::DEL:
 		KIO::del(urlList);
 		break;
 
@@ -139,28 +113,29 @@ static void delOrTrash(Operation operation, const KUrl::List& urlList, QWidget* 
 	}
 }
 
+
 void copyTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(COPY, urlList, parent);
+	copyMoveOrLink(KonqOperations::COPY, urlList, parent);
 }
 
 
 void moveTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(MOVE, urlList, parent);
+	copyMoveOrLink(KonqOperations::MOVE, urlList, parent);
 }
 
 
 void linkTo(const KUrl::List& urlList, QWidget* parent) {
-	copyMoveOrLink(LINK, urlList, parent);
+	copyMoveOrLink(KonqOperations::LINK, urlList, parent);
 }
 
 
 void trash(const KUrl::List& urlList, QWidget* parent) {
-	delOrTrash(TRASH, urlList, parent);
+	delOrTrash(KonqOperations::TRASH, urlList, parent);
 }
 
 
 void del(const KUrl::List& urlList, QWidget* parent) {
-	delOrTrash(DEL, urlList, parent);
+	delOrTrash(KonqOperations::DEL, urlList, parent);
 }
 
 
