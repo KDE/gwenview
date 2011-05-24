@@ -67,6 +67,7 @@ public:
 	: QLabel(parent)
 	{
 		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		setTextInteractionFlags(Qt::TextBrowserInteraction);
 	}
 
 	QSize minimumSizeHint() const {
