@@ -577,6 +577,9 @@ void DocumentView::setCompareMode(bool compare) {
 
 void DocumentView::setCurrent(bool value) {
 	d->mCurrent = value;
+	if (value) {
+		d->mAdapter->widget()->setFocus();
+	}
 	update();
 }
 
