@@ -142,6 +142,7 @@ struct DocumentPanelPrivate {
 	QWidget* mStatusBarContainer;
 	ThumbnailBarView* mThumbnailBar;
 	KToggleAction* mToggleThumbnailBarAction;
+	KToggleAction* mSynchronizeAction;
     QCheckBox* mSynchronizeCheckBox;
 
 	bool mFullScreenMode;
@@ -311,8 +312,6 @@ struct DocumentPanelPrivate {
 		layout->addWidget(mSynchronizeCheckBox);
 		layout->addStretch();
 		layout->addWidget(mDocumentViewController->zoomWidget());
-
-		QObject::connect(mSynchronizeCheckBox, SIGNAL(toggled(bool)), mSynchronizer, SLOT(setActive(bool)));
 	}
 
 	void setupSplitter() {
@@ -418,6 +417,17 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	connect(d->mToggleThumbnailBarAction, SIGNAL(triggered(bool)),
 		this, SLOT(setThumbnailBarVisibility(bool)) );
 	d->mToggleThumbnailBarButton->setDefaultAction(d->mToggleThumbnailBarAction);
+
+	d->mSynchronizeAction = view->add<KToggleAction>("synchronize_views");
+	d->mSynchronizeAction->setText(i18n("Synchronize"));
+	d->mSynchronizeAction->setShortcut(Qt::CTRL | Qt::Key_Y);
+	connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
+		d->mSynchronizer, SLOT(setActive(bool)));
+	// Ensure mSynchronizeAction and mSynchronizeCheckBox are in sync
+	connect(d->mSynchronizeAction, SIGNAL(toggled(bool)),
+		d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
+	connect(d->mSynchronizeCheckBox, SIGNAL(toggled(bool)),
+		d->mSynchronizeAction, SLOT(setChecked(bool)));
 }
 
 
@@ -526,10 +536,7 @@ void DocumentPanel::showContextMenu() {
 	}
 	if (d->mCompareMode) {
 		menu.addSeparator();
-		QAction* action = menu.addAction(d->mSynchronizeCheckBox->text());
-		action->setCheckable(true);
-		action->setChecked(d->mSynchronizeCheckBox->isChecked());
-		connect(action, SIGNAL(toggled(bool)), d->mSynchronizeCheckBox, SLOT(setChecked(bool)));
+		addActionToMenu(&menu, d->mActionCollection, "synchronize_views");
 	}
 
 	menu.addSeparator();
