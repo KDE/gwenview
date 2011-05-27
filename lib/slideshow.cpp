@@ -19,6 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "slideshow.moc"
 
+// libc
+#include <time.h>
+
 // STL
 #include <algorithm>
 
@@ -52,6 +55,24 @@ enum State {
 	WaitForEndOfUrl
 };
 
+/**
+ * This class generate random numbers which are not the same between two runs
+ * of Gwenview. See bug #132334
+ */
+class RandomNumberGenerator {
+public:
+	RandomNumberGenerator()
+	: mSeed(time(0)) {
+	}
+
+	int operator()(int n) {
+		return rand_r(&mSeed) % n;
+	}
+
+private:
+	unsigned int mSeed;
+};
+
 struct SlideShowPrivate {
 	QTimer* mTimer;
 	State mState;
@@ -59,6 +80,7 @@ struct SlideShowPrivate {
 	QVector<KUrl> mShuffledUrls;
 	QVector<KUrl>::ConstIterator mStartIt;
 	KUrl mCurrentUrl;
+	KUrl mLastShuffledUrl;
 
 	QAction* mLoopAction;
 	QAction* mRandomAction;
@@ -103,7 +125,14 @@ struct SlideShowPrivate {
 
 	void initShuffledUrls() {
 		mShuffledUrls = mUrls;
-		std::random_shuffle(mShuffledUrls.begin(), mShuffledUrls.end());
+		RandomNumberGenerator generator;
+		std::random_shuffle(mShuffledUrls.begin(), mShuffledUrls.end(), generator);
+		// Ensure the first url is different from the previous last one, so that
+		// last url does not stay visible twice longer than usual
+		if (mLastShuffledUrl == mShuffledUrls.first() && mShuffledUrls.count() > 1) {
+			qSwap(mShuffledUrls[0], mShuffledUrls[1]);
+		}
+		mLastShuffledUrl = mShuffledUrls.last();
 	}
 
 
