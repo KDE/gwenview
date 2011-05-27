@@ -110,7 +110,7 @@ Q_SIGNALS:
 
 	void adapterChanged();
 
-	void clicked(DocumentView*);
+	void focused(DocumentView*);
 
 	void zoomToFitChanged(bool);
 

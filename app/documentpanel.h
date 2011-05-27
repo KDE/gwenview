@@ -122,7 +122,7 @@ private Q_SLOTS:
 
 	void showContextMenu();
 
-	void slotViewClicked(DocumentView*);
+	void slotViewFocused(DocumentView*);
 
 	void trashView(Gwenview::DocumentView*);
 	void deselectView(DocumentView*);

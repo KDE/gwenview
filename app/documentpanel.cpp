@@ -245,8 +245,8 @@ struct DocumentPanelPrivate {
 				that, SIGNAL(captionUpdateRequested(const QString&)) );
 			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
 				that, SIGNAL(toggleFullScreenRequested()) );
-			QObject::connect(view, SIGNAL(clicked(DocumentView*)),
-				that, SLOT(slotViewClicked(DocumentView*)) );
+			QObject::connect(view, SIGNAL(focused(DocumentView*)),
+				that, SLOT(slotViewFocused(DocumentView*)) );
 
 			QObject::connect(view, SIGNAL(videoFinished()),
 				slideShow, SLOT(resumeAndGoToNextUrl()));
@@ -705,7 +705,7 @@ void DocumentPanel::reset() {
 	}
 }
 
-void DocumentPanel::slotViewClicked(DocumentView* view) {
+void DocumentPanel::slotViewFocused(DocumentView* view) {
 	d->setCurrentView(view);
 }
 

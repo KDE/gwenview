@@ -519,19 +519,25 @@ qreal DocumentView::zoom() const {
 
 
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::MouseButtonPress) {
+	switch (event->type()) {
+	case QEvent::MouseButtonPress:
 		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
-	} else if (event->type() == QEvent::MouseButtonRelease) {
-		clicked(this);
+	case QEvent::MouseButtonRelease:
 		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
-	} else if (event->type() == QEvent::Resize) {
+	case QEvent::Resize:
 		d->updateZoomSnapValues();
-	} else if (event->type() == QEvent::MouseButtonDblClick) {
+		break;
+	case QEvent::MouseButtonDblClick:
 		return d->adapterMouseDoubleClickEventFilter(static_cast<QMouseEvent*>(event));
-	} else if (event->type() == QEvent::Wheel) {
+	case QEvent::Wheel:
 		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
-	} else if (event->type() == QEvent::ContextMenu) {
+	case QEvent::ContextMenu:
 		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
+	case QEvent::FocusIn:
+		focused(this);
+		break;
+	default:
+		break;
 	}
 
 	return false;
