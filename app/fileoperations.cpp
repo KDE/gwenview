@@ -177,6 +177,8 @@ void showMenuForDroppedUrls(QWidget* parent, const KUrl::List& urlList, const KU
 		job = KIO::copy(urlList, destUrl);
 	} else if (action == linkAction) {
 		job = KIO::link(urlList, destUrl);
+	} else {
+		return;
 	}
 	Q_ASSERT(job);
 	job->ui()->setWindow(parent);
