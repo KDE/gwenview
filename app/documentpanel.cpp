@@ -559,21 +559,17 @@ KUrl DocumentPanel::url() const {
 		return KUrl();
 	}
 
-	if (!d->currentView()->adapter()->document()) {
-		LOG("!d->documentView()->adapter()->document()");
-		return KUrl();
-	}
-
-	return d->currentView()->adapter()->document()->url();
+	return d->currentView()->url();
 }
 
 
 Document::Ptr DocumentPanel::currentDocument() const {
 	if (!d->currentView()) {
+		LOG("!d->documentView()");
 		return Document::Ptr();
 	}
 
-	return d->currentView()->adapter()->document();
+	return d->currentView()->document();
 }
 
 
@@ -673,10 +669,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 
 
 void DocumentPanel::reload() {
-	if (!d->currentView()->adapter()) {
-		return;
-	}
-	Document::Ptr doc = d->currentView()->adapter()->document();
+	Document::Ptr doc = d->currentView()->document();
 	if (!doc) {
 		kWarning() << "!doc";
 		return;

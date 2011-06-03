@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kactioncollection.h>
 
 // Local
+#include <lib/document/document.h>
 
 class KUrl;
 
@@ -58,6 +59,8 @@ public:
 	~DocumentView();
 
 	AbstractDocumentViewAdapter* adapter() const;
+
+	Document::Ptr document() const;
 
 	KUrl url() const;
 
