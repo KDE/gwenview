@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "documentfactory.moc"
 
 // Qt
+#include <QByteArray>
 #include <QDateTime>
 #include <QMap>
 #include <QUndoGroup>
@@ -39,7 +40,19 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-static const int MAX_UNREFERENCED_IMAGES = 3;
+inline int getMaxUnreferencedImages() {
+	int defaultValue = 3;
+	QByteArray ba = qgetenv("GWENVIEW_MAX_UNREFERENCED_IMAGES");
+	if (ba.isEmpty()) {
+		return defaultValue;
+	}
+	kDebug() << "Custom value for max unreferenced images:" << ba;
+	bool ok;
+	int value = ba.toInt(&ok);
+	return ok ? value : defaultValue;
+}
+
+static const int MAX_UNREFERENCED_IMAGES = getMaxUnreferencedImages();
 
 /**
  * This internal structure holds the document and the last time it has been
