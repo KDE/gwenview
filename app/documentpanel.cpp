@@ -618,6 +618,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		KUrl url = view->url();
 		if (notDisplayedUrls.contains(url)) {
+			// view displays an url we must display, keep it
 			notDisplayedUrls.remove(url);
 			view->setCompareMode(d->mCompareMode);
 			if (url == currentUrl) {
@@ -627,8 +628,7 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 			}
 			visibleViews.append(view);
 		} else {
-			view->reset();
-			view->hide();
+			// view url is not interesting, prepare to reuse it
 			availableViews.append(view);
 		}
 	}
@@ -649,6 +649,12 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		}
 		visibleViews.append(view);
 		view->show();
+	}
+
+	// Hide remaining available views
+	Q_FOREACH(DocumentView* view, availableViews) {
+		view->reset();
+		view->hide();
 	}
 
 	Q_FOREACH(HudWidget* hud, d->mHuds) {
