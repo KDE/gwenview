@@ -45,12 +45,6 @@ namespace Gwenview {
 #define LOG(x) ;
 #endif
 
-// Defines how the createBuffer() method should behave
-enum PreviousBufferContentPolicy {
-	ClearBufferIfSizeIsDifferent,
-	KeepPreviousBufferContent
-};
-
 struct ImageViewPrivate {
 	ImageView* mView;
 	QPixmap mBackgroundTexture;
@@ -79,7 +73,7 @@ struct ImageViewPrivate {
 	}
 
 
-	QSize requiredBufferSize() const {
+	QSize visibleImageSize() const {
 		if (!mDocument) {
 			return QSize();
 		}
@@ -113,40 +107,25 @@ struct ImageViewPrivate {
 		}
 	}
 
-	void createBuffer(PreviousBufferContentPolicy policy) {
-		QSize size = requiredBufferSize();
+	void createBuffer() {
+		QSize size = mView->size();
 		if (size == mCurrentBuffer.size()) {
 			return;
 		}
-		mAlternateBuffer = QPixmap();
 		if (!size.isValid()) {
+			mAlternateBuffer = QPixmap();
 			mCurrentBuffer = QPixmap();
 			return;
 		}
-		QPixmap oldBuffer = mCurrentBuffer;
-		mCurrentBuffer = QPixmap(size);
 
-		QPainter painter(&mCurrentBuffer);
+		mAlternateBuffer = QPixmap(size);
+		QPainter painter(&mAlternateBuffer);
+		QColor bgColor = mViewport->palette().color(mViewport->backgroundRole());
+		painter.fillRect(mAlternateBuffer.rect(), bgColor);
+		painter.drawPixmap(0, 0, mCurrentBuffer);
+		qSwap(mAlternateBuffer, mCurrentBuffer);
 
-		if (policy == ClearBufferIfSizeIsDifferent) {
-			painter.fillRect(mCurrentBuffer.rect(), Qt::black);
-			return;
-		}
-		painter.drawPixmap(0, 0, oldBuffer);
-
-		const QRegion emptyRegion = QRegion(QRect(QPoint(0, 0), size)) - QRegion(oldBuffer.rect());
-		if (!emptyRegion.isEmpty()) {
-			if (mDocument->hasAlphaChannel()) {
-				const QPoint offset = QPoint(hScroll(), vScroll());
-				Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
-					drawAlphaBackground(&painter, rect, offset);
-				}
-			} else {
-				Q_FOREACH(const QRect& rect, emptyRegion.rects()) {
-					painter.fillRect(rect, Qt::black);
-				}
-			}
-		}
+		mAlternateBuffer = QPixmap();
 	}
 
 
@@ -187,7 +166,7 @@ struct ImageViewPrivate {
 
 	void forceBufferRecreation() {
 		mCurrentBuffer = QPixmap();
-		createBuffer(ClearBufferIfSizeIsDifferent);
+		createBuffer();
 		setScalerRegionToVisibleRect();
 	}
 
@@ -305,7 +284,7 @@ void ImageView::finishSetDocument() {
 		return;
 	}
 
-	d->createBuffer(ClearBufferIfSizeIsDifferent);
+	d->createBuffer();
 	d->mScaler->setDocument(d->mDocument);
 
 	connect(d->mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)),
@@ -345,16 +324,9 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 		return;
 	}
 
-	QSize bufferSize = d->requiredBufferSize();
-	if (bufferSize != d->mCurrentBuffer.size()) {
-		LOG("Need a new buffer");
-		// Since the required buffer size is not the same as our current buffer
-		// size, the image must have been resized. Call setDocument(), it will
-		// take care of resizing the buffer and repainting the whole image.
-		setDocument(d->mDocument);
-		return;
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
 	}
-
 	d->setScalerRegionToVisibleRect();
 	d->mViewport->update();
 }
@@ -365,7 +337,7 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	painter.setClipRect(event->rect());
 
 	painter.setCompositionMode(QPainter::CompositionMode_Source);
-	painter.drawPixmap(imageOffset(), d->mCurrentBuffer);
+	painter.drawPixmap(0, 0, d->mCurrentBuffer);
 
 	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 	if (d->mTool) {
@@ -375,20 +347,25 @@ void ImageView::paintEvent(QPaintEvent* event) {
 
 void ImageView::resizeEvent(QResizeEvent*) {
 	if (d->mZoomToFit) {
+		// Bypass "same zoom" test: even if the zoom is the same we want a new
+		// buffer of the correct size (and if switching from/to fullscreen, using
+		// the correct background) to be created
+		d->mZoom = -1;
 		setZoom(computeZoomToFit());
 		// Make sure one can't use mousewheel in zoom-to-fit mode
 		horizontalScrollBar()->setRange(0, 0);
 		verticalScrollBar()->setRange(0, 0);
 	} else {
-		d->createBuffer(KeepPreviousBufferContent);
+		d->createBuffer();
 		updateScrollBars();
 		d->setScalerRegionToVisibleRect();
 	}
 }
 
 QPoint ImageView::imageOffset() const {
-	int left = qMax( (d->mViewport->width() - d->mCurrentBuffer.width()) / 2, 0);
-	int top = qMax( (d->mViewport->height() - d->mCurrentBuffer.height()) / 2, 0);
+	QSize size = d->visibleImageSize();
+	int left = qMax( (d->mViewport->width() - size.width()) / 2, 0);
+	int top = qMax( (d->mViewport->height() - size.height()) / 2, 0);
 
 	return QPoint(left, top);
 }
@@ -403,6 +380,8 @@ void ImageView::setZoom(qreal zoom, const QPoint& _center) {
 	if (qAbs(zoom - oldZoom) < 0.001) {
 		return;
 	}
+	// Get offset *before* setting mZoom, otherwise we get the new offset
+	QPoint oldOffset = imageOffset();
 	d->mZoom = zoom;
 
 	QPoint center;
@@ -420,14 +399,7 @@ void ImageView::setZoom(qreal zoom, const QPoint& _center) {
 		d->mScaler->setTransformationMode(Qt::FastTransformation);
 	}
 
-	// Get offset *before* resizing the buffer, otherwise we get the new offset
-	QPoint oldOffset = imageOffset();
-	d->createBuffer(ClearBufferIfSizeIsDifferent);
-	if (d->mZoom < oldZoom && (d->mCurrentBuffer.width() < d->mViewport->width() || d->mCurrentBuffer.height() < d->mViewport->height())) {
-		// Trigger an update to erase borders
-		d->mViewport->update();
-	}
-
+	d->createBuffer();
 	d->mInsideSetZoom = true;
 
 	/*
@@ -522,7 +494,7 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 	}
 	// Scroll existing
 	{
-		if (d->mAlternateBuffer.isNull()) {
+		if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
 			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
 		}
 		QPainter painter(&d->mAlternateBuffer);
@@ -559,8 +531,9 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
 	LOG("");
-	int viewportLeft = zoomedImageLeft - d->hScroll();
-	int viewportTop = zoomedImageTop - d->vScroll();
+	QPoint offset = imageOffset();
+	int viewportLeft = offset.x() + zoomedImageLeft - d->hScroll();
+	int viewportTop = offset.y() + zoomedImageTop - d->vScroll();
 
 	{
 		QPainter painter(&d->mCurrentBuffer);
@@ -573,20 +546,27 @@ void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const 
 			painter.setCompositionMode(QPainter::CompositionMode_Source);
 		}
 		painter.drawImage(viewportLeft, viewportTop, image);
-		// Debug rects
+
+		// Clear borders. We do it here which is quite late, but this way we ensure
+		// borders are not cleared until the new image is ready. Meanwhile we
+		// continue to show the previous image. If we cleared the borders earlier
+		// we could end up clearing the borders on the previous image, leading to
+		// a temporary cropped result
+		QColor bgColor = d->mViewport->palette().color(d->mViewport->backgroundRole());
+		QRegion region = d->mCurrentBuffer.rect();
+		region -= QRect(imageOffset(), d->mDocument->size() * d->mZoom);
+		Q_FOREACH(const QRect& rect, region.rects()) {
+			painter.fillRect(rect, bgColor);
+		}
 		/*
+		// Debug rects
 		QPen pen(Qt::red);
 		pen.setStyle(Qt::DotLine);
 		painter.setPen(pen);
 		painter.drawRect(viewportLeft, viewportTop, image.width() - 1, image.height() - 1);
 		*/
 	}
-	QPoint offset = imageOffset();
-	d->mViewport->update(
-		offset.x() + viewportLeft,
-		offset.y() + viewportTop,
-		image.width(),
-		image.height());
+	d->mViewport->update();
 }
 
 
