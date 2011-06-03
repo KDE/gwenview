@@ -630,7 +630,7 @@ void DocumentView::slotKeyPressed(Qt::Key key, bool pressed)
 
 
 KUrl DocumentView::url() const {
-	Document::Ptr doc = d->mAdapter->document();
+	Document::Ptr doc = d->mDocument;
 	return doc ? doc->url() : KUrl();
 }
 

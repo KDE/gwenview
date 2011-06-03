@@ -364,16 +364,15 @@ struct DocumentPanelPrivate {
 	}
 
 	QModelIndex indexForView(DocumentView* view) const {
-		Document::Ptr doc = view->adapter()->document();
-		Q_ASSERT(doc);
-		if (!doc) {
-			kWarning() << "No document!";
+		KUrl url = view->url();
+		if (!url.isValid()) {
+			kWarning() << "View does not display any document!";
 			return QModelIndex();
 		}
 
 		// FIXME: Ugly coupling!
 		SortedDirModel* model = static_cast<SortedDirModel*>(mThumbnailBar->model());
-		return model->indexForUrl(doc->url());
+		return model->indexForUrl(url);
 	}
 };
 
