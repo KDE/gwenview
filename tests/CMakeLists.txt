@@ -151,3 +151,6 @@ set(imageloadbench_SRCS
 kde4_add_executable(imageloadbench TEST ${imageloadbench_SRCS})
 
 target_link_libraries(imageloadbench ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
+
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
+add_dependencies(check buildtests)
