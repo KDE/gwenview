@@ -471,6 +471,15 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 
 void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
 	QListView::dataChanged(topLeft, bottomRight);
+	for (int row = topLeft.row(); row <= bottomRight.row(); ++row) {
+		QModelIndex index = model()->index(row, 0);
+		KUrl url = urlForIndex(index);
+		if (!url.isValid()) {
+			kWarning() << "Invalid url for index" << index << ". This should not happen!";
+			continue;
+		}
+		d->mThumbnailForUrl.remove(url);
+	}
 	d->mScheduledThumbnailGenerationTimer.start();
 }
 
