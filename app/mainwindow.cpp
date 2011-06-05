@@ -1266,7 +1266,7 @@ void MainWindow::reload() {
 	if (d->mCurrentPageId == ViewPageId) {
 		d->mDocumentPanel->reload();
 	} else {
-		d->mDirModel->reload();
+		d->mThumbnailViewPanel->reload();
 	}
 }
 

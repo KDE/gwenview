@@ -250,6 +250,15 @@ KUrlNavigator* ThumbnailViewPanel::urlNavigator() const {
 }
 
 
+void ThumbnailViewPanel::reload() {
+	QModelIndexList list = d->mThumbnailView->selectionModel()->selectedIndexes();
+	Q_FOREACH(const QModelIndex& index, list) {
+		d->mThumbnailView->reloadThumbnail(index);
+	}
+	d->mDirModel->reload();
+}
+
+
 void ThumbnailViewPanel::editLocation() {
 	d->mUrlNavigator->setUrlEditable(true);
 	d->mUrlNavigator->setFocus();

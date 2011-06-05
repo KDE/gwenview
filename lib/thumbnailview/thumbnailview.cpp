@@ -867,4 +867,20 @@ void ThumbnailView::smoothNextThumbnail() {
 }
 
 
+void ThumbnailView::reloadThumbnail(const QModelIndex& index) {
+	KUrl url = urlForIndex(index);
+	if (!url.isValid()) {
+		kWarning() << "Invalid url for index" << index;
+		return;
+	}
+	ThumbnailLoadJob::deleteImageThumbnail(url);
+	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
+	if (it == d->mThumbnailForUrl.end()) {
+		return;
+	}
+	d->mThumbnailForUrl.erase(it);
+	generateThumbnailsForVisibleItems();
+}
+
+
 } // namespace

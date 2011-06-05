@@ -89,6 +89,8 @@ public:
 	 */
 	QPixmap busySequenceCurrentPixmap() const;
 
+	void reloadThumbnail(const QModelIndex&);
+
 Q_SIGNALS:
 	/**
 	 * It seems we can't use the 'activated()' signal for now because it does

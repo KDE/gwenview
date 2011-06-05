@@ -53,6 +53,8 @@ public:
 
 	void applyPalette(const QPalette&);
 
+	void reload();
+
 	ThumbnailView* thumbnailView() const;
 	KUrlNavigator* urlNavigator() const;
 
