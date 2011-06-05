@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsScene>
 #include <QGraphicsSvgItem>
 #include <QGraphicsView>
+#include <QSvgRenderer>
 
 // KDE
 #include <kdebug.h>
-#include <ksvgrenderer.h>
 
 // Local
 #include "document/documentfactory.h"
@@ -38,7 +38,7 @@ namespace Gwenview {
 
 
 struct SvgViewAdapterPrivate {
-	KSvgRenderer* mRenderer;
+	QSvgRenderer* mRenderer;
 	QGraphicsScene* mScene;
 	QGraphicsView* mView;
 
@@ -51,7 +51,7 @@ struct SvgViewAdapterPrivate {
 SvgViewAdapter::SvgViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new SvgViewAdapterPrivate) {
-	d->mRenderer = new KSvgRenderer(this);
+	d->mRenderer = new QSvgRenderer(this);
 	d->mScene = new QGraphicsScene(this);
 	d->mView = new QGraphicsView(d->mScene, parent);
 	d->mView->setFrameStyle(QFrame::NoFrame);
