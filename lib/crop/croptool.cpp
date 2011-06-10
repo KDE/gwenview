@@ -122,21 +122,21 @@ struct CropToolPrivate {
 		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
-			top = rect.top();
+			top = rect.top() - HANDLE_SIZE / 2;
 		} else if (handle & CH_Bottom) {
-			top = rect.bottom() - HANDLE_SIZE;
+			top = rect.bottom() - HANDLE_SIZE / 2;
 		} else {
-			top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
-			top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
+			top = rect.top() + (rect.height() - HANDLE_SIZE / 2) / 2;
+			top = qBound(-HANDLE_SIZE / 2, top, viewportSize.height() - HANDLE_SIZE / 2);
 		}
 
 		if (handle & CH_Left) {
-			left = rect.left();
+			left = rect.left() - HANDLE_SIZE / 2;
 		} else if (handle & CH_Right) {
-			left = rect.right() - HANDLE_SIZE;
+			left = rect.right() - HANDLE_SIZE / 2;
 		} else {
-			left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
-			left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
+			left = rect.left() + (rect.width() - HANDLE_SIZE / 2) / 2;
+			left = qBound(-HANDLE_SIZE / 2, left, viewportSize.width() - HANDLE_SIZE / 2);
 		}
 
 		return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
@@ -369,13 +369,14 @@ void CropTool::paint(QPainter* painter) {
 	rect.adjust(0, 0, -1, -1);
 	painter->drawRect(rect);
 
-	if (d->mMovingHandle == CH_None) {
-		// Only draw handles when user is not resizing
-		painter->setBrush(fillColor);
-		Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
-			rect = d->handleViewportRect(handle);
-			painter->drawRect(rect);
-		}
+	painter->setRenderHint(QPainter::Antialiasing);
+	painter->translate(.5, .5);
+	painter->setBrush(fillColor);
+	painter->setClipRegion(QRegion(imageRect) - rect);
+	Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
+		painter->drawRoundedRect(
+			d->handleViewportRect(handle),
+			5, 5);
 	}
 }
 
