@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
+#include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
 
@@ -68,6 +69,8 @@ enum HudSide {
 	HS_TopInside = HS_Top | HS_Inside,
 	HS_BottomInside = HS_Bottom | HS_Inside
 };
+
+typedef QPair<QPoint, HudSide> OptimalPosition;
 
 static const int HUD_TIMER_MAX_PIXELS_PER_UPDATE = 20;
 static const int HUD_TIMER_ANIMATION_INTERVAL = 20;
@@ -217,7 +220,15 @@ struct CropToolPrivate {
 			mCropTool, SLOT(moveHudWidget()));
 	}
 
-	typedef QPair<QPoint, HudSide> OptimalPosition;
+	void connectToView() {
+		ImageView* view = mCropTool->imageView();
+		QObject::connect(view, SIGNAL(zoomChanged(qreal)),
+			mCropTool, SLOT(updateHudWidgetPosition()));
+		QObject::connect(view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+			mCropTool, SLOT(updateHudWidgetPosition()));
+		QObject::connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),
+			mCropTool, SLOT(updateHudWidgetPosition()));
+	}
 
 	OptimalPosition computeOptimalHudWidgetPosition() {
 		const ImageView* view = mCropTool->imageView();
@@ -262,25 +273,6 @@ struct CropToolPrivate {
 		ret.first.setY(qBound(hudMaxRect.top(), ret.first.y(), hudMaxRect.bottom()));
 		return ret;
 	}
-
-
-	void updateHudWidgetPosition() {
-		OptimalPosition result = computeOptimalHudWidgetPosition();
-		if (mHudSide == HS_None) {
-			mHudSide = result.second;
-		}
-		if (mHudSide == result.second && !mHudTimer->isActive()) {
-			// Not changing side and not in an animation, move directly the hud
-			// to the final position to avoid lagging effect
-			mHudWidget->move(result.first);
-		} else {
-			mHudEndPos = result.first;
-			mHudSide = result.second;
-			if (!mHudTimer->isActive()) {
-				mHudTimer->start();
-			}
-		}
-	}
 };
 
 
@@ -297,7 +289,8 @@ CropTool::CropTool(ImageView* view)
 	d->mCropRatio = 0.;
 
 	d->setupHudWidget();
-	d->updateHudWidgetPosition();
+	d->connectToView();
+	updateHudWidgetPosition();
 }
 
 
@@ -444,7 +437,7 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 
 	imageView()->viewport()->update();
 	rectUpdated(d->mRect);
-	d->updateHudWidgetPosition();
+	updateHudWidgetPosition();
 }
 
 
@@ -478,7 +471,7 @@ void CropTool::slotCropRequested() {
 
 bool CropTool::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::Resize) {
-		d->updateHudWidgetPosition();
+		updateHudWidgetPosition();
 	}
 	return false;
 }
@@ -497,6 +490,25 @@ void CropTool::moveHudWidget() {
 	}
 
 	d->mHudWidget->move(pos);
+}
+
+
+void CropTool::updateHudWidgetPosition() {
+	OptimalPosition result = d->computeOptimalHudWidgetPosition();
+	if (d->mHudSide == HS_None) {
+		d->mHudSide = result.second;
+	}
+	if (d->mHudSide == result.second && !d->mHudTimer->isActive()) {
+		// Not changing side and not in an animation, move directly the hud
+		// to the final position to avoid lagging effect
+		d->mHudWidget->move(result.first);
+	} else {
+		d->mHudEndPos = result.first;
+		d->mHudSide = result.second;
+		if (!d->mHudTimer->isActive()) {
+			d->mHudTimer->start();
+		}
+	}
 }
 
 
