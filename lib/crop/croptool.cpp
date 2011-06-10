@@ -79,6 +79,20 @@ Q_DECLARE_FLAGS(CropHandle, CropHandleFlag)
 
 } // namespace
 
+inline QPoint boundPointX(const QPoint& point, const QRect& rect) {
+	return QPoint(
+		qBound(rect.left(), point.x(), rect.right()),
+		point.y()
+		);
+}
+
+inline QPoint boundPointXY(const QPoint& point, const QRect& rect) {
+	return QPoint(
+		qBound(rect.left(), point.x(), rect.right()),
+		qBound(rect.top(),  point.y(), rect.bottom())
+		);
+}
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::CropHandle)
 
 namespace Gwenview {
@@ -232,15 +246,17 @@ struct CropToolPrivate {
 
 	OptimalPosition computeOptimalHudWidgetPosition() {
 		const ImageView* view = mCropTool->imageView();
-		const QRect rect = view->mapToViewport(mRect);
+		const QRect viewportRect = view->viewport()->rect();
+		const QRect rect = view->mapToViewport(mRect).intersected(viewportRect);
 		const int margin = HANDLE_SIZE;
 		const int hudHeight = mHudWidget->height();
-		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, -mHudWidget->width(), -hudHeight);
+		const QRect hudMaxRect = viewportRect.adjusted(0, 0, -mHudWidget->width(), -hudHeight);
 
 		OptimalPosition ret;
 
-		// Compute preferred and fallback positions. Preferred is outside rect
-		// on the same side, fallback is outside on the other side.
+		// Compute preferred and fallback positions. 'preferred' is outside the
+		// crop rect, on the current side. 'fallback' is outside on the other
+		// side.
 		OptimalPosition preferred = OptimalPosition(
 			QPoint(rect.left(), rect.bottom() + margin),
 			HS_Bottom);
@@ -252,11 +268,17 @@ struct CropToolPrivate {
 			qSwap(preferred, fallback);
 		}
 
-		// Check if a position outside rect fits
+		// If possible, 'preferred' and 'fallback' are aligned on the left edge
+		// by default, but if they don't fit the viewport horizontally, adjust
+		// their X coordinate so that the hud remain visible
+		preferred.first = boundPointX(preferred.first, hudMaxRect);
+		fallback.first = boundPointX(fallback.first, hudMaxRect);
+
+		// Check if either 'preferred' or 'fallback' fits
 		if (hudMaxRect.contains(preferred.first)) {
 			ret = preferred;
 		} else if (hudMaxRect.contains(fallback.first)) {
-			ret= fallback;
+			ret = fallback;
 		} else {
 			// Does not fit outside, use a position inside rect
 			QPoint pos;
@@ -269,8 +291,7 @@ struct CropToolPrivate {
 		}
 
 		// Ensure it's always fully visible
-		ret.first.setX(qBound(hudMaxRect.left(), ret.first.x(), hudMaxRect.right()));
-		ret.first.setY(qBound(hudMaxRect.top(), ret.first.y(), hudMaxRect.bottom()));
+		ret.first = boundPointXY(ret.first, hudMaxRect);
 		return ret;
 	}
 };
