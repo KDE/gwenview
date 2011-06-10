@@ -366,7 +366,7 @@ void CropTool::paint(QPainter* painter) {
 	rect.adjust(0, 0, -1, -1);
 	painter->drawRect(rect);
 
-	if (QApplication::mouseButtons() == Qt::NoButton) {
+	if (d->mMovingHandle == CH_None) {
 		// Only draw handles when user is not resizing
 		painter->setBrush(fillColor);
 		Q_FOREACH(const CropHandle& handle, d->mCropHandleList) {
