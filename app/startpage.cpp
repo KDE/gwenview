@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kfileplacesmodel.h>
+#include <kglobalsettings.h>
 #include <kicon.h>
 #include <kmimetype.h>
 
@@ -168,19 +169,28 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 		SLOT(slotTagViewClicked(const QModelIndex&)));
 
 	// Recent folder view
-	connect(d->mRecentFoldersView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotListViewClicked(const QModelIndex&)) );
+	connect(d->mRecentFoldersView, SIGNAL(indexActivated(const QModelIndex&)),
+		SLOT(slotListViewActivated(const QModelIndex&)) );
 
 	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
 
 	// Url bag view
 	d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
-	connect(d->mRecentUrlsView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotListViewClicked(const QModelIndex&)) );
 
 	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
+
+	if (KGlobalSettings::singleClick()) {
+		if (KGlobalSettings::changeCursorOverIcon()) {
+			d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
+		}
+		connect(d->mRecentUrlsView, SIGNAL(clicked(const QModelIndex&)),
+			SLOT(slotListViewActivated(const QModelIndex&)) );
+	} else {
+		connect(d->mRecentUrlsView, SIGNAL(doubleClicked(const QModelIndex&)),
+			SLOT(slotListViewActivated(const QModelIndex&)) );
+	}
 
 	d->updateHistoryTab();
 	connect(GwenviewConfig::self(), SIGNAL(configChanged()),
@@ -224,7 +234,7 @@ void StartPage::applyPalette(const QPalette& newPalette) {
 }
 
 
-void StartPage::slotListViewClicked(const QModelIndex& index) {
+void StartPage::slotListViewActivated(const QModelIndex& index) {
 	if (!index.isValid()) {
 		return;
 	}

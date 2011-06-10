@@ -54,7 +54,7 @@ protected:
 	virtual void showEvent(QShowEvent*);
 
 private Q_SLOTS:
-	void slotListViewClicked(const QModelIndex& index);
+	void slotListViewActivated(const QModelIndex& index);
 	void showRecentFoldersViewContextMenu(const QPoint& pos);
 	void slotTagViewClicked(const QModelIndex& index);
 	void slotConfigChanged();
