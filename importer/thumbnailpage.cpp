@@ -274,7 +274,7 @@ void ThumbnailPage::importList(const QModelIndexList& list) {
 
 void ThumbnailPage::updateImportButtons() {
 	d->mImportSelectedButton->setEnabled(d->mThumbnailView->selectionModel()->hasSelection());
-	d->mImportAllButton->setEnabled(d->mDirModel->hasChildren());
+	d->mImportAllButton->setEnabled(d->mDirModel->hasDocuments());
 }
 
 
