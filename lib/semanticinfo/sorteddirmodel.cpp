@@ -277,4 +277,21 @@ bool SortedDirModel::lessThan(const QModelIndex& left, const QModelIndex& right)
 }
 
 
+bool SortedDirModel::hasDocuments() const
+{
+	const int count = rowCount();
+	if (count == 0) {
+		return false;
+	}
+	for (int row = 0; row < count; ++row) {
+		const QModelIndex idx = index(row, 0);
+		const KFileItem item = itemForIndex(idx);
+		if (!ArchiveUtils::fileItemIsDirOrArchive(item)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
 } //namespace

@@ -71,7 +71,7 @@ private:
 class GWENVIEWLIB_EXPORT SortedDirModel : public KDirSortFilterProxyModel {
 	Q_OBJECT
 public:
-	SortedDirModel(QObject* parent);
+	SortedDirModel(QObject* parent=0);
 	~SortedDirModel();
 	KDirLister* dirLister() const;
 	KFileItem itemForIndex(const QModelIndex& index) const;
@@ -101,6 +101,8 @@ public:
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 	SemanticInfo semanticInfoForSourceIndex(const QModelIndex& sourceIndex) const;
 #endif
+
+	bool hasDocuments() const;
 
 public Q_SLOTS:
     void applyFilters();

@@ -1,3 +1,17 @@
+macro(gv_add_unit_test _test)
+	set(_src ${_test}.cpp ${ARGN})
+	qt4_automoc(${_src})
+	kde4_add_unit_test(${_test} ${_src})
+	target_link_libraries(${_test}
+		${KDE4_KIO_LIBS}
+		${KDE4_KDEUI_LIBS}
+		${KDE4_KDECORE_LIBS}
+		${QT_QTTEST_LIBRARY}
+		${QT_QTCORE_LIBRARY}
+		${QT_QTGUI_LIBRARY}
+		gwenviewlib)
+endmacro(gv_add_unit_test)
+
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/..
 	)
@@ -142,6 +156,8 @@ set(slidecontainertest_SRCS
 kde4_add_executable(slidecontainertest TEST ${slidecontainertest_SRCS})
 
 target_link_libraries(slidecontainertest ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} gwenviewlib)
+
+gv_add_unit_test(sorteddirmodeltest testutils.cpp)
 
 # imageloadbench
 set(imageloadbench_SRCS
