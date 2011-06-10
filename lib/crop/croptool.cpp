@@ -118,6 +118,7 @@ struct CropToolPrivate {
 
 
 	QRect handleViewportRect(CropHandle handle) {
+		QSize viewportSize = mCropTool->imageView()->viewport()->size();
 		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
@@ -126,6 +127,7 @@ struct CropToolPrivate {
 			top = rect.bottom() - HANDLE_SIZE;
 		} else {
 			top = rect.top() + (rect.height() - HANDLE_SIZE) / 2;
+			top = qBound(0, top, viewportSize.height() - HANDLE_SIZE);
 		}
 
 		if (handle & CH_Left) {
@@ -134,6 +136,7 @@ struct CropToolPrivate {
 			left = rect.right() - HANDLE_SIZE;
 		} else {
 			left = rect.left() + (rect.width() - HANDLE_SIZE) / 2;
+			left = qBound(0, left, viewportSize.width() - HANDLE_SIZE);
 		}
 
 		return QRect(left, top, HANDLE_SIZE, HANDLE_SIZE);
