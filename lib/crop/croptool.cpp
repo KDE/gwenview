@@ -224,7 +224,7 @@ struct CropToolPrivate {
 		const QRect rect = view->mapToViewport(mRect);
 		const int margin = HANDLE_SIZE;
 		const int hudHeight = mHudWidget->height();
-		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, 0, -hudHeight);
+		const QRect hudMaxRect = view->viewport()->rect().adjusted(0, 0, -mHudWidget->width(), -hudHeight);
 
 		OptimalPosition ret;
 
@@ -258,7 +258,8 @@ struct CropToolPrivate {
 		}
 
 		// Ensure it's always fully visible
-		ret.first.rx() = qMin(ret.first.rx(), hudMaxRect.width() - mHudWidget->width());
+		ret.first.setX(qBound(hudMaxRect.left(), ret.first.x(), hudMaxRect.right()));
+		ret.first.setY(qBound(hudMaxRect.top(), ret.first.y(), hudMaxRect.bottom()));
 		return ret;
 	}
 
