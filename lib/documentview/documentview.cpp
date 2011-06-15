@@ -438,6 +438,12 @@ void DocumentView::slotLoaded() {
 	d->hideLoadingIndicator();
 	d->updateCaption();
 	d->updateZoomSnapValues();
+	if (!d->mAdapter->zoomToFit()) {
+		qreal min = minimumZoom();
+		if (d->mAdapter->zoom() < min) {
+			d->mAdapter->setZoom(min);
+		}
+	}
 	emit completed();
 }
 
