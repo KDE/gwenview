@@ -666,7 +666,8 @@ void ThumbnailLoadJob::checkThumbnail() {
 		mState=STATE_PREVIEWJOB;
 		KFileItemList list;
 		list.append(mCurrentItem);
-		KIO::Job* job=KIO::filePreview(list, ThumbnailGroup::pixelSize(mThumbnailGroup));
+		const int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
+		KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize));
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());
 		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
 			this, SLOT(slotGotPreview(const KFileItem&, const QPixmap&)) );
