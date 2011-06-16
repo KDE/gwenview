@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Qt
 
 // KDE
+#include <kaboutdata.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
@@ -30,9 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <klocale.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
-#include <kparts/genericfactory.h>
+#include <kpluginfactory.h>
 #include <kpropertiesdialog.h>
 
 // Local
@@ -47,13 +49,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 //Factory Code
-typedef KParts::GenericFactory<Gwenview::GVPart> GVPartFactory;
-K_EXPORT_COMPONENT_FACTORY( gvpart /*library name*/, GVPartFactory )
+K_PLUGIN_FACTORY(GVPartFactory, registerPlugin<Gwenview::GVPart>();)
+K_EXPORT_PLUGIN(GVPartFactory )
 
 namespace Gwenview {
 
 
-GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QStringList& /*args*/)
+GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
         KGlobal::locale()->insertCatalog("gwenview");

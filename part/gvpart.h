@@ -39,7 +39,7 @@ class DocumentView;
 class GVPart : public KParts::ReadOnlyPart {
 	Q_OBJECT
 public:
-	GVPart(QWidget* parentWidget, QObject* parent, const QStringList&);
+	GVPart(QWidget* parentWidget, QObject* parent, const QVariantList&);
 
 	static KAboutData* createAboutData();
 
