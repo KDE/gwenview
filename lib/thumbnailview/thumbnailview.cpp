@@ -84,8 +84,9 @@ static KUrl urlForIndex(const QModelIndex& index) {
 }
 
 struct Thumbnail {
-	Thumbnail(const QPersistentModelIndex& index_)
+	Thumbnail(const QPersistentModelIndex& index_, const KDateTime& mtime)
 	: mIndex(index_)
+	, mModificationTime(mtime)
 	, mRough(true)
 	, mWaitingForThumbnail(true) {}
 
@@ -119,7 +120,18 @@ struct Thumbnail {
 		return groupSize == qMax(mFullSize.width(), mFullSize.height());
 	}
 
+	void prepareForRefresh(const KDateTime& mtime) {
+		mModificationTime = mtime;
+		mGroupPix = QPixmap();
+		mAdjustedPix = QPixmap();
+		mFullSize = QSize();
+		mRealFullSize = QSize();
+		mRough = true;
+		mWaitingForThumbnail = true;
+	}
+
 	QPersistentModelIndex mIndex;
+	KDateTime mModificationTime;
 	/// The pix loaded from .thumbnails/{large,normal}
 	QPixmap mGroupPix;
 	/// Scaled version of mGroupPix, adjusted to ThumbnailView::thumbnailSize
@@ -184,7 +196,7 @@ struct ThumbnailViewPrivate {
 		QPixmap pix;
 		QSize fullSize;
 		mDocumentInfoProvider->thumbnailForDocument(url, group, &pix, &fullSize);
-		mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index));
+		mThumbnailForUrl[url] = Thumbnail(QPersistentModelIndex(index), KDateTime::currentLocalDateTime());
 		that->setThumbnail(item, pix, fullSize);
 	}
 
@@ -471,16 +483,36 @@ void ThumbnailView::rowsInserted(const QModelIndex& parent, int start, int end) 
 
 void ThumbnailView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
 	QListView::dataChanged(topLeft, bottomRight);
+	bool thumbnailsNeedRefresh = false;
 	for (int row = topLeft.row(); row <= bottomRight.row(); ++row) {
 		QModelIndex index = model()->index(row, 0);
-		KUrl url = urlForIndex(index);
-		if (!url.isValid()) {
-			kWarning() << "Invalid url for index" << index << ". This should not happen!";
+		KFileItem item = fileItemForIndex(index);
+		if (item.isNull()) {
+			kWarning() << "Invalid item for index" << index << ". This should not happen!";
 			continue;
 		}
-		d->mThumbnailForUrl.remove(url);
+
+		ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(item.url());
+		if (it != d->mThumbnailForUrl.end()) {
+			// All thumbnail views are connected to the model, so
+			// ThumbnailView::dataChanged() is called for all of them. As a
+			// result this method will also be called for views which are not
+			// currently visible, and do not yet have a thumbnail for the
+			// modified url.
+			KDateTime mtime = item.time(KFileItem::ModificationTime);
+			if (it->mModificationTime != mtime) {
+				// dataChanged() is called when the file changes but also when
+				// the model fetched additional data such as semantic info. To
+				// avoid needless refreshes, we only trigger a refresh if the
+				// modification time changes.
+				thumbnailsNeedRefresh = true;
+				it->prepareForRefresh(mtime);
+			}
+		}
 	}
-	d->mScheduledThumbnailGenerationTimer.start();
+	if (thumbnailsNeedRefresh) {
+		d->mScheduledThumbnailGenerationTimer.start();
+	}
 }
 
 
@@ -554,7 +586,7 @@ QPixmap ThumbnailView::thumbnailForIndex(const QModelIndex& index, QSize* fullSi
 	// Find or create Thumbnail instance
 	ThumbnailForUrl::Iterator it = d->mThumbnailForUrl.find(url);
 	if (it == d->mThumbnailForUrl.end()) {
-		Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
+		Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index), item.time(KFileItem::ModificationTime));
 		it = d->mThumbnailForUrl.insert(url, thumbnail);
 	}
 	Thumbnail& thumbnail = it.value();
@@ -780,7 +812,7 @@ void ThumbnailView::generateThumbnailsForVisibleItems() {
 		// Insert the thumbnail in mThumbnailForUrl, so that
 		// setThumbnail() can find the item to update
 		if (it == d->mThumbnailForUrl.constEnd()) {
-			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index));
+			Thumbnail thumbnail = Thumbnail(QPersistentModelIndex(index), item.time(KFileItem::ModificationTime));
 			d->mThumbnailForUrl.insert(url, thumbnail);
 		}
 	}
