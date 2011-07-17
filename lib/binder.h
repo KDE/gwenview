@@ -76,7 +76,7 @@ protected Q_SLOTS:
  * Note: the method does not need to be a slot.
  */
 template <class Receiver, class Arg, typename MethodArg>
-class GWENVIEWLIB_EXPORT BaseBinder : public BinderInternal
+class BaseBinder : public BinderInternal
 {
 public:
 	typedef void (Receiver::*Method)(MethodArg);
