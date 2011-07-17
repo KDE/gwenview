@@ -40,7 +40,7 @@
 <year>2008</year>
 <holder>Henry de Valence</holder>
 </copyright>
-<!-- <legalnotice>&FDLNotice;</legalnotice> -->
+<legalnotice>&FDLNotice;</legalnotice>
 
 <date>2005-08-21</date>
 <releaseinfo>1.2.92</releaseinfo>
@@ -397,6 +397,23 @@ action="simul">&Ctrl;<keycap>O</keycap></keycombo>:
 Open an image using the standard file selection dialog.</para></listitem> 
 </itemizedlist> 
 </sect1>
+</chapter>
+
+<chapter id="credits">
+<title>Credits and Copyright</title>
+
+<para>&kappname; is currently maintained by Aurélien Gâteau</para>
+
+<para>This document was written by Christopher Martin</para>
+
+<para>This document was updated for &kde; 4 by Henry de Valence</para>
+
+<para>Screenshots in this document were updated for &kde; 4.5 by Burkhard Lück</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
 </chapter>
 
 </book>
