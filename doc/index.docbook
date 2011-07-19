@@ -172,11 +172,9 @@ blurry and/or pixelated.</para></listitem>
       <keycap>F11</keycap>
     </shortcut>
     <guimenu>View</guimenu>
-    <guimenuitem>Show/Hide Sidebar</guimenuitem>
+    <guimenuitem>Sidebar</guimenuitem>
   </menuchoice>
-  or using the <guiicon>Show/Hide Sidebar</guiicon> button. Note that the
-  option will appear as either <guiicon>Show Sidebar</guiicon> or <guiicon>Hide
-  Sidebar</guiicon>, depending on whether the sidebar is currently shown. The
+  or using the <guiicon>Sidebar</guiicon> button. The
   slider at the bottom right allows you to change the size of the image
   thumbnails. You can also filter the images by filename using the box on the 
   lower left. The toolbar (left) appears in both Browse mode as well as View
@@ -407,8 +405,6 @@ Open an image using the standard file selection dialog.</para></listitem>
 <para>This document was written by Christopher Martin</para>
 
 <para>This document was updated for &kde; 4 by Henry de Valence</para>
-
-<para>Screenshots in this document were updated for &kde; 4.5 by Burkhard Lück</para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
