@@ -66,7 +66,7 @@
 <para>
 &kappname; is a fast and easy to use image viewer for KDE.
 </para>
-
+<!-- Start Page missing-->
 <para>
 Gwenview features three main modes: Browse, View, and Full Screen. Browse Mode 
 lets you navigate through your computer showing thumbnails of your images, View 
@@ -144,8 +144,19 @@ blurry and/or pixelated.</para></listitem>
 </para></listitem>
 
 </itemizedlist>
+
+<!-- missing
+Tip:
+Install Kipi-Plugins -> menu Plugins with all Kipi actions  
+-->
 </section>
 
+<!-- missing
+<section id='start_page'><title>Start Page</title>
+left Recent Folders + Recent Urls
+right Places + Tags
+</section>
+-->
 <section id='browse_mode'><title>Browse Mode</title>
   
 <para>When in Browse Mode, you can easily navigate through your files and folders.
@@ -165,7 +176,7 @@ blurry and/or pixelated.</para></listitem>
 <para>
   Moving the mouse over an image shows buttons to rotate the image as well as
   a button to enter Fullscreen Mode. Clicking on an image takes you into View
-  Mode. The sidebar on the right does not appear
+  Mode. The sidebar on the left does not appear
   by default, but its appearance can be toggled using
   <menuchoice>
     <shortcut>
@@ -174,9 +185,18 @@ blurry and/or pixelated.</para></listitem>
     <guimenu>View</guimenu>
     <guimenuitem>Sidebar</guimenuitem>
   </menuchoice>
-  or using the <guiicon>Sidebar</guiicon> button. The
-  slider at the bottom right allows you to change the size of the image
-  thumbnails. You can also filter the images by filename using the box on the 
+  or using the little arrow on the top of the sidebar splitter. When clicked it 
+  collapses or expandes the sidebar. The collapser can overlap the image, but fades 
+  away when the mouse cursor moves out of the sidebar.</para>
+  <!-- Folder tab “Places” list as root items, so you can easily start browsing from your prefered folders.
+  Information tab
+  Meta Information: properties of selected picture
+  Semantic Information: Rating Tags Description
+  Operations tab:
+  Image Operations and File Operations
+    -->
+  <para>The slider at the bottom right allows you to change the size of the image
+  thumbnails. You can also filter the images by filename or date using the box on the 
   lower left. The toolbar (left) appears in both Browse mode as well as View
   mode and contains the most commonly used actions. </para>
 <itemizedlist>
@@ -192,7 +212,7 @@ the next image in the folder.</para></listitem>
 <listitem><para>Rotate Left/Right: Same as discussed in 
 Image Operations</para></listitem>
 
-<listitem><para>Show Sidebar: Shows the sidebar (right) which
+<listitem><para>Show Sidebar: Shows the sidebar (left) which
 displays information about the current image.</para></listitem>
 </itemizedlist>
  
@@ -275,6 +295,13 @@ current folder. Clicking on one will display it.</para>
 
 </section>
 
+<!--missing
+<section>
+<tiltle>Genview Importer</tiltle>
+</section>
+gwenview_importer settings dialog has Help button enabled -> documentation not found
+either disable this button or link to here
+-->
 
 </chapter>
 
