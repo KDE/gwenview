@@ -186,7 +186,7 @@ right Places + Tags
     <guimenuitem>Sidebar</guimenuitem>
   </menuchoice>
   or using the little arrow on the top of the sidebar splitter. When clicked it 
-  collapses or expandes the sidebar. The collapser can overlap the image, but fades 
+  collapses or expands the sidebar. The collapser can overlap the image, but fades 
   away when the mouse cursor moves out of the sidebar.</para>
   <!-- Folder tab “Places” list as root items, so you can easily start browsing from your prefered folders.
   Information tab
@@ -339,7 +339,7 @@ either disable this button or link to here
   shows that image.</para></listitem>
   <listitem><para>When in Browse mode, scrolling the mouse wheel will scroll up
   or down the thumbail view area.</para></listitem>
-  <listitem><para>If the Mouse Behaviour option in
+  <listitem><para>If the Mouse Behavior option in
   <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
   &kappname;</guimenuitem></menuchoice>
   is set to Browse, scrolling the mouse wheel while in View Mode will 
@@ -410,7 +410,7 @@ Move the current image to the trash.</para></listitem>
 
 <listitem><para><keycombo
 action="simul">&Shift;<keycap>Del</keycap></keycombo>: 
-Permenantly delete the image from the disk. Note that this operation is
+Permanently delete the image from the disk. Note that this operation is
 irreversible and cannot be undone.</para></listitem> 
 
 <listitem><para><keycombo
