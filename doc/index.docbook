@@ -196,7 +196,7 @@ right Places + Tags
   Image Operations and File Operations
     -->
   <para>The slider at the bottom right allows you to change the size of the image
-  thumbnails. You can also filter the images by filename or date using the box on the 
+  thumbnails. You can also filter the images by filename, date, tag or rating using the box on the
   lower left. The toolbar (left) appears in both Browse mode as well as View
   mode and contains the most commonly used actions. </para>
 <itemizedlist>
