@@ -70,6 +70,7 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
 	setFaceType(KPageDialog::Plain);
 	// Hide help button until there is actual documentation to show
 	showButton(KDialog::Help, false);
+	showButtonSeparator(true);
 	addPage(widget, QString());
 
 	connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(const QString&)),
