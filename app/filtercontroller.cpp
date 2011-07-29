@@ -137,7 +137,7 @@ NameFilterWidget::NameFilterWidget(SortedDirModel* model)
 	timer->setSingleShot(true);
 	connect(timer, SIGNAL(timeout()), SLOT(applyNameFilter()));
 
-	connect(d->mLineEdit, SIGNAL(textChanged(const QString &)),
+	connect(d->mLineEdit, SIGNAL(textChanged(QString)),
 		timer, SLOT(start()));
 
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
@@ -231,7 +231,7 @@ DateFilterWidget::DateFilterWidget(SortedDirModel* model)
 	layout->addWidget(d->mModeComboBox);
 	layout->addWidget(d->mDateWidget);
 
-	connect(d->mDateWidget, SIGNAL(dateChanged(const QDate&)),
+	connect(d->mDateWidget, SIGNAL(dateChanged(QDate)),
 		SLOT(applyDateFilter()));
 	connect(d->mModeComboBox, SIGNAL(currentIndexChanged(int)),
 		SLOT(applyDateFilter()));

@@ -82,7 +82,7 @@ void ImporterTest::testSuccessfulImport() {
 
 	Importer importer(0);
 	QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
-	QSignalSpy errorSpy(&importer, SIGNAL(error(const QString&)));
+	QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
 
 	KUrl::List list = mDocumentList;
 
@@ -230,7 +230,7 @@ void ImporterTest::testReadOnlyDestination() {
 	chmod(QFile::encodeName(mTempDir->name()), 0555);
 
 	Importer importer(0);
-	QSignalSpy errorSpy(&importer, SIGNAL(error(const QString&)));
+	QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));
 	importer.start(mDocumentList, destUrl);
 
 	QCOMPARE(errorSpy.count(), 1);

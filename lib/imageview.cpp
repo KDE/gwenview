@@ -209,8 +209,8 @@ ImageView::ImageView(QWidget* parent)
 		// See bug #210058
 		horizontalScrollBar()->setLayoutDirection(Qt::LeftToRight);
 	}
-	connect(d->mScaler, SIGNAL(scaledRect(int, int, const QImage&)), 
-		SLOT(updateFromScaler(int, int, const QImage&)) );
+	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
+		SLOT(updateFromScaler(int,int,QImage)) );
 }
 
 ImageView::~ImageView() {
@@ -253,7 +253,7 @@ void ImageView::setDocument(Document::Ptr document) {
 		return;
 	}
 
-	connect(d->mDocument.data(), SIGNAL(metaInfoLoaded(const KUrl&)),
+	connect(d->mDocument.data(), SIGNAL(metaInfoLoaded(KUrl)),
 		SLOT(slotDocumentMetaInfoLoaded()) );
 	connect(d->mDocument.data(), SIGNAL(isAnimatedUpdated()),
 		SLOT(slotDocumentIsAnimatedUpdated()) );
@@ -271,7 +271,7 @@ void ImageView::slotDocumentMetaInfoLoaded() {
 	} else {
 		// Could not retrieve image size from meta info, we need to load the
 		// full image now.
-		connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
+		connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
 			SLOT(finishSetDocument()) );
 		d->mDocument->startLoadingFullImage();
 	}
@@ -287,8 +287,8 @@ void ImageView::finishSetDocument() {
 	d->createBuffer();
 	d->mScaler->setDocument(d->mDocument);
 
-	connect(d->mDocument.data(), SIGNAL(imageRectUpdated(const QRect&)),
-		SLOT(updateImageRect(const QRect&)) );
+	connect(d->mDocument.data(), SIGNAL(imageRectUpdated(QRect)),
+		SLOT(updateImageRect(QRect)) );
 
 	if (d->mZoomToFit) {
 		// Set the zoom to an invalid value to make sure setZoom() does not

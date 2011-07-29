@@ -91,14 +91,14 @@ ContextManager::ContextManager(SortedDirModel* dirModel, QItemSelectionModel* se
 		SLOT(emitQueuedSignals()) );
 
 	d->mDirModel = dirModel;
-	connect(d->mDirModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-		SLOT(slotDirModelDataChanged(const QModelIndex&, const QModelIndex&)) );
+	connect(d->mDirModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+		SLOT(slotDirModelDataChanged(QModelIndex,QModelIndex)) );
 
 	d->mSelectionModel = selectionModel;
-	connect(d->mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+	connect(d->mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
 		SLOT(slotSelectionChanged()) );
-	connect(d->mSelectionModel, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-		SLOT(slotCurrentChanged(const QModelIndex&)) );
+	connect(d->mSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+		SLOT(slotCurrentChanged(QModelIndex)) );
 
 	d->mSelectedFileItemListNeedsUpdate = false;
 	d->mOnlyCurrentUrl = false;

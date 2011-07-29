@@ -62,13 +62,13 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 	mDocumentView = new DocumentView(parentWidget, actionCollection());
 	setWidget(mDocumentView);
 
-	connect(mDocumentView, SIGNAL(captionUpdateRequested(const QString&)),
-		SIGNAL(setWindowCaption(const QString&)));
+	connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),
+		SIGNAL(setWindowCaption(QString)));
 	connect(mDocumentView, SIGNAL(completed()),
 		SIGNAL(completed()));
 
 	mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(mDocumentView, SIGNAL(customContextMenuRequested(const QPoint&)),
+	connect(mDocumentView, SIGNAL(customContextMenuRequested(QPoint)),
 		SLOT(showContextMenu()) );
 
 	KAction* action = new KAction(actionCollection());

@@ -92,10 +92,10 @@ struct DocumentViewPrivate {
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mAdapter, SIGNAL(zoomInRequested(const QPoint&)),
-			that, SLOT(zoomIn(const QPoint&)) );
-		QObject::connect(mAdapter, SIGNAL(zoomOutRequested(const QPoint&)),
-			that, SLOT(zoomOut(const QPoint&)) );
+		QObject::connect(mAdapter, SIGNAL(zoomInRequested(QPoint)),
+			that, SLOT(zoomIn(QPoint)) );
+		QObject::connect(mAdapter, SIGNAL(zoomOutRequested(QPoint)),
+			that, SLOT(zoomOut(QPoint)) );
 
 		that->layout()->addWidget(mAdapter->widget());
 
@@ -313,7 +313,7 @@ DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
 	d->that = this;
 	d->mActionCollection = actionCollection;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
-	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key, bool)), SLOT(slotKeyPressed(Qt::Key, bool)));
+	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
@@ -374,7 +374,7 @@ void DocumentView::openUrl(const KUrl& url) {
 		disconnect(d->mDocument.data(), 0, this, 0);
 	}
 	d->mDocument = DocumentFactory::instance()->load(url);
-	connect(d->mDocument.data(), SIGNAL(busyChanged(const KUrl&, bool)), SLOT(slotBusyChanged(const KUrl&, bool)));
+	connect(d->mDocument.data(), SIGNAL(busyChanged(KUrl,bool)), SLOT(slotBusyChanged(KUrl,bool)));
 
 	if (d->mDocument->loadingState() < Document::KindDetermined) {
 		MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter);
@@ -382,7 +382,7 @@ void DocumentView::openUrl(const KUrl& url) {
 			messageViewAdapter->setInfoMessage(QString());
 		}
 		d->showLoadingIndicator();
-		connect(d->mDocument.data(), SIGNAL(kindDetermined(const KUrl&)),
+		connect(d->mDocument.data(), SIGNAL(kindDetermined(KUrl)),
 			SLOT(finishOpenUrl()));
 	} else {
 		finishOpenUrl();
@@ -391,7 +391,7 @@ void DocumentView::openUrl(const KUrl& url) {
 
 
 void DocumentView::finishOpenUrl() {
-	disconnect(d->mDocument.data(), SIGNAL(kindDetermined(const KUrl&)),
+	disconnect(d->mDocument.data(), SIGNAL(kindDetermined(KUrl)),
 		this, SLOT(finishOpenUrl()));
 	if (d->mDocument->loadingState() < Document::KindDetermined) {
 		kWarning() << "d->mDocument->loadingState() < Document::KindDetermined, this should not happen!";
@@ -406,9 +406,9 @@ void DocumentView::finishOpenUrl() {
 
 	connect(d->mDocument.data(), SIGNAL(downSampledImageReady()),
 		SLOT(slotLoaded()) );
-	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
+	connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
 		SLOT(slotLoaded()) );
-	connect(d->mDocument.data(), SIGNAL(loadingFailed(const KUrl&)),
+	connect(d->mDocument.data(), SIGNAL(loadingFailed(KUrl)),
 		SLOT(slotLoadingFailed()) );
 	d->mAdapter->setDocument(d->mDocument);
 	d->updateCaption();

@@ -47,10 +47,10 @@ struct ImageViewAdapterPrivate {
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mScrollTool, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mScrollTool, SIGNAL(zoomInRequested(const QPoint&)),
-			that, SIGNAL(zoomInRequested(const QPoint&)) );
-		QObject::connect(mScrollTool, SIGNAL(zoomOutRequested(const QPoint&)),
-			that, SIGNAL(zoomOutRequested(const QPoint&)) );
+		QObject::connect(mScrollTool, SIGNAL(zoomInRequested(QPoint)),
+			that, SIGNAL(zoomInRequested(QPoint)) );
+		QObject::connect(mScrollTool, SIGNAL(zoomOutRequested(QPoint)),
+			that, SIGNAL(zoomOutRequested(QPoint)) );
 	}
 };
 
@@ -97,7 +97,7 @@ void ImageViewAdapter::setCursor(const QCursor& cursor) {
 void ImageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mView->setDocument(doc);
 
-	connect(doc.data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()) );
+	connect(doc.data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()) );
 	if (doc->loadingState() == Document::LoadingFailed) {
 		slotLoadingFailed();
 	}

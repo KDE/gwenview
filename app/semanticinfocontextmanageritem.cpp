@@ -152,7 +152,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
 
 		mDescriptionTextEdit->installEventFilter(that);
 
-		QObject::connect(mTagLabel, SIGNAL(linkActivated(const QString&)),
+		QObject::connect(mTagLabel, SIGNAL(linkActivated(QString)),
 			mEditTagsAction, SLOT(trigger()) );
 	}
 
@@ -414,10 +414,10 @@ void SemanticInfoContextManagerItem::showSemanticInfoDialog() {
 
 		AbstractSemanticInfoBackEnd* backEnd = contextManager()->dirModel()->semanticInfoBackEnd();
 		d->mSemanticInfoDialog->mTagWidget->setSemanticInfoBackEnd(backEnd);
-		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagAssigned(const SemanticInfoTag&)),
-			SLOT(assignTag(const SemanticInfoTag&)) );
-		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagRemoved(const SemanticInfoTag&)),
-			SLOT(removeTag(const SemanticInfoTag&)) );
+		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagAssigned(SemanticInfoTag)),
+			SLOT(assignTag(SemanticInfoTag)) );
+		connect(d->mSemanticInfoDialog->mTagWidget, SIGNAL(tagRemoved(SemanticInfoTag)),
+			SLOT(removeTag(SemanticInfoTag)) );
 	}
 	d->updateSemanticInfoDialog();
 	d->mSemanticInfoDialog->show();

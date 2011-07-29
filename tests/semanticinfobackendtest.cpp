@@ -53,8 +53,8 @@ namespace Gwenview {
 
 SemanticInfoBackEndClient::SemanticInfoBackEndClient(AbstractSemanticInfoBackEnd* backEnd)
 : mBackEnd(backEnd) {
-	connect(backEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
-		SLOT(slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
+	connect(backEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
+		SLOT(slotSemanticInfoRetrieved(KUrl,SemanticInfo)) );
 }
 
 
@@ -100,7 +100,7 @@ void SemanticInfoBackEndTest::testRating() {
 	url.setPath(temp.fileName());
 
 	SemanticInfoBackEndClient client(mBackEnd);
-	QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)) );
+	QSignalSpy spy(mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)) );
 	mBackEnd->retrieveSemanticInfo(url);
 	QVERIFY(waitForSignal(spy));
 
@@ -113,7 +113,7 @@ void SemanticInfoBackEndTest::testRating() {
 
 
 void SemanticInfoBackEndTest::testTagForLabel() {
-	QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)) );
+	QSignalSpy spy(mBackEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)) );
 
 	TagSet oldAllTags = mBackEnd->allTags();
 	QString label = "testTagForLabel-" + KRandom::randomString(5);

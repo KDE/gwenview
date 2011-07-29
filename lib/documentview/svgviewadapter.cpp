@@ -89,7 +89,7 @@ void SvgViewAdapter::setCursor(const QCursor& cursor) {
 
 void SvgViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
-	connect(d->mDocument.data(), SIGNAL(loaded(const KUrl&)),
+	connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
 		SLOT(loadFromDocument()));
 	loadFromDocument();
 }

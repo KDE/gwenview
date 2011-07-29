@@ -176,8 +176,8 @@ void DocumentTest::testLoadDownSampled() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	QSignalSpy downSampledImageReadySpy(doc.data(), SIGNAL(downSampledImageReady()));
-	QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(const KUrl&)));
-	QSignalSpy loadedSpy(doc.data(), SIGNAL(loaded(const KUrl&)));
+	QSignalSpy loadingFailedSpy(doc.data(), SIGNAL(loadingFailed(KUrl)));
+	QSignalSpy loadedSpy(doc.data(), SIGNAL(loaded(KUrl)));
 	bool ready = doc->prepareDownSampledImageForZoom(0.2);
 	QVERIFY2(!ready, "There should not be a down sampled image at this point");
 
@@ -206,7 +206,7 @@ void DocumentTest::testLoadDownSampledPng() {
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
 
 	LoadingStateSpy stateSpy(doc);
-	connect(doc.data(), SIGNAL(loaded(const KUrl&)), &stateSpy, SLOT(readState()));
+	connect(doc.data(), SIGNAL(loaded(KUrl)), &stateSpy, SLOT(readState()));
 
 	bool ready = doc->prepareDownSampledImageForZoom(0.2);
 	QVERIFY2(!ready, "There should not be a down sampled image at this point");
@@ -237,7 +237,7 @@ void DocumentTest::testLoadRemote() {
 void DocumentTest::testLoadAnimated() {
 	KUrl srcUrl = urlForTestFile("40frames.gif");
 	Document::Ptr doc = DocumentFactory::instance()->load(srcUrl);
-	QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(const QRect&)));
+	QSignalSpy spy(doc.data(), SIGNAL(imageRectUpdated(QRect)));
 	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 	QVERIFY(doc->isAnimated());
@@ -325,9 +325,9 @@ void DocumentTest::testSaveAs() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	DocumentFactory* factory = DocumentFactory::instance();
 	Document::Ptr doc = factory->load(url);
-	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
 	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
-	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
+	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
 	doc->startLoadingFullImage();
 
 	KUrl destUrl = urlForTestOutputFile("result.png");
@@ -436,9 +436,9 @@ void DocumentTest::testModifyAndSaveAs() {
 	DocumentFactory* factory = DocumentFactory::instance();
 	Document::Ptr doc = factory->load(url);
 
-	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
 	QSignalSpy modifiedDocumentListChangedSpy(factory, SIGNAL(modifiedDocumentListChanged()));
-	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(const KUrl&)));
+	QSignalSpy documentChangedSpy(factory, SIGNAL(documentChanged(KUrl)));
 
 	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
@@ -566,8 +566,8 @@ void DocumentTest::testModifiedAndSavedSignals() {
 
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(const KUrl&)));
-	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(const KUrl&, const KUrl&)));
+	QSignalSpy modifiedSpy(doc.data(), SIGNAL(modified(KUrl)));
+	QSignalSpy savedSpy(doc.data(), SIGNAL(saved(KUrl,KUrl)));
 	doc->startLoadingFullImage();
 	doc->waitUntilLoaded();
 
@@ -612,7 +612,7 @@ private:
 void DocumentTest::testJobQueue() {
 	KUrl url = urlForTestFile("orient6.jpg");
 	Document::Ptr doc = DocumentFactory::instance()->load(url);
-	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(const KUrl&, bool)));
+	QSignalSpy spy(doc.data(), SIGNAL(busyChanged(KUrl,bool)));
 
 	QString str;
 	doc->enqueueJob(new TestJob(&str, 'a'));

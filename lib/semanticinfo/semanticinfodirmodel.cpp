@@ -72,15 +72,15 @@ SemanticInfoDirModel::SemanticInfoDirModel(QObject* parent)
 	d->mBackEnd = new NepomukSemanticInfoBackEnd(this);
 #endif
 
-	connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
-		SLOT(slotSemanticInfoRetrieved(const KUrl&, const SemanticInfo&)),
+	connect(d->mBackEnd, SIGNAL(semanticInfoRetrieved(KUrl,SemanticInfo)),
+		SLOT(slotSemanticInfoRetrieved(KUrl,SemanticInfo)),
 		Qt::QueuedConnection);
 
 	connect(this, SIGNAL(modelAboutToBeReset()),
 		SLOT(slotModelAboutToBeReset()) );
 
-	connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-		SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)) );
+	connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+		SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)) );
 }
 
 

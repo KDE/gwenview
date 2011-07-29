@@ -234,11 +234,11 @@ struct MainWindow::Private {
 
 		connect(mSaveBar, SIGNAL(requestSaveAll()),
 			mGvCore, SLOT(saveAll()) );
-		connect(mSaveBar, SIGNAL(goToUrl(const KUrl&)),
-			mWindow, SLOT(goToUrl(const KUrl&)) );
+		connect(mSaveBar, SIGNAL(goToUrl(KUrl)),
+			mWindow, SLOT(goToUrl(KUrl)) );
 
-		connect(mSlideShow, SIGNAL(goToUrl(const KUrl&)),
-			mWindow, SLOT(goToUrl(const KUrl&)) );
+		connect(mSlideShow, SIGNAL(goToUrl(KUrl)),
+			mWindow, SLOT(goToUrl(KUrl)) );
 	}
 
 	void setupThumbnailView(QWidget* parent) {
@@ -258,33 +258,33 @@ struct MainWindow::Private {
 		mThumbnailView->setThumbnailViewHelper(mThumbnailViewHelper);
 
 		// Connect thumbnail view
-		connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
-			mWindow, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)) );
-		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+		connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
+			mWindow, SLOT(slotThumbnailViewIndexActivated(QModelIndex)) );
+		connect(mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
 			mWindow, SLOT(slotSelectionChanged()) );
 
 		// Connect delegate
 		QAbstractItemDelegate* delegate = mThumbnailView->itemDelegate();
-		connect(delegate, SIGNAL(saveDocumentRequested(const KUrl&)),
-			mGvCore, SLOT(save(const KUrl&)) );
-		connect(delegate, SIGNAL(rotateDocumentLeftRequested(const KUrl&)),
-			mGvCore, SLOT(rotateLeft(const KUrl&)) );
-		connect(delegate, SIGNAL(rotateDocumentRightRequested(const KUrl&)),
-			mGvCore, SLOT(rotateRight(const KUrl&)) );
-		connect(delegate, SIGNAL(showDocumentInFullScreenRequested(const KUrl&)),
-			mWindow, SLOT(showDocumentInFullScreen(const KUrl&)) );
-		connect(delegate, SIGNAL(setDocumentRatingRequested(const KUrl&, int)),
-			mGvCore, SLOT(setRating(const KUrl&, int)) );
+		connect(delegate, SIGNAL(saveDocumentRequested(KUrl)),
+			mGvCore, SLOT(save(KUrl)) );
+		connect(delegate, SIGNAL(rotateDocumentLeftRequested(KUrl)),
+			mGvCore, SLOT(rotateLeft(KUrl)) );
+		connect(delegate, SIGNAL(rotateDocumentRightRequested(KUrl)),
+			mGvCore, SLOT(rotateRight(KUrl)) );
+		connect(delegate, SIGNAL(showDocumentInFullScreenRequested(KUrl)),
+			mWindow, SLOT(showDocumentInFullScreen(KUrl)) );
+		connect(delegate, SIGNAL(setDocumentRatingRequested(KUrl,int)),
+			mGvCore, SLOT(setRating(KUrl,int)) );
 
 		// Connect url navigator
-		connect(mUrlNavigator, SIGNAL(urlChanged(const KUrl&)),
-			mWindow, SLOT(openDirUrl(const KUrl&)) );
+		connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
+			mWindow, SLOT(openDirUrl(KUrl)) );
 	}
 
 	void setupDocumentPanel(QWidget* parent) {
 		mDocumentPanel = new DocumentPanel(parent, mSlideShow, mWindow->actionCollection());
-		connect(mDocumentPanel, SIGNAL(captionUpdateRequested(const QString&)),
-			mWindow, SLOT(setCaption(const QString&)) );
+		connect(mDocumentPanel, SIGNAL(captionUpdateRequested(QString)),
+			mWindow, SLOT(setCaption(QString)) );
 		connect(mDocumentPanel, SIGNAL(completed()),
 			mWindow, SLOT(slotPartCompleted()) );
 		connect(mDocumentPanel, SIGNAL(previousImageRequested()),
@@ -301,8 +301,8 @@ struct MainWindow::Private {
 
 	void setupStartPage(QWidget* parent) {
 		mStartPage = new StartPage(parent, mGvCore);
-		connect(mStartPage, SIGNAL(urlSelected(const KUrl&)),
-			mWindow, SLOT(slotStartPageUrlSelected(const KUrl&)) );
+		connect(mStartPage, SIGNAL(urlSelected(KUrl)),
+			mWindow, SLOT(slotStartPageUrlSelected(KUrl)) );
 	}
 
 
@@ -438,8 +438,8 @@ struct MainWindow::Private {
 		// Create context manager items
 		FolderViewContextManagerItem* folderViewItem = new FolderViewContextManagerItem(mContextManager);
 		mContextManager->addItem(folderViewItem);
-		connect(folderViewItem, SIGNAL(urlChanged(const KUrl&)),
-			mWindow, SLOT(openDirUrl(const KUrl&)));
+		connect(folderViewItem, SIGNAL(urlChanged(KUrl)),
+			mWindow, SLOT(openDirUrl(KUrl)));
 
 		InfoContextManagerItem* infoItem = new InfoContextManagerItem(mContextManager);
 		mContextManager->addItem(infoItem);
@@ -503,10 +503,10 @@ struct MainWindow::Private {
 			| MimeTypeUtils::KIND_VIDEO);
 		setDirModelShowDirs(true);
 
-		connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+		connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
 			mWindow, SLOT(slotDirModelNewItems()) );
 
-		connect(mDirModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+		connect(mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
 			mWindow, SLOT(updatePreviousNextActions()) );
 		connect(mDirModel, SIGNAL(modelReset()),
 			mWindow, SLOT(updatePreviousNextActions()) );
@@ -1388,7 +1388,7 @@ bool MainWindow::queryExit() {
 
 void MainWindow::showConfigDialog() {
 	ConfigDialog dialog(this);
-	connect(&dialog, SIGNAL(settingsChanged(const QString&)), SLOT(loadConfig()));
+	connect(&dialog, SIGNAL(settingsChanged(QString)), SLOT(loadConfig()));
 	dialog.exec();
 }
 

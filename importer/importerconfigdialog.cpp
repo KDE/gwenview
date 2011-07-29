@@ -55,8 +55,8 @@ struct ImporterConfigDialogPrivate : public Ui_ImporterConfigDialog {
 		helpText += "</ul>";
 		mRenameFormatHelpLabel->setText(helpText);
 
-		QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(const QString&)),
-			q, SLOT(slotHelpLinkActivated(const QString&)));
+		QObject::connect(mRenameFormatHelpLabel, SIGNAL(linkActivated(QString)),
+			q, SLOT(slotHelpLinkActivated(QString)));
 	}
 };
 
@@ -70,7 +70,7 @@ ImporterConfigDialog::ImporterConfigDialog(QWidget* parent)
 	setFaceType(KPageDialog::Plain);
 	addPage(widget, QString());
 
-	connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(const QString&)),
+	connect(d->kcfg_AutoRenameFormat, SIGNAL(textChanged(QString)),
 		SLOT(updatePreview()));
 
 	d->setupHelpText();

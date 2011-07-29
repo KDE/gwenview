@@ -197,7 +197,7 @@ KIPIInterface::KIPIInterface(MainWindow* mainWindow)
 #if 0
 //TODO instead of delaying can we load them all at start-up to use actions somewhere else?
 // delay a bit, so that it's called after loadPlugins()
-	QTimer::singleShot( 0, this, SLOT( init()));
+	QTimer::singleShot( 0, this, SLOT(init()));
 #endif
 }
 

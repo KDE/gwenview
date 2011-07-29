@@ -204,10 +204,10 @@ struct ThumbnailViewPrivate {
 		ThumbnailGroup::Enum group = ThumbnailGroup::fromPixelSize(mThumbnailSize);
 		if (!mThumbnailLoadJob) {
 			mThumbnailLoadJob = new ThumbnailLoadJob(list, group);
-			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(const KFileItem&, const QPixmap&, const QSize&)),
-				that, SLOT(setThumbnail(const KFileItem&, const QPixmap&, const QSize&)));
-			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(const KFileItem&)),
-				that, SLOT(setBrokenThumbnail(const KFileItem&)));
+			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoaded(KFileItem,QPixmap,QSize)),
+				that, SLOT(setThumbnail(KFileItem,QPixmap,QSize)));
+			QObject::connect(mThumbnailLoadJob, SIGNAL(thumbnailLoadingFailed(KFileItem)),
+				that, SLOT(setBrokenThumbnail(KFileItem)));
 			mThumbnailLoadJob->start();
 		} else {
 			mThumbnailLoadJob->setThumbnailGroup(group);
@@ -334,15 +334,15 @@ ThumbnailView::ThumbnailView(QWidget* parent)
 		SLOT(smoothNextThumbnail()) );
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+	connect(this, SIGNAL(customContextMenuRequested(QPoint)),
 		SLOT(showContextMenu()) );
 
 	if (KGlobalSettings::singleClick()) {
-		connect(this, SIGNAL(clicked(const QModelIndex&)),
-			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
+		connect(this, SIGNAL(clicked(QModelIndex)),
+			SLOT(emitIndexActivatedIfNoModifiers(QModelIndex)) );
 	} else {
-		connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-			SLOT(emitIndexActivatedIfNoModifiers(const QModelIndex&)) );
+		connect(this, SIGNAL(doubleClicked(QModelIndex)),
+			SLOT(emitIndexActivatedIfNoModifiers(QModelIndex)) );
 	}
 }
 
@@ -357,8 +357,8 @@ void ThumbnailView::setModel(QAbstractItemModel* newModel) {
 		disconnect(model(), 0, this, 0);
 	}
 	QListView::setModel(newModel);
-	connect(model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-		SIGNAL(rowsRemovedSignal(const QModelIndex&, int, int)));
+	connect(model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+		SIGNAL(rowsRemovedSignal(QModelIndex,int,int)));
 }
 
 
@@ -420,10 +420,10 @@ AbstractThumbnailViewHelper* ThumbnailView::thumbnailViewHelper() const {
 void ThumbnailView::setDocumentInfoProvider(AbstractDocumentInfoProvider* provider) {
 	d->mDocumentInfoProvider = provider;
 	if (provider) {
-		connect(provider, SIGNAL(busyStateChanged(const QModelIndex&, bool)),
-			SLOT(updateThumbnailBusyState(const QModelIndex&, bool)));
-		connect(provider, SIGNAL(documentChanged(const QModelIndex&)),
-			SLOT(updateThumbnail(const QModelIndex&)));
+		connect(provider, SIGNAL(busyStateChanged(QModelIndex,bool)),
+			SLOT(updateThumbnailBusyState(QModelIndex,bool)));
+		connect(provider, SIGNAL(documentChanged(QModelIndex)),
+			SLOT(updateThumbnail(QModelIndex)));
 	}
 }
 

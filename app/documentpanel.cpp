@@ -232,7 +232,7 @@ struct DocumentPanelPrivate {
 
 			// Connect context menu
 			view->setContextMenuPolicy(Qt::CustomContextMenu);
-			QObject::connect(view, SIGNAL(customContextMenuRequested(const QPoint&)),
+			QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
 				that, SLOT(showContextMenu()) );
 
 			QObject::connect(view, SIGNAL(completed()),
@@ -241,8 +241,8 @@ struct DocumentPanelPrivate {
 				that, SIGNAL(previousImageRequested()) );
 			QObject::connect(view, SIGNAL(nextImageRequested()),
 				that, SIGNAL(nextImageRequested()) );
-			QObject::connect(view, SIGNAL(captionUpdateRequested(const QString&)),
-				that, SIGNAL(captionUpdateRequested(const QString&)) );
+			QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
+				that, SIGNAL(captionUpdateRequested(QString)) );
 			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
 				that, SIGNAL(toggleFullScreenRequested()) );
 			QObject::connect(view, SIGNAL(focused(DocumentView*)),

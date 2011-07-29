@@ -125,10 +125,10 @@ struct TagWidgetPrivate {
 	void setupWidgets() {
 		mListView = new QListView;
 		TagItemDelegate* delegate = new TagItemDelegate(mListView);
-		QObject::connect(delegate, SIGNAL(removeTagRequested(const SemanticInfoTag&)),
-			that, SLOT(removeTag(const SemanticInfoTag&)));
-		QObject::connect(delegate, SIGNAL(assignTagToAllRequested(const SemanticInfoTag&)),
-			that, SLOT(assignTag(const SemanticInfoTag&)));
+		QObject::connect(delegate, SIGNAL(removeTagRequested(SemanticInfoTag)),
+			that, SLOT(removeTag(SemanticInfoTag)));
+		QObject::connect(delegate, SIGNAL(assignTagToAllRequested(SemanticInfoTag)),
+			that, SLOT(assignTag(SemanticInfoTag)));
 		mListView->setItemDelegate(delegate);
 		mListView->setModel(mAssignedTagModel);
 

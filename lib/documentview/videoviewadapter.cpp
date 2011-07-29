@@ -65,7 +65,7 @@ struct VideoViewAdapterPrivate {
 		q->updatePlayPauseButton();
 		QObject::connect(mPlayPauseButton, SIGNAL(clicked()),
 			q, SLOT(slotPlayPauseClicked()));
-		QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+		QObject::connect(mMediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
 			q, SLOT(updatePlayPauseButton()));
 
 		Phonon::SeekSlider* seekSlider = new Phonon::SeekSlider;

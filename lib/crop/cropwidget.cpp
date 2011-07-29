@@ -189,8 +189,8 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 
 	d->initRatioComboBox();
 
-	connect(d->mCropTool, SIGNAL(rectUpdated(const QRect&)),
-		SLOT(setCropRect(const QRect&)) );
+	connect(d->mCropTool, SIGNAL(rectUpdated(QRect)),
+		SLOT(setCropRect(QRect)) );
 
 	connect(d->leftSpinBox, SIGNAL(valueChanged(int)),
 		SLOT(slotPositionChanged()) );
@@ -203,7 +203,7 @@ CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool
 
 	d->initCropButton();
 	
-	connect(d->ratioComboBox, SIGNAL(editTextChanged(const QString&)),
+	connect(d->ratioComboBox, SIGNAL(editTextChanged(QString)),
 		SLOT(slotRatioComboBoxEditTextChanged()) );
 	connect(d->ratioComboBox, SIGNAL(activated(int)),
 		SLOT(slotRatioComboBoxActivated()) );

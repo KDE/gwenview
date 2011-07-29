@@ -393,12 +393,12 @@ ThumbnailLoadJob::ThumbnailLoadJob(const KFileItemList& items, ThumbnailGroup::E
 	mItems = items;
 	mCurrentItem = KFileItem();
 
-	connect(&mThumbnailThread, SIGNAL(done(const QImage&, const QSize&)),
-		SLOT(thumbnailReady(const QImage&, const QSize&)),
+	connect(&mThumbnailThread, SIGNAL(done(QImage,QSize)),
+		SLOT(thumbnailReady(QImage,QSize)),
 		Qt::QueuedConnection);
 
-	connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(const QString&, const QImage&)),
-		sThumbnailCache, SLOT(queueThumbnail(const QString&, const QImage&)),
+	connect(&mThumbnailThread, SIGNAL(thumbnailReadyToBeCached(QString,QImage)),
+		sThumbnailCache, SLOT(queueThumbnail(QString,QImage)),
 		Qt::QueuedConnection);
 }
 
@@ -502,7 +502,7 @@ void ThumbnailLoadJob::determineNextIcon() {
 		if ( KDE::stat( mCurrentUrl.toLocalFile(), &buff ) == 0 )  {
 			directStatOk = true;
 			mOriginalTime = buff.st_mtime;
-			QTimer::singleShot( 0, this, SLOT( checkThumbnail()));
+			QTimer::singleShot( 0, this, SLOT(checkThumbnail()));
 		}
 	}
 	if (!directStatOk) {
@@ -669,9 +669,9 @@ void ThumbnailLoadJob::checkThumbnail() {
 		const int pixelSize = ThumbnailGroup::pixelSize(mThumbnailGroup);
 		KIO::Job* job = KIO::filePreview(list, QSize(pixelSize, pixelSize));
 		//job->ui()->setWindow(KApplication::kApplication()->activeWindow());
-		connect(job, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
-			this, SLOT(slotGotPreview(const KFileItem&, const QPixmap&)) );
-		connect(job, SIGNAL(failed(const KFileItem&)),
+		connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
+			this, SLOT(slotGotPreview(KFileItem,QPixmap)) );
+		connect(job, SIGNAL(failed(KFileItem)),
 			this, SLOT(emitThumbnailLoadingFailed()) );
 		addSubjob(job);
 	}

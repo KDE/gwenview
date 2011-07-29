@@ -161,35 +161,35 @@ StartPage::StartPage(QWidget* parent, GvCore* gvCore)
 	d->mBookmarksView->setModel(d->mBookmarksModel);
 	d->mBookmarksView->setAutoResizeItemsEnabled(false);
 
-	connect(d->mBookmarksView, SIGNAL(urlChanged(const KUrl&)),
-		SIGNAL(urlSelected(const KUrl&)) );
+	connect(d->mBookmarksView, SIGNAL(urlChanged(KUrl)),
+		SIGNAL(urlSelected(KUrl)) );
 
 	// Tag view
-	connect(d->mTagView, SIGNAL(clicked(const QModelIndex&)),
-		SLOT(slotTagViewClicked(const QModelIndex&)));
+	connect(d->mTagView, SIGNAL(clicked(QModelIndex)),
+		SLOT(slotTagViewClicked(QModelIndex)));
 
 	// Recent folder view
-	connect(d->mRecentFoldersView, SIGNAL(indexActivated(const QModelIndex&)),
-		SLOT(slotListViewActivated(const QModelIndex&)) );
+	connect(d->mRecentFoldersView, SIGNAL(indexActivated(QModelIndex)),
+		SLOT(slotListViewActivated(QModelIndex)) );
 
-	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(const QPoint&)),
-		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
+	connect(d->mRecentFoldersView, SIGNAL(customContextMenuRequested(QPoint)),
+		SLOT(showRecentFoldersViewContextMenu(QPoint)));
 
 	// Url bag view
 	d->mRecentUrlsView->setItemDelegate(new HistoryViewDelegate(d->mRecentUrlsView));
 
-	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(const QPoint&)),
-		SLOT(showRecentFoldersViewContextMenu(const QPoint&)));
+	connect(d->mRecentUrlsView, SIGNAL(customContextMenuRequested(QPoint)),
+		SLOT(showRecentFoldersViewContextMenu(QPoint)));
 
 	if (KGlobalSettings::singleClick()) {
 		if (KGlobalSettings::changeCursorOverIcon()) {
 			d->mRecentUrlsView->setCursor(Qt::PointingHandCursor);
 		}
-		connect(d->mRecentUrlsView, SIGNAL(clicked(const QModelIndex&)),
-			SLOT(slotListViewActivated(const QModelIndex&)) );
+		connect(d->mRecentUrlsView, SIGNAL(clicked(QModelIndex)),
+			SLOT(slotListViewActivated(QModelIndex)) );
 	} else {
-		connect(d->mRecentUrlsView, SIGNAL(doubleClicked(const QModelIndex&)),
-			SLOT(slotListViewActivated(const QModelIndex&)) );
+		connect(d->mRecentUrlsView, SIGNAL(doubleClicked(QModelIndex)),
+			SLOT(slotListViewActivated(QModelIndex)) );
 	}
 
 	d->updateHistoryTab();

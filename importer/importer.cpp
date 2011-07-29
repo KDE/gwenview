@@ -100,8 +100,8 @@ struct ImporterPrivate {
 		}
 		QObject::connect(job, SIGNAL(result(KJob*)),
 			q, SLOT(slotCopyDone(KJob*)));
-		QObject::connect(job, SIGNAL(percent(KJob*, unsigned long)),
-			q, SLOT(slotPercent(KJob*, unsigned long)));
+		QObject::connect(job, SIGNAL(percent(KJob*,ulong)),
+			q, SLOT(slotPercent(KJob*,ulong)));
 	}
 
 	void renameImportedUrl(const KUrl& src) {

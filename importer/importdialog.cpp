@@ -171,8 +171,8 @@ ImportDialog::ImportDialog()
 : d(new ImportDialogPrivate) {
 	d->q = this;
 	d->mImporter = new Importer(this);
-	connect(d->mImporter, SIGNAL(error(const QString&)),
-		SLOT(showImportError(const QString&)));
+	connect(d->mImporter, SIGNAL(error(QString)),
+		SLOT(showImportError(QString)));
 	d->mThumbnailPage = new ThumbnailPage;
 
 	KUrl url = ImporterConfig::destinationUrl();

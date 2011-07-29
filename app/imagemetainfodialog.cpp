@@ -130,8 +130,8 @@ ImageMetaInfoDialog::~ImageMetaInfoDialog() {
 void ImageMetaInfoDialog::setMetaInfo(ImageMetaInfoModel* model, const QStringList& list) {
 	if (model) {
 		d->mModel.reset(new PreferredImageMetaInfoModel(model, list));
-		connect(d->mModel.get(), SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
-			this, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)) );
+		connect(d->mModel.get(), SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
+			this, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)) );
 	} else {
 		d->mModel.reset(0);
 	}

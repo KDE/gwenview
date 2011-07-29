@@ -252,7 +252,7 @@ struct InfoContextManagerItemPrivate {
 
 		EventWatcher::install(mGroup, QEvent::Show, q, SLOT(updateSideBarContent()));
 
-		QObject::connect(moreLabel, SIGNAL(linkActivated(const QString&)),
+		QObject::connect(moreLabel, SIGNAL(linkActivated(QString)),
 			q, SLOT(showMetaInfoDialog()) );
 	}
 
@@ -372,8 +372,8 @@ void InfoContextManagerItem::showMetaInfoDialog() {
 	if (!d->mImageMetaInfoDialog) {
 		d->mImageMetaInfoDialog = new ImageMetaInfoDialog(d->mOneFileWidget);
 		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
-			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
+		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
+			SLOT(slotPreferredMetaInfoKeyListChanged(QStringList)) );
 	}
 	d->mImageMetaInfoDialog->setMetaInfo(d->mDocument ? d->mDocument->metaInfo() : 0, GwenviewConfig::preferredMetaInfoKeyList());
 	d->mImageMetaInfoDialog->show();

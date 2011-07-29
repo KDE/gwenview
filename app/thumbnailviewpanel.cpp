@@ -94,8 +94,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 		QVBoxLayout* layout = new QVBoxLayout(mUrlNavigatorContainer);
 		layout->setMargin(0);
 		layout->addWidget(mUrlNavigator);
-		QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(const KUrl&, QDropEvent*)),
-			that, SLOT(slotUrlsDropped(const KUrl&, QDropEvent*)));
+		QObject::connect(mUrlNavigator, SIGNAL(urlsDropped(KUrl,QDropEvent*)),
+			that, SLOT(slotUrlsDropped(KUrl,QDropEvent*)));
 
 		// Thumbnail slider
 		QObject::connect(mThumbnailSlider, SIGNAL(valueChanged(int)),
@@ -164,11 +164,11 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	}
 
 	void setupDocumentCountConnections() {
-		QObject::connect(mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-			that, SLOT(slotDirModelRowsInserted(const QModelIndex&, int, int)) );
+		QObject::connect(mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+			that, SLOT(slotDirModelRowsInserted(QModelIndex,int,int)) );
 
-		QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-			that, SLOT(slotDirModelRowsAboutToBeRemoved(const QModelIndex&, int, int)) );
+		QObject::connect(mDirModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+			that, SLOT(slotDirModelRowsAboutToBeRemoved(QModelIndex,int,int)) );
 
 		QObject::connect(mDirModel, SIGNAL(modelReset()),
 			that, SLOT(slotDirModelReset()) );

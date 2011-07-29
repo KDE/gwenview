@@ -119,8 +119,8 @@ TagModel* TagModel::createAllTagsModel(QObject* parent, AbstractSemanticInfoBack
 	TagModel* tagModel = new TagModel(parent);
 	tagModel->setSemanticInfoBackEnd(backEnd);
 	tagModel->setTagSet(backEnd->allTags());
-	connect(backEnd, SIGNAL(tagAdded(const SemanticInfoTag&, const QString&)),
-		tagModel, SLOT(addTag(const SemanticInfoTag&, const QString&)));
+	connect(backEnd, SIGNAL(tagAdded(SemanticInfoTag,QString)),
+		tagModel, SLOT(addTag(SemanticInfoTag,QString)));
 	return tagModel;
 }
 

@@ -39,8 +39,8 @@ void LoadingJob::doStart() {
 		setError(NoError);
 		emitResult();
 	} else {
-		connect(document().data(), SIGNAL(loaded(const KUrl&)), SLOT(slotLoaded()));
-		connect(document().data(), SIGNAL(loadingFailed(const KUrl&)), SLOT(slotLoadingFailed()));
+		connect(document().data(), SIGNAL(loaded(KUrl)), SLOT(slotLoaded()));
+		connect(document().data(), SIGNAL(loadingFailed(KUrl)), SLOT(slotLoadingFailed()));
 	}
 }
 

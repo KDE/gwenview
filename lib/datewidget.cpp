@@ -54,10 +54,10 @@ struct DateWidgetPrivate {
 		mDatePicker->hide();
 		mDatePicker->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-		QObject::connect(mDatePicker, SIGNAL(dateEntered(const QDate&)),
-			that, SLOT(slotDatePickerModified(const QDate&)));
-		QObject::connect(mDatePicker, SIGNAL(dateSelected(const QDate&)),
-			that, SLOT(slotDatePickerModified(const QDate&)));
+		QObject::connect(mDatePicker, SIGNAL(dateEntered(QDate)),
+			that, SLOT(slotDatePickerModified(QDate)));
+		QObject::connect(mDatePicker, SIGNAL(dateSelected(QDate)),
+			that, SLOT(slotDatePickerModified(QDate)));
 	}
 
 	void updateButton() {

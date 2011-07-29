@@ -99,8 +99,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		layout->setMargin(0);
 		layout->addWidget(mUrlNavigator);
 
-		QObject::connect(mUrlNavigator, SIGNAL(urlChanged(const KUrl&)),
-			q, SLOT(openUrl(const KUrl&)) );
+		QObject::connect(mUrlNavigator, SIGNAL(urlChanged(KUrl)),
+			q, SLOT(openUrl(KUrl)) );
 	}
 
 	void setupThumbnailView() {
@@ -131,8 +131,8 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 		mSlider->updateToolTip();
 		mThumbnailView->setThumbnailSize(thumbnailSize);
 
-		QObject::connect(mThumbnailView, SIGNAL(indexActivated(const QModelIndex&)),
-			q, SLOT(slotThumbnailViewIndexActivated(const QModelIndex&)));
+		QObject::connect(mThumbnailView, SIGNAL(indexActivated(QModelIndex)),
+			q, SLOT(slotThumbnailViewIndexActivated(QModelIndex)));
 	}
 
 	void setupButtonBox() {
@@ -148,13 +148,13 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 			q, SLOT(slotImportAll()));
 
 		QObject::connect(
-			mThumbnailView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+			mThumbnailView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
 			q, SLOT(updateImportButtons()));
 		QObject::connect(
-			mDirModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+			mDirModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
 			q, SLOT(updateImportButtons()));
 		QObject::connect(
-			mDirModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+			mDirModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
 			q, SLOT(updateImportButtons()));
 		QObject::connect(
 			mDirModel, SIGNAL(modelReset()),
@@ -189,8 +189,8 @@ ThumbnailPage::~ThumbnailPage() {
 
 void ThumbnailPage::setSourceUrl(const KUrl& url) {
 	DocumentDirFinder* finder = new DocumentDirFinder(url);
-	connect(finder, SIGNAL(done(const KUrl&, DocumentDirFinder::Status)),
-		SLOT(slotDocumentDirFinderDone(const KUrl&, DocumentDirFinder::Status)));
+	connect(finder, SIGNAL(done(KUrl,DocumentDirFinder::Status)),
+		SLOT(slotDocumentDirFinderDone(KUrl,DocumentDirFinder::Status)));
 	finder->start();
 }
 

@@ -246,9 +246,9 @@ struct CropToolPrivate {
 		QObject::connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
 		// rangeChanged() is emitted when the view is resized
-		QObject::connect(view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
+		QObject::connect(view->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
-		QObject::connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int, int)),
+		QObject::connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int,int)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
 	}
 

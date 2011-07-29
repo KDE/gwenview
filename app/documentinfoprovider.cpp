@@ -42,11 +42,11 @@ DocumentInfoProvider::DocumentInfoProvider(SortedDirModel* model)
 : AbstractDocumentInfoProvider(model)
 , d(new DocumentInfoProviderPrivate) {
 	d->mDirModel = model;
-	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(const KUrl&, bool)),
-		SLOT(emitBusyStateChanged(const KUrl&, bool)) );
+	connect(DocumentFactory::instance(), SIGNAL(documentBusyStateChanged(KUrl,bool)),
+		SLOT(emitBusyStateChanged(KUrl,bool)) );
 
-	connect(DocumentFactory::instance(), SIGNAL(documentChanged(const KUrl&)),
-		SLOT(emitDocumentChanged(const KUrl&)) );
+	connect(DocumentFactory::instance(), SIGNAL(documentChanged(KUrl)),
+		SLOT(emitDocumentChanged(KUrl)) );
 }
 
 

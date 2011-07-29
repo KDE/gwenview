@@ -159,14 +159,14 @@ Document::Ptr DocumentFactory::load(const KUrl& url) {
 	// Start loading the document
 	LOG(url.fileName() << "loading");
 	Document* doc = new Document(url);
-	connect(doc, SIGNAL(loaded(const KUrl&)),
-		SLOT(slotLoaded(const KUrl&)) );
-	connect(doc, SIGNAL(saved(const KUrl&, const KUrl&)),
-		SLOT(slotSaved(const KUrl&, const KUrl&)) );
-	connect(doc, SIGNAL(modified(const KUrl&)),
-		SLOT(slotModified(const KUrl&)) );
-	connect(doc, SIGNAL(busyChanged(const KUrl&, bool)),
-		SLOT(slotBusyChanged(const KUrl&, bool)) );
+	connect(doc, SIGNAL(loaded(KUrl)),
+		SLOT(slotLoaded(KUrl)) );
+	connect(doc, SIGNAL(saved(KUrl,KUrl)),
+		SLOT(slotSaved(KUrl,KUrl)) );
+	connect(doc, SIGNAL(modified(KUrl)),
+		SLOT(slotModified(KUrl)) );
+	connect(doc, SIGNAL(busyChanged(KUrl,bool)),
+		SLOT(slotBusyChanged(KUrl,bool)) );
 
 	// Create DocumentInfo instance
 	info = new DocumentInfo;

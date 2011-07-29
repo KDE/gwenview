@@ -281,8 +281,8 @@ SaveBar::SaveBar(QWidget* parent, KActionCollection* actionCollection)
 	connect(DocumentFactory::instance(), SIGNAL(modifiedDocumentListChanged()),
 		SLOT(updateContent()) );
 
-	connect(d->mActionsLabel, SIGNAL(linkActivated(const QString&)),
-		SLOT(triggerAction(const QString&)) );
+	connect(d->mActionsLabel, SIGNAL(linkActivated(QString)),
+		SLOT(triggerAction(QString)) );
 }
 
 

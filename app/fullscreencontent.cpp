@@ -116,8 +116,8 @@ struct FullScreenContentPrivate {
 		int row = themeList.indexOf(FullScreenTheme::currentThemeName());
 		listWidget->setCurrentRow(row);
 
-		QObject::connect(listWidget, SIGNAL(currentTextChanged(const QString&)),
-			that, SLOT(setCurrentFullScreenTheme(const QString&)) );
+		QObject::connect(listWidget, SIGNAL(currentTextChanged(QString)),
+			that, SLOT(setCurrentFullScreenTheme(QString)) );
 	}
 
 	void applyCurrentFullScreenTheme() {
@@ -298,8 +298,8 @@ void FullScreenContent::showImageMetaInfoDialog() {
 		// it's already quite complicated to create a theme
 		d->mImageMetaInfoDialog->setStyle(QApplication::style());
 		d->mImageMetaInfoDialog->setAttribute(Qt::WA_DeleteOnClose, true);
-		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(const QStringList&)),
-			SLOT(slotPreferredMetaInfoKeyListChanged(const QStringList&)) );
+		connect(d->mImageMetaInfoDialog, SIGNAL(preferredMetaInfoKeyListChanged(QStringList)),
+			SLOT(slotPreferredMetaInfoKeyListChanged(QStringList)) );
 		connect(d->mImageMetaInfoDialog, SIGNAL(destroyed()),
 			SLOT(enableAutoHiding()) );
 	}
