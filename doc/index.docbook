@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN"
 "dtd/kdex.dtd" [
   <!ENTITY kappname "<application>Gwenview</application>">
-  <!ENTITY package "gwenview">
+  <!ENTITY package "kdegraphics">
   <!ENTITY introduction SYSTEM "introduction.docbook">
   <!ENTITY interface SYSTEM "interface.docbook">
   <!ENTITY mouse SYSTEM "mouse.docbook">
