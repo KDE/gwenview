@@ -310,7 +310,7 @@ slideshow. The slideshow controls there are: </para>
     </para></listitem>
     <listitem><para><guilabel>Appearance</guilabel> allows you to select a theme
     for the Full Screen View.</para></listitem>
-    <listitem><para>If the <guilabel>Show thumbnail</guilabel> checkbox is checked,
+    <listitem><para>If the <guilabel>Show thumbnails</guilabel> checkbox is checked,
     thumbnails for all images in the current folder will be displayed to the left of
     the toolbar.</para></listitem>
     <listitem><para>The <guilabel>Height</guilabel> slider changes the size of the
