@@ -75,6 +75,8 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	KSelectAction* mSortAction;
 	QActionGroup* mThumbnailDetailsActionGroup;
 	PreviewItemDelegate* mDelegate;
+	QPalette mNormalPalette;
+	QPalette mFullScreenPalette;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -322,11 +324,6 @@ void ThumbnailViewPanel::updateThumbnailDetails() {
 }
 
 
-void ThumbnailViewPanel::applyPalette(const QPalette& palette) {
-	d->mThumbnailView->setPalette(palette);
-}
-
-
 void ThumbnailViewPanel::slotUrlsDropped(const KUrl& destUrl, QDropEvent* event) {
 	const KUrl::List urlList = KUrl::List::fromMimeData(event->mimeData());
 	if (urlList.isEmpty()) {
@@ -345,5 +342,19 @@ void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const
 	FileOperations::showMenuForDroppedUrls(d->mUrlNavigator, urlList, destUrl);
 }
 
+
+void ThumbnailViewPanel::setFullScreenMode(bool fullScreen) {
+	if (fullScreen) {
+		setPalette(d->mFullScreenPalette);
+	} else {
+		setPalette(d->mNormalPalette);
+	}
+}
+
+void ThumbnailViewPanel::setPalettes(const QPalette& normalPal, const QPalette& fsPal) {
+	d->mNormalPalette = normalPal;
+	d->mFullScreenPalette = fsPal;
+	setPalette(d->mNormalPalette);
+}
 
 } // namespace

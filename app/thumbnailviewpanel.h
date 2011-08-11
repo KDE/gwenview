@@ -51,7 +51,7 @@ public:
 	ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
 	~ThumbnailViewPanel();
 
-	void applyPalette(const QPalette&);
+	void setPalettes(const QPalette& normalPal, const QPalette& fsPal);
 
 	void reload();
 
@@ -60,6 +60,8 @@ public:
 
 	void loadConfig();
 	void saveConfig() const;
+
+	void setFullScreenMode(bool);
 
 private Q_SLOTS:
 	void editLocation();

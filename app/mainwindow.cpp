@@ -1209,6 +1209,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
+		d->mThumbnailViewPanel->setFullScreenMode(true);
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
 		d->updateDistractionsState();
@@ -1222,6 +1223,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		setAutoSaveSettings();
 
 		// Back to normal
+		d->mThumbnailViewPanel->setFullScreenMode(false);
 		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
 		d->mSaveBar->setFullScreenMode(false);
@@ -1404,14 +1406,18 @@ void MainWindow::loadConfig() {
 	QColor bgColor = QColor::fromHsv(0, 0, value);
 	QColor fgColor = value > 128 ? Qt::black : Qt::white;
 
-	QPalette pal = palette();
-	pal.setColor(QPalette::Base, bgColor);
-	pal.setColor(QPalette::Text, fgColor);
+	QPalette normalPal = palette();
+	normalPal.setColor(QPalette::Base, bgColor);
+	normalPal.setColor(QPalette::Text, fgColor);
+
+	QPalette fsPal = palette();
+	fsPal.setColor(QPalette::Base, Qt::black);
+	fsPal.setColor(QPalette::Text, Qt::white);
 
 	// Apply to widgets
-	d->mThumbnailViewPanel->applyPalette(pal);
-	d->mStartPage->applyPalette(pal);
-	d->mDocumentPanel->setNormalPalette(pal);
+	d->mStartPage->applyPalette(normalPal);
+	d->mThumbnailViewPanel->setPalettes(normalPal, fsPal);
+	d->mDocumentPanel->setPalettes(normalPal, fsPal);
 
 	// FIXME: Should we avoid CSS here to get a more native look?
 	d->mSideBarCollapser->setAutoFillBackground(true);

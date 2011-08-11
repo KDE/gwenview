@@ -386,9 +386,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->mFullScreenMode = false;
 	d->mCompareMode = false;
 	d->mThumbnailBarVisibleBeforeFullScreen = false;
-	d->mFullScreenPalette = QPalette(palette());
-	d->mFullScreenPalette.setColor(QPalette::Base, Qt::black);
-	d->mFullScreenPalette.setColor(QPalette::Text, Qt::white);
 
 	QShortcut* goToBrowseModeShortcut = new QShortcut(this);
 	goToBrowseModeShortcut->setKey(Qt::Key_Return);
@@ -591,8 +588,9 @@ DocumentView* DocumentPanel::documentView() const {
 }
 
 
-void DocumentPanel::setNormalPalette(const QPalette& palette) {
-	d->mNormalPalette = palette;
+void DocumentPanel::setPalettes(const QPalette& normalPal, const QPalette& fsPal) {
+	d->mNormalPalette = normalPal;
+	d->mFullScreenPalette = fsPal;
 	d->applyPalette();
 	d->setupThumbnailBarStyleSheet();
 }
