@@ -115,6 +115,8 @@ Q_SIGNALS:
 
 	void toggleFullScreenRequested();
 
+	void goToBrowseModeRequested();
+
 	void captionUpdateRequested(const QString&);
 
 private Q_SLOTS:
