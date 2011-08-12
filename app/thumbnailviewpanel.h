@@ -51,7 +51,7 @@ public:
 	ThumbnailViewPanel(QWidget* parent, SortedDirModel*, KActionCollection*);
 	~ThumbnailViewPanel();
 
-	void setPalettes(const QPalette& normalPal, const QPalette& fsPal);
+	void setNormalPalette(const QPalette&);
 
 	void reload();
 

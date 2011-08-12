@@ -76,7 +76,6 @@ struct ThumbnailViewPanelPrivate : public Ui_ThumbnailViewPanel {
 	QActionGroup* mThumbnailDetailsActionGroup;
 	PreviewItemDelegate* mDelegate;
 	QPalette mNormalPalette;
-	QPalette mFullScreenPalette;
 
 	void setupWidgets() {
 		setupUi(that);
@@ -344,16 +343,12 @@ void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const
 
 
 void ThumbnailViewPanel::setFullScreenMode(bool fullScreen) {
-	if (fullScreen) {
-		setPalette(d->mFullScreenPalette);
-	} else {
-		setPalette(d->mNormalPalette);
-	}
+	// For fullscreen mode, we use the application palette, which has been set to a fullscreen version
+	setPalette(fullScreen ? QPalette() : d->mNormalPalette);
 }
 
-void ThumbnailViewPanel::setPalettes(const QPalette& normalPal, const QPalette& fsPal) {
-	d->mNormalPalette = normalPal;
-	d->mFullScreenPalette = fsPal;
+void ThumbnailViewPanel::setNormalPalette(const QPalette& pal) {
+	d->mNormalPalette = pal;
 	setPalette(d->mNormalPalette);
 }
 

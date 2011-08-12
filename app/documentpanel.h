@@ -68,7 +68,7 @@ public:
 
 	bool isFullScreenMode() const;
 
-	void setPalettes(const QPalette& normalPal, const QPalette& fsPal);
+	void setNormalPalette(const QPalette&);
 
 	int statusBarHeight() const;
 

@@ -147,7 +147,6 @@ struct DocumentPanelPrivate {
 
 	bool mFullScreenMode;
 	QPalette mNormalPalette;
-	QPalette mFullScreenPalette;
 	bool mCompareMode;
 	bool mThumbnailBarVisibleBeforeFullScreen;
 
@@ -328,11 +327,6 @@ struct DocumentPanelPrivate {
 		layout->addWidget(mThumbnailSplitter);
 	}
 
-	void applyPalette() {
-		QPalette palette = mFullScreenMode ? mFullScreenPalette : mNormalPalette;
-		mDocumentViewContainer->setPalette(palette);
-	}
-
 	void saveSplitterConfig() {
 		if (mThumbnailBar->isVisible()) {
 			GwenviewConfig::setThumbnailSplitterSizes(mThumbnailSplitter->sizes());
@@ -486,7 +480,9 @@ int DocumentPanel::statusBarHeight() const {
 void DocumentPanel::setFullScreenMode(bool fullScreenMode) {
 	d->mFullScreenMode = fullScreenMode;
 	d->mStatusBarContainer->setVisible(!fullScreenMode);
-	d->applyPalette();
+	// For fullscreen mode, we use the application palette, which has been set to a fullscreen version
+	d->mDocumentViewContainer->setPalette(fullScreenMode ? QPalette() : d->mNormalPalette);
+
 	if (fullScreenMode) {
 		d->mThumbnailBarVisibleBeforeFullScreen = d->mToggleThumbnailBarAction->isChecked();
 		if (d->mThumbnailBarVisibleBeforeFullScreen) {
@@ -588,10 +584,9 @@ DocumentView* DocumentPanel::documentView() const {
 }
 
 
-void DocumentPanel::setPalettes(const QPalette& normalPal, const QPalette& fsPal) {
-	d->mNormalPalette = normalPal;
-	d->mFullScreenPalette = fsPal;
-	d->applyPalette();
+void DocumentPanel::setNormalPalette(const QPalette& pal) {
+	d->mNormalPalette = pal;
+	d->mDocumentViewContainer->setPalette(pal);
 	d->setupThumbnailBarStyleSheet();
 }
 

@@ -42,6 +42,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
+#include <kglobalsettings.h>
 #include <kmenubar.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -155,6 +156,7 @@ struct MainWindow::Private {
 	QStackedWidget* mViewStackedWidget;
 	FullScreenBar* mFullScreenBar;
 	FullScreenContent* mFullScreenContent;
+	QPalette mFullScreenPalette;
 	SaveBar* mSaveBar;
 	bool mStartSlideShowWhenDirListerCompleted;
 	SlideShow* mSlideShow;
@@ -195,6 +197,9 @@ struct MainWindow::Private {
 	KNotificationRestrictions* mNotificationRestrictions;
 
 	void setupWidgets() {
+		KSharedConfigPtr config = KSharedConfig::openConfig("color-schemes/ObsidianCoast.colors", KConfig::FullConfig, "data");
+		mFullScreenPalette = KGlobalSettings::createApplicationPalette(config);
+
 		mCentralSplitter = new Splitter(Qt::Horizontal, mWindow);
 		mWindow->setCentralWidget(mCentralSplitter);
 
@@ -245,10 +250,6 @@ struct MainWindow::Private {
 
 		mThumbnailView = mThumbnailViewPanel->thumbnailView();
 		mUrlNavigator = mThumbnailViewPanel->urlNavigator();
-		QPalette pal = mUrlNavigator->palette();
-		pal.setColor(QPalette::Window, pal.color(QPalette::Window).dark(110));
-		mUrlNavigator->setAutoFillBackground(true);
-		mUrlNavigator->setPalette(pal);
 
 		mDocumentInfoProvider = new DocumentInfoProvider(mDirModel);
 		mThumbnailView->setDocumentInfoProvider(mDocumentInfoProvider);
@@ -1209,6 +1210,8 @@ void MainWindow::toggleFullScreen(bool checked) {
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
 		toolBar()->hide();
+
+		QApplication::setPalette(d->mFullScreenPalette);
 		d->mThumbnailViewPanel->setFullScreenMode(true);
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
@@ -1223,6 +1226,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		setAutoSaveSettings();
 
 		// Back to normal
+		QApplication::setPalette(KGlobalSettings::createApplicationPalette());
 		d->mThumbnailViewPanel->setFullScreenMode(false);
 		d->mDocumentPanel->setFullScreenMode(false);
 		d->mSlideShow->stop();
@@ -1410,14 +1414,10 @@ void MainWindow::loadConfig() {
 	normalPal.setColor(QPalette::Base, bgColor);
 	normalPal.setColor(QPalette::Text, fgColor);
 
-	QPalette fsPal = palette();
-	fsPal.setColor(QPalette::Base, Qt::black);
-	fsPal.setColor(QPalette::Text, Qt::white);
-
 	// Apply to widgets
 	d->mStartPage->applyPalette(normalPal);
-	d->mThumbnailViewPanel->setPalettes(normalPal, fsPal);
-	d->mDocumentPanel->setPalettes(normalPal, fsPal);
+	d->mThumbnailViewPanel->setNormalPalette(normalPal);
+	d->mDocumentPanel->setNormalPalette(normalPal);
 
 	// FIXME: Should we avoid CSS here to get a more native look?
 	d->mSideBarCollapser->setAutoFillBackground(true);
