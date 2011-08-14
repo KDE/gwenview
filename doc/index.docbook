@@ -173,8 +173,8 @@ Moving the mouse over an image shows buttons to select or rotate the image as we
 a button to enter Fullscreen Mode. Clicking on an image takes you into View
 Mode.  You may select multiple images and switch to View Mode to view them side-by-side.</para>
 
-<para>The slider at the bottom right allows you to change the size of the image
-thumbnails. You can also filter the images by filename, date, tag or rating using the box on the
+<para>The slider at the bottom right allows you to change the size of the image. 
+You can also filter the images by filename, date, tag or rating using the box on the
 lower left. The toolbar (left) appears in both Browse mode as well as View
 mode and contains the most commonly used actions. </para>
 <itemizedlist>
@@ -200,7 +200,7 @@ Image Operations</para></listitem>
 the left. At the bottom, there is the Thumbnail Bar, which allows you to scroll
 through the images in the current folder. The Thumbnail Bar can be minimized by
 clicking on the <guibutton>Thumbnail Bar</guibutton> button. Clicking again will
-restore it.</para>
+restore it. To change the size of the thumbnails move the splitter with the &LMB;.</para>
 
 <para>View Mode supports viewing multiple images side-by-side.  You may select
 multiple images in Browse Mode before switching to View Mode, or you may click the
