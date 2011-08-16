@@ -29,13 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
-#include <QPropertyAnimation>
 #include <QWidget>
+
+// libc
 #include <qmath.h>
 
 namespace Gwenview {
-
-//typedef QList<DocumentView*> Row;
 
 struct DocumentViewContainerPrivate {
 	DocumentViewContainer* q;
@@ -60,7 +59,6 @@ void DocumentViewContainer::addView(DocumentView* view) {
 	d->mItems << view;
 	view->setParent(this);
 	view->installEventFilter(this);
-	connect(view, SIGNAL(adapterChanged()), SLOT(updateLayout()));
 	updateLayout();
 }
 
@@ -94,7 +92,7 @@ void DocumentViewContainer::updateLayout() {
 	// List visible views
 	QList<DocumentView*> visibleViews;
 	Q_FOREACH(DocumentView* view, d->mItems) {
-		if (!view->isEmpty()) {
+		if (view->isVisible()) {
 			visibleViews << view;
 		}
 	}
