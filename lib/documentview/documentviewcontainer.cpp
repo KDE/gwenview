@@ -60,6 +60,8 @@ void DocumentViewContainer::addView(DocumentView* view) {
 	d->mItems << view;
 	view->setParent(this);
 	view->installEventFilter(this);
+	connect(view, SIGNAL(adapterChanged()), SLOT(updateLayout()));
+	updateLayout();
 }
 
 
@@ -86,8 +88,6 @@ void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 	updateLayout();
 }
-
-
 
 
 void DocumentViewContainer::updateLayout() {

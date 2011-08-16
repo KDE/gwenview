@@ -36,7 +36,7 @@ class KUrl;
 
 namespace Gwenview {
 
-class AbstractDocumentViewAdapter;
+class ImageView;
 class SlideShow;
 class ZoomWidget;
 
@@ -58,17 +58,30 @@ public:
 	DocumentView(QWidget* parent, KActionCollection*);
 	~DocumentView();
 
-	AbstractDocumentViewAdapter* adapter() const;
-
 	Document::Ptr document() const;
 
 	KUrl url() const;
 
 	void openUrl(const KUrl&);
 
+	/**
+	 * Tells the current adapter to load its config. Used when the user changed
+	 * the config while the view was visible.
+	 */
+	void loadAdapterConfig();
+
+	/**
+	 * Unload the current adapter, if any
+	 */
 	void reset();
 
+	/**
+	 * Returns true if an adapter is loaded (note: adapters are also used to
+	 * display error messages!)
+	 */
 	bool isEmpty() const;
+
+	bool canZoom() const;
 
 	qreal minimumZoom() const;
 
@@ -83,6 +96,11 @@ public:
 	bool zoomToFit() const;
 
 	QPoint position() const;
+
+	/**
+	 * Returns the ImageView of the current adapter, if it has one
+	 */
+	ImageView* imageView() const;
 
 public Q_SLOTS:
 	void setZoom(qreal);

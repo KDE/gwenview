@@ -82,9 +82,12 @@ struct DocumentViewPrivate {
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
-		Q_ASSERT(adapter);
 		delete mAdapter;
 		mAdapter = adapter;
+		if (!mAdapter) {
+			that->adapterChanged();
+			return;
+		}
 
 		mAdapter->loadConfig();
 
@@ -329,15 +332,9 @@ DocumentView::~DocumentView() {
 }
 
 
-AbstractDocumentViewAdapter* DocumentView::adapter() const {
-	return d->mAdapter;
-}
-
-
 void DocumentView::createAdapterForDocument() {
-	Q_ASSERT(d->mAdapter);
 	const MimeTypeUtils::Kind documentKind = d->mDocument->kind();
-	if (documentKind != MimeTypeUtils::KIND_UNKNOWN && documentKind == d->mAdapter->kind()) {
+	if (d->mAdapter && documentKind == d->mAdapter->kind() && documentKind != MimeTypeUtils::KIND_UNKNOWN) {
 		// Do not reuse for KIND_UNKNOWN: we may need to change the message
 		LOG("Reusing current adapter");
 		return;
@@ -425,12 +422,24 @@ void DocumentView::reset() {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
 	}
-	d->setCurrentAdapter(new MessageViewAdapter(this));
+	d->setCurrentAdapter(0);
 }
 
 
 bool DocumentView::isEmpty() const {
-	return d->mAdapter->kind() == MimeTypeUtils::KIND_UNKNOWN;
+	return !d->mAdapter;
+}
+
+
+void DocumentView::loadAdapterConfig() {
+	if (d->mAdapter) {
+		d->mAdapter->loadConfig();
+	}
+}
+
+
+ImageView* DocumentView::imageView() const {
+	return d->mAdapter ? d->mAdapter->imageView() : 0;
 }
 
 
@@ -456,6 +465,11 @@ void DocumentView::slotLoadingFailed() {
 	adapter->setErrorMessage(message, d->mDocument->errorString());
 	d->setCurrentAdapter(adapter);
 	emit completed();
+}
+
+
+bool DocumentView::canZoom() const {
+	return d->mAdapter && d->mAdapter->canZoom();
 }
 
 

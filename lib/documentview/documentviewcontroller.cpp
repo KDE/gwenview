@@ -93,11 +93,11 @@ struct DocumentViewControllerPrivate {
 		if (!mZoomWidget) {
 			return;
 		}
-		mZoomWidget->setVisible(mView && mView->adapter()->canZoom());
+		mZoomWidget->setVisible(mView && mView->canZoom());
 	}
 
 	void updateActions() {
-		const bool enabled = mView && mView->isVisible() && mView->adapter()->canZoom();
+		const bool enabled = mView && mView->isVisible() && mView->canZoom();
 		Q_FOREACH(QAction* action, mActions) {
 			action->setEnabled(enabled);
 		}
@@ -128,7 +128,6 @@ void DocumentViewController::setView(DocumentView* view) {
 	if (d->mView) {
 		d->mView->removeEventFilter(this);
 		disconnect(d->mView, 0, this, 0);
-		disconnect(d->mView->adapter(), 0, this, 0);
 		Q_FOREACH(QAction* action, d->mActions) {
 			disconnect(action, 0, d->mView, 0);
 		}
