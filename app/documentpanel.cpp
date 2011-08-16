@@ -429,9 +429,7 @@ DocumentPanel::~DocumentPanel() {
 void DocumentPanel::loadConfig() {
 	// FIXME: Not symetric with saveConfig(). Check if it matters.
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
-		if (view->adapter()) {
-			view->adapter()->loadConfig();
-		}
+		view->loadAdapterConfig();
 	}
 
 	Qt::Orientation orientation = GwenviewConfig::thumbnailBarOrientation();
@@ -519,7 +517,7 @@ void DocumentPanel::showContextMenu() {
 	menu.addSeparator();
 	addActionToMenu(&menu, d->mActionCollection, "go_previous");
 	addActionToMenu(&menu, d->mActionCollection, "go_next");
-	if (d->currentView()->adapter()->canZoom()) {
+	if (d->currentView()->canZoom()) {
 		menu.addSeparator();
 		addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
 		addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
@@ -575,7 +573,10 @@ bool DocumentPanel::isEmpty() const {
 
 
 ImageView* DocumentPanel::imageView() const {
-	return d->currentView()->adapter()->imageView();
+	if (!d->currentView()) {
+		return 0;
+	}
+	return d->currentView()->imageView();
 }
 
 
