@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDesktopWidget>
 #include <QBitmap>
 #include <QEvent>
+#include <QMouseEvent>
 #include <QLayout>
 #include <QTimeLine>
 #include <QTimer>
@@ -221,7 +222,8 @@ bool FullScreenBar::eventFilter(QObject* object, QEvent* event) {
 				slideOut();
 			}
 		} else {
-			if (d->slideInTriggerRect().contains(QCursor::pos())) {
+			QMouseEvent* mouseEvent = static_cast<QMouseEvent *>(event);
+			if (mouseEvent->buttons() == 0 && d->slideInTriggerRect().contains(QCursor::pos())) {
 				slideIn();
 			}
 		}
