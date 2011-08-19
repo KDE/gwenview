@@ -132,6 +132,9 @@ struct DocumentViewPrivate {
 	}
 
 	void setZoomCursor() {
+		if (!mAdapter) {
+			return;
+		}
 		QCursor currentCursor = mAdapter->cursor();
 		if (currentCursor.pixmap().cacheKey() == mZoomCursor.pixmap().cacheKey()) {
 			return;
@@ -141,6 +144,9 @@ struct DocumentViewPrivate {
 	}
 
 	void restoreCursor() {
+		if (!mAdapter) {
+			return;
+		}
 		mAdapter->setCursor(mPreviousCursor);
 	}
 
@@ -185,13 +191,16 @@ struct DocumentViewPrivate {
 
 
 	void uncheckZoomToFit() {
-		if (mAdapter->zoomToFit()) {
+		if (mAdapter && mAdapter->zoomToFit()) {
 			mAdapter->setZoomToFit(false);
 		}
 	}
 
 
 	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
+		if (!mAdapter) {
+			return;
+		}
 		uncheckZoomToFit();
 		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
