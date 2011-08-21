@@ -228,7 +228,7 @@ struct DocumentPanelPrivate {
 		mDocumentViewController->setZoomWidget(zoomWidget);
 
 		for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
-			DocumentView* view = new DocumentView(0, mActionCollection);
+			DocumentView* view = new DocumentView(0);
 
 			// Connect context menu
 			view->setContextMenuPolicy(Qt::CustomContextMenu);
