@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QVBoxLayout>
 
 // KDE
-#include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmodifierkeyinfo.h>
@@ -68,7 +67,6 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 struct DocumentViewPrivate {
 	DocumentView* that;
-	KActionCollection* mActionCollection;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
@@ -319,11 +317,10 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent, KActionCollection* actionCollection)
+DocumentView::DocumentView(QWidget* parent)
 : QWidget(parent)
 , d(new DocumentViewPrivate) {
 	d->that = this;
-	d->mActionCollection = actionCollection;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;

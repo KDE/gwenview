@@ -59,7 +59,7 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 : KParts::ReadOnlyPart(parent)
 {
         KGlobal::locale()->insertCatalog("gwenview");
-	mDocumentView = new DocumentView(parentWidget, actionCollection());
+	mDocumentView = new DocumentView(parentWidget);
 	setWidget(mDocumentView);
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),

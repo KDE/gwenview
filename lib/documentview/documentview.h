@@ -55,7 +55,7 @@ public:
 	enum {
 		MaximumZoom = 16
 	};
-	DocumentView(QWidget* parent, KActionCollection*);
+	DocumentView(QWidget* parent);
 	~DocumentView();
 
 	Document::Ptr document() const;
