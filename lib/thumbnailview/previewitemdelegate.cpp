@@ -129,7 +129,7 @@ struct PreviewItemDelegatePrivate {
 	QModelIndex mIndexUnderCursor;
 	int mThumbnailSize;
 	PreviewItemDelegate::ThumbnailDetails mDetails;
-	PreviewItemDelegate::ContextBarMode mContextBarMode;
+	PreviewItemDelegate::ContextBarActions mContextBarActions;
 	Qt::TextElideMode mTextElideMode;
 
 	QPointer<ToolTipWidget> mToolTip;
@@ -150,15 +150,14 @@ struct PreviewItemDelegatePrivate {
 
 
 	void showContextBar(const QRect& rect, const QPixmap& thumbnailPix) {
-		if (mContextBarMode == PreviewItemDelegate::NoContextBar) {
+		if (mContextBarActions == PreviewItemDelegate::NoAction) {
 			return;
 		}
 		mContextBar->adjustSize();
-		// Center bar in FullContextBar mode, left align in
-		// SelectionOnlyContextBar mode
-		const int posX = mContextBarMode == PreviewItemDelegate::FullContextBar
-			? (rect.width() - mContextBar->width()) / 2
-			: 0;
+		// Center bar, except if only showing SelectionAction.
+		const int posX = mContextBarActions == PreviewItemDelegate::SelectionAction
+			? 0
+			: (rect.width() - mContextBar->width()) / 2;
 		const int posY = qMax(CONTEXTBAR_MARGIN, mThumbnailSize - thumbnailPix.height() - mContextBar->height());
 		mContextBar->move(rect.topLeft() + QPoint(posX, posY));
 		mContextBar->show();
@@ -538,16 +537,16 @@ struct PreviewItemDelegatePrivate {
 	}
 
 	void updateContextBar() {
-		if (mContextBarMode == PreviewItemDelegate::NoContextBar) {
+		if (mContextBarActions == PreviewItemDelegate::NoAction) {
 			mContextBar->hide();
 			return;
 		}
 		const int width = itemWidth();
 		const int buttonWidth = mRotateRightButton->sizeHint().width();
-		bool full = mContextBarMode == PreviewItemDelegate::FullContextBar;
-		mFullScreenButton->setVisible(full);
-		mRotateLeftButton->setVisible(full && width >= 3 * buttonWidth);
-		mRotateRightButton->setVisible(full && width >= 4 * buttonWidth);
+		mFullScreenButton->setVisible(mContextBarActions & PreviewItemDelegate::FullScreenAction);
+		bool rotate = mContextBarActions & PreviewItemDelegate::RotateAction;
+		mRotateLeftButton->setVisible(rotate && width >= 3 * buttonWidth);
+		mRotateRightButton->setVisible(rotate && width >= 4 * buttonWidth);
 		mContextBar->adjustSize();
 	}
 
@@ -565,7 +564,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
 	d->mDetails = FileNameDetail;
-	d->mContextBarMode = FullContextBar;
+	d->mContextBarActions = SelectionAction | FullScreenAction | RotateAction;
 	d->mTextElideMode = Qt::ElideRight;
 
 	connect(view, SIGNAL(rowsRemovedSignal(QModelIndex,int,int)),
@@ -847,13 +846,13 @@ void PreviewItemDelegate::setThumbnailDetails(PreviewItemDelegate::ThumbnailDeta
 }
 
 
-PreviewItemDelegate::ContextBarMode PreviewItemDelegate::contextBarMode() const {
-	return d->mContextBarMode;
+PreviewItemDelegate::ContextBarActions PreviewItemDelegate::contextBarActions() const {
+	return d->mContextBarActions;
 }
 
 
-void PreviewItemDelegate::setContextBarMode(PreviewItemDelegate::ContextBarMode mode) {
-	d->mContextBarMode = mode;
+void PreviewItemDelegate::setContextBarActions(PreviewItemDelegate::ContextBarActions actions) {
+	d->mContextBarActions = actions;
 	d->updateContextBar();
 }
 

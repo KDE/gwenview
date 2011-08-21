@@ -345,6 +345,11 @@ void ThumbnailViewPanel::showMenuForDroppedUrls(const KUrl::List& urlList, const
 void ThumbnailViewPanel::setFullScreenMode(bool fullScreen) {
 	// For fullscreen mode, we use the application palette, which has been set to a fullscreen version
 	setPalette(fullScreen ? QPalette() : d->mNormalPalette);
+	PreviewItemDelegate::ContextBarActions actions = PreviewItemDelegate::SelectionAction | PreviewItemDelegate::RotateAction;
+	if (!fullScreen) {
+		actions |= PreviewItemDelegate::FullScreenAction;
+	}
+	d->mDelegate->setContextBarActions(actions);
 }
 
 void ThumbnailViewPanel::setNormalPalette(const QPalette& pal) {

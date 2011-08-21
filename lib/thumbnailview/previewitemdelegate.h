@@ -50,11 +50,13 @@ public:
 	PreviewItemDelegate(ThumbnailView*);
 	~PreviewItemDelegate();
 
-	enum ContextBarMode {
-		NoContextBar,            /** Do not show context bar at all */
-		SelectionOnlyContextBar, /** Only show the +/- button */
-		FullContextBar           /** Show all buttons, provided there is enough room */
+	enum ContextBarAction {
+		NoAction         = 0,
+		SelectionAction  = 1,
+		FullScreenAction = 2,
+		RotateAction     = 4
 	};
+	Q_DECLARE_FLAGS(ContextBarActions, ContextBarAction)
 
 	enum ThumbnailDetail {
 		FileNameDetail  = 1,
@@ -74,9 +76,9 @@ public:
 
 	void setThumbnailDetails(ThumbnailDetails);
 
-	ContextBarMode contextBarMode() const;
+	ContextBarActions contextBarActions() const;
 
-	void setContextBarMode(ContextBarMode);
+	void setContextBarActions(ContextBarActions);
 
 	Qt::TextElideMode textElideMode() const;
 
@@ -120,5 +122,6 @@ private:
 
 // See upper
 Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::PreviewItemDelegate::ThumbnailDetails)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Gwenview::PreviewItemDelegate::ContextBarActions)
 
 #endif /* PREVIEWITEMDELEGATE_H */

@@ -256,7 +256,7 @@ void StartPage::showEvent(QShowEvent* event) {
 			d->mRecentFoldersView->setThumbnailViewHelper(new HistoryThumbnailViewHelper(d->mRecentFoldersView));
 			d->mRecentFoldersView->setModel(d->mGvCore->recentFoldersModel());
 			PreviewItemDelegate* delegate = new PreviewItemDelegate(d->mRecentFoldersView);
-			delegate->setContextBarMode(PreviewItemDelegate::NoContextBar);
+			delegate->setContextBarActions(PreviewItemDelegate::NoAction);
 			delegate->setTextElideMode(Qt::ElideLeft);
 			d->mRecentFoldersView->setItemDelegate(delegate);
 			d->mRecentFoldersView->setThumbnailSize(128);
