@@ -116,6 +116,10 @@ struct DocumentViewPrivate {
 				that, SIGNAL(positionChanged()));
 		}
 
+		if (mCurrent) {
+			mAdapter->widget()->setFocus();
+		}
+
 		that->adapterChanged();
 		that->positionChanged();
 		if (mAdapter->canZoom()) {
@@ -609,6 +613,9 @@ void DocumentView::setCompareMode(bool compare) {
 
 void DocumentView::setCurrent(bool value) {
 	d->mCurrent = value;
+	if (!d->mAdapter) {
+		return;
+	}
 	if (value) {
 		d->mAdapter->widget()->setFocus();
 	}
