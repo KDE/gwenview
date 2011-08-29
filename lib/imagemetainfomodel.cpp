@@ -230,6 +230,7 @@ struct ImageMetaInfoModelPrivate {
 		group->addEntry("General.Size", i18nc("@item:intable", "File Size"), QString());
 		group->addEntry("General.Time", i18nc("@item:intable", "File Time"), QString());
 		group->addEntry("General.ImageSize", i18nc("@item:intable", "Image Size"), QString());
+		group->addEntry("General.Comment", i18nc("@item:intable", "Comment"), QString());
 	}
 
 
@@ -338,6 +339,8 @@ void ImageMetaInfoModel::setExiv2Image(const Exiv2::Image* image) {
 	if (!image) {
 		return;
 	}
+
+	d->setGroupEntryValue(GeneralGroup, "General.Comment", QString::fromUtf8(image->comment().c_str()));
 
 	if (image->checkMode(Exiv2::mdExif) & Exiv2::amRead) {
 		const Exiv2::ExifData& exifData = image->exifData();
