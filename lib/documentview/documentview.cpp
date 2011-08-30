@@ -73,42 +73,38 @@ struct DocumentViewPrivate {
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
-	AbstractDocumentViewAdapter* mAdapter;
+	QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
 	bool mCurrent;
 
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
-		delete mAdapter;
-		mAdapter = adapter;
-		if (!mAdapter) {
-			that->adapterChanged();
-			return;
-		}
+		Q_ASSERT(adapter);
+		mAdapter.reset(adapter);
 
-		mAdapter->loadConfig();
+		adapter->loadConfig();
 
-		QObject::connect(mAdapter, SIGNAL(previousImageRequested()),
+		QObject::connect(adapter, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(mAdapter, SIGNAL(nextImageRequested()),
+		QObject::connect(adapter, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mAdapter, SIGNAL(zoomInRequested(QPoint)),
+		QObject::connect(adapter, SIGNAL(zoomInRequested(QPoint)),
 			that, SLOT(zoomIn(QPoint)) );
-		QObject::connect(mAdapter, SIGNAL(zoomOutRequested(QPoint)),
+		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
 			that, SLOT(zoomOut(QPoint)) );
 
-		that->layout()->addWidget(mAdapter->widget());
+		that->layout()->addWidget(adapter->widget());
 
-		if (mAdapter->canZoom()) {
-			QObject::connect(mAdapter, SIGNAL(zoomChanged(qreal)),
+		if (adapter->canZoom()) {
+			QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
 				that, SLOT(slotZoomChanged(qreal)) );
-			QObject::connect(mAdapter, SIGNAL(zoomToFitChanged(bool)),
+			QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
-		mAdapter->installEventFilterOnViewWidgets(that);
+		adapter->installEventFilterOnViewWidgets(that);
 
-		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(mAdapter->widget());
+		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());
 		if (area) {
 			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
 				that, SIGNAL(positionChanged()));
@@ -117,13 +113,13 @@ struct DocumentViewPrivate {
 		}
 
 		if (mCurrent) {
-			mAdapter->widget()->setFocus();
+			adapter->widget()->setFocus();
 		}
 
 		that->adapterChanged();
 		that->positionChanged();
-		if (mAdapter->canZoom()) {
-			that->zoomToFitChanged(mAdapter->zoomToFit());
+		if (adapter->canZoom()) {
+			that->zoomToFitChanged(adapter->zoomToFit());
 		}
 	}
 
@@ -134,22 +130,16 @@ struct DocumentViewPrivate {
 	}
 
 	void setZoomCursor() {
-		if (!mAdapter) {
-			return;
-		}
-		QCursor currentCursor = mAdapter->cursor();
+		QCursor currentCursor = mAdapter.data()->cursor();
 		if (currentCursor.pixmap().cacheKey() == mZoomCursor.pixmap().cacheKey()) {
 			return;
 		}
 		mPreviousCursor = currentCursor;
-		mAdapter->setCursor(mZoomCursor);
+		mAdapter.data()->setCursor(mZoomCursor);
 	}
 
 	void restoreCursor() {
-		if (!mAdapter) {
-			return;
-		}
-		mAdapter->setCursor(mPreviousCursor);
+		mAdapter.data()->setCursor(mPreviousCursor);
 	}
 
 	void setupLoadingIndicator() {
@@ -164,10 +154,6 @@ struct DocumentViewPrivate {
 
 	void updateCaption() {
 		QString caption;
-		if (!mAdapter) {
-			emit that->captionUpdateRequested(caption);
-			return;
-		}
 
 		Document::Ptr doc = mAdapter->document();
 		if (!doc) {
@@ -193,16 +179,13 @@ struct DocumentViewPrivate {
 
 
 	void uncheckZoomToFit() {
-		if (mAdapter && mAdapter->zoomToFit()) {
+		if (mAdapter->zoomToFit()) {
 			mAdapter->setZoomToFit(false);
 		}
 	}
 
 
 	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
-		if (!mAdapter) {
-			return;
-		}
 		uncheckZoomToFit();
 		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
@@ -330,7 +313,6 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mLoadingIndicator = 0;
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
-	d->mAdapter = 0;
 	d->setupZoomCursor();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 	d->mCurrent = false;
@@ -384,7 +366,7 @@ void DocumentView::openUrl(const KUrl& url) {
 	connect(d->mDocument.data(), SIGNAL(busyChanged(KUrl,bool)), SLOT(slotBusyChanged(KUrl,bool)));
 
 	if (d->mDocument->loadingState() < Document::KindDetermined) {
-		MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter);
+		MessageViewAdapter* messageViewAdapter = qobject_cast<MessageViewAdapter*>(d->mAdapter.data());
 		if (messageViewAdapter) {
 			messageViewAdapter->setInfoMessage(QString());
 		}
@@ -432,24 +414,22 @@ void DocumentView::reset() {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
 	}
-	d->setCurrentAdapter(0);
+	d->setCurrentAdapter(new EmptyAdapter(this));
 }
 
 
 bool DocumentView::isEmpty() const {
-	return !d->mAdapter;
+	return qobject_cast<EmptyAdapter*>(d->mAdapter.data());
 }
 
 
 void DocumentView::loadAdapterConfig() {
-	if (d->mAdapter) {
-		d->mAdapter->loadConfig();
-	}
+	d->mAdapter->loadConfig();
 }
 
 
 ImageView* DocumentView::imageView() const {
-	return d->mAdapter ? d->mAdapter->imageView() : 0;
+	return d->mAdapter->imageView();
 }
 
 
@@ -479,7 +459,7 @@ void DocumentView::slotLoadingFailed() {
 
 
 bool DocumentView::canZoom() const {
-	return d->mAdapter && d->mAdapter->canZoom();
+	return d->mAdapter->canZoom();
 }
 
 
@@ -613,9 +593,6 @@ void DocumentView::setCompareMode(bool compare) {
 
 void DocumentView::setCurrent(bool value) {
 	d->mCurrent = value;
-	if (!d->mAdapter) {
-		return;
-	}
 	if (value) {
 		d->mAdapter->widget()->setFocus();
 	}

@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 #include <QPoint>
+#include <QWidget>
 
 // KDE
 
@@ -121,6 +122,24 @@ private:
 	QWidget* mWidget;
 };
 
+
+/**
+ * An empty adapter, used when no document is displayed
+ */
+class EmptyAdapter : public AbstractDocumentViewAdapter
+{
+	Q_OBJECT
+public:
+	EmptyAdapter(QWidget* parent)
+	: AbstractDocumentViewAdapter(parent) {
+		setWidget(new QWidget);
+	}
+
+	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
+	virtual void installEventFilterOnViewWidgets(QObject*) {}
+	virtual Document::Ptr document() const { return Document::Ptr(); }
+	virtual void setDocument(Document::Ptr) {}
+};
 
 } // namespace
 
