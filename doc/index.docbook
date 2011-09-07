@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN"
 "dtd/kdex.dtd" [
-  <!ENTITY kappname "Gwenview">
-  <!ENTITY package "gwenview">
+  <!ENTITY kappname "<application>Gwenview</application>">
+  <!ENTITY package "kdegraphics">
   <!ENTITY introduction SYSTEM "introduction.docbook">
   <!ENTITY interface SYSTEM "interface.docbook">
   <!ENTITY mouse SYSTEM "mouse.docbook">
@@ -42,8 +42,8 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-08-21</date>
-<releaseinfo>1.2.92</releaseinfo>
+<date>2011-08-03</date>
+<releaseinfo>2.7.0 (&kde; 4.7)</releaseinfo>
 <abstract>
 <para>&kappname; is an image viewer for &kde;.</para>
 </abstract>
@@ -66,12 +66,13 @@
 <para>
 &kappname; is a fast and easy to use image viewer for KDE.
 </para>
-<!-- Start Page missing-->
+
 <para>
-Gwenview features three main modes: Browse, View, and Full Screen. Browse Mode 
-lets you navigate through your computer showing thumbnails of your images, View 
-Mode lets you view images one at a time, and Full Screen lets you make quick 
-slideshows.
+Gwenview features three main modes: Browse, View, and Full Screen. Browse Mode
+lets you navigate through your computer showing thumbnails of your images, View
+Mode lets you view images one at a time, and Full Screen lets you make quick
+slideshows.  There is also a start screen that displays a list of recently opened
+folders and &URL;s as well as your places and tags.
 </para>
 
 <para>Image loading is handled by the Qt library, so &kappname; supports all
@@ -88,8 +89,8 @@ images. Lossless JPEG transforms such as rotations and mirroring are also suppor
 <title>The interface</title>
 
 <section id='image_operations'><title>Image Operations</title>
-<para>Gwenview has a few features which are available in both Browse, View, and
-Full Screen view. Gwenview has the capability to do basic alteration of your
+<para>&kappname; has a few features which are available in both Browse, View, and
+Full Screen view. &kappname; has the capability to do basic alteration of your
 images.</para>
 <itemizedlist>
 <listitem><para>Rotate: A rotate operation will rotate the image either to the left
@@ -100,8 +101,8 @@ or to the right, depending on whether you do
     </shortcut>
     <guimenu>Edit</guimenu>
     <guimenuitem>Rotate Right</guimenuitem>
-  </menuchoice> 
-or 
+  </menuchoice>
+or
   <menuchoice>
     <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
@@ -128,6 +129,9 @@ reflection along the horizontal axis)</para></listitem>
 
 <listitem><para>
  <menuchoice>
+  <shortcut>
+    <keycombo action="simul">&Shift;<keycap>R</keycap></keycombo>
+  </shortcut>
   <guimenu>Edit</guimenu>
   <guimenuitem>Resize</guimenuitem>
  </menuchoice>:
@@ -135,30 +139,21 @@ This operation will allow you to shrink or expand the image. Note that if you
 increase the size of an image, it may appear
 blurry and/or pixelated.</para></listitem>
 
-<listitem><para>
- <menuchoice>
-  <guimenu>Edit</guimenu>
-  <guimenuitem>Crop</guimenuitem>
- </menuchoice>:
- This operation lets you discard parts of the image you don't want.
-</para></listitem>
-
 </itemizedlist>
 
-<!-- missing
-Tip:
-Install Kipi-Plugins -> menu Plugins with all Kipi actions  
--->
+<tip><para>If you have installed the Kipi Plugins, a <guimenu>Plugins</guimenu>
+menu will be available that will allow you to perform many additional operations
+on your images.  For more information, see the
+<ulink url="help:kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
 </section>
 
-<!-- missing
 <section id='start_page'><title>Start Page</title>
-left Recent Folders + Recent Urls
-right Places + Tags
+<para>The start page lists recently opened files and &URL;s on the left side,
+and your places and tags on the right side.</para>
 </section>
--->
+
 <section id='browse_mode'><title>Browse Mode</title>
-  
+
 <para>When in Browse Mode, you can easily navigate through your files and folders.
   The preview window shows thumbnails of the images in the current folder, as
   well as subfolders. </para>
@@ -174,55 +169,53 @@ right Places + Tags
 </screenshot>
 
 <para>
-  Moving the mouse over an image shows buttons to rotate the image as well as
-  a button to enter Fullscreen Mode. Clicking on an image takes you into View
-  Mode. The sidebar on the left does not appear
-  by default, but its appearance can be toggled using
-  <menuchoice>
-    <shortcut>
-      <keycap>F11</keycap>
-    </shortcut>
-    <guimenu>View</guimenu>
-    <guimenuitem>Sidebar</guimenuitem>
-  </menuchoice>
-  or using the little arrow on the top of the sidebar splitter. When clicked it 
-  collapses or expands the sidebar. The collapser can overlap the image, but fades 
-  away when the mouse cursor moves out of the sidebar.</para>
-  <!-- Folder tab “Places” list as root items, so you can easily start browsing from your prefered folders.
-  Information tab
-  Meta Information: properties of selected picture
-  Semantic Information: Rating Tags Description
-  Operations tab:
-  Image Operations and File Operations
-    -->
-  <para>The slider at the bottom right allows you to change the size of the image
-  thumbnails. You can also filter the images by filename, date, tag or rating using the box on the 
-  lower left. The toolbar (left) appears in both Browse mode as well as View
-  mode and contains the most commonly used actions. </para>
+Moving the mouse over an image shows buttons to select or rotate the image as well as
+a button to enter Fullscreen Mode. Clicking on an image takes you into View
+Mode.  You may select multiple images and switch to View Mode to view them side-by-side.</para>
+
+<para>The slider at the bottom right allows you to change the size of the images. 
+You can also filter the images by filename, date, tag or rating using the box on the
+lower left. The toolbar (left) appears in both Browse mode as well as View
+mode and contains the most commonly used actions. </para>
 <itemizedlist>
-<listitem><para>Browse: Switches to Browse Mode.</para></listitem>
-<listitem><para>View: Switches to View Mode.</para></listitem>
-<listitem><para>Full Screen: Switches to Full Screen Mode.</para></listitem>
-<listitem><para>Go to Previous Image: Clicking this icon will go
+<listitem><para><guiicon>Browse</guiicon>: Switches to Browse Mode.</para></listitem>
+<listitem><para><guiicon>View</guiicon>: Switches to View Mode.</para></listitem>
+<listitem><para><guiicon>Full Screen</guiicon>: Switches to Full Screen Mode.</para></listitem>
+<listitem><para><guiicon>Previous</guiicon>: Clicking this icon will go
 to the previous image in the folder.</para></listitem>
 
-<listitem><para>Go to Next Image: Clicking this button will go to
+<listitem><para><guiicon>Next</guiicon>: Clicking this button will go to
 the next image in the folder.</para></listitem>
 
-<listitem><para>Rotate Left/Right: Same as discussed in 
+<listitem><para>Rotate Left/Right: Same as discussed in
 Image Operations</para></listitem>
 
-<listitem><para>Show Sidebar: Shows the sidebar (left) which
-displays information about the current image.</para></listitem>
 </itemizedlist>
- 
+
 </section>
 
 <section id='view_mode'><title>View Mode</title>
-<para>View Mode displays one image at a time. At the bottom, there is the
-Thumbnail Bar, which allows you to scroll through the images in the current
-folder. The Thumbnail Bar can be minimized by clicking on the Thumbnail Bar
-button. Clicking again will restore it. </para>
+<para>View Mode displays full-size images.  The same
+<link linkend="sidebar">sidebar</link> available in Browse Mode is displayed on
+the left. At the bottom, there is the Thumbnail Bar, which allows you to scroll
+through the images in the current folder. The Thumbnail Bar can be minimized by
+clicking on the <guibutton>Thumbnail Bar</guibutton> button. Clicking again will
+restore it. To change the size of the thumbnails move the splitter with the &LMB;.</para>
+
+<para>View Mode supports viewing multiple images side-by-side.  You may select
+multiple images in Browse Mode before switching to View Mode, or you may click the
+<guibutton>+</guibutton> button that appears when hovering over images in the
+Thumbnail Bar to add a pane displaying that image.  A <guibutton>-</guibutton> will
+then appear that will permit you to remove its pane.</para>
+
+<para>When multiple images are displayed, a small toolbar appears below each image
+that permits you to delete the image or remove its pane.  You may perform zoom operations
+independently for each image, or synchronize them.  Toggle this by checking the
+<guilabel>Synchronize</guilabel> to the left of the zoom slider or by pressing
+<keycombo action="simul">&Ctrl;<keycap>Y</keycap></keycombo>.  You can switch images
+by clicking on their pane, or using your keyboard.  To switch to the image on the
+right, press <keycombo action="simul">&Tab;</keycombo>.  To switch to the image
+on the left, press <keycombo action="simul">&Shift;&Tab;</keycombo>.</para>
 
 <screenshot>
   <screeninfo>View Mode Screenshot</screeninfo>
@@ -234,15 +227,39 @@ button. Clicking again will restore it. </para>
 </screenshot>
 
 <para>The slider at the bottom right controls the zoom of the image. The
-<guiicon>Zoom to Fit</guiicon> button and the <guiicon>Actual Size</guiicon>
+<guibutton>Fit</guibutton> button and the <guibutton>100%</guibutton>
 button are next to the zoom slider and are two preset zoom levels. The
-<guiicon>Zoom to Fit</guiicon> button zooms the current image to fit the size
-of the window, and the <guiicon>Actual Size</guiicon> button zooms the image to
+<guibutton>Fit</guibutton> button zooms the current image to fit the size
+of the window, and the <guibutton>100%</guibutton> button zooms the image to
 the actual pixel size.</para>
 
 <tip><para>You can start directly in View mode by starting &kappname; from a
-context menu like Open With in another program or by launching it from the
-command line with an image as an argument.</para> </tip>
+context menu like <guimenuitem>Open With</guimenuitem> in another program or by
+launching it from the command line with an image as an argument.</para> </tip>
+
+<para>The following additional image operations are available only in View Mode:</para>
+
+<itemizedlist>
+<listitem><para>
+ <menuchoice>
+   <shortcut>
+        <keycombo action="simul">&Shift;<keycap>C</keycap></keycombo>
+   </shortcut>
+  <guimenu>Edit</guimenu>
+  <guimenuitem>Crop</guimenuitem>
+ </menuchoice>:
+ This operation lets you discard parts of the image you don't want.
+</para></listitem>
+
+<listitem><para>
+ <menuchoice>
+  <guimenu>Edit</guimenu>
+  <guimenuitem>Red Eye Reduction</guimenuitem>
+ </menuchoice>:
+ This operation reduces the "red eye" effect commonly found in photographs taken
+ with a flash camera.
+</para></listitem>
+</itemizedlist>
 
 </section>
 
@@ -251,7 +268,7 @@ command line with an image as an argument.</para> </tip>
 <para>The Full Screen Mode shows a slideshow of your images. Access Full Screen
 Mode by clicking on the button that appears when you move the mouse over the
 thumbnails in Browse Mode, by pressing the <guiicon>Full Screen</guiicon>
-button on the taskbar, or by 
+button on the taskbar, or by
   <menuchoice>
     <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>
@@ -274,41 +291,135 @@ mouse to the top of the screen. If the mouse cursor is over the top bar, it
 will not autohide. Most of the buttons on the bar are the same as the ones on
 the toolbar in Browse or View Modes, except for the <guiicon>Exit Full
 Screen Mode</guiicon> button which returns you to the &kappname; window, the
-<guiicon>Start/Stop Slideshow</guiicon> button, and the 
+<guiicon>Start/Stop Slideshow</guiicon> button, and the
 <guiicon>Configure Full Screen Mode</guiicon> button which shows a
 small settings dialog that allows you to easily and quickly configure the
 slideshow. The slideshow controls there are: </para>
 
-<itemizedlist> 
-	<listitem><para>The Interval slider controls how long &kappname; will show
-	an image before it move to the next one.</para></listitem>
-	<listitem><para>If the Loop checkbox is checked, when the end of the
-	slideshow is reached, it will continue from the beginning instead of
-	stopping. </para></listitem>
-	<listitem><para>If the Random checkbox is checked, instead of progressing
-	through the folder alphabetically, images will be shown in random
-	order.</para></listitem>
+<itemizedlist>
+    <listitem><para>The <guilabel>Interval</guilabel> slider controls how long
+    &kappname; will show an image before it move to the next one.</para></listitem>
+    <listitem><para>If the <guilabel>Loop</guilabel> checkbox is checked, when the
+    end of the slideshow is reached, it will continue from the beginning instead
+    of stopping. </para></listitem>
+    <listitem><para>If the <guilabel>Random</guilabel> checkbox is checked,
+    instead of progressing through the folder alphabetically, images will be
+    shown in random order.</para></listitem>
+    <listitem><para><guibutton>Configure Displayed Metadata</guibutton> allows
+    you to define what metadata is displayed under the buttons on the toolbar.
+    </para></listitem>
+    <listitem><para><guilabel>Appearance</guilabel> allows you to select a theme
+    for the Full Screen View.</para></listitem>
+    <listitem><para>If the <guilabel>Show thumbnails</guilabel> checkbox is checked,
+    thumbnails for all images in the current folder will be displayed to the left of
+    the toolbar.</para></listitem>
+    <listitem><para>The <guilabel>Height</guilabel> slider changes the size of the
+    thumbnails displayed.</para></listitem>
 </itemizedlist>
 
-<para>Also in the top bar is an area that shows you the other images in the
-current folder. Clicking on one will display it.</para>
+<para>If enabled, an area that shows you the other images in the current folder will
+be shown on the top bar. Clicking on one will display it.</para>
 
 </section>
 
-<!--missing
+<section id="sidebar">
+<title>Sidebar</title>
+
+<para>The sidebar on the left is available in the Browse and View modes, but does
+not appear by default in Browse Mode.  Its appearance can be toggled using
+<menuchoice>
+<shortcut>
+    <keycap>F11</keycap>
+</shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Sidebar</guimenuitem>
+</menuchoice>
+or using the little arrow on the top of the sidebar splitter. When clicked it
+collapses or expands the sidebar. The collapser can overlap the image, but fades
+away when the mouse cursor moves out of the sidebar.  The sidebar contains several
+tabs:</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Folders</guilabel></term>
+<listitem><para>Displays a list of all folders on your system permitting you to
+switch between them.  In Browse Mode thumbnails from the folder will be displayed,
+while in View Mode the first image in the folder will appear, from which you can
+browse through the folder using the <guibutton>Previous</guibutton> and
+<guibutton>Next</guibutton> buttons or shortcuts.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Information</guilabel></term>
+<listitem><para>Displays <guilabel>Meta Information</guilabel> like the filename
+and size.  The <guilabel>More...</guilabel> link permits you to view all available
+metadata and select which data appear in the sidebar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Operations</guilabel></term>
+<listitem><para>This permits you to perform the
+<link linkend="image_operations">previously described global image operations</link>
+as well as those specific to View Mode.  It also permits common file operations like
+copying, renaming, deleting, and creating new folders.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+</chapter>
+
+<chapter id="importer">
+<title>&kappname; Importer</title>
+
 <section>
-<tiltle>Genview Importer</tiltle>
+<title>Introduction</title>
+<para>The &kappname; Importer allows you to import images from a digital camera or
+removable media.  To launch it, select <guilabel>Download Photos with &kappname;</guilabel>
+in the &kde; Device Notifier after connecting a supported device.</para>
+
+<screenshot>
+  <screeninfo>&kappname; Importer Screenshot</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG" />
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
 </section>
-gwenview_importer settings dialog has Help button enabled -> documentation not found
-either disable this button or link to here
--->
+
+<section>
+<title>Importing Images</title>
+<para>If you wish, you may select the images you want to import under
+<guilabel>Select the documents to import</guilabel> by pressing the <guiicon>+</guiicon>
+button that appears when hovering over an image.  You may also select the folder
+that images are imported to in the text box at the bottom of the window. To browse
+for folders on your system, click the <guiicon>Open file dialog</guiicon>
+button to the right of the text box.  When you are done, click the
+<guibutton>Import Selected</guibutton> button to import only the images you have
+selected, or click <guibutton>Import All</guibutton> to import all images found
+on the device.</para>
+</section>
+
+<section>
+<title>Automatic Renaming</title>
+<para>&kappname; Importer can rename your files according to a specified pattern.
+To configure this, select the <guibutton>Settings</guibutton> in the lower left
+corner.  You may turn this feature on or off using the checkbox at the top.  The
+<guilabel>Rename Format</guilabel> supports several special parameters, which will
+be replaced by metadata such as the date the image was created or its filename.
+They are listed below the text box.  You may either click on the parameter name to
+enter it into the text box or type one manually.</para>
+</section>
 
 </chapter>
 
 <chapter id="tips">
 <title>Tips</title>
 <sect1 id='mouse'><title>Using the mouse</title>
-  
+
 <sect2 id='mouse_panning'><title>Panning with the mouse</title>
 <itemizedlist>
   <listitem><para>Holding down the left mouse button on an image allows you to
@@ -323,11 +434,11 @@ either disable this button or link to here
 <itemizedlist>
   <listitem><para>Clicking the middle mouse button will toggle the auto zoom
       on/off.</para></listitem>
-  <listitem><para>Hold down the Control key, then either use the mouse wheel to
+  <listitem><para>Hold down the &Ctrl; key, then either use the mouse wheel to
       zoom in and out or left click to zoom in and right click to zoom
       out.</para></listitem>
 
-  <listitem><para>The mouse wheel, used while holding down the Alt key, will
+  <listitem><para>The mouse wheel, used while holding down the &Alt; key, will
       scroll the image horizontally.</para></listitem>
 </itemizedlist>
 </sect2>
@@ -339,10 +450,10 @@ either disable this button or link to here
   shows that image.</para></listitem>
   <listitem><para>When in Browse mode, scrolling the mouse wheel will scroll up
   or down the thumbail view area.</para></listitem>
-  <listitem><para>If the Mouse Behavior option in
+  <listitem><para>If the <guilabel>Mouse Behavior</guilabel> option in
   <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
   &kappname;</guimenuitem></menuchoice>
-  is set to Browse, scrolling the mouse wheel while in View Mode will 
+  is set to Browse, scrolling the mouse wheel while in View Mode will
   move you through the images in the folder.</para></listitem>
 </itemizedlist>
 </sect2>
@@ -359,7 +470,7 @@ remapped.</para>
 
 <para>A few of the most useful default bindings are:</para>
 
-<itemizedlist> 
+<itemizedlist>
 <listitem><para><keycap>Space</keycap>: Displays the next image
 in the directory.</para></listitem>
 
@@ -367,60 +478,78 @@ in the directory.</para></listitem>
 Displays the previous image in the directory.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Alt;<keycap>Up</keycap></keycombo>: 
-Moves to the parent folder of the current folder.</para></listitem> 
+action="simul">&Alt;<keycap>Up</keycap></keycombo>:
+Moves to the parent folder of the current folder.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>: 
-Switches into Full Screen Mode.</para></listitem> 
+action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo>:
+Switches into Full Screen Mode.</para></listitem>
 
 <listitem><para>&Esc;: Exits from Full Screen
 mode.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>M</keycap></keycombo>: 
-Show or hide the menubar.</para></listitem> 
+action="simul">&Ctrl;<keycap>M</keycap></keycombo>:
+Show or hide the menubar.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>B</keycap></keycombo>: 
-Show or hide the Thumbnail bar.</para></listitem> 
+action="simul">&Ctrl;<keycap>B</keycap></keycombo>:
+Show or hide the Thumbnail bar.</para></listitem>
 
-<listitem><para><keycap>F11</keycap>
-Show or hide the Sidebar.</para></listitem> 
+<listitem><para><keycap>F11</keycap>:
+Show or hide the Sidebar.</para></listitem>
 
-<listitem><para><keycap>F6</keycap>
+<listitem><para><keycap>F6</keycap>:
 Make the Location bar editable so that you can directly type in a file path.
 You can return to the standard Location Bar by pressing the arrow at the
-right.</para></listitem> 
+right.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>R</keycap></keycombo>: 
-Rotate the current image to the right.</para></listitem> 
+action="simul">&Ctrl;<keycap>R</keycap></keycombo>:
+Rotate the current image to the right.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>L</keycap></keycombo>: 
-Rotate the current image to the left.</para></listitem> 
+action="simul">&Ctrl;<keycap>L</keycap></keycombo>:
+Rotate the current image to the left.</para></listitem>
+
+<listitem><para><keycombo action="simul">&Shift;<keycap>R</keycap></keycombo>:
+Resize the current image.</para></listitem>
+
+<listitem><para><keycombo action="simul">&Shift;<keycap>C</keycap></keycombo>:
+Crop the current image.</para></listitem>
+
+<listitem><para><keycombo action="simul">&Ctrl;<keycap>Y</keycap></keycombo>:
+When multiple images are displayed in View Mode, this synchronizes their views.
+</para></listitem>
+
+<listitem><para><keycombo action="simul">&Tab;</keycombo>:
+When multiple images are displayed in View Mode, this switched to the image to
+the right of the currently selected image.</para></listitem>
+
+<listitem><para><keycombo action="simul">&Shift;&Tab;</keycombo>:
+When multiple images are displayed in View Mode, this switched to the image to
+the left of the currently selected image.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>S</keycap></keycombo>: 
-Save any changes made to the image.</para></listitem> 
+action="simul">&Ctrl;<keycap>S</keycap></keycombo>:
+Save any changes made to the image.</para></listitem>
 
-<listitem><para><keycap>Del</keycap>
-Move the current image to the trash.</para></listitem> 
+<listitem><para><keycap>Del</keycap>:
+Move the current image to the trash.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Shift;<keycap>Del</keycap></keycombo>: 
+action="simul">&Shift;<keycap>Del</keycap></keycombo>:
 Permanently delete the image from the disk. Note that this operation is
-irreversible and cannot be undone.</para></listitem> 
+irreversible and cannot be undone.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>P</keycap></keycombo>: 
-Print the current image.</para></listitem> 
+action="simul">&Ctrl;<keycap>P</keycap></keycombo>:
+Print the current image.</para></listitem>
 
 <listitem><para><keycombo
-action="simul">&Ctrl;<keycap>O</keycap></keycombo>: 
-Open an image using the standard file selection dialog.</para></listitem> 
-</itemizedlist> 
+action="simul">&Ctrl;<keycap>O</keycap></keycombo>:
+Open an image using the standard file selection dialog.</para></listitem>
+</itemizedlist>
 </sect1>
 </chapter>
 
