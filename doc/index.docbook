@@ -88,7 +88,7 @@ images. Lossless JPEG transforms such as rotations and mirroring are also suppor
 <chapter id="interface">
 <title>The interface</title>
 
-<section id='image_operations'><title>Image Operations</title>
+<sect1 id='image_operations'><title>Image Operations</title>
 <para>&kappname; has a few features which are available in both Browse, View, and
 Full Screen view. &kappname; has the capability to do basic alteration of your
 images.</para>
@@ -145,14 +145,14 @@ blurry and/or pixelated.</para></listitem>
 menu will be available that will allow you to perform many additional operations
 on your images.  For more information, see the
 <ulink url="help:kipi-plugins">Kipi Plugins documentation</ulink>.</para></tip>
-</section>
+</sect1>
 
-<section id='start_page'><title>Start Page</title>
+<sect1 id='start_page'><title>Start Page</title>
 <para>The start page lists recently opened files and &URL;s on the left side,
 and your places and tags on the right side.</para>
-</section>
+</sect1>
 
-<section id='browse_mode'><title>Browse Mode</title>
+<sect1 id='browse_mode'><title>Browse Mode</title>
 
 <para>When in Browse Mode, you can easily navigate through your files and folders.
   The preview window shows thumbnails of the images in the current folder, as
@@ -192,9 +192,9 @@ Image Operations</para></listitem>
 
 </itemizedlist>
 
-</section>
+</sect1>
 
-<section id='view_mode'><title>View Mode</title>
+<sect1 id='view_mode'><title>View Mode</title>
 <para>View Mode displays full-size images.  The same
 <link linkend="sidebar">sidebar</link> available in Browse Mode is displayed on
 the left. At the bottom, there is the Thumbnail Bar, which allows you to scroll
@@ -261,9 +261,9 @@ launching it from the command line with an image as an argument.</para> </tip>
 </para></listitem>
 </itemizedlist>
 
-</section>
+</sect1>
 
-<section id='fullscreen_mode'><title>Full Screen Mode</title>
+<sect1 id='fullscreen_mode'><title>Full Screen Mode</title>
 
 <para>The Full Screen Mode shows a slideshow of your images. Access Full Screen
 Mode by clicking on the button that appears when you move the mouse over the
@@ -311,7 +311,7 @@ slideshow. The slideshow controls there are: </para>
     <listitem><para><guilabel>Appearance</guilabel> allows you to select a theme
     for the Full Screen View.</para></listitem>
     <listitem><para>If the <guilabel>Show thumbnails</guilabel> checkbox is checked,
-    thumbnails for all images in the current folder will be displayed to the left of
+    thumbnails for all images in the current folder will be displayed to the right of
     the toolbar.</para></listitem>
     <listitem><para>The <guilabel>Height</guilabel> slider changes the size of the
     thumbnails displayed.</para></listitem>
@@ -320,9 +320,9 @@ slideshow. The slideshow controls there are: </para>
 <para>If enabled, an area that shows you the other images in the current folder will
 be shown on the top bar. Clicking on one will display it.</para>
 
-</section>
+</sect1>
 
-<section id="sidebar">
+<sect1 id="sidebar">
 <title>Sidebar</title>
 
 <para>The sidebar on the left is available in the Browse and View modes, but does
@@ -366,14 +366,14 @@ copying, renaming, deleting, and creating new folders.</para></listitem>
 </varlistentry>
 
 </variablelist>
-</section>
+</sect1>
 
 </chapter>
 
 <chapter id="importer">
 <title>&kappname; Importer</title>
 
-<section>
+<sect1>
 <title>Introduction</title>
 <para>The &kappname; Importer allows you to import images from a digital camera or
 removable media.  To launch it, select <guilabel>Download Photos with &kappname;</guilabel>
@@ -388,9 +388,9 @@ in the &kde; Device Notifier after connecting a supported device.</para>
   </mediaobject>
 </screenshot>
 
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>Importing Images</title>
 <para>If you wish, you may select the images you want to import under
 <guilabel>Select the documents to import</guilabel> by pressing the <guiicon>+</guiicon>
@@ -401,9 +401,9 @@ button to the right of the text box.  When you are done, click the
 <guibutton>Import Selected</guibutton> button to import only the images you have
 selected, or click <guibutton>Import All</guibutton> to import all images found
 on the device.</para>
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>Automatic Renaming</title>
 <para>&kappname; Importer can rename your files according to a specified pattern.
 To configure this, select the <guibutton>Settings</guibutton> in the lower left
@@ -412,7 +412,7 @@ corner.  You may turn this feature on or off using the checkbox at the top.  The
 be replaced by metadata such as the date the image was created or its filename.
 They are listed below the text box.  You may either click on the parameter name to
 enter it into the text box or type one manually.</para>
-</section>
+</sect1>
 
 </chapter>
 
