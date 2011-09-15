@@ -902,6 +902,9 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		if (d->mDocumentPanel->isEmpty()) {
 			openSelectedDocuments();
 		}
+		if (d->mFullScreenAction->isChecked()) {
+			toolBar()->hide();
+		}
 	} else {
 		d->mCurrentPageId = BrowsePageId;
 		// Switching to browse mode
@@ -919,6 +922,9 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		d->setDirModelShowDirs(true);
 		setCaption(QString());
 		d->mContextManager->setOnlyCurrentUrl(false);
+		if (d->mFullScreenAction->isChecked()) {
+			toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
+		}
 	}
 	d->loadSideBarConfig();
 
@@ -1209,7 +1215,9 @@ void MainWindow::toggleFullScreen(bool checked) {
 		// Go full screen
 		setWindowState(windowState() | Qt::WindowFullScreen);
 		menuBar()->hide();
-		toolBar()->hide();
+		if (d->mViewAction->isChecked()) {
+			toolBar()->hide();
+		}
 
 		QApplication::setPalette(d->mFullScreenPalette);
 		d->mThumbnailViewPanel->setFullScreenMode(true);
