@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="54">
+<kpartgui name="gwenview" version="55">
 
 <MenuBar>
 	<Menu name="file" >
@@ -91,6 +91,7 @@
 	<Action name="go_start_page" />
 	<Action name="browse" />
 	<Action name="view" />
+	<Separator/>
 	<Action name="fullscreen" />
 	<Separator/>
 	<Action name="go_previous" />
