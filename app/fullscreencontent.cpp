@@ -28,9 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QEvent>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPainter>
 #include <QPointer>
 #include <QPushButton>
-#include <QStyle>
 #include <QToolButton>
 #include <QWindowsStyle>
 
@@ -44,7 +44,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 #include <lib/document/documentfactory.h>
 #include <lib/fullscreenbar.h>
-#include <lib/fullscreentheme.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/imagemetainfomodel.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
@@ -53,29 +52,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-// Subclass QToolButton to make initStyleOption public
-class ButtonBarButton : public QToolButton {
-public:
-	void initStyleOption(QStyleOptionToolButton* option) const {
-		return QToolButton::initStyleOption(option);
-	}
-};
-
 static QToolButton* createButtonBarButton() {
-
-	ButtonBarButton* button = new ButtonBarButton;
-	QSize iconSize = QSize(32, 32);
-	button->setIconSize(iconSize);
-
-	// When the action icon changes, the button gets a few pixels larger. This
-	// is probably caused by the css styling.
-	// Setting a fixed size prevents this problem.
-	QStyleOptionToolButton opt;
-	button->initStyleOption(&opt);
-	QSize buttonSize = button->style()
-		->sizeFromContents(QStyle::CT_ToolButton, &opt, iconSize, button)
-		.expandedTo(QApplication::globalStrut());
-	button->setFixedSize(buttonSize);
+	QToolButton* button = new QToolButton;
+	button->setIconSize(QSize(32, 32));
+	button->setAutoRaise(true);
 	return button;
 }
 
@@ -110,23 +90,6 @@ struct FullScreenContentPrivate {
 			that, SLOT(showFullScreenConfigDialog()) );
 	}
 
-	void setupThemeListWidget(QListWidget* listWidget) {
-		QStringList themeList = FullScreenTheme::themeNameList();
-		listWidget->addItems(themeList);
-		int row = themeList.indexOf(FullScreenTheme::currentThemeName());
-		listWidget->setCurrentRow(row);
-
-		QObject::connect(listWidget, SIGNAL(currentTextChanged(QString)),
-			that, SLOT(setCurrentFullScreenTheme(QString)) );
-	}
-
-	void applyCurrentFullScreenTheme() {
-		FullScreenTheme theme(FullScreenTheme::currentThemeName());
-		mFullScreenBar->setStyleSheet(theme.styleSheet());
-		const bool fullWidth = GwenviewConfig::showFullScreenThumbnails();
-		mFullScreenBar->setProperty("fullWidth", fullWidth);
-	}
-
 	void createLayout() {
 		mThumbnailBar->setVisible(GwenviewConfig::showFullScreenThumbnails());
 		if (GwenviewConfig::showFullScreenThumbnails()) {
@@ -156,7 +119,6 @@ struct FullScreenContentPrivate {
 			mFullScreenBar->setFixedHeight(layout->minimumSize().height());
 		}
 		mFullScreenBar->adjustSize();
-		applyCurrentFullScreenTheme();
 	}
 
 
@@ -165,6 +127,20 @@ struct FullScreenContentPrivate {
 			return;
 		}
 		mFullScreenBar->adjustSize();
+	}
+
+	void updateBackground() {
+		QPalette pal = QApplication::palette();
+
+		QPixmap pix(16, mFullScreenBar->height());
+		pix.fill(Qt::transparent);
+		QPainter painter(&pix);
+		painter.setOpacity(0.8);
+		painter.fillRect(pix.rect(), pal.window());
+		painter.end();
+
+		pal.setBrush(mFullScreenBar->backgroundRole(), pix);
+		mFullScreenBar->setPalette(pal);
 	}
 };
 
@@ -175,18 +151,8 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	d->that = this;
 	d->mFullScreenBar = bar;
 	d->mSlideShow = slideShow;
+	bar->setAutoFillBackground(true);
 	bar->installEventFilter(this);
-
-	// Hardcode base style. This is necessary because some styles like
-	// to paint stuff with an event filter rather than overloading QStyle
-	// methods, overwriting the stylesheet rendering.
-	// Oxygen is one of those styles.
-	QStyle* style = new QWindowsStyle;
-	d->mFullScreenBar->setStyle(style);
-	style->setParent(d->mFullScreenBar);
-
-	// Apply theme
-	d->applyCurrentFullScreenTheme();
 
 	// Button bar
 	d->mButtonBar = new QWidget;
@@ -196,18 +162,28 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	buttonBarLayout->setSpacing(0);
 	QStringList actionNameList;
 	actionNameList
+		<< "browse"
+		<< ""
 		<< "fullscreen"
-		<< "toggle_slideshow"
+		<< ""
 		<< "go_previous"
+		<< "toggle_slideshow"
 		<< "go_next"
+		<< ""
 		<< "rotate_left"
 		<< "rotate_right"
+		<< ""
 		;
+	const int spacing = KDialog::spacingHint() * 2;
 	Q_FOREACH(const QString& actionName, actionNameList) {
-		QAction* action = actionCollection->action(actionName);
-		QToolButton* button = createButtonBarButton();
-		button->setDefaultAction(action);
-		buttonBarLayout->addWidget(button);
+		if (actionName.isEmpty()) {
+			buttonBarLayout->addSpacing(spacing);
+		} else {
+			QAction* action = actionCollection->action(actionName);
+			QToolButton* button = createButtonBarButton();
+			button->setDefaultAction(action);
+			buttonBarLayout->addWidget(button);
+		}
 	}
 
 	d->createOptionsButton();
@@ -215,6 +191,9 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 
 	// Thumbnail bar
 	d->mThumbnailBar = new ThumbnailBarView(bar);
+	QPalette pal;
+	pal.setColor(QPalette::Base, Qt::transparent);
+	d->mThumbnailBar->setPalette(pal);
 	ThumbnailBarItemDelegate* delegate = new ThumbnailBarItemDelegate(d->mThumbnailBar);
 	d->mThumbnailBar->setItemDelegate(delegate);
 	d->mThumbnailBar->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -225,6 +204,7 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	d->mInformationLabel->setAlignment(Qt::AlignCenter);
 
 	d->createLayout();
+	d->updateBackground();
 }
 
 
@@ -276,14 +256,9 @@ void FullScreenContent::updateInformationLabel() {
 }
 
 
-void FullScreenContent::setCurrentFullScreenTheme(const QString& themeName) {
-	FullScreenTheme::setCurrentThemeName(themeName);
-	d->applyCurrentFullScreenTheme();
-}
-
-
 bool FullScreenContent::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::Show) {
+		d->updateBackground();
 		updateInformationLabel();
 		updateMetaInfoDialog();
 	}
@@ -343,6 +318,7 @@ void FullScreenContent::updateSlideShowIntervalLabel() {
 void FullScreenContent::setFullScreenBarHeight(int value) {
 	d->mFullScreenBar->setFixedHeight(value);
 	GwenviewConfig::setFullScreenBarHeight(value);
+	d->updateBackground();
 }
 
 
@@ -381,8 +357,6 @@ void FullScreenContent::showFullScreenConfigDialog() {
 	// Config button
 	connect(dialog->mConfigureDisplayedInformationButton, SIGNAL(clicked()),
 		SLOT(showImageMetaInfoDialog()) );
-
-	d->setupThemeListWidget(dialog->mThemeListWidget);
 
 	// Thumbnails check box
 	dialog->mShowThumbnailsCheckBox->setChecked(GwenviewConfig::showFullScreenThumbnails());

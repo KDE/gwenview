@@ -1,110 +1,111 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>FullScreenConfigDialog</class>
- <widget class="QWidget" name="FullScreenConfigDialog" >
-  <property name="geometry" >
+ <widget class="QWidget" name="FullScreenConfigDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>336</width>
-    <height>424</height>
+    <height>261</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="mSlideShowTitle" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="mSlideShowTitle">
+     <property name="text">
       <string>Slideshow</string>
      </property>
-     <property name="isTitle" stdset="0" >
+     <property name="isTitle" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Interval:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+   <item row="1" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QSlider" name="mSlideShowIntervalSlider" >
-       <property name="minimum" >
+      <widget class="QSlider" name="mSlideShowIntervalSlider">
+       <property name="minimum">
         <number>2</number>
        </property>
-       <property name="maximum" >
+       <property name="maximum">
         <number>60</number>
        </property>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="mSlideShowIntervalLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <widget class="QLabel" name="mSlideShowIntervalLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>30</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="1" >
-    <widget class="QCheckBox" name="mSlideShowLoopCheckBox" >
-     <property name="text" >
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="mSlideShowLoopCheckBox">
+     <property name="text">
       <string>Loop</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QCheckBox" name="mSlideShowRandomCheckBox" >
-     <property name="text" >
+   <item row="3" column="1">
+    <widget class="QCheckBox" name="mSlideShowRandomCheckBox">
+     <property name="text">
       <string>Random</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2" >
-    <widget class="QLabel" name="mMetaDataTitle" >
-     <property name="text" >
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="mMetaDataTitle">
+     <property name="text">
       <string>Metadata</string>
      </property>
-     <property name="isTitle" stdset="0" >
+     <property name="isTitle" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="5" column="1" >
-    <layout class="QHBoxLayout" name="horizontalLayout_3" >
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QPushButton" name="mConfigureDisplayedInformationButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="mConfigureDisplayedInformationButton">
+       <property name="text">
         <string>Configure Displayed Metadata...</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_2" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -114,102 +115,89 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0" colspan="2" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Appearance</string>
      </property>
-     <property name="isTitle" stdset="0" >
+     <property name="isTitle" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Theme:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" >
-    <widget class="QListWidget" name="mThemeListWidget" />
-   </item>
-   <item row="8" column="1" >
-    <widget class="QCheckBox" name="mShowThumbnailsCheckBox" >
-     <property name="text" >
+   <item row="7" column="1">
+    <widget class="QCheckBox" name="mShowThumbnailsCheckBox">
+     <property name="text">
       <string>Show thumbnails</string>
      </property>
-     <property name="checked" >
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="9" column="1" >
-    <layout class="QHBoxLayout" name="horizontalLayout_4" >
+   <item row="8" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label_5" >
-       <property name="text" >
+      <widget class="QLabel" name="label_5">
+       <property name="text">
         <string>Height:</string>
        </property>
-       <property name="alignment" >
+       <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="mHeightSlider" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="QSlider" name="mHeightSlider">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>204</width>
          <height>0</height>
         </size>
        </property>
-       <property name="minimum" >
+       <property name="minimum">
         <number>70</number>
        </property>
-       <property name="maximum" >
+       <property name="maximum">
         <number>256</number>
        </property>
-       <property name="value" >
+       <property name="value">
         <number>70</number>
        </property>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="10" column="0" colspan="2" >
-    <widget class="Line" name="line" >
-     <property name="minimumSize" >
+   <item row="9" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="minimumSize">
       <size>
        <width>0</width>
        <height>3</height>
       </size>
      </property>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="11" column="0" colspan="2" >
-    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+   <item row="10" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <spacer name="horizontalSpacer" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -218,8 +206,8 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="mCloseButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="mCloseButton">
+       <property name="text">
         <string>Close</string>
        </property>
       </widget>
@@ -233,7 +221,6 @@
   <tabstop>mSlideShowLoopCheckBox</tabstop>
   <tabstop>mSlideShowRandomCheckBox</tabstop>
   <tabstop>mConfigureDisplayedInformationButton</tabstop>
-  <tabstop>mThemeListWidget</tabstop>
   <tabstop>mShowThumbnailsCheckBox</tabstop>
   <tabstop>mHeightSlider</tabstop>
   <tabstop>mCloseButton</tabstop>
@@ -246,11 +233,11 @@
    <receiver>FullScreenConfigDialog</receiver>
    <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>325</x>
      <y>413</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>335</x>
      <y>174</y>
     </hint>
@@ -262,11 +249,11 @@
    <receiver>mHeightSlider</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>137</x>
      <y>328</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>156</x>
      <y>362</y>
     </hint>
@@ -278,11 +265,11 @@
    <receiver>label_5</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>94</x>
      <y>332</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>85</x>
      <y>354</y>
     </hint>

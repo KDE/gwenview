@@ -65,7 +65,6 @@ private Q_SLOTS:
 	void slotPreferredMetaInfoKeyListChanged(const QStringList& list);
 	void showFullScreenConfigDialog();
 	void updateSlideShowIntervalLabel();
-	void setCurrentFullScreenTheme(const QString& themeName);
 	void setFullScreenBarHeight(int value);
 	void enableAutoHiding();
 	void slotShowThumbnailsToggled(bool value);
