@@ -492,6 +492,10 @@ struct PreviewItemDelegatePrivate {
 	}
 
 	int itemHeight() const {
+		return mThumbnailSize + itemTextHeight() + 3*ITEM_MARGIN;
+	}
+
+	int itemTextHeight() const {
 		const int lineHeight = mView->fontMetrics().height();
 		int textHeight = 0;
 		if (mDetails & PreviewItemDelegate::FileNameDetail) {
@@ -513,7 +517,7 @@ struct PreviewItemDelegatePrivate {
 			// Keep at least one row of text, so that we can show folder names
 			textHeight = lineHeight;
 		}
-		return mThumbnailSize + textHeight + 3*ITEM_MARGIN;
+		return textHeight;
 	}
 
 	void selectIndexUnderCursorIfNoMultiSelection() {
@@ -551,7 +555,7 @@ struct PreviewItemDelegatePrivate {
 	}
 
 	void updateViewGridSize() {
-		mView->setGridSize(QSize(itemWidth(), itemHeight()));
+		//mView->setGridSize(QSize(itemWidth(), itemHeight()));
 	}
 };
 
@@ -561,6 +565,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView* view)
 , d(new PreviewItemDelegatePrivate) {
 	d->that = this;
 	d->mView = view;
+	view->setUniformItemSizes(false);
 	view->viewport()->installEventFilter(this);
 	d->mThumbnailSize = view->thumbnailSize();
 	d->mDetails = FileNameDetail;
@@ -622,8 +627,12 @@ PreviewItemDelegate::~PreviewItemDelegate() {
 }
 
 
-QSize PreviewItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/ ) const {
-	return d->mView->gridSize();
+QSize PreviewItemDelegate::sizeHint(const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const {
+	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+	QSize size = thumbnailPix.size();
+	size.rwidth() = d->itemWidth();
+	size.rheight() += d->itemTextHeight() + ITEM_MARGIN * 3;
+	return size;
 }
 
 

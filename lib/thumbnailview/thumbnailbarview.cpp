@@ -147,8 +147,12 @@ ThumbnailBarItemDelegate::ThumbnailBarItemDelegate(ThumbnailView* view)
 }
 
 
-QSize ThumbnailBarItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const {
-	return d->mView->gridSize();
+QSize ThumbnailBarItemDelegate::sizeHint( const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const {
+	QPixmap thumbnailPix = d->mView->thumbnailForIndex(index);
+	QSize size = thumbnailPix.size();
+	size.rwidth() += ITEM_MARGIN * 2;
+	size.rheight() += ITEM_MARGIN * 2;
+	return size;
 }
 
 
@@ -371,7 +375,7 @@ struct ThumbnailBarViewPrivate {
 
 	void updateThumbnailSize() {
 		QSizeDimension dimension = oppositeDimension();
-		int scrollBarSize = (scrollBar()->sizeHint().*dimension)();
+		int scrollBarSize = 0; //(scrollBar()->sizeHint().*dimension)();
 		int widgetSize = (q->size().*dimension)();
 
 		if (mRowCount > 1) {
@@ -382,8 +386,6 @@ struct ThumbnailBarViewPrivate {
 		}
 
 		int gridSize = (widgetSize - scrollBarSize - 2 * q->frameWidth()) / mRowCount;
-
-		q->setGridSize(QSize(gridSize, gridSize));
 		q->setThumbnailSize(gridSize - ITEM_MARGIN * 2);
 	}
 };
@@ -403,7 +405,8 @@ ThumbnailBarView::ThumbnailBarView(QWidget* parent)
 	setOrientation(Qt::Horizontal);
 
 	setObjectName( QLatin1String("thumbnailBarView" ));
-	setUniformItemSizes(true);
+	setUniformItemSizes(false);
+	setMovement(QListView::Static);
 	setWrapping(true);
 
 	d->mStyle = new ProxyStyle(style());
@@ -430,10 +433,10 @@ void ThumbnailBarView::setOrientation(Qt::Orientation orientation) {
 
 	if (d->mOrientation == Qt::Vertical) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setFlow(LeftToRight);
 	} else {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setFlow(TopToBottom);
 	}

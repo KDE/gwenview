@@ -225,7 +225,7 @@ struct ThumbnailViewPrivate {
 			thumbnail->mAdjustedPix = mGroupPix;
 			thumbnail->mRough = false;
 		} else {
-			thumbnail->mAdjustedPix = mGroupPix.scaled(mThumbnailSize, mThumbnailSize, Qt::KeepAspectRatio);
+			thumbnail->mAdjustedPix = mGroupPix.scaledToHeight(mThumbnailSize);
 			thumbnail->mRough = true;
 		}
 	}
@@ -399,6 +399,7 @@ void ThumbnailView::setThumbnailSize(int value) {
 	}
 
 	thumbnailSizeChanged(value);
+	scheduleDelayedItemsLayout();
 	d->scheduleThumbnailGenerationForVisibleItems();
 }
 
@@ -542,6 +543,7 @@ void ThumbnailView::setThumbnail(const KFileItem& item, const QPixmap& pixmap, c
 	thumbnail.mWaitingForThumbnail = false;
 
 	update(thumbnail.mIndex);
+	scheduleDelayedItemsLayout();
 }
 
 
@@ -884,7 +886,7 @@ void ThumbnailView::smoothNextThumbnail() {
 	}
 
 	Thumbnail& thumbnail = it.value();
-	thumbnail.mAdjustedPix = thumbnail.mGroupPix.scaled(d->mThumbnailSize, d->mThumbnailSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	thumbnail.mAdjustedPix = thumbnail.mGroupPix.scaledToHeight(d->mThumbnailSize, Qt::SmoothTransformation);
 	thumbnail.mRough = false;
 
 	if (thumbnail.mIndex.isValid()) {
