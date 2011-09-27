@@ -210,27 +210,19 @@ struct DocumentPanelPrivate {
 		mDocumentViewContainer = new DocumentViewContainer;
 		mDocumentViewContainer->setAutoFillBackground(true);
 		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
-		Q_FOREACH(DocumentView* view, mDocumentViews) {
-			mDocumentViewContainer->addView(view);
-		}
 		layout->addWidget(mDocumentViewContainer);
 		layout->addWidget(mStatusBarContainer);
 	}
 
-	void setupDocumentViews() {
+	void setupDocumentViewController() {
 		mDocumentViewController = new DocumentViewController(mActionCollection, that);
 
 		ZoomWidget* zoomWidget = new ZoomWidget(that);
 		mDocumentViewController->setZoomWidget(zoomWidget);
-
-		for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
-			mDocumentViews << createDocumentView();
-		}
-
 		mSynchronizer = new DocumentViewSynchronizer(that);
 	}
 
-	DocumentView* createDocumentView() {
+	void createDocumentView() {
 		DocumentView* view = new DocumentView(0);
 
 		// Connect context menu
@@ -258,7 +250,8 @@ struct DocumentPanelPrivate {
 		QObject::connect(view, SIGNAL(videoFinished()),
 			mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
-		return view;
+		mDocumentViews << view;
+		mDocumentViewContainer->addView(view);
 	}
 
 	void setupStatusBar() {
@@ -358,7 +351,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	toggleFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
-	d->setupDocumentViews();
+	d->setupDocumentViewController();
 
 	d->setupStatusBar();
 
@@ -367,6 +360,10 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->setupThumbnailBar();
 
 	d->setupSplitter();
+	for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
+		d->createDocumentView();
+	}
+
 
 	KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 
