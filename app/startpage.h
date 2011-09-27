@@ -45,7 +45,8 @@ public:
 	StartPage(QWidget* parent, GvCore*);
 	~StartPage();
 
-	void applyPalette(const QPalette&);
+	void setNormalPalette(const QPalette&);
+	void setFullScreenMode(bool fullScreen);
 
 Q_SIGNALS:
 	void urlSelected(const KUrl& url);

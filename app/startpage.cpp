@@ -93,6 +93,7 @@ public:
 
 struct StartPagePrivate : public Ui_StartPage{
 	StartPage* that;
+	QPalette mNormalPalette;
 	GvCore* mGvCore;
 	KFilePlacesModel* mBookmarksModel;
 	bool mSearchUiInitialized;
@@ -216,21 +217,14 @@ void StartPage::slotTagViewClicked(const QModelIndex& index) {
 }
 
 
-void StartPage::applyPalette(const QPalette& newPalette) {
-	QColor fgColor = newPalette.text().color();
+void StartPage::setNormalPalette(const QPalette& newPalette) {
+	d->mNormalPalette = newPalette;
+	setPalette(d->mNormalPalette);
+}
 
-	QPalette pal = palette();
-	pal.setBrush(backgroundRole(), newPalette.base());
-	pal.setBrush(QPalette::Button, newPalette.base());
-	pal.setBrush(QPalette::WindowText, fgColor);
-	pal.setBrush(QPalette::ButtonText, fgColor);
-	pal.setBrush(QPalette::Text, fgColor);
-	setPalette(pal);
 
-	initViewPalette(d->mBookmarksView, fgColor);
-	initViewPalette(d->mTagView, fgColor);
-	initViewPalette(d->mRecentFoldersView, fgColor);
-	initViewPalette(d->mRecentUrlsView, fgColor);
+void StartPage::setFullScreenMode(bool fullScreen) {
+	setPalette(fullScreen ? QPalette() : d->mNormalPalette);
 }
 
 

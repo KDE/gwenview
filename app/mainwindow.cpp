@@ -1238,6 +1238,7 @@ void MainWindow::toggleFullScreen(bool checked) {
 		}
 
 		QApplication::setPalette(d->mFullScreenPalette);
+		d->mStartPage->setFullScreenMode(true);
 		d->mThumbnailViewPanel->setFullScreenMode(true);
 		d->mDocumentPanel->setFullScreenMode(true);
 		d->mSaveBar->setFullScreenMode(true);
@@ -1441,7 +1442,7 @@ void MainWindow::loadConfig() {
 	normalPal.setColor(QPalette::Text, fgColor);
 
 	// Apply to widgets
-	d->mStartPage->applyPalette(normalPal);
+	d->mStartPage->setNormalPalette(normalPal);
 	d->mThumbnailViewPanel->setNormalPalette(normalPal);
 	d->mDocumentPanel->setNormalPalette(normalPal);
 
