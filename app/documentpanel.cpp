@@ -130,6 +130,7 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  */
 struct DocumentPanelPrivate {
 	DocumentPanel* that;
+	SlideShow* mSlideShow;
 	KActionCollection* mActionCollection;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
@@ -221,40 +222,44 @@ struct DocumentPanelPrivate {
 		layout->addWidget(mStatusBarContainer);
 	}
 
-	void setupDocumentView(SlideShow* slideShow) {
+	void setupDocumentViews() {
 		mDocumentViewController = new DocumentViewController(mActionCollection, that);
 
 		ZoomWidget* zoomWidget = new ZoomWidget(that);
 		mDocumentViewController->setZoomWidget(zoomWidget);
 
 		for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
-			DocumentView* view = new DocumentView(0);
-
-			// Connect context menu
-			view->setContextMenuPolicy(Qt::CustomContextMenu);
-			QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
-				that, SLOT(showContextMenu()) );
-
-			QObject::connect(view, SIGNAL(completed()),
-				that, SIGNAL(completed()) );
-			QObject::connect(view, SIGNAL(previousImageRequested()),
-				that, SIGNAL(previousImageRequested()) );
-			QObject::connect(view, SIGNAL(nextImageRequested()),
-				that, SIGNAL(nextImageRequested()) );
-			QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
-				that, SIGNAL(captionUpdateRequested(QString)) );
-			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
-				that, SIGNAL(toggleFullScreenRequested()) );
-			QObject::connect(view, SIGNAL(focused(DocumentView*)),
-				that, SLOT(slotViewFocused(DocumentView*)) );
-
-			QObject::connect(view, SIGNAL(videoFinished()),
-				slideShow, SLOT(resumeAndGoToNextUrl()));
-
-			mDocumentViews << view;
+			mDocumentViews << createDocumentView();
 		}
 
 		mSynchronizer = new DocumentViewSynchronizer(that);
+	}
+
+	DocumentView* createDocumentView() {
+		DocumentView* view = new DocumentView(0);
+
+		// Connect context menu
+		view->setContextMenuPolicy(Qt::CustomContextMenu);
+		QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
+			that, SLOT(showContextMenu()) );
+
+		QObject::connect(view, SIGNAL(completed()),
+			that, SIGNAL(completed()) );
+		QObject::connect(view, SIGNAL(previousImageRequested()),
+			that, SIGNAL(previousImageRequested()) );
+		QObject::connect(view, SIGNAL(nextImageRequested()),
+			that, SIGNAL(nextImageRequested()) );
+		QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
+			that, SIGNAL(captionUpdateRequested(QString)) );
+		QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
+			that, SIGNAL(toggleFullScreenRequested()) );
+		QObject::connect(view, SIGNAL(focused(DocumentView*)),
+			that, SLOT(slotViewFocused(DocumentView*)) );
+
+		QObject::connect(view, SIGNAL(videoFinished()),
+			mSlideShow, SLOT(resumeAndGoToNextUrl()));
+
+		return view;
 	}
 
 	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
@@ -382,6 +387,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 , d(new DocumentPanelPrivate)
 {
 	d->that = this;
+	d->mSlideShow = slideShow;
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mCompareMode = false;
@@ -394,7 +400,7 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	toggleFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
-	d->setupDocumentView(slideShow);
+	d->setupDocumentViews();
 
 	d->setupHuds();
 
