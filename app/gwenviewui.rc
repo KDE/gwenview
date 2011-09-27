@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="gwenview" version="55">
+<kpartgui name="gwenview" version="56">
 
 <MenuBar>
 	<Menu name="file" >
@@ -17,9 +17,12 @@
 		<Action name="quit"/>
 	</Menu>
 	<Menu name="view" >
+		<Action name="go_start_page"/>
 		<Action name="browse" />
 		<Action name="view" />
+		<Separator/>
 		<Action name="fullscreen" />
+		<Separator/>
 		<Action name="toggle_slideshow" />
 		<Separator/>
 		<Action name="view_actual_size"/>
@@ -67,8 +70,6 @@
 		<Action name="go_last"/>
 		<Separator/>
 		<Action name="go_up"/>
-		<Separator/>
-		<Action name="go_start_page"/>
 	</Menu>
 	<Menu name="plugins">
 		<text>&amp;Plugins</text>

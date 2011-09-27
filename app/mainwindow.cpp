@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QApplication>
 #include <QDateTime>
 #include <QDesktopWidget>
+#include <QDir>
+#include <QFileInfo>
 #include <QLabel>
 #include <QTimer>
 #include <QShortcut>
@@ -166,6 +168,7 @@ struct MainWindow::Private {
 #endif
 
 	QActionGroup* mViewModeActionGroup;
+	KAction* mStartPageAction;
 	KAction* mBrowseAction;
 	KAction* mViewAction;
 	KAction* mGoUpAction;
@@ -322,17 +325,26 @@ struct MainWindow::Private {
 		action->setIcon(KIcon("view-refresh"));
 		action->setShortcut(Qt::Key_F5);
 
+		mStartPageAction = view->addAction("go_start_page");
+		mStartPageAction->setIcon(KIcon("go-home"));
+		mStartPageAction->setCheckable(true);
+		mStartPageAction->setText(i18nc("@action", "Start Page"));
+		mStartPageAction->setPriority(QAction::LowPriority);
+
 		mBrowseAction = view->addAction("browse");
 		mBrowseAction->setText(i18nc("@action Switch to file list", "Browse"));
 		mBrowseAction->setCheckable(true);
 		mBrowseAction->setIcon(KIcon("view-list-icons"));
+		mBrowseAction->setPriority(QAction::LowPriority);
 
 		mViewAction = view->addAction("view");
 		mViewAction->setText(i18nc("@action Switch to image view", "View"));
 		mViewAction->setIcon(KIcon("view-preview"));
 		mViewAction->setCheckable(true);
+		mViewAction->setPriority(QAction::LowPriority);
 
 		mViewModeActionGroup = new QActionGroup(mWindow);
+		mViewModeActionGroup->addAction(mStartPageAction);
 		mViewModeActionGroup->addAction(mBrowseAction);
 		mViewModeActionGroup->addAction(mViewAction);
 
@@ -376,10 +388,6 @@ struct MainWindow::Private {
 		mGoToLastAction->setShortcut(Qt::Key_End);
 
 		mGoUpAction = view->addAction(KStandardAction::Up,mWindow, SLOT(goUp()));
-
-		action = view->addAction("go_start_page",mWindow, SLOT(showStartPage()));
-		action->setIcon(KIcon("go-home"));
-		action->setText(i18nc("@action", "Start Page"));
 
 		mToggleSideBarAction = view->add<KToggleAction>("toggle_sidebar");
 		connect(mToggleSideBarAction, SIGNAL(toggled(bool)),
@@ -610,15 +618,13 @@ struct MainWindow::Private {
 
 
 	void setActionsDisabledOnStartPageEnabled(bool enabled) {
-		mBrowseAction->setEnabled(enabled);
-		mViewAction->setEnabled(enabled);
 		mToggleSideBarAction->setEnabled(enabled);
-		mFullScreenAction->setEnabled(enabled);
 		mToggleSlideShowAction->setEnabled(enabled);
 
 		setActionEnabled("reload", enabled);
-		setActionEnabled("go_start_page", enabled);
 		setActionEnabled("add_folder_to_places", enabled);
+		setActionEnabled("rotate_left", enabled);
+		setActionEnabled("rotate_right", enabled);
 	}
 
 	void updateDistractionsState() {
@@ -905,7 +911,16 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		if (d->mFullScreenAction->isChecked()) {
 			toolBar()->hide();
 		}
-	} else {
+		d->loadSideBarConfig();
+	} else if (action == d->mBrowseAction) {
+		if (!d->mContextManager->currentDirUrl().isValid()) {
+			QString path = KGlobalSettings::picturesPath();
+			QFileInfo info(path);
+			if (!info.isDir() || !info.isReadable()) {
+				path = QDir::homePath();
+			};
+			openDirUrl(KUrl::fromPath(path));
+		}
 		d->mCurrentPageId = BrowsePageId;
 		// Switching to browse mode
 		d->mViewStackedWidget->setCurrentWidget(d->mThumbnailViewPanel);
@@ -925,8 +940,10 @@ void MainWindow::setActiveViewModeAction(QAction* action) {
 		if (d->mFullScreenAction->isChecked()) {
 			toolBar()->setVisible(d->mStateBeforeFullScreen.mToolBarVisible);
 		}
+		d->loadSideBarConfig();
+	} else {
+		showStartPage();
 	}
-	d->loadSideBarConfig();
 
 	emit viewModeChanged();
 }
@@ -1005,6 +1022,7 @@ void MainWindow::showStartPage() {
 		d->saveSideBarConfig();
 		d->mCurrentPageId = StartPageId;
 	}
+	d->mStartPageAction->setChecked(true);
 	d->setActionsDisabledOnStartPageEnabled(false);
 	d->spreadCurrentDirUrl(KUrl());
 

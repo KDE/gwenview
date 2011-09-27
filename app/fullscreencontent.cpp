@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kactioncollection.h>
+#include <kiconloader.h>
 #include <klocale.h>
 
 // Local
@@ -54,7 +55,8 @@ namespace Gwenview {
 
 static QToolButton* createButtonBarButton() {
 	QToolButton* button = new QToolButton;
-	button->setIconSize(QSize(32, 32));
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+	button->setIconSize(QSize(size, size));
 	button->setAutoRaise(true);
 	return button;
 }
@@ -162,7 +164,9 @@ FullScreenContent::FullScreenContent(FullScreenBar* bar, KActionCollection* acti
 	buttonBarLayout->setSpacing(0);
 	QStringList actionNameList;
 	actionNameList
+		<< "go_start_page"
 		<< "browse"
+		<< "view"
 		<< ""
 		<< "fullscreen"
 		<< ""
