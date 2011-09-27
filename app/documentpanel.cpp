@@ -39,7 +39,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "fileoperations.h"
 #include "splitter.h"
-#include <lib/binder.h>
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
@@ -47,15 +46,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/hudwidget.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
-#include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
-
 
 namespace Gwenview {
 
@@ -136,7 +132,6 @@ struct DocumentPanelPrivate {
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
-	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
 	QToolButton* mToggleThumbnailBarButton;
 	DocumentViewContainer* mDocumentViewContainer;
@@ -255,52 +250,15 @@ struct DocumentPanelPrivate {
 			that, SIGNAL(toggleFullScreenRequested()) );
 		QObject::connect(view, SIGNAL(focused(DocumentView*)),
 			that, SLOT(slotViewFocused(DocumentView*)) );
+		QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
+			that, SLOT(trashView(DocumentView*)) );
+		QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
+			that, SLOT(deselectView(DocumentView*)) );
 
 		QObject::connect(view, SIGNAL(videoFinished()),
 			mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
 		return view;
-	}
-
-	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
-		QToolButton* button = new QToolButton;
-		if (showText) {
-			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-			button->setText(text);
-		} else {
-			button->setToolTip(text);
-		}
-		button->setIcon(SmallIcon(iconName));
-		return button;
-	}
-
-	void setupViewHud(DocumentView* view) {
-		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
-		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
-
-		QWidget* content = new QWidget;
-		QHBoxLayout* layout = new QHBoxLayout(content);
-		layout->setMargin(0);
-		layout->setSpacing(4);
-		layout->addWidget(trashButton);
-		layout->addWidget(deselectButton);
-
-		HudWidget* hud = new HudWidget;
-		hud->init(content, HudWidget::OptionNone);
-		WidgetFloater* floater = new WidgetFloater(view);
-		floater->setChildWidget(hud);
-		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-
-		Binder<DocumentPanel, DocumentView*>::bind(trashButton, SIGNAL(clicked()), that, &DocumentPanel::trashView, view);
-		Binder<DocumentPanel, DocumentView*>::bind(deselectButton, SIGNAL(clicked()), that, &DocumentPanel::deselectView, view);
-
-		mHuds.append(hud);
-	}
-
-	void setupHuds() {
-		Q_FOREACH(DocumentView* view, mDocumentViews) {
-			setupViewHud(view);
-		}
 	}
 
 	void setupStatusBar() {
@@ -401,8 +359,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
 	d->setupDocumentViews();
-
-	d->setupHuds();
 
 	d->setupStatusBar();
 
@@ -659,12 +615,6 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		view->hide();
 	}
 
-	Q_FOREACH(HudWidget* hud, d->mHuds) {
-		hud->setVisible(d->mCompareMode);
-		if (d->mCompareMode) {
-			hud->raise();
-		}
-	}
 	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
 	if (d->mCompareMode) {
 		d->mSynchronizer->setDocumentViews(visibleViews);

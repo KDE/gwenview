@@ -137,6 +137,9 @@ Q_SIGNALS:
 
 	void positionChanged();
 
+	void hudTrashClicked(DocumentView*);
+	void hudDeselectClicked(DocumentView*);
+
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
@@ -157,6 +160,9 @@ private Q_SLOTS:
 	void slotBusyChanged(const KUrl&, bool);
 
 	void slotKeyPressed(Qt::Key key, bool pressed);
+
+	void emitHudTrashClicked();
+	void emitHudDeselectClicked();
 
 private:
 	friend struct DocumentViewPrivate;

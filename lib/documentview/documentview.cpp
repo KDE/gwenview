@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -67,6 +68,7 @@ static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
 struct DocumentViewPrivate {
 	DocumentView* that;
+	HudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
@@ -150,6 +152,41 @@ struct DocumentViewPrivate {
 
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
+	}
+
+	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
+		QToolButton* button = new QToolButton;
+		if (showText) {
+			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+			button->setText(text);
+		} else {
+			button->setToolTip(text);
+		}
+		button->setIcon(SmallIcon(iconName));
+		return button;
+	}
+
+	void setupHud() {
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		layout->setMargin(0);
+		layout->setSpacing(4);
+		layout->addWidget(trashButton);
+		layout->addWidget(deselectButton);
+
+		mHud = new HudWidget;
+		mHud->init(content, HudWidget::OptionNone);
+		WidgetFloater* floater = new WidgetFloater(that);
+		floater->setChildWidget(mHud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(emitHudTrashClicked()));
+		QObject::connect(deselectButton, SIGNAL(clicked()), that, SLOT(emitHudDeselectClicked()));
+
+		mHud->hide();
 	}
 
 	void updateCaption() {
@@ -314,6 +351,7 @@ DocumentView::DocumentView(QWidget* parent)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
 	d->setupZoomCursor();
+	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 	d->mCurrent = false;
 }
@@ -588,6 +626,12 @@ qreal DocumentView::minimumZoom() const {
 
 void DocumentView::setCompareMode(bool compare) {
 	layout()->setMargin(compare ? 4 : 0);
+	if (compare) {
+		d->mHud->show();
+		d->mHud->raise();
+	} else {
+		d->mHud->hide();
+	}
 }
 
 
@@ -647,6 +691,14 @@ Document::Ptr DocumentView::document() const {
 KUrl DocumentView::url() const {
 	Document::Ptr doc = d->mDocument;
 	return doc ? doc->url() : KUrl();
+}
+
+void DocumentView::emitHudDeselectClicked() {
+	hudDeselectClicked(this);
+}
+
+void DocumentView::emitHudTrashClicked() {
+	hudTrashClicked(this);
 }
 
 
