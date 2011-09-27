@@ -1426,7 +1426,6 @@ void MainWindow::toggleMenuBar() {
 
 void MainWindow::loadConfig() {
 	d->mDirModel->setBlackListedExtensions(GwenviewConfig::blackListedExtensions());
-	MimeTypeUtils::Kinds kind = d->mDirModel->kindFilter();
 	d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
 	d->mDocumentPanel->loadConfig();
