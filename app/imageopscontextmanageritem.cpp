@@ -80,19 +80,23 @@ struct ImageOpsContextManagerItem::Private {
 		mRotateLeftAction->setText(i18n("Rotate Left"));
 		mRotateLeftAction->setIcon(KIcon("object-rotate-left"));
 		mRotateLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
+		mRotateLeftAction->setPriority(QAction::LowPriority);
 
 		mRotateRightAction = edit->addAction("rotate_right",that, SLOT(rotateRight()));
 		mRotateRightAction->setText(i18n("Rotate Right"));
 		mRotateRightAction->setIcon(KIcon("object-rotate-right"));
 		mRotateRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
+		mRotateRightAction->setPriority(QAction::LowPriority);
 
 		mMirrorAction = edit->addAction("mirror",that, SLOT(mirror()));
 		mMirrorAction->setText(i18n("Mirror"));
 		mMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+		mMirrorAction->setPriority(QAction::LowPriority);
 
 		mFlipAction = edit->addAction("flip",that, SLOT(flip()));
 		mFlipAction->setText(i18n("Flip"));
 		mFlipAction->setIcon(KIcon("object-flip-vertical"));
+		mFlipAction->setPriority(QAction::LowPriority);
 
 		mResizeAction = edit->addAction("resize",that, SLOT(resizeImage()) );
 		mResizeAction->setText(i18n("Resize"));
