@@ -567,58 +567,42 @@ void DocumentPanel::openUrl(const KUrl& url) {
 }
 
 
-void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
+void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
+	QSet<KUrl> urls = _urls.toSet();
 	d->mCompareMode = urls.count() > 1;
 
-	// Get a list of available views and urls we are not already displaying
-	QSet<KUrl> notDisplayedUrls = urls.toSet();
-	QList<DocumentView*> availableViews;
+	// Destroy views which show urls we don't care about, remove from "urls" the
+	// urls which already have a view.
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		KUrl url = view->url();
-		if (notDisplayedUrls.contains(url)) {
+		if (urls.contains(url)) {
 			// view displays an url we must display, keep it
-			notDisplayedUrls.remove(url);
-			view->setCompareMode(d->mCompareMode);
-			if (url == currentUrl) {
-				d->setCurrentView(view);
-			} else {
-				view->setCurrent(false);
-			}
+			urls.remove(url);
 		} else {
-			// view url is not interesting, prepare to reuse it
-			availableViews.append(view);
+			// view url is not interesting, drop it
+			d->destroyDocumentView(view);
 		}
 	}
 
-	// Show urls to display in available views
-	Q_FOREACH(const KUrl& url, notDisplayedUrls) {
-		DocumentView* view;
-		if (availableViews.isEmpty()) {
-			if (d->mDocumentViews.count() < MaxViewCount) {
-				kWarning() << "Creating view for" << url;
-				view = d->createDocumentView();
-			} else {
-				kWarning() << "Too many documents to show";
-				break;
-			}
-		} else {
-			kWarning() << "Reusing view for" << url;
-			view = availableViews.takeFirst();
+	// Create view for remaining urls
+	Q_FOREACH(const KUrl& url, urls) {
+		if (d->mDocumentViews.count() >= MaxViewCount) {
+			kWarning() << "Too many documents to show";
+			break;
 		}
+		DocumentView* view = d->createDocumentView();
 		view->openUrl(url);
+		view->show();
+	}
+
+	// Init views
+	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		view->setCompareMode(d->mCompareMode);
-		if (url == currentUrl) {
+		if (view->url() == currentUrl) {
 			d->setCurrentView(view);
 		} else {
 			view->setCurrent(false);
 		}
-		view->show();
-	}
-
-	// Delete unused views
-	Q_FOREACH(DocumentView* view, availableViews) {
-		kWarning() << "Destroying view";
-		d->destroyDocumentView(view);
 	}
 
 	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
