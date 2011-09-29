@@ -46,6 +46,7 @@ public:
 	~DocumentViewContainer();
 
 	void addView(DocumentView* view);
+	void removeView(DocumentView* view);
 
 protected:
 	bool eventFilter(QObject*, QEvent*);

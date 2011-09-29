@@ -63,6 +63,12 @@ void DocumentViewContainer::addView(DocumentView* view) {
 }
 
 
+void DocumentViewContainer::removeView(DocumentView* view) {
+	d->mItems.removeOne(view);
+	updateLayout();
+}
+
+
 bool DocumentViewContainer::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
 	case QEvent::Show:

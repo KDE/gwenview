@@ -222,7 +222,7 @@ struct DocumentPanelPrivate {
 		mSynchronizer = new DocumentViewSynchronizer(that);
 	}
 
-	void createDocumentView() {
+	DocumentView* createDocumentView() {
 		DocumentView* view = new DocumentView(0);
 
 		// Connect context menu
@@ -252,6 +252,14 @@ struct DocumentPanelPrivate {
 
 		mDocumentViews << view;
 		mDocumentViewContainer->addView(view);
+
+		return view;
+	}
+
+	void destroyDocumentView(DocumentView* view) {
+		mDocumentViewContainer->removeView(view);
+		mDocumentViews.removeOne(view);
+		view->deleteLater();
 	}
 
 	void setupStatusBar() {
@@ -360,10 +368,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	d->setupThumbnailBar();
 
 	d->setupSplitter();
-	for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
-		d->createDocumentView();
-	}
-
 
 	KActionCategory* view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface","View"), actionCollection);
 
@@ -565,7 +569,6 @@ void DocumentPanel::openUrl(const KUrl& url) {
 
 void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	d->mCompareMode = urls.count() > 1;
-	QList<DocumentView*> visibleViews;
 
 	// Get a list of available views and urls we are not already displaying
 	QSet<KUrl> notDisplayedUrls = urls.toSet();
@@ -581,7 +584,6 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 			} else {
 				view->setCurrent(false);
 			}
-			visibleViews.append(view);
 		} else {
 			// view url is not interesting, prepare to reuse it
 			availableViews.append(view);
@@ -590,11 +592,19 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 
 	// Show urls to display in available views
 	Q_FOREACH(const KUrl& url, notDisplayedUrls) {
+		DocumentView* view;
 		if (availableViews.isEmpty()) {
-			kWarning() << "No room to load" << url << ". This should not happen";
-			break;
+			if (d->mDocumentViews.count() < MaxViewCount) {
+				kWarning() << "Creating view for" << url;
+				view = d->createDocumentView();
+			} else {
+				kWarning() << "Too many documents to show";
+				break;
+			}
+		} else {
+			kWarning() << "Reusing view for" << url;
+			view = availableViews.takeFirst();
 		}
-		DocumentView* view = availableViews.takeFirst();
 		view->openUrl(url);
 		view->setCompareMode(d->mCompareMode);
 		if (url == currentUrl) {
@@ -602,21 +612,21 @@ void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 		} else {
 			view->setCurrent(false);
 		}
-		visibleViews.append(view);
 		view->show();
 	}
 
-	// Hide remaining available views
+	// Delete unused views
 	Q_FOREACH(DocumentView* view, availableViews) {
-		view->reset();
-		view->hide();
+		kWarning() << "Destroying view";
+		d->destroyDocumentView(view);
 	}
 
 	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
 	if (d->mCompareMode) {
-		d->mSynchronizer->setDocumentViews(visibleViews);
+		d->mSynchronizer->setDocumentViews(d->mDocumentViews);
 		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
 	} else {
+		d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
 		d->mSynchronizer->setActive(false);
 	}
 }
@@ -676,18 +686,14 @@ void DocumentPanel::deselectView(DocumentView* view) {
 		int idx = d->mDocumentViews.indexOf(view);
 		// Look for the next visible view after the current one
 		for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
-			if (d->mDocumentViews.at(newIdx)->isVisible()) {
-				newCurrentView = d->mDocumentViews.at(newIdx);
-				break;
-			}
+			newCurrentView = d->mDocumentViews.at(newIdx);
+			break;
 		}
 		if (!newCurrentView) {
 			// No visible view found after the current one, look before
 			for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
-				if (d->mDocumentViews.at(newIdx)->isVisible()) {
-					newCurrentView = d->mDocumentViews.at(newIdx);
-					break;
-				}
+				newCurrentView = d->mDocumentViews.at(newIdx);
+				break;
 			}
 		}
 		if (!newCurrentView) {
