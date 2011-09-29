@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
+#include <QTimer>
 #include <QWidget>
 
 // libc
@@ -39,6 +40,11 @@ namespace Gwenview {
 struct DocumentViewContainerPrivate {
 	DocumentViewContainer* q;
 	QList<DocumentView*> mItems;
+	QTimer* mLayoutUpdateTimer;
+
+	void scheduleLayoutUpdate() {
+		mLayoutUpdateTimer->start();
+	}
 };
 
 
@@ -47,6 +53,11 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 , d(new DocumentViewContainerPrivate) {
 	d->q = this;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	d->mLayoutUpdateTimer = new QTimer(this);
+	d->mLayoutUpdateTimer->setInterval(0);
+	d->mLayoutUpdateTimer->setSingleShot(true);
+	connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
 }
 
 
@@ -58,57 +69,36 @@ DocumentViewContainer::~DocumentViewContainer() {
 void DocumentViewContainer::addView(DocumentView* view) {
 	d->mItems << view;
 	view->setParent(this);
-	view->installEventFilter(this);
-	updateLayout();
+	d->scheduleLayoutUpdate();
 }
 
 
 void DocumentViewContainer::removeView(DocumentView* view) {
 	d->mItems.removeOne(view);
-	updateLayout();
-}
-
-
-bool DocumentViewContainer::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Show:
-	case QEvent::Hide:
-		updateLayout();
-		break;
-	default:
-		break;
-	}
-	return false;
+	d->scheduleLayoutUpdate();
 }
 
 
 void DocumentViewContainer::showEvent(QShowEvent* event) {
 	QWidget::showEvent(event);
-	updateLayout();
+	d->scheduleLayoutUpdate();
 }
 
 
 void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
-	updateLayout();
+	d->scheduleLayoutUpdate();
 }
 
 
 void DocumentViewContainer::updateLayout() {
-	// List visible views
-	QList<DocumentView*> visibleViews;
-	Q_FOREACH(DocumentView* view, d->mItems) {
-		if (view->isVisible()) {
-			visibleViews << view;
-		}
-	}
-	if (visibleViews.isEmpty()) {
+	if (d->mItems.isEmpty()) {
 		return;
 	}
 
 	// Compute column count
 	int colCount;
-	switch (visibleViews.count()) {
+	switch (d->mItems.count()) {
 	case 1:
 		colCount = 1;
 		break;
@@ -132,7 +122,7 @@ void DocumentViewContainer::updateLayout() {
 		break;
 	}
 
-	int rowCount = qCeil(visibleViews.count() / qreal(colCount));
+	int rowCount = qCeil(d->mItems.count() / qreal(colCount));
 	Q_ASSERT(rowCount > 0);
 	int viewWidth = width() / colCount;
 	int viewHeight = height() / rowCount;
@@ -140,7 +130,7 @@ void DocumentViewContainer::updateLayout() {
 	int col = 0;
 	int row = 0;
 
-	Q_FOREACH(DocumentView* view, visibleViews) {
+	Q_FOREACH(DocumentView* view, d->mItems) {
 		QRect rect;
 		rect.setLeft(col * viewWidth);
 		rect.setTop(row * viewHeight);
@@ -148,6 +138,7 @@ void DocumentViewContainer::updateLayout() {
 		rect.setHeight(viewHeight);
 
 		view->setGeometry(rect);
+		view->show();
 
 		++col;
 		if (col == colCount) {

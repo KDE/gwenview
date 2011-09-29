@@ -592,7 +592,6 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 		}
 		DocumentView* view = d->createDocumentView();
 		view->openUrl(url);
-		view->show();
 	}
 
 	// Init views

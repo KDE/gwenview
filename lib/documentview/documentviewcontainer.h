@@ -49,7 +49,6 @@ public:
 	void removeView(DocumentView* view);
 
 protected:
-	bool eventFilter(QObject*, QEvent*);
 	void showEvent(QShowEvent*);
 	void resizeEvent(QResizeEvent*);
 
