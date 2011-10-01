@@ -30,9 +30,43 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QWidget>
 
+class QPropertyAnimation;
+
 namespace Gwenview {
 
 class DocumentView;
+class ViewItem;
+
+/**
+ * Draws a scaled screenshot of a widget. Faster than drawing the actual widget
+ * when animating.
+ */
+class Placeholder : public QWidget {
+	Q_OBJECT
+	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
+public:
+	Placeholder(ViewItem* item, QWidget* parent);
+	void animate(QPropertyAnimation*);
+
+	Q_INVOKABLE qreal opacity() const;
+
+public Q_SLOTS:
+	void setOpacity(qreal);
+
+Q_SIGNALS:
+	void animationFinished(ViewItem*);
+
+protected:
+	void paintEvent(QPaintEvent*);
+
+private:
+	ViewItem* mViewItem;
+	QPixmap mPixmap;
+	qreal mOpacity;
+
+private Q_SLOTS:
+	void emitAnimationFinished();
+};
 
 class DocumentViewContainerPrivate;
 /**
@@ -46,6 +80,10 @@ public:
 	~DocumentViewContainer();
 
 	void addView(DocumentView* view);
+
+	/**
+	 * Note: this method takes ownership of the view and will delete it
+	 */
 	void removeView(DocumentView* view);
 
 protected:
@@ -54,6 +92,7 @@ protected:
 
 private Q_SLOTS:
 	void updateLayout();
+	void slotItemAnimationFinished(ViewItem*);
 
 private:
 	DocumentViewContainerPrivate* const d;

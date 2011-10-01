@@ -119,9 +119,10 @@ struct ImageViewPrivate {
 		}
 
 		mAlternateBuffer = QPixmap(size);
+		mAlternateBuffer.fill(Qt::transparent);
 		QPainter painter(&mAlternateBuffer);
-		QColor bgColor = mViewport->palette().color(mViewport->backgroundRole());
-		painter.fillRect(mAlternateBuffer.rect(), bgColor);
+		//painter.setCompositionMode(QPainter::CompositionMode_Source);
+		//painter.fillRect(mAlternateBuffer.rect(), Qt::transparent);
 		painter.drawPixmap(0, 0, mCurrentBuffer);
 		qSwap(mAlternateBuffer, mCurrentBuffer);
 
@@ -187,6 +188,8 @@ ImageView::ImageView(QWidget* parent)
 : QAbstractScrollArea(parent)
 , d(new ImageViewPrivate)
 {
+	setAttribute(Qt::WA_NoSystemBackground);
+
 	d->mAlphaBackgroundMode = AlphaBackgroundCheckBoard;
 	d->mAlphaBackgroundColor = Qt::black;
 
@@ -195,8 +198,9 @@ ImageView::ImageView(QWidget* parent)
 	d->mZoomToFit = true;
 	d->createBackgroundTexture();
 	setFrameShape(QFrame::NoFrame);
-	setBackgroundRole(QPalette::Base);
+	//setBackgroundRole(QPalette::Base);
 	d->mViewport = new QWidget();
+	d->mViewport->setAttribute(Qt::WA_NoSystemBackground);
 	setViewport(d->mViewport);
 	d->mViewport->setMouseTracking(true);
 	horizontalScrollBar()->setSingleStep(16);
@@ -552,11 +556,11 @@ void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const 
 		// continue to show the previous image. If we cleared the borders earlier
 		// we could end up clearing the borders on the previous image, leading to
 		// a temporary cropped result
-		QColor bgColor = d->mViewport->palette().color(d->mViewport->backgroundRole());
 		QRegion region = d->mCurrentBuffer.rect();
 		region -= QRect(imageOffset(), d->mDocument->size() * d->mZoom);
+		painter.setCompositionMode(QPainter::CompositionMode_Source);
 		Q_FOREACH(const QRect& rect, region.rects()) {
-			painter.fillRect(rect, bgColor);
+			painter.fillRect(rect, Qt::transparent);
 		}
 		/*
 		// Debug rects

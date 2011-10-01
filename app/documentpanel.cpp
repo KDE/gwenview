@@ -256,10 +256,9 @@ struct DocumentPanelPrivate {
 		return view;
 	}
 
-	void destroyDocumentView(DocumentView* view) {
+	void removeDocumentView(DocumentView* view) {
 		mDocumentViewContainer->removeView(view);
 		mDocumentViews.removeOne(view);
-		view->deleteLater();
 	}
 
 	void setupStatusBar() {
@@ -580,7 +579,7 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 			urls.remove(url);
 		} else {
 			// view url is not interesting, drop it
-			d->destroyDocumentView(view);
+			d->removeDocumentView(view);
 		}
 	}
 
