@@ -91,7 +91,9 @@ Placeholder::Placeholder(ViewItem* item, QWidget* parent)
 {
 	setAttribute(Qt::WA_NoSystemBackground);
 	setGeometry(item->view()->geometry());
-	mPixmap = QPixmap::grabWidget(item->view());
+	mPixmap = QPixmap(size());
+	mPixmap.fill(Qt::transparent);
+	mViewItem->view()->render(&mPixmap, QPoint(), QRegion(), QWidget::DrawChildren);
 }
 
 void Placeholder::animate(QPropertyAnimation* anim) {
@@ -107,7 +109,6 @@ void Placeholder::animate(QPropertyAnimation* anim) {
 void Placeholder::paintEvent(QPaintEvent*) {
 	QPainter painter(this);
 	painter.setOpacity(mOpacity);
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	QPixmap pix = mPixmap.scaled(size(), Qt::KeepAspectRatio);
 	painter.drawPixmap((width() - pix.width()) / 2, (height() - pix.height())/ 2, pix);
 }

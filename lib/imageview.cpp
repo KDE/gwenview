@@ -340,10 +340,8 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
 
-	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	painter.drawPixmap(0, 0, d->mCurrentBuffer);
 
-	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 	if (d->mTool) {
 		d->mTool->paint(&painter);
 	}
