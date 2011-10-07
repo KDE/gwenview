@@ -121,8 +121,6 @@ struct ImageViewPrivate {
 		mAlternateBuffer = QPixmap(size);
 		mAlternateBuffer.fill(Qt::transparent);
 		QPainter painter(&mAlternateBuffer);
-		//painter.setCompositionMode(QPainter::CompositionMode_Source);
-		//painter.fillRect(mAlternateBuffer.rect(), Qt::transparent);
 		painter.drawPixmap(0, 0, mCurrentBuffer);
 		qSwap(mAlternateBuffer, mCurrentBuffer);
 
