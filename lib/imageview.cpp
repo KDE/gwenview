@@ -118,7 +118,7 @@ struct ImageViewPrivate {
 	}
 
 	void createBuffer() {
-		QSize size = mView->size();
+		QSize size = visibleImageSize();
 		if (size == mCurrentBuffer.size()) {
 			return;
 		}
@@ -352,11 +352,13 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	painter.setClipRect(event->rect());
 	painter.setOpacity(d->mOpacity);
 
+	QSize viewportSize = d->mViewport->size();
+
 	QSize bufferSize = d->mCurrentBuffer.size();
-	bufferSize.scale(size(), Qt::KeepAspectRatio);
+	bufferSize.scale(viewportSize, Qt::KeepAspectRatio);
 	painter.drawPixmap(
-		(width() - bufferSize.width()) / 2,
-		(height() - bufferSize.height()) / 2,
+		(viewportSize.width() - bufferSize.width()) / 2,
+		(viewportSize.height() - bufferSize.height()) / 2,
 		bufferSize.width(),
 		bufferSize.height(),
 		d->mCurrentBuffer);
@@ -559,9 +561,8 @@ void ImageView::scrollContentsBy(int dx, int dy) {
 
 void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
 	LOG("");
-	QPoint offset = imageOffset();
-	int viewportLeft = offset.x() + zoomedImageLeft - d->hScroll();
-	int viewportTop = offset.y() + zoomedImageTop - d->vScroll();
+	int viewportLeft = zoomedImageLeft - d->hScroll();
+	int viewportTop = zoomedImageTop - d->vScroll();
 
 	{
 		QPainter painter(&d->mCurrentBuffer);
@@ -574,18 +575,6 @@ void ImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const 
 			painter.setCompositionMode(QPainter::CompositionMode_Source);
 		}
 		painter.drawImage(viewportLeft, viewportTop, image);
-
-		// Clear borders. We do it here which is quite late, but this way we ensure
-		// borders are not cleared until the new image is ready. Meanwhile we
-		// continue to show the previous image. If we cleared the borders earlier
-		// we could end up clearing the borders on the previous image, leading to
-		// a temporary cropped result
-		QRegion region = d->mCurrentBuffer.rect();
-		region -= QRect(imageOffset(), d->mDocument->size() * d->mZoom);
-		painter.setCompositionMode(QPainter::CompositionMode_Source);
-		Q_FOREACH(const QRect& rect, region.rects()) {
-			painter.fillRect(rect, Qt::transparent);
-		}
 		/*
 		// Debug rects
 		QPen pen(Qt::red);
