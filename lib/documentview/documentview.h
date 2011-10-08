@@ -51,6 +51,7 @@ class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
 	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
+	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
 	enum {
 		MaximumZoom = 16
@@ -96,6 +97,10 @@ public:
 	bool zoomToFit() const;
 
 	QPoint position() const;
+
+	qreal opacity() const;
+
+	void setOpacity(qreal value);
 
 	/**
 	 * Returns the ImageView of the current adapter, if it has one

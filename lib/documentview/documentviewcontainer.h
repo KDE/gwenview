@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Qt
-#include <QPointer>
 #include <QWidget>
 
 class QPropertyAnimation;
@@ -37,54 +36,29 @@ namespace Gwenview {
 
 class DocumentView;
 class DocumentViewContainer;
-class Placeholder;
 class ViewItem;
 
 class ViewItem : public QObject {
+	Q_OBJECT
 public:
 	ViewItem(DocumentView* view, DocumentViewContainer* container);
 	~ViewItem();
-	Placeholder* createPlaceholder();
 	DocumentView* view() const { return mView; }
-	Placeholder* placeholder() const { return mPlaceholder; }
+
+	void moveTo(const QRect&);
+	void fadeIn();
+	void fadeOut();
+
+private Q_SLOTS:
+	void slotAnimationFinished();
 
 private:
 	Q_DISABLE_COPY(ViewItem)
 
-	DocumentView* mView;
-	QPointer<Placeholder> mPlaceholder;
-	DocumentViewContainer* mContainer;
-};
-
-/**
- * Draws a scaled screenshot of a widget. Faster than drawing the actual widget
- * when animating.
- */
-class Placeholder : public QWidget {
-	Q_OBJECT
-	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
-public:
-	Placeholder(ViewItem* item, QWidget* parent);
 	void animate(QPropertyAnimation*);
 
-	Q_INVOKABLE qreal opacity() const;
-
-public Q_SLOTS:
-	void setOpacity(qreal);
-
-Q_SIGNALS:
-	void animationFinished(ViewItem*);
-
-protected:
-	void paintEvent(QPaintEvent*);
-
-private:
-	ViewItem* mViewItem;
-	QPixmap mPixmap;
-	qreal mOpacity;
-
-private Q_SLOTS:
-	void emitAnimationFinished();
+	DocumentView* mView;
+	DocumentViewContainer* mContainer;
 };
 
 class DocumentViewContainerPrivate;
@@ -111,10 +85,11 @@ protected:
 
 private Q_SLOTS:
 	void updateLayout();
-	void slotItemAnimationFinished(ViewItem*);
 
 private:
+	friend class ViewItem;
 	DocumentViewContainerPrivate* const d;
+	void onItemAnimationFinished(ViewItem*);
 };
 
 

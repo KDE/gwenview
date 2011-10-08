@@ -565,6 +565,14 @@ qreal DocumentView::zoom() const {
 	return d->mAdapter->zoom();
 }
 
+qreal DocumentView::opacity() const {
+	return d->mAdapter->opacity();
+}
+
+void DocumentView::setOpacity(qreal value) {
+	d->mAdapter->setOpacity(value);
+	update();
+}
 
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
@@ -599,6 +607,7 @@ void DocumentView::paintEvent(QPaintEvent* event) {
 	}
 	QPainter painter(this);
 	if (d->mCurrent) {
+		painter.setOpacity(d->mAdapter->opacity());
 		painter.setBrush(Qt::NoBrush);
 		painter.setPen(QPen(palette().highlight().color(), 2));
 		painter.setRenderHint(QPainter::Antialiasing);

@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QEvent>
 #include <QPainter>
-#include <QPointer>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QWidget>
@@ -45,69 +44,47 @@ namespace Gwenview {
 ViewItem::ViewItem(DocumentView* view, DocumentViewContainer* container)
 : QObject(container)
 , mView(view)
-, mPlaceholder(0)
 , mContainer(container)
 {}
 
 ViewItem::~ViewItem() {
-	delete mPlaceholder;
 }
 
-Placeholder* ViewItem::createPlaceholder() {
-	if (mPlaceholder) {
-		delete mPlaceholder;
-	}
-	mPlaceholder = new Placeholder(this, mContainer);
-	QObject::connect(mPlaceholder, SIGNAL(animationFinished(ViewItem*)),
-		mContainer, SLOT(slotItemAnimationFinished(ViewItem*))
-	);
-	return mPlaceholder;
+void ViewItem::moveTo(const QRect& rect) {
+	QPropertyAnimation* anim = new QPropertyAnimation(mView, "geometry");
+	anim->setStartValue(mView->geometry());
+	anim->setEndValue(rect);
+	animate(anim);
+}
+
+void ViewItem::fadeIn() {
+	mView->setOpacity(0);
+	mView->show();
+	QPropertyAnimation* anim = new QPropertyAnimation(mView, "opacity");
+	anim->setStartValue(0.);
+	anim->setEndValue(1.);
+	animate(anim);
+}
+
+void ViewItem::fadeOut() {
+	QPropertyAnimation* anim = new QPropertyAnimation(mView, "opacity");
+	anim->setStartValue(1.);
+	anim->setEndValue(0.);
+	animate(anim);
+}
+
+void ViewItem::animate(QPropertyAnimation* anim) {
+	connect(anim, SIGNAL(finished()),
+		SLOT(slotAnimationFinished()));
+	anim->setDuration(500);
+	anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void ViewItem::slotAnimationFinished() {
+	mContainer->onItemAnimationFinished(this);
 }
 
 typedef QSet<ViewItem*> ViewItemSet;
-
-//// Placeholder ////
-Placeholder::Placeholder(ViewItem* item, QWidget* parent)
-: QWidget(parent)
-, mViewItem(item)
-, mOpacity(1)
-{
-	setAttribute(Qt::WA_NoSystemBackground);
-	setGeometry(item->view()->geometry());
-	mPixmap = QPixmap(size());
-	mPixmap.fill(Qt::transparent);
-	mViewItem->view()->render(&mPixmap, QPoint(), QRegion(), QWidget::DrawChildren);
-}
-
-void Placeholder::animate(QPropertyAnimation* anim) {
-	connect(anim, SIGNAL(finished()),
-		SLOT(emitAnimationFinished()));
-	anim->setDuration(500);
-	anim->start(QAbstractAnimation::DeleteWhenStopped);
-	mViewItem->view()->hide();
-	raise();
-	show();
-}
-
-void Placeholder::paintEvent(QPaintEvent*) {
-	QPainter painter(this);
-	painter.setOpacity(mOpacity);
-	QPixmap pix = mPixmap.scaled(size(), Qt::KeepAspectRatio);
-	painter.drawPixmap((width() - pix.width()) / 2, (height() - pix.height())/ 2, pix);
-}
-
-void Placeholder::emitAnimationFinished() {
-	animationFinished(mViewItem);
-}
-
-qreal Placeholder::opacity() const {
-	return mOpacity;
-}
-
-void Placeholder::setOpacity(qreal opacity) {
-	mOpacity = opacity;
-	update();
-}
 
 //// DocumentViewContainer ////
 struct DocumentViewContainerPrivate {
@@ -119,31 +96,6 @@ struct DocumentViewContainerPrivate {
 
 	void scheduleLayoutUpdate() {
 		mLayoutUpdateTimer->start();
-	}
-
-	void moveView(ViewItem* item, const QRect& rect) {
-		Placeholder* holder = item->createPlaceholder();
-		QPropertyAnimation* anim = new QPropertyAnimation(holder, "geometry");
-		anim->setStartValue(holder->geometry());
-		anim->setEndValue(rect);
-		holder->animate(anim);
-	}
-
-	void fadeInView(ViewItem* item) {
-		Placeholder* holder = item->createPlaceholder();
-		holder->setOpacity(0);
-		QPropertyAnimation* anim = new QPropertyAnimation(holder, "opacity");
-		anim->setStartValue(0.);
-		anim->setEndValue(1.);
-		holder->animate(anim);
-	}
-
-	void fadeOutView(ViewItem* item) {
-		Placeholder* holder = item->createPlaceholder();
-		QPropertyAnimation* anim = new QPropertyAnimation(holder, "opacity");
-		anim->setStartValue(1.);
-		anim->setEndValue(0.);
-		holder->animate(anim);
 	}
 
 	bool removeFromSet(DocumentView* view, ViewItemSet* set) {
@@ -254,11 +206,11 @@ void DocumentViewContainer::updateLayout() {
 
 			if (d->mViewItems.contains(item)) {
 				if (rect != item->view()->geometry()) {
-					d->moveView(item, rect);
+					item->moveTo(rect);
 				}
 			} else {
 				item->view()->setGeometry(rect);
-				d->fadeInView(item);
+				item->fadeIn();;
 			}
 
 			++col;
@@ -270,11 +222,11 @@ void DocumentViewContainer::updateLayout() {
 	}
 
 	Q_FOREACH(ViewItem* item, d->mRemovedViewItems) {
-		d->fadeOutView(item);
+		item->fadeOut();
 	}
 }
 
-void DocumentViewContainer::slotItemAnimationFinished(ViewItem* item) {
+void DocumentViewContainer::onItemAnimationFinished(ViewItem* item) {
 	if (d->mRemovedViewItems.contains(item)) {
 		d->mRemovedViewItems.remove(item);
 		delete item->view();
@@ -285,9 +237,6 @@ void DocumentViewContainer::slotItemAnimationFinished(ViewItem* item) {
 		d->mAddedViewItems.remove(item);
 		d->mViewItems.insert(item);
 	}
-	item->view()->setGeometry(item->placeholder()->geometry());
-	item->view()->show();
-	delete item->placeholder();
 }
 
 } // namespace
