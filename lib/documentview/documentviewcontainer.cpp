@@ -42,44 +42,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 //// ViewItem /////
-class ViewItem {
-public:
-	ViewItem(DocumentView* view, DocumentViewContainer* container)
-	: mView(view)
-	, mPlaceholder(0)
-	, mContainer(container)
-	{}
+ViewItem::ViewItem(DocumentView* view, DocumentViewContainer* container)
+: mView(view)
+, mPlaceholder(0)
+, mContainer(container)
+{}
 
-	~ViewItem() {
+ViewItem::~ViewItem() {
+	delete mPlaceholder;
+}
+
+Placeholder* ViewItem::createPlaceholder() {
+	if (mPlaceholder) {
 		delete mPlaceholder;
 	}
-
-	Placeholder* createPlaceholder() {
-		if (mPlaceholder) {
-			delete mPlaceholder;
-		}
-		mPlaceholder = new Placeholder(this, mContainer);
-		QObject::connect(mPlaceholder, SIGNAL(animationFinished(ViewItem*)),
-			mContainer, SLOT(slotItemAnimationFinished(ViewItem*))
-		);
-		return mPlaceholder;
-	}
-
-	DocumentView* view() const {
-		return mView;
-	}
-
-	Placeholder* placeholder() const {
-		return mPlaceholder;
-	}
-
-private:
-	Q_DISABLE_COPY(ViewItem)
-
-	DocumentView* mView;
-	QPointer<Placeholder> mPlaceholder;
-	DocumentViewContainer* mContainer;
-};
+	mPlaceholder = new Placeholder(this, mContainer);
+	QObject::connect(mPlaceholder, SIGNAL(animationFinished(ViewItem*)),
+		mContainer, SLOT(slotItemAnimationFinished(ViewItem*))
+	);
+	return mPlaceholder;
+}
 
 typedef QSet<ViewItem*> ViewItemSet;
 

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Qt
+#include <QPointer>
 #include <QWidget>
 
 class QPropertyAnimation;
@@ -35,7 +36,25 @@ class QPropertyAnimation;
 namespace Gwenview {
 
 class DocumentView;
+class DocumentViewContainer;
+class Placeholder;
 class ViewItem;
+
+class ViewItem {
+public:
+	ViewItem(DocumentView* view, DocumentViewContainer* container);
+	~ViewItem();
+	Placeholder* createPlaceholder();
+	DocumentView* view() const { return mView; }
+	Placeholder* placeholder() const { return mPlaceholder; }
+
+private:
+	Q_DISABLE_COPY(ViewItem)
+
+	DocumentView* mView;
+	QPointer<Placeholder> mPlaceholder;
+	DocumentViewContainer* mContainer;
+};
 
 /**
  * Draws a scaled screenshot of a widget. Faster than drawing the actual widget
