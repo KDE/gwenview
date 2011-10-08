@@ -43,7 +43,8 @@ namespace Gwenview {
 
 //// ViewItem /////
 ViewItem::ViewItem(DocumentView* view, DocumentViewContainer* container)
-: mView(view)
+: QObject(container)
+, mView(view)
 , mPlaceholder(0)
 , mContainer(container)
 {}

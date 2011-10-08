@@ -40,7 +40,7 @@ class DocumentViewContainer;
 class Placeholder;
 class ViewItem;
 
-class ViewItem {
+class ViewItem : public QObject {
 public:
 	ViewItem(DocumentView* view, DocumentViewContainer* container);
 	~ViewItem();
