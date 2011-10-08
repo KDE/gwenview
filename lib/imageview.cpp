@@ -355,12 +355,18 @@ void ImageView::paintEvent(QPaintEvent* event) {
 	QSize viewportSize = d->mViewport->size();
 
 	QSize bufferSize = d->mCurrentBuffer.size();
-	bufferSize.scale(viewportSize, Qt::KeepAspectRatio);
+
+	QSize paintSize;
+	if (d->mZoomToFit) {
+		paintSize = d->mDocument->size() * computeZoomToFit();
+	} else {
+		paintSize = bufferSize;
+	}
 	painter.drawPixmap(
-		(viewportSize.width() - bufferSize.width()) / 2,
-		(viewportSize.height() - bufferSize.height()) / 2,
-		bufferSize.width(),
-		bufferSize.height(),
+		(viewportSize.width() - paintSize.width()) / 2,
+		(viewportSize.height() - paintSize.height()) / 2,
+		paintSize.width(),
+		paintSize.height(),
 		d->mCurrentBuffer);
 
 	if (d->mTool) {
