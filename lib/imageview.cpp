@@ -130,8 +130,10 @@ struct ImageViewPrivate {
 
 		mAlternateBuffer = QPixmap(size);
 		mAlternateBuffer.fill(Qt::transparent);
-		QPainter painter(&mAlternateBuffer);
-		painter.drawPixmap(0, 0, mCurrentBuffer);
+		{
+			QPainter painter(&mAlternateBuffer);
+			painter.drawPixmap(0, 0, mCurrentBuffer);
+		}
 		qSwap(mAlternateBuffer, mCurrentBuffer);
 
 		mAlternateBuffer = QPixmap();
