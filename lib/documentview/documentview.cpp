@@ -65,6 +65,7 @@ namespace Gwenview {
 static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
+static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
@@ -79,7 +80,7 @@ struct DocumentViewPrivate {
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
 	bool mCurrent;
-
+	bool mCompareMode;
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
 		Q_ASSERT(adapter);
@@ -96,7 +97,9 @@ struct DocumentViewPrivate {
 		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
 			that, SLOT(zoomOut(QPoint)) );
 
-		that->layout()->addWidget(adapter->widget());
+		adapter->widget()->setParent(that);
+		adapter->widget()->show();
+		resizeAdapterWidget();
 
 		if (adapter->canZoom()) {
 			QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
@@ -266,6 +269,13 @@ struct DocumentViewPrivate {
 		mLoadingIndicator->hide();
 	}
 
+	void resizeAdapterWidget() {
+		QRect rect = that->rect();
+		if (mCompareMode) {
+			rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
+		}
+		mAdapter->widget()->setGeometry(rect);
+	}
 
 	bool adapterMousePressEventFilter(QMouseEvent* event) {
 		if (mAdapter->canZoom()) {
@@ -348,12 +358,11 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->setMargin(0);
 	d->setupZoomCursor();
 	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 	d->mCurrent = false;
+	d->mCompareMode = false;
 }
 
 
@@ -602,7 +611,7 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 
 void DocumentView::paintEvent(QPaintEvent* event) {
 	QWidget::paintEvent(event);
-	if (layout()->margin() == 0) {
+	if (!d->mCompareMode) {
 		return;
 	}
 	QPainter painter(this);
@@ -634,7 +643,8 @@ qreal DocumentView::minimumZoom() const {
 
 
 void DocumentView::setCompareMode(bool compare) {
-	layout()->setMargin(compare ? 4 : 0);
+	d->mCompareMode = compare;
+	d->resizeAdapterWidget();
 	if (compare) {
 		d->mHud->show();
 		d->mHud->raise();
@@ -710,5 +720,9 @@ void DocumentView::emitHudTrashClicked() {
 	hudTrashClicked(this);
 }
 
+void DocumentView::resizeEvent(QResizeEvent* event) {
+	QWidget::resizeEvent(event);
+	d->resizeAdapterWidget();
+}
 
 } // namespace

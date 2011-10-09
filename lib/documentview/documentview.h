@@ -149,6 +149,7 @@ protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
 	virtual void paintEvent(QPaintEvent*);
+	void resizeEvent(QResizeEvent* event);
 
 private Q_SLOTS:
 	void finishOpenUrl();
