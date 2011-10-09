@@ -84,9 +84,13 @@ struct DocumentViewPrivate {
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
 		Q_ASSERT(adapter);
+		qreal opacity = mAdapter.data() ? mAdapter->opacity() : -1;
 		mAdapter.reset(adapter);
 
 		adapter->loadConfig();
+		if (opacity >= 0) {
+			adapter->setOpacity(opacity);
+		}
 
 		QObject::connect(adapter, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
