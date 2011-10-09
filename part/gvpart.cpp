@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
+#include "../lib/documentview/documentviewcontroller.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
 #include "../lib/version.h"
@@ -70,6 +71,10 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 	mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mDocumentView, SIGNAL(customContextMenuRequested(QPoint)),
 		SLOT(showContextMenu()) );
+
+	// Necessary to have zoom actions
+	DocumentViewController* documentViewController = new DocumentViewController(actionCollection(), this);
+	documentViewController->setView(mDocumentView);
 
 	KAction* action = new KAction(actionCollection());
 	action->setText(i18nc("@action", "Properties"));
