@@ -160,6 +160,9 @@ void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 }
 
 void DocumentViewContainer::updateLayout() {
+	// Stop update timer: this is useful if updateLayout() is called directly
+	// and not through scheduleLayoutUpdate()
+	d->mLayoutUpdateTimer->stop();
 	ViewItemSet items = d->mViewItems | d->mAddedViewItems;
 
 	if (!items.isEmpty()) {

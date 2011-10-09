@@ -79,12 +79,12 @@ public:
 	 */
 	void removeView(DocumentView* view);
 
+public Q_SLOTS:
+	void updateLayout();
+
 protected:
 	void showEvent(QShowEvent*);
 	void resizeEvent(QResizeEvent*);
-
-private Q_SLOTS:
-	void updateLayout();
 
 private:
 	friend class ViewItem;

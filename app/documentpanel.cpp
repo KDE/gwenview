@@ -584,13 +584,15 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 	}
 
 	// Create view for remaining urls
+	typedef QPair<DocumentView*, KUrl> ViewUrlPair;
+	QList<ViewUrlPair> urlForViewList;
 	Q_FOREACH(const KUrl& url, urls) {
 		if (d->mDocumentViews.count() >= MaxViewCount) {
 			kWarning() << "Too many documents to show";
 			break;
 		}
 		DocumentView* view = d->createDocumentView();
-		view->openUrl(url);
+		urlForViewList << qMakePair(view, url);
 	}
 
 	// Init views
@@ -610,6 +612,14 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 	} else {
 		d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
 		d->mSynchronizer->setActive(false);
+	}
+
+	d->mDocumentViewContainer->updateLayout();
+
+	// Load urls for new views. Do it only now because the view must have the
+	// correct size before it starts loading its url
+	Q_FOREACH(const ViewUrlPair& pair, urlForViewList) {
+		pair.first->openUrl(pair.second);
 	}
 }
 
