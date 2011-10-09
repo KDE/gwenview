@@ -595,6 +595,15 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 		urlForViewList << qMakePair(view, url);
 	}
 
+	d->mDocumentViewContainer->updateLayout();
+
+	// Load urls for new views. Do it only now because the view must have the
+	// correct size before it starts loading its url. Do not do it later because
+	// view->url() needs to be set for the next loop.
+	Q_FOREACH(const ViewUrlPair& pair, urlForViewList) {
+		pair.first->openUrl(pair.second);
+	}
+
 	// Init views
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		view->setCompareMode(d->mCompareMode);
@@ -612,14 +621,6 @@ void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
 	} else {
 		d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
 		d->mSynchronizer->setActive(false);
-	}
-
-	d->mDocumentViewContainer->updateLayout();
-
-	// Load urls for new views. Do it only now because the view must have the
-	// correct size before it starts loading its url
-	Q_FOREACH(const ViewUrlPair& pair, urlForViewList) {
-		pair.first->openUrl(pair.second);
 	}
 }
 
