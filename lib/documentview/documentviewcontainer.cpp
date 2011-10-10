@@ -30,8 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
-#include <QPainter>
-#include <QPropertyAnimation>
 #include <QTimer>
 #include <QWidget>
 
@@ -40,70 +38,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-//// ViewItem /////
-ViewItem::ViewItem(DocumentView* view, DocumentViewContainer* container)
-: QObject(container)
-, mView(view)
-, mContainer(container)
-{}
+typedef QSet<DocumentView*> DocumentViewSet;
 
-ViewItem::~ViewItem() {
-}
-
-void ViewItem::moveTo(const QRect& rect) {
-	QPropertyAnimation* anim = new QPropertyAnimation(mView, "geometry");
-	anim->setStartValue(mView->geometry());
-	anim->setEndValue(rect);
-	animate(anim);
-}
-
-void ViewItem::fadeIn() {
-	mView->setOpacity(0);
-	mView->show();
-	QPropertyAnimation* anim = new QPropertyAnimation(mView, "opacity");
-	anim->setStartValue(0.);
-	anim->setEndValue(1.);
-	animate(anim);
-}
-
-void ViewItem::fadeOut() {
-	QPropertyAnimation* anim = new QPropertyAnimation(mView, "opacity");
-	anim->setStartValue(1.);
-	anim->setEndValue(0.);
-	animate(anim);
-}
-
-void ViewItem::animate(QPropertyAnimation* anim) {
-	connect(anim, SIGNAL(finished()),
-		SLOT(slotAnimationFinished()));
-	anim->setDuration(500);
-	anim->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void ViewItem::slotAnimationFinished() {
-	mContainer->onItemAnimationFinished(this);
-}
-
-typedef QSet<ViewItem*> ViewItemSet;
-
-//// DocumentViewContainer ////
 struct DocumentViewContainerPrivate {
 	DocumentViewContainer* q;
-	ViewItemSet mViewItems;
-	ViewItemSet mAddedViewItems;
-	ViewItemSet mRemovedViewItems;
+	DocumentViewSet mViews;
+	DocumentViewSet mAddedViews;
+	DocumentViewSet mRemovedViews;
 	QTimer* mLayoutUpdateTimer;
 
 	void scheduleLayoutUpdate() {
 		mLayoutUpdateTimer->start();
 	}
 
-	bool removeFromSet(DocumentView* view, ViewItemSet* set) {
-		ViewItemSet::Iterator it = set->begin(), end = set->end();
+	bool removeFromSet(DocumentView* view, DocumentViewSet* set) {
+		DocumentViewSet::Iterator it = set->begin(), end = set->end();
 		for (; it != end; ++it) {
-			if ((*it)->view() == view) {
+			if (*it == view) {
 				set->erase(it);
-				mRemovedViewItems << *it;
+				mRemovedViews << *it;
 				scheduleLayoutUpdate();
 				return true;
 			}
@@ -132,17 +85,19 @@ DocumentViewContainer::~DocumentViewContainer() {
 
 
 void DocumentViewContainer::addView(DocumentView* view) {
-	d->mAddedViewItems << new ViewItem(view, this);
+	d->mAddedViews << view;
 	view->setParent(this);
+	connect(view, SIGNAL(animationFinished(DocumentView*)),
+		SLOT(slotViewAnimationFinished(DocumentView*)));
 	d->scheduleLayoutUpdate();
 }
 
 
 void DocumentViewContainer::removeView(DocumentView* view) {
-	if (d->removeFromSet(view, &d->mViewItems)) {
+	if (d->removeFromSet(view, &d->mViews)) {
 		return;
 	}
-	if (d->removeFromSet(view, &d->mAddedViewItems)) {
+	if (d->removeFromSet(view, &d->mAddedViews)) {
 		return;
 	}
 }
@@ -163,12 +118,12 @@ void DocumentViewContainer::updateLayout() {
 	// Stop update timer: this is useful if updateLayout() is called directly
 	// and not through scheduleLayoutUpdate()
 	d->mLayoutUpdateTimer->stop();
-	ViewItemSet items = d->mViewItems | d->mAddedViewItems;
+	DocumentViewSet views = d->mViews | d->mAddedViews;
 
-	if (!items.isEmpty()) {
+	if (!views.isEmpty()) {
 		// Compute column count
 		int colCount;
-		switch (items.count()) {
+		switch (views.count()) {
 		case 1:
 			colCount = 1;
 			break;
@@ -192,7 +147,7 @@ void DocumentViewContainer::updateLayout() {
 			break;
 		}
 
-		int rowCount = qCeil(items.count() / qreal(colCount));
+		int rowCount = qCeil(views.count() / qreal(colCount));
 		Q_ASSERT(rowCount > 0);
 		int viewWidth = width() / colCount;
 		int viewHeight = height() / rowCount;
@@ -200,20 +155,20 @@ void DocumentViewContainer::updateLayout() {
 		int col = 0;
 		int row = 0;
 
-		Q_FOREACH(ViewItem* item, items) {
+		Q_FOREACH(DocumentView* view, views) {
 			QRect rect;
 			rect.setLeft(col * viewWidth);
 			rect.setTop(row * viewHeight);
 			rect.setWidth(viewWidth);
 			rect.setHeight(viewHeight);
 
-			if (d->mViewItems.contains(item)) {
-				if (rect != item->view()->geometry()) {
-					item->moveTo(rect);
+			if (d->mViews.contains(view)) {
+				if (rect != view->geometry()) {
+					view->moveTo(rect);
 				}
 			} else {
-				item->view()->setGeometry(rect);
-				item->fadeIn();;
+				view->setGeometry(rect);
+				view->fadeIn();;
 			}
 
 			++col;
@@ -224,21 +179,20 @@ void DocumentViewContainer::updateLayout() {
 		}
 	}
 
-	Q_FOREACH(ViewItem* item, d->mRemovedViewItems) {
-		item->fadeOut();
+	Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+		view->fadeOut();
 	}
 }
 
-void DocumentViewContainer::onItemAnimationFinished(ViewItem* item) {
-	if (d->mRemovedViewItems.contains(item)) {
-		d->mRemovedViewItems.remove(item);
-		delete item->view();
-		delete item;
+void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view) {
+	if (d->mRemovedViews.contains(view)) {
+		d->mRemovedViews.remove(view);
+		delete view;
 		return;
 	}
-	if (d->mAddedViewItems.contains(item)) {
-		d->mAddedViewItems.remove(item);
-		d->mViewItems.insert(item);
+	if (d->mAddedViews.contains(view)) {
+		d->mAddedViews.remove(view);
+		d->mViews.insert(view);
 	}
 }
 

@@ -107,6 +107,10 @@ public:
 	 */
 	ImageView* imageView() const;
 
+	void moveTo(const QRect&);
+	void fadeIn();
+	void fadeOut();
+
 public Q_SLOTS:
 	void setZoom(qreal);
 
@@ -145,6 +149,8 @@ Q_SIGNALS:
 	void hudTrashClicked(DocumentView*);
 	void hudDeselectClicked(DocumentView*);
 
+	void animationFinished(DocumentView*);
+
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
@@ -169,6 +175,8 @@ private Q_SLOTS:
 
 	void emitHudTrashClicked();
 	void emitHudDeselectClicked();
+
+	void slotAnimationFinished();
 
 private:
 	friend struct DocumentViewPrivate;

@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAbstractScrollArea>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -271,6 +272,13 @@ struct DocumentViewPrivate {
 			return;
 		}
 		mLoadingIndicator->hide();
+	}
+
+	void animate(QPropertyAnimation* anim) {
+		QObject::connect(anim, SIGNAL(finished()),
+			that, SLOT(slotAnimationFinished()));
+		anim->setDuration(500);
+		anim->start(QAbstractAnimation::DeleteWhenStopped);
 	}
 
 	void resizeAdapterWidget() {
@@ -728,5 +736,33 @@ void DocumentView::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 	d->resizeAdapterWidget();
 }
+
+void DocumentView::moveTo(const QRect& rect) {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
+	anim->setStartValue(geometry());
+	anim->setEndValue(rect);
+	d->animate(anim);
+}
+
+void DocumentView::fadeIn() {
+	setOpacity(0);
+	show();
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(0.);
+	anim->setEndValue(1.);
+	d->animate(anim);
+}
+
+void DocumentView::fadeOut() {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(1.);
+	anim->setEndValue(0.);
+	d->animate(anim);
+}
+
+void DocumentView::slotAnimationFinished() {
+	animationFinished(this);
+}
+
 
 } // namespace

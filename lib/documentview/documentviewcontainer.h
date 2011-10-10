@@ -30,36 +30,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QWidget>
 
-class QPropertyAnimation;
-
 namespace Gwenview {
 
 class DocumentView;
-class DocumentViewContainer;
-class ViewItem;
-
-class ViewItem : public QObject {
-	Q_OBJECT
-public:
-	ViewItem(DocumentView* view, DocumentViewContainer* container);
-	~ViewItem();
-	DocumentView* view() const { return mView; }
-
-	void moveTo(const QRect&);
-	void fadeIn();
-	void fadeOut();
-
-private Q_SLOTS:
-	void slotAnimationFinished();
-
-private:
-	Q_DISABLE_COPY(ViewItem)
-
-	void animate(QPropertyAnimation*);
-
-	DocumentView* mView;
-	DocumentViewContainer* mContainer;
-};
 
 class DocumentViewContainerPrivate;
 /**
@@ -89,7 +62,9 @@ protected:
 private:
 	friend class ViewItem;
 	DocumentViewContainerPrivate* const d;
-	void onItemAnimationFinished(ViewItem*);
+
+private Q_SLOTS:
+	void slotViewAnimationFinished(DocumentView*);
 };
 
 
