@@ -52,16 +52,14 @@ struct DocumentViewContainerPrivate {
 	}
 
 	bool removeFromSet(DocumentView* view, DocumentViewSet* set) {
-		DocumentViewSet::Iterator it = set->begin(), end = set->end();
-		for (; it != end; ++it) {
-			if (*it == view) {
-				set->erase(it);
-				mRemovedViews << *it;
-				scheduleLayoutUpdate();
-				return true;
-			}
+		DocumentViewSet::Iterator it = set->find(view);
+		if (it == set->end()) {
+			return false;
 		}
-		return false;
+		set->erase(it);
+		mRemovedViews << *it;
+		scheduleLayoutUpdate();
+		return true;
 	}
 };
 
@@ -97,9 +95,7 @@ void DocumentViewContainer::removeView(DocumentView* view) {
 	if (d->removeFromSet(view, &d->mViews)) {
 		return;
 	}
-	if (d->removeFromSet(view, &d->mAddedViews)) {
-		return;
-	}
+	d->removeFromSet(view, &d->mAddedViews);
 }
 
 
