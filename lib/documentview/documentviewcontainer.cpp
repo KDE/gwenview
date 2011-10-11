@@ -101,13 +101,13 @@ void DocumentViewContainer::removeView(DocumentView* view) {
 
 void DocumentViewContainer::showEvent(QShowEvent* event) {
 	QWidget::showEvent(event);
-	d->scheduleLayoutUpdate();
+	updateLayout();
 }
 
 
 void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
-	d->scheduleLayoutUpdate();
+	updateLayout();
 }
 
 void DocumentViewContainer::updateLayout() {
@@ -160,11 +160,18 @@ void DocumentViewContainer::updateLayout() {
 
 			if (d->mViews.contains(view)) {
 				if (rect != view->geometry()) {
-					view->moveTo(rect);
+					if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
+						// View moves because of a resize
+						view->moveTo(rect);
+					} else {
+						// View moves because the number of views changed,
+						// animate the change
+						view->moveToAnimated(rect);
+					}
 				}
 			} else {
 				view->setGeometry(rect);
-				view->fadeIn();;
+				view->fadeIn();
 			}
 
 			++col;

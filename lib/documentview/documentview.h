@@ -108,6 +108,7 @@ public:
 	ImageView* imageView() const;
 
 	void moveTo(const QRect&);
+	void moveToAnimated(const QRect&);
 	void fadeIn();
 	void fadeOut();
 

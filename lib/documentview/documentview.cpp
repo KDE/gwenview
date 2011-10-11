@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QScrollBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWeakPointer>
 
 // KDE
 #include <kdebug.h>
@@ -74,6 +75,7 @@ struct DocumentViewPrivate {
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
+	QWeakPointer<QPropertyAnimation> mMoveAnimation;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
@@ -738,10 +740,19 @@ void DocumentView::resizeEvent(QResizeEvent* event) {
 }
 
 void DocumentView::moveTo(const QRect& rect) {
+	if (d->mMoveAnimation) {
+		d->mMoveAnimation.data()->setEndValue(rect);
+	} else {
+		setGeometry(rect);
+	}
+}
+
+void DocumentView::moveToAnimated(const QRect& rect) {
 	QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
 	anim->setStartValue(geometry());
 	anim->setEndValue(rect);
 	d->animate(anim);
+	d->mMoveAnimation = anim;
 }
 
 void DocumentView::fadeIn() {
