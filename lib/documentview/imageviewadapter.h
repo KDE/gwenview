@@ -68,6 +68,10 @@ public:
 
 	virtual void setDocument(Document::Ptr);
 
+	virtual qreal opacity() const;
+
+	virtual void setOpacity(qreal value);
+
 	virtual ImageView* imageView() const;
 
 	virtual void loadConfig();

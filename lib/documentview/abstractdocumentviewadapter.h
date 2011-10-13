@@ -88,6 +88,9 @@ public:
 	virtual Document::Ptr document() const = 0;
 	virtual void setDocument(Document::Ptr) = 0;
 
+	virtual qreal opacity() const = 0;
+	virtual void setOpacity(qreal value) = 0;
+
 	virtual void loadConfig() {}
 
 protected:
@@ -139,6 +142,8 @@ public:
 	virtual void installEventFilterOnViewWidgets(QObject*) {}
 	virtual Document::Ptr document() const { return Document::Ptr(); }
 	virtual void setDocument(Document::Ptr) {}
+	virtual qreal opacity() const { return 1; }
+	virtual void setOpacity(qreal) {}
 };
 
 } // namespace

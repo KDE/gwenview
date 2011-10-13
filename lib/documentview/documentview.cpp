@@ -25,9 +25,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QAbstractScrollArea>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWeakPointer>
 
 // KDE
 #include <kdebug.h>
@@ -46,6 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -64,12 +67,15 @@ namespace Gwenview {
 static const qreal REAL_DELTA = 0.001;
 static const qreal MAXIMUM_ZOOM_VALUE = qreal(DocumentView::MaximumZoom);
 
+static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
+	HudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
+	QWeakPointer<QPropertyAnimation> mMoveAnimation;
 
 	KPixmapSequenceWidget* mLoadingIndicator;
 
@@ -77,13 +83,17 @@ struct DocumentViewPrivate {
 	QList<qreal> mZoomSnapValues;
 	Document::Ptr mDocument;
 	bool mCurrent;
-
+	bool mCompareMode;
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
 		Q_ASSERT(adapter);
+		qreal opacity = mAdapter.data() ? mAdapter->opacity() : -1;
 		mAdapter.reset(adapter);
 
 		adapter->loadConfig();
+		if (opacity >= 0) {
+			adapter->setOpacity(opacity);
+		}
 
 		QObject::connect(adapter, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
@@ -94,7 +104,9 @@ struct DocumentViewPrivate {
 		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
 			that, SLOT(zoomOut(QPoint)) );
 
-		that->layout()->addWidget(adapter->widget());
+		adapter->widget()->setParent(that);
+		adapter->widget()->show();
+		resizeAdapterWidget();
 
 		if (adapter->canZoom()) {
 			QObject::connect(adapter, SIGNAL(zoomChanged(qreal)),
@@ -150,6 +162,41 @@ struct DocumentViewPrivate {
 
 		WidgetFloater* floater = new WidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
+	}
+
+	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
+		QToolButton* button = new QToolButton;
+		if (showText) {
+			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+			button->setText(text);
+		} else {
+			button->setToolTip(text);
+		}
+		button->setIcon(SmallIcon(iconName));
+		return button;
+	}
+
+	void setupHud() {
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		layout->setMargin(0);
+		layout->setSpacing(4);
+		layout->addWidget(trashButton);
+		layout->addWidget(deselectButton);
+
+		mHud = new HudWidget;
+		mHud->init(content, HudWidget::OptionNone);
+		WidgetFloater* floater = new WidgetFloater(that);
+		floater->setChildWidget(mHud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		QObject::connect(trashButton, SIGNAL(clicked()), that, SLOT(emitHudTrashClicked()));
+		QObject::connect(deselectButton, SIGNAL(clicked()), that, SLOT(emitHudDeselectClicked()));
+
+		mHud->hide();
 	}
 
 	void updateCaption() {
@@ -229,6 +276,20 @@ struct DocumentViewPrivate {
 		mLoadingIndicator->hide();
 	}
 
+	void animate(QPropertyAnimation* anim) {
+		QObject::connect(anim, SIGNAL(finished()),
+			that, SLOT(slotAnimationFinished()));
+		anim->setDuration(500);
+		anim->start(QAbstractAnimation::DeleteWhenStopped);
+	}
+
+	void resizeAdapterWidget() {
+		QRect rect = that->rect();
+		if (mCompareMode) {
+			rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
+		}
+		mAdapter->widget()->setGeometry(rect);
+	}
 
 	bool adapterMousePressEventFilter(QMouseEvent* event) {
 		if (mAdapter->canZoom()) {
@@ -311,11 +372,11 @@ DocumentView::DocumentView(QWidget* parent)
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
-	QVBoxLayout* layout = new QVBoxLayout(this);
-	layout->setMargin(0);
 	d->setupZoomCursor();
+	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter(this));
 	d->mCurrent = false;
+	d->mCompareMode = false;
 }
 
 
@@ -527,6 +588,14 @@ qreal DocumentView::zoom() const {
 	return d->mAdapter->zoom();
 }
 
+qreal DocumentView::opacity() const {
+	return d->mAdapter->opacity();
+}
+
+void DocumentView::setOpacity(qreal value) {
+	d->mAdapter->setOpacity(value);
+	update();
+}
 
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
@@ -556,11 +625,12 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 
 void DocumentView::paintEvent(QPaintEvent* event) {
 	QWidget::paintEvent(event);
-	if (layout()->margin() == 0) {
+	if (!d->mCompareMode) {
 		return;
 	}
 	QPainter painter(this);
 	if (d->mCurrent) {
+		painter.setOpacity(d->mAdapter->opacity());
 		painter.setBrush(Qt::NoBrush);
 		painter.setPen(QPen(palette().highlight().color(), 2));
 		painter.setRenderHint(QPainter::Antialiasing);
@@ -587,7 +657,14 @@ qreal DocumentView::minimumZoom() const {
 
 
 void DocumentView::setCompareMode(bool compare) {
-	layout()->setMargin(compare ? 4 : 0);
+	d->mCompareMode = compare;
+	d->resizeAdapterWidget();
+	if (compare) {
+		d->mHud->show();
+		d->mHud->raise();
+	} else {
+		d->mHud->hide();
+	}
 }
 
 
@@ -647,6 +724,55 @@ Document::Ptr DocumentView::document() const {
 KUrl DocumentView::url() const {
 	Document::Ptr doc = d->mDocument;
 	return doc ? doc->url() : KUrl();
+}
+
+void DocumentView::emitHudDeselectClicked() {
+	hudDeselectClicked(this);
+}
+
+void DocumentView::emitHudTrashClicked() {
+	hudTrashClicked(this);
+}
+
+void DocumentView::resizeEvent(QResizeEvent* event) {
+	QWidget::resizeEvent(event);
+	d->resizeAdapterWidget();
+}
+
+void DocumentView::moveTo(const QRect& rect) {
+	if (d->mMoveAnimation) {
+		d->mMoveAnimation.data()->setEndValue(rect);
+	} else {
+		setGeometry(rect);
+	}
+}
+
+void DocumentView::moveToAnimated(const QRect& rect) {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "geometry");
+	anim->setStartValue(geometry());
+	anim->setEndValue(rect);
+	d->animate(anim);
+	d->mMoveAnimation = anim;
+}
+
+void DocumentView::fadeIn() {
+	setOpacity(0);
+	show();
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(0.);
+	anim->setEndValue(1.);
+	d->animate(anim);
+}
+
+void DocumentView::fadeOut() {
+	QPropertyAnimation* anim = new QPropertyAnimation(this, "opacity");
+	anim->setStartValue(1.);
+	anim->setEndValue(0.);
+	d->animate(anim);
+}
+
+void DocumentView::slotAnimationFinished() {
+	animationFinished(this);
 }
 
 

@@ -54,6 +54,7 @@ struct VideoViewAdapterPrivate {
 	QToolButton* mPlayPauseButton;
 
 	Document::Ptr mDocument;
+	qreal mOpacity;
 
 	void setupHud(QWidget* parent) {
 		// Create hud content
@@ -122,6 +123,7 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new VideoViewAdapterPrivate) {
 	d->q = this;
+	d->mOpacity = 1;
 	d->mMediaObject = new Phonon::MediaObject(this);
 	connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
@@ -186,6 +188,16 @@ void VideoViewAdapter::updatePlayPauseButton() {
 	} else {
 		d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
 	}
+}
+
+
+qreal VideoViewAdapter::opacity() const {
+	return d->mOpacity;
+}
+
+
+void VideoViewAdapter::setOpacity(qreal value) {
+	d->mOpacity = value;
 }
 
 

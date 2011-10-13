@@ -47,16 +47,24 @@ public:
 
 	void addView(DocumentView* view);
 
+	/**
+	 * Note: this method takes ownership of the view and will delete it
+	 */
+	void removeView(DocumentView* view);
+
+public Q_SLOTS:
+	void updateLayout();
+
 protected:
-	bool eventFilter(QObject*, QEvent*);
 	void showEvent(QShowEvent*);
 	void resizeEvent(QResizeEvent*);
 
-private Q_SLOTS:
-	void updateLayout();
-
 private:
+	friend class ViewItem;
 	DocumentViewContainerPrivate* const d;
+
+private Q_SLOTS:
+	void slotViewAnimationFinished(DocumentView*);
 };
 
 

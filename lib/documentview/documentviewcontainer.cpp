@@ -26,9 +26,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 #include <kdebug.h>
+#include <kurl.h>
 
 // Qt
 #include <QEvent>
+#include <QTimer>
 #include <QWidget>
 
 // libc
@@ -36,9 +38,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+typedef QSet<DocumentView*> DocumentViewSet;
+
 struct DocumentViewContainerPrivate {
 	DocumentViewContainer* q;
-	QList<DocumentView*> mItems;
+	DocumentViewSet mViews;
+	DocumentViewSet mAddedViews;
+	DocumentViewSet mRemovedViews;
+	QTimer* mLayoutUpdateTimer;
+
+	void scheduleLayoutUpdate() {
+		mLayoutUpdateTimer->start();
+	}
+
+	bool removeFromSet(DocumentView* view, DocumentViewSet* set) {
+		DocumentViewSet::Iterator it = set->find(view);
+		if (it == set->end()) {
+			return false;
+		}
+		set->erase(it);
+		mRemovedViews << *it;
+		scheduleLayoutUpdate();
+		return true;
+	}
 };
 
 
@@ -47,6 +69,11 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 , d(new DocumentViewContainerPrivate) {
 	d->q = this;
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	d->mLayoutUpdateTimer = new QTimer(this);
+	d->mLayoutUpdateTimer->setInterval(0);
+	d->mLayoutUpdateTimer->setSingleShot(true);
+	connect(d->mLayoutUpdateTimer, SIGNAL(timeout()), SLOT(updateLayout()));
 }
 
 
@@ -56,23 +83,19 @@ DocumentViewContainer::~DocumentViewContainer() {
 
 
 void DocumentViewContainer::addView(DocumentView* view) {
-	d->mItems << view;
+	d->mAddedViews << view;
 	view->setParent(this);
-	view->installEventFilter(this);
-	updateLayout();
+	connect(view, SIGNAL(animationFinished(DocumentView*)),
+		SLOT(slotViewAnimationFinished(DocumentView*)));
+	d->scheduleLayoutUpdate();
 }
 
 
-bool DocumentViewContainer::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Show:
-	case QEvent::Hide:
-		updateLayout();
-		break;
-	default:
-		break;
+void DocumentViewContainer::removeView(DocumentView* view) {
+	if (d->removeFromSet(view, &d->mViews)) {
+		return;
 	}
-	return false;
+	d->removeFromSet(view, &d->mAddedViews);
 }
 
 
@@ -87,67 +110,92 @@ void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 	updateLayout();
 }
 
-
 void DocumentViewContainer::updateLayout() {
-	// List visible views
-	QList<DocumentView*> visibleViews;
-	Q_FOREACH(DocumentView* view, d->mItems) {
-		if (view->isVisible()) {
-			visibleViews << view;
+	// Stop update timer: this is useful if updateLayout() is called directly
+	// and not through scheduleLayoutUpdate()
+	d->mLayoutUpdateTimer->stop();
+	DocumentViewSet views = d->mViews | d->mAddedViews;
+
+	if (!views.isEmpty()) {
+		// Compute column count
+		int colCount;
+		switch (views.count()) {
+		case 1:
+			colCount = 1;
+			break;
+		case 2:
+			colCount = 2;
+			break;
+		case 3:
+			colCount = 3;
+			break;
+		case 4:
+			colCount = 2;
+			break;
+		case 5:
+			colCount = 3;
+			break;
+		case 6:
+			colCount = 3;
+			break;
+		default:
+			colCount = 3;
+			break;
+		}
+
+		int rowCount = qCeil(views.count() / qreal(colCount));
+		Q_ASSERT(rowCount > 0);
+		int viewWidth = width() / colCount;
+		int viewHeight = height() / rowCount;
+
+		int col = 0;
+		int row = 0;
+
+		Q_FOREACH(DocumentView* view, views) {
+			QRect rect;
+			rect.setLeft(col * viewWidth);
+			rect.setTop(row * viewHeight);
+			rect.setWidth(viewWidth);
+			rect.setHeight(viewHeight);
+
+			if (d->mViews.contains(view)) {
+				if (rect != view->geometry()) {
+					if (d->mAddedViews.isEmpty() && d->mRemovedViews.isEmpty()) {
+						// View moves because of a resize
+						view->moveTo(rect);
+					} else {
+						// View moves because the number of views changed,
+						// animate the change
+						view->moveToAnimated(rect);
+					}
+				}
+			} else {
+				view->setGeometry(rect);
+				view->fadeIn();
+			}
+
+			++col;
+			if (col == colCount) {
+				col = 0;
+				++row;
+			}
 		}
 	}
-	if (visibleViews.isEmpty()) {
+
+	Q_FOREACH(DocumentView* view, d->mRemovedViews) {
+		view->fadeOut();
+	}
+}
+
+void DocumentViewContainer::slotViewAnimationFinished(DocumentView* view) {
+	if (d->mRemovedViews.contains(view)) {
+		d->mRemovedViews.remove(view);
+		delete view;
 		return;
 	}
-
-	// Compute column count
-	int colCount;
-	switch (visibleViews.count()) {
-	case 1:
-		colCount = 1;
-		break;
-	case 2:
-		colCount = 2;
-		break;
-	case 3:
-		colCount = 3;
-		break;
-	case 4:
-		colCount = 2;
-		break;
-	case 5:
-		colCount = 3;
-		break;
-	case 6:
-		colCount = 3;
-		break;
-	default:
-		colCount = 3;
-		break;
-	}
-
-	int rowCount = qCeil(visibleViews.count() / qreal(colCount));
-	Q_ASSERT(rowCount > 0);
-	int viewWidth = width() / colCount;
-	int viewHeight = height() / rowCount;
-
-	int col = 0;
-	int row = 0;
-
-	Q_FOREACH(DocumentView* view, visibleViews) {
-		QRect rect;
-		rect.setLeft(col * viewWidth);
-		rect.setTop(row * viewHeight);
-		rect.setWidth(viewWidth);
-		rect.setHeight(viewHeight);
-
-		view->setGeometry(rect);
-
-		++col;
-		if (col == colCount) {
-			col = 0;
-			++row;
-		}
+	if (d->mAddedViews.contains(view)) {
+		d->mAddedViews.remove(view);
+		d->mViews.insert(view);
 	}
 }
 

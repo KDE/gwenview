@@ -175,4 +175,14 @@ bool SvgViewAdapter::eventFilter(QObject*, QEvent* event) {
 }
 
 
+qreal SvgViewAdapter::opacity() const {
+	return d->mItem->opacity();
+}
+
+
+void SvgViewAdapter::setOpacity(qreal value) {
+	d->mItem->setOpacity(value);
+}
+
+
 } // namespace
