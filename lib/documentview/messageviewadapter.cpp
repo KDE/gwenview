@@ -35,14 +35,12 @@ namespace Gwenview {
 
 struct MessageViewAdapterPrivate : Ui_MessageView {
 	Document::Ptr mDocument;
-	qreal mOpacity;
 };
 
 
 MessageViewAdapter::MessageViewAdapter(QWidget* parent)
 : AbstractDocumentViewAdapter(parent)
 , d(new MessageViewAdapterPrivate) {
-	d->mOpacity = 1.;
 	QWidget* widget = new QWidget(parent);
 	d->setupUi(widget);
 	d->mMessageWidget->setCloseButtonVisible(false);
@@ -94,17 +92,6 @@ Document::Ptr MessageViewAdapter::document() const {
 void MessageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
 }
-
-
-qreal MessageViewAdapter::opacity() const {
-	return d->mOpacity;
-}
-
-
-void MessageViewAdapter::setOpacity(qreal value) {
-	d->mOpacity = value;
-}
-
 
 
 } // namespace

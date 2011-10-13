@@ -51,7 +51,6 @@ class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
 	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
-	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
 	enum {
 		MaximumZoom = 16
@@ -98,19 +97,10 @@ public:
 
 	QPoint position() const;
 
-	qreal opacity() const;
-
-	void setOpacity(qreal value);
-
 	/**
 	 * Returns the ImageView of the current adapter, if it has one
 	 */
 	ImageView* imageView() const;
-
-	void moveTo(const QRect&);
-	void moveToAnimated(const QRect&);
-	void fadeIn();
-	void fadeOut();
 
 public Q_SLOTS:
 	void setZoom(qreal);
@@ -147,16 +137,10 @@ Q_SIGNALS:
 
 	void positionChanged();
 
-	void hudTrashClicked(DocumentView*);
-	void hudDeselectClicked(DocumentView*);
-
-	void animationFinished(DocumentView*);
-
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
 	virtual void paintEvent(QPaintEvent*);
-	void resizeEvent(QResizeEvent* event);
 
 private Q_SLOTS:
 	void finishOpenUrl();
@@ -173,11 +157,6 @@ private Q_SLOTS:
 	void slotBusyChanged(const KUrl&, bool);
 
 	void slotKeyPressed(Qt::Key key, bool pressed);
-
-	void emitHudTrashClicked();
-	void emitHudDeselectClicked();
-
-	void slotAnimationFinished();
 
 private:
 	friend struct DocumentViewPrivate;

@@ -124,7 +124,7 @@ private Q_SLOTS:
 
 	void slotViewFocused(DocumentView*);
 
-	void trashView(DocumentView*);
+	void trashView(Gwenview::DocumentView*);
 	void deselectView(DocumentView*);
 
 private:

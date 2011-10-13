@@ -62,10 +62,6 @@ public:
 
 	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1));
 
-	virtual qreal opacity() const;
-
-	virtual void setOpacity(qreal value);
-
 	virtual qreal computeZoomToFit() const;
 	virtual qreal computeZoomToFitWidth() const;
 	virtual qreal computeZoomToFitHeight() const;

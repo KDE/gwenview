@@ -50,10 +50,6 @@ public:
 
 	void setErrorMessage(const QString& main, const QString& detail = QString());
 
-	qreal opacity() const;
-
-	void setOpacity(qreal);
-
 private:
 	MessageViewAdapterPrivate* const d;
 };
