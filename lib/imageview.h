@@ -99,9 +99,6 @@ public:
 	qreal computeZoomToFitWidth() const;
 	qreal computeZoomToFitHeight() const;
 
-	qreal opacity() const;
-	void setOpacity(qreal value);
-
 Q_SIGNALS:
 	void zoomChanged(qreal);
 
@@ -128,7 +125,6 @@ protected:
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();
 	void slotDocumentIsAnimatedUpdated();
-	void updateZoomToFit();
 
 	/**
 	 * This method performs the necessary adjustments to get the view ready to

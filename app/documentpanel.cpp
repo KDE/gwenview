@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Local
 #include "fileoperations.h"
 #include "splitter.h"
+#include <lib/binder.h>
 #include <lib/document/document.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 #include <lib/documentview/documentview.h>
@@ -46,12 +47,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <lib/documentview/documentviewcontroller.h>
 #include <lib/documentview/documentviewsynchronizer.h>
 #include <lib/gwenviewconfig.h>
+#include <lib/hudwidget.h>
 #include <lib/paintutils.h>
 #include <lib/semanticinfo/sorteddirmodel.h>
 #include <lib/slideshow.h>
 #include <lib/statusbartoolbutton.h>
 #include <lib/thumbnailview/thumbnailbarview.h>
+#include <lib/widgetfloater.h>
 #include <lib/zoomwidget.h>
+
 
 namespace Gwenview {
 
@@ -103,16 +107,16 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  *
  * +-mThumbnailSplitter--------------------------------+
  * |+-mAdapterContainer-------------------------------+|
- * ||+-mDocumentViewContainer------------------------+||
- * |||+-DocumentView--------++-DocumentView---------+|||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * ||||                     ||                      ||||
- * |||+---------------------++----------------------+|||
- * ||+-----------------------------------------------+||
+ * ||+-mDocumentViews-------++-----------------------+||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * |||                      ||                       |||
+ * ||+----------------------++-----------------------+||
  * ||+-mStatusBarContainer---------------------------+||
  * |||[mToggleThumbnailBarButton]       [mZoomWidget]|||
  * ||+-----------------------------------------------+||
@@ -126,12 +130,12 @@ static QString gradient(Qt::Orientation orientation, const QColor &color, int va
  */
 struct DocumentPanelPrivate {
 	DocumentPanel* that;
-	SlideShow* mSlideShow;
 	KActionCollection* mActionCollection;
 	QSplitter *mThumbnailSplitter;
 	QWidget* mAdapterContainer;
 	DocumentViewController* mDocumentViewController;
 	QList<DocumentView*> mDocumentViews;
+	QList<HudWidget*> mHuds;
 	DocumentViewSynchronizer* mSynchronizer;
 	QToolButton* mToggleThumbnailBarButton;
 	DocumentViewContainer* mDocumentViewContainer;
@@ -210,55 +214,88 @@ struct DocumentPanelPrivate {
 		mDocumentViewContainer = new DocumentViewContainer;
 		mDocumentViewContainer->setAutoFillBackground(true);
 		mDocumentViewContainer->setBackgroundRole(QPalette::Base);
+		Q_FOREACH(DocumentView* view, mDocumentViews) {
+			mDocumentViewContainer->addView(view);
+		}
 		layout->addWidget(mDocumentViewContainer);
 		layout->addWidget(mStatusBarContainer);
 	}
 
-	void setupDocumentViewController() {
+	void setupDocumentView(SlideShow* slideShow) {
 		mDocumentViewController = new DocumentViewController(mActionCollection, that);
 
 		ZoomWidget* zoomWidget = new ZoomWidget(that);
 		mDocumentViewController->setZoomWidget(zoomWidget);
+
+		for (int idx=0; idx < DocumentPanel::MaxViewCount; ++idx) {
+			DocumentView* view = new DocumentView(0);
+
+			// Connect context menu
+			view->setContextMenuPolicy(Qt::CustomContextMenu);
+			QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
+				that, SLOT(showContextMenu()) );
+
+			QObject::connect(view, SIGNAL(completed()),
+				that, SIGNAL(completed()) );
+			QObject::connect(view, SIGNAL(previousImageRequested()),
+				that, SIGNAL(previousImageRequested()) );
+			QObject::connect(view, SIGNAL(nextImageRequested()),
+				that, SIGNAL(nextImageRequested()) );
+			QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
+				that, SIGNAL(captionUpdateRequested(QString)) );
+			QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
+				that, SIGNAL(toggleFullScreenRequested()) );
+			QObject::connect(view, SIGNAL(focused(DocumentView*)),
+				that, SLOT(slotViewFocused(DocumentView*)) );
+
+			QObject::connect(view, SIGNAL(videoFinished()),
+				slideShow, SLOT(resumeAndGoToNextUrl()));
+
+			mDocumentViews << view;
+		}
+
 		mSynchronizer = new DocumentViewSynchronizer(that);
 	}
 
-	DocumentView* createDocumentView() {
-		DocumentView* view = new DocumentView(0);
-
-		// Connect context menu
-		view->setContextMenuPolicy(Qt::CustomContextMenu);
-		QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
-			that, SLOT(showContextMenu()) );
-
-		QObject::connect(view, SIGNAL(completed()),
-			that, SIGNAL(completed()) );
-		QObject::connect(view, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(view, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(view, SIGNAL(captionUpdateRequested(QString)),
-			that, SIGNAL(captionUpdateRequested(QString)) );
-		QObject::connect(view, SIGNAL(toggleFullScreenRequested()),
-			that, SIGNAL(toggleFullScreenRequested()) );
-		QObject::connect(view, SIGNAL(focused(DocumentView*)),
-			that, SLOT(slotViewFocused(DocumentView*)) );
-		QObject::connect(view, SIGNAL(hudTrashClicked(DocumentView*)),
-			that, SLOT(trashView(DocumentView*)) );
-		QObject::connect(view, SIGNAL(hudDeselectClicked(DocumentView*)),
-			that, SLOT(deselectView(DocumentView*)) );
-
-		QObject::connect(view, SIGNAL(videoFinished()),
-			mSlideShow, SLOT(resumeAndGoToNextUrl()));
-
-		mDocumentViews << view;
-		mDocumentViewContainer->addView(view);
-
-		return view;
+	QToolButton* createHudButton(const QString& text, const char* iconName, bool showText) {
+		QToolButton* button = new QToolButton;
+		if (showText) {
+			button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+			button->setText(text);
+		} else {
+			button->setToolTip(text);
+		}
+		button->setIcon(SmallIcon(iconName));
+		return button;
 	}
 
-	void removeDocumentView(DocumentView* view) {
-		mDocumentViewContainer->removeView(view);
-		mDocumentViews.removeOne(view);
+	void setupViewHud(DocumentView* view) {
+		QToolButton* trashButton = createHudButton(i18n("Trash"), "user-trash", false);
+		QToolButton* deselectButton = createHudButton(i18n("Deselect"), "list-remove", true);
+
+		QWidget* content = new QWidget;
+		QHBoxLayout* layout = new QHBoxLayout(content);
+		layout->setMargin(0);
+		layout->setSpacing(4);
+		layout->addWidget(trashButton);
+		layout->addWidget(deselectButton);
+
+		HudWidget* hud = new HudWidget;
+		hud->init(content, HudWidget::OptionNone);
+		WidgetFloater* floater = new WidgetFloater(view);
+		floater->setChildWidget(hud);
+		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+		Binder<DocumentPanel, DocumentView*>::bind(trashButton, SIGNAL(clicked()), that, &DocumentPanel::trashView, view);
+		Binder<DocumentPanel, DocumentView*>::bind(deselectButton, SIGNAL(clicked()), that, &DocumentPanel::deselectView, view);
+
+		mHuds.append(hud);
+	}
+
+	void setupHuds() {
+		Q_FOREACH(DocumentView* view, mDocumentViews) {
+			setupViewHud(view);
+		}
 	}
 
 	void setupStatusBar() {
@@ -345,7 +382,6 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 , d(new DocumentPanelPrivate)
 {
 	d->that = this;
-	d->mSlideShow = slideShow;
 	d->mActionCollection = actionCollection;
 	d->mFullScreenMode = false;
 	d->mCompareMode = false;
@@ -358,7 +394,9 @@ DocumentPanel::DocumentPanel(QWidget* parent, SlideShow* slideShow, KActionColle
 	toggleFullScreenShortcut->setKey(Qt::Key_Return);
 	connect(toggleFullScreenShortcut, SIGNAL(activated()), SIGNAL(toggleFullScreenRequested()) );
 
-	d->setupDocumentViewController();
+	d->setupDocumentView(slideShow);
+
+	d->setupHuds();
 
 	d->setupStatusBar();
 
@@ -566,60 +604,66 @@ void DocumentPanel::openUrl(const KUrl& url) {
 }
 
 
-void DocumentPanel::openUrls(const KUrl::List& _urls, const KUrl& currentUrl) {
-	QSet<KUrl> urls = _urls.toSet();
+void DocumentPanel::openUrls(const KUrl::List& urls, const KUrl& currentUrl) {
 	d->mCompareMode = urls.count() > 1;
+	QList<DocumentView*> visibleViews;
 
-	// Destroy views which show urls we don't care about, remove from "urls" the
-	// urls which already have a view.
+	// Get a list of available views and urls we are not already displaying
+	QSet<KUrl> notDisplayedUrls = urls.toSet();
+	QList<DocumentView*> availableViews;
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		KUrl url = view->url();
-		if (urls.contains(url)) {
+		if (notDisplayedUrls.contains(url)) {
 			// view displays an url we must display, keep it
-			urls.remove(url);
+			notDisplayedUrls.remove(url);
+			view->setCompareMode(d->mCompareMode);
+			if (url == currentUrl) {
+				d->setCurrentView(view);
+			} else {
+				view->setCurrent(false);
+			}
+			visibleViews.append(view);
 		} else {
-			// view url is not interesting, drop it
-			d->removeDocumentView(view);
+			// view url is not interesting, prepare to reuse it
+			availableViews.append(view);
 		}
 	}
 
-	// Create view for remaining urls
-	typedef QPair<DocumentView*, KUrl> ViewUrlPair;
-	QList<ViewUrlPair> urlForViewList;
-	Q_FOREACH(const KUrl& url, urls) {
-		if (d->mDocumentViews.count() >= MaxViewCount) {
-			kWarning() << "Too many documents to show";
+	// Show urls to display in available views
+	Q_FOREACH(const KUrl& url, notDisplayedUrls) {
+		if (availableViews.isEmpty()) {
+			kWarning() << "No room to load" << url << ". This should not happen";
 			break;
 		}
-		DocumentView* view = d->createDocumentView();
-		urlForViewList << qMakePair(view, url);
-	}
-
-	d->mDocumentViewContainer->updateLayout();
-
-	// Load urls for new views. Do it only now because the view must have the
-	// correct size before it starts loading its url. Do not do it later because
-	// view->url() needs to be set for the next loop.
-	Q_FOREACH(const ViewUrlPair& pair, urlForViewList) {
-		pair.first->openUrl(pair.second);
-	}
-
-	// Init views
-	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
+		DocumentView* view = availableViews.takeFirst();
+		view->openUrl(url);
 		view->setCompareMode(d->mCompareMode);
-		if (view->url() == currentUrl) {
+		if (url == currentUrl) {
 			d->setCurrentView(view);
 		} else {
 			view->setCurrent(false);
 		}
+		visibleViews.append(view);
+		view->show();
 	}
 
+	// Hide remaining available views
+	Q_FOREACH(DocumentView* view, availableViews) {
+		view->reset();
+		view->hide();
+	}
+
+	Q_FOREACH(HudWidget* hud, d->mHuds) {
+		hud->setVisible(d->mCompareMode);
+		if (d->mCompareMode) {
+			hud->raise();
+		}
+	}
 	d->mSynchronizeCheckBox->setVisible(d->mCompareMode);
 	if (d->mCompareMode) {
-		d->mSynchronizer->setDocumentViews(d->mDocumentViews);
+		d->mSynchronizer->setDocumentViews(visibleViews);
 		d->mSynchronizer->setActive(d->mSynchronizeCheckBox->isChecked());
 	} else {
-		d->mSynchronizer->setDocumentViews(QList<DocumentView*>());
 		d->mSynchronizer->setActive(false);
 	}
 }
@@ -679,14 +723,18 @@ void DocumentPanel::deselectView(DocumentView* view) {
 		int idx = d->mDocumentViews.indexOf(view);
 		// Look for the next visible view after the current one
 		for (int newIdx = idx + 1; newIdx < d->mDocumentViews.count(); ++newIdx) {
-			newCurrentView = d->mDocumentViews.at(newIdx);
-			break;
+			if (d->mDocumentViews.at(newIdx)->isVisible()) {
+				newCurrentView = d->mDocumentViews.at(newIdx);
+				break;
+			}
 		}
 		if (!newCurrentView) {
 			// No visible view found after the current one, look before
 			for (int newIdx = idx - 1; newIdx >= 0; --newIdx) {
-				newCurrentView = d->mDocumentViews.at(newIdx);
-				break;
+				if (d->mDocumentViews.at(newIdx)->isVisible()) {
+					newCurrentView = d->mDocumentViews.at(newIdx);
+					break;
+				}
 			}
 		}
 		if (!newCurrentView) {
