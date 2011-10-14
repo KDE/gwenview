@@ -373,7 +373,6 @@ DocumentView::DocumentView()
 	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter);
 	setWidget(d->mWidget);
-	d->mWidget->show();
 	d->mCurrent = false;
 	d->mCompareMode = false;
 }
@@ -614,7 +613,7 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 
 
 void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	QGraphicsProxyWidget::paint(painter, option, widget);
+	//QGraphicsProxyWidget::paint(painter, option, widget);
 	if (!d->mCompareMode) {
 		return;
 	}
