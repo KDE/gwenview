@@ -75,6 +75,10 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 	setScene(d->mScene);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+	setFrameStyle(QFrame::NoFrame);
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
 	d->mLayoutUpdateTimer = new QTimer(this);
 	d->mLayoutUpdateTimer->setInterval(0);
 	d->mLayoutUpdateTimer->setSingleShot(true);
