@@ -37,7 +37,7 @@ struct SvgViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT SvgViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	SvgViewAdapter(QWidget*);
+	SvgViewAdapter();
 	~SvgViewAdapter();
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
@@ -61,10 +61,6 @@ public:
 	virtual qreal zoom() const;
 
 	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1));
-
-	virtual qreal opacity() const;
-
-	virtual void setOpacity(qreal value);
 
 	virtual qreal computeZoomToFit() const;
 	virtual qreal computeZoomToFitWidth() const;

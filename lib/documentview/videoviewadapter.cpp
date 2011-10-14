@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <Phonon/SeekSlider>
 #include <Phonon/VideoWidget>
 #include <Phonon/VolumeSlider>
+#include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QToolButton>
@@ -54,7 +55,6 @@ struct VideoViewAdapterPrivate {
 	QToolButton* mPlayPauseButton;
 
 	Document::Ptr mDocument;
-	qreal mOpacity;
 
 	void setupHud(QWidget* parent) {
 		// Create hud content
@@ -119,15 +119,13 @@ struct VideoViewAdapterPrivate {
 };
 
 
-VideoViewAdapter::VideoViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new VideoViewAdapterPrivate) {
+VideoViewAdapter::VideoViewAdapter()
+: d(new VideoViewAdapterPrivate) {
 	d->q = this;
-	d->mOpacity = 1;
 	d->mMediaObject = new Phonon::MediaObject(this);
 	connect(d->mMediaObject, SIGNAL(finished()), SIGNAL(videoFinished()));
 
-	d->mVideoWidget = new Phonon::VideoWidget(parent);
+	d->mVideoWidget = new Phonon::VideoWidget;
 	d->mVideoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	d->mVideoWidget->setAttribute(Qt::WA_Hover);
 
@@ -138,7 +136,9 @@ VideoViewAdapter::VideoViewAdapter(QWidget* parent)
 
 	d->setupHud(d->mVideoWidget);
 
-	setWidget(d->mVideoWidget);
+	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+	proxy->setWidget(d->mVideoWidget);
+	setWidget(proxy);
 }
 
 
@@ -189,16 +189,5 @@ void VideoViewAdapter::updatePlayPauseButton() {
 		d->mPlayPauseButton->setIcon(KIcon("media-playback-start"));
 	}
 }
-
-
-qreal VideoViewAdapter::opacity() const {
-	return d->mOpacity;
-}
-
-
-void VideoViewAdapter::setOpacity(qreal value) {
-	d->mOpacity = value;
-}
-
 
 } // namespace

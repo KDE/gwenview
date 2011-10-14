@@ -41,7 +41,7 @@ public:
 		AlphaBackgroundSolid
 	};
 
-	ImageView(QWidget* parent);
+	ImageView(QWidget* parent=0);
 	~ImageView();
 
 	/**

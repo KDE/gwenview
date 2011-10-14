@@ -37,7 +37,7 @@ struct ImageViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	ImageViewAdapter(QWidget*);
+	ImageViewAdapter();
 	~ImageViewAdapter();
 
 	virtual void installEventFilterOnViewWidgets(QObject*);

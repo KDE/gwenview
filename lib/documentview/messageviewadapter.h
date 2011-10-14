@@ -35,7 +35,7 @@ struct MessageViewAdapterPrivate;
 class MessageViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	MessageViewAdapter(QWidget* parent);
+	MessageViewAdapter();
 	~MessageViewAdapter();
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
@@ -49,10 +49,6 @@ public:
 	void setInfoMessage(const QString&);
 
 	void setErrorMessage(const QString& main, const QString& detail = QString());
-
-	qreal opacity() const;
-
-	void setOpacity(qreal);
 
 private:
 	MessageViewAdapterPrivate* const d;

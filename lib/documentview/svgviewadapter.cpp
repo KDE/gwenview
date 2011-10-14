@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "svgviewadapter.moc"
 
 // Qt
+#include <QCursor>
 #include <QEvent>
-#include <QGraphicsScene>
-#include <QGraphicsSvgItem>
-#include <QGraphicsView>
+#include <QGraphicsWidget>
+#include <QPainter>
 #include <QSvgRenderer>
 
 // KDE
@@ -36,39 +36,56 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class SvgWidget : public QGraphicsWidget {
+public:
+	SvgWidget(QGraphicsItem* parent = 0)
+	: QGraphicsWidget(parent)
+	, mRenderer(new QSvgRenderer(this))
+	{}
+
+	void loadFromDocument(Document::Ptr doc) {
+		mRenderer->load(doc->rawData());
+		updateCache();
+	}
+
+protected:
+	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+		painter->drawPixmap(0, 0, mCachePix);
+	}
+
+private:
+	QSvgRenderer* mRenderer;
+	QPixmap mCachePix;
+
+	void updateCache() {
+		mCachePix = QPixmap(boundingRect().size().toSize());
+		mCachePix.fill(Qt::transparent);
+		QPainter painter(&mCachePix);
+		mRenderer->render(&painter, boundingRect());
+		update();
+	}
+};
 
 struct SvgViewAdapterPrivate {
-	QSvgRenderer* mRenderer;
-	QGraphicsScene* mScene;
-	QGraphicsView* mView;
-
 	Document::Ptr mDocument;
-	QGraphicsSvgItem* mItem;
+	SvgWidget* mWidget;
 	bool mZoomToFit;
 };
 
 
-SvgViewAdapter::SvgViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new SvgViewAdapterPrivate) {
-	d->mRenderer = new QSvgRenderer(this);
-	d->mScene = new QGraphicsScene(this);
-	d->mView = new QGraphicsView(d->mScene, parent);
-	d->mView->setFrameStyle(QFrame::NoFrame);
-	d->mView->setDragMode(QGraphicsView::ScrollHandDrag);
-	d->mView->viewport()->installEventFilter(this);
-
-	d->mItem = 0;
+SvgViewAdapter::SvgViewAdapter()
+: d(new SvgViewAdapterPrivate) {
 	d->mZoomToFit = true;
-
-	setWidget(d->mView);
+	d->mWidget = new SvgWidget;
+	setWidget(d->mWidget);
 }
 
 
-void SvgViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	d->mView->viewport()->installEventFilter(object);
+void SvgViewAdapter::installEventFilterOnViewWidgets(QObject* /*object*/) {
+	// FIXME: QGV
+	//d->mView->viewport()->installEventFilter(object);
 	// Necessary to receive key{Press,Release} events
-	d->mView->installEventFilter(object);
+	//d->mView->installEventFilter(object);
 }
 
 
@@ -78,12 +95,12 @@ SvgViewAdapter::~SvgViewAdapter() {
 
 
 QCursor SvgViewAdapter::cursor() const {
-	return d->mView->viewport()->cursor();
+	return widget()->cursor();
 }
 
 
 void SvgViewAdapter::setCursor(const QCursor& cursor) {
-	d->mView->viewport()->setCursor(cursor);
+	widget()->setCursor(cursor);
 }
 
 
@@ -96,17 +113,7 @@ void SvgViewAdapter::setDocument(Document::Ptr doc) {
 
 
 void SvgViewAdapter::loadFromDocument() {
-	delete d->mItem;
-	d->mItem = 0;
-
-	if (!d->mRenderer->load(d->mDocument->rawData())) {
-		kWarning() << "Decoding SVG failed";
-		return;
-	}
-	d->mItem = new QGraphicsSvgItem();
-	d->mItem->setSharedRenderer(d->mRenderer);
-	d->mScene->addItem(d->mItem);
-
+	d->mWidget->loadFromDocument(d->mDocument);
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	}
@@ -136,15 +143,20 @@ bool SvgViewAdapter::zoomToFit() const {
 
 
 qreal SvgViewAdapter::zoom() const {
-	return d->mView->matrix().m11();
+	return 1;
+	// FIXME: QGV
+	//return d->mView->matrix().m11();
 }
 
 
-void SvgViewAdapter::setZoom(qreal zoom, const QPoint& /*center*/) {
+void SvgViewAdapter::setZoom(qreal /*zoom*/, const QPoint& /*center*/) {
+	// FIXME: QGV
+	/*
 	QMatrix matrix;
 	matrix.scale(zoom, zoom);
 	d->mView->setMatrix(matrix);
 	emit zoomChanged(zoom);
+	*/
 }
 
 
@@ -154,14 +166,22 @@ qreal SvgViewAdapter::computeZoomToFit() const {
 
 
 qreal SvgViewAdapter::computeZoomToFitWidth() const {
+	return 1;
+	// FIXME: QGV
+	/*
 	int width = d->mScene->width();
 	return width != 0 ? (qreal(d->mView->viewport()->width()) / width) : 1;
+	*/
 }
 
 
 qreal SvgViewAdapter::computeZoomToFitHeight() const {
+	return 1;
+	// FIXME: QGV
+	/*
 	int height = d->mScene->height();
 	return height != 0 ? (qreal(d->mView->viewport()->height()) / height) : 1;
+	*/
 }
 
 
@@ -173,16 +193,5 @@ bool SvgViewAdapter::eventFilter(QObject*, QEvent* event) {
 	}
 	return false;
 }
-
-
-qreal SvgViewAdapter::opacity() const {
-	return d->mItem->opacity();
-}
-
-
-void SvgViewAdapter::setOpacity(qreal value) {
-	d->mItem->setOpacity(value);
-}
-
 
 } // namespace

@@ -22,7 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "abstractdocumentviewadapter.moc"
 
 // Qt
-#include <QWidget>
+#include <QCursor>
+#include <QGraphicsWidget>
 
 // KDE
 
@@ -31,14 +32,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 
-AbstractDocumentViewAdapter::AbstractDocumentViewAdapter(QWidget* parent)
-: QObject(parent)
-, mWidget(0) {
+AbstractDocumentViewAdapter::AbstractDocumentViewAdapter()
+: mWidget(0) {
 }
 
 
-AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter()
-{
+AbstractDocumentViewAdapter::~AbstractDocumentViewAdapter() {
 	delete mWidget;
 }
 
@@ -52,6 +51,10 @@ void AbstractDocumentViewAdapter::setCursor(const QCursor& cursor) {
 	if (mWidget) {
 		mWidget->setCursor(cursor);
 	}
+}
+
+EmptyAdapter::EmptyAdapter() {
+	setWidget(new QGraphicsWidget);
 }
 
 } // namespace

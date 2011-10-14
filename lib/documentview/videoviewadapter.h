@@ -37,7 +37,7 @@ struct VideoViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT VideoViewAdapter : public AbstractDocumentViewAdapter {
 	Q_OBJECT
 public:
-	VideoViewAdapter(QWidget*);
+	VideoViewAdapter();
 	~VideoViewAdapter();
 
 	virtual void installEventFilterOnViewWidgets(QObject*);
@@ -47,10 +47,6 @@ public:
 	virtual Document::Ptr document() const;
 
 	virtual void setDocument(Document::Ptr);
-
-	virtual qreal opacity() const;
-
-	virtual void setOpacity(qreal value);
 
 Q_SIGNALS:
 	void videoFinished();

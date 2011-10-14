@@ -99,8 +99,7 @@ struct DocumentViewPrivate {
 		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
 			that, SLOT(zoomOut(QPoint)) );
 
-		adapter->widget()->setParent(mWidget);
-		adapter->widget()->show();
+		adapter->widget()->setParentItem(that);
 		resizeAdapterWidget();
 
 		if (adapter->canZoom()) {
@@ -111,6 +110,8 @@ struct DocumentViewPrivate {
 		}
 		adapter->installEventFilterOnViewWidgets(mWidget);
 
+		// FIXME QGV
+		/*
 		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());
 		if (area) {
 			QObject::connect(area->horizontalScrollBar(), SIGNAL(valueChanged(int)),
@@ -118,6 +119,7 @@ struct DocumentViewPrivate {
 			QObject::connect(area->verticalScrollBar(), SIGNAL(valueChanged(int)),
 				that, SIGNAL(positionChanged()));
 		}
+		*/
 
 		if (mCurrent) {
 			adapter->widget()->setFocus();
@@ -279,7 +281,7 @@ struct DocumentViewPrivate {
 	}
 
 	void resizeAdapterWidget() {
-		QRect rect = mWidget->rect();
+		QRectF rect = QRectF(QPointF(0, 0), that->boundingRect().size());
 		if (mCompareMode) {
 			rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
 		}
@@ -369,7 +371,7 @@ DocumentView::DocumentView()
 	d->mLoadingIndicator = 0;
 	d->setupZoomCursor();
 	d->setupHud();
-	d->setCurrentAdapter(new MessageViewAdapter(d->mWidget));
+	d->setCurrentAdapter(new MessageViewAdapter);
 	setWidget(d->mWidget);
 	d->mWidget->show();
 	d->mCurrent = false;
@@ -392,23 +394,23 @@ void DocumentView::createAdapterForDocument() {
 	AbstractDocumentViewAdapter* adapter = 0;
 	switch (documentKind) {
 	case MimeTypeUtils::KIND_RASTER_IMAGE:
-		adapter = new ImageViewAdapter(d->mWidget);
+		adapter = new ImageViewAdapter;
 		break;
 	case MimeTypeUtils::KIND_SVG_IMAGE:
-		adapter = new SvgViewAdapter(d->mWidget);
+		adapter = new SvgViewAdapter;
 		break;
 	case MimeTypeUtils::KIND_VIDEO:
-		adapter = new VideoViewAdapter(d->mWidget);
+		adapter = new VideoViewAdapter;
 		connect(adapter, SIGNAL(videoFinished()),
 			SIGNAL(videoFinished()));
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
-		adapter = new MessageViewAdapter(d->mWidget);
+		adapter = new MessageViewAdapter;
 		static_cast<MessageViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 		break;
 	default:
 		kWarning() << "should not be called for documentKind=" << documentKind;
-		adapter = new MessageViewAdapter(d->mWidget);
+		adapter = new MessageViewAdapter;
 		break;
 	}
 
@@ -472,7 +474,7 @@ void DocumentView::reset() {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
 	}
-	d->setCurrentAdapter(new EmptyAdapter(d->mWidget));
+	d->setCurrentAdapter(new EmptyAdapter);
 }
 
 
@@ -507,7 +509,7 @@ void DocumentView::slotLoaded() {
 
 void DocumentView::slotLoadingFailed() {
 	d->hideLoadingIndicator();
-	MessageViewAdapter* adapter = new MessageViewAdapter(d->mWidget);
+	MessageViewAdapter* adapter = new MessageViewAdapter;
 	adapter->setDocument(d->mDocument);
 	QString message = i18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
 	adapter->setErrorMessage(message, d->mDocument->errorString());
@@ -661,7 +663,6 @@ void DocumentView::setCurrent(bool value) {
 	if (value) {
 		d->mAdapter->widget()->setFocus();
 	}
-	update();
 }
 
 
@@ -671,6 +672,8 @@ bool DocumentView::isCurrent() const {
 
 
 QPoint DocumentView::position() const {
+	// FIXME: QGV
+	/*
 	QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(d->mAdapter->widget());
 	if (!area) {
 		return QPoint();
@@ -679,6 +682,8 @@ QPoint DocumentView::position() const {
 		area->horizontalScrollBar()->value(),
 		area->verticalScrollBar()->value()
 		);
+	*/
+	return QPoint();
 }
 
 

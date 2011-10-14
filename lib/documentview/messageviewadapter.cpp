@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "messageviewadapter.moc"
 
 // Qt
+#include <QGraphicsProxyWidget>
 
 // KDE
 #include <klocale.h>
@@ -35,15 +36,12 @@ namespace Gwenview {
 
 struct MessageViewAdapterPrivate : Ui_MessageView {
 	Document::Ptr mDocument;
-	qreal mOpacity;
 };
 
 
-MessageViewAdapter::MessageViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new MessageViewAdapterPrivate) {
-	d->mOpacity = 1.;
-	QWidget* widget = new QWidget(parent);
+MessageViewAdapter::MessageViewAdapter()
+: d(new MessageViewAdapterPrivate) {
+	QWidget* widget = new QWidget;
 	d->setupUi(widget);
 	d->mMessageWidget->setCloseButtonVisible(false);
 	d->mMessageWidget->setWordWrap(true);
@@ -54,7 +52,9 @@ MessageViewAdapter::MessageViewAdapter(QWidget* parent)
 	widget->setBackgroundRole(QPalette::Base);
 	widget->setForegroundRole(QPalette::Text);
 
-	setWidget(widget);
+	QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget;
+	proxy->setWidget(widget);
+	setWidget(proxy);
 }
 
 
@@ -94,17 +94,5 @@ Document::Ptr MessageViewAdapter::document() const {
 void MessageViewAdapter::setDocument(Document::Ptr doc) {
 	d->mDocument = doc;
 }
-
-
-qreal MessageViewAdapter::opacity() const {
-	return d->mOpacity;
-}
-
-
-void MessageViewAdapter::setOpacity(qreal value) {
-	d->mOpacity = value;
-}
-
-
 
 } // namespace

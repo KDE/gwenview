@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "imageviewadapter.moc"
 
 // Qt
+#include <QGraphicsProxyWidget>
 
 // KDE
 #include <kurl.h>
@@ -55,12 +56,13 @@ struct ImageViewAdapterPrivate {
 };
 
 
-ImageViewAdapter::ImageViewAdapter(QWidget* parent)
-: AbstractDocumentViewAdapter(parent)
-, d(new ImageViewAdapterPrivate) {
+ImageViewAdapter::ImageViewAdapter()
+: d(new ImageViewAdapterPrivate) {
 	d->that = this;
-	d->mView = new ImageView(parent);
-	setWidget(d->mView);
+	d->mView = new ImageView;
+	QGraphicsProxyWidget* proxyWidget = new QGraphicsProxyWidget;
+	proxyWidget->setWidget(d->mView);
+	setWidget(proxyWidget);
 	d->setupScrollTool();
 
 	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );

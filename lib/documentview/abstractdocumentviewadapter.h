@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 #include <QPoint>
-#include <QWidget>
 
 // KDE
 
@@ -34,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/document/document.h>
 
 class QCursor;
-class QWidget;
+class QGraphicsWidget;
 
 
 namespace Gwenview {
@@ -50,10 +49,10 @@ class ImageView;
 class GWENVIEWLIB_EXPORT AbstractDocumentViewAdapter : public QObject {
 	Q_OBJECT
 public:
-	AbstractDocumentViewAdapter(QWidget*);
+	AbstractDocumentViewAdapter();
 	virtual ~AbstractDocumentViewAdapter();
 
-	QWidget* widget() const { return mWidget; }
+	QGraphicsWidget* widget() const { return mWidget; }
 
 	virtual MimeTypeUtils::Kind kind() const = 0;
 
@@ -91,7 +90,7 @@ public:
 	virtual void loadConfig() {}
 
 protected:
-	void setWidget(QWidget* widget) { mWidget = widget; }
+	void setWidget(QGraphicsWidget* widget) { mWidget = widget; }
 
 Q_SIGNALS:
 	void previousImageRequested();
@@ -119,7 +118,7 @@ Q_SIGNALS:
 	/** @} */
 
 private:
-	QWidget* mWidget;
+	QGraphicsWidget* mWidget;
 };
 
 
@@ -130,11 +129,7 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
 {
 	Q_OBJECT
 public:
-	EmptyAdapter(QWidget* parent)
-	: AbstractDocumentViewAdapter(parent) {
-		setWidget(new QWidget);
-	}
-
+	EmptyAdapter();
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
 	virtual void installEventFilterOnViewWidgets(QObject*) {}
 	virtual Document::Ptr document() const { return Document::Ptr(); }
