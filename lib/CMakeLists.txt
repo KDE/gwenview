@@ -179,6 +179,7 @@ target_link_libraries(gwenviewlib
 	${KDE4_PHONON_LIBS}
 	${JPEG_LIBRARY}
 	${EXIV2_LIBRARIES}
+	${QT_QTOPENGL_LIBRARY}
 	)
 if( WIN32 )
 target_link_libraries( gwenviewlib ${EXPAT_LIBRARIES} )

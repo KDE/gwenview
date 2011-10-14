@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
+#include <QGLWidget>
 #include <QGraphicsScene>
 #include <QTimer>
 
@@ -70,6 +71,7 @@ DocumentViewContainer::DocumentViewContainer(QWidget* parent)
 , d(new DocumentViewContainerPrivate) {
 	d->q = this;
 	d->mScene = new QGraphicsScene(this);
+	setViewport(new QGLWidget);
 	setScene(d->mScene);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
