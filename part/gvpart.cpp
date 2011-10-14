@@ -59,16 +59,18 @@ namespace Gwenview {
 GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*args*/)
 : KParts::ReadOnlyPart(parent)
 {
-        KGlobal::locale()->insertCatalog("gwenview");
-	mDocumentView = new DocumentView(parentWidget);
-	setWidget(mDocumentView);
+	KGlobal::locale()->insertCatalog("gwenview");
+	// FIXME: QGV
+	//mDocumentView = new DocumentView(parentWidget);
+	//setWidget(mDocumentView);
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),
 		SIGNAL(setWindowCaption(QString)));
 	connect(mDocumentView, SIGNAL(completed()),
 		SIGNAL(completed()));
 
-	mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
+	// FIXME: QGV
+	//mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mDocumentView, SIGNAL(customContextMenuRequested(QPoint)),
 		SLOT(showContextMenu()) );
 
@@ -91,7 +93,8 @@ GVPart::GVPart(QWidget* parentWidget, QObject* parent, const QVariantList& /*arg
 
 
 void GVPart::showProperties() {
-	KPropertiesDialog::showDialog(url(), mDocumentView);
+	// FIXME: QGV
+	//KPropertiesDialog::showDialog(url(), mDocumentView);
 }
 
 
@@ -145,7 +148,9 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void GVPart::showContextMenu() {
-	KMenu menu(mDocumentView);
+	// FIXME QGV
+	//KMenu menu(mDocumentView);
+	KMenu menu;
 	addActionToMenu(&menu, actionCollection(), "file_save_as");
 	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");

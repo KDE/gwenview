@@ -158,16 +158,4 @@ void ImageViewAdapter::loadConfig() {
 	d->mView->setEnlargeSmallerImages(GwenviewConfig::enlargeSmallerImages());
 }
 
-
-qreal ImageViewAdapter::opacity() const {
-	return d->mView->opacity();
-}
-
-
-void ImageViewAdapter::setOpacity(qreal value) {
-	d->mView->setOpacity(value);
-}
-
-
-
 } // namespace

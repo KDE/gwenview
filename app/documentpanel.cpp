@@ -223,10 +223,11 @@ struct DocumentPanelPrivate {
 	}
 
 	DocumentView* createDocumentView() {
-		DocumentView* view = new DocumentView(0);
+		DocumentView* view = new DocumentView;
 
 		// Connect context menu
-		view->setContextMenuPolicy(Qt::CustomContextMenu);
+		// FIXME
+		//view->setContextMenuPolicy(Qt::CustomContextMenu);
 		QObject::connect(view, SIGNAL(customContextMenuRequested(QPoint)),
 			that, SLOT(showContextMenu()) );
 

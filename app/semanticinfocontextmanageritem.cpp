@@ -341,7 +341,9 @@ void SemanticInfoContextManagerItem::slotRatingChanged(int rating) {
 	// Show rating indicator in view mode, and only if sidebar is not visible
 	if (d->mDocumentPanel->isVisible() && !d->mRatingWidget->isVisible()) {
 		delete d->mRatingIndicator.data();
-		d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel->documentView());
+		// FIXME QGV
+		//d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel->documentView());
+		d->mRatingIndicator = new RatingIndicator(d->mDocumentPanel);
 		d->mRatingIndicator->setRating(rating);
 		d->mRatingIndicator->show();
 	}

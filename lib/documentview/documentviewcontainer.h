@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Qt
-#include <QWidget>
+#include <QGraphicsView>
 
 namespace Gwenview {
 
@@ -39,7 +39,7 @@ class DocumentViewContainerPrivate;
  * A container for DocumentViews which will arrange them to make best use of
  * available space.
  */
-class GWENVIEWLIB_EXPORT DocumentViewContainer : public QWidget {
+class GWENVIEWLIB_EXPORT DocumentViewContainer : public QGraphicsView {
 	Q_OBJECT
 public:
 	DocumentViewContainer(QWidget* parent=0);

@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QWidget>
+#include <QGraphicsProxyWidget>
 
 // KDE
 #include <kactioncollection.h>
@@ -46,17 +46,16 @@ struct DocumentViewPrivate;
  * This widget can display various documents, using an instance of
  * AbstractDocumentViewAdapter
  */
-class GWENVIEWLIB_EXPORT DocumentView : public QWidget {
+class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsProxyWidget {
 	Q_OBJECT
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
 	Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged)
-	Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
 	enum {
 		MaximumZoom = 16
 	};
-	DocumentView(QWidget* parent);
+	DocumentView();
 	~DocumentView();
 
 	Document::Ptr document() const;
@@ -98,10 +97,6 @@ public:
 
 	QPoint position() const;
 
-	qreal opacity() const;
-
-	void setOpacity(qreal value);
-
 	/**
 	 * Returns the ImageView of the current adapter, if it has one
 	 */
@@ -111,6 +106,8 @@ public:
 	void moveToAnimated(const QRect&);
 	void fadeIn();
 	void fadeOut();
+
+	void setGeometry(const QRectF& rect); // reimp
 
 public Q_SLOTS:
 	void setZoom(qreal);
@@ -155,8 +152,7 @@ Q_SIGNALS:
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
-	virtual void paintEvent(QPaintEvent*);
-	void resizeEvent(QResizeEvent* event);
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
 private Q_SLOTS:
 	void finishOpenUrl();

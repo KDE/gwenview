@@ -99,9 +99,6 @@ public:
 	qreal computeZoomToFitWidth() const;
 	qreal computeZoomToFitHeight() const;
 
-	qreal opacity() const;
-	void setOpacity(qreal value);
-
 Q_SIGNALS:
 	void zoomChanged(qreal);
 

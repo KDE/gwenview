@@ -71,6 +71,7 @@ static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
+	QWidget* mWidget;
 	HudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
@@ -87,13 +88,7 @@ struct DocumentViewPrivate {
 
 	void setCurrentAdapter(AbstractDocumentViewAdapter* adapter) {
 		Q_ASSERT(adapter);
-		qreal opacity = mAdapter.data() ? mAdapter->opacity() : -1;
 		mAdapter.reset(adapter);
-
-		adapter->loadConfig();
-		if (opacity >= 0) {
-			adapter->setOpacity(opacity);
-		}
 
 		QObject::connect(adapter, SIGNAL(previousImageRequested()),
 			that, SIGNAL(previousImageRequested()) );
@@ -104,7 +99,7 @@ struct DocumentViewPrivate {
 		QObject::connect(adapter, SIGNAL(zoomOutRequested(QPoint)),
 			that, SLOT(zoomOut(QPoint)) );
 
-		adapter->widget()->setParent(that);
+		adapter->widget()->setParent(mWidget);
 		adapter->widget()->show();
 		resizeAdapterWidget();
 
@@ -114,7 +109,7 @@ struct DocumentViewPrivate {
 			QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
-		adapter->installEventFilterOnViewWidgets(that);
+		adapter->installEventFilterOnViewWidgets(mWidget);
 
 		QAbstractScrollArea* area = qobject_cast<QAbstractScrollArea*>(adapter->widget());
 		if (area) {
@@ -160,7 +155,7 @@ struct DocumentViewPrivate {
 		mLoadingIndicator->setSequence(sequence);
 		mLoadingIndicator->setInterval(100);
 
-		WidgetFloater* floater = new WidgetFloater(that);
+		WidgetFloater* floater = new WidgetFloater(mWidget);
 		floater->setChildWidget(mLoadingIndicator);
 	}
 
@@ -189,7 +184,7 @@ struct DocumentViewPrivate {
 
 		mHud = new HudWidget;
 		mHud->init(content, HudWidget::OptionNone);
-		WidgetFloater* floater = new WidgetFloater(that);
+		WidgetFloater* floater = new WidgetFloater(mWidget);
 		floater->setChildWidget(mHud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
@@ -284,7 +279,7 @@ struct DocumentViewPrivate {
 	}
 
 	void resizeAdapterWidget() {
-		QRect rect = that->rect();
+		QRect rect = mWidget->rect();
 		if (mCompareMode) {
 			rect.adjust(COMPARE_MARGIN, COMPARE_MARGIN, -COMPARE_MARGIN, -COMPARE_MARGIN);
 		}
@@ -365,16 +360,18 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView(QWidget* parent)
-: QWidget(parent)
-, d(new DocumentViewPrivate) {
+DocumentView::DocumentView()
+: d(new DocumentViewPrivate) {
 	d->that = this;
+	d->mWidget = new QWidget;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
 	d->setupZoomCursor();
 	d->setupHud();
-	d->setCurrentAdapter(new MessageViewAdapter(this));
+	d->setCurrentAdapter(new MessageViewAdapter(d->mWidget));
+	setWidget(d->mWidget);
+	d->mWidget->show();
 	d->mCurrent = false;
 	d->mCompareMode = false;
 }
@@ -395,23 +392,23 @@ void DocumentView::createAdapterForDocument() {
 	AbstractDocumentViewAdapter* adapter = 0;
 	switch (documentKind) {
 	case MimeTypeUtils::KIND_RASTER_IMAGE:
-		adapter = new ImageViewAdapter(this);
+		adapter = new ImageViewAdapter(d->mWidget);
 		break;
 	case MimeTypeUtils::KIND_SVG_IMAGE:
-		adapter = new SvgViewAdapter(this);
+		adapter = new SvgViewAdapter(d->mWidget);
 		break;
 	case MimeTypeUtils::KIND_VIDEO:
-		adapter = new VideoViewAdapter(this);
+		adapter = new VideoViewAdapter(d->mWidget);
 		connect(adapter, SIGNAL(videoFinished()),
 			SIGNAL(videoFinished()));
 		break;
 	case MimeTypeUtils::KIND_UNKNOWN:
-		adapter = new MessageViewAdapter(this);
+		adapter = new MessageViewAdapter(d->mWidget);
 		static_cast<MessageViewAdapter*>(adapter)->setErrorMessage(i18n("Gwenview does not know how to display this kind of document"));
 		break;
 	default:
 		kWarning() << "should not be called for documentKind=" << documentKind;
-		adapter = new MessageViewAdapter(this);
+		adapter = new MessageViewAdapter(d->mWidget);
 		break;
 	}
 
@@ -475,7 +472,7 @@ void DocumentView::reset() {
 		disconnect(d->mDocument.data(), 0, this, 0);
 		d->mDocument = 0;
 	}
-	d->setCurrentAdapter(new EmptyAdapter(this));
+	d->setCurrentAdapter(new EmptyAdapter(d->mWidget));
 }
 
 
@@ -510,7 +507,7 @@ void DocumentView::slotLoaded() {
 
 void DocumentView::slotLoadingFailed() {
 	d->hideLoadingIndicator();
-	MessageViewAdapter* adapter = new MessageViewAdapter(this);
+	MessageViewAdapter* adapter = new MessageViewAdapter(d->mWidget);
 	adapter->setDocument(d->mDocument);
 	QString message = i18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
 	adapter->setErrorMessage(message, d->mDocument->errorString());
@@ -588,15 +585,6 @@ qreal DocumentView::zoom() const {
 	return d->mAdapter->zoom();
 }
 
-qreal DocumentView::opacity() const {
-	return d->mAdapter->opacity();
-}
-
-void DocumentView::setOpacity(qreal value) {
-	d->mAdapter->setOpacity(value);
-	update();
-}
-
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
 	case QEvent::MouseButtonPress:
@@ -623,19 +611,19 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 }
 
 
-void DocumentView::paintEvent(QPaintEvent* event) {
-	QWidget::paintEvent(event);
+void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	QGraphicsProxyWidget::paint(painter, option, widget);
 	if (!d->mCompareMode) {
 		return;
 	}
-	QPainter painter(this);
 	if (d->mCurrent) {
-		painter.setOpacity(d->mAdapter->opacity());
-		painter.setBrush(Qt::NoBrush);
-		painter.setPen(QPen(palette().highlight().color(), 2));
-		painter.setRenderHint(QPainter::Antialiasing);
-		QRectF selectionRect = QRectF(rect()).adjusted(2, 2, -2, -2);
-		painter.drawRoundedRect(selectionRect, 3, 3);
+		painter->save();
+		painter->setBrush(Qt::NoBrush);
+		painter->setPen(QPen(palette().highlight().color(), 2));
+		painter->setRenderHint(QPainter::Antialiasing);
+		QRectF selectionRect = boundingRect().adjusted(2, 2, -2, -2);
+		painter->drawRoundedRect(selectionRect, 3, 3);
+		painter->restore();
 	}
 }
 
@@ -734,8 +722,8 @@ void DocumentView::emitHudTrashClicked() {
 	hudTrashClicked(this);
 }
 
-void DocumentView::resizeEvent(QResizeEvent* event) {
-	QWidget::resizeEvent(event);
+void DocumentView::setGeometry(const QRectF& rect) {
+	QGraphicsProxyWidget::setGeometry(rect);
 	d->resizeAdapterWidget();
 }
 

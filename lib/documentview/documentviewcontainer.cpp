@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QEvent>
+#include <QGraphicsScene>
 #include <QTimer>
-#include <QWidget>
 
 // libc
 #include <qmath.h>
@@ -42,6 +42,7 @@ typedef QSet<DocumentView*> DocumentViewSet;
 
 struct DocumentViewContainerPrivate {
 	DocumentViewContainer* q;
+	QGraphicsScene* mScene;
 	DocumentViewSet mViews;
 	DocumentViewSet mAddedViews;
 	DocumentViewSet mRemovedViews;
@@ -65,9 +66,11 @@ struct DocumentViewContainerPrivate {
 
 
 DocumentViewContainer::DocumentViewContainer(QWidget* parent)
-: QWidget(parent)
+: QGraphicsView(parent)
 , d(new DocumentViewContainerPrivate) {
 	d->q = this;
+	d->mScene = new QGraphicsScene(this);
+	setScene(d->mScene);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	d->mLayoutUpdateTimer = new QTimer(this);
@@ -84,7 +87,8 @@ DocumentViewContainer::~DocumentViewContainer() {
 
 void DocumentViewContainer::addView(DocumentView* view) {
 	d->mAddedViews << view;
-	view->setParent(this);
+	d->mScene->addItem(view);
+	view->show();
 	connect(view, SIGNAL(animationFinished(DocumentView*)),
 		SLOT(slotViewAnimationFinished(DocumentView*)));
 	d->scheduleLayoutUpdate();

@@ -55,7 +55,6 @@ struct ImageViewPrivate {
 	QColor mAlphaBackgroundColor;
 	bool mEnlargeSmallerImages;
 	Document::Ptr mDocument;
-	qreal mOpacity;
 	qreal mZoom;
 	bool mZoomToFit;
 	QPixmap mCurrentBuffer;
@@ -204,7 +203,6 @@ ImageView::ImageView(QWidget* parent)
 	d->mAlphaBackgroundColor = Qt::black;
 
 	d->mView = this;
-	d->mOpacity = 1.;
 	d->mZoom = 1.;
 	d->mZoomToFit = true;
 	d->createBackgroundTexture();
@@ -352,7 +350,6 @@ void ImageView::updateImageRect(const QRect& imageRect) {
 void ImageView::paintEvent(QPaintEvent* event) {
 	QPainter painter(d->mViewport);
 	painter.setClipRect(event->rect());
-	painter.setOpacity(d->mOpacity);
 
 	QSize viewportSize = d->mViewport->size();
 
@@ -792,18 +789,5 @@ void ImageView::keyReleaseEvent(QKeyEvent* event) {
 	}
 	QAbstractScrollArea::keyReleaseEvent(event);
 }
-
-
-qreal ImageView::opacity() const {
-	return d->mOpacity;
-}
-
-
-void ImageView::setOpacity(qreal value) {
-	d->mOpacity = value;
-	update();
-}
-
-
 
 } // namespace
