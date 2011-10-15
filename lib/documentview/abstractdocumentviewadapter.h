@@ -93,9 +93,6 @@ protected:
 	void setWidget(QGraphicsWidget* widget) { mWidget = widget; }
 
 Q_SIGNALS:
-	void previousImageRequested();
-	void nextImageRequested();
-
 	/**
 	 * @addgroup zooming functions
 	 * @{

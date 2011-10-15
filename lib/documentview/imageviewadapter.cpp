@@ -44,10 +44,6 @@ struct ImageViewAdapterPrivate {
 	void setupScrollTool() {
 		mScrollTool = new ScrollTool(mView);
 		mView->setDefaultTool(mScrollTool);
-		QObject::connect(mScrollTool, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(mScrollTool, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
 	}
 };
 

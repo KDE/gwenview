@@ -93,11 +93,6 @@ struct DocumentViewPrivate {
 		Q_ASSERT(adapter);
 		mAdapter.reset(adapter);
 
-		QObject::connect(adapter, SIGNAL(previousImageRequested()),
-			that, SIGNAL(previousImageRequested()) );
-		QObject::connect(adapter, SIGNAL(nextImageRequested()),
-			that, SIGNAL(nextImageRequested()) );
-
 		adapter->widget()->setParentItem(that);
 		resizeAdapterWidget();
 

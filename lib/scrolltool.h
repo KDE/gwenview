@@ -50,10 +50,6 @@ public:
 	virtual void toolActivated();
 	virtual void toolDeactivated();
 
-Q_SIGNALS:
-	void previousImageRequested();
-	void nextImageRequested();
-
 private:
 	ScrollToolPrivate* const d;
 };
