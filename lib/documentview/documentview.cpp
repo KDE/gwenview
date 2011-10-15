@@ -568,17 +568,13 @@ void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
-// FIXME: QGV
-/*
 void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	// Filter out context menu if Ctrl is down to avoid showing it when
 	// zooming out with Ctrl + Right button
-	if (event->modifiers() == Qt::ControlModifier) {
-		return true;
+	if (event->modifiers() != Qt::ControlModifier) {
+		contextMenuRequested();
 	}
-	return false;
 }
-*/
 
 void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
 	if (!d->mCompareMode) {

@@ -149,6 +149,8 @@ Q_SIGNALS:
 
 	void animationFinished(DocumentView*);
 
+	void contextMenuRequested();
+
 protected:
 	virtual bool eventFilter(QObject*, QEvent* event);
 
@@ -157,6 +159,7 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent* event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 	void wheelEvent(QGraphicsSceneWheelEvent* event);
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
 
 private Q_SLOTS:
 	void finishOpenUrl();
