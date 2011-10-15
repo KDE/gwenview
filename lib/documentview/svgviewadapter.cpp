@@ -41,6 +41,7 @@ public:
 	SvgWidget(QGraphicsItem* parent = 0)
 	: QGraphicsWidget(parent)
 	, mRenderer(new QSvgRenderer(this))
+	, mZoom(1)
 	{}
 
 	void loadFromDocument(Document::Ptr doc) {
@@ -48,22 +49,28 @@ public:
 		updateCache();
 	}
 
-protected:
-	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
-		painter->drawPixmap(0, 0, mCachePix);
-	}
-
-private:
-	QSvgRenderer* mRenderer;
-	QPixmap mCachePix;
-
 	void updateCache() {
-		mCachePix = QPixmap(boundingRect().size().toSize());
+		mCachePix = QPixmap(defaultSize() * mZoom);
 		mCachePix.fill(Qt::transparent);
 		QPainter painter(&mCachePix);
-		mRenderer->render(&painter, boundingRect());
+		mRenderer->render(&painter, QRectF(mCachePix.rect()));
 		update();
 	}
+
+	QSize defaultSize() const {
+		return mRenderer->defaultSize();
+	}
+
+	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+		painter->drawPixmap(
+			(size().width() - mCachePix.width()) / 2,
+			(size().height() - mCachePix.height()) / 2,
+			mCachePix);
+	}
+
+	QSvgRenderer* mRenderer;
+	qreal mZoom;
+	QPixmap mCachePix;
 };
 
 struct SvgViewAdapterPrivate {
@@ -143,20 +150,14 @@ bool SvgViewAdapter::zoomToFit() const {
 
 
 qreal SvgViewAdapter::zoom() const {
-	return 1;
-	// FIXME: QGV
-	//return d->mView->matrix().m11();
+	return d->mWidget->mZoom;
 }
 
 
-void SvgViewAdapter::setZoom(qreal /*zoom*/, const QPoint& /*center*/) {
-	// FIXME: QGV
-	/*
-	QMatrix matrix;
-	matrix.scale(zoom, zoom);
-	d->mView->setMatrix(matrix);
+void SvgViewAdapter::setZoom(qreal zoom, const QPoint& /*center*/) {
+	d->mWidget->mZoom = zoom;
+	d->mWidget->updateCache();
 	emit zoomChanged(zoom);
-	*/
 }
 
 
@@ -166,22 +167,14 @@ qreal SvgViewAdapter::computeZoomToFit() const {
 
 
 qreal SvgViewAdapter::computeZoomToFitWidth() const {
-	return 1;
-	// FIXME: QGV
-	/*
-	int width = d->mScene->width();
-	return width != 0 ? (qreal(d->mView->viewport()->width()) / width) : 1;
-	*/
+	qreal width = d->mWidget->defaultSize().width();
+	return width != 0 ? (d->mWidget->size().width() / width) : 1;
 }
 
 
 qreal SvgViewAdapter::computeZoomToFitHeight() const {
-	return 1;
-	// FIXME: QGV
-	/*
-	int height = d->mScene->height();
-	return height != 0 ? (qreal(d->mView->viewport()->height()) / height) : 1;
-	*/
+	qreal height = d->mWidget->defaultSize().height();
+	return height != 0 ? (d->mWidget->size().height() / height) : 1;
 }
 
 
