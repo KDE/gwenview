@@ -79,7 +79,7 @@ struct DocumentViewPrivate {
 	QCursor mPreviousCursor;
 	QWeakPointer<QPropertyAnimation> mMoveAnimation;
 
-	KPixmapSequenceWidget* mLoadingIndicator;
+	QGraphicsProxyWidget* mLoadingIndicator;
 
 	QScopedPointer<AbstractDocumentViewAdapter> mAdapter;
 	QList<qreal> mZoomSnapValues;
@@ -154,11 +154,14 @@ struct DocumentViewPrivate {
 
 	void setupLoadingIndicator() {
 		KPixmapSequence sequence("process-working", 22);
-		mLoadingIndicator = new KPixmapSequenceWidget;
-		mLoadingIndicator->setSequence(sequence);
-		mLoadingIndicator->setInterval(100);
+		KPixmapSequenceWidget* widget = new KPixmapSequenceWidget;
+		widget->setSequence(sequence);
+		widget->setInterval(100);
 
-		WidgetFloater* floater = new WidgetFloater(mWidget);
+		mLoadingIndicator = new QGraphicsProxyWidget(that);
+		mLoadingIndicator->setWidget(widget);
+
+		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
 		floater->setChildWidget(mLoadingIndicator);
 	}
 
@@ -265,7 +268,7 @@ struct DocumentViewPrivate {
 			setupLoadingIndicator();
 		}
 		mLoadingIndicator->show();
-		mLoadingIndicator->raise();
+		mLoadingIndicator->setZValue(1);
 	}
 
 
