@@ -58,8 +58,6 @@ public:
 
 	virtual ImageView* imageView() const { return 0; }
 
-	virtual void installEventFilterOnViewWidgets(QObject*) = 0;
-
 	virtual QCursor cursor() const;
 
 	virtual void setCursor(const QCursor&);
@@ -116,7 +114,6 @@ class EmptyAdapter : public AbstractDocumentViewAdapter
 public:
 	EmptyAdapter();
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
-	virtual void installEventFilterOnViewWidgets(QObject*) {}
 	virtual Document::Ptr document() const { return Document::Ptr(); }
 	virtual void setDocument(Document::Ptr) {}
 };

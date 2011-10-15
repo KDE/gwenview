@@ -142,11 +142,6 @@ VideoViewAdapter::VideoViewAdapter()
 }
 
 
-void VideoViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	d->mVideoWidget->installEventFilter(object);
-}
-
-
 VideoViewAdapter::~VideoViewAdapter() {
 	delete d;
 }

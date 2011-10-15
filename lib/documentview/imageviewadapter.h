@@ -40,8 +40,6 @@ public:
 	ImageViewAdapter();
 	~ImageViewAdapter();
 
-	virtual void installEventFilterOnViewWidgets(QObject*);
-
 	virtual QCursor cursor() const;
 
 	virtual void setCursor(const QCursor&);

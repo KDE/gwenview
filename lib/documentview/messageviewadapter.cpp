@@ -81,11 +81,6 @@ void MessageViewAdapter::setInfoMessage(const QString& message) {
 }
 
 
-void MessageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	widget()->installEventFilter(object);
-}
-
-
 Document::Ptr MessageViewAdapter::document() const {
 	return d->mDocument;
 }

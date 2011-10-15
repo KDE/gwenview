@@ -38,8 +38,6 @@ public:
 	MessageViewAdapter();
 	~MessageViewAdapter();
 
-	virtual void installEventFilterOnViewWidgets(QObject*);
-
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_UNKNOWN; }
 
 	virtual Document::Ptr document() const;

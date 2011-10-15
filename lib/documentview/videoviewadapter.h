@@ -40,8 +40,6 @@ public:
 	VideoViewAdapter();
 	~VideoViewAdapter();
 
-	virtual void installEventFilterOnViewWidgets(QObject*);
-
 	virtual MimeTypeUtils::Kind kind() const { return MimeTypeUtils::KIND_VIDEO; }
 
 	virtual Document::Ptr document() const;

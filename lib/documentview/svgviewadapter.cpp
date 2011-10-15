@@ -88,14 +88,6 @@ SvgViewAdapter::SvgViewAdapter()
 }
 
 
-void SvgViewAdapter::installEventFilterOnViewWidgets(QObject* /*object*/) {
-	// FIXME: QGV
-	//d->mView->viewport()->installEventFilter(object);
-	// Necessary to receive key{Press,Release} events
-	//d->mView->installEventFilter(object);
-}
-
-
 SvgViewAdapter::~SvgViewAdapter() {
 	delete d;
 }

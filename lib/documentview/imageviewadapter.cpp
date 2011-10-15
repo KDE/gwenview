@@ -61,13 +61,6 @@ ImageViewAdapter::ImageViewAdapter()
 }
 
 
-void ImageViewAdapter::installEventFilterOnViewWidgets(QObject* object) {
-	d->mView->viewport()->installEventFilter(object);
-	// Necessary to receive key{Press,Release} events
-	d->mView->installEventFilter(object);
-}
-
-
 ImageViewAdapter::~ImageViewAdapter() {
 	delete d;
 }
