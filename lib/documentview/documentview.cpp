@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
+#include <lib/graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
 #include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
@@ -72,7 +73,7 @@ static const int COMPARE_MARGIN = 4;
 struct DocumentViewPrivate {
 	DocumentView* that;
 	QWidget* mWidget;
-	HudWidget* mHud;
+	QGraphicsProxyWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
@@ -184,9 +185,11 @@ struct DocumentViewPrivate {
 		layout->addWidget(trashButton);
 		layout->addWidget(deselectButton);
 
-		mHud = new HudWidget;
-		mHud->init(content, HudWidget::OptionNone);
-		WidgetFloater* floater = new WidgetFloater(mWidget);
+		HudWidget* hud = new HudWidget;
+		hud->init(content, HudWidget::OptionNone);
+		mHud = new QGraphicsProxyWidget(that);
+		mHud->setWidget(hud);
+		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
 		floater->setChildWidget(mHud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 
@@ -650,7 +653,7 @@ void DocumentView::setCompareMode(bool compare) {
 	d->resizeAdapterWidget();
 	if (compare) {
 		d->mHud->show();
-		d->mHud->raise();
+		d->mHud->setZValue(1);
 	} else {
 		d->mHud->hide();
 	}
