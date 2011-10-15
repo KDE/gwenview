@@ -39,11 +39,6 @@ struct ScrollToolPrivate;
 class GWENVIEWLIB_EXPORT ScrollTool : public AbstractImageViewTool {
 	Q_OBJECT
 public:
-	enum MouseWheelBehavior {
-		MouseWheelScroll,
-		MouseWheelBrowse
-	};
-
 	ScrollTool(ImageView* view);
 	~ScrollTool();
 

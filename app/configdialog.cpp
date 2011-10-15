@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "ui_advancedconfigpage.h"
 #include <lib/gwenviewconfig.h>
 #include <lib/invisiblebuttongroup.h>
-#include <lib/scrolltool.h>
 
 namespace Gwenview {
 
@@ -80,8 +79,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
 	d->mWheelBehaviorGroup = new InvisibleButtonGroup(widget);
 	d->mWheelBehaviorGroup->setObjectName( QLatin1String("kcfg_MouseWheelBehavior" ));
-	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(ScrollTool::MouseWheelScroll));
-	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(ScrollTool::MouseWheelBrowse));
+	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelScrollRadioButton, int(MouseWheelBehavior::Scroll));
+	d->mWheelBehaviorGroup->addButton(d->mImageViewConfigPage.mouseWheelBrowseRadioButton, int(MouseWheelBehavior::Browse));
 
 	d->mThumbnailBarOrientationGroup = new InvisibleButtonGroup(widget);
 	d->mThumbnailBarOrientationGroup->setObjectName( QLatin1String("kcfg_ThumbnailBarOrientation" ));
