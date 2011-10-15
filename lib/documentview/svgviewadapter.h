@@ -60,7 +60,7 @@ public:
 
 	virtual qreal zoom() const;
 
-	virtual void setZoom(qreal /*zoom*/, const QPoint& /*center*/ = QPoint(-1, -1));
+	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
 
 	virtual qreal computeZoomToFit() const;
 	virtual qreal computeZoomToFitWidth() const;

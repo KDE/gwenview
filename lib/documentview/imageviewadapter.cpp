@@ -120,8 +120,8 @@ bool ImageViewAdapter::zoomToFit() const {
 }
 
 
-void ImageViewAdapter::setZoom(qreal zoom, const QPoint& center) {
-	d->mView->setZoom(zoom, center);
+void ImageViewAdapter::setZoom(qreal zoom, const QPointF& center) {
+	d->mView->setZoom(zoom, center.toPoint());
 }
 
 

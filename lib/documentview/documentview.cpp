@@ -23,6 +23,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QAbstractScrollArea>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPropertyAnimation>
@@ -72,7 +75,6 @@ static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
-	QWidget* mWidget;
 	QGraphicsProxyWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
@@ -105,7 +107,6 @@ struct DocumentViewPrivate {
 			QObject::connect(adapter, SIGNAL(zoomToFitChanged(bool)),
 				that, SIGNAL(zoomToFitChanged(bool)) );
 		}
-		adapter->installEventFilterOnViewWidgets(mWidget);
 
 		// FIXME QGV
 		/*
@@ -231,7 +232,7 @@ struct DocumentViewPrivate {
 	}
 
 
-	void setZoom(qreal zoom, const QPoint& center = QPoint(-1, -1)) {
+	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1)) {
 		uncheckZoomToFit();
 		zoom = qBound(that->minimumZoom(), zoom, MAXIMUM_ZOOM_VALUE);
 		mAdapter->setZoom(zoom, center);
@@ -290,91 +291,18 @@ struct DocumentViewPrivate {
 		mAdapter->widget()->setGeometry(rect);
 	}
 
-	bool adapterMousePressEventFilter(QMouseEvent* event) {
-		if (mAdapter->canZoom()) {
-			if (event->modifiers() == Qt::ControlModifier) {
-				// Ctrl + Left or right button => zoom in or out
-				if (event->button() == Qt::LeftButton) {
-					that->zoomIn(event->pos());
-				} else if (event->button() == Qt::RightButton) {
-					that->zoomOut(event->pos());
-				}
-				return true;
-			} else if (event->button() == Qt::MidButton) {
-				// Middle click => toggle zoom to fit
-				that->setZoomToFit(!mAdapter->zoomToFit());
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool adapterMouseReleaseEventFilter(QMouseEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() == Qt::ControlModifier) {
-			// Eat the mouse release so that the svg view does not restore its
-			// drag cursor on release: we want the zoom cursor to stay as long
-			// as Control is held down.
-			return true;
-		}
-		return false;
-	}
-
-	bool adapterMouseDoubleClickEventFilter(QMouseEvent* event) {
-		if (event->modifiers() == Qt::NoModifier) {
-			that->toggleFullScreenRequested();
-			return true;
-		}
-		return false;
-	}
-
-
-	bool adapterWheelEventFilter(QWheelEvent* event) {
-		if (mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
-			// Ctrl + wheel => zoom in or out
-			if (event->delta() > 0) {
-				that->zoomIn(event->pos());
-			} else {
-				that->zoomOut(event->pos());
-			}
-			return true;
-		}
-		if (event->modifiers() == Qt::NoModifier
-			&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
-			) {
-			// Browse with mouse wheel
-			if (event->delta() > 0) {
-				that->previousImageRequested();
-			} else {
-				that->nextImageRequested();
-			}
-			return true;
-		}
-		return false;
-	}
-
-
-	bool adapterContextMenuEventFilter(QContextMenuEvent* event) {
-		// Filter out context menu if Ctrl is down to avoid showing it when
-		// zooming out with Ctrl + Right button
-		if (event->modifiers() == Qt::ControlModifier) {
-			return true;
-		}
-		return false;
-	}
 };
 
 
 DocumentView::DocumentView()
 : d(new DocumentViewPrivate) {
 	d->that = this;
-	d->mWidget = new QWidget;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
 	d->setupZoomCursor();
 	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter);
-	setWidget(d->mWidget);
 	d->mCurrent = false;
 	d->mCompareMode = false;
 }
@@ -546,7 +474,7 @@ void DocumentView::zoomActualSize() {
 }
 
 
-void DocumentView::zoomIn(const QPoint& center) {
+void DocumentView::zoomIn(const QPointF& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
 	Q_FOREACH(qreal zoom, d->mZoomSnapValues) {
@@ -558,7 +486,7 @@ void DocumentView::zoomIn(const QPoint& center) {
 }
 
 
-void DocumentView::zoomOut(const QPoint& center) {
+void DocumentView::zoomOut(const QPointF& center) {
 	qreal currentZoom = d->mAdapter->zoom();
 
 	QListIterator<qreal> it(d->mZoomSnapValues);
@@ -590,19 +518,6 @@ qreal DocumentView::zoom() const {
 
 bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	switch (event->type()) {
-	case QEvent::MouseButtonPress:
-		return d->adapterMousePressEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::MouseButtonRelease:
-		return d->adapterMouseReleaseEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::Resize:
-		d->updateZoomSnapValues();
-		break;
-	case QEvent::MouseButtonDblClick:
-		return d->adapterMouseDoubleClickEventFilter(static_cast<QMouseEvent*>(event));
-	case QEvent::Wheel:
-		return d->adapterWheelEventFilter(static_cast<QWheelEvent*>(event));
-	case QEvent::ContextMenu:
-		return d->adapterContextMenuEventFilter(static_cast<QContextMenuEvent*>(event));
 	case QEvent::FocusIn:
 		focused(this);
 		break;
@@ -613,9 +528,64 @@ bool DocumentView::eventFilter(QObject*, QEvent* event) {
 	return false;
 }
 
+void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	if (!d->mAdapter->canZoom()) {
+		return;
+	}
+	if (event->modifiers() == Qt::ControlModifier) {
+		// Ctrl + Left or right button => zoom in or out
+		if (event->button() == Qt::LeftButton) {
+			zoomIn(event->pos());
+		} else if (event->button() == Qt::RightButton) {
+			zoomOut(event->pos());
+		}
+	} else if (event->button() == Qt::MidButton) {
+		// Middle click => toggle zoom to fit
+		setZoomToFit(!d->mAdapter->zoomToFit());
+	}
+}
 
-void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	//QGraphicsProxyWidget::paint(painter, option, widget);
+void DocumentView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+	if (event->modifiers() == Qt::NoModifier) {
+		toggleFullScreenRequested();
+	}
+}
+
+void DocumentView::wheelEvent(QGraphicsSceneWheelEvent* event) {
+	if (d->mAdapter->canZoom() && event->modifiers() & Qt::ControlModifier) {
+		// Ctrl + wheel => zoom in or out
+		if (event->delta() > 0) {
+			zoomIn(event->pos());
+		} else {
+			zoomOut(event->pos());
+		}
+		return;
+	}
+	if (event->modifiers() == Qt::NoModifier
+		&& GwenviewConfig::mouseWheelBehavior() == MouseWheelBehavior::Browse
+		) {
+		// Browse with mouse wheel
+		if (event->delta() > 0) {
+			previousImageRequested();
+		} else {
+			nextImageRequested();
+		}
+	}
+}
+
+// FIXME: QGV
+/*
+void DocumentView::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// Filter out context menu if Ctrl is down to avoid showing it when
+	// zooming out with Ctrl + Right button
+	if (event->modifiers() == Qt::ControlModifier) {
+		return true;
+	}
+	return false;
+}
+*/
+
+void DocumentView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
 	if (!d->mCompareMode) {
 		return;
 	}
@@ -729,7 +699,7 @@ void DocumentView::emitHudTrashClicked() {
 }
 
 void DocumentView::setGeometry(const QRectF& rect) {
-	QGraphicsProxyWidget::setGeometry(rect);
+	QGraphicsWidget::setGeometry(rect);
 	d->resizeAdapterWidget();
 }
 

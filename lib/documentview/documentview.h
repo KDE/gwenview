@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/gwenviewlib_export.h>
 
 // Qt
-#include <QGraphicsProxyWidget>
+#include <QGraphicsWidget>
 
 // KDE
 #include <kactioncollection.h>
@@ -46,7 +46,7 @@ struct DocumentViewPrivate;
  * This widget can display various documents, using an instance of
  * AbstractDocumentViewAdapter
  */
-class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsProxyWidget {
+class GWENVIEWLIB_EXPORT DocumentView : public QGraphicsWidget {
 	Q_OBJECT
 	Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
 	Q_PROPERTY(bool zoomToFit READ zoomToFit WRITE setZoomToFit NOTIFY zoomToFitChanged)
@@ -154,6 +154,10 @@ protected:
 
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+	void wheelEvent(QGraphicsSceneWheelEvent* event);
+
 private Q_SLOTS:
 	void finishOpenUrl();
 	void slotLoaded();
@@ -161,8 +165,8 @@ private Q_SLOTS:
 
 	void zoomActualSize();
 
-	void zoomIn(const QPoint& center = QPoint(-1,-1));
-	void zoomOut(const QPoint& center = QPoint(-1,-1));
+	void zoomIn(const QPointF& center = QPointF(-1,-1));
+	void zoomOut(const QPointF& center = QPointF(-1,-1));
 
 	void slotZoomChanged(qreal);
 
