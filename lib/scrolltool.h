@@ -56,8 +56,6 @@ public:
 	virtual void toolDeactivated();
 
 Q_SIGNALS:
-	void zoomInRequested(const QPoint&);
-	void zoomOutRequested(const QPoint&);
 	void previousImageRequested();
 	void nextImageRequested();
 

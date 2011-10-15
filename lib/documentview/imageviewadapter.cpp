@@ -48,10 +48,6 @@ struct ImageViewAdapterPrivate {
 			that, SIGNAL(previousImageRequested()) );
 		QObject::connect(mScrollTool, SIGNAL(nextImageRequested()),
 			that, SIGNAL(nextImageRequested()) );
-		QObject::connect(mScrollTool, SIGNAL(zoomInRequested(QPoint)),
-			that, SIGNAL(zoomInRequested(QPoint)) );
-		QObject::connect(mScrollTool, SIGNAL(zoomOutRequested(QPoint)),
-			that, SIGNAL(zoomOutRequested(QPoint)) );
 	}
 };
 
