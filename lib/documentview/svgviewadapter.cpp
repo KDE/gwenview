@@ -36,46 +36,55 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-class SvgWidget : public QGraphicsWidget {
-public:
-	SvgWidget(QGraphicsItem* parent = 0)
-	: QGraphicsWidget(parent)
-	, mRenderer(new QSvgRenderer(this))
-	, mZoom(1)
-	{}
+AbstractImageView::AbstractImageView(QGraphicsItem* parent)
+: QGraphicsWidget(parent)
+, mZoom(1)
+{
+}
 
-	void loadFromDocument(Document::Ptr doc) {
-		mRenderer->load(doc->rawData());
-		updateCache();
-	}
+void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+	painter->drawPixmap(
+		(size().width() - mCachePix.width()) / 2,
+		(size().height() - mCachePix.height()) / 2,
+		mCachePix);
+}
 
-	void updateCache() {
-		mCachePix = QPixmap(defaultSize() * mZoom);
-		mCachePix.fill(Qt::transparent);
-		QPainter painter(&mCachePix);
-		mRenderer->render(&painter, QRectF(mCachePix.rect()));
-		update();
-	}
+qreal AbstractImageView::zoom() const {
+	return mZoom;
+}
 
-	QSize defaultSize() const {
-		return mRenderer->defaultSize();
-	}
+void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
+	mZoom = zoom;
+	updateCache();
+}
 
-	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
-		painter->drawPixmap(
-			(size().width() - mCachePix.width()) / 2,
-			(size().height() - mCachePix.height()) / 2,
-			mCachePix);
-	}
+/// SvgImageView ////
+SvgImageView::SvgImageView(QGraphicsItem* parent)
+: AbstractImageView(parent)
+, mRenderer(new QSvgRenderer(this))
+{}
 
-	QSvgRenderer* mRenderer;
-	qreal mZoom;
-	QPixmap mCachePix;
-};
+void SvgImageView::loadFromDocument(Document::Ptr doc) {
+	mRenderer->load(doc->rawData());
+	updateCache();
+}
 
+QSize SvgImageView::defaultSize() const {
+	return mRenderer->defaultSize();
+}
+
+void SvgImageView::updateCache() {
+	mCachePix = QPixmap(defaultSize() * mZoom);
+	mCachePix.fill(Qt::transparent);
+	QPainter painter(&mCachePix);
+	mRenderer->render(&painter, QRectF(mCachePix.rect()));
+	update();
+}
+
+//// SvgViewAdapter ////
 struct SvgViewAdapterPrivate {
 	Document::Ptr mDocument;
-	SvgWidget* mWidget;
+	SvgImageView* mView;
 	bool mZoomToFit;
 };
 
@@ -83,8 +92,8 @@ struct SvgViewAdapterPrivate {
 SvgViewAdapter::SvgViewAdapter()
 : d(new SvgViewAdapterPrivate) {
 	d->mZoomToFit = true;
-	d->mWidget = new SvgWidget;
-	setWidget(d->mWidget);
+	d->mView = new SvgImageView;
+	setWidget(d->mView);
 }
 
 
@@ -112,7 +121,7 @@ void SvgViewAdapter::setDocument(Document::Ptr doc) {
 
 
 void SvgViewAdapter::loadFromDocument() {
-	d->mWidget->loadFromDocument(d->mDocument);
+	d->mView->loadFromDocument(d->mDocument);
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	}
@@ -142,13 +151,12 @@ bool SvgViewAdapter::zoomToFit() const {
 
 
 qreal SvgViewAdapter::zoom() const {
-	return d->mWidget->mZoom;
+	return d->mView->zoom();
 }
 
 
-void SvgViewAdapter::setZoom(qreal zoom, const QPointF& /*center*/) {
-	d->mWidget->mZoom = zoom;
-	d->mWidget->updateCache();
+void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
+	d->mView->setZoom(zoom, center);
 	emit zoomChanged(zoom);
 }
 
@@ -159,14 +167,14 @@ qreal SvgViewAdapter::computeZoomToFit() const {
 
 
 qreal SvgViewAdapter::computeZoomToFitWidth() const {
-	qreal width = d->mWidget->defaultSize().width();
-	return width != 0 ? (d->mWidget->size().width() / width) : 1;
+	qreal width = d->mView->defaultSize().width();
+	return width != 0 ? (d->mView->size().width() / width) : 1;
 }
 
 
 qreal SvgViewAdapter::computeZoomToFitHeight() const {
-	qreal height = d->mWidget->defaultSize().height();
-	return height != 0 ? (d->mWidget->size().height() / height) : 1;
+	qreal height = d->mView->defaultSize().height();
+	return height != 0 ? (d->mView->size().height() / height) : 1;
 }
 
 
