@@ -29,27 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
 class QSvgRenderer;
 
 namespace Gwenview {
-
-class AbstractImageView : public QGraphicsWidget {
-public:
-    AbstractImageView(QGraphicsItem* parent = 0);
-
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/);
-
-	qreal zoom() const;
-
-	void setZoom(qreal zoom, const QPointF& /*center*/);
-
-protected:
-	virtual void updateCache() = 0;
-	qreal mZoom;
-	QPixmap mCachePix;
-};
 
 class SvgImageView : public AbstractImageView {
 public:

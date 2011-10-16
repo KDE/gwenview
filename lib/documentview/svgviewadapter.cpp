@@ -36,28 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-AbstractImageView::AbstractImageView(QGraphicsItem* parent)
-: QGraphicsWidget(parent)
-, mZoom(1)
-{
-}
-
-void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
-	painter->drawPixmap(
-		(size().width() - mCachePix.width()) / 2,
-		(size().height() - mCachePix.height()) / 2,
-		mCachePix);
-}
-
-qreal AbstractImageView::zoom() const {
-	return mZoom;
-}
-
-void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
-	mZoom = zoom;
-	updateCache();
-}
-
 /// SvgImageView ////
 SvgImageView::SvgImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
