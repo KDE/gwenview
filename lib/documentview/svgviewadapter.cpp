@@ -45,18 +45,21 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 void SvgImageView::setDocument(Document::Ptr doc) {
 	AbstractImageView::setDocument(doc);
 	mRenderer->load(doc->rawData());
-	updateCache();
+	createBuffer();
+	updateBuffer();
 }
 
 QSizeF SvgImageView::documentSize() const {
 	return mRenderer->defaultSize();
 }
 
-void SvgImageView::updateCache() {
-	mCachePix = QPixmap((documentSize() * zoom()).toSize());
-	mCachePix.fill(Qt::transparent);
-	QPainter painter(&mCachePix);
-	mRenderer->render(&painter, QRectF(mCachePix.rect()));
+void SvgImageView::updateBuffer() {
+	if (buffer().isNull()) {
+		return;
+	}
+	buffer().fill(Qt::transparent);
+	QPainter painter(&buffer());
+	mRenderer->render(&painter, QRectF(buffer().rect()));
 	update();
 }
 

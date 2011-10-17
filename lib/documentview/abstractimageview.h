@@ -60,12 +60,17 @@ public:
 
 	virtual QSizeF documentSize() const;
 
+	QSizeF visibleImageSize() const;
+
+	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const;
+
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
 
 protected:
-	virtual void updateCache() = 0;
-	QPixmap mCachePix;
+	virtual void updateBuffer() = 0;
+	void createBuffer();
+	QPixmap& buffer();
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
 

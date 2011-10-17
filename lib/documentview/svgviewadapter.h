@@ -45,7 +45,7 @@ public:
 	QSizeF documentSize() const;
 
 protected:
-	void updateCache();
+	void updateBuffer();
 
 private:
 	QSvgRenderer* mRenderer;

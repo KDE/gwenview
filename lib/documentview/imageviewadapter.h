@@ -43,7 +43,7 @@ public:
 	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
 
 protected:
-	void updateCache();
+	void updateBuffer();
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();

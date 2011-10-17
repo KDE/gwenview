@@ -43,39 +43,9 @@ struct RasterImageViewPrivate {
 
 	void startAnimationIfNecessary() {
 	}
-	
-	QSizeF visibleImageSize() const {
-		if (!q->document()) {
-			return QSizeF();
-		}
-		qreal zoom;
-		if (q->zoomToFit()) {
-			zoom = q->computeZoomToFit();
-		} else {
-			zoom = q->zoom();
-		}
-
-		QSizeF size = q->documentSize() * zoom;
-		size = size.boundedTo(q->boundingRect().size());
-
-		return size;
-	}
-
-	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) {
-		// FIXME: QGV
-		QPointF offset = QPointF(0, 0); //mView->imageOffset();
-		QRectF rect = QRectF(
-			viewportRect.x(), //+ hScroll() - offset.x(),
-			viewportRect.y(), //+ vScroll() - offset.y(),
-			viewportRect.width(),
-			viewportRect.height()
-		);
-
-		return rect;
-	}
 
 	void setScalerRegionToVisibleRect() {
-		QRectF rect = mapViewportToZoomedImage(q->boundingRect());
+		QRectF rect = q->mapViewportToZoomedImage(q->boundingRect());
 		mScaler->setDestinationRegion(QRegion(rect.toRect()));
 	}
 };
@@ -126,7 +96,7 @@ void RasterImageView::finishSetDocument() {
 		return;
 	}
 
-	updateCache();
+	createBuffer();
 	d->mScaler->setDocument(document());
 
 	if (zoomToFit()) {
@@ -161,10 +131,10 @@ void RasterImageView::finishSetDocument() {
 		updateImageRect(rect);
 		updateScrollBars();
 	}
+	*/
 
 	d->startAnimationIfNecessary();
-	d->mViewport->update();
-	*/
+	update();
 }
 
 
@@ -174,8 +144,9 @@ void RasterImageView::slotDocumentIsAnimatedUpdated() {
 }
 
 
-void RasterImageView::updateCache() {
-	mCachePix = QPixmap(d->visibleImageSize().toSize());
+void RasterImageView::updateBuffer() {
+	d->mScaler->setZoom(zoom());
+	d->setScalerRegionToVisibleRect();
 }
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
@@ -183,7 +154,7 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 	int viewportLeft = zoomedImageLeft; // - d->hScroll();
 	int viewportTop = zoomedImageTop; // - d->vScroll();
 	{
-		QPainter painter(&mCachePix);
+		QPainter painter(&buffer());
 		/*
 		if (d->mDocument->hasAlphaChannel()) {
 			d->drawAlphaBackground(
@@ -280,8 +251,7 @@ void RasterImageView::setZoom(qreal zoom, const QPointF& _center) {
 	emit zoomChanged(d->mZoom);
 #endif
 	AbstractImageView::setZoom(zoom, _center);
-	d->mScaler->setZoom(zoom);
-	d->setScalerRegionToVisibleRect();
+	updateBuffer();
 }
 
 //// ImageViewAdapter ////

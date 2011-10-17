@@ -34,6 +34,8 @@ struct AbstractImageViewPrivate {
 	Document::Ptr mDoc;
 	qreal mZoom;
 	bool mZoomToFit;
+	QPixmap mCurrentBuffer;
+	QPixmap mAlternateBuffer;
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -49,9 +51,9 @@ AbstractImageView::~AbstractImageView() {
 
 void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
 	painter->drawPixmap(
-		(size().width() - mCachePix.width()) / 2,
-		(size().height() - mCachePix.height()) / 2,
-		mCachePix);
+		(size().width() - d->mCurrentBuffer.width()) / 2,
+		(size().height() - d->mCurrentBuffer.height()) / 2,
+		d->mCurrentBuffer);
 }
 
 qreal AbstractImageView::zoom() const {
@@ -60,7 +62,8 @@ qreal AbstractImageView::zoom() const {
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
 	d->mZoom = zoom;
-	updateCache();
+	createBuffer();
+	updateBuffer();
 }
 
 bool AbstractImageView::zoomToFit() const {
@@ -108,6 +111,63 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	}
+}
+
+QSizeF AbstractImageView::visibleImageSize() const {
+	if (!d->mDoc) {
+		return QSizeF();
+	}
+	qreal zoom;
+	if (d->mZoomToFit) {
+		zoom = computeZoomToFit();
+	} else {
+		zoom = d->mZoom;
+	}
+
+	QSizeF size = documentSize() * zoom;
+	size = size.boundedTo(boundingRect().size());
+
+	return size;
+}
+
+QRectF AbstractImageView::mapViewportToZoomedImage(const QRectF& viewportRect) const {
+	// FIXME: QGV
+	QPointF offset = QPointF(0, 0); //mView->imageOffset();
+	QRectF rect = QRectF(
+		viewportRect.x(), //+ hScroll() - offset.x(),
+		viewportRect.y(), //+ vScroll() - offset.y(),
+		viewportRect.width(),
+		viewportRect.height()
+	);
+
+	return rect;
+}
+
+void AbstractImageView::createBuffer() {
+	QSize size = visibleImageSize().toSize();
+	if (size == d->mCurrentBuffer.size()) {
+		return;
+	}
+	if (!size.isValid()) {
+		d->mAlternateBuffer = QPixmap();
+		d->mCurrentBuffer = QPixmap();
+		return;
+	}
+
+	d->mAlternateBuffer = QPixmap(size);
+	d->mAlternateBuffer.fill(Qt::transparent);
+	{
+		QPainter painter(&d->mAlternateBuffer);
+		painter.drawPixmap(0, 0, d->mCurrentBuffer);
+	}
+	qSwap(d->mAlternateBuffer, d->mCurrentBuffer);
+
+	d->mAlternateBuffer = QPixmap();
+}
+
+QPixmap& AbstractImageView::buffer()
+{
+	return d->mCurrentBuffer;
 }
 
 } // namespace
