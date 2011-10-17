@@ -65,7 +65,6 @@ Q_SIGNALS:
 
 protected:
 	virtual void updateCache() = 0;
-	qreal mZoom;
 	QPixmap mCachePix;
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);

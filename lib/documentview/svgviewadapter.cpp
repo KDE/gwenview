@@ -53,7 +53,7 @@ QSizeF SvgImageView::documentSize() const {
 }
 
 void SvgImageView::updateCache() {
-	mCachePix = QPixmap((documentSize() * mZoom).toSize());
+	mCachePix = QPixmap((documentSize() * zoom()).toSize());
 	mCachePix.fill(Qt::transparent);
 	QPainter painter(&mCachePix);
 	mRenderer->render(&painter, QRectF(mCachePix.rect()));

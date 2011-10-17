@@ -32,13 +32,14 @@ namespace Gwenview {
 
 struct AbstractImageViewPrivate {
 	Document::Ptr mDoc;
+	qreal mZoom;
 	bool mZoomToFit;
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
-, mZoom(1)
 , d(new AbstractImageViewPrivate) {
+	d->mZoom = 1;
 	d->mZoomToFit = true;
 }
 
@@ -54,11 +55,11 @@ void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 }
 
 qreal AbstractImageView::zoom() const {
-	return mZoom;
+	return d->mZoom;
 }
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
-	mZoom = zoom;
+	d->mZoom = zoom;
 	updateCache();
 }
 
