@@ -99,6 +99,9 @@ void RasterImageView::finishSetDocument() {
 	createBuffer();
 	d->mScaler->setDocument(document());
 
+	connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
+		SLOT(updateImageRect(QRect)) );
+
 	if (zoomToFit()) {
 		// Set the zoom to an invalid value to make sure setZoom() does not
 		// return early because the new zoom is the same as the old zoom.
@@ -106,38 +109,30 @@ void RasterImageView::finishSetDocument() {
 		//d->mZoom = -1;
 		setZoom(computeZoomToFit());
 	} else {
-		// FIXME: QGV
-		/*
-		QRect rect(QPoint(0, 0), d->mDocument->size());
+		QRect rect(QPoint(0, 0), document()->size());
 		updateImageRect(rect);
-		updateScrollBars();
-		*/
 	}
-	// FIXME: QGV
-	/*
-	d->createBuffer();
-	d->mScaler->setDocument(d->mDocument);
-
-	connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
-		SLOT(updateImageRect(QRect)) );
-
-	if (d->mZoomToFit) {
-		// Set the zoom to an invalid value to make sure setZoom() does not
-		// return early because the new zoom is the same as the old zoom.
-		d->mZoom = -1;
-		setZoom(computeZoomToFit());
-	} else {
-		QRect rect(QPoint(0, 0), d->mDocument->size());
-		updateImageRect(rect);
-		updateScrollBars();
-	}
-	*/
 
 	d->startAnimationIfNecessary();
 	update();
 }
 
+void RasterImageView::updateImageRect(const QRect& imageRect) {
+	// FIXME: QGV
+	/*
+	QRect viewportRect = mapToViewport(imageRect);
+	viewportRect = viewportRect.intersected(d->mViewport->rect());
+	if (viewportRect.isEmpty()) {
+		return;
+	}
+	*/
 
+	if (zoomToFit()) {
+		setZoom(computeZoomToFit());
+	}
+	d->setScalerRegionToVisibleRect();
+	update();
+}
 
 void RasterImageView::slotDocumentIsAnimatedUpdated() {
 	d->startAnimationIfNecessary();

@@ -50,6 +50,7 @@ private Q_SLOTS:
 	void slotDocumentIsAnimatedUpdated();
 	void finishSetDocument();
 	void updateFromScaler(int, int, const QImage&);
+	void updateImageRect(const QRect& imageRect);
 
 private:
 	RasterImageViewPrivate* const d;
