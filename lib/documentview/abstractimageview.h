@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #define ABSTRACTIMAGEVIEW_H
 
 // Local
+#include <lib/document/document.h>
 
 // KDE
 
@@ -46,6 +47,14 @@ public:
 	qreal zoom() const;
 
 	void setZoom(qreal zoom, const QPointF& center);
+
+	virtual void setDocument(Document::Ptr doc);
+
+	Document::Ptr document() const;
+
+	qreal computeZoomToFit() const;
+
+	virtual QSizeF documentSize() const;
 
 protected:
 	virtual void updateCache() = 0;

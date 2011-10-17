@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 namespace Gwenview {
 
 struct AbstractImageViewPrivate {
+	Document::Ptr mDoc;
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -58,5 +59,31 @@ void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
 	mZoom = zoom;
 	updateCache();
 }
+
+Document::Ptr AbstractImageView::document() const {
+	return d->mDoc;
+}
+
+void AbstractImageView::setDocument(Document::Ptr doc) {
+	d->mDoc = doc;
+}
+
+QSizeF AbstractImageView::documentSize() const {
+	return d->mDoc ? d->mDoc->size() : QSizeF();
+}
+
+qreal AbstractImageView::computeZoomToFit() const {
+	QSizeF docSize = documentSize();
+	if (docSize.isEmpty()) {
+		return 1;
+	}
+
+	QSizeF viewSize = boundingRect().size();
+
+	qreal fitWidth = viewSize.width() / docSize.width();
+	qreal fitHeight = viewSize.height() / docSize.height();
+	return qMin(fitWidth, fitHeight);
+}
+
 
 } // namespace

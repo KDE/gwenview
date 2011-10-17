@@ -28,10 +28,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
+#include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
 namespace Gwenview {
 
+class RasterImageViewPrivate;
+class RasterImageView : public AbstractImageView {
+	Q_OBJECT
+public:
+	RasterImageView(QGraphicsItem* parent = 0);
+	~RasterImageView();
+	void setDocument(Document::Ptr doc);
+	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
+
+protected:
+	void updateCache();
+
+private Q_SLOTS:
+	void slotDocumentMetaInfoLoaded();
+	void slotDocumentIsAnimatedUpdated();
+	void finishSetDocument();
+	void updateFromScaler(int, int, const QImage&);
+
+private:
+	RasterImageViewPrivate* const d;
+};
 
 struct ImageViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter {
@@ -57,10 +79,6 @@ public:
 	virtual void setZoom(qreal zoom, const QPointF& center);
 
 	virtual qreal computeZoomToFit() const;
-
-	virtual qreal computeZoomToFitWidth() const;
-
-	virtual qreal computeZoomToFitHeight() const;
 
 	virtual Document::Ptr document() const;
 

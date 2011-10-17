@@ -40,9 +40,9 @@ class SvgImageView : public AbstractImageView {
 public:
     SvgImageView(QGraphicsItem* parent = 0);
 
-	void loadFromDocument(Document::Ptr doc);
+	void setDocument(Document::Ptr doc);
 
-	QSize defaultSize() const;
+	QSizeF documentSize() const;
 
 protected:
 	void updateCache();
@@ -79,14 +79,9 @@ public:
 	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1));
 
 	virtual qreal computeZoomToFit() const;
-	virtual qreal computeZoomToFitWidth() const;
-	virtual qreal computeZoomToFitHeight() const;
 
 protected:
 	virtual bool eventFilter(QObject*, QEvent*);
-
-private Q_SLOTS:
-	void loadFromDocument();
 
 private:
 	SvgViewAdapterPrivate* const d;

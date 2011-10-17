@@ -42,17 +42,18 @@ SvgImageView::SvgImageView(QGraphicsItem* parent)
 , mRenderer(new QSvgRenderer(this))
 {}
 
-void SvgImageView::loadFromDocument(Document::Ptr doc) {
+void SvgImageView::setDocument(Document::Ptr doc) {
+	AbstractImageView::setDocument(doc);
 	mRenderer->load(doc->rawData());
 	updateCache();
 }
 
-QSize SvgImageView::defaultSize() const {
+QSizeF SvgImageView::documentSize() const {
 	return mRenderer->defaultSize();
 }
 
 void SvgImageView::updateCache() {
-	mCachePix = QPixmap(defaultSize() * mZoom);
+	mCachePix = QPixmap((documentSize() * mZoom).toSize());
 	mCachePix.fill(Qt::transparent);
 	QPainter painter(&mCachePix);
 	mRenderer->render(&painter, QRectF(mCachePix.rect()));
@@ -61,7 +62,6 @@ void SvgImageView::updateCache() {
 
 //// SvgViewAdapter ////
 struct SvgViewAdapterPrivate {
-	Document::Ptr mDocument;
 	SvgImageView* mView;
 	bool mZoomToFit;
 };
@@ -91,23 +91,12 @@ void SvgViewAdapter::setCursor(const QCursor& cursor) {
 
 
 void SvgViewAdapter::setDocument(Document::Ptr doc) {
-	d->mDocument = doc;
-	connect(d->mDocument.data(), SIGNAL(loaded(KUrl)),
-		SLOT(loadFromDocument()));
-	loadFromDocument();
-}
-
-
-void SvgViewAdapter::loadFromDocument() {
-	d->mView->loadFromDocument(d->mDocument);
-	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
-	}
+	d->mView->setDocument(doc);
 }
 
 
 Document::Ptr SvgViewAdapter::document() const {
-	return d->mDocument;
+	return d->mView->document();
 }
 
 
@@ -140,21 +129,8 @@ void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
 
 
 qreal SvgViewAdapter::computeZoomToFit() const {
-	return qMin(computeZoomToFitWidth(), computeZoomToFitHeight());
+	return d->mView->computeZoomToFit();
 }
-
-
-qreal SvgViewAdapter::computeZoomToFitWidth() const {
-	qreal width = d->mView->defaultSize().width();
-	return width != 0 ? (d->mView->size().width() / width) : 1;
-}
-
-
-qreal SvgViewAdapter::computeZoomToFitHeight() const {
-	qreal height = d->mView->defaultSize().height();
-	return height != 0 ? (d->mView->size().height() / height) : 1;
-}
-
 
 bool SvgViewAdapter::eventFilter(QObject*, QEvent* event) {
 	if (event->type() == QEvent::Resize) {

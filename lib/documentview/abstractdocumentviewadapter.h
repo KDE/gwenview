@@ -78,8 +78,6 @@ public:
 	virtual void setZoom(qreal /*zoom*/, const QPointF& /*center*/ = QPointF(-1, -1)) {}
 
 	virtual qreal computeZoomToFit() const { return 1.; }
-	virtual qreal computeZoomToFitWidth() const { return 1.; }
-	virtual qreal computeZoomToFitHeight() const { return 1.; }
 	/** @} */
 
 	virtual Document::Ptr document() const = 0;
