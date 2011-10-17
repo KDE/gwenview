@@ -41,11 +41,11 @@ public:
     AbstractImageView(QGraphicsItem* parent = 0);
 	~AbstractImageView();
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/);
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 	qreal zoom() const;
 
-	void setZoom(qreal zoom, const QPointF& /*center*/);
+	void setZoom(qreal zoom, const QPointF& center);
 
 protected:
 	virtual void updateCache() = 0;
