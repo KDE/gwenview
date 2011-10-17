@@ -182,7 +182,6 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 	// FIXME: QGV
 	int viewportLeft = zoomedImageLeft; // - d->hScroll();
 	int viewportTop = zoomedImageTop; // - d->vScroll();
-	kDebug() << viewportLeft << viewportTop << image.size();
 	{
 		QPainter painter(&mCachePix);
 		/*
