@@ -48,21 +48,15 @@ struct RasterImageViewPrivate {
 		if (!q->document()) {
 			return QSizeF();
 		}
-		QSizeF size = q->document()->size();
-		kDebug() << size;
-		size *= q->computeZoomToFit();
-		kDebug() << size;
-		/*
 		qreal zoom;
-		if (mZoomToFit) {
-			zoom = mView->computeZoomToFit();
+		if (q->zoomToFit()) {
+			zoom = q->computeZoomToFit();
 		} else {
-			zoom = mZoom;
+			zoom = q->zoom();
 		}
 
-		size = mDocument->size() * zoom;
-		size = size.boundedTo(mViewport->size());
-		*/
+		QSizeF size = q->documentSize() * zoom;
+		size = size.boundedTo(q->boundingRect().size());
 
 		return size;
 	}
@@ -134,7 +128,21 @@ void RasterImageView::finishSetDocument() {
 
 	updateCache();
 	d->mScaler->setDocument(document());
-	setZoom(computeZoomToFit());
+
+	if (zoomToFit()) {
+		// Set the zoom to an invalid value to make sure setZoom() does not
+		// return early because the new zoom is the same as the old zoom.
+		// FIXME: QGV
+		//d->mZoom = -1;
+		setZoom(computeZoomToFit());
+	} else {
+		// FIXME: QGV
+		/*
+		QRect rect(QPoint(0, 0), d->mDocument->size());
+		updateImageRect(rect);
+		updateScrollBars();
+		*/
+	}
 	// FIXME: QGV
 	/*
 	d->createBuffer();
@@ -346,21 +354,13 @@ qreal ImageViewAdapter::zoom() const {
 }
 
 
-void ImageViewAdapter::setZoomToFit(bool /*on*/) {
-	// FIXME: QGV
-	/*
-	if (d->mView->zoomToFit() != on) {
-		d->mView->setZoomToFit(on);
-		zoomToFitChanged(on);
-	}
-	*/
+void ImageViewAdapter::setZoomToFit(bool on) {
+	d->mView->setZoomToFit(on);
 }
 
 
 bool ImageViewAdapter::zoomToFit() const {
-	return true;
-	// FIXME: QGV
-	//return d->mView->zoomToFit();
+	return d->mView->zoomToFit();
 }
 
 

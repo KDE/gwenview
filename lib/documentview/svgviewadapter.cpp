@@ -63,13 +63,11 @@ void SvgImageView::updateCache() {
 //// SvgViewAdapter ////
 struct SvgViewAdapterPrivate {
 	SvgImageView* mView;
-	bool mZoomToFit;
 };
 
 
 SvgViewAdapter::SvgViewAdapter()
 : d(new SvgViewAdapterPrivate) {
-	d->mZoomToFit = true;
 	d->mView = new SvgImageView;
 	setWidget(d->mView);
 }
@@ -101,19 +99,12 @@ Document::Ptr SvgViewAdapter::document() const {
 
 
 void SvgViewAdapter::setZoomToFit(bool on) {
-	if (d->mZoomToFit == on) {
-		return;
-	}
-	d->mZoomToFit = on;
-	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
-	}
-	zoomToFitChanged(on);
+	d->mView->setZoomToFit(on);
 }
 
 
 bool SvgViewAdapter::zoomToFit() const {
-	return d->mZoomToFit;
+	return d->mView->zoomToFit();
 }
 
 
@@ -130,15 +121,6 @@ void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
 
 qreal SvgViewAdapter::computeZoomToFit() const {
 	return d->mView->computeZoomToFit();
-}
-
-bool SvgViewAdapter::eventFilter(QObject*, QEvent* event) {
-	if (event->type() == QEvent::Resize) {
-		if (d->mZoomToFit) {
-			setZoom(computeZoomToFit());
-		}
-	}
-	return false;
 }
 
 } // namespace

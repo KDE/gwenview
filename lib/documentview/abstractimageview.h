@@ -46,7 +46,11 @@ public:
 
 	qreal zoom() const;
 
-	void setZoom(qreal zoom, const QPointF& center);
+	virtual void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
+
+	bool zoomToFit() const;
+
+	virtual void setZoomToFit(bool value);
 
 	virtual void setDocument(Document::Ptr doc);
 
@@ -56,10 +60,15 @@ public:
 
 	virtual QSizeF documentSize() const;
 
+Q_SIGNALS:
+	void zoomToFitChanged(bool);
+
 protected:
 	virtual void updateCache() = 0;
 	qreal mZoom;
 	QPixmap mCachePix;
+
+	void resizeEvent(QGraphicsSceneResizeEvent* event);
 
 private:
 	AbstractImageViewPrivate* const d;
