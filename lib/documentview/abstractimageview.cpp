@@ -35,6 +35,9 @@ struct AbstractImageViewPrivate {
 	qreal mZoom;
 	bool mZoomToFit;
 	QPixmap mCurrentBuffer;
+	// The alternate buffer is useful when scrolling: existing content is copied
+	// to mAlternateBuffer and buffers are then swapped. This avoids the
+	// allocation of a new QPixmap everytime the view is scrolled.
 	QPixmap mAlternateBuffer;
 };
 
