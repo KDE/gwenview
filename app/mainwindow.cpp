@@ -1090,7 +1090,8 @@ void MainWindow::slotPartCompleted() {
 		QModelIndex index = d->mDirModel->indexForUrl(url);
 		QItemSelectionModel* selectionModel = d->mThumbnailView->selectionModel();
 		if (index.isValid() && !selectionModel->isSelected(index)) {
-			selectionModel->select(index, QItemSelectionModel::SelectCurrent);
+			// FIXME: QGV Reactivating this line prevents navigation to prev/next image
+			//selectionModel->select(index, QItemSelectionModel::SelectCurrent);
 		}
 	} else {
 		d->mDirModel->dirLister()->openUrl(dirUrl);
