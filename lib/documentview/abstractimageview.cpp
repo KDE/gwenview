@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 
 // KDE
+#include <kdebug.h>
+#include <kurl.h>
 
 // Qt
 #include <QPainter>
@@ -58,6 +60,8 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 	d->q = this;
 	d->mZoom = 1;
 	d->mZoomToFit = true;
+	setFlag(ItemIsFocusable);
+	setFlag(ItemIsSelectable);
 
 	d->setupZoomToFitUpdateTimer();
 }
@@ -203,5 +207,28 @@ QPixmap& AbstractImageView::buffer()
 {
 	return d->mCurrentBuffer;
 }
+
+void AbstractImageView::keyPressEvent(QKeyEvent* event) {
+	kDebug() << d->mDoc->url();
+}
+
+void AbstractImageView::keyReleaseEvent(QKeyEvent* event) {
+	kDebug() << d->mDoc->url();
+}
+
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	kDebug();
+	// Necessary to get focus when clicking on a single image
+	setFocus();
+}
+
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	kDebug();
+}
+
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	kDebug();
+}
+
 
 } // namespace

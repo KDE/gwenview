@@ -152,14 +152,12 @@ Q_SIGNALS:
 	void contextMenuRequested();
 
 protected:
-	virtual bool eventFilter(QObject*, QEvent* event);
-
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
-	void mousePressEvent(QGraphicsSceneMouseEvent* event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 	void wheelEvent(QGraphicsSceneWheelEvent* event);
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent* event);
+	bool sceneEventFilter(QGraphicsItem*, QEvent*);
 
 private Q_SLOTS:
 	void finishOpenUrl();
@@ -179,6 +177,7 @@ private Q_SLOTS:
 
 	void emitHudTrashClicked();
 	void emitHudDeselectClicked();
+	void emitFocused();
 
 	void slotAnimationFinished();
 

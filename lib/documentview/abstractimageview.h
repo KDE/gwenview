@@ -74,6 +74,12 @@ protected:
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
 
+	void keyPressEvent(QKeyEvent* event);
+	void keyReleaseEvent(QKeyEvent* event);
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+
 private Q_SLOTS:
 	void updateZoomToFit();
 

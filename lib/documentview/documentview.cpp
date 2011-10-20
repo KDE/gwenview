@@ -114,6 +114,7 @@ struct DocumentViewPrivate {
 		}
 		*/
 
+		adapter->widget()->installSceneEventFilter(that);
 		if (mCurrent) {
 			adapter->widget()->setFocus();
 		}
@@ -286,6 +287,22 @@ struct DocumentViewPrivate {
 		mAdapter->widget()->setGeometry(rect);
 	}
 
+	void adapterMousePressEvent(QGraphicsSceneMouseEvent* event) {
+		if (mAdapter->canZoom()) {
+			if (event->modifiers() == Qt::ControlModifier) {
+				// Ctrl + Left or right button => zoom in or out
+				if (event->button() == Qt::LeftButton) {
+					that->zoomIn(event->pos());
+				} else if (event->button() == Qt::RightButton) {
+					that->zoomOut(event->pos());
+				}
+			} else if (event->button() == Qt::MidButton) {
+				// Middle click => toggle zoom to fit
+				that->setZoomToFit(!mAdapter->zoomToFit());
+			}
+		}
+		QMetaObject::invokeMethod(that, "emitFocused", Qt::QueuedConnection);
+	}
 };
 
 
@@ -295,6 +312,8 @@ DocumentView::DocumentView()
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
 	d->mLoadingIndicator = 0;
+	setFlag(ItemIsFocusable);
+	setFlag(ItemIsSelectable);
 	d->setupZoomCursor();
 	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter);
@@ -511,35 +530,6 @@ qreal DocumentView::zoom() const {
 	return d->mAdapter->zoom();
 }
 
-bool DocumentView::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::FocusIn:
-		focused(this);
-		break;
-	default:
-		break;
-	}
-
-	return false;
-}
-
-void DocumentView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (!d->mAdapter->canZoom()) {
-		return;
-	}
-	if (event->modifiers() == Qt::ControlModifier) {
-		// Ctrl + Left or right button => zoom in or out
-		if (event->button() == Qt::LeftButton) {
-			zoomIn(event->pos());
-		} else if (event->button() == Qt::RightButton) {
-			zoomOut(event->pos());
-		}
-	} else if (event->button() == Qt::MidButton) {
-		// Middle click => toggle zoom to fit
-		setZoomToFit(!d->mAdapter->zoomToFit());
-	}
-}
-
 void DocumentView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->modifiers() == Qt::NoModifier) {
 		toggleFullScreenRequested();
@@ -625,6 +615,7 @@ void DocumentView::setCurrent(bool value) {
 	if (value) {
 		d->mAdapter->widget()->setFocus();
 	}
+	update();
 }
 
 
@@ -689,6 +680,10 @@ void DocumentView::emitHudTrashClicked() {
 	hudTrashClicked(this);
 }
 
+void DocumentView::emitFocused() {
+	focused(this);
+}
+
 void DocumentView::setGeometry(const QRectF& rect) {
 	QGraphicsWidget::setGeometry(rect);
 	d->resizeAdapterWidget();
@@ -728,6 +723,14 @@ void DocumentView::fadeOut() {
 
 void DocumentView::slotAnimationFinished() {
 	animationFinished(this);
+}
+
+bool DocumentView::sceneEventFilter(QGraphicsItem* item, QEvent* event) {
+	if (event->type() == QEvent::GraphicsSceneMousePress) {
+		QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
+		d->adapterMousePressEvent(mouseEvent);
+	}
+	return false;
 }
 
 
