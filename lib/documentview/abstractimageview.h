@@ -74,6 +74,9 @@ protected:
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
 
+private Q_SLOTS:
+	void updateZoomToFit();
+
 private:
 	AbstractImageViewPrivate* const d;
 };

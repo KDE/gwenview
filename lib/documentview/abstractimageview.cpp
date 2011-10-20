@@ -27,10 +27,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QPainter>
+#include <QTimer>
 
 namespace Gwenview {
 
 struct AbstractImageViewPrivate {
+	AbstractImageView* q;
 	Document::Ptr mDoc;
 	qreal mZoom;
 	bool mZoomToFit;
@@ -39,13 +41,25 @@ struct AbstractImageViewPrivate {
 	// to mAlternateBuffer and buffers are then swapped. This avoids the
 	// allocation of a new QPixmap everytime the view is scrolled.
 	QPixmap mAlternateBuffer;
+	QTimer* mZoomToFitUpdateTimer;
+
+	void setupZoomToFitUpdateTimer() {
+		mZoomToFitUpdateTimer = new QTimer(q);
+		mZoomToFitUpdateTimer->setInterval(500);
+		mZoomToFitUpdateTimer->setSingleShot(true);
+		QObject::connect(mZoomToFitUpdateTimer, SIGNAL(timeout()),
+			q, SLOT(updateZoomToFit()));
+	}
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 : QGraphicsWidget(parent)
 , d(new AbstractImageViewPrivate) {
+	d->q = this;
 	d->mZoom = 1;
 	d->mZoomToFit = true;
+
+	d->setupZoomToFitUpdateTimer();
 }
 
 AbstractImageView::~AbstractImageView() {
@@ -53,9 +67,19 @@ AbstractImageView::~AbstractImageView() {
 }
 
 void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
+	QSize bufferSize = d->mCurrentBuffer.size();
+
+	QSizeF paintSize;
+	if (d->mZoomToFit) {
+		paintSize = documentSize() * computeZoomToFit();
+	} else {
+		paintSize = bufferSize;
+	}
 	painter->drawPixmap(
-		(size().width() - d->mCurrentBuffer.width()) / 2,
-		(size().height() - d->mCurrentBuffer.height()) / 2,
+		(boundingRect().width() - paintSize.width()) / 2,
+		(boundingRect().height() - paintSize.height()) / 2,
+		paintSize.width(),
+		paintSize.height(),
 		d->mCurrentBuffer);
 }
 
@@ -112,8 +136,15 @@ qreal AbstractImageView::computeZoomToFit() const {
 void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
     QGraphicsWidget::resizeEvent(event);
 	if (d->mZoomToFit) {
-		setZoom(computeZoomToFit());
+		d->mZoomToFitUpdateTimer->start();
 	}
+}
+
+void AbstractImageView::updateZoomToFit() {
+	if (!d->mZoomToFit) {
+		return;
+	}
+	setZoom(computeZoomToFit());
 }
 
 QSizeF AbstractImageView::visibleImageSize() const {
