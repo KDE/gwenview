@@ -725,7 +725,7 @@ void DocumentView::slotAnimationFinished() {
 	animationFinished(this);
 }
 
-bool DocumentView::sceneEventFilter(QGraphicsItem* item, QEvent* event) {
+bool DocumentView::sceneEventFilter(QGraphicsItem*, QEvent* event) {
 	if (event->type() == QEvent::GraphicsSceneMousePress) {
 		QGraphicsSceneMouseEvent* mouseEvent = static_cast<QGraphicsSceneMouseEvent*>(event);
 		d->adapterMousePressEvent(mouseEvent);

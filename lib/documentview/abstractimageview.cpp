@@ -170,7 +170,7 @@ QSizeF AbstractImageView::visibleImageSize() const {
 
 QRectF AbstractImageView::mapViewportToZoomedImage(const QRectF& viewportRect) const {
 	// FIXME: QGV
-	QPointF offset = QPointF(0, 0); //mView->imageOffset();
+	//QPointF offset = QPointF(0, 0); //mView->imageOffset();
 	QRectF rect = QRectF(
 		viewportRect.x(), //+ hScroll() - offset.x(),
 		viewportRect.y(), //+ vScroll() - offset.y(),
@@ -208,25 +208,25 @@ QPixmap& AbstractImageView::buffer()
 	return d->mCurrentBuffer;
 }
 
-void AbstractImageView::keyPressEvent(QKeyEvent* event) {
+void AbstractImageView::keyPressEvent(QKeyEvent* /*event*/) {
 	kDebug() << d->mDoc->url();
 }
 
-void AbstractImageView::keyReleaseEvent(QKeyEvent* event) {
+void AbstractImageView::keyReleaseEvent(QKeyEvent* /*event*/) {
 	kDebug() << d->mDoc->url();
 }
 
-void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* /*event*/) {
 	kDebug();
 	// Necessary to get focus when clicking on a single image
 	setFocus();
 }
 
-void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* /*event*/) {
 	kDebug();
 }
 
-void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/) {
 	kDebug();
 }
 

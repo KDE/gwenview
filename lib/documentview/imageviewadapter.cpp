@@ -117,7 +117,7 @@ void RasterImageView::finishSetDocument() {
 	update();
 }
 
-void RasterImageView::updateImageRect(const QRect& imageRect) {
+void RasterImageView::updateImageRect(const QRect& /*imageRect*/) {
 	// FIXME: QGV
 	/*
 	QRect viewportRect = mapToViewport(imageRect);
