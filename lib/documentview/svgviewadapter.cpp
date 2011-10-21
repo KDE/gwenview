@@ -53,13 +53,19 @@ QSizeF SvgImageView::documentSize() const {
 	return mRenderer->defaultSize();
 }
 
-void SvgImageView::updateBuffer() {
+void SvgImageView::updateBuffer(const QRegion& region) {
 	if (buffer().isNull()) {
 		return;
 	}
 	buffer().fill(Qt::transparent);
 	QPainter painter(&buffer());
-	mRenderer->render(&painter, QRectF(buffer().rect()));
+	QRect dstRect = region.isEmpty() ? buffer().rect() : region.boundingRect();
+	QRect srcRect = QRect(
+		(dstRect.topLeft() + scrollPos().toPoint()) / zoom(),
+		dstRect.size() / zoom()
+		);
+	mRenderer->setViewBox(srcRect);
+	mRenderer->render(&painter, QRectF(dstRect));
 	update();
 }
 

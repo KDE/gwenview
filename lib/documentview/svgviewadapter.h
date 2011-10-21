@@ -45,7 +45,7 @@ public:
 	QSizeF documentSize() const;
 
 protected:
-	void updateBuffer();
+	void updateBuffer(const QRegion& region = QRegion());
 
 private:
 	QSvgRenderer* mRenderer;

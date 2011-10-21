@@ -64,12 +64,19 @@ public:
 
 	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const;
 
+	QPointF scrollPos() const;
+
+	void setScrollPos(const QPointF& pos);
+
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
 	void zoomChanged(qreal);
 
 protected:
-	virtual void updateBuffer() = 0;
+	/**
+	 * Update all or parts of the buffer
+	 */
+	virtual void updateBuffer(const QRegion& region = QRegion()) = 0;
 	void createBuffer();
 	QPixmap& buffer();
 

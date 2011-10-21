@@ -139,15 +139,18 @@ void RasterImageView::slotDocumentIsAnimatedUpdated() {
 }
 
 
-void RasterImageView::updateBuffer() {
+void RasterImageView::updateBuffer(const QRegion& region) {
 	d->mScaler->setZoom(zoom());
-	d->setScalerRegionToVisibleRect();
+	if (region.isEmpty()) {
+		d->setScalerRegionToVisibleRect();
+	} else {
+		d->mScaler->setDestinationRegion(region);
+	}
 }
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
-	// FIXME: QGV
-	int viewportLeft = zoomedImageLeft; // - d->hScroll();
-	int viewportTop = zoomedImageTop; // - d->vScroll();
+	int viewportLeft = zoomedImageLeft - scrollPos().x();
+	int viewportTop = zoomedImageTop - scrollPos().y();
 	{
 		QPainter painter(&buffer());
 		/*
