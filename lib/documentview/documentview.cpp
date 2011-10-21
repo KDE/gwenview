@@ -308,17 +308,19 @@ struct DocumentViewPrivate {
 
 DocumentView::DocumentView()
 : d(new DocumentViewPrivate) {
-	d->that = this;
-	d->mModifierKeyInfo = new KModifierKeyInfo(this);
-	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
-	d->mLoadingIndicator = 0;
 	setFlag(ItemIsFocusable);
 	setFlag(ItemIsSelectable);
+
+	d->that = this;
+	d->mLoadingIndicator = 0;
+	d->mCurrent = false;
+	d->mCompareMode = false;
+	d->mModifierKeyInfo = new KModifierKeyInfo(this);
+	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
+
 	d->setupZoomCursor();
 	d->setupHud();
 	d->setCurrentAdapter(new MessageViewAdapter);
-	d->mCurrent = false;
-	d->mCompareMode = false;
 }
 
 
