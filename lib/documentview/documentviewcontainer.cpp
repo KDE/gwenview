@@ -91,13 +91,14 @@ DocumentViewContainer::~DocumentViewContainer() {
 }
 
 
-void DocumentViewContainer::addView(DocumentView* view) {
+DocumentView* DocumentViewContainer::createView() {
+	DocumentView* view = new DocumentView(d->mScene);
 	d->mAddedViews << view;
-	d->mScene->addItem(view);
 	view->show();
 	connect(view, SIGNAL(animationFinished(DocumentView*)),
 		SLOT(slotViewAnimationFinished(DocumentView*)));
 	d->scheduleLayoutUpdate();
+	return view;
 }
 
 

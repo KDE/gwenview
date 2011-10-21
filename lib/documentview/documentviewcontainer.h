@@ -45,7 +45,10 @@ public:
 	DocumentViewContainer(QWidget* parent=0);
 	~DocumentViewContainer();
 
-	void addView(DocumentView* view);
+	/**
+	 * Create a DocumentView in the DocumentViewContainer scene
+	 */
+	DocumentView* createView();
 
 	/**
 	 * Note: this method takes ownership of the view and will delete it

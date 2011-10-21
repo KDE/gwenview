@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QAbstractScrollArea>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneWheelEvent>
 #include <QMouseEvent>
@@ -306,7 +307,7 @@ struct DocumentViewPrivate {
 };
 
 
-DocumentView::DocumentView()
+DocumentView::DocumentView(QGraphicsScene* scene)
 : d(new DocumentViewPrivate) {
 	setFlag(ItemIsFocusable);
 	setFlag(ItemIsSelectable);
@@ -317,6 +318,8 @@ DocumentView::DocumentView()
 	d->mCompareMode = false;
 	d->mModifierKeyInfo = new KModifierKeyInfo(this);
 	connect(d->mModifierKeyInfo, SIGNAL(keyPressed(Qt::Key,bool)), SLOT(slotKeyPressed(Qt::Key,bool)));
+
+	scene->addItem(this);
 
 	d->setupZoomCursor();
 	d->setupHud();

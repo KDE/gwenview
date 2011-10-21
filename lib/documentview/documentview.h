@@ -55,7 +55,12 @@ public:
 	enum {
 		MaximumZoom = 16
 	};
-	DocumentView();
+
+	/**
+	 * Create a new view attached to scene. We need the scene to be able to
+	 * install scene event filters.
+	 */
+	DocumentView(QGraphicsScene* scene);
 	~DocumentView();
 
 	Document::Ptr document() const;

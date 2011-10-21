@@ -223,7 +223,7 @@ struct DocumentPanelPrivate {
 	}
 
 	DocumentView* createDocumentView() {
-		DocumentView* view = new DocumentView;
+		DocumentView* view = mDocumentViewContainer->createView();
 
 		// Connect context menu
 		QObject::connect(view, SIGNAL(contextMenuRequested()),
@@ -250,7 +250,6 @@ struct DocumentPanelPrivate {
 			mSlideShow, SLOT(resumeAndGoToNextUrl()));
 
 		mDocumentViews << view;
-		mDocumentViewContainer->addView(view);
 
 		return view;
 	}
