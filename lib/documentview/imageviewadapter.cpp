@@ -246,7 +246,6 @@ void RasterImageView::setZoom(qreal zoom, const QPointF& _center) {
 	emit zoomChanged(d->mZoom);
 #endif
 	AbstractImageView::setZoom(zoom, _center);
-	updateBuffer();
 }
 
 //// ImageViewAdapter ////
