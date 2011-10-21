@@ -61,7 +61,7 @@ void SvgImageView::setDocument(Document::Ptr doc) {
 }
 
 QSizeF SvgImageView::documentSize() const {
-	return QSizeF(); //mRenderer->defaultSize();
+	return mSvgItem->renderer()->defaultSize();
 }
 
 qreal SvgImageView::zoom() const {
@@ -90,7 +90,7 @@ void SvgImageView::setZoomToFit(bool on) {
 }
 
 void SvgImageView::adjustPos() {
-	QSizeF visibleSize = mSvgItem->renderer()->defaultSize() * mZoom;
+	QSizeF visibleSize = documentSize() * mZoom;
 	QSizeF viewSize = boundingRect().size();
 	QSizeF scrollRange = visibleSize - viewSize;
 	QPointF p = mSvgItem->pos();
@@ -117,29 +117,11 @@ void SvgImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
 }
 
 qreal SvgImageView::computeZoomToFit() const {
-	QSizeF docSize = mSvgItem->renderer()->defaultSize();
+	QSizeF docSize = documentSize();
 	QSizeF viewSize = boundingRect().size();
 	qreal fitWidth = viewSize.width() / docSize.width();
 	qreal fitHeight = viewSize.height() / docSize.height();
 	return qMin(fitWidth, fitHeight);
-}
-
-void SvgImageView::updateBuffer(const QRegion& region) {
-	/*
-	if (buffer().isNull()) {
-		return;
-	}
-	buffer().fill(Qt::transparent);
-	QPainter painter(&buffer());
-	QRect dstRect = region.isEmpty() ? buffer().rect() : region.boundingRect();
-	QRect srcRect = QRect(
-		(dstRect.topLeft() + scrollPos().toPoint()) / zoom(),
-		dstRect.size() / zoom()
-		);
-	mRenderer->setViewBox(srcRect);
-	mRenderer->render(&painter, QRectF(dstRect));
-	update();
-	*/
 }
 
 void SvgImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
