@@ -649,13 +649,10 @@ void DocumentPanel::reload() {
 
 
 void DocumentPanel::reset() {
-	int idx = 0;
+	// FIXME: Should probably delete views instead of resetting and hiding them
 	Q_FOREACH(DocumentView* view, d->mDocumentViews) {
 		view->reset();
-		if (idx > 0) {
-			view->hide();
-		}
-		++idx;
+		view->hide();
 	}
 }
 
