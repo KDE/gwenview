@@ -39,10 +39,8 @@ class AbstractImageViewPrivate;
 class AbstractImageView : public QGraphicsWidget {
 	Q_OBJECT
 public:
-    AbstractImageView(QGraphicsItem* parent = 0);
+	AbstractImageView(QGraphicsItem* parent);
 	~AbstractImageView();
-
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 	qreal zoom() const;
 
@@ -62,23 +60,13 @@ public:
 
 	QSizeF visibleImageSize() const;
 
-	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const;
-
-	QPointF scrollPos() const;
-
-	void setScrollPos(const QPointF& pos);
-
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
 	void zoomChanged(qreal);
 
 protected:
-	/**
-	 * Update all or parts of the buffer
-	 */
-	virtual void updateBuffer(const QRegion& region = QRegion()) = 0;
-	void createBuffer();
-	QPixmap& buffer();
+	void setChildItem(QGraphicsItem*);
+	virtual void loadFromDocument() = 0;
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
 
@@ -87,9 +75,6 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent* event);
 	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-
-private Q_SLOTS:
-	void updateZoomToFit();
 
 private:
 	AbstractImageViewPrivate* const d;

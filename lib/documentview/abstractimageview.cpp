@@ -28,12 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurl.h>
 
 // Qt
-#include <QPainter>
-#include <QTimer>
+#include <QCursor>
+#include <QGraphicsSceneMouseEvent>
 
 namespace Gwenview {
 
 static const int KEY_SCROLL_STEP = 16;
+#if 0
 
 struct AbstractImageViewPrivate {
 	AbstractImageView* q;
@@ -324,6 +325,161 @@ void AbstractImageView::setScrollPos(const QPointF& _pos) {
 	updateBuffer(region);
 	update();
 }
+#endif
 
+struct AbstractImageViewPrivate {
+	AbstractImageView* q;
+	QGraphicsItem* mChildItem;
+	Document::Ptr mDocument;
+	qreal mZoom;
+	bool mZoomToFit;
+	QPointF mStartDragOffset;
+
+	void adjustPos() {
+		QSizeF visibleSize = q->documentSize() * mZoom;
+		QSizeF viewSize = q->boundingRect().size();
+		QSizeF scrollRange = visibleSize - viewSize;
+		QPointF p = mChildItem->pos();
+		if (viewSize.width() > visibleSize.width()) {
+			p.setX((viewSize.width() - visibleSize.width()) / 2);
+		} else {
+			p.setX(qBound(-scrollRange.width(), p.x(), 0.));
+		}
+		if (viewSize.height() > visibleSize.height()) {
+			p.setY((viewSize.height() - visibleSize.height()) / 2);
+		} else {
+			p.setY(qBound(-scrollRange.height(), p.y(), 0.));
+		}
+		mChildItem->setPos(p);
+	}
+
+};
+
+AbstractImageView::AbstractImageView(QGraphicsItem* parent)
+: QGraphicsWidget(parent)
+, d(new AbstractImageViewPrivate) {
+	d->q = this;
+	d->mZoom = 1;
+	d->mZoomToFit = true;
+	d->mChildItem = 0;
+	setCursor(Qt::OpenHandCursor);
+	setFlag(ItemIsFocusable);
+	setFlag(ItemIsSelectable);
+}
+
+AbstractImageView::~AbstractImageView() {
+	delete d;
+}
+
+void AbstractImageView::setChildItem(QGraphicsItem* item) {
+	Q_ASSERT(item);
+	d->mChildItem = item;
+	d->mChildItem->setParentItem(this);
+}
+
+Document::Ptr AbstractImageView::document() const {
+	return d->mDocument;
+}
+
+void AbstractImageView::setDocument(Document::Ptr doc) {
+	d->mDocument = doc;
+	loadFromDocument();
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	}
+}
+
+QSizeF AbstractImageView::documentSize() const {
+	return d->mDocument ? d->mDocument->size() : QSizeF();
+}
+
+qreal AbstractImageView::zoom() const {
+	return d->mZoom;
+}
+
+void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
+	d->mZoom = zoom;
+	d->mChildItem->setScale(d->mZoom);
+	d->adjustPos();
+	zoomChanged(d->mZoom);
+}
+
+bool AbstractImageView::zoomToFit() const {
+	return d->mZoomToFit;
+}
+
+void AbstractImageView::setZoomToFit(bool on) {
+	d->mZoomToFit = on;
+	if (on) {
+		setZoom(computeZoomToFit());
+	} else {
+		setZoom(1.);
+	}
+	zoomToFitChanged(d->mZoomToFit);
+}
+
+void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
+    QGraphicsWidget::resizeEvent(event);
+	if (d->mZoomToFit) {
+		setZoom(computeZoomToFit());
+	} else {
+		d->adjustPos();
+	}
+}
+
+qreal AbstractImageView::computeZoomToFit() const {
+	QSizeF docSize = documentSize();
+	if (docSize.isEmpty()) {
+		return 1;
+	}
+	QSizeF viewSize = boundingRect().size();
+	qreal fitWidth = viewSize.width() / docSize.width();
+	qreal fitHeight = viewSize.height() / docSize.height();
+	return qMin(fitWidth, fitHeight);
+}
+
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mousePressEvent(event);
+	setCursor(Qt::ClosedHandCursor);
+	d->mStartDragOffset = mapToItem(d->mChildItem, event->lastPos()) * d->mZoom;
+}
+
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseMoveEvent(event);
+	QPointF newPos = mapToItem(this, event->lastPos()) - d->mStartDragOffset;
+	d->mChildItem->setPos(newPos);
+	d->adjustPos();
+}
+
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseReleaseEvent(event);
+	setCursor(Qt::OpenHandCursor);
+}
+
+void AbstractImageView::keyPressEvent(QKeyEvent* event) {
+	QPointF delta(0, 0);
+	switch (event->key()) {
+	case Qt::Key_Left:
+		delta.setX(-1);
+		break;
+	case Qt::Key_Right:
+		delta.setX(1);
+		break;
+	case Qt::Key_Up:
+		delta.setY(-1);
+		break;
+	case Qt::Key_Down:
+		delta.setY(1);
+		break;
+	default:
+		return;
+	}
+	delta *= KEY_SCROLL_STEP;
+	d->mChildItem->setPos(d->mChildItem->pos() + delta);
+	d->adjustPos();
+}
+
+void AbstractImageView::keyReleaseEvent(QKeyEvent* /*event*/) {
+}
 
 } // namespace

@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsProxyWidget>
 #include <QPainter>
+#include <QStyleOptionGraphicsItem>
+#include <QTimer>
 
 // KDE
 #include <kurl.h>
@@ -37,34 +39,147 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-struct RasterImageViewPrivate {
-	RasterImageView* q;
-	ImageScaler* mScaler;
+class TileArray {
+public:
+	TileArray()
+	: mZoom(0)
+	{}
 
-	void startAnimationIfNecessary() {
+	enum Which {
+		All,
+		Missing
+	};
+	
+	void paint(QPainter* painter, const QRectF& dstRect) {
+		Q_FOREACH(const TileId& id, findTileIdsForRect(dstRect, All)) {
+			ImageHash::ConstIterator it = mImageForTileId.find(id);
+			if (it != mImageForTileId.end()) {
+				painter->drawImage(id.pos(), it.value());;
+			}
+		}
 	}
 
-	void setScalerRegionToVisibleRect() {
-		QRectF rect = q->mapViewportToZoomedImage(q->boundingRect());
-		mScaler->setDestinationRegion(QRegion(rect.toRect()));
+	TileIdList findTileIdsForRect(const QRectF& dstRect, Which which) {
+		return TileIdList();
+	}
+
+	void setZoom(qreal zoom) {
+		mZoom = zoom;
+		mImageForTileId.clear();
+	}
+
+	qreal zoom() const {
+		return mZoom;
+	}
+
+	void setImageForTileId(const TileId& id, const QImage& image) {
+		mImageForTileId.insert(id, image);
+	}
+
+private:
+	typedef QHash<TileId, QImage> ImageHash;
+	QHash<TileId, QImage> mImageForTileId;
+	qreal mZoom;
+};
+
+struct RasterImageViewPrivate {
+	RasterImageView* q;
+	RasterItem* mItem;
+	ImageScaler* mScaler;
+	QTimer* mUpdateTimer;
+
+	TileIdList mUpdateQueue;
+
+	TileArray mCurrentTileArray;
+	TileArray mOldTileArray;
+	void startAnimationIfNecessary();
+	void scheduleUpdate(const TileIdList&);
+	void cancelUpdate();
+};
+
+//// RasterItem ////
+class RasterItem : public QGraphicsObject {
+public:
+    RasterItem(RasterImageView* view)
+	: mView(view)
+	{
+		setFlag(ItemUsesExtendedStyleOption);
+		setFlag(ItemSendsGeometryChanges);
+	}
+	
+	virtual QRectF boundingRect() const {
+		return QRectF(
+			QPointF(0, 0),
+			mView->documentSize() * scale());
+	}
+
+	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) {
+		TileIdList ids = mView->d->mCurrentTileArray.findTileIdsForRect(option->exposedRect, TileArray::Missing);
+		if (!ids.isEmpty()) {
+			mView->d->scheduleUpdate(ids);
+			mView->d->mOldTileArray.paint(painter, option->exposedRect);
+		}
+		mView->d->mCurrentTileArray.paint(painter, option->exposedRect);
+	}
+
+	virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) {
+		if (change == ItemScaleHasChanged) {
+			onItemScaleHasChanged();
+		}
+		return QGraphicsObject::itemChange(change, value);
+	}
+
+private:
+	RasterImageView* mView;
+
+	void onItemScaleHasChanged() {
+		mView->d->cancelUpdate();
+		qSwap(mView->d->mCurrentTileArray, mView->d->mOldTileArray);
+		mView->d->mCurrentTileArray.setZoom(scale());
 	}
 };
 
+//// RasterImageViewPrivate ////
+void RasterImageViewPrivate::startAnimationIfNecessary() {
+}
+
+void RasterImageViewPrivate::scheduleUpdate(const QList& tiles) {
+	mUpdateQueue += tiles;
+	if (!mUpdateTimer->isActive()) {
+		mUpdateTimer->start();
+	}
+}
+
+void RasterImageViewPrivate::cancelUpdate() {
+	mUpdateQueue.clear();
+	mUpdateTimer->stop();
+}
+
+//// RasterImageView ////
 RasterImageView::RasterImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
 , d(new RasterImageViewPrivate) {
 	d->q = this;
+	d->mItem = new RasterItem(this);
+	setChildItem(d->mItem);
+
 	d->mScaler = new ImageScaler(this);
-	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
-		SLOT(updateFromScaler(int,int,QImage)) );
+	connect(d->mScaler, SIGNAL(scaled(TileId,QImage)),
+		SLOT(updateFromScaler(TileId,QImage)) );
+
+	d->mUpdateTimer = new QTimer(this);
+	d->mUpdateTimer->setInterval(500);
+	d->mUpdateTimer->setSingleShot(true);
+	connect(d->mUpdateTimer, SIGNAL(timeout()),
+		SLOT(processUpdates()));
 }
 
 RasterImageView::~RasterImageView() {
 	delete d;
 }
 
-void RasterImageView::setDocument(Document::Ptr doc) {
-	AbstractImageView::setDocument(doc);
+void RasterImageView::loadFromDocument() {
+	Document::Ptr doc = document();
 	connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
 		SLOT(slotDocumentMetaInfoLoaded()) );
 	connect(doc.data(), SIGNAL(isAnimatedUpdated()),
@@ -96,17 +211,12 @@ void RasterImageView::finishSetDocument() {
 		return;
 	}
 
-	createBuffer();
 	d->mScaler->setDocument(document());
 
 	connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
 		SLOT(updateImageRect(QRect)) );
 
 	if (zoomToFit()) {
-		// Set the zoom to an invalid value to make sure setZoom() does not
-		// return early because the new zoom is the same as the old zoom.
-		// FIXME: QGV
-		//d->mZoom = -1;
 		setZoom(computeZoomToFit());
 	} else {
 		QRect rect(QPoint(0, 0), document()->size());
@@ -117,28 +227,34 @@ void RasterImageView::finishSetDocument() {
 	update();
 }
 
-void RasterImageView::updateImageRect(const QRect& /*imageRect*/) {
-	// FIXME: QGV
-	/*
-	QRect viewportRect = mapToViewport(imageRect);
-	viewportRect = viewportRect.intersected(d->mViewport->rect());
-	if (viewportRect.isEmpty()) {
+void RasterImageView::updateImageRect(const QRect& imageRect) {
+	QRect visibleRect = mapRectFromItem(d->mItem, imageRect)
+		.intersected(boundingRect());
+	if (visibleRect.isEmpty()) {
 		return;
 	}
-	*/
 
 	if (zoomToFit()) {
 		setZoom(computeZoomToFit());
 	}
-	d->setScalerRegionToVisibleRect();
-	update();
+	TileIds ids = d->mCurrentTileArray.findTileIdsForRect(visibleRect, TileArray::All);
+	d->scheduleUpdate(ids);
 }
 
 void RasterImageView::slotDocumentIsAnimatedUpdated() {
 	d->startAnimationIfNecessary();
 }
 
+void RasterImageView::processUpdates() {
+	Q_ASSERT(!d->mUpdateQueue.isEmpty());
+	TileId id = d->mUpdateQueue.takeFirst();
+	d->mScaler->setTileId(id);
+	if (!d->mUpdateQueue.isEmpty()) {
+		d->mUpdateTimer->start();
+	}
+}
 
+#if 0
 void RasterImageView::updateBuffer(const QRegion& region) {
 	d->mScaler->setZoom(zoom());
 	if (region.isEmpty()) {
@@ -169,86 +285,11 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 	}
 	update();
 }
-
-void RasterImageView::setZoom(qreal zoom, const QPointF& _center) {
-	// FIXME: QGV
-#if 0
-	if (!d->mDocument) {
-		return;
-	}
-
-	qreal oldZoom = d->mZoom;
-	if (qAbs(zoom - oldZoom) < 0.001) {
-		return;
-	}
-	// Get offset *before* setting mZoom, otherwise we get the new offset
-	QPoint oldOffset = imageOffset();
-	d->mZoom = zoom;
-
-	QPoint center;
-	if (_center == QPoint(-1, -1)) {
-		center = QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2);
-	} else {
-		center = _center;
-	}
-
-	// If we zoom more than twice, then assume the user wants to see the real
-	// pixels, for example to fine tune a crop operation
-	if (d->mZoom < 2.) {
-		d->mScaler->setTransformationMode(Qt::SmoothTransformation);
-	} else {
-		d->mScaler->setTransformationMode(Qt::FastTransformation);
-	}
-
-	d->createBuffer();
-	d->mInsideSetZoom = true;
-
-	/*
-	We want to keep the point at viewport coordinates "center" at the same
-	position after zooming. The coordinates of this point in image coordinates
-	can be expressed like this:
-
-	                      oldScroll + center
-	imagePointAtOldZoom = ------------------
-	                           oldZoom
-
-	                   scroll + center
-	imagePointAtZoom = ---------------
-	                        zoom
-
-	So we want:
-
-	    imagePointAtOldZoom = imagePointAtZoom
-
-	    oldScroll + center   scroll + center
-	<=> ------------------ = ---------------
-	          oldZoom             zoom
-
-	              zoom
-	<=> scroll = ------- (oldScroll + center) - center
-	             oldZoom
-	*/
-
-	/*
-	Compute oldScroll
-	It's useless to take the new offset in consideration because if a direction
-	of the new offset is not 0, we won't be able to center on a specific point
-	in that direction.
-	*/
-	QPointF oldScroll = QPointF(d->hScroll(), d->vScroll()) - oldOffset;
-
-	QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
-
-	updateScrollBars();
-	horizontalScrollBar()->setValue(int(scroll.x()));
-	verticalScrollBar()->setValue(int(scroll.y()));
-	d->mInsideSetZoom = false;
-
-	d->mScaler->setZoom(d->mZoom);
-	d->setScalerRegionToVisibleRect();
-	emit zoomChanged(d->mZoom);
 #endif
-	AbstractImageView::setZoom(zoom, _center);
+void RasterImageView::updateFromScaler(const TileId& id, const QImage& image) {
+	if (id.zoom == d->mCurrentTileArray.zoom()) {
+		setImageForTileId(id, image);
+	}
 }
 
 //// ImageViewAdapter ////

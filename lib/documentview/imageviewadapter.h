@@ -33,26 +33,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class RasterItem;
 class RasterImageViewPrivate;
 class RasterImageView : public AbstractImageView {
 	Q_OBJECT
 public:
 	RasterImageView(QGraphicsItem* parent = 0);
 	~RasterImageView();
-	void setDocument(Document::Ptr doc);
-	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
 
 protected:
-	void updateBuffer(const QRegion&);
+	void loadFromDocument();
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();
 	void slotDocumentIsAnimatedUpdated();
 	void finishSetDocument();
-	void updateFromScaler(int, int, const QImage&);
+	//void updateFromScaler(int, int, const QImage&);
 	void updateImageRect(const QRect& imageRect);
+	void processUpdates();
 
 private:
+	friend class RasterItem;
 	RasterImageViewPrivate* const d;
 };
 

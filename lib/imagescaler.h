@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Qt
 #include <QObject>
+#include <QPoint>
 
 // KDE
 #include <ksharedptr.h>
@@ -33,6 +34,28 @@ class QRect;
 class QRegion;
 
 namespace Gwenview {
+
+struct TileId {
+	enum {
+		DIMENSION = 128
+	};
+
+	TileId(int _column, int _row, qreal _zoom)
+	: column(_column)
+	, row(_row)
+	, zoom(_zoom)
+	{}
+
+	int column;
+	int row;
+	qreal zoom;
+
+	QPoint pos() const {
+		return QPoint(column * DIMENSION, row * DIMENSION);
+	}
+};
+
+typedef QList<TileId> TileIdList;
 
 class Document;
 
