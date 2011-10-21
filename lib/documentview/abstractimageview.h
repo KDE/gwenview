@@ -66,6 +66,7 @@ public:
 
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
+	void zoomChanged(qreal);
 
 protected:
 	virtual void updateBuffer() = 0;

@@ -73,6 +73,8 @@ SvgViewAdapter::SvgViewAdapter()
 : d(new SvgViewAdapterPrivate) {
 	d->mView = new SvgImageView;
 	setWidget(d->mView);
+	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
+	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
 }
 
 
@@ -118,7 +120,6 @@ qreal SvgViewAdapter::zoom() const {
 
 void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
 	d->mView->setZoom(zoom, center);
-	emit zoomChanged(zoom);
 }
 
 

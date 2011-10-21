@@ -95,6 +95,7 @@ void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
 	d->mZoom = zoom;
 	createBuffer();
 	updateBuffer();
+	zoomChanged(d->mZoom);
 }
 
 bool AbstractImageView::zoomToFit() const {

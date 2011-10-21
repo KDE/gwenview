@@ -273,9 +273,10 @@ ImageViewAdapter::ImageViewAdapter()
 	setWidget(proxyWidget);
 	d->setupScrollTool();
 
-	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
 	*/
 	d->mView = new RasterImageView;
+	connect(d->mView, SIGNAL(zoomChanged(qreal)), SIGNAL(zoomChanged(qreal)) );
+	connect(d->mView, SIGNAL(zoomToFitChanged(bool)), SIGNAL(zoomToFitChanged(bool)) );
 	setWidget(d->mView);
 }
 
