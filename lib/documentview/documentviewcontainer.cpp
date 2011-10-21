@@ -118,6 +118,7 @@ void DocumentViewContainer::showEvent(QShowEvent* event) {
 
 void DocumentViewContainer::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
+	d->mScene->setSceneRect(rect());
 	updateLayout();
 }
 

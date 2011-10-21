@@ -24,6 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QCursor>
 #include <QEvent>
+#include <QGraphicsSvgItem>
+#include <QGraphicsTextItem>
 #include <QGraphicsWidget>
 #include <QPainter>
 #include <QSvgRenderer>
@@ -33,27 +35,97 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 #include "document/documentfactory.h"
+#include <qgraphicssceneevent.h>
 
 namespace Gwenview {
 
 /// SvgImageView ////
 SvgImageView::SvgImageView(QGraphicsItem* parent)
-: AbstractImageView(parent)
-, mRenderer(new QSvgRenderer(this))
-{}
+: QGraphicsWidget(parent)
+, mSvgItem(new QGraphicsSvgItem(this))
+, mZoom(1)
+, mZoomToFit()
+{
+	setCursor(Qt::OpenHandCursor);
+	setFlag(ItemIsSelectable);
+}
 
 void SvgImageView::setDocument(Document::Ptr doc) {
-	AbstractImageView::setDocument(doc);
-	mRenderer->load(doc->rawData());
-	createBuffer();
-	updateBuffer();
+	mDocument = doc;
+	QSvgRenderer* renderer = new QSvgRenderer(this);
+	renderer->load(doc->rawData());
+	mSvgItem->setSharedRenderer(renderer);
+	if (mZoomToFit) {
+		setZoom(computeZoomToFit());
+	}
 }
 
 QSizeF SvgImageView::documentSize() const {
-	return mRenderer->defaultSize();
+	return QSizeF(); //mRenderer->defaultSize();
+}
+
+qreal SvgImageView::zoom() const {
+	return mZoom;
+}
+
+void SvgImageView::setZoom(qreal zoom) {
+	mZoom = zoom;
+	mSvgItem->setScale(mZoom);
+	adjustPos();
+	zoomChanged(mZoom);
+}
+
+bool SvgImageView::zoomToFit() const {
+	return mZoomToFit;
+}
+
+void SvgImageView::setZoomToFit(bool on) {
+	mZoomToFit = on;
+	if (on) {
+		setZoom(computeZoomToFit());
+	} else {
+		setZoom(1.);
+	}
+	zoomToFitChanged(mZoomToFit);
+}
+
+void SvgImageView::adjustPos() {
+	QSizeF visibleSize = mSvgItem->renderer()->defaultSize() * mZoom;
+	QSizeF viewSize = boundingRect().size();
+	QSizeF scrollRange = visibleSize - viewSize;
+	QPointF p = mSvgItem->pos();
+	if (viewSize.width() > visibleSize.width()) {
+		p.setX((viewSize.width() - visibleSize.width()) / 2);
+	} else {
+		p.setX(qBound(-scrollRange.width(), p.x(), 0.));
+	}
+	if (viewSize.height() > visibleSize.height()) {
+		p.setY((viewSize.height() - visibleSize.height()) / 2);
+	} else {
+		p.setY(qBound(-scrollRange.height(), p.y(), 0.));
+	}
+	mSvgItem->setPos(p);
+}
+
+void SvgImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
+    QGraphicsWidget::resizeEvent(event);
+	if (mZoomToFit) {
+		setZoom(computeZoomToFit());
+	} else {
+		adjustPos();
+	}
+}
+
+qreal SvgImageView::computeZoomToFit() const {
+	QSizeF docSize = mSvgItem->renderer()->defaultSize();
+	QSizeF viewSize = boundingRect().size();
+	qreal fitWidth = viewSize.width() / docSize.width();
+	qreal fitHeight = viewSize.height() / docSize.height();
+	return qMin(fitWidth, fitHeight);
 }
 
 void SvgImageView::updateBuffer(const QRegion& region) {
+	/*
 	if (buffer().isNull()) {
 		return;
 	}
@@ -67,7 +139,27 @@ void SvgImageView::updateBuffer(const QRegion& region) {
 	mRenderer->setViewBox(srcRect);
 	mRenderer->render(&painter, QRectF(dstRect));
 	update();
+	*/
 }
+
+void SvgImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mousePressEvent(event);
+	setCursor(Qt::ClosedHandCursor);
+	mStartDragOffset = mapToItem(mSvgItem, event->lastPos()) * mZoom;
+}
+
+void SvgImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseMoveEvent(event);
+	QPointF newPos = mapToItem(this, event->lastPos()) - mStartDragOffset;
+	mSvgItem->setPos(newPos);
+	adjustPos();
+}
+
+void SvgImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseReleaseEvent(event);
+	setCursor(Qt::OpenHandCursor);
+}
+
 
 //// SvgViewAdapter ////
 struct SvgViewAdapterPrivate {
@@ -125,7 +217,7 @@ qreal SvgViewAdapter::zoom() const {
 
 
 void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
-	d->mView->setZoom(zoom, center);
+	d->mView->setZoom(zoom); //, center);
 }
 
 

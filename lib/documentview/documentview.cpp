@@ -311,6 +311,7 @@ DocumentView::DocumentView(QGraphicsScene* scene)
 : d(new DocumentViewPrivate) {
 	setFlag(ItemIsFocusable);
 	setFlag(ItemIsSelectable);
+	setFlag(ItemClipsChildrenToShape);
 
 	d->that = this;
 	d->mLoadingIndicator = 0;

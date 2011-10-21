@@ -32,23 +32,51 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
-class QSvgRenderer;
+class QGraphicsSvgItem;
 
 namespace Gwenview {
 
-class SvgImageView : public AbstractImageView {
+class SvgImageView : public QGraphicsWidget {
+	Q_OBJECT
 public:
     SvgImageView(QGraphicsItem* parent = 0);
 
 	void setDocument(Document::Ptr doc);
 
+	Document::Ptr document() const {
+		return mDocument;
+	}
+
 	QSizeF documentSize() const;
 
+	qreal zoom() const;
+
+	void setZoom(qreal);
+
+	bool zoomToFit() const;
+
+	void setZoomToFit(bool);
+
+	qreal computeZoomToFit() const;
+
+Q_SIGNALS:
+	void zoomChanged(qreal);
+	void zoomToFitChanged(bool);
+
 protected:
-	void updateBuffer(const QRegion& region = QRegion());
+	void resizeEvent(QGraphicsSceneResizeEvent* event);
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 private:
-	QSvgRenderer* mRenderer;
+	QGraphicsSvgItem* mSvgItem;
+	Document::Ptr mDocument;
+	qreal mZoom;
+	bool mZoomToFit;
+	QPointF mStartDragOffset;
+
+	void adjustPos();
 };
 
 struct SvgViewAdapterPrivate;
