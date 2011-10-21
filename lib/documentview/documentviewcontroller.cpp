@@ -126,7 +126,6 @@ void DocumentViewController::setView(DocumentView* view) {
 	Q_ASSERT(view);
 	// Forget old view
 	if (d->mView) {
-		d->mView->removeEventFilter(this);
 		disconnect(d->mView, 0, this, 0);
 		Q_FOREACH(QAction* action, d->mActions) {
 			disconnect(action, 0, d->mView, 0);
@@ -135,7 +134,6 @@ void DocumentViewController::setView(DocumentView* view) {
 
 	// Connect new view
 	d->mView = view;
-	d->mView->installEventFilter(this);
 	connect(d->mView, SIGNAL(adapterChanged()),
 		SLOT(slotAdapterChanged()));
 
@@ -188,19 +186,6 @@ ZoomWidget* DocumentViewController::zoomWidget() const {
 void DocumentViewController::slotAdapterChanged() {
 	d->updateActions();
 	d->updateZoomWidgetVisibility();
-}
-
-
-bool DocumentViewController::eventFilter(QObject*, QEvent* event) {
-	switch (event->type()) {
-	case QEvent::Show:
-	case QEvent::Hide:
-		d->updateActions();
-		break;
-	default:
-		break;
-	}
-	return false;
 }
 
 

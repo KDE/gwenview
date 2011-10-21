@@ -55,9 +55,6 @@ public:
 	void setView(DocumentView*);
 	void setZoomWidget(ZoomWidget* widget);
 
-protected:
-	bool eventFilter(QObject*, QEvent*);
-
 private Q_SLOTS:
 	void slotAdapterChanged();
 	void updateZoomToFitActionFromView();
