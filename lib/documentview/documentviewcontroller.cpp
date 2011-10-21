@@ -130,6 +130,7 @@ void DocumentViewController::setView(DocumentView* view) {
 		Q_FOREACH(QAction* action, d->mActions) {
 			disconnect(action, 0, d->mView, 0);
 		}
+		disconnect(d->mZoomWidget, 0, d->mView, 0);
 	}
 
 	// Connect new view
