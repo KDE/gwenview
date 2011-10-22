@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../lib/document/document.h"
 #include "../lib/document/documentfactory.h"
 #include "../lib/documentview/documentview.h"
+#include "../lib/documentview/documentviewcontainer.h"
 #include "../lib/documentview/documentviewcontroller.h"
 #include "../lib/imageformats/imageformats.h"
 #include "../lib/urlutils.h"
@@ -60,18 +61,16 @@ GVPart::GVPart(QWidget* /*parentWidget*/, QObject* parent, const QVariantList& /
 : KParts::ReadOnlyPart(parent)
 {
 	KGlobal::locale()->insertCatalog("gwenview");
-	// FIXME: QGV
-	//mDocumentView = new DocumentView(parentWidget);
-	//setWidget(mDocumentView);
+	DocumentViewContainer* container = new DocumentViewContainer;
+	setWidget(container);
+	mDocumentView = container->createView();
 
 	connect(mDocumentView, SIGNAL(captionUpdateRequested(QString)),
 		SIGNAL(setWindowCaption(QString)));
 	connect(mDocumentView, SIGNAL(completed()),
 		SIGNAL(completed()));
 
-	// FIXME: QGV
-	//mDocumentView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(mDocumentView, SIGNAL(customContextMenuRequested(QPoint)),
+	connect(mDocumentView, SIGNAL(contextMenuRequested()),
 		SLOT(showContextMenu()) );
 
 	// Necessary to have zoom actions
@@ -93,8 +92,7 @@ GVPart::GVPart(QWidget* /*parentWidget*/, QObject* parent, const QVariantList& /
 
 
 void GVPart::showProperties() {
-	// FIXME: QGV
-	//KPropertiesDialog::showDialog(url(), mDocumentView);
+	KPropertiesDialog::showDialog(url(), widget());
 }
 
 
