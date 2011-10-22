@@ -36,47 +36,20 @@ class QGraphicsSvgItem;
 
 namespace Gwenview {
 
-class SvgImageView : public QGraphicsWidget {
+class SvgImageView : public AbstractImageView {
 	Q_OBJECT
 public:
     SvgImageView(QGraphicsItem* parent = 0);
 
-	void setDocument(Document::Ptr doc);
-
-	Document::Ptr document() const {
-		return mDocument;
-	}
-
 	QSizeF documentSize() const;
 
-	qreal zoom() const;
-
-	void setZoom(qreal);
-
-	bool zoomToFit() const;
-
-	void setZoomToFit(bool);
-
-	qreal computeZoomToFit() const;
-
-Q_SIGNALS:
-	void zoomChanged(qreal);
-	void zoomToFitChanged(bool);
-
 protected:
-	void resizeEvent(QGraphicsSceneResizeEvent* event);
-	void mousePressEvent(QGraphicsSceneMouseEvent* event);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+	void loadFromDocument();
+	void onZoomChanged();
+	void onImagePosChanged(const QPointF& oldPos);
 
 private:
 	QGraphicsSvgItem* mSvgItem;
-	Document::Ptr mDocument;
-	qreal mZoom;
-	bool mZoomToFit;
-	QPointF mStartDragOffset;
-
-	void adjustPos();
 };
 
 struct SvgViewAdapterPrivate;

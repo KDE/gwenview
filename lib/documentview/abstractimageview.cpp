@@ -28,8 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kurl.h>
 
 // Qt
-#include <QPainter>
-#include <QTimer>
+#include <QCursor>
+#include <QGraphicsSceneMouseEvent>
 
 namespace Gwenview {
 
@@ -37,35 +37,43 @@ static const int KEY_SCROLL_STEP = 16;
 
 struct AbstractImageViewPrivate {
 	AbstractImageView* q;
-	Document::Ptr mDoc;
+	Document::Ptr mDocument;
 	qreal mZoom;
 	bool mZoomToFit;
-	QPixmap mCurrentBuffer;
-	// The alternate buffer is useful when scrolling: existing content is copied
-	// to mAlternateBuffer and buffers are then swapped. This avoids the
-	// allocation of a new QPixmap everytime the view is scrolled.
-	QPixmap mAlternateBuffer;
-	QTimer* mZoomToFitUpdateTimer;
-	QPointF mScrollPos;
+	QPointF mStartDragOffset;
+	QPointF mImagePos;
 
-	void setupZoomToFitUpdateTimer() {
-		mZoomToFitUpdateTimer = new QTimer(q);
-		mZoomToFitUpdateTimer->setInterval(500);
-		mZoomToFitUpdateTimer->setSingleShot(true);
-		QObject::connect(mZoomToFitUpdateTimer, SIGNAL(timeout()),
-			q, SLOT(updateZoomToFit()));
+	void setImagePos(const QPointF& pos) {
+		QPointF oldPos = mImagePos;
+		mImagePos = clippedPos(pos);
+		if (oldPos != mImagePos) {
+			q->onImagePosChanged(oldPos);
+		}
 	}
 
-	QPointF boundedScrollPos(const QPointF& pos) const {
-		QSizeF maxScroll = q->documentSize() * mZoom - q->size();
-		qreal x = qBound(0., pos.x(), maxScroll.width());
-		qreal y = qBound(0., pos.y(), maxScroll.height());
-		return QPointF(x, y);
+	void clipImagePos() {
+		// This will not change anything *unless* the clipping bounds changed
+		setImagePos(mImagePos);
 	}
 
-	void adjustScrollPos() {
-		q->setScrollPos(mScrollPos);
+	QPointF clippedPos(const QPointF& _pos) const {
+		QPointF pos = _pos;
+		QSizeF visibleSize = q->documentSize() * mZoom;
+		QSizeF viewSize = q->boundingRect().size();
+		QSizeF scrollRange = visibleSize - viewSize;
+		if (scrollRange.width() < 0) {
+			pos.setX(-scrollRange.width() / 2);
+		} else {
+			pos.setX(qBound(-scrollRange.width(), pos.x(), 0.));
+		}
+		if (scrollRange.height() < 0) {
+			pos.setY(-scrollRange.height() / 2);
+		} else {
+			pos.setY(qBound(-scrollRange.height(), pos.y(), 0.));
+		}
+		return pos;
 	}
+
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -74,32 +82,29 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 	d->q = this;
 	d->mZoom = 1;
 	d->mZoomToFit = true;
-	d->mScrollPos = QPointF(0, 0);
+	setCursor(Qt::OpenHandCursor);
 	setFlag(ItemIsFocusable);
 	setFlag(ItemIsSelectable);
-
-	d->setupZoomToFitUpdateTimer();
 }
 
 AbstractImageView::~AbstractImageView() {
 	delete d;
 }
 
-void AbstractImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/) {
-	QSize bufferSize = d->mCurrentBuffer.size();
+Document::Ptr AbstractImageView::document() const {
+	return d->mDocument;
+}
 
-	QSizeF paintSize;
+void AbstractImageView::setDocument(Document::Ptr doc) {
+	d->mDocument = doc;
+	loadFromDocument();
 	if (d->mZoomToFit) {
-		paintSize = documentSize() * computeZoomToFit();
-	} else {
-		paintSize = bufferSize;
+		setZoom(computeZoomToFit());
 	}
-	painter->drawPixmap(
-		(boundingRect().width() - paintSize.width()) / 2,
-		(boundingRect().height() - paintSize.height()) / 2,
-		paintSize.width(),
-		paintSize.height(),
-		d->mCurrentBuffer);
+}
+
+QSizeF AbstractImageView::documentSize() const {
+	return d->mDocument ? d->mDocument->size() : QSizeF();
 }
 
 qreal AbstractImageView::zoom() const {
@@ -108,9 +113,8 @@ qreal AbstractImageView::zoom() const {
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
 	d->mZoom = zoom;
-	createBuffer();
-	d->adjustScrollPos();
-	updateBuffer();
+	d->clipImagePos();
+	onZoomChanged();
 	zoomChanged(d->mZoom);
 }
 
@@ -118,27 +122,23 @@ bool AbstractImageView::zoomToFit() const {
 	return d->mZoomToFit;
 }
 
-void AbstractImageView::setZoomToFit(bool value) {
-	if (d->mZoomToFit == value) {
-		return;
+void AbstractImageView::setZoomToFit(bool on) {
+	d->mZoomToFit = on;
+	if (on) {
+		setZoom(computeZoomToFit());
+	} else {
+		setZoom(1.);
 	}
-	d->mZoomToFit = value;
+	zoomToFitChanged(d->mZoomToFit);
+}
+
+void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
+    QGraphicsWidget::resizeEvent(event);
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
+	} else {
+		d->clipImagePos();
 	}
-	zoomToFitChanged(value);
-}
-
-Document::Ptr AbstractImageView::document() const {
-	return d->mDoc;
-}
-
-void AbstractImageView::setDocument(Document::Ptr doc) {
-	d->mDoc = doc;
-}
-
-QSizeF AbstractImageView::documentSize() const {
-	return d->mDoc ? d->mDoc->size() : QSizeF();
 }
 
 qreal AbstractImageView::computeZoomToFit() const {
@@ -146,88 +146,30 @@ qreal AbstractImageView::computeZoomToFit() const {
 	if (docSize.isEmpty()) {
 		return 1;
 	}
-
 	QSizeF viewSize = boundingRect().size();
-
 	qreal fitWidth = viewSize.width() / docSize.width();
 	qreal fitHeight = viewSize.height() / docSize.height();
 	return qMin(fitWidth, fitHeight);
 }
 
-void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
-    QGraphicsWidget::resizeEvent(event);
-	if (d->mZoomToFit) {
-		d->mZoomToFitUpdateTimer->start();
-	}
-	d->adjustScrollPos();
+void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mousePressEvent(event);
+	setCursor(Qt::ClosedHandCursor);
+	d->mStartDragOffset = event->lastPos() - d->mImagePos;
 }
 
-void AbstractImageView::updateZoomToFit() {
-	if (!d->mZoomToFit) {
-		return;
-	}
-	setZoom(computeZoomToFit());
+void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseMoveEvent(event);
+	QPointF newPos = event->lastPos() - d->mStartDragOffset;
+	d->setImagePos(newPos);
 }
 
-QSizeF AbstractImageView::visibleImageSize() const {
-	if (!d->mDoc) {
-		return QSizeF();
-	}
-	qreal zoom;
-	if (d->mZoomToFit) {
-		zoom = computeZoomToFit();
-	} else {
-		zoom = d->mZoom;
-	}
-
-	QSizeF size = documentSize() * zoom;
-	size = size.boundedTo(boundingRect().size());
-
-	return size;
-}
-
-QRectF AbstractImageView::mapViewportToZoomedImage(const QRectF& viewportRect) const {
-	// FIXME: QGV
-	//QPointF offset = QPointF(0, 0); //mView->imageOffset();
-	QRectF rect = QRectF(
-		viewportRect.x(), //+ hScroll() - offset.x(),
-		viewportRect.y(), //+ vScroll() - offset.y(),
-		viewportRect.width(),
-		viewportRect.height()
-	);
-
-	return rect;
-}
-
-void AbstractImageView::createBuffer() {
-	QSize size = visibleImageSize().toSize();
-	if (size == d->mCurrentBuffer.size()) {
-		return;
-	}
-	if (!size.isValid()) {
-		d->mAlternateBuffer = QPixmap();
-		d->mCurrentBuffer = QPixmap();
-		return;
-	}
-
-	d->mAlternateBuffer = QPixmap(size);
-	d->mAlternateBuffer.fill(Qt::transparent);
-	{
-		QPainter painter(&d->mAlternateBuffer);
-		painter.drawPixmap(0, 0, d->mCurrentBuffer);
-	}
-	qSwap(d->mAlternateBuffer, d->mCurrentBuffer);
-
-	d->mAlternateBuffer = QPixmap();
-}
-
-QPixmap& AbstractImageView::buffer()
-{
-	return d->mCurrentBuffer;
+void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseReleaseEvent(event);
+	setCursor(Qt::OpenHandCursor);
 }
 
 void AbstractImageView::keyPressEvent(QKeyEvent* event) {
-	kDebug() << d->mDoc->url();
 	QPointF delta(0, 0);
 	switch (event->key()) {
 	case Qt::Key_Left:
@@ -246,84 +188,14 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event) {
 		return;
 	}
 	delta *= KEY_SCROLL_STEP;
-	setScrollPos(scrollPos() + delta);
+	d->setImagePos(d->mImagePos + delta);
 }
 
 void AbstractImageView::keyReleaseEvent(QKeyEvent* /*event*/) {
-	kDebug() << d->mDoc->url();
 }
 
-void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* /*event*/) {
-	kDebug();
-	// Necessary to get focus when clicking on a single image
-	setFocus();
+QPointF AbstractImageView::imagePos() const {
+	return d->mImagePos;
 }
-
-void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* /*event*/) {
-	kDebug();
-}
-
-void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/) {
-	kDebug();
-}
-
-QPointF AbstractImageView::scrollPos() const {
-	return d->mScrollPos;
-}
-
-void AbstractImageView::setScrollPos(const QPointF& _pos) {
-	QPointF pos = d->boundedScrollPos(_pos);
-	if (d->mScrollPos == pos) {
-		return;
-	}
-
-	int dx = d->mScrollPos.x() - pos.x();
-	int dy = d->mScrollPos.y() - pos.y();
-	d->mScrollPos = pos;
-
-	// FIXME: QGV
-	/*
-	if (d->mInsideSetZoom) {
-		// Do not scroll anything: since we are zooming the whole viewport will
-		// eventually be repainted
-		return;
-	}
-	*/
-	// Scroll existing
-	{
-		if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
-			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
-		}
-		QPainter painter(&d->mAlternateBuffer);
-		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
-	}
-	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
-
-	// Scale missing parts
-	QRegion region;
-	int posX = pos.x();
-	int posY = pos.y();
-	int width = size().width();
-	int height = size().height();
-
-	QRect rect;
-	if (dx > 0) {
-		rect = QRect(posX, posY, dx, height);
-	} else {
-		rect = QRect(posX + width + dx, posY, -dx, height);
-	}
-	region |= rect;
-
-	if (dy > 0) {
-		rect = QRect(posX, posY, width, dy);
-	} else {
-		rect = QRect(posX, posY + height + dy, width, -dy);
-	}
-	region |= rect;
-
-	updateBuffer(region);
-	update();
-}
-
 
 } // namespace

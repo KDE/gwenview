@@ -39,11 +39,14 @@ class RasterImageView : public AbstractImageView {
 public:
 	RasterImageView(QGraphicsItem* parent = 0);
 	~RasterImageView();
-	void setDocument(Document::Ptr doc);
-	void setZoom(qreal zoom, const QPointF& center = QPointF(-1, -1));
+
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 protected:
-	void updateBuffer(const QRegion&);
+	void loadFromDocument();
+	void onZoomChanged();
+	void onImagePosChanged(const QPointF& oldPos);
+	void resizeEvent(QGraphicsSceneResizeEvent* event);
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();

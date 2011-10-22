@@ -40,13 +40,75 @@ namespace Gwenview {
 struct RasterImageViewPrivate {
 	RasterImageView* q;
 	ImageScaler* mScaler;
+	QPixmap mCurrentBuffer;
+	// The alternate buffer is useful when scrolling: existing content is copied
+	// to mAlternateBuffer and buffers are swapped. This avoids allocating a new
+	// QPixmap everytime the image is scrolled.
+	QPixmap mAlternateBuffer;
 
 	void startAnimationIfNecessary() {
 	}
 
+	QSizeF visibleImageSize() const {
+		if (!q->document()) {
+			return QSizeF();
+		}
+		qreal zoom;
+		if (q->zoomToFit()) {
+			zoom = q->computeZoomToFit();
+		} else {
+			zoom = q->zoom();
+		}
+
+		QSizeF size = q->documentSize() * zoom;
+		return size.boundedTo(q->boundingRect().size());
+	}
+
+	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
+		QRectF rect = QRectF(
+			viewportRect.x() - q->imagePos().x(),
+			viewportRect.y() - q->imagePos().y(),
+			viewportRect.width(),
+			viewportRect.height()
+		);
+
+		return rect;
+	}
+
 	void setScalerRegionToVisibleRect() {
-		QRectF rect = q->mapViewportToZoomedImage(q->boundingRect());
+		QRectF rect = mapViewportToZoomedImage(q->boundingRect());
 		mScaler->setDestinationRegion(QRegion(rect.toRect()));
+	}
+
+	void createBuffer() {
+		QSize size = visibleImageSize().toSize();
+		if (size == mCurrentBuffer.size()) {
+			return;
+		}
+		if (!size.isValid()) {
+			mAlternateBuffer = QPixmap();
+			mCurrentBuffer = QPixmap();
+			return;
+		}
+
+		mAlternateBuffer = QPixmap(size);
+		mAlternateBuffer.fill(Qt::transparent);
+		{
+			QPainter painter(&mAlternateBuffer);
+			painter.drawPixmap(0, 0, mCurrentBuffer);
+		}
+		qSwap(mAlternateBuffer, mCurrentBuffer);
+
+		mAlternateBuffer = QPixmap();
+	}
+
+	void updateBuffer(const QRegion& region = QRegion()) {
+		mScaler->setZoom(q->zoom());
+		if (region.isEmpty()) {
+			setScalerRegionToVisibleRect();
+		} else {
+			mScaler->setDestinationRegion(region);
+		}
 	}
 };
 
@@ -63,8 +125,8 @@ RasterImageView::~RasterImageView() {
 	delete d;
 }
 
-void RasterImageView::setDocument(Document::Ptr doc) {
-	AbstractImageView::setDocument(doc);
+void RasterImageView::loadFromDocument() {
+	Document::Ptr doc = document();
 	connect(doc.data(), SIGNAL(metaInfoLoaded(KUrl)),
 		SLOT(slotDocumentMetaInfoLoaded()) );
 	connect(doc.data(), SIGNAL(isAnimatedUpdated()),
@@ -75,7 +137,6 @@ void RasterImageView::setDocument(Document::Ptr doc) {
 		slotDocumentMetaInfoLoaded();
 	}
 }
-
 
 void RasterImageView::slotDocumentMetaInfoLoaded() {
 	if (document()->size().isValid()) {
@@ -89,24 +150,19 @@ void RasterImageView::slotDocumentMetaInfoLoaded() {
 	}
 }
 
-
 void RasterImageView::finishSetDocument() {
 	if (!document()->size().isValid()) {
 		kError() << "No valid image size available, this should not happen!";
 		return;
 	}
 
-	createBuffer();
+	d->createBuffer();
 	d->mScaler->setDocument(document());
 
 	connect(document().data(), SIGNAL(imageRectUpdated(QRect)),
 		SLOT(updateImageRect(QRect)) );
 
 	if (zoomToFit()) {
-		// Set the zoom to an invalid value to make sure setZoom() does not
-		// return early because the new zoom is the same as the old zoom.
-		// FIXME: QGV
-		//d->mZoom = -1;
 		setZoom(computeZoomToFit());
 	} else {
 		QRect rect(QPoint(0, 0), document()->size());
@@ -138,21 +194,11 @@ void RasterImageView::slotDocumentIsAnimatedUpdated() {
 	d->startAnimationIfNecessary();
 }
 
-
-void RasterImageView::updateBuffer(const QRegion& region) {
-	d->mScaler->setZoom(zoom());
-	if (region.isEmpty()) {
-		d->setScalerRegionToVisibleRect();
-	} else {
-		d->mScaler->setDestinationRegion(region);
-	}
-}
-
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
-	int viewportLeft = zoomedImageLeft - scrollPos().x();
-	int viewportTop = zoomedImageTop - scrollPos().y();
+	int viewportLeft = zoomedImageLeft + qMin(imagePos().x(), 0.);
+	int viewportTop = zoomedImageTop + qMin(imagePos().y(), 0.);
 	{
-		QPainter painter(&buffer());
+		QPainter painter(&d->mCurrentBuffer);
 		/*
 		if (d->mDocument->hasAlphaChannel()) {
 			d->drawAlphaBackground(
@@ -170,85 +216,104 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 	update();
 }
 
-void RasterImageView::setZoom(qreal zoom, const QPointF& _center) {
-	// FIXME: QGV
-#if 0
-	if (!d->mDocument) {
-		return;
-	}
-
-	qreal oldZoom = d->mZoom;
-	if (qAbs(zoom - oldZoom) < 0.001) {
-		return;
-	}
-	// Get offset *before* setting mZoom, otherwise we get the new offset
-	QPoint oldOffset = imageOffset();
-	d->mZoom = zoom;
-
-	QPoint center;
-	if (_center == QPoint(-1, -1)) {
-		center = QPoint(d->mViewport->width() / 2, d->mViewport->height() / 2);
-	} else {
-		center = _center;
-	}
-
-	// If we zoom more than twice, then assume the user wants to see the real
-	// pixels, for example to fine tune a crop operation
-	if (d->mZoom < 2.) {
-		d->mScaler->setTransformationMode(Qt::SmoothTransformation);
-	} else {
-		d->mScaler->setTransformationMode(Qt::FastTransformation);
-	}
-
+void RasterImageView::onZoomChanged() {
 	d->createBuffer();
-	d->mInsideSetZoom = true;
+	d->updateBuffer();
+}
 
+void RasterImageView::onImagePosChanged(const QPointF& oldPos) {
+	d->updateBuffer();
+	return;
+	int dx = oldPos.x() - imagePos().x();
+	int dy = oldPos.y() - imagePos().y();
+
+	// FIXME: QGV
 	/*
-	We want to keep the point at viewport coordinates "center" at the same
-	position after zooming. The coordinates of this point in image coordinates
-	can be expressed like this:
+	 *      if (d->mInsideSetZoom) {
+	 *              // Do not scroll anything: since we are zooming the whole viewport will
+	 *              // eventually be repainted
+	 *              return;
+	 }
+	 */
+	// Scroll existing
+	{
+		if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
+			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
+		}
+		QPainter painter(&d->mAlternateBuffer);
+		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
+	}
+	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
 
-	                      oldScroll + center
-	imagePointAtOldZoom = ------------------
-	                           oldZoom
+	// Scale missing parts
+	QRegion region;
+	int posX = imagePos().x();
+	int posY = imagePos().y();
+	int width = size().width();
+	int height = size().height();
 
-	                   scroll + center
-	imagePointAtZoom = ---------------
-	                        zoom
+	QRect rect;
+	if (dx > 0) {
+		rect = QRect(posX, posY, dx, height);
+	} else {
+		rect = QRect(posX + width + dx, posY, -dx, height);
+	}
+	region |= rect;
 
-	So we want:
+	if (dy > 0) {
+		rect = QRect(posX, posY, width, dy);
+	} else {
+		rect = QRect(posX, posY + height + dy, width, -dy);
+	}
+	region |= rect;
 
-	    imagePointAtOldZoom = imagePointAtZoom
+	d->updateBuffer(region);
+	update();
+}
 
-	    oldScroll + center   scroll + center
-	<=> ------------------ = ---------------
-	          oldZoom             zoom
+void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
+{
+	QPointF topLeft(
+		qMax(imagePos().x(), 0.),
+		qMax(imagePos().y(), 0.)
+		);
+    painter->drawPixmap(topLeft, d->mCurrentBuffer);
 
-	              zoom
-	<=> scroll = ------- (oldScroll + center) - center
-	             oldZoom
-	*/
+	// FIXME: QGV
+/*
+	QSize bufferSize = d->mCurrentBuffer.size();
 
-	/*
-	Compute oldScroll
-	It's useless to take the new offset in consideration because if a direction
-	of the new offset is not 0, we won't be able to center on a specific point
-	in that direction.
-	*/
-	QPointF oldScroll = QPointF(d->hScroll(), d->vScroll()) - oldOffset;
+	QSizeF paintSize;
+	if (d->mZoomToFit) {
+		paintSize = documentSize() * computeZoomToFit();
+	} else {
+		paintSize = bufferSize;
+	}
+	painter->drawPixmap(
+		(boundingRect().width() - paintSize.width()) / 2,
+		(boundingRect().height() - paintSize.height()) / 2,
+		paintSize.width(),
+		paintSize.height(),
+		d->mCurrentBuffer);
+*/
 
-	QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
+	// Debug
+#if 0
+	QSizeF visibleSize = documentSize() * zoom();
+	painter->setPen(Qt::red);
+	painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);
 
-	updateScrollBars();
-	horizontalScrollBar()->setValue(int(scroll.x()));
-	verticalScrollBar()->setValue(int(scroll.y()));
-	d->mInsideSetZoom = false;
-
-	d->mScaler->setZoom(d->mZoom);
-	d->setScalerRegionToVisibleRect();
-	emit zoomChanged(d->mZoom);
+	painter->setPen(Qt::blue);
+	painter->drawRect(topLeft.x(), topLeft.y(), d->mCurrentBuffer.width() - 1, d->mCurrentBuffer.height() - 1);
 #endif
-	AbstractImageView::setZoom(zoom, _center);
+}
+
+void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
+	Gwenview::AbstractImageView::resizeEvent(event);
+	if (!zoomToFit()) {
+		d->createBuffer();
+		d->updateBuffer();
+	}
 }
 
 //// ImageViewAdapter ////
