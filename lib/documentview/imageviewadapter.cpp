@@ -222,55 +222,23 @@ void RasterImageView::onImageOffsetChanged() {
 }
 
 void RasterImageView::onScrollPosChanged(const QPointF& oldPos) {
-	d->updateBuffer();
-	return;
-#if 0
-	int dx = oldPos.x() - imagePos().x();
-	int dy = oldPos.y() - imagePos().y();
+	QPointF delta = scrollPos() - oldPos;
 
-	// FIXME: QGV
-	/*
-	 *      if (d->mInsideSetZoom) {
-	 *              // Do not scroll anything: since we are zooming the whole viewport will
-	 *              // eventually be repainted
-	 *              return;
-	 }
-	 */
 	// Scroll existing
 	{
 		if (d->mAlternateBuffer.size() != d->mCurrentBuffer.size()) {
 			d->mAlternateBuffer = QPixmap(d->mCurrentBuffer.size());
 		}
 		QPainter painter(&d->mAlternateBuffer);
-		painter.drawPixmap(dx, dy, d->mCurrentBuffer);
+		painter.drawPixmap(-delta, d->mCurrentBuffer);
 	}
 	qSwap(d->mCurrentBuffer, d->mAlternateBuffer);
 
 	// Scale missing parts
-	QRegion region;
-	int posX = imagePos().x();
-	int posY = imagePos().y();
-	int width = size().width();
-	int height = size().height();
-
-	QRect rect;
-	if (dx > 0) {
-		rect = QRect(posX, posY, dx, height);
-	} else {
-		rect = QRect(posX + width + dx, posY, -dx, height);
-	}
-	region |= rect;
-
-	if (dy > 0) {
-		rect = QRect(posX, posY, width, dy);
-	} else {
-		rect = QRect(posX, posY + height + dy, width, -dy);
-	}
-	region |= rect;
-
-	d->updateBuffer(region);
+	QRegion bufferRegion = QRegion(d->mCurrentBuffer.rect().translated(scrollPos().toPoint()));
+	QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
+	d->updateBuffer(updateRegion);
 	update();
-#endif
 }
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
