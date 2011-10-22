@@ -129,7 +129,7 @@ qreal SvgViewAdapter::zoom() const {
 
 
 void SvgViewAdapter::setZoom(qreal zoom, const QPointF& center) {
-	d->mView->setZoom(zoom); //, center);
+	d->mView->setZoom(zoom, center);
 }
 
 

@@ -121,10 +121,58 @@ qreal AbstractImageView::zoom() const {
 	return d->mZoom;
 }
 
-void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
+void AbstractImageView::setZoom(qreal zoom, const QPointF& _center) {
+	qreal oldZoom = d->mZoom;
+	if (qFuzzyCompare(zoom, oldZoom)) {
+		return;
+	}
 	d->mZoom = zoom;
+
+	QPointF center;
+	if (_center == QPointF(-1, -1)) {
+		center = boundingRect().center();
+	} else {
+		center = _center;
+	}
+
+	/*
+	We want to keep the point at viewport coordinates "center" at the same
+	position after zooming. The coordinates of this point in image coordinates
+	can be expressed like this:
+
+	                      oldScroll + center
+	imagePointAtOldZoom = ------------------
+	                           oldZoom
+
+	                   scroll + center
+	imagePointAtZoom = ---------------
+	                        zoom
+
+	So we want:
+
+	    imagePointAtOldZoom = imagePointAtZoom
+
+	    oldScroll + center   scroll + center
+	<=> ------------------ = ---------------
+	          oldZoom             zoom
+
+	              zoom
+	<=> scroll = ------- (oldScroll + center) - center
+	             oldZoom
+	*/
+
+	/*
+	Compute oldScroll
+	It's useless to take the new offset in consideration because if a direction
+	of the new offset is not 0, we won't be able to center on a specific point
+	in that direction.
+	*/
+	QPointF oldScroll = scrollPos() - imageOffset();
+
+	QPointF scroll = (zoom / oldZoom) * (oldScroll + center) - center;
+
 	d->adjustImageOffset(AbstractImageViewPrivate::Silent);
-	d->adjustScrollPos(AbstractImageViewPrivate::Silent);
+	d->setScrollPos(scroll, AbstractImageViewPrivate::Silent);
 	onZoomChanged();
 	zoomChanged(d->mZoom);
 }
