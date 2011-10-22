@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QGraphicsProxyWidget>
 #include <QPainter>
+#include <QTimer>
 
 // KDE
 #include <kurl.h>
@@ -40,11 +41,22 @@ namespace Gwenview {
 struct RasterImageViewPrivate {
 	RasterImageView* q;
 	ImageScaler* mScaler;
+	bool mBufferIsEmpty;
 	QPixmap mCurrentBuffer;
 	// The alternate buffer is useful when scrolling: existing content is copied
 	// to mAlternateBuffer and buffers are swapped. This avoids allocating a new
 	// QPixmap everytime the image is scrolled.
 	QPixmap mAlternateBuffer;
+
+	QTimer* mUpdateTimer;
+
+	void setupUpdateTimer() {
+		mUpdateTimer = new QTimer(q);
+		mUpdateTimer->setInterval(500);
+		mUpdateTimer->setSingleShot(true);
+		QObject::connect(mUpdateTimer, SIGNAL(timeout()),
+			q, SLOT(updateBuffer()));
+	}
 
 	void startAnimationIfNecessary() {
 	}
@@ -97,24 +109,18 @@ struct RasterImageViewPrivate {
 
 		mAlternateBuffer = QPixmap();
 	}
-
-	void updateBuffer(const QRegion& region = QRegion()) {
-		mScaler->setZoom(q->zoom());
-		if (region.isEmpty()) {
-			setScalerRegionToVisibleRect();
-		} else {
-			mScaler->setDestinationRegion(region);
-		}
-	}
 };
 
 RasterImageView::RasterImageView(QGraphicsItem* parent)
 : AbstractImageView(parent)
 , d(new RasterImageViewPrivate) {
 	d->q = this;
+	d->mBufferIsEmpty = true;
 	d->mScaler = new ImageScaler(this);
 	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
 		SLOT(updateFromScaler(int,int,QImage)) );
+
+	d->setupUpdateTimer();
 }
 
 RasterImageView::~RasterImageView() {
@@ -193,6 +199,7 @@ void RasterImageView::slotDocumentIsAnimatedUpdated() {
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
 	int viewportLeft = zoomedImageLeft - scrollPos().x();
 	int viewportTop = zoomedImageTop - scrollPos().y();
+	d->mBufferIsEmpty = false;
 	{
 		QPainter painter(&d->mCurrentBuffer);
 		/*
@@ -213,8 +220,9 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 }
 
 void RasterImageView::onZoomChanged() {
-	d->createBuffer();
-	d->updateBuffer();
+	if (!d->mUpdateTimer->isActive()) {
+		updateBuffer();
+	}
 }
 
 void RasterImageView::onImageOffsetChanged() {
@@ -237,20 +245,16 @@ void RasterImageView::onScrollPosChanged(const QPointF& oldPos) {
 	// Scale missing parts
 	QRegion bufferRegion = QRegion(d->mCurrentBuffer.rect().translated(scrollPos().toPoint()));
 	QRegion updateRegion = bufferRegion - bufferRegion.translated(-delta.toPoint());
-	d->updateBuffer(updateRegion);
+	updateBuffer(updateRegion);
 	update();
 }
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-    painter->drawPixmap(imageOffset(), d->mCurrentBuffer);
-
-	// FIXME: QGV
-/*
 	QSize bufferSize = d->mCurrentBuffer.size();
 
 	QSizeF paintSize;
-	if (d->mZoomToFit) {
+	if (zoomToFit()) {
 		paintSize = documentSize() * computeZoomToFit();
 	} else {
 		paintSize = bufferSize;
@@ -261,7 +265,6 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 		paintSize.width(),
 		paintSize.height(),
 		d->mCurrentBuffer);
-*/
 
 	// Debug
 #if 0
@@ -276,10 +279,32 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 }
 
 void RasterImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
-	Gwenview::AbstractImageView::resizeEvent(event);
+	// If we are in zoomToFit mode and have something in our buffer, delay the
+	// update: paint() will paint a scaled version of the buffer until resizing
+	// is done. This is much faster than rescaling the whole image for each
+	// resize event we receive.
+	// mUpdateTimer must be start before calling AbstractImageView::resizeEvent()
+	// because AbstractImageView::resizeEvent() will call onZoomChanged(), which
+	// will trigger an immediate update unless the mUpdateTimer is active.
+	if (zoomToFit() && !d->mBufferIsEmpty) {
+		d->mUpdateTimer->start();
+	}
+	AbstractImageView::resizeEvent(event);
 	if (!zoomToFit()) {
-		d->createBuffer();
-		d->updateBuffer();
+		// Only update buffer if we are not in zoomToFit mode: if we are
+		// onZoomChanged() will have already updated the buffer.
+		updateBuffer();
+	}
+}
+
+void RasterImageView::updateBuffer(const QRegion& region) {
+	d->mUpdateTimer->stop();
+	d->createBuffer();
+	d->mScaler->setZoom(zoom());
+	if (region.isEmpty()) {
+		d->setScalerRegionToVisibleRect();
+	} else {
+		d->mScaler->setDestinationRegion(region);
 	}
 }
 

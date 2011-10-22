@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void finishSetDocument();
 	void updateFromScaler(int, int, const QImage&);
 	void updateImageRect(const QRect& imageRect);
+	void updateBuffer(const QRegion& region = QRegion());
 
 private:
 	RasterImageViewPrivate* const d;
