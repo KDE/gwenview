@@ -46,7 +46,7 @@ struct AbstractImageViewPrivate {
 	bool mZoomToFit;
 	QPointF mImageOffset;
 	QPointF mScrollPos;
-	QPointF mStartDragOffset;
+	QPointF mLastDragPos;
 
 	void adjustImageOffset(Verbosity verbosity = Notify) {
 		QSizeF zoomedDocSize = q->documentSize() * mZoom;
@@ -216,13 +216,42 @@ qreal AbstractImageView::computeZoomToFit() const {
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mousePressEvent(event);
 	setCursor(Qt::ClosedHandCursor);
-	d->mStartDragOffset = event->lastPos() - d->mImageOffset + d->mScrollPos;
+	d->mLastDragPos = event->pos();
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mouseMoveEvent(event);
-	QPointF newPos = d->mStartDragOffset - event->lastPos();
-	d->setScrollPos(newPos);
+
+	QPointF mousePos = event->pos();
+	QPointF newScrollPos = d->mScrollPos + d->mLastDragPos - mousePos;
+
+	// Wrap mouse pos
+	qreal maxWidth = boundingRect().width();
+	qreal maxHeight = boundingRect().height();
+	// We need a margin because if the window is maximized, the mouse may not
+	// be able to go past the bounding rect.
+	// The mouse get placed 1 pixel before/after the margin to avoid getting
+	// considered as needing to wrap the other way in next mouseMoveEvent
+	// (because we don't check the move vector)
+	const int margin = 5;
+	if (mousePos.x() <= margin) {
+		mousePos.setX(maxWidth - margin - 1);
+	} else if (mousePos.x() >= maxWidth - margin) {
+		mousePos.setX(margin + 1);
+	}
+	if (mousePos.y() <= margin) {
+		mousePos.setY(maxHeight - margin - 1);
+	} else if (mousePos.y() >= maxHeight - margin) {
+		mousePos.setY(margin + 1);
+	}
+
+	// Set mouse pos (Hackish translation to screen coords!)
+	QPointF screenDelta = event->screenPos() - event->pos();
+	QCursor::setPos((mousePos + screenDelta).toPoint());
+
+	d->mLastDragPos = mousePos;
+	d->setScrollPos(newScrollPos);
+
 }
 
 void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
