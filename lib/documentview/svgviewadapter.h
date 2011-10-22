@@ -46,10 +46,12 @@ public:
 protected:
 	void loadFromDocument();
 	void onZoomChanged();
-	void onImagePosChanged(const QPointF& oldPos);
+	void onImageOffsetChanged();
+	void onScrollPosChanged(const QPointF& oldPos);
 
 private:
 	QGraphicsSvgItem* mSvgItem;
+	void adjustItemPos();
 };
 
 struct SvgViewAdapterPrivate;

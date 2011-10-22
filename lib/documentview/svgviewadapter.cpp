@@ -58,10 +58,19 @@ QSizeF SvgImageView::documentSize() const {
 
 void SvgImageView::onZoomChanged() {
 	mSvgItem->setScale(zoom());
+	adjustItemPos();
 }
 
-void SvgImageView::onImagePosChanged(const QPointF& /* oldPos */) {
-	mSvgItem->setPos(imagePos());
+void SvgImageView::onImageOffsetChanged() {
+	adjustItemPos();
+}
+
+void SvgImageView::onScrollPosChanged(const QPointF& /* oldPos */) {
+	adjustItemPos();
+}
+
+void SvgImageView::adjustItemPos() {
+	mSvgItem->setPos(imageOffset() - scrollPos());
 }
 
 //// SvgViewAdapter ////

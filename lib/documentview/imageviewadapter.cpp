@@ -65,14 +65,10 @@ struct RasterImageViewPrivate {
 	}
 
 	QRectF mapViewportToZoomedImage(const QRectF& viewportRect) const {
-		QRectF rect = QRectF(
-			viewportRect.x() - q->imagePos().x(),
-			viewportRect.y() - q->imagePos().y(),
-			viewportRect.width(),
-			viewportRect.height()
-		);
-
-		return rect;
+		return QRectF(
+			viewportRect.topLeft() - q->imageOffset() + q->scrollPos(),
+			viewportRect.size()
+			);
 	}
 
 	void setScalerRegionToVisibleRect() {
@@ -195,8 +191,8 @@ void RasterImageView::slotDocumentIsAnimatedUpdated() {
 }
 
 void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, const QImage& image) {
-	int viewportLeft = zoomedImageLeft + qMin(imagePos().x(), 0.);
-	int viewportTop = zoomedImageTop + qMin(imagePos().y(), 0.);
+	int viewportLeft = zoomedImageLeft - scrollPos().x();
+	int viewportTop = zoomedImageTop - scrollPos().y();
 	{
 		QPainter painter(&d->mCurrentBuffer);
 		/*
@@ -221,9 +217,14 @@ void RasterImageView::onZoomChanged() {
 	d->updateBuffer();
 }
 
-void RasterImageView::onImagePosChanged(const QPointF& oldPos) {
+void RasterImageView::onImageOffsetChanged() {
+	update();
+}
+
+void RasterImageView::onScrollPosChanged(const QPointF& oldPos) {
 	d->updateBuffer();
 	return;
+#if 0
 	int dx = oldPos.x() - imagePos().x();
 	int dy = oldPos.y() - imagePos().y();
 
@@ -269,15 +270,12 @@ void RasterImageView::onImagePosChanged(const QPointF& oldPos) {
 
 	d->updateBuffer(region);
 	update();
+#endif
 }
 
 void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/)
 {
-	QPointF topLeft(
-		qMax(imagePos().x(), 0.),
-		qMax(imagePos().y(), 0.)
-		);
-    painter->drawPixmap(topLeft, d->mCurrentBuffer);
+    painter->drawPixmap(imageOffset(), d->mCurrentBuffer);
 
 	// FIXME: QGV
 /*
@@ -299,6 +297,7 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 
 	// Debug
 #if 0
+	QPointF topLeft = imageOffset();
 	QSizeF visibleSize = documentSize() * zoom();
 	painter->setPen(Qt::red);
 	painter->drawRect(topLeft.x(), topLeft.y(), visibleSize.width() - 1, visibleSize.height() - 1);

@@ -60,7 +60,18 @@ public:
 
 	QSizeF visibleImageSize() const;
 
-	QPointF imagePos() const;
+	/**
+	 * If the image is smaller than the view, imageOffset is the distance from
+	 * the topleft corner of the view to the topleft corner of the image.
+	 * Neither x nor y can be negative.
+	 */
+	QPointF imageOffset() const;
+
+	/**
+	 * The scroll position, in zoomed image coordinates.
+	 * x and y are always between 0 and (docsize * zoom - viewsize)
+	 */
+	QPointF scrollPos() const;
 
 Q_SIGNALS:
 	void zoomToFitChanged(bool);
@@ -70,7 +81,16 @@ protected:
 	void setChildItem(QGraphicsItem*);
 	virtual void loadFromDocument() = 0;
 	virtual void onZoomChanged() = 0;
-	virtual void onImagePosChanged(const QPointF& oldPos) = 0;
+	/**
+	 * Called when the offset changes.
+	 * Note: to avoid multiple adjustments, this is not called if zoom changes!
+	 */
+	virtual void onImageOffsetChanged() = 0;
+	/**
+	 * Called when the scrollPos changes.
+	 * Note: to avoid multiple adjustments, this is not called if zoom changes!
+	 */
+	virtual void onScrollPosChanged(const QPointF& oldPos) = 0;
 
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
 

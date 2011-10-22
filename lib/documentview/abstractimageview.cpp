@@ -36,44 +36,52 @@ namespace Gwenview {
 static const int KEY_SCROLL_STEP = 16;
 
 struct AbstractImageViewPrivate {
+	enum Verbosity {
+		Silent,
+		Notify
+	};
 	AbstractImageView* q;
 	Document::Ptr mDocument;
 	qreal mZoom;
 	bool mZoomToFit;
+	QPointF mImageOffset;
+	QPointF mScrollPos;
 	QPointF mStartDragOffset;
-	QPointF mImagePos;
 
-	void setImagePos(const QPointF& pos) {
-		QPointF oldPos = mImagePos;
-		mImagePos = clippedPos(pos);
-		if (oldPos != mImagePos) {
-			q->onImagePosChanged(oldPos);
-		}
-	}
-
-	void clipImagePos() {
-		// This will not change anything *unless* the clipping bounds changed
-		setImagePos(mImagePos);
-	}
-
-	QPointF clippedPos(const QPointF& _pos) const {
-		QPointF pos = _pos;
-		QSizeF visibleSize = q->documentSize() * mZoom;
+	void adjustImageOffset(Verbosity verbosity = Notify) {
+		QSizeF zoomedDocSize = q->documentSize() * mZoom;
 		QSizeF viewSize = q->boundingRect().size();
-		QSizeF scrollRange = visibleSize - viewSize;
-		if (scrollRange.width() < 0) {
-			pos.setX(-scrollRange.width() / 2);
-		} else {
-			pos.setX(qBound(-scrollRange.width(), pos.x(), 0.));
+		QPointF offset(
+			qMax((viewSize.width() - zoomedDocSize.width()) / 2, 0.),
+			qMax((viewSize.height() - zoomedDocSize.height()) / 2, 0.)
+			);
+		if (offset != mImageOffset) {
+			mImageOffset = offset;
+			if (verbosity == Notify) {
+				q->onImageOffsetChanged();
+			}
 		}
-		if (scrollRange.height() < 0) {
-			pos.setY(-scrollRange.height() / 2);
-		} else {
-			pos.setY(qBound(-scrollRange.height(), pos.y(), 0.));
-		}
-		return pos;
 	}
 
+	void adjustScrollPos(Verbosity verbosity = Notify) {
+		setScrollPos(mScrollPos, verbosity);
+	}
+
+	void setScrollPos(const QPointF& _newPos, Verbosity verbosity = Notify) {
+		QSizeF zoomedDocSize = q->documentSize() * mZoom;
+		QSizeF viewSize = q->boundingRect().size();
+		QPointF newPos(
+			qBound(0., _newPos.x(), zoomedDocSize.width() - viewSize.width()),
+			qBound(0., _newPos.y(), zoomedDocSize.height() - viewSize.height())
+			);
+		if (newPos != mScrollPos) {
+			QPointF oldPos = mScrollPos;
+			mScrollPos = newPos;
+			if (verbosity == Notify) {
+				q->onScrollPosChanged(oldPos);
+			}
+		}
+	}
 };
 
 AbstractImageView::AbstractImageView(QGraphicsItem* parent)
@@ -82,6 +90,8 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 	d->q = this;
 	d->mZoom = 1;
 	d->mZoomToFit = true;
+	d->mImageOffset = QPointF(0, 0);
+	d->mScrollPos = QPointF(0, 0);
 	setCursor(Qt::OpenHandCursor);
 	setFlag(ItemIsFocusable);
 	setFlag(ItemIsSelectable);
@@ -113,7 +123,8 @@ qreal AbstractImageView::zoom() const {
 
 void AbstractImageView::setZoom(qreal zoom, const QPointF& /*center*/) {
 	d->mZoom = zoom;
-	d->clipImagePos();
+	d->adjustImageOffset(AbstractImageViewPrivate::Silent);
+	d->adjustScrollPos(AbstractImageViewPrivate::Silent);
 	onZoomChanged();
 	zoomChanged(d->mZoom);
 }
@@ -137,7 +148,8 @@ void AbstractImageView::resizeEvent(QGraphicsSceneResizeEvent* event) {
 	if (d->mZoomToFit) {
 		setZoom(computeZoomToFit());
 	} else {
-		d->clipImagePos();
+		d->adjustImageOffset();
+		d->adjustScrollPos();
 	}
 }
 
@@ -155,13 +167,13 @@ qreal AbstractImageView::computeZoomToFit() const {
 void AbstractImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mousePressEvent(event);
 	setCursor(Qt::ClosedHandCursor);
-	d->mStartDragOffset = event->lastPos() - d->mImagePos;
+	d->mStartDragOffset = event->lastPos() - d->mImageOffset + d->mScrollPos;
 }
 
 void AbstractImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mouseMoveEvent(event);
-	QPointF newPos = event->lastPos() - d->mStartDragOffset;
-	d->setImagePos(newPos);
+	QPointF newPos = d->mStartDragOffset - event->lastPos();
+	d->setScrollPos(newPos);
 }
 
 void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -188,14 +200,18 @@ void AbstractImageView::keyPressEvent(QKeyEvent* event) {
 		return;
 	}
 	delta *= KEY_SCROLL_STEP;
-	d->setImagePos(d->mImagePos + delta);
+	d->setScrollPos(d->mScrollPos + delta);
 }
 
 void AbstractImageView::keyReleaseEvent(QKeyEvent* /*event*/) {
 }
 
-QPointF AbstractImageView::imagePos() const {
-	return d->mImagePos;
+QPointF AbstractImageView::imageOffset() const {
+	return d->mImageOffset;
+}
+
+QPointF AbstractImageView::scrollPos() const {
+	return d->mScrollPos;
 }
 
 } // namespace
