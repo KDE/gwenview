@@ -33,7 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
-static const int KEY_SCROLL_STEP = 16;
+static const int UNIT_STEP = 16;
 
 struct AbstractImageViewPrivate {
 	enum Verbosity {
@@ -93,7 +93,7 @@ AbstractImageView::AbstractImageView(QGraphicsItem* parent)
 	d->mImageOffset = QPointF(0, 0);
 	d->mScrollPos = QPointF(0, 0);
 	setCursor(Qt::OpenHandCursor);
-	setFlag(ItemIsFocusable);
+	setFocusPolicy(Qt::WheelFocus);
 	setFlag(ItemIsSelectable);
 }
 
@@ -183,27 +183,42 @@ void AbstractImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 void AbstractImageView::keyPressEvent(QKeyEvent* event) {
 	QPointF delta(0, 0);
+	qreal pageStep = boundingRect().height();
+	qreal unitStep;
+	if (event->modifiers() & Qt::ShiftModifier) {
+		unitStep = pageStep / 2;
+	} else {
+		unitStep = UNIT_STEP;
+	}
 	switch (event->key()) {
 	case Qt::Key_Left:
-		delta.setX(-1);
+		delta.setX(-unitStep);
 		break;
 	case Qt::Key_Right:
-		delta.setX(1);
+		delta.setX(unitStep);
 		break;
 	case Qt::Key_Up:
-		delta.setY(-1);
+		delta.setY(-unitStep);
 		break;
 	case Qt::Key_Down:
-		delta.setY(1);
+		delta.setY(unitStep);
 		break;
+	case Qt::Key_PageUp:
+		delta.setY(-pageStep);
+		break;
+	case Qt::Key_PageDown:
+		delta.setY(pageStep);
+		break;
+	case Qt::Key_Home:
+		d->setScrollPos(QPointF(d->mScrollPos.x(), 0));
+		return;
+	case Qt::Key_End:
+		d->setScrollPos(QPointF(d->mScrollPos.x(), documentSize().height() * zoom()));
+		return;
 	default:
 		return;
 	}
-	delta *= KEY_SCROLL_STEP;
 	d->setScrollPos(d->mScrollPos + delta);
-}
-
-void AbstractImageView::keyReleaseEvent(QKeyEvent* /*event*/) {
 }
 
 QPointF AbstractImageView::imageOffset() const {
