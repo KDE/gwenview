@@ -146,9 +146,7 @@ inline void addActionToMenu(KMenu* menu, KActionCollection* actionCollection, co
 
 
 void GVPart::showContextMenu() {
-	// FIXME QGV
-	//KMenu menu(mDocumentView);
-	KMenu menu;
+	KMenu menu(widget());
 	addActionToMenu(&menu, actionCollection(), "file_save_as");
 	menu.addSeparator();
 	addActionToMenu(&menu, actionCollection(), "view_actual_size");
