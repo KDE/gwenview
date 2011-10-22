@@ -220,6 +220,13 @@ void RasterImageView::updateFromScaler(int zoomedImageLeft, int zoomedImageTop, 
 }
 
 void RasterImageView::onZoomChanged() {
+	// If we zoom more than twice, then assume the user wants to see the real
+	// pixels, for example to fine tune a crop operation
+	if (zoom() < 2.) {
+		d->mScaler->setTransformationMode(Qt::SmoothTransformation);
+	} else {
+		d->mScaler->setTransformationMode(Qt::FastTransformation);
+	}
 	if (!d->mUpdateTimer->isActive()) {
 		updateBuffer();
 	}
