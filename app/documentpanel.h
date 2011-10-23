@@ -36,7 +36,7 @@ class KActionCollection;
 namespace Gwenview {
 
 class DocumentView;
-class ImageView;
+class RasterImageView;
 class SlideShow;
 class ThumbnailBarView;
 
@@ -95,7 +95,7 @@ public:
 	/**
 	 * Returns the image view, if the current adapter has one.
 	 */
-	ImageView* imageView() const;
+	RasterImageView* imageView() const;
 
 	/**
 	 * Returns the document view

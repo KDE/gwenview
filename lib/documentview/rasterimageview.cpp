@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <kdebug.h>
 
 // Qt
+#include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QTimer>
 #include <QWeakPointer>
@@ -337,6 +338,9 @@ AbstractRasterImageViewTool* RasterImageView::currentTool() const {
 void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->mousePressEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::mousePressEvent(event);
 }
@@ -344,6 +348,9 @@ void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->mouseMoveEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::mouseMoveEvent(event);
 }
@@ -351,6 +358,9 @@ void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->mouseReleaseEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::mouseReleaseEvent(event);
 }
@@ -358,6 +368,9 @@ void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->wheelEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::wheelEvent(event);
 }
@@ -365,6 +378,9 @@ void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event) {
 void RasterImageView::keyPressEvent(QKeyEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->keyPressEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::keyPressEvent(event);
 }
@@ -372,6 +388,9 @@ void RasterImageView::keyPressEvent(QKeyEvent* event) {
 void RasterImageView::keyReleaseEvent(QKeyEvent* event) {
 	if (d->mTool) {
 		d->mTool.data()->keyReleaseEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
 	}
 	AbstractImageView::keyReleaseEvent(event);
 }

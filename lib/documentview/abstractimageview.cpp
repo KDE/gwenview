@@ -307,4 +307,19 @@ QPointF AbstractImageView::scrollPos() const {
 	return d->mScrollPos;
 }
 
+QPointF AbstractImageView::mapToView(const QPointF& imagePos) const {
+	return imagePos * d->mZoom + d->mImageOffset - d->mScrollPos;
+}
+
+QRectF AbstractImageView::mapToView(const QRectF& imageRect) const {
+	return QRectF(
+		mapToView(imageRect.topLeft()),
+		imageRect.size() * zoom()
+		);
+}
+
+QPointF AbstractImageView::mapToImage(const QPointF& viewPos) const {
+	return (viewPos - d->mImageOffset + d->mScrollPos) / d->mZoom;
+}
+
 } // namespace

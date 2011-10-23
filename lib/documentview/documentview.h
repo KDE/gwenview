@@ -36,7 +36,7 @@ class KUrl;
 
 namespace Gwenview {
 
-class ImageView;
+class RasterImageView;
 class SlideShow;
 class ZoomWidget;
 
@@ -103,9 +103,9 @@ public:
 	QPoint position() const;
 
 	/**
-	 * Returns the ImageView of the current adapter, if it has one
+	 * Returns the RasterImageView of the current adapter, if it has one
 	 */
-	ImageView* imageView() const;
+	RasterImageView* imageView() const;
 
 	void moveTo(const QRect&);
 	void moveToAnimated(const QRect&);

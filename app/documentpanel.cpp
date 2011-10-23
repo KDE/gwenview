@@ -539,7 +539,7 @@ bool DocumentPanel::isEmpty() const {
 }
 
 
-ImageView* DocumentPanel::imageView() const {
+RasterImageView* DocumentPanel::imageView() const {
 	if (!d->currentView()) {
 		return 0;
 	}

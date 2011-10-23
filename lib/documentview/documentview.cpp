@@ -437,8 +437,8 @@ void DocumentView::loadAdapterConfig() {
 }
 
 
-ImageView* DocumentView::imageView() const {
-	return d->mAdapter->imageView();
+RasterImageView* DocumentView::imageView() const {
+	return d->mAdapter->rasterImageView();
 }
 
 

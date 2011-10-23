@@ -28,15 +28,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Local
-#include <lib/abstractimageviewtool.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 
 namespace Gwenview {
 
 class AbstractImageOperation;
-class ImageView;
+class RasterImageView;
 
 struct RedEyeReductionToolPrivate;
-class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractImageViewTool {
+class GWENVIEWLIB_EXPORT RedEyeReductionTool : public AbstractRasterImageViewTool {
 	Q_OBJECT
 public:
 	enum Status {
@@ -44,13 +44,14 @@ public:
 		Adjusting
 	};
 
-	RedEyeReductionTool(ImageView* parent);
+	RedEyeReductionTool(RasterImageView* parent);
 	~RedEyeReductionTool();
 
 	virtual void paint(QPainter*);
 
-	virtual void mousePressEvent(QMouseEvent*);
-	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
 	virtual void toolActivated();
 	virtual void toolDeactivated();
