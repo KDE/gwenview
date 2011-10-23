@@ -117,4 +117,8 @@ void ImageViewAdapter::loadConfig() {
 	*/
 }
 
+RasterImageView* ImageViewAdapter::rasterImageView() const {
+	return d->mView;
+}
+
 } // namespace

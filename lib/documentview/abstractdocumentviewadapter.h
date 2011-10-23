@@ -40,7 +40,7 @@ namespace Gwenview {
 
 
 class ImageView;
-
+class RasterImageView;
 
 /**
  * Classes inherit from this class so that they can be used inside the
@@ -57,6 +57,8 @@ public:
 	virtual MimeTypeUtils::Kind kind() const = 0;
 
 	virtual ImageView* imageView() const { return 0; }
+
+	virtual RasterImageView* rasterImageView() const { return 0; }
 
 	virtual QCursor cursor() const;
 

@@ -63,6 +63,8 @@ public:
 
 	virtual void loadConfig();
 
+	virtual RasterImageView* rasterImageView() const;
+
 private Q_SLOTS:
 	void slotLoadingFailed();
 

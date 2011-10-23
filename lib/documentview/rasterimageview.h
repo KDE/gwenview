@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 namespace Gwenview {
 
+class AbstractRasterImageViewTool;
+
 class RasterImageViewPrivate;
 class GWENVIEWLIB_EXPORT RasterImageView : public AbstractImageView {
 	Q_OBJECT
@@ -39,12 +41,21 @@ public:
 
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
+	void setCurrentTool(AbstractRasterImageViewTool* tool);
+	AbstractRasterImageViewTool* currentTool() const;
+
 protected:
 	void loadFromDocument();
 	void onZoomChanged();
 	void onImageOffsetChanged();
 	void onScrollPosChanged(const QPointF& oldPos);
 	void resizeEvent(QGraphicsSceneResizeEvent* event);
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+	void wheelEvent(QGraphicsSceneWheelEvent* event);
+	void keyPressEvent(QKeyEvent* event);
+	void keyReleaseEvent(QKeyEvent* event);
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();

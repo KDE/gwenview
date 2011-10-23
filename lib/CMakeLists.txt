@@ -60,6 +60,7 @@ set(gwenviewlib_SRCS
 	document/videodocumentloadedimpl.cpp
 	documentview/abstractdocumentviewadapter.cpp
 	documentview/abstractimageview.cpp
+	documentview/abstractrasterimageviewtool.cpp
 	documentview/documentview.cpp
 	documentview/documentviewcontroller.cpp
 	documentview/documentviewsynchronizer.cpp

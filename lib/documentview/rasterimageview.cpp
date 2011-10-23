@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "rasterimageview.moc"
 
 // Local
+#include <lib/documentview/abstractrasterimageviewtool.h>
 #include <lib/imagescaler.h>
 
 // KDE
@@ -30,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QPainter>
 #include <QTimer>
+#include <QWeakPointer>
 
 namespace Gwenview {
 
@@ -45,6 +47,8 @@ struct RasterImageViewPrivate {
 	QPixmap mAlternateBuffer;
 
 	QTimer* mUpdateTimer;
+
+	QWeakPointer<AbstractRasterImageViewTool> mTool;
 
 	void setupUpdateTimer() {
 		mUpdateTimer = new QTimer(q);
@@ -269,6 +273,10 @@ void RasterImageView::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 		paintSize.height(),
 		d->mCurrentBuffer);
 
+	if (d->mTool) {
+		d->mTool.data()->paint(painter);
+	}
+
 	// Debug
 #if 0
 	QPointF topLeft = imageOffset();
@@ -309,6 +317,63 @@ void RasterImageView::updateBuffer(const QRegion& region) {
 	} else {
 		d->mScaler->setDestinationRegion(region);
 	}
+}
+
+void RasterImageView::setCurrentTool(AbstractRasterImageViewTool* tool) {
+	if (d->mTool) {
+		d->mTool.data()->toolDeactivated();
+	}
+	d->mTool = tool;
+	if (d->mTool) {
+		d->mTool.data()->toolActivated();
+	}
+	update();
+}
+
+AbstractRasterImageViewTool* RasterImageView::currentTool() const {
+	return d->mTool.data();
+}
+
+void RasterImageView::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->mousePressEvent(event);
+	}
+	AbstractImageView::mousePressEvent(event);
+}
+
+void RasterImageView::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->mouseMoveEvent(event);
+	}
+	AbstractImageView::mouseMoveEvent(event);
+}
+
+void RasterImageView::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->mouseReleaseEvent(event);
+	}
+	AbstractImageView::mouseReleaseEvent(event);
+}
+
+void RasterImageView::wheelEvent(QGraphicsSceneWheelEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->wheelEvent(event);
+	}
+	AbstractImageView::wheelEvent(event);
+}
+
+void RasterImageView::keyPressEvent(QKeyEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->keyPressEvent(event);
+	}
+	AbstractImageView::keyPressEvent(event);
+}
+
+void RasterImageView::keyReleaseEvent(QKeyEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->keyReleaseEvent(event);
+	}
+	AbstractImageView::keyReleaseEvent(event);
 }
 
 } // namespace
