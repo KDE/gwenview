@@ -28,38 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // KDE
 
 // Local
-#include <lib/documentview/abstractimageview.h>
 #include <lib/documentview/abstractdocumentviewadapter.h>
 
 namespace Gwenview {
-
-class RasterImageViewPrivate;
-class RasterImageView : public AbstractImageView {
-	Q_OBJECT
-public:
-	RasterImageView(QGraphicsItem* parent = 0);
-	~RasterImageView();
-
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-
-protected:
-	void loadFromDocument();
-	void onZoomChanged();
-	void onImageOffsetChanged();
-	void onScrollPosChanged(const QPointF& oldPos);
-	void resizeEvent(QGraphicsSceneResizeEvent* event);
-
-private Q_SLOTS:
-	void slotDocumentMetaInfoLoaded();
-	void slotDocumentIsAnimatedUpdated();
-	void finishSetDocument();
-	void updateFromScaler(int, int, const QImage&);
-	void updateImageRect(const QRect& imageRect);
-	void updateBuffer(const QRegion& region = QRegion());
-
-private:
-	RasterImageViewPrivate* const d;
-};
 
 struct ImageViewAdapterPrivate;
 class GWENVIEWLIB_EXPORT ImageViewAdapter : public AbstractDocumentViewAdapter {
@@ -89,8 +60,6 @@ public:
 	virtual Document::Ptr document() const;
 
 	virtual void setDocument(Document::Ptr);
-
-	virtual ImageView* imageView() const;
 
 	virtual void loadConfig();
 
