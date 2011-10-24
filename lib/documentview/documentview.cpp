@@ -51,9 +51,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/documentview/imageviewadapter.h>
 #include <lib/documentview/svgviewadapter.h>
 #include <lib/documentview/videoviewadapter.h>
+#include <lib/graphicshudwidget.h>
 #include <lib/graphicswidgetfloater.h>
 #include <lib/gwenviewconfig.h>
-#include <lib/hudwidget.h>
 #include <lib/mimetypeutils.h>
 #include <lib/signalblocker.h>
 #include <lib/widgetfloater.h>
@@ -76,7 +76,7 @@ static const int COMPARE_MARGIN = 4;
 
 struct DocumentViewPrivate {
 	DocumentView* that;
-	QGraphicsProxyWidget* mHud;
+	GraphicsHudWidget* mHud;
 	KModifierKeyInfo* mModifierKeyInfo;
 	QCursor mZoomCursor;
 	QCursor mPreviousCursor;
@@ -182,10 +182,8 @@ struct DocumentViewPrivate {
 		layout->addWidget(trashButton);
 		layout->addWidget(deselectButton);
 
-		HudWidget* hud = new HudWidget;
-		hud->init(content, HudWidget::OptionNone);
-		mHud = new QGraphicsProxyWidget(that);
-		mHud->setWidget(hud);
+		mHud = new GraphicsHudWidget(that);
+		mHud->init(content, GraphicsHudWidget::OptionNone);
 		GraphicsWidgetFloater* floater = new GraphicsWidgetFloater(that);
 		floater->setChildWidget(mHud);
 		floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
