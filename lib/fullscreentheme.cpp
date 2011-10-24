@@ -115,5 +115,9 @@ QStringList FullScreenTheme::themeNameList() {
 	return list;
 }
 
+QPalette FullScreenTheme::palette() {
+	static QPalette pal = QPalette(QColor::fromHsvF(0, 0, 0, 0.6));
+	return pal;
+}
 
 } // namespace

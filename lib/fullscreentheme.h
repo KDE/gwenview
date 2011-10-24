@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Local
 
+class QPalette;
 class QString;
 class QStringList;
 
@@ -47,6 +48,8 @@ public:
 	static QStringList themeNameList();
 	static QString currentThemeName();
 	static void setCurrentThemeName(const QString&);
+
+	static QPalette palette();
 
 private:
 	FullScreenThemePrivate* const d;
