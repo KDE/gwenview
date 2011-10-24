@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "redeyereductiontool.moc"
 
 // Qt
-#include <QGraphicsProxyWidget>
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QPainter>
@@ -37,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 #include <lib/documentview/rasterimageview.h>
 #include <lib/graphicswidgetfloater.h>
-#include <lib/hudwidget.h>
+#include <lib/graphicshudwidget.h>
 #include "gwenviewconfig.h"
 #include "paintutils.h"
 #include "redeyereductionimageoperation.h"
@@ -60,7 +59,7 @@ struct RedEyeReductionToolPrivate {
 	RedEyeReductionTool::Status mStatus;
 	QPointF mCenter;
 	int mDiameter;
-	QGraphicsProxyWidget* mHudWidget;
+	GraphicsHudWidget* mHudWidget;
 	GraphicsWidgetFloater* mFloater;
 
 
@@ -87,13 +86,11 @@ struct RedEyeReductionToolPrivate {
 
 	void createHudWidgetForWidget(QWidget* widget) {
 		mHudWidget->deleteLater();
-		HudWidget* hud = new HudWidget();
-		hud->init(widget, HudWidget::OptionCloseButton);
-		hud->adjustSize();
-		QObject::connect(hud, SIGNAL(closed()),
+		mHudWidget = new GraphicsHudWidget(mRedEyeReductionTool->imageView());
+		mHudWidget->init(widget, GraphicsHudWidget::OptionCloseButton);
+		mHudWidget->adjustSize();
+		QObject::connect(mHudWidget, SIGNAL(closed()),
 			mRedEyeReductionTool, SIGNAL(done()) );
-		mHudWidget = new QGraphicsProxyWidget(mRedEyeReductionTool->imageView());
-		mHudWidget->setWidget(hud);
 		mFloater->setChildWidget(mHudWidget);
 	}
 
