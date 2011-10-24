@@ -82,6 +82,7 @@ set(gwenviewlib_SRCS
 	flowlayout.cpp
 	fullscreenbar.cpp
 	fullscreentheme.cpp
+	graphicshudwidget.cpp
 	graphicswidgetfloater.cpp
 	hudwidget.cpp
 	imageformats/imageformats.cpp
