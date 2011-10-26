@@ -104,7 +104,7 @@ struct CropToolPrivate {
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
-	QPointF mLastMouseMovePos;
+	QPoint mLastMouseMovePos;
 	double mCropRatio;
 	GraphicsHudWidget* mHudWidget;
 	CropWidget* mCropWidget;
@@ -393,7 +393,7 @@ void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	d->updateCursor(d->mMovingHandle, true /* down */);
 
 	if (d->mMovingHandle == CH_Content) {
-		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
+		d->mLastMouseMovePos = imageView()->mapToImage(event->pos().toPoint());
 	}
 
 	// Update to hide handles
@@ -461,8 +461,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 
 	if (d->mMovingHandle == CH_Content) {
-		QPoint delta = (point - d->mLastMouseMovePos).toPoint();
-		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
+		d->mRect.translate(point - d->mLastMouseMovePos);
 		d->mLastMouseMovePos = point;
 	}
 
