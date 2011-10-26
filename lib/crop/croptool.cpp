@@ -389,11 +389,11 @@ void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->buttons() != Qt::LeftButton) {
 		return;
 	}
-	d->mMovingHandle = d->handleAt(event->lastPos());
+	d->mMovingHandle = d->handleAt(event->pos());
 	d->updateCursor(d->mMovingHandle, true /* down */);
 
 	if (d->mMovingHandle == CH_Content) {
-		d->mLastMouseMovePos = imageView()->mapToImage(event->lastPos());
+		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
 
 	// Update to hide handles
@@ -409,7 +409,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 	const QSize imageSize = imageView()->document()->size();
 
-	QPoint point = imageView()->mapToImage(event->lastPos().toPoint());
+	QPoint point = imageView()->mapToImage(event->pos().toPoint());
 	int posX = qBound(0, point.x(), imageSize.width() - 1);
 	int posY = qBound(0, point.y(), imageSize.height() - 1);
 
@@ -463,7 +463,7 @@ void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (d->mMovingHandle == CH_Content) {
 		QPoint delta = (point - d->mLastMouseMovePos).toPoint();
 		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
-		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
+		d->mLastMouseMovePos = point;
 	}
 
 	d->keepRectInsideImage();
