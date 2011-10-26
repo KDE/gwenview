@@ -73,9 +73,15 @@ public:
 	 */
 	QPointF scrollPos() const;
 
-	QPointF mapToView(const QPointF& viewPos) const;
+	QPointF mapToView(const QPointF& imagePos) const;
+	QPoint mapToView(const QPoint& imagePos) const;
 	QRectF mapToView(const QRectF& imageRect) const;
+	QRect mapToView(const QRect& imageRect) const;
+
 	QPointF mapToImage(const QPointF& viewPos) const;
+	QPoint mapToImage(const QPoint& viewPos) const;
+	QRectF mapToImage(const QRectF& viewRect) const;
+	QRect mapToImage(const QRect& viewRect) const;
 
 Q_SIGNALS:
 	void zoomToFitChanged(bool);

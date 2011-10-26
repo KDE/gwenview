@@ -34,8 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <klocale.h>
 
 // Local
+#include <lib/documentview/rasterimageview.h>
 #include "croptool.h"
-#include "imageview.h"
 #include "signalblocker.h"
 #include "ui_cropwidget.h"
 
@@ -169,7 +169,7 @@ struct CropWidgetPrivate : public Ui_CropWidget {
 };
 
 
-CropWidget::CropWidget(QWidget* parent, ImageView* imageView, CropTool* cropTool)
+CropWidget::CropWidget(QWidget* parent, RasterImageView* imageView, CropTool* cropTool)
 : QWidget(parent)
 , d(new CropWidgetPrivate) {
 	setWindowFlags(Qt::Tool);

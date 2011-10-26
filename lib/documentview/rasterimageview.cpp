@@ -120,6 +120,7 @@ RasterImageView::RasterImageView(QGraphicsItem* parent)
 	d->mScaler = new ImageScaler(this);
 	connect(d->mScaler, SIGNAL(scaledRect(int,int,QImage)), 
 		SLOT(updateFromScaler(int,int,QImage)) );
+	setAcceptHoverEvents(true);
 
 	d->setupUpdateTimer();
 }
@@ -393,6 +394,16 @@ void RasterImageView::keyReleaseEvent(QKeyEvent* event) {
 		}
 	}
 	AbstractImageView::keyReleaseEvent(event);
+}
+
+void RasterImageView::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
+	if (d->mTool) {
+		d->mTool.data()->hoverMoveEvent(event);
+		if (event->isAccepted()) {
+			return;
+		}
+	}
+	AbstractImageView::hoverMoveEvent(event);
 }
 
 } // namespace

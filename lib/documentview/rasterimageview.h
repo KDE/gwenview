@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KDE
 
+class QGraphicsSceneHoverEvent;
+
 namespace Gwenview {
 
 class AbstractRasterImageViewTool;
@@ -56,6 +58,7 @@ protected:
 	void wheelEvent(QGraphicsSceneWheelEvent* event);
 	void keyPressEvent(QKeyEvent* event);
 	void keyReleaseEvent(QKeyEvent* event);
+	void hoverMoveEvent(QGraphicsSceneHoverEvent*);
 
 private Q_SLOTS:
 	void slotDocumentMetaInfoLoaded();

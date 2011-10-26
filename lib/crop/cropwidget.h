@@ -34,13 +34,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 namespace Gwenview {
 
 class CropTool;
-class ImageView;
+class RasterImageView;
 
 struct CropWidgetPrivate;
 class GWENVIEWLIB_EXPORT CropWidget : public QWidget {
 	Q_OBJECT
 public:
-	CropWidget(QWidget* parent, ImageView*, CropTool*);
+	CropWidget(QWidget* parent, RasterImageView*, CropTool*);
 	~CropWidget();
 
 Q_SIGNALS:

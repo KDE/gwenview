@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // KDE
 
 // Local
-#include <lib/abstractimageviewtool.h>
+#include <lib/documentview/abstractrasterimageviewtool.h>
 
 class QRect;
 
@@ -38,10 +38,10 @@ class AbstractImageOperation;
 class ImageView;
 
 struct CropToolPrivate;
-class GWENVIEWLIB_EXPORT CropTool : public AbstractImageViewTool {
+class GWENVIEWLIB_EXPORT CropTool : public AbstractRasterImageViewTool {
 	Q_OBJECT
 public:
-	CropTool(ImageView* parent);
+	CropTool(RasterImageView* parent);
 	~CropTool();
 
 	void setCropRatio(double ratio);
@@ -51,9 +51,10 @@ public:
 
 	virtual void paint(QPainter*);
 
-	virtual void mousePressEvent(QMouseEvent*);
-	virtual void mouseMoveEvent(QMouseEvent*);
-	virtual void mouseReleaseEvent(QMouseEvent*);
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
 
 	virtual void toolActivated();
 	virtual void toolDeactivated();

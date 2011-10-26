@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Local
 
 class QKeyEvent;
+class QGraphicsSceneHoverEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
 class QPainter;
@@ -52,6 +53,7 @@ public:
 	virtual void mousePressEvent(QGraphicsSceneMouseEvent*) {}
 	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) {}
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) {}
+	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) {}
 	virtual void wheelEvent(QGraphicsSceneWheelEvent*) {}
 	virtual void keyPressEvent(QKeyEvent*) {}
 	virtual void keyReleaseEvent(QKeyEvent*) {}

@@ -233,9 +233,7 @@ void ImageOpsContextManagerItem::crop() {
 	if (!d->ensureEditable()) {
 		return;
 	}
-// FIXME: QGV
-#if 0
-	ImageView* imageView = d->mMainWindow->documentPanel()->imageView();
+	RasterImageView* imageView = d->mMainWindow->documentPanel()->imageView();
 	if (!imageView) {
 		kError() << "No ImageView available!";
 		return;
@@ -248,7 +246,6 @@ void ImageOpsContextManagerItem::crop() {
 
 	d->mMainWindow->setDistractionFreeMode(true);
 	imageView->setCurrentTool(tool);
-#endif
 }
 
 

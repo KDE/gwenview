@@ -21,11 +21,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 // Self
 #include "croptool.moc"
 
-#include <math.h>
-
 // Qt
+#include <qmath.h>
 #include <QApplication>
 #include <QFlags>
+#include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
@@ -38,10 +38,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <kdialog.h>
 
 // Local
+#include <lib/documentview/rasterimageview.h>
 #include "cropimageoperation.h"
 #include "cropwidget.h"
+#include "graphicshudwidget.h"
 #include "imageview.h"
-#include "hudwidget.h"
 
 static const int HANDLE_SIZE = 15;
 
@@ -103,9 +104,9 @@ struct CropToolPrivate {
 	QRect mRect;
 	QList<CropHandle> mCropHandleList;
 	CropHandle mMovingHandle;
-	QPoint mLastMouseMovePos;
+	QPointF mLastMouseMovePos;
 	double mCropRatio;
-	HudWidget* mHudWidget;
+	GraphicsHudWidget* mHudWidget;
 	CropWidget* mCropWidget;
 
 	QTimer* mHudTimer;
@@ -113,12 +114,12 @@ struct CropToolPrivate {
 
 
 	QRect viewportCropRect() const {
-		return mCropTool->imageView()->mapToViewport(mRect.adjusted(0, 0, 1, 1));
+		return mCropTool->imageView()->mapToView(mRect.adjusted(0, 0, 1, 1));
 	}
 
 
 	QRect handleViewportRect(CropHandle handle) {
-		QSize viewportSize = mCropTool->imageView()->viewport()->size();
+		QSize viewportSize = mCropTool->imageView()->size().toSize();
 		QRect rect = viewportCropRect();
 		int left, top;
 		if (handle & CH_Top) {
@@ -143,14 +144,14 @@ struct CropToolPrivate {
 	}
 
 
-	CropHandle handleAt(const QPoint& pos) {
+	CropHandle handleAt(const QPointF& pos) {
 		Q_FOREACH(const CropHandle& handle, mCropHandleList) {
-			QRect rect = handleViewportRect(handle);
+			QRectF rect = handleViewportRect(handle);
 			if (rect.contains(pos)) {
 				return handle;
 			}
 		}
-		QRect rect = viewportCropRect();
+		QRectF rect = viewportCropRect();
 		if (rect.contains(pos)) {
 			return CH_Content;
 		}
@@ -188,11 +189,11 @@ struct CropToolPrivate {
 			shape = Qt::ArrowCursor;
 			break;
 		}
-		mCropTool->imageView()->viewport()->setCursor(shape);
+		mCropTool->imageView()->setCursor(shape);
 	}
 
 	void keepRectInsideImage() {
-		const QSize imageSize = mCropTool->imageView()->document()->size();
+		const QSize imageSize = mCropTool->imageView()->documentSize().toSize();
 		if (mRect.width() > imageSize.width() || mRect.height() > imageSize.height()) {
 			// This can happen when the crop ratio changes
 			QSize rectSize = mRect.size();
@@ -216,8 +217,8 @@ struct CropToolPrivate {
 	void setupHudWidget() {
 		mHudSide = HS_None;
 
-		ImageView* view = mCropTool->imageView();
-		mHudWidget = new HudWidget(view->viewport());
+		RasterImageView* view = mCropTool->imageView();
+		mHudWidget = new GraphicsHudWidget(view);
 		QObject::connect(mHudWidget, SIGNAL(closed()),
 			mCropTool, SIGNAL(done()));
 
@@ -225,7 +226,7 @@ struct CropToolPrivate {
 		QObject::connect(mCropWidget, SIGNAL(cropRequested()),
 			mCropTool, SLOT(slotCropRequested()));
 
-		mHudWidget->init(mCropWidget, HudWidget::OptionCloseButton);
+		mHudWidget->init(mCropWidget, GraphicsHudWidget::OptionCloseButton);
 		mHudWidget->setCursor(Qt::ArrowCursor);
 		mHudWidget->show();
 
@@ -238,27 +239,28 @@ struct CropToolPrivate {
 	}
 
 	void connectToView() {
-		ImageView* view = mCropTool->imageView();
+		RasterImageView* view = mCropTool->imageView();
 		QObject::connect(view, SIGNAL(zoomChanged(qreal)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
-		QObject::connect(view->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+		QObject::connect(view, SIGNAL(scrollPosChanged()),
 			mCropTool, SLOT(updateHudWidgetPosition()));
-		QObject::connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)),
-			mCropTool, SLOT(updateHudWidgetPosition()));
+		// FIXME: QGV
+		/*
 		// rangeChanged() is emitted when the view is resized
 		QObject::connect(view->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
 		QObject::connect(view->verticalScrollBar(), SIGNAL(rangeChanged(int,int)),
 			mCropTool, SLOT(updateHudWidgetPosition()));
+		*/
 	}
 
 	OptimalPosition computeOptimalHudWidgetPosition() {
-		const ImageView* view = mCropTool->imageView();
-		const QRect viewportRect = view->viewport()->rect();
-		const QRect rect = view->mapToViewport(mRect).intersected(viewportRect);
+		const RasterImageView* view = mCropTool->imageView();
+		const QRect viewportRect = view->boundingRect().toRect();
+		const QRect rect = view->mapToView(mRect).intersected(viewportRect);
 		const int margin = HANDLE_SIZE;
-		const int hudHeight = mHudWidget->height();
-		const QRect hudMaxRect = viewportRect.adjusted(0, 0, -mHudWidget->width(), -hudHeight);
+		const int hudHeight = mHudWidget->size().height();
+		const QRect hudMaxRect = viewportRect.adjusted(0, 0, -mHudWidget->size().width(), -hudHeight);
 
 		OptimalPosition ret;
 
@@ -305,15 +307,15 @@ struct CropToolPrivate {
 };
 
 
-CropTool::CropTool(ImageView* view)
-: AbstractImageViewTool(view)
+CropTool::CropTool(RasterImageView* view)
+: AbstractRasterImageViewTool(view)
 , d(new CropToolPrivate) {
 	d->mCropTool = this;
 	d->mCropHandleList << CH_Left << CH_Right << CH_Top << CH_Bottom << CH_TopLeft << CH_TopRight << CH_BottomLeft << CH_BottomRight;
 	d->mHudSide = HS_Bottom;
 	d->mMovingHandle = CH_None;
-	const QRect imageRect = QRect(QPoint(0, 0), view->document()->size());
-	const QRect viewportRect = view->mapToImage(view->viewport()->rect());
+	const QRect imageRect = QRect(QPoint(0, 0), view->documentSize().toSize());
+	const QRect viewportRect = view->mapToImage(view->rect().toRect());
 	d->mRect = imageRect & viewportRect;
 	d->mCropRatio = 0.;
 
@@ -339,7 +341,7 @@ void CropTool::setRect(const QRect& rect) {
 	if (d->mRect != rect) {
 		rectUpdated(d->mRect);
 	}
-	imageView()->viewport()->update();
+	imageView()->update();
 }
 
 
@@ -351,7 +353,7 @@ QRect CropTool::rect() const {
 void CropTool::paint(QPainter* painter) {
 	QRect rect = d->viewportCropRect();
 
-	QRect imageRect = imageView()->rect();
+	QRect imageRect = imageView()->rect().toRect();
 
 	static const QColor outerColor  = QColor::fromHsvF(0, 0, 0, 0.5);
 	// For some reason nothing gets drawn if borderColor is not fully opaque!
@@ -380,32 +382,34 @@ void CropTool::paint(QPainter* painter) {
 }
 
 
-void CropTool::mousePressEvent(QMouseEvent* event) {
+void CropTool::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	// FIXME: Fade out?
 	//d->mHudWidget->hide();
-	d->mMovingHandle = d->handleAt(event->pos());
-	d->updateCursor(d->mMovingHandle, event->buttons() != Qt::NoButton);
+	event->accept();
+	if (event->buttons() != Qt::LeftButton) {
+		return;
+	}
+	d->mMovingHandle = d->handleAt(event->lastPos());
+	d->updateCursor(d->mMovingHandle, true /* down */);
 
 	if (d->mMovingHandle == CH_Content) {
-		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
+		d->mLastMouseMovePos = imageView()->mapToImage(event->lastPos());
 	}
 
 	// Update to hide handles
-	imageView()->viewport()->update();
+	imageView()->update();
 }
 
 
-void CropTool::mouseMoveEvent(QMouseEvent* event) {
-	if (event->buttons() == Qt::NoButton) {
-		// Make sure cursor is updated when moving over handles
-		CropHandle handle = d->handleAt(event->pos());
-		d->updateCursor(handle, false/* buttonDown*/);
+void CropTool::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	event->accept();
+	if (event->buttons() != Qt::LeftButton) {
 		return;
 	}
 
 	const QSize imageSize = imageView()->document()->size();
 
-	QPoint point = imageView()->mapToImage(event->pos());
+	QPoint point = imageView()->mapToImage(event->lastPos().toPoint());
 	int posX = qBound(0, point.x(), imageSize.width() - 1);
 	int posY = qBound(0, point.y(), imageSize.height() - 1);
 
@@ -457,32 +461,41 @@ void CropTool::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	if (d->mMovingHandle == CH_Content) {
-		QPoint delta = point - d->mLastMouseMovePos;
+		QPoint delta = (point - d->mLastMouseMovePos).toPoint();
 		d->mRect.adjust(delta.x(), delta.y(), delta.x(), delta.y());
 		d->mLastMouseMovePos = imageView()->mapToImage(event->pos());
 	}
 
 	d->keepRectInsideImage();
 
-	imageView()->viewport()->update();
+	imageView()->update();
 	rectUpdated(d->mRect);
 	updateHudWidgetPosition();
 }
 
 
-void CropTool::mouseReleaseEvent(QMouseEvent* event) {
+void CropTool::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	event->accept();
 	// FIXME: Fade in?
 	//d->mHudWidget->show();
 	d->mMovingHandle = CH_None;
-	d->updateCursor(d->handleAt(event->pos()), false);
+	d->updateCursor(d->handleAt(event->lastPos()), false);
 
 	// Update to show handles
-	imageView()->viewport()->update();
+	imageView()->update();
+}
+
+
+void CropTool::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
+	event->accept();
+	// Make sure cursor is updated when moving over handles
+	CropHandle handle = d->handleAt(event->lastPos());
+	d->updateCursor(handle, false /* buttonDown */);
 }
 
 
 void CropTool::toolActivated() {
-	imageView()->viewport()->setCursor(Qt::CrossCursor);
+	imageView()->setCursor(Qt::CrossCursor);
 }
 
 
@@ -507,18 +520,18 @@ bool CropTool::eventFilter(QObject*, QEvent* event) {
 
 
 void CropTool::moveHudWidget() {
-	const QPoint delta = d->mHudEndPos - d->mHudWidget->pos();
+	const QPointF delta = d->mHudEndPos - d->mHudWidget->pos();
 
-	const double distance = sqrt(pow(double(delta.x()), 2) + pow(double(delta.y()), 2));
+	const qreal distance = qSqrt(qPow(delta.x(), 2.) + qPow(delta.y(), 2.));
 	QPoint pos;
-	if (distance > double(HUD_TIMER_MAX_PIXELS_PER_UPDATE)) {
-		pos = d->mHudWidget->pos() + delta * double(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance;
+	if (distance > qreal(HUD_TIMER_MAX_PIXELS_PER_UPDATE)) {
+		pos = (d->mHudWidget->pos() + delta * qreal(HUD_TIMER_MAX_PIXELS_PER_UPDATE) / distance).toPoint();
 	} else {
 		pos = d->mHudEndPos;
 		d->mHudTimer->stop();
 	}
 
-	d->mHudWidget->move(pos);
+	d->mHudWidget->setPos(pos);
 }
 
 
@@ -530,7 +543,7 @@ void CropTool::updateHudWidgetPosition() {
 	if (d->mHudSide == result.second && !d->mHudTimer->isActive()) {
 		// Not changing side and not in an animation, move directly the hud
 		// to the final position to avoid lagging effect
-		d->mHudWidget->move(result.first);
+		d->mHudWidget->setPos(result.first);
 	} else {
 		d->mHudEndPos = result.first;
 		d->mHudSide = result.second;
