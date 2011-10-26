@@ -321,7 +321,7 @@ CropTool::CropTool(RasterImageView* view)
 
 	d->setupHudWidget();
 	d->connectToView();
-	updateHudWidgetPosition();
+	QMetaObject::invokeMethod(this, "updateHudWidgetPosition", Qt::QueuedConnection);
 }
 
 
