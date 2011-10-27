@@ -21,10 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define SLIDECONTAINER_H
 
 // Qt
+#include <QWeakPointer>
 #include <QFrame>
-#include <QTimeLine>
 
 #include <lib/gwenviewlib_export.h>
+
+class QPropertyAnimation;
 
 namespace Gwenview {
 
@@ -36,6 +38,7 @@ namespace Gwenview {
  */
 class GWENVIEWLIB_EXPORT SlideContainer : public QFrame {
 	Q_OBJECT
+	Q_PROPERTY(int slideHeight READ slideHeight WRITE setSlideHeight)
 public:
 	SlideContainer(QWidget* parent = 0);
 
@@ -53,6 +56,10 @@ public:
 
 	virtual QSize minimumSizeHint() const;
 
+	int slideHeight() const;
+
+	Q_INVOKABLE void setSlideHeight(int height);
+
 public Q_SLOTS:
 	/**
 	 * Slides the content widget in.
@@ -68,15 +75,19 @@ public Q_SLOTS:
 
 protected:
 	void resizeEvent(QResizeEvent*);
-	bool eventFilter(QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent* event);
 
 private Q_SLOTS:
-	void slotTimeLineChanged(qreal value);
-	void slotTimeLineFinished();
+	void slotSlidedOut();
 
 private:
 	QWidget* mContent;
-	QTimeLine* mTimeLine;
+	QWeakPointer<QPropertyAnimation> mAnim;
+	bool mSlidingOut;
+
+	void adjustContentGeometry();
+
+	void animTo(int height);
 };
 
 
